@@ -1,46 +1,46 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C3219B5A5;
-	Thu,  6 Jun 2024 16:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1002219CCF4;
+	Thu,  6 Jun 2024 16:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717690413; cv=fail; b=YiBhY1z3YFdQpr5NhfU2TYdv3xXjpWM4GOfWsHRBWmtbNuEY5p12K5MWlg9s3HHy/ka9eyDlOtYjaCF1k/INmDqcaFDJr2ZZO8Z6u+kLq5DKHuIn8V7bxQAdJ5dkR7ulLKUvDIhsM8usRxSjAa9gclQQLm0MFUBoKotVlPvDCbY=
+	t=1717690415; cv=fail; b=KVMGbmBCkYQ81QfjA26sJbKhDu8o58AIdlotCfDEiH/gXx+/F/hRE4gX3vYUi0CjLU87REJ3pyLaRbYyoWfI2Pb58IdlKglJLoNWkH7WGFG8SS/x1wShWkhWAMkWK8AVVZqETetq0keq/kB6Hk0nW1mRPjrjGlhgRqGi7rdtIzs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717690413; c=relaxed/simple;
-	bh=f6hqEN1VIsd63HVw54vGLB6GVd2Qpx/lRCj+1dUDUQc=;
+	s=arc-20240116; t=1717690415; c=relaxed/simple;
+	bh=1skJ/7VJ1g2JtxqhkVli2UyaJ7oCXqXoF/P+u1FuNqw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=k0ZTDzr84N3fPMu9FJdiyzF6ukaw9qMdwQGj+Fb0virBl8Q0YOJYq7VyL0OyB4Bn0plw3kRyEwWn6cWCGWJ2ezWkiAQOAlavmYMa2ptfC81YtzhxEBE41Utf+ouBr4vN5vmbZ43v1qrXcOUUbkTIxrnhrQZ9kcLXequRCrdiHus=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uzA9cSOk; arc=fail smtp.client-ip=40.107.93.47
+	 In-Reply-To:To:CC; b=Q1jrs6XFn++T3GZ/POgWWo/Th4uDVJp0sO4XvKTzjzGt7Apz2B3YeRSo2fqt27O34AfLSB/AJSvY2Xdsre7+hqWua4CXhaLrdC6J87fZF/sR60wQZdjL3NVpXeVQ69d1NOyTMbd8S7pOJy6xI24i8pQMtiZavV3M8krdaxVlQYE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XhNjxgb5; arc=fail smtp.client-ip=40.107.244.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uzA9cSOk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XhNjxgb5"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MOwrjDHXogRyv+5q9hOLdKWqQMwVHql4GieJLPvmJXngJd08rHXXVtlf3Ib8/7nP+BHf5nvpaZHqbNuMWD+RAaZWa898CgyAZ1mSI3snkPCj9z1QHovfiq9HwCJDZncKoVqg6D+dsbm9Ny6tE9vR/rJTU8pauCmqR7bLs8zSJ8SP+r0Euex4K7o4CwFFVKkMsE71ezX3JQMQWvvL7t7N0Uf3S2hrPEvUnRiaZud1EQs5a9EaEgsaMPKLASa6TYGZxc/3GPhWDmvv2Y80xsWwpJGxVkmINDDdeaUCRtWy0bxv+Sjpm9C9d7U55iJ9L/bvveVps6t4UC4RYzmmilp4KA==
+ b=HgtVhK4IWNTFh7qnraElEebZSN3gUOCVTjELqF7TWqmvC9zHnSC8ogKcmsEdWgMj9ldduq8wH1xCpdy2EFBEsrFBcIJXXNd/pkesQTim8r1PWQGKfjEFvKFHT8CJY9fdi9oZy4MUnUa2mPCEXjiGjpUwvtgFrOfDVb8xncHRS8Ezy9sNgh7W5ft7HmpyXzXtOBWgRvEMaciFO+PUdO6MCKENZ1P0dSkYMcbB1za6rbi1lSE0xl3AnAQuv8XPKcTxrQKqQ2WbChOqeX0PQKELkcxjNz2YWhJgQeVH/aGB3VMV/L5QZUcnNsLWzjSkUXaxvRQrMDD3VHcEci+fiV+TAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/bHFV0adVCqx/ezBMck7stOQmPqgwE41m48rs+rvyqc=;
- b=GTHro1TGKiP6IKOjsNq8x8/OI7j2gWyEHdpH2CsrUBT2IvqnenzUmiauqn7ZC/PbuiyHS5e4OQsZ5RotTpKYmKWf5xB1wL5uD4u4fYvZGKaO//ndH4guRD1cFiydS5+JseHyqNcI5nS60pWuaDz/CfQWyOUnD0ExSmH0yYE4Vlonc2EWYFQU7Nb5Sd4fIrupJj4MfnvRVoy86Guvg4Jb5ZneKpsFZRcF47HcCEBA8/XRmlbPLgFDUP3IY1W5ZDBpACyBAtJmnqfK5MljP9CnQ1PBd7abivGjHVidx7Z+WO1jCHAlAH8CyoDlN9C/BrtkuWSVuLLKk/9VmE7680HMpQ==
+ bh=UE47HnUxvTJjZSnzAEg9NHiMXdh7F1Vo3vF5L9ZH1NA=;
+ b=Mh+yOSqj99Xws/jBf6Wzkht7ZTGACQ0GNlncMSXHH4UtTlQgSAPgCEDUjjEgjue8SsOQWaDq9u+W6ONGeKKg03YOSDqJulP3H2Iop91TaJ71MlS3ucc2swAmFGqRxYKZM5XWh4IlEVedbfA7S5rVuBWJE6aqAOMuPozfRrv4oNcZ2h54FXogKnxRf2G853pShkqNoXrVAEdhwOdH8OQjQUQDb9erJ92RGInOc8aOb7kawfqoY5iwtIBQ+NrWSh12s0fzRbnHmpaDBZtPtGpt/8sgEbKsqXLvB1Pb0auJksWsThEI2TyfFIwRQ9PzK8J4Dc8l7WaGGSf7EzE3IR0xgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/bHFV0adVCqx/ezBMck7stOQmPqgwE41m48rs+rvyqc=;
- b=uzA9cSOkeRpPWC3EJnPCxluUT5q5LC9aTA2jXuX+HSdluiOEa49wyoo3JmDQvsH10BwuGKhsx5dBdRjryopKeaqU71YxV9YnqEpPdExjIXLYpwjlh9cuvUN+STYBI2ZntFNAg09I77oUxieNAWkNXEdN4JBQtK7/48U9GnP+hsg=
-Received: from CH0PR04CA0109.namprd04.prod.outlook.com (2603:10b6:610:75::24)
- by PH7PR12MB5999.namprd12.prod.outlook.com (2603:10b6:510:1db::20) with
+ bh=UE47HnUxvTJjZSnzAEg9NHiMXdh7F1Vo3vF5L9ZH1NA=;
+ b=XhNjxgb5YWQFYptXTbQUa6EIaA4W83ZI85e2Uy6NAa0SLJuc3m8haa24VQ07mLagZdvQ49O66RE8vyy8UGb1g3Ogp8LZjuJCbuRNCyNA1UvZzDRM8lEDJdzUr7t1SkppRuXh53/nFJrEcAlCod6fOCNPLbSefoZWN0dFTfLoEGE=
+Received: from CH0PR04CA0097.namprd04.prod.outlook.com (2603:10b6:610:75::12)
+ by PH0PR12MB7813.namprd12.prod.outlook.com (2603:10b6:510:286::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Thu, 6 Jun
- 2024 16:13:28 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.25; Thu, 6 Jun
+ 2024 16:13:29 +0000
 Received: from CH2PEPF00000146.namprd02.prod.outlook.com
- (2603:10b6:610:75:cafe::ec) by CH0PR04CA0109.outlook.office365.com
- (2603:10b6:610:75::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.21 via Frontend
- Transport; Thu, 6 Jun 2024 16:13:26 +0000
+ (2603:10b6:610:75:cafe::ec) by CH0PR04CA0097.outlook.office365.com
+ (2603:10b6:610:75::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.20 via Frontend
+ Transport; Thu, 6 Jun 2024 16:13:29 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -50,15 +50,14 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CH2PEPF00000146.mail.protection.outlook.com (10.167.244.103) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Thu, 6 Jun 2024 16:13:26 +0000
+ 15.20.7633.15 via Frontend Transport; Thu, 6 Jun 2024 16:13:28 +0000
 Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 6 Jun
- 2024 11:13:21 -0500
+ 2024 11:13:22 -0500
 From: Yazen Ghannam <yazen.ghannam@amd.com>
-Date: Thu, 6 Jun 2024 11:12:59 -0500
-Subject: [PATCH v4 6/8] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
- parameters
+Date: Thu, 6 Jun 2024 11:13:01 -0500
+Subject: [PATCH v4 8/8] hwmon: (k10temp) Rename _data variable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,7 +66,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240606-fix-smn-bad-read-v4-6-ffde21931c3f@amd.com>
+Message-ID: <20240606-fix-smn-bad-read-v4-8-ffde21931c3f@amd.com>
 References: <20240606-fix-smn-bad-read-v4-0-ffde21931c3f@amd.com>
 In-Reply-To: <20240606-fix-smn-bad-read-v4-0-ffde21931c3f@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Yazen Ghannam
@@ -80,137 +79,95 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|PH7PR12MB5999:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00b8b172-1007-4995-8b86-08dc864398fd
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000146:EE_|PH0PR12MB7813:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c365862-689b-4bf6-a3a2-08dc86439a59
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|82310400017|36860700004|1800799015|376005;
+	BCL:0;ARA:13230031|1800799015|36860700004|376005|82310400017;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Z1A4TDBELzZ3NTk2cE1lYzN6biswaDd0UitUOFc5R2ZQNmtHdXFMSzRoMmRh?=
- =?utf-8?B?YzUzb1FuYXR1NHlrTzBaWU5hTVNqY1c1cWdBaVlPTExlNlpoM0l3ZzdjdXdy?=
- =?utf-8?B?VGhYU1pmOGZRVkNwYUEwQ3Fqay9TcVVzbStLZU9KaG9aVEpBNXgwU3E1Mll6?=
- =?utf-8?B?VTd4MnZaM0xrblp4dlIyYzJTRlhueFZZU21iVGVVYTJvbnp5aGkyc1NuUGZE?=
- =?utf-8?B?Um4zSGErU1ZVQnp1RVRzSHRTSnIxdTRlRG1KRWNsOGJOS3Fwd2huLytVcmQ5?=
- =?utf-8?B?WFZOWkRDbHpaZTh4K3k4ZkVNRW0ySi9taSthRzJVbXQxS2ZmK0QzMFBxOWs3?=
- =?utf-8?B?WkQ1bVROcFd3a2ViQzNrOGdUVkNVS2l4TFpyakdhNGNBSStINDBzVmUzZlky?=
- =?utf-8?B?SEFPL3QyVjR2NFhpa3RXYlFWY3NyMmI5aTcwUFRTaW83VTJoVitVSnVUZDZJ?=
- =?utf-8?B?ZTN5NWpWcGRnNUN0c2lGaFk1UU5iN1lCUUhuVGZJN09uY25HcElzenVmczZm?=
- =?utf-8?B?L1ZrZXVhbDBWeDVQc0s3SXVhVmx6UFo2TVNhZklkd2lwSjhUV0RIT29mbjAz?=
- =?utf-8?B?SDNpVVdmQlg2ZFZZc1hVOVZkaEZ4KzdHaWhkbzhqNHlZSFFUN29laE85VVI2?=
- =?utf-8?B?Uk40YW5CYkw4Ry9FZHdQVStqWlRaSDU2Z1o0U1NKTkxHQXU2ZGdkNXY0bk1I?=
- =?utf-8?B?djNXR01KcWkra2lLcjNQbVovUFFyQVlWMmI1MFBEY0V2VHhhWnZxTWZUd3A5?=
- =?utf-8?B?azMxR2U3TTE5ZEFQQTQzSnZEUTRRQ1h1WFlVNGJFYmR1U0ZBK3YvSDVlY0ZV?=
- =?utf-8?B?WjMwbEJqU0xtSEdacGRteDNUR2JaODllYmtMN05tSEZqdlkrUTdINmJyYm5S?=
- =?utf-8?B?b3kveTFlSCtYQXJYYUNKYndnS1VpZkZJTHkwZ2xYVnkxWk0wOVZNcnIraU9B?=
- =?utf-8?B?NEg3aEY1dzcxMGxhQytUTmJCY1FBVXhUY1Ntc0JDUThrcEYwaXZ6ZUFCRWN3?=
- =?utf-8?B?bjVPM3RMY1ZMUnpQRk0yRnkvYVZYN3VTeXpnWVNha0t4aXd5L09xNXFZRWxk?=
- =?utf-8?B?dkcvaUFFcTVYYkZJZXZ4Q3hGRFdqbTFPWktRNnhMRHB2bDIrWFI5S1BXWXVF?=
- =?utf-8?B?Szc0ZSs2a3lpdGtnVzRnNk5OTWdBbGV6d0doN1RHVGR2d3hTN0lMbVB6aWtT?=
- =?utf-8?B?dzNlbVZ1amowUVhRL3JhMlovQ1pqdXNQbE8xeVJrZXJOM25OSzN2SXdJSnha?=
- =?utf-8?B?RzEzZnhzdTg1MSswRnRRM3FaTkhiWlpBcWxoalBpQk96OVd1dmI2R2N0NXVi?=
- =?utf-8?B?d1NWY2FQMGhtRFhrd3ZKRXpNTTd2N2FhcXo5YUVKZHRyUjF5N3liWS9lL2pS?=
- =?utf-8?B?ZjgzS1YwSEVqbi9UOTI5WjNCczI1UGlIVEUybHZvbEJrQW9scUtkc1UxU3c4?=
- =?utf-8?B?TjBtRU1Hc3hJSWthczhYa0xLTW9LeTVUNEY0UUttSHRZTUhucm5RSmFqdnFT?=
- =?utf-8?B?c3J0WDFERlcwZzg3Z1E2dWtDYjFxM3dJTXF1NFhuaGtYT3Y1c2FHRkhuODV5?=
- =?utf-8?B?WWI1TTNFcU91Q3k0NzFNMFVFdS9VNkNYYVJYU0FkRzFndFdhOUdsZ2dMNjNJ?=
- =?utf-8?B?Q0YwL0JwZXUyU3JuZzhKejZqdXFoVVlhMmIvbTRJM3dQNGJCbVJUbEZraWdi?=
- =?utf-8?B?TW9FazlPWlpKUXRyU0M1eHg5bmM5M1VxQWVCWUUvYTY3NndLaWk3QlhKdWsr?=
- =?utf-8?B?UUZ6RUp0ZXlUZVlVcDNNWGM1TCtTZmdmUkJkZHVqS3E0dnFXeVZVVFZqUVcv?=
- =?utf-8?B?V2VZVHFyQXE3MXVKcFcvM1NOMFRCMlRBWStkc1Y2SzR4QnVRbU1tTEpzNmtQ?=
- =?utf-8?B?RUljMTdCcitSaW9rcWNMQ1B5ZkNHSG91VXlmcEV4SGtaeEE9PQ==?=
+	=?utf-8?B?bGNaM21WM1hvc1ZrL2hnQ2syQ3FIMTJBdXV6UmVWWEJUN0lYalhLMDhaYnpk?=
+ =?utf-8?B?ZEdzYkdOd2thaDJPamw3MkhoZjFYVlJza3RSc1F5TThZcWtjbyt4RCtHaThV?=
+ =?utf-8?B?WTRVdHBGUXNlQzBQV3ZYanlSZytnNDZvY0J3U2pTMDZmSEpRV0hSRXhTekZz?=
+ =?utf-8?B?WnE5NytRTEFmd3JaUm5zUEk4RnJVTjVQMlROTkZzVU9kYVZsUVRMTDdGUU1X?=
+ =?utf-8?B?dnlicnU3Y2luMk55UGJTanZ5bVRRNURmWkdjdmFBRVR2VUliM3A5S2YzUDFO?=
+ =?utf-8?B?UE9NUXdwZUErcjB0N3RFVTc5ZWV1R0pqNUdjSkJFa3JkcENVOVJUMjEvaVJz?=
+ =?utf-8?B?bHZ0ejViSXhTL25YRmR1TGRPSldoNTZ5cFhZMklXREcxL3VRSkhGdm5kL3Br?=
+ =?utf-8?B?ZnY0cXh5SFl6SWRoTlF1Tlo0NmxweFJEbGcyY0RERy9TMVZ4b2RnTHJrQ25Q?=
+ =?utf-8?B?VnV3OW82blpPYVBiekxudStCNE5ML3kzQVV2Y1UrRGVEMjgxbmNjZGZZSTNt?=
+ =?utf-8?B?NVhnSDFiQWU2Umduazd3NzFQYno1NjV0Q0VlRUhDcTVReXdmZlN1eXZCZWZi?=
+ =?utf-8?B?TTZnbDIvNmRrZG5aTGxSRVpSNGErOGpRRTNneXE4enlqSjdDZEZVclBwS1pv?=
+ =?utf-8?B?MkhmU3BFUjd5VW05d0tyVkJQNy9OZWF4VUVPWFA4dlE4VG9DK0tCSnRRbEZh?=
+ =?utf-8?B?azA4Q1NIbDc2NnNTVUxKMitFZjY4aktzVXNuQVpWaTY2NUNoZURwWlVyVE9a?=
+ =?utf-8?B?MmtKRXhnQUdUb3QxdkpHNm1IZGUzRWFDMGlTaU5VYkxjRUU0SE9vT2RCc3lH?=
+ =?utf-8?B?b3ZEMTBuYW8xaUpTeTRPN05ZV1lFNENxQTdvS1JBTXlmblJMa0ZCanUvSkRi?=
+ =?utf-8?B?Y2IvK3VreWJWekJtYVFhaG1PTEZma1VqdUZ4REI3REEvRUZtL3ltaXZzUzRl?=
+ =?utf-8?B?WTFVQTA1eGVaRGJpUFU2R1NpNzN4WmFNZ25wbjJxejVPN3R2L29TMUp6ZUJO?=
+ =?utf-8?B?ZzhCQ0lWa3hiVGN1OXZHOC9nOG9DREZackg1SmdXbmg5a25SbGdGcGc5OWRr?=
+ =?utf-8?B?aU1MU05DbWY3Q0QrU24xUEhtbFJ2ZGRiOEFjdXo4WGh4TElna3phNktiSkgz?=
+ =?utf-8?B?b1ZCejB4QytZalgxMXhPSHF6R2hUVCt4SXMrUm80Z0hzWi9pL2NVSk05cEs5?=
+ =?utf-8?B?ejcySjFpTUtkem0vZUxtMG5xcEZ2R1JqUjdJbjFuWDZ4TXd1bTJjQ0ZIVnFl?=
+ =?utf-8?B?aEtKa1lhbTU5QlJRc2EwUlI2bVZNU1VkNnlwVUkrWUFJdmJ3ckpmeDc5SjVw?=
+ =?utf-8?B?WmxkemUzdmVHVzJHamQ2QjRZWGFPcFRzYkUzQk1qeWUxdVM3VDhtZ09McDJV?=
+ =?utf-8?B?eFRhekxxWjhpUXJZRmp0UHRQdXgzcmhvem5aY2RYMDUrSlV2aGgyV3hkaTVo?=
+ =?utf-8?B?ZElmM0RJWlM2Q09JcXQyemJ6aGJFYmIrMUNGSjFLY09pMVZjSHdJL0pwc3Z3?=
+ =?utf-8?B?QjgzYXQzK3hjUVdjV2dRVmNYN3hUNEVIRU1oQUl1eE9NaFZHV2lIdEVnUXZa?=
+ =?utf-8?B?RG53c0oxNlFyOFh6dWhKREFsVUZJT20xY0NVSjJQeFBGTWVkdFlBblNNMVhl?=
+ =?utf-8?B?bS9KSExaS1pQcFNrYzdITzVWZ25EQzEzLzNGUnhqbnE5ZW9BQ3QvckpWRzRY?=
+ =?utf-8?B?a0hISFFwQ0RHa3p4SU90SWZSajd3dkVMTGVIc2xSdUhYVTVzaVVJY0NSekJu?=
+ =?utf-8?B?WmFzVTJPSVdnMFJuNmZKdnNyM3ZEeUNZZHNnS296ajdRN3gyckdrL3RmdEhD?=
+ =?utf-8?B?a2xPcTl0V29zaCs3Uk9RYTFoN2xhazZVVUhMdDdkb3V5MklyRyttNDQwMXd5?=
+ =?utf-8?B?ZmtUQ3hreG5OUnc1dVNZNFZDbFNYRlRaYzl4VzFRNzlScmc9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(36860700004)(1800799015)(376005);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(1800799015)(36860700004)(376005)(82310400017);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 16:13:26.6670
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2024 16:13:28.9483
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00b8b172-1007-4995-8b86-08dc864398fd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c365862-689b-4bf6-a3a2-08dc86439a59
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CH2PEPF00000146.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5999
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7813
 
-Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
-However, "pdev" is already included in "data". Furthermore, the "pdev"
-parameter is no longer used in k10temp_get_ccd_support(), since its use
-was moved into read_ccd_temp_reg().
+...to address the following warning:
 
-Drop the "pdev" input parameter as it is no longer needed.
+drivers/hwmon/k10temp.c:273:47:
+warning: declaration shadows a variable in the global scope [-Wshadow]
+static umode_t k10temp_is_visible(const void *_data,
+                                              ^
+include/asm-generic/sections.h:36:13:
+note: previous declaration is here
+extern char _data[], _sdata[], _edata[];
 
 No functional change is intended.
 
 Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/k10temp.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ drivers/hwmon/k10temp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 315c52de6e54..6deb272c7cef 100644
+index a2d203304533..543526bac042 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -385,8 +385,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
- 	.info = k10temp_info,
- };
+@@ -269,11 +269,11 @@ static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
+ 	}
+ }
  
--static void k10temp_get_ccd_support(struct pci_dev *pdev,
--				    struct k10temp_data *data, int limit)
-+static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
+-static umode_t k10temp_is_visible(const void *_data,
++static umode_t k10temp_is_visible(const void *drvdata,
+ 				  enum hwmon_sensor_types type,
+ 				  u32 attr, int channel)
  {
- 	u32 regval;
- 	int i;
-@@ -456,18 +455,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x11:	/* Zen APU */
- 		case 0x18:	/* Zen+ APU */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 4);
-+			k10temp_get_ccd_support(data, 4);
- 			break;
- 		case 0x31:	/* Zen2 Threadripper */
- 		case 0x60:	/* Renoir */
- 		case 0x68:	/* Lucienne */
- 		case 0x71:	/* Zen2 */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		}
- 	} else if (boot_cpu_data.x86 == 0x19) {
-@@ -481,21 +480,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		case 0x21:		/* Zen3 Ryzen Desktop */
- 		case 0x50 ... 0x5f:	/* Green Sardine */
- 			data->ccd_offset = 0x154;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x40 ... 0x4f:	/* Yellow Carp */
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x60 ... 0x6f:
- 		case 0x70 ... 0x7f:
- 			data->ccd_offset = 0x308;
--			k10temp_get_ccd_support(pdev, data, 8);
-+			k10temp_get_ccd_support(data, 8);
- 			break;
- 		case 0x10 ... 0x1f:
- 		case 0xa0 ... 0xaf:
- 			data->ccd_offset = 0x300;
--			k10temp_get_ccd_support(pdev, data, 12);
-+			k10temp_get_ccd_support(data, 12);
- 			break;
- 		}
- 	} else if (boot_cpu_data.x86 == 0x1a) {
+-	const struct k10temp_data *data = _data;
++	const struct k10temp_data *data = drvdata;
+ 	struct pci_dev *pdev = data->pdev;
+ 	u32 reg;
+ 
 
 -- 
 2.34.1
