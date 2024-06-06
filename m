@@ -1,167 +1,102 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FC114E2C4
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Jun 2024 10:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DB4146A88
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Jun 2024 13:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717669927; cv=none; b=K8TxWKpvwBxG0hqMsRAh3P4q2g3xLAttZtkEwtDgqs6XgbGjqN1C5RO1AxZBUvtKnImlet62PXCK/fkpUlm82oAa7NuPn2BlRdgAnjNwgLcMP+aQ3T157tVg5+/E7lrnkS6zEdhtdtYa5VLHHdVihALNFeGAOE3OleOaKB5HnfY=
+	t=1717679539; cv=none; b=jNL+NMpAtoCqJ9jsSNxoDtLAMFXGLw18ozA8jDL6fkoqlRLbT7qmuIjBf/OC4Fo45dDmNMJSN7jQUKhHdspKNA0g60GjJA8zk11vD7B3s/8hXkFfd9zMB0ijDNy6PD5NlEVDpto22DfvHo2w6Zf7rHmHQ/wo307xaHgFs+m0B1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717669927; c=relaxed/simple;
-	bh=n0hrzdYnBksW+DamHG6BupTO1J0YAJybs/VDL2sugrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UFXOJ6IC8115Ghh2GmwfMsUKCcGf8N1Ao2WbYj8IPzjDErYaaT9iBdOE9paqCiYOUKrcPQMDiFjjEtXFthuQhJguwePjRPFoI6PtP1jHFzTEr1/7jCcihxgEST8BJe8t9/9wJgQexQNE5usRAXcWato8cfhD7TVkkVB0qrSRC84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ij9/iU/U; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1717679539; c=relaxed/simple;
+	bh=me6Ty41cRCSnMOmdHM0XNnCYCzQRzAGcL0KUR6aAOg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mNTOXHtq6bIg/1/Dd/8kMLzHpNTfRe+l+WECbfElPvwn+LluRmDfnODRbhO282rg2zai+z8cT+JYfYau8EYiU8E1UaiWoG42G6sumlrJJuBo1TBAWxnuIB4UfLaPIR4o7iUIjfSSfQ+HpKT4d7tDlKbw7dSKvSlIfUCDFP2YuQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fgWk78SX; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ij9/iU/U"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2eabd22d441so11701661fa.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Jun 2024 03:32:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fgWk78SX"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57a1fe6392eso1139517a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Jun 2024 06:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717669923; x=1718274723; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=Ij9/iU/Uyo6fcf8LONJ7xC09lvYBG8qaaeEz4vBXq2BTPZbQ2/pF3yyQBM4fRbFGfh
-         G2YVI79pdecNzRewdbn8sACLDUSzd7rOjlh6zMMORYPcVD1QveoeZ2kHNSsE+9FRNNbv
-         STcLcfiwZHhGsSEvRFW5mX9h4B8YphLBoSkl78uJsHCRnl9eDwrE59GFqtGknBB9mMy1
-         OSPuYgWTVQS8j2w3KVuq+5S7UftcTUbs1qQVWVzbjEhqRqb3+fKICTURvn7oWD734yHM
-         ft1saZpU5WP1Di0/lkFYY358dTnV3FFIlPJYisX1EUMUoYuw+wFXKiytWhGLxoNHAlTO
-         IcBA==
+        d=linaro.org; s=google; t=1717679536; x=1718284336; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PxE7l690bffTKUzQL4YoKYab1ziPbqqN+8E58otRGxA=;
+        b=fgWk78SX8ddpC3EEREr42d64HI1y7nQ22Omr+c54YWBSAgm1ki4ftHxPuX/dFbrmax
+         Vydb4RhUhLaI/5Qo1SU3NBCD40CpR2mab47hE4T6g/HAkZrTdg4pH5TO+SXWJygrmtGE
+         1RTev4hbteS8gej3t/w6KljVdQRL/mslxzIGxYYdu9Zl3NKjlXPA7CZfrpDp7zse0pJp
+         U2iuwZ7DG/+/aDsgKANoRzmVD0ds0xAXjqJFTrBcN1Hv6LaWP5kzlVLDsTMlawHrZtL1
+         pn7LHVIjUj5gXUJN0mKs2A7hjbd/UnuUobLRcscDga1WQoJIrYYu/sOPCoh/vR9qJYuc
+         zICQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717669923; x=1718274723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=KYgVSV3NMMYbTqk54PT9V75AWPWntMzPwthMNjftmFJ2h4amghfjfnM7ulchXHYwzU
-         3SywxLeO8fGF9Agk2P/kd0FKFOVPpJ0sXIFRlYCOZSeY9h4meImyaThQPc2rhNgaPKox
-         o2oF169ZUZ/JVe/IJlgWL1R+DGZI2fV3fNI2LBuMKOkBOks0XmLTWoUOddX2TqUMzQYa
-         vxZ2A5cESoFrPbiXEf3vnmUa4F458zdZVnNxF93sZ+kledjYA9Ttkyx5Xj0YKR0BWImZ
-         MDc6pVItk17wLmdotlFHtONKx5Ljg240yRUbIs3MiaBCOxV1TZClCZCylvpyBZVqR9Mk
-         Tvgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUFkz/O+99lS+CbbkIbb6GaU3mWo2/9V+7cf3XXrPgkJZ1PQiSc/MdDUVlkaGd94MoZ3qqYW3xKocE0ZiqJv27vH/ZiTr9N7Of2Vtc=
-X-Gm-Message-State: AOJu0YzUnCN7vx1r1zFkj8aW9RlxuSzWRDAQ7KXOlKAOCU0kqMSjD3ow
-	24e0BW5vxm+FeZ5hKEdEE2+2P6a2tX2JlNex4RnVe1U5W+FoG/FkYNeUhXgWPXFttreIHppEJyA
-	Ml2+mJZxW5UWJyREStNN30J9lL6iXJQq9ReRH
-X-Google-Smtp-Source: AGHT+IHb92CvWzY0UMLIO3bnYXJ9lrbqmbf5jFApgNniI36TJ0LubnwynaglXsT5ps/3HCuaPh8FvkYR0EYkfnbTRiI=
-X-Received: by 2002:a2e:9643:0:b0:2e1:9c57:195a with SMTP id
- 38308e7fff4ca-2eac7a5fd4dmr33302121fa.32.1717669922881; Thu, 06 Jun 2024
- 03:32:02 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717679536; x=1718284336;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxE7l690bffTKUzQL4YoKYab1ziPbqqN+8E58otRGxA=;
+        b=qxjyAlgaXEQqkgiIOSIwT1j1SAkwvrpJUCoLmLyF+BXo4xu03b9lOS6s6mhMzLDRlu
+         fP2M+z3zJI0z7sK/ffoR5NJi7AZmtdOp8KYOLFr0DF5fxLQN8stI12yHHr5mcCdTcOA0
+         HE0eln3dGK6yEr4hZ/jwBARTyLqNj4DjY5Lo+5t8VqBa07sOBDkzQU4mEIe7ehttthj1
+         WozOnNMUYpDwZ7mxnQ4Tquo64/jrCVaIWvJKTQILlfXK7/HpeNWrwD8Wsy2c78dLomzp
+         H89LhqW7iuYmwtg/0I7I6RScS6p6Ng+jp+3fLda1SfVhlXK3UipaBp8z8qSAttN8mJZR
+         +LUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVHkxL7A7Ugg2njPyGQwbQxXlU2eijofyowSRdX6zieTahxDAPdg15d6yyp/ohmyjUN2iMRSaQXqQ0eGTtLSeLWpc79xXZTr8zRsiE=
+X-Gm-Message-State: AOJu0YxFWhmhSjBuA8kC5DrRg8I7KPXA7tQ7ZD9gMATBXcoTLG2bAjNt
+	yYANWTV7ZhEokV84TmWyuO/hqeNzj/1dXjO5heh8iOH2K2KtrCKDwzI0w19bh+o=
+X-Google-Smtp-Source: AGHT+IEz8YfL+SCPuHJF+3F2Q+2LZ4go3JrKNs5304zCp0iKQZ2Bs1sP4ET868nj7mSwau9p+NP6xg==
+X-Received: by 2002:a17:906:390f:b0:a62:5ff6:c728 with SMTP id a640c23a62f3a-a69a025318amr374676066b.76.1717679535821;
+        Thu, 06 Jun 2024 06:12:15 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c805ccb1csm96890166b.80.2024.06.06.06.12.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 06:12:15 -0700 (PDT)
+Date: Thu, 6 Jun 2024 16:12:11 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@weissschuh.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (cros_ec) Prevent read overflow in probe()
+Message-ID: <42331b70-bd3c-496c-8c79-3ec4faad40b8@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605175953.2613260-1-joychakr@google.com> <20240605175953.2613260-8-joychakr@google.com>
- <f98a1d8f-e936-4798-8447-c642e8fe11d5@moroto.mountain> <CAOSNQF0Qj2CnRDWAGM8Y1wyEdgWP04RDJx1TKO-Ge4nUH=qxoQ@mail.gmail.com>
- <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-In-Reply-To: <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-From: Joy Chakraborty <joychakr@google.com>
-Date: Thu, 6 Jun 2024 16:01:42 +0530
-Message-ID: <CAOSNQF02nUPZ=8re=uyruhxReQSjPoc8L-9yTnWMe4EfJ0-huA@mail.gmail.com>
-Subject: Re: [PATCH v1 07/17] misc: eeprom: at25: Change nvmem reg_read/write
- return type
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, manugautam@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On Thu, Jun 6, 2024 at 3:41=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
->
-> On Thu, Jun 06, 2024 at 03:12:03PM +0530, Joy Chakraborty wrote:
-> > > These functions are used internally and exported to the user through
-> > > sysfs via bin_attr_nvmem_read/write().  For internal users partial re=
-ads
-> > > should be treated as failure.  What are we supposed to do with a part=
-ial
-> > > read?  I don't think anyone has asked for partial reads to be support=
-ed
-> > > from sysfs either except Greg was wondering about it while reading th=
-e
-> > > code.
-> > >
-> > > Currently, a lot of drivers return -EINVAL for partial read/writes bu=
-t
-> > > some return success.  It is a bit messy.  But this patchset doesn't
-> > > really improve anything.  In at24_read() we check if it's going to be=
- a
-> > > partial read and return -EINVAL.  Below we report a partial read as a
-> > > full read.  It's just a more complicated way of doing exactly what we
-> > > were doing before.
-> >
-> > Currently what drivers return is up to their interpretation of int
-> > return type, there are a few drivers which also return the number of
-> > bytes written/read already like
-> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c .
->
-> Returning non-zero is a bug.  It won't break bin_attr_nvmem_read/write()
-> but it will break other places like nvmem_access_with_keepouts(),
-> __nvmem_cell_read() and nvmem_cell_prepare_write_buffer() where all
-> non-zero returns from nvmem_reg_read() are treated as an error.
->
+The "resp.sensor_name" comes from cros_ec_cmd() and it hasn't necessarily
+been NUL terminated.  We had not intended to read past "sensor_name_size"
+bytes, however, there is a width vs precision bug in the format string.
+The format needs to be precision '%.*s' instead of width '%*s'.
+Precision prevents an out of bounds read, but width is a no-op.
 
-Yes, I will resend the patch to fix that.
+Fixes: bc3e45258096 ("hwmon: add ChromeOS EC driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/hwmon/cros_ec_hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > The objective of the patch was to handle partial reads and errors at
-> > the nvmem core and instead of leaving it up to each nvmem provider by
-> > providing a better return value to nvmem providers.
-> >
-> > Regarding drivers/misc/eeprom/at25.c which you pointed below, that is
-> > a problem in my code change. I missed that count was modified later on
-> > and should initialize bytes_written to the new value of count, will
-> > fix that when I come up with the new patch.
-> >
-> > I agree that it does not improve anything for a lot of nvmem providers
-> > for example the ones which call into other reg_map_read/write apis
-> > which do not return the number of bytes read/written but it does help
-> > us do better error handling at the nvmem core layer for nvmem
-> > providers who can return the valid number of bytes read/written.
->
-> If we're going to support partial writes, then it needs to be done all
-> the way.  We need to audit functions like at24_read() and remove the
-> -EINVAL lines.
->
->    440          if (off + count > at24->byte_len)
->    441                  return -EINVAL;
->
-> It should be:
->
->         if (off + count > at24->byte_len)
->                 count =3D at24->byte_len - off;
->
-> Some drivers handle writing zero bytes as -EINVAL and some return 0.
-> Those changes could be done before we change the API.
->
+diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+index 41f268fa8260..b3ba7247e06b 100644
+--- a/drivers/hwmon/cros_ec_hwmon.c
++++ b/drivers/hwmon/cros_ec_hwmon.c
+@@ -212,7 +212,7 @@ static void cros_ec_hwmon_probe_temp_sensors(struct device *dev, struct cros_ec_
+ 			continue;
+ 
+ 		sensor_name_size = strnlen(resp.sensor_name, sizeof(resp.sensor_name));
+-		priv->temp_sensor_names[i] = devm_kasprintf(dev, GFP_KERNEL, "%*s",
++		priv->temp_sensor_names[i] = devm_kasprintf(dev, GFP_KERNEL, "%.*s",
+ 							    (int)sensor_name_size,
+ 							    resp.sensor_name);
+ 	}
+-- 
+2.43.0
 
-Sure, we can do it in a phased manner like you suggested in another
-reply by creating new pointers and slowly moving each driver to the
-new pointer and then deprecating the old one.
-
-> You updated nvmem_access_with_keepouts() to handle negative returns but
-> not zero returns so it could lead to a forever loop.
->
-
-Yes, that is a possible case. Will rework it.
-
-> regards,
-> dan carpenter
->
-Thanks
-Joy
