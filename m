@@ -1,127 +1,88 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4838044C8C;
-	Fri,  7 Jun 2024 21:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EEA153517;
+	Fri,  7 Jun 2024 22:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717794026; cv=none; b=eczJwMaP7OGThkknEpZznpA9bOLGsuRqJcZitSH2znGsruwIY8jGQ70IECNqqyY5SscjosUVBGvSiXhjZgDCIxEDZb0Hj173WC6p0121iWgyE6dGH8f4xjEgkF1rUQ9lUA9UjraPrlsGObzjiHpDTL7xgUDZ9zYpWbH+6lh1V98=
+	t=1717798116; cv=none; b=YU3FcM25ZMm5gzTJndnZbmqlzACoC0YbAqWSJudAg1BhatNnLkDk7iaedB3GzNp8FyaiO2bRbX8O5IHiVeB7EhdsEHx4Qntnq3uHnoIDy7By/5fAe8sks99IvnPH7OggtUoGoPgIDRMWlBu8g5f80lQrnT0PaRBBMDNwYx/9kUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717794026; c=relaxed/simple;
-	bh=ef3MWoAXTfNUCcOtFjro99oNO2Ai0BPF9p5sAINVR/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pFScaetZjGdB00Cw6+aA8edg5nJK+1Giv2HaHk+bzdmgI2M5kdaZaz6uSJRHL9r/xUVlnIOaOAGdGBY4k6TvFeugGyLlfIhIiZbs6Q7MGzq/5HtGMI+7xQ7Si2oI4r1CBIWx5DAERccQ8YMDs2UBy5m0EM+yIIMbhkpVewacNBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfQcR8D3; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1717798116; c=relaxed/simple;
+	bh=X0XqUrYOJ+/axRTziCgVjNc+Zqgi8AfvSjUQVzmbmZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R0LRSXci457jLSBd1O2+7DjCQWUQjQ5dy5XMIk5RBLyk78bdc9XDI0pHEVAacMN/rl3FoWg4XoxnzaeI9QkX0ug56eLLGk4ugWPrNdEWo3n6fRQT2NrEip0Nchwqgobs73lCILG6gBatTVGtrdM9WOxoZbiGoP8KYggwK/wgJEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=liYB0M3B; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfQcR8D3"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52c525257feso259251e87.1;
-        Fri, 07 Jun 2024 14:00:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="liYB0M3B"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2c1ab9e17f6so2324421a91.1;
+        Fri, 07 Jun 2024 15:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717794022; x=1718398822; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QslBPCPaaB+ZOzzWf1yvlb/8i+T4YYI9EZK5xnRWDPQ=;
-        b=bfQcR8D3ZUB38fk1MSkNbmf8dmDofk0eqd9xo37sTKZ9+XbVQwP0I/BnmtoLaO7aZH
-         +dSRvDZWgFvtbHUrJ8NRWxvdTBIZXvcrbaioBa68lemUAdf0qefiXoWhd4suthujAruX
-         VGnrvi/ie4S0gEl+Om3iD8Duu0eGc8DeFhT6WJcuHyQ152jS8eGz1PYyREqFioltKU87
-         4dVSJaPzTdsGiT3hoTFZV4qBQixkrDtMu8Ot0nUrElCP5fse1u6tKIkJbhDSW1WNYqUS
-         VhYNU4mzBZaewNDKcsSsnfhALvfze40oespa+kfEI50siwowPJtulI9DUg8c+W18iA8k
-         /9FA==
+        d=gmail.com; s=20230601; t=1717798114; x=1718402914; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tjL1fI/IK1fmmOTt7dCYi2cVdCScqaBbh8g2CZYU+V0=;
+        b=liYB0M3B02DGx9P26+TTL/tPUzWnl4r5MdoA4hbQy5BeJ2WUjhmvqPNd9NUyNArOK+
+         xbas/3hQQZN9D1JC7jnuEaAtfUUjemtJUrnQp7LkZmggewbFXYjZsz1CgAmWtuzaAJbM
+         qZKp+Y7eqLI2oFM96IGQPtGQrf03jSyZfl3HZcPqsD/mtw3x2SRhESxaSRtqdpLT8as9
+         styvefFzpiSSIaxfp6395DMxn/pgcBGescVjV1WxI5kylCWs57EH04AQprKtstHQm6Rl
+         4BrmcUdHLmYVDvd7rX3g3uhhwwN0wfL15Wu4LLWFp/QU+Nh+4nq5u2/1n3ARWg/s52jX
+         CI8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717794022; x=1718398822;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QslBPCPaaB+ZOzzWf1yvlb/8i+T4YYI9EZK5xnRWDPQ=;
-        b=ffAY+pAcuOO3rpr8oeLS1EUWOD9LRmZXQkQx+oQ3z7oRMni20mn8xeXsjBFSmA7+EK
-         H6dbvIUy4R1r+PF8gR8g5om9UAaLVKObNJdZo4SLcGFunN+JExUGQzcTYxFlmQZuDkar
-         nQyDpE/aFrgjRZtWzRnZbWHdicoWn6HlcEzm7SRNfSGtirH9CQM8ukkZqeel3YaNvGqn
-         IHgpCR4eJQhLCMYdMX0jOMfqQLg83x6+1aJGTnXdiyVA83P0wqjOe1UiTPOmNOmREPLf
-         h5RK2NxJjPNqi6/+NKknf5n8lxxX8HF8MRTKIZqBPdTmiyvzUy778xjtLGC4/efK5XWp
-         Uorg==
-X-Forwarded-Encrypted: i=1; AJvYcCVx6o7SSANxu3KbyecR8mD6KUMlwRf56KoyqeJJ4hP7BeCguOyNHUmAGImTv+aG5TTmcWfDmvrqZcEljuSfJADcR0jtmEwRRGrQv6KJ
-X-Gm-Message-State: AOJu0YyS2mDwXEEhqWAz14XWwkf6U/Sx0otluRaLdX6uJt4b4sym77iB
-	l9YGJ5nB5krP8igjPGl1D0Wc063ZdNGmUi3P0vwOqt9RSlRei357
-X-Google-Smtp-Source: AGHT+IEA4DbtGpy9qbGCiOpXknY8wt7xumZrRAf4VNqcZpLR8VWXTEmY/hS7flSaqdMT4zUtrg5RPQ==
-X-Received: by 2002:ac2:48a2:0:b0:52b:ce2f:5d11 with SMTP id 2adb3069b0e04-52bce2f5df1mr617884e87.25.1717794022092;
-        Fri, 07 Jun 2024 14:00:22 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c9717b6e3sm198436766b.13.2024.06.07.14.00.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 14:00:21 -0700 (PDT)
-Message-ID: <0e0d9d44-d7f2-4dc0-9851-06b1f7290976@gmail.com>
-Date: Fri, 7 Jun 2024 23:00:19 +0200
+        d=1e100.net; s=20230601; t=1717798114; x=1718402914;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tjL1fI/IK1fmmOTt7dCYi2cVdCScqaBbh8g2CZYU+V0=;
+        b=ObI4HM93uQnNVcmNxEE5zrUTzYN7nPP7KAoaIUNAWmgHBvEr/FJspv7HGsrfU/h/sn
+         WB+8PImSwAnHY8y+EHSJ+0c0481+C7QST65GOxYerADM0DRsErDK7/H9HOx2muODp+xb
+         qEsJBaVxtrc2Bc+RIDc3G+nQmOUhw7Pgigu+Rd5hQLS0Hv76Kfa2vVJl//9MNAwMricA
+         QdTrcof2Jn7zmICHIihPAPKCa0V+XYPEEXQijbOCNLYvnL2dbVnLE9A+SexWTz0NW/h3
+         qRsQL3ZVrp4rpAgQ7DQP4xwoCwczvi5L2sWa3YfC6qdNaQvvsGvIlgVoekrdasyKtExO
+         xFRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVm69D6QD1NUjVpPHmEV+7TswyWi4LA2fq8cjnxCQdRgiubSVnRjaDIAulsv0txaFIN9z2cXT9z0YsGT1441G+ZKyaAOoqcx2bXbMxAQQr4usIrbflFHkLuE6MC0iuZKvDYwZcTxtldkGc=
+X-Gm-Message-State: AOJu0YxPppjzDUzAjaBLMiMZtkpRSRElgIgV1VT9c4ijc7Cl2xGxnmM0
+	em+vrb64n/I6UjkJf9xMbpBdu9W8DFVX4ny46o2eQgIg0NjAW5LR
+X-Google-Smtp-Source: AGHT+IGChmawK4zkE+D9W9szWfv9Cxmt5l6QBRHfW8hRCsjYoduvbVXQaWQ2Qc380gHB0D26TQ55eg==
+X-Received: by 2002:a17:90a:788d:b0:2c1:ff35:78f5 with SMTP id 98e67ed59e1d1-2c2bcaf6920mr3740683a91.15.1717798113686;
+        Fri, 07 Jun 2024 15:08:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2c661f8basm1830971a91.12.2024.06.07.15.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jun 2024 15:08:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 7 Jun 2024 15:08:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Tim Harvey <tharvey@gateworks.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (ltc2991) use
+ device_for_each_child_node_scoped()
+Message-ID: <6416e24b-ea6d-4b3c-9803-b87ca5aa43ca@roeck-us.net>
+References: <20240404-hwmon_device_for_each_child_node_scoped-v1-0-53997abde43c@gmail.com>
+ <20240404-hwmon_device_for_each_child_node_scoped-v1-1-53997abde43c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] hwmon: use device_for_each_child_node_scoped()
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Tim Harvey <tharvey@gateworks.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240404-hwmon_device_for_each_child_node_scoped-v1-0-53997abde43c@gmail.com>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240404-hwmon_device_for_each_child_node_scoped-v1-0-53997abde43c@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240404-hwmon_device_for_each_child_node_scoped-v1-1-53997abde43c@gmail.com>
 
-On 04/04/2024 13:13, Javier Carrasco wrote:
+On Thu, Apr 04, 2024 at 01:13:27PM +0200, Javier Carrasco wrote:
 > Switch to the _scoped() version introduced in commit 365130fd47af
 > ("device property: Introduce device_for_each_child_node_scoped()")
 > to remove the need for manual calling of fwnode_handle_put() in the
 > paths where the code exits the loop early.
 > 
-> There are only two users of the non scoped version in the hwmon
-> subsystem:
-> 
-> - ltc2991
-> - gsc-hwmon
-> 
-> All calls of fwnode_handle_put() were in error paths.
-> 
-> This series is based on the master branch of linux-next (next-20240404)
-> to profif from the scoped version of device_for_each_child_node().
-> 
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
-> Javier Carrasco (2):
->       hwmon: (ltc2991) use device_for_each_child_node_scoped()
->       hwmon: (gsc-hwmon) use device_for_each_child_node_scoped()
-> 
->  drivers/hwmon/gsc-hwmon.c |  7 +------
->  drivers/hwmon/ltc2991.c   | 11 +++--------
->  2 files changed, 4 insertions(+), 14 deletions(-)
-> ---
-> base-commit: 2b3d5988ae2cb5cd945ddbc653f0a71706231fdd
-> change-id: 20240404-hwmon_device_for_each_child_node_scoped-6e581c1d8a31
-> 
-> Best regards,
 
+Applied, and sorry for the confusion.
 
-Hi, this patch appears as "superseded" in the patchwork, but I could not
-find what series actually superseded it.
-
-I just noticed that the cleanup in ltc2991.c turns out to be a bug fix
-as well because there is an error path if "shunt-resistor-micro-ohms" is
-zero that misses the required fwnode_handle_put().
-
-This is something similar like the recently applied fix for the ltc2992
-[1], but in this case the _scoped() macro already exists and is in use
-in the mainline kernel, and no explicit call to fwnode_handle_put() is
-required unless the fix is to be ported to old kernels that don't have
-the device_for_each_child_node_scoped() macro.
-
-Link:
-https://lore.kernel.org/linux-hwmon/20240523-fwnode_for_each_available_child_node_scoped-v2-0-701f3a03f2fb@gmail.com/
-[1]
-
-Best regards,
-Javier Carrasco
+Guenter
