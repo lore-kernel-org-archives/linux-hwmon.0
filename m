@@ -1,61 +1,60 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D1D487B3;
-	Thu,  6 Jun 2024 21:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221DE1847
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Jun 2024 06:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717708509; cv=none; b=E3sFgGObhIf6mF3mchcsbqCyoEEMepuXNQBO/1jak0oPNG/luW6lx9i6oD+Uk0DnAac3tsEAlsPABTuJxALZQzntMXwMG4Zq3c+JUqWGkQEKu6xZ9lAv54KP2FHCv1y4/7JIFbZnc0+tlQXTcT/HH7vr6ntd+Ex6/kEd7t418a0=
+	t=1717743230; cv=none; b=uHk1idZpFaxYyeOCkVWvEOyeEAWXImDTw+zhzFOJ7ucFw3OtLehNlU1vUqm7aoPZqbGf+9iNPWGw6Z7zP03QPW39hxQ7ZcMKxIUkUlx9uAG9Rz+yALb1WZUJm8STGcUvJ6yBOcvjYZFvMYjMDXtDBQ4niK8ie7OKqnx578pAUxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717708509; c=relaxed/simple;
-	bh=YkoxsWKSsg2N16NjzFpPpAWn9SbqFRGf1ZPBljEkono=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l/OvAVXOhtTGJ3uGH4iAaAJHjzM84WR3EiZ1uF7ofGicdTALhGx0VCYAX4x2NKvw8sjgbptxY7Y57FvoYRGPdXcZrk4wPM5AYae3LrVHBBpXUhw2divmd5LOpgF+VPdCd/qLQOoXSkrXUqo11XAHD4VgTYjh7v6HY/ApfAg/bOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOpY2Y1G; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1717743230; c=relaxed/simple;
+	bh=KNGyQXdTnutaMvHHVdH0giLjLucmMgCVt/J+Na13hSg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YPpMmMCunlDJp6WmT26DYfveu0c/uvmIGDf6YshaEbz2JqzXT8ID6KZxqOVDggRBfyCI4FezRPyT0BYz6NJx6xPnDZa09ipQtSoXFM41yx99hGSTxbksidth2K2ONUwxfFicY+QftWczfGzP2GccOV8GW5pXFugYVfv4UYwCPn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fsvoWktV; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOpY2Y1G"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f6c7cded3fso7236965ad.0;
-        Thu, 06 Jun 2024 14:15:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fsvoWktV"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42163fed884so8045875e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 06 Jun 2024 23:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717708507; x=1718313307; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcoa1oQIPOXOdQAzOu4Ehk+5JNgeFxLcleZSqGXdpsw=;
-        b=eOpY2Y1GOMqUraJXwsbMHWLBaxmCHHjnav+tQrEF99sLff3XS1hs8VzsGKlIy8cHox
-         gDU168oo1+bj4gOZKFAYLU7T/fheGmXfTpBefyi2z01dTPvGhddCfMmMsALAfLABanMZ
-         20wUTI4geikTXEuuQC4Ig7dwA07lty/sNj2bw/oZKSGKDQQbe6/u40vBhuk5gsdKvamU
-         VfKPWHSHgLuxmSdpoJnSvLgeYrDrC7CSKBN7GFn17euxl3M0KdbhN4e2A/Bf3cqRX6d9
-         lUKshGtOCLsKQ3k6+Yq3giGXaxl2FLtCf3GaWMORyxFLcQyfLM3KzbbGGm97NvJiVtb0
-         se/g==
+        d=linaro.org; s=google; t=1717743226; x=1718348026; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6oy9paXt3y1M6rnKNIikFuvNbwWD5iuAyif14OquD/E=;
+        b=fsvoWktVwTaWqYZNsf7Lq3m9fTPvqExM1TMNO0b0mtSosIub2tBvVYjeZ+xo05H21d
+         fdKOYRS0jIx9gG0pkfg7XdFx40hhPLIh1cO4eIlarnX+k5pWB4pjqVOktbvoHJ9R34x3
+         KRUc7iLmCWlUCnBZvFNvski68q2izOdlNXcP7ammjT8czxN3+0yk2iCqO96TudCA7uq8
+         x7f1UVSFtOKXuC6jUZNtHWR3WBaZN4P7hXLNmFSBGDqZI3mOHa8pCnEnJcV53tDvDNt9
+         rdYHpzV2Wgb1yJnbE5IxVLS/iMfi9ZE7NK1sZE3avm/S4uqgMAtvfSrGX88n0i8kk+uB
+         qC0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717708507; x=1718313307;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zcoa1oQIPOXOdQAzOu4Ehk+5JNgeFxLcleZSqGXdpsw=;
-        b=Fn0srvys4GBo0Xfe3CXY2G5bLvLTz9cg6qrVpissRXf/EfTpPDjecKTi4whyG6Qu7j
-         BV5HhVOcKh1+g1XX7bIfhf7lbTxhhcKFukppVa/UdHxLoWuE4qBFRAGbya9sK0nDN9xL
-         1bc2iljXmrKkMMgYK5OokVHA2sNp1iB9yylX5BbVenBA53I21ItTyjjD9hLA8QoOlUAV
-         O/4sCIRA/5f0UuozYo6x0ISEOLUCsXpFVs7Fnq3qPB9SgjiQac8W3v5apRh2EGXzgbyy
-         qVxpbtEEh9FVCExxiBkcULqSlawg6xyHK8CnTgufhwfpCtBZDgPfcqQTN/hZBJUYV6Eu
-         G1SA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyKiNwKQn9fB7uAHIA69XKb9zIHax7JvVz3nWOOWRUS0MLhDDuSMFBzny6i+npB73AUnS5heD1ZksKFR8tL0pryTQI2uVC2OqPeYATAzgxVmcOFhyen4oW9NgcV53q0lK273veBqxxvlA=
-X-Gm-Message-State: AOJu0Yyeo8j5hdwjoBK50miAc7063XJQ3AxdqI4lV5/6eT0TK13zN+8e
-	kRfuIYBODCSO/8PSRPF5qOg2izK9ioNGWiBqfztB/X5amB9kDNRD
-X-Google-Smtp-Source: AGHT+IFwaLPIOzhDbwTSfRLdHW+TA8ZTWR1nM61MrPqbv/ZjJGakjaaHDuE0l6A7pdJCs5WxexPOoQ==
-X-Received: by 2002:a17:902:db05:b0:1f6:9010:1cb8 with SMTP id d9443c01a7336-1f6d03ce036mr7327325ad.65.1717708506850;
-        Thu, 06 Jun 2024 14:15:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7e1ec5sm19796655ad.197.2024.06.06.14.15.05
+        d=1e100.net; s=20230601; t=1717743226; x=1718348026;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6oy9paXt3y1M6rnKNIikFuvNbwWD5iuAyif14OquD/E=;
+        b=Uo+frjq0mhjNP8I3MbaCa9OF9ExOeU5Mz7XgwvD4UWb1Eoy1HoFu7b/DaEacr7UZiD
+         RZ/mHuMI66DGjBiSX0XF9JX5Un/kss+5OPZOKpK8+EXRFIvXXZYhZASvk7RP6CI3gwc1
+         R5tL1g0DJXYN1Pbc760ipyp2bLp8bF4C5oo6crnjvF2lFqK98C3sJM1VfDxoCkAQnQjl
+         KM5pdOY4t7UE93HD3S9Ky7OlpqDENbxpKrVRqa7JhXwj3Ds6At3ISKltVXKp6tpYWvny
+         aQpQ7G/yzVBm5jg1YWIHfQqmY95tGbIWTR0/ugi1UPlTaHqblgR3roSjuEo7Yk5QvRVP
+         Zn5A==
+X-Forwarded-Encrypted: i=1; AJvYcCVjGbE70voANeP33Xr5P5nBKbBMLi4rzJB7RDrh3+84UOUctQyuBvlbeQU8KB886zcO2avxsUUQU6tHU6KF5ITd4EkEBPD0Q+k7RB0=
+X-Gm-Message-State: AOJu0Yxp//ehcpAilFJqlXgsHYIxccORBHvglkf2W21+9e22Mz6hhjLf
+	6Wo/1kCwSJuMo/+IblpCN/gId5GgWGy1gGe6pgAkMHZTY+AhC7GC9emjQZVbT27UuuP8Jba/6me
+	wcnSKtQ==
+X-Google-Smtp-Source: AGHT+IHgA5lgH7zAw9Sqnzi5KBTiy7erUxiMScCpH9Hr5Dutp39kMuOAvdHBlzhbeOGArQ1G7E7JlA==
+X-Received: by 2002:a05:600c:35c3:b0:41b:d4a3:ad6a with SMTP id 5b1f17b1804b1-42164a02b99mr14690295e9.17.1717743226409;
+        Thu, 06 Jun 2024 23:53:46 -0700 (PDT)
+Received: from [192.168.2.24] ([110.93.11.116])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421581490cesm77164715e9.31.2024.06.06.23.53.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jun 2024 14:15:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ce42caf8-85f7-4f8e-9058-d04884f9d823@roeck-us.net>
-Date: Thu, 6 Jun 2024 14:15:04 -0700
+        Thu, 06 Jun 2024 23:53:45 -0700 (PDT)
+Message-ID: <22de160e-d925-4295-8208-f03a44f026bc@linaro.org>
+Date: Fri, 7 Jun 2024 08:53:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,109 +62,106 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (cros-ec_hwmon) Fix access to restricted __le16
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Benson Leung <bleung@chromium.org>
-References: <20240606180507.3332237-1-linux@roeck-us.net>
- <571aaac0-a397-4aa8-b9d5-2315f6a637d4@t-8ch.de>
- <9f2e2b48-f7b4-49da-ac02-1f73923fb9ef@roeck-us.net>
- <a9409e1f-a6d1-4d97-86c5-acb11c0115af@t-8ch.de>
+Subject: Re: [PATCH] hwmon: lm70: simplify with spi_get_device_match_data()
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240606142515.132504-1-krzysztof.kozlowski@linaro.org>
+ <32a542a9-e338-4f8a-af24-a32c8426e619@roeck-us.net>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <a9409e1f-a6d1-4d97-86c5-acb11c0115af@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <32a542a9-e338-4f8a-af24-a32c8426e619@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 6/6/24 13:48, Thomas Weißschuh wrote:
-> On 2024-06-06 13:16:59+0000, Guenter Roeck wrote:
->> On 6/6/24 12:53, Thomas Weißschuh wrote:
->>> Thanks!
->>>
->>> On 2024-06-06 11:05:07+0000, Guenter Roeck wrote:
->>>> 0-day complains:
->>>>
->>>> drivers-hwmon-cros_ec_hwmon.c:sparse:sparse:cast-to-restricted-__le16
->>>>
->>>> Fix by using a __le16 typed variable as parameter to le16_to_cpu().
->>>>
->>>> Fixes: bc3e45258096 ("hwmon: add ChromeOS EC driver")
->>>> Cc: Thomas Weißschuh <linux@weissschuh.net>
->>>> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>
->>> Acked-by: Thomas Weißschuh <linux@weissschuh.net>
->>>
->>> Guenter, does sparse work locally for you?
->>>
+On 06/06/2024 17:56, Guenter Roeck wrote:
+> On 6/6/24 07:25, Krzysztof Kozlowski wrote:
+>> Use spi_get_device_match_data() helper to simplify a bit the driver.
+>> Also kernel_ulong_t type is preferred for kernel code over uintptr_t
+>> (needed for the cast).
 >>
->> It does, but I use the version from git://repo.or.cz/smatch.git.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   drivers/hwmon/lm70.c | 6 +-----
+>>   1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
+>> index 481e4e1f8f4f..0d5a250cb672 100644
+>> --- a/drivers/hwmon/lm70.c
+>> +++ b/drivers/hwmon/lm70.c
+>> @@ -169,11 +169,7 @@ static int lm70_probe(struct spi_device *spi)
+>>   	struct lm70 *p_lm70;
+>>   	int chip;
+>>   
+>> -	if (dev_fwnode(&spi->dev))
+>> -		chip = (int)(uintptr_t)device_get_match_data(&spi->dev);
+>> -	else
+>> -		chip = spi_get_device_id(spi)->driver_data;
+>> -
+>> +	chip = (kernel_ulong_t)spi_get_device_match_data(spi);
+>>   
+>>   	/* signaling is SPI_MODE_0 */
+>>   	if ((spi->mode & SPI_MODE_X_MASK) != SPI_MODE_0)
 > 
-> That does indeed look much better, thanks.
+> I'll apply this patch, but ...
 > 
-> 
-> I have another question about the endianness conversion in general.
-> The only places I see doing a conversion are
-> cros_ec_sensors_cmd_read_u16() and the original cros_ec hwmon driver.
-> 
-> Also the documentation of the EC protocol does not specify anything in
-> that regard.
-> Instead there is the following comment in host_event_set_bit():
-> 
->     /*
->      * The overall host event implementation assumes it's running on and
->      * communicating with little-endian architectures.
->      */
-> 
-> Can the conversion be dropped?
-> 
+> I take it that the earlier claims that driver_data must not be
+> something like "(void *) LM70_CHIP_LM70", where LM70_CHIP_LM70 is 0,
+> was wrong. I'll start reverting all patches which changed starting
+> enum values from 0 to 1 based on that wrong claim.
 
+Yeah, they should not be 0. I think Jonathan also brought it some time
+ago for iio drivers:
 
-Unless it is wrong I don't see a reason to drop it.
+https://lore.kernel.org/linux-iio/20240226192555.14aa178e@jic23-huawei/
 
-Guenter
+but if all the ID tables are complete, the 0 will work fine:
+
+https://lore.kernel.org/all/20240413154511.52576-1-krzysztof.kozlowski@linaro.org/
+
+Best regards,
+Krzysztof
 
