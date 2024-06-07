@@ -1,92 +1,159 @@
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAE21D6BD
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Jun 2024 18:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE801DFEB
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Jun 2024 18:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717783230; cv=none; b=auCEZIkdhtxfvyjmfU/y96/VNNDy3dvqkJof69VNEi9BIX0wnIKVcTnx9IUlLS+tmxrh9wD7STxKNV+MWlgD7hFPCDVrylG90Vx4d3d4ho43udF9Lw/bsMroZbK4bba8FGNHTHxMb5FHXCHkLmz1oSFBdtGcQ/+XQdqF5q9YDLc=
+	t=1717784369; cv=none; b=Ni/2earV7VTrVJeJHu1ecLxCSEfpDNUeaxjmKYiMUswF1pNmSHhsrJ0Nvk68nVeXdF/+hKBtRzK5CiX0YyzIUEGkxNBnQm/LXvhBQXsXnG9CSsRyYEcc7ZdvRHC8pVbYVjeav1B5mu0P9TSdr2mnwQokffOKsHMcUfk5iES5U6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717783230; c=relaxed/simple;
-	bh=0NRGuS2YrkWBCFcj/9uHh/nwyQi8ilhdgYK4XspWfA0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FV6zSxVEAi1UX/Z/AIgJIVV7gNmTcKwSQpM/PsLUAONJB1K1TfDVLRSUyQsfZugfnC1HRVFUFcKA+rAY/hTfetzl8lCs92lfujyJjFCprlF4/PDcIJIgNoCl6rK8kb5FKT0N36PKAhBLs6MRzjJdpfXR3RzHtx/yQG7z5Wp/73k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YbU/IO9s; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1717784369; c=relaxed/simple;
+	bh=M7RFaJwUb5y9jRpZACSi9UjIxiGsqmknllgaBtE7tbk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VdiVPdDyUlGx1FFSS3QlUlYd2SXwjA4qyNBrnARn59YOVy0HXjhH4EFfhY0GogejYhaEEP957lN/0vzeCMr36/wk2yYEHZocbHi7WZM9COQwzkdwCly/Xc5Ap8naCcaaPOjv3HY1zmaEusYriMXnqui1ASUORrZ2DMZc7xlIiNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kkbf+e7/; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YbU/IO9s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=0NRG
-	uS2YrkWBCFcj/9uHh/nwyQi8ilhdgYK4XspWfA0=; b=YbU/IO9sX3jfXvqlFN/B
-	cpDFyFS+gIkhlS3iwPWzsRnHRBe3vNTqv/Riknz25fD24OQaoo+288/sk277osOA
-	IlK9xRMb0mab9SbpllMkDwwIZblfE1TPoLeNAKsBHiFA3OlPbvyGU6dgkdE+DSKm
-	IpcSeBQY2g2stZlCx38VotzStqSD6xfz/WaIXYPqD/eQVOj2y9BIc0IWGmaa7CPt
-	3eR3cynz4g+Y3AdKSQs4AxWL7VHio6TPyTCv/lcMmTIjA2TX+SXWnlvmSOrkIDni
-	oPhw5Z2uhdNoRX9IpdDQYu3kMyfG1PPXp2S1uoiU4DHyDdJW+D7Nw/SW2lCHPkkk
-	4A==
-Received: (qmail 3413723 invoked from network); 7 Jun 2024 20:00:20 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Jun 2024 20:00:20 +0200
-X-UD-Smtp-Session: l3s3148p1@mbWaklAalMhehhrL
-Date: Fri, 7 Jun 2024 20:00:17 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, =?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-Message-ID: <txliuvufu6muqucno2uex2q6xvnveozpjzahx7zryqlvvvzrs7@flv2zztine6r>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Armin Wolf <W_Armin@gmx.de>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, =?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Stephen Horvath <s.horvath@outlook.com.au>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <c939b0c7-2c8c-4cf1-8d5c-9309ce0b371a@gmx.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kkbf+e7/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717784368; x=1749320368;
+  h=date:from:to:cc:subject:message-id;
+  bh=M7RFaJwUb5y9jRpZACSi9UjIxiGsqmknllgaBtE7tbk=;
+  b=Kkbf+e7/J3z84Peg2LEdp6h+H53hCW+hr7/YyCaVCisfVkwcE7/m4rdD
+   F2uRsV0ZRAvOb6Gufhn/BxwHhzsRpRaI/vOFEvZD7pMyULoqUmFi8DWL/
+   L42JRJfsqQBvlrXL4nYp9K96KMjzyxynLeGhPES8COnByGKqrXu/WIqG7
+   d9221tuy9ZmrYDwGNUVlkQ4SyqU7So2xJlwKwigLbAMwCqMLM5D4vJ+am
+   IUaKcsnCB77RixSQg6++9ugWUgnqy4L4rA1UfRSMmeDAHvTQjN085SuLp
+   tCkOhmVvEYhmqymUv36uA0T3oaG4SWrkTI21IMiFPFQ0bc6wEkoWs/ybZ
+   Q==;
+X-CSE-ConnectionGUID: cXUDq9RiRA2jhAa5HUFIUw==
+X-CSE-MsgGUID: mnZh3fmtTKaHEYFpuquabA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="11968135"
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="11968135"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 11:19:27 -0700
+X-CSE-ConnectionGUID: M2cFBwk2QreUZzxlrM5H2A==
+X-CSE-MsgGUID: 9CR0I5IDS8Gh1oZ5ZZWW5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="39069953"
+Received: from lkp-server01.sh.intel.com (HELO 472b94a103a1) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 07 Jun 2024 11:19:26 -0700
+Received: from kbuild by 472b94a103a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFeBQ-0000Eg-15;
+	Fri, 07 Jun 2024 18:19:24 +0000
+Date: Sat, 08 Jun 2024 02:19:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 431761d744cc94f563033713b1ea9014887a3dd4
+Message-ID: <202406080214.xABaPkX9-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="44kjmhkbol2rnepo"
-Content-Disposition: inline
-In-Reply-To: <c939b0c7-2c8c-4cf1-8d5c-9309ce0b371a@gmx.de>
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 431761d744cc94f563033713b1ea9014887a3dd4  hwmon: (w83795): Remove use of i2c_match_id()
 
---44kjmhkbol2rnepo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+elapsed time: 1456m
 
+configs tested: 82
+configs skipped: 3
 
-> the text "Only works for DDR, DDR2, DDR3 and DDR4 for now" should be updated too.
-> With this fixed:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Yes, maybe this could be simplified to "(LP)DDR memory types"
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                                 defconfig   gcc  
+arm                               allnoconfig   clang
+arm                                 defconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+i386         buildonly-randconfig-001-20240607   clang
+i386         buildonly-randconfig-002-20240607   clang
+i386         buildonly-randconfig-003-20240607   clang
+i386         buildonly-randconfig-004-20240607   clang
+i386         buildonly-randconfig-005-20240607   clang
+i386         buildonly-randconfig-006-20240607   clang
+i386                  randconfig-001-20240607   gcc  
+i386                  randconfig-002-20240607   gcc  
+i386                  randconfig-003-20240607   gcc  
+i386                  randconfig-004-20240607   gcc  
+i386                  randconfig-005-20240607   gcc  
+i386                  randconfig-006-20240607   gcc  
+i386                  randconfig-011-20240607   clang
+i386                  randconfig-012-20240607   gcc  
+i386                  randconfig-013-20240607   clang
+i386                  randconfig-014-20240607   clang
+i386                  randconfig-015-20240607   clang
+i386                  randconfig-016-20240607   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   gcc  
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+x86_64                            allnoconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   clang
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
 
-
---44kjmhkbol2rnepo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZjSq4ACgkQFA3kzBSg
-KbbTbg//cD7sOcvnAnkIomuxZCVkBx0taLNZrNBPEfiUHTdGQ3zontEQMXJ0moHe
-acWUAt/sy6sxemTyRojO0FWsDCGOZ9hPO95F8Tpt921gdDOFF3mSMXv7V4eLVbzV
-H7jI+QIn7hvjUBpCTCgZ0DjDY5ku36tAxcpxbr/7aYsoXPz31lqk9Tb8lthum4+j
-8AfgziLgAaNqvd0tDO5CoVmAiy0d8gs2OvqXfwP5XOOzhGA78CzfxG2GSCqqO73c
-qXxrR3Rhu82NMej7FUUd+eThQvcmgo3eqV7AOHlr0eaT1338DBk3ZIEGFlswn5ae
-LsoeVUtequuqUVbsf5XM0QHaCO8uB/Z9lvgwa1FIHdMvbWT/lUebhtjwlH61WjZk
-aZam6j+Av84nmp9XdPWNm5itz1Yk8YcekN1Eq/rjlDqu8VF9fFofH5caKrtnojEk
-+1tlAyjdoRudnf15D59pcrD/S1NMYxWb94rw0BekOaQYOHAo51dnPMsOS+YW5/H7
-DqSuo2PjSMobSv8GHuUq0Sd/Ghvrc3jxSlEtgUk4jUWv6QJSBIMzrA5wWrPiYjVk
-YHxgS1VSNMApKGgHGcvhzyLSWJllAiZWs3POngn0wVRiTNQwqTLkyypF8fkzOe1Q
-T9IaM1Fjx/+bn2IHZRQaRNhBYfGy7tZVgodo8x5mXaOsjDmP41E=
-=qngC
------END PGP SIGNATURE-----
-
---44kjmhkbol2rnepo--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
