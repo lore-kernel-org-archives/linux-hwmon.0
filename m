@@ -1,159 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE801DFEB
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Jun 2024 18:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4838044C8C;
+	Fri,  7 Jun 2024 21:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717784369; cv=none; b=Ni/2earV7VTrVJeJHu1ecLxCSEfpDNUeaxjmKYiMUswF1pNmSHhsrJ0Nvk68nVeXdF/+hKBtRzK5CiX0YyzIUEGkxNBnQm/LXvhBQXsXnG9CSsRyYEcc7ZdvRHC8pVbYVjeav1B5mu0P9TSdr2mnwQokffOKsHMcUfk5iES5U6Q=
+	t=1717794026; cv=none; b=eczJwMaP7OGThkknEpZznpA9bOLGsuRqJcZitSH2znGsruwIY8jGQ70IECNqqyY5SscjosUVBGvSiXhjZgDCIxEDZb0Hj173WC6p0121iWgyE6dGH8f4xjEgkF1rUQ9lUA9UjraPrlsGObzjiHpDTL7xgUDZ9zYpWbH+6lh1V98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717784369; c=relaxed/simple;
-	bh=M7RFaJwUb5y9jRpZACSi9UjIxiGsqmknllgaBtE7tbk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VdiVPdDyUlGx1FFSS3QlUlYd2SXwjA4qyNBrnARn59YOVy0HXjhH4EFfhY0GogejYhaEEP957lN/0vzeCMr36/wk2yYEHZocbHi7WZM9COQwzkdwCly/Xc5Ap8naCcaaPOjv3HY1zmaEusYriMXnqui1ASUORrZ2DMZc7xlIiNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kkbf+e7/; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717794026; c=relaxed/simple;
+	bh=ef3MWoAXTfNUCcOtFjro99oNO2Ai0BPF9p5sAINVR/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pFScaetZjGdB00Cw6+aA8edg5nJK+1Giv2HaHk+bzdmgI2M5kdaZaz6uSJRHL9r/xUVlnIOaOAGdGBY4k6TvFeugGyLlfIhIiZbs6Q7MGzq/5HtGMI+7xQ7Si2oI4r1CBIWx5DAERccQ8YMDs2UBy5m0EM+yIIMbhkpVewacNBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfQcR8D3; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kkbf+e7/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717784368; x=1749320368;
-  h=date:from:to:cc:subject:message-id;
-  bh=M7RFaJwUb5y9jRpZACSi9UjIxiGsqmknllgaBtE7tbk=;
-  b=Kkbf+e7/J3z84Peg2LEdp6h+H53hCW+hr7/YyCaVCisfVkwcE7/m4rdD
-   F2uRsV0ZRAvOb6Gufhn/BxwHhzsRpRaI/vOFEvZD7pMyULoqUmFi8DWL/
-   L42JRJfsqQBvlrXL4nYp9K96KMjzyxynLeGhPES8COnByGKqrXu/WIqG7
-   d9221tuy9ZmrYDwGNUVlkQ4SyqU7So2xJlwKwigLbAMwCqMLM5D4vJ+am
-   IUaKcsnCB77RixSQg6++9ugWUgnqy4L4rA1UfRSMmeDAHvTQjN085SuLp
-   tCkOhmVvEYhmqymUv36uA0T3oaG4SWrkTI21IMiFPFQ0bc6wEkoWs/ybZ
-   Q==;
-X-CSE-ConnectionGUID: cXUDq9RiRA2jhAa5HUFIUw==
-X-CSE-MsgGUID: mnZh3fmtTKaHEYFpuquabA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="11968135"
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="11968135"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 11:19:27 -0700
-X-CSE-ConnectionGUID: M2cFBwk2QreUZzxlrM5H2A==
-X-CSE-MsgGUID: 9CR0I5IDS8Gh1oZ5ZZWW5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
-   d="scan'208";a="39069953"
-Received: from lkp-server01.sh.intel.com (HELO 472b94a103a1) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 07 Jun 2024 11:19:26 -0700
-Received: from kbuild by 472b94a103a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sFeBQ-0000Eg-15;
-	Fri, 07 Jun 2024 18:19:24 +0000
-Date: Sat, 08 Jun 2024 02:19:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 431761d744cc94f563033713b1ea9014887a3dd4
-Message-ID: <202406080214.xABaPkX9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfQcR8D3"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52c525257feso259251e87.1;
+        Fri, 07 Jun 2024 14:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717794022; x=1718398822; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QslBPCPaaB+ZOzzWf1yvlb/8i+T4YYI9EZK5xnRWDPQ=;
+        b=bfQcR8D3ZUB38fk1MSkNbmf8dmDofk0eqd9xo37sTKZ9+XbVQwP0I/BnmtoLaO7aZH
+         +dSRvDZWgFvtbHUrJ8NRWxvdTBIZXvcrbaioBa68lemUAdf0qefiXoWhd4suthujAruX
+         VGnrvi/ie4S0gEl+Om3iD8Duu0eGc8DeFhT6WJcuHyQ152jS8eGz1PYyREqFioltKU87
+         4dVSJaPzTdsGiT3hoTFZV4qBQixkrDtMu8Ot0nUrElCP5fse1u6tKIkJbhDSW1WNYqUS
+         VhYNU4mzBZaewNDKcsSsnfhALvfze40oespa+kfEI50siwowPJtulI9DUg8c+W18iA8k
+         /9FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717794022; x=1718398822;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QslBPCPaaB+ZOzzWf1yvlb/8i+T4YYI9EZK5xnRWDPQ=;
+        b=ffAY+pAcuOO3rpr8oeLS1EUWOD9LRmZXQkQx+oQ3z7oRMni20mn8xeXsjBFSmA7+EK
+         H6dbvIUy4R1r+PF8gR8g5om9UAaLVKObNJdZo4SLcGFunN+JExUGQzcTYxFlmQZuDkar
+         nQyDpE/aFrgjRZtWzRnZbWHdicoWn6HlcEzm7SRNfSGtirH9CQM8ukkZqeel3YaNvGqn
+         IHgpCR4eJQhLCMYdMX0jOMfqQLg83x6+1aJGTnXdiyVA83P0wqjOe1UiTPOmNOmREPLf
+         h5RK2NxJjPNqi6/+NKknf5n8lxxX8HF8MRTKIZqBPdTmiyvzUy778xjtLGC4/efK5XWp
+         Uorg==
+X-Forwarded-Encrypted: i=1; AJvYcCVx6o7SSANxu3KbyecR8mD6KUMlwRf56KoyqeJJ4hP7BeCguOyNHUmAGImTv+aG5TTmcWfDmvrqZcEljuSfJADcR0jtmEwRRGrQv6KJ
+X-Gm-Message-State: AOJu0YyS2mDwXEEhqWAz14XWwkf6U/Sx0otluRaLdX6uJt4b4sym77iB
+	l9YGJ5nB5krP8igjPGl1D0Wc063ZdNGmUi3P0vwOqt9RSlRei357
+X-Google-Smtp-Source: AGHT+IEA4DbtGpy9qbGCiOpXknY8wt7xumZrRAf4VNqcZpLR8VWXTEmY/hS7flSaqdMT4zUtrg5RPQ==
+X-Received: by 2002:ac2:48a2:0:b0:52b:ce2f:5d11 with SMTP id 2adb3069b0e04-52bce2f5df1mr617884e87.25.1717794022092;
+        Fri, 07 Jun 2024 14:00:22 -0700 (PDT)
+Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c9717b6e3sm198436766b.13.2024.06.07.14.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jun 2024 14:00:21 -0700 (PDT)
+Message-ID: <0e0d9d44-d7f2-4dc0-9851-06b1f7290976@gmail.com>
+Date: Fri, 7 Jun 2024 23:00:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] hwmon: use device_for_each_child_node_scoped()
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Tim Harvey <tharvey@gateworks.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240404-hwmon_device_for_each_child_node_scoped-v1-0-53997abde43c@gmail.com>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <20240404-hwmon_device_for_each_child_node_scoped-v1-0-53997abde43c@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 431761d744cc94f563033713b1ea9014887a3dd4  hwmon: (w83795): Remove use of i2c_match_id()
+On 04/04/2024 13:13, Javier Carrasco wrote:
+> Switch to the _scoped() version introduced in commit 365130fd47af
+> ("device property: Introduce device_for_each_child_node_scoped()")
+> to remove the need for manual calling of fwnode_handle_put() in the
+> paths where the code exits the loop early.
+> 
+> There are only two users of the non scoped version in the hwmon
+> subsystem:
+> 
+> - ltc2991
+> - gsc-hwmon
+> 
+> All calls of fwnode_handle_put() were in error paths.
+> 
+> This series is based on the master branch of linux-next (next-20240404)
+> to profif from the scoped version of device_for_each_child_node().
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> Javier Carrasco (2):
+>       hwmon: (ltc2991) use device_for_each_child_node_scoped()
+>       hwmon: (gsc-hwmon) use device_for_each_child_node_scoped()
+> 
+>  drivers/hwmon/gsc-hwmon.c |  7 +------
+>  drivers/hwmon/ltc2991.c   | 11 +++--------
+>  2 files changed, 4 insertions(+), 14 deletions(-)
+> ---
+> base-commit: 2b3d5988ae2cb5cd945ddbc653f0a71706231fdd
+> change-id: 20240404-hwmon_device_for_each_child_node_scoped-6e581c1d8a31
+> 
+> Best regards,
 
-elapsed time: 1456m
 
-configs tested: 82
-configs skipped: 3
+Hi, this patch appears as "superseded" in the patchwork, but I could not
+find what series actually superseded it.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I just noticed that the cleanup in ltc2991.c turns out to be a bug fix
+as well because there is an error path if "shunt-resistor-micro-ohms" is
+zero that misses the required fwnode_handle_put().
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                                 defconfig   gcc  
-arm                               allnoconfig   clang
-arm                                 defconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386         buildonly-randconfig-001-20240607   clang
-i386         buildonly-randconfig-002-20240607   clang
-i386         buildonly-randconfig-003-20240607   clang
-i386         buildonly-randconfig-004-20240607   clang
-i386         buildonly-randconfig-005-20240607   clang
-i386         buildonly-randconfig-006-20240607   clang
-i386                  randconfig-001-20240607   gcc  
-i386                  randconfig-002-20240607   gcc  
-i386                  randconfig-003-20240607   gcc  
-i386                  randconfig-004-20240607   gcc  
-i386                  randconfig-005-20240607   gcc  
-i386                  randconfig-006-20240607   gcc  
-i386                  randconfig-011-20240607   clang
-i386                  randconfig-012-20240607   gcc  
-i386                  randconfig-013-20240607   clang
-i386                  randconfig-014-20240607   clang
-i386                  randconfig-015-20240607   clang
-i386                  randconfig-016-20240607   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
+This is something similar like the recently applied fix for the ltc2992
+[1], but in this case the _scoped() macro already exists and is in use
+in the mainline kernel, and no explicit call to fwnode_handle_put() is
+required unless the fix is to be ported to old kernels that don't have
+the device_for_each_child_node_scoped() macro.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Link:
+https://lore.kernel.org/linux-hwmon/20240523-fwnode_for_each_available_child_node_scoped-v2-0-701f3a03f2fb@gmail.com/
+[1]
+
+Best regards,
+Javier Carrasco
