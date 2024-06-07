@@ -1,168 +1,301 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2111.outbound.protection.outlook.com [40.107.94.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D3A199E9A;
-	Fri,  7 Jun 2024 16:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717776551; cv=none; b=S9bbKRCYWSsBZUZrYYe62qqLGP+EgVSHtHfVDFTgxD+hnsqY6v5WHPFkdfAp2zjE2JpPPIwC+zb2llk36mfjFtGhmRHDmPCtuzTgU0DfrWJgAihBjjm3bY76/QJcTd2Lny4XHBJ7bAmuXPfdmHufQD2n7PC65+ppJ42KFlSayz8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717776551; c=relaxed/simple;
-	bh=0bL0I8IkMYINLSg8BK8N0AeKq4PToRzzG8KCyf7a0B0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S6mf/GRn05/0ilxTWVQYXDZXV6of6r8O4OO0JXNQxV2Xfxjrwue2Ef/aaRrfUv8Sv304ri4hgpxZJTpfIxAKSXpgkY5j+If+ftXfn0XZgl0Xe30M8eSlCQGt3S7a67rDJT6Fv1XUUpb/TK/ETq7Sk1i5so48jzTqOnB8QR+n5nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=hM4VwsXl; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5335134B2;
+	Fri,  7 Jun 2024 16:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.111
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717778830; cv=fail; b=K/oZSbebsg/3dv+FpUDyQ80I/8nkGSDEf2edbbCIIco+XoTOMr2XKN68yi+H8E/vZz1wThvvEotNOfx5HfFumkrnXSVvTNYOmmjHjrxcaOi+/m72Jikqzn7Kyv42iPCuweqZTGx1Ao2ZWUijtXqXG5OBPha4RbCtEtWSlp3wHEM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717778830; c=relaxed/simple;
+	bh=4NkV7hokM/7LJEMraYebpIzWBz2cnBg3FVSUIL0otks=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DO7GC0LRZUxji0AbGU5/beI9uhs7j52i680atKLB7Vom8W6dWI+uVeb4DXGLHA68ZQbk626YPp5ianqsxshW5NlkfsIPmtJGmAsOPxnuOn1nkIbDVApF/xrG4xKC+pqAmKuqa1dcnYxm1oMfhVF/+3aiKk1Zl1hm0p3R6i6twOs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=JnRZ9yv8 reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.94.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="hM4VwsXl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1717776515; x=1718381315; i=w_armin@gmx.de;
-	bh=7OGfGQBAdXl5rAGmMZnYjUnABvyc7y+GS9BjNAEJP5c=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=hM4VwsXlA2DSQdPpLjo6NvwMoMLq2+jLUhUhHA0Hrp+acdFK/kHvTfH2co3ir/bM
-	 EMOcH3RRDqfo4PyY2ecbnOGMLwo6WHjIgCWmgoz8ILXQ6FIOs6JwdpsPjwLHp7kj7
-	 IdxqDsfXDTte7gGzz04dfSIIm1+xTpHzvMpfn8TeQN+r/1LDj3e/DxdTfgoX9p/D1
-	 WABlfON1viTa7NzMkU6MTByu7HPSXBd6Z2K1UbTAgRX3HGDR/6IASQvtuAgfqvsyI
-	 EwRHOI4pxE735oe4Nl6Px5goqdJEcXTbEfVQPNg28zFtiDjDhYyw7wxV0/Pr9rik6
-	 94tTx2nNc7TCQMMKXw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MV63q-1rpo6H0T3u-00U9KT; Fri, 07
- Jun 2024 18:08:35 +0200
-Message-ID: <90fc6f8c-0f5b-4ed4-8bdb-b6eb9d0298b4@gmx.de>
-Date: Fri, 7 Jun 2024 18:08:34 +0200
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="JnRZ9yv8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A2yLKJuuUe+jXg6kZXpeabekORZzQ0X29+zqT3+P77nlowgEyHIJUt2GWp4+Qma9Ic6Cxe1sHmNQqRrJwfRsmSXuhXCsxCviK3snZkFCvBs8anS8gXrj5ovY+44XjXqngci36/A68FsOoe5PtSM1UyZbAy+VHk20QXhsmqsBTvnVyruGPnkWsB+r3bqVWbcrGs9BkYWSowdy3TPMCmT/KcHg44aHv13vZ3xMQD8vttwub1GvItdYYMHhqeW+JG8Cw1fLEHL9d4ZklR8v1wUyL2I/NsEq+Xu7HFj0Fn2m7MfhfbjOarKFbxE07BRfIHb9h5BRY7qYdx1Cbs6Gmom8AA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n4AF+CrlQjOSIXynNGm/bkA1U7ShpesIpF9FHHt6/Bw=;
+ b=BpRNGU8eXzdFZIRvDBALjBtSPwLL2wYGcl0Ehi+LGP5r4RDwDGawYqKQUuoo/k695oBLA2P8spbVvwwo6m0FMgx1zRk9TmYhW7D1xBpKd2m0Am1v+KWpvi9SgMJRWcpKTyMhejo1VlxheNBltC4zruyrASjK2Cal4RvRgc7OvCeiAbvZYKfU4H8kOCZEmGvgU6tm3VXvKySqFM1LprBsu54K0C1VqOM8UQv4uWB7p6ZMRydJmjyF4fZYSZL1s1Uvkf8H4rPND8dWS4H9cPIW9HQ/gFVzfbn3Wr4sVWCd77B0QY3VouzbG+qNLCNDz/WQksjBLtfSrvaZfqH1abasrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n4AF+CrlQjOSIXynNGm/bkA1U7ShpesIpF9FHHt6/Bw=;
+ b=JnRZ9yv8mkkUjtj/xwD/aiHmwVYJEDprRS/Rie/r+vQAvwGjLRxl3OSJLi3bpFgt0JYteIeENsytK1JI64V0ADqxxLSbUhzlsX7T13jPb1YumXUzz6Oa1CDsrE5jboIuFfFBc4i8BLTWbtJOnzxBd6rGQP3d5/2AEC2dQlVPrBI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from DM6PR01MB5947.prod.exchangelabs.com (2603:10b6:5:1dd::12) by
+ CH0PR01MB7051.prod.exchangelabs.com (2603:10b6:610:10c::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7633.34; Fri, 7 Jun 2024 16:47:03 +0000
+Received: from DM6PR01MB5947.prod.exchangelabs.com
+ ([fe80::919c:7d6a:2069:b0ca]) by DM6PR01MB5947.prod.exchangelabs.com
+ ([fe80::919c:7d6a:2069:b0ca%3]) with mapi id 15.20.7633.033; Fri, 7 Jun 2024
+ 16:47:03 +0000
+Message-ID: <a69b0e95-f89e-46b6-bf25-98984e95c751@amperemail.onmicrosoft.com>
+Date: Fri, 7 Jun 2024 23:46:52 +0700
+User-Agent: Mozilla Thunderbird
+From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: max31790: Add
+ maxim,pwmout-pin-as-tach-input property
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor@kernel.org>
+Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>,
+ Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240414042246.8681-1-chanh@os.amperecomputing.com>
+ <20240414042246.8681-4-chanh@os.amperecomputing.com>
+ <13b195e6-cbbd-4f74-a6fa-d874cb4aaa45@linaro.org>
+ <065243cc-09cf-4087-8842-bd4394fb324f@amperemail.onmicrosoft.com>
+ <d549cf2b-a7fa-4644-8fcb-3c420503ee01@amperemail.onmicrosoft.com>
+ <20240423-gallantly-slurp-24adbfbd6f09@spud>
+ <ab5cfd8c-0e88-4194-a77e-5ffbb6890319@amperemail.onmicrosoft.com>
+ <396b47f5-9604-44ab-881f-94d0664bcab8@roeck-us.net>
+ <0dcc8788-604a-49c1-8c6b-fdbfa9192039@amperemail.onmicrosoft.com>
+ <da94fde6-3286-44eb-a543-c2ac4d11cd32@roeck-us.net>
+ <8fb38eb3-bb94-49cc-b5bc-80989d7876b9@amperemail.onmicrosoft.com>
+ <a20479be-a4cf-4fb5-8d37-277d14a93224@linaro.org>
+Content-Language: en-US
+In-Reply-To: <a20479be-a4cf-4fb5-8d37-277d14a93224@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI1PR02CA0045.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::16) To DM6PR01MB5947.prod.exchangelabs.com
+ (2603:10b6:5:1dd::12)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4a 6/6] hwmon: (spd5118) Add configuration option for
- auto-detection
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>
-References: <20240604040237.1064024-7-linux@roeck-us.net>
- <20240605021907.4125716-1-linux@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240605021907.4125716-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MKkSufyTnMzwVOJq5udRYV9WMly4F2JfS0rhow53ovMu5CAWRz6
- oz8KaCc1GXC+t+6q4MnRyZ8KeCwy8l9aUw74onihsW0VN0duz3fDcv4jE+emzPY4BHirHUf
- db1gx5UVMPcDsriwzPYrNTovh2whMA+7iFMkTxpYQhHypNDdTZ1V9jcXP5rpNHCKlkMH0da
- DM5U3aaOVtPBEfHHhkPbw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TyLAve/e7hk=;iIp8HhroBI320UomHSANDvoe2ic
- 9qEpLl+iEwFsw1VLWTKjmHPA7M4WuRcBjdAsTRzLyQm8037LBMAtU+lnaHhc/pncuguQbW2mQ
- yeCVDLsW9pdN6Rc7GX0/tJ6z7ku8iyk7m1PfgBuXCTJ1WzaCTqKR3Dp+KXqU5lx9zEpdnzg0E
- c9OMD1rIJVOYCOmVgCIo503yy1WomF6l3flPZu7rTgfAHGgkhlO9p3Uov2lc5ag6bqRQewIZP
- 7ebCPHTzvSPQa53vYuzVlgRzEadfHUnBs4/wEjHCXO9Jpwtv/+HKJFPL+wtjOgkTPPqpVUxXz
- Aq+9TeyUlXgqpZCNDScvCOJGkSTlJF9Fa4rps96NRTKhdzxRzufEcIKBAGCPAfM3bbsliyu2n
- 0s1btnYcTEJQ69YLr1DZt1bJLU9ZhW/N7nDqt5omJ3SPyQuPfozfW+avJLC+GCu0v9VzaQFC/
- ha4Cu6zxpWZmbMq72PemVazRbL7oPFA8a537DlQXLCfbzN52gKqWG2iVZnjc9ngFOiKcP3QqD
- Me8YCojiwT6YgdqkOIYTpTQ7UH9IXrEIqcqcUE2yORX439QIvDVMXdGCBm0FUca6846PYpJCq
- S6BENIkj4HjY+2xfc7z4LfyFqSknTST28ziyAAodClUw3HJfiuUomoVPT3X14jtrAT/IHuDXG
- Kb1N0qPBk5NPz1RenZI1P3bF5H/2VSlhRPbvM1kwxkzTibDW+5uv+THyuIBmMRoK7SW2XKL00
- svRyrzHOJ+v51ckSbQ9Yge/o2InLpYescUwDl02d5Hxg9nymY0xRS/zjN4fRqD1wqCHYvzlWl
- EYYXMsp653HQoO8OSu6MV+2tcE781cDRTgXxtprAur0GE=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR01MB5947:EE_|CH0PR01MB7051:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e8dcf05-e880-4725-74d8-08dc871174e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|7416005|1800799015;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VkxsWERtdDlPL292azFQSzdTYVQ1aUE0UjA4bFcxUjZiT0tNUDdPTExBNjBX?=
+ =?utf-8?B?TCtPVGdXZWJVaTNna29mOVJkeFFRWFBsem1xaHNqRXJNc1U4UzlrOFVlT3Fz?=
+ =?utf-8?B?bENkdDVQOFlGWkpYZEZUK0xhZUE0T1g3ck9SOTBsMDV1aUNqSmFlMW5GeWtx?=
+ =?utf-8?B?VGkxamNSVHdCekEyWXVqdGVyRFpnaEdBNE4rMnV3bklDRzJySWVaaUxNZEk0?=
+ =?utf-8?B?SVZmZ1ZvNGsydGR2TDM5NUUyRGtjVXBCWHZPenptRnJhMm5na0ZhLytoVWlD?=
+ =?utf-8?B?ZDltV2h2eFE5d2gvUk9acFpWMWhHSnhmS2d5MmFpbVpXWGI4eXVUcGZCWE9q?=
+ =?utf-8?B?SE9GQTBnencrMnZjTzJPZmFlU1pJNllrbXA1UHUrNVh1UExTOFMwV0lHc0Vx?=
+ =?utf-8?B?eWNXeDloTThhelV4STBYSGFHTm9kTTlxQUFIendRN3AyN05HSHVJZUlWZDFr?=
+ =?utf-8?B?RUNRY0t6U2UweFloV2NMRzhSOXR3c21hNDM0QXg0N3BFM2pLZW9jdkQxeDRW?=
+ =?utf-8?B?d09aMERObExkanRRRDNadzJVaWZOcDVSNXZkMVZNSHZpc2p0dWRValpqdEU1?=
+ =?utf-8?B?MkVrNHNMVWJOVDN0SlBQeVBMQTZJaXlmVXVqYXZFbFM4UmZMTnlNcTFoUHEw?=
+ =?utf-8?B?bWtNVTBuR0EzSk9FUTVnaHdQVzdzRzlwUnA2Z0FyT0JweGJpbW9BditzK3J1?=
+ =?utf-8?B?UTRiVTd0WmFUZ0JwMlNGSVk1UnR2K3JBOStobUJTMVVUaDkyaGVNZ1B6cllu?=
+ =?utf-8?B?R2s4K05kN3BpRzdILzlReHdiWlNYeVZ5bENYSk9Gdkh3UVZOU3ZjUVN2TVZK?=
+ =?utf-8?B?azQ2MTFoSk5vK05CM3A3bXQyTlJZNEZBdHpGbDlGOU9lUmZYbDYyTzNTbUNG?=
+ =?utf-8?B?V0piZHp1SjV5NVhmTlZhU2xkM2dRcFRwcXVleWVVbGxIYlh4anpVT0JvejJp?=
+ =?utf-8?B?MWRKV201NXUyYzlXOVRkMnJiSDZuTmRmMWMvQjdTUTVjWVVoWWFiUFpUTStW?=
+ =?utf-8?B?SnZ3eTRUeVVET2w5blJqV1E0T3d3ZVJPTk00RU9zdURvLzgrMSt3TW1UcGo5?=
+ =?utf-8?B?dWZmMzlrWGovcTk4bDBnWU1zK0c1RGlxRFh1QUpXeEY0U1d6czY3S1pIRjVV?=
+ =?utf-8?B?eFIxNlJ2QXlxV01KZXU3UEVYWEp1cmxEbVpFTlZGTlh2SEx3eUhyenNhbkg3?=
+ =?utf-8?B?d21hamRTNjRvUnZHb1NiLysrd0NDbFR2M0RSMmVLb2xxQkN1a09DaVJ0RUlV?=
+ =?utf-8?B?NEtGSk9ETmtYY3BqRU84N3prZFVLU2g0QmdxWFVqbGhMYXMvWnFlZHJXbk5O?=
+ =?utf-8?B?Q1U3bXBxbmRvMnhMUldXQ2lLR01RMklLRUt4WUFHOFgwd2huSXNOTnI5QVVh?=
+ =?utf-8?B?dk9HRm5iL0VkMmxUK091SnIvd041eFdaZjcyalFMM09OZXFUUnBoMi84V1Mv?=
+ =?utf-8?B?cUY0aTRPd1lKR2luT2hMbzlPWTlQc0ZZbnRxczA2elBleVZpb2p4ME1VTi9R?=
+ =?utf-8?B?eEI4UUhMUTEySmZtSGE5bEVNVFhPYWF1OTducWRTNDRRWTd2aDROWVhHKytK?=
+ =?utf-8?B?ZWErc0J2TEFjNDJkMkFJZW1mK0cvSE1MT3cyVTdDQlRtRDd3VzFCR1dLWXp2?=
+ =?utf-8?B?a3NFVGsvSUhJTmhUekdEWkk3ZjJ1TXhDMDVqanZONFhRaVRqOXY2dHJWeE93?=
+ =?utf-8?B?YlFuZWpsMWVTNW5yT0dvR3U1VU9BdTFJOG0wa3phS2tsV0dhRmxVVkVnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5947.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Qnc0SGcyTlEzL25PakpuNXlVNDdPREFjdnZTVld1NStNQmIvenUrMHdSTmg0?=
+ =?utf-8?B?QXR1TjdQWUIwdGtVdTlXU0Y1bStwOFFXMk5uRXBQTTdmRi82QVY2TldDcml4?=
+ =?utf-8?B?UWhncm0rTzNVNGoxcktBKzk0eDlUMUxEMkE1TURiZk1UaUF3b3ltQzk1c0dq?=
+ =?utf-8?B?M0xTdThDRFQ5dlpSNE9hL1RFNmwrOEtGdnMxVVZGeHZjd2hhNjFiQ0h4M2lp?=
+ =?utf-8?B?aFRpOUk1VUpyRC83dTZ2WDlqb1JVdWVJemZKL0VkU1k0VHBWVnJYcW5mQ3do?=
+ =?utf-8?B?c3pQNC9aQmlqVlEwWHgybGlUMDJMUzBQRUYxdkhDbFRoQ0ZMMzRxdzgyclp1?=
+ =?utf-8?B?VGpNdG5ZU2VzRmhuVHJsZWw4ayt3dEl3Q0xTaFp4enRNemFtZStJeDZSY0po?=
+ =?utf-8?B?VmtsTEZ4cWNuRVQwb2hqbjBHTFp0eGFvRG1OTkV2L1Zjd01WVG9heEVzcDZ3?=
+ =?utf-8?B?T0tCZHNnN3B4U3pKK2hsNnU4LzBpOFlmbVJJbDdpaFZNS1BuUlFzbitjV09q?=
+ =?utf-8?B?VkFMMGZrZ0duQU4vSXlRVDRuaUR1czRscGdSak9FU0NXUkpydVg4MnNaWStz?=
+ =?utf-8?B?NzlCa0s5KzVTUlAzWUQyR25tVDd4Y3hCaU41c1MxaVlHVCtmNmordk1mSHEw?=
+ =?utf-8?B?SG5IRlV5ZTNvTkg1QjZ5Y2F1dlJzY0FVWVhCd2ZpR1dwbk40T2pQdndwVkFu?=
+ =?utf-8?B?TnZHcHNyNUFTdFFIVVo0bWFwSzlVVVRmU2QxbUNUWnNUV0U3RjJFVHduYmZC?=
+ =?utf-8?B?Z0J4S3hrVERqWnJpOE4xdHlvMjFDK213MVQzRHc4aW1DNlpoaUlPRHpOb1lw?=
+ =?utf-8?B?N29BZGJmWTJDL1F6TEJhZmRzMmlZVXBnWDNxbXYrbytUR0Z0MU9GM1grQ0pP?=
+ =?utf-8?B?dXRBeFFLb1I0dXVmdTAyVmZrdndaQzdvMy9sNXc1WlRqTCtQUDNYeVBrUzFt?=
+ =?utf-8?B?UnZ1NWQ3c1JsUVZaV3JZTXBybTJzdVBmYk1nZ25VN2owR3YwNTY3UkV4ZnJq?=
+ =?utf-8?B?ZE1Sa0lKUExWNWowUWY5WVBZWE96aWpSS1VjV3lUUGxEZkZyVFVFazl5Y1FZ?=
+ =?utf-8?B?bGx5SlJGU055SjhMNEg3VGs0VEtXaVh6WmZiK0lubDI3TEV5Zzg1eDlYSG1Q?=
+ =?utf-8?B?UVhkRmgxVWRwTDgyNHR3WlcyZVVtMTNab05qenUrcWxjN1g2cVk3cDEvUHFt?=
+ =?utf-8?B?QjBlSmtBS3BJdWhUTW5wWDczVE9zaWxYdjcybUd0WlRSd0pKUEFnR3ZZS09u?=
+ =?utf-8?B?aFoyUjFHa0xtcFhkMHhRdHMxZ05SQWJlbEFHNDdtanVhWk9MLzJtRHJaWitl?=
+ =?utf-8?B?U2oxSDg1S01TR1doWm5MWldLWlE3eVF4bTkvRnhYeWZCamdnQ2dITHJWNzFR?=
+ =?utf-8?B?bnN4NGJCSjhyNGVxRy8yZy85RzVPNzZGK1BBamdVcGhXa2o1V1pXYjQxdVJL?=
+ =?utf-8?B?ZkJ6eWVjUE1qV052eHZwT0svTUlkYWdLRWNwbkZOQVB2SnJDOHhDNEJnYlFs?=
+ =?utf-8?B?SXc1OHVhQ1hxV1h4MUZMc3lobGlEZzBtMHlNYWZ4ZGtoL2pZNWVQb2xnTFow?=
+ =?utf-8?B?aXFsUkYzdWI2UUQzQ3dVaWhBbEU0VVFVVWZ0QXVjdU14MmlMNXh4RXREWUN5?=
+ =?utf-8?B?VC83K1BqZTNOVmUrN3IwbHJ3NmJmYlM3UUhlUlBKS3diUE0zaWhTWDVLVms0?=
+ =?utf-8?B?ZnBvRFpONVNaN0hpbXhkRnlWamVLTzdLdjlVcEx0eXZ5cEZXUHFFZ2VVbVBu?=
+ =?utf-8?B?bFZXaFJKY0RRaVpTY29JNTkwVlVpRHN2TDhPQ0Zwd0txUmhacktJdWo2NE1v?=
+ =?utf-8?B?UjlPMERDOERZdEM1RVpnSTZNM1RsOFluM21sV2k2MlRnaTIwTjFDRWhkYlFE?=
+ =?utf-8?B?RXRaYnlhM0RjMDRCVGZnbnlpYjRVdy9GSlV2RDF5SHF5MnFyWVMvanl6TWYy?=
+ =?utf-8?B?SllORTIzM3lxMTk5TTJkWjVsSEluKzYzcTNsOXVzdkt0Q3BpeW9wVTBFT2ts?=
+ =?utf-8?B?SzlCRXFIYXBQYzM3VFJrWDVqeW03UlNIczhCekdlUVpEdzJ1SUlpVWxHRTBx?=
+ =?utf-8?B?dkxIVnR1b2h0ek9hZjRwUHloRlVFNGZUa3FERWlpcnhhcjE5aDYvSDZRV1Aw?=
+ =?utf-8?B?dnRjd1RYK3hIbFE0cUlQN0pzWTIzSllxYTNQUkg1d3lpRHEwZXc4ZFBnUTZT?=
+ =?utf-8?Q?16w5E93uBu/V14HDC8JU55Y=3D?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e8dcf05-e880-4725-74d8-08dc871174e6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB5947.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 16:47:03.1791
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q+BHTRgK3wjU3RbdgXnRvnPmlg/Oo7OmA6eG9D91XtzXgpkYzE2lxsKZ9ReBd7SbUnMCflsuq/2ptEDnsfALTyOmkD4v1RxqsIgyeUGZC8uhPvMdrkP3lMqOGMo03/6+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7051
 
-Am 05.06.24 um 04:19 schrieb Guenter Roeck:
 
-> With SPD5118 chip detection for the most part handled by the i2c-smbus
-> core using DMI information, the spd5118 driver no longer needs to
-> auto-detect spd5118 compliant chips.
->
-> Auto-detection by the driver is still needed on systems with no DMI supp=
-ort
-> or on systems with more than eight DIMMs and can not be removed entirely=
-.
-> However, it affects boot time and introduces the risk of mis-identifying
-> chips. Add configuration option to be able to disable it on systems wher=
-e
-> chip detection is handled outside the driver.
 
-Tested-by: Armin Wolf <W_Armin@gmx.de>
+On 09/05/2024 15:29, Krzysztof Kozlowski wrote:
+> On 08/05/2024 05:44, Chanh Nguyen wrote:
+>>>>>>
+>>>>>
+>>>>> I am not even sure how to define tach-ch to mean "use the pwm output pin
+>>>>> associated with this tachometer input channel not as pwm output
+>>>>> but as tachometer input". That would be a boolean, not a number.
+>>>>>
+>>>>
+>>>> Thank Guenter,
+>>>>
+>>>> I reviewed again the "tach-ch" property, which is used in the
+>>>> https://elixir.bootlin.com/linux/v6.9-rc6/source/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml#L68 and https://elixir.bootlin.com/linux/v6.9-rc6/source/drivers/hwmon/aspeed-g6-pwm-tach.c#L434
+>>>>
+>>>> That is something completely different from my purpose.
+>>>>
+>>>
+>>> Based on its definition, tach-ch is associated with fans, and it looks
+>>> like the .yaml file groups multiple sets of fans into a single
+>>> fan node.
+>>>
+>>> In the simple case that would be
+>>>       tach-ch = <1>
+>>> ...
+>>>       tach-ch = <12>
+>>>
+>>> or, if all fans are controlled by a single pwm
+>>>       tach-ch = <1 2 3 4 5 6 8 9 10 11 12>
+>>>
+>>> The existence of tachometer channel 7..12 implies that pwm channel
+>>> (tachometer
+>>> channel - 6) is used as tachometer channel. That should be sufficient to
+>>> program
+>>> the chip for that channel. All you'd have to do is to ensure that pwm
+>>> channel
+>>> "X" is not listed as tachometer channel "X + 6", and program pwm channel
+>>> "X - 6"
+>>> for tachometer channels 7..12 as tachometer channels.
+>>>
+>>
+>> Hi Guenter,
+>>
+>> I applied the patch [2/3] in my patch series
+>> (https://lore.kernel.org/lkml/20240414042246.8681-3-chanh@os.amperecomputing.com/)
+>>
+>> My device tree is configured as below, I would like to configure PWMOUT
+>> pins 5 and 6 to become the tachometer input pins.
+>>
+> 
+> And what is wrong in described common tach-ch property? I think we
+> explained it three times and you did not provide any arguments, what's
+> missing. Instead you say "I want something like this in DTS" which is
+> not an argument and does not help discussion.
+> 
 
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> Sent as v4a to avoid resending the entire series.
->
-> v4a:
->      Do not auto-select SENSORS_SPD5118_DETECT if DMI is disabled
->      Modify help text of SENSORS_SPD5118_DETECT
->      Default SENSORS_SPD5118_DETECT to y if (!DMI || !X86)
->
-> v4: New patch
->
->   drivers/hwmon/Kconfig   | 19 +++++++++++++++++++
->   drivers/hwmon/spd5118.c |  4 +++-
->   2 files changed, 22 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7a84e7637b51..d5eced417fc3 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2193,6 +2193,25 @@ config SENSORS_SPD5118
->   	  This driver can also be built as a module. If so, the module
->   	  will be called spd5118.
->
-> +config SENSORS_SPD5118_DETECT
-> +	bool "Enable detect function"
-> +	depends on SENSORS_SPD5118
-> +	default (!DMI || !X86)
-> +	help
-> +	  If enabled, the driver auto-detects if a chip in the SPD address
-> +	  range is compliant to the SPD51888 standard and auto-instantiates
-> +	  if that is the case. If disabled, SPD5118 compliant devices have
-> +	  to be instantiated by other means. On X86 systems with DMI support
-> +	  this will typically be done from DMI DDR detection code in the
-> +	  I2C SMBus subsystem. Devicetree based systems will instantiate
-> +	  attached devices if the DIMMs are listed in the devicetree file.
-> +
-> +	  Disabling the detect function will speed up boot time and reduce
-> +	  the risk of mis-detecting SPD5118 compliant devices. However, it
-> +	  may result in missed DIMMs under some circumstances.
-> +
-> +	  If unsure, say Y.
-> +
->   config SENSORS_TC74
->   	tristate "Microchip TC74"
->   	depends on I2C
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index 5cb5e52c0a38..19d203283a21 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -313,7 +313,7 @@ static bool spd5118_vendor_valid(u8 bank, u8 id)
->   }
->
->   /* Return 0 if detection is successful, -ENODEV otherwise */
-> -static int spd5118_detect(struct i2c_client *client, struct i2c_board_i=
-nfo *info)
-> +static int __maybe_unused spd5118_detect(struct i2c_client *client, str=
-uct i2c_board_info *info)
->   {
->   	struct i2c_adapter *adapter =3D client->adapter;
->   	int regval;
-> @@ -647,7 +647,9 @@ static struct i2c_driver spd5118_driver =3D {
->   	},
->   	.probe		=3D spd5118_probe,
->   	.id_table	=3D spd5118_id,
-> +#ifdef CONFIG_SENSORS_SPD5118_DETECT
->   	.detect		=3D spd5118_detect,
-> +#endif
->   	.address_list	=3D normal_i2c,
->   };
->
+Hi Krzysztof,
+
+Apologies for any inconvenience caused by the delayed response.
+
+I'll to support the child nodes by having different tach-ch values. I 
+suggest the child nodes and the "tach-ch" is optional, it will not be 
+added to "required:". Do you have any comments? Please help me share!
+
+This is a brief binding
+...
+properties:
+   compatible:
+     const: maxim,max31790
+
+   reg:
+     maxItems: 1
+
+   clocks:
+     maxItems: 1
+
+   resets:
+     maxItems: 1
+
+patternProperties:
+   "^fan-[0-9]+$":
+     $ref: fan-common.yaml#
+     unevaluatedProperties: false
+
+required:
+   - compatible
+   - reg
+
+additionalProperties: false
+
+examples:
+   - |
+     i2c {
+       #address-cells = <1>;
+       #size-cells = <0>;
+
+       pwm_provider: fan-controller@20 {
+         compatible = "maxim,max31790";
+         reg = <0x20>;
+         clocks = <&sys_clk>;
+         resets = <&reset 0>;
+
+         fan-0 {
+           pwms = <&pwm_provider 1>;
+           tach-ch = <1 2>;
+         };
+
+         fan-1 {
+           pwms = <&pwm_provider 2>;
+           tach-ch = <7 8>;
+         };
+       };
+     };
+
+
+If it's OK, I'm going to push the patch series v3 soon.
+
+Thanks,
+Chanh Ng
+
+> Best regards,
+> Krzysztof
+> 
