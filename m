@@ -1,129 +1,132 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9B22BAE9;
-	Sat,  8 Jun 2024 08:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C51D53C
+	for <linux-hwmon@vger.kernel.org>; Sat,  8 Jun 2024 23:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717836744; cv=none; b=DY3FOcUpM4AxtYMnxx9DhprzpMyUxFiA02pp2Yf1q5M6SIdWnrG1sqJ0TU8GLEqJ5te1Hac5IOd/dPZSQ9w10LolGBDnjBxQF5GTw52QAHSda71aO8xJJzlPmCQoJpW3Jg3boAbLiiboyZejwn5Iv4JlgIWNNCF7oxjegLUaOrw=
+	t=1717887631; cv=none; b=NNeJPDOKZwHpqeuLgUjcqmcndRfPLOGwQ8mSMYFjNrCcyrBoXmtyQvbktDUDkQWCoOgVTRe9gbHv8Fs3kV/Wkd+lNjzgJvsRb9ohF8LEZthbXbcNKexK3J4SkWBse8ANxYWShFs0P915jJcBXJRtbpHTmH8zxzh2NpoEqCw3LxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717836744; c=relaxed/simple;
-	bh=ha7EzrpsruY6y9xDIkz/nhmxyf0XxlQ+52RUFa2ziNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jEOSX+7az5YdCgg9bk5nMq5FDW2cGglEGtfw/AjpgX31CDFh721mDKiTiWlEkfOzy3w4ztWyz7N/pz2G1Ajn0dB+Nrdi0pRD5oHsDJqjgfJq5i4uB3qvSbnUJ/Sy3p7vw7rc1/YdBLYnJOdSMmBQhH758eEFI+gJ4evN5q16vIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsiKKfaP; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1717887631; c=relaxed/simple;
+	bh=QCRRV83U/T6Vqdz8mqvNYR70ulxPjCn9d+ws6j1pWnE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PsrI6WY5i1c4WkHpf0IcIZX1q4SY0qXcAc+3csVna2f27oqzJjtQyoTzimwflQF+NqzhR6atKWxE56i0lHqQAU/whojXUwNApTXu3vBLjNjWpyWlEpvmTGhkvmTQGVa9tzVMnqAgtLICls/dDtLbW9H7L3gRiF+kgtdL+/tl6o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ie7Cdp7e; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsiKKfaP"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a6e0a499687so135733066b.2;
-        Sat, 08 Jun 2024 01:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717836741; x=1718441541; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w1aXjWmtgZ3e8sv722YupJkGCAHwEEWx+AcscMfS3UI=;
-        b=HsiKKfaPTpqswHjqPBp9bR6b+9ihcnsARcehS6lv5XHD1Kw3MS78BODbDfWzAq0dZG
-         JHjubAKUuxL18aUpVRM5ioRTp2bg7eWVCMDMRbmIhFvKSQ2r0QbJGZT6OBnSnMcfL9tl
-         iX88nQYpwB1ikU5FGK+UwUNcCOFyFrph1dm5ubuk4GLlCC66bhhQGTZ5fqU9RAkl/jZm
-         HiLpIx37+IHndikXl8Jt3bXp2dP8orWUB1rJSq5yeAh+PMj10P/oi0AtJp6OL9d1eKFI
-         r49VYIJz6qQehiQ8WDEYkJTRNQthXAuAvizBZuxYWH0SdX3zPYnEHcC2WDNSjYj3ax5t
-         scjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717836741; x=1718441541;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w1aXjWmtgZ3e8sv722YupJkGCAHwEEWx+AcscMfS3UI=;
-        b=wyn//DCgspDB411wQdKWSWjnRFMjiYFbT53EGP9nkCCBflTZnB56j33fpDmf4eD6yY
-         vwOYoqfH39aXrhMmqhbllyiRHjOC9Ou1DF00qM/7yn2wEhRrPp2/SjEzDt9uwlGhkCen
-         zlIio/1wBd4CASI+nSvvCLyvzAnIEJ5DgdS+X9R05v8CX9cQdUvdDQHaPYu64wtC68zw
-         Kk/WA5k9gwUrTX9ualndJ5IorUlZqJju78hR+8/HNahpbR+Nooz1dR620mSKZQUseW67
-         21dbFpTTQi/74c0yk0uvZAebd79nqwzdveZeCL4t6K/xuHZ+BuHtP2zzxFcEqY21+65a
-         UNgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKw67NnFraa/cI0NS4jRDOwqS9CNELrLwIXzSi4CZ03E8E9aM0gpOGcV7dpW+TdLJYMyzBK4C8uZmOSWZkruoRIHYoX2as0s+DaXqSxSzo4k4yJa9d8k3Kbnfx5hDRb4v5vSPGb0A8qOcGaZuORUDZPvzTIW8oPsZeQYOSbyvWTAqTDgM=
-X-Gm-Message-State: AOJu0YwWVE2mwYILNgUOSh+3AEuUyVIleBxPK9ZQkAWZXG8i1CBsMnPs
-	ZvG2BV1XRDOovEf+OoVDCN6XbyAHTOxrMoaWg59+6ooqmNZpWgRz
-X-Google-Smtp-Source: AGHT+IFbDZmJD7JT3b/jbSma58/rkMWsWZspI9oABhrJ/uKXNK/8TzbM8H3qFUVbwUIAU2urSQtEXw==
-X-Received: by 2002:a17:906:3882:b0:a69:2025:1535 with SMTP id a640c23a62f3a-a6cd7a8abdemr323683866b.33.1717836740945;
-        Sat, 08 Jun 2024 01:52:20 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f200400a86c445e36ca9cbe.dip0.t-ipconnect.de. [2003:cf:9f20:400:a86c:445e:36ca:9cbe])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a6c805fa410sm359066266b.94.2024.06.08.01.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jun 2024 01:52:20 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hwmon: (asus-ec-sensors) add ProArt X670E-CREATOR WIFI
-Date: Sat,  8 Jun 2024 10:50:05 +0200
-Message-ID: <20240608085146.572777-2-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240608085146.572777-1-eugene.shalygin@gmail.com>
-References: <20240608085146.572777-1-eugene.shalygin@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ie7Cdp7e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717887630; x=1749423630;
+  h=date:from:to:cc:subject:message-id;
+  bh=QCRRV83U/T6Vqdz8mqvNYR70ulxPjCn9d+ws6j1pWnE=;
+  b=Ie7Cdp7eFUDDZRvN9oRn5dEKayDi7vpbpeagm6P/3nwOF8A39Q4fft2o
+   D7+TEZOrKHKm+ui0U8MQlRVjzEyCtheg/MWUeTqio0fshFCvom9Ui5TWR
+   d3VZtZwD6V4lF5dF19j4vMKAgbu0MyCcqaCTG1ZtfeAQb+KjrBe7Inh0f
+   m/pC/C6S6d0lJZxEyUE7k/WO2E+9mdZfs6zvf3SfocwO76ubfuHmqwP0c
+   2ewHX7K1Ul1CsUwiICq1Rl/XT+oTC/rfOYy3V5y1CknKakM6lD+zk4H6/
+   OoBvxmDQme7/i85pHTqIHkfPckH+70S1cjKHZRRpXgdjf73Snv6BdGWxZ
+   g==;
+X-CSE-ConnectionGUID: 0dZwrOSLSnWBnH45Hqe6UQ==
+X-CSE-MsgGUID: wnEAmBnDQxiOKXxdrrbSmw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14414597"
+X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
+   d="scan'208";a="14414597"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 16:00:30 -0700
+X-CSE-ConnectionGUID: yANmIQEvQ1uIGbDIPs2niA==
+X-CSE-MsgGUID: ExLGrlmzTgu2xYf1csmdcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
+   d="scan'208";a="38672260"
+Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 08 Jun 2024 16:00:28 -0700
+Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sG52w-0000az-1h;
+	Sat, 08 Jun 2024 23:00:26 +0000
+Date: Sun, 09 Jun 2024 06:59:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD REGRESSION
+ b51114a3570081b85aecb89a207b57bf346e868d
+Message-ID: <202406090640.2aMitUf3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Provided and tested by a user in a GitHub PR [1].
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: b51114a3570081b85aecb89a207b57bf346e868d  hwmon: add missing MODULE_DESCRIPTION() macros
 
-[1] https://github.com/zeule/asus-ec-sensors/pull/56
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+{standard input}:1025: Warning: overflow in branch to .L126; converted into longer instruction sequence
+{standard input}:1070: Warning: overflow in branch to .L130; converted into longer instruction sequence
+{standard input}:1189: Warning: overflow in branch to .L121; converted into longer instruction sequence
+{standard input}:1273: Error: expected comma after name `mp29' in .size directive
+{standard input}:1564: Error: unknown pseudo-op: `.lvl184'
+{standard input}:692: Error: expected comma after name `mp2973_write_word' in .size directive
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 0bf99ba406dd..ca38922f4ec5 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -8,6 +8,7 @@ Supported boards:
-  * PRIME X570-PRO
-  * Pro WS X570-ACE
-  * ProArt X570-CREATOR WIFI
-+ * ProArt X670E-CREATOR WIFI
-  * ProArt B550-CREATOR
-  * ROG CROSSHAIR VIII DARK HERO
-  * ROG CROSSHAIR VIII HERO (WI-FI)
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 36f9e38000d5..6bb8d7b1d219 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -322,6 +322,14 @@ static const struct ec_board_info board_info_pro_art_x570_creator_wifi = {
- 	.family = family_amd_500_series,
- };
- 
-+static const struct ec_board_info board_info_pro_art_x670E_creator_wifi = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
-+		SENSOR_TEMP_T_SENSOR,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_pro_art_b550_creator = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -486,6 +494,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_prime_x570_pro),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI",
- 					&board_info_pro_art_x570_creator_wifi),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X670E-CREATOR WIFI",
-+					&board_info_pro_art_x670E_creator_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
- 					&board_info_pro_art_b550_creator),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE",
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- sh-allyesconfig
+|   `-- standard-input:Error:expected-comma-after-name-mp29-in-.size-directive
+|-- sh-buildonly-randconfig-r002-20220212
+|   |-- standard-input:Warning:overflow-in-branch-to-.L121-converted-into-longer-instruction-sequence
+|   |-- standard-input:Warning:overflow-in-branch-to-.L126-converted-into-longer-instruction-sequence
+|   `-- standard-input:Warning:overflow-in-branch-to-.L130-converted-into-longer-instruction-sequence
+|-- sh-randconfig-r003-20220606
+|   `-- standard-input:Error:expected-comma-after-name-mp2973_write_word-in-.size-directive
+`-- sh-randconfig-r035-20230912
+    `-- standard-input:Error:unknown-pseudo-op:lvl184
+
+elapsed time: 1450m
+
+configs tested: 35
+configs skipped: 1
+
+tested configs:
+loongarch                        allmodconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                       allyesconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                            allyesconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   clang
+s390                             allmodconfig   clang
+s390                              allnoconfig   clang
+s390                             allyesconfig   gcc  
+s390                                defconfig   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                                allnoconfig   clang
+um                                  defconfig   clang
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+xtensa                            allnoconfig   gcc  
+
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
