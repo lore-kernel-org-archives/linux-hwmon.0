@@ -1,95 +1,105 @@
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC48142E98;
-	Mon, 10 Jun 2024 17:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E566757E3;
+	Mon, 10 Jun 2024 18:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718039448; cv=none; b=qrVG+br6ahRzUi444U992QQ5z8mm1pr0nM8Ztd42g2LQrMPyqInMVADKYvEjRWmNuHsVrO/vCQTQvJgg5SxV0dTAuxeLcBM+HU7ZsNHJnBa7i6AuoMxhSJetAVDINUq5NQfnB9Dveck95trRLtvbwtYnBmxIy+w2YsRVBpzfZ8g=
+	t=1718043052; cv=none; b=OhLxgpQ35wUM9vi5EfgrlCuSjpkupSPPVO3+RJp8CcQ+Lvf7q3PEOeZ7112jVduaDnvrruJXi+ACNg2XX6mKnh/v2/8P62dGayZMEhxr3JZbzGEQgVPvfLCsBBYseX53cA8bWzzxt3qYabi8HO+1EL9jo6ql4eNpicHNmV4Za8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718039448; c=relaxed/simple;
-	bh=KFZLKRJgQQZenPBAgjVr/0fLpBXVmplQTRwYwWy3zRA=;
-	h=Message-ID:Date:MIME-Version:To:References:Subject:From:Cc:
-	 In-Reply-To:Content-Type; b=KdWdpKdwxhbUFt3bG3aLzTLaJZZu+Jx0CGdBCBd3aHi9zzlCE5xwLJY3FXRO4lNCSWqY0Fu2DDaXpkKwl/D0UhC6lYmMGRYuhpVK9zQ+GGfcYdKQLUZjzlKsCmiDpM4EMdtE2tmTEzyw8lD5YbECGnS2eykV5PyEYIUgQhRwRGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=XcvL1n7f; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1718043052; c=relaxed/simple;
+	bh=0eeEmyGuqeL83TJD2e5vEhbVdH476h+TQmS/Nc07uOY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lyLR5QbF4Bb7gsB4EnK6jadLDkNpj0Kjch3bP4LIM6zaxUi7/M4uO+R36rlRC8F6H0JGWCqru0qXcj+08jiyh4Mb/SRty2lbjlb1K3Dwr129go3c5yDAv+Afalk38CHgH+0g8/PxTzHPx/17WqqCNwqpnkPx+aIS57NJE4h4Gz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUtY+BeO; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="XcvL1n7f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1718039398; x=1718644198; i=markus.elfring@web.de;
-	bh=PI0cKSPt9y9ms7d09bbx92IbLJG836EONN5o/9dG9ho=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:References:
-	 Subject:From:Cc:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=XcvL1n7fEkSA1yTH4Juqe4oy+/f0vZ52IzqGBSVhV3S04BJShr6KMel5nF92DuvD
-	 NDNWO3NaK2WhXTy8lBKdsV+rZRI2FKf3ZSL5YgqMKEarqtl9V6GK/VGHCOOrH933O
-	 AD0SUatgiFswk6BgLPvNnykQ8amaikbLKo/Knl7vB4IU8CSqOnH2L/ppxdoW1J4Ca
-	 JaQCR1+fh+IVlZd7DaWmdCiCSNkdx1gto5lWvGxQLdcXfwJTSZg9H5h5V56WvdRxJ
-	 J+/VuAvCtyC5sM4Vus/8skXEt5t50zBuWjJwle201qB5Kp+Kf5tQ16M9PEczxAOYb
-	 Gqt5Nkg/Upt+dFhDTw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MXGKA-1rvIQV3RD4-00NQcB; Mon, 10
- Jun 2024 19:09:57 +0200
-Message-ID: <70516ad7-fc85-4ce5-8a7f-e3e02d499d02@web.de>
-Date: Mon, 10 Jun 2024 19:09:43 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUtY+BeO"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f6f38b1ab0so1139135ad.1;
+        Mon, 10 Jun 2024 11:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718043050; x=1718647850; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=YeKd4x9T4zcAkJm59oT5TgzREq4OVAwAGCECxqy0L7k=;
+        b=BUtY+BeO4lzwfa/i/S5DNaRGJnxF2aNjiWNYw2cWc/d8nlaaT5Fq2hB2G1P19Lihnn
+         AkfqQLvM2fsEjp1YSVjj+v6E7Ponu6m7mdnGW+2oY1h4EY/46esCZpRb1G4Ajgq6AJ99
+         Ghz2yQyEifpVk+aRg3JdM4MS7BtQXihHb+m/pB/ghZS5Y/ykrRDX703VlzVkEwgHK1gy
+         DiAqodvx8ad9e4PgTQYRVu8YR+zzbizbdbHYVeYClAx3ifuc9f9LB5Sx21W54q1GsRp3
+         hH61cxyLhAjFdDLvHmRbSOZGEY6pTz6qxhv49JskN4b08HdRA+235y552mMbrA/GHTcy
+         YQgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718043050; x=1718647850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YeKd4x9T4zcAkJm59oT5TgzREq4OVAwAGCECxqy0L7k=;
+        b=BH4Mfdwbq4//SUneyNlIMSy3xHzvvFdvWzJXv5Yszj69HkWbiFbygMzCoON6pLq2pB
+         3afj2twApvOYy79N4Lu9itFAONnECDbxMjvS69VIU74mhjLF8cVX3UFCjHgipjh/3/V3
+         QyXe99fBGm0sjhBKzb06QYORnIWEf31fXCFtpgUEQjAkJOhtQhOiAUCZfheZntSVMEC8
+         o5JdN1rubazxeZOvPdO0BUvw1NjbBhB/k4VI441A8Yn0U2gOtX4mIXQpHzphFjdpB80n
+         FK0UHLWOLDhqBiGMlZK6fyGxbfoafvzxgVvRg9XY9bC7l2J+BG2CD8AQVCgJzc0rWDu2
+         JuTg==
+X-Forwarded-Encrypted: i=1; AJvYcCVtJFbWg24BM5SV+8BPli7WzK/K4JQcxe11ihsvsybgy5DEYmU7coAM152GbNvtyU9cyeE6YyFYpvB8JagHJAuRge+ADDzy+QI3fulJ
+X-Gm-Message-State: AOJu0YwtDPmTn+xYJSWVANHvGTWtoxn3GVtWyEVTVs9PBBlhNVmhgFDE
+	q0YuLZoY3BV6NnNenv01sJH+K51oMERxVif1CLZsUqC63eHujCfZIYeCsw==
+X-Google-Smtp-Source: AGHT+IGQuJjDY8lBMCPcL+F3nw9NA+u4DIJa6vEMUA0EfyI2dLyreRyXab9dG7IEmSvJbduPFmULIQ==
+X-Received: by 2002:a17:903:41cd:b0:1f7:2479:a52b with SMTP id d9443c01a7336-1f72479abfcmr13253745ad.65.1718043050147;
+        Mon, 10 Jun 2024 11:10:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd7695ddsm85604285ad.63.2024.06.10.11.10.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jun 2024 11:10:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Potin Lai <potin.lai.pt@gmail.com>,
+	Daniel Matyas <daniel.matyas@analog.com>,
+	Andrew Davis <afd@ti.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/4] hwmon: Update handling of chip-id enums
+Date: Mon, 10 Jun 2024 11:10:42 -0700
+Message-Id: <20240610181046.1991436-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Noah Wang <noahwang.wang@outlook.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?=
- <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>
-References: <KL1PR0401MB64911C4D68B4361C9EA97422FAFF2@KL1PR0401MB6491.apcprd04.prod.outlook.com>
-Subject: Re: [v4,2/2] hwmon: add MP2891 driver
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
- Bjorn Helgaas <bhelgaas@google.com>, Cosmo Chou <chou.cosmo@gmail.com>,
- DelphineCCChiu <delphine_cc_chiu@wiwynn.com>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Lukas Wunner <lukas@wunner.de>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Peter Yin <peteryin.openbmc@gmail.com>
-In-Reply-To: <KL1PR0401MB64911C4D68B4361C9EA97422FAFF2@KL1PR0401MB6491.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MGcOBqdhPn6PNd+nWXDeFns0YHTOPA44mXmtXzb6LFdRmzmb79g
- sKBhtHsyP+CY1EpA7f7AWWSxB0RoNohEsHFZiynxd0ftT+tWICq5x5KcWL2Upexhf4SnwNO
- VvcCU1X9fPAX0T4/gAJuy9ZAKrczURGnW4x+ev4sNBOzvVroJkiQv7cCzfkblocdVlFBdYW
- 76CNEIO20xkyeKIlT7+Gw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:gexMoFMv7zI=;6tw9e7rsPkNJLiplCwiPpUfF4OU
- bveq/kR1QbnOfW83CVSdlF4CoAdMQjk9Mt3zZyfERfRu1LnrSew2rCnV+AKdd/mZrmo99Sfi9
- GAqmO3a5LaWvjovn7Kq7zp3mxMLplsO2RzmWDnXpgFH5duFpc/AzMxbsoLKdbY4FJTZLd/URY
- R/DZQPqhoSwnTcBQX4aE6gHoYTNgYhvO7mITaZCJ9GW22ZTP3T5/0Y5Wk2EjFWlGumBJJ1bRl
- ulvdpQ9PBaHVY7W8qcvfWdJBJ/u2jq6zll9JXWKDsvxnacTLR4NTFCq5dqHjB6ldGbvD7zYWE
- Mn/1c5d25p3iX9DLARyiFeXOYaVMajdjww9rVI9CNGzpiMulBIVZmVYRhF1ko2VDKgDeDyHRM
- h6IhbL7OqNXgcnwrtA5b0PteBwT8lSsYCQZVU0HTwYOQ2LvC1cXwa6FW4mpvJaC7W4aW2ao9H
- B7eh/MYBGd75ED02mxfoutxZwFQ9ja9SnlTOKFofku1atWT18O5xzakUzKr3v/D32T2aAZDWr
- amDTPbQEOfW/60tSWbLqlZV/FGXIikq6xPtGO9QnOdmKcBttk95aNSUQq7pxIX9wAxddCpi9F
- z0EmCBMFkoUerkhQpAkqxbM63FVg5TDSAmjTV+5qqjnT6zg4hIZ1vrfmQ554L3BHP1VBD3eRU
- ASE6tHi3DAYgw7TDqvJ1eQvOusgJX+GXB5a4JX2g1ovgmKtF4Vf1fwSekZwwOISFmv+hJRq7r
- D0NXZe7jMAuZaSmVoIGtZP1ttBPg7xwswFgOqtOQzdaC7auQyuRg8cF3Macoz1rL7/iPY0aXN
- FAySYQgtunOZUN0yMD+gRkePi0YbJRkZCxbtIzkX+0ecc=
+Content-Transfer-Encoding: 8bit
 
-> Add support for MPS VR controller mp2891. This driver exposes
-> telemetry and limit value readings and writtings.
+With the transition to use device_get_match_data() or i2c_get_match_data()
+instead of i2c_match_id() and of_match_device(), the assumption was made
+that the data pointer in struct i2c_device_id and struct of_device_id must
+not be NULL (0). Initial patches changed enums used in those data pointers
+to start with 1.
 
-                limits?                  writings?
+However, it turns out that this is only necessary if device_get_match_data()
+is used. i2c_get_match_data() calls device_get_match_data() and uses
+i2c_match_id() as fallback if device_get_match_data() returns NULL.
+Therefore, it is perfectly valid to keep using 0 as starting enum value
+as long as struct i2c_device_id is complete and matches the data in struct
+of_device_id.
 
+It is confusing to have some drivers start enums with 0 and others starting
+them with 1, even more so if that is done inconsistently and/or if enums
+starting with 1 are used to index arrays. Let enums start with index 0
+where possible, and otherwise explain why the index has to start with 1.
 
-Should the presented message subjects have contained the key word =E2=80=
-=9CPATCH=E2=80=9D?
+----------------------------------------------------------------
+Guenter Roeck (4):
+      hwmon: (pmbus/lm25066) Let enum chips start with index 0
+      hwmon: (nct6775) Let enum kinds start with index 0
+      hwmon: (pmbus/mp2856) Let enum chips start with index 0
+      hwmon: (pmbus/max31827) Explain why enum chips must not start with 0
 
-Regards,
-Markus
+ drivers/hwmon/max31827.c      | 5 +++++
+ drivers/hwmon/nct6775.h       | 2 +-
+ drivers/hwmon/pmbus/lm25066.c | 2 +-
+ drivers/hwmon/pmbus/mp2856.c  | 8 ++++----
+ 4 files changed, 11 insertions(+), 6 deletions(-)
