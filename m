@@ -1,61 +1,61 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF3982495;
-	Mon, 10 Jun 2024 16:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992DB5B1F8;
+	Mon, 10 Jun 2024 16:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718036603; cv=none; b=HfMb4zFz7wJV6+9tP4p+1azu3qOTtuIJLMdyuUOmtlos5AsZbmBpAcM/Mkk3KIoRFpCLQH9NGgYDzyDQqoYQvqTOZD/wdyVop9MkYSM5NvwanT0SSuaD6AkN8RUx/kwIVqCUwpDHm5beu5jvcK4er5/DkeTlgqAFdtNB1H97hE8=
+	t=1718036958; cv=none; b=PDQZNR70u8QLPj4JNwzuotyd0wV/KCdg+KG2aBHv2T2to/2t7If7cswuXCkJynYsAwx3B/cKa+36V4OIMcq+DpFNyh/x5AV6m0Ih1Ld2kdDwN0BBJpgAd/gbltzfRGupzb5Bw8KH4xHaQjNqVWDNJXbwEeK521l0G6oODFurc1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718036603; c=relaxed/simple;
-	bh=xxxwDL1VhagEgWqEC94FMiAapAmQyT105SOPUo8n98I=;
+	s=arc-20240116; t=1718036958; c=relaxed/simple;
+	bh=XbZF71q1zYnvPsR2ymkEb7s6SSdeVRGUxy4y1HaDNj0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GKw78jJRmpQTrKD5HTgs/0eL3rt8XH9I22K+wT5I8o35/jmBEDpLPFvFk0pfeu4HQP+xOwdH/siGh67KigUhBvbwXa1DJYo9NcX+zIhn8tx//tffWCrc02zUw/j7GlsTZvqaIxxR+lLQoamJEqdf8il1Y8g2tZzQGzJrDKTccX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKyogNdx; arc=none smtp.client-ip=209.85.210.174
+	 In-Reply-To:Content-Type; b=iJcVK3vsOkDS2TA+YZReIp8/hnCKQLcHdjLcXXDlSimdOFrTEUCL3/MrPlJR6sW27AfAUKEzNqcm5kFgB9TaPUNfIwOOXtxS98nS4l/YUXUh7VoQgY599u/LFqRjhgk+TdT2u0pgpX+riHATsTKu5/2fkqxCjkwWR+f9/L3r67Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhKY5lZW; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKyogNdx"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ff6fe215c6so3997900b3a.3;
-        Mon, 10 Jun 2024 09:23:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhKY5lZW"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f480624d10so41525485ad.1;
+        Mon, 10 Jun 2024 09:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718036601; x=1718641401; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718036956; x=1718641756; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oL/ZBT9csiX0Fm2nxo5GzFgdOzvJwnHo2NeNg9h2dGg=;
-        b=hKyogNdx5r+8/sgPrJNg6vGDQjyLcODoNuPwL/2LaHDwGTb+pVmRqvl/mJxcky3Oy+
-         cIZ/rEArYu2qTZ6mQHvAKhO+ww3TZRJuJeqM/vKdcjRYx4+XFCDYB+SItW+gr8V5q2bv
-         9b/4+g0if4T38S8u35WhvKAFf8fsPjlTvTjWI5le1HdP4JESbL4RLCMJvad5iEfH0O4Q
-         fAhPfiZDwBfKaSZkt9tkTT48h6+g05StyNbCERZXOV87Ds3CkmAWn9MUqgy/qe9Rco0v
-         UvwqdlWqXJluSMM4BOy+Omsvff3pJTzdkcwoOe8UBH8UN9LkPU34mhWYK4fCqwMi8JC0
-         D3fw==
+        bh=vFW4QMDXEfiSRxy7aS4QsiVoTt08DVq0GrTNcQt+urE=;
+        b=nhKY5lZWj68rnTFyiMmZmRTKHnQbPa6mbWxuPrpc96pDtjPKJmXqnfs3bT4BMIXZcu
+         UnlP6K/ovePHnHqOts3Dl6xvM4t+HXrfSI3IKazKsqw6x6jEQcCq/nbtdqKy2aMPeDqd
+         4gi061l56oH9zEQBQNLwEyOYj2/2IS77cBecOEoInvDDUeFSMFNaA8RAJf1Ks46+zVft
+         Hu+sLOrAwEiedJIUYI7WXKPHDlG/eRSUtN0wa9bFGu+51GJZrFl7D/L1EWMQjnArNG4+
+         /sgDoUFlOw8CB0JD0eXEmwuCOy2S9WM/l/bBlwwBPy3hhfJ29UAzWV4i9qMtQiP3E3aU
+         dljg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718036601; x=1718641401;
+        d=1e100.net; s=20230601; t=1718036956; x=1718641756;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oL/ZBT9csiX0Fm2nxo5GzFgdOzvJwnHo2NeNg9h2dGg=;
-        b=ZdKarl1+NwMH99RrEgDD3709hBtSRXEqWzga7dR1iU30zddMWlyjf9RDea+TfeMoCz
-         A37K1v7p+gaJZYDyWODO9b9vsJEwdOitctsVA3pNwqPpDk4tHVYOgoJOiAnUTO0fXNIE
-         VZDULsf0RUjlP/v2GGzp3VoSKb1y+ww7WY9lijZLM3CdaRq690gOfO5v316UXCAHw0fg
-         2W42DNMo0Ph/n8VZyZu6EXBkTWOXEK0ytV94CvJShLtKzoO3t2lbawyAeJfLe526A2tY
-         mebFgJNLyUVaFF0UFln8kflx5p9GxGWl1JArTBF0iBbAjVAe0Hnt9wHidNpHMC0+ES2f
-         T6/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW5zEcS/hgXiIDmvD6kCIQIUKeK1zDZO0Xy75uHAqkEQsTA8DhwWNnuXkCHG7rmECdjWPk0AuDLQGFFUkYWFf8m/Poh4PaNZXERT6xau5+s/eZm9RV3uDm1VDbPGk1BhWJs8D36z37OuJ4sO7/H813xMAlD4JIf19w/NZaTK1huYLDPzNcGVd8dRva0PAAQibm1okE2XdKzc2pg1QeYgcnYeiPmQ4B2GTpTgfeKZ7139mx/L4Gb4+YXvnFu
-X-Gm-Message-State: AOJu0YwuKfXb60pAZno24vpwXBnd3ag/xv/SzEJ7dLHVF8wrXx1N78O1
-	tYba5Qon3atuXO3sz1/3L4NG4P6IiIcJUZ5tLUexH1Dw3ZxDv8go
-X-Google-Smtp-Source: AGHT+IEpfugtCmqnolrSDWFn6mD7tthrk1U/6t8OeTiLrRnmPGdiOT6KR48Kjbtqp3vsTpQlnZObVA==
-X-Received: by 2002:a05:6a21:33a5:b0:1b4:2011:d694 with SMTP id adf61e73a8af0-1b42011d7a7mr10534979637.29.1718036601345;
-        Mon, 10 Jun 2024 09:23:21 -0700 (PDT)
+        bh=vFW4QMDXEfiSRxy7aS4QsiVoTt08DVq0GrTNcQt+urE=;
+        b=If4wbNX78LBSEwYCh8Q+JRTQGxvCxAISiCrzH+eakreL4WEFkooldjB/vwDdn5KNgG
+         hpAnHB68ds/T0KGfMmwPRsRYdF7pt97R6jiAVxiLaEKEOVgaRQ2Tduu7SZk3qYse3dsJ
+         q7/uHCIurEKQQEe9gtlFQw6x8O1zBV+JKbVjJoQYMO+DJDYYrfG0Bb3BkxW1sbwyVUYt
+         /U/4h1mh+U32BfxQvb8f5W0hg8wHaqKa4hYGU1bnMJQzO7Au68QFWLMG7u9Tp3kYC9Sq
+         ns3+13Olhf92eTao6Cc3iBTMxe3qXgq7G0BpezVpCU9x6GuHfq6Sgi/tjpT+zdvq8Had
+         maNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXJsRf3IguYszILqBxjf2PiBIrm8E74mUydgp1UJ9lYmehtF2+CSG0d6oQC47bEWBGI5SCs3PYo2PV11TRhLecKwiMuu3OuEELDHe4RSEes1IXf+O5sznwZrdKLooBnGtUo+QyBqCi7tUabW96AJggyskDNVSXooPHkd1aM+b2lfPhekYg
+X-Gm-Message-State: AOJu0YyQwe8e8xhXcf4PiahIcnPq4BeK7+HLPqrNN8ra/VXSNnLe0VNI
+	ACMBsSFZ2cUbuDy7VA0Dv5N5b/i6ADVjWQQ/ttDwPFcXtoe8mv8wFLEZpg==
+X-Google-Smtp-Source: AGHT+IE7JQHKMyGctSZmckJTHmiYsKytTpvlCGW5ta2gn7cl3uRslllpr9As/0C4KFrJyfQXHYsUSg==
+X-Received: by 2002:a17:902:ecc7:b0:1f2:fb02:3dfd with SMTP id d9443c01a7336-1f6d02d2170mr128827675ad.11.1718036955727;
+        Mon, 10 Jun 2024 09:29:15 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6e2b38167a2sm4851815a12.90.2024.06.10.09.23.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f728492becsm1350945ad.78.2024.06.10.09.29.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 09:23:20 -0700 (PDT)
+        Mon, 10 Jun 2024 09:29:15 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6e966bb8-5ef2-448d-b6bd-c1012509a2cc@roeck-us.net>
-Date: Mon, 10 Jun 2024 09:23:18 -0700
+Message-ID: <33f421f0-f52a-4bf5-9efe-727ea5701cd1@roeck-us.net>
+Date: Mon, 10 Jun 2024 09:29:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,17 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [v4,2/2] hwmon: add MP2891 driver
-To: Noah Wang <noahwang.wang@outlook.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, jdelvare@suse.com
-Cc: corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com, peteryin.openbmc@gmail.com,
- javier.carrasco.cruz@gmail.com, patrick.rudolph@9elements.com,
- luca.ceresoli@bootlin.com, chou.cosmo@gmail.com, bhelgaas@google.com,
- lukas@wunner.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <20240603105306.180874-1-noahwang.wang@outlook.com>
- <KL1PR0401MB64911C4D68B4361C9EA97422FAFF2@KL1PR0401MB6491.apcprd04.prod.outlook.com>
+Subject: Re: [PATCH v3 2/2] hwmon: (ina2xx) Add device tree support to pass
+ alert polarity
+To: Amna Waseem <Amna.Waseem@axis.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20240603-apol-ina2xx-fix-v3-0-b9eff3158e4e@axis.com>
+ <20240603-apol-ina2xx-fix-v3-2-b9eff3158e4e@axis.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,46 +117,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <KL1PR0401MB64911C4D68B4361C9EA97422FAFF2@KL1PR0401MB6491.apcprd04.prod.outlook.com>
+In-Reply-To: <20240603-apol-ina2xx-fix-v3-2-b9eff3158e4e@axis.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/3/24 03:53, Noah Wang wrote:
-> Add support for MPS VR controller mp2891. This driver exposes
-> telemetry and limit value readings and writtings.
+On 6/3/24 03:08, Amna Waseem wrote:
+> The INA230 has an Alert pin which is asserted when the alert
+> function selected in the Mask/Enable register exceeds the
+> value programmed into the Alert Limit register. Assertion is based
+> on the Alert Polarity Bit (APOL, bit 1 of the Mask/Enable register).
+> It is default set to value 0 i.e Normal (active-low open collector).
+> However, hardware can be designed in such a way that expects Alert pin
+> to become active high if a user-defined threshold in Alert limit
+> register has been exceeded. This patch adds a way to pass alert polarity
+> value to the driver via device tree.
 > 
-> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
+> Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
 > ---
-[ ... ]
-
+>   drivers/hwmon/ina2xx.c | 35 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 35 insertions(+)
+> 
+> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+> index d8415d1f21fc..101346d26c88 100644
+> --- a/drivers/hwmon/ina2xx.c
+> +++ b/drivers/hwmon/ina2xx.c
+> @@ -73,6 +73,11 @@
+>   #define INA226_READ_AVG(reg)		(((reg) & INA226_AVG_RD_MASK) >> 9)
+>   #define INA226_SHIFT_AVG(val)		((val) << 9)
+>   
+> +#define INA226_ALERT_POLARITY_MASK		0x0002
+> +#define INA226_SHIFT_ALERT_POLARITY(val)	((val) << 1)
+> +#define INA226_ALERT_POL_LOW			0
+> +#define INA226_ALERT_POL_HIGH			1
 > +
-> +static int mp2891_identify(struct i2c_client *client, struct pmbus_driver_info *info)
+>   /* bit number of alert functions in Mask/Enable Register */
+>   #define INA226_SHUNT_OVER_VOLTAGE_BIT	15
+>   #define INA226_SHUNT_UNDER_VOLTAGE_BIT	14
+> @@ -178,6 +183,17 @@ static u16 ina226_interval_to_reg(int interval)
+>   	return INA226_SHIFT_AVG(avg_bits);
+>   }
+>   
+> +static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
+> +				     unsigned long val)
 > +{
-> +	int ret;
+> +	if (!(val == 0 || val == 1))
+> +		return -EINVAL;
 > +
-> +	/* Identify vout scale for rail 1. */
-> +	ret = mp2891_identify_vout_scale(client, info, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify vout scale for rail 2. */
-> +	ret = mp2891_identify_vout_scale(client, info, 1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify iout scale for rail 1. */
-> +	ret = mp2891_identify_iout_scale(client, info, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify iout scale for rail 2. */
-> +	ret = mp2891_identify_iout_scale(client, info, 1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return ret;
 
-	return mp2891_identify_iout_scale(...);
+The above check is completely unnecessary. This is a static function,
+and the parameters are known to be either INA226_ALERT_POL_LOW or
+INA226_ALERT_POL_HIGH.
 
 Guenter
 
