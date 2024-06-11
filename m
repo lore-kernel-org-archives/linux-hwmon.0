@@ -1,46 +1,45 @@
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2053.outbound.protection.outlook.com [40.107.6.53])
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2060.outbound.protection.outlook.com [40.107.6.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B9617623D;
-	Tue, 11 Jun 2024 09:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B221D178CCF;
+	Tue, 11 Jun 2024 09:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718098597; cv=fail; b=WMuQ0izuqlIfStOb1VztvfugaasATKYVdUqlUvZtwQRayv1xH/aEvgtg21Pa8/cDakfVRVq8QRE6mR80F+9/36au5wzGG70SOOH1nUpwtn8+GraEnKyuIMhBMNZNYqPoawVPzZipG/tvfVT2gaENWe9MrlxgSOG7wwPR1HDQm/I=
+	t=1718098603; cv=fail; b=VkYJ2cEk0Ti+Rg+tOrfgQ1DaWZQ+AkukZPVmhbanbyB69GQZvS7ruxUoroPHpwI/DZWcVHg6rZYTIHtz7vk+HDYUrqEyifz/p94nWcApFzqTE53yySe6Nj9W5MiV7QUGFZysf2lgDo5ImrTdmB7/vKCzEl8TTmgZJfXRIgox5ys=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718098597; c=relaxed/simple;
-	bh=/pLFLvsmTvstIusxiLOXn00gR8P/rtdCps+6C+6HuYg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=eqqXtY5nB5P+GoQVMooM953JllJo4H5oGSxt1+Km3+Y65kwYwAGYSoASRd/8U2o0oMGCZNEOFmYPQvUe16nNqVH4PDGCRNvGSOEtn/eQd/NRZvW0ZyO29pip9qzT8F/Qfl04wOkpTKFNHW2EeDu+C698M4xGbjjGwCIp987ZJG0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=H0m8tWyo; arc=fail smtp.client-ip=40.107.6.53
+	s=arc-20240116; t=1718098603; c=relaxed/simple;
+	bh=D52XoW+saOgGhGOkmenEkpqbXGlWZn5LbATvdSjlatA=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=o30mqFtGo72zb3nwaDJ57RU2KoXTNGOeV7YV+JiInEq20tMrRzVXV0CBPS93+veRGIKEHtj3+kfgtwLJn+LxGj81M9+9QJIdtZhdEzFcjNJWoZ2bED1Lt94AyuRTLGpR+U3YMVtohuzGAgmfgzaoMfbizyStXytsVdaGDwzl9J4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=R767LD11; arc=fail smtp.client-ip=40.107.6.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="H0m8tWyo"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="R767LD11"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Anx5OQVF0fyeM6yWOZzTEiQcqJCXyXvot60Kt7rooK/awQsgthwZWwqzxj47TN65HnMqvplYl81g5GGHSx2qy7169nn0bgEjLjAXs0MM2ZzBsG31mI6pCltNqc8azOop91025aymArHaktMq/8mV4GdTm8somMfhvVrhVmo7V0Dog5YQWQDOJ5Zm0DugELzgptO7OB/C6D0w1jXwB0z45/GXIEt+fE31UC/a/afBOzsz6HfO9ppg44iokEShNNHGNxmsU/IQELJBqwPZtWGIBBKmwB5eH3H5PYSJLd8R4kc9kbQhbCxzO7nv4k794Wa/DSS1h1v4s+9kn0Ewip4X9A==
+ b=bQspR9AI34TPolaxNpzGIXs4XQGtEht+AdVQLWBTneOgu8ohRyfSreONxElRNgSRWY7SsZC+aHUh2ugP7q8caetnHagUS6icazv5+k8FrXR1ySATOBUbWSBRcSTtgx5vbMXvRSFOoCSou7RNv6OSx/B9UquzNWC5op0iEaF99Q99zSytu0dwFgg1gcfBQowxfHVjXMcCd79BpnKCAIq/R5Z0ltDRPHbJnQKuBU5Za3mp5yLKH3NaQ+8BaVsxbwHH4u8QkrBcU928Ix2uTgNzgqkK95RdN9MrBXb4e70a131KByoRtcc51L/BAinLAjm0IXMIjV4sIya7gzaiUh9zaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3LISKJW0Ft8RRdvxUOaTd+tMKHmGv1hfXEUZAakyH90=;
- b=SBc0tkCXseq9/93zMuwOHrPg3+qYwmkVZPlIRoTNlYOc2HXxGGCS+IQiHHXsGsp0izTAKl0B5EJ2Xy0Fw59xyaANoN51Idi0+M8hC9ZNOGBvme20Uf0tpdYTHJR1Q9YOIsHGUgcH4onm8VzItTHnhh9V8N1LYEWJpjXxrxMQTt/MszCTrgtVWt3cgHHUdKFZ+1AGXRgHKYn/bZ/YYHHvYnGxoSBeQyvJRlrzVJiKNwEBNVjcaPSINJ9mRqSL5ckd7d+SP9U0ne3aSVpwKAO5j5TsfQ1pJYaSCGkkRSUxXGGWB8L2FEqPS7JD880dc+XNzhrByvZPTsr7IDkjVzA/GQ==
+ bh=sSQpQesB4/wae/5o3oqujPQk9IM2ahfa4m9o8EsZ9YY=;
+ b=gQPlcDjAlnSxGwSUErcVgatbebqRnRT5b2NQq0/8WqH7I3zN/QNtmc+IjqDszkmXHOdrORhyCvTl6zf3vg2Dtlrw+0kG99x5uuJcM98+2soX32OeP6f54ogp5KTwX4gIrQ3MJ+SMWiRj+d/A1lr2craissLklDpPgx9GRYSDgjzrGd6otDcIzTIHQWFJWXM84bZDMRlTX3uZVBjh1Ezo5+0+tkqhuTa2m4jvfP996NVZPIb8BW2Y7eOuloxkYVyx65fYKSjcbvm/78C1JVey/X68OrKst3iMlOS6K444u6rIk9Qm1RekjhcCgCcj7yHGVFNhsEuPCrsg0F7AejKJSA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3LISKJW0Ft8RRdvxUOaTd+tMKHmGv1hfXEUZAakyH90=;
- b=H0m8tWyoM0z0m2qQvbuPWIho/4j5gjHuvtSCGBerGxVIdXefRQ5TAAPKhdjiqrVE50FPalfQWT29DQ8qY9tN8TfUfKazfUr+HQXd10+umMC7iYym073y5Bs9o/Ig6ZqBeTyAj7AKoY1XsjQVhQMJnsyBKs3NLYI+w4h/XJFJ2Uo=
-Received: from DUZPR01CA0175.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4b3::19) by PA4PR02MB8193.eurprd02.prod.outlook.com
- (2603:10a6:102:272::18) with Microsoft SMTP Server (version=TLS1_2,
+ bh=sSQpQesB4/wae/5o3oqujPQk9IM2ahfa4m9o8EsZ9YY=;
+ b=R767LD11Um3J/nvtdqEnru4yS1cWrWIFP4jWvzTe29bszTNBIrrLc+BAt0vhHOQ4UxVZxTqPIiyjoADQzo7pCeFmXY0GTC+3PjZ8IhIZHC/9JoBbPp1wSxt1CFLyPTnIlcmhTexP7R8bkxQRlbqMCqt0QI+5CuXC1945d3FIq+A=
+Received: from DU7P195CA0023.EURP195.PROD.OUTLOOK.COM (2603:10a6:10:54d::7) by
+ GVXPR02MB11111.eurprd02.prod.outlook.com (2603:10a6:150:217::16) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
- 2024 09:36:30 +0000
-Received: from DB1PEPF000509ED.eurprd03.prod.outlook.com
- (2603:10a6:10:4b3:cafe::41) by DUZPR01CA0175.outlook.office365.com
- (2603:10a6:10:4b3::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.27 via Frontend
- Transport; Tue, 11 Jun 2024 09:36:25 +0000
+ 2024 09:36:27 +0000
+Received: from DU6PEPF0000952A.eurprd02.prod.outlook.com
+ (2603:10a6:10:54d:cafe::bc) by DU7P195CA0023.outlook.office365.com
+ (2603:10a6:10:54d::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.17 via Frontend
+ Transport; Tue, 11 Jun 2024 09:36:26 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
  smtp.mailfrom=axis.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=axis.com;
@@ -48,25 +47,26 @@ Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
  195.60.68.100 as permitted sender) receiver=protection.outlook.com;
  client-ip=195.60.68.100; helo=mail.axis.com; pr=C
 Received: from mail.axis.com (195.60.68.100) by
- DB1PEPF000509ED.mail.protection.outlook.com (10.167.242.71) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ DU6PEPF0000952A.mail.protection.outlook.com (10.167.8.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.20.7677.15 via Frontend Transport; Tue, 11 Jun 2024 09:36:28 +0000
-Received: from se-mail02w.axis.com (10.20.40.8) by se-mail01w.axis.com
- (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
+Received: from se-mail02w.axis.com (10.20.40.8) by se-mail02w.axis.com
+ (10.20.40.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 11 Jun
  2024 11:36:28 +0200
 Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail02w.axis.com
  (10.20.40.8) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
  Transport; Tue, 11 Jun 2024 11:36:28 +0200
 Received: from lnxamnaw.se.axis.com (unknown [10.92.129.190])
-	by se-intmail01x.se.axis.com (Postfix) with ESMTP id 4A6D4574A;
+	by se-intmail01x.se.axis.com (Postfix) with ESMTP id 453C7E2;
 	Tue, 11 Jun 2024 11:36:28 +0200 (CEST)
 Received: by lnxamnaw.se.axis.com (Postfix, from userid 12778)
-	id 47A90207290; Tue, 11 Jun 2024 11:36:28 +0200 (CEST)
+	id 3FC8B206ACE; Tue, 11 Jun 2024 11:36:28 +0200 (CEST)
 From: Amna Waseem <Amna.Waseem@axis.com>
-Date: Tue, 11 Jun 2024 11:36:26 +0200
-Subject: [PATCH v4 2/2] hwmon: (ina2xx) Add device tree support to pass
- alert polarity
+Subject: [PATCH v4 0/2] hwmon: (ina2xx):Add Suppor for passing alert
+ polarity from device tree to driver
+Date: Tue, 11 Jun 2024 11:36:24 +0200
+Message-ID: <20240611-apol-ina2xx-fix-v4-0-8df1d2282fc5@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,9 +75,10 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240611-apol-ina2xx-fix-v4-2-8df1d2282fc5@axis.com>
-References: <20240611-apol-ina2xx-fix-v4-0-8df1d2282fc5@axis.com>
-In-Reply-To: <20240611-apol-ina2xx-fix-v4-0-8df1d2282fc5@axis.com>
+X-B4-Tracking: v=1; b=H4sIAJkaaGYC/4XN0QrCIBTG8VcJrzP06HTrqveILnQ7NqG2MUOMs
+ XfPDaJoF11+B37/M5GAo8dAjruJjBh98H2Xh9zvSN2a7orUN3kTYCBZAZKaob9R3xlIiTqfqJC
+ olZCqtqBIVsOI+bwWz5e8Wx8e/fhcH0S+XN+tatOKnDKqtZVWlMAr5k4m+XCo+ztZUhH+cMgcE
+ RqtuIQG4YeLD1dMbLnI3FbonOBFiRK/+DzPL93iZnwrAQAA
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, "Rob
  Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
  Dooley" <conor+dt@kernel.org>
@@ -87,132 +88,102 @@ CC: Krzysztof Kozlowski <krzk@kernel.org>, <linux-hwmon@vger.kernel.org>,
 X-Mailer: b4 0.13.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509ED:EE_|PA4PR02MB8193:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9baa9c4-bf86-4c2b-2951-08dc89f9f893
+X-MS-TrafficTypeDiagnostic: DU6PEPF0000952A:EE_|GVXPR02MB11111:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6346247-3818-469e-db51-08dc89f9f897
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|82310400017|1800799015|376005|36860700004;
+	BCL:0;ARA:13230031|82310400017|36860700004|376005|1800799015;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZG1BK1pnS2lLUld1TXhoUUxwK1dITDJXVHp4NzNkT013aVAwUWJ5RysvN3FB?=
- =?utf-8?B?WlBqRFJQbDRiMk83ZHNEVFBmR3ZzWWxhMGJWZjZaQnNYNmcvVmZaaExQMTZX?=
- =?utf-8?B?RVpmSXJWZk9NbTR1Rkc1ekY1dE9LTWdlT0Zsdm1JTG00UEpLU3BVQ1RRcXVM?=
- =?utf-8?B?V0dnREtGeUFleHZCWXl0ZWJCMjJkb2pJbU5GbThPMmVuVkhwSEFnUVZ5emlT?=
- =?utf-8?B?NXBJN1dUU0wvajNsaVVCUi9sUUQwWEFpaGNrakVpTXFwanoxaGJDRHgrTGlm?=
- =?utf-8?B?ZFpjdEhPV2RkSEhaTkRCMGxaemp5RTlFeit5NVRUdTZyOGlYZ01ZaStLczkv?=
- =?utf-8?B?Y1czV2Z5TStZU3FQSmx0QWZvU1JheUV2WitvMnRrTGt5cWtpOEtaKzVDZVFu?=
- =?utf-8?B?WTRrWXZMN295SjdlMkh3K0lINnA4amxBOWNRZTJiRkxmSFhMRjl4M1lNUTZQ?=
- =?utf-8?B?UHVtMG84ZE5idGszTzFsKzUvUzVZSDBvY3NJM3cyLzh6T3JGMnpWMEZhbk1U?=
- =?utf-8?B?VXhOc3hQdmJWQkxiUUd4YlNjMlpCbTVHakRPaUw2NDB4OU04amcyaHFiUXJI?=
- =?utf-8?B?UmhhdkZ6UGxyaUdpMk5vdjRFMmtnRFptTElrRC83Q2tQUEFyUU9sUm9GaVZj?=
- =?utf-8?B?czdsd0NlY2NvV1hKOVdkNHZqVU5yWGJHa2J2V0N2YldmRGFpcW1VME1IUWFh?=
- =?utf-8?B?djlSZmhIUzVKeU1Hc0dDQzdjSkNwaVNzZzd5VWR6bzQ5UHZYS2RlS3RkQVMw?=
- =?utf-8?B?aCtJTWE0bkEwYUlzRG9rMWpHQTBjNVJxcWdSNVlObFV3bW96a2tRSVo1M0cw?=
- =?utf-8?B?UWdHYnYyNzJtNndKMlFvU2xHM2tWY3BXY01RY3BwcDNoNXNndmhjVEd6SGRI?=
- =?utf-8?B?OVk0NmxGR3JjOGtmVUVNaTJQVVZqK0NDdGZTbGFrOW1JY3ZuRW5UMzQ1Q09j?=
- =?utf-8?B?OEV3d2FDendsREoxVGh6bkdSb0gvZ1RRVTE0WEZzYnIwaUx2TXliakNLeE8r?=
- =?utf-8?B?cjdqaG9obnJRYWVvc1VYeDFGR2pIY2ZaNlQ5bEhDZW9aT0xpWDAxcmNSWlNx?=
- =?utf-8?B?Yk5mK2Q5VHF3ZmtLOU5FMmE0R2NFRUQ4K0JvN0ZYTXcwVjd1aytZWHRwaVJx?=
- =?utf-8?B?ZnVsKzN3SU1qMVNCclZ6enZ5MWk5RXlkM0Nua0pXdEpsRmdCcmUzWGh3YVp0?=
- =?utf-8?B?Unk5NkpLcVNuVmpZUWRISWF0Sk8yZnVJVTIrZWwweldJKzN1bWFoaElvOXor?=
- =?utf-8?B?V3NYZDZjMkFBRHVJbTBVRFhDSk8xZHY3d3BNYmdBMVNieWVraW1rSm44MytX?=
- =?utf-8?B?eVk5Z1k5TUIraUxSelVlTzlDdGNqQmVRYks3L2drUlNlWDJFcmU3ZXFNV3FE?=
- =?utf-8?B?UWF3RVpyNFVBK01ycWVVb0NBcUdDd3FXdFROZE5hRlVpUEF6VVFKWnJucVpR?=
- =?utf-8?B?eDJBQkZmNW0wNmhOQng5SklxWWc4Y3VpZXdpNkRqWTVvN0hKTzJkVGgzaGVV?=
- =?utf-8?B?SzM1a0xwT0lBVCtnQkhMUVU3WldHNDJ3d0NNRE9zM0VQNysycTZXVGlFTXUy?=
- =?utf-8?B?b1U3aDRkUEU5clJUYkR2UE5QU1RBTzVsRWFERXh6VFo0VWpUNHd2VXpMcXZH?=
- =?utf-8?B?amVOTU9hQU1oejU0cndzWEJUdVpTSWdUd2hXSUhabjAwUUNoU2ZDd1Y5Y2pP?=
- =?utf-8?B?ZEFjMlFLcDhSRUdOaEhwUnc2TXVwNzlxalpScHdqSDR3NDY2dUZXN1pxSnRi?=
- =?utf-8?B?VExDakxPdFgrRGNnSEdaVGFpR0psQlN0cmxpTytCNS8yN0puR1ZScWtaL2ZW?=
- =?utf-8?B?cVJ1L1dHRXpBbjNFSi9Zay9oakwvRytSR2Fwc3dlUUFUdHV1d09aaUNOeU9n?=
- =?utf-8?B?MTk2aEYxTEZBcHdveCtvZUZFZTRubEdCSU85SGR5NHJsTXc9PQ==?=
+	=?utf-8?B?OUlBTlVVQWs2eGJhUTdsOG5lTDRVdm0yZVpxUmNqMFZKNTlNM2ZGMW1qaGFH?=
+ =?utf-8?B?TjN5Q2RwZGZJYlBIS3lvRkduRkptQWxsbGppMVl4eHNIeTlPL1AzeUwrR2Fi?=
+ =?utf-8?B?SnJzaVA2L0hyWEhZa1VoRHR1LzZlQzhzUzk5THlTckxNTWlLT01vTHZGekxT?=
+ =?utf-8?B?RDhDc1JFa0ZzTXJ6Z0JaRVFrdC83VjFycS9yaElXZ0FhTzkrMzVxblg4T05X?=
+ =?utf-8?B?UEREcmEyWGVZVkc2ZUZRMmlHRVhDMWdtbUQ1S3RXZUhZRHFOZWo1aFpMcFlQ?=
+ =?utf-8?B?TjdsZlRHSkxtUTR3Qm9WczNwNTE2c2dnRXZiREYwUEw4TW1qeGh5NXZjVzZV?=
+ =?utf-8?B?eEhEUXJlQVBXUEVXQktXQ1VnamoxVnFqNFFmY3VCZ0ZBWlEvYzRZaE51ckEz?=
+ =?utf-8?B?Q3UrWTIzeFJqVEdhdWdBWGtwSEwvVWxLK3pWTEMvSzJsQzNTR3lsUFBhenBQ?=
+ =?utf-8?B?Vm0wbXVuMjRORDdBSWFBVzd0MmVRNlJLSkk5SkZ1VHRPYTBZVE5XYVQ3M0t6?=
+ =?utf-8?B?ZWFJcEVMa2phUWtoY1B3WU9JbEQ3Q3c5Mk9WcVNDSEpUMC9sMVRkVzhmSGFQ?=
+ =?utf-8?B?c3JndTcxMkc0aDVDelh1OTlYWVVEWEpLa0FNQTB2RmlWeUdFNFlBVVhoTXMx?=
+ =?utf-8?B?eFpTWkFYNmRuUTcvSEVHdnE0QXdrdTlURE5DakFZTkxBNXFFU0V5VGY1YVpQ?=
+ =?utf-8?B?NCs0SmdNSTc4cmZObkpIbTNPMFVSNnZGL2JRY1Y5Ti9WUkpDSUFDbGRJODRp?=
+ =?utf-8?B?V3hqeGV2L1BnSHlIeFlOUmtuRWZwcVBzNzNZNHBUNG93TzIwQlZMa1kyVzdD?=
+ =?utf-8?B?U1NDcDFCZ2svR0kxcC8xUmc0bW8vT0dwWVVUTll2WnBPMjVuUXFRVFo0U2dL?=
+ =?utf-8?B?NUFDUUVYNEZTU2ZmMEo4L2hzdWtXRE55dGhCSGk1QVpjc1pNVkZYMlA3TUxI?=
+ =?utf-8?B?TnV2L1RrbTJ6dG9LZTR3TklETFFzcGlGREVhMUpBTXZCVjFKNzcxcFloeDdO?=
+ =?utf-8?B?RGpudWc2TytFSEFLY1ZrN3lubndSelhkdlN5SDFnL3JNMkVncVZYdXhVVnFi?=
+ =?utf-8?B?QXpqOERQTWNaVmZpSXRXQzgxZW1nQlpnN1ArNW5oMjZuWlhFN20yUHJUQ29C?=
+ =?utf-8?B?YW8vdWVJVVF4S0dRMkx2VXY4cFZ5Uk5RRzdvVnZ2T3UreGkreTVhZ3NhWC9S?=
+ =?utf-8?B?ZzJlMUw5bjlmWCtiRnRtcUFoajhZVjFTdW9mS3YvTzUzMzRnbi9kVHV1TEJh?=
+ =?utf-8?B?aEJzRmlXcGlUSzR4U2NkdVB3QkEwaUFweURMVy84ODhGYjZQNWxkVU9DcE9R?=
+ =?utf-8?B?dlpIOVVtV0xCM3FIejBFTExGZmRkZlFVMVpuS0ZGUzFSSVk2ZDJualEyMzFS?=
+ =?utf-8?B?YmtHSkU1S1A0Z0Y0Qmk2bDI2RHVITGVKcWpuVWMwbmpCTk9YY0VZQ1JHbjBN?=
+ =?utf-8?B?bWlsclZ0eVBNVmpQTGNKeEpHM0RyRDFSblBWbng1VzJxbW9kOVJvSEplOWVR?=
+ =?utf-8?B?N2dEeGhmS1Q4eENVVkpYMlZic2NMTXZSL2RpQWlZYUZha3MyRkdxQXZTSlFN?=
+ =?utf-8?B?V0JnLzc0U3pCOWpCV2t4aGNseTg0WFRwclFFWG1Lbm05UmRWRHFwU25ENE5J?=
+ =?utf-8?B?MVdITkhkMTFyMS9MQmhySlFkZHF6c0NJS0V2M054NXBvRHBKdnJUVSszalpM?=
+ =?utf-8?B?SDc3VTVpUXpEYkV6L2FzN1ZFMmp6NTJESW1ITDdkeFp6enZLd1dreS9uTWky?=
+ =?utf-8?B?S0p2S2o4NmxnNG1QRmZwTzRBcmpUM0Flc0xNclV4SjU1ZkpyTFdxN2o1MWUw?=
+ =?utf-8?B?eStjRUJ0RkNRSG5xVmljT3psVWtVODh3aFJsYzdWY2xQZ3IzbDVBSWo1clVL?=
+ =?utf-8?B?TzBnRzlmbHhHYTE5aUlSa3Z2b3N1bUJvRkkwcmJKTVVvM1E9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(1800799015)(376005)(36860700004);DIR:OUT;SFP:1101;
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400017)(36860700004)(376005)(1800799015);DIR:OUT;SFP:1101;
 X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 09:36:28.9243
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 09:36:28.9550
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9baa9c4-bf86-4c2b-2951-08dc89f9f893
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6346247-3818-469e-db51-08dc89f9f897
 X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509ED.eurprd03.prod.outlook.com
+	DU6PEPF0000952A.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR02MB8193
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR02MB11111
 
-The INA230 has an Alert pin which is asserted when the alert
-function selected in the Mask/Enable register exceeds the
-value programmed into the Alert Limit register. Assertion is based
-on the Alert Polarity Bit (APOL, bit 1 of the Mask/Enable register).
-It is default set to value 0 i.e Normal (active-low open collector).
-However, hardware can be designed in such a way that expects Alert pin
-to become active high if a user-defined threshold in Alert limit
-register has been exceeded. This patch adds a way to pass alert polarity
-value to the driver via device tree.
+The INA230 has alert polarity bit in Mask/Enable register which can be
+configured to be active high or active low depending upon the requirements
+of the hardware using this chip. The patches in this series adds the support
+for passing alert polarity value from device tree to the driver. Alert polarity
+property is added device tree bindings and the driver is modified to read
+this property and set the Alert polarity (APOL) bit value in Mask/Enable register
+of INA230.
 
 Signed-off-by: Amna Waseem <Amna.Waseem@axis.com>
 ---
- drivers/hwmon/ina2xx.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Changes in v4:
+- Remove unnecessary checks while setting alert polarity bit
+- Link to v3: https://lore.kernel.org/r/20240603-apol-ina2xx-fix-v3-0-b9eff3158e4e@axis.com
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index d8415d1f21fc..f26ba479bf5c 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -73,6 +73,11 @@
- #define INA226_READ_AVG(reg)		(((reg) & INA226_AVG_RD_MASK) >> 9)
- #define INA226_SHIFT_AVG(val)		((val) << 9)
- 
-+#define INA226_ALERT_POLARITY_MASK		0x0002
-+#define INA226_SHIFT_ALERT_POLARITY(val)	((val) << 1)
-+#define INA226_ALERT_POL_LOW			0
-+#define INA226_ALERT_POL_HIGH			1
-+
- /* bit number of alert functions in Mask/Enable Register */
- #define INA226_SHUNT_OVER_VOLTAGE_BIT	15
- #define INA226_SHUNT_UNDER_VOLTAGE_BIT	14
-@@ -178,6 +183,14 @@ static u16 ina226_interval_to_reg(int interval)
- 	return INA226_SHIFT_AVG(avg_bits);
- }
- 
-+static int ina2xx_set_alert_polarity(struct ina2xx_data *data,
-+				     unsigned long val)
-+{
-+	return regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
-+				 INA226_ALERT_POLARITY_MASK,
-+				 INA226_SHIFT_ALERT_POLARITY(val));
-+}
-+
- /*
-  * Calibration register is set to the best value, which eliminates
-  * truncation errors on calculating current register in hardware.
-@@ -659,6 +672,25 @@ static int ina2xx_probe(struct i2c_client *client)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to enable vs regulator\n");
- 
-+	if (chip == ina226) {
-+		if (of_property_read_bool(dev->of_node, "ti,alert-polarity-active-high")) {
-+			ret = ina2xx_set_alert_polarity(data,
-+							INA226_ALERT_POL_HIGH);
-+			if (ret < 0) {
-+				return dev_err_probe(dev, ret,
-+					"failed to set alert polarity active high\n");
-+			}
-+		} else {
-+			/* Set default value i.e active low */
-+			ret = ina2xx_set_alert_polarity(data,
-+							INA226_ALERT_POL_LOW);
-+			if (ret < 0) {
-+				return dev_err_probe(dev, ret,
-+					"failed to set alert polarity active low\n");
-+			}
-+		}
-+	}
-+
- 	ret = ina2xx_init(data);
- 	if (ret < 0) {
- 		dev_err(dev, "error configuring the device: %d\n", ret);
+Changes in v3:
+- Convert the alert polarity property in dt bindings to be a flag
+- Set alert polarity depending upon on the presence of flag in
+  device tree. Otherwise, default value is set
+- Make setting of alert polarity to be chip specific since only
+  ina226,ina230 and ina231 supports alert polarity setting. 
+- Link to v2: https://lore.kernel.org/r/20240529-apol-ina2xx-fix-v2-0-ee2d76142de2@axis.com
 
+Changes in v2:
+- Add vendor specific prefix to alert polarity property in binding.
+- Minor improvement in description of alert polarity binding property
+- Remove usage of mutex while setting alert polarity in Mask/Enable
+  register
+- Correct indentation
+- Link to v1: https://lore.kernel.org/r/20240529-apol-ina2xx-fix-v1-0-77b4b382190f@axis.com
+
+---
+Amna Waseem (2):
+      dt-bindings: hwmon: ti,ina2xx: Add ti,alert-polarity-active-high property
+      hwmon: (ina2xx) Add device tree support to pass alert polarity
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml       |  9 ++++++
+ drivers/hwmon/ina2xx.c                             | 32 ++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+---
+base-commit: a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
+change-id: 20240524-apol-ina2xx-fix-34e76346cb26
+
+Best regards,
 -- 
-2.30.2
+Amna Waseem <Amna.Waseem@axis.com>
 
