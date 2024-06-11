@@ -1,91 +1,109 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47CD22095;
-	Tue, 11 Jun 2024 04:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8030579C8;
+	Tue, 11 Jun 2024 09:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718079429; cv=none; b=RgbE6cXVwS9et0Himpk/ixc9hCJBLZ43jTPB00zIT73WDFOdmO90S4hKHGRitSvViiLX4DDnoN2poMoBXfMKi3O1dXE00GBvERR+7hz/Ly85SqzF17nT0Gfk8UOtbdamrVntd15YhQJ9dPoRytqNcNrXh01Ep0zbHGXs9WKRBzY=
+	t=1718096606; cv=none; b=owL9/WiSulCqLLUNdhkdL5h7girnNe0GsNV4xsFD48Y7J43UkswWlHUH/UxTOWQf4NHuYk8VDHnIafZT+eRONtGUE+FGZe3z+LnMwacO8hgzU2NpDdJF3tcuR1WxPiJ7l2wp7k4KbuanQibL2oUEOQEQAolAEcxGzm5jBzoxatU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718079429; c=relaxed/simple;
-	bh=pOqxnzpHsqOorNOTPo+6rMsXtOAA9gSB1Pi1l3jkIyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6fT1CQ3FxfQL57j39sY++mYcPEu1Gi6PVWRZgJVFblotDB65ewNhP5D7OaXMYzcZLkf8GOYCkTqVsz7i27TkO+M7Hnq4hcatfpqJqC2iaLsM+ph9Wu+sodQaqwfg+t9mmi+3DdbTcWPqfgKCcp/H8t+Z9YLMvZXseQhC+aTvrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fqdbYVdI; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1718096606; c=relaxed/simple;
+	bh=cFBtMtud7strLsmIoucBTehp9+ujneQBRiuKV7REWKA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WmrBo1Zms8Sg/njjoYh0CSIrbdmCiuDpwSCCnV/7EdV4/BhoPehh5TYQAWNRnAHeXMaOK+igIwzeuCEVB0zNuY2n2u4EJTOI9D12uuvlkQ2cZH+hD7v0qPxt3x8EdtD7gk/sbG1ewku2D9tuSiIFrkPMlEOhqkyHd5xaRgLx4w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RxVxevJJ; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fqdbYVdI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1718079423;
-	bh=pOqxnzpHsqOorNOTPo+6rMsXtOAA9gSB1Pi1l3jkIyA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fqdbYVdISC27qrrAvuV+Kb8aqggOdTRwNbAKDNHhALa+nHwlBqh61kx2cv2uP37hD
-	 V3KOLUU4EUEkmJl7Z3MQoWywK78uTVjAmByvSBO+dkY9cs6i6z8+Ogo3PLh6/oBPi9
-	 sggBP+WGlZ6IjSKX1xasoaDRvmCIj55DVx7GUzKU=
-Date: Tue, 11 Jun 2024 06:17:02 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Guenter Roeck <groeck@chromium.org>, Jean Delvare <jdelvare@suse.com>, 
-	Dustin Howett <dustin@howett.net>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Stephen Horvath <s.horvath@outlook.com.au>, chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 0/5] hwmon: (cros_ec): fan target, fan pwm control and
- temperature thresholds
-Message-ID: <26d68031-233f-432a-b395-cdbafc31191b@t-8ch.de>
-References: <20240608-cros_ec-hwmon-pwm-v1-0-d29dfc26fbc3@weissschuh.net>
- <536e51a1-5968-4493-96ce-287167b89288@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxVxevJJ"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6f04afcce1so90319266b.2;
+        Tue, 11 Jun 2024 02:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718096603; x=1718701403; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MaUvDD1ua4d11/mNYdxEtsIhc9jZ3PvUExTrYcCwUcM=;
+        b=RxVxevJJN8rTcVKZJBYsbqSuJ7hyiDalJGOUlaQRG8vyfCWualWnWLZCZ21IOJ+3DS
+         Xl0XtZtkwDHIMb6BIKK3KhmBGozeDA8IBwtAlEzYtBd02NUBaEYmC+Q5pgBuxUfJY6NP
+         NLv/si02wjTTuN7hc450/LN+4773ZFrF2EnijxSpKKEriC8DL+vkJj7JYZVwP5i3m2kt
+         Bsuzj0ZKENiutJcjBcU5jtBildGT9JZjj949fw9yZdUburWXgXogQhmelgMNgOPMg1IN
+         2WeBKHAyO/JWXkgiAfCNK2FYpJD6xbVG38rZZiohlc6ayJcas2A0LCo0ggWRoXfY1oND
+         92Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718096603; x=1718701403;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MaUvDD1ua4d11/mNYdxEtsIhc9jZ3PvUExTrYcCwUcM=;
+        b=qk4bQq76iJzw5NE5EKqR0Fw3af8l1DrMVldc4DglQJOxk07VDr0qVF67IXPO78wYrr
+         uzEPU3mYIytwqN7Aelb2/MNAALLqe6UURKSfxlZ9wjPbAV62q4BFOmbf/sEwqzJGQiJO
+         IbUNNlBqhbPUv1TmMjGyQZbgudRc7pDtHv6OY1SByxfWFYwNwMrXa51aTsoklIZ9uLiM
+         rWlSiqdtBvIU0ESgcEjrNW6cfrGPEnAHG51C+ucVRgoIVJgJ9XorD4DKiOCy3jwKnroy
+         M74BNhmd8wjRyWVSabzfEF8nm8jdmDbatbPeanJu/wpLyfTGxi5jABHuJmDvrDm0QrH1
+         mafQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9kl/ZaF9luIqKmnHxF5lWn0CkaKavYdCthw6jXepZVOnEwqFCHgtvYThXWHn5CUUNKipXKXlV3WvFYILN0hk1OEgvBB54FxzGkq3S4lXSzEV8hbGts6l84x/YmztGsmojtI5Q70+gZrg=
+X-Gm-Message-State: AOJu0YyBnUnoKhrd2fUSj+kz9Qx2QeKX6qYy8ObXpgKjRLYuBgHNPAGg
+	AK3f465GFMv2Y9OB9yx+GZkfcGOm4vBPFAKyUESiLTkdzLLs+S7K
+X-Google-Smtp-Source: AGHT+IF1p47KrotDUyugQTZUcZ3xIm+l6ILxJywC0yVVgkBB72xEYlqMNGH3djepNLmIPJAx0EWjLA==
+X-Received: by 2002:a17:906:3cb:b0:a6f:2e80:6e04 with SMTP id a640c23a62f3a-a6f2e807573mr232587566b.19.1718096602571;
+        Tue, 11 Jun 2024 02:03:22 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef1c:c500:994e:fbde:478:1ce1? (p200300f6ef1cc500994efbde04781ce1.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:994e:fbde:478:1ce1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6e2e1d4cb8sm562848766b.5.2024.06.11.02.03.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 02:03:22 -0700 (PDT)
+Message-ID: <5f329f81cdfed31771f014d4d3cc35f4d13ffb0e.camel@gmail.com>
+Subject: Re: [PATCH 4/4] hwmon: (pmbus/max31827) Explain why enum chips must
+ not start with 0
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, Peter Yin
+ <peteryin.openbmc@gmail.com>, Potin Lai <potin.lai.pt@gmail.com>, Daniel
+ Matyas <daniel.matyas@analog.com>, Andrew Davis <afd@ti.com>, Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Tue, 11 Jun 2024 11:07:10 +0200
+In-Reply-To: <20240610181046.1991436-5-linux@roeck-us.net>
+References: <20240610181046.1991436-1-linux@roeck-us.net>
+	 <20240610181046.1991436-5-linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <536e51a1-5968-4493-96ce-287167b89288@roeck-us.net>
 
-On 2024-06-10 18:18:05+0000, Guenter Roeck wrote:
-> On 6/8/24 01:12, Thomas Weißschuh wrote:
-> > Add support to cros_ec_hwmon for
-> > * fan target speed for fan 1
-> > * fan pwm control for all fans
-> > * fan temperature thresholds (RW) for all temp sensors
-> > 
-> > The EC also supports tempY_auto_pointZ_{pwm,temp} but that does not yet
-> > seem to be usable from "struct hwmon_channel_info".
-> > Guenter, is this intentional, do you want me to add support for it?
-> > 
-> 
-> When I wrote the _info API, I figured it was too chip specific to make
-> it generic. It is also at least somewhat questionable if it makes sense
-> to have all that configurable through sysfs in the first place; normally
-> the ranges are device specific and should be configured through the
-> thermal subsystem using devicetree properties and not be touched by
-> the user. There might even be warranty implications by playing with
-> thermal parameters if someone manages to overheat the system as result.
-> I really don't want to help enabling that.
+On Mon, 2024-06-10 at 11:10 -0700, Guenter Roeck wrote:
+> If a driver calls device_get_match_data(), the .data pointer in its id
+> data structures must not be NULL/0 because device_get_match_data()
+> returns NULL if an entry is not found. Explain that in a comment to avoid
+> confusion why this is required in this driver but not in other drivers.
+>=20
+> Cc: Daniel Matyas <daniel.matyas@analog.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
 
-Fair enough.
+Acked-by: Nuno Sa <nuno.sa@analog.com>
 
-> Which leads to the next question - we are going way beyond just reporting
-> system operational parameters with your patches. What is the actual use
-> case ?
+> =C2=A0drivers/hwmon/max31827.c | 5 +++++
+> =C2=A01 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+> index f8a13b30f100..391cb059e94d 100644
+> --- a/drivers/hwmon/max31827.c
+> +++ b/drivers/hwmon/max31827.c
+> @@ -46,6 +46,11 @@
+> =C2=A0#define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
+> =C2=A0#define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
+> =C2=A0
+> +/*
+> + * The enum passed in the .data pointer of struct of_device_id must
+> + * start with a value !=3D 0 since that is a requirement for using
+> + * device_get_match_data().
+> + */
+> =C2=A0enum chips { max31827 =3D 1, max31828, max31829 };
+> =C2=A0
+> =C2=A0enum max31827_cnv {
 
-The pwm control is something that many users want.
-There are a custom daemon [0], its gnome-shell-extension [1] and quite a
-few scripts shared in the Framework forums to adjust the fan pwm through
-ectool.
-
-Personally I'd like to avoid some thermal throttling for shorter compute
-tasks where the default curves are not aggressive enough.
-
-For the others, it's mostly because the information was already there.
-
-I'd be fine with dropping the write access to the thresholds,
-not even ectool exposes that.
-
-[0] https://github.com/TamtamHero/fw-fanctrl
-[1] https://extensions.gnome.org/extension/7053/fw-fanctrl/
