@@ -1,99 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8729181312;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC57181317;
+	Wed, 12 Jun 2024 15:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718207758; cv=none; b=TqXTeEeTAyXVbweCTjoWfBrrGZJUwDrCPyIDjVgVE3FZ26jyM9Z3RPxx6/LeAjEp3TsP95CT+n6UP0CUMsRsB8M3+YQyKDh1oR2OoF1wnWNVpe8KaS7+09BcaDD6vEo2GpIVOIzC3TiLZ1xqA9gNc9zEuyE5KGmvuf/A4EuNMZA=
+	t=1718207973; cv=none; b=myTOKZyQky4ZJEsW/yHFZkHbsrggNOL22yH4tLNaKqPqcIELZIJ+qqumcogOtDCipBAJqr/c1BDjBgySN7o6vcGTyWFlV00HmKOz4z7yxQsHXMZueZuiTXIHwI/2nEVg24auQ90M/apEiiAEoOAr6QxKFCMOHmNSIhximMq2AV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718207758; c=relaxed/simple;
-	bh=OGohKvk0MjWf9+Q8+mvrBX+1BAlKKRyUXLbfH75xyb4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aVOTTwsJpcctQuUjdTM8dhm19LLOc1Dt6AuwIhKCXrejUHcYcJPE5H4DC9Fzyw6QCAdYqEK0nP0ui81Knrinl0W7LiaUbPTrmLHR1XPSyo1uTsFW2/6YtmNxiP9jkihUCMxy7nnZMPsyNeMQ5f1h0fnSNwiH7kbWlovFqnKdm34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYWVzenO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718207973; c=relaxed/simple;
+	bh=oMcGDrE4Mw8QgCqo3A7gqxfHme1uE+j+aY8hmT0NHzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LxoWmSR07PEy+6JtTGnmiIaHltxiMFpriA5qR/fzvL7ATtxSpm2XvXCjRIjLmorW5zVaib7t9eaYuI20Y7fI9YqNbh7EYEd963b1WBZQvoNiBOgVwk1DJt7X6jBq7kBnZiLXLZ4BbgYtJFAoWfRMknUtjNdklK8Ugm59iaV4KFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWIBCf6+; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYWVzenO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AEC7C4DDE4;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718207757;
-	bh=OGohKvk0MjWf9+Q8+mvrBX+1BAlKKRyUXLbfH75xyb4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kYWVzenO6v46dav7m+6VeeBQvWtkfZ2ijSROLzZNF2xhVox8NT4g6D7nEQ7Yr1CvD
-	 QbMqbzoNwKvtHxN4oOUSJGsdzFSOiqxLCA02gKqMCQ7TCsZzzusBONx5M/RWdCVpV3
-	 EiLccKqgRHfAnZUsG10WiKCsIr5ffuOoIqg1qhcsU6IhDG8FGsX5pkowWNVMy10FlC
-	 cn2EJB/8N7UtSBq02dCqRuSQs3PZ1MDiLAg7XtxdpzyjShLg11I47hWenlonizyvmL
-	 MeVPPNyid+I2VhiIZBpPj5WbK56sRWz78MH6UY8PKtaaCMSFrdgOOixPo+5vEX+bSG
-	 8/iqEXeUVgsUQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61107C43618;
-	Wed, 12 Jun 2024 15:55:57 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWIBCf6+"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-6c53a315c6eso5279656a12.3;
+        Wed, 12 Jun 2024 08:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718207970; x=1718812770; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mtQXgpv7/Oooaz+G4TiUO97dolMQhKitRb9zDqW9N0A=;
+        b=iWIBCf6+2cps6XrbjpgD2pW/xhEiqgVinYF7lffM3ri6KVlWjjC16drK2OjeAo44M3
+         8nrdiM/Bs5VmEuH4pwdkbTOewoZ7wA5d47qLw3R/FF9+BoaRJqKQzEKBUEWx86HALBPp
+         yi78HExA9/IAs/ZkOyT++3VVdAOjhvvjQNuZ1vXPqtYUnuawX/eCclvOBdWq7Q6ti3LZ
+         umxW0CB2/n/Qaq4te9BDClF/dlfC9Z2MZkZzW9UKNq5UvTXpIW4VktWythyIPTD8Nl1O
+         zt9dZG9VrhfxARPBKZH4iKVRrJWbQEHO3yStQCZOdpiCL36YevGZ+xr3/7yOrrTjJi3Z
+         tjyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718207970; x=1718812770;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mtQXgpv7/Oooaz+G4TiUO97dolMQhKitRb9zDqW9N0A=;
+        b=RmsjlohLmjm9kkWXQYEwx2gewplMBzk/VCvILeeRekYhqZwaf/pX4236IlDwaWLks6
+         uFv9f21qW8bkVhWafE6KNR3bAqX8GMJbKRKfLu2Wawm+g3qu/vkQsmcDrv/sdlaP0dCj
+         qHTtSXZ7+BtgsVBtzmQBYDjiO+wUYqQI0UYsJ+SISfIl4swIR8t7ou6vZEkM1KqNmc+d
+         HddAnXBnXp7wInrhRwr9P0QinyBtr8JC4K/pvRlq+kULLXTxjHt9pJ75iA1jX7S4Q/kw
+         fmSdkPCpUrMm9AhnRFmTPStLsLfpGTv/TnKnAU9muCp6BShdZW4W1stb9idrh+46KJPZ
+         Bhew==
+X-Forwarded-Encrypted: i=1; AJvYcCU+aZ/nERaZoeQoaD+vNx+kQRGLDvsuGSmIvv1l2Hmrpmrz7K40okZ8Dz+DvO2HXS1B53vOiVeO3qJjNvDlMjMhKJumx9Kcpy1g+WB36tV8qKKHxuf2ct1ekx1d1bM3Z/9mq1i7ntsc8EOpQkE2zutTl2iJp4AUiclJcNfGbj+Ug5yY3QZ9Qc2ILSF49OH5HbHe8RT0H1GTII3HTdzQJTJ2kOWh2MHyTDcg9QDvBGitB2JpGFD0ipbqhUuN
+X-Gm-Message-State: AOJu0Yzp/Pj/zb/8vtDjjKV9fqKpAkWQwsCbLkVT0SphXIhweYJr0kLm
+	eJkBvnyKMpN6hLVl2LE7La3pXd4SFpKdlFvONE3TIHAFiGBfcmL9
+X-Google-Smtp-Source: AGHT+IHbTM6oooBQgQWM1YhIXDNGXV/+otzNg0UQ5enijvCEmV4lK+FoI9FGnmRQbpPc7Qo2uv63wQ==
+X-Received: by 2002:a17:902:e847:b0:1f7:ed3:65cc with SMTP id d9443c01a7336-1f83b5c8336mr26696915ad.27.1718207970516;
+        Wed, 12 Jun 2024 08:59:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f84064dadbsm14837475ad.292.2024.06.12.08.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 08:59:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 12 Jun 2024 08:59:28 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Noah Wang <noahwang.wang@outlook.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+	peteryin.openbmc@gmail.com, javier.carrasco.cruz@gmail.com,
+	patrick.rudolph@9elements.com, bhelgaas@google.com, lukas@wunner.de,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: Add MPS mp2993
+Message-ID: <5c1c7d9d-5404-4ce3-8247-ff554c97e521@roeck-us.net>
+References: <SEYPR04MB6482721F71C0527767A149DEFAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
+ <SEYPR04MB6482EE5CA0C9A3F14863B999FAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH] tracing/treewide: Remove second parameter of
- __assign_str()
-From: patchwork-bot+f2fs@kernel.org
-Message-Id: 
- <171820775738.32393.13116890369510221266.git-patchwork-notify@kernel.org>
-Date: Wed, 12 Jun 2024 15:55:57 +0000
-References: <20240516133454.681ba6a0@rorschach.local.home>
-In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-hyperv@vger.kernel.org, kvm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ath10k@lists.infradead.org,
- Julia.Lawall@inria.fr, linux-s390@vger.kernel.org, dev@openvswitch.org,
- linux-cifs@vger.kernel.org, linux-bcachefs@vger.kernel.org,
- linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
- io-uring@vger.kernel.org, torvalds@linux-foundation.org,
- iommu@lists.linux.dev, ath11k@lists.infradead.org,
- linux-media@vger.kernel.org, linux-wpan@vger.kernel.org,
- linux-pm@vger.kernel.org, selinux@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- linux-erofs@lists.ozlabs.org, virtualization@lists.linux.dev,
- linux-sound@vger.kernel.org, linux-block@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, mathieu.desnoyers@efficios.com,
- linux-cxl@vger.kernel.org, linux-tegra@vger.kernel.org,
- intel-xe@lists.freedesktop.org, linux-edac@vger.kernel.org,
- linux-hwmon@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
- linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
- linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
- ath12k@lists.infradead.org, tipc-discussion@lists.sourceforge.net,
- mhiramat@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- freedreno@lists.freedesktop.org, linux-nfs@vger.kernel.org,
- linux-btrfs@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SEYPR04MB6482EE5CA0C9A3F14863B999FAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
 
-Hello:
-
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Steven Rostedt (Google) <rostedt@goodmis.org>:
-
-On Thu, 16 May 2024 13:34:54 -0400 you wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Jun 11, 2024 at 06:14:14PM +0800, Noah Wang wrote:
+> Add support for MPS mp2993 controller
 > 
-> [
->    This is a treewide change. I will likely re-create this patch again in
->    the second week of the merge window of v6.10 and submit it then. Hoping
->    to keep the conflicts that it will cause to a minimum.
-> ]
-> 
-> [...]
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
 
-Here is the summary with links:
-  - [f2fs-dev] tracing/treewide: Remove second parameter of __assign_str()
-    https://git.kernel.org/jaegeuk/f2fs/c/2c92ca849fcc
+Applied.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Guenter
