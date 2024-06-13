@@ -1,58 +1,30 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B1A145A11;
-	Thu, 13 Jun 2024 21:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232B13D50F;
+	Thu, 13 Jun 2024 23:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718315853; cv=none; b=ZKgvSFHwbKZpUmHkM6hgN/IfQ9DLRqLWc6sA0OZs62PredSn9RNXf2n9uuoJkaWbEREBNeFje8qBUj7/T5UsdVA9cEAgWTGT4we7ORRuZEFMXiO6e3xaEtre7URJ+V8aox6h7UakBQAaPbBc9KQlPMqSIhiUhBs1oaLPHWtqXXw=
+	t=1718319709; cv=none; b=bLSy97RU9bBHZW7G8RR3enxENXKDlsd8IIrFW8l2C5fQUhbgUG/4Z1AU02kZrAWzeSrc6eYlbcK2P0w/Qv7lXDjObKSsdhjAv11I5NXhtnwLnNi22jWgzGQmUsazUGGsZgQJ35gOPfwVtBksgjC0uNjxHbEXfU3kqa0PLl0tG4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718315853; c=relaxed/simple;
-	bh=3V/7338jp67od7cu+kOPTYkCysA1/BAci9WSQHsUlEk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rgl7Da8/ntinni5qb6fb7S5CxZQ08J0w2eA3WDV90xZ5/csbKrnUHrbCBfNHAJP8EG625SQK+FUWfMj30aW3Y6iTYc5r3gMtFXGFkVlxiaXbtQhO4Ia4dT1xAxiheNk408rTM+6eNM2XawdsKgcAWlpKQHNpohRibi6KJgGfQZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3HKDcdv; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718319709; c=relaxed/simple;
+	bh=BZVtQqHhflViNbQmzgYDT7jR3J6wdX6z8FyyRLKusww=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bmx/aIuiEpTfKjR+9I9DvWxEkBA55dZhGSlna67K3n9rut9LH88ggNGWVCGVkQS0caI3+x4L8lk+vj9xIPv0S3g8a/EhPgOP0gRNsgVsrplf3n9/1FMZ9ogu8C++n9NzANM4QYWY+LmO4UgfbpHM17qbmYssad7MDxTNX7u7cLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WTTp7Y4M; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3HKDcdv"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57c5c51cb89so1673009a12.2;
-        Thu, 13 Jun 2024 14:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718315850; x=1718920650; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Srockrd4TWAIr2NvGJ4jjCz5NsXjkOxmfb8MBOetxt8=;
-        b=h3HKDcdvp5sgoDWlG8+P3qTsZalDsFJ7xSCgSgx0eFbR4klehltAS+6MXEihyuyqeC
-         HSkE/6Cm92treK6k4nFI85ddzG8bVpBlf1yml6dn9LrTq7MaEUg8si+UK0OzCgXkxUQB
-         4qwFeV+gQRwRi78/2QXuljUlsuffh97ckmbCKN4VAYHRx4T/vRok2wChoVqoASGI++CI
-         beUi5kuijqza1hzKrUQije4yvXsaZl4wyYs9F2rdAm9vhr36VRP1UmymfahTD2WAxEju
-         pllhQSOKaNZ/Zuj7XmulJuAcR73ra0JQ6/AZhUltEcuZ+6kTG+qgiqLLR8XSn3SALeIL
-         Igrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718315850; x=1718920650;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Srockrd4TWAIr2NvGJ4jjCz5NsXjkOxmfb8MBOetxt8=;
-        b=mXdfIO+LMXmIl364dEN3Vluk5IGosOG7GiLLx3MpK7G0N3kR3OYrxPs+82uK+Fldg3
-         UytiE8xizeI0lTwSg22ltcui8KWUMDLN4Xy1e6iqdmEP3Tp/U29WW37K5FQQogllsuBH
-         TOpX1MMHl9d4M+OdxCm9geIfirCupMPk9at8ehOEQsYSQTBbjkDfQ6/66qeSjfRNiZVH
-         TQlyiijtVKznKDjAS6tsqh2xrdMYanbQobKdQf64eqx/fiZHz9LBhSQ3Gq6PYfMBTCx1
-         4fencZYkR+nJIz5pCSNURpjvL+8YNxpE8zlBeybcQhz7gxoIiq84KtM3ygSMFb2VHkcJ
-         z6vA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRheQ5VMx1/qNyVmK5pbmqnL5t5mB2tEIoL2zQUo/ehKgK1zfEpzIK14+VZOlr3EaQiZ8+bkGATR/t6tQyZ9D7g2pyXA+Dr12DhMr9
-X-Gm-Message-State: AOJu0Ywt+/8qFZH3iPFxalIxp3qWcEVsL6rPJLT9UdpxPp9vM4bKDGES
-	LU2wKdUAxHXBc5jvFyc6QhGmwyr6V4DLninvpeeVeJUu6EnVkOlb
-X-Google-Smtp-Source: AGHT+IHn01AdUmN6xxiNDM0C/T273A07MvSQ7Sl6A8jAy9uIOMLs9C09dMtNjHL6xPZ4k0t8S/nujQ==
-X-Received: by 2002:a17:907:9689:b0:a68:fcc9:6c1c with SMTP id a640c23a62f3a-a6f60bdc4d3mr86099466b.0.1718315849519;
-        Thu, 13 Jun 2024 14:57:29 -0700 (PDT)
-Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f416dfsm112391666b.164.2024.06.13.14.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jun 2024 14:57:29 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Thu, 13 Jun 2024 23:57:25 +0200
-Subject: [PATCH] hwmon: (pmbus/mp9941) Add missing bitfield header
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WTTp7Y4M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1718319705;
+	bh=BZVtQqHhflViNbQmzgYDT7jR3J6wdX6z8FyyRLKusww=;
+	h=From:Date:Subject:To:Cc:From;
+	b=WTTp7Y4M8BiDpHvCdh14luro0jfvDcuOOcD3M+KVpkMKyeRQ+0kBabd2x/kIllHzD
+	 Xz+tIplvqdenDMXV9vksQqUAETd3zUCIjsMrfNDixqM4UBjHg+quO1RclBjQ7o6YkS
+	 6S0EdBnBcPrMEGpIBAzzER+AOPd8T1A3P76/k2x0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Fri, 14 Jun 2024 01:01:42 +0200
+Subject: [PATCH] hwmon: (core) Make hwmon_class const
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,62 +32,50 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240613-mp9941_bitfield_h-v1-1-681afa8aa498@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAERra2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDM0Nj3dwCS0sTw/ikzJK0zNSclPgMXVPL5OREC+PEVCNjYyWgvoKi1LT
- MCrCZ0bG1tQB+xX3IYwAAAA==
-To: Noah Wang <noahwang.wang@outlook.com>, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240614-class-const-hwmon-v1-1-27b910d06a90@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAFV6a2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0MT3eScxOJi3eT8vOIS3Yzy3Pw8XVNTMwNDk2QDoyRzAyWgvoKi1LT
+ MCrCZ0bG1tQBb+5WbYwAAAA==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel test robot <lkp@intel.com>, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718315848; l=1389;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=3V/7338jp67od7cu+kOPTYkCysA1/BAci9WSQHsUlEk=;
- b=r5ZC/uW7Wh1ZE6r0sgrh6jGJutNNmQuY0fUkhsODtov8buhDr9ZHbh/bI4ZJ3bfw/NHhBkouW
- 8C+msojM9ctASfUBCi4KL4dZZdw9vzE0DL9sScPCXEsR99a+p1Mdqms
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718319704; l=861;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=BZVtQqHhflViNbQmzgYDT7jR3J6wdX6z8FyyRLKusww=;
+ b=qF8cZO+mKNoYus/N7MwoMK6aWB6D65m0p87hoQVF6RCxd/5G89MMqfsgK6wNv1iXmN08KODaf
+ Ym6fHTxdE9FBbHQc/KN9VoQKiMJHNsetDXtJ2SP9DeUxvbidsdcuD/5
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The recently added driver for the MP99441 is missing the bitfield
-header. Without it, gcc fails to find FIELD_PREP and FIELD_GET.
+Now that the driver core allows for struct class to be in read-only
+memory, mark hwmon_class as const.
 
-Add the missing <linux/bitfield.h>
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: c16fa6967781 ("hwmon: add MP9941 driver")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-This patch fixes the errors reported by the kernel test robot about
-the MP9941 in the hwmon subsystem. It does not close the error report
-from the BUILD REGRESSION 6906a84c482f098d31486df8dc98cead21cce2d0,
-that includes, among others, this issue. The report attached to the
-mentioned build regression actually covers a different bug.
-Hence why no Closes: tag was added.
----
- drivers/hwmon/pmbus/mp9941.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/mp9941.c b/drivers/hwmon/pmbus/mp9941.c
-index b7b0eda5b552..475221b738f5 100644
---- a/drivers/hwmon/pmbus/mp9941.c
-+++ b/drivers/hwmon/pmbus/mp9941.c
-@@ -3,6 +3,7 @@
-  * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP9941)
-  */
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 3b259c425ab7..1d1451dd239d 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -136,7 +136,7 @@ static void hwmon_dev_release(struct device *dev)
+ 	kfree(hwdev);
+ }
  
-+#include <linux/bitfield.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
+-static struct class hwmon_class = {
++static const struct class hwmon_class = {
+ 	.name = "hwmon",
+ 	.dev_groups = hwmon_dev_attr_groups,
+ 	.dev_release = hwmon_dev_release,
 
 ---
-base-commit: 6906a84c482f098d31486df8dc98cead21cce2d0
-change-id: 20240613-mp9941_bitfield_h-59cca83ae233
+base-commit: d20f6b3d747c36889b7ce75ee369182af3decb6b
+change-id: 20240614-class-const-hwmon-556014c02b70
 
 Best regards,
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Thomas Weißschuh <linux@weissschuh.net>
 
