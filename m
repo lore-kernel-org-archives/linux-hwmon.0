@@ -1,227 +1,776 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5922B12F581
-	for <linux-hwmon@vger.kernel.org>; Thu, 13 Jun 2024 03:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE2E140374
+	for <linux-hwmon@vger.kernel.org>; Thu, 13 Jun 2024 09:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718250516; cv=none; b=JCOsEvoK59u52Kua8W4Zp/S9612SuKAnsJAfArOHJUIdW8Sh79J4z2rBrJrcCtWNwK2xrF3uO0mOGnoFG0AgsV7ax5n27NKjHq5KS+VeEiuj8tpmWqcg0j/TYurYi8BfGen6NyxOBTJKoGHovc/+ajXitG9/x2XDg12QlzJ6d7k=
+	t=1718271365; cv=none; b=GE3AGxdRHgkQgkGVhe9tbgPJZKdhvqTwCQPtRzJvIiVmNiCQC9Rxg6vKQmgoL/O3kyAJ39IfP3qNvroEvMo/LvaOiu69XEldX6hpMygF0ePzUxGeZriyySmPAQ0qgTMq+X9D1SJ//JEYI7MZUHFPnlME6gM5BeCjrImUXuS6W18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718250516; c=relaxed/simple;
-	bh=SWTs3L2l/CyjLwW4zDfO58G0cH451F92RRlK5ceEscg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hmwXGVjRAcMwLu62nkiXxF4UH42JNWE5e0SVcla32BoOcqhi1pJKkDv+9+mdkd+wlDknaz7hIWHz0zLwL4RcwrjVq5BGyvJHR9Zp/+5+i+F5TrrGcD5dyIDz9LRJJpQOHcQ6SClpxawTOSWNXwKS04urYxMlKIaG2vUxUHxB6v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bz97IEbp; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718271365; c=relaxed/simple;
+	bh=+RYxMDDuFz7TqnzbrcEthITR8Z4N/1usuiofS3gVaNA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FlN7ErqSNUdVj6VF6JlsLjlF/PHmLPQMWOUqi/bwI6sn6UKJuL+q4i7PVZR5sdVDANxj7UtOfYIbOZsf13gAlUVz0UIXDguiGXJUirOyxn4jwPmWoU4nYcaoecQ10jJOxd5M4PvDvb8uczDItllO6Iysj5iL9QNAZ+e3ymOFG5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=duIeASb5; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bz97IEbp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718250514; x=1749786514;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SWTs3L2l/CyjLwW4zDfO58G0cH451F92RRlK5ceEscg=;
-  b=Bz97IEbpPs2Ehe7mWV2PrS22Kf3u9A/jvtDbsLlM4tAhooAVh0+a26Hl
-   DZJ9kOOaNUW+vekSifSMfFt54qsFnci2L+Wy5RebtUFekQu44Z8UhL29s
-   PLstRae2ccV5hTglqrxU0QjyRODdFNRSsfH74BYNciV1CxSH46cr2rfd9
-   Ygb1epZ5f8e0z6FRrG1y9MfFr3YA388Pd5hVepgR80eh804fu451NW4Ri
-   OIX6xC0BEEQaDHjNLth9lO7ZO/BQFBHq/V88c1jonvg3ZVeB44kstICrU
-   rVV9ilusdk8ge1l15OGjOtO/h3FKoNV5smcqFdYMJT9YDKF7KiyaCRTBT
-   g==;
-X-CSE-ConnectionGUID: KIs+gsXhSna99uVwA5uzRA==
-X-CSE-MsgGUID: S+cXdbqsTVGcaRMBObdx0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="14767894"
-X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
-   d="scan'208";a="14767894"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 20:48:31 -0700
-X-CSE-ConnectionGUID: TPMH6uPOSVykT7qkOSuWCg==
-X-CSE-MsgGUID: jxVNspd3S0mFfoVqOV8QQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
-   d="scan'208";a="63178584"
-Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Jun 2024 20:48:29 -0700
-Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sHbRr-0002Bs-2F;
-	Thu, 13 Jun 2024 03:48:27 +0000
-Date: Thu, 13 Jun 2024 11:48:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Noah Wang <noahwang.wang@outlook.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 63/63]
- drivers/hwmon/pmbus/mp9941.c:60:33: error: call to undeclared function
- 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202406131151.XhKU0bke-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="duIeASb5"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-6e41550ae5bso574278a12.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Jun 2024 02:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1718271361; x=1718876161; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eNpuyI/2HksD1FaTADuV7K6WUULVhB5NOnD2o32DTzE=;
+        b=duIeASb5C2yG5W3UpHMlNkcqq8xjiNPSmBQrqacT1caOoyCahf1g4EgrlE5V2rrSw/
+         nodGkrqsrgBTFDG+P421e6q6Mwg7i7y6cVDqlwPy0pu005f669+GBQtEmngRNKeSOw14
+         qfX2RPmD45w6uTkcOYue8wX3IvMySLliagDTB6yuL2FhzRso5wvhYVSEkuwJ6fmo9bBY
+         ty8rhOXnme8sPlqBKCDQeDd/dw5CK45vcm8U+6O1DT69XT8Nd26zXgTwSOhY6Ucdr0RI
+         nhloigjYOAErgScQVXf+EE5rO72429+vats0JvWs2enPPxrCB/7Xq+lymVRu3yTYnfK9
+         tHEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718271361; x=1718876161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eNpuyI/2HksD1FaTADuV7K6WUULVhB5NOnD2o32DTzE=;
+        b=pZPMLPpRpQl1gkdO56eFSR26fHqWf+ryACKUoWxTzZPvpEIKhmuOl1dxwNRBv9ZfbQ
+         Vgg5HL5hVyTg9L1o6ZTTQg17w6OT1wQHr6wuaEO0XMiKneJ6maFpf3joaeeVfoJFEq59
+         rA/2X4jp0LCRUjoHkFVSXgp3dKCYUeMeNhJ6WSm+D+DCaT2DNxYWD1GfE4/1R2Wc1/7C
+         5nkroJlAURY7nvG6i5msMV9SNLdwV0IOtcyY7hGDImBfMgj75sVNFu0ILgZHSV2XkaNp
+         gWNA+o+wrWq2cq9x7UhhB6kJI8czEzzDenNmneV+MhpcvzmvjvP+PrS0BuM5UCFzMxGf
+         D/fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcu4tBQbBSZpqxRYnvK39z/xS7nvCyL+ZbTv2PTRK/ExHgL16sHlYR+aFAr5cPC/idTuYjQp17ZRbVJp/JrkPtLqXBGVwl0zS5HPs=
+X-Gm-Message-State: AOJu0Yy8O3Iqeo6rQBVs3wb51MmSVYnmYy/365MDHX9EiPWO4mxMHE6A
+	M6CTimqslT/bdZkk3x/GCYqQtYi+ElCfMWZUr6msriASeuqW/LKs07KboYFughA92FJHicNXFCE
+	fGFlHavaVCaV3DtE2VkpVyMSULZbAkeyvpI4j1Q==
+X-Google-Smtp-Source: AGHT+IGdJdHpLfzegzGsVYcDeFyC4gyrUOh/9oFhQs7fqEAWtqtPTB5VNk8uRe/CnNJsNLpkqtKxRmKEUL2Jl5lDzAQ=
+X-Received: by 2002:a05:6a21:1a3:b0:1b2:3998:404 with SMTP id
+ adf61e73a8af0-1b8a9b64678mr5009421637.4.1718271361233; Thu, 13 Jun 2024
+ 02:36:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240604124742.4093334-1-naresh.solanki@9elements.com> <86ed7651-818c-42fb-ae31-8f73f7e725a7@roeck-us.net>
+In-Reply-To: <86ed7651-818c-42fb-ae31-8f73f7e725a7@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Thu, 13 Jun 2024 15:05:51 +0530
+Message-ID: <CABqG17hC_h8ru6xmTZiQH4vEAY_+zcPk4=CMB2rn9u_j2jVx0A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: (max6639) : Update hwmon init using info structure
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   c16fa69677811f3a33ef5d4102f106a3f8c5cbdf
-commit: c16fa69677811f3a33ef5d4102f106a3f8c5cbdf [63/63] hwmon: add MP9941 driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240613/202406131151.XhKU0bke-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4403cdbaf01379de96f8d0d6ea4f51a085e37766)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240613/202406131151.XhKU0bke-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406131151.XhKU0bke-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/mp9941.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/mp9941.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/mp9941.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/pmbus/mp9941.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/mp9941.c:60:33: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      60 |         ret = (ret & ~GENMASK(7, 6)) | FIELD_PREP(GENMASK(7, 6), 3);
-         |                                        ^
->> drivers/hwmon/pmbus/mp9941.c:84:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      84 |         if (FIELD_GET(GENMASK(4, 4), ret))
-         |             ^
-   drivers/hwmon/pmbus/mp9941.c:104:33: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     104 |         ret = (ret & ~GENMASK(3, 2)) | FIELD_PREP(GENMASK(3, 2), 0);
-         |                                        ^
-   7 warnings and 3 errors generated.
+Hi Guenter,
 
 
-vim +/FIELD_PREP +60 drivers/hwmon/pmbus/mp9941.c
+On Wed, 12 Jun 2024 at 20:04, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Hi Naresh,
+>
+> On Tue, Jun 04, 2024 at 06:17:39PM +0530, Naresh Solanki wrote:
+> > Update hwmon init with info instead of group. The hwmon info structure
+> > in more flexible to describe sensor attribute & easy to maintian.
+> >
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+>
+> After applying your patch, I get the following errors in my module tests.
+>
+> Testing max6639 ...
+> temp1_crit: Suspected underflow: [min=0, read 255000, written -2147483648]
+> temp1_emergency: Suspected underflow: [min=0, read 255000, written -2147483648]
+> temp1_max: Suspected underflow: [min=0, read 255000, written -2147483648]
+> temp2_crit: Suspected underflow: [min=0, read 255000, written -2147483648]
+> temp2_emergency: Suspected underflow: [min=0, read 255000, written -2147483648]
+> temp2_max: Suspected underflow: [min=0, read 255000, written -2147483648]
+>
+> That was not seen before. Problem is that your set functions pass 'unsigned long'
+> as parameter, converting negative values into large positive ones.
+Agree. Will update v5 with below changes:
+For set functions, I'll change 'unsigned long' to long.
+For get functions, will do typecast as below:
+        *crit = (long)val * 1000;
 
-    43	
-    44	static int mp9941_set_vout_format(struct i2c_client *client)
-    45	{
-    46		int ret;
-    47	
-    48		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-    49		if (ret < 0)
-    50			return ret;
-    51	
-    52		ret = i2c_smbus_read_word_data(client, MFR_RESO_SET);
-    53		if (ret < 0)
-    54			return ret;
-    55	
-    56		/*
-    57		 * page = 0, MFR_RESO_SET[7:6] defines the vout format
-    58		 * 2'b11 set the vout format as direct
-    59		 */
-  > 60		ret = (ret & ~GENMASK(7, 6)) | FIELD_PREP(GENMASK(7, 6), 3);
-    61	
-    62		return i2c_smbus_write_word_data(client, MFR_RESO_SET, ret);
-    63	}
-    64	
-    65	static int
-    66	mp9941_identify_vid_resolution(struct i2c_client *client, struct pmbus_driver_info *info)
-    67	{
-    68		struct mp9941_data *data = to_mp9941_data(info);
-    69		int ret;
-    70	
-    71		/*
-    72		 * page = 2, MFR_VR_MULTI_CONFIG_R1[4:4] defines rail1 vid step value
-    73		 * 1'b0 represents the vid step value is 10mV
-    74		 * 1'b1 represents the vid step value is 5mV
-    75		 */
-    76		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
-    77		if (ret < 0)
-    78			return ret;
-    79	
-    80		ret = i2c_smbus_read_word_data(client, MFR_VR_MULTI_CONFIG_R1);
-    81		if (ret < 0)
-    82			return ret;
-    83	
-  > 84		if (FIELD_GET(GENMASK(4, 4), ret))
-    85			data->vid_resolution = 5;
-    86		else
-    87			data->vid_resolution = 10;
-    88	
-    89		return 0;
-    90	}
-    91	
+Please let me know if you have any other suggestions.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Naresh.
+>
+> Guenter
+>
+>
+> > Changes in v4:
+> > - Change res type from unsigned to signed
+> >
+> > Changes in V3:
+> > - return 0 when 'res' variable is known zero.
+> > - Handle errors first before assigning results
+> > - Use BIT to make it easier to read.
+> > - Remove error message print on user input
+> > - Return err value instead of printing error message & returing zero.
+> > - Remove variable declaration in switch case statement
+> > - Use find_closest instead of for loop
+> > - Remove pointless assignment & check
+> > - Seperate patch for adding additional attributes
+> > ---
+> >  drivers/hwmon/max6639.c | 469 +++++++++++++++++++++++++---------------
+> >  1 file changed, 299 insertions(+), 170 deletions(-)
+> >
+> >
+> > base-commit: 5124d9acf3af50bcc6d0958db4fecb3c2f13f8ed
+> >
+> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> > index cbb595fe47aa..e2a5210f9f95 100644
+> > --- a/drivers/hwmon/max6639.c
+> > +++ b/drivers/hwmon/max6639.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/mutex.h>
+> >  #include <linux/platform_data/max6639.h>
+> >  #include <linux/regmap.h>
+> > +#include <linux/util_macros.h>
+> >
+> >  /* Addresses to scan */
+> >  static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+> > @@ -55,13 +56,17 @@ static const unsigned short normal_i2c[] = { 0x2c, 0x2e, 0x2f, I2C_CLIENT_END };
+> >  #define MAX6639_GCONFIG_PWM_FREQ_HI          0x08
+> >
+> >  #define MAX6639_FAN_CONFIG1_PWM                      0x80
+> > -
+> > +#define MAX6639_FAN_CONFIG3_FREQ_MASK                0x03
+> >  #define MAX6639_FAN_CONFIG3_THERM_FULL_SPEED 0x40
+> >
+> >  #define MAX6639_NUM_CHANNELS                 2
+> >
+> >  static const int rpm_ranges[] = { 2000, 4000, 8000, 16000 };
+> >
+> > +/* Supported PWM frequency */
+> > +static const unsigned int freq_table[] = { 20, 33, 50, 100, 5000, 8333, 12500,
+> > +                                        25000 };
+> > +
+> >  #define FAN_FROM_REG(val, rpm_range) ((val) == 0 || (val) == 255 ? \
+> >                               0 : (rpm_ranges[rpm_range] * 30) / (val))
+> >  #define TEMP_LIMIT_TO_REG(val)       clamp_val((val) / 1000, 0, 255)
+> > @@ -73,19 +78,16 @@ struct max6639_data {
+> >       struct regmap *regmap;
+> >
+> >       /* Register values initialized only once */
+> > -     u8 ppr;                 /* Pulses per rotation 0..3 for 1..4 ppr */
+> > -     u8 rpm_range;           /* Index in above rpm_ranges table */
+> > +     u8 ppr[MAX6639_NUM_CHANNELS];   /* Pulses per rotation 0..3 for 1..4 ppr */
+> > +     u8 rpm_range[MAX6639_NUM_CHANNELS]; /* Index in above rpm_ranges table */
+> >
+> >       /* Optional regulator for FAN supply */
+> >       struct regulator *reg;
+> >  };
+> >
+> > -static ssize_t temp_input_show(struct device *dev,
+> > -                            struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_temp_read_input(struct device *dev, int channel, long *temp)
+> >  {
+> > -     long temp;
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       unsigned int val;
+> >       int res;
+> >
+> > @@ -93,251 +95,378 @@ static ssize_t temp_input_show(struct device *dev,
+> >        * Lock isn't needed as MAX6639_REG_TEMP wpnt change for at least 250ms after reading
+> >        * MAX6639_REG_TEMP_EXT
+> >        */
+> > -     res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(attr->index), &val);
+> > +     res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(channel), &val);
+> >       if (res < 0)
+> >               return res;
+> >
+> > -     temp = val >> 5;
+> > -     res = regmap_read(data->regmap, MAX6639_REG_TEMP(attr->index), &val);
+> > +     *temp = val >> 5;
+> > +     res = regmap_read(data->regmap, MAX6639_REG_TEMP(channel), &val);
+> >       if (res < 0)
+> >               return res;
+> >
+> > -     temp |= val << 3;
+> > -     temp *= 125;
+> > +     *temp |= val << 3;
+> > +     *temp *= 125;
+> >
+> > -     return sprintf(buf, "%ld\n", temp);
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_fault_show(struct device *dev,
+> > -                            struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_temp_read_fault(struct device *dev, int channel, long *fault)
+> >  {
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(attr->index), &val);
+> > +     res = regmap_read(data->regmap, MAX6639_REG_TEMP_EXT(channel), &val);
+> >       if (res < 0)
+> >               return res;
+> >
+> > -     return sprintf(buf, "%d\n", val & 1);
+> > +     *fault = val & 1;
+> > +
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_max_show(struct device *dev,
+> > -                          struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_temp_read_max(struct device *dev, int channel, long *max)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> >       unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_THERM_LIMIT(attr->index), &val);
+> > +     res = regmap_read(data->regmap, MAX6639_REG_THERM_LIMIT(channel), &val);
+> >       if (res < 0)
+> >               return res;
+> >
+> > -     return sprintf(buf, "%d\n", (val * 1000));
+> > +     *max = val * 1000;
+> > +
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_max_store(struct device *dev,
+> > -                           struct device_attribute *dev_attr,
+> > -                           const char *buf, size_t count)
+> > +static int max6639_temp_read_crit(struct device *dev, int channel, long *crit)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned long val;
+> > +     unsigned int val;
+> >       int res;
+> >
+> > -     res = kstrtoul(buf, 10, &val);
+> > -     if (res)
+> > +     res = regmap_read(data->regmap, MAX6639_REG_ALERT_LIMIT(channel), &val);
+> > +     if (res < 0)
+> >               return res;
+> >
+> > -     regmap_write(data->regmap, MAX6639_REG_THERM_LIMIT(attr->index),
+> > -                  TEMP_LIMIT_TO_REG(val));
+> > -     return count;
+> > +     *crit = val * 1000;
+> > +
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_crit_show(struct device *dev,
+> > -                           struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_temp_read_emergency(struct device *dev, int channel, long *emerg)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> >       unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_ALERT_LIMIT(attr->index), &val);
+> > +     res = regmap_read(data->regmap, MAX6639_REG_OT_LIMIT(channel), &val);
+> >       if (res < 0)
+> >               return res;
+> >
+> > -     return sprintf(buf, "%d\n", (val * 1000));
+> > +     *emerg = val * 1000;
+> > +
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_crit_store(struct device *dev,
+> > -                            struct device_attribute *dev_attr,
+> > -                            const char *buf, size_t count)
+> > +static int max6639_get_status(struct device *dev, unsigned int *status)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned long val;
+> > +     unsigned int val;
+> >       int res;
+> >
+> > -     res = kstrtoul(buf, 10, &val);
+> > -     if (res)
+> > +     res = regmap_read(data->regmap, MAX6639_REG_STATUS, &val);
+> > +     if (res < 0)
+> >               return res;
+> >
+> > -     regmap_write(data->regmap, MAX6639_REG_ALERT_LIMIT(attr->index),
+> > -                  TEMP_LIMIT_TO_REG(val));
+> > -     return count;
+> > +     *status = val;
+> > +
+> > +     return 0;
+> >  }
+> >
+> > -static ssize_t temp_emergency_show(struct device *dev,
+> > -                                struct device_attribute *dev_attr,
+> > -                                char *buf)
+> > +static int max6639_temp_set_max(struct max6639_data *data, int channel, unsigned long val)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> > -     struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_OT_LIMIT(attr->index), &val);
+> > -     if (res < 0)
+> > -             return res;
+> > -
+> > -     return sprintf(buf, "%d\n", (val * 1000));
+> > +     res = regmap_write(data->regmap, MAX6639_REG_THERM_LIMIT(channel),
+> > +                        TEMP_LIMIT_TO_REG(val));
+> > +     return res;
+> >  }
+> >
+> > -static ssize_t temp_emergency_store(struct device *dev,
+> > -                                 struct device_attribute *dev_attr,
+> > -                                 const char *buf, size_t count)
+> > +static int max6639_temp_set_crit(struct max6639_data *data, int channel, unsigned long val)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> > -     struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned long val;
+> >       int res;
+> >
+> > -     res = kstrtoul(buf, 10, &val);
+> > -     if (res)
+> > -             return res;
+> > -
+> > -     regmap_write(data->regmap, MAX6639_REG_OT_LIMIT(attr->index), TEMP_LIMIT_TO_REG(val));
+> > +     res = regmap_write(data->regmap, MAX6639_REG_ALERT_LIMIT(channel), TEMP_LIMIT_TO_REG(val));
+> >
+> > -     return count;
+> > +     return res;
+> >  }
+> >
+> > -static ssize_t pwm_show(struct device *dev, struct device_attribute *dev_attr,
+> > -                     char *buf)
+> > +static int max6639_temp_set_emergency(struct max6639_data *data, int channel, unsigned long val)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> > -     struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(attr->index), &val);
+> > -     if (res < 0)
+> > -             return res;
+> > +     res = regmap_write(data->regmap, MAX6639_REG_OT_LIMIT(channel), TEMP_LIMIT_TO_REG(val));
+> >
+> > -     return sprintf(buf, "%d\n", val * 255 / 120);
+> > +     return res;
+> >  }
+> >
+> > -static ssize_t pwm_store(struct device *dev,
+> > -                      struct device_attribute *dev_attr, const char *buf,
+> > -                      size_t count)
+> > +static int max6639_read_fan(struct device *dev, u32 attr, int channel,
+> > +                         long *fan_val)
+> >  {
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     unsigned long val;
+> > +     unsigned int val;
+> >       int res;
+> >
+> > -     res = kstrtoul(buf, 10, &val);
+> > -     if (res)
+> > -             return res;
+> > +     if (IS_ERR(data))
+> > +             return PTR_ERR(data);
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_fan_input:
+> > +             res = regmap_read(data->regmap, MAX6639_REG_FAN_CNT(channel), &val);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *fan_val = FAN_FROM_REG(val, data->rpm_range[channel]);
+> > +             return 0;
+> > +     case hwmon_fan_fault:
+> > +             res = max6639_get_status(dev, &val);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *fan_val = !!(val & BIT(1 - channel));
+> > +             return 0;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static int max6639_set_ppr(struct max6639_data *data, int channel, u8 ppr)
+> > +{
+> > +     /* Decrement the PPR value and shift left by 6 to match the register format */
+> > +     return regmap_write(data->regmap, MAX6639_REG_FAN_PPR(channel), ppr-- << 6);
+> > +}
+> >
+> > -     val = clamp_val(val, 0, 255);
+> > +static umode_t max6639_fan_is_visible(const void *_data, u32 attr, int channel)
+> > +{
+> > +     struct max6639_data *data = (struct max6639_data *)_data;
+> >
+> > -     regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(attr->index), val * 120 / 255);
+> > +     if (IS_ERR(data))
+> > +             return PTR_ERR(data);
+> >
+> > -     return count;
+> > +     switch (attr) {
+> > +     case hwmon_fan_input:
+> > +     case hwmon_fan_fault:
+> > +             return 0444;
+> > +     case hwmon_fan_pulses:
+> > +             return 0644;
+> > +     default:
+> > +             return 0;
+> > +     }
+> >  }
+> >
+> > -static ssize_t fan_input_show(struct device *dev,
+> > -                           struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_read_pwm(struct device *dev, u32 attr, int channel,
+> > +                         long *pwm_val)
+> >  {
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> >       unsigned int val;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_FAN_CNT(attr->index), &val);
+> > -     if (res < 0)
+> > -             return res;
+> > +     if (IS_ERR(data))
+> > +             return PTR_ERR(data);
+> >
+> > -     return sprintf(buf, "%d\n", FAN_FROM_REG(val, data->rpm_range));
+> > +     switch (attr) {
+> > +     case hwmon_pwm_input:
+> > +             res = regmap_read(data->regmap, MAX6639_REG_TARGTDUTY(channel), &val);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *pwm_val = val * 255 / 120;
+> > +             return 0;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> >  }
+> >
+> > -static ssize_t alarm_show(struct device *dev,
+> > -                       struct device_attribute *dev_attr, char *buf)
+> > +static int max6639_write_pwm(struct device *dev, u32 attr, int channel,
+> > +                          long val)
+> >  {
+> >       struct max6639_data *data = dev_get_drvdata(dev);
+> > -     struct sensor_device_attribute *attr = to_sensor_dev_attr(dev_attr);
+> > -     unsigned int val;
+> > +     int err;
+> > +
+> > +     if (IS_ERR(data))
+> > +             return PTR_ERR(data);
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_pwm_input:
+> > +             val = clamp_val(val, 0, 255);
+> > +             err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(channel),
+> > +                                val * 120 / 255);
+> > +             return err;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static umode_t max6639_pwm_is_visible(const void *_data, u32 attr, int channel)
+> > +{
+> > +     switch (attr) {
+> > +     case hwmon_pwm_input:
+> > +             return 0644;
+> > +     default:
+> > +             return 0;
+> > +     }
+> > +}
+> > +
+> > +static int max6639_read_temp(struct device *dev, u32 attr, int channel,
+> > +                          long *val)
+> > +{
+> > +     unsigned int status;
+> >       int res;
+> >
+> > -     res = regmap_read(data->regmap, MAX6639_REG_STATUS, &val);
+> > -     if (res < 0)
+> > +     switch (attr) {
+> > +     case hwmon_temp_input:
+> > +             res = max6639_temp_read_input(dev, channel, val);
+> > +             return res;
+> > +     case hwmon_temp_fault:
+> > +             res = max6639_temp_read_fault(dev, channel, val);
+> > +             return res;
+> > +     case hwmon_temp_max:
+> > +             res = max6639_temp_read_max(dev, channel, val);
+> > +             return res;
+> > +     case hwmon_temp_crit:
+> > +             res = max6639_temp_read_crit(dev, channel, val);
+> > +             return res;
+> > +     case hwmon_temp_emergency:
+> > +             res = max6639_temp_read_emergency(dev, channel, val);
+> >               return res;
+> > +     case hwmon_temp_max_alarm:
+> > +             res = max6639_get_status(dev, &status);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *val = !!(status & BIT(3 - channel));
+> > +             return 0;
+> > +     case hwmon_temp_crit_alarm:
+> > +             res = max6639_get_status(dev, &status);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *val = !!(status & BIT(7 - channel));
+> > +             return 0;
+> > +     case hwmon_temp_emergency_alarm:
+> > +             res = max6639_get_status(dev, &status);
+> > +             if (res < 0)
+> > +                     return res;
+> > +             *val = !!(status & BIT(5 - channel));
+> > +             return 0;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static int max6639_write_temp(struct device *dev, u32 attr, int channel,
+> > +                           long val)
+> > +{
+> > +     struct max6639_data *data = dev_get_drvdata(dev);
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_temp_max:
+> > +             return max6639_temp_set_max(data, channel, val);
+> > +     case hwmon_temp_crit:
+> > +             return max6639_temp_set_crit(data, channel, val);
+> > +     case hwmon_temp_emergency:
+> > +             return max6639_temp_set_emergency(data, channel, val);
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static umode_t max6639_temp_is_visible(const void *_data, u32 attr, int channel)
+> > +{
+> > +     switch (attr) {
+> > +     case hwmon_temp_input:
+> > +     case hwmon_temp_fault:
+> > +     case hwmon_temp_max_alarm:
+> > +     case hwmon_temp_crit_alarm:
+> > +     case hwmon_temp_emergency_alarm:
+> > +             return 0444;
+> > +     case hwmon_temp_max:
+> > +     case hwmon_temp_crit:
+> > +     case hwmon_temp_emergency:
+> > +             return 0644;
+> > +     default:
+> > +             return 0;
+> > +     }
+> > +}
+> > +
+> > +static int max6639_read(struct device *dev, enum hwmon_sensor_types type,
+> > +                     u32 attr, int channel, long *val)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_fan:
+> > +             return max6639_read_fan(dev, attr, channel, val);
+> > +     case hwmon_pwm:
+> > +             return max6639_read_pwm(dev, attr, channel, val);
+> > +     case hwmon_temp:
+> > +             return max6639_read_temp(dev, attr, channel, val);
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> >
+> > -     return sprintf(buf, "%d\n", !!(val & (1 << attr->index)));
+> > +static int max6639_write(struct device *dev, enum hwmon_sensor_types type,
+> > +                      u32 attr, int channel, long val)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_pwm:
+> > +             return max6639_write_pwm(dev, attr, channel, val);
+> > +     case hwmon_temp:
+> > +             return max6639_write_temp(dev, attr, channel, val);
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static umode_t max6639_is_visible(const void *data,
+> > +                               enum hwmon_sensor_types type,
+> > +                               u32 attr, int channel)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_fan:
+> > +             return max6639_fan_is_visible(data, attr, channel);
+> > +     case hwmon_pwm:
+> > +             return max6639_pwm_is_visible(data, attr, channel);
+> > +     case hwmon_temp:
+> > +             return max6639_temp_is_visible(data, attr, channel);
+> > +     default:
+> > +             return 0;
+> > +     }
+> >  }
+> >
+> > -static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
+> > -static SENSOR_DEVICE_ATTR_RO(temp2_input, temp_input, 1);
+> > -static SENSOR_DEVICE_ATTR_RO(temp1_fault, temp_fault, 0);
+> > -static SENSOR_DEVICE_ATTR_RO(temp2_fault, temp_fault, 1);
+> > -static SENSOR_DEVICE_ATTR_RW(temp1_max, temp_max, 0);
+> > -static SENSOR_DEVICE_ATTR_RW(temp2_max, temp_max, 1);
+> > -static SENSOR_DEVICE_ATTR_RW(temp1_crit, temp_crit, 0);
+> > -static SENSOR_DEVICE_ATTR_RW(temp2_crit, temp_crit, 1);
+> > -static SENSOR_DEVICE_ATTR_RW(temp1_emergency, temp_emergency, 0);
+> > -static SENSOR_DEVICE_ATTR_RW(temp2_emergency, temp_emergency, 1);
+> > -static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+> > -static SENSOR_DEVICE_ATTR_RW(pwm2, pwm, 1);
+> > -static SENSOR_DEVICE_ATTR_RO(fan1_input, fan_input, 0);
+> > -static SENSOR_DEVICE_ATTR_RO(fan2_input, fan_input, 1);
+> > -static SENSOR_DEVICE_ATTR_RO(fan1_fault, alarm, 1);
+> > -static SENSOR_DEVICE_ATTR_RO(fan2_fault, alarm, 0);
+> > -static SENSOR_DEVICE_ATTR_RO(temp1_max_alarm, alarm, 3);
+> > -static SENSOR_DEVICE_ATTR_RO(temp2_max_alarm, alarm, 2);
+> > -static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, alarm, 7);
+> > -static SENSOR_DEVICE_ATTR_RO(temp2_crit_alarm, alarm, 6);
+> > -static SENSOR_DEVICE_ATTR_RO(temp1_emergency_alarm, alarm, 5);
+> > -static SENSOR_DEVICE_ATTR_RO(temp2_emergency_alarm, alarm, 4);
+> > -
+> > -
+> > -static struct attribute *max6639_attrs[] = {
+> > -     &sensor_dev_attr_temp1_input.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_input.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_fault.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_fault.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_max.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_max.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_crit.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_crit.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_emergency.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_emergency.dev_attr.attr,
+> > -     &sensor_dev_attr_pwm1.dev_attr.attr,
+> > -     &sensor_dev_attr_pwm2.dev_attr.attr,
+> > -     &sensor_dev_attr_fan1_input.dev_attr.attr,
+> > -     &sensor_dev_attr_fan2_input.dev_attr.attr,
+> > -     &sensor_dev_attr_fan1_fault.dev_attr.attr,
+> > -     &sensor_dev_attr_fan2_fault.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_max_alarm.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_max_alarm.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_crit_alarm.dev_attr.attr,
+> > -     &sensor_dev_attr_temp1_emergency_alarm.dev_attr.attr,
+> > -     &sensor_dev_attr_temp2_emergency_alarm.dev_attr.attr,
+> > +static const struct hwmon_channel_info * const max6639_info[] = {
+> > +     HWMON_CHANNEL_INFO(fan,
+> > +                        HWMON_F_INPUT | HWMON_F_FAULT,
+> > +                        HWMON_F_INPUT | HWMON_F_FAULT),
+> > +     HWMON_CHANNEL_INFO(pwm,
+> > +                        HWMON_PWM_INPUT,
+> > +                        HWMON_PWM_INPUT),
+> > +     HWMON_CHANNEL_INFO(temp,
+> > +                        HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_MAX | HWMON_T_MAX_ALARM |
+> > +                        HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_EMERGENCY |
+> > +                        HWMON_T_EMERGENCY_ALARM,
+> > +                        HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_MAX | HWMON_T_MAX_ALARM |
+> > +                        HWMON_T_CRIT | HWMON_T_CRIT_ALARM | HWMON_T_EMERGENCY |
+> > +                        HWMON_T_EMERGENCY_ALARM),
+> >       NULL
+> >  };
+> > -ATTRIBUTE_GROUPS(max6639);
+> > +
+> > +static const struct hwmon_ops max6639_hwmon_ops = {
+> > +     .is_visible = max6639_is_visible,
+> > +     .read = max6639_read,
+> > +     .write = max6639_write,
+> > +};
+> > +
+> > +static const struct hwmon_chip_info max6639_chip_info = {
+> > +     .ops = &max6639_hwmon_ops,
+> > +     .info = max6639_info,
+> > +};
+> >
+> >  /*
+> >   *  returns respective index in rpm_ranges table
+> > @@ -355,11 +484,6 @@ static int rpm_range_to_reg(int range)
+> >       return 1; /* default: 4000 RPM */
+> >  }
+> >
+> > -static int max6639_set_ppr(struct max6639_data *data, u8 channel, u8 ppr)
+> > -{
+> > -     return regmap_write(data->regmap, MAX6639_REG_FAN_PPR(channel), ppr << 6);
+> > -}
+> > -
+> >  static int max6639_init_client(struct i2c_client *client,
+> >                              struct max6639_data *data)
+> >  {
+> > @@ -380,30 +504,34 @@ static int max6639_init_client(struct i2c_client *client,
+> >               ppr = max6639_info->ppr;
+> >       else
+> >               ppr = 2;
+> > -     ppr -= 1;
+> > +
+> > +     data->ppr[0] = ppr;
+> > +     data->ppr[1] = ppr;
+> >
+> >       if (max6639_info)
+> >               rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
+> > -     data->rpm_range = rpm_range;
+> > +     data->rpm_range[0] = rpm_range;
+> > +     data->rpm_range[1] = rpm_range;
+> >
+> >       for (i = 0; i < MAX6639_NUM_CHANNELS; i++) {
+> > -
+> >               /* Set Fan pulse per revolution */
+> > -             err = max6639_set_ppr(data, i, ppr);
+> > +             err = max6639_set_ppr(data, i, data->ppr[i]);
+> >               if (err)
+> >                       return err;
+> >
+> >               /* Fans config PWM, RPM */
+> >               err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG1(i),
+> > -                                MAX6639_FAN_CONFIG1_PWM | rpm_range);
+> > +                                MAX6639_FAN_CONFIG1_PWM | data->rpm_range[i]);
+> >               if (err)
+> >                       return err;
+> >
+> >               /* Fans PWM polarity high by default */
+> > -             if (max6639_info && max6639_info->pwm_polarity == 0)
+> > -                     err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+> > -             else
+> > -                     err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+> > +             if (max6639_info) {
+> > +                     if (max6639_info->pwm_polarity == 0)
+> > +                             err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+> > +                     else
+> > +                             err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+> > +             }
+> >               if (err)
+> >                       return err;
+> >
+> > @@ -534,9 +662,10 @@ static int max6639_probe(struct i2c_client *client)
+> >       if (err < 0)
+> >               return err;
+> >
+> > -     hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+> > -                                                        data,
+> > -                                                        max6639_groups);
+> > +     hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+> > +                                                      data, &max6639_chip_info,
+> > +                                                      NULL);
+> > +
+> >       return PTR_ERR_OR_ZERO(hwmon_dev);
+> >  }
+> >
