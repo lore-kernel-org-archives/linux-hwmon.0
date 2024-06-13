@@ -1,61 +1,61 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4ED1448E9;
-	Thu, 13 Jun 2024 13:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285C19476;
+	Thu, 13 Jun 2024 13:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718286252; cv=none; b=NmC54q0z9C9MwiJFdV2X3HS3gevLNnkzcxWm9rHMBkBnMhzIXyYJlhyC4/ND1RmJZk1HNg9sjJFLkjhfhq0x7feEbMuid69IRxgBJAHjTCiiu2vl8TA1Lso2810hBlMzhW2s5VFR2o//i5VM3BY79m8mvLsUtmOuSs3BnfHP60o=
+	t=1718286419; cv=none; b=JD+R/KWj71iKidZpKlLaitY3hSX8jGseAj0fcMWG/V07Vojlb0KQ0p/Gw66sPaGUwGhNk7mHufm+D0kyEhDgG2jGwRbM8B3lcIZric2kY4mOtGvAPZm/tEb1XDj4Cytlan0Tk9PTY1iQZPepbFvHUi2S3YXMhk+iWarxBDKmqW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718286252; c=relaxed/simple;
-	bh=xNK/PCEG3N6+VYN8NIPMtL5Es0MOikkNeua2KGAGwy4=;
+	s=arc-20240116; t=1718286419; c=relaxed/simple;
+	bh=cLTlb0MIYYTHtZ+pmfm8TGdplUGb99YJYQz8oU/M6/g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=evWfL11mUzPd7eCYpN9X4jAM0a4Wt7hc6i1J3R0gAXXJs3LkeT8WaxdH2i1X/fJa9RL+96roS83EbXnnwqDG4O29Lz7vkR5Yn2J+lBrrANsYv+vxg6wHlVcoIwm73ElYyRsLvjv/9vkYDvSMhfFhPCsEBl08qaLJ+GeTbbG39xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eABclINr; arc=none smtp.client-ip=209.85.161.47
+	 In-Reply-To:Content-Type; b=uQEYh2R3faIHDTpSUUaUPWgXpCGhhUxc1DP0SIM8bhFnGb1jK4P1Ie11xRTpyl9TRBMACFmM4xHf/2hKIjEQzE71UemwRVtB+VQo46aT7s5b4JFl2kiGJEI6wikhp+MQlP1XZiBcUzcbGvWRbOLmj+JDtXOpyiK/AonzMBjJICc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ikHKyI4u; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eABclINr"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5ba33b08550so546303eaf.2;
-        Thu, 13 Jun 2024 06:44:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ikHKyI4u"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-704261a1f67so776146b3a.3;
+        Thu, 13 Jun 2024 06:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718286249; x=1718891049; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718286417; x=1718891217; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+bL1zWxRb6IFK9YDQY5NUClMqeTp1DcWB3L8U2N2LA=;
-        b=eABclINr2c4sD6eSOiEfz1twr1z2N2+p6mDKYPotCqoHDECdPdUUOKL+AA6wJliGdx
-         wB65QpHyPrYMl0k0LZvLG0Q7s+1pn45LC0DWuHFGIKYmv/DZ951+9IVtjRetAr7bLrsx
-         ZwfinOxGG9lVZbZM/vLyVazKpU+m4bPai+bIu4MrruptgtPh6PpPnLXvPsf+mhMeHVG9
-         3O2Bg2Y+mpB3XcBre0BmVgPKFdRq973unmfjKsI6sCt+C1H3b5rBrX6EhllLCrRBxzpI
-         WgtsBQ1jgtqjVzBpmjE6hxtU7Pk/8NzkeMfKvyA77pYbemkGw5tijnhme+vcYg93KAsA
-         i5+A==
+        bh=3UDlNvMamIbg8E6qB25/Fj6Y3vwnK2yTxGg2ToHYWkA=;
+        b=ikHKyI4uGjXaGW0uIO9wOTW+xYUB88xbQNQTqUfrF3bYZ++CmnruM58sbO1UPqtjiA
+         VNLSK0SvLU+vhdlnG4S/V0xn6untGtR5VfowlXan5UkDkr0cjedZE3sc5O4UNz158wmy
+         zIh0R2+qz/5FjzamoZCYduITwJudQBSFARBkVAtiZYflPSxnvsuXZpnU3CIsbm+nyMKA
+         5ucWuIjnaCz6nVyAb16caZZRe+WNd9q6iqFThXfYih9C8gloPqLWj14aekzRgcNLZdFl
+         Xi64Ay+ZP7u7qo32ceEbOhoov3D0SAIiU3EuOEAfA9yeb56lsNC9y60aQXPv+TVOPAk3
+         noxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718286249; x=1718891049;
+        d=1e100.net; s=20230601; t=1718286417; x=1718891217;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K+bL1zWxRb6IFK9YDQY5NUClMqeTp1DcWB3L8U2N2LA=;
-        b=D51o1mdihQfpagukJoCZiUEPJ/NsqtQfeM9WsvHElF99RqUnQeMQJYg4OXyX3bYxE5
-         XARi1c7CmwJyDWKe9F2KcbDVbmdsw0m5V46XZqUtBTppyEXy1mDiUYcY5KtvVgJbToR+
-         bezmmRQSjD1PRIBxlMm0aErBZjxaoWD3VvZzrptZsJbnunnC8fDjwWsVi+PVRjH7mFl7
-         OzdvBSodhjTnzndoT4yjMJlVkBeM15c+rhhyRlrdiDckEvoxIcX6o0rWx/xn+VdztYyV
-         MckPJipODPOak+XjB5GtvHG8jtyhZFT+8M4eKyF19VVUCmCbJvo4nZUY93xmRab07vEU
-         MiEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVqn+WutC8Ry/V9Nh3hnVIh4MzOe+QQOqfOcSu2deK6G0biEdbshmCmxI8jaLGJSiohbhasQfqJQ61ZgrbYJRZMM96Zw8iCC15mF1R57KyEZ1WfsqbLV6PeFQay35WvBiljfz44uotlfbc=
-X-Gm-Message-State: AOJu0YytaQ66vWcLK9/b1wThDopUG4x5ykaMKggbiPcPXWJO3hemiPII
-	syUctluZHNj92rMZVbUKq7XEVMDEXkBquRFTpgEPwWUTHRXQobFYsCfaeQ==
-X-Google-Smtp-Source: AGHT+IH5cQ/X1yNZ8NKXqndwy0W17U5qnpvK5dGoFeuq5Qs0pA+uHPpbDXyM9HndK/XKi0UPheteEA==
-X-Received: by 2002:a05:6820:229c:b0:5b1:bf03:d1c6 with SMTP id 006d021491bc7-5bb3b963494mr5540538eaf.1.1718286248879;
-        Thu, 13 Jun 2024 06:44:08 -0700 (PDT)
+        bh=3UDlNvMamIbg8E6qB25/Fj6Y3vwnK2yTxGg2ToHYWkA=;
+        b=Mx70bwHPuaQoLIk6b3uKTu6hCwDlSH/qexDD8hENlJSqDNAaEKu8tT5Fo4KqzvkEXV
+         HCOD8Os09Bz6PACOGXo6dx3H1tn48sY9bmYXUTfleaXo6Qtb4K2sbyaGEF3G99YNI3y8
+         iMQx5zsXEjqgBczubr1oFbh/pApTAovptvu7/WC57OXZt+5kcBvniQU4MxfejG4lwB6C
+         IaatzRLjkQ0ZcA4vErj2WNWdjAfiD4XpGmMPUv/m98+Ojlsvk7npAvVvxfyH1wBziQec
+         SVssHn+MCCt/NKDi25FmVCW35oq6uOC5imrgp11NJTnEj5NcUdZDEM0Cb7FDsQoOe37a
+         Zs+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUEeWBe34D/jPr+3Q/GKAQRwDYtb+46VekmHhedcVJj3oWTpIQFIi8T0g2GndCrG3GjG1ZaT8NAf5gtYnMpzQcbpqKpjBCscq2ldc/K/1dRyOCqiD9gT0V71zJ9yFQw7PR8Q6e7jDPTf40=
+X-Gm-Message-State: AOJu0Yx121d6eu7+R457/d9r6qf16PZvsGWuVNMb5/pgGcMCFMvlh4cy
+	BLfYpT1drX4XD7VZ2rfbmPjR2JjxhFR5cwDEHyEiivFeF5xJIC82
+X-Google-Smtp-Source: AGHT+IGPCNGOVGTcDmHZ+P6mJfERO9Y99QuogSk6vP5GoI76s0l31CHG/2tUyZrAOtrM/zDLYMTFbw==
+X-Received: by 2002:a05:6a00:a04:b0:705:9aac:ffb8 with SMTP id d2e1a72fcca58-705bcdf085bmr5746433b3a.9.1718286417215;
+        Thu, 13 Jun 2024 06:46:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5bd5de6a1eesm187903eaf.7.2024.06.13.06.44.07
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb8f3desm1315949b3a.201.2024.06.13.06.46.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jun 2024 06:44:07 -0700 (PDT)
+        Thu, 13 Jun 2024 06:46:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <49d2ceb3-24f2-4cef-841c-392595f66c92@roeck-us.net>
-Date: Thu, 13 Jun 2024 06:44:06 -0700
+Message-ID: <4b5f50d2-198a-4bfc-bbdc-d2da02d50ca7@roeck-us.net>
+Date: Thu, 13 Jun 2024 06:46:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,15 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] hwmon: (max6639) : Add hwmon attributes for fan
- and pwm
+Subject: Re: [PATCH v4 1/2] hwmon: (max6639) : Update hwmon init using info
+ structure
 To: Naresh Solanki <naresh.solanki@9elements.com>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240604124742.4093334-1-naresh.solanki@9elements.com>
- <20240604124742.4093334-2-naresh.solanki@9elements.com>
- <3bd9a52e-bfca-4ac2-af48-59772de8b61e@roeck-us.net>
- <CABqG17gS=qfrJCkug5aca6Ag1JSPhbFbfr7X8x7XLCpDwtOMAw@mail.gmail.com>
+ <86ed7651-818c-42fb-ae31-8f73f7e725a7@roeck-us.net>
+ <CABqG17hC_h8ru6xmTZiQH4vEAY_+zcPk4=CMB2rn9u_j2jVx0A@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -117,42 +116,48 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CABqG17gS=qfrJCkug5aca6Ag1JSPhbFbfr7X8x7XLCpDwtOMAw@mail.gmail.com>
+In-Reply-To: <CABqG17hC_h8ru6xmTZiQH4vEAY_+zcPk4=CMB2rn9u_j2jVx0A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/13/24 02:51, Naresh Solanki wrote:
-...
+On 6/13/24 02:35, Naresh Solanki wrote:
+> Hi Guenter,
+> 
+> 
+> On Wed, 12 Jun 2024 at 20:04, Guenter Roeck <linux@roeck-us.net> wrote:
 >>
->>> +     switch (attr) {
->>> +     case hwmon_fan_pulses:
->>> +             if (val <= 0 || val > 5)
->>> +                     return -EINVAL;
->>> +
->>> +             /* Set Fan pulse per revolution */
->>> +             err = max6639_set_ppr(data, channel, val);
->>> +             if (err < 0)
->>> +                     return err;
->>> +
->>> +             data->ppr[channel] = val;
+>> Hi Naresh,
 >>
->> Needs mutex protection to avoid inconsistencies due to concurrent writes.
-> This is single i2c access. Still we need mutex protection here ?
+>> On Tue, Jun 04, 2024 at 06:17:39PM +0530, Naresh Solanki wrote:
+>>> Update hwmon init with info instead of group. The hwmon info structure
+>>> in more flexible to describe sensor attribute & easy to maintian.
+>>>
+>>> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+>>> ---
+>>
+>> After applying your patch, I get the following errors in my module tests.
+>>
+>> Testing max6639 ...
+>> temp1_crit: Suspected underflow: [min=0, read 255000, written -2147483648]
+>> temp1_emergency: Suspected underflow: [min=0, read 255000, written -2147483648]
+>> temp1_max: Suspected underflow: [min=0, read 255000, written -2147483648]
+>> temp2_crit: Suspected underflow: [min=0, read 255000, written -2147483648]
+>> temp2_emergency: Suspected underflow: [min=0, read 255000, written -2147483648]
+>> temp2_max: Suspected underflow: [min=0, read 255000, written -2147483648]
+>>
+>> That was not seen before. Problem is that your set functions pass 'unsigned long'
+>> as parameter, converting negative values into large positive ones.
+> Agree. Will update v5 with below changes:
+> For set functions, I'll change 'unsigned long' to long.
+> For get functions, will do typecast as below:
+>          *crit = (long)val * 1000;
+> 
+> Please let me know if you have any other suggestions.
+> 
 
-In this case, the mutex doesn't protect the i2c access, it protects the
-consistency between the chip configuration and the information stored
-in data->ppr[].
+No. Running your patch through my module tests was the last step of applying it,
+so you were almost there.
 
-CPU1			CPU2
-[val==1]		[val!=1]
-
-max6639_set_ppr();
-			max6639_set_ppr();
-			data->ppr[channel] = val;
-data->ppr[channel] = val;
-
-The alternative would be to not cache ppr and read it from the regmap cache
-when needed.
-
+Thanks,
 Guenter
 
