@@ -1,61 +1,61 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D0754660;
-	Sun, 16 Jun 2024 20:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA6612E5B;
+	Sun, 16 Jun 2024 20:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718569595; cv=none; b=Z9den03t2kuBMsH+BUSiNTdIHBlGg3vixkIP4e9Eza7us45VUGgjPnGHjVpzmOuqAm86fnx/2q9d4EI/RDZqyy5GfGasxslnF0WHSNh7JvZtwf5+Z6tPshFqyQ9ldJ6F/+xMesuwEI7W4EFQYX/mrPf5wSqx5X2fXUwaFX9cD4w=
+	t=1718570592; cv=none; b=t1UUo7RKYhwNtrroEHEOiAK6x0UrAKGbBL/1cMYZoZ21gkzQ0RrhN0HsTYU70cDkh4agA5rb8VqEXHHl3zudv3pQbwNXt2Dm0DxQ7afHcqxTh4YUfjcKwecLb7O3f089pR6rxdS1MqYb+Vxt86SpyH9cT/gZCApni4ewcHQ9SVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718569595; c=relaxed/simple;
-	bh=GxHq1I1yK4ushy+cbVDTnikWctzsVLN0jARxQzbhmAE=;
+	s=arc-20240116; t=1718570592; c=relaxed/simple;
+	bh=gGwjEFazaWXjREXYJOGV0tEx7mfESFqlR/M6Rzv755I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aAsWaAwl/33EKEXLxbb3qT5d7hkjJ+qpYIVOc1neCyoEIVa2/RifmakwQHCmrUn/f0AktJL74J7yUJY6L3bS9MsIk87IK8A3jlAyPApm5EELyiUQAGbCdmDd6GJuPAsnRWhNhQyQA3KPKpdT/miduYP3YbjA502wYJQKn9DdWCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQdTJOcY; arc=none smtp.client-ip=209.85.215.177
+	 In-Reply-To:Content-Type; b=SlNqQYXZ1Upk3XRlAMo0UvoccnO6ZOEQ6CPadnzOEzr5NlXcz3RCYoJx6BamGLkr7NlAvx7Sl/kz8NQihOamRtOWR254KEorXKAP/8ylj4SsDO/lQKsmeLciXTW+7S8uhRa8CxGB+r4jUuVMkZ9pHn9RABTAuV7DX38M7y1NPwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=So49XRAA; arc=none smtp.client-ip=209.85.166.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQdTJOcY"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-707040e3017so717711a12.3;
-        Sun, 16 Jun 2024 13:26:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="So49XRAA"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-375f6841efdso2820275ab.3;
+        Sun, 16 Jun 2024 13:43:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718569592; x=1719174392; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718570590; x=1719175390; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzZNLXZyAad49lqyEMwbFZUTxKz2TWCABxME8TyuxUY=;
-        b=UQdTJOcYuqZJ8PZxKWB89xAG2Qt7Wee05o8j1FWvPQjE+Pv8tYv8wc3nnTjIAvd4zv
-         FgJ2XB3tHT+brw9L39Meo3B00CtuNWSWF5aDZZ89eiStmz4JbMrnwU7s2GUqe7ehJ+gQ
-         2LKOqxnBiiWFaM/cC497aPs4RSMFKxQoXTPnRzuvW9QfA3bTjGvkXSCDyajp6iWU7E7Q
-         zTb2SLz8X8UfJCYWrYenD6+KLXtWobR4XVmicqhqLUwij2AvH+F/aaLx3qPASEn/0t/D
-         eEmk2Kc5T/CHHS9QHdrgEBMTCBYiqoeVN4P1wWbcJ09mLOGulNphgLnu80dOAOZzYmcM
-         45ew==
+        bh=eZkHU+YVncyhDTUT+HAuuHG6hrCtQiXps+9v9Zknt/4=;
+        b=So49XRAArTJgGAU0b/e3sWcGn+4oAsGqdrAuMwdGEFt30+SHNl3GpcWaWWwUcQ+wU9
+         yGKLlxSZQjAlJ+2dTf+vXTP0pJMZUaGdj3mYFEbeoTiBveK4FXfRDu51lMuLP73K7HgT
+         w25UnwpCUi42sw1Ssmccvo8VMixz2kOhJXsfIQL9zz9Ni2L2BEBI1TOdJUF/vKEjACjv
+         9ss+nUivGCG0fwQoRPxIm3oWvUCluXwfiUfDtyQed758yFkpRHy7uH+L84+Vtf2lAA7n
+         S1dqNmbOMxyaYgh3ri/dAA+wPkuU22sFf/rTSOqH2JT8G4E/swHWliQWkcmm2mOIy3zg
+         jdbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718569592; x=1719174392;
+        d=1e100.net; s=20230601; t=1718570590; x=1719175390;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rzZNLXZyAad49lqyEMwbFZUTxKz2TWCABxME8TyuxUY=;
-        b=qmhluW2GyVomikbDn7dHQq1Nh4wnsGyOORHNiSt5n6Vg5NMVk+eoZbO1vwj/dhqVOP
-         Kg3GNVKqvAEuS6VuD5ZtkG0I3/Zfq6WnIfGFlf1GWwTxD1/wd7PYBVLg9Pbdth5qIsHI
-         rNguRKdlFhQw52f7i6miydKwn0uh99u7KVq76UTZzQQRMaUgLT5eDARyeEJGJECymay1
-         JZ6EMXbiq8zya0nP5yLyRYDJJR5dA5qgzZuL07h2NzeGukNZiTh8ku6tha6G2ArYBKvB
-         p+6hu/cFnVNNjGyT/YPFN6em/AsTeQ1ld1JcgVHY5zC7rqZeNo3HxkzD0VIPLD4dGkBx
-         /K+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWhqHdnxG4A022HWZYRA7oGyWKZ2g9jSipAkRyPTtfon13iqQKzXf+XUMMveRX0UiBi8JNnpkQK+T4PGH5B47Tnoc8K4JdB4UN1VrFwi8mo8ql0gluFmArfI+6mpMpW/Pxjcdyh3Jh1+hg/w0EyVHZu3fxU7HWD4u8KF22XnE/Ce+uCuHun
-X-Gm-Message-State: AOJu0YynFzdlQdR6YFZAuqgDQ2QN5wLS1+NBLH5ivShsmB0osiOyVlq4
-	Vj7uYptYmhnF47Ryn7EdPgvUf/6VvMayS4ZB92sP9PF0oenQilKU
-X-Google-Smtp-Source: AGHT+IEkv9TFVryZMuRXnrW9c7YuK4/7rSSgV4AcCArj1ccOtH/22/ytdQGihbdr31j/txPe/Mzfvw==
-X-Received: by 2002:a17:902:c20c:b0:1f8:44f8:a366 with SMTP id d9443c01a7336-1f8627ce3dfmr74464955ad.16.1718569592414;
-        Sun, 16 Jun 2024 13:26:32 -0700 (PDT)
+        bh=eZkHU+YVncyhDTUT+HAuuHG6hrCtQiXps+9v9Zknt/4=;
+        b=q8mEcU9PTy1Qo9FEKRd5DzX4awb2+H0LzsBTMPpLYKp9UuAghMPH27IYjuJxbnC7V8
+         GQDkS38Ah8fGnlYbGN8TywXmkXAJnMqjLkOnA9PVhATrXLItQrWFHAPaUpufB/g/0g/g
+         e/sSKntInw4wV4mRbSvibct+AE920BVtDzGZhE5XzmbPaoioEY+od+tQumiDEhC1IlXk
+         XuSrUXYZMWZNfOEXd68q2DRV5bY88h9a9MU+hhxpUHNWHFLXqRo8IpKT0GL21XSfo6Qg
+         nmZhOlWlg4NEYGpDNuCo7+9BC3X8epdhnkSsSbiqMEYJlx/YZ7YqvPbGQMhKeHGfGo6T
+         /hNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZb8Xnde4omxiq2v0Q6QKo4LPO2zonQx43+UGTkVssNJilrswrXW7FfbiBs/goWZhU9qZpQwJ7JarSGxGxpEgir/E3E7YlGc1hRfCXm3OGwo2Sb0I7WNEmzYG8UVTYOIaCgm5kSbL5EQ==
+X-Gm-Message-State: AOJu0YwNHyyt3dh01FhYQoWat+iKumITxfi0KmLqbg6MClk326bLojBV
+	OyyuMMuBjYENtn/zWUB1Wax5ga+UNABBUM+X+NDbTIp8yoy5OZr8
+X-Google-Smtp-Source: AGHT+IHIXTAOCDrOh9xc3RjqiiTgt0YMh5JGm9dR2yJL7g+BWp6VH3XauMqWW/OuV9pOlwiwwH4Zpg==
+X-Received: by 2002:a05:6e02:12e2:b0:375:ae6b:9d9c with SMTP id e9e14a558f8ab-375e0e595f2mr106639925ab.26.1718570590214;
+        Sun, 16 Jun 2024 13:43:10 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f1a4fdsm67179965ad.233.2024.06.16.13.26.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d2e8sm6276031b3a.107.2024.06.16.13.43.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jun 2024 13:26:31 -0700 (PDT)
+        Sun, 16 Jun 2024 13:43:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2ba6ed1-3a6a-4481-9f43-265eee78c0c1@roeck-us.net>
-Date: Sun, 16 Jun 2024 13:26:29 -0700
+Message-ID: <f75635d8-4199-4bbe-9fba-a1d2ed206966@roeck-us.net>
+Date: Sun, 16 Jun 2024 13:43:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,19 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH] hwmon: (spd5118) Add support for Renesas/ITD SPD5118
- hub controllers
-To: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>,
- Paul Menzel <pmenzel@molgen.mpg.de>, Sasha Kozachuk <skozachuk@google.com>,
- John Hamrick <johnham@google.com>
-References: <20240614185924.604672-1-linux@roeck-us.net>
- <2046d2c3-bbf6-4842-bc51-b2f567f33c0a@gmx.de>
+Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp108: document V+ supply, add
+ short description
+To: Stanislav Jakubek <stano.jakubek@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,79 +116,28 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <2046d2c3-bbf6-4842-bc51-b2f567f33c0a@gmx.de>
+In-Reply-To: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Armin,
-
-On 6/16/24 11:09, Armin Wolf wrote:
-> Am 14.06.24 um 20:59 schrieb Guenter Roeck:
+On 6/16/24 12:40, Stanislav Jakubek wrote:
+> TMP108 is powered by its V+ supply, document it.
+> While at it, add a short description with a link to its datasheets.
 > 
->> The SPD5118 specification says, in its documentation of the page bits
->> in the MR11 register:
->>
->> "
->> This register only applies to non-volatile memory (1024) Bytes) access of
->> SPD5 Hub device.
->> For volatile memory access, this register must be programmed to '000'.
->> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> "
->>
->> Renesas/ITD SPD5118 hub controllers take this literally and disable access
->> to volatile memory if the page selected in MR11 is != 0. Since the BIOS or
->> ROMMON will access the non-volatile memory and likely select a page != 0,
->> this means that the driver will not instantiate since it can not identify
->> the chip. Even if the driver instantiates, access to volatile registers
->> is blocked after a nvram read operation which selects a page other than 0.
->>
->> To solve the problem, add initialization code to select page 0 during
->> probe. Before doing that, use basic validation to ensure that this is
->> really a SPD5118 device and not some random EEPROM. Explicitly select
->> page 0 when accessing the volatile register space, and protect volatile
->> register access against nvmem access using the device mutex.
-> 
-> Hi,
-> 
-> maybe we can use struct regmap_range_cfg so the paged register accesses are being
-> done by the regmap code itself?
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+> Not entirely sure of the "v+-supply" name, but the datasheet only ever
+> refers to it as "V+" or simply as the "supply voltage".
+> Only other name I've seen is in the schematic for the msm8226-based
+> motorola-falcon smartphone, where it's called "V_POS".
 > 
 
-In theory that might work, but regmap does not permit a selector register to
-be part of another range. The first range would be the non-volatile registers,
-and the selector register is part of that for all ranges.
+Guess one has to praise the ability of datasheet writers to come up
+with different names.
 
-I tried the following ranges configuration.
+The datasheet for tmp117 also uses the V+ term, yet the supply name
+is "vcc-supply". I would personally very much prefer to stick with that,
+but that is just my personal opinion.
 
-static const struct regmap_range_cfg spd5118_regmap_range_cfg[] = {
-         {
-         .selector_reg     = SPD5118_REG_I2C_LEGACY_MODE,
-         .selector_mask    = SPD5118_LEGACY_PAGE_MASK,
-         .selector_shift   = 0,
-         .window_start     = 0,
-         .window_len       = SPD5118_PAGE_SIZE,
-         .range_min        = 0,
-         .range_max        = SPD5118_PAGE_SIZE - 1,
-         },
-         {
-         .selector_reg     = SPD5118_REG_I2C_LEGACY_MODE,
-         .selector_mask    = SPD5118_LEGACY_PAGE_MASK,
-         .selector_shift   = 0,
-         .window_start     = SPD5118_PAGE_SIZE,
-         .window_len       = SPD5118_PAGE_SIZE,
-         .range_min        = SPD5118_PAGE_SIZE,
-         .range_max        = 9 * SPD5118_PAGE_SIZE - 1,
-         },
-};
-
-This results in
-
-spd5118 0-0050: Range 0: selector for 1 in window
-spd5118 0-0050: error -EINVAL: regmap init failed
-
-If you have an idea how to configure the ranges differently,
-please let me know.
-
-Thanks,
 Guenter
 
