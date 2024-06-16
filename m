@@ -1,61 +1,41 @@
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA6612E5B;
-	Sun, 16 Jun 2024 20:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888C01847;
+	Sun, 16 Jun 2024 22:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718570592; cv=none; b=t1UUo7RKYhwNtrroEHEOiAK6x0UrAKGbBL/1cMYZoZ21gkzQ0RrhN0HsTYU70cDkh4agA5rb8VqEXHHl3zudv3pQbwNXt2Dm0DxQ7afHcqxTh4YUfjcKwecLb7O3f089pR6rxdS1MqYb+Vxt86SpyH9cT/gZCApni4ewcHQ9SVU=
+	t=1718578281; cv=none; b=WoEj/ybk6/7jxV53iW4hGo18HbcMrLSwHeDgiIqXB5LeQr2/rHrru76s0y/aFWfNFZkLezLO4ajamjFce/WowCgYsgQIDemxBCkwyhhP+PbbdroTu9dSB4v1d/rlyXlrFw9WjiK3MTN2fxNVszPB//AhrcBLV26xW1e0V5Kdaxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718570592; c=relaxed/simple;
-	bh=gGwjEFazaWXjREXYJOGV0tEx7mfESFqlR/M6Rzv755I=;
+	s=arc-20240116; t=1718578281; c=relaxed/simple;
+	bh=yJlgW9UrW4omqwaBaOUEXjoztVTlH9fY5tVIGbqAUjM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SlNqQYXZ1Upk3XRlAMo0UvoccnO6ZOEQ6CPadnzOEzr5NlXcz3RCYoJx6BamGLkr7NlAvx7Sl/kz8NQihOamRtOWR254KEorXKAP/8ylj4SsDO/lQKsmeLciXTW+7S8uhRa8CxGB+r4jUuVMkZ9pHn9RABTAuV7DX38M7y1NPwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=So49XRAA; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=GjC1FH3mnRY4x9u1RmX4rP/ZdKy72YnnsorB0OuOy4lysEpBZiKjWdFZIpxlwify2tjh2s0GGXOJeP4Wq0Q+bxeiVjzX3S4c/jCVbvf+ROfxoHHmkCFTjmoolxjyuHaUnpWUVQwYBp7SnHEyKyDMpeYKU14KKEYjvqPvmIfUwis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Bcvrc7d5; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="So49XRAA"
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-375f6841efdso2820275ab.3;
-        Sun, 16 Jun 2024 13:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718570590; x=1719175390; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZkHU+YVncyhDTUT+HAuuHG6hrCtQiXps+9v9Zknt/4=;
-        b=So49XRAArTJgGAU0b/e3sWcGn+4oAsGqdrAuMwdGEFt30+SHNl3GpcWaWWwUcQ+wU9
-         yGKLlxSZQjAlJ+2dTf+vXTP0pJMZUaGdj3mYFEbeoTiBveK4FXfRDu51lMuLP73K7HgT
-         w25UnwpCUi42sw1Ssmccvo8VMixz2kOhJXsfIQL9zz9Ni2L2BEBI1TOdJUF/vKEjACjv
-         9ss+nUivGCG0fwQoRPxIm3oWvUCluXwfiUfDtyQed758yFkpRHy7uH+L84+Vtf2lAA7n
-         S1dqNmbOMxyaYgh3ri/dAA+wPkuU22sFf/rTSOqH2JT8G4E/swHWliQWkcmm2mOIy3zg
-         jdbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718570590; x=1719175390;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eZkHU+YVncyhDTUT+HAuuHG6hrCtQiXps+9v9Zknt/4=;
-        b=q8mEcU9PTy1Qo9FEKRd5DzX4awb2+H0LzsBTMPpLYKp9UuAghMPH27IYjuJxbnC7V8
-         GQDkS38Ah8fGnlYbGN8TywXmkXAJnMqjLkOnA9PVhATrXLItQrWFHAPaUpufB/g/0g/g
-         e/sSKntInw4wV4mRbSvibct+AE920BVtDzGZhE5XzmbPaoioEY+od+tQumiDEhC1IlXk
-         XuSrUXYZMWZNfOEXd68q2DRV5bY88h9a9MU+hhxpUHNWHFLXqRo8IpKT0GL21XSfo6Qg
-         nmZhOlWlg4NEYGpDNuCo7+9BC3X8epdhnkSsSbiqMEYJlx/YZ7YqvPbGQMhKeHGfGo6T
-         /hNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZb8Xnde4omxiq2v0Q6QKo4LPO2zonQx43+UGTkVssNJilrswrXW7FfbiBs/goWZhU9qZpQwJ7JarSGxGxpEgir/E3E7YlGc1hRfCXm3OGwo2Sb0I7WNEmzYG8UVTYOIaCgm5kSbL5EQ==
-X-Gm-Message-State: AOJu0YwNHyyt3dh01FhYQoWat+iKumITxfi0KmLqbg6MClk326bLojBV
-	OyyuMMuBjYENtn/zWUB1Wax5ga+UNABBUM+X+NDbTIp8yoy5OZr8
-X-Google-Smtp-Source: AGHT+IHIXTAOCDrOh9xc3RjqiiTgt0YMh5JGm9dR2yJL7g+BWp6VH3XauMqWW/OuV9pOlwiwwH4Zpg==
-X-Received: by 2002:a05:6e02:12e2:b0:375:ae6b:9d9c with SMTP id e9e14a558f8ab-375e0e595f2mr106639925ab.26.1718570590214;
-        Sun, 16 Jun 2024 13:43:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d2e8sm6276031b3a.107.2024.06.16.13.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jun 2024 13:43:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f75635d8-4199-4bbe-9fba-a1d2ed206966@roeck-us.net>
-Date: Sun, 16 Jun 2024 13:43:08 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Bcvrc7d5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1718578243; x=1719183043; i=w_armin@gmx.de;
+	bh=yJlgW9UrW4omqwaBaOUEXjoztVTlH9fY5tVIGbqAUjM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Bcvrc7d5+wDfh9hXQUc6Ai2hI7y1mjys88iUwZ9rO4/zsTzmX1W0RKOVhfSt+GtG
+	 qZ3XdzcNf8+2BEVpMERums1rSuKtAJBXYa+HIojjecDVsbLyYQ0Fu+I7Kaoxs2eo/
+	 EsresJqryX193eZ3P1720R4omXLDenTRsVH8CLyIUqveMk0Ry232JosGBxm8LvTB7
+	 9ZOt9Qna4qqzGP6y+ILNYQ1ZuV5/lW4KLiBMKFOMnMZk+gW+Tve331fW8uMuc5XTe
+	 KmR5J3O/9u8JhPPsuN3SwaLHRSTmhxTo9pl0pKH67/zMM5c6xce1t6VfdnXKTMLLl
+	 wcpMB1t6HLqGkFiO/g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mq2jC-1snLiz09pq-00ozp8; Mon, 17
+ Jun 2024 00:50:43 +0200
+Message-ID: <da7c9855-ff4b-4e80-99b8-b2fe24a9a9d9@gmx.de>
+Date: Mon, 17 Jun 2024 00:50:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,81 +43,146 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp108: document V+ supply, add
- short description
-To: Stanislav Jakubek <stano.jakubek@gmail.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
+Subject: Re: [RFT PATCH] hwmon: (spd5118) Add support for Renesas/ITD SPD5118
+ hub controllers
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Stephen Horvath <s.horvath@outlook.com.au>,
+ Paul Menzel <pmenzel@molgen.mpg.de>, Sasha Kozachuk <skozachuk@google.com>,
+ John Hamrick <johnham@google.com>
+References: <20240614185924.604672-1-linux@roeck-us.net>
+ <2046d2c3-bbf6-4842-bc51-b2f567f33c0a@gmx.de>
+ <d2ba6ed1-3a6a-4481-9f43-265eee78c0c1@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <d2ba6ed1-3a6a-4481-9f43-265eee78c0c1@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YG+AR2HaD0ZrDXDgA6S0XsN5xRge+w9izDgXbPEpHlS89095d9x
+ jdUSITzOeLngdD8HpH/K+faiJ9nX+E19GVWdeM3Ktt47y+xC7Sv2EJEpNFxpefFZO9IqzWB
+ 5EOgQ9OEv7SZZZjwpwU2ThP+DFKfcBBc2qKHbvSgnUInEtZ9WHlh3ke6tb2T9QegWlhqNva
+ ILDBizK/uG2oqGvhGhptg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:81bpPNYPz28=;4RTuB/Py0X8z0D2Vpj5QnVp7dHH
+ vZlLoXFH9FybtsiYtEGpa0ra18sUoqRIlVuKKnURWPk6Awjhy24NMPsPGMmVT6T0/5FA9mHTV
+ Mtzt5zQgQpJ0KCFm0sUff1xuoh6VpCr/6FQIPAgHZChhAb+wdKmyPP1ABOE5QE1LBWYQO/JiY
+ 7ZCskEuuXP0cUhsg5QdpMQvPDSP3q29bPbXNmFJA2PHv1OoVg0ogVc4FHXOM/zQqww/i2Syk0
+ BA/KIGs82B6a/QnJ/euhrKKlsTeV5qBNlUCD3HrqxMCVRwsQKDUWYX0v5G+kgtrNGamoigLP7
+ dBi2NBUm5epptcduTrGB5BzK/xcSq+Vx3wIcum/zT2WDxJpFE/gJ6LeMfncRojzulQZ1hW0O0
+ knGRN1EcEkt6vuvGTqz6cM48JdA+j/70CNkpi+nR1K+z0gx0qbvswhB4qA3EkjXxRDD+E1UbO
+ 0wDixkCeYy6KCPRvAXUJSC3f5g7FZ1tuGqvBC53QfbXq4XEn7LvYUEx4HWmAPFElYuYgT4CKT
+ lFbtnxiSKOWxSSXtshR1wpAq+8uzn3UKZgnZCgW4vKGM/QtEfmOBX9jU8oNFxwdb/DUHSUurt
+ 0GLHCt0WZbE96TlfS45Pdui8RgK0t77QsKFTEj9/0/ZXhCCU9DVtFxS/xrrFzo4Wcl7hj7y4h
+ 3SY9TgPqkVtdDFxHqymnt87F1TxUkg3vMMOFHRzB19JZzxcqkH90pDHukkVEDdJyT4+zn/hzN
+ GQ/shGAWZZR66O/7f8r5BkWgjpR+L/jhF1x3Inw3y1z4DhvL8oGa4ciJdwEjwNDRxyuEeD3Vx
+ gUvI4lZgQ6fenYK7Lz3lJpnOWx3NtEU3/2CyZY2Al60sM=
 
-On 6/16/24 12:40, Stanislav Jakubek wrote:
-> TMP108 is powered by its V+ supply, document it.
-> While at it, add a short description with a link to its datasheets.
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
-> Not entirely sure of the "v+-supply" name, but the datasheet only ever
-> refers to it as "V+" or simply as the "supply voltage".
-> Only other name I've seen is in the schematic for the msm8226-based
-> motorola-falcon smartphone, where it's called "V_POS".
-> 
+Am 16.06.24 um 22:26 schrieb Guenter Roeck:
 
-Guess one has to praise the ability of datasheet writers to come up
-with different names.
+> Hi Armin,
+>
+> On 6/16/24 11:09, Armin Wolf wrote:
+>> Am 14.06.24 um 20:59 schrieb Guenter Roeck:
+>>
+>>> The SPD5118 specification says, in its documentation of the page bits
+>>> in the MR11 register:
+>>>
+>>> "
+>>> This register only applies to non-volatile memory (1024) Bytes)
+>>> access of
+>>> SPD5 Hub device.
+>>> For volatile memory access, this register must be programmed to '000'.
+>>> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>> "
+>>>
+>>> Renesas/ITD SPD5118 hub controllers take this literally and disable
+>>> access
+>>> to volatile memory if the page selected in MR11 is !=3D 0. Since the
+>>> BIOS or
+>>> ROMMON will access the non-volatile memory and likely select a page
+>>> !=3D 0,
+>>> this means that the driver will not instantiate since it can not
+>>> identify
+>>> the chip. Even if the driver instantiates, access to volatile register=
+s
+>>> is blocked after a nvram read operation which selects a page other
+>>> than 0.
+>>>
+>>> To solve the problem, add initialization code to select page 0 during
+>>> probe. Before doing that, use basic validation to ensure that this is
+>>> really a SPD5118 device and not some random EEPROM. Explicitly select
+>>> page 0 when accessing the volatile register space, and protect volatil=
+e
+>>> register access against nvmem access using the device mutex.
+>>
+>> Hi,
+>>
+>> maybe we can use struct regmap_range_cfg so the paged register
+>> accesses are being
+>> done by the regmap code itself?
+>>
+>
+> In theory that might work, but regmap does not permit a selector
+> register to
+> be part of another range. The first range would be the non-volatile
+> registers,
+> and the selector register is part of that for all ranges.
+>
+> I tried the following ranges configuration.
+>
+> static const struct regmap_range_cfg spd5118_regmap_range_cfg[] =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_reg=C2=A0=C2=A0=C2=
+=A0=C2=A0 =3D SPD5118_REG_I2C_LEGACY_MODE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_mask=C2=A0=C2=A0=C2=
+=A0 =3D SPD5118_LEGACY_PAGE_MASK,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_shift=C2=A0=C2=A0 =
+=3D 0,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .window_start=C2=A0=C2=A0=C2=
+=A0=C2=A0 =3D 0,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .window_len=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 =3D SPD5118_PAGE_SIZE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .range_min=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 =3D 0,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .range_max=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 =3D SPD5118_PAGE_SIZE - 1,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_reg=C2=A0=C2=A0=C2=
+=A0=C2=A0 =3D SPD5118_REG_I2C_LEGACY_MODE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_mask=C2=A0=C2=A0=C2=
+=A0 =3D SPD5118_LEGACY_PAGE_MASK,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .selector_shift=C2=A0=C2=A0 =
+=3D 0,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .window_start=C2=A0=C2=A0=C2=
+=A0=C2=A0 =3D SPD5118_PAGE_SIZE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .window_len=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 =3D SPD5118_PAGE_SIZE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .range_min=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 =3D SPD5118_PAGE_SIZE,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .range_max=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 =3D 9 * SPD5118_PAGE_SIZE - 1,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
+> };
+>
+> This results in
+>
+> spd5118 0-0050: Range 0: selector for 1 in window
+> spd5118 0-0050: error -EINVAL: regmap init failed
+>
+> If you have an idea how to configure the ranges differently,
+> please let me know.
+>
+> Thanks,
+> Guenter
+>
+Oh, i did not think of this. In this case we indeed cannot use regmap here=
+. I will test the patch tomorrow.
 
-The datasheet for tmp117 also uses the V+ term, yet the supply name
-is "vcc-supply". I would personally very much prefer to stick with that,
-but that is just my personal opinion.
-
-Guenter
+Thanks,
+Armin Wolf
 
