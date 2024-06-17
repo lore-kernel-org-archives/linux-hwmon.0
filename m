@@ -1,76 +1,66 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B85EAC5;
-	Mon, 17 Jun 2024 15:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023C215F3F1;
+	Mon, 17 Jun 2024 16:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718639376; cv=none; b=S7aEgw8sgbsgZG6o83Id1CFSxLGpP9xpISVuP6XiCOzQpmVUWRYqGoxHUxyjegnbJXaCXJh5C5ItVzASnt4xgE/B518kXNGQmDgOsHK27AhTh0XbV88NbPDCMqaPk2pS7Jnzc4TnrZzoczxwPYR1kHAlt9wxjCDh8uiSeU2kTdo=
+	t=1718642195; cv=none; b=XDm6n9s5GBH/3vuWLiPXpcUm33C8y9ayGUz/PklpoPmI/CvAaCAdQytjIeaBLy5LHeqdz6zpAr05nXNmsl+P7kuFKYuRQdWGJO1tSTMSHvPMHKgZb+5777buYs8ZdwogR8pl0Pd1Vvub9UyP9gJEP8KqjCEkg+FtD0GUpDtzlEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718639376; c=relaxed/simple;
-	bh=9jxoacm0VNzafJu9FOapUXFOnY1Zd94cS5szpcO+6Zg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VrVuZWPxS80t77K7rIGRMHBI99hc21jSEur0EE9AiBMccC/8ZdHd3JbsJdY/pp+6yNnoaiNbpwI1/wHC1+jqCO/HkiqxQSV8zS9a2IjD5252lufZlb/i7MF0ECSz4ai5Hdvd/4i8HpwkDWzNQOagsj1QhPR0QIPxfxqmk+29VGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQ2APQT+; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1718642195; c=relaxed/simple;
+	bh=PafAoQuauL2uDpvEMoalA/IWpx3Yh86pLH0rQoSNF/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m5mo3Znm+IiAIr5cwlQJGQraNu7Nfl2YLHgt2G0HAwNM20vJDI+lZE4+X1OPWqfNFXhvuuZ999mqpXil29p0thuOI+S0ijfhLl0883EwMzyOcKxQjlC/9V0IeyzQjXBuifi3HmMkT/JdgK4LuZBbram/K6pFJnQyxIN8mP//4eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0CyRYxv; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQ2APQT+"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f717608231so34377225ad.2;
-        Mon, 17 Jun 2024 08:49:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0CyRYxv"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57c60b13a56so5442093a12.0;
+        Mon, 17 Jun 2024 09:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718639374; x=1719244174; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fHo927smNjkpt0+sCP+aYgix3Q+5w0hosKdaxQjMOgQ=;
-        b=MQ2APQT+iO+Eh0DXJQkI4uU+NnoTm57gpAHrOcGq3sb/q0iBES4aesC9E7BAFWyvzE
-         /8pP5TIM+H0bGTfECCMxrG+ru7qGjPZcaHg4lRspd5PFTw1i6TCPTqGBjeYIJqe4gUyw
-         bGEW7bwtLS7seet9zfDkBgk7GPiL/ZHitZJ5zDJ/W3+RFXdV/5pCZbPOL8/jFlOnej8Y
-         nXevDfIwy+xipH7Ixf3rgdIMOrDolXxI4hOhJIbNIcvFl1B2SGYrZQipwW+AahrSpmTV
-         CMdJfkzBeG0ZS6zSq0vAUq3Fz4p1ZLUIsl2W6WMOQ3ted8ttgmmEXPSsteZnvzHisi7W
-         30rw==
+        d=gmail.com; s=20230601; t=1718642192; x=1719246992; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RX68X2X3/LgY/l3MYixd+6MA7bxPaVTf3PwZWrV/Y9Q=;
+        b=U0CyRYxvXMytLI7M8yXo3wCut0trPpVPo0VEEa8Ysr6fh1cYCE/CvuW3R3Mz18yftq
+         LaVym8irWG0YxN7kTZ2yjraDNNfNi/EDDBRYNAowFIc3Q6hW84AxV/JrKCAjGhXkaRTV
+         QQcP++6pQpefZLIkdwt4kA4P/Ckhu8KrAlrXmrV8fZIWafnV5wSrfOJL+XFaOZJrPNUi
+         Gb3sDc0Ygr090Y7Xzr3Gg0AJ9PnyQv2ULzScRM4aGMXbuUHBo9SknkJ0VbD2jYUX0GEo
+         6PnYdju0Pm/SZ46ovKwCeM2mP59N6mlChxjPMPXFM8hw9dLqdj0GwUf4T12uK2AhuvI1
+         DehQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718639374; x=1719244174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fHo927smNjkpt0+sCP+aYgix3Q+5w0hosKdaxQjMOgQ=;
-        b=XtuurV6AnhqW08ikfC/v7F/AbLBgYiLnbi0E6nyKKeG0W52yiCAPIF4VzcSpOGHAUd
-         BL6qjOjwdP7Q3Z/qdA3A6HiOhbgyxXArVjLIjBpJ15weTHE0HyqAn4OiXHgbOkU5RTFY
-         mBZePZQc6p3S4jmL74wD8liEoqtKe8jbAVjECUdHlDjWbTvJM4j9WpqjVkTlMKqaA0MR
-         7NZTYOZEvHkec/KwlhaoUA5qeBMUfgAbJDQbbKbUBS7kpUB4uq8oJ2J6Y1rfKDpiDryT
-         /7J4+Wjrqlx3dWIN2BnMxK6O6JBhRXnDtAuq3FAcNT1PFtlJZwLSacLMP7wZzYedJATn
-         L9Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCXXaikpSaFCDI9IPmEQp+B2Fuw0OK18xie+Y9nrweBdSv8FemS+CcEIahVP0k5R9oUHgSEEkdetK2dpo9a7DlJ7bzBoxYz/dVvqCx1V40NxyVF7MLKWszEbHKbUIpWMrjO/Doz2Cb41vnOSNxWXLOWEXQwY77azFCjvloA2ZXr6Yl13Fg==
-X-Gm-Message-State: AOJu0YzTJm0htyL7hociH7PmG0sWSf6Pc9oN3qGf94rzBXxIqETVBwCX
-	HaqKJq+yH3P9PTrVvf3wZj2uA0I29JXnMeGiQg6GIYO1Vi0AZEXw
-X-Google-Smtp-Source: AGHT+IGNbnjCGTfKI07a4UNbGPXQuG49aaEGA13NJD7JLoGUMWXHzLxcA414MUCJx0aBqKwSDo3jQQ==
-X-Received: by 2002:a17:902:e889:b0:1f7:4021:508a with SMTP id d9443c01a7336-1f8627c7d14mr158688035ad.33.1718639373888;
-        Mon, 17 Jun 2024 08:49:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855ee8349sm80467885ad.120.2024.06.17.08.49.32
+        d=1e100.net; s=20230601; t=1718642192; x=1719246992;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RX68X2X3/LgY/l3MYixd+6MA7bxPaVTf3PwZWrV/Y9Q=;
+        b=Lu0rFRudfL/PMr8biqctIDVKhJalrq66GqBtKqNAa8ysgyYcMJE2gjz/Zu+3xoCnPm
+         ekLe7OhUpLcINeaiq4emNIq+FmXQ5xMo2xFRSQYvENvji1rpu83HKgItgo6MdrP1YzL0
+         mj23vKAqr1gvlspqhQ4fy8hBfYjBSJ2rrW2pTfFBMQsqgxu1wgKl5vj4VRI51iegjsCW
+         2xOHEGq+UxUlb9yd+s5RYbhJAUZP7+54ucbe8NW5HC8lNePgXKdDpZ0JUBRvQN2xITRl
+         6OZhHXJrlACCO/m0AbEfeEf7HgDTygd7QSnv7aWk15xHPyk+bVwjpGzunf1acThbS33p
+         UtCg==
+X-Forwarded-Encrypted: i=1; AJvYcCUC2wA/K00+wdbKkFiMSqMTdIScsvPxV730/RAZJpyYCVMbDgj0vtoOzxI6MCiLPkHOI6OoR1Vtt8gPqxa1cyURhtLe1Gy6w3ezxHO9yvZNAkgoTxQbhskb4MjnI3pPvycQNPCTw2psrw==
+X-Gm-Message-State: AOJu0YxtnCwK8oLqVuKUJnLMVu6WzXfRxw/31kBcHlurXjtR1JcQ32WB
+	f7zRvpuhSzpuv9YrjWzmouZzVqNOROmdoPAtw3MG2Dp2niY1S1tLw4jf5A==
+X-Google-Smtp-Source: AGHT+IH71gzLrAlo2d/fCViNvMGwCFnTsuGXcX3WVOzNheI0BHq7kjsmP+W4eSqwxgAmyFq1J/kUtg==
+X-Received: by 2002:aa7:d294:0:b0:57c:cab3:407f with SMTP id 4fb4d7f45d1cf-57ccab34137mr4262219a12.9.1718642191987;
+        Mon, 17 Jun 2024 09:36:31 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb743b032sm6618545a12.92.2024.06.17.09.36.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 08:49:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Jun 2024 08:49:30 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mon, 17 Jun 2024 09:36:31 -0700 (PDT)
+Date: Mon, 17 Jun 2024 18:36:29 +0200
+From: Stanislav Jakubek <stano.jakubek@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactcode.de>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Armin Wolf <W_Armin@gmx.de>,
-	Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-Message-ID: <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
- <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
- <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: hwmon: ti,tmp108: document V+ supply, add
+ short description
+Message-ID: <ZnBmDXfnDQXNXz3k@standask-GA-A55M-S2HP>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,57 +69,58 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
 
-Hi Paul,
+TMP108 is powered by its V+ supply, document it. The property is called
+"vcc-supply" since the plus sign (+) is not an expected character.
+While at it, add a short description with a link to its datasheets.
 
-On Mon, Jun 17, 2024 at 04:42:47PM +0200, Paul Menzel wrote:
-[ ... ]
-> 
-> I applied your patch
-> 
->     $ git log --oneline --no-decorate -2
->     00058a6 eeprom: Add basic spd5118 support
->     a0e5865 i2cdetect: only use "newer" I2C_FUNC_* flags if they exist
-> 
-> but reading eeprom fails:
-> 
->     $ sudo ./eeprom/decode-dimms
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+Changes in V2:
+  - rename "v+-supply" to "vcc-supply"
+  - add a short description clarifying that vcc is actually V+
+  - update commit message to reflect this change
 
-decode-dimms does not need sudo, but that should not make a difference.
+ .../devicetree/bindings/hwmon/ti,tmp108.yaml         | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
->     Cannot read /sys/bus/i2c/drivers/spd5118/0-0050/eeprom at
-> ./eeprom/decode-dimms line 2465.
-> 
-Well, it _is_ a hack ;-), but that specific operation should not fail.
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+index 8b5307c875ff..0ad10d43fac0 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+@@ -9,6 +9,14 @@ title: TMP108 temperature sensor
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+ 
++description: |
++  The TMP108 is a digital-output temperature sensor with a
++  dynamically-programmable limit window, and under- and overtemperature
++  alert functions.
++
++  Datasheets:
++    https://www.ti.com/product/TMP108
++
+ properties:
+   compatible:
+     enum:
+@@ -24,6 +32,9 @@ properties:
+   "#thermal-sensor-cells":
+     const: 0
+ 
++  vcc-supply:
++    description: phandle to the regulator that provides the V+ supply
++
+ required:
+   - compatible
+   - reg
+@@ -45,6 +56,7 @@ examples:
+             interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
+             pinctrl-names = "default";
+             pinctrl-0 = <&tmp_alrt>;
++            vcc-supply = <&supply>;
+             #thermal-sensor-cells = <0>;
+         };
+     };
+-- 
+2.34.1
 
-Please try the following:
-
-ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
-od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-sudo i2cdump -y -f 0 0x50
-
-All those should work, and the size of /tmp/eeprom should be
-1024 bytes. The output of i2cdump should start with something like
-
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 51 18 0a 86 32 03 32 00 00 00 00 07 ff 7f 00 00    Q???2?2......?..
-                                     ^^
-
-and with
-
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 7f 00 00    Q???2?2......?..
-                                     ^^
-
-after executing the "sensors" command.
-
-Other than that, I can see that your system is an Intel system,
-meaning the i2c controller would be i801, not piix4. I wonder
-if that makes a difference. Has anyone else seeing this tested
-eeprom access with i801 (or any other controller besides piix4),
-by any chance ?
-
-Thanks,
-Guenter
