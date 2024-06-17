@@ -1,102 +1,129 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D2EC136;
-	Mon, 17 Jun 2024 05:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6D185089;
+	Mon, 17 Jun 2024 06:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718600989; cv=none; b=N5uhLUf1al+c7fysADAwz8XOscw9s2fc+aR32Tyf6dS6dzZKuUuFFOb5JT0Fe+SZtqlHWDq0KhcBNzpRBcCYPahvkFiGUAj8bJXM+tK5YHC5WKkFOaPE0GmXzhz2NBoIBQOuQRlfpnVFjLp3FIi3Wkwv7y2rCjanu+QYcPFvLPM=
+	t=1718604987; cv=none; b=BqXjcDxwKNoiVHlGTtJa7w3+6rhkf/Ut2qRBoWhrmO43VM01eN3UHtTpLEFNmuZzaTxdVcs0IdH4tJni828nakMWSht4ES3Zo1BJ+UPNmGRKn0sGd8HGUGbHwRppOlMMW8x7VzixdUaPXUSxAgQ0F/2hMUBkAPjAmEam2kFTfJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718600989; c=relaxed/simple;
-	bh=X8BFyKxY6wBYbNa+fiV7J1CRgSjDZN/wvZjS2640onA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uKmkln+0q34izZi30w6dt3rUpWb6ro9XnbzcWtAG5Se/gygow8caJbOo7x7zepfHfkgD9/gttDE3xrXILdx3NbmYJcmTXJ3vnOzCgX+VXo5qgsRxjEMvRyRqt8k25yN/5zw/xDs/PRyZ16AjoM5dbzSYhyUHrny6UF4k7RbIWnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5Kxh85H; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718604987; c=relaxed/simple;
+	bh=xnKpAidf5yJRHsGR7e7UNXSdcW+rnTfw1pW+zBytFmw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=skEIl/L80DI1bZQO2ai53fFfh9V/AFfn35SGbwrYWlD4z/oc/xu/Q/vIpS/tgRNp/zeXkZHNegO5avRDl2QV7G/AOmMo/ZQ3jbw2TeM35cXZ/7FOO5AN7kXIF4mK+qEJ5hVwQxUn8MYpxtHeV1WXLb+cfHQ0PqwII41+OpllnTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L42Wd3C3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5Kxh85H"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52c9034860dso4895922e87.2;
-        Sun, 16 Jun 2024 22:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718600986; x=1719205786; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uhrm9GRzpV6wkMAL+rfDjBKgrfJOqup9MGtDr2Lv6Hc=;
-        b=c5Kxh85HttXyp+Wcz4wbQfB065CDtLetra53JUMxQkSB0iePB5yspbfT3FpxbG3Cr0
-         uamn80r46U8doQwe1auPYyGnyLe0CxgqbaY41R+b89Eh6FkHMkcO/nGfu8xjy1JXISoQ
-         lmf7pQMnYEKGQ7bmzpTENBBN7853YZc2onP5G3wHj16OGmH/UJcTGiYIzKnXN1KxOmej
-         imIuk+HvwiNIUax3N7SbTLoSTF14wIL+kfMuH/Koo7avXcSOMipP38+1nfKZncxfxCbd
-         8O5E8sMd6R/c6feUlH5rkIzIQ/MFBYnJg2QLcw3tlbXJH7Ct2xNx4kcVii6dHDcAlfd4
-         wSww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718600986; x=1719205786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhrm9GRzpV6wkMAL+rfDjBKgrfJOqup9MGtDr2Lv6Hc=;
-        b=rWFRD2DRj9NNn/5+SIOVS+XnCWotKwneHyNaeANMTJ/NEeNZ4HatpetH29I0L7pQ0d
-         +pxcwY6T35pnaUx0fIu/B6B7A17OKxmpix8j1bxF5Sg3vKMFChewnQumsP4hP8vynPab
-         Z5fH0BCOVKLDEjMSS0/H+jbfm+tkZ8Hg7unTQjGr8xoWkneTGSYk+RIRrykW3m4w6Rer
-         0slWk05efbagIq9/0jgNkQU9oiYZMunYNISP0/xXy/RLngHW1JnB17rnVuKel3T3O1BP
-         7GNvmQUEuVRQ4MGOVQGg+lG6aFvPziW0RvfBkKAI/jruqcy9fI24o4Ew8LS2gexhvgZ/
-         mYgw==
-X-Forwarded-Encrypted: i=1; AJvYcCXad+nzuH0HiiHCygVS/G3eaVG5BUmjr9Vlh/2SvBL9/bwF+CeYlN2+rP4azDI83pHoANZJC+7X+j9wNmdyBLX1+lC4n0+0zktQIiNguTmVbN8wjUYpsxd2f5urDCBlfU4gRr2fMEdXKw+vJfiW3RquvxPn+tsuFRxSzY3mRgsLScn8qR1D
-X-Gm-Message-State: AOJu0YxWgFQLzZdqCXb3RE4mRXCyHMKsmJ5/7cVAs0omw7UFgJW0vrLz
-	fhPW9u0JaSd2jeLCoK5s6uZxgYDu+ogBjjT03Yfj8390+KlJxOnF
-X-Google-Smtp-Source: AGHT+IG5Y90zKuPv0zATa48fqja2SWtNAxno4Y7ZLzyPvJ5eeHYWN5Pkn02qHFc5yvESmaC+uVNOjg==
-X-Received: by 2002:a05:6512:b9c:b0:52c:aea5:9e09 with SMTP id 2adb3069b0e04-52caea5a347mr7517168e87.20.1718600985478;
-        Sun, 16 Jun 2024 22:09:45 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56db6b0fsm477118166b.74.2024.06.16.22.09.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jun 2024 22:09:45 -0700 (PDT)
-Date: Mon, 17 Jun 2024 07:09:43 +0200
-From: Stanislav Jakubek <stano.jakubek@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp108: document V+ supply, add
- short description
-Message-ID: <Zm/FF2xX/rhwmLZ6@standask-GA-A55M-S2HP>
-References: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
- <f75635d8-4199-4bbe-9fba-a1d2ed206966@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L42Wd3C3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D38C2BD10;
+	Mon, 17 Jun 2024 06:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718604987;
+	bh=xnKpAidf5yJRHsGR7e7UNXSdcW+rnTfw1pW+zBytFmw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=L42Wd3C3jiMaIC0TCNmUeMB9D152DFsdrcJtxM3Br1YhkTQZIu97blHZqNIHNIyQ4
+	 EF9oT8p7PXlYLbLPWnqSmyVU3bOpst9tbqNihHJrCrl7tZeZ/qu3b8n5hLWcRMu2Ym
+	 uQvtVCk3mJn3sSMSH9Lpx5N/maP+8Izs5x1aAjuiZkdFtJqJU4GTBT74wT7I98MVX7
+	 ehKdr0UwbZNAZzpZW25fBT3WjCpCPL6lNq17nJZ/W/ONMFv8fB8jNH4RMIGjWfRuRf
+	 b8xezawcaRfhAPkdiOdgr3DRI4LnfD7ftVPnk4xQXeNFBAtiSrZs4riN0IYuWea+bm
+	 sMOSXdpuw6fpw==
+Message-ID: <312d0bf2-3a17-44df-8a42-0168b2e3640a@kernel.org>
+Date: Mon, 17 Jun 2024 08:16:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f75635d8-4199-4bbe-9fba-a1d2ed206966@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp108: document V+ supply, add
+ short description
+To: Stanislav Jakubek <stano.jakubek@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Zm8/qxGc8fvi/tuE@standask-GA-A55M-S2HP>
+ <f75635d8-4199-4bbe-9fba-a1d2ed206966@roeck-us.net>
+ <Zm/FF2xX/rhwmLZ6@standask-GA-A55M-S2HP>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <Zm/FF2xX/rhwmLZ6@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jun 16, 2024 at 01:43:08PM -0700, Guenter Roeck wrote:
-> On 6/16/24 12:40, Stanislav Jakubek wrote:
-> > TMP108 is powered by its V+ supply, document it.
-> > While at it, add a short description with a link to its datasheets.
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > Not entirely sure of the "v+-supply" name, but the datasheet only ever
-> > refers to it as "V+" or simply as the "supply voltage".
-> > Only other name I've seen is in the schematic for the msm8226-based
-> > motorola-falcon smartphone, where it's called "V_POS".
-> > 
+On 17/06/2024 07:09, Stanislav Jakubek wrote:
+> On Sun, Jun 16, 2024 at 01:43:08PM -0700, Guenter Roeck wrote:
+>> On 6/16/24 12:40, Stanislav Jakubek wrote:
+>>> TMP108 is powered by its V+ supply, document it.
+>>> While at it, add a short description with a link to its datasheets.
+>>>
+>>> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+>>> ---
+>>> Not entirely sure of the "v+-supply" name, but the datasheet only ever
+>>> refers to it as "V+" or simply as the "supply voltage".
+>>> Only other name I've seen is in the schematic for the msm8226-based
+>>> motorola-falcon smartphone, where it's called "V_POS".
+>>>
+>>
+>> Guess one has to praise the ability of datasheet writers to come up
+>> with different names.
+>>
+>> The datasheet for tmp117 also uses the V+ term, yet the supply name
+>> is "vcc-supply". I would personally very much prefer to stick with that,
+>> but that is just my personal opinion.
+>>
+>> Guenter
+>>
 > 
-> Guess one has to praise the ability of datasheet writers to come up
-> with different names.
-> 
-> The datasheet for tmp117 also uses the V+ term, yet the supply name
-> is "vcc-supply". I would personally very much prefer to stick with that,
-> but that is just my personal opinion.
-> 
-> Guenter
-> 
+> I'm okay with that. I'll keep this for a few days to see if anyone else
+> has anything to say, then I'll send a V2 with it changed to vcc.
 
-I'm okay with that. I'll keep this for a few days to see if anyone else
-has anything to say, then I'll send a V2 with it changed to vcc.
+vcc. Anyway + is not an expected character.
 
-Stanislav
+Best regards,
+Krzysztof
+
