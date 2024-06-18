@@ -1,41 +1,61 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CB336AEF;
-	Tue, 18 Jun 2024 20:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87B516D4E4;
+	Tue, 18 Jun 2024 21:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718744400; cv=none; b=tQdJrXQh7iJ4aJ9MkH30zUg9CMls7RoMSTPEUGB/ZfV6OB56vX9Pf4MrOjfIiLXN3avcHmgy6TirJrqNu1YOJfmmYA0MC72PKVKMYsUV5gDP5fol5Aap14DoFPJJQCYwZhCArg9i0b8c3YgWNjs5eY6az8Goc3wvDEmnzujZI70=
+	t=1718744944; cv=none; b=RmjZGcThsrJ9r73fm7RvbkhtJks3ISZkN1tO59+wFVX3Gkx944VL2CC2CqIOOVO3iJcbVwQwV8cWKGKEYcT6+YQJU5qkOhBJ/eoEeqwcpUJwWuksASbSahJT19Xh1RRAdwriUSC7/4CrF57y+c3ZHbFUlV6f4YeZiOLyta7+twM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718744400; c=relaxed/simple;
-	bh=6Wz0qavIcGXG3zJDSp0SjQWZH51p8gZ3Joj+rMnDXLk=;
+	s=arc-20240116; t=1718744944; c=relaxed/simple;
+	bh=SpZaISbVBb9iUDJHatkJRwQpc/R/fWmgwWwgUWBSI28=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ufsUgqxkvX2p2RSmqCk4GVTU9H0oo8hwTgSE96pGA2jGjWuT/0zyWK3Sy100qMzK1bhMCUSz2WdREM9lHPJrrQHYTbitI/el7zDYktacf91dmm2aDzcokhyVYqAeWq6xEyk2kLwVbwR9046Lfu0jUclV3BSZsmcTYA4bzfONQBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=UmOGp6kA; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=j/uEU3eYj1G2x0UqjZkxMoywErDkgIhw2eFE9RW70roUAe8+GScE4JbcMVEIxNP62dvnCXZvafSSGsfpu600IDKRe92v4CxcKy0e+0XMzCpXGZvHQeJEvUeveT01ZLtE5QASMhxdDcPOGGnAdk4Q51WVpAAnd6JHPXTT1J5wN9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFc2ySeC; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="UmOGp6kA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1718744364; x=1719349164; i=w_armin@gmx.de;
-	bh=MmECG9E/2VutsNlPUEt2UkHxGGytK6+o71DcLl0dUMQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=UmOGp6kAM21rCaJogsI7XsXpimXS7SySCPFrn+VGc8pdUa7CB6WHHsgPf9g/tQmV
-	 A96DCDyfmQUO36xR/xFmdEc5rmU3rEJGMEn1dHAo0qKH2nAZ2yfOgZxLp89WUVOeQ
-	 KKPZUGhIRJ4/m4k7J33ml0XwwmdtJBBaTiM1ggLcBKge1SXg09BoMHAilHF2TRlAo
-	 agNTpa4VtM0OZU+Mdm07C6HWsevzSND6IIw+oCoN2Y32beajAc0xRurvSTcpLHI9w
-	 pnUHfwQ+vj55EEz1eSVC82nJXQdcdtB0BAJmpMnZ+tVw0vNNi2tRXux97UhwUpcj9
-	 C5gQxGPlnytG6A9gaA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mn2WF-1slH231XD5-00g7xW; Tue, 18
- Jun 2024 22:59:24 +0200
-Message-ID: <c19e8f05-a189-4091-805c-1898de4e1095@gmx.de>
-Date: Tue, 18 Jun 2024 22:59:23 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFc2ySeC"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70625e8860cso668967b3a.2;
+        Tue, 18 Jun 2024 14:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718744942; x=1719349742; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+mgf92UzYz1g9WJM1jvVrJIcNR6Z2RVVltO+KcadmA=;
+        b=YFc2ySeC3/SAa3cjNY2pr7rAYBTghf62s9Y9Hcm/GhhAYM2jFpJmL6vSsY6Ra6niYb
+         d1O3zRR9RzOyI+2/e427fJ9qypsk4JbYPzhK7b/1oHBRsL8glGrUxZ6Ie5IPYExCez2a
+         DC53R2BV77azJz1EvQizfTjy80y6s1yxpdi1fQqzcwkdlJp2qRy7FZO7HU+s8aHpPdOg
+         0LQsJOpQLVBs2fVI4nRFZrmioBELmmRSqVxEwoE5LqVfI05aYXN9oNvLIBu04YcwC8bU
+         V9BRXPhh7LfK9gcT5s4EJtb/Hx59ge0FBoLhNBPcdRx/RI8pcpVua+Hx9Vgmy8b2gqcn
+         AEPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718744942; x=1719349742;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U+mgf92UzYz1g9WJM1jvVrJIcNR6Z2RVVltO+KcadmA=;
+        b=uU477V2Hgtl5o1yhkNBl4Rg0pftxFfpGS3KXIa63/3MQQzCgzS2KFyF1z1KWneLB75
+         whQ8ZKTcIonq80JO0aXvl7Hv8gyGcju4xMmrK2OZxaRwbCE6waAYimxkaFgintEMT1P2
+         M73GRJFXMkk4GiNknYqeKtpv9DgwsHPxxLJCON87+IuMbKl+yl4rrvJ1FEcNsoeE21Cf
+         BfFs2FpKDuuzJ7B0JTY6b8hWeHaLRDYZiqeI8kSA0NVFpn0Kzvp5uN4EszX75XoSz95r
+         njoh0uqbMCjbDLmPlkgClLccSEXcFs60PE58b+0R7L+k2jVA3cXTl/VRMAfFKMBs/95q
+         iiqA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQtrFsHL3GQWonXzSnZgj29jNyS5gjX2fSo7gR0T33HSIpMf1WTSBBr9BR6EmHleHnv18lhHV0LsDRhSuZhvWtP9aBncdatmq6TD8=
+X-Gm-Message-State: AOJu0Yyi1Xrmfyw4pY306+Z5QLz5O8Lb4+qJnC/kddUvAaCg9k09B9Vc
+	RoyWwCxnXNjNQseq33Nhwx+KQrBY3q3WZXkvFaDe4dTLzl9Ul7+IweVeYA==
+X-Google-Smtp-Source: AGHT+IElrM0fTf8G2+Otc/FtPEa4yz02cEvWa+Rz5+NhCjPAMlHh52Gl+Ns/osoHhzaulUpHwRa1rw==
+X-Received: by 2002:a05:6a20:cd5e:b0:1b8:4107:ce3a with SMTP id adf61e73a8af0-1bcbb5d4c78mr704424637.39.1718744941812;
+        Tue, 18 Jun 2024 14:09:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d1ccsm9361749b3a.125.2024.06.18.14.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 14:09:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <661def21-b0a9-49c1-937e-8526008f529c@roeck-us.net>
+Date: Tue, 18 Jun 2024 14:08:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,74 +63,97 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH v2 0/3] hwmon: (spd5118) Various improvements
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [RFT PATCH v2 2/3] hwmon: (spd5118) Use spd5118 specific
+ read/write operations
+To: Paul Menzel <pmenzel@molgen.mpg.de>
 Cc: linux-kernel@vger.kernel.org,
  Wolfram Sang <wsa+renesas@sang-engineering.com>,
  =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
  =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>,
- Paul Menzel <pmenzel@molgen.mpg.de>, Sasha Kozachuk <skozachuk@google.com>,
- John Hamrick <johnham@google.com>, Chris Sarra <chrissarra@google.com>
+ Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>,
+ Sasha Kozachuk <skozachuk@google.com>, John Hamrick <johnham@google.com>,
+ Chris Sarra <chrissarra@google.com>, linux-hwmon@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>
 References: <20240618195348.1670547-1-linux@roeck-us.net>
+ <20240618195348.1670547-3-linux@roeck-us.net>
+ <a7f208df-4c9e-4fa2-9d17-80895db51182@molgen.mpg.de>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20240618195348.1670547-1-linux@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <a7f208df-4c9e-4fa2-9d17-80895db51182@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:aXz0wUK9mlfockTnnLbgT/StykYPC7Lf0wwRtL50zC5WVV0Fxbq
- y6c96v3KQ8cLU/1YbWeTX7SdfE+ITrzswUB56H54C2bbgYoI1wOkSezWRrdIi8086ujzf7h
- XHTsPpHlXwRAUV6O018DiKfnerXAkyKgC8XVDTb2oZ2HlZnWpOjmpkUHQabczesVmTPyE9i
- M+71JKdTxRVrpX5SEgicA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:eRQ9vyaso2o=;FFBs7NQDxxwI8+VojZFav2dDPmP
- +iE7a5USYULxT+FXzCqAeH81v5N821eMCS0vGBJWazUxX+iTnHcq1AyKi1+5R9lPxB80FKEWr
- E5bXPBAna0WBjYDYLMELcsoRQrRNuPeNu/q+zlWHupWUceXyxJH7hqwz9yMbSAl7u+OtByh14
- wikY4yY0c3OOOLOB7FkBMnxqVe5l9iVMQewlZya/yO6kp2rzLXORAjxWYwzeZefNmqeZFzovv
- bYAQCsJLO8kyu8n06mmN12CIQTZctq/DrqY4dkeoCK1RCsZI0LAW9F+9iVZxQqm2mTdqxZ4hk
- jZEleYVOhkmHiIRpDXkVJX2zi/cKCnp1iCen5ocKkl4CsTwizGnJc7X4KYQX/ca+0XMjU4X8F
- WkEOHbXwDKLUIoI8FOPS/1vswTsRV7tqYU0Mw+FbGQYKhbWjaSE3BFU9Jxgpg5cQIwQs/IloZ
- PGapWQxkfeYVSuZOdLcKFg58AlHle69MC6BvDvTsQwKpo+Wo5S2Vz3f04A2JCSRzoYJZ5WFZq
- yGvMRTD1QaTNMl4n0bhmd1A/doUT9lVqJUmZeW7VqGsQkZJxp/pHT/Iai2ntf4ovWkid9FdUO
- tCuAAmNdmZkUfccyVrikgFbEOeoGKTbRKy5ulOwPpCVEmhGI5qr3hUrmyaUu9tFnZIq/5OwQi
- T+VdVkAmhLqQs4/aZHDqTxHq7eUv5mzoDz3BpeCMwC9kAzBNeXVoaEzmJ9dLSwWXwSPSFgxL6
- lTPHpG/WnsXvut5euJFcQRKQtWUBTNZwZuKs0fLC+9kTbtIYptgmKcG1kL53AyBimAY9F4jzu
- X5eHUYjbCarLhKA0B8rjstrGA5d6pLB/NKHTM+3apEJxI=
+Content-Transfer-Encoding: 8bit
 
-Am 18.06.24 um 21:53 schrieb Guenter Roeck:
+Hi Paul,
 
-> The first patch of this series introduces multi-page support using the
-> regmap infrastructure. This simplifies the code and improves regmap caching.
->
-> The second patch introduces a spd5118-specific regmap bus to implement
-> SMBus accesses. This solves a problem seen with i801 I2C controllers
-> when writing to the chip. The I2C_FUNC_SMBUS_I2C_BLOCK support implemented
-> in those controllers does not work with spd5118 compatible chips, so
-> byte-by-byte access needs to be used explicitly.
->
-> The third patch adds support for spd5118 compatible chips which follow
-> the standard literally and block access to volatile registers if not
-> on page 0.
->
-> RFT: I was able to test the code on AMD systems using the piix4 I2C
-> controller. It needs testing with i801 controllers and with Renesas
-> chips.
->
-> v2: Added patches 1 and 2; simplified patch 3 to rely on regmap
->      based paging.
+On 6/18/24 13:37, Paul Menzel wrote:
+[ ... ]
+> Unfortunately, it still fails:
+> 
+>      $ git log --no-decorate --oneline -4
+>      7ddcff2d44ae3 hwmon: (spd5118) Add support for Renesas/ITD SPD5118 hub controllers
+>      e89136743324f hwmon: (spd5118) Use spd5118 specific read/write operations
+>      0fcc7279f0cc4 hwmon: (spd5118) Use regmap to implement paging
+>      801b6aad6fa7a hwmon: (spd5118) Add configuration option for auto-detection
+> 
+>      $ uname -r
+>      6.10.0-rc4.mx64.461-00050-g7ddcff2d44ae
+>      $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+>      bash: line 1: echo: write error: No such device or address
+> 
 
-Hi,
+Now I am really baffled. I don't think we could do anything simpler
+than that.
 
-i also have an AMD system and DRAM chips without the Renesas controller, but still:
+Please try
+	sudo i2cset -y -f 0 0x50 0x21 0x06
 
-Tested-by: Armin Wolf <W_Armin@gmx.de>
+That should update the critical temperature from 85 degrees C
+to 86 degrees C. If that doesn't work, we'll be really out of luck
+with that controller (or at least I don't have an idea what else to try).
 
-> ----------------------------------------------------------------
-> Guenter Roeck (3):
->        hwmon: (spd5118) Use regmap to implement paging
->        hwmon: (spd5118) Use spd5118 specific read/write operations
->        hwmon: (spd5118) Add support for Renesas/ITD SPD5118 hub controllers
->
->   drivers/hwmon/Kconfig   |   2 +-
->   drivers/hwmon/spd5118.c | 131 +++++++++++++++++++++++++++++++++++++-----------
->   2 files changed, 102 insertions(+), 31 deletions(-)
+Thanks,
+Guenter
+
