@@ -1,88 +1,108 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436AE2E85E;
-	Tue, 18 Jun 2024 15:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4380323759;
+	Tue, 18 Jun 2024 15:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718723636; cv=none; b=ndVyMwXIlsvEsZ2E8K5ek8k6MJ1/Ub8v4lH+dpM7e596nQKu0LX/JUrBKLE9Dth4lLCffBhSq37fi/+hTKjZekKE3tOypNVlmgv4DPQPDajssZ55EasqdHcvSQQvM4ME/gjABe8XL9W4nXPyCdtnkAGMlp85qKacV0u613AORDs=
+	t=1718724358; cv=none; b=gn2Jh9BOjgalI3RpOEH9L5Fk+NAXeOVvH9sX8eH19Gn3y8keno2YXMCphaOU+lBKiLWmYgHRFhtTyuuOYGFR9kUg7P4JJjq+HXjqYBLjSbuZMmxVcVlOfhJas+l4iIxVQjpXCoTAt5o9dD7TlzphY0rXAOKfGyaTrI9zAyyc5EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718723636; c=relaxed/simple;
-	bh=y7vvC69wYoXFh3sTRtpDlYAeN1SgjDNrUTnRnVw2VE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eZgqCoVHnhQaekeAErT36h8BmWfwY1YcfSDmnBsv99zoxjnT3/loLMkk3FK+jvNtXRqUPebIBPANGNwKSJrUa3sMPmkrbyOmJ0xQSEz9nTPqtQLYn3DBCs3wcE/TtKJ1UjHbj6Qyv/o7Iwee5IkbADvpOEdg1LJQlCr4jjv0PRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H5GUKMkp; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5GUKMkp"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7046211e455so4007409b3a.3;
-        Tue, 18 Jun 2024 08:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718723634; x=1719328434; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BatJn/gnplUVEPVXO05g6NGph447Qfn+Qkz47NvoH0M=;
-        b=H5GUKMkp5ilt4KjQ1B94zisqyBeu7jN3zkxdHasEuDqvSKL1jkJmUPim2hYVDfx2WF
-         zaoiXH8Tn39/8DRUzUbL0ux5S3VeSP44kzcitSpF9JEQX40ZthRE0TjZGyluAQc0cPWB
-         YSeVn3HnPxXGN8P0xrYlmOyFIGY3/guc0YLKDCwV/H2Pt1h2Wo81FWqZXdhxwxwPbNWL
-         hfIchTvrDx1EIX9hT3GhtrL3iML5a1B+RIUzyN2SjVNobTvRDzwoDI/LPnhLkOBkPVJF
-         WL8objvVf30dBaC11sGRmdsRmANUW6lsV8tTvX53tYgnzJshlEFPSMMHOCCLG7GdD7IX
-         3erQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718723634; x=1719328434;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BatJn/gnplUVEPVXO05g6NGph447Qfn+Qkz47NvoH0M=;
-        b=YVX7S86QIDRLi+WENKmDj+kXPttstD93YPKKMp73eu47eCdSQ8rqrV14xTXuo/qLcD
-         F/U+WfmEdYz0bZVbr/wxXmSwB7UG5j8Ylc4ytAtjPvqKM58QBjWvswS9ctBk6a6XMXLy
-         kx+YbD31erdn8cL7owq/MfLtwRrUScZ0TYvJgrAOoXM9U4AYfvYmO9TPcCNllabAOnXD
-         ICL1g+Cn2EYjCH7RB9yZK0Gtg252wKBc+6M/ITilLCY5X7otuuGE0fg8ph3wOGOqSunV
-         9E+TIqgpxR0iAHLNgHRrEZKunaO4sxijvSWfvoBhOV8lut7hrsAYuTW+MjEaLgau6PKD
-         07pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUDwqMOdHJoQtmry7P2cLIgE6DTqgpRxqOHXwSiAiB53LmAugGnIT/mtAJ0Mn4JnmmI1N0NH7jJ7kPaagPm8/GoFD+TO1IX3rPf2PL6L5g2UQRk0J/h1Ry6gmtiNgGYGMeYNFaQNl5g1Uqt5S6MGpGsBuk3oUp9lUL2duf/kj97KuDB9bZ9
-X-Gm-Message-State: AOJu0YwM9BLTnX2L5JGyBKz3CdvceJU7ygrf0KSVIxeWqCLaSRLc+SLB
-	Xlbso0vX2Wc5ERpU3yXJn31t+2z+j6e4z/OaLPqtjxyBFNZXyd5hNWeVRw==
-X-Google-Smtp-Source: AGHT+IEAXtFLP/7/Rh/SKpEwtUJtDTtAZEuuIAFrKujlLHqWNnL9ZuhQKY4jFG+HuLTkss9LPHwk8A==
-X-Received: by 2002:a05:6a20:7348:b0:1af:e624:b9b1 with SMTP id adf61e73a8af0-1bae7ecefb8mr13622145637.21.1718723634379;
-        Tue, 18 Jun 2024 08:13:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6fedf0bef16sm8156304a12.43.2024.06.18.08.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 08:13:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 18 Jun 2024 08:13:52 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: hwmon: ti,tmp108: document V+ supply,
- add short description
-Message-ID: <eec4e16b-912c-4df4-9a7c-4a55e1ea86e5@roeck-us.net>
-References: <ZnBmDXfnDQXNXz3k@standask-GA-A55M-S2HP>
+	s=arc-20240116; t=1718724358; c=relaxed/simple;
+	bh=/jGyBaftRhGd7bK/ZcKOcC+QqJpdWcC7EYoVm/cOc60=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m9IkhJ2tSd97PJ6vpvW02u0KfDt2avZuWraX+/MRbwvJHE4dYPJV8zSpth8C/WIO8mkuAr4ChyQ08eN0Rhy4BIP2D4NaD5x8Ov0fUuW+3U5HAKxFqlmkQ1HzJsusu8qORlFVDKW4SrhRj1t4u32ApCVNh1erXUTea9WXfCLH8nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D32C161E5FE05;
+	Tue, 18 Jun 2024 17:25:13 +0200 (CEST)
+Message-ID: <5b9379f4-5ccd-402c-8502-8895acc0cdb8@molgen.mpg.de>
+Date: Tue, 18 Jun 2024 17:25:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZnBmDXfnDQXNXz3k@standask-GA-A55M-S2HP>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
+ <20240604040237.1064024-6-linux@roeck-us.net>
+ <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
+ <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
+ <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+ <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
+ <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+ <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
+ <8719fc64-2b51-4b79-ba52-0a3b9216f2db@molgen.mpg.de>
+ <f76a4d07-887b-4efb-b20e-52979db31216@roeck-us.net>
+ <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
+ <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 17, 2024 at 06:36:29PM +0200, Stanislav Jakubek wrote:
-> TMP108 is powered by its V+ supply, document it. The property is called
-> "vcc-supply" since the plus sign (+) is not an expected character.
-> While at it, add a short description with a link to its datasheets.
+Dear Guenter,
+
+
+Am 18.06.24 um 17:10 schrieb Guenter Roeck:
+> On 6/18/24 07:59, Paul Menzel wrote:
+> [ ... ]
 > 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> I did
+>>
+>>      $ tail -3 /etc/sensors3.conf
+>>      chip "spd5118-*"
+>>          set temp1_max 56000
+>>          set temp1_crit 84000
+>>
+>> but it stays with the defaults:
+>>
+>> ```
+>> $ sensors
+>> spd5118-i2c-0-53
+>> Adapter: SMBus I801 adapter at efa0
+>> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
+>>                         (crit low =  +0.0°C, crit = +85.0°C)
+>>
+> 
+> You'd have to write directly into the attribute files.
+> For example, if you have
+> 
+> $ grep . /sys/class/hwmon/*/name
+> /sys/class/hwmon/hwmon0/name:nvme
+> /sys/class/hwmon/hwmon1/name:nct6687
+> /sys/class/hwmon/hwmon2/name:k10temp
+> /sys/class/hwmon/hwmon3/name:spd5118
+> /sys/class/hwmon/hwmon4/name:spd5118
+> /sys/class/hwmon/hwmon5/name:spd5118
+> /sys/class/hwmon/hwmon6/name:spd5118
+> /sys/class/hwmon/hwmon7/name:mt7921_phy0
+> /sys/class/hwmon/hwmon8/name:amdgpu
+> 
+> you could run
+> 
+> sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
 
-Applied.
+     $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+     bash: line 1: echo: write error: No such device or address
 
-Thanks,
-Guenter
+
+Kind regards,
+
+Paul
