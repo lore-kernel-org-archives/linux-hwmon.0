@@ -1,190 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D56F73467
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Jun 2024 12:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DCF154C02;
+	Tue, 18 Jun 2024 13:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718713677; cv=none; b=bBVHlqiu8PXclN7Q2xPbmFa+GSmYanqDJ6nACM2mmENs9lf9t6MnKSyFc0KkgxTOaOE54rJ6VGzGXfQaSfovV9pbXjtftukm5zdaZYG/7CoRFnKMS4FbzhoUkxEW/txSgoFbR0id/FnGeZaJ+aRyVBsEVmWamDVK4eZXmDZiXFI=
+	t=1718717541; cv=none; b=b2r/Vi6qEj0UuET+/NHybbaVFNCmR/W5siWMWtbXRj2cfEEQCrNPWSqMpbHaxdt7CAbaoJBWXLMp6i1+UZIkT38B45rwOf00U/0jXJoQxrKK0EhZGgFlxud4vyl5sML7LEVhWWH3lvC3+xivGz4vdkxViTMHD6Dtwh3gQ4EjqE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718713677; c=relaxed/simple;
-	bh=atH244BK2bEDImAtYnMC1q1A3GAJrnthGs4GMjNkN+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=feGe2edKvDOlqXPqmNyDc5z/150/cwwFFQmOziKP/3kbmeYglxI2aui2zC40FKC/5szdT/G4Uzx5cD7Vy10qwAlu+TQhREz4+KmbZvLIf+iT6iYO3wwnM4TVZnq26ZOdBiTdalVOSTDaBkV7jUwIKlCW5t4OSTrnjW4lVdhNpC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y61w47Vx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718717541; c=relaxed/simple;
+	bh=PPxLoT9BzBda+0TPqQBQVseMBZPIoA0HnsreLI0+ttg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fBrOiY4xpFDosfmj3MCum2LE5pHOQf+mq0TZXDNhs/7fl8DRuPgkYo7XOqITE9mFIFXMzmL3b6hZdUOUhB/y+4lebTGsrg1buK8Y6i3DDfkzBgAE8P7ujsmYW6FcM6xQPPSX1SPD2xKwA/et9fWeKD5iKLMExPtFoLMXqSr29EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ai+ac9+m; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y61w47Vx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86240C3277B;
-	Tue, 18 Jun 2024 12:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718713677;
-	bh=atH244BK2bEDImAtYnMC1q1A3GAJrnthGs4GMjNkN+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y61w47VxG3444ObprlgOydnSQGb5SY+jn3fhGJcLnQiasOpVasutoVcTqVnefHMze
-	 0VFV3QESGBf8xF/q16cRT63NmaI5tQeYnt6FFbBK/oJriuqydwf1ddHNq13KawNEva
-	 WrUHf4cpaH9BNMeDB+qhs75AvVGKHoVeYRqbFOcDyfZ2X+Xl9qOSKv+CsCOL4QJV+c
-	 M04/SQIv3/V+LUkhoI14iA0DA01X97zOmBAoyUm+pHhhZ2VrHsAmN8imYq2CYeo2Ho
-	 8ryiUYsZlhsTxk8xys0JSUziVzzCtdShyVysmfON30cfw9KK3Aj0thI8kofAEGFeR0
-	 mhqamdBMJVX9w==
-Date: Tue, 18 Jun 2024 13:27:52 +0100
-From: Lee Jones <lee@kernel.org>
-To: "Chatradhi, Naveen Krishna" <naveenkrishna.chatradhi@amd.com>
-Cc: linux-hwmon@vger.kernel.org, inux-kernel@vger.kernel.org,
-	linux@roeck-us.net, gregkh@linuxfoundation.org, arnd@arndb.de,
-	Akshay Gupta <akshay.gupta@amd.com>
-Subject: Re: [PATCH 0/5] mfd: add amd side-band functionality
-Message-ID: <20240618122752.GX3029315@google.com>
-References: <20240530112307.3089696-1-naveenkrishna.chatradhi@amd.com>
- <20240613170514.GQ2561462@google.com>
- <e37f0503-0ae2-4651-8e32-1e6444e852c2@amd.com>
- <20240614144930.GJ3029315@google.com>
- <19708a93-be04-4163-b111-68d5f71487ef@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ai+ac9+m"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70599522368so3848323b3a.2;
+        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718717539; x=1719322339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
+        b=Ai+ac9+mYZhEwB9u2c2BXM16m+Tbtmk8c0RjN5HLKZPXG1tEB9knV3bvn+8mHmP1tR
+         7vKPLnQaYzis7xfzP2CaeWYU0PtJFfVitITe7FcJQ++hmtbcOSuRsjxngMN6Ts+nXt31
+         rzUNL5LjnCYJyUsZn2Nc05x1LVkFGyMKDXQttfQoAml8sZkqPnNHOPHwbqI4MT1g61u2
+         CZfJqlj4Oz4fV8ovzfMipm4uPLvvKHfs3AT0i+jRSJM1xv9GFg1sJ70rAio+HUV4fzVt
+         i2jOGP9LZmmL7zMjDxfaNF3+Awf3IhfjQR7W2qYARIclWcC+/hiQ6xKg2zqU3DIcv19v
+         W3PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718717539; x=1719322339;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
+        b=OoQRdKUpAcxBvM7bpuNrHhcqtRugqV0UPOiXdPXqV2mhJCzpMB/M6QXcnY9pwiZ78E
+         YnewCotYZgHPSjQbI3Smqsa6o6H7YLIKouU6qC04ZK48tRL89cIdf5eSYgZA3GZmeQw2
+         bVA0bduCRHFm9SZL8kn2DXbYZH3y4woEvAAgl6ZmtYryj2Ak1tX5mLbQS/w1Cl4uimIL
+         asNAKN4C6RWi0U+44VHONzpHCXGnu6NyQmIObR5xH9I/L7qarrZN1Cl7JzwjxiRV3HTM
+         MrLIJfyLvJAuMa67cuk3GwrDdnGCBxFfTDm4Ij2zKCkKGMBiv1sQGxdkjcHKZy2Wmo7d
+         6uTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXU8P/Q4qzY4elVKFW7WvlcLxp2TLOPd9Q1OWxXTCnm9GCne02BrGImwe2iqdH27RwHPRJ+UxPZdP34Lh7DAtqzRGlXoSlQyC6PjNKjEnaWYMfljBPNMgGktvgGjGI7G5vpljhvyb/9RqlMn99xjcyt1UZmWidkvMAeszAAKugYSP3Pzw==
+X-Gm-Message-State: AOJu0Yxf89X3mt3/KiF5M8CHpH6KFY2e0VM6ZiCVhzuxDUGsYeWOqHys
+	rAzpnsm00fODnBJui1odQlTeLv5OOaueolxwjpL9qcz6jYEklVBUcgLxuQ==
+X-Google-Smtp-Source: AGHT+IHksL6eMBnmENqjS1uVpx29FcncN0UOU745Ih8OCdjgve7QFKKkB8et2BOHKvMIOBQFtx41oQ==
+X-Received: by 2002:a05:6a20:7491:b0:1b2:ae30:95b5 with SMTP id adf61e73a8af0-1bae82a7234mr12451751637.56.1718717539203;
+        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb6b9c9sm8952931b3a.160.2024.06.18.06.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 06:32:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
+Date: Tue, 18 Jun 2024 06:32:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
+ <20240604040237.1064024-6-linux@roeck-us.net>
+ <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
+ <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
+ <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+ <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
+ <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <19708a93-be04-4163-b111-68d5f71487ef@amd.com>
 
-On Tue, 18 Jun 2024, Chatradhi, Naveen Krishna wrote:
+Hi Paul,
 
+On 6/18/24 03:25, Paul Menzel wrote:
+[ ... ]
 > 
-> On 6/14/2024 8:19 PM, Lee Jones wrote:
-> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> > 
-> > 
-> > On Fri, 14 Jun 2024, Chatradhi, Naveen Krishna wrote:
-> > 
-> > > On 6/13/2024 10:35 PM, Lee Jones wrote:
-> > > > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> > > > 
-> > > > 
-> > > > On Thu, 30 May 2024, Naveen Krishna Chatradhi wrote:
-> > > > 
-> > > > > From: Akshay Gupta <akshay.gupta@amd.com>
-> > > > > 
-> > > > > At present, sbrmi under hwmon subsystem is probed as an i2c
-> > > > > driver and reports power.
-> > > > > 
-> > > > > However, APML interface defines few other protocols to support
-> > > > > OOB system management functionality.
-> > > > > 
-> > > > > This patchset the following
-> > > > > 1. Based on hwmon maintainers feedback, move the i2c client
-> > > > >      probe and sbrmi core functionality to drivers/mfd/
-> > > > > 2. Add an MFD cell, which probes the hwmon/sbrmi and continues to
-> > > > >      report power using the symbol exported by the mfd/sbrmi-core.
-> > > > > 3. Convert i2c to regmap which provides multiple benefits
-> > > > >      over direct smbus APIs.
-> > > > > 4. Register a misc device which provides
-> > > > >       a. An ioctl interface through node /dev/sbrmiX
-> > > > >       b. Open-sourced and widely used https://github.com/amd/esmi_oob_library
-> > > > >          will continue to provide user-space programmable API for the following
-> > > > >         - Mailbox xfer (already defined in sbrmi_mailbox_xfer())
-> > > > >         - CPUID access
-> > > > >         - MCAMSR access
-> > > > > 
-> > > > > Akshay Gupta (5):
-> > > > >     hwmon/mfd sbrmi: Move core sbrmi from hwmon to MFD
-> > > > >     mfd: sbrmi: Add mfd cell to I2C probe to be used by hwmon
-> > > > >     mfd/hwmon sbrmi: Use regmap subsystem
-> > > > >     mfd: sbrmi: Clear sbrmi status register bit SwAlertSts
-> > > > >     mfd/hwmon: sbrmi: Add support for APML protocols
-> > > > > 
-> > > > >    drivers/hwmon/Kconfig         |   1 +
-> > > > >    drivers/hwmon/sbrmi.c         | 284 +++-----------------
-> > > > >    drivers/mfd/Kconfig           |   9 +-
-> > > > >    drivers/mfd/Makefile          |   2 +
-> > > > >    drivers/mfd/sbrmi-core.c      | 490 ++++++++++++++++++++++++++++++++++
-> > > > It's not clear to me what any of these 500 lines do, but they do not
-> > > > look like a good fit for MFD.  Perhaps I'm missing something.  Can you
-> > > > provide some more information about the device and why you think MFD is
-> > > > a suitable location for it?
-> > > Hi lee,
-> > > 
-> > > Data center processors from AMD provide a side-band (often called
-> > > out-of-band) path for manageability
-> > > 
-> > > called Advanced Platform Management Link (APML), which consists of i2c/i3c
-> > > client devices called
-> > > 
-> > > Side-band Remote Management Interface (SB-RMI) and Side-band Temperature
-> > > Sensor Interface (SB-TSI).
-> > > 
-> > > 
-> > > We have i2c client drivers upstreamed under drivers/hwmon sbrmi.c and
-> > > sbtsi_temp.c reporting power and
-> > > 
-> > > temperature via hwmon interfaces. However, sbrmi device can also provide
-> > > performance, telemetry and RAS
-> > MFD knows nothing of these characteristics.
-> 
-> Yes, we will modify the implementation to define ops structure with
-> functionality that
-> 
-> can be called by platforms drivers in hwmon and other subsystems.
-> 
-> > 
-> > > monitoring, management using AMD defined protocols. One of them
-> > > sbrmi_mailbox_xfer()is defined in
-> > I large portion of this should be moved out to drivers/mailbox.
-> 
-> we have explored the mailbox subsystem, APML xfer is not a ful-fledge
-> mailbox interface as such,
-> 
-> it is a custom protocol, which accepts inputs and provides outputs over
-> i2c/i3c. It does not support
-> 
-> multichannel (tx/rx) or have IRQs or a memory mapped IO and it is one of the
-> protocols supported
-> 
-> by the RMI device.
-> 
-> > 
-> > > drivers/hwmon/sbrmi.c.
-> > > 
-> > > Patchset would do the following
-> > > 
-> > > 1. Move core functionality from hwmon/sbrmi.c to drivers/mfd/sbrmi-i2c.c as
-> > > an i2c_driver.
-> > > 
-> > > 2. Convert the hwmon/sbrmi.c to a platform driver.
-> > > 
-> > > 3. Use mfd_add_devices() API to add cells which will probe the platform
-> > > driver under hwmon/sbrmi.c
-> > How many devices will mfd_add_devices() be registering?
-> 
-> This patch is adding one hwmon device.
-> 
-> We can add additional cell which probes a platform driver in drivers/misc
-> which handles
-> 
-> the user space interface part.
+>      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers /spd5118/0-0050/eeprom
+>      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
+>      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
 
-It sounds like MFD is (once more) being used as a dumping ground for
-random devices which do not fit anywhere else.  A Multi-Function Device
-driver's role is to create shared resources (memory, IRQs, Clocks,
-Regulators, etc) for and register more than one real device that uses
-those shared resources, that's all.  Even if you were to move the Misc
-part out, using that as a second device to prove it MFD-worthy is not
-going to fly.  Take a look at what these devices usually consist of:
+That suggests that the i801 driver got an error when trying some chip operation.
+Unfortunately I have no idea what that error or the failed operation might be.
 
-  git grep -W "struct mfd_cell.*{" -- drivers/mfd
+>      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
+>      0000000
+> 
+>> sudo i2cdump -y -f 0 0x50
+> 
+>      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+>      No size specified (using byte-data access)
+>      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
+> 
+This should work after you load the "i2c-dev" module.
 
-This submission results in a 650-line driver that registers a single
-cell.  One that is attributed only to the device it's being removed
-from.
+If you get it to work, please provide the output. Maybe it helps tracking down
+the problem.
 
-I see that Guenter already said:
+Thanks,
+Guenter
 
-  "This is not hardware monitoring functionality and would have to
-  reside elsewhere, outside the hwmon subsystem."
-
-Well it's not MFD functionality either.  Sorry.
-
--- 
-Lee Jones [李琼斯]
