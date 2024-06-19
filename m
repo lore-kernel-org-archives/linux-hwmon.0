@@ -1,61 +1,61 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E8113DDC0;
-	Wed, 19 Jun 2024 13:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844F81CF8D;
+	Wed, 19 Jun 2024 14:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718803906; cv=none; b=YlmXL/LmR7u2Vfhusyjn3L8+wpE2XsaAmJEAAkzR/2QxMEH87X/E3BvWZaZUFNYUQhE6YunZP2Y4WxZvxABb9tZ8bpXxDtM9HfKgiYllakrVeWwcUdQF2jJpA433t24Lp2NfOvhrDFT3JKi0y+XQSTiP+mfAH4J3tXUfToVMGIE=
+	t=1718806688; cv=none; b=Kszq8J13LUC+Tx+cU+/hcfS5Ms0bmZCQOkhnl8HNb6Yoc69IhEkO6wolKTeOAUGGjg7cO9FSevJNu0Hljfx4fCJeY6erzcg+uhgYUqxpxusxsSaGe/oZaTkuMLKCNo/dwilmUTRae8AY4jJ7wGOLd0VuPy+VxWcxEPXxEBK8o2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718803906; c=relaxed/simple;
-	bh=ZBfChBVBWlZJjIw54iQUHW8NeUGjauKrsiDKAhuBBOo=;
+	s=arc-20240116; t=1718806688; c=relaxed/simple;
+	bh=RGSHa7sfaiEy5D4a/j1wrv+LOR9Q1Itk+/bpvv3EMrQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KH4sq5FFul9mfwdQ8o2P1fr6I9R4dQ6wwIVWPyh//dYukSOC4cLN0km9VbTn7uS421uYHiDZqmeEcWrgD1yYbVNHH7Mvt3IejgQlwybZTyaeX08RBgqpVxvFejCQYuwWErPGqvEz6Gr5yFpJLbDo9vU8ERlt5kP2Vd+NYSpyA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpU+pb1+; arc=none smtp.client-ip=209.85.215.171
+	 In-Reply-To:Content-Type; b=TlAVWiHN94tBjJuDVdmjZfQlvViSUPvNTso6JmJiTtMExc8iRpmClV1Dp2/cFKaHJqgjbUTE8EEJVigkbTBJ5xVgaW5C4IwNkQXud3QQMarxEN+PL1HEbGRT8uLVwoKf8lJpbNs+mFFmlIWC9W5bp3KUaKUhXwHXDZMewaSYb54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApBt96rQ; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpU+pb1+"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-6e9f52e99c2so4813683a12.1;
-        Wed, 19 Jun 2024 06:31:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApBt96rQ"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-70a365a4532so2876849a12.1;
+        Wed, 19 Jun 2024 07:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718803904; x=1719408704; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718806686; x=1719411486; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HI0t+/1JB+6ef0nfrkSzkQxua50xtKanE9sFqkgJ53E=;
-        b=TpU+pb1+KBmf8s06PVFGWzH6MZIHPaHcuCBvH7cHNANRvGjvT9tkVLROCEyjXLZs5Q
-         J2UHSwctxXzokTleKxsd869SeM0rifbc/1sobJk1vZkFP1/RB15DlUre2AJhths+kKmF
-         56Q+B8RisarVeNhlAc/v368Iwuof/xk9XUurzmhRNeImzsuC556wVZL2L6EHbJQpJJ53
-         mQSRUDe44PpWoaY7ITsvLjkP4rOmAMD6pAFd9GAajah61U7Fsz6mGfl6XoiCWM6BbFJR
-         RiLHWVuaQvizvv9vkRcIJ2qeZyS0vi9iy1rRGOyQ167K+eOvYWuFCZKV5etIsVbFxt6T
-         4c1g==
+        bh=logi2V8osBzXhzd35gF5npZIF3ONa+VvHKEUDyy2HCQ=;
+        b=ApBt96rQqEvbqton4MbNvsCGZXNaGHeaBKI/EpmaN258rLVSJbOK4ks5uq+ajaZPmg
+         RaFeS7he4I/lyZ4SzCV+WlnVx0UIlgjVJg2KGAeObMmnPQlHr//r5zom17SeYu8dpIze
+         LpezjzSnZhegBs9QEv7UCq+0DtDZT4opQQBkllYZcNLZXCFI6ESn9BzHgoq2NWdgvido
+         gmb8dnmayjoijHdlDRWSiQcit0i5hNAxC7zw9MB4BibR6EpqdNcQjMmv5dAkW2/6aXUs
+         orRnB1fQg/XmIIilGAdxlqzQCYqKqjllKtUeEPR+j6he3RGdngKDjN6qpttHUWaCKhJ+
+         FnIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718803904; x=1719408704;
+        d=1e100.net; s=20230601; t=1718806686; x=1719411486;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HI0t+/1JB+6ef0nfrkSzkQxua50xtKanE9sFqkgJ53E=;
-        b=FMqH104ESVNXSLrQWeHELu+eJblc8gAgeDzJu8nLQsIDWMLtC08iRMAHDhRkyFDpA2
-         T7Yi56KaYdpZs4hmK7PnonK8LmCMGq11hZJd0tQXPLy9cyAeCuRUiFaCDlbVCG5+mNDh
-         ICuOEfimrAvOF0hCJ28+X2hlh1OzUi9n0O0UwFJOFnZ4O8I+MV1A4Iq/zvyEhFR2mfeX
-         wVKnU+npJwQhK+wAWI3NFqiYIuweE+OcWz1zoszogdUGus5TuPeMurXSFeOhRiKax22N
-         lfvt0pClohHBDgsiHutZldwEoBugHb5wDnXKfm24M9Uim/t+D/kg+mwP+rEXzFZon0dr
-         7pPw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIjF6yY8kkkKvOj5N9Ei3ltpsa/3LF1bywsvEdWOO/ptaUd04qE6RBgsbsDZdbsVrWKElNd0034ejMF/ut/SR7oV0q/7Ffu/gtOUnP4VZ36eVatUu1qlcbKCIgNixCgN2rmOiIk+w2Gk7ZPj3zLiiMjWCEBeMS2Z8g447kf4HQZhsCfQ==
-X-Gm-Message-State: AOJu0YxZbP8pN2JYg8UBNv5gB+HzLX//6GkfTs4jBjBxu8B+fStb89/B
-	EpffUqTXZ2rmqsuD3YfB56HMnPSSXfw03t9+hoBAK0+1Ygg1eTO0
-X-Google-Smtp-Source: AGHT+IFPpveAvpchtmNTCN+GZfPG6z+XtfrCcq/Z03OLD+nabATM05+LiujAr+DnkDsUiF7evQTapA==
-X-Received: by 2002:a17:90a:4dc6:b0:2c7:5622:bf40 with SMTP id 98e67ed59e1d1-2c7b59f0cf8mr2471835a91.4.1718803903861;
-        Wed, 19 Jun 2024 06:31:43 -0700 (PDT)
+        bh=logi2V8osBzXhzd35gF5npZIF3ONa+VvHKEUDyy2HCQ=;
+        b=koPqU8TkCUc12g84gUwJj/vyyC1jTHlnAy4P54s70v9tWC3NLFFgdWt03niXMcMYNS
+         pTQWF9vjTfec1JqPK0W8sD9voKT5c4ZK3co/BEmFEoO/0LZ70pZnnfTyGH/PVExGTbth
+         VnMfuQXuT7WdQNJbNEB/jRIlphbtQ1pL6o0qHyi0+FjMKrliHSdwtFpLIIR5WBSMM+tN
+         39XqzdlgEE1Sk1pwD05HA3u7xrscdDDStcL4cFmD22WSATPrmunjfqlHC/yZUPJWIc87
+         ivenGwjsdrj+Yyk1s9IiWuqz2K2XCyKbWjzembnGe5NtDHJiZhg/OpGUOee6tMzQrdV5
+         8hOw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+rc2GAi3hPyabHadgtJ5iP6eNM45nJssgv+oCvquzgiM/Dfe68vTkQTj1h9WcnXyZ0Mfo5G9P/M8cSzGRSiV20rLTz/Cno5R38odSQlGERqLyr0CP0TiN9Y/I+6doxvoqbxln9Ow1zGQ=
+X-Gm-Message-State: AOJu0YzdlAQw0YpOlyNRtlJxGoDxQjb5Ox6v09Cd0w6bOHJlkfoThkp9
+	wLZXfpqMbOPtN4spiurvwERGAZkralBCRT+KP0NQqzWcfwHwnd+C
+X-Google-Smtp-Source: AGHT+IEWg9UInkYQIxfsa4v520A/FhV/0j9YrrqxpE2GgK7xvcCxFUZIcPus6ZaDoqLvMHsbspm+9Q==
+X-Received: by 2002:a17:90b:a44:b0:2c3:40b6:293b with SMTP id 98e67ed59e1d1-2c7b5da95d0mr2617806a91.39.1718806685579;
+        Wed, 19 Jun 2024 07:18:05 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c79963a2b9sm2862985a91.54.2024.06.19.06.31.41
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c77ba5b202sm3120071a91.36.2024.06.19.07.18.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jun 2024 06:31:42 -0700 (PDT)
+        Wed, 19 Jun 2024 07:18:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2a1ae708-3718-4f70-9837-bcc50b7c8f66@roeck-us.net>
-Date: Wed, 19 Jun 2024 06:31:40 -0700
+Message-ID: <52d9ec36-2ac8-427a-8631-c7730c979bd0@roeck-us.net>
+Date: Wed, 19 Jun 2024 07:18:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,21 +63,27 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/9] Add Mule MFD support
-To: Farouk Bouabid <farouk.bouabid@cherry.de>,
- Quentin Schulz <quentin.schulz@cherry.de>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Heiko Stuebner <heiko@sntech.de>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20240618-dev-mule-i2c-mux-v4-0-5462d28354c8@cherry.de>
- <fdeea79f-4568-4e70-9b49-0c02abc91170@roeck-us.net>
- <4f92528b-8311-4c0b-998b-f0221d7bd474@cherry.de>
- <c2803eed-b4f4-44cf-a7f7-9557d05e798e@roeck-us.net>
- <19ee521d-298d-4718-bdc6-f282666de371@cherry.de>
+Subject: Re: [RFT PATCH v2 2/3] hwmon: (spd5118) Use spd5118 specific
+ read/write operations
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Armin Wolf <W_Armin@gmx.de>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-kernel@vger.kernel.org, =?UTF-8?Q?Ren=C3=A9_Rebe?=
+ <rene@exactcode.de>, Stephen Horvath <s.horvath@outlook.com.au>,
+ Sasha Kozachuk <skozachuk@google.com>, John Hamrick <johnham@google.com>,
+ Chris Sarra <chrissarra@google.com>, linux-hwmon@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>, Heiner Kallweit <hkallweit1@gmail.com>
+References: <20240618195348.1670547-1-linux@roeck-us.net>
+ <20240618195348.1670547-3-linux@roeck-us.net>
+ <a7f208df-4c9e-4fa2-9d17-80895db51182@molgen.mpg.de>
+ <661def21-b0a9-49c1-937e-8526008f529c@roeck-us.net>
+ <omsjeb6zbkcdhh4a3urjdrdeyj2kczb734tbhxwdcvngzlm7pe@dzdphvmm6asq>
+ <4755d088-7eab-47ca-923c-db1fdf3611ab@gmx.de>
+ <6845cc2d-c50b-415b-af49-bf57333ee939@molgen.mpg.de>
+ <f437519f-97c3-4811-ac04-0695a27d9b37@roeck-us.net>
+ <0b8ae7fa-e3d3-4d31-9b4b-657b15c2d19c@t-8ch.de>
+ <a682ab44-d623-40fe-8fee-af2a3ae5590a@roeck-us.net>
+ <879b15c1-d924-41d9-a41d-da785b943d26@t-8ch.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,23 +129,115 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <19ee521d-298d-4718-bdc6-f282666de371@cherry.de>
+In-Reply-To: <879b15c1-d924-41d9-a41d-da785b943d26@t-8ch.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/19/24 00:45, Farouk Bouabid wrote:
-
+On 6/19/24 02:13, Thomas Weißschuh wrote:
+> On 2024-06-18 18:02:51+0000, Guenter Roeck wrote:
+>> On 6/18/24 17:50, Thomas Weißschuh wrote:
+>>> On 2024-06-18 17:23:44+0000, Guenter Roeck wrote:
+>>>> On 6/18/24 16:39, Paul Menzel wrote:
+>>>>> [Cc: +Heiner]
+>>>>>
+>>>>>
+>>>>> Dear Armin,
+>>>>>
+>>>>>
+>>>>> Am 19.06.24 um 01:28 schrieb Armin Wolf:
+>>>>>> Am 19.06.24 um 00:28 schrieb Wolfram Sang:
+>>>>>>
+>>>>>>>> to 86 degrees C. If that doesn't work, we'll be really out of luck
+>>>>>>>> with that controller (or at least I don't have an idea what else to try).
+>>>>>>>
+>>>>>>> Try CCing Heiner Kallweit for ideas about the i801 controller.
+>>>>>
+>>>>>> i am not Heiner Kallweit, but i found something interesting in
+>>>>>> commit ba9ad2af7019 ("i2c: i801: Fix I2C Block Read on 8-Series/C220 and later").
+>>>>>>
+>>>>>> Basically, it seems that the i802 i2c controller indeed features a SPD write disable bit which blocks all writes for slave addresses 0x50-0x57.
+>>>>>>
+>>>>>> Does the i801 i2c controller driver print something like "SPD Write Disable is set" during boot?
+>>>>>
+>>>>> Nice find. Yes, it does:
+>>>>>
+>>>>
+>>>> Yes, definitely. I didn't have any recent datasheets, so I missed that flag.
+>>>> Oh well :-(.
+>>>>
+>>>>>        [    5.462605] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+>>>>>        [    5.468399] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
+>>>>>
+>>>>
+>>>> Bummer. That explains the problem. It means that the BIOS effectively
+>>>> blocks reading the eeprom on your system (because that would require writing
+>>>> the page register), as well as changing temperature limits. That is really
+>>>> annoying, but there is nothing we can do about it. Maybe the BIOS has a
+>>>> configuration flag to enable or disable write protect, but I doubt it.
+>>>
+>>> What about using 16bit addressing mode?
+>>>
+>>>       Alternatively, at initial power on, the host can set the Table 112, “MR11” [3] = ‘1’ to address the entire 1024 bytes of
+>>>       non-volatile memory with 2 bytes of address and hence not required to go through page selection to address entire
+>>>       non-volatile memory.
+>>>
+>>> regmap-i2c allows 16bit addresses when I2C_FUNC_SMBUS_I2C_BLOCK is supported,
+>>> which to me looks like it should be the case on i801 for ICH5.
+>>>
 >>
->> If it is properly defined in devicetree, the emulated AMC6821 should be
->> an i2c device, possibly sitting behind an i2c multiplexer, not a
->> platform device.
+>> Good idea, but it doesn't work. I can get write operations with
+>> 16-bit register addresses to work even on piix4, but read operations
+>> require writing a 16-bit register address followed by byte reads (see
+>> regmap_i2c_smbus_i2c_read_reg16). Unfortunately, spd5118 devices
+>> don't auto-increment the address on byte read operations, meaning
+>> each byte read returns data from address 0x00 (i.e., it returns
+>> 0x51). Try "i2cdump -y -f 0 0x50 c" and you'll see what I mean.
+>> Maybe there is a way around it, but I have not found it.
 > 
+> Thanks for the pointer to regmap_i2c_smbus_i2c_read_reg16().
+> I'm not really familiar with I2C/SMBUS ...
 > 
-> The emulated AMC6821 and the Mule I2C mux are both reachable using I2C address (0x18), and hence the use of MFD as the mux only uses one I2C register that is not used by AMC6821.
+> Did you look into "2.6.8.3 Default Read Address Pointer Mode"?
+> 
+Yes, I did, and, yes, setting that for each planned read operation
+might do the trick, but even that would not work here since writes
+are blocked. On top of that, it would be extremely expensive (one
+would have to write the address into the default address registers
+before starting a read). The reason to use 16-bit access mode would
+be to simplify access, not to make it more expensive.
+
+> I am failing to understand how that address pointer mode would ever make
+> sense without address auto-increment.
+
+Oh, it kind of does, as long as each access is a single i2c operation.
+One would have to use a SMBus read word operation to read two bytes
+with a single SMBus command. I guess one could also use something similar
+to an i2c block operation - start a read with no command byte and just
+keep going.
+
+> 
+>> On top of that, configuring 16-bit mode requires a write operation
+>> into the page register, and that is blocked.
+> 
+> ... this one on the other hand is really obvious.
 > 
 
-Whatever you do, the amc chip is still an i2c driver and needs to remain one.
-Modeling it as platform driver is simply wrong, and I won't accept those patches.
+There is actually another problem: When I tried enabling 16-bit mode
+in my system, I initially had trouble clearing it. When I rebooted,
+I got a BIOS error telling me that the configuration changed, and
+it gave me the option to either enter setup or continue. A soft
+reset did not clear the bit. Power cycle did, but I got the
+"configuration changed" message again.
 
+So even if we would get 16-bit mode to work, it would not be a good idea
+because it would expose people to the "configuration changed" BIOS
+message. Resetting the bit on shutdown and when unloading the driver
+would not help because that would not happen when the system crashes.
+
+So, in summary, 16-bit mode is just not usable. If some BIOS actually
+enables it, we might have to disable it or figure out how to use it
+without depending on "Default Read Address Pointer Mode".
+
+Thanks,
 Guenter
 
