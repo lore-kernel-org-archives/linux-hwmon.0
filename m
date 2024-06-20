@@ -1,54 +1,44 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4DD77119
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Jun 2024 21:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43246EB60
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Jun 2024 21:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718918004; cv=none; b=HS5XOADsvJWlxowKra00uhwoUjOAfFmWRcikXQcC1UFjtPr04xZHKduWKpB1PR9gqs/dVcEFZV9BryJ5TapERj0UWOdVNCmiMv0QdQ4KBFKnXJUNczKlubN7dhjwxtFbVW/UPx01mEsS05Ptq0PJg/2LfWxrG/Z1y2ZXIBUlEdM=
+	t=1718918412; cv=none; b=ZqCMVKYwPRGG42OeF47Mkzcs/0skR3nrjqoJ4eWglob2oMS8UUWgInar+Rlq6aF1doui7+8t27QqrRmAbosYPwqOVeW5DuS4AURQC/troSGT0pRpkbicgvzUOO8O0zwWchhqZPYEqbELjfSRqKxRR8ZtLiysTLRh8axbg8Jtc6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718918004; c=relaxed/simple;
-	bh=QyX6hFu5aH/3FUAeokgMlgJR6loneZVeGcpYw3d3hjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MjCutLphG8zQghxzz5el1PNMZycopNpZPbi/xrP8QKSoGI916HhKCJ8tIDIAHPT2CTsmPs/f1USc62Vv1LHFbgvgdrCmy5Oc0QrbY2Kgyx9RM/R0vo5i9thU++M1CEV8VBCYGgFDfKGS9ovTX7PxYgEtHeYEajZaGj/GgpeW4qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qXF2LTuG; arc=none smtp.client-ip=91.218.175.184
+	s=arc-20240116; t=1718918412; c=relaxed/simple;
+	bh=w8tKgNnZphqOV8+1lxnIdoceRh5HvzWFxdxJrnRLlFs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aKN/aSb+1EYezmVJPxakqGVYbsZ+OPZJRxx/Amj62h5gTCpl5JgSbizqJuZ8Vy6CmrEJPhFrVlLRNcYu8V/dWaqnIcrXl/T6tOwky8jxqcZ7ktWzVUTyqifvBCR2cf4n5B4DDi4T9fxkUHi68i6o4CMNcnx88Gd7HBJ6V0+vsz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=du8jc1am; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qXF2LTuG"
-X-Envelope-To: jic23@kernel.org
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="du8jc1am"
+X-Envelope-To: jdelvare@suse.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1718917999;
+	t=1718918409;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uJIcJeul+qmKBv5T/OXvSe+kfJGIu3x5ZFUMxqYCCzU=;
-	b=qXF2LTuGLu/At/rZdw/vJeZTGYTcaWqOxnclGreYhJvC23ZRu4yGMb17xFnRgKx3mXMUEn
-	jlAAaVFZZ4bbURagj8JEuICJIQy04qJ/9aqPW82PCkBTcBGC+JZyCMajcMlm94+kAk1Uo1
-	X/Yp5vs2QqkcRLQu/wvu7oED388MT5k=
-X-Envelope-To: jdelvare@suse.com
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nrTd+P8XD11NlExzimKrveSe59LGx3sOd4knYOqqS04=;
+	b=du8jc1amvmmLF2vLDp1QOo6rUPwG44p7r9xdxKO0dQOe0Q3wJKUKVo+YOCIKgL7TK8UqR7
+	RVbJsGzgxObBjZX8uQ6pncbGUaTGO7/LnEuQM/74AhHbWbkx1hnhmDOdF3EYt4+ztKcV9p
+	Nq3R/Bx/hVLxP15t0QLotgzUVYnyxXQ=
 X-Envelope-To: linux@roeck-us.net
-X-Envelope-To: linux-iio@vger.kernel.org
 X-Envelope-To: linux-hwmon@vger.kernel.org
-X-Envelope-To: lars@metafoo.de
 X-Envelope-To: linux-kernel@vger.kernel.org
 X-Envelope-To: sean.anderson@linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Sean Anderson <sean.anderson@linux.dev>
-To: Jonathan Cameron <jic23@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
+To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	linux-iio@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Cc: Lars-Peter Clausen <lars@metafoo.de>,
-	linux-kernel@vger.kernel.org,
+Cc: linux-kernel@vger.kernel.org,
 	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH 2/2] hwmon: iio: Add labels from IIO channels
-Date: Thu, 20 Jun 2024 17:13:09 -0400
-Message-Id: <20240620211310.820579-3-sean.anderson@linux.dev>
-In-Reply-To: <20240620211310.820579-1-sean.anderson@linux.dev>
-References: <20240620211310.820579-1-sean.anderson@linux.dev>
+Subject: [PATCH] hwmon: iio: Use iio_read_channel_processed_scale for IIO_POWER
+Date: Thu, 20 Jun 2024 17:20:05 -0400
+Message-Id: <20240620212005.821805-1-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,77 +48,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add labels from IIO channels to our channels. This allows userspace to
-display more meaningful names instead of "in0" or "temp5".
+Instead of rescaling power channels after the fact, use the dedicated
+scaling API. This should reduce any inaccuracies resulting from the
+scaling.
 
 Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 ---
 
- drivers/hwmon/iio_hwmon.c | 33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
+ drivers/hwmon/iio_hwmon.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-index 4c8a80847891..588b64c18e63 100644
+index 4c8a80847891..fab32e1e15f2 100644
 --- a/drivers/hwmon/iio_hwmon.c
 +++ b/drivers/hwmon/iio_hwmon.c
-@@ -33,6 +33,17 @@ struct iio_hwmon_state {
- 	struct attribute **attrs;
- };
+@@ -49,16 +49,17 @@ static ssize_t iio_hwmon_read_val(struct device *dev,
+ 	struct iio_channel *chan = &state->channels[sattr->index];
+ 	enum iio_chan_type type;
  
-+static ssize_t iio_hwmon_read_label(struct device *dev,
-+				  struct device_attribute *attr,
-+				  char *buf)
-+{
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-+	struct iio_hwmon_state *state = dev_get_drvdata(dev);
-+	struct iio_channel *chan = &state->channels[sattr->index];
-+
-+	return iio_read_channel_label(chan, buf);
-+}
-+
- /*
-  * Assumes that IIO and hwmon operate in the same base units.
-  * This is supposed to be true, but needs verification for
-@@ -90,12 +101,12 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+-	ret = iio_read_channel_processed(chan, &result);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = iio_get_channel_type(chan, &type);
+ 	if (ret < 0)
+ 		return ret;
  
- 	st->channels = channels;
+ 	if (type == IIO_POWER)
+-		result *= 1000; /* mili-Watts to micro-Watts conversion */
++		/* mili-Watts to micro-Watts conversion */
++		ret = iio_read_channel_processed_scale(chan, &result, 1000);
++	else
++		ret = iio_read_channel_processed(chan, &result);
++	if (ret < 0)
++		return ret;
  
--	/* count how many attributes we have */
-+	/* count how many channels we have */
- 	while (st->channels[st->num_channels].indio_dev)
- 		st->num_channels++;
- 
- 	st->attrs = devm_kcalloc(dev,
--				 st->num_channels + 1, sizeof(*st->attrs),
-+				 2 * st->num_channels + 1, sizeof(*st->attrs),
- 				 GFP_KERNEL);
- 	if (st->attrs == NULL)
- 		return -ENOMEM;
-@@ -147,7 +158,23 @@ static int iio_hwmon_probe(struct platform_device *pdev)
- 		a->dev_attr.show = iio_hwmon_read_val;
- 		a->dev_attr.attr.mode = 0444;
- 		a->index = i;
--		st->attrs[i] = &a->dev_attr.attr;
-+		st->attrs[2 * i] = &a->dev_attr.attr;
-+
-+		a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
-+		if (a == NULL)
-+			return -ENOMEM;
-+
-+		sysfs_attr_init(&a->dev_attr.attr);
-+		a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
-+						       "%s%d_label",
-+						       prefix, n);
-+		if (!a->dev_attr.attr.name)
-+			return -ENOMEM;
-+
-+		a->dev_attr.show = iio_hwmon_read_label;
-+		a->dev_attr.attr.mode = 0444;
-+		a->index = i;
-+		st->attrs[2 * i + 1] = &a->dev_attr.attr;
- 	}
- 
- 	st->attr_group.attrs = st->attrs;
+ 	return sprintf(buf, "%d\n", result);
+ }
 -- 
 2.35.1.1320.gc452695387.dirty
 
