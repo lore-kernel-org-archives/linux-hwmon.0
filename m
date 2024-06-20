@@ -1,243 +1,638 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844F81CF8D;
-	Wed, 19 Jun 2024 14:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D506B1AB35E;
+	Thu, 20 Jun 2024 14:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718806688; cv=none; b=Kszq8J13LUC+Tx+cU+/hcfS5Ms0bmZCQOkhnl8HNb6Yoc69IhEkO6wolKTeOAUGGjg7cO9FSevJNu0Hljfx4fCJeY6erzcg+uhgYUqxpxusxsSaGe/oZaTkuMLKCNo/dwilmUTRae8AY4jJ7wGOLd0VuPy+VxWcxEPXxEBK8o2w=
+	t=1718893400; cv=none; b=MgxZmU2izWdc10mtqhX79ta5WRkol2cWa/64ph+gWTTpRbfcXuPSzWXrPkBK/CbL0vXMzz+6SrFTT4kX8BaLN+K7o6HsMQhF42qcA0GwrRRjJK8mq0w907pfksioVHrEXI6m966ai4HFmN8mNF6zfxefQp2F2GhMNsp5u2Ybxm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718806688; c=relaxed/simple;
-	bh=RGSHa7sfaiEy5D4a/j1wrv+LOR9Q1Itk+/bpvv3EMrQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TlAVWiHN94tBjJuDVdmjZfQlvViSUPvNTso6JmJiTtMExc8iRpmClV1Dp2/cFKaHJqgjbUTE8EEJVigkbTBJ5xVgaW5C4IwNkQXud3QQMarxEN+PL1HEbGRT8uLVwoKf8lJpbNs+mFFmlIWC9W5bp3KUaKUhXwHXDZMewaSYb54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApBt96rQ; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1718893400; c=relaxed/simple;
+	bh=+4W6JHoLbictFQEQCAFezXlFJOLnm+WKWCVrkiWdAOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYL+nMCq4lENXgRZEC78q0ENfQL6kBedTZ5UVMRitZ/qeMtjbxYOoZm9T35FAdbS8qeOgGE3YdpiKocUgJvfgNAli37NpCmk7Erou7YNaV70m4CPq/exbUtRsT0PGx21ZUeFXEiyZF881vFt9luak+DVaoOCxdNGubLU3e5wlFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W49EKvE8; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApBt96rQ"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-70a365a4532so2876849a12.1;
-        Wed, 19 Jun 2024 07:18:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W49EKvE8"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-6bfd4b88608so753899a12.1;
+        Thu, 20 Jun 2024 07:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718806686; x=1719411486; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=logi2V8osBzXhzd35gF5npZIF3ONa+VvHKEUDyy2HCQ=;
-        b=ApBt96rQqEvbqton4MbNvsCGZXNaGHeaBKI/EpmaN258rLVSJbOK4ks5uq+ajaZPmg
-         RaFeS7he4I/lyZ4SzCV+WlnVx0UIlgjVJg2KGAeObMmnPQlHr//r5zom17SeYu8dpIze
-         LpezjzSnZhegBs9QEv7UCq+0DtDZT4opQQBkllYZcNLZXCFI6ESn9BzHgoq2NWdgvido
-         gmb8dnmayjoijHdlDRWSiQcit0i5hNAxC7zw9MB4BibR6EpqdNcQjMmv5dAkW2/6aXUs
-         orRnB1fQg/XmIIilGAdxlqzQCYqKqjllKtUeEPR+j6he3RGdngKDjN6qpttHUWaCKhJ+
-         FnIw==
+        d=gmail.com; s=20230601; t=1718893398; x=1719498198; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uHxT3flbaEPPxQuVj7AheidwaIoPLVYY25DeO8a1/YU=;
+        b=W49EKvE82DRf5GFU3KhMOhG1G5AYvg7QEp6n+r/s60Kp3bNFi/oYjs9vGMcU4kddxx
+         dx5KGKYrh8Ln1le9ME8irJji8R4hrBMO7bEqPUOTVznZYGB2u9hLcAO01bDWVdZgn6y0
+         ZthIpzQPZ8J6koRM9kCgzZQWQYZYRuL9JctQKF/q5LmM++numlJcd3EpA5S3mh5OpPWA
+         up2fQhlsJFV0D9szH/ri9DRrxg76tx0utDwLxdImt3j33Rj2eHhXuwzt5kX2p/fyPxwz
+         dlEZIEVcHgaqph0as2CaY+hGTCSsJmskmQzkxVAMdnIDRjX7T02N0GaPERIoRVADIhzo
+         jN0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718806686; x=1719411486;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=logi2V8osBzXhzd35gF5npZIF3ONa+VvHKEUDyy2HCQ=;
-        b=koPqU8TkCUc12g84gUwJj/vyyC1jTHlnAy4P54s70v9tWC3NLFFgdWt03niXMcMYNS
-         pTQWF9vjTfec1JqPK0W8sD9voKT5c4ZK3co/BEmFEoO/0LZ70pZnnfTyGH/PVExGTbth
-         VnMfuQXuT7WdQNJbNEB/jRIlphbtQ1pL6o0qHyi0+FjMKrliHSdwtFpLIIR5WBSMM+tN
-         39XqzdlgEE1Sk1pwD05HA3u7xrscdDDStcL4cFmD22WSATPrmunjfqlHC/yZUPJWIc87
-         ivenGwjsdrj+Yyk1s9IiWuqz2K2XCyKbWjzembnGe5NtDHJiZhg/OpGUOee6tMzQrdV5
-         8hOw==
-X-Forwarded-Encrypted: i=1; AJvYcCV+rc2GAi3hPyabHadgtJ5iP6eNM45nJssgv+oCvquzgiM/Dfe68vTkQTj1h9WcnXyZ0Mfo5G9P/M8cSzGRSiV20rLTz/Cno5R38odSQlGERqLyr0CP0TiN9Y/I+6doxvoqbxln9Ow1zGQ=
-X-Gm-Message-State: AOJu0YzdlAQw0YpOlyNRtlJxGoDxQjb5Ox6v09Cd0w6bOHJlkfoThkp9
-	wLZXfpqMbOPtN4spiurvwERGAZkralBCRT+KP0NQqzWcfwHwnd+C
-X-Google-Smtp-Source: AGHT+IEWg9UInkYQIxfsa4v520A/FhV/0j9YrrqxpE2GgK7xvcCxFUZIcPus6ZaDoqLvMHsbspm+9Q==
-X-Received: by 2002:a17:90b:a44:b0:2c3:40b6:293b with SMTP id 98e67ed59e1d1-2c7b5da95d0mr2617806a91.39.1718806685579;
-        Wed, 19 Jun 2024 07:18:05 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c77ba5b202sm3120071a91.36.2024.06.19.07.18.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jun 2024 07:18:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718893398; x=1719498198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uHxT3flbaEPPxQuVj7AheidwaIoPLVYY25DeO8a1/YU=;
+        b=DHYRBv/nilcOjidwXift4U109zdqF2PvKUPFFKnTCF/tuT8FdtFrPGB0rxwzYJQMSj
+         9txTfsdP7EEPAwuI+E7lWcLIXdK0TZ5BmIHDIvDBMdYcBxGtUM4O+3C35YsRm4Y/u28V
+         VmcHJvlkPOArI1uTfDaB/zFmxG/5a5u+p6d2k4lRKkBrXt7lNt03rMGDvJjWGVEceMSW
+         CtngoA2yoBwj6noC1GeTd6x6FYhfd+TY5qeqidPqCHWzvOqE2Rvz45YJesWsleImSIka
+         LArDPDBimo2SD+gKTsLOXHpcvL1s7vfRmVDywpDL1ZF/DhD022Sj5ByCsZBqAv1alKCg
+         HltA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAhDei7QgkEevNutfFePQmWxI42sbY3ubB8wxPHYvAsB6G7RMEE3LnZH9vAnC69yz+F1Kl860ffJNw0xtHy3xiwJP0ypaqwiFp22D8dX0fwLyac0cy4atFy7zl1zGZ8jp4EloEMyiRWlIkZ9M/Z28NPlXxssazKSn0WX6U2V5d1KpoTeuBrsbm5F0ljlsSFOmY5DsvlLfd1gScV40SdRuj
+X-Gm-Message-State: AOJu0YzC9maGKLhE/s7oL8ur8IsndbaiNx/EgrS9hV1wSFQFhvPH/FRW
+	sTxXOrsr67rv5QsB1Obyb68lNOWtJyyxJs6eFROt/xKsVg/4gSZvBVdIxQ==
+X-Google-Smtp-Source: AGHT+IFbizT99phNhpGKm9snju0f+ayL5ZR+zNOlGENZy23mB9lvmEatcku8nuEVSMkICmYFwMj6RA==
+X-Received: by 2002:a17:90b:97:b0:2c4:aa3d:f1e8 with SMTP id 98e67ed59e1d1-2c7b5b06d60mr5492012a91.14.1718893397960;
+        Thu, 20 Jun 2024 07:23:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c7e64ac485sm1733545a91.57.2024.06.20.07.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 07:23:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <52d9ec36-2ac8-427a-8631-c7730c979bd0@roeck-us.net>
-Date: Wed, 19 Jun 2024 07:18:02 -0700
+Date: Thu, 20 Jun 2024 07:23:15 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: baneric926@gmail.com
+Cc: jdelvare@suse.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	corbet@lwn.net, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
+	kwliu@nuvoton.com, kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com,
+	Bonnie_Lo@wiwynn.com
+Subject: Re: [PATCH v5 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
+Message-ID: <dee8d81d-590e-4ae5-9771-9e1848b8ffe9@roeck-us.net>
+References: <20240322081158.4106326-1-kcfeng0@nuvoton.com>
+ <20240322081158.4106326-3-kcfeng0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH v2 2/3] hwmon: (spd5118) Use spd5118 specific
- read/write operations
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Armin Wolf <W_Armin@gmx.de>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-kernel@vger.kernel.org, =?UTF-8?Q?Ren=C3=A9_Rebe?=
- <rene@exactcode.de>, Stephen Horvath <s.horvath@outlook.com.au>,
- Sasha Kozachuk <skozachuk@google.com>, John Hamrick <johnham@google.com>,
- Chris Sarra <chrissarra@google.com>, linux-hwmon@vger.kernel.org,
- Jean Delvare <jdelvare@suse.com>, Heiner Kallweit <hkallweit1@gmail.com>
-References: <20240618195348.1670547-1-linux@roeck-us.net>
- <20240618195348.1670547-3-linux@roeck-us.net>
- <a7f208df-4c9e-4fa2-9d17-80895db51182@molgen.mpg.de>
- <661def21-b0a9-49c1-937e-8526008f529c@roeck-us.net>
- <omsjeb6zbkcdhh4a3urjdrdeyj2kczb734tbhxwdcvngzlm7pe@dzdphvmm6asq>
- <4755d088-7eab-47ca-923c-db1fdf3611ab@gmx.de>
- <6845cc2d-c50b-415b-af49-bf57333ee939@molgen.mpg.de>
- <f437519f-97c3-4811-ac04-0695a27d9b37@roeck-us.net>
- <0b8ae7fa-e3d3-4d31-9b4b-657b15c2d19c@t-8ch.de>
- <a682ab44-d623-40fe-8fee-af2a3ae5590a@roeck-us.net>
- <879b15c1-d924-41d9-a41d-da785b943d26@t-8ch.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <879b15c1-d924-41d9-a41d-da785b943d26@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240322081158.4106326-3-kcfeng0@nuvoton.com>
 
-On 6/19/24 02:13, Thomas Weißschuh wrote:
-> On 2024-06-18 18:02:51+0000, Guenter Roeck wrote:
->> On 6/18/24 17:50, Thomas Weißschuh wrote:
->>> On 2024-06-18 17:23:44+0000, Guenter Roeck wrote:
->>>> On 6/18/24 16:39, Paul Menzel wrote:
->>>>> [Cc: +Heiner]
->>>>>
->>>>>
->>>>> Dear Armin,
->>>>>
->>>>>
->>>>> Am 19.06.24 um 01:28 schrieb Armin Wolf:
->>>>>> Am 19.06.24 um 00:28 schrieb Wolfram Sang:
->>>>>>
->>>>>>>> to 86 degrees C. If that doesn't work, we'll be really out of luck
->>>>>>>> with that controller (or at least I don't have an idea what else to try).
->>>>>>>
->>>>>>> Try CCing Heiner Kallweit for ideas about the i801 controller.
->>>>>
->>>>>> i am not Heiner Kallweit, but i found something interesting in
->>>>>> commit ba9ad2af7019 ("i2c: i801: Fix I2C Block Read on 8-Series/C220 and later").
->>>>>>
->>>>>> Basically, it seems that the i802 i2c controller indeed features a SPD write disable bit which blocks all writes for slave addresses 0x50-0x57.
->>>>>>
->>>>>> Does the i801 i2c controller driver print something like "SPD Write Disable is set" during boot?
->>>>>
->>>>> Nice find. Yes, it does:
->>>>>
->>>>
->>>> Yes, definitely. I didn't have any recent datasheets, so I missed that flag.
->>>> Oh well :-(.
->>>>
->>>>>        [    5.462605] i801_smbus 0000:00:1f.4: SPD Write Disable is set
->>>>>        [    5.468399] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
->>>>>
->>>>
->>>> Bummer. That explains the problem. It means that the BIOS effectively
->>>> blocks reading the eeprom on your system (because that would require writing
->>>> the page register), as well as changing temperature limits. That is really
->>>> annoying, but there is nothing we can do about it. Maybe the BIOS has a
->>>> configuration flag to enable or disable write protect, but I doubt it.
->>>
->>> What about using 16bit addressing mode?
->>>
->>>       Alternatively, at initial power on, the host can set the Table 112, “MR11” [3] = ‘1’ to address the entire 1024 bytes of
->>>       non-volatile memory with 2 bytes of address and hence not required to go through page selection to address entire
->>>       non-volatile memory.
->>>
->>> regmap-i2c allows 16bit addresses when I2C_FUNC_SMBUS_I2C_BLOCK is supported,
->>> which to me looks like it should be the case on i801 for ICH5.
->>>
->>
->> Good idea, but it doesn't work. I can get write operations with
->> 16-bit register addresses to work even on piix4, but read operations
->> require writing a 16-bit register address followed by byte reads (see
->> regmap_i2c_smbus_i2c_read_reg16). Unfortunately, spd5118 devices
->> don't auto-increment the address on byte read operations, meaning
->> each byte read returns data from address 0x00 (i.e., it returns
->> 0x51). Try "i2cdump -y -f 0 0x50 c" and you'll see what I mean.
->> Maybe there is a way around it, but I have not found it.
+On Fri, Mar 22, 2024 at 04:11:58PM +0800, baneric926@gmail.com wrote:
+> From: Ban Feng <kcfeng0@nuvoton.com>
 > 
-> Thanks for the pointer to regmap_i2c_smbus_i2c_read_reg16().
-> I'm not really familiar with I2C/SMBUS ...
+> The NCT7363Y is a fan controller which provides up to 16
+> independent FAN input monitors. It can report each FAN input count
+> values. The NCT7363Y also provides up to 16 independent PWM
+> outputs. Each PWM can output specific PWM signal by manual mode to
+> control the FAN duty outside.
 > 
-> Did you look into "2.6.8.3 Default Read Address Pointer Mode"?
+> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+
+Sorry for the late reply. This got somehow lost in my queue.
+
+> ---
+>  Documentation/hwmon/index.rst   |   1 +
+>  Documentation/hwmon/nct7363.rst |  33 +++
+>  MAINTAINERS                     |   2 +
+>  drivers/hwmon/Kconfig           |  11 +
+>  drivers/hwmon/Makefile          |   1 +
+>  drivers/hwmon/nct7363.c         | 396 ++++++++++++++++++++++++++++++++
+>  6 files changed, 444 insertions(+)
+>  create mode 100644 Documentation/hwmon/nct7363.rst
+>  create mode 100644 drivers/hwmon/nct7363.c
 > 
-Yes, I did, and, yes, setting that for each planned read operation
-might do the trick, but even that would not work here since writes
-are blocked. On top of that, it would be extremely expensive (one
-would have to write the address into the default address registers
-before starting a read). The reason to use 16-bit access mode would
-be to simplify access, not to make it more expensive.
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 1ca7a4fe1f8f..0874f2f754f4 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -170,6 +170,7 @@ Hardware Monitoring Kernel Drivers
+>     mpq8785
+>     nct6683
+>     nct6775
+> +   nct7363
+>     nct7802
+>     nct7904
+>     npcm750-pwm-fan
+> diff --git a/Documentation/hwmon/nct7363.rst b/Documentation/hwmon/nct7363.rst
+> new file mode 100644
+> index 000000000000..1a6abce3a433
+> --- /dev/null
+> +++ b/Documentation/hwmon/nct7363.rst
+> @@ -0,0 +1,33 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver nct7363
+> +=====================
+> +
+> +Supported chip:
+> +
+> +  * Nuvoton NCT7363Y
+> +
+> +    Prefix: nct7363
+> +
+> +    Addresses: I2C 0x20, 0x21, 0x22, 0x23
+> +
+> +Author: Ban Feng <kcfeng0@nuvoton.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +The NCT7363Y is a fan controller which provides up to 16 independent
+> +FAN input monitors, and up to 16 independent PWM outputs with SMBus interface.
+> +
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +Currently, the driver supports the following features:
+> +
+> +==========  ==========================================
+> +fanX_input  provide current fan rotation value in RPM
+> +
+> +pwmX        get or set PWM fan control value.
+> +==========  ==========================================
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2705e44ffc0c..c016a0bed476 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15221,6 +15221,8 @@ M:	Ban Feng <kcfeng0@nuvoton.com>
+>  L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+> +F:	Documentation/hwmon/nct7363.rst
+> +F:	drivers/hwmon/nct7363.c
+>  
+>  NETDEVSIM
+>  M:	Jakub Kicinski <kuba@kernel.org>
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 83945397b6eb..4ff19ea11001 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1658,6 +1658,17 @@ config SENSORS_NCT6775_I2C
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called nct6775-i2c.
+>  
+> +config SENSORS_NCT7363
+> +	tristate "Nuvoton NCT7363Y"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  If you say yes here you get support for the Nuvoton NCT7363Y
+> +	  hardware monitoring chip.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nct7363.
+> +
+>  config SENSORS_NCT7802
+>  	tristate "Nuvoton NCT7802Y"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 5c31808f6378..cf7be22b916a 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -171,6 +171,7 @@ obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
+>  nct6775-objs			:= nct6775-platform.o
+>  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
+>  obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
+> +obj-$(CONFIG_SENSORS_NCT7363)	+= nct7363.o
+>  obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
+>  obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
+>  obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
+> diff --git a/drivers/hwmon/nct7363.c b/drivers/hwmon/nct7363.c
+> new file mode 100644
+> index 000000000000..858296f5d5b3
+> --- /dev/null
+> +++ b/drivers/hwmon/nct7363.c
+> @@ -0,0 +1,396 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2023 Nuvoton Technology corporation.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/bits.h>
+> +#include <linux/err.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +#define NCT7363_REG_FUNC_CFG_BASE(x)	(0x20 + (x))
+> +#define NCT7363_REG_PWMEN_BASE(x)	(0x38 + (x))
+> +#define NCT7363_REG_FANINEN_BASE(x)	(0x41 + (x))
+> +#define NCT7363_REG_FANINX_HVAL(x)	(0x48 + ((x) * 2))
+> +#define NCT7363_REG_FANINX_LVAL(x)	(0x49 + ((x) * 2))
+> +#define NCT7363_REG_FSCPXDUTY(x)	(0x90 + ((x) * 2))
+> +
+> +#define PWM_SEL(x)			(BIT(0) << ((x) * 2))
+> +#define FANIN_SEL(x)			(BIT(1) << ((x < 8) ? \
+> +					 (((x) + 8) * 2) : \
+> +					 (((x) % 8) * 2)))
+> +#define VALUE_TO_REG(x, y)		(((x) >> ((y) * 8)) & 0xFF)
+> +
+> +#define NCT7363_FANINX_LVAL_MASK	GENMASK(4, 0)
+> +#define NCT7363_FANIN_MASK		GENMASK(12, 0)
+> +
+> +#define NCT7363_PWM_COUNT		16
+> +
+> +static inline unsigned int FAN_FROM_REG(u16 val)
 
-> I am failing to understand how that address pointer mode would ever make
-> sense without address auto-increment.
+Please use lower case for functions, even if inline.
 
-Oh, it kind of does, as long as each access is a single i2c operation.
-One would have to use a SMBus read word operation to read two bytes
-with a single SMBus command. I guess one could also use something similar
-to an i2c block operation - start a read with no command byte and just
-keep going.
+> +{
+> +	if (val == NCT7363_FANIN_MASK || val == 0)
+> +		return 0;
+> +
+> +	return (1350000UL / val);
+> +}
+> +
+> +enum chips { nct7363, nct7362 };
+> +
 
-> 
->> On top of that, configuring 16-bit mode requires a write operation
->> into the page register, and that is blocked.
-> 
-> ... this one on the other hand is really obvious.
-> 
+Those enums are not actually used. Are they needed ?
 
-There is actually another problem: When I tried enabling 16-bit mode
-in my system, I initially had trouble clearing it. When I rebooted,
-I got a BIOS error telling me that the configuration changed, and
-it gave me the option to either enter setup or continue. A soft
-reset did not clear the bit. Power cycle did, but I got the
-"configuration changed" message again.
+> +static const struct i2c_device_id nct7363_id[] = {
+> +	{ "nct7363", nct7363 },
+> +	{ "nct7362", nct7362 },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(i2c, nct7363_id);
+> +
+> +static const struct of_device_id nct7363_of_match[] = {
+> +	{ .compatible = "nuvoton,nct7363", .data = (void *)nct7363 },
+> +	{ .compatible = "nuvoton,nct7362", .data = (void *)nct7362 },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, nct7363_of_match);
+> +
+> +struct nct7363_data {
+> +	struct regmap		*regmap;
+> +	struct mutex		lock;		/* protect register access */
+> +
+> +	u16			fanin_mask;
+> +	u16			pwm_mask;
+> +};
+> +
+> +static int nct7363_read_fan(struct device *dev, u32 attr, int channel,
+> +			    long *val)
+> +{
+> +	struct nct7363_data *data = dev_get_drvdata(dev);
+> +	unsigned int hi, lo, rpm;
+> +	int ret = 0;
+> +	u16 cnt;
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		/*
+> +		 * High-byte register should be read first to latch
+> +		 * synchronous low-byte value
+> +		 */
+> +		mutex_lock(&data->lock);
+> +		ret = regmap_read(data->regmap,
+> +				  NCT7363_REG_FANINX_HVAL(channel), &hi);
+> +		if (ret)
+> +			goto out;
+> +
+> +		ret = regmap_read(data->regmap,
+> +				  NCT7363_REG_FANINX_LVAL(channel), &lo);
 
-So even if we would get 16-bit mode to work, it would not be a good idea
-because it would expose people to the "configuration changed" BIOS
-message. Resetting the bit on shutdown and when unloading the driver
-would not help because that would not happen when the system crashes.
+Please consider using regmap_read_bulk() to avoid the locks.
 
-So, in summary, 16-bit mode is just not usable. If some BIOS actually
-enables it, we might have to disable it or figure out how to use it
-without depending on "Default Read Address Pointer Mode".
+> +		if (ret)
+> +			goto out;
+> +		mutex_unlock(&data->lock);
+> +
+> +		cnt = (hi << 5) | (lo & NCT7363_FANINX_LVAL_MASK);
+> +		rpm = FAN_FROM_REG(cnt);
+> +		*val = (long)rpm;
 
-Thanks,
-Guenter
+rpm and the typecast are unnecessary. Just use
+		*val = fan_from_reg(cnt);
 
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +out:
+> +	mutex_unlock(&data->lock);
+> +	return ret;
+> +}
+> +
+> +static umode_t nct7363_fan_is_visible(const void *_data, u32 attr, int channel)
+> +{
+> +	const struct nct7363_data *data = _data;
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		if (data->fanin_mask & BIT(channel))
+> +			return 0444;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct7363_read_pwm(struct device *dev, u32 attr, int channel,
+> +			    long *val)
+> +{
+> +	struct nct7363_data *data = dev_get_drvdata(dev);
+> +	unsigned int regval;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		ret = regmap_read(data->regmap,
+> +				  NCT7363_REG_FSCPXDUTY(channel), &regval);
+> +		if (ret)
+> +			return ret;
+> +
+> +		*val = (long)regval;
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int nct7363_write_pwm(struct device *dev, u32 attr, int channel,
+> +			     long val)
+> +{
+> +	struct nct7363_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		if (val < 0 || val > 255)
+> +			return -EINVAL;
+> +
+> +		ret = regmap_write(data->regmap,
+> +				   NCT7363_REG_FSCPXDUTY(channel), val);
+> +
+> +		return ret;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t nct7363_pwm_is_visible(const void *_data, u32 attr, int channel)
+> +{
+> +	const struct nct7363_data *data = _data;
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		if (data->pwm_mask & BIT(channel))
+> +			return 0644;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct7363_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return nct7363_read_fan(dev, attr, channel, val);
+> +	case hwmon_pwm:
+> +		return nct7363_read_pwm(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int nct7363_write(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return nct7363_write_pwm(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t nct7363_is_visible(const void *data,
+> +				  enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return nct7363_fan_is_visible(data, attr, channel);
+> +	case hwmon_pwm:
+> +		return nct7363_pwm_is_visible(data, attr, channel);
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static const struct hwmon_channel_info *nct7363_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT,
+> +			   HWMON_F_INPUT),
+
+Other potential attributes:
+
+- enable (register 0x41, 0x42, and possibly 0x40)
+- alarm (register 0x34, 0x35)
+- min (register 0x6c, 0x6d)
+
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT),
+
+Other potential attributes:
+
+- enable (register 0x38)
+- freq (register 0x91, ...)
+
+All those could be added later, of course, but I would suggest to at least
+add the fan speed low limit and alarm attributes.
+
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops nct7363_hwmon_ops = {
+> +	.is_visible = nct7363_is_visible,
+> +	.read = nct7363_read,
+> +	.write = nct7363_write,
+> +};
+> +
+> +static const struct hwmon_chip_info nct7363_chip_info = {
+> +	.ops = &nct7363_hwmon_ops,
+> +	.info = nct7363_info,
+> +};
+> +
+> +static int nct7363_init_chip(struct nct7363_data *data)
+> +{
+> +	u32 func_config = 0;
+> +	int i, ret;
+> +
+> +	/* Pin Function Configuration */
+> +	for (i = 0; i < NCT7363_PWM_COUNT; i++) {
+> +		if (data->pwm_mask & BIT(i))
+> +			func_config |= PWM_SEL(i);
+> +		if (data->fanin_mask & BIT(i))
+> +			func_config |= FANIN_SEL(i);
+> +	}
+> +
+> +	for (i = 0; i < 4; i++) {
+> +		ret = regmap_write(data->regmap, NCT7363_REG_FUNC_CFG_BASE(i),
+> +				   VALUE_TO_REG(func_config, i));
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	/* PWM and FANIN Monitoring Enable */
+> +	for (i = 0; i < 2; i++) {
+> +		ret = regmap_write(data->regmap, NCT7363_REG_PWMEN_BASE(i),
+> +				   VALUE_TO_REG(data->pwm_mask, i));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = regmap_write(data->regmap, NCT7363_REG_FANINEN_BASE(i),
+> +				   VALUE_TO_REG(data->fanin_mask, i));
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct7363_present_pwm_fanin(struct device *dev,
+> +				     struct device_node *child,
+> +				     struct nct7363_data *data)
+> +{
+> +	u8 fanin_ch[NCT7363_PWM_COUNT];
+> +	struct of_phandle_args args;
+> +	int ret, fanin_cnt;
+> +	u8 ch, index;
+> +
+> +	ret = of_parse_phandle_with_args(child, "pwms", "#pwm-cells",
+> +					 0, &args);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (args.args[0] >= NCT7363_PWM_COUNT)
+> +		return -EINVAL;
+> +	data->pwm_mask |= BIT(args.args[0]);
+> +
+> +	fanin_cnt = of_property_count_u8_elems(child, "tach-ch");
+> +	if (fanin_cnt < 1 || fanin_cnt > NCT7363_PWM_COUNT)
+> +		return -EINVAL;
+> +
+> +	ret = of_property_read_u8_array(child, "tach-ch", fanin_ch, fanin_cnt);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (ch = 0; ch < fanin_cnt; ch++) {
+> +		index = fanin_ch[ch];
+> +		if (index >= NCT7363_PWM_COUNT)
+> +			return -EINVAL;
+> +		data->fanin_mask |= BIT(index);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct regmap_config nct7363_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+
+Your call to make, but this doesn't use regmap caching capabilities which
+might be really useful here. Most of the registers (all but the count and
+status registers, plus the gpio input registers if/when gpio support is
+added) are not volatile and could be cached.
+
+> +};
+> +
+> +static int nct7363_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device_node *child;
+> +	struct nct7363_data *data;
+> +	struct device *hwmon_dev;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->regmap = devm_regmap_init_i2c(client, &nct7363_regmap_config);
+> +	if (IS_ERR(data->regmap))
+> +		return PTR_ERR(data->regmap);
+> +
+> +	mutex_init(&data->lock);
+> +
+> +	for_each_child_of_node(dev->of_node, child) {
+> +		ret = nct7363_present_pwm_fanin(dev, child, data);
+> +		if (ret) {
+> +			of_node_put(child);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	/* Initialize the chip */
+> +	ret = nct7363_init_chip(data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	hwmon_dev =
+> +		devm_hwmon_device_register_with_info(dev, client->name, data,
+> +						     &nct7363_chip_info, NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static struct i2c_driver nct7363_driver = {
+> +	.class = I2C_CLASS_HWMON,
+> +	.driver = {
+> +		.name = "nct7363",
+> +		.of_match_table = nct7363_of_match,
+> +	},
+> +	.probe = nct7363_probe,
+> +	.id_table = nct7363_id,
+> +};
+> +
+> +module_i2c_driver(nct7363_driver);
+> +
+> +MODULE_AUTHOR("CW Ho <cwho@nuvoton.com>");
+> +MODULE_AUTHOR("Ban Feng <kcfeng0@nuvoton.com>");
+> +MODULE_DESCRIPTION("NCT7363 Hardware Monitoring Driver");
+> +MODULE_LICENSE("GPL");
