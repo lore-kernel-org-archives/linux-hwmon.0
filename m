@@ -1,67 +1,75 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636E538FA0;
-	Fri, 21 Jun 2024 15:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDF728DB3;
+	Fri, 21 Jun 2024 15:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718982588; cv=none; b=hkEGo923keri94dIZ5xR/xL4J/33bQMIAqzZby9S37XQd9cE4A7kvK0lsr/L1yAtwywSxsbkwSkq1j6G1lwlqgjtv/mgyXSm7X+/TX8TsIHI+g6qnSPTzyH7AQhbZng6GOwGa7hFBQ1mJfW7b3pwQdTf/jX/9QFXc/K4YxiHql0=
+	t=1718983154; cv=none; b=ASNJ4sa5kh2GAE25Bozu+Jj9gIhL4jciYCKivme6T9+t92bSnmGDddOGEL4Dkt8nU792ZA5j+MvayPQrtG0H9L5LXuQTE/hPu1PP7Iqpg+51dhlOkXpef8UXE9D4rKq/emPHH3UR7c+2+SQWV583ysDwcVZPa3cnLY17XTggAy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718982588; c=relaxed/simple;
-	bh=0VMF9n+QtL3+3e8cyhyYJCm5O5ipnpmBnXL6xMoEx0w=;
+	s=arc-20240116; t=1718983154; c=relaxed/simple;
+	bh=A5p+moRk0R9liIKtFtn2PGNkd8z9yeHkYGV/CCjCva4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AWsRnSXlmybtmu9Ia9uBqH+CRsetv9HjG5DWOa8iMaHWrpF+O88ynLP+tD9HfStgwPvzFVEvPXd8hT3pUW3qNWY1RAgOhOMPhoVWM60wpQ3tC3guFOFS5OxqmrscrUf/QdURdh0TN7JJO7w3jO4oj8xzsZErioxjjpga9+d355Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0Ql9WIT; arc=none smtp.client-ip=209.85.216.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=h2Kucgct1iu2CrJyCW/GGRvFFkzA39r6VjdDNczMI/Z4SZ+H8vKOVLd+30bzl6eCt+DD36dZ9kWkQAuADjedlAo43AKHYzDm0UjMdXyzQa+ZggTRdGoraAMLe9mXgwFjThtDHkGeiT2wSQ3MxA28tzEQdUBTOOHno7q9Vbu7gQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TwfGKdxI; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0Ql9WIT"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2c8065e1666so1193026a91.2;
-        Fri, 21 Jun 2024 08:09:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwfGKdxI"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7163489149eso854434a12.1;
+        Fri, 21 Jun 2024 08:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718982587; x=1719587387; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718983152; x=1719587952; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vD78Ry4oM+SZFSOpnK1UvmdpLaurNsJCZMHc+5y/b/o=;
-        b=e0Ql9WIT7LsOb1TJz5hcwUFi0CXcZPDab0PIvSxZrfcKbO8Hp8LWRhg2sOPTI3PNNI
-         acdQ8Pqz7Krtbq1jeA6BKKaYUal+eDEMrplgiS/VGlt1qPFDl9YJRQ9G8l+n0gNbLY8B
-         UY7OUFbCOyU0vVojDhSr8Wxl8ufg4rQoxHWbJ93nikdn48dDdA/v2EXgTwT6TZ7YwYwo
-         k18riC46NT73qL7HqNN5ZFI5odw/PL5uqtOn/mh4V00MquODYtIwk9JWknxYOBSl0+yt
-         kQIz5/Qu+9YfOVFPp2BS9IdwtSrCtbsFK98D0gfPc9BZXl5cAplCsNbCQDo+XetoV/3S
-         uxgA==
+        bh=Cjxvv/dXpoLtAAeIGzsy9ReaW7NrPJCCE9CeS4zb3TA=;
+        b=TwfGKdxIcXWBrwWJqdD8zau+nl+9x+JQae6iipIuzuVdnSnGcNh+okT70OUUHF2T6Z
+         mFL7yhoOnW4BO3YNow7ZsUeNu0au/5MFaEKvJVIr2kHytwnkc6nKTXqlz5BW2vlhRmeK
+         qjPWyfqAPYJWgQbV2d0BdEL3/gzXPN8Sr8DOF/sygmFwyxn+1wuE0/495I0jxby971CI
+         u1BJ/Fn4QhQfpEWtlrQ8ap3RPVsijPuX+g/bdHrF6O7D42kGdQorHXC0fOJVMeW0yjRY
+         lZmNIFzITjC8jwzpelQYtEyRD6bc6WOAoBbAEKb3T0BUGb+1d+39jBcciJ9M1Lttp4r/
+         7kPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718982587; x=1719587387;
+        d=1e100.net; s=20230601; t=1718983152; x=1719587952;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vD78Ry4oM+SZFSOpnK1UvmdpLaurNsJCZMHc+5y/b/o=;
-        b=U/2Gx9la3/pi08xC1yug/x1wQDJuUKM4zL/kNcJROdkarBBWbjZbPCfZ3UCeDwfZ3P
-         9Y37w78+ph6BVIbwavylfLo5hUQp9wObxxRmdaCI8qUYqjJPgUUqYjX23LG2tesfjznG
-         5jsAGP4XVofmMpnpguvMpUYVFs6OsanX1w4UkMB7ZeAsJyQMxIiVBjr76mohKTw8LQen
-         9XHSnzVwm0HDfKtQbYN7s4lh3Hz3JZJPGpLdPiM2r1/VmrK2/2DP8EH+FqgZ4zjYVnj9
-         J4caSkwtl7VdOP4ZaXKgkaNk+isFe4xg8ZLUGx2ymcF7X4dTPCxr3IM2VFiWN03EFaNL
-         ZOyw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcvaHx0M27DAjnnmJ0nd/r1YRiukgduG4WGHdHuIRjyyBjoZ4rMQhqr1EiV+8qsI1WJbmcx2pFJKVHSV40N1RcVzr9YVzGcKdVSD3jiGzwRBDDW4aOqkncC7wWeC1HBbFu0sCopFvg26M=
-X-Gm-Message-State: AOJu0YzC540s5igY39Y0a2jt8sGyF9I/n9A8rnYHza43vyzO2ztgorqN
-	iQOYuTkDEslg0qyLBExsXZVewCspXQbFHsfcPot3QoqrWGlKjoNY
-X-Google-Smtp-Source: AGHT+IF8UKWJTRpcmvflOOzP+qhIAdQw5fFI4pueBDFbxMdSZx8+AH1CJi64a8/TxSHjJjtzoOaH/g==
-X-Received: by 2002:a17:90a:ec09:b0:2c7:a8b6:1bdb with SMTP id 98e67ed59e1d1-2c7b5cc9e2emr7976646a91.24.1718982586647;
-        Fri, 21 Jun 2024 08:09:46 -0700 (PDT)
+        bh=Cjxvv/dXpoLtAAeIGzsy9ReaW7NrPJCCE9CeS4zb3TA=;
+        b=fprxozMqrtSM1as9UCwDgXIFqRdVynsTnRSd6uQGnZqcm7A3qK4sYCGTREFKW7RWft
+         CJoUpqeT+/b/JHp9yP21DJ4X6jdEpAr4r/Map9tRjGenMQcesTHEPJ3sg+n5zQS1iX4u
+         ezchvyCRAZUOhbzL8pEd1qpYbhEUOlU6hK8BXHAlFfCLX5f5c2K8c8XEHeraYMCfLz0p
+         lsbqj+Nv8JCt/DnSxEnAJpOkQEuJz6ljdkeZfK2X/p6V4y3qmKHenCIl2cHzU9EgJDaJ
+         Ud8nDykZgtcj7wexxQbpK8q5c/5lwzwXs9KX3jewU7J/Y9/RBlS/ueZ6468T03eqBPd9
+         6uCg==
+X-Forwarded-Encrypted: i=1; AJvYcCVFVF9gCYz4gAwQSY0z0R2V53h2JjsmZdTc7WOljtB+XCM7IBTLVjLvkzQOSXywJ8xgOpAmjqJM5X8Z8HGzSEUY88+L/M6Ip808hPbblJCC21I4/+qM9zhLx7JK2vc3Z3OjFcTT1vkvQPlerwQKOIgoXnE1KWc9yLY03ODftzoQdbk6/JJp
+X-Gm-Message-State: AOJu0YzUDthUxp9teUgoSrBQCY14Jgw5MWl0KmeXAa/Fu5+v/GXHYG9s
+	LG/c/bckMdHel0c9HvShopfYwWfHaqNYoKgGsWsHG4DGKzFXd1FA
+X-Google-Smtp-Source: AGHT+IEPNc1yAbSPX6EhL18Hn9h8G+pMaRon9VBVmVWl+LZtObdhSRq3RpDsRRBngcXbxQQSri7+Lw==
+X-Received: by 2002:a17:90a:ea92:b0:2c3:e99:614f with SMTP id 98e67ed59e1d1-2c7b5d52dbfmr8330945a91.37.1718983152142;
+        Fri, 21 Jun 2024 08:19:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c7e55dcc7fsm3717649a91.29.2024.06.21.08.09.45
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c7e55db329sm3732434a91.26.2024.06.21.08.19.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 08:09:45 -0700 (PDT)
+        Fri, 21 Jun 2024 08:19:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 21 Jun 2024 08:09:44 -0700
+Date: Fri, 21 Jun 2024 08:19:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: iio: Use iio_read_channel_processed_scale for
- IIO_POWER
-Message-ID: <cba10629-b24d-4252-a358-1816d9063600@roeck-us.net>
-References: <20240620212005.821805-1-sean.anderson@linux.dev>
+To: Inochi Amaoto <inochiama@outlook.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 2/2] drivers: hwmon: sophgo: Add SG2042 external
+ hardware monitor support
+Message-ID: <df0f11cb-3b44-4869-bfd6-6e5d01e6debd@roeck-us.net>
+References: <PH7PR20MB4962C6D8FD6989BC79F9483FBB1D2@PH7PR20MB4962.namprd20.prod.outlook.com>
+ <PH7PR20MB49622B0A6E9169B04211C7AFBB1D2@PH7PR20MB4962.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,16 +78,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240620212005.821805-1-sean.anderson@linux.dev>
+In-Reply-To: <PH7PR20MB49622B0A6E9169B04211C7AFBB1D2@PH7PR20MB4962.namprd20.prod.outlook.com>
 
-On Thu, Jun 20, 2024 at 05:20:05PM -0400, Sean Anderson wrote:
-> Instead of rescaling power channels after the fact, use the dedicated
-> scaling API. This should reduce any inaccuracies resulting from the
-> scaling.
+On Sun, May 05, 2024 at 09:18:53AM +0800, Inochi Amaoto wrote:
+> SG2042 use an external MCU to provide basic hardware information
+> and thermal sensors.
 > 
-> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+> Add driver support for the onboard MCU of SG2042.
+> 
+> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
+> ---
+>  drivers/hwmon/Kconfig            |  11 +
+>  drivers/hwmon/Makefile           |   1 +
+>  drivers/hwmon/sg2042-hwmon-mcu.c | 531 +++++++++++++++++++++++++++++++
 
-Applied.
+Documentation missing.
 
-Thanks,
+> +config SENSORS_SG2042_HWMON_MCU
+
+"SENSORS" and "HWMON" is redundant. Yes, I know, others do it
+as well, but that doesn't make it less redundant.
+
+> +static DEVICE_ATTR_RO(board_type);
+> +static DEVICE_ATTR_RO(firmware_version);
+> +static DEVICE_ATTR_RO(pcb_version);
+> +static DEVICE_ATTR_RO(reset_count);
+> +static DEVICE_ATTR_RO(uptime);
+> +static DEVICE_ATTR_RO(reset_reason);
+> +static DEVICE_ATTR_RO(mcu_type);
+> +static DEVICE_ATTR_RW(critical_action);
+
+None of the above are hardware monitoring attributes. They are not
+acceptable as sysfs attributes. Some of them might be acceptable
+as debugfs attributes.
+
+> +static DEVICE_ATTR_RW(repower_temp);
+> +
+
+For this one, I don't know what it is. If it is a temperature
+limit, it should be implemented as one (for example as _emergency
+limit).
+
 Guenter
