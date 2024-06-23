@@ -1,166 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.emenem.pl (cmyk.emenem.pl [217.79.154.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580D9180A9B;
-	Sun, 23 Jun 2024 12:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250A714884C;
+	Sun, 23 Jun 2024 19:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.79.154.63
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719144227; cv=none; b=NeLj+Ji8wPU89yX9lGhhNB9py792V22maSHyBPZ5l2FVfrZ97cKEUIdixC2vpBA6nCmgPUIzcCcUos4vjf5XiDnwrUi2O3okT5hjQIXf64i074nBki4VOx3pN5/KVpNoJ+4g/kTO17wAnmxBOZ0+z1keShMKY4J9ti3MPeAuuos=
+	t=1719169233; cv=none; b=YZYCcM2sxd9zUdptnlAWSx6T1lFzhQsoNH0SRSit9hdFf0+txOXUGeFsah4Igv3rXrS60aq4yfKHIiwo2iC6ZujHkD9ottD2so+P49n3euWKgL5GEC8q+ZZd7GQ85bEXIVsCpI7AFg13wXLehTc9gU42I2xDqlfxOS3x6wFlqWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719144227; c=relaxed/simple;
-	bh=Ldz1GN6+3Z7G8+L6Q7Yh9h7HRyzDV64bj3F+rO77G7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GmsV7V28PzW42zuJDg+V1gvOXw9FkTT1Rt7Qy4okN6P6QiVPlXbsbUCSOH0Jandi8nuDjqnpeSo7pl1Z1JwgnLkx5rsWkR12JdWRgjzF0pfby2DYxh9Z5/mdMUMEVJOFbb32kdkaY215A5gF3MGSxf12xVX+MukogVaSJi4w4IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFjOE7tY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719169233; c=relaxed/simple;
+	bh=qzc1rsDiN8j7iEnMzlh7jqK3ss+j7dWOOp7vhyRU7YY=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=SufqUtcgmGplruBJuj6mIuo/bczupl8PXIPPuw+7FMU9vyh/m8fkjHqC1CLuee4Unjp2qAFvtmKnhtjwmMkKwruSBokxMi7G+kHnCb+8k6i/916M8QZnEVtaY/z/g7Qf6rF2DsFNlWr8vvaxFVmHSZi8EEZmXOxQOTZVPmeVN9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl; spf=none smtp.mailfrom=ans.pl; dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b=i4YLnqOv; arc=none smtp.client-ip=217.79.154.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ans.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFjOE7tY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D09DC2BD10;
-	Sun, 23 Jun 2024 12:03:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719144226;
-	bh=Ldz1GN6+3Z7G8+L6Q7Yh9h7HRyzDV64bj3F+rO77G7A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SFjOE7tYSboRbmzbWgyT48Ah1/vEWsZ61y7RgQdabaMP/sUFH8lcpcfV6Ty1kg6G5
-	 LuaNtJrdpZTVgmao2HDLK0zGz5fRoJjySoVbzQtoiUcutHfEyxLdz4Yb0GoE2B379Q
-	 dN9GaKC+pcd/B6tRbe6VtlI89fXkmoGFYIUa6VgDN4xrSACazrSZ3Z34pn32VupmhD
-	 InImK/T0qbo6C8QGNtNWVlTxgIGp91v80XrZxq/cpfuw0pYI+OPAmawMe4Zkqdkm+Q
-	 s54W7zCF5mn15d1iovDv9t8JoIEbp7hhDcDT8Zaj/cw8OBViYm6AY7KSKQkPDle5Bj
-	 cPOy5Rj9HO+YQ==
-Date: Sun, 23 Jun 2024 13:03:39 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, Lars-Peter Clausen
- <lars@metafoo.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iio: Add iio_read_channel_label to inkern API
-Message-ID: <20240623130339.535b96ba@jic23-huawei>
-In-Reply-To: <20240620211310.820579-2-sean.anderson@linux.dev>
-References: <20240620211310.820579-1-sean.anderson@linux.dev>
-	<20240620211310.820579-2-sean.anderson@linux.dev>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b="i4YLnqOv"
+X-Virus-Scanned: amavisd-new at emenem.pl
+Received: from [192.168.1.10] (c-98-45-176-131.hsd1.ca.comcast.net [98.45.176.131])
+	(authenticated bits=0)
+	by cmyk.emenem.pl (8.17.1.9/8.17.1.9) with ESMTPSA id 45NIlfW5005236
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Sun, 23 Jun 2024 20:47:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ans.pl; s=20190507;
+	t=1719168466; bh=blP9kTlShQLTEEvQ48fKrZcg3eT1y3M9qA5WwxT5rN4=;
+	h=Date:From:To:Cc:Subject;
+	b=i4YLnqOv6jMrMjpF5FKdSZmRcyUvkxVNDtrc6u8ant03qzut3cSXx/kL8V/SsRuED
+	 fdXc0JR9hOG3L/v/us8Drcv5gOFXoD/xKSWtHarq/VvAcsZXRubWXHZxsi2J2X8kdh
+	 gkYziZhyEEJYrX/ZGSlEUQbIPknOvDASrsq0U0t8=
+Message-ID: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
+Date: Sun, 23 Jun 2024 11:47:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?= <ole@ans.pl>
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor in
+ the SPD case" - "sysfs: cannot create duplicate filename"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 20 Jun 2024 17:13:08 -0400
-Sean Anderson <sean.anderson@linux.dev> wrote:
+Hi,
 
-> It can be convenient for other in-kernel drivers to reuse IIO channel
-> labels. Export the iio_read_channel_label function to allow this. The
-> signature is different depending on where we are calling it from, so
-> the meat is moved to do_iio_read_channel_label.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+After upgrading kernel to Linux 6.6.34 on one of my systems, I noticed "sysfs: cannot create duplicate filename" and i2c registration errors in dmesg, please see below.
 
-Seems like a useful addition to me. I'm not 100% what path this will
-take so if it goes via HWMON.
+This seems to be related to https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.6.y&id=4d5ace787273cb159bfdcf1c523df957938b3e42 - reverting the change fixes the problem.
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Note that jc42 devices are registered correctly and work with and without the change.
 
-It may be messy and need an immutable branch however. I haven't
-checked for churn in this code yet.
+# grep . /sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-*/name
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0018/name:jc42
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0019/name:jc42
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-001a/name:jc42
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-001b/name:jc42
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0050/name:spd
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0051/name:spd
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0052/name:spd
+/sys/devices/pci0000:00/0000:00:1f.3/i2c-12/12-0053/name:spd
+
+# sensors|grep -A4 jc42-i2c
+jc42-i2c-12-1b
+Adapter: SMBus I801 adapter at 3000
+temp1:        +33.2°C  (low  =  +0.0°C)
+                       (high = +91.0°C, hyst = +91.0°C)
+                       (crit = +95.0°C, hyst = +95.0°C)
+--
+jc42-i2c-12-19
+Adapter: SMBus I801 adapter at 3000
+temp1:        +33.5°C  (low  =  +0.0°C)
+                       (high = +91.0°C, hyst = +91.0°C)
+                       (crit = +95.0°C, hyst = +95.0°C)
+--
+jc42-i2c-12-1a
+Adapter: SMBus I801 adapter at 3000
+temp1:        +33.5°C  (low  =  +0.0°C)
+                       (high = +91.0°C, hyst = +91.0°C)
+                       (crit = +95.0°C, hyst = +95.0°C)
+--
+jc42-i2c-12-18
+Adapter: SMBus I801 adapter at 3000
+temp1:        +33.2°C  (low  =  +0.0°C)
+                       (high = +91.0°C, hyst = +91.0°C)
+                       (crit = +95.0°C, hyst = +95.0°C)
 
 
-> ---
-> 
->  drivers/iio/iio_core.h          |  4 ++++
->  drivers/iio/industrialio-core.c | 23 ++++++++++++++---------
->  drivers/iio/inkern.c            |  6 ++++++
->  include/linux/iio/consumer.h    | 10 ++++++++++
->  4 files changed, 34 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/iio/iio_core.h b/drivers/iio/iio_core.h
-> index 1a38b1915e7a..b7d5f4f0fada 100644
-> --- a/drivers/iio/iio_core.h
-> +++ b/drivers/iio/iio_core.h
-> @@ -34,6 +34,10 @@ void iio_device_ioctl_handler_register(struct iio_dev *indio_dev,
->  				       struct iio_ioctl_handler *h);
->  void iio_device_ioctl_handler_unregister(struct iio_ioctl_handler *h);
->  
-> +ssize_t do_iio_read_channel_label(struct iio_dev *indio_dev,
-> +				  const struct iio_chan_spec *c,
-> +				  char *buf);
-> +
->  int __iio_add_chan_devattr(const char *postfix,
->  			   struct iio_chan_spec const *chan,
->  			   ssize_t (*func)(struct device *dev,
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> index 2f185b386949..0f6cda7ffe45 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -727,22 +727,27 @@ ssize_t iio_format_value(char *buf, unsigned int type, int size, int *vals)
->  }
->  EXPORT_SYMBOL_GPL(iio_format_value);
->  
-> -static ssize_t iio_read_channel_label(struct device *dev,
-> -				      struct device_attribute *attr,
-> -				      char *buf)
-> +ssize_t do_iio_read_channel_label(struct iio_dev *indio_dev,
-> +				  const struct iio_chan_spec *c,
-> +				  char *buf)
->  {
-> -	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-> -	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
-> -
->  	if (indio_dev->info->read_label)
-> -		return indio_dev->info->read_label(indio_dev, this_attr->c, buf);
-> +		return indio_dev->info->read_label(indio_dev, c, buf);
->  
-> -	if (this_attr->c->extend_name)
-> -		return sysfs_emit(buf, "%s\n", this_attr->c->extend_name);
-> +	if (c->extend_name)
-> +		return sysfs_emit(buf, "%s\n", c->extend_name);
->  
->  	return -EINVAL;
->  }
->  
-> +static ssize_t iio_read_channel_label(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      char *buf)
-> +{
-> +	return do_iio_read_channel_label(dev_to_iio_dev(dev),
-> +					 to_iio_dev_attr(attr)->c, buf);
-> +}
-> +
->  static ssize_t iio_read_channel_info(struct device *dev,
->  				     struct device_attribute *attr,
->  				     char *buf)
-> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> index 39cf26d69d17..9f484c94bc6e 100644
-> --- a/drivers/iio/inkern.c
-> +++ b/drivers/iio/inkern.c
-> @@ -1010,3 +1010,9 @@ ssize_t iio_write_channel_ext_info(struct iio_channel *chan, const char *attr,
->  			       chan->channel, buf, len);
->  }
->  EXPORT_SYMBOL_GPL(iio_write_channel_ext_info);
-> +
-> +ssize_t iio_read_channel_label(struct iio_channel *chan, char *buf)
-> +{
-> +	return do_iio_read_channel_label(chan->indio_dev, chan->channel, buf);
-> +}
-> +EXPORT_SYMBOL_GPL(iio_read_channel_label);
-> diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
-> index e9910b41d48e..333d1d8ccb37 100644
-> --- a/include/linux/iio/consumer.h
-> +++ b/include/linux/iio/consumer.h
-> @@ -441,4 +441,14 @@ ssize_t iio_read_channel_ext_info(struct iio_channel *chan,
->  ssize_t iio_write_channel_ext_info(struct iio_channel *chan, const char *attr,
->  				   const char *buf, size_t len);
->  
-> +/**
-> + * iio_read_channel_label() - read label for a given channel
-> + * @chan:		The channel being queried.
-> + * @buf:		Where to store the attribute value. Assumed to hold
-> + *			at least PAGE_SIZE bytes.
-> + *
-> + * Returns the number of bytes written to buf, or an error code.
-> + */
-> +ssize_t iio_read_channel_label(struct iio_channel *chan, char *buf);
-> +
->  #endif
+dmesg:
+[    0.000000] DMI: Dell Inc. PowerEdge T110 II/0PM2CW, BIOS 2.10.0 05/24/2018
+(...)
+[    7.681132] i2c_dev: i2c /dev entries driver
+[    7.687116] i2c i2c-12: 4/4 memory slots populated (from DMI)
+[    7.690623] at24 12-0050: 256 byte spd EEPROM, read-only
+[    7.691812] i2c i2c-12: Successfully instantiated SPD at 0x50
+[    7.698246] at24 12-0051: 256 byte spd EEPROM, read-only
+[    7.699465] i2c i2c-12: Successfully instantiated SPD at 0x51
+[    7.700043] i2c i2c-12: Failed to register i2c client jc42 at 0x19 (-16)
+[    7.700047] i2c i2c-12: Failed creating jc42 at 0x19
+[    7.705248] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:1f.3/i2c-12/12-001a'
+[    7.711617]  <TASK>
+[    7.712612]  dump_stack_lvl+0x37/0x4a
+[    7.712612]  sysfs_warn_dup+0x55/0x61
+[    7.715616]  sysfs_create_dir_ns+0xa6/0xd2
+[    7.716620]  kobject_add_internal+0xc3/0x1c0
+[    7.716620]  kobject_add+0xba/0xe4
+[    7.719615]  ? device_add+0x53/0x726
+[    7.720611]  device_add+0x132/0x726
+[    7.720611]  i2c_new_client_device+0x1ee/0x246
+[    7.723616]  at24_probe+0x5f8/0x666
+[    7.724642]  ? __pfx_at24_read+0x10/0x10
+[    7.724642]  ? __pfx_at24_write+0x10/0x10
+[    7.724642]  ? __pfx___device_attach_driver+0x10/0x10
+[    7.727619]  i2c_device_probe+0x1b7/0x240
+[    7.728612]  really_probe+0x101/0x248
+[    7.728612]  __driver_probe_device+0xbb/0xed
+[    7.731620]  driver_probe_device+0x1a/0x72
+[    7.732621]  __device_attach_driver+0x82/0x96
+[    7.732621]  bus_for_each_drv+0xa6/0xd4
+[    7.732621]  __device_attach+0xa8/0x12a
+[    7.735619]  bus_probe_device+0x31/0x95
+[    7.736614]  device_add+0x265/0x726
+[    7.736614]  i2c_new_client_device+0x1ee/0x246
+[    7.739618]  i2c_register_spd+0x1a1/0x1ed
+[    7.740613]  i801_probe+0x589/0x603
+[    7.740613]  ? up_write+0x37/0x4d
+[    7.740613]  ? kernfs_add_one+0x104/0x126
+[    7.743618]  ? __raw_spin_unlock_irqrestore+0x14/0x29
+[    7.744612]  pci_device_probe+0xbe/0x12f
+[    7.744612]  really_probe+0x101/0x248
+[    7.744612]  __driver_probe_device+0xbb/0xed
+[    7.747618]  driver_probe_device+0x1a/0x72
+[    7.748612]  __driver_attach_async_helper+0x2d/0x42
+[    7.748612]  async_run_entry_fn+0x25/0xa0
+[    7.748612]  process_scheduled_works+0x193/0x291
+[    7.748612]  worker_thread+0x1c5/0x21f
+[    7.751619]  ? __pfx_worker_thread+0x10/0x10
+[    7.752611]  kthread+0xf6/0xfe
+[    7.752611]  ? __pfx_kthread+0x10/0x10
+[    7.752611]  ret_from_fork+0x23/0x35
+[    7.755621]  ? __pfx_kthread+0x10/0x10
+[    7.756613]  ret_from_fork_asm+0x1b/0x30
+[    7.756613]  </TASK>
+[    7.759637] i2c i2c-12: Failed to register i2c client jc42 at 0x1a (-17)
+[    7.760815] at24 12-0052: 256 byte spd EEPROM, read-only
+[    7.762047] i2c i2c-12: Successfully instantiated SPD at 0x52
+[    7.765252] i2c i2c-12: Failed to register i2c client jc42 at 0x1b (-16)
+[    7.766126] at24 12-0053: 256 byte spd EEPROM, read-only
+[    7.767584] i2c i2c-12: Successfully instantiated SPD at 0x53
 
+Thanks,
+ Krzysztof
