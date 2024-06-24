@@ -1,70 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1373C3A1A8;
-	Mon, 24 Jun 2024 19:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175AE1A01C3
+	for <linux-hwmon@vger.kernel.org>; Mon, 24 Jun 2024 19:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719257081; cv=none; b=Bftdi/MqQWosOO5a3BCEq+dtQmeLhVpvhh40xcs+giwPzCmGmXMrzAjyIlizF+Z7W3RtPc2d7Pxd3G61+FuQg2ynbh09HMagM3oYEP6xWKB/j5AMhGfNthjy++Fp117ik3zLoeaKBZpM6TrZwGbb7XKETCojUaaKgLXtwV/l86s=
+	t=1719257694; cv=none; b=S3bLunywuw6Tb6yyH7htDDfXAGn0tt9acURPcul50C8oGqmbYl2INgAwXwT/g7KoXdsIKWvkcYH/NVsgg15RCPPrgrsT8AtUbB2kplZaBVFotRTYNr9m3W1Tzdy5MBqMm3zUdRSZZZDq/UzkmyJj1OtYRwjLWumKv8Cfk9djrA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719257081; c=relaxed/simple;
-	bh=THHerX9VKK9eiYYoRM4Rium1mANrF3Sydv039s+f3XA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=chFgIV88ellmIeQEsiCbtV/fM7XvXoiZgjaQy5s49xClhD/gb1kBJ70hl0Yn/AUXpkyzGK3hKMp+R0PS8aNUZKSFzxr5wURuQ+Lu8mQJDusLnSCimkONN2KhtOYlfeX/KSmrjjvC8UQygHS9L7d2hfuuoPVXQ0PwMhhr5dBj5FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cp4l7Pav; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719257694; c=relaxed/simple;
+	bh=QTn1WRuA4hsCw/k8adDN6Jh64KjHr3yyO5fpW6vGjHU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=htgYewvVWbSyk1n/Won8Xp+LgZYl4o6VUdgc3EmT1noI/7jIam/jhUHvBnPfiTxVy3KPMOc1bxADvqqNrmzpW9G2CJJ8Z+5kcbyA/v6yDe98FkwVTjInvjkQdBbwQJ/fWKr5sxKa5iO8GaAnZ+T6AWUZwTPm5MyUV4t2z9i5uxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xgH3D7Fr; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cp4l7Pav"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E32C2BBFC;
-	Mon, 24 Jun 2024 19:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719257080;
-	bh=THHerX9VKK9eiYYoRM4Rium1mANrF3Sydv039s+f3XA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cp4l7PaviaEy6YJPLRoWd+76FRUoGC1HAlupSulljKPu14wZxdTYrJ+CLydYeftHg
-	 Oqnc/uKpENqHgGeLwOypGoM/m+/9zIWvAITTgGp2uQMeZkg2mWWaE+ayc6GUsevy/W
-	 sAhb41HSRaB2Pibt7aH4EA3KP1nwV1pkkIbz7/DKNaLxDv2S7BT1HBOcntqXsS+Mro
-	 Q0f+guqPApf7spEONbHsOd++m3Znsdu/YOQVi+bNKYgdQaCfH7Xow4m+PHLHM9R3Ff
-	 bm0j7chYYY/U07skWCIw43VrWEJliK//SB5Lzawwx0uVJfML3pzVtKlRkhgIMlix/G
-	 /ILrWfZrh2/Qw==
-Date: Mon, 24 Jun 2024 20:24:33 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Sean Anderson <sean.anderson@linux.dev>, Jean Delvare
- <jdelvare@suse.com>, linux-iio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Lars-Peter
- Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 2/2] hwmon: iio: Add labels from IIO channels
-Message-ID: <20240624202433.29564802@jic23-huawei>
-In-Reply-To: <ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
-References: <20240624174601.1527244-1-sean.anderson@linux.dev>
-	<20240624174601.1527244-3-sean.anderson@linux.dev>
-	<ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xgH3D7Fr"
+X-Envelope-To: linux@roeck-us.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1719257691;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Gm2PDGMMowWzUmm56U0hh5D/fJqNhmzLuHu2GZApjI=;
+	b=xgH3D7FrktYrIkdGVYTAYPboDDd8QmQu52MF5MVVEc7wPvjFMAsusnlG26IB6k9NmqGUgq
+	D2K8edbAy8hKIczFb1hPujNTQaaBenZuoE3drW9gaweZyP0nsWo7cIn8hFYFc+3kHgirnm
+	/77XfMiFjxeIUOykPJK6lFBo1MoIjDQ=
+X-Envelope-To: jic23@kernel.org
+X-Envelope-To: jdelvare@suse.com
+X-Envelope-To: linux-iio@vger.kernel.org
+X-Envelope-To: linux-hwmon@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: lars@metafoo.de
+Message-ID: <63046df2-e1fb-442b-a55f-2a9847c6c59e@linux.dev>
+Date: Mon, 24 Jun 2024 15:34:46 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 2/2] hwmon: iio: Add labels from IIO channels
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Cameron <jic23@kernel.org>,
+ Jean Delvare <jdelvare@suse.com>, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
+References: <20240624174601.1527244-1-sean.anderson@linux.dev>
+ <20240624174601.1527244-3-sean.anderson@linux.dev>
+ <ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 24 Jun 2024 11:47:39 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
+On 6/24/24 14:47, Guenter Roeck wrote:
 > On 6/24/24 10:46, Sean Anderson wrote:
-> > Add labels from IIO channels to our channels. This allows userspace to
-> > display more meaningful names instead of "in0" or "temp5".
-> > 
-> > Although lm-sensors gracefully handles errors when reading channel
-> > labels, the ABI says the label attribute
-> >   
-> >> Should only be created if the driver has hints about what this voltage
-> >> channel is being used for, and user-space doesn't.  
-> > 
-> > Therefore, we test to see if the channel has a label before
-> > creating the attribute.
-> >   
+>> Add labels from IIO channels to our channels. This allows userspace to
+>> display more meaningful names instead of "in0" or "temp5".
+>>
+>> Although lm-sensors gracefully handles errors when reading channel
+>> labels, the ABI says the label attribute
+>>
+>>> Should only be created if the driver has hints about what this voltage
+>>> channel is being used for, and user-space doesn't.
+>>
+>> Therefore, we test to see if the channel has a label before
+>> creating the attribute.
+>>
 > 
 > FWIW, complaining about an ABI really does not belong into a commit
 > message. Maybe you and lm-sensors don't care about error returns when
@@ -72,61 +78,48 @@ Guenter Roeck <linux@roeck-us.net> wrote:
 > expect drivers to follow the ABI. Last time I checked, the basic rule
 > was still "Don't break userspace", and that doesn't mean "it's ok to
 > violate / break an ABI as long as no one notices".
-> 
-> > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> > ---
-> > 
-> > Changes in v2:
-> > - Check if the label exists before creating the attribute
-> > 
-> >   drivers/hwmon/iio_hwmon.c | 45 ++++++++++++++++++++++++++++++++++-----
-> >   1 file changed, 40 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-> > index 4c8a80847891..5722cb9d81f9 100644
-> > --- a/drivers/hwmon/iio_hwmon.c
-> > +++ b/drivers/hwmon/iio_hwmon.c
-> > @@ -33,6 +33,17 @@ struct iio_hwmon_state {
-> >   	struct attribute **attrs;
-> >   };
-> >   
-> > +static ssize_t iio_hwmon_read_label(struct device *dev,
-> > +				  struct device_attribute *attr,
-> > +				  char *buf)
-> > +{
-> > +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-> > +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
-> > +	struct iio_channel *chan = &state->channels[sattr->index];
-> > +
-> > +	return iio_read_channel_label(chan, buf);
-> > +}
-> > +  
+
+This isn't complaining about the ABI, just documenting the reason it was
+done this way...
+
+>> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+>> ---
+>>
+>> Changes in v2:
+>> - Check if the label exists before creating the attribute
+>>
+>>   drivers/hwmon/iio_hwmon.c | 45 ++++++++++++++++++++++++++++++++++-----
+>>   1 file changed, 40 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+>> index 4c8a80847891..5722cb9d81f9 100644
+>> --- a/drivers/hwmon/iio_hwmon.c
+>> +++ b/drivers/hwmon/iio_hwmon.c
+>> @@ -33,6 +33,17 @@ struct iio_hwmon_state {
+>>       struct attribute **attrs;
+>>   };
+>>   +static ssize_t iio_hwmon_read_label(struct device *dev,
+>> +                  struct device_attribute *attr,
+>> +                  char *buf)
+>> +{
+>> +    struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+>> +    struct iio_hwmon_state *state = dev_get_drvdata(dev);
+>> +    struct iio_channel *chan = &state->channels[sattr->index];
+>> +
+>> +    return iio_read_channel_label(chan, buf);
+>> +}
+>> +
 > 
 > I personally find it a bit kludgy that an in-kernel API would do a
 > sysfs write like this and expect a page-aligned buffer as parameter,
 > but since Jonathan is fine with it:
 
-That's a good point that I'd not picked up on and it probably makes sense
-to address that before it bites us on some other subsystem.
+This is also how the in-kernel iio_read_channel_ext_info API works.
+I agree that it is a strange API, but I do not want to rewrite all
+the implementing drivers.
 
-It was more reasonable when the only path was to a light wrapper that went
-directly around the sysfs callback. Now we are wrapping these up for more
-general use we should avoid that restriction.
+--Sean
 
-Two approaches to that occur to me.
-1) Fix up read_label() everywhere to not use sysfs_emit and take a size
-   of the buffer to print into. There are only 11 implementations so
-   far so this should be straight forward.
-
-2) Add a bounce buffer so we emit into a suitable size for sysfs_emit()
-  then reprint from there into a buffer provided via this interface with
-  the appropriate size provided.  This one is clunky and given the relatively
-  few call sits I think fixing it via option 1 is the better route forwards.
- 
-Jonathan
-
-
-> 
 > Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
 > Jonathan, please apply through your tree.
