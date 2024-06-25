@@ -1,159 +1,180 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D272F56;
-	Tue, 25 Jun 2024 03:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5992F17082D;
+	Tue, 25 Jun 2024 16:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719287134; cv=none; b=U0TLlLA01tEAqwYVs+nXRQ5KBbYe2S18uO9Sqwgpv5hkxRfqPmo/YQfWZfh5a5IAP9tEWNDnQJJuA7ks53v7pl+mrpfpAOYeFvuv79KSVcQYyaltvUqy48QuXZqM6m4kNQeL8gbJqN8cz6vZmmjQKtgbAhK9Y2stj50YTUq/4N8=
+	t=1719332543; cv=none; b=cemuWuaTmbQQ5vWwrvOexgfFmNDwPxmavh8iihHpLjQj1Wy1ERzQjHwMEmVaT6pa18puySL6JfAQclkW7bfmdw45tP7Twns99Oo7V5MG8BL7LobaVK1Ob/iNZkV7hvEnR3BUL6KeUCmExjdgZW/OQfs9VZ+JoRD/lU37nn7OexQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719287134; c=relaxed/simple;
-	bh=akYYhE64gutriQphsCYtrgVyTh52zZni47qVxMnregk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BZGqWVOWE963zIn+m2xbJrWgUHyCa+qcCaq3M+PXPo1tvbI9dU7CW10wWm7LQSk9Zo9vVWcQgEx8HW5EfF71UECSze85RO/431QD0s6KSFRJ6Yd7mv36p+xnE0L3AAhD83Kf4AJKMv7GeevrW7bkJADfYACaYSCPBBbabejLZJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2zgq7/9; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719332543; c=relaxed/simple;
+	bh=akzr2Tcmr8hvoXCrldFTf3vxOcOP1rC3e1w/56iBGCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rx89qVRU7DaJMdhzioxKerS3Wil5hHQTO+D+beAX7vzjFbNuD26ixI60neMpbgUtwZ90Xmk1tjyOVMKR8sx39ZKqHRRts6mIpnHda+tqdybFZtQOxXMWaWOWTw2H2sp1kThWna2szv8yLpjMYS1Q++Vt479esCU7jtvaOQoYSQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgDzJGYh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2zgq7/9"
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b97a071c92so2427577eaf.1;
-        Mon, 24 Jun 2024 20:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719287131; x=1719891931; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAGv1C3HZZdBM5385FH4CpehIrO1aLyESVw6wair3LM=;
-        b=J2zgq7/9MdKLzYoCpX+qXzPRUHUAl2Awhaw4UtIBzs5Trx+uO/879y1qsXg1zIVe8I
-         vunZVkEaKQTzXznZV481ZnbVQ5XV6OA831rrnZnWBcR7X/Z+cCkgbxMgsl6qAl0/xPyv
-         u5/yheEI2L5I+RseFBUo/+Kfas9ei8lNkX1pKp6GpEDEiEtd3wDCZg3k9aY2C3T2ah9Z
-         HVXWDvHXy+Xgzu0Rhzym173M5nL3PxmHN5MFt1jHwd28T25rkPCh1AU/HzIIQlhVTZX1
-         hTlx213zFlIDSstsPAOwNRL3GJ9DMHNgYcR+oJ1H4oBxAgSZVuw7yVJzU5mffde9s8Y4
-         XMJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719287131; x=1719891931;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nAGv1C3HZZdBM5385FH4CpehIrO1aLyESVw6wair3LM=;
-        b=gH6wHAbpyz0RJlRF9nwLNMhGxNaxLCRepzHaqd7JYVqmxMxMixuETiJYY7Qpx6YjY0
-         E519YmG8yWXiz+DCM5B6/d3E+4NB9Bpi7Do3rPCmzj2lPx4ibYHiYj9DRn97YFarmo/R
-         46C0z+0KtLy/lKP97ugsvqUws/F3suL5IGxxin4YvPgWRsmQh9wQ7dteu+eidk4c8Zys
-         jjdYahl9g5F9V60p1HN2dlzU8TqjHk1xbO4iEsAtUqK8o59dmtIp4Jz7P1uwDVKggLVl
-         45qSHKrDTLI0w12wJZDwAlT6NARLtp/fmAjl19BirQMHCD2Cuc1reC6W99inc1P+3qiI
-         VFgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNQpEu+cx4wj0MhG3DvzAVwBi7qCYCNgkq2PU8R8H0rYnOxvF9RrTBxQ/EBZbuFGmaxyh+N3lS+dIbSTy8k7BX0LJQeXCxov01s42hfdgC6OCryi41cGnqr0+JQXZW+oSpzy4WzHJFbEn/9ikypiZUMIsiqQ3BeUZe0mmjcVXLjnm6gcs=
-X-Gm-Message-State: AOJu0YyAFfj0XtWHjmKGFevFuJ0P1m4MSMj4isKNOHLxx7RIqqLCNXSJ
-	KupjxXlEhkmDci6/qVCG6bGC7lUWUb4KnJzUvKPkvTuhghJ1ilSs
-X-Google-Smtp-Source: AGHT+IFuMpIiyI/ambneXj2V/8PhRkYWS8YSC9Jtn9HUyffHKT4WhBv98Y8lT8RDDOn1kRo/O911/g==
-X-Received: by 2002:a05:6358:2823:b0:1a1:c5c6:9da6 with SMTP id e5c5f4694b2df-1a2389a5d8dmr871908455d.3.1719287131313;
-        Mon, 24 Jun 2024 20:45:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-716ba5b5f7asm6051573a12.64.2024.06.24.20.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jun 2024 20:45:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5a4e1cd6-5770-423b-9a25-a0fbfd93014a@roeck-us.net>
-Date: Mon, 24 Jun 2024 20:45:27 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgDzJGYh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8676DC32781;
+	Tue, 25 Jun 2024 16:22:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719332542;
+	bh=akzr2Tcmr8hvoXCrldFTf3vxOcOP1rC3e1w/56iBGCw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kgDzJGYhBaKcP6lEFjj4Tas4lTM4uNMNjxCcJSfTfs7MGHnesN9d6V0ysjucd8ApJ
+	 oGsYgeiLYVUa2J5vjhepCeohL/GNZjw7XkXjWHaYssoEdRIhI2n7uODbb8iBMwyEqX
+	 4S57r7ji7tpfhAJcbpsLJY34qc4ZNUCjdN9MVMn1g88vg6Tk+pRScjFqmoIxmueID9
+	 r4VRe56YSCVllR1HdOYWbROv/2LVmyhvDR7V4/VcP66FC1vZTZ9Q+9cNvSMdrdbsdn
+	 wrR0GQFivlLs3qkoVNHJ9F0yODORAVaO98ansY5enl0Y2V3pUPM9LcJMkkXNN4/SKr
+	 qq+kKY/VEPUYw==
+Date: Tue, 25 Jun 2024 17:22:18 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ukleinek@kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Message-ID: <20240625-oppressor-scaling-5713b4719a89@spud>
+References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
+ <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
+ <20240529-faucet-vending-3e330f8eb67b@wendy>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
- in the SPD case" - "sysfs: cannot create duplicate filename"
-To: Heiner Kallweit <hkallweit1@gmail.com>, =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?=
- <ole@ans.pl>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Wolfram Sang <wsa@the-dreams.de>
-Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-hwmon@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
- <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
- <77c1b740-9e6d-40f7-83f0-9a949366f1c9@ans.pl>
- <97c497ae-44f7-4cec-b7d9-f639e4597571@roeck-us.net>
- <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="R3N5fZNUTuh/Iu6H"
+Content-Disposition: inline
+In-Reply-To: <20240529-faucet-vending-3e330f8eb67b@wendy>
 
-On 6/24/24 13:58, Heiner Kallweit wrote:
-[ ... ]
-> 
-> Too me the issue also looks like a race. According to the OP's logs:
-> - jc42 at 0x18 is instantiated successfully
-> - jc42 at 0x19 returns -EBUSY. This is what is expected if the device
->    has been instantiated otherwise already.
-> - jc42 at 0x1a returns -EEXIST. Here two instantiations of the the same
->    device seem to collide.
-> - jc42 at 0x1b returns -EBUSY, like at 0x19.
-> 
-> So it looks like referenced change isn't wrong, but reveals an
-> underlying issue with device instantiation races.
 
-It isn't just a race, though. Try to unload the at24 (or ee1004 driver
-for DDR4) and load it again, and you'll see the -EBUSY errors. Problem
-is that instantiating those drivers _always_ triggers the call to
-i2c_new_client_device() even if the jc42 device is already instantiated.
-Unloading the spd/eeprom driver doesn't unload the jc42 driver,
-so -EBUSY will be seen if the spd/eeprom driver is loaded again.
+--R3N5fZNUTuh/Iu6H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have not been able to reproduce the backtrace with my systems, but those
-are all with AMD CPUs using the piix4 driver, so timing is likely different.
-Another difference is that my systems (with DDR4) use the ee1004 driver.
-That driver instantiates the jc42 devices under a driver lock, so it is
-guaranteed that a single instantiation doesn't interfere with other
-instantiations running in parallel.
+Uwe,
 
-Guenter
+On Wed, May 29, 2024 at 08:58:41AM +0100, Conor Dooley wrote:
+> On Wed, May 29, 2024 at 10:56:36AM +1200, Chris Packham wrote:
+> > Add fan child nodes that allow describing the connections for the
+> > ADT7475 to the fans it controls. This also allows setting some
+> > initial values for the pwm duty cycle and frequency.
+> >=20
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> >=20
+> > Notes:
+> >     I realise there is still some discussion about how to express the
+> >     frequency and duty cycle. I have a personal preference for using he=
+rtz
+> >     for the frequency and 0-255 for the duty cycle but if the consensus=
+ is
+> >     to express these things some other way I'm fine with doing some mat=
+h.
+>=20
+> Probably worth carrying a link to it here:
+> https://lore.kernel.org/all/4de798f3-069e-4028-a5b5-5e6a639277e3@alliedte=
+lesis.co.nz/
+>=20
+> I asked Uwe to take a look & it's on his todo list.
 
+This is an attempt to bump this up on your todo list a bit!
+
+Thanks,
+Conor.
+
+> >    =20
+> >     Changes in v4:
+> >     - 0 is not a valid frequency value
+> >     Changes in v3:
+> >     - Use the pwm provider/consumer bindings
+> >     Changes in v2:
+> >     - Document 0 as a valid value (leaves hardware as-is)
+> >=20
+> >  .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++++-
+> >  1 file changed, 24 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Doc=
+umentation/devicetree/bindings/hwmon/adt7475.yaml
+> > index 051c976ab711..bfef4c803bf7 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > @@ -51,6 +51,15 @@ properties:
+> >        enum: [0, 1]
+> >        default: 1
+> > =20
+> > +  "#pwm-cells":
+> > +    const: 4
+> > +    description: |
+> > +      Number of cells in a PWM specifier.
+> > +      - 0: The pwm channel
+> > +      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 88=
+, 22500
+> > +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
+> > +      - 3: The default pwm duty cycle - 0-255
+> > +
+> >  patternProperties:
+> >    "^adi,bypass-attenuator-in[0-4]$":
+> >      description: |
+> > @@ -81,6 +90,10 @@ patternProperties:
+> >        - smbalert#
+> >        - gpio
+> > =20
+> > +  "^fan-[0-9]+$":
+> > +    $ref: fan-common.yaml#
+> > +    unevaluatedProperties: false
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -89,11 +102,12 @@ additionalProperties: false
+> > =20
+> >  examples:
+> >    - |
+> > +    #include <dt-bindings/pwm/pwm.h>
+> >      i2c {
+> >        #address-cells =3D <1>;
+> >        #size-cells =3D <0>;
+> > =20
+> > -      hwmon@2e {
+> > +      pwm: hwmon@2e {
+> >          compatible =3D "adi,adt7476";
+> >          reg =3D <0x2e>;
+> >          adi,bypass-attenuator-in0 =3D <1>;
+> > @@ -101,5 +115,14 @@ examples:
+> >          adi,pwm-active-state =3D <1 0 1>;
+> >          adi,pin10-function =3D "smbalert#";
+> >          adi,pin14-function =3D "tach4";
+> > +        #pwm-cells =3D <4>;
+> > +
+> > +        fan-0 {
+> > +          pwms =3D <&pwm 0 22500 PWM_POLARITY_INVERTED 255>;
+> > +        };
+> > +
+> > +        fan-1 {
+> > +          pwms =3D <&pwm 2 22500 PWM_POLARITY_INVERTED 255>;
+> > +        };
+> >        };
+> >      };
+> > --=20
+> > 2.45.1
+> >=20
+
+
+
+--R3N5fZNUTuh/Iu6H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnruugAKCRB4tDGHoIJi
+0kFRAQCZIrHaisIz4R0cjPl4ENnCGHKMXBh7j/mC8rYE/KB85wD/RTIZIcVxwnp3
+vJJ40zdLuhvyve24lm/u4nEf90mDYwc=
+=rn/M
+-----END PGP SIGNATURE-----
+
+--R3N5fZNUTuh/Iu6H--
