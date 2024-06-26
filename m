@@ -1,180 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5992F17082D;
-	Tue, 25 Jun 2024 16:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F8913A869;
+	Wed, 26 Jun 2024 06:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719332543; cv=none; b=cemuWuaTmbQQ5vWwrvOexgfFmNDwPxmavh8iihHpLjQj1Wy1ERzQjHwMEmVaT6pa18puySL6JfAQclkW7bfmdw45tP7Twns99Oo7V5MG8BL7LobaVK1Ob/iNZkV7hvEnR3BUL6KeUCmExjdgZW/OQfs9VZ+JoRD/lU37nn7OexQ=
+	t=1719383388; cv=none; b=AZihES0E6Vr0JtQA0b4J24Sm6N1Q443wtGHTV61HRnDWvsZNX0zfzfMNjepgW0W6ommu1syqTySAb/W/rTtCotXtMStQAOrE4lvySgysZjI2jyfTxUr0t+vm+cqW0pQzETY+opeze+emJo3FcNxSoL6lE+mdhHJSSJ66vgi2mVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719332543; c=relaxed/simple;
-	bh=akzr2Tcmr8hvoXCrldFTf3vxOcOP1rC3e1w/56iBGCw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rx89qVRU7DaJMdhzioxKerS3Wil5hHQTO+D+beAX7vzjFbNuD26ixI60neMpbgUtwZ90Xmk1tjyOVMKR8sx39ZKqHRRts6mIpnHda+tqdybFZtQOxXMWaWOWTw2H2sp1kThWna2szv8yLpjMYS1Q++Vt479esCU7jtvaOQoYSQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgDzJGYh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719383388; c=relaxed/simple;
+	bh=wcTOigAllogu0DSwfrGUFSIGPo2YkJCiUGsMUNsrS1M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rUsYhMWgJQKj2/lvvkMM9EbY+7NvPevvM6YlClONHNYdxZBkfPssMNgu/1OOjsf6bi3wf/fxRYQfipEMKkWUAraCFVx/uM6U77Qp3MFZnOGGLLHeveewZ/aL60HBU00ijvCRQ1JkqbUwB7hc23fSSFQettUgW3wenQ0ZUwKWNok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M4sb1/19; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgDzJGYh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8676DC32781;
-	Tue, 25 Jun 2024 16:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719332542;
-	bh=akzr2Tcmr8hvoXCrldFTf3vxOcOP1rC3e1w/56iBGCw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kgDzJGYhBaKcP6lEFjj4Tas4lTM4uNMNjxCcJSfTfs7MGHnesN9d6V0ysjucd8ApJ
-	 oGsYgeiLYVUa2J5vjhepCeohL/GNZjw7XkXjWHaYssoEdRIhI2n7uODbb8iBMwyEqX
-	 4S57r7ji7tpfhAJcbpsLJY34qc4ZNUCjdN9MVMn1g88vg6Tk+pRScjFqmoIxmueID9
-	 r4VRe56YSCVllR1HdOYWbROv/2LVmyhvDR7V4/VcP66FC1vZTZ9Q+9cNvSMdrdbsdn
-	 wrR0GQFivlLs3qkoVNHJ9F0yODORAVaO98ansY5enl0Y2V3pUPM9LcJMkkXNN4/SKr
-	 qq+kKY/VEPUYw==
-Date: Tue, 25 Jun 2024 17:22:18 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
-	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, ukleinek@kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
-Message-ID: <20240625-oppressor-scaling-5713b4719a89@spud>
-References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
- <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
- <20240529-faucet-vending-3e330f8eb67b@wendy>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4sb1/19"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-57d07f07a27so7228530a12.3;
+        Tue, 25 Jun 2024 23:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719383385; x=1719988185; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wcTOigAllogu0DSwfrGUFSIGPo2YkJCiUGsMUNsrS1M=;
+        b=M4sb1/19vOECk7+3+25kXwV8ruCLXC0vNncNCPzlKESixAi5abS6JTZNfEtGfTs9lN
+         Z2U0rExUA6YBRn0dlnFYT3VBjqlqS/hQz0k7QwlmPi2wdhr2pMirBK0xVZyySp9FMkN4
+         DYs94bn+OTPpGXVOs/zLhyiIxmFrq37aODH3OLBawCKNAH1JCvNHYMEI8BzfgHGXn62Y
+         Y1vMY26B8t9W2PjsZcHe45eiSVdHd0R9hzKWic+KE8CkbEJopDOIjsJoL8TFJfs+cH4/
+         M7yA1bb1WSafpPUGKADZyO9cD/mrz2CCmPY6ryqGKZF+yTmU38HvxuokkZwzZFFhj/ob
+         QEQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719383385; x=1719988185;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wcTOigAllogu0DSwfrGUFSIGPo2YkJCiUGsMUNsrS1M=;
+        b=kmxHzPzJJwYj/7A4mYsCamBLHVcYNamy2QnjEuSygsV9ZNXN7Zw15gE6+U2hfJS3WR
+         cGCI3FDwds+yxMTaCs1/cqa5MQviVYmU5RAK66WRnSQob6YQNC47bIKNNYFnRAEotHqK
+         lwPvUL9FrFsUkNZ2JTrZ2rY4/7a/Yk7R2liOJwXD7Wn7p0MLuawLF8DHiDbKjSrm5Bj1
+         VRPQFaZrPb9pUR4BNY0RCjuPxc27eKhdze291hv5iAUzW7yikX/j6Ls/g7cfqnNNcwpe
+         ARICz+TWbdsdWn2B+efMrgswkEY1wCTqobpNuHcd74W0KWaSRnwRq7qGUaCNH0kxO2g1
+         MoSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVT07E4rTxKOlRkq8grMyB5mmhsa0I2YqjTmbD6dyW4SuPXV6Fo7wjJYCDKGpfX+yua3SQ5N7r2Lkc9pSJXD0xc00G8bzMkRmBEqQkfyfJ+UowtPgGrj1CEEDsn4earzMIg1r2x9Dx3YElIdyQejphuin8jWvijV1/siA5CuILuo82yFMyx3d0A//RLxIo+OgBXgzOytaqPrcMcRFgcXekMEQ==
+X-Gm-Message-State: AOJu0YztiUQ0ZEiSOrOi+dSCq4PFPqS29D8tdBh1fKP21/tbRAaWxfKC
+	l+tCt5Y/aqW3MVm/SsuxNkpZ907zLStfkDEIdj+JAOM4IVpmBdRP
+X-Google-Smtp-Source: AGHT+IEUoyW0X469t4cMCMQD6yp4U9TgW6q8ZrFrHJwvys/gFlNpzy8MrNRr98L4zzJEB6+G47h3zQ==
+X-Received: by 2002:a50:9ee6:0:b0:57d:5bc:56d9 with SMTP id 4fb4d7f45d1cf-57d4bd5630bmr5980637a12.2.1719383384511;
+        Tue, 25 Jun 2024 23:29:44 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef1c:c500:ee59:d953:f148:40ba? (p200300f6ef1cc500ee59d953f14840ba.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:ee59:d953:f148:40ba])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d30534e2asm6812991a12.70.2024.06.25.23.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 23:29:44 -0700 (PDT)
+Message-ID: <7b194e7c4a96cacb13756b05ca7738010742eb12.camel@gmail.com>
+Subject: Re: [PATCH v2 3/3] hwmon: (ltc2992) Use
+ fwnode_for_each_available_child_node_scoped()
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>, Jonathan Cameron
+	 <jic23@kernel.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally
+ <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,  Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Antoniu Miclaus
+ <antoniu.miclaus@analog.com>, linux-acpi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, Rob Herring
+ <robh@kernel.org>, devicetree@vger.kernel.org
+Date: Wed, 26 Jun 2024 08:33:35 +0200
+In-Reply-To: <ZlSY8tjYm5g9bEJ_@surfacebook.localdomain>
+References: 
+	<20240523-fwnode_for_each_available_child_node_scoped-v2-0-701f3a03f2fb@gmail.com>
+	 <20240523-fwnode_for_each_available_child_node_scoped-v2-3-701f3a03f2fb@gmail.com>
+	 <20240526144851.493dd3f2@jic23-huawei>
+	 <ZlSY8tjYm5g9bEJ_@surfacebook.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="R3N5fZNUTuh/Iu6H"
-Content-Disposition: inline
-In-Reply-To: <20240529-faucet-vending-3e330f8eb67b@wendy>
 
-
---R3N5fZNUTuh/Iu6H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Uwe,
-
-On Wed, May 29, 2024 at 08:58:41AM +0100, Conor Dooley wrote:
-> On Wed, May 29, 2024 at 10:56:36AM +1200, Chris Packham wrote:
-> > Add fan child nodes that allow describing the connections for the
-> > ADT7475 to the fans it controls. This also allows setting some
-> > initial values for the pwm duty cycle and frequency.
+On Mon, 2024-05-27 at 17:30 +0300, Andy Shevchenko wrote:
+> Sun, May 26, 2024 at 02:48:51PM +0100, Jonathan Cameron kirjoitti:
+> > On Thu, 23 May 2024 17:47:16 +0200
+> > Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
 > >=20
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
+> > > The scoped version of the fwnode_for_each_available_child_node() macr=
+o
+> > > automates object recfount decrement, avoiding possible memory leaks
+> > > in new error paths inside the loop like it happened when
+> > > commit '10b029020487 ("hwmon: (ltc2992) Avoid division by zero")'
+> > > was added.
+> > >=20
+> > > The new macro removes the need to manually call fwnode_handle_put() i=
+n
+> > > the existing error paths and in any future addition. It also removes =
+the
+> > > need for the current child node declaration as well, as it is interna=
+lly
+> > > declared.
+> > >=20
+> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 > >=20
-> > Notes:
-> >     I realise there is still some discussion about how to express the
-> >     frequency and duty cycle. I have a personal preference for using he=
-rtz
-> >     for the frequency and 0-255 for the duty cycle but if the consensus=
- is
-> >     to express these things some other way I'm fine with doing some mat=
-h.
+> > This looks like another instances of the lack of clarify about=20
+> > what device_for_each_child_node[_scoped]() guarantees about node
+> > availability.
+> > On DT it guarantees the node is available as ultimately calls
+> > of_get_next_available_child()
+> >=20
+> > On ACPI it doesn't (I think).
+> > For swnode, there isn't an obvious concept of available.
+> >=20
+> > It would be much better if we reached some agreement on this and
+> > hence could avoid using the fwnode variants just to get the _available_=
+ form
+> > as done here.
 >=20
-> Probably worth carrying a link to it here:
-> https://lore.kernel.org/all/4de798f3-069e-4028-a5b5-5e6a639277e3@alliedte=
-lesis.co.nz/
+> > Or just add the device_for_each_available_child_node[_scoped]()
+> > and call that in almost all cases.
 >=20
-> I asked Uwe to take a look & it's on his todo list.
+> device_for_each*() _implies_ availability. You need to talk to Rob about =
+all
+> this. The design of the device_for_each*() was exactly done in accordance=
+ with
+> his suggestions...
+>=20
+> > In generic code, do we ever want to walk unavailable child nodes?
+>=20
+> ...which are most likely like your question here, i.e. why we ever need t=
+o
+> traverse over unavailable nodes.
+>=20
 
-This is an attempt to bump this up on your todo list a bit!
+I have some vague idea of Rob talking about CPUs being one of the reasons f=
+or
+the current design. Don't remember for sure. At least (if not already) havi=
+ng
+this clearly documented would be nice.
 
-Thanks,
-Conor.
-
-> >    =20
-> >     Changes in v4:
-> >     - 0 is not a valid frequency value
-> >     Changes in v3:
-> >     - Use the pwm provider/consumer bindings
-> >     Changes in v2:
-> >     - Document 0 as a valid value (leaves hardware as-is)
-> >=20
-> >  .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++++-
-> >  1 file changed, 24 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/adt7475.yaml
-> > index 051c976ab711..bfef4c803bf7 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > @@ -51,6 +51,15 @@ properties:
-> >        enum: [0, 1]
-> >        default: 1
-> > =20
-> > +  "#pwm-cells":
-> > +    const: 4
-> > +    description: |
-> > +      Number of cells in a PWM specifier.
-> > +      - 0: The pwm channel
-> > +      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 88=
-, 22500
-> > +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
-> > +      - 3: The default pwm duty cycle - 0-255
-> > +
-> >  patternProperties:
-> >    "^adi,bypass-attenuator-in[0-4]$":
-> >      description: |
-> > @@ -81,6 +90,10 @@ patternProperties:
-> >        - smbalert#
-> >        - gpio
-> > =20
-> > +  "^fan-[0-9]+$":
-> > +    $ref: fan-common.yaml#
-> > +    unevaluatedProperties: false
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > @@ -89,11 +102,12 @@ additionalProperties: false
-> > =20
-> >  examples:
-> >    - |
-> > +    #include <dt-bindings/pwm/pwm.h>
-> >      i2c {
-> >        #address-cells =3D <1>;
-> >        #size-cells =3D <0>;
-> > =20
-> > -      hwmon@2e {
-> > +      pwm: hwmon@2e {
-> >          compatible =3D "adi,adt7476";
-> >          reg =3D <0x2e>;
-> >          adi,bypass-attenuator-in0 =3D <1>;
-> > @@ -101,5 +115,14 @@ examples:
-> >          adi,pwm-active-state =3D <1 0 1>;
-> >          adi,pin10-function =3D "smbalert#";
-> >          adi,pin14-function =3D "tach4";
-> > +        #pwm-cells =3D <4>;
-> > +
-> > +        fan-0 {
-> > +          pwms =3D <&pwm 0 22500 PWM_POLARITY_INVERTED 255>;
-> > +        };
-> > +
-> > +        fan-1 {
-> > +          pwms =3D <&pwm 2 22500 PWM_POLARITY_INVERTED 255>;
-> > +        };
-> >        };
-> >      };
-> > --=20
-> > 2.45.1
-> >=20
-
-
-
---R3N5fZNUTuh/Iu6H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnruugAKCRB4tDGHoIJi
-0kFRAQCZIrHaisIz4R0cjPl4ENnCGHKMXBh7j/mC8rYE/KB85wD/RTIZIcVxwnp3
-vJJ40zdLuhvyve24lm/u4nEf90mDYwc=
-=rn/M
------END PGP SIGNATURE-----
-
---R3N5fZNUTuh/Iu6H--
+- Nuno S=C3=A1
