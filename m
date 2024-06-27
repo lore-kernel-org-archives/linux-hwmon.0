@@ -1,80 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162901990C4;
-	Thu, 27 Jun 2024 15:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561A919A288
+	for <linux-hwmon@vger.kernel.org>; Thu, 27 Jun 2024 18:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719501157; cv=none; b=ik7jLvjyDWfD8Et0/lU8+dPxQD9djd1xOFAXX0Mnovnym4ZTVtQkp21gWqpDgcAx8mQZft54nf2yNCqghPkBQUp9YHkkkgkN+BAuJ5u1UmKwQb/qUIxqbFtwSq0Jyk3Fz8o0Z2QeR0jgY8AXSDKIHldVrh7GKmPXUOi+iGUOEGw=
+	t=1719513434; cv=none; b=iQYHLS8i4fvMFImbGEPE0ghZ9l3mmLaHMxmg5F5Y9KvXCTy+bw38iSOV4iazXMAPg8eTNNjqFrbd/IQ1FejpbUpwohSOE91kJP3eX+RdzQfmNO14oUQ2Rbfx+9XNs9r0SBOqnGt/ORg1UED8OgfA4zsDAfj3gc1SnG0UGXFevd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719501157; c=relaxed/simple;
-	bh=BLte6At7ixoiAZA1MyTPlTAmzQk/XIy+UqKAJC+JXh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bSQ9F4jnDDHfHUMffWehffOYsJdXU+BkL+0tkb6o/u1kD/LjIT4yJ75N0vfobGHXI4vj29BP9H7eb9WVxgDzNAYhdkjYyWdn2dwtvDzkHtMz7HV4uwZkI+1LJBbfloNR6LKqMlF4d79W8AabUCuDYpD0coiNulBDp6mragjYAL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9T/VVBS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719513434; c=relaxed/simple;
+	bh=kMf/jTaHv8Pibllz765oLhr56R7Vnv74xKa/hCJTaII=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j9ji6Zl10t9Olr4g5q2nLxeTGF4inqLm0dpyf3mUxsTj6PSUZ/tCV6CJIGjc5qKzOGTZvTbgPLWsBYgafw6tE4fWCIO3Ju8ErwWbLcFYDiHc6oZka1OaIUnYGfsE08yaBHw7kudXExPCc2nqLvgsM7lxcrNGpA2vq88DKODLd8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W1534gzr; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9T/VVBS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3A7C4AF0B;
-	Thu, 27 Jun 2024 15:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719501156;
-	bh=BLte6At7ixoiAZA1MyTPlTAmzQk/XIy+UqKAJC+JXh8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n9T/VVBSaVs+miPscG7rUMyPJIdw1iEuh8q0Mij+Kkp85ACsMY8SPISKzUosYtSzf
-	 ce/DZl10yT1L9i7TyepIb3mgHBakGSc173AVhjO3nPPl2uOs1UXDgR/WHPYRBG4Krk
-	 Zy2wdLd28diQAxnDu5k610W1G/9950PXQMT3zq2FUMQgUnakUvWBG4zNfeYEyYKo8N
-	 QaOJNKKwF/uB5Z7BD+IZHrdWz6zK79EhJsrde2pikAfZ+bfmq6INw6DrqCs80O82xL
-	 kO+5lMauuG2ZJRoJk9TstPg/xHoxFhU/eELARCNgXnkHSA3jccj29WuNkqjSxJyDBV
-	 jEVqeaaYNNW+g==
-Date: Thu, 27 Jun 2024 16:12:31 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Alex Vdovydchenko <keromvp@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add MPS mp5920
-Message-ID: <20240627-swivel-grower-002af077b654@spud>
-References: <20240627090113.391730-1-xzeol@yahoo.com>
- <20240627090113.391730-2-xzeol@yahoo.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W1534gzr"
+X-Envelope-To: jic23@kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1719513429;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LcX+DNUAOkuuXE8/JmszLDMKosfH1JHvU1xDYWp+oWM=;
+	b=W1534gzrjEl4P8g5y/J0X5tfxFPrE1J+gIoykAKtFAUDacat2D3PUXImDN83E0bM/P+BpT
+	K7ISNAsIhoBPqPifciJwK9EXKDrrvbGq+eKB6x1s5dPhSqU39VJu3aKZ/qnhjExFyVhT6C
+	SSZPLqZK48b82/3359XmIQkrvpwND4Y=
+X-Envelope-To: linux@roeck-us.net
+X-Envelope-To: jdelvare@suse.com
+X-Envelope-To: linux-iio@vger.kernel.org
+X-Envelope-To: linux-hwmon@vger.kernel.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: lars@metafoo.de
+Message-ID: <f6ee3049-47a0-4c84-ab90-2321bf6970d0@linux.dev>
+Date: Thu, 27 Jun 2024 14:37:01 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="RPgB/PKWlchm0czC"
-Content-Disposition: inline
-In-Reply-To: <20240627090113.391730-2-xzeol@yahoo.com>
+Subject: Re: [PATCH v2 2/2] hwmon: iio: Add labels from IIO channels
+To: Jonathan Cameron <jic23@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Lars-Peter Clausen <lars@metafoo.de>
+References: <20240624174601.1527244-1-sean.anderson@linux.dev>
+ <20240624174601.1527244-3-sean.anderson@linux.dev>
+ <ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
+ <20240624202433.29564802@jic23-huawei>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <20240624202433.29564802@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
+On 6/24/24 15:24, Jonathan Cameron wrote:
+> On Mon, 24 Jun 2024 11:47:39 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> On 6/24/24 10:46, Sean Anderson wrote:
+>> > Add labels from IIO channels to our channels. This allows userspace to
+>> > display more meaningful names instead of "in0" or "temp5".
+>> > 
+>> > Although lm-sensors gracefully handles errors when reading channel
+>> > labels, the ABI says the label attribute
+>> >   
+>> >> Should only be created if the driver has hints about what this voltage
+>> >> channel is being used for, and user-space doesn't.  
+>> > 
+>> > Therefore, we test to see if the channel has a label before
+>> > creating the attribute.
+>> >   
+>> 
+>> FWIW, complaining about an ABI really does not belong into a commit
+>> message. Maybe you and lm-sensors don't care about error returns when
+>> reading a label, but there are other userspace applications which may
+>> expect drivers to follow the ABI. Last time I checked, the basic rule
+>> was still "Don't break userspace", and that doesn't mean "it's ok to
+>> violate / break an ABI as long as no one notices".
+>> 
+>> > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+>> > ---
+>> > 
+>> > Changes in v2:
+>> > - Check if the label exists before creating the attribute
+>> > 
+>> >   drivers/hwmon/iio_hwmon.c | 45 ++++++++++++++++++++++++++++++++++-----
+>> >   1 file changed, 40 insertions(+), 5 deletions(-)
+>> > 
+>> > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+>> > index 4c8a80847891..5722cb9d81f9 100644
+>> > --- a/drivers/hwmon/iio_hwmon.c
+>> > +++ b/drivers/hwmon/iio_hwmon.c
+>> > @@ -33,6 +33,17 @@ struct iio_hwmon_state {
+>> >   	struct attribute **attrs;
+>> >   };
+>> >   
+>> > +static ssize_t iio_hwmon_read_label(struct device *dev,
+>> > +				  struct device_attribute *attr,
+>> > +				  char *buf)
+>> > +{
+>> > +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
+>> > +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
+>> > +	struct iio_channel *chan = &state->channels[sattr->index];
+>> > +
+>> > +	return iio_read_channel_label(chan, buf);
+>> > +}
+>> > +  
+>> 
+>> I personally find it a bit kludgy that an in-kernel API would do a
+>> sysfs write like this and expect a page-aligned buffer as parameter,
+>> but since Jonathan is fine with it:
+> 
+> That's a good point that I'd not picked up on and it probably makes sense
+> to address that before it bites us on some other subsystem.
+> 
+> It was more reasonable when the only path was to a light wrapper that went
+> directly around the sysfs callback. Now we are wrapping these up for more
+> general use we should avoid that restriction.
+> 
+> Two approaches to that occur to me.
+> 1) Fix up read_label() everywhere to not use sysfs_emit and take a size
+>    of the buffer to print into. There are only 11 implementations so
+>    far so this should be straight forward.
 
---RPgB/PKWlchm0czC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This API is the same as the existing iio_read_channel_ext_info. It is
+used for the same purpose: forwarding sysfs reads/writes from one
+device to another (see e.g. iio-mux and iio-rescale). ext_info is used
+by around 85 drivers, so it is not so trivial to change the API. While I
+agree that the current API is unusual, it's not too bad given that we
+get the same guarantees from device_attribute.show.
 
-On Thu, Jun 27, 2024 at 12:01:07PM +0300, Alex Vdovydchenko wrote:
-> Add support for MPS mp5920 controller
->=20
-> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
+--Sean
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> 2) Add a bounce buffer so we emit into a suitable size for sysfs_emit()
+>   then reprint from there into a buffer provided via this interface with
+>   the appropriate size provided.  This one is clunky and given the relatively
+>   few call sits I think fixing it via option 1 is the better route forwards.
 
---RPgB/PKWlchm0czC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn2BXwAKCRB4tDGHoIJi
-0lwGAQC1i8MZZpU7iOI+vllUkWLkJbg0/o+VXsEFKfEl08w0VwD/SB/f3092bw/G
-E05WRIggJqljvcsGS0+hrAMNC5zQTgA=
-=6KO+
------END PGP SIGNATURE-----
-
---RPgB/PKWlchm0czC--
