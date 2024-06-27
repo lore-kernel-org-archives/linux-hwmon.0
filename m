@@ -1,35 +1,61 @@
-Received: from smtp.emenem.pl (cmyk.emenem.pl [217.79.154.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B5214882B;
-	Thu, 27 Jun 2024 12:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.79.154.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891001E51D;
+	Thu, 27 Jun 2024 14:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719490377; cv=none; b=iTVoho0ZDAcGtSbfwCxNkhFBKm/ey2Ni8zn2EOR9F/Iav8eNaxv9bUBvkj3Dy6l7PKYzrMSfYVyf8uukn9IEeXSdirjjrNCotG1tBcqO45jDhC3TL4CmXg7noD5Tq11b0MJ0l1hKHjomDYyRrZb71ngdMZM/bRJUZ3iui2DS+Ec=
+	t=1719498655; cv=none; b=AEbXFApiXTQ9SgT+i2GleALz31NgmiDnkp5gTLvC0AE9j+tGSXYlM5+hT0Hxr9CTNbY6hHoV11ZTQmV55ZgfcmQ67GFhyjXF8CydF34ZkZ9nD7N8pBgKBuaFwb31Es3sMBfU2DK+ki+pA25KG2/iBHYJmTNwMRC66lBUdr1DlpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719490377; c=relaxed/simple;
-	bh=vUrIpTG9oETZl1YZ1umSdqMPHIfCPEeA5plf7s/3hfc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fT19FNTVliuGrWfpAT19qnaFTP02ydjZcUPv1ooTGpQJO69d7X+N6sbrw75zBF7KpM+cZEjUee4d0L/kZTMLvQ+D9rBy6q2/KY5usA8crUQPpMPnWPvCTngsyxpn/2pWq/FyOTEUc3w2jYzwkpLmWYuU9C7r4BZ0R+dCqBDl3SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl; spf=none smtp.mailfrom=ans.pl; dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b=VSrKkyrQ; arc=none smtp.client-ip=217.79.154.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ans.pl
+	s=arc-20240116; t=1719498655; c=relaxed/simple;
+	bh=KIobNT3FVqIbEuBkRXfA/d4XzamYSNXUXEShI192cu4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pLNRqqX1grUsnWxWzmDIcOFoQtiB1pTmrUySIgWilZThPo+p8RI5hPfO36AvkXV4LBnAauKRHmAYUA5/+RBngtPVaUlZgJPbm4NyWbCbBd3bkbVV3LkNAGSURUlOZfmoQLHvDb2hacubc1rXIq3Nai/3efbOwfXx2SPymAfGTe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/7KwSK6; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b="VSrKkyrQ"
-X-Virus-Scanned: amavisd-new at emenem.pl
-Received: from [192.168.1.10] (c-98-45-176-131.hsd1.ca.comcast.net [98.45.176.131])
-	(authenticated bits=0)
-	by cmyk.emenem.pl (8.17.1.9/8.17.1.9) with ESMTPSA id 45RCCIVZ008585
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 27 Jun 2024 14:12:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ans.pl; s=20190507;
-	t=1719490342; bh=QBvgsSy1scU8OJ7RBK3h/br+lN+Asf3nUcLwIGTo24U=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=VSrKkyrQMoZHRLuxCqHs9nCAl3SGe/VrIxYlZRAwLA0j2hlPY9p2GrGdfEfVLP4d2
-	 dnqAfwewGbrFE9EagdbNlpPYjLsFsamRqwyyGs3i8Q1ZyoxRGYJRxyTb014Q4XBSko
-	 bHa0LkF0H8m9wycWirvuOxBTuEy4NCT4ye2TeW7g=
-Message-ID: <ee1996fa-4cdd-4897-b7fa-800cc9863599@ans.pl>
-Date: Thu, 27 Jun 2024 05:12:17 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/7KwSK6"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f9c6e59d34so65055665ad.2;
+        Thu, 27 Jun 2024 07:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719498653; x=1720103453; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=prOX6eOKEHEmVNHglh0d/kTFjpassowhtDmDJYgcELU=;
+        b=Z/7KwSK6O4iyxuNxmTHU2wW0gGPl1P5LE/GnZask6P2i756KLNJWV5MQomG4d6tb3F
+         BEyFw+wgFl05KpMBS9dg0iI3E2jIOkV5ZrksDq3/7WDIK2iaFtarWlTf6v5k520uLGpb
+         Q+++Gm28YWWw9pJsCPc8qxGz1e8EzkqZjvmbxg2DITDyuwrszo8ApMOnIhLaFWrjq1Is
+         TKte98HYWpue4jLBhZIIVk6nPt9Uqb9gPJB4b2X/03MrHXI+jR2L5DRLyraGhbw6yIhA
+         aEKENC/nB+DM6p9cRiEEQf/tEjsNALMp6LtB3BzNeSAtDLKk40KG9BW4XnJZpKPdY9K5
+         sAcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719498653; x=1720103453;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=prOX6eOKEHEmVNHglh0d/kTFjpassowhtDmDJYgcELU=;
+        b=UrdMdZAxGWg1O2ksmshepJRfKz1ZNV6NFPvcenU2p2Mz29SZs+wb1PFcU+zDeY2+ld
+         8uUk62ols1LL5wduOEdkuKJWm/YyY3RC6cUDNYbA9pgElG6yNb/ECvOfzN+6HVbUB8xn
+         8mnYFK6ndDp9MI8QgK6VINXN/9axx8j9l0pMlGUJbaIupOe4NXSR3FQ3PFze99vi89ld
+         eq3EZCnCg2j8QrCBEHaG1ymiBQaThTfMQDRj9o/KgWI4tsVqO67dGqR5GunN/PvzlKRa
+         3o59MRyzgEnhMxUzSFc4XVR0aQidee9oTFEoLNYrbyBjbRBiGrfoOUsVA9UdE61xLB6p
+         PHqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWe4Y5Dqa8mlxTiY4n9qpNaS7b611E6ZJJ+DyuOPZzD+lByX3nxRdBJj7MpM9uUX4LonuNyRkaUemMFJI48gpdAgg+mbhk685z4i2GiLHCEYIDQ+2HWc4qw4E8D4z357TM0dO3lbJbe4/V4RwIFWEz4zOQBsy8/KxdCQBoXFcvvNJAYeK2fpAHIDI464Mn/nDyQvQTCz0Vv2uvF7CyFUlo=
+X-Gm-Message-State: AOJu0Yy3gfKqzadEL6G5mOByQblazDzunmJJdyjBxLY+LPiaOk58R+SZ
+	7ooaZdTi4oz9N31DEmDJMKxBrpLeQ5VbL3RSZzgXJAck23K9HHSt
+X-Google-Smtp-Source: AGHT+IGb6LRH5tSL0zxSz7eX5YcdjjvCFbgea762hMw2TlPtap0H5lu0zMnM2ToKTYoB42SKt9dD+Q==
+X-Received: by 2002:a17:903:22c6:b0:1f6:f814:d542 with SMTP id d9443c01a7336-1fa1d6acf16mr156972075ad.68.1719498652545;
+        Thu, 27 Jun 2024 07:30:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1faac995113sm13885535ad.188.2024.06.27.07.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jun 2024 07:30:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d788697e-dad5-46b9-b61a-1016c55c4e83@roeck-us.net>
+Date: Thu, 27 Jun 2024 07:30:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -37,133 +63,88 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
- in the SPD case" - "sysfs: cannot create duplicate filename"
-From: =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?= <ole@ans.pl>
-To: Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit
- <hkallweit1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
- <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
- <77c1b740-9e6d-40f7-83f0-9a949366f1c9@ans.pl>
- <97c497ae-44f7-4cec-b7d9-f639e4597571@roeck-us.net>
- <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
- <5a4e1cd6-5770-423b-9a25-a0fbfd93014a@roeck-us.net>
- <9541ab9f-0f13-4856-85f0-14615b77142f@ans.pl>
+Subject: Re: [PATCH v2 0/2] Add MPS MP5920 Host-Swap controller
+To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
+References: <20240627090113.391730-1-xzeol@yahoo.com>
 Content-Language: en-US
-In-Reply-To: <9541ab9f-0f13-4856-85f0-14615b77142f@ans.pl>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240627090113.391730-1-xzeol@yahoo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 27.06.2024 at 04:29, Krzysztof Olędzki wrote:
-> On 24.06.2024 at 20:45, Guenter Roeck wrote:
->> On 6/24/24 13:58, Heiner Kallweit wrote:
->> [ ... ]
->>>
->>> Too me the issue also looks like a race. According to the OP's logs:
->>> - jc42 at 0x18 is instantiated successfully
->>> - jc42 at 0x19 returns -EBUSY. This is what is expected if the device
->>>    has been instantiated otherwise already.
->>> - jc42 at 0x1a returns -EEXIST. Here two instantiations of the the same
->>>    device seem to collide.
->>> - jc42 at 0x1b returns -EBUSY, like at 0x19.
->>>
->>> So it looks like referenced change isn't wrong, but reveals an
->>> underlying issue with device instantiation races.
->>
->> It isn't just a race, though. Try to unload the at24 (or ee1004 driver
->> for DDR4) and load it again, and you'll see the -EBUSY errors. Problem
->> is that instantiating those drivers _always_ triggers the call to
->> i2c_new_client_device() even if the jc42 device is already instantiated.
->> Unloading the spd/eeprom driver doesn't unload the jc42 driver,
->> so -EBUSY will be seen if the spd/eeprom driver is loaded again.
->>
->> I have not been able to reproduce the backtrace with my systems, but those
->> are all with AMD CPUs using the piix4 driver, so timing is likely different.
->> Another difference is that my systems (with DDR4) use the ee1004 driver.
->> That driver instantiates the jc42 devices under a driver lock, so it is
->> guaranteed that a single instantiation doesn't interfere with other
->> instantiations running in parallel.
+On 6/27/24 02:01, Alex Vdovydchenko wrote:
+> This series of patches adds the MP5920 Host-swap controller, which is used
+> as a protection and control IC for devices that are being inserted into a live
+> backplane. MP5920 acts as a voltage regulator (MP5911 etc) supervisor. IC
+> utilizes pmbus and provides monitoring, statistics and limits to electrical and
+> thermal characteristics such as:
+> - input and output voltage
+> - output current
+> - output power
+> - IC temperature
 > 
-> Right, sorry for not mentioning this in the original report:
+> One must take into account the nonlinear character of readings, so there will be
+> a statistical error in the range 5–10 percents, depending on current passing
+> through. In order to use the IC, make sure to specify a valid I2C address
+> (consult to datasheet and dts-bindings)
+> MP5920 datasheet: https://www.monolithicpower.com/en/mp5920.html
 > 
-> [    0.269013] pci 0000:00:1f.3: [8086:1c22] type 00 class 0x0c0500
-> [    0.269098] pci 0000:00:1f.3: reg 0x10: [mem 0xc3a02000-0xc3a020ff 64bit]
-> [    0.269186] pci 0000:00:1f.3: reg 0x20: [io  0x3000-0x301f]
-> [    0.334962] pci 0000:00:1f.3: Adding to iommu group 7
-> [    7.874736] i801_smbus 0000:00:1f.3: SMBus using PCI interrupt
-> 
-> $ lspci -s 0000:00:1f.3 -vvnn
-> 00:1f.3 SMBus [0c05]: Intel Corporation 6 Series/C200 Series Chipset Family SMBus Controller [8086:1c22] (rev 04)
->         Subsystem: Dell Device [1028:04de]
->         Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx-
->         Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
->         Interrupt: pin C routed to IRQ 19
->         IOMMU group: 7
->         Region 0: Memory at c3a02000 (64-bit, non-prefetchable) [size=256]
->         Region 4: I/O ports at 3000 [size=32]
->         Kernel driver in use: i801_smbus
+> Changes in v2:
+>    -  fixed typos
 
-Also, here is a different trace showing a different code path, which even more suggest a race:
+... and ignored all other feedback without explaining the reasons.
 
-[    7.871973] i2c_dev: i2c /dev entries driver
-[    7.878215] i2c i2c-12: 4/4 memory slots populated (from DMI)
-[    7.881116] at24 12-0050: 256 byte spd EEPROM, read-only
-[    7.881887] i2c i2c-12: Successfully instantiated SPD at 0x50
-[    7.894183] at24 12-0051: 256 byte spd EEPROM, read-only
-[    7.895910] i2c i2c-12: Failed to register i2c client jc42 at 0x19 (-16)
-[    7.896039] i2c i2c-12: Successfully instantiated SPD at 0x51
-[    7.896850] i2c i2c-12: Failed creating jc42 at 0x19
-[    7.903444] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:1f.3/i2c-12/12-001a'
-[    7.904085] at24 12-0052: 256 byte spd EEPROM, read-only
-[    7.905284] Hardware name: Dell Inc. PowerEdge T110 II/0PM2CW, BIOS 2.10.0 05/24/2018
-[    7.905284] Call Trace:
-[    7.905284]  <TASK>
-[    7.909238]  dump_stack_lvl+0x37/0x4a
-[    7.910488] at24 12-0053: 256 byte spd EEPROM, read-only
-[    7.909855]  sysfs_warn_dup+0x55/0x61
-[    7.911456] i2c i2c-12: Successfully instantiated SPD at 0x53
-[    7.911597]  sysfs_create_dir_ns+0xa6/0xd2
-[    7.911597]  kobject_add_internal+0xc3/0x1c0
-[    7.914606]  kobject_add+0xba/0xe4
-[    7.915595]  ? device_add+0x53/0x726
-[    7.915595]  device_add+0x132/0x726
-[    7.916622]  i2c_new_client_device+0x1ee/0x246
-[    7.916622]  i2c_detect.isra.0+0x17c/0x223
-[    7.918603]  ? __pfx___process_new_driver+0x10/0x10
-[    7.919603]  __process_new_driver+0x17/0x1e
-[    7.919603]  bus_for_each_dev+0x8b/0xcf
-[    7.920595]  ? __pfx___process_new_driver+0x10/0x10
-[    7.920595]  i2c_for_each_dev+0x2d/0x49
-[    7.922608]  i2c_register_driver+0x51/0x63
-[    7.922608]  ? __pfx_jc42_driver_init+0x10/0x10
-[    7.923595]  do_one_initcall+0x93/0x182
-[    7.924601]  kernel_init_freeable+0x1be/0x204
-[    7.924601]  ? __pfx_kernel_init+0x10/0x10
-[    7.924601]  kernel_init+0x15/0x110
-[    7.926609]  ret_from_fork+0x23/0x35
-[    7.927602]  ? __pfx_kernel_init+0x10/0x10
-[    7.927602]  ret_from_fork_asm+0x1b/0x30
-[    7.927602]  </TASK>
-[    7.929937] kobject: kobject_add_internal failed for 12-001a with -EEXIST, don't try to register things with the same name in the same directory.
-[    7.932129] i2c i2c-12: Failed to register i2c client jc42 at 0x1a (-17)
-[    7.933257] i2c i2c-12: Failed creating jc42 at 0x1a
+I am not even going to review this version.
 
-Note there is no warning for 0x18 and 0x1b.
-
-# sensors|grep jc42-i2c|sort
-jc42-i2c-12-18
-jc42-i2c-12-19
-jc42-i2c-12-1a
-jc42-i2c-12-1b
-
-
-Krzysztof
+Guenter
 
