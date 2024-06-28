@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2BD2D05E;
-	Fri, 28 Jun 2024 05:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1094513E058;
+	Fri, 28 Jun 2024 07:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719552588; cv=none; b=baN39cJhxNUy0V1SYKCQGiRHaOY9wx1nrb6ri+D9Snszon4KOsUcW1+yF3cDdmkSs6Z93Ze2n4Bwz0BACAQigCNB2qTvz3YgR223TgXLERIQeGIDA0bLPUM1OjfqV4M0wXaPfKJAH00jTqHIROGovWP4VI3qQwi2RuABlLcdv0Y=
+	t=1719559344; cv=none; b=IS5Q9CWw+Do+o3KIyWBrLKajyInyOvoewyQqtnTkbPw1HWf2NzI9st+/2Hq+pDo31t6TsH88+swSQBv0mbunpnhQuxkw0NXoTnNUWcslOFHIbrsxaf85/O9W/7AFoWcsb8JZedrWkf8uT3nDNn6uk5BJB+Mxdzw8BzfusQJyoRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719552588; c=relaxed/simple;
-	bh=MuOWgcJQOSUBmO2Vy37Xg7xftpXiU+ZC8r+Ven/mpw4=;
+	s=arc-20240116; t=1719559344; c=relaxed/simple;
+	bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l1ZLqlbbLF+/AlohTkaUWS3IpnlNfQonzd7N2wEYVxy56PhDPs9UodM3HH2y53YxSUTBReq9Huj/P3nTHbm+JN1BaKzvtijjXnBqe8Qn1yLjFUhtN8cFFX6PeWKfQg308uMAWq0atbbaRrWxIRwV8X0gKjk9Zj0c1+VIRO+qKeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=URWNnbeE; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jp6YA1zWCZd24i78WGnC+r4D7fKAgtY/2r1xQbSvj6UBxnCnRgJ1Em7xxu2hP26LVj82abNhgrmDRni+Bphcp+FR1pEWpHXLuk8CBW8TVyggokF4rjtKTPQsIipoySjW8RMxRZFBs0JhSFZE6+1SXTWdFqOKEMc9szrPRQCnODY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nxu+xklR; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="URWNnbeE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nxu+xklR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719552587; x=1751088587;
+  t=1719559341; x=1751095341;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MuOWgcJQOSUBmO2Vy37Xg7xftpXiU+ZC8r+Ven/mpw4=;
-  b=URWNnbeES5n+B6OWdZfGcITG4kkZGUcGMnMbyQN5SWruZk4yUiSDgqN0
-   YNT2NdXA2AYXCyr5qCi5aoj0sZo3ceXgSarl2PQEM/n3JWubfi3uNUinx
-   iIVIw4GG+YFe+HMs8obzdfgtK/xWKCY3LBg+J0qol4lEVfMvW8i7Lih8h
-   oAWAYjV2e8vC1uZSmzwBC+rtQZmePybw6rnmRMlEbD5dqBMXdkMM6txgk
-   aVs+OIYGSuT6tjqQbNa4KX9x63cjKJlr70IRghpP+qNVUrlfx7LrGKX3T
-   pFgUWlDfPK/Rw7PG3N0XX5ZUOu563Wd7amnJVt0NEVtE8E1xn5kgUf/sl
-   A==;
-X-CSE-ConnectionGUID: z9SLJq7CQdGYRBlHqGg69A==
-X-CSE-MsgGUID: meu3jU/jTUy7ylbJ7x4yPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="19621229"
+  bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
+  b=Nxu+xklRrCKBuy4TN8nVFGR5fUyyEcjxeNiUc1ouICMzL1piC3u1xQUR
+   pKcudj6F6+Bcxn35IJcbbOJhgxPhtpo3IVlt8zVAfSx+i9VqyqMb3qG6P
+   wVEBNpL9Igtp5I4MOjWgkDRJl5pKOVaIwSM7hzzMiK9on2etzkdR7nvqF
+   YERuROWgzYceIqJ8W0qaCNxKmjEzqax85mUGj949raG8RPyPUItztk02B
+   H2G3KLYqJRf7KYUD85yAPaxb8aJ0GuYE1K+ZIZwkhZZTx6ajzU6WWRPTg
+   a+6LtaEj+u/7rbtSwZzuYk8u0z77Vyzz9xopZ9wXBylUSwaPNOBswfpSR
+   w==;
+X-CSE-ConnectionGUID: oVioolhhSpGwNY3UavbQmQ==
+X-CSE-MsgGUID: T69KE4ovQAOqd9nUukrP3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16468202"
 X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="19621229"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 22:29:46 -0700
-X-CSE-ConnectionGUID: gIPGBZVMRcK+8kzmzM3kyw==
-X-CSE-MsgGUID: 1rkE5azqT8KLfF+K4mIHQQ==
+   d="scan'208";a="16468202"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 00:22:20 -0700
+X-CSE-ConnectionGUID: CBI4nw8NSwuGvrqeMakrxQ==
+X-CSE-MsgGUID: VaE3baFuSwybmyPTgbBtPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="49802219"
+   d="scan'208";a="49567540"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 27 Jun 2024 22:29:43 -0700
+  by orviesa003.jf.intel.com with ESMTP; 28 Jun 2024 00:22:17 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sN4B2-000Gpm-0Y;
-	Fri, 28 Jun 2024 05:29:40 +0000
-Date: Fri, 28 Jun 2024 13:29:38 +0800
+	id 1sN5vx-000Gti-2j;
+	Fri, 28 Jun 2024 07:22:13 +0000
+Date: Fri, 28 Jun 2024 15:21:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -56,12 +56,12 @@ To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Alex Vdovydchenko <xzeol@yahoo.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
 Subject: Re: [PATCH v2 2/2] hwmon: add MP5920 driver
-Message-ID: <202406281339.YzOThRyw-lkp@intel.com>
+Message-ID: <202406281512.NAdadCZX-lkp@intel.com>
 References: <20240627090113.391730-3-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -88,55 +88,109 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Vdovydchenko/dt-bind
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20240627090113.391730-3-xzeol%40yahoo.com
 patch subject: [PATCH v2 2/2] hwmon: add MP5920 driver
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20240628/202406281339.YzOThRyw-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281339.YzOThRyw-lkp@intel.com/reproduce)
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406281339.YzOThRyw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406281512.NAdadCZX-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/hwmon/pmbus/mp5920.c:26:9: error: 'pages' undeclared here (not in a function); did you mean 'page'?
+   In file included from drivers/hwmon/pmbus/mp5920.c:18:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/pmbus/mp5920.c:26:2: error: use of undeclared identifier 'pages'
       26 |         pages = 1,
-         |         ^~~~~
-         |         page
->> drivers/hwmon/pmbus/mp5920.c:27:9: error: 'format' undeclared here (not in a function)
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:27:2: error: use of undeclared identifier 'format'
       27 |         format[PSC_VOLTAGE_IN] = direct,
-         |         ^~~~~~
->> drivers/hwmon/pmbus/mp5920.c:32:9: error: 'm' undeclared here (not in a function); did you mean 'tm'?
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:28:2: error: use of undeclared identifier 'format'
+      28 |         format[PSC_VOLTAGE_OUT] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:29:2: error: use of undeclared identifier 'format'
+      29 |         format[PSC_CURRENT_OUT] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:30:2: error: use of undeclared identifier 'format'
+      30 |         format[PSC_POWER] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:31:2: error: use of undeclared identifier 'format'
+      31 |         format[PSC_TEMPERATURE] = direct,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:32:2: error: use of undeclared identifier 'm'
       32 |         m[PSC_VOLTAGE_IN] = 2266,
          |         ^
-         |         tm
->> drivers/hwmon/pmbus/mp5920.c:33:9: error: 'b' undeclared here (not in a function); did you mean 'mb'?
+>> drivers/hwmon/pmbus/mp5920.c:33:2: error: use of undeclared identifier 'b'
       33 |         b[PSC_VOLTAGE_IN] = 0,
          |         ^
-         |         mb
->> drivers/hwmon/pmbus/mp5920.c:34:9: error: 'R' undeclared here (not in a function)
+>> drivers/hwmon/pmbus/mp5920.c:34:2: error: use of undeclared identifier 'R'
       34 |         R[PSC_VOLTAGE_IN] = -1,
          |         ^
->> drivers/hwmon/pmbus/mp5920.c:44:9: warning: excess elements in struct initializer
+   drivers/hwmon/pmbus/mp5920.c:35:2: error: use of undeclared identifier 'm'
+      35 |         m[PSC_VOLTAGE_OUT] = 2266,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:36:2: error: use of undeclared identifier 'b'
+      36 |         b[PSC_VOLTAGE_OUT] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:37:2: error: use of undeclared identifier 'R'
+      37 |         R[PSC_VOLTAGE_OUT] = -1,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:38:2: error: use of undeclared identifier 'm'
+      38 |         m[PSC_CURRENT_OUT] = 546,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:39:2: error: use of undeclared identifier 'b'
+      39 |         b[PSC_CURRENT_OUT] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:40:2: error: use of undeclared identifier 'R'
+      40 |         R[PSC_CURRENT_OUT] = -2,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:41:2: error: use of undeclared identifier 'm'
+      41 |         m[PSC_POWER] = 5840,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:42:2: error: use of undeclared identifier 'b'
+      42 |         b[PSC_POWER] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:43:2: error: use of undeclared identifier 'R'
+      43 |         R[PSC_POWER] = -3,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:44:2: error: use of undeclared identifier 'm'
       44 |         m[PSC_TEMPERATURE] = 1067,
          |         ^
-   drivers/hwmon/pmbus/mp5920.c:44:9: note: (near initialization for 'mp5920_info')
-   drivers/hwmon/pmbus/mp5920.c:45:9: warning: excess elements in struct initializer
-      45 |         b[PSC_TEMPERATURE] = 20500,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:45:9: note: (near initialization for 'mp5920_info')
-   drivers/hwmon/pmbus/mp5920.c:46:9: warning: excess elements in struct initializer
-      46 |         R[PSC_TEMPERATURE] = -2,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:46:9: note: (near initialization for 'mp5920_info')
->> drivers/hwmon/pmbus/mp5920.c:47:9: error: 'func' undeclared here (not in a function)
-      47 |         func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
-         |         ^~~~
-   drivers/hwmon/pmbus/mp5920.c:47:9: warning: excess elements in struct initializer
-   drivers/hwmon/pmbus/mp5920.c:47:9: note: (near initialization for 'mp5920_info')
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   5 warnings and 20 errors generated.
 
 
-vim +26 drivers/hwmon/pmbus/mp5920.c
+vim +/pages +26 drivers/hwmon/pmbus/mp5920.c
 
     24	
     25	static struct pmbus_driver_info mp5920_info = {
@@ -158,10 +212,10 @@ vim +26 drivers/hwmon/pmbus/mp5920.c
     41		m[PSC_POWER] = 5840,
     42		b[PSC_POWER] = 0,
     43		R[PSC_POWER] = -3,
-  > 44		m[PSC_TEMPERATURE] = 1067,
+    44		m[PSC_TEMPERATURE] = 1067,
     45		b[PSC_TEMPERATURE] = 20500,
     46		R[PSC_TEMPERATURE] = -2,
-  > 47		func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
+    47		func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
     48			PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
     49			PMBUS_HAVE_TEMP,
     50	};
