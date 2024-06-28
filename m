@@ -1,226 +1,172 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F726191;
-	Fri, 28 Jun 2024 00:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2BD2D05E;
+	Fri, 28 Jun 2024 05:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719533161; cv=none; b=U05hKR2kfIYsiLFkc5DbdCoVG7X3PJyfSw+xRTTBH46cdS5KQ8QwHVLCJiYrN3mWPAV4vPovGIXtPZKt7Iu0cWh4NcJwmpnQr0Fp1Mq0Py95C6lOB9wgG2GI5FoDirP+wTl0+9SZfJDZdk+SsxsIyH+4LmjmepfjKn7pBMMscg0=
+	t=1719552588; cv=none; b=baN39cJhxNUy0V1SYKCQGiRHaOY9wx1nrb6ri+D9Snszon4KOsUcW1+yF3cDdmkSs6Z93Ze2n4Bwz0BACAQigCNB2qTvz3YgR223TgXLERIQeGIDA0bLPUM1OjfqV4M0wXaPfKJAH00jTqHIROGovWP4VI3qQwi2RuABlLcdv0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719533161; c=relaxed/simple;
-	bh=dokR8Fm2CKhCvAzDfAdyB4SxWiGcs4M3DQR4tXuRD/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SgK0w7MtAHqLRx+bitgv5kli5jH/ietkfJWcLjCMkpr8d2ZX5xGwlRKv3C6c6io3MJHnqn7YD+nAsGtKEcdZeghwTNlQCABzO2WA4oHprHYiaZgfbBdo3Crki1LR7q3zVISzuBv51DbsK+orvFliaGSF41d+lYdPkaifFzZKIOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=it2hPG6r; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719552588; c=relaxed/simple;
+	bh=MuOWgcJQOSUBmO2Vy37Xg7xftpXiU+ZC8r+Ven/mpw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l1ZLqlbbLF+/AlohTkaUWS3IpnlNfQonzd7N2wEYVxy56PhDPs9UodM3HH2y53YxSUTBReq9Huj/P3nTHbm+JN1BaKzvtijjXnBqe8Qn1yLjFUhtN8cFFX6PeWKfQg308uMAWq0atbbaRrWxIRwV8X0gKjk9Zj0c1+VIRO+qKeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=URWNnbeE; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="it2hPG6r"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1f6fabe9da3so113855ad.0;
-        Thu, 27 Jun 2024 17:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719533159; x=1720137959; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0ZSvkaYPL0aMiPJTdyZjWw4rhkAuBmNQ840zqqrBqw=;
-        b=it2hPG6r0Z9y6FvqpBNOD72X/o+/N8qTxPk895VSpt/a9dFr+tTPISWFH6XSdowtYr
-         fwKoRou+XizbYLNZWxX6KP00m2uoenaYO4aHiJkohou2sOM3J/qyNMAiNKvAN6fg0egx
-         boOwO1xaCU4j80k9KCZ9Kdw4im6Eom9GBBDMBkrLeoFfaQ9etBfSyuaBONB78P+gWvW9
-         sjoC6FKcjoO3UNGhMUnRQ6HZeL60ecqjQDtiCmdHCHVe/l6xqhSc44oE8vjCu8XG56hv
-         tCQKGNPVZ/SYSnIDGbkaDzv2MXckh5Hn0GVmMPh0h9naGNewbQdHkIYLpNx8cKoO3vWM
-         PIPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719533159; x=1720137959;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q0ZSvkaYPL0aMiPJTdyZjWw4rhkAuBmNQ840zqqrBqw=;
-        b=hDa7391n9H0yK6yd+CNpGs4Q9nNH3f2WFp3dMp0621RO6xppTZlh1UbZiv9HneSGKz
-         IE7Y6gXbnC9/v63VAtqoM+040mh5C+dCkrup5Nms9glpKqviI/9s3BSrvIhfAdZK5rYg
-         QmhH7wckEyX+/lxCpaXX02XgKprgJ3GjPZbaVROQ+yasMAtL/wG281PPXRrK2nFM8qWU
-         n8nY0UJ91BpF9yhDtZi+EM5nW2sEGo5eX9fBXjjG9gT5nxNOlLxoAXlSLpbkr2zm2XU/
-         5V7gTcXPKZ6jJg3Oq4zMKP2WaELIyhXq1xnLNRgoBkAFFPpS69+dtpZXwNm681ntiiSJ
-         KKVw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmUoXjvBFENBvWyszH9B7qobnmDy3RdvPQSFtk4o4RxM7FXc2IM7wlgGlrCQdR+myYxQNTG9xkA8IzzhaCqvSHg7cPCGyrmFpQQnPn5+8byeeyEbvevMy1KW3k/OVIxS9/KXPpH7aKm8fPKlTmBCVS91uc/k9/0r8xxTMLHy9rxgRjuA==
-X-Gm-Message-State: AOJu0YxOE8+ATL/ux+UL4oq7VaVM94AU6pUpGTouaZ7foah9+NoiwXq3
-	/pdYi3rKUUmGJ0Q6dz3tA9yJr6txRBFnu9DK+FKZrBpdqX+b64RW
-X-Google-Smtp-Source: AGHT+IH/QWpADj9D7MciL00kSwES1GkfECaQH7fjfH0/mq7eWSZ/ccaxiPO/zqqPT6IKLCNy18Co4w==
-X-Received: by 2002:a17:902:a501:b0:1fa:d77:21f8 with SMTP id d9443c01a7336-1fa23f158c6mr108575135ad.42.1719533158537;
-        Thu, 27 Jun 2024 17:05:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1596675sm3333215ad.249.2024.06.27.17.05.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jun 2024 17:05:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dbfa52ab-c6fa-4c11-89bd-87445941bac3@roeck-us.net>
-Date: Thu, 27 Jun 2024 17:05:55 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="URWNnbeE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719552587; x=1751088587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MuOWgcJQOSUBmO2Vy37Xg7xftpXiU+ZC8r+Ven/mpw4=;
+  b=URWNnbeES5n+B6OWdZfGcITG4kkZGUcGMnMbyQN5SWruZk4yUiSDgqN0
+   YNT2NdXA2AYXCyr5qCi5aoj0sZo3ceXgSarl2PQEM/n3JWubfi3uNUinx
+   iIVIw4GG+YFe+HMs8obzdfgtK/xWKCY3LBg+J0qol4lEVfMvW8i7Lih8h
+   oAWAYjV2e8vC1uZSmzwBC+rtQZmePybw6rnmRMlEbD5dqBMXdkMM6txgk
+   aVs+OIYGSuT6tjqQbNa4KX9x63cjKJlr70IRghpP+qNVUrlfx7LrGKX3T
+   pFgUWlDfPK/Rw7PG3N0XX5ZUOu563Wd7amnJVt0NEVtE8E1xn5kgUf/sl
+   A==;
+X-CSE-ConnectionGUID: z9SLJq7CQdGYRBlHqGg69A==
+X-CSE-MsgGUID: meu3jU/jTUy7ylbJ7x4yPg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="19621229"
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="19621229"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 22:29:46 -0700
+X-CSE-ConnectionGUID: gIPGBZVMRcK+8kzmzM3kyw==
+X-CSE-MsgGUID: 1rkE5azqT8KLfF+K4mIHQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="49802219"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 27 Jun 2024 22:29:43 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sN4B2-000Gpm-0Y;
+	Fri, 28 Jun 2024 05:29:40 +0000
+Date: Fri, 28 Jun 2024 13:29:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Alex Vdovydchenko <xzeol@yahoo.com>
+Subject: Re: [PATCH v2 2/2] hwmon: add MP5920 driver
+Message-ID: <202406281339.YzOThRyw-lkp@intel.com>
+References: <20240627090113.391730-3-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/9] Add Mule MFD support
-To: Farouk Bouabid <farouk.bouabid@cherry.de>,
- Quentin Schulz <quentin.schulz@cherry.de>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Heiko Stuebner <heiko@sntech.de>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20240618-dev-mule-i2c-mux-v4-0-5462d28354c8@cherry.de>
- <fdeea79f-4568-4e70-9b49-0c02abc91170@roeck-us.net>
- <4f92528b-8311-4c0b-998b-f0221d7bd474@cherry.de>
- <c2803eed-b4f4-44cf-a7f7-9557d05e798e@roeck-us.net>
- <19ee521d-298d-4718-bdc6-f282666de371@cherry.de>
- <2a1ae708-3718-4f70-9837-bcc50b7c8f66@roeck-us.net>
- <85b2061a-9f5b-4998-b9cb-21308ee1965f@cherry.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <85b2061a-9f5b-4998-b9cb-21308ee1965f@cherry.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240627090113.391730-3-xzeol@yahoo.com>
 
-On 6/24/24 09:13, Farouk Bouabid wrote:
-> Hi Guenter,
-> 
-> On 19.06.24 15:31, Guenter Roeck wrote:
->> On 6/19/24 00:45, Farouk Bouabid wrote:
->>
->>>>
->>>> If it is properly defined in devicetree, the emulated AMC6821 should be
->>>> an i2c device, possibly sitting behind an i2c multiplexer, not a
->>>> platform device.
->>>
->>>
->>> The emulated AMC6821 and the Mule I2C mux are both reachable using I2C address (0x18), and hence the use of MFD as the mux only uses one I2C register that is not used by AMC6821.
->>>
->>
->> Whatever you do, the amc chip is still an i2c driver and needs to remain one.
->> Modeling it as platform driver is simply wrong, and I won't accept those patches.
->>
-> 
-> The issue that we have cannot be handled by an I2C mux because in that case both the mux and its child would have the same address which is not supported in the I2C subsystem:
-> 
-> 
-> i2c-mux@18 {
-> 
->          compatible = "tsd,mule-i2c-mux";
-> 
->          reg = <0x18>;
-> 
->          #address-cells = <1>;
-> 
->          #size-cells = <0>;
-> 
-> 
->          i2c10: i2c@0 {
-> 
->                  reg = <0x0>;
-> 
->                  #address-cells = <1>;
-> 
->                  #size-cells = <0>;
-> 
-> 
->                  fan: fan@18 {
-> 
->                          compatible = "ti, amc6821";
-> 
->                          reg = <0x18>;
-> 
->                  };
-> 
->          };
-> 
-> };
-> 
-> 
-> The I2C maintainer rejected supporting this use case and suggested that an MFD could probably be more suitable.
-> 
-> 
-> On one hand, the MFD looks indeed more appropriate and a lot of I2C devices are modeled through platform sub devices. On the other hand we are emulating the amc6821 in our device which requires us to have it modeled as platform:
-> 
+Hi Alex,
 
-The difference is that those other i2c devices are real multi-function
-devices.
+kernel test robot noticed the following build errors:
 
-> 
->        +--------+----------------+------------------------------+
->        |  Mule         (MFD)                                    |
->   0x18 |        +----------------+                              |
-> --------+----->|    amc6821     |                              |
->        | |      +----------------+                              |
->        | +----->|      Mux       |-----+                        |
->        |        +----------------+     |                        |
->        |                               V__          +---------+ |
->        |                              |   \-------->| isl1208 | |
->        |                              |   |         +---------+ |
->   0x6f |                              | M |-------->| dev #1  | |
-> ------------------------------------>| U |         +---------+ |
->        |                              | X |-------->| dev #2  | |
->        |                              |   |         +---------+ |
->        |                              |   /-------->| dev #3  | |
->        |                              |__/          +---------+ |
->        +--------------------------------------------------------+
-> 
-> 
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on next-20240627]
+[cannot apply to robh/for-next krzk-dt/for-next linus/master v6.10-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It would have been much more appropriate to use a different I2C address for the mux.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Vdovydchenko/dt-bindings-hwmon-Add-MPS-mp5920/20240628-021125
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240627090113.391730-3-xzeol%40yahoo.com
+patch subject: [PATCH v2 2/2] hwmon: add MP5920 driver
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20240628/202406281339.YzOThRyw-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281339.YzOThRyw-lkp@intel.com/reproduce)
 
-> If we cannot proceed with that then we could add a compatible to the amc6821 driver to add the mux device (Basically the "tsd,mule" compatible in amc6821 compatible list would be a combo driver with mux logic + amc6821). Do you think that is more appropriate ?
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406281339.YzOThRyw-lkp@intel.com/
 
-Implement the mux as part of the amc6821 driver ? No. We could discuss
-instantiating the i2c mux driver from the amc6821 driver.
+All error/warnings (new ones prefixed by >>):
 
-Guenter
+>> drivers/hwmon/pmbus/mp5920.c:26:9: error: 'pages' undeclared here (not in a function); did you mean 'page'?
+      26 |         pages = 1,
+         |         ^~~~~
+         |         page
+>> drivers/hwmon/pmbus/mp5920.c:27:9: error: 'format' undeclared here (not in a function)
+      27 |         format[PSC_VOLTAGE_IN] = direct,
+         |         ^~~~~~
+>> drivers/hwmon/pmbus/mp5920.c:32:9: error: 'm' undeclared here (not in a function); did you mean 'tm'?
+      32 |         m[PSC_VOLTAGE_IN] = 2266,
+         |         ^
+         |         tm
+>> drivers/hwmon/pmbus/mp5920.c:33:9: error: 'b' undeclared here (not in a function); did you mean 'mb'?
+      33 |         b[PSC_VOLTAGE_IN] = 0,
+         |         ^
+         |         mb
+>> drivers/hwmon/pmbus/mp5920.c:34:9: error: 'R' undeclared here (not in a function)
+      34 |         R[PSC_VOLTAGE_IN] = -1,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:44:9: warning: excess elements in struct initializer
+      44 |         m[PSC_TEMPERATURE] = 1067,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:44:9: note: (near initialization for 'mp5920_info')
+   drivers/hwmon/pmbus/mp5920.c:45:9: warning: excess elements in struct initializer
+      45 |         b[PSC_TEMPERATURE] = 20500,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:45:9: note: (near initialization for 'mp5920_info')
+   drivers/hwmon/pmbus/mp5920.c:46:9: warning: excess elements in struct initializer
+      46 |         R[PSC_TEMPERATURE] = -2,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:46:9: note: (near initialization for 'mp5920_info')
+>> drivers/hwmon/pmbus/mp5920.c:47:9: error: 'func' undeclared here (not in a function)
+      47 |         func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
+         |         ^~~~
+   drivers/hwmon/pmbus/mp5920.c:47:9: warning: excess elements in struct initializer
+   drivers/hwmon/pmbus/mp5920.c:47:9: note: (near initialization for 'mp5920_info')
 
+
+vim +26 drivers/hwmon/pmbus/mp5920.c
+
+    24	
+    25	static struct pmbus_driver_info mp5920_info = {
+  > 26		pages = 1,
+  > 27		format[PSC_VOLTAGE_IN] = direct,
+    28		format[PSC_VOLTAGE_OUT] = direct,
+    29		format[PSC_CURRENT_OUT] = direct,
+    30		format[PSC_POWER] = direct,
+    31		format[PSC_TEMPERATURE] = direct,
+  > 32		m[PSC_VOLTAGE_IN] = 2266,
+  > 33		b[PSC_VOLTAGE_IN] = 0,
+  > 34		R[PSC_VOLTAGE_IN] = -1,
+    35		m[PSC_VOLTAGE_OUT] = 2266,
+    36		b[PSC_VOLTAGE_OUT] = 0,
+    37		R[PSC_VOLTAGE_OUT] = -1,
+    38		m[PSC_CURRENT_OUT] = 546,
+    39		b[PSC_CURRENT_OUT] = 0,
+    40		R[PSC_CURRENT_OUT] = -2,
+    41		m[PSC_POWER] = 5840,
+    42		b[PSC_POWER] = 0,
+    43		R[PSC_POWER] = -3,
+  > 44		m[PSC_TEMPERATURE] = 1067,
+    45		b[PSC_TEMPERATURE] = 20500,
+    46		R[PSC_TEMPERATURE] = -2,
+  > 47		func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
+    48			PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
+    49			PMBUS_HAVE_TEMP,
+    50	};
+    51	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
