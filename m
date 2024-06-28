@@ -1,148 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F04E6EB56;
-	Fri, 28 Jun 2024 19:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51B780034;
+	Fri, 28 Jun 2024 21:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719601722; cv=none; b=iq6qjFRu5PeFaxjkXnqhWp/nKORmN43xsfRdCSR6yC+18mF0PplorJOesrU6kwAiPOi+chSebYkZ9DNbyMIXQ/8UWfLx3+3nQ/Niopgos8n3adMNY9aFYYZ9AFgdwiJ350Z4BkRhefECb7iEmR9Gj6n82qOsTc9ZzCgy57ZUcq0=
+	t=1719611273; cv=none; b=PjVVZnBwNO54K3h8SeGgyTxVDRVOa9c1PkzMaXbA5WtG1LyM8tNwvgwz4LRBbQFNESNmaIJl41zbKnXd1S/G4+r7UTH9Hrl17SUhNjcUremnnKtFPXHmsjRuzRW/HE8rWtFeRWinih+bWVkXa1YooxpYwpgEoX9yl5RFow37zDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719601722; c=relaxed/simple;
-	bh=e9grNQ3HIDWrOxb68W815q7PLDeOfmbqGLJtbuYESHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ux5SICgBpWphvr7dTEMdVDLwN5EoyneATboZzkKVCrCEqv2xv4FFT2RNgHPZCwBn1iuabWlDV39AAKikw4ijBthlPriMIV4NYrtFFbKdJD0xS/p4OJsjZwV73Cq3+SK8GQblDp055kpFwpOQ+83xyX/xlnVc0ayj8LfnLQlgwt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qknRx32z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719611273; c=relaxed/simple;
+	bh=B/8tZDJsGVsaLODreD1PIpyCj/+GdBxQ3ATGY0y3Po0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kBwJ37KsXR8QhElszE+kRSEkygvlV3DoA6FfK96cOcUPIanzyyikvds/Cw0SzKX3ztpepxMXNCKstXW8I55ACXXcEUtQRLGz2cqGR2R0a+VVBdvvPFvmmU0gMdHeovumtj8MXQkELSRfNmZaqO+JKs8zGxojc3BDKDgcyExybDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=pdyKr325; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qknRx32z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31B3C116B1;
-	Fri, 28 Jun 2024 19:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719601721;
-	bh=e9grNQ3HIDWrOxb68W815q7PLDeOfmbqGLJtbuYESHM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qknRx32z/f0BEsD7wRERvSvK05nFQ9raDozdkbS08y2foJ+3Nbpi0j5nQytQB90D/
-	 0VF+J9qYuM/29Hee7ASc9PtH4oZAPRq+nyHhIuHu+jaYxApdgJiCRKQXL63lqVqTK3
-	 K8X1XKq3QUFmhfNbLCaPnqqB6YwuwDHkT5uF6DAK8/tzM4kP5Yp2mQPf7nR2SJ5Dr2
-	 S8DKosUq6f5yW1UfLT5JXynB0VEAgLWnxDDrh1tq4oA+jiuO3suHgbf2dJYjajrrA4
-	 LcAPvQkVJJSOli2Mp6wDpSUG/5IdzR0I0pCcRDCExWUSl9i56uG5diY6+IgXovZwNN
-	 g45LJagz6AboQ==
-Date: Fri, 28 Jun 2024 20:08:34 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 2/2] hwmon: iio: Add labels from IIO channels
-Message-ID: <20240628200834.44c6453a@jic23-huawei>
-In-Reply-To: <f6ee3049-47a0-4c84-ab90-2321bf6970d0@linux.dev>
-References: <20240624174601.1527244-1-sean.anderson@linux.dev>
-	<20240624174601.1527244-3-sean.anderson@linux.dev>
-	<ff43e01e-5a26-4b75-bfaa-ed3ad4395e7c@roeck-us.net>
-	<20240624202433.29564802@jic23-huawei>
-	<f6ee3049-47a0-4c84-ab90-2321bf6970d0@linux.dev>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="pdyKr325"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1719611250; x=1720216050; i=w_armin@gmx.de;
+	bh=VA8OHoFyFxNsoLyIQwYK59+hH83W2X16hxmTj+3risE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=pdyKr325ds91WRMkamNsTr/XbH63AkeSgMqcGq9nMyOrAAQEnNgI6taCXeVHSC5d
+	 7QLqICg4m3ORyeSlhF1gbr05STf+po9DKbRDSdoLou4jwaQZ4KZfomaAW+jDMZMEI
+	 VKxWfQjpzkDQBluKDlgiJI7iBz8xoEWk12VRjbXIMtAgeCNpRutd7BNMb5DG9vH3y
+	 GrdIefFXPsTsQv6X4QCA+QlmzG7ZhzpKdPVwoTUrfKfLno+D6Mrai3uPUmzVPTOCI
+	 BtDkSXNfGAvhmriEPLPddOLVHySVdcAj4Wta48dFaS+38R0ezVUY+mwHDV0NSkPUz
+	 FK8WTgiEKrzVWr76GQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MulqN-1seI1h1KUt-00t7wm; Fri, 28 Jun 2024 23:47:30 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: pali@kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Dell OptiPlex 7060 to DMI table
+Date: Fri, 28 Jun 2024 23:47:23 +0200
+Message-Id: <20240628214723.19665-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:edCRx5YbhlfbA5nZqBnVML37Fv32WAzxjXHbspgsi0Io7Z+yFC4
+ l+VmUGRSOddmhnPeGHXVA/tVTaLp2svvZO8FYTFqzqzjh/6eWjwazfOHL0gwoHyqzjl5F4/
+ BNn10veGLkZnv2vjLigKQd/rpbjL/7X9AGhz7xbY5vrE+bykCoSx1tAifD4r5a09eFnAxFg
+ UxldkEJsc6bgTD8/EAM3g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:e3gYM6X2Pmw=;rWgXJM43Zx8LD6ixVfTkZpEFFcc
+ Lju95X/jBfQwzwS6JtuZ2vK8iuRhXpLbZZMozycgVApGiNx5o4qALm8uM/OXbv0GCrgw7XHOs
+ /SUo/2EZAVVYRIc2n+SZZa4MA+yKQGkC91WkSNVfrvda2VEn1ePFrxkD4Hz1vlZ5iI4wG8NT+
+ 5ODFp1QifXes6J7W9iTanWJxOyN3aeWUB/MQ5S3lJM9bo5pTvzEL/OGD1tfiXzm6A9F1SM9r4
+ rMHalKHXmOHZ50dIQmBtTu8AMClTl0YfPiHH9zjvgmGhEeIZ3bTDPxl39pYmYRVTxxP10xgfi
+ mbGoTQqFdwDcQzYDxL8VBLfBX1atRKNp6cQIaLZildShX59BuGKVZkLPUw6lpqKlav+RcSYuT
+ Dfi65nAXTPYxTT1yE6EU/ZaI4eHQB2cAeIGt1c8GHQQY7il+yACjx/Xj2aX0qDZk+Dmel9NCt
+ EU0AY+vvi+95Vbqpm/bFmYPruVRdVCWPEW/xhmg9wMM5w2pZ8/2fjHZwojtI10MgK+1E4JWZI
+ 6NWVh/8LVhlBeu+xZFHh+k96xAPbNCt1mERpS09jLZP9CXPz6c4I0Xp6mFZ47Dz2W3L7sFS4T
+ OEJsg3a4dEuhMLA0w+2JwW6doIaAWej4E86d9OZ7HB/tb0zcpu2oLiiE22DIsLTmm0E/cLxx8
+ lrVhKyff6OKHd1RhibqMnNejEWNprHtP7s+gG9khc6WE31srMywNUnHgoFHX3MB/hxn46hYtY
+ CA2hnRpfQhbUwMFZVr1VANdA/LAS5tI91Ka3c4YK2mYhVFTZZkQqX7mujFTfOfgHJJfKYRVP5
+ YmCtzB0sComymoyM6LAh6MnrGK7R21Iy4OusZ70gNDl54=
 
-On Thu, 27 Jun 2024 14:37:01 -0400
-Sean Anderson <sean.anderson@linux.dev> wrote:
+The BIOS on this machine is buggy and will in some cases return
+an error when trying to get the fan state, but reading of the
+RPM values and the temperature sensors still works.
 
-> On 6/24/24 15:24, Jonathan Cameron wrote:
-> > On Mon, 24 Jun 2024 11:47:39 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> >   
-> >> On 6/24/24 10:46, Sean Anderson wrote:  
-> >> > Add labels from IIO channels to our channels. This allows userspace to
-> >> > display more meaningful names instead of "in0" or "temp5".
-> >> > 
-> >> > Although lm-sensors gracefully handles errors when reading channel
-> >> > labels, the ABI says the label attribute
-> >> >     
-> >> >> Should only be created if the driver has hints about what this voltage
-> >> >> channel is being used for, and user-space doesn't.    
-> >> > 
-> >> > Therefore, we test to see if the channel has a label before
-> >> > creating the attribute.
-> >> >     
-> >> 
-> >> FWIW, complaining about an ABI really does not belong into a commit
-> >> message. Maybe you and lm-sensors don't care about error returns when
-> >> reading a label, but there are other userspace applications which may
-> >> expect drivers to follow the ABI. Last time I checked, the basic rule
-> >> was still "Don't break userspace", and that doesn't mean "it's ok to
-> >> violate / break an ABI as long as no one notices".
-> >>   
-> >> > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> >> > ---
-> >> > 
-> >> > Changes in v2:
-> >> > - Check if the label exists before creating the attribute
-> >> > 
-> >> >   drivers/hwmon/iio_hwmon.c | 45 ++++++++++++++++++++++++++++++++++-----
-> >> >   1 file changed, 40 insertions(+), 5 deletions(-)
-> >> > 
-> >> > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-> >> > index 4c8a80847891..5722cb9d81f9 100644
-> >> > --- a/drivers/hwmon/iio_hwmon.c
-> >> > +++ b/drivers/hwmon/iio_hwmon.c
-> >> > @@ -33,6 +33,17 @@ struct iio_hwmon_state {
-> >> >   	struct attribute **attrs;
-> >> >   };
-> >> >   
-> >> > +static ssize_t iio_hwmon_read_label(struct device *dev,
-> >> > +				  struct device_attribute *attr,
-> >> > +				  char *buf)
-> >> > +{
-> >> > +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-> >> > +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
-> >> > +	struct iio_channel *chan = &state->channels[sattr->index];
-> >> > +
-> >> > +	return iio_read_channel_label(chan, buf);
-> >> > +}
-> >> > +    
-> >> 
-> >> I personally find it a bit kludgy that an in-kernel API would do a
-> >> sysfs write like this and expect a page-aligned buffer as parameter,
-> >> but since Jonathan is fine with it:  
-> > 
-> > That's a good point that I'd not picked up on and it probably makes sense
-> > to address that before it bites us on some other subsystem.
-> > 
-> > It was more reasonable when the only path was to a light wrapper that went
-> > directly around the sysfs callback. Now we are wrapping these up for more
-> > general use we should avoid that restriction.
-> > 
-> > Two approaches to that occur to me.
-> > 1) Fix up read_label() everywhere to not use sysfs_emit and take a size
-> >    of the buffer to print into. There are only 11 implementations so
-> >    far so this should be straight forward.  
-> 
-> This API is the same as the existing iio_read_channel_ext_info. It is
-> used for the same purpose: forwarding sysfs reads/writes from one
-> device to another (see e.g. iio-mux and iio-rescale). ext_info is used
-> by around 85 drivers, so it is not so trivial to change the API. While I
-> agree that the current API is unusual, it's not too bad given that we
-> get the same guarantees from device_attribute.show.
+Closes: https://github.com/vitorafsr/i8kutils/issues/38
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+ drivers/hwmon/dell-smm-hwmon.c         | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-Fair enough.  Maybe we can clean this up at somepoint but let's not do 
-it today. Applied to the togreg branch of iio.git and pushed out as testing for
-0-day to poke at it and maybe find something we missed.
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index 977263cb57a8..74905675d71f 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -360,6 +360,8 @@ Firmware Bug                                          =
+  Affected Machines
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ Reading of fan states return spurious errors.           Precision 490
 
-Jonathan
++                                                        OptiPlex 7060
++
+ Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
 
-> 
-> --Sean
-> 
-> > 2) Add a bounce buffer so we emit into a suitable size for sysfs_emit()
-> >   then reprint from there into a buffer provided via this interface with
-> >   the appropriate size provided.  This one is clunky and given the relatively
-> >   few call sits I think fixing it via option 1 is the better route forwards.  
-> 
-> 
+                                                         Studio XPS 8100
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 48a81c64f00d..c75bfe93f2f6 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1263,6 +1263,13 @@ static const struct dmi_system_id i8k_dmi_table[] _=
+_initconst =3D {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "MP061"),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell OptiPlex 7060",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7060"),
++		},
++	},
+ 	{
+ 		.ident =3D "Dell Precision",
+ 		.matches =3D {
+=2D-
+2.39.2
 
