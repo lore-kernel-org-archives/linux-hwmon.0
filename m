@@ -1,121 +1,100 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51B780034;
-	Fri, 28 Jun 2024 21:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D311B80630;
+	Fri, 28 Jun 2024 21:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719611273; cv=none; b=PjVVZnBwNO54K3h8SeGgyTxVDRVOa9c1PkzMaXbA5WtG1LyM8tNwvgwz4LRBbQFNESNmaIJl41zbKnXd1S/G4+r7UTH9Hrl17SUhNjcUremnnKtFPXHmsjRuzRW/HE8rWtFeRWinih+bWVkXa1YooxpYwpgEoX9yl5RFow37zDE=
+	t=1719611828; cv=none; b=b6RYmK0FLDnc4JpKaw1qyX7p9+47TOjeQHLYpZcLRsXzBGWXqOBtQhogmFWWovsWzDxNT9ac8Dk5Sk8gWspZlTC4sGTLjmkFo2X21smYyLzeg5nEdd+qcD1jeGtqmBlHWM54RJIk/pUcY7yXre+CL7AKPCaEh8XPFjpkwmx7HTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719611273; c=relaxed/simple;
-	bh=B/8tZDJsGVsaLODreD1PIpyCj/+GdBxQ3ATGY0y3Po0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kBwJ37KsXR8QhElszE+kRSEkygvlV3DoA6FfK96cOcUPIanzyyikvds/Cw0SzKX3ztpepxMXNCKstXW8I55ACXXcEUtQRLGz2cqGR2R0a+VVBdvvPFvmmU0gMdHeovumtj8MXQkELSRfNmZaqO+JKs8zGxojc3BDKDgcyExybDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=pdyKr325; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1719611828; c=relaxed/simple;
+	bh=2SzSLQDtkY9neHotg9G5l9A/qZHaOlO/5cgaX8OuoYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qb8dmySztojSGZnVE/QyvLJsWsIo3pBt4cnVMWZpIc4sfXGmAdEle4t5/A7He63cMIH34BTw3v6ELbeaqRVwTWo3UHTKBk/JqPIMLjOPBaaMnoPssnpizR1df+C/kxo02ylpjeflsiWp+HhRLGMxfLCCEHblSrUjvSOhM4DDuM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XesoriSQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="pdyKr325"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1719611250; x=1720216050; i=w_armin@gmx.de;
-	bh=VA8OHoFyFxNsoLyIQwYK59+hH83W2X16hxmTj+3risE=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=pdyKr325ds91WRMkamNsTr/XbH63AkeSgMqcGq9nMyOrAAQEnNgI6taCXeVHSC5d
-	 7QLqICg4m3ORyeSlhF1gbr05STf+po9DKbRDSdoLou4jwaQZ4KZfomaAW+jDMZMEI
-	 VKxWfQjpzkDQBluKDlgiJI7iBz8xoEWk12VRjbXIMtAgeCNpRutd7BNMb5DG9vH3y
-	 GrdIefFXPsTsQv6X4QCA+QlmzG7ZhzpKdPVwoTUrfKfLno+D6Mrai3uPUmzVPTOCI
-	 BtDkSXNfGAvhmriEPLPddOLVHySVdcAj4Wta48dFaS+38R0ezVUY+mwHDV0NSkPUz
-	 FK8WTgiEKrzVWr76GQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MulqN-1seI1h1KUt-00t7wm; Fri, 28 Jun 2024 23:47:30 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: pali@kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XesoriSQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B41C116B1;
+	Fri, 28 Jun 2024 21:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719611828;
+	bh=2SzSLQDtkY9neHotg9G5l9A/qZHaOlO/5cgaX8OuoYk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XesoriSQQdUF02x7RS84iZD03IruGXLnqqOLjSrbFRPIw5rIbKH5RUrHiv0YdYJvd
+	 ayFozyvx0EshMjX8xEmOZIvexUrItS4mn9ysJTDHH1f4shANqgnmAEGG+9EicBE3SP
+	 38E5LJm/8cdc9r1ouCIT4RnDW2R1dfn/oP0BzcnJdfPHCVJwh7lh+VpHY2GFO3VTJN
+	 EIbSz7NLX5nqgWC9YSo7PpCmbWpvaUl+1DZy5xXpKlGPPmUgdMA3YWiGSsJN6ZTsr3
+	 eF94ESmTP5yKwRZX1Eay5WMd0biSLZco6jC3GzMWOHfPY6UG9SG+siWTnyQHlIlg98
+	 RvpdVTqJgx+FA==
+Received: by pali.im (Postfix)
+	id CDAF37A6; Fri, 28 Jun 2024 23:57:04 +0200 (CEST)
+Date: Fri, 28 Jun 2024 23:57:04 +0200
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Add Dell OptiPlex 7060 to DMI table
-Date: Fri, 28 Jun 2024 23:47:23 +0200
-Message-Id: <20240628214723.19665-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell OptiPlex 7060 to DMI table
+Message-ID: <20240628215704.i6ohbuz2zgegr27p@pali>
+References: <20240628214723.19665-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:edCRx5YbhlfbA5nZqBnVML37Fv32WAzxjXHbspgsi0Io7Z+yFC4
- l+VmUGRSOddmhnPeGHXVA/tVTaLp2svvZO8FYTFqzqzjh/6eWjwazfOHL0gwoHyqzjl5F4/
- BNn10veGLkZnv2vjLigKQd/rpbjL/7X9AGhz7xbY5vrE+bykCoSx1tAifD4r5a09eFnAxFg
- UxldkEJsc6bgTD8/EAM3g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:e3gYM6X2Pmw=;rWgXJM43Zx8LD6ixVfTkZpEFFcc
- Lju95X/jBfQwzwS6JtuZ2vK8iuRhXpLbZZMozycgVApGiNx5o4qALm8uM/OXbv0GCrgw7XHOs
- /SUo/2EZAVVYRIc2n+SZZa4MA+yKQGkC91WkSNVfrvda2VEn1ePFrxkD4Hz1vlZ5iI4wG8NT+
- 5ODFp1QifXes6J7W9iTanWJxOyN3aeWUB/MQ5S3lJM9bo5pTvzEL/OGD1tfiXzm6A9F1SM9r4
- rMHalKHXmOHZ50dIQmBtTu8AMClTl0YfPiHH9zjvgmGhEeIZ3bTDPxl39pYmYRVTxxP10xgfi
- mbGoTQqFdwDcQzYDxL8VBLfBX1atRKNp6cQIaLZildShX59BuGKVZkLPUw6lpqKlav+RcSYuT
- Dfi65nAXTPYxTT1yE6EU/ZaI4eHQB2cAeIGt1c8GHQQY7il+yACjx/Xj2aX0qDZk+Dmel9NCt
- EU0AY+vvi+95Vbqpm/bFmYPruVRdVCWPEW/xhmg9wMM5w2pZ8/2fjHZwojtI10MgK+1E4JWZI
- 6NWVh/8LVhlBeu+xZFHh+k96xAPbNCt1mERpS09jLZP9CXPz6c4I0Xp6mFZ47Dz2W3L7sFS4T
- OEJsg3a4dEuhMLA0w+2JwW6doIaAWej4E86d9OZ7HB/tb0zcpu2oLiiE22DIsLTmm0E/cLxx8
- lrVhKyff6OKHd1RhibqMnNejEWNprHtP7s+gG9khc6WE31srMywNUnHgoFHX3MB/hxn46hYtY
- CA2hnRpfQhbUwMFZVr1VANdA/LAS5tI91Ka3c4YK2mYhVFTZZkQqX7mujFTfOfgHJJfKYRVP5
- YmCtzB0sComymoyM6LAh6MnrGK7R21Iy4OusZ70gNDl54=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240628214723.19665-1-W_Armin@gmx.de>
+User-Agent: NeoMutt/20180716
 
-The BIOS on this machine is buggy and will in some cases return
-an error when trying to get the fan state, but reading of the
-RPM values and the temperature sensors still works.
+On Friday 28 June 2024 23:47:23 Armin Wolf wrote:
+> The BIOS on this machine is buggy and will in some cases return
+> an error when trying to get the fan state, but reading of the
+> RPM values and the temperature sensors still works.
 
-Closes: https://github.com/vitorafsr/i8kutils/issues/38
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
- drivers/hwmon/dell-smm-hwmon.c         | 7 +++++++
- 2 files changed, 9 insertions(+)
+Does this error affects machine usage (e.g. freeze of CPU or some
+erratic fan behavior)? Or just kernel does not receive fan state and is
+unable to report meaningful value to userspace?
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
-dell-smm-hwmon.rst
-index 977263cb57a8..74905675d71f 100644
-=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -360,6 +360,8 @@ Firmware Bug                                          =
-  Affected Machines
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- Reading of fan states return spurious errors.           Precision 490
-
-+                                                        OptiPlex 7060
-+
- Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
-
-                                                         Studio XPS 8100
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 48a81c64f00d..c75bfe93f2f6 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1263,6 +1263,13 @@ static const struct dmi_system_id i8k_dmi_table[] _=
-_initconst =3D {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "MP061"),
- 		},
- 	},
-+	{
-+		.ident =3D "Dell OptiPlex 7060",
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7060"),
-+		},
-+	},
- 	{
- 		.ident =3D "Dell Precision",
- 		.matches =3D {
-=2D-
-2.39.2
-
+> 
+> Closes: https://github.com/vitorafsr/i8kutils/issues/38
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  Documentation/hwmon/dell-smm-hwmon.rst | 2 ++
+>  drivers/hwmon/dell-smm-hwmon.c         | 7 +++++++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+> index 977263cb57a8..74905675d71f 100644
+> --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> @@ -360,6 +360,8 @@ Firmware Bug                                            Affected Machines
+>  ======================================================= =================
+>  Reading of fan states return spurious errors.           Precision 490
+> 
+> +                                                        OptiPlex 7060
+> +
+>  Reading of fan types causes erratic fan behaviour.      Studio XPS 8000
+> 
+>                                                          Studio XPS 8100
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 48a81c64f00d..c75bfe93f2f6 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1263,6 +1263,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
+>  			DMI_MATCH(DMI_PRODUCT_NAME, "MP061"),
+>  		},
+>  	},
+> +	{
+> +		.ident = "Dell OptiPlex 7060",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7060"),
+> +		},
+> +	},
+>  	{
+>  		.ident = "Dell Precision",
+>  		.matches = {
+> --
+> 2.39.2
+> 
