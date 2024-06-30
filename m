@@ -1,139 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBF6374D1;
-	Sun, 30 Jun 2024 11:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F36615350B;
+	Sun, 30 Jun 2024 16:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719747727; cv=none; b=Bffh1gDjABDAnGzvXSPdhrAvFcAXrykSqJResguuSM6YFMxIA75OtiD8CpamR2OtEEMr+9EF3qrJbt74hqxsAaHwIhHshshKGeDrrjBeCXMB9t0vtVCmdZkBZmWFIe3psdJfWalgk+HgUnZgzPGGew8pJjJNK4sA/KVgpV6uits=
+	t=1719764014; cv=none; b=cQmFoYN/s6gi3OqirIpDjx7AU8NV3rUj4XDXyM60rzWifDiZc9L1gOgxc6YaX8TD4hXkeA+cuZpb0N35HWZFNmZwsd8CfgWeUVgH1qlF0FmAr8IRho82MJd7LGsdKi/qAsxg8giB+vohcJua/lEDpbqutC94mIEn4QHuyw5On1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719747727; c=relaxed/simple;
-	bh=Wr9YU7QH4kFYCtMsLVkZVjG1ysibb7bqSYIXB/NkZ9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FUQqaUUHw1OHWUl+wGugMWFTJSxrflbZSo6PRPtAWIrazqeHnt7QvWWVVn3rjCfOFlb/IEXSZnYAhfN2MIVnsV/ZOPgtxDTzOh8on2+s8rz9kcoDI0RnvZW9dClwgcT6ECST5mWexAjh4RiNjH/OZOE2rzsH4+HvHiHn20IYoBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyigFXNP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719764014; c=relaxed/simple;
+	bh=gBegh4lCDc3lzGzvIk0yZgjkGG7HNx8Q0MLpf28nm90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HBNfLr9vWdOhqHVhBfy46rwBaScQCRYcKraySxlUzn+j1YMnjT3SlqQ6IpUjFYXp5XydB4SRqgVlL6LwUhrpfKsh/ppJu3mIuaIgP0hSzdZNF9vL745EaBCHOTS4zMBAqOsk/iWXGu5s+vktdYBDm6pDpmP5cPM6o4QelLHKJBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWzrC/CU; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyigFXNP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912B9C2BD10;
-	Sun, 30 Jun 2024 11:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719747727;
-	bh=Wr9YU7QH4kFYCtMsLVkZVjG1ysibb7bqSYIXB/NkZ9I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=IyigFXNPSsQwaus0q13F56fpvlAIyYBJqRffqCVbc7CnVItuR1wQd4GkxdrxTrWdl
-	 cCBN+A1vNszzZc213/Y2wHNsxqTCWeIa/8B1QwYi+5apUbxpIKnrxVP6Bvx6z9N9de
-	 nEiLpcVNua55QazzwO6hROs7gAzndsXxnk7JRBJy2kagOB/aALIoA05Dswl7hVJc7G
-	 bFkFXX7PIWEIp//r3kOi2HDNUj3eS7SM7+iaN6OWBCCYj2GQtN/8LhnBI7ycfKUJI2
-	 vr7aU5gKO0wHkph72QNLeqolZz966xpbePy8VfL3i2yjSgn03vDy/vTk1WajH9ZpMp
-	 tSm4Gv1N4vMjQ==
-Date: Sun, 30 Jun 2024 12:41:57 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Jean Delvare <jdelvare@suse.com>, Guenter
- Roeck <linux@roeck-us.net>, Antoniu Miclaus <antoniu.miclaus@analog.com>,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (ltc2992) Use
- fwnode_for_each_available_child_node_scoped()
-Message-ID: <20240630124157.07bf97d9@jic23-huawei>
-In-Reply-To: <3a16dc06-81df-4493-bac6-216e9c6ea16e@gmail.com>
-References: <20240523-fwnode_for_each_available_child_node_scoped-v2-0-701f3a03f2fb@gmail.com>
-	<20240523-fwnode_for_each_available_child_node_scoped-v2-3-701f3a03f2fb@gmail.com>
-	<20240526144851.493dd3f2@jic23-huawei>
-	<3a16dc06-81df-4493-bac6-216e9c6ea16e@gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWzrC/CU"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f480624d0dso16793065ad.1;
+        Sun, 30 Jun 2024 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719764012; x=1720368812; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PrKPEr5dAf7Uc7FJuurmlcLczDzgXAmmoWwF3Wmfg1A=;
+        b=dWzrC/CUHA6nx+fu/D8N2vJsks80KqOinU5qau3dVt74s0i1DKam68nbRlqd2wGzmF
+         yisDVaY1w8JeTjpAY1mooN/uIcN2DwmAkqMQ2pRehUWCnYeZ6r7mSS1sRMs8Z/ABm+RI
+         5Wq1PB/Ew56BpDqWg5kNU3nIW6uqIM6PKsofyWJ+aVva9uXtmfUP4E3n856Sy78XlQjA
+         1iIVeE1HFiVWhVyVOWyBYmm51BvUq+SwaMhm6wbYgTpIRVtDyvr+Tdb4SgcSIEwX0hRX
+         28+2yJYtr5Nmr3caAvYJ9qjnReHVGNCiscO+zzSTaolGvoMdof0Gq+pYAT/RN0PrhK7C
+         i8XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719764012; x=1720368812;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrKPEr5dAf7Uc7FJuurmlcLczDzgXAmmoWwF3Wmfg1A=;
+        b=C6eVqpdljkhIUD0IpoFbT/f7YOs1/oIjFbh35+eLIq7wI53LPRt0TiourktLaOE+vH
+         ES7cx1ItNQbenJJQNQK6j/9owZnegIdOsbK3ItZ+WTfTSThKvn9h+tTGEr9QUKWOt9Oy
+         jc8fV8YnPoj0nMCcjG+Y8KGELZWCToXoktuWwrgn8JEtvjD5HjgoyvPTOO2ADjjoiYud
+         QpRbfG6ESZQqOpAxtZ/pySDqE29WOYNHKfn4Qd0cBcn5XD4dWlySTEhO+LiSsegbjoiz
+         kNAgJzLhNA7G5uarGqyk+XUFGkzL8NvQmZ/b+54bNBYrRLNJxl4jz71hjEhMx2YqPYMW
+         vJ7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWU8ZLfR/QglhqOarUsGsuFXP4JvyRQSFfiSae30C8n/lzHJ/V5WUoiEOGm6w1wk5+ZOHS9W9HyDfTPmsTUR46sYpyCFqulGWRO0HsJcA3ulDi0eMQLWYEzQunH/l7/RkcesFv+qI62NdM=
+X-Gm-Message-State: AOJu0YzA5KphQvK6ZiWTKftPhD8Gl5C/VNnD9Rc+NZ9e9e2Z6TE+/8CJ
+	0jU7lA8fqfaAzrJkepghdubzgOXKuTBAE4bpQNFH+9G6KPZ2wa4C
+X-Google-Smtp-Source: AGHT+IH3M/QXEIc13dcQqwSIIUSxm74TjaDNw3+f1Rkh7385CM8C3SZc+/DeLs4lX1fiv0rbaBDdVQ==
+X-Received: by 2002:a17:903:1c4:b0:1f7:1706:2596 with SMTP id d9443c01a7336-1fadbd07d45mr42837855ad.67.1719764012450;
+        Sun, 30 Jun 2024 09:13:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac15389b3sm47706835ad.121.2024.06.30.09.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jun 2024 09:13:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 30 Jun 2024 09:13:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell OptiPlex 7060 to DMI table
+Message-ID: <ef22ef34-f93b-4395-9fae-4e4018d3f501@roeck-us.net>
+References: <20240628214723.19665-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240628214723.19665-1-W_Armin@gmx.de>
 
-On Mon, 24 Jun 2024 23:45:42 +0200
-Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
-
-> On 26/05/2024 15:48, Jonathan Cameron wrote:
-> > On Thu, 23 May 2024 17:47:16 +0200
-> > Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
-> >   
-> >> The scoped version of the fwnode_for_each_available_child_node() macro
-> >> automates object recfount decrement, avoiding possible memory leaks
-> >> in new error paths inside the loop like it happened when
-> >> commit '10b029020487 ("hwmon: (ltc2992) Avoid division by zero")'
-> >> was added.
-> >>
-> >> The new macro removes the need to manually call fwnode_handle_put() in
-> >> the existing error paths and in any future addition. It also removes the
-> >> need for the current child node declaration as well, as it is internally
-> >> declared.
-> >>
-> >> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>  
-> > 
-> > This looks like another instances of the lack of clarify about 
-> > what device_for_each_child_node[_scoped]() guarantees about node availability.
-> > On DT it guarantees the node is available as ultimately calls
-> > of_get_next_available_child()
-> > 
-> > On ACPI it doesn't (I think).
-> > For swnode, there isn't an obvious concept of available.
-> > 
-> > It would be much better if we reached some agreement on this and
-> > hence could avoid using the fwnode variants just to get the _available_ form
-> > as done here.  Or just add the device_for_each_available_child_node[_scoped]()
-> > and call that in almost all cases.
-> > 
-> > In generic code, do we ever want to walk unavailable child nodes?
-> > 
-> > Jonathan
-> >   
+On Fri, Jun 28, 2024 at 11:47:23PM +0200, Armin Wolf wrote:
+> The BIOS on this machine is buggy and will in some cases return
+> an error when trying to get the fan state, but reading of the
+> RPM values and the temperature sensors still works.
 > 
-> Hi,
-> 
-> if I did not miss anything, the discussion about the convenience of the
-> fwnode_for_each_available_child_node_scoped() macro stalled without a
-> clear outcome.
-> 
-> At this point there are multiple users of both
-> fwnode_for_each_child_node() and fwnode_for_each_available_child_node(),
-> and I wonder how many of them use the non-scoped version for a different
-> reason than not having/knowing the _available_ variant back then.
-> 
-> Maybe touching that now could turn into regressions if someone is just
-> ignoring that some nodes are actually disabled. Their bad, but still
-> painful. But maybe there is a better reason to have both macros I don't
-> know.
-> 
-> As I am still interested in this matter for new users that only want to
-> iterate over available nodes, and I want to have a scoped solution, I
-> would like to revive this discussion.
+> Closes: https://github.com/vitorafsr/i8kutils/issues/38
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Acked-by: Pali Rohár <pali@kernel.org>
 
-Straw man for people to shoot at:
+Applied.
 
-I think where possible rely on device_for_each_child_node[_scoped]()
-actually meaning the available nodes.  In cases where it applies that
-is normally cleaner anyway.
-
-If you find cases where there is no relevant device (I'm sure there are some)
-just provide fwnode_for_each_available_child_node() and not the non-available
-one.  If that means switching some drivers to use the available form as
-part of cleanups, at that point we consider if there is a special reason
-it actually wants the non available modes.
-
-Ideally we also add documentation to say the device_for_each_child_node()
-will (at least mostly) not consider non available nodes.  It might
-be always, I'm still personally not sure on that!
-
-Jonathan
-
-> 
-> Thanks and best regards,
-> Javier Carrasco
-
+Thanks,
+Guenter
