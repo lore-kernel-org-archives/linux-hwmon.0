@@ -1,61 +1,61 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E9014B942;
-	Mon,  1 Jul 2024 13:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC6D1607AD;
+	Mon,  1 Jul 2024 14:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719841857; cv=none; b=ly3Qg4Q1tgnEybJt2Wo+scSorprS0514bFhW9tkthOgL32QnvCFOGJGeF2Kjp0uRGsY9/+jjPDhek3b0vhUBmBrTx69xetuumFg5pLOHt8YMihwtnMY00+zCWAnKpTcWwu4UAPBK8Y1S10b1Nobpd7WVcKVKeWb88Aea0K8xuaI=
+	t=1719843082; cv=none; b=KZs+tsC405d4F2bpNBd0tR0ccc1IIic/gvnYv/KpBe29tVXY631xqtZPDyZ30qOxTcIcj5NV/cbJpyZwcPzY/LF2I5leE4Z+e/pVHbYW7tQeK4QRmmJ2Njxgn/9bTESgLsmRJXGELndfznwx8wVpKWPLzxmOCUcOvnxDaGKM1mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719841857; c=relaxed/simple;
-	bh=eZlVUf2pjdJ7wx8/EG4tWngAQTnZAt+whrzVz6Q+dR0=;
+	s=arc-20240116; t=1719843082; c=relaxed/simple;
+	bh=6CEOtsGrhFPLDoewzW5lq5jt//qvPQJNQo5z1GQLZLE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m2b0eMKpgTSjSxIxjMcs28a4L/e7TWaYYnVmrFIvItz3XPoXBbJU/3Lkjy2WM4ZcLGoUj0dKymGpW2jEuScdYQBBmdzYYX/qDF328MZgiQdYc2ElExrWLmH8p4Un0e5H2gIJqntATn7+iTLSjZNWLYSabTyo8XUdcuYe2Lz8KnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NbX9ADzP; arc=none smtp.client-ip=209.85.215.171
+	 In-Reply-To:Content-Type; b=kTb+X+x/orxLyDKGWVmnmsQ+EnlkX8jufRQWu9rve5J4CY5+xKzPKGZ0+qv1IDrJNk6RfWHHDklR7RJmeeAdA7uQLuMiBr+1GOEjw7GxjOYTkfV+2iYDEzRK1DUTihC/ZnzskyS8CZzadFz9CZwf2yk0D4DoJ/fNXze5WTYfdBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WxvKCFyf; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NbX9ADzP"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7449fbfeb6bso634012a12.2;
-        Mon, 01 Jul 2024 06:50:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WxvKCFyf"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70683d96d0eso1680211b3a.0;
+        Mon, 01 Jul 2024 07:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719841855; x=1720446655; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719843079; x=1720447879; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jTqiwRiaKohs7x2y2156eaaN3UtZLenGwNHGHhqV/do=;
-        b=NbX9ADzPKvtz1TJ0d9hDTgqMOk77mASWV1WmHARlnXOpeu/wX3q//bqx5Lm+k49JNc
-         plTJvsoVfSNoz5d+0T/3OOcAF5ZKPDwIrSgWfHkmSAhYUuxLxiK1bK5nrS6HYTe6zjQe
-         K50Kn64HheSD7vOp5MltKytFxEsi2Hl+TK9lALTAOaon3i1l9HGw/xi7M43zWpP/zC2C
-         OQTa3H8crkF87U1eOC0oo7IdV2BXr4G4BnqI3UM2X9rBNDHvu2gtgddbZ3zCuF8a0+ir
-         NomQVRqo8G6lQt8AdSWStwVgDTAbmmvO6d2ZRzIDBf4ec7y3YBFh/SDQLWuD5AAd2esf
-         UKSg==
+        bh=pu5CC5vhF/R0A2vVFkwivIsgk4tWVCJcrZSVx6Dp8AY=;
+        b=WxvKCFyfrUBq1hRJ5/zY0KqKkyNYpz7ug9HdVjV6W8YlKOgP/2l4KNKvTQc+3/p5Mo
+         XIJvfkP3yzaUCfSu072iyDjGzOMPnDvdusBleZOBivEzgwdJd76iigJot4y57aH7qnIF
+         teHLEtAtXTUgE3NsBMIYrhwlc2v+v82UMpCXAjqBZ31fET/yRc6yxveiDIcr0Qde/Fyi
+         +KNgFbn/NDdfTNnla8ZDUE9BTikXXYl/hVmgVIHS+yvXCYD0c6MpQGhBkmEvkzS1//OP
+         V3fuVb9WLoz2ZcDIToAIpTf2nXTVADfSbxzyT9+Bam4lH/Om3q2JT1M8OlhMJDTdbE+3
+         cT2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719841855; x=1720446655;
+        d=1e100.net; s=20230601; t=1719843079; x=1720447879;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jTqiwRiaKohs7x2y2156eaaN3UtZLenGwNHGHhqV/do=;
-        b=CPrIRRS2TXFjkYJd136bnpo4y0k/vtNIZDIx4Iam1T0kj8YXEo0bybiEONjYVp5jDE
-         V++1coe6R5vD7/dX2iHHwXC4C/MAyznOd44qdIzueeQaDy9zvGqnYHf+XTYQBRTiWssK
-         tFWoZKcEIVqbtvQACI2f6YBpuEJ1coOSHysvo74gZV4skQIyDQMYSWwAJUD7YnrTSqJn
-         K/gTpWTv1/02Nks8eoEwpFF46px0c+qtrggNLNdkDMJabQOytG5KHOTj6WR6EZqI2AUZ
-         oOPWIjWrJ2Qnla4CqisUPQ/g16sxzB7CGBKkxItmh+YBQ/uTsPzKnRtdwjAj88ShTysN
-         cA+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV0GUY4ouvH1QdH7wC4JNS59o0gaeP/wj+He2L3pO3faqVJGZpHIifxaxy9CaC4Hl/w3YjC79XRx7giOWmM7t0L5/u7XHciYo+q880=
-X-Gm-Message-State: AOJu0Yy1FJiEBqcZmAJA5qG0fkMgtID8/IfvvvUAL07gqIVkzcxripHt
-	aKPh/ChEfYPo1uD1Sq068D59zf7WBd1VG9dkNJpywmmm1uRLXIad2/H6Zw==
-X-Google-Smtp-Source: AGHT+IF+/mUbUdrbWKrvyObFtgWx0zvvT2LG547+atIB2hSsurp0PtZbL4o2SDYVaxO3QRyvJ3h0jw==
-X-Received: by 2002:a05:6a20:2591:b0:1b4:2f6:62b3 with SMTP id adf61e73a8af0-1bef613f539mr5085815637.26.1719841854469;
-        Mon, 01 Jul 2024 06:50:54 -0700 (PDT)
+        bh=pu5CC5vhF/R0A2vVFkwivIsgk4tWVCJcrZSVx6Dp8AY=;
+        b=GJeYZB4oht0f0W1LFOtyBsyIQfHq8JxXgpabhQZIDoXxhU6qInzpLYpyII4LPBIjMY
+         JdwBLMdbPyoUpJBBfEuc2Zr12e3AnK22XRDy0q3VC3GvN/PD651kN5XPGYpqQ9bm9sKt
+         8Jvzt5ehlx6N81y814wDsKWxu+yL9d6EW1nbxPKs41/BVeR6haqw45ZRwBFdfuzQChZ6
+         jww2KQHZ5NuUdYneAMDj4O0VHkItU/zSQmxGIYhBevc+oIAWXYUSd4moyEn4WZJVveBX
+         bew3rDbSQJWAexOIpxwVO3w0Qg+2+FDgyVUtV8Doyq0FNqbtajJDX3Vvh3T0+flYGWvJ
+         GiaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6uliDsYMjFm1ExBUZur1Sk2YZcboFypoZi7YVjwWHPnOX3Nmo8xwy29lvFZeBYsSaVoWp3UmdkotOOKag6J6McPsvz4Tm+KFEQ1I=
+X-Gm-Message-State: AOJu0YxJ5dqzFU1/t7mUgHCsC1qfjVkggbTT1EKl2mv5VnVxKYjakkzU
+	LRIGs+K4nzKbp/La5LWvNNcT/edooBtsXhEtisODz7hj82C2vASzDm7JGg==
+X-Google-Smtp-Source: AGHT+IEGlifLhxAvN00wV7XN6aNF3blGFC0qmHDyTVxyMc5RCf9DpQVGC7hhtZV9r2oocj7wua513A==
+X-Received: by 2002:a05:6a00:1944:b0:6e7:20a7:9fc0 with SMTP id d2e1a72fcca58-70aaaf1de5cmr4668059b3a.34.1719843078646;
+        Mon, 01 Jul 2024 07:11:18 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1569f83sm64570355ad.204.2024.07.01.06.50.53
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-708044ae297sm6533531b3a.155.2024.07.01.07.11.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 06:50:53 -0700 (PDT)
+        Mon, 01 Jul 2024 07:11:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2569cc23-9ab8-45c8-8188-6d4547e49ecc@roeck-us.net>
-Date: Mon, 1 Jul 2024 06:50:52 -0700
+Message-ID: <9fce6789-edc8-4c44-89c0-ae4ca3ec3315@roeck-us.net>
+Date: Mon, 1 Jul 2024 07:11:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10] hwmon: (amc6821) Stop accepting invalid pwm values
+Subject: Re: [PATCH 02/10] hwmon: (amc6821) Make reading and writing fan speed
+ limits consistent
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240628151346.1152838-1-linux@roeck-us.net>
- <20240628151346.1152838-2-linux@roeck-us.net>
- <8fdb07b6-ef80-4faa-80cf-ea16839e9e98@cherry.de>
+ <20240628151346.1152838-3-linux@roeck-us.net>
+ <615377cf-99bb-4159-b072-7992ccddf09d@cherry.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,76 +115,59 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <8fdb07b6-ef80-4faa-80cf-ea16839e9e98@cherry.de>
+In-Reply-To: <615377cf-99bb-4159-b072-7992ccddf09d@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/1/24 03:19, Quentin Schulz wrote:
+On 7/1/24 04:05, Quentin Schulz wrote:
 > Hi Guenter,
 > 
 > On 6/28/24 5:13 PM, Guenter Roeck wrote:
->> The pwm value range is well defined from 0..255. Don't accept
->> any values outside this range.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> The default value of the maximum fan speed limit register is 0,
+>> essentially translating to an unlimited fan speed. When reading
+>> the limit, a value of 0 is reported in this case. However, writing
+>> a value of 0 results in writing a value of 0xffff into the register,
+>> which is inconsistent.
+>>  > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
->>   drivers/hwmon/amc6821.c | 14 ++++++++++----
->>   1 file changed, 10 insertions(+), 4 deletions(-)
+>>   drivers/hwmon/amc6821.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
 >>
 >> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
->> index 9b02b304c2f5..3c614a0bd192 100644
+>> index 3c614a0bd192..e37257ae1a6b 100644
 >> --- a/drivers/hwmon/amc6821.c
 >> +++ b/drivers/hwmon/amc6821.c
->> @@ -360,8 +360,11 @@ static ssize_t pwm1_store(struct device *dev,
+>> @@ -601,7 +601,7 @@ static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
+>>       struct amc6821_data *data = amc6821_update_device(dev);
+>>       int ix = to_sensor_dev_attr(devattr)->index;
+>>       if (0 == data->fan[ix])
+>> -        return sprintf(buf, "0");
+>> +        return sprintf(buf, "6000000");
+>>       return sprintf(buf, "%d\n", (int)(6000000 / data->fan[ix]));
+>>   }
+>> @@ -625,10 +625,10 @@ static ssize_t fan_store(struct device *dev, struct device_attribute *attr,
+>>       int ret = kstrtol(buf, 10, &val);
 >>       if (ret)
 >>           return ret;
->> +    if (val < 0 || val > 255)
->> +        return -EINVAL;
->> +
-> 
-> Why not use kstrtoul to avoid having to check for negative val? The same way that is done just below in this patch?
-> 
-> Additionally, why not using kstrtou8 so we don't have to do this check ourselves in the driver?
-> 
-
-Following my desire to minimize changes, but you have a point. I'll use kstrtou8().
-
+>> -    val = 1 > val ? 0xFFFF : 6000000/val;
+>> +    val = val < 1 ? 0xFFFF : 6000000 / val;
 >>       mutex_lock(&data->update_lock);
->> -    data->pwm1 = clamp_val(val , 0, 255);
->> +    data->pwm1 = val;
->>       i2c_smbus_write_byte_data(client, AMC6821_REG_DCY, data->pwm1);
->>       mutex_unlock(&data->update_lock);
->>       return count;
->> @@ -558,13 +561,16 @@ static ssize_t pwm1_auto_point_pwm_store(struct device *dev,
->>       struct amc6821_data *data = dev_get_drvdata(dev);
->>       struct i2c_client *client = data->client;
->>       int dpwm;
->> -    long val;
->> -    int ret = kstrtol(buf, 10, &val);
->> +    unsigned long val;
->> +    int ret = kstrtoul(buf, 10, &val);
+>> -    data->fan[ix] = (u16) clamp_val(val, 1, 0xFFFF);
+>> +    data->fan[ix] = (u16)clamp_val(val, 0, 0xFFFF);
 > 
-> Same remark concerning kstrtou8 use.
+> This is an unrelated change I believe and I would therefore have this in its own commit with proper documentation in the commit log. Indeed:
 > 
-I'll use kstrtou8().
-
->>       if (ret)
->>           return ret;
->> +    if (val > 255)
->> +        return -EINVAL;
->> +
->>       mutex_lock(&data->update_lock);
->> -    data->pwm1_auto_point_pwm[1] = clamp_val(val, 0, 254);
-> 
-> We're suddenly allowing 255 as a valid value.
-> 
-> I don't see 255 triggering an obvious divide-by-0 issue in the code, nor any limitation from a quick look at the datasheet. 254 was introduced in the introducing commit, as well as the other 255... so probably an oversight by the original author? In any case, I would make this a separate commit or at the very least make this explicit in the commit log to show this isn't an oversight **right now** and that this change was desired.
+> 1- Change in fan_show handles the default 0x0 register value (which can only currently be achieved via the default value of the registers)
+> 2- Allow (re-)setting unlimited fan speed by allowing the user to pass 6000001+ instead of clamping it to 6000000 RPM.
 > 
 
-No, this is on purpose. pwm1_auto_point_pwm[2] is set to a constant
-255, and pwm1_auto_point_pwm[1] has to be lower than that. As you had
-noticed, I fixed this in a later commit, but I should have fixed it
-here.
+Both changes are related.
+
+The whole point of this commit is to report and permit consistent values when
+the register value is 0. But you do have a point - reading it after my changes
+returns 6000000, but writing the same value sets the register to 1. So I think
+the proper change would be to display 6000001 as speed if the register value is
+0, and provide a more detailed explanation. Would that address your concerns ?
 
 Thanks,
 Guenter
