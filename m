@@ -1,140 +1,259 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2112.outbound.protection.outlook.com [40.107.104.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A811EB2A;
-	Mon,  1 Jul 2024 16:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719850299; cv=none; b=jNvdpd6JqOX5HlnX2f/5F2y2mT2MMo/EH4S6bJ5wZMf3DomF3azvFDK/NE47EQdphBho7YIUN28A9j6Am9V/jJ3oHLIbDtKfOvO6p5eyJsGgMrunCzDw8ggItxBdClWBncBGdf4tUQOmMMDkThIJj+RbOWc4Te7/VUv/lJd9ozQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719850299; c=relaxed/simple;
-	bh=0TFTL2VmQr0dxcD2CU7cN8SoCIqPsJjtAg/sOk2qjZ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gdp7NBr1qsAEoAL57VoqLUmOAofTMst98BxQN5cFTcQ2310pIBeFG+MvhrYtiXI1/w2G7G3a5wwMVVxg5uuWlr14UTmnKNTyPqGw7PHiCMC4Qn6toHGKEMYnvH9HtoUAdFqkTuVCuZJ21ewZzTfZflBlsy+yItjK+awDvitZSn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ayl0Ms6G; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8695616D31E;
+	Mon,  1 Jul 2024 16:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719850449; cv=fail; b=BPBQO46ElJqLur+puQMPQzjjYhSyG58WSzZuFGKJclHbHO6ZcXgApWI+Jyk5pg6SFfubIvSJUMSPTs7r1ssJvzWGP+q0e5RxuId6PGGl2CyqZ8smCM/2XF6RGBBX8hZ9HezGkzfrCKF2m8XY7mGQlIL41LyX3FiJanMHPzjk814=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719850449; c=relaxed/simple;
+	bh=MbfMqxO7OEosWa7yEHD4R0gsVuUcI4Xpc1NXNriZjVs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=gLhAt1qDmN6sNZQgAvkMbZhsTl3yiBfB3Q5Z+6qEAEQCg3G9XE6i5L4mjTsXmDCCvOHRHpj8F4hA9H3pQhzTPMzn5+XZZS56RROEBmj8ZyuZY7t1TkghyIvt94xjX9g/007RqJawllM3Rqso60Ev+UydeUd+irEsxa+sAKDv8pw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=N7jxd3f4; arc=fail smtp.client-ip=40.107.104.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ayl0Ms6G"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2c722e54db8so2178750a91.2;
-        Mon, 01 Jul 2024 09:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719850297; x=1720455097; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=r2bQVFLtKvwNRDTYmCMNC+Da1fLpCg7wL1mgkqFufVA=;
-        b=Ayl0Ms6GlSARaPqzrcpMKjcz/NjkOT7TAsLs6+iAp6ht3BI6hvOg8GxoXLYSJQznrF
-         ypRsIfVaRzxqliCkDnytMVQSx7RFL992pYsQjA/NCRSVrv9X8ZRMxaRSND1UxWvJtUxS
-         zkltRZO6CqBcqYLNEylI75lCU2exr9NV+gq/WZpgrUZoVYHvLjVWkgFZrKqCe3T4oiGd
-         1N3y3kxI7vWwASt3+GJgP/LW2lPfq0jiC0cl5hTnMXhmWHlNdY6ea6XU1ZsAIT2s8rOk
-         4rqKxRGO9AA5S5lhDjk/2krTfoBWh116qh+bd2f7sFsUDbs42sKrVTyRuULFtrENZIlY
-         I9bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719850297; x=1720455097;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r2bQVFLtKvwNRDTYmCMNC+Da1fLpCg7wL1mgkqFufVA=;
-        b=FSxGlt5PSYsVlwehnDBrQq9X4gS14ssOA0SstzIB3F8zwV3slpRYocxDNz6PQbmdB2
-         l3pR9xsUZ9+tAohdSrTMwcInIzJ4ZMIsy6yNF2jndRC1SD5BPYtDdqWIxdFzCzauufqG
-         KV/oFbiMsIdD5uaoLVkSpOe0G3J0/d9cFrUjPOYy9YfxmrmdoZd0lfweSgWen9aC/G/3
-         7WVPAcvDbYl3GCQof30rQsSN+Yrmg6Ywslvxhr76foynPHJs1AMCRC2F/g7XT5+M819K
-         qUqNaqrUbGy4cVbahy/2KAvW1owRZuvYJiwCCGHGli6f9UUNknwNp3dNyV/l+tdVnTmA
-         4njw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6L6m47fMik3lPH4pBWtJOtPxVkWh93Sjk170gr4VIcYHVJdktKpa0yBq0B8+KweTpkAngI1pO8kV84FiM4i5LgddwTvaS6k6ZEEt19VQpQctyuytP1VXu8IHm5/1atxKIYpeoqs8j9Myx9IyKrAP2I1cDgIqJZxSQhwvS0VqFmQAO5p7sT4mQ79TKKLLhVh7djVVhFKqSZ4RU6RI//d8=
-X-Gm-Message-State: AOJu0Yx0457eVf1AEIWDqEWrk73B/uz46eH+nWSciVLBs5PVBXZ8d6EG
-	PWC7WOosPF8Pmd/NmPquz0y09lEgKuEwDP2Wowem1S3can9kPqWx
-X-Google-Smtp-Source: AGHT+IEgi3BJ6wGJJlrFhvwlwzwbVax5wtS4iFCwmb2T8SAcNQB0KYX2PlWdgIyx2ER1awfla8R3cA==
-X-Received: by 2002:a17:90b:154:b0:2c2:fa5e:106a with SMTP id 98e67ed59e1d1-2c93d77cbdbmr4667542a91.48.1719850296685;
-        Mon, 01 Jul 2024 09:11:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91d3bc5a1sm6942412a91.36.2024.07.01.09.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 09:11:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <08c75bb9-7826-43e3-bffe-793a8542bdff@roeck-us.net>
-Date: Mon, 1 Jul 2024 09:11:33 -0700
+	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="N7jxd3f4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UAGRW5eReVeTIZzL3HK0l+4b0aEDGqFUslVnGByWJ1a+FhIcI8rybtRo6s0O5vPwdbpsxx7I4e0zyi6r8RpB6bMs2C30FcHxdsWGWN60kppLeufoDdj/jX22wQYr3D5NCcdyF5ZQ2iyn4BWAPiiNMokylkBq3OylznyUKfaJNXpBMZ8oZnBLbuiYBdpkLKJrCsfAaSadj4IGOXqH2NnfH4PXufZs2HhhV3yYpOIB3MwtudItPGl68CnP4wkREc2ufhB7Qwp08ltYYV1nlofnVi/ghZpTXFdVUwmPTCKxdznCOSuHjedvC0HGaFdzklXL3H6RUozKI670LJLnTNN2fQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FOXc9N/YDlIV8rIfW0DXdy0HTqWkUnhqzV4LK7iVpXc=;
+ b=XWM+logmYs0umvbrMM6GrfqeVfCmYvdiNbvlbzrQUeYJNXUN0XKSXlFyqMutVDmkzB/Ena/Vrw5XAnkhTl3jK8j1t29HQoFCnwfwoeUJ6VDgdeBNEt8iC3DhcCJEHxnpIFM+opQjls/MuRL3rccrqaxVCZfh7J7OHeK10E5Yt12NZ+M0qlbmI/YJnasUGUl9/WquhtZSE7iVNQmGhi/dELgfuB9p4PSX8gb4h5dOjrOtuwxMzMgCWhMsPw/AxUYrhiAKHf1cywAzdA/HrMTcVRVucrpMMp9J5a9m94PCDeAhQpu9MKC2bJbOIIgvG8Pmi4XD5sJtKL/825qi1BuEhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FOXc9N/YDlIV8rIfW0DXdy0HTqWkUnhqzV4LK7iVpXc=;
+ b=N7jxd3f4x2XTDQZ6bmsxPyWAoYsdW6MKeoId+1joESTMhh8zTUYcgOXSlTPIGfh7e/F2yzFuGGD9q+slrS21Cb3GyRlkbyeM0RmWYihHX51JIENqv+c36VVC99Y8q/DMxJjxb+1xSOuVnxTx7GS2JaRiiBH1e155f201DhSJm80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Received: from PA4PR04MB7982.eurprd04.prod.outlook.com (2603:10a6:102:c4::9)
+ by VE1PR04MB7309.eurprd04.prod.outlook.com (2603:10a6:800:1a8::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Mon, 1 Jul
+ 2024 16:14:01 +0000
+Received: from PA4PR04MB7982.eurprd04.prod.outlook.com
+ ([fe80::3c4:afd5:49ac:77af]) by PA4PR04MB7982.eurprd04.prod.outlook.com
+ ([fe80::3c4:afd5:49ac:77af%4]) with mapi id 15.20.7719.029; Mon, 1 Jul 2024
+ 16:14:01 +0000
+Message-ID: <535f3381-2fa9-41a3-896a-8d5879546ac9@cherry.de>
+Date: Mon, 1 Jul 2024 18:13:58 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] hwmon: (amc6821) Make reading and writing fan speed
+ limits consistent
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
+References: <20240628151346.1152838-1-linux@roeck-us.net>
+ <20240628151346.1152838-3-linux@roeck-us.net>
+ <615377cf-99bb-4159-b072-7992ccddf09d@cherry.de>
+ <9fce6789-edc8-4c44-89c0-ae4ca3ec3315@roeck-us.net>
+ <80a7f733-655e-4b00-a802-825d3acaafcb@roeck-us.net>
+Content-Language: en-US
+From: Quentin Schulz <quentin.schulz@cherry.de>
+In-Reply-To: <80a7f733-655e-4b00-a802-825d3acaafcb@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: WA2P291CA0042.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1f::14) To PA4PR04MB7982.eurprd04.prod.outlook.com
+ (2603:10a6:102:c4::9)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: add MP5920 driver
-To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
-References: <20240701145603.1507516-1-xzeol@yahoo.com>
- <20240701145603.1507516-3-xzeol@yahoo.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240701145603.1507516-3-xzeol@yahoo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB7982:EE_|VE1PR04MB7309:EE_
+X-MS-Office365-Filtering-Correlation-Id: 94a11ab8-c6b3-486c-2643-08dc99e8d1e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OTZCK29RQWk0K0QwVThnODNLQWFqVUl6WElVbTlFdDV6SzFNN2ZyK01RS0Vn?=
+ =?utf-8?B?SldUMVZ2UDFGNXFhMTVYRWxlMEw0UVpMRDVSYUZqS1laYXNBbTZBTUt6YWFp?=
+ =?utf-8?B?QllwZDArMCs3VlkyNVR5TTB2UjViYTFWQWE2ejhlb3U4cVhjZk5xdks5OER1?=
+ =?utf-8?B?M3hNYTZ2UGhNNTU0VXJiOVNjMTViQ29rQU16NnB3L3VPRy95eUM2RGkvK0p0?=
+ =?utf-8?B?QkI3dFdNdTk2YS9Rem5CQVkxa0RtdmE5Y1RKdml1ZVgwWjVFdFZuRCsrc1hV?=
+ =?utf-8?B?WTFVZTRMMWlHTHp5TUg0M3FQZStmVlFKdWhNdWdycUZ0WmlaVVIxcEh2UHRv?=
+ =?utf-8?B?MkwxQnZBODFOeGVEUWk0dGQ3TjljMFhVT2Z1c3lHc0hhYnZDMGVHcWVpSGN3?=
+ =?utf-8?B?aFpaenJ2bW82ZlpBWTBPRG9sUWJHcFhtSXU5dnpadnU1TmF0SjVPdE9FSUNy?=
+ =?utf-8?B?bXA3OFlXMEltdXE3dWlyeWJ4blEzeDJtV2J6VFJ6d2srNmNqZi9nQUd0TWly?=
+ =?utf-8?B?OFRCbEdIeThlNzRUNkZsYWRqT1Y1UUV1WlNxOG5nYlZ4VENuYzZKYm1CdkFm?=
+ =?utf-8?B?dlhXNUtyTlVQTDkyWWRtdFc3STA1MmtybnpJUCtZekRSZzdMSG1acVhEOHVP?=
+ =?utf-8?B?LzgxTjNpSlB4UVVod0RqUzk1UFJKYkRuWTBZNFBpS05lanFYczZ1U0FTdmll?=
+ =?utf-8?B?QklYRDRGZkJNL2JJZEltTWlWUGEramlXOERYcXlkU3ppSHMwRkUxU3lIZkoy?=
+ =?utf-8?B?L1JGTUl0czlEcndxVDhwdVp5QWFtQTk4djNxQkJwa29rbUM0MERnZlJZd1lD?=
+ =?utf-8?B?TW1FaXZjZEJZS3kweDlER25DVGRSU0YwaS9sZys1alFNbzloemI0U2Vla1k0?=
+ =?utf-8?B?SnVYNHZpNUUxVXFCUTQxKzJMd3ZveHJsRGhublkwMkZoRFJsZjRMaFdpNlFL?=
+ =?utf-8?B?YjJzR0YyQklEZVZscy8rMjgrUFU4eFNJamhiODhucGpYbTlZK0FkV1AxVkFk?=
+ =?utf-8?B?YnlJRkFyelcycmlvMFlYcFk4cmRjV0xlN0ZnMFV2dm5DQm5JUE1aOUVFMmZr?=
+ =?utf-8?B?eUdLMjF3TWh0dGxaamJiZHZvWE5EQ0tyTHI0cDR6MDRxd1lDN2NIQkFrRnpm?=
+ =?utf-8?B?NEg5TUZseHlsNWNZUVU5cDM5QzZldzdwamo0Vlk4VWJmcm1nK0h1ZUs1Uk5Y?=
+ =?utf-8?B?NVZaOEpYRTJZUnVKQjZCdENPZFVNL3NZTWN6MVcxaE01OGpJbmRkNHRad2xP?=
+ =?utf-8?B?TzIzV2VFam5VSStiRFQzajF1RCtRbHJ0elBzWURXdWJnSmFxK0VzMGxRSWFP?=
+ =?utf-8?B?U0Z5Ym5wblZzYkFJQ2F6biswcWgwMjRMZFJ6R2ZWNXV5aFlVWXFCZHZ6aUlt?=
+ =?utf-8?B?dUswM3FXWUZueWJlOEtKQTZtbjl6b25tb0RzV3UrQTlyaHVMUW5iaTdFQnpm?=
+ =?utf-8?B?ckNNamNiSysyMEpHZmVlVzl1L29OeE90U0tLNGdpMGgzU1NlYmVLSXhrVk1z?=
+ =?utf-8?B?NzFCclRLNVFOSE5Ua2libHYwcVNoL0pDenk2THd2N1pCUG5ldURoL3N4VHN3?=
+ =?utf-8?B?N0MzQ2lpK2ZJS0pSSktPR1poTnNRMnhSZEVHelRKUTZCak9ySzEwWi9pWnBT?=
+ =?utf-8?B?N2RkWWZ5YWV4KzYwZkpJUGNjVUlZUVA0aXVhYU9yQUo5VWdBK000WFNZRTRo?=
+ =?utf-8?B?YnJOZkZxQzRsWFlZcWFQYXMxQ3R0WjhsNWtBK29lcDkvcnlwa0huVVFXZGVm?=
+ =?utf-8?B?NFpSZFJSbTI4NTk5bmJxZVZ0eURPL0hpRkhpWVplMlk0U0JaWkdDbUkyUEF2?=
+ =?utf-8?B?MkJndGQxODBtVzJtWFlVZz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7982.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TXZ6aHNMdG15OHNQNFZ0bG1hSUM0bllQYnhUVUQxMEFGR3dxeEFBeGtUQUpp?=
+ =?utf-8?B?MXJXZFlGZEJhQ21kam82YjBqK2Z1Nkd3M28vZzlZOXQ3NjU4REJsbWdnWk13?=
+ =?utf-8?B?V1lXS0VGczhxcjlXUVJtOFFoNVhWb0laaDArRHRkWmJ6Tkk0bFhuTFQxNjVt?=
+ =?utf-8?B?bkpGbGZ5Q081S0NEbEFBOUUvUm9LS2ZZNEhzU0tsUlFWWXZaVG1ISmVBSHVM?=
+ =?utf-8?B?cG1ONWFJS0pEZnFRRUIrR3ZZdFJubzhCRURKMkxhVVNpV2dEYlllQy8zZGRa?=
+ =?utf-8?B?dWFrYVBKMEwxcTN2OVVvV1pqTWNkRWFBWEs3UmMyNXRhcUZWVkxNeHRMWXFQ?=
+ =?utf-8?B?Q3NUNllIamlVZmRqR2loWisvQXNISHllUm41cTMvNkN2NkVDeDRTRFNUcVJp?=
+ =?utf-8?B?V1RyS3pmQlU3TkpCYnNRNkNSaExHNjBiTG82Q0dIdWlZczNma0JvZlQ2bWVK?=
+ =?utf-8?B?SVpneHpuR1RqZG5CS3lNdFIyV2pHeDVTTUl0MHdFOVZRMWxhQWJ6K01rQldM?=
+ =?utf-8?B?UGxlWW1yenFDcGJvdzlhdkg4YkI4NXFKUVFQclZnYXZHL3gwTkJpSFk4LzY5?=
+ =?utf-8?B?ZUsyNUQ4RlZRemV6QVVOMzU0SWFuVG85YXlZWkh5c0pXSnB1aUdUV3hlQXly?=
+ =?utf-8?B?QW1UZjk2UTc0WFBUMHJnM2NBTk9yYjVrZU52dXJ6WklEL3dTNHlSQXR6Smd6?=
+ =?utf-8?B?NkhlT3dqNThTYURhWnplcjJFYktnOXNJTlhxR1JIRllpR2x6Y1FrWUJvS0Zh?=
+ =?utf-8?B?VFhzQkNJRnJ5RDBFd2xlL0l0YkRkZllSNDhCNzlYaFpNUHd3Si9GS3VDbTJP?=
+ =?utf-8?B?VlhnWnJDRmJORFZMeU51STA5T3ZlcXF4aW5rdEZobXJ4TkdJdjFSRHN5STBp?=
+ =?utf-8?B?NmNIVjB2citWSGdwcjJMTklZSE9ieWJmbjRaemtGV3F0Q0N1Qi9UVlVnTUVu?=
+ =?utf-8?B?cjMyRE5XaitML2dwdFgrRmFlTkFnOFJTSzZQVmdZOEdNU0NsVEVBVjJUNnBD?=
+ =?utf-8?B?dnFRQytVd3FWaU8xQ3o3bFZDWlYrUnJxTlNFQWxwaVlnazErMmpublVJQ0VX?=
+ =?utf-8?B?Y1JOY2VkWmNVb3hTYWRaM1RPT1hMNWt3Q2xOMGVVelM0cmtod2k2ZU1Jc0g0?=
+ =?utf-8?B?UFJkZFZlOGo5OUV3TzRPcW85UjE5cFZYKzZxWEhTOXQ0elVERTVIUHdRRVph?=
+ =?utf-8?B?ZloyMktGaWpWUVA1bWpZVW9GdmlyYy9VNXNHWDI3UjU3Q1ViUlQ0dlhSaVRS?=
+ =?utf-8?B?QnlqRDhmbGNwUjNWY3N0TlpxdEJ2MmdEcjh2NEJyOWtZMkcwR2huVEJqQzlq?=
+ =?utf-8?B?ZGhIa0FkWi9mVGNxWWlYOHpIU3pVUjNTQjlQRlhuVkpKZk5kTHg3aEEwemo2?=
+ =?utf-8?B?c2liL2YzbEltVDNrMDViUWVYdUVyN0htOFVjM0U1Yzk3WkppdFVlcDFtZ2RE?=
+ =?utf-8?B?OTFZYVJTdzNhaHF6Ym43Zk9QK1BiSGtXM1Z3SnY0cGU5SG5La3JsdWs4Y0dR?=
+ =?utf-8?B?dU5mOWJNbllzYkFkUUtjVnJ6bU1rdUJ6SFc4QXZvMlg0andUR3Z4cmNGbU84?=
+ =?utf-8?B?aDNRLzd6emF5dUJxMG9IYStXM0pma0ttZ003N0pQUVFGNDJJSHhaMytxWTFP?=
+ =?utf-8?B?RE5RSElTaWU2cGhTSGlxNDVaTFBNajhvQjM4VGdWQ25zcmwyYzlXTWpPOEJl?=
+ =?utf-8?B?amFreVRxL3hOVU55U0NrdFdpOTRZSmRna1JtaldjZi85TjlFbWg4V2FCWm01?=
+ =?utf-8?B?MEVEUG5DVkN1VGkxQWViN0hBS05UYll5dlNrYWNVWjhGaUY3TytzaHljTmE3?=
+ =?utf-8?B?Ry9WOHNudDVQbEg4eU43VjJKT0xZSkhMLzYxV1RTV2ExcXhWVkphWjZVQzk0?=
+ =?utf-8?B?cUVPZ0RNYk9vOGpKbW9rYS9DKzcwbkxOWXlYWVVidXZES2NLbVBhOTZIRU9G?=
+ =?utf-8?B?Qm9sY2NqY3I2Umd5REdFZTEva3RtNVdOQXJYNVVOY0E3RkZmNVVKamRIa0hJ?=
+ =?utf-8?B?RWlNT0svU2t5WmRLTWh5bFgyVmlIUEYzeDZ4VHBpQVdjSVJBVmt2dmxqcHl0?=
+ =?utf-8?B?M2VwVnpybDlzbnZCVTVrQ0FETEJWNjJvek9GdzJ5dlV6UjBLUHQ4TEwzNGFY?=
+ =?utf-8?B?OUNxVFRrNjZWeHJJUmZidSthR3BEcW9YTnFqb3BQNHNoc3N5VU1GZDI5cDQ5?=
+ =?utf-8?Q?6c3cND3F4Z1jfW6Tyf79+bU=3D?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94a11ab8-c6b3-486c-2643-08dc99e8d1e6
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7982.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2024 16:14:01.3891
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oZEOdw4dQc2G4I+ivbSxA+vSpBs88frs5+ZoWjivPyrRRWv2CPSj6+lxIsuNfJtMqz1l01WgAYgp8XQOr8b4X438/v+kriQ4tlNdF3Z2WwM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7309
 
-On 7/1/24 07:56, Alex Vdovydchenko wrote:
-> Add support for MPS Hot-Swap controller mp5920. This driver exposes
-> telemetry and limit value readings and writings.
+Hi Guenter,
+
+On 7/1/24 4:37 PM, Guenter Roeck wrote:
+> On 7/1/24 07:11, Guenter Roeck wrote:
+>> On 7/1/24 04:05, Quentin Schulz wrote:
+>>> Hi Guenter,
+>>>
+>>> On 6/28/24 5:13 PM, Guenter Roeck wrote:
+>>>> The default value of the maximum fan speed limit register is 0,
+>>>> essentially translating to an unlimited fan speed. When reading
+>>>> the limit, a value of 0 is reported in this case. However, writing
+>>>> a value of 0 results in writing a value of 0xffff into the register,
+>>>> which is inconsistent.
+>>>>  > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>>> ---
+>>>>   drivers/hwmon/amc6821.c | 6 +++---
+>>>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+>>>> index 3c614a0bd192..e37257ae1a6b 100644
+>>>> --- a/drivers/hwmon/amc6821.c
+>>>> +++ b/drivers/hwmon/amc6821.c
+>>>> @@ -601,7 +601,7 @@ static ssize_t fan_show(struct device *dev, 
+>>>> struct device_attribute *devattr,
+>>>>       struct amc6821_data *data = amc6821_update_device(dev);
+>>>>       int ix = to_sensor_dev_attr(devattr)->index;
+>>>>       if (0 == data->fan[ix])
+>>>> -        return sprintf(buf, "0");
+>>>> +        return sprintf(buf, "6000000");
+>>>>       return sprintf(buf, "%d\n", (int)(6000000 / data->fan[ix]));
+>>>>   }
+>>>> @@ -625,10 +625,10 @@ static ssize_t fan_store(struct device *dev, 
+>>>> struct device_attribute *attr,
+>>>>       int ret = kstrtol(buf, 10, &val);
+>>>>       if (ret)
+>>>>           return ret;
+>>>> -    val = 1 > val ? 0xFFFF : 6000000/val;
+>>>> +    val = val < 1 ? 0xFFFF : 6000000 / val;
+>>>>       mutex_lock(&data->update_lock);
+>>>> -    data->fan[ix] = (u16) clamp_val(val, 1, 0xFFFF);
+>>>> +    data->fan[ix] = (u16)clamp_val(val, 0, 0xFFFF);
+>>>
+>>> This is an unrelated change I believe and I would therefore have this 
+>>> in its own commit with proper documentation in the commit log. Indeed:
+>>>
+>>> 1- Change in fan_show handles the default 0x0 register value (which 
+>>> can only currently be achieved via the default value of the registers)
+>>> 2- Allow (re-)setting unlimited fan speed by allowing the user to 
+>>> pass 6000001+ instead of clamping it to 6000000 RPM.
+>>>
+>>
+>> Both changes are related.
+>>
+>> The whole point of this commit is to report and permit consistent 
+>> values when
+>> the register value is 0. But you do have a point - reading it after my 
+>> changes
+>> returns 6000000, but writing the same value sets the register to 1. So 
+>> I think
+>> the proper change would be to display 6000001 as speed if the register 
+>> value is
+>> 0, and provide a more detailed explanation. Would that address your 
+>> concerns ?
+>>
 > 
-> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
+> Ah, never  mind, I'll do it differently:
+> 
+> - If the register value is 0, keep reporting 0.
 
-checkpatch says:
+Or...... maybe UINT_MAX?
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Alex Vdovydchenko <keromvp@gmail.com>' != 'Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>'
+> - If the value written is 0, write 0, otherwise limit the range to 
+> 1..6000000
+>    and write clamp_val(6000000 / val, 1, 0xffff)
+> 
 
-You'll have to decide which address to use, and use it consistently.
+Mmmm... I'm a bit worried about the implication of writing 0 in 
+TACH-Low-Limit, what is actually going to happen in that scenario? I 
+assume **every** possible RPM returned by TACH-DATA will be deemed 
+invalid/below the limit then? Reading `Fan Spin-Up` section, if FSPD bit 
+from register 0x20 (which we don't write to yet I think?) is set to 0, a 
+spin-up is started whenever the fan is detected to be running at too low 
+speed. And we would also be getting an interrupt for that too-low event.
 
-Thanks,
-Guenter
+Basically, wondering if we shouldn't gate the writing of 0 to only the 
+MAX setting?
 
+> This minimizes user visibility of the changes, and also ensures that
+> the reported fan speed is 0 if the register value is 0 when reading the fan
+> speed.
+> 
+
+But didn't you say this means the fan is running at unknown 60 000 000+ 
+RPMs? Do we really want to return 0 even if the fan is actually running? 
+In which case max < current (possibly) but with no event happening 
+(which I would expect, reading the datasheet).
+
+Quentin
