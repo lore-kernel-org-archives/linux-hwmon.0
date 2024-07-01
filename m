@@ -1,61 +1,61 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7FA16EB67;
-	Mon,  1 Jul 2024 18:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF84C8C7;
+	Mon,  1 Jul 2024 19:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719858293; cv=none; b=WJNO8GaGuI9b3JC4X1ptzJ7crM0nlZ1dM9stoe5zKl9wjvIldP6T8gMfOCpO3jfuEShJG4/AwxMcYKL6NUH74Nj7+XvaYqac7XGK4DMhbSHDuv5ZQtD1T6FtjbhJnO3S5FhElw+R7KSJAU3raxX39PH5LuIsiHkBzU+4wRq3QaE=
+	t=1719861066; cv=none; b=Vz5z0pVrlJk6HbG1++4llUuJB8WIEppv3l9UpUAOhnKs0Fc1L8Bx6EVOWcN/8jtW5EbBwm15AGeGViPsfj23cQLIXnirTcuqKz62h+TY5iXPehJ2xxUd6vmOi1cgBxfdnlgI4+rfZIK5mdN6Bsvo2yIdl3x+rQMzsRCdWKcvzO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719858293; c=relaxed/simple;
-	bh=jdQfrgOBYpndc4Fsctw4MkLVRC3/MTWv/FVWdX3Wfds=;
+	s=arc-20240116; t=1719861066; c=relaxed/simple;
+	bh=YZjZSMykGXHpHp8MTY7uQTOQsBY4p1Z5Z4+k4W6ouKY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zv3QgL1NkRgoEtZaz985UC4N9uM2Qd99ZNvqI1vjQmZL1mChmIGn4rvT9a54wV5m+75OSzFZJh7hDu+ilC7Pw4MpcjjHmpCow6D59ieVZU56Q2W6BKZZDkZhQjM4/jWI7OoA31I5+hF75c/XwTH+Z5UVyyFBOx26mtqlfsVfAig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dYRlcQKb; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=DXvJ4zPETC6+k9R2jkh88VjzcNXMD4RSdguM9tyaGXD37Z0Wm47zTvwhQeWb5EAUxEAOsPUM7WU7vjsLE3sYTPsz8DtO+VkKGl4XkCQAzyGQ55ro0lV9TGixRCyqeOtMksHVgL4iK5SD4Rc2g4Kpa+Zpo/MF09OUJ7pvAzRE7oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F3gTle1j; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYRlcQKb"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f9b364faddso19046385ad.3;
-        Mon, 01 Jul 2024 11:24:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F3gTle1j"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f9b52ef481so16116255ad.1;
+        Mon, 01 Jul 2024 12:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719858291; x=1720463091; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719861064; x=1720465864; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PkycmGNpNqpvxDu5dyJREuyztlzeKmepvD0aPuk8y+A=;
-        b=dYRlcQKboH1dJQGzl8mboalWfnPhytZwSQ6Zh9LCy0e37gx8x1jXuHUS6BYWsnuQbx
-         7gHqPmkIsXiJaz03FIMFQ6LqJLfRqroC5k+QGKfhCy08gBc7s+9uuozhpWdAmfi1JcVy
-         pOT3r3qReAmEDptV94WG7ObQnhTEMADn0CyA8+xBRTH0YjbnBSN0Vaai2FbXGE8FlEz2
-         wUKXFQefh1e5BqhF/iYkWu4PO1bqjBMZYoxeqT7NFIbd4xiSvSOL2jFYmdtoRnKtVugn
-         CLEd8USVMZQSTmNb1NttlBpjuHxumJ7L+KrthBiBjbx0YRII0tb+4WCSezleoPGqnoq9
-         /PXA==
+        bh=WaQf5eB4yJCnY9jwvEhyKrOzzCXHD916jBEPf3E+YZQ=;
+        b=F3gTle1jADqMsg0QSg0H7+6f6wliipD3f6pm8jwH5RXehEhh1f0jwW/2ep8odjW8RQ
+         t49oVfUN0O1joV0w9YhK40hcUIvBgRFjUwLJiea8zGCDSFSLI98oybwLKgaGVlQg3LyS
+         JG3NEPWrS1nd17NPfkUc4dd1yuPG4WxvrFRpVKfYdKToirrJRRnjwdxVbKZaXiTLxr3K
+         61IPTAPKnE4s2oDOIUjeqO+zJyrJMAJxBkijoHS7nH/mcl+QFKjgNf0Zkcj88zJBX1Fc
+         fjrAXg5oH3MPet4JcflzOSQwXdCVwuYBZOf2scy0970wFAKcAE7lTz8TJep3+oqXi5TO
+         OZFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719858291; x=1720463091;
+        d=1e100.net; s=20230601; t=1719861064; x=1720465864;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PkycmGNpNqpvxDu5dyJREuyztlzeKmepvD0aPuk8y+A=;
-        b=tosogN+ApajKuc0R4Q6dtO79xe0jJPcbT/PFmP8/tVR6z0AEdERqNiUZEMvwdkLxRF
-         f1qX4M4HksN1njLAqD2kXhGBTO6Em9sz8W4dy2Ih8qBt4IwXxeozrB69JCrr4XRsZRXo
-         He+QiZRVH9JXXGjIq7feNajD4XMO1lMqO+8TaAbabR7syLwmpo59c/TT/QoeYMIKGHYb
-         nR+nlIbcf0DU8WkJeEKLrHQbhq8w2EBZarh0W0nIb5EpFICSlC4+kMBw4bFi6tyDIr7a
-         nW3o65pdkxioHFv+sGbbGB3lPrVZYufBhSykb5P02+vm/mDsGjNjQCwxOAwwe5F8J4s1
-         yGGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbzFdZehHR5md3Xv/95SMM0VauBdFWjgFVN6IxR7itJmJPav1KCcV2/fy4vG24RNtglVyUR0nSRV7KqNktfYFAKBqtOn75ymUw3m4=
-X-Gm-Message-State: AOJu0YxiDSd9Oxuli6qDVjtZk2SWKc0tmBUdbHR1hptthYi2TnGCEDCl
-	ljttfvuvBAfOpEvr2qxY5uHD9e2h3tEB2uPTpWyfEb4VF28W8/tN
-X-Google-Smtp-Source: AGHT+IFb6snvZ+z2O23pZwZ6pvjYySm7UzN9xwUmSq3fbLFdKqe7ywiX7w1E/YUxY8WeDIW2nJzl3A==
-X-Received: by 2002:a17:902:eb89:b0:1f7:2bfe:87a2 with SMTP id d9443c01a7336-1fadbd02041mr34513455ad.62.1719858290691;
-        Mon, 01 Jul 2024 11:24:50 -0700 (PDT)
+        bh=WaQf5eB4yJCnY9jwvEhyKrOzzCXHD916jBEPf3E+YZQ=;
+        b=V6K/iUHj1gYvfhfNMP5hcuIF4Oa9ZlECELsaXEd4/3I5o8Vi/OhrWUepTvBGVbJFIj
+         MsnnoU3sE2/ABV7hslRGtiW3+Ac+qI6sUhDPhqEaa2ClSN0Ay1rzgW8FITTrLa9dRe67
+         wdztWp+lDtoINK2JN39tyP2eBg6ahkiHf7sySu4cE0IK3z9teP8vXlr4g/iwPMD0uijl
+         nr1wPi6dSWLk7OK5RTnPtYKp3ESecz68C9Mr1kUfCvP9Itji2clfiVqb/orPicZI1r/n
+         Ne0ir6A5RIqIFsoBLAoTCbF9SzY7aCOGNDCVga82Myi5t7DMI87+C00v8firztxk6Wh1
+         y0kg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3F39L4wTqUgRJOXlqd28NnQ00gVcZOLq6bMMMuGchKNjL4IQu3EvN6tWqvMDgZ+01+zxBXhaaDVuUr4/ZEPaACjdVKSJEEsvZ9qk=
+X-Gm-Message-State: AOJu0YxUWHcERN4N7d1pNZw0yzGwD1nC3SBeUJOhVxUPfM3P+ELNcZ70
+	YQIt+cqSfkWCkmlWhWlQyvwIZ98wjENlTtTjnkWdmY9uZvA/e0X/n6iArg==
+X-Google-Smtp-Source: AGHT+IGPIkmMifrgCWzHR7WbyF5ma4AM83gJ5/eEi+HSn7HAH1RWNky8/JUw2MG1a2gUqDHpnGvb0w==
+X-Received: by 2002:a17:90a:a516:b0:2c4:aa13:aa6e with SMTP id 98e67ed59e1d1-2c93d785f95mr3182828a91.41.1719861064216;
+        Mon, 01 Jul 2024 12:11:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac159686csm68112045ad.266.2024.07.01.11.24.49
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91d3b9c1dsm7127329a91.45.2024.07.01.12.11.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 11:24:49 -0700 (PDT)
+        Mon, 01 Jul 2024 12:11:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8ac6b3f9-7e08-470f-ad46-982a88623ba3@roeck-us.net>
-Date: Mon, 1 Jul 2024 11:24:48 -0700
+Message-ID: <593b4cd5-4b03-40de-8749-341964970ca1@roeck-us.net>
+Date: Mon, 1 Jul 2024 12:11:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/10] hwmon: (amc6821) Convert to with_info API
+Subject: Re: [PATCH 02/10] hwmon: (amc6821) Make reading and writing fan speed
+ limits consistent
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240628151346.1152838-1-linux@roeck-us.net>
- <20240628151346.1152838-11-linux@roeck-us.net>
- <b59cbabc-eef1-4697-8f33-276ee1967829@cherry.de>
+ <20240628151346.1152838-3-linux@roeck-us.net>
+ <615377cf-99bb-4159-b072-7992ccddf09d@cherry.de>
+ <9fce6789-edc8-4c44-89c0-ae4ca3ec3315@roeck-us.net>
+ <80a7f733-655e-4b00-a802-825d3acaafcb@roeck-us.net>
+ <535f3381-2fa9-41a3-896a-8d5879546ac9@cherry.de>
+ <8a86272c-933d-45c2-b229-ed10e65d9053@roeck-us.net>
+ <1543dfdc-0cde-401c-8ab7-a4f2ee0eb81f@cherry.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,137 +120,123 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <b59cbabc-eef1-4697-8f33-276ee1967829@cherry.de>
+In-Reply-To: <1543dfdc-0cde-401c-8ab7-a4f2ee0eb81f@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi uentin,
-
-On 7/1/24 10:46, Quentin Schulz wrote:
-
->>           return err;
->> -    return sysfs_emit(buf, "%d\n", !!(regval & mask));
->> +    *val = (int8_t)regval * 1000;
+On 7/1/24 11:05, Quentin Schulz wrote:
+> On 7/1/24 7:21 PM, Guenter Roeck wrote:
+>> On 7/1/24 09:13, Quentin Schulz wrote:
+>>> Hi Guenter,
+>>>
+>>> On 7/1/24 4:37 PM, Guenter Roeck wrote:
+>>>> On 7/1/24 07:11, Guenter Roeck wrote:
+>>>>> On 7/1/24 04:05, Quentin Schulz wrote:
+>>>>>> Hi Guenter,
+>>>>>>
+>>>>>> On 6/28/24 5:13 PM, Guenter Roeck wrote:
+>>>>>>> The default value of the maximum fan speed limit register is 0,
+>>>>>>> essentially translating to an unlimited fan speed. When reading
+>>>>>>> the limit, a value of 0 is reported in this case. However, writing
+>>>>>>> a value of 0 results in writing a value of 0xffff into the register,
+>>>>>>> which is inconsistent.
+>>>>>>>  > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>>>>>> ---
+>>>>>>>   drivers/hwmon/amc6821.c | 6 +++---
+>>>>>>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+>>>>>>> index 3c614a0bd192..e37257ae1a6b 100644
+>>>>>>> --- a/drivers/hwmon/amc6821.c
+>>>>>>> +++ b/drivers/hwmon/amc6821.c
+>>>>>>> @@ -601,7 +601,7 @@ static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
+>>>>>>>       struct amc6821_data *data = amc6821_update_device(dev);
+>>>>>>>       int ix = to_sensor_dev_attr(devattr)->index;
+>>>>>>>       if (0 == data->fan[ix])
+>>>>>>> -        return sprintf(buf, "0");
+>>>>>>> +        return sprintf(buf, "6000000");
+>>>>>>>       return sprintf(buf, "%d\n", (int)(6000000 / data->fan[ix]));
+>>>>>>>   }
+>>>>>>> @@ -625,10 +625,10 @@ static ssize_t fan_store(struct device *dev, struct device_attribute *attr,
+>>>>>>>       int ret = kstrtol(buf, 10, &val);
+>>>>>>>       if (ret)
+>>>>>>>           return ret;
+>>>>>>> -    val = 1 > val ? 0xFFFF : 6000000/val;
+>>>>>>> +    val = val < 1 ? 0xFFFF : 6000000 / val;
+>>>>>>>       mutex_lock(&data->update_lock);
+>>>>>>> -    data->fan[ix] = (u16) clamp_val(val, 1, 0xFFFF);
+>>>>>>> +    data->fan[ix] = (u16)clamp_val(val, 0, 0xFFFF);
+>>>>>>
+>>>>>> This is an unrelated change I believe and I would therefore have this in its own commit with proper documentation in the commit log. Indeed:
+>>>>>>
+>>>>>> 1- Change in fan_show handles the default 0x0 register value (which can only currently be achieved via the default value of the registers)
+>>>>>> 2- Allow (re-)setting unlimited fan speed by allowing the user to pass 6000001+ instead of clamping it to 6000000 RPM.
+>>>>>>
+>>>>>
+>>>>> Both changes are related.
+>>>>>
+>>>>> The whole point of this commit is to report and permit consistent values when
+>>>>> the register value is 0. But you do have a point - reading it after my changes
+>>>>> returns 6000000, but writing the same value sets the register to 1. So I think
+>>>>> the proper change would be to display 6000001 as speed if the register value is
+>>>>> 0, and provide a more detailed explanation. Would that address your concerns ?
+>>>>>
+>>>>
+>>>> Ah, never  mind, I'll do it differently:
+>>>>
+>>>> - If the register value is 0, keep reporting 0.
+>>>
+>>> Or...... maybe UINT_MAX?
+>>>
+>>
+>> Problem with that is that disconnected fans would report that value as fan speed.
+>> Traditionally drivers report a fan speed of 0 in that case.
+>>
 > 
-> The discussed signed_extended32() in another patch would need to make it here too.
+> OK so the issue is that the current fan speed in RPM could be 0 because it's disconnected, or because it exceeds 6M tach pulses.
 > 
-Yes. Thanks for the reminder, I had missed that one.
-
->> -    return sprintf(buf, "%d\n", val);
->> +    err = regmap_bulk_read(regmap, reg, regs, 2);
->> +    if (err)
->> +        return err;
->> +
->> +    regval = (regs[1] << 8) | regs[0];
->> +    *val = 6000000 / (regval ? : 1);
->> +
+>> On the other side I agree that reporting "0" as "maximum fan speed" doesn't
+>> make much sense either because the real limit _is_ unlimited. But reporting
+>> 4294967295 in that case isn't really any better.
+>>
 > 
-> Just putting a "bookmark" here since we're having a discussion about this logic in another thread for another patch.
-> 
-> Also... missing 0 here between the question mark and the colon?
-> 
-It translates to
-	 *val = 6000000 / (regval ? regval : 1);
-which is what I had wanted (divide by regval if regval != 0,
-otherwise divide by 1 [i.e., return 6000000]).
-
-I have it now as
-	*val = regval ? 6000000 / regval : 0;
-
->> +static int amc6821_fan_write(struct device *dev, u32 attr, long val)
->> +{
->> +    struct amc6821_data *data = dev_get_drvdata(dev);
->> +    struct regmap *regmap = data->regmap;
->> +    u8 regs[2];
->> +    int reg;
->> +
->> +    if (attr == hwmon_fan_pulses) {
->> +        if (val != 2 && val != 4)
->> +            return -EINVAL;
->> +        return regmap_update_bits(regmap, AMC6821_REG_CONF4,
->> +                     AMC6821_CONF4_PSPR,
->> +                     val == 4 ? AMC6821_CONF4_PSPR : 0);
->> +    }
->> +
->> +    if (val < 0)
->> +        return -EINVAL;
->> +
->> +    val = clamp_val(6000000 / (val ? : 1), 0, 0xffff);
->> +
-> 
-> And another "bookmark" here.
-> 
-
-That is now
-	val = val ? 6000000 / clamp_val(val, 1, 6000000) : 0;
-         val = clamp_val(val, 0, 0xffff);
-
-'val' is checked earlier and must be > 0 for the minimum
-and target fan speed.
-	
->> +    switch (attr) {
->> +    case hwmon_fan_min:
->> +        reg = AMC6821_REG_TACH_LLIMITL;
->> +        break;
->> +    case hwmon_fan_max:
->> +        reg = AMC6821_REG_TACH_HLIMITL;
->> +        break;
->> +    case hwmon_fan_target:
->> +        reg = AMC6821_REG_TACH_SETTINGL;
->> +        break;
->> +    default:
->> +        return -EOPNOTSUPP;
->> +    }
->> +
->> +    regs[0] = val & 0xff;
->> +    regs[1] = val >> 8;
->> +
->> +    return regmap_bulk_write(data->regmap, reg, regs, 2);
->>   }
->>   static ssize_t temp_auto_point_temp_show(struct device *dev,
->>                        struct device_attribute *devattr,
->>                        char *buf)
->>   {
->> +    struct amc6821_data *data = dev_get_drvdata(dev);
->>       int ix = to_sensor_dev_attr_2(devattr)->index;
->>       int nr = to_sensor_dev_attr_2(devattr)->nr;
->> -    struct amc6821_data *data = dev_get_drvdata(dev);
-> 
-> Should be squashed with the appropriate commit?
+> Agreed, but I'm also wondering if there really exist fans at 6M+ RPMs? Maybe we're discussing a scenario that just doesn't exist (yet) and that we don't need to handle?
 > 
 
-Yes, the previous one.
+No, such fans don't exist. There are some industrial fans with high rpm, like
+in the 30k+ RPM range, but it would not be technically possible to build one
+much faster than that. The fastest (small) fan I could find is
+https://www.sanyodenki.com/archive/document/product/cooling/catalog_E_pdf/San_Ace_40HVA28_E.pdf
+which is rated for up to 38,000 rpm, but that is pretty much as fast as it goes.
 
->>       switch (nr) {
->>       case 1:
->> @@ -423,7 +495,6 @@ static ssize_t temp_auto_point_temp_show(struct device *dev,
->>           return sprintf(buf, "%d\n",
->>               data->temp2_auto_point_temp[ix] * 1000);
->>       default:
->> -        dev_dbg(dev, "Unknown attr->nr (%d).\n", nr);
+As an exercise, you could try to calculate the edge speed of a fan running at
+6M RPM. That would be several times the speed of sound even for a very small fan.
+
+> [...]
+>>>> This minimizes user visibility of the changes, and also ensures that
+>>>> the reported fan speed is 0 if the register value is 0 when reading the fan
+>>>> speed.
+>>>>
+>>>
+>>> But didn't you say this means the fan is running at unknown 60 000 000+ RPMs? Do we really want to return 0 even if the fan is actually running? In which case max < current (possibly) but with no event happening (which I would expect, reading the datasheet).
+>>>
+>>
+>> Did I say that ? If so, I must have meant something different. The register counts the
+>> pulse period, so, yes, it would be 0 if rpm is above 6,000,000. But that is really not
+>> realistic. In practice I don't know what the controller reports in the register if no
+>> fan is connected - that would require real hardware which obviously I don't have.
+>>
 > 
-> Not sure this is related? Maybe a separate commit?
+> I'll forage in our shelves tomorrow if I don't forget, trying to find one... if we have one.
 > 
-
-It should have been part of the previous commit, where it is explained ("remove
-spurious debug messages which would only be seen as result of a bug in the code")
-
->> @@ -872,7 +902,6 @@ static int amc6821_probe(struct i2c_client *client)
->>       if (!data)
->>           return -ENOMEM;
->> -
+>> Overall I think I'll stick with the minimum, at least for now: Permit writing 0
+>> into the high limit register only, and otherwise keep the currently permitted ranges.
+>>
 > 
-> Should be squashed with the previous commit.
+> Works for me, we can always revisit later on if needed/desired.
 > 
-Ok.
+Agreed.
 
-> Nice clean-up albeit very difficult to review in patch form, not sure there's anything we can do about it though. Maybe migrating one attribute at a time, but I would myself not be very happy if I was asked to do it :)
-> 
-
-Yes, that is always the problem with the conversion to the with_info API.
-I don't think it would make much sense to try to split it further.
-
-Thanks a lot for the detailed review!
-
+Thanks,
 Guenter
 
