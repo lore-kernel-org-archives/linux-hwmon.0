@@ -1,61 +1,61 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613B246434;
-	Mon,  1 Jul 2024 17:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7595315EFC2;
+	Mon,  1 Jul 2024 17:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719855023; cv=none; b=sbaUzkkvOiRuS45lXOmSIJIxvbZVMhglwgJ8TEme9cyGIRz1FYyaiIk71DnNA6+XcZfvmOrVdEyzx/Ofl7EmMhfUPhJP1FomT8UOcbFxfKUsspTv8YfQ5TTXyrJfPXC5P+bm/GyctBVozRJ/2K371lilPng2PFM+kYfH/bn9yAc=
+	t=1719855105; cv=none; b=CvQ6VJ0y/FBbyHIvk6sv3I33QFYUhzfHteT/dM7jKfPfDKE9hZum22DR2ryq0TmF+BWi2YjNXyr2Xtj8YBMnvhAuNRIZG0Vjy+9/zPQJJ1QwaM57FU3LRBQly6KOXG0u28dgETK3mdH+IyR5OkyAE5wn6OlVrsmh0DIIztSRwdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719855023; c=relaxed/simple;
-	bh=9B3GeytStm6KQQcYRGClzHWWdF4lELSrsW7DZVhGry0=;
+	s=arc-20240116; t=1719855105; c=relaxed/simple;
+	bh=TSnmE91ts8m5MoEkwM8+530yEwcIGko8qsO6yzrmnrw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XoALporIhg70ZWJNOm7EWMpRYaQHez0rZ562oiYwLw10sU2fbQ6WOPWm/znQW7jV8fxgveC+S4ypncer0hnm01JMveKMjT83sleM265Ns0OIHo8Xw/GGka5CbuCEaJ3i7pdI/h3M0r50RWig0X0WQjGF6XlIUSyFavZ7twDi5a0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MHHVEhiC; arc=none smtp.client-ip=209.85.210.174
+	 In-Reply-To:Content-Type; b=CCFuL89gBuY6sUhl7JDTU6Jg5MhvFIi7DiG0fA3Ygyq/dS1XOkbwUUUT8xw9zqUvtCGomD05Dk1d6aKDI8C8ZXh9oG6GWu8FG4qfbPXQwAB00wCIoVroZ2l5lrySDat0JSCMU9uyJhp/BNV6e3N9JHXe0te8T/eZ9NuOVI6rJfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b/0m5HbZ; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MHHVEhiC"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7066c799382so2721319b3a.3;
-        Mon, 01 Jul 2024 10:30:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b/0m5HbZ"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7021dd7ffebso251933a34.3;
+        Mon, 01 Jul 2024 10:31:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719855022; x=1720459822; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719855102; x=1720459902; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uYSIMscRLzxdz7e0rxkejaGUQTT7AfQBN3YKjGG/1O8=;
-        b=MHHVEhiCUKGx3gwzdHZilZPzsgYOvZ9nE45PiqXoYPRytMqEP1OKBfnu9cuz4mOJB+
-         aHncHbmZcOBdwgwV2oEAIseYzOsvFgmdrceVfratqCg7JCc7T3+iDXQ6U0KXtRayUVIv
-         GSnOG4UCYAMSB1FIZ5gzPSRezf3l8AbAYJFUO2GHehoYkrcai0HNebD1TO8mgqx05SCE
-         Nm/Uu/xTkdEyjapbpWKWQ2wDfTeNN7ccl21MVppPNAZoLbhn5Ipin6xh2ODpPVkGr0N9
-         gjcnykDjNX2vVl+BAcB0eidSFOYVK0cxwCZECnS4NN8kCfWgT5mC/uWVCH6UHAGE4QA+
-         EPhg==
+        bh=zSAK/44NTLDZNYBgMCw+YgL8/CQMC51+c+ZUun3pCUo=;
+        b=b/0m5HbZ9ITpi++IxCLSG5is1QeoAGKvp0WH8NKv0xyhXQHbauYcPnHJzYPo+onMpl
+         QRUOGEzYaKZ9TbzibEsb+7DoxnRUCGRQnedoCQ0Z0Cko/ox4o0kftv0kdc+HnaVuL0wI
+         2uoukrXg/D89VyTR2p9bZb5dy3O2Xmnj7Nx/Jo0IJODjfmdnnDEa3zKj4DUNmIHinuTm
+         Hm6w1AYbar48tm69JLHePcbGrZpMu9pLWryPtom8ibvuq10oH3jr/yVATXYsPgRC8y6j
+         NLWcOATRQEHb1Afn+ke6Mpey+xM6Nl8xIk+CuMaSLX8lGu0uKvoSpDENGcnobs5TLy8P
+         EdOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719855022; x=1720459822;
+        d=1e100.net; s=20230601; t=1719855102; x=1720459902;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uYSIMscRLzxdz7e0rxkejaGUQTT7AfQBN3YKjGG/1O8=;
-        b=pRD7vLI7CxQsZludnBpJm5hAdl5YOr6ZEMWbfGZ+khk+7hKQcLNLiGkliXyagKjZRz
-         3a1QgAEnVvcOy5kOPXhZVsqeghNnDaLmISsQok/Bn5EX5ZQxpQE4r6xP2qccNWak1J3h
-         sS6EpEnLIlkW+3HJr742gtSD9zlh1N48J51eUA0+3b0vxHgaWTyJJIGEElxzPJbNYTti
-         Ql4OFMKKp9sh0PXDanLhDXQd8zp99Aa4HjJhPLmeemkBF2lchJquSC0pNefIvlEs0w3f
-         pFePIsUFVoAv4bUFVXIMttxcARxtuH6GBXGEWcIFXfxBnr/62U1iXS6ei+7MXtoUZGkk
-         HedA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjhK8UiCTbPROv/Eq7qI3l1ndaoGg1R+qrh1h452Gam5vV3wyQqmwfanQ9PvbY3WW6hKheKPC+pY7tPFirIpi3Dop0y5zlrYJRT1o=
-X-Gm-Message-State: AOJu0YwUmQ56P56yVZEB6Vl/hbGjn1UXeA4zikLK69KWVvXbKB8mjg8R
-	KDk/viRuiVAz/s/RRQ6MTGIumisYwJumQaYMDur9iFpm372DlQvD4PuXHg==
-X-Google-Smtp-Source: AGHT+IGxlI6ltNr75wSTpbDicqo6+EMHbJK+6H8aGeSTokG4V5NB2VpNUrfS+xX5GMlBXL89nHOU1A==
-X-Received: by 2002:a05:6a20:9191:b0:1be:d260:93c1 with SMTP id adf61e73a8af0-1bef60fce2bmr10607756637.9.1719855021584;
-        Mon, 01 Jul 2024 10:30:21 -0700 (PDT)
+        bh=zSAK/44NTLDZNYBgMCw+YgL8/CQMC51+c+ZUun3pCUo=;
+        b=h/rIkJRn0jbblm5gkAo1ryKikmvMlHGykrwvqydxkLZoz3Dsv3EfQw3MdNrpf9gg3W
+         Q0uE+DK2qKiwO0Vak6EXaIpR739TqRy6vsKMPtkBKL3mTG0gS5YCQ6ImR7sfmE4OD6DH
+         Yakdc1JeYGPx/fDXIlVLWDoV86ESoLq/PMf+wVmv2tpA60MZ/y9NZWbU40GeIxfqI4VI
+         Jf+yBRevOdF76qJsrfl9Sw1ddP2SkNLCZ44DYamgxR+ACEFB0EpRB5AiOOZBeCBgxwpR
+         qUzEIKPg0aJQPV7hgLX0ZvA3bk7X1UndaSNkV/k6OCEr6wq7zss90zn+o+2iCc++2XDA
+         dncg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4riUGKDbqsdC95gG5zSkS45wufC02KnWN/MKQQXuvdAVf6ksbcYV+EH6EqH0Pk3hJkGy5bUhxdbCw9LBrzDUbdLC9Ewsf1ilZbO4=
+X-Gm-Message-State: AOJu0YwwQ3j3Bpqm6HyBmVGpJceQdbClopEheDd6/BiXmXu/bWaFGWrl
+	kbfHVDQn2GfkG1T9GgOArwVGeKausdjmoRoXHQKAKpgAS4Xa4NC12Ylulg==
+X-Google-Smtp-Source: AGHT+IGXyHpSbUYSxmrEDs3+UU7OqkU8gE0jXgL2G6nQ7sAsxB6lv6xdEN61pCEoWV2eZxZ47nxU0Q==
+X-Received: by 2002:a05:6871:3a25:b0:25d:6d99:a483 with SMTP id 586e51a60fabf-25db340df18mr5609826fac.12.1719855101772;
+        Mon, 01 Jul 2024 10:31:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac15693f3sm67524775ad.218.2024.07.01.10.30.20
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70801e54b97sm7023587b3a.16.2024.07.01.10.31.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 10:30:21 -0700 (PDT)
+        Mon, 01 Jul 2024 10:31:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1934f597-9133-4784-9a41-8808a1253376@roeck-us.net>
-Date: Mon, 1 Jul 2024 10:30:19 -0700
+Message-ID: <ad2dbb44-b7cd-491f-aced-63e15cef1837@roeck-us.net>
+Date: Mon, 1 Jul 2024 10:31:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/10] hwmon: (amc6821) Convert to use regmap
+Subject: Re: [PATCH 04/10] hwmon: (amc6821) Add support for fan1_target and
+ pwm1_enable mode 4
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240628151346.1152838-1-linux@roeck-us.net>
- <20240628151346.1152838-10-linux@roeck-us.net>
- <7a829bf2-c5f6-4234-a224-52328045f581@cherry.de>
- <13b73e86-fed0-4ef0-9815-eda765f2a70c@roeck-us.net>
- <7a1f2916-3e2b-45ee-9681-7327d7b1798a@cherry.de>
+ <20240628151346.1152838-5-linux@roeck-us.net>
+ <e1933ae1-af38-4c17-b36e-33d43e90f057@cherry.de>
+ <31eb2d27-fd00-4284-93f8-23504e14b47f@roeck-us.net>
+ <86df2f79-c201-4e80-9e28-dfe13b674258@cherry.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,49 +117,79 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <7a1f2916-3e2b-45ee-9681-7327d7b1798a@cherry.de>
+In-Reply-To: <86df2f79-c201-4e80-9e28-dfe13b674258@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/1/24 09:54, Quentin Schulz wrote:
-> Hi Guenter,
+On 7/1/24 09:29, Quentin Schulz wrote:
+> Guenter,
 > 
-> On 7/1/24 3:47 PM, Guenter Roeck wrote:
->> On 7/1/24 06:01, Quentin Schulz wrote:
+> On 7/1/24 5:26 PM, Guenter Roeck wrote:
+>> Quentin,
 >>
->>>> -#define AMC6821_CONF1_FDRC1        BIT(7)
->>>> +#define AMC6821_CONF1_FDRC1        BIT(6)
+>> On 7/1/24 04:23, Quentin Schulz wrote:
+>>> Hi Guenter,
 >>>
->>> This should have been squashed with a previous commit.
+>>> On 6/28/24 5:13 PM, Guenter Roeck wrote:
+>>>> After setting fan1_target and setting pwm1_enable to 4,
+>>>> the fan controller tries to achieve the requested fan speed.
+>>>>
 >>>
->>
->> Yes. I had found the bug but then fixed it in the wrong patch of the series.
->>
->> ...
->>>>   static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
->>>>                char *buf)
->>>>   {
->>>> -    struct amc6821_data *data = amc6821_update_device(dev);
->>>> +    struct amc6821_data *data = dev_get_drvdata(dev);
->>>>       int ix = to_sensor_dev_attr(devattr)->index;
->>>> +    u32 regval;
+>>> There's something in the docs (section `Software-RPM Control Mode (Fan Speed Regulator`) that rubs me the wrong way though.
 >>>
->>> Why not a u8 directly here? We know single reads are going to return a u8 so no need to store more?
+>>> """
+>>> When the TACH-MODE bit (bit 1 of
+>>> 0x02) is cleared ('0'), the duty cycle of PWM-Out is forced to 30% when the calculated desired value of duty
+>>> cycle is less than 30%. Therefore, the TACH setting must be not greater than the value corresponding to the
+>>> RPM for 30% duty cycle.
+>>> """
 >>>
 >>
->> The parameter of regmap_read is a pointer to unsigned int.
+>> It turns out that the tach-mode bit is in reality the DC vs. pwm selector,
+>> and defaults to DC. For pwm fans (4-bit fans), the bit should be set to 1.
+>> That means that pwm1_mode should be supported to set the mode. I'll add a patch
+>> for that.
+>>
+>>> TACH-MODE is never modified in the driver, so its default value prevails: 0.
+>>>
+>>> I'm wondering if there isn't something we need to do to make sure we're not under those 30% for TACH-Low-Limit/TACH-High-Limit/TACH-SETTING? Forbid the user to write (or clamp instead) <30% duty cycle. Forbid the user to select mode 4 if current values are <30% duty cycle, or update them to be >=30%?
+>>>
+>>
+>> It also says that the "the selected target speed must not be too low
+>> to operate the fan", which makes sense. It also says that the requested
+>> fan speed should not be below the speed translating to 30% duty cycle.
+>> However, that is not a fixed value; it depends on the fan. Some fans may
+>> operate at 500 rpm with a duty cycle of 30%, others at 3,000 rpm.
+>> Looking at Figure 26, I don't think the value written into the pwm
+>> register makes any difference in Software-RPM control mode.
+>>
+>> With that in mind, the only thing we could do is to ensure that the
+>> requested fan speed is within the configured low and high limits,
+>> or in other words require the user to set the limits before writing
+>> the target fan speed. That is a bit circular, though - the user
+>> could still write the target speed and _then_ update the limits
+>> to a value outside the requested limit. The best we could do would be
+>> to sanitize settings when the mode is set to 4 and any of the limits
+>> is changed, and return an error if an obviously wrong limit or target
+>> speed is requested (target speed outside limit, or low limit >= high
+>> limit). Do you think that would be worth the effort ?
 >>
 > 
-> Eventually through the many indirections, because our regmap_config sets the size of values in registers to 8b, it's a u8. But it's not worth our time to optimize this.
+> It depends how far we want to go to prevent the user shooting themself in the foot. I think the kernel's stance on that is "let them"?
 > 
-> EDIT: coming back to this after reading the rest... Wouldn't we have a possible endianness issue here? Especially with the int8_t cast or the sign_extend32 (wouldn't the sign bit be at a different index on LE/BE ?). Sorry for the question, endianness really isn't my cup of tea.
+> The "benefit" of forcing the user to enter a value in a user-modifiable range is that they wouldn't unknowingly trigger a too-low or too-high logic within the IC.
 > 
+> As an example, my bank has a limit on how much I can pay by card per day. However, I can instantly change the value through an app and retry the payment again right after if it's been refused.
+> 
+> Would that be something interesting for this speed limit.... who knows.
+> 
+> Another thing we could do is modify the min and max values if they are higher and lower than the requested speed. But this is trying to be smart, which I think isn't something the kernel is aiming for (as little logic/algorithm as possible)?
+> 
+> So... I guess, the answer is "no, not worth the effort"?
+> 
+I'll go with "not worth the effort".
 
-The underlying code does an implicit conversion. For example,  see
-regmap_smbus_byte_reg_read(). There is no endianness issue because
-the returned data is always in host endianness order. Sure, that
-could be big endian, but the sign bit is still in bit 7.
+Thanks a lot for the feedback!
 
-Thanks,
 Guenter
 
