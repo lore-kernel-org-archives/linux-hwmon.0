@@ -1,61 +1,61 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFB716A950;
-	Mon,  1 Jul 2024 14:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEF1667F6;
+	Mon,  1 Jul 2024 14:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719844662; cv=none; b=CwApHBIalVinSrZI3VxHomt/QJoznm/jqsbF9r4ovykqGDUzRK3jAmT5bjIQlSthwIvfmplDrPaM8lSRC03cHsXZIhvWf3QGBIjpRWBBGIL6z5l0WhZWXBXstXkhck2xGtmm4FlEQX6kj/SVttS0d03ENmuaWdbq+SYgHzHAD2w=
+	t=1719845045; cv=none; b=dsuCEfCTVQzvsyKw7Zn7ZKO8GgRGimR/H5l5Ker1/24JXsijJDE5zFz5VRjv056tIGa1JI7jyEBRWdlG1SnavwgvJwqnZ0qY/Y/ZhLlxp29cprDNk5BKKVKL7se5P/yfE/6yefJWRsmE1nULW6twF1iOPUktRllIP12zROQqrhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719844662; c=relaxed/simple;
-	bh=wFygjrw+03MVkih0LnEQYVyGmtKD2135VhE5JF8Lgis=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=U1VkKjt95SOg554H1LI/BHB7EIFgDKsnMyyFo+VhIKchxi0p2JBoj7IcdouvLzORuz+U9dILXRScwPnX36tTq4PjZxBr2/hF8GvIXDLfiF0/wHdpD7Gx49UkwstTObQIFlDFVS6Tkq2W8uJgfw6Stu339UgBjB6zFMef8CU2z44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RCBSiOoY; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1719845045; c=relaxed/simple;
+	bh=QJt/g88ILmRPOr0O3qKjmRXRftaMfWYZlfM+9TgSXoY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AoLv52W/KpNarExpT4xt6cz9sXu0qLgW6W/KWdkfMFIgRlejMQF0PNwwathp8Roz6lKc7zJkIBQJNyB7Fkn00VfbZipKD4DA7jSwSXwRlNxDEpSGhrEMpbMRvowsB26TF2Xc6Ie+9ZveYCLwBxqh1EDYyXFOqPL4zYm5kpZurvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=StK21unG; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RCBSiOoY"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-726d9b3bcf8so2040882a12.0;
-        Mon, 01 Jul 2024 07:37:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="StK21unG"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2c70c372755so1950741a91.1;
+        Mon, 01 Jul 2024 07:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719844660; x=1720449460; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4W7aGgE3bwlAgmVAT8Os13+TJFUopHhRByibpmBWhzI=;
-        b=RCBSiOoYRmfh5e1m9O9UKfJQP1V7nA663cxFlWhKlpEQVerA+MrMZf8as9cwGnawJD
-         +3H1rhwfDnM/7sMRS7Mq28ZT6QRO2f2ri8X2A42U9Qk3cJV7J67ZpSQh4431sAgNok4u
-         lTwOsKebqNsNG1k4YwTV3Hm931kAsPHc/jQxOD6snpBaBcsl1x0JYqZglc35llHH8Ie7
-         7It6TZRwuTJ2CNnxEj48BTtZ6VsQZKxoiwnfaaY8U2eUtSMv6nKSMk1ph0gWpAE2rvOF
-         G0GVR+mWdlWb7ktTTp4ZiSSAyNaS1tVrOFZh2nD2eNDYeo8uxu1g1cmCJDFQYvS9VLzn
-         ayxw==
+        d=gmail.com; s=20230601; t=1719845043; x=1720449843; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+f3PquVXHV2z7yTB4AWHe6Rt80pHIkayPW4cjA3/coE=;
+        b=StK21unGFGV1J4xm4SXq1BzS1URCEi1trTcsFRnQapZluenMH1iF6WPmi0vVnfOR8W
+         iHMcI9GaBpOgNkK064SbfXOTU6TPB7abJljPchBODewvedRazmesRg6A6FPCdoRU26zT
+         wlODcV3dA23Sw125M27XtJ4N6+5rc93c/P5s3d2Y2ecKhhDAFl5Z2+Fgp8/kp617qkbb
+         Gd3POWRkQNZvvn9MGow82xthYurrY665bcGQ5EO71/D7u17kV8ZxwBQ7WrbuNG8wWO4K
+         HYF0I779LvZ79Jh9mpm+EquzUHYCygUsLX+Pq9Mzc7LOjCRm2IZuYuOxmdElPZgjAOvJ
+         ghcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719844660; x=1720449460;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1719845043; x=1720449843;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4W7aGgE3bwlAgmVAT8Os13+TJFUopHhRByibpmBWhzI=;
-        b=P2Iy3suuwpPqzjzxkczjj7RBkY9jiQn5tufcU0TkpKD1REIUMDK/5RzltbOw6+pOEG
-         S4OWLN6W4w+3P6VKJke4vSvsja4KiQWOCu4RvVqncyVobw0oj78MC45sIQY3z/HUtGRc
-         LFQOpjouiSGlmZuSQIS3kOJ3okXMGz72NcYeC7amTQay1tLA7N+lq1WHDUDj3KYQDZ8q
-         1ASzwiwSB7luNH11navDgFSUeWkwoY3iSOpReFd2EBNSvp/wx/15hrk3dBJAiHK3YPGr
-         xzeilgAPAbAjsAesHnhAq3JvEFLFSk+m1mEvNyIWUoXoWK+u2l+8xFt2z2EqAD4VqsGC
-         gWYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXw+gqGa4e+oP1QQ4hmPM1j8wc0bm4olh6KcJ4dQkBkY+rdbNFjwOpmpEgu83ucCz4+qW4u0Y4NGSvA9/CQL3ZAMt2ijgWXf/ZarNY=
-X-Gm-Message-State: AOJu0YxlV+b69t4MGFBT3/CRQpHHAprQnxioNChTOv4nc83SBqCF3sZS
-	Xe1gEj/m8GvklcjEpQ69evzMjd0xv2ajgmL1StKeYcy8z7PDxC0HJqQ9qA==
-X-Google-Smtp-Source: AGHT+IEQF02p3y8OFOzzKeUh5j9ACccBn3wvbJLst9pFynEQYARoGnUEwN5iGjbw1AVel3fjJpYtzw==
-X-Received: by 2002:a17:90a:128d:b0:2c3:236e:473c with SMTP id 98e67ed59e1d1-2c93d710aacmr3236445a91.21.1719844659948;
-        Mon, 01 Jul 2024 07:37:39 -0700 (PDT)
+        bh=+f3PquVXHV2z7yTB4AWHe6Rt80pHIkayPW4cjA3/coE=;
+        b=gDG64PphN7LFmdP6SxGaqCUO1q0sqz06PvBrkswQiE58m1MgHnWBODkjRnu1Q3NSZW
+         wVKzhzPyCAFqBifowFTcV0mJ74Fnp4q2peN7v7mIDRdrcljxOjK+lSWbjkf4+fMarNcm
+         Iz4lHyBpTFKrIp3/4FVdLDUA+pqvw182d5wu87c6CwB2N8ZrTll4e1SLhGpUa6exdGIV
+         uq4MjDX9sgnJlrRpKpa0ODUjWNZ3oD3Jgnr00oV/SBfVy0icNkwbel5bCUvHFhReK+xc
+         6AXbcMKtGXJt9P8hYCV40p7cLdGE7fso8i4oma274CUkG/oTvCIHzknI3xiR0WZ/+Ms1
+         T8QA==
+X-Forwarded-Encrypted: i=1; AJvYcCXW90f/cTVhB2OS+wptg+9Gl0D/1wG5CujwKPu7C/1oma2Fp+dchZC9yvUR35utJxgmNt3QryhfKO0Z4tkzsF7oWXkFfhyYaqo+IX8=
+X-Gm-Message-State: AOJu0Yyxp1n7n2SSisGazVnm+bHLVKslj/npO08rLRCfGi282HhyE2qB
+	1FrDGrJVyQvVkGqj99uEAvsE80npJ1OTRUdbHpA334fohFbPQoMx
+X-Google-Smtp-Source: AGHT+IEZccSHoszorYX2PTckFKY8+DsPOg8OCBDmvtYOo3S/w+QUs6Srbne5zCOmkEQLDm4ztzxFWg==
+X-Received: by 2002:a17:90a:e009:b0:2c8:f3a5:4ddd with SMTP id 98e67ed59e1d1-2c93d743777mr2786260a91.19.1719845042926;
+        Mon, 01 Jul 2024 07:44:02 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91ce5469dsm6863021a91.23.2024.07.01.07.37.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c939ccb232sm2495370a91.0.2024.07.01.07.44.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 07:37:39 -0700 (PDT)
+        Mon, 01 Jul 2024 07:44:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <80a7f733-655e-4b00-a802-825d3acaafcb@roeck-us.net>
-Date: Mon, 1 Jul 2024 07:37:37 -0700
+Message-ID: <7262a592-f344-48b8-801c-e9f6d365eb77@roeck-us.net>
+Date: Mon, 1 Jul 2024 07:44:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,16 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/10] hwmon: (amc6821) Make reading and writing fan speed
- limits consistent
-From: Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 07/10] hwmon: (amc2821) Use BIT() and GENMASK()
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240628151346.1152838-1-linux@roeck-us.net>
- <20240628151346.1152838-3-linux@roeck-us.net>
- <615377cf-99bb-4159-b072-7992ccddf09d@cherry.de>
- <9fce6789-edc8-4c44-89c0-ae4ca3ec3315@roeck-us.net>
+ <20240628151346.1152838-8-linux@roeck-us.net>
+ <339e3355-d6cb-4327-be49-e2721f1a592d@cherry.de>
 Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -116,71 +114,57 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <9fce6789-edc8-4c44-89c0-ae4ca3ec3315@roeck-us.net>
+In-Reply-To: <339e3355-d6cb-4327-be49-e2721f1a592d@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/1/24 07:11, Guenter Roeck wrote:
-> On 7/1/24 04:05, Quentin Schulz wrote:
->> Hi Guenter,
->>
->> On 6/28/24 5:13 PM, Guenter Roeck wrote:
->>> The default value of the maximum fan speed limit register is 0,
->>> essentially translating to an unlimited fan speed. When reading
->>> the limit, a value of 0 is reported in this case. However, writing
->>> a value of 0 results in writing a value of 0xffff into the register,
->>> which is inconsistent.
->>>  > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>> ---
->>>   drivers/hwmon/amc6821.c | 6 +++---
->>>   1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
->>> index 3c614a0bd192..e37257ae1a6b 100644
->>> --- a/drivers/hwmon/amc6821.c
->>> +++ b/drivers/hwmon/amc6821.c
->>> @@ -601,7 +601,7 @@ static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
->>>       struct amc6821_data *data = amc6821_update_device(dev);
->>>       int ix = to_sensor_dev_attr(devattr)->index;
->>>       if (0 == data->fan[ix])
->>> -        return sprintf(buf, "0");
->>> +        return sprintf(buf, "6000000");
->>>       return sprintf(buf, "%d\n", (int)(6000000 / data->fan[ix]));
->>>   }
->>> @@ -625,10 +625,10 @@ static ssize_t fan_store(struct device *dev, struct device_attribute *attr,
->>>       int ret = kstrtol(buf, 10, &val);
->>>       if (ret)
->>>           return ret;
->>> -    val = 1 > val ? 0xFFFF : 6000000/val;
->>> +    val = val < 1 ? 0xFFFF : 6000000 / val;
->>>       mutex_lock(&data->update_lock);
->>> -    data->fan[ix] = (u16) clamp_val(val, 1, 0xFFFF);
->>> +    data->fan[ix] = (u16)clamp_val(val, 0, 0xFFFF);
->>
->> This is an unrelated change I believe and I would therefore have this in its own commit with proper documentation in the commit log. Indeed:
->>
->> 1- Change in fan_show handles the default 0x0 register value (which can only currently be achieved via the default value of the registers)
->> 2- Allow (re-)setting unlimited fan speed by allowing the user to pass 6000001+ instead of clamping it to 6000000 RPM.
->>
+On 7/1/24 04:31, Quentin Schulz wrote:
+> Hi Guenter,
 > 
-> Both changes are related.
+> On 6/28/24 5:13 PM, Guenter Roeck wrote:
+>> Use BIT() and GENMASK() for bit and mask definitions
+>> to help distinguish bit and mask definitions from other
+>> defines and to make the code easier to read.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>   drivers/hwmon/amc6821.c | 71 +++++++++++++++++++++--------------------
+>>   1 file changed, 36 insertions(+), 35 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+>> index 03ce2e3ffd86..042e2044de7b 100644
+>> --- a/drivers/hwmon/amc6821.c
+>> +++ b/drivers/hwmon/amc6821.c
+>> @@ -8,6 +8,7 @@
+>>    * Copyright (C) 2007 Hans J. Koch <hjk@hansjkoch.de>
+>>    */
+>> +#include <linux/bits.h>
+>>   #include <linux/err.h>
+>>   #include <linux/hwmon.h>
+>>   #include <linux/hwmon-sysfs.h>
+>> @@ -68,46 +69,46 @@ enum chips { amc6821 };
+>>   #define AMC6821_REG_TACH_SETTINGL    0x1e
+>>   #define AMC6821_REG_TACH_SETTINGH    0x1f
+>> -#define AMC6821_CONF1_START        0x01
+>> -#define AMC6821_CONF1_FAN_INT_EN    0x02
+>> -#define AMC6821_CONF1_FANIE        0x04
+>> -#define AMC6821_CONF1_PWMINV        0x08
+>> -#define AMC6821_CONF1_FAN_FAULT_EN    0x10
+>> -#define AMC6821_CONF1_FDRC0        0x20
+>> -#define AMC6821_CONF1_FDRC1        0x40
+>> -#define AMC6821_CONF1_THERMOVIE        0x80
+>> +#define AMC6821_CONF1_START        BIT(0)
+>> +#define AMC6821_CONF1_FAN_INT_EN    BIT(1)
+>> +#define AMC6821_CONF1_FANIE        BIT(2)
+>> +#define AMC6821_CONF1_PWMINV        BIT(3)
+>> +#define AMC6821_CONF1_FAN_FAULT_EN    BIT(4)
+>> +#define AMC6821_CONF1_FDRC0        BIT(5)
+>> +#define AMC6821_CONF1_FDRC1        BIT(7)
 > 
-> The whole point of this commit is to report and permit consistent values when
-> the register value is 0. But you do have a point - reading it after my changes
-> returns 6000000, but writing the same value sets the register to 1. So I think
-> the proper change would be to display 6000001 as speed if the register value is
-> 0, and provide a more detailed explanation. Would that address your concerns ?
+> Should be BIT(6) here if I'm not mistaken.
 > 
 
-Ah, never  mind, I'll do it differently:
-
-- If the register value is 0, keep reporting 0.
-- If the value written is 0, write 0, otherwise limit the range to 1..6000000
-   and write clamp_val(6000000 / val, 1, 0xffff)
-
-This minimizes user visibility of the changes, and also ensures that
-the reported fan speed is 0 if the register value is 0 when reading the fan
-speed.
+Yes, I had fixed that later but accidentally applied the fix to later patch.
 
 Guenter
 
