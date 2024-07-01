@@ -1,160 +1,224 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2091.outbound.protection.outlook.com [40.107.241.91])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB58524C9;
-	Mon,  1 Jul 2024 09:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719826547; cv=none; b=HIadCvsIIL93cRYXd18PCYTHYmDVIFfelOAO/oyMNhlGwdhVvmg3cG1vZshvktoqXbQSXDjIWnQn1e+5zcLcWFbA/O7oOabxcknICYnKndNIYOKDE2WJlf+o4/A+99aC/+hvEVHQnMbiZgZ9wmZViBTXB4KMyF641l/j6zpL1wA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719826547; c=relaxed/simple;
-	bh=59nWDz5KyWpQYxZk1EUqpoOhyJdMTuiAo37okGxi7JQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r8xdIO1j6r0VeV2aoLNl0QGV72VK9/noJDuirDLyhPfKibEY5ewy+xVDi/K4OFX9XxuWWKT3+t9fXzciQd+G+tXCCCOTz9L93vRzJ0/jDwpsCFUq9WAK8Wk8t9TMeYEM1UPhbsUazximeuNcNzk3YLK9nBi8xQAejM5wB3b4U/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NC8ySdEb; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D3313AA35;
+	Mon,  1 Jul 2024 10:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.91
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719829180; cv=fail; b=JqRfcun8jN3Qis5t0r19AWQUMA3VQbBt1eTquBB4mQIXVaXFXGpV7HzaUFsnjrus3GVoXh4NXfDCESvTs2kxz/nIPcTDFMHn0cADPk7hhmHUo5QUTgs6Tj7NqmO4hg4VCZ58IaKB9AiFzOljqfJJZS5hfy0YP4cr6I/xh59XJcc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719829180; c=relaxed/simple;
+	bh=Fmil2c4Fx+EXq87GvPckOx0kP4Xchbih4B7cu4oBOI4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=D05KEyGwgqZNAvnS2QpvjRrwYYQO8UU1yGfSFADpPoMpeHsqWxVWDjIweG14gRkqIn3Ecd4kgmraZ35SbgQggny7bS+lCmRDIm1CvZhOb3ac4MXXWK+DW0a9NRctrI5NhNLxhCDKLmXcmduAy/wYQe1m2VWOFEaeTE7K8oqjc4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=UmxkLC8d; arc=fail smtp.client-ip=40.107.241.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NC8ySdEb"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52e8b27f493so640506e87.2;
-        Mon, 01 Jul 2024 02:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719826543; x=1720431343; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jNtVDXlUBrpuhb54W707Pwv7hKueeWy4QSQTipfsCuo=;
-        b=NC8ySdEbINopdim8LCsHMC+6sZuSZcEiJsIvxMsYxaA48jb8cX6C2OrKpwgaDCgTiw
-         /O8LB1SSHG+zXfOmd7/ku4d6wC4OFIWZp0V6HPTXC09/VdGEngT2CQgr6QUDAFwkvEsR
-         anwx4fxFJAaWAXUMGhyTEo98M/dKf6o0ALZdC/sSsIPirhA99BR/DJxyGXzV8IgCZWtq
-         Mpwv1e6odbeYrMEVGJFIY/3M/Q4RMkcQj4YN01PcvcMb+GR4EGIPlhs6gJ4H04jL8wTa
-         zCGDMl2MPms7Jdl1phQcIUzkIOc9FaQ+pxM/5RyBvpFmyeWjN84TCDn1tOdlI7cN+J3Y
-         tlmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719826543; x=1720431343;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNtVDXlUBrpuhb54W707Pwv7hKueeWy4QSQTipfsCuo=;
-        b=R2goiGMfMAA6sQhAm/teST/6ICjHWlZk6zFkdPi0HHO22OEYJX87SIGnRba5F0bJAM
-         KUeDMlYM4dz8+gRRT+0AHSSqM58Nns5tnNLXG9Cwk2l+76g/1hulE2eYmkYAsdv4AngH
-         BF3P71FOJkEhcdPUUbMf5Wc4Ky69r4SjvD0ir8hjcf+Ta5Fh8kK9of4vghOkv20i4Ilk
-         4fF8zJJxtTTFIxbaTWsZs+xWX4G/ONBxUwINIhuQBEL2n2u9jjRCIQ4+T92OrphxEQkt
-         9vy+XJn+GuKgTD5PWKbxsp4uIjTTYk2WAaMRsyltvLK8zSk9OE+F9fYhG0cvsTFPYe30
-         tIKw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2+GKET32uuUnU0p0BheqXwtxYb1PAJW0TJ6PNHPU1YqcmhxQxTnJknVi4/N6x9zzKYdvguHgdBQDHPaH6wItcmh2ndLQILleaUddd6UOYdus4Q0f5/HCvMPld44NiZzasItrssWjMyuj+ZS14nJTCyHwN0UR2K83fGvuDoSrTTf6085WnDCNMpjXi2V8Evqvt2DEe3CXRP4uz7KWDIRljKQ==
-X-Gm-Message-State: AOJu0YxQwAQ9frmG6WP7gt4+c/UA7o0E4qr8Gdsyo70qno211bF3ayBv
-	HZAw8m7ySBMlYv9Jr6Y3tbc6NkoIg95a2VenfC5ApohpYzFDmIuS
-X-Google-Smtp-Source: AGHT+IGTWlXt5GwVSpONKN18jUPqOio2BQyzMNx8kLyn1xpM2UpBf6ISd9dLJbwj/YGEYvPKtguBoQ==
-X-Received: by 2002:a05:6512:e93:b0:52e:7f3c:6b81 with SMTP id 2adb3069b0e04-52e82687479mr4007321e87.32.1719826543231;
-        Mon, 01 Jul 2024 02:35:43 -0700 (PDT)
-Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72aaf18c99sm314224466b.2.2024.07.01.02.35.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 02:35:42 -0700 (PDT)
-Message-ID: <cffb5885-3cbc-480c-ab6d-4a442d1afb8a@gmail.com>
-Date: Mon, 1 Jul 2024 11:35:41 +0200
+	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="UmxkLC8d"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LJDprHkGYpUY/w+AjZF7QxZOTGl3rkcRsx1wCssCZUV0zyvGXMPz1svCzQVvjqssh0aIPITeqiAR95DKN4wsfh/Saw/0TyG+UYSU/1xaQZDlBhzxnbtQndbL+8G/8cWyphRpj9S1BcubH8Ro8IY//q+t+Pa2foAj/n5WP52GnupwoTadWsNFD3J+0hoZqTKosCSkickqqrbYQb1VriQpoSAp/j6OVJLaYpwfCyTHYS1Zrux0ZETvMiPSW1ZxWoXb3Nkdqpa7hj4CoXrI8ZEOxruu7R+NPxPd/V5AoPZtLavLFaBd9s/MKJv+2QeXrlTOFZOR7M0aCdrmK4gIwVR9ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9ZF4HOy4vbZNSN+UaFe5GeLMS9nz8+uW9gp+azs2ip8=;
+ b=XjP3ImB0JBTZHiy9WEKgBD5GTwtf6sW4FP2tdZmYaMSK8SWiqMTWImek+4znA4ozOJQ6RqtMX5RTRZe00qmbXgMng3KlYqIcGyztd2OYKxSlnByJrXDa0tQVhsz/0IZ8zLaiU6PcRKMpx8KHOkgebC/x3c4dD8gx7IEEHgha+VBtshcX3pz0S1sAcGT6POzRAcwhsKKFJDrN26RpSYMlR2rDnCnWXnU/x0C7p0XCanV++dr6sYqkERhvg6TEpjhLo8HT/rIglsKCIqGBIQObWAN9rvIWMDtmD2ir5qBs412UXU3rI5ofEeP4gyzUdQiE2h2AZwS+PqKXNG5aFVzPDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9ZF4HOy4vbZNSN+UaFe5GeLMS9nz8+uW9gp+azs2ip8=;
+ b=UmxkLC8dSJ0ReJ6xsfz48napXjREipyypPLVnNN+emx7ZUx84p7O26OZD2FC76aP6gIVHHlvMHYX/r+NqDcl6FO3h1H19v4z82m9tvaYc5rH1XG6we1FZnHl3B0ee2N+HN0gXec+nQLAI+OrOTSD7aq0z94Rtudy+mpbxlkWMfE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Received: from PA4PR04MB7982.eurprd04.prod.outlook.com (2603:10a6:102:c4::9)
+ by VI1PR04MB6829.eurprd04.prod.outlook.com (2603:10a6:803:13b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.32; Mon, 1 Jul
+ 2024 10:19:32 +0000
+Received: from PA4PR04MB7982.eurprd04.prod.outlook.com
+ ([fe80::3c4:afd5:49ac:77af]) by PA4PR04MB7982.eurprd04.prod.outlook.com
+ ([fe80::3c4:afd5:49ac:77af%4]) with mapi id 15.20.7719.029; Mon, 1 Jul 2024
+ 10:19:31 +0000
+Message-ID: <8fdb07b6-ef80-4faa-80cf-ea16839e9e98@cherry.de>
+Date: Mon, 1 Jul 2024 12:19:30 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/10] hwmon: (amc6821) Stop accepting invalid pwm values
+To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
+References: <20240628151346.1152838-1-linux@roeck-us.net>
+ <20240628151346.1152838-2-linux@roeck-us.net>
+Content-Language: en-US
+From: Quentin Schulz <quentin.schulz@cherry.de>
+In-Reply-To: <20240628151346.1152838-2-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: WA2P291CA0040.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1f::24) To PA4PR04MB7982.eurprd04.prod.outlook.com
+ (2603:10a6:102:c4::9)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] hwmon: (ltc2992) Use
- fwnode_for_each_available_child_node_scoped()
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Antoniu Miclaus <antoniu.miclaus@analog.com>, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-References: <20240523-fwnode_for_each_available_child_node_scoped-v2-0-701f3a03f2fb@gmail.com>
- <20240523-fwnode_for_each_available_child_node_scoped-v2-3-701f3a03f2fb@gmail.com>
- <20240526144851.493dd3f2@jic23-huawei>
- <3a16dc06-81df-4493-bac6-216e9c6ea16e@gmail.com>
- <20240630124157.07bf97d9@jic23-huawei>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240630124157.07bf97d9@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB7982:EE_|VI1PR04MB6829:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8db789d-6081-43c6-7139-08dc99b74c37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UGFZSHlwdmZZcTljQmlBQXM2a1BkZ1VFU3hrUm5XYTVNU2lDa2JjRXdqRTFT?=
+ =?utf-8?B?dytWdVVOU1J4bk9VK0hwR1VGa3J2YmZCb0VBNkU2eGs0TDJReXo1OGFvZjdt?=
+ =?utf-8?B?WFhWWjdNYm5acXoyS1Y3bEtQT2hBa2NlQ1JnWi8xUFZBYTVtYlRzdk1JajE5?=
+ =?utf-8?B?QzRHbEVDSVRhc0M0bWExUmoydm1hVUphYk5ScGdlVUxjdVUrdllQZ01wK0ND?=
+ =?utf-8?B?ZFpPS3dZZ0FmSHpPdWlPajhpdi9raHpXeUFab3JrQW40aXNZdWR5bXV0TjE5?=
+ =?utf-8?B?WGp1bkgvNWtjM1R4eVZJd0kzM0FoU2I5U3JxaXNVTHAzOHFvZ2pzM1RuV0pY?=
+ =?utf-8?B?T0JidDc0cFNzR2JvYWZxMStISnRiQ2ZnWm5tSm9wb0FrZ1VxZE1ZRCswWnVx?=
+ =?utf-8?B?Sklwa0I2Qis2dTdhTS8zeXhqV25HWWQ5VlZEQlZTSlVZSDBsbHBwOEoyZHd5?=
+ =?utf-8?B?RzRncTM1cjBsRWNFSHNML1ptcG4yeWo3dmpuQlNWUHkzRi9LcUtLQ2lvZnBU?=
+ =?utf-8?B?c2dwcWZXSmVzNkVWLzl3ZmN3YlhBUmVjdDIvbjVvMnJTM1h6cE5JbW5DUWxo?=
+ =?utf-8?B?VnNtdEQ4TmUyNmhlMEZXYUgwUXl4QTVUOHJsc201SHQ3NFoxVFhXY09zeWVn?=
+ =?utf-8?B?OGp3Vml5Rmo5N3pNa2UwelBBOWlnczFwV29DZmtSMEYvWnNYb1lUNXgwTHFQ?=
+ =?utf-8?B?K2VQOXFMWDFMbnVFQWNXaXFXVHFJMWE0aGg2Rm9mbVlzVGhCQ2Fkck50bE9D?=
+ =?utf-8?B?L0VvWkFEWHVRcFdoSnZOTmVoUXhPV1dqLytYQ05DVTVMTmJ4WXJmY2JDY21z?=
+ =?utf-8?B?Q3pmOGNia0FmaHgzaHcvS0J0NjdCRnRua2pWSkRka2hpMlNqS0lEOGZwd1Zz?=
+ =?utf-8?B?T2dCNVllN1BPaG5ST2ZQd0d6cVUzdFBsOFZ5ZnM5RHFHUlNnZVpqVC9XcWMx?=
+ =?utf-8?B?RVdKdElhSW5GM0wyNkQ2VW1TVWk1RUJ6enNrQWFlemtNQ0t4UDFYb1ZmNzVq?=
+ =?utf-8?B?cmRoeVpIZ0k1dE5tRndPYUFKU0RrYk9kWTRtTVlRdHNIeDBJNTJpcEsya0dD?=
+ =?utf-8?B?MzhIQ3BxNXFuK01hNmkzL3pSRTFNcnhuTVR5eDRaM2xRM1VleVZtL09iQk8z?=
+ =?utf-8?B?YndXRGVDWFVGZC8rS0VCTSttL1d1YVJwbWI1U2xpVkUrVk1INnFNRlNuNVJa?=
+ =?utf-8?B?OWJORUFVWStjYnV4TjNsUVJNUTFLTUtVRGtTZExXNnhPR0VWQld3UnlxaDY2?=
+ =?utf-8?B?eUxURW10SlYzc2lxWUpQWFBCbklacXYyMkM4WjlXWnVuV0FMWjdlaU9OeGJS?=
+ =?utf-8?B?WjRIR0NCNzZ5dFVpQldIZ0U1Wkd5R2FUc2Q4bkhFL0ZnUk9uTXBVSU9kajdB?=
+ =?utf-8?B?aVRBM3QzZU1ucEdhWmJEYUt1bnN0NENLaXk5RmJ4Nmh4SXFSZG43VXJUWFJi?=
+ =?utf-8?B?WXhvM3doR1RtNWdGWVFPR3plUjZPVEhvOXlWZ3RQOHdaSTFTb3VINURIQlRB?=
+ =?utf-8?B?SEVlSnZNNVFxZ0ViaUFTWmsyTXkyWHh4aXI0S0JKOFhQZ0pRcEJNenFIbk1H?=
+ =?utf-8?B?ejNCY3BneVk4aWN6Z0tSMUgyNWNBUEJFdUlBaFlZV1lldEljbzJsZUpBSFlO?=
+ =?utf-8?B?bGI0S0hZSlVkWjhOdUVyWHk2Y3B1dlNQK0s2RlZBOFZ5UDRSYldrVGlVRG1J?=
+ =?utf-8?B?c0F0dWYvSHNtNlNOVXY0RXNFVVJHT0JBdHZvbm1KYWliRldSZlhubkNmS25F?=
+ =?utf-8?B?NGU2VHRTaGI1Ry9Dd3ZvRng4QkhlVU16d3d4UzdPYmw0U05TY2t6N1JEZkpR?=
+ =?utf-8?B?TC83aW5USUZDWlV2OHVYdz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7982.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TTZQR1RwekJ2ZnJzZSsrRHZTdU5GTEcxV3gzMFhra0oyY28zenZONm95UytD?=
+ =?utf-8?B?OUlUdVFkeUJvdnRyNE53d0RGaXV6MEpabjkvU3NZTjdVUHg4L1NVa2ZEU1FT?=
+ =?utf-8?B?anNmRmFCN3NMRy9Udk9LQUNOR1YzT0VESWhTbWpiTzQ2USs3RU5HOEdodkJW?=
+ =?utf-8?B?dUZ6UXFzeFRkY1ZaODhMUFczUWVqMWpFMytOMWM1NGtjaW9mZUI4cFZyclor?=
+ =?utf-8?B?UkhuWFhObkNXNXZEUDhDaFU2VVB5aktTeDlpMHh5UmZFWEdJZVdxbmwzdWU1?=
+ =?utf-8?B?aDZvT0ZWeHRIT2JrWXk0Myt3MlA1cHhCZHBWUXVhL0xxV3NIcWxzZkFhOXhk?=
+ =?utf-8?B?U0Z1aHdxUHdCbUd4MVd6MDEvTlZhRmhJclRPbFBOTVJNSVhIeGlOT0FRU1Rr?=
+ =?utf-8?B?RFc5M25LeWE4QVRWMjlqdUYxem01NmZHY3ZEdGh4T0Y1a1ZvQVVrQ0ppTGVw?=
+ =?utf-8?B?MTQreFJMWXhnODRUanZZRFNnOExaSXZYc3NyVzVWZlNaMmd0QWVtbGZnRkor?=
+ =?utf-8?B?aGg0VWlFRVJ2anBsSVViY0MwT1NIbjI2cHppUWxKOGtIdVF0SUI3WTcxMlhS?=
+ =?utf-8?B?VTdyU2RhZ21oNFltZ3BXYlgxNDgwcndIR0JnSXZxTU9WV25SSlJCY3g4Q2RU?=
+ =?utf-8?B?R0k0bDBYK1VWUDJURWxBWUdRZHNpWjNueHB1RWxPWE12OVhuMzlQWHpoQmY5?=
+ =?utf-8?B?WE1pTis3Q3JYOU8xbnJJNW1pYjBBZTN0T3pJT2ducmJ0OE42d09NUFI3Q1B1?=
+ =?utf-8?B?QitPNDdHVkY2bi9GcWIrSEtsYmJHbUliRkp3RlFDZTdFNE1CVDI3Y3QwN0VT?=
+ =?utf-8?B?VGl3WVc0bXNtVmJ3cVVPSGo0VDFQUS9QMEMvNWxFRmJmT2kyKzJRSXcyeGQ0?=
+ =?utf-8?B?MDB4VW1BQ1dGQ250dVNsUTZ0K0ZHMTA4NWpJTWRraFFCUHZyQU9pRGNJMjY3?=
+ =?utf-8?B?MUxKOG5tZ0J0VVUwd3hFTTI4eW13RnU2M3NQK2krMzJMQ0dteVdPc29XcjY5?=
+ =?utf-8?B?bWFxa2Yrcis0USswWFM1b3JRa2Y1QXVOKzdhQ2hzOGpaWWdja3dnOHJ6VVhT?=
+ =?utf-8?B?YzVaby8rUlp0V2tHRDNlalN4cVptUGFUZ2tUdlhUOWdwbkM4N0tpdEQxT0lX?=
+ =?utf-8?B?cFQ0TDR5SVBqdG5WTjRGOVp0QVc3aWNqUW9PWjE2QVgzVlZvZzU5V2lzNHhi?=
+ =?utf-8?B?T0NYV01vUFJZeXBqZ08rRm95UWkwOUZIR3o4aUEyamtJNGR0bDlobm02WEJW?=
+ =?utf-8?B?cWhRQlFlWUpabjlNL0krbE5qdzJFODJ2SEhZN1RUcTloaEMwKzVYcVFTNTV2?=
+ =?utf-8?B?SXEyanU3ZUtlTlZpWlNKSmEvQ3V4aHczME9iYWR4L3M4NEZWTDhJQ0lvSXVh?=
+ =?utf-8?B?bGZuQlVHYUhvSmhDQ3djdDhxOFBGRlJPNExMWmtadXBwUHJiQTVucmk3L0FZ?=
+ =?utf-8?B?Rm9uSCtxZnpzYk9zWnd3NUV3ME1RYmhwWStaanRaS2hnbU16TjRZLzMvZDdQ?=
+ =?utf-8?B?WGdlWndZazZ1ekgveHVUb3lONTZNZWZCS2xHd1l2azVSTWo5MWw2S1h6Rnl3?=
+ =?utf-8?B?dmdnRktVMHVsekRkSWt4UlM1TG1ESXR6UG9hclRmQ1pyWXF3d0hHZkEzUWV2?=
+ =?utf-8?B?WnQzRWR4dHlLVHA5YXh3WlkwU2ZScGJlLzdzcXYwdjUwenZWa0FabmxpVHlr?=
+ =?utf-8?B?aEtCZndISVhTSCtDZTFILzV1MGNYbXc5ZThISnBSMi85Y0dVb09jZ0ZvOGxQ?=
+ =?utf-8?B?S2FveGlVQXlDd2s3UHl0NGVHMVJZM1lSeDVpR2E4OGx5NmVqdmdqbjdsL1Bv?=
+ =?utf-8?B?Nk43WEtwcUVlZXI0OG95MnczcmpYZU1SaHUvcVdSbkRMcWo0WmlTbUNGdHlH?=
+ =?utf-8?B?d0ZjRmtUa25zOXNXUmJtRElhU2ZrbWREdFR4VHptLzQxQmlLeTJrVE8ydGJD?=
+ =?utf-8?B?bTNaUTQ3OC9yeVlLZmdMOUx0TjNBTkkxRDltYU53WVNYQUhKV2szcDVDY1lj?=
+ =?utf-8?B?VlFsSGpteDFSdUI4QWpzb0ZqMlFqdW1GOXpZT1cxM2NSSDcxK0VTcVlVUWNm?=
+ =?utf-8?B?RVZJZm5hWnZHckFha3Jpbk1KdU9ib3FsVUcrMDczOElnWkZaaVFaUHRQQ0Qw?=
+ =?utf-8?B?aWwyUVRqa0h5WDI2MFArb2hFdTI0MDU0Q0grK3J6dEdnNGkzWDZFM3FkUTBP?=
+ =?utf-8?B?ZHc9PQ==?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8db789d-6081-43c6-7139-08dc99b74c37
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7982.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2024 10:19:31.8841
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jWZ/72lW0iutJCasRDNtuZTfrk9oj/wF5riZRWyGT5K4IKPr/A69b5p/XfzeiQ+OiUugZThSQQUKGQgKwhba3atoH9FP6XtDq+7xTGalthk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6829
 
-On 30/06/2024 13:41, Jonathan Cameron wrote:
-> On Mon, 24 Jun 2024 23:45:42 +0200
-> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+Hi Guenter,
+
+On 6/28/24 5:13 PM, Guenter Roeck wrote:
+> The pwm value range is well defined from 0..255. Don't accept
+> any values outside this range.
 > 
->> On 26/05/2024 15:48, Jonathan Cameron wrote:
->>> On Thu, 23 May 2024 17:47:16 +0200
->>> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
->>>   
->>>> The scoped version of the fwnode_for_each_available_child_node() macro
->>>> automates object recfount decrement, avoiding possible memory leaks
->>>> in new error paths inside the loop like it happened when
->>>> commit '10b029020487 ("hwmon: (ltc2992) Avoid division by zero")'
->>>> was added.
->>>>
->>>> The new macro removes the need to manually call fwnode_handle_put() in
->>>> the existing error paths and in any future addition. It also removes the
->>>> need for the current child node declaration as well, as it is internally
->>>> declared.
->>>>
->>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>  
-
-...
-
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>   drivers/hwmon/amc6821.c | 14 ++++++++++----
+>   1 file changed, 10 insertions(+), 4 deletions(-)
 > 
-> Straw man for people to shoot at:
-> 
-> I think where possible rely on device_for_each_child_node[_scoped]()
-> actually meaning the available nodes.  In cases where it applies that
-> is normally cleaner anyway.
-> 
-> If you find cases where there is no relevant device (I'm sure there are some)
-> just provide fwnode_for_each_available_child_node() and not the non-available
-> one.  If that means switching some drivers to use the available form as
-> part of cleanups, at that point we consider if there is a special reason
-> it actually wants the non available modes.
-> 
-> Ideally we also add documentation to say the device_for_each_child_node()
-> will (at least mostly) not consider non available nodes.  It might
-> be always, I'm still personally not sure on that!
-> 
-> Jonathan
+> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+> index 9b02b304c2f5..3c614a0bd192 100644
+> --- a/drivers/hwmon/amc6821.c
+> +++ b/drivers/hwmon/amc6821.c
+> @@ -360,8 +360,11 @@ static ssize_t pwm1_store(struct device *dev,
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (val < 0 || val > 255)
+> +		return -EINVAL;
+> +
 
-There are multiple cases where fwnode_for_each_available_child_node()
-seems to be used just to get a macro that explicitly guarantees node
-availability i.e. they retrieve ’fwnode’ out of ’device' by means of
-dev_fwnode() to pass it to the loop.
+Why not use kstrtoul to avoid having to check for negative val? The same 
+way that is done just below in this patch?
 
-In those cases, device_for_each_child_node[_scoped]() could be used if
-it guarantees availability, which no one could refute so far.
+Additionally, why not using kstrtou8 so we don't have to do this check 
+ourselves in the driver?
 
-On the other hand, there are other uses that do need the fwnode_*
-variants because they iterate over nodes inside another node which is
-usually retrieved via device_get_named_child_node().
+>   	mutex_lock(&data->update_lock);
+> -	data->pwm1 = clamp_val(val , 0, 255);
+> +	data->pwm1 = val;
+>   	i2c_smbus_write_byte_data(client, AMC6821_REG_DCY, data->pwm1);
+>   	mutex_unlock(&data->update_lock);
+>   	return count;
+> @@ -558,13 +561,16 @@ static ssize_t pwm1_auto_point_pwm_store(struct device *dev,
+>   	struct amc6821_data *data = dev_get_drvdata(dev);
+>   	struct i2c_client *client = data->client;
+>   	int dpwm;
+> -	long val;
+> -	int ret = kstrtol(buf, 10, &val);
+> +	unsigned long val;
+> +	int ret = kstrtoul(buf, 10, &val);
 
-If there are no objections or better proposals, I will proceed as follows:
+Same remark concerning kstrtou8 use.
 
-1. Document that device_for_each_child_node() means availability.
-2. Use device_for_each_child_node[_scoped]() instead of the fwnode_*
-variant where it makes sense.
-3. Provide fwnode_*_scoped() macros.
-4. Use the new macros where needed.
-5. Use fwnode_for_each_available_child_node() as the default where
-unavailable nodes are not explicitly required.
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (val > 255)
+> +		return -EINVAL;
+> +
+>   	mutex_lock(&data->update_lock);
+> -	data->pwm1_auto_point_pwm[1] = clamp_val(val, 0, 254);
 
-Any additional feedback, especially to clarify _availability_ in the
-device_for_each_child_node macros, or to provide a case where
-unavailable nodes must be considered (Nuno mentioned CPUs, but just as a
-vague idea) is more than welcome.
+We're suddenly allowing 255 as a valid value.
 
-Best regards,
-Javier Carrasco
+I don't see 255 triggering an obvious divide-by-0 issue in the code, nor 
+any limitation from a quick look at the datasheet. 254 was introduced in 
+the introducing commit, as well as the other 255... so probably an 
+oversight by the original author? In any case, I would make this a 
+separate commit or at the very least make this explicit in the commit 
+log to show this isn't an oversight **right now** and that this change 
+was desired.
 
+Cheers,
+Quentin
