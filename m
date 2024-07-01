@@ -1,148 +1,105 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C552817556B;
-	Mon,  1 Jul 2024 21:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66EE17BA1;
+	Mon,  1 Jul 2024 22:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719869051; cv=none; b=NxgxnUXvxyUukfpsQpO/YJ0mvB32yVAUH5m4j7/c+ZIaE8CeQitpa1zim3pXV2k39TUdb6v1bvZIHnt8xXKxHRNIZlPBSPN/efD7uJofkPV6nySKt5V5VDFy3SgaSopshicQfymzjOjNgJmN+wFqggjRq3EHbMq/qtZk+NMVR7k=
+	t=1719873953; cv=none; b=L4OGARm+q8Gh+WRh+URPypBP8tw2q18f8X6xu7Wsn82LnoiiyCsFt6hFBG8pfSVivktTYzaMi9IvSPtHtRG2zIwCyn+HY8nQ8jjo/Pn8C8KZJLTxZqHXRc86/4pjwaHsf4X2COW2IYRdDeUJ4xpzDWB1FY0WZFb8w1tGbTNsr2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719869051; c=relaxed/simple;
-	bh=HtaUQZY6PdMTzY4wNxSAu9k0222peQdQm0FUhCEWFuc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Nd8WrhvbQ9pAbgmrOz62eiGpWKylaJrtODCkfSRcQCnnCYWczZ/SjK3PGN7gOOBJ9Hez5f8XGJYoaePz278TRBInuRLiUzZipLJhvtVfg/UPs/pCeOZ5QcLJ5OVuSiEDmc2+QzC8YHo0YCTfoJZwsox0I6Wjn8172GGdwJBsieI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H86NSpSK; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1719873953; c=relaxed/simple;
+	bh=ufjEm8YoF5Op33vbJ09TdKfLOuic197HbSb/KsG6WD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MnAorOfXY42arRhiuHlGYartc289HdzK6yf0niuLalimZK7vwnRvA5vg2Tp24DDJJHmmYp7QkUM4mbLHkEXaDb3+8Zt7DWVXbtgU9fj9j1h6sEpT8oJ61mLLXmclimeFBe7RIVKrSLelNTC4WnB8UFxf9eRU76f+eiNt6ZFC29k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FoR+ETrT; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H86NSpSK"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f6a837e9a3so14163255ad.1;
-        Mon, 01 Jul 2024 14:24:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoR+ETrT"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-652fd0bb5e6so2388757a12.0;
+        Mon, 01 Jul 2024 15:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719869049; x=1720473849; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOpXTWHEXnjjvx9LV4U8IMiTxHBdnBSzp3nuNfveMIA=;
-        b=H86NSpSKvCzLb5nn+UHYUeQpd1MrgUocTuu4B6LVR7yKvYzmPaT2YoiLh16Neuxz/U
-         04jfU1le94NWE0IdnbqQOqfutButu3G2mdlzNou0r6nTE/NtJZuIQe4u6MvbHIMP2bXj
-         Ub8ROTZJUsmtd4FQdHnBhAGZ56KQD6DT+FZkLDDuPVj52t8HH70Ny660LbvH2pZ0hd+A
-         5I+lCzjafd7z4wzMeYrDcekU9tBa2MFB4pswDSvC4CgKR9NErYmI+w/hyqeYx7yAwUFC
-         xdS2Z+iHBLvlcz2Aq4PGILzKjugLCtHoQ/oamwFPey3j0oJ2MZq45LUjVqMKFLkromyw
-         RzQA==
+        d=gmail.com; s=20230601; t=1719873951; x=1720478751; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ytilIlYGI6G0vsdwh8EYmpZox8Lx+hJDscML5QdmUfw=;
+        b=FoR+ETrTrCBZW1V0ooicIBSWU9r63sCvjghH6JYYVwqkhvwYr9yS41e1f2qGaq4J8N
+         7DJr4/R+adLM5FBKYdDBnXg6/NmGbbIZR3KoVY+t9N1f5N83YWfoVLqnyVY9pNn+rKQB
+         hoshbxwPSzgwbdRSnbVbZuN9izSSeZgvp+IZDvIsScAwlTodPY/9fZt+PJLTlc95Rj7I
+         1zub1wjSMgihRn2zajTgXvbwrBr7zyeRrmcF24y5c9Nbe+t9SH9jTOHRpMrcl0KNCiBh
+         Yj92CPpTBj+96MrIZeZSwq8R0dMzd0bhdlGd0JDPoOarsSCLk7FEmoM0eQZWUAxnnLxn
+         6Q+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719869049; x=1720473849;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YOpXTWHEXnjjvx9LV4U8IMiTxHBdnBSzp3nuNfveMIA=;
-        b=EDWjKBK4xOhqRhErKtjNRTNwU2d1v/tVl8HT1RaKXd0zf2PxDYI/jlAtpaiU1rqoxr
-         H3pRbmHYdGY2J4mh6FcLiZ4eoZE2KCS/aeZV9UxIRIFiJe5Z0TsCvXm6U39fGGZm+Bo7
-         BJeMagnt+ZJm6CbKkpZXB3tnZ8EN3P58O2pKCh4GjXbEPJZbxsiGN/ZiVPZ4iEWyaqWO
-         7jvSamBABYNMnODLIkUQlvy4SD9oBtVtDOJAYrgjjr0af2cX7GOCwYifkmJ4bFtxSWCB
-         GXzl/43tzXfIoPymcxGGULMjRA0scjvU1do0QMuTEembf2fzK7x/mtKAEStSxAeFUeRl
-         vZCA==
-X-Gm-Message-State: AOJu0YwWMJUpl2Cl4budoEXf1Ir6que99J8taQnyRAVEtHDPVMTu0/rd
-	cNXKmWMVjY6OATbI7hahl3aL4hx4TZTvnJ/FWXy9SynjCEwpABUytf3lig==
-X-Google-Smtp-Source: AGHT+IF5xzD0UHn0TgJqM0MM34LPR67PGpGlrjjz2021w9Z0Oiavk/7Ph5O9N/wAgW/MjT7wpPo9Ng==
-X-Received: by 2002:a17:903:41cc:b0:1f5:e635:21fc with SMTP id d9443c01a7336-1fadbc746bemr28760955ad.21.1719869048632;
-        Mon, 01 Jul 2024 14:24:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719873951; x=1720478751;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ytilIlYGI6G0vsdwh8EYmpZox8Lx+hJDscML5QdmUfw=;
+        b=WohY3bh63o8imXVBuQH7xwB2j2oAIWMzdpw3oC+lLzf0lYVW3M0T0kBoz7GOxDQYim
+         mun2Z5E8qr2qT63ROK8QMMF2OjB46ewz1x69wtgbMXC2lTz0fgtJpzOmiG2lv/CPOyWG
+         Py8k+RGTjbO4Yn7qmkyqc6wvEmh6mMUNcn5jE0KJHyUiFDddyZRWHJ4+w6H9AuENL8xt
+         BJ9yWO1JTFDwL38NmyU89iVcvpCtXVZ+oiDXotYILZ9qN3pvPOtLVpEUjJkaEta4gPxO
+         CHBFRxUTFU3iNaedzqtLLas1BDD5l8eAo06BpcjHb3DcaluUp1bA6As4sxkvqB/2iaW4
+         iRDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5+XZaN3N/rtGMLimkecwM/Le2REKTzpeq5hpjXyVl8mChkJUApsPEr47BwJZkGSZCmMdM9gtT08KESdjDwuDSXRi1726TeQFRdZH8tyNtNFQMuKrTI3lz9qq+4weQgifvcw/XPiE06GE=
+X-Gm-Message-State: AOJu0YwmKKV5tcCcWfMVz2NUtgZiMf5UDm428mGIGzU+k/mjN19F8lur
+	Il298VHPVeehvF2EBpBHEVAAaJ5+mJhTh+nGWeZ7cY5FUMcBfWBC
+X-Google-Smtp-Source: AGHT+IGeS8lCW4viz7kTH1BTqyoltsuzGNlKEnhrJtxVzeeiGEWTrgq1RqLWtJq+2CQ12bx2NhxqOw==
+X-Received: by 2002:a17:90b:a53:b0:2c7:8fac:48bf with SMTP id 98e67ed59e1d1-2c93d6e3bacmr5573407a91.2.1719873951113;
+        Mon, 01 Jul 2024 15:45:51 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fad4933a80sm57256755ad.289.2024.07.01.14.24.07
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91d3e8125sm7352521a91.48.2024.07.01.15.45.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 14:24:08 -0700 (PDT)
+        Mon, 01 Jul 2024 15:45:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 1 Jul 2024 15:45:49 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 11/11] hwmon: (amc6821) Add support for pwm1_mode attribute
-Date: Mon,  1 Jul 2024 14:23:48 -0700
-Message-Id: <20240701212348.1670617-12-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240701212348.1670617-1-linux@roeck-us.net>
-References: <20240701212348.1670617-1-linux@roeck-us.net>
+To: Wayne Tung <chineweff@gmail.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adt7475) Fix default duty on fan is disabled
+Message-ID: <6c91530f-00f3-44ed-ae77-312260c2af9e@roeck-us.net>
+References: <20240701073252.317397-1-chineweff@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240701073252.317397-1-chineweff@gmail.com>
 
-AMC6821 supports configuring if a fan is DC or PWM controlled.
-Add support for the pwm1_mode attribute to make it runtime configurable.
+On Mon, Jul 01, 2024 at 03:32:52PM +0800, Wayne Tung wrote:
+> According to the comments on fan is disabled, we change to manual mode
+> and set the duty cycle to 0.
+> For setting the duty cycle part, the register is wrong. Fix it.
+> 
+> Signed-off-by: Wayne Tung <chineweff@gmail.com>
+> ---
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: New patch
+Applied. 
 
- Documentation/hwmon/amc6821.rst |  1 +
- drivers/hwmon/amc6821.c         | 16 +++++++++++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Curious - how did you find that ? That bug existed since the driver was
+introduced.
 
-diff --git a/Documentation/hwmon/amc6821.rst b/Documentation/hwmon/amc6821.rst
-index 96e604c5ea8e..dbd544cd1160 100644
---- a/Documentation/hwmon/amc6821.rst
-+++ b/Documentation/hwmon/amc6821.rst
-@@ -58,6 +58,7 @@ pwm1_enable		rw	regulator mode, 1=open loop, 2=fan controlled
- 				remote-sensor temperature,
- 				4=fan controlled by target rpm set with
- 				fan1_target attribute.
-+pwm1_mode		rw	Fan duty control mode (0=DC, 1=PWM)
- pwm1_auto_channels_temp ro	1 if pwm_enable==2, 3 if pwm_enable==3
- pwm1_auto_point1_pwm	ro	Hardwired to 0, shared for both
- 				temperature channels.
-diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
-index 5a3c089ae06f..98a45fe529e0 100644
---- a/drivers/hwmon/amc6821.c
-+++ b/drivers/hwmon/amc6821.c
-@@ -317,6 +317,12 @@ static int amc6821_pwm_read(struct device *dev, u32 attr, long *val)
- 			break;
- 		}
- 		return 0;
-+	case hwmon_pwm_mode:
-+		err = regmap_read(regmap, AMC6821_REG_CONF2, &regval);
-+		if (err)
-+			return err;
-+		*val = !!(regval & AMC6821_CONF2_TACH_MODE);
-+		return 0;
- 	case hwmon_pwm_auto_channels_temp:
- 		err = regmap_read(regmap, AMC6821_REG_CONF1, &regval);
- 		if (err)
-@@ -372,6 +378,13 @@ static int amc6821_pwm_write(struct device *dev, u32 attr, long val)
- 		return regmap_update_bits(regmap, AMC6821_REG_CONF1,
- 					  AMC6821_CONF1_FDRC0 | AMC6821_CONF1_FDRC1,
- 					  mode);
-+	case hwmon_pwm_mode:
-+		if (val < 0 || val > 1)
-+			return -EINVAL;
-+		return regmap_update_bits(regmap, AMC6821_REG_CONF1,
-+					  AMC6821_CONF2_TACH_MODE,
-+					  val ? AMC6821_CONF2_TACH_MODE : 0);
-+		break;
- 	case hwmon_pwm_input:
- 		if (val < 0 || val > 255)
- 			return -EINVAL;
-@@ -749,6 +762,7 @@ static umode_t amc6821_is_visible(const void *data,
- 		}
- 	case hwmon_pwm:
- 		switch (attr) {
-+		case hwmon_pwm_mode:
- 		case hwmon_pwm_enable:
- 		case hwmon_pwm_input:
- 			return 0644;
-@@ -775,7 +789,7 @@ static const struct hwmon_channel_info * const amc6821_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
- 			   HWMON_F_TARGET | HWMON_F_PULSES | HWMON_F_FAULT),
- 	HWMON_CHANNEL_INFO(pwm,
--			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE |
-+			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE | HWMON_PWM_MODE |
- 			   HWMON_PWM_AUTO_CHANNELS_TEMP),
- 	NULL
- };
--- 
-2.39.2
+Thanks,
+Guenter
 
+>  drivers/hwmon/adt7475.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 4224ffb30483..ec3336804720 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1900,7 +1900,7 @@ static void adt7475_read_pwm(struct i2c_client *client, int index)
+>  		data->pwm[CONTROL][index] &= ~0xE0;
+>  		data->pwm[CONTROL][index] |= (7 << 5);
+>  
+> -		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
+> +		i2c_smbus_write_byte_data(client, PWM_REG(index),
+>  					  data->pwm[INPUT][index]);
+>  
+>  		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
