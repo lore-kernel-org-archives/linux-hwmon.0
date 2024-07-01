@@ -1,61 +1,61 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFEF1667F6;
-	Mon,  1 Jul 2024 14:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFA1137E;
+	Mon,  1 Jul 2024 14:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719845045; cv=none; b=dsuCEfCTVQzvsyKw7Zn7ZKO8GgRGimR/H5l5Ker1/24JXsijJDE5zFz5VRjv056tIGa1JI7jyEBRWdlG1SnavwgvJwqnZ0qY/Y/ZhLlxp29cprDNk5BKKVKL7se5P/yfE/6yefJWRsmE1nULW6twF1iOPUktRllIP12zROQqrhM=
+	t=1719845228; cv=none; b=SB+CfR0YzYDCxxenNyoWNNc4OdQC5AEaXhLChycJuwdIcyLqLf+5owqgUsSLSYD92OvXXgrkJypQdI9BiW7XmS1miPcfqKNfebo8/oDcPwrhbJWBh4MtjRxhSqG6G9Q4x9Qqgj2iv/shsl4y8jlHe9y/hihxuTZv8tSndLtQqp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719845045; c=relaxed/simple;
-	bh=QJt/g88ILmRPOr0O3qKjmRXRftaMfWYZlfM+9TgSXoY=;
+	s=arc-20240116; t=1719845228; c=relaxed/simple;
+	bh=IOpOeq/apq9NMfohJySlJTNoOxb5yTQ4ueXxyPg/O/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AoLv52W/KpNarExpT4xt6cz9sXu0qLgW6W/KWdkfMFIgRlejMQF0PNwwathp8Roz6lKc7zJkIBQJNyB7Fkn00VfbZipKD4DA7jSwSXwRlNxDEpSGhrEMpbMRvowsB26TF2Xc6Ie+9ZveYCLwBxqh1EDYyXFOqPL4zYm5kpZurvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=StK21unG; arc=none smtp.client-ip=209.85.216.51
+	 In-Reply-To:Content-Type; b=ow3GrxkS7Ikr4NT7alFyR6MsivXFly4lQudussZJeRiMjt2lzkan1s5TbCg1oqeOquv2YVx+JOGvU5Md4frLOsRQhSZwZ7vgXHZyRBuS42tq9ZXm8EsIKo9VqWn+/Vb5F10i+oY0vnOKg3a/yQri7YgQGqmX/hav7IhN7uHQP8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZbXGq2ax; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="StK21unG"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2c70c372755so1950741a91.1;
-        Mon, 01 Jul 2024 07:44:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZbXGq2ax"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1fa07e4f44eso19936285ad.2;
+        Mon, 01 Jul 2024 07:47:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719845043; x=1720449843; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719845227; x=1720450027; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+f3PquVXHV2z7yTB4AWHe6Rt80pHIkayPW4cjA3/coE=;
-        b=StK21unGFGV1J4xm4SXq1BzS1URCEi1trTcsFRnQapZluenMH1iF6WPmi0vVnfOR8W
-         iHMcI9GaBpOgNkK064SbfXOTU6TPB7abJljPchBODewvedRazmesRg6A6FPCdoRU26zT
-         wlODcV3dA23Sw125M27XtJ4N6+5rc93c/P5s3d2Y2ecKhhDAFl5Z2+Fgp8/kp617qkbb
-         Gd3POWRkQNZvvn9MGow82xthYurrY665bcGQ5EO71/D7u17kV8ZxwBQ7WrbuNG8wWO4K
-         HYF0I779LvZ79Jh9mpm+EquzUHYCygUsLX+Pq9Mzc7LOjCRm2IZuYuOxmdElPZgjAOvJ
-         ghcQ==
+        bh=AK0hCuXAYwD/v/5DkxVcOfPtao36VdBojNvzM07HuK8=;
+        b=ZbXGq2axFLMHbfgbrHm4MsZjfHim7bE4vIzVRZwdlOVXPp+4dedSsfuAXhOEpkJOqz
+         +6ZoOazR9w0aT1PNtVDaEjfCC+wUM4Uuh1M6ZrzZzOQTLF/opMxEanJjnbIK1kjTSpB6
+         vg/OWuqvat1nglJRDjb/nzz/xJgd+biSxpLnwWf2Fsd0DDkbxJnI6QmW+KEAwhpTyjM0
+         l0OEe2wQQmdmjFFMzI9X9fYuz1cLqxpnBb51+tIo9TSTNa7EOWYc48z/F8wJ1K6ILsuL
+         e478ayZlPRpZcsHpqVS9v9rNiv8lvRchQ5oRvoBbBUDM/BvzJz5hudU4eTQpmFKh3JRV
+         jPMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719845043; x=1720449843;
+        d=1e100.net; s=20230601; t=1719845227; x=1720450027;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+f3PquVXHV2z7yTB4AWHe6Rt80pHIkayPW4cjA3/coE=;
-        b=gDG64PphN7LFmdP6SxGaqCUO1q0sqz06PvBrkswQiE58m1MgHnWBODkjRnu1Q3NSZW
-         wVKzhzPyCAFqBifowFTcV0mJ74Fnp4q2peN7v7mIDRdrcljxOjK+lSWbjkf4+fMarNcm
-         Iz4lHyBpTFKrIp3/4FVdLDUA+pqvw182d5wu87c6CwB2N8ZrTll4e1SLhGpUa6exdGIV
-         uq4MjDX9sgnJlrRpKpa0ODUjWNZ3oD3Jgnr00oV/SBfVy0icNkwbel5bCUvHFhReK+xc
-         6AXbcMKtGXJt9P8hYCV40p7cLdGE7fso8i4oma274CUkG/oTvCIHzknI3xiR0WZ/+Ms1
-         T8QA==
-X-Forwarded-Encrypted: i=1; AJvYcCXW90f/cTVhB2OS+wptg+9Gl0D/1wG5CujwKPu7C/1oma2Fp+dchZC9yvUR35utJxgmNt3QryhfKO0Z4tkzsF7oWXkFfhyYaqo+IX8=
-X-Gm-Message-State: AOJu0Yyxp1n7n2SSisGazVnm+bHLVKslj/npO08rLRCfGi282HhyE2qB
-	1FrDGrJVyQvVkGqj99uEAvsE80npJ1OTRUdbHpA334fohFbPQoMx
-X-Google-Smtp-Source: AGHT+IEZccSHoszorYX2PTckFKY8+DsPOg8OCBDmvtYOo3S/w+QUs6Srbne5zCOmkEQLDm4ztzxFWg==
-X-Received: by 2002:a17:90a:e009:b0:2c8:f3a5:4ddd with SMTP id 98e67ed59e1d1-2c93d743777mr2786260a91.19.1719845042926;
-        Mon, 01 Jul 2024 07:44:02 -0700 (PDT)
+        bh=AK0hCuXAYwD/v/5DkxVcOfPtao36VdBojNvzM07HuK8=;
+        b=dSJHA+fM708TJo3StPfFZCp+4VS1WHxJNqaFMmqNbt2PWC3ce1GO+YvpnKKV8Sfw3+
+         Fw8HEL/cWgEks4LLrT2hAHsPFLu0FHFxApUM0ZNQE2LEt/hpfgQXr6X0vuCV1jM1Zbfq
+         mgLgpBiGtS+YII3Saeu9vx7i4pfdVSKQaWiOkZsMRI4YNlE+ZgJr62illNpaGkYZBplw
+         Z6NQjOPj0fPTmdCYpaq5ZsZcWCFUPGK0x+y0c75FYeK52ko5YicCdX0QdMxq7IXRKSBg
+         rRsDjfjibfmyvDGL/dRXD9n3JxKpShOvovUVryGk68lP0vCshxo8y8bkA9orPMrp1V/v
+         DcsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUi+EAALT3tlyVzddVPg5jB3a5OKB0Lu+2wXF5XzMM02YXWeG368MYdPb13Rlp67YUx0QZELZLRUQ6wvsSUz6W9ueFiwQJGEu3BNjM=
+X-Gm-Message-State: AOJu0Yzi0329pH0OZPYD6WVj7BQOYOdu92XcbCrtFNXS+gGj5zdsyZ/n
+	rRrPGtY9RLF7aOz71QLromx3Tn8hd6Aw0k+FKa9Y+yzvWjTfduBA
+X-Google-Smtp-Source: AGHT+IHvELqW6jsrflenH2VfTKma0cpHpdiqh38xFQaXb/Kfl3/SfFAQdt7NLzyGDUiFBulJQG+2zg==
+X-Received: by 2002:a17:902:c409:b0:1fa:292f:cb20 with SMTP id d9443c01a7336-1fadbcfb91cmr60514265ad.58.1719845226703;
+        Mon, 01 Jul 2024 07:47:06 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c939ccb232sm2495370a91.0.2024.07.01.07.44.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10d2282sm65609135ad.44.2024.07.01.07.47.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 07:44:02 -0700 (PDT)
+        Mon, 01 Jul 2024 07:47:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7262a592-f344-48b8-801c-e9f6d365eb77@roeck-us.net>
-Date: Mon, 1 Jul 2024 07:44:00 -0700
+Message-ID: <cdcedb9a-3619-4448-9047-c250e7df1a81@roeck-us.net>
+Date: Mon, 1 Jul 2024 07:47:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] hwmon: (amc2821) Use BIT() and GENMASK()
+Subject: Re: [PATCH 08/10] hwmon: (amc6821) Drop unnecessary enum chips
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240628151346.1152838-1-linux@roeck-us.net>
- <20240628151346.1152838-8-linux@roeck-us.net>
- <339e3355-d6cb-4327-be49-e2721f1a592d@cherry.de>
+ <20240628151346.1152838-9-linux@roeck-us.net>
+ <3108c6e2-c865-4170-bf23-f45dba429e80@cherry.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,57 +114,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <339e3355-d6cb-4327-be49-e2721f1a592d@cherry.de>
+In-Reply-To: <3108c6e2-c865-4170-bf23-f45dba429e80@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/1/24 04:31, Quentin Schulz wrote:
+On 7/1/24 04:36, Quentin Schulz wrote:
 > Hi Guenter,
 > 
 > On 6/28/24 5:13 PM, Guenter Roeck wrote:
->> Use BIT() and GENMASK() for bit and mask definitions
->> to help distinguish bit and mask definitions from other
->> defines and to make the code easier to read.
+>> The driver only supports a single chip, so an enum
+>> to determine the chip type is unnecessary. Drop it.
 >>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
->>   drivers/hwmon/amc6821.c | 71 +++++++++++++++++++++--------------------
->>   1 file changed, 36 insertions(+), 35 deletions(-)
+>>   drivers/hwmon/amc6821.c | 5 +----
+>>   1 file changed, 1 insertion(+), 4 deletions(-)
 >>
 >> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
->> index 03ce2e3ffd86..042e2044de7b 100644
+>> index 042e2044de7b..ebffc9393c3d 100644
 >> --- a/drivers/hwmon/amc6821.c
 >> +++ b/drivers/hwmon/amc6821.c
->> @@ -8,6 +8,7 @@
->>    * Copyright (C) 2007 Hans J. Koch <hjk@hansjkoch.de>
->>    */
->> +#include <linux/bits.h>
->>   #include <linux/err.h>
->>   #include <linux/hwmon.h>
->>   #include <linux/hwmon-sysfs.h>
->> @@ -68,46 +69,46 @@ enum chips { amc6821 };
->>   #define AMC6821_REG_TACH_SETTINGL    0x1e
->>   #define AMC6821_REG_TACH_SETTINGH    0x1f
->> -#define AMC6821_CONF1_START        0x01
->> -#define AMC6821_CONF1_FAN_INT_EN    0x02
->> -#define AMC6821_CONF1_FANIE        0x04
->> -#define AMC6821_CONF1_PWMINV        0x08
->> -#define AMC6821_CONF1_FAN_FAULT_EN    0x10
->> -#define AMC6821_CONF1_FDRC0        0x20
->> -#define AMC6821_CONF1_FDRC1        0x40
->> -#define AMC6821_CONF1_THERMOVIE        0x80
->> +#define AMC6821_CONF1_START        BIT(0)
->> +#define AMC6821_CONF1_FAN_INT_EN    BIT(1)
->> +#define AMC6821_CONF1_FANIE        BIT(2)
->> +#define AMC6821_CONF1_PWMINV        BIT(3)
->> +#define AMC6821_CONF1_FAN_FAULT_EN    BIT(4)
->> +#define AMC6821_CONF1_FDRC0        BIT(5)
->> +#define AMC6821_CONF1_FDRC1        BIT(7)
+>> @@ -36,8 +36,6 @@ module_param(pwminv, int, 0444);
+>>   static int init = 1; /*Power-on initialization.*/
+>>   module_param(init, int, 0444);
+>> -enum chips { amc6821 };
+>> -
+>>   #define AMC6821_REG_DEV_ID        0x3D
+>>   #define AMC6821_REG_COMP_ID        0x3E
+>>   #define AMC6821_REG_CONF1        0x00
+>> @@ -943,7 +941,7 @@ static int amc6821_probe(struct i2c_client *client)
+>>   }
+>>   static const struct i2c_device_id amc6821_id[] = {
+>> -    { "amc6821", amc6821 },
+>> +    { "amc6821", 0 },
 > 
-> Should be BIT(6) here if I'm not mistaken.
+> amc6821_id being a global variable, its content should be initialized by the compiler if omitted, and the default value of kernel_ulong_t (aka unsigned long) is 0. So I think we could just remove the second parameter there.
+> 
+> Doesn't hurt to keep it though and it seems there's a mix of implicit and explicit initialization among the i2c kernel drivers, so with that said:
 > 
 
-Yes, I had fixed that later but accidentally applied the fix to later patch.
+I may use that inconsistently myself. I am never sure if I want to say
+"keep default" or "explicitly state that the value is 0". I'll keep
+it as-is.
 
+> Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+> 
+
+Thanks,
 Guenter
 
