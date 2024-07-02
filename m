@@ -1,105 +1,105 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66EE17BA1;
-	Mon,  1 Jul 2024 22:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE381534EC;
+	Tue,  2 Jul 2024 10:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719873953; cv=none; b=L4OGARm+q8Gh+WRh+URPypBP8tw2q18f8X6xu7Wsn82LnoiiyCsFt6hFBG8pfSVivktTYzaMi9IvSPtHtRG2zIwCyn+HY8nQ8jjo/Pn8C8KZJLTxZqHXRc86/4pjwaHsf4X2COW2IYRdDeUJ4xpzDWB1FY0WZFb8w1tGbTNsr2c=
+	t=1719914984; cv=none; b=knWy70rQmXHYZnesJFE8Rf4gDU2F1DjMX0nV/Q2D0HvzIQ3h20MweYVlA+ANuAsx+Wj/hMMsiSCUjqGL1cpVLOaCyrVZ/4jcwoU29qPY73LTHQd5XRBEpOy2ZI4Vfmyr+hPKVUd8+96e6F9aMCVdGR8dCDlDoJ24sb51U7mk1Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719873953; c=relaxed/simple;
-	bh=ufjEm8YoF5Op33vbJ09TdKfLOuic197HbSb/KsG6WD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MnAorOfXY42arRhiuHlGYartc289HdzK6yf0niuLalimZK7vwnRvA5vg2Tp24DDJJHmmYp7QkUM4mbLHkEXaDb3+8Zt7DWVXbtgU9fj9j1h6sEpT8oJ61mLLXmclimeFBe7RIVKrSLelNTC4WnB8UFxf9eRU76f+eiNt6ZFC29k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FoR+ETrT; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1719914984; c=relaxed/simple;
+	bh=g2HcVrfzUkoc4bMPBDSpk1If8X1nscDfttTqg6/6ETE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jDQmEy2s4taRjmR6N2turztLZoajhDYwmcwA+y3cXSAVMoJbxUJ7ILBqaPZ7I0hRdMwwH5hcARB2fWRJnBYr6KnM/Na5+Or3XiJo6JDbavxMzXHN/f5tJTpfS94g5fSnXiskub2fs/rmGg2guUhgGLzuzeFRVhRK654nbuYsn7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8bCm87d; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoR+ETrT"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-652fd0bb5e6so2388757a12.0;
-        Mon, 01 Jul 2024 15:45:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8bCm87d"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ec52fbb50cso39131961fa.2;
+        Tue, 02 Jul 2024 03:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719873951; x=1720478751; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ytilIlYGI6G0vsdwh8EYmpZox8Lx+hJDscML5QdmUfw=;
-        b=FoR+ETrTrCBZW1V0ooicIBSWU9r63sCvjghH6JYYVwqkhvwYr9yS41e1f2qGaq4J8N
-         7DJr4/R+adLM5FBKYdDBnXg6/NmGbbIZR3KoVY+t9N1f5N83YWfoVLqnyVY9pNn+rKQB
-         hoshbxwPSzgwbdRSnbVbZuN9izSSeZgvp+IZDvIsScAwlTodPY/9fZt+PJLTlc95Rj7I
-         1zub1wjSMgihRn2zajTgXvbwrBr7zyeRrmcF24y5c9Nbe+t9SH9jTOHRpMrcl0KNCiBh
-         Yj92CPpTBj+96MrIZeZSwq8R0dMzd0bhdlGd0JDPoOarsSCLk7FEmoM0eQZWUAxnnLxn
-         6Q+A==
+        d=gmail.com; s=20230601; t=1719914980; x=1720519780; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORlm+pvBVTYWDNlelC+yKxdC1S4NZedvbzc98e8A0Zo=;
+        b=m8bCm87dwZJmE1orXaKVircMBG5ryJGIXSZ2737wISeT6P4fUrneZIsMMc2BQNC+pe
+         ddh+NXKEeMeZmcMDVyHhy6fH2AfZDWORCiMFavjkuNQTDfxEtEQvdk79U/WWef9QEn2G
+         pKGQeiwH2bssxRaOmt2Q1dVw9ztBqHJGgup2gw/fsX7B9lxhyO5SrVfhJyKgPEJx326q
+         eHyXWpvGcBMu9MP80dhLrqOouwZb0l6AckoOfS4MQtFEjVKRXmy5BLELHQ8pzNry3iHw
+         WeBXlT2EJGT7RjbSt8L/a+Gj9x+p0Hdne1c6EwJ7MmakSqaL9AEKjPONnrfdE2MV05ci
+         cpcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719873951; x=1720478751;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ytilIlYGI6G0vsdwh8EYmpZox8Lx+hJDscML5QdmUfw=;
-        b=WohY3bh63o8imXVBuQH7xwB2j2oAIWMzdpw3oC+lLzf0lYVW3M0T0kBoz7GOxDQYim
-         mun2Z5E8qr2qT63ROK8QMMF2OjB46ewz1x69wtgbMXC2lTz0fgtJpzOmiG2lv/CPOyWG
-         Py8k+RGTjbO4Yn7qmkyqc6wvEmh6mMUNcn5jE0KJHyUiFDddyZRWHJ4+w6H9AuENL8xt
-         BJ9yWO1JTFDwL38NmyU89iVcvpCtXVZ+oiDXotYILZ9qN3pvPOtLVpEUjJkaEta4gPxO
-         CHBFRxUTFU3iNaedzqtLLas1BDD5l8eAo06BpcjHb3DcaluUp1bA6As4sxkvqB/2iaW4
-         iRDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5+XZaN3N/rtGMLimkecwM/Le2REKTzpeq5hpjXyVl8mChkJUApsPEr47BwJZkGSZCmMdM9gtT08KESdjDwuDSXRi1726TeQFRdZH8tyNtNFQMuKrTI3lz9qq+4weQgifvcw/XPiE06GE=
-X-Gm-Message-State: AOJu0YwmKKV5tcCcWfMVz2NUtgZiMf5UDm428mGIGzU+k/mjN19F8lur
-	Il298VHPVeehvF2EBpBHEVAAaJ5+mJhTh+nGWeZ7cY5FUMcBfWBC
-X-Google-Smtp-Source: AGHT+IGeS8lCW4viz7kTH1BTqyoltsuzGNlKEnhrJtxVzeeiGEWTrgq1RqLWtJq+2CQ12bx2NhxqOw==
-X-Received: by 2002:a17:90b:a53:b0:2c7:8fac:48bf with SMTP id 98e67ed59e1d1-2c93d6e3bacmr5573407a91.2.1719873951113;
-        Mon, 01 Jul 2024 15:45:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91d3e8125sm7352521a91.48.2024.07.01.15.45.49
+        d=1e100.net; s=20230601; t=1719914980; x=1720519780;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ORlm+pvBVTYWDNlelC+yKxdC1S4NZedvbzc98e8A0Zo=;
+        b=PgWNhQtGFGLQldHamopGXoD2+D0L0AQOFjMxpj43QpUbHDOgXwcNN0qTyeASBx7EwO
+         kAtt1HOTIJNCAot4+S/z/JhHogRP29UW6UhaPoZmrN9u1HuIhRIfTML75vRfp0+LOphf
+         GSwhsPZilOpSzuXVlx6DBBtvsKruIvQ7wthKUSEargXpABOI9TFKm8khP0S7/ngAAuOQ
+         4a9JMNzjUt/KvjAMnRp4R6bcxQEdIhV0Pnyu9Loku+L8WwWh1yZc8+HjtGhjHuTwpVgW
+         h1LDuRLNzaftpRYuBXTK+jrrUBG01xHLMnVn3iE49K7YDQ6e6LiST2tHzKC431/Bk/X7
+         NoGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWo1PcjuZHVlFJIKqQyKaix2StjIRFMUke3KGWTnvdwwoeBGtOicVT11ILX2fxs0k/XpnZrH8FJ6mZ2XHaH5Surk3BZkfG90QmhHWSi
+X-Gm-Message-State: AOJu0Yzk26hZDk7ed8G87RgB7Nu2pmpEsm5D2EcDypWq94hI98/BRLUc
+	fTw7e9v0ZLPin2CF7Kq6kforQKvHbK8HBNf8jWCuufek4LaSfxTG43lblA==
+X-Google-Smtp-Source: AGHT+IEp/60WQQZbuNNOgwwaRD9CX5cVlzlsfNe/G+lFEh773fjrwvCtuPjD24jNmKf9uOkyGmFpCw==
+X-Received: by 2002:a05:651c:1a09:b0:2ec:596c:b629 with SMTP id 38308e7fff4ca-2ee5e392b84mr65614661fa.20.1719914980298;
+        Tue, 02 Jul 2024 03:09:40 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b06377dsm192630315e9.28.2024.07.02.03.09.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 15:45:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 1 Jul 2024 15:45:49 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wayne Tung <chineweff@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adt7475) Fix default duty on fan is disabled
-Message-ID: <6c91530f-00f3-44ed-ae77-312260c2af9e@roeck-us.net>
-References: <20240701073252.317397-1-chineweff@gmail.com>
+        Tue, 02 Jul 2024 03:09:39 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/3] hwmon: constify struct regmap_config
+Date: Tue, 02 Jul 2024 12:09:29 +0200
+Message-Id: <20240702-hwmon-const-regmap-v1-0-63f6d4765fe0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240701073252.317397-1-chineweff@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANnRg2YC/x3MQQqAIBBA0avErBswE8KuEi1CJ51FKhoVSHdPW
+ r7F/xUKZaYCc1ch08WFY2gY+g6M34IjZNsMUkglJiHR30cMaGIoJ2Zyx5ZQWUWjEXqymqCFKdP
+ Ozz9d1vf9AAxU/QVkAAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Eric Tremblay <etremblay@distech-controls.com>, 
+ Robert Marko <robert.marko@sartura.hr>, 
+ Luka Perkov <luka.perkov@sartura.hr>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719914978; l=806;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=g2HcVrfzUkoc4bMPBDSpk1If8X1nscDfttTqg6/6ETE=;
+ b=MeVkxsnF4FlKU7QNrYGmXBIlx5oZCtmdnYhosOHWL9jlRXTanTGSBrF27BRLQaGfantkwKwqY
+ kSiZ1K1NPWDD/r7s+xqMAxvVGwN22U6F9IHVJ4GzPCVS48i7w6OU+Wp
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On Mon, Jul 01, 2024 at 03:32:52PM +0800, Wayne Tung wrote:
-> According to the comments on fan is disabled, we change to manual mode
-> and set the duty cycle to 0.
-> For setting the duty cycle part, the register is wrong. Fix it.
-> 
-> Signed-off-by: Wayne Tung <chineweff@gmail.com>
-> ---
+This series adds the const modifier to the remaining regmap_config
+structs within the hwmon subsystem that are effectively used as const
+(i.e., only read after their declaration), but kept ad writtable data.
 
-Applied. 
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (3):
+      hwmon: (ina238) Constify struct regmap_config
+      hwmon: (tmp513) Constify struct regmap_config
+      hwmon: (tps23861) Constify struct regmap_config
 
-Curious - how did you find that ? That bug existed since the driver was
-introduced.
+ drivers/hwmon/ina238.c   | 2 +-
+ drivers/hwmon/tmp513.c   | 2 +-
+ drivers/hwmon/tps23861.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: 39b24cced70fdc336dbc0070f8b3bde61d8513a8
+change-id: 20240702-hwmon-const-regmap-4d4e3c097d9e
 
-Thanks,
-Guenter
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
->  drivers/hwmon/adt7475.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 4224ffb30483..ec3336804720 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1900,7 +1900,7 @@ static void adt7475_read_pwm(struct i2c_client *client, int index)
->  		data->pwm[CONTROL][index] &= ~0xE0;
->  		data->pwm[CONTROL][index] |= (7 << 5);
->  
-> -		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
-> +		i2c_smbus_write_byte_data(client, PWM_REG(index),
->  					  data->pwm[INPUT][index]);
->  
->  		i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(index),
