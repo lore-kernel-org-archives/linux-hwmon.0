@@ -1,61 +1,61 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5786E5ED;
-	Tue,  2 Jul 2024 19:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBA26E5ED;
+	Tue,  2 Jul 2024 19:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719949182; cv=none; b=ZVZqhIV4xBVPEtu4U7Z3cIUTx3iwsso3vgvzL7n6i1FRzWblM5XXHUncrjFnzhcDtLEGzjdNVax3sLJCIC0IhptuWhbDcQHYjuKf8Prejw+uoOsKbXnkGDYt6Dde/Kaz6kGlmf1EoC5+spJFNN2lEemKD1p9cstYYTaCBoy7jKg=
+	t=1719949319; cv=none; b=XNAXK+Lnwd8bb4HqlKhC++gL06flhfO9poP9IlF7M7eyGnn3UsuP99CLBmV74TbFJSWpY1ZHMIdMaIAAnwicc2ISgNJkSkenga8AeMWWv/GYzOFHAzwW569oNNoShUl2t8GzCWrvHPLXxYZrgB45zMlVZw/HPzj0/4nU0E0nJPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719949182; c=relaxed/simple;
-	bh=oRlSI9t2p3jGFJ880LK9WDLLsE0d6mzD6XkeeFAK5Pw=;
+	s=arc-20240116; t=1719949319; c=relaxed/simple;
+	bh=TZGcjbtvTsnrvFBj3xqWqx8rGJ5OZrkJk7XtA1uzbdw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=otPNzx5Nr7SOGPT9imMFRn4xXS/t5tcAKcBovIxnf+99o/8Uy+4QtVxEnaA/2DniHKhHdM3T6S/3rZjMOMgsAEHTNmM4+VimT0JeO4J3vfK6aZ/eB+5iCe561WG3RskYpdquUai6Wtb0i77sYnOhRxhYvnDPYA5BhbDGlyztSkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RDsG/4K4; arc=none smtp.client-ip=209.85.216.48
+	 In-Reply-To:Content-Type; b=RKn8FKL4t+6bTp2Cp082YvwQ80pte0EnX85IFPKl6HCyB4vDokyS0outht9HmH9mtLThnhTlWGgF1eE3g9uxnFIFLJLmu1xBQGpn0JhhhXtKS9su82e1w3+BqqL2bgw7mcVN9St5UXBWEdjt+a+Cjtkh43EpB6QJUlV/Ou3tDuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9SyRAOr; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RDsG/4K4"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2c2d25b5432so2750536a91.2;
-        Tue, 02 Jul 2024 12:39:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9SyRAOr"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-706b539fcaeso4060600b3a.0;
+        Tue, 02 Jul 2024 12:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719949181; x=1720553981; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719949318; x=1720554118; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=S8RmM/nQ903jD1e784juDC9He5+yPgPg+HlP+Yxh+mY=;
-        b=RDsG/4K4Hen4/TkA9to5zweFgNQiZHKqThyNSZkq6m+zAaI/dh7DahX9VvskSmTjd0
-         b5gZgabHvN/7/vGAWGrgqm99srKzbyO+z+VbsC6sMG2UUJEspbx1FRCxjHbw/ZbNXPNA
-         JR1Q+nv41hZLPJnpr1MgMUXnZ7hwCURD5RUi3drag/u9Cc8jMHpbekNJAOmqp1byt959
-         gZ4Q4oHQbXUGZYKtFnlswqGpdpS6rkYt7D8qHjeACyGO2i9i1lwTTBgb3MdWHvtXR6fe
-         bvvuq82WY8oGzZATnDewXXloTuXJlXvAHvKdr0tbshjQBxSf2Hl6PQ7mAdkBRqjXJGTw
-         XtHA==
+        bh=nNFpzjchwkxobyBRrMsfVq2/FuemrGIUhIq6St66qhw=;
+        b=C9SyRAOrH/Z67SRjUeI99nunVTlrPbIKogZHkZzOT4FGKRsVNz6HUjC+k5kQOoQYXO
+         Nv9nbC/OD/Re5kKGjx5FqvsoweIPefyMFwUXDvSXjthl10pD+YmP6QCRXH829InqqkBB
+         T9N1pzEtTG9IxfaxXZmWhX6bIphjgqahYdG4Wi46dggblBznnl9vfVFqT3PW3f/SwV/q
+         SFXRB9vNWj9y4JyJa3uOpMCGHYnIOa2S5J6M41qRxJqgeqlK4gNLggk5tWHZxNDIxgWD
+         HpB56jEG8qtLK0zegRxOcGR6izOWZkYdz+OwiF1Hpme3SUZZtaOCYshsGueJ3wPh+5lK
+         Yj8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719949181; x=1720553981;
+        d=1e100.net; s=20230601; t=1719949318; x=1720554118;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S8RmM/nQ903jD1e784juDC9He5+yPgPg+HlP+Yxh+mY=;
-        b=ET5VNSiQoR5bFskL1wo+mqm6Oy3D72VzJ91J+U6kU8OcEvoffMhT89MOEReWm3lVTT
-         YFlC9VbfFb2ot025fAoCEl9vPeHBthcr//Rr1+Vmdb/7RI/jhARnedkX8jqCSiklDwsj
-         Kx0bZ9TB62OvXlVeWR16W042rF/ofvMKGcUfbyBm78Hr/5E24etAL23PY1DJRJLUm8TC
-         81wtVEXjrPIfTAOWyjD2rITxAPHZSm3mcs9Rq88m9k9ZHjskJ6I4onBt97/u07dND/66
-         jg+ZI/SrI/K1ibYfUHUlNYsG6xX5JFNXpj6PBAQBLtn4TbbAcv4XjsxAiPDvRpfWwldK
-         uJsw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSMlnwQ2vqCT7jNAMqWtCj4He3GnHV+feP0mNsQQG0DNLc6Fnf4K9BmsrcFMcAEXxNeUYUnQ2bVV8kSwDSSqXa9FlX+Qk0ahHpe1pok+5sSAtaTSkNiwBTPMAImxun7ZRl5RqO2uWfIWrh5K01o+tBkCwlzo3+rs560OV0G+xUZIC3a335Tp/pkuoGRfv59kVMqN8tinP/ELLlzHF6d1t8DXuiUlg3YdQytQbMNPG1ELveHs1ADD1u3PIR
-X-Gm-Message-State: AOJu0Yy/aEA4M8b0ufnWsDk68jGY4QzDsCLdepsiHSzIvKPYMKcSlnc7
-	5tBU40Ji4F5qZbIfRjnq8lLSyK1btKFiu5I+c11iuQt0ufjrqAz1
-X-Google-Smtp-Source: AGHT+IERdVtlgKLMdAMQSFOlOPmsLrxNuImG3ycfTmId0OWD4i32DoVyGKXhjOqTzMWyCCtp4yaYmw==
-X-Received: by 2002:a17:90b:2287:b0:2c7:70ba:3efe with SMTP id 98e67ed59e1d1-2c93d7097c6mr5833019a91.17.1719949180632;
-        Tue, 02 Jul 2024 12:39:40 -0700 (PDT)
+        bh=nNFpzjchwkxobyBRrMsfVq2/FuemrGIUhIq6St66qhw=;
+        b=jtX/i3YteX4yUTt9xd3ZErCLJbRWj4UTA+sLDj7q05ZCNAkQSYUx5TJuQvE035LCqE
+         mYBP9DaXYPUAb/FQGZ7dcM8p/rpAKppoZZiLOspxxDQWAraICI8W1JsVGA1cZ7WRZppv
+         adQSw4DRgJCtpn61nCPsN9WDURu995HPzX39s12ekhj3CE6Ss2koY8fs+ZlWKeaJfry3
+         0t2A22FHAbSoXc4KUrkV1xuQq/H81X9LlUM8EkoesPFBnp1etf5vNw3dHM1QkTRWtyrG
+         3ESqnM+HvZ6TenyMsnubuC5XDxoiSFnRYtYFpkIUZKXSA+F0P8z4tClxc57tpc54rnsa
+         aDfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUCs82wu1VI7Psek1XJsSXlyCZUrtRoJS5jzg511ej3lm2Pc3N/DY8MwfI/Eu7FYFNznetTkGVo8kNciwtAFMP5cncCNo/n4QKvZxezS3twZe9S1AWRpCmjHa4oqXHHbb44bpnpXm+EgCU=
+X-Gm-Message-State: AOJu0Yz2Os/E5zhPpyWsDI0jRca6T7pd7uy+kcw4Zma3ZwfawRPMIdKS
+	ga/UAy+RWY5pdtmyVCEBUIKhtGUG56NY74Gg7RA5I/YDxfVRs0lo4Nb3QA==
+X-Google-Smtp-Source: AGHT+IH6ct0kRkaJ/3I7wpdHjmOW+7Kton0AK/6wgw6KRAaTuUjoWg3keO/EMYOXsh8l7q+ZZnZ2sQ==
+X-Received: by 2002:a05:6a20:9744:b0:1bd:27d4:afcf with SMTP id adf61e73a8af0-1bee4994c6fmr17745635637.24.1719949317566;
+        Tue, 02 Jul 2024 12:41:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c91ce4668esm9297079a91.21.2024.07.02.12.39.39
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72c6c9e1634sm7035885a12.58.2024.07.02.12.41.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jul 2024 12:39:40 -0700 (PDT)
+        Tue, 02 Jul 2024 12:41:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <da649c17-2237-430f-80c9-253cef47deb6@roeck-us.net>
-Date: Tue, 2 Jul 2024 12:39:38 -0700
+Message-ID: <b83aaa99-caa8-47b4-a502-b1f284c6408c@roeck-us.net>
+Date: Tue, 2 Jul 2024 12:41:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,18 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] hwmon: add MP5920 driver
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
- Alex Vdovydchenko <xzeol@yahoo.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240702115252.981416-1-xzeol@yahoo.com>
- <20240702115252.981416-3-xzeol@yahoo.com>
- <956582ec-0205-46c3-b4dd-820aa150c03d@t-8ch.de>
+Subject: Re: [PATCH] hwmon: (adt7475) Fix default duty on fan is disabled
+To: Wayne Tung <chineweff@gmail.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240701073252.317397-1-chineweff@gmail.com>
+ <6c91530f-00f3-44ed-ae77-312260c2af9e@roeck-us.net>
+ <CABrnb7xqZFWwp9A3==ccDkkyAWy855O7JKYrf4EDUGEbhMEZnw@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,37 +115,18 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <956582ec-0205-46c3-b4dd-820aa150c03d@t-8ch.de>
+In-Reply-To: <CABrnb7xqZFWwp9A3==ccDkkyAWy855O7JKYrf4EDUGEbhMEZnw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/2/24 12:00, Thomas Weißschuh wrote:
-> On 2024-07-02 14:52:51+0000, Alex Vdovydchenko wrote:
->> Add support for MPS Hot-Swap controller mp5920. This driver exposes
->> telemetry and limit value readings and writings.
->>
->> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
->> ---
->>   Documentation/hwmon/index.rst  |  1 +
->>   Documentation/hwmon/mp5920.rst | 91 +++++++++++++++++++++++++++++++++
->>   drivers/hwmon/pmbus/Kconfig    |  9 ++++
->>   drivers/hwmon/pmbus/Makefile   |  1 +
->>   drivers/hwmon/pmbus/mp5920.c   | 93 ++++++++++++++++++++++++++++++++++
->>   5 files changed, 195 insertions(+)
->>   create mode 100644 Documentation/hwmon/mp5920.rst
->>   create mode 100644 drivers/hwmon/pmbus/mp5920.c
-> 
-> The entry in MAINTAINERS seems to be missing.
+On 7/2/24 03:31, Wayne Tung wrote:
+> I'm using adt7475 on the x86 system.
+> I found that when I tried to probe the driver manually, fans would run full speed (It's in disabled mode by default).
+> So I traced the driver and found the issue.
 > 
 
-That isn't mandatory; checkpatch asks for it, but I prefer not to have it
-in the first place if the submitter doesn't really plan to maintain it.
+Thanks for the update. It is interesting to learn that this chip
+is still actively used.
 
-> Otherwise:
-> 
-> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-> 
-
-Thanks,
 Guenter
 
