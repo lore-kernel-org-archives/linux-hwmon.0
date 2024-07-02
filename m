@@ -1,87 +1,70 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16971BB69E;
-	Tue,  2 Jul 2024 18:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D77747F;
+	Tue,  2 Jul 2024 19:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719945107; cv=none; b=G+uOGMLKp8QHRudZ5O5w9+ePS1MtE6aynukPsqbRhHAn+I6vJ+2KxSaaz684OVXnf1LYtnY74Zw3Rnaw+IqsF+sNcjRPa3E8R5fst3QdTb8nFN62hmPHi/Jh88lxsJPHMNsgaSowhPIyCFriW3+6tWi2LHT1z8/70cYIATtYOnE=
+	t=1719946836; cv=none; b=QSWMCXTNwriwXGjKLmsd7myGX5pLg6PK4/EFad8I3dt/6WmVEMtZDIVtNP8KjdOj+i6ukOyuwVbknEaGFkyyEwntUoFn21E2dhm2IGGTpjO7kdF8DVyZ0LhEDGcnkWREt+liaSfcRK54jPIW4HBztBzlWQPqXQYyas6/RiMT3hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719945107; c=relaxed/simple;
-	bh=pqDZ1/vCtAwi9zJHezUha0cEU3or+SfAETfpqFIlcKY=;
+	s=arc-20240116; t=1719946836; c=relaxed/simple;
+	bh=8lZGxe1XkKl3YyiIX7/JgyBSoQSInmskZwV4M6OEaJg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DiUFaztqvXxL5kRCfifB58I+LnChfm2X1MetmrTFewBY4sQ+znHFX672v8pFDU4cg7la8eghaiu1RxGtzJ013GjXJEqxCQ6NFHUlEx5aw4tHxhi3T9WdavatS3ygGerObTL8WWpBKB3fpyAdKOhVPfT3LLiYaHNOD3GAjOYFQsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RgUnzBr4; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2tA8TQ1qL3s9HUW8u2b1vPuR8NgtTzLi9ZQp6PSXspkZOT8fBSDKcdB9WMMlQFb5BK9i3WwwAJDKcAD9ralcE82NSP0BCebRqKxaRsn8yXspGn5DQlTzhxBZKPTbmYRX/e+EyqmXlot8Vyhc1mrroc1JpFRPp1t8WQtmQp//cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=VmlQ2aa2; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgUnzBr4"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-718b714d362so2522545a12.0;
-        Tue, 02 Jul 2024 11:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719945105; x=1720549905; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZlLp4s8Opxn4iwkcv4P7KdPkWgeRG/lKDgUPmU3V1QQ=;
-        b=RgUnzBr4UIhzvfObZVax1OZ+3YLftpobRamKfxd2qIwJKXKRxR1Fl0c1XmTDAUraNo
-         Aw6kq5sdxOHvWAg1HcP80uN/bYGduzf6Rsm8oVIDL0tI9Bcz1xKYi3HXnnzdE26zFzIj
-         wT6B8Hod5hFOxJ4wIWtqH1/cAsgfyaJfmJl0fGQGtx+kdFFW4GOwHOiLTtWQEcjFSp62
-         rSrjac3JjpDuaib7oWjuDIeNUcJLYnBx1Ax6NSfF7B7Azo23K5N4ND9WuUopiazekTFr
-         Ve6kKtaxOT8v5LyCvxWTCuMbRI1cWM0o3d9E+1uIqOcGt6tHvZaieg9OsRSJHrSsky8n
-         6M5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719945105; x=1720549905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZlLp4s8Opxn4iwkcv4P7KdPkWgeRG/lKDgUPmU3V1QQ=;
-        b=vf8m7OhVAqNoPiGoW9TBSVWD7/Zr6omOpYhNb+/z5QYJZqZlsF3awNAXl27wDsc0rS
-         //gMK5e3ycs7r8J3f7gwktTwmPyZLiH5kUNCzNw4amq41x+SE9cVCB9+rlHQHZ/WB1iT
-         lFSCH+T7RhX+7sGAkssxA/FyQt9Onam7tDKe4NF0+2uNmALdd+dvD+/YuTIuNFT2dL9U
-         C5WH/hSrNjR1AKlFe9ewQ7nbzkEXHQ3eOQw3yHhMlhbQahf2ICMXfROtQVXeLf1gMtft
-         tHFrGMMj81Ed1nLefsMm/p/qG8EO5hIHRj9zrzfMO+i64qMfaYhJ7PHfUFbj4zKptznC
-         DAcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWq7uEppRf5eHQkFsc4b7maPGWOiMQRJEaDzDnMVEw8y8j+HqALlVXeLGd1mX6SpKOwbzJYCE8K0HVM25d+hnbLjgG+7fkpW+ETnvCZEQmpUL3v5QK8n48V/zqZVk7+yyu5IJ4ZN0JrN0A=
-X-Gm-Message-State: AOJu0Yx1/hT6UDW3/eTMznjyLOf8a8fG1WYpPa7RKXQeVOKmvOu8O7X6
-	T1/WTVPhGqA5WSEeBZ1xzlQZsSjwQYZm/89D56/0P72tSR5uKCGM
-X-Google-Smtp-Source: AGHT+IEodsbzFaBhUZP2e0TTyRETRmeOEJTYER+L06cA3XSX/MkbBPi6iZjM2QpZpmYB0S1qGdQalg==
-X-Received: by 2002:a05:6a20:6089:b0:1be:dd1c:a6e3 with SMTP id adf61e73a8af0-1bef6276203mr6736631637.54.1719945104713;
-        Tue, 02 Jul 2024 11:31:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac159d8c1sm87509395ad.290.2024.07.02.11.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jul 2024 11:31:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 2 Jul 2024 11:31:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Eric Tremblay <etremblay@distech-controls.com>,
-	Robert Marko <robert.marko@sartura.hr>,
-	Luka Perkov <luka.perkov@sartura.hr>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (tps23861) Constify struct regmap_config
-Message-ID: <593b6334-c50c-4812-abf5-30ec05efb739@roeck-us.net>
-References: <20240702-hwmon-const-regmap-v1-0-63f6d4765fe0@gmail.com>
- <20240702-hwmon-const-regmap-v1-3-63f6d4765fe0@gmail.com>
+	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="VmlQ2aa2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+	t=1719946823; bh=8lZGxe1XkKl3YyiIX7/JgyBSoQSInmskZwV4M6OEaJg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VmlQ2aa2gURNQKsh4qI7+/jsIIpHH3+yuP0XBPPeYaHWSS3dIXac9EuB9llLfhrFT
+	 DLK+uRBjUHPMA+4BirKNH9+FH4ve9o8Vyvr3nsfVY3Q+OAEcNofRuBqvWC9ym574yY
+	 4gDDCCh+CHAglLxoOV2dgHclesXcfptpQB5Tx3Ho=
+Date: Tue, 2 Jul 2024 21:00:23 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To: Alex Vdovydchenko <xzeol@yahoo.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sean Anderson <sean.anderson@linux.dev>, Guenter Roeck <linux@roeck-us.net>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] hwmon: add MP5920 driver
+Message-ID: <956582ec-0205-46c3-b4dd-820aa150c03d@t-8ch.de>
+References: <20240702115252.981416-1-xzeol@yahoo.com>
+ <20240702115252.981416-3-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240702-hwmon-const-regmap-v1-3-63f6d4765fe0@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240702115252.981416-3-xzeol@yahoo.com>
 
-On Tue, Jul 02, 2024 at 12:09:32PM +0200, Javier Carrasco wrote:
-> `tps23861_regmap_config` is not modified and can be declared as const to
-> move its data to a read-only section.
+On 2024-07-02 14:52:51+0000, Alex Vdovydchenko wrote:
+> Add support for MPS Hot-Swap controller mp5920. This driver exposes
+> telemetry and limit value readings and writings.
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
+> ---
+>  Documentation/hwmon/index.rst  |  1 +
+>  Documentation/hwmon/mp5920.rst | 91 +++++++++++++++++++++++++++++++++
+>  drivers/hwmon/pmbus/Kconfig    |  9 ++++
+>  drivers/hwmon/pmbus/Makefile   |  1 +
+>  drivers/hwmon/pmbus/mp5920.c   | 93 ++++++++++++++++++++++++++++++++++
+>  5 files changed, 195 insertions(+)
+>  create mode 100644 Documentation/hwmon/mp5920.rst
+>  create mode 100644 drivers/hwmon/pmbus/mp5920.c
 
-Applied.
+The entry in MAINTAINERS seems to be missing.
 
-Thanks,
-Guenter
+Otherwise:
+
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+
+<snip>
