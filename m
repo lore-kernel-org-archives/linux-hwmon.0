@@ -1,61 +1,61 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3CB191F7C;
-	Wed,  3 Jul 2024 20:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08E6181CEC;
+	Wed,  3 Jul 2024 21:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720040140; cv=none; b=XjKvqehY19Paq7w7aQvscLL32rNHP4W5a5A0iRdaL+mOHMlTrzb3N2o6ujf5sJnfAnn9sk9PHlqOEgGSb73SmbAaAOaXtLHgTT0q37H9eGvvqi3ItvjbhWBKf19C81U68iEjvZNrGKtFOCgSHYzMaglC8m1hj6qotTtk2ZtIvOg=
+	t=1720042147; cv=none; b=eDRqRYSN3lo7ycTMyBMrU7y1xzX9WOeDTe4AIIMPRLs4AFEtdphVaoKizMMzw9QGSDmVJOor9ix3W3IQQFuyo+apFVsTNHU/NlppCNUoT0/d53Np79PLVFgrbnlFTIVQ8HeKKIBmx69DAv0ATn6H6KDUrjCpZzninddbQdzTIfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720040140; c=relaxed/simple;
-	bh=GJRl0LWEIkZNtEFRfdreR1gE7v+oVSxEwSQRZH+4hpo=;
+	s=arc-20240116; t=1720042147; c=relaxed/simple;
+	bh=tR09rMdaXRzSOZJlbbwDCYT3+wz1Ju26+n0RaMRBw0I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RF7ZPI8KGzajsZHE6YN3IoL8edtCgR/zZwoePlJqjFmGGOB0cxvVNl7yBuCUMo+oWln9fufkW3TZv0/UhJW+P3t16qZUz2PXrdp6lxebl0AsI6gnO6Ug2kcCp0LdwTUNQ13h9bx/K+DY2uTonZSd9qlg+EHVB+RFNjbg7Cvug38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DU2NF67X; arc=none smtp.client-ip=209.85.210.169
+	 In-Reply-To:Content-Type; b=uLPvk6hLjSVUxj+BMuBVe2BsSoFN7puWbKCdsfD8X6zwCZzDTk87P4VvhFSFPc6+bCJmk8WlA0ttdPxlJYZ3HkekxtbFj0qRdRDT/6iXWQ+s/hFhC4+BxHb90CMdP8s4EvNSx9o6B5IrHDHyQNDW+NBPIR2JUIV+TgWsee0Wb24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lP1O+RU/; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DU2NF67X"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-706b539fcaeso874274b3a.0;
-        Wed, 03 Jul 2024 13:55:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lP1O+RU/"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1f4a5344ec7so98145ad.1;
+        Wed, 03 Jul 2024 14:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720040137; x=1720644937; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720042145; x=1720646945; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uQB2N3uOdGSMm95fBQpuHrjgogDhh1zsUzME7/IbVmw=;
-        b=DU2NF67XhkUvVV4ypdlMiiDMKzF95cx7wu9JAKUOOAt9f/AxlXA3RKxsYZkQN17sUi
-         Llk5MU63CJWM39naZES2V2leKJSKdw8KI8YdhlPTFR06x8YCBuU9dzEPSCkHpJ8tW+8l
-         fl640u/KcqxKAYu2K6ppMXtrJR8kBsEJmiju29bQOlkSaseIcuioGBZUTnidWdYhaton
-         OlZqnb2LqPrYDiQCLquMbECHBRbyFl4HOT4xtV3jAr62t00fnYPWKxyOxmWa5sVLGvje
-         xLRo/6v2P4E2a9Hsf9mvYPWKIzLXN1GKHvOfyaEDr8L2nKD75D+7ARCuyBI7+iRyiWAI
-         D2bg==
+        bh=MQHG/jePXaqUQxyIwx4IFdiaoRRMKbDkq0isirmyfIc=;
+        b=lP1O+RU/pD5+9BvtEJTVlO/VUOKLXdhlBndAtFtLG5NZGSnMXN/uC4HZnFp7fiRuL6
+         ln1MONaETB7mIQCHatlcYSz6PrSWMRNowT5CsldSOuV0P5ZBJdBD+nCX6bar1Dtprksn
+         rgrwhFo7cKjHo8Tj+t0buISxWwcahWqTXLjWWggDTj+bHO10etrI+sg00+L9WxkoPL+x
+         2zMXkZ0O0MCQZnPmvvtHe3zVH+EXQ/KK6DOSq8GDxCzHJU9FEsALSS6g1UpGsJ9udR9t
+         TxYH6xEew7pJmuccOi6QHXPLyaoKl2rnEfqiok47uXWTWGyKgi0puYxT5D39c6f83FR7
+         FnSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720040137; x=1720644937;
+        d=1e100.net; s=20230601; t=1720042145; x=1720646945;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uQB2N3uOdGSMm95fBQpuHrjgogDhh1zsUzME7/IbVmw=;
-        b=KNggCHU3/AzVLQ+z0S4QQQ7ZfFj6YRwt6OPWrR0+yyOlxNMptVxnOOe5MgOUpPdzif
-         EPsFhgFONQ/BFP7fR+8hBpVSfBUYKqG9t8B0217m8S9dzT+sVR/4ocau6NSRgfBOplYv
-         raj+UD2ZxZ1m8u74pmIFUE4v0GocEEwPnSkbbtIqICazzPKnu94/SEU08YDLDNCFyhCW
-         2kHZogFjzsSa3zDg+ZTPrpsEhBqknYdY6oSGki6TBYinwIlPrMNcT4yKsUwKtCF6qw8t
-         qhP9e7JbJrsa0pMxlSPNglH8biZFwhr1f137A3iHZJNiniACdFr3+kPaMxnoPuKtHSun
-         +dwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLvTxYzm4DErQZSmjxqiVuVF9p4IK3bgzysONepBerVIpzD8CZZjqgvF3w8RZxo5kVE1a4hNkUFvkyBw97DV0DySZAavfd6D3QRDM=
-X-Gm-Message-State: AOJu0Yxe6sB1FDPT0YZlU+CnYA7963pj1dLapNUKUmwJnZwsy/c0Oqha
-	1QpbQmK8JFGUThU1dv/FPdGBQ9pvbKu2ZSgVxSk/FaZFHY5UL0u+Lcjytg==
-X-Google-Smtp-Source: AGHT+IHMgY/3CHcRbCQK5DewKI8lVdMbM0r8AD3szNYyGV7fnAAxC04b4wks4R1NlVGjEXVR061zow==
-X-Received: by 2002:a05:6a20:1585:b0:1bd:27da:5f20 with SMTP id adf61e73a8af0-1c0bfe8c4c0mr4543786637.6.1720040137347;
-        Wed, 03 Jul 2024 13:55:37 -0700 (PDT)
+        bh=MQHG/jePXaqUQxyIwx4IFdiaoRRMKbDkq0isirmyfIc=;
+        b=tXnp5ydGX6FNPWWh5PR1ZMm5QzboF4zkrZGUwzR+Lj3vI8RK3HfSqn6hCx9K5OWAqN
+         PEEP3EsY+paKPZPPMoqR//eUQrmrVLgwP76LEgRgcpV/wruFf0Et2t7u9JMhCn0CzJbE
+         WHrXOX4e4fqGzXgyN5wubFN1WsVgQXXOOwG2YnjCDi5qoK+I/6nK3QUHq5clveFeL8xn
+         e+hAlUGormndSxuDDV+FNHXmIyzzef9Z61WfRukW5UiTRtmYMIxOsiNoS4qxnbe20Yw0
+         jteXxQGObvle2k6siGOljk2/5icuJxxV5CtGkXcrRFjxTzahR8Kf2OcaqJZi/PEvD8Mv
+         MXzg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxS0gqrtwg2ziBMZXEf6HVfDCXS+twHf3+tcWiUMgNCdpizpS9hzr4dh9fZ7ZKFK6nNT/XbJ5RPOMOYuBz2fGZnrOji63wZKpZCMo=
+X-Gm-Message-State: AOJu0Yzw8tH1YCOC0mVhsu2Cu6BGaxZqXcSx/gAd69OhwNPx+tIUm+Oq
+	0FjbB1oJsUbtbnZJDBxqJZwa50Ed0NLmtjVug8D9MeYUK3u7FU2stEtCnQ==
+X-Google-Smtp-Source: AGHT+IFExeFjZxBVywRNDCGExJCTAn96L/t6bgM405RZKaBaFgE0upQ/cynVux5Rczsbsz0/YQVKrg==
+X-Received: by 2002:a17:902:dad1:b0:1f9:f6c5:b483 with SMTP id d9443c01a7336-1fb1a0d1fedmr43299825ad.27.1720042144893;
+        Wed, 03 Jul 2024 14:29:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70801e57aa0sm10877596b3a.28.2024.07.03.13.55.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb1a3d25f1sm18274265ad.139.2024.07.03.14.29.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jul 2024 13:55:36 -0700 (PDT)
+        Wed, 03 Jul 2024 14:29:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <744ba422-b683-4b87-abdc-abb5d662eed5@roeck-us.net>
-Date: Wed, 3 Jul 2024 13:55:35 -0700
+Message-ID: <38a76df3-61f1-4e40-b318-d2afe3a39445@roeck-us.net>
+Date: Wed, 3 Jul 2024 14:29:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/11] hwmon: (amc6821) Convert to use regmap
+Subject: Re: [PATCH v2 11/11] hwmon: (amc6821) Add support for pwm1_mode
+ attribute
 To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
 References: <20240701212348.1670617-1-linux@roeck-us.net>
- <20240701212348.1670617-10-linux@roeck-us.net>
- <015776ca-a9e0-470f-bbf5-39cec4147c6b@cherry.de>
+ <20240701212348.1670617-12-linux@roeck-us.net>
+ <135535d2-f400-4ca8-8362-526b47ae8362@cherry.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,204 +115,68 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <015776ca-a9e0-470f-bbf5-39cec4147c6b@cherry.de>
+In-Reply-To: <135535d2-f400-4ca8-8362-526b47ae8362@cherry.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/3/24 09:19, Quentin Schulz wrote:
+On 7/3/24 08:28, Quentin Schulz wrote:
 > Hi Guenter,
 > 
 > On 7/1/24 11:23 PM, Guenter Roeck wrote:
->> Use regmap for register accesses and for most caching.
->>
->> While at it, use sysfs_emit() instead of sprintf() to write sysfs
->> attribute data, and remove spurious debug messages which would
->> only be seen as result of a bug in the code.
->>
->> No functional change intended.
+>> AMC6821 supports configuring if a fan is DC or PWM controlled.
+>> Add support for the pwm1_mode attribute to make it runtime configurable.
 >>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
->> v2: Drop another spurious debug message in this patch instead of patch 10
->>      Add missing "select REGMAP_I2C" to Kconfig
->>      Change misleading variable name from 'mask' to 'mode'.
->>      Use sysfs_emit instead of sprintf everywhere
+>> v2: New patch
 >>
->>   drivers/hwmon/Kconfig   |   1 +
->>   drivers/hwmon/amc6821.c | 713 ++++++++++++++++++----------------------
->>   2 files changed, 329 insertions(+), 385 deletions(-)
+>>   Documentation/hwmon/amc6821.rst |  1 +
+>>   drivers/hwmon/amc6821.c         | 16 +++++++++++++++-
+>>   2 files changed, 16 insertions(+), 1 deletion(-)
 >>
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index e14ae18a973b..a8fa87a96e8f 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -2127,6 +2127,7 @@ config SENSORS_ADS7871
->>   config SENSORS_AMC6821
->>       tristate "Texas Instruments AMC6821"
->>       depends on I2C
->> +    select REGMAP_I2C
->>       help
->>         If you say yes here you get support for the Texas Instruments
->>         AMC6821 hardware monitoring chips.
+>> diff --git a/Documentation/hwmon/amc6821.rst b/Documentation/hwmon/amc6821.rst
+>> index 96e604c5ea8e..dbd544cd1160 100644
+>> --- a/Documentation/hwmon/amc6821.rst
+>> +++ b/Documentation/hwmon/amc6821.rst
+>> @@ -58,6 +58,7 @@ pwm1_enable        rw    regulator mode, 1=open loop, 2=fan controlled
+>>                   remote-sensor temperature,
+>>                   4=fan controlled by target rpm set with
+>>                   fan1_target attribute.
+>> +pwm1_mode        rw    Fan duty control mode (0=DC, 1=PWM)
+>>   pwm1_auto_channels_temp ro    1 if pwm_enable==2, 3 if pwm_enable==3
+>>   pwm1_auto_point1_pwm    ro    Hardwired to 0, shared for both
+>>                   temperature channels.
 >> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
->> index 028998d3bedf..3fe0bfeac843 100644
+>> index 5a3c089ae06f..98a45fe529e0 100644
 >> --- a/drivers/hwmon/amc6821.c
 >> +++ b/drivers/hwmon/amc6821.c
->> @@ -8,15 +8,16 @@
->>    * Copyright (C) 2007 Hans J. Koch <hjk@hansjkoch.de>
->>    */
->> +#include <linux/bitops.h>
->>   #include <linux/bits.h>
->>   #include <linux/err.h>
->>   #include <linux/hwmon.h>
->>   #include <linux/hwmon-sysfs.h>
->>   #include <linux/i2c.h>
->>   #include <linux/init.h>
->> -#include <linux/jiffies.h>
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->> +#include <linux/regmap.h>
->>   #include <linux/slab.h>
->>   /*
->> @@ -44,6 +45,7 @@ module_param(init, int, 0444);
->>   #define AMC6821_REG_CONF4        0x04
->>   #define AMC6821_REG_STAT1        0x02
->>   #define AMC6821_REG_STAT2        0x03
->> +#define AMC6821_REG_TEMP_LO        0x06
->>   #define AMC6821_REG_TDATA_LOW        0x08
->>   #define AMC6821_REG_TDATA_HI        0x09
->>   #define AMC6821_REG_LTEMP_HI        0x0A
->> @@ -61,11 +63,8 @@ module_param(init, int, 0444);
->>   #define AMC6821_REG_DCY_LOW_TEMP    0x21
->>   #define AMC6821_REG_TACH_LLIMITL    0x10
->> -#define AMC6821_REG_TACH_LLIMITH    0x11
->>   #define AMC6821_REG_TACH_HLIMITL    0x12
->> -#define AMC6821_REG_TACH_HLIMITH    0x13
->>   #define AMC6821_REG_TACH_SETTINGL    0x1e
->> -#define AMC6821_REG_TACH_SETTINGH    0x1f
->>   #define AMC6821_CONF1_START        BIT(0)
->>   #define AMC6821_CONF1_FAN_INT_EN    BIT(1)
->> @@ -130,224 +129,169 @@ static const u8 fan_reg_low[] = {AMC6821_REG_TDATA_LOW,
->>               AMC6821_REG_TACH_HLIMITL,
->>               AMC6821_REG_TACH_SETTINGL, };
->> -static const u8 fan_reg_hi[] = {AMC6821_REG_TDATA_HI,
->> -            AMC6821_REG_TACH_LLIMITH,
->> -            AMC6821_REG_TACH_HLIMITH,
->> -            AMC6821_REG_TACH_SETTINGH, };
->> -
->>   /*
->>    * Client data (each client gets its own)
->>    */
->>   struct amc6821_data {
->> -    struct i2c_client *client;
->> +    struct regmap *regmap;
->>       struct mutex update_lock;
->> -    bool valid; /* false until following fields are valid */
->> -    unsigned long last_updated; /* in jiffies */
->> -    /* register values */
->> -    int temp[TEMP_IDX_LEN];
->> -
->> -    u16 fan[FAN1_IDX_LEN];
->> -    u8 fan1_pulses;
->> -
->> -    u8 pwm1;
->>       u8 temp1_auto_point_temp[3];
->>       u8 temp2_auto_point_temp[3];
->> -    u8 pwm1_auto_point_pwm[3];
->> -    u8 pwm1_enable;
->> -    u8 pwm1_auto_channels_temp;
->> -
->> -    u8 stat1;
->> -    u8 stat2;
->>   };
->> -static struct amc6821_data *amc6821_update_device(struct device *dev)
->> +static int amc6821_init_auto_point_data(struct amc6821_data *data)
->>   {
->> -    struct amc6821_data *data = dev_get_drvdata(dev);
->> -    struct i2c_client *client = data->client;
->> -    int timeout = HZ;
->> -    u8 reg;
->> -    int i;
->> +    struct regmap *regmap = data->regmap;
->> +    u32 pwm, regval;
->> +    int err;
->> -    mutex_lock(&data->update_lock);
->> +    err = regmap_read(regmap, AMC6821_REG_DCY_LOW_TEMP, &pwm);
+>> @@ -317,6 +317,12 @@ static int amc6821_pwm_read(struct device *dev, u32 attr, long *val)
+>>               break;
+>>           }
+>>           return 0;
+>> +    case hwmon_pwm_mode:
+>> +        err = regmap_read(regmap, AMC6821_REG_CONF2, &regval);
+>> +        if (err)
+>> +            return err;
+>> +        *val = !!(regval & AMC6821_CONF2_TACH_MODE);
+>> +        return 0;
+>>       case hwmon_pwm_auto_channels_temp:
+>>           err = regmap_read(regmap, AMC6821_REG_CONF1, &regval);
+>>           if (err)
+>> @@ -372,6 +378,13 @@ static int amc6821_pwm_write(struct device *dev, u32 attr, long val)
+>>           return regmap_update_bits(regmap, AMC6821_REG_CONF1,
+>>                         AMC6821_CONF1_FDRC0 | AMC6821_CONF1_FDRC1,
+>>                         mode);
+>> +    case hwmon_pwm_mode:
+>> +        if (val < 0 || val > 1)
+>> +            return -EINVAL;
+>> +        return regmap_update_bits(regmap, AMC6821_REG_CONF1,
 > 
-> I think this is incorrect logic.
-> 
-> amc6821_init_auto_point_data is only called once in init_client, in probe. While we currently do not write to AMC6821_REG_DCY_LOW_TEMP, we could in the future. But writing to it would desynchronise the auto_point_temp values for the new value of the register.
+> Wrong register here, should be AMC6821_REG_CONF2.
 > 
 
-We do write the register, in pwm1_auto_point_pwm_store().
+Oops. I had a bug in my test script, and thanks to that it failed to report the problem.
 
-> I suggest we put the logic into a function and return the value for a given temp_auto_point (1/2 currently) so that we are calling this function instead of a member in the struct so that we are never caching it unknowingly (regmap would do it for us in any case). It's a bit odd anyway to have only **those** values be cached in the struct as members and migrating everything else.
-
-Yes, I know, that is a bit odd. Essentially I was too lazy to clean that up.
-But, yes, you are correct, that results in the cached values being wrong
-after AMC6821_REG_DCY_LOW_TEMP is updated. Back to the drawing board,
-and thanks for finding this.
-
-[ ... ]
-
->>       default:
->> -        dev_dbg(dev, "Unknown attr->index (%d).\n", ix);
-> 
-> Was this an intended removal? I think we can afford keeping it in?
-
-Yes, it is intentional. It (and the others below) indicate a coding
-error, which would have been found during development. While it does make
-sense to keep the default: case to make the compiler happy, it doesn't
-make sense to keep the pointless message in the code.
-
->> @@ -561,10 +538,11 @@ static ssize_t pwm1_auto_point_pwm_store(struct device *dev,
->>                        const char *buf, size_t count)
->>   {
->>       struct amc6821_data *data = dev_get_drvdata(dev);
->> -    struct i2c_client *client = data->client;
->> -    int dpwm;
->> +    struct regmap *regmap = data->regmap;
->>       u8 val;
->> -    int ret = kstrtou8(buf, 10, &val);
->> +    int ret;
->> +
->> +    ret = kstrtou8(buf, 10, &val);
-> 
-> Not sure this cosmetic change is worth it? Or maybe squash with an earlier commit?
-> 
-
-That slipped in, I think from the first patch of the series. I'll move it there.
-
->>       if (ret)
->>           return ret;
->> @@ -572,27 +550,24 @@ static ssize_t pwm1_auto_point_pwm_store(struct device *dev,
->>           return -EINVAL;
->>       mutex_lock(&data->update_lock);
->> -    data->pwm1_auto_point_pwm[1] = val;
->> -    if (i2c_smbus_write_byte_data(client, AMC6821_REG_DCY_LOW_TEMP,
->> -            data->pwm1_auto_point_pwm[1])) {
->> -        dev_err(&client->dev, "Register write error, aborting.\n");
->> -        count = -EIO;
->> -        goto EXIT;
->> +    ret = regmap_write(regmap, AMC6821_REG_DCY_LOW_TEMP, val);
->> +    if (ret)
-> 
-> I think we're missing a count = something here?
-> 
-Yes.
-
->> +        goto unlock;
->> +
->> +    ret = set_slope_register(regmap, AMC6821_REG_LTEMP_FAN_CTRL,
->> +                 data->temp1_auto_point_temp);
->> +    if (ret) {
->> +        count = ret;
-> 
-> In some places, we replace set_slope_register return code with -EIO (like it was) and sometimes we propagate it, like here. Is there some reason for this or can we have some kind of consistency across the code base here?
-> 
-Thanks for noticing. The code should be consistent and always propagate the error code.
-I'll fix it.
-
-Thanks,
+Thanks for noticing!
 Guenter
 
