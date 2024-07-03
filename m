@@ -1,61 +1,61 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEC6194A43;
-	Wed,  3 Jul 2024 21:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7621E49F;
+	Wed,  3 Jul 2024 21:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720043334; cv=none; b=O8S2exSKhzmlUMJUJ/WST4uO0SpK0maQ2rZv8n/Z9RjiSRU5hkQQQICcd7rQPT+jzLc1UefP/W9Wg1IApDqJo/apGLC1tatxRbWQxPzi5xz+pjMGi4+vZPa2oNT/7Lv3mmZ1Tmqid7byFi9iRELx1mUYogHEyjTDND1XIKHXzeA=
+	t=1720043804; cv=none; b=rutQNJmjVlFfyTmORWBAOvISQejSbk+JrLCXyThvcGxDMzW0PSvZ1CsIvStxlEU+AMj+fl5PLzG/yIjK+KmF1QctZH202/0g4bhkT2igHeiIY7TaQNa1Ew4n3rHNDKSfZbQ8CirK8AjX0TLfC5Pe2KaVksqfImvuGvAumN4ErVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720043334; c=relaxed/simple;
-	bh=N32NDO0/HIEfM/TdFnBQODUZPnPhe+ICVnHfYxYC2Pw=;
+	s=arc-20240116; t=1720043804; c=relaxed/simple;
+	bh=1+YTn3dIOeDJfoLGZQBdtN3XpA+TZgyiDhPfGpaEPOA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n4yprDvNZ72VfdKCy1l32ntLjTK3BQthnNe5+3WTpZSyrPiMqIRumGZcHSOiroOfocTxuNAm8fH+PzIZ9hcrkDNR2kfKE83jPY5wEQ4e08UV9GrNBUmf19rAZDFFYrnWMEXvTkJmixSPF3hthHEnxhUF0Pkix+oazJamf5I7cOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcTyJI6t; arc=none smtp.client-ip=209.85.215.170
+	 In-Reply-To:Content-Type; b=fO+ab1LC1jIO5L8w8Rrxq7T3tZMWFDvP4bXS7ySMM00lGmFTJxxu/3979ijK/6B6d3x48OBuZUieyXr9vOxeqfKmhNl+x878fdFw22WlM8LgZkF+A0g0Ws2FJwB0XxBApalvFRdwZkA0eT8Vr+CBDpxq12jbcV6Aciehqt5qT74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1dI6i/z; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcTyJI6t"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7201cb6cae1so3414490a12.2;
-        Wed, 03 Jul 2024 14:48:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1dI6i/z"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-24c9f6338a4so21404fac.1;
+        Wed, 03 Jul 2024 14:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720043332; x=1720648132; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720043801; x=1720648601; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZJelXmMaiDFYpGA+bEfG1CdOh8nPHcs/JLTHgefJjY=;
-        b=LcTyJI6t1VNd9f3ETNKg33Sfd+us3dWy+/Qa7dqGTR8bmoxqRUOHl97d474NP8ebuu
-         NFszWyJwZAdcwGB4+CzFEeg8SA6oTlwyKgZ+4u6lkEvmR5DUUhR9JmRgMWM6gPXcWHlW
-         zL//qXq+nNbgiW2cdGaWjQ/dNrhSeaxUD/w4FIFbCaikwLUm/dLFaBZlHGCupNk0EEUd
-         H93KQ9ROQjvH4X4fl76c1YPdbrUXfBOs/tBNd/X32ml1sJf9E1bQm5ZjdOVZF1ZXkaZR
-         1WyhMiB1rq6G9ZY289KklAsjh3SRJdEY7Nz0PuzRYBVLCuXOJ3nddfX2na93kGVJPyma
-         qjpg==
+        bh=NSE/m2zZbakwvs1F6RA5g6uA7BZCRYoaxoKgYZnqXNo=;
+        b=Y1dI6i/zE970c5jGPPY75CP1I2Vrmu4FxuVF9CJ81WnSXUZuQjdOi47ONXw0Gt7dqz
+         1YEGDo89/LS9UI8rjV3VbGKLQScych9VlTKRgc/zVArEGXDBDrIrHJBESF5DJh9Z6Vju
+         c1GbekDBY7133Q68dUwuNe5F1dcHdeW74qj3tfKw+m12dxkFZApHS8pC7p6GgB8ZY9Tq
+         WpjfilDVLnPlCgBi5H7S1ue1uDhbk/iyrMHVyz9PqBb4s0LL6gH28xsXudBMmYD9Umsz
+         kNaxu6jJzgPpOEJRgB+BAyVF0naN7Gk3wPSF4z8MydgPR8o7C0WjxY1JWgYk7OCSBH5j
+         yg6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720043332; x=1720648132;
+        d=1e100.net; s=20230601; t=1720043801; x=1720648601;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IZJelXmMaiDFYpGA+bEfG1CdOh8nPHcs/JLTHgefJjY=;
-        b=lzc4MIICe2633chRvTxAZlTbNPBoQmVA3zOGrMtmdvTAKdfU0ePbcv7dYCa/1EPvU1
-         ecsC1Bchbs5p+cVA3NOMZwLrvjVY3bYxM0K9PiNIpniKFLjB0RB8T9nXxEmpJPoTMIXi
-         USw17A0FA5k5l2aJWj7pb2XK4xW96zvFfUivFwzH+TcJXeH3wfmynWIGQ7P/PwJTQOr4
-         FgsUXnxk6oToTjc+j0VA6JkntfiB8WnLGwuc4UXig4LpiTknwR6O/P3hNXDZptR7xGLE
-         oZUVO/p1TOrBlbRvoRCO+ckYAJ1upSlDFy4wasqZMedQzETDoG3kcuK3Wo2SNEZEukww
-         RArA==
-X-Forwarded-Encrypted: i=1; AJvYcCXVrTovC1vhK6klNJVHoMn1CYgIn8KT/8EpVPikwlMxsRte5RshBAh5BQYrmPkfqNLc6bNdfkLiXwYIsoQJqzYGozSpTy5b9K3RdKQ=
-X-Gm-Message-State: AOJu0Yxa6pn+2SUxt08bYDAVNpx0EKQcUGaOayi/hyDkdzHN4P+5tXeu
-	OVinaEHRjiKPMkXNlNjl6ib6fqciueyrYEbYhijYBDOSm/udd7yxqtZmdg==
-X-Google-Smtp-Source: AGHT+IHiPJNadjh+TVTY7XFT0j1N1EnDTIJVqAoAtkqY6ONufJLxOEQjzp6TODM14IP9y392wr3cQw==
-X-Received: by 2002:a05:6a20:a124:b0:1bd:1df4:bd43 with SMTP id adf61e73a8af0-1bef6275a5dmr12677224637.54.1720043332343;
-        Wed, 03 Jul 2024 14:48:52 -0700 (PDT)
+        bh=NSE/m2zZbakwvs1F6RA5g6uA7BZCRYoaxoKgYZnqXNo=;
+        b=QLVAgLwFnmojjMHZD9se/rQvxhtJYnXuy+lD2p4C+mcoJ4+2CQrFJYw+hj0Ckdb6wB
+         6prsjgvA23s1HGIdxb4DsbozUsQLeyGcvgvJRkBCdJ22CmDap778uISBpaC4RJMS9qwe
+         U5hCNnfa2Alsm5zj7p8oEnQciVFd7W/lis/to+JiRdnQ3Qr0+wN9lSal5dkUPPb2zbAb
+         8KKrneFZlHEuLh1zdJxZ51nkbJELnNKKIoX+KtNmWXSaNahoKSxvB+5t494KLTh/Eowb
+         CHJN8iCS0rr7E7jSLFCLzUr8CExPqNiDzeOFDBpYMAULPBqm4vLwXgmi1t6efSr65wHd
+         OQlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWN5JcttY9vgFob8MC/RHxRDxM4IgtOM392Hua6u152Wy3mVsq2q2+NTKsGkjF0f7UryEKYP9BB1NZczX2iN+vwd+hHQxHpTNDlO8uVLfSo3vYz4ey4yNOG0fn4RhrJiOyOw3qAWa7BJWU=
+X-Gm-Message-State: AOJu0Yx4vt6tFAd9/f2vr97k4n+b3BfRY/zn9N+KNZFVSOU6GjJEz/uW
+	IakVzW8cvq3OghrczBxqJ8WzrVeMuGKEduEVJFMXDXl/AQoCWw0fZc1pvw==
+X-Google-Smtp-Source: AGHT+IGw9OpUcJNXsCVQtff2v6e34FGuCuX1fBCIxFSZw2QkQ7Hmnlysak4EvhPR89gY/eE2/cZzXw==
+X-Received: by 2002:a05:6870:1ec7:b0:25d:dea:456f with SMTP id 586e51a60fabf-25db3640381mr12229317fac.42.1720043801519;
+        Wed, 03 Jul 2024 14:56:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb1a3d25f1sm18428625ad.139.2024.07.03.14.48.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70801e53b2csm10920990b3a.39.2024.07.03.14.56.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jul 2024 14:48:51 -0700 (PDT)
+        Wed, 03 Jul 2024 14:56:40 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8cb9dc38-499e-4f10-93a4-c07898a776b4@roeck-us.net>
-Date: Wed, 3 Jul 2024 14:48:50 -0700
+Message-ID: <cbcf8eb9-1817-4451-9c1e-a0daa81a18ea@roeck-us.net>
+Date: Wed, 3 Jul 2024 14:56:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,13 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/11] hwmon: (amc6821) Make reading and writing fan
- speed limits consistent
-To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
-References: <20240701212348.1670617-1-linux@roeck-us.net>
- <20240701212348.1670617-3-linux@roeck-us.net>
- <750d28c7-4d90-4bd6-a910-4d5e73828e55@cherry.de>
+Subject: Re: [PATCH] hwmon: (dell-smm) Simplify with cleanup.h
+To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240703083129.95955-1-krzysztof.kozlowski@linaro.org>
+ <982dc693-dbb2-41a7-ae0d-3b3c05c28117@roeck-us.net>
+ <20240703191641.i5okrz22exrt3mgk@pali>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -115,74 +116,93 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <750d28c7-4d90-4bd6-a910-4d5e73828e55@cherry.de>
+In-Reply-To: <20240703191641.i5okrz22exrt3mgk@pali>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/3/24 07:35, Quentin Schulz wrote:
-> Hi Guenter,
+On 7/3/24 12:16, Pali Rohár wrote:
+> On Wednesday 03 July 2024 11:52:14 Guenter Roeck wrote:
+>> On 7/3/24 01:31, Krzysztof Kozlowski wrote:
+>>> Allocate memory, which is being freed at end of the scope, to make the
+>>> code a bit simpler.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>    drivers/hwmon/dell-smm-hwmon.c | 7 +++----
+>>>    1 file changed, 3 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+>>> index 0362a13f6525..e72e26db6e10 100644
+>>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>>> @@ -14,6 +14,7 @@
+>>>    #include <linux/acpi.h>
+>>>    #include <linux/capability.h>
+>>> +#include <linux/cleanup.h>
+>>>    #include <linux/cpu.h>
+>>>    #include <linux/ctype.h>
+>>>    #include <linux/delay.h>
+>>> @@ -1095,9 +1096,9 @@ static int dell_smm_init_cdev(struct device *dev, u8 fan_num)
+>>>    	struct thermal_cooling_device *cdev;
+>>>    	struct dell_smm_cooling_data *cdata;
+>>>    	int ret = 0;
+>>> -	char *name;
+>>> -	name = kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
+>>> +	char *name __free(kfree) = kasprintf(GFP_KERNEL, "dell-smm-fan%u",
+>>> +					     fan_num + 1);
+>>>    	if (!name)
+>>>    		return -ENOMEM;
+>>> @@ -1115,8 +1116,6 @@ static int dell_smm_init_cdev(struct device *dev, u8 fan_num)
+>>>    		ret = -ENOMEM;
+>>>    	}
+>>> -	kfree(name);
+>>> -
+>>>    	return ret;
+>>>    }
+>>
+>> If you really want to clean this up, just use
+>> 	char name[32];
+>> 	...
+>> 	snprintf(name, sizeof(name), "dell-smm-fan%u", fan_num + 1);
+>>
+>> I don't see the point of all this complexity.
+>>
+>> Guenter
+>>
 > 
-> On 7/1/24 11:23 PM, Guenter Roeck wrote:
->> The default value of the maximum fan speed limit register is 0,
->> essentially translating to an unlimited fan speed. When reading
->> the limit, a value of 0 is reported in this case. However, writing
->> a value of 0 results in writing a value of 0xffff into the register,
->> which is inconsistent.
->>
->> To solve the problem, permit writing a limit of 0 for the maximim fan
->> speed, effectively translating to "no limit". Write 0 into the register
->> if a limit value of 0 is written. Otherwise limit the range to
->> <1..6000000> and write 1..0xffff into the register. This ensures that
->> reading and writing from and to a limit register return the same value
->> while at the same time not changing reported values when reading the
->> speed or limits.
->>
->> While at it, restrict fan limit writes to non-negative numbers; writing
->> a negative limit does not make sense and should be reported instead of
->> being corrected.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v2: Do not accept negative fan speed values
->>      Display fan speed and speed limit as 0 if register value is 0
->>      (instead of 6000000), as in original code.
->>      Only permit writing 0 (unlimited) for the maximum fan speed.
->>
->>   drivers/hwmon/amc6821.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
->> index eb2d5592a41a..9c19d4d278ec 100644
->> --- a/drivers/hwmon/amc6821.c
->> +++ b/drivers/hwmon/amc6821.c
->> @@ -617,15 +617,20 @@ static ssize_t fan_store(struct device *dev, struct device_attribute *attr,
->>   {
->>       struct amc6821_data *data = dev_get_drvdata(dev);
->>       struct i2c_client *client = data->client;
->> -    long val;
->> +    unsigned long val;
->>       int ix = to_sensor_dev_attr(attr)->index;
->> -    int ret = kstrtol(buf, 10, &val);
->> +    int ret = kstrtoul(buf, 10, &val);
->>       if (ret)
->>           return ret;
->> -    val = 1 > val ? 0xFFFF : 6000000/val;
->> +
->> +    /* The minimum fan speed must not be unlimited (0) */
->> +    if (ix == IDX_FAN1_MIN && !val)
->> +        return -EINVAL;
->> +
->> +    val = val > 0 ? 6000000 / clamp_val(val, 1, 6000000) : 0;
+> Lets first ask a question: And what the problem we are solving there?
+
+None.
+
+> I do not see any memory leak here, it is neither mentioned in the commit
+> message. So I think that there is no real problem, and code has just
+> clear and explicit alloc/free pattern.
 > 
-> I'm wondering if we shouldn't check !val for min after this line instead? Otherwise we allow 6000001+RPM speeds... which is technically unlimited.
+Correct.
+
+> On the other hand proposed change with __free does not make it simpler.
+> It has still same complexity, plus magic around.
+> 
+Again correct.
+
+> snprintf with stack allocation at the first glance looks simpler.
+> 
+> But has a problem that if in future the device name will change then it
+> would be required also check (and maybe modify) size of stack buffer. In
+> its usage you are specifying pair <sizeof(name), "dell-smm-fan%u"> which
+> has size not related to the string. But something more common sense
+> would be to specify pair <32,"dell-smm-fan%u"> which could say that it
+> is always maximally 32 (and you can easily check if the string is not
+> going to be larger). So for long term maintenance this is maybe worse.
 > 
 
-If ix == IDX_FAN1_MIN, val must be positive because of the check above.
-The expression "6000000 / clamp_val(val, 1, 6000000)" is therefore always
-positive as well because val is clamped. Its minimum result would be
-6000000/6000000 = 1. The alternate case of the ternary expression would
-never hit because it is guaranteed that val > 0. Am I missing something ?
+Agreed, but I very much prefer that over the complexity introduced with
+the "free" magic.
 
-Thanks,
+Unfortunately, once framework code such as the free magic is introduced, it
+doesn't help to just say "please go away", because people will just keep
+submitting patches like this one which don't improve the code but still take
+review time.
+
 Guenter
 
