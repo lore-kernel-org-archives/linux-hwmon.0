@@ -1,36 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B49F16A945;
-	Thu,  4 Jul 2024 11:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDFB1AD9C0;
+	Thu,  4 Jul 2024 11:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720093719; cv=none; b=TGcDyzvcT5iKRbXBK9ytVi1b9MyX9cmyk8mUuGioRO73vXW8Pw4dZ8P/9QVX1T9Ou6wNxtdoJzWqkZ7xLHLtUvXe+J2eNs67ytfFAxvgOYcLqy5tUQegOlGKkElQRzf9maiuBI5oytmUwhUSSNeEvvfRt7Km+tNpxBWnEDHhn48=
+	t=1720093847; cv=none; b=apBMSNdHvccUXAfUS62cHJ88trytC1ywQDzxB83GZxNfgA/r1e1oeKW7jeL0rFSsE6yKIqubv0xHLJ8TRg0BVxcbgBV/0rzGgfLexVF1r4hIO8E9ZrtGruoysBpEy0YiOjWfx1zSteNPwGl/Ob2BcvL4PxWrH9rzucDjlux86qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720093719; c=relaxed/simple;
-	bh=c4OshHpTxBAdoC0PCCGARRV97ciDLNCp+eTfY08+D8w=;
+	s=arc-20240116; t=1720093847; c=relaxed/simple;
+	bh=r32OYyafeioYlL/gWWhzHmJjQ3BGcDLQ9nYLWcuZLM8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mxG1SVInaayVpyKZFoUvQJ6khiZdKKIeUbv4LgHM2hcDqyBY1dAWZRnl9ZKjV8Wq0B9hAwF9wZry9HgF77oxTKsvJ/uCnHNw+02PIymHExvUf8xXgt2qRRLmsPLQ/wVYFM6W+d7GGwLwN18cNKQui+G7t5HEUsvM2SyaOJ6UCt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IoyZ3fM2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=SlSNqUmFfeGp81pKAt6mfon892ezCKc1p2bjwCoTLi1PWKiUcYao9wLvC5o4Cb+/So4ByjBMmhBlB8ZB6cI0+wMBkRxgcwXv7UBUcErAJm1mIyfg//Vr//o03b+PVrQo5sUvjyiM1l1ZOb9feI8AlA/4z1MAsBBBi74cAOz8u54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eSn9hP53; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IoyZ3fM2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B2DC3277B;
-	Thu,  4 Jul 2024 11:48:37 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eSn9hP53"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57BEEC3277B;
+	Thu,  4 Jul 2024 11:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720093718;
-	bh=c4OshHpTxBAdoC0PCCGARRV97ciDLNCp+eTfY08+D8w=;
+	s=korg; t=1720093846;
+	bh=r32OYyafeioYlL/gWWhzHmJjQ3BGcDLQ9nYLWcuZLM8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IoyZ3fM2L8dLuiR+jLFo4RN3qwSY8fZ4Blc4SBotEqbxybfC91Xyl8mMLJBCl3ixN
-	 EmEzGDBN5Dd04NGlNtX+wrspAPikfUvw5DJoZHjan5FvNo9ejyzdJTq5X4WJbcl9RN
-	 VJBLpd0G827Lnmzo/6/lB2LDDNZYYZekn4u1Yusc=
-Date: Thu, 4 Jul 2024 13:48:35 +0200
+	b=eSn9hP53yxT2sMm3nTyHnW19q20XewBwbtlnHWYJCCbDLnWG4EA41M38M+Hz39jqe
+	 xH1kM1Zg3uwTxJogL2MqJxxCr5ZzJLw8gi0dtKtvo9aWmzLF+BkkdIZj0zW9SjvBnk
+	 94+gMj0UeeExbL7udPSdHWYAMyDdEo6wM0M6yzPE=
+Date: Thu, 4 Jul 2024 13:50:43 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Akshay Gupta <akshay.gupta@amd.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux@roeck-us.net, arnd@arndb.de, naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 0/6] misc: add amd side-band functionality
-Message-ID: <2024070416-cosponsor-barrack-6125@gregkh>
+Subject: Re: [PATCH 2/6] misc: sbrmi: Add platform device add to create
+ platform device
+Message-ID: <2024070447-cosigner-shanty-fbbd@gregkh>
 References: <20240704111624.1583460-1-akshay.gupta@amd.com>
+ <20240704111624.1583460-3-akshay.gupta@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -39,44 +41,73 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240704111624.1583460-1-akshay.gupta@amd.com>
+In-Reply-To: <20240704111624.1583460-3-akshay.gupta@amd.com>
 
-On Thu, Jul 04, 2024 at 11:16:18AM +0000, Akshay Gupta wrote:
-> AMD's APML interface provides system management functionality accessed by
-> the BMC. Sbrmi driver under hwmon subsystem, which is probed as an i2c
-> driver and reports power using APML specified protocol.
+On Thu, Jul 04, 2024 at 11:16:20AM +0000, Akshay Gupta wrote:
+> - AMD provides socket power information from out of band
+>   which can be read by sensors.
+> - platform driver will probe drivers/hwmon/sbrmi as a platform device
+>   and share the sbrmi device data.
 
-What is "APML"?  What is "BMC"?
+So you are "splitting" a real device into different ones using a
+platform device?  THat's not ok, and an abuse of the platform api.
+Please use the correct one for that instead.
 
-> However, APML interface defines few other protocols to support
-> full system management functionality out-of-band.
 
-What is out-of-band here?
+> 
+> Signed-off-by: Akshay Gupta <akshay.gupta@amd.com>
+> Reviewed-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+> ---
+>  drivers/misc/amd-sb/sbrmi-i2c.c | 25 ++++++++++++++++++++++++-
+>  include/misc/amd-sb.h           |  2 ++
+>  2 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/amd-sb/sbrmi-i2c.c b/drivers/misc/amd-sb/sbrmi-i2c.c
+> index c4903d9e9f0f..b593bbdd78e0 100644
+> --- a/drivers/misc/amd-sb/sbrmi-i2c.c
+> +++ b/drivers/misc/amd-sb/sbrmi-i2c.c
+> @@ -72,7 +72,29 @@ static int sbrmi_i2c_probe(struct i2c_client *client)
+>  		return ret;
+>  
+>  	/* Cache maximum power limit */
+> -	return sbrmi_get_max_pwr_limit(data);
+> +	ret = sbrmi_get_max_pwr_limit(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	dev_set_drvdata(dev, (void *)data);
 
-> This patchset is an attempt to add all APML core functionality in one place
-> and provide hwmon and user interface
-> 1. Move the i2c client probe and sbrmi core functionality from drivers/hwmon
->    to drivers/misc/
-> 2. Add a platform device, which probes the hwmon/sbrmi and continues to
->    report power using the symbol exported by the misc/sbrmi-core.
+No need to cast, right?
 
-Are you sure this is a platform device?  It better not be a pci one...
+> +	data->pdev = platform_device_register_data(dev, "sbrmi-hwmon",
+> +						   PLATFORM_DEVID_NONE,
 
-> 3. Convert i2c to regmap which provides multiple benefits
->    over direct smbus APIs.
+Yeah, that's not ok.  Please do this correctly, as this is NOT a
+platform device, but rather a made-up one that you just created out of
+no where.  Instead use the correct apis for that.
 
-What are those?
+> +						   data,
+> +						   sizeof(struct sbrmi_data));
+> +	if (IS_ERR(data->pdev)) {
+> +		pr_err("unable to register platform device for sbrmi-hwmon\n");
+> +		return PTR_ERR(data->pdev);
 
-> 4. Register a misc device which provides 
->     a. An ioctl interface through node /dev/sbrmiX
+You don't need to unwind anything else here?
 
-Why?
 
->     b. Open-sourced and widely used https://github.com/amd/esmi_oob_library
->        will continue to provide user-space programmable API.
 
-Will this use the new ioctl api?  If it's not present, what will it use
-instead?
+> +	}
+> +	return ret;
+> +}
+> +
+> +static void sbrmi_i2c_remove(struct i2c_client *client)
+> +{
+> +	struct sbrmi_data *data = dev_get_drvdata(&client->dev);
+> +
+> +	if (!data)
+> +		return;
+
+How can that happen?
 
 thanks,
 
