@@ -1,63 +1,63 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F14A13A260
-	for <linux-hwmon@vger.kernel.org>; Thu,  4 Jul 2024 21:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19756143892
+	for <linux-hwmon@vger.kernel.org>; Thu,  4 Jul 2024 21:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720129049; cv=none; b=m4zR9FqWjSNod+u9wg7TEsuon9WIkf8RFBecxvYrBDMBOnhRk0vCs8CgkhQMsF2/wSHK4P9IlYtCKrdlNVZak4XvGSLCCTx5samc0WpEoDDSlPancOzwMoWUXPn/gMscBpvoKwCblNpkFF0bRJIbenf8vt7Y9yTzIt35XuQ13SM=
+	t=1720129050; cv=none; b=a+E44mHDFj1byq+XPLo5y/UUjeM64zO5KWlaintqNbySqYK7OEGZ3kAN+R06y0gqCbsoLr5nh2n1BIPADvmUFwH2NP/uD+BRQfgvt7szDBcKOJrl4vP1szA7MQqWJJgRA8YiJQpEhRyU1DpBGjSniV5mJ3C5b+NJrxaZsCWCysE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720129049; c=relaxed/simple;
-	bh=nSYTLfykq6Q7koEBiKI6IES9qjeWkhUyTRkStFXF/3Q=;
+	s=arc-20240116; t=1720129050; c=relaxed/simple;
+	bh=ri2VHkpN01jzXgoDotq/TFm7g2Ji5nHuOShxvHRpqMQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=quyv8iElwBKKMM3LRwBKWj1yJ8lDrxfS8Jg8R/P/A3SJA5xl7FcspvriZP04tqC9GycD2HW8LoKwtSFd9MrNIukxxke5RiIQtrP6FDmeDwVbIOaZ/gT0y7dGvnEwVd67CIGioHe9KWarLCnnXedFNQFCE8WIsFn44aqiucL1gxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U4ybxYzA; arc=none smtp.client-ip=209.85.167.174
+	 MIME-Version; b=E1LTFbYMXPM5jhvPe47A2m5dL2NU+YNeNtUYMQ0h8OB+xApLVJvpLs7VGPRIhrNYw40EaMtEAAsVYH6tbD/eNEHR0ZJsHciTPfYa8AE6N/MIPHQae73SWE+wUpT3foxM2QFLtSHcsywnDIzRnjJEUgpg2GaowFazmXHM/k9GpbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KeLoyzlM; arc=none smtp.client-ip=209.85.160.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U4ybxYzA"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3d55f198f1eso511341b6e.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Jul 2024 14:37:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KeLoyzlM"
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-25e3d8db819so150061fac.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 04 Jul 2024 14:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720129046; x=1720733846; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720129047; x=1720733847; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tRzuR0zVRtJexew852wMyGOvZW75YybIt7u3laQ/oyY=;
-        b=U4ybxYzAE+Hn8TxesBE+mWLuMIdJgVmcGa2C6UdCL+R0toXNXstX5JmYYhYkpihc6k
-         iQqD7t/95udPjCYknPHEvX6Fq+RGPDgC1/DLAuyawQtpHxiSlKGgmIHq4SdibYVRVdkC
-         lNUrfKRCYjGFf+cH2zYD5awx3qgik9ZJgVUhpx/FyHZLMv14RsLPUj3Oov2yU03XEiP+
-         +h6LcQGzNGVAu5i+pZ9LODarRDtB3685lC1gIEIvYCqHtDTQvLxtI7YogyH25mKkpM2T
-         WsYv+kWpork5DVPHvzHXKr4GihwUlR2vip9AoOk+/12mCxhtiA2+JQoanenjs7Qcdnzs
-         Ndyg==
+        bh=buU1sa3D8kYKB4RAOEfOuNvdlYsBO0jca9eI/hF/X6Y=;
+        b=KeLoyzlMU7Eu96jiKkkbkLLyHYSKjppJHm0cvKIkxTp0HNn6GDRXqysV63NJwATEq0
+         KJ3GGnc8l6PYcpHa03lcUtapw3oRASeqZMKm6Wc190BmQVMlGz/sxTE2qi0ehtSjXv5c
+         AXwsCXimVZTQZqCuYaqq+jJCBYgTdnvduA2QImTwWZyvkyHVtxcqlPF1y8xtuXN1qCZc
+         hr3Hcq7NN5+Pe6iCCv2R2O99K6E0GUuT9A8bocWAq+dDsUkiTRarloVtz3LyyR7HSfCT
+         1me1DAnVMdw5AYWuz1dPkAaQlCsAdh1QaT6laIIVt0WtKAZvAqW2NzddWQtZirhmhSV6
+         xP5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720129046; x=1720733846;
+        d=1e100.net; s=20230601; t=1720129047; x=1720733847;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tRzuR0zVRtJexew852wMyGOvZW75YybIt7u3laQ/oyY=;
-        b=QltdzMESUkbl6pjuY9HkQ4cf35D5zMW3LJd+p7z/o6M3NVhYLSW6xmOjDPLU00Tl94
-         B5rcc2W2yNluG/bgjEG7HBmXHWi8TVZz4eLbbOY0XozFxFNFPVE+D1dLtp1N4oDxFLkR
-         qYnUURvnleaQaEcsHuU0YlfXGOQMStnnDO//MO4NPtHJawQRNTdaq8Y1KZtbIvtRKmwt
-         1LLph1VZdjRi4/WJ8EBuYcXeqULsCz3h2d9uNxaHjFSPfiw7c6jzsITgD84ZA+MblZO7
-         11nxlIpjQ4d3zUQYh4DLWv8nNiwl+MVKd1/FZ+4HPnK/CAAKT/7W3wRy/9gnkO1A7KzC
-         vIZg==
-X-Gm-Message-State: AOJu0YzOK+Ew6ijRdDOZ6VNC3N4pDlTlIiFLfin7hAmfvgxbHWSSVLym
-	2kJCyFc1eJaNU0fa1KsZm5iyGTM9zvIgd0eGPgGg5IFFVbwOBU4Z21MVew==
-X-Google-Smtp-Source: AGHT+IGLPmxmiXKpO5Lqv/tEXrBJFNWmKGOWGAlL6mxH6S5vBO0oDcbGZPkDXJs6QG5EKOi6f3Gj0A==
-X-Received: by 2002:a05:6808:3090:b0:3d5:6306:97af with SMTP id 5614622812f47-3d914eae92dmr3111866b6e.46.1720129045605;
-        Thu, 04 Jul 2024 14:37:25 -0700 (PDT)
+        bh=buU1sa3D8kYKB4RAOEfOuNvdlYsBO0jca9eI/hF/X6Y=;
+        b=iy2f4itgwn93U3Ia37oQhCKkJXpsMmmi9yGz4C38pl38Q6qJPVYKfqvH8t9mavBFLe
+         FLx5Jer44Fr31Eicd7JXtb451j/+RqHRuvvOU5Qhv//w1wDBQr69Gvj4o0EH/YHcWWkn
+         UOZ4lfZ39SxOzXQvSLXWPoo1GmPsKM1MV4noMTqIfvMLCGW862m90jvNTwG3+wqbxgsl
+         Q3DtSBcz4861Q51gLHnnWsl4F5IFzCvNUCU4hzLLj1IYt8e7nnrSibD8Hx2+8FPHgja5
+         8xgf03Ipua9W9lSFkgLzUEtk/G/aaAgEqMd7WhXOrozYKS3P9v9Ctg2SuKycvdwZU30L
+         pMtA==
+X-Gm-Message-State: AOJu0YyjENgR50j+1Cb7NWHcRYoe8/yQnVWg+14N/79g11UbETTgJpa4
+	rVK21GM2tnCT3zPnls90PKtKtcPROd8KXljiylyKv7oTgUZKwu6TtPFS5w==
+X-Google-Smtp-Source: AGHT+IE+ipZHt9ZDnEveZ5qB56P0vzA5faVN070cH3wOgcCDQmAP0zPa+WluSTbEjBDR/8B/0OCGog==
+X-Received: by 2002:a05:6871:24cd:b0:24f:cddc:ccfe with SMTP id 586e51a60fabf-25e2b59025fmr2437619fac.0.1720129047250;
+        Thu, 04 Jul 2024 14:37:27 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70803ed31ebsm12724240b3a.110.2024.07.04.14.37.24
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-74a3594c5ffsm5188505a12.35.2024.07.04.14.37.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jul 2024 14:37:24 -0700 (PDT)
+        Thu, 04 Jul 2024 14:37:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4/7] hwmon: (g762) Use bit operations
-Date: Thu,  4 Jul 2024 14:37:09 -0700
-Message-Id: <20240704213712.2699553-5-linux@roeck-us.net>
+Subject: [PATCH 5/7] hwmon: (g762) Make chip configuration devicetree independent
+Date: Thu,  4 Jul 2024 14:37:10 -0700
+Message-Id: <20240704213712.2699553-6-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240704213712.2699553-1-linux@roeck-us.net>
 References: <20240704213712.2699553-1-linux@roeck-us.net>
@@ -69,231 +69,254 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use bit operations to make the code easier to read and avoid duplication.
-While at it, improve column alignment in defines.
-
-No functional change.
+Move chip configuration code to one place, and make it devicetree
+independent by using device property instead of devicetree functions
+to read configuration data.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/g762.c | 130 +++++++++++++------------------------------
- 1 file changed, 40 insertions(+), 90 deletions(-)
+ drivers/hwmon/g762.c | 187 ++++++++++++++++++-------------------------
+ 1 file changed, 77 insertions(+), 110 deletions(-)
 
 diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index 37d8a45610a3..59077e54d47e 100644
+index 59077e54d47e..0ddaa0bd1075 100644
 --- a/drivers/hwmon/g762.c
 +++ b/drivers/hwmon/g762.c
-@@ -27,6 +27,8 @@
-  *       http://www.gmt.com.tw/product/datasheet/EDS-762_3.pdf
-  */
+@@ -44,13 +44,6 @@
  
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/device.h>
- #include <linux/err.h>
-@@ -59,35 +61,32 @@ enum g762_regs {
- };
+ #define DRVNAME "g762"
  
- /* Config register bits */
--#define G762_REG_FAN_CMD1_DET_FAN_FAIL  0x80 /* enable fan_fail signal */
--#define G762_REG_FAN_CMD1_DET_FAN_OOC   0x40 /* enable fan_out_of_control */
--#define G762_REG_FAN_CMD1_OUT_MODE      0x20 /* out mode: PWM or DC */
--#define G762_REG_FAN_CMD1_FAN_MODE      0x10 /* fan mode: closed/open-loop */
--#define G762_REG_FAN_CMD1_CLK_DIV_ID1   0x08 /* clock divisor value */
--#define G762_REG_FAN_CMD1_CLK_DIV_ID0   0x04
--#define G762_REG_FAN_CMD1_PWM_POLARITY  0x02 /* PWM polarity */
--#define G762_REG_FAN_CMD1_PULSE_PER_REV 0x01 /* pulse per fan revolution */
-+#define G762_REG_FAN_CMD1_DET_FAN_FAIL	BIT(7)	/* enable fan_fail signal */
-+#define G762_REG_FAN_CMD1_DET_FAN_OOC	BIT(6)	/* enable fan_out_of_control */
-+#define G762_REG_FAN_CMD1_OUT_MODE	BIT(5)	/* out mode: PWM or DC */
-+#define G762_REG_FAN_CMD1_FAN_MODE	BIT(4)	/* fan mode: closed/open-loop */
-+#define G762_REG_FAN_CMD1_CLK_DIV_MASK	GENMASK(3, 2)
-+#define G762_REG_FAN_CMD1_PWM_POLARITY	BIT(1)	/* PWM polarity */
-+#define G762_REG_FAN_CMD1_PULSE_PER_REV	BIT(0)	/* pulse per fan revolution */
- 
--#define G762_REG_FAN_CMD2_GEAR_MODE_1   0x08 /* fan gear mode */
--#define G762_REG_FAN_CMD2_GEAR_MODE_0   0x04
--#define G762_REG_FAN_CMD2_FAN_STARTV_1  0x02 /* fan startup voltage */
--#define G762_REG_FAN_CMD2_FAN_STARTV_0  0x01
-+#define G762_REG_FAN_CMD2_GEAR_MASK	GENMASK(3, 2)
-+#define G762_REG_FAN_CMD2_FAN_STARTV_MASK GENMASK(1, 0)	/* fan startup voltage */
- 
--#define G762_REG_FAN_STA_FAIL           0x02 /* fan fail */
--#define G762_REG_FAN_STA_OOC            0x01 /* fan out of control */
-+#define G762_REG_FAN_STA_FAIL		BIT(1)	/* fan fail */
-+#define G762_REG_FAN_STA_OOC		BIT(0)	/* fan out of control */
- 
- /* Config register values */
--#define G762_OUT_MODE_PWM            1
--#define G762_OUT_MODE_DC             0
-+#define G762_OUT_MODE_PWM		1
-+#define G762_OUT_MODE_DC		0
- 
--#define G762_FAN_MODE_CLOSED_LOOP    2
--#define G762_FAN_MODE_OPEN_LOOP      1
-+#define G762_FAN_MODE_CLOSED_LOOP	2
-+#define G762_FAN_MODE_OPEN_LOOP		1
- 
--#define G762_PWM_POLARITY_NEGATIVE   1
--#define G762_PWM_POLARITY_POSITIVE   0
-+#define G762_PWM_POLARITY_NEGATIVE	1
-+#define G762_PWM_POLARITY_POSITIVE	0
- 
- /* Register data is read (and cached) at most once per second. */
--#define G762_UPDATE_INTERVAL    HZ
-+#define G762_UPDATE_INTERVAL		HZ
- 
- /*
-  * Extract pulse count per fan revolution value (2 or 4) from given
-@@ -101,16 +100,14 @@ enum g762_regs {
-  * register value.
-  */
- #define G762_CLKDIV_FROM_REG(reg) \
--	(1 << (((reg) & (G762_REG_FAN_CMD1_CLK_DIV_ID0 |	\
--			 G762_REG_FAN_CMD1_CLK_DIV_ID1)) >> 2))
-+	BIT(FIELD_GET(G762_REG_FAN_CMD1_CLK_DIV_MASK, reg))
- 
- /*
-- * Extract fan gear mode multiplier value (0, 2 or 4) from given
-+ * Extract fan gear mode multiplier value (1, 2 or 4) from given
-  * FAN_CMD2 register value.
-  */
- #define G762_GEARMULT_FROM_REG(reg) \
--	(1 << (((reg) & (G762_REG_FAN_CMD2_GEAR_MODE_0 |	\
--			 G762_REG_FAN_CMD2_GEAR_MODE_1)) >> 2))
-+	BIT(FIELD_GET(G762_REG_FAN_CMD2_GEAR_MASK, reg))
- 
- struct g762_data {
- 	struct i2c_client *client;
-@@ -303,32 +300,15 @@ static int do_set_fan_div(struct device *dev, unsigned long val)
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	if (hweight_long(val) != 1 || val > 8)
-+		return -EINVAL;
-+
- 	mutex_lock(&data->update_lock);
--	switch (val) {
--	case 1:
--		data->fan_cmd1 &= ~G762_REG_FAN_CMD1_CLK_DIV_ID0;
--		data->fan_cmd1 &= ~G762_REG_FAN_CMD1_CLK_DIV_ID1;
--		break;
--	case 2:
--		data->fan_cmd1 |=  G762_REG_FAN_CMD1_CLK_DIV_ID0;
--		data->fan_cmd1 &= ~G762_REG_FAN_CMD1_CLK_DIV_ID1;
--		break;
--	case 4:
--		data->fan_cmd1 &= ~G762_REG_FAN_CMD1_CLK_DIV_ID0;
--		data->fan_cmd1 |=  G762_REG_FAN_CMD1_CLK_DIV_ID1;
--		break;
--	case 8:
--		data->fan_cmd1 |=  G762_REG_FAN_CMD1_CLK_DIV_ID0;
--		data->fan_cmd1 |=  G762_REG_FAN_CMD1_CLK_DIV_ID1;
--		break;
--	default:
--		ret = -EINVAL;
--		goto out;
--	}
-+	data->fan_cmd1 &= ~G762_REG_FAN_CMD1_CLK_DIV_MASK;
-+	data->fan_cmd1 |= FIELD_PREP(G762_REG_FAN_CMD1_CLK_DIV_MASK, __ffs(val));
- 	ret = i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD1,
- 					data->fan_cmd1);
- 	data->valid = false;
-- out:
- 	mutex_unlock(&data->update_lock);
- 
- 	return ret;
-@@ -343,28 +323,15 @@ static int do_set_fan_gear_mode(struct device *dev, unsigned long val)
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	if (val > 2)
-+		return -EINVAL;
-+
- 	mutex_lock(&data->update_lock);
--	switch (val) {
--	case 0:
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_GEAR_MODE_0;
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_GEAR_MODE_1;
--		break;
--	case 1:
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_GEAR_MODE_0;
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_GEAR_MODE_1;
--		break;
--	case 2:
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_GEAR_MODE_0;
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_GEAR_MODE_1;
--		break;
--	default:
--		ret = -EINVAL;
--		goto out;
--	}
-+	data->fan_cmd2 &= ~G762_REG_FAN_CMD2_GEAR_MASK;
-+	data->fan_cmd2 |= FIELD_PREP(G762_REG_FAN_CMD2_GEAR_MASK, val);
- 	ret = i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD2,
- 					data->fan_cmd2);
- 	data->valid = false;
-- out:
- 	mutex_unlock(&data->update_lock);
- 
- 	return ret;
-@@ -526,32 +493,15 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-+	if (val > 3)
-+		return -EINVAL;
-+
- 	mutex_lock(&data->update_lock);
--	switch (val) {
--	case 0:
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_FAN_STARTV_0;
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_FAN_STARTV_1;
--		break;
--	case 1:
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_FAN_STARTV_0;
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_FAN_STARTV_1;
--		break;
--	case 2:
--		data->fan_cmd2 &= ~G762_REG_FAN_CMD2_FAN_STARTV_0;
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_FAN_STARTV_1;
--		break;
--	case 3:
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_FAN_STARTV_0;
--		data->fan_cmd2 |=  G762_REG_FAN_CMD2_FAN_STARTV_1;
--		break;
--	default:
--		ret = -EINVAL;
--		goto out;
--	}
-+	data->fan_cmd2 &= ~G762_REG_FAN_CMD2_FAN_STARTV_MASK;
-+	data->fan_cmd2 |= FIELD_PREP(G762_REG_FAN_CMD2_FAN_STARTV_MASK, val);
- 	ret = i2c_smbus_write_byte_data(data->client, G762_REG_FAN_CMD2,
- 					data->fan_cmd2);
- 	data->valid = false;
-- out:
- 	mutex_unlock(&data->update_lock);
- 
- 	return ret;
-@@ -722,7 +672,7 @@ static ssize_t fan1_div_show(struct device *dev, struct device_attribute *da,
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
--	return sprintf(buf, "%d\n", G762_CLKDIV_FROM_REG(data->fan_cmd1));
-+	return sprintf(buf, "%ld\n", G762_CLKDIV_FROM_REG(data->fan_cmd1));
+-static const struct i2c_device_id g762_id[] = {
+-	{ "g762" },
+-	{ "g763" },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(i2c, g762_id);
+-
+ enum g762_regs {
+ 	G762_REG_SET_CNT  = 0x00,
+ 	G762_REG_ACT_CNT  = 0x01,
+@@ -315,7 +308,7 @@ static int do_set_fan_div(struct device *dev, unsigned long val)
  }
  
- static ssize_t fan1_div_store(struct device *dev, struct device_attribute *da,
-@@ -753,7 +703,7 @@ static ssize_t fan1_pulses_show(struct device *dev,
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
--	return sprintf(buf, "%d\n", G762_PULSE_FROM_REG(data->fan_cmd1));
-+	return sprintf(buf, "%ld\n", G762_PULSE_FROM_REG(data->fan_cmd1));
+ /* Set fan gear mode. Accepts either 0, 1 or 2. */
+-static int do_set_fan_gear_mode(struct device *dev, unsigned long val)
++static int do_set_fan_gear_mode(struct device *dev, u32 val)
+ {
+ 	struct g762_data *data = g762_update_client(dev);
+ 	int ret;
+@@ -507,96 +500,6 @@ static int do_set_fan_startv(struct device *dev, unsigned long val)
+ 	return ret;
  }
  
- static ssize_t fan1_pulses_store(struct device *dev,
+-/*
+- * Helper to import hardware characteristics from .dts file and push
+- * those to the chip.
+- */
+-
+-#ifdef CONFIG_OF
+-static const struct of_device_id g762_dt_match[] = {
+-	{ .compatible = "gmt,g762" },
+-	{ .compatible = "gmt,g763" },
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(of, g762_dt_match);
+-
+-/*
+- * Grab clock (a required property), enable it, get (fixed) clock frequency
+- * and store it.
+- */
+-static int g762_of_clock_enable(struct device *dev)
+-{
+-	unsigned long clk_freq = 0;
+-	struct clk *clk;
+-	int ret;
+-
+-	clk = devm_clk_get_enabled(dev, NULL);
+-	if (IS_ERR(clk)) {
+-		if (dev->of_node)
+-			return dev_err_probe(dev, PTR_ERR(clk), "failed to enable clock\n");
+-	} else {
+-		clk_freq = clk_get_rate(clk);
+-	}
+-
+-	ret = do_set_clk_freq(dev, clk_freq);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "invalid clock freq %lu\n", clk_freq);
+-
+-	return 0;
+-}
+-
+-static int g762_of_prop_import_one(struct i2c_client *client,
+-				   const char *pname,
+-				   int (*psetter)(struct device *dev,
+-						  unsigned long val))
+-{
+-	int ret;
+-	u32 pval;
+-
+-	if (of_property_read_u32(client->dev.of_node, pname, &pval))
+-		return 0;
+-
+-	dev_dbg(&client->dev, "found %s (%d)\n", pname, pval);
+-	ret = (*psetter)(&client->dev, pval);
+-	if (ret)
+-		dev_err(&client->dev, "unable to set %s (%d)\n", pname, pval);
+-
+-	return ret;
+-}
+-
+-static int g762_of_prop_import(struct i2c_client *client)
+-{
+-	int ret;
+-
+-	if (!client->dev.of_node)
+-		return 0;
+-
+-	ret = g762_of_prop_import_one(client, "fan_gear_mode",
+-				      do_set_fan_gear_mode);
+-	if (ret)
+-		return ret;
+-
+-	ret = g762_of_prop_import_one(client, "pwm_polarity",
+-				      do_set_pwm_polarity);
+-	if (ret)
+-		return ret;
+-
+-	return g762_of_prop_import_one(client, "fan_startv",
+-				       do_set_fan_startv);
+-}
+-
+-#else
+-static int g762_of_prop_import(struct i2c_client *client)
+-{
+-	return 0;
+-}
+-
+-static int g762_of_clock_enable(struct device *dev)
+-{
+-	return 0;
+-}
+-#endif
+-
+ /*
+  * sysfs attributes
+  */
+@@ -918,6 +821,65 @@ static inline int g762_fan_init(struct device *dev)
+ 					 data->fan_cmd1);
+ }
+ 
++/*
++ * Grab clock (a required property), enable it, get (fixed) clock frequency
++ * and store it.
++ */
++static int g762_clock_enable(struct device *dev)
++{
++	unsigned long clk_freq = 0;
++	struct clk *clk;
++	int ret;
++
++	clk = devm_clk_get_enabled(dev, NULL);
++	if (IS_ERR(clk)) {
++		if (dev->of_node)
++			return dev_err_probe(dev, PTR_ERR(clk), "failed to enable clock\n");
++	} else {
++		clk_freq = clk_get_rate(clk);
++	}
++
++	ret = do_set_clk_freq(dev, clk_freq);
++	if (ret)
++		return dev_err_probe(dev, ret, "invalid clock freq %lu\n", clk_freq);
++
++	return 0;
++}
++
++static int g762_configure(struct device *dev)
++{
++	u32 property;
++	int ret;
++
++	/* Enable fan failure detection and fan out of control protection */
++	ret = g762_fan_init(dev);
++	if (ret)
++		return ret;
++
++	ret = g762_clock_enable(dev);
++	if (ret)
++		return ret;
++
++	if (!device_property_read_u32(dev, "fan_gear_mode", &property)) {
++		ret = do_set_fan_gear_mode(dev, property);
++		if (ret)
++			return ret;
++	}
++
++	if (!device_property_read_u32(dev, "pwm_polarity", &property)) {
++		ret = do_set_pwm_polarity(dev, property);
++		if (ret)
++			return ret;
++	}
++
++	if (!device_property_read_u32(dev, "fan_startv", &property)) {
++		ret = do_set_fan_startv(dev, property);
++		if (ret)
++			return ret;
++	}
++	return 0;
++}
++
+ static int g762_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -933,20 +895,11 @@ static int g762_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	i2c_set_clientdata(client, data);
++	dev_set_drvdata(dev, data);
+ 	data->client = client;
+ 	mutex_init(&data->update_lock);
+ 
+-	/* Enable fan failure detection and fan out of control protection */
+-	ret = g762_fan_init(dev);
+-	if (ret)
+-		return ret;
+-
+-	/* Get configuration via DT ... */
+-	ret = g762_of_clock_enable(dev);
+-	if (ret)
+-		return ret;
+-	ret = g762_of_prop_import(client);
++	ret = g762_configure(dev);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -955,10 +908,24 @@ static int g762_probe(struct i2c_client *client)
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+ 
++static const struct of_device_id g762_dt_match[] = {
++	{ .compatible = "gmt,g762" },
++	{ .compatible = "gmt,g763" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, g762_dt_match);
++
++static const struct i2c_device_id g762_id[] = {
++	{ "g762" },
++	{ "g763" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, g762_id);
++
+ static struct i2c_driver g762_driver = {
+ 	.driver = {
+ 		.name = DRVNAME,
+-		.of_match_table = of_match_ptr(g762_dt_match),
++		.of_match_table = g762_dt_match,
+ 	},
+ 	.probe = g762_probe,
+ 	.id_table = g762_id,
 -- 
 2.39.2
 
