@@ -1,63 +1,63 @@
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C3813A260
-	for <linux-hwmon@vger.kernel.org>; Thu,  4 Jul 2024 21:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED31143888
+	for <linux-hwmon@vger.kernel.org>; Thu,  4 Jul 2024 21:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720129043; cv=none; b=h1LnKVL6JyClBIVpKXH8NUszSwHLobVKFybFcRbopl+91nQ+zE6c9Xlho1qWYyrxMGXf024KTXY+Q7tf4NxAE4DmqwiqkJl3IRgoOs7+Dmv1MdkjolslmHv2J3GQ3wL0BUPNhtvIunNLeIyBJbEevnh7+6wEEyuvwGCaFypnT/c=
+	t=1720129045; cv=none; b=LLM3O6l6plMB/n23lTAJapZMiDdUAQC2npAWgsYlHh5tLdbil7gPUGtOokNR+KvIY86kMKOCZkuHlQisiQjL40jHdRb3m4QviuRSWDQH31vurWIOD8zBDZmJGmkEx3/8TTwZA375oubp1I3wJqm2G4y0gkvjI51p5+Mnc2ON+d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720129043; c=relaxed/simple;
-	bh=mIIsDFzMw6/AWQVQ/iQUOQ1uB4z3DigcyVbPvPZFgfs=;
+	s=arc-20240116; t=1720129045; c=relaxed/simple;
+	bh=RPHBgDZxfcAB6HPPQzxHs4E1QEJkQXRPY/aZ5bC3glg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YMggIF6CBrwRp2gX7VSbBi1qFEdxjcwWA4KUEkxB3lhWtUQWWO31WMMI3URk3HrZVV8LBkaPYGb41s0jdVm6J51ibmpQQxjKgp0LUDbxQL+eSNBVyDzxnLfp4HLeJqHDXnrm6is+zQglGYGQUVsAz9ELCNLZ6hPMWPKGBzm6gtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T9X/osc/; arc=none smtp.client-ip=209.85.166.173
+	 MIME-Version; b=SpfVzQofVQ5EGV4NFPJJrJAIMCUlYbbxKXcomdXstm2Uwad72tVS0V272iAgVeZd2Idn/LMbtkSdAJ1mxR4UZrXQCo81S63PfjKPLSx/8B/KOrMPdnkcsKOdPlRgFM7feAikzj62Ctq9AELAfrLaiScst2lzcjp764zvpzdpxts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dpr7Aj23; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T9X/osc/"
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3737dc4a669so3596835ab.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 04 Jul 2024 14:37:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dpr7Aj23"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fb1c918860so13580185ad.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 04 Jul 2024 14:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720129040; x=1720733840; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720129042; x=1720733842; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5dG6iRobVZTYBkdbLDz9IGF27zkktf4osxkRKl6w5hc=;
-        b=T9X/osc/aX6Dma8orlkJjbMgDFUqMrZKh44lD15xSahD41b5A2C2Gkmr/QC2yM8INX
-         8WT0wKvgIqu9Wy1bU/Ybb6uRSl6wZQbPdcn4WhoFknzfFnO653YcQErmiI5Znmce34UX
-         AxsMQHXgZkT/MNIiDsfqNKlXnD5ofNZ7MnjrLI8EStS+Kx+X6h5TC5fsMbnrnJhN1v6F
-         gyqEymHfRnYzMUJa73Kyyngpk6MwY6WWJ77GVlanxMF8UDA1w5SF3PhjMIYR5tgEdcJJ
-         lSagVXkLOn0AgeMdR8GsawkNEf/iYBmxW8fXkpQB502KaxMgHZ9ceOXMLUHbNqOWKBjS
-         JEFw==
+        bh=Cfcj/kKnCMp1UHLZbqSv0iOiyGovljmsk2n2/55swXc=;
+        b=Dpr7Aj2355YgcDdX5akDS07aldeC8o7rTITZvBlF9jKdbcLNK5hpQTFkpQyH1Wr+kA
+         i6J0qkNM/w4S/fakQkkYHwDuqGV3wJ5J3Z0NS/gLoMzDm4rZhR+51gZBQ6B0/3C96KQu
+         e8ygiRQLmNh9PHgve5LoxIYbIqgHv1ufs1U+0gE2F9oUIEWVau11yY+E69rytIkngar6
+         XRtrOUzcoI+o1CDky8Hgfx9Di8Vp4E1oHYb2re6CeNGASECxspzPdMvvqbLogBeFHbPW
+         gBf2Q8UL+DaWMKb6sFxM0eG45FQLqy6PFx2JfBsOFycbHHElU1hfZpUKkEjpiU1DKswR
+         gpaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720129040; x=1720733840;
+        d=1e100.net; s=20230601; t=1720129042; x=1720733842;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=5dG6iRobVZTYBkdbLDz9IGF27zkktf4osxkRKl6w5hc=;
-        b=bn7uwHb2QyysvQU3YxAq3T0qS9AFP5W5aqd8dZXBVcv3PzfQjBLHLeI7sE7cDG41Tc
-         a+y72wFpKaGSVFXhq22XUqikholoQ5k99YjNBZt7Q05mI1yJuixY9QfcXHyajj2ZaTHq
-         FL3re6pthXAKFoBa6kJoj15MoWoETmEziHwPEKSVwI0N5lfDLZR7WmS8zG4264+jQNqC
-         zOPonVjnslpon5aD9ND+IQVZfVhaCzwN1j1QkIfm+Yi+OGQt+EwMfTXT/QlSB0r+oLo5
-         LtTGDlTYezFUpMel0/VvHzMyZGzpp+nym8f0IYel334chFaGKzL4C22ksC5vrs7pCMv/
-         rKZg==
-X-Gm-Message-State: AOJu0YwGb/m65SKau0XwGk3bp5EjzNTryoWvhsW4SICAJqceF1IX84YT
-	dezsdNurvi7IIELWpqHEngxv4jnUzn4TkYVapaF0zZkFA1mDGsownohBuQ==
-X-Google-Smtp-Source: AGHT+IEK+ssAk4HUs/ckLB6evmHUEZZny+PqJO79Dtl52z1hNG8cDplUuyVUNr/n5/t295OhMU91Fg==
-X-Received: by 2002:a05:6e02:18c5:b0:376:148f:d6c6 with SMTP id e9e14a558f8ab-3839a6f85cbmr34645675ab.24.1720129040211;
-        Thu, 04 Jul 2024 14:37:20 -0700 (PDT)
+        bh=Cfcj/kKnCMp1UHLZbqSv0iOiyGovljmsk2n2/55swXc=;
+        b=KhkEtkG1Vue/hcZub6QvjnudT3DPTcmNEE38lroochUtT7MI7lk+Ay9UrfMjPbeA6i
+         9SE6Y72PS8J7s0riE5ImeVMt+QvLd71jLoebWhDvQ86oDLKzj/x0Ymou1Cwcf1bX6661
+         ogkJkwZ3yXj32nIAIJZb5irwLqlcZ0qd7CO/HNsow9Kw3EpJPyKuKVuTgzEZq1u3cx/9
+         OBAbasXDQ/s0S5R7a/YMGjYMrYgT1XnruTRZq94fnnsXZisPKhIkQzA/RJMZg96SobBW
+         456Xu26ISnRcm1sgz2GlW0e7U5aNWxIU2OcyaA070C9JgizqbhjsLTGdoBE5gZVc2EFe
+         4tiA==
+X-Gm-Message-State: AOJu0YwLRT+7dSWztkb2EW+MzgovQ6HvOXLpQe8HQ+mXuWt3LNif34or
+	EIiyVQuMwLHMHUNZiAJJuzV+u2pUP+waXISvBy2Y+uB94qB9/dyXtHERWA==
+X-Google-Smtp-Source: AGHT+IHZd9z5rqWgJmibnPwNP1D5Zu34eCsLESbHkt2d3em4ng/PsWme4biMMMNvrD0KYygv2GhZsQ==
+X-Received: by 2002:a17:902:e84a:b0:1f6:6a94:76c5 with SMTP id d9443c01a7336-1fb3705f98emr36455795ad.20.1720129041931;
+        Thu, 04 Jul 2024 14:37:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7623cd854b2sm968059a12.38.2024.07.04.14.37.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10d1353sm127704715ad.11.2024.07.04.14.37.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jul 2024 14:37:19 -0700 (PDT)
+        Thu, 04 Jul 2024 14:37:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/7] hwmon: (g762) Simplify clock initialization
-Date: Thu,  4 Jul 2024 14:37:06 -0700
-Message-Id: <20240704213712.2699553-2-linux@roeck-us.net>
+Subject: [PATCH 2/7] hwmon: (g762) Drop platform data support
+Date: Thu,  4 Jul 2024 14:37:07 -0700
+Message-Id: <20240704213712.2699553-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240704213712.2699553-1-linux@roeck-us.net>
 References: <20240704213712.2699553-1-linux@roeck-us.net>
@@ -69,128 +69,120 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use a device managed function to prepare and enable the clock.
-To match the current code, only let it fails if a device node
-is present (i.e., when it is mandatory). Otherwise set the default
-clock speed.
-
-No functional change intended, even though the code now does set
-the default frequency if there is neither a devicetree node nor
-platform data.
+There is no in-tree user (or at least not anymore), so drop platform data
+to simplify the code.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/g762.c | 66 +++++++++-----------------------------------
- 1 file changed, 13 insertions(+), 53 deletions(-)
+ Documentation/hwmon/g762.rst       |  4 +---
+ drivers/hwmon/g762.c               | 33 ------------------------------
+ include/linux/platform_data/g762.h | 24 ----------------------
+ 3 files changed, 1 insertion(+), 60 deletions(-)
+ delete mode 100644 include/linux/platform_data/g762.h
 
+diff --git a/Documentation/hwmon/g762.rst b/Documentation/hwmon/g762.rst
+index 0371b3365c48..3dc5294b2181 100644
+--- a/Documentation/hwmon/g762.rst
++++ b/Documentation/hwmon/g762.rst
+@@ -17,9 +17,7 @@ done via a userland daemon like fancontrol.
+ Note that those entries do not provide ways to setup the specific
+ hardware characteristics of the system (reference clock, pulses per
+ fan revolution, ...); Those can be modified via devicetree bindings
+-documented in Documentation/devicetree/bindings/hwmon/g762.txt or
+-using a specific platform_data structure in board initialization
+-file (see include/linux/platform_data/g762.h).
++documented in Documentation/devicetree/bindings/hwmon/g762.txt.
+ 
+   fan1_target:
+ 	    set desired fan speed. This only makes sense in closed-loop
 diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index af1228708e25..da43a26f558d 100644
+index da43a26f558d..8573865a8989 100644
 --- a/drivers/hwmon/g762.c
 +++ b/drivers/hwmon/g762.c
-@@ -115,7 +115,6 @@ enum g762_regs {
+@@ -39,7 +39,6 @@
+ #include <linux/kernel.h>
+ #include <linux/clk.h>
+ #include <linux/of.h>
+-#include <linux/platform_data/g762.h>
  
- struct g762_data {
- 	struct i2c_client *client;
--	struct clk *clk;
+ #define DRVNAME "g762"
  
- 	/* update mutex */
- 	struct mutex update_lock;
-@@ -574,66 +573,27 @@ MODULE_DEVICE_TABLE(of, g762_dt_match);
+@@ -648,34 +647,6 @@ static int g762_of_clock_enable(struct device *dev)
+ }
+ #endif
  
- /*
-  * Grab clock (a required property), enable it, get (fixed) clock frequency
-- * and store it. Note: upon success, clock has been prepared and enabled; it
-- * must later be unprepared and disabled (e.g. during module unloading) by a
-- * call to g762_of_clock_disable(). Note that a reference to clock is kept
-- * in our private data structure to be used in this function.
-+ * and store it.
-  */
--static void g762_of_clock_disable(void *data)
-+static int g762_of_clock_enable(struct device *dev)
- {
--	struct g762_data *g762 = data;
+-/*
+- * Helper to import hardware characteristics from .dts file and push
+- * those to the chip.
+- */
 -
--	clk_disable_unprepare(g762->clk);
--	clk_put(g762->clk);
--}
--
--static int g762_of_clock_enable(struct i2c_client *client)
+-static int g762_pdata_prop_import(struct i2c_client *client)
 -{
--	struct g762_data *data;
--	unsigned long clk_freq;
-+	unsigned long clk_freq = 0;
- 	struct clk *clk;
- 	int ret;
- 
--	if (!client->dev.of_node)
+-	struct g762_platform_data *pdata = dev_get_platdata(&client->dev);
+-	int ret;
+-
+-	if (!pdata)
 -		return 0;
 -
--	clk = of_clk_get(client->dev.of_node, 0);
-+	clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(clk)) {
--		dev_err(&client->dev, "failed to get clock\n");
--		return PTR_ERR(clk);
-+		if (dev->of_node)
-+			return dev_err_probe(dev, PTR_ERR(clk), "failed to enable clock\n");
-+	} else {
-+		clk_freq = clk_get_rate(clk);
- 	}
- 
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(&client->dev, "failed to enable clock\n");
--		goto clk_put;
--	}
+-	ret = do_set_fan_gear_mode(&client->dev, pdata->fan_gear_mode);
+-	if (ret)
+-		return ret;
 -
--	clk_freq = clk_get_rate(clk);
--	ret = do_set_clk_freq(&client->dev, clk_freq);
--	if (ret) {
--		dev_err(&client->dev, "invalid clock freq %lu\n", clk_freq);
--		goto clk_unprep;
--	}
+-	ret = do_set_pwm_polarity(&client->dev, pdata->pwm_polarity);
+-	if (ret)
+-		return ret;
 -
--	data = i2c_get_clientdata(client);
--	data->clk = clk;
+-	ret = do_set_fan_startv(&client->dev, pdata->fan_startv);
+-	if (ret)
+-		return ret;
 -
--	ret = devm_add_action(&client->dev, g762_of_clock_disable, data);
--	if (ret) {
--		dev_err(&client->dev, "failed to add disable clock action\n");
--		goto clk_unprep;
--	}
-+	ret = do_set_clk_freq(dev, clk_freq);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "invalid clock freq %lu\n", clk_freq);
- 
- 	return 0;
+-	return do_set_clk_freq(&client->dev, pdata->clk_freq);
+-}
 -
-- clk_unprep:
--	clk_disable_unprepare(clk);
--
-- clk_put:
--	clk_put(clk);
--
--	return ret;
- }
- 
- static int g762_of_prop_import_one(struct i2c_client *client,
-@@ -682,7 +642,7 @@ static int g762_of_prop_import(struct i2c_client *client)
- 	return 0;
- }
- 
--static int g762_of_clock_enable(struct i2c_client *client)
-+static int g762_of_clock_enable(struct device *dev)
- {
- 	return 0;
- }
-@@ -1062,7 +1022,7 @@ static int g762_probe(struct i2c_client *client)
- 		return ret;
- 
- 	/* Get configuration via DT ... */
--	ret = g762_of_clock_enable(client);
-+	ret = g762_of_clock_enable(dev);
+ /*
+  * sysfs attributes
+  */
+@@ -1026,10 +997,6 @@ static int g762_probe(struct i2c_client *client)
  	if (ret)
  		return ret;
  	ret = g762_of_prop_import(client);
+-	if (ret)
+-		return ret;
+-	/* ... or platform_data */
+-	ret = g762_pdata_prop_import(client);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/include/linux/platform_data/g762.h b/include/linux/platform_data/g762.h
+deleted file mode 100644
+index 249257ee2132..000000000000
+--- a/include/linux/platform_data/g762.h
++++ /dev/null
+@@ -1,24 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Platform data structure for g762 fan controller driver
+- *
+- * Copyright (C) 2013, Arnaud EBALARD <arno@natisbad.org>
+- */
+-#ifndef __LINUX_PLATFORM_DATA_G762_H__
+-#define __LINUX_PLATFORM_DATA_G762_H__
+-
+-/*
+- * Following structure can be used to set g762 driver platform specific data
+- * during board init. Note that passing a sparse structure is possible but
+- * will result in non-specified attributes to be set to default value, hence
+- * overloading those installed during boot (e.g. by u-boot).
+- */
+-
+-struct g762_platform_data {
+-	u32 fan_startv;
+-	u32 fan_gear_mode;
+-	u32 pwm_polarity;
+-	u32 clk_freq;
+-};
+-
+-#endif /* __LINUX_PLATFORM_DATA_G762_H__ */
 -- 
 2.39.2
 
