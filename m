@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B61016A945;
-	Thu,  4 Jul 2024 11:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9FD14B078;
+	Thu,  4 Jul 2024 11:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720094002; cv=none; b=CpiQNb+uBer5cuI4ow+LlTN7FEnxUpaWKEc8CxkMKDrOXr6WRIsnFvWy7/FWDYkrcZbo7h+GqdkVGo9OJAV+n+neDVZLvHwvNZL95vPAiX2n2CJHiaKL3Q1EBFmPR3UeBNE8eOXLLGS2t4xc56ZglabFAImhSg3LkDTEcGiURbA=
+	t=1720094072; cv=none; b=e1UTfoGKrPBdXTzsrQTCMcw2GKkSFF/wtQHrnSyDBFraD5VjC6bo/7iJZMD9mGWhhqK+lb016lZjUnXMPf3rnboPPdoeFR3O4AjQTeihy9z51FIGWGz9FZEKt50BvhtXJddAMiO29kICRjRCa/KDf4EUadx3w7iTJeDkF08g110=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720094002; c=relaxed/simple;
-	bh=U3dPr5l/cWz9eU6uDK/U5qicfmezuiQruprhrMGvAwk=;
+	s=arc-20240116; t=1720094072; c=relaxed/simple;
+	bh=3O8/t+3wfCMKK8plthSo7lGuK9QcXUx2GEAeeJGoSJM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upZcl1Czw1j0QOGI4T+Yyl8mKY/n/1fQges4W4WkcMsaezQAQq12ORarS/o6TTbBXDRKPUg0HwRuD2aPZH6dq2PBd6Hz/9Bjy+8//jqaT2+ZHfns8DtmzdqniM3oeI87XCrGTrfHNgQm5ScXXT6DqdKXJYXya9rJdKYZZt/LbDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RAcQPM3+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bXPm/CHbhKf+OxeVryd1ZbtcZCpAVCveuupMOU+YCTRqUmgOnN0JBafMTeg53O1IjMZ82JyPcmxR8F6RnYFR9CUSu3AVdvDBS8QuiRd4t7RAcE3G5vltxyvyF3XA3Xt+KDDQuFAAFOmNIT3BuokcugsA6V/94ijjZslNEJWjjWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LcUAK6gr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RAcQPM3+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0734EC3277B;
-	Thu,  4 Jul 2024 11:53:21 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LcUAK6gr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AFCC3277B;
+	Thu,  4 Jul 2024 11:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720094002;
-	bh=U3dPr5l/cWz9eU6uDK/U5qicfmezuiQruprhrMGvAwk=;
+	s=korg; t=1720094072;
+	bh=3O8/t+3wfCMKK8plthSo7lGuK9QcXUx2GEAeeJGoSJM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RAcQPM3+1kLHxoBzf16sZ8IQTKx4nbsCip/OWI+I0Puq+6kBLFYRuJYPPdiFctkQg
-	 Ag1UF52wDjb7n1kBaqwnIHFgXSa3vym0++qBSbiQ6YL6tXqonA3i6c7KZjIxMjBLcU
-	 lufjwuzkDgMaPXm84KiqKLbk3tOW5JB7TRFw9qWI=
-Date: Thu, 4 Jul 2024 13:53:19 +0200
+	b=LcUAK6grU+gPn1yO4WXBy3BAn0achJW+RBqHDUjX6CXucSDot/7oGYRWD5NP1FwL+
+	 GAOZRVyyB/F/Zn0SqR7ZALnUW1LV1peeIzuTWASRzTP4eTaPm1ULzcMeTn5r4YOcmT
+	 m+aTE85Mf/cTezYEHy5LFW+2IEZHkB2syDtWE19c=
+Date: Thu, 4 Jul 2024 13:54:29 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Akshay Gupta <akshay.gupta@amd.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux@roeck-us.net, arnd@arndb.de, naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 3/6] misc: sbrmi: Use regmap subsystem
-Message-ID: <2024070400-sweat-playback-3a80@gregkh>
+Subject: Re: [PATCH 6/6] misc: sbrmi: Add support for new revision
+Message-ID: <2024070452-bunkbed-example-9dd3@gregkh>
 References: <20240704111624.1583460-1-akshay.gupta@amd.com>
- <20240704111624.1583460-4-akshay.gupta@amd.com>
+ <20240704111624.1583460-7-akshay.gupta@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,50 +40,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240704111624.1583460-4-akshay.gupta@amd.com>
+In-Reply-To: <20240704111624.1583460-7-akshay.gupta@amd.com>
 
-On Thu, Jul 04, 2024 at 11:16:21AM +0000, Akshay Gupta wrote:
-> - regmap subsystem provides multiple benefits over direct smbus APIs
+On Thu, Jul 04, 2024 at 11:16:24AM +0000, Akshay Gupta wrote:
+> - RMI device supports v21 on Turin, which has increased register set.
+>   Hence, requires 2byte for register addressing.
+> 
+> - Both Genoa and Turin processors are SP5 compatible, often CPUs are
+>   interchanged on the base boards with BMC remaining the same.
+>   Hence, we need to identify correct regmap configuration. A mechanism
+>   was not defined to identify the RMI register address width.
+> - The address width can only be determined if the socket is powered ON.
+> - This patch also addresses CPUID and MCAMSR register read protocol,
+>   the modification is due to the increase in register address size and
+>   the modified thread input.
+> 
 
-In what way, please document.
+When you have to list all of the different things you did in a single
+change, that's a huge hint that it needs to be split up.
 
-> - The susbsytem can be helpful in following cases
->   - Differnet types of bus (i2c/i3c)
->   - Different Register address size (1byte/2byte)
+Remember, each patch can only do _one_ thing.
 
-Is that what is happening here?  I don't see i3c support...
-
-> --- a/include/misc/amd-sb.h
-> +++ b/include/misc/amd-sb.h
-> @@ -7,8 +7,8 @@
->  #define _AMD_SB_H_
->  
->  #include <linux/mutex.h>
-> -#include <linux/i2c.h>
-
-Why remove this?
-
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  /*
->   * SB-RMI supports soft mailbox service request to MP1 (power management
->   * firmware) through SBRMI inbound/outbound message registers.
-> @@ -23,11 +23,11 @@ enum sbrmi_msg_id {
->  
->  /* Each client has this additional data */
->  struct sbrmi_data {
-> -	struct i2c_client *client;
-> +	struct regmap *regmap;
->  	struct mutex lock;
->  	struct platform_device *pdev;
->  	u32 pwr_limit_max;
-> -};
-> +} __packed;
-
-Why is this suddenly required to be __packed?
-
-Isn't that going to cause more problems than it is worth?  And why is it
-worth it at all?
+Would you want to review something that attempted to do all of this at
+once?
 
 thanks,
 
