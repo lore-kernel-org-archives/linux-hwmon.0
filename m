@@ -1,170 +1,489 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2122.outbound.protection.outlook.com [40.107.20.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0032C1465A3;
-	Fri,  5 Jul 2024 11:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.122
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720177244; cv=fail; b=CjcOzEP1SwNuKZ2WZIYWa/6k3jajX1mGgdKPgjlSTsBt8JpRv9YA8+EM5xLOB+9Au7H79eFLfBegYiP2czhXdCMrVIalS5ChT5ItidASs7Cfo3daj7MpZBiZn4Jov+M47Ts/tJ1iB5WbVGfKevvTM553WEgtq9HUomiFE/4f/Ko=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720177244; c=relaxed/simple;
-	bh=QtWkyR75vn4mCEW5GWB+CU1ijz9b/+TKfujmSRZsk34=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=i6MRlRVPhMuZyNorEFcBLfcPYv0ZVXBmLrKctGaEOBpAycjT0AFYatlzqlGkBoKLzsnuJDDL1B49zHQ0PkZ97GnvtnuHBOYe3u0K3ofClYnFlpQCu64pHVuIhu/wuNY4rkAUGEtOGZ2HQcV1id1kA9InTFAlTJivNslsExqdwe0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=eTISJ4pZ; arc=fail smtp.client-ip=40.107.20.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1481581E3;
+	Fri,  5 Jul 2024 14:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720189694; cv=none; b=gjbK97d2KMlpW8s3cQHXjQQKa3uFGMZc3KeQmoNANhWQrnDeQsS6Pe1VWvPqKv2/+9qSt8MV8ODH/LNLO202zO21nQcJ5wt4OpCcIeQPPRp6A86Ig4nLTe5K9Ia2Wg0QdxF64+E7zQ6GQC1rD6K0u0oEMeaXXxbWzRbuE5bxWag=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720189694; c=relaxed/simple;
+	bh=GWJTzrnc5dxJB/XfFLQi7Vj6y8KXDRSFYOGgsZH70LU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RUvr+QISEK9mL6yBw9UdjlIrDXlfzQKneUL2gpDCDgRN8vwWX+vp/fNvbLZSfY27NAHexF98crYjyknxdsHHPnilJFfEWccc58SlhgJ+t/LNnC/693KmudpdQtCVLJDGgOm/72v4dLtvR0nh6D7kESJlNWiWH7nhCQndYsHcOmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cy61sMY6; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="eTISJ4pZ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fsQ9/Ma2g1pBrlT21eXkN8NNQzX1R/Oc17ac0XyWq2lZOENFwMs/zAjuRUUgjFLVs6Z2A9N1NZFYKxF/7z2yLNGLQ34CWAwW1d/DQki105M0gTsYAFLucQftzhgqNJwfEa+2ncdtP3OvZpJlr9BURsqIBN73pOiuR9B8iFWx3GeqhFwUfFkgP9utPiNxrXEH43R2hD+Y2uElskT6yhs0DRKWqIoF7WniD9GlI+DDLlm2zVgSYcY9UaN9e+XJ98oofIUIgf6ILq7q76cWzOAwkhfqfJ+VD6DUqtj2m65dy3tv6/+etHT9AkN7Ws1asNEPZ3vfmmNu5rznviiFcNDC/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/W5xrRyzRCq6lQK/iek88rlSlUxVsoguTmLuOMQIgPY=;
- b=R+ARkQkXMV13BcMALH3pWleJA5HH6NyE7cR+jWOgp5O+JXt/mBbLYvr9csd8f2+liOVHk26daf1ItInr/XD0y7YKaGMReR+cr5+NWB8ANyNaQTJbH4sLYAjOy9LqsLjgTARJCQT55hrMHgyq5wVE4QY4/RZz9SN/VbpfX8B7Qh16DHdruUSbiVSXxjBFUmI7HSSxryGNT4ozvQup6E5FlViGfXPuwmu5iSogE4oUaP00E1jYQhNYQ99ggSJBZc0JXxk9rIg6pQTlNt8z+037yVDbYGeM5p8w9+JC6jaY0ivedUKEUqRIR878vyoPe1jkxyB34a4aYG+mzRc8qmscxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
- dkim=pass header.d=cherry.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/W5xrRyzRCq6lQK/iek88rlSlUxVsoguTmLuOMQIgPY=;
- b=eTISJ4pZjiqj0ni2Fh+W9UpvZpUNofcxu/3aw8eyd2xw0sxi8CXA1ax/fpSfIrMizf37Oa6iopbUOnnqxhWLLo8whCwg1EsLknCWoNWRZIDjUjgQrTFSe0vts9WmUHF6Ef3D7Hz1ZZGrW8xK4AnMdGw8Qs0fsfRaZqsphVw1Rbg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cherry.de;
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com (2603:10a6:20b:409::9)
- by AS8PR04MB8417.eurprd04.prod.outlook.com (2603:10a6:20b:3f9::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.29; Fri, 5 Jul
- 2024 11:00:37 +0000
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea]) by AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea%5]) with mapi id 15.20.7741.017; Fri, 5 Jul 2024
- 11:00:37 +0000
-Message-ID: <9f4abd56-d095-4c51-b026-8a6640ce1e0a@cherry.de>
-Date: Fri, 5 Jul 2024 13:00:35 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/11] hwmon: (amc6821) Add support for pwm1_mode
- attribute
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
-References: <20240704175207.2684012-1-linux@roeck-us.net>
- <20240704175207.2684012-12-linux@roeck-us.net>
-Content-Language: en-US
-From: Quentin Schulz <quentin.schulz@cherry.de>
-In-Reply-To: <20240704175207.2684012-12-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: WA1P291CA0002.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:19::26) To AM9PR04MB8906.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::9)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cy61sMY6"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70b1207bc22so397757b3a.3;
+        Fri, 05 Jul 2024 07:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720189692; x=1720794492; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyfYVKD9xtxSHAXdztHJ99V3RCNC5chxeVnRJQXUl2Y=;
+        b=cy61sMY6gyOZmZkki2xXP+epgB/S8ua6N8BYqKI/5/CanfsxWam0AtYX6V9eKOCYXz
+         ar36lP0qsafHbxeXGMbEeS7/ObbvZ2IpH9HcTzwOjTb7eMW3IgOg+/PnZ7mMGRrvhA95
+         AgIFME4CM+UtQmZO+BzMKrxMR9qhNsne5UeGQC+uuzg1HcFC/DmMQB39U+PMkKxufZqs
+         T1jzgafGXDIc6kvTSw0mcjVkVhPsN2/h81bZIyCO/zI5l98MKQGENG5vfKLUOihYhI4D
+         SToE3ajDB+WPfwCUGllxbQ6RlfTtOMDIcFE810HSPYyzTeV2dAB42v+LSDkjWsOIf+oD
+         IQnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720189692; x=1720794492;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wyfYVKD9xtxSHAXdztHJ99V3RCNC5chxeVnRJQXUl2Y=;
+        b=XnmyiR5gjVo5+ytufAb2xhgrz0SMi2yjtbEgn+MLIve4ochoEZj3yZBxvQzIWPzFiX
+         X/j/foYgNNGacYtHD+JE08gocllgE3rt+xZfgiWXOZkn6+rj0xKH6RlEipbU7rA+BOAX
+         +4Bt/HfJkKmBk/FGfNmWH0h7UddWcWKX1GUClAmUEtc9BrCAi3jLebdqz47HAx3RFtDu
+         67vi7plGelZZrzhBQ14rTCpF72JfXEFUpS+cGoPMh1miC9ljyIn4RnCxelqoVHL0MZbq
+         Fx4cVlOh8Zl9pN9Qw26vuaRFEtOpfhYwhOw9WGq6n071V78pxaCwtxdo3yhsXBAHZ1r2
+         ET0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUOHSk4lajv89nd8gxEM/Z3R0LkBeZhFFVGKlGef545HBaVUyDSZdXK3PXBeXpE37eUdutCo0nlwFZb1HU31vBXm2MqEnHapYLh2ls=
+X-Gm-Message-State: AOJu0Yzgiqti/z6kc8Q++35imxBBybQECeixLTTKxRGR0/zOCy5oVwpE
+	KQdIRCAQ45D+2TFKcfepda9iDl9oE9XiWsTfI6r1cBbP8ZlLQ1DpOAMLfA==
+X-Google-Smtp-Source: AGHT+IFXjyereFMVHqpNRQvIERW82t+53cM2+U1LrRmpk254CTjl22TUIGokR+agzzdqyS75C3bXwg==
+X-Received: by 2002:a05:6a00:3d0b:b0:706:6af8:e08a with SMTP id d2e1a72fcca58-70b00a642bbmr6010310b3a.2.1720189691579;
+        Fri, 05 Jul 2024 07:28:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b13a79f23sm715491b3a.155.2024.07.05.07.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jul 2024 07:28:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <949d9c32-7722-4afe-a8ae-b2ef57d1cf01@roeck-us.net>
+Date: Fri, 5 Jul 2024 07:28:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8906:EE_|AS8PR04MB8417:EE_
-X-MS-Office365-Filtering-Correlation-Id: 756e3c78-0bac-44bf-ceca-08dc9ce1b369
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Q0pmUjJaaFFxUFQzQUU0Qng0RlZJdTZBRTVOOCthUzdnQVlNSlk1U0VQd3NG?=
- =?utf-8?B?SjZ1WmpkQkdIS0Vnc2FVQWdXbTBqVi80YXZjbWNCQ0dhcy9xeVFHcnlTQ2RD?=
- =?utf-8?B?MUNHVjU1S1MrbEFSVHY3bmFsR2Z2REpRTGVVTDNyS0xjenM2NjJYTzVUZWcy?=
- =?utf-8?B?TmhkTTkyNHM3ZlZIS1c4UzRNRlMxMVVlYWFvN0xpWGxiczlGeXduZTV5RmFv?=
- =?utf-8?B?amdDQTRmMmVLbThtZ0thRzBrR1QxaTRDZ1B5cnAwUUl0NUhlUEZVYTZ3aTMy?=
- =?utf-8?B?cE9FVnRyeit4dnNLekZhMTdadTErd2Z5bDVsT2Z3RzlzOHZQRnc4aGJaM1Bo?=
- =?utf-8?B?SnRxcHg1akUwM1g0YTQ2WFVJWSsvSTU3aFRSQ0N6RGt4bndNOXgvVlJHRDB1?=
- =?utf-8?B?SU5YYXJ2b1ZvNkpFdFNFLzg5YlpOd3RUNVoxanJSSVJtUXNscUdhaTJ1OFZM?=
- =?utf-8?B?bE4zazlQSzZqK3F3YitJUDBLK2kxeGE5Ulhzc3RTeCt1c0drbDNESkppK25p?=
- =?utf-8?B?T2NSRmpVY0RmU1puU2hHbndXOW9YOHdEbzViN1JUVC91VGpxaTI0R1hYNFVV?=
- =?utf-8?B?RXZMSWp2akZqRlY5RU12cVBuWXBJL0RMbzJTSytsZXl1U09GT2M1ODJxZnYv?=
- =?utf-8?B?cWRaMy9QSkhaWS96Mld2NEoxOEFkYUNrMW5KY2JXMEZuaVdrREpHS0lCb0hm?=
- =?utf-8?B?cnJheXBGUW9yOTViSkRLMEF5RmprRXdMS0FXWDduanpldkxOcjV4WGdNREdQ?=
- =?utf-8?B?S3J1SE1rUXpxQWIvNis5Z1dYZ0UrNGhQcUR6dEFvcG41S2lCajQ3M09JTll1?=
- =?utf-8?B?dmNoNUFEMHFZQTlHTngwZXNNS2Y3SGJTMTc0OTVTcEZhUDhzOXEwVjd0aUox?=
- =?utf-8?B?NlpsenptaEtlMTcwdEI4MHIvVXp3NFJqS1NwTWI2K0FPTVRQbUVZZ0QzbVlY?=
- =?utf-8?B?bURlVjJoZDNkRXdlaHp5eDBUMFZPQlhrU1pBSEdSM2E5NDNHVXZaanAxM3lX?=
- =?utf-8?B?WlZaMnZpZFovOSsyWng1aERrNzNNMkRtQUZDR0Z5czFjOXFjRGFIdExGWEZX?=
- =?utf-8?B?c1ExcVNjQ0dKNzM1QVg2bUlSOHVTd3Q0M3pmOGJ1VWc5VXVZbWJOSDZOR2Z6?=
- =?utf-8?B?ZzhkdHVJbVJsT2FWTmJRc256YXlvb1dLMUJtNXJiVDl6bUw4cWh6UkQ0QjFP?=
- =?utf-8?B?YndKS1dPMW5ha2RBa2FzR1dzdjBtYVd5MWgvVDNobmlkZGx0TlRnVWhDRzBL?=
- =?utf-8?B?YjNUM2c0cm1IVHNPbnZLTEtTUzA0NS9pWWFKWFlIaDJkTUhCYndGZnRYbmNq?=
- =?utf-8?B?Qmpwc01LNWVXMWNJMU14K3FuQXVuVVhCTzQ3WXNORHA2U21YbHM1LzNqdVZZ?=
- =?utf-8?B?RWt4SitCMmgrMzczQzFzWUwwa0UzdUhWMU13ZDVqUkJMd09yd2puNGQ1dVlG?=
- =?utf-8?B?MGtvdHQzNEh3N0gxc2RHRE9JWmRhSE1tVEVXbWY3Q210OFpSRVRkV2NGL2pF?=
- =?utf-8?B?M2UwWTYvbUp0bWs2c3R2b2VQVkhHSXdXaDFpd2tJV2QzN1FnTnU4U0Y0cVpR?=
- =?utf-8?B?ZnRyR3hmMW9TV2tpYzNwNGFNOGtZN0xUWnh3UVkyR1lKZ2ZVK1MxTXVtOTlR?=
- =?utf-8?B?Vmc4ejlsaThLY2lSaDBPYkJIZDFrc0hLcHM1dlBNZUZXaExRQVpDNE5wVVda?=
- =?utf-8?B?MnhyL3pRSGJBWHhWalp3TURZZkl5RVRSWWxUd3c2TWdLT25DNWFGdXg2TEsr?=
- =?utf-8?B?VXU2c3VVVytadkR0VHpFWHIzcThzbjY4bWU1NFFBRCtrSkFBVFpaMnFHbkIw?=
- =?utf-8?B?MkpiR09BUzVnSytQRCt5QT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8906.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b1pvRkUxVHM2UzNuUWJCVTBWbUtyZ0VVRUFUTncwbUE5TXFSS2J2QUdWOFcy?=
- =?utf-8?B?VUQrRDRub25sM2lrd1Fpb0orTXdNODBNREpKc245QUtLb2VTZG16bW41aFQv?=
- =?utf-8?B?NWF3WVRscnkvTXJZYWNkUEN6K0RYZHRTd2pLUytzM0FlMU0zZDJLc2RPNFR2?=
- =?utf-8?B?UWdOTVM4eU5mTHdsNllVbHlEZTVzTEtpN24veXloSDBESjh5YVVMRkRDNzl5?=
- =?utf-8?B?d2dOVnkxQWFSZk80N2hPa0ZPY2xxZHhka3MrQXBDWDlTblpFdU8wakptS0x0?=
- =?utf-8?B?NDA2KzZrdXF2QkFROEpZOW01akhEZCt0UzRKOFZWNHRqRmpIZ2FKS3hheWxL?=
- =?utf-8?B?T0p3dHJ4MktodmZCZENhYlFZK3V0YzdRQ2ttdWYvYnVBOHBMam80aXltWkJ0?=
- =?utf-8?B?OWxtK25UaENRd3pSYWZpMk9PbGs2ZG8zUWhDSlJkejVUNzRON1BTbEtLU3Vi?=
- =?utf-8?B?aURHOHN1M2xzMTNaOG9xZG9pYld1VExPRUlCOWlELzFsRTIvTll0RHhGZXVU?=
- =?utf-8?B?SFZSOXkraEFFWTRVcHdMYXgwMTJrNVZnbGI5dXFCNHVpeXNvZEo0aWx0WVEr?=
- =?utf-8?B?em43cWo5Rk9yeDd3QnZtQ0tJVlo0NkpVTHJ3eFQyYnRQN1JUS05IVEg2UkdC?=
- =?utf-8?B?blpxS2pIM1B1aDhZbWFzYnQ2Wm81c0hhVk9TcDVGcVptS1BEV0p0ekxFNlVO?=
- =?utf-8?B?NGMyMkVoMi9nNHRRSTQya05tTVZraEtSZGRWTFhrRHJsdzQ2U2lzY0tsWWxz?=
- =?utf-8?B?S1F4S1hCUDNHZmNKSndXVER2SUFlV0kySk5ISXl3NTMzbVhlcUUyNld6R2lU?=
- =?utf-8?B?UWo2UW11cGg4VmZIaG9RdXhjQ3BhaEhvZk5vQzB4b1FXSFhkbjZFaEtDaE54?=
- =?utf-8?B?WlpOSjJ3R3c3NWEvZTZ2QmZXa25ybHQxcFBNMmV2d1VtcUtST1dnZ1pMNjZk?=
- =?utf-8?B?Rm0xSFFIbDNRSE56UFBEeHBKT0FrT3NlK3hsenJlT29OdEI0RnZteG0wVHRh?=
- =?utf-8?B?ZXdURU5tejlHcmVTTHVSYmdHZHdNY0RER3JlR1pNMTVNaG5Ic2QwM1VURHZW?=
- =?utf-8?B?Zzg3d3l4VnY2NCtWcXRZeTBIS016b0ZhbHZoS0NGK29lcUwzWFdZakZHOVNt?=
- =?utf-8?B?bnM0bFpjMDdGR2NNaFpwMFRKYURyYi85cytJT3JFK0lRNmkweCtpekhUSmxO?=
- =?utf-8?B?aVNWQktzSjl6Q1l3emoyaVh0WjNGaVdxU0Rrdi9Uc3Z0U3N4d3lGcy9PbWIr?=
- =?utf-8?B?dnBWbzRFaEJuQm1TYThnM1loaVVyOHRaZHFQb1dpSHk0QTd4czA5dG5Wc2p3?=
- =?utf-8?B?WVJVajRtcTgwMFpqZEQzRi9ZU0VUbU9oVjhDblJrK2JLaEhmb29sOWs3STN5?=
- =?utf-8?B?eUMvWGlvT0RJQ2VGQnRpSGJnY2N3dXdmL3JKcmxMbk5qZ0psdTQ3SU5yeFg1?=
- =?utf-8?B?SFBSbzBMUEt1RTUvZGdRTUVubzJ6eW9WQmNHQ2NsMlhFdnBUZE9BVGtCcDkv?=
- =?utf-8?B?VCtKQnQ1MmdranBkYnNtUUtsdzJnbnVMQk9iaVJsbVV3bXBPR3o4U2lPQkgw?=
- =?utf-8?B?cm9qZk83MUlTV1pwbEptUXlpMTcxcXk0eW50QWw1Mm1UeklYUy90cm8wbkJP?=
- =?utf-8?B?akt0Y2lIQWFvVVNxbEwvcUVCQysvakhndW1OTVhpd2N5MGU4OGV1R3VRd1ZE?=
- =?utf-8?B?WEJVQlJXZDdRWXlaNVQ3MVdCaVIrS0w2ektsanZSL3Vmb2YzZm5tZTZuTzEy?=
- =?utf-8?B?QUdiTmlFQ1FHM1ovOHNHamhOaTcxczdwSkFHR2hsNDdTd3YrM1VRV0VSVVl0?=
- =?utf-8?B?UktOSzZRYVhUNmJJTDBaRlc3QnhRZzRycTdHV1dVVU4wY2xBY1hJdEtxRzRi?=
- =?utf-8?B?S3g5VEFQZVlaS0YvTHBDMi8wL1FPQ1h4YW0yUjBlQjROZDdIOElzbGdpR0s4?=
- =?utf-8?B?REJOVTNabUFtVTNWSnBnUER4SWdqUStHYUtMbjlDNEI3WThwV3NyN29QOUhZ?=
- =?utf-8?B?VXdiTUdNSTQ3ajNvUS9meDJLbUZlZSt0VVl3Q241UllSWm9NSDJuTW1wMzZW?=
- =?utf-8?B?K2I4U2JFMWNobytab2hRUWliaG1FaU1EZ2xUTDdkZWMxNWx1NXprWUVWUkd5?=
- =?utf-8?B?RkNkQzEvQXdoTy94UHF2K0FZcGVUcWRmN2lYc1pmNHo4S3NRTkdxQzRHbG5B?=
- =?utf-8?B?SlE9PQ==?=
-X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 756e3c78-0bac-44bf-ceca-08dc9ce1b369
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8906.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2024 11:00:37.3057
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sae/fCilqfGnYWrFPgd1WLVG2yvedeZV+EimOlq9PU4CsCNlNiP87KXgaUqpVVMiOTj44zeBZZSLHwGEFRUrBUg2HSPkA79M7Ik8k5iNbXc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8417
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/11] hwmon: (amc6821) Convert to use regmap
+To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
+References: <20240704175207.2684012-1-linux@roeck-us.net>
+ <20240704175207.2684012-10-linux@roeck-us.net>
+ <773d8bea-7ddb-4138-b75c-219a52c82fc6@cherry.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <773d8bea-7ddb-4138-b75c-219a52c82fc6@cherry.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Guenter,
-
-On 7/4/24 7:52 PM, Guenter Roeck wrote:
-> AMC6821 supports configuring if a fan is DC or PWM controlled.
-> Add support for the pwm1_mode attribute to make it runtime configurable.
+On 7/5/24 03:59, Quentin Schulz wrote:
+> Hi Guenter,
 > 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> On 7/4/24 7:52 PM, Guenter Roeck wrote:
+>> Use regmap for register accesses and caching.
+>>
+>> While at it, use sysfs_emit() instead of sprintf() to write sysfs
+>> attribute data, and remove spurious debug messages which would only
+>> be seen as result of a bug in the code. Also make sure that error
+>> codes are propagated and not replaced with -EIO.
+>>
+>> While at it, introduce rounding of written temperature values and for
+>> internal calculations to reduce deviation from written values and as
+>> much as possible.
+>>
+>> No functional change intended except for differences introduced by
+>> rounding.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v3: Add more details to patch description
+>>      Cache all attributes
+>>      Introduce rounding when writing attributes and for some calculations
+>>      Always return error codes from regmap operations; never replace with
+>>      -EIO
+>>
+>> v2: Drop another spurious debug message in this patch instead of patch 10
+>>      Add missing "select REGMAP_I2C" to Kconfig
+>>      Change misleading variable name from 'mask' to 'mode'.
+>>      Use sysfs_emit instead of sprintf everywhere
+>>
+>>
+>>   drivers/hwmon/Kconfig   |   1 +
+>>   drivers/hwmon/amc6821.c | 812 ++++++++++++++++++----------------------
+>>   2 files changed, 373 insertions(+), 440 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index e14ae18a973b..a8fa87a96e8f 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -2127,6 +2127,7 @@ config SENSORS_ADS7871
+>>   config SENSORS_AMC6821
+>>       tristate "Texas Instruments AMC6821"
+>>       depends on I2C
+>> +    select REGMAP_I2C
+>>       help
+>>         If you say yes here you get support for the Texas Instruments
+>>         AMC6821 hardware monitoring chips.
+>> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
+>> index 295a9148779d..a5abd36a1430 100644
+>> --- a/drivers/hwmon/amc6821.c
+>> +++ b/drivers/hwmon/amc6821.c
+>> @@ -8,15 +8,18 @@
+>>    * Copyright (C) 2007 Hans J. Koch <hjk@hansjkoch.de>
+>>    */
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>>   #include <linux/bits.h>
+>>   #include <linux/err.h>
+>>   #include <linux/hwmon.h>
+>>   #include <linux/hwmon-sysfs.h>
+>>   #include <linux/i2c.h>
+>>   #include <linux/init.h>
+>> -#include <linux/jiffies.h>
+>> +#include <linux/minmax.h>
+>>   #include <linux/module.h>
+>>   #include <linux/mutex.h>
+>> +#include <linux/regmap.h>
+>>   #include <linux/slab.h>
+>>   /*
+>> @@ -44,6 +47,7 @@ module_param(init, int, 0444);
+>>   #define AMC6821_REG_CONF4        0x04
+>>   #define AMC6821_REG_STAT1        0x02
+>>   #define AMC6821_REG_STAT2        0x03
+>> +#define AMC6821_REG_TEMP_LO        0x06
+>>   #define AMC6821_REG_TDATA_LOW        0x08
+>>   #define AMC6821_REG_TDATA_HI        0x09
+>>   #define AMC6821_REG_LTEMP_HI        0x0A
+>> @@ -61,11 +65,8 @@ module_param(init, int, 0444);
+>>   #define AMC6821_REG_DCY_LOW_TEMP    0x21
+>>   #define AMC6821_REG_TACH_LLIMITL    0x10
+>> -#define AMC6821_REG_TACH_LLIMITH    0x11
+>>   #define AMC6821_REG_TACH_HLIMITL    0x12
+>> -#define AMC6821_REG_TACH_HLIMITH    0x13
+>>   #define AMC6821_REG_TACH_SETTINGL    0x1e
+>> -#define AMC6821_REG_TACH_SETTINGH    0x1f
+>>   #define AMC6821_CONF1_START        BIT(0)
+>>   #define AMC6821_CONF1_FAN_INT_EN    BIT(1)
+>> @@ -108,6 +109,9 @@ module_param(init, int, 0444);
+>>   #define AMC6821_STAT2_L_THERM        BIT(6)
+>>   #define AMC6821_STAT2_THERM_IN        BIT(7)
+>> +#define AMC6821_TEMP_SLOPE_MASK        GENMASK(2, 0)
+>> +#define AMC6821_TEMP_LIMIT_MASK        GENMASK(7, 3)
+>> +
+>>   enum {IDX_TEMP1_INPUT = 0, IDX_TEMP1_MIN, IDX_TEMP1_MAX,
+>>       IDX_TEMP1_CRIT, IDX_TEMP2_INPUT, IDX_TEMP2_MIN,
+>>       IDX_TEMP2_MAX, IDX_TEMP2_CRIT,
+>> @@ -130,224 +134,155 @@ static const u8 fan_reg_low[] = {AMC6821_REG_TDATA_LOW,
+>>               AMC6821_REG_TACH_HLIMITL,
+>>               AMC6821_REG_TACH_SETTINGL, };
+>> -static const u8 fan_reg_hi[] = {AMC6821_REG_TDATA_HI,
+>> -            AMC6821_REG_TACH_LLIMITH,
+>> -            AMC6821_REG_TACH_HLIMITH,
+>> -            AMC6821_REG_TACH_SETTINGH, };
+>> -
+>>   /*
+>>    * Client data (each client gets its own)
+>>    */
+>>   struct amc6821_data {
+>> -    struct i2c_client *client;
+>> +    struct regmap *regmap;
+>>       struct mutex update_lock;
+>> -    bool valid; /* false until following fields are valid */
+>> -    unsigned long last_updated; /* in jiffies */
+>> -
+>> -    /* register values */
+>> -    int temp[TEMP_IDX_LEN];
+>> -
+>> -    u16 fan[FAN1_IDX_LEN];
+>> -    u8 fan1_pulses;
+>> -
+>> -    u8 pwm1;
+>> -    u8 temp1_auto_point_temp[3];
+>> -    u8 temp2_auto_point_temp[3];
+>> -    u8 pwm1_auto_point_pwm[3];
+>> -    u8 pwm1_enable;
+>> -    u8 pwm1_auto_channels_temp;
+>> -
+>> -    u8 stat1;
+>> -    u8 stat2;
+>>   };
+>> -static struct amc6821_data *amc6821_update_device(struct device *dev)
+>> +/*
+>> + * Return set of three temperatures:
+> 
+> It actually returns 0 if successful, negative errno otherwise (matches regmap_* return values).
+> 
+I'll rephrase.
 
-Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+> But it does write to temps array with those values.
+> 
+> Would be nice to say what we're expecting in channel, i.e. 0 for Remote and 1 for Local.
+> 
 
-Thanks!
-Quentin
+1 for remote
+
+>> + * temps[0]: Passive cooling temperature, applies to both channels
+>> + * temps[1]: Low temperature, start slope calculations
+>> + * temps[2]: High temperature
+>> + */
+> 
+> IIUC, we have different units there, >> 3 (/4) °C for 0 and 2, but °C for temps[1] ? If I didn't misunderstand, I think it's worth making it explicit in the docs (or make them have the same unit).
+> 
+
+It should be all in °C.
+
+>> +static int amc6821_get_auto_point_temps(struct regmap *regmap, int channel, u8 *temps)
+>>   {
+>> -    struct amc6821_data *data = dev_get_drvdata(dev);
+>> -    struct i2c_client *client = data->client;
+>> -    int timeout = HZ;
+>> -    u8 reg;
+>> -    int i;
+>> +    u32 pwm, regval;
+>> +    int err;
+>> -    mutex_lock(&data->update_lock);
+>> +    err = regmap_read(regmap, AMC6821_REG_DCY_LOW_TEMP, &pwm);
+>> +    if (err)
+>> +        return err;
+>> -    if (time_after(jiffies, data->last_updated + timeout) ||
+>> -            !data->valid) {
+>> +    err = regmap_read(regmap, AMC6821_REG_PSV_TEMP, &regval);
+>> +    if (err)
+>> +        return err;
+>> +    temps[0] = regval;
+>> -        for (i = 0; i < TEMP_IDX_LEN; i++)
+>> -            data->temp[i] = (int8_t)i2c_smbus_read_byte_data(
+>> -                client, temp_reg[i]);
+>> +    err = regmap_read(regmap,
+>> +              channel ? AMC6821_REG_RTEMP_FAN_CTRL : AMC6821_REG_LTEMP_FAN_CTRL,
+>> +              &regval);
+>> +    if (err)
+>> +      return err;
+>> +    temps[1] = (regval & 0xF8) >> 1;
+> 
+> I think we want to use AMC6821_TEMP_LIMIT_MASK here instead of 0xF8?
+> 
+> I guess we could also use FIELD_GET?
+> 
+
+Yes. The value in the register is in °C * 4, so that is going to be
+	temps[1] = FIELD_GET(regval, AMC6821_TEMP_LIMIT_MASK) * 4;
+which improves readability and should also clarify the units a bit
+better.
+
+Note hat
+	(regval & 0xF8) >> 1;
+resulted in the temperature in °C (shift right 1 instead of 3).
+
+>> -        data->stat1 = i2c_smbus_read_byte_data(client,
+>> -            AMC6821_REG_STAT1);
+>> -        data->stat2 = i2c_smbus_read_byte_data(client,
+>> -            AMC6821_REG_STAT2);
+>> +    regval &= 0x07;
+> 
+> I think we want to use AMC6821_TEMP_SLOPE_MASK instead of 0x07 here?
+> 
+> I guess we could also use FIELD_GET?
+> 
+Done, making it
+	regval = BIT(5) >> FIELD_GET(regval, AMC6821_TEMP_SLOPE_MASK);
+
+> [...]
+> 
+>>   static ssize_t temp_auto_point_temp_store(struct device *dev,
+>>                         struct device_attribute *attr,
+>>                         const char *buf, size_t count)
+>>   {
+>> -    struct amc6821_data *data = amc6821_update_device(dev);
+>> -    struct i2c_client *client = data->client;
+>> +    struct amc6821_data *data = dev_get_drvdata(dev);
+>>       int ix = to_sensor_dev_attr_2(attr)->index;
+>>       int nr = to_sensor_dev_attr_2(attr)->nr;
+>> -    u8 *ptemp;
+>> -    u8 reg;
+>> -    int dpwm;
+>> +    struct regmap *regmap = data->regmap;
+>> +    u8 temps[3], otemps[3];
+>>       long val;
+>> -    int ret = kstrtol(buf, 10, &val);
+>> +    int ret;
+>> +
+>> +    ret = kstrtol(buf, 10, &val);
+>>       if (ret)
+>>           return ret;
+>> -    switch (nr) {
+>> -    case 1:
+>> -        ptemp = data->temp1_auto_point_temp;
+>> -        reg = AMC6821_REG_LTEMP_FAN_CTRL;
+>> -        break;
+>> -    case 2:
+>> -        ptemp = data->temp2_auto_point_temp;
+>> -        reg = AMC6821_REG_RTEMP_FAN_CTRL;
+>> -        break;
+>> -    default:
+>> -        dev_dbg(dev, "Unknown attr->nr (%d).\n", nr);
+>> -        return -EINVAL;
+>> -    }
+>> -
+>>       mutex_lock(&data->update_lock);
+>> -    data->valid = false;
+>> +
+>> +    ret = amc6821_get_auto_point_temps(data->regmap, nr, temps);
+>> +    if (ret)
+>> +        goto unlock;
+>> +    ret = amc6821_get_auto_point_temps(data->regmap, 1 - nr, otemps);
+>> +    if (ret)
+>> +        goto unlock;
+> 
+> We could reduce the scope of otemps since it's only used in the ix==0 case below.
+> 
+Done.
+
+>>       switch (ix) {
+>>       case 0:
+>> -        ptemp[0] = clamp_val(val / 1000, 0,
+>> -                     data->temp1_auto_point_temp[1]);
+>> -        ptemp[0] = clamp_val(ptemp[0], 0,
+>> -                     data->temp2_auto_point_temp[1]);
+>> -        ptemp[0] = clamp_val(ptemp[0], 0, 63);
+>> -        if (i2c_smbus_write_byte_data(
+>> -                    client,
+>> -                    AMC6821_REG_PSV_TEMP,
+>> -                    ptemp[0])) {
+>> -                dev_err(&client->dev,
+>> -                    "Register write error, aborting.\n");
+>> -                count = -EIO;
+>> -        }
+>> -        goto EXIT;
+>> +        /*
+>> +         * Passive cooling temperature. Range limit against low limit
+>> +         * of both channels.
+>> +         */
+>> +        val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 63000), 1000);
+> 
+> This was already in the original code, but I think 64°C should be doable as well? The datasheet says:
+> 
+> """
+> The PSV ranges from 0°C to +64°C.
+> """
+> 
+
+Yes, but I am sure the datasheet is wrong here. The register has 6 active bits,
+which means the highest possible value is 0x3f or 63.
+
+> And there's a PSV8 bit we can write, meaning we can do (1 << 8) with a step of 4°C which gives us 64°C? In a separate commit though, to not mix too many fixes into one, making it easier for people to identify and possibly revert them if necessary.
+> 
+Not sure I understand. Can you clarify ?
+
+Temperature bit assignments in the datasheet are confusing. PSV3
+means full degrees C, PSV8 means 32 degrees C. That is all in one register.
+On the other side, L-TEMP0 reflects _4_ degrees C.
+
+Am I missing something ?
+
+>> +        val = clamp_val(val, 0, min(temps[1], otemps[1]));
+>> +        ret = regmap_write(regmap, AMC6821_REG_PSV_TEMP, val);
+>> +        break;
+>>       case 1:
+>> -        ptemp[1] = clamp_val(val / 1000, (ptemp[0] & 0x7C) + 4, 124);
+>> -        ptemp[1] &= 0x7C;
+>> -        ptemp[2] = clamp_val(ptemp[2], ptemp[1] + 1, 255);
+>> +        /*
+>> +         * Low limit; must be between passive and high limit,
+>> +         * and not exceed 124. Step size is 4 degrees C.
+>> +         */
+>> +        val = clamp_val(val, DIV_ROUND_UP(temps[0], 4) * 4000, 124000);
+> 
+> Oof. I think the issue is that we have different units for temps[0], temps[1] and temps[2]?
+> 
+> temps[1] is in °C, while temps[0] is in °C >> 3 (so / 4) because we read from PSV-Temp register directly, which only exposes PSV[8:3] and PSV[2:0] are 0. I'm wondering if we shouldn't just have the same unit when filled by amc6821_get_auto_point_temps?
+> 
+No, they are all in °C. I think the confusion arises from L-TEMP[0..4] which is in multiples
+of 4 °C. Since L-TEMP needs to be in multiples of 4 degrees C, and temps[0] is in degrees C,
+the above sets the lower limit to the next multiple of 4 °C at or above temps[0].
+The upper limit is 124 degrees C per datasheet.
+
+> temps[2] is also °C >> 3 (4°C step in the register). I think we would benefit from having the same unit here to make it easier to do maths with temps[1] and temps[0/2]. What do you think?
+> 
+> If we didn't have this °C >> 3 formula, we could simply divide by 1000 to get the value and then do the same maths for writing to the registers (except a different offset for temps[0] than temps[1/2]).
+> 
+> 
+>> +        temps[1] = DIV_ROUND_CLOSEST(val, 4000) * 4;
+
+The DIV_ROUND_CLOSEST() here is to improve rounding to 4 degrees C. The resulting value
+in temp[1] is {0, 4, 8, ... 124}.
+
+>> +        val = temps[1] / 4;
+
+This is the register value to be written.
+
+>> +        /* Auto-adjust high limit if necessary */
+>> +        temps[2] = clamp_val(temps[2], temps[1] + 1, 255);
+> 
+> Is this why we didn't want 255 for temps[1]? Because then we could have 256 here?
+> 
+
+The highest possible value for temps[1] is 124, so the lower clamp value
+would never be 256. The above only ensures that temps[2] is > temps[1].
+
+>> +        ret = regmap_update_bits(regmap,
+>> +                     nr ? AMC6821_REG_RTEMP_FAN_CTRL
+>> +                        : AMC6821_REG_LTEMP_FAN_CTRL,
+>> +                     AMC6821_TEMP_LIMIT_MASK,
+>> +                     FIELD_PREP(AMC6821_TEMP_LIMIT_MASK, val));
+>> +        if (ret)
+>> +            break;
+>> +        ret = set_slope_register(regmap, nr, temps);
+> 
+> I'm wondering if we shouldn't put the writes to the TEMP_LIMIT_MASK and AMC6821_TEMP_SLOPE_MASK into the same regmap write, otherwise there's a small timeframe during which the slope is not matching the TEMP_LIMIT. I guess it's probably not that big of a deal but still bringing this up.
+> 
+
+Hmm, you mean to let set_slope_register() also update the low temperature limit
+based on temps[1] ? Excellent idea. I'll do that; it will save a register write
+to the chip.
+
+Thanks,
+Guenter
+
