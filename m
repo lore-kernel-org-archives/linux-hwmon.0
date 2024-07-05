@@ -1,89 +1,238 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629F51FDA;
-	Fri,  5 Jul 2024 01:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13ECC146584
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Jul 2024 09:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720142110; cv=none; b=N4Zv2cgiHpsGL+oVm7NNKfcTl2GToCFffSOb4swAAJKlfsZSbrElog1F867yC5ccwauTUVB7WUGVCWRJ2rS1gz4XI6nPta6ElBnk4q704JVMQPiuR/Ni5fnP/blEQ2K3Z+d1+2ytZuGkbtAgLmwbLPnV9YNng4M614TX9faIrCc=
+	t=1720170559; cv=none; b=Bf6nxJMb5QQZ7aDqJxLWuDrYa1jP/8bGy8orfWyL8KdBy2biMEeIBby4KFLmJtWrx7L4RGUkMcRIVZ25uXtWYr3UlMIIcnsAaccaN4u+C1U3849pRXbbSoL5t9iwGaiJrm7BmEs3SW0n+kvOWCQFrsp+3diVyIjVvQHIMu+wf3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720142110; c=relaxed/simple;
-	bh=x4nEAQ7b6/TWXyXgB9wGBJ+8zigiSwfnUL6grPIcrwE=;
+	s=arc-20240116; t=1720170559; c=relaxed/simple;
+	bh=z7uln/wCHBuVL23Qb6fK90d/XfI2YedBBgXbvaPu1+4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EznH/7paLNmVo6o7ZdwJUqosQm5cLAi0yh2fsVP+z2+yqMJFXN0Fd0gctSzzBDXYfo+WT7RMGiXgURx3DMUTA61Ap10zl9NxJ3iiqvJwKWiIwCOXvxBoLARoGLkiYFOHAVRMHIFqIyFQuYPX30pBLG81Xltv9U3yusSa4NBG43Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fX0LSpee; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=X3hrEMqI3K6kabSeJuPm3rPFqNNHK79hL3k3OS9mDDdx9pUTNOtbkHtifsxiM5lkth0N8O47hohfyKgeqJ26fiWBMXOU6N0nXnxFnA+vBSJbi3VNs8nS9k8AMRkuWkUxUv5UrK4KCFGf2odw1c0u2nglaIEuF38p6LOApvuIs+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KK6SxJ5n; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fX0LSpee"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1f6a837e9a3so6118995ad.1;
-        Thu, 04 Jul 2024 18:15:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KK6SxJ5n"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58b447c5112so1642023a12.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 05 Jul 2024 02:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720142107; x=1720746907; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720170554; x=1720775354; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7wvXbEhzCKn5OcOH7K7UNIRxOnmz2N20qR1Phd4d5b0=;
-        b=fX0LSpeewT2JPgQRwve0S1FHoOTbZ9OYFjrLAf9FzDXpYw8+tgKB/nRL3ukAWksBeQ
-         cJniW0Rs+zR8vWs/CgNnoBOsPZCshlwgSO+ZL6oQ6mJrXTvIMTuNXsMOS7NR/M78RETJ
-         PBQWhdtAZYcHT5N4S8GMJtcYSRMzPLbgICt9yYeNgQURDTattA9QqYCb3wpuJP9CdlsL
-         KyXR3K85bNb3Dhiw0T9nUBRCDBA2vyO+FjobKDnikKKfMF4MtXjjxS8d88bZ8zXPijUD
-         5I/Mt6z8HmP0rSX/oQM3O7pD/cKyYHD8lLP8ufA2jvonAhFTKDlXI3CBX0KioXy7guV+
-         3eGA==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yawcdPmdc9R5nFHXmROZ5YiAiTzKYfck2rMJGJ0W1kc=;
+        b=KK6SxJ5nU4lB3JZ8mP8u1ghrSqksETJhT/kH9xC3+3a8HjgDkh6MKG0pWQPQI9kbjx
+         bJ/oPeOAESH/Iift8cL/5LOuVgOeba08dTKenKMxeyXNEoz8scd+F7UHyMaMwgI/BUTF
+         z+5HiGbEkuBPyZiGQFKMmZgDih9tqs9qZWEzbEAaTd24efRqWxvWka+J9ZVvC2VwhnT0
+         kSOH8zoZI9JcvVJOxhN+JkGgpoCKzpJY7sPKIp5FdYFwYuv2+7yY5zavlfuHhcjxhP/n
+         p2Jc7VKrWIZvfbAtAzUfyZCAtfWCaJvsBerkjUvGbJmOX856jiKb97mKngjb7DsoYnc1
+         2F9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720142107; x=1720746907;
+        d=1e100.net; s=20230601; t=1720170554; x=1720775354;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7wvXbEhzCKn5OcOH7K7UNIRxOnmz2N20qR1Phd4d5b0=;
-        b=BQ4mydY787v5F2mBNQeJhlL8ClIMWpR59guze7uBrEFnbPwIoVfxy3CAXa7jQZTCOq
-         6tKwgM9MTZPRnFYwEXHuA6Q7exqyTOF/C/hrbLIs5gW4YzwldQVwM40YDsKF2eXafdX+
-         ug78Q1R8XBa43RlgWdxSQ1SRX0/L1Uu7HbzufZhP/fVi1Tdd71ABdGPNvt7VCXY+jZK0
-         5s/sUgFgxgDdVn2/stf5OIWEh7b0q2N+Dk4/FAa+cKwr08WChGOBj9+pbkeKbIKiyPIH
-         OXm3V1hIFik8o4uPam4QkYp5LLYwVWIO+Lh/emoxuu+4VPedpzm9TCoNfTnT1kwcnazr
-         PBDw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVHmJGivNShoUBC0zdWOaVMEJeW8DrntYlCSBh691Y54EDy2EReOs3Rr0aebeX4wmbNXPtcpknR4SahNQmL5rWnc3IcLwHgs+6wf1ZW+jKJZDSdWvzCrFc4GOshJ9dEs4VrhRijGB+ihmbkJ0RK1odnWgLVFZPMd2FYWBP9Nh7BIPFkRKAwBhRTK4=
-X-Gm-Message-State: AOJu0YzzhGfnYDS3QTenLn04ybLx8xGVh4kfmZJ5v0geGJ9JffBE2kqf
-	pM76OTKQ/IoVtoCTsJ8kI/u5eV3k4LI/95PvcWfFSZFzcLzidvM9LJmNIA==
-X-Google-Smtp-Source: AGHT+IGN2hOzzJNvDE3eZIK5E2GMzoNH/XyxROd+JLpuvF+R8xOkV9bvFNV4mhcdrAASVj1yWj3pcw==
-X-Received: by 2002:a17:902:e744:b0:1f9:e3e8:456b with SMTP id d9443c01a7336-1fb33e12804mr27126685ad.4.1720142107399;
-        Thu, 04 Jul 2024 18:15:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb3b83e89csm15623335ad.56.2024.07.04.18.15.06
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yawcdPmdc9R5nFHXmROZ5YiAiTzKYfck2rMJGJ0W1kc=;
+        b=ZtyneCAQxrhuipPbTEDLf1vldPx/UsTM9ukf+UxCwdR0UzCCLNijJNOcdOK7StEQl9
+         CoM5rCFfVV083EqXMDfAzTgIS9aZ8UM4KgbOG6osfSPW3oJ4FwwDOUj8CJb93JW/H0Sa
+         MbFUw7k60GpS7R/QkhBNBMVQgJA5jt7SfdBXmb9FwL1GISQMhBEm05X8+RTDuQZh8BBh
+         Fan2/vYsydq+AJ9KTpf5N2col5QSCBzn8vUb4UWP1qfUpZFcQiQz/gQHP9Vj27TnAR5Y
+         HxV4eBsBsKZXaVztJ1JxHqG2Uz6o7wDQR5u2Yg5rjXO2g4SUbyyMOjT40AFaa7t6wSMO
+         o0ew==
+X-Forwarded-Encrypted: i=1; AJvYcCUOrqaqTkNca7EI+bXq4sI2M9fKRY6FzLkv9l2OFsyorlsuZQz8IG0gkolcze90Bs8jIM8oDn8Hf///saQOU8gnlURRB6zwZn4hm3g=
+X-Gm-Message-State: AOJu0Yz+Pvwlcq7L1yBZ7KNWIwfYqLAZtL6GThE7AoRZHADR2KQSr9bS
+	4kx0Odzh2QznQj1DjvZkIQ7ygIEdMJufVQN9QUMXFbwm6/5MWWGHsBT5ULXQFXw=
+X-Google-Smtp-Source: AGHT+IHsYMalDL4OFCPxRq3oohtjYA/UuspzbffcUEicK/5Ws4VMPv3kobeNAJ/RWF12C4F4dwAbOw==
+X-Received: by 2002:a05:6402:278c:b0:587:86d8:8b54 with SMTP id 4fb4d7f45d1cf-58e5a6ee9f5mr3180323a12.4.1720170554293;
+        Fri, 05 Jul 2024 02:09:14 -0700 (PDT)
+Received: from localhost (p50915e7b.dip0.t-ipconnect.de. [80.145.94.123])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-58f90b20091sm646111a12.45.2024.07.05.02.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jul 2024 18:15:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 4 Jul 2024 18:15:05 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Antoniu Miclaus <antoniu.miclaus@analog.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ltc2991) re-order conditions to fix off by one
- bug
-Message-ID: <275932cb-9549-4cbe-9f7a-acb19378905e@roeck-us.net>
-References: <Zoa9Y_UMY4_ROfhF@stanley.mountain>
+        Fri, 05 Jul 2024 02:09:13 -0700 (PDT)
+Date: Fri, 5 Jul 2024 11:09:12 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Message-ID: <drqvaon5lb2ei3jqofutbr6demibyfdhbmr24sva27gzpqdnon@fxa7rpl33iih>
+References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
+ <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bgu6tv6sylwa4466"
+Content-Disposition: inline
+In-Reply-To: <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
+
+
+--bgu6tv6sylwa4466
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zoa9Y_UMY4_ROfhF@stanley.mountain>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 04, 2024 at 10:18:59AM -0500, Dan Carpenter wrote:
-> LTC2991_T_INT_CH_NR is 4.  The st->temp_en[] array has LTC2991_MAX_CHANNEL
-> (4) elements.  Thus if "channel" is equal to LTC2991_T_INT_CH_NR then we
-> have read one element beyond the end of the array.  Flip the conditions
-> around so that we check if "channel" is valid before using it as an array
-> index.
-> 
-> Fixes: 2b9ea4262ae9 ("hwmon: Add driver for ltc2991")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+Hello Chris,
 
-Applied.
+sorry for taking so long to respond. Don't take it personal, I'm way
+behind my maintainer dutys in general.
 
-Thanks,
-Guenter
+On Wed, May 29, 2024 at 10:56:36AM +1200, Chris Packham wrote:
+> Add fan child nodes that allow describing the connections for the
+> ADT7475 to the fans it controls. This also allows setting some
+> initial values for the pwm duty cycle and frequency.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>=20
+> Notes:
+>     I realise there is still some discussion about how to express the
+>     frequency and duty cycle. I have a personal preference for using hertz
+>     for the frequency and 0-255 for the duty cycle but if the consensus is
+>     to express these things some other way I'm fine with doing some math.
+>    =20
+>     Changes in v4:
+>     - 0 is not a valid frequency value
+>     Changes in v3:
+>     - Use the pwm provider/consumer bindings
+>     Changes in v2:
+>     - Document 0 as a valid value (leaves hardware as-is)
+>=20
+>  .../devicetree/bindings/hwmon/adt7475.yaml    | 25 ++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
+entation/devicetree/bindings/hwmon/adt7475.yaml
+> index 051c976ab711..bfef4c803bf7 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> @@ -51,6 +51,15 @@ properties:
+>        enum: [0, 1]
+>        default: 1
+> =20
+> +  "#pwm-cells":
+> +    const: 4
+> +    description: |
+> +      Number of cells in a PWM specifier.
+> +      - 0: The pwm channel
+> +      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 88, =
+22500
+
+Nack, don't deviate from how PWMs are usually referenced. So specify the
+period in nanoseconds, not Hertz.
+
+> +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
+> +      - 3: The default pwm duty cycle - 0-255
+
+I'd be ok with that, however please add support for that in the pwm core
+and then just use that.
+
+You wrote that you find it irritating that the duty is specified in
+nanoseconds and not a percentage. The reason for that is historic. Also
+it gives a more precise specification (at least compared to the naive
+representation of the integer percentage as an integer type).
+For the rework of how PWM waveforms are represented I picked
+"duty_length" as variable name for this value, in the hope this is less
+confusing.
+
+untested prototype for a 4th member in pwm specifiers:
+
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index 5c1d20985148..f732235df12d 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -251,7 +251,7 @@ int pwm_adjust_config(struct pwm_device *pwm)
+ 	 * duty cycle of 0.
+ 	 */
+ 	if (!state.period) {
+-		state.duty_cycle =3D 0;
++		state.duty_cycle =3D pargs.duty_length;
+ 		state.period =3D pargs.period;
+ 		state.polarity =3D pargs.polarity;
+=20
+@@ -437,6 +437,10 @@ of_pwm_xlate_with_flags(struct pwm_chip *chip, const s=
+truct of_phandle_args *arg
+ 	if (args->args_count > 2 && args->args[2] & PWM_POLARITY_INVERTED)
+ 		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+=20
++	pwm->args.duty_length =3D 0;
++	if (args->args_count > 3)
++		pwm->args.duty_length =3D args->args[3];
++
+ 	return pwm;
+ }
+ EXPORT_SYMBOL_GPL(of_pwm_xlate_with_flags);
+@@ -457,6 +461,10 @@ of_pwm_single_xlate(struct pwm_chip *chip, const struc=
+t of_phandle_args *args)
+ 	if (args->args_count > 1 && args->args[1] & PWM_POLARITY_INVERTED)
+ 		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+=20
++	pwm->args.duty_length =3D 0;
++	if (args->args_count > 2)
++		pwm->args.duty_length =3D args->args[2];
++
+ 	return pwm;
+ }
+ EXPORT_SYMBOL_GPL(of_pwm_single_xlate);
+@@ -1353,6 +1361,9 @@ static struct pwm_device *acpi_pwm_get(const struct f=
+wnode_handle *fwnode)
+ 	if (args.nargs > 2 && args.args[2] & PWM_POLARITY_INVERTED)
+ 		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+=20
++	/* Maybe extend this to apply args.args[3] if args.nargs > 3? */
++	pwm->args.duty_cycle =3D 0;
++
+ 	return pwm;
+ }
+=20
+@@ -1514,6 +1525,7 @@ struct pwm_device *pwm_get(struct device *dev, const =
+char *con_id)
+=20
+ 	pwm->args.period =3D chosen->period;
+ 	pwm->args.polarity =3D chosen->polarity;
++	pwm->args.duty_length =3D 0;
+=20
+ 	return pwm;
+ }
+diff --git a/include/linux/pwm.h b/include/linux/pwm.h
+index f8c2dc12dbd3..678a97706eac 100644
+--- a/include/linux/pwm.h
++++ b/include/linux/pwm.h
+@@ -41,6 +41,7 @@ enum pwm_polarity {
+  */
+ struct pwm_args {
+ 	u64 period;
++	u32 duty_length;
+ 	enum pwm_polarity polarity;
+ };
+=20
+(I think it doesn't make sense to use a u64 here. At least the oftree
+values are only 32 bit wide. I didn't check the ACPI part, if that is
+only 32 bit wide, too, it would make sense to make period use a 32 bit
+type, too.)
+
+Best regards
+Uwe
+
+--bgu6tv6sylwa4466
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaHuDYACgkQj4D7WH0S
+/k4H9Af+O1HkX2H4GXenGFqpvtMnbx935Ir2D1Fj9LzGpibaiBBA3v2zbr22qpPJ
+YwlBG7YQken7sjySLxHLYTtgsqofwWThNKkRE94iJmGLNcE29IW0oq6ATryTiry4
+V/F3T3X78rjpK5lTWnLZzs1A8lsIwD+XBZfczkq79fcwUOFN5bLCXHv/GyMTkwuQ
+4uedlGEPZZ/kL1QfzBztKuw9Z46Yfkh8KRYAuW75EkDjfyl8VMWGDFi+lX1wGioC
+eIaBxX9qcBhoKmT+27g4HctQ3Cp4XdLD2qM856PO1I5+dTaGFKuZXeN4KdjeULnn
+l/5NTnIRGwFWHmasBFUe0VAxOnWoaQ==
+=KiYp
+-----END PGP SIGNATURE-----
+
+--bgu6tv6sylwa4466--
