@@ -1,176 +1,147 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A34E143863;
-	Sat,  6 Jul 2024 15:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3692C8E1;
+	Sat,  6 Jul 2024 16:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720279447; cv=none; b=pcVLdQeBNjUQUbD6OJ6nyllE4g1DRI1HcVxTypm1gDAIsX2FwsR7DIzdpC4kDDD0bfQx0wBzk3OEsRptPqC7UmPxknjpYxDqK24ji2SWxBTTmWPmtWuLLx9+eOuMmWZZkeKs3w0gg4neVqEZiH9ARV/OXoWhqxMcyCsYOXMIFDA=
+	t=1720284543; cv=none; b=Z11bytaTakbT8v5pT5zMdY3avbutRLGbNCyUAd/ic5UTB1IharomnfhAzUucn70A4NuOsIS2HBsIo0zuAmTR4C/I5KrsE72Ude1LP0iqAn9E3y/IVbgsMxttY/PulilEkPNpkljOxl7rtsV90SdogJyKEnvjtrniJ75/hLzPd2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720279447; c=relaxed/simple;
-	bh=FqQDDFZRZErZwoVBwncsgkhb9stwS0b2C3AaKUJjEeM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nl7SRTjc6x4QIV7n7p1DQdK3OSNVFQtxc6NkIYNwDkDVGLIPotufthjeUtmjHeHcI1f1gFWmbKWUl6pKtTjx5y5XhDz4Zt/CuNkRQbdr4MknJDfIa7U1nw3VtC4TVVHC14jHe/AmK051xQH1A6x9PbwI4kLw86efmpPO7l0AyvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmTPtclV; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1720284543; c=relaxed/simple;
+	bh=lVLS1J+a6VwpogBP/TJsabzltLu0nFkAMMRxA/hKr6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c8128RxIbf+KrPQTQglEXYDYqiThidLzf330gjUyHiRP4r/x/C+aT7H/KN4Hj6HVnb9cQbpPqWpEkrZf40TOHCzWUaHKjcN9WaLzOGl9Z0TVfT/wj3SiAwgUE70yWtc51HB8fj6/L+43cPDKIfADxdps6LY9j0v/SaYd2rCz4sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYInJxk/; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmTPtclV"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4265921b0f6so8161545e9.2;
-        Sat, 06 Jul 2024 08:24:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYInJxk/"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fb70169c23so1573025ad.1;
+        Sat, 06 Jul 2024 09:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720279444; x=1720884244; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1720284541; x=1720889341; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Snaqybo2SQ9uek82H01UqwsbwzQvNpsRmSQLWD2DPEc=;
-        b=nmTPtclVWbXXf9fVkcsiqzpYV0sSMcryc+3JCFktfHhmbTQLTkZ3vFknMLVrF+RA6m
-         wgHSMch4CzE5Qsc8C5O2B3MYWnKQTk78vQnsqgfAjmrmvSp2kU+rTMXPyaUVlmqtWHio
-         HNSSEnD12o/DrA4mRHq3xoKt8SfNVaGzZmfTTH3+RN5abJ8Ft45EDFdFCpHDpSF8Kx9d
-         6GO2T17GJXXN1ImLepzWRvpC1TQ2sWHJN+YxGXEK342LfQFtwwYfWFvi9vz5CnNDbBw/
-         e30Sr0zNk3P4zE9YBeuYfjSn9O8udxj0T3hb80VdOwbFSLJQ3iee5JOe4kOk16stov5u
-         TVsw==
+        bh=7pPLymTdWA31lQrXZwdfEII/TYIYPSXMJ6wqAirrqs4=;
+        b=OYInJxk/sGH2PwBEDOl/32wgiVeefpOJFok2f6EFSdTCqwn/Qn5/jYiamBfwewXiwV
+         b7Xn356e8jJIO8AjptvVKt6JGjxc9CC4M/+Knk3vk35YHeCTKsflo9IN98JauwQHHVFz
+         hOLZ9YxynigTgH6Cw39izIvsp4pTiFttvm3bP/yp5AGVbN5pXkyXDfQWs3fEjKD2iLOp
+         b4ZmmdkagyKBz0Hu0ZhP8e5l5ZdI10cLZhoEL6h61Kt0MGE//wgBrJTZCM3FfOrJT8gh
+         NhEsHC/Ra90s/1ssvu4tEIGV4MrwjLrs/nUWeyh+e1X/yJLaTSYZ2PXgdDGSeL5OZfxo
+         vIdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720279444; x=1720884244;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1720284541; x=1720889341;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Snaqybo2SQ9uek82H01UqwsbwzQvNpsRmSQLWD2DPEc=;
-        b=bjP6taPJPoolTEtyUscs0aaGC7n8qpavgrUz8A6FcWssktdqvROoSs3D8lxNPk3ezT
-         WsybCP7XktSWVRSKx4fB4fH5ND7HC/wLbRJejBLsnlKpdSZMOIi4gnoEABW8FfePS1E6
-         HDNk72XFJ6JcBD54eOO+DsQ2mp5fCrrd+2OkRbDwoBq6sUlA3klLA/IHe1/4dC9AtMeh
-         Ns0bmcY+zltNzeOBLKbWFs55WLpdSgmY/6ZZh3zWhHEa/7XdpN7Cek/YTRKjebX1FDDZ
-         J5i/no1kJfHTWKdz8Xem80S77nGNv9aWV0aXjobkmGHNTjW/LaN0JkK6eHGAgUR4Shm+
-         axYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXTvpEzeoYa0juJ46lywheiX+bejod5ZI4N+EsrM8uRD1yNd8XcQcX+4bFQ6ur1FBz4XUItt1+b8PnvbKRe0FO8JQ2zhVB4BLGcQnZ7S8FGozvsZ1uU3CtQdyFNxXeKNfO5zBsY7WgO/HUEyMg4SKO8xqKRymntWLOrzI9lTHkO2XjKD6Ps3wvmBLeyd0M7/r+ymnY9L57pB2bUUpPO
-X-Gm-Message-State: AOJu0Yybr2Voiy1Y1JT0PhBdNaSLLzrdALwO6Ib9FeGzP4G7+evej3mI
-	K1D8lPcJVs1xSAczdOJFTk7v3T9d4yEGCgriFogNLJItF7nmxm+c
-X-Google-Smtp-Source: AGHT+IHcEq8Yc3mYNalQX8RlmIf4m62FTVZhE01QeXRyiVYmbmbL9x/FzVMFnqzIuz8+XRLsKWF+iw==
-X-Received: by 2002:a05:600c:4fd3:b0:425:672a:766e with SMTP id 5b1f17b1804b1-4264a36eea8mr56784065e9.0.1720279443721;
-        Sat, 06 Jul 2024 08:24:03 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-d11b-8ec4-ea76-796c.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:d11b:8ec4:ea76:796c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3679ed376cdsm6421593f8f.114.2024.07.06.08.24.01
+        bh=7pPLymTdWA31lQrXZwdfEII/TYIYPSXMJ6wqAirrqs4=;
+        b=k5lxXXe4Kh4MkiPOoOu5UOx44dQrHPREdaqWBiAEYlDIslWRBMcy7FCJ2aG7RqQni0
+         funPvkelpPg4RTCOhLT80BdD/KkbKeG+tQt/x5hYfO3jB14nvYwQpuTUx99oc8Dls6is
+         bZyNr76d2VWCFiI00u/1/a629b/Z41o4tdy7LG125yCEgsE0Lz3CU1jIe1GThxGL/Lc8
+         QbfQMM01LPlQQEQOzydjihXd3U4O7VEDBHnSDwHK6fPBsFX+VvFbGsE1kqskTaRYUkkJ
+         Xc2fOJNPcbfFiGdYfZG2BB23yTdgrlcrsa6n7tcVFwoiiF+fe89k0NdqrgPOf8cSV+Ku
+         t/kA==
+X-Forwarded-Encrypted: i=1; AJvYcCXS9Te4spjKeGliRe73ZVfS/4915OMzvCQPBAeBZJ9xaCUVpsGcvBoivZyNhwtLwKOwBd9OwpB0desj4NBkOYl5/3gBrSqdENsy69rTFhC2D3ESeu3HLUDOPhm03UXAndpAzil9jIDdTwzlRpNpeZ2DyGk1Suhc+YClKXEJwDGU/5hsSNUjde2QOyU1TZ+2k9vpwZZuwQGl7QcU17k+TTZh
+X-Gm-Message-State: AOJu0Yx8gklIB+Rm02tXGO+Csj1UdldbZbmzSqcaaC48FlHTXrU5M8iT
+	P/CB+Co1mejlWSPhHf2PE4rDQMx/IG6rRcPrGDoyy4S4FDpwb/oJ
+X-Google-Smtp-Source: AGHT+IENJeiU7Mi8p64xH7HmJ8ROz4UbZ9E6gDDBcfa1jvirP9W3uzmIUxJcyVS/Lt1WZqvP42h/qQ==
+X-Received: by 2002:a17:902:f541:b0:1fb:29d1:501b with SMTP id d9443c01a7336-1fb33dfc2f8mr53062975ad.5.1720284540933;
+        Sat, 06 Jul 2024 09:49:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb3419e297sm50786015ad.70.2024.07.06.09.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Jul 2024 08:24:03 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Sat, 06 Jul 2024 17:23:38 +0200
-Subject: [PATCH 6/6] net: mvpp2: use device_for_each_child_node() to access
- device child nodes
+        Sat, 06 Jul 2024 09:48:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 6 Jul 2024 09:48:58 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Inochi Amaoto <inochiama@outlook.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: Add Sophgo SG2042 external
+ hardware monitor support
+Message-ID: <5a2e23f4-d54a-45ae-a09d-e557b110e017@roeck-us.net>
+References: <IA1PR20MB4953967EA6AF3A6EFAE6AB10BBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <IA1PR20MB4953F58B631D836F3863115ABBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240706-device_for_each_child_node-available-v1-6-8a3f7615e41c@gmail.com>
-References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
-In-Reply-To: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>, 
- Daniel Scally <djrscally@gmail.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
- Marcin Wojtas <marcin.s.wojtas@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org, 
- netdev@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720279430; l=3064;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=FqQDDFZRZErZwoVBwncsgkhb9stwS0b2C3AaKUJjEeM=;
- b=iYfjox0buokEbZZKDxP8IjBs7/BLHuTRJspiW0SQNWK4kaEyOHbevnTQUZFZMwWBmoXcBYvtO
- WPOUxSokjULCQwJBFziUXz70jl9I43krYe0vWYwX507MG+hQrbPBtUA
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR20MB4953F58B631D836F3863115ABBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
 
-The iterated nodes are direct children of the device node, and the
-`device_for_each_child_node()` macro accounts for child node
-availability.
+On Wed, Jul 03, 2024 at 10:30:43AM +0800, Inochi Amaoto wrote:
+> Due to the design, Sophgo SG2042 use an external MCU to provide
+> hardware information, thermal information and reset control.
+> 
+> Add bindings for this monitor device.
+> 
+> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../hwmon/sophgo,sg2042-hwmon-mcu.yaml        | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
+> 
+> --
+> 2.45.2
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
+> new file mode 100644
+> index 000000000000..f0667ac41d75
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sophgo,sg2042-hwmon-mcu.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/sophgo,sg2042-hwmon-mcu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sophgo SG2042 onboard MCU support
+> +
+> +maintainers:
+> +  - Inochi Amaoto <inochiama@outlook.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sophgo,sg2042-hwmon-mcu
 
-`fwnode_for_each_available_child_node()` is meant to access the child
-nodes of an fwnode, and therefore not direct child nodes of the device
-node.
+According to the other patch, this actually covers four
+distinct models/devices.
 
-The child nodes within mvpp2_probe are not accessed outside the lopps,
-and the socped version of the macro can be used to automatically
-decrement the refcount on early exits.
+static const struct sg2042_mcu_board_data sg2042_boards_data[] = {
+> +	{
+> +		.id = 0x80,
+> +		.name = "SG2042 evb x8",
+> +	},
+> +	{
+> +		.id = 0x81,
+> +		.name = "SG2042R evb",
+> +	},
+> +	{
+> +		.id = 0x83,
+> +		.name = "SG2042 evb x4",
+> +	},
+> +	{
+> +		.id = 0x90,
+> +		.name = "Milk-V Pioneer",
+> +	},
+> +};
+> +
 
-Use `device_for_each_child_node()` and its scoped variant to indicate
-device's direct child nodes.
+Is it really appropriate to use a single compatible property for all of those ?
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index 9adf4301c9b1..97f1faab6f28 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -7417,8 +7417,6 @@ static int mvpp2_get_sram(struct platform_device *pdev,
- 
- static int mvpp2_probe(struct platform_device *pdev)
- {
--	struct fwnode_handle *fwnode = pdev->dev.fwnode;
--	struct fwnode_handle *port_fwnode;
- 	struct mvpp2 *priv;
- 	struct resource *res;
- 	void __iomem *base;
-@@ -7591,7 +7589,7 @@ static int mvpp2_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Map DTS-active ports. Should be done before FIFO mvpp2_init */
--	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
-+	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
- 		if (!fwnode_property_read_u32(port_fwnode, "port-id", &i))
- 			priv->port_map |= BIT(i);
- 	}
-@@ -7614,7 +7612,7 @@ static int mvpp2_probe(struct platform_device *pdev)
- 		goto err_axi_clk;
- 
- 	/* Initialize ports */
--	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
-+	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
- 		err = mvpp2_port_probe(pdev, port_fwnode, priv);
- 		if (err < 0)
- 			goto err_port_probe;
-@@ -7653,10 +7651,8 @@ static int mvpp2_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_port_probe:
--	fwnode_handle_put(port_fwnode);
--
- 	i = 0;
--	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
-+	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
- 		if (priv->port_list[i])
- 			mvpp2_port_remove(priv->port_list[i]);
- 		i++;
-@@ -7677,13 +7673,12 @@ static int mvpp2_probe(struct platform_device *pdev)
- static void mvpp2_remove(struct platform_device *pdev)
- {
- 	struct mvpp2 *priv = platform_get_drvdata(pdev);
--	struct fwnode_handle *fwnode = pdev->dev.fwnode;
- 	int i = 0, poolnum = MVPP2_BM_POOLS_NUM;
- 	struct fwnode_handle *port_fwnode;
- 
- 	mvpp2_dbgfs_cleanup(priv);
- 
--	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
-+	device_for_each_child_node(&pdev->dev, port_fwnode) {
- 		if (priv->port_list[i]) {
- 			mutex_destroy(&priv->port_list[i]->gather_stats_lock);
- 			mvpp2_port_remove(priv->port_list[i]);
-
--- 
-2.40.1
-
+Guenter
