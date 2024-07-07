@@ -1,105 +1,121 @@
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F01249F5
-	for <linux-hwmon@vger.kernel.org>; Sun,  7 Jul 2024 14:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77174654E;
+	Sun,  7 Jul 2024 16:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720363666; cv=none; b=CLVRq/Mp6zDuz58h2lxY5JWsjZKQy0+Uh9pqCDjtDzaQ5nAhcSOFtGSG3xpslf1z7XzG436yTx6YL/nWsAujS8fZJKX4bS5DUVt9V1eufIYn5dq0LCxP/oOVUDM38eMdX1R49tNK12DH0StdqWzAyWn8qBNlc+VX0Ro3g7kjOv4=
+	t=1720371226; cv=none; b=NKkbim48V+c4wWoYDA9iCXSo+iOmh2H62F82ETqcZGB19J4yrJSaVIX680UcSN2oiw3J6yS3LIAZqAKtdLv8kwSH+ECje6AWxAsTdIz0UJrfWHkjp46vCuu0zp8FpBM51gF8t9fy4PYPablgDxvqBU+p8YDtO+y1QXOGExZZKKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720363666; c=relaxed/simple;
-	bh=OxMxHKY/7EcDMXWNJgMSRcvEDpp8+Cu6kzSCm5Rnns4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZaNFNVilrsT4DUwQUpe5E1LUQGI1kh/i8MCTu3L2yF3Hq69IAy4jtMKwwYqPZQs3gKYQ5a1TK81+GOcRrD4lWrlTqwQbpQLfZStk2xp3D6p/IVTTzsFq90rgV9wO3zx0ClJ9n8sXRn0eAWWg0wUJREcYHzi7jePN+57zWnyNrbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R33hAM+E; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1720371226; c=relaxed/simple;
+	bh=LO+JAK2kFx7TUk6Rns6hr7HIOLavQDXDT6QwVoDH924=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kIXlX9A75ZsAEWgh0evJKK9gb4WE9kTLJwfGDAAi/j6tpPNi8ShtV7Z2VPSjYrW3I/Aqu7WV9k+WlzNt0+aZFB9h+cgSJVrHdbaw6L/Jl+AvQ/w0c0girBqD39TlI9xqDhTSXHkKonjH4VSqW8eez1u6uy9N3ZZTa/J9M634Glo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxR8DmPe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R33hAM+E"
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7fa8ffd03aaso23544439f.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jul 2024 07:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720363664; x=1720968464; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uXhLjdmO1CjATRhU5W7zEDwOJSaHfyV1bCOmj/qlkIA=;
-        b=R33hAM+EwTpGBewdl9KHaUb1zh62+EkzkWl6bTg6Z68eIg78bjvVcJpWuuJaIuJbOL
-         /IiWEWRNSs24nL9718yRKwjg6SkGoE1TaG4vSjwufvNeNvC0vpaiiTH0TYpPk7MJE/Mw
-         uYNUhfoKdFcLVpDqe7hHxRajjnKfrrKidy6JfRkHr4lrMfPlYUNRs10Fc90V8kCfDrP4
-         hYbZjs80MbilzMCcB4VrLxx2ktScbAlFL05ily0eO8A7xpWCyrf6/MwNjNinHq2/WgUP
-         kg/zseoVR3RfME7fA7BxFRmUaOVQT3zFbmkHhM6WNv36F7RxGjIBOVM4L9K9Xss6vGvE
-         SLcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720363664; x=1720968464;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uXhLjdmO1CjATRhU5W7zEDwOJSaHfyV1bCOmj/qlkIA=;
-        b=b21TAYFFHryMVF3kVhY1jexHwbms28IDJpRfh2vYehJSWjBsmj6XBduQy4GRxj4SLw
-         nTfhvI32twfOak9y30X8jwoD7ICjAlkHE/cC+4z8KX7Van5u+626z3Clc/b6fpHuLsqO
-         sos1xBrkyUmLQ6NDaI2phvbvB0T6hDTRwEVzPyRMYTkrfMf0GJAFdOHgY3V9gfnplseH
-         hYeKIAv/8mQ5VIxwInA6y0Xu1qTz0yBZYBEHeVXzxhUu4UoF8qP+bU51t1wRwfFscUXf
-         L+wb6tiWr0ROIh5qMxzrWxcBhIFOqzBEA1ok7RJHn32d0XjjFIX+zyqH7oqJp5LE6K1+
-         w0IQ==
-X-Gm-Message-State: AOJu0YyBI6fKGQZ1BhMwjsJ9SuwIUYQKmXuJHIHoQK7XZ976Z5ADKenP
-	n7kz3oZt15CakaCwf1L6guFeGE5r7Pwjn9XIIQWADmHV+1niClHdRPKqlA==
-X-Google-Smtp-Source: AGHT+IEHqMqQxgN11Sg5yZWE1Pxj6jX0/HgIgJFoUK89ssp1Gp72THdQ//lN2OGXXIxlHANOgpfngA==
-X-Received: by 2002:a05:6e02:1d04:b0:375:a6cd:dff2 with SMTP id e9e14a558f8ab-3839871068dmr130491465ab.5.1720363663697;
-        Sun, 07 Jul 2024 07:47:43 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a9977cfsm6456774a91.34.2024.07.07.07.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jul 2024 07:47:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 4/4] hwmon: (w83627ehf) Fix underflows seen when writing limit attributes
-Date: Sun,  7 Jul 2024 07:47:30 -0700
-Message-Id: <20240707144730.1490208-5-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240707144730.1490208-1-linux@roeck-us.net>
-References: <20240707144730.1490208-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxR8DmPe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB5DC32781;
+	Sun,  7 Jul 2024 16:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720371226;
+	bh=LO+JAK2kFx7TUk6Rns6hr7HIOLavQDXDT6QwVoDH924=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PxR8DmPedXrCCP0XME8n551nlcjprlutZZPfIk6n5MRaKHGv5891jLauSifacmz8m
+	 6DPL4t8smgNlMKuPQ55Wyxn4Yj9GBG8wxjU5MjbgB0uojFlym7TA/qYLgfU4ggbwzy
+	 bUG9MXkkynOZ29wDWeFHwf5fJRMNaisN7P2baSjOWYMQDqOC3By3ItZ2gb8u6boWeq
+	 kFJTdBCihK8Z1DPGVeBFxyxVkrmASrr4PVFq9DBPtsIE4ZlOH39Q0BFj647eZTZcFH
+	 IM763w1rxz2v5MbJ+JV/8of1NHggFKw/vR0Uy7QsQyyrBLi8JsrZKBX6z0kFjGAUBb
+	 bwi0/McI6+ZTw==
+Date: Sun, 7 Jul 2024 17:53:39 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, Daniel Scally <djrscally@gmail.com>, Heikki
+ Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Jean Delvare <jdelvare@suse.com>, Guenter
+ Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+ <lee@kernel.org>, Marcin Wojtas <marcin.s.wojtas@gmail.com>, Russell King
+ <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-leds@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/6] device property: document
+ device_for_each_child_node macro
+Message-ID: <20240707175339.427ab29f@jic23-huawei>
+In-Reply-To: <20240706-device_for_each_child_node-available-v1-1-8a3f7615e41c@gmail.com>
+References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
+	<20240706-device_for_each_child_node-available-v1-1-8a3f7615e41c@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-DIV_ROUND_CLOSEST() after kstrtol() results in an underflow if a large
-negative number such as -9223372036854775808 is provided by the user.
-Fix it by reordering clamp_val() and DIV_ROUND_CLOSEST() operations.
+On Sat, 06 Jul 2024 17:23:33 +0200
+Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/w83627ehf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> There have been some misconceptions about this macro, which iterates
+> over available child nodes from different backends.
+> 
+> As that is not obvious by its name, some users have opted for the
+> `fwnode_for_each_available_child_node()` macro instead.
+> That requires an unnecessary, explicit access to the fwnode member
+> of the device structure.
+> 
+> Passing the device to `device_for_each_child_node()` is shorter,
+> reflects more clearly the nature of the child nodes, and renders the
+> same result.
+> 
+> In general, `fwnode_for_each_available_child_node()` should be used
+> whenever the parent node of the children to iterate over is a firmware
+> node, and not the device itself.
+> 
+> Document the `device_for_each_child node(dev, child)` macro to clarify
+> its functionality.
+> 
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index fe960c0a624f..7d7d70afde65 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -895,7 +895,7 @@ store_target_temp(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
- 		return err;
- 
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 127);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 127000), 1000);
- 
- 	mutex_lock(&data->update_lock);
- 	data->target_temp[nr] = val;
-@@ -920,7 +920,7 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
- 		return err;
- 
- 	/* Limit the temp to 0C - 15C */
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 15);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 15000), 1000);
- 
- 	mutex_lock(&data->update_lock);
- 	reg = w83627ehf_read_value(data, W83627EHF_REG_TOLERANCE[nr]);
--- 
-2.39.2
+LGTM but I think needs at least a DT and ACPI ack.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+One trivial tweak inline.
+
+> ---
+>  include/linux/property.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 61fc20e5f81f..ba8a3dc54786 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -171,6 +171,16 @@ struct fwnode_handle *fwnode_get_next_available_child_node(
+>  struct fwnode_handle *device_get_next_child_node(const struct device *dev,
+>  						 struct fwnode_handle *child);
+>  
+> +/**
+> + * device_for_each_child_node - iterate over available child nodes of a device
+> + * @dev: Pointer to the struct device
+> + * @child: Pointer to an available child node in each loop iteration, if found
+
+If it's not found then there are no loop iterations. So could drop the ,if found
+I think.
+
+> + *
+> + * Unavailable nodes are skipped i.e. this macro is implicitly _available_.
+> + * The reference to the child node must be dropped on early exits.
+> + * See fwnode_handle_put().
+> + * For a scoped version of this macro, use device_for_each_child_node_scoped().
+> + */
+>  #define device_for_each_child_node(dev, child)				\
+>  	for (child = device_get_next_child_node(dev, NULL); child;	\
+>  	     child = device_get_next_child_node(dev, child))
+> 
 
