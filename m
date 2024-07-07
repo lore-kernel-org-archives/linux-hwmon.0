@@ -1,63 +1,63 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A986D2263A
-	for <linux-hwmon@vger.kernel.org>; Sun,  7 Jul 2024 14:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50312BAE8
+	for <linux-hwmon@vger.kernel.org>; Sun,  7 Jul 2024 14:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720363661; cv=none; b=t69p7KD1nLRRO11Yb49lSXwl9ZpWAJzZ2XaRsFAM8f1g6FQAnOfNu2H3/1LGHzD/fL+Kixt70u3mP4gEgRqbKx5pAXl5+mDqXUwyGr6TVZY1EDzs6j+vTkd26MFFZxP5KBDvPZUjnf7WYaRf9XqMlmTaUF6vWH0UoLxBbdCJOWw=
+	t=1720363663; cv=none; b=f7SFUbG91T7eG22RpDrlyqBkdfKe583/8m7+xOXWjGPBUkucAaH8+yNvSoaVbXeG3A/KV0bm7/glwDe9teetCY9U7AVUSVuLe2aU+oGnHT1r5HNXdwCepqwWIktXVZEC8vFMB/Rk+dd4JXGv9FVixgyRvnwT97hQLwuINEzsFhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720363661; c=relaxed/simple;
-	bh=U/oN48LnusEKS0cwQHrYQmZfyy+w2xjXS9PZSQxnZ3I=;
+	s=arc-20240116; t=1720363663; c=relaxed/simple;
+	bh=OwotWA2iEZm9EHtic7oOoo/bz6skHoHRlN6LPZFvBxw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fDjiG2IlqgdGK6nSfh5w5KwB9q0pIklTe7q/84qrBZUmhqvlBBht4kVeRDagpbjDkt7Zi1x15fPL8YIi5c56Otre37BsTRvPAiduMk1ebOcWWoj3us3TsfM65JEU/TNVKX7NaD6oEivp7Yaf8gsQ8Stl4FogT1klo+H4pG1t3FU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZ4draT8; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=DefVYLUo/ph0f2S7WM5UHt9EZ5aUdEMOhenyYfmJlUdO16K/Uci0kqMzQwtfIfL9XDIjMooncD+xP9rt/P3TFxmJnSYJcJpahJ0noCsjlZ6w+2sIxsTF/kncZLbnfEsw5d7+/zdgxYHQIz78W0ul66wOwkuqSUr3Ruome3naGe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7BT3wDQ; arc=none smtp.client-ip=209.85.166.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZ4draT8"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2c8517aab46so2268897a91.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jul 2024 07:47:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7BT3wDQ"
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-375af3538f2so13416505ab.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Jul 2024 07:47:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720363658; x=1720968458; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720363660; x=1720968460; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2tE900apGoG5K8RVzmYNJWODr1eZ3+rfBsCAtQZIY98=;
-        b=SZ4draT8SZQUGlJdTqsg50Bk7IYS0pFQe+rmHy8D7TU79DPyazskTyJjzjLa5EUn/g
-         /y6HnFpJScIsnhudWfMuVdDdmCUpzCu1ALnYbXr4AfMByTsLbbALLOwUtM9AR+xdzxO2
-         zEYeSQuJGHkyemwutFvIy2Eu6A11nD4TW03VCoFhEGUlujyEG6pFhyahxMwSEhgNksEq
-         Ker1jaxjAbaG/m/poATdVrPFXCyk1f658T93COonr1eTFc4sozOtWdZq0joHmJgOpkxt
-         i6Farf498Fe6mwMDJJuv/OHh4rmobdQD+G9iNDTVakCsb2UXuRaRWOP/OPJlFGeYL/pt
-         eBxA==
+        bh=64fBQHR2i8u9oR3UY62ZgTI2mEitUHDWKavLr8Dpk18=;
+        b=e7BT3wDQKXD8Q1ZvMcxPBcqwqADymwc+SZbdo3cOmscmhZZ70k4nAaannIdORAC+7t
+         okwRrmDB0rrU/SXF52lz1l+TqJsvhnkuWFS0xHnC5wCKbOG3adUs+Auak9B7vtYXlLnB
+         49FCOkKwi5dDE6bC7yp0JAMAlyyWSvhakr0TeQjqjC+F20f6kgJ1pziHQDM0xEicmri3
+         pcCyLsS+NmBi/HEp0sbaAeYqvMtlECODbuOh9wbam7/N8XhU8m8o2VjdWEj2HV8xrPRk
+         090tBTzWutv0+2aE6cMepVX1R1vjSwv8h/gtD9VU6RG4OQkL1ZuCVckY+rl6r5xF4Dyn
+         fF5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720363658; x=1720968458;
+        d=1e100.net; s=20230601; t=1720363660; x=1720968460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2tE900apGoG5K8RVzmYNJWODr1eZ3+rfBsCAtQZIY98=;
-        b=dcnDUXPCWzHi4ZEkJ0N/eqollzrTWKSR+Aq4C5tiJAGIuL1Y3t9MZOtfP92NizqKRF
-         +q3nTsRxuHVsz1rZgBRrSyNj60awHbqg5kuPzQebqmHL+nTLS/RNalE/y6QQ/G273YkR
-         2q2BoeJw8xAaIjwuzEF2D51tp0T5UhpzGJUIq5ido+zP2+XLnIpjLNgjSDtyCDGbCHfT
-         jmzDq6TzIl3eBWY6nHKCBQ2N49qO/bPOQlrFva/X8ZthVv8thXteVMVkjJa6oFcVAaI+
-         50auU61eb2kkuwP2nVrceHLV5chjjPxTVoEwP3KSrgFbkFz9vBhRQrk/fPFjRgV8ExQP
-         rpVA==
-X-Gm-Message-State: AOJu0Yzzb6F6w/OqaWz0lGBeSWclu8r2JKPgrZHuw/lHM5Zsx7jWFecQ
-	Jy2W77/+JNX1Fb15XQa0rDCHIOkOFmd3QnL3B2zwLyjg6u6BvJN01wwY/Q==
-X-Google-Smtp-Source: AGHT+IGgURUunbjqy5kFRY0tgNvEV1b0sw4LmFMPBVsLR0z4ef2pOAKLdp9TssgkarMeYJZv7xiPYA==
-X-Received: by 2002:a17:90a:69a5:b0:2c8:5cb3:42b6 with SMTP id 98e67ed59e1d1-2c99c5057e5mr7343132a91.8.1720363658013;
-        Sun, 07 Jul 2024 07:47:38 -0700 (PDT)
+        bh=64fBQHR2i8u9oR3UY62ZgTI2mEitUHDWKavLr8Dpk18=;
+        b=kjjuRnYQ5ZGb8vfZFEjWbm3R8zNcP4NXxrt4AEgmO6rfSZW7/lHc6BqNsIXwuGRvG4
+         CoTk3A+LDQvdwEIo7/vJBb/fVuZJdJxNghvs57/z8X7hpO+pdHYGPP/+KMCECeQkKx4s
+         mtBLhgnA9Of3kBvY+4IIkkgpS5UH2xHq+hOmBr4KYFm/hMsblXh97oK070oc9wMQS06B
+         92xKTGqHyqwRqb2K1qmDMLSOkpDwhMT2UkG/isfynDGeFTRhpvpL1dBaLrp2YusRa3G4
+         mm/B/2P3RXao6v9Kzzr85wAVrhNc7B4kEMDYjaZghNaP+fB3yHU6ru7mEDTqe4HaWx+P
+         NBJg==
+X-Gm-Message-State: AOJu0Yyjg7K29dwtqgGcauN9LleyhbUUHEcLEa225X5JH7l8f8thHxOw
+	t7qttD9hQgHV/bC8+8uD5t1vpfTcrKt3DUWNydnkqhCtG6gUE98puf6k9g==
+X-Google-Smtp-Source: AGHT+IH04wBcsepKQWIhjRmN5DDXUnwFdHQNyNwGndvu3r6YH9QVYqe1vv/IWrmImB52MezDXl4CKg==
+X-Received: by 2002:a05:6e02:1ca8:b0:382:64aa:d8d2 with SMTP id e9e14a558f8ab-3839acbc2cemr133887395ab.25.1720363660049;
+        Sun, 07 Jul 2024 07:47:40 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a97a7d8sm6540656a91.22.2024.07.07.07.47.36
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99aa895ecsm6467655a91.47.2024.07.07.07.47.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jul 2024 07:47:37 -0700 (PDT)
+        Sun, 07 Jul 2024 07:47:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/4] hwmon: (adc128d818) Fix underflows seen when writing limit attributes
-Date: Sun,  7 Jul 2024 07:47:27 -0700
-Message-Id: <20240707144730.1490208-2-linux@roeck-us.net>
+Subject: [PATCH 2/4] hwmon: (lm95234) Fix underflows seen when writing limit attributes
+Date: Sun,  7 Jul 2024 07:47:28 -0700
+Message-Id: <20240707144730.1490208-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240707144730.1490208-1-linux@roeck-us.net>
 References: <20240707144730.1490208-1-linux@roeck-us.net>
@@ -75,31 +75,50 @@ Fix it by reordering clamp_val() and DIV_ROUND_CLOSEST() operations.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/adc128d818.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm95234.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-index 8ac6e735ec5c..5e805d4ee76a 100644
---- a/drivers/hwmon/adc128d818.c
-+++ b/drivers/hwmon/adc128d818.c
-@@ -175,7 +175,7 @@ static ssize_t adc128_in_store(struct device *dev,
+diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
+index 67b9d7636ee4..37e8e9679aeb 100644
+--- a/drivers/hwmon/lm95234.c
++++ b/drivers/hwmon/lm95234.c
+@@ -301,7 +301,8 @@ static ssize_t tcrit2_store(struct device *dev, struct device_attribute *attr,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, index ? 255 : 127);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, (index ? 255 : 127) * 1000),
++				1000);
  
  	mutex_lock(&data->update_lock);
- 	/* 10 mV LSB on limit registers */
--	regval = clamp_val(DIV_ROUND_CLOSEST(val, 10), 0, 255);
-+	regval = DIV_ROUND_CLOSEST(clamp_val(val, 0, 2550), 10);
- 	data->in[index][nr] = regval << 4;
- 	reg = index == 1 ? ADC128_REG_IN_MIN(nr) : ADC128_REG_IN_MAX(nr);
- 	i2c_smbus_write_byte_data(data->client, reg, regval);
-@@ -213,7 +213,7 @@ static ssize_t adc128_temp_store(struct device *dev,
- 		return err;
+ 	data->tcrit2[index] = val;
+@@ -350,7 +351,7 @@ static ssize_t tcrit1_store(struct device *dev, struct device_attribute *attr,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 255);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255000), 1000);
  
  	mutex_lock(&data->update_lock);
--	regval = clamp_val(DIV_ROUND_CLOSEST(val, 1000), -128, 127);
-+	regval = DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
- 	data->temp[index] = regval << 1;
- 	i2c_smbus_write_byte_data(data->client,
- 				  index == 1 ? ADC128_REG_TEMP_MAX
+ 	data->tcrit1[index] = val;
+@@ -391,7 +392,7 @@ static ssize_t tcrit1_hyst_store(struct device *dev,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	val = DIV_ROUND_CLOSEST(val, 1000);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, -255000, 255000), 1000);
+ 	val = clamp_val((int)data->tcrit1[index] - val, 0, 31);
+ 
+ 	mutex_lock(&data->update_lock);
+@@ -431,7 +432,7 @@ static ssize_t offset_store(struct device *dev, struct device_attribute *attr,
+ 		return ret;
+ 
+ 	/* Accuracy is 1/2 degrees C */
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 500), -128, 127);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, -64000, 63500), 500);
+ 
+ 	mutex_lock(&data->update_lock);
+ 	data->toffset[index] = val;
 -- 
 2.39.2
 
