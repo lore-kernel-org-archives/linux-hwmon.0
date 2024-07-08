@@ -1,166 +1,158 @@
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2086.outbound.protection.outlook.com [40.92.103.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA801B974;
-	Mon,  8 Jul 2024 07:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.103.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720422717; cv=fail; b=oBi9RD41ykrwyMbRTq1sJ81sphR8b457TRofdnHdPot+mftf931t+Auc3GuMOGDh8nc6ywMwQVJLSVDxNL59sScORogFGC9D4N1v6Ra4TXaCKNuD+1WOSAqqFQRpfICfj7fuzNYyJF1BJ8a+LpFIunJc2CEkr1sJ/IomO/1RNsI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720422717; c=relaxed/simple;
-	bh=jX38H/jQW1l8cWOvploavVudiSpCl4dJL0H7qlfXy68=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hQmphJz+zU6+XjcY/CuS+ltp3MFAsRr19TUvW4KWis9qDAkgYALJXPYF6uJ0MbG69BkRpL4FrnZZT5K9W2caAWHWiyLJaAftgr32p6ZBsxj3FcA3cPTBLAXuV9eeTR8pcISacgR6Y9U2WVKtYxGVmVSXmh8EWBRwEjd9sI667bo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=EG6CfMm3; arc=fail smtp.client-ip=40.92.103.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B8C39AFD;
+	Mon,  8 Jul 2024 08:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720426491; cv=none; b=axAC+o24GmMzzADe4hfLB1p7KTjj1Ajp9FEzPYVVRXnCQM2S9q7asbWh5xlk25foqKGV1acWkaCcfGvlYQhKJ+mp5FNjiQK9wR3sXo50an6sPvGTpo4oJMnQA8nP7Grte9JCgNESuI2Ej5USVHZeQ6L4uMOcRuK9RtDh597NqWM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720426491; c=relaxed/simple;
+	bh=bW2kBwLh7hLCqFmQpvVPmf6stmpS/Uma1LaKPKgxZLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gHVb96biTIJNwImR2xeGHHN+BusEcI2yZlaUxw/3jM7s69Q3uW3HaU30bNH2b4Wg2V1cSHLNSsLSSoN9NlgpJWvsCFeS6aC8CmSY+T37nDl72bJQXUWMBvf4x01hU1JecjuweG7SIznnuyWYN+VarX1tuK33kvONIokxNpIFHpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GlyOZ6FR; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="EG6CfMm3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oFebkLIS13gOOEEyPtKanTX//EmJngEs7FYtKBRxZJgXJWzzBMyM+ybHslRMtNsir4nYrR8a6bADkpeNEkui1Zs8viebK+/UwVi3BkPDaQTEVZGE3oSZTzFB5AJ+bE2xUWwPO6Kmg/3ABzZDgqsTPf5iJmjwUep+7WQfpBpCbC6RwNOMcd01X2vHkP4R26Gl/wNLKbZQtDgPbhrv1e0LPDDoxhUFm+Wvf0UnZSsIBg+Fx+SMg2KH53Qrvc3dE+VEBP+Sd66stEyaeVVacmw/iTkdHqziwPONSGlrdM/z6eYSrHjHGweAmVu0dOSb8eX7J2yBuXveV+X6oQyn9Vpsjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lPpEuvVXl2NNqEItLR5sL9PS/9JtEz5hrMRoCpU9MY4=;
- b=je87wFh8QBUSNB9ebiqfULVVPDWL/Dwkc4hEYr0tgvBwKHgxdvcNgim3K7TjXn7LA+5doe6Rgu5DNDYJ2VJYwISSKq8Wk33sD/CRZHiuEKH+gK6nQN2CQkHa5RCbCWmvpjJQd5ciERZmhcvXvAa17ZFG8y34wZTmJypD81PaeR5j0n6H2yGV0GTU1k8ukf48YKQgc01Gp3ncdiyr4FI+wdPOYGrV20Wwh+cC3pACCeh7yhCSN6MVYVWjyGSsP0xVkyRrb+zTpkrG95y4qI1/wW1xdKuOQ/8U1f1m9qG/4gpAfD/SEZFO13O2mtuWQeQSU/b2wq3mYgDXxlC6X842EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lPpEuvVXl2NNqEItLR5sL9PS/9JtEz5hrMRoCpU9MY4=;
- b=EG6CfMm3L/H50eEDqdxI/fqLE0SCHKNATh9G9sGh2OmQD49i+nhpcvx05jegsw8Zp4Zbb32MuL1AP+7D6ucLWkDJbctBjzVgsbqSu6+A0eFbfVbq7c8+Z6iBdBv7U8wgL3gy+ZfQnAPZxBMMAjztvg+NV7HpXtQvvVxnnz/iDYNT8a6eVglOrCVyIn1aClxJHV3EUiiV6gRgRYWsj6viPACmKkxpWYBMsltKsqbT6rtDgjrvsXqhxX8yVvdNRI6i6qeAQOC3xnolndoo9T5nLdVhwSe0ssC1GkeK5xjoIaBNYTbSyuLgOXgCQewXjDF2bQDVNbxmdWGG8nd74Xh4mQ==
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
- by PN3P287MB0082.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:d6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Mon, 8 Jul
- 2024 07:11:43 +0000
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c%3]) with mapi id 15.20.7741.033; Mon, 8 Jul 2024
- 07:11:43 +0000
-Message-ID:
- <MA0P287MB2822676C9CF9443B9A3CB657FEDA2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
-Date: Mon, 8 Jul 2024 15:11:37 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] drivers: hwmon: sophgo: Add SG2042 external
- hardware monitor support
-To: Inochi Amaoto <inochiama@outlook.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org
-References: <IA1PR20MB4953967EA6AF3A6EFAE6AB10BBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <IA1PR20MB4953EC4C486B8D4B186BB848BBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <MA0P287MB2822935DEA9EE418F3411CFAFEDA2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <IA1PR20MB4953230DCEDD7DF01134A8A9BBDA2@IA1PR20MB4953.namprd20.prod.outlook.com>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <IA1PR20MB4953230DCEDD7DF01134A8A9BBDA2@IA1PR20MB4953.namprd20.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN: [oc1yEjBa3zVZtTUQ5G6VQQSsnP4wgOvR]
-X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::14) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:138::5)
-X-Microsoft-Original-Message-ID:
- <f8829b4c-5ba3-45ff-a2cd-234e3c3c7e44@outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GlyOZ6FR"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4265921b0f6so15154065e9.2;
+        Mon, 08 Jul 2024 01:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720426488; x=1721031288; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LB/Swk3ycn4H//NhFUYR9qWMXgjl7noaRfXFak1SvO8=;
+        b=GlyOZ6FRwuPyUFnhN6P96zD9gvTFuYC6lXkbOoHbHGCw7kjqAEUh8eDPteQSRIO8Lv
+         tc1d5ZDsFoSURb+ARE408OHeqAb72DPbYc0AJwYMHU9pyIR/Y8TgPnpiqfw5dQmyeQOk
+         OJHV+LBMbHS+jZelhQg9kcwSjxmwg/Qes6dxXC9sycd8HN3ymdla1558si+1q+i1jFUa
+         IykClgZEx135AVIMMvL/MPlBzhcg685+uH7Am+301D8LaHpWjPUGHXrWTp0Ra6B/nXsm
+         pUMlyUpmfYjiBsaTs5iiB3eCFxroQpwLkNCcwF7Cmnb4NgCoFIZ4C/s/C8rDrWVvdVxb
+         meFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720426488; x=1721031288;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LB/Swk3ycn4H//NhFUYR9qWMXgjl7noaRfXFak1SvO8=;
+        b=ZSP6RXMG5HS5YAJfKXObUtVNe4B3Ek31zNhy2ZYqaJPXI8Oc0/UcJTT5R49jRtQy/X
+         OEOo9wFX4C3xJDmO/p647jubDmeRzpIGK66phJ6jqPodVYvyv/eGZ0qyMYgO4L1ptrTC
+         PtjdWxzKr2Dl55Ldcj4fBg+XfU+ke9EtXA3MIpOkP8G//ZNL+4lLhs9FDcYfhuEVTGEu
+         luwaRGxmVbn+8eARp8gDHVKjLPDPdnu0L0UesDzS3VXVttgqow1H3f4Vh6bfvD6mIwbv
+         tmwX24D9163mGG0qzMr1OstG9SaBD7almPtqNiD85xIvPSBrWzNbqxuq7k0N7Lg34BAF
+         oagg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiGsWAeqC/Pzw1rceg7VjpgdnsvmeLTj34op70pL9i8Gv7xELv3wiF5pI0G/3hIvprH8zgtyrRlvR2qhxgZLAGhezSPzIGA36GKVPl85KvnSHPIrTRPJCI09y9s+UDV2uB26YSHpyEEr5qI4pGiVfD8cDDZN+GL6NhUjWJ/0xLNr98SfvO+VmzHLK3zfXdrwmOcq6MO4XhyGLdSF8BvCJSE4uIp5NsRSBh2FZdh8Sz1YI7ZiwdqGcx3Q==
+X-Gm-Message-State: AOJu0YyHO+ksWWSKT92p7GRhx5i6D4NmX4S5a2biyV1bXdF8UBY/q7Fo
+	IJoNTThijwxkkOi7ggZaCTdEmyTpritiIDFlFepkb4gTu64GKHlj
+X-Google-Smtp-Source: AGHT+IG8F79NBHnf063XhYUCby0asGygjp8CO89/3eVOIoVh9aNxTtR8n7wvSe//36xefcMl+q9eLg==
+X-Received: by 2002:a05:600c:6d2:b0:426:5ef6:f5a9 with SMTP id 5b1f17b1804b1-4265ef6f63fmr37710785e9.13.1720426488061;
+        Mon, 08 Jul 2024 01:14:48 -0700 (PDT)
+Received: from ?IPV6:2a02:8389:41cf:e200:7e72:ed92:807f:1d20? (2a02-8389-41cf-e200-7e72-ed92-807f-1d20.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:7e72:ed92:807f:1d20])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a1d16b0sm152642145e9.7.2024.07.08.01.14.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jul 2024 01:14:47 -0700 (PDT)
+Message-ID: <4cf71de7-dc47-475c-bba0-a9e755f66d49@gmail.com>
+Date: Mon, 8 Jul 2024 10:14:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN3P287MB0082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19e69aa7-2018-425a-b368-08dc9f1d3868
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|19110799003|8060799006|3412199025|440099028;
-X-Microsoft-Antispam-Message-Info:
-	DLBETb3AD5yfkpn3sxeSaVc6JYZrjaP59CL5yTW9oTB3kWGK4bEEt9vHz5oezFdbjVQOsdn3YOZT9R0/PUVUi4eTGquaYkvieljK/pZkHT8IIbvJSqrjZ9zxtD+hUzdECBrmKByVv9p+O0G2lXsgSynS8BFzsbhEKnl50pRDQhqgtPisxO/X1e2OjggEusPduq2qDcjxhZMx5zea3djR4x3Z8COfgIBZ4VLY3Yj4D70nKhOgexXcOm5E/eKRVXrD9pzCpnRxH3A7/1d/AZ1RikoQhcBYawK0K1Yi9lmjYkwWmuanHdJ2Y5EC/zxb5NP736vleFKrTfqvINeGJ1LlFiCV2FKv9eN3V+DTLdPDOSb9Y8OR+61ao1jF+UQpL27DCI16+5dZ/xK6JBl6pP8Mil0hIxNre4BJFYIivyOyRSDQ10FAIQHbWoNFR5EvyRAs80FenZoXRbuuDE5klRC8kEDsYmABNIffq/gGreJYc6hZ5dVn17XS6WhZsgk8YeqBdlsjZb7PS0wCyeObq9vs27WaQjwioD8tzgXDU8ltrssm4Y7EKdLbvSbXKKDeuUlg+8BjgVwvak1kj6HDulCsC6DnPyvcBVvXi4+qKNgwH6O01RQP8bYCV/ilp0gqpNJK3t86EX+pv6rXVegwnAF/Ag==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3Z2dnk2bXNzdHcxUEYxdEN6eGlXWWhFTW81VUkzSWFpenpFMTY3Y0U4Z29R?=
- =?utf-8?B?RTNmK0tKbU9HQU92SXJVaFUxTkEzQ1BaK2kvREJkZzUvL0N5YW9OM2NrUzJO?=
- =?utf-8?B?RjB4WkJ5cU0xREQ5NFFZQWpPTkh3Si9qcFBBTWdUNWNQNmFtekRtYU5XdVh0?=
- =?utf-8?B?L1gvSzdsQ1N6K21MckhyY2Jtc0ZNU1kwVE5uNndiditLZytSY09DYmt6MFJt?=
- =?utf-8?B?Z2hPQXlleUpZV3d6RVNJWWUyZVhmL09LMUZZQ0Jqbk8yZnRQc01xYWk4d1hG?=
- =?utf-8?B?TURlSTc3UVlFaGNrMHlFaDB3aDhJTElORjdVa1BtWW1neWhsYjgreHlhUkgy?=
- =?utf-8?B?SFdETmlEZXQyOCtreTRnK3JTYm9Ca2t2RDhzWkF0RnZER3VHdlUyenIvTFVP?=
- =?utf-8?B?cVhXZm5EQVoyTGtmNlFJUHNjam1sQ2hFekM5SXdsTHE2aTQrazBDOWdwMEc0?=
- =?utf-8?B?V0JoN0RieHozVU50blNTZ1dnTmFWcDdYUHc0cENMQW15RnJXRjNiWWpwM092?=
- =?utf-8?B?QVNVUTg1RGhWeTdPK2Vocmd3b0dVVHluTEtPanE2TVpGYXJLSlZ6NmlvekhW?=
- =?utf-8?B?VTRXeFhnNGhtdnVUelk2ek1YQlRXaXNVTHV0dTRTZEhaMjBaNVpOdTJUM2hU?=
- =?utf-8?B?T3JsbkRBK2orZ2hpWmN1dEhRV25vbFFlUk1GMGJ2OTBFaWpCV1FrditOQ1lt?=
- =?utf-8?B?SEJUSDJqTjBlWWJvcldVZ3VjblRpckZEZEx3aWg0aHhLQnJjdW9aSWN2MXFO?=
- =?utf-8?B?Wnh1czNweUFBWnVxNlh1NHRJM3JPa2FHVGg0eHlMWFo0Nko1S3dzTG54SkFp?=
- =?utf-8?B?ditMM1ptdCswMU5YZFMrYWFzeGh5cG1lcktzYldFVCs1SWY0c0lEMkVTZ1o1?=
- =?utf-8?B?NkRWS3VqS3lwK3c0bDZlQVNEYjJvdHcxc0pmUUV5UzI4NExyOVZ3djVlcmVD?=
- =?utf-8?B?KzJNalBxUXI2VlBJU1I1YlcvNFZFRFcwdnFxNkFDVy9jMGIwQWhjcVRsSjRN?=
- =?utf-8?B?VC9vRjYzV2FtZ0FVSGNNQlhpTDBGY2x4Ky8yN1IxRW05eDZLUHdQTHhLN2hD?=
- =?utf-8?B?RVoxYXNPdUJ5Ynd2c1NNTG01ckU5YU83TE5VSG5HUlU5dWR2SWJQaXA5S0pS?=
- =?utf-8?B?Nm9PTHJDUUpiVVpMTjVxWVUzdkVXd3VNVTlxaXRzNVBmaWNERlVpMHlpL1lu?=
- =?utf-8?B?WmpCRmI5MUdrbFIyWHZHY25Jc0duWk5rMnNDSjNuWGFQMVJOMHQ3Sk1DK0J3?=
- =?utf-8?B?L3F2ZzFMR29pU1ZRVE1JbXJicmRBTDF6NTNqY1BrNitmd2JORUtKaW9wa1R6?=
- =?utf-8?B?ZWZkODg4Z3Fkb1BYdUJCTU1qWlhuRnVDdjVlVFh5SDh2U2pZMDljOERONlVa?=
- =?utf-8?B?RjVGTnJOMEg3bThmWU1haFBNS0dTaW14L2lWQ21aUHorT0pkay9lN0gxQ01T?=
- =?utf-8?B?QUZBTm9vWks5VVpnV2grQzg5WGY4V2NCU1BXSmFaZHRVWlNxelN1QmFCN1Jn?=
- =?utf-8?B?T0hkNUJnTldQNktzSms0dVJ3Tm1qVXdQUmROZEdwdHc1OVBCMU52K0w3NzhG?=
- =?utf-8?B?elpLdzh5V2dnbjRPSXBvdkZGTkx0MEEveE9WL1RJallyY3E2dlBsQnZDN2d1?=
- =?utf-8?B?NG0zdFQrOVdmb0dJYlVSNE9JRnJrNTNmRHFyemI2cDRoV21hRnAvV1FGS2Fy?=
- =?utf-8?Q?/m1oMrv3xQVQieiRysmj?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19e69aa7-2018-425a-b368-08dc9f1d3868
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2024 07:11:43.0601
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB0082
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] leds: bd2606mvv: use device_for_each_child_node() to
+ access device child nodes
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+ Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
+ <20240706-device_for_each_child_node-available-v1-3-8a3f7615e41c@gmail.com>
+ <20240707175713.4deb559f@jic23-huawei>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <20240707175713.4deb559f@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 07/07/2024 18:57, Jonathan Cameron wrote:
+> On Sat, 06 Jul 2024 17:23:35 +0200
+> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+> 
+>> The iterated nodes are direct children of the device node, and the
+>> `device_for_each_child_node()` macro accounts for child node
+>> availability.
+>>
+>> `fwnode_for_each_available_child_node()` is meant to access the child
+>> nodes of an fwnode, and therefore not direct child nodes of the device
+>> node.
+>>
+>> Use `device_for_each_child_node()` to indicate device's direct child
+>> nodes.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> Why not the scoped variant?
+> There look to be two error paths in there which would be simplified.
+> 
 
-On 2024/7/8 8:53, Inochi Amaoto wrote:
-> On Mon, Jul 08, 2024 at 08:25:55AM GMT, Chen Wang wrote:
->> On 2024/7/3 10:30, Inochi Amaoto wrote:
->>> SG2042 use an external MCU to provide basic hardware information
->>> and thermal sensors.
->>>
->>> Add driver support for the onboard MCU of SG2042.
->>>
->>> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
->>> ---
->>>    Documentation/hwmon/index.rst |   1 +
->>>    Documentation/hwmon/sgmcu.rst |  44 +++
->>>    drivers/hwmon/Kconfig         |  11 +
->>>    drivers/hwmon/Makefile        |   1 +
->>>    drivers/hwmon/sgmcu.c         | 585 ++++++++++++++++++++++++++++++++++
->>>    5 files changed, 642 insertions(+)
->>>    create mode 100644 Documentation/hwmon/sgmcu.rst
->>>    create mode 100644 drivers/hwmon/sgmcu.c
->>>
->>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
->>> index 03d313af469a..189626b3a055 100644
->>> --- a/Documentation/hwmon/index.rst
->>> +++ b/Documentation/hwmon/index.rst
->>> @@ -203,6 +203,7 @@ Hardware Monitoring Kernel Drivers
->>>       sch5636
->>>       scpi-hwmon
->>>       sfctemp
->>> +   sgmcu
->> This driver is for sg2042 only, right? "sgmcu" looks be general for all
->> sophgo products.
-> Yes, according to sophgo, it use this mechanism for multiple products,
-> so I switch to a general name.
+I did not use the scoped variant because "child" is used outside the loop.
 
-But multiple != ALL.
+On the other hand, I think an fwnode_handle_get() is missing for every
+"led_fwnodes[reg] = child" because a simple assignment does not
+increment the refcount.
 
-[......]
+After adding fwnode_handle_get(), the scoped variant could be used, and
+the call to fwnode_handle_put() would act on led_fwnodes[reg] instead.
 
+>> ---
+>>  drivers/leds/leds-bd2606mvv.c | 7 +++----
+>>  1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
+>> index 3fda712d2f80..4f38b7b4d9d1 100644
+>> --- a/drivers/leds/leds-bd2606mvv.c
+>> +++ b/drivers/leds/leds-bd2606mvv.c
+>> @@ -69,7 +69,7 @@ static const struct regmap_config bd2606mvv_regmap = {
+>>  
+>>  static int bd2606mvv_probe(struct i2c_client *client)
+>>  {
+>> -	struct fwnode_handle *np, *child;
+>> +	struct fwnode_handle *child;
+>>  	struct device *dev = &client->dev;
+>>  	struct bd2606mvv_priv *priv;
+>>  	struct fwnode_handle *led_fwnodes[BD2606_MAX_LEDS] = { 0 };
+>> @@ -77,8 +77,7 @@ static int bd2606mvv_probe(struct i2c_client *client)
+>>  	int err, reg;
+>>  	int i;
+>>  
+>> -	np = dev_fwnode(dev);
+>> -	if (!np)
+>> +	if (!dev_fwnode(dev))
+>>  		return -ENODEV;
+>>  
+>>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> @@ -94,7 +93,7 @@ static int bd2606mvv_probe(struct i2c_client *client)
+>>  
+>>  	i2c_set_clientdata(client, priv);
+>>  
+>> -	fwnode_for_each_available_child_node(np, child) {
+>> +	device_for_each_child_node(dev, child) {
+>>  		struct bd2606mvv_led *led;
+>>  
+>>  		err = fwnode_property_read_u32(child, "reg", &reg);
+>>
+> 
 
