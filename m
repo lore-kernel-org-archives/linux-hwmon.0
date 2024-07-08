@@ -1,61 +1,59 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87E91C06;
-	Mon,  8 Jul 2024 14:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD59138C;
+	Mon,  8 Jul 2024 15:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720449808; cv=none; b=nyedgPm6bhL3eAVvCvM3BhLkeT+/S69UYlVSFwKDCEpDJeZWQfHQuYuA6abmVnraaneQHYB2Jvo5RIHwqaBLv53TVjrp43nEiV3K0Tx5zAInvr1y0f0wgQFmd29xMyU0BLwhpVqfEJp8Cbx/zEb5+ZXCxjTjl2Q9IVbe7q7+iI4=
+	t=1720453550; cv=none; b=SChIqXEUTz40+UbHFkq0xwaerX2a+Y9AkUcWMhmBnjNoA1G0Any2UZxn9mB+KCozZSqeNr4Z0VycAc8DtKR27iSXktCewKGqLUEY1A1/xpiDWPawc0n9PqWYexq3UFE6NsZjbDLLXenWIhHr79i7xqnOpCDIqy/cq9Q4rSxtJos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720449808; c=relaxed/simple;
-	bh=CHWqoIV9RCwtCwzWQhYtMQfO1WmPimGp7WMmqX2bbI0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jxwo6p4xXz6es+rVG6qoASvwbHKzDUeunp5C6AdIM+TRCgIW+aWPaRc/AAB4MkOoFGxPYuFMT93FHpLJwUawL/dH5svl8D2AC0WfvQWS0zlPnAV58GHLptvrXuM6Mk/IkI2/9knokruvXO4Uj5dkE4moI1Q/ctlDuvmFARYDD08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KfVRk9jo; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1720453550; c=relaxed/simple;
+	bh=Lno49dn6Wp3XRCaV6biRDC5IjTigepJR3LEZe26mXSY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=A24uAfKHmLKocZlD/0pFwcHsfMKQ5kEc5aEeQIi36X0kp1rRBIfJhWPb/u7D75j9NQJSirprJ5KNONR6caP8WqynVHJLjT5OSrLig5rFPTpPNycaV1FYhJWfmOcd0GJJNmZJLCHRf3cTdpyhXzZxnmBsUwYgsQJl8OnS6Ir9fjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5YbolPp; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KfVRk9jo"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1fb0d7e4ee9so26012685ad.3;
-        Mon, 08 Jul 2024 07:43:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5YbolPp"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42122ac2f38so25028775e9.1;
+        Mon, 08 Jul 2024 08:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720449806; x=1721054606; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OR72EgiGejdHn+1BiHKQnjBsdzjCQp49d2Jtk5/6u/k=;
-        b=KfVRk9jogkoQ1jDNLWYfNF/gKNd7cZALK+opFz93ilXNyjG9XZLiBFh8fB9p8CnVqn
-         qugJwiwv0nS+h/SS/VKFihRoK7NfjRa21mpuC8AtHXIh5XThvcON+lT23TUSZ+mgYvCE
-         JjVHpEb5syh9lP7I9kdaaOh4SLczRlJ1oz9Vl/aewBM4JCHWCqNlrxYNvwyX9vfPq2r5
-         QotO2bSjAl+Vg5H4zZSf8Bng4tctxBKQG8ZT7n2jBGr4VbhWP5LD/Xno12SOVkI1S8Cf
-         Muh1pT4QZl9o1rZkYENEW8ryCho/sa3ER2maQUnvcyfmtfdzTsc0BESwNda/JTJBKKA4
-         juCA==
+        d=gmail.com; s=20230601; t=1720453547; x=1721058347; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qkICa0ofvLlVTjjsmaahvBqbNaY6s0KcNDXv8H869/w=;
+        b=j5YbolPpwdIiDL2vrPStJbRtMwyCeIJQEinF0UD+JHipfMcOY8zX5K57kby037aqV8
+         7fms1x61VPzkPiTXt5OYAeEfyfk10Xxr30r2uaOQ6FPKvltT70vT7b7zwcFentHJWAJ4
+         RgnZ37uchy9FSMA0RHJmlZffWgOArpfwFM3YqWCq1qvmITscGqg7Rqw1bikv/URwLdo0
+         1Fb4YvNGfijIO9VSIIlxR/TobZc4ZLXY18gLuu51m2n9FRlhOTAB5CGdvbclX70scSSO
+         fW5Uxg44HMx6xjQVJ9KpHcNPX8/yvkEmhiDUq0YuoiSbHSQOl5zZFBWF7EpVK77+FcKp
+         L5kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720449806; x=1721054606;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OR72EgiGejdHn+1BiHKQnjBsdzjCQp49d2Jtk5/6u/k=;
-        b=Dbg14my7aYD28bzUVrpbzd2B5OeeUbFp7yFRGO02irWIvpcBFbSWQKqQLMAw/gF2Rw
-         9AfnDQyrQPqPDvbYyvdOfamH9lBjFzLTy5sBFZ0j6BpM3QK4MTjsgIwL34DgP04i0NvP
-         O6/T8PAQJmkyFSJRXn/7zTyJ87TzqNEPdQ0mlXv+bq8sWJbSvLJ4oQNMxcnUaJxOPFAB
-         +xAKvRMY8R00hIaE1StCSc6TrW44mnq4mJOvagRbIBLIHsXMV+UIx1bYyRyByuO1LrYW
-         hqUFF/bWLW29RT5r2p8AY9/HfKN6aLlZ0dQTDTeO4DvCGb7s5IJBSXNsMSbg3FcC1qoq
-         RnSg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdM1YjQpCx+AraQ8P3z/o3vht5+DjRYhYE/x4P8uWxOhCmxRIFd0UiTtcV5KHRjD8BdKi6AMvypcZdZzhJVmn94teKFxs7WTfN5sE=
-X-Gm-Message-State: AOJu0YxIe4spkswnzQneHBYGikzG+bId9pMcG6rlf8oGR2aO6pcwby4j
-	lB3JH07lvYIyzi5+J5osOMbhM3+tKB2OkadMr28eY5puj/T8/Q/H
-X-Google-Smtp-Source: AGHT+IFgHiNaL7yJfpctkH7CTVXFOojbuEkw1n7xgVIs0z64cnq5x6HNe58jAX+ZIwjpot0A9TZFHA==
-X-Received: by 2002:a17:902:fc45:b0:1fb:7de2:8dc4 with SMTP id d9443c01a7336-1fb7de29030mr48477755ad.57.1720449805635;
-        Mon, 08 Jul 2024 07:43:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb5bcbaff1sm49027515ad.8.2024.07.08.07.43.23
+        d=1e100.net; s=20230601; t=1720453547; x=1721058347;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qkICa0ofvLlVTjjsmaahvBqbNaY6s0KcNDXv8H869/w=;
+        b=MKi35TBQ/8all9UvLJ+PFVyuNtk/V8onrYNNIuJTu9Y9C/Ob3JA6ot8Hq+wHNFICFw
+         EWhyMlSn/e7P/fbELFn/YcQyw2WwIP5KIvWDg2xKVAu4mJ4PtgO8XPEhMNwBdpIHhwp2
+         svVBpIeVTBDC4V+uBmIP8Cf0byqb8bCV+Y+dZl6e35GvWBZuPWQRtmsF218jhuCYc/dJ
+         hwbRLA0JTzRWfjjG7pUT80ZwkvTJuTuJj5wwgD0OQfkc+s5VwDDBtBfWiFRiVbKjh3lx
+         AgUog321D9xLrHhoAftRK/IEOH1zJczzTUPUZo1vjA3ckh7AdudWwVJQu4abtGVTZxTI
+         E8hA==
+X-Forwarded-Encrypted: i=1; AJvYcCU7fPKnw6lsreEstvX5jU6z0p17ypTyPzTiaTdHJGg9DSchLYPZMIpxcsZ5PXQyd/le32ymIKSrJEJYZflTRGkdbcw20ul+4fxoI72R92qtMt2yeekz9kFQkRrr0yt74O2o3sYrLMDtT1Iaa16+73KE+i6JcKONdIAvYQbeaqnULR28TuXx0YUz0WhWJcf02+eoDkad1+g+uTh0b7PaLyP+w6Wef08k6/OQ7ySj1nc9X9LyOnN+V9ddLw==
+X-Gm-Message-State: AOJu0Yx2Bp/gZk3Bd1SSa1/KmpUd6FBHGGssmR6fEFvJPMHIm6sLRkQ4
+	ZXDk4GOX19jkKL9ILwUN8703QA1Bm/1qzzNh6nIRTyH1u6PvMsBL
+X-Google-Smtp-Source: AGHT+IEPZ7bBGfEpmnLUfGsNXVTk4kA/uPf8kqKXrCigSFsssX0ifq5fYeIZEnN6//AqJ9JvXtUdhA==
+X-Received: by 2002:a05:600c:1c98:b0:426:5fa7:b495 with SMTP id 5b1f17b1804b1-4265fa7b6c3mr55487905e9.15.1720453546702;
+        Mon, 08 Jul 2024 08:45:46 -0700 (PDT)
+Received: from ?IPV6:2a02:8389:41cf:e200:2322:5f32:18e0:d6c4? (2a02-8389-41cf-e200-2322-5f32-18e0-d6c4.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:2322:5f32:18e0:d6c4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6e09f1sm3388355e9.1.2024.07.08.08.45.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jul 2024 07:43:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2c378a1-0137-4c31-aa38-34e808406f36@roeck-us.net>
-Date: Mon, 8 Jul 2024 07:43:22 -0700
+        Mon, 08 Jul 2024 08:45:46 -0700 (PDT)
+Message-ID: <2cd45260-e737-43e9-9bf6-c267d6f86ad3@gmail.com>
+Date: Mon, 8 Jul 2024 17:45:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,86 +61,118 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 09/11] hwmon: (amc6821) Convert to use regmap
-To: Quentin Schulz <quentin.schulz@cherry.de>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Farouk Bouabid <farouk.bouabid@cherry.de>
-References: <20240705213547.1155690-1-linux@roeck-us.net>
- <20240705213547.1155690-10-linux@roeck-us.net>
- <e38ceaf9-c904-41f1-a32d-14a150c92f30@cherry.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <e38ceaf9-c904-41f1-a32d-14a150c92f30@cherry.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 3/6] leds: bd2606mvv: use device_for_each_child_node() to
+ access device child nodes
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>,
+ Andreas Kemnade <andreas@kemnade.info>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+ Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
+ <20240706-device_for_each_child_node-available-v1-3-8a3f7615e41c@gmail.com>
+ <20240707175713.4deb559f@jic23-huawei>
+ <4cf71de7-dc47-475c-bba0-a9e755f66d49@gmail.com>
+Content-Language: en-US, de-AT
+In-Reply-To: <4cf71de7-dc47-475c-bba0-a9e755f66d49@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Quentin.On 7/8/24 03:58, Quentin Schulz wrote:
-
->> +    regval = BIT(5) >> FIELD_GET(AMC6821_TEMP_SLOPE_MASK, regval);
+On 08/07/2024 10:14, Javier Carrasco wrote:
+> On 07/07/2024 18:57, Jonathan Cameron wrote:
+>> On Sat, 06 Jul 2024 17:23:35 +0200
+>> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+>>
+>>> The iterated nodes are direct children of the device node, and the
+>>> `device_for_each_child_node()` macro accounts for child node
+>>> availability.
+>>>
+>>> `fwnode_for_each_available_child_node()` is meant to access the child
+>>> nodes of an fwnode, and therefore not direct child nodes of the device
+>>> node.
+>>>
+>>> Use `device_for_each_child_node()` to indicate device's direct child
+>>> nodes.
+>>>
+>>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>> Why not the scoped variant?
+>> There look to be two error paths in there which would be simplified.
+>>
 > 
-> BIT(5) doesn't have real meaning in the datasheet, what is in the datasheet though is that the slope is 32 / L-SLP[2:0] (well, you can more easily guess it from the datasheet than 0x20 or BIT(5) IMO).
+> I did not use the scoped variant because "child" is used outside the loop.
+> 
+> On the other hand, I think an fwnode_handle_get() is missing for every
+> "led_fwnodes[reg] = child" because a simple assignment does not
+> increment the refcount.
+> 
+> After adding fwnode_handle_get(), the scoped variant could be used, and
+> the call to fwnode_handle_put() would act on led_fwnodes[reg] instead.
 > 
 
-Good point, though it is 32 >> L-SLP[2:0]. I'll make it 32 and add a comment,
-but I won't send another version.
+Actually, the whole trouble comes from doing the processing in two
+consecutive loops, where the second loop accesses a child node that gets
+released at the end of the first one. It seems that some code got moved
+from one loop to a new one between two versions of the patchset.
 
->> +        ret = amc6821_get_auto_point_temps(data->regmap, 1 - nr, otemps);
+@Andreas Kemnade: I see that you had a single loop until v4 (the driver
+got applied with v6), and then you split it into two loops, but I don't
+see any mention to this modification in the change log.
+
+What was the reason for this modification? Apparently, similar drivers
+do everything in one loop to avoid such issues.
+
+Maybe refactoring to have a single loop again (if possible) would be the
+cleanest solution. Otherwise a get/put mechanism might be necessary.
+
+>>> ---
+>>>  drivers/leds/leds-bd2606mvv.c | 7 +++----
+>>>  1 file changed, 3 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
+>>> index 3fda712d2f80..4f38b7b4d9d1 100644
+>>> --- a/drivers/leds/leds-bd2606mvv.c
+>>> +++ b/drivers/leds/leds-bd2606mvv.c
+>>> @@ -69,7 +69,7 @@ static const struct regmap_config bd2606mvv_regmap = {
+>>>  
+>>>  static int bd2606mvv_probe(struct i2c_client *client)
+>>>  {
+>>> -	struct fwnode_handle *np, *child;
+>>> +	struct fwnode_handle *child;
+>>>  	struct device *dev = &client->dev;
+>>>  	struct bd2606mvv_priv *priv;
+>>>  	struct fwnode_handle *led_fwnodes[BD2606_MAX_LEDS] = { 0 };
+>>> @@ -77,8 +77,7 @@ static int bd2606mvv_probe(struct i2c_client *client)
+>>>  	int err, reg;
+>>>  	int i;
+>>>  
+>>> -	np = dev_fwnode(dev);
+>>> -	if (!np)
+>>> +	if (!dev_fwnode(dev))
+>>>  		return -ENODEV;
+>>>  
+>>>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>>> @@ -94,7 +93,7 @@ static int bd2606mvv_probe(struct i2c_client *client)
+>>>  
+>>>  	i2c_set_clientdata(client, priv);
+>>>  
+>>> -	fwnode_for_each_available_child_node(np, child) {
+>>> +	device_for_each_child_node(dev, child) {
+>>>  		struct bd2606mvv_led *led;
+>>>  
+>>>  		err = fwnode_property_read_u32(child, "reg", &reg);
+>>>
+>>
 > 
-> I would have been more comfortable with
-> nr ? 0 : 1
-> 
-
-No, because that is a conditional and 1 - nr isn't.
-
-> Only nitpicks, so:
-> 
-> Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
-> 
-
-Thanks for the detailed reviews!
-
-Guenter
-
 
