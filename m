@@ -1,203 +1,239 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2050.outbound.protection.outlook.com [40.92.21.50])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5C14084D;
-	Tue,  9 Jul 2024 02:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.21.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720490640; cv=fail; b=V5PYp50IF4+GM+EFv5xxIlQJX3MHuSEgOtaf5RXygebd69G4JCRUTwsB6+mtXJL/dCuq+ZjBQS2GnUV5/jf02APPr3g/n5athZLgBL30LE4d2YpNU1CBEkhCW23GXfbbDgfrSSn1OPFVstmCJ0OqMkQs1cElhuliKfIejEoC6wA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720490640; c=relaxed/simple;
-	bh=Sxu1JkmkOMuUHlXcpPYT1ey/0EyVTN8aTKwfX866XZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=bwc+FH4+zV3rrVRQBc8aIfR2x88flaejwmoTVb0bCCujEZN5SnQQVlygL7IHYe7C62Q5uqpX6R1kcTAtnyTg3iGq4SVNsH//brE8s6xVA09qaU9NISZSe5WQlAMy1dshRbtlMPrC9o22OIOewfd0LeNsiXKHVSHPCs4PjceKXc8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ELrnBWG0; arc=fail smtp.client-ip=40.92.21.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFC412C48B
+	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jul 2024 04:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720500007; cv=none; b=NmavwVweeTvSmSUzvon53XlyPcQXI2c6KZYbbBk3wC5Z3ZPly/sZmo+RjnJAcRKbl5+qPEfCEZ0QDy4yu8FbbjYk31/AOTIJLiZ6MO25u51jYqYIbL1TsZS0GNeGLUBf8KwS5AF4N7ByWpfFdms/31k1hIUsb8k4vGEINFuRj3Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720500007; c=relaxed/simple;
+	bh=LeY9f0EG+MSezoKDOhd2hA6cUvlQGzzBb1ytlZrWj90=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=E5uiFUMsO2FAONFA5ymxESAQMnuCb5hfvmQqv+bFeiBQ/c+JfJigmgyzYrbW5tgJL5bkcqJty5BmAWmPsW8FmqDu5uhMsIDOku2GT0kHmNvLNtykVBrqFuwQQ4bo36c5Wnyg/zx39o9Rmylk15PVmSIJn7af6deEGk/yNzxLfko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H2hBD1+U; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ELrnBWG0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S9aHuVP9kcjrkayGsn5Y3vsq91sKcpu6c9TDc0IiDSoXW6+LDVt/MlxjYjmCKCxVksh1zSYeQJvLCqkjEAybEdyFpKmGttz0X2cydilzDPC2I+qjFBiUWQsUe8FVoWePwchgiDeboGVxVY2BQ05pb2NfzZEBa36HoW2Bv6IbJER9UUvA6OzyC3nPnnby61PlUzkDIDevTq/JAYN+Gnb4c0jNRjmPb07aqhQmkpYR2gSVt3QAZ+avh3o7TKLqUX32gmSnTbwlVW8lkVfsCkRuWs1PwXOJvNr5VavbkbXPuXDEOASsaMqaf30MwSQioBRC4ANgM092PCA80sW6iJaGiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NnOPAnhDTOE+coMH2dRD1Dc4s5g0uuYjrHBKhEgyosw=;
- b=FHv9MXz1IzkuGHr5gT8AU3MT/IPDbhmOgu7vq9OFAStL92yQ1lLPzXSMRsd84IffA57GGiU6yK7PLZtb2U4O+YxRwLzkZo+ciVBJNHZwJj+enXl4ieyKrIaCEUGso+x6DSzO3Yy/6Em+8xcB2ez2TT3WV7wIQuB2INLPcLHtEtgRFVY9RyjmRZY/+haoeOvQkNwV6fQZyvilveThzUnqvtZdFQtih6ovga+JvbKTe0zpGPC1T8WeACfauzpMYeACNmCs3ipjPI1calHCcbdX2m4c31MPOA7TN49GGo0OCDZd1po4c7jARZpIg/DMlRgpCHTmMt77rawt22RhHy74Rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NnOPAnhDTOE+coMH2dRD1Dc4s5g0uuYjrHBKhEgyosw=;
- b=ELrnBWG0tMErPQDffabDhm+t4OHZiipMeHhyalfKEsTQDwgz2iBI9Vx8gRUjGhOB1bZvDzbwi2OL3Yy/0EyYohIFIXLlXkcsAMW65AYvA+xIj4voJnvLgVey8pCrvfvzub0xB09qVdxZNhH/ueo7Q4CjO6BHJWpVcOzUBq12A2w0z9ZyYAy82qGU8h3lEF6cy7vljGjWexUK+oJGIZUI6oFi5/wJBmPJ22bab4FZClg3qwJ32310ILjTSs8qStXwcDjyO8WkQ3soFzrltAjueOMPBLG/qhc17FiGNEwZOMf7nUIX/+m/UDzotd++EM2NX6Nw1LNAAqzi3mTHvC2G0A==
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
- by CH0PR20MB6708.namprd20.prod.outlook.com (2603:10b6:610:18f::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.36; Tue, 9 Jul
- 2024 02:03:56 +0000
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149]) by IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149%6]) with mapi id 15.20.7741.033; Tue, 9 Jul 2024
- 02:03:56 +0000
-Date: Tue, 9 Jul 2024 10:03:18 +0800
-From: Inochi Amaoto <inochiama@outlook.com>
-To: Guenter Roeck <linux@roeck-us.net>, 
-	Inochi Amaoto <inochiama@outlook.com>, Chen Wang <unicorn_wang@outlook.com>, 
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v6 2/2] drivers: hwmon: sophgo: Add SG2042 external
- hardware monitor support
-Message-ID:
- <IA1PR20MB4953092189839BB66599E3EFBBDB2@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <IA1PR20MB4953967EA6AF3A6EFAE6AB10BBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <IA1PR20MB4953EC4C486B8D4B186BB848BBDD2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <MA0P287MB2822935DEA9EE418F3411CFAFEDA2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <IA1PR20MB4953230DCEDD7DF01134A8A9BBDA2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <MA0P287MB2822676C9CF9443B9A3CB657FEDA2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <IA1PR20MB495309AA07F1B77D4DA1EF6BBBDA2@IA1PR20MB4953.namprd20.prod.outlook.com>
- <b12fc4a5-1b12-4d59-bf21-edd583a81b4d@roeck-us.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b12fc4a5-1b12-4d59-bf21-edd583a81b4d@roeck-us.net>
-X-TMN: [qXW+/GPufBYUGm8nu28gQnAc8zygkLKtS4TQcoXNujM=]
-X-ClientProxiedBy: PU1PR04CA0016.apcprd04.prod.outlook.com
- (2603:1096:803:29::28) To IA1PR20MB4953.namprd20.prod.outlook.com
- (2603:10b6:208:3af::19)
-X-Microsoft-Original-Message-ID:
- <qzo4efgcxs3okmo42zbqldfvku2bei7etul3dqwdvl72fbi6qr@bxa3ex4nqtyb>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H2hBD1+U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720500005; x=1752036005;
+  h=date:from:to:cc:subject:message-id;
+  bh=LeY9f0EG+MSezoKDOhd2hA6cUvlQGzzBb1ytlZrWj90=;
+  b=H2hBD1+U4ztFudtnAztDMM7ASxcQln9qW71xkXnkR2AHjlKWVGZMUuW+
+   QmohKcZzCqhEf3hzwIXH9sSEqRpmWGxCKalSpni52UM2TwNfMZph/oVYH
+   SmcDbgHITPY+2ZZL+G1JqVq9wezhBfA/Jthji3IipLq1gRENMn+z4iSlj
+   7l7yWfzBVzmi59HaUpeZ9bGB52krsHLOLDreCYb6zM5sdi9xVpCf6/H5M
+   9RA9cBi31MTuHoV+SBtPbNBQXnCQVpzgY6NwuUd/Wdn4q2VmU/C0YZeTJ
+   J6R1eFB/Ji/qtLO5i04LHqiUw/jW1LQLA+X+nP20gxpYJ/oyMlTU4RLvX
+   Q==;
+X-CSE-ConnectionGUID: rHFE5DCyTdC4A33DpRbOVg==
+X-CSE-MsgGUID: ueEb5WW6ROOB6XTBQkUKXA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17833922"
+X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
+   d="scan'208";a="17833922"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 21:40:04 -0700
+X-CSE-ConnectionGUID: FlutieHoSKCTQe6AHRRrTQ==
+X-CSE-MsgGUID: C5JkgVTyQoWylwlkZxwQBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
+   d="scan'208";a="47491889"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Jul 2024 21:40:03 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sR2e1-000WJu-0Y;
+	Tue, 09 Jul 2024 04:40:01 +0000
+Date: Tue, 09 Jul 2024 12:39:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 4814241a5817ce8140dda8f1375bf76f99e68697
+Message-ID: <202407091221.S9WwUelv-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|CH0PR20MB6708:EE_
-X-MS-Office365-Filtering-Correlation-Id: 253ed462-2358-42b7-0429-08dc9fbb63c4
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|19110799003|461199028|3412199025|440099028|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	eJ0w805/z/FhvaZ/YWNyB8mAXSmsHD90T/iuPXJs1JNzHNZXtk5Q8ATO7Ui1oNHFjXgzUpmnhz7WK8wpZyUmlMyHQPlE3AuU6ovMxMDEz16GFfBErknHvYYdQSmAgp115DDUrJEKypd/kdc6dwynL50vrdHNX05KhZoSO4qeSQ5Ii0RE/QekYlivOatoU2JzdXF6zUTyjAwM34dXdRjGw797ZtAb5Wj2J6FHH0wWbhPnKnaiEKpJB8sLeVcwC9RhA9UZF0pmvXlGZOVVw+9CTdv3mL8hXmSOWavARVUygC+NaGZWYtSGnisJHHKLR9CtrzaGycoeEdY/mmjPS03xgm7aWMNh+wi6hMOSppwZ5lTeCLVUxYBdCsh+/L9e2ii+Ir9XtXY3O8Sr55vL5qV9/YjmLFVvfV9k7uxtlGfUj5HTjfzGdyA4Vc4w3RXTNYVtusvcjq1ljKCre+44SFejeun8CZpChBs6YThzNwNEJBel4PBmIKk5aYKctrh8RpdIugQhGIOdW6WDOoR3abuiDjen6YfmnkWcWR00xV1DEmRw4prw7TzUek8Gv0EDKf48c0kgtGtdjEnyEeBZzTO/7vzhG0rQL8FBWOGQLzUdNESQbQkPxtJ5Fqtw8Fda6vgmuXqweiZLHc379N0O5XFoJa+j/USN0BYb87Lbum9PWIw=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/0G2oeMhSauLOfxmzel2JBO/L/XYyzJANUOqX2kx/GKSKyj5IyPCgjl5Ssug?=
- =?us-ascii?Q?hMsMEaAxFKF+YttSUV4Z5gqJSg5BOH7h19TIVr6J0N1rsVZlsq/qGgqtq6Yq?=
- =?us-ascii?Q?VPxkk6M8F/kcz/J4zmwpSa93jb99tALOVsLcT53qiTpdJ095R0XztmcqxhKe?=
- =?us-ascii?Q?fN19sZFcWm1Hwau6MhTBzA9rNgAGQQ683b3NGQSPWOCPfj5PJkpiTrLLbYrr?=
- =?us-ascii?Q?7z7KkT5Ym8BZ6qQ2CVmIvUY+q2JOZvHFfSBjAZ3A4CvCxB6ZpSjRUZnDlxTu?=
- =?us-ascii?Q?3fsqBJitg+8W39MVqqNm7wEyMEjY86PZP2x24UIVXTxqzVFgH7FXcAbulLlf?=
- =?us-ascii?Q?JCQzDSLOKizvb8Q/Vd7EJuiDsTUNPaFeztPJkkcGO9J30TjhEzNnXIl+PKg+?=
- =?us-ascii?Q?CpDOcqIaTmfwLFTs8mlggWoDqVlKbz4Ewe31a+3ruDlDI0wmAAF/p8GPRE2D?=
- =?us-ascii?Q?rnKljIGl65Y02FvhtOkipuj/1uKVKdQhiTpUMeQfcAeMNgtW8mo8JrO34j4O?=
- =?us-ascii?Q?zPrSiF62ESvA+Iz6lYrgLkgb+f2fWVhyNUHVVBHV42LuaNKIgZbQWAWIrKWJ?=
- =?us-ascii?Q?qTmdh+H7SiNhbYEldd8oZtBsSy7EU0+QpuwvgsQAkiSEfydXqhUKqhtQHoNh?=
- =?us-ascii?Q?gHioMS4aDIbSBQXifJF1BIkMAUxSNKBm13qKhDf/4kxoJCK5rswe9htFrAVu?=
- =?us-ascii?Q?xK65QPGg+Q84iDWB5XTlDX3X0Xo03DqvF4FibGXYyk7LiJ8W13zWaLMwJ53t?=
- =?us-ascii?Q?JLxo7SLsGEWUPSWNT4CbX5CEmM0wVD4/UgvC0J1k2Y/MlP4C7CdGDKXni9Py?=
- =?us-ascii?Q?Al/LMxTgMAp15ojBufL9QfIKE5Hm/AyS4xhs5gxEq94OSXfIG20celeI4MJ4?=
- =?us-ascii?Q?byQ+bhuJGyJmWPTnfaHxMby/M8B34Vm5eZE1pBjE2B83rHfppIvx0Yb6GmaZ?=
- =?us-ascii?Q?onSGe8bM8mx7T+ZeGjLiu1L3p8rzc2OV2h7vc2C0JmBK5nhdng5MIXNljy7t?=
- =?us-ascii?Q?SZuKDT4IspRxNObDEGcKeiZ07hVyD2YrVDcZ1JnrZFuANIZjq++2R6G9i/OP?=
- =?us-ascii?Q?heb8eeEVnm2nJHnqaAlfWKcV6sX2XvZ9ZldHu0kT7aCN5znH7ZWdP7vp/pAf?=
- =?us-ascii?Q?KH4P3d91tO8iXBz0mZXsPDqSyMUHnMgxZ7J14ehZCdqXru9v7VVCexPkR1hx?=
- =?us-ascii?Q?LMeqUT7YkqKB/nbyPQqDAxDde4LbJBgePw/CApgCQQQiluyfOtnaK73JvySh?=
- =?us-ascii?Q?POoGsfHly/tqqC2mAzi3?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 253ed462-2358-42b7-0429-08dc9fbb63c4
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 02:03:56.4379
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR20MB6708
 
-On Mon, Jul 08, 2024 at 06:42:14PM GMT, Guenter Roeck wrote:
-> On 7/8/24 15:15, Inochi Amaoto wrote:
-> > On Mon, Jul 08, 2024 at 03:11:37PM GMT, Chen Wang wrote:
-> > > 
-> > > On 2024/7/8 8:53, Inochi Amaoto wrote:
-> > > > On Mon, Jul 08, 2024 at 08:25:55AM GMT, Chen Wang wrote:
-> > > > > On 2024/7/3 10:30, Inochi Amaoto wrote:
-> > > > > > SG2042 use an external MCU to provide basic hardware information
-> > > > > > and thermal sensors.
-> > > > > > 
-> > > > > > Add driver support for the onboard MCU of SG2042.
-> > > > > > 
-> > > > > > Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
-> > > > > > ---
-> > > > > >     Documentation/hwmon/index.rst |   1 +
-> > > > > >     Documentation/hwmon/sgmcu.rst |  44 +++
-> > > > > >     drivers/hwmon/Kconfig         |  11 +
-> > > > > >     drivers/hwmon/Makefile        |   1 +
-> > > > > >     drivers/hwmon/sgmcu.c         | 585 ++++++++++++++++++++++++++++++++++
-> > > > > >     5 files changed, 642 insertions(+)
-> > > > > >     create mode 100644 Documentation/hwmon/sgmcu.rst
-> > > > > >     create mode 100644 drivers/hwmon/sgmcu.c
-> > > > > > 
-> > > > > > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> > > > > > index 03d313af469a..189626b3a055 100644
-> > > > > > --- a/Documentation/hwmon/index.rst
-> > > > > > +++ b/Documentation/hwmon/index.rst
-> > > > > > @@ -203,6 +203,7 @@ Hardware Monitoring Kernel Drivers
-> > > > > >        sch5636
-> > > > > >        scpi-hwmon
-> > > > > >        sfctemp
-> > > > > > +   sgmcu
-> > > > > This driver is for sg2042 only, right? "sgmcu" looks be general for all
-> > > > > sophgo products.
-> > > > Yes, according to sophgo, it use this mechanism for multiple products,
-> > > > so I switch to a general name.
-> > > 
-> > > But multiple != ALL.
-> > > 
-> > > [......]
-> > > 
-> > > 
-> > 
-> > We can add new driver when there is new mechanism.
-> 
-> Now you are contradicting yourself. Either sgmcu is the catch-all
-> driver, or it isn't. How are you going to call that new driver ? sgmcuv2 ?
-> Are we going to have sgmcuv[2-N] over time ?
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 4814241a5817ce8140dda8f1375bf76f99e68697  hwmon: (amc6821) Add support for pwm1_mode attribute
 
-No, I mean new mechanism that does not use MCU. For example, the chip 
-cv1800b and the incoming sg2380, these chip have different mechanism. 
-For all chip with the MCU, I want to keep only one driver.
+elapsed time: 762m
 
-> All we know so far is that the driver and the mcu support sg2042. That is how the
-> driver should be named. It is easier to add support a new device with a different
-> name to the existing driver than to add a new driver if the name of an existing driver
-> is too generic.
-> 
-> Ultimately this is similar to wildcards in a file name, which are strongly discouraged.
-> One of the worst examples is drivers/hwmon/ina2xx.c, which does _not_ support all chips
-> from ina200 to ina299. Please don't let us go there.
-> 
+configs tested: 162
+configs skipped: 5
 
-> An opposite example is the lm90 driver, which has not problem supporting more than 40
-> different chips with different names because they are all similar. The driver can be named
-> sg2042 and support as many similar variants if that mcu as feasible. It should not be named
-> sgmcu because we can not make the assumption that it will support all mcu variants from
-> sophgo.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks, this is hole I don't consider. I have made an assumption that 
-this driver only serves for sophgo products (especially products with
-this MCU mechanism), which is too limited. Now let me restrict it as
-sg2042 specific and evolve it in the future.
+tested configs:
+alpha                            alldefconfig   gcc-13.2.0
+alpha                             allnoconfig   gcc-13.2.0
+alpha                            allyesconfig   gcc-13.2.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                           tb10x_defconfig   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                                 defconfig   gcc-13.2.0
+arm                            dove_defconfig   gcc-13.2.0
+arm                          gemini_defconfig   gcc-13.2.0
+arm                      integrator_defconfig   gcc-13.2.0
+arm                          ixp4xx_defconfig   gcc-13.2.0
+arm                         nhk8815_defconfig   gcc-13.2.0
+arm                        spear6xx_defconfig   gcc-13.2.0
+arm                         vf610m4_defconfig   gcc-13.2.0
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                               defconfig   gcc-13.2.0
+csky                              allnoconfig   gcc-13.2.0
+csky                                defconfig   gcc-13.2.0
+hexagon                          allmodconfig   clang-19
+hexagon                          allyesconfig   clang-19
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240709   gcc-11
+i386         buildonly-randconfig-002-20240709   gcc-11
+i386         buildonly-randconfig-003-20240709   gcc-11
+i386         buildonly-randconfig-004-20240709   gcc-11
+i386         buildonly-randconfig-005-20240709   gcc-11
+i386         buildonly-randconfig-006-20240709   gcc-11
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240709   gcc-11
+i386                  randconfig-002-20240709   gcc-11
+i386                  randconfig-003-20240709   gcc-11
+i386                  randconfig-004-20240709   gcc-11
+i386                  randconfig-005-20240709   gcc-11
+i386                  randconfig-006-20240709   gcc-11
+i386                  randconfig-011-20240709   gcc-11
+i386                  randconfig-012-20240709   gcc-11
+i386                  randconfig-013-20240709   gcc-11
+i386                  randconfig-014-20240709   gcc-11
+i386                  randconfig-015-20240709   gcc-11
+i386                  randconfig-016-20240709   gcc-11
+loongarch                        allmodconfig   gcc-13.2.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                           defconfig   gcc-13.2.0
+m68k                             allmodconfig   gcc-13.2.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                             allyesconfig   gcc-13.2.0
+m68k                       bvme6000_defconfig   gcc-13.2.0
+m68k                                defconfig   gcc-13.2.0
+m68k                          multi_defconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-13.2.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                       allyesconfig   gcc-13.2.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                         bigsur_defconfig   gcc-13.2.0
+mips                         cobalt_defconfig   gcc-13.2.0
+mips                            gpr_defconfig   gcc-13.2.0
+mips                           jazz_defconfig   gcc-13.2.0
+mips                      malta_kvm_defconfig   gcc-13.2.0
+mips                    maltaup_xpa_defconfig   gcc-13.2.0
+nios2                         3c120_defconfig   gcc-13.2.0
+nios2                             allnoconfig   gcc-13.2.0
+nios2                               defconfig   gcc-13.2.0
+openrisc                          allnoconfig   gcc-13.2.0
+openrisc                         allyesconfig   gcc-13.2.0
+openrisc                            defconfig   gcc-13.2.0
+openrisc                    or1ksim_defconfig   gcc-13.2.0
+parisc                           allmodconfig   gcc-13.2.0
+parisc                            allnoconfig   gcc-13.2.0
+parisc                           allyesconfig   gcc-13.2.0
+parisc                              defconfig   gcc-13.2.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-13.2.0
+powerpc                           allnoconfig   gcc-13.2.0
+powerpc                          allyesconfig   gcc-13.2.0
+powerpc                    gamecube_defconfig   gcc-13.2.0
+powerpc                     kmeter1_defconfig   gcc-13.2.0
+powerpc                   lite5200b_defconfig   gcc-13.2.0
+powerpc                      mgcoge_defconfig   gcc-13.2.0
+powerpc                    mvme5100_defconfig   gcc-13.2.0
+powerpc                      pcm030_defconfig   gcc-13.2.0
+powerpc                     powernv_defconfig   gcc-13.2.0
+powerpc                      ppc44x_defconfig   gcc-13.2.0
+powerpc                         ps3_defconfig   gcc-13.2.0
+powerpc                     redwood_defconfig   gcc-13.2.0
+powerpc                      tqm8xx_defconfig   gcc-13.2.0
+riscv                            allmodconfig   gcc-13.2.0
+riscv                             allnoconfig   gcc-13.2.0
+riscv                            allyesconfig   gcc-13.2.0
+riscv                               defconfig   gcc-13.2.0
+s390                             allmodconfig   clang-19
+s390                              allnoconfig   gcc-13.2.0
+s390                             allyesconfig   clang-19
+s390                             allyesconfig   gcc-13.2.0
+s390                                defconfig   gcc-13.2.0
+sh                               alldefconfig   gcc-13.2.0
+sh                               allmodconfig   gcc-13.2.0
+sh                                allnoconfig   gcc-13.2.0
+sh                               allyesconfig   gcc-13.2.0
+sh                                  defconfig   gcc-13.2.0
+sh                        dreamcast_defconfig   gcc-13.2.0
+sh                ecovec24-romimage_defconfig   gcc-13.2.0
+sh                        edosk7760_defconfig   gcc-13.2.0
+sh                            hp6xx_defconfig   gcc-13.2.0
+sh                          rsk7203_defconfig   gcc-13.2.0
+sh                          rsk7269_defconfig   gcc-13.2.0
+sh                           se7206_defconfig   gcc-13.2.0
+sh                           se7619_defconfig   gcc-13.2.0
+sh                   secureedge5410_defconfig   gcc-13.2.0
+sh                        sh7785lcr_defconfig   gcc-13.2.0
+sh                            shmin_defconfig   gcc-13.2.0
+sh                             shx3_defconfig   gcc-13.2.0
+sparc                            allmodconfig   gcc-13.2.0
+sparc64                          alldefconfig   gcc-13.2.0
+sparc64                             defconfig   gcc-13.2.0
+um                               allmodconfig   clang-19
+um                               allmodconfig   gcc-13.2.0
+um                                allnoconfig   gcc-13.2.0
+um                               allyesconfig   gcc-13
+um                               allyesconfig   gcc-13.2.0
+um                                  defconfig   gcc-13.2.0
+um                             i386_defconfig   gcc-13.2.0
+um                           x86_64_defconfig   gcc-13.2.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240709   gcc-11
+x86_64       buildonly-randconfig-002-20240709   gcc-11
+x86_64       buildonly-randconfig-003-20240709   gcc-11
+x86_64       buildonly-randconfig-004-20240709   gcc-11
+x86_64       buildonly-randconfig-005-20240709   gcc-11
+x86_64       buildonly-randconfig-006-20240709   gcc-11
+x86_64                              defconfig   clang-18
+x86_64                randconfig-001-20240709   gcc-11
+x86_64                randconfig-002-20240709   gcc-11
+x86_64                randconfig-003-20240709   gcc-11
+x86_64                randconfig-004-20240709   gcc-11
+x86_64                randconfig-005-20240709   gcc-11
+x86_64                randconfig-006-20240709   gcc-11
+x86_64                randconfig-011-20240709   gcc-11
+x86_64                randconfig-012-20240709   gcc-11
+x86_64                randconfig-013-20240709   gcc-11
+x86_64                randconfig-014-20240709   gcc-11
+x86_64                randconfig-015-20240709   gcc-11
+x86_64                randconfig-016-20240709   gcc-11
+x86_64                randconfig-071-20240709   gcc-11
+x86_64                randconfig-072-20240709   gcc-11
+x86_64                randconfig-073-20240709   gcc-11
+x86_64                randconfig-074-20240709   gcc-11
+x86_64                randconfig-075-20240709   gcc-11
+x86_64                randconfig-076-20240709   gcc-11
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                    xip_kc705_defconfig   gcc-13.2.0
 
-Regards,
-Inochi
-
-> 
-> Guenter
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
