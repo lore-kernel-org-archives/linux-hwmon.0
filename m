@@ -1,62 +1,67 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFEF13211E
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Jul 2024 22:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFB02C80;
+	Wed, 10 Jul 2024 01:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720565393; cv=none; b=q6HWN4TwTdsYPbMDbhzjXG9wgr1g4fsGg0jRqjQpOmWdwCwQEF5/6CZXteTP0+hfXFyaqGvVgg9uQsw9NY2LZyXiRIv6M54kAjWSjiFVqkLWhL0U3BRSL0GYfIrHoLvqLdCbTBZFEE5mZWN0XRyqa0zn+LDhGRxNDdJTF4iN5/s=
+	t=1720576588; cv=none; b=QTOClEanT9H8Cs9+lbq1NEKNC4D9qVZgE7fqzHxGMmKtELefOfHIz6xTHwGwHmfaMyYdmg03MH//cBizjVPdu/yfDPvYCIlL0Su0nLRcu7bJ6GbKZ5iVDRPuFzmVSuucdP5CJo6U7GLX3HSYTxdiV+R4TLyiaaHWmMU2uGNle1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720565393; c=relaxed/simple;
-	bh=3rKZQ73CNn8+pw+2DifuBFIfjtP48NDa1NyDXsuyt+c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nDmnaN505jmIaEHUlRKo3QzLKNdAkJcnpwB/btvAr/dcoB8GL3npEBia2mgwsnAc+LCj8fwIZKkreguv0W5jGbN2SfyLMsUV5aNWWlDauqfNnoroY56rcvI7+rVI0fR91uFk1fxeW004AAS+vYRX8OCMxBo+ZXUryeqqTekW7FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEC6Kq+8; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1720576588; c=relaxed/simple;
+	bh=4c8Hv+dhG+AYplc+VLWoT1bJ74n8Hva4M8qP5Lcpidc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=M1Um+H5+2y7TyxXdwCCHGVZLfx1LaHf6+XFrO1EJSDeFrxt+ZDK9pEe2ePWnsgHu0L8+4wuKYLtqAYdowTe99dZchxzbXjcHEdCrrM6lwa/Z0m2UKyuLlC1XxrR+U11JZFQVJTSl5pcDrcY3Wki8iTBsPB/8A1BxQRuJX+Xb2eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EmRc/c7/; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEC6Kq+8"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fb3037b47dso38778805ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jul 2024 15:49:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EmRc/c7/"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70b0d0fefe3so3057228b3a.2;
+        Tue, 09 Jul 2024 18:56:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720565391; x=1721170191; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720576586; x=1721181386; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CrElP78f2XC+z73SEFgv7/cr7c4YhSKvpuYbbNHDQYc=;
-        b=MEC6Kq+85ZvXnkzU/3FXz2TL3rmazG3mGxYzrDJxtLGGVvSKgY5dq4vME/twYOOWry
-         DHs8/vLAqIqBFp8qjhim98jtSn0cvSox+shi5NbdSH3hfGJzA32n/nTO9vNv+bONlKui
-         bx2aZSZetj0VdZT9NR1Ft2FadgDG9EaJ+O5e1d2ML5Nu677arGbbiFSZnDVRC9RnMJzm
-         WElzJ/oGaYWoEvjnPv7lmpAfyjASaLHaMaF3OA2jKIL3zErQ0EfAdCtGzkFIUCOlIIf8
-         zJnjlFLuTEelOWAJU6aGWIQAeoF/MLaHNwUNi8VgVqns1RCdlRLn9XidViSrlNr02fHJ
-         jA+Q==
+        bh=enW4cQKf7B4H11t1mfNT7cdVujNpDQzYO6FACNhVkX8=;
+        b=EmRc/c7/FrZPywldeqOUq6b5vA7TEyjjJNN4352gXxkTGAM9t1QQqeWXSzzo3Iz68P
+         dM12ttBNh2YV3pdfJaIEYNgyUcqA7ZP6htiMhKA1cv5TjIFI31mqdbVK9P+LW5sTd5Hb
+         o/St6V6BkPoz+DL7WkaaYTepcZyYKllMfbAdPlC4f8MyAr0YR2cHXKcRXk9P/uwX/t6u
+         UXQXxRztnfL89ic9ulpUhhIqmYnLGnFvuTO7QyC84zWhu98jm9DxCJ5FPwgLOrhALPDZ
+         blPpLwovVRHMKQBcsohmqzpU+YgCB59BuuU6eWmtTfWTLExpef1PqQr5SjH60sdjE5MI
+         i5Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720565391; x=1721170191;
+        d=1e100.net; s=20230601; t=1720576586; x=1721181386;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CrElP78f2XC+z73SEFgv7/cr7c4YhSKvpuYbbNHDQYc=;
-        b=Y+/y2sfB46GLOuRIajOyxwDfP0XupjM/d3WF2jORapk9uACCJkmJEBv5iqVc4tFnAo
-         U8bIQQMczQPWR5nyFljVPZ4BziBb7ne6POXydH5DUNooHIGCbdFnQdWRs5lvA1Soz72F
-         KHJ3yy7X3fse68Y0mom+0xzY6PLsT1232JuhrhqeVRKLuHAjBhTRlq2UchbG2Gtm14Lo
-         tqYC+FqYxtqWBWfj2brVYcQgFHpQOl7jblWihthTFJv1F9pDBORHA2hOvBXvBa9wf3o8
-         BP1Hq2Ir61xyHgvKTHYQw3FabzJ1Ud1Ittn80eNSwP6DL/ozgDCXQM11HCX9k3D3UQfe
-         jBow==
-X-Gm-Message-State: AOJu0Yy0JCWBGY0IaTdPwaYTx0/tTS1C5Xooha0w155grHrOj4g/U3uE
-	tWMfz7z5dxZMZbAeVY6+Vj6HJNcHnpo2ybbS393zfiqc3ZUojD0/RIBlQQ==
-X-Google-Smtp-Source: AGHT+IHf1Lsy31afa5YlEokz1HpAii9HFDSZD4dU+PVbEa7nL45sYYmlZ9/aZIMksV8UPUmgWsw/aw==
-X-Received: by 2002:a17:902:ea05:b0:1fb:8a0e:76f9 with SMTP id d9443c01a7336-1fbb6d5ee12mr31903625ad.39.1720565390944;
-        Tue, 09 Jul 2024 15:49:50 -0700 (PDT)
+        bh=enW4cQKf7B4H11t1mfNT7cdVujNpDQzYO6FACNhVkX8=;
+        b=XatM4K0SId80KPtx6U2XOnUplCyWfdxmOr2fbp8JqXx7C2ve4VFGxIKbQW2BjhG1yp
+         Q7z6H6F6B0Mff+sTFuFYcMfqsqfF1x+il4Idy0UTh2SAfbx0GsbQVgk8Oq1rQx/ZY5oH
+         6PEh6OeeR8ysjO1f5ucenBmpW+jhFKCUsnAvhk4schL2ZIXv4kBQ0S5Rxeltu8384DKk
+         kNlit9Slbvnlii/gq1V1l3PagQwTkpVHnMJZesfWohvhkBYOsPoDuKP23kN5FZFmOLa0
+         HNetJnUAJ4+VfAOie863xYZqUmr2fonRtcLvbIZ9UM5uYb4F0PA/3pCiDlRZZ8Z0kaK6
+         7U2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUBK4/eyNteFsGTbB4IRqDVDPz/M9rctKuvw2qgJuOHcw2YaVfcJqWq+RIVMrUkJWaLgV2wNK92xyB5fVGccl70jUK+fR/bVrARGTue4YxF4fhPTn2uQzUBQyRyrl2JzbqJptdl3C/DTs0=
+X-Gm-Message-State: AOJu0Yx2woeEI0vSDpWOMRM0H5Gpkqs7io9fmrMd91GPC3VZEvHi0Tjw
+	fr2TnLxerp+K4Nt8iNLLLdQvkskzIc3+1yfUqSl8tqhIjnQ3kktpImD0OQ==
+X-Google-Smtp-Source: AGHT+IG4KqeNamkilvotkSQf0ix2WylzIwLgFGaO5x022D41uRLSeUhbNZCfsdzUylEMxw2tHkPCTA==
+X-Received: by 2002:a05:6a00:2da0:b0:705:ddbf:5c05 with SMTP id d2e1a72fcca58-70b54edb0femr5858b3a.11.1720576585821;
+        Tue, 09 Jul 2024 18:56:25 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a2bef3sm21217655ad.105.2024.07.09.15.49.49
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c25basm2527876b3a.72.2024.07.09.18.56.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 15:49:49 -0700 (PDT)
+        Tue, 09 Jul 2024 18:56:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH] hwmon: (g762) Initialize fans after configuring clock
-Date: Tue,  9 Jul 2024 15:49:47 -0700
-Message-Id: <20240709224947.1953794-1-linux@roeck-us.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [RFC PATCH 0/3] regmap: Implement regmap_multi_reg_read()
+Date: Tue,  9 Jul 2024 18:56:19 -0700
+Message-Id: <20240710015622.1960522-1-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -66,55 +71,25 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding support for G761 included adding support for an internal clock.
-Enabling the internal clock requires setting a bit in the FAN_CMD2
-register. This is implemented in g762_fan_init(). However, g762_fan_init()
-is called before clock support is selected, and the flag indicating that
-the internal clock should be used is not yet set.
+regmap_multi_reg_read() is similar to regmap_bilk_read() but reads from
+an array of non-sequential registers. It is helpful if multiple non-
+sequential registers need to be read in a single operation which would
+otherwise have to be mutex protected.
 
-Initialize the clock before initializing the fan to solve the problem.
-While at it, also add "g7621" to the i2c_device_id array.
+The name of the new function was chosen to match the existing function
+regmap_multi_reg_write().
 
-Cc: Christian Marangi <ansuelsmth@gmail.com>
-Fixes: 6ce402327a6f ("hwmon: g672: add support for g761")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/g762.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+The first patch of the series introduces the new function. The following
+two patches provide examples for its use.
 
-diff --git a/drivers/hwmon/g762.c b/drivers/hwmon/g762.c
-index a00cf3245eec..4fa3aa1271da 100644
---- a/drivers/hwmon/g762.c
-+++ b/drivers/hwmon/g762.c
-@@ -44,6 +44,7 @@
- #define DRVNAME "g762"
- 
- static const struct i2c_device_id g762_id[] = {
-+	{ "g761" },
- 	{ "g762" },
- 	{ "g763" },
- 	{ }
-@@ -1083,15 +1084,16 @@ static int g762_probe(struct i2c_client *client)
- 	data->client = client;
- 	mutex_init(&data->update_lock);
- 
-+	/* Get configuration via DT ... */
-+	ret = g762_of_clock_enable(client);
-+	if (ret)
-+		return ret;
-+
- 	/* Enable fan failure detection and fan out of control protection */
- 	ret = g762_fan_init(dev);
- 	if (ret)
- 		return ret;
- 
--	/* Get configuration via DT ... */
--	ret = g762_of_clock_enable(client);
--	if (ret)
--		return ret;
- 	ret = g762_of_prop_import(client);
- 	if (ret)
- 		return ret;
--- 
-2.39.2
+----------------------------------------------------------------
+Guenter Roeck (3):
+      regmap: Implement regmap_multi_reg_read()
+      hwmon: (adt7470) Use multi-byte regmap operations
+      hwmon: (tmp401) Use multi-byte regmap operations
 
+ drivers/base/regmap/regmap.c | 103 ++++++++++++++++++++++++++++---------------
+ drivers/hwmon/adt7470.c      |  22 +++------
+ drivers/hwmon/tmp401.c       |  19 +++-----
+ include/linux/regmap.h       |   2 +
+ 4 files changed, 84 insertions(+), 62 deletions(-)
