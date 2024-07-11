@@ -1,251 +1,225 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B94316D324;
-	Thu, 11 Jul 2024 21:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05F11A0719
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jul 2024 22:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720732647; cv=none; b=i7jAwD0kuRDd5IxWZbIHjjisf+WEzFZFoULTpI2zQqn9LBKB9BAh8a0ErNOcxgAFSQL+mVSNc21MOKAtoJF6/lXY+0AyusWs9MODW5jKzhxMGrSvc0mYEJzHEC/nbivQtYBchXm+8Rzc64xOEYKmJgm/nSGk1Lm6Di4Jz1WYz/Q=
+	t=1720738783; cv=none; b=tYyuM4/km7itNvzeKZG3MjywP0HqA6Yn9H1ISwXfimiGiBCVlJHszMtbMsA0GBimSM7TdEKoRm8+p4eNb9rT5gOEmWo2hLAHwIDntK1RakhHVNb7mpB2ixqVPA4s685vWjEJTSWx2QijElg0bLPjdWcxAM1mcMOzAYkOPjFEkkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720732647; c=relaxed/simple;
-	bh=RpjRG8g1/F7J1W4iZNeHwl9ZfrXytIdknIVJmm5AHfQ=;
+	s=arc-20240116; t=1720738783; c=relaxed/simple;
+	bh=1w3AKH9EN0Wx9MD0cTBXA2kFEOGo0pQZKRLTrIYTgsg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IzT1cmczf/oVTtRB73o2ukDgyoBqQA9GacI9xqsP7bGzaZIr6PXDfs1df6itKopXrsvQzwpQ/xgC9txlM1hPaZTht9B7UhMDNh83s16j8fLVbFSi34/oASkV5urhqRgwb5Bm6dwxADHIc4He+YOK6SeBOiXWQeIrUgcsxtPtHcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtewKqpo; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=JMjd+KiYUdcvq8p+PpOlAHbcZrCEnq9mUvS+GJsDdn8AKvNlHMp71ScIX7QzVTQR7tk4OGuESGUTALpPcm/dJfpkHckjrgflhL2Jh19eEBQ74Wl9shjgFPICgAcmLyYbdzPKQFTFp1Z+iP58kqnTegUYLVtilcPKuAsa7aLTjbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=GSmJMHE8; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtewKqpo"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-58ba3e38027so1534768a12.1;
-        Thu, 11 Jul 2024 14:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720732643; x=1721337443; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CZcaI5+6z82r9vq6pp4cVgvJLD8/+zJh4wg+noG/zTM=;
-        b=BtewKqpoQWHUPL99YOuzLe+fcBTVSfWtajLloqCZxuRan2gf4A/ypmw81Ki90H4edQ
-         XgmiwV8eaAhvwcbM5R1anfloamqfeYsnXZjAzMPr0Tn3K2QYnAVkyunV6y3y0W/19/Pb
-         m+/Xnwei05wMyzJRXnT+YuiCz3Rr5w1bcN9coAX1q2xkjmj+lbDCvLWrGQ36ZZOr6gws
-         iC0rBYc0CpD53qN1bmNiWOB0El3zN/PXBHbPPCYV+4ZbOMbtqUC0JUOOpGQsxebKtRO4
-         5HBRf8vvOPJutTorTA/K0XRlw97aIT8FNfFCGC+i0azr5xwxG7aEEmcK+EWsoxwejLUt
-         tHcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720732643; x=1721337443;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CZcaI5+6z82r9vq6pp4cVgvJLD8/+zJh4wg+noG/zTM=;
-        b=d5pHbVuGBQwWdfHKkI1aqyU1SdroHTPjcVDrUqpkN1C4XQB3Jc4p1FxQbKNNoh9nos
-         1ywGKmPnXu6LsfVkemh69v/Wta2F1d8P1jIwYTGMePY7MJiYC+nz+Z/K4tIdw2v51Mgx
-         jo125we4GeHiuNqIOgozPJaKsMkwBt2Jqrqb10ItPC+AJXw8UPUQI9vrPmnEMOyiubmQ
-         kraKq/uU9JewyYVzYhMtF4raOe251rRNsNKduUDwPcqQ2Cc0qwpUSwbkUVb3lWjNToAM
-         TDBQtFQCBtrWAT0D5pUgk++iBr98GpjUTR5OLOsa4BNABUam00LKzEP4vIfjNGnFv/mJ
-         9m5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXtl6NPinKE18zsVJnycf0iLQW5+VLGBH7heH0QYPlGD30xLovj6lm9OB9w9zGVTNBWgC6GQ/mAcWXS5VFA1aG2xyhafDryfYjhuR8P/WluaxcpRP6fM8ixItzLPCRYqfQz3agylFc6ygs=
-X-Gm-Message-State: AOJu0YwdgWCkdCZGkEoR9/0Bvlm0xxje5m9/KEcRCh7a6OlZCQqHqV7r
-	UkfuxEnVFF0CJeN3o9+1AcNc0VxV48K7ZszfXPYEJdb8roku6p9S
-X-Google-Smtp-Source: AGHT+IETl+vIg7IhxTUhL4uj8vO5jfAtMX+OC788CD/RERkRMNUie3Oga3XfiHTBxFlvuuJR2sL2zQ==
-X-Received: by 2002:a05:6402:2354:b0:58d:d1d5:da65 with SMTP id 4fb4d7f45d1cf-594baf91407mr8936223a12.11.1720732643086;
-        Thu, 11 Jul 2024 14:17:23 -0700 (PDT)
-Received: from [192.168.178.20] (dh207-43-148.xnet.hr. [88.207.43.148])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-594bda30b18sm3829176a12.95.2024.07.11.14.17.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jul 2024 14:17:22 -0700 (PDT)
-Message-ID: <0ece317b-74ae-4f15-bc28-d85972ef18b7@gmail.com>
-Date: Thu, 11 Jul 2024 23:17:21 +0200
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="GSmJMHE8"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 74E652C0132;
+	Fri, 12 Jul 2024 10:59:38 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1720738778;
+	bh=MHVDaPGK/QMOD6P3TiMBGa1kYC6k4UkPb0F0BCu/HbM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GSmJMHE8epDzwfmZlTW5gMVq0BFJClLSPRyXJDOBGI+QoGO0Zu0/zTGyavUUNm34X
+	 aN/cMlNsjd930qcWrjY9Px6LVUwtx86KOn4oiQonMqUcm1Ubpb4e90VhrMCDmAOLlN
+	 jldoDOgKOw8VXqXQeLnDHxVGgU/fWNKI6jUlgT18yPHTTiMLFMGQtI7/UP1Bz1BY3Y
+	 D/+psADuakPAlu1QP8TcvQ39f0rm7m3LIZDpQ5aFUZfWSmqCWBAM4MtJOqxHra6raT
+	 9jdiXlulppDqT2E4kfYNVeX5ij3Wt1rfUBi+v60s0jTTNUn/H0zUpu21VXQE4+zdvO
+	 g5kTlMDwzcr+g==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B669063da0000>; Fri, 12 Jul 2024 10:59:38 +1200
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 48B1D13EE2B;
+	Fri, 12 Jul 2024 10:59:38 +1200 (NZST)
+Message-ID: <d44a6621-49ff-41c3-a4c1-69bf2e92e012@alliedtelesis.co.nz>
+Date: Fri, 12 Jul 2024 10:59:38 +1200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PROBLEM linux-next] drivers/hwmon/aht10.c:224: warning: Function
- parameter or struct member 'data' not described in 'aht10_interval_write'
-To: Guenter Roeck <linux@roeck-us.net>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- "Johannes Cornelis Draaijer (datdenkikniet)" <jcdra1@gmail.com>
-References: <851b86f1-5757-4f4a-960a-2d4ecb840734@gmail.com>
- <07955cfb-aae7-4a97-8222-b9c235e7c8c2@roeck-us.net>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+References: <20240528225638.1211676-1-chris.packham@alliedtelesis.co.nz>
+ <20240528225638.1211676-2-chris.packham@alliedtelesis.co.nz>
+ <drqvaon5lb2ei3jqofutbr6demibyfdhbmr24sva27gzpqdnon@fxa7rpl33iih>
 Content-Language: en-US
-From: Mirsad Todorovac <mtodorovac69@gmail.com>
-In-Reply-To: <07955cfb-aae7-4a97-8222-b9c235e7c8c2@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <drqvaon5lb2ei3jqofutbr6demibyfdhbmr24sva27gzpqdnon@fxa7rpl33iih>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=PIKs+uqC c=1 sm=1 tr=0 ts=669063da a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=4kmOji7k6h8A:10 a=txvsxk6BNV_vTGTgBH0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
+Hi Uwe,
 
-
-On 7/11/24 19:11, Guenter Roeck wrote:
-> On 7/11/24 09:57, Mirsad Todorovac wrote:
->> Hi all,
+On 5/07/24 21:09, Uwe Kleine-K=C3=B6nig wrote:
+> Hello Chris,
+>
+> sorry for taking so long to respond. Don't take it personal, I'm way
+> behind my maintainer dutys in general.
+>
+> On Wed, May 29, 2024 at 10:56:36AM +1200, Chris Packham wrote:
+>> Add fan child nodes that allow describing the connections for the
+>> ADT7475 to the fans it controls. This also allows setting some
+>> initial values for the pwm duty cycle and frequency.
 >>
->> On the linux-next vanilla tree next-20240709, there is a lot of complaining about
->> code like these, which is not an error, but it seems like documentation lags behind
->> the [dynamic] source development.
+>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> ---
 >>
->> If you  are interested in reporting these to the respective maintainers and developers,
->> give me a ping.
+>> Notes:
+>>      I realise there is still some discussion about how to express the
+>>      frequency and duty cycle. I have a personal preference for using =
+hertz
+>>      for the frequency and 0-255 for the duty cycle but if the consens=
+us is
+>>      to express these things some other way I'm fine with doing some m=
+ath.
+>>     =20
+>>      Changes in v4:
+>>      - 0 is not a valid frequency value
+>>      Changes in v3:
+>>      - Use the pwm provider/consumer bindings
+>>      Changes in v2:
+>>      - Document 0 as a valid value (leaves hardware as-is)
 >>
->> drivers/hwmon/aht10.c:224: warning: Function parameter or struct member 'data' not described in 'aht10_interval_write'
->> drivers/hwmon/aht10.c:224: warning: Function parameter or struct member 'val' not described in 'aht10_interval_write'
->> drivers/hwmon/aht10.c:235: warning: Function parameter or struct member 'data' not described in 'aht10_interval_read'
->> drivers/hwmon/aht10.c:235: warning: Function parameter or struct member 'val' not described in 'aht10_interval_read'
->> drivers/hwmon/aht10.c:244: warning: Function parameter or struct member 'data' not described in 'aht10_temperature1_read'
->> drivers/hwmon/aht10.c:244: warning: Function parameter or struct member 'val' not described in 'aht10_temperature1_read'
->> drivers/hwmon/aht10.c:259: warning: Function parameter or struct member 'data' not described in 'aht10_humidity1_read'
->> drivers/hwmon/aht10.c:259: warning: Function parameter or struct member 'val' not described in 'aht10_humidity1_read'
+>>   .../devicetree/bindings/hwmon/adt7475.yaml    | 25 +++++++++++++++++=
++-
+>>   1 file changed, 24 insertions(+), 1 deletion(-)
 >>
-> 
-> I'll be happy to accept patches, but plain reports like this are just noise.
-> 
-> Guenter
-> 
+>> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Do=
+cumentation/devicetree/bindings/hwmon/adt7475.yaml
+>> index 051c976ab711..bfef4c803bf7 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+>> @@ -51,6 +51,15 @@ properties:
+>>         enum: [0, 1]
+>>         default: 1
+>>  =20
+>> +  "#pwm-cells":
+>> +    const: 4
+>> +    description: |
+>> +      Number of cells in a PWM specifier.
+>> +      - 0: The pwm channel
+>> +      - 1: The pwm frequency in hertz - 11, 14, 22, 29, 35, 44, 58, 8=
+8, 22500
+> Nack, don't deviate from how PWMs are usually referenced. So specify th=
+e
+> period in nanoseconds, not Hertz.
 
-Hi, Mr. Guenter,
+OK no problem. The math is easy enough. I might end up over documenting=20
+things for the acceptable PWM period so someone can weigh in on that.
 
-Thank you kindly for your reply.
+>> +      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
+>> +      - 3: The default pwm duty cycle - 0-255
+> I'd be ok with that, however please add support for that in the pwm cor=
+e
+> and then just use that.
+>
+> You wrote that you find it irritating that the duty is specified in
+> nanoseconds and not a percentage. The reason for that is historic. Also
+> it gives a more precise specification (at least compared to the naive
+> representation of the integer percentage as an integer type).
+> For the rework of how PWM waveforms are represented I picked
+> "duty_length" as variable name for this value, in the hope this is less
+> confusing.
+>
+> untested prototype for a 4th member in pwm specifiers:
 
-I agree with you that it adds a lot traffic to the channel with little "signal" when compared to the "noise".
+Right now the adt7475 is not a pwm_chip and I'm not really planning on=20
+making it one. My goal with this was just to make it possible for the=20
+kernel to keep the fans running quietly before userland can take over=20
+and start doing proper configuration/monitoring. The best I can do is=20
+make sure that the devicetree binding is done in such a way that it=20
+could grow pwm_chip capabilities in the future.
 
-However, there is about a 100 such warnings from 26 modules, and I do not feel competent and equipped to
-analyse all of these:
-
-      1 arch/x86/entry/common.c
-      1 arch/x86/kernel/apic/apic.c
-      4 arch/x86/kernel/cpu/mtrr/amd.c
-      1 arch/x86/kernel/cpu/mtrr/centaur.c
-      1 arch/x86/mm/pat/memtype.c
-     13 arch/x86/mm/pgtable.c
-      1 block/blk-merge.c
-      1 drivers/firmware/efi/libstub/efi-stub-helper.c
-      8 drivers/hwmon/aht10.c
-      2 drivers/hwtracing/intel_th/core.c
-     10 drivers/hwtracing/intel_th/msu.c
-     17 drivers/memstick/core/memstick.c
-      2 drivers/pinctrl/pinctrl-aw9523.c
-      2 drivers/tty/n_hdlc.c
-      1 fs/bcachefs/io_write.c
-      1 fs/gfs2/glock.c
-      2 fs/gfs2/super.c
-      6 fs/nilfs2/btnode.c
-      7 fs/nilfs2/ioctl.c
-      3 fs/nilfs2/super.c
-      4 fs/ufs/inode.c
-      2 kernel/reboot.c
-      2 kernel/time/tick-broadcast.c
-      5 lib/842/842_compress.c
-      4 lib/842/842_decompress.c
-      1 mm/page_counter.c
-
-In particular, those are expanded as:
-
-arch/x86/mm/pat/memtype.c:708: warning: Function parameter or struct member 'pfn' not described in 'pat_pfn_immune_to_uc_mtrr'
-arch/x86/mm/pgtable.c:652: warning: Function parameter or struct member 'reserve' not described in 'reserve_top_address'
-arch/x86/mm/pgtable.c:701: warning: Function parameter or struct member 'p4d' not described in 'p4d_set_huge'
-arch/x86/mm/pgtable.c:701: warning: Function parameter or struct member 'addr' not described in 'p4d_set_huge'
-arch/x86/mm/pgtable.c:701: warning: Function parameter or struct member 'prot' not described in 'p4d_set_huge'
-arch/x86/mm/pgtable.c:711: warning: Function parameter or struct member 'p4d' not described in 'p4d_clear_huge'
-arch/x86/mm/pgtable.c:728: warning: Function parameter or struct member 'pud' not described in 'pud_set_huge'
-arch/x86/mm/pgtable.c:728: warning: Function parameter or struct member 'addr' not described in 'pud_set_huge'
-arch/x86/mm/pgtable.c:728: warning: Function parameter or struct member 'prot' not described in 'pud_set_huge'
-arch/x86/mm/pgtable.c:754: warning: Function parameter or struct member 'pmd' not described in 'pmd_set_huge'
-arch/x86/mm/pgtable.c:754: warning: Function parameter or struct member 'addr' not described in 'pmd_set_huge'
-arch/x86/mm/pgtable.c:754: warning: Function parameter or struct member 'prot' not described in 'pmd_set_huge'
-arch/x86/mm/pgtable.c:781: warning: Function parameter or struct member 'pud' not described in 'pud_clear_huge'
-arch/x86/mm/pgtable.c:796: warning: Function parameter or struct member 'pmd' not described in 'pmd_clear_huge'
-arch/x86/entry/common.c:211: warning: Function parameter or struct member 'regs' not described in 'do_int80_emulation'
-block/blk-merge.c:220: warning: Function parameter or struct member 'len' not described in 'get_max_segment_size'
-lib/842/842_compress.c:479: warning: Function parameter or struct member 'in' not described in 'sw842_compress'
-lib/842/842_compress.c:479: warning: Function parameter or struct member 'ilen' not described in 'sw842_compress'
-lib/842/842_compress.c:479: warning: Function parameter or struct member 'out' not described in 'sw842_compress'
-lib/842/842_compress.c:479: warning: Function parameter or struct member 'olen' not described in 'sw842_compress'
-lib/842/842_compress.c:479: warning: Function parameter or struct member 'wmem' not described in 'sw842_compress'
-lib/842/842_decompress.c:279: warning: Function parameter or struct member 'in' not described in 'sw842_decompress'
-lib/842/842_decompress.c:279: warning: Function parameter or struct member 'ilen' not described in 'sw842_decompress'
-lib/842/842_decompress.c:279: warning: Function parameter or struct member 'out' not described in 'sw842_decompress'
-lib/842/842_decompress.c:279: warning: Function parameter or struct member 'olen' not described in 'sw842_decompress'
-arch/x86/kernel/cpu/mtrr/amd.c:61: warning: Function parameter or struct member 'reg' not described in 'amd_set_mtrr'
-arch/x86/kernel/cpu/mtrr/amd.c:61: warning: Function parameter or struct member 'base' not described in 'amd_set_mtrr'
-arch/x86/kernel/cpu/mtrr/amd.c:61: warning: Function parameter or struct member 'size' not described in 'amd_set_mtrr'
-arch/x86/kernel/cpu/mtrr/amd.c:61: warning: Function parameter or struct member 'type' not described in 'amd_set_mtrr'
-arch/x86/kernel/cpu/mtrr/centaur.c:28: warning: Function parameter or struct member 'replace_reg' not described in 'centaur_get_free_region'
-mm/page_counter.c:400: warning: Function parameter or struct member 'counter' not described in 'page_counter_calculate_protection'
-drivers/pinctrl/pinctrl-aw9523.c:562: warning: Function parameter or struct member 'awi' not described in '_aw9523_gpio_get_multiple'
-drivers/pinctrl/pinctrl-aw9523.c:562: warning: Function parameter or struct member 'mask' not described in '_aw9523_gpio_get_multiple'
-arch/x86/kernel/apic/apic.c:2138: warning: Function parameter or struct member 'spurious_interrupt' not described in 'DEFINE_IDTENTRY_IRQ'
-kernel/reboot.c:234: warning: Function parameter or struct member 'cmd' not described in 'do_kernel_restart'
-kernel/reboot.c:965: warning: Function parameter or struct member 'poweroff_delay_ms' not described in 'hw_failure_emergency_poweroff'
-kernel/time/tick-broadcast.c:1026: warning: Function parameter or struct member 'bc' not described in 'tick_broadcast_setup_oneshot'
-kernel/time/tick-broadcast.c:1026: warning: Function parameter or struct member 'from_periodic' not described in 'tick_broadcast_setup_oneshot'
-fs/ufs/inode.c:398: warning: Function parameter or struct member 'inode' not described in 'ufs_getfrag_block'
-fs/ufs/inode.c:398: warning: Function parameter or struct member 'fragment' not described in 'ufs_getfrag_block'
-fs/ufs/inode.c:398: warning: Function parameter or struct member 'bh_result' not described in 'ufs_getfrag_block'
-fs/ufs/inode.c:398: warning: Function parameter or struct member 'create' not described in 'ufs_getfrag_block'
-fs/nilfs2/btnode.c:175: warning: Function parameter or struct member 'btnc' not described in 'nilfs_btnode_prepare_change_key'
-fs/nilfs2/btnode.c:175: warning: Function parameter or struct member 'ctxt' not described in 'nilfs_btnode_prepare_change_key'
-fs/nilfs2/btnode.c:238: warning: Function parameter or struct member 'btnc' not described in 'nilfs_btnode_commit_change_key'
-fs/nilfs2/btnode.c:238: warning: Function parameter or struct member 'ctxt' not described in 'nilfs_btnode_commit_change_key'
-fs/nilfs2/btnode.c:278: warning: Function parameter or struct member 'btnc' not described in 'nilfs_btnode_abort_change_key'
-fs/nilfs2/btnode.c:278: warning: Function parameter or struct member 'ctxt' not described in 'nilfs_btnode_abort_change_key'
-fs/nilfs2/super.c:121: warning: Function parameter or struct member 'sb' not described in '__nilfs_error'
-fs/nilfs2/super.c:121: warning: Function parameter or struct member 'function' not described in '__nilfs_error'
-fs/nilfs2/super.c:121: warning: Function parameter or struct member 'fmt' not described in '__nilfs_error'
-fs/nilfs2/ioctl.c:120: warning: Function parameter or struct member 'dentry' not described in 'nilfs_fileattr_get'
-fs/nilfs2/ioctl.c:120: warning: Function parameter or struct member 'fa' not described in 'nilfs_fileattr_get'
-fs/nilfs2/ioctl.c:133: warning: Function parameter or struct member 'idmap' not described in 'nilfs_fileattr_set'
-fs/nilfs2/ioctl.c:133: warning: Function parameter or struct member 'dentry' not described in 'nilfs_fileattr_set'
-fs/nilfs2/ioctl.c:133: warning: Function parameter or struct member 'fa' not described in 'nilfs_fileattr_set'
-fs/nilfs2/ioctl.c:164: warning: Function parameter or struct member 'inode' not described in 'nilfs_ioctl_getversion'
-fs/nilfs2/ioctl.c:164: warning: Function parameter or struct member 'argp' not described in 'nilfs_ioctl_getversion'
-fs/gfs2/glock.c:1277: warning: Function parameter or struct member 'ip' not described in '__gfs2_holder_init'
-fs/bcachefs/io_write.c:1584: warning: Function parameter or struct member 'bch2_write' not described in 'CLOSURE_CALLBACK'
-fs/gfs2/super.c:735: warning: Function parameter or struct member 'who' not described in 'gfs2_freeze_super'
-fs/gfs2/super.c:803: warning: Function parameter or struct member 'who' not described in 'gfs2_thaw_super'
-drivers/tty/n_hdlc.c:140: warning: Function parameter or struct member 'write_work' not described in 'n_hdlc'
-drivers/tty/n_hdlc.c:140: warning: Function parameter or struct member 'tty_for_write_work' not described in 'n_hdlc'
-drivers/memstick/core/memstick.c:206: warning: Function parameter or struct member 'host' not described in 'memstick_detect_change'
-drivers/memstick/core/memstick.c:222: warning: Function parameter or struct member 'host' not described in 'memstick_next_req'
-drivers/memstick/core/memstick.c:222: warning: Function parameter or struct member 'mrq' not described in 'memstick_next_req'
-drivers/memstick/core/memstick.c:248: warning: Function parameter or struct member 'host' not described in 'memstick_new_req'
-drivers/memstick/core/memstick.c:265: warning: Function parameter or struct member 'mrq' not described in 'memstick_init_req_sg'
-drivers/memstick/core/memstick.c:265: warning: Function parameter or struct member 'tpc' not described in 'memstick_init_req_sg'
-drivers/memstick/core/memstick.c:265: warning: Function parameter or struct member 'sg' not described in 'memstick_init_req_sg'
-drivers/memstick/core/memstick.c:295: warning: Function parameter or struct member 'mrq' not described in 'memstick_init_req'
-drivers/memstick/core/memstick.c:295: warning: Function parameter or struct member 'tpc' not described in 'memstick_init_req'
-drivers/memstick/core/memstick.c:295: warning: Function parameter or struct member 'buf' not described in 'memstick_init_req'
-drivers/memstick/core/memstick.c:295: warning: Function parameter or struct member 'length' not described in 'memstick_init_req'
-drivers/memstick/core/memstick.c:366: warning: Function parameter or struct member 'card' not described in 'memstick_set_rw_addr'
-drivers/memstick/core/memstick.c:513: warning: Function parameter or struct member 'host' not described in 'memstick_add_host'
-drivers/memstick/core/memstick.c:549: warning: Function parameter or struct member 'host' not described in 'memstick_remove_host'
-drivers/memstick/core/memstick.c:571: warning: Function parameter or struct member 'host' not described in 'memstick_free_host'
-drivers/memstick/core/memstick.c:582: warning: Function parameter or struct member 'host' not described in 'memstick_suspend_host'
-drivers/memstick/core/memstick.c:594: warning: Function parameter or struct member 'host' not described in 'memstick_resume_host'
-drivers/firmware/efi/libstub/efi-stub-helper.c:613: warning: Function parameter or struct member 'out' not described in 'efi_load_initrd'
-drivers/hwtracing/intel_th/core.c:866: warning: Function parameter or struct member 'drvdata' not described in 'intel_th_alloc'
-drivers/hwtracing/intel_th/core.c:866: warning: Function parameter or struct member 'ndevres' not described in 'intel_th_alloc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'msu_base' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'mbuf_priv' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'work' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'switch_on_unlock' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'orig_addr' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'orig_sz' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'iter_list' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'stop_on_full' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'do_irq' not described in 'msc'
-drivers/hwtracing/intel_th/msu.c:168: warning: Function parameter or struct member 'multi_is_broken' not described in 'msc'
-drivers/hwmon/aht10.c:224: warning: Function parameter or struct member 'data' not described in 'aht10_interval_write'
-drivers/hwmon/aht10.c:224: warning: Function parameter or struct member 'val' not described in 'aht10_interval_write'
-drivers/hwmon/aht10.c:235: warning: Function parameter or struct member 'data' not described in 'aht10_interval_read'
-drivers/hwmon/aht10.c:235: warning: Function parameter or struct member 'val' not described in 'aht10_interval_read'
-drivers/hwmon/aht10.c:244: warning: Function parameter or struct member 'data' not described in 'aht10_temperature1_read'
-drivers/hwmon/aht10.c:244: warning: Function parameter or struct member 'val' not described in 'aht10_temperature1_read'
-drivers/hwmon/aht10.c:259: warning: Function parameter or struct member 'data' not described in 'aht10_humidity1_read'
-drivers/hwmon/aht10.c:259: warning: Function parameter or struct member 'val' not described in 'aht10_humidity1_read'
-
-These do not break builds, so maybe there are higher priorities, but I will trust your judgment
-as if a senior developer's ...
-
-Best regards,
-Mirsad Todorovac
+>
+> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+> index 5c1d20985148..f732235df12d 100644
+> --- a/drivers/pwm/core.c
+> +++ b/drivers/pwm/core.c
+> @@ -251,7 +251,7 @@ int pwm_adjust_config(struct pwm_device *pwm)
+>   	 * duty cycle of 0.
+>   	 */
+>   	if (!state.period) {
+> -		state.duty_cycle =3D 0;
+> +		state.duty_cycle =3D pargs.duty_length;
+>   		state.period =3D pargs.period;
+>   		state.polarity =3D pargs.polarity;
+>  =20
+> @@ -437,6 +437,10 @@ of_pwm_xlate_with_flags(struct pwm_chip *chip, con=
+st struct of_phandle_args *arg
+>   	if (args->args_count > 2 && args->args[2] & PWM_POLARITY_INVERTED)
+>   		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+>  =20
+> +	pwm->args.duty_length =3D 0;
+> +	if (args->args_count > 3)
+> +		pwm->args.duty_length =3D args->args[3];
+> +
+>   	return pwm;
+>   }
+>   EXPORT_SYMBOL_GPL(of_pwm_xlate_with_flags);
+> @@ -457,6 +461,10 @@ of_pwm_single_xlate(struct pwm_chip *chip, const s=
+truct of_phandle_args *args)
+>   	if (args->args_count > 1 && args->args[1] & PWM_POLARITY_INVERTED)
+>   		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+>  =20
+> +	pwm->args.duty_length =3D 0;
+> +	if (args->args_count > 2)
+> +		pwm->args.duty_length =3D args->args[2];
+> +
+>   	return pwm;
+>   }
+>   EXPORT_SYMBOL_GPL(of_pwm_single_xlate);
+> @@ -1353,6 +1361,9 @@ static struct pwm_device *acpi_pwm_get(const stru=
+ct fwnode_handle *fwnode)
+>   	if (args.nargs > 2 && args.args[2] & PWM_POLARITY_INVERTED)
+>   		pwm->args.polarity =3D PWM_POLARITY_INVERSED;
+>  =20
+> +	/* Maybe extend this to apply args.args[3] if args.nargs > 3? */
+> +	pwm->args.duty_cycle =3D 0;
+> +
+>   	return pwm;
+>   }
+>  =20
+> @@ -1514,6 +1525,7 @@ struct pwm_device *pwm_get(struct device *dev, co=
+nst char *con_id)
+>  =20
+>   	pwm->args.period =3D chosen->period;
+>   	pwm->args.polarity =3D chosen->polarity;
+> +	pwm->args.duty_length =3D 0;
+>  =20
+>   	return pwm;
+>   }
+> diff --git a/include/linux/pwm.h b/include/linux/pwm.h
+> index f8c2dc12dbd3..678a97706eac 100644
+> --- a/include/linux/pwm.h
+> +++ b/include/linux/pwm.h
+> @@ -41,6 +41,7 @@ enum pwm_polarity {
+>    */
+>   struct pwm_args {
+>   	u64 period;
+> +	u32 duty_length;
+>   	enum pwm_polarity polarity;
+>   };
+>  =20
+> (I think it doesn't make sense to use a u64 here. At least the oftree
+> values are only 32 bit wide. I didn't check the ACPI part, if that is
+> only 32 bit wide, too, it would make sense to make period use a 32 bit
+> type, too.)
+>
+> Best regards
+> Uwe
