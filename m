@@ -1,112 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DE86FCB;
-	Thu, 11 Jul 2024 01:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C83171C1;
+	Thu, 11 Jul 2024 03:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720660500; cv=none; b=o1PvO2KFUqZXHVxdd+V0TBcbP862XrvV5md3lClfKBN67PFqtodxI3KZN/FlcG6uKpo26bRfe3AJbtrSkZuqwaZ2ZMQABNvMSIasOdYA+7uh15pstyTP+r5XBqgqHJ+06iVzOcU4ftzsz0ZmUS7QJtQd29Pfjyz11laO8s9RcQY=
+	t=1720668827; cv=none; b=ScC+EDtNFrLHXGP5Cx7M9u8jGIWPpF5QC0XHsPORD6cdNbxMDtMKOd09O+lmyvktPZ5ntbksN8eO2/UCBwez63FvWi03ZsIKWmCPmQmlKHyVAoHVtFf+meM61UDP+tbfl0r2YGuvRJepU2UPH3Uki/A0iqdpY6IF6Ww1j0AoSic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720660500; c=relaxed/simple;
-	bh=QmVeqyAg4kx3FS1nqobMtRmk9z39HHVvttSW/nDR6FQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tU8cRH/BHDk9GnAeKoJ00OFpYCSKaoiQb5/GUZ7NMkbeMgnVVf3GFWYY1cc/Z8QyKa57kvis7bDNFYNEryzWPSqJTB8OIsQcQo/ffnWMolI5bUB35HGTxz3DpQw+adqfRQYhlUquMRPudA8kqEDNzvmUDoKumq7DE8M8GrjxWqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QwcE3E/F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720668827; c=relaxed/simple;
+	bh=4hlYR62Hg+U/Y1kFs0Ifw4O8vrwVZnqQNa0SmlCLrlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iwp+7Hb1O6fG4ZB6vhVryxlmET34LbRPrbYPeGnYNj+qG15ZYfgi1bHXQvJE40tIr+q5Og8I7sKD+4XLP1fkcj5qXHiYYTmdY4GGeRjSbhLhX/Mjh6mYdqc/QYRMdm2vWZXwUb437ivGcFlhkzjWqLOuy0U1Cs16TPuFC61iSwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Igh+Qulw; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QwcE3E/F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBB7C4AF09;
-	Thu, 11 Jul 2024 01:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720660500;
-	bh=QmVeqyAg4kx3FS1nqobMtRmk9z39HHVvttSW/nDR6FQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QwcE3E/FDMXP7ng6I1/jq/eDzyZTjUMRg+cZQn8UKGpZJMqvviz7fXm6QDKltom1N
-	 vqMeKxtpC+ikvGjkBl6LLPliMLuoY6H8jOCt4MCcKCYPFOj7Q68E+htdG4/k8EHyqO
-	 WD3P9UYlPCpreeHOT+fTDtfORFijPTdz4MlCNg/Suo1A5rUCaVcDctHuzeIhIMKxGZ
-	 sAl9gfChwS1NjRJsya5Nl9OdgxdYDNjaZBPp0V2LGCTbNVlkpMTEKMcfPUgXncjoMt
-	 L2OsNWL9JVGBGRxEDAqSGyfDbxesr5PlixVU9KImF5Zx4t0jCALj7x38wJ7O2f4R2x
-	 WV0ApC+VNxUEQ==
-Date: Thu, 11 Jul 2024 02:14:56 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] regmap: Implement regmap_multi_reg_read()
-Message-ID: <Zo8yECqjvhw6dNGy@finisterre.sirena.org.uk>
-References: <20240710015622.1960522-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Igh+Qulw"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2c9a1ea8cc3so345456a91.0;
+        Wed, 10 Jul 2024 20:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720668825; x=1721273625; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yt3QLy2Sw58+UdLWM0CN81s3FpNswdEnQpHKCTNZxGQ=;
+        b=Igh+QulwbOMO39saUbD86koE8kh3ZEpy4TnU5RnXo6+wZZXbQCiQ8zanchz/W4P6GP
+         0H3qzZPOLoOJ2kPZMRqXNWF2xQjucfUQaukKGYXkKhbg4U4zM/NFH5dqDDkpafK5B3eX
+         OUts4ceyT0t3xtgD5IoUre7SBlsmm8GYxXMcRpWV++56/uq1Yq4YxwM7FQdPXwDKx1na
+         KHTTitZmWXPlynbLKbnEoFcZi+VaMD9fzrNq8MPqcw+8DKpEO6uK+P3TWcjI9y529utk
+         XoQsj8nyN5O+yinJfsnhvDEK8XmxXIGI9ZjFHNwv6MkzXDrc07AzpRcSnKlcMltTMSfT
+         ePgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720668825; x=1721273625;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yt3QLy2Sw58+UdLWM0CN81s3FpNswdEnQpHKCTNZxGQ=;
+        b=MR7ILMZ+OLnrInbwX5oHC1CuQzPJ4vbJfJ0kqBhSZRXDXaMsrBYWkOx7qynpTHIZUj
+         YETAhSu2xsErZHU7KHR4V2Rqc2d12n7/upS5YpUtC3N3vctIVumXjdSpqQKqkRDYwjSS
+         if+X6StFDamtRHOuW2/jKSn6Ng+H8p8IXPhhda82QFS51+93rQAyMYy/Y8/fpIrkjXHK
+         mqfFNDWXeEsTj1clvu0xB+zHgqKtnaEhBpZP/4Jkw6GSFigIwBdrcP0XiHjLPYQvjEMc
+         rRwsM+YZmTVyK77qMHxMlsaWEHzbIuekIunBvK5a+dYEB4euI1LnXUI03AIM8SEcjnud
+         4kTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2kqkvcxV9LnQ+MnE1VJHn4ZGTJhClXTWneY+JL204Q7O0HbtbyOGfXugCCqxrd4m9HVyje+5ytQiq/YIixJurTiUZompUh9FrvENrHOU3t+2+BLzmr6z2+ugvQQuaNr0Ss37b4TCm5as=
+X-Gm-Message-State: AOJu0Yyvi/ondpkvC9XyEKdSibbaAcnTccHvbezZdxWAtXvqW+su96KK
+	q26yHm/NUrmeMZQbmsHVnHr72H+vlGW6wb0l4CjRnw+lcP0AlhXS
+X-Google-Smtp-Source: AGHT+IFQOFIlozp52Pu30R4uQDnndw0Jf0+KidnafwhJyD+e2M9KkS/A/OAlv8KbGmqJAe+9sVwM6A==
+X-Received: by 2002:a17:90a:d70a:b0:2c9:6a0e:6e66 with SMTP id 98e67ed59e1d1-2ca9d74756cmr2106536a91.5.1720668824961;
+        Wed, 10 Jul 2024 20:33:44 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c99a9977cfsm12598020a91.34.2024.07.10.20.33.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 20:33:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ddb24ce3-a8a7-4535-9d8f-9368440d502e@roeck-us.net>
+Date: Wed, 10 Jul 2024 20:33:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PLf9y0OX9e5TZU/2"
-Content-Disposition: inline
-In-Reply-To: <20240710015622.1960522-1-linux@roeck-us.net>
-X-Cookie: Your love life will be... interesting.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/3] regmap: Implement regmap_multi_reg_read()
+To: Mark Brown <broonie@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240710015622.1960522-1-linux@roeck-us.net>
+ <Zo8yECqjvhw6dNGy@finisterre.sirena.org.uk>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Zo8yECqjvhw6dNGy@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 7/10/24 18:14, Mark Brown wrote:
+> On Tue, Jul 09, 2024 at 06:56:19PM -0700, Guenter Roeck wrote:
+>> regmap_multi_reg_read() is similar to regmap_bilk_read() but reads from
+>> an array of non-sequential registers. It is helpful if multiple non-
+>> sequential registers need to be read in a single operation which would
+>> otherwise have to be mutex protected.
+> 
+> It would be nice to have KUnit coverage for the new function too.
+> 
 
---PLf9y0OX9e5TZU/2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Agreed, makes sense. I'll have a look and see what I can come up with.
+I assume you'd also like to have a unit test for regmap_multi_reg_write() ?
 
-On Tue, Jul 09, 2024 at 06:56:19PM -0700, Guenter Roeck wrote:
-> regmap_multi_reg_read() is similar to regmap_bilk_read() but reads from
-> an array of non-sequential registers. It is helpful if multiple non-
-> sequential registers need to be read in a single operation which would
-> otherwise have to be mutex protected.
+Thanks,
+Guenter
 
-It would be nice to have KUnit coverage for the new function too.
-
-The following changes since commit f2661062f16b2de5d7b6a5c42a9a5c96326b8454:
-
-  Linux 6.10-rc5 (2024-06-23 17:08:54 -0400)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-multi-reg-write
-
-for you to fetch changes up to 3c1ff93b4deea502cd8b0869839557cab2a28b71:
-
-  regmap: Implement regmap_multi_reg_read() (2024-07-10 18:45:34 +0100)
-
-----------------------------------------------------------------
-regmap: Implement regmap_multi_reg_read()
-
-A new API function from Guenter Roeck:
-
-regmap_multi_reg_read() is similar to regmap_bulk_read() but reads from
-an array of non-sequential registers. It is helpful if multiple non-
-sequential registers need to be read in a single operation which would
-otherwise have to be mutex protected.
-
-The name of the new function was chosen to match the existing function
-regmap_multi_reg_write().
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      regmap: Implement regmap_multi_reg_read()
-
- drivers/base/regmap/regmap.c | 103 ++++++++++++++++++++++++++++---------------
- include/linux/regmap.h       |   2 +
- 2 files changed, 70 insertions(+), 35 deletions(-)
-
---PLf9y0OX9e5TZU/2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaPMg8ACgkQJNaLcl1U
-h9DFUAf/ZT+z/+QECPzqG+vbsK0T/UIkvKo+EJm2Mt3GwDfE9aaJSFE0qUAyureZ
-W4SXt8Dw3RUkeU906rtuVF17g8SSb6RlmTTXo3pWfivSFh1eMxuCLaEyUHFBk921
-arbpAt6j2oc2jhqIwEJCu5YR441Hu8ktfmKjJIyIHcqf9dunkmUICWQIUzoDEm0r
-42uFy4xcuNlNHWtpeyrVGicXTX7zkwdLwLfived4sEar8oMIztQ9Ig9l3NCncez3
-MMJR1vnv1xX05hwy+Kw6LzA46nN4xtz67WUAtZa6WM6As1UC5u/udgVUV0qB3Jlu
-Ed4RhJno0mOpxtxSAJ8qjoe6JRHYAg==
-=jntA
------END PGP SIGNATURE-----
-
---PLf9y0OX9e5TZU/2--
