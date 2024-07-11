@@ -1,44 +1,43 @@
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB0219EEBF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AD215B133
 	for <linux-hwmon@vger.kernel.org>; Thu, 11 Jul 2024 23:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720741582; cv=none; b=Q1NOuXSpTbNzyDyePu9clqhEVM0+zB8qssuqf4MYi0NDzqouUTbKI/GOwW9k0vNDL/44IPCFhZBZOZVvtr3u3YhR+6ufWYd3GE1P+XEGk6eDeGRfkMIOF+NndYuOrcYOBuczsCnlAVYwdr8GZ9mXZWVeUsuMwjdHQIGUMthiQ9A=
+	t=1720741582; cv=none; b=pw7EweFu8lSvrR3PlG1SRIupQ4H0XQqA7MTJtUwo2MqHogzQXUrzC6nvUIyjZmaz7/WSIAHoYSw11lXJDAKqHeXbER4vAfjDYmOFF1172dQ50/2tnRN1tNZZ1fPiA82523O1w5N9czvjDqfbiSGhFnNtvoIa0t0QeC3FHkYMcbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720741582; c=relaxed/simple;
-	bh=PgGp7QdGHzRSCtu6RukkPy9ylvUkbdEXuoNaRqoaAKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dL1R+hUgu8kklQ3YcmfD15fE5vtryluEowUSzQVzPK/srASFheW7dfbgTUWyXau3YIX9O2FwryIahj+WT511jRzP4TEOvdedq3U1TAStfO5fAepkr6b698wUldhIq8S4/kFvjhgdaGsp3NnV/N3A1benqmF2jAErCidtIwyWSyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=azvPbddD; arc=none smtp.client-ip=202.36.163.20
+	bh=2lokm9uCl6o/abXtjtX/wmsJ5mYneFBL5sd2oqnz0PM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=czU7w18a+5IqeuI8JlgBblO+XxXzWdlffJ5CxeBwADfj0thuZTAP3IJLV1yUeP6y76jmBadfNQMpWUikfDFDEgFwE7K0m6rwEl918hcKRnIW1117un8oCGwKSiDxEjvBYY8GxZsu7L+sjBSFJb9VmwX8n3AbjdwXbMYFamsYdjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=ThcWAICA; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="azvPbddD"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="ThcWAICA"
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9BB582C05E1;
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7913D2C00BB;
 	Fri, 12 Jul 2024 11:46:16 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
 	s=mail181024; t=1720741576;
-	bh=RuTTVBDdix7lp1WaDSw93ev/kB8Tjmkx3MrD5bBHFcs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=azvPbddDdBBbxljMN9xxdqlBCO54axlg9yyhDg/XoIBzsB8Elmzjc4NzW7VRUtKFh
-	 Yuqf4hkd3+rgX6QV09Gnecz+4VRaLaqm0yyXahfg4OGC6F35xekUPKFy3i7ufkR9HY
-	 9IVw8dYjeNQRFYXdcoHrJ+TZ7GeVxzJewE+R14tKzWFo3xmATt79ATaXr8a/V3vE/r
-	 EQK4lfO/kzGixaO9Fgoc7xwdD9g68oCMr6Mnhf0hlJ5UBIikmVAvjV74Ru5eZpdeb5
-	 AQFM6/wFyoGx3q70rDh7t+jC5jUWcFbun4yq1vlb/vExj+9zyHVQgHz0lFwcGDQlbi
-	 T9CA+dq6dqPVQ==
+	bh=EKGPPthhjVJwEdnCORAyHfpXsGIZwcVoOJ6m2/X6BtA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ThcWAICAgwy575O78H9g8ZQevLUk4VqQnqxgYb9btjLsvjOZAI3gEBCy/DQ0pcmsO
+	 +SSD6g417oVqUijXYoN5cD56ch724kse+Ptq5va6zdWEABf0oWtKKH8XQFoiUXCFzW
+	 WP2WTYkRGctI/aIB1pxxo4vvWLWsIjqPWlYo5RtwROmSbUqMUHk+1WbUzS+bKioMtS
+	 n+/bK7LmY1rHifK/HiqraqeGxgYeVAnuV8268+JxtqB2uYvajy9WOUKBfYL/0Mcy3A
+	 01a4smN+xAipiYb0vUfortQIm+URivSDUd4KuNaMoGUcyqJXwv8tQNogh2VHCO3OVY
+	 RSQAdsD9MWLMg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B66906ec80003>; Fri, 12 Jul 2024 11:46:16 +1200
+	id <B66906ec80000>; Fri, 12 Jul 2024 11:46:16 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 46E6113EE5B;
+	by pat.atlnz.lc (Postfix) with ESMTP id 3C12013EE2B;
 	Fri, 12 Jul 2024 11:46:16 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 442A32809DC; Fri, 12 Jul 2024 11:46:16 +1200 (NZST)
+	id 36DDB28097C; Fri, 12 Jul 2024 11:46:16 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: jdelvare@suse.com,
 	linux@roeck-us.net,
@@ -51,12 +50,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pwm@vger.kernel.org,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 3/3] hwmon: (adt7475) Add support for configuring initial PWM state
-Date: Fri, 12 Jul 2024 11:46:14 +1200
-Message-ID: <20240711234614.3104839-4-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 0/3] hwmon: (adt7475) duty cycle configuration
+Date: Fri, 12 Jul 2024 11:46:11 +1200
+Message-ID: <20240711234614.3104839-1-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240711234614.3104839-1-chris.packham@alliedtelesis.co.nz>
-References: <20240711234614.3104839-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,190 +61,88 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=PIKs+uqC c=1 sm=1 tr=0 ts=66906ec8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=cN3pOM3YZmoqkZYst0EA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=PIKs+uqC c=1 sm=1 tr=0 ts=66906ec8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=1vY5SClPdTbzMX9iZtUA:9 a=3ZKOabzyN94A:10
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-By default the PWM duty cycle in hardware is 100%. On some systems this
-can cause unwanted fan noise. Add the ability to specify the fan
-connections and initial state of the PWMs via device properties.
+I have a system that has very over spec'd fans so the amount of noise whe=
+n they
+run at 100% duty cycle is considerable. We have userspace monitoring tool=
+s that
+will configure appropriate fan control parameters but there is a bit of a=
+ delay
+between the kernel loading the driver and the userland tools catching up =
+to
+configure the fan control. This series adds device properties that allow =
+the
+PWM duty cycle to be specified via device properties so the PWM duty cycl=
+e can
+be reduced as soon as possible.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+This series attempts to setup the adt7475 as a pwm provider so that we ca=
+n
+specify these properties. The devicetree support was reasonably straight
+forward (example usage is in the binding patch). I struggled to get the A=
+CPI
+version working well and in the end the code had to distinguish between t=
+he
+of_node and other case. The ASL I've ended up with is
 
-Notes:
-    Changes in v5:
-    - Deal with PWM frequency and duty cycle being specified in nanosecon=
-ds
-    Changes in v4:
-    - Support DT and ACPI fwnodes
-    - Put PWM into manual mode
-    Changes in v3:
-    - Use the pwm provider/consumer bindings
-    Changes in v2:
-    - Use correct device property string for frequency
-    - Allow -EINVAL and only warn on error
-    - Use a frequency of 0 to indicate that the hardware should be left a=
-s-is
+    Device (ADT0)
+    {
+        Name (_HID, "PRP0001")
+        Name (_CRS, ResourceTemplate () {
+            I2cSerialBusV2 (0x2E, ControllerInitiated,
+                            100000, AddressingMode7Bit,
+                            "^^CH00", 0x00,
+                            ResourceConsumer, , Exclusive, )
+        })
+        Name (_DSD, Package () {
+            ToUUID (UUID_DEVICE_PROPERTIES),
+            Package () {
+                Package () { "compatible", "adi,adt7476" },
+                Package () { "#pwm-cells", 4 },
+            },
+        })
+        Device (FAN0)
+        {
+            Name (_ADR, 0)
+            Name (_DSD, Package () {
+                ToUUID (UUID_DEVICE_PROPERTIES),
+                Package () {
+                    Package () { "pwms", Package () { 0, 44444, 1, 22222 =
+} },
+                }
+            })
+        }
+        Device (FAN1)
+        {
+            Name (_ADR, 0)
+            Name (_DSD, Package () {
+                ToUUID (UUID_DEVICE_PROPERTIES),
+                Package () {
+                    Package () { "pwms", Package () { 2, 44444, 1, 22222 =
+} },
+                }
+            })
+        }
+    }
 
- drivers/hwmon/adt7475.c | 122 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
+If had to introduce a code path that parses that because try as I might I=
+ could
+not convince fwnode_property_get_reference_args() to fetch the informatio=
+n out
+of the ACPI data. If I've missed something obvious please let me know.
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 4224ffb30483..5edf423bcb6c 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -21,6 +21,8 @@
- #include <linux/of.h>
- #include <linux/util_macros.h>
-=20
-+#include <dt-bindings/pwm/pwm.h>
-+
- /* Indexes for the sysfs hooks */
-=20
- #define INPUT		0
-@@ -1662,6 +1664,122 @@ static int adt7475_set_pwm_polarity(struct i2c_cl=
-ient *client)
- 	return 0;
- }
-=20
-+struct adt7475_pwm_config {
-+	int index;
-+	int freq;
-+	int flags;
-+	int duty;
-+};
-+
-+static int adt7475_pwm_properties_parse_reference_args(struct fwnode_han=
-dle *fwnode,
-+						       struct adt7475_pwm_config *cfg)
-+{
-+	int ret;
-+	struct fwnode_reference_args args =3D {};
-+	int freq_hz;
-+	int duty;
-+
-+	ret =3D fwnode_property_get_reference_args(fwnode, "pwms", "#pwm-cells"=
-, 0, 0, &args);
-+	if (ret)
-+		return ret;
-+
-+	if (args.nargs !=3D 4) {
-+		fwnode_handle_put(args.fwnode);
-+		return -EINVAL;
-+	}
-+
-+	freq_hz =3D 1000000000UL / args.args[1];
-+	duty =3D 255 / (args.args[1] / args.args[3]);
-+
-+	cfg->index =3D args.args[0];
-+	cfg->freq =3D find_closest(freq_hz, pwmfreq_table, ARRAY_SIZE(pwmfreq_t=
-able));
-+	cfg->flags =3D args.args[2];
-+	cfg->duty =3D clamp_val(duty, 0, 0xFF);
-+
-+	fwnode_handle_put(args.fwnode);
-+
-+	return 0;
-+}
-+
-+static int adt7475_pwm_properties_parse_args(struct fwnode_handle *fwnod=
-e,
-+					     struct adt7475_pwm_config *cfg)
-+{
-+	int ret;
-+	u32 args[4] =3D {};
-+	int freq_hz;
-+	int duty;
-+
-+	ret =3D fwnode_property_read_u32_array(fwnode, "pwms", args, ARRAY_SIZE=
-(args));
-+	if (ret)
-+		return ret;
-+
-+	freq_hz =3D 1000000000UL / args[1];
-+	duty =3D 255 / (args[1] / args[3]);
-+
-+	cfg->index =3D args[0];
-+	cfg->freq =3D find_closest(freq_hz, pwmfreq_table, ARRAY_SIZE(pwmfreq_t=
-able));
-+	cfg->flags =3D args[2];
-+	cfg->duty =3D clamp_val(duty, 0, 0xFF);
-+
-+	return 0;
-+}
-+
-+static int adt7475_fan_pwm_config(struct i2c_client *client)
-+{
-+	struct adt7475_data *data =3D i2c_get_clientdata(client);
-+	struct fwnode_handle *child;
-+	struct adt7475_pwm_config cfg =3D {};
-+	int ret;
-+
-+	device_for_each_child_node(&client->dev, child) {
-+		if (!fwnode_property_present(child, "pwms"))
-+			continue;
-+
-+		if (is_of_node(child))
-+			ret =3D adt7475_pwm_properties_parse_reference_args(child, &cfg);
-+		else
-+			ret =3D adt7475_pwm_properties_parse_args(child, &cfg);
-+
-+		if (cfg.index >=3D ADT7475_PWM_COUNT)
-+			return -EINVAL;
-+
-+		ret =3D adt7475_read(PWM_CONFIG_REG(cfg.index));
-+		if (ret < 0)
-+			return ret;
-+		data->pwm[CONTROL][cfg.index] =3D ret;
-+		if (cfg.flags & PWM_POLARITY_INVERTED)
-+			data->pwm[CONTROL][cfg.index] |=3D BIT(4);
-+		else
-+			data->pwm[CONTROL][cfg.index] &=3D ~BIT(4);
-+
-+		/* Force to manual mode so PWM values take effect */
-+		data->pwm[CONTROL][cfg.index] &=3D ~0xE0;
-+		data->pwm[CONTROL][cfg.index] |=3D 0x07 << 5;
-+
-+		ret =3D i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(cfg.index),
-+						data->pwm[CONTROL][cfg.index]);
-+		if (ret)
-+			return ret;
-+
-+		data->pwm[INPUT][cfg.index] =3D cfg.duty;
-+		ret =3D i2c_smbus_write_byte_data(client, PWM_REG(cfg.index),
-+						data->pwm[INPUT][cfg.index]);
-+		if (ret)
-+			return ret;
-+
-+		data->range[cfg.index] =3D adt7475_read(TEMP_TRANGE_REG(cfg.index));
-+		data->range[cfg.index] &=3D ~0xf;
-+		data->range[cfg.index] |=3D cfg.freq;
-+
-+		ret =3D i2c_smbus_write_byte_data(client, TEMP_TRANGE_REG(cfg.index),
-+						data->range[cfg.index]);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int adt7475_probe(struct i2c_client *client)
- {
- 	enum chips chip;
-@@ -1778,6 +1896,10 @@ static int adt7475_probe(struct i2c_client *client=
-)
- 	if (ret && ret !=3D -EINVAL)
- 		dev_warn(&client->dev, "Error configuring pwm polarity\n");
-=20
-+	ret =3D adt7475_fan_pwm_config(client);
-+	if (ret)
-+		dev_warn(&client->dev, "Error %d configuring fan/pwm\n", ret);
-+
- 	/* Start monitoring */
- 	switch (chip) {
- 	case adt7475:
+Chris Packham (3):
+  dt-bindings: hwmon: Add adt7475 fan/pwm properties
+  dt-bindings: hwmon: adt7475: Deprecate adi,pwm-active-state
+  hwmon: (adt7475) Add support for configuring initial PWM state
+
+ .../devicetree/bindings/hwmon/adt7475.yaml    |  37 +++++-
+ drivers/hwmon/adt7475.c                       | 122 ++++++++++++++++++
+ 2 files changed, 157 insertions(+), 2 deletions(-)
+
 --=20
 2.45.2
 
