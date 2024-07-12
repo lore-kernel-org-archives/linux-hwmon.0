@@ -1,368 +1,202 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27D716A93F
-	for <linux-hwmon@vger.kernel.org>; Fri, 12 Jul 2024 11:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1D716EBFC;
+	Fri, 12 Jul 2024 12:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720782748; cv=none; b=LJ5PxCxxih4MfNHfQHiIo1/nO18JeMOCWkscTXE4wzam34yYwkkkjZtY2OE6JgQmrdk6CvULIXx51xxt17A129ki504p4LQREVawvkfTdMg3a7J5shjGBm5e1MAD2Vp48egt06c24qH8UIXJvDRvueV4mwHyi/VN1asM9B4EtqM=
+	t=1720788391; cv=none; b=lc7V4tBSt9BQcZTMSQI8t1EnzAj8rFEvzLAIwaCwYWdF645MKK1SZlWIWCcm+nLi1ZVt9YAwfjv3dAZBq8H3iqj3a8rfTroWgeZZE3tA5xnEJbIzmPihhFWBz7bV8owvXdS0E4L2DbELvxw92SfY5rRle/nq6p2baVl7PAK7u88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720782748; c=relaxed/simple;
-	bh=qvowtk4oPBtXidGGSdnwGV7eiZrna+QT1iCqD7O6B0M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kpooHFI03REQjiuOrHgiybwbNons/KNDHpZ5LaJKpmvsWPAq9Dcpcuj4JrHTalbZ5H7cLtpM60y+Z5q1G3JLySTaVVOxC/bYFxTJrvl5z2TaXYlnmd4WMJjNzTAspY6Rcaz3xrlZo4RNiUMrKPjV26YOt4D5VRyQwqCuCEL6PYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PGcKCoPl; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1720788391; c=relaxed/simple;
+	bh=Erx0gIUMC5sqOzJTfoUmK6Hj8OfOwuZt+Y0hxU1mY18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZI25YuMAugGi8j++nXTuCwpXFka7cYn6/GmC51AVBWaChQL/qi+0aTCzZSBAB9PB7QS5DZ2+3CE9J2wD2PSvmIRQZQIZUhVlUBGmH8tYY+9LjaKjtJwZVPxqweyrm1Qj9at7FcR/PIODS6l21uFpvPE/2oZ95aHROz9NtMOdrUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NSRq5EBl; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PGcKCoPl"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-426636ef8c9so12297345e9.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 12 Jul 2024 04:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720782744; x=1721387544; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ws/WN5VtvB/NY3hvXh8JUFotsmoTKoVR7TJMcWsTJ8=;
-        b=PGcKCoPlsdaHI3/D+gjuw71xiKWqqXjbD1Xtu3lUAo+bkO5MTFGHh5IQcrpfdjkSUD
-         GEPIaPF1NuRyxOg5BsEizw0lKg0wIoYQwIzKSBKCuomvNq/At+CajeNfj6WUFVoK/ZUj
-         1BgXLF7XitSBtk0j+o4LHCbdQTP+wDWmaYrKYOwJKNEt54Mu43riCg0Ovlvxhfahfdwg
-         gt6JrIqS68bMiP+Bzv3OS4/Pr9c3+2cQYkoApQtkpKCNsBl8XtvHX6z+a3fgTmqd+vVv
-         x0U1RgE//nLAzM1DD2mccyocVZiLSCJnzwSIlOPSFm4lbRTyC3FYVSYGhDt0coC2DWg6
-         I2eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720782744; x=1721387544;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0ws/WN5VtvB/NY3hvXh8JUFotsmoTKoVR7TJMcWsTJ8=;
-        b=fjvKw+cETHslaD501RJEqF2cj+VC/1inzrmyTuiGHWwbBFVbUjoopUsLkSsenHkYVM
-         TkWz+rU7+mLNy4ZSvrhqHPiIO7r7KWILjkH2ic4CUED6l4OA8j/78h+lMKZIul1tUfdH
-         IBQ36HoW4zcGvIh6zD04w/gbseL80dIOzvMdEE6HJpRmfEiSybP6la01oVnRjrYMEK5s
-         pGbnuuICE9gM0Kej2AXxhNh0zCsPUEP1D0s85Cfy91rStvQSKuOsV7oGMYAlarhoo2t2
-         27X4ozbje1ldQo6gKeN79987Q6URzpfwR4Q0DuZpz45LApo8MEuEY+WzeKaiZKUEzUkb
-         EXiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpNK3amE/hyxN8iC9YP6ZxKJZvQjsIws3L+l1zLS1oqpU4HB842xb2gc4jRnuT9vf2xjsueIhUKd8NslL2NyfHjSymN5SM5sK9AOA=
-X-Gm-Message-State: AOJu0YwFiQICE8oc33/r5FeRslb7C8Cz5fHBdAkWYPa+l+4D4+cEVkuS
-	vSLvO3YN0GcgxG2IBJ7Bse2RCAj5xV3QwiuJYb1/QH8pxDwd/zf3UH3JokFcmtg=
-X-Google-Smtp-Source: AGHT+IE+I8xL6C1YjfC9f2FLcxUf4RylJkfgRfsuuQ/1dYXYmMPyg15Xeq2cyJNJBVSZKhgvE/+93Q==
-X-Received: by 2002:a05:600c:48a7:b0:425:7bbf:fd07 with SMTP id 5b1f17b1804b1-426707cea0bmr73062785e9.5.1720782744106;
-        Fri, 12 Jul 2024 04:12:24 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f2babdfsm20106705e9.36.2024.07.12.04.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 04:12:23 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Banajit Goswami <bgoswami@quicinc.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	alsa-devel@alsa-project.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: codecs: wsa884x: Implement temperature reading and hwmon
-Date: Fri, 12 Jul 2024 13:12:06 +0200
-Message-ID: <20240712111206.72534-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NSRq5EBl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720788389; x=1752324389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Erx0gIUMC5sqOzJTfoUmK6Hj8OfOwuZt+Y0hxU1mY18=;
+  b=NSRq5EBlb7K1nWYJMVgbGsxa5K+WmXsTh/9iLhMO7sHQ26CMB7qBH5R+
+   erFAiW5u0y/6KdsbiX+amyULqvuHcVawEG92Hf1ZlNOBrLwD6YrzTbWEI
+   RwqDkuU+QK8IYx/tNm5x8qiEbXF8uh31uOU9uOkOuRaBKitd5FsqA9gYt
+   hrmn2UjxRGEmV5ZXcpMqeNvHu7KEbxblzBQwQE55YcC1uohi362e+d8Pw
+   xqcnh2uEHUevAttYnlSaWvwrunmXisZt9DaqWPUZGsA3q1uS0QjieeVau
+   UV7BxM1OOs58DjpIvXXm+V6RszjzwPe5w0tFLDXWyi9/bFi7TsPiw6BPI
+   w==;
+X-CSE-ConnectionGUID: ntrCyXSGS9KrCPMN/hLpoQ==
+X-CSE-MsgGUID: J3UFfIr9T5WHWSqejI+GiA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="18092313"
+X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
+   d="scan'208";a="18092313"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 05:46:28 -0700
+X-CSE-ConnectionGUID: EDVtn1l5QK2eRdquepR0IA==
+X-CSE-MsgGUID: 7jGGRIxoQjiXaAkF7BUY2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
+   d="scan'208";a="86398888"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 12 Jul 2024 05:46:24 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSFfJ-000am6-39;
+	Fri, 12 Jul 2024 12:46:21 +0000
+Date: Fri, 12 Jul 2024 20:45:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ukleinek@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 3/3] hwmon: (adt7475) Add support for configuring
+ initial PWM state
+Message-ID: <202407122021.YFqdjjQS-lkp@intel.com>
+References: <20240711234614.3104839-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711234614.3104839-4-chris.packham@alliedtelesis.co.nz>
 
-Read temperature of the speaker and expose it via hwmon interface, which
-will be later used during calibration of speaker protection algorithms.
+Hi Chris,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- sound/soc/codecs/wsa884x.c | 197 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 197 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/sound/soc/codecs/wsa884x.c b/sound/soc/codecs/wsa884x.c
-index 7b19df9c1728..5f4acd66f942 100644
---- a/sound/soc/codecs/wsa884x.c
-+++ b/sound/soc/codecs/wsa884x.c
-@@ -5,11 +5,14 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/cleanup.h>
- #include <linux/device.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/hwmon.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-@@ -301,8 +304,28 @@
- #define WSA884X_PA_FSM_MSK1		(WSA884X_DIG_CTRL0_BASE + 0x3b)
- #define WSA884X_PA_FSM_BYP_CTL		(WSA884X_DIG_CTRL0_BASE + 0x3c)
- #define WSA884X_PA_FSM_BYP0		(WSA884X_DIG_CTRL0_BASE + 0x3d)
-+#define WSA884X_PA_FSM_BYP0_DC_CAL_EN_MASK		0x01
-+#define WSA884X_PA_FSM_BYP0_DC_CAL_EN_SHIFT		0
-+#define WSA884X_PA_FSM_BYP0_CLK_WD_EN_MASK		0x02
-+#define WSA884X_PA_FSM_BYP0_CLK_WD_EN_SHIFT		1
-+#define WSA884X_PA_FSM_BYP0_BG_EN_MASK			0x04
-+#define WSA884X_PA_FSM_BYP0_BG_EN_SHIFT			2
-+#define WSA884X_PA_FSM_BYP0_BOOST_EN_MASK		0x08
-+#define WSA884X_PA_FSM_BYP0_BOOST_EN_SHIFT		3
-+#define WSA884X_PA_FSM_BYP0_PA_EN_MASK			0x10
-+#define WSA884X_PA_FSM_BYP0_PA_EN_SHIFT			4
-+#define WSA884X_PA_FSM_BYP0_D_UNMUTE_MASK		0x20
-+#define WSA884X_PA_FSM_BYP0_D_UNMUTE_SHIFT		5
-+#define WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_MASK		0x40
-+#define WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_SHIFT		6
-+#define WSA884X_PA_FSM_BYP0_TSADC_EN_MASK		0x80
-+#define WSA884X_PA_FSM_BYP0_TSADC_EN_SHIFT		7
- #define WSA884X_PA_FSM_BYP1		(WSA884X_DIG_CTRL0_BASE + 0x3e)
- #define WSA884X_TADC_VALUE_CTL		(WSA884X_DIG_CTRL0_BASE + 0x50)
-+#define WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK	0x01
-+#define WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_SHIFT	0
-+#define WSA884X_TADC_VALUE_CTL_VBAT_VALUE_RD_EN_MASK	0x02
-+#define WSA884X_TADC_VALUE_CTL_VBAT_VALUE_RD_EN_SHIFT	1
- #define WSA884X_TEMP_DETECT_CTL		(WSA884X_DIG_CTRL0_BASE + 0x51)
- #define WSA884X_TEMP_DIN_MSB		(WSA884X_DIG_CTRL0_BASE + 0x52)
- #define WSA884X_TEMP_DIN_LSB		(WSA884X_DIG_CTRL0_BASE + 0x53)
-@@ -691,6 +714,17 @@
- 		SNDRV_PCM_FMTBIT_S24_LE |\
- 		SNDRV_PCM_FMTBIT_S24_3LE | SNDRV_PCM_FMTBIT_S32_LE)
- 
-+/* Two-point trimming for temperature calibration */
-+#define WSA884X_T1_TEMP			-10L
-+#define WSA884X_T2_TEMP			150L
-+
-+/*
-+ * Device will report senseless data in many cases, so discard any measurements
-+ * outside of valid range.
-+ */
-+#define WSA884X_LOW_TEMP_THRESHOLD	5
-+#define WSA884X_HIGH_TEMP_THRESHOLD	45
-+
- struct wsa884x_priv {
- 	struct regmap *regmap;
- 	struct device *dev;
-@@ -706,6 +740,13 @@ struct wsa884x_priv {
- 	int active_ports;
- 	int dev_mode;
- 	bool hw_init;
-+	/*
-+	 * Protects temperature reading code (related to speaker protection) and
-+	 * fields: temperature and pa_on.
-+	 */
-+	struct mutex sp_lock;
-+	unsigned int temperature;
-+	bool pa_on;
- };
- 
- enum {
-@@ -1650,6 +1691,10 @@ static int wsa884x_spkr_event(struct snd_soc_dapm_widget *w,
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_POST_PMU:
-+		mutex_lock(&wsa884x->sp_lock);
-+		wsa884x->pa_on = true;
-+		mutex_unlock(&wsa884x->sp_lock);
-+
- 		wsa884x_spkr_post_pmu(component, wsa884x);
- 
- 		snd_soc_component_write_field(component, WSA884X_PDM_WD_CTL,
-@@ -1661,6 +1706,10 @@ static int wsa884x_spkr_event(struct snd_soc_dapm_widget *w,
- 		snd_soc_component_write_field(component, WSA884X_PDM_WD_CTL,
- 					      WSA884X_PDM_WD_CTL_PDM_WD_EN_MASK,
- 					      0x0);
-+
-+		mutex_lock(&wsa884x->sp_lock);
-+		wsa884x->pa_on = false;
-+		mutex_unlock(&wsa884x->sp_lock);
- 		break;
- 	}
- 
-@@ -1800,6 +1849,144 @@ static struct snd_soc_dai_driver wsa884x_dais[] = {
- 	},
- };
- 
-+static int wsa884x_get_temp(struct wsa884x_priv *wsa884x, long *temp)
-+{
-+	unsigned int d1_msb = 0, d1_lsb = 0, d2_msb = 0, d2_lsb = 0;
-+	unsigned int dmeas_msb = 0, dmeas_lsb = 0;
-+	int d1, d2, dmeas;
-+	unsigned int mask;
-+	long val;
-+	int ret;
-+
-+	guard(mutex)(&wsa884x->sp_lock);
-+
-+	if (wsa884x->pa_on) {
-+		/*
-+		 * Reading temperature is possible only when Power Amplifier is
-+		 * off. Report last cached data.
-+		 */
-+		*temp = wsa884x->temperature;
-+		return 0;
-+	}
-+
-+	ret = pm_runtime_resume_and_get(wsa884x->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	mask = WSA884X_PA_FSM_BYP0_DC_CAL_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_CLK_WD_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_BG_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_D_UNMUTE_MASK |
-+	       WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_TSADC_EN_MASK;
-+	/*
-+	 * Here and further do not care about read or update failures.
-+	 * For example, before turning on Power Amplifier for the first
-+	 * time, reading WSA884X_TEMP_DIN_MSB will always return 0.
-+	 * Instead, check if returned value is within reasonable
-+	 * thresholds.
-+	 */
-+	regmap_update_bits(wsa884x->regmap, WSA884X_PA_FSM_BYP0, mask, mask);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_TADC_VALUE_CTL,
-+			   WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK,
-+			   FIELD_PREP(WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK, 0x0));
-+
-+	regmap_read(wsa884x->regmap, WSA884X_TEMP_DIN_MSB, &dmeas_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_TEMP_DIN_LSB, &dmeas_lsb);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_TADC_VALUE_CTL,
-+			   WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK,
-+			   FIELD_PREP(WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK, 0x1));
-+
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_1, &d1_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_2, &d1_lsb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_3, &d2_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_4, &d2_lsb);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_PA_FSM_BYP0, mask, 0x0);
-+
-+	dmeas = (((dmeas_msb & 0xff) << 0x8) | (dmeas_lsb & 0xff)) >> 0x6;
-+	d1 = (((d1_msb & 0xff) << 0x8) | (d1_lsb & 0xff)) >> 0x6;
-+	d2 = (((d2_msb & 0xff) << 0x8) | (d2_lsb & 0xff)) >> 0x6;
-+
-+	if (d1 == d2) {
-+		/* Incorrect data in OTP? */
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	val = WSA884X_T1_TEMP + (((dmeas - d1) * (WSA884X_T2_TEMP - WSA884X_T1_TEMP))/(d2 - d1));
-+
-+	dev_dbg(wsa884x->dev, "Measured temp %ld (dmeas=%d, d1=%d, d2=%d)\n",
-+		val, dmeas, d1, d2);
-+
-+	if ((val > WSA884X_LOW_TEMP_THRESHOLD) &&
-+	    (val < WSA884X_HIGH_TEMP_THRESHOLD)) {
-+		wsa884x->temperature = val;
-+		*temp = val;
-+		ret = 0;
-+	} else {
-+		ret = -EAGAIN;
-+	}
-+
-+out:
-+	pm_runtime_mark_last_busy(wsa884x->dev);
-+	pm_runtime_put_autosuspend(wsa884x->dev);
-+
-+	return ret;
-+}
-+
-+static umode_t wsa884x_hwmon_is_visible(const void *data,
-+					enum hwmon_sensor_types type, u32 attr,
-+					int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int wsa884x_hwmon_read(struct device *dev,
-+			      enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *temp)
-+{
-+	int ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		ret = wsa884x_get_temp(dev_get_drvdata(dev), temp);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct hwmon_channel_info *const wsa884x_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops wsa884x_hwmon_ops = {
-+	.is_visible	= wsa884x_hwmon_is_visible,
-+	.read		= wsa884x_hwmon_read,
-+};
-+
-+static const struct hwmon_chip_info wsa884x_hwmon_chip_info = {
-+	.ops	= &wsa884x_hwmon_ops,
-+	.info	= wsa884x_hwmon_info,
-+};
-+
- static void wsa884x_reset_powerdown(void *data)
- {
- 	struct wsa884x_priv *wsa884x = data;
-@@ -1849,6 +2036,7 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- {
- 	struct device *dev = &pdev->dev;
- 	struct wsa884x_priv *wsa884x;
-+	struct device *hwmon;
- 	unsigned int i;
- 	int ret;
- 
-@@ -1856,6 +2044,8 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	if (!wsa884x)
- 		return -ENOMEM;
- 
-+	mutex_init(&wsa884x->sp_lock);
-+
- 	for (i = 0; i < WSA884X_SUPPLIES_NUM; i++)
- 		wsa884x->supplies[i].supply = wsa884x_supply_name[i];
- 
-@@ -1913,6 +2103,13 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	regcache_cache_only(wsa884x->regmap, true);
- 	wsa884x->hw_init = true;
- 
-+	hwmon = devm_hwmon_device_register_with_info(dev, "wsa884x", wsa884x,
-+						     &wsa884x_hwmon_chip_info,
-+						     NULL);
-+	if (IS_ERR(hwmon))
-+		return dev_err_probe(dev, PTR_ERR(hwmon),
-+				     "Failed to register hwmon sensor\n");
-+
- 	pm_runtime_set_autosuspend_delay(dev, 3000);
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_mark_last_busy(dev);
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.10-rc7 next-20240712]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/dt-bindings-hwmon-Add-adt7475-fan-pwm-properties/20240712-074936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240711234614.3104839-4-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v5 3/3] hwmon: (adt7475) Add support for configuring initial PWM state
+config: i386-randconfig-002-20240712 (https://download.01.org/0day-ci/archive/20240712/202407122021.YFqdjjQS-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407122021.YFqdjjQS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407122021.YFqdjjQS-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-abt-y030xx067a.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-novatek-nt39016.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-orisetech-ota5601a.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_mipi_dbi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/udl/udl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-w1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/open-dice.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/uapi-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/packet-serdes-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/storage/uas.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/ch341.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/mxuport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/navman.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/symbolserial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/isight_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/yurex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/mon/usbmon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/chipidea/ci_hdrc_msm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/libcomposite.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_acm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ss_lb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_serial.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_obex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_mass_storage.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_fs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_hid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_printer.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_tcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/legacy/g_dbgp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/google/framebuffer-coreboot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-betopff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-chicony.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-kbd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-holtek-mouse.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-letsketch.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lg-g15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-logitech-hidpp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-megaworld.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-redragon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tmff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-uclogic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-viewsonic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-winwing.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/of/of_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-bootrom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-hid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-log.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-loopback.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-power-supply.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-vibrator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gbphy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-pwm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spilib.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-usb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/siemens/simatic-ipc-batt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/ibm_rtl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+>> ERROR: modpost: "__udivdi3" [drivers/hwmon/adt7475.ko] undefined!
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
