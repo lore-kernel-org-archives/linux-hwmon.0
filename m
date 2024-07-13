@@ -1,157 +1,151 @@
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE59B1B28D
-	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 18:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128DE1448DC
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 21:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720896785; cv=none; b=O6At5CC4un3LDDjncw5PMv1cQWg9CusgIudSRuEBLcgPpM14FJdIgzvu3zmQQGt5SZqzKgSLtnqAj0UpyUccvR6qxXHSb6QNJUWm0R4Zr9VMf/f9bf+zLpBMALSGOaAAPMVGn/zMRvEOSLJ5aCkrG03g5t0JxkdX2tlRTP+pj1A=
+	t=1720905169; cv=none; b=hyDnsmr8VhYNiUuGAKgBI4gMXWLPE01GWHmaJqcGzYkInYnQVg2GXVtkyAuf5djkdRxPOIjxodxwtqI7juvS89D6mk809XTrTKrsYAGxpMMoB6GjJJovtEcsfyDvuyD4Ocf8KFUfaeRf3QZE/OF6oTLc/fLW8GPAWlLC87s8HGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720896785; c=relaxed/simple;
-	bh=u3APVbY4oSDfhgPMeEgEbBGR+mQZkuAiasA5FGrMSTE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IipPv64bnCkzOieWsYN7cUPKoAT83TjTpjVkNLD3Vu6PIpl7ya0qZfG21Nn61lXqxjRAMoqG0bbWRGUDPKc/oIi8+EkuhtR6ujvd72pVWHdA+Ub3HN5gJfwnyootcZzuCvOzqXwgOnjQRz0wbV5BQWCLqGJwkXFcjhBWlXJS+kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmR/QR3B; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1720905169; c=relaxed/simple;
+	bh=OHdB2EOIsbKMToubj5nhEqq8SrZ7xvFa8o/dicF6Gr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OU9lrNm0yDM8HHaFJzVY+axyIccjFXCbTBheilAT580ClYDxBVkMQZwA5iqM/MB1yCUDKmStR0A0McDnwTp1T48D/Y3+NeXGcmXJoFiHvYMjJ+5u4MxgeT3cqVt1kTQKRNZD6fb4wVcDEh2sCJaadeuN8GCv9gOw22ynY3z1zGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fsjORkCg; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmR/QR3B"
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e02c4983bfaso3263916276.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 11:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720896783; x=1721501583; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=apBxvcm2zLEvt0mWcKuclJf5L0RHB5GXUfVN2gJQdyY=;
-        b=dmR/QR3BfZVRGnN48U+iBe9Qbruznqdhd2dhBgaILLve2VWkP02tMnujgP0mAvz6o7
-         bgkDybTSunvGmMcKi2+1BPucSDSChKiSjB51atlKOlCVWp91ZZore2ESTXOKd8CFP8BL
-         JWOs4/PI1DGoHAHuciVSQacK1JjxW3hVmzccz3xvSl43XEqhuOoMiw2mfz/CB2x/LzaM
-         tU87yPb15WCX/7LziIDFCy9wCSXxDMwMw0Hb762pVzgWAU3gLOrfXcTFuaE9zIXP8+5A
-         aPoZfByp8ga4M0xGfT1wz+kTIttz0PJvpLtcaOyUZmgLuct19fopCKqNBSennuJS4lWY
-         R0fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720896783; x=1721501583;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=apBxvcm2zLEvt0mWcKuclJf5L0RHB5GXUfVN2gJQdyY=;
-        b=k+j/vPRXAyxmftTDpU0DqSuQPGvxeCErCN62sA1APM3cbuQW6VQWJq0ttSV9nx+Xdz
-         3YM2HbbuRGoksDEFlWGJWElUtZDuYuzWz7OvnUo3iFSEncf/5Gnz4Pk24K+KZxVszqJm
-         /Paas7R7xBUhwFGUeTK6Ec52ltPDQoPERGnHMLtaOszgXxdRJvj4VG0Kq2YjRa+2A7gm
-         jEbCM9VffQyxDW2S8kxl3DLllMG85Po01HL1J56ikaotsAURtd7KbNh2sr/ZUWGcHuDz
-         FqPGP/JeSlWzUziqLpBfylxSSL7aHidnv1BjM9rJKloIMX+4AwZY0tXXA60dVsK1BT2p
-         BDMQ==
-X-Gm-Message-State: AOJu0YyB0u0bi17MNN8QNWIBdtkkwPdMvm0vEpipGSERhNBi5bhU0eUa
-	iFdUr7xxgeet9gVKK+aNdIrN4CHl+GygKYawk+uk7ctT6QR+IXsn
-X-Google-Smtp-Source: AGHT+IE42X5JAKRiyIIGE5bcSjR5k4ZOUfqA/fdjpStYs7DIO8p6vQK3coprn6dmIVMcv5AWyoqtvA==
-X-Received: by 2002:a25:aba2:0:b0:e03:6147:4c91 with SMTP id 3f1490d57ef6-e041b22b911mr16284114276.60.1720896782712;
-        Sat, 13 Jul 2024 11:53:02 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-78e34d2b21fsm967558a12.47.2024.07.13.11.53.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Jul 2024 11:53:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e263f50e-ffc7-4208-b1a5-960be94569dd@roeck-us.net>
-Date: Sat, 13 Jul 2024 11:53:00 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fsjORkCg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720905168; x=1752441168;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OHdB2EOIsbKMToubj5nhEqq8SrZ7xvFa8o/dicF6Gr8=;
+  b=fsjORkCgad7GpqxrotvmT06VpzZ1eNp9lb5DmAEz/W8m8RKftIROz4R/
+   qoMhZ6yT4lzk1TpAXwmmbghGSdKN9k7L/XLzEYYqzNveblxmw3kGm7Ywh
+   BMrdtM8aNJnaS1iiNdNyZ42wjSq5u3zV1UToiKEFtW8FOgIcuVxQ/3Tn7
+   qHis8pt1HAbdpy2NnvzDOkYvYDyqK9J1KCRj9eOiAlsUX7uk1lIke6asf
+   tjeuubJd3yHYaRoHnv0G4DwWqZfiJFNZuNZj+xmsBerBnfPf6WIUe1ofG
+   XnmozLr9GoiSdDj0WvxOJcUKbl5/5oeQjb/uO8QRjLFqNroFyyqXIW6IE
+   Q==;
+X-CSE-ConnectionGUID: BmP+UXr7Q4mf9wswtzEjEw==
+X-CSE-MsgGUID: q8mjLIioRUKIH0eYe/f0XA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="29002884"
+X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
+   d="scan'208";a="29002884"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 14:12:47 -0700
+X-CSE-ConnectionGUID: o/5523AmSw6NxKOfxKmYgw==
+X-CSE-MsgGUID: jqRL+JbZQLiaCnqGxjbagg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
+   d="scan'208";a="49315084"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 13 Jul 2024 14:12:46 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSk2t-000ckW-2p;
+	Sat, 13 Jul 2024 21:12:43 +0000
+Date: Sun, 14 Jul 2024 05:11:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-staging 104/137]
+ drivers/hwmon/emc2103.c:380:2: warning: unannotated fall-through between
+ switch labels
+Message-ID: <202407140515.mXPztiXi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Remove obsolete adm1021 and max6642 drivers
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240712173548.3556699-1-linux@roeck-us.net>
- <ZpKbxZf6TOqid1cP@tzungbi-laptop>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZpKbxZf6TOqid1cP@tzungbi-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+Hi Guenter,
 
-On 7/13/24 08:22, Tzung-Bi Shih wrote:
-> On Fri, Jul 12, 2024 at 10:35:48AM -0700, Guenter Roeck wrote:
->> diff --git a/drivers/hwmon/adm1021.c b/drivers/hwmon/adm1021.c
-> [...]
->> -static const struct i2c_device_id adm1021_id[] = {
->> -	{ "adm1021", adm1021 },
->> -	{ "adm1023", adm1023 },
->> -	{ "max1617", max1617 },
->> -	{ "max1617a", max1617a },
-> 
-> The device ID "max1617a" only in Documentation/hwmon/lm90.rst but not in
-> drivers/hwmon/lm90.c which results in max1617a is no longer supported after
-> applying the patch.
-> 
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Thanks for noticing. It is an oversight, really. The chip is the same.
-max1617a is even mentioned in the lm90 documentation.
-The chip is detected and supported as "max1617" in the lm90 driver.
-Here are the notes from that driver.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+head:   a8f382d6e448547fa649f47443668d4a5336e271
+commit: bb44b8b0b1e1bae9123fef3cbcf0b4a40887e3a3 [104/137] hwmon: (emc2103) Convert to use regmap and with_info API
+config: i386-buildonly-randconfig-004-20240714 (https://download.01.org/0day-ci/archive/20240714/202407140515.mXPztiXi-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407140515.mXPztiXi-lkp@intel.com/reproduce)
 
-  * Note: Multiple chips with different markings labeled as
-  * "MAX1617" (no "A") were observed to report manufacturer ID
-  * 0x4d and device ID 0x01. It is unknown if other variants of
-  * MAX1617/MAX617A with different behavior exist. The detection
-  * code below works for those chips.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407140515.mXPztiXi-lkp@intel.com/
 
-Not sure if I should mark the chips as max1617a instead of max1617
-or just update the documentation.
+All warnings (new ones prefixed by >>):
 
-Either case, all configurations enabling the adm1021 driver also enable the
-lm90 driver, and that in turn prevents the adm1021 driver from being built.
-Effectively that means that the adm1021 driver hasn't been built for a long
-time.
+>> drivers/hwmon/emc2103.c:380:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     380 |         default:
+         |         ^
+   drivers/hwmon/emc2103.c:380:2: note: insert 'break;' to avoid fall-through
+     380 |         default:
+         |         ^
+         |         break; 
+   drivers/hwmon/emc2103.c:188:18: warning: unused variable 'pwm_base_frequencies' [-Wunused-const-variable]
+     188 | static const u16 pwm_base_frequencies[] = {26000, 19531, 4882, 2441};
+         |                  ^~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
-Thanks,
-Guenter
 
+vim +380 drivers/hwmon/emc2103.c
+
+   338	
+   339	static umode_t emc2103_is_visible(const void *_data, enum hwmon_sensor_types type,
+   340					  u32 attr, int channel)
+   341	{
+   342		const struct emc2103_data *data = _data;
+   343	
+   344		switch (type) {
+   345		case hwmon_temp:
+   346			if (channel >= data->temp_count)
+   347				return 0;
+   348			switch (attr) {
+   349			case hwmon_temp_input:
+   350			case hwmon_temp_fault:
+   351			case hwmon_temp_min_alarm:
+   352			case hwmon_temp_max_alarm:
+   353				return 0444;
+   354			case hwmon_temp_min:
+   355			case hwmon_temp_max:
+   356				return 0644;
+   357			default:
+   358				break;
+   359			}
+   360			break;
+   361		case hwmon_fan:
+   362			switch (attr) {
+   363			case hwmon_fan_input:
+   364			case hwmon_fan_fault:
+   365				return 0444;
+   366			case hwmon_fan_div:
+   367			case hwmon_fan_target:
+   368				return 0644;
+   369			default:
+   370				break;
+   371			}
+   372			break;
+   373		case hwmon_pwm:
+   374			switch (attr) {
+   375			case hwmon_pwm_enable:
+   376				return 0644;
+   377			default:
+   378				break;
+   379			}
+ > 380		default:
+   381			break;
+   382		}
+   383		return 0;
+   384	}
+   385	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
