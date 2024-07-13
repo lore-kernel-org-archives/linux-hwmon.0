@@ -1,129 +1,160 @@
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D31D219FF;
-	Fri, 12 Jul 2024 21:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7ED1759F
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 01:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720818450; cv=none; b=fWq56q6arKRbKVw3qpAC40Znu07ekXhMXgtMzc7nhc8/rRa/gTfZvM7aRk1h4Ua7TUFsJK3ejBciKIsxqPHipY+tqqfzYUiYsNWedPwundi6gs72kc8flJq9BM/KERYp/Cf/LNdrj5RsbV394Aki7uiZmk/tgm7WGm3TvLploVo=
+	t=1720834141; cv=none; b=uies/Ks6D5EStLQPGCrHlJQsfDalZikUFw2ux59iLkz2865MHXeYvp+SnRaO3dUZ1d2gnhQPVcsc7OmLH+PTi6XtR1Tq/XjoAOfxz1WeSt8tFNY3FIeTvB8SCI7LnsUubB89K4if7FoA5jaek9a3cVdmI1IJVzJYACY3cPUXJTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720818450; c=relaxed/simple;
-	bh=vKFZ7VhhVPwDMBl1L3Jwa9uOyxKi/wF0dZAUg/xUYoM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RcfxGAhNmJ0i1diy3a30bthBXK33ExUGsqvErnBM/DBf2H806IdKuwtLzvW9a08/gJ6jR6mXPqmCzqdxAQsyBDYU0zsoZzg23RtpjH2+490xl4iA0SIIeX/hKwL9Ny+hYR2VEekJ26mYRZV5BfM2mWcoghKkEC0PCdwHa2Hsyv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=gSpGb5Qt; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	s=arc-20240116; t=1720834141; c=relaxed/simple;
+	bh=ub/j9Je+42nrnaf5GjPf6IwipblxfQc7qPVTAwy/5fs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tVoqis2LE+fxpFYk2oxGyEVrjC0xZWXVCXKi5RdQfuXIEKCdoiEXl+Lw/N85JPek9LB2mvtTquJKfc+5s4xPf4qGC79p+upiwR5kqGOeGDhBpWGcLBL+suweOAd0pvhraqSHfyKs110Lrsi9iLEH7sLEf6xAtjiFhuorW6MVNU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ht/UfKJp; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="gSpGb5Qt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4fyXkYyDXPeoIA7KiK11Pb/8YiiA2kBtTpxn1oy5Xfg=; b=gSpGb5Qt1QavJ4twGDivqpU9x1
-	kJt7FGBvbK2aTCJXowAhCepe19G36RO0QZWmVH4ZPnVqIYIfznu7g94inYaiaa4BZwbr0mfO7JKmq
-	hYRy6/W3yREkiAKPS246SXVVNa0BVKo1HZe+daKDFlZ9wbhS0rpTOJi6AfDKYl1fydKTSjE4zeaFA
-	T2PD/MI/JPC74BKmrhhAdrEh2TjJz5S2lgouEjh1E/aDlO28e1Khlw1472v0LlmBo1AWQJStJIzSv
-	XuNycvvbN48jEJAU5oiGYqzSk8+UlLvMw5zPEmKVQbAREOVeGYIr8Ia4mlMgVp51XfHHXOziLrjME
-	hkmO4NzA==;
-Date: Fri, 12 Jul 2024 23:06:56 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Rob Herring
- <robh@kernel.org>, Daniel Scally <djrscally@gmail.com>, Heikki Krogerus
- <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Jean Delvare <jdelvare@suse.com>, Guenter
- Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>, Lee Jones
- <lee@kernel.org>, Marcin Wojtas <marcin.s.wojtas@gmail.com>, Russell King
- <linux@armlinux.org.uk>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-leds@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 3/6] leds: bd2606mvv: use device_for_each_child_node()
- to access device child nodes
-Message-ID: <20240712230656.67e89eb2@akphone>
-In-Reply-To: <2cd45260-e737-43e9-9bf6-c267d6f86ad3@gmail.com>
-References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
-	<20240706-device_for_each_child_node-available-v1-3-8a3f7615e41c@gmail.com>
-	<20240707175713.4deb559f@jic23-huawei>
-	<4cf71de7-dc47-475c-bba0-a9e755f66d49@gmail.com>
-	<2cd45260-e737-43e9-9bf6-c267d6f86ad3@gmail.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.37; aarch64-alpine-linux-musl)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ht/UfKJp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720834139; x=1752370139;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ub/j9Je+42nrnaf5GjPf6IwipblxfQc7qPVTAwy/5fs=;
+  b=Ht/UfKJpZ8cSYgGTBWADEb7dQcoQ6sFey/V4P92Np/xYw3wFIiXKcb7i
+   Y6IPYyESRx/ROFx8uaZWuyK48KtY1zOBbied0bB4Ad9NY8dnlN3G1uDhx
+   QtAlOdq6k5le64XEcjgE/cVXhzhO7tFTuROezS5qcTIKa2IWemH8nmZPs
+   ouLj0t07oW7UxWPXv8BKt0ccbgVImRRKh5svCRpsFsU2rUqrM92lN4J01
+   oFOPnUKO1JYb8xkvsVYpRFjN3PxuUF8nD0VMcekrJ4UxTE+B39btqu1J3
+   gGXlP6qH9Wl3JXqykHuY4IZTvtFbT03+v+NKoQGRAopIDJUaCKh12Y751
+   g==;
+X-CSE-ConnectionGUID: Rq4WHpY5QIWS51E1EeofoA==
+X-CSE-MsgGUID: 9KsYfmJpR9iMn1IY7zT02g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="29441198"
+X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
+   d="scan'208";a="29441198"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 18:28:58 -0700
+X-CSE-ConnectionGUID: j1+PW8TgR9GKsX+RVpXidw==
+X-CSE-MsgGUID: J26SMWPRSSGTDVTaNSEp0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
+   d="scan'208";a="48812639"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 12 Jul 2024 18:28:56 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSRZG-000bWS-2J;
+	Sat, 13 Jul 2024 01:28:54 +0000
+Date: Sat, 13 Jul 2024 09:28:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-staging 111/143]
+ drivers/hwmon/lm95234.c:223:7: warning: variable 'ret' is uninitialized when
+ used here
+Message-ID: <202407130915.X917zHwW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 8 Jul 2024 17:45:43 +0200
-Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+head:   80e45111b670e9c913398f5ad54196a99a739497
+commit: 85a6f963ad7f3657dff782c3e3ac40ab6c95f62c [111/143] hwmon: (lm9534) Convert to with_info hwmon API
+config: i386-buildonly-randconfig-002-20240713 (https://download.01.org/0day-ci/archive/20240713/202407130915.X917zHwW-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407130915.X917zHwW-lkp@intel.com/reproduce)
 
-> On 08/07/2024 10:14, Javier Carrasco wrote:
-> > On 07/07/2024 18:57, Jonathan Cameron wrote:  
-> >> On Sat, 06 Jul 2024 17:23:35 +0200
-> >> Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
-> >>  
-> >>> The iterated nodes are direct children of the device node, and the
-> >>> `device_for_each_child_node()` macro accounts for child node
-> >>> availability.
-> >>>
-> >>> `fwnode_for_each_available_child_node()` is meant to access the
-> >>> child nodes of an fwnode, and therefore not direct child nodes of
-> >>> the device node.
-> >>>
-> >>> Use `device_for_each_child_node()` to indicate device's direct
-> >>> child nodes.
-> >>>
-> >>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>  
-> >> Why not the scoped variant?
-> >> There look to be two error paths in there which would be
-> >> simplified. 
-> > 
-> > I did not use the scoped variant because "child" is used outside
-> > the loop.
-> > 
-> > On the other hand, I think an fwnode_handle_get() is missing for
-> > every "led_fwnodes[reg] = child" because a simple assignment does
-> > not increment the refcount.
-> > 
-> > After adding fwnode_handle_get(), the scoped variant could be used,
-> > and the call to fwnode_handle_put() would act on led_fwnodes[reg]
-> > instead. 
-> 
-> Actually, the whole trouble comes from doing the processing in two
-> consecutive loops, where the second loop accesses a child node that
-> gets released at the end of the first one. It seems that some code
-> got moved from one loop to a new one between two versions of the
-> patchset.
-> 
-> @Andreas Kemnade: I see that you had a single loop until v4 (the
-> driver got applied with v6), and then you split it into two loops,
-> but I don't see any mention to this modification in the change log.
-> 
-> What was the reason for this modification? Apparently, similar drivers
-> do everything in one loop to avoid such issues.
-> 
-The reason for two loops is that we check in the first loop whether
-broghtness can be individually controlled so we can set max_brightness
-in the second loop. I had the assumption that max_brightness should be
-set before registering leds.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407130915.X917zHwW-lkp@intel.com/
 
-Some LEDs share brightness register, in the case where leds are defined
-with a shared register, we revert to on-off.
+All warnings (new ones prefixed by >>):
 
-> Maybe refactoring to have a single loop again (if possible) would be
-> the cleanest solution. Otherwise a get/put mechanism might be
-> necessary.
-> 
-I had no idea how to do it the time I wrote the patch.
+>> drivers/hwmon/lm95234.c:223:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     223 |                 if (ret)
+         |                     ^~~
+   drivers/hwmon/lm95234.c:183:9: note: initialize the variable 'ret' to silence this warning
+     183 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-Regards,
-Andreas
+
+vim +/ret +223 drivers/hwmon/lm95234.c
+
+   177	
+   178	static int lm95234_temp_read(struct device *dev, u32 attr, int channel, long *val)
+   179	{
+   180		struct lm95234_data *data = dev_get_drvdata(dev);
+   181		struct regmap *regmap = data->regmap;
+   182		u32 regval, mask;
+   183		int ret;
+   184	
+   185		switch (attr) {
+   186		case hwmon_temp_input:
+   187			return lm95234_read_temp(regmap, channel, val);
+   188		case hwmon_temp_max_alarm:
+   189			ret =  regmap_read(regmap, lm95234_alarm_reg(channel), &regval);
+   190			if (ret)
+   191				return ret;
+   192			*val = !!(regval & BIT(channel));
+   193			break;
+   194		case hwmon_temp_crit_alarm:
+   195			ret =  regmap_read(regmap, LM95234_REG_STS_TCRIT1, &regval);
+   196			if (ret)
+   197				return ret;
+   198			*val = !!(regval & BIT(channel));
+   199			break;
+   200		case hwmon_temp_crit_hyst:
+   201			return lm95234_hyst_get(data, LM95234_REG_TCRIT1(channel), val);
+   202		case hwmon_temp_type:
+   203			ret = regmap_read(regmap, LM95234_REG_REM_MODEL, &regval);
+   204			if (ret)
+   205				return ret;
+   206			*val = (regval & BIT(channel)) ? 1 : 2;
+   207			break;
+   208		case hwmon_temp_offset:
+   209			ret = regmap_read(regmap, LM95234_REG_OFFSET(channel - 1), &regval);
+   210			if (ret)
+   211				return ret;
+   212			*val = sign_extend32(regval, 7) * 500;
+   213			break;
+   214		case hwmon_temp_fault:
+   215			ret = regmap_read(regmap, LM95234_REG_STS_FAULT, &regval);
+   216			if (ret)
+   217				return ret;
+   218			mask = (BIT(0) | BIT(1)) << ((channel - 1) << 1);
+   219			*val = !!(regval & mask);
+   220			break;
+   221		case hwmon_temp_max:
+   222			regmap_read(regmap, lm95234_crit_reg(channel), &regval);
+ > 223			if (ret)
+   224				return ret;
+   225			*val = regval * 1000;
+   226			break;
+   227		case hwmon_temp_max_hyst:
+   228			return lm95234_hyst_get(data, lm95234_crit_reg(channel), val);
+   229		case hwmon_temp_crit:
+   230			regmap_read(regmap, LM95234_REG_TCRIT1(channel), &regval);
+   231			if (ret)
+   232				return ret;
+   233			*val = regval * 1000;
+   234			break;
+   235		default:
+   236			return -EOPNOTSUPP;
+   237		}
+   238		return 0;
+   239	}
+   240	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
