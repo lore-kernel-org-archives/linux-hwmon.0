@@ -1,151 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128DE1448DC
-	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 21:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E861DFE3
+	for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 21:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720905169; cv=none; b=hyDnsmr8VhYNiUuGAKgBI4gMXWLPE01GWHmaJqcGzYkInYnQVg2GXVtkyAuf5djkdRxPOIjxodxwtqI7juvS89D6mk809XTrTKrsYAGxpMMoB6GjJJovtEcsfyDvuyD4Ocf8KFUfaeRf3QZE/OF6oTLc/fLW8GPAWlLC87s8HGU=
+	t=1720906449; cv=none; b=Ts+vMaxalELdfwnZO6lOawkGz3vAsl5iVq4w5AltHcuuwBWpW9zUkdhI3WNykUZnWBTh1VwLdi1BPjVXKM6xhCjurOLeNOJbmeeL3K26lw9JbeaEgCNLwXxAduGbw8e1P+yu1t8b2SgjGFz7qv8OY7R0lvhoTSETjzxuJaRCq1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720905169; c=relaxed/simple;
-	bh=OHdB2EOIsbKMToubj5nhEqq8SrZ7xvFa8o/dicF6Gr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OU9lrNm0yDM8HHaFJzVY+axyIccjFXCbTBheilAT580ClYDxBVkMQZwA5iqM/MB1yCUDKmStR0A0McDnwTp1T48D/Y3+NeXGcmXJoFiHvYMjJ+5u4MxgeT3cqVt1kTQKRNZD6fb4wVcDEh2sCJaadeuN8GCv9gOw22ynY3z1zGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fsjORkCg; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720906449; c=relaxed/simple;
+	bh=4bXOes5nthMnZ956W1D/3+2Gp1CGv/t8SWeFIPteo7w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KBwaTpVRgrxCtIm8ly8h0TqrxAb7B7+T6vXFQiktG+rp83em0I0sGquwe3AB5d3B/EwiF005ZkrOwvK3LOlCobxvr6CQ/JJrwnN+xsAJLc8+0s70g3Fq6VXwmwzGATWrr8odNb0mR9WBoP6NpaCPOl4OGCnx3xaZm8Jr27XYvfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbykQ9+t; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fsjORkCg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720905168; x=1752441168;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OHdB2EOIsbKMToubj5nhEqq8SrZ7xvFa8o/dicF6Gr8=;
-  b=fsjORkCgad7GpqxrotvmT06VpzZ1eNp9lb5DmAEz/W8m8RKftIROz4R/
-   qoMhZ6yT4lzk1TpAXwmmbghGSdKN9k7L/XLzEYYqzNveblxmw3kGm7Ywh
-   BMrdtM8aNJnaS1iiNdNyZ42wjSq5u3zV1UToiKEFtW8FOgIcuVxQ/3Tn7
-   qHis8pt1HAbdpy2NnvzDOkYvYDyqK9J1KCRj9eOiAlsUX7uk1lIke6asf
-   tjeuubJd3yHYaRoHnv0G4DwWqZfiJFNZuNZj+xmsBerBnfPf6WIUe1ofG
-   XnmozLr9GoiSdDj0WvxOJcUKbl5/5oeQjb/uO8QRjLFqNroFyyqXIW6IE
-   Q==;
-X-CSE-ConnectionGUID: BmP+UXr7Q4mf9wswtzEjEw==
-X-CSE-MsgGUID: q8mjLIioRUKIH0eYe/f0XA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="29002884"
-X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
-   d="scan'208";a="29002884"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 14:12:47 -0700
-X-CSE-ConnectionGUID: o/5523AmSw6NxKOfxKmYgw==
-X-CSE-MsgGUID: jqRL+JbZQLiaCnqGxjbagg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
-   d="scan'208";a="49315084"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 13 Jul 2024 14:12:46 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sSk2t-000ckW-2p;
-	Sat, 13 Jul 2024 21:12:43 +0000
-Date: Sun, 14 Jul 2024 05:11:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-staging 104/137]
- drivers/hwmon/emc2103.c:380:2: warning: unannotated fall-through between
- switch labels
-Message-ID: <202407140515.mXPztiXi-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbykQ9+t"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-70af81e8439so2751061b3a.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 13 Jul 2024 14:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720906446; x=1721511246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CnRHxWzyGeGfo+AcjA6iVliyPyD6y//d9SYyvcX+Juw=;
+        b=WbykQ9+t8++Vq3SXQnxwk9V3cxC42YwvhGseSUG1U3qPm0X5O/pw/U167HI0UWjB0c
+         isNX3cv60UxtNClGALFtgvYNUtojAf6Scr2xYnpeIzusIIp0ygD3up9lpLoM5ptLlChg
+         AMY+MWwLCtlxaKYW/qIqFqc2KJOJxeFa9HMs4oUW3XIlMtO6cPmmGvtuwcu7jg3snl/g
+         QUaEf3YrDWGwIIblTFJAmhY45HjEjr8ejBJwZ7g6izJN/Jl3afFRFue+3Wf6d8dqN++Z
+         g0kdcLbLvJH3eFjLpgCQlOnAD1coCkrNBbJMu6wMGSBB+aeqyfO94dqFHQn8sMVvtTct
+         exlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720906446; x=1721511246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnRHxWzyGeGfo+AcjA6iVliyPyD6y//d9SYyvcX+Juw=;
+        b=H/ddWeO+ts5fH2MEJdVyfIKL06kyw9ypck9G0JL1Mcrwr4OSjuT1N6Tjz3CRNDgpm4
+         l85HK48FY6Ghs4c67UHawPd8RU3+d28NR+aOdYTdakeAE7Oi2mcVBQFZ+H43cngn9kC6
+         pi8/Kpx07VNyqViYYwYLFaLSFqdYgmI+cruvm5lzOCIWSworABqq3P5vKts/IssjfZaS
+         YKPIeBanFmI4no6U+svR9MLoQHwr3xTgmRmqLipKYT+ZwGfR/vPmbjkc5C2mBrayE6Zp
+         dRs9ON6eZEjL1OFDT6vQXjHwBe0nfT4lAdlPllmI8K6etR/6hkujjPwir4TEmhJMqa/p
+         NDzw==
+X-Gm-Message-State: AOJu0YzOl3ufuX6654v9l7Vm2wXJT86Zfd6A4jeS2SzfZrOflVSfKwVK
+	M7oCcko6QI45fvDms5Bcui1ar0iAqwJiS1ggZsv6JZb1uspyyHG6U8wmxQ==
+X-Google-Smtp-Source: AGHT+IEDLmEp+M6pS/6X+6iTk9bhh3U5TfILj84GAbwNOIY0et/FvKHhjkJJ1m3OBEf2t8gb/rxu1g==
+X-Received: by 2002:a05:6a00:1493:b0:705:c0a1:61d8 with SMTP id d2e1a72fcca58-70b434f31e7mr18488526b3a.4.1720906446110;
+        Sat, 13 Jul 2024 14:34:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eb9c974sm1693598b3a.10.2024.07.13.14.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jul 2024 14:34:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] hwmon: (max6697) Fix swapped temp{1,8} critical alarms
+Date: Sat, 13 Jul 2024 14:34:01 -0700
+Message-Id: <20240713213402.1085599-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Guenter,
+The critical alarm bit for the local temperature sensor (temp1) is in
+bit 7 of register 0x45 (not bit 6), and the critical alarm bit for remote
+temperature sensor 7 (temp8) is in bit 6 (not bit 7).
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+This only affects MAX6581 since all other chips supported by this driver
+do not support those critical alarms.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
-head:   a8f382d6e448547fa649f47443668d4a5336e271
-commit: bb44b8b0b1e1bae9123fef3cbcf0b4a40887e3a3 [104/137] hwmon: (emc2103) Convert to use regmap and with_info API
-config: i386-buildonly-randconfig-004-20240714 (https://download.01.org/0day-ci/archive/20240714/202407140515.mXPztiXi-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407140515.mXPztiXi-lkp@intel.com/reproduce)
+Fixes: 5372d2d71c46 ("hwmon: Driver for Maxim MAX6697 and compatibles")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/max6697.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407140515.mXPztiXi-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/emc2103.c:380:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     380 |         default:
-         |         ^
-   drivers/hwmon/emc2103.c:380:2: note: insert 'break;' to avoid fall-through
-     380 |         default:
-         |         ^
-         |         break; 
-   drivers/hwmon/emc2103.c:188:18: warning: unused variable 'pwm_base_frequencies' [-Wunused-const-variable]
-     188 | static const u16 pwm_base_frequencies[] = {26000, 19531, 4882, 2441};
-         |                  ^~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +380 drivers/hwmon/emc2103.c
-
-   338	
-   339	static umode_t emc2103_is_visible(const void *_data, enum hwmon_sensor_types type,
-   340					  u32 attr, int channel)
-   341	{
-   342		const struct emc2103_data *data = _data;
-   343	
-   344		switch (type) {
-   345		case hwmon_temp:
-   346			if (channel >= data->temp_count)
-   347				return 0;
-   348			switch (attr) {
-   349			case hwmon_temp_input:
-   350			case hwmon_temp_fault:
-   351			case hwmon_temp_min_alarm:
-   352			case hwmon_temp_max_alarm:
-   353				return 0444;
-   354			case hwmon_temp_min:
-   355			case hwmon_temp_max:
-   356				return 0644;
-   357			default:
-   358				break;
-   359			}
-   360			break;
-   361		case hwmon_fan:
-   362			switch (attr) {
-   363			case hwmon_fan_input:
-   364			case hwmon_fan_fault:
-   365				return 0444;
-   366			case hwmon_fan_div:
-   367			case hwmon_fan_target:
-   368				return 0644;
-   369			default:
-   370				break;
-   371			}
-   372			break;
-   373		case hwmon_pwm:
-   374			switch (attr) {
-   375			case hwmon_pwm_enable:
-   376				return 0644;
-   377			default:
-   378				break;
-   379			}
- > 380		default:
-   381			break;
-   382		}
-   383		return 0;
-   384	}
-   385	
-
+diff --git a/drivers/hwmon/max6697.c b/drivers/hwmon/max6697.c
+index b28b7b9448aa..1111b2ea55ee 100644
+--- a/drivers/hwmon/max6697.c
++++ b/drivers/hwmon/max6697.c
+@@ -428,14 +428,14 @@ static SENSOR_DEVICE_ATTR_RO(temp6_max_alarm, alarm, 20);
+ static SENSOR_DEVICE_ATTR_RO(temp7_max_alarm, alarm, 21);
+ static SENSOR_DEVICE_ATTR_RO(temp8_max_alarm, alarm, 23);
+ 
+-static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, alarm, 14);
++static SENSOR_DEVICE_ATTR_RO(temp1_crit_alarm, alarm, 15);
+ static SENSOR_DEVICE_ATTR_RO(temp2_crit_alarm, alarm, 8);
+ static SENSOR_DEVICE_ATTR_RO(temp3_crit_alarm, alarm, 9);
+ static SENSOR_DEVICE_ATTR_RO(temp4_crit_alarm, alarm, 10);
+ static SENSOR_DEVICE_ATTR_RO(temp5_crit_alarm, alarm, 11);
+ static SENSOR_DEVICE_ATTR_RO(temp6_crit_alarm, alarm, 12);
+ static SENSOR_DEVICE_ATTR_RO(temp7_crit_alarm, alarm, 13);
+-static SENSOR_DEVICE_ATTR_RO(temp8_crit_alarm, alarm, 15);
++static SENSOR_DEVICE_ATTR_RO(temp8_crit_alarm, alarm, 14);
+ 
+ static SENSOR_DEVICE_ATTR_RO(temp2_fault, alarm, 1);
+ static SENSOR_DEVICE_ATTR_RO(temp3_fault, alarm, 2);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
