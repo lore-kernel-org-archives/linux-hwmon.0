@@ -1,398 +1,307 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C616256D;
-	Mon, 15 Jul 2024 00:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4B2A3F
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Jul 2024 03:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721002635; cv=none; b=PW06vBwU4lrvhPBMupSnL0mrRTdvk3eE3PfUCvpgv2EYrqPwy+ID5/3FdMb4LIYQSA9mFR0EL1ZtGvLoAVh+Rx+6hQmfnBy3F6i5jVzrfmVQ8ncT1NgG9Jv9kASTmtpFGGaJn46gLYF6BLyNACYUClDU+lShjSf/RE7JM81hd8k=
+	t=1721015171; cv=none; b=XNZ2w82iKb2GmV3XxpkFdVOXVM76EwtAsLsq6a2otKt1gwrj8Ehc2J/vYdDUD6aAymv3sLyyLqbt8k8WSR0oAC6fSCZS4q1sXkJhfJCS7aB5B1Qlm3ihAWBInSphtEuCdICRigU4yl5xxHIm23EQnXgbyVWgi2KQt+XsA3aLGGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721002635; c=relaxed/simple;
-	bh=BanR1i/E5zzE+zeXIafeCWQYnvFXyIBuxo2BNRrD6Tk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=JZrJLnRsqjrJ5Z0XQv4x9L5t8X6tMgzPSFPW2Cje2Uk0o62sNrqOgl1AXeZTj4bLCUjiZfXxVEj5uc1/L6mLe9cFa1QENr+nhqVEgIkIo8/rOP1lUlA3Fxldim2RwEGnz/Cvish6NuyHpWyRDCfcR6P/RRHYofZQhuwOLIFGSec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AYBVk/I6; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721015171; c=relaxed/simple;
+	bh=q6hTg4nngeBF1Kr41yWe9t0XhE+sMap8MoQFCMLDDpE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=u84hfDFE0v1WeORNONfjWRREoZoy/9KWOD2WYgTPMaFrCwl75dg/weOInPpvOqJf9q89Ke849Jz/TQBQFKyAY8vkGBM9XSzEZgHSbDtDqS2LXHmdOqvD/rBQJtdWujCrngSDJptsuxkBzHYhX5aitYOONGNEVDvjDpY6AYsHGEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LTlvGzV3; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AYBVk/I6"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1fb3cf78fbdso21153525ad.1;
-        Sun, 14 Jul 2024 17:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721002632; x=1721607432; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=23YE02sKGs1ovbki4IWRYzYGC71dt+ZDLu0P218dEWo=;
-        b=AYBVk/I6fNtpbiWkrPgdocxbraxB93lZ81w/LXrA5rBRpgvw0vxsIBV+kkIjRAyOuD
-         X8PAzBFaG90MRsKimBLoVn6Uoyvkmm032KyxBNelIwxHo7b2tYhaS45b4eykxiEZ0sJ4
-         /8EHs7Xs2/DbDMRt0/02vtZJjo698rxjETTpkTxPFS9YH1RCowOGMCuy5wOPrGYWeTYr
-         xW1UeT6SUKxNpxO4JDpMNrdOIeAtREuaIR+zzPiGViREEq+bKbuot8yQncIO2mz0bwyZ
-         1i78tjp25WHvd79j2WqZJiS4RUzbWZQlghvNOV6x/UF5vYKQGZQ6XYO4/Bj6PBt58lBv
-         MfMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721002632; x=1721607432;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=23YE02sKGs1ovbki4IWRYzYGC71dt+ZDLu0P218dEWo=;
-        b=PUrUKHmbuaNIhlw0VjxkpRuIVa28lllJE1P63DbqcKkmwFKFqH9m1E3kOkrevxCxL6
-         /mDA625c0WthUiA25oDi80DiTtOuoZXv4V3Uk8r/pW87qp5DV47BuTaiAhGqUKvYe78v
-         o883sLYzbYrH/jEIVFqtSY8k0LXUe0QbrEQw1IjDM8u0rM+BdIbifEQ/2Te9sdQzpUps
-         98lzQlB5v2pYmhg5Dqitnn2ft2Xawt58X1bN62bEq4c8OvBvclXNoTGJeQfekB2FzIYl
-         yINzS2ZO94aw4kmmciuyqASxmyKazWBo5HApNnbgMonVblUCo2d6r86DwnGsmQTi9azr
-         cLzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHdPjsH23WFG7q5EZeyP6ErMwmgjhH+jCQhhppxvhKrKjk4Acr3bXXGkhZF0ZeDQdzV+VsQ1kOC9G+aNdR5YpF17eXta7ZCgRn5Ip0
-X-Gm-Message-State: AOJu0Yzm89B7vFczn1hBCjV/RzCNKNe2pKgzPnj/3Cn634MZw1pYVuB9
-	O9QdEYjf4uLpbQaw2L7lAZQJpLG1BL7Hb557iGg7N3RVX01b1nRr5VY/Fg==
-X-Google-Smtp-Source: AGHT+IFepPF4jucndbUoIG7QT2OfcPM4/Sh437+F5qrC5y0bwIJsnBNsbqtazNv1hhXVXJtX7BVPWw==
-X-Received: by 2002:a17:902:c411:b0:1f7:26f:9185 with SMTP id d9443c01a7336-1fbb6cd187fmr143785775ad.10.1721002632075;
-        Sun, 14 Jul 2024 17:17:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb73f8esm28729785ad.40.2024.07.14.17.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jul 2024 17:17:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.11
-Date: Sun, 14 Jul 2024 17:17:09 -0700
-Message-Id: <20240715001709.2985905-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LTlvGzV3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721015168; x=1752551168;
+  h=date:from:to:cc:subject:message-id;
+  bh=q6hTg4nngeBF1Kr41yWe9t0XhE+sMap8MoQFCMLDDpE=;
+  b=LTlvGzV349qwxzWAsC1B8nfq5iiTVQX7ePS3TGE+ce4XnJy/nlyNcTgI
+   FsxJ8NazgPD19651rWe0iHFaGWQbMvzQ5LwZ+jK+9HFgim+MRCPvIapRc
+   4bB9O8RRnMraZxk1IJF/GamZ1SkOt4BVuYyUI8pxtfBBdkSgRwkKwz6Q8
+   gi+/6JGCLXy/UjLDrfd4ZngdV/xzUJK/cYtFMMDEKjXXB4NLlLDcXFCbi
+   6b0OiVwjanx6lTOtje1VyW38/TUfadwZBdwdAVEQp94QDVhgtJJjMHwVA
+   wjelVFr6H+xW+mFylMcWZ8jttLnC0I9p6BmznWpbEtVNJEaDuUuIqp+ys
+   w==;
+X-CSE-ConnectionGUID: PjSTz7ZpS16aYWaIt5BOqg==
+X-CSE-MsgGUID: Sq1QFmXBRyK+E3TPlk6WPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11133"; a="29057255"
+X-IronPort-AV: E=Sophos;i="6.09,209,1716274800"; 
+   d="scan'208";a="29057255"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2024 20:46:08 -0700
+X-CSE-ConnectionGUID: xZwJUSQ1TGOXpCHWwd7KQg==
+X-CSE-MsgGUID: YSBIURiMSP+/wEQnVxJPtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,209,1716274800"; 
+   d="scan'208";a="49369761"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 14 Jul 2024 20:46:07 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sTCf6-000dyr-2H;
+	Mon, 15 Jul 2024 03:46:04 +0000
+Date: Mon, 15 Jul 2024 11:45:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
+ e1dda5d92bda11969b935e238e5619ff67d8f6e0
+Message-ID: <202407151151.9Hy1x6bu-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+branch HEAD: e1dda5d92bda11969b935e238e5619ff67d8f6e0  Merge branch 'hwmon-emc2103' into hwmon-staging
 
-Please pull hwmon updates for Linux v6.11 from signed tag:
+elapsed time: 1275m
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11
+configs tested: 230
+configs skipped: 5
 
-Thanks,
-Guenter
-------
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
+tested configs:
+alpha                             allnoconfig   gcc-13.2.0
+alpha                             allnoconfig   gcc-13.3.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                          axs103_defconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                     nsimosci_hs_defconfig   gcc-13.2.0
+arc                 nsimosci_hs_smp_defconfig   gcc-13.2.0
+arc                   randconfig-001-20240714   gcc-13.2.0
+arc                   randconfig-002-20240714   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                              allmodconfig   gcc-14.1.0
+arm                               allnoconfig   clang-19
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-14.1.0
+arm                                 defconfig   gcc-13.2.0
+arm                      footbridge_defconfig   gcc-13.2.0
+arm                          gemini_defconfig   gcc-13.2.0
+arm                       imx_v6_v7_defconfig   gcc-13.2.0
+arm                           imxrt_defconfig   clang-19
+arm                      integrator_defconfig   clang-19
+arm                   milbeaut_m10v_defconfig   gcc-13.2.0
+arm                   randconfig-001-20240714   clang-19
+arm                   randconfig-002-20240714   clang-15
+arm                   randconfig-003-20240714   clang-17
+arm                   randconfig-004-20240714   clang-15
+arm                         s5pv210_defconfig   gcc-14.1.0
+arm                           sunxi_defconfig   gcc-14.1.0
+arm64                            allmodconfig   clang-19
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   gcc-13.2.0
+arm64                 randconfig-001-20240714   clang-15
+arm64                 randconfig-002-20240714   clang-19
+arm64                 randconfig-003-20240714   clang-19
+arm64                 randconfig-004-20240714   gcc-14.1.0
+csky                              allnoconfig   gcc-13.2.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-13.2.0
+csky                  randconfig-001-20240714   gcc-14.1.0
+csky                  randconfig-002-20240714   gcc-14.1.0
+hexagon                          allmodconfig   clang-19
+hexagon                           allnoconfig   clang-19
+hexagon                          allyesconfig   clang-19
+hexagon               randconfig-001-20240714   clang-19
+hexagon               randconfig-002-20240714   clang-19
+i386                             allmodconfig   gcc-13
+i386                              allnoconfig   gcc-13
+i386                             allyesconfig   gcc-13
+i386         buildonly-randconfig-001-20240714   gcc-13
+i386         buildonly-randconfig-002-20240714   clang-18
+i386         buildonly-randconfig-003-20240714   gcc-11
+i386         buildonly-randconfig-004-20240714   clang-18
+i386         buildonly-randconfig-005-20240714   gcc-9
+i386         buildonly-randconfig-006-20240714   clang-18
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240714   clang-18
+i386                  randconfig-002-20240714   clang-18
+i386                  randconfig-003-20240714   clang-18
+i386                  randconfig-004-20240714   clang-18
+i386                  randconfig-005-20240714   clang-18
+i386                  randconfig-006-20240714   gcc-7
+i386                  randconfig-011-20240714   clang-18
+i386                  randconfig-012-20240714   gcc-13
+i386                  randconfig-013-20240714   clang-18
+i386                  randconfig-014-20240714   gcc-10
+i386                  randconfig-015-20240714   gcc-13
+i386                  randconfig-016-20240714   clang-18
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-13.2.0
+loongarch             randconfig-001-20240714   gcc-14.1.0
+loongarch             randconfig-002-20240714   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                                defconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-14.1.0
+mips                           gcw0_defconfig   gcc-13.2.0
+mips                           ip22_defconfig   gcc-13.2.0
+mips                  maltasmvp_eva_defconfig   gcc-13.2.0
+mips                          rm200_defconfig   gcc-13.2.0
+nios2                         3c120_defconfig   gcc-13.2.0
+nios2                            alldefconfig   gcc-14.1.0
+nios2                             allnoconfig   gcc-13.2.0
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-13.2.0
+nios2                 randconfig-001-20240714   gcc-14.1.0
+nios2                 randconfig-002-20240714   gcc-14.1.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+openrisc                       virt_defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+parisc                randconfig-001-20240714   gcc-14.1.0
+parisc                randconfig-002-20240714   gcc-14.1.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc                          allyesconfig   clang-19
+powerpc                    gamecube_defconfig   gcc-13.2.0
+powerpc                        icon_defconfig   gcc-14.1.0
+powerpc                     kilauea_defconfig   clang-19
+powerpc                      mgcoge_defconfig   gcc-13.2.0
+powerpc                      pasemi_defconfig   gcc-13.2.0
+powerpc               randconfig-001-20240714   clang-19
+powerpc               randconfig-002-20240714   clang-19
+powerpc               randconfig-003-20240714   gcc-14.1.0
+powerpc                     tqm8548_defconfig   gcc-13.2.0
+powerpc64             randconfig-001-20240714   gcc-14.1.0
+powerpc64             randconfig-002-20240714   gcc-14.1.0
+powerpc64             randconfig-003-20240714   gcc-14.1.0
+riscv                            allmodconfig   clang-19
+riscv                             allnoconfig   gcc-14.1.0
+riscv                            allyesconfig   clang-19
+riscv                               defconfig   clang-19
+riscv                               defconfig   gcc-14.1.0
+riscv                    nommu_virt_defconfig   clang-19
+riscv                 randconfig-001-20240714   clang-19
+riscv                 randconfig-002-20240714   clang-15
+s390                             allmodconfig   clang-19
+s390                              allnoconfig   clang-19
+s390                             allyesconfig   clang-19
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   clang-19
+s390                                defconfig   gcc-14.1.0
+s390                  randconfig-001-20240714   clang-19
+s390                  randconfig-002-20240714   gcc-14.1.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-13.2.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sh                 kfr2r09-romimage_defconfig   gcc-14.1.0
+sh                    randconfig-001-20240714   gcc-14.1.0
+sh                    randconfig-002-20240714   gcc-14.1.0
+sh                           se7722_defconfig   gcc-14.1.0
+sh                           se7724_defconfig   gcc-14.1.0
+sh                           se7780_defconfig   gcc-13.2.0
+sh                           se7780_defconfig   gcc-14.1.0
+sparc                       sparc32_defconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+sparc64               randconfig-001-20240714   gcc-14.1.0
+sparc64               randconfig-002-20240714   gcc-14.1.0
+um                               allmodconfig   clang-19
+um                               allmodconfig   gcc-13.3.0
+um                                allnoconfig   clang-17
+um                               allyesconfig   gcc-13
+um                               allyesconfig   gcc-13.3.0
+um                                  defconfig   clang-19
+um                                  defconfig   gcc-14.1.0
+um                             i386_defconfig   gcc-13
+um                             i386_defconfig   gcc-14.1.0
+um                    randconfig-001-20240714   clang-19
+um                    randconfig-002-20240714   clang-19
+um                           x86_64_defconfig   clang-15
+um                           x86_64_defconfig   gcc-14.1.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240714   clang-18
+x86_64       buildonly-randconfig-001-20240715   clang-18
+x86_64       buildonly-randconfig-002-20240714   gcc-13
+x86_64       buildonly-randconfig-002-20240715   clang-18
+x86_64       buildonly-randconfig-003-20240714   gcc-13
+x86_64       buildonly-randconfig-003-20240715   clang-18
+x86_64       buildonly-randconfig-004-20240714   clang-18
+x86_64       buildonly-randconfig-004-20240715   clang-18
+x86_64       buildonly-randconfig-005-20240714   clang-18
+x86_64       buildonly-randconfig-005-20240715   clang-18
+x86_64       buildonly-randconfig-006-20240714   clang-18
+x86_64       buildonly-randconfig-006-20240715   clang-18
+x86_64                              defconfig   gcc-13
+x86_64                randconfig-001-20240714   gcc-13
+x86_64                randconfig-001-20240715   clang-18
+x86_64                randconfig-002-20240714   clang-18
+x86_64                randconfig-002-20240715   clang-18
+x86_64                randconfig-003-20240714   gcc-13
+x86_64                randconfig-003-20240715   clang-18
+x86_64                randconfig-004-20240714   clang-18
+x86_64                randconfig-004-20240715   clang-18
+x86_64                randconfig-005-20240714   gcc-10
+x86_64                randconfig-005-20240715   clang-18
+x86_64                randconfig-006-20240714   gcc-10
+x86_64                randconfig-006-20240715   clang-18
+x86_64                randconfig-011-20240714   clang-18
+x86_64                randconfig-011-20240715   clang-18
+x86_64                randconfig-012-20240714   gcc-7
+x86_64                randconfig-012-20240715   clang-18
+x86_64                randconfig-013-20240714   clang-18
+x86_64                randconfig-013-20240715   clang-18
+x86_64                randconfig-014-20240714   clang-18
+x86_64                randconfig-014-20240715   clang-18
+x86_64                randconfig-015-20240714   gcc-13
+x86_64                randconfig-015-20240715   clang-18
+x86_64                randconfig-016-20240714   clang-18
+x86_64                randconfig-016-20240715   clang-18
+x86_64                randconfig-071-20240714   clang-18
+x86_64                randconfig-071-20240715   clang-18
+x86_64                randconfig-072-20240714   gcc-13
+x86_64                randconfig-072-20240715   clang-18
+x86_64                randconfig-073-20240714   clang-18
+x86_64                randconfig-073-20240715   clang-18
+x86_64                randconfig-074-20240714   clang-18
+x86_64                randconfig-074-20240715   clang-18
+x86_64                randconfig-075-20240714   clang-18
+x86_64                randconfig-075-20240715   clang-18
+x86_64                randconfig-076-20240714   clang-18
+x86_64                randconfig-076-20240715   clang-18
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                            allnoconfig   gcc-14.1.0
+xtensa                  nommu_kc705_defconfig   gcc-13.2.0
+xtensa                randconfig-001-20240714   gcc-14.1.0
+xtensa                randconfig-002-20240714   gcc-14.1.0
 
-  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.11
-
-for you to fetch changes up to 1ea3fd1eb9869fcdcbc9c68f9728bfc47b9503f1:
-
-  hwmon: (max6697) Fix swapped temp{1,8} critical alarms (2024-07-14 11:49:01 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v6.11-rc1
-
-* Obsolete driver removals
-
-  - Removed obsolete adm1021 and max6642 drivers
-
-* New drivers
-
-  - MPS MP2891
-
-  - MPS MP2993
-
-  - MPS MP9941
-
-  - MPS MP5920
-
-  - SPD5118 (Temperature Sensor and EEPROM)
-
-* Added device support to existing drivers
-
-  - g762: G761
-
-  - dell-smm: Dell OptiPlex 7060
-
-  - asus-ec-sensors: ProArt X670E-CREATOR WIFI
-
-  - corsair-psu: HX1200i Series 2023 psu
-
-  - nzxt-smart2: Additional USB IS for NZXT RGB & Fan Controller
-
-* Notable enhancements and fixes
-
-  - Removed use of i2c_match_id()
-
-  - Constified struct regmap_config where feasible
-
-  - Cleaned up amc6821 driver, and converted to use regmap and with_info API
-
-  - Converted max6639 driver to use with_info API; added support for
-    additional sysfs attributes
-
-  - Fixed various sysfs attribute underflows
-
-  - Added PEC support to hwmon core, and use in lm90 and max31827 drivers
-
-* Various other minor fixes and improvements
-
-----------------------------------------------------------------
-Aleksandr Mezin (1):
-      hwmon: (nzxt-smart2) Add support for another version of NZXT RGB & Fan Controller
-
-Alex Vdovydchenko (2):
-      dt-bindings: hwmon: Add MPS mp5920
-      hwmon: add MP5920 driver
-
-Amna Waseem (2):
-      dt-bindings: hwmon: ti,ina2xx: Add ti,alert-polarity-active-high property
-      hwmon: (ina2xx) Add device tree support to pass alert polarity
-
-Andrew Davis (31):
-      hwmon: (ad7418) Remove use of i2c_match_id()
-      hwmon: (adm1021) Remove use of i2c_match_id()
-      hwmon: (adm1031) Remove use of i2c_match_id()
-      hwmon: (ads7828) Remove use of i2c_match_id()
-      hwmon: (adt7475) Remove use of i2c_match_id()
-      hwmon: (aht10) Remove use of i2c_match_id()
-      hwmon: (dme1737) Remove use of i2c_match_id()
-      hwmon: (ds1621) Remove use of i2c_match_id()
-      hwmon: (f75375s) Remove use of i2c_match_id()
-      hwmon: (fschmd) Remove use of i2c_match_id()
-      hwmon: (ina2xx) Remove use of i2c_match_id()
-      hwmon: (lm63) Remove use of i2c_match_id()
-      hwmon: (lm75) Remove use of i2c_match_id()
-      hwmon: (lm78) Remove use of i2c_match_id()
-      hwmon: (lm83) Remove use of i2c_match_id()
-      hwmon: (lm85) Remove use of i2c_match_id()
-      hwmon: (lm90) Remove use of i2c_match_id()
-      hwmon: (lm95234) Remove use of i2c_match_id()
-      hwmon: (max16065) Remove use of i2c_match_id()
-      hwmon: (max1668) Remove use of i2c_match_id()
-      hwmon: (max6697) Remove use of i2c_match_id()
-      hwmon: (mcp3021) Remove use of i2c_match_id()
-      hwmon: (powr1220) Remove use of i2c_match_id()
-      hwmon: (sht3x) Remove use of i2c_match_id()
-      hwmon: (shtc1) Remove use of i2c_match_id()
-      hwmon: (thmc50) Remove use of i2c_match_id()
-      hwmon: (tmp401) Remove use of i2c_match_id()
-      hwmon: (tmp421) Remove use of i2c_match_id()
-      hwmon: (tmp464) Remove use of i2c_match_id()
-      hwmon: (w83781d) Remove use of i2c_match_id()
-      hwmon: (w83795): Remove use of i2c_match_id()
-
-Armin Wolf (1):
-      hwmon: (dell-smm) Add Dell OptiPlex 7060 to DMI table
-
-Christian Marangi (3):
-      dt-bindings: hwmon: g762: Convert to yaml schema
-      dt-bindings: hwmon: g76x: Add support for g761
-      hwmon: g672: add support for g761
-
-Dan Carpenter (1):
-      hwmon: (ltc2991) re-order conditions to fix off by one bug
-
-Eugene Shalygin (1):
-      hwmon: (asus-ec-sensors) add ProArt X670E-CREATOR WIFI
-
-Guenter Roeck (36):
-      hwmon: (nct6683) Display warning when enabling driver for unknown customer
-      hwmon: Add PEC attribute support to hardware monitoring core
-      hwmon: (lm90) Convert to use PEC support from hwmon core
-      dt-bindings: trivial-devices: Add jedec,spd5118
-      hwmon: Add support for SPD5118 compliant temperature sensors
-      hwmon: (spd5118) Add suspend/resume support
-      hwmon: (spd5118) Add support for reading SPD data
-      i2c: smbus: Support DDR5 and LPDDR5 SPD EEPROMs
-      hwmon: (spd5118) Add configuration option for auto-detection
-      hwmon: (pmbus/max31827) Explain why enum chips must not start with 0
-      hwmon: (pmbus/mp2856) Let enum chips start with index 0
-      hwmon: (nct6775) Let enum kinds start with index 0
-      hwmon: (pmbus/lm25066) Let enum chips start with index 0
-      hwmon: (spd5118) Use regmap to implement paging
-      hwmon: (spd5118) Add support for Renesas/ITD SPD5118 hub controllers
-      hwmon: (jc42) Use common device ID for TSE2004av compliant sensors
-      hwmon: (jc42)  Strengthen detect function
-      hwmon: (adc128d818) Fix underflows seen when writing limit attributes
-      hwmon: (lm95234) Fix underflows seen when writing limit attributes
-      hwmon: (nct6775-core) Fix underflows seen when writing limit attributes
-      hwmon: (w83627ehf) Fix underflows seen when writing limit attributes
-      hwmon: (amc6821) Stop accepting invalid pwm values
-      hwmon: (amc6821) Make reading and writing fan speed limits consistent
-      hwmon: (amc6821) Rename fan1_div to fan1_pulses
-      hwmon: (amc6821) Add support for fan1_target and pwm1_enable mode 4
-      hwmon: (amc6821) Reorder include files, drop unnecessary ones
-      hwmon: (amc6821) Use tabs for column alignment in defines
-      hwmon: (amc6821) Use BIT() and GENMASK()
-      hwmon: (amc6821) Drop unnecessary enum chips
-      hwmon: (amc6821) Convert to use regmap
-      hwmon: (amc6821) Convert to with_info API
-      hwmon: (amc6821) Add support for pwm1_mode attribute
-      hwmon: (g762) Initialize fans after configuring clock
-      hwmon: Remove obsolete adm1021 and max6642 drivers
-      hwmon: (max6697) Fix underflow when writing limit attributes
-      hwmon: (max6697) Fix swapped temp{1,8} critical alarms
-
-Javier Carrasco (6):
-      hwmon: (ltc2991) use device_for_each_child_node_scoped()
-      hwmon: (gsc-hwmon) use device_for_each_child_node_scoped()
-      hwmon: (ina238) Constify struct regmap_config
-      hwmon: (tmp513) Constify struct regmap_config
-      hwmon: (tps23861) Constify struct regmap_config
-      hwmon: (gsc-hwmon) constify read-only struct regmap_bus
-
-Jeff Johnson (1):
-      hwmon: add missing MODULE_DESCRIPTION() macros
-
-Krzysztof Kozlowski (1):
-      hwmon: lm70: simplify with spi_get_device_match_data()
-
-Marius Zachmann (1):
-      hwmon: (corsair-cpro) Add firmware and bootloader information
-
-Naresh Solanki (3):
-      dt-bindings: hwmon: Add max6639
-      hwmon: (max6639) : Update hwmon init using info structure
-      hwmon: (max6639) : Add additional hwmon attributes for fan and pwm
-
-Noah Wang (6):
-      dt-bindings: hwmon: Add MPS mp2993
-      hwmon: add MP2993 driver
-      dt-bindings: hwmon: Add MPS mp9941
-      hwmon: add MP9941 driver
-      dt-bindings: hwmon: Add MPS mp2891
-      hwmon: add MP2891 driver
-
-Radu Sabau (1):
-      hwmon: (max31827) Add PEC support
-
-Sean Anderson (1):
-      hwmon: iio: Use iio_read_channel_processed_scale for IIO_POWER
-
-Stanislav Jakubek (1):
-      dt-bindings: hwmon: ti,tmp108: document V+ supply, add short description
-
-Thomas Weißschuh (1):
-      hwmon: (core) Make hwmon_class const
-
-Uwe Kleine-König (1):
-      hwmon: (pmbus/ltc4286) Drop unused i2c device ids
-
-Wayne Tung (1):
-      hwmon: (adt7475) Fix default duty on fan is disabled
-
-Wilken Gottwalt (1):
-      hwmon: corsair-psu: add USB id of HX1200i Series 2023 psu
-
- Documentation/devicetree/bindings/hwmon/g762.txt   |   47 -
- .../devicetree/bindings/hwmon/gmt,g762.yaml        |   95 ++
- .../devicetree/bindings/hwmon/maxim,max6639.yaml   |   92 ++
- .../devicetree/bindings/hwmon/ti,ina2xx.yaml       |    9 +
- .../devicetree/bindings/hwmon/ti,tmp108.yaml       |   12 +
- .../devicetree/bindings/trivial-devices.yaml       |   10 +
- Documentation/hwmon/adm1021.rst                    |  153 ---
- Documentation/hwmon/amc6821.rst                    |    7 +-
- Documentation/hwmon/asus_ec_sensors.rst            |    1 +
- Documentation/hwmon/corsair-cpro.rst               |    8 +
- Documentation/hwmon/corsair-psu.rst                |    6 +-
- Documentation/hwmon/dell-smm-hwmon.rst             |    2 +
- Documentation/hwmon/index.rst                      |    7 +-
- Documentation/hwmon/max31827.rst                   |   13 +-
- Documentation/hwmon/max6642.rst                    |   27 -
- Documentation/hwmon/mp2891.rst                     |  179 +++
- Documentation/hwmon/mp2993.rst                     |  150 +++
- Documentation/hwmon/mp5920.rst                     |   91 ++
- Documentation/hwmon/mp9941.rst                     |   92 ++
- Documentation/hwmon/spd5118.rst                    |   63 +
- MAINTAINERS                                        |   21 +
- drivers/hwmon/Kconfig                              |   56 +-
- drivers/hwmon/Makefile                             |    3 +-
- drivers/hwmon/ad7418.c                             |    7 +-
- drivers/hwmon/adc128d818.c                         |    4 +-
- drivers/hwmon/adm1021.c                            |  505 -------
- drivers/hwmon/adm1031.c                            |    4 +-
- drivers/hwmon/ads7828.c                            |    7 +-
- drivers/hwmon/adt7475.c                            |   18 +-
- drivers/hwmon/aht10.c                              |    3 +-
- drivers/hwmon/amc6821.c                            | 1402 ++++++++++----------
- drivers/hwmon/asus-ec-sensors.c                    |   10 +
- drivers/hwmon/asus_atk0110.c                       |    1 +
- drivers/hwmon/corsair-cpro.c                       |   89 ++
- drivers/hwmon/corsair-psu.c                        |    7 +-
- drivers/hwmon/dell-smm-hwmon.c                     |    7 +
- drivers/hwmon/dme1737.c                            |    4 +-
- drivers/hwmon/ds1621.c                             |    4 +-
- drivers/hwmon/f75375s.c                            |   46 +-
- drivers/hwmon/fschmd.c                             |    2 +-
- drivers/hwmon/g762.c                               |   43 +-
- drivers/hwmon/gsc-hwmon.c                          |    9 +-
- drivers/hwmon/hwmon.c                              |  149 ++-
- drivers/hwmon/iio_hwmon.c                          |   11 +-
- drivers/hwmon/ina238.c                             |    2 +-
- drivers/hwmon/ina2xx.c                             |   39 +-
- drivers/hwmon/jc42.c                               |   49 +-
- drivers/hwmon/lm63.c                               |    5 +-
- drivers/hwmon/lm70.c                               |    6 +-
- drivers/hwmon/lm75.c                               |   10 +-
- drivers/hwmon/lm78.c                               |    4 +-
- drivers/hwmon/lm83.c                               |   16 +-
- drivers/hwmon/lm85.c                               |    7 +-
- drivers/hwmon/lm90.c                               |   61 +-
- drivers/hwmon/lm95234.c                            |   14 +-
- drivers/hwmon/ltc2991.c                            |   15 +-
- drivers/hwmon/max16065.c                           |   10 +-
- drivers/hwmon/max1668.c                            |    4 +-
- drivers/hwmon/max31827.c                           |   23 +-
- drivers/hwmon/max6639.c                            |  608 ++++++---
- drivers/hwmon/max6642.c                            |  314 -----
- drivers/hwmon/max6697.c                            |   12 +-
- drivers/hwmon/mcp3021.c                            |    6 +-
- drivers/hwmon/mr75203.c                            |    1 +
- drivers/hwmon/nct6683.c                            |    2 +
- drivers/hwmon/nct6775-core.c                       |    2 +-
- drivers/hwmon/nct6775.h                            |    2 +-
- drivers/hwmon/nzxt-smart2.c                        |    1 +
- drivers/hwmon/pmbus/Kconfig                        |   36 +
- drivers/hwmon/pmbus/Makefile                       |    4 +
- drivers/hwmon/pmbus/lm25066.c                      |    2 +-
- drivers/hwmon/pmbus/ltc4286.c                      |    4 +-
- drivers/hwmon/pmbus/mp2856.c                       |    8 +-
- drivers/hwmon/pmbus/mp2891.c                       |  600 +++++++++
- drivers/hwmon/pmbus/mp2993.c                       |  261 ++++
- drivers/hwmon/pmbus/mp5920.c                       |   90 ++
- drivers/hwmon/pmbus/mp9941.c                       |  319 +++++
- drivers/hwmon/powr1220.c                           |    6 +-
- drivers/hwmon/sht3x.c                              |   20 +-
- drivers/hwmon/shtc1.c                              |    4 +-
- drivers/hwmon/spd5118.c                            |  703 ++++++++++
- drivers/hwmon/thmc50.c                             |    4 +-
- drivers/hwmon/tmp401.c                             |    2 +-
- drivers/hwmon/tmp421.c                             |    6 +-
- drivers/hwmon/tmp464.c                             |    5 +-
- drivers/hwmon/tmp513.c                             |    2 +-
- drivers/hwmon/tps23861.c                           |    2 +-
- drivers/hwmon/w83627ehf.c                          |    4 +-
- drivers/hwmon/w83781d.c                            |    4 +-
- drivers/hwmon/w83795.c                             |    4 +-
- drivers/i2c/i2c-smbus.c                            |    6 +-
- include/linux/hwmon.h                              |    2 +
- 92 files changed, 4473 insertions(+), 2314 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/g762.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
- delete mode 100644 Documentation/hwmon/adm1021.rst
- delete mode 100644 Documentation/hwmon/max6642.rst
- create mode 100644 Documentation/hwmon/mp2891.rst
- create mode 100644 Documentation/hwmon/mp2993.rst
- create mode 100644 Documentation/hwmon/mp5920.rst
- create mode 100644 Documentation/hwmon/mp9941.rst
- create mode 100644 Documentation/hwmon/spd5118.rst
- delete mode 100644 drivers/hwmon/adm1021.c
- delete mode 100644 drivers/hwmon/max6642.c
- create mode 100644 drivers/hwmon/pmbus/mp2891.c
- create mode 100644 drivers/hwmon/pmbus/mp2993.c
- create mode 100644 drivers/hwmon/pmbus/mp5920.c
- create mode 100644 drivers/hwmon/pmbus/mp9941.c
- create mode 100644 drivers/hwmon/spd5118.c
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
