@@ -1,63 +1,63 @@
 Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A892A1AA
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 23:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8B86A01E
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 23:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721170863; cv=none; b=ZHBzcqrmfEPX9/Aq3CVWyzGLEFwkhH+pmqzMxJy8Qv2oBiXtuVeKnpPPTYG7GReEdQSDEmE+PgeGRpDHWKplUuPO7JU4FQIsPIVRvTrzVXQTIgnhKbeWzPSPWwz5Vjmg667WCzk1WvrnyacY2ujqrC4+QyR6Ysw+RPjd6DgW98A=
+	t=1721170864; cv=none; b=b+1KW2AIiUPusWqtOSnn+h61MYgZjrfFWjpj8G0unciF8AXArfIBYEYxgslT5AV5Q0SC7lb9oTLAPRhiMCk7RmQ/Ij5hbhM/KtfDVD6WCa/CGgDkUx2jKkp8sA5zKSZZGqArpw3h5hQuEn2/W9hY0D01iNT9uUWaJsErCS5CLeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721170863; c=relaxed/simple;
-	bh=QuAF5jDUQY4fce8gJR0uUbraF3Vsup0Z3qPwpCk0sK4=;
+	s=arc-20240116; t=1721170864; c=relaxed/simple;
+	bh=GOlEHnyUoF59EnIaOqz8h1goXcGRS5L4vAtiGCgCsIM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eLrxQkyJLXkHelE8UkEX/65zPEVL8wv8lr1O61L8vyNkvqZEfPm8o0Y0U2En8u21L52F0PO2Lw9GJ3pYA9iPB+Xo9q5t/UwfmpgYhICuBgp15BUYKrvdTuZwooIaoeefSdiSZwX7DEU1gCd3aGcIOwV9i/nY4enEKrJKNK3hsTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GH0rx/xQ; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=BwY8WqTxsXIa/OlMQxePpC1YPRzxbCsdbzrM84YcMq4xJ20vLfX4688x4NxYKlCk9t6y/SkkvqdmI1l7OsE6qUVlt3tbvs4zgLKpG/Q1DWxOqjAd4ZNrv2SQE1Y/tB7/WGopq78+fxUieqvMqKmAl+GTS/LJ4A41eAOeMedOgIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kv8kQdJD; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GH0rx/xQ"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70b42250526so4612840b3a.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 16:01:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kv8kQdJD"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70b5117ae06so4406737b3a.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 16:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721170860; x=1721775660; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721170862; x=1721775662; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uoKt1Ppg09NG9pVN3LcM+m26clGMcm38wUCw/PB5OL4=;
-        b=GH0rx/xQEqxQZcQCt/EAC1MqEPFizuBbwsBgG5YMr+lXdQdfWClrNOK1wdtpOKqwSe
-         p0Fq8FpUhEhUpoizXvd1iOyw27UoSsUg+onkHkJpfuTwIZLMXa68gePiFFPVlFsYQVVS
-         z9nKFFPY9b/xoZGgOs1MZwq1gEzhzPxnpsWO+nclXoSFyM135oqvw4sgc+KtOb0e5xs4
-         NUEXFbFhQFWp8IE8dTWJZf/w017tmXsHrIdhxMb3ErlZgkjC0MIGwq3nLfpoug7bwiEs
-         CbQPnkdDEm2PI2k4ILrpM2c6cmdDt2wGszn3W/fgAn/bvkR8xJbpgyg/IzggmYH3stMh
-         bWrA==
+        bh=36VPYYbZzj8FPEQTnHRvuJaCAQi9X4RzJKfeP9NlBXI=;
+        b=kv8kQdJD35UdN1K3cdIbX0n9leCQ4+q3pi4Vn4D4ImMHHbdSNQU95RddZLHF2QOS10
+         qgCuIBULrqv1zmJLvs3ojmSCJKDGeXDxIwRRfyqov1MBbje1k2+JyaNI9syQwubwTVji
+         tIFRPHjBOgWYkhQ99VLPQJK0RgzQ8ptPkBTR37czSL+htkGcxeHhjB6yfVgIwTM548t5
+         wqJu+XmSYLhjWy2ngD7C8zSD2j4w5baLrfdJLQEe1BDNLCDYHoKP5eRzi5jkvKEZETO3
+         s400glkeQW9zTEE9g1KuIy4aoKannK05deb1uhFBVAaABb53HKXtXtF5JlbFQIiPPEtv
+         Cwrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721170860; x=1721775660;
+        d=1e100.net; s=20230601; t=1721170862; x=1721775662;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=uoKt1Ppg09NG9pVN3LcM+m26clGMcm38wUCw/PB5OL4=;
-        b=kwxYj7dfd9h33tFxanKg/hQBuIIsVZMRUAwiazoL4pXhu6kG1A8QeleQJd6Z3v2gHs
-         x2BWSJfDXj2AOsk9v0fSc1V1kJqyOWZ4mW3PC22d1XVfSg/gbWFO6ecbaluT84B1lBJt
-         MNSuvcq3vVrHPAEYFGOwe5ngkiygLt5JDKZ6jyWfiWCMgxvr0dcldKSIXxzjDcuQ9BlL
-         c6MFjYQdIiEFNaKS5rP2omOiWuWCZ+gTEPFWtgHl8Tl+/MQ1+GuGu8e2BKlnU8QI2M0M
-         u/mmYHLgHyiYruOql+ja2tzYArTR8fWk2YQdvMFgBEXYEPNJ59l6k54qeVJFeI8knRUM
-         2HKw==
-X-Gm-Message-State: AOJu0YzTTwCrf9Bh2xmUKmQ2hNeNvzFoGUPNQ/ZhGMfLS+4DSyNUqmGe
-	tlzwl/B7iMDqAxQX1JYMBa1N2Qfjs4YUenRJtDHnuKgkFCr01/peVUbIXw==
-X-Google-Smtp-Source: AGHT+IH+HuFL229bsEMyujD0NyFAdGGnwIinHWtMA0GwnsY5YieZRGEGqoSanwND8155w3wSH7rERw==
-X-Received: by 2002:a05:6a00:2304:b0:706:251d:d98 with SMTP id d2e1a72fcca58-70c1fb673fbmr4150721b3a.4.1721170860281;
-        Tue, 16 Jul 2024 16:01:00 -0700 (PDT)
+        bh=36VPYYbZzj8FPEQTnHRvuJaCAQi9X4RzJKfeP9NlBXI=;
+        b=kDWhAFx9PUJPMsBFr0mBezV0WgEACavgvjToAvwNkiQo53w1OGOROACFeLBRHsHNWT
+         Tvjblj+BcHkDmE9x6XdNbrPahMn3oZ53zQOPfChnUY1nAbRPW53HcnweTCwdZPIgI8LH
+         XrTsydfB2QTpG9AgHiU1Rf8asgcOKmyJgb9nsAerpFzk5Qbu6rvlCxpF7dyKIMCPoapx
+         8f10Emdcb6x/8avYiNWdoqpgMFqWhWpIm/CwdwtTX3ybQHwcObwTh9lo6k/a1drftcP6
+         6/YrnrRF06tIMP2k9R5XRfgpCi8sgyFxNH7yJeaBlRqsnJPhzIhlqWaoO+/QRlTwehXW
+         +chw==
+X-Gm-Message-State: AOJu0Yzm9xyYEa6tl47+0K2SIf5BWECmGCfU3CA0/FxwjsKPOxj2hM/M
+	SvYFZqtvAr/j6qjOG41HdIjuh3u+HPA5gEzAoA8G3TWzA0TUFbrcp+Aulg==
+X-Google-Smtp-Source: AGHT+IF7hmuaXme0anRSsY4skxOFbtJicS6TadEfoHSsi1A4fsa90y40FZIJFgVyXlpdM0o10dzokA==
+X-Received: by 2002:a05:6a00:b43:b0:70a:f40e:f2c7 with SMTP id d2e1a72fcca58-70c2e9b331fmr5098353b3a.24.1721170861971;
+        Tue, 16 Jul 2024 16:01:01 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eb9dec9sm6855032b3a.20.2024.07.16.16.00.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eca7865sm6876207b3a.158.2024.07.16.16.01.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 16:00:59 -0700 (PDT)
+        Tue, 16 Jul 2024 16:01:01 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/6] hwmon: (adt7x10) Use multi-byte regmap operations
-Date: Tue, 16 Jul 2024 16:00:47 -0700
-Message-Id: <20240716230050.2049534-4-linux@roeck-us.net>
+Subject: [PATCH 4/6] hwmon: (tmp464) Use multi-byte regmap operations
+Date: Tue, 16 Jul 2024 16:00:48 -0700
+Message-Id: <20240716230050.2049534-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240716230050.2049534-1-linux@roeck-us.net>
 References: <20240716230050.2049534-1-linux@roeck-us.net>
@@ -76,47 +76,89 @@ No functional changes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/adt7x10.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/hwmon/tmp464.c | 33 +++++++++++++++------------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 6701920de17f..2d329391ed3f 100644
---- a/drivers/hwmon/adt7x10.c
-+++ b/drivers/hwmon/adt7x10.c
-@@ -170,21 +170,15 @@ static int adt7x10_temp_write(struct adt7x10_data *data, int index, long temp)
- 
- static int adt7x10_hyst_read(struct adt7x10_data *data, int index, long *val)
+diff --git a/drivers/hwmon/tmp464.c b/drivers/hwmon/tmp464.c
+index 3ee1137533d6..0a7c0448835b 100644
+--- a/drivers/hwmon/tmp464.c
++++ b/drivers/hwmon/tmp464.c
+@@ -147,11 +147,11 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
  {
--	int hyst, temp, ret;
-+	unsigned int regs[2] = {ADT7X10_T_HYST, ADT7X10_REG_TEMP[index]};
-+	int hyst, ret;
-+	u16 regdata[2];
+ 	struct tmp464_data *data = dev_get_drvdata(dev);
+ 	struct regmap *regmap = data->regmap;
+-	unsigned int regval, regval2;
++	unsigned int regs[2];
++	unsigned int regval;
++	u16 regvals[2];
+ 	int err = 0;
  
 -	mutex_lock(&data->update_lock);
--	ret = regmap_read(data->regmap, ADT7X10_T_HYST, &hyst);
--	if (ret) {
--		mutex_unlock(&data->update_lock);
--		return ret;
--	}
 -
--	ret = regmap_read(data->regmap, ADT7X10_REG_TEMP[index], &temp);
+ 	switch (attr) {
+ 	case hwmon_temp_max_alarm:
+ 		err = regmap_read(regmap, TMP464_THERM_STATUS_REG, &regval);
+@@ -172,26 +172,27 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
+ 		 * complete. That means we have to cache the value internally
+ 		 * for one measurement cycle and report the cached value.
+ 		 */
++		mutex_lock(&data->update_lock);
+ 		if (!data->valid || time_after(jiffies, data->last_updated +
+ 					       msecs_to_jiffies(data->update_interval))) {
+ 			err = regmap_read(regmap, TMP464_REMOTE_OPEN_REG, &regval);
+ 			if (err < 0)
+-				break;
++				goto unlock;
+ 			data->open_reg = regval;
+ 			data->last_updated = jiffies;
+ 			data->valid = true;
+ 		}
+ 		*val = !!(data->open_reg & BIT(channel + 7));
++unlock:
++		mutex_unlock(&data->update_lock);
+ 		break;
+ 	case hwmon_temp_max_hyst:
+-		err = regmap_read(regmap, TMP464_THERM_LIMIT[channel], &regval);
++		regs[0] = TMP464_THERM_LIMIT[channel];
++		regs[1] = TMP464_TEMP_HYST_REG;
++		err = regmap_multi_reg_read(regmap, regs, regvals, 2);
+ 		if (err < 0)
+ 			break;
+-		err = regmap_read(regmap, TMP464_TEMP_HYST_REG, &regval2);
+-		if (err < 0)
+-			break;
+-		regval -= regval2;
+-		*val = temp_from_reg(regval);
++		*val = temp_from_reg(regvals[0] - regvals[1]);
+ 		break;
+ 	case hwmon_temp_max:
+ 		err = regmap_read(regmap, TMP464_THERM_LIMIT[channel], &regval);
+@@ -200,14 +201,12 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
+ 		*val = temp_from_reg(regval);
+ 		break;
+ 	case hwmon_temp_crit_hyst:
+-		err = regmap_read(regmap, TMP464_THERM2_LIMIT[channel], &regval);
++		regs[0] = TMP464_THERM2_LIMIT[channel];
++		regs[1] = TMP464_TEMP_HYST_REG;
++		err = regmap_multi_reg_read(regmap, regs, regvals, 2);
+ 		if (err < 0)
+ 			break;
+-		err = regmap_read(regmap, TMP464_TEMP_HYST_REG, &regval2);
+-		if (err < 0)
+-			break;
+-		regval -= regval2;
+-		*val = temp_from_reg(regval);
++		*val = temp_from_reg(regvals[0] - regvals[1]);
+ 		break;
+ 	case hwmon_temp_crit:
+ 		err = regmap_read(regmap, TMP464_THERM2_LIMIT[channel], &regval);
+@@ -239,8 +238,6 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
+ 		break;
+ 	}
+ 
 -	mutex_unlock(&data->update_lock);
-+	ret = regmap_multi_reg_read(data->regmap, regs, regdata, 2);
- 	if (ret)
- 		return ret;
- 
--	hyst = (hyst & ADT7X10_T_HYST_MASK) * 1000;
-+	hyst = (regdata[0] & ADT7X10_T_HYST_MASK) * 1000;
- 
- 	/*
- 	 * hysteresis is stored as a 4 bit offset in the device, convert it
-@@ -194,7 +188,7 @@ static int adt7x10_hyst_read(struct adt7x10_data *data, int index, long *val)
- 	if (index == adt7x10_t_alarm_low)
- 		hyst = -hyst;
- 
--	*val = ADT7X10_REG_TO_TEMP(data, temp) - hyst;
-+	*val = ADT7X10_REG_TO_TEMP(data, regdata[1]) - hyst;
- 	return 0;
+-
+ 	return err;
  }
  
 -- 
