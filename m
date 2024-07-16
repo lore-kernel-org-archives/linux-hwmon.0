@@ -1,63 +1,63 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449592A1AA
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 23:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B6513D502
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 23:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721170860; cv=none; b=q16/X/uabs2//rGu8nQFC62n5M6NdnWclwSDvJnoSj5jj/vnX/bmTru8eGpdcDdbH4mw6LNY0wCAJKNg7TGWtbnZrsf1YzstoC8mkq34bpoB9sSEPaYpbR3kQkxfkcJIQALF7n1+/5mTQEaA/RxGWhMYAPIpNxPo5BGexNJH+oU=
+	t=1721170861; cv=none; b=uw4WzKZusUOJWmPSnmpMWf1DiVYmPTK1vbwUxzHCJXgr9SPpPNirnQX+9ZNPOGQnNQD9mTkzhk18GQdUG3+PKYWwGngZkP2ROXLKBKERCetIn13I/Rmn2+Woge1mtQ662cLukgDamf5BIIIZGddy33VaJJaMgFgmzTrxSW32Brg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721170860; c=relaxed/simple;
-	bh=GgbN/xfi1+1UQUAQkw9MrQPh2Mrsg06rKp2yEd7dmzQ=;
+	s=arc-20240116; t=1721170861; c=relaxed/simple;
+	bh=luq9bOH6eETrJWj0Xm8t3HuCpW+2B19gKdWieuZXsiw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P7M6DBOvO4ixo2J0uaQpPwS6XdW4DmuppYtVFicQFL/3gDfZ9wv7eUiswPaYypuxX/FArCFTFO1eRx5OS6VSoOwH6neQZ9/u/RuNOJ28YQ4KGlnHB80T+oTENlsDdN4uGMorciTKcCJnMh8UmSXqieOAUzzBdbjqUCss9paS10E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lk5BgpMS; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=Q3uwkJ+1UYV3/Opmif/en8Drk4OzrkeVHh90io6MFlawdFYo00M1noJTEkTy1V3e8GFZDE5GexI+K+cpgVhm0Nmd2ua1qwuQK6TMVHfPriyADVh2Uvgm8Thj7867oNTu7Vdk27ZfXu1x7sVvJyqcWMEtVPRbmuvsnM9rvulro/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jtksCpQR; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lk5BgpMS"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc49c0aaffso1715935ad.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 16:00:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jtksCpQR"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70af8128081so4153625b3a.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 16:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721170857; x=1721775657; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721170858; x=1721775658; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QgF4IJKfLbvm9+vR9izv5Fs0Pq+QR9XA65JgqRSU/6Y=;
-        b=Lk5BgpMSAgBB/qTyOM6rsXlobWPYosrS4dkRSh6ebxhmw1XH+xFsuNDffmtEFxayN4
-         9BKuHzW5iMF7RZy7FL3W5YuQE7AidT/Z3SdvpzP4DKjNShfSYaTsfUPAm7BA08By+Emi
-         zgap13t+RWlZYItTsC1pwMeP6sgzaLtSUNLvJ6j2pv0tSpMvV7wciiAD5q/uJuzvbsSD
-         55NFKhAwgCfbhcCyGzn5zX1sOmua7vuHiQ/h1s78ivF4pz7agGIbPgU4epfCNDAW7m8Y
-         G18iBLdk8Kb0AE9DOTBuVF7HR/SrL118cFR7aTo++YoEYsdiWmxXfkZ/sA0BSClhlj+d
-         ldqQ==
+        bh=G+mhWIh9rO13TbrQbGprfCh45gda11b9VrQFxkUKZFo=;
+        b=jtksCpQRjYBlO78YV2DClxpLjPygqfaN9PZ6vlmjo9oBfBIMK9ng0GNOP9h4f1QJ3g
+         wH+SoxTqlczeuJ8vNyYv2wXQUQR3p5Ec5rVZX5d+LfXNKGFwKEnNr0id0IQKmu2InM2h
+         QrbMMlrUYFQOQQl8YWYKepTSrKAnH1HN/QsHkj2WrGaIKiDhgwyQpJ44/WmGT8J7OQw6
+         +2I4CwZYqBIFb8JQuHjOUbrmQSvBz0SvIZfj//ePlGwLHCXP7PJUafsCsj7TE1GRIKhJ
+         zpwwD4/xqbc0fvUZ7c/bEkynIsp4V9ZqGBlyLWDTJVdi61zNM9z7svP5VSeXrHsjl17k
+         Hhwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721170857; x=1721775657;
+        d=1e100.net; s=20230601; t=1721170858; x=1721775658;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QgF4IJKfLbvm9+vR9izv5Fs0Pq+QR9XA65JgqRSU/6Y=;
-        b=bf+kwXheFiePdw3Q+Ww+6UNxhzyZQ38e4DSlhu4Z05zkojtYePXQE3k5JnYGQPzWWv
-         MI42BXUSbJlpjB0XJzQcr1ba4fMEpnfkQ0dtldZrdISu2gV4V9oBYfZwD1YCi5tUMkOR
-         RKIO/tWLE8IMybuuqSDDTP13AnUCnSpaBHBH4SPmMQUc4rNymEkGCc+br18lyQ2i9WWg
-         lOr1ZOfvpL7bj5AGSYUDnnhpXkb+6WqCZwS3/dF69NjxUF9qS2BSvY9twyyOjqwfMYJq
-         8ucx+dIJOuAmcyon7WZbKhVlkqNOsGkZJSSHvM/QhgolDql+RFQBLBd6A5/Jd+ZsAe+l
-         orxA==
-X-Gm-Message-State: AOJu0YzRd3JHqid3rGxDAI18epAljweKAvRWvvWysG1c63JxKfmr9TA8
-	WuiAo2eFEgsYap62eWF0En66aBeLvRT34BbV2w1EQB1WyY5UDPQPWIfweg==
-X-Google-Smtp-Source: AGHT+IHdCY+oHR26DA42V4gPePoh3v05rw8/lkdDNA7BZ+VNXQTutVqHiscFF1MsQecabO5nnn34RA==
-X-Received: by 2002:a17:902:d487:b0:1fb:cffb:cf9b with SMTP id d9443c01a7336-1fc3d92c920mr33200275ad.7.1721170856643;
-        Tue, 16 Jul 2024 16:00:56 -0700 (PDT)
+        bh=G+mhWIh9rO13TbrQbGprfCh45gda11b9VrQFxkUKZFo=;
+        b=A9EGpTfwA9RIbYysVdGbsti9hw9HzCdiNb99AXy6eLD/Fo45HIqmbVLLkTw1o7UCW4
+         M8iXoa/7UQM1NeF//OVQq7xlZ97ed9WSRjyVuMCTxgo33knAgVVNXfZDzlfDRm5qf2d3
+         evq5d1pLEtsB9M01m7bOQBPgrrEatVS2XYVNSW8X+2+HRWxW9H3hYGsLOKcW/ef+80LQ
+         yoO/16L/Eq2gHnIY5sh90ifgejBBWDkdJCghRGfyTsPRWh8TwGOfU6q/0C+DSnKG8B9e
+         KhyKRlhvRT2Y/Ppx3DEnoCTwfFkOqVSaEuq/7F1NnOz2TLvdFYt39GqeZ7Jqrmurhi/X
+         +PQA==
+X-Gm-Message-State: AOJu0YxEEhUpvnipxgE7TZFjNGdA+GK0r7k5zwS7tfxyi4hYm2aDf1q8
+	VahOyW0OeUFtRxWNWTZPG8qwiBIerKitzY5pJUrUqhHEHyz9UXugEDVziA==
+X-Google-Smtp-Source: AGHT+IGwzrNH+TXe8OzRoxF9hBnwgKV24W7Pu5nLZ72u18WBeVsQVOnUHAkV+aD4Y7MO61u52LCAgg==
+X-Received: by 2002:a05:6a21:7702:b0:1c0:ed64:e4a9 with SMTP id adf61e73a8af0-1c3fdd1838bmr39984637.34.1721170858423;
+        Tue, 16 Jul 2024 16:00:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc27503sm63639185ad.175.2024.07.16.16.00.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ec7d2dasm6905823b3a.111.2024.07.16.16.00.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 16:00:55 -0700 (PDT)
+        Tue, 16 Jul 2024 16:00:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/6] hwmon: (lm95245) Use multi-byte regmap operations
-Date: Tue, 16 Jul 2024 16:00:45 -0700
-Message-Id: <20240716230050.2049534-2-linux@roeck-us.net>
+Subject: [PATCH 2/6] hwmon: (nct7802) Use multi-byte regmap operations
+Date: Tue, 16 Jul 2024 16:00:46 -0700
+Message-Id: <20240716230050.2049534-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240716230050.2049534-1-linux@roeck-us.net>
 References: <20240716230050.2049534-1-linux@roeck-us.net>
@@ -72,198 +72,125 @@ Content-Transfer-Encoding: 8bit
 Use multi-byte regmap operations where possible to reduce code size
 and the need for mutex protection.
 
-No functional change.
+No functional changes.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm95245.c | 110 ++++++++++++++++------------------------
- 1 file changed, 45 insertions(+), 65 deletions(-)
+ drivers/hwmon/nct7802.c | 61 ++++++++++++++++-------------------------
+ 1 file changed, 23 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/hwmon/lm95245.c b/drivers/hwmon/lm95245.c
-index d293b4f15dc1..3bdc30530847 100644
---- a/drivers/hwmon/lm95245.c
-+++ b/drivers/hwmon/lm95245.c
-@@ -161,18 +161,18 @@ static int lm95245_read_temp(struct device *dev, u32 attr, int channel,
+diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
+index 97e8c6424403..3d6819aebe16 100644
+--- a/drivers/hwmon/nct7802.c
++++ b/drivers/hwmon/nct7802.c
+@@ -229,41 +229,34 @@ static int nct7802_read_temp(struct nct7802_data *data,
+ 
+ static int nct7802_read_fan(struct nct7802_data *data, u8 reg_fan)
  {
- 	struct lm95245_data *data = dev_get_drvdata(dev);
- 	struct regmap *regmap = data->regmap;
--	int ret, regl, regh, regvall, regvalh;
-+	unsigned int regs[2];
-+	unsigned int regval;
-+	u8 regvals[2];
-+	int ret;
+-	unsigned int f1, f2;
++	unsigned int regs[2] = {reg_fan, REG_FANCOUNT_LOW};
++	u8 f[2];
+ 	int ret;
  
- 	switch (attr) {
- 	case hwmon_temp_input:
--		regl = channel ? LM95245_REG_R_REMOTE_TEMPL_S :
--				 LM95245_REG_R_LOCAL_TEMPL_S;
--		regh = channel ? LM95245_REG_R_REMOTE_TEMPH_S :
--				 LM95245_REG_R_LOCAL_TEMPH_S;
--		ret = regmap_read(regmap, regl, &regvall);
--		if (ret < 0)
--			return ret;
--		ret = regmap_read(regmap, regh, &regvalh);
-+		regs[0] = channel ? LM95245_REG_R_REMOTE_TEMPL_S :
-+				    LM95245_REG_R_LOCAL_TEMPL_S;
-+		regs[1] = channel ? LM95245_REG_R_REMOTE_TEMPH_S :
-+				    LM95245_REG_R_LOCAL_TEMPH_S;
-+		ret = regmap_multi_reg_read(regmap, regs, regvals, 2);
- 		if (ret < 0)
- 			return ret;
- 		/*
-@@ -181,92 +181,77 @@ static int lm95245_read_temp(struct device *dev, u32 attr, int channel,
- 		 * Use signed calculation for remote if signed bit is set
- 		 * or if reported temperature is below signed limit.
- 		 */
--		if (!channel || (regvalh & 0x80) || regvalh < 0x7f) {
--			*val = temp_from_reg_signed(regvalh, regvall);
-+		if (!channel || (regvals[1] & 0x80) || regvals[1] < 0x7f) {
-+			*val = temp_from_reg_signed(regvals[1], regvals[0]);
- 			return 0;
- 		}
--		ret = regmap_read(regmap, LM95245_REG_R_REMOTE_TEMPL_U,
--				  &regvall);
--		if (ret < 0)
-+		ret = regmap_bulk_read(regmap, LM95245_REG_R_REMOTE_TEMPH_U, regvals, 2);
-+		if (ret)
- 			return ret;
--		ret = regmap_read(regmap, LM95245_REG_R_REMOTE_TEMPH_U,
--				  &regvalh);
--		if (ret < 0)
--			return ret;
--		*val = temp_from_reg_unsigned(regvalh, regvall);
-+		*val = temp_from_reg_unsigned(regvals[0], regvals[1]);
- 		return 0;
- 	case hwmon_temp_max:
- 		ret = regmap_read(regmap, LM95245_REG_RW_REMOTE_OS_LIMIT,
--				  &regvalh);
-+				  &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = regvalh * 1000;
-+		*val = regval * 1000;
- 		return 0;
- 	case hwmon_temp_crit:
--		regh = channel ? LM95245_REG_RW_REMOTE_TCRIT_LIMIT :
--				 LM95245_REG_RW_LOCAL_OS_TCRIT_LIMIT;
--		ret = regmap_read(regmap, regh, &regvalh);
-+		regs[0] = channel ? LM95245_REG_RW_REMOTE_TCRIT_LIMIT :
-+				    LM95245_REG_RW_LOCAL_OS_TCRIT_LIMIT;
-+		ret = regmap_read(regmap, regs[0], &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = regvalh * 1000;
-+		*val = regval * 1000;
- 		return 0;
- 	case hwmon_temp_max_hyst:
--		ret = regmap_read(regmap, LM95245_REG_RW_REMOTE_OS_LIMIT,
--				  &regvalh);
-+		regs[0] = LM95245_REG_RW_REMOTE_OS_LIMIT;
-+		regs[1] = LM95245_REG_RW_COMMON_HYSTERESIS;
-+		ret = regmap_multi_reg_read(regmap, regs, regvals, 2);
- 		if (ret < 0)
- 			return ret;
--		ret = regmap_read(regmap, LM95245_REG_RW_COMMON_HYSTERESIS,
--				  &regvall);
--		if (ret < 0)
--			return ret;
--		*val = (regvalh - regvall) * 1000;
-+		*val = (regvals[0] - regvals[1]) * 1000;
- 		return 0;
- 	case hwmon_temp_crit_hyst:
--		regh = channel ? LM95245_REG_RW_REMOTE_TCRIT_LIMIT :
--				 LM95245_REG_RW_LOCAL_OS_TCRIT_LIMIT;
--		ret = regmap_read(regmap, regh, &regvalh);
-+		regs[0] = channel ? LM95245_REG_RW_REMOTE_TCRIT_LIMIT :
-+				    LM95245_REG_RW_LOCAL_OS_TCRIT_LIMIT;
-+		regs[1] = LM95245_REG_RW_COMMON_HYSTERESIS;
-+
-+		ret = regmap_multi_reg_read(regmap, regs, regvals, 2);
- 		if (ret < 0)
- 			return ret;
--		ret = regmap_read(regmap, LM95245_REG_RW_COMMON_HYSTERESIS,
--				  &regvall);
--		if (ret < 0)
--			return ret;
--		*val = (regvalh - regvall) * 1000;
-+		*val = (regvals[0] - regvals[1]) * 1000;
- 		return 0;
- 	case hwmon_temp_type:
--		ret = regmap_read(regmap, LM95245_REG_RW_CONFIG2, &regvalh);
-+		ret = regmap_read(regmap, LM95245_REG_RW_CONFIG2, &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = (regvalh & CFG2_REMOTE_TT) ? 1 : 2;
-+		*val = (regval & CFG2_REMOTE_TT) ? 1 : 2;
- 		return 0;
- 	case hwmon_temp_offset:
--		ret = regmap_read(regmap, LM95245_REG_RW_REMOTE_OFFL,
--				  &regvall);
-+		ret = regmap_bulk_read(regmap, LM95245_REG_RW_REMOTE_OFFH, regvals, 2);
- 		if (ret < 0)
- 			return ret;
--		ret = regmap_read(regmap, LM95245_REG_RW_REMOTE_OFFH,
--				  &regvalh);
--		if (ret < 0)
--			return ret;
--		*val = temp_from_reg_signed(regvalh, regvall);
-+		*val = temp_from_reg_signed(regvals[0], regvals[1]);
- 		return 0;
- 	case hwmon_temp_max_alarm:
--		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regvalh);
-+		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = !!(regvalh & STATUS1_ROS);
-+		*val = !!(regval & STATUS1_ROS);
- 		return 0;
- 	case hwmon_temp_crit_alarm:
--		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regvalh);
-+		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = !!(regvalh & (channel ? STATUS1_RTCRIT : STATUS1_LOC));
-+		*val = !!(regval & (channel ? STATUS1_RTCRIT : STATUS1_LOC));
- 		return 0;
- 	case hwmon_temp_fault:
--		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regvalh);
-+		ret = regmap_read(regmap, LM95245_REG_R_STATUS1, &regval);
- 		if (ret < 0)
- 			return ret;
--		*val = !!(regvalh & STATUS1_DIODE_FAULT);
-+		*val = !!(regval & STATUS1_DIODE_FAULT);
- 		return 0;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -279,6 +264,7 @@ static int lm95245_write_temp(struct device *dev, u32 attr, int channel,
- 	struct lm95245_data *data = dev_get_drvdata(dev);
- 	struct regmap *regmap = data->regmap;
- 	unsigned int regval;
-+	u8 regvals[2];
- 	int ret, reg;
+-	mutex_lock(&data->access_lock);
+-	ret = regmap_read(data->regmap, reg_fan, &f1);
+-	if (ret < 0)
+-		goto abort;
+-	ret = regmap_read(data->regmap, REG_FANCOUNT_LOW, &f2);
+-	if (ret < 0)
+-		goto abort;
+-	ret = (f1 << 5) | (f2 >> 3);
++	ret = regmap_multi_reg_read(data->regmap, regs, f, 2);
++	if (ret)
++		return ret;
++	ret = (f[0] << 5) | (f[1] >> 3);
+ 	/* convert fan count to rpm */
+ 	if (ret == 0x1fff)	/* maximum value, assume fan is stopped */
+ 		ret = 0;
+ 	else if (ret)
+ 		ret = DIV_ROUND_CLOSEST(1350000U, ret);
+-abort:
+-	mutex_unlock(&data->access_lock);
+ 	return ret;
+ }
  
- 	switch (attr) {
-@@ -311,16 +297,10 @@ static int lm95245_write_temp(struct device *dev, u32 attr, int channel,
- 	case hwmon_temp_offset:
- 		val = clamp_val(val, -128000, 127875);
- 		val = val * 256 / 1000;
--		mutex_lock(&data->update_lock);
--		ret = regmap_write(regmap, LM95245_REG_RW_REMOTE_OFFL,
--				   val & 0xe0);
--		if (ret < 0) {
--			mutex_unlock(&data->update_lock);
--			return ret;
--		}
--		ret = regmap_write(regmap, LM95245_REG_RW_REMOTE_OFFH,
--				   (val >> 8) & 0xff);
--		mutex_unlock(&data->update_lock);
-+		regvals[0] = val >> 8;
-+		regvals[1] = val & 0xe0;
+ static int nct7802_read_fan_min(struct nct7802_data *data, u8 reg_fan_low,
+ 				u8 reg_fan_high)
+ {
+-	unsigned int f1, f2;
++	unsigned int regs[2] = {reg_fan_low, reg_fan_high};
++	u8 f[2];
+ 	int ret;
+ 
+-	mutex_lock(&data->access_lock);
+-	ret = regmap_read(data->regmap, reg_fan_low, &f1);
++	ret = regmap_multi_reg_read(data->regmap, regs, f, 2);
+ 	if (ret < 0)
+-		goto abort;
+-	ret = regmap_read(data->regmap, reg_fan_high, &f2);
+-	if (ret < 0)
+-		goto abort;
+-	ret = f1 | ((f2 & 0xf8) << 5);
++		return ret;
 +
-+		ret = regmap_bulk_write(regmap, LM95245_REG_RW_REMOTE_OFFH, regvals, 2);
- 		return ret;
- 	case hwmon_temp_type:
- 		if (val != 1 && val != 2)
++	ret = f[0] | ((f[1] & 0xf8) << 5);
+ 	/* convert fan count to rpm */
+ 	if (ret == 0x1fff)	/* maximum value, assume no limit */
+ 		ret = 0;
+@@ -271,8 +264,6 @@ static int nct7802_read_fan_min(struct nct7802_data *data, u8 reg_fan_low,
+ 		ret = DIV_ROUND_CLOSEST(1350000U, ret);
+ 	else
+ 		ret = 1350000U;
+-abort:
+-	mutex_unlock(&data->access_lock);
+ 	return ret;
+ }
+ 
+@@ -302,33 +293,27 @@ static u8 nct7802_vmul[] = { 4, 2, 2, 2, 2 };
+ 
+ static int nct7802_read_voltage(struct nct7802_data *data, int nr, int index)
+ {
+-	unsigned int v1, v2;
++	u8 v[2];
+ 	int ret;
+ 
+ 	mutex_lock(&data->access_lock);
+ 	if (index == 0) {	/* voltage */
+-		ret = regmap_read(data->regmap, REG_VOLTAGE[nr], &v1);
++		unsigned int regs[2] = {REG_VOLTAGE[nr], REG_VOLTAGE_LOW};
++
++		ret = regmap_multi_reg_read(data->regmap, regs, v, 2);
+ 		if (ret < 0)
+-			goto abort;
+-		ret = regmap_read(data->regmap, REG_VOLTAGE_LOW, &v2);
+-		if (ret < 0)
+-			goto abort;
+-		ret = ((v1 << 2) | (v2 >> 6)) * nct7802_vmul[nr];
++			return ret;
++		ret = ((v[0] << 2) | (v[1] >> 6)) * nct7802_vmul[nr];
+ 	}  else {	/* limit */
+ 		int shift = 8 - REG_VOLTAGE_LIMIT_MSB_SHIFT[index - 1][nr];
++		unsigned int regs[2] = {REG_VOLTAGE_LIMIT_LSB[index - 1][nr],
++					REG_VOLTAGE_LIMIT_MSB[nr]};
+ 
+-		ret = regmap_read(data->regmap,
+-				  REG_VOLTAGE_LIMIT_LSB[index - 1][nr], &v1);
++		ret = regmap_multi_reg_read(data->regmap, regs, v, 2);
+ 		if (ret < 0)
+-			goto abort;
+-		ret = regmap_read(data->regmap, REG_VOLTAGE_LIMIT_MSB[nr],
+-				  &v2);
+-		if (ret < 0)
+-			goto abort;
+-		ret = (v1 | ((v2 << shift) & 0x300)) * nct7802_vmul[nr];
++			return ret;
++		ret = (v[0] | ((v[1] << shift) & 0x300)) * nct7802_vmul[nr];
+ 	}
+-abort:
+-	mutex_unlock(&data->access_lock);
+ 	return ret;
+ }
+ 
 -- 
 2.39.2
 
