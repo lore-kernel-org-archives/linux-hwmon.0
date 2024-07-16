@@ -1,76 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699E21465B8;
-	Mon, 15 Jul 2024 12:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ABA1CD24;
+	Tue, 16 Jul 2024 00:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721045864; cv=none; b=YSnU3hhJaA26zzHE7209xa3s4IvA5cZ1hYFfbwecNJNFnPIczs0N1JwAyUbM/SjrHkMtR8DzEaaw08E3xD1dRpl0ml6zrd26978lgF9C6NptkvOOcIQbTQrs7AAVQ2B0blbcw8wjLlWoSNFJDVyjiyqGKF3zEFTPwio2mmSMKkw=
+	t=1721091116; cv=none; b=u9rmB+ozfvMPBF/cU1nP/uI5izsGUxcW2iAvAr4JXnUfi9+As+2KqNEOKvD4nzOZLD6F035HBKGJsI6ao1BmmqDRCyDIL0Kah/Gi3L8OVV9wWK5uCWECINPFTMDXyFhVRbfnyjMBjzuAquVV3/QsJbgoRWwfIFv/wC0n7n/vnqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721045864; c=relaxed/simple;
-	bh=uCJLkcwDXyYOQxbRIMSEE+HcgfmMo2augGT7JD3amXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hue0QjM/66DsU23OGuDw91PDEBrwWhqPHm/nHN2FY8OF1kMfSd50q0nuyn45gVR0S79Y5q+ZjVc7iVBY4CzhGS2WKhstUh5BquZN+FD/vr71XmXoZ9aLX+vOueG7KhjF7yjcYQbDpvqqnC+XoTv00Po8OJbceOjVJDkhBQGUbL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YK25P6Dw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721091116; c=relaxed/simple;
+	bh=o1fWuHaPEjXYs1Ccf2hkVSPL8P3qFvdSsUaQiw87IW8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=soFi8EtcNeh/L0Op4jUGYDrcrFsmPw7z+yGJA7VRu2uX8iqsK1b1yLN+TxMiG83oGCUyM8bApL/NmmqWyzJKa7N/D6DIxZOwUUsUR9lRFtDmSS5Is/CElmVle3gosriUvFLK7zxK+Qba2apfNS605URlLlX9zNytndx5aAXfLbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTAMQgke; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YK25P6Dw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5E4C32782;
-	Mon, 15 Jul 2024 12:17:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTAMQgke"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3AE20C4AF11;
+	Tue, 16 Jul 2024 00:51:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721045863;
-	bh=uCJLkcwDXyYOQxbRIMSEE+HcgfmMo2augGT7JD3amXY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YK25P6DwQ38slp4Xm5FuFT9bxBatFQVlAPCI+40+ivQ+GocnyGfz9fUkmHVcQzGre
-	 de0KiGh5aZp4hEkSqgZh1m5AepsnXGvNlGni3pdK5ygCVXK3jmud2WBCPb6gtb3Tdk
-	 vyTI1VI7NLeiECHZy4nKKUGBd3Gu2SA2bAwtG5xHfRr/7hrpNfSRCPHDiXVIBl9UpK
-	 bNb0z6HaGbIDVPsyyXS2EDoefB1ES8v7aTYYuoMHx5mkkVZWvvi2yW0SescCmtHj40
-	 0JsS7IW4lIc2nFRXyn5+6EO3SydTaXVCIqvuhRoqox3tXcIBnIdr5SSEibcxE8aTWC
-	 b6yvjya+TJOOw==
-Date: Mon, 15 Jul 2024 06:17:42 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: linux-hwmon@vger.kernel.org, conor+dt@kernel.org, linux@roeck-us.net,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	krzk+dt@kernel.org, ukleinek@kernel.org, devicetree@vger.kernel.org,
-	jdelvare@suse.com
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
-Message-ID: <172104586129.3775717.7588578554384809361.robh@kernel.org>
-References: <20240711234614.3104839-1-chris.packham@alliedtelesis.co.nz>
- <20240711234614.3104839-2-chris.packham@alliedtelesis.co.nz>
+	s=k20201202; t=1721091116;
+	bh=o1fWuHaPEjXYs1Ccf2hkVSPL8P3qFvdSsUaQiw87IW8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=RTAMQgkeUswsdSx69rnQgJLKLFKUqnUElcCTEsoPsWfTB8xTlrb97Z7A9xVPyUWG1
+	 ahKSPwt8vQrHe+9NvgYWHh8rAnAIAO3UiSpXa5jiFgFxkr5VmNIWF9zqCQ9ZCxaBm4
+	 utouXNHmjZ5IewKsR6G8x57orGrP/QH8lV8PmyjLuvD4j4OH9u182cxTBFdA1v19vD
+	 NfM5h+qB5fW4jm7Q1RNToGAoI//6uxK/u1bzawETtGlueo2w5jGiQx4ocHHthbuPE/
+	 hQFMd6nAix+Xe0MHiwwENGO51+VpzrO6hRh4t5v3rqcsXm3GKgzxZ5qbLuacCgcXPQ
+	 sXXyoYX2lM9IQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32217C43443;
+	Tue, 16 Jul 2024 00:51:56 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v6.11
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240715001709.2985905-1-linux@roeck-us.net>
+References: <20240715001709.2985905-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240715001709.2985905-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11
+X-PR-Tracked-Commit-Id: 1ea3fd1eb9869fcdcbc9c68f9728bfc47b9503f1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 500a711df663adccb30fd3508960ff90c73f1cd4
+Message-Id: <172109111619.26590.2517070296944987372.pr-tracker-bot@kernel.org>
+Date: Tue, 16 Jul 2024 00:51:56 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240711234614.3104839-2-chris.packham@alliedtelesis.co.nz>
 
+The pull request you sent on Sun, 14 Jul 2024 17:17:09 -0700:
 
-On Fri, 12 Jul 2024 11:46:12 +1200, Chris Packham wrote:
-> Add fan child nodes that allow describing the connections for the
-> ADT7475 to the fans it controls. This also allows setting some
-> initial values for the pwm duty cycle and frequency.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v5:
->     - Use nanoseconds for PWM frequency and duty cycle as per existing
->       conventions for PWMs
->     - Set flags to 0 in example to match adi,pwm-active-state setting
->     Changes in v4:
->     - 0 is not a valid frequency value
->     Changes in v3:
->     - Use the pwm provider/consumer bindings
->     Changes in v2:
->     - Document 0 as a valid value (leaves hardware as-is)
-> 
->  .../devicetree/bindings/hwmon/adt7475.yaml    | 35 ++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
-> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/500a711df663adccb30fd3508960ff90c73f1cd4
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
