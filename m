@@ -1,61 +1,61 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385FC1109;
-	Wed, 17 Jul 2024 14:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679F1180A67;
+	Wed, 17 Jul 2024 16:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721227332; cv=none; b=NatVhzsIiOI2QjPXb+TRO7PJBqWcUAmiCNdGm//9mAcWzHDFzFRDwLiHiY/TUvj7vdbvrQco/pgKlJ6JCIwC0+H7ff7kTMy8iELpT3Sk0vYH5WFFkAt5pvvSJCM1i71bgqqIplbYzVcgjfTR939xhd8r0qG0MoR0bGEIMfyaTrY=
+	t=1721233597; cv=none; b=opi1s3bfS+CJuZSZP7TAYYaV2JMo0y4SHAnM92/EaIOhukksDncdbygRN04X4njNGOYPT/xSnbaqdp+kT0lInb74gL+TnmAFmWlqn4fiHddPk+4f7chLehDRj3e64jbSHUh6sIeUXhNIPS09xrKmHTKWbAialsP09IficUKHxKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721227332; c=relaxed/simple;
-	bh=l/KM7yxi2ZHkF8cQYBEhy4a+9kOEEclU8QcrHDuMnK4=;
+	s=arc-20240116; t=1721233597; c=relaxed/simple;
+	bh=I2eGsjFhX70XBcnNVF+/czALV8y44WdUsYs50JL3l4g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FEJzyQGdlv0UH+doGHbGRthU0/BP9XsRsGlxfsvqP+kLrzwMaay9MhAkt6I79kf5xjJuxZuQo0//HSH9faLhI9xU27ii/hRznup1v8OH5EAsbVArtn0hrlEsP4gk460N5fhF0REmdaB7XUr120XdaJzOQlHqajqW2w42bmY5p8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NinKXh5b; arc=none smtp.client-ip=209.85.215.170
+	 In-Reply-To:Content-Type; b=L9M55mhj8FWeOBTMnXKq+fkixNNujuHf67e3AOx2xruyDRstKWU1PFLNJMmJ3M1nod8JkRdet+0t/yige0OJ3Z3zXRU5M3h4iGnOstfHlpyIjpo1WjGmhfXFDbIESbZf4mIQ4W5k4zRy5obtDRkrGd9NAks8Q335Qg29xdNtCgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQE8MiJg; arc=none smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NinKXh5b"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-78006198aeeso610647a12.1;
-        Wed, 17 Jul 2024 07:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQE8MiJg"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-70360eeb7d2so230513a34.1;
+        Wed, 17 Jul 2024 09:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721227330; x=1721832130; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721233594; x=1721838394; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+H9w8F77UOiuxTWjm2gxO0HFKxtsrjJrC/NVtqoOGY=;
-        b=NinKXh5bZliO84cqaMwxH2p3Ege24w+s0zwc1X5rqu6redgT58lY4+2aax+WIsaC4b
-         gYMKStmODu8N0+oAOU64nyLoo+eBqSeqYZHH7M7pV5bvUZF/83Rt82FMvyCNDvcuIwSH
-         05UrcwP8CQI35rs1FT4MCbSMv7yjy0bWfh0bvx1fQlYGNs2mdfFudzLpWnWu3wFNk1Gp
-         N8/O3vnqL/ykCMqJtTk3nIyiJHPcTu8Jj7xsxdweRU9pEDWIMF17pTagctcfWz5RCCyt
-         sFcV5P/dTpzRBz1GpPA8g8fJ0fUCXx4iOfFLvaEzP5Q2zjsCn3gy7c7Qg6+0gOIdGnj6
-         vCIw==
+        bh=PRqnKCtfj6g6rjCE6KHBQ+SuSmEcX2d5CkGn30mc4Dk=;
+        b=FQE8MiJgIYbYHaHMx1LiIeMVkX2JCEaGOXC/FIcgKhBPBhk9vFh9KNBfXaF/wlMgq1
+         JpzBgvp2lnFQX+yKEo4UxoPaRhi6dv1da/NfH7Q3+2WzcG56jASK0Elw7JRWbZCZ227v
+         NqayGT56/GoP72UctBkSa5cp30pgomkaIMu49NLwGb6N8Al2l7L6lAb5YQFclv24kiXa
+         bGKtJ5AuN15DoDtuYqxWgR9Pn4gxx5rtcb/tUfffwfuSbmI+rwPVDSoyqn6YaxIac4e2
+         NBYTi/83AVsQv+0oQwGU0e9NRqb3BAOezaRP9aSh+ycPqCs+dVWyF8jLgJH4cbUm+WiQ
+         Txmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721227330; x=1721832130;
+        d=1e100.net; s=20230601; t=1721233594; x=1721838394;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9+H9w8F77UOiuxTWjm2gxO0HFKxtsrjJrC/NVtqoOGY=;
-        b=J9YNQl0C+uN8NnynRG4ECEC35Wwrqc1NwkdGHYH8P+h0eFOradCxLUvXqlMfLfbBtt
-         5TushiwPVHIyqtjNCMMF5UeLNhcqNrd8tJbPfYb1SiRJmo2U9nNt1IrlohF4iggLSdGO
-         +uW75USmvVvxHH3a4HBTUnr2IqcIM1DbLtj1ErTCXWAhvWIU9P5pC57MCFe6sf0Z5lQi
-         r8RTEKFzuCK8VYFUDJaMA6tjp2CUKaFHkTT3g/oTgGpEPmfcOaxiqEJgO3/LP1rlgBnc
-         +wQRYIXEW+Q5a4Ce/RD8ER5pIvolc2D6qJrrVeSRajMqxn1aEqpGKr9Ck+oWp+spfNf6
-         4qsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXyhP9HomXbLSLLbEAFKiia2u+CVskSoVW+7ZgTfTxHu5Ec1AUcfL2+7+TGxuB8bNKYt9LCVItqdde4yup336Iwr6PtAqSQ0TWh6MdV0wcjn8vU58jPFU72nfISZZtgpjL5O/3B10fTidI=
-X-Gm-Message-State: AOJu0Yxe11nl8YV5WdGIWGNQZJdPjCcumvpI8yGTrh1pO4dLOJjFpz9t
-	c7rKuvWfjQWqDZlayMW2MEkw5R0qIGLpcUJlspLAWq46IDFJMauq
-X-Google-Smtp-Source: AGHT+IFzIuwPU0tk7qlRcOVg/ETQ6ftxICf4AoFYaR1qpTdQwQjw/2oKyOQbCcwNIBDFyjh3O1ecRg==
-X-Received: by 2002:a17:903:22c9:b0:1fb:a38b:c5b7 with SMTP id d9443c01a7336-1fc4c362d39mr32559675ad.1.1721227330321;
-        Wed, 17 Jul 2024 07:42:10 -0700 (PDT)
+        bh=PRqnKCtfj6g6rjCE6KHBQ+SuSmEcX2d5CkGn30mc4Dk=;
+        b=d+P8Rqglp69F8ziJFshw2AHZyeGpuIZpNdEgDP76IqoXAClQvArUi0QavRKNTp3G7g
+         wqg4TEhZBbYy6Vx2wNrSyjlxBoxZJK+PNiYKIazjQcHnxDClol4q0KqSiGGM77rh4hzc
+         c2WM3S0s9H2tQCE4OAdVqGimfd1AQfzx8UmXdIzAgoVlgHKKlSQvHQkovucQSSe32yZI
+         8CR7HzoquTU+vefdzpvq+3MZr2PDen+bj6rWj9gRMsGehdKq3ciRPgBjazTeMwCTD1N+
+         Xd730Bf/4mj4M5Q6wijGnDEjN63sG8a6G8vhs8UXbdAOqgQq4MuMAQDw76NEl0u2Bn+m
+         k+nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGaGtRXSmQLzsyjJMVZC/xruwMMLK01IA9nM8lVAs20Yuc4nGahXoB8iMp1mFlWw0+VRp88cXxTJN11hszBTaxxJiTBtj0URa71gCBoDKujbu6hBFLfXs8+Ja8ZptL9er5VuKcV07zXho=
+X-Gm-Message-State: AOJu0Yxks0xY8VisdkWjMub+Jd/Aob5gep9epc8VbrdB3+n7yZMIn0l/
+	x7Fjhag5SF8WhNss5nZ8jrTklTxb0QOzTZb85JaiCXt9q+TxVJkQ
+X-Google-Smtp-Source: AGHT+IFs6Nd6U9feGVZuPjVusY5QIze7IvbR0Hq0eU5ifsPkAZeyAweB11hHaqOBU2XL++f7dwwGVQ==
+X-Received: by 2002:a05:6870:353:b0:24e:8987:6f34 with SMTP id 586e51a60fabf-260d8fe84b7mr1671024fac.3.1721233594046;
+        Wed, 17 Jul 2024 09:26:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb6fe52sm75712465ad.21.2024.07.17.07.42.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eb9dee7sm8620113b3a.16.2024.07.17.09.26.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 07:42:09 -0700 (PDT)
+        Wed, 17 Jul 2024 09:26:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e83aada2-79b2-4272-ab10-4453083193cd@roeck-us.net>
-Date: Wed, 17 Jul 2024 07:42:08 -0700
+Message-ID: <6e8245d5-8c39-491e-9fd0-1be88be7b00a@roeck-us.net>
+Date: Wed, 17 Jul 2024 09:26:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,11 +63,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] hwmon: pmbus: Implement generic bus access delay
-To: Patrick Rudolph <patrick.rudolph@9elements.com>,
+Subject: Re: [PATCH v2 1/8] hwmon/misc: amd-sbi: Move core sbrmi from hwmon to
+ misc
+To: Akshay Gupta <akshay.gupta@amd.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20240717073000.786228-1-patrick.rudolph@9elements.com>
+Cc: gregkh@linuxfoundation.org, arnd@arndb.de, naveenkrishna.chatradhi@amd.com
+References: <20240717081027.2079549-1-akshay.gupta@amd.com>
+ <20240717081027.2079549-2-akshay.gupta@amd.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,43 +115,21 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240717073000.786228-1-patrick.rudolph@9elements.com>
+In-Reply-To: <20240717081027.2079549-2-akshay.gupta@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Patrick,
+On 7/17/24 01:10, Akshay Gupta wrote:
+> This is done to support other functionality provided by the SBRMI, which
+> does not fit in the hwmon subsystem.
+> 
+> - Move the SBRMI core functionality and I2C device probing part to misc.
+> - Move hwmon device sensor to misc as only power is reported through
+>    hwmon sensor.
+> 
 
-On 7/17/24 00:29, Patrick Rudolph wrote:
-> Some drivers, like the max15301 or zl6100, are intentionally delaying
-> SMBus communications, to prevent transmission errors. As this is necessary
-> on additional PMBus compatible devices, implement a generic delay mechanism
-> in the pmbus core.
-> 
-> Introduces two delay settings in the pmbus_driver_info struct, one applies
-> to every SMBus transaction and the other is for write transaction only.
-> Once set by the driver the SMBus traffic, using the generic pmbus access
-> helpers, is automatically delayed when necessary.
-> 
-> The two settings are:
-> access_delay:
->    - Unit in microseconds
->    - Stores the accessed timestamp after every SMBus access
->    - Delays when necessary before the next SMBus access
-> 
-> write_delay:
->    - Unit in microseconds
->    - Stores the written timestamp after a write SMBus access
->    - Delays when necessary before the next SMBus access
-> 
-> This allows to drop the custom delay code from the drivers and easily
-> introduce this feature in additional pmbus drivers.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
-
-Sigh (sorry, but this isn't your first patch, and you should know).
-
-Change log goes here.
+I fail to see the logic here. Why would the supported sensor types
+be a reason or an argument for moving the hwmon code out of hwmon ?
 
 Guenter
 
