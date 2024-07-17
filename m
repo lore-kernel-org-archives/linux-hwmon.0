@@ -1,61 +1,61 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04D718C3D;
-	Wed, 17 Jul 2024 07:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09F418C3D;
+	Wed, 17 Jul 2024 07:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721199668; cv=none; b=Q4EmqMWGzNM8xMpcGB1Iz6MDaNvx33om8kqLRlli2695va1Pg8BlVpPGEdeblrend10YQg/2Vc9elCu7/JbZ1ZJbW77ffxAqoNnQC2aSMk7cs8QRzq5y6pvttwrkfI7Yg140S4VHWz2iQinIobJvF/VpTodk7pK6rBpzTccOO/g=
+	t=1721199841; cv=none; b=B/cK5OMLjqHXeS1ugMhb+1k0uE2U3x5cusfCBn8qyhxIZcfBpRCYOE1kI8+BwiUiZ9ffXbSejocVnCoIscAUAgsGPRQ7LKha8mwkDYhtclYkIalA4P1Z1YptAntRhWAuRgB6mAEVo+jbEt/60QM4W8KnOWTD7FUCjSQU9z3MbaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721199668; c=relaxed/simple;
-	bh=wPGh9hJ8L6n603K4RwjKOCoJ+c13U2nvAWtRYtfi6t4=;
+	s=arc-20240116; t=1721199841; c=relaxed/simple;
+	bh=9+u7VhpS0v0Ayu1qi7neh7YFfB4o2VEa2gNq7VOU6kM=;
 	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=unhjgCfedmvmSmZJee+qRAgvRzJsbQRNjabTTvg5cdrDj3sA5ZI+sK37Tz0Vibs2UUfNkWxb8+Eu8c+R3Ekjrw1SKRBE5K+jo6e5G4bG3rwqux6Ka51Fpts4cEye+G77QlYNcCQR6yYWZFCodYfaLehtzOqplVCBBKoHyhi5NgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HVAf+0XX; arc=none smtp.client-ip=209.85.210.177
+	 In-Reply-To:Content-Type; b=AwHFUdcUejzLcKCWBo8/TuO3q/8RzSIkbdfrgbRE+OD1B/uRhXVne5tEWS1sUOXfV5ny+imfGL9/Z7mZ3kMYiDBtvrJ1XacqGCRcjQzICRebVmGd9yZSB0KNzq55FJGtGfZ+7/VIwPJltspnQS8I4pPSyxCSEV1VaE6TPG4vcVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JEIk/CNE; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVAf+0XX"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70af3d9169bso4410019b3a.1;
-        Wed, 17 Jul 2024 00:01:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JEIk/CNE"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70b0e7f6f8bso5570314b3a.3;
+        Wed, 17 Jul 2024 00:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721199667; x=1721804467; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721199839; x=1721804639; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=BIqvVG1aJAwtJPezD7HsgM4ZWhFFBG5im4HLCUicOoA=;
-        b=HVAf+0XXPyy+0Mh0W4xl17hgi0shosm2GUN2xOBUvTmQciGJmPsLN0V11SGHOWucEI
-         uDvT2PSV0COn8Xvihm2D7JmQxLpAjcPYpfCtWbD/KeDhdlQLSSpF26rHvkbOQKsMKxqC
-         0IlcXjr5jwEqYOEo6ykhIPXWUZH6nRS6b68IFyqCf7Pk2R9nK/IfV/UyKpTA6R+lQz6s
-         a1g2fMp2pa6JQxAFNLwqyKR16obruNP1pb+s7B/SzbnmKg1qZ/C/nbrcs/01p0SFBORw
-         ClaOFDcICVJkUP3kCQ5FRu9j+tI9HfLA38Dz6wyFuoMK5rNd8s52IiB8TlFMrjKbIb7N
-         bKxw==
+        bh=EBQVSX8cISMGMb/XotZL4r577Dyw3ahWCKqo1wIoGyA=;
+        b=JEIk/CNEDWdgqhUz0ZsYhuJ3q/MDz5SwUjjtofpa062hF/s+UJAK8VVuqMn3NTGHMz
+         VygGRtfGQT2+jTsiykSTsnMsuJfP8fR3C5hdK7zFCnI18i5wVu+gpgiNmRu89pcffCLP
+         kByfgW3lTvhmZeZLpXnPKiOF4tWGughz91hlasQ/ciNAQRCcJ2ZsBgDGWLPfMMp688Cl
+         ukFvbBd/DBuK6BRMLg8ZT+T3mYQdL1qRskTwNdvxI8or78vb68GMpcK0OLtf2ww7vzoy
+         6Bi5d1qgSO5s4KRFZag6JnZ7FfNgLKT+Dy4QotJ6BmVfdWf+GaRkyiF0kw7sQJg+nHVl
+         Ej+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721199667; x=1721804467;
+        d=1e100.net; s=20230601; t=1721199839; x=1721804639;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:user-agent:mime-version:date:message-id:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIqvVG1aJAwtJPezD7HsgM4ZWhFFBG5im4HLCUicOoA=;
-        b=knxDfvjTiaBXJwDHAOTRzbTz4NJkH8E5h4iqWG6jgGW8CJCEyRSqLK0AlsDO9sJJHz
-         03bmYV5gO7fczErCdQpenNst18EhoaiCYsk7DDMsiqZQlHDSaOZ1AAO1OqGrEDMyXXp1
-         FJjOpcW19iJv1Zbp/lMAq7N6Z6u4XO1BfT96puELymPhCOgM8H5vBeXnaGr0fI4M/b+S
-         i27FrDvH3u0xPosqYUDt+CmgUjRK2ojmAzxK64ukPX3/ho1WBK1TzgMzsXM9t27bkwz7
-         MEIPDU1AYv0Zc+HS2uTnwDbqBX46jC79NmC1bOdrVBWAwDpVUYWH9AS4uXEXtaBNiSLL
-         iGcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ72u46js9a3+yHqno4VPDIWjqsaFE1Zm5ZDtai+JBuGii+EFVTKgfHjTfTXZGvSKnzBxtTf60VBu/T152ssBtD9gf/beOMnBRxrhZImzdBn/C9IVT3oJDwy+SrEPxOTCjcDDXCqw=
-X-Gm-Message-State: AOJu0Yx8nbYnsHkO+ccrmOMkteCJpQg9W5yei/BlKfjbmmhtJKZXDkkv
-	ysD/CFXMvsgal4UL126TZix6l21XsMZ3I++pXoIZF7XUYrtSNhvF
-X-Google-Smtp-Source: AGHT+IHeC7UoR6Xe/1y11RPhs3xLhOgqwGTrjo3HScfLmJhEpAjYaBUYzHDOGtnSHPWasj2S3Hzveg==
-X-Received: by 2002:a05:6a00:3a0f:b0:706:b10c:548a with SMTP id d2e1a72fcca58-70ce507da1emr886883b3a.22.1721199666651;
-        Wed, 17 Jul 2024 00:01:06 -0700 (PDT)
+        bh=EBQVSX8cISMGMb/XotZL4r577Dyw3ahWCKqo1wIoGyA=;
+        b=HG8N2Ycs7IGW6rtQOG01sIf6SX4ES/dW+Eyg7pqcdJxG1mBBMBzrHMU9Z3qQ9Tv8Bt
+         eWLce8fUEvpZNu11REUk0J0Q3pZaWMrNxGeTE4+BLbc5Vt+UCJHYjoDvZBTYUPCjShgn
+         31elxBgAx1nXFse9E/7SZodjV04yBEGvONlcxKk4hDKLCXCMQYtRvUOTy6on26hjTYzT
+         9Y2IcdarrlJo2LTxMjNlnFTYjKEre09VtHcTIKqTYuqRbpCCruqIFvc5MtfOd9IM8+QL
+         0nF/6m/LzL+DSBSx02qmU/9an9ISXpSUymzVjYg63ILsPRqnPuxzq7/d2HjxHGNAlpAG
+         +tpw==
+X-Forwarded-Encrypted: i=1; AJvYcCX5ci6SIVTj0S34CPJle0MtabZCEwO8r2SlHSQUtADzdlqqLkIjxZUFZTXAFm07jbBuvRsNsXF9E63XNro7ZcmP9mEe9W4C997j6+ckJXc+AtAPPcxYJaL0qZ8Wa7ugruvHsqPOq00=
+X-Gm-Message-State: AOJu0Yw8NKUWY3tVdu86FTb3laFqhXFuIVcRwDyKS9WfKrV21pu7gWVm
+	dT+410sPn7FNC4kINlUA+ZBAykOd60nU3csd6kCqIGRcTr+U6Swn
+X-Google-Smtp-Source: AGHT+IHjymBQBKqbE9v0z3JpgTA3UbRYXozd9N7g2aRJOa7OB/sK87AzoilQ9r/Nxvkd/59q5soL1Q==
+X-Received: by 2002:a05:6a00:23c1:b0:706:5d85:61a5 with SMTP id d2e1a72fcca58-70ce4f9003amr894285b3a.8.1721199838965;
+        Wed, 17 Jul 2024 00:03:58 -0700 (PDT)
 Received: from [198.18.0.1] ([2401:d9c0:2902::c2eb])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ec7d2b1sm7461162b3a.108.2024.07.17.00.01.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ec7da19sm7437615b3a.133.2024.07.17.00.03.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 00:01:06 -0700 (PDT)
+        Wed, 17 Jul 2024 00:03:58 -0700 (PDT)
 From: Cryolitia PukNgae <cryolitia@gmail.com>
 X-Google-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
-Message-ID: <fd9423c0-8c2b-4aef-9d76-cb7def3e2344@gmail.com>
-Date: Wed, 17 Jul 2024 15:01:02 +0800
+Message-ID: <8e5798c5-d539-4d4a-9d6c-9bb3ba69bb41@gmail.com>
+Date: Wed, 17 Jul 2024 15:03:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,32 +64,31 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] hwmon: add GPD devices sensor driver
-To: Krzysztof Kozlowski <krzk@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
  =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>
 References: <20240717-gpd_fan-v2-0-f7b7e6b9f21b@gmail.com>
  <20240717-gpd_fan-v2-1-f7b7e6b9f21b@gmail.com>
- <7e4e45e1-9a77-4780-a5bd-ac44cd7c6cdd@kernel.org>
+ <deca2345-0961-4d3a-9ab4-8d11c7d240f2@roeck-us.net>
 Content-Language: en-US
-In-Reply-To: <7e4e45e1-9a77-4780-a5bd-ac44cd7c6cdd@kernel.org>
+In-Reply-To: <deca2345-0961-4d3a-9ab4-8d11c7d240f2@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
-On 2024/7/17 03:28, Krzysztof Kozlowski wrote:
-> Why would you add here untested models?
-The manufacturer GPD  sent me these quirks and reg addresses, and they 
-used them to write their Windows user space driver. They are unlikely to 
-have problems. It was fully tested by several people on WIn Max 2 2023 
-and Win 4, and there's only little address difference with other model.
-> static, so how do you support more than one device?
-
-The device will have and only have one EC controller, I use 
-platform_device just for easier alloc and release resources.
-
+On 2024/7/17 02:04, Guenter Roeck wrote:
+>> +            pr_warn("GPD Fan Driver do have the quirk for your 
+>> device, but it's not tested. Please tested carefully by model 
+>> parameter gpd_fan_model=%s and report.\n",
+>> +                match->model_name);
+>> +            match = NULL;
+>> +        }
+>> +    }
+>> +
+>> +    if (IS_ERR_OR_NULL(match)) {
+>
+> match is never an ERR_PTR.
 Sincerely thank you for your guidance, v3 has been sent: 
 https://lore.kernel.org/r/20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com
-
-
