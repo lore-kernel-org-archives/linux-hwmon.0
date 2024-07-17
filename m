@@ -1,131 +1,114 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD6C13CFA3
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 23:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8225C33D8;
+	Wed, 17 Jul 2024 06:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721170869; cv=none; b=TbUMPVhxoa5bEeQUGr3WuzeEnahIlzuTIKHDrtmWOf0sA1nKjohyA4ZP+xQ6uMoN9/p7ebf5SXETqcHx+8lksTcU6FguFDTfkIfLUf0hhpLNAls0lEt7sdJI4aQvrhgtD2j39MQAmB6KSbPkuSgL2T1FTIeGpRhmtPES9Upw5rM=
+	t=1721198794; cv=none; b=Wt1KbCs87wYnZCW+UnFHC6ZZu8CHYwkRF53HG50UX+AK9QXfFlmzzkMpGMiC/R6ETujRpG1ChvEnuv7bSOutvBKd3VZPgC2b/yE5arupZBPUcmIX2lv5e6gF5dDEijtrh4OOtRA9GPCuCE2Nnjl9TP/EbaY18gkgk1WoIPC01pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721170869; c=relaxed/simple;
-	bh=ZLjgHqYTQvU4XadmxDeUP6p9g9ffBRj7/tcMJGf1UYc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jx4TMpjWzBAS1lBlVfXebwkLlWmEKPLqBreD78UAw/k0kDRFdw+W5dGydgngeR1l1pdc8tB9bEpHQzV2RjFTYJb/eZYfIUmFL/hqKU1OmrWt3XnNpOpNS9lXBYrCOD8e1x5rU+oaK9mNhKzUg7Zddhk5vCYn2UDmrV67Tr9eMLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eD1MGVzJ; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721198794; c=relaxed/simple;
+	bh=uMqIIpyBOEqt0CJmGAlMj+e7wF3ct3u+0A8IBPGTYoU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W87FyNN3tjI7D5rOab5TzkNBLbe/xZIhUcE3lppwgdE9IqvJDjbkCYDheZ8wa7hduu582o/E2NkQHuLvRVZsjFi2GEh5230PYLb3jOSSzljnS0/WeyGUF7jxIGysEpNX3TK6Aw6QDAvWoONagdPZ8OlFoot1g1Mu0a1JmzMtoII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8w08Aol; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eD1MGVzJ"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fb3b7d0d3aso37914225ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jul 2024 16:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721170867; x=1721775667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZYUsX+qSPd3Gzit9fuaalTnUQU5YObCV4PTll9Ip+Dg=;
-        b=eD1MGVzJghZuORnSTt90+StSP7ShiYgTT0xaC563pKhIi369zd0xrcpyhEV/kW0ezv
-         HL7OcrbxO6yQNbkFdZIXAKzxiqXZYV7rECsIduLFqQvHtw/p76aBxKK33cfa/JfKq+j1
-         lCyRwsOcO/jkFaBZmLs8cbINt4F3UFYMTmQkrxtPzcSECYyHIzk7Q2My6uxBBlfgs2dL
-         xk7zQ3yo7lk5O6wkqwPH33dP8dYy87MxdcN01GmwKynatUQGdVlsVzhLXKszqyLzxsSW
-         sO1tZ9SzIwtoVY7Wg76S08rF+9UgaKq4B1Xb0yUYcqL1l8ieaoDSdBa5Ec6aU2ELch2w
-         fMtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721170867; x=1721775667;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZYUsX+qSPd3Gzit9fuaalTnUQU5YObCV4PTll9Ip+Dg=;
-        b=cAuocSKx/sta8jXZFALtFpN1l9wPloCMg+Im8PViLGnHsf6oYVZfdq/gwqAFpxrzDf
-         Ei2Cxp2Wq1p8scRbtncDzhGEtx9gpvQ4xxa+/KMnJth0A8SL0ESNvWd36gvkIqWNUC+u
-         qcHjN8DDIzNKMaXkmPi38PCrcBpndQDml1j+HnETu4Opi4V5ikgtzO2SHPROZhBDh9Ic
-         Oc0r9B9umfSx5e62e+NLnetxdG1ooX/Q2qiSKj9OD+9iWBcxP/9vbqjHPrlljsqmJpsV
-         kHA81Yc8NKWhDN8nEGAR2mSCYn820YFl5uiW9qiwpKeU+nnA+z5tlMcpr25fSkEGN3SA
-         U4lA==
-X-Gm-Message-State: AOJu0Yy0LSnOUFode8OfgaSlPG4zqxV4Q14kEGgeqDGAJbqFnQ3VnbeC
-	O42mIM3UoWq7Z/J84k8FNWvT+smei17UL+KJfL/MXxGvrTdl8xQtJbnIBA==
-X-Google-Smtp-Source: AGHT+IHMhvSGEkyuuEfp4j1TAtEDgOM3jzyMpz2cDsBk4TshuMWkGJFMmmZPFkk4PhhY2qV7sTY2xA==
-X-Received: by 2002:a17:902:e945:b0:1fb:396c:7532 with SMTP id d9443c01a7336-1fc3d9f4d2bmr31465645ad.56.1721170865510;
-        Tue, 16 Jul 2024 16:01:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bb70306sm63748405ad.31.2024.07.16.16.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 16:01:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 6/6] hwmon: (amc6821) Use multi-byte regmap operations
-Date: Tue, 16 Jul 2024 16:00:50 -0700
-Message-Id: <20240716230050.2049534-7-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240716230050.2049534-1-linux@roeck-us.net>
-References: <20240716230050.2049534-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8w08Aol"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E9D6C4AF09;
+	Wed, 17 Jul 2024 06:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721198794;
+	bh=uMqIIpyBOEqt0CJmGAlMj+e7wF3ct3u+0A8IBPGTYoU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=A8w08Aol4NsvGHucRsXWDe35HVmylrYgdApVMyGZM+l9fZTx15gq377yjJd+0Cn01
+	 ygFI3mE3ed7h6IWg8AZdoMWy0FzZc+26D5cignaMx/cSRsPZO0U90DsYEh3yGCZOR/
+	 nDiQn4DavEJ5x5P8NVtziGmTIa7HOL4V6gVKLXbY90ZeRd+KsttVP8AWtmogF96WLI
+	 2J5OnQYbcZNJ5zWlb+7F3Ip0z5vC8ibLzwd2TWg4bf+xsTmw8XoWbNE8Bo0jeN7Pvp
+	 UV3fDvxncuNFsGiejFTchBJ/IQWYfLrvri+uYbYX0Sek6Njz93ByV+To3CHD1rE7nk
+	 VTGNGk4JxXAGA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45BBCC3DA4B;
+	Wed, 17 Jul 2024 06:46:34 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>
+Subject: [PATCH v3 0/2] hwmon: add GPD devices sensor driver
+Date: Wed, 17 Jul 2024 14:46:25 +0800
+Message-Id: <20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMFol2YC/2WMyQqDMBRFf0XeuikZNNGu+h+llGgGH9SBpIQW8
+ d8b3VTo8lzuOQtEG9BGuBQLBJsw4jRmEKcCul6P3hI0mYFTXlLFJPGzeTg9kko5QRsuurouIb/
+ nYB2+99LtnrnH+JrCZw8ntq3/jcQIJaKkFTNGMU3l1Q8an+duGmBrJH701M/j2XOqVVa2jeOsP
+ Xrrun4BYCwYZtYAAAA=
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Cryolitia PukNgae <Cryolitia@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
+ Yao Zi <ziyao@disroot.org>, 
+ =?utf-8?q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1328;
+ i=Cryolitia@gmail.com; h=from:subject:message-id;
+ bh=uMqIIpyBOEqt0CJmGAlMj+e7wF3ct3u+0A8IBPGTYoU=;
+ b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0VCYlFHUy9wQU5Bd0FJQVQ1ZEYzTDhpb
+ zdkQWNzbVlnQm1sMmpGNjY3UjRtOGNzS1BDOXJxOXRzeU1sVXVwCkVpVzlYQnhLRWlpQTRwcVR1
+ M0tKQVRNRUFBRUlBQjBXSVFSME5XMHB5dmR3U0JGOENDWStYUmR5L0lxTzNRVUMKWnBkb3hRQUt
+ DUkErWFJkeS9JcU8zVC9HQi85a0l3eitoUEE3NXd3V3ZrWUdSTjYzQXJkQW1hNDRoeHExS2JuZQ
+ ppNjFxS0k4RWs2M20xbCt5ZXlrQ29HczZ3SFZRZVI2UjQ3Q2kvTDFhcUUzSFVFalRubW1vc2E1R
+ UFTNitPenhUCi9qNU1OWG11QlY5WVdmZDl4U0lGNmQyY2JFOEw1NkZaK0U5cU9NUmFjWmxaSUlS
+ UGFPUU1EdEFKbHcreUE4S0UKT0hxYjBTVStQSW9Oc0FwbVlsamNmdlhkWXh0MlV0dDlSSEpZZ3E
+ zZUJNMGttY2ZSUm9Dd0NCVDhTVDVCejhCbgpWVCtuV08vc1lUOVFwdXZodDhiNUozcFl5anRDZl
+ JyZy8xYkNxNmprUm1NdnZVTEt3NGl6Q1U2Y1ZJYUZxbEd6CjZ5cXQ1SmZQM1JGY05YQzUzcjRUc
+ 0phbVArajAwSjNIQkVEbTZYS2hFb0J3TDk2WAo9dzdnUQotLS0tLUVORCBQR1AgTUVTU0FHRS0t
+ LS0tCg==
+X-Developer-Key: i=Cryolitia@gmail.com; a=openpgp;
+ fpr=1C3C6547538D7152310C0EEA84DD0C0130A54DF7
+X-Endpoint-Received: by B4 Relay for Cryolitia@gmail.com/default with
+ auth_id=186
+X-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
+Reply-To: Cryolitia@gmail.com
 
-Use multi-byte regmap operations where possible to reduce code size.
+Sensors driver for GPD Handhelds that expose fan reading and control via
+hwmon sysfs.
 
-No functional changes.
+Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+devices. This driver implements these functions through x86 port-mapped IO.
+I have tested it on my device.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Marcin Strągowski <marcin@stragowski.com>
+Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+
 ---
- drivers/hwmon/amc6821.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+Changes in v3:
+- Re-arrange code, thanks to Krzysztof Kozlowski, Guenter Roeck, Yao Zi!
+- Link to v2: https://lore.kernel.org/r/20240717-gpd_fan-v2-0-f7b7e6b9f21b@gmail.com
 
-diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
-index ec94392fcb65..ac64b407ed0e 100644
---- a/drivers/hwmon/amc6821.c
-+++ b/drivers/hwmon/amc6821.c
-@@ -136,29 +136,25 @@ struct amc6821_data {
-  */
- static int amc6821_get_auto_point_temps(struct regmap *regmap, int channel, u8 *temps)
- {
--	u32 pwm, regval;
-+	u32 regs[] = {
-+		AMC6821_REG_DCY_LOW_TEMP,
-+		AMC6821_REG_PSV_TEMP,
-+		channel ? AMC6821_REG_RTEMP_FAN_CTRL : AMC6821_REG_LTEMP_FAN_CTRL
-+	};
-+	u8 regvals[3];
-+	int slope;
- 	int err;
- 
--	err = regmap_read(regmap, AMC6821_REG_DCY_LOW_TEMP, &pwm);
-+	err = regmap_multi_reg_read(regmap, regs, regvals, 3);
- 	if (err)
- 		return err;
--
--	err = regmap_read(regmap, AMC6821_REG_PSV_TEMP, &regval);
--	if (err)
--		return err;
--	temps[0] = regval;
--
--	err = regmap_read(regmap,
--			  channel ? AMC6821_REG_RTEMP_FAN_CTRL : AMC6821_REG_LTEMP_FAN_CTRL,
--			  &regval);
--	if (err)
--		return err;
--	temps[1] = FIELD_GET(AMC6821_TEMP_LIMIT_MASK, regval) * 4;
-+	temps[0] = regvals[1];
-+	temps[1] = FIELD_GET(AMC6821_TEMP_LIMIT_MASK, regvals[2]) * 4;
- 
- 	/* slope is 32 >> <slope bits> in °C */
--	regval = 32 >> FIELD_GET(AMC6821_TEMP_SLOPE_MASK, regval);
--	if (regval)
--		temps[2] = temps[1] + DIV_ROUND_CLOSEST(255 - pwm, regval);
-+	slope = 32 >> FIELD_GET(AMC6821_TEMP_SLOPE_MASK, regvals[2]);
-+	if (slope)
-+		temps[2] = temps[1] + DIV_ROUND_CLOSEST(255 - regvals[0], slope);
- 	else
- 		temps[2] = 255;
- 
+Changes in v2:
+- Improved documentation, thanks to Randy Dunlap!
+- Link to v1: https://lore.kernel.org/r/20240716-gpd_fan-v1-0-34051dd71a06@gmail.com
+
+---
+Cryolitia PukNgae (2):
+      hwmon: add GPD devices sensor driver
+      hwmon: document: add gpd-fan
+
+ Documentation/hwmon/gpd-fan.rst |  63 ++++
+ Documentation/hwmon/index.rst   |   1 +
+ MAINTAINERS                     |   7 +
+ drivers/hwmon/Kconfig           |  10 +
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/gpd-fan.c         | 674 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 756 insertions(+)
+---
+base-commit: d67978318827d06f1c0fa4c31343a279e9df6fde
+change-id: 20240716-gpd_fan-57f30923c884
+
+Best regards,
 -- 
-2.39.2
+Cryolitia PukNgae <Cryolitia@gmail.com>
+
 
