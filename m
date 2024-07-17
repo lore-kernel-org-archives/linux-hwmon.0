@@ -1,377 +1,341 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34131CD1F;
-	Wed, 17 Jul 2024 07:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE2614F6C
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 07:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721200306; cv=none; b=nS5tAAMoyrTwvLRDuJVrngL17RpXQC8nNk/meidrs7JpehuQep4NyKIIeYkWjmM+NlKsa4xLRTZft5y1QlCKb+g+mbi+MxjZP7B5G4ENpn2kwo/7ZPMOLeAc3f2R3BeNOgA+q7P/DvotEm3bmCkKmea3T9JqBpfyNlm/64uTN6I=
+	t=1721201465; cv=none; b=IjZtMpubYDih+X5GSQiZu7+EKAYtjYw5eWSIpNqwFx96VmjRj9u4L1auuX/+/IAGQIcyexRVVHo8MY7Bq2Y9Yn55asrW9Hx9YbSJbd7xMj59rVi85gV1u+S+4sqz8F1hYi4xvup+QAoip7LhX+SFJder4BbLem8jQp4PXRoPd5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721200306; c=relaxed/simple;
-	bh=qqz2dTQAyhsrr8JcadvDgbuxVDuo0fTC4NGyVOzaHXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sFcP4sFXV8EUEIIuFYp0uJV36Ffl6oO6TwcpU4sJoX+MrtzZHfEjTXL26Ct6iulgKlHm+yU6y0mzsm7LowktxHKbnBDDnUv07SoW4TVNzwf7T+ntFbZXOcHrMAaApHiNWkguxKHYN4wVw2ZfVZbJWgSFKt9aScUh+sXkTaLPxvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWFYMh3C; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721201465; c=relaxed/simple;
+	bh=2AWDJ29/eZpQrMGz6us27l4ySjmwawxPrVQH8M1RMmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XI7gbSmEzQ59hdV38+8ippv5Y/9Y8auBlIn9NXs+Zc2xtpRxw7Ki/gDYDx1HjSZwyi+1MJ6mSU8IvC430ycZlAxJ3hTwEpLaPyw+clGnpRUL0x+T47Di+AjTmEbuF6k++HfacyE7G+J0sT4fq8SpdT9qSFZir0wZs6KjxcPu9xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=fi3UzSJc; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWFYMh3C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B3DC32782;
-	Wed, 17 Jul 2024 07:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721200305;
-	bh=qqz2dTQAyhsrr8JcadvDgbuxVDuo0fTC4NGyVOzaHXw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qWFYMh3Cs1hGN0lO4VjK+On3biP7Ol+puJxEkcfuhWFPBe37nNSywThDqc2nZyyYW
-	 IABc2KQ/dBmjQ6zG1SY9vPOOpYDPxYoDS9j7GUrSz/HimvY5PSLD0KdbjTaTKZeNk+
-	 ljqq4TesDOm3+Iz7xXjeeaAZgKGen3kj1752DnEI/rlkTo6rIHbNcR5zr6quSmfm7j
-	 HXQGH/DpZiOK7lGbsjxhCtpHJV6hNhKoeZInKYbMzadpZKkurPYDE9bYJuRfPxK6Fn
-	 1lEz7/dq/DC63TWriC/Ta6ZjSTWt91TjUHq0J8XN9j2lCSk6u3tN2Gh+GlkYESuMf8
-	 WPr2yKaVSbC5w==
-Message-ID: <14e3654e-27b1-41f7-a66f-03ec47e95593@kernel.org>
-Date: Wed, 17 Jul 2024 09:11:39 +0200
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="fi3UzSJc"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52ea34ffcdaso6992860e87.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 00:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1721201460; x=1721806260; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UjY2uYBPwkskN4yFFi5h7tCJfakT+MBEBO8/3c4UXEs=;
+        b=fi3UzSJcl3c2mTwR1d8Rs98MVUp6ax8zqKQVbD9ncrsVb0YwjfwtkisJcy/VkthA38
+         KY54IzGmgVy66wV+/QNybgoo0yaivcPjuuMz2FMi4vQaJKcYzLfT6Y8MkM26X2Za5Fl4
+         Uw1/qUn4avOQcS3uDw5opmyS8uebL0D9Hd2kD7PLTKj3mimG6CIRAk+BKrIE7UUahStw
+         VGyeLJ9wx7Hsl1ekg+1OabNmnWKzBU4j53eLDnVRtwU6EMKCpupNqZTi/JVQBA0P/6Ak
+         ZLruXn9/fWsFlDXlVEF1DDJeuUBh6S3dDA3BkySgfa9J61OXmuJrtYNV1+m8mRi7HSdg
+         E8bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721201460; x=1721806260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UjY2uYBPwkskN4yFFi5h7tCJfakT+MBEBO8/3c4UXEs=;
+        b=ojRRRelOm1ZCXJq2ktLCSCcm6Ju7rXDX08dhku1WUAfbVDtsq54gPIQmuDR0bCg/Hy
+         9n7Lr1ZTODY2rE2YXaECJbeLKXvjfMhbIYioD3wX/wqCWHqS+RTtii0CeiUAtVX4w/6V
+         r1j5sC7+GoNV1HHz7RwD+eD55868NfDX0fJmWvblNWuLUDLXhN+s0YhXXpXDtoZg2O4m
+         fZ8Dgl8h5kWESAMZCMw2gUMB2o6zxesyif+dMCs83f37cBdJiWRQ67a2IkrHdJpp1dHZ
+         zND6DJSsFNSB7/k50NgNpvq3Ne83AKIToHGhmuvTCbE5wDYT5gymRos1jHqMkWr40o/D
+         0wzw==
+X-Forwarded-Encrypted: i=1; AJvYcCUtxR27xS/1ZXPVDaontNlq7xXZxCwqDCLFEEkwx5JGGHVLbrRLOh+WY4yqnEGD3WwXyPA37Aj7JvPN/Prl0mHS9rId1v4I+0/iDwA=
+X-Gm-Message-State: AOJu0YyHTnx4adalDcF8TC7IvGt26atuZ61cNq7m7jfzdpDuKAd+uDm0
+	lCehbNE4Mhi0dZrWgwhPYWVk2nTsjlripMY93yr5Wuc0RLCYdjvpmFm3fPxQpZs=
+X-Google-Smtp-Source: AGHT+IHeWtuGurVPdRGB70Fs9fzMflS8oagvjjxtdPigXpGltmnMTFk5PIPxKdHX/IEiLs1pWrYupg==
+X-Received: by 2002:a05:6512:32c5:b0:52e:9acf:b698 with SMTP id 2adb3069b0e04-52ee53f7c0emr569256e87.36.1721201459793;
+        Wed, 17 Jul 2024 00:30:59 -0700 (PDT)
+Received: from fedora.sec.9e.network (ip-037-049-067-221.um09.pools.vodafone-ip.de. [37.49.67.221])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-59edba561e0sm2766841a12.50.2024.07.17.00.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jul 2024 00:30:59 -0700 (PDT)
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
+To: linux-kernel@vger.kernel.org
+Cc: Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 1/5] hwmon: pmbus: Implement generic bus access delay
+Date: Wed, 17 Jul 2024 09:29:52 +0200
+Message-ID: <20240717073000.786228-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] hwmon: add GPD devices sensor driver
-To: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
- Yao Zi <ziyao@disroot.org>, =?UTF-8?Q?Marcin_Str=C4=85gowski?=
- <marcin@stragowski.com>
-References: <20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com>
- <20240717-gpd_fan-v3-1-8d7efb1263b7@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240717-gpd_fan-v3-1-8d7efb1263b7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 17/07/2024 08:46, Cryolitia PukNgae via B4 Relay wrote:
-> From: Cryolitia PukNgae <Cryolitia@gmail.com>
-> 
-> Sensors driver for GPD Handhelds that expose fan reading and control via
-> hwmon sysfs.
-> 
-> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
-> devices. This driver implements these functions through x86 port-mapped IO.
-> I have only tested it on my device Win Max 2 2023.
-> 
-> Tested-by: Marcin Strągowski <marcin@stragowski.com>
-> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
-> ---
->  MAINTAINERS             |   6 +
->  drivers/hwmon/Kconfig   |  10 +
->  drivers/hwmon/Makefile  |   1 +
->  drivers/hwmon/gpd-fan.c | 674 ++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 691 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index af4b4c271342..9ced72cec42b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9372,6 +9372,12 @@ F:	drivers/phy/samsung/phy-gs101-ufs.c
->  F:	include/dt-bindings/clock/google,gs101.h
->  K:	[gG]oogle.?[tT]ensor
->  
+Some drivers, like the max15301 or zl6100, are intentionally delaying
+SMBus communications, to prevent transmission errors. As this is necessary
+on additional PMBus compatible devices, implement a generic delay mechanism
+in the pmbus core.
 
-...
+Introduces two delay settings in the pmbus_driver_info struct, one applies
+to every SMBus transaction and the other is for write transaction only.
+Once set by the driver the SMBus traffic, using the generic pmbus access
+helpers, is automatically delayed when necessary.
 
-> +// device EC truly access start
-> +
-> +static int gpd_ecram_read(const struct gpd_model_ec_address *address,
-> +			  u16 offset, u8 *val)
-> +{
-> +	int ret;
-> +
-> +	ret = mutex_lock_interruptible(&gpd_fan_lock);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	u16 addr_port = address->addr_port;
-> +	u16 data_port = address->data_port;
+The two settings are:
+access_delay:
+  - Unit in microseconds
+  - Stores the accessed timestamp after every SMBus access
+  - Delays when necessary before the next SMBus access
 
-Again, definitions are at the top. Read Linux Coding Style.
+write_delay:
+  - Unit in microseconds
+  - Stores the written timestamp after a write SMBus access
+  - Delays when necessary before the next SMBus access
 
-<form letter>
-This is a friendly reminder during the review process.
+This allows to drop the custom delay code from the drivers and easily
+introduce this feature in additional pmbus drivers.
 
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+---
+ drivers/hwmon/pmbus/pmbus.h      | 10 ++++
+ drivers/hwmon/pmbus/pmbus_core.c | 92 +++++++++++++++++++++++++++++---
+ 2 files changed, 96 insertions(+), 6 deletions(-)
 
-Thank you.
-</form letter>
-
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x11, data_port);
-> +	outb(0x2F, addr_port);
-> +	outb((u8)((offset >> 8) & 0xFF), data_port);
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x10, data_port);
-> +	outb(0x2F, addr_port);
-> +	outb((u8)(offset & 0xFF), data_port);
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x12, data_port);
-> +	outb(0x2F, addr_port);
-> +	*val = inb(data_port);
-> +
-> +	mutex_unlock(&gpd_fan_lock);
-> +	return 0;
-> +}
-> +
-> +static int gpd_ecram_write(const struct gpd_model_ec_address *address,
-> +			   u16 offset, u8 value)
-> +{
-> +	int ret = mutex_lock_interruptible(&gpd_fan_lock);
-
-<form letter>
-This is a friendly reminder during the review process.
-
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
-
-Thank you.
-</form letter>
-
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	u16 addr_port = address->addr_port;
-> +	u16 data_port = address->data_port;
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x11, data_port);
-> +	outb(0x2F, addr_port);
-> +	outb((u8)((offset >> 8) & 0xFF), data_port);
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x10, data_port);
-> +	outb(0x2F, addr_port);
-> +	outb((u8)(offset & 0xFF), data_port);
-> +
-> +	outb(0x2E, addr_port);
-> +	outb(0x12, data_port);
-> +	outb(0x2F, addr_port);
-> +	outb(value, data_port);
-> +
-> +	mutex_unlock(&gpd_fan_lock);
-> +	return 0;
-> +}
-> +
-> +// device EC truly access end
-> +
-> +// device quirk function implement start
-> +
-> +static s32
-> +gpd_read_cached_fan_speed(struct gpd_driver_priv *data,
-> +			  s32 (*read_uncached)(const struct gpd_driver_priv *))
-> +{
-> +	// Update per 1000 milliseconds
-> +	if (time_after(jiffies, data->fan_speed_last_update + HZ)) {
-> +		s32 ret = read_uncached(data);
-> +
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		data->fan_speed_cached = ret;
-> +		data->fan_speed_last_update = jiffies;
-> +	}
-> +	return data->fan_speed_cached;
-> +}
-> +
-> +static s32
-> +gpd_read_cached_pwm(struct gpd_driver_priv *data,
-> +		    s16 (*read_uncached)(const struct gpd_driver_priv *))
-> +{
-> +	// Update per 1000 milliseconds
-> +	if (time_after(jiffies, data->read_pwm_last_update + HZ)) {
-> +		s16 ret = read_uncached(data);
-> +
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		data->read_pwm_cached = ret;
-> +		data->read_pwm_last_update = jiffies;
-> +	}
-> +	return data->read_pwm_cached;
-> +}
-> +
-> +static s32 gpd_read_rpm_uncached(const struct gpd_driver_priv *data)
-> +{
-> +	u8 high, low;
-> +	int ret;
-> +	const struct gpd_model_ec_address *address = &data->quirk->address;
-> +
-> +	ret = gpd_ecram_read(address, address->rpm_read, &high);
-> +	if (ret)
-> +		return ret;
-> +	ret = gpd_ecram_read(address, address->rpm_read + 1, &low);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return high << 8 | low;
-> +}
-> +
-> +static s32 gpd_read_rpm(struct gpd_driver_priv *data)
-> +{
-> +	return gpd_read_cached_fan_speed(data, gpd_read_rpm_uncached);
-> +}
-> +
-> +static s16 gpd_read_pwm(struct gpd_driver_priv *data)
-> +{
-> +	return data->pwm_value;
-> +}
-> +
-> +static int gpd_write_pwm(const struct gpd_driver_priv *data, u8 val)
-> +{
-> +	const struct gpd_model_ec_address *address = &data->quirk->address;
-> +
-> +	u8 actual = val * (address->pwm_max - 1) / 255 + 1;
-> +
-> +	return gpd_ecram_write(address, address->pwm_write, actual);
-> +}
-> +
-> +static int gpd_win_mini_set_pwm_enable(struct gpd_driver_priv *data,
-> +				       enum FAN_PWM_ENABLE pwm_enable)
-> +{
-> +	switch (pwm_enable) {
-> +	case DISABLE:
-> +		return gpd_write_pwm(data, 255);
-> +	case MANUAL:
-> +		return gpd_write_pwm(data, data->pwm_value);
-> +	case AUTOMATIC:
-> +		return gpd_write_pwm(data, 0);
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int gpd_win_mini_write_pwm(const struct gpd_driver_priv *data, u8 val)
-> +{
-> +	if (data->pwm_enable == MANUAL)
-> +		return gpd_write_pwm(data, val);
-> +	return 0;
-> +}
-> +
-
-...
-
-> +// hwmon subsystem end
-> +
-> +static int gpd_fan_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct gpd_driver_priv *data;
-> +	const struct resource *plat_res;
-> +	const struct device *dev_reg;
-> +	const struct resource *region_res;
-> +
-> +	data = dev_get_platdata(&pdev->dev);
-> +	if (IS_ERR_OR_NULL(data))
-> +		return -ENODEV;
-> +
-> +	plat_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> +	if (IS_ERR_OR_NULL(plat_res))
-
-IS_ERR_OR_NULL is usually poor code.
-
-> +		return dev_err_probe(dev, PTR_ERR(plat_res),
-> +				     "Failed to get platform resource\n");
-> +
-> +	region_res = devm_request_region(dev, plat_res->start,
-> +					 resource_size(plat_res), DRIVER_NAME);
-> +	if (IS_ERR_OR_NULL(region_res))
-
-IS_ERR_OR_NULL is usually poor code.
-
-> +		return dev_err_probe(dev, PTR_ERR(region_res),
-> +				     "Failed to request region\n");
-> +
-> +	dev_reg = devm_hwmon_device_register_with_info(
-> +		dev, DRIVER_NAME, data, &gpd_fan_chip_info, NULL);
-
-Fix the alignment/wrapping.
-
-> +	if (IS_ERR_OR_NULL(dev_reg))
-
-IS_ERR_OR_NULL is usually poor code. Or wrong. Cannot be NULL.
-
-> +		return dev_err_probe(dev, PTR_ERR(region_res),
-> +				     "Failed to register hwmon device\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int gpd_fan_remove(__always_unused struct platform_device *pdev)
-> +{
-> +	struct gpd_driver_priv *data = dev_get_platdata(&pdev->dev);
-
-What is this __always_unused? How pdev can be unused if it is just here?
-
-This entire driver still does not look like using Linux coding style.
-
-> +
-> +	data->pwm_enable = AUTOMATIC;
-> +	data->quirk->set_pwm_enable(data, AUTOMATIC);
-> +
-> +	return 0;
-> +}
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index fb442fae7b3e..5d5dc774187b 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -466,6 +466,16 @@ struct pmbus_driver_info {
+ 
+ 	/* custom attributes */
+ 	const struct attribute_group **groups;
++
++	/*
++	 * Some chips need a little delay between SMBus communication. When
++	 * set, the generic PMBus helper functions will wait if necessary
++	 * to meet this requirement. The access delay is honored after
++	 * every SMBus operation. The write delay is only honored after
++	 * SMBus write operations.
++	 */
++	int access_delay;		/* in microseconds */
++	int write_delay;		/* in microseconds */
+ };
+ 
+ /* Regulator ops */
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index cb4c65a7f288..0ea6fe7eb17c 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/debugfs.h>
++#include <linux/delay.h>
+ #include <linux/kernel.h>
+ #include <linux/math64.h>
+ #include <linux/module.h>
+@@ -108,6 +109,8 @@ struct pmbus_data {
+ 
+ 	int vout_low[PMBUS_PAGES];	/* voltage low margin */
+ 	int vout_high[PMBUS_PAGES];	/* voltage high margin */
++	ktime_t write_time;		/* Last SMBUS write timestamp */
++	ktime_t access_time;		/* Last SMBUS access timestamp */
+ };
+ 
+ struct pmbus_debugfs_entry {
+@@ -158,6 +161,39 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_set_update, PMBUS);
+ 
++/* Some chips need a delay between accesses. */
++static void pmbus_wait(struct i2c_client *client)
++{
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	const struct pmbus_driver_info *info = data->info;
++	s64 delta;
++
++	if (info->access_delay) {
++		delta = ktime_us_delta(ktime_get(), data->access_time);
++
++		if (delta < info->access_delay)
++			fsleep(info->access_delay - delta);
++	} else if (info->write_delay) {
++		delta = ktime_us_delta(ktime_get(), data->write_time);
++
++		if (delta < info->write_delay)
++			fsleep(info->write_delay - delta);
++	}
++}
++
++/* Sets the last accessed timestamp for pmbus_wait */
++static void pmbus_update_ts(struct i2c_client *client, bool write_op)
++{
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	const struct pmbus_driver_info *info = data->info;
++
++	if (info->access_delay) {
++		data->access_time = ktime_get();
++	} else if (info->write_delay && write_op) {
++		data->write_time = ktime_get();
++	}
++}
++
+ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+@@ -168,11 +204,15 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 
+ 	if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
+ 	    data->info->pages > 1 && page != data->currpage) {
++		pmbus_wait(client);
+ 		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
++		pmbus_update_ts(client, true);
+ 		if (rv < 0)
+ 			return rv;
+ 
++		pmbus_wait(client);
+ 		rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
++		pmbus_update_ts(client, false);
+ 		if (rv < 0)
+ 			return rv;
+ 
+@@ -183,8 +223,10 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 
+ 	if (data->info->phases[page] && data->currphase != phase &&
+ 	    !(data->info->func[page] & PMBUS_PHASE_VIRTUAL)) {
++		pmbus_wait(client);
+ 		rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
+ 					       phase);
++		pmbus_update_ts(client, true);
+ 		if (rv)
+ 			return rv;
+ 	}
+@@ -202,7 +244,11 @@ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_write_byte(client, value);
++	pmbus_wait(client);
++	rv = i2c_smbus_write_byte(client, value);
++	pmbus_update_ts(client, true);
++
++	return rv;
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_write_byte, PMBUS);
+ 
+@@ -233,7 +279,11 @@ int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_write_word_data(client, reg, word);
++	pmbus_wait(client);
++	rv = i2c_smbus_write_word_data(client, reg, word);
++	pmbus_update_ts(client, true);
++
++	return rv;
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_write_word_data, PMBUS);
+ 
+@@ -351,7 +401,11 @@ int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_read_word_data(client, reg);
++	pmbus_wait(client);
++	rv = i2c_smbus_read_word_data(client, reg);
++	pmbus_update_ts(client, false);
++
++	return rv;
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_read_word_data, PMBUS);
+ 
+@@ -410,7 +464,11 @@ int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg)
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_read_byte_data(client, reg);
++	pmbus_wait(client);
++	rv = i2c_smbus_read_byte_data(client, reg);
++	pmbus_update_ts(client, false);
++
++	return rv;
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_read_byte_data, PMBUS);
+ 
+@@ -422,7 +480,11 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_write_byte_data(client, reg, value);
++	pmbus_wait(client);
++	rv = i2c_smbus_write_byte_data(client, reg, value);
++	pmbus_update_ts(client, true);
++
++	return rv;
+ }
+ EXPORT_SYMBOL_NS_GPL(pmbus_write_byte_data, PMBUS);
+ 
+@@ -454,7 +516,11 @@ static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_read_block_data(client, reg, data_buf);
++	pmbus_wait(client);
++	rv = i2c_smbus_read_block_data(client, reg, data_buf);
++	pmbus_update_ts(client, false);
++
++	return rv;
+ }
+ 
+ static struct pmbus_sensor *pmbus_find_sensor(struct pmbus_data *data, int page,
+@@ -2450,9 +2516,11 @@ static int pmbus_read_coefficients(struct i2c_client *client,
+ 	data.block[1] = attr->reg;
+ 	data.block[2] = 0x01;
+ 
++	pmbus_wait(client);
+ 	rv = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+ 			    I2C_SMBUS_WRITE, PMBUS_COEFFICIENTS,
+ 			    I2C_SMBUS_BLOCK_PROC_CALL, &data);
++	pmbus_update_ts(client, true);
+ 
+ 	if (rv < 0)
+ 		return rv;
+@@ -2604,7 +2672,10 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 
+ 	/* Enable PEC if the controller and bus supports it */
+ 	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
++		pmbus_wait(client);
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
++		pmbus_update_ts(client, false);
++
+ 		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+ 			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
+ 				client->flags |= I2C_CLIENT_PEC;
+@@ -2617,10 +2688,16 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	 * Bail out if both registers are not supported.
+ 	 */
+ 	data->read_status = pmbus_read_status_word;
++	pmbus_wait(client);
+ 	ret = i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
++	pmbus_update_ts(client, false);
++
+ 	if (ret < 0 || ret == 0xffff) {
+ 		data->read_status = pmbus_read_status_byte;
++		pmbus_wait(client);
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
++		pmbus_update_ts(client, false);
++
+ 		if (ret < 0 || ret == 0xff) {
+ 			dev_err(dev, "PMBus status register not found\n");
+ 			return -ENODEV;
+@@ -2635,7 +2712,10 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	 * limit registers need to be disabled.
+ 	 */
+ 	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
++		pmbus_wait(client);
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
++		pmbus_update_ts(client, false);
++
+ 		if (ret > 0 && (ret & PB_WP_ANY))
+ 			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
+ 	}
+-- 
+2.45.2
 
