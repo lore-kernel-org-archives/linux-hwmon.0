@@ -1,218 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B7817FABD
-	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 14:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C41181313
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 14:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721224897; cv=none; b=Hcqi1wLCsCsF//qsw8/zyp6qqT9xESJpNDkAkuLLhLRl+KDmZH7yw/aq97JnbzIUgiHUieUgBcBrdE5z+6X6GKM5ECdcwKtQA/YMS0X+Jd7WHUp46TG2cKDQG4rIl0S021a1hCCM8c1v22MrMu+BMNe6cTPMUI4HTbMrKcfaGqg=
+	t=1721227035; cv=none; b=TAlab4Fc+9RjxylZdOjVcDSeTeE5sw5p6TZ45Y4+XGCCSIRXYqvqjv9qlWMQcyW0QJxmI9VZGxZPAscOKXPxqlVeLZmOPESQdVlZqXNLb4KA3FZcuSZvAnC6Hqyc66KKGiDMnDA+f3E7PLdIKgmJdDK+o8+IQRVbl3lWFTkoiDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721224897; c=relaxed/simple;
-	bh=l8ba4Cmmx5UKoPVWQaRo9GK5RU3G1zfG88/+Alfh0sY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nSD3ps64wF8vRg5lk08zc01XH3YMxKj2C0JqDr3aDm0Y4RWaaWqUKuAi1fr3oPfQlaiANuEHlnkhi6eIgGcJ4iuaEpZmLtjuB7ZMqShdzUJV0duKKCWNJYqF+r42Kgdnk72Khkz+eTDjXZCroxrBnjc85TUWDupJkpnlWaNkGKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EsTVni2w; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721227035; c=relaxed/simple;
+	bh=0ZjwxX3yIBKO6pluZrBxwCKd8Hx46ACgdTx2RrokriY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YPbdQlMOcICiQbviKw4Cd2e8Fo8bJdfVyp+x3bExt//Xxqug7K66XUyB9KNaQBjbqa5YUkLkjpfoI9yxTvhwf8BaKG8i5RuISt9n1+jMgIP/FbMr9o9ALLK5y25Dk5RRsER1o5Kop7CoDugRKNiIgbZdtyJKi6gfuUhmBDqfnik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=imYWm0I+; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EsTVni2w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721224895; x=1752760895;
-  h=date:from:to:cc:subject:message-id;
-  bh=l8ba4Cmmx5UKoPVWQaRo9GK5RU3G1zfG88/+Alfh0sY=;
-  b=EsTVni2wU+d0zYuv5SHk1GvD1pSTjZdmOZQy0B1JHXW0fVvf9QfwnFfK
-   hL2Rmv/qMHQvvh939Fxkw5/hYAqQjfy6UeS4vqMjwloEvQ+piSK8ex8XP
-   guEZtoerGDxNQb8/cBjNH+wTQeMVJc0vRsF/nW4YDjP0MsBce8cqc7lVg
-   Hm2VBHlxMSXu46k9vfDcMDsZLyE4h1vWjgJep7NzudEOxrR7h/iNsCpv6
-   G8Lfxk2N0pP8k4RBBVZ9d48M6jWsctVkw+GteHUuXf7FM8NpuI9z32ntc
-   oei+k0Z8OQLUOb6eyCZklubLeIhBVIvKBTxoUzI3DVS6W86Jjma9NTsJx
-   Q==;
-X-CSE-ConnectionGUID: v3A168NgQvKc3qgUBVRmrQ==
-X-CSE-MsgGUID: pojKzYkLRY6lb2JA3HgqjA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="18595010"
-X-IronPort-AV: E=Sophos;i="6.09,214,1716274800"; 
-   d="scan'208";a="18595010"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 07:01:15 -0700
-X-CSE-ConnectionGUID: K+rZDX2GQ5mD+AZCfrGbjA==
-X-CSE-MsgGUID: mpYFJ1geTcuT12XLzXQCEw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,214,1716274800"; 
-   d="scan'208";a="50141960"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 17 Jul 2024 07:01:13 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sU5DT-000gMc-14;
-	Wed, 17 Jul 2024 14:01:11 +0000
-Date: Wed, 17 Jul 2024 22:01:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- b0ec72a402521754aa56307cd63561e4bba6cf35
-Message-ID: <202407172204.VkQnPR8J-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="imYWm0I+"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fbda48631cso6647475ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 07:37:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721227033; x=1721831833; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+lSgHeSjSPl/fPTi6N+qdo7sKz38u6MbH3ebLOYp8C4=;
+        b=imYWm0I++Y0rslCDwM8Rw9hGnMDt0WfIEqHA73SOwMOlS7wYGEFkFnl0LUKxVYfqht
+         sSmxMRnBD0//+TqP9titJ38U8qVdZeL4snZMjWWKtA3K1HCvpIzQHv7Rod+zb9Jranuj
+         7KLtv86aZzFCvhSKxxN0bhVMlDsjqVkA9yX73n5YEOlD1Nj6tknLo+LSwJK4bA5xUAG2
+         8m7LVsMTmdfSBVyI8P5pA2oihCfYapAjAByuyc4bwY27ppZQvFp2V5WtEyERix7r8bEJ
+         qPM79xFhtuxrzuQZI/j2IL7xc/yWMqK/hOgu6Uf2Mmui0I3OX/PRUcHaPkNy1WlFLcw/
+         BBvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721227033; x=1721831833;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+lSgHeSjSPl/fPTi6N+qdo7sKz38u6MbH3ebLOYp8C4=;
+        b=MqI1ZXbcFHKbxImaq5kh0pVOiA83rcrA19oaMLt+p27dXAlulOzGPZ71GUKMhhiSjy
+         ne7EXhqlh3319D8zsirOvc+1a9KAc/eeDcEWi9h7qptH4vF3NDfNPsi6n/pNUXLvwevV
+         EarNTqcHz7lAp3JCzFXhGraKrF74N0R3T7QyJX8aqaACRJVwmY4qJBBwu9i+K+Q2ibf2
+         rFfrk2sb1AxgpgY+SBQt/tnkeN6UMjB48sZwC86HBxLtkmRa8WSsP5xvYl9iF27z6aSV
+         /ryyuZ7YkIuxbogAa6cQnxAiAspYh/uxErb/WxKmNttsZWSJ/9K1rfg8QG0an00VgEsV
+         IXmw==
+X-Gm-Message-State: AOJu0YzUYk0rpR35uW/JCt/2nqFeGSGkBxpdmGe3xxLAZBM4HwPNCGHl
+	6aijVs3AsEZjSDtWS6WR5VbDSSq0sQ3OvqWrrWgqea+qtDo9BOhs
+X-Google-Smtp-Source: AGHT+IF6tKM053s866xGQuoKbitCYwu5FzodllCL97NH7SnxPqpYtbf/s+DhTcGXUqzdfi50C0sN9A==
+X-Received: by 2002:a17:903:11cf:b0:1fb:8924:dfae with SMTP id d9443c01a7336-1fc3e5dedf1mr89063045ad.1.1721227033231;
+        Wed, 17 Jul 2024 07:37:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc53fc6sm75900475ad.294.2024.07.17.07.37.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jul 2024 07:37:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4b195103-5f8a-4251-8612-7ec51f07bd2d@roeck-us.net>
+Date: Wed, 17 Jul 2024 07:37:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/6] hwmon: (tmp464) Use multi-byte regmap operations
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240716230050.2049534-1-linux@roeck-us.net>
+ <20240716230050.2049534-5-linux@roeck-us.net>
+ <ZpfIqtrclTDsTy0x@tzungbi-laptop>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <ZpfIqtrclTDsTy0x@tzungbi-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: b0ec72a402521754aa56307cd63561e4bba6cf35  Merge branch 'kunit-improvements' into testing
+On 7/17/24 06:35, Tzung-Bi Shih wrote:
+> On Tue, Jul 16, 2024 at 04:00:48PM -0700, Guenter Roeck wrote:
+>> @@ -147,11 +147,11 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
+>>   {
+> [...]
+>> -	mutex_lock(&data->update_lock);
+>> -
+>>   	switch (attr) {
+>>   	case hwmon_temp_max_alarm:
+>>   		err = regmap_read(regmap, TMP464_THERM_STATUS_REG, &regval);
+>> @@ -172,26 +172,27 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
+>>   		 * complete. That means we have to cache the value internally
+>>   		 * for one measurement cycle and report the cached value.
+>>   		 */
+>> +		mutex_lock(&data->update_lock);
+>>   		if (!data->valid || time_after(jiffies, data->last_updated +
+>>   					       msecs_to_jiffies(data->update_interval))) {
+>>   			err = regmap_read(regmap, TMP464_REMOTE_OPEN_REG, &regval);
+>>   			if (err < 0)
+>> -				break;
+>> +				goto unlock;
+>>   			data->open_reg = regval;
+>>   			data->last_updated = jiffies;
+>>   			data->valid = true;
+>>   		}
+>>   		*val = !!(data->open_reg & BIT(channel + 7));
+>> +unlock:
+>> +		mutex_unlock(&data->update_lock);
+>>   		break;
+> 
+> I think the function can entirely drop the mutex.  Only [1] needs it.
+> 
 
-elapsed time: 913m
+It is needed to protect updating open_reg. Otherwise a second process
+could enter the code and read the register again, which would then return
+different (cleared) values. As result open_reg might contain the temporarily
+"cleared" values.
 
-configs tested: 141
-configs skipped: 3
+Process 1			Process 2
+err = regmap_read();
+data->open_reg = regval;
+				err = regmap_read();
+				data->open_reg = regval;
+data->last_updated = jiffies;
+...
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Guenter
 
-tested configs:
-alpha                             allnoconfig   gcc-13.3.0
-alpha                            allyesconfig   gcc-13.3.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                   randconfig-001-20240717   gcc-13.2.0
-arc                   randconfig-002-20240717   gcc-13.2.0
-arm                              allmodconfig   gcc-14.1.0
-arm                               allnoconfig   clang-19
-arm                              allyesconfig   gcc-14.1.0
-arm                   randconfig-001-20240717   gcc-14.1.0
-arm                   randconfig-002-20240717   gcc-14.1.0
-arm                   randconfig-003-20240717   gcc-14.1.0
-arm                   randconfig-004-20240717   clang-19
-arm64                            allmodconfig   clang-19
-arm64                             allnoconfig   gcc-14.1.0
-arm64                 randconfig-001-20240717   gcc-14.1.0
-arm64                 randconfig-002-20240717   clang-19
-arm64                 randconfig-003-20240717   clang-16
-arm64                 randconfig-004-20240717   clang-19
-csky                              allnoconfig   gcc-14.1.0
-csky                  randconfig-001-20240717   gcc-14.1.0
-csky                  randconfig-002-20240717   gcc-14.1.0
-hexagon                          allmodconfig   clang-19
-hexagon                           allnoconfig   clang-19
-hexagon                          allyesconfig   clang-19
-hexagon               randconfig-001-20240717   clang-19
-hexagon               randconfig-002-20240717   clang-19
-i386                             allmodconfig   gcc-13
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240717   clang-18
-i386         buildonly-randconfig-002-20240717   gcc-13
-i386         buildonly-randconfig-003-20240717   gcc-13
-i386         buildonly-randconfig-004-20240717   gcc-13
-i386         buildonly-randconfig-005-20240717   gcc-10
-i386         buildonly-randconfig-006-20240717   clang-18
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240717   gcc-8
-i386                  randconfig-002-20240717   clang-18
-i386                  randconfig-003-20240717   clang-18
-i386                  randconfig-004-20240717   gcc-8
-i386                  randconfig-005-20240717   gcc-10
-i386                  randconfig-006-20240717   gcc-13
-i386                  randconfig-011-20240717   gcc-9
-i386                  randconfig-012-20240717   gcc-13
-i386                  randconfig-013-20240717   clang-18
-i386                  randconfig-014-20240717   clang-18
-i386                  randconfig-015-20240717   clang-18
-i386                  randconfig-016-20240717   clang-18
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch             randconfig-001-20240717   gcc-14.1.0
-loongarch             randconfig-002-20240717   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-nios2                             allnoconfig   gcc-14.1.0
-nios2                 randconfig-001-20240717   gcc-14.1.0
-nios2                 randconfig-002-20240717   gcc-14.1.0
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-14.1.0
-parisc                            allnoconfig   gcc-14.1.0
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-14.1.0
-parisc                randconfig-001-20240717   gcc-14.1.0
-parisc                randconfig-002-20240717   gcc-14.1.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc                          allyesconfig   clang-19
-powerpc               randconfig-001-20240717   clang-19
-powerpc               randconfig-002-20240717   gcc-14.1.0
-powerpc               randconfig-003-20240717   clang-19
-powerpc64             randconfig-001-20240717   gcc-14.1.0
-powerpc64             randconfig-002-20240717   gcc-14.1.0
-powerpc64             randconfig-003-20240717   gcc-14.1.0
-riscv                            allmodconfig   clang-19
-riscv                             allnoconfig   gcc-14.1.0
-riscv                            allyesconfig   clang-19
-riscv                               defconfig   clang-19
-riscv                 randconfig-001-20240717   clang-19
-riscv                 randconfig-002-20240717   clang-17
-s390                             allmodconfig   clang-19
-s390                              allnoconfig   clang-19
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   clang-19
-s390                  randconfig-001-20240717   gcc-14.1.0
-s390                  randconfig-002-20240717   gcc-14.1.0
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-14.1.0
-sh                    randconfig-001-20240717   gcc-14.1.0
-sh                    randconfig-002-20240717   gcc-14.1.0
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-14.1.0
-sparc64               randconfig-001-20240717   gcc-14.1.0
-sparc64               randconfig-002-20240717   gcc-14.1.0
-um                               allmodconfig   clang-19
-um                                allnoconfig   clang-17
-um                               allyesconfig   gcc-13
-um                                  defconfig   clang-19
-um                             i386_defconfig   gcc-13
-um                    randconfig-001-20240717   gcc-8
-um                    randconfig-002-20240717   gcc-13
-um                           x86_64_defconfig   clang-15
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240717   gcc-13
-x86_64       buildonly-randconfig-002-20240717   gcc-13
-x86_64       buildonly-randconfig-003-20240717   gcc-13
-x86_64       buildonly-randconfig-004-20240717   clang-18
-x86_64       buildonly-randconfig-005-20240717   clang-18
-x86_64       buildonly-randconfig-006-20240717   gcc-13
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240717   gcc-7
-x86_64                randconfig-002-20240717   gcc-9
-x86_64                randconfig-003-20240717   clang-18
-x86_64                randconfig-004-20240717   gcc-9
-x86_64                randconfig-005-20240717   clang-18
-x86_64                randconfig-006-20240717   gcc-11
-x86_64                randconfig-011-20240717   gcc-8
-x86_64                randconfig-012-20240717   clang-18
-x86_64                randconfig-013-20240717   gcc-12
-x86_64                randconfig-014-20240717   gcc-10
-x86_64                randconfig-015-20240717   clang-18
-x86_64                randconfig-016-20240717   clang-18
-x86_64                randconfig-071-20240717   gcc-12
-x86_64                randconfig-072-20240717   clang-18
-x86_64                randconfig-073-20240717   gcc-10
-x86_64                randconfig-074-20240717   gcc-13
-x86_64                randconfig-075-20240717   gcc-13
-x86_64                randconfig-076-20240717   gcc-12
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-14.1.0
-xtensa                randconfig-002-20240717   gcc-14.1.0
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
