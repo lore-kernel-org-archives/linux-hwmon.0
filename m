@@ -1,61 +1,60 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679F1180A67;
-	Wed, 17 Jul 2024 16:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE74B181B9A
+	for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 17:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721233597; cv=none; b=opi1s3bfS+CJuZSZP7TAYYaV2JMo0y4SHAnM92/EaIOhukksDncdbygRN04X4njNGOYPT/xSnbaqdp+kT0lInb74gL+TnmAFmWlqn4fiHddPk+4f7chLehDRj3e64jbSHUh6sIeUXhNIPS09xrKmHTKWbAialsP09IficUKHxKU=
+	t=1721236494; cv=none; b=bpKoj7lEFiWFLdx8+46Csvt1KV2aYwHb/AXLb9o5PrAG8ArhM61SamN+NX/3HU86M06BqUeqkHwhez+bh+AeBZdpgYVfMhvBeMWm61QOTMMdM5GfudyAbxdmF2d1VowjEI0P9wEa39Kx1eQUZ6dY3p0bP66L2KHz+yNk3B48TG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721233597; c=relaxed/simple;
-	bh=I2eGsjFhX70XBcnNVF+/czALV8y44WdUsYs50JL3l4g=;
+	s=arc-20240116; t=1721236494; c=relaxed/simple;
+	bh=Uzs8OspFzmyITuCUQuTzVnyudfeeH2WxlWjnDqfhTgc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L9M55mhj8FWeOBTMnXKq+fkixNNujuHf67e3AOx2xruyDRstKWU1PFLNJMmJ3M1nod8JkRdet+0t/yige0OJ3Z3zXRU5M3h4iGnOstfHlpyIjpo1WjGmhfXFDbIESbZf4mIQ4W5k4zRy5obtDRkrGd9NAks8Q335Qg29xdNtCgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQE8MiJg; arc=none smtp.client-ip=209.85.210.52
+	 In-Reply-To:Content-Type; b=h+2SeuFxEN6wiTHzN2qq0GPlnzIjZzRXvJW0BJL9Q7NHy8YeKlXSWQLi6Eqtn2ilQDYwXsedIF5MNGN3a9XlBxxSKHcVp+Op7Uo/cbclXFO1vf98xlzXtDVqt2KxGKcEr6bCMOkBKZkETThsZMPJ82LVnY8d8wU2X+59x29dJHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIc3rLk8; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQE8MiJg"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-70360eeb7d2so230513a34.1;
-        Wed, 17 Jul 2024 09:26:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIc3rLk8"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2cb5789297eso487672a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 10:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721233594; x=1721838394; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721236492; x=1721841292; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PRqnKCtfj6g6rjCE6KHBQ+SuSmEcX2d5CkGn30mc4Dk=;
-        b=FQE8MiJgIYbYHaHMx1LiIeMVkX2JCEaGOXC/FIcgKhBPBhk9vFh9KNBfXaF/wlMgq1
-         JpzBgvp2lnFQX+yKEo4UxoPaRhi6dv1da/NfH7Q3+2WzcG56jASK0Elw7JRWbZCZ227v
-         NqayGT56/GoP72UctBkSa5cp30pgomkaIMu49NLwGb6N8Al2l7L6lAb5YQFclv24kiXa
-         bGKtJ5AuN15DoDtuYqxWgR9Pn4gxx5rtcb/tUfffwfuSbmI+rwPVDSoyqn6YaxIac4e2
-         NBYTi/83AVsQv+0oQwGU0e9NRqb3BAOezaRP9aSh+ycPqCs+dVWyF8jLgJH4cbUm+WiQ
-         Txmg==
+        bh=TURCm4Bc4EF8ZbvhY/Ve4x1FtqxdyGvfqCxGqxE90IE=;
+        b=jIc3rLk8InwDpAJYBCvPV+dEZICys0OCmZV5dOV2GhiYlKofiwcvTqPdkn0R7XIl1v
+         9qcE4sUAd69EIg8EIwVMGF9zuWY9y+pgRc6z23oFidOVTfpELKE/TqIOeBrXvasFgAcg
+         NAe3mu+btctP/BOEZpA1MC9M6poazhmeElN+LBYUbADPzhnWdotmNh6mkM9eUEIk7DEb
+         +xUk8vwfzuTrVnGrvOIt28DfIxOno6Mjm2NDIeV+vrGk5AnHFCUA+Lep+S8W3LVqIBhN
+         DLB26KxWZR1M1WeXWW6fceCdCOj2xmY2wIvWTSbaFQBOE2awKwDq8ElrRTJTdcjgE+nA
+         I61A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721233594; x=1721838394;
+        d=1e100.net; s=20230601; t=1721236492; x=1721841292;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PRqnKCtfj6g6rjCE6KHBQ+SuSmEcX2d5CkGn30mc4Dk=;
-        b=d+P8Rqglp69F8ziJFshw2AHZyeGpuIZpNdEgDP76IqoXAClQvArUi0QavRKNTp3G7g
-         wqg4TEhZBbYy6Vx2wNrSyjlxBoxZJK+PNiYKIazjQcHnxDClol4q0KqSiGGM77rh4hzc
-         c2WM3S0s9H2tQCE4OAdVqGimfd1AQfzx8UmXdIzAgoVlgHKKlSQvHQkovucQSSe32yZI
-         8CR7HzoquTU+vefdzpvq+3MZr2PDen+bj6rWj9gRMsGehdKq3ciRPgBjazTeMwCTD1N+
-         Xd730Bf/4mj4M5Q6wijGnDEjN63sG8a6G8vhs8UXbdAOqgQq4MuMAQDw76NEl0u2Bn+m
-         k+nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGaGtRXSmQLzsyjJMVZC/xruwMMLK01IA9nM8lVAs20Yuc4nGahXoB8iMp1mFlWw0+VRp88cXxTJN11hszBTaxxJiTBtj0URa71gCBoDKujbu6hBFLfXs8+Ja8ZptL9er5VuKcV07zXho=
-X-Gm-Message-State: AOJu0Yxks0xY8VisdkWjMub+Jd/Aob5gep9epc8VbrdB3+n7yZMIn0l/
-	x7Fjhag5SF8WhNss5nZ8jrTklTxb0QOzTZb85JaiCXt9q+TxVJkQ
-X-Google-Smtp-Source: AGHT+IFs6Nd6U9feGVZuPjVusY5QIze7IvbR0Hq0eU5ifsPkAZeyAweB11hHaqOBU2XL++f7dwwGVQ==
-X-Received: by 2002:a05:6870:353:b0:24e:8987:6f34 with SMTP id 586e51a60fabf-260d8fe84b7mr1671024fac.3.1721233594046;
-        Wed, 17 Jul 2024 09:26:34 -0700 (PDT)
+        bh=TURCm4Bc4EF8ZbvhY/Ve4x1FtqxdyGvfqCxGqxE90IE=;
+        b=igxz2ODZtmac7uTxIRML+8lzDYdz/IDPYAN+muBHGVHrhsKyVkmTlM1fz0hg94Vq95
+         UmgYILnQij6QqFH6QyvrJhEij7hsjM55wtuDCP6brOZpOeziy5I46ZuDrol9VXUmu/uM
+         KzldmCArGq2Vpj9obun8tO3E0JcDafZD5It63p8y/zZzy6D+yq2b1QX0eprYBlzbOQ8D
+         vTNL6i3EL7xydWowMVlpE0l7F/1IEyUcklDYgm+eqYrvdgeE9sa/5chfpFXPCgTsBWKk
+         xO86ihRggK2NMFCkxcw3FGPtHdzMCOHAL0H6ig+yr/Mp/pHtbpJw1qC+HrPpb/dvVjpq
+         kRnA==
+X-Gm-Message-State: AOJu0Yzwo0wcnXFGgn1I0H0U1YmmYktVAFPkfvo4nZnOCJOcDVlAIHmP
+	KB9eVrU2bH2HIfpNOVBFhFFt6eQBRTEX4+twwSGIydIbmmL9DqQsWr4ZWQ==
+X-Google-Smtp-Source: AGHT+IF0oM181bQ8Of07yb2LL8cLkoCL+MMlRbzcE7Sbx9rltxpUJ03oFjjhecjGVCnfsBD846QylQ==
+X-Received: by 2002:a17:90b:238a:b0:2c9:77d7:261c with SMTP id 98e67ed59e1d1-2cb529511camr1772444a91.44.1721236492100;
+        Wed, 17 Jul 2024 10:14:52 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7eb9dee7sm8620113b3a.16.2024.07.17.09.26.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cb60187871sm185530a91.48.2024.07.17.10.14.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 09:26:32 -0700 (PDT)
+        Wed, 17 Jul 2024 10:14:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6e8245d5-8c39-491e-9fd0-1be88be7b00a@roeck-us.net>
-Date: Wed, 17 Jul 2024 09:26:31 -0700
+Message-ID: <ee004cd9-6682-4049-8cc8-f6389ce5c835@roeck-us.net>
+Date: Wed, 17 Jul 2024 10:14:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,13 +62,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] hwmon/misc: amd-sbi: Move core sbrmi from hwmon to
- misc
-To: Akshay Gupta <akshay.gupta@amd.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: gregkh@linuxfoundation.org, arnd@arndb.de, naveenkrishna.chatradhi@amd.com
-References: <20240717081027.2079549-1-akshay.gupta@amd.com>
- <20240717081027.2079549-2-akshay.gupta@amd.com>
+Subject: Re: [PATCH 5/6] hwmon: (max6639) Use multi-byte regmap operations
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240716230050.2049534-1-linux@roeck-us.net>
+ <20240716230050.2049534-6-linux@roeck-us.net>
+ <ZpfIwpmmte8PUrjk@tzungbi-laptop>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -115,21 +113,22 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240717081027.2079549-2-akshay.gupta@amd.com>
+In-Reply-To: <ZpfIwpmmte8PUrjk@tzungbi-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/17/24 01:10, Akshay Gupta wrote:
-> This is done to support other functionality provided by the SBRMI, which
-> does not fit in the hwmon subsystem.
+On 7/17/24 06:36, Tzung-Bi Shih wrote:
+> On Tue, Jul 16, 2024 at 04:00:49PM -0700, Guenter Roeck wrote:
+>> @@ -88,25 +88,16 @@ struct max6639_data {
+>>   
+>>   static int max6639_temp_read_input(struct device *dev, int channel, long *temp)
+>>   {
+>> +	u32 regs[2] = {MAX6639_REG_TEMP_EXT(channel), MAX6639_REG_TEMP(channel) };
+>                         ^                                                       ^
+> To be consistent, either drop the space or insert an extra space otherwise.
 > 
-> - Move the SBRMI core functionality and I2C device probing part to misc.
-> - Move hwmon device sensor to misc as only power is reported through
->    hwmon sensor.
-> 
+Good point. I added the space.
 
-I fail to see the logic here. Why would the supported sensor types
-be a reason or an argument for moving the hwmon code out of hwmon ?
-
+Thanks,
 Guenter
 
