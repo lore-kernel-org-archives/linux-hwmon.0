@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1874A18E11;
-	Wed, 17 Jul 2024 07:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34131CD1F;
+	Wed, 17 Jul 2024 07:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721199864; cv=none; b=jQWs/pGjGFk9lWsHoDsjRoGIu+iMHs/XJVNM3Rdx4maQdWjiYXzyd3Gbu2ePPae2bEFowiVXa3KUHCx9bnz+QU0jw5cJFwNNqhv+u+wsw4OSGjJLn9ZeUAwo2R5ApRmbt6XaToKqOy1ZBiQVv4ZrG6EgG9pol5S4aosf5YNrTJ8=
+	t=1721200306; cv=none; b=nS5tAAMoyrTwvLRDuJVrngL17RpXQC8nNk/meidrs7JpehuQep4NyKIIeYkWjmM+NlKsa4xLRTZft5y1QlCKb+g+mbi+MxjZP7B5G4ENpn2kwo/7ZPMOLeAc3f2R3BeNOgA+q7P/DvotEm3bmCkKmea3T9JqBpfyNlm/64uTN6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721199864; c=relaxed/simple;
-	bh=NZTi0KhXX3vh5uOQWGmeTi2gLhis7Sw0gZjX7vcMeOs=;
+	s=arc-20240116; t=1721200306; c=relaxed/simple;
+	bh=qqz2dTQAyhsrr8JcadvDgbuxVDuo0fTC4NGyVOzaHXw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C63zpyy2NrOC83jXSGx2bmjMD/C619nvNPoSFbAoRHnsvw3qR3Y6jS4DqyOqZu1J/ga4qQK7MOGB2hUUhUoN9PU4EfopvkQYO9wkWwFo03D/XJmh17SM+uBW0B9XGKivGz8N0aLdA3l6jMSMpAA/vXJnEQkiAo2YCyi70gJuW0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mP6HUjeT; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=sFcP4sFXV8EUEIIuFYp0uJV36Ffl6oO6TwcpU4sJoX+MrtzZHfEjTXL26Ct6iulgKlHm+yU6y0mzsm7LowktxHKbnBDDnUv07SoW4TVNzwf7T+ntFbZXOcHrMAaApHiNWkguxKHYN4wVw2ZfVZbJWgSFKt9aScUh+sXkTaLPxvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWFYMh3C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mP6HUjeT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D2FC32782;
-	Wed, 17 Jul 2024 07:04:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWFYMh3C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B3DC32782;
+	Wed, 17 Jul 2024 07:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721199863;
-	bh=NZTi0KhXX3vh5uOQWGmeTi2gLhis7Sw0gZjX7vcMeOs=;
+	s=k20201202; t=1721200305;
+	bh=qqz2dTQAyhsrr8JcadvDgbuxVDuo0fTC4NGyVOzaHXw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mP6HUjeTgjpqHu4Gf50JORD8UpEVFMMLajmpXmhrovHdHvqRKcu0iaMO9bUknarF6
-	 CrNhQUf9o1kl3iJN6nlGokzpJBb/FNW4wQzf6mm3MU7Y7f2MXeWQYgPGOHBNRkqe43
-	 VZS0gLldnm8WwyzakKm/kHBCQ/GHraADxl2xY8e0JJZQOae1eUXYAVMCND3HlKS0sp
-	 mfsVC2u1NNbXDANntRRF58z12DU0Ssm26ovJ+AmZd4P2XMCmoglM9tFMNleUDVvgAW
-	 TCUBIILn05gMWSENegKunJCAZTtgFKY2Y/IdSuSbHvWMTzN5TTwMKR6NR1tG9zY2+K
-	 NFldb7COXrd+w==
-Message-ID: <d2b4beee-5eb6-4976-844a-76981a604067@kernel.org>
-Date: Wed, 17 Jul 2024 09:04:17 +0200
+	b=qWFYMh3Cs1hGN0lO4VjK+On3biP7Ol+puJxEkcfuhWFPBe37nNSywThDqc2nZyyYW
+	 IABc2KQ/dBmjQ6zG1SY9vPOOpYDPxYoDS9j7GUrSz/HimvY5PSLD0KdbjTaTKZeNk+
+	 ljqq4TesDOm3+Iz7xXjeeaAZgKGen3kj1752DnEI/rlkTo6rIHbNcR5zr6quSmfm7j
+	 HXQGH/DpZiOK7lGbsjxhCtpHJV6hNhKoeZInKYbMzadpZKkurPYDE9bYJuRfPxK6Fn
+	 1lEz7/dq/DC63TWriC/Ta6ZjSTWt91TjUHq0J8XN9j2lCSk6u3tN2Gh+GlkYESuMf8
+	 WPr2yKaVSbC5w==
+Message-ID: <14e3654e-27b1-41f7-a66f-03ec47e95593@kernel.org>
+Date: Wed, 17 Jul 2024 09:11:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,17 +35,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon: add GPD devices sensor driver
-To: Cryolitia PukNgae <cryolitia@gmail.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v3 1/2] hwmon: add GPD devices sensor driver
+To: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
- =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>
-References: <20240717-gpd_fan-v2-0-f7b7e6b9f21b@gmail.com>
- <20240717-gpd_fan-v2-1-f7b7e6b9f21b@gmail.com>
- <7e4e45e1-9a77-4780-a5bd-ac44cd7c6cdd@kernel.org>
- <fd9423c0-8c2b-4aef-9d76-cb7def3e2344@gmail.com>
+ Yao Zi <ziyao@disroot.org>, =?UTF-8?Q?Marcin_Str=C4=85gowski?=
+ <marcin@stragowski.com>
+References: <20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com>
+ <20240717-gpd_fan-v3-1-8d7efb1263b7@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,20 +89,288 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <fd9423c0-8c2b-4aef-9d76-cb7def3e2344@gmail.com>
+In-Reply-To: <20240717-gpd_fan-v3-1-8d7efb1263b7@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 17/07/2024 09:01, Cryolitia PukNgae wrote:
+On 17/07/2024 08:46, Cryolitia PukNgae via B4 Relay wrote:
+> From: Cryolitia PukNgae <Cryolitia@gmail.com>
 > 
-> On 2024/7/17 03:28, Krzysztof Kozlowski wrote:
->> Why would you add here untested models?
-> The manufacturer GPD  sent me these quirks and reg addresses, and they 
-> used them to write their Windows user space driver. They are unlikely to 
-> have problems. It was fully tested by several people on WIn Max 2 2023 
-> and Win 4, and there's only little address difference with other model.
+> Sensors driver for GPD Handhelds that expose fan reading and control via
+> hwmon sysfs.
+> 
+> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+> devices. This driver implements these functions through x86 port-mapped IO.
+> I have only tested it on my device Win Max 2 2023.
+> 
+> Tested-by: Marcin Strągowski <marcin@stragowski.com>
+> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+> ---
+>  MAINTAINERS             |   6 +
+>  drivers/hwmon/Kconfig   |  10 +
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/gpd-fan.c | 674 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 691 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index af4b4c271342..9ced72cec42b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9372,6 +9372,12 @@ F:	drivers/phy/samsung/phy-gs101-ufs.c
+>  F:	include/dt-bindings/clock/google,gs101.h
+>  K:	[gG]oogle.?[tT]ensor
+>  
 
-Then just skip this testing checks.
+...
+
+> +// device EC truly access start
+> +
+> +static int gpd_ecram_read(const struct gpd_model_ec_address *address,
+> +			  u16 offset, u8 *val)
+> +{
+> +	int ret;
+> +
+> +	ret = mutex_lock_interruptible(&gpd_fan_lock);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	u16 addr_port = address->addr_port;
+> +	u16 data_port = address->data_port;
+
+Again, definitions are at the top. Read Linux Coding Style.
+
+<form letter>
+This is a friendly reminder during the review process.
+
+It seems my or other reviewer's previous comments were not fully
+addressed. Maybe the feedback got lost between the quotes, maybe you
+just forgot to apply it. Please go back to the previous discussion and
+either implement all requested changes or keep discussing them.
+
+Thank you.
+</form letter>
+
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x11, data_port);
+> +	outb(0x2F, addr_port);
+> +	outb((u8)((offset >> 8) & 0xFF), data_port);
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x10, data_port);
+> +	outb(0x2F, addr_port);
+> +	outb((u8)(offset & 0xFF), data_port);
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x12, data_port);
+> +	outb(0x2F, addr_port);
+> +	*val = inb(data_port);
+> +
+> +	mutex_unlock(&gpd_fan_lock);
+> +	return 0;
+> +}
+> +
+> +static int gpd_ecram_write(const struct gpd_model_ec_address *address,
+> +			   u16 offset, u8 value)
+> +{
+> +	int ret = mutex_lock_interruptible(&gpd_fan_lock);
+
+<form letter>
+This is a friendly reminder during the review process.
+
+It seems my or other reviewer's previous comments were not fully
+addressed. Maybe the feedback got lost between the quotes, maybe you
+just forgot to apply it. Please go back to the previous discussion and
+either implement all requested changes or keep discussing them.
+
+Thank you.
+</form letter>
+
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	u16 addr_port = address->addr_port;
+> +	u16 data_port = address->data_port;
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x11, data_port);
+> +	outb(0x2F, addr_port);
+> +	outb((u8)((offset >> 8) & 0xFF), data_port);
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x10, data_port);
+> +	outb(0x2F, addr_port);
+> +	outb((u8)(offset & 0xFF), data_port);
+> +
+> +	outb(0x2E, addr_port);
+> +	outb(0x12, data_port);
+> +	outb(0x2F, addr_port);
+> +	outb(value, data_port);
+> +
+> +	mutex_unlock(&gpd_fan_lock);
+> +	return 0;
+> +}
+> +
+> +// device EC truly access end
+> +
+> +// device quirk function implement start
+> +
+> +static s32
+> +gpd_read_cached_fan_speed(struct gpd_driver_priv *data,
+> +			  s32 (*read_uncached)(const struct gpd_driver_priv *))
+> +{
+> +	// Update per 1000 milliseconds
+> +	if (time_after(jiffies, data->fan_speed_last_update + HZ)) {
+> +		s32 ret = read_uncached(data);
+> +
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		data->fan_speed_cached = ret;
+> +		data->fan_speed_last_update = jiffies;
+> +	}
+> +	return data->fan_speed_cached;
+> +}
+> +
+> +static s32
+> +gpd_read_cached_pwm(struct gpd_driver_priv *data,
+> +		    s16 (*read_uncached)(const struct gpd_driver_priv *))
+> +{
+> +	// Update per 1000 milliseconds
+> +	if (time_after(jiffies, data->read_pwm_last_update + HZ)) {
+> +		s16 ret = read_uncached(data);
+> +
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		data->read_pwm_cached = ret;
+> +		data->read_pwm_last_update = jiffies;
+> +	}
+> +	return data->read_pwm_cached;
+> +}
+> +
+> +static s32 gpd_read_rpm_uncached(const struct gpd_driver_priv *data)
+> +{
+> +	u8 high, low;
+> +	int ret;
+> +	const struct gpd_model_ec_address *address = &data->quirk->address;
+> +
+> +	ret = gpd_ecram_read(address, address->rpm_read, &high);
+> +	if (ret)
+> +		return ret;
+> +	ret = gpd_ecram_read(address, address->rpm_read + 1, &low);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return high << 8 | low;
+> +}
+> +
+> +static s32 gpd_read_rpm(struct gpd_driver_priv *data)
+> +{
+> +	return gpd_read_cached_fan_speed(data, gpd_read_rpm_uncached);
+> +}
+> +
+> +static s16 gpd_read_pwm(struct gpd_driver_priv *data)
+> +{
+> +	return data->pwm_value;
+> +}
+> +
+> +static int gpd_write_pwm(const struct gpd_driver_priv *data, u8 val)
+> +{
+> +	const struct gpd_model_ec_address *address = &data->quirk->address;
+> +
+> +	u8 actual = val * (address->pwm_max - 1) / 255 + 1;
+> +
+> +	return gpd_ecram_write(address, address->pwm_write, actual);
+> +}
+> +
+> +static int gpd_win_mini_set_pwm_enable(struct gpd_driver_priv *data,
+> +				       enum FAN_PWM_ENABLE pwm_enable)
+> +{
+> +	switch (pwm_enable) {
+> +	case DISABLE:
+> +		return gpd_write_pwm(data, 255);
+> +	case MANUAL:
+> +		return gpd_write_pwm(data, data->pwm_value);
+> +	case AUTOMATIC:
+> +		return gpd_write_pwm(data, 0);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int gpd_win_mini_write_pwm(const struct gpd_driver_priv *data, u8 val)
+> +{
+> +	if (data->pwm_enable == MANUAL)
+> +		return gpd_write_pwm(data, val);
+> +	return 0;
+> +}
+> +
+
+...
+
+> +// hwmon subsystem end
+> +
+> +static int gpd_fan_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct gpd_driver_priv *data;
+> +	const struct resource *plat_res;
+> +	const struct device *dev_reg;
+> +	const struct resource *region_res;
+> +
+> +	data = dev_get_platdata(&pdev->dev);
+> +	if (IS_ERR_OR_NULL(data))
+> +		return -ENODEV;
+> +
+> +	plat_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> +	if (IS_ERR_OR_NULL(plat_res))
+
+IS_ERR_OR_NULL is usually poor code.
+
+> +		return dev_err_probe(dev, PTR_ERR(plat_res),
+> +				     "Failed to get platform resource\n");
+> +
+> +	region_res = devm_request_region(dev, plat_res->start,
+> +					 resource_size(plat_res), DRIVER_NAME);
+> +	if (IS_ERR_OR_NULL(region_res))
+
+IS_ERR_OR_NULL is usually poor code.
+
+> +		return dev_err_probe(dev, PTR_ERR(region_res),
+> +				     "Failed to request region\n");
+> +
+> +	dev_reg = devm_hwmon_device_register_with_info(
+> +		dev, DRIVER_NAME, data, &gpd_fan_chip_info, NULL);
+
+Fix the alignment/wrapping.
+
+> +	if (IS_ERR_OR_NULL(dev_reg))
+
+IS_ERR_OR_NULL is usually poor code. Or wrong. Cannot be NULL.
+
+> +		return dev_err_probe(dev, PTR_ERR(region_res),
+> +				     "Failed to register hwmon device\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int gpd_fan_remove(__always_unused struct platform_device *pdev)
+> +{
+> +	struct gpd_driver_priv *data = dev_get_platdata(&pdev->dev);
+
+What is this __always_unused? How pdev can be unused if it is just here?
+
+This entire driver still does not look like using Linux coding style.
+
+> +
+> +	data->pwm_enable = AUTOMATIC;
+> +	data->quirk->set_pwm_enable(data, AUTOMATIC);
+> +
+> +	return 0;
+> +}
+
 
 Best regards,
 Krzysztof
