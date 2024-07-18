@@ -1,157 +1,156 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC008145356
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 17:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410641459FB;
+	Thu, 18 Jul 2024 18:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721325203; cv=none; b=CLpHP3612HfQdvClqQQRuqeuzVCMKLSNkM75dpKQAcW5pgHo+F+O1/1yHE7hDkPxJHye5hWbcvhnOJ4iLGE3rPmUDMe0Eqf0yZeDMmR6LrMAU0rmtKeSrL+2fzXfZpx6DTSic7wHGarBRlFWJ8bP0cGPC4GBtFHFhn77pvdev0Q=
+	t=1721325894; cv=none; b=f4T54n88OqQHIdImT9n+0Qj9fUZVgHn2QBm5C+q9uGPL1eRlUnBH4+sg/k6+7OwMtH46L4x7Sm6dDeMPKJpRvQO70HocjUwphE/K+u4p0Tv75tS0B1lRt1PT5+daTk7Kpey2z+vbeP1/Hz8dNtVhS0FoLqv6jSEv1YIsVp+JgAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721325203; c=relaxed/simple;
-	bh=paTbNKZJGro4RySBnk9HvNxki1VTTZrSnPn5kpoyluk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=VgUsJ0vG7sGUGLWWeLUj3cQ3YEr7sYFViEz/2eoo+nFO0DUdLm/OLq4vvn2qJfor0KXjeYtKML+KUo9QTa3tu7nTZI1Z825KbrzXzfz5I47rIO7/PFdRney8Ib+QlPCCxX/z3Xg9eeRrxkNby3Cn2vGQ0qhECKRiyhPYQhHjyWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWl9AJVO; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721325894; c=relaxed/simple;
+	bh=HMcEiL85QIpDgR55RY/AUkCj+r3L9aAc6hf/4mw/umM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VDvQbzRHqf9qrAGkmsoreaeSULrzxI64LRo4A0K8Qq/rKaSKf2ndBwDDbGpQii4jcABYsbBHVAqMA5uEc9gruX1E873DQEw0xGZhhQng1OJRCVbklVHVUPNa/uvW9XDobw5h8RJ+NywV5ALRGFGv/b8aOxFMvicoiDETun2SeiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j1CxCrZK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWl9AJVO"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2610623f445so125918fac.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 10:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721325201; x=1721930001; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EE9nWcNix9FCTfTIAOR1X7h3QmspAGvjshdTH46s9MY=;
-        b=LWl9AJVOVWSHFEwbe0idw7nBcVdHCE10H6EbrGEH1W4Hfdn/03hr0Jx89/HdOq8djG
-         B9hXH87nq16Yrgcw20PyoiW3Qd8lWnmLbAZ+wwt3V6CF5TFA4TOznXjgCc39kYxdo+fR
-         ySOYzCMdn3UsDVqt4j1I3frhCaiar+sjrAqV+rOYoyARp5FCM4p50rmlq5oLisiNyWiW
-         Ye35aDFPqW+TFO13Ij4K0G+0bNGxsugP6WKvpnM+GSJ+ci4nhFqNMdv1kieQWDOIcFaq
-         Rvm+EwWSJCKeSvwyPOJfdM4axugxHiTV+hdVhvW1ukRHIFmlG2G8S/5b/6azX/H5+X6H
-         Ma8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721325201; x=1721930001;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EE9nWcNix9FCTfTIAOR1X7h3QmspAGvjshdTH46s9MY=;
-        b=mWXXhx4q1MNaNjectzc0AwfEXNkAJ1+9w0Lgw3GPJxsEODCply3JCdmRGbrizLyrFH
-         hsl52dPid5znVqy2FT7yWpUqqF/YWZNp1vSZpvqlE1xQf2rmlJnKpcx7ZUGaJZBlCpg7
-         n1jFYec6verD6vDOXRrInQzBSLLOLVwxeUzOy8gDh/tugYqfSYrFnea95vl3DbNPUALW
-         CHDWE2DJQhauVDPM7nCKt9omk/IoZgXQD2Bq4G/3dmQw/lZjAj/dhMBicXqJWRQ9g0XE
-         m0C3sRQe1Ay32LOE2b5x/NNxE3vgd1I6E5MCBhoG7rlnVGqe+bo5D17cuVt56yMEmBeT
-         AHGw==
-X-Gm-Message-State: AOJu0YwPUybFhG9SON+TRDta7jzONKw7+9zPTFKiGWVJlCA8ca4g3gMy
-	wpIAj6SH1Xs4ltG75g+iZlO0KHOXJex8F+w+mQTUhczFhOsfwdS5Nby43Q==
-X-Google-Smtp-Source: AGHT+IH6I1+a0IISyAAITCacj5cWT0K5ukSQa9PWVwp/yKcyanu9edaMmSO7n5j09rvJ57uN69H4bg==
-X-Received: by 2002:a05:6870:f626:b0:25e:14e9:10c9 with SMTP id 586e51a60fabf-260d915c0c3mr4353618fac.6.1721325200934;
-        Thu, 18 Jul 2024 10:53:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70cfc72fbadsm104611b3a.90.2024.07.18.10.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 10:53:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1242332a-b979-4284-9af4-1b76c9fb41ef@roeck-us.net>
-Date: Thu, 18 Jul 2024 10:53:19 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j1CxCrZK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721325892; x=1752861892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HMcEiL85QIpDgR55RY/AUkCj+r3L9aAc6hf/4mw/umM=;
+  b=j1CxCrZKEUaPzQIulDIfhN6HvuQ0H4nyFoEhXpv25hcX44w24JuAe3Zl
+   iKHWf7QjTZxj07Njrn0Ckfxqyx1AxsNHqQcDUm4Ng4ZbN3Wd9fa94MmxK
+   qluu1JyMc0sCztvcP51QJnGqzVl7x5nxcG9ruimHyn1S1oUCuDQfcnKvT
+   ACH4AfLsCXBdyog6/wi5hM5LY0PByKY7Rh2H0WuAGwJV8iMn5m4fDsHWA
+   cS2ZlgNlTAPwSP9lriHp2lOP7Wv3q56++RUTxhRATILjkAt3ITs+SmMQD
+   EyEmV/UYlwq3M1FKbRqFrhV0omNhH8JBe/Tx1uUsSiDwdtCt+kdu/CmEw
+   g==;
+X-CSE-ConnectionGUID: r1LnUjwgQdihhnlv25iQ3g==
+X-CSE-MsgGUID: 7MPU7S2CRruVdu3kB6dlag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="22718988"
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="22718988"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 11:04:51 -0700
+X-CSE-ConnectionGUID: PkXV4fQ2TvKoW9NgCDXuyA==
+X-CSE-MsgGUID: TTq7uPu4SUuvh0VA+uoqXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="55142933"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 18 Jul 2024 11:04:49 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUVUk-000hUk-2E;
+	Thu, 18 Jul 2024 18:04:46 +0000
+Date: Fri, 19 Jul 2024 02:04:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Cryolitia PukNgae <Cryolitia@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	Celeste Liu <CoelacanthusHex@gmail.com>, Yao Zi <ziyao@disroot.org>,
+	Marcin =?utf-8?Q?Str=C4=85gowski?= <marcin@stragowski.com>
+Subject: Re: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
+Message-ID: <202407190105.hnZaypzI-lkp@intel.com>
+References: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] hwmon: (lm95234) Use find_closest to find matching
- update interval
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240718033935.205185-1-linux@roeck-us.net>
- <20240718033935.205185-3-linux@roeck-us.net>
- <ZplFW4rL5qhxbT0M@tzungbi-laptop>
- <c241f1cf-7388-4021-86c3-45fce9df9e0f@roeck-us.net>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <c241f1cf-7388-4021-86c3-45fce9df9e0f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
 
-On 7/18/24 10:48, Guenter Roeck wrote:
-> On 7/18/24 09:39, Tzung-Bi Shih wrote:
->> On Wed, Jul 17, 2024 at 08:39:31PM -0700, Guenter Roeck wrote:
->>> @@ -471,10 +472,7 @@ static ssize_t update_interval_store(struct device *dev,
->>>       if (ret < 0)
->>>           return ret;
->>> -    for (regval = 0; regval < 3; regval++) {
->>> -        if (val <= update_intervals[regval])
->>> -            break;
->>> -    }
->>> +    regval = find_closest(val, update_intervals, ARRAY_SIZE(update_intervals));
->>
->> The behavior changed.
->>
->> static u16 update_intervals[] = { 143, 364, 1000, 2500 };
->>
->> If val = 144,
->> * Originally, regval = 1.
->> * After applying the patch, regval = 0.
->>
-> 
-> 
-> Yes, find_closest() rounds the value instead of using the lower match.
-> That was intentional. I'll add an explicit note to the commit message.
-> 
+Hi Cryolitia,
 
-I added this to the commit message:
+kernel test robot noticed the following build warnings:
 
-     Since find_closest() uses rounding to find the best match, the resulting
-     update interval will now reflect the update interval that is closest to
-     the requested value, not the value that is lower or equal to the requested
-     value.
+[auto build test WARNING on d67978318827d06f1c0fa4c31343a279e9df6fde]
 
-Thanks,
-Guenter
+url:    https://github.com/intel-lab-lkp/linux/commits/Cryolitia-PukNgae-via-B4-Relay/hwmon-add-GPD-devices-sensor-driver/20240718-104420
+base:   d67978318827d06f1c0fa4c31343a279e9df6fde
+patch link:    https://lore.kernel.org/r/20240718-gpd_fan-v4-1-116e5431a9fe%40gmail.com
+patch subject: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240719/202407190105.hnZaypzI-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407190105.hnZaypzI-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407190105.hnZaypzI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/gpd-fan.c:153:35: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     153 |                 .driver_data    = &gpd_win_mini_quirk,
+         |                                   ^
+   drivers/hwmon/gpd-fan.c:162:35: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     162 |                 .driver_data    = &gpd_win4_quirk,
+         |                                   ^
+   drivers/hwmon/gpd-fan.c:171:35: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     171 |                 .driver_data    = &gpd_wm2_quirk,
+         |                                   ^
+   drivers/hwmon/gpd-fan.c:181:35: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     181 |                 .driver_data    = &gpd_wm2_quirk,
+         |                                   ^
+
+
+vim +/const +153 drivers/hwmon/gpd-fan.c
+
+   144	
+   145	static const struct dmi_system_id gpd_devices[] = {
+   146		{
+   147			// GPD Win Mini
+   148			// GPD Win Mini with AMD Ryzen 8840U
+   149			.matches	= {
+   150						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   151						DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
+   152					},
+ > 153			.driver_data	= &gpd_win_mini_quirk,
+   154		},
+   155		{
+   156			// GPD Win 4 with AMD Ryzen 6800U
+   157			.matches	= {
+   158						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   159						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+   160						DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
+   161					},
+   162			.driver_data	= &gpd_win4_quirk,
+   163		},
+   164		{
+   165			// GPD Win 4 with Ryzen 7840U
+   166			.matches	= {
+   167						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   168						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+   169						DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
+   170					},
+   171			.driver_data	= &gpd_wm2_quirk,
+   172		},
+   173		{
+   174			// GPD Win Max 2 with Ryzen 6800U
+   175			// GPD Win Max 2 2023 with Ryzen 7840U
+   176			// GPD Win Max 2 2024 with Ryzen 8840U
+   177			.matches	= {
+   178						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   179						DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
+   180					},
+   181			.driver_data	= &gpd_wm2_quirk,
+   182		},
+   183		{}
+   184	};
+   185	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
