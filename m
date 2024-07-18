@@ -1,60 +1,60 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F61459E2
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 17:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38205144D37
+	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 17:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721324880; cv=none; b=X4uH+clSc69ZGr6K3hKIecb4DgzU98roHYpQBI5P2MVA8ijZkDbZGhhLMN/ABgRRl3VnzVN+CYA0xZjfTPm+/DVMTKK7KrU0DilSptBX9W31/dUBi0jr1rxDUWyn9Ding++Ldf7douE9qI3XFwxUZSYcrL/Y7WZtnDfKFn+MDns=
+	t=1721324913; cv=none; b=BpeC+g9iPkcAAGKxhQ5Nmh8Z4tIcRB2oReg91LGpWoZZF5UQptGAOrQkdshqohllYbjrLJ7TjONnMdr2JmhDRd5z28mLmQLlDA/Okz1xQYV26kgqPJUVhIpkQbBjys7nPWBT5q+wXfmUrRCNRchF2K68m47l17ecJuph5Wsz8TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721324880; c=relaxed/simple;
-	bh=30goUu0wUd/GUiJSaZpOpm5M3gZ8kLg4aAUv7vpoJA4=;
+	s=arc-20240116; t=1721324913; c=relaxed/simple;
+	bh=EZcOO7e/WBIy4H6FZj/9ev6aT2b/k/q6okZx5SPMFdw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GN8g/DpTS1BFKBhUfryXSh9RPmsbdct7uXJDWTlnAwfFmhyoY0IKGn3V6Cy3hzpp5CqbWXtZhOizxYeqUFItJ61I+8bm4KWkfs8lawif/tq2lIFu8HegFsw6TetGCUWY/m1U2e4cAF8/OMlj/k5QkRt7TNQJ0v5n5EW0ABvIWfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efAYPMEM; arc=none smtp.client-ip=209.85.210.42
+	 In-Reply-To:Content-Type; b=W/1npTrOG9XyvqCgzfsHOuOegyJ1kDvxxkeD10ek6j5Y921ihuXp3G2p9ts63n0j/EHEYIHRpWlYBGFRwE/wvzhHilj41yN4sk9d4yMEemQ3/ausvKRfLfmAMx717AwLtxBuYLZreDCIAutWeeBeitv8iT0ApnmS+Uin0xS03hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZcwutB/I; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efAYPMEM"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-708b273b437so592336a34.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 10:47:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZcwutB/I"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3d9e13ef9aaso674456b6e.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 10:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721324878; x=1721929678; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721324911; x=1721929711; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=v6V8K4zMZDvbGC/pdfm8eIhjeWKQxkNGZLFlfvID7KQ=;
-        b=efAYPMEMKIBiMu0Q4yhGhg5+1kNs8zJBjZLCgz4E9pf9YVYHDM7I5K+ssbUIpan3yj
-         Ru0etOjeT3DQuktZYTDyDlKC17TucEzIS4xFNHFy3daShEp1frxMqNCGodED3DahYSia
-         yLVhpd6VDqFPWceDhh08DCAwkETgedVv8ldbpOckdzwoxRQ++n7K7yepc2N9RVJCrD/0
-         Tf+vjx30pFUCTI750PHYpbE6AHfeXKenXYVIJgYZBpmy9eR5wI4gMkBnTkFpkOpmj9bh
-         wbO4u1sMCm0VegWtmewJkIKaUnp7Rjzq6d5YmIajw6vpUsQXZs5fRVldgs5uaul/JMXd
-         Ya0w==
+        bh=eHT6UXb1LawupmQPr2SQOYCUmB/vIHI4StVj44kt1BM=;
+        b=ZcwutB/IUVlC32kjEX1jRrRErgxIdkbnL9ahOAeExp1vYd9RSIsxoqLBjd++CzWLS4
+         XPxJ5xpSV1MXbWLn8lvz//QSo1+xQl12+/k7Vy0zRUcbg+lPzO0hhEKS4bRTDY5DQYY3
+         sA5vETdrHK0mJPpGes5LfiiyfgziDjAcy46iD2iJnBbtAfBcViErIeK33fDvUnsSKxcp
+         pgXQLVYoI4EhT4HxeBJp2xzRRoS7qyfHq/c+YxFHxOIkiiBbdpkzHDVvXSbDuRyI/CoE
+         klRatEYDtuRiq+EqRjG+jdUgkuZd4oUFhbl2fTJyaSabt19HTdluN0CkxYxDWfmk2Qyw
+         Wocg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721324878; x=1721929678;
+        d=1e100.net; s=20230601; t=1721324911; x=1721929711;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v6V8K4zMZDvbGC/pdfm8eIhjeWKQxkNGZLFlfvID7KQ=;
-        b=FbWceoX8SySyc72K6ueENEHJLLS4fz7tswx7bbDl9292iaPcOpLqsPgZVkljt7e8kZ
-         W5SV1rNYhpJqwCMGbbD6kM5wJlKJ9eq+ALYq+TyOSDd2wgJESIFIN5ngB4PlIzZrNL4G
-         QA//89hBvWhwlw2ZNyjvrIaPjWb3qxDF+7efdoI79n/mYHoXcTyfcMZaRoKsIDmz8A9G
-         kls2FiNDFskvZvZZD2nlHGFaVOGhf+WZ7CxeSka1GxWPM35h66UvUE0oa6smIgu57V4O
-         knISorhNUFyuSDk3dIorck7cvAUrgOJUx4DvO9J3l5wqVwjxy7/u7IdrPDl0mu+qw8bf
-         fnLQ==
-X-Gm-Message-State: AOJu0Yz+O6OzoWztwKtujGbAJsN1hLRe3tBTWk2LyF56Z2uGNoSTcoIW
-	cM7q4fzCX6oo0Tumj75j4mM8RmreIxBiQBM66cEXDyC56D1NNCLyYBMwgA==
-X-Google-Smtp-Source: AGHT+IH4QFBnsvoDJLAugGo9p+ekST48x+Gam0SViemYKYEge4st5fb2J4N8b4H2NFQGHID7S8EIBA==
-X-Received: by 2002:a9d:5e93:0:b0:704:494e:fa1f with SMTP id 46e09a7af769-708e37ec4d4mr5761832a34.29.1721324878028;
-        Thu, 18 Jul 2024 10:47:58 -0700 (PDT)
+        bh=eHT6UXb1LawupmQPr2SQOYCUmB/vIHI4StVj44kt1BM=;
+        b=WTsO/ccqC4bk5P/dvIlKxe8k9ArZEH8MJsvul/8czd42gxrQmBV2FPpPh9Y9AYKqDz
+         5o2liXiDp4E0MqkS4Q1rq/fZMLV1snQSCd6N3ZDNuk9WUzHcT44sAGpChh5jhOy/ykev
+         jsKJY5q3aMepzpsJNsO8dGUb6S6d8P66QQIzNLmv/AmXiJ7v+JN272LYcz2Bn/hkG8qx
+         +64C0ytozJcu/zgn37pM59rwuyCpF3hQ17I3cUOCPLXqZBNVwC4iCUTdbkXpTM3r7R3n
+         ECa88GH418tlKPjo1A4ZbUDTtr169CMwFXh4l9VJQXHs7FVkAxLVQyYGgdhSg/ht0GCV
+         2X+w==
+X-Gm-Message-State: AOJu0YxNe1wEXHsGi42crGHH6YMwmqRcEuIZf7ClBARKnAFf1gKrmuFn
+	Ube9fXb+DD+dTPQR/DDlx2kfuLpFYOeqfkeupf+ejaDH84BBH03u
+X-Google-Smtp-Source: AGHT+IEa5Wdw78WNPq/+2M8iL02bHLL8dLusrUXsytl+USYhx60+XMT6ySdKWum71A45W1VZAi7k3w==
+X-Received: by 2002:a05:6808:3099:b0:3d9:33e9:e339 with SMTP id 5614622812f47-3dad1f11f2fmr6292563b6e.9.1721324911131;
+        Thu, 18 Jul 2024 10:48:31 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-78e34289397sm8101518a12.38.2024.07.18.10.47.56
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70cfc6e083esm100848b3a.7.2024.07.18.10.48.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 10:47:57 -0700 (PDT)
+        Thu, 18 Jul 2024 10:48:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <89c18e08-3a98-4c33-bca4-ea5acba9f6f2@roeck-us.net>
-Date: Thu, 18 Jul 2024 10:47:55 -0700
+Message-ID: <c241f1cf-7388-4021-86c3-45fce9df9e0f@roeck-us.net>
+Date: Thu, 18 Jul 2024 10:48:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,12 +62,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] hwmon: (lm95234) Convert to with_info hwmon API
+Subject: Re: [PATCH 2/6] hwmon: (lm95234) Use find_closest to find matching
+ update interval
 To: Tzung-Bi Shih <tzungbi@kernel.org>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 References: <20240718033935.205185-1-linux@roeck-us.net>
- <20240718033935.205185-5-linux@roeck-us.net>
- <ZplFeHMIKjHPiwTc@tzungbi-laptop>
+ <20240718033935.205185-3-linux@roeck-us.net>
+ <ZplFW4rL5qhxbT0M@tzungbi-laptop>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,70 +114,35 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZplFeHMIKjHPiwTc@tzungbi-laptop>
+In-Reply-To: <ZplFW4rL5qhxbT0M@tzungbi-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/18/24 09:40, Tzung-Bi Shih wrote:
-> On Wed, Jul 17, 2024 at 08:39:33PM -0700, Guenter Roeck wrote:
->> +static int lm95234_temp_write(struct device *dev, u32 attr, int channel, long val)
->>   {
-> [...]
->> +	case hwmon_temp_max:
->> +		val = clamp_val(val, 0, channel ? 255000 : 127000);
+On 7/18/24 09:39, Tzung-Bi Shih wrote:
+> On Wed, Jul 17, 2024 at 08:39:31PM -0700, Guenter Roeck wrote:
+>> @@ -471,10 +472,7 @@ static ssize_t update_interval_store(struct device *dev,
+>>   	if (ret < 0)
+>>   		return ret;
+>>   
+>> -	for (regval = 0; regval < 3; regval++) {
+>> -		if (val <= update_intervals[regval])
+>> -			break;
+>> -	}
+>> +	regval = find_closest(val, update_intervals, ARRAY_SIZE(update_intervals));
 > 
-> Perhaps I am misunderstanding, but this looks weird to me.  By applying
-> the patch, the maximum values are:
+> The behavior changed.
 > 
-> static SENSOR_DEVICE_ATTR_RW(temp1_max, tcrit1, 0); -> 127000
-> static SENSOR_DEVICE_ATTR_RW(temp2_max, tcrit2, 0); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp3_max, tcrit2, 1); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp4_max, tcrit1, 3); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp5_max, tcrit1, 4); -> 255000
+> static u16 update_intervals[] = { 143, 364, 1000, 2500 };
 > 
-> 
-> However, it was originally:
-> 
-> static ssize_t tcrit1_store(struct device *dev, struct device_attribute *attr,
-> 	        const char *buf, size_t count)
-> {
-> [...]
->      val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255000), 1000);
-> 
-> static ssize_t tcrit2_store(struct device *dev, struct device_attribute *attr,
-> 	        const char *buf, size_t count)
-> {
-> [...]
->      val = DIV_ROUND_CLOSEST(clamp_val(val, 0, (index ? 255 : 127) * 1000),
-> 		    1000);
-> 
-> static SENSOR_DEVICE_ATTR_RW(temp1_max, tcrit1, 0); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp2_max, tcrit2, 0); -> 127000
-> static SENSOR_DEVICE_ATTR_RW(temp3_max, tcrit2, 1); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp4_max, tcrit1, 3); -> 255000
-> static SENSOR_DEVICE_ATTR_RW(temp5_max, tcrit1, 4); -> 255000
-> 
->> +		val = DIV_ROUND_CLOSEST(val, 1000);
->> +		return regmap_write(regmap, lm95234_crit_reg(channel), val);
+> If val = 144,
+> * Originally, regval = 1.
+> * After applying the patch, regval = 0.
 > 
 
-That is indeed a bug. Here is the fix:
 
-diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
-index c3c68c196479..7da6c8f07332 100644
---- a/drivers/hwmon/lm95234.c
-+++ b/drivers/hwmon/lm95234.c
-@@ -150,7 +150,7 @@ static int lm95234_temp_write(struct device *dev, u32 attr, int channel, long va
-                 val = DIV_ROUND_CLOSEST(clamp_val(val, -64000, 63500), 500);
-                 return regmap_write(regmap, LM95234_REG_OFFSET(channel - 1), val);
-         case hwmon_temp_max:
--               val = clamp_val(val, 0, channel ? 255000 : 127000);
-+               val = clamp_val(val, 0, channel == 1 ? 127000 : 255000);
-                 val = DIV_ROUND_CLOSEST(val, 1000);
-                 return regmap_write(regmap, lm95234_crit_reg(channel), val);
-         case hwmon_temp_max_hyst:
+Yes, find_closest() rounds the value instead of using the lower match.
+That was intentional. I'll add an explicit note to the commit message.
 
-Thanks a lot for the detailed review!
-
+Thanks,
 Guenter
 
