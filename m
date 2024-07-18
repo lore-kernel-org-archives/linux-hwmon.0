@@ -1,98 +1,182 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EBA156CE
-	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 01:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384E71B86E2;
+	Thu, 18 Jul 2024 02:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721266145; cv=none; b=kAd/iuFzZunQ8c+CI6nk9tz7oNXmZ+u0LjpwdNcFUS9wNKRtaQrSI5b0Yg2s275j56dw0+KotVVLPgv+cQ9fLjiIue1cu/NhynliJcUN+wxOmo/pRs3EOq6kP3fmVaijaV6KS6RRIGCfT1A0Wip62D5wUHNFHslMm7QlJlhBauo=
+	t=1721269349; cv=none; b=T+iAU72nK5q+5KbD1fnDXEXE1UKKYHH/q0LnM/4nS7w6kIYCTQPZFrwbmTwVzZ43sGRWaXusJ4iUiI3mv5uFYxoDkNo9NhNwOl48tgJKm6PcAUo0xXMTZ0a4ifE6+zEtm69Q3JCK/VsPtQ2D9BNTRmLWgIRtNjqVuI+/RHtasHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721266145; c=relaxed/simple;
-	bh=5BTBKRNkcYHADHZLhjo0ThyflLkDIXg8PH3AGsdXafQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dajL2cE/n9/tldNBaFrkcdda+1qsiEm6CqFiEz8KPv4waacJnA1j5CLsCK9bxFeU0DUFtMBUACoSoUrz4t2A2X9rpYJo0zchhCoE4y3P4+khksS2S5yRQLQoQksJxgarEIKJcikSG01Vh1bxSp+sska+AJGW1dtGRKYOlC/aHiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oF16zRHA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721269349; c=relaxed/simple;
+	bh=gDkyXHZ+uvQOh5+CSatxWv2gpcXQE70zzlSXyGIc6hE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=U26zKziVCgy4HzQtpIvc2kQMTDBfas6cTDyLOkKB9cKgnPDfUGKSIVihgBg7AwZhTOLczg4GtPYJIyw9L7emWfyg92f42grmjIJuVlIN3Ef7n8Y77f5YyJnZvIhqkjNk+r0gdehutz+G+mPDxrVNVZiOaKcnHAiNN6KFSO0U2GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0dphP4n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oF16zRHA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C744C2BD10;
-	Thu, 18 Jul 2024 01:29:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0dphP4n"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DAB64C4AF12;
+	Thu, 18 Jul 2024 02:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721266145;
-	bh=5BTBKRNkcYHADHZLhjo0ThyflLkDIXg8PH3AGsdXafQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oF16zRHAAQHcP1LXdS22pdkO1mdEE/1sStTzoUf9eXnKa5xZTPhOkee+CE1+SIBeB
-	 FHM5a0YqdjGduoYI22v9HvNXY0nVW9QZLtQBxXJtT7lJao0+jaXPCn08EvCaPmwXlQ
-	 xmWD9qXoBNqt7G8ww2Ne6Tyqx/tgKlNSFw+O6SmLgEXMROqpAy5gQrYU4YLe4h+I/P
-	 MYNyDQWRAV/tWi3kdQh/0usVgdi8fC7tT1oyTIS46/luINx1kBaQpKbaZhMteA1M14
-	 DaOTNff9zdGAdA4rwouvv6nyF51IEq+czLOOiT7n6+CDz8oUrxOZpze7a8RQwBlhl0
-	 ZiYy61mopWcPQ==
-Date: Thu, 18 Jul 2024 09:29:02 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 4/6] hwmon: (tmp464) Use multi-byte regmap operations
-Message-ID: <Zphv3kGeqX7LUgY0@tzungbi-laptop>
-References: <20240716230050.2049534-1-linux@roeck-us.net>
- <20240716230050.2049534-5-linux@roeck-us.net>
- <ZpfIqtrclTDsTy0x@tzungbi-laptop>
- <4b195103-5f8a-4251-8612-7ec51f07bd2d@roeck-us.net>
+	s=k20201202; t=1721269348;
+	bh=gDkyXHZ+uvQOh5+CSatxWv2gpcXQE70zzlSXyGIc6hE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=A0dphP4nJn/3JPeId6DJUHW6gcD8hNLGS8Io2CfK1unCA4jB4kVQXQEwAa1yhnYF1
+	 4Yky0HTOYwCpxVFUYwlheE/VINKh4xg7pSaPwjQetwR68hF7v5E9MZOKnoG2v4TRSY
+	 1SYRdGKoKDcduS3m6AznAA/ocR8mZmuBteYKVf4GxASmX8hxncGm4bOnWh26/x/sJA
+	 HgWbyF/AEL6LAXELJ8T9RXDyb1lNOEYN3NBQ9W+hy0zS4T45wzLMVN0L8H7dcLgOBB
+	 ilKQ4kAOmEcMRpILWMDYhCWE+CN5gvdwZ5rfPsEhcL2o2vVeemPqte4sh7pBEYW33S
+	 Lkx+E8gYeurow==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB888C3DA6A;
+	Thu, 18 Jul 2024 02:22:28 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>
+Date: Thu, 18 Jul 2024 10:22:24 +0800
+Subject: [PATCH v4 2/2] hwmon: document: add gpd-fan
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b195103-5f8a-4251-8612-7ec51f07bd2d@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240718-gpd_fan-v4-2-116e5431a9fe@gmail.com>
+References: <20240718-gpd_fan-v4-0-116e5431a9fe@gmail.com>
+In-Reply-To: <20240718-gpd_fan-v4-0-116e5431a9fe@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Cryolitia PukNgae <Cryolitia@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
+ Yao Zi <ziyao@disroot.org>, 
+ =?utf-8?q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2841;
+ i=Cryolitia@gmail.com; h=from:subject:message-id;
+ bh=w5ysSKMT+Erogd22vy685m5vnNbd3B3fdSDLl++agfw=;
+ b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0VCYlFHUy9wQU5Bd0FJQVQ1ZEYzTDhpb
+ zdkQWNzbVlnQm1tSHhpRFl0SmswN3RiNXpxc0s4VlIrV3pRdzJqClFKQnFMeHAvMjdnaGd6a2Jl
+ ZXlKQVRNRUFBRUlBQjBXSVFSME5XMHB5dmR3U0JGOENDWStYUmR5L0lxTzNRVUMKWnBoOFlnQUt
+ DUkErWFJkeS9JcU8zVW45Q0FDVFR6bGRPMzBrVXpobHVLTzBYRnp1Z014Zit6OVlycWVsQllvcg
+ pDUDQzZ2hNRTRKRGYvV1lEZ09BTVd1QmlVRHQ3OWJVb1B6NExoWHlTZGZHLzE3ZEg1VXN0L0xHR
+ FJDMFJIU2RlCjAvNXQ4Y1dHcUduKzBKQk5VWjBielZNS29TNFhJSXY0U3JkZ08za0U0VU1RYkNQ
+ dTYycW16aGxQVVlxZ1dlNlQKdjFpS1BwaXNMS2VqeUlLRE1Vd1l2dGpDdjBDZVBNSzQ4M04xUDl
+ nRE5rWS9rOHVEY0d2b0JEdXlnUW9TdmFuZgorR0FmUFhDUExocEFvc29OaGtlUmI2aTVqU1NOMU
+ FDNGxZZWdkUFYyYUdJeFZvZ2NxcmJwdHRaMlJOc1Z0VWRyCjIvN3UxZExrbU1vZWw0NDVSSmhPS
+ E5rdng5SzgxY3hOMkNTbUFCbGp2aDFucExrdQo9VzdLeAotLS0tLUVORCBQR1AgTUVTU0FHRS0t
+ LS0tCg==
+X-Developer-Key: i=Cryolitia@gmail.com; a=openpgp;
+ fpr=1C3C6547538D7152310C0EEA84DD0C0130A54DF7
+X-Endpoint-Received: by B4 Relay for Cryolitia@gmail.com/default with
+ auth_id=186
+X-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
+Reply-To: Cryolitia@gmail.com
 
-On Wed, Jul 17, 2024 at 07:37:10AM -0700, Guenter Roeck wrote:
-> On 7/17/24 06:35, Tzung-Bi Shih wrote:
-> > On Tue, Jul 16, 2024 at 04:00:48PM -0700, Guenter Roeck wrote:
-> > > @@ -147,11 +147,11 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
-> > >   {
-> > [...]
-> > > -	mutex_lock(&data->update_lock);
-> > > -
-> > >   	switch (attr) {
-> > >   	case hwmon_temp_max_alarm:
-> > >   		err = regmap_read(regmap, TMP464_THERM_STATUS_REG, &regval);
-> > > @@ -172,26 +172,27 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
-> > >   		 * complete. That means we have to cache the value internally
-> > >   		 * for one measurement cycle and report the cached value.
-> > >   		 */
-> > > +		mutex_lock(&data->update_lock);
-> > >   		if (!data->valid || time_after(jiffies, data->last_updated +
-> > >   					       msecs_to_jiffies(data->update_interval))) {
-> > >   			err = regmap_read(regmap, TMP464_REMOTE_OPEN_REG, &regval);
-> > >   			if (err < 0)
-> > > -				break;
-> > > +				goto unlock;
-> > >   			data->open_reg = regval;
-> > >   			data->last_updated = jiffies;
-> > >   			data->valid = true;
-> > >   		}
-> > >   		*val = !!(data->open_reg & BIT(channel + 7));
-> > > +unlock:
-> > > +		mutex_unlock(&data->update_lock);
-> > >   		break;
-> > 
-> > I think the function can entirely drop the mutex.  Only [1] needs it.
-> > 
-> 
-> It is needed to protect updating open_reg. Otherwise a second process
-> could enter the code and read the register again, which would then return
-> different (cleared) values. As result open_reg might contain the temporarily
-> "cleared" values.
-> 
-> Process 1			Process 2
-> err = regmap_read();
-> data->open_reg = regval;
-> 				err = regmap_read();
-> 				data->open_reg = regval;
-> data->last_updated = jiffies;
-> ...
+From: Cryolitia PukNgae <Cryolitia@gmail.com>
 
-Ack.
+Add GPD fan driver document
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+---
+ Documentation/hwmon/gpd-fan.rst | 63 +++++++++++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst   |  1 +
+ MAINTAINERS                     |  1 +
+ 3 files changed, 65 insertions(+)
+
+diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
+new file mode 100644
+index 000000000000..68189cdc5b45
+--- /dev/null
++++ b/Documentation/hwmon/gpd-fan.rst
+@@ -0,0 +1,63 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver gpd-fan
++=========================
++
++Author:
++    - Cryolitia PukNgae <Cryolitia@gmail.com>
++
++Description
++------------
++
++Handheld devices from Shenzhen GPD Technology Co., Ltd. provide fan readings and fan control through
++their embedded controllers.
++
++Supported devices
++-----------------
++
++Currently the driver supports the following handhelds:
++
++ - GPD Win Mini (7840U)
++ - GPD Win Mini (8840U)
++ - GPD Win Max 2
++ - GPD Win Max 2 2023 (7840U)
++ - GPD Win Max 2 2024 (8840U)
++ - GPD Win 4 (6800U)
++ - GPD Win 4 (7840U)
++
++Module parameters
++-----------------
++
++gpd_fan_model
++  Force specific which module quirk should be used.
++  Use it like "gpd_fan_model=wm2".
++
++   - wm2
++       - GPD Win 4 (7840U)
++       - GPD Win Max 2 (6800U)
++       - GPD Win Max 2 2023 (7840U)
++       - GPD Win Max 2 2024 (8840U)
++   - win4
++       - GPD Win 4 (6800U)
++   - win_mini
++       - GPD Win Mini (7840U)
++       - GPD Win Mini (8840U)
++
++Sysfs entries
++-------------
++
++The following attributes are supported:
++
++fan1_input
++  Read Only. Reads current fan RPM.
++
++pwm1_enable
++  Read/Write. Enable manual fan control. Write "0" to disable control and run at
++  full speed. Write "1" to set to manual, write "2" to let the EC control decide
++  fan speed. Read this attribute to see current status.
++
++pwm1
++  Read/Write. Read this attribute to see current duty cycle in the range [0-255].
++  When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
++  to set fan speed.
++
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 913c11390a45..97add26f53b7 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -80,6 +80,7 @@ Hardware Monitoring Kernel Drivers
+    gigabyte_waterforce
+    gsc-hwmon
+    gl518sm
++   gpd-fan
+    gxp-fan-ctrl
+    hih6130
+    hp-wmi-sensors
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9ced72cec42b..5079b5bfe4b1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9376,6 +9376,7 @@ GPD FAN DRIVER
+ M:	Cryolitia PukNgae <Cryolitia@gmail.com>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
++F:	Documentation/hwmon/gpd-fan.rst
+ F:	drivers/hwmon/gpd-fan.c
+ 
+ GPD POCKET FAN DRIVER
+
+-- 
+2.45.2
+
+
