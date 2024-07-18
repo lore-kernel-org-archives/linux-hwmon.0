@@ -1,61 +1,60 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A7B15C3;
-	Thu, 18 Jul 2024 02:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9694B2BB1C
+	for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 02:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721269660; cv=none; b=Dcvezj6Z4LFhsCILPX0CSfaF1FyHvcoby11yIa1DLPO+wjpK3Ul1QyK8XwRFMSkgcVpDj3Ahv/8Br9WOZdeXBuVH/qc5sILjW53qUK48nKOGIoPetisEha7C5XBSJm0msfuWONtqgUTgqk0te75yBACUWFI4zCe9OyV38RBsg6g=
+	t=1721269664; cv=none; b=rT7q165zf08R0YyVvBZgmCr5PCA262bibo9j6pAXyAZBFtt9pG+hGDo7EBkCEy42X149uvRNDTyPCyye2G/ITQ3MId4T1Xh8nv2YP77qv4hnVTB+xGxiCy41FKD6BpFMLiYxs92f39kcD2vsIaQ9idwwP0qsTOox7QIzh+vpiEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721269660; c=relaxed/simple;
-	bh=CV7LYfCxINP5w09KGhat3kkBY4Oo+VC8T93Z6UfqSUs=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hz8EdxeYEyVxRBemXBxAVym10tZilVqlBUZFv8ZucecoObV/paan1adwT5T9hRlVq1WFlte/W4cOXN18uyi56jHpVwnzwOgHfCDtyhbID0LeaLPIe8cFor5EgMTmJ+ExykpNI04L2ucQApT1sxzzweZeacaChpzkOCIzWSxWlSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YmVk3VPk; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1721269664; c=relaxed/simple;
+	bh=BTUSfvBrqekcGzXwNWKQVcoNSfhpxvV4zOeJUZKiZ1A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sLrxxaT/bCvJ9OYsefJ212q+jJkPQeP46VlMbmB6W57/8aBKM2tx7Okz1bjsvW3dv3eBTtb5oDINzYL0L93iiHMz5QIRd0PqL23g9gc8wPnaihEnLF9wWVzt1G9zn0eGEu3pNNi/sbmJ23stFU/uzVQo+zMcZCpI39t6Sf6VlOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WoD8Y2vx; arc=none smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YmVk3VPk"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2c9e37bdd6fso226097a91.3;
-        Wed, 17 Jul 2024 19:27:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WoD8Y2vx"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3d9dbbaa731so201345b6e.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Jul 2024 19:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721269659; x=1721874459; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GUAd6g54xeJRdV81nGL0g6LtQDcATLm06ClbA+KAow0=;
-        b=YmVk3VPkhaShHuV6sYN0Wzq6WCzWirBMqsII8PJh6S36bLQjcXXbzRZJvCjEMbfOLU
-         itLI66/eJnIV/oSxh4sIWBhduzBc0sHR3z1aMYAK93ylA2Cgm7UMsMCHLwBI/f75cNnf
-         gyLN5KKHjNmHLKppQ/WqN7PGQOY0BTvgAzN8J7UgU9ViX8evC1Wxh8gP3Ynn+LjSiOk/
-         IgAyMRXk0N7TD6FPwpem/CF33lRC854f7JLRvW7feyBYlV5Y2Ff+v1cOnavkscU3Bpgq
-         GrUrxTUX8tQK0BSdyiJcDjeYeViU5UGX5sX7UxA1hXCDq0a8JZ78gszoViF78jGdB/ij
-         MWQA==
+        d=gmail.com; s=20230601; t=1721269661; x=1721874461; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=AVqtXhRohGSRt/PKaa1LPfNs4POXbdhprHxibETuM60=;
+        b=WoD8Y2vxqNH4pCX7Y3WLYGcz1Qd0X2cD5sEdU4rc2PpU8uQczV5ipFNQyTUwLOrbFu
+         4+6EprcpSGpjlYusNgAtUorLUB9uOs4aAolbAI4SzKxHzXVLICOqfE9pWThVZyts519C
+         BC5VC/TIcfcG0ULn8HjSPQVyDT2ZGlRU5vgikVc6Y4CktkQ6vulYfccl1zRujjOqpL9Y
+         8EdjgbpSBTXS/O86Veh8eSqB1M1fgjquOfM/IV8bG5O+3ZpWJWSFIHvx//rGlU0X/55m
+         Wy24SkRAkjI4KmH89B0G01lwxYkzdBVdYd8klC5amSvui4Tc5EuRbzVgYpTGY7Lol3fe
+         VXDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721269659; x=1721874459;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GUAd6g54xeJRdV81nGL0g6LtQDcATLm06ClbA+KAow0=;
-        b=RZucKeurtWdjULt4i5uWs+Qle/b9bfqapjbpXed2s0pmNZZRjl1m6unKz6STbwFYla
-         B2Cb7H3VjMu3LrfVGlmJfu5kT4BC4hePTGW8Bl0a7NsR0IOqtMXMOtIeNTdNxmPgGKJ6
-         uLFUy0GEaPIMxVfAKt8YmA0pmS2iUD5raEpvW+6JmvwhgmPvyF5TXyWTCo9XjzLJQLk0
-         XWgDbdsNe2R3P1VB26crnYcFsw1Cm5zl8BuVfCsSmxJTBy7+MyQeSZAyNnVSGTqCwasW
-         +w//7awLTsvg2Qkp4XjFcj7eyHio3MsqF+ULwDCmu0zExv0U0V+j21V9h5Znu4tPcTrc
-         gwmw==
-X-Forwarded-Encrypted: i=1; AJvYcCXczA+r9wi3cj1wh/ReKsNWkeDzVzudGrRi7A6DL6vD7O3NzDq2quXtAJpRQsCeCCAMb3pwkcmEmvFBKR6ohWfeNbitpETevGiZGLp8NP6ebt8d+fw1Dubb3aZJ+OzyuqD+BcjZzK4=
-X-Gm-Message-State: AOJu0YwG6LathwkXVrOmc1WxSQ5glJEOiRiS0fCkaKvs/0iaKBANdRRc
-	OslIiJN/KW7q2GTppf11wJuOVCpXhv8lJgC8TuOqFQuQzG5xPTeVtAGZ2BNp
-X-Google-Smtp-Source: AGHT+IE8SvX4CLDwAqE0jj8m+KCvYqhmkfATV+kF3+EHc9JlTZrnccUYA8tLj1CrFijiVCWM2kehCw==
-X-Received: by 2002:a17:90a:fb8f:b0:2c8:1f30:4e04 with SMTP id 98e67ed59e1d1-2cb5293beb9mr3038183a91.36.1721269658624;
-        Wed, 17 Jul 2024 19:27:38 -0700 (PDT)
-Received: from [198.18.0.1] ([2401:d9c0:2902::c2eb])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cb601e42easm662877a91.40.2024.07.17.19.27.31
+        d=1e100.net; s=20230601; t=1721269661; x=1721874461;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AVqtXhRohGSRt/PKaa1LPfNs4POXbdhprHxibETuM60=;
+        b=CdTx3rsfye5kXfZ3u012MUnEQZNaLA7t7dr3qp80FtmrxIVmcSNmS4o3wugOpudPK1
+         x0XDrpDgDK7H2bWoHx39KPUX+ajHbtNYwvgkyGiV7HufVrdYlSOyBhnqkGGBo8AW4SVE
+         5gva8wsfTvgF3vCA8nSCYWmWCusINLLzmgK/64aVrjR9ts3+iu3inE8GBvYrcmDP3AJO
+         VBe5KcyKiA2E8aT3cVrbcZKGND3yzuIUGhVQRfbHx+jwgGBbJ9xJZUT1z2/HEgt8JxwJ
+         wrm+iavWz5h6bHrva/YMrw8AJpKcizRQ2qCmIvduz7Wlf/x0LA+nJ8coasPELcdaAi/M
+         8P4g==
+X-Gm-Message-State: AOJu0Yxj01PojAV4Yi2oQE1SPgcUF9C6jrSOCUca8l02tfFAqhi4fjn8
+	G71J28xI5pB0GDDqkR1IAKR6ZtRp9x2gom+OxgWp0UGn1Zv0KJrGRfCQog==
+X-Google-Smtp-Source: AGHT+IEzjadtxxEuyu3Sfz1eZIutZJICzD2rr6e5K8y0QznuFT7hXhb32lVYutt+OqE5SHJdj7FLGw==
+X-Received: by 2002:a05:6808:1288:b0:3d2:1ed4:78b2 with SMTP id 5614622812f47-3dad1fa5d8bmr4388234b6e.55.1721269661404;
+        Wed, 17 Jul 2024 19:27:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ecb8935sm8839122b3a.183.2024.07.17.19.27.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 19:27:36 -0700 (PDT)
-From: Cryolitia PukNgae <cryolitia@gmail.com>
-X-Google-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
-Message-ID: <22807968-922a-460d-9dda-7e8f9b4791ad@gmail.com>
-Date: Thu, 18 Jul 2024 10:27:28 +0800
+        Wed, 17 Jul 2024 19:27:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c8be2b63-233b-4dd1-bb73-e624038475e0@roeck-us.net>
+Date: Wed, 17 Jul 2024 19:27:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,30 +62,80 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] hwmon: add GPD devices sensor driver
-To: Krzysztof Kozlowski <krzk@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
- Yao Zi <ziyao@disroot.org>, =?UTF-8?Q?Marcin_Str=C4=85gowski?=
- <marcin@stragowski.com>
-References: <20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com>
- <20240717-gpd_fan-v3-1-8d7efb1263b7@gmail.com>
- <14e3654e-27b1-41f7-a66f-03ec47e95593@kernel.org>
+Subject: Re: [PATCH 5/6] hwmon: (max6639) Use multi-byte regmap operations
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240716230050.2049534-1-linux@roeck-us.net>
+ <20240716230050.2049534-6-linux@roeck-us.net>
+ <ZpfIwpmmte8PUrjk@tzungbi-laptop>
+ <ee004cd9-6682-4049-8cc8-f6389ce5c835@roeck-us.net>
+ <Zphvza7uY2U5_YO9@tzungbi-laptop>
 Content-Language: en-US
-In-Reply-To: <14e3654e-27b1-41f7-a66f-03ec47e95593@kernel.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Zphvza7uY2U5_YO9@tzungbi-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 7/17/24 18:28, Tzung-Bi Shih wrote:
+> On Wed, Jul 17, 2024 at 10:14:49AM -0700, Guenter Roeck wrote:
+>> On 7/17/24 06:36, Tzung-Bi Shih wrote:
+>>> On Tue, Jul 16, 2024 at 04:00:49PM -0700, Guenter Roeck wrote:
+>>>> @@ -88,25 +88,16 @@ struct max6639_data {
+>>>>    static int max6639_temp_read_input(struct device *dev, int channel, long *temp)
+>>>>    {
+>>>> +	u32 regs[2] = {MAX6639_REG_TEMP_EXT(channel), MAX6639_REG_TEMP(channel) };
+>>>                          ^                                                       ^
+>>> To be consistent, either drop the space or insert an extra space otherwise.
+>>>
+>> Good point. I added the space.
+> 
+> With that,
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-On 2024/7/17 15:11, Krzysztof Kozlowski wrote:
-> This entire driver still does not look like using Linux coding style.
 
-I carefully read the code style again and adjusted my code.
+Thanks a lot for the reviews !
 
-I apologize for my rookie recklessness and sincerely thank you for your 
-patience.
-
-v4 sent: 
-https://lore.kernel.org/all/20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com/
-
+Guenter
