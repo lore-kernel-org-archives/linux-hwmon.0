@@ -1,87 +1,93 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843DC137E;
-	Fri, 19 Jul 2024 22:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661AF2C1AC
+	for <linux-hwmon@vger.kernel.org>; Fri, 19 Jul 2024 22:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721427427; cv=none; b=UUebzbwi5u+g8Qvk4ISa5wTE+7wD98UlR9OhqiBI5xNhxVE3YRAgzPBwk54ek4s5A9a4faZZqK8PxlXBoh7818SYeB08CqgS3gQoHacOcMN4kw1G15n58f4MATZCTo64Duezl3soOb75e9QcaVLxldR+VfE91ReWq6TZIa6VLlE=
+	t=1721428404; cv=none; b=liJMyQSZaZWhmqsm1MoAwz0Lkpi+xzgffKa2D0NxOJtTypYh9uUiOs+O/5nxF1ijJe5doez9dhN4HBuHxz+9FyiCK4t2UKcRhrtx5PHMQVwwrV4lkv1qPAdmVOmP+JMex+cWCr6eYJtAjxXhto93jb5NZAqEyHyWOzs80WbAp48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721427427; c=relaxed/simple;
-	bh=NDpFvtCLvONa8XvXcgZdNoT4tOOXrYjLQ0OyoVKkaRA=;
+	s=arc-20240116; t=1721428404; c=relaxed/simple;
+	bh=6TKyVUfVj+CJ3k1Sx8U1+J2PTqnTWYT2gbAfqv68asA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j/KM0+DS2+3wUcQdx61HL3eLIQZJyAM6zLOjXxWDDwtAv+84BDgTQ6yhUWQeknabf2VoMVgbOkaKit14VxT18tpnwGYUQiXLTlTtN7yF9VnuWuXQzB8ZHxnEgRS8Jh0Zgax8jjC/dyh7EymN6f2RsT8X7JXOMuYESVWeKUb/SDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdgWfGJR; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uINvvvcyu47ELBZcGJBN6QiiZW8pGmfP+VxUZGTsWnpcPLKIWs3dCkGpnlr+OrVWS322utP7eFviKhaKoUrV8By9c9ihR9jijUXHVP/V0u9ZNeSE3xODJcfj6R+2f1fUqYU3eoQFoSsjg20Iw2bLR3RMWrKEhfkobhElAJq8f88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=emFYENNv; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdgWfGJR"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2cb4c51fb41so1283707a91.0;
-        Fri, 19 Jul 2024 15:17:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="emFYENNv"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-703d5b29e06so1155822a34.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Jul 2024 15:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721427425; x=1722032225; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tsZZfi5YDEq6bo7bl7/hSegHmbEe4ON9DK9CSEhHZN0=;
-        b=BdgWfGJRZt8TDG/hJBaOoYH7GlfbNhsoGtxzrQzr1ngTg/0UOLSBVDlVX4Yi539CYQ
-         mk0PokOVGXxdMvBBw195aEtEYYYDGEZxtl/6VKqPcePfMx8u+wL5aXn6ermPdQG83atf
-         HjKyQO1rpqi9Le7Nkl7hORT/7NK1xw+vXlpkWmWkv7pZ8EGLy2+/94Gge3UBIxQ61xSU
-         H8x2sXBYS2+5Nhb1BOdYclYJcJaCxR4NFFDhz6tMqMRRW6VKQqLHmNd5w8lBwbBh3SRk
-         BAtpKBYhq94Eor32tR8Ki0ZM4StzIdS5djcQ75VD2UM42tHTrUprQtDEnN0zEgtRs3gn
-         HGPw==
+        d=linaro.org; s=google; t=1721428401; x=1722033201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GAat9gPjggjnmEuKBl3Xq+6G65KAOiFMLvJZgqVVjRQ=;
+        b=emFYENNvq9RiR2rJYgB7i8IWuiMtJVvkoKQuwv4n4Wl5FTeV/rqqqV6NA5/8Phmwuk
+         z88YGqXpJtKC4tIwlvGLkXrB3rb1x9bZ4lXqlwQewtNBQpCj+Nm6fdQ6SUr9nDUnI8PE
+         eAif69FZ2xjh54roJ1zw2E46oFxBVzp/rCz3HdzD425gVUixevD+PgPhkDXRBQb6k7kc
+         RL8+gVWJocT14Fl3yUYNWiiSwJJ+8/YPKfTDe8SfJkyHIVbfjNPfkCF3EGg/b9o7nMj+
+         vlh+5ouY3Z8/fI0Eupzv/4+Ih/+31gcSBrbmEeEZj9y1v4pG1Ts013cm0ON61fsRuiui
+         qYGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721427425; x=1722032225;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tsZZfi5YDEq6bo7bl7/hSegHmbEe4ON9DK9CSEhHZN0=;
-        b=e1x2BGIF2u0Xwhy8ZhQJe0bNf4BDpFnAO2FOlme95bDDhZqjH4Mo2pNtbSwP9ZAmxC
-         oLcLA2sYsxSgaxtceXj9BJ0MtgOmRiRcaeOM5kj2nhNwEU7LWLvpRCIV9emP0g7bRIyQ
-         RWbz8gH8QZyd8ffbESMu5f+9HaLOmUbjN/oHfg/R8SyqfP2F8gmgTjzfIbm5dIVZ2soj
-         vx+IXeMYwBzjqS/pdv9aG0A0GAxrus4PXfMywXLoBUAg9PAjesTRslYGvUxLTw2t3BlH
-         vXEuUenCTYBNBEJZ12I5ja6e/Vf1b0LUH+wWe6jKy7VuHU+gT6dYgH+SP3XD+EQqGied
-         ffwg==
-X-Forwarded-Encrypted: i=1; AJvYcCX34Q52/QZp1lHJm+BY57Pk67NPlw9TJS58VmRltaM/cKTZHt4jfYqo2zB1ql17ks2g2seTLJNZd7tGpqZlB4mHZXadvVWyJ3OHA/2sQNdID3YqYBmfRzFRpHNr4YVMmgAXDv4orM62+8I=
-X-Gm-Message-State: AOJu0Yz1dYdwwbw7TtCJUHd5MTBBmUx15DS/5eMqvvBe5AnwptNqXmZy
-	V7y+MpIgdDhyO3N+RmgP0FtVyvPuDFGMzJTdS4zKqGcqgqKsSvVFJ684Iw==
-X-Google-Smtp-Source: AGHT+IEjzZF2tf7nDqcL3Tr9c4kXAto8yxsqMpLGV3ks09j0itDUbsvV1ZJV0NH6Qu0OXCsUX7eKzw==
-X-Received: by 2002:a17:90b:238a:b0:2c9:77d7:261c with SMTP id 98e67ed59e1d1-2cb529511camr7327906a91.44.1721427424751;
-        Fri, 19 Jul 2024 15:17:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ccf7b5c342sm2269714a91.19.2024.07.19.15.17.03
+        d=1e100.net; s=20230601; t=1721428401; x=1722033201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GAat9gPjggjnmEuKBl3Xq+6G65KAOiFMLvJZgqVVjRQ=;
+        b=qpoyBnPkoGr8EOUNfzqgih94FjjUqWYnsXrrUgiiJRinzi2H/Q8YKKTpVnISBfvdYZ
+         0XyF7KBPy6U40LF1ChK8FBLskI7mCa3UEahWzRm0WmuOiPF746hD1koImaG7BbIjgTtl
+         h5lrlNMPBExkCLTZ3lzU4rrolQYEftEPOEfu1nHVnIt0jvN/wlFCVzlK8X+q+Q0k7HET
+         wE8ingntSpZ9hcFJhmj/qWoEr0adLvzTRX4vRWAd4/RMprMhfGLB0DqIjRPMNmZDW2R7
+         AGYZ1yDHTGgeJoCp98RtfcFbyiu4URQfNEKjQKodt/HsWP0PVKvWQmjmpmihUojJaWZT
+         6Llw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQZI02wGxlk6Y+KVNPb512SYBYxnTiQ01X8DbefM1NToiNLOwWO65i4NB/yU0n1bAYQkzUGRQ4CmeflEo+HgtcyJSEJBXFyBJKxwk=
+X-Gm-Message-State: AOJu0YzyGAyPnYQCO5oN8IdJOcW6h3b6SaEm1QPSzJLYh51GRM7rfjmw
+	DakjcNxW5Zyx4uvzmJ7yQVvRSZc5S8e4UC8SSGvmBIhG9Wyi2W+ENETIfCUwrlnVIrnZUWukwtZ
+	7
+X-Google-Smtp-Source: AGHT+IGgSsW81rDhy7H1WaJVznxb4wLFtRoDqLh/AYCu7rlDLBXMUa33V7PlDQOTf3fh9TsSHAemGQ==
+X-Received: by 2002:a05:6830:270b:b0:703:6ec7:64e1 with SMTP id 46e09a7af769-708e36cc533mr9781441a34.0.1721428401392;
+        Fri, 19 Jul 2024 15:33:21 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700:4528:a9e:1eaf:80c5])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708f60d6c1csm488766a34.37.2024.07.19.15.33.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jul 2024 15:17:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 19 Jul 2024 15:17:02 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7320 to fan control
- whitelist
-Message-ID: <8a8956e3-c07e-4104-9087-ea1521082ef5@roeck-us.net>
-References: <20240719203706.19466-1-W_Armin@gmx.de>
+        Fri, 19 Jul 2024 15:33:20 -0700 (PDT)
+Date: Fri, 19 Jul 2024 17:33:19 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Eduardo Valentin <eduval@amazon.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [bug report] hwmon: (pmbus) Register with thermal for
+ PSC_TEMPERATURE
+Message-ID: <d88d5476-eec4-4e0c-8375-18dcc168e31e@suswa.mountain>
+References: <abd89e07-3a61-408e-ac2c-67ec0605f12b@stanley.mountain>
+ <cddb4e8e-4b4d-48de-a02d-4931c373b47b@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240719203706.19466-1-W_Armin@gmx.de>
+In-Reply-To: <cddb4e8e-4b4d-48de-a02d-4931c373b47b@roeck-us.net>
 
-On Fri, Jul 19, 2024 at 10:37:06PM +0200, Armin Wolf wrote:
-> Add the Dell Latitude 7320 to the fan control whitelist to allow
-> for manual fan control.
+On Fri, Jul 19, 2024 at 02:10:16PM -0700, Guenter Roeck wrote:
+> >      1373
+> >      1374         /* temperature sensors with _input values are registered with thermal */
+> > --> 1375         if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
+> >                                                          ^^^^
+> > Unchecked dereference
+> > 
 > 
-> Closes: https://github.com/Wer-Wolf/i8kutils/issues/8
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Acked-by: Pali Rohár <pali@kernel.org>
+> It is only NULL for PSC_PWM, never for PSC_TEMPERATURE. We could add a check to
+> make the static checker happy but it won't make a practical difference.
 
-Applied.
+No, don't do that.  Just ignore the warning in that case.
 
-Thanks,
-Guenter
+I'm running with the cross function database, and in theory that should
+have silenced the warning.  I'll investigate.
+
+
+regards,
+dan carpenter
+
