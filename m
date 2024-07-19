@@ -1,103 +1,135 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F97F59168;
-	Fri, 19 Jul 2024 20:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF7C1B86EC
+	for <linux-hwmon@vger.kernel.org>; Fri, 19 Jul 2024 20:55:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721421451; cv=none; b=eV1evtHHT8+e3gGy35b3QkbPoSuA63GwLe5Gu/yMelJ5VTJBv8/8DRp1GQWgBpyJmQBvEGhQCcB1vXoKsap0yRpBHcRhmFsrJl44mN05eXc0qwEcTy1AcLztQuMMBs24mfPGkOiwpew1B+0xfg0mnujh384a47xSmkJV97jH/9s=
+	t=1721422542; cv=none; b=PQzDi6wTETirp1GN8nA9iTSOTA2TLVKQu+Cp52wnZmYedxjYUtf8Ve6KjXH4/E5qH7thOf6llsB3zPrNTf5Cy6dTgdwQ/nM0S3lBwh6QCLHSIzy9bJx/+fT1B2eYGNOkBH0gU/4Ggk6kgyLYZlnxloVmQwHuieYCjP+IU3d8kbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721421451; c=relaxed/simple;
-	bh=zhWRHgnHuwV/l/mbk02OZ3eImJEQQ1aOLWOTcfjzHWA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ICzPsmIINtO9L0inpTYOkayA6scCJZ6VB8XGYgj/4G5CcfQ+BXk14gQWOuRiVASR0X6DsXQG6/eDepjD4RTHQx4p8bZiiY7e1rsXqdz6kABXKCfwRMtfhDoVEChicEjjXbwMl1AUuEQw/r+RQRoJ4vSDlBJzuIMK8bDojJKIzIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Uc4bYMIV; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1721422542; c=relaxed/simple;
+	bh=l4Ks79YNqVuDnAuwwKFJ37XY9BsGwX9fbRIOJCDX4VU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZUMlMgYZp5bLuFj35i9ToSRc7MoqveopRPu7aoRdF0Qb3lDXXcKJJAULQbzOIBqx25AvM20tpPUW6I68wpMKDuo5CKP1PjsCr/AgKwFCEW7pV8KqlJfXWMVFvJFUeEN5do5mD/LQ8ISQGDC5f3RiaXM5y37fRgfKMSI8jfNb1PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DCmxv20C; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Uc4bYMIV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1721421429; x=1722026229; i=w_armin@gmx.de;
-	bh=JzkrddmU1/BMgLEAoo1h+oYv4fNeYIF3jP8yDToxero=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Uc4bYMIVbzfUGTH58tGbAlldmGXs6pfiHI9IqlGedhKWm1tZLTv5bAipkBUpHsNb
-	 E8u/MSFxgacnO1wJkzQXFmRfwwId9txS4E7y4Xej8g+Q8OX2RwHuSW5YT8txe9SSA
-	 qikhX2AeIsnfmIqhw3fegXLc8IILsgdYN7zvU5w0Jo3E9GpYyGQqBanlzPrl6Rswi
-	 5KkN/jZ2fnBiG0YehVbVQ5Grhb3Yx7FMP1qtH75jzNfzJG5gBImdYG/TPa2eefAQt
-	 4U0c12rL/6B7HjYiDNGCXhpx+MPC6wemLWjgvSchvt9CRlAHobWExzuzZpKP+mJJW
-	 mHwpTpYWd0zN5guu5Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MJVHU-1skEHM3lhw-00Tdfb; Fri, 19 Jul 2024 22:37:08 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: pali@kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7320 to fan control whitelist
-Date: Fri, 19 Jul 2024 22:37:06 +0200
-Message-Id: <20240719203706.19466-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DCmxv20C"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7037a208ff5so1320221a34.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Jul 2024 13:55:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721422540; x=1722027340; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zrl1Y6YawrpQTcJf/fQ2r4sSawu4iSfJJ2SWKoJA670=;
+        b=DCmxv20CYYBs+dryucVcc4E9BxjHzfTWZ/iRs2NbiwXJK4OWOUTJqIpGjHVSyGykyD
+         ffhydtLT/qwK8NmJO2wBhvZXtsW2qNGcxEJy9IKAIHOonPQU3yaYC5WN4zG0PrhK960Y
+         k6Yfm+jGXaSBYo3VAIvfkZCYYEAkSyzGttwXnpsspCslX5aHykrI0kipcBYdIjl2QO5u
+         sv6AB1AB5tmQIQlUsT3VUppZluU+yokHTRdbrSVeBFgLZByiSke+gT2kzpjwLp28k7sH
+         RXjZkqHeBp4c7jVzszsRMkAPwMc65/fXZjkrVgDeeu/qJez5JJMnRV2zltHxc1ofk3xY
+         04bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721422540; x=1722027340;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zrl1Y6YawrpQTcJf/fQ2r4sSawu4iSfJJ2SWKoJA670=;
+        b=hLyCcYiR78ObqCjKzwEoqyfeiSs8aspBquba+FH5EPsuv/2IheYl0JpyU+jc8YbuHM
+         Uxk38nnsyodaUUZ1GmposWAQK0zJgzlL8bbBYaZEAZTO6gPuMG6QsUXkmEW3B1zgcNDV
+         s/qr/lhvq5774njBSsZzHMwdPlACBWwoYIR/kd4cP1xQiLz30Gjh1gW/QkBT7SGgXMB9
+         ovPG3d59u5inG9vrZIeaYhkX3cSOo+GzJQzwGS1W7dr2njEs0caG/jlZCKNPCZQ9GHCI
+         pxxQdGuk3yFpkrIYlSLrnGoasEQlFDiy66auclfljEMAVTDu/KgvIjglgxBKd4Tb2kyp
+         B/vQ==
+X-Gm-Message-State: AOJu0YyC4hmDdziCZg22+eek5lUzI6ZmnwcB+QS6fC0JxnFwCaz9sVDc
+	7WMm9dm4rrJs4RJDuynk/AxyneHAmc/twZJSIC6hUws0bOLPZufTXDnxLlrssCywTy2EibvKjeB
+	+
+X-Google-Smtp-Source: AGHT+IE3frboOhuC6uI31KDuhMXAWMgIaMSnLt/ToXuwNIHREMmekQrTMyom+XbYH9G3yWIaRwF+5Q==
+X-Received: by 2002:a05:6830:3894:b0:704:4a3f:8d75 with SMTP id 46e09a7af769-708fdadf534mr1333541a34.5.1721422540140;
+        Fri, 19 Jul 2024 13:55:40 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700:739a:b665:7f57:d340])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708f60ec231sm456528a34.45.2024.07.19.13.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jul 2024 13:55:39 -0700 (PDT)
+Date: Fri, 19 Jul 2024 15:55:37 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Eduardo Valentin <eduval@amazon.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (pmbus) Register with thermal for PSC_TEMPERATURE
+Message-ID: <abd89e07-3a61-408e-ac2c-67ec0605f12b@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SYxTOHjVLvmV/gfVShGuiF4q6t/sVnjtpHSOV3MRBbFr+Dy++zY
- 9XeGBVICVS/BzT5GvrbBYEiM7/nEQOGsXMeiuZiXm31S8dLyawJy6C6nhKe1Q67UBUWou1S
- 66UrSfQwzEOo1H+/p9WFOmv0Sukbrue11AaytdSRagYZZa0iMGDmvzEi//N5+2W8ZBA4Ke8
- T3/9kUOma/EDvN4TsKFdg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:E9QEDZz01j4=;7lZ66irtTqbAOPfdPFFE9j6ksrW
- g6KAoLnh6ptkUvuhGoej7YPgSf0E202vVViybp9HwLts/2F+JdoB3wxM8l8+vup7JQCaAyhcx
- uf75pWBYHVzevY651GxiJlA0VOsQfOoKU09r8sMH6qxBHay1Apy3wj+698t86PMTzbuLzXJQA
- 2EdDQwpqkohh6WrGQwzwQTXeSvXw1+QN3Hln+qLQVSVWXYy/9df4h4pqzhDdMSYIVuGnEF/pI
- T3cqTwTKueNr0KMEBmcqrPzV+I6qFCbt7AoffBqug3RT2V9Ln1gTk9xWu9W4GXKT4sZKvsupy
- ANo6oaL/fmMbX5zKChYYr/YOMfX6AbgEff3mh1FqOb4VYsKrYxc5TQiuENJY6LUePJTmP59tq
- an4evYYE2M8b4aGyPNnWWGMZHoGSqCzYy5atVKtJ3Wsu0j1ne26eBW1rycoXXn3Le21qpXVL5
- vbfl/iMW/j1pOVDHIpzIVIZcPCsELLCyyxFOE3qIL7v8bPr+cy/9mKw8fNX7Wb4G1WpSIgxxs
- O/me2K+1CqzN+3xgnOKuAD0gz+hC2kiUyJ4MG31SMMlBvGCyUBtvXUXufVErk71v//hH2e7Qa
- OOnYwEpD7Iaai+Ki4qYkx88BxzSZQoahyLcZllPaH+OwFHbCTJt9MnwtP/jIp9yqTJ475/xDI
- IRjR38aMsexyNnuGXCZ6gjTjrJSUhSzeLUscoDrg8aBwa/K3XtT2GHUQn1DSxxI2KczVSn/p4
- mVrcZ5jyODmRiruPVqF8t8V8vDLLJ/3uF/Q7BXPS0613jnvZq+UYXILKV5mwcjA3z1KOFVtjr
- 8HKtPdepj83fswZj0yX2SraA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Add the Dell Latitude 7320 to the fan control whitelist to allow
-for manual fan control.
+Hello Eduardo Valentin,
 
-Closes: https://github.com/Wer-Wolf/i8kutils/issues/8
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Commit 3aa74796cfd0 ("hwmon: (pmbus) Register with thermal for
+PSC_TEMPERATURE") from Apr 28, 2022 (linux-next), leads to the
+following Smatch static checker warning:
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index c75bfe93f2f6..ac4484bd949b 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1488,6 +1488,14 @@ static const struct dmi_system_id i8k_whitelist_fan=
-_control[] __initconst =3D {
- 		},
- 		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
- 	},
-+	{
-+		.ident =3D "Dell Latitude 7320",
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude 7320"),
-+		},
-+		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{
- 		.ident =3D "Dell Latitude E6440",
- 		.matches =3D {
-=2D-
-2.39.2
+	drivers/hwmon/pmbus/pmbus_core.c:1375 pmbus_add_sensor()
+	error: we previously assumed 'type' could be null (see line 1347)
 
+drivers/hwmon/pmbus/pmbus_core.c
+    1331 static struct pmbus_sensor *pmbus_add_sensor(struct pmbus_data *data,
+    1332                                              const char *name, const char *type,
+    1333                                              int seq, int page, int phase,
+    1334                                              int reg,
+    1335                                              enum pmbus_sensor_classes class,
+    1336                                              bool update, bool readonly,
+    1337                                              bool convert)
+    1338 {
+    1339         struct pmbus_sensor *sensor;
+    1340         struct device_attribute *a;
+    1341 
+    1342         sensor = devm_kzalloc(data->dev, sizeof(*sensor), GFP_KERNEL);
+    1343         if (!sensor)
+    1344                 return NULL;
+    1345         a = &sensor->attribute;
+    1346 
+    1347         if (type)
+                     ^^^^
+This code assumes type can be NULL
+
+    1348                 snprintf(sensor->name, sizeof(sensor->name), "%s%d_%s",
+    1349                          name, seq, type);
+    1350         else
+    1351                 snprintf(sensor->name, sizeof(sensor->name), "%s%d",
+    1352                          name, seq);
+    1353 
+    1354         if (data->flags & PMBUS_WRITE_PROTECTED)
+    1355                 readonly = true;
+    1356 
+    1357         sensor->page = page;
+    1358         sensor->phase = phase;
+    1359         sensor->reg = reg;
+    1360         sensor->class = class;
+    1361         sensor->update = update;
+    1362         sensor->convert = convert;
+    1363         sensor->data = -ENODATA;
+    1364         pmbus_dev_attr_init(a, sensor->name,
+    1365                             readonly ? 0444 : 0644,
+    1366                             pmbus_show_sensor, pmbus_set_sensor);
+    1367 
+    1368         if (pmbus_add_attribute(data, &a->attr))
+    1369                 return NULL;
+    1370 
+    1371         sensor->next = data->sensors;
+    1372         data->sensors = sensor;
+    1373 
+    1374         /* temperature sensors with _input values are registered with thermal */
+--> 1375         if (class == PSC_TEMPERATURE && strcmp(type, "input") == 0)
+                                                        ^^^^
+Unchecked dereference
+
+    1376                 pmbus_thermal_add_sensor(data, sensor, seq);
+    1377 
+    1378         return sensor;
+    1379 }
+
+regards,
+dan carpenter
