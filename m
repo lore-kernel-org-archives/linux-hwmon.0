@@ -1,189 +1,103 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9901FA5
-	for <linux-hwmon@vger.kernel.org>; Fri, 19 Jul 2024 01:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F97F59168;
+	Fri, 19 Jul 2024 20:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354110; cv=none; b=s2IE29EpKy1qYExTYrJ8Gzhfy8GD8UKcx2f+1EPi+RIOZNCF1me+T08HGJwzx4TTLaWuM7nR2IdxczdV6kO4ri46gjQ5VEa47uTAqKLM9xr6jtESf6XmJpM8YV/iBnzA5ZfOLtxGiDtqHKTFsSITSiN+OD36TZ/U36RAMMU2eMk=
+	t=1721421451; cv=none; b=eV1evtHHT8+e3gGy35b3QkbPoSuA63GwLe5Gu/yMelJ5VTJBv8/8DRp1GQWgBpyJmQBvEGhQCcB1vXoKsap0yRpBHcRhmFsrJl44mN05eXc0qwEcTy1AcLztQuMMBs24mfPGkOiwpew1B+0xfg0mnujh384a47xSmkJV97jH/9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354110; c=relaxed/simple;
-	bh=KXaROGIr6Quq0rdg/DqSUet+SmDHqfA38jPblBL1BBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4FPf9yaJXOjNM9RK/047sbAx3rQO3Ms1GAnqZgw87D/GlIbEs9NZmrahKmZ28ThJbHyLmLIG7p/SGOoaemFxzQi6lxNX1np/utFv/aj/H/KBKnuwT82bssEt0iVMGDRRwyWWv4qt/U+PoXNhtMzjeumI9A3UU1jYjyScUqO1VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWeNP8uh; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721421451; c=relaxed/simple;
+	bh=zhWRHgnHuwV/l/mbk02OZ3eImJEQQ1aOLWOTcfjzHWA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ICzPsmIINtO9L0inpTYOkayA6scCJZ6VB8XGYgj/4G5CcfQ+BXk14gQWOuRiVASR0X6DsXQG6/eDepjD4RTHQx4p8bZiiY7e1rsXqdz6kABXKCfwRMtfhDoVEChicEjjXbwMl1AUuEQw/r+RQRoJ4vSDlBJzuIMK8bDojJKIzIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Uc4bYMIV; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWeNP8uh"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc65329979so9817625ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jul 2024 18:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721354108; x=1721958908; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jD/m0HZC+julbbowlqu8Ik4CQU6DOzbV2YleEHS8/eg=;
-        b=QWeNP8uhKn1FTgaPrevaEYF+ZIs5iSL0NYRI/pR0R51KPVHPX8GN8AbzrswK0MoYhk
-         leohBowhf1Gvzbs6Dwd1BEBazcRHWZYQoBkiyUyDqxexLyv536f7fm2mVfihdYNnvQrM
-         NSGIUaGboD4oLVNGNglqPlTTjdzwAW+GzcenXAy/+pMdpTpr97oVQRaEuMrRUbrhkfSQ
-         8pQtaO2NDiYlWu7xBfYqKt8XuuJVsurzyvTW5e6oBZKFSNXRhqxjtTEBuLiHsO0yBHyJ
-         phjNbwMsO/g1Ea6L+ztXG3gPqd2kgrDeM1WHjXT+DyrX63XNZF6V3OmIPOdPrwipVyVf
-         YPQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721354108; x=1721958908;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jD/m0HZC+julbbowlqu8Ik4CQU6DOzbV2YleEHS8/eg=;
-        b=iJ4JSsvXOrB0Y2ZuUjlDisht1Crl1dtlR2mZ/lbpBgxhTxN/yZDygIal+wFcldDOZp
-         0Pxcdzu33mAk83UqGevIJJx+QkSiJr3zYJQtcI3qNxv1nefK0UuLPXgIWnOdDXLKUD0n
-         j0I8oZS3PI+ehg0w0W+PuA/2q2FVhgwnR3PCWKhve2xwuucWs91yIPguBpESUueHsF/t
-         74wBasLer9h9NDM3M84J7To3Py/psJRAdUGAhM4qBuaVRTwcyFqfq2CF3kXcIb9XKL68
-         RDTam7w5jwDzBOWXqUSU92GqS1eJGPxyyYtNpaL9LwlzdCEeXSNNk0WPWKmRWQElMOJP
-         83JA==
-X-Gm-Message-State: AOJu0YzdbtNZ3NjlcyqRAzYQDTSrhEBmtzdntOV9Va5AKB9i2w9d5+tE
-	l6UR6Zd9W2emggQ9WEzifbkvrfGLG5mJ6eWczKnhEFJeufAhv3IT
-X-Google-Smtp-Source: AGHT+IGjf7R3kAncBI0Yryb99H1hB5Ywsaa/nvHLhlnLPMRIWyWNw0/f11mtbwurY5FazzS2lx4Fog==
-X-Received: by 2002:a17:903:2452:b0:1fb:1cc3:646d with SMTP id d9443c01a7336-1fc4e278e67mr59419655ad.29.1721354108207;
-        Thu, 18 Jul 2024 18:55:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd64b5112csm2537725ad.1.2024.07.18.18.55.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 18:55:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e096acc8-e1b7-4e73-90e9-7a466cac0925@roeck-us.net>
-Date: Thu, 18 Jul 2024 18:55:06 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Uc4bYMIV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1721421429; x=1722026229; i=w_armin@gmx.de;
+	bh=JzkrddmU1/BMgLEAoo1h+oYv4fNeYIF3jP8yDToxero=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Uc4bYMIVbzfUGTH58tGbAlldmGXs6pfiHI9IqlGedhKWm1tZLTv5bAipkBUpHsNb
+	 E8u/MSFxgacnO1wJkzQXFmRfwwId9txS4E7y4Xej8g+Q8OX2RwHuSW5YT8txe9SSA
+	 qikhX2AeIsnfmIqhw3fegXLc8IILsgdYN7zvU5w0Jo3E9GpYyGQqBanlzPrl6Rswi
+	 5KkN/jZ2fnBiG0YehVbVQ5Grhb3Yx7FMP1qtH75jzNfzJG5gBImdYG/TPa2eefAQt
+	 4U0c12rL/6B7HjYiDNGCXhpx+MPC6wemLWjgvSchvt9CRlAHobWExzuzZpKP+mJJW
+	 mHwpTpYWd0zN5guu5Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MJVHU-1skEHM3lhw-00Tdfb; Fri, 19 Jul 2024 22:37:08 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: pali@kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7320 to fan control whitelist
+Date: Fri, 19 Jul 2024 22:37:06 +0200
+Message-Id: <20240719203706.19466-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] hwmon: (lm95234) Convert to with_info hwmon API
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240718033935.205185-1-linux@roeck-us.net>
- <20240718033935.205185-5-linux@roeck-us.net>
- <ZplFeHMIKjHPiwTc@tzungbi-laptop>
- <89c18e08-3a98-4c33-bca4-ea5acba9f6f2@roeck-us.net>
- <Zpm44KVimCVZWhrq@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Zpm44KVimCVZWhrq@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:SYxTOHjVLvmV/gfVShGuiF4q6t/sVnjtpHSOV3MRBbFr+Dy++zY
+ 9XeGBVICVS/BzT5GvrbBYEiM7/nEQOGsXMeiuZiXm31S8dLyawJy6C6nhKe1Q67UBUWou1S
+ 66UrSfQwzEOo1H+/p9WFOmv0Sukbrue11AaytdSRagYZZa0iMGDmvzEi//N5+2W8ZBA4Ke8
+ T3/9kUOma/EDvN4TsKFdg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:E9QEDZz01j4=;7lZ66irtTqbAOPfdPFFE9j6ksrW
+ g6KAoLnh6ptkUvuhGoej7YPgSf0E202vVViybp9HwLts/2F+JdoB3wxM8l8+vup7JQCaAyhcx
+ uf75pWBYHVzevY651GxiJlA0VOsQfOoKU09r8sMH6qxBHay1Apy3wj+698t86PMTzbuLzXJQA
+ 2EdDQwpqkohh6WrGQwzwQTXeSvXw1+QN3Hln+qLQVSVWXYy/9df4h4pqzhDdMSYIVuGnEF/pI
+ T3cqTwTKueNr0KMEBmcqrPzV+I6qFCbt7AoffBqug3RT2V9Ln1gTk9xWu9W4GXKT4sZKvsupy
+ ANo6oaL/fmMbX5zKChYYr/YOMfX6AbgEff3mh1FqOb4VYsKrYxc5TQiuENJY6LUePJTmP59tq
+ an4evYYE2M8b4aGyPNnWWGMZHoGSqCzYy5atVKtJ3Wsu0j1ne26eBW1rycoXXn3Le21qpXVL5
+ vbfl/iMW/j1pOVDHIpzIVIZcPCsELLCyyxFOE3qIL7v8bPr+cy/9mKw8fNX7Wb4G1WpSIgxxs
+ O/me2K+1CqzN+3xgnOKuAD0gz+hC2kiUyJ4MG31SMMlBvGCyUBtvXUXufVErk71v//hH2e7Qa
+ OOnYwEpD7Iaai+Ki4qYkx88BxzSZQoahyLcZllPaH+OwFHbCTJt9MnwtP/jIp9yqTJ475/xDI
+ IRjR38aMsexyNnuGXCZ6gjTjrJSUhSzeLUscoDrg8aBwa/K3XtT2GHUQn1DSxxI2KczVSn/p4
+ mVrcZ5jyODmRiruPVqF8t8V8vDLLJ/3uF/Q7BXPS0613jnvZq+UYXILKV5mwcjA3z1KOFVtjr
+ 8HKtPdepj83fswZj0yX2SraA==
 
-On 7/18/24 17:52, Tzung-Bi Shih wrote:
-> On Thu, Jul 18, 2024 at 10:47:55AM -0700, Guenter Roeck wrote:
->> On 7/18/24 09:40, Tzung-Bi Shih wrote:
->>> On Wed, Jul 17, 2024 at 08:39:33PM -0700, Guenter Roeck wrote:
->>>> +static int lm95234_temp_write(struct device *dev, u32 attr, int channel, long val)
->>>>    {
->>> [...]
->>>> +	case hwmon_temp_max:
->>>> +		val = clamp_val(val, 0, channel ? 255000 : 127000);
->>>
->>> Perhaps I am misunderstanding, but this looks weird to me.  By applying
->>> the patch, the maximum values are:
->>>
->>> static SENSOR_DEVICE_ATTR_RW(temp1_max, tcrit1, 0); -> 127000
->>> static SENSOR_DEVICE_ATTR_RW(temp2_max, tcrit2, 0); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp3_max, tcrit2, 1); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp4_max, tcrit1, 3); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp5_max, tcrit1, 4); -> 255000
->>>
->>>
->>> However, it was originally:
->>>
->>> static ssize_t tcrit1_store(struct device *dev, struct device_attribute *attr,
->>> 	        const char *buf, size_t count)
->>> {
->>> [...]
->>>       val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255000), 1000);
->>>
->>> static ssize_t tcrit2_store(struct device *dev, struct device_attribute *attr,
->>> 	        const char *buf, size_t count)
->>> {
->>> [...]
->>>       val = DIV_ROUND_CLOSEST(clamp_val(val, 0, (index ? 255 : 127) * 1000),
->>> 		    1000);
->>>
->>> static SENSOR_DEVICE_ATTR_RW(temp1_max, tcrit1, 0); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp2_max, tcrit2, 0); -> 127000
->>> static SENSOR_DEVICE_ATTR_RW(temp3_max, tcrit2, 1); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp4_max, tcrit1, 3); -> 255000
->>> static SENSOR_DEVICE_ATTR_RW(temp5_max, tcrit1, 4); -> 255000
->>>
->>>> +		val = DIV_ROUND_CLOSEST(val, 1000);
->>>> +		return regmap_write(regmap, lm95234_crit_reg(channel), val);
->>>
->>
->> That is indeed a bug. Here is the fix:
->>
->> diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
->> index c3c68c196479..7da6c8f07332 100644
->> --- a/drivers/hwmon/lm95234.c
->> +++ b/drivers/hwmon/lm95234.c
->> @@ -150,7 +150,7 @@ static int lm95234_temp_write(struct device *dev, u32 attr, int channel, long va
->>                  val = DIV_ROUND_CLOSEST(clamp_val(val, -64000, 63500), 500);
->>                  return regmap_write(regmap, LM95234_REG_OFFSET(channel - 1), val);
->>          case hwmon_temp_max:
->> -               val = clamp_val(val, 0, channel ? 255000 : 127000);
->> +               val = clamp_val(val, 0, channel == 1 ? 127000 : 255000);
->>                  val = DIV_ROUND_CLOSEST(val, 1000);
->>                  return regmap_write(regmap, lm95234_crit_reg(channel), val);
->>          case hwmon_temp_max_hyst:
-> 
-> With that,
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> 
-Thanks a lot for the reviews!
+Add the Dell Latitude 7320 to the fan control whitelist to allow
+for manual fan control.
 
-Guenter
+Closes: https://github.com/Wer-Wolf/i8kutils/issues/8
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index c75bfe93f2f6..ac4484bd949b 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1488,6 +1488,14 @@ static const struct dmi_system_id i8k_whitelist_fan=
+_control[] __initconst =3D {
+ 		},
+ 		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+ 	},
++	{
++		.ident =3D "Dell Latitude 7320",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude 7320"),
++		},
++		.driver_data =3D (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
++	},
+ 	{
+ 		.ident =3D "Dell Latitude E6440",
+ 		.matches =3D {
+=2D-
+2.39.2
 
