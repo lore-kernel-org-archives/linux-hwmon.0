@@ -1,114 +1,102 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D9129AF;
-	Sun, 21 Jul 2024 18:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BA1323D
+	for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 19:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721586185; cv=none; b=DmRTgRMRsCuKCik6ZHtRYwIBnsFj5/7NTS/AbBOgP1TWFb/3y5qYfzNvwgjh5/UrGDtYO9OwfSfJvXJ2kBAAAu+K8d3u8N0oT/lJs0NOEIB0/l5+ybUPRxWc9CNr1pQwKCqiwn+5PsPSAqpuEhjwHdzlP6ZzPPkrhClfZ0SfMIM=
+	t=1721590514; cv=none; b=QRHFqvSjR1kAIg8NBZc3YJnB0//qJo/WF324JI0FTsTrjuu3l0ET7Xpd4XmoGCxts/Nb+UFLu6c9Wr6uFjgo7JykCYRHU1GamMt9/ZFluMKqj5OIrqwHPWG/jNU7TG/5hN0vcZqB1FQgJN/z5TEKITuHhwwQ7DpKuI0VLdKsLVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721586185; c=relaxed/simple;
-	bh=PsBy4cLGJVi7HIeNRgypgVRR5tS7RtNhn3NWwEGwcl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pzv7GDwKL+evX4buaP6vVmcBmuCVmV4AzTsax3DCzSqKoFwyZwGUYByn/d3RMVOm6mI1R3mQ2Nzxjr/ZXZJSo0UzPWc4OJE1ukgdWAw66/p7mhYJJJaEBQCz2u1xIttCV+c+NeEfg77+GCQf51wCgrDixQ8ELCMeLZQJ+5t5bFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiD/5nOM; arc=none smtp.client-ip=209.85.167.172
+	s=arc-20240116; t=1721590514; c=relaxed/simple;
+	bh=4gHkUUltNhm2cTkJlM7SP0khTA2I8X6Zli+I8pkBhks=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fmhE9soZKix8yRnpuDGbpXbL9gVSLV6DdQ2MWGsGwaNkz2PtdNUHFR3LgIMZrl+Un9k1Bn6Ok5ib37PDV84clSH33g5WRdwUHxSC0mBEOVoVUPyqkc2cri0ZoFwZjZM6Hm6GWxAbxJSzZMnqI0I3utfWr9qfZGTcFnWuFjZ/vQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHKwPC6W; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiD/5nOM"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3d9306100b5so2208752b6e.1;
-        Sun, 21 Jul 2024 11:23:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHKwPC6W"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6678a45eaa3so32660767b3.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 12:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721586180; x=1722190980; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/zJZTIIS+YB6nZ9zaQmGQwfdAxpIAvfpVmARDOV44uo=;
-        b=HiD/5nOMvz2tPc2k1acFnq93xH6R6oz6Q8y7olc6KP7uxllzpGoqXPns7KgnLCUtmd
-         JkO/DiY/TB8OFpvIg4gbP5rU5/MISvbnHVNorLgFvvBAc5Kr2ot12jLXz5hA9pvEAn2Z
-         q+V7Qz2+CiLhxA7UVucIKpf+s4TnXKoOPqDcu4gsZX7j9EKEhBKHBZXfyX3j/CftuN6G
-         C0yv7zZlBpCLy3NqTIkDUG6NFYk+KL4AcIXAJ3Z5MV/tQ6aSGF7vk65p/g5Ij1kYdv/C
-         edqooDlV2qu7Wxl8x8ehQtQA8E/8j0B445i8LOeH1Q2PRMnaPDIctULPh3fKacvDVHa7
-         nuNg==
+        d=gmail.com; s=20230601; t=1721590511; x=1722195311; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BSkAn7EEW2JNVPll0iiX5W8n+BwPxahYpsDZLchK37w=;
+        b=BHKwPC6WDMs0VYeHzUhFqmfBvO0lPbPb000avHkU8MyHZLStauSDj94ZnOYZgNGyxX
+         QkHrl7mfK9iAJYb9CAk6xJHdRfT/jmRlkVWaEm7VmJi1SRhoxiHLjhFYNB/8sozHSKmt
+         MuW8Zr/fLUesm7Zdes8HsaAShRO5IsaNsv9DJLmTEzDYMBlZUylQUmt+dxeNewBL7z4r
+         1qxMiygMs+wKpAuwGzAFYQK17teeg8TjVTziVd6syu+TyMNhaqYrigIk5P2QSBcA1bTM
+         4D6yftHNaERcIfXaI/S6Os+bGdjzx3Eej6zrZLajCCKgwciBGmtqpdeAMxA7yTefEeR6
+         4jbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721586180; x=1722190980;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/zJZTIIS+YB6nZ9zaQmGQwfdAxpIAvfpVmARDOV44uo=;
-        b=MhZ7FWL80NpnfSwCVmcw3lV7+BPQPsJJUPqL2YmbE8JJyHEJaoubZCMBha7IF0x1FL
-         p13tXp3ZTNjxWCc+yFBXoyinUFgEyL1g80gu/P0r+n7zV9ldZiw25W9VUxJC8YyolBBQ
-         Pd+AxXW4onJVB4AhIKnf/ruU/O7yZiZ73FDeNmU9gM/ICDGGxF/fgaalC5YtnetjmizL
-         V/kZ/5AHFclvteQv1JQwrINWfl7Av2cIAFky1BlWFhu1XlCXaEiBDzoMsCc4snL56eG0
-         2D91kMztd1jwe5EwLPeuqVhE8psvwN9W+NL4R83b0jALMHTQRybaHv8dEXULeXWUmA+E
-         uW6A==
-X-Forwarded-Encrypted: i=1; AJvYcCW7ufg9YFss+z+tXjmY6uuH2DMo6lmoBP+KE6umiw4Z++oCkDwwWDo0+ixpp3Vvy98Dvdk9S0FjFThWPIfpQemIvLXVUdUlWYL6v5m8VzWTMBemjPoG1PTmZFYmo0Vpls2g4MDZ/3f3W29izayBteGEdFCyH4GBG5sCz6FBxcoOAp72xH6HMNUopcoBhBdFBEd4bgTNriq1F1+nxJpxi90eFb1Nd4j5jk6KB8Rca8nsb+W3BkrxLJxKFg==
-X-Gm-Message-State: AOJu0YyJpOp7yN8qBX1/rU6cwSVvTTqRkCW2z0xaQ0FmtbrUGq1nTuPG
-	qn6ezm4iEhGEYs02PakPPW7NUAbpgu2N8b6W/5oGTydqrLEJAhRb
-X-Google-Smtp-Source: AGHT+IHt9Tdi8370hKjtpI7bea8UmMjP0HfqoLX6MLh4vL255ISQmsN7Vs+ENtHhwJ9arzHwpj4Tcg==
-X-Received: by 2002:a05:6808:221d:b0:3d9:e19a:cd16 with SMTP id 5614622812f47-3dae5f48ffamr6912946b6e.24.1721586180615;
-        Sun, 21 Jul 2024 11:23:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721590511; x=1722195311;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BSkAn7EEW2JNVPll0iiX5W8n+BwPxahYpsDZLchK37w=;
+        b=b8+lcxlRlid8KYTHxyY8lHexPDjuML4naIhWWCMnRHWFAIU0G4xdlBu03t5jV648wD
+         4hFuWJpTWqjXaa+FzgEuuo+X7u7B9GaIWhlN1Y4wMZ/slVQ7y+UzhfgPjAGuVmYuvb7T
+         iuMXxHgeUiM8QqlOsBr26rP56C+o83IFRGHXDEnAws7X9jFiU3pu7fWQi2kIip4fokQ3
+         NfQGB7zQfs5nv+BHTuTQLGBAw55bE48siW8qF7UTj1G62SBe/i1COISSSi2S/V/0nAO1
+         qEn6PMCtVma8hvOFhstW8Inv0FcwTga2DUeDzyYw3Yop1ScuR5xUP2BQAdOegLJJNnKK
+         7QSw==
+X-Gm-Message-State: AOJu0YyjIDPLLSo3c/UlS0q0Z5c2Rd0ED8fHcgvVX3AH1dfWnhnCQGdJ
+	MLaDhQa/aiBjvMYxCYaSnT1Uax1zbZBNrd42xxYs2VVZ/APMJMd8f/xT1A==
+X-Google-Smtp-Source: AGHT+IHrXQGOJPqeeXl08rD1eELLRIyy/Au/+LV2f6BbHC9OA/y6Y91Ogx4V8P/lUsu054sp2o28kA==
+X-Received: by 2002:a05:690c:3301:b0:64b:2a73:f050 with SMTP id 00721157ae682-66ad8ec4979mr49340037b3.23.1721590510732;
+        Sun, 21 Jul 2024 12:35:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f25b37bsm39302795ad.34.2024.07.21.11.22.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70d2628be4fsm823799b3a.80.2024.07.21.12.35.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jul 2024 11:22:59 -0700 (PDT)
+        Sun, 21 Jul 2024 12:35:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 21 Jul 2024 11:22:58 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andreas Kemnade <andreas@kemnade.info>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-leds@vger.kernel.org, netdev@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 2/6] hwmon: (ltc2992) use
- device_for_each_child_node_scoped() to access child nodes
-Message-ID: <07bbf2c9-4de5-4441-a9bd-25b6e5a197a1@roeck-us.net>
-References: <20240721-device_for_each_child_node-available-v2-0-f33748fd8b2d@gmail.com>
- <20240721-device_for_each_child_node-available-v2-2-f33748fd8b2d@gmail.com>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] hwmon: (max16065) Fix overflows seen when writing limits
+Date: Sun, 21 Jul 2024 12:35:05 -0700
+Message-Id: <20240721193506.2330006-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240721-device_for_each_child_node-available-v2-2-f33748fd8b2d@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 21, 2024 at 05:19:02PM +0200, Javier Carrasco wrote:
-> The iterated nodes are direct children of the device node, and the
-> `device_for_each_child_node()` macro accounts for child node
-> availability.
-> 
-> `fwnode_for_each_available_child_node()` is meant to access the child
-> nodes of an fwnode, and therefore not direct child nodes of the device
-> node.
-> 
-> In this case, the child nodes are not required outside the loop, and
-> the scoped version of the macro can be used to remove the repetitive
-> `goto put` pattern.
-> 
-> Use `device_for_each_child_node_scoped_scoped()` to indicate device's
-> direct child nodes.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Writing large limits resulted in overflows as reported by module tests.
 
-Applied.
+in0_lcrit: Suspected overflow: [max=5538, read 0, written 2147483647]
+in0_crit: Suspected overflow: [max=5538, read 0, written 2147483647]
+in0_min: Suspected overflow: [max=5538, read 0, written 2147483647]
 
-Thanks,
-Guenter
+Fix the problem by clamping prior to multiplications and the use of
+DIV_ROUND_CLOSEST, and by using consistent variable types.
+
+Fixes: f5bae2642e3d ("hwmon: Driver for MAX16065 System Manager and compatibles")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/max16065.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/max16065.c b/drivers/hwmon/max16065.c
+index 7ce9a89f93a0..5b2a174c6bad 100644
+--- a/drivers/hwmon/max16065.c
++++ b/drivers/hwmon/max16065.c
+@@ -114,9 +114,10 @@ static inline int LIMIT_TO_MV(int limit, int range)
+ 	return limit * range / 256;
+ }
+ 
+-static inline int MV_TO_LIMIT(int mv, int range)
++static inline int MV_TO_LIMIT(unsigned long mv, int range)
+ {
+-	return clamp_val(DIV_ROUND_CLOSEST(mv * 256, range), 0, 255);
++	mv = clamp_val(mv, 0, ULONG_MAX / 256);
++	return DIV_ROUND_CLOSEST(clamp_val(mv * 256, 0, range * 255), range);
+ }
+ 
+ static inline int ADC_TO_CURR(int adc, int gain)
+-- 
+2.39.2
+
