@@ -1,62 +1,66 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BA1323D
-	for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 19:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D308733C8
+	for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 19:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721590514; cv=none; b=QRHFqvSjR1kAIg8NBZc3YJnB0//qJo/WF324JI0FTsTrjuu3l0ET7Xpd4XmoGCxts/Nb+UFLu6c9Wr6uFjgo7JykCYRHU1GamMt9/ZFluMKqj5OIrqwHPWG/jNU7TG/5hN0vcZqB1FQgJN/z5TEKITuHhwwQ7DpKuI0VLdKsLVA=
+	t=1721590515; cv=none; b=NWahvaUBhPKVuMTdk0hVsPLMjFNCPxGsC8eXTa00w5vUeNGg7s4M5jNCiIRLtdhOSgl6+Hj/KGIGcpB/gwZUyxxBG4OJXWlIiUY0RjRLsSUj148AlxQ60dkxjY9b72H/f++NmGXk2eM+E2vYVoEvCTd22+1ozBkXiOPnTKZF9nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721590514; c=relaxed/simple;
-	bh=4gHkUUltNhm2cTkJlM7SP0khTA2I8X6Zli+I8pkBhks=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fmhE9soZKix8yRnpuDGbpXbL9gVSLV6DdQ2MWGsGwaNkz2PtdNUHFR3LgIMZrl+Un9k1Bn6Ok5ib37PDV84clSH33g5WRdwUHxSC0mBEOVoVUPyqkc2cri0ZoFwZjZM6Hm6GWxAbxJSzZMnqI0I3utfWr9qfZGTcFnWuFjZ/vQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHKwPC6W; arc=none smtp.client-ip=209.85.128.179
+	s=arc-20240116; t=1721590515; c=relaxed/simple;
+	bh=I0N7BAaIV+7qN3e2MM1U1QcJ3YovGFQHWzIHuwdomB4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=K+GI51A1OY+jysQOo9xKB4UJ0wVvLbgDLX0/YcMow6V3CnU9P7DjBVEHN0tdhvBdIamnkkwMcOQUQutawLiMJ3mxqR9iK9okSOAqgq3cyPDOC1wZDQCD6NhvITIzys4vj5L/7rULux/gaF5a2alpPJOz5rMKuldLVAY2DvJ6tAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=deC/IW0A; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHKwPC6W"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6678a45eaa3so32660767b3.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 12:35:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="deC/IW0A"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7163489149eso2803007a12.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 21 Jul 2024 12:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721590511; x=1722195311; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSkAn7EEW2JNVPll0iiX5W8n+BwPxahYpsDZLchK37w=;
-        b=BHKwPC6WDMs0VYeHzUhFqmfBvO0lPbPb000avHkU8MyHZLStauSDj94ZnOYZgNGyxX
-         QkHrl7mfK9iAJYb9CAk6xJHdRfT/jmRlkVWaEm7VmJi1SRhoxiHLjhFYNB/8sozHSKmt
-         MuW8Zr/fLUesm7Zdes8HsaAShRO5IsaNsv9DJLmTEzDYMBlZUylQUmt+dxeNewBL7z4r
-         1qxMiygMs+wKpAuwGzAFYQK17teeg8TjVTziVd6syu+TyMNhaqYrigIk5P2QSBcA1bTM
-         4D6yftHNaERcIfXaI/S6Os+bGdjzx3Eej6zrZLajCCKgwciBGmtqpdeAMxA7yTefEeR6
-         4jbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721590511; x=1722195311;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1721590513; x=1722195313; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BSkAn7EEW2JNVPll0iiX5W8n+BwPxahYpsDZLchK37w=;
-        b=b8+lcxlRlid8KYTHxyY8lHexPDjuML4naIhWWCMnRHWFAIU0G4xdlBu03t5jV648wD
-         4hFuWJpTWqjXaa+FzgEuuo+X7u7B9GaIWhlN1Y4wMZ/slVQ7y+UzhfgPjAGuVmYuvb7T
-         iuMXxHgeUiM8QqlOsBr26rP56C+o83IFRGHXDEnAws7X9jFiU3pu7fWQi2kIip4fokQ3
-         NfQGB7zQfs5nv+BHTuTQLGBAw55bE48siW8qF7UTj1G62SBe/i1COISSSi2S/V/0nAO1
-         qEn6PMCtVma8hvOFhstW8Inv0FcwTga2DUeDzyYw3Yop1ScuR5xUP2BQAdOegLJJNnKK
-         7QSw==
-X-Gm-Message-State: AOJu0YyjIDPLLSo3c/UlS0q0Z5c2Rd0ED8fHcgvVX3AH1dfWnhnCQGdJ
-	MLaDhQa/aiBjvMYxCYaSnT1Uax1zbZBNrd42xxYs2VVZ/APMJMd8f/xT1A==
-X-Google-Smtp-Source: AGHT+IHrXQGOJPqeeXl08rD1eELLRIyy/Au/+LV2f6BbHC9OA/y6Y91Ogx4V8P/lUsu054sp2o28kA==
-X-Received: by 2002:a05:690c:3301:b0:64b:2a73:f050 with SMTP id 00721157ae682-66ad8ec4979mr49340037b3.23.1721590510732;
-        Sun, 21 Jul 2024 12:35:10 -0700 (PDT)
+        bh=QgXnfIH6arkbZaSgRq2zz4XnGUndFu6tz8AoOxnnVDM=;
+        b=deC/IW0AsjMZkijNjuaWWDRz3CMRf/ZIkCrHmOHVEoafukOf3bE/N+JlLUwk1puXdD
+         2vPPrle+j2iqK5/jEdmz/vRdPz2okfdq0kguLeVukF5gBVQtj5Dks/wrwkfkrJb6eUhU
+         J5N4bv7dKNtTb8cMdSlLhmpL2WZV4uuTPBANNbh99paYSoTnNHte3MUshpqX7W137r3T
+         EypjN1TdrUd0ITlGuR33VnFDrikZRdRbMTgvdRAuRBou8c77EkW3LRzwmklFwxgS5Vpb
+         UFFhVNX9Tl8BkwqZxe3+G+E1WIcY8MVp+qirT8ki5lF/kjgpk5eljRXM72lytojrjlN7
+         JQ/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721590513; x=1722195313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QgXnfIH6arkbZaSgRq2zz4XnGUndFu6tz8AoOxnnVDM=;
+        b=Dp7hAR7TsaD/PQsx06GjU7T/m92dUZ2EiA0HahUVUrYcDtWloN3n6+TnWSoT/lSqJk
+         tw/QoKT4OyjJeN+DvZdqXLZF9HmzGhbBQL3Vu5xiyeO+omOilKr/5z70haetQN80lsHV
+         X9YhW2zq54hWrYuNBWE8lBHoSopRjD5bPMZ0yTg3/qLZ3pdWlT40ScIueCtlUFYICbPx
+         9TF7NolMy7rPLVY7WBZ4t5UoJByPTzHd7QqRvq0K6TrJMxmELvaimIJ+COjHSfjvFxZy
+         tZ9J0UT47QXz9EZ/AaBC+dnBl9kbJJRJyVq6CQmRWI1ej4Xq9iCeVuhnexjmpG7OM3n+
+         Gxpw==
+X-Gm-Message-State: AOJu0YwGzD6RW03fMIrtIu7JzTWk1mkDFPq3IjWcUjztwtVS12nH4fjt
+	txV2EbgzIZIJpLNp7WGK7Z3wdb4gYjp1v23m3wwCx54L39CqaK90cXwZvg==
+X-Google-Smtp-Source: AGHT+IE9WQ3iTfbbKhTF+NM/oZABlOo3iITbh7QciQQmi22UkGGvUfqBf3EAJt2xs/q2IVEKeo3RVg==
+X-Received: by 2002:a17:903:2341:b0:1fb:6663:b648 with SMTP id d9443c01a7336-1fd7455a1cdmr55488825ad.21.1721590512444;
+        Sun, 21 Jul 2024 12:35:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70d2628be4fsm823799b3a.80.2024.07.21.12.35.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f28c002sm40190935ad.70.2024.07.21.12.35.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jul 2024 12:35:09 -0700 (PDT)
+        Sun, 21 Jul 2024 12:35:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] hwmon: (max16065) Fix overflows seen when writing limits
-Date: Sun, 21 Jul 2024 12:35:05 -0700
-Message-Id: <20240721193506.2330006-1-linux@roeck-us.net>
+Subject: [PATCH 2/2] hwmon: (max16065) Fix alarm attributes
+Date: Sun, 21 Jul 2024 12:35:06 -0700
+Message-Id: <20240721193506.2330006-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240721193506.2330006-1-linux@roeck-us.net>
+References: <20240721193506.2330006-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,38 +69,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Writing large limits resulted in overflows as reported by module tests.
+Chips reporting overcurrent alarms report it in the second alarm register.
+That means the second alarm register has to be read, even if the chip only
+supports 8 or fewer ADC channels.
 
-in0_lcrit: Suspected overflow: [max=5538, read 0, written 2147483647]
-in0_crit: Suspected overflow: [max=5538, read 0, written 2147483647]
-in0_min: Suspected overflow: [max=5538, read 0, written 2147483647]
-
-Fix the problem by clamping prior to multiplications and the use of
-DIV_ROUND_CLOSEST, and by using consistent variable types.
+MAX16067 and MAX16068 report undervoltage and overvoltage alarms in
+separate registers. Fold register contents together to report both with
+the existing alarm attribute. This requires actually storing the chip type
+in struct max16065_data. Rename the variable 'chip' to match the variable
+name used in the probe function.
 
 Fixes: f5bae2642e3d ("hwmon: Driver for MAX16065 System Manager and compatibles")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max16065.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/hwmon/max16065.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/max16065.c b/drivers/hwmon/max16065.c
-index 7ce9a89f93a0..5b2a174c6bad 100644
+index 5b2a174c6bad..0ccb5eb596fc 100644
 --- a/drivers/hwmon/max16065.c
 +++ b/drivers/hwmon/max16065.c
-@@ -114,9 +114,10 @@ static inline int LIMIT_TO_MV(int limit, int range)
- 	return limit * range / 256;
- }
+@@ -79,7 +79,7 @@ static const bool max16065_have_current[] = {
+ };
  
--static inline int MV_TO_LIMIT(int mv, int range)
-+static inline int MV_TO_LIMIT(unsigned long mv, int range)
- {
--	return clamp_val(DIV_ROUND_CLOSEST(mv * 256, range), 0, 255);
-+	mv = clamp_val(mv, 0, ULONG_MAX / 256);
-+	return DIV_ROUND_CLOSEST(clamp_val(mv * 256, 0, range * 255), range);
- }
+ struct max16065_data {
+-	enum chips type;
++	enum chips chip;
+ 	struct i2c_client *client;
+ 	const struct attribute_group *groups[4];
+ 	struct mutex update_lock;
+@@ -162,10 +162,17 @@ static struct max16065_data *max16065_update_device(struct device *dev)
+ 						     MAX16065_CURR_SENSE);
+ 		}
  
- static inline int ADC_TO_CURR(int adc, int gain)
+-		for (i = 0; i < DIV_ROUND_UP(data->num_adc, 8); i++)
++		for (i = 0; i < 2; i++)
+ 			data->fault[i]
+ 			  = i2c_smbus_read_byte_data(client, MAX16065_FAULT(i));
+ 
++		/*
++		 * MAX16067 and MAX16068 have separate undervoltage and
++		 * overvoltage alarm bits. Squash them together.
++		 */
++		if (data->chip == max16067 || data->chip == max16068)
++			data->fault[0] |= data->fault[1];
++
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
+ 	}
+@@ -514,6 +521,7 @@ static int max16065_probe(struct i2c_client *client)
+ 	if (unlikely(!data))
+ 		return -ENOMEM;
+ 
++	data->chip = chip;
+ 	data->client = client;
+ 	mutex_init(&data->update_lock);
+ 
 -- 
 2.39.2
 
