@@ -1,200 +1,199 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0CF1607B5
-	for <linux-hwmon@vger.kernel.org>; Mon, 22 Jul 2024 07:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19F215FD01;
+	Mon, 22 Jul 2024 07:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721634670; cv=none; b=Px0YxrRgVNiMaqJAod9CCRoFmYZcG/ku5jeT8rNwrfkGprAWAVpZjmux6VEHzAXL8fuuN2105E1ULhtc2MU/eACyxXDLjOfstU+hTMv4IVCjGkwhKZehiHmU/MPHKVTpDKd+dEDVAn7xXlh76f5HsmgfG7Y+6GfMpYFZZUZNPgM=
+	t=1721635200; cv=none; b=W+F1M0yKBfIPyY3B5aCLiNOVRuSqusNoyrgDAApZ006uQ0H20aU9LcYHuoX4G6394qJiModWEGOZDpZl220VydTwXh52lnQGjyLhoFFrBKhC/VfF3yRJX/57OMx9CD4c6q+BlMsbGy7ra8zN4aPcnHydoZzi6pj2kARG8M9FpnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721634670; c=relaxed/simple;
-	bh=EnH0hjCJsqenVdJIOwLmnk1ZdSWDskungvUxR29H0VE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UDE7/fd+Vd1igRj9qaM8b0j3KQxnlSW8BvgKp9OfmiRgnh1/MhKfBTIEEvcH6kI6iiMI+arQcfrWkRtneoRkQbNrXB5N6Hq2XI+vsMMU7yYwuVYuc3vMdy5zLKmE/NfYdVmtm9MwU+Ivc3LCe9NYM8xlm43ioOvXsTjBQ2X74f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=LNhPfXYs; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1721635200; c=relaxed/simple;
+	bh=DETe9cqRl472ht2Rv9JHngPeg4K1nkxpvGkPc2r2hGw=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=psPb0jBChHzRWFwx4xjvyhAx/+A2zFMR/xiyGYIMq05qCJcguQNd7yb5eCySrpylQyzN3HV6d43L7CQmkEBQpZX3iyEIQkOb3DOLBe5EDFf+1JzbVEAtkSinF2nyGfufTLpW0h4P2Bd1aMKeZxoKoDt8kabh+dUf0gOk0kv6/3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2HyqMpG; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LNhPfXYs"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5a1337cfbb5so3350215a12.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Jul 2024 00:51:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2HyqMpG"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fa9ecfb321so25681785ad.0;
+        Mon, 22 Jul 2024 00:59:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721634666; x=1722239466; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnH0hjCJsqenVdJIOwLmnk1ZdSWDskungvUxR29H0VE=;
-        b=LNhPfXYsPOE2ObCRfUAb+CieFs0aVzwk5AX74GbnwvnvEZu0msTsRuDeJyq4fqPojr
-         2F561P6tlczhQjxUGFrfiMsAik9JravoAP1mhhbDOozG1vxP+c5YvFuKJVDseth3ODTe
-         jZbVhJ2Hw1JAyn/iisNmJU70mhshmI9qD8kXoHHTSLDrZQUN/5OsLeBNmobZFqdm0LPM
-         iY2uvZLs42Xj80/z4PGpVN2DALDKguHpwswWsBj2ZLKwhcJCI4O+uGzt78TO4xzPVW++
-         Amu3vRJO0Y1+v6PBcdvv9hBa0+KF/QWALD2yxcmWprN77uUI2yVvC9agm/UKyjE4v/gD
-         sM5w==
+        d=gmail.com; s=20230601; t=1721635198; x=1722239998; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fYfE/3PpByzsoGwhv8BBvxXbgN0ILya8G+Bi1D7Wfn8=;
+        b=P2HyqMpGtsl4g9+JyhlYfycNz652hC8U5CQRs7Q2q9jKNcr/h/s5F0TQLZHRnIwg97
+         tdmYnpt4FmD9WZ2lW6IWXb28uJZo57n+duLzaQ61i+pXjrN4OMix5aXBbWR+MaBSNP5Z
+         KyHBdwuIkajWcE2n7FPWBj4yVWqQ9tFS5nZMo1J/8WIj4YHGigIv4CJLzI4eMFpfK8j5
+         ZCWLRfuirF0O9X9aYtRapcbl3eHpFOOpunrmg+bCk16XL61GkutrKlp2l02S6AYtM5Xi
+         rSrLOUovJy8XBK3w4AYcQmsO34/Ac4la9KwsbEnChhfrTiVLO7cfdnjtwX0lZTKOkk9d
+         112w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721634666; x=1722239466;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EnH0hjCJsqenVdJIOwLmnk1ZdSWDskungvUxR29H0VE=;
-        b=p605YJg5mCoGseOdVKELA0nOj17xiIcefBuCvEpnsn1f4XTVX/UdXKBShhGDvK0WvM
-         RWBqwnjWiUAjKWa84ZqwCoOuFwxUVcsuVZIONuHbRZQ5GZhVxlypO4sQPIxmbpeuh1Xr
-         +8v+p6AvqNzca0Qcfpz3ZByCPkQJrMHWDbB5yEBOgV5+nZiFd/WS0u1LIXlSd+HVYw38
-         ldtC5mM2wKz1aWJMdcPxCIZ94cMxOaoq4lBu7wlXeHcBymetL/bEfffudTXTwajECxTz
-         5sYGz9IRBH7uU0nO9+n8whNbkR/9B+9U1TxnjgNDtRK1o/MUJrECqO4/wwUxITjqMVEv
-         VqLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVdgHAY6EEFPMj2e1/uqjbOl9GV0tTi8dPOk5hsLqru+qf13NZrY0Sd/obBgurPTM9hWk50tWerj2ZMc6nTSK+rw5alc8TrRPDl4W0=
-X-Gm-Message-State: AOJu0YyLBS37r8exVyxOshmXKovB/c6b38vEzWs5LPiwo1hq0wfhPoJ1
-	1VrvBWWuEVhe2oLezwhvccWH5JgG3iEdcxpyPb6kE38XsPDZbHs1RkGN3d1dkpw=
-X-Google-Smtp-Source: AGHT+IERPpuu0WjjXUrxYUbuy6duds0kLH+r0sY8euaPygoIAdU5GkvLdgJpcNxtsiPzvG1YmGPTUA==
-X-Received: by 2002:a50:9b4a:0:b0:5a4:12ea:333f with SMTP id 4fb4d7f45d1cf-5a47ba979acmr3556532a12.37.1721634666398;
-        Mon, 22 Jul 2024 00:51:06 -0700 (PDT)
-Received: from localhost (p50915eb1.dip0.t-ipconnect.de. [80.145.94.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5a30c2f8808sm5651235a12.78.2024.07.22.00.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 00:51:05 -0700 (PDT)
-Date: Mon, 22 Jul 2024 09:51:04 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: Guenter Roeck <linux@roeck-us.net>, jdelvare@suse.com, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] hwmon: (adt7475) Add support for configuring
- initial PWM state
-Message-ID: <5fnaskzlfybxiddwhm3fdm774ispvuxdmv4jb4wj5sts2btkf2@gmcfdzx3qvjy>
-References: <20240722005825.1800403-1-chris.packham@alliedtelesis.co.nz>
- <20240722005825.1800403-4-chris.packham@alliedtelesis.co.nz>
- <15f4c51c-3f7d-4e93-9c3a-71ac1d626463@roeck-us.net>
- <c261c74f-6829-4888-9836-6f27ba87dc25@alliedtelesis.co.nz>
+        d=1e100.net; s=20230601; t=1721635198; x=1722239998;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYfE/3PpByzsoGwhv8BBvxXbgN0ILya8G+Bi1D7Wfn8=;
+        b=P362MH3/83uToK5I3fekwxuCAuu4leykmn9vJHweYHlBpvi74esYGmUIBvCC2jw4kj
+         Agjq85p7CAJZLaDAK21HukNAYpfu+Dlywrjt5ArRHQdTqK20tWfCXsXtXB6zJ+j3gJds
+         r8HshK089qpAvThI1FGoiIODvDF1/LnPSef63U81BBgz5cU2TyPioqkh7aBp0xa85t35
+         Eg9sqkXYxHXuwE1JBqpVMhzPer67le5wnYNRbvuAhnSP4bJzYnX/yHPZbzavn/42Dm8n
+         mB1SPQ2r5TlFixYHFCluiIT9jgv+oJ8ptZ614cjlyMHEjoREPzUkpMdl99m3KqVZB/Fd
+         Sh2w==
+X-Forwarded-Encrypted: i=1; AJvYcCU7uSJpJjqPhStP9S9vQKiHam8++8JOy29b87mkuOVUR9r37aYuBnq/mHmWJ2PQtKpi+YMpq8uE1JbJm0mv+hNA106Vz9G9GBzQNG7II8yta7wYNS2oXpRXd1lMJCJaXz+uSzr1EyKr/c4rW55XePqUVhHSedmPf1+qyfu0IQqUwU4r4eU=
+X-Gm-Message-State: AOJu0YzF1migHdvPIYXqrpP6HEHX/toXipKBZly7EMlOfCKq6KxuFNAs
+	ctC859EsXf5xl+hEagym42VfBFGMUp15bGI9WXM6CmSKIcaG+puT
+X-Google-Smtp-Source: AGHT+IH1/q7piFxaPApp/nFcftg2U5jv2fki91ORtk9udTyWHUR7dl8pWdRwBt/h+VS8LKQYhXu4fw==
+X-Received: by 2002:a17:902:f549:b0:1fb:3e8c:95a6 with SMTP id d9443c01a7336-1fd7465ba9amr33047925ad.40.1721635197623;
+        Mon, 22 Jul 2024 00:59:57 -0700 (PDT)
+Received: from [198.18.0.1] ([2401:d9c0:2902::c2eb])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f3181f4sm48696385ad.163.2024.07.22.00.59.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jul 2024 00:59:57 -0700 (PDT)
+From: Cryolitia PukNgae <cryolitia@gmail.com>
+X-Google-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
+Message-ID: <3e1db249-f89e-4cc4-9e92-1f00f2e262f9@gmail.com>
+Date: Mon, 22 Jul 2024 15:59:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r4x3fdstgdwascyl"
-Content-Disposition: inline
-In-Reply-To: <c261c74f-6829-4888-9836-6f27ba87dc25@alliedtelesis.co.nz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
+ Yao Zi <ziyao@disroot.org>, =?UTF-8?Q?Marcin_Str=C4=85gowski?=
+ <marcin@stragowski.com>
+References: <20240718-gpd_fan-v4-0-116e5431a9fe@gmail.com>
+ <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
+ <cf41c18f-8b35-4970-a274-2834a15c9f08@roeck-us.net>
+Content-Language: en-US
+In-Reply-To: <cf41c18f-8b35-4970-a274-2834a15c9f08@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---r4x3fdstgdwascyl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2024/7/19 09:41, Guenter Roeck wrote:
+> I am havng a hard time reviewing this driver. I am going to pint out a few
+> issues, but this is far from a complete review.
 
-On Mon, Jul 22, 2024 at 04:09:46PM +1200, Chris Packham wrote:
->=20
-> On 22/07/24 15:53, Guenter Roeck wrote:
-> > On 7/21/24 17:58, Chris Packham wrote:
-> > > By default the PWM duty cycle in hardware is 100%. On some systems th=
-is
-> > > can cause unwanted fan noise. Add the ability to specify the fan
-> > > connections and initial state of the PWMs via device properties.
-> > >=20
-> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > > ---
-> > >=20
-> > > Notes:
-> > > =A0=A0=A0=A0 Changes in v6:
-> > > =A0=A0=A0=A0 - Use do_div() instead of plain /
-> > > =A0=A0=A0=A0 - Use a helper function to avoid repetition between the =
-of and
-> > > non-of
-> > > =A0=A0=A0=A0=A0=A0 code paths.
-> > > =A0=A0=A0=A0 Changes in v5:
-> > > =A0=A0=A0=A0 - Deal with PWM frequency and duty cycle being specified=
- in
-> > > nanoseconds
-> > > =A0=A0=A0=A0 Changes in v4:
-> > > =A0=A0=A0=A0 - Support DT and ACPI fwnodes
-> > > =A0=A0=A0=A0 - Put PWM into manual mode
-> > > =A0=A0=A0=A0 Changes in v3:
-> > > =A0=A0=A0=A0 - Use the pwm provider/consumer bindings
-> > > =A0=A0=A0=A0 Changes in v2:
-> > > =A0=A0=A0=A0 - Use correct device property string for frequency
-> > > =A0=A0=A0=A0 - Allow -EINVAL and only warn on error
-> > > =A0=A0=A0=A0 - Use a frequency of 0 to indicate that the hardware sho=
-uld be
-> > > left as-is
-> > >=20
-> > > =A0 drivers/hwmon/adt7475.c | 130 +++++++++++++++++++++++++++++++++++=
-+++++
-> > > =A0 1 file changed, 130 insertions(+)
-> > >=20
-> > > diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> > > index 4224ffb30483..fc5605d34f36 100644
-> > > --- a/drivers/hwmon/adt7475.c
-> > > +++ b/drivers/hwmon/adt7475.c
-> > > @@ -21,6 +21,8 @@
-> > > =A0 #include <linux/of.h>
-> > > =A0 #include <linux/util_macros.h>
-> > > =A0 +#include <dt-bindings/pwm/pwm.h>
-> > > +
-> > > =A0 /* Indexes for the sysfs hooks */
-> > > =A0 =A0 #define INPUT=A0=A0=A0=A0=A0=A0=A0 0
-> > > @@ -1662,6 +1664,130 @@ static int adt7475_set_pwm_polarity(struct
-> > > i2c_client *client)
-> > > =A0=A0=A0=A0=A0 return 0;
-> > > =A0 }
-> > > =A0 +struct adt7475_pwm_config {
-> > > +=A0=A0=A0 int index;
-> > > +=A0=A0=A0 int freq;
-> > > +=A0=A0=A0 int flags;
-> > > +=A0=A0=A0 int duty;
-> > > +};
-> > > +
-> > > +static int _adt7475_pwm_properties_parse_args(u32 args[4], struct
-> > > adt7475_pwm_config *cfg)
-> > > +{
-> > > +=A0=A0=A0 unsigned long freq_hz;
-> > > +=A0=A0=A0 unsigned long duty;
-> > > +
-> > > +=A0=A0=A0 if (args[1] =3D=3D 0)
-> > > +=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;
-> > > +
-> > > +=A0=A0=A0 freq_hz =3D 1000000000UL;
-> > > +=A0=A0=A0 do_div(freq_hz, args[1]);
-> > > +=A0=A0=A0 duty =3D 255 * args[3];
-> > > +=A0=A0=A0 do_div(duty, args[1]);
-> > > +
-> >=20
-> > Gues I am a bit at loss here, just as 0-day. Why use do_div ? It is only
-> > needed
-> > for 64-bit divide operations.
->=20
-> Mainly because of Uwe's comment on v5. I think I've avoided the original =
-u64
-> issue now that I'm converting fwnode_reference_args::args to a u32 array.
+I'm new to kernel development, so please forgive my mistakes and thank 
+you for your patience.
 
-My comment was only about the build bot finding a division where the gcc
-stub was missing with is an indication that do_div should be used.=20
+I am modifying the source code of this driver according to your 
+suggestions, and I would like to discuss some of your comments first.
 
-Usually for PWMs perdiod and duty_cycle are u64, but here it's only
-about values from the dtb, so they are u32 and a plain / should be fine.
+>> +static const struct gpd_model_quirk gpd_win4_quirk = {
+>> +	.model_name	= "win4",
+>> +	.address	= {
+>> +				.addr_port		= 0x2E,
+>> +				.data_port		= 0x2F,
+>> +				.manual_control_enable	= 0xC311,
+>> +				.rpm_read		= 0xC880,
+>> +				.pwm_write		= 0xC311,
+>> +				.pwm_max		= 127,
+>> +			},
+>> +	.read_rpm	= gpd_win4_read_rpm,
+>> +	// same as GPD Win Mini
+>> +	.set_pwm_enable	= gpd_win_mini_set_pwm_enable,
+>> +	.read_pwm	= gpd_read_pwm,
+>> +	// same as GPD Win Mini
+> I do not see te value in those comments.
 
-> can probably get away with plain division, although 255 * args[3] / args[=
-1]
-> might overflow in theory but shouldn't in practice.
+It's the struct of win4, but it's part of functions are the same as 
+win_mini's.
 
-I don't like possible overflows, but I don't care enough for hwmon
-drivers to object. Still a check for args[3] <=3D 0x1010101 would be easy
-enough.
+The comment is to remind that, it's by design to use win_mini's 
+function, not by mistake.
 
-Best regards
-Uwe
+>> +
+>> +static int gpd_fan_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct gpd_driver_priv *data;
+>> +	const struct resource *plat_res;
+>> +	const struct device *dev_reg;
+>> +	const struct resource *region_res;
+>> +
+>> +	data = dev_get_platdata(&pdev->dev);
+>> +	if (IS_ERR(data))
+>> +		return -ENODEV;
+>> +
+> With all the "const" spread through the driver, this one is really odd.
+> I have never seen a driver there the _platform data_ is used to store
+> instance-specific information. Normally _that_ information is considered
+> constant and not modified by a driver.  I really have to say that it is
+> extremely odd to have the init function
+> declare values such as pwm enable and pwm value and use it in the driver.
+>
+> Please provide a rationale for this unusual approach.
+I don't know how to pass which model the init function found. Is it a 
+good idea the use a global pointer to point to the instance-specific 
+information?
+>> +	plat_res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+>> +	if (IS_ERR(plat_res))
+>> +		return dev_err_probe(dev, PTR_ERR(plat_res),
+>> +				     "Failed to get platform resource\n");
+>> +
+>> +	region_res = devm_request_region(dev, plat_res->start,
+>> +					 resource_size(plat_res), DRIVER_NAME);
+>> +	if (IS_ERR(region_res))
+>> +		return dev_err_probe(dev, PTR_ERR(region_res),
+>> +				     "Failed to request region\n");
+>> +
+>> +	dev_reg = devm_hwmon_device_register_with_info(
+>> +		dev, DRIVER_NAME, data, &gpd_fan_chip_info, NULL);
+> CHECK: Lines should not end with a '('
+> #756: FILE: drivers/hwmon/gpd-fan.c:593:
+> +	dev_reg = devm_hwmon_device_register_with_info(
+>
+> Plus on top of that multi-line code should be aligned with '('.
 
---r4x3fdstgdwascyl
-Content-Type: application/pgp-signature; name="signature.asc"
+The source code has been formatted by clang-format with kernel's 
+`.clang-format` file.
 
------BEGIN PGP SIGNATURE-----
+But I would be glad to manually adjust it's style if needed.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaeD2YACgkQj4D7WH0S
-/k5n5AgAoiOFkhm/1XqNRpW8sFdlsQuirycWjHtM7CNcf9FXDizyShxG1sMeFYq4
-hgfzlOKpzvMGZlrORtwH2cgZpK9baBzm2Z0jjRETdkHg9cFKhXzAlFWClNEnekwC
-dHuQOeE/0a6CNVb2b2kIps+9AVHutvTqLf4BUxuUieWCmiMA33bJp/j11ieYvW80
-9b/vXu5p8zgBACGJt8Jaz0DgKAbTuF/xorEUP+w5CKGS401cjkTQvD0pzCYFk0U8
-HJ/tGE8GaT7xUkuWECmydZ3psWxTwkXJZ2AKtzUqstBREJiDRO9j9ywST8IBgZeD
-glPw1K3wbIWgsueafREfGF/LF6f6+w==
-=/pvZ
------END PGP SIGNATURE-----
+>> +static int gpd_fan_remove(struct platform_device *pdev)
+>> +{
+>> +	struct gpd_driver_priv *data = dev_get_platdata(&pdev->dev);
+>> +
+>> +	data->pwm_enable = AUTOMATIC;
+>> +	data->quirk->set_pwm_enable(data, AUTOMATIC);
+>> +
+> This is even more unusual. Can you point me to other drivers in the kernel
+> using that same approach for handling device specific private data ?
 
---r4x3fdstgdwascyl--
+It's to set EC back to default status if user rmmod the driver, to 
+prevent a hardware damage.
+
+For example, they may use a userspace program to adjusting the fan 
+curve, setting the EC to manually control mode. It happened that the 
+device was in low power consumption and fan speed during rmmod, and the 
+user remove the module and then performed some tasks that generated a 
+lot of heat. Since the module was uninstalled and the EC was still in 
+manual mode, there was nothing to protect the device.
+
+I don't know how to implement this part elegantly
+
+>> +
+>> +	struct gpd_driver_priv data = {
+>> +		.pwm_enable		= AUTOMATIC,
+>> +		.pwm_value		= 255,
+> This is unusual, to say it mildly. Since the pwm value is never read
+> from the controller/chip, this is just a random value.
+
+We cannot read pwm out on win_mini, only wm2 support it.
+
+It's also to prevent the device from damaging.
+
+Assuming the user switches to manual control mode immediately after 
+loading the module, the fan will always run at full speed until the user 
+specifies the fan speed.
+
