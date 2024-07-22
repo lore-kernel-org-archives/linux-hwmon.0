@@ -1,44 +1,44 @@
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677048801
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68FFA8BEA
 	for <linux-hwmon@vger.kernel.org>; Mon, 22 Jul 2024 01:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721610520; cv=none; b=gLlmt0dqF0U4kP1uFtbdDvX0eBxHgos83OeDda+PVk7mutacAzrGfcb5EYmzw2t1l9xdpmAc1CyH9WhO0fva1Abhg0TgmYzHY6WDalbyze6e12yHx7yV3xIPh5w/lG8G1DXFJO3TS/r/mer/Bvrrp8cz4FReh/7IpBmFT10kl+A=
+	t=1721610521; cv=none; b=DFPnJXjU9VvZ3Xz0DJEPpjUqjTi/XUH9pgEQCJ/lo28cTnpejwZdiYbgJVany9Po4yixqnYxD7OUeVMmwmsv6D7Earxpbt4dHTJePxqBlKD/cUTa+hlYHc7TxanouCfb0WFe4X7WISWKZ338XYGyuO7NRxnDXR3cs8Sco9trLdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721610520; c=relaxed/simple;
-	bh=A6UbHtt51ryxjEQ56nmE97SbAYAIhVAvX6o9Y8W6vR4=;
+	s=arc-20240116; t=1721610521; c=relaxed/simple;
+	bh=sBAG8CgQvJNf1n1v9OA5RdPMZATzxBlvnrmNXiecv08=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ahHQpdbon82862XS9wi/9hJYO3I2lUnEjdYOnywLF0Lt2ksSU2smlxbeSmUi0iQMrmQBz0C9HGP+VKaanFBSWT2qh888kQp5DyHTLpwFcrEc3y9U26sAt+ASg1adGJFHVlQ1gcLU7qc52grRRtsM/RjBIYPJD8vDBf5MeQ3/lyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=bzz4opar; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=lD8ByHRlwU0ancbi824YNPFrMIqM+TjxjeP4yKcMQLJjNNDXkBpUUizerqX/7NPXr/sBwHBb2YvDIajAhFZ3mC4BH2jYc6F5VkKonfD55Ha4Ltle+f8u9Q8yDsbFJJTDALJ5Syy2x3oNE5D3nquHusm3R756OP/b2rkorMR/bBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=zCEVQkxz; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="bzz4opar"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="zCEVQkxz"
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8C4272C0E2F;
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8E0142C0E30;
 	Mon, 22 Jul 2024 12:58:41 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
 	s=mail181024; t=1721609921;
-	bh=Mv6CJIE83p5kF2aun4rUSQtQtj6Pahz/PyoQynZs19Y=;
+	bh=CEQoIEZwGjggOOe+cMGdGFt8ELGSd5VDRabos8qlvQ8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bzz4opar1WGUlIAT098yDYdBzrtdj/lTF9LSEoRQJ7084Xf6hzRxygQnjo/BnbYgc
-	 dyD/MWksfJ0KRxo+RKiWXHMuZ1pdQEVZ69y29cPCwF6/XiLlMTUrzIODQVab+qR6dR
-	 GMTWCEzsSb+MQGItXFesGfRddavtz1ETpdAJUP9i+lJM7+vRPrI1HTldGYk/IvhIYy
-	 /Cb8Z4Sh55XZLrSCTBqdKTryUNfTcPEjQi3Wu3L/SX9BW/6Y36f/aNEFa8Ims/QTx+
-	 QtL/k28t9hFc60AJZoByD2AhRQ+n7HId/7QT2u1SiKy2ODnjX73LrrIJy95Y8Lsi9d
-	 /wQvSMGEAzfwg==
+	b=zCEVQkxzbS6k6P9vF8NkLfxGpsx5COsZzlU1m626EWug8vYY1qsBK6vyW/052rcu0
+	 KHDk9JZd/LPotcfbT+h8jI4ymW9Dya2avGe23sixicctmI+/QizCNWjdmlOxe2sFlS
+	 UoApyrQxs3a9Ku1ViIvnFkKVluKwsEea6Kev1fpzJDC65TCh3WJk2B6q1NP9xD8fRq
+	 KMKd9DOpx5ttq9QbPlvXJSDkLTCTjdEbaW0R/am0fzosc65ZR0MLuCQMN7qoSYGZFn
+	 uw3zERKWnt6fgrp1YQ8vdznhnxR2AI79PTwV8aIeaVKcIzocfsfOttNFUpIRtH3814
+	 6QKzTs8MhMYAg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B669daec10002>; Mon, 22 Jul 2024 12:58:41 +1200
+	id <B669daec10001>; Mon, 22 Jul 2024 12:58:41 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 3E4DC13ED2A;
+	by pat.atlnz.lc (Postfix) with ESMTP id 38D0613EE6D;
 	Mon, 22 Jul 2024 12:58:41 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 3AC3E2808D5; Mon, 22 Jul 2024 12:58:41 +1200 (NZST)
+	id 34E522808D5; Mon, 22 Jul 2024 12:58:41 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: jdelvare@suse.com,
 	linux@roeck-us.net,
@@ -51,9 +51,9 @@ Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pwm@vger.kernel.org,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v6 2/3] dt-bindings: hwmon: adt7475: Deprecate adi,pwm-active-state
-Date: Mon, 22 Jul 2024 12:58:24 +1200
-Message-ID: <20240722005825.1800403-3-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v6 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Date: Mon, 22 Jul 2024 12:58:23 +1200
+Message-ID: <20240722005825.1800403-2-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240722005825.1800403-1-chris.packham@alliedtelesis.co.nz>
 References: <20240722005825.1800403-1-chris.packham@alliedtelesis.co.nz>
@@ -64,50 +64,106 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Gqbh+V1C c=1 sm=1 tr=0 ts=669daec1 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=VwQbUJbxAAAA:8 a=A1YWOaG1RMH6ymt1ZYoA:9 a=3ZKOabzyN94A:10 a=TmF2cBh53Nm6oE2QjmZc:22 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Gqbh+V1C c=1 sm=1 tr=0 ts=669daec1 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=VwQbUJbxAAAA:8 a=nd0hpPEdzzsPhCuWCasA:9 a=3ZKOabzyN94A:10 a=MKNsf3uAAu3gLl-MH12z:22 a=AjGcO6oz07-iQ99wixmX:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Now that we have fan child nodes that can specify flags for the PWM
-outputs we no longer need the adi,pwm-active-state property.
+Add fan child nodes that allow describing the connections for the
+ADT7475 to the fans it controls. This also allows setting some
+initial values for the pwm duty cycle and frequency.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 ---
 
 Notes:
+    Changes in v6:
+    - Collect r-by from Rob
     Changes in v5:
-    - Add ack from Rob
+    - Use nanoseconds for PWM frequency and duty cycle as per existing
+      conventions for PWMs
+    - Set flags to 0 in example to match adi,pwm-active-state setting
     Changes in v4:
-    - None
+    - 0 is not a valid frequency value
     Changes in v3:
-    - New
+    - Use the pwm provider/consumer bindings
+    Changes in v2:
+    - Document 0 as a valid value (leaves hardware as-is)
 
- Documentation/devicetree/bindings/hwmon/adt7475.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 35 ++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
 entation/devicetree/bindings/hwmon/adt7475.yaml
-index df2b5b889e4d..79e8d62fa3b3 100644
+index 051c976ab711..df2b5b889e4d 100644
 --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
 +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-@@ -45,6 +45,7 @@ properties:
-       the pwm uses a logic low output for 100% duty cycle. If set to 1 t=
-he pwm
-       uses a logic high output for 100% duty cycle.
-     $ref: /schemas/types.yaml#/definitions/uint32-array
-+    deprecated: true
-     minItems: 3
-     maxItems: 3
-     items:
-@@ -121,7 +122,6 @@ examples:
+@@ -51,6 +51,24 @@ properties:
+       enum: [0, 1]
+       default: 1
+=20
++  "#pwm-cells":
++    const: 4
++    description: |
++      Number of cells in a PWM specifier.
++      - 0: The PWM channel
++      - 1: The PWM period in nanoseconds
++           - 90909091 (11 Hz)
++           - 71428571 (14 Hz)
++           - 45454545 (22 Hz)
++           - 34482759 (29 Hz)
++           - 28571429 (35 Hz)
++           - 22727273 (44 Hz)
++           - 17241379 (58 Hz)
++           - 11363636 (88 Hz)
++           - 44444 (22 kHz)
++      - 2: PWM flags 0 or PWM_POLARITY_INVERTED
++      - 3: The default PWM duty cycle in nanoseconds
++
+ patternProperties:
+   "^adi,bypass-attenuator-in[0-4]$":
+     description: |
+@@ -81,6 +99,10 @@ patternProperties:
+       - smbalert#
+       - gpio
+=20
++  "^fan-[0-9]+$":
++    $ref: fan-common.yaml#
++    unevaluatedProperties: false
++
+ required:
+   - compatible
+   - reg
+@@ -89,11 +111,12 @@ additionalProperties: false
+=20
+ examples:
+   - |
++    #include <dt-bindings/pwm/pwm.h>
+     i2c {
+       #address-cells =3D <1>;
+       #size-cells =3D <0>;
+=20
+-      hwmon@2e {
++      pwm: hwmon@2e {
+         compatible =3D "adi,adt7476";
          reg =3D <0x2e>;
          adi,bypass-attenuator-in0 =3D <1>;
-         adi,bypass-attenuator-in1 =3D <0>;
--        adi,pwm-active-state =3D <1 0 1>;
+@@ -101,5 +124,15 @@ examples:
+         adi,pwm-active-state =3D <1 0 1>;
          adi,pin10-function =3D "smbalert#";
          adi,pin14-function =3D "tach4";
-         #pwm-cells =3D <4>;
++        #pwm-cells =3D <4>;
++
++        /* PWMs at 22.5 kHz frequency, 50% duty*/
++        fan-0 {
++          pwms =3D <&pwm 0 44444 0 22222>;
++        };
++
++        fan-1 {
++          pwms =3D <&pwm 2 44444 0 22222>;
++        };
+       };
+     };
 --=20
 2.45.2
 
