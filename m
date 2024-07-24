@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BC0158D89
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Jul 2024 13:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C6515AD95
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Jul 2024 13:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721826111; cv=none; b=Sh0viQxj1Ux4rNV8BDR1VH4ks3dADj/Q7Raak2vBKwTpILNkWhZSR+2tiKFyAud6PthU1WGMYrhNaJrXChxY0gMybXzZoYN3xHoo867b/BlTttGiMA1BcwOKdett+J0C2hYcKLa9jT23IA9SSxLR2Ry4Qyg/s1iOdjfcKmuBV+U=
+	t=1721826146; cv=none; b=RMcSmnW2I/C4kTvNT7F5tBTc6fY1jhhgzUHJjirOmsJQdgC4kxAR7S8VZQrfEtLXBB8c9rRtJ/BDe8EnF2iy5hkDVv9AMcYJlqsAsnwFhieO2RI743piffESo9lu7MUaWQSGmZEbav184gbwwr7GY9XPU/+XMefeEA4XmpjF8Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721826111; c=relaxed/simple;
-	bh=ZoMgPLJe9lcv2RQmhSdv/EUfcIy9QeT/MJgwTnPFj5E=;
+	s=arc-20240116; t=1721826146; c=relaxed/simple;
+	bh=vOT6C7Nyo5ok2/04vqK8vpKTNL4nwHYlyX3rcxJVgbE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EriAWu1ZDij8X95Adl1qIsVNBKORGFz9IFWW2OXjk98SSDdaPZLXbwgQHpRnA4U4PX5J9Gd8+Z8hR+31BskxIIrtL8Av822kOd5nftUshhAuoX4tNPBGHYKjN02NUDOnlHoaAeOgm+a2YBpQqZWv2lQ63aBClbKLijaFxctwIR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCHgOQZM; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=YSszD8SvnxxP91/8hKocKQvPeh62fqeQk2QDHhIhwoJFM94wDIb+i84uTU6PeiW9rna7PVDzdo4Lj/03OQ5xAzW+Nh8rphTNbeX74Im7MR8FBMC43Jh9QOv58kWcu9uYLtJKm5HS8xunL1XeRjkb5UOAz+D72stKszrPW4U/N9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fx17NRzE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCHgOQZM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D10C4AF09;
-	Wed, 24 Jul 2024 13:01:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fx17NRzE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A35C4AF10;
+	Wed, 24 Jul 2024 13:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721826110;
-	bh=ZoMgPLJe9lcv2RQmhSdv/EUfcIy9QeT/MJgwTnPFj5E=;
+	s=k20201202; t=1721826145;
+	bh=vOT6C7Nyo5ok2/04vqK8vpKTNL4nwHYlyX3rcxJVgbE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LCHgOQZM+GMYDvwQNALJk9v51cMlTygSdq7amD7G/Yc+HpzrXzKt9nseaHxNWStIh
-	 R6zhCAcQe3Hg2CX9idUSQXo79xmoBuO4ThIQGuBuGmmVq7dSABxKY74qVqMKOgaBDS
-	 N+Ijqn90m3gpIzFEVlIlVD7kHcdmIwQY9VNtvZcdNvmZopjgGNT+24kXA0i5cuI/5I
-	 z3UXOvYISWeA/jdZIUCuV9xvvT5n+xEIHDvJ4hugrTbVL7u8wKGT+to8oTIYmXkqhF
-	 q1vDESg+yUux8YptwXgRAczRjy1SZU5vEieHx5WZYb2pUQ9MnYX1VaPhgtn82o2HfR
-	 ujb66ood9jIWw==
-Date: Wed, 24 Jul 2024 21:01:47 +0800
+	b=Fx17NRzEYZrtyByS6qHWpvdYd99O8UFrjLQnmYKskzaHGDTbjo+yEZECEvxcHXilP
+	 w/K5dDYqOnaFUKld3udAAJW9qXt3V5aF1Q+n3QxWKpKyPj3/k3jufirj8+dMNVWA3n
+	 Y4FqPNxWjDSmlJHvLn+yND8bIzkxeHw4r//HVnw4x5LSPdgHSISEJXcmD1wS0JtHwv
+	 I7GS6qOHW3kh663xiyaLRLzVodRcGrGxk8qwg7ZhBBcNxPt1AmTCl+k1OyF/svEtjS
+	 TVvPW19tjoY2gO8lX0CLwF2Yw5Tl4oFqcu9p52Yu54F9inKGG9TdSXeHtmc68sq5lZ
+	 nvwFpatDrUDIw==
+Date: Wed, 24 Jul 2024 21:02:21 +0800
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] hwmon: (max6697) Reorder include files
-Message-ID: <ZqD7O9dk7ZKQ_zHl@tzungbi-laptop>
+Subject: Re: [PATCH v2 3/6] hwmon: (max6697) Use bit operations where possible
+Message-ID: <ZqD7XaeoD7Dru495@tzungbi-laptop>
 References: <20240723154447.2669995-1-linux@roeck-us.net>
- <20240723154447.2669995-2-linux@roeck-us.net>
+ <20240723154447.2669995-4-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -42,10 +42,10 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240723154447.2669995-2-linux@roeck-us.net>
+In-Reply-To: <20240723154447.2669995-4-linux@roeck-us.net>
 
-On Tue, Jul 23, 2024 at 08:44:42AM -0700, Guenter Roeck wrote:
-> Reorder include files to alphabetic order to improve maintainability.
+On Tue, Jul 23, 2024 at 08:44:44AM -0700, Guenter Roeck wrote:
+> Use bit operations to improve code maintainability.
 > 
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
