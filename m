@@ -1,85 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EBD19D880;
-	Thu, 25 Jul 2024 16:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FDB6F2EA;
+	Thu, 25 Jul 2024 19:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721924886; cv=none; b=QU4EffwhtTScWWq7m1Xjx9D9dmst5TgqROllRbMGYQhKPpILFQ//c33VMmO+9OP54GJLYbXUPkn77assfK1t56jvlS9VkxsoGegu80UO9ESy608i4G2W1MWPLgC770udyNR641oSXI6tLogLTsf79cixXvvDzODIQtStVBnMCW4=
+	t=1721936774; cv=none; b=p+tb7wcCxO2oXnwmuBiSsOyTzLtgbkJSuuOHDSEkyoAqHG8L9Dn4yLwbkFh5s+XUXshkvsO09p6h7b7JES2WsDczmwfog9Lx1Sjd/pyruqfhQDz2Rypi8xOlXjQjBHRVnFo0cBBlZjBKMw49AN6YO1gRMuLnRCVz54UCYH4H2eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721924886; c=relaxed/simple;
-	bh=L7Fg0m1ebyP2PV/ivJTC9Xfja1OP5JV3H02XKfasc1Q=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OT38r9u3oLT5a3UzkHVlrwiFmko5Hsp3ATEgZh8cZqwdPP3TdeRZDg9Z6Y/9AG5878dSPdFOXrpHeGCUC/RDrqZrhUtbAmKkgcypMmMPSvUnajjojIkcWlwkFrFf/ByMKMPXVod/hl1SIsIilKnFozhWm4tDN24Y0awjsKigkDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LiyTau5p; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LiyTau5p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D6BC116B1;
-	Thu, 25 Jul 2024 16:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721924886;
-	bh=L7Fg0m1ebyP2PV/ivJTC9Xfja1OP5JV3H02XKfasc1Q=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=LiyTau5pMzmxs6bD/CxOOKH86UKrbpTZF1Nel2qo8HJGlIjkwJvQ04jQU/2tFFc5/
-	 IKTI/sBNYtMfyhkhKfjrElrm+/3UskwyACdIARCu+QdpMy8oCjygLhG+ODfpvxIgAu
-	 jTO1M/YjC5MBLNLoeMt7TOcDL/WThyditsFXNKVInnnogFYqh6AVHqt+2H62h4AjJL
-	 VIR1oU5gfMLcL/Jxqu3jfVtdb+4cccoqgCwrLg65O8ZyVOz2X5fm0WuLzxQjgspCqg
-	 n2HMqS9VX4MoXuShAZlCIFbCCr6elsxEJiHi3IGYOSrLWyzDRlX+8JaxDPceea5P56
-	 /GQO5hzX4G95w==
-From: Lee Jones <lee@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>, 
- Daniel Scally <djrscally@gmail.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
- Marcin Wojtas <marcin.s.wojtas@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Andreas Kemnade <andreas@kemnade.info>, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org, 
- netdev@vger.kernel.org, Jonathan Cameron <Jonathan.Cameron@huawei.com>
-In-Reply-To: <20240721-device_for_each_child_node-available-v2-0-f33748fd8b2d@gmail.com>
-References: <20240721-device_for_each_child_node-available-v2-0-f33748fd8b2d@gmail.com>
-Subject: Re: (subset) [PATCH v2 0/6] use device_for_each_child_node() to
- access device child nodes
-Message-Id: <172192488125.1053789.17350723750885690064.b4-ty@kernel.org>
-Date: Thu, 25 Jul 2024 17:28:01 +0100
+	s=arc-20240116; t=1721936774; c=relaxed/simple;
+	bh=fkrMzGswzCO7CPU3pzXIY4sgrQ/Z3eYGrtwNukVb2dM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Zv3Hnbk37+dENHaiuVSUo7xlnkCe71Jr4VxusRJ1tzS5ysBwO1QGDGUQExlooudQovXK9jZ50X4jVUjKvrc5BCRgwJd1FePXnEBiipxhja0CawQtgqAI4pHlCOemd9JJck4oG7FMUIg3r9mYFYe8g1zVnZJKCKDE3lYkOGb+kb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i5e860cdd.versanet.de ([94.134.12.221] helo=phil.lan)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sX4PS-0001rD-Bx; Thu, 25 Jul 2024 21:45:54 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: lee@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	dmitry.torokhov@gmail.com,
+	pavel@ucw.cz
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	ukleinek@debian.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: [PATCH 7/7] arm64: dts: rockchip: set hdd led labels on qnap-ts433
+Date: Thu, 25 Jul 2024 21:45:39 +0200
+Message-Id: <20240725194539.1780790-8-heiko@sntech.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240725194539.1780790-1-heiko@sntech.de>
+References: <20240725194539.1780790-1-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
 
-On Sun, 21 Jul 2024 17:19:00 +0200, Javier Carrasco wrote:
-> This series aims to clarify the use cases of:
-> 
-> - device_for_each_child_node[_scoped]()
-> - fwnode_for_each_available_child_node[_scoped]()
-> 
-> to access firmware nodes.
-> 
-> [...]
+The automatically generated names for the LEDs from color and function
+do not match nicely for the 4 hdds, so set them manually per the label
+property to also match the LEDs generated from the MCU.
 
-Applied, thanks!
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+---
+ arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-[3/6] leds: bd2606mvv: fix device child node usage in bd2606mvv_probe()
-      commit: 75d2a77327c4917bb66163eea0374bb749428e9c
-[4/6] leds: is31fl319x: use device_for_each_child_node_scoped() to access child nodes
-      commit: 0f5a3feb60aba5d74f0b655cdff9c35aca03e81b
-[5/6] leds: pca995x: use device_for_each_child_node() to access device child nodes
-      (no commit info)
-
---
-Lee Jones [李琼斯]
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts b/arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts
+index bff21684a3970..c35c11203e903 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-qnap-ts433.dts
+@@ -50,6 +50,7 @@ led-0 {
+ 			color = <LED_COLOR_ID_GREEN>;
+ 			function = LED_FUNCTION_DISK;
+ 			gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
++			label = "hdd1:green:disk";
+ 			linux,default-trigger = "disk-activity";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&hdd1_led_pin>;
+@@ -59,6 +60,7 @@ led-1 {
+ 			color = <LED_COLOR_ID_GREEN>;
+ 			function = LED_FUNCTION_DISK;
+ 			gpios = <&gpio1 RK_PD6 GPIO_ACTIVE_LOW>;
++			label = "hdd2:green:disk";
+ 			linux,default-trigger = "disk-activity";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&hdd2_led_pin>;
+@@ -68,6 +70,7 @@ led-2 {
+ 			color = <LED_COLOR_ID_GREEN>;
+ 			function = LED_FUNCTION_DISK;
+ 			gpios = <&gpio1 RK_PD7 GPIO_ACTIVE_LOW>;
++			label = "hdd3:green:disk";
+ 			linux,default-trigger = "disk-activity";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&hdd3_led_pin>;
+@@ -77,6 +80,7 @@ led-3 {
+ 			color = <LED_COLOR_ID_GREEN>;
+ 			function = LED_FUNCTION_DISK;
+ 			gpios = <&gpio2 RK_PA0 GPIO_ACTIVE_LOW>;
++			label = "hdd4:green:disk";
+ 			linux,default-trigger = "disk-activity";
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&hdd4_led_pin>;
+-- 
+2.39.2
 
