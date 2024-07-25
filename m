@@ -1,70 +1,70 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB4A19AD8E;
-	Thu, 25 Jul 2024 14:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D487C16DEA8;
+	Thu, 25 Jul 2024 14:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721916404; cv=none; b=gM4MFI2uY1ewuk5VnIftTQkRsd3Gj/PRz8/SohVBIuOJuRpbjudpoYXLfvx2MGjHGX8vvd1DhmD87B0Rzc8R2jDHoyWN0S5mdtJ8PN7aHwLEBJ1TgowWW/iskU6/TrI2FoCrVoPAqECImkYcVG0ZuY7CP0FuKAW6IK8ymdXho0w=
+	t=1721916578; cv=none; b=NT96wZMTciYFvdQSgBlKf0ZJ3uH6vnuGA7zTa4AhdPbi+Me5/0vC7XrTTVkw+IQlubysjikaPIawQoyf1Bt2DwLrXWcvt1H1pQQbVFelG93J7n7NYdgI+2cwAmEtTA0FGMBDZJ2XW7CyvwMWuen+wK18Spx2FZ7txlwmPfMJ4RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721916404; c=relaxed/simple;
-	bh=YCGVXnenM9aIYoFmVJfyYZHXqFMMgJHskCqhrQFJSbE=;
+	s=arc-20240116; t=1721916578; c=relaxed/simple;
+	bh=U/uAOTdYfC2F+wnRdy4AsQFPTVSnYTBO9SwUlVbukMU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m84wM45iYVJ1fOBCbAAoaSknRtbnnhzBftGJcCm1YFF9lqX1qtfojKy8P06Fxp9HU9jB2Dtp9bjY5IW0HworGObYE/w9Z3rrNuqIjNDjzexwMrFbJhE3//dfkZ5d8SeiZ4jfcqBxHWzg9KC0WRQotrJLbqNjIqSr4Ux1tBY6V24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H0G44LJQ; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hx09LGtSIpScM56s2V/KODESM4b/kHQDcq5NnE9mOQtgjgp/aWO3jzZiv0/KkZrn7tWz7POcqw+w3Hx6szcgZ9KJ3VgPpyl3FGYUdFrZt5AEiC3sB10Yd8O91UusQeqGRUc4aSS51nqpkkvzPe0+ReXzx393dQ9Fiu3gWSNy9eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bEVy5acl; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H0G44LJQ"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fd66cddd4dso8968065ad.2;
-        Thu, 25 Jul 2024 07:06:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bEVy5acl"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc56fd4de1so6724375ad.0;
+        Thu, 25 Jul 2024 07:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721916402; x=1722521202; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721916576; x=1722521376; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ezQFWfu2fMHQP/Z74+Hkc23CyrW5uNNig5qh5YLS3Xg=;
-        b=H0G44LJQL2woYnOpHtC4c3usisc2rRdlPJFCMwxvM/LBekC2OyI47l49rr+Q9p9UKk
-         ZMYuKU/ilTfCHpYS+D0L/5tpYtAHX/VrAl7Jfrfv0weU8Ja2D0xGC3tg7mz3D+1ui97f
-         5cVhtKK11IwzfHc1PVnPoWmsb+iijsGL3T0qQ37ilIS3UfV8ySSc/7p8gses6dIctteT
-         gGjRh83sxZaq+3ibi22h4jh3u5TVBIqS1ZhwOOXRhz2orXmrKWniS/S+rlXXUw6MKV2t
-         IgBp51U+mS8jUIMpzscbDrGc/zjxiljlr+zF9iPulzprzXokWCkWjsyWLYGFiHnV8G3C
-         +gZg==
+        bh=iipe01EYYFLSHptlnXHBTS73LbEfJBsYOUZlLZ0zqO8=;
+        b=bEVy5aclU1d9cGYWWqpFwXZTJAKbYg/d/8egwxiOSYNWvj2Ze58BJyazjFtDiknmK0
+         n75wB06hXcAPtwtyp5HMkeQATb6eByVOCJOXgv30tb7NW18Dfi0wMiclkJUA3oBd/S+c
+         JzI/T0fy6u+QO3G5NJF2mQO8oEkKLN07uVRlqkmNZnoZZgi2nDRFKReUO/GVj7F6a9qh
+         WgLP0rv6mnly3ArnnhgB4Elv3T1QzRweEYMNyEb5kvxYosmEBtq73WrkeFYD7wfqYqsi
+         EKKTLxxLMKPncOOnPFDmzviWj9ytiV51AHaZoZfYpLXAxhPf6/dNqRt+nZoXnhPThwGZ
+         bedg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721916402; x=1722521202;
+        d=1e100.net; s=20230601; t=1721916576; x=1722521376;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ezQFWfu2fMHQP/Z74+Hkc23CyrW5uNNig5qh5YLS3Xg=;
-        b=rJ6D5lwFca3bewW4dq946rIPrFGnXoEvUDz2rHv3bwFWTH6nnXlr5L9Rkyd9ndyOpi
-         1ADo8E9pG/JKGZee6SEKOIY3E9EVJMQYljiGIyGAqbe6i7Nsq23fcRXUX9LCAkicWpRI
-         OouFaajdQ0QxH6mQ+fvUfIPUIPcD7hm1JjiVmWG9cjLF+reTVaBhXlAc0MSlM0rArTBT
-         Dc8c2B6IDJuxWYA0GwFZjZWGnJWYF411UyxpN4z2NEpKLAcC+ta1eqQw6WkFEhHKPYZl
-         QajuHEJX1HdCpVecIyaNE3OHhuHqbzq/81DBTToN2441wVWe8OWTaAaRc8PyhX5pIR4e
-         DTQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEUYLsz1DQIh/2yLlELgs1y+gDsNowg19O6LgP72mHL2mYp1H3LY/Hagme+/FWSXJyQXUAlBCXftAZX9H3h+7cGs8mYnxGsHQISIzTi0PsCQJc54udSgQSCvTtmYdMIVNX0j4JQEer9Hm99m9kVsX27k4HVfug2yA+dq3SEKFoelRHk88lioSu/RcorIjhJsuOk5ZL+qtuSv+jOSEpHbCq
-X-Gm-Message-State: AOJu0Yy5b+UY4Zsg9rXzMKlDhKGn4xiyly3YaB3mNiazKO5LAH3JTPuH
-	KrtKhDzOvC7zjHSKQx1yjNW/qj1rPplVLjmU6YQOQVKjiNM6ItYS
-X-Google-Smtp-Source: AGHT+IF9FyncD8xdJY+gHWiBE3BEmq9ApnNGjXXHb4tP6o3UGb0kCW5qg2nbHlxYSlz7ZdCLgsoy1A==
-X-Received: by 2002:a17:903:41ca:b0:1fd:64ec:886f with SMTP id d9443c01a7336-1fed38b7ca3mr42194885ad.26.1721916402019;
-        Thu, 25 Jul 2024 07:06:42 -0700 (PDT)
+        bh=iipe01EYYFLSHptlnXHBTS73LbEfJBsYOUZlLZ0zqO8=;
+        b=DCWQQqi5G+OQ0hCoJq5kYoYFNoZIDHqI6TXdJWgiw/muJY87GdWI/lDSeERsE0bCpv
+         kg0d5DSyFxzk+vXf41A1K+1MEKRq57mTtwlh5F+o7ly8iOlZvqRu/vrlBa0H78uOUyw5
+         lBgYFaptalrC3LypqOhCIAQYd24dk8zuW5pTsEQAyGlb7swpWW8PUWwel5qSeDUVhI4F
+         jZu2k1ff9fCH/dORn10wX4HJ1hSYwBpmr1uN+oIbY3ncPMxqPJ8ejebWKcexOqtzXDTc
+         gfbZB/QkzBTAOwvwZmc4JYWFtDJJHbbjxzRgOGYtYmB4g3zG4cN5KdJrrOfWfgaOGneb
+         1mhw==
+X-Forwarded-Encrypted: i=1; AJvYcCX01U7+LAhhaBFp6xwLEm5FT0Y82MumvfjUCuA7wHdnpIDso43ImWs7/aHKeaIrN24j9QQt+ro4IrXQkTWarYw3FXo8oJrnxcBGD3FLwEMnSpps9ZFT7YL9zWviElLD0VRGUT4WUHNgaFba806DCcYvxt3k8MTifxeAoX45JDb4ghfmEy1IaStZSHMdH0l3WE1jQd1dbTQ1OpKH0QOq+C7g
+X-Gm-Message-State: AOJu0YyGZDRynyJep0Aq9aw0/TA0FFkovwXotXpia4bos1aviNOXXmS5
+	nMtfOgtXUXPBz+5Q3bbe8mJ4eq6MChBRk3a6sTRb8VYQ+Ea2HTIi
+X-Google-Smtp-Source: AGHT+IEaPtNdrTWZZ5e0/beamAel5CJ+dgspi0CP+esfYOaGUUmHT7NNGzPkhbwhmXQx2HjaRCzP/w==
+X-Received: by 2002:a17:902:d486:b0:1fb:8e29:621f with SMTP id d9443c01a7336-1fed277f45dmr47080355ad.16.1721916575986;
+        Thu, 25 Jul 2024 07:09:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7fcd252sm14454985ad.285.2024.07.25.07.06.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7fe1a26sm14459805ad.288.2024.07.25.07.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jul 2024 07:06:41 -0700 (PDT)
+        Thu, 25 Jul 2024 07:09:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 25 Jul 2024 07:06:40 -0700
+Date: Thu, 25 Jul 2024 07:09:34 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
 	conor+dt@kernel.org, ukleinek@kernel.org,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] dt-bindings: hwmon: adt7475: Deprecate
- adi,pwm-active-state
-Message-ID: <e2bb24c4-8df5-4601-8091-3fbb079d4c6e@roeck-us.net>
+Subject: Re: [PATCH v7 3/3] hwmon: (adt7475) Add support for configuring
+ initial PWM state
+Message-ID: <aaa8217b-031d-40e7-96a7-b9ed8482748a@roeck-us.net>
 References: <20240722221737.3407958-1-chris.packham@alliedtelesis.co.nz>
- <20240722221737.3407958-3-chris.packham@alliedtelesis.co.nz>
+ <20240722221737.3407958-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,16 +73,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240722221737.3407958-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240722221737.3407958-4-chris.packham@alliedtelesis.co.nz>
 
-On Tue, Jul 23, 2024 at 10:17:36AM +1200, Chris Packham wrote:
-> Now that we have fan child nodes that can specify flags for the PWM
-> outputs we no longer need the adi,pwm-active-state property.
+On Tue, Jul 23, 2024 at 10:17:37AM +1200, Chris Packham wrote:
+> By default the PWM duty cycle in hardware is 100%. On some systems this
+> can cause unwanted fan noise. Add the ability to specify the fan
+> connections and initial state of the PWMs via device properties.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Applied.
+CHECK: Blank lines aren't necessary before a close brace '}'
+#207: FILE: drivers/hwmon/adt7475.c:1734:
++
++}
+
+Never mind, applied after fixing the above.
 
 Thanks,
 Guenter
