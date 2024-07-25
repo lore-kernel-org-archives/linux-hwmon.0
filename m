@@ -1,267 +1,97 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3643A13AD23;
-	Thu, 25 Jul 2024 19:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6D66F2EA
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Jul 2024 21:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721936777; cv=none; b=l4WHsCvHRuoOVOWnS+UEpgBKlXyzIWFQCWjUNRiSu9X4XjH+uNluSqkX+SWD9PVIFEcz/nPLza0Mdz3ttkq0B8prlHz4BsmFt1mse5bMK1mOEb9qwtOm9kippd9kipDWRTK3xrGAE7FiDVSb3W5CO9+69Ufl7/qzqnFeoaLPhoA=
+	t=1721941359; cv=none; b=NeeAnoESCVBAdWB2Hm+kYatqFeXlbHxOG4mQ1OkmiIN4vwcGfzGbsdGsGvj5xO8hMDdzb/FpzGQhQ+v1PYRFWw9VmTsnQ3oI4RVfeofzhB4muooxO59j/gb8EBQtwNo7Gu/7USGQPeLNXdTc9gHPpabrdem0KO4Q3R8DvvCYOPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721936777; c=relaxed/simple;
-	bh=+tAV/jdwNu/c42NsW1/DDe58gft+TQdAXYr918JtTps=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lfUgjtUtiTV3LqMSHTIdPSl+/sHZVlS+18k2Sbyy9FZ0xO8baD5sgi2WoSUEl/mfoCmfKIpM32As60ffCJlOgBtAyzNYd071v+aX8dbYbD0naUwGEHa3mD7b1448JlRper25KVk+ZEUUQcDDOQELjXtdCsotLNlvIWoGCqyQ/LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e860cdd.versanet.de ([94.134.12.221] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sX4PQ-0001rD-7y; Thu, 25 Jul 2024 21:45:52 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: lee@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	dmitry.torokhov@gmail.com,
-	pavel@ucw.cz
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	ukleinek@debian.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-leds@vger.kernel.org
-Subject: [PATCH 4/7] Input: add driver for the input part of qnap-mcu devices
-Date: Thu, 25 Jul 2024 21:45:36 +0200
-Message-Id: <20240725194539.1780790-5-heiko@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240725194539.1780790-1-heiko@sntech.de>
-References: <20240725194539.1780790-1-heiko@sntech.de>
+	s=arc-20240116; t=1721941359; c=relaxed/simple;
+	bh=itACr6q6euo6bZmjeTw9qs8N0BkFk0gWez2lg4bJR3w=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=JYVPu0+7a7372QImN01HoUTkkBJtKTLk5FJXu2CFpT2BCjcPfm1JS9HgV50kbQRFR+ICnmdjxegwVYwevwBqQ6dQ8fuoqYVBDfgZnVHb+osUnbZZhSQxmiq+F8buPJQ59ybKZIto49IuaFxl8G6Mv+hx7l0Aikz2hdeHtPWbMvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=LbkS9bQJ; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="LbkS9bQJ"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E70DF2C04A9;
+	Fri, 26 Jul 2024 09:02:28 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1721941348;
+	bh=itACr6q6euo6bZmjeTw9qs8N0BkFk0gWez2lg4bJR3w=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=LbkS9bQJw8dedgsSBB3+i4G52hDocXnEd7yrnucY8Hv0FlgwMmk+dygkiE3xLm6zs
+	 Kjvt5cdc9UBQUKVUbOBmILKY0GP8X6TSqWlo3R1Yf3rObJX8mAYWY3cN5uJis06Lby
+	 sdtuQwLlEpol1wzcZfZiYmrlBoayBrI89t4SJl9EBZveUa3KvEk0pu5N2CFQpF9Jnz
+	 FSAX0OTGvnSJDi4zpaUWjuLODaR7d7XsLo50kER7SKQKlhPJlOxoVi8Ldh8KO4y20j
+	 ixC74ukimyJdXq0o6d4OrnzA/jrMPAShMCaVD92u7cpZHsAP8POi5HpTolDyvwIHSL
+	 Gt5d7U7P7I9UQ==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B66a2bd640001>; Fri, 26 Jul 2024 09:02:28 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 26 Jul 2024 09:02:28 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.011; Fri, 26 Jul 2024 09:02:28 +1200
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
+	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "ukleinek@kernel.org"
+	<ukleinek@kernel.org>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pwm@vger.kernel.org"
+	<linux-pwm@vger.kernel.org>
+Subject: Re: [PATCH v7 3/3] hwmon: (adt7475) Add support for configuring
+ initial PWM state
+Thread-Topic: [PATCH v7 3/3] hwmon: (adt7475) Add support for configuring
+ initial PWM state
+Thread-Index: AQHa3IT3Zuzwz3xFwkKaciGnUdU3zLIGtlgAgABzS4A=
+Date: Thu, 25 Jul 2024 21:02:28 +0000
+Message-ID: <ee3b9800-4649-4e8a-af67-80713e76b79d@alliedtelesis.co.nz>
+References: <20240722221737.3407958-1-chris.packham@alliedtelesis.co.nz>
+ <20240722221737.3407958-4-chris.packham@alliedtelesis.co.nz>
+ <aaa8217b-031d-40e7-96a7-b9ed8482748a@roeck-us.net>
+In-Reply-To: <aaa8217b-031d-40e7-96a7-b9ed8482748a@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B30A173DDF236640BC96E73D55C672FA@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Gqbh+V1C c=1 sm=1 tr=0 ts=66a2bd64 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=4kmOji7k6h8A:10 a=YMKABRJBKZM-AwbpdXYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-The MCU controls the power-button and beeper, so expose them as input
-device. There is of course no interrupt line, so the status of the
-power-button needs to be polled. To generate an event the power-button
-also needs to be held for 1-2 seconds, so the polling interval does
-not need to be overly fast.
-
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- drivers/input/misc/Kconfig          |  12 +++
- drivers/input/misc/Makefile         |   1 +
- drivers/input/misc/qnap-mcu-input.c | 156 ++++++++++++++++++++++++++++
- 3 files changed, 169 insertions(+)
- create mode 100644 drivers/input/misc/qnap-mcu-input.c
-
-diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index 6ba984d7f0b18..4ab8fe8301635 100644
---- a/drivers/input/misc/Kconfig
-+++ b/drivers/input/misc/Kconfig
-@@ -900,6 +900,18 @@ config INPUT_HISI_POWERKEY
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called hisi_powerkey.
- 
-+config INPUT_QNAP_MCU
-+	tristate "Input Support for QNAP MCU controllers"
-+	depends on MFD_QNAP_MCU
-+	help
-+	  This option enables support for input elements available on
-+	  embedded controllers used in QNAP NAS devices.
-+
-+	  This includes a polled power-button as well as a beeper.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called qnap-mcu-input.
-+
- config INPUT_RAVE_SP_PWRBUTTON
- 	tristate "RAVE SP Power button Driver"
- 	depends on RAVE_SP_CORE
-diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-index 04296a4abe8e8..05f5d0072b08f 100644
---- a/drivers/input/misc/Makefile
-+++ b/drivers/input/misc/Makefile
-@@ -66,6 +66,7 @@ obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)	+= pmic8xxx-pwrkey.o
- obj-$(CONFIG_INPUT_POWERMATE)		+= powermate.o
- obj-$(CONFIG_INPUT_PWM_BEEPER)		+= pwm-beeper.o
- obj-$(CONFIG_INPUT_PWM_VIBRA)		+= pwm-vibra.o
-+obj-$(CONFIG_INPUT_QNAP_MCU)		+= qnap-mcu-input.o
- obj-$(CONFIG_INPUT_RAVE_SP_PWRBUTTON)	+= rave-sp-pwrbutton.o
- obj-$(CONFIG_INPUT_RB532_BUTTON)	+= rb532_button.o
- obj-$(CONFIG_INPUT_REGULATOR_HAPTIC)	+= regulator-haptic.o
-diff --git a/drivers/input/misc/qnap-mcu-input.c b/drivers/input/misc/qnap-mcu-input.c
-new file mode 100644
-index 0000000000000..9bac7ea2c6b80
---- /dev/null
-+++ b/drivers/input/misc/qnap-mcu-input.c
-@@ -0,0 +1,156 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Driver for input events on QNAP-MCUs
-+ *
-+ * Copyright (C) 2024 Heiko Stuebner <heiko@sntech.de>
-+ */
-+
-+#include <linux/input.h>
-+#include <linux/mfd/qnap-mcu.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <uapi/linux/input-event-codes.h>
-+
-+/*
-+ * The power-key needs to be pressed for a while to create an event,
-+ * so there is no use for overly frequent polling.
-+ */
-+#define POLL_INTERVAL		500
-+
-+struct qnap_mcu_input_dev {
-+	struct input_dev *input;
-+	struct qnap_mcu *mcu;
-+	struct device *dev;
-+
-+	struct work_struct beep_work;
-+	int beep_type;
-+};
-+
-+static void qnap_mcu_input_poll(struct input_dev *input)
-+{
-+	struct qnap_mcu_input_dev *idev = input_get_drvdata(input);
-+	u8 cmd[] = {
-+		[0] = 0x40, /* @ */
-+		[1] = 0x43, /* C */
-+		[2] = 0x56  /* V */
-+	};
-+	u8 reply[4];
-+	int state, ret;
-+
-+	/* poll the power button */
-+	ret = qnap_mcu_exec(idev->mcu, cmd, sizeof(cmd), reply, sizeof(reply));
-+	if (ret)
-+		return;
-+
-+	/* First bytes must mirror the sent command */
-+	if (memcmp(cmd, reply, sizeof(cmd))) {
-+		dev_err(idev->dev, "malformed data received\n");
-+		return;
-+	}
-+
-+	state = reply[3] - 0x30;
-+	input_event(input, EV_KEY, KEY_POWER, state);
-+	input_sync(input);
-+}
-+
-+static void qnap_mcu_input_beeper_work(struct work_struct *work)
-+{
-+	struct qnap_mcu_input_dev *idev =
-+		container_of(work, struct qnap_mcu_input_dev, beep_work);
-+	u8 cmd[] = {
-+		[0] = 0x40, /* @ */
-+		[1] = 0x43, /* C */
-+		[2] = (idev->beep_type == SND_TONE) ? 0x33 : 0x32
-+	};
-+
-+	qnap_mcu_exec_with_ack(idev->mcu, cmd, sizeof(cmd));
-+}
-+
-+static int qnap_mcu_input_event(struct input_dev *input, unsigned int type,
-+				unsigned int code, int value)
-+{
-+	struct qnap_mcu_input_dev *idev = input_get_drvdata(input);
-+
-+	if (type != EV_SND || (code != SND_BELL && code != SND_TONE))
-+		return -EOPNOTSUPP;
-+
-+	if (value < 0)
-+		return -EINVAL;
-+
-+	/* beep runtime is determined by the MCU */
-+	if (value == 0)
-+		return 0;
-+
-+	/* Schedule work to actually turn the beeper on */
-+	idev->beep_type = code;
-+	schedule_work(&idev->beep_work);
-+
-+	return 0;
-+}
-+
-+static int qnap_mcu_input_probe(struct platform_device *pdev)
-+{
-+	struct qnap_mcu *mcu = dev_get_drvdata(pdev->dev.parent);
-+	struct qnap_mcu_input_dev *idev;
-+	struct device *dev = &pdev->dev;
-+	struct input_dev *input;
-+	int ret;
-+
-+	idev = devm_kzalloc(dev, sizeof(*idev), GFP_KERNEL);
-+	if (!idev)
-+		return -ENOMEM;
-+
-+	input = devm_input_allocate_device(dev);
-+	if (!input)
-+		return dev_err_probe(dev, -ENOMEM, "no memory for input device\n");
-+
-+	idev->input = input;
-+	idev->dev = dev;
-+	idev->mcu = mcu;
-+
-+	input_set_drvdata(input, idev);
-+
-+	input->name		= "qnap-mcu";
-+	input->phys		= "qnap-mcu-input/input0";
-+	input->id.bustype	= BUS_HOST;
-+	input->id.vendor	= 0x0001;
-+	input->id.product	= 0x0001;
-+	input->id.version	= 0x0100;
-+	input->event		= qnap_mcu_input_event;
-+
-+	input_set_capability(input, EV_KEY, KEY_POWER);
-+	input_set_capability(input, EV_SND, SND_BELL);
-+	input_set_capability(input, EV_SND, SND_TONE);
-+
-+	INIT_WORK(&idev->beep_work, qnap_mcu_input_beeper_work);
-+
-+	ret = input_setup_polling(input, qnap_mcu_input_poll);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "unable to set up polling\n");
-+
-+	input_set_poll_interval(input, POLL_INTERVAL);
-+
-+	ret = input_register_device(input);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "unable to register input device\n");
-+
-+	qnap_mcu_input_poll(input);
-+	input_sync(input);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver qnap_mcu_input_driver = {
-+	.probe = qnap_mcu_input_probe,
-+	.driver = {
-+		.name = "qnap-mcu-input",
-+	},
-+};
-+module_platform_driver(qnap_mcu_input_driver);
-+
-+MODULE_ALIAS("platform:qnap-mcu-input");
-+MODULE_AUTHOR("Heiko Stuebner <heiko@sntech.de>");
-+MODULE_DESCRIPTION("QNAP MCU input driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
-
+DQpPbiAyNi8wNy8yNCAwMjowOSwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gVHVlLCBKdWwg
+MjMsIDIwMjQgYXQgMTA6MTc6MzdBTSArMTIwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEJ5
+IGRlZmF1bHQgdGhlIFBXTSBkdXR5IGN5Y2xlIGluIGhhcmR3YXJlIGlzIDEwMCUuIE9uIHNvbWUg
+c3lzdGVtcyB0aGlzDQo+PiBjYW4gY2F1c2UgdW53YW50ZWQgZmFuIG5vaXNlLiBBZGQgdGhlIGFi
+aWxpdHkgdG8gc3BlY2lmeSB0aGUgZmFuDQo+PiBjb25uZWN0aW9ucyBhbmQgaW5pdGlhbCBzdGF0
+ZSBvZiB0aGUgUFdNcyB2aWEgZGV2aWNlIHByb3BlcnRpZXMuDQo+Pg0KPj4gU2lnbmVkLW9mZi1i
+eTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPiBD
+SEVDSzogQmxhbmsgbGluZXMgYXJlbid0IG5lY2Vzc2FyeSBiZWZvcmUgYSBjbG9zZSBicmFjZSAn
+fScNCj4gIzIwNzogRklMRTogZHJpdmVycy9od21vbi9hZHQ3NDc1LmM6MTczNDoNCj4gKw0KPiAr
+fQ0KPg0KPiBOZXZlciBtaW5kLCBhcHBsaWVkIGFmdGVyIGZpeGluZyB0aGUgYWJvdmUuDQoNCkht
+bSwgb2RkIGNoZWNrcGF0Y2gucGwgZG9lc24ndCBjb21wbGFpbiBmb3IgbWUNCg0KJCAuL3Njcmlw
+dHMvY2hlY2twYXRjaC5wbCANCnBhdGNoZXMvYWR0LWluaXQtZHV0eS92Ny92Ny0wMDAzLWh3bW9u
+LWFkdDc0NzUtQWRkLXN1cHBvcnQtZm9yLWNvbmZpZ3VyaW5nLWluaXRpYWwucGF0Y2ggDQoNCnRv
+dGFsOiAwIGVycm9ycywgMCB3YXJuaW5ncywgMTQ5IGxpbmVzIGNoZWNrZWQNCg0KcGF0Y2hlcy9h
+ZHQtaW5pdC1kdXR5L3Y3L3Y3LTAwMDMtaHdtb24tYWR0NzQ3NS1BZGQtc3VwcG9ydC1mb3ItY29u
+ZmlndXJpbmctaW5pdGlhbC5wYXRjaCANCmhhcyBubyBvYnZpb3VzIHN0eWxlIHByb2JsZW1zIGFu
+ZCBpcyByZWFkeSBmb3Igc3VibWlzc2lvbi4NCg0KPg0KPiBUaGFua3MsDQo+IEd1ZW50ZXI=
