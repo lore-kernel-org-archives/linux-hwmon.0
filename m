@@ -1,67 +1,40 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7735D1CA80;
-	Fri, 26 Jul 2024 14:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD07178CC5
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 15:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722003947; cv=none; b=i1qcr/AT2eSC7nxlfzin3HObj1NxiMArycSU67mZH/9mBwoIvrQkyKYEp9nYbWC8Nan+CfPibDUKdGMMAIyYmhB+jSHuphRwgy7JcYB1WyEOffBchWwH6PCLFUANkNW2lfI9ZNi3yT182i7CRlpyqWSbDkLoyG95U+x99+HJiP8=
+	t=1722007220; cv=none; b=nzmESxcIfnQ2fvRwyjeMv4bizXKvRySrgazr09g2/9jqgRs+UM9nOXNlnfAUJPfzn9mjZwBZwaPRnbE6doXpeio6dk2j6pj3dMOk3ROq/COPLfA8FEkxW8ussieLUbveXR6lLbSyi4c+U5A9bacVu52hH0ZG6q8334UBPPicPYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722003947; c=relaxed/simple;
-	bh=Dn135Z5lIeJU8XZ+6nZPpMeFanBfB1QMFUV4i8APx5k=;
+	s=arc-20240116; t=1722007220; c=relaxed/simple;
+	bh=t5MYS4GBUH5pVLPk103bN2kFBi8f+yAanN8Qv8tuWuA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z4KBehLFfuNGlUJtYJMk/sakFNtDDJvznautacJYeY1OQ7uqBWUnLJMy8lL2cjIfVfoes8gltHYgOevLV63cLoFQIJMWWtkzF5nNwviSEzi94qeMktGI+DSqG1g1s2jp7hV5I0fAFyKUPcxGD8N+aAp96Ejq9X3cAYLWcNyU/uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7DsES4G; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=YmFGBwNgHvIwakDDuT4We4EUt0TgSvQArNM80C+VPMGCjwjgcdlX4kdvEqRb00uYJRvQwUTcxglLNis+6kAbyEASndAdZ8ESJ3w1VGY6PsbW8qpzS4KazOOO7MXY+DaiG6E25nJTGXjkEwPD4K9qWY9AwRSWmGYmftlRs0sgmnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SAUlQ3HP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7DsES4G"
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3d6301e7279so686514b6e.3;
-        Fri, 26 Jul 2024 07:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722003945; x=1722608745; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k2dSjzQVoou3+io8zljtSLUJKL0DDyVy1h+d2igdtKk=;
-        b=R7DsES4GWOJHLRiRqQ5qOL/u+2m1QS2QJyggyGSLRsFT8ie/9K9R4VbU+n5Nqd9wBx
-         i70g4F1+kgNf7SUbQKm4BAL6VkKI4NV8LUV7FNv+oD8VZuDFpwOLhd9hGe6m8fhsULK3
-         EuwNXYdZgpQTuGUIKlpi0x7HGGA0gKnZKw10BbXezBCbZ+WykpbpSSojhze8Ri9JNZY4
-         lg2wKrwF5qObcF0G+uDGGTL1bDWEF++bj5XqSyThrfNmMeBSVlCniXUoylfQxZnFI8Yn
-         dqhe2Ko+eroWeaVQT0Knax1AVIteRhiFxmnolmEfvljHtOBa6bKISthLNrn5ghrW2mT2
-         PUFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722003945; x=1722608745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k2dSjzQVoou3+io8zljtSLUJKL0DDyVy1h+d2igdtKk=;
-        b=YrKl4v7OvLcnLQ1JDCEth+fHwXKMDO9azKbT0omoOty5QuA5sJE6Mp1FRBYkJiRTuQ
-         NeAi3r52K9GT49OorhlLhQgXaQwdYNYP+aDlTO4KikNCCCMKKBYNjP/GfaC6yHIs1WvM
-         iIIIKARuOiao9enA3spfJFLc2+j8VS0WD42XA5CN3nBZr+zJD4I3p8jH4a1ERkZXzCiv
-         G3crbcLzSyjH6flJ+QoSBsL2tSd3jRI79m28fq2FO+UMswH3pdO0Uexw2IG0cTelrc8V
-         umT4xW83QtE9nSJrC7tpvxQ1cEMGXalDqIoeIcAuwmCyq7lXjeeEUmHcaDtQE0aO324i
-         HAlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUha4kS32OFR8hb4QRpg7YsZqNlSPU+/WQURKNgg5ZSxUwE5YqDywJCTwMBFyL5ZiCC9zib5eVvBwRX6XX4R+WUlEKDrWPitsPCqOUGZx/k/+sA95dHAcJe3CdZR0ocXGONkUlIM5zj9XTwA1nzML4HvcWbcieSdXbogPIEaXThG1NVQKI=
-X-Gm-Message-State: AOJu0YwsoRuf6uLWkKYDAjoWBbW6o8DxPBw8uKF+ClDPUGZer1oXpcc1
-	PpSw8DfjKj42VML9vgL1/lAxJWH5ImHX/nZvEhJuc23gRMRACdro
-X-Google-Smtp-Source: AGHT+IGQcCgvF2YcDKF8DG4or6U99L3ds2DC7EMO4xgSJ6DHv7uif2MT5LRGelGsU0gcV84NNTP83w==
-X-Received: by 2002:a05:6808:1816:b0:3d9:28cd:4f89 with SMTP id 5614622812f47-3db140ecad5mr5450726b6e.24.1722003945514;
-        Fri, 26 Jul 2024 07:25:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9fa593715sm2883820a12.84.2024.07.26.07.25.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 07:25:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 26 Jul 2024 07:25:43 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Cryolitia@gmail.com
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, trivial@kernel.org
-Subject: Re: [PATCH] hwmon: document: fix typo in oxp-sensors
-Message-ID: <e4f93c17-be7f-405b-babb-2b4aef709537@roeck-us.net>
-References: <20240726-typo-v1-1-3ca3f07f93e9@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SAUlQ3HP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F10FC4AF0B;
+	Fri, 26 Jul 2024 15:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722007219;
+	bh=t5MYS4GBUH5pVLPk103bN2kFBi8f+yAanN8Qv8tuWuA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SAUlQ3HPd9GOMfzRgqAO2X9myYvU/okHu6W8XwbO2uDoqkM0TXatLF9Z0mZaVwn5S
+	 Lyj5E2hJYSEX7aROY7giQ6ogPNOLgyqshNorf1C3cj6yIjw3rQRNaydk4Hl4qWU7Tr
+	 +OUQ9U2IgayDLzan9ZfMiGoPLs81Rvo630SwouQrPWvubVuKK7QML28hyXARCklFOH
+	 yiqt96LvTVYqcsOSSHnuYjYgqMllihHmucPcRB8C4qmSDhvmS71wOp2fOI1fIE1q0K
+	 o4qCGrufIw5jIxrYgetqvKyBhE5kasgQLS6Xl4hMCUA2jf50NCI0B2aNcbdnV8hTGw
+	 I1LBoqXD9dRqQ==
+Date: Fri, 26 Jul 2024 23:20:16 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH 1/5] hwmon: (max1668) Reorder include files to alphabetic
+ order
+Message-ID: <ZqO-sEd6bmuejw5c@tzungbi-laptop>
+References: <20240726004329.934763-1-linux@roeck-us.net>
+ <20240726004329.934763-2-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,43 +43,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726-typo-v1-1-3ca3f07f93e9@gmail.com>
+In-Reply-To: <20240726004329.934763-2-linux@roeck-us.net>
 
-On Fri, Jul 26, 2024 at 09:21:14AM +0800, Cryolitia PukNgae via B4 Relay wrote:
-> From: Cryolitia PukNgae <Cryolitia@gmail.com>
+On Thu, Jul 25, 2024 at 05:43:25PM -0700, Guenter Roeck wrote:
+> Reorder include files to alphabetic order to simplify driver maintenance.
 > 
-> RMP -> RPM
-> ---
-> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Plus, having your Signed-off-by: tag after '---' drops it
-when applying the patch. _Please_ be more careful when submitting
-patches, even more so for minor ones like this one.
-
-Thanks,
-Guenter
-
-> ---
->  Documentation/hwmon/oxp-sensors.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> 
-> ---
-> base-commit: 73f3c33036904bada1b9b6476a883b1a966440cc
-> change-id: 20240726-typo-616bb7db0f68
-> 
-> Best regards,
-> 
-> diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-> index 55b1ef61625e..50618f064379 100644
-> --- a/Documentation/hwmon/oxp-sensors.rst
-> +++ b/Documentation/hwmon/oxp-sensors.rst
-> @@ -52,7 +52,7 @@ Sysfs entries
->  The following attributes are supported:
->  
->  fan1_input
-> -  Read Only. Reads current fan RMP.
-> +  Read Only. Reads current fan RPM.
->  
->  pwm1_enable
->    Read Write. Enable manual fan control. Write "1" to set to manual, write "0"
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
