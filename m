@@ -1,63 +1,67 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF844C99
-	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 22:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61EC4C99
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 22:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722032169; cv=none; b=a40t/T3/Mu4t3LqRgkPBzVmLbGymiEICs4QSINwT/FVyCHceILro9wVZF2mKW0R3mFVFuJWLw8svofc8TUq4U752UwibWnpnel35Ux0Os6UCnIzImhKqFsQwrG1MMcBb61fK4z5xNtyjzo4b+OryMQM+SscHTISMQxRBNKmQb0Y=
+	t=1722032172; cv=none; b=eOlTPaWAr6A/E63Rs8BoQScVGWnWGs2QGe/uDAiqxBjMwOavqTGL7ji+zRz5aWcsEHnfI1mJSowvfwkrSlL3TzxyC1nZJhTh7N+KdqJ/6079ihCyBOV0HqlKIs3pjsycCXuF/eYZWB/v44N8EbqRM3VSoHfeADyCnOpmH5sQRM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722032169; c=relaxed/simple;
-	bh=H0Gnod2k/eOk6M3JrddFBB3zOHA0chbIbqlBeHjAisg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=it6i9KDhF0vmwF8179/isK3akRpKCVDjRjMeo8u02V3zRh3nZlIfeE/yMhsnSxxo/7SSgZnxIVjo9U6rVAljzjt2cvHVNA9S+VWveoAU7ZnystdOkniLnposXS0AlwVGD5ePRJwk7ckqnRGYu5pn2C+1xqFdnTvMHQFKAzz15zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHSw8n1j; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1722032172; c=relaxed/simple;
+	bh=5A3HmYWrG/JHfNl8CBkFrnLUVXeSext/VolRVBGiMCY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=IxWSc4Ww9L75qWQk+BF1pke9L+CtOpXl82zLWcGhBfNoQAMIsOhnl/bZB5zEl/ww4gAK2gxgTLHG7qiaPk3OIcmWbdetzymAbFMj1lXuJTrfBxy+vGiqjFZwy3PPvXwEQp94ZxppCJMxkOlLUZu633T18CL4f6XE7tlVi14tfZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=muTZogd/; arc=none smtp.client-ip=209.85.166.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHSw8n1j"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fd9e70b592so9300645ad.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 15:16:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muTZogd/"
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3992195d08aso11163855ab.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 15:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722032167; x=1722636967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hs3+rDnoNa11yqRKjIlgGE8CIDzcydZoSFfJtreRiGg=;
-        b=YHSw8n1jzN9TvtSG7VLP8UFGpIT2WQ5NZZpum95ihsNQSxvRPRHVilEoXnpnzeQCtt
-         WBf3j/AFq3tjpfTV4WROCHGLcsgb3FqYMWwRav+QGoscZMimLOelijuaBU9uTsJgq09j
-         F9eXOoPtO4RFt7So/yj24AgobDNFfBzN434xPO4dQ9qoazX0Bprf8sVDAxGnUPk8yr18
-         bpCkygWP9WKwrg2uoHjJ+b0Zjgc2V8SCZnkHwjNyVt3NDfWkBTXucSYHVtOcWjeHVXTm
-         T1KbD1XnxLhZe48EkPbRWtSDO/9b0iGAm++uG0qG1IRtuqlzIDKslA3499Cd5K70GIsr
-         aAGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722032167; x=1722636967;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1722032168; x=1722636968; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hs3+rDnoNa11yqRKjIlgGE8CIDzcydZoSFfJtreRiGg=;
-        b=JIjvfqHvE34UcO/fHplujEK3w4QahvMcr2AdYsXvrlQM3e5qg2cwW82Pa3PsY6i294
-         8lM9wv2+Go9TeaBizyCZjptW2txxSaqArwgz52EbvjgoMd2yXUMkQv+pU1ajbcBC7Xob
-         6nDsrUrF53DhvVecfqGxmP7oCzv/3xoR2/jFz/osXq5UxOeRKLv2TZxJiHxzSW0bA+U+
-         acxGwx1pR5lLXHEe3y57ZekuC/rdyHQPeHIActbcBRR2ILBfRiTiIO/fZftx/8nL0ghQ
-         0SspcYCOZk8+pLEdn+ZBTffC+2HnpzWlB/R63lE/6dXfpV0EYGOrpLMimNs0yT+ib4li
-         gY/w==
-X-Gm-Message-State: AOJu0YzTKLtSu7yqIfyVXMOoTFsvzElA4GmV3RiUxPZgoxQeJC5SOJkt
-	yyscZoUuuX+J0b8mUUvCo6W6BwBjpktNwROUDukrnkt1ENVmxvU+x5w+BQ==
-X-Google-Smtp-Source: AGHT+IGj0ttat9YdSJjhGEL9fY+0S0+t5UFOeCDN9JX3TV5fKLNUbyhV5WGcDFInEJQVuzeMRWeaBA==
-X-Received: by 2002:a17:902:e5d2:b0:1fb:54d9:ebbb with SMTP id d9443c01a7336-1ff047a60ebmr10875755ad.22.1722032166627;
-        Fri, 26 Jul 2024 15:16:06 -0700 (PDT)
+        bh=tP3rxUGqnF8b5+X7YA/COhrego+TOipxI7A0odRA2wc=;
+        b=muTZogd/m0doD2S8znR5i31sEGs6N+cS7BcYIwd4VzpmXVFBTWzmQG8c/YjEuOzzr1
+         64yt/wNlJnVXkkDwXVP3ZeIuD4PFLMqde66Sb55Q/5T6RuzlQcv+5bky05164FYPVqBm
+         99Y0utJRGY0bJ+rnVdoYxSjMIMBz0WTbK3CUJCBhqh5hGAIYMvN/jBZ6GV0velhZv8xQ
+         FDpYX5z34hWFLalK8ww1iEjiXqbJtIVIxndVihes3qJqzUv1gqTjvua9WiEpjucav6xu
+         +/iqr5kuJcgHp8HonOsChhGpful679V8kUppzDjgCywu3yswV74FySld80qJ4Dhuvxzd
+         pjBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722032168; x=1722636968;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tP3rxUGqnF8b5+X7YA/COhrego+TOipxI7A0odRA2wc=;
+        b=uyvbi/Nm1/I7joYAQRrRghsWcZlzOOTKN14GVgb4Rjq4M0KobNm/B16G13F6Aby33V
+         AjCNeRRKWYtZYOdVISyRyi3oWxGiAiuo/v26bA/5PO7oNsOf90soRtX2dDsIeXn1IvCZ
+         FAC2k08fW0iD7UJ+lGFUSjBV0vRvvwhsiil9DXLxbyFCrmi3l3X0aICpb3pFu8GQf4bZ
+         puw4gNaJQul0oX4RFPog+wvgPXIBFZ/XhVwQQxO6w5tm3nv0qxMfrFwj2cOihWEmX8N4
+         ja1HcibE4g4hKnjALKuDDD3Qp99yn/fBP6gViIjW0WAlinuT9pMYYamDzTxrxbB29yRW
+         1uQw==
+X-Gm-Message-State: AOJu0YyAlRCWd8uKcu1BeBKGt4nLC4j9Ed2Z0yeMtpykmfC7ttyVcpSh
+	Y27l8YtaE+XLvKuatlIHy7lfdVAPqMrrG4JZJVZZeJTBGxraXYHH2OXqFQ==
+X-Google-Smtp-Source: AGHT+IFSvS2jso9taDMqZ7T9TiXNQN2WVyqjknbB11TH7RfzKNmUGAFV2qL3QY5eo1HWFtYy6kVNIg==
+X-Received: by 2002:a05:6e02:184d:b0:39a:12d7:2841 with SMTP id e9e14a558f8ab-39aec2e3585mr12358665ab.15.1722032168355;
+        Fri, 26 Jul 2024 15:16:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f2baf9sm37850565ad.210.2024.07.26.15.16.05
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f9ec428bsm2793299a12.63.2024.07.26.15.16.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 15:16:05 -0700 (PDT)
+        Fri, 26 Jul 2024 15:16:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 0/5] hwmon: (max1668) Modernize driver
-Date: Fri, 26 Jul 2024 15:15:58 -0700
-Message-Id: <20240726221603.1190437-1-linux@roeck-us.net>
+Subject: [PATCH v2 1/5] hwmon: (max1668) Reorder include files to alphabetic order
+Date: Fri, 26 Jul 2024 15:15:59 -0700
+Message-Id: <20240726221603.1190437-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240726221603.1190437-1-linux@roeck-us.net>
+References: <20240726221603.1190437-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -66,21 +70,42 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clean up driver and convert it to use regmap and with_info hardware
-monitoring API to reduce code size and to make it easier to maintain.
+Reorder include files to alphabetic order to simplify driver maintenance.
 
-v2:
-- Added Reviewed-by: tags
-- Dropped no longer needed include files
-- Fixed wrong fault bit in regmap conversion patch
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Added Reviewed-by: tag
 
-----------------------------------------------------------------
-Guenter Roeck (5):
-      hwmon: (max1668) Reorder include files to alphabetic order
-      hwmon: (max1668) Use BIT macro
-      hwmon: (max1668) Convert to use regmap
-      hwmon: (max1668) Replace chip type with number of channels
-      hwmon: (max1668) Convert to use with_info hwmon API
+ drivers/hwmon/max1668.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
- drivers/hwmon/max1668.c | 487 ++++++++++++++++++------------------------------
- 1 file changed, 180 insertions(+), 307 deletions(-)
+diff --git a/drivers/hwmon/max1668.c b/drivers/hwmon/max1668.c
+index 9fc583ebb11b..f5b5cc29da17 100644
+--- a/drivers/hwmon/max1668.c
++++ b/drivers/hwmon/max1668.c
+@@ -6,15 +6,15 @@
+  * some credit to Christoph Scheurer, but largely a rewrite
+  */
+ 
+-#include <linux/module.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/jiffies.h>
+-#include <linux/i2c.h>
++#include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+-#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/slab.h>
+ 
+ /* Addresses to scan */
+ static const unsigned short max1668_addr_list[] = {
+-- 
+2.39.2
+
