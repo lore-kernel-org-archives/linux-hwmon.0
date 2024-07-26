@@ -1,105 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4920ED8;
-	Fri, 26 Jul 2024 01:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9369E176AA9;
+	Fri, 26 Jul 2024 10:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721956878; cv=none; b=GJUl/ofntQ4cTtLNY+nkSxBGE30uKm5kWdx2LZWgcGyo4HTz6D5+Xa/xccBGh+6VDkXA+sVNH0gd16ggjo4HIZx0480qACqFEqTxYfB0v0ISfcrchr9N1GXzrg9PLOtpal+5Nn3HNjBzKBQk5v5sd6KU+ZX8MKiPWINkchEnlLE=
+	t=1721988257; cv=none; b=pNBIe7iCw8zgNaTvYkBucdswFCb5uCXJAt2TYY1tW/wkom53Bd7UNXe/RyIt2NRVBNLi1uum1oK/3tFJW0Vx56ubpsqG6neZZRi5tcvHtgScQFWdCCMhRlOVkQLBQErAM1dmFWZ8F4avA2nIs/0yZm8pif+vQjwerKHV+9RVAA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721956878; c=relaxed/simple;
-	bh=flPzlvlz7DN9JhwlSkJl0NM787fbfSfCMC2TYm0H5Dg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=o9R8Jm4XRmktq7k39QGKnNuwzFwhshEpY1g/wkyTWxj3yUiLODRRGFETxNnInq081rtbBUEKsezNd/Zl95AUa77Y0oZMb4Ysaek4ZJ6Q1oY7S4EAUDmeEmypVe7LK6ZxkpYa/P2iPh3bc7Rgzrophwq/pCznSqUfr1DCibCnT3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iciomw1g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721988257; c=relaxed/simple;
+	bh=XlhcHXnRSqptUTP1RNNiRZxd2iwlEZU0iUMh/1bntXY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TKBg91C6+wBcbp5EbhrWQJZwe6WL5+GUpmO/gUSMXDD2KhPkjEmA+z1foRjNOM40BMg7eeDZ0wOMZ2zzOBShlF9Ndvw7dCSSivHd8KVeDpxC3uKSSpyduBNBZ8+pEIXNvVZqrHbz3EGGiY8JxgXC+fTiqWxTj0XD/ME40pZ4RPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dn0T106q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iciomw1g"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F187C4AF07;
-	Fri, 26 Jul 2024 01:21:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dn0T106q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAF0C32782;
+	Fri, 26 Jul 2024 10:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721956878;
-	bh=flPzlvlz7DN9JhwlSkJl0NM787fbfSfCMC2TYm0H5Dg=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=iciomw1gvfse2OEyXdczIQoW5EmOZtSYo+UbZI3NXHO/QaobUmUgwS4QCF6aYEnOz
-	 5JhXWyRauzw5sOhYFzbIUuPvXM6tDQRYcORJALTPbsRuiI+lZwtVriJVjpUjq2XyCT
-	 YqQ2QDBIhw3bsCpaqDsU/Sad1BDleKg1rGcmxPxQO5qh1TV5h5BO780eQX8IGXIp3a
-	 0FS5Xx3gkuHX1ayL7BrNUtg0G30+QftNv2XAknOVgF/DAXX95GYOlqfoq4ER/uTFw+
-	 GNgM+ZM90fqld4ebGoof2ZR81QgJzuzMsxC0v4TCykzk3LSXYiO3Ga+JcKJ/EQ3YIf
-	 XDZ5Qn7KG46Kw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B91BC3DA64;
-	Fri, 26 Jul 2024 01:21:18 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>
-Date: Fri, 26 Jul 2024 09:21:14 +0800
-Subject: [PATCH] hwmon: document: fix typo in oxp-sensors
+	s=k20201202; t=1721988257;
+	bh=XlhcHXnRSqptUTP1RNNiRZxd2iwlEZU0iUMh/1bntXY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dn0T106q6PUhsZ6b5qJ1qAVI2oauqbFghMh+1VZ/TEIm0kJ8BZTBzmaAyo5I05dRv
+	 b9aJA/hMr86WsoFdAFx2vbx7pbK+1arx2HTvAbgLfq4N4Rw09kNBkz7qYCg9WYFbRB
+	 bijtdYPPWKSUyB+kASHGCoWvEDURWJeoUvLri0psOHn7YODhcrdsSUC7w+sM/zx8Q1
+	 rWfKTiyClTMLh3amVt++mxS4b0lHUUf3HF3PPYUtVPCLZEkBQ+qRrfMjl/ZPYAoowp
+	 To3NhXIYQ8puwhg7pnaPy/AuCp88ziVBfaBK60I4hlVDdIDhUI9R2OnKSZDoBo/xWk
+	 KWKC2SKYMn5qQ==
+Message-ID: <a6712679-3d76-45eb-bd73-1b41775c5e74@kernel.org>
+Date: Fri, 26 Jul 2024 12:04:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/7] dt-bindings: mfd: add binding for qnap,mcu devices
+To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, jdelvare@suse.com,
+ linux@roeck-us.net, dmitry.torokhov@gmail.com, pavel@ucw.cz
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ ukleinek@debian.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+References: <20240725194539.1780790-1-heiko@sntech.de>
+ <20240725194539.1780790-2-heiko@sntech.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240725194539.1780790-2-heiko@sntech.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240726-typo-v1-1-3ca3f07f93e9@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAn6omYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDcyMz3ZLKgnxdM0OzpCTzlCSDNDMLJaDSgqLUtMwKsDHRsbW1ADphpSF
- WAAAA
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, trivial@kernel.org, 
- Cryolitia PukNgae <Cryolitia@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=819; i=Cryolitia@gmail.com;
- h=from:subject:message-id;
- bh=RoowNEKAO63y2ZFmj969A6C2D0ZaS9bvHWQpvSGXH5I=;
- b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0VCYlFHUy9wQU5Bd0FJQVQ1ZEYzTDhpb
- zdkQWNzbVlnQm1vdm9MQ1hCbk5xMU9hRFU5c3pTVlNaWGhFbmFBCkdiN3l5aXRkdkpHbVJhRkJ4
- eWVKQVRNRUFBRUlBQjBXSVFSME5XMHB5dmR3U0JGOENDWStYUmR5L0lxTzNRVUMKWnFMNkN3QUt
- DUkErWFJkeS9JcU8zU2puQi8wUlZHUElLSXd2bWZpUzJzblBHWmp1NFFyMmQrUmhDZnZ6R1ppZg
- pJbzNPS2RWZlI2M2JmQlNlVGU1SG9KR2NweDhaWlRNb3JTT1NWU2NuWXdzbkNlcy85bVhmRFNhQ
- mlWMXFVMy9hCml4TG5Tc3loaEpKL0dXUWxKZU9iOUZHNlFtd3AreU04OFRrR0JVZ1FsRlFiVjlF
- cWh3bTVubFFBckxRaUFoZTEKM2RRWjlqRnIrcW5LbnY2Nm8vcURSUjByNHVraThmR01CQnNadVZ
- NS09mMmNvVk5WaW5FZE1LR3ZuWWdtaHk1QQp3OE0rWkM4bjZLVjMrSkRFL0JERm4xbFk5L1U0Sn
- gxMFV5c1RXa1BIK3JQTWhjN0xRWXVGV0l4MkI1cWN4WTlHCkpaeXhzNGFOOHBJb0I0dUVCRjF5d
- mdLUU93ZXZUNXdOUDJlRDRnQ2VjMHJ4WCtIWAo9RU16UgotLS0tLUVORCBQR1AgTUVTU0FHRS0t
- LS0tCg==
-X-Developer-Key: i=Cryolitia@gmail.com; a=openpgp;
- fpr=1C3C6547538D7152310C0EEA84DD0C0130A54DF7
-X-Endpoint-Received: by B4 Relay for Cryolitia@gmail.com/default with
- auth_id=186
-X-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
-Reply-To: Cryolitia@gmail.com
 
-From: Cryolitia PukNgae <Cryolitia@gmail.com>
+On 25/07/2024 21:45, Heiko Stuebner wrote:
+> These MCUs can be found in network attached storage devices made by QNAP.
+> They are connected to a serial port of the host device and provide
+> functionality like LEDs, power-control and temperature monitoring.
+> 
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  .../devicetree/bindings/mfd/qnap,mcu.yaml     | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/qnap,mcu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/qnap,mcu.yaml b/Documentation/devicetree/bindings/mfd/qnap,mcu.yaml
+> new file mode 100644
+> index 0000000000000..3b1ad8cb54da3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/qnap,mcu.yaml
 
-RMP -> RPM
+qnap,ts433-mcu.yaml
 
----
-Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
----
- Documentation/hwmon/oxp-sensors.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/qnap,mcu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: QNAP NAS on-board Microcontroller
+> +
+> +maintainers:
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +description: |
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 55b1ef61625e..50618f064379 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -52,7 +52,7 @@ Sysfs entries
- The following attributes are supported:
- 
- fan1_input
--  Read Only. Reads current fan RMP.
-+  Read Only. Reads current fan RPM.
- 
- pwm1_enable
-   Read Write. Enable manual fan control. Write "1" to set to manual, write "0"
+Do not need '|' unless you need to preserve formatting.
 
----
-base-commit: 73f3c33036904bada1b9b6476a883b1a966440cc
-change-id: 20240726-typo-616bb7db0f68
+> +  QNAP embeds a microcontroller on their NAS devices adding system feature
+> +  as PWM Fan control, additional LEDs, power button status and more.
+> +
+
+With two above:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
--- 
-Cryolitia PukNgae <Cryolitia@gmail.com>
-
+Krzysztof
 
