@@ -1,240 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97980249F9
-	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 18:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF844C99
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 22:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722019686; cv=none; b=b8EdBTgDb7R1LEtcNNHqSJfrKhgmaOGacflctGGkUvkFuohTabWqn3+tYIUIrONNll/YRAQkHYpKbpPL9G7CAidfWRcqJstzTC2JLb2bevghtS0vOg09QIulAK+vuJgxchEM48laVpCPWvlxspF0kwVtF2j/c+gVpETLFZWVIyA=
+	t=1722032169; cv=none; b=a40t/T3/Mu4t3LqRgkPBzVmLbGymiEICs4QSINwT/FVyCHceILro9wVZF2mKW0R3mFVFuJWLw8svofc8TUq4U752UwibWnpnel35Ux0Os6UCnIzImhKqFsQwrG1MMcBb61fK4z5xNtyjzo4b+OryMQM+SscHTISMQxRBNKmQb0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722019686; c=relaxed/simple;
-	bh=EZPFDrqVstVUFtntyjijCgvpX6alEv8hphTJ5ustJK4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XWBy5CU5Km6bLdj495FqsljB4gxZwQV1hBW89xBj0w6egZTD+Sqo3e7mVMAkp3UCaFdwM+NcaLM8+3yDJYbVBR4TT8Mm9fZEwgBo2kHyjYQAvZrVkcdJO5E1iBdoUbZtmYeapwU245/oJh7yxIJn8T8E9+MxefjxKFcjUPWpotI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MZLtDyCL; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722032169; c=relaxed/simple;
+	bh=H0Gnod2k/eOk6M3JrddFBB3zOHA0chbIbqlBeHjAisg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=it6i9KDhF0vmwF8179/isK3akRpKCVDjRjMeo8u02V3zRh3nZlIfeE/yMhsnSxxo/7SSgZnxIVjo9U6rVAljzjt2cvHVNA9S+VWveoAU7ZnystdOkniLnposXS0AlwVGD5ePRJwk7ckqnRGYu5pn2C+1xqFdnTvMHQFKAzz15zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHSw8n1j; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MZLtDyCL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722019684; x=1753555684;
-  h=date:from:to:cc:subject:message-id;
-  bh=EZPFDrqVstVUFtntyjijCgvpX6alEv8hphTJ5ustJK4=;
-  b=MZLtDyCLNqYMotxXUiUYMUbSP3xeF+JnhNpNAHL/LAaf8fFonXNPIvcP
-   a2LIZc4reo1b9faV3/uqHQGFHYv0ONv/LTcFaQtMVMbeB9V1nVWElJ9YO
-   rZWvA+68LXJiWQ37TtFBlzZwntxRR7seVk0b7YUssrZid9DgnzpooKxdo
-   NO3cCDWrPdavE963OOsHREncw/hqWKeEntY7r3QpffHr1TroZ0cgwIrBb
-   wkCK60WPQnY4PzDn8nLpH2xmwN6vUo6/pHLGM2R1KA2kh0SXfrMkPqk6q
-   gRnAPNaAWSZBa3NQB3wFFIDhY/CJ2C/tgfmkBHAJgzJ7pqXfIzBRN8NQU
-   A==;
-X-CSE-ConnectionGUID: uEY/cTltQlOlU8vH9DyqDQ==
-X-CSE-MsgGUID: FJNLPlldSo2i0KAM1jxByg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11145"; a="31218101"
-X-IronPort-AV: E=Sophos;i="6.09,239,1716274800"; 
-   d="scan'208";a="31218101"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2024 11:48:04 -0700
-X-CSE-ConnectionGUID: 030jVaAZQ92V90EqE5vFEg==
-X-CSE-MsgGUID: yDfjhA7BRJutccikrwqWnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,239,1716274800"; 
-   d="scan'208";a="53257446"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 26 Jul 2024 11:48:02 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sXPyy-000pJV-29;
-	Fri, 26 Jul 2024 18:48:00 +0000
-Date: Sat, 27 Jul 2024 02:47:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
- 67bc2980ac76a8afb11c15114ebc23c585a42d84
-Message-ID: <202407270214.Q9q3NQoQ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHSw8n1j"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fd9e70b592so9300645ad.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 Jul 2024 15:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722032167; x=1722636967; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hs3+rDnoNa11yqRKjIlgGE8CIDzcydZoSFfJtreRiGg=;
+        b=YHSw8n1jzN9TvtSG7VLP8UFGpIT2WQ5NZZpum95ihsNQSxvRPRHVilEoXnpnzeQCtt
+         WBf3j/AFq3tjpfTV4WROCHGLcsgb3FqYMWwRav+QGoscZMimLOelijuaBU9uTsJgq09j
+         F9eXOoPtO4RFt7So/yj24AgobDNFfBzN434xPO4dQ9qoazX0Bprf8sVDAxGnUPk8yr18
+         bpCkygWP9WKwrg2uoHjJ+b0Zjgc2V8SCZnkHwjNyVt3NDfWkBTXucSYHVtOcWjeHVXTm
+         T1KbD1XnxLhZe48EkPbRWtSDO/9b0iGAm++uG0qG1IRtuqlzIDKslA3499Cd5K70GIsr
+         aAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722032167; x=1722636967;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hs3+rDnoNa11yqRKjIlgGE8CIDzcydZoSFfJtreRiGg=;
+        b=JIjvfqHvE34UcO/fHplujEK3w4QahvMcr2AdYsXvrlQM3e5qg2cwW82Pa3PsY6i294
+         8lM9wv2+Go9TeaBizyCZjptW2txxSaqArwgz52EbvjgoMd2yXUMkQv+pU1ajbcBC7Xob
+         6nDsrUrF53DhvVecfqGxmP7oCzv/3xoR2/jFz/osXq5UxOeRKLv2TZxJiHxzSW0bA+U+
+         acxGwx1pR5lLXHEe3y57ZekuC/rdyHQPeHIActbcBRR2ILBfRiTiIO/fZftx/8nL0ghQ
+         0SspcYCOZk8+pLEdn+ZBTffC+2HnpzWlB/R63lE/6dXfpV0EYGOrpLMimNs0yT+ib4li
+         gY/w==
+X-Gm-Message-State: AOJu0YzTKLtSu7yqIfyVXMOoTFsvzElA4GmV3RiUxPZgoxQeJC5SOJkt
+	yyscZoUuuX+J0b8mUUvCo6W6BwBjpktNwROUDukrnkt1ENVmxvU+x5w+BQ==
+X-Google-Smtp-Source: AGHT+IGj0ttat9YdSJjhGEL9fY+0S0+t5UFOeCDN9JX3TV5fKLNUbyhV5WGcDFInEJQVuzeMRWeaBA==
+X-Received: by 2002:a17:902:e5d2:b0:1fb:54d9:ebbb with SMTP id d9443c01a7336-1ff047a60ebmr10875755ad.22.1722032166627;
+        Fri, 26 Jul 2024 15:16:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f2baf9sm37850565ad.210.2024.07.26.15.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 15:16:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/5] hwmon: (max1668) Modernize driver
+Date: Fri, 26 Jul 2024 15:15:58 -0700
+Message-Id: <20240726221603.1190437-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
-branch HEAD: 67bc2980ac76a8afb11c15114ebc23c585a42d84  Merge branch 'hwmon-max16065' into hwmon-staging
+Clean up driver and convert it to use regmap and with_info hardware
+monitoring API to reduce code size and to make it easier to maintain.
 
-elapsed time: 1014m
+v2:
+- Added Reviewed-by: tags
+- Dropped no longer needed include files
+- Fixed wrong fault bit in regmap conversion patch
 
-configs tested: 163
-configs skipped: 4
+----------------------------------------------------------------
+Guenter Roeck (5):
+      hwmon: (max1668) Reorder include files to alphabetic order
+      hwmon: (max1668) Use BIT macro
+      hwmon: (max1668) Convert to use regmap
+      hwmon: (max1668) Replace chip type with number of channels
+      hwmon: (max1668) Convert to use with_info hwmon API
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                            allyesconfig   gcc-13.3.0
-alpha                               defconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arc                        nsimosci_defconfig   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                              allmodconfig   gcc-14.1.0
-arm                               allnoconfig   gcc-13.2.0
-arm                              allyesconfig   gcc-13.2.0
-arm                              allyesconfig   gcc-14.1.0
-arm                                 defconfig   gcc-13.2.0
-arm                          gemini_defconfig   clang-20
-arm                        keystone_defconfig   clang-20
-arm                         mv78xx0_defconfig   gcc-13.2.0
-arm                        mvebu_v5_defconfig   gcc-13.2.0
-arm                       omap2plus_defconfig   gcc-13.2.0
-arm                          pxa168_defconfig   clang-20
-arm                         s3c6400_defconfig   clang-20
-arm                           tegra_defconfig   gcc-13.2.0
-arm64                            allmodconfig   clang-20
-arm64                            allmodconfig   gcc-13.2.0
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-hexagon                          allmodconfig   clang-20
-hexagon                          allyesconfig   clang-20
-i386                             allmodconfig   clang-18
-i386                             allmodconfig   gcc-13
-i386                              allnoconfig   clang-18
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   clang-18
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240726   gcc-13
-i386         buildonly-randconfig-002-20240726   clang-18
-i386         buildonly-randconfig-002-20240726   gcc-13
-i386         buildonly-randconfig-003-20240726   gcc-13
-i386         buildonly-randconfig-004-20240726   clang-18
-i386         buildonly-randconfig-004-20240726   gcc-13
-i386         buildonly-randconfig-005-20240726   gcc-13
-i386         buildonly-randconfig-005-20240726   gcc-7
-i386         buildonly-randconfig-006-20240726   clang-18
-i386         buildonly-randconfig-006-20240726   gcc-13
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240726   gcc-13
-i386                  randconfig-002-20240726   gcc-13
-i386                  randconfig-003-20240726   clang-18
-i386                  randconfig-003-20240726   gcc-13
-i386                  randconfig-004-20240726   gcc-13
-i386                  randconfig-005-20240726   clang-18
-i386                  randconfig-005-20240726   gcc-13
-i386                  randconfig-006-20240726   clang-18
-i386                  randconfig-006-20240726   gcc-13
-i386                  randconfig-011-20240726   gcc-13
-i386                  randconfig-012-20240726   gcc-13
-i386                  randconfig-012-20240726   gcc-8
-i386                  randconfig-013-20240726   gcc-10
-i386                  randconfig-013-20240726   gcc-13
-i386                  randconfig-014-20240726   gcc-13
-i386                  randconfig-015-20240726   clang-18
-i386                  randconfig-015-20240726   gcc-13
-i386                  randconfig-016-20240726   gcc-13
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                                defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                     decstation_defconfig   gcc-13.2.0
-mips                          eyeq5_defconfig   clang-20
-mips                           gcw0_defconfig   gcc-13.2.0
-mips                           xway_defconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-openrisc                          allnoconfig   gcc-14.1.0
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-14.1.0
-openrisc                 simple_smp_defconfig   gcc-13.2.0
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   gcc-14.1.0
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-14.1.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   gcc-14.1.0
-powerpc                          allyesconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                    amigaone_defconfig   gcc-13.2.0
-powerpc                      arches_defconfig   gcc-13.2.0
-powerpc                      bamboo_defconfig   clang-20
-powerpc                       ebony_defconfig   clang-20
-powerpc                 mpc832x_rdb_defconfig   clang-20
-powerpc                  mpc885_ads_defconfig   clang-20
-powerpc                     taishan_defconfig   gcc-13.2.0
-riscv                            allmodconfig   clang-20
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   gcc-14.1.0
-riscv                            allyesconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-14.1.0
-s390                             allmodconfig   clang-20
-s390                              allnoconfig   clang-20
-s390                              allnoconfig   gcc-14.1.0
-s390                             allyesconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-14.1.0
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-13.2.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-14.1.0
-sh                        dreamcast_defconfig   gcc-13.2.0
-sh                          r7780mp_defconfig   gcc-13.2.0
-sh                          rsk7269_defconfig   gcc-13.2.0
-sh                          sdk7780_defconfig   gcc-13.2.0
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-14.1.0
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-17
-um                                allnoconfig   gcc-14.1.0
-um                               allyesconfig   gcc-13
-um                                  defconfig   gcc-14.1.0
-um                             i386_defconfig   gcc-14.1.0
-um                           x86_64_defconfig   gcc-14.1.0
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240726   gcc-13
-x86_64       buildonly-randconfig-002-20240726   gcc-13
-x86_64       buildonly-randconfig-003-20240726   gcc-13
-x86_64       buildonly-randconfig-004-20240726   gcc-13
-x86_64       buildonly-randconfig-005-20240726   gcc-13
-x86_64       buildonly-randconfig-006-20240726   gcc-13
-x86_64                              defconfig   clang-18
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240726   gcc-13
-x86_64                randconfig-002-20240726   gcc-13
-x86_64                randconfig-003-20240726   gcc-13
-x86_64                randconfig-004-20240726   gcc-13
-x86_64                randconfig-005-20240726   gcc-13
-x86_64                randconfig-006-20240726   gcc-13
-x86_64                randconfig-011-20240726   gcc-13
-x86_64                randconfig-012-20240726   gcc-13
-x86_64                randconfig-013-20240726   gcc-13
-x86_64                randconfig-014-20240726   gcc-13
-x86_64                randconfig-015-20240726   gcc-13
-x86_64                randconfig-016-20240726   gcc-13
-x86_64                randconfig-071-20240726   gcc-13
-x86_64                randconfig-072-20240726   gcc-13
-x86_64                randconfig-073-20240726   gcc-13
-x86_64                randconfig-074-20240726   gcc-13
-x86_64                randconfig-075-20240726   gcc-13
-x86_64                randconfig-076-20240726   gcc-13
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                  audio_kc705_defconfig   gcc-13.2.0
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ drivers/hwmon/max1668.c | 487 ++++++++++++++++++------------------------------
+ 1 file changed, 180 insertions(+), 307 deletions(-)
