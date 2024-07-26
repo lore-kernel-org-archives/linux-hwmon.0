@@ -1,66 +1,66 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E10FC2FC;
-	Fri, 26 Jul 2024 14:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7735D1CA80;
+	Fri, 26 Jul 2024 14:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722003667; cv=none; b=moff5SM6oD5P3VK1rKk8z1mjWXshusEfMkUF2sev4N33suV1icPqOiwOit/3EY8blAX1s64mBlwhnnu2kOOrjyYVBh20T1vpw6vxYq2hguie3RpcNgSJRem/MlAvkD6PW+v+9pKJo1RDifagvq6xNBz1vFtdAeHHHQ9gxuhyXCQ=
+	t=1722003947; cv=none; b=i1qcr/AT2eSC7nxlfzin3HObj1NxiMArycSU67mZH/9mBwoIvrQkyKYEp9nYbWC8Nan+CfPibDUKdGMMAIyYmhB+jSHuphRwgy7JcYB1WyEOffBchWwH6PCLFUANkNW2lfI9ZNi3yT182i7CRlpyqWSbDkLoyG95U+x99+HJiP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722003667; c=relaxed/simple;
-	bh=DNwk3I1f/fSk4di5p2HsLWzCelPOwoh9KSpwfjtRbio=;
+	s=arc-20240116; t=1722003947; c=relaxed/simple;
+	bh=Dn135Z5lIeJU8XZ+6nZPpMeFanBfB1QMFUV4i8APx5k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nmp3K0PpzMcLimCOE4TJy4T1M83C3QMbOMl9n9SSvWOnnyG7pkVdxk+1pXtBW64guo/LTo8p67w0VD8NC6uiLzUxqXDFox4Penayo8T+rqdfLacnTgRFQhfihSdu9TDWc4ll0i4dBvOF8S4+3BjVlxSitqBlIXYiCnVeD81U4QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gNs2edn1; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4KBehLFfuNGlUJtYJMk/sakFNtDDJvznautacJYeY1OQ7uqBWUnLJMy8lL2cjIfVfoes8gltHYgOevLV63cLoFQIJMWWtkzF5nNwviSEzi94qeMktGI+DSqG1g1s2jp7hV5I0fAFyKUPcxGD8N+aAp96Ejq9X3cAYLWcNyU/uI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7DsES4G; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gNs2edn1"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70d19d768c2so881031b3a.3;
-        Fri, 26 Jul 2024 07:21:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7DsES4G"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3d6301e7279so686514b6e.3;
+        Fri, 26 Jul 2024 07:25:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722003665; x=1722608465; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722003945; x=1722608745; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vUNh+TkG6bDRDZgn3CoW/HOQcsGVtwoCqNd8S8gTyyQ=;
-        b=gNs2edn1HzSM2kSq14AuHJY0osIOQ9jm2P1SE3jGcte4+yiHXaIM4lusbnDrg6PbEV
-         Tk0umdBurXfPmrPGa3zJygigd0X+wRWVLkTFJNSLBU0gwmhqq14t4LCbxJPd9tcOoQxN
-         RmSVpZKYgUjfDF/DxLDo+N8cXEAy6dNZUvvn5VLxMaGNSRqOr34aorsiwP9P5llmUSZk
-         w9n2hxJUpe31VPhp7rh/LjpL8RMiFSu18CBAwcXuH5kLNPSEMhLVtgrxnpqgagileE4W
-         ntuPkQhllDNG/u4iK+za/p8KEmgIdLauRsONGoPC6WKjKxd3wDRe0ad6ug8swmHuat8+
-         9ctg==
+        bh=k2dSjzQVoou3+io8zljtSLUJKL0DDyVy1h+d2igdtKk=;
+        b=R7DsES4GWOJHLRiRqQ5qOL/u+2m1QS2QJyggyGSLRsFT8ie/9K9R4VbU+n5Nqd9wBx
+         i70g4F1+kgNf7SUbQKm4BAL6VkKI4NV8LUV7FNv+oD8VZuDFpwOLhd9hGe6m8fhsULK3
+         EuwNXYdZgpQTuGUIKlpi0x7HGGA0gKnZKw10BbXezBCbZ+WykpbpSSojhze8Ri9JNZY4
+         lg2wKrwF5qObcF0G+uDGGTL1bDWEF++bj5XqSyThrfNmMeBSVlCniXUoylfQxZnFI8Yn
+         dqhe2Ko+eroWeaVQT0Knax1AVIteRhiFxmnolmEfvljHtOBa6bKISthLNrn5ghrW2mT2
+         PUFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722003665; x=1722608465;
+        d=1e100.net; s=20230601; t=1722003945; x=1722608745;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vUNh+TkG6bDRDZgn3CoW/HOQcsGVtwoCqNd8S8gTyyQ=;
-        b=MB1qUmbgjEyzBGIf4uT+HmsAU1ByXb3A5+rm1APoanckNXVshJ0OjzX5yN4x9d5qsS
-         hh5KlRLv9opOtl7pslcdjxDnAC5CZMOiWSjxFwx4eAwFdfmWPh9nuqqOXXSKWQUj4e6P
-         f+U4TV/MXgxMpzgjEKBn0WL8S1AcBJpggaTussDnnhqvEBQ6hfOebZXDJP2yxB1GtLTw
-         zQAYV2STsLKU09+3zMgvJFL1l1GK6c1ny9Y/yvdu/x1wqD9kYCTSFyV5Tg9FrUDk2G4s
-         ELsV/e0S3M489+ILaulCZlF5HBO7F3LDG6udAGuKRNk/awbsctq+ba86cdxqV/sX7ajG
-         rRdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjn6o0ZfBchGajNdU6LySUd4lsSHPShicMql4YwU4MuVoLTo7yl3Dk2mVphpqtX8ae9hHOeM5zvcCIlTWpNXnf9upwN4cdWLOfe8QBdUB/nNybKOcT2rxOfnEega+LRVtjk82fldLYkEk8GZbAjkC+VX+wuoyHZCjA7UuxoEz8MY95Vss=
-X-Gm-Message-State: AOJu0Yy0Y1C/j08H0Jd2b2tc3nlek/hka4XGNHEtHW/E4WKzdOY80rh2
-	CotFOSaD1PD+x2uHOjg6lCRGSL2jsdpbFd2x9S/N4xbFDppUdrug
-X-Google-Smtp-Source: AGHT+IEw4oTFjdB/5J9Pj1YPyu96hZlE919BJH6oLA8KA0M0dqho43sCy9mA1k8SmpBYDRufkes6Gg==
-X-Received: by 2002:a17:90b:1bcc:b0:2c2:5f25:5490 with SMTP id 98e67ed59e1d1-2cf2eb20008mr5937036a91.34.1722003665421;
-        Fri, 26 Jul 2024 07:21:05 -0700 (PDT)
+        bh=k2dSjzQVoou3+io8zljtSLUJKL0DDyVy1h+d2igdtKk=;
+        b=YrKl4v7OvLcnLQ1JDCEth+fHwXKMDO9azKbT0omoOty5QuA5sJE6Mp1FRBYkJiRTuQ
+         NeAi3r52K9GT49OorhlLhQgXaQwdYNYP+aDlTO4KikNCCCMKKBYNjP/GfaC6yHIs1WvM
+         iIIIKARuOiao9enA3spfJFLc2+j8VS0WD42XA5CN3nBZr+zJD4I3p8jH4a1ERkZXzCiv
+         G3crbcLzSyjH6flJ+QoSBsL2tSd3jRI79m28fq2FO+UMswH3pdO0Uexw2IG0cTelrc8V
+         umT4xW83QtE9nSJrC7tpvxQ1cEMGXalDqIoeIcAuwmCyq7lXjeeEUmHcaDtQE0aO324i
+         HAlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUha4kS32OFR8hb4QRpg7YsZqNlSPU+/WQURKNgg5ZSxUwE5YqDywJCTwMBFyL5ZiCC9zib5eVvBwRX6XX4R+WUlEKDrWPitsPCqOUGZx/k/+sA95dHAcJe3CdZR0ocXGONkUlIM5zj9XTwA1nzML4HvcWbcieSdXbogPIEaXThG1NVQKI=
+X-Gm-Message-State: AOJu0YwsoRuf6uLWkKYDAjoWBbW6o8DxPBw8uKF+ClDPUGZer1oXpcc1
+	PpSw8DfjKj42VML9vgL1/lAxJWH5ImHX/nZvEhJuc23gRMRACdro
+X-Google-Smtp-Source: AGHT+IGQcCgvF2YcDKF8DG4or6U99L3ds2DC7EMO4xgSJ6DHv7uif2MT5LRGelGsU0gcV84NNTP83w==
+X-Received: by 2002:a05:6808:1816:b0:3d9:28cd:4f89 with SMTP id 5614622812f47-3db140ecad5mr5450726b6e.24.1722003945514;
+        Fri, 26 Jul 2024 07:25:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdb73b32cbsm5499610a91.17.2024.07.26.07.21.04
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9fa593715sm2883820a12.84.2024.07.26.07.25.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 07:21:04 -0700 (PDT)
+        Fri, 26 Jul 2024 07:25:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 26 Jul 2024 07:21:03 -0700
+Date: Fri, 26 Jul 2024 07:25:43 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Cryolitia@gmail.com
 Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, trivial@kernel.org
 Subject: Re: [PATCH] hwmon: document: fix typo in oxp-sensors
-Message-ID: <fca04d5b-5454-4642-aa59-06162f8d9262@roeck-us.net>
+Message-ID: <e4f93c17-be7f-405b-babb-2b4aef709537@roeck-us.net>
 References: <20240726-typo-v1-1-3ca3f07f93e9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -76,19 +76,16 @@ On Fri, Jul 26, 2024 at 09:21:14AM +0800, Cryolitia PukNgae via B4 Relay wrote:
 > From: Cryolitia PukNgae <Cryolitia@gmail.com>
 > 
 > RMP -> RPM
+> ---
+> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
 
-The subject should have been something like
-	hwmon: (oxp-sensors) Fix typo in documentation
-
-Never mind, I fixed that up.
-
-Applied.
+Plus, having your Signed-off-by: tag after '---' drops it
+when applying the patch. _Please_ be more careful when submitting
+patches, even more so for minor ones like this one.
 
 Thanks,
 Guenter
 
-> ---
-> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
 > ---
 >  Documentation/hwmon/oxp-sensors.rst | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
