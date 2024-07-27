@@ -1,63 +1,63 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E86317F4E7
-	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jul 2024 14:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D92717F4FA
+	for <linux-hwmon@vger.kernel.org>; Sat, 27 Jul 2024 14:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722091116; cv=none; b=TZjWb4uGcA+VzVC+KrLQ7ii/erxKtkL9rMxO3OYFsJrAfISizpBZ/GFhXY17n13av9FFbYcK9l8W2P9A4nfzC+Uofzb5OVjOEZIe2o7AXq/YdesTU3lxd9OVD3knagU1ocuOBjgUUa1GVNrG26B2VZ6Mi6fIRQ5uifFhaeeog7E=
+	t=1722091117; cv=none; b=MgQsfDhC+oAcJtLOdy7pBqrGPf2P63W+2HPz3iN1Z3QS0eBR4xocG3mRr0iXGqpa6uwYMuBewpw/aHKg9IEFttgIlQlzxZPyDnpfbK+kaN+mk4uVI6uEfhbMKo5McSSs9FUY6Zy2BIXNvg0F5t+qQ67oLhqeo97/fck+22TPMJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722091116; c=relaxed/simple;
-	bh=P9oZ68LneqTkxD52x28dXbNSxuL0oRl4hl0x7QpyVEc=;
+	s=arc-20240116; t=1722091117; c=relaxed/simple;
+	bh=RSvztWsFC8r+hApjT51Ztdy0YP6vZiSrufocsnKTE8I=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oLuBFZ8C9jJvXKus7BzqHVwhHhUS7ztBIG+NZu0eq9TfauhO7QAY1+HS74BVYYQYPS/X+8RFqrkBki9xt7v6dgIyNQ2q8XA5+OxVWQ0VTmkb1ZBPjM2KW1jIPPe8XSwImBf8n/z5/Erxddr8lakf9ubSIZdpUXz15PKfdQNR3PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QaPxl9cF; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=RE468sYfSkFaNUrH8SImPnFh8axcH7z/fjm8WBqC50FA2I0e4rpGG74ZS24bockfS988TrgmEdfgYOOJ4Gw1NXzOzhh3SCCazek12a/3drL3zTa8kEdxWE50tUYUXHcOXjaf+zNr6/NFYGryBxYHWnXl1c8wqMDPPwUSxz6wG0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DRy0B71/; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QaPxl9cF"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fc4fccdd78so11768815ad.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jul 2024 07:38:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DRy0B71/"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70b703eda27so1220336b3a.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 27 Jul 2024 07:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722091113; x=1722695913; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722091115; x=1722695915; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rgP4eqX8nQMm7kPlYFEnUJf4BHxvfPBYpZaKMJ8sc3g=;
-        b=QaPxl9cFk59Zst5mex2EvCMGBvt0B8Cq6RfXrvBi26R7V/kNHs33Ddh/xZr4VPTCyM
-         Jf9sqUZCTOSaOa9kuJ8+wf63lk8/2WzYcN8rsWsTTB9fJgEOyh5eCfZ7BZYkLeRWtTHy
-         GIPmQSkDEQwCNve2veOA8ci5ioWppYGeq7lKv21PTiQyd/zQAxFJ09aWwuGQm4aI19Am
-         ev3xrfw6SqSXZ0t17kxa8BIJkgN7QVLVNQzA1yyfP0yssSmxC5l7g/27YeWTzV7JxA1y
-         60+EbCtem+NS4ApPgErhvrV3Aid3r1e10WSPv37/d1Ipikvw44QhgaDtfXOITPRqwFGk
-         oDAQ==
+        bh=ftpkBdMptxPsjLxu2uLiHpkSFlQTD+VnwsJlH+CgPTg=;
+        b=DRy0B71/IRxI26WHSXNJfc8TEPKYddoIkymTdQLfgeWBmSCqAjAHA8uYxziZJ3Ztl8
+         Zf/Kk+4Onf21Ilf2nPb0wl0D0y9hhVkTBmlba1OZgYAcVScMVJPNqZVM3vOoKjY4T35W
+         ILRWBJkja/FPlU9balntC9l34Xr0jXI0f19LpShkr9Fn96hKi0gKxj1GI1I5pNWppG2A
+         4SuGXVMdlMeMC8Ic70Zdrfhy2bDtQ0CK7Gc08g6Ye26wykeSNSGpiqExOhbXqeRwitXV
+         hI3P5q/7vxTwXVAo4rjrbcc7LfHTeWYJcJbpTYuGFoyc+SAzExe4tvz9itMhC9dIe9rG
+         l0Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722091113; x=1722695913;
+        d=1e100.net; s=20230601; t=1722091115; x=1722695915;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rgP4eqX8nQMm7kPlYFEnUJf4BHxvfPBYpZaKMJ8sc3g=;
-        b=PNAwkQ6EFXi7i1Xo+tbDZFZfVaPMc+Em9GkfTpQmZhG9NaDRSWuvvqH5hrTKG93Krl
-         izKciPQympfKre0CbUcoRJ3MBamIQxJIpaRAonaExKk+aXRORuYBnFVoeLTljJ7fuCGN
-         uKU6CzpqZA+I207tzFkgCX3Cf/VHgQ+qYugvfaW5IMN2QAyGAardqffSyK9gTPj4WVyR
-         LBCrfChB1T4rdlfmS/vbOUlVTwmM8e8Zk6A55Dkox768ECpfNOujI+94Zd7b4jdOsqxK
-         SxQLM0YzjMt2IuHIFKkeowf5ABFRWb92kR+ZoMwPe5gTV13xREPNP083dJLZvO20AAS4
-         6Bzw==
-X-Gm-Message-State: AOJu0YzRxXxoZaExPpWUfCdY/VcOKaxQld0EcB+TkpCes4sZF6mNkI9X
-	w608r7MQoMBwBIgeGNbYwo1ex+Hrr2OyeRbhsHz170+3evo/QIjAfZcp8w==
-X-Google-Smtp-Source: AGHT+IFFVlfYIaALMCa9EgcPBwv4f2+faksMDySfpSB98W77nflVlpJrz/GGxyZdXatlEAJt6QRHRg==
-X-Received: by 2002:a17:902:8208:b0:1fd:9269:72c6 with SMTP id d9443c01a7336-1ff04950890mr22758165ad.62.1722091113411;
-        Sat, 27 Jul 2024 07:38:33 -0700 (PDT)
+        bh=ftpkBdMptxPsjLxu2uLiHpkSFlQTD+VnwsJlH+CgPTg=;
+        b=GpA6AjnxtBwtZIkD/3UTP7j8+XvWI7uQmMBDyf3R39FYcW1e8nVrdU+VStP3f5fV7p
+         hSAeqFLyhPB0seFUUH56l3Nst5NAdESceV2ERoW7nBlcDO/cmi8HPO/NiLq0ZkcyzjIt
+         Y3fuZXmBa8g9b/zC2PI0PiIPhnPuPe6vtJk4ELI0lWaFulvnRH+fd6j/PE3Xb2eCOm2c
+         Ud3KsplrIuGX0vJQMdn+3ltIosyyYY8ZH97zXkjyXonmk//YzFTtIh0Rip7lv4hlEaF2
+         /PtlzHgBeBVRFlbPrTOofXXKtPLH+dV9eGFXQgk6JgHYsJUu7ptWVGt7J/Q1zGoFzApW
+         iNnw==
+X-Gm-Message-State: AOJu0YwPsKkCYB7TAD7/Hn3cOAdao6FnyvUwsMVKbItIrdCm9goRXx3+
+	h0J95Tu6wDHqN4Ingdrm/kvnRuKaaUIN8ltRmckTkIBeO9/18Z9U0tGFkg==
+X-Google-Smtp-Source: AGHT+IHu7g3McASfrvoZSL2Pjv4HpXHtBi2s5lJup9tEVFNLORduHtIxwdIKVDZN05tdvijHSD+jsA==
+X-Received: by 2002:a05:6a00:4651:b0:706:34f3:7b60 with SMTP id d2e1a72fcca58-70eceda1d57mr2381409b3a.23.1722091115081;
+        Sat, 27 Jul 2024 07:38:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7edd813sm51477515ad.170.2024.07.27.07.38.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead8a3a86sm4221091b3a.205.2024.07.27.07.38.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 07:38:32 -0700 (PDT)
+        Sat, 27 Jul 2024 07:38:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5/6] hwmon: (max1619) Add support for update_interval attribute
-Date: Sat, 27 Jul 2024 07:38:19 -0700
-Message-Id: <20240727143820.1358225-6-linux@roeck-us.net>
+Subject: [PATCH 6/6] hwmon: (max1619) Improve chip detection code
+Date: Sat, 27 Jul 2024 07:38:20 -0700
+Message-Id: <20240727143820.1358225-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240727143820.1358225-1-linux@roeck-us.net>
 References: <20240727143820.1358225-1-linux@roeck-us.net>
@@ -69,115 +69,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The chip supports reading and writing the conversion rate.
-Add support for the update_interval sysfs attribute.
+Bail out immediately if reading any of the registers used for chip
+detection fails, or if it returns an unexpected value. Drop all log
+messages from detection code.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max1619.c | 50 ++++++++++++++++++++++++++++++++++-------
- 1 file changed, 42 insertions(+), 8 deletions(-)
+ drivers/hwmon/max1619.c | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/hwmon/max1619.c b/drivers/hwmon/max1619.c
-index 966fe650aa59..40f0726e9f22 100644
+index 40f0726e9f22..9cbca17f27a5 100644
 --- a/drivers/hwmon/max1619.c
 +++ b/drivers/hwmon/max1619.c
-@@ -18,6 +18,7 @@
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-+#include <linux/util_macros.h>
- 
- static const unsigned short normal_i2c[] = {
- 	0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x4c, 0x4d, 0x4e, I2C_CLIENT_END };
-@@ -102,11 +103,20 @@ static int max1619_temp_read(struct regmap *regmap, u32 attr, int channel, long
- 	return 0;
- }
- 
-+static u16 update_intervals[] = { 16000, 8000, 4000, 2000, 1000, 500, 250, 125 };
-+
- static int max1619_chip_read(struct regmap *regmap, u32 attr, long *val)
+@@ -260,31 +260,27 @@ static int max1619_detect(struct i2c_client *client,
+ 			  struct i2c_board_info *info)
  {
--	int alarms;
-+	int alarms, ret;
-+	u32 regval;
+ 	struct i2c_adapter *adapter = client->adapter;
+-	u8 reg_config, reg_convrate, reg_status, man_id, chip_id;
++	int regval;
  
- 	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		ret = regmap_read(regmap, MAX1619_REG_CONVRATE, &regval);
-+		if (ret < 0)
-+			return ret;
-+		*val = update_intervals[regval & 7];
-+		break;
- 	case hwmon_chip_alarms:
- 		alarms = get_alarms(regmap);
- 		if (alarms < 0)
-@@ -134,14 +144,21 @@ static int max1619_read(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+ 		return -ENODEV;
  
--static int max1619_write(struct device *dev, enum hwmon_sensor_types type,
--			 u32 attr, int channel, long val)
-+static int max1619_chip_write(struct regmap *regmap, u32 attr, long val)
- {
--	struct regmap *regmap = dev_get_drvdata(dev);
--	int reg;
--
--	if (type != hwmon_temp)
-+	switch (attr) {
-+	case hwmon_chip_update_interval:
-+		val = find_closest_descending(val, update_intervals, ARRAY_SIZE(update_intervals));
-+		return regmap_write(regmap, MAX1619_REG_CONVRATE, val);
-+	default:
- 		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int max1619_temp_write(struct regmap *regmap,
-+			      u32 attr, int channel, long val)
-+{
-+	int reg;
+-	/* detection */
+-	reg_config = i2c_smbus_read_byte_data(client, MAX1619_REG_CONFIG);
+-	reg_convrate = i2c_smbus_read_byte_data(client, MAX1619_REG_CONVRATE);
+-	reg_status = i2c_smbus_read_byte_data(client, MAX1619_REG_STATUS);
+-	if ((reg_config & 0x03) != 0x00
+-	 || reg_convrate > 0x07 || (reg_status & 0x61) != 0x00) {
+-		dev_dbg(&adapter->dev, "MAX1619 detection failed at 0x%02x\n",
+-			client->addr);
++	regval = i2c_smbus_read_byte_data(client, MAX1619_REG_CONFIG);
++	if (regval < 0 || (regval & 0x03))
++		return -ENODEV;
++	regval = i2c_smbus_read_byte_data(client, MAX1619_REG_CONVRATE);
++	if (regval < 0 || regval > 0x07)
++		return -ENODEV;
++	regval = i2c_smbus_read_byte_data(client, MAX1619_REG_STATUS);
++	if (regval < 0 || (regval & 0x61))
+ 		return -ENODEV;
+-	}
  
- 	switch (attr) {
- 	case hwmon_temp_min:
-@@ -163,12 +180,29 @@ static int max1619_write(struct device *dev, enum hwmon_sensor_types type,
- 	return regmap_write(regmap, reg, val);
- }
+-	/* identification */
+-	man_id = i2c_smbus_read_byte_data(client, MAX1619_REG_MAN_ID);
+-	chip_id = i2c_smbus_read_byte_data(client, MAX1619_REG_CHIP_ID);
+-	if (man_id != 0x4D || chip_id != 0x04) {
+-		dev_info(&adapter->dev,
+-			 "Unsupported chip (man_id=0x%02X, chip_id=0x%02X).\n",
+-			 man_id, chip_id);
++	regval = i2c_smbus_read_byte_data(client, MAX1619_REG_MAN_ID);
++	if (regval != 0x4d)
++		return -ENODEV;
++	regval = i2c_smbus_read_byte_data(client, MAX1619_REG_CHIP_ID);
++	if (regval != 0x04)
+ 		return -ENODEV;
+-	}
  
-+static int max1619_write(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long val)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_chip:
-+		return max1619_chip_write(regmap, attr, val);
-+	case hwmon_temp:
-+		return max1619_temp_write(regmap, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static umode_t max1619_is_visible(const void *_data, enum hwmon_sensor_types type,
- 				  u32 attr, int channel)
- {
- 	switch (type) {
- 	case hwmon_chip:
- 		switch (attr) {
-+		case hwmon_chip_update_interval:
-+			return 0644;
- 		case hwmon_chip_alarms:
- 			return 0444;
- 		default:
-@@ -200,7 +234,7 @@ static umode_t max1619_is_visible(const void *_data, enum hwmon_sensor_types typ
- }
+ 	strscpy(info->type, "max1619", I2C_NAME_SIZE);
  
- static const struct hwmon_channel_info * const max1619_info[] = {
--	HWMON_CHANNEL_INFO(chip, HWMON_C_ALARMS),
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_ALARMS | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT,
- 			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
 -- 
 2.39.2
 
