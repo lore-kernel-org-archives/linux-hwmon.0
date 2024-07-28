@@ -1,68 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C898636124
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 12:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731FD2F28
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 14:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722169033; cv=none; b=LREraaer0edgiueiOQ/FfokH34eAaSjASUpcahoPYhx42tmo4jaKDgZyWvx7s4QBoknMfDrPoJEWr+FH3yHeLxdTtnvcUmor4iMaCOztAn+1sZRAN+nrGYpINz+KjVTx8/u5E0lVA9vz6Ye8ICkJUQfHFvueIVXrrwV9kA7S4JQ=
+	t=1722177442; cv=none; b=fz3fRYEcatN0yXY7Fz+xK8JuTxQxkpLBGSzqUFsja9bDbJF6QaBbQpck437iVj9r1etmKBIQV+o2e+pAagGFP5/V7Z7YsMvGe4667hp39V3gjnE4S2eGi0oWTqJ9DSK5NhsyUqGfYwuw6FASzl+/wxLpunR/X8HIfDBhwMlP8mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722169033; c=relaxed/simple;
-	bh=WGZp5svto0C6JU6uI8AUm3qwBYFcSQ7+28Pf3POBiRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=orVQc+zUdEQW2+sHqs4jF61XRH28Du7fxKTFE/8R+/O54I8VqJjNUzPKELmmY6keNjPA6Z7r1PCIkj1MW2vtlD3dld0DE4XvzOa8Cxg77Yqa6Z9bYX2QAMFNwVEM/Tx9IktDWad8QstY4O0uh7bWGoPoxLbUaXH03HmeSAFe4aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnjR1OjR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722177442; c=relaxed/simple;
+	bh=nbdJug5zn2m3JgWsVyQ9xULnlbLqPOo47AZhHQRIMsk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bpVTW8f7vVg55r3Awu53Pi9wScz8GU8Z1jiaQhhKJPVSYmfNXZxlDYBSG3tbpnhTsS3Ht9RXBFPtliM3xuSxoZy1cAYLNECodaxDwaxxDeDYxv+hmtVfmk1vpRpdNj05WjFJPWGLYmi+cD03Nd3/FU5PHj5J+CfRQUxqnUS/Xgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Klcd5PVJ; arc=none smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnjR1OjR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D60C116B1;
-	Sun, 28 Jul 2024 12:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722169033;
-	bh=WGZp5svto0C6JU6uI8AUm3qwBYFcSQ7+28Pf3POBiRw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nnjR1OjRfBBcHOJM7B0pymd6vaxd4G0WZgJTi9p+88omawSuHiksJO2lnz5RylCkk
-	 G6gKcMr+I+zxHnB1ptNwNAeEea0v6Cm/vcBCJUryH5yVs6tgQz+tRu7vTzypiLwRIM
-	 5akuluXQUpR27uZ9+rPCYZF1QwJ2wAS7WRcW2N11lSt4focLJCARMHiF7PKkIMNX0Z
-	 RHM2y9anK0f1Bakl4GDE8a+Oo1RuO+M+RUuttuGOQOCuj+A+aWgEoobZAr7aR/1Ubd
-	 4xWngL/gA0ebrcApVK1cLtQFa6SRrEcT05WjUiKwYcwVQ7vc7CbvQB0ql5fgl2Ammp
-	 ivNOz3MNrQdQg==
-Date: Sun, 28 Jul 2024 20:17:10 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: (max6697) Document discrepancy in overtemperature
- status bit values
-Message-ID: <ZqY2xgkvdOgWKN4s@tzungbi-laptop>
-References: <20240727202007.1656841-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Klcd5PVJ"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3db157cb959so1751296b6e.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 07:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722177439; x=1722782239; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=KkpbVRpKNiOVQhkYuC8K5xX5pA0wpZp0Py/VZMVJzBQ=;
+        b=Klcd5PVJ5lxvipjIDkZL9mBQOcwaquQGZkk8VTJnfxtQ2x29w0S1Zh0dz54pAo9+JF
+         xMpEHrd0gaUZ9BVq7k9vV16xAxhe1gb5yz5I8WEsd1NePQazXiJ/zARViqnyFEm2wpZ6
+         jMqijfWqyCfKGjoS7x+cIvlec76njqZnRxSgAkd4l1SQyBfjFQDLlM6c6egjsCKF8lKQ
+         T/49OD5am6Q1nNPSDUnB3YtcXxyDK1xE2WdTJoitbLGY5eqFNBLASXqw/UOwOg78+ODy
+         JqcFdiyX+pH+jmmxoWXPZ3OZIlCE9SXFV455CHhY7LkPYDFc0AV4bxLhHdQVjGQhcCLH
+         Tp2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722177439; x=1722782239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KkpbVRpKNiOVQhkYuC8K5xX5pA0wpZp0Py/VZMVJzBQ=;
+        b=nrOr2yaSS7abKg1G/dlOKDr807j1MbSXKI1fP652NGUpMwQuEA6JpfyPOj4KExHVHW
+         1Leqdjjng54hBJDNa8uOGQlHkcyVGOP2X2Ni+3hDdDIHnuOTQVjGHFE4tw/qDfGKd5Uk
+         sAaG86R+mHPsz49UiygqgxbvFJ9hvezI67j6ZiJ85z8VxOtRpsMcPwNZ7CTY0GMHGGOq
+         0+3jQsfhAU/4Usgz3yYdcTMfN38wdbZISIvKFzYkRdXw2oT2hjW46iPCjFG9a5qvAWts
+         86RLaYT0q4pD5IiqPUT7OdzaSQrajB5DGvzK94Gi13Uht4S44OcXQTfmsM1Bm64yJ6kB
+         LCCA==
+X-Gm-Message-State: AOJu0YxYXJtYy9ErlNzxMWpUf/2LezlXo80RhQvG67u3N5IvWtotV1hm
+	DPNRcZVvotsJYecnt7rALqZ68eCu2M7h5J5l+Co/hr26NmGB7UysdUEjSQ==
+X-Google-Smtp-Source: AGHT+IGH0c2/3ePdkLSvtq1StY5M1Bbe2n3Iyb2XvEITtsmUD/rwgIz6VxeQWHhovamk3VfE0hVuhg==
+X-Received: by 2002:a05:6808:200d:b0:3db:160b:d5e7 with SMTP id 5614622812f47-3db23a09513mr6783193b6e.22.1722177439016;
+        Sun, 28 Jul 2024 07:37:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7ee5734sm65511685ad.135.2024.07.28.07.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jul 2024 07:37:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/7] hwmon: (max1619) Modernize driver
+Date: Sun, 28 Jul 2024 07:37:08 -0700
+Message-Id: <20240728143715.1585816-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240727202007.1656841-1-linux@roeck-us.net>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 27, 2024 at 01:20:07PM -0700, Guenter Roeck wrote:
-> In the MAX6581 datasheet Revision 0 to 3, the local channel overtemperature
-> status is reported in bit 6 of register 0x45, and the overtemperature
-> status for remote channel 7 is reported in bit 7. In Revision 4 and later,
-> the local channel overtemperature status is reported in bit 7, and the
-> remote channel 7 overtemperature status is reported in bit 6. A real
-> chip was found to match the functionality documented in Revision 4 and
-> later.
-> 
-> The code was fixed with commit 1ea3fd1eb986 ("hwmon: (max6697) Fix swapped
-> temp{1,8} critical alarms"). At that time it looked like this was an
-> original bug. It only turned out later that the problem was the result of
-> incorrect information in the chip datasheet.
-> 
-> Document the discrepancy to avoid confusion caused by old versions of the
-> datasheet.
-> 
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fix limit overflows, improve chip detection code, convert to use
+regmap, convert to use with_info hwmon API, and add support for
+update_interval sysfs attribute.
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+v2: Initialize chip as in original code
+    Separate 'alarms' attribute masking into its own patch
+    Added Reviewed-by: tags
+
+----------------------------------------------------------------
+Guenter Roeck (7):
+      hwmon: (max1619) Clamp temperature range when writing limits
+      hwmon: (max1619) Reorder include files to alphabetic order
+      hwmon: (max1619) Mask valid alarm bits
+      hwmon: (max1619) Convert to use regmap
+      hwmon: (max1619) Convert to with_info API
+      hwmon: (max1619) Add support for update_interval attribute
+      hwmon: (max1619) Improve chip detection code
+
+ Documentation/hwmon/max1619.rst |   4 -
+ drivers/hwmon/max1619.c         | 495 +++++++++++++++++++++++-----------------
+ 2 files changed, 288 insertions(+), 211 deletions(-)
