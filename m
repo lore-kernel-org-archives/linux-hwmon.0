@@ -1,64 +1,64 @@
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00A8FBF0
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 14:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7E043ABC
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 14:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722177445; cv=none; b=XFcbXsRb1iQgYmCSeFVGE15ft4W0Uh5akTWmAayUG042GAogrtU0I/Dk+m88XRmyQsin0jfwkv9WlisSvHGWO1RszwNdTBTEk/Swi64/l93ZjTfj97MNheCJ7g9TMWEhYa6OfRQyUDbpVLidCN8L0JjklfbKSTyLRf92cP+RfsE=
+	t=1722177447; cv=none; b=EIAunkQm5h2An7BbVxjz1p2CjMQIBp/NPX/vKIVgva3jqRi7GDgBsVPks8MN9Ms67SZ33Jzl3gHTNGytKk6+UZ4lb1JTEnJqpf/uYRXlWchCdTy8iwy7KoXcJKpQVZoiJXtq6O46O4BgKOt+KWygSrqp4YFM8iXfMPvW0eiPalc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722177445; c=relaxed/simple;
-	bh=arPK8z4osZOJ66+zmf2iDu5FU8JX6t/XcMoQsOaJf7M=;
+	s=arc-20240116; t=1722177447; c=relaxed/simple;
+	bh=hWCVTIYujH3yiMCaJ+ud5Vu+AQBPJ5D8pUWj7vZZtYg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pJrSOjzLFgY8ptovQBT3bdRQ4v1TbHbs4jvV7LCUE65nrZh24ygyAFo1t0ANDEuAgrbs0x4TXT/ugrp8xpAVCmDX/4hILvlkeZiU5zzyr5BOxL/Qw/uNeveEj1QEQJQiCTGX7U6P7Tjzu4v6Gqe7BgSZkbb7G/fyDI8aF5kQxrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H529uApO; arc=none smtp.client-ip=209.85.161.50
+	 MIME-Version; b=MmwkxCUEXmgcEBV/ELNJ6tuIjUp1mbq5H3pbOIazm4KVv+6Uv6VDHGCTMaTAGWlqg0NoXnnTpBmPEY6TUHOjPDbqQYHsbvaXELhbV9afwM3cm6lfUtvgr8mO00B1KC6SrN+0Gl9tVn6dRkzWqoAEaXRa2Q1GWZMoFCLhw4vjAdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U+LmryQx; arc=none smtp.client-ip=209.85.167.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H529uApO"
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5d5b850d969so1707746eaf.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 07:37:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U+LmryQx"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3db1d4dab7fso1546128b6e.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 07:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722177442; x=1722782242; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722177444; x=1722782244; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wjC7NxrTuEs6NU7ZGsMPtI2pd8QR0ZFJN3vXQzYe3qs=;
-        b=H529uApOd3iG/JpduyE7e+iGqiFeyDeDeY8A0VvDhg+6Ry9lfm12GTnS5Kw4EeL4VM
-         CVmno5OvaXQ0G7rs7phCHSAHnxWbVPJfidInvQ/EKv5UWZntPfsD6/QGJgk8a9WpbZYq
-         WWtmrzLCZx8fLP5NywXwU8Sp1led/JMCUWTfiTAE5nWfEofhpSLPxOQ/cilbed3rUHWJ
-         kWfubdwKPhTLOoFYpAFiYeep5TzL66EbBXRpO1uE6qwrwZLxLNvw6G9kUM1iI8XzYiEb
-         CxepNyB5Bd7yW/Zo2+MCSEBMi17yAArdWdQA1PmghqTsUC/TOF8FvS6tcT6rLA7IBPXH
-         Bp2Q==
+        bh=41z9zLCcl8a9skX3iWLTkdfhL2LgJ8bQvmyC7i+go7k=;
+        b=U+LmryQxiNXyEjms2hPaU+IHJJ1emkEUrGDlXgmuHlmc9J3+us9UsC9NrvvfhWqo40
+         b8tv1IrqP+Lq1uqZqRXjSj4bcfYdfJ+cn9HD10qm9sgjIXVXwY72LXo7fCZuQJYFBgxU
+         G87ZH960I/W0fRytR+cQ0wOS6SnWzj5GsyN+xgd626Bh+4Wx1KcYzxz+mvpf4TFTsyMo
+         I6eDj7+l56ADlmhPgcXkmDRxDY0+BhioVgXUXRqrWXJEQx1tnZthcOczM2qeMzHf56xG
+         Hyc+h3jW2/zgJJboDFeWmYKm1A1zC11OSIASCgVDGDaIP9SWvt9LflhEQTKPuD5qxvM3
+         zD3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722177442; x=1722782242;
+        d=1e100.net; s=20230601; t=1722177444; x=1722782244;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wjC7NxrTuEs6NU7ZGsMPtI2pd8QR0ZFJN3vXQzYe3qs=;
-        b=NQk9t0uyb0FTvxwq966fQypy9VnAASoYoObA5IrW6FcVCxscHKiomjd6wWp+ntUtS0
-         zTCAFZkWGOlm8IFTcYV+qwnAN8fqI4Ew+HPE6EVFy5YFqpuIYBRTRxfigMYSb06cWV4a
-         smhouCyako3G2xkiUH1lRij93JpNP9ACspliqdMecdaXmebKpIxWR/P7QR9at7ICxiD7
-         pDrfBB5SRAZPywJ25KbB/rdpgPc4YZVKI1LePAbpxoSDGUgOd2NHxqRHDccgLrxk/4Zp
-         WBXQs/y4/GekWVbqR12G54x8qzPMuP+Gj69Kb1LS5JLtJUR6u/1+NO8x7Y/R6PcZBslk
-         6EBw==
-X-Gm-Message-State: AOJu0YwjtVxwhgOKO/jsjgkiMUK/jfzwnP1Sd8DeZLRlysk287VLF843
-	kjq9UJGDoOFJDHjG/oduUC0WA8vo7vS4V2iasYu7Dm9y2FE9z4TPqAtBdg==
-X-Google-Smtp-Source: AGHT+IGEk9kmiTEm2GTQcs8kGRQSdh5xbVv55V20rom0jvqDr81nQ0iyOakYXCYU3Tcq42rWqZLBRg==
-X-Received: by 2002:a05:6358:7245:b0:1aa:c9ba:4336 with SMTP id e5c5f4694b2df-1adb2423087mr577089455d.3.1722177442509;
-        Sun, 28 Jul 2024 07:37:22 -0700 (PDT)
+        bh=41z9zLCcl8a9skX3iWLTkdfhL2LgJ8bQvmyC7i+go7k=;
+        b=JS9G2IlVoGpTvb0qABLAoPXWDUshutT12hXvuHoCnFgkxhvWsJll7NavUP5RsdJgpl
+         mDYMaB3h4NOL5IcpIWhRQQeAMj2y5fdEPOqNcbq6i8MyHCoZagph4imN/PJS2uc9RwOu
+         EL/lJNxVxc5Dum7nb9btpjvNRdt7f71ZphcU+iL/6/qxb4g8yoYOI4vFNx6uQE4mJPME
+         98QEgFLfISRGwGLJliPLoxmGzhXbXdpj3+olunMBbAWyNJ+DnprVWfNZ4uiRQ9HBtBTp
+         WTM0tkiwxdpRWMytFz0N51Wj9fiIQjfPelEhoT57nBPeLzX4wA2Msg+RATd7c/kD7iOl
+         eODw==
+X-Gm-Message-State: AOJu0YyU07eL8yJC822WSAKaU9f4bYNrfGfOIi6h1Njpjs+QtbGUF8WG
+	tJfgpvsA6VGGZH0xmRc0Eck5MDqWAvHInBGK8fHJMacvaBypw116rmxwTQ==
+X-Google-Smtp-Source: AGHT+IE9hV1c7gM6Jo6w03p++G+radrcAHfKYUlnqmfvDhATJnXwT+upxgyZmfpJgV6uqbkk+M9rQg==
+X-Received: by 2002:a05:6808:23c9:b0:3d9:2b24:5b2 with SMTP id 5614622812f47-3db2348e454mr7975006b6e.0.1722177444238;
+        Sun, 28 Jul 2024 07:37:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f817f5a2sm4841733a12.24.2024.07.28.07.37.21
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7cf1db4sm65881655ad.87.2024.07.28.07.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jul 2024 07:37:21 -0700 (PDT)
+        Sun, 28 Jul 2024 07:37:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 2/7] hwmon: (max1619) Reorder include files to alphabetic order
-Date: Sun, 28 Jul 2024 07:37:10 -0700
-Message-Id: <20240728143715.1585816-3-linux@roeck-us.net>
+Subject: [PATCH v2 3/7] hwmon: (max1619) Mask valid alarm bits
+Date: Sun, 28 Jul 2024 07:37:11 -0700
+Message-Id: <20240728143715.1585816-4-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240728143715.1585816-1-linux@roeck-us.net>
 References: <20240728143715.1585816-1-linux@roeck-us.net>
@@ -70,42 +70,30 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Simplify maintenance by reordering include files to alphabetic order.
+Bit 0, 5, and 6 in the status register are reserved and, if set, do not
+indicate an alarm. Bit 7 is the 'busy' bit and also does not indicate
+an alarm. Mask the non-alarm bits to avoid reporting them to userspace.
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Added Reviewed-by: tag
+v2: Added patch
 
- drivers/hwmon/max1619.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/hwmon/max1619.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/hwmon/max1619.c b/drivers/hwmon/max1619.c
-index 464f4c838394..8eb7d04bd2f5 100644
+index 8eb7d04bd2f5..5edc9bbbe299 100644
 --- a/drivers/hwmon/max1619.c
 +++ b/drivers/hwmon/max1619.c
-@@ -12,15 +12,15 @@
-  *   http://pdfserv.maxim-ic.com/en/ds/MAX1619.pdf
-  */
+@@ -112,6 +112,7 @@ static struct max1619_data *max1619_update_device(struct device *dev)
+ 		config = i2c_smbus_read_byte_data(client, MAX1619_REG_R_CONFIG);
+ 		if (!(config & 0x20))
+ 			data->alarms ^= 0x02;
++		data->alarms &= 0x1e;
  
--#include <linux/module.h>
--#include <linux/init.h>
--#include <linux/slab.h>
--#include <linux/jiffies.h>
--#include <linux/i2c.h>
-+#include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
--#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/slab.h>
- #include <linux/sysfs.h>
- 
- static const unsigned short normal_i2c[] = {
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
 -- 
 2.39.2
 
