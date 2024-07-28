@@ -1,64 +1,64 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B665FBF0
-	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 14:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00A8FBF0
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 14:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722177443; cv=none; b=K58Xc5hG7vlbvJG/QEq4qC/zvGi/0EtwIyuspGkw7qovgaEvmviXKhLIqvgMSfuG5jywqrjcj/jd07qUdRhW1nn/wbFXT/O+AHhTSgLwh02QyD2fi1Dan30EmhbiEFK7RoOKXRjepLQf7OsEhRC22RsQ6b4JcGgyd61olQEaUqY=
+	t=1722177445; cv=none; b=XFcbXsRb1iQgYmCSeFVGE15ft4W0Uh5akTWmAayUG042GAogrtU0I/Dk+m88XRmyQsin0jfwkv9WlisSvHGWO1RszwNdTBTEk/Swi64/l93ZjTfj97MNheCJ7g9TMWEhYa6OfRQyUDbpVLidCN8L0JjklfbKSTyLRf92cP+RfsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722177443; c=relaxed/simple;
-	bh=zGK/a2SB57EiF3yNEYfU2LUyA1Ey1YNtte8R9rBGVR0=;
+	s=arc-20240116; t=1722177445; c=relaxed/simple;
+	bh=arPK8z4osZOJ66+zmf2iDu5FU8JX6t/XcMoQsOaJf7M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DOytr0WtzNS9a45Vxt6uvn4c53eMKErtjEjrOZEPVXyIuKBIWuwuY7iwq0wMUtSJdTJx3LQpDsPfMMmMhLRwCZtiSDpc4pMQy5nnM4UEVLGUKhmDBqKbfj+W4WVu+xRQFIwiiFm8jxNerqHGdrR72b2dr3/OLrIvVVnakvLlDzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKKPvET8; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=pJrSOjzLFgY8ptovQBT3bdRQ4v1TbHbs4jvV7LCUE65nrZh24ygyAFo1t0ANDEuAgrbs0x4TXT/ugrp8xpAVCmDX/4hILvlkeZiU5zzyr5BOxL/Qw/uNeveEj1QEQJQiCTGX7U6P7Tjzu4v6Gqe7BgSZkbb7G/fyDI8aF5kQxrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H529uApO; arc=none smtp.client-ip=209.85.161.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKKPvET8"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fc66fc35f2so13492655ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 07:37:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H529uApO"
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5d5b850d969so1707746eaf.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 07:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722177441; x=1722782241; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722177442; x=1722782242; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OPQkpIPphZ/YHUYU4wZPqI4h9ZJ1ZAsztINnvCIUwbQ=;
-        b=MKKPvET8FvPsOmyZDJVBBiec6c+FFImXUBdFEaFSRRxRyB0nFiYmnrsG5jrwx/QCwi
-         2u1ta0Y9anw6do38Ewz0/DTSyIdh04+k2xmjq8Vy5NPoOjDb1kDpVwpa1jgaEzrB+CmQ
-         K0oifJdIccJHkbZ+Ngx8xEgLf0i/wJcDI4GkvcMc06fwK5D5r4euWipEEzJlEdP/ABKO
-         lSvNzNBpNpMV+wDwOjtTz8lrdyZbik6FI/Q7yXN2mmulgKpWr8gNLtI6QhPqCdVNtoZz
-         VDHzNgoUt249QIlv5VBkBga0lucQ3pyzuz1AoJq41B3Zrlt7G4h7TmHuBxngYw4vAwFA
-         rfow==
+        bh=wjC7NxrTuEs6NU7ZGsMPtI2pd8QR0ZFJN3vXQzYe3qs=;
+        b=H529uApOd3iG/JpduyE7e+iGqiFeyDeDeY8A0VvDhg+6Ry9lfm12GTnS5Kw4EeL4VM
+         CVmno5OvaXQ0G7rs7phCHSAHnxWbVPJfidInvQ/EKv5UWZntPfsD6/QGJgk8a9WpbZYq
+         WWtmrzLCZx8fLP5NywXwU8Sp1led/JMCUWTfiTAE5nWfEofhpSLPxOQ/cilbed3rUHWJ
+         kWfubdwKPhTLOoFYpAFiYeep5TzL66EbBXRpO1uE6qwrwZLxLNvw6G9kUM1iI8XzYiEb
+         CxepNyB5Bd7yW/Zo2+MCSEBMi17yAArdWdQA1PmghqTsUC/TOF8FvS6tcT6rLA7IBPXH
+         Bp2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722177441; x=1722782241;
+        d=1e100.net; s=20230601; t=1722177442; x=1722782242;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OPQkpIPphZ/YHUYU4wZPqI4h9ZJ1ZAsztINnvCIUwbQ=;
-        b=a4zInnqcXY1M2ag+MdvivdfVTl8y3DBs4ZRdqauS1/KoB5hH6p32uZG8sqwbZEra60
-         FC/czg9nlhp2yzsdPANttKAZT+ibi2D9LCEKDmDpBIkkaWoQENXaI/nVeJzcnAUAsFpG
-         uqIlu0WliqUP1MA9QRpnONezjpSUoxGMjd6tmK205tx8ObF3bsW3fwLutA2UmprwX6Vy
-         3HMvvgiWc/w/M4Cn6oU0v78eSAoIk/T5Rc9ITvO/ln2wTty+NV81vTIUUgrTDe2sdnct
-         ZABvwV8GbFja5AfhAZFEbM3vXXH4Yet23WHX2XyVxYIV2ya6G4MSsd/yT+UQQR0kuzXR
-         UnPQ==
-X-Gm-Message-State: AOJu0YxeXTIzM0/5M2/OuhFbB/eTT9BkvIjE+NCIY1Kapvrf7MRuHkhj
-	j7dGtDI+gwHoU3pNxRQHDZ28+Ag0rGL1ppJSHYDsPljXAd1m2NayCsvPRA==
-X-Google-Smtp-Source: AGHT+IHR06uXAD0zF/mnMuvfJoExKf67eKbwvDB1fZwNzUdW47V1wjPJakUWGgaKIZM3v9aUxhBBiw==
-X-Received: by 2002:a17:902:dacc:b0:1fd:d4c4:362a with SMTP id d9443c01a7336-1ff04b01cccmr80405625ad.24.1722177440676;
-        Sun, 28 Jul 2024 07:37:20 -0700 (PDT)
+        bh=wjC7NxrTuEs6NU7ZGsMPtI2pd8QR0ZFJN3vXQzYe3qs=;
+        b=NQk9t0uyb0FTvxwq966fQypy9VnAASoYoObA5IrW6FcVCxscHKiomjd6wWp+ntUtS0
+         zTCAFZkWGOlm8IFTcYV+qwnAN8fqI4Ew+HPE6EVFy5YFqpuIYBRTRxfigMYSb06cWV4a
+         smhouCyako3G2xkiUH1lRij93JpNP9ACspliqdMecdaXmebKpIxWR/P7QR9at7ICxiD7
+         pDrfBB5SRAZPywJ25KbB/rdpgPc4YZVKI1LePAbpxoSDGUgOd2NHxqRHDccgLrxk/4Zp
+         WBXQs/y4/GekWVbqR12G54x8qzPMuP+Gj69Kb1LS5JLtJUR6u/1+NO8x7Y/R6PcZBslk
+         6EBw==
+X-Gm-Message-State: AOJu0YwjtVxwhgOKO/jsjgkiMUK/jfzwnP1Sd8DeZLRlysk287VLF843
+	kjq9UJGDoOFJDHjG/oduUC0WA8vo7vS4V2iasYu7Dm9y2FE9z4TPqAtBdg==
+X-Google-Smtp-Source: AGHT+IGEk9kmiTEm2GTQcs8kGRQSdh5xbVv55V20rom0jvqDr81nQ0iyOakYXCYU3Tcq42rWqZLBRg==
+X-Received: by 2002:a05:6358:7245:b0:1aa:c9ba:4336 with SMTP id e5c5f4694b2df-1adb2423087mr577089455d.3.1722177442509;
+        Sun, 28 Jul 2024 07:37:22 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c85ca8sm65896275ad.49.2024.07.28.07.37.19
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f817f5a2sm4841733a12.24.2024.07.28.07.37.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jul 2024 07:37:20 -0700 (PDT)
+        Sun, 28 Jul 2024 07:37:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 1/7] hwmon: (max1619) Clamp temperature range when writing limits
-Date: Sun, 28 Jul 2024 07:37:09 -0700
-Message-Id: <20240728143715.1585816-2-linux@roeck-us.net>
+Subject: [PATCH v2 2/7] hwmon: (max1619) Reorder include files to alphabetic order
+Date: Sun, 28 Jul 2024 07:37:10 -0700
+Message-Id: <20240728143715.1585816-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240728143715.1585816-1-linux@roeck-us.net>
 References: <20240728143715.1585816-1-linux@roeck-us.net>
@@ -70,63 +70,42 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Module test code reports underflows when writing sensor limits.
-
-temp2_min: Suspected underflow: [min=-77000, read 101000, written -2147483648]
-temp2_max: Suspected underflow: [min=-77000, read 101000, written -2147483648]
-temp2_crit: Suspected underflow: [min=-77000, read 101000, written -2147483648]
-
-Clamp temperature ranges when writing limits to fix the problem.
-While at it, use sign_extend32() when reading temperatures to make
-the code easier to understand.
+Simplify maintenance by reordering include files to alphabetic order.
 
 Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Added Reviewed-by: tag
 
- drivers/hwmon/max1619.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ drivers/hwmon/max1619.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hwmon/max1619.c b/drivers/hwmon/max1619.c
-index a89a519cf5d9..464f4c838394 100644
+index 464f4c838394..8eb7d04bd2f5 100644
 --- a/drivers/hwmon/max1619.c
 +++ b/drivers/hwmon/max1619.c
-@@ -52,16 +52,6 @@ static const unsigned short normal_i2c[] = {
-  * Conversions
+@@ -12,15 +12,15 @@
+  *   http://pdfserv.maxim-ic.com/en/ds/MAX1619.pdf
   */
  
--static int temp_from_reg(int val)
--{
--	return (val & 0x80 ? val-0x100 : val) * 1000;
--}
--
--static int temp_to_reg(int val)
--{
--	return (val < 0 ? val+0x100*1000 : val) / 1000;
--}
--
- enum temp_index {
- 	t_input1 = 0,
- 	t_input2,
-@@ -142,7 +132,7 @@ static ssize_t temp_show(struct device *dev, struct device_attribute *devattr,
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct max1619_data *data = max1619_update_device(dev);
+-#include <linux/module.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/jiffies.h>
+-#include <linux/i2c.h>
++#include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+-#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/slab.h>
+ #include <linux/sysfs.h>
  
--	return sprintf(buf, "%d\n", temp_from_reg(data->temp[attr->index]));
-+	return sprintf(buf, "%d\n", sign_extend(data->temp[attr->index], 7) * 1000);
- }
- 
- static ssize_t temp_store(struct device *dev,
-@@ -158,7 +148,7 @@ static ssize_t temp_store(struct device *dev,
- 		return err;
- 
- 	mutex_lock(&data->update_lock);
--	data->temp[attr->index] = temp_to_reg(val);
-+	data->temp[attr->index] = DIV_ROUND_CLOSEST(clamp_val(val, -128000, 127000), 1000);
- 	i2c_smbus_write_byte_data(client, regs_write[attr->index],
- 				  data->temp[attr->index]);
- 	mutex_unlock(&data->update_lock);
+ static const unsigned short normal_i2c[] = {
 -- 
 2.39.2
 
