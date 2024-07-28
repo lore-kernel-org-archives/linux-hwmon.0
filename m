@@ -1,118 +1,119 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7C8374CC;
-	Sat, 27 Jul 2024 22:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6475EEB1;
+	Sun, 28 Jul 2024 00:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722118146; cv=none; b=PV5GngbAKi+KcEFcWC5DtL17EaRSMD9SIxaZX6BjxySG3ukBdwU8qBtak4MYe0QFmvAnBuOeqKcL8J591n0WdlzpFbUY8yyh9o2oNK08QA6KVe3nlES+zeQm4NFqrstKDTnbgxzk7JS9MiHY5/zbbAbhatEjZW39kw3TSPuaW54=
+	t=1722127667; cv=none; b=keWz2XFxLsZYjDdQj5s2Hct7PQ7Tzdu4/SyzMQru0P+iva3uDmWIvnxUfPE13Fn0DRwolNzEOfGOZiCOTuCvcU4K40THGCZdSgmF+SXdqI3uzPTGCXKFqkAPYi4V+UNuwE0auHNBpAUeFSm1+z+Gr3puqT58i54/pk4zIZO5Pi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722118146; c=relaxed/simple;
-	bh=GzadQwjoQzzX0lmnM516VSn1xtch5w/RYIg24gk/3MM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=En2tm3WP6xceOksPP8mUo8gAizNq4wzZKHpR5OXRT1l6MwMrE3EkWXsCBxMW/F2QFbNK52h7wIAox+hWACHs4eNH9WSwlHcY/rQevT+taJDXWOHzbN+pv2NWCnnTHs0FXhK4bY3PU/mp4Fq/ItU14JCTBW5nJZ+XjvNETlEoJXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AkX/ghSg; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722127667; c=relaxed/simple;
+	bh=w3FlVKxMbbv3EuRWb1BX7xihz/7lTVonfbO1GVY7dn4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XSq1K6g35WW2ibwjs/aylP/ybrIOAMT2ITZrPFfEgNF142X3wn/B44TkyIXd9oHnyuYJnc9rs1ex4qgF1/S40hTt14gKtbGvvWr1iviJpEntz4cZwLH6OeSwTIQGoMk6CSrhgXxTZwzbIZWy4FpY/w9kRRccx+lwCjcbKPQsI1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXFme9W7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AkX/ghSg"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-709465248b7so353541a34.3;
-        Sat, 27 Jul 2024 15:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722118143; x=1722722943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oaFMrKlbHFJcfn4PbrnnnsUBc8VoxxJ2+yy9JoXTL8U=;
-        b=AkX/ghSgabQaidwjtBm0Bm4BN1ZativAPcEclyAthCzUnqqms48cO+nRTyqpC/DXVK
-         RRDjOEAPY7QCs0tKsnPqZC78/wXsXJcWdk50jUYvCcvNWRPVBiRjZ4ZVDHkwqzChfZH1
-         GVJu6SMO1t7UECm5cIS/42If7YgsdasYJB0yyvrHkKGo7wCClFP+pvxRiYefgIZOwBY2
-         6rAzQlhrKh85o+7IU1WBphm9D9MJtQnTYuMYOeFe5RFlbkAiSPWJRFaEmw22oXyxJl46
-         +JyNP4DudXFRrqotP+kaA9vvVvfyl5kWBIqhPoog+9r/qmEX9RT8ekQTfsjc4ef00g4M
-         c/lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722118143; x=1722722943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oaFMrKlbHFJcfn4PbrnnnsUBc8VoxxJ2+yy9JoXTL8U=;
-        b=mrB3SSRKZ1LZkZ0yr35XieoNjh3srV5pyLM4A6MFudH9NwjbhhjXjYemllo4UR9WO3
-         fgreSOpWjAMr9AAggzMgPxpMU88YuFltEJKKheFL+yQDb501yX3Oxt7UKDZAEywxB9Sj
-         kQxS/TTHkVN0F1HURxPoD4AuXjnriQiG5QGrihYRn4GTvYKYFZIoaGqWpdguigr0jK/Y
-         6Vix9+cj92tVP289dCPc/sDO7A6iEYrpVcw/8quvy8QEPzCChzw3iMPdZ854pOKubjxR
-         gHOMXeXm+CRntSB1CLZI1B6OyurelYBsndUfHGv9y5+bFKFdiDwdjXJT2xj5sFIeF3Vg
-         5XQw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2H1Em3wywyP2kCrCzyIL1qVnSj4V9kBHng6Mp11H8g6usd3NEtSJn51wm6YvVeyIDuCLwHvB+KFz1AwceQFPkULcY+NHq/KB320VdSD86QgEDm6JPK5aiwESxExEqjAuf9Syw92JwMdI=
-X-Gm-Message-State: AOJu0Yz15tc+zUGi+N/VnimELjmUrUMwbs9p7rQ8FESqhEGLO35lw5Ng
-	fYgReKOc6lI48vWv3DEFRoO0MqkXKkUSiCtJ6I54JDNBDrdjUWee
-X-Google-Smtp-Source: AGHT+IH9W7PFbImoTMw86FAU66Y1ZcSevxmTXjh5hVgoGTQwhBxbYh4gjC6s4ZTTib93Gwd0/DwbOA==
-X-Received: by 2002:a05:6830:3881:b0:703:6845:ed89 with SMTP id 46e09a7af769-70940bfe10amr5363485a34.5.1722118143546;
-        Sat, 27 Jul 2024 15:09:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdb738fd4csm7841629a91.3.2024.07.27.15.09.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 15:09:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 27 Jul 2024 15:09:01 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: RobotRoss <true.robot.ross@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E
- GAMING
-Message-ID: <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
-References: <20240727170604.9149-1-eugene.shalygin@gmail.com>
- <20240727170604.9149-2-eugene.shalygin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXFme9W7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA61C4AF07;
+	Sun, 28 Jul 2024 00:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722127667;
+	bh=w3FlVKxMbbv3EuRWb1BX7xihz/7lTVonfbO1GVY7dn4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IXFme9W7RKxsXzgWBC8yjbQyCyKwyTdiexXSvUAMh2UkFW/R1lrqSVk7hildUNo9N
+	 xvwZVfJeTcvVhyOcLi06Z3vFZM2PilileyDQ+2uky9qBPLzDtz5cMCYfU0oimQPYoF
+	 V0CA5dunun5vJkNQ2u+En2aLVP8hEHk6rip7uAffHBIc+RJTtuI6hIgmWAJ/6HO18E
+	 Wgqv8MmEgtvkiNuMJzV9kzmNt/Wv2oyQSEKKwDm0yyxqMToVPzakYby5G457BXl7Ct
+	 GvkDzmgsEyVHtaKdJ+2Q2AvrGBYBjtfzr5Vb8hG19OXp0X8F7dTrQ/oO4B0Hs3dwem
+	 aTAnm8y6s3UKw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	jdelvare@suse.com,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 04/16] hwmon: corsair-psu: add USB id of HX1200i Series 2023 psu
+Date: Sat, 27 Jul 2024 20:47:21 -0400
+Message-ID: <20240728004739.1698541-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240728004739.1698541-1-sashal@kernel.org>
+References: <20240728004739.1698541-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240727170604.9149-2-eugene.shalygin@gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.2
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 27, 2024 at 07:04:52PM +0200, Eugene Shalygin wrote:
-> From: RobotRoss <true.robot.ross@gmail.com>
-> 
-> There is no hardware support, it seems the sensor was added by mistake [1].
-> 
-> [1] https://github.com/zeule/asus-ec-sensors/pull/58
-> 
-Such a reference in an upstream git log has little if any value since it
-may be deleted at some point. On top of that "it seems the sensor was
-added by mistake" doesn't really add value either.
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 
-"X570-E GAMING does not support the VRM temperature sensor."
+[ Upstream commit b9c15c96ccb47ad860af2e075c5f3c90c4cd1730 ]
 
-would have been good enough.
+Add the usb id of the HX1200i Series 2023. Update the documentation
+accordingly. Also fix the version comments, there are no Series 2022
+products. That are legacy or first version products going back many
+many years.
 
-> Signed-off-by: RobotRoss <true.robot.ross@gmail.com>
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Link: https://lore.kernel.org/r/ZlAZs4u0dU7JxtDf@monster.localdomain
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ Documentation/hwmon/corsair-psu.rst | 6 +++---
+ drivers/hwmon/corsair-psu.c         | 7 ++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Hmm, that very much looks like an alias.
+diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+index 16db34d464dd6..7ed794087f848 100644
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -15,11 +15,11 @@ Supported devices:
+ 
+   Corsair HX850i
+ 
+-  Corsair HX1000i (Series 2022 and 2023)
++  Corsair HX1000i (Legacy and Series 2023)
+ 
+-  Corsair HX1200i
++  Corsair HX1200i (Legacy and Series 2023)
+ 
+-  Corsair HX1500i (Series 2022 and 2023)
++  Corsair HX1500i (Legacy and Series 2023)
+ 
+   Corsair RM550i
+ 
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 2c7c92272fe39..f8f22b8a67cdf 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -875,15 +875,16 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i Series 2022 */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i Legacy */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i Legacy */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
+-	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Series 2022 and 2023 */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
++	{ HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+-- 
+2.43.0
 
-Guenter
-
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 6bb8d7b1d219..ee396f21fac5 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -420,7 +420,7 @@ static const struct ec_board_info board_info_strix_b550_i_gaming = {
->  
->  static const struct ec_board_info board_info_strix_x570_e_gaming = {
->  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-> -		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-> +		SENSOR_TEMP_T_SENSOR |
->  		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
->  		SENSOR_IN_CPU_CORE,
->  	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-> -- 
-> 2.45.2
-> 
-> 
