@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6475EEB1;
-	Sun, 28 Jul 2024 00:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D1E770EF;
+	Sun, 28 Jul 2024 00:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722127667; cv=none; b=keWz2XFxLsZYjDdQj5s2Hct7PQ7Tzdu4/SyzMQru0P+iva3uDmWIvnxUfPE13Fn0DRwolNzEOfGOZiCOTuCvcU4K40THGCZdSgmF+SXdqI3uzPTGCXKFqkAPYi4V+UNuwE0auHNBpAUeFSm1+z+Gr3puqT58i54/pk4zIZO5Pi8=
+	t=1722127699; cv=none; b=XcUCWOzjBvcqKs5+9FejOeJkustSJJ1/sJ0gyEY2/DWGwOW9o2Q1l5Ogo2AiCjiTk6D7LkC/rs2O736DzbhUpjHQHC1uLnMinlHRpX4obgy1wDj1w+jZBcZ4jEzrf9NAvuQp8Xu16gfRPo4JP6Oa322C2xxLhWvvmeMiIGHsQJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722127667; c=relaxed/simple;
+	s=arc-20240116; t=1722127699; c=relaxed/simple;
 	bh=w3FlVKxMbbv3EuRWb1BX7xihz/7lTVonfbO1GVY7dn4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XSq1K6g35WW2ibwjs/aylP/ybrIOAMT2ITZrPFfEgNF142X3wn/B44TkyIXd9oHnyuYJnc9rs1ex4qgF1/S40hTt14gKtbGvvWr1iviJpEntz4cZwLH6OeSwTIQGoMk6CSrhgXxTZwzbIZWy4FpY/w9kRRccx+lwCjcbKPQsI1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXFme9W7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=k6ObqnTo+7yeWMToIJ/a/6vc9YWe5SSJQl218ziV8/Tqr8iZdBIih8eEl9SJLMHIMC25fJRM3N3DSO3OL+ODy3P3+PQu/Er9yUx/0I2vvlCsG1ENoohs0j6yW6a/CXNKFpPzR+AHHxPF3ikIA5mX5HP0qsuPZxDaeCxEX48gWsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNFvGFET; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXFme9W7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA61C4AF07;
-	Sun, 28 Jul 2024 00:47:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNFvGFET"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D19C32781;
+	Sun, 28 Jul 2024 00:48:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722127667;
+	s=k20201202; t=1722127699;
 	bh=w3FlVKxMbbv3EuRWb1BX7xihz/7lTVonfbO1GVY7dn4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IXFme9W7RKxsXzgWBC8yjbQyCyKwyTdiexXSvUAMh2UkFW/R1lrqSVk7hildUNo9N
-	 xvwZVfJeTcvVhyOcLi06Z3vFZM2PilileyDQ+2uky9qBPLzDtz5cMCYfU0oimQPYoF
-	 V0CA5dunun5vJkNQ2u+En2aLVP8hEHk6rip7uAffHBIc+RJTtuI6hIgmWAJ/6HO18E
-	 Wgqv8MmEgtvkiNuMJzV9kzmNt/Wv2oyQSEKKwDm0yyxqMToVPzakYby5G457BXl7Ct
-	 GvkDzmgsEyVHtaKdJ+2Q2AvrGBYBjtfzr5Vb8hG19OXp0X8F7dTrQ/oO4B0Hs3dwem
-	 aTAnm8y6s3UKw==
+	b=FNFvGFETXnKv2p62JbHC3VeCDJpAyMT9daqV+Ed+p9HiuISo89ZOx/tN6/JFxrgUw
+	 POK7WbYOckl91TVGaB7ZGl1g9wFw3Lb4A/3KqEH9dxzikOYm6ff6JCDoBkVyWqOVN6
+	 06x/3XVZOIO6lGd+oVVx9gp72JfRqBdTphvQYp+9X4dnZR9bUHBr5WV2I2XKVPvmHz
+	 OvNIkVlN/m1sDkoNOXdoO58yhB0LrllcgEmxy2pw7nvW+J/y/3KyBTvk14eyY7IxsY
+	 vDQMlCvOJeZ6iXm2L+SWAYKh/g3jNyIAgD32AkEfmZLL99aSO8XVyfUKxxEfXn1+ku
+	 KUdNy3lKyJs+g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Wilken Gottwalt <wilken.gottwalt@posteo.net>,
 	corbet@lwn.net,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 04/16] hwmon: corsair-psu: add USB id of HX1200i Series 2023 psu
-Date: Sat, 27 Jul 2024 20:47:21 -0400
-Message-ID: <20240728004739.1698541-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 3/9] hwmon: corsair-psu: add USB id of HX1200i Series 2023 psu
+Date: Sat, 27 Jul 2024 20:48:04 -0400
+Message-ID: <20240728004812.1701139-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240728004739.1698541-1-sashal@kernel.org>
-References: <20240728004739.1698541-1-sashal@kernel.org>
+In-Reply-To: <20240728004812.1701139-1-sashal@kernel.org>
+References: <20240728004812.1701139-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.2
+X-stable-base: Linux 6.6.43
 Content-Transfer-Encoding: 8bit
 
 From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
