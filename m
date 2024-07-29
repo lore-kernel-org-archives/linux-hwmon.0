@@ -1,152 +1,150 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2010.outbound.protection.outlook.com [40.92.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019517F49B;
-	Mon, 29 Jul 2024 02:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.21.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722219978; cv=fail; b=bhpP9Mpr+t3WrAjqzN/6/6Fzh+PodfSA2nmpiRhjii5fXNVCKgw7k9w01JqkcRYNwKxmoltpI9S8byd6ff5FW7MFTVh2O6iA1Y8h+wU5ZX6fjCGY9gfu97+lZpQ2JlqHcCjha3OZzbpaxzmm6dbdSs0mG9ZxEPnQuZ9u9n+qhcU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722219978; c=relaxed/simple;
-	bh=i5uJVpVqHzYneC8x74apUJpzwoJvkLMx3dMpKQs+vKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CP+TUVbk5vSjc+prsENWLgYehW2UsNzbZ4mAiHt+VircEiCPMYmbaSE8uEVGBxkklDFXnFsQKdLkKIAf7H1w2VANaFnmXNlk8CSCARPsch9rydyS66nCi7ZWlLk94oFhlxZD9yYg+FD9TMECWJoDP+FgWpDARwm6NoysE4uN5l0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=B20VSsNR; arc=fail smtp.client-ip=40.92.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174A27E563
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jul 2024 03:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722223000; cv=none; b=pK1Jokh7qKcwmFajR2X1D414fuCO0eBWRxZCnQ4z4yTunrn/zD9szgAG2fz4g9qDIluirglOyxpwgp1o9ixbGGTOVsP5R1oH+MND4NtXD85ofQZm64AU3A/QBrHSa3nDs5p074nmf7s8AyjBSgGvJG858LFlsxLxLgIwlPSK2sk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722223000; c=relaxed/simple;
+	bh=XqqdQYwoG5+1gzIXk37TZpbkJSU8F/gi0nIxCfM8mpQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MTPQSNP2xFoQkGSezE/mVT9zQnNFch+R+rOs4bYFU8YcuHyZx5ZRYSKp1+LR37LJ82iPRnQZuWftL3dVxLk8GmbYwZFSNIMuHSEpnJt81xFBgdAjYphSKAh7GQ4Z8DrPda6b6mxc7u8mUMmLgcmZaZmn3Npk4sjDuqwtWaG+/v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Is7CUKER; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="B20VSsNR"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IoH/EYbBUOxgXEjlnKMIs0ZcOONvJp/yMa/HqomeCwW2iDY8bj/pwTfQktdUn7FUGMAedaPv6oZoaUmKMHJ69nYPod9/HlnoaSFqPAYV9AbJ8mkNnynMOxjqcX9t/Gow7mmKNLQ6ZEaMjpOD4fGE28f+hWJzvLK55stqdOGK7cNmyhB4qrwUIJt+La3oqt9VudfDFcByJZf3LxUU6ewPgxl9qKwOJ5M957o3ROUNg08wMu05VmllwUjFxhU7yzFzH6OWh4tdCrcxJwev+MSfjSXhRLDj8ItACLFQFnVdvKUaDlnj9Wg/jvq4jdcS15DvdDi4mDKoBDj7MhhX/N5+lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i5uJVpVqHzYneC8x74apUJpzwoJvkLMx3dMpKQs+vKM=;
- b=oZFqDFTHNd5rAWs97zOnzihq32OzsBbO+a2KIM4SUWXIfo9cJQL73wZMsIK4DUpklF61DqlGEzI5VTkDXTEzYPO7HG5vakisnpFqj66NZ0cjaWGKZRSRUFYqvimTSyjFNw6/uUGF9LkJ2Iz6cQsOPY/h2NVwYvjYQeBeekj5PQ9cnNOmU87Q2pvyiwF9N7tgcdGlQGcVRH4OHVfWXauXNZKKT0cJ7t+PgeLOeWkEFcgCE5X+NuG83UEh1G8sN6of4ME04g3XA9Kjz0sd5hWx9J+d7WxHd8BdZBnsuMtWP6znYIKiMwjj/WRMgZVrATiNiUQ2hgZRuP/j2WKGhPHnag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i5uJVpVqHzYneC8x74apUJpzwoJvkLMx3dMpKQs+vKM=;
- b=B20VSsNRdV30y+H1qx499Tv8UCHhXTZsv69jPDM/hwlv8hcb0vsLMRU6LdoZjvWcZ4bZALrWlPXAA/tsEwePvqWvcYm64zyevr0t4JMUN98a6kB9ul6AZxMK98Fj0hQVQEf8AsSvwobq/xGmJ1xK1Sou7zeHyiYeEIt6GScdNvjG7jmhiMcAN564H+A8rtLY5v8ULi8z7QIL0wHDGMYqgl1/+c3s5dSWXKRm9LE9S64bKetQFhu5zdnZ/oQNNJg95S+gujIxJe+C4GpxOCHyQ2x12Gr5RLrvNUhxoSTG+cnfsgsz6DurReCMezCKDMOU5jyWYo+uXOhayB4YBZE4eQ==
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
- by PH8PR20MB5413.namprd20.prod.outlook.com (2603:10b6:510:22b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Mon, 29 Jul
- 2024 02:26:13 +0000
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149]) by IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149%5]) with mapi id 15.20.7807.026; Mon, 29 Jul 2024
- 02:26:13 +0000
-From: Inochi Amaoto <inochiama@outlook.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Guo Ren <guoren@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Jinyu Tang <tangjinyu@tinylab.org>,
-	Drew Fustini <dfustini@baylibre.com>,
-	Sunil V L <sunilvl@ventanamicro.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Hal Feng <hal.feng@starfivetech.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: [PATCH v7 4/4] riscv: defconfig: Enable MCU support for SG2042
-Date: Mon, 29 Jul 2024 10:25:33 +0800
-Message-ID:
- <IA1PR20MB4953F4162372085ECE625C26BBB72@IA1PR20MB4953.namprd20.prod.outlook.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <IA1PR20MB49534B9F7A3B4A1585467C87BBB72@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <IA1PR20MB49534B9F7A3B4A1585467C87BBB72@IA1PR20MB4953.namprd20.prod.outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [hEgp07/OQY1Gt+Y8L6CLvUmn9fesjZZHrX4qW6Q+tOc=]
-X-ClientProxiedBy: TYCP286CA0131.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b6::13) To IA1PR20MB4953.namprd20.prod.outlook.com
- (2603:10b6:208:3af::19)
-X-Microsoft-Original-Message-ID:
- <20240729022534.842326-4-inochiama@outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Is7CUKER"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc47abc040so13213965ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 20:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722222998; x=1722827798; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=K/2ms6sV91UTLOQMx9ktOyXpX+5Cot7DPRoAAia+I5k=;
+        b=Is7CUKERBBW7MiU0wu9xxQlN9XxuzxLvzqc/RrlbCgpAy45afwPAiXSZrXyvWyCtqR
+         YqxbmDtkEHUK6glsvMU6zU3n0ql9iz2qIMf9L6c0pyHqIWUvaGAqKq6qGBo4NRnxN72f
+         k4Gd4cYtFK0zy2j2XaI50pRdvpfiDuXyHk8hDQ4FtqiAeMYY9NK8q3DtfkBp4wP6TQwR
+         A/PRyWh7+sHkgi1Y8lFk/LDBeZNDDXw9M5/W0luseumQMux0qqimEmA1HZgTz8W9DCep
+         qSU+NKljj1H4k2lvuW6zknleJg6Jgop0EClFI4eE1+XuMN/WYf/Dq5t2pEAnd6Gjlocx
+         777g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722222998; x=1722827798;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K/2ms6sV91UTLOQMx9ktOyXpX+5Cot7DPRoAAia+I5k=;
+        b=n1YjGo7hFMuad7UexriLUWZR4gi2xFaHc/FN8zLAXIqQkf2xpdbIqo+wTqyDaWPf9E
+         4aB53ykmTDDGSNSr2lUAH2aJXpZmHTQXCzJUW+huYiI/juNzbk/b2x8MBckXCPqf4tbF
+         QZ2tx12TzwT0zG3ufanEIhbS0aQViphhvwU1TEfg+OAY5Att1v6OEBFF49c4d+ORCiwR
+         b4PkuO8uvTAShc+29mS3anXflgbhc2xHx0QhjjiJPgWnojdWPheJiKO86kRtv1gwzqyN
+         ihFU5jeqJtU3qyyX9KY6AknbAtyw3AOxyKFYlPo5LIq0hpw9XUcTXmVXk/ri2/HLHB6/
+         yuMA==
+X-Gm-Message-State: AOJu0Yx2MG/mZxsKXf++etfCjWfS01qDptkHAnBQa7SJ3Iyn6mx0tZPT
+	z6pzBvzg8aKVnN5lPgg0lXlFAMrhq3ir5Jjl+UL2rywY20tK9wii
+X-Google-Smtp-Source: AGHT+IHfjED+g4ieKmRfnBh8kglsI9o9909hM0G/zxabAD+ndp+IjaonZ5Scv8vjF/HG4TCBXr6pFg==
+X-Received: by 2002:a17:902:f551:b0:1fb:fc96:757e with SMTP id d9443c01a7336-1ff047df750mr42941005ad.37.1722222998286;
+        Sun, 28 Jul 2024 20:16:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f614c9sm71263725ad.224.2024.07.28.20.16.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jul 2024 20:16:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ea599334-5916-4d03-a662-a0d02d1296bc@roeck-us.net>
+Date: Sun, 28 Jul 2024 20:16:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|PH8PR20MB5413:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffe4a480-1cea-45ed-0e84-08dcaf75d139
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|19110799003|5072599006|8060799006|3412199025|440099028|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	ZtnRzdx9ye3oisr3mlqaJklpdY6xWJMKllboGrwCoWGF8pDW0bOKwgjG22vNylJeIymyLc8RCZvYVQSN5EG6nVrbxduYP+26WY76ErJVdXpdXKQaSjT/9Z9SjIPXtZ8J/GIz76GYk6kQzscubfpxxIFSj7AXFY/bfF2IN7NWJSuPxJkWH9oHhMhovKFs4yzj/dwjLcgaREDfZnj1i6RkanL8Wg1dFG4hrOvQ2juJtd/EY5ZgZVtX0tZElodaai4ybREaQz1wpEaUyaTlZjqZp0NmkN9qtP0Yokk61JnITW5W2pk1trOtdexSMAgP0zQRYzraz17BQxaflkjiyygyFxMTz+si9a2jlZd+qrrWkGxQP7/t1pm8FBfVveAaNgmL/7Tb9aKVJrKSOu5QaAexyozPDqLsvgSiwjT3hBACyluYEo1Z469g09txo8/cSBjKPzxiP45UfWbuqOXybm7qhI7RzDCMB7p2l+KR9mcB/RCsFagKVdCF8DfFctS33gKsJxFoJR5tnn/3SjEmyPJkyOwfze5ZWt2QypXLtBvmK0PQYAuTj+4ETIVfkpJvPpwIjZPUbvCCC/LPnMX1Vr5OZbYD+xLQqaGQLROzOEgz52QlikHKdmH5x+PB/TAyhSClJrR09k18h65rGzZzB6FCXnYl1YxC/HecyyFXb3b63a0PLG6R9UxD7xQ2ZVZfLtxzgVnHeEuZdhxcbtIruRBPPQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xobbS/KotmUOVsibR8u1l+B2EmFgd69GYHIHPnhPN29ssBI5888D8Qq7/NZE?=
- =?us-ascii?Q?CJ0EaCDAt76T00mVB44ZwDOx+4etNG4ChM8rYIuh5yJqVPnDoKAnuCEYoWtR?=
- =?us-ascii?Q?u2EofZ37HgX4CgjfidYmqDwm3KraJy+ENyLhVcd2Hc6PjGXO1QJT6wmR4pM8?=
- =?us-ascii?Q?ZgdodoEoGzZTtpCGi1v11J1kj1a5Fj51l9vxoHVI9BEFpUtuXUKxTIE47iww?=
- =?us-ascii?Q?liWAz+6pOVcYWeetqrQPhkGatJzyWDoYRupakLs8fcO01j25adIGyrxUQUlq?=
- =?us-ascii?Q?WAYFd2J8ypOgBKgUW2EVenKkFG0kt6md9NJ4t7uLIi0EU2NNCGbQ7MPY3GVe?=
- =?us-ascii?Q?FTxb466t0mBrfbkHRt8jBBOIBHdsEkyAaiC3AXbEW6WszdycQ+jmoU2IIEWo?=
- =?us-ascii?Q?JvYzDc4i/yWbey5kPSRm9j+hDjWbLB3awaG0rtGrUYpS0OHlePX4zrizF9vx?=
- =?us-ascii?Q?A4ISAso1IokhOgnmQFk/reLrsH0oxsTZxtq/f/4PwbXS0c+FMUbUlsBRmgoq?=
- =?us-ascii?Q?IgpxLz6kJf12wErUaXDELrzgDkfLvFwwQTs0F1DdvCUaeikJ0iK+FYfCvgI9?=
- =?us-ascii?Q?ybXDud61ecPmfNeI3FdbNYEkIx5DbkkoJihh2f4G4KBxC6XrQbNyzOWb84Zq?=
- =?us-ascii?Q?I3b4yI4rVIOuL4du0VOO67Tl+qxoOm9CyRjQoZFmfEigfF8oW/YqfISQb2uQ?=
- =?us-ascii?Q?21HSsRh3sKVLRn044Wq9Lf/ZbLVu10H6dP4/H/ipAX9yTOQEdziq1EpCIpNR?=
- =?us-ascii?Q?MlFFjLldrmU+xpCyH8rkFLzwvqShpMgHejcFu8c8x4P3F8/PR4SyQdOfsFBA?=
- =?us-ascii?Q?nbAA/unhf7rf6AIdngNeprweCvNMdhNSsCyv3fmLggEt2APlkKdjnUUHklGY?=
- =?us-ascii?Q?w/EJLt6zdmApflIF6BIEjpmCfJUjhsiFLZuOrxz7GaUBA3G9kuQEXpkU6/i/?=
- =?us-ascii?Q?ppub2sp9gSPTm+aaeaNrpJN2Xnma1T9R0pv0Ldyu2l8xgkHJ44uMQr7yakVf?=
- =?us-ascii?Q?iwfOxR/9g5vSP+GrI7YtIuFGgpzSeDEfI0L61VtJUiIfheQSlPYz0+7eP1ap?=
- =?us-ascii?Q?RsUJH/zk59RDRyA9Bw9Phuuu8ZZpovRjE7OxN+UdKS8dW4dBIxTCGppytEzE?=
- =?us-ascii?Q?YmdCQ38Sb2hdXBTFCv/uLngrkeq1UdENpWvsElE+7GNF6A/hEVf8mGvxgEHr?=
- =?us-ascii?Q?aMJ65NG0ccaBCXTGjXg+dbWm1WlaeVB1TyQAJ2nYAQWysGFu52JMeYHZPwS/?=
- =?us-ascii?Q?R0cblJYYNU8jOdKnxyE+?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffe4a480-1cea-45ed-0e84-08dcaf75d139
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2024 02:26:13.7260
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR20MB5413
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/7] hwmon: (max1619) Convert to use regmap
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240728143715.1585816-1-linux@roeck-us.net>
+ <20240728143715.1585816-5-linux@roeck-us.net> <Zqb75Ue3NjENz8g0@google.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Zqb75Ue3NjENz8g0@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Enable MCU driver for SG2042 to provide thermal and reboot support.
+On 7/28/24 19:18, Tzung-Bi Shih wrote:
+> On Sun, Jul 28, 2024 at 07:37:12AM -0700, Guenter Roeck wrote:
+>> -static void max1619_init_client(struct i2c_client *client)
+>> +static int max1619_init_chip(struct regmap *regmap)
+>>   {
+>> -	u8 config;
+>> +	int ret;
+>>   
+>> -	/*
+>> -	 * Start the conversions.
+>> -	 */
+>> -	i2c_smbus_write_byte_data(client, MAX1619_REG_W_CONVRATE,
+>> -				  5); /* 2 Hz */
+>> -	config = i2c_smbus_read_byte_data(client, MAX1619_REG_R_CONFIG);
+>> -	if (config & 0x40)
+>> -		i2c_smbus_write_byte_data(client, MAX1619_REG_W_CONFIG,
+>> -					  config & 0xBF); /* run */
+>> +	ret = regmap_write(regmap, MAX1619_REG_CONVRATE, 5);	/* 2 Hz */
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/* Start conversions */
+>> +	return regmap_set_bits(regmap, MAX1619_REG_CONFIG, 0x40);
+> 
+> Should be regmap_clear_bits()?
 
-Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
----
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 0d678325444f..a0f346301df6 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -170,6 +170,7 @@ CONFIG_SPI_SUN6I=y
- CONFIG_GPIO_SIFIVE=y
- CONFIG_POWER_RESET_GPIO_RESTART=y
- CONFIG_SENSORS_SFCTEMP=m
-+CONFIG_SENSORS_SG2042_MCU=y
- CONFIG_CPU_THERMAL=y
- CONFIG_DEVFREQ_THERMAL=y
- CONFIG_RZG2L_THERMAL=y
---
-2.45.2
+Sigh. yes, of course.
+
+Thanks,
+Guenter
 
