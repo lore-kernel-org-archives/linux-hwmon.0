@@ -1,93 +1,87 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4614412D745;
-	Mon, 29 Jul 2024 07:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EA013B5B0;
+	Mon, 29 Jul 2024 08:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722239352; cv=none; b=jMQcnDmSoPPiOI2QEJgtkFgSpGOAtK8n4VZx7ws3RAhlT3l/PQhEvaxuLbCzgYeAgjlyNmIiS9I9h5lLoUh5NLxqx5Zxx9pWzDZCLXwTXpz/lj7m6jnvOn65iwXbappSsGxA9HhdvSfP+XwyMyIye7iICFA4vt+8c2ZO1XCuqm8=
+	t=1722241249; cv=none; b=U19tVn0JGUzyD0nxb7gFa6D/3BPZDMk6nR/jKkrMfXqXlPt6BzqVlFXj2R++S6xiUOLuDb1M+A9eMYPB5U+1eS1zDCFsuwg74L8vHK4k+Bbmv4zt5d1HwmgomaczudVgXDZBjWnQizvdRGU2uo9KXYJk75kuDp07JXlBww5LDWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722239352; c=relaxed/simple;
-	bh=VSun/wxDS4xDOcuLBEA6E7BacEf8jkUpb4LRTsCx8kw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OOMohYuV1ea75lcd5fRvHN0WxzP3sHP8NRlI1oa13zOWfeiXZngVW++64dz0Aq4oblv88yqqP3Em83t/eVAmnnXsH66MsNxvKqhwgNNt5hSEcLAJ7q5OLvbuMNrE5EyLfOcscARuIPbl3UApqJ4mV6ZuMFmKujOWhzpKPIZzQaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e86192c.versanet.de ([94.134.25.44] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sYL7k-00028u-Q2; Mon, 29 Jul 2024 09:48:52 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Florian Eckert <fe@dev.tdt.de>
-Cc: lee@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
- dmitry.torokhov@gmail.com, pavel@ucw.cz, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, ukleinek@debian.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH v2 3/7] leds: add driver for LEDs from qnap-mcu devices
-Date: Mon, 29 Jul 2024 09:48:50 +0200
-Message-ID: <2916408.FA0FI3ke8A@diego>
-In-Reply-To: <f7d10147a643f4d0d7cf2decbe490315@dev.tdt.de>
-References:
- <20240728211751.2160123-1-heiko@sntech.de>
- <20240728211751.2160123-4-heiko@sntech.de>
- <f7d10147a643f4d0d7cf2decbe490315@dev.tdt.de>
+	s=arc-20240116; t=1722241249; c=relaxed/simple;
+	bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G9fczkm9P+BOmSeODDDgGuELKQM6+mNbRdMRM87coM1NN7kLtI6QOEa8hcTASUYYrMjDt+BwXDMp22bmAD7vLQtqTPsI1YFWs1+1ZHAl61a6shS76Ecf0WS245tOogduTToVgZ+tWyVUh2QNqN8n5GP3ChGtqzNgJcWctRr2piw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5gWaDAG; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5gWaDAG"
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-81f94ce22f2so102600639f.1;
+        Mon, 29 Jul 2024 01:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722241247; x=1722846047; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
+        b=b5gWaDAGtuDZcQODtx10ptbAMSzAGerYViDw7+9S1gQMsPfR1/x3ZK+ejbGfFxkFPQ
+         87938QAdalImWmc+CqQ+Zdp5A3JmuQ09Q/A/Ysvx7JkljPqnbsHC8OVJUoG/xH4O2QYd
+         aGzSIVCUSohnPZ5dR8zEbEBagge/2Ji3lC/ct/MWZhsRKlbqV6pZhuCSNAsGgOh6WzOD
+         /vOYR6X2SsgIWp2meDz+virW3MS6TvX3mc8hoXL2RKXc/sO/YdAVkHL4+tOFXFyERCXE
+         YSfVkVgCvhArevLZHRhevSv5UT72LxIUJSnJTJvYu5XbslONkJnsbqWNsYhG23MmcH7V
+         gCPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722241247; x=1722846047;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
+        b=RcgCLwCME+6TByTMv4hmxUKI11MFvB5uun7vZPtaDeD/YT5PFvEl3GCcASe/dz+NIH
+         IkUYcUTESZuGUnp2czoipVfZnyCjXNg13sHLYh00SGMcyNn76/WYNhHcbAy+qC4Rq8ZP
+         b/qB3Ga/v0BlaaY3ZtvqrbKK6O0CdYJ4Onf4uB38zzOteumzTorDCwX4UW9upl7P+rL5
+         smOWHYD3RHMJWEl3XgbYz+wBJ1BhIL2Pp8Mt2gbAvO/KeV9IHb9IShdF5Dy4maARUkQ+
+         MooLjHU4njdqE9FplSbBAny0v9sQBQbuPojWzvN1/2yH74g7oIKgJHKxfF4eFF+ko4MA
+         bfHw==
+X-Forwarded-Encrypted: i=1; AJvYcCX+eFLFUQvgaA2/8C+SL6TpbjqrTStP9tler3gcdUHQBM1FBp4YJ5AivWjiFe3LHK2eUJswKnQvHrAaQDw1B9vii2yBbP0gVCB2UD/Dph7pZAxVKCA/OAm9idlHEA0ZuSQXelBeefxaZXs=
+X-Gm-Message-State: AOJu0YxXg9YczqpeM8aAvfazRN6QAEaIEATiGJen8CnZf2yZXDVlDAAY
+	EobclzIh1Jk+BDrXOplrEeomJAN+elYySXsULYJYspypMEPHuFcA1UjCJqVkv776c37RqAajGr5
+	tQ93HFuG6+piCHDezJgpycxYaQnI=
+X-Google-Smtp-Source: AGHT+IFRjPzCVjscduMe9PJTJPCwA2zTGpVECZbzZ1yuPl5xjdRZBOYtWRkqcDIIuWn8xfTHGWkMJXhEqEdFQ9nbXV4=
+X-Received: by 2002:a05:6602:3f82:b0:80f:81f5:b496 with SMTP id
+ ca18e2360f4ac-81f95aba61fmr1054588639f.14.1722241247516; Mon, 29 Jul 2024
+ 01:20:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20240727170604.9149-1-eugene.shalygin@gmail.com>
+ <20240727170604.9149-2-eugene.shalygin@gmail.com> <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
+In-Reply-To: <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+Date: Mon, 29 Jul 2024 10:20:36 +0200
+Message-ID: <CAB95QATwU=P6m1vub18PcuWty1eKGkM5aGMfuuWZPD9LyAcd2g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: RobotRoss <true.robot.ross@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Florian,
+Hi Guenter,
 
-Am Montag, 29. Juli 2024, 08:24:26 CEST schrieb Florian Eckert:
-> > +static int qnap_mcu_register_err_led(struct device *dev, struct
-> > qnap_mcu *mcu, int num)
-> > +{
-> > +	struct qnap_mcu_err_led *err_led;
-> > +	char tmp_buf[LED_MAX_NAME_SIZE];
-> > +	int ret;
-> > +
-> > +	err_led = devm_kzalloc(dev, sizeof(*err_led), GFP_KERNEL);
-> > +	if (!err_led)
-> > +		return -ENOMEM;
-> > +
-> > +	err_led->mcu = mcu;
-> > +	err_led->num = num;
-> > +	err_led->mode = QNAP_MCU_ERR_LED_OFF;
-> > +
-> > +	snprintf(tmp_buf, LED_MAX_NAME_SIZE, "hdd%d:red:status", num + 1);
-> > +	err_led->cdev.name = tmp_buf;
-> 
-> Should not the memory have to be allocated here via 'kzalloc' for 
-> 'err_led->cdev.name'?
-> After leaving the function, tmp_buf is no longer on the stack?
+On Sun, 28 Jul 2024 at 00:09, Guenter Roeck <linux@roeck-us.net> wrote:
+> "X570-E GAMING does not support the VRM temperature sensor."
+>
+> would have been good enough.
 
-Reading the led_classdev_register thing, cdev->name is used only for
-creating the final-name for the LED and thus copied into yet another
-temporary buffer [0] .
+I can easily change the commit message, of course,
 
-And cdev->name is not accessed anymore outside the register function.
+> > Signed-off-by: RobotRoss <true.robot.ross@gmail.com>
+>
+> Hmm, that very much looks like an alias.
 
-But thinking more about that, you're still right, because after registering
-cdev->name is in a bad state, pointing to something no valid anymore.
-So if the LED core changes behaviour in the future, this will cause breakage.
+but what can I do about user email? I can ask them to provide their
+real name, but they saw your email as well already...
 
-So I'll change that.
-
-
-Thanks for catching that
-Heiko
-
-
-
-[0] https://elixir.bootlin.com/linux/v6.10.1/source/drivers/leds/led-class.c#L500
-https://elixir.bootlin.com/linux/v6.10.1/source/drivers/leds/led-class.c#L503
-
-
+Cheers,
+Eugene
