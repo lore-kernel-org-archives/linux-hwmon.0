@@ -1,158 +1,348 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9719383CD6
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Jul 2024 03:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A236284052;
+	Mon, 29 Jul 2024 06:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.224.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722225526; cv=none; b=utg7nQTNwSqgc9U2FnudvmnK7WKoPDFXArwaqfQs99ilwJsWUSPzbevJpl4gvb/9TMWcfd4yHp8PURAShG6vA5o6ixoxCI33YX3ifX9R2l0v/9m5mD3MVtBYiV0K2sPuuWMbkarIcjlrsr83SqllNAc4i4fJuV6M+OkB4BpaF9Y=
+	t=1722235258; cv=none; b=jM3b5ugUaReRyJnHcVUQ8avrFde9z8ByAX4JbG/xBCyr+mEgXVtT9RD0TsStXAxkOsm8bjPs0UkcACdwKv7wcVctSOJIfPPNEnr7hQU9X/LBC+brFBKVgn4nJzhSuZN83oDrFECnQUuyWyGN6Mi1LfgQiyuJ7UZQLFhtCoKAThY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722225526; c=relaxed/simple;
-	bh=9DddguxozJV5pflcX3mHjcvMGzvB3U0GqujxdbhIUiU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xw3mPwcSuORCQfyQdTyD3ERab8fHjiWfCKvgMMKp5EvP7DltEEg84088ZcWpnuDTFwdajtjZOA3QvaEuUuMp/iiMHBGCrRLxHwevrDudSw0Avr2sPD4TGcgYyWQrtDZShj6vm/LI+PKmmRw4J/mhtxqVFjqMjpeFjfmNrf26xrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YX5Fczyl; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YX5Fczyl"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70d162eef54so1713606b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jul 2024 20:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722225524; x=1722830324; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lu82eOrVGA51x6eJP3G/CJ3NiAxWjxtOjSBRSgPRex8=;
-        b=YX5Fczyll/hdOOq3JoqxPq59/R3kmgFkk6f/E8ra3dJJj4DwoGPlOUc7xIjSCz4UGG
-         7FOM2gvYRYUPTSmLdUeV6F4IMS9xnqoPXm5V00AhzCtqn8H8C2d+da1NodptMIv+3Vfd
-         JR7zjpzzYMNd9jngoHK0FU9B6Exr40JeszxdJmpS9IxrfdKDW+Ri1UbbeDRCtW7DE8Ux
-         t4VSLAqY/fap8w/bCRZSWBjXGLjzMVhV+ei3CQli/6eBz0wEO7Xu4MbbvusSJ5ryxmUM
-         Mq+NQaKh0l37nyae4XqwOmNBXzoibEoy53tevoPWTQ0RvipmAMMIhwQVyEWiLsGAr58/
-         kVSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722225524; x=1722830324;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lu82eOrVGA51x6eJP3G/CJ3NiAxWjxtOjSBRSgPRex8=;
-        b=I5B2FifJ1YulT4tFsMJJw6Oj0dsPQ7lBMUdmBfRSsq8FjhCnqnoB9MzsTqYZ2PEAIp
-         pjwO1TwT+e9/+i0wivC9azpugLKTcVrhT8o7UCw8gFf8KWNEVe5yQepEANi855HS60+o
-         uzVkgk2goaViZpiXRKBe9vzdA0TVYOysx1S2On6JM+03Vf5XDVfycYt10yJKJ5Z7uGKF
-         k5PrSXc7wtPAeyuKGNGutg8NFQK1HvIiXf0Gm2vekvkpWhNYWMPFb7Xe2rnx3x/HP8g1
-         mljucUINseKYAA366wSfMAko+mb40aoP0xZ4A1Bp9ZwIfZGkj4FrfeFDcMC9s7cstPVH
-         1NEA==
-X-Gm-Message-State: AOJu0YwAwaxLIy7j+JPJ8HwyI7ECuz5KYy6nlwCSkmsa2YbnUcmko+iu
-	+PSHnJ7ZzZOtgUoVu4JY9t+yIE/E27FXdShPODD4sYHaaudivgSb
-X-Google-Smtp-Source: AGHT+IGmxPPI7de7NXA3DsNKTC8PneVWe5FX+2Vg+25okb6M0xA3x1VMcOgUOR7t2mjcMgr6HBYqfg==
-X-Received: by 2002:a05:6a20:2455:b0:1c3:ea28:3c0e with SMTP id adf61e73a8af0-1c4a13afc2bmr4482309637.33.1722225523816;
-        Sun, 28 Jul 2024 20:58:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cf28df0816sm7448896a91.40.2024.07.28.20.58.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Jul 2024 20:58:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <597c61c3-db92-4c8a-b74c-05b2aa49ac70@roeck-us.net>
-Date: Sun, 28 Jul 2024 20:58:41 -0700
+	s=arc-20240116; t=1722235258; c=relaxed/simple;
+	bh=x5FdFI8UNAApHvTVx7N8rwm526f3zkx/HepVYYmXwt4=;
+	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
+	 References:Message-ID; b=mWlReJoCk7bRRXTUs2rzifvhTnoSYDR4n3UJrnvowA8nP18FCouLpej1beVFk+EC4k72YLd2tZm7XfgY31iUDGAvcpXAcU18fKuozkr8PJOScsr63BbsBbKjvli6V+E5+pF2GNWjwaCpqc6lnJcklt9eH485eB7pclUtEIM54ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; arc=none smtp.client-ip=91.198.224.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
+Received: from [127.0.0.1] (helo=localhost)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=1954343a27=fe@dev.tdt.de>)
+	id 1sYJo5-009RoD-Df; Mon, 29 Jul 2024 08:24:29 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1sYJo4-00EKvn-Kw; Mon, 29 Jul 2024 08:24:28 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id 31333240041;
+	Mon, 29 Jul 2024 08:24:28 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id 04C26240036;
+	Mon, 29 Jul 2024 08:24:28 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+	by mail.dev.tdt.de (Postfix) with ESMTP id 1E66B20A38;
+	Mon, 29 Jul 2024 08:24:27 +0200 (CEST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/7] hwmon: (max1619) Convert to use regmap
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240728143715.1585816-1-linux@roeck-us.net>
- <20240728143715.1585816-5-linux@roeck-us.net> <Zqb75Ue3NjENz8g0@google.com>
- <ea599334-5916-4d03-a662-a0d02d1296bc@roeck-us.net>
- <ZqcLUDCtxKPs-sRN@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZqcLUDCtxKPs-sRN@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date: Mon, 29 Jul 2024 08:24:26 +0200
+From: Florian Eckert <fe@dev.tdt.de>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: lee@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+ dmitry.torokhov@gmail.com, pavel@ucw.cz, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, ukleinek@debian.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] leds: add driver for LEDs from qnap-mcu devices
+In-Reply-To: <20240728211751.2160123-4-heiko@sntech.de>
+References: <20240728211751.2160123-1-heiko@sntech.de>
+ <20240728211751.2160123-4-heiko@sntech.de>
+Message-ID: <f7d10147a643f4d0d7cf2decbe490315@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-purgate-type: clean
+X-purgate-ID: 151534::1722234269-16C4CD11-DF4FFB49/0/0
+X-purgate: clean
 
-On 7/28/24 20:24, Tzung-Bi Shih wrote:
-> On Sun, Jul 28, 2024 at 08:16:35PM -0700, Guenter Roeck wrote:
->> On 7/28/24 19:18, Tzung-Bi Shih wrote:
->>> On Sun, Jul 28, 2024 at 07:37:12AM -0700, Guenter Roeck wrote:
->>>> -static void max1619_init_client(struct i2c_client *client)
->>>> +static int max1619_init_chip(struct regmap *regmap)
->>>>    {
->>>> -	u8 config;
->>>> +	int ret;
->>>> -	/*
->>>> -	 * Start the conversions.
->>>> -	 */
->>>> -	i2c_smbus_write_byte_data(client, MAX1619_REG_W_CONVRATE,
->>>> -				  5); /* 2 Hz */
->>>> -	config = i2c_smbus_read_byte_data(client, MAX1619_REG_R_CONFIG);
->>>> -	if (config & 0x40)
->>>> -		i2c_smbus_write_byte_data(client, MAX1619_REG_W_CONFIG,
->>>> -					  config & 0xBF); /* run */
->>>> +	ret = regmap_write(regmap, MAX1619_REG_CONVRATE, 5);	/* 2 Hz */
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	/* Start conversions */
->>>> +	return regmap_set_bits(regmap, MAX1619_REG_CONFIG, 0x40);
->>>
->>> Should be regmap_clear_bits()?
->>
->>
->> Sigh. yes, of course.
-> 
-> With that,
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> 
+Hello Heiko,
 
-Thanks!
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index effdfc6f1e951..27eb6cd827610 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -77,6 +77,7 @@ obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
+>  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
+>  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+>  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+> +obj-$(CONFIG_LEDS_QNAP_MCU)		+= leds-qnap-mcu.o
+>  obj-$(CONFIG_LEDS_REGULATOR)		+= leds-regulator.o
+>  obj-$(CONFIG_LEDS_SC27XX_BLTC)		+= leds-sc27xx-bltc.o
+>  obj-$(CONFIG_LEDS_SUN50I_A100)		+= leds-sun50i-a100.o
+> diff --git a/drivers/leds/leds-qnap-mcu.c 
+> b/drivers/leds/leds-qnap-mcu.c
+> new file mode 100644
+> index 0000000000000..e3244923759d2
+> --- /dev/null
+> +++ b/drivers/leds/leds-qnap-mcu.c
+> @@ -0,0 +1,247 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Driver for LEDs found on QNAP MCU devices
+> + *
+> + * Copyright (C) 2024 Heiko Stuebner <heiko@sntech.de>
+> + */
+> +
+> +#include <linux/leds.h>
+> +#include <linux/mfd/qnap-mcu.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <uapi/linux/uleds.h>
+> +
+> +enum qnap_mcu_err_led_mode {
+> +	QNAP_MCU_ERR_LED_ON = 0,
+> +	QNAP_MCU_ERR_LED_OFF = 1,
+> +	QNAP_MCU_ERR_LED_BLINK_FAST = 2,
+> +	QNAP_MCU_ERR_LED_BLINK_SLOW = 3,
+> +};
+> +
+> +struct qnap_mcu_err_led {
+> +	struct qnap_mcu *mcu;
+> +	struct led_classdev cdev;
+> +	u8 num;
+> +	u8 mode;
+> +};
+> +
+> +static inline struct qnap_mcu_err_led *
+> +		cdev_to_qnap_mcu_err_led(struct led_classdev *led_cdev)
+> +{
+> +	return container_of(led_cdev, struct qnap_mcu_err_led, cdev);
+> +}
+> +
+> +static int qnap_mcu_err_led_set(struct led_classdev *led_cdev,
+> +				enum led_brightness value)
+> +{
+> +	struct qnap_mcu_err_led *err_led = 
+> cdev_to_qnap_mcu_err_led(led_cdev);
+> +	u8 cmd[] = {
+> +		[0] = 0x40,
+> +		[1] = 0x52,
+> +		[2] = 0x30 + err_led->num,
+> +		[3] = 0x30
+> +	};
+> +
+> +	/*
+> +	 * If the led is off, turn it on. Otherwise don't disturb
+> +	 * a possible set blink-mode.
+> +	 */
+> +	if (value == 0)
+> +		err_led->mode = QNAP_MCU_ERR_LED_OFF;
+> +	else if (err_led->mode == QNAP_MCU_ERR_LED_OFF)
+> +		err_led->mode = QNAP_MCU_ERR_LED_ON;
+> +
+> +	cmd[3] = 0x30 + err_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(err_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_err_led_blink_set(struct led_classdev *led_cdev,
+> +				      unsigned long *delay_on,
+> +				      unsigned long *delay_off)
+> +{
+> +	struct qnap_mcu_err_led *err_led = 
+> cdev_to_qnap_mcu_err_led(led_cdev);
+> +	u8 cmd[] = {
+> +		[0] = 0x40,
+> +		[1] = 0x52,
+> +		[2] = 0x30 + err_led->num,
+> +		[3] = 0x30
+> +	};
+> +
+> +	/* LED is off, nothing to do */
+> +	if (err_led->mode == QNAP_MCU_ERR_LED_OFF)
+> +		return 0;
+> +
+> +	if (*delay_on < 500) {
+> +		*delay_on = 100;
+> +		*delay_off = 100;
+> +		err_led->mode = QNAP_MCU_ERR_LED_BLINK_FAST;
+> +	} else {
+> +		*delay_on = 500;
+> +		*delay_off = 500;
+> +		err_led->mode = QNAP_MCU_ERR_LED_BLINK_SLOW;
+> +	}
+> +
+> +	cmd[3] = 0x30 + err_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(err_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_register_err_led(struct device *dev, struct
+> qnap_mcu *mcu, int num)
+> +{
+> +	struct qnap_mcu_err_led *err_led;
+> +	char tmp_buf[LED_MAX_NAME_SIZE];
+> +	int ret;
+> +
+> +	err_led = devm_kzalloc(dev, sizeof(*err_led), GFP_KERNEL);
+> +	if (!err_led)
+> +		return -ENOMEM;
+> +
+> +	err_led->mcu = mcu;
+> +	err_led->num = num;
+> +	err_led->mode = QNAP_MCU_ERR_LED_OFF;
+> +
+> +	snprintf(tmp_buf, LED_MAX_NAME_SIZE, "hdd%d:red:status", num + 1);
+> +	err_led->cdev.name = tmp_buf;
 
-Guenter
+Should not the memory have to be allocated here via 'kzalloc' for 
+'err_led->cdev.name'?
+After leaving the function, tmp_buf is no longer on the stack?
 
+
+> +
+> +	err_led->cdev.brightness_set_blocking = qnap_mcu_err_led_set;
+> +	err_led->cdev.blink_set = qnap_mcu_err_led_blink_set;
+> +	err_led->cdev.brightness = 0;
+> +	err_led->cdev.max_brightness = 1;
+> +
+> +	ret = devm_led_classdev_register(dev, &err_led->cdev);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to register hdd led %d", 
+> num);
+> +
+> +	return qnap_mcu_err_led_set(&err_led->cdev, 0);
+> +}
+> +
+> +enum qnap_mcu_usb_led_mode {
+> +	QNAP_MCU_USB_LED_ON = 1,
+> +	QNAP_MCU_USB_LED_OFF = 3,
+> +	QNAP_MCU_USB_LED_BLINK = 2,
+> +};
+> +
+> +struct qnap_mcu_usb_led {
+> +	struct qnap_mcu *mcu;
+> +	struct led_classdev cdev;
+> +	u8 mode;
+> +};
+> +
+> +static inline struct qnap_mcu_usb_led *
+> +		cdev_to_qnap_mcu_usb_led(struct led_classdev *led_cdev)
+> +{
+> +	return container_of(led_cdev, struct qnap_mcu_usb_led, cdev);
+> +}
+> +
+> +static int qnap_mcu_usb_led_set(struct led_classdev *led_cdev,
+> +				enum led_brightness value)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led = 
+> cdev_to_qnap_mcu_usb_led(led_cdev);
+> +	u8 cmd[] = {
+> +		[0] = 0x40,
+> +		[1] = 0x43,
+> +		[2] = 0
+> +	};
+> +
+> +	/*
+> +	 * If the led is off, turn it on. Otherwise don't disturb
+> +	 * a possible set blink-mode.
+> +	 */
+> +	if (value == 0)
+> +		usb_led->mode = QNAP_MCU_USB_LED_OFF;
+> +	else if (usb_led->mode == QNAP_MCU_USB_LED_OFF)
+> +		usb_led->mode = QNAP_MCU_USB_LED_ON;
+> +
+> +	/* byte 3 is shared between the usb led target and setting the mode 
+> */
+> +	cmd[2] = 0x44 | usb_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(usb_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_usb_led_blink_set(struct led_classdev *led_cdev,
+> +				      unsigned long *delay_on,
+> +				      unsigned long *delay_off)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led = 
+> cdev_to_qnap_mcu_usb_led(led_cdev);
+> +	u8 cmd[] = {
+> +		[0] = 0x40,
+> +		[1] = 0x43,
+> +		[2] = 0
+> +	};
+> +
+> +	/* LED is off, nothing to do */
+> +	if (usb_led->mode == QNAP_MCU_USB_LED_OFF)
+> +		return 0;
+> +
+> +	*delay_on = 250;
+> +	*delay_off = 250;
+> +	usb_led->mode = QNAP_MCU_USB_LED_BLINK;
+> +
+> +	/* byte 3 is shared between the usb led target and setting the mode 
+> */
+> +	cmd[2] = 0x44 | usb_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(usb_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_register_usb_led(struct device *dev, struct 
+> qnap_mcu *mcu)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led;
+> +	int ret;
+> +
+> +	usb_led = devm_kzalloc(dev, sizeof(*usb_led), GFP_KERNEL);
+> +	if (!usb_led)
+> +		return -ENOMEM;
+> +
+> +	usb_led->mcu = mcu;
+> +	usb_led->mode = QNAP_MCU_USB_LED_OFF;
+> +	usb_led->cdev.name = "usb:blue:disk";
+> +	usb_led->cdev.brightness_set_blocking = qnap_mcu_usb_led_set;
+> +	usb_led->cdev.blink_set = qnap_mcu_usb_led_blink_set;
+> +	usb_led->cdev.brightness = 0;
+> +	usb_led->cdev.max_brightness = 1;
+> +
+> +	ret = devm_led_classdev_register(dev, &usb_led->cdev);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to register usb led");
+> +
+> +	return qnap_mcu_usb_led_set(&usb_led->cdev, 0);
+> +}
+> +
+> +static int qnap_mcu_leds_probe(struct platform_device *pdev)
+> +{
+> +	struct qnap_mcu *mcu = dev_get_drvdata(pdev->dev.parent);
+> +	const struct qnap_mcu_variant *variant = 
+> qnap_mcu_get_variant_data(mcu);
+> +	int ret, i;
+> +
+> +	for (i = 0; i < variant->num_drives; i++) {
+> +		ret = qnap_mcu_register_err_led(&pdev->dev, mcu, i);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					"failed to register error led %d\n", i);
+> +	}
+> +
+> +	if (variant->usb_led) {
+> +		ret = qnap_mcu_register_usb_led(&pdev->dev, mcu);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					"failed to register usb led %d\n", i);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver qnap_mcu_leds_driver = {
+> +	.probe = qnap_mcu_leds_probe,
+> +	.driver = {
+> +		.name = "qnap-mcu-leds",
+> +	},
+> +};
+> +module_platform_driver(qnap_mcu_leds_driver);
+> +
+> +MODULE_ALIAS("platform:qnap-mcu-leds");
+> +MODULE_AUTHOR("Heiko Stuebner <heiko@sntech.de>");
+> +MODULE_DESCRIPTION("QNAP MCU LEDs driver");
+> +MODULE_LICENSE("GPL");
