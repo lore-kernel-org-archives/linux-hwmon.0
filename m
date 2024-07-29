@@ -1,111 +1,155 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9691DFCF;
-	Mon, 29 Jul 2024 13:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AE21E515;
+	Mon, 29 Jul 2024 13:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722258095; cv=none; b=LGMeNvUqNnjRWDaMICGzivPB+kD60QQD2jCMZZ1UMS8d7C8EaK8D8Zw1VyiKg12Hy2nDAz+OOlX94do2Qm6swrRNAno1QqySj4dfwvbiG/KYVkwhDpbEUV97cHvbQB4tXX1hOuP7qUCHHKSlslCrmMU6NC7+PtXTyVn+JuPkv5M=
+	t=1722260945; cv=none; b=lAg6EQ263adDULRq9pfJESbNsjH2XnkH8gTd9awLYTY+2gsgpOjb7hEddlqgyOyz6kY5hzomg7ewM6zA3eFPuAsZsfqXxS9aL/Bd9Yom1WuiLdLYdgZWh5+EF8UJR+x+MUPVXBvGNZa+Ex5qfrKIooHiCMXxzc6xeR5VI42ky9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722258095; c=relaxed/simple;
-	bh=lyMQxeeEfari71/LaXTaod34URVqznPpnYytJZ6gTr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bfAPWDRQpOVFW2mEdObYXU8jOpLkrhfN49Qrk/CmHpnL3GlMM434p1cdU6Zpz3YPjCP5jg62JMsO3rNHMk1kYuwXjdRkM0c9H76MyS71URzMacDAvXOPlSprLwRWflzfxAO6o/QCxp5uPKkIs/3BPTreUqR1bJ8+FTeQw3h+Q9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=1GSkuUcM; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1722260945; c=relaxed/simple;
+	bh=bsGnorrUtmsQ6vRodBQGMe1zqHBUrA+/z3pKz7sLq0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=quAIKdgtuuzflcnvHx7AOjwJxZ9ylW0fRGTyW0tUmzbn36bdQ2IqoAFJhtxY8GeHtYMgMHW8azTLDZNmyevht+2y7FQnZzbyDRejPFLyWmhrcxi8w3EOaz2LPJ/h88d4Dfl9h37kQ+AQ6sXpq5me9Eumd2UA9BQRU1RyLacJbyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XDzds7zC; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="1GSkuUcM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=dCor073xQJijp8I3RK3+ty7FjGp2GGPrVnPyb5mRIYg=; b=1GSkuUcMy+MnQlrUUZPZiL0Ly1
-	wOJOpFW9Dt0n42j9nsc0LVGkc3G+6GPbXxx+ZDe53eeqx673xKGuCnzOrTx4epdFvaYwzMsxkTSRR
-	gLtYX28JoCoPRJ87N0XRwsvLOCpF6My7Oj2j7wen56JhKivm+CKuH/au6IXd/PC6kmGAzWZRBSz5r
-	ozwMLyEdlI8UkrK5WHK8xSjQRp9/SQvCCUzUGatWht/0O3UNm5r29E2wr3+ccshTiNNn/Ec79Nrfl
-	iV9EgtQoX1Tj0DeCd/h9othUdgE6IGfc9O8kKzYQh4O/c4Kcvoqru5wAqHlb2WW2nGzbFeMChzKlR
-	f0BFD+Mw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46248)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1sYPzP-0004Lu-1R;
-	Mon, 29 Jul 2024 14:00:35 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1sYPzQ-0004L5-68; Mon, 29 Jul 2024 14:00:36 +0100
-Date: Mon, 29 Jul 2024 14:00:36 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 6/6] net: mvpp2: use device_for_each_child_node() to
- access device child nodes
-Message-ID: <ZqeSdMMOk+GbVzHj@shell.armlinux.org.uk>
-References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
- <20240706-device_for_each_child_node-available-v1-6-8a3f7615e41c@gmail.com>
- <ZqdRgDkK1PzoI2Pf@shell.armlinux.org.uk>
- <aa440f7c-0ccc-443c-8435-50c864edd1c2@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XDzds7zC"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fd66cddd4dso27577425ad.2;
+        Mon, 29 Jul 2024 06:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722260943; x=1722865743; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAGTJVuRsl0K1QbB7ALBNAGr3bL3APT3SD+BTeTctzg=;
+        b=XDzds7zCdboCOXrFmK7PS3XQWpdz2BrZTrVBJE2CziVDzj1dwX1fP0QlP7MW3xPEhd
+         wYOL3fCSrHkYp5h2dkm4gD13o/fZvdru4PqjrH8mj1gt9IDaUm07sipySKmpq8Yt7Vps
+         J0CyVL7iIZBW4c+gngO1VkPcG66Tjne0AKVlLrhT68yCOXs/+EUOfWuGUcX/XonA5nIC
+         t2UhVEnROy6ijoNnrD+SYNhsskbC1yHuZfcSwHTaqIPE8k2fP+h9r9LIx9UTpC4SyxDe
+         W+9syjz/qVwJ0C/Hu7je/KeOz2T4VQvs9raLQ/4dhZSfn1min2v8xWBfUMBSqaZBBf0p
+         9SXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722260943; x=1722865743;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jAGTJVuRsl0K1QbB7ALBNAGr3bL3APT3SD+BTeTctzg=;
+        b=WfnFw4tZry3sJzT9GVXJFWTAl9d2VpXAkr7VQVyUus8M/6s4ecbhF80GaLM0AdH8+/
+         qp/AHH1xhKbT6rFClu8uBsc4CRu71hdfgMko4r2Tg7DfnhQc8R9ABCFk3DzOqFA08m7Q
+         Wvoi2z7ylsXkfO/tKMEvQMs5qFeT8pGbswYJm6sneNrMYhrVc0fWwWK3hYQAnbGB/5Vg
+         OSQ8vEu+a1OHQ+DqethUTs4kK60wfrXKN/QU+7jHmQg/vir5ks3YWQ6Egez4TlMekzJ3
+         Vw8kFcm83Oe/HPxiEprgbeCFPeW4IcqJWNB3QxqhzkqiwK2p51KEDhuCUymxZOesTt8h
+         L6TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtRpg3fUmOVoCrlVKrixObu2lV4lKLznaQY4rHSV6GaG6bAci8mQFAtemXzC4VcMXjLgc7hkRLkSQDHXlFiDs7vfVoaI3qBQG2JmVaOAEJ6amMeGyXLWmyQNSoh2cj2XmZQPhfqHfc2ks=
+X-Gm-Message-State: AOJu0YyjqmoD1hXn73xkMNGZTrYmjBee5Erv+rNCL5I89NgxN8BV21+G
+	frQUVqLeQGyDPoT0Mff5CaFoXSg7S6Q6O0pjCiz2G+uQzO1oNRf/u7+pRA==
+X-Google-Smtp-Source: AGHT+IFWzcjuTcZkUTqt8OyX1l4tNtIyPmbfaaLf1HxeDMXfpsornZj84Jvyy1L3i7o4TQ56pPREkQ==
+X-Received: by 2002:a17:902:ced1:b0:1fd:6581:f69f with SMTP id d9443c01a7336-1ff0481882dmr91065065ad.22.1722260942642;
+        Mon, 29 Jul 2024 06:49:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7cde45csm82982875ad.77.2024.07.29.06.49.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jul 2024 06:49:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6b0a00d8-6357-45d1-972c-0af438868991@roeck-us.net>
+Date: Mon, 29 Jul 2024 06:48:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa440f7c-0ccc-443c-8435-50c864edd1c2@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E
+ GAMING
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: RobotRoss <true.robot.ross@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240727170604.9149-1-eugene.shalygin@gmail.com>
+ <20240727170604.9149-2-eugene.shalygin@gmail.com>
+ <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
+ <CAB95QATwU=P6m1vub18PcuWty1eKGkM5aGMfuuWZPD9LyAcd2g@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CAB95QATwU=P6m1vub18PcuWty1eKGkM5aGMfuuWZPD9LyAcd2g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 29, 2024 at 11:23:47AM +0200, Javier Carrasco wrote:
-> Apart from that, there is a suspicious check towards the end of the same
-> function:
+On 7/29/24 01:20, Eugene Shalygin wrote:
+> Hi Guenter,
 > 
->  if (is_acpi_node(port_fwnode))
-> 		return;
+> On Sun, 28 Jul 2024 at 00:09, Guenter Roeck <linux@roeck-us.net> wrote:
+>> "X570-E GAMING does not support the VRM temperature sensor."
+>>
+>> would have been good enough.
 > 
-> At the point it is called in the current implementation, port_fwnode
-> could have been cleaned. And after removing the loop, it is simply
-> uninitialized. Was that meant to be pdev->dev->fwnode?
+> I can easily change the commit message, of course,
+> 
+>>> Signed-off-by: RobotRoss <true.robot.ross@gmail.com>
+>>
+>> Hmm, that very much looks like an alias.
+> 
+> but what can I do about user email? I can ask them to provide their
+> real name, but they saw your email as well already...
+> 
 
-If you're referring to the one before the clk_disable_unprepare() calls,
-it's only slightly suspicious:
+Process explicitly says
 
-These clocks are setup in a:
+then you just add a line saying::
 
-        if (dev_of_node(&pdev->dev)) {
-		...
-	}
+         Signed-off-by: Random J Developer <random@developer.example.org>
 
-block, so they're only setup if we have device tree. So, avoiding it
-for ACPI is entirely reasonable. However, we also have software nodes
-as well, so the test should be:
+using a known identity (sorry, no anonymous contributions.)
 
-	if (!dev_of_node(&pdev->dev))
-		return;
+where an alias is clearly an anonymous contribution. You could author
+yourself and add a comment along the line of "originally from github user
+RobotRoss".
 
-to match what the probe function is doing.
+Guenter
 
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
