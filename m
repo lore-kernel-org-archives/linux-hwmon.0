@@ -1,87 +1,186 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EA013B5B0;
-	Mon, 29 Jul 2024 08:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9E5163;
+	Mon, 29 Jul 2024 08:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722241249; cv=none; b=U19tVn0JGUzyD0nxb7gFa6D/3BPZDMk6nR/jKkrMfXqXlPt6BzqVlFXj2R++S6xiUOLuDb1M+A9eMYPB5U+1eS1zDCFsuwg74L8vHK4k+Bbmv4zt5d1HwmgomaczudVgXDZBjWnQizvdRGU2uo9KXYJk75kuDp07JXlBww5LDWo=
+	t=1722241441; cv=none; b=o5dBR6CoRBBnWFjGFvFvwbZvpL+49rq/LA/uqbolJsk+KgwoHhPE+82yviaCMWvLMv9xc0zUJXm6gjGnJ0eiCZ5j5f41BDSybYNustXtiIdQq197effLCYIcn3sS3WWzDmtwjz55DoNhiS1KKwQko3616u0JOaE0EyT55cQVvjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722241249; c=relaxed/simple;
-	bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G9fczkm9P+BOmSeODDDgGuELKQM6+mNbRdMRM87coM1NN7kLtI6QOEa8hcTASUYYrMjDt+BwXDMp22bmAD7vLQtqTPsI1YFWs1+1ZHAl61a6shS76Ecf0WS245tOogduTToVgZ+tWyVUh2QNqN8n5GP3ChGtqzNgJcWctRr2piw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b5gWaDAG; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722241441; c=relaxed/simple;
+	bh=7X5xnHFefvuElntNGSqCpczzz7wiyzBF3tNMyaeA8D4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W2Rngvs3MqvGivVShc10+Zw9a9JndPSCKG374aWLOyMrv91cwTuwXK7/XHHY/aghm1S9Ae4M1XfnAeI2HBdVG4QMd5tDMg6KORtnej07CSDWuOvHc3PAQ5d+nRr3jsajQjB2Yyt6eMoGEUHYwAonaOGmgPMwSdoJeFl3evRJ40M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=yqmS2yCV; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5gWaDAG"
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-81f94ce22f2so102600639f.1;
-        Mon, 29 Jul 2024 01:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722241247; x=1722846047; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
-        b=b5gWaDAGtuDZcQODtx10ptbAMSzAGerYViDw7+9S1gQMsPfR1/x3ZK+ejbGfFxkFPQ
-         87938QAdalImWmc+CqQ+Zdp5A3JmuQ09Q/A/Ysvx7JkljPqnbsHC8OVJUoG/xH4O2QYd
-         aGzSIVCUSohnPZ5dR8zEbEBagge/2Ji3lC/ct/MWZhsRKlbqV6pZhuCSNAsGgOh6WzOD
-         /vOYR6X2SsgIWp2meDz+virW3MS6TvX3mc8hoXL2RKXc/sO/YdAVkHL4+tOFXFyERCXE
-         YSfVkVgCvhArevLZHRhevSv5UT72LxIUJSnJTJvYu5XbslONkJnsbqWNsYhG23MmcH7V
-         gCPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722241247; x=1722846047;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v3L3wlGUVAp84fPXlhzTAV/E5cXslAj1M+rVrZvHt5Q=;
-        b=RcgCLwCME+6TByTMv4hmxUKI11MFvB5uun7vZPtaDeD/YT5PFvEl3GCcASe/dz+NIH
-         IkUYcUTESZuGUnp2czoipVfZnyCjXNg13sHLYh00SGMcyNn76/WYNhHcbAy+qC4Rq8ZP
-         b/qB3Ga/v0BlaaY3ZtvqrbKK6O0CdYJ4Onf4uB38zzOteumzTorDCwX4UW9upl7P+rL5
-         smOWHYD3RHMJWEl3XgbYz+wBJ1BhIL2Pp8Mt2gbAvO/KeV9IHb9IShdF5Dy4maARUkQ+
-         MooLjHU4njdqE9FplSbBAny0v9sQBQbuPojWzvN1/2yH74g7oIKgJHKxfF4eFF+ko4MA
-         bfHw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+eFLFUQvgaA2/8C+SL6TpbjqrTStP9tler3gcdUHQBM1FBp4YJ5AivWjiFe3LHK2eUJswKnQvHrAaQDw1B9vii2yBbP0gVCB2UD/Dph7pZAxVKCA/OAm9idlHEA0ZuSQXelBeefxaZXs=
-X-Gm-Message-State: AOJu0YxXg9YczqpeM8aAvfazRN6QAEaIEATiGJen8CnZf2yZXDVlDAAY
-	EobclzIh1Jk+BDrXOplrEeomJAN+elYySXsULYJYspypMEPHuFcA1UjCJqVkv776c37RqAajGr5
-	tQ93HFuG6+piCHDezJgpycxYaQnI=
-X-Google-Smtp-Source: AGHT+IFRjPzCVjscduMe9PJTJPCwA2zTGpVECZbzZ1yuPl5xjdRZBOYtWRkqcDIIuWn8xfTHGWkMJXhEqEdFQ9nbXV4=
-X-Received: by 2002:a05:6602:3f82:b0:80f:81f5:b496 with SMTP id
- ca18e2360f4ac-81f95aba61fmr1054588639f.14.1722241247516; Mon, 29 Jul 2024
- 01:20:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="yqmS2yCV"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=mrWuVJBqtXXYWh1tuazQKatQsFaPa3sBlAWQOq6z7vg=; b=yqmS2yCVLIM4Y3ahJwyIQfrNtz
+	iANxgSSpa79Sv7aC63NctW+C/c9m6w/86Tkzv0dz9T8ggCEJXpJ4grVsVI8u7s9BzfYNxVW6NwCQP
+	gfPiQmsbV+CI0ARm3JQyH18FjVroQuszf9Tpwfx3IRQYrf/su4r7Mnr7JlnrMhps26ZK/Wip/3be3
+	V0UiIRG3JbGg9510ifzaTTHPjp7HPMoKDDBeXZZzpyhNmkldkcfrzmfP7eJHA39kMTXn/pplsvIgk
+	BLyUiVj0wy0ziQ4N82lJd91IOiYvP2aIQ5KWq37rcc8SdWQgv/+e4+Imj3d2tJjvfjm5K1umRSZTd
+	KCyJWggw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40970)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1sYLfC-0003Ok-17;
+	Mon, 29 Jul 2024 09:23:26 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1sYLfE-0004AV-FT; Mon, 29 Jul 2024 09:23:28 +0100
+Date: Mon, 29 Jul 2024 09:23:28 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 6/6] net: mvpp2: use device_for_each_child_node() to
+ access device child nodes
+Message-ID: <ZqdRgDkK1PzoI2Pf@shell.armlinux.org.uk>
+References: <20240706-device_for_each_child_node-available-v1-0-8a3f7615e41c@gmail.com>
+ <20240706-device_for_each_child_node-available-v1-6-8a3f7615e41c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240727170604.9149-1-eugene.shalygin@gmail.com>
- <20240727170604.9149-2-eugene.shalygin@gmail.com> <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
-In-Reply-To: <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Mon, 29 Jul 2024 10:20:36 +0200
-Message-ID: <CAB95QATwU=P6m1vub18PcuWty1eKGkM5aGMfuuWZPD9LyAcd2g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: RobotRoss <true.robot.ross@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240706-device_for_each_child_node-available-v1-6-8a3f7615e41c@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Hi Guenter,
+On Sat, Jul 06, 2024 at 05:23:38PM +0200, Javier Carrasco wrote:
+> The iterated nodes are direct children of the device node, and the
+> `device_for_each_child_node()` macro accounts for child node
+> availability.
+> 
+> `fwnode_for_each_available_child_node()` is meant to access the child
+> nodes of an fwnode, and therefore not direct child nodes of the device
+> node.
+> 
+> The child nodes within mvpp2_probe are not accessed outside the lopps,
 
-On Sun, 28 Jul 2024 at 00:09, Guenter Roeck <linux@roeck-us.net> wrote:
-> "X570-E GAMING does not support the VRM temperature sensor."
->
-> would have been good enough.
+"lopps" ?
 
-I can easily change the commit message, of course,
+> and the socped version of the macro can be used to automatically
 
-> > Signed-off-by: RobotRoss <true.robot.ross@gmail.com>
->
-> Hmm, that very much looks like an alias.
+"socped" ?
 
-but what can I do about user email? I can ask them to provide their
-real name, but they saw your email as well already...
+> decrement the refcount on early exits.
+> 
+> Use `device_for_each_child_node()` and its scoped variant to indicate
+> device's direct child nodes.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> index 9adf4301c9b1..97f1faab6f28 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -7417,8 +7417,6 @@ static int mvpp2_get_sram(struct platform_device *pdev,
+>  
+>  static int mvpp2_probe(struct platform_device *pdev)
+>  {
+> -	struct fwnode_handle *fwnode = pdev->dev.fwnode;
+> -	struct fwnode_handle *port_fwnode;
+>  	struct mvpp2 *priv;
+>  	struct resource *res;
+>  	void __iomem *base;
+> @@ -7591,7 +7589,7 @@ static int mvpp2_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* Map DTS-active ports. Should be done before FIFO mvpp2_init */
+> -	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
+> +	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
+>  		if (!fwnode_property_read_u32(port_fwnode, "port-id", &i))
+>  			priv->port_map |= BIT(i);
+>  	}
+> @@ -7614,7 +7612,7 @@ static int mvpp2_probe(struct platform_device *pdev)
+>  		goto err_axi_clk;
+>  
+>  	/* Initialize ports */
+> -	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
+> +	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
+>  		err = mvpp2_port_probe(pdev, port_fwnode, priv);
+>  		if (err < 0)
+>  			goto err_port_probe;
+> @@ -7653,10 +7651,8 @@ static int mvpp2_probe(struct platform_device *pdev)
+>  	return 0;
+>  
+>  err_port_probe:
+> -	fwnode_handle_put(port_fwnode);
+> -
+>  	i = 0;
+> -	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
+> +	device_for_each_child_node_scoped(&pdev->dev, port_fwnode) {
+>  		if (priv->port_list[i])
+>  			mvpp2_port_remove(priv->port_list[i]);
+>  		i++;
+> @@ -7677,13 +7673,12 @@ static int mvpp2_probe(struct platform_device *pdev)
+>  static void mvpp2_remove(struct platform_device *pdev)
+>  {
+>  	struct mvpp2 *priv = platform_get_drvdata(pdev);
+> -	struct fwnode_handle *fwnode = pdev->dev.fwnode;
+>  	int i = 0, poolnum = MVPP2_BM_POOLS_NUM;
+>  	struct fwnode_handle *port_fwnode;
+>  
+>  	mvpp2_dbgfs_cleanup(priv);
+>  
+> -	fwnode_for_each_available_child_node(fwnode, port_fwnode) {
+> +	device_for_each_child_node(&pdev->dev, port_fwnode) {
+>  		if (priv->port_list[i]) {
+>  			mutex_destroy(&priv->port_list[i]->gather_stats_lock);
+>  			mvpp2_port_remove(priv->port_list[i]);
 
-Cheers,
-Eugene
+This loop is just silly. There is no need to iterate the child nodes.
+port_fwnode is not used, and the loop boils down to:
+
+	for (i = 0; i < priv->port_count; i++) {
+		mutex_destroy(&priv->port_list[i]->gather_stats_lock);
+		mvpp2_port_remove(priv->port_list[i]);
+	}
+
+Not only is walking the child nodes not necessary, but checking whether
+the pointer is NULL is also unnecessary. mvpp2_port_probe() populates
+the array using:
+
+        priv->port_list[priv->port_count++] = port;
+
+and "port" can not be NULL here, so we're guaranteed that all port_list
+entries for 0..priv->port_count will be non-NULL, and the driver makes
+this assumption in multiple places.
+
+In fact, I'd say that using fwnode_for_each_available_child_node() or
+device_for_each_child_node() is buggy here if the availability of the
+children change - it could leave ports not cleaned up.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
