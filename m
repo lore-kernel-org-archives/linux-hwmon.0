@@ -1,101 +1,114 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF1815ECDB;
-	Tue, 30 Jul 2024 06:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C0C10E3;
+	Tue, 30 Jul 2024 06:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722320613; cv=none; b=mzQKq06OP25NbD8mklwnMSz0GpnR/oOrQzdyqBBrNiiVBI0vHVssuXdqQ1U7wahOWr+gbcT/bGEoaSdHQGjovJMb2TpfwWybw5aocrouVzyKxEE/0f7MNE9Bf3I6pyyMJHkLZFblBk7DROZC9M10RhkCVQi9mI9c2e+lfTMxElw=
+	t=1722321596; cv=none; b=GY97oBg881wG0yU3ZE2lPu68NGRRJYNE2MtmLTr9AID2Jiwq456rrRJgeoUD4NWdC7yfbxin4Mw37wRb5iVVulwn/o/BibsQm0oDueE9ZZacgg2kS1I+Uu/kLummKhubYStczh5K/FbAPUGxB3YD0kWrhG/YGvJ1xttcADEqzu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722320613; c=relaxed/simple;
-	bh=vgWfXJV6oh+U/d5HLqk14418pfX+0DmbJnN8OA3G+po=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V1UHdvfmvrZiMywgB6dSlRpWltfon6nX3smtDIofSRGqKnD+kWcVXtLzm/w+R/1xdgAdqzk4m4+ToD4CKcLr1G9VdfQ4LRjp4YLkAIoi3QXfjDx+c44KwW0VvDlt+soQDVAvRgnBlmCCqcrYrXU7JphrnCQbbLJs4QIzIlI1S34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nAdTbsJh; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1722321596; c=relaxed/simple;
+	bh=+xtUfjH7KBTL75kox6rhnJ5bWZr33hb+FK2ewG5rRcs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j0BwNwqC1AYV74xRUxxe4ZR4YSw7LsO/556Ood2t5E6yMOAb/VtmM/G8B0MbeXUH/Wrl7hjUHjJCNMpamUeniX2SXlOLTEFALwObirUbHPFWbRgpajF2NtfDCRC6zdPc+gPy+F6MDcpOTuBoczlh6x5hxp8OSDquoUkFk/DMdME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QP10ojf0; arc=none smtp.client-ip=209.85.166.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nAdTbsJh"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5b3fff87e6bso915836a12.0;
-        Mon, 29 Jul 2024 23:23:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QP10ojf0"
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-80a2939265cso156078139f.3;
+        Mon, 29 Jul 2024 23:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722320611; x=1722925411; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1722321594; x=1722926394; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AyZR/OhdzXMfOSBXz8hteOTckbpW6XJjdSMij7DYOMY=;
-        b=nAdTbsJhZXcbLv+V+iyn80ohPoMvA5tQEJMjTUvj6EeCIgQszbY8MSrIbkIK2tJENt
-         FhVQohuwhoDKkKmlQ6rDo64AiqRp9UpuZjpx3id1MsSoDxGukrUc/zXZFnpu0UuCRWS+
-         9dwXtAS7nnNC3SXDDv8dyAviKYhviKAK2INcGAADUVDt3pVRGkrc42+rwsQP8QAksgjp
-         BDg6Tp3Xyetr4s6plv/q3qto3aUKjQQrPSIBLH5wTPfxkspBvMdYva/fS7S+9eX5JrMw
-         hX/ssNtlVUyYaR+ht8pWMasDcbvbREpOooMybnDu0iPbLr6KtKO/RBkTFo2usRpozcp3
-         HCng==
+        bh=tjnAIAiT/lsg9NJmkv883qSS5p8X2M+ZCJHCHeUKx4k=;
+        b=QP10ojf0+Yj1jzmKZ9eymmuB9i5fhXam3EmYLlBSTTKosfucryyylm3vDmFcAHbGlM
+         huv/Kqq+dPUno42pgzAySvAO+6VhR70GNKl5FI9BsRkJNRFnZSLD6SJSxY8jo1uMZdEH
+         TBofwzLc/L35y2XpA4tpSn52NNuYW95txB/Ui8GFfe0WT19wQpMYVIHZ62wRSOhnFdSE
+         16lY/78nkgDedgYWJpFzl/mqFhg8NcOL1Fmq9Phgo6y6u5Zsp35Y/CInXI+ckreAXC8K
+         6q8MNxp98rC2nSSNPIOnuZGAqIOJchzCAyLHVkfvUued9/2Evf1p+zt5fKBgYO+aRDo9
+         G55g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722320611; x=1722925411;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1722321594; x=1722926394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AyZR/OhdzXMfOSBXz8hteOTckbpW6XJjdSMij7DYOMY=;
-        b=NgoFbe6uWieKuqgfSbXN5f/GyK8qCXsrRO0feOYSKbZxN2+65Wswvol4gDKvF+R1+p
-         gON3k9Yq8oMy8tBnfbs5fJlt1/lRajocGjsTNG9U6sn8K0e9atmpi3j/8kDH1l+Zd7qz
-         OPs+SPuYwk95999PMzrO2TYcMDfAzVuXjTmAmPEcbOWBD6cT1ICXvJx4NQqTC1B9wRHQ
-         KMzQzjS+/Hqulgv/saYTRdWEHMnfmACiLvDVNhAIS6VgwAmAPMDIFxNqZoySL3p9SWpB
-         6fU2rtss0elTvlqKyJKg6f6svf/uNeorBeLBxBnIIVrui2xQbNCNJ8VG4jJ//xhePlFD
-         T2gg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxyULtj6NTnTtw4DZgwEnT5SIKF63WGlCaZIrGjkARlIEIyxgf6spRuQgSRaEQ/FYtDnzoqeTYX6wxxKd/vD/FX2G0AyYH9friXrbdeieQvxr3azGxFwBZMzuWGJj9taLv8jU2Nxl/0us=
-X-Gm-Message-State: AOJu0YwsfyVGYKXvDyaBzg6TbJoJzhnz2lLSd8hWHaJWYcn3FQqHMU0a
-	qz7e8yvbQD2sFFcSZAtuQ428LRh1QF2Vq+CayqjCxXYTZdxEKBkX
-X-Google-Smtp-Source: AGHT+IH3lhTXI6afBWK2HVh8LjHA55TAsRQ4XXdNCo0D/juqj8GpUtpQ7r7Nv+wm9WULyoz1DIvh6Q==
-X-Received: by 2002:a50:d482:0:b0:5a0:d754:5ec5 with SMTP id 4fb4d7f45d1cf-5b021d21b76mr6260613a12.26.1722320610310;
-        Mon, 29 Jul 2024 23:23:30 -0700 (PDT)
-Received: from caracal.museclub.art (p200300cf9f1ec5003008007610402bf2.dip0.t-ipconnect.de. [2003:cf:9f1e:c500:3008:76:1040:2bf2])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5ac63590d76sm6826134a12.24.2024.07.29.23.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 23:23:29 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Ross Brown <true.robot.ross@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
-Date: Tue, 30 Jul 2024 08:21:42 +0200
-Message-ID: <20240730062320.5188-2-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240730062320.5188-1-eugene.shalygin@gmail.com>
-References: <20240730062320.5188-1-eugene.shalygin@gmail.com>
+        bh=tjnAIAiT/lsg9NJmkv883qSS5p8X2M+ZCJHCHeUKx4k=;
+        b=FyCCKzS+mIWqsK5tA+8kRrgNW1fG6HN3NoT49kbgCMEakW0zBSr+iKG697bxPOt1DH
+         1QfhtWFnqxYU1Cj4E9gxNpCyHp1u1JWpookWxQBZgsuOrNx9Rv/Iz5d/Vi33hSRf0K5T
+         +oj2iLMaHOI9mbCLcx3rl3x/2KkA8wpdWvoxYKyawc8oHa53mq5NUwgSM1NOJoKEGGeH
+         73a89za1kne2rZQsd6fROD+w+o5LFweXEpslc2LBqkNUO/OQ3Uwd36NnoTy3ufE8Vipp
+         DUEE4iABaCA/xGA77ysfcIS59IQj/p66xzom+X4pB+i/wFBqjdY4ZcVIuFjIXItr5npJ
+         xm7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVRZFgUApo/TcllJtV8bwlL9Att02gLVQyfqoz1JfPyE7mvbETdyr8nZPLYYo8ERD2DZ2oUnunk2XdENaiNST9/HpbWQZ6A5fviNgtQeDenByGIUQzybYL0/XARqCMwyqD3UwKE4Za/uJ0=
+X-Gm-Message-State: AOJu0Yz03cZr3+zKETB8ON/qIgW0lDfM8CL/9P7pMSEQrmU43qt+Yp3R
+	BSPRujLLVNg2/fBtIsI2azMzk7IWt2A8FWjuDaZddJuCC5BuperEIM5K2dhOLr1PZV3oODO7GgA
+	XvYLvu7Z0JTAiR4zIauOh5D6Y/z4=
+X-Google-Smtp-Source: AGHT+IFYxEb/vGr8cSYDE0FixzUoIYxeKUCmDQvP0QatjRnL53gTAC9rwsUtpA3Qy3vX1HloNIPuoFU4yVIxRVxJgoU=
+X-Received: by 2002:a05:6602:2dd2:b0:7f9:59af:c26b with SMTP id
+ ca18e2360f4ac-81f95c2ddf6mr1074320639f.17.1722321594178; Mon, 29 Jul 2024
+ 23:39:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240727170604.9149-1-eugene.shalygin@gmail.com>
+ <20240727170604.9149-2-eugene.shalygin@gmail.com> <8b2949b0-63e0-4250-a313-9664f714c4b5@roeck-us.net>
+ <CAB95QATwU=P6m1vub18PcuWty1eKGkM5aGMfuuWZPD9LyAcd2g@mail.gmail.com> <6b0a00d8-6357-45d1-972c-0af438868991@roeck-us.net>
+In-Reply-To: <6b0a00d8-6357-45d1-972c-0af438868991@roeck-us.net>
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+Date: Tue, 30 Jul 2024 08:39:43 +0200
+Message-ID: <CAB95QAR_XDFm5iHObfHzFcAEfn=r=WQ7npe5+RfYPU6A09ziKA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: RobotRoss <true.robot.ross@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Ross Brown <true.robot.ross@gmail.com>
+Hi G=C3=BCnter,
 
-X570-E GAMING does not have VRM temperature sensor.
+Thank you for all the clarifications! I learned the author's name and
+submitted v3.
 
-Signed-off-by: Ross Brown <true.robot.ross@gmail.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
+Eugene
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 6bb8d7b1d219..ee396f21fac5 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -420,7 +420,7 @@ static const struct ec_board_info board_info_strix_b550_i_gaming = {
- 
- static const struct ec_board_info board_info_strix_x570_e_gaming = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+		SENSOR_TEMP_T_SENSOR |
- 		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
- 		SENSOR_IN_CPU_CORE,
- 	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--- 
-2.45.2
-
+On Mon, 29 Jul 2024 at 15:49, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/29/24 01:20, Eugene Shalygin wrote:
+> > Hi Guenter,
+> >
+> > On Sun, 28 Jul 2024 at 00:09, Guenter Roeck <linux@roeck-us.net> wrote:
+> >> "X570-E GAMING does not support the VRM temperature sensor."
+> >>
+> >> would have been good enough.
+> >
+> > I can easily change the commit message, of course,
+> >
+> >>> Signed-off-by: RobotRoss <true.robot.ross@gmail.com>
+> >>
+> >> Hmm, that very much looks like an alias.
+> >
+> > but what can I do about user email? I can ask them to provide their
+> > real name, but they saw your email as well already...
+> >
+>
+> Process explicitly says
+>
+> then you just add a line saying::
+>
+>          Signed-off-by: Random J Developer <random@developer.example.org>
+>
+> using a known identity (sorry, no anonymous contributions.)
+>
+> where an alias is clearly an anonymous contribution. You could author
+> yourself and add a comment along the line of "originally from github user
+> RobotRoss".
+>
+> Guenter
+>
