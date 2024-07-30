@@ -1,74 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C64018EFE0;
-	Tue, 30 Jul 2024 09:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655219FA91;
+	Tue, 30 Jul 2024 15:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722332259; cv=none; b=hM0takv6rGpErmAmwNrkgiJCp3IpgPBpwT4z2y/nv7BsGR6s3V6v4TdAA5ezvmbqrNt8alvYseY8ZGj6esEW7ahOx8tmQnMTOeMROHhZt7Ede2YZhiY5ulGQI/tDuU8vI5CXi01GNTBaZ4vdIkXDLySDbYFbMLoUdYRajxGb7/I=
+	t=1722353268; cv=none; b=JIRNvcrbr3b8+dPIZMnlIStwKfoSwfRFOEsY110C10Sx8OV33ynaMf/JD/sAIJSzLbdrH7xWI7cmo/r29/sd8kr2nEjDci5xxby64kSrbThUluzns04TjzDZFiIb7aYdqNOZXUrzuIoIfNs1XygUaacYLT1dJYoSHICupt4NK1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722332259; c=relaxed/simple;
-	bh=eQ4F1x/lpLxGO5KX65v21lz8EB6jaKNod2yiaHWTOHU=;
+	s=arc-20240116; t=1722353268; c=relaxed/simple;
+	bh=JZw8WwEedVSoAPqbDc8RGAXuCyf+bLo0NDiUMu3dTPI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pOAD4G1JsKRpPW3OBxrE3CI8EV/CYDD7VhmAv4C9o1vo1j9mGsfqq9Bz6+KwkpP90Y8U1rlVo+sC43bqqzErvLqQnyO7eYUZV9uBG2LgIH99yAPeAO0I/SHHdnKOxbtttZFhG7uZfMccR4NzGSn9mWcYTmfuMFtXDgW4hekC5EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDqxSAI/; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=T/ZHu+9snx4/AgQf+Sa+7+Xz4EUchlP6hknal1t0GmgQgXa/jYjZrVxA+4mw92lf8B7hkubKRGTalewWWyhFn00WrJQTg6FNaMNA379EqgyPb96DA0CHjg2F3HtuxSAQ5tvWTZkKpdgMx2cEw77mx4ERaaVp4tY7RocewJUUWMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYpN4cLg; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDqxSAI/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722332257; x=1753868257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eQ4F1x/lpLxGO5KX65v21lz8EB6jaKNod2yiaHWTOHU=;
-  b=gDqxSAI/lWgnwnaZzcjDa32ePLqjrrHcLbJ8GMZQ7jYA7zQq9tmHrRX5
-   UXWnD5xq10uSnm8ATuHK6HyYiDMxP0eNXE8u+s1IesJzMnLiHL+KzoUmx
-   5TPeEs2vRECrx4LTY2l1qeQlLbY/XznxQxc5cRI6bXp0kD/goBjMmQqsl
-   95VQv5G8UQIrMpTYneO5rynQusz3nGEZ5B5AxvD2cd+4n6JkMVEwmkxpz
-   fYy1A7u9daA7KDU/SImxvH/wS1JwrQaHR8yWghZygP913UHJ0sou7CWO6
-   drT6aQmBaupIB9vxJl1Yw7ks1SM6bviJWlmRiXCteb7cFFlxNKkHQ0BAv
-   g==;
-X-CSE-ConnectionGUID: 6qX+W8k0TnGsHmFSRMf23w==
-X-CSE-MsgGUID: RxkUyNQeQOiwuiYSm1zj/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="37609123"
-X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="37609123"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 02:37:36 -0700
-X-CSE-ConnectionGUID: LKz+kXhGS6K4pP63RiYLZQ==
-X-CSE-MsgGUID: CH0h1jCyQo+6eb2XHzFn6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="58605605"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 30 Jul 2024 02:37:33 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYjIQ-000sjU-11;
-	Tue, 30 Jul 2024 09:37:30 +0000
-Date: Tue, 30 Jul 2024 17:36:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Inochi Amaoto <inochiama@outlook.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Hal Feng <hal.feng@starfivetech.com>,
-	Jinyu Tang <tangjinyu@tinylab.org>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYpN4cLg"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70d333d57cdso3185505b3a.3;
+        Tue, 30 Jul 2024 08:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722353265; x=1722958065; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k9fB8RPDY0z+oCE/hyzm1c3RzHRC+GlwxeI848w9iZo=;
+        b=LYpN4cLg6yPJBuTqajK1NEWW1TupN2oof4JoY8S5xD8p22BoQZ04ta+eWDuuwlyJjk
+         Gb/z/ci7miHfEeCkgV1U+fpCQhrrxR9k+ZlYa94xrKaBgmd9ShS52iMiKQun7WsO5v/8
+         JG9T+v2uYvdBaRhpMf5KVPLPpMYLQxsB6a0n6WpIg7ATqV+SUil+zpB5cOVVDPQjURid
+         9ivFgX7lrWS/FYBTmKv543JIq+FiJlVodZUfjcLp5VjgYW3FbbCE2ZDIT2fTynU+Hbtd
+         BgLOkbrYCME1qkev1+z40tmDTW+LIdp4gggPCUzmzMDNEnRyLPAzxKcQHshlpvJNSpre
+         L+tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722353265; x=1722958065;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k9fB8RPDY0z+oCE/hyzm1c3RzHRC+GlwxeI848w9iZo=;
+        b=mjtyw/aCBrZbKLFFrA0CdOmm1WzbsnACfqpQRBVw23z3+Lk9UNYN34Ducmeu/zIIaa
+         6xfT5qM4Wmw/fv8UA70iuuDLwW7p1hTG3cOoWt4zM3iq6n1/9W7t7/YEYhJXTuR9rYsM
+         znTNA1FI455qp5P5O0vZd76r1BeFTTR1bHHD08UCpWl6/t3ynp4oNtbdvbm+b4iYlLDw
+         DNDIq2tG8y9EgOCvqf2ttuYlIHh2d5BcwTxNYsc1ggssfffdzMeGHdM/U3kAGTz09Z6l
+         ZLcRB96ey5KQOkoCW9nZFFJE04vhOz4HMCCU2OluXQlcHhAHNUKwPeXERbRI9jeYimuY
+         wbBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtro2saMEhkAn4XR9xHVt1pLyzce26qq0v5UKANpEe8k0wQISPwjl9uBuJWjRyOHBbF3FGm+/oKh+ldmxrlSvTbB2WQ9Wd6Y+ru2Ue6ZMpxpfclri9fQSw6+TE9jqsAIgePyMdHMwGk/On89eW0J8r22J1iKe2LRjZHKfqPUxJgpn04p94ntR3SAtlcOsvZAbaQcJovXr8w5ps6Roio3HAbVYPUMBKFSg4mBmB4+mNVXPYY5rVtWcZ7HkMCO+p
+X-Gm-Message-State: AOJu0YxW+AUGIxFBAuVrw1ewEuosjbdZZRmOwiToUEQ2WYLSJg2hoDju
+	+gP6nw5mdMowZ9afY/Lj7YoJlTd26GsbLGqMeVL8cQBf0FLNUkNv
+X-Google-Smtp-Source: AGHT+IH53uN+ps3K8FG722OlZVH9uQ9lhJBPizHtofyjk7vLzArAEYnaqOOhdbpSqtoFe0xY9sV3lg==
+X-Received: by 2002:a05:6a21:6da0:b0:1c2:8ece:97ae with SMTP id adf61e73a8af0-1c4a13afd52mr8779302637.34.1722353265287;
+        Tue, 30 Jul 2024 08:27:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead86ff47sm8863987b3a.145.2024.07.30.08.27.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jul 2024 08:27:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 30 Jul 2024 08:27:42 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: lee@kernel.org, jdelvare@suse.com, dmitry.torokhov@gmail.com,
+	pavel@ucw.cz, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ukleinek@debian.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 3/4] riscv: dts: sophgo: Add mcu device for Milk-V
- Pioneer
-Message-ID: <202407301749.K0pFCNLU-lkp@intel.com>
-References: <IA1PR20MB4953826DECDCC141A7CDE634BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v2 5/7] hwmon: add driver for the hwmon parts of qnap-mcu
+ devices
+Message-ID: <83226476-8b23-4a11-a100-d01049f6eef2@roeck-us.net>
+References: <20240728211751.2160123-1-heiko@sntech.de>
+ <20240728211751.2160123-6-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,37 +76,35 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <IA1PR20MB4953826DECDCC141A7CDE634BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
+In-Reply-To: <20240728211751.2160123-6-heiko@sntech.de>
 
-Hi Inochi,
+On Sun, Jul 28, 2024 at 11:17:49PM +0200, Heiko Stuebner wrote:
+> The MCU can be found on network-attached-storage devices made by QNAP
+> and provides access to fan control including reading back its RPM as
+> well as reading the temperature of the NAS case.
+> 
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 
-kernel test robot noticed the following build errors:
+Minor comment inline, in case you resend, otherwise
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on robh/for-next linus/master v6.11-rc1 next-20240730]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Inochi-Amaoto/dt-bindings-hwmon-Add-Sophgo-SG2042-external-hardware-monitor-support/20240730-160416
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/IA1PR20MB4953826DECDCC141A7CDE634BBB02%40IA1PR20MB4953.namprd20.prod.outlook.com
-patch subject: [PATCH v8 3/4] riscv: dts: sophgo: Add mcu device for Milk-V Pioneer
-config: riscv-randconfig-051-20240730 (https://download.01.org/0day-ci/archive/20240730/202407301749.K0pFCNLU-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 14.1.0
-dtschema version: 2024.6.dev4+g23441a4
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301749.K0pFCNLU-lkp@intel.com/reproduce)
+> +static int qnap_mcu_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+> +				u32 attr, int channel, long val)
+> +{
+> +	struct qnap_mcu_hwmon *hwm = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		if (val < 0 || val > 255)
+> +			return -EINVAL;
+> +
+> +		if (val < hwm->pwm_min)
+> +			val = hwm->pwm_min;
+> +
+> +		if (val > hwm->pwm_max)
+> +			val = hwm->pwm_max;
+> +
+		val = clamp_val(val, hwm->pwm_min, hwm->pwm_max);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407301749.K0pFCNLU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts:29.1-6 Label or path i2c1 not found
-   FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Guenter
