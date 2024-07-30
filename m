@@ -1,73 +1,48 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655219FA91;
-	Tue, 30 Jul 2024 15:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B31518B46A;
+	Tue, 30 Jul 2024 16:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722353268; cv=none; b=JIRNvcrbr3b8+dPIZMnlIStwKfoSwfRFOEsY110C10Sx8OV33ynaMf/JD/sAIJSzLbdrH7xWI7cmo/r29/sd8kr2nEjDci5xxby64kSrbThUluzns04TjzDZFiIb7aYdqNOZXUrzuIoIfNs1XygUaacYLT1dJYoSHICupt4NK1o=
+	t=1722355845; cv=none; b=BP32s7ZFTnBCIFge1wjz/ewsCiLknoopfmxrOfenLJTO7E0I3f1Ck3HDXNNiuSuPMHSqtna7s+ja/fu+RSiMMHZn7EAhkbeRhaCt6mFKJVnfPPdWgCrFx8pHN8ng21V5/V0fKZjkjA/f7VCVA9IbwpQF3HeEwJjcGC7mkPrwN1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722353268; c=relaxed/simple;
-	bh=JZw8WwEedVSoAPqbDc8RGAXuCyf+bLo0NDiUMu3dTPI=;
+	s=arc-20240116; t=1722355845; c=relaxed/simple;
+	bh=ruZCOMj4GJJR9diWNZwtPXkWLCbh7l5zwXN9Wrur3to=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T/ZHu+9snx4/AgQf+Sa+7+Xz4EUchlP6hknal1t0GmgQgXa/jYjZrVxA+4mw92lf8B7hkubKRGTalewWWyhFn00WrJQTg6FNaMNA379EqgyPb96DA0CHjg2F3HtuxSAQ5tvWTZkKpdgMx2cEw77mx4ERaaVp4tY7RocewJUUWMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYpN4cLg; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8LmS7FnkyqhfqyC5jfYk0LNND9HqJysuy3CfQkquYZOA78dqN1nI6Rujg/1Q/f4VKf6aw3RdFP5IiAEKVwhlQNgajLCpyhCyvjYGY8UNMxm+nec4c8EGhasH8i7H9lDDkt24aYqI3gxaHOYJj5GLnN1WO+yyDcZ3fA4j4ZpfUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hscoFwZO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYpN4cLg"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70d333d57cdso3185505b3a.3;
-        Tue, 30 Jul 2024 08:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722353265; x=1722958065; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k9fB8RPDY0z+oCE/hyzm1c3RzHRC+GlwxeI848w9iZo=;
-        b=LYpN4cLg6yPJBuTqajK1NEWW1TupN2oof4JoY8S5xD8p22BoQZ04ta+eWDuuwlyJjk
-         Gb/z/ci7miHfEeCkgV1U+fpCQhrrxR9k+ZlYa94xrKaBgmd9ShS52iMiKQun7WsO5v/8
-         JG9T+v2uYvdBaRhpMf5KVPLPpMYLQxsB6a0n6WpIg7ATqV+SUil+zpB5cOVVDPQjURid
-         9ivFgX7lrWS/FYBTmKv543JIq+FiJlVodZUfjcLp5VjgYW3FbbCE2ZDIT2fTynU+Hbtd
-         BgLOkbrYCME1qkev1+z40tmDTW+LIdp4gggPCUzmzMDNEnRyLPAzxKcQHshlpvJNSpre
-         L+tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722353265; x=1722958065;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k9fB8RPDY0z+oCE/hyzm1c3RzHRC+GlwxeI848w9iZo=;
-        b=mjtyw/aCBrZbKLFFrA0CdOmm1WzbsnACfqpQRBVw23z3+Lk9UNYN34Ducmeu/zIIaa
-         6xfT5qM4Wmw/fv8UA70iuuDLwW7p1hTG3cOoWt4zM3iq6n1/9W7t7/YEYhJXTuR9rYsM
-         znTNA1FI455qp5P5O0vZd76r1BeFTTR1bHHD08UCpWl6/t3ynp4oNtbdvbm+b4iYlLDw
-         DNDIq2tG8y9EgOCvqf2ttuYlIHh2d5BcwTxNYsc1ggssfffdzMeGHdM/U3kAGTz09Z6l
-         ZLcRB96ey5KQOkoCW9nZFFJE04vhOz4HMCCU2OluXQlcHhAHNUKwPeXERbRI9jeYimuY
-         wbBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXtro2saMEhkAn4XR9xHVt1pLyzce26qq0v5UKANpEe8k0wQISPwjl9uBuJWjRyOHBbF3FGm+/oKh+ldmxrlSvTbB2WQ9Wd6Y+ru2Ue6ZMpxpfclri9fQSw6+TE9jqsAIgePyMdHMwGk/On89eW0J8r22J1iKe2LRjZHKfqPUxJgpn04p94ntR3SAtlcOsvZAbaQcJovXr8w5ps6Roio3HAbVYPUMBKFSg4mBmB4+mNVXPYY5rVtWcZ7HkMCO+p
-X-Gm-Message-State: AOJu0YxW+AUGIxFBAuVrw1ewEuosjbdZZRmOwiToUEQ2WYLSJg2hoDju
-	+gP6nw5mdMowZ9afY/Lj7YoJlTd26GsbLGqMeVL8cQBf0FLNUkNv
-X-Google-Smtp-Source: AGHT+IH53uN+ps3K8FG722OlZVH9uQ9lhJBPizHtofyjk7vLzArAEYnaqOOhdbpSqtoFe0xY9sV3lg==
-X-Received: by 2002:a05:6a21:6da0:b0:1c2:8ece:97ae with SMTP id adf61e73a8af0-1c4a13afd52mr8779302637.34.1722353265287;
-        Tue, 30 Jul 2024 08:27:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead86ff47sm8863987b3a.145.2024.07.30.08.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 08:27:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 30 Jul 2024 08:27:42 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: lee@kernel.org, jdelvare@suse.com, dmitry.torokhov@gmail.com,
-	pavel@ucw.cz, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, ukleinek@debian.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hscoFwZO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9E8C4AF0F;
+	Tue, 30 Jul 2024 16:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722355844;
+	bh=ruZCOMj4GJJR9diWNZwtPXkWLCbh7l5zwXN9Wrur3to=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hscoFwZOwv5/8Bg9JkyOHYkxUOVRz9xOXGnuptijczkPuXrxJ3KDhGgmoW3Ok99cD
+	 mOM0TjXktxqYjpiYsHszIPlzylf764x5Uc8piW+7hFzXvxazi61UgnzmuiquLY0me9
+	 5zy3SSqftcye4xK69nsBNrzRoQNdNcPb6OKHKhncZmAAVhL+7FKDM/MchUuuCL7BY4
+	 WQiui4vW/5kUsFxzdMQxA37/sRla1cHelMgY8jKTPACT0QEyHzx8zmJan4CwiieJGl
+	 hqzHPw+ANKKEZNqe7nF52DT/kqldmhbIvZ6kxl4UcAvwQe1O2WvN5C6PACEHANbMZk
+	 LNWArYpWTcp/Q==
+Date: Tue, 30 Jul 2024 10:10:43 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Quentin Schulz <quentin.schulz@cherry.de>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Peter Rosin <peda@axentia.se>, Conor Dooley <conor+dt@kernel.org>,
+	linux-rockchip@lists.infradead.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] hwmon: add driver for the hwmon parts of qnap-mcu
- devices
-Message-ID: <83226476-8b23-4a11-a100-d01049f6eef2@roeck-us.net>
-References: <20240728211751.2160123-1-heiko@sntech.de>
- <20240728211751.2160123-6-heiko@sntech.de>
+	Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v6 3/8] dt-bindings: hwmon: add support for ti,amc6821
+Message-ID: <172235584253.1397741.13902491716086703093.robh@kernel.org>
+References: <20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de>
+ <20240725-dev-mule-i2c-mux-v6-3-f9f6d7b60fb2@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,35 +51,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240728211751.2160123-6-heiko@sntech.de>
+In-Reply-To: <20240725-dev-mule-i2c-mux-v6-3-f9f6d7b60fb2@cherry.de>
 
-On Sun, Jul 28, 2024 at 11:17:49PM +0200, Heiko Stuebner wrote:
-> The MCU can be found on network-attached-storage devices made by QNAP
-> and provides access to fan control including reading back its RPM as
-> well as reading the temperature of the NAS case.
+
+On Thu, 25 Jul 2024 15:27:49 +0200, Farouk Bouabid wrote:
+> Add dt-bindings for amc6821 intelligent temperature monitor and
+> pulse-width modulation (PWM) fan controller.
 > 
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+> ---
+>  .../devicetree/bindings/hwmon/ti,amc6821.yaml      | 86 ++++++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml       |  2 -
+>  2 files changed, 86 insertions(+), 2 deletions(-)
+> 
 
-Minor comment inline, in case you resend, otherwise
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> +static int qnap_mcu_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> +				u32 attr, int channel, long val)
-> +{
-> +	struct qnap_mcu_hwmon *hwm = dev_get_drvdata(dev);
-> +
-> +	switch (attr) {
-> +	case hwmon_pwm_input:
-> +		if (val < 0 || val > 255)
-> +			return -EINVAL;
-> +
-> +		if (val < hwm->pwm_min)
-> +			val = hwm->pwm_min;
-> +
-> +		if (val > hwm->pwm_max)
-> +			val = hwm->pwm_max;
-> +
-		val = clamp_val(val, hwm->pwm_min, hwm->pwm_max);
-
-Guenter
