@@ -1,265 +1,106 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF993232;
-	Wed, 31 Jul 2024 15:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4301758B;
+	Wed, 31 Jul 2024 15:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722438160; cv=none; b=bC23XZPSfddOsHieq2732WH7pIjgJqS+KSRlpoyjKrwT+UU1k4fupEIKHHkFMHxYejsSv7688bpidxsxIxlh/LP7aRwqZRzAbzCFvamPwpyEheMa0Iu17ZosRVZHpXJ/Put4/44LtTGc5PtbrtT2WytNdCMLL+lBBl9TP5t7HcY=
+	t=1722438624; cv=none; b=dqpQaE1/bGNlk3UV/4OYGv82LLkzp9Iz5HqUPMt4YTbVHcBA5elosCa/nVPj7p64u/HFv4+1Vt/sCNcoyIcX0sbtvJPpydNDB+RMuSMI2YDpcYuzqKDUzlWpiXpNjmKj8oGCBmWBYPhchfgjC/LiCGx+IZ3jAWWyfiQI8F2Oxck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722438160; c=relaxed/simple;
-	bh=GdbXqK3pOYa0rkRvKMpQ1qP1/xyRibNZjDLqjkPfE2I=;
+	s=arc-20240116; t=1722438624; c=relaxed/simple;
+	bh=mg3rwHUBRj5NFcD84jPC4GZQa5CLuMZgrhGUzasiLEg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gi7oj/5r6zKXioQByVZOnEiWm/hpk3E/3Bo4qW+J39Yhj9LE6dedt1/rFo9nltHqkKkuM2ue8izOwHn2PBUjo6jnaqcukVj2KBZY1hWlfYyUMUVcIZ0iWaZXTM3ekdyEiY2JlRbjauBimXNFAYsbvRH8RuFxydnbu6eyzfpq11w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLXg2z4i; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=BMHmPu7h25Kx44eQEj/Ir63WnbtP6WgPDZ2UWTZUfWR2qrn82SfxL7gY2CQVSyMmsvsIQ4vM5qPuOlZeozJaU0n1d6Yranxk4TWvUsuOwRbkGDkwU5uAUBkgtAb+zVRBHfh03bTpaC/y2Vc0KWuBhZHXfpJcg+0XNFMAYIYxQbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/mfiNwC; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLXg2z4i"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70d1c655141so4326736b3a.1;
-        Wed, 31 Jul 2024 08:02:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/mfiNwC"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-39865a15900so20983375ab.1;
+        Wed, 31 Jul 2024 08:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722438158; x=1723042958; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n3pEcVDWIeBBKJY5rYo4nIp1+5IBnyuWvRwhKMSQzHM=;
-        b=HLXg2z4iYFFciYI3MiRdHb5/mGXrN4m3aXOMXEM8/SU8LrQ4uJovXxwoEftugkbRpj
-         RCqvGInGtSdZtXM1U6hTPD4koC1ezkWI9lU9c0oRhmRyXgamUYcOa6PGB2K96rmH4tDX
-         rgG72HuPk2JYhAzjsocs3VWPw5Uk3LHilf8GL2BopAcqhoEKg+sNUcfSXsyc+xdY7L4t
-         Fkv/OeOmGD35TIRmpRKm+cAdXZxKUYep8fV2mDFG3zcPVp6UIgEX6TOQlU18ErafeEud
-         9KF88gRXEFjzR4rV2HBNMmjWxfWH4vgSZRZYrpZDzt36wNt54jXpMpd6KaKP1j0qJ+Z0
-         KFhA==
+        d=gmail.com; s=20230601; t=1722438622; x=1723043422; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NI4Uz7WpMjZ/bG9q7ybNvSKLCB8PS92F5Vl2OFTuldo=;
+        b=N/mfiNwCyRU60V2X4RqYqHalUxxCMs9B3r1jYKNx2A9R0TMQXCQnTA31b+QStgUedl
+         /0AmtHn3UVF5QmgMsK2Nk9ycy9RCdaTttiUrG8g4eyckEC9B6yc83HdzK/73+GbkYNKY
+         yFsJbpWgrpTphVJqpJIE+e258NDhXIxbCa4ACR7gIM6kGeLxPw/KtgOb7YMut4iCF2tk
+         VnzNYYc1SWOXq7OseJdXPtPfwGgaEFA7VbiCJF33DRmCki7LTJJzv4xix2u378/Rakgx
+         fHk2/pf7NxdhbcDrfaIwrfie2JIli42fjwv/xv1AXFWAsdqUxfiTFgnuQ2hCNIUh/5Ok
+         OW+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722438158; x=1723042958;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3pEcVDWIeBBKJY5rYo4nIp1+5IBnyuWvRwhKMSQzHM=;
-        b=PSPjFLnUUdy+7u/BYj17pTIanTSXpdfCdXOppfKX+XTEJgllNNX17qqPm8SlSZ5J/m
-         9YsKUVHCVK7hpdoIawWgk5gqc7YpGHDrdZKFolNIqewtfAEwTaXRnVSgrX8cad81T4At
-         heUzXgEzDZWsq6+8pqWOjd/v64mcZRGWKkJkO8IU1ou8klFWtvkv7zkCwIw1bspunFER
-         ISdOMdwAe5rJnxKEdbjZwQa2b1mWou01u6dE2fGZHRCP4vafh0/UuAQEIe0V1LEcw7cs
-         iq5di3jAA9H/MO3do0hyo0AckfwYfKweRdJGZksZQukR9In9xuwyd70OPmqoAq+q/8U0
-         TF9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXiQipoIQ6zY/miMw3gg9pVVSdobWgKbRh69+hS75JuRIE3t5XS0k8/X8lRJPPO4fHDFgLXZLeBa5tgCrUahkqBX8gdQS72z6t7fWWJ6X7uZNMkMA5KrJhp3GvZ+m95Zknn695h0nvY2p6FpDpqilDE5ulHQ2BtM9DemsdXcmITlXGS0aJRWXeyHyvafyq/wpxADy1z5+bSrXKqOHZekFhy
-X-Gm-Message-State: AOJu0Yyq+glCQt4MoFb//lXCnMOCwVZhNua5ihP3a3Zf2p5CJFljfcfC
-	wJErTUrJ5oER3Z7fETzoxX7JE44VsDhBoUN+T8K7qNb+Ok5+6qN8
-X-Google-Smtp-Source: AGHT+IFDe+Gop8MQmy/8qvQgta8yZDYKCAntFqVNAuMmp6Sw0Ob7fNHgNCvkehwyfC09R83AyyEuCQ==
-X-Received: by 2002:a17:902:c947:b0:1fd:a644:e466 with SMTP id d9443c01a7336-1ff0485ba7cmr146711915ad.39.1722438158295;
-        Wed, 31 Jul 2024 08:02:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722438622; x=1723043422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NI4Uz7WpMjZ/bG9q7ybNvSKLCB8PS92F5Vl2OFTuldo=;
+        b=V2yBowhxL8ftZWRZ/OdsNYLo3kRawHGXbXIhXIp74N6MRfmCDmHLE4FuhzJHVCAROa
+         56m7rlKFZGm7l7R64NTSjleV9/yuv5Xy8vTlEVZme83v519mR7RJnIGgx/vROZ5y5Vuy
+         P3qUsN98MP+0mCxV81dzHkX0DE2VcsG3aqrKH/2p6ZZipqjDzZ8aoMBxmjJpPVTiqBG9
+         t7K1pZiwxkxZO8oMhTdzLzNGdEkk7ArjYDtvdLtE4vRoW93Cvu1xDkzuEK4fESu4HKso
+         DFCF1n+NYHPWlNJpSvjR+hynt5h68cC1mU87cEYUYKVJksxpy+NPN/Bgdc54etCGseXM
+         Sxtg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5pE91fznsu4Wl8J+XdSuA1HnIEnwIr7vHY7qFEkucVkd2AEABpSPqI92SVen2PbgDGJ651v7Pn81DUOPdLjkdGoX1Xs9S7j8VJvQtHgX/srZd74a7FkL2Cb0VJhQP7AyRcO+GxU2HPtY=
+X-Gm-Message-State: AOJu0Yw9tjxbHIC/F/AEfcTRjZPX0mrr7DDJ3pDpWcv4j/h66vo2y7ii
+	xglNwZ1xONgWedWOmvsZPQDPbS4tZPGn/gRzYC16SBPxk3oqWy7kvYE02g==
+X-Google-Smtp-Source: AGHT+IEY7/ewQuyHW6YInhVwwomKxOmW1tQUBn36xyssBY/9z2RHF7Z8NIZ6MGWs0qQ3WJPBNGfCkA==
+X-Received: by 2002:a05:6e02:13a1:b0:39a:e9c4:6baf with SMTP id e9e14a558f8ab-39aec2c9e0emr164218925ab.26.1722438621801;
+        Wed, 31 Jul 2024 08:10:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c8582dsm121843175ad.6.2024.07.31.08.02.37
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f817f5a2sm9043938a12.24.2024.07.31.08.10.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 08:02:37 -0700 (PDT)
+        Wed, 31 Jul 2024 08:10:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 31 Jul 2024 08:02:36 -0700
+Date: Wed, 31 Jul 2024 08:10:20 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Inochi Amaoto <inochiama@outlook.com>
-Cc: Chen Wang <unicorn_wang@outlook.com>, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Hal Feng <hal.feng@starfivetech.com>,
-	Jinyu Tang <tangjinyu@tinylab.org>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	chunzhi.lin@sophgo.com, haijiao.liu@sophgo.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 2/4] drivers: hwmon: sophgo: Add SG2042 external
- hardware monitor support
-Message-ID: <75f6f910-43ff-4d98-b39f-b4b0629a56a1@roeck-us.net>
-References: <IA1PR20MB49538C09E94D90F07B7B2562BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
- <IA1PR20MB4953DE89C56AB3F328954131BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
- <MA0P287MB2822D0C770667CFE484EBC95FEB12@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <IA1PR20MB49534944E268A0A71AA3D5D1BBB12@IA1PR20MB4953.namprd20.prod.outlook.com>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Ross Brown <true.robot.ross@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] hwmon: (asus-ec-sensors) remove VRM temp X570-E
+ GAMING
+Message-ID: <1a473986-f174-492a-a779-0c79c8692498@roeck-us.net>
+References: <20240730062320.5188-1-eugene.shalygin@gmail.com>
+ <20240730062320.5188-2-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <IA1PR20MB49534944E268A0A71AA3D5D1BBB12@IA1PR20MB4953.namprd20.prod.outlook.com>
+In-Reply-To: <20240730062320.5188-2-eugene.shalygin@gmail.com>
 
-On Wed, Jul 31, 2024 at 03:17:57PM +0800, Inochi Amaoto wrote:
-> On Wed, Jul 31, 2024 at 02:13:20PM GMT, Chen Wang wrote:
-> > 
-> > On 2024/7/30 15:50, Inochi Amaoto wrote:
-> > [......]
-> > > +#define REG_CRITICAL_ACTIONS			0x65
-> > The name "REG_CRITICAL_ACTIONS" is ambiguous. I have confirmed with sophgo
-> > engineers that the complete process is: when the measured temperature
-> > exceeds the temperature set by REG_CRITICAL_TEMP, the processor is powered
-> > off and shut down, and then after the temperature returns to the temperature
-> > set by REG_REPOWER_TEMP, it is decided whether to power on again or remain
-> > in the shutdown state based on the action set by REG_CRITICAL_ACTIONS,
-> > whether it is reboot or poweroff.
-> > 
-> > So based on the above description, I think it would be better to
-> > call "REG_CRITICAL_ACTIONS" as "REG_REPOWER_ACTIONS". "REG_CRITICAL_ACTIONS"
-> > gives people the first impression that it is used to set actions related to
-> > REG_CRITICAL_TEMP.
-> > 
-> > It is also recommended to add the above description of temperature control
-> > and action settings in the code. Currently, sophgo does not have a clear
-> > document description for this part, and adding it will help us understand
-> > its functions.
-> > 
-> > Adding sophgo engineers Chunzhi and Haijiao, FYI.
-> > 
-> > > +#define REG_CRITICAL_TEMP			0x66
-> > > +#define REG_REPOWER_TEMP			0x67
-> > > +
-> > > +#define CRITICAL_ACTION_REBOOT			1
-> > > +#define CRITICAL_ACTION_POWEROFF		2
-> > 
-> > As I said upon, actions are not related to critical, but is for restoring
-> > from critical, suggest to give a better name.
-> > 
-> > [......]
-> > 
-> > > +static ssize_t critical_action_show(struct device *dev,
-> > [......]
-> > > +static ssize_t critical_action_store(struct device *dev,
-> > 
-> > [......]
-> > 
-> > The same reason as upon, "critical_action_xxx" is misleading.
-> > 
-> > [......]
-> > 
+On Tue, Jul 30, 2024 at 08:21:42AM +0200, Eugene Shalygin wrote:
+> From: Ross Brown <true.robot.ross@gmail.com>
 > 
-> Thanks for explanation, I just get the name from the driver of SG2042.
-> This is out of my knowledge.
+> X570-E GAMING does not have VRM temperature sensor.
 > 
-> > > +static int sg2042_mcu_read_temp(struct device *dev,
-> > > +				u32 attr, int channel,
-> > > +				long *val)
-> > > +{
-> > > +	struct sg2042_mcu_data *mcu = dev_get_drvdata(dev);
-> > > +	int tmp;
-> > > +	u8 reg;
-> > > +
-> > > +	switch (attr) {
-> > > +	case hwmon_temp_input:
-> > > +		reg = channel ? REG_BOARD_TEMP : REG_SOC_TEMP;
-> > > +		break;
-> > > +	case hwmon_temp_crit:
-> > > +		reg = REG_CRITICAL_TEMP;
-> > > +		break;
-> > > +	case hwmon_temp_crit_hyst:
-> > > +		reg = REG_REPOWER_TEMP;
-> > > +		break;
-> > > +	default:
-> > > +		return -EOPNOTSUPP;
-> > > +	}
-> > > +
-> > > +	tmp = i2c_smbus_read_byte_data(mcu->client, reg);
-> > > +	if (tmp < 0)
-> > > +		return tmp;
-> > > +	*val = tmp * 1000;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int sg2042_mcu_read(struct device *dev,
-> > > +			   enum hwmon_sensor_types type,
-> > > +			   u32 attr, int channel, long *val)
-> > > +{
-> > > +	return sg2042_mcu_read_temp(dev, attr, channel, val);
-> > > +}
-> > Can we merge sg2042_mcu_read and sg2042_mcu_read_temp？
+> Signed-off-by: Ross Brown <true.robot.ross@gmail.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+
+Applied.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/asus-ec-sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Yes, it can be merged. but I think using this nested function 
-> is more clear. And gcc can auto inline this function so we
-> got no performance penalty.
-> 
-
-FWIW, I think that is pointless. Te only difference is unused
-parameters.
-
-> > > +
-> > > +static int sg2042_mcu_write(struct device *dev,
-> > > +			    enum hwmon_sensor_types type,
-> > > +			    u32 attr, int channel, long val)
-> > > +{
-> > > +	struct sg2042_mcu_data *mcu = dev_get_drvdata(dev);
-> > > +	int temp = val / 1000;
-> > > +	int hyst_temp, crit_temp;
-> > > +	int ret;
-> > > +	u8 reg;
-> > > +
-> > > +	if (temp > MCU_POWER_MAX)
-> > > +		temp = MCU_POWER_MAX;
-
-No lower limit ? -1000000 is ok ?
-
-> > > +
-> > > +	mutex_lock(&mcu->mutex);
-> > > +
-> > > +	switch (attr) {
-> > > +	case hwmon_temp_crit:
-> > > +		hyst_temp = i2c_smbus_read_byte_data(mcu->client,
-> > > +						     REG_REPOWER_TEMP);
-> > > +		if (hyst_temp < 0) {
-> > > +			ret = -ENODEV;
-> > > +			goto failed;
-
-Do not overwrite error codes.
-
-> > > +		}
-> > > +
-> > > +		crit_temp = temp;
-> > > +		reg = REG_CRITICAL_TEMP;
-> > > +		break;
-> > > +	case hwmon_temp_crit_hyst:
-> > > +		crit_temp = i2c_smbus_read_byte_data(mcu->client,
-> > > +						     REG_CRITICAL_TEMP);
-> > > +		if (crit_temp < 0) {
-> > > +			ret = -ENODEV;
-> > > +			goto failed;
-
-Do not overwrite error codes.
-
-> > > +		}
-> > > +
-> > > +		hyst_temp = temp;
-> > > +		reg = REG_REPOWER_TEMP;
-> > > +		break;
-> > > +	default:
-> > > +		mutex_unlock(&mcu->mutex);
-> > > +		return -EOPNOTSUPP;
-
-This is inconsistent.
-
-> > > +	}
-> > > +
-> > It is recommended to add some comments to explain why we need to ensure that
-> > crit_temp is greater than or equal to hyst_temp. This is entirely because
-> > the current MCU does not limit the input, which may cause user to set
-> > incorrect crit_temp and hyst_temp.
-> 
-> Yeah, this is good idea.
-> 
-> > > +	if (crit_temp < hyst_temp) {
-> > > +		ret = -EINVAL;
-> > > +		goto failed;
-> > > +	}
-> > > +
-> > > +	ret = i2c_smbus_write_byte_data(mcu->client, reg, temp);
-> > > +
-> > > +failed:
-> > > +	mutex_unlock(&mcu->mutex);
-> > > +	return ret;
-> > > +}
-> > > +
-> > [......]
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 6bb8d7b1d219..ee396f21fac5 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -420,7 +420,7 @@ static const struct ec_board_info board_info_strix_b550_i_gaming = {
+>  
+>  static const struct ec_board_info board_info_strix_x570_e_gaming = {
+>  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+> -		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+> +		SENSOR_TEMP_T_SENSOR |
+>  		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
+>  		SENSOR_IN_CPU_CORE,
+>  	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
