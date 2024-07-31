@@ -1,75 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE67B16D9A8;
-	Wed, 31 Jul 2024 19:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3F53E47B;
+	Wed, 31 Jul 2024 19:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722453238; cv=none; b=PD7xQMJbvJys5kcV4wY2qew4SLBoLFFWdP8Kd5uufYy6sgQE4HaEbZXVXSgvRlqiNU0xh9ynUg1jIdSx+/kVpkRF5IU8P2uky+fTkVQNonEqmUS9NLRq/r9BUy56n/LYvpqDRGudBreDUi6PNwKYDXYBaH5JTkTSJYcOefvQQDM=
+	t=1722453601; cv=none; b=CtSlqk48+Lf2Hwy9TnSFJiPFc6iZNCrkgtUc6bplA3DeJPyVzVERDamdXpBCKme+h42eOr7EN1RcPx0RmFWAtBd4meeaZnZjqQezi6oGxV5dah/NumYwwUf9sRLYb35jm6lNbkQaJGxMMhmF5oeaCuP99rQ6Pi1Lb+5QkJ2ebHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722453238; c=relaxed/simple;
-	bh=B57o1SV3zRToqiSMqD2BRI2alnivLDeH2CgGFuQHidc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oxkENs3R8eXkRR3fUWTq5zcNK2uvhH7tittIOjGuAyuI3tLhIPVBKFEHRPIvIaj71pggCV86rcshvDTW3of5HbZQSjMRYPFLGd5N5GbAC7KqxBYsHFkypX9NAfBM4KxBPGgWs58jZrzZK43aiycORQdjPDcv9dYR8tGLTpd0Bwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=poI2Or9p; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="poI2Or9p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BDF7C116B1;
-	Wed, 31 Jul 2024 19:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722453237;
-	bh=B57o1SV3zRToqiSMqD2BRI2alnivLDeH2CgGFuQHidc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=poI2Or9pnWnOvRjcRnO3MXsmCJ/rM3NeJ5kvGl7KK++OXFPKMMeJV/K7WyN1SSn2q
-	 iW/jGdbMdLhczNJDA0Ef1KZYyfyYsmAB+wdxcJfGK4i7U89wuuV71Fdv86R+hHRexB
-	 o5UyGNEkQ9H9CMNWhfCh0TtpUve91tTQUt8h/+ajAZfMDvQvpRbmOzDVxR1Wp8vgtm
-	 4XfdhtbWLREX2Dq97dwqLiR8Qx+tvBqotYxbP2rm/LvQRSUAd/YMSo32Eyf2sTPSoM
-	 EJi+yRk6RnMVPLxc/Z9Tt1PbWo146B1R2sRnydJrLphgTdLCD61dXOJcsTBgXEwTS+
-	 XEuG/UwBPXIIg==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Liviu Dudau <liviu.dudau@arm.com>,
+	s=arc-20240116; t=1722453601; c=relaxed/simple;
+	bh=Pu4x/CV4TJXGKOW179zhqVu57PY0n3kkSu8JLSbNwL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pu8cjX+T+hT8jBL9X/sdCbgFSDeP3ROc5Zik0ulIKuaqoHru9qQZF1fW4CCT5vyHflz7iJVDT1zuOvWPafMBV2tQg4GHMMFT1GNm5Y6oG06EKbNZE4QqWizitIEMGJ9LH+leKI4h/sEqfQqeYYYUHmJKxgESEHgCG8bz0W172lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE7BC1007;
+	Wed, 31 Jul 2024 12:20:23 -0700 (PDT)
+Received: from bogus (unknown [10.57.94.234])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D5443F64C;
+	Wed, 31 Jul 2024 12:19:56 -0700 (PDT)
+Date: Wed, 31 Jul 2024 20:19:53 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: vexpress: Use of_property_present()
-Date: Wed, 31 Jul 2024 13:12:51 -0600
-Message-ID: <20240731191312.1710417-13-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] hwmon: vexpress: Use of_property_present()
+Message-ID: <20240731191953.wzbvo2kym326gekv@bogus>
+References: <20240731191312.1710417-13-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240731191312.1710417-13-robh@kernel.org>
 
-Use of_property_present() to test for property presence rather than
-of_get_property(). This is part of a larger effort to remove callers
-of of_get_property() and similar functions. of_get_property() leaks
-the DT property data pointer which is a problem for dynamically
-allocated nodes which may be freed.
+On Wed, Jul 31, 2024 at 01:12:51PM -0600, Rob Herring (Arm) wrote:
+> Use of_property_present() to test for property presence rather than
+> of_get_property(). This is part of a larger effort to remove callers
+> of of_get_property() and similar functions. of_get_property() leaks
+> the DT property data pointer which is a problem for dynamically
+> allocated nodes which may be freed.
+>
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- drivers/hwmon/vexpress-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Guenter,
 
-diff --git a/drivers/hwmon/vexpress-hwmon.c b/drivers/hwmon/vexpress-hwmon.c
-index d82a3b454d0e..a2e350f52a9e 100644
---- a/drivers/hwmon/vexpress-hwmon.c
-+++ b/drivers/hwmon/vexpress-hwmon.c
-@@ -72,7 +72,7 @@ static umode_t vexpress_hwmon_attr_is_visible(struct kobject *kobj,
- 				struct device_attribute, attr);
- 
- 	if (dev_attr->show == vexpress_hwmon_label_show &&
--			!of_get_property(dev->of_node, "label", NULL))
-+			!of_property_present(dev->of_node, "label"))
- 		return 0;
- 
- 	return attr->mode;
+I assume you will pick this up.
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
 -- 
-2.43.0
-
+Regards,
+Sudeep
