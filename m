@@ -1,62 +1,66 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAADD2F32
-	for <linux-hwmon@vger.kernel.org>; Thu,  1 Aug 2024 14:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE37F198A10
+	for <linux-hwmon@vger.kernel.org>; Thu,  1 Aug 2024 14:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722523766; cv=none; b=pGooujWp+jhzQXaBh38wk3eDoFp5xBCkoju8p/yWehzPg60QJd6X3qGKg1q1rMrQNGTfe0f4Tbc/b/2qPH6mu8RPt0TxDSR3hiv2kBN9cfqWye+hIRHojS78aERZKjV2krmoj1LWJmpP15hBpZWMMrm0R7aiJKOJzyFymyxvFAw=
+	t=1722523767; cv=none; b=mevz11zRcLDstcrzvEPed6340adA4lmXAdWYSTQN5ui3UxidXrF/aZRQvlkskYBxJ6DTX5jHq7uatozwVIMmWIdhpy4Vseb3BOIDDcyAY/3TRj7W7M1oxRxskiMbnA+EpJSI1RloygvnksL5iq3tMm+IXY/RZirmBRfbVMdmP3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722523766; c=relaxed/simple;
-	bh=vrPQ/cXjcNNuj7GqvWQVm2XV3OqFCdz1xs82G/BYkLM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fOgRESNwXVnShx3NpWF/eOTbZCBkEXOiKJT3MlxwgRWpDqaB3rRTrwVWuuKA/n3am7eif7zt9qFoNP+mpntXcDlMOIR9oX0QYgKFEQSC7wIES00z1nLpqcbg/sI9okQum1JuwKtcA//BbOSogd51zBiFgJYNpCFxpo956zBK2Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJvlJfYm; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1722523767; c=relaxed/simple;
+	bh=LC0clT8WFU6qIQxSILnxhfKrHuibEGbgMT3lvfGQx9I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Gs77ckxwgkUN9dpFd/hnMd6V0wRTKrg13FlJolbFxCAYkiawD4GzE4Eg66FfIzjtD2quYPEqV5hiZTT0A5fSoneTItMXmLeRrTQxU3eOKzRr1Gvuzg+ImpGpm1IEmhiJ849Ims3RyVnboYwmKFONuScen4ZVI7Nk8/Aw4suGQ1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fU1BWeOp; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJvlJfYm"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2caff99b1c9so4692909a91.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 01 Aug 2024 07:49:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fU1BWeOp"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2cb81c0ecb4so1655788a91.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 Aug 2024 07:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722523762; x=1723128562; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyY52641o5EqsBobAxSLul8LYO5rhQ1hZtnfUxdXcIg=;
-        b=NJvlJfYmGJ3h6KrsgzaWA7OLq3NdF7SQUAug4vvWvo6y/FM4CzPv1foSJMdjpS9dg0
-         JhJAnVXmYIEPrwT8YHzXotkSHaZNbbc/iNT4W1L+wS67yDwiTNrJnQBxO/gz2nr+xKAs
-         dHKIJkHlnxNB4aycOFnTSUrJcGwr2Wif1DE7jnXSRg7AR2nzkIHz4jILuc4SAVAdJhMk
-         kj7vyeXeH7/JLMvcShqR41rbqIAQk5gDRDcBxS42IMltBxh5ymWTk2h/1BCgBQePotEX
-         tMppveMVOA12mVeeAHDJm7+FJ6CeSwIeYhgY5JLYbUruUpSUgL0pmC4LFJM5nTxhFLRm
-         4REg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722523762; x=1723128562;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1722523764; x=1723128564; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OyY52641o5EqsBobAxSLul8LYO5rhQ1hZtnfUxdXcIg=;
-        b=gEwOIfXIvfroa5yp2tQyawrT3L5oBm99GmxvJpSsXo73RLCxRwnTwKSQ4Qxc5o9lAp
-         Q6c67XbTpBre5H7L0/3z9XjuaxVtnR0aJXhoDTkQOhbyvyYNigPv+1iWnzhiyEO+ZMod
-         nyPUVUQHDlh4qrkFwUPVMp+w3L54eIKz2c4hAXQ/0Z3hR5fuQLBkJT8kgsuRiKfPJziT
-         oFJ3tzUvnzB6DwYzTYqYQ8NwH0tnMdO9k1iQ/FsVUM4QyO0+R4m5/Cmyg7MBJdAPcEPW
-         vhbLbCFdJvo8RG1djP3jhZ3aYRNXWBPwe9EHtDdDMnLlwIO3EI7DI4StnHHpc3RvpDpF
-         aKoQ==
-X-Gm-Message-State: AOJu0YyJ3ZPH4D/hbDffoLbTZHozg34fZyNAg4vuoRCBRoepAiufRJVt
-	6R2ZRC6T+Txa4u3JB1w6+vsOVs702nE14LAFBIaZsLHRuxKmlP0rbWq1fA==
-X-Google-Smtp-Source: AGHT+IHA4P6QmDIacTXMKlmOD82vGsKO+SATSJbFCRw5+YSa7gixaAhOj/4ZKh5MjOWspFdGXl3FtA==
-X-Received: by 2002:a17:90a:6682:b0:2c9:b72:7a1f with SMTP id 98e67ed59e1d1-2cff9514876mr519405a91.28.1722523762479;
-        Thu, 01 Aug 2024 07:49:22 -0700 (PDT)
+        bh=h7kpafWE7ZxSKn48/frTNbSlf6U7pKkGaZJ1ZDSR/Io=;
+        b=fU1BWeOphFfsv1pw+UkVh/pCxH1Em02gXU3lpE68UEwDmhSFAZQnec54biPmqddq3k
+         BKRZ3QH7vzEV+JtWkYUdihBZ9mYH1qjaCKuPJcizUMKOg99HKH4UtbShZQdaQbhTrlOi
+         bR5kuudLYrE4V8o1y8hvPySYf7bk+4z1aqjbWWUHQB2ZCRxtyFekWYiIEPMkbbiuqk1S
+         riMpCGi7omrvPXnnRsX1KQRi94Eb4ey6SPdqTjCC21/VfKgL947zMu4XxPsx+JQyb6v5
+         SBcQ4fNNOJes9+GXhlR++0tWFk7vsKqzFE7GtAjaj4JbRxn2sEciotbkL4eOWPZljj5X
+         Q2cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722523764; x=1723128564;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=h7kpafWE7ZxSKn48/frTNbSlf6U7pKkGaZJ1ZDSR/Io=;
+        b=LQrOQHW+LATa+8RWw/l+oNUFcn+YupqCimfJhbRFuHWJnjbDl9/OGSw9oLBI8ewbJO
+         NEZ14fwJnxy5DHhJbs09VljaBlhcIIvBOGQ6XOW3D6ApyjFtq87OS3cWdkegm9+u6WHC
+         +/82uz74yQxMcgMzGck47ulMZCkn8r511kvuu7iGsu3a32J1EdA443P5p300SLE3vbVP
+         Scf9ubC+5BiiJKyoh6k1z++Zjj0GrPKWPqZ36Mmd550QJ5cX43xTMTkjk7rdd/k6MW76
+         c/cexrJ0Ux6pDg5Z4qUhKRToJh22/THbCINDZ2kUHXbYAw9kkBXXcSBMeDFGEeRroojV
+         +s7w==
+X-Gm-Message-State: AOJu0YxyZ9vR24L6TVWSS2VyytwstPz3469/dnBiFnjq7OHRJA3FjEuD
+	/1hE35P02YQt/HUrkLSAZ/B8fEjaq+LFk+ppczTediaUj18sVFHoemTY4g==
+X-Google-Smtp-Source: AGHT+IFg/FXbnxbVGTFe04+U6+yI8V6hoqwTh2VZKF4uEaGm/Fbe3PG3NzqBltvztrvOpjFST4+qRA==
+X-Received: by 2002:a17:90b:4d05:b0:2c9:5a71:1500 with SMTP id 98e67ed59e1d1-2cff9d8389emr395031a91.0.1722523764537;
+        Thu, 01 Aug 2024 07:49:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cfdc426751sm3464417a91.12.2024.08.01.07.49.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cfdc406a0dsm3480139a91.3.2024.08.01.07.49.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Aug 2024 07:49:21 -0700 (PDT)
+        Thu, 01 Aug 2024 07:49:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 0/6] hwmon: (lm92) Cleanup and conversion to with_info API
-Date: Thu,  1 Aug 2024 07:49:12 -0700
-Message-Id: <20240801144918.6156-1-linux@roeck-us.net>
+Subject: [PATCH 1/6] hwmon: (lm92) Improve auto-detection accuracy
+Date: Thu,  1 Aug 2024 07:49:13 -0700
+Message-Id: <20240801144918.6156-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240801144918.6156-1-linux@roeck-us.net>
+References: <20240801144918.6156-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,19 +69,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clean up lm92 driver and convert it to use regmap and the with_info hwmon
-API.
+Checking three configuration register bits and the manufacturer ID
+register to auto-detect LM92 is a bit vague. Repeat twice on replicated
+register addresses to improve detection accuracy.  Check the manufacturer
+ID first and bail out immediately without reading the other register if
+there is a mismatch to reduce the number of i2c transfers needed in that
+case. Also explicitly test for an error from reading the configuration
+register to avoid potential situations where the returned error masked
+against 0xe0 is 0.
 
-----------------------------------------------------------------
-Guenter Roeck (6):
-      hwmon: (lm92) Improve auto-detection accuracy
-      hwmon: (lm92) Reorder include files to alphabetic order
-      hwmon: (lm92) Replace chip IDs with limit register resolution
-      hwmon: (lm92) Convert to use regmap
-      hwmon: (lm92) Convert to with_info hwmon API
-      hwmon: (lm92) Update documentation
+While at it, drop "lm92: Found National Semiconductor LM92 chip" detection
+noise.
 
- Documentation/hwmon/lm92.rst |  26 +--
- drivers/hwmon/Kconfig        |   3 +-
- drivers/hwmon/lm92.c         | 457 ++++++++++++++++++++++++++-----------------
- 3 files changed, 291 insertions(+), 195 deletions(-)
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/lm92.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hwmon/lm92.c b/drivers/hwmon/lm92.c
+index 46579a3e1715..e2d8c8afcbfa 100644
+--- a/drivers/hwmon/lm92.c
++++ b/drivers/hwmon/lm92.c
+@@ -272,20 +272,28 @@ static int lm92_detect(struct i2c_client *new_client,
+ 		       struct i2c_board_info *info)
+ {
+ 	struct i2c_adapter *adapter = new_client->adapter;
+-	u8 config;
+-	u16 man_id;
++	u8 config_addr = LM92_REG_CONFIG;
++	u8 man_id_addr = LM92_REG_MAN_ID;
++	int i, regval;
+ 
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA
+ 					    | I2C_FUNC_SMBUS_WORD_DATA))
+ 		return -ENODEV;
+ 
+-	config = i2c_smbus_read_byte_data(new_client, LM92_REG_CONFIG);
+-	man_id = i2c_smbus_read_word_data(new_client, LM92_REG_MAN_ID);
+-
+-	if ((config & 0xe0) == 0x00 && man_id == 0x0180)
+-		pr_info("lm92: Found National Semiconductor LM92 chip\n");
+-	else
+-		return -ENODEV;
++	/*
++	 * Register values repeat with multiples of 8.
++	 * Read twice to improve detection accuracy.
++	 */
++	for (i = 0; i < 2; i++) {
++		regval = i2c_smbus_read_word_data(new_client, man_id_addr);
++		if (regval != 0x0180)
++			return -ENODEV;
++		regval = i2c_smbus_read_byte_data(new_client, config_addr);
++		if (regval < 0 || (regval & 0xe0))
++			return -ENODEV;
++		config_addr += 8;
++		man_id_addr += 8;
++	}
+ 
+ 	strscpy(info->type, "lm92", I2C_NAME_SIZE);
+ 
+-- 
+2.39.2
+
