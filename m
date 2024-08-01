@@ -1,313 +1,174 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04olkn2073.outbound.protection.outlook.com [40.92.45.73])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0433C2744E;
-	Wed, 31 Jul 2024 22:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.45.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722466152; cv=fail; b=tPOunwYkpMDifveUqOIkmQBsdQdCO8VAZjcyamWP6Wpd6io30I2aXklcMB+BVbh92pxjlEcWzUd8JNBNdV69Kq6cTkng2Qx3GZgAXrG6Tmz5l24WMqT2P3M+WXdmZ1TiZEYlXTGxx7IV3o7aOiVJPazk4U33B+R1ontZr2oStgo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722466152; c=relaxed/simple;
-	bh=TgzrZF2Y0ojPSPMYphVuGu0HrjT0hmyRzgY4FAdLyIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kq0NpGqQDTdzHOlvgUu3Jf4DzN8+ybn26oVWBOjEPzzUubFD/T5zXRlfrO9NBhh5fWO3u7HjSNkCLUjGvlYHmB9H1vOH3j3SwSlFT6G8VyPIBt5DL3nG1tUfsDLSrJhH5j2yOS9ZpILSRdGd4iSpQghxsr90IgTx524BY3ODQtI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=MJDu9oJN; arc=fail smtp.client-ip=40.92.45.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFF61A00F5;
+	Thu,  1 Aug 2024 00:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722471319; cv=none; b=PbBtq+0mkJdpoHVIazO9uqMR5m9WzzvUEcP3KQAq5VLnBJyLefOG0gxST8tbNqdZHFdp98PzjvAOIUTcT3W/37kZaK7VqXYbP+KwU+y0vWZV8eI42mKjuXLfVgNJQFOVst356+FTMnoa7DAYiST+hdlQ6WbR8rqSlK7QqRa0uxs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722471319; c=relaxed/simple;
+	bh=KTGm+ilUVWniYjnuDO3KDX6ydHfBknLU0Z30PK8azqc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bh2YzUzngMyrx91c7Jnte94fgswK9DRiKErbTeRJt5CY1zxbknKRLQrJ+ytXEkPfTgragbPE/nYv4sOwAb+yeMDJA01XFLKcgexZSR7N6dKrJtAHNyF35tUsUEhAe8Gd2TUhvEkgUlVTrvCraUY/wJPSKqzyR44Yp1W9F/1JeO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y4u+peHn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="MJDu9oJN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nz6f5UPzaXm7I7myeJnT1WrI9QnHFblD8YpBjG1S1FZVihmpIbEgkqlOM8SP2pxRWC+s+Ow6fH3mCjAXtmzkmEUNjqpd9lZjS20MQ4vPL50I7gt7k71OS9NthG+95ZWIqe3S3qj3zKo+iq8mCJtaEk3W1B5tsC2zgy4RJOhhYIeBr1bl0+bV8MHzyeCammX79Fy1l2cq6YHhLjbPAjIHJXc3lRPQx7wabQQiu5E6w3/3mPGDBzY06bPcSBBNgAkBYvFxFzWilEaqnFbGCf4ZJD15KmxZzp/dLQa+xiJis7l5kZsu3ebEN+OyS0VEtq7Y2Z6nbWm+/JHJUc/aEtQWSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VQ9tNXQtc/tu+bixljgPBdbPuWSl8dx/zWKtVLEI4YQ=;
- b=JsEk+ZPXlb3tAnKhkSIUzbdmXL7hEZpV9crFAHz7y8RicFoFNat/jTpewRGKr0Ee4QTO6RM4D3W5vXOFoDOgBOzhuxvvpzO3O8e1h0pYeG486sOb3SnTBkr9c2+dl3++kmAXabH3Zq0++arin9/Iw9XwL2cfRS0KfWJcDtmNAKx2FbQX9pii9NY/0U0YbxYeR6tySj9vww6XiEWQqha3Ivq9bY8i1MQ5z/b3/b3HvweHZF7QROsXlUlqEHEv7vjuOcudrh0nt7dj13XIpjUSN6XIptPsTj/Irm03tayFcIlCg0ldsUW2PY+ontaRGYvEXpD57AxQ8Vbb+OAwA4LWcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VQ9tNXQtc/tu+bixljgPBdbPuWSl8dx/zWKtVLEI4YQ=;
- b=MJDu9oJNAIxlVpvq9iGTcXWfoURZCsQwGY+N9+TdhSIocOkioDTjHaJhvHOdzBHNNFUDgWREug4dkHBWl7QsvcnOvRig/wvIGPlz5mU8dQt2pEZyZWPp1ITBijc++wLHKMYKt4dh2vJ9KeEZpAUl8/WG94IRFLPptcX3FRWyUXrgGkV/gSpYzR/vQkbz/Zog0/vLmlUaaBLYqcgPpwdQcCCLaReLioXzqV+JLCTNoBJ68nH9mloWtIMabdfrPQOAA32NdVedBd8CnmhstKTu/yzpk1zS8bKDBbxxBm4lg4osSCP6LTX5kP/KY0d8LXzbyrMbBDtL8AThX6Zt88hmGg==
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
- by CY8PR20MB5714.namprd20.prod.outlook.com (2603:10b6:930:9d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Wed, 31 Jul
- 2024 22:49:07 +0000
-Received: from IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149]) by IA1PR20MB4953.namprd20.prod.outlook.com
- ([fe80::ab0b:c0d3:1f91:d149%5]) with mapi id 15.20.7807.026; Wed, 31 Jul 2024
- 22:49:07 +0000
-Date: Thu, 1 Aug 2024 06:48:34 +0800
-From: Inochi Amaoto <inochiama@outlook.com>
-To: Guenter Roeck <linux@roeck-us.net>, 
-	Inochi Amaoto <inochiama@outlook.com>
-Cc: Chen Wang <unicorn_wang@outlook.com>, Jean Delvare <jdelvare@suse.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>, Chao Wei <chao.wei@sophgo.com>, 
-	Hal Feng <hal.feng@starfivetech.com>, Jinyu Tang <tangjinyu@tinylab.org>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, chunzhi.lin@sophgo.com, haijiao.liu@sophgo.com, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 2/4] drivers: hwmon: sophgo: Add SG2042 external
- hardware monitor support
-Message-ID:
- <IA1PR20MB49535B0E8AB827FD5672580BBBB12@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <IA1PR20MB49538C09E94D90F07B7B2562BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
- <IA1PR20MB4953DE89C56AB3F328954131BBB02@IA1PR20MB4953.namprd20.prod.outlook.com>
- <MA0P287MB2822D0C770667CFE484EBC95FEB12@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
- <IA1PR20MB49534944E268A0A71AA3D5D1BBB12@IA1PR20MB4953.namprd20.prod.outlook.com>
- <75f6f910-43ff-4d98-b39f-b4b0629a56a1@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75f6f910-43ff-4d98-b39f-b4b0629a56a1@roeck-us.net>
-X-TMN: [eUgIcC8ZM1dTn+Kdhqp9Oyc8fWmuiFhd6z51yM5zVAI=]
-X-ClientProxiedBy: SI2PR02CA0005.apcprd02.prod.outlook.com
- (2603:1096:4:194::6) To IA1PR20MB4953.namprd20.prod.outlook.com
- (2603:10b6:208:3af::19)
-X-Microsoft-Original-Message-ID:
- <rkkokpahtbojln4bd3pxmzqyi6hproyiwdfszb7a4vtustzbf3@ik3u2lxozmet>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y4u+peHn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723CCC32786;
+	Thu,  1 Aug 2024 00:15:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722471318;
+	bh=KTGm+ilUVWniYjnuDO3KDX6ydHfBknLU0Z30PK8azqc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Y4u+peHnJQWRatWGxivx5k5OXhhbQkS0jv6IMYWhizReuZFvOkwT3ubChRd9FUoFn
+	 VnXvu81K5QOCuJwwExXtZPtAsjOqZNTu6svR3Eni5Z1TMhUQ6EhVbn1UEZZQYoF1Z4
+	 CZbNLJ4biHdsFQdDkv3ffxS+zSIox11EzMVTFvbULEogYgRxl795yEcWbf8xxyx0wV
+	 sb+10v7p/VhIEzdgyPOIpNke7xc+HxXIXDaLSDKt/nEo+V+5lcwXxxJ36C2We3P1LW
+	 6jj1AeEogeY3fqtZPr0yfPMQguWvE4YUXJdZzXfFMukhDQt3HxBC3j/8/brVLaIPyA
+	 xzNPylhJj1yDA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	clemens@ladisch.de,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 071/121] hwmon: (k10temp) Check return value of amd_smn_read()
+Date: Wed, 31 Jul 2024 20:00:09 -0400
+Message-ID: <20240801000834.3930818-71-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240801000834.3930818-1-sashal@kernel.org>
+References: <20240801000834.3930818-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|CY8PR20MB5714:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2016eca2-b822-4f65-5d9d-08dcb1b2fbd7
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|19110799003|461199028|5072599009|440099028|3412199025|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	Kl166dRwMhs1Xx8baaiiHOFwpM+FAU5/8BTTKztJXot26bVD8wJwlMG17Yb5N2ZHtNYq8LYSJarp0RIJnXgvK+8H1Thz4+HgZnj5hNkToO3xaL+JhWlw0pKRt6ZCmlDoLcMyZO0uBk8zlzzTVhYMs33M963cPbHU7qAPXCqOy+07nCUh6+mEoyRft5F8XgwBUtAK40J/DHdj6YUz9Wz4c2gq6v+0/m2k9h8HLoZ8xuh3vESyeQnjFFYmYMTZEjIGOi8+xuOy1lfZYcRUZwQ9T2WRjnt7WGFujmDoKvJX3aCko4GiuA7PcJrqjQmxz2Zcy6FNVxTx1N4qWZBaRCNxkETwiUYvB01UnpcrmWX9ZIwFMzgL8jcowYrM8Ka4qTUDfOSZlHLWka29VItZXyJXdwTk/H0PZJLTZ0eB7iq64tfS71E3zlyfpY3LxaYI3BZRd6M/1xjbBkfhL17d0rfsUikQGOhep2+eHs7nMr5LzCCNLAsZcAMNiYQB8UZzr5WRmmjhskhYvRyC+nNYn/C4cs5L8dlxnNa0mbBLqLANDeN++kYoupPP5qxIX6DFJyP0wnBOn2+fff4vuhDb18FDZSTICB7w2G7Qp4eZ5peqcYhRWAvdXIoDLgcq5OqcXoznh/l/6eWns9hcYiKck5yZY80L4S5/vUzDoFBoGU+sydUGZRINFVNZlaRvMO+im9h/wEdefroywJI0ypGB1uRtHQ==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S3ZBNjJvZzJMc1hBbUIxL2ZUNGp2ZXZHMHhmUkc3UDh3MDdtaytIWm9ZZ0JG?=
- =?utf-8?B?aTFpYnNNRG1nSDhrbDllMUxFY1VyV25HeWs5a1ZkRjZlWXdmMmZGNlB4NFJt?=
- =?utf-8?B?c3Y5Qnk1STgwb2JuRnl2UysvRnEwTWhiSWtrT05SaEFRUE01R2NlQjk4R2ZJ?=
- =?utf-8?B?clhQUjBaVy9SNVZwMUFWSTBIbUJCUHdpWXU2S0hwTXVDcTNYcldleUhycGZD?=
- =?utf-8?B?KzdXRXRXMXdBWTBYanVhUGFBSXVFcU5VVEk1SE5ucWlJdDlmTmxyOEhkYlNC?=
- =?utf-8?B?SXdaQUd5cG1TYnk0VTdLVXVId01nRTgzL1M5U1RxcnlROVFHWDR0RDdUVkU4?=
- =?utf-8?B?alpGOTF5KzJneENpbFo2SGhvWXBwN0Mxb2swYitjOXRNcW5KSlFlL1JZVlg2?=
- =?utf-8?B?RGVSeTkxMStvNnBNM09QcWkwbTI0ZHdjUHBpWEg2d1NqZHRNTEdiNnZDZWZz?=
- =?utf-8?B?VmtBdERnSkljTlMrQ0lDVFo1ekZZdk4wcXN6WUxSVk56dlkzbGxpSkhyRnFm?=
- =?utf-8?B?czVYTGFZY2lhdzE1bmlOL0ljbWJUczVmMmIwaHFFcTNzdzRUN2tEMnM2UG5t?=
- =?utf-8?B?TW1Jck0vaXJnQmNwOFZjektLblNqM0dPaVRWYkIwZTludWE0MkFmbktrSFN5?=
- =?utf-8?B?a0xSWjhBK2FnZDltZVlrQk5xT2ZQSlVZVnpDMFF1YlExZG9YV3diWG4zZWhF?=
- =?utf-8?B?eEZUT0RRUGZ1QzdpcFAvSFdzOVlvRW4vM0tkV3VzMjZMd0lJR003Sno5dEpz?=
- =?utf-8?B?bFVLUkFSUHV2VVY3Zm1sUkNJaXVvM29zWStQeFZ5TE4wS21JcW1QSGpmWk1R?=
- =?utf-8?B?NUwwRXpvR21INTJsbkRZcnh3dGo1VGR2MXpDa3RPQzNnVk5Ec3piZWt2S2NQ?=
- =?utf-8?B?SmxSd0FCMnpZampqaWx1c2k1d2lWa21JMEVMTjVlOVkrNlpZdFlNSGF2eUxq?=
- =?utf-8?B?SzhMODZWVFdsOFZjS3ZpeGcxYmtVejdQTXVjZkRSSnIvOTNQMDNTSzd4Ris2?=
- =?utf-8?B?bVZGTjhkM0ZTVzYxY0F5NzUxMEd2WmlUb25nNWx2ZkNFN2VpUmpVUG5SWkxt?=
- =?utf-8?B?WnpnZ0w0bDNSaklMY2RRTEY0NlZkMG9UYlluUFFqcVd3NW1vUU9IQlczSFMw?=
- =?utf-8?B?TUNtaXQvWit4VnIwbGhRYm5vRVc2YWtubDdKMW83cXYxYTRoY2wya2h5ZFZ6?=
- =?utf-8?B?aHJ4elgzV0tlWFFvWC9MRFBLcnNEV21QMjFYNHdLVTJvQkFjUjNPZUNwSVVB?=
- =?utf-8?B?eW5VaUNCODFqVFFUZ1RFdG9oVHUzR0hQLzVKVitia052blYwTVFvVDZSS2Zw?=
- =?utf-8?B?SzhVYWpSd1RnRlRPUitiVGVxbzVpK1UwMlg1ckVsMDlQZHdtd09kQmtqRXZ0?=
- =?utf-8?B?SVkyVW92QmhxTDdGM3g1bHZvUUhzdjZxN0tyRzlSTVNsVG8ra3lPYkxVN1By?=
- =?utf-8?B?amdkTXhCM2U5S2xhZnJzbXZaVVRacjF3R1ExZkRaaE9PTWI1YmdKbjc3eExr?=
- =?utf-8?B?SC9hRmFhV2phcVZVN1orWVlpZ3VESExDUzlhWHpzcEVud2s1Wjk4T3YxZFVT?=
- =?utf-8?B?Y1pROEF3SkF2TWR1aTJadTBTb25EMGx4L1JUbkFqZUpIK2Qvd0FmNjNjNS9B?=
- =?utf-8?B?dm1xSzVvR3Mva2RZclVWLzNaUENKLzhsVHorWXl3T1luODZUMzZOZnFtMGk1?=
- =?utf-8?Q?c9QRT253DvC0D3BkJxk/?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2016eca2-b822-4f65-5d9d-08dcb1b2fbd7
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 22:49:07.0218
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR20MB5714
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.2
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 31, 2024 at 08:02:36AM GMT, Guenter Roeck wrote:
-> On Wed, Jul 31, 2024 at 03:17:57PM +0800, Inochi Amaoto wrote:
-> > On Wed, Jul 31, 2024 at 02:13:20PM GMT, Chen Wang wrote:
-> > > 
-> > > On 2024/7/30 15:50, Inochi Amaoto wrote:
-> > > [......]
-> > > > +#define REG_CRITICAL_ACTIONS			0x65
-> > > The name "REG_CRITICAL_ACTIONS" is ambiguous. I have confirmed with sophgo
-> > > engineers that the complete process is: when the measured temperature
-> > > exceeds the temperature set by REG_CRITICAL_TEMP, the processor is powered
-> > > off and shut down, and then after the temperature returns to the temperature
-> > > set by REG_REPOWER_TEMP, it is decided whether to power on again or remain
-> > > in the shutdown state based on the action set by REG_CRITICAL_ACTIONS,
-> > > whether it is reboot or poweroff.
-> > > 
-> > > So based on the above description, I think it would be better to
-> > > call "REG_CRITICAL_ACTIONS" as "REG_REPOWER_ACTIONS". "REG_CRITICAL_ACTIONS"
-> > > gives people the first impression that it is used to set actions related to
-> > > REG_CRITICAL_TEMP.
-> > > 
-> > > It is also recommended to add the above description of temperature control
-> > > and action settings in the code. Currently, sophgo does not have a clear
-> > > document description for this part, and adding it will help us understand
-> > > its functions.
-> > > 
-> > > Adding sophgo engineers Chunzhi and Haijiao, FYI.
-> > > 
-> > > > +#define REG_CRITICAL_TEMP			0x66
-> > > > +#define REG_REPOWER_TEMP			0x67
-> > > > +
-> > > > +#define CRITICAL_ACTION_REBOOT			1
-> > > > +#define CRITICAL_ACTION_POWEROFF		2
-> > > 
-> > > As I said upon, actions are not related to critical, but is for restoring
-> > > from critical, suggest to give a better name.
-> > > 
-> > > [......]
-> > > 
-> > > > +static ssize_t critical_action_show(struct device *dev,
-> > > [......]
-> > > > +static ssize_t critical_action_store(struct device *dev,
-> > > 
-> > > [......]
-> > > 
-> > > The same reason as upon, "critical_action_xxx" is misleading.
-> > > 
-> > > [......]
-> > > 
-> > 
-> > Thanks for explanation, I just get the name from the driver of SG2042.
-> > This is out of my knowledge.
-> > 
-> > > > +static int sg2042_mcu_read_temp(struct device *dev,
-> > > > +				u32 attr, int channel,
-> > > > +				long *val)
-> > > > +{
-> > > > +	struct sg2042_mcu_data *mcu = dev_get_drvdata(dev);
-> > > > +	int tmp;
-> > > > +	u8 reg;
-> > > > +
-> > > > +	switch (attr) {
-> > > > +	case hwmon_temp_input:
-> > > > +		reg = channel ? REG_BOARD_TEMP : REG_SOC_TEMP;
-> > > > +		break;
-> > > > +	case hwmon_temp_crit:
-> > > > +		reg = REG_CRITICAL_TEMP;
-> > > > +		break;
-> > > > +	case hwmon_temp_crit_hyst:
-> > > > +		reg = REG_REPOWER_TEMP;
-> > > > +		break;
-> > > > +	default:
-> > > > +		return -EOPNOTSUPP;
-> > > > +	}
-> > > > +
-> > > > +	tmp = i2c_smbus_read_byte_data(mcu->client, reg);
-> > > > +	if (tmp < 0)
-> > > > +		return tmp;
-> > > > +	*val = tmp * 1000;
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > > > +static int sg2042_mcu_read(struct device *dev,
-> > > > +			   enum hwmon_sensor_types type,
-> > > > +			   u32 attr, int channel, long *val)
-> > > > +{
-> > > > +	return sg2042_mcu_read_temp(dev, attr, channel, val);
-> > > > +}
-> > > Can we merge sg2042_mcu_read and sg2042_mcu_read_temp？
-> > 
-> > Yes, it can be merged. but I think using this nested function 
-> > is more clear. And gcc can auto inline this function so we
-> > got no performance penalty.
-> > 
-> 
-> FWIW, I think that is pointless. Te only difference is unused
-> parameters.
-> 
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-OK, I will merge these function.
+[ Upstream commit c2d79cc5455c891de6c93e1e0c73d806e299c54f ]
 
-> > > > +
-> > > > +static int sg2042_mcu_write(struct device *dev,
-> > > > +			    enum hwmon_sensor_types type,
-> > > > +			    u32 attr, int channel, long val)
-> > > > +{
-> > > > +	struct sg2042_mcu_data *mcu = dev_get_drvdata(dev);
-> > > > +	int temp = val / 1000;
-> > > > +	int hyst_temp, crit_temp;
-> > > > +	int ret;
-> > > > +	u8 reg;
-> > > > +
-> > > > +	if (temp > MCU_POWER_MAX)
-> > > > +		temp = MCU_POWER_MAX;
-> 
-> No lower limit ? -1000000 is ok ?
-> 
+Check the return value of amd_smn_read() before saving a value. This
+ensures invalid values aren't saved or used.
 
-My fault, it should always > 0.
+There are three cases here with slightly different behavior:
 
-> > > > +
-> > > > +	mutex_lock(&mcu->mutex);
-> > > > +
-> > > > +	switch (attr) {
-> > > > +	case hwmon_temp_crit:
-> > > > +		hyst_temp = i2c_smbus_read_byte_data(mcu->client,
-> > > > +						     REG_REPOWER_TEMP);
-> > > > +		if (hyst_temp < 0) {
-> > > > +			ret = -ENODEV;
-> > > > +			goto failed;
-> 
-> Do not overwrite error codes.
-> 
-> > > > +		}
-> > > > +
-> > > > +		crit_temp = temp;
-> > > > +		reg = REG_CRITICAL_TEMP;
-> > > > +		break;
-> > > > +	case hwmon_temp_crit_hyst:
-> > > > +		crit_temp = i2c_smbus_read_byte_data(mcu->client,
-> > > > +						     REG_CRITICAL_TEMP);
-> > > > +		if (crit_temp < 0) {
-> > > > +			ret = -ENODEV;
-> > > > +			goto failed;
-> 
-> Do not overwrite error codes.
-> 
-> > > > +		}
-> > > > +
-> > > > +		hyst_temp = temp;
-> > > > +		reg = REG_REPOWER_TEMP;
-> > > > +		break;
-> > > > +	default:
-> > > > +		mutex_unlock(&mcu->mutex);
-> > > > +		return -EOPNOTSUPP;
-> 
-> This is inconsistent.
-> 
+1) read_tempreg_nb_zen():
+	This is a function pointer which does not include a return code.
+	In this case, set the register value to 0 on failure. This
+	enforces Read-as-Zero behavior.
 
-Thanks, I will handle the return properly.
+2) k10temp_read_temp():
+	This function does have return codes, so return the error code
+	from the failed register read. Continued operation is not
+	necessary, since there is no valid data from the register.
+	Furthermore, if the register value was set to 0, then the
+	following operation would underflow.
 
-> > > > +	}
-> > > > +
-> > > It is recommended to add some comments to explain why we need to ensure that
-> > > crit_temp is greater than or equal to hyst_temp. This is entirely because
-> > > the current MCU does not limit the input, which may cause user to set
-> > > incorrect crit_temp and hyst_temp.
-> > 
-> > Yeah, this is good idea.
-> > 
-> > > > +	if (crit_temp < hyst_temp) {
-> > > > +		ret = -EINVAL;
-> > > > +		goto failed;
-> > > > +	}
-> > > > +
-> > > > +	ret = i2c_smbus_write_byte_data(mcu->client, reg, temp);
-> > > > +
-> > > > +failed:
-> > > > +	mutex_unlock(&mcu->mutex);
-> > > > +	return ret;
-> > > > +}
-> > > > +
-> > > [......]
+3) k10temp_get_ccd_support():
+	This function reads the same register from multiple CCD
+	instances in a loop. And a bitmask is formed if a specific bit
+	is set in each register instance. The loop should continue on a
+	failed register read, skipping the bit check.
+
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20240606-fix-smn-bad-read-v4-3-ffde21931c3f@amd.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 8092312c0a877..6cad35e7f1828 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -153,8 +153,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+ 
+ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+ {
+-	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
++	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
++		*regval = 0;
+ }
+ 
+ static long get_raw_temp(struct k10temp_data *data)
+@@ -205,6 +206,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+ 	struct k10temp_data *data = dev_get_drvdata(dev);
++	int ret = -EOPNOTSUPP;
+ 	u32 regval;
+ 
+ 	switch (attr) {
+@@ -221,13 +223,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 				*val = 0;
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+-			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+-				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+-						  &regval);
++			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
++					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
++					   &regval);
++
++			if (ret)
++				return ret;
++
+ 			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+ 			break;
+ 		default:
+-			return -EOPNOTSUPP;
++			return ret;
+ 		}
+ 		break;
+ 	case hwmon_temp_max:
+@@ -243,7 +249,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			- ((regval >> 24) & 0xf)) * 500 + 52000;
+ 		break;
+ 	default:
+-		return -EOPNOTSUPP;
++		return ret;
+ 	}
+ 	return 0;
+ }
+@@ -381,8 +387,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+ 	int i;
+ 
+ 	for (i = 0; i < limit; i++) {
+-		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
++		/*
++		 * Ignore inaccessible CCDs.
++		 *
++		 * Some systems will return a register value of 0, and the TEMP_VALID
++		 * bit check below will naturally fail.
++		 *
++		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
++		 * the register value. And this will incorrectly pass the TEMP_VALID
++		 * bit check.
++		 */
++		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
++			continue;
++
+ 		if (regval & ZEN_CCD_TEMP_VALID)
+ 			data->show_temp |= BIT(TCCD_BIT(i));
+ 	}
+-- 
+2.43.0
+
