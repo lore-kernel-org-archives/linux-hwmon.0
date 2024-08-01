@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF8B1DE847;
-	Thu,  1 Aug 2024 00:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AF21E485E;
+	Thu,  1 Aug 2024 00:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722472533; cv=none; b=aoHgGWQ8l0SCPFXijY/cV8CZL6lBz0gGKcsURYvZwAnnO7573fFjiNtHPRrWv0UnoSlYkZYxWjF4IkumA2+0hzay5a8x97ZVGcZxYcO3Ci3XjA4FlA2JP5tQpyG0FUEx4s75SWD7RRT67mhL6bD7CfzagxHUpK2CNfZwlRHT3iw=
+	t=1722472724; cv=none; b=pAhEmrxEbrm7BpXJ2ILLU9qd2Lt3Y4QtKIevqVRCfnjPEUEFQfLncamqT5x7j6bru1KFbYtmfbsVQwWC7KEEKeMAZ9cadALbyN1WYjysvoCgPamjZg6zvHiglQ+dLvVvDjrJ3vpsGbHEpT8KR3EoG2Zu6aqh82UL1DqImFNnyEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722472533; c=relaxed/simple;
-	bh=IcSwx/f1ZlyKwtv1Llxa1H7h6NhG96+nsaNLIEbKm0A=;
+	s=arc-20240116; t=1722472724; c=relaxed/simple;
+	bh=O2BLuasox0+3fbluWb/+lkR7LS/BWyUFFsFtM6gtuC0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S4etJH2y+Gf91EReTN8xEC9RiRE6HFB6ZwQxbkdSa1ePYMycZQVTnxTJpez5+Dw6wc2g11QS2nG7CN4KsrmtvOCyAFgoMWNcV3gSnhZ/vFOszDQrLP9SIXOboIfYxTr/tE9w2Q/YR1A+rmfq1QPBbNL8apZbu9e74q/bkbSXuFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THWmRxgJ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=hiMNLlfKL9mLMjt1rL9JiEq5LVpXZDExJ5l9SZbkODlza7p0aRjsQ64RoXXGlPq8FEmRjutUWbZNHZTftoqKMGIMdNJyA8QcR2D63X7S7da359eYaSGbIlozwiGo1PJFvw92XQeruzflJO4ptGJL0h43rC3RU+OUwe5s5b4UYEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFUSkvz7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THWmRxgJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B422C32786;
-	Thu,  1 Aug 2024 00:35:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFUSkvz7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18CFFC4AF0E;
+	Thu,  1 Aug 2024 00:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722472532;
-	bh=IcSwx/f1ZlyKwtv1Llxa1H7h6NhG96+nsaNLIEbKm0A=;
+	s=k20201202; t=1722472723;
+	bh=O2BLuasox0+3fbluWb/+lkR7LS/BWyUFFsFtM6gtuC0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=THWmRxgJArQqJ9i9Nf3IowNboYQAhw38CxPjs90hVtfzQRObbTzoykAn+XUybk4Wl
-	 Ighq3sLuFM8P35PtkCghRkEXF9H2SXljCgLBWyq3EMKmar49s0MkqzGPygEMyDFUV7
-	 in8yZT3g7iBK2YPci8+5U9Kq79PvlZXUuLvfSYenOctgozBNmtTi2o0k83IKl2TF3a
-	 BniP8OklH0sbHcAcb7yJ7L/TnlLO/qlpzYMhw7nUYJXThJvBYtgCoNEp1/LPDVLFya
-	 6K5i0Gjmb9GSDBV2oZuJMnTLDATKRN5nLZvu3p8JQ2N+w1rlKGlx+tEiLkZYdXq+Nn
-	 GTlVbC7iYddSA==
+	b=lFUSkvz7PPptyTa3aR2X7VKOS+dAmAaoF5stZczWbO5ghk3LXojeFVgCRI258Q/U4
+	 6mrXIxhcNdAZt0BtgK+u8xi0Swsx6cug2OSC3ydDtXJlFtJjEpoRansmMCPXSAkE0U
+	 Ij/w8IQIA4MtYvDNoOLZWL7jy/wIGXO01j56KIxubiKUJeQelVICnKvxnQhHHzQbjg
+	 HzhCMCFBhNlIXYxGGLQXN1c7+JT+KgMbtql30wlAVQA3emj/SyAJD5oUaxFtDHuMxJ
+	 bDSKvXN3uJRr06ck2MQXNmpoGO1X+I+Np+1RYMzQQZX5tm7I82kMKgiSFXTGGSg8Hy
+	 x01BQZ4TKgCvw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -33,12 +33,12 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 44/47] hwmon: (w83627ehf) Fix underflows seen when writing limit attributes
-Date: Wed, 31 Jul 2024 20:31:34 -0400
-Message-ID: <20240801003256.3937416-44-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 35/38] hwmon: (lm95234) Fix underflows seen when writing limit attributes
+Date: Wed, 31 Jul 2024 20:35:41 -0400
+Message-ID: <20240801003643.3938534-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240801003256.3937416-1-sashal@kernel.org>
-References: <20240801003256.3937416-1-sashal@kernel.org>
+In-Reply-To: <20240801003643.3938534-1-sashal@kernel.org>
+References: <20240801003643.3938534-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,12 +47,12 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.164
+X-stable-base: Linux 5.10.223
 Content-Transfer-Encoding: 8bit
 
 From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit 5c1de37969b7bc0abcb20b86e91e70caebbd4f89 ]
+[ Upstream commit af64e3e1537896337405f880c1e9ac1f8c0c6198 ]
 
 DIV_ROUND_CLOSEST() after kstrtol() results in an underflow if a large
 negative number such as -9223372036854775808 is provided by the user.
@@ -61,31 +61,50 @@ Fix it by reordering clamp_val() and DIV_ROUND_CLOSEST() operations.
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/w83627ehf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/lm95234.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index 705a59663d42c..b6bae04d656ed 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -895,7 +895,7 @@ store_target_temp(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
- 		return err;
+diff --git a/drivers/hwmon/lm95234.c b/drivers/hwmon/lm95234.c
+index ac169a994ae00..db2aecdfbd17c 100644
+--- a/drivers/hwmon/lm95234.c
++++ b/drivers/hwmon/lm95234.c
+@@ -301,7 +301,8 @@ static ssize_t tcrit2_store(struct device *dev, struct device_attribute *attr,
+ 	if (ret < 0)
+ 		return ret;
  
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 127);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 127000), 1000);
- 
- 	mutex_lock(&data->update_lock);
- 	data->target_temp[nr] = val;
-@@ -920,7 +920,7 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
- 		return err;
- 
- 	/* Limit the temp to 0C - 15C */
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 15);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 15000), 1000);
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, index ? 255 : 127);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, (index ? 255 : 127) * 1000),
++				1000);
  
  	mutex_lock(&data->update_lock);
- 	reg = w83627ehf_read_value(data, W83627EHF_REG_TOLERANCE[nr]);
+ 	data->tcrit2[index] = val;
+@@ -350,7 +351,7 @@ static ssize_t tcrit1_store(struct device *dev, struct device_attribute *attr,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 255);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 255000), 1000);
+ 
+ 	mutex_lock(&data->update_lock);
+ 	data->tcrit1[index] = val;
+@@ -391,7 +392,7 @@ static ssize_t tcrit1_hyst_store(struct device *dev,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	val = DIV_ROUND_CLOSEST(val, 1000);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, -255000, 255000), 1000);
+ 	val = clamp_val((int)data->tcrit1[index] - val, 0, 31);
+ 
+ 	mutex_lock(&data->update_lock);
+@@ -431,7 +432,7 @@ static ssize_t offset_store(struct device *dev, struct device_attribute *attr,
+ 		return ret;
+ 
+ 	/* Accuracy is 1/2 degrees C */
+-	val = clamp_val(DIV_ROUND_CLOSEST(val, 500), -128, 127);
++	val = DIV_ROUND_CLOSEST(clamp_val(val, -64000, 63500), 500);
+ 
+ 	mutex_lock(&data->update_lock);
+ 	data->toffset[index] = val;
 -- 
 2.43.0
 
