@@ -1,91 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81C4170A0B;
-	Thu,  1 Aug 2024 00:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4D615252D;
+	Thu,  1 Aug 2024 12:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722472865; cv=none; b=pkBDa5fYxo7kJCi2blphNguyMXavAxlzd2y69YZX0bKEiJG814iEPsdp38oSIQaRtdb8QLjOiG++j8CMFDT7h+uv0EQdJubHSuoTi0rWvnTX0oB4WCGMZDteU+rSwa+LNJStvy7hXPewbWpFwBeIJ3XpNVoarOXr5E4GaxWkQtU=
+	t=1722515949; cv=none; b=bA3NowNrJ9b/LPZQKN+Pp7s2EI/QXSW5WucG/hRrp1LpcAVhuDxcDMou4oM8h6Sm3DHyT68l/QhPKJJ2r+DRrIM47hsfUU4arUxCWrrkPueiHEbLLKZqb4/a6ib0QJigIwjHIiNXiz6CQg95XpnCagRWsKziQmDNhfUDgBuHVJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722472865; c=relaxed/simple;
-	bh=m8azvAv8JyoISEBql/CSvTpQWUmJ7QETCRCUvThPEgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y1tInckOdt96PtYCabI3Z8KIRkgDdF43UU0yB2AREkNLq8jIcpQwoJBVc4k9P8gVPW8uXFr20yHEWd78OMDopGZHH8CLSh10Nxg5aMk4OkvobH0XKMGBAWdywh7T/y5Aeti1EgDyLSywfS3dGmYtbl7bcfKvpk9/vBs4VbYyPEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kD56RAYy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722515949; c=relaxed/simple;
+	bh=HBLGXJAA56+z2j8DW+eYMm1UK33BW0xzkvU79F0+rlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M35jFUluXIC0RCnT5mfEvBWAX2jeCZRVGNI/VLUkEXMRF/vKCyAzaUtcMBg94KuvxseuVcRHRZolzNW8UXvroB11rr/DLA46e4L38FC4/+lG5plRBJc9P+CfCiBWGVTfLAXRW4fK6gLXlJFMRZE2PBWXcU35a/ugRPAXSWJA5So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCn4DhID; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kD56RAYy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD41FC116B1;
-	Thu,  1 Aug 2024 00:41:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCn4DhID"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B04C32786;
+	Thu,  1 Aug 2024 12:39:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722472865;
-	bh=m8azvAv8JyoISEBql/CSvTpQWUmJ7QETCRCUvThPEgQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kD56RAYysIjjaOLiuEtduEIkyGipMlPzMsHcdxsuTIRzRu38CucXx4btwKsXbxw7y
-	 4DkWqjHpaxB7eIi6526GBfG3liavJGjtOcMfRgo+ehOrKPvvxvH4YYG2e4QlNtMJ0q
-	 ADq3/nTXEYAcq/kYlX00cKr4EZMd8b5Xg/3bVeZHU7a4BI7aPXFVEfjhZvSV9g+jKO
-	 Fxp5PMaNuNamoKjRwE9j8GcJ/DvBcMbeVvX1MOAJSWp16M4SicG904ZhtEWcpw8VvJ
-	 IS3Ypr9/qund8GdwIc1pW4C+0LVwd0jm2BNO91twguuPk6zB72/PYhq3OZBYgsQfQ9
-	 VMO4IfBWDr/EQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Sasha Levin <sashal@kernel.org>,
-	jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 13/14] hwmon: (w83627ehf) Fix underflows seen when writing limit attributes
-Date: Wed, 31 Jul 2024 20:40:21 -0400
-Message-ID: <20240801004037.3939932-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240801004037.3939932-1-sashal@kernel.org>
-References: <20240801004037.3939932-1-sashal@kernel.org>
+	s=k20201202; t=1722515948;
+	bh=HBLGXJAA56+z2j8DW+eYMm1UK33BW0xzkvU79F0+rlk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nCn4DhIDkkEjOtwKn+8KB/FH9Bq93/RvdjSoKKVEk2sTX0poiVs6zed4NrpceWj3B
+	 ud97PfOJ3obUOkUfrmF4sIsCEYQ4fxL6Ep04la58Eoi9XhIf/YvI0EVFzNx7oEf/xu
+	 JHD3wnLR877SRn2kRzwZ7KSIeM0c2r/j/IGEIDRHHJhTCNfebXj12JTs6rR3zKL5Q5
+	 dRKOPRr5nPzlLNVk1RRgQvfPkVrdcBr0Ua5ilKSmuFshMUCgZUwZJ978c5nvFWKlrG
+	 JZKLc3E2cxqUBFEV8FxYQoDg3YhR40H6n3eJc8z1jKQ0iup/V+7T52xPKLkhhshkwK
+	 /iLdAEM5iLwHA==
+Date: Thu, 1 Aug 2024 13:39:01 +0100
+From: Lee Jones <lee@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Pavel Machek <pavel@ucw.cz>,
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andreas Kemnade <andreas@kemnade.info>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-leds@vger.kernel.org, netdev@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: (subset) [PATCH v2 0/6] use device_for_each_child_node() to
+ access device child nodes
+Message-ID: <20240801123901.GC6756@google.com>
+References: <20240721-device_for_each_child_node-available-v2-0-f33748fd8b2d@gmail.com>
+ <172192488125.1053789.17350723750885690064.b4-ty@kernel.org>
+ <094c7d7f-749f-4d8f-9254-f661090e4350@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.319
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <094c7d7f-749f-4d8f-9254-f661090e4350@gmail.com>
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Mon, 29 Jul 2024, Javier Carrasco wrote:
 
-[ Upstream commit 5c1de37969b7bc0abcb20b86e91e70caebbd4f89 ]
+> On 25/07/2024 18:28, Lee Jones wrote:
+> > On Sun, 21 Jul 2024 17:19:00 +0200, Javier Carrasco wrote:
+> >> This series aims to clarify the use cases of:
+> >>
+> >> - device_for_each_child_node[_scoped]()
+> >> - fwnode_for_each_available_child_node[_scoped]()
+> >>
+> >> to access firmware nodes.
+> >>
+> >> [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [3/6] leds: bd2606mvv: fix device child node usage in bd2606mvv_probe()
+> >       commit: 75d2a77327c4917bb66163eea0374bb749428e9c
+> > [4/6] leds: is31fl319x: use device_for_each_child_node_scoped() to access child nodes
+> >       commit: 0f5a3feb60aba5d74f0b655cdff9c35aca03e81b
+> > [5/6] leds: pca995x: use device_for_each_child_node() to access device child nodes
+> >       (no commit info)
+> > 
+> > --
+> > Lee Jones [李琼斯]
+> > 
+> 
+> Hi Lee,
+> 
+> could you please tell me where you applied them? I rebased onto
+> linux-next to prepare for v3, and these patches are still added on top
+> of it. Can I find them in some leds/ branch? Thank you.
 
-DIV_ROUND_CLOSEST() after kstrtol() results in an underflow if a large
-negative number such as -9223372036854775808 is provided by the user.
-Fix it by reordering clamp_val() and DIV_ROUND_CLOSEST() operations.
+Sorry, I was side-tracked before pushing.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/w83627ehf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Pushed now.  They should be in -next tomorrow.
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index ad68b6d9ff17e..8da5f77b8987c 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -1519,7 +1519,7 @@ store_target_temp(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
- 		return err;
- 
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 127);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 127000), 1000);
- 
- 	mutex_lock(&data->update_lock);
- 	data->target_temp[nr] = val;
-@@ -1545,7 +1545,7 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
- 		return err;
- 
- 	/* Limit the temp to 0C - 15C */
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 15);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 15000), 1000);
- 
- 	mutex_lock(&data->update_lock);
- 	if (sio_data->kind == nct6775 || sio_data->kind == nct6776) {
 -- 
-2.43.0
-
+Lee Jones [李琼斯]
