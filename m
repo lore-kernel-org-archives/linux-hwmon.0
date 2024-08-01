@@ -1,44 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B192013A3F0;
-	Thu,  1 Aug 2024 00:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B26F1A489C;
+	Thu,  1 Aug 2024 00:24:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722471506; cv=none; b=GDfRp/LAge1w6Lt/PM340lA0ILHOkrl34ILPbAi9+vlR6nq/gTa7YSiJyUCkGbaDDnKo1QjMHZ4+dDLRdinR3PDbpT4E0EVR+i74P+juh/y/BsQWfHa57YN7BbyfybcwTbo+FWVZn7HsJMGnqCksir5hYDr7HhZfuX4V21Xt2dI=
+	t=1722471875; cv=none; b=mCszax5RP0euuBYQFUriT3LGSDRI0JuWg+KHEHXcE3pzUnP3JqyYLb+CtNQUOPpUVi19Kj2FiyuTmmo1GFBzLXOFhzskBYgNGyHMCD3ZnEXf4jSMT5VEuUxcQF+pt8/LoR6Ac6lg53x15vsKQsFvRdRw7J2bawwc1AMGBiSM/JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722471506; c=relaxed/simple;
-	bh=EnUEvHvbyAQWtZYVX6zVsMAma+OH+8r/lAB2a2IlOU8=;
+	s=arc-20240116; t=1722471875; c=relaxed/simple;
+	bh=q4jLe0gPXPOSpVVuswEiTqRr1e9pJhPDGqbSSIUHLcA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dwuoQi/1i1wrvHD1z9j8oYnpLJB9mIknx+ATUfAKxb8T0pJIoFH92T80eZYkgso0lJLb5mY7ElliNGTXTYR3TMePF4YOeG2GOuoV5RJ5sQnFMi0elrtCOzzeM/dkheTzDWARSxfV+QWSpjp1HQ0PYfQzS/kbyYA1/rSn64Skt14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EYmdLwqf; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=brYlpheXxJrauRKMo4M8WwwdQNT+HydALYBuz56B0QL/d5If/1yEuIqbV72e1vosfiD8wWJC6SS4+EtxKERtM6ww63WU80UMEG8f43jqgneDQnL+8EVEF83Cy44EVfkDSxj9nCHWxU3zRWuPl9W90w2i1oF/jQz5bgYePsTnuVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UC6nrpsx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EYmdLwqf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AE1C116B1;
-	Thu,  1 Aug 2024 00:18:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UC6nrpsx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD9BC4AF15;
+	Thu,  1 Aug 2024 00:24:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722471504;
-	bh=EnUEvHvbyAQWtZYVX6zVsMAma+OH+8r/lAB2a2IlOU8=;
+	s=k20201202; t=1722471874;
+	bh=q4jLe0gPXPOSpVVuswEiTqRr1e9pJhPDGqbSSIUHLcA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EYmdLwqfylmUyeMvh4hcWmh+f/+NeAOfoMbonHfbFMwagz+QQbD/Gyq9yfvRm9Vc3
-	 y0R/LSydo9tSklZPOwMLVxS65Ggc0IAfxa2gSHe5IWt/X/kwm15hAIsNm0/4vfCsZh
-	 eRV7pzH2fmOczIkpJORS1nMIzTjy5dB0KQOA9b9WEGxlaWVi0q2cU3PI/bKrurGMWp
-	 nZcrUkAJp6pCY08gsycPUFalYz3kBEnGzUoswZ92HihC00XF7fPQdcsbUUlC3x2EV0
-	 hwWRO8cZ+ZU2SZOXvs+0gXVZDa1j4BJqvTQVoY41/6TMJ8NBXki7ps8tnPpPgOCbHB
-	 MONT4L61FZ51g==
+	b=UC6nrpsxbdESIjcaL4Mii1H66/ycC4fbDAgJBht3k/CpHiHUCBU4Xjux5FWmdBVrk
+	 5LejTX2LraXI7IJU7wK0GlXOGqCEYXYbIseOwz8H7T9JNoTMBhAW4M0cYcKOuR/ApI
+	 1XPzDTf2FxJQ0AL5G2WzkxvXWnEBsEj8D3pOiHtmWWqKDq0IEkp/p+zkeFEqYWFOyA
+	 A4BGdDZ0jwNW0uno4z8NsZe8CQB1SwNKN5v7+pUTA6qZWx+MEnpbs0KjISWGn359It
+	 A+FnR2a8I35XgCyg+N2Zq2SKVpnkD2Zn1/FFuqFndA0mimle0OPsmN/7VDuD1imtR1
+	 HfrRUazBI8yZA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
+	clemens@ladisch.de,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.10 117/121] hwmon: (w83627ehf) Fix underflows seen when writing limit attributes
-Date: Wed, 31 Jul 2024 20:00:55 -0400
-Message-ID: <20240801000834.3930818-117-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 48/83] hwmon: (k10temp) Check return value of amd_smn_read()
+Date: Wed, 31 Jul 2024 20:18:03 -0400
+Message-ID: <20240801002107.3934037-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240801000834.3930818-1-sashal@kernel.org>
-References: <20240801000834.3930818-1-sashal@kernel.org>
+In-Reply-To: <20240801002107.3934037-1-sashal@kernel.org>
+References: <20240801002107.3934037-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,45 +51,124 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.2
+X-stable-base: Linux 6.6.43
 Content-Transfer-Encoding: 8bit
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Yazen Ghannam <yazen.ghannam@amd.com>
 
-[ Upstream commit 5c1de37969b7bc0abcb20b86e91e70caebbd4f89 ]
+[ Upstream commit c2d79cc5455c891de6c93e1e0c73d806e299c54f ]
 
-DIV_ROUND_CLOSEST() after kstrtol() results in an underflow if a large
-negative number such as -9223372036854775808 is provided by the user.
-Fix it by reordering clamp_val() and DIV_ROUND_CLOSEST() operations.
+Check the return value of amd_smn_read() before saving a value. This
+ensures invalid values aren't saved or used.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+There are three cases here with slightly different behavior:
+
+1) read_tempreg_nb_zen():
+	This is a function pointer which does not include a return code.
+	In this case, set the register value to 0 on failure. This
+	enforces Read-as-Zero behavior.
+
+2) k10temp_read_temp():
+	This function does have return codes, so return the error code
+	from the failed register read. Continued operation is not
+	necessary, since there is no valid data from the register.
+	Furthermore, if the register value was set to 0, then the
+	following operation would underflow.
+
+3) k10temp_get_ccd_support():
+	This function reads the same register from multiple CCD
+	instances in a loop. And a bitmask is formed if a specific bit
+	is set in each register instance. The loop should continue on a
+	failed register read, skipping the bit check.
+
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20240606-fix-smn-bad-read-v4-3-ffde21931c3f@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/w83627ehf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/k10temp.c | 36 +++++++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hwmon/w83627ehf.c b/drivers/hwmon/w83627ehf.c
-index fe960c0a624f7..7d7d70afde655 100644
---- a/drivers/hwmon/w83627ehf.c
-+++ b/drivers/hwmon/w83627ehf.c
-@@ -895,7 +895,7 @@ store_target_temp(struct device *dev, struct device_attribute *attr,
- 	if (err < 0)
- 		return err;
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index bae0becfa24be..ae0f454c305d6 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -153,8 +153,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
  
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 127);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 127000), 1000);
+ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+ {
+-	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
++	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
++		*regval = 0;
+ }
  
- 	mutex_lock(&data->update_lock);
- 	data->target_temp[nr] = val;
-@@ -920,7 +920,7 @@ store_tolerance(struct device *dev, struct device_attribute *attr,
- 		return err;
+ static long get_raw_temp(struct k10temp_data *data)
+@@ -205,6 +206,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+ 	struct k10temp_data *data = dev_get_drvdata(dev);
++	int ret = -EOPNOTSUPP;
+ 	u32 regval;
  
- 	/* Limit the temp to 0C - 15C */
--	val = clamp_val(DIV_ROUND_CLOSEST(val, 1000), 0, 15);
-+	val = DIV_ROUND_CLOSEST(clamp_val(val, 0, 15000), 1000);
+ 	switch (attr) {
+@@ -221,13 +223,17 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 				*val = 0;
+ 			break;
+ 		case 2 ... 13:		/* Tccd{1-12} */
+-			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+-				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+-						  &regval);
++			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
++					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
++					   &regval);
++
++			if (ret)
++				return ret;
++
+ 			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+ 			break;
+ 		default:
+-			return -EOPNOTSUPP;
++			return ret;
+ 		}
+ 		break;
+ 	case hwmon_temp_max:
+@@ -243,7 +249,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			- ((regval >> 24) & 0xf)) * 500 + 52000;
+ 		break;
+ 	default:
+-		return -EOPNOTSUPP;
++		return ret;
+ 	}
+ 	return 0;
+ }
+@@ -381,8 +387,20 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+ 	int i;
  
- 	mutex_lock(&data->update_lock);
- 	reg = w83627ehf_read_value(data, W83627EHF_REG_TOLERANCE[nr]);
+ 	for (i = 0; i < limit; i++) {
+-		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
++		/*
++		 * Ignore inaccessible CCDs.
++		 *
++		 * Some systems will return a register value of 0, and the TEMP_VALID
++		 * bit check below will naturally fail.
++		 *
++		 * Other systems will return a PCI_ERROR_RESPONSE (0xFFFFFFFF) for
++		 * the register value. And this will incorrectly pass the TEMP_VALID
++		 * bit check.
++		 */
++		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
++				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
++			continue;
++
+ 		if (regval & ZEN_CCD_TEMP_VALID)
+ 			data->show_temp |= BIT(TCCD_BIT(i));
+ 	}
 -- 
 2.43.0
 
