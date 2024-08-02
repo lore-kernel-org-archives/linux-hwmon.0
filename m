@@ -1,133 +1,174 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82B218B48C
-	for <linux-hwmon@vger.kernel.org>; Fri,  2 Aug 2024 14:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1462E16BE0C;
+	Fri,  2 Aug 2024 17:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722607870; cv=none; b=ZMsgEosW9OxZInNSvxi0bjlYpJvGUXCpoI6SaQoBDV1UI3Xbwmg/2m9qeuTSQ4NFOlYXjemFziE7Icaa/ZsseZpoU7I3bLPRxsuhXLncp9/jrBcNEjW02++D/0Es1REEt6UHA2ixI0g5bTCv9sT0WPxpi0bayfwvAguH9/JtKM8=
+	t=1722619072; cv=none; b=qNofM3IK3eMDevSYsIIJA5haKBiyzOzmRfe9khoPASNb+P9fRo4SpZy2rQRHclge5Iqy5ecXnCg4ieJsLhuelxuhPqS1DmGNnJKgVpFijcpRPpHHIK9+oBQHart7Gvdw0CpqjTaJFN51E+jy1j8/rfTl5rc5bFdGkOToml5ZJs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722607870; c=relaxed/simple;
-	bh=yPR7IvTs8h3DKW9322WMqO231qY4GKTrEVFY2f9x4gI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qtvwl1ohEEE1L1o6Hdo2XiADbVNPnAytsUd5peG5Y+Hg2+1lDE595QYWF1EfJwFaRT4/YRARbKDgwmVZtkUaanncWnSzlmWw1+hmlEgOPXTkyk7fZYmcSlX+aKiOPA2Gw+l+MG9BzuCclZ1CGdefH9wRn5ymSiBqkGVahlMH7QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CHT2FDwV; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722619072; c=relaxed/simple;
+	bh=o9DJWhGlqtKQ1iWtEKepaZu/t4tj65qSh5IdSpzdbCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EHhI/v2i1zc5NGe86KBBg3NAoFJAUv6qz8uUB778GkHgKPG0WFb35+6smupasG1UwW7mSfEFDchp4dZOnJBo4+ozbAHW7EvZLca6lLZsi7frbrT0741EP4xZJU2kq3nDMMtHxJboKJsUxkZhbuAIl2G1XLjb9mBa6SfOE2NQqWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwScdWuM; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CHT2FDwV"
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3992195d08aso42499705ab.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 02 Aug 2024 07:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722607868; x=1723212668; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=xiKTRlKIv1wxufB8RD0jokR9PiK9GObKeziIuboJVuY=;
-        b=CHT2FDwVLDEOLGMIXFeNabD0LJJVlIjQWifC/+hP5hXo1OfrzMBacXTTc22WZUvp0Y
-         kkQRk7i0g53jHXBKdab4szSjkeEIHe0DWqjdPNLSgsfFgh1Eys/tdGtWpaouj69nCthL
-         vP1naetlAr/x8I9P+vKaRYyyS8n05fIOZ4qR2epEmz6fF0bLplF0Ua3kvi9MceABHZX3
-         RZuRVWHm0ou6JHXpFb00haAV9Sx1tBuP7sgJd0A1+Xr/jyPRe4BOTEKfTBTnNKN4oqng
-         ZYm7XpYmZvGONIFNDVu9/H8vRFwZA++fSSZajgyHw9mA1+MSyGE9EDAIkeX26eQpfFPx
-         3dGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722607868; x=1723212668;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xiKTRlKIv1wxufB8RD0jokR9PiK9GObKeziIuboJVuY=;
-        b=bjhonhNTyOGxj0hr31tE7bNc5ISxZoNOaA3Shq79quDe9llJkerzP8kwBn1Vo+GH4D
-         7gRdKR4YbvYxiXM+JnbFifiwyrkPgVRWPkp6vqspb30XyVwKkDi6aSYmzcY1VsWdpl3n
-         u6/5owno61DLXnAEb2ziCSvBw+PXV8psi6x9bNTxR2ChLuRmPIa2JFBzHBw6ljjUPuF0
-         Oxw7to2T29A6qYggiqTGZUuKDDsRqB0jXn8ASzXVXCK7lqF+XaCWxTjB7oLXEkXvOuf/
-         jIUOrjhUyBoGu2IGM4OjmkyscW6oOdyabDddbf44joY72EIrv3MFE8hD6b/9Wy8r2p05
-         b8ow==
-X-Gm-Message-State: AOJu0Yw54ZZCaHKH/fMsTnxkl1fTh83MitSxS0uGRSXoRL0iQnqdm/ck
-	Luh1vKma29Khz2rGfjt0OUuMKFXmz2fiAg87TNRY1nECCj2hAkIVa4Um+Q==
-X-Google-Smtp-Source: AGHT+IEbmomhQFGYWjkB2/F7Of8pZmBPTedhPege6fam7CovZSS5TBJb2SmhV18T/ED4p8Kr2i/+Hg==
-X-Received: by 2002:a05:6e02:605:b0:399:4535:b66e with SMTP id e9e14a558f8ab-39b1fb6b767mr39350545ab.9.1722607867911;
-        Fri, 02 Aug 2024 07:11:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7b7654be293sm1159385a12.91.2024.08.02.07.11.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Aug 2024 07:11:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <32e4707d-a32a-4649-853e-2112dc22f8bc@roeck-us.net>
-Date: Fri, 2 Aug 2024 07:11:06 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwScdWuM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722619071; x=1754155071;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o9DJWhGlqtKQ1iWtEKepaZu/t4tj65qSh5IdSpzdbCo=;
+  b=lwScdWuMXWfATwt8ajLJsjWNIXh7m1sGOtHbIaA4em/8WJd6M5jM0H9A
+   82X+4mfvmXYZvg8LS+ktYt4+obivx1m1YllOWGxxvCdxREQgl87nSPaQ9
+   lNBkWFAuEBldeRz+C5JTTRds1GgHXo4c1GCpHv2CL3s2h+FT4n5al29qW
+   gnQQn2a17XvE27Tj9PXYXAG/0VCr/h9/c9UByXu4I9/GLDn76rELhCqMo
+   ey/xwa3BqbInygujcPNLJvSBOJgB1nglbt37eW8oIGoUEDwzy2GoaRriQ
+   TqRwOrhc1PLZJCl/4rk5wXvjTMoMdu9/zmrlb+niiCKO/TxNzr/Y+mjfY
+   Q==;
+X-CSE-ConnectionGUID: QylhNXamQ4m6oQ1EuihGyw==
+X-CSE-MsgGUID: BHlwXsjAROGHGIPSalFK0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="31296284"
+X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
+   d="scan'208";a="31296284"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 10:17:50 -0700
+X-CSE-ConnectionGUID: hRN/0xX9QpaChBGARfY0ow==
+X-CSE-MsgGUID: PPBUJ3eyQS+/+TdOfJxyBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
+   d="scan'208";a="60309478"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 02 Aug 2024 10:17:46 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sZvuR-000xBO-2v;
+	Fri, 02 Aug 2024 17:17:43 +0000
+Date: Sat, 3 Aug 2024 01:16:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, jdelvare@suse.com,
+	linux@roeck-us.net, dmitry.torokhov@gmail.com, pavel@ucw.cz
+Cc: oe-kbuild-all@lists.linux.dev, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, heiko@sntech.de, ukleinek@debian.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] mfd: add base driver for qnap-mcu devices
+Message-ID: <202408030016.QLOhRHF1-lkp@intel.com>
+References: <20240731212430.2677900-3-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] hwmon: (lm92) Update documentation
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240801144918.6156-1-linux@roeck-us.net>
- <20240801144918.6156-7-linux@roeck-us.net> <Zqxqx8bZkYOtzUub@google.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Zqxqx8bZkYOtzUub@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240731212430.2677900-3-heiko@sntech.de>
 
-On 8/1/24 22:12, Tzung-Bi Shih wrote:
-> On Thu, Aug 01, 2024 at 07:49:18AM -0700, Guenter Roeck wrote:
->> Update datasheet references. Replace misleading 'force parameter needed'
->> with 'must be instantiated explicitly'. Explain the reason for the missing
->> auto-detection. Mention all supported chips in Kconfig.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> 
+Hi Heiko,
 
-Thanks a lot for the reviews!
+kernel test robot noticed the following build warnings:
 
-Guenter
+[auto build test WARNING on next-20240801]
+[also build test WARNING on v6.11-rc1]
+[cannot apply to groeck-staging/hwmon-next lee-leds/for-leds-next lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes linus/master v6.11-rc1 v6.10 v6.10-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/dt-bindings-mfd-add-binding-for-qnap-ts433-mcu-devices/20240802-103948
+base:   next-20240801
+patch link:    https://lore.kernel.org/r/20240731212430.2677900-3-heiko%40sntech.de
+patch subject: [PATCH v3 2/7] mfd: add base driver for qnap-mcu devices
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240803/202408030016.QLOhRHF1-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408030016.QLOhRHF1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408030016.QLOhRHF1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from include/linux/mfd/core.h:13,
+                    from drivers/mfd/qnap-mcu.c:12:
+   drivers/mfd/qnap-mcu.c: In function 'qnap_mcu_receive_buf':
+>> drivers/mfd/qnap-mcu.c:108:31: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     108 |                 dev_warn(dev, "received %lu bytes, we were not waiting for\n",
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:156:61: note: in expansion of macro 'dev_fmt'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   drivers/mfd/qnap-mcu.c:108:17: note: in expansion of macro 'dev_warn'
+     108 |                 dev_warn(dev, "received %lu bytes, we were not waiting for\n",
+         |                 ^~~~~~~~
+   drivers/mfd/qnap-mcu.c:108:43: note: format string is defined here
+     108 |                 dev_warn(dev, "received %lu bytes, we were not waiting for\n",
+         |                                         ~~^
+         |                                           |
+         |                                           long unsigned int
+         |                                         %u
+
+
+vim +108 drivers/mfd/qnap-mcu.c
+
+    96	
+    97	static size_t qnap_mcu_receive_buf(struct serdev_device *serdev,
+    98					   const u8 *buf, size_t size)
+    99	{
+   100		struct device *dev = &serdev->dev;
+   101		struct qnap_mcu *mcu = dev_get_drvdata(dev);
+   102		struct qnap_mcu_reply *reply = mcu->reply;
+   103		const u8 *src = buf;
+   104		const u8 *end = buf + size;
+   105	
+   106		mutex_lock(&mcu->reply_lock);
+   107		if (!reply) {
+ > 108			dev_warn(dev, "received %lu bytes, we were not waiting for\n",
+   109				 size);
+   110			mutex_unlock(&mcu->reply_lock);
+   111			return size;
+   112		}
+   113	
+   114		while (src < end) {
+   115			reply->data[reply->received] = *src++;
+   116			reply->received++;
+   117	
+   118			if (reply->received == reply->length) {
+   119				complete(&reply->done);
+   120				mutex_unlock(&mcu->reply_lock);
+   121	
+   122				/*
+   123				 * We report the consumed number of bytes. If there
+   124				 * are still bytes remaining (though there shouldn't)
+   125				 * the serdev layer will re-execute this handler with
+   126				 * the remainder of the Rx bytes.
+   127				 */
+   128				return src - buf;
+   129			}
+   130		}
+   131	
+   132		/*
+   133		 * The only way to get out of the above loop and end up here
+   134		 * is through consuming all of the supplied data, so here we
+   135		 * report that we processed it all.
+   136		 */
+   137		mutex_unlock(&mcu->reply_lock);
+   138		return size;
+   139	}
+   140	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
