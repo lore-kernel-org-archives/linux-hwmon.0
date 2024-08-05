@@ -1,404 +1,166 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2031.outbound.protection.outlook.com [40.92.102.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB7C1CD39;
-	Sun,  4 Aug 2024 23:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722812929; cv=none; b=BwC1IiWoR0i/5iVtGwTPJWimiUQglqH5zsdfuH4cQLVqQc06jf3ke+Bd4dDJ9BtUZ3fqKJ5LXOFjXD0bBhqV3SJkrT7hCftFe3JOoZ4Ig/6NvHaCEMTSbAqc93Kd3YGqfA8z4fcV6kag0P5lQ4WeocjN2WhGeItKb9WKPA+7vZg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722812929; c=relaxed/simple;
-	bh=uXazAgzWjWMKqAu+LqD+kdrcJ89JiG0q+jN3nJfZ5IQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qARj1dULLiCUryz5OffWnmmMVVIOrKlnNvMzOkhDTBgWYYtVsHfeu78f2ePjTeRGht8a3cUmJGiX0UW+yB0yBbxB/BZy4kN8oxrFMCCJlaYuueFj9C7q/x7VbMyx8XS/7aIAMw1DIOntNi0feFBtDkfHagury4wpUJeg8cHfgRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hpv6/oJD; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAEA2BAE2;
+	Mon,  5 Aug 2024 01:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.102.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722821509; cv=fail; b=TWJc89Tfeda1jtTuTX4MQFYf8YU8kFZ3Vx39+rcgVgk5ix0cLOHdeLKoHKoRc0T8FDpWzbrBDcs7ssdCbWOOUH/gfQWVG+J5qG1q4InImGTJ/2Pe0OcODGgaKMDtzYtrbDRgPhD2GY2QvH+UPBxwqmoeJOhAmUlT48tYoaLhSJQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722821509; c=relaxed/simple;
+	bh=K/Ba8r8HyIKhbEI26KhZMp+2wWTM+DwMy7pPSqbhoOI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=SZaAdZqQoM+4LcvfGt+qZe8QiYtLr+zK221y/T6A1eoe2R+XrP7O9myaogZXOo3ZKBhOab/WXdoBz3GMunCbhLAoRU+8VLdx6sSBWz9g5eVtzjAJ10eRsFHaP1kyDXAJAeHBFd4RdjtMVOd3uDn9wXzT3rW2reDqI1aR8exJOgo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=aZ60pDsb; arc=fail smtp.client-ip=40.92.102.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hpv6/oJD"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52efd855adbso13579701e87.2;
-        Sun, 04 Aug 2024 16:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722812925; x=1723417725; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCY7+immcdfucaqPpVVcufb9QtsyrZSj4oLGCzgBHLc=;
-        b=Hpv6/oJDVd6gkSprISVSg+poED8ShoIkNVqMKNDRyLY3AxtQQpIttw44W+s9+zO+Pt
-         vN5k6If8uk4SnaW0DJjn/AV6vHasJQEkXeKPvGYbBfmX1iYtGIZHIemXWeXLLmDB1WF2
-         Rf7Y8ryrqgM0TCegiwFe4cB9Umtr56PO7cJ6LiMnxN491rM/dgNcC8zYGfljgMnNsbnE
-         DNZkG+PeUU1zLGyPl+ygEpn3VMuW+BRZR5gELSTXksScr7AYkkaNweiZ14bX09R67ufM
-         Cg5AEifHJrgOg5zWAJE2mWtrCJpLgtbzEVcQ9vDZIWlFtDjud6b72GAmbuBfg2CG6DiW
-         /Zsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722812925; x=1723417725;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sCY7+immcdfucaqPpVVcufb9QtsyrZSj4oLGCzgBHLc=;
-        b=wqy9VGcwQTqKOm0Enov251pfOh3kpINMf3v2yxTJ3Ol18W2B9bIne5ETf3u647eHSD
-         vufdnKjbt1nL7fM3cGhSTGv/9dAOH7DZlDcMNGrLfeYfjjpBfXZ83+BQszCAOr03OHEx
-         WuCG9+zkDRWcBF856mmJFnu67wcMv6qtDAo7hyEWmT+h6nZ0OCGpuKAC11KBa9jDvtWI
-         /OEhMHj/tA2MLSwF+vOtSF+JvIQnnlhgSIslpryzTq5cdi/dqKjr7Jk90IBLnB/znY1h
-         xxga8oJygzEzUNFZWWPZmonsefYxU9vCfB8Z6NbWfLqb2MNny4eUNpNpbXvUk18H+4uc
-         DIYA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+mabUAydiZB92NoIijRMcITL6ybXu+vYhW37oVIAjFnLqve9HjseOsME7c97IPLJfkplmF89uqVX8vM6K31D6memZGuevyiex7N3t5SMNV2Z5p64k8CozaYZZnP3af69FOxgQGwov2XI=
-X-Gm-Message-State: AOJu0YwRSZgs4Zvlqzk0IMxIZfrcU9nEFVLma1BvMeziUgVG5gChJOrz
-	MuHOQPBI+ygwMZN70OU13s5r9956o9c1RbX+K2rdOInx3aKSOdkE
-X-Google-Smtp-Source: AGHT+IHmEWVBI3me/pCVCsfPcC+RDADzrbSHnI3s71UcHhG45q8rQPSrk9bO0V1usbJdYGJnKZlY9g==
-X-Received: by 2002:a05:6512:b1f:b0:52e:9d6c:4462 with SMTP id 2adb3069b0e04-530bb3797d6mr6735102e87.23.1722812925024;
-        Sun, 04 Aug 2024 16:08:45 -0700 (PDT)
-Received: from xws.fritz.box ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9ec7266sm378753366b.196.2024.08.04.16.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Aug 2024 16:08:44 -0700 (PDT)
-From: Maximilian Luz <luzmaximilian@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Maximilian Luz <luzmaximilian@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ivor Wanders <ivor@iwanders.net>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: Add thermal sensor driver for Surface Aggregator Module
-Date: Mon,  5 Aug 2024 01:08:29 +0200
-Message-ID: <20240804230832.247852-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="aZ60pDsb"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CWJWiG31I36PFQSCCVc6W4rYI8m8GWH5aNEA3dX/kEE98w3UDATgIw7+PAPrqhL/RCmsbqOQXnnChXS6kWA3iTtxyYmX5FScLAVr4gevAONhpgdSnb4ASF7hDEAgFFnOEGD7ftnyi0P870GGJERlG67S9sa0ed/HDYfzpQ7iWNP9jkiFXqzM+uhaSBZBclGj2dQzw6pzxWksI2P1y9z/cmjuSHutDCvEFKy5+/UVIh/YUal55//VZNbUE2XAUyAi/HTNXPZ6iC4M5hQERZRKW+SFpDji3Q+T7MABdEYY1bsNNLGC26BZTZXSAe0InZ5cwD1RO10/FZHU4T9o6LY74A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SyjFHsYIt8gMibD+yMn4dHE3jI4nHIYAYeYf3KCbPoc=;
+ b=wEs7q6Iy3Q/moSOYBMoIadNTUiwxxdIvs1VxrdqwA0RObUy0krhPEdFmR7Ab5Yea6+upxeiEPiGU06g73k0/0m/T4QJdf4vU6n7Cowfn0oSH1KbecMAMNqgPxrqtfTe6/Y6K67DtVyIsJdO74NxKi9vhFoOicHEn7/YYDRcNVve//BfcEBAiyLJ0JhdiqV0FcMXs+1EkR5ZxO/TfJRpLD7JziNYx+gpD6ayKjUs9DmUpp8V70g+d5oBZ559r+54IPYtxPqydSngeoPQAwpjnjApKrk5wkLZgtrD+D1A520ZAWlU1L3kYctWdHC6rBflS1f1d/4LY8XywngWE52w84w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SyjFHsYIt8gMibD+yMn4dHE3jI4nHIYAYeYf3KCbPoc=;
+ b=aZ60pDsbgoqXE19UpFbf6cE6g8KaA/0WZDFNR5jgrJyUtUrcAze+mHu1Luwvx/e5F4GOCwRCT8j7ywPqVqOtxnwF3kF6ykDh3AVC89D002fQqAuHhfSNXyr1ANaCAx0+IJfdi386+Td+ywxZZiPaoe5ecGPrC8tlTjJ7hu6I+3QYeZABf7SVnda+ZOXvQHn6gtX2DUOLLOHTSMmtnn7uFzCXTuvJVNWyMsptxuip3bdgOub/AoJJvEroFnWFPPAEgEAQWl72qYfJ6Nbhb+5x6+2PeJGtYj3ldnOLh6KwCCMPinmF31REDUAj1OoZ6E5DqMVrfTTYj+xvuvIG83PL/g==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by PN2P287MB1137.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:135::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.26; Mon, 5 Aug
+ 2024 01:31:39 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c%6]) with mapi id 15.20.7828.023; Mon, 5 Aug 2024
+ 01:31:39 +0000
+Message-ID:
+ <MA0P287MB2822C3C5AC61D2A91542C33EFEBE2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Mon, 5 Aug 2024 09:31:24 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 4/4] riscv: defconfig: Enable MCU support for SG2042
+To: Inochi Amaoto <inochiama@outlook.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Guo Ren <guoren@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
+ Jinyu Tang <tangjinyu@tinylab.org>, Hal Feng <hal.feng@starfivetech.com>,
+ Yangyu Chen <cyy@cyyself.name>,
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+References: <IA1PR20MB495337877FFC8D787A045C15BBB32@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <IA1PR20MB49530E505BAEC8F92B19F37FBBB32@IA1PR20MB4953.namprd20.prod.outlook.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <IA1PR20MB49530E505BAEC8F92B19F37FBBB32@IA1PR20MB4953.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN: [kaUUtZue337fUwQvBFZOHyEpFLSZbalU]
+X-ClientProxiedBy: SG2PR01CA0155.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::35) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <8fc25005-f9fb-4d03-a516-da590047f105@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN2P287MB1137:EE_
+X-MS-Office365-Filtering-Correlation-Id: e93f3df2-f9c0-423c-5145-08dcb4ee593d
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199028|8060799006|5072599009|19110799003|440099028|3412199025;
+X-Microsoft-Antispam-Message-Info:
+	wCyIAOE3Kc2lf3MHiBxveRdEAODZixKh+2XDgAUf0sswXnlCYywMuxSpVuTAZcJqmQ8NuA0uUio9ztrnoU9inuksIHTQtet4p8JwZQ3ESGCurmkobp/fx5FsJdBiAnyuf1GAHDGbY3p2E/+q2dQ95GzI8FV1iK4PeZ6qLM5bPtHwc8ZLOstgvHRX+iI3nEzpXsQK1fV201E66NuVQuWkdbTg11nf7KzhjLALdaw760PiM8TFp0xwFnTixhnd4R03NA3qSL/hkbtze6sEtW9Z4hesdcfbJHSUw/dMBMjQnDXvLpCE/Si9QU17CzzFqzjL8d+Q3HRFGvVonyLcudD17lDsVFwRNLm1xFNFVIA/O7yNMgHmdR+y/0VAaY1Odc7cPpLB0oZPwUwITyV0AxJ3bCOHn5kghvMxVXKQA+aZEoCAjFmseFZ2vXhTydom1CNDGVwOJNO6CeNG147KcEtpqX4Xh4H5W1E1J5f6YWh6AiXa8Lcv9L3WALoZpL9HOq/Pe+kBK52vPcdBpug585gJunVl4EmiP12Hef4pTSn355tZQF5dUgcyAMdMFFBZUrpXsBG3G0W2BAv4nNld7uGHFyrcEMFikUbV8wHgM8Y7f96BwnYJZ5GsAjcLvmU1CKb44Wh9cmspYh+taM28oQGvetkqrroLivTlFjiv4vH4ujNC+Y8VDydwdN9J9od3nywK
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WFZWMm9FSGZKOGo1Z05TRGsyYVlSalp5UVRrbS9FTVdQTU52RUlKUGUyK3p0?=
+ =?utf-8?B?Ujc3VHRDdDZqU0xTQ25HNWdmSitDUGxJRlo2a3d2M1ZySENxWlRFNzhqSTFU?=
+ =?utf-8?B?emxGU3U4Wkt0RXdBTUkyNTZTOVFEaDBka2Z4NXdLWk5tSWVvYm1NazhwaTlp?=
+ =?utf-8?B?U3hGSnJWc2xoRmVZWDBydmRMa1JPN2dUWjJpOXZURTFvT1BVWEdNeDh2NmJL?=
+ =?utf-8?B?ZEF4K2x0STEwV2xtM3o0NS85QXpFL0ZiUUV0SndMSmZCQkg4RnREc01Ja2I2?=
+ =?utf-8?B?SDRLU1FZcnV1YzIvY2I4MXl1dW52NWN5REVoSlBtbHhHYlhtK2VBKzdIVGtx?=
+ =?utf-8?B?Z09TQnNYcVhlSm5WS0lSKzliQ2tSaXRJdFI1ZnRVTCtiR05OekdiUHVldnBY?=
+ =?utf-8?B?R3YxQWkzOHpyYkNGUkFOSkVqaHlGVmZuSlhMVWRia0o4d3F4OUY0MzlWRnpz?=
+ =?utf-8?B?NnhNMTBaZXovb1JHazFUU2twU01sV0pVYkl2eFVuSlNEc2J1STNzYlQ2SXV1?=
+ =?utf-8?B?T1NocVcwaGltcWh0L1VTcUpiQlZWSE83KzQyZ2VnUVJyczhGNXVNblJqSGYv?=
+ =?utf-8?B?WkhiTWY2T0RSaE1WRWhoRGg0M2k3L0l4L0ZtTmhzSGR5OXU1OGtNeXNFODZE?=
+ =?utf-8?B?dlgzWUQ4V3RHRzlXV28wTFBEMjZBc1BtMS9rQzl1Rm85dDIyaExUQVFENUtu?=
+ =?utf-8?B?TTVHenhaYzhPc1p2ZlR1bVh3a0JzN1VsbHUwMU0wNWRBWGhjSWhlNGp4TU44?=
+ =?utf-8?B?TzljNkRxUlI0TU5BdEV4L3VPM1FUQVpPaTNxQVlGaGgyOUR0NlhXYUI0QkpP?=
+ =?utf-8?B?a1l0eHBUb1FrS0J4ZWpKSGVBU1hLcWQra1V2ZEZUWU0wdkJxT1RURGMxVjNx?=
+ =?utf-8?B?d0VDVE9qNkhDVnB2dUI3SGw5N0hEaloraUVrVTg4Q3Zhd2F0dDlsUXJRQitx?=
+ =?utf-8?B?TzMxVHN5TVkrb1pxY014UEhkYUNETmlkVFR5b0Y2NjVOc3lhRmtlZG1WZndr?=
+ =?utf-8?B?dmVvRUl1aWNOTTc0dGxpN2h3WVF3YWNEUy9iZFgrYm1nT1hwdnNJaVBGS1hS?=
+ =?utf-8?B?M2VtY25xcEdxVkpERlMvRGdrMjBPaVIydjZoZjVhZ29BZUhUTkhHRUw4UGU2?=
+ =?utf-8?B?RmlHZE9aNkhyNHg1T1d0emlMTGdmbE14b25SSTEzeXJTdkVlbm80T2dIZFNN?=
+ =?utf-8?B?Wmdybk14Z3NWb0pWZ3JMWFNEaWlONXplUnI5WXFERFBFaXNHZzh6Z0tRcXlD?=
+ =?utf-8?B?cFNPUTZBMzE0UldlYTZUWmI0VndXb3hQMEphM2ZwM2ZyWVlqNm9kbm5FYnFk?=
+ =?utf-8?B?TDR5aVBob2M1TFU1MG9HbytLL3MydVY2WWxYRThjczN6NVpiQUNDTzZNWDJJ?=
+ =?utf-8?B?RnJEdDVTZzAzTzE1MlBtSnIyZFlYNVU1STRlcGliOGY5OHpQK1FySU93akpE?=
+ =?utf-8?B?VTJ5NTNDN0FxVFY5UGJmeXlCME4rRWp5TzZuK0lpVkZuMWVGTmVvaXhLSVAw?=
+ =?utf-8?B?MVFMOTN5K2xwY2dzZm9ZSDhxSTBwTWZqSllNS05nOFlRWUJ0cFVxeEdqNnNO?=
+ =?utf-8?B?ZWRheXlicDJhaUVpTDlnNFN3NFZIaGtybnVrRW95dGpuQU0ybDhzME85STNS?=
+ =?utf-8?B?ZklPZE1wQ0thL2hRRThPQVFxNjE5eDY5cTdwbC9PUEpaMktNUXhaZ0JiVmJI?=
+ =?utf-8?Q?cJAQIRUTgc6WfjixxCFN?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e93f3df2-f9c0-423c-5145-08dcb4ee593d
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2024 01:31:39.0509
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB1137
 
-Some of the newer Microsoft Surface devices (such as the Surface Book
-3 and Pro 9) have thermal sensors connected via the Surface Aggregator
-Module (the embedded controller on those devices). Add a basic driver
-to read out the temperature values of those sensors.
+Why this patch change the dts?
 
-The EC can have up to 16 thermal sensors connected via a single
-sub-device, each providing temperature readings and a label string.
-
-Link: https://github.com/linux-surface/surface-aggregator-module/issues/59
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Co-developed-by: Ivor Wanders <ivor@iwanders.net>
-Signed-off-by: Ivor Wanders <ivor@iwanders.net>
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-
----
-
-Links:
- - v1: https://lore.kernel.org/linux-kernel/ee8c39ab-d47a-481d-a19c-1d656519e66d@gmail.com
-
-Changes in v2:
- - Drop patch 0003 ("platform/surface: aggregator_registry: Add support
-   for thermal sensors on the Surface Pro 9") as it has already been
-   applied.
- - Squash patches 0001 ("hwmon: Add thermal sensor driver for Surface
-   Aggregator Module") and 0002 ("hwmon: surface_temp: Add support for
-   sensor names") into a single patch.
- - Replace usage of WARN_ON() with dev_err().
- - Fix formatting and (strict) checkpatch complaints.
-
----
- MAINTAINERS                  |   6 +
- drivers/hwmon/Kconfig        |  10 ++
- drivers/hwmon/Makefile       |   1 +
- drivers/hwmon/surface_temp.c | 235 +++++++++++++++++++++++++++++++++++
- 4 files changed, 252 insertions(+)
- create mode 100644 drivers/hwmon/surface_temp.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 42decde38320..39c61db0169c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15200,6 +15200,12 @@ S:	Maintained
- F:	Documentation/hwmon/surface_fan.rst
- F:	drivers/hwmon/surface_fan.c
- 
-+MICROSOFT SURFACE SENSOR THERMAL DRIVER
-+M:	Maximilian Luz <luzmaximilian@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	drivers/hwmon/surface_temp.c
-+
- MICROSOFT SURFACE GPE LID SUPPORT DRIVER
- M:	Maximilian Luz <luzmaximilian@gmail.com>
- L:	platform-driver-x86@vger.kernel.org
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index b60fe2e58ad6..70c6385f0ed6 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2080,6 +2080,16 @@ config SENSORS_SURFACE_FAN
- 
- 	  Select M or Y here, if you want to be able to read the fan's speed.
- 
-+config SENSORS_SURFACE_TEMP
-+	tristate "Microsoft Surface Thermal Sensor Driver"
-+	depends on SURFACE_AGGREGATOR
-+	help
-+	  Driver for monitoring thermal sensors connected via the Surface
-+	  Aggregator Module (embedded controller) on Microsoft Surface devices.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called surface_temp.
-+
- config SENSORS_ADC128D818
- 	tristate "Texas Instruments ADC128D818"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index b1c7056c37db..3ce8d6a9202e 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -209,6 +209,7 @@ obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
- obj-$(CONFIG_SENSORS_SPD5118)	+= spd5118.o
- obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
- obj-$(CONFIG_SENSORS_SURFACE_FAN)+= surface_fan.o
-+obj-$(CONFIG_SENSORS_SURFACE_TEMP)+= surface_temp.o
- obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
- obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
- obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
-diff --git a/drivers/hwmon/surface_temp.c b/drivers/hwmon/surface_temp.c
-new file mode 100644
-index 000000000000..cd21f331f157
---- /dev/null
-+++ b/drivers/hwmon/surface_temp.c
-@@ -0,0 +1,235 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Thermal sensor subsystem driver for Surface System Aggregator Module (SSAM).
-+ *
-+ * Copyright (C) 2022-2023 Maximilian Luz <luzmaximilian@gmail.com>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/hwmon.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
-+
-+#include <linux/surface_aggregator/controller.h>
-+#include <linux/surface_aggregator/device.h>
-+
-+/* -- SAM interface. -------------------------------------------------------- */
-+
-+/*
-+ * Available sensors are indicated by a 16-bit bitfield, where a 1 marks the
-+ * presence of a sensor. So we have at most 16 possible sensors/channels.
-+ */
-+#define SSAM_TMP_SENSOR_MAX_COUNT	16
-+
-+/*
-+ * All names observed so far are 6 characters long, but there's only
-+ * zeros after the name, so perhaps they can be longer. This number reflects
-+ * the maximum zero-padded space observed in the returned buffer.
-+ */
-+#define SSAM_TMP_SENSOR_NAME_LENGTH	18
-+
-+struct ssam_tmp_get_name_rsp {
-+	__le16 unknown1;
-+	char unknown2;
-+	char name[SSAM_TMP_SENSOR_NAME_LENGTH];
-+} __packed;
-+
-+static_assert(sizeof(struct ssam_tmp_get_name_rsp) == 21);
-+
-+SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_tmp_get_available_sensors, __le16, {
-+	.target_category = SSAM_SSH_TC_TMP,
-+	.command_id      = 0x04,
-+});
-+
-+SSAM_DEFINE_SYNC_REQUEST_MD_R(__ssam_tmp_get_temperature, __le16, {
-+	.target_category = SSAM_SSH_TC_TMP,
-+	.command_id      = 0x01,
-+});
-+
-+SSAM_DEFINE_SYNC_REQUEST_MD_R(__ssam_tmp_get_name, struct ssam_tmp_get_name_rsp, {
-+	.target_category = SSAM_SSH_TC_TMP,
-+	.command_id      = 0x0e,
-+});
-+
-+static int ssam_tmp_get_available_sensors(struct ssam_device *sdev, s16 *sensors)
-+{
-+	__le16 sensors_le;
-+	int status;
-+
-+	status = __ssam_tmp_get_available_sensors(sdev, &sensors_le);
-+	if (status)
-+		return status;
-+
-+	*sensors = le16_to_cpu(sensors_le);
-+	return 0;
-+}
-+
-+static int ssam_tmp_get_temperature(struct ssam_device *sdev, u8 iid, long *temperature)
-+{
-+	__le16 temp_le;
-+	int status;
-+
-+	status = __ssam_tmp_get_temperature(sdev->ctrl, sdev->uid.target, iid, &temp_le);
-+	if (status)
-+		return status;
-+
-+	/* Convert 1/10 °K to 1/1000 °C */
-+	*temperature = (le16_to_cpu(temp_le) - 2731) * 100L;
-+	return 0;
-+}
-+
-+static int ssam_tmp_get_name(struct ssam_device *sdev, u8 iid, char *buf, size_t buf_len)
-+{
-+	struct ssam_tmp_get_name_rsp name_rsp;
-+	int status;
-+
-+	status =  __ssam_tmp_get_name(sdev->ctrl, sdev->uid.target, iid, &name_rsp);
-+	if (status)
-+		return status;
-+
-+	/*
-+	 * This should not fail unless the name in the returned struct is not
-+	 * null-terminated or someone changed something in the struct
-+	 * definitions above, since our buffer and struct have the same
-+	 * capacity by design. So if this fails, log an error message. Since
-+	 * the more likely cause is that the returned string isn't
-+	 * null-terminated, we might have received garbage (as opposed to just
-+	 * an incomplete string), so also fail the function.
-+	 */
-+	status = strscpy(buf, name_rsp.name, buf_len);
-+	if (status < 0) {
-+		dev_err(&sdev->dev, "received non-null-terminated sensor name string\n");
-+		return status;
-+	}
-+
-+	return 0;
-+}
-+
-+/* -- Driver.---------------------------------------------------------------- */
-+
-+struct ssam_temp {
-+	struct ssam_device *sdev;
-+	s16 sensors;
-+	char names[SSAM_TMP_SENSOR_MAX_COUNT][SSAM_TMP_SENSOR_NAME_LENGTH];
-+};
-+
-+static umode_t ssam_temp_hwmon_is_visible(const void *data,
-+					  enum hwmon_sensor_types type,
-+					  u32 attr, int channel)
-+{
-+	const struct ssam_temp *ssam_temp = data;
-+
-+	if (!(ssam_temp->sensors & BIT(channel)))
-+		return 0;
-+
-+	return 0444;
-+}
-+
-+static int ssam_temp_hwmon_read(struct device *dev,
-+				enum hwmon_sensor_types type,
-+				u32 attr, int channel, long *value)
-+{
-+	const struct ssam_temp *ssam_temp = dev_get_drvdata(dev);
-+
-+	return ssam_tmp_get_temperature(ssam_temp->sdev, channel + 1, value);
-+}
-+
-+static int ssam_temp_hwmon_read_string(struct device *dev,
-+				       enum hwmon_sensor_types type,
-+				       u32 attr, int channel, const char **str)
-+{
-+	const struct ssam_temp *ssam_temp = dev_get_drvdata(dev);
-+
-+	*str = ssam_temp->names[channel];
-+	return 0;
-+}
-+
-+static const struct hwmon_channel_info * const ssam_temp_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_ops ssam_temp_hwmon_ops = {
-+	.is_visible = ssam_temp_hwmon_is_visible,
-+	.read = ssam_temp_hwmon_read,
-+	.read_string = ssam_temp_hwmon_read_string,
-+};
-+
-+static const struct hwmon_chip_info ssam_temp_hwmon_chip_info = {
-+	.ops = &ssam_temp_hwmon_ops,
-+	.info = ssam_temp_hwmon_info,
-+};
-+
-+static int ssam_temp_probe(struct ssam_device *sdev)
-+{
-+	struct ssam_temp *ssam_temp;
-+	struct device *hwmon_dev;
-+	s16 sensors;
-+	int channel;
-+	int status;
-+
-+	status = ssam_tmp_get_available_sensors(sdev, &sensors);
-+	if (status)
-+		return status;
-+
-+	ssam_temp = devm_kzalloc(&sdev->dev, sizeof(*ssam_temp), GFP_KERNEL);
-+	if (!ssam_temp)
-+		return -ENOMEM;
-+
-+	ssam_temp->sdev = sdev;
-+	ssam_temp->sensors = sensors;
-+
-+	/* Retrieve the name for each available sensor. */
-+	for (channel = 0; channel < SSAM_TMP_SENSOR_MAX_COUNT; channel++) {
-+		if (!(sensors & BIT(channel)))
-+			continue;
-+
-+		status = ssam_tmp_get_name(sdev, channel + 1, ssam_temp->names[channel],
-+					   SSAM_TMP_SENSOR_NAME_LENGTH);
-+		if (status)
-+			return status;
-+	}
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&sdev->dev, "surface_thermal", ssam_temp,
-+							 &ssam_temp_hwmon_chip_info, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct ssam_device_id ssam_temp_match[] = {
-+	{ SSAM_SDEV(TMP, SAM, 0x00, 0x02) },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(ssam, ssam_temp_match);
-+
-+static struct ssam_device_driver ssam_temp = {
-+	.probe = ssam_temp_probe,
-+	.match_table = ssam_temp_match,
-+	.driver = {
-+		.name = "surface_temp",
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+	},
-+};
-+module_ssam_device_driver(ssam_temp);
-+
-+MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
-+MODULE_DESCRIPTION("Thermal sensor subsystem driver for Surface System Aggregator Module");
-+MODULE_LICENSE("GPL");
--- 
-2.45.2
-
+On 2024/8/2 20:38, Inochi Amaoto wrote:
+> Enable MCU driver for SG2042 to provide thermal and reboot support.
+>
+> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
+> Tested-by: Chen Wang <unicorn_wang@outlook.com>
+> Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
+> ---
+>   arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 2 +-
+>   arch/riscv/configs/defconfig                        | 1 +
+>   2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts b/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
+> index 8b8fdf6243d4..76375e25a495 100644
+> --- a/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
+> +++ b/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
+> @@ -67,7 +67,7 @@ soc_active3: soc-active3 {
+>   				};
+>   
+>   				soc_hot: soc-hot {
+> -					temperature = <85000>;
+> +					temperature = <80000>;
+>   					hysteresis = <5000>;
+>   					type = "hot";
+>   				};
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 0d678325444f..a0f346301df6 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -170,6 +170,7 @@ CONFIG_SPI_SUN6I=y
+>   CONFIG_GPIO_SIFIVE=y
+>   CONFIG_POWER_RESET_GPIO_RESTART=y
+>   CONFIG_SENSORS_SFCTEMP=m
+> +CONFIG_SENSORS_SG2042_MCU=y
+>   CONFIG_CPU_THERMAL=y
+>   CONFIG_DEVFREQ_THERMAL=y
+>   CONFIG_RZG2L_THERMAL=y
