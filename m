@@ -1,168 +1,157 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2189BC2E3;
-	Thu,  8 Aug 2024 02:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A6917FD;
+	Thu,  8 Aug 2024 04:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723084145; cv=none; b=Sqo/BsgvBPilTHQVBILHf3GAEW4DyfHWYZGk6VkE4DH/kz38fEgukzvJMKLN9YYtuxOR2uEHaXSMBQ6MQQFl66zEvNcGu905m0chjRqds+uuuizbvXXO2ZYZqOT8nVTMecgJtEfUu68pgjtGLBY5cuCCTjsLHNYhxHXzGKh0Xaw=
+	t=1723092180; cv=none; b=reP5JXobh+KRgmCxGZkk5ijM/dEAPw//Tw8pLyuH68IhkewGjxzcd7wqeiuvXAd+h8BBq3m5SO4xKScAzzxVRduY6wLa0yJIU+1mBpDaK7ux33jejgXK8Gi1ci7HMaLzLV2I8b9Z/rWgsPuTEocmgUE69+fFGiGCZs65JOSicu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723084145; c=relaxed/simple;
-	bh=M5odKgRdiYB4QiClc+4B0qhQc9NLJddk0d001KyKyEI=;
+	s=arc-20240116; t=1723092180; c=relaxed/simple;
+	bh=4syzyV6hdGjV22Hiflj6sEtCj534I2q+jdzZRjAGewU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iu80A8U/ITu4lqcth4gDwJ5/k3PeVFYwGyTzw87US/qyLEW6L3ETysfGNO+eKi/xWMoNF0Wc0h1p5BSWp8eVsyfDmhy6pxQOI2wUx72gDoH4u3N20qmEDWF0ODsJkI31N0052Tj+qzH6EFZUbv3LBqrFmgZDpBn4GQhzstQGz/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EIK/q8UU; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMRrhgnX6CXe9bDjpXRm2QSsTAPYf0ifwLPgyaTHYfquZi1mnjQhV4+V6KrNBbY20TNtVkzOh1JdQ4lH6uYg54d+g0pML/BQ6F6rBW/Yzmrb1UyV5B7M/Trc6+iB2Ebyp+bdJVphZzJpV8KZFJwX/VZLbKRI7IvJOMzJjQUBUlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HVNK57JB; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EIK/q8UU"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70d2d7e692eso484587b3a.0;
-        Wed, 07 Aug 2024 19:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723084143; x=1723688943; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ONR16OLsmnYFIi37edT6X8si5tDO2pD3UYRS4yUxjjA=;
-        b=EIK/q8UUYmufd+jOnfXfvY3B37tx0u8OOX8ik9m8NC4AdMFzagGyi01YAkMBx2FWQh
-         +44fqyqteTlPRdjo0DXcE85ICxcppftrKKFOE83B2CYpTK8Yf383wfe3akeYaNfpPG/r
-         79gTYyh8B9SIQq9eSZu6ySwxWKxU2f7j2qv4W69VLlGUUvwI7dtLHfOBirHT4NID6p0n
-         BQRn2UHmmgikMDwyYp7pXW7PGk+FWtiqLq7Wv7f/r8a04JxBMuetJAlyhg4TmMOQE2He
-         MUcLPz+OOWQNAEB6HV1KixhJ10MhxKEqMQ1tvY0gulTXas6zneg9uphmgUosS0sqKIIP
-         /sGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723084143; x=1723688943;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONR16OLsmnYFIi37edT6X8si5tDO2pD3UYRS4yUxjjA=;
-        b=ERyUicljTOoLT9sbhcLNiQWILxPR4jQYRQ68ithmxTeojLg0wo7ApYZTD/0NGTrSEK
-         1QjkuTwORiYmEVDwFpS2NYkQvU7IjtPP17eiJ7BOGiohCHELEdNgikwiNJPfTNJ4Lrr7
-         Qql4gIe1kemwxcYnmokjeQ9Jldorxs6oRnkdAqmbe8+WbDPu4vRZvwklc4YLMviqnryg
-         52fjkkgW6rz8tnws4ywQ37UObnT8ZBUs8l5vcIqKlDDKb79H9SAZ9aHiJRy3Zc5TfdIX
-         u/77Xl0LStrYLcz4Hqv3gjSzC9e3j2hPBBNPKdN8oqPZN4gFk3MRdEExdApMWrxc0S9O
-         plQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWexMLTt1ujomLLsCgRvRbsxayHJQz+z+ShEdPZFNHWNrnfE82193gF44I2CD28YhP0852E+1D0a5SMRw==@vger.kernel.org, AJvYcCXl1lLlJokbImt0m9FbCyotXNzaKqgmT4P3q6QJBEkWNRiH9mfJordscSJ+A7Dgt0HP4ybNvkqiHpeVKP4R@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDRDXVPocI7s2/utvfZXRAF0NinUDOSTjA9m6B6sNiDWQUcPYY
-	waFI3gb8UcDdr/rmLaA7YD5t1zbfjM5nRl536kJNg+FDijGy4Bzwxk6bjNtc
-X-Google-Smtp-Source: AGHT+IGMm3IMUSPrMpyI6bchgrNHCd66zaz2jzidMWRtIQWMFwDhn+AfcBMRBpyOLC/xs9rCK1G1jg==
-X-Received: by 2002:a05:6a00:1249:b0:705:a13b:e740 with SMTP id d2e1a72fcca58-710cae20b3bmr734926b3a.19.1723084143114;
-        Wed, 07 Aug 2024 19:29:03 -0700 (PDT)
-Received: from embed-PC.myguest.virtualbox.org ([110.225.178.109])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-710cb2d3544sm177193b3a.115.2024.08.07.19.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Aug 2024 19:29:02 -0700 (PDT)
-Date: Thu, 8 Aug 2024 07:46:36 +0530
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, skhan@linuxfoundation.org, rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (lm93) Return error values on read failure
-Message-ID: <ZrQqhOvt3zCHNh38@embed-PC.myguest.virtualbox.org>
-References: <20240807181746.508972-1-abhishektamboli9@gmail.com>
- <bdca4f35-ec3e-4fac-bbcf-ed5326feb6f4@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HVNK57JB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723092178; x=1754628178;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4syzyV6hdGjV22Hiflj6sEtCj534I2q+jdzZRjAGewU=;
+  b=HVNK57JBPlBfiL10Rpkc4qIFGthSYTsVc1llWCnzczgO3BpaEz3Hg/4X
+   PY7AOZMNbXscZtWfbRde1VIv5V0mLR9alpeoGjlRbXBegxizzcqZ6ODpC
+   rCJZTd+T3podJniQIb51lqHpah8m3h++ILAqdxB8x3t0jKh+cQxAmkxlA
+   yBR3clQTP4d4Mk5GKtQxhQ8qtYBLj8gexgEwOPWzlxH0Z/06ueue2TIiC
+   8RljDesUDYEU8KE0fiZ7ThvpaRrcKa9MRlQxO72HX27B2jJ8Qp7EPrrfw
+   PuSRStb3rhCFxxZPdgnpmzFsDoXDeH37M5LIrPEwraWhqnbZJXgFN9hGj
+   w==;
+X-CSE-ConnectionGUID: 08Nz32qWQyS8Rml9j/0voQ==
+X-CSE-MsgGUID: wmEdLxsOQwSeFoRR3sPn8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="31867206"
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="31867206"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 21:42:57 -0700
+X-CSE-ConnectionGUID: KXtIwPg7SaG4OrINrtmQ+Q==
+X-CSE-MsgGUID: BT2jfhRmQaSIW27BmDM3lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="61203255"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 21:42:54 -0700
+Date: Thu, 8 Aug 2024 07:42:51 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Andi Shyti <andi.shyti@linux.intel.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
+	daniel@ffwll.ch, linux@roeck-us.net,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	anshuman.gupta@intel.com, badal.nilawar@intel.com,
+	riana.tauro@intel.com, ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com, andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH v3] drm/i915/hwmon: expose fan speed
+Message-ID: <ZrRMyzUfNdjyL1y6@black.fi.intel.com>
+References: <20240807123018.827506-1-raag.jadav@intel.com>
+ <ZrN1i2snlz8tSA1M@ashyti-mobl2.lan>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bdca4f35-ec3e-4fac-bbcf-ed5326feb6f4@roeck-us.net>
+In-Reply-To: <ZrN1i2snlz8tSA1M@ashyti-mobl2.lan>
 
-On Wed, Aug 07, 2024 at 11:38:34AM -0700, Guenter Roeck wrote:
-Hi Guenter,
-Thank you for your feedback.
-> On 8/7/24 11:17, Abhishek Tamboli wrote:
-> > Fix the issue of lm93_read_byte() and lm93_read_word() return 0 on
-> > read failure after retries, which could be confused with valid data.
-> > 
-> > Address the TODO: what to return in case of error?
-> > 
-> > Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
-> > ---
-> >   drivers/hwmon/lm93.c | 10 ++++++----
-> >   1 file changed, 6 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/lm93.c b/drivers/hwmon/lm93.c
-> > index be4853fad80f..b76f3c1c6297 100644
-> > --- a/drivers/hwmon/lm93.c
-> > +++ b/drivers/hwmon/lm93.c
-> > @@ -798,6 +798,7 @@ static unsigned LM93_ALARMS_FROM_REG(struct block1_t b1)
-> >   static u8 lm93_read_byte(struct i2c_client *client, u8 reg)
+On Wed, Aug 07, 2024 at 02:24:27PM +0100, Andi Shyti wrote:
+> Hi Raag,
 > 
-> This is still returning an u8.
-My interpretation of the TODO was to address the error condition while keeping the 
-existing logic of the driver intact. I understand that this driver is 
-old and that changes should be approached with caution.
-> >   {
-> >   	int value, i;
-> > +	int ret;
-> >   	/* retry in case of read errors */
-> >   	for (i = 1; i <= MAX_RETRIES; i++) {
-> > @@ -808,14 +809,14 @@ static u8 lm93_read_byte(struct i2c_client *client, u8 reg)
-> >   			dev_warn(&client->dev,
-> >   				 "lm93: read byte data failed, address 0x%02x.\n",
-> >   				 reg);
-> > +			ret = value;
-> >   			mdelay(i + 3);
-> >   		}
-> >   	}
-> > -	/* <TODO> what to return in case of error? */
-> >   	dev_err(&client->dev, "lm93: All read byte retries failed!!\n");
+> > +static umode_t
+> > +hwm_fan_is_visible(const struct hwm_drvdata *ddat, u32 attr)
+> > +{
+> > +	struct i915_hwmon *hwmon = ddat->hwmon;
+> > +
+> > +	switch (attr) {
+> > +	case hwmon_fan_input:
+> > +		return i915_mmio_reg_valid(hwmon->rg.fan_speed) ? 0444 : 0;
+> > +	default:
+> > +		return 0;
+> > +	}
 > 
-> Those messages only make sense if there is no error return.
-> 
-> > -	return 0;
-> > +	return ret;
-> 
-> This is pointless and actually dangerous unless the calling code actually checks
-> the return value and aborts on error.
-> 
-> 
-> 
-> >   }
-> >   static int lm93_write_byte(struct i2c_client *client, u8 reg, u8 value)
-> > @@ -836,6 +837,7 @@ static int lm93_write_byte(struct i2c_client *client, u8 reg, u8 value)
-> >   static u16 lm93_read_word(struct i2c_client *client, u8 reg)
-> >   {
-> >   	int value, i;
-> > +	int ret;
-> >   	/* retry in case of read errors */
-> >   	for (i = 1; i <= MAX_RETRIES; i++) {
-> > @@ -846,14 +848,14 @@ static u16 lm93_read_word(struct i2c_client *client, u8 reg)
-> >   			dev_warn(&client->dev,
-> >   				 "lm93: read word data failed, address 0x%02x.\n",
-> >   				 reg);
-> > +			ret = value;
-> >   			mdelay(i + 3);
-> >   		}
-> >   	}
-> > -	/* <TODO> what to return in case of error? */
-> >   	dev_err(&client->dev, "lm93: All read word retries failed!!\n");
-> > -	return 0;
-> > +	return ret;
-> 
-> Same as above.
-> 
-> Actually, your patch makes the problem worse because the errors are still ignored
-> and at the same time report more or less random values to the user (the error code
-> truncated to an unsigned 8 or 16 bit value).
-> 
-> Is this just a blind patch, submitted as kind of an exercise, or do you have an
-> actual use case for this driver ? 
-This was not intended as a blind exercise. I aimed to make a meaningful improvement.
->The driver is in such bad shape that it should
-> be left alone unless someone actually needs it and is able to test any changes.
-> Otherwise changes like this just increase risk (or, rather, make it even worse)
-> without real benefit.
-I’m relatively new to kernel development, and I appreciate your insights on how this 
-patch may have introduced additional issues rather than resolving the problem. 
+> Why do we need switch case here?
 
-I'll take your comments into account and Thank you for pointing out the mistakes.
+Just following the file conventions.
 
-Regards,
-Abhishek
+> Why can't this function become a single "return " line?
+> 
+> > +}
+> > +
+> > +static int
+> > +hwm_fan_read(struct hwm_drvdata *ddat, u32 attr, long *val)
+> > +{
+> > +	struct i915_hwmon *hwmon = ddat->hwmon;
+> > +	struct hwm_fan_info *fi = &ddat->fi;
+> > +	u32 reg_val, pulses, time, time_now;
+> > +	intel_wakeref_t wakeref;
+> > +	long rotations;
+> > +	int ret = 0;
+> > +
+> > +	switch (attr) {
+> > +	case hwmon_fan_input:
+> > +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref) {
+> > +			mutex_lock(&hwmon->hwmon_lock);
+> > +
+> > +			reg_val = intel_uncore_read(ddat->uncore, hwmon->rg.fan_speed);
+> > +			time_now = jiffies_to_msecs(jiffies);
+> > +
+> > +			/* Handle overflow */
+> > +			if (reg_val >= fi->reg_val_prev)
+> > +				pulses = reg_val - fi->reg_val_prev;
+> > +			else
+> > +				pulses = UINT_MAX - fi->reg_val_prev + reg_val;
+> > +
+> > +			/*
+> > +			 * HW register value is accumulated count of pulses from
+> > +			 * PWM fan with the scale of 2 pulses per rotation.
+> > +			 */
+> > +			rotations = pulses >> 1;
+> > +			time = time_now - fi->time_prev;
+> > +
+> > +			if (unlikely(!time)) {
+> > +				ret = -EAGAIN;
+> > +				mutex_unlock(&hwmon->hwmon_lock);
+> > +				break;
+> > +			}
+> > +
+> > +			/* Convert to minutes for calculating RPM */
+> > +			*val = DIV_ROUND_UP(rotations * (60 * MSEC_PER_SEC), time);
+> > +
+> > +			fi->reg_val_prev = reg_val;
+> > +			fi->time_prev = time_now;
+> > +
+> > +			mutex_unlock(&hwmon->hwmon_lock);
+> > +		}
+> > +		return ret;
+> > +	default:
+> > +		return -EOPNOTSUPP;
+> > +	}
+> 
+> same here, can we make this function:
+> 
+> if (attr != hwmon_fan_input)
+> 	return -EOPNOTSUPP;
+> 
+> and then save all the indentation.
+
+Makes sense for hwm_fan_read(). Let me try this.
+
+> Are we expecting more cases here?
+
+Not for now.
+
+Raag
