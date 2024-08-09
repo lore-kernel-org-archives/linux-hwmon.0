@@ -1,377 +1,169 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4C118B488
-	for <linux-hwmon@vger.kernel.org>; Fri,  9 Aug 2024 11:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B91EADA;
+	Fri,  9 Aug 2024 11:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723201292; cv=none; b=FCOuGq8UpnZim3eT9ryyuOWhRxJDZSiyMKRHT79BuH9LV/Kcifvxlhry6n39GTTM7vuqm4WT3SqBlPLvwXJPFdoqszqqkiTaLE8/tK66xkClJ3Oe/n+IsrUtlW3e8OHIOiImGCFC1YqdhYdvOtX1dzUrw7aR0ofaKzzdeYMGOrA=
+	t=1723204099; cv=none; b=oTno9mG9PiKgZTlYj2DJi3sIgQRdYcNyHwcT4K8hFflgfF58v1rJq1QvRwuvnR5gCfPVqv+vj20oJPNIslKweSDk4acb/8AWzFXdj+Z6p+P9BRXJb/Z7Odlq56ViGaUNkUKP3s2bqpy92LvH/sQQzFUl501dwrHhqAiLsq+gBJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723201292; c=relaxed/simple;
-	bh=MUOJttNLDDkaf3vn9kxvM207x74kpVe47iGW1tUIkIQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iseWBsR6VU066wO6dXNJ8H1jqIuAuwa6nCGLAfmC/ouN+9mM7NBCRuR3MivC/byG+h1m/4A76jG1Uvu11qngtkr4bk2vfmQt6QgeBoWa99iPJIkAreLIRl58GlDO9Qyx9SWFy/SU6XymdB/+1o2G/fyvkeMT9XSzgFskRXj7sRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WoOD8p75; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1723204099; c=relaxed/simple;
+	bh=qpnMDeRnJlAFCtGqKuynReSNxZ3lj28gwduVzRqU0iE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XBdD8tvTJfhhdWp4WaVd29IZfDWopKx037GtHHd7pzPMT1bGesG12ovnZrwG+/DfpnbmdhX5JlY2sD+geMmbyBMzSkVbUjmosqLJgm+uMszNqWOdkWd9/P056LwgdB7F1FfYudmolzhyZMRwXfLomvhVW2XphltYVZV+Tko2Tpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DhfQTJgv; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WoOD8p75"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3686b285969so1014033f8f.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Aug 2024 04:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723201288; x=1723806088; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/682q/IgmSx1ugjwpcrW1fYYFoT2Yei89ggcZ5WWfo8=;
-        b=WoOD8p75yvavw9AdQB54DgMP5yWrgyHu3FyY6ulR1EHJ86fu9b4J+TzkI510Vii6Io
-         +927POzYWALqqDv4wHeUyxeF2wPgEGMu3y5fHWVrox84xuHBOIUERhUG1yKitlE52HNW
-         32XcFlujcOEX2+uYqTxSQmZR/mAejrFwNIV+Kfdwbu7My4vpnmQliI1MmUYbyCt1A/zp
-         70JXD2kdp2yjAo5IPQ+OWlPYrV6tbKOmWxUJiGoeSjXkn2UCqMNHqNVG+VMDAYJZyEWR
-         TVg0xBlVS/usCMH+OGJ8Vlsrofe9B92FXAHww14b2KIxwbo8huLp59tQrISqy/uyo1Sk
-         cqmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723201288; x=1723806088;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/682q/IgmSx1ugjwpcrW1fYYFoT2Yei89ggcZ5WWfo8=;
-        b=t6zfFt7AbiGqXLAAdaBshu672xsGfDVh/PvbyyCD3fLSbqW2+NRr12fz2te4oob5Wn
-         erh/8k/tYPuqOrEp6K7Dc8YujPneaUwly/PjMPGjtUyzBXSKRr+EHbMMRKWF+53HnEBt
-         F4DKNSh4EE1S9DWLhgCfD4nXrzCmYw0fQOoJLU6cb1Ct8DGNd/01DVE3NH3guN0zL6is
-         Ee1LbRGYVy47L5bX1XV25GPDvLEBaPJXGQPLmNGYG74Cfy1E76NcDUJDTzssB9PREyH2
-         iWJk2gqEy8bOqr6lSoQyQRjPrthHJY/m49BArT0DcCtf47s5KIzqEkA2oqE25Mk6/wTU
-         qf+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWFZGfq3dXDBBEUoGF8f2iKGJLQ0hlwDD4T21mcVnoSjxvkuLObXaPPK+Ng0LNCdZVh/4iwbinsRfu0VntvIMZOOIAfVxHEJ4z6saU=
-X-Gm-Message-State: AOJu0YzDOHZbh1jRGOURRSEJZZy+6rZH8lO1UKnqtDUV2KUADBFA9rrX
-	3Pzhx+Z2q7mBGNuGC8z0f3Mzl9HpOOSPQKOXE0lz1V8xNg4KKawfOTiTtaiGkkI=
-X-Google-Smtp-Source: AGHT+IEMw0S9h0YIYl4LyxIuHNAP7T9PX2ZjGuz2Ky4aelpGhhnCl3Hs3qzr8diKaTFhAHA9AO9+OA==
-X-Received: by 2002:a5d:5f91:0:b0:367:8a84:7427 with SMTP id ffacd0b85a97d-36d5de93557mr1073255f8f.2.1723201288119;
-        Fri, 09 Aug 2024 04:01:28 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36d340acfdasm1815992f8f.13.2024.08.09.04.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 04:01:27 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Banajit Goswami <bgoswami@quicinc.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	alsa-devel@alsa-project.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] ASoC: codecs: wsa884x: Implement temperature reading and hwmon
-Date: Fri,  9 Aug 2024 13:01:22 +0200
-Message-ID: <20240809110122.137761-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DhfQTJgv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723204097; x=1754740097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qpnMDeRnJlAFCtGqKuynReSNxZ3lj28gwduVzRqU0iE=;
+  b=DhfQTJgvjgyy9tn0GcZk01uuLmq/LJcJcbu8+EXnCLHZNhtJaYwPlHMU
+   9+MO3WPWy0EGxliAK96/37/1LwghLeGQwJ53waMZPVLS3bsST9XmYMfPN
+   o+SsEh/svflj5NidaQwhbZe+k9NyJDAfMtm1v1gYcwyMTKD3D/VXELWs3
+   BCbhywiZmyO8/x7LG8k0iX3EX2qBlK7oKFUs5MTRPkC8N1OFPyI3pm8Mf
+   zwuUMzfwKJUhDleI9lwn6DHPK2gBAF/6a/OdImBmMYrlywN2efPVfdLXA
+   ClbGpFPrXRseTVVnb4wwm1ME+ho8JMKgA983W2aKO+CUe3sbTHugDRxo3
+   w==;
+X-CSE-ConnectionGUID: cFfJUehRQTa/xmWcrFPROg==
+X-CSE-MsgGUID: e2fTszMcSg2vIiQncyWU3g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="46781444"
+X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
+   d="scan'208";a="46781444"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 04:48:16 -0700
+X-CSE-ConnectionGUID: duNv+l5FT+GbHA4UyEjmww==
+X-CSE-MsgGUID: xBuRMrSIRiSGYyRs9rFE4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
+   d="scan'208";a="62385693"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 04:48:13 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1scO6K-0000000DPCp-462l;
+	Fri, 09 Aug 2024 14:48:08 +0300
+Date: Fri, 9 Aug 2024 14:48:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
+	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	anshuman.gupta@intel.com, badal.nilawar@intel.com,
+	riana.tauro@intel.com, ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com
+Subject: Re: [PATCH v4] drm/i915/hwmon: expose fan speed
+Message-ID: <ZrYB-GI9L2RSc2bt@smile.fi.intel.com>
+References: <20240809061525.1368153-1-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240809061525.1368153-1-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Read temperature of the speaker and expose it via hwmon interface, which
-will be later used during calibration of speaker protection algorithms.
+On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
+> Add hwmon support for fan1_input attribute, which will expose fan speed
+> in RPM. With this in place we can monitor fan speed using lm-sensors tool.
+> 
+> $ sensors
+> i915-pci-0300
+> Adapter: PCI adapter
+> in0:         653.00 mV
+> fan1:        3833 RPM
+> power1:           N/A  (max =  43.00 W)
+> energy1:      32.02 kJ
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> v2:
+> - Add mutex protection
+> - Handle overflow
+> - Add ABI documentation
+> - Aesthetic adjustments (Riana)
+> 
+> v3:
+> - Declare rotations as "long" and drop redundant casting
+> - Change date and version in ABI documentation
+> - Add commenter name in changelog (Riana)
+> 
+> v4:
+> - Fix wakeref leak
+> - Drop switch case and simplify hwm_fan_xx() (Andi)
 
----
+I do not understand why we pollute Git history with changelogs, but it's
+probably the ugly atavism in DRM workflow.
 
-Changes in v3:
-1. Replace Kconfig HWMON dependency in favor of
-   IS_REACHABLE(CONFIG_HWMON) which solves Kernel Test Robot warning for
-   !HWMON and HWMON=y && WSA884x=m
+...
 
-Changes in v2:
-1. Add missing dependency on HWMON for y!=m builds (Kernel Test Robot
-   report: undefined reference to
-   `devm_hwmon_device_register_with_info').
----
- sound/soc/codecs/wsa884x.c | 201 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 201 insertions(+)
+> +hwm_fan_is_visible(const struct hwm_drvdata *ddat, u32 attr)
+> +{
+> +	struct i915_hwmon *hwmon = ddat->hwmon;
+> +
+> +	return attr == hwmon_fan_input &&
+> +	       i915_mmio_reg_valid(hwmon->rg.fan_speed) ? 0444 : 0;
 
-diff --git a/sound/soc/codecs/wsa884x.c b/sound/soc/codecs/wsa884x.c
-index 8db1380d1f10..86df5152c547 100644
---- a/sound/soc/codecs/wsa884x.c
-+++ b/sound/soc/codecs/wsa884x.c
-@@ -5,11 +5,14 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/cleanup.h>
- #include <linux/device.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/hwmon.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-@@ -301,8 +304,28 @@
- #define WSA884X_PA_FSM_MSK1		(WSA884X_DIG_CTRL0_BASE + 0x3b)
- #define WSA884X_PA_FSM_BYP_CTL		(WSA884X_DIG_CTRL0_BASE + 0x3c)
- #define WSA884X_PA_FSM_BYP0		(WSA884X_DIG_CTRL0_BASE + 0x3d)
-+#define WSA884X_PA_FSM_BYP0_DC_CAL_EN_MASK		0x01
-+#define WSA884X_PA_FSM_BYP0_DC_CAL_EN_SHIFT		0
-+#define WSA884X_PA_FSM_BYP0_CLK_WD_EN_MASK		0x02
-+#define WSA884X_PA_FSM_BYP0_CLK_WD_EN_SHIFT		1
-+#define WSA884X_PA_FSM_BYP0_BG_EN_MASK			0x04
-+#define WSA884X_PA_FSM_BYP0_BG_EN_SHIFT			2
-+#define WSA884X_PA_FSM_BYP0_BOOST_EN_MASK		0x08
-+#define WSA884X_PA_FSM_BYP0_BOOST_EN_SHIFT		3
-+#define WSA884X_PA_FSM_BYP0_PA_EN_MASK			0x10
-+#define WSA884X_PA_FSM_BYP0_PA_EN_SHIFT			4
-+#define WSA884X_PA_FSM_BYP0_D_UNMUTE_MASK		0x20
-+#define WSA884X_PA_FSM_BYP0_D_UNMUTE_SHIFT		5
-+#define WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_MASK		0x40
-+#define WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_SHIFT		6
-+#define WSA884X_PA_FSM_BYP0_TSADC_EN_MASK		0x80
-+#define WSA884X_PA_FSM_BYP0_TSADC_EN_SHIFT		7
- #define WSA884X_PA_FSM_BYP1		(WSA884X_DIG_CTRL0_BASE + 0x3e)
- #define WSA884X_TADC_VALUE_CTL		(WSA884X_DIG_CTRL0_BASE + 0x50)
-+#define WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK	0x01
-+#define WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_SHIFT	0
-+#define WSA884X_TADC_VALUE_CTL_VBAT_VALUE_RD_EN_MASK	0x02
-+#define WSA884X_TADC_VALUE_CTL_VBAT_VALUE_RD_EN_SHIFT	1
- #define WSA884X_TEMP_DETECT_CTL		(WSA884X_DIG_CTRL0_BASE + 0x51)
- #define WSA884X_TEMP_DIN_MSB		(WSA884X_DIG_CTRL0_BASE + 0x52)
- #define WSA884X_TEMP_DIN_LSB		(WSA884X_DIG_CTRL0_BASE + 0x53)
-@@ -691,6 +714,17 @@
- 		SNDRV_PCM_FMTBIT_S24_LE |\
- 		SNDRV_PCM_FMTBIT_S24_3LE | SNDRV_PCM_FMTBIT_S32_LE)
- 
-+/* Two-point trimming for temperature calibration */
-+#define WSA884X_T1_TEMP			-10L
-+#define WSA884X_T2_TEMP			150L
-+
-+/*
-+ * Device will report senseless data in many cases, so discard any measurements
-+ * outside of valid range.
-+ */
-+#define WSA884X_LOW_TEMP_THRESHOLD	5
-+#define WSA884X_HIGH_TEMP_THRESHOLD	45
-+
- struct wsa884x_priv {
- 	struct regmap *regmap;
- 	struct device *dev;
-@@ -706,6 +740,13 @@ struct wsa884x_priv {
- 	int active_ports;
- 	int dev_mode;
- 	bool hw_init;
-+	/*
-+	 * Protects temperature reading code (related to speaker protection) and
-+	 * fields: temperature and pa_on.
-+	 */
-+	struct mutex sp_lock;
-+	unsigned int temperature;
-+	bool pa_on;
- };
- 
- enum {
-@@ -1660,6 +1701,10 @@ static int wsa884x_spkr_event(struct snd_soc_dapm_widget *w,
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_POST_PMU:
-+		mutex_lock(&wsa884x->sp_lock);
-+		wsa884x->pa_on = true;
-+		mutex_unlock(&wsa884x->sp_lock);
-+
- 		wsa884x_spkr_post_pmu(component, wsa884x);
- 
- 		snd_soc_component_write_field(component, WSA884X_PDM_WD_CTL,
-@@ -1671,6 +1716,10 @@ static int wsa884x_spkr_event(struct snd_soc_dapm_widget *w,
- 		snd_soc_component_write_field(component, WSA884X_PDM_WD_CTL,
- 					      WSA884X_PDM_WD_CTL_PDM_WD_EN_MASK,
- 					      0x0);
-+
-+		mutex_lock(&wsa884x->sp_lock);
-+		wsa884x->pa_on = false;
-+		mutex_unlock(&wsa884x->sp_lock);
- 		break;
- 	}
- 
-@@ -1810,6 +1859,144 @@ static struct snd_soc_dai_driver wsa884x_dais[] = {
- 	},
- };
- 
-+static int wsa884x_get_temp(struct wsa884x_priv *wsa884x, long *temp)
-+{
-+	unsigned int d1_msb = 0, d1_lsb = 0, d2_msb = 0, d2_lsb = 0;
-+	unsigned int dmeas_msb = 0, dmeas_lsb = 0;
-+	int d1, d2, dmeas;
-+	unsigned int mask;
-+	long val;
-+	int ret;
-+
-+	guard(mutex)(&wsa884x->sp_lock);
-+
-+	if (wsa884x->pa_on) {
-+		/*
-+		 * Reading temperature is possible only when Power Amplifier is
-+		 * off. Report last cached data.
-+		 */
-+		*temp = wsa884x->temperature;
-+		return 0;
-+	}
-+
-+	ret = pm_runtime_resume_and_get(wsa884x->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	mask = WSA884X_PA_FSM_BYP0_DC_CAL_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_CLK_WD_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_BG_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_D_UNMUTE_MASK |
-+	       WSA884X_PA_FSM_BYP0_SPKR_PROT_EN_MASK |
-+	       WSA884X_PA_FSM_BYP0_TSADC_EN_MASK;
-+	/*
-+	 * Here and further do not care about read or update failures.
-+	 * For example, before turning on Power Amplifier for the first
-+	 * time, reading WSA884X_TEMP_DIN_MSB will always return 0.
-+	 * Instead, check if returned value is within reasonable
-+	 * thresholds.
-+	 */
-+	regmap_update_bits(wsa884x->regmap, WSA884X_PA_FSM_BYP0, mask, mask);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_TADC_VALUE_CTL,
-+			   WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK,
-+			   FIELD_PREP(WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK, 0x0));
-+
-+	regmap_read(wsa884x->regmap, WSA884X_TEMP_DIN_MSB, &dmeas_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_TEMP_DIN_LSB, &dmeas_lsb);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_TADC_VALUE_CTL,
-+			   WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK,
-+			   FIELD_PREP(WSA884X_TADC_VALUE_CTL_TEMP_VALUE_RD_EN_MASK, 0x1));
-+
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_1, &d1_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_2, &d1_lsb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_3, &d2_msb);
-+	regmap_read(wsa884x->regmap, WSA884X_OTP_REG_4, &d2_lsb);
-+
-+	regmap_update_bits(wsa884x->regmap, WSA884X_PA_FSM_BYP0, mask, 0x0);
-+
-+	dmeas = (((dmeas_msb & 0xff) << 0x8) | (dmeas_lsb & 0xff)) >> 0x6;
-+	d1 = (((d1_msb & 0xff) << 0x8) | (d1_lsb & 0xff)) >> 0x6;
-+	d2 = (((d2_msb & 0xff) << 0x8) | (d2_lsb & 0xff)) >> 0x6;
-+
-+	if (d1 == d2) {
-+		/* Incorrect data in OTP? */
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	val = WSA884X_T1_TEMP + (((dmeas - d1) * (WSA884X_T2_TEMP - WSA884X_T1_TEMP))/(d2 - d1));
-+
-+	dev_dbg(wsa884x->dev, "Measured temp %ld (dmeas=%d, d1=%d, d2=%d)\n",
-+		val, dmeas, d1, d2);
-+
-+	if ((val > WSA884X_LOW_TEMP_THRESHOLD) &&
-+	    (val < WSA884X_HIGH_TEMP_THRESHOLD)) {
-+		wsa884x->temperature = val;
-+		*temp = val;
-+		ret = 0;
-+	} else {
-+		ret = -EAGAIN;
-+	}
-+
-+out:
-+	pm_runtime_mark_last_busy(wsa884x->dev);
-+	pm_runtime_put_autosuspend(wsa884x->dev);
-+
-+	return ret;
-+}
-+
-+static umode_t wsa884x_hwmon_is_visible(const void *data,
-+					enum hwmon_sensor_types type, u32 attr,
-+					int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int wsa884x_hwmon_read(struct device *dev,
-+			      enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *temp)
-+{
-+	int ret;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		ret = wsa884x_get_temp(dev_get_drvdata(dev), temp);
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct hwmon_channel_info *const wsa884x_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops wsa884x_hwmon_ops = {
-+	.is_visible	= wsa884x_hwmon_is_visible,
-+	.read		= wsa884x_hwmon_read,
-+};
-+
-+static const struct hwmon_chip_info wsa884x_hwmon_chip_info = {
-+	.ops	= &wsa884x_hwmon_ops,
-+	.info	= wsa884x_hwmon_info,
-+};
-+
- static void wsa884x_reset_powerdown(void *data)
- {
- 	struct wsa884x_priv *wsa884x = data;
-@@ -1866,6 +2053,8 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	if (!wsa884x)
- 		return -ENOMEM;
- 
-+	mutex_init(&wsa884x->sp_lock);
-+
- 	for (i = 0; i < WSA884X_SUPPLIES_NUM; i++)
- 		wsa884x->supplies[i].supply = wsa884x_supply_name[i];
- 
-@@ -1923,6 +2112,18 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	regcache_cache_only(wsa884x->regmap, true);
- 	wsa884x->hw_init = true;
- 
-+	if (IS_REACHABLE(CONFIG_HWMON)) {
-+		struct device *hwmon;
-+
-+		hwmon = devm_hwmon_device_register_with_info(dev, "wsa884x",
-+							     wsa884x,
-+							     &wsa884x_hwmon_chip_info,
-+							     NULL);
-+		if (IS_ERR(hwmon))
-+			return dev_err_probe(dev, PTR_ERR(hwmon),
-+					     "Failed to register hwmon sensor\n");
-+	}
-+
- 	pm_runtime_set_autosuspend_delay(dev, 3000);
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_mark_last_busy(dev);
+Not sure why ternary here, it's not well readable in my opinion.
+
+	if (attr == hwmon_fan_input && i915_mmio_reg_valid(hwmon->rg.fan_speed))
+		return 0444;
+
+	return 0;
+
+looks better, no?
+
+> +}
+
+...
+
+> +	/*
+> +	 * HW register value is accumulated count of pulses from
+> +	 * PWM fan with the scale of 2 pulses per rotation.
+> +	 */
+> +	rotations = pulses >> 1;
+
+In accordance with the comment the
+
+	rotations = pulses / 2;
+
+looks better.
+
+...
+
+(1)
+
+> +	time = time_now - fi->time_prev;
+> +
+
+I think location of this blank line is better at (1) above.
+
+> +	if (unlikely(!time)) {
+> +		ret = -EAGAIN;
+> +		goto exit;
+> +	}
+
+...
+
+> +	/* Convert to minutes for calculating RPM */
+> +	*val = DIV_ROUND_UP(rotations * (60 * MSEC_PER_SEC), time);
+
+Have you considered to keep jiffies in the fi and use something from jiffies.h
+here? To me it feels like we multiply and divide when it can be avoided.
+Please, think about it (I haven't checked myself, just an idea to share).
+
+Also comment probably needs to be expanded to explain the formulas behind all
+this.
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
