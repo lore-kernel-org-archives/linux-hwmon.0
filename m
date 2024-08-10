@@ -1,87 +1,143 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DE97E9
-	for <linux-hwmon@vger.kernel.org>; Sat, 10 Aug 2024 00:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D291DA58;
+	Sat, 10 Aug 2024 01:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723250086; cv=none; b=cIv6fPPp0OkGbxk6ktbWb8nX3/t6dFjEu9l+VaUAutYocrVYT8/DRpDj6HhbDYONunVayF7Bz7Cohkqtg+vOhtyeN3YnAmpyk/2i02bPxJROeYgDMPrQltfMA21HXKtzjNj0oyvHnn/9Ls9n2zPqRE4lEC30Ly1ndKwWstZaKyk=
+	t=1723251867; cv=none; b=usgZ8ZoDuezr+FK1AhleFbG2SqVqjieNvW9R5AuVpEpb3y+8ev8VSq99B3QcD93qNAaTMKRKCymXUNgFqccrd5XaZhQ9mbM1EDT3Lvm2IBPsfNwebE4porSnKpvaJ+RWhOavPRN57IJ2NStOnlF9CXG7hb6h0ok3P5Y+zDdCm6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723250086; c=relaxed/simple;
-	bh=oSHrVPTVyklLnpD7FP4CqUxmFTVvNZMZ/lHd7SK2dfo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=L9PEy0kQcU9IJE9sNLf+V9SKiJet0eiWsgaB1AmJeTS8BAjb8ddS1nomIVnwSUZ2mwpFtFZmyle2+9cyBA6KzaWr2Bo3LCEudToXkxKqBB12iQohG2iSK69YDz/eKbVR6A7FdFDtGrSqUM+peMxMMX9lV0iKBlJ7rN/8OuHL59M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net; spf=pass smtp.mailfrom=iwanders.net; dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b=OB+JvSWk; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iwanders.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwanders.net
+	s=arc-20240116; t=1723251867; c=relaxed/simple;
+	bh=8UQ6Gh5JmTBWQc8KqZpDbl+68IWTdtUmmYvg4y4U8t4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q4gYbWC7Oz9eQCfasFb2ZZ8s86FxcVD5ku7HZIFryk4znXfuW8bp1w2Ggp4B/NuJirz1gVY8sDxlWO9Cv+bCs/zOHYP26n1yKBRnqH7+Mxqq8Bu8rDwumzaZD0MrRUSV/2+UgeCpNXgCGNqTnj8oiwo1OQDxd1zWuOo/0Nbmir4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GUVfSrnD; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iwanders.net header.i=@iwanders.net header.b="OB+JvSWk"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6b7a3b75133so17120806d6.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Aug 2024 17:34:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GUVfSrnD"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-369c609d0c7so1946935f8f.3;
+        Fri, 09 Aug 2024 18:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iwanders.net; s=google; t=1723250084; x=1723854884; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oSHrVPTVyklLnpD7FP4CqUxmFTVvNZMZ/lHd7SK2dfo=;
-        b=OB+JvSWkbGl+7y+bxnsBCntJJ9Wbjvp9rYcVjn5VetFDv/2sUrtT7fEqVlc1F6QyqF
-         PM4d5Ggy+h4iPRJld6IVMw0psZfiNmMHZyfTbiOSHif32pIBuoqgRj108jgzI9frXWM/
-         kg7JgQ4uRMwjQ5g1tTVS1SwBKzIMn+44DUkNc=
+        d=gmail.com; s=20230601; t=1723251863; x=1723856663; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kxH8ZI6GvvlQj37P1FOk5R8rQRGuhYdScgrObjHN0VM=;
+        b=GUVfSrnDHGwfuem14r1B8CKiu3C7r94SQRaV5hHlLFAKNyaJdOr8s6+OTzEkY+0zwH
+         pFMd/FKn68AhOa7eV8Nw0SE9jjXhNTg6TXo8Fer/OZ7uvZymORHZmDOL2yBHWE7c0SZ4
+         VHzQR157O2BRDxME8h2a5gqY9Y2gA6hh9lBEKonP8LE/Shic3/ihyBK0H+qDjBvW3RXT
+         Oz7WCzKl3ffUdxuT1cl5wfTCUg8kPcRJYEpVd7b7/mpgp7GunLwC7Mdl89jzWlW5TLba
+         aekO/PoKpgZHNCJtqfO0+kkWXwYsSQkau/CfqV1jVCeKInxco3Fm0rpzOLVhPanoIfvR
+         NOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723250084; x=1723854884;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        d=1e100.net; s=20230601; t=1723251863; x=1723856663;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oSHrVPTVyklLnpD7FP4CqUxmFTVvNZMZ/lHd7SK2dfo=;
-        b=XEcIyMQ7i8y9Uqa+i/hQ4DJr0Fzb1IP4/80B8sfCu7bJieGucMGQDqUv+G+6bN/PFl
-         PP6L+HD+rDjxCAQRNgVbQGjFmtzb0WBirNZsePcjksOLAovINfXnAeDy3+H4sb/frARJ
-         iGgkGGAq5y1WG6Nx4+XMrFUsjq5ti9cFA9RwrZejw6RcFW8BE4k9IBkrY4YVTw0DuoSF
-         X3LzD8qSxqSb9obI20TZv7sDsWRxoM20dz99rMBNQStf6PXqb4WaYk38yYyMGEvo1Fd1
-         6Qj5M+CmD8+ElFi1OTzXsHcacUVkqo0zIbTZdvZvK35uKGX7HiPHvQ+nh/Q7KAk4USQY
-         zPVw==
-X-Forwarded-Encrypted: i=1; AJvYcCVpvmSRAvrTPYGyqzfUunTRjZQLH/cn/MRBjg7MczqN6CRNv22XfeKnLbR/cVvhfyBsZ/i6lZbZvk9myiqq2RtSZr6fhOeAItsbUJk=
-X-Gm-Message-State: AOJu0YxNHJITRFxU5rONBRf24cnhTA4sqLzIhTffSm6qz0Wv4RdEAWow
-	ahjV48Kgi28fZae/JfjA13nxDENjfNbGuwSuYYmMO1e0KH1ySfu8E54G92fXC7w=
-X-Google-Smtp-Source: AGHT+IGLYIiSBYXL7L13kFVDwOYWS4+0ru5AwylZmzY3NHi4+KAgDtksYaNenf3nZLTIuGRZOXWeqA==
-X-Received: by 2002:a05:6214:440d:b0:6b7:a3f1:3251 with SMTP id 6a1803df08f44-6bd78f079e2mr35735196d6.51.1723250083657;
-        Fri, 09 Aug 2024 17:34:43 -0700 (PDT)
-Received: from eagle.lan (24-246-30-234.cable.teksavvy.com. [24.246.30.234])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bd82e54586sm2703456d6.109.2024.08.09.17.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 17:34:42 -0700 (PDT)
-From: Ivor Wanders <ivor@iwanders.net>
-To: konradybcio@kernel.org
-Cc: hdegoede@redhat.com,
-	ivor@iwanders.net,
-	jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	luzmaximilian@gmail.com
-Subject: Re: [PATCH v2] hwmon: Add thermal sensor driver for Surface Aggregator Module
-Date: Fri,  9 Aug 2024 20:34:35 -0400
-Message-Id: <20240810003435.10539-1-ivor@iwanders.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <6027d9db-b1a8-4eb0-a0b7-451f1524834c@kernel.org>
-References: <6027d9db-b1a8-4eb0-a0b7-451f1524834c@kernel.org>
+        bh=kxH8ZI6GvvlQj37P1FOk5R8rQRGuhYdScgrObjHN0VM=;
+        b=BdBtpVwlWV51llLokMH27UvPXh+j+KLKqZSHfAWjVUvq4hKRH46bFTdYAwIVqU3DAG
+         zv+EGUGMmHBJrPs5Vec7XYFEt4TWcEyMEjqqCRxIhDMQo20mOYNyD3NnVQunGcTX4fUC
+         ILbKa8+VSlwofiTMJmbvqwmrue/yAI9a2efT+yrLNl+Ckq9AEmCpYaK90nO6oadQ6neh
+         ZL1fE/55iv+5Qh5z7isGqk2MmlW4nm2dtM++COz8fz6a00iu4QB029mBYC2z5vrTU7oA
+         bs2+agiITcZ500Z780to0U8uQwm43HQAk7lgArn0RcQqOWbZPX73u1e+8FKbHEUIdDzw
+         qNXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpbltlXpneh84JnpVPOjOpG2SYsOn/Pbay6pNlLpFzsO3iyF3MXUsFyq3odrBX/72SfRdIqKBZNlhB37limtvTwo0Xa3bexdUQpvGwmNTeChQgVjMmjrGGMK/Hbjs2IJ1g53d8xb4OL3g=
+X-Gm-Message-State: AOJu0YydYTyTFBsfAd/mxgCLuFt3xLoLn8eBhkYZbTs28VCf5cNV3e2q
+	d7BRMa7POymrPf9rsQEykqpAo6hcV2Nhfdh1KriuS2W4Ze1uMO9K
+X-Google-Smtp-Source: AGHT+IGHMqxtIRrNI8/9flAsYnKITLakK0Q+G95RCtqROL5xrwBxOIv1gMPdqfVaILhtlwrnZ+4EsA==
+X-Received: by 2002:a5d:540a:0:b0:360:75b1:77fb with SMTP id ffacd0b85a97d-36d5db7ac26mr3031551f8f.8.1723251862517;
+        Fri, 09 Aug 2024 18:04:22 -0700 (PDT)
+Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c750e57fsm10102405e9.12.2024.08.09.18.04.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Aug 2024 18:04:21 -0700 (PDT)
+Message-ID: <4464d0f5-1a40-40b9-8d53-7f0d75b9d062@gmail.com>
+Date: Sat, 10 Aug 2024 03:04:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: Add thermal sensor driver for Surface
+ Aggregator Module
+To: Konrad Dybcio <konradybcio@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Hans de Goede <hdegoede@redhat.com>,
+ Ivor Wanders <ivor@iwanders.net>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20240804230832.247852-1-luzmaximilian@gmail.com>
+ <6027d9db-b1a8-4eb0-a0b7-451f1524834c@kernel.org>
+Content-Language: en-US
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <6027d9db-b1a8-4eb0-a0b7-451f1524834c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> Gave it a shot on SL7, some names are repeated and one sensor is totally busted
+On 8/10/24 1:35 AM, Konrad Dybcio wrote:
+> On 5.08.2024 1:08 AM, Maximilian Luz wrote:
+>> Some of the newer Microsoft Surface devices (such as the Surface Book
+>> 3 and Pro 9) have thermal sensors connected via the Surface Aggregator
+>> Module (the embedded controller on those devices). Add a basic driver
+>> to read out the temperature values of those sensors.
+>>
+>> The EC can have up to 16 thermal sensors connected via a single
+>> sub-device, each providing temperature readings and a label string.
+>>
+>> Link: https://github.com/linux-surface/surface-aggregator-module/issues/59
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>> Co-developed-by: Ivor Wanders <ivor@iwanders.net>
+>> Signed-off-by: Ivor Wanders <ivor@iwanders.net>
+>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+>>
+>> ---
+> 
+> Gave it a shot on SL7, some names are repeated and one sensor is
+> totally busted
+> 
+> /sys/class/hwmon/hwmon66/name:surface_thermal
+> /sys/class/hwmon/hwmon66/temp10_input:32200
+> /sys/class/hwmon/hwmon66/temp10_label:I_RTS2
+> /sys/class/hwmon/hwmon66/temp11_input:31600
+> /sys/class/hwmon/hwmon66/temp11_label:I_RTS3
+> /sys/class/hwmon/hwmon66/temp12_input:38000
+> /sys/class/hwmon/hwmon66/temp12_label:I_RTS4
+> /sys/class/hwmon/hwmon66/temp1_input:43900
+> /sys/class/hwmon/hwmon66/temp1_label:I_RTS1
+> /sys/class/hwmon/hwmon66/temp2_input:44000
+> /sys/class/hwmon/hwmon66/temp2_label:I_RTS2
+> /sys/class/hwmon/hwmon66/temp3_input:47300
+> /sys/class/hwmon/hwmon66/temp3_label:I_RTS3
+> /sys/class/hwmon/hwmon66/temp4_input:-273100
+> /sys/class/hwmon/hwmon66/temp4_label:I_RTS4
+> /sys/class/hwmon/hwmon66/temp5_input:31300
+> /sys/class/hwmon/hwmon66/temp5_label:I_RTS5
+> /sys/class/hwmon/hwmon66/temp9_input:37100
+> /sys/class/hwmon/hwmon66/temp9_label:I_RTS1
 
-Interesting, thanks for testing. I'm not sure if this is the right place for discussing this, or
-whether we should take this to the downstream thread (link in cover letter or in [2]).
+Hmm, on the SPX it looks like this:
 
-I have duplicates for RTS{1..3} as well, so you're not alone there, for me it's also sensor 1 and 9
-forming a duplicated name pair [1], this makes me wonder if the names are always of the form
-`I_RTS#` where # is (id % 8 + 1), if that is the case for all surface models the names may not be
-that much of a value add?
+I_RTS1:       +31.9°C
+I_RTS2:       +31.3°C
+I_RTS3:       +31.4°C
+I_RTS4:       +28.3°C
+I_RTS5:       +29.3°C
+I_RTS6:       +29.3°C
+I_RTS7:       +29.3°C
+I_RTS8:       +29.3°C
+VTS1:         +30.2°C
+VTS2:          +0.0°C
+VTS3:          +0.0°C
+VTS4:          +0.0°C
+VTS5:          +0.0°C
 
-The surface diagnostics tool actually doesn't request these names: it has hardcoded names for just
-three sensor ids that are part of the diagnostics [2], but I don't know if those three id's are
-stable across the various devices though.
+So VTS2-5 seem like they may not actually be connected, but the rest at
+least look somewhat sensible. I'd probably still keep the names as they
+at least might give an indication what the sensors could be for.
 
-~Ivor
+But there's a good chance that we're missing something on how MS
+envisions these sensors to work exactly.
 
-[1]: https://github.com/linux-surface/surface-aggregator-module/pull/68#issue-2054614428
-[2]: https://github.com/linux-surface/surface-aggregator-module/issues/59#issuecomment-1974827016
+Regards,
+Max
