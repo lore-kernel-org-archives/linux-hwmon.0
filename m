@@ -1,100 +1,120 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F0B1370;
-	Sat, 10 Aug 2024 23:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8C413D285;
+	Sat, 10 Aug 2024 23:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723332213; cv=none; b=Hv5XVeeU49ATZjAaFJV7oztYh72dgz2G9k68xr80Jf6Hf+ocZ/w8IS3n7Dps+aq3m8UH8gb3IpObJxlXKKtIxzzVcl5TXTJuuFsMi8sKXkb8FvWJoib0xLTYKflh0oZ2GS1HLR6v+VweyzLb9z56qbnCR2H1S5CAAA4ZoA84h9A=
+	t=1723334052; cv=none; b=PKKNbNiCg9XByOhPTn1Qz44guYBGyeuTUpz7p4mEnEj4qXe3A2G8XgB4ecTOEOaoLlCce4lB4pAgi/GxVVDrx9tHy/d6ILKzvAL+39Wuz9Zp/inY826jjdHTkMFskxsThB51n7ou499EKepd9ZlRYCWgDiUXd1ITyO/m1dyA7KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723332213; c=relaxed/simple;
-	bh=8x/4BAzgBy+Z525erO8Dx6lrQPJUvjoVl/OBSwO84G0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GwNPNCMlmXc9JSWfrYH5ggCSB6FerCxLF/Ibhmh0ck1J9e0GreWu2ns7XyqgZOTFo6C1kNMhPS/zXCkDvQBopFmthJuB/dTl9Z3us3KK1avCAPJPDVw2FDEbBrNTqamo0kR8Qmjz+nDxDSXFvaJHh36udfqG2kv/02OlPVpBwgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dui8VF4r; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723334052; c=relaxed/simple;
+	bh=jELHr4OfQX75YNJR6rcQVmwfUsLpvDrUG7RynsU1oys=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U7PzPrxiCSQ4WvXhlG/ApfD5Ea2EPahTesnhh1TqZvpBiP4aZbN71Eh2bGlDCasIaJnIprCGg04QlmqeKe7jwmfSBr77Ya6g8fYbImR8ZhuM1cS05zfBjMeE9+uw3gXufBiE8CGyet3Mxuu+G25e4xFHdc+upiif/XjLaZvHtAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g0i3Jm4k; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dui8VF4r"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7ad02501c3so406606266b.2;
-        Sat, 10 Aug 2024 16:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723332209; x=1723937009; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=maa/cnPjxVZZnXA/kZaSCf1M+tAAW9uKRTzieR0VU8U=;
-        b=Dui8VF4rBPYVf8gR5lxVAVe38PO3qLwubqftwdCUGVBhx3u7cs3LY5DV8y7Rieq/YF
-         ZqwA/zBRtEkjBsP0dbv41kpT1Ni7zAY/zkKnK1fNt9oo/4k5/bNbEh1bd7KxyamsF5pG
-         uEWyyDmFnTi8H3JpROF3XF1l08qRL+cZ0hOwdxkTzqns9TtuBiiNvc5uRR7rdS+JlNFx
-         aZaHijMlq2FM3F+vaPOFlS8yME67869KkjMXxLcxoBO1LEAd9eblocLBwl5eLzRFuNO3
-         FUywaIptbLHSpBo2E3y9EWNJd9Ti36P6HSof+nwkQ5AtBYvpsXQcmbATOZ+uVIwniVs3
-         3OGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723332209; x=1723937009;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maa/cnPjxVZZnXA/kZaSCf1M+tAAW9uKRTzieR0VU8U=;
-        b=UVF69vNINqrPxLwuo8b47mKzyhTBHVOMZexXt+hvtBO4s1NjJjwyrHnaayrZy0JjJC
-         cst4m6P5piP3iZ2NhlbNK3TJJoXW/bRJ17P2JHt4O0mwD1U6XsYNpg/o0Ro2NVA+YRa/
-         VnHs5DT2JiksxtVXbfXnzS14j4pY+3uNRp3TYR0JPEu/oTMqPvIkONRgD3qVSNJwPcEw
-         zDSnB3sSjDta5YUieUVmjWE2XpCoCFrtVxTpJmqetem07ga07x9C+ARffVuOD8W5gBTU
-         f/84yuugNKFbmCKnC6gPx6+7iSkGNDprsnXbEkMzQ99/XXEVLrQ1DmCtYSclqBElZWAQ
-         yuQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyan5Ncl2+P7Ib0vV+ka8z5systXVWZHuZdYe6pS84nsRARea/BmR9jEj2OMqFfWFWmBNdyiD59GgmoT4lRvraD/xkRWWaDqE7jVwwCdszYBysrOqOukauGrQNitHTCdyZi0AWdQkiouQ=
-X-Gm-Message-State: AOJu0YynEuH+4YmOQfFYG2HT2fzjQE5omWDTEUp07DuDlqqLM+EMIti+
-	EHJ9hT1k+c2bscD9JXcyuIbgRq0cH1nncAVgV2101/Dx9lVFtfP9
-X-Google-Smtp-Source: AGHT+IGPnLj7xdNXn21eaH4JRwopcpgOSWElYWSTAV0U5hGmGZW9t2N4bG12G2mbEGMH7Te+sWXY6A==
-X-Received: by 2002:a17:907:802:b0:a7a:9ca6:524 with SMTP id a640c23a62f3a-a80aa55a33fmr474255966b.14.1723332208783;
-        Sat, 10 Aug 2024 16:23:28 -0700 (PDT)
-Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80bb2437bcsm102710666b.209.2024.08.10.16.23.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Aug 2024 16:23:28 -0700 (PDT)
-Message-ID: <5fe4c524-ced6-4666-b8fe-ab95c8d1cff1@gmail.com>
-Date: Sun, 11 Aug 2024 01:23:27 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g0i3Jm4k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723334051; x=1754870051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jELHr4OfQX75YNJR6rcQVmwfUsLpvDrUG7RynsU1oys=;
+  b=g0i3Jm4korPxmB/boX1M0VkdXUagtAfsYr0BPy6Iu85CYAB5wH+VcQtI
+   syANQrMw0FAun/yhUKYoqZz9zBKs/fI8DZJQQugGzGQSAYb0sPO6Uyg3+
+   jK7GVeWWDrexHILIBCfxnEcdyKeykAi0nxDm/MB+XVGgtbTnC7d04QCT3
+   ZOvP+Xim+9xHianOZxZ5n59nPy+oxJbnzFFf5A+MNice2U0EAoPCaLp95
+   l4VxNxSuFbl7AqQUfEcZg3Rh+tbXtlnOyiVkimGlfIRLr+HwnL9oRRQVD
+   z8lguE6us5+snx3KJQNJpIo9PqOXQqNMrDmbDwG1DnDI5kgGoUBhvxujL
+   w==;
+X-CSE-ConnectionGUID: HzQKKNy5Rnilm/Fb5GQSAw==
+X-CSE-MsgGUID: EDXbe70DSvWgOEjl6TQvPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="25341572"
+X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
+   d="scan'208";a="25341572"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 16:54:10 -0700
+X-CSE-ConnectionGUID: G3SzeE3bQJKREYtogpp9JA==
+X-CSE-MsgGUID: 80sDJ7y7RxqrcWtRJ7Bj1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
+   d="scan'208";a="62566866"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Aug 2024 16:54:09 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scvuQ-000AOn-2W;
+	Sat, 10 Aug 2024 23:54:06 +0000
+Date: Sun, 11 Aug 2024 07:53:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maximilian Luz <luzmaximilian@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: oe-kbuild-all@lists.linux.dev, Maximilian Luz <luzmaximilian@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (surface_fan) Change dependency on
+ SURFACE_AGGREGATOR_BUS to 'select'
+Message-ID: <202408110753.1wxzPUwV-lkp@intel.com>
+References: <20240810214709.425095-1-luzmaximilian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: Add thermal sensor driver for Surface
- Aggregator Module
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Hans de Goede <hdegoede@redhat.com>,
- Ivor Wanders <ivor@iwanders.net>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240810214748.425520-1-luzmaximilian@gmail.com>
-Content-Language: en-US
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20240810214748.425520-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240810214709.425095-1-luzmaximilian@gmail.com>
 
-On 8/10/24 11:47 PM, Maximilian Luz wrote:
+Hi Maximilian,
 
-[...]
+kernel test robot noticed the following build errors:
 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index e4d9a035a57a..5ac9ce8fa0a9 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2080,6 +2080,17 @@ config SENSORS_SURFACE_FAN
->   
->   	  Select M or Y here, if you want to be able to read the fan's speed.
->   
-> +config SENSORS_SURFACE_TEMP
-> +	tristate "Microsoft Surface Thermal Sensor Driver"
-> +	depends on SURFACE_AGGREGATOR
-> +	select SURFACE_AGGREGATOR_BUS
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.11-rc2 next-20240809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It seems that for some reason, this creates a recurrence in Kconfig. I should
-have properly build-tested this before sending it in, sorry. I'll switch to
-"depends on" for now as there seem to be more changes required to make
-"select" work.
+url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Luz/hwmon-surface_fan-Change-dependency-on-SURFACE_AGGREGATOR_BUS-to-select/20240811-054808
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240810214709.425095-1-luzmaximilian%40gmail.com
+patch subject: [PATCH] hwmon: (surface_fan) Change dependency on SURFACE_AGGREGATOR_BUS to 'select'
+config: x86_64-rhel-8.3-rust (attached as .config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110753.1wxzPUwV-lkp@intel.com/reproduce)
 
-Best regards,
-Max
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408110753.1wxzPUwV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error: recursive dependency detected!
+   symbol GPIOLIB is selected by I2C_MUX_LTC4306
+   symbol I2C_MUX_LTC4306 depends on I2C_MUX
+   symbol I2C_MUX is selected by MPU3050_I2C
+   symbol MPU3050_I2C depends on IIO
+   symbol IIO is implied by HID_MCP2221
+   symbol HID_MCP2221 depends on HID
+   symbol HID is selected by SURFACE_HID_CORE
+   symbol SURFACE_HID_CORE is selected by SURFACE_HID
+   symbol SURFACE_HID depends on SURFACE_AGGREGATOR_REGISTRY
+   symbol SURFACE_AGGREGATOR_REGISTRY depends on SURFACE_AGGREGATOR_BUS
+   symbol SURFACE_AGGREGATOR_BUS is selected by SENSORS_SURFACE_FAN
+   symbol SENSORS_SURFACE_FAN depends on HWMON
+   symbol HWMON is selected by EEEPC_LAPTOP
+   symbol EEEPC_LAPTOP depends on ACPI_VIDEO
+   symbol ACPI_VIDEO depends on BACKLIGHT_CLASS_DEVICE
+   symbol BACKLIGHT_CLASS_DEVICE is selected by FB_BACKLIGHT
+   symbol FB_BACKLIGHT is selected by FB_SSD1307
+   symbol FB_SSD1307 depends on GPIOLIB
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
