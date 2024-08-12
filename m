@@ -1,120 +1,101 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C744188007
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Aug 2024 17:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C023191F85;
+	Mon, 12 Aug 2024 20:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723484229; cv=none; b=QI9WPre6dFKZF+zMb6yk4Y8Mzq5hrx6oWa0yfu4lWfMwAHA8n4GeG7LAHx3WWPd7094HeVkBTv0cxebvTy+c62G9aYXBRNEqzpJe+GulpSgC/JKc10puV/O8LvQop2ihOzbhcEhrreEt7qecqPSPQWjS7bZ16OgTivbcI0W3Jxc=
+	t=1723492804; cv=none; b=Y69EVtlaZCy7Ht0AqBKxq7Q2v31IY/0u/5Nnz0rfZm5Fuy6mBBkkDLU1n+zdl56H5fYiHmUpgVVcmG1JdnAbJQ0jW5+PVhA2Jd0BhOf5htGKVKqsmwLg40hzwq7HwjFQ2sP+csgiDLh/eLHBoNiuQYkrA3nF5eHHBt5Sv5kvsGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723484229; c=relaxed/simple;
-	bh=X+tCnDWQvroKBLhT2+NKJ34gv0lM9SYFG/oysxvfa68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oX9BDiGZ/WaZ36G8/wdy65TUbL75Q2WuY8/HTdwkm50wRgZ86vLga0CdQX5ERVYopBWxwGHd2huFJUb0wPxXz2BRJzP+sbzbgtrzQL8yW2sTPr/mWgmYtolJy5KGmNrgCHgwZtmmV8oinv3BfgaN048OqM4Vw1VsyA8ivOYSvo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ZI4PNX5Q; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1723492804; c=relaxed/simple;
+	bh=avFD1LlUcf1dSl/c1/+dZbZxf3+J/nDqkccuNJZUydQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fnw3Wzk8o7AORH24RpTCPtbAEpa/9rhZSpXeqKTL0CjLYE1aBKr/kHWEgz1La7rbgkviVQQUasbuMJOax+HXMa3ywmP54p7CDT2hijKgRm6AKpFPJhYg1Ww+oU9csG4qWo5lycXAneHkQwtbEjioj8tDZkog0Tn60TJbf4BduxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wvl86XgM; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ZI4PNX5Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=X+tC
-	nDWQvroKBLhT2+NKJ34gv0lM9SYFG/oysxvfa68=; b=ZI4PNX5QAJ2kYGaRJ78/
-	jrL1WU84XbC/GvCvgCLQIpkRFAjMJ75pvqVVGjHD0AfbPhNyQzSb04fi/rSjeBSq
-	kH3A0WVSe/GvDA5htlN99bIIcZRYdLGeT1g/xhV61wzsx0LyPGvQvOyPNlFyGzxy
-	DLUIreB96yAuBFzYKUYJPL55dRD5Z+Lsx5o7cjYokQnTnSLUfPBYem/g5e8DaLxv
-	30y9ana3kYoFvNWHHpfu0H2aH5H4K30ETFQSPuBxS8HGza08rqT6jplBq5rpmTdJ
-	wZR0dwLqbiIIbN5QmAt5aOchLz8AvSUtCt30GV+zy6+uoEX9kgZpmJHcYqNU1hWc
-	ug==
-Received: (qmail 1432277 invoked from network); 12 Aug 2024 19:37:02 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Aug 2024 19:37:02 +0200
-X-UD-Smtp-Session: l3s3148p1@Rmfc8H8ftusujnvj
-Date: Mon, 12 Aug 2024 19:37:01 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Quentin Schulz <quentin.schulz@cherry.de>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v6 2/8] i2c: muxes: add support for tsd,mule-i2c
- multiplexer
-Message-ID: <ZrpIPTOTN20GoWqR@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-References: <20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de>
- <20240725-dev-mule-i2c-mux-v6-2-f9f6d7b60fb2@cherry.de>
- <728a8e06-81f1-4771-8031-ea043b9baf20@cherry.de>
- <3a36e89b-b4e2-4eb8-9197-a7a1d04a7fb6@kernel.org>
- <ZrnekeUKciV4eAKC@shikoro>
- <f6dfc6cc-365d-4f0a-9a4c-dc34cf4c5b7d@kernel.org>
- <Zrn-ZkgYKVquarDX@ninjato>
- <426eb8b6-9b2f-4594-9cc3-320ef0cee835@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wvl86XgM"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-36d2a601c31so2440640f8f.0;
+        Mon, 12 Aug 2024 13:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723492801; x=1724097601; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ao0ZXFLg7v2QvZz434llCl1Nat8PYLcu6tU4rBBTmg=;
+        b=Wvl86XgMV+PgcVcQNZXRYkgHeV0IevnAqGERWbqKThwRW2mXSVuilUZtyUbNCzWbYL
+         nVh0J1s4APqpP+9rLh94RoZETHXkFqIBL0aoeVFVC+yqJ25OJ2aO7Y2jHGniyN4OZBW/
+         98D9TyDZ07Ul59aoPzXS/TJSZeQFgXjRHbMFubNMu2rZbD9E8KenQ27iGThoPLJcTjoF
+         oVibkUvllIWhc3qZPPcrDCS/rJo4WCja/vz/0KFJBvzBa4/dhgkkCLyI1tCBjN9zUsA4
+         HPw1RlNK/ZGOS0QOeOMRcTkfQUpF1EGLrnZihqRi5D1hVaDOkfLrLyQuEPurHNXOJgwg
+         OHkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723492801; x=1724097601;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ao0ZXFLg7v2QvZz434llCl1Nat8PYLcu6tU4rBBTmg=;
+        b=wD6an6GSnjjRaGSPuFuDJXa3SEPmHHy4rX9Jo1orUEBXx9Yr9B7QCJw2WdBZ0PeG/e
+         b7YjUAfAkVzgKWPU1cods3Bblxtsjj2SjzAL5bwNI/wC6cB/ORBP2W8GqBNIm1N/OYB6
+         EmVpQMevfz+lR6BjoJJT1j8lmkeS1QHM86XwgdY8qyIIKODh+ZsRgn0lPg5sj8iLQ2wK
+         NaPryhRsjZD1I96ZTCKlcS5llmAAQDFov5bcYZZrGasJn4+mMIPQC1WDGDavbIYqd2/E
+         F5Meu4KoFrSRxdF1t7cfF5L+QAQOojAoEGOGTHm1wstVIUO7M9TX+5czW2keIMSzzsMH
+         BamQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUudwlr9MywbiQuI8JS84EvyqTi228p6tGvNCDXvSJQZcG2WVZlqEUIUplm8RF/lIZj8XUpSlSCZ/+uII8sZBy4xvrRAChaS7qZkqyk
+X-Gm-Message-State: AOJu0YxAALlPzbQgDhnqkFJVFll2YCCqhkkFaCxqiSAFM4PyW6mklNQc
+	AKzEww8+7OX4oRo58QOpVs/9g3LTacTOv8vwPXpJXBZXLP0IRV1s
+X-Google-Smtp-Source: AGHT+IGbqZEoLfrQgXObtuQyMnLN8NINsVSBStefN5CaF/7HYlYKpwoWP194Dyl4Kc9MBWjXAc87cw==
+X-Received: by 2002:a5d:4ccf:0:b0:360:7812:6abc with SMTP id ffacd0b85a97d-3716cd2c2bamr945006f8f.60.1723492801109;
+        Mon, 12 Aug 2024 13:00:01 -0700 (PDT)
+Received: from [192.168.0.31] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4ebd330fsm8267251f8f.96.2024.08.12.12.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Aug 2024 13:00:00 -0700 (PDT)
+Message-ID: <9659c699-1ce4-4b74-b697-83d926d80b35@gmail.com>
+Date: Mon, 12 Aug 2024 21:59:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/t9BApsAyYarLt7K"
-Content-Disposition: inline
-In-Reply-To: <426eb8b6-9b2f-4594-9cc3-320ef0cee835@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: chipcap2: disable sensor if request ready irq
+ fails
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com>
+ <20240812-chipcap2-probe-improvements-v1-2-3cdff6d16897@gmail.com>
+ <9b4f88e8-5fc6-4c4a-b89c-7f96675e81ac@roeck-us.net>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <9b4f88e8-5fc6-4c4a-b89c-7f96675e81ac@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 12/08/2024 18:49, Guenter Roeck wrote:
+> On 8/12/24 08:43, Javier Carrasco wrote:
+>> This check is carried out after getting the regulator, and the device
+>> can be disabled if an error occurs.
+>>
+> 
+> I do not see a possible path for a call to cc2_enable() at this point,
+> meaning the regulator won't ever be enabled. Please provide a better
+> explanation why this patch would be necessary.
+> 
+> Guenter
+> 
 
---/t9BApsAyYarLt7K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Guenter,
 
+this patch enforces the state where the dedicated regulator is disabled,
+no matter what the history of the regulator was. If a previous
+regulator_disable() failed, it would still be desirable that the
+regulator gets disabled the next time the driver is probed (i.e. a new
+attempt to disable it on failure).
+cc2_disable() checks first if the regulator is enabled to avoid any
+imbalance.
 
-> No, it's not. It was just a ping. The issue is here not describing
-> dependency, allowing Guenter to take the patch and not even telling him
-> that now next has warning. :/ It's like entire weight is on maintainers
-> and contributors care only about getting their patch inside. Once it is
-> inside, not my problem anymore... :(
-
-I totally get the "weight on maintainers" thing. I just also see that
-for new contributors, it can be hard to see soft dependencies in
-advance. I mean, even we missed it. I guess Guenter is right, we all
-make mistakes, so we fix them. Commits got reverted and we will re-apply
-better.
-
-
---/t9BApsAyYarLt7K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma6SDkACgkQFA3kzBSg
-KbazHg//UBrJXW8DM60tpZPlTELL7+7g6fwFoo/w9eTO2Nus8TPYisMeCP3wFfFj
-otbLP0QqgloZv27D4gogTFE0HoWhLdXxZ/hJAZddOyBsm4qDOzBad9GCVI+a60Ge
-woF4s7L26m8JwUZ6tzEbCf4dUwhI322bbqFgv2c5G94p+jzgm8T+iwyyv0qAMsi+
-nQdB3ElNgt88XAfBoFttsPKoE9+RrUZlHSJhLokEvDatAO+iXmYzbUhLfXDM6pEy
-mJRcWWcs45bxC3mEmQpZ9dvh2ZY8Q8C7o6E0lCubIKEh6LazNNAZnfWt1FQFhiy8
-IntMUuK2zITNsFo6HV5ISNy8IkQxKeOMO+QuCZfQKGeErZP/yV/Uuamdku7A/S1j
-Mk3e1oiHSi4g57gsSKqeC/j1N/rHFoDCgVrh7l1kaQjuwGY9QpZPgYedfzxQ5oMb
-347qEM7Yd905SdXNOoFCYshaEVhDvRNrUHVlZDseKn2XWf3/26/dvevuH3AuLipi
-5ykyvXxUw3/GvAGQEcrx0d6qotT/Ow6hYiCE2fPQ+AqfLsn4F1384q4xXgGwprfT
-ZO6RVwVXkE9V1yaN+8zVs085bNbs97VLy9YPncGroK4kvvuNq4EWKWBEMA+78ucf
-CZ6tcKwph09bY6bcYHQ2RfaSH+19joL6xzWbr2NtHYXaSWSjk6Y=
-=nV8m
------END PGP SIGNATURE-----
-
---/t9BApsAyYarLt7K--
+Best regards,
+Javier Carrasco
