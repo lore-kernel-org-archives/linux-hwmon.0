@@ -1,153 +1,161 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578ED16DEAB;
-	Mon, 12 Aug 2024 22:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F73116B39F;
+	Mon, 12 Aug 2024 23:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723500275; cv=none; b=PtTvzBPtZk3MwNw+KMScDTRMzkBooNOOL/WZqHRxj7Igo2i/5sGzQ5+OnTKnmOANRqyApK+7ghab11jN+0QAfzqeK9ZA3FDBWweRdZBvboOSNaKBhLvg8as7lMtUMh9EG4loe82nUI2eIdngA1volIzuss5EfjqL40nEvXhB9Oo=
+	t=1723503609; cv=none; b=iScMll58G9Tw0uXU/2ypdY74YCyXBzT/FshisP5AQsoCqvITUuHtw4/Bz9q36KARrFdwPnCs8SyjO/Xp8mP7XI35jt1FlAjaHNcmMcjDmGf82nAmaUWYq0UTVGSAVhXeTm3l6C8qaoStRY23hGzo9hfg2LxBgyui43A/6oivnAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723500275; c=relaxed/simple;
-	bh=s356l82982ex54FrtcWCDDd+kcMjvFBOhngs5HfNkNE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tKnPHNh3ekl2CouvGFlyxkL7tly46bpZbXDpOkt5IqUGKM5chU/c7aDmqHf7PibFEMf84MSroax0lgOwuZbd7ZMyKbhQmm3hI7kuBAkH9tnIByISAvtvmo9HLNZh8OdTRX8vL0rCed4OxFAs3AgOmSFJ+OmFVugorGnO6oq9+e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kp0ESuQF; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1723503609; c=relaxed/simple;
+	bh=6rvVT3g8PMFlULyNgTXkS+21xtqlNqEdKiOf00PNAtQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iJP5tVZMO7lOJrFbgBPagAxddZ7+36b8BSbTr6dGakHnfsom7oprGZYO1Zb2Or4pMd2qAr+rXCEuiT4bwCLbFF6FNBu5juffjrObsCM6ZsdB0d9jIgZ0/irYou/97UGdv66bfGb/vfLmfIu6KDDPKvkMq1k3hU/v4G1WzwFcjLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RP0qZZyH; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kp0ESuQF"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-530e2548dfdso5070341e87.1;
-        Mon, 12 Aug 2024 15:04:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RP0qZZyH"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-36ba3b06186so2629224f8f.2;
+        Mon, 12 Aug 2024 16:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723500271; x=1724105071; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w2sJcbXaYw9J75zTjKpIjNm2QuuWu9ce9ETcgUGYICE=;
-        b=Kp0ESuQFUDa/Roc2Y93m+gqVaz72AnUvGSUhGjsmhdmHWzSVG06Iukzo8L904q8pIa
-         2qSChPOiafqLCs9v77CNsM5CuFPbT+id74oQFfXgw+69Apb7nu6VXx7n4imM/Bhr3Qca
-         TZo1VcuwvgB5D7qxNsNZvDlg7OxlFQVsXWRiMy+4RSqWyChOrPjKFNEhrelc3tajqYTf
-         0EBClh2wXkPS30LTarW8wyoRy82B8uObKC8oUKKryYmxxq/yYOBCc63Jdo5s8m/WfLT/
-         LHDpcWHUSkdh0T7Chx+cRBqRCC5yVPRJfcGIGINeP2uOY4YfjgRffEbjfFhooPoeVMSY
-         IYIA==
+        d=gmail.com; s=20230601; t=1723503606; x=1724108406; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V7JUF/TPnGtlf/M2nkRGL+e/Djk5IUojalKzK15LptQ=;
+        b=RP0qZZyHHzKpzj7Ffn5c5bje4+wCCGFb04yhqHJUnlHrW9UrBo51bBBEehr2zlIABY
+         xXucgoC3YZ7lWCo2xQg2uXcTXZjZDssYLydKFYPQGlFimpmYHbx/ZWqgZ52MjrLrr1fC
+         aE4n+Gds4t+XyoYFOZ/Vo9C7AsSwx5W2xcj5R/Wy41g62TdmIdEkQAel55KAHKSlLdOG
+         SK62l4DMhvS9VnzuFp5foDu4kkz+sr8J7KbtPoE55Xqggm1wv0sFTRZHL4xoHfWahjbm
+         defN01cG1sPyNXCRGdDEbaSdP4XP7yWh764QkWJidJUcg1W6AEFnf84i2MfKBtJBSnCJ
+         kHBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723500271; x=1724105071;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2sJcbXaYw9J75zTjKpIjNm2QuuWu9ce9ETcgUGYICE=;
-        b=lw/+U+T6Ub6ZKqey4wnrtoVZkYTba3gy4FOOfS46vUnMgPX1b1GKhMHkZagZ1+d7uU
-         7NrxXFeQDE8is4GxPTlZFPeSAuqlz7a4tetH2YAG4o1ieNlXuMWuB8uI0b7+Iyu9WuU0
-         v7J5qUgDSnvMmJOA/lNJBrDreFAscNczDmFOY5ly9wkMn8wczStHiJtaTfk/znDaWJKI
-         AGxeE3Q2njK3yNpWqnycPJfywU8skMReRxj6zUHNf9ZSzztdsOWWUWiwgXljijmFWJ5I
-         tx5+Z8UVwGRRi8vNHRmtonQSAsSFpPjbaPJ0wu/IhunAYV9yJShbDKt8QmcYvl+8drup
-         0r6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW8CR9qaJkM0KGe50qYWrFG0/sIl66xJRlGiMQ87z5BpCfMDa/TPm+/9dChkK9czIYAviRKN83bSMM7Lw15gH5+TGSba9vlO1dZWO0O
-X-Gm-Message-State: AOJu0YyEbouKTuqzqLzMek9Iw55RZpnpMrib+wcSP1qmv8IkVLfd9Lsa
-	OZWSPU/GAZS+mTVBHh4FUu5DzdM26I6BQl4XSe8C8Phw5zlsTgqxb/w1QA==
-X-Google-Smtp-Source: AGHT+IF64eeMGuR5Ozqv3G42ytGbfL5UFf2rkE56ljjgH0sh5epW013JhZq5DT+Ui9g0uFF8bjkRRw==
-X-Received: by 2002:a05:6512:131b:b0:52b:c1cc:51f1 with SMTP id 2adb3069b0e04-532136582e5mr943442e87.23.1723500270891;
-        Mon, 12 Aug 2024 15:04:30 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f3fa4646sm14573466b.54.2024.08.12.15.04.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Aug 2024 15:04:30 -0700 (PDT)
-Message-ID: <d90b6e77-be5f-4f47-8f9f-6fb926a0690f@gmail.com>
-Date: Tue, 13 Aug 2024 00:04:29 +0200
+        d=1e100.net; s=20230601; t=1723503606; x=1724108406;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V7JUF/TPnGtlf/M2nkRGL+e/Djk5IUojalKzK15LptQ=;
+        b=MB++vvSFLPnHIlnYjgybNlhgdNkEhUHaLqa+JNgCBctgZa4wfy/3Uf5pZTIZbDI3fA
+         c+OpKt2gGzcdK7Z0E9PSL8qpaPgRm+ZEYRBeYBXgN6h4BQJTP2zQ43z01greJbl5+Q7F
+         MI2AhilHFwE1Of2UrEOXmT0Dj2aJoSlFQMo1jOA+3bkE1c4S7Km7eJYemt+ar2WycGv7
+         TWdqFYlDBm+hWK7Yl50YKJ+aloW8joySq/rLC97l02Wxd/8HOEXv5PkxsNDQLqcEhGjw
+         HCvaz55QvIQEC/uO9emvBu6dY1tHpayn/Ftw9B2CKb2jvsulMjJE1KbVZsDCeGnmXhBj
+         pmEw==
+X-Forwarded-Encrypted: i=1; AJvYcCW5WomnLGYkUekUgHpvb92vNg/gP//4/R4G9CA1KUoP670AZ8mrfF+b/455s/fsqn8JPWdhchsyJ4g9Wk23WReI/4ydXjMz+ESBHPdq
+X-Gm-Message-State: AOJu0YxLC3+OlrC2EdaDNUzSPwv09r8JsudrDxzboybF2GfjTQTLKSC9
+	Sl//H7QRYjPNZM2OXNcfS1k8l0qYYWHi8GWfdwq6+2bDoS0qcupmuJ+XoQ==
+X-Google-Smtp-Source: AGHT+IGp/3psuYDM81I5PsrD96jw8gvGaVmdphyy2IogDLIHejWAEz5ZL5lA9/pWC4R2r/wjcvwhXQ==
+X-Received: by 2002:a5d:5d85:0:b0:371:6fb7:41af with SMTP id ffacd0b85a97d-3716fb7428emr256682f8f.34.1723503605253;
+        Mon, 12 Aug 2024 16:00:05 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c36bcaasm8643183f8f.7.2024.08.12.16.00.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Aug 2024 16:00:04 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Tue, 13 Aug 2024 00:59:53 +0200
+Subject: [PATCH v2] hwmon: chipcap2: drop cc2_disable() in the probe and
+ return dev_err_probe()
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: chipcap2: disable sensor if request ready irq
- fails
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com>
- <20240812-chipcap2-probe-improvements-v1-2-3cdff6d16897@gmail.com>
- <9b4f88e8-5fc6-4c4a-b89c-7f96675e81ac@roeck-us.net>
- <9659c699-1ce4-4b74-b697-83d926d80b35@gmail.com>
- <eefbeda1-8c09-4b57-83dc-30be9966de2b@roeck-us.net>
- <f6034baa-3a1c-4bd3-8cf2-cd197e8a0945@gmail.com>
- <ba54014c-429b-44ed-a887-e25a4bf033c0@roeck-us.net>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <ba54014c-429b-44ed-a887-e25a4bf033c0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240813-chipcap2-probe-improvements-v2-1-e9a2932a8a00@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOiTumYC/42NQQqDMBBFryKzbooTg9WuvEdxYZOJDjQmJBJax
+ Ls39QRdfd7/8P4OiSJTgnu1Q6TMif1aQF4q0Mu0ziTYFAZZS1V3KIVeOOgpSBGif5bVlczkaN2
+ S0L0yqBq0SBaKIUSy/D7tj7Hwwmnz8XOeZfy1/3kzilo02ljbGmy7/jbMbuLXVXsH43EcX0ocE
+ njGAAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723503604; l=2588;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=6rvVT3g8PMFlULyNgTXkS+21xtqlNqEdKiOf00PNAtQ=;
+ b=LbCrikNkvHR3rdcTB1GwdmGVqwlT0dIed49p/9UNK+k/82mdIwriuQm/ywt1leH+Lyv+Wm+OI
+ P3SmyDYjqDrAK7lJ7XVpYpAKSefBE3ulI1JqqjYvmeuRH3fij299ZLH
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On 12/08/2024 23:26, Guenter Roeck wrote:
-> On 8/12/24 13:48, Javier Carrasco wrote:
->> On 12/08/2024 22:08, Guenter Roeck wrote:
->>> On 8/12/24 12:59, Javier Carrasco wrote:
->>>> On 12/08/2024 18:49, Guenter Roeck wrote:
->>>>> On 8/12/24 08:43, Javier Carrasco wrote:
->>>>>> This check is carried out after getting the regulator, and the device
->>>>>> can be disabled if an error occurs.
->>>>>>
->>>>>
->>>>> I do not see a possible path for a call to cc2_enable() at this point,
->>>>> meaning the regulator won't ever be enabled. Please provide a better
->>>>> explanation why this patch would be necessary.
->>>>>
->>>>> Guenter
->>>>>
->>>>
->>>> Hi Guenter,
->>>>
->>>> this patch enforces the state where the dedicated regulator is
->>>> disabled,
->>>> no matter what the history of the regulator was. If a previous
->>>> regulator_disable() failed, it would still be desirable that the
->>>> regulator gets disabled the next time the driver is probed (i.e. a new
->>>> attempt to disable it on failure).
->>>> cc2_disable() checks first if the regulator is enabled to avoid any
->>>> imbalance.
->>>>
->>>
->>> That is very theoretic. Sorry, I am not going to accept this patch.
->>>
->>> Guenter
->>>
->>
->> I get your point, but given that this device requires a dedicated
->> regulator, I believe it makes sense that it tries to disable it whenever
->> possible if it's not going to be used. I think that makes more sense
->> that just returning an error value without even making sure that de
->> regulator was disabled, doesn't it?
->>
-> 
-> No, it doesn't make any sense whatsoever. What are you planning to do,
-> clutter the kernel with code to disable regulators if instantiating a
-> device
-> fails for whatever reason and it turns out that a regulator which should
-> not have been enabled to start with turns out to be enabled anyway ?
-> 
->> Of course this is not a killer feature, and I don't want to make you
->> waste much time with it. But I think the dedicated regulator should be
->> shut down in all error paths, whatever status it had before.
->>
-> 
-> I strongly disagree. This can only mess up the kernel all over the place.
-> Maybe you can convince other maintainers to accept such code, but please
-> refrain from doing that in my scope of responsibility. If the regulator
-> subsystem has the habit of leaving regulators enabled even after they
-> have been released, that problem should be fixed in the regulator subsystem
-> and not be worked around in individual drivers.
-> 
-> Guenter
-> 
+There is no need to actively disable a regulator that has not been
+enabled by the driver, which makes the call to cc2_disable() in the
+probe function meaningless, because the probe function never enables
+the device's dedicated regulator.
 
-In that case the current behavior is wrong in the opposite direction,
-and disabling the regulator before any call to cc2_enable() follows the
-same invalid assumption.
+Once the call to cc2_disable() is dropped, the error paths can directly
+return dev_err_probe() in all cases.
 
-I will remove the call to cc2_disable() in the probe function, which was
-there exactly to ensure that the regulator gets disabled under all
-circumstances. All error paths will just return, letting the regulator
-untouched if it was not actively enabled.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v2:
+- Drop cc2_disable() in the probe function.
+- Return dev_err_probe() in the error paths.
+- Link to v1: https://lore.kernel.org/r/20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com
+---
+ drivers/hwmon/chipcap2.c | 33 +++++++++++----------------------
+ 1 file changed, 11 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
+index 6ccceae21f70..edf454474f11 100644
+--- a/drivers/hwmon/chipcap2.c
++++ b/drivers/hwmon/chipcap2.c
+@@ -740,37 +740,26 @@ static int cc2_probe(struct i2c_client *client)
+ 	data->client = client;
+ 
+ 	data->regulator = devm_regulator_get_exclusive(dev, "vdd");
+-	if (IS_ERR(data->regulator)) {
+-		dev_err_probe(dev, PTR_ERR(data->regulator),
+-			      "Failed to get regulator\n");
+-		return PTR_ERR(data->regulator);
+-	}
++	if (IS_ERR(data->regulator))
++		return dev_err_probe(dev, PTR_ERR(data->regulator),
++				     "Failed to get regulator\n");
+ 
+ 	ret = cc2_request_ready_irq(data, dev);
+-	if (ret) {
+-		dev_err_probe(dev, ret, "Failed to request ready irq\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to request ready irq\n");
+ 
+ 	ret = cc2_request_alarm_irqs(data, dev);
+-	if (ret) {
+-		dev_err_probe(dev, ret, "Failed to request alarm irqs\n");
+-		goto disable;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to request alarm irqs\n");
+ 
+ 	data->hwmon = devm_hwmon_device_register_with_info(dev, client->name,
+ 							   data, &cc2_chip_info,
+ 							   NULL);
+-	if (IS_ERR(data->hwmon)) {
+-		dev_err_probe(dev, PTR_ERR(data->hwmon),
+-			      "Failed to register hwmon device\n");
+-		ret = PTR_ERR(data->hwmon);
+-	}
+-
+-disable:
+-	cc2_disable(data);
++	if (IS_ERR(data->hwmon))
++		return dev_err_probe(dev, PTR_ERR(data->hwmon),
++				     "Failed to register hwmon device\n");
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static void cc2_remove(struct i2c_client *client)
+
+---
+base-commit: 9e6869691724b12e1f43655eeedc35fade38120c
+change-id: 20240812-chipcap2-probe-improvements-c94d1431f1ef
 
 Best regards,
-Javier Carrasco
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
