@@ -1,98 +1,99 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623E8130AC8;
-	Mon, 12 Aug 2024 15:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19B513E022;
+	Mon, 12 Aug 2024 15:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723476442; cv=none; b=mmzKAkqPdoTCFNTQyOP53k1LruheQ1Njk8nwxYwDEBFV8LeWga7OV7wOuVtrOpKSSSL51nx3V0e9THuPe6ftKa8Nz4TPuBolS98afgO0hzsWsJd+roNsaArrEh5BrHmDJ1Ny+3zkb/cTz6i4N5wCbZRnEMixfSh1/AGVxTix/l8=
+	t=1723477399; cv=none; b=aKGaSHCqti1JCKR+PKa9LzdbxAgO8tSC46LTjLTZhX5F6bYv69wKXfss1nCUXd1XSNBPbd+sJYCXzX0lbtzLCm0e2fJ+O29SarPTqU4K+4IxWM9dXTod4817Jra+Svxp2iiq328Zg0Adr6ctxMZR4jgetFqy+HYQ+fWBy0KjQuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723476442; c=relaxed/simple;
-	bh=SJOT4u2AOnoFTV6NcHUtZJgEsVCS7Ps8uAl3BZ5rzRc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VMRirwtv9bLeJG8iEqw2LsJ1aJ+Qwu1N8FXiM3jeTbarZrzVccf0IL0LMQ4muWJ3PlGnpe8eNFnsUUDUGOzs8bNx0VkgoGILQ/YPb1aR3jiISoaciM+FLepKIZBztn3JEkz0cHKndpevh2id0GF97VObZgxqEFMTeCRVZdeuT0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+j0HDcj; arc=none smtp.client-ip=209.85.208.54
+	s=arc-20240116; t=1723477399; c=relaxed/simple;
+	bh=2atFC6N/vaLVNHJuH0O5e2noPBaxOUdAzlE9V94AAXg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MgB2qBaSQaeP8aueY/LwHO3cG8UfmNsJ2C5WsDa7XW2XXtloY1tUXT3ITWjBAc+zF6Ow9EmNXG8i1Uj0b63jEqqn1XxRvKieGHQMNrB0dG6JZPWjGzFkG/FUwZl9UF5XG8RZbJOUN2aKxpCjt1NhTnfoLsnwFo1yVu7e/yOpjbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzrL3qjd; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+j0HDcj"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5b8c2a611adso5323163a12.1;
-        Mon, 12 Aug 2024 08:27:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzrL3qjd"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42808071810so34482875e9.1;
+        Mon, 12 Aug 2024 08:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723476440; x=1724081240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PbQh4JaQElNnZSJflbJl8EURMl30t+auDTJhns6YUQ0=;
-        b=i+j0HDcje/0Ugf/0u1gCeRhcisLELoJcTCiGt7ElPgWNjBE8Tz4ZYCXMYH2p03r53C
-         hZGqUs9nAzGU4H8JGDJ0aRuHysI8Qt3xqqRgeRF4gBu5jKqX3qAjaT9jkFz1QcIygOBO
-         O/cw47QXipNADqB81pvTDunbrISyEK5GhGv3u7uxXQAF9vrSke1JBWV6xWRUyZeBHG+A
-         aVzv7THI5Fws2UZwcjByH/kizJKOkKtVmDB00Jmhyq4vuKgL9Rn/Oc0+BK9qEn9j7E7z
-         jjGLjK2zWMZ9S4UrYsvSVJVIHoA4ju0fY4FYxDcQh020pKdhWkKaG9CO17653fn1H7DE
-         WjnA==
+        d=gmail.com; s=20230601; t=1723477396; x=1724082196; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=buI9Ko5ZDG8/IEDGLRiJRvZNs9QL9HWCq0F93tw6IHc=;
+        b=TzrL3qjd1qSRA0gjO3CtqDB2EwuOmeV7lD2NDdiE9pGsPxR4JA2EXnoU+Odh1TbIF1
+         3eDVqUWr0/QcsLFxVAuj2aIfyMZp1/TbUVe2ktAC4SbkY6rVLj4VtnzvB0A6deXbRl9P
+         /QbMh96Ztjuh6Y5PHvJgaBSXmNvbTU8Dt3KeKiKUYlh4gsvjRCiYoBR4YrOHXcdrTYyd
+         nTRPE9GiX5ylmkQcEtSfwcIdEyjnWQ5goTKD+MSH0cd65agsyufnzgo9Kg5Ea2ucyXEw
+         CCNhsZya6b+7JS9/e+pwVZ6bGz2IpEYPY+OmiD89A5zD/IAkY/HArilrzSHQAjCbU1Tu
+         QcYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723476440; x=1724081240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1723477396; x=1724082196;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PbQh4JaQElNnZSJflbJl8EURMl30t+auDTJhns6YUQ0=;
-        b=wA2WGnf4Ptmtw7m4thsQvkVIWoqOETBsRonQRvrL4lTePaOb9Wo04crXFSLdRXU2i1
-         1hFY0Jp0kCbIyrsBc/ZjizaV31QZOx89LkrfAs92fvlGoxueV1z1yrg+mk/cqcAntrsj
-         0vlB725YSqryrujIS+QH+8F8EGE/rq3g6VTmZuc4KchPfQM7JiXq0cgYU/RxuHLdvv7u
-         JIhCELCc1zbjQYnElslw49SSrq9VCw/xpZ8ZgHRLw+XcInQCanZ+MBZRy3Ie6KcnugGa
-         zaxm84ZUg0Zkj0nR2V0/HT6G6gzQ/DeESCx6vqPKrPejwNM6TvFCymbNAECm8TKRqpah
-         uELg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWhbVh92+23hNogZyp3M8RyEIZIBxzjeotOA5KlOYXm2A2Ti0WX/zrqGklqTIM+5s9phGUnq2VYFZiVMpt0zOSer4lPcurnR5CWelXQGuwA+8U9bi+RI0w1uScSEhBk2p77JCAoQ//6wE=
-X-Gm-Message-State: AOJu0YySiNk9H3OoZ2UOJH7PVvPkae21i/f8E+Y/4dsZgQvvrO3FMYWM
-	RG9xvb+a6vxUxpDBKVgM6r8E3xoHOn8gtguOJA4qVdpSSoLOA2QD
-X-Google-Smtp-Source: AGHT+IGTq/JhAuFfdEry9aYhhGTitZfc0b1DLfoiMUaC/HKUYquk1iU502prvA9tvKyVKql/7LeUEg==
-X-Received: by 2002:a17:907:f7a8:b0:a6f:d990:338c with SMTP id a640c23a62f3a-a80ed1efea2mr52466366b.20.1723476439263;
-        Mon, 12 Aug 2024 08:27:19 -0700 (PDT)
-Received: from localhost.localdomain ([46.211.27.200])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a80bb213171sm240568866b.145.2024.08.12.08.27.10
+        bh=buI9Ko5ZDG8/IEDGLRiJRvZNs9QL9HWCq0F93tw6IHc=;
+        b=Q+KuHJ5eXs1O+VGI1v/efXWO51OzWwf5lKGfBIPooyhu0gbgj8uCcTA7/pZxp8+mkf
+         giOfJBHcrBzsnUOERQkoTh6k3o/NWhd5KHMlWX2WIkFlGoNz1vIBRk3qArQ8fdzPCrvS
+         O+1+3RXk8H+8sMPy4hogHLd1GKfl03nTwXWvRhaNfTCNpXvQR18un/x/WG5uJT5Hk0vF
+         qi99ZASmfSIih7TkJB0cLV8GOwIGhyXph/YrbscnxNrfF76mkRiDWo9swtpwzypmy0Fu
+         82+Gn/8SkwHsXeLaQ6SjFYQH+DJ7Oj3CsxqRBvOQyHrZLKzdsgvBjiEVYgN/yhSdOzFz
+         Zj0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVhfXkQ1r+Y6rY/LDej5fPWdjZ4gmtoc/jJDAGvwj54TIuELMG4D1OrwovS3giKPDmQZ97hWCjcKStlJQjyxvM92jsaoGrlI2vsP40G
+X-Gm-Message-State: AOJu0Yz1z80JaCnkJwle4ZHC80VX8D8y2fM8GXggKP9fStwafMwsCFEk
+	LWl2LgZSw/NrKlcwMu0CZKLvppCN96uh8a9aZ0SSZpBe9ijDcM/+wN0oOQ==
+X-Google-Smtp-Source: AGHT+IGlQTA8XQFSIRQepdrd1h2T8uOH6GkOw0ZjyBZZXoTjSwkUFofJU2xury6YpSC/MrlT2/WM/Q==
+X-Received: by 2002:a05:6000:e0b:b0:366:f469:a8d with SMTP id ffacd0b85a97d-3716cd0115emr490669f8f.35.1723477395662;
+        Mon, 12 Aug 2024 08:43:15 -0700 (PDT)
+Received: from [127.0.1.1] ([213.208.157.67])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4e51eb47sm7859713f8f.88.2024.08.12.08.43.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Aug 2024 08:27:18 -0700 (PDT)
-From: Denis Pauk <pauk.denis@gmail.com>
-To: pauk.denis@gmail.com
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	attila@fulop.one
-Subject: [PATCH] hwmon: (nct6775) add G15CF to ASUS WMI monitoring list
-Date: Mon, 12 Aug 2024 18:26:38 +0300
-Message-ID: <20240812152652.1303-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Mon, 12 Aug 2024 08:43:15 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] hwmon: chipcap2: small improvements in probe function
+Date: Mon, 12 Aug 2024 17:43:01 +0200
+Message-Id: <20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIUtumYC/x2MQQqAIBAAvxJ7TnDNQ/WV6FC25h4y0YhA+ntLp
+ 2EYmAqFMlOBsamQ6ebCZxTBtgEXlriT4k0cjDZW92iUC5zckoxK+VylHsKbDopXUW6wG9oOPZI
+ HOaRMnp//Ps3v+wHbdcjNbQAAAA==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723477394; l=688;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=2atFC6N/vaLVNHJuH0O5e2noPBaxOUdAzlE9V94AAXg=;
+ b=+ifSgcyjWO24xuuBIV9BWYqX3BXYnKFe4B3m+cnSExQsqHtTWcnE+8dMhEeoafwQfb3mSTSwU
+ GRKU5Pp+QUFCJi76X6oDi0mAyOjzijAdVOFJMNquEVepb2Q14moO2Qr
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Boards G15CF has got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+These modifications only affect error paths, simplifying a case where
+dev_err_probe() could be returned, and disabling the sensor if getting
+the ready interrupt fails.
 
-This commit adds such board to the WMI monitoring list.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Attila <attila@fulop.one>
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- drivers/hwmon/nct6775-platform.c | 1 +
- 1 file changed, 1 insertion(+)
+Javier Carrasco (2):
+      hwmon: chipcap2: return dev_err_probe if get regulator fails
+      hwmon: chipcap2: disable sensor if request ready irq fails
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 9aa4dcf4a6f3..096f1daa8f2b 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1269,6 +1269,7 @@ static const char * const asus_msi_boards[] = {
- 	"EX-B760M-V5 D4",
- 	"EX-H510M-V3",
- 	"EX-H610M-V3 D4",
-+	"G15CF",
- 	"PRIME A620M-A",
- 	"PRIME B560-PLUS",
- 	"PRIME B560-PLUS AC-HES",
+ drivers/hwmon/chipcap2.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+---
+base-commit: 9e6869691724b12e1f43655eeedc35fade38120c
+change-id: 20240812-chipcap2-probe-improvements-c94d1431f1ef
+
+Best regards,
 -- 
-2.43.0
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
