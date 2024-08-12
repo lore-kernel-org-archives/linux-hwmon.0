@@ -1,131 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1BE17A92F;
-	Mon, 12 Aug 2024 13:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623E8130AC8;
+	Mon, 12 Aug 2024 15:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723470659; cv=none; b=byZDgWPCxmlL0xo4TmBWXn7FKEJgcD5GzIwkHQFjBzkjpouPh3nnta1ex9vyeT60E/jGGnnrrkiWFHnIwJiojuVM9QSzhQqkpi63O8pWIJVsRsur4WAvH7l0rwbQXCfiOj4r4Dm2Tu+93ub0ZpgNv+mxtu8AGD4MMPtgVeBdw9c=
+	t=1723476442; cv=none; b=mmzKAkqPdoTCFNTQyOP53k1LruheQ1Njk8nwxYwDEBFV8LeWga7OV7wOuVtrOpKSSSL51nx3V0e9THuPe6ftKa8Nz4TPuBolS98afgO0hzsWsJd+roNsaArrEh5BrHmDJ1Ny+3zkb/cTz6i4N5wCbZRnEMixfSh1/AGVxTix/l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723470659; c=relaxed/simple;
-	bh=iZp5l59CAGjLpHSJneafAUtnEDyDDH25DA7+A9E6wP8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lA8GTkbr2orpw2lJxh2ZxOh0PAPBPskzJfwYx2q4qsl5s9BF9h21i0WNTcGBEbx7W/smqX/xakyCsbUgGw9jdCUHl3LOGMmDqLXYF2wV9CdChbswk9T8nS2brl16GwxU6xWdhHisP1lJgLB26NhyiwsOSKFqrpmsIw5QUKk1UbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dd3niisA; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1723476442; c=relaxed/simple;
+	bh=SJOT4u2AOnoFTV6NcHUtZJgEsVCS7Ps8uAl3BZ5rzRc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VMRirwtv9bLeJG8iEqw2LsJ1aJ+Qwu1N8FXiM3jeTbarZrzVccf0IL0LMQ4muWJ3PlGnpe8eNFnsUUDUGOzs8bNx0VkgoGILQ/YPb1aR3jiISoaciM+FLepKIZBztn3JEkz0cHKndpevh2id0GF97VObZgxqEFMTeCRVZdeuT0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+j0HDcj; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dd3niisA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723470658; x=1755006658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iZp5l59CAGjLpHSJneafAUtnEDyDDH25DA7+A9E6wP8=;
-  b=dd3niisAd0ekOeuqFs9WFTJdztL8Q0aesAkJZTIUY1yrQD8uglqHdMVd
-   ybA/ntgOeJ9oRl7Nm7lSXiGH0YXHxjyzY40oeq6Tx5CCGmYVTXaWGXhHG
-   M2FUMqgzPd3pU3dExgm+GLxSWo7Nb51HkgAIUPH+AD0hK/HaIcs6AWWx/
-   Ukf6bDkyJRdSmlZXW/e0ZVFuark4KCXfXh5XMXmRIHY6Q9iaNifQHvQzv
-   QJ8RuOt1QTeimDItXP7E6K+RjoKkJZshdIt4afyhzzVyIpeKkDadJJ7ML
-   hOwKFIbrwO8Qw2ds3G3qj3hVZf0eQo8wq0JKRQkE3DP3iOYIPYl1cX7wY
-   A==;
-X-CSE-ConnectionGUID: V8fuBa87QpeSbHCULqTbIQ==
-X-CSE-MsgGUID: uZ5juxveTpeOQy3n3f0yjg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="24488318"
-X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
-   d="scan'208";a="24488318"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 06:50:57 -0700
-X-CSE-ConnectionGUID: yU49dKNsSOSVTrqEuovdIg==
-X-CSE-MsgGUID: C6k8NsNYRsqMqzjvAcWSuw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
-   d="scan'208";a="58212835"
-Received: from slindbla-desk.ger.corp.intel.com (HELO intel.com) ([10.245.246.165])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 06:50:50 -0700
-Date: Mon, 12 Aug 2024 15:50:47 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
-	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
-	andriy.shevchenko@linux.intel.com, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, anshuman.gupta@intel.com,
-	badal.nilawar@intel.com, riana.tauro@intel.com,
-	ashutosh.dixit@intel.com, karthik.poosa@intel.com
-Subject: Re: [PATCH v5] drm/i915/hwmon: expose fan speed
-Message-ID: <ZroTN3UudwvIJ7oR@ashyti-mobl2.lan>
-References: <20240812081538.1457396-1-raag.jadav@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+j0HDcj"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5b8c2a611adso5323163a12.1;
+        Mon, 12 Aug 2024 08:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723476440; x=1724081240; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbQh4JaQElNnZSJflbJl8EURMl30t+auDTJhns6YUQ0=;
+        b=i+j0HDcje/0Ugf/0u1gCeRhcisLELoJcTCiGt7ElPgWNjBE8Tz4ZYCXMYH2p03r53C
+         hZGqUs9nAzGU4H8JGDJ0aRuHysI8Qt3xqqRgeRF4gBu5jKqX3qAjaT9jkFz1QcIygOBO
+         O/cw47QXipNADqB81pvTDunbrISyEK5GhGv3u7uxXQAF9vrSke1JBWV6xWRUyZeBHG+A
+         aVzv7THI5Fws2UZwcjByH/kizJKOkKtVmDB00Jmhyq4vuKgL9Rn/Oc0+BK9qEn9j7E7z
+         jjGLjK2zWMZ9S4UrYsvSVJVIHoA4ju0fY4FYxDcQh020pKdhWkKaG9CO17653fn1H7DE
+         WjnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723476440; x=1724081240;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PbQh4JaQElNnZSJflbJl8EURMl30t+auDTJhns6YUQ0=;
+        b=wA2WGnf4Ptmtw7m4thsQvkVIWoqOETBsRonQRvrL4lTePaOb9Wo04crXFSLdRXU2i1
+         1hFY0Jp0kCbIyrsBc/ZjizaV31QZOx89LkrfAs92fvlGoxueV1z1yrg+mk/cqcAntrsj
+         0vlB725YSqryrujIS+QH+8F8EGE/rq3g6VTmZuc4KchPfQM7JiXq0cgYU/RxuHLdvv7u
+         JIhCELCc1zbjQYnElslw49SSrq9VCw/xpZ8ZgHRLw+XcInQCanZ+MBZRy3Ie6KcnugGa
+         zaxm84ZUg0Zkj0nR2V0/HT6G6gzQ/DeESCx6vqPKrPejwNM6TvFCymbNAECm8TKRqpah
+         uELg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWhbVh92+23hNogZyp3M8RyEIZIBxzjeotOA5KlOYXm2A2Ti0WX/zrqGklqTIM+5s9phGUnq2VYFZiVMpt0zOSer4lPcurnR5CWelXQGuwA+8U9bi+RI0w1uScSEhBk2p77JCAoQ//6wE=
+X-Gm-Message-State: AOJu0YySiNk9H3OoZ2UOJH7PVvPkae21i/f8E+Y/4dsZgQvvrO3FMYWM
+	RG9xvb+a6vxUxpDBKVgM6r8E3xoHOn8gtguOJA4qVdpSSoLOA2QD
+X-Google-Smtp-Source: AGHT+IGTq/JhAuFfdEry9aYhhGTitZfc0b1DLfoiMUaC/HKUYquk1iU502prvA9tvKyVKql/7LeUEg==
+X-Received: by 2002:a17:907:f7a8:b0:a6f:d990:338c with SMTP id a640c23a62f3a-a80ed1efea2mr52466366b.20.1723476439263;
+        Mon, 12 Aug 2024 08:27:19 -0700 (PDT)
+Received: from localhost.localdomain ([46.211.27.200])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a80bb213171sm240568866b.145.2024.08.12.08.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Aug 2024 08:27:18 -0700 (PDT)
+From: Denis Pauk <pauk.denis@gmail.com>
+To: pauk.denis@gmail.com
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	attila@fulop.one
+Subject: [PATCH] hwmon: (nct6775) add G15CF to ASUS WMI monitoring list
+Date: Mon, 12 Aug 2024 18:26:38 +0300
+Message-ID: <20240812152652.1303-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240812081538.1457396-1-raag.jadav@intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Raag,
+Boards G15CF has got a nct6775 chip, but by default there's no use of it
+because of resource conflict with WMI method.
 
-> +static int
-> +hwm_fan_read(struct hwm_drvdata *ddat, u32 attr, long *val)
-> +{
-> +	struct i915_hwmon *hwmon = ddat->hwmon;
-> +	struct hwm_fan_info *fi = &ddat->fi;
-> +	u64 rotations, time_now, time;
-> +	intel_wakeref_t wakeref;
-> +	u32 reg_val, pulses;
-> +	int ret = 0;
-> +
-> +	if (attr != hwmon_fan_input)
-> +		return -EOPNOTSUPP;
-> +
-> +	wakeref = intel_runtime_pm_get(ddat->uncore->rpm);
-> +	mutex_lock(&hwmon->hwmon_lock);
-> +
-> +	reg_val = intel_uncore_read(ddat->uncore, hwmon->rg.fan_speed);
-> +	time_now = get_jiffies_64();
-> +
-> +	/* Handle HW register overflow */
-> +	if (reg_val >= fi->reg_val_prev)
-> +		pulses = reg_val - fi->reg_val_prev;
-> +	else
-> +		pulses = UINT_MAX - fi->reg_val_prev + reg_val;
-> +
-> +	/*
-> +	 * HW register value is accumulated count of pulses from
-> +	 * PWM fan with the scale of 2 pulses per rotation.
-> +	 */
-> +	rotations = pulses / 2;
-> +
-> +	time = jiffies_delta_to_msecs(time_now - fi->time_prev);
-> +	if (unlikely(!time)) {
-> +		ret = -EAGAIN;
-> +		goto exit;
-> +	}
+This commit adds such board to the WMI monitoring list.
 
-Can you please add a comment describing how you obtain the speed
-calculation?
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Tested-by: Attila <attila@fulop.one>
+---
+ drivers/hwmon/nct6775-platform.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Basically at every read you store the values. Is it possible that
-we don't have reads for a long time and the register resets more
-than once?
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index 9aa4dcf4a6f3..096f1daa8f2b 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1269,6 +1269,7 @@ static const char * const asus_msi_boards[] = {
+ 	"EX-B760M-V5 D4",
+ 	"EX-H510M-V3",
+ 	"EX-H610M-V3 D4",
++	"G15CF",
+ 	"PRIME A620M-A",
+ 	"PRIME B560-PLUS",
+ 	"PRIME B560-PLUS AC-HES",
+-- 
+2.43.0
 
-Thanks,
-Andi
-
-> +	/*
-> +	 * Convert to minutes for calculating RPM.
-> +	 * RPM = number of rotations * msecs per minute / time in msecs
-> +	 */
-> +	*val = DIV_ROUND_UP(rotations * (MSEC_PER_SEC * 60), time);
-> +
-> +	fi->reg_val_prev = reg_val;
-> +	fi->time_prev = time_now;
-> +exit:
-> +	mutex_unlock(&hwmon->hwmon_lock);
-> +	intel_runtime_pm_put(ddat->uncore->rpm, wakeref);
-> +	return ret;
-> +}
