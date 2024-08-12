@@ -1,106 +1,88 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FEF1862B9;
-	Mon, 12 Aug 2024 15:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3E4186E47;
+	Mon, 12 Aug 2024 16:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723477401; cv=none; b=LZZBu3KmGGJ0+Qh19MmhyU2D1JXfpj2bOeL32IcUt/IG6eBUby/cvmOd0HhL/2AIDguQ770xY34fGmBc+prnZOedc2nesWS4J9xHpImXsFKKwmMQ7UTxgolytHg5fUxagNkTD/dsUTknXh4pxh9ztRMkxKZQjQO3hlZHsxNYfzc=
+	t=1723479080; cv=none; b=Tu6eIa+1UWv/UAP+axYRUM4m6dhomPnYHgOiQ1LxZczeTJTMWqIfxuOW7RGbnhIz9t+p4+J9ugW0AqljEfm4XoFweQzbrbWrDZC0aj8W4J7evgTmjmFdNVQoQgw4d8zUVDdtBMEiJCTY+jCUDmZDi92vYv44+QtRq8NQhjG/PBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723477401; c=relaxed/simple;
-	bh=+qEeRmaVE/yJhvllAM6mSXQP96hC3cxBt77l6bQ4w10=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L09RzGn3wz98lD3tTV7wf+hyd2HD8Jc9jZ4cmUohykCPN2ExeWq5YglwzId7CKPbPykByUXl3jtmSl8/WBCBS3TXqk/pJNBWqlYNSJgpRIbJZP3DSYbdgrhagtDO/llSW0zD6Za2bQHQpzY07TEEcFr48ywPxduAFRrpLMiLTVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I4vKWvmr; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723479080; c=relaxed/simple;
+	bh=4LGlDYfh9hnYMFH9HallVbetIIWElNY/SAddpwGbcKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DYR1klyy74eGu4gvGGm3jXyQkYsCrPhy+5IDfVAdIebX1xqvR7dPqbFlGdzv3poz99WDrNc8MOVu8cpJgUszwe8IvPIzMfN6qqYEqsDq1GPFwK2p/wiEVggZQXgT5Aw5gHag9PAlMAECLipx6cimoDenaSGOZGJhiXzJQTqqvGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiOYfU1I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I4vKWvmr"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4280c55e488so26396255e9.0;
-        Mon, 12 Aug 2024 08:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723477398; x=1724082198; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mpsmSmGqrOexvhDBQICod60vYYV3sv3m/b8LQyy02Ok=;
-        b=I4vKWvmrEJa8PPMWBeFYHYMG8wkOxeY4hO2aU5ojr+GUvri30VqzPdfF37dcmSpqE+
-         VFw+6iehciztGhh+DuZAZSe593PFRrKjy6pwVhIvTYhW0CFTmnPGBed/SRfxPisBGpop
-         VlD/eMiE/wXby9mP07MbCl9F+oOqOX1rSsKmJgVchyUR9baLy5JZRaNn37THIRJIKfZ2
-         Ro468KI/Y4/3y/+7BngcQPVmfAlctzKSeUL/LGIjRV56RxLUS5jZSGj4lrWeHLlVSjmz
-         RWiMlPnuY2Sbyc9bnnYGDnkEKn48/NIFtG1VsIiTf6OW4diNOoYUqq4ea9ghnxE7Eg5Q
-         UoyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723477398; x=1724082198;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mpsmSmGqrOexvhDBQICod60vYYV3sv3m/b8LQyy02Ok=;
-        b=iC7PFL9wgLcKdIWzTqZSpg1fOYs28DKHHWfYuQUwvt3wBTm+ecSquQFbJFKp/15YjU
-         DctJYE/2JHmCWarTjXl4tPXPvmt+NL92bN/OpwRKDpA+7igvWC0WKZLdArUDMB/6ofvk
-         5F/AGGAVmRmI2U8cZnrj0/1FtS8uFq5tVbproIkBy/kAmYBWMxBq0D2xpIiSrqiD9vUN
-         Crp30VNRdnK/p5TDgMp49NEe1H4UhD6/OPsKelpW9PeOJMI2ZmTasv+alL1eDQyHkOKD
-         mS9oc/h46r5ZHXN0+gPiL0D/0pe/x1uET/1M4wOxsCH7eX7karneLXvr0hVHg+8HHAb/
-         QqFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhy9EJxFLk1XkhMAgzpI6mqmwGIXgNfOuPpUC21PdOZrkDdp7zleA47pxU0/vDQDQA+VrmRVV9TQ7WOhPt1vadGCqKMOBii/WZsPyo
-X-Gm-Message-State: AOJu0YwoTyRxf48xAVChVEpBOyqD2OYfoOStOQQFwc6D3lp1lw38T+bS
-	txD+FtXH4ebAXEqgt31wtoxug7zz6mn7I5ZsbjMKv3H0xFaMlbJy2Yrn5Q==
-X-Google-Smtp-Source: AGHT+IFvU6D6BP7UFiJ+pjIbE12qGr7ID88u1ZHFrIjQcLa9MtJwPhJ5nHKgBT8MI7IaMOsfeV8dNQ==
-X-Received: by 2002:a05:600c:4514:b0:424:8743:86b4 with SMTP id 5b1f17b1804b1-429d62900cfmr522245e9.6.1723477398042;
-        Mon, 12 Aug 2024 08:43:18 -0700 (PDT)
-Received: from [127.0.1.1] ([213.208.157.67])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4e51eb47sm7859713f8f.88.2024.08.12.08.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Aug 2024 08:43:17 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Mon, 12 Aug 2024 17:43:03 +0200
-Subject: [PATCH 2/2] hwmon: chipcap2: disable sensor if request ready irq
- fails
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiOYfU1I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004B2C32782;
+	Mon, 12 Aug 2024 16:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723479080;
+	bh=4LGlDYfh9hnYMFH9HallVbetIIWElNY/SAddpwGbcKE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YiOYfU1Ij/i1jdXyGc8m98/EA7WtwNA41DwzsHqDSmtiyyPFtOzgwusn/AaHBqVmc
+	 8MLwIv5/W9AnfLXql3jEa5B0C2CIcmS12uUwsXjbX+9R4rS7v/rSJyvmHgSnLhwLXt
+	 tB0lGpaETVDV2vYQDbzIhRJksBIL4klb1d6EgAvh7ZXFU0PDxGvtwyHKB2NBLC+N+C
+	 HV7yoKzZPj/aVYBHdejEG+YayVBKOmT9lKioYyWHfqQ+Vts4gl0PVXSM15ii/5opJQ
+	 xX04n6Bu6aFCof+MOrkTBS1peejbyaSfRce56Q0Jx0xL7A1eQKaX+a/x6o+WUPrcZh
+	 gCOlGR5gTEsbA==
+Date: Mon, 12 Aug 2024 17:11:14 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: lee@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+	dmitry.torokhov@gmail.com, pavel@ucw.cz, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, ukleinek@debian.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v4 1/7] dt-bindings: mfd: add binding for qnap,ts433-mcu
+ devices
+Message-ID: <20240812-unlisted-cussed-ffa50b07a82d@spud>
+References: <20240810184743.277248-1-heiko@sntech.de>
+ <20240810184743.277248-2-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240812-chipcap2-probe-improvements-v1-2-3cdff6d16897@gmail.com>
-References: <20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com>
-In-Reply-To: <20240812-chipcap2-probe-improvements-v1-0-3cdff6d16897@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723477394; l=724;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=+qEeRmaVE/yJhvllAM6mSXQP96hC3cxBt77l6bQ4w10=;
- b=S8K0k0DsvELn94xMnOgy3awPzq8XJZAg2bb8TsB6b+ak9BFqm9s3uKkRWiSjSV3+j4c/jw81/
- /ucmIgjyoV2Azh4OwmYojlu4QCo4jR+nbYaGCbrC+AcRX+HUaJcyTwz
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="cHN7OHm8jMQ3S5kz"
+Content-Disposition: inline
+In-Reply-To: <20240810184743.277248-2-heiko@sntech.de>
 
-This check is carried out after getting the regulator, and the device
-can be disabled if an error occurs.
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/hwmon/chipcap2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--cHN7OHm8jMQ3S5kz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index 88689f4eb598..02764689ed21 100644
---- a/drivers/hwmon/chipcap2.c
-+++ b/drivers/hwmon/chipcap2.c
-@@ -747,7 +747,7 @@ static int cc2_probe(struct i2c_client *client)
- 	ret = cc2_request_ready_irq(data, dev);
- 	if (ret) {
- 		dev_err_probe(dev, ret, "Failed to request ready irq\n");
--		return ret;
-+		goto disable;
- 	}
- 
- 	ret = cc2_request_alarm_irqs(data, dev);
+On Sat, Aug 10, 2024 at 08:47:37PM +0200, Heiko Stuebner wrote:
+> These MCUs can be found in network attached storage devices made by QNAP.
+> They are connected to a serial port of the host device and provide
+> functionality like LEDs, power-control and temperature monitoring.
+>=20
+> LEDs, buttons, etc are all elements of the MCU firmware itself, so don't
+> need devicetree input, though the fan gets its cooling settings from
+> a fan-0 subnode.
+>=20
+> A binding for the LEDs for setting the linux-default-trigger may come
+> later, once all the LEDs are understood and ATA controllers actually
+> can address individual port-LEDs, but are really optional.
+>=20
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
--- 
-2.43.0
+--cHN7OHm8jMQ3S5kz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZro0IgAKCRB4tDGHoIJi
+0tg7AQCS2xWrPC2UUU1meYRX0JcteDszsR77WU6wV+xQhG4KEwEAlYF2R80DyuEq
+tvLDLFquMfbB3h6dMgWWxA51/UKOdQY=
+=E5pg
+-----END PGP SIGNATURE-----
+
+--cHN7OHm8jMQ3S5kz--
