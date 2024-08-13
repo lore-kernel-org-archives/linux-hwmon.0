@@ -1,51 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCF2194AE6;
-	Tue, 13 Aug 2024 11:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40649170A2B;
+	Tue, 13 Aug 2024 11:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723548203; cv=none; b=JZ4sVZcJ3gh1Pax4CWea4Pw2sxQbzYGAwhKROPuLzbuBk5INUtawgQSD417QzeOkTrKhQvYiQb25vdPL+QMP8KnKZhUd8R/pxhPYo4YR6N/m/p/XIFdhFLLIVNwqyprPmeFjpwqEI0fxmv1zfET9QvX195IXlzHh283yZ8SUcPk=
+	t=1723549656; cv=none; b=S5sAFKc2k1h9pBhQ6kJnrTDwSWGoMN49ntVFBXsxs72pnwUBOWt6pB2hfKagAeRM2jPRj63v1f9ob6oq4cHYt5CwGcj8IOJ6tuBmBT48cLNws/I1fTEpjp36yzp49DF+LVRI5k8IexT/LlEV6tyAjwGCOCXzIs1TvVgYuxTtSMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723548203; c=relaxed/simple;
-	bh=/UJoSeNq4Z69OVheBJmypYp4ovP53kxbHryvRHxEXXE=;
+	s=arc-20240116; t=1723549656; c=relaxed/simple;
+	bh=G3pOGZVBqXB7sYa2biEjElbdDn1qcCVetk8yRjFI7VY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IUfS8ysl69BwsJ7RH8UTC74WS7Y3gMeCblDRM086LZFeq1tQBGN216r3HBl9MzEPq2NcDsj7LQ02jK3GJA8SptLVaPT7mjClKK6hMK38gZHAhFOuveiPHF9XrS5GUfQLcekOLcMfoE75/u1lRx3WnnMmq5pEYLKDRNjExc2j7MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IjkQFRO0; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yi/MSFTno3VEvC1H/1hv/9a7r3tvdds/zzYAoC4CbmLd39OzfyAsREJDdsAJd5SrjIHHUjYlDld9dUvPTXr5zX9DorJHvfmhFxES3c9HPYcHnXq1pCPK49n4TuTq4Zgkzc3QsqyvDjIongkLseozvavI/t7Zkomk5IMGkbzhZ1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EnMLezDq; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IjkQFRO0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EnMLezDq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723548202; x=1755084202;
+  t=1723549655; x=1755085655;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/UJoSeNq4Z69OVheBJmypYp4ovP53kxbHryvRHxEXXE=;
-  b=IjkQFRO0diQCPxoWmz+sJYH4GHlYusbB24YP7DhtI9TaQVZ3LJkOiAJ9
-   +ZmUhDFIv5pJO8osUc2yv1JOwvkJrpYF2jDDgjm8yxh0bTkT1CvWDkuiO
-   JafihfoyZC2gPUp6WLodDSNqdmLlrnsujVA3J32lNKalAaUmL2BqiBFcx
-   FUZNGo6yBf/9/WpvuYRSH0FGNmyEhm2R9FvAW8TXqJNYRZLQG7r6s/VnF
-   OA8Hm5gpfXe5Qbh61MF7kT0ymoEn4mT7fy/CIIq/TEIh0hstogzzpaMG4
-   InjHJCb2jxriMCCZHp18pMZutC6fN8UjLcEywMsugQGlo8IMVmoiG+gij
-   w==;
-X-CSE-ConnectionGUID: LXy9eX1IQkmXa81xdqYCcg==
-X-CSE-MsgGUID: 6gJpSBcURuCvYVQclJ1b7Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21872583"
+  bh=G3pOGZVBqXB7sYa2biEjElbdDn1qcCVetk8yRjFI7VY=;
+  b=EnMLezDqBNHPWTSdYnU33I/gWqbZeP3sN7Q8m0KHQ16ku9RLPuheaWIl
+   hYwRNcAuCktYwr8cWFeXP8dX4pvBkO54iawqae3d3ObTjHPeN0zyMl/+n
+   IGjbd6VdOU0HbyPs2ClowqYtYzvqdxLyQnBflE2wla4gH5KcIf9KpAnAQ
+   PqdfsEz63IaeENuefBdaHU0+K+XLzx8AoY2Ihy2BUxYAUs23tMpHBwJRX
+   CPOuj6T77DO8O05F+ptku4Bhbkx3txC7RaVpd61MvnknU6Vqd8oVMOA7Y
+   jBUb1QhQTR53E1BtOJL8iYjpquCOdcJZfMhwWkIFfobSKp1N7pJv9Ve+Y
+   g==;
+X-CSE-ConnectionGUID: bnvg5LeKS+6PtVjF5/P1DQ==
+X-CSE-MsgGUID: xTutnZ81RxmudOgWL05MBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21523385"
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21872583"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:23:21 -0700
-X-CSE-ConnectionGUID: jEhCf8CZR9OXK4P7V66CjQ==
-X-CSE-MsgGUID: 6Ewi4twyQ42M8kTCgOLFYA==
+   d="scan'208";a="21523385"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:47:35 -0700
+X-CSE-ConnectionGUID: VQZ2r7WpSwadk3elOT4wXg==
+X-CSE-MsgGUID: EAyy5BgcTr6dvpG+kQFuLw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="63496347"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:23:17 -0700
-Date: Tue, 13 Aug 2024 14:23:13 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="63038013"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:47:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sdpzs-0000000EiH4-0Rht;
+	Tue, 13 Aug 2024 14:47:28 +0300
+Date: Tue, 13 Aug 2024 14:47:27 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Raag Jadav <raag.jadav@intel.com>
 Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
 	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
 	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
@@ -55,9 +59,10 @@ Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
 	riana.tauro@intel.com, ashutosh.dixit@intel.com,
 	karthik.poosa@intel.com
 Subject: Re: [PATCH v4] drm/i915/hwmon: expose fan speed
-Message-ID: <ZrtCIU8On4ZKILmh@black.fi.intel.com>
+Message-ID: <ZrtHz1aY_Lf_XIsL@smile.fi.intel.com>
 References: <20240809061525.1368153-1-raag.jadav@intel.com>
  <ZrYB-GI9L2RSc2bt@smile.fi.intel.com>
+ <ZrtCIU8On4ZKILmh@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -66,29 +71,35 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZrYB-GI9L2RSc2bt@smile.fi.intel.com>
+In-Reply-To: <ZrtCIU8On4ZKILmh@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Aug 09, 2024 at 02:48:08PM +0300, Andy Shevchenko wrote:
-> On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
+On Tue, Aug 13, 2024 at 02:23:13PM +0300, Raag Jadav wrote:
+> On Fri, Aug 09, 2024 at 02:48:08PM +0300, Andy Shevchenko wrote:
+> > On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
+
+...
+
+> > > +	/*
+> > > +	 * HW register value is accumulated count of pulses from
+> > > +	 * PWM fan with the scale of 2 pulses per rotation.
+> > > +	 */
+> > > +	rotations = pulses >> 1;
+> > 
+> > In accordance with the comment the
+> > 
+> > 	rotations = pulses / 2;
+> > 
+> > looks better.
 > 
-> > +	/*
-> > +	 * HW register value is accumulated count of pulses from
-> > +	 * PWM fan with the scale of 2 pulses per rotation.
-> > +	 */
-> > +	rotations = pulses >> 1;
-> 
-> In accordance with the comment the
-> 
-> 	rotations = pulses / 2;
-> 
-> looks better.
+> This change seems to cause a build error in v5.
+> Something to do with __udivdi3 on i386.
 
-This change seems to cause a build error in v5.
-Something to do with __udivdi3 on i386.
+No, it's not this change.
+Please, read report carefully.
 
-Should we revert back to shift?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Found something similar here,
-drivers/target/target_core_xcopy.c +697
 
-Raag
