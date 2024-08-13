@@ -1,60 +1,60 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F181A0709
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 16:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F23D1A08D7
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 16:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723566019; cv=none; b=Vw1AVAHTiZX/ENynEZHdTQak87PK04f6hSkpcn7N0YI6pGMV44Sku4E9AKUEkBa214VF7u9ijYIi4aV/7XawxE4MYM1T/FcQrX4026VyBFVHj3m7At/YBV5pnt3DQPopIF5in/6OVMv+ZCgs8APe0cgGFQH0TWM0tYuyPd+zcBA=
+	t=1723566100; cv=none; b=dnhzW2A9FxQVXHitUQIONaNWjcCAprQk4PceudqssMdNTP+y35ty7uTS4AaIS/dbslZTKBpam4FEYPfqzFAIXaG/fg9JGZ5VrUfL+RyoX4PrpNAGDdBNYLKmapyDvC36Tf0OpVQsYHMFvrfO/z+ICUS3sC8oRcmQ6Pf0SdNImyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723566019; c=relaxed/simple;
-	bh=C8tZVbJDMojby4sbsZfbNeLsdVrZBpsCltpwAdATmZk=;
+	s=arc-20240116; t=1723566100; c=relaxed/simple;
+	bh=sUriLCwYNvXVr15cYyQ/1Qh0mIx8qLbZAMNS2KzTe4E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UMRSDu0dyteeksV2qedXWsclch5m6JNqGl99c28O9RC59mL+7CMQk6cZzIAvfopSJB7bENNXveXdnyATgJJuSwXsvBgoESpBEFaO97zmxBTvbBPHDgU5Yym2IN6+njYyD24zFvdMdWvEpen7M7H70V0W4yqIJOc3MF2RGnLsjwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PEICgMS1; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:Content-Type; b=HLe0A+FTspso65c1DW/SRvIWiz6yPmVdiSJdG7li+kQe8/FwVekxDlg+/7/4nwdgeqQcH1XA+E6CD8jtVR1q/qpVYBdxzFwSuL+JS2p0FNdpIqkJVBb0rq93sybWjAbJG7BeCPuJUQeDR4xa6/ltWC8DP7HygxqxDZH/5BOrZW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qaGNkQR8; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PEICgMS1"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3684e8220f9so14171f8f.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 09:20:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qaGNkQR8"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-428e3129851so42129885e9.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 09:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723566014; x=1724170814; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1723566098; x=1724170898; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BgSm6S2qU2VrM+S+5DH8+MdeO025H1mZEQLkO3/EmQs=;
-        b=PEICgMS1KE6F3oIg1jB3xTb+vw1re71yLT38CHi7j7mrGDvwVtQeDjbL91iEZ9XwrM
-         BSqNp/PsqLevm7K4AtAcD5/npxpf5e54KjgO3BuaJGRup7A6C2t8KhIcl90TzIWtn7ul
-         YM3WDqfFkC8KrS5OHs0VyQBVuYy2HdPoaho3pPo/1aPt5SrzRHGCU8P+QS9Y3w4hPaKG
-         djYRHd7JuupnLhrmrnk7zPnB4VBEUIZ2CGaaCuW+LHlFn+ioW8jaH2noq8daNiowmRlP
-         wFmdpfJ4s/ALrn4S4jze2xKypQQzfL+TP8UV8AbgBrCinsSSEoPeemQCMp3WlGL2THU/
-         RwVA==
+        bh=VgfBYxGiGh6y5pI52oZra6uY30VKualFdRhfSNu8SZU=;
+        b=qaGNkQR8f5vxfsXIYXYI4ApCCj2B4ZoMDoxh/wh7FKFDoI4qTYgGpiiAgWCQSxFt5q
+         G5nuYoCd0FINA3C3MKqdGUwqP7PIlGbi7adEJPDEF3Xg0OYHAkbw1oFLgtcj9gHOIqla
+         MdNwPoP4C7zJij/TJi9vziW3rfuoyOLwHf66AV/Dwk4eFvcxs3HC0YNZikSwwKNhiNcP
+         z48fBRBKY1S9IEijDUkNi1mMiJWHyz+4jojbRWi7gHedgvz13skQvcBCbRB2usVWYX3D
+         IPEulTX8Jlc9g1Z9uoE9JRxi+7M2wZAJIegGlv1R/L/Aqf/Gr6k6CgLwWwIFdcIMRHFd
+         aM4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723566014; x=1724170814;
+        d=1e100.net; s=20230601; t=1723566098; x=1724170898;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BgSm6S2qU2VrM+S+5DH8+MdeO025H1mZEQLkO3/EmQs=;
-        b=NK3S4zBtbTiuqh2ncKRZ9yjewCZhDMSI6FZjce/70Abj5gJKpYFeDvot6uRrTWjiYX
-         YaRXsc9bTvBfcPm2AFC+5vH3sksys4CRA/bJgGdoaRIhOA2bDUvUEdlrjMG2nsINcR9X
-         VB5/k/jFkWxF52pOfj4Fg1vWUJqufkCQqT5aeR9FNMFpypy9JkYzbx7Vm5prqzZXM81X
-         HEVIjalFd3HP0aISC+aFySPMdaZMXQm2ZhJHSFPkXR05zHdzOKN4xjM9p0Sjqhl135Tb
-         ntQKxcuK5r5yhLPvrpZCTKL3164ibmmayI4KTJp41ar2tAJpc/gEj3V954xAFVc+5yVv
-         cQ9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUnWC0Y6XLcFBCFAAB+bNBZ2r9w4ooa/8IRLI7pXMekkT4RRz+2Y0AtscUReE/PIQrRmTxj3XPkYnntaxFEjVVYnO+0uFJp20qKu80=
-X-Gm-Message-State: AOJu0Yw7qO9bRW/9nN323+ChhHtbrYxrEQB5q1o8JtUaZULGmfJYh1cB
-	AEQ88nzda1rJb3Lh5wOeQSC+EfITMKZNYBGMFv1zkf2F0G5msYP6aFfMcckHqPM=
-X-Google-Smtp-Source: AGHT+IFcsdOXQom88JsbkdTXdvZ8u7603bJwZjY3MGQBwPAl/4YCiHadCzSzBovYSIxkgpZVvf8C1Q==
-X-Received: by 2002:a05:6000:1a89:b0:366:ea4a:17ec with SMTP id ffacd0b85a97d-3716e3ead5emr2881417f8f.2.1723566014065;
-        Tue, 13 Aug 2024 09:20:14 -0700 (PDT)
+        bh=VgfBYxGiGh6y5pI52oZra6uY30VKualFdRhfSNu8SZU=;
+        b=A6C3JG8ACHtmyhmpCW80z/K9NgoikC+RrgRvYX3N36+4JAD6RNHKB1yxjgVGHkhiy2
+         p8g568/FUGG4f2wF4s+D1co4RH89Hd6ceqZW1cNELfJE1ISnYA0EIhwIQ5izRZTUL7GU
+         5Y3JZy9ujfqpZKhI2d0kI4RvRZLCYjeC6ieLqqfUCbHgZnMLicneQFZPss0uuHnHEJrW
+         nlh4lZNJd7pve24KdSkQJnaPEG5a60lHaFaZn6R5y7Iby5nU4o2vPnqWVg0wlaef7q9K
+         lq7ANsal6VsGPUh02QwVIH5WztHGVOQUsvlcxE05ZAcP7DPhXQl9xG002NcWbmbidlGO
+         KtmA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9HMAbyDUBhNkdu4al8mr61hJys8+I7uq2i5NVRZFZfGWhlZzJDnlKPCQSnZgPS+f16qEyqnsY+00kQ2+cObag/9/eOLaRYmg4m1c=
+X-Gm-Message-State: AOJu0YzJPTktH3rvA4JazYUASD+vd/YTqpghT1djCnJwCOIwIenCz5xB
+	Sar7q1zflIX/tyNcCaXKKKXboA7OuNv2ihvqC/3gmjwMmioeVhmjVgrdEcrN7nM=
+X-Google-Smtp-Source: AGHT+IFWrFbw9oo2MSFYuiiamzVVOspnNkuxXoK8L2AFiAv9RMDrxjdgT7zw4E5PpuJsr/CBTtorJw==
+X-Received: by 2002:a05:600c:a44:b0:426:6d1a:d497 with SMTP id 5b1f17b1804b1-429dd2384c7mr340285e9.12.1723566097507;
+        Tue, 13 Aug 2024 09:21:37 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4d1db515sm10862703f8f.64.2024.08.13.09.20.09
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c77372dbsm143532695e9.38.2024.08.13.09.21.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 09:20:10 -0700 (PDT)
-Message-ID: <f9f97553-a50a-44c0-b817-3a44f730cfeb@linaro.org>
-Date: Tue, 13 Aug 2024 18:20:09 +0200
+        Tue, 13 Aug 2024 09:21:31 -0700 (PDT)
+Message-ID: <cff4a562-2ed7-4dbc-9e2f-68ff1a601ef3@linaro.org>
+Date: Tue, 13 Aug 2024 18:21:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,20 +63,23 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
-To: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
+To: Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>, Justin Ledford
  <justinledford@google.com>, devicetree@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Open Source Submission <patches@amperecomputing.com>,
+ Phong Vo <phong@os.amperecomputing.com>,
  Thang Nguyen <thang@os.amperecomputing.com>,
  Quan Nguyen <quan@os.amperecomputing.com>
 References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
  <20240813084152.25002-2-chanh@os.amperecomputing.com>
+ <20240813-sister-hamburger-586eff8b45fc@spud>
+ <10680d13-442d-4f12-a77c-2bd05f11dc10@roeck-us.net>
+ <20240813-extruding-unfunded-0e14a5c161e1@spud>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -123,39 +126,40 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240813084152.25002-2-chanh@os.amperecomputing.com>
+In-Reply-To: <20240813-extruding-unfunded-0e14a5c161e1@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/08/2024 10:41, Chanh Nguyen wrote:
-> Add device tree bindings and an example for max31790 device.
+On 13/08/2024 18:16, Conor Dooley wrote:
+>>>> +examples:
+>>>> +  - |
+>>>> +    i2c {
+>>>> +      #address-cells = <1>;
+>>>> +      #size-cells = <0>;
+>>>> +
+>>>> +      fan-controller@21 {
+>>>> +        compatible = "maxim,max31790";
+>>>> +        reg = <0x21>;
+>>>> +        clocks = <&sys_clk>;
+>>>> +        resets = <&reset 0>;
+>>>> +      };
+>>>> +    };
+>>>
+>>> What does this example demonstrate? The one below seems useful, this one
+>>> I don't quite understand - what's the point of a fan controller with no
+>>> fans connected to it? What am I missing?
+>>>
+>>
+>> Just guessing, but maybe this is supposed to reflect a system which only monitors fan
+>> speeds but does not implement fan control.
 > 
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> Even without any control, I would expect to see fan-# child nodes, just
+> no pwms property in them. Without the child nodes, how does software
+> determine which fan is being monitored by which channel?
 
-
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      fan-controller@21 {
-> +        compatible = "maxim,max31790";
-> +        reg = <0x21>;
-> +        clocks = <&sys_clk>;
-> +        resets = <&reset 0>;
-
-This node is incomplete. I asked to make the example complete, not by
-adding two incomplete examples or other ways... The binding description
-says this device controls fan. If so, where is the fan here?
-
-IOW, keep only one, complete example.
-
-Rest looks good. With this addressed (and optionally with maintainer
-change, which Conor asked):
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yeah, to me this example is confusing. If device's purpose is to also
+monitor, then hardware description in "description:" field should be a
+bit extended.
 
 Best regards,
 Krzysztof
