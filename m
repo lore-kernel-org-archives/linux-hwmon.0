@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB911368
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 04:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400B933981
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 05:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723524491; cv=none; b=Inrc9RWrireU0KVN8Ql38766thfjnjBDF8pmA95vOYYhWcFLWxOfGuA/oQSHQsMuJfy51ifQPkrrWztuPnI7uThqFjeu+utfgOpZ2Dyh2DrfEKv7WAYcDCrKqsah8a9EUQihUKkrtVZ0LYf8gNrGRX6DMlNtMeGNaJEX8tIbtT8=
+	t=1723527133; cv=none; b=B6f5klCTF+7KkqdpAZgPKwsth7RaFmDSFQkCpzViI6O2UMvo4blxL2yw6zdfaQOkO9r+7tZpt3UD17tkTrMUNKaIwvKwXZoxxxvkZCpuaxru2u7C3+XQ4nmu8ck8Bb0a6Kwvs3R1eCKQkl1CuQ0icsVUNnKgMgZOtuefQi/TSVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723524491; c=relaxed/simple;
-	bh=EUgomPQeM3rHnFJ1J1r0ek5XngIZtMriQt8vRHYXMSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Btxsr5DAzIhgFopTDCKMeZ65NvZl7xRNRoSFis/uGS2IPU99fQnUePcJMUaKcbc3diO/zvxWPJyqZgKn1mzG2wrvAyOCRvsvipmi44ubhn4gdKe8a4UOf4Lid9uTJfsDP3sZm0UoCqkHpgIo8Qh6t9cabZHbugBaPvCOUC0Ttkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPO4V237; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1723527133; c=relaxed/simple;
+	bh=4dCNkgCH6miIiJgVmwnoU45JlilnGsKZIv4KAoJKzlE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ukXK6d9+chQW1AJup7l4OjNuR6MYh5L8Qs3LDxylI6wA4h80rWgLVoBYvSMfCB2VQVvnSzLTN+VN6UYnN5l2ClP9x3is3yX8wYZaAZKMwC6vHJxgL6o3tp1cRxcFtSQOOg8XUigYVaXk/K3RA9Bv9vHObskoiNaMY70vsRVRF6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F97qd7FU; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPO4V237"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F97qd7FU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723524490; x=1755060490;
+  t=1723527132; x=1755063132;
   h=date:from:to:cc:subject:message-id;
-  bh=EUgomPQeM3rHnFJ1J1r0ek5XngIZtMriQt8vRHYXMSQ=;
-  b=PPO4V237HU9bBy/mCoCQbfkADPJMD0LACQiN8Uz+V9ydG6dnT0a56S83
-   szXPJL350rEW9ZRGi+Y/vA5LdHXH6CutUEzgxR17N4rSPGoN5sH2D/+FS
-   kMLToaUQMylBDL95GKSBZevfkeyPoN6P4L96aP4dA1Js38akXq0Z37YzF
-   gmplJ7/n0x2M0CLbmxybvZIB2A0wD3xLxGdsXyyFdDZHkHbDClbqd2OP4
-   o0XnhzONj89Pq/odvm//1ExcuA0CYxW1mCotqIcF7pkKUIM8RmQDVkJnS
-   Sm8w6UI5gzrb+qSv2LjYYKsW3Y9aXzSKjs7Gp09s01vGGQvFwlqh5UXvn
-   Q==;
-X-CSE-ConnectionGUID: 5E2EWgivR6+HXkAtNWb2aQ==
-X-CSE-MsgGUID: CiDSXMesTQipZ8ZRb6UdEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21797639"
+  bh=4dCNkgCH6miIiJgVmwnoU45JlilnGsKZIv4KAoJKzlE=;
+  b=F97qd7FUyLN42+bgwXZfgxEeCJQonv1gr0JZqifgz66cxS/2+D7laSIS
+   TsoTarj6rDwEi8Hbok42hv8LVNtj+EYDD3T8w1jSFpupLU+t8ewUZjiwp
+   ccRqDozZhqu1aVtvM+6Zy1btVlthFYfSlfybjPVo4NzGRMMh0q0RVKvT/
+   pXNGKGSAfPaJbS/yOoyBLqS1l7F2xc/YmqNVKlpA4iddH5ehb/mX/xITj
+   VGQmJ6fcTd3w2vASVLELUmTBue9v4Rh69fsmuyk/rKjkdgqkVVmCxMi5C
+   K4I+WARWgAV4GqudELZXKtHKuhA/Em/3FQDi7ilubgC4ow0bt3j9QXz6v
+   A==;
+X-CSE-ConnectionGUID: duqMhl/wSmqXmPXQ/2nSHQ==
+X-CSE-MsgGUID: VxXHmnF0S+WQi2WtmSSDcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="44190492"
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21797639"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 21:48:09 -0700
-X-CSE-ConnectionGUID: nDia3Qh3QVStUM8S3Lj4Xg==
-X-CSE-MsgGUID: T/bblL4hQGCuzntgXLYWVw==
+   d="scan'208";a="44190492"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 22:32:11 -0700
+X-CSE-ConnectionGUID: X8hdHq4xS6ua+3DBntqi7w==
+X-CSE-MsgGUID: 5F9xjJ7LS5+XXcqnh/u7dg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="63493536"
+   d="scan'208";a="58418806"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 12 Aug 2024 21:48:08 -0700
+  by orviesa010.jf.intel.com with ESMTP; 12 Aug 2024 22:32:09 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sdjS2-0000Aw-04;
-	Tue, 13 Aug 2024 04:48:06 +0000
-Date: Tue, 13 Aug 2024 12:47:33 +0800
+	id 1sdk8c-0000CI-3A;
+	Tue, 13 Aug 2024 05:32:06 +0000
+Date: Tue, 13 Aug 2024 13:32:05 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 7f32bde51dcd0c75f1085f0282010ea77f04a717
-Message-ID: <202408131231.JTYeJDhw-lkp@intel.com>
+Subject: [groeck-staging:fixes] BUILD SUCCESS
+ 1e94a0654bc416235a48e9ca595804fba1befc92
+Message-ID: <202408131303.AVVq0Xfg-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,13 +59,13 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 7f32bde51dcd0c75f1085f0282010ea77f04a717  Merge branch 'kpsingh-static' into testing
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
+branch HEAD: 1e94a0654bc416235a48e9ca595804fba1befc92  apparmor: fix policy_unpack_test on big endian systems
 
-elapsed time: 723m
+elapsed time: 768m
 
-configs tested: 137
-configs skipped: 3
+configs tested: 130
+configs skipped: 2
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -155,7 +155,6 @@ powerpc64             randconfig-003-20240813   gcc-14.1.0
 riscv                            allmodconfig   clang-20
 riscv                             allnoconfig   gcc-14.1.0
 riscv                            allyesconfig   clang-20
-riscv                               defconfig   clang-20
 riscv                 randconfig-001-20240813   gcc-14.1.0
 riscv                 randconfig-002-20240813   gcc-14.1.0
 s390                             allmodconfig   clang-20
@@ -170,13 +169,9 @@ sh                                  defconfig   gcc-14.1.0
 sh                    randconfig-001-20240813   gcc-14.1.0
 sh                    randconfig-002-20240813   gcc-14.1.0
 sparc                            allmodconfig   gcc-14.1.0
-sparc64               randconfig-001-20240813   gcc-14.1.0
-sparc64               randconfig-002-20240813   gcc-14.1.0
 um                               allmodconfig   clang-20
 um                                allnoconfig   clang-17
 um                               allyesconfig   gcc-12
-um                    randconfig-001-20240813   gcc-12
-um                    randconfig-002-20240813   clang-14
 x86_64                            allnoconfig   clang-18
 x86_64                           allyesconfig   clang-18
 x86_64       buildonly-randconfig-001-20240813   clang-18
@@ -206,8 +201,6 @@ x86_64                randconfig-075-20240813   gcc-12
 x86_64                randconfig-076-20240813   clang-18
 x86_64                          rhel-8.3-rust   clang-18
 xtensa                            allnoconfig   gcc-14.1.0
-xtensa                randconfig-001-20240813   gcc-14.1.0
-xtensa                randconfig-002-20240813   gcc-14.1.0
 
 -- 
 0-DAY CI Kernel Test Service
