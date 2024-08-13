@@ -1,60 +1,35 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.emenem.pl (cmyk.emenem.pl [217.79.154.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F23D1A08D7
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 16:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E28E1EA84;
+	Tue, 13 Aug 2024 16:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.79.154.63
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723566100; cv=none; b=dnhzW2A9FxQVXHitUQIONaNWjcCAprQk4PceudqssMdNTP+y35ty7uTS4AaIS/dbslZTKBpam4FEYPfqzFAIXaG/fg9JGZ5VrUfL+RyoX4PrpNAGDdBNYLKmapyDvC36Tf0OpVQsYHMFvrfO/z+ICUS3sC8oRcmQ6Pf0SdNImyM=
+	t=1723567805; cv=none; b=UzQ2ycveQq6dizyBtVzlx+QvQZlunIBlaROn4q0c8NQ+oKsjmELLSbOBR6pgYEHScBj5AS2uPmOPEpawHHJ2vpNx0TeMiYFxPolFDtTowdHCALuiN0uxNl07GJA9yWeiK8NCmQ1+Y76ug118+WOM5l/d723m8YdwI4yLcffSDu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723566100; c=relaxed/simple;
-	bh=sUriLCwYNvXVr15cYyQ/1Qh0mIx8qLbZAMNS2KzTe4E=;
+	s=arc-20240116; t=1723567805; c=relaxed/simple;
+	bh=7FlvYxm1sHKssvEviLrXCVI4tO2CdU5hnY4jPFNEJ1w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HLe0A+FTspso65c1DW/SRvIWiz6yPmVdiSJdG7li+kQe8/FwVekxDlg+/7/4nwdgeqQcH1XA+E6CD8jtVR1q/qpVYBdxzFwSuL+JS2p0FNdpIqkJVBb0rq93sybWjAbJG7BeCPuJUQeDR4xa6/ltWC8DP7HygxqxDZH/5BOrZW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qaGNkQR8; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:Content-Type; b=M67scf+k4q4g2vHcBQtXxHhsqv22nSkjJE/qW3hfA4pkhzqcSCLJC3QtZfXSaenQfLRBVfN6LA02gdxpP+Lm6XNi1HloieDVR8C/NKTtTZ4d0O9H9Nvw6IOrtvN3sCrPl6ftTVmgDOGf/rFY2DBcD4N6Jn/AD6BVFRbDPgT3FG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl; spf=none smtp.mailfrom=ans.pl; dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b=f17/iu+2; arc=none smtp.client-ip=217.79.154.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ans.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qaGNkQR8"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-428e3129851so42129885e9.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 09:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723566098; x=1724170898; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VgfBYxGiGh6y5pI52oZra6uY30VKualFdRhfSNu8SZU=;
-        b=qaGNkQR8f5vxfsXIYXYI4ApCCj2B4ZoMDoxh/wh7FKFDoI4qTYgGpiiAgWCQSxFt5q
-         G5nuYoCd0FINA3C3MKqdGUwqP7PIlGbi7adEJPDEF3Xg0OYHAkbw1oFLgtcj9gHOIqla
-         MdNwPoP4C7zJij/TJi9vziW3rfuoyOLwHf66AV/Dwk4eFvcxs3HC0YNZikSwwKNhiNcP
-         z48fBRBKY1S9IEijDUkNi1mMiJWHyz+4jojbRWi7gHedgvz13skQvcBCbRB2usVWYX3D
-         IPEulTX8Jlc9g1Z9uoE9JRxi+7M2wZAJIegGlv1R/L/Aqf/Gr6k6CgLwWwIFdcIMRHFd
-         aM4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723566098; x=1724170898;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VgfBYxGiGh6y5pI52oZra6uY30VKualFdRhfSNu8SZU=;
-        b=A6C3JG8ACHtmyhmpCW80z/K9NgoikC+RrgRvYX3N36+4JAD6RNHKB1yxjgVGHkhiy2
-         p8g568/FUGG4f2wF4s+D1co4RH89Hd6ceqZW1cNELfJE1ISnYA0EIhwIQ5izRZTUL7GU
-         5Y3JZy9ujfqpZKhI2d0kI4RvRZLCYjeC6ieLqqfUCbHgZnMLicneQFZPss0uuHnHEJrW
-         nlh4lZNJd7pve24KdSkQJnaPEG5a60lHaFaZn6R5y7Iby5nU4o2vPnqWVg0wlaef7q9K
-         lq7ANsal6VsGPUh02QwVIH5WztHGVOQUsvlcxE05ZAcP7DPhXQl9xG002NcWbmbidlGO
-         KtmA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9HMAbyDUBhNkdu4al8mr61hJys8+I7uq2i5NVRZFZfGWhlZzJDnlKPCQSnZgPS+f16qEyqnsY+00kQ2+cObag/9/eOLaRYmg4m1c=
-X-Gm-Message-State: AOJu0YzJPTktH3rvA4JazYUASD+vd/YTqpghT1djCnJwCOIwIenCz5xB
-	Sar7q1zflIX/tyNcCaXKKKXboA7OuNv2ihvqC/3gmjwMmioeVhmjVgrdEcrN7nM=
-X-Google-Smtp-Source: AGHT+IFWrFbw9oo2MSFYuiiamzVVOspnNkuxXoK8L2AFiAv9RMDrxjdgT7zw4E5PpuJsr/CBTtorJw==
-X-Received: by 2002:a05:600c:a44:b0:426:6d1a:d497 with SMTP id 5b1f17b1804b1-429dd2384c7mr340285e9.12.1723566097507;
-        Tue, 13 Aug 2024 09:21:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c77372dbsm143532695e9.38.2024.08.13.09.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 09:21:31 -0700 (PDT)
-Message-ID: <cff4a562-2ed7-4dbc-9e2f-68ff1a601ef3@linaro.org>
-Date: Tue, 13 Aug 2024 18:21:29 +0200
+	dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b="f17/iu+2"
+X-Virus-Scanned: amavisd-new at emenem.pl
+Received: from [192.168.1.10] (c-98-45-176-131.hsd1.ca.comcast.net [98.45.176.131])
+	(authenticated bits=0)
+	by cmyk.emenem.pl (8.17.1.9/8.17.1.9) with ESMTPSA id 47DGSkN1013361
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 13 Aug 2024 18:28:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ans.pl; s=20190507;
+	t=1723566531; bh=u/YKptwkKOxxpGKP2ofGDqmwMq4DvqlrFcaZ5HKAMeM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=f17/iu+2VneCVljPaWJBKMjd+pKkkGXP7pZbtGarKFGJxwnzi2P+LNG6dzfxQTuGo
+	 LeLQ0ZE4ytKGtETliwD69hA2xQLz+wsRuN2Cl6uoN1n69p4jJv1ZAQ7qRJ5hSduotw
+	 T8lDgmnv7xgJAL1e2hTndnA1FkhYyYztAmErhI8U=
+Message-ID: <9479fe4e-eb0c-407e-84c0-bd60c15baf74@ans.pl>
+Date: Tue, 13 Aug 2024 09:28:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,105 +37,107 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
-To: Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>,
- Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
- <20240813084152.25002-2-chanh@os.amperecomputing.com>
- <20240813-sister-hamburger-586eff8b45fc@spud>
- <10680d13-442d-4f12-a77c-2bd05f11dc10@roeck-us.net>
- <20240813-extruding-unfunded-0e14a5c161e1@spud>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
+ in the SPD case" - "sysfs: cannot create duplicate filename"
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
+ <3365237d-5fb7-4cbd-a1c0-aff39433f5c2@gmail.com>
+ <be8eb641-a16d-4fc5-b4cc-35c663c37df7@ans.pl>
+ <55445bee-03c6-4725-8b1d-5f656018a8af@ans.pl>
+ <93f1b363-9d1e-4d18-991f-b85e7ec0cfb0@gmail.com>
+From: =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?= <ole@ans.pl>
 Content-Language: en-US
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240813-extruding-unfunded-0e14a5c161e1@spud>
+In-Reply-To: <93f1b363-9d1e-4d18-991f-b85e7ec0cfb0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13/08/2024 18:16, Conor Dooley wrote:
->>>> +examples:
->>>> +  - |
->>>> +    i2c {
->>>> +      #address-cells = <1>;
->>>> +      #size-cells = <0>;
->>>> +
->>>> +      fan-controller@21 {
->>>> +        compatible = "maxim,max31790";
->>>> +        reg = <0x21>;
->>>> +        clocks = <&sys_clk>;
->>>> +        resets = <&reset 0>;
->>>> +      };
->>>> +    };
+On 03.08.2024 at 10:19, Heiner Kallweit wrote:
+> On 23.07.2024 16:12, Krzysztof Olędzki wrote:
+>> On 06.07.2024 at 18:42, Krzysztof Olędzki wrote:
+>>> On 02.07.2024 at 13:25, Heiner Kallweit wrote:
+>>>> On 23.06.2024 20:47, Krzysztof Olędzki wrote:
+>>>>> Hi,
+>>>>>
+>>>>> After upgrading kernel to Linux 6.6.34 on one of my systems, I noticed "sysfs: cannot create duplicate filename" and i2c registration errors in dmesg, please see below.
+>>>>>
+>>>>> This seems to be related to https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.6.y&id=4d5ace787273cb159bfdcf1c523df957938b3e42 - reverting the change fixes the problem.
 >>>
->>> What does this example demonstrate? The one below seems useful, this one
->>> I don't quite understand - what's the point of a fan controller with no
->>> fans connected to it? What am I missing?
+>>> <CUT>
 >>>
+>>>>
+>>>> Could you please test whether the attached two experimental patches fix the issue for you?
+>>>> They serialize client device instantiation per I2C adapter, and include the client device
+>>>> name in the check whether a bus address is busy.
+>>>
+>>> Sadly, they crash the kernel.
+>>>
+>>> I will get serial console attached there next week, so will be able to capture the full crash.
+>>> For now, I was able to obtain a photo. I'm very sorry for the quality, just wanted to provide
+>>> something for now.
 >>
->> Just guessing, but maybe this is supposed to reflect a system which only monitors fan
->> speeds but does not implement fan control.
-> 
-> Even without any control, I would expect to see fan-# child nodes, just
-> no pwms property in them. Without the child nodes, how does software
-> determine which fan is being monitored by which channel?
+>> Sorry it took me so long - my attempts to coordinate setting up serial console
+>> were not successful, so it had to wait for me to go there in person...
+>>
+>> I have attached complete dmesg, summary:
+>>
+>> [   10.905953] rtmutex deadlock detected
+>> [   10.909959] WARNING: CPU: 5 PID: 83 at kernel/locking/rtmutex.c:1642 __rt_mutex_slowlock_locked.constprop.0+0x10f/0x1a5
+>> [   10.920961] CPU: 5 PID: 83 Comm: kworker/u16:3 Not tainted 6.6.34-o5 #1
+>> [   10.929970] Hardware name: Dell Inc. PowerEdge T110 II/0PM2CW, BIOS 2.10.0 05/24/2018
+>> [   10.938954] Workqueue: events_unbound async_run_entry_fn
+>>
+>>
+>> [   11.336954] BUG: scheduling while atomic: kworker/u16:3/83/0x00000002
+>> [   11.342953] Preemption disabled at:
+>> [   11.342953] [<0000000000000000>] 0x0
+>> [   11.350953] CPU: 5 PID: 83 Comm: kworker/u16:3 Tainted: G        W          6.6.34-o5 #1
+>> [   11.361954] Hardware name: Dell Inc. PowerEdge T110 II/0PM2CW, BIOS 2.10.0 05/24/2018
+>> [   11.369953] Workqueue: events_unbound async_run_entry_fn
+>>
+> Thanks a lot for the comprehensive info. Reason for the deadlock is that calls to
+> i2c_new_client_device() can be nested. So another solution approach is needed.
+> I'd appreciate if you could test also the new version below.
 
-Yeah, to me this example is confusing. If device's purpose is to also
-monitor, then hardware description in "description:" field should be a
-bit extended.
+The patch did not apply cleanly for Linux-6.6, so I had to tweak it a little
+bit for the include/linux/i2c.h part, but it does seem to work. Everything
+gets detected and there are no warning / errors:
 
-Best regards,
-Krzysztof
 
+[    8.311414] i2c i2c-12: 4/4 memory slots populated (from DMI)
+[    8.314112] at24 12-0050: 256 byte spd EEPROM, read-only
+[    8.314856] i2c i2c-12: Successfully instantiated SPD at 0x50
+[    8.317513] at24 12-0051: 256 byte spd EEPROM, read-only
+[    8.318252] i2c i2c-12: Successfully instantiated SPD at 0x51
+[    8.320909] at24 12-0052: 256 byte spd EEPROM, read-only
+[    8.322126] i2c i2c-12: Successfully instantiated SPD at 0x52
+[    8.325538] at24 12-0053: 256 byte spd EEPROM, read-only
+[    8.326789] i2c i2c-12: Successfully instantiated SPD at 0x53
+
+# sensors|grep -A2 jc42
+jc42-i2c-12-19
+Adapter: SMBus I801 adapter at 3000
+temp1:        +36.5°C  (low  =  +0.0°C)
+--
+jc42-i2c-12-1b
+Adapter: SMBus I801 adapter at 3000
+temp1:        +35.0°C  (low  =  +0.0°C)
+--
+jc42-i2c-12-1a
+Adapter: SMBus I801 adapter at 3000
+temp1:        +36.0°C  (low  =  +0.0°C)
+--
+jc42-i2c-12-18
+Adapter: SMBus I801 adapter at 3000
+temp1:        +36.5°C  (low  =  +0.0°C)
+
+Feel free to add:
+Tested-by: Krzysztof Piotr Oledzki <ole@ans.pl>
+
+Thanks,
+ Krzysztof
