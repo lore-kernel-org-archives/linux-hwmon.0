@@ -1,121 +1,178 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7061317E8EA;
-	Tue, 13 Aug 2024 18:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A70238FB9;
+	Tue, 13 Aug 2024 20:39:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723574627; cv=none; b=Suc/4E3v/kIiv2qdan7vrjTqoOn8NVzvQA5O1SnCFvTYPKhnBlKSXtooaCbQMaYuC1QSE4eUcDuRZPlC+rIGGm+i4ZpQwwgxgQMDIzYT6JXLf7JjI/LtsfLBpXYI3YQGC1RNg30LrgoZ+F4V89Lcud2/6T/MAoVprUaCfZDCvig=
+	t=1723581599; cv=none; b=kDB+LqlesAZwxtdp48AePLcVXQl2+4S22mnFqAEFUfoRXeogSV1ra0tG2cNG0s4DLCobkA1yE1YgtupsneEGUZfcjDHh+NZ2UsoBL4GolIjU/RvA94YA0SLEMkLMvVJweOQlH0Q8Dx8qauokU4pdCJyXnKZXUcublcfi+Y9QEHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723574627; c=relaxed/simple;
-	bh=v/4/ExDEMVxaShKSRYrGg01MqXd0Urhg4o8Onty+r5U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tP6eY3OWztdkBw5oMf8wVZjmFwcVRC5xDo6anfkJ53UWmAf0sCNiNx7vGOuKnGRkj/MFzpG24iW3Q/BDuXtBk3PTWbu9fSr1AQ0Vc1xuXG4KcvXpdOa7JV3y/ZtaWnqjLeaz0n2Fk6zSJnFxec8yN+CLDBNvVIU/Sd4huMkBM5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFcmo6lT; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723581599; c=relaxed/simple;
+	bh=b3EY4SWzYmIQwNOrS1X29uZP6IEX+ak/XXLqUQD7Spk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TrE2Q8YioYvDY7F7NvMCU3HmVXuvNBMcCAqzfdPA/if8/+0hfgcqXX4YYfBDOJhjhOJRWD2guyXRJdfeXvINn9hApak9+3ye+8lkLURkB8r0Bil/8kKnW37nYHvke4iR93NCOkPxppQrBign56lr+UCV1m/pbk9WyDGcuvxlTyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=udpQwN67; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFcmo6lT"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42817bee9e8so43570465e9.3;
-        Tue, 13 Aug 2024 11:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723574624; x=1724179424; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qz/Yyw0OTE1YQiF2rKw+64GCde443sgt4oa5jF1x0Kg=;
-        b=FFcmo6lTQx/Zeq3Jiix4mDJZ9VxXMBuemD5oUoIBKtTMeKmc1FVBE/Y8rw28dPJc4E
-         lObu8JSRju4IwI8eGbSe62AlwCl83b9zMz3zPV5qtJ6wLldKlYKn7RCuCcOmsFiacDzI
-         VFhtLmSA4eSUS5aZ4u5XCuAhXbaCV/Pb3hUCDJDroNSjNTxkYYC+IMH7+KZw3cPc45uV
-         HziKdKs6mwp635E4kiHfNc4et5x3jrDUQ4yR4v97VZ1QNFvKQgIjsr1vSsCtvTXoZIKA
-         RmvIBnvZNdVFvImgYir5ehVl7Y03RKIbu+lMiIPPf1RPUPEbitv3dts41YMUewUyky+c
-         9+OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723574624; x=1724179424;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qz/Yyw0OTE1YQiF2rKw+64GCde443sgt4oa5jF1x0Kg=;
-        b=FpfxQJFYa4lX01pYdHo3/YKE8Gv6q5CDv6U74dpST5u28yupRup1jA4FY3LajdAdOU
-         MUqxSUI7NRFzkhE3/oAjAYRVakZIgQuqkApX6VwA7Ck1hxVpR3I1I704morpENbBb5PR
-         aRrOE6VzWrATAEWJjPx5DUmQWa0mx+KJnLfzaVehbqj44SQDmBWA4wKOP52INttSfIC3
-         HH6Ipzka3l7//bnpCk1HuqnLx/ZiYPyqi3+uLVpnWs6LczNZzS+9ai7vopCBvcmMseEY
-         X7Jdx5I813YW8q1IcA5tENFu/7969BtwdtbxiWGSUK8idz5h5pvJFM8iVcjXHkXvvS9j
-         2V9g==
-X-Forwarded-Encrypted: i=1; AJvYcCVq8iyydm2jfTvBmcaTvEG6WiLNVKo7bg65ZdzNrDdimGqbZuzi7sJ5Bg6x+yegg9Q+DG/wSpEonZNWl8Rgg6zCQ+U3Is4pZWGhFUnaujd2HS5jCVg5N3OKofF6EiEWO2cF+GGpzbOTetE=
-X-Gm-Message-State: AOJu0YyZXkYIngwIP/8kopXpAT9iq5oAWP83HZHA+97dcQNkMG0GEPQr
-	VfEKJoAu8fa0kZ53lDUvB/cuRWnNbaJenMkSylFKpbKGbyCtDeEf
-X-Google-Smtp-Source: AGHT+IF6iSPxAwa6LBbQRjq4iy5sc6KVkpOTKR3k3/k643p6ZlGS13e871eo392o9zODICjlN92jsw==
-X-Received: by 2002:a05:600c:1e0c:b0:426:6e95:78d6 with SMTP id 5b1f17b1804b1-429dd22fe6dmr3220735e9.4.1723574623649;
-        Tue, 13 Aug 2024 11:43:43 -0700 (PDT)
-Received: from ?IPV6:2a02:8071:b783:140:927c:82ba:d32d:99c1? ([2a02:8071:b783:140:927c:82ba:d32d:99c1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c77372b9sm149493435e9.35.2024.08.13.11.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 11:43:43 -0700 (PDT)
-Message-ID: <70b83fe7-102c-41ea-9d9a-36f1d99b5f4e@gmail.com>
-Date: Tue, 13 Aug 2024 20:43:44 +0200
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="udpQwN67"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Aw6HPgNtHSv0JTB+x3MRxV4/A5VVag4qDtzrfXOgR6I=; b=udpQwN67fMWJlzBb8qfEZ7owIT
+	m/27YJnrE61lK6m3Tvx0n6bpoZevRu67V9NYpUR2R4wvgYCBd7nlMTLftJLEHS+5jKk2D+vqYoSoB
+	sZ8hcH5nydNAw2JhMOAel5bZcsZBnR06qDOMMUkyQFppKam8rIzek6N6qcgRSdSJVEulCRoZzVIBV
+	Ic78h9QGlfkadTfYXVv/yMqhKojtEBUuDaiMeolt1ipabsWJLzFGuhm1PFCulLy93w4IORh4lb/Aw
+	7+732fzymxsrcNauSKX11udR8K/XbynjMfpjcf7ZL5oNSB4llBoGSqBnSzw/OkpY/7t9au54p8vb2
+	f3ejNk3A==;
+Received: from i53875b02.versanet.de ([83.135.91.2] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sdyIu-0004Fs-Ho; Tue, 13 Aug 2024 22:39:40 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: lee@kernel.org, jdelvare@suse.com, dmitry.torokhov@gmail.com,
+ pavel@ucw.cz, Guenter Roeck <linux@roeck-us.net>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ ukleinek@debian.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject:
+ Re: [PATCH v4 5/7] hwmon: add driver for the hwmon parts of qnap-mcu devices
+Date: Tue, 13 Aug 2024 22:39:38 +0200
+Message-ID: <7628765.mr9Zh2SJbS@diego>
+In-Reply-To: <fd1db8a4-9ea5-49b2-9316-65bf3753a7fa@roeck-us.net>
+References:
+ <20240810184743.277248-1-heiko@sntech.de>
+ <20240810184743.277248-6-heiko@sntech.de>
+ <fd1db8a4-9ea5-49b2-9316-65bf3753a7fa@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (surface_fan) Change dependency on
- SURFACE_AGGREGATOR_BUS to 'select'
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240810214709.425095-1-luzmaximilian@gmail.com>
- <0d8bc971-7780-42a2-8617-aeb3bb9bbfd1@gmail.com>
- <4f048dcb-876f-4900-9ab9-3df03aedff9b@roeck-us.net>
-Content-Language: en-US
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <4f048dcb-876f-4900-9ab9-3df03aedff9b@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On 8/12/24 6:44 AM, Guenter Roeck wrote:
-> On 8/10/24 16:20, Maximilian Luz wrote:
->> On 8/10/24 11:47 PM, Maximilian Luz wrote:
->>> The SURFACE_AGGREGATOR_BUS option specifies whether SAM bus support is
->>> build into the SAM controller driver or not. The surface_fan module
->>> requires this, due to which it has a dependency on the option.
->>>
->>> However, from an end-user perspective, it makes more sense to
->>> automatically enable the option when choosing to include the fan driver,
->>> rather than requiring the user to know that they have to enable bus
->>> support first before they get shown the option for the fan driver.
->>>
->>> Therefore change the 'depends on' to 'select'.
->>>
->>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
->>> ---
->>>   drivers/hwmon/Kconfig | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>> index b60fe2e58ad6..e4d9a035a57a 100644
->>> --- a/drivers/hwmon/Kconfig
->>> +++ b/drivers/hwmon/Kconfig
->>> @@ -2069,7 +2069,7 @@ config SENSORS_SFCTEMP
->>>   config SENSORS_SURFACE_FAN
->>>       tristate "Surface Fan Driver"
->>>       depends on SURFACE_AGGREGATOR
->>> -    depends on SURFACE_AGGREGATOR_BUS
->>> +    select SURFACE_AGGREGATOR_BUS
->>>       help
->>>         Driver that provides monitoring of the fan on Surface Pro devices that
->>>         have a fan, like the Surface Pro 9.
->>
->> I should have properly build-tested this, sorry. It seems that it
->> creates a recursion in Kconfig. So please disregard this, and let's
->> stick to "depends on" until I have figured this out.
->>
+Hi Guenter,
+
+Am Dienstag, 13. August 2024, 18:03:57 CEST schrieb Guenter Roeck:
+> On 8/10/24 11:47, Heiko Stuebner wrote:
+
+> > +static int qnap_mcu_hwmon_set_pwm(struct qnap_mcu_hwmon *hwm, u8 pwm)
+> > +{
+> > +	const u8 cmd[] = {
+> > +		[0] = 0x40, /* @ */
+> > +		[1] = 0x46, /* F */
+> > +		[2] = 0x57, /* W */
+> > +		[3] = 0x30, /* 0 ... fan-id? */
+> > +		[4] = pwm
+> > +	};
+> > +
+> > +	/* set the fan pwm */
+> > +	return qnap_mcu_exec_with_ack(hwm->mcu, cmd, sizeof(cmd));
+> > +}
+
+> > +static int qnap_mcu_hwmon_get_cooling_data(struct device *dev, struct qnap_mcu_hwmon *hwm)
+> > +{
+> > +	struct fwnode_handle *fwnode;
+> > +	int num, i, ret;
+> > +
+> > +	fwnode = device_get_named_child_node(dev->parent, "fan-0");
 > 
-> You'd probably have to change all of them at the same time.
+> Is the dummy "-0" index mandated somewhere ?
 
-Right, I'll see if I can give that a try on the weekend.
+I don't think it is. The node should just begin with "fan" I think.
 
-Best regards,
-Max
+I've added the -0 because from everything I've seen of the qnap software-
+side, the mcu firmware can address multiple fans.
+
+In the original firmware, everything is done in userspace wrt. the MCU,
+and the fan commands in their abstraction layer allow for multiple fans.
+
+Also there is that suspicious "0" in the command sequence when
+getting/setting the fan pwm. And in the original device config this is
+labeled as the first fan.
+
+From everything I've seen, the MCU is not limited to the Rockchip-line
+of devices and I do hope others will find this useful in the future,
+so adding the "-0" was a better safe than sorry choice.
+
+Because that way adding that theoretical 2nd fan in the future won't
+cause too much trouble in the dt-binding.
+
+
+> I don't care either way, it just seems odd. Either case,
+> 
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> > +	if (!fwnode)
+> > +		return 0;
+> > +
+> > +	/* if we found the fan-node, we're keeping it until device-unbind */
+> > +	hwm->fan_node = fwnode;
+> > +	ret = devm_add_action_or_reset(dev, devm_fan_node_release, hwm);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (!fwnode_property_present(fwnode, "cooling-levels"))
+> > +		return 0;
+> > +
+> 
+> Side note: One could argue that a sub-node with no content does not really
+> make sense and should be invalid.
+
+I remember thinking about that, but didn't come to a real decision on my
+own, hence left it as it was. So will follow your suggestion :-)
+
+
+> > +	ret = fwnode_property_count_u32(fwnode, "cooling-levels");
+> > +	if (ret <= 0) {
+> > +		dev_err(dev, "Failed to count elements in 'cooling-levels'\n");
+> > +		return ret ? : -EINVAL;
+> > +	}
+> > +
+> > +	num = ret;
+> 
+> Another side note: Using ret here isn't necessary. I'd just have used
+> 'num' directly.
+
+will do
+
+> 
+> > +	hwm->fan_cooling_levels = devm_kcalloc(dev, num, sizeof(u32),
+> > +					       GFP_KERNEL);
+> > +	if (!hwm->fan_cooling_levels)
+> > +		return -ENOMEM;
+> > +
+> > +	ret = fwnode_property_read_u32_array(fwnode, "cooling-levels",
+> > +					     hwm->fan_cooling_levels, num);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to read 'cooling-levels'\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	for (i = 0; i < num; i++) {
+> > +		if (hwm->fan_cooling_levels[i] > hwm->pwm_max) {
+> > +			dev_err(dev, "fan state[%d]:%d > %d\n", i,
+> > +				hwm->fan_cooling_levels[i], hwm->pwm_max);
+> > +			return -EINVAL;
+> 
+> In case you send another version, you might want to consider using dev_err_probe().
+
+ok will do.
+
+I was probably way overthinking if I should not use dev_err_probe in a
+function that is not a probe function (though of course part of the probe
+process).
+
+
+Thanks a lot for looking over the code once again
+Heiko
+
+
