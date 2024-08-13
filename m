@@ -1,106 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2107.outbound.protection.outlook.com [40.92.103.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E14519A;
-	Tue, 13 Aug 2024 00:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723509593; cv=none; b=RhnYJ9IEe1PLDhnS6w+ZqH/Tbaz01imBdvfr1lNmUjNvR19MQu8DbyBJl66t44Q6lxVZKbxy0xHgq1z3cS/5jV4roWnG0JDsn8B1BkinOUrceir6BCmqIWgt4Rfv594LVTNRMk91t+lZYm1OYKppPTkMRAMG6EdVHYahNAgPqyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723509593; c=relaxed/simple;
-	bh=kKBDWhHjGWEtOgUPL2LtV+bhsd+NyypdZgjZaBPSHoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m16xJdWV6uxCqzD7a/m51aBEVj28a4rCzWpbTyzh7g8Oi0L2+o0SyYzpMIVVsMHcS7skYNH2032Blea/4VP32nOdXMbJx8XzPorVE8O69fPQ60m43ZACdHF7iSUetjZ+dcbQPMRfwtnj+cjfAlY7vidrX2MedyQFEL6FXB8LJRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7A5c60M; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85A0ED8;
+	Tue, 13 Aug 2024 01:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.103.107
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723512170; cv=fail; b=qb21/+HUy5zIwcde1t+OMmc0pDExCvPX8Btt88ey27NqWLVKjHmzZfEUqPI2O7hcmwZOXW/6d2j+EwqpG51/U0IY9LOjucE1T4LcXqGHW8CMpZE8ZZ6K2EWKBIyim2L/1O+/AQbeY0MNsrmjNFtjJuV5RyRrVN6jY+TGkWpemzM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723512170; c=relaxed/simple;
+	bh=2r2NuubDBmSsQrsQcGaoCCuEKaoGbnOcZk9EN73REis=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=GI1chcV0wircpJQanbfOQJQbhkIviSiTKzaWIhQnXkiXIWPyWv687H75IAcQjrSc3GM5lvlsivU/bUjyGaK7iDAsZQ3K+hCUZoQSWz8f1uacnCnxrQjf9gyGgEhVX6e+c3LFgqOaAivV0eAiLlvvlDB1csuuW84DGl7S9JM2stM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=TZgCPM85; arc=fail smtp.client-ip=40.92.103.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7A5c60M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723509590; x=1755045590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kKBDWhHjGWEtOgUPL2LtV+bhsd+NyypdZgjZaBPSHoY=;
-  b=E7A5c60MlybMr1BlqpMGcEpEVK1mPRYpJLgKXTU8cr3fvY2oiCt/3rKc
-   TNWCJQTx40TdVgVpIluL9ek3eJgnoBch8H8CqWLY8FB7XedzTlqzdLKPa
-   bPv5sxX8E47Dxay4mGwSbVMelZOSoDozBUWyTLcHd8I1qFK8JNcSDTaEV
-   xudwBldKAlhrGoyz2lIHBXeJEBHq5viXoVlka9q6GEOG/C+BciSurwc1E
-   7Rk7U3RP1pMvXGnPxM0kYWvbTiTNY84tY6SJoTyEVPLSNknDekZMzRZ8R
-   VYskc+Ezupm6pTVDvyAfeAnKTmnEnzv/u5vsbD6wqRZwod+1xe73pXtJR
-   g==;
-X-CSE-ConnectionGUID: 6tBjHZZ2QLWZ0VWrM2AkeA==
-X-CSE-MsgGUID: 8IctZi+YR8eLLd0q7DXV5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21793822"
-X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
-   d="scan'208";a="21793822"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 17:39:49 -0700
-X-CSE-ConnectionGUID: lyaNmWkIRoe32jnzSRTaiQ==
-X-CSE-MsgGUID: 6tKtG5pARo6uQ0whq2Or/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
-   d="scan'208";a="58553687"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Aug 2024 17:39:45 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sdfZe-000CGl-19;
-	Tue, 13 Aug 2024 00:39:42 +0000
-Date: Tue, 13 Aug 2024 08:38:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raag Jadav <raag.jadav@intel.com>, jani.nikula@linux.intel.com,
-	joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-	tursulin@ursulin.net, airlied@gmail.com, daniel@ffwll.ch,
-	linux@roeck-us.net, andi.shyti@linux.intel.com,
-	andriy.shevchenko@linux.intel.com
-Cc: oe-kbuild-all@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, anshuman.gupta@intel.com,
-	badal.nilawar@intel.com, riana.tauro@intel.com,
-	ashutosh.dixit@intel.com, karthik.poosa@intel.com,
-	Raag Jadav <raag.jadav@intel.com>
-Subject: Re: [PATCH v5] drm/i915/hwmon: expose fan speed
-Message-ID: <202408130800.XtY6XxQ5-lkp@intel.com>
-References: <20240812081538.1457396-1-raag.jadav@intel.com>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="TZgCPM85"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XoPTGSQoykr9pBMYUzLidXLmlG2Edp4Il7d1JW9fAksZWH28HaYNcrRFttALzjXtK087bIOAlyCVoqEQ6j0kKQdzjFkSW2TVXWSDV8zwcno8SySLEjG9XzxWgvJzOlnDuD/mR96XnYiv/B9QMAkiixguVoqC3LnMtF4t+7hon50tra8Q9KXlHYZOtkMkAl9i3aHFqeWLWLdIU2LsEO7nZc5cMgBeK1A/lvS8UcRo4G4raso5tT5TrKkuiDfNoAnpx5EAXn61aqq67RbZCN8Gswl5Da2SxDyr2xug+GzeB7CfST+uuFv3Zwy7leL4z54TDlgeGUD5iLaYSbioRxU98g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cGnbdLqP8bk2cqKGU4VlwgjIwlKbgoL4CvX5JGhB6Yk=;
+ b=FBJSn2dNXetkQq5xv1RykcOKYnHJprBNCJZGR5Wr5w2pJ+86ZVX4vq7Vjs0DVurWkgCYmEQ1tWOkBdaE8HBhSACdRF1iXK/FafjhRx1zLb51AkfbM1f4e7739NzdIZgviNt2ggKFDDjc3mKrByf25LeVZVa2uVF7JhsB4edMm2MKJjZhuk5BwteyiCfuCrdwvXACwYnBU58DJSk+W/5WUZm62XqvmS2wrj9GGepB/NnhY61fJhWgCaffuNEXHTeA0ZFrtlTOFhg1jAckhqvV//DRDm+qJRReMu8k2g4lCqgF12/B6Rtd99s0tO3lcHRWaqE7EaFPaV35FmGq6r+KNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cGnbdLqP8bk2cqKGU4VlwgjIwlKbgoL4CvX5JGhB6Yk=;
+ b=TZgCPM85FBPxEvuupL6lWZC4BCI3RVE49bRCOMLrVDoWSxSooOkxV8AjtPBRbE/dkwRCaGC/hGgd783a3e5f6qGRxdh0vY8Kt8Ye114fTB+ggxzytpOJqn1/LD5aQZsMdNIa087GiXnpIQMd7GvcdqqeJtLIqoRZ7EdJhXrb5Lzo6gDZu4xS3pQgDiXroY0Ifckpr71k7z/DVdvKWMZWkEG2Yj5zezOkTZM9Gdk57pXZb1hJ2h60Obexjm+0tyPKg3wuODDxh9lSq7z/U76nDX2ElViLniON1MqxPa7fUzW9WB08EvVTORjHylyFcT/MRYpSaC9x9cacfLjmxRCdjg==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by MA0P287MB2040.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:11f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.22; Tue, 13 Aug
+ 2024 01:22:40 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c%6]) with mapi id 15.20.7849.021; Tue, 13 Aug 2024
+ 01:22:40 +0000
+Message-ID:
+ <MA0P287MB28225D1113B42EE5C80B27AAFE862@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Tue, 13 Aug 2024 09:22:29 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 2/4] drivers: hwmon: sophgo: Add SG2042 external
+ hardware monitor support
+To: Inochi Amaoto <inochiama@outlook.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Guo Ren <guoren@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Drew Fustini <dfustini@baylibre.com>, Sunil V L <sunilvl@ventanamicro.com>,
+ Hal Feng <hal.feng@starfivetech.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+References: <IA1PR20MB4953C5DB4AC5DF01236CE785BBBB2@IA1PR20MB4953.namprd20.prod.outlook.com>
+ <IA1PR20MB4953936E4916334E1A234962BBBB2@IA1PR20MB4953.namprd20.prod.outlook.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <IA1PR20MB4953936E4916334E1A234962BBBB2@IA1PR20MB4953.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN: [6jq9R3Ao730EtpC99+kBCEJhs+7JrI+c]
+X-ClientProxiedBy: SG2PR04CA0159.apcprd04.prod.outlook.com (2603:1096:4::21)
+ To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <76b9f6a2-e36f-48b2-a94f-2445abc0b901@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240812081538.1457396-1-raag.jadav@intel.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|MA0P287MB2040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 372e9400-9756-451c-91f6-08dcbb366b66
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|5072599009|19110799003|15080799003|8060799006|461199028|3412199025|440099028;
+X-Microsoft-Antispam-Message-Info:
+	Q+NdYm1ymozKAh3XcRlAqDn27PzGwVxGH4Bbryy34nmeuPhUWxk9B2LaGKsrKuOWDffUythMQtuWca1LYbypiPTJRu/pv0ysmEznZEnjtr6BxnKr1jRmdb5USCTUSIt+XDDBZv18vENLymdQ8kvhRx2ppIaEoOwvJFUA1syp5KEbo8KFxehESv5jx7QKujE5dhkgir+CWABB5BPDDQzXzo4z6jVATdKad5UZbuoYIgwhHGKmtp8WSLPCXOKRxQrr0M37iwyI1Def6AeE/kksbcDpJoO6C3OWYsKbkEv+UMr2Xr/ag0AmZu9Jiu4k5GUWMBcn9XphLNGXdGFfHL0XvkqS+PRvZVzcDYqzhO4+T2N5AtXR5eh1Jhb7xjykP+BzxPoTm8nWMI7e4Ryg17gHfz05c062UpKtgv6mcrmQo+fnpVHF5c8sAhFEDhcnWjlODqspK/OmWIEoy9LOcq8Cev6zWfT+bHDJCBcNiTgas/dxOmlrJPp5kVZFH4Tly8S9PsK5Fu2XTuX8Msi8KERmj/yhm3tA/xBgwl79CtMA7LY1zzELZcgsv84cbCWD10vOhyRmtYNP3htYVyfI3Byj3R3ERGAz4sIeKvnVGLAfiq4twJXPz7mIJaUVJ/HK4YmkOi5QK8h4iDMyo2WOKHUUJp6v83guLeOnJpIPivk75Sxw6bmMxS8mnuWHbfGaT6cUJJpYSGLAw1Rw8AMSmOjsig==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UUNlTTdqM2RkQTlCTFhQMnFyNGxHWFVMV3B0U05idGN5UTYxOTROc2pnTGY0?=
+ =?utf-8?B?QVhrc3ZPNXYwMHQrUysrSUJncjVuRng4eTl2S1hSNGdZUHczV05UUTB5aG9K?=
+ =?utf-8?B?MTdjTEptbzNId3JSWXdTOVpCQWNaZFV3RWpZY1BLOVNoSXNLc2h5ZTFOZVR5?=
+ =?utf-8?B?bWNqclNXYzlXUVlaZFFPVmRNVUtMY1AvbFlJUHIwM0dhN1RTYjFZV3hvUWxm?=
+ =?utf-8?B?Q1U3MkpyYlpyRUY0S3BxbHFVV2x4RStEelJqSXdiMmZYbEVHcWNpTkt4OFFS?=
+ =?utf-8?B?SHR3eWpIT3h1UUJ3TU02UGtoY0lHYnR0d0I5bGZRQTRYZmNOT3FaVExCeHRj?=
+ =?utf-8?B?RktQMllocjRBRmZNcUNURWJQL2xxZ3lleUNSd2RrTm05aTdwMlF2UW1RWGpr?=
+ =?utf-8?B?aldqVGdwOGRra2pEbHZhVGJSVWhYVExMNmtYUXc4K1RWUjNZWTVZa3Q5WnRu?=
+ =?utf-8?B?ZXBaaWZ2RWJEc3NxVXlER2MrNlhJYUQxdVBndG1LR2dVT2gzbHRzUzZtbi8z?=
+ =?utf-8?B?OFlJNGwyYUViL1hkVnl4VDFRSkRzcEkvdFVpYm9wT0lsWmExeFcrYitpSVpy?=
+ =?utf-8?B?Y1llZWRrNHp6MVl2dTdxN0U2UWh3ZmdQR0NlbDZINHdBSDVrQy9rVGEybXpY?=
+ =?utf-8?B?S2d0d3pwZ0ZpRktQNk5TWHo3akRCN2ZjMnJsaU5qb1RiYXNkLzNWYW5wWDNU?=
+ =?utf-8?B?V3Z5RjFvVkNGZlFvdEVHWXdRSHRjdnZWMHJBSnZJOGFRUUpKeEZnKzV5ZStY?=
+ =?utf-8?B?UjlWcTV0UGhJYThzbEJsZzU4aDJkUkJpbnY1RiswMzdESk4wY21qZ1YxWjN3?=
+ =?utf-8?B?alU1b0F0NmVEWHY4Vzk2dC9ybWUyNUxPN0hGWEpvdmxSa3JJcTBTR1crZmFG?=
+ =?utf-8?B?cUpaOWJHZXc3NWYrRG9oMVloNHJrbHliczdmYmJScFVZcHpKYng5dG1UZjVY?=
+ =?utf-8?B?ckhTQmVvMERWbjI4SmJnODl1TVZmbEtYSUNwYUFqSmVzMnRJZ1FGQ0xKRzds?=
+ =?utf-8?B?V1BMNDd3NVg1cklzaUZRdkpzTkdFdVlOSlpMU3VFbDd2Q21nN0F5R1RrRWxM?=
+ =?utf-8?B?cm9XWUIzeXJ5Mjl5STgxU3dwUnlRWlZiTFNHaG5zT1BsemJvY05XaU8rM1Mx?=
+ =?utf-8?B?RDYxNjkxNHRGYTFML1dzR3hWcytjcFdOSXdoOEo1K0J2YXFNekVjQUFlQzBR?=
+ =?utf-8?B?YjJ6NG1aU0thL0FlaGVqUG9SeS9SdVdYa2lENTVOSkIvTHRFbHE1UGtMekxC?=
+ =?utf-8?B?MGJoaVQybUQyaGF1N1BMTllGN0xiMGZSVmdaQWpPT2dPclBpbFR6WWVIODZw?=
+ =?utf-8?B?OFpoZmRSb2pKN2Z4V0lsS1J5N0JhNnhDZkw3dVBQYjFmYjMweFBndGV1SkxU?=
+ =?utf-8?B?QXZkankvVEF4T1dTbDJJZlFtcytMbnN0RzZiTjdXc2xNSE9paUk4UXRFb3lO?=
+ =?utf-8?B?LzY0b3NIeGVMb25nbDFMVHRMUXhieGVyTmNVak9MZGZyL0crWlNyQzlBaVc5?=
+ =?utf-8?B?am1iRytsYjlSRXJxcDFvYnFJNTUwVEJhTzlMTE1JZ3R5UTlQZm9Vcjg2ejd0?=
+ =?utf-8?B?cTNrMEt0WEs4aW5vWWNmYzgvU3Qyd3Rlc2JQNlo5ZmloU2YrWUZrSUd3SDlJ?=
+ =?utf-8?B?THVETzNRb2N3UDJXd2FMMWNhUkdIdXVSNFNvTVJMTCtGQkRINzVOUHVKRXBY?=
+ =?utf-8?Q?paD4ntbFakUSxs/rVPm2?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 372e9400-9756-451c-91f6-08dcbb366b66
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2024 01:22:40.1518
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0P287MB2040
 
-Hi Raag,
 
-kernel test robot noticed the following build errors:
+On 2024/8/10 16:03, Inochi Amaoto wrote:
+> SG2042 use an external MCU to provide basic hardware information
+> and thermal sensors.
+>
+> Add driver support for the onboard MCU of SG2042.
+>
+> Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.11-rc3 next-20240812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Chen Wang <unicorn_wang@outlook.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/drm-i915-hwmon-expose-fan-speed/20240812-161645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240812081538.1457396-1-raag.jadav%40intel.com
-patch subject: [PATCH v5] drm/i915/hwmon: expose fan speed
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20240813/202408130800.XtY6XxQ5-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408130800.XtY6XxQ5-lkp@intel.com/reproduce)
+Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408130800.XtY6XxQ5-lkp@intel.com/
+> ---
+>   Documentation/hwmon/index.rst      |   1 +
+>   Documentation/hwmon/sg2042-mcu.rst |  77 ++++++
+>   drivers/hwmon/Kconfig              |  11 +
+>   drivers/hwmon/Makefile             |   1 +
+>   drivers/hwmon/sg2042-mcu.c         | 388 +++++++++++++++++++++++++++++
+>   5 files changed, 478 insertions(+)
+>   create mode 100644 Documentation/hwmon/sg2042-mcu.rst
+>   create mode 100644 drivers/hwmon/sg2042-mcu.c
 
-All errors (new ones prefixed by >>):
+[......]
 
-   ld: drivers/gpu/drm/i915/i915_hwmon.o: in function `hwm_read':
->> i915_hwmon.c:(.text+0xe60): undefined reference to `__udivdi3'
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
