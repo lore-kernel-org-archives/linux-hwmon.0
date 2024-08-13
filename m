@@ -1,67 +1,66 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1984D8DA;
-	Tue, 13 Aug 2024 15:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A3C2AF0D;
+	Tue, 13 Aug 2024 15:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723564391; cv=none; b=dmHLs+0+cygWeew4D0DzNRgdGvfhdCIKYkDDMyaaghv55qpGP9Ue50fOXihYt5YMLpr0F2V2HWsQEFpcqYcF4BIgSuaACzuNSllJI9G/VARWFDJYTU39nQYJqGkUvH8ib3ty2XZ99N8Oh7s6OoQhWhKeL4ixAt1o1rwpxarkieo=
+	t=1723564524; cv=none; b=Rqpy2mtveM28VFC6KxN1TKG2NmGH/YAd2bxcrZBYNLBCd6Ew0y3WYIBMZNoJugE779e8DtRJYGvW7QZVdRHuJOUPXILdpijF1gntXTSlSQ2LZFeUxtSRlJJImORztPF7PTOeG9xc7I24R6bFB7gf0kLJU4lwIWYs1dKqwbrhSSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723564391; c=relaxed/simple;
-	bh=XZXQn0D9qp6oUZpRwEYVBpQ/F9RMTzsJtw4ybppWYSw=;
+	s=arc-20240116; t=1723564524; c=relaxed/simple;
+	bh=KLRQ9XCMyV4+IoLC63KlpiQQx6VJgzr/PuSqrkEfaa4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bDQMV+1JAEQ0WNFCGJaOYZTlXxoy6mQiyAGBBqqDt/46pvs3fTJvDfXRpN+9rFC6hKgDK6na+l7oe9vUHbPjb8JRTQVWMWOF08hag4ion5JxAtVjuxSy2EsZ/4LEeta7niA5r408lOI+5k+QSktH+V82GMui+NhCtlrx9XFjk5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MoslguCC; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=PB7zl3d9RcNDp17HRE+CKxNfyOqLD2AhoNUO/Z3Gtx/ZfN1lo47qWjPE0UGLe33m/fF1iDzz91Dz8IW3Ed4xEP5rHsyrpsQ4HEH6YA6dzT8kaKb8NCe1+MObg558TTx+3qRTBHRBscLsuYszaXwh1kkKzVfHFl6x9PDCIz6VgyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5MhdNux; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MoslguCC"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1ff4568676eso54446805ad.0;
-        Tue, 13 Aug 2024 08:53:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5MhdNux"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2cb4c584029so4378390a91.3;
+        Tue, 13 Aug 2024 08:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723564389; x=1724169189; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723564522; x=1724169322; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6pdnkA+t5ian2aHHJUDq7NHgKzc+xyESZiLjyrnpwzY=;
-        b=MoslguCCioFS4MQyS6qItX1zAaVu7b03JZA1jfkcqu4eitQLDUb+1C8CQ9aSKpKMPt
-         9kZ8+Vb3bRcSw3I+rN3P0841ry9dEWLTWc2pFxdQBUd8ZScamfs9Gq/kBasfMekxEj7s
-         p8yHLTcSTQ7/5ruxpOWRyzG+sh9Pm2jTZhkgyChynI6KU752Ko0u0jnJVQArO3thnr3B
-         VaFUFC+Biswkpa2LBl1iEZma40s28awVzTIlub1sLP4frYdNt8VVyASIgS+188ybLuFC
-         OmRRLUXya74nQEsPbt3WOALHbduRuq+Ol1yNIlZN69VJha+yuE7aVAyIBJKavnQxvcXT
-         L5LQ==
+        bh=JNEc4eFJdLCTJFxQk4jRqMY314XfkiZ1DqdWjlphD8k=;
+        b=l5MhdNuxjtpo7H/lPAqTAopquIHQl84xd0K+90nNb+PY9UkNGlyYRjLs5SxdMR9Qik
+         mOaF/4U3i/UehLD3L328hAg0nPidd+bQW1kj1v1kQH7IqLa/3TalNPKQ+U2sXlMUcRN6
+         iq7Jox0BOSvNaUYocG1z/DWP7JtguCA6PDpHytX8gSss9p4PmVzfnVQEe/Bh9kkKdyaM
+         l/BNQJNzaWon3D0niWgs7lMgMhkEAtsTwn6QsLj8XSI+FaxODRiG22jVPk796GY+PKWT
+         5pCimFsI1NhjCebFgE1ror20pZhJrczDeAQsbmgR/5+K7wr4xhdejwKnQv93LEUGn5Y/
+         JSng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723564389; x=1724169189;
+        d=1e100.net; s=20230601; t=1723564522; x=1724169322;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6pdnkA+t5ian2aHHJUDq7NHgKzc+xyESZiLjyrnpwzY=;
-        b=ZaFu1+Ary/2Daj3RK5fWZKDBNlKP+yk/MivWIrYy0TTVBYhDiBJCrpW5+U8C23kdHL
-         kYZR6gSeDUqt7jjz0R4zgMbH7ZbNSsdCxw1IBB3rvEi6L+FxvzxeFErRFWdsRSM99cw3
-         Ca6g8I2tdje+N7ynRIQeG8GPq8JYSEnOx+ET77vFFezVNT6Vy8j/1eTEpd89t1Ve30RO
-         knH+3fEN13FUhe/VWvaNZS//AZTG4eGmNK658fxZuaiRLm8UP/vckHULSxr4zlq4/+lj
-         mFHZtbbG0XSbJEy/5ObW6kHwP/dgSGGl1kKN/qRxwp1uYV37hXvPiOzQqMhczdRbkjrv
-         FKjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5DmGGuLYnShD/Y72uNVZbPWqV7FaZPOFg/+OLQMhwdiBTWznj1m2xGMd54Dq3DdT2foekyShvJaeqQPot/5nQoSscI0QovwKxcPwSSdpuwYs5lMR3L1XsDRAinOAGCR2wIiaQv93DAUA=
-X-Gm-Message-State: AOJu0YyfSAHeJ+cn55HetrGmfCeLmz3JLOkAhrMpUnza+J47ImPd1vWr
-	Pj0uz8QMTUcQ++aqcmpaJQrRqAEYqc0cn8rBLJ8732N9RJ6oWjsEhkqAIg==
-X-Google-Smtp-Source: AGHT+IEtCQFeSKon38N3qam/q9EKML/imFjl8GYLR3a8KJlvFvNMztaiAox20Q+RYCRpWgI/JkELxQ==
-X-Received: by 2002:a17:903:2449:b0:200:668f:bfd5 with SMTP id d9443c01a7336-201ca13d746mr49853555ad.21.1723564389002;
-        Tue, 13 Aug 2024 08:53:09 -0700 (PDT)
+        bh=JNEc4eFJdLCTJFxQk4jRqMY314XfkiZ1DqdWjlphD8k=;
+        b=UqvQ9ex70FrLahWIyHHOdQunLG4/WouzFZMmwE/aOa+cYDwpRn13RtQhzG7kWG5U0/
+         kVwdBYEjX6u6+40iRagsOvL5nAdwGZ68dNIbkkrv5PiaGGZgqJ4v5/nRCvUl9hHWQxI3
+         aFEGMQR5+mJhCjf6zc0KINNXzcu6gQ2vwlPg2i8VzfZpP/ADaBlLxj30vjqax25Dq3kG
+         RWOz7vPNbG41G7vYEztSXMlqWnIFopggcfZEOaV2PeJBcl85nPTBPPzUGQEYvK1LrtbB
+         UVWMEt9ns4DJsimSi42WeDkpLJ+nf1+zqwESaLGuvkHmXOnfMwiRaf0cfZHnja77XcMF
+         T1Qw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTo1i2Jy1RSgJF0EINIPhEZDDQN3LOFP8N3pSfFjDI9v6HvLJBLWjLiEw/2LTmYL94aaDAzWMAlAa0LaluIrvbC8ZbB+QQ4T44y57tvJXr74pTfoPVmpYSLPfaQpy3/HjlOxKrg90NGNQ=
+X-Gm-Message-State: AOJu0YxDHkINzO+lOCxJ+9SZq1dsroy8zFuyYLWMYKdU0Om4PQw3j8Wz
+	v0tRenaZCWILQPqF0cTnt7RI2ZtqvZhJ7KEX3T7FMl9TJwxe7GjO
+X-Google-Smtp-Source: AGHT+IHsNoLdrX0R4zp4o2c8WmRrDV2F3h2rC+DtkfhJfrI5TN9h3V521gKbzOJvd+yeGYEpdFTIyw==
+X-Received: by 2002:a17:90b:3b46:b0:2cd:2f63:a447 with SMTP id 98e67ed59e1d1-2d39267dcdbmr4411975a91.36.1723564521500;
+        Tue, 13 Aug 2024 08:55:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1bce12sm15219885ad.227.2024.08.13.08.53.08
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1fd02102dsm7465294a91.51.2024.08.13.08.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 08:53:08 -0700 (PDT)
+        Tue, 13 Aug 2024 08:55:20 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 13 Aug 2024 08:53:07 -0700
+Date: Tue, 13 Aug 2024 08:55:19 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: chipcap2: drop cc2_disable() in the probe and
- return dev_err_probe()
-Message-ID: <95a73570-0ea9-4396-866e-ffb6fc8a2ba0@roeck-us.net>
-References: <20240813-chipcap2-probe-improvements-v2-1-e9a2932a8a00@gmail.com>
+To: Denis Pauk <pauk.denis@gmail.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, attila@fulop.one
+Subject: Re: [PATCH] hwmon: (nct6775) add G15CF to ASUS WMI monitoring list
+Message-ID: <3c1c6785-b994-486d-a255-8c8bd8080eb1@roeck-us.net>
+References: <20240812152652.1303-1-pauk.denis@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,20 +69,46 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240813-chipcap2-probe-improvements-v2-1-e9a2932a8a00@gmail.com>
+In-Reply-To: <20240812152652.1303-1-pauk.denis@gmail.com>
 
-On Tue, Aug 13, 2024 at 12:59:53AM +0200, Javier Carrasco wrote:
-> There is no need to actively disable a regulator that has not been
-> enabled by the driver, which makes the call to cc2_disable() in the
-> probe function meaningless, because the probe function never enables
-> the device's dedicated regulator.
+On Mon, Aug 12, 2024 at 06:26:38PM +0300, Denis Pauk wrote:
+> Boards G15CF has got a nct6775 chip, but by default there's no use of it
+> because of resource conflict with WMI method.
 > 
-> Once the call to cc2_disable() is dropped, the error paths can directly
-> return dev_err_probe() in all cases.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> This commit adds such board to the WMI monitoring list.
 
-Applied.
+Please read the documentation for proper patch descriptions.
+Specifically,
+
+> Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+> instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+> to do frotz", as if you are giving orders to the codebase to change
+> its behaviour.
+
+I'll fix that up, but please keep it in mind for future patches.
+
+Applied,
 
 Thanks,
 Guenter
+
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Tested-by: Attila <attila@fulop.one>
+> ---
+>  drivers/hwmon/nct6775-platform.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index 9aa4dcf4a6f3..096f1daa8f2b 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -1269,6 +1269,7 @@ static const char * const asus_msi_boards[] = {
+>  	"EX-B760M-V5 D4",
+>  	"EX-H510M-V3",
+>  	"EX-H610M-V3 D4",
+> +	"G15CF",
+>  	"PRIME A620M-A",
+>  	"PRIME B560-PLUS",
+>  	"PRIME B560-PLUS AC-HES",
