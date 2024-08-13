@@ -1,233 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D22E19AD90;
-	Tue, 13 Aug 2024 16:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F181A0709
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 16:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723565803; cv=none; b=YCiQTiw3hvZbE2aBndatuD9qmzyczhADv4OaFJpcQ3JVlJa3dPOZ8H9tUWhx6iZV0IYJUfvDNXvXDX9e9LGO2ei5LI4dT4kTT8OqQspEPv280zwxCgOqfa7cr0nVpbQb+Zgi6hv2mC3hvi6+iObCZJBdZJ9W5VCT5Q8XG8RKPNo=
+	t=1723566019; cv=none; b=Vw1AVAHTiZX/ENynEZHdTQak87PK04f6hSkpcn7N0YI6pGMV44Sku4E9AKUEkBa214VF7u9ijYIi4aV/7XawxE4MYM1T/FcQrX4026VyBFVHj3m7At/YBV5pnt3DQPopIF5in/6OVMv+ZCgs8APe0cgGFQH0TWM0tYuyPd+zcBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723565803; c=relaxed/simple;
-	bh=daOJgWX3PT8vZBC5urR9rWuZVDqjHh5/saAshpAPoAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FjsTN29nB4Q2byvz56oIi+vZBef6kICDdiagacdFjSciw6GpRi4VYfdobyGHmNKqI1AQZuI0K+MG6Pihx4d9V8fS12FUfqst/ZQkzk/sUW0CtmF0/TPzPEfUAAAbYPgySvYDuSKJj3LxHy6BohKG28XOg5QfwN6eYJnZSoUFi4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsQ/kg4W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723566019; c=relaxed/simple;
+	bh=C8tZVbJDMojby4sbsZfbNeLsdVrZBpsCltpwAdATmZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UMRSDu0dyteeksV2qedXWsclch5m6JNqGl99c28O9RC59mL+7CMQk6cZzIAvfopSJB7bENNXveXdnyATgJJuSwXsvBgoESpBEFaO97zmxBTvbBPHDgU5Yym2IN6+njYyD24zFvdMdWvEpen7M7H70V0W4yqIJOc3MF2RGnLsjwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PEICgMS1; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsQ/kg4W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D46C4AF09;
-	Tue, 13 Aug 2024 16:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723565803;
-	bh=daOJgWX3PT8vZBC5urR9rWuZVDqjHh5/saAshpAPoAA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PsQ/kg4WI10Y5eUajCACFdN/J7ekx2sJbxryxg2p1zSg+yBoMXNC7Rw5mFteNUxwL
-	 Yg1QL4C/uFFS5m2JotwfWX4+Do9J1Er+MDWjI9ybMPiOxKNnmDeDtuuUn2fl/U0oBg
-	 Fy+7h31xwUBtcvxjZbE+6c9ZmnkQkdAMunjmuExlv0Jhlrl9VwcjaMpNdhRLcg2kt9
-	 kHN6gJ4023Xw1QsNVPysCq9wiwIzvMtd/DKGEPfMuWN6mglWhS6ZR7RX6PJlJeFPJK
-	 hiukZXWgS53IxyfJvg/pWGZrtQ/e08OxHgcE1uPzKZowpy4yAHcaVyeIQ1jmGIGUq2
-	 412R69seE3pAQ==
-Date: Tue, 13 Aug 2024 17:16:38 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Justin Ledford <justinledford@google.com>,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-	Open Source Submission <patches@amperecomputing.com>,
-	Phong Vo <phong@os.amperecomputing.com>,
-	Thang Nguyen <thang@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>
-Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
-Message-ID: <20240813-extruding-unfunded-0e14a5c161e1@spud>
-References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
- <20240813084152.25002-2-chanh@os.amperecomputing.com>
- <20240813-sister-hamburger-586eff8b45fc@spud>
- <10680d13-442d-4f12-a77c-2bd05f11dc10@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PEICgMS1"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3684e8220f9so14171f8f.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Aug 2024 09:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723566014; x=1724170814; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgSm6S2qU2VrM+S+5DH8+MdeO025H1mZEQLkO3/EmQs=;
+        b=PEICgMS1KE6F3oIg1jB3xTb+vw1re71yLT38CHi7j7mrGDvwVtQeDjbL91iEZ9XwrM
+         BSqNp/PsqLevm7K4AtAcD5/npxpf5e54KjgO3BuaJGRup7A6C2t8KhIcl90TzIWtn7ul
+         YM3WDqfFkC8KrS5OHs0VyQBVuYy2HdPoaho3pPo/1aPt5SrzRHGCU8P+QS9Y3w4hPaKG
+         djYRHd7JuupnLhrmrnk7zPnB4VBEUIZ2CGaaCuW+LHlFn+ioW8jaH2noq8daNiowmRlP
+         wFmdpfJ4s/ALrn4S4jze2xKypQQzfL+TP8UV8AbgBrCinsSSEoPeemQCMp3WlGL2THU/
+         RwVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723566014; x=1724170814;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BgSm6S2qU2VrM+S+5DH8+MdeO025H1mZEQLkO3/EmQs=;
+        b=NK3S4zBtbTiuqh2ncKRZ9yjewCZhDMSI6FZjce/70Abj5gJKpYFeDvot6uRrTWjiYX
+         YaRXsc9bTvBfcPm2AFC+5vH3sksys4CRA/bJgGdoaRIhOA2bDUvUEdlrjMG2nsINcR9X
+         VB5/k/jFkWxF52pOfj4Fg1vWUJqufkCQqT5aeR9FNMFpypy9JkYzbx7Vm5prqzZXM81X
+         HEVIjalFd3HP0aISC+aFySPMdaZMXQm2ZhJHSFPkXR05zHdzOKN4xjM9p0Sjqhl135Tb
+         ntQKxcuK5r5yhLPvrpZCTKL3164ibmmayI4KTJp41ar2tAJpc/gEj3V954xAFVc+5yVv
+         cQ9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUnWC0Y6XLcFBCFAAB+bNBZ2r9w4ooa/8IRLI7pXMekkT4RRz+2Y0AtscUReE/PIQrRmTxj3XPkYnntaxFEjVVYnO+0uFJp20qKu80=
+X-Gm-Message-State: AOJu0Yw7qO9bRW/9nN323+ChhHtbrYxrEQB5q1o8JtUaZULGmfJYh1cB
+	AEQ88nzda1rJb3Lh5wOeQSC+EfITMKZNYBGMFv1zkf2F0G5msYP6aFfMcckHqPM=
+X-Google-Smtp-Source: AGHT+IFcsdOXQom88JsbkdTXdvZ8u7603bJwZjY3MGQBwPAl/4YCiHadCzSzBovYSIxkgpZVvf8C1Q==
+X-Received: by 2002:a05:6000:1a89:b0:366:ea4a:17ec with SMTP id ffacd0b85a97d-3716e3ead5emr2881417f8f.2.1723566014065;
+        Tue, 13 Aug 2024 09:20:14 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4d1db515sm10862703f8f.64.2024.08.13.09.20.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Aug 2024 09:20:10 -0700 (PDT)
+Message-ID: <f9f97553-a50a-44c0-b817-3a44f730cfeb@linaro.org>
+Date: Tue, 13 Aug 2024 18:20:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uC4C3RIk4uKBhTFS"
-Content-Disposition: inline
-In-Reply-To: <10680d13-442d-4f12-a77c-2bd05f11dc10@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
+To: Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Justin Ledford
+ <justinledford@google.com>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
+ <20240813084152.25002-2-chanh@os.amperecomputing.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240813084152.25002-2-chanh@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 13/08/2024 10:41, Chanh Nguyen wrote:
+> Add device tree bindings and an example for max31790 device.
+> 
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
 
 
---uC4C3RIk4uKBhTFS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      fan-controller@21 {
+> +        compatible = "maxim,max31790";
+> +        reg = <0x21>;
+> +        clocks = <&sys_clk>;
+> +        resets = <&reset 0>;
 
-On Tue, Aug 13, 2024 at 08:52:22AM -0700, Guenter Roeck wrote:
-> On 8/13/24 08:33, Conor Dooley wrote:
-> > On Tue, Aug 13, 2024 at 08:41:52AM +0000, Chanh Nguyen wrote:
-> > > Add device tree bindings and an example for max31790 device.
-> > >=20
-> > > Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> > > ---
-> > > Changes in v2:
-> > >   - Update filename of the maxim,max31790.yaml                       =
- [Krzysztof]
-> > >   - Add the common fan schema to $ref                                =
- [Krzysztof]
-> > >   - Update the node name to "fan-controller" in maxim,max31790.yaml  =
- [Krzysztof]
-> > >   - Drop "driver" in commit title                                    =
- [Krzysztof]
-> > > Changes in v3:
-> > >   - Drop redundant "bindings" in commit title                        =
- [Krzysztof]
-> > >   - Add the clocks and resets property in example                    =
- [Krzysztof]
-> > >   - Add child node refer to fan-common.yaml                          =
- [Krzysztof, Conor]
-> > > ---
-> > >   .../bindings/hwmon/maxim,max31790.yaml        | 81 ++++++++++++++++=
-+++
-> > >   1 file changed, 81 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,ma=
-x31790.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.y=
-aml b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> > > new file mode 100644
-> > > index 000000000000..d28a6373edd3
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> > > @@ -0,0 +1,81 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/hwmon/maxim,max31790.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: The Maxim MAX31790 Fan Controller
-> > > +
-> > > +maintainers:
-> > > +  - Guenter Roeck <linux@roeck-us.net>
-> >=20
-> > Why Guenter and not you?
-> >=20
->=20
-> Fine with me, actually. We don't expect individual driver maintainers
-> in the hardware monitoring subsystem, and this chip doesn't have an
-> explicit maintainer. Forcing people to act as maintainer for .yaml
-> files they submit can only result in fewer submissions. I prefer to be
-> listed as maintainer over having no devicetree bindings.
+This node is incomplete. I asked to make the example complete, not by
+adding two incomplete examples or other ways... The binding description
+says this device controls fan. If so, where is the fan here?
 
-Sure, if you're happy with it. Having someone that knows about how the
-particular model works is usually preferred however!
+IOW, keep only one, complete example.
 
->=20
-> > > +
-> > > +description: >
-> > > +  The MAX31790 controls the speeds of up to six fans using six
-> > > +  independent PWM outputs. The desired fan speeds (or PWM duty cycle=
-s)
-> > > +  are written through the I2C interface.
-> > > +
-> > > +  Datasheets:
-> > > +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: maxim,max31790
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    maxItems: 1
-> > > +
-> > > +  resets:
-> > > +    maxItems: 1
-> > > +
-> > > +  "#pwm-cells":
-> > > +    const: 1
-> > > +
-> > > +patternProperties:
-> > > +  "^fan-[0-9]+$":
-> > > +    $ref: fan-common.yaml#
-> > > +    unevaluatedProperties: false
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    i2c {
-> > > +      #address-cells =3D <1>;
-> > > +      #size-cells =3D <0>;
-> > > +
-> > > +      fan-controller@21 {
-> > > +        compatible =3D "maxim,max31790";
-> > > +        reg =3D <0x21>;
-> > > +        clocks =3D <&sys_clk>;
-> > > +        resets =3D <&reset 0>;
-> > > +      };
-> > > +    };
-> >=20
-> > What does this example demonstrate? The one below seems useful, this one
-> > I don't quite understand - what's the point of a fan controller with no
-> > fans connected to it? What am I missing?
-> >=20
->=20
-> Just guessing, but maybe this is supposed to reflect a system which only =
-monitors fan
-> speeds but does not implement fan control.
+Rest looks good. With this addressed (and optionally with maintainer
+change, which Conor asked):
 
-Even without any control, I would expect to see fan-# child nodes, just
-no pwms property in them. Without the child nodes, how does software
-determine which fan is being monitored by which channel?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Cheers,
-Conor.
+Best regards,
+Krzysztof
 
-> > > +  - |
-> > > +    i2c {
-> > > +      #address-cells =3D <1>;
-> > > +      #size-cells =3D <0>;
-> > > +
-> > > +      pwm_provider: fan-controller@20 {
-> > > +        compatible =3D "maxim,max31790";
-> > > +        reg =3D <0x20>;
-> > > +        clocks =3D <&sys_clk>;
-> > > +        resets =3D <&reset 0>;
-> > > +        #pwm-cells =3D <1>;
-> > > +
-> > > +        fan-0 {
-> > > +          pwms =3D <&pwm_provider 1>;
-> > > +        };
-> > > +
-> > > +        fan-1 {
-> > > +          pwms =3D <&pwm_provider 2>;
-> > > +        };
-> > > +      };
-> > > +    };
-> > > +
-> > > --=20
-> > > 2.43.0
-> > >=20
->=20
-
---uC4C3RIk4uKBhTFS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZruG5gAKCRB4tDGHoIJi
-0pOFAP4/0+bg9cjKQnVF88AcHV6oKCmzIrA1RT6z0WKz2YQaTwEA7WffCz0ElzBM
-nzSxulI2PfdAHoWuUAIlqFZj6fNb+Qo=
-=iRVr
------END PGP SIGNATURE-----
-
---uC4C3RIk4uKBhTFS--
