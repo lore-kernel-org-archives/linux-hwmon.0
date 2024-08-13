@@ -1,115 +1,208 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33674206D;
-	Tue, 13 Aug 2024 13:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D94199245;
+	Tue, 13 Aug 2024 15:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723554445; cv=none; b=OKKZQQ9xGkZ6kkGM6/j0QbNr+oCcGLrPiZlWzw1NaADI0a1CXVFJ8RaZeGVKeKcltLMmZdv1I5/wZkKYo7Ei/wFHzkHFEhxaQSroeqrSmBD7uphro21vOPOQUdNFfgu3Naq5751fU9PY/cs5WO0pKRwqKGjGxjAGHfaQTBXJtC4=
+	t=1723563231; cv=none; b=P1rIR/ctg29vtVDd9PSobQ+xTXnMl0t4C+/wc3kW8+cpF4I/euLJE1YVu1mC3fN6UH2cAYQIM+TSPLdQxso1CCFq6tvVtUFMln+73DI7k+L1E0uimeOzDggkheT3Hj4SQ1Z8LEsvIC8V7mL8dYzTnOn+PDvMEzkYGyc0jzErbPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723554445; c=relaxed/simple;
-	bh=1SsjcRHn8DjWskGdveSNsQlKaaFlgtYez08ulurzBwM=;
+	s=arc-20240116; t=1723563231; c=relaxed/simple;
+	bh=aBoadrasI7W57NZaSVKLOZTY0EhuP2+mHH77sl5XLqg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b987bi52dmGPmJ6JxzUW2SzuC4S3aXKgriJntyzIEKEBKKMx/hjrJTWI6AhFV1ZIn5FPMmJJjxHwEG0R06ZUKwdxGu7shix83A11AV+eEOcdudNVKL+j6xGTDgM9YbkV9fbtce/G1T4XNlWqI7JQP6jr8aSH7x9j3KNL1Q2bces=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GqpTOnQb; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nRTQ4tJohihQZdRmc37UukQsn2DSYXy8GLEofifTc1Opv+LAf/gXSpelZ+fExVV034wfzbdLM6lgGc2H8oX2z8gDVeuZeuHhuy4B5g9jkfP+tIyeepXHpBZo6YLR3YqJbrUEBSAaIkeAvedS5ihAyWsaopZIOu5nXROYc4vmrjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqBJQhB2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GqpTOnQb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723554444; x=1755090444;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1SsjcRHn8DjWskGdveSNsQlKaaFlgtYez08ulurzBwM=;
-  b=GqpTOnQbFx6/+iJMqz/O95uWKXxvBV66DD6oM3UQ93tFORm0gEn1BdFF
-   RRseEECw1MuoLEeQ01wLtBsKjLWi943DvdkJt/VkdEyakIHFoPI4s+7TU
-   sjUREVO27mAt3eM6WaI6swGkc+nYg/4FTYnncYhVioqfAHvnw30YLpwLy
-   oU3FD7hHmlMzulRWHT3e0FKnSTwUEcFQNwgCZ7QwKQIMsvr4sj5/+Vc2B
-   fpWfy0aD5o960UedoA2JyiwLl3TLSLbDOSCrXfa1SWcDmGMaFx5Hq09n9
-   uJwQJhq2zXxD1tlEoDFbE+P1SiW8N30V4ZKzgcnGCBknLFAUV4Hxyb/+2
-   Q==;
-X-CSE-ConnectionGUID: SV0JfnlPSqi1O6IS0Js1Aw==
-X-CSE-MsgGUID: 43amjeKtRn6Q0blrvJAZEg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="21576990"
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21576990"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 06:07:23 -0700
-X-CSE-ConnectionGUID: U9SN55OaQxG0TKcDYafbeQ==
-X-CSE-MsgGUID: yVuekMmaQvydIIHB4aIdVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="63604817"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 06:07:19 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sdrF5-0000000Ejnv-3Bk5;
-	Tue, 13 Aug 2024 16:07:15 +0300
-Date: Tue, 13 Aug 2024 16:07:15 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
-	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	anshuman.gupta@intel.com, badal.nilawar@intel.com,
-	riana.tauro@intel.com, ashutosh.dixit@intel.com,
-	karthik.poosa@intel.com
-Subject: Re: [PATCH v4] drm/i915/hwmon: expose fan speed
-Message-ID: <Zrtag2qgxsCNiocc@smile.fi.intel.com>
-References: <20240809061525.1368153-1-raag.jadav@intel.com>
- <ZrYB-GI9L2RSc2bt@smile.fi.intel.com>
- <ZrtCIU8On4ZKILmh@black.fi.intel.com>
- <ZrtHz1aY_Lf_XIsL@smile.fi.intel.com>
- <ZrtXReujITKx4rHH@black.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqBJQhB2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E2CC4AF09;
+	Tue, 13 Aug 2024 15:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723563231;
+	bh=aBoadrasI7W57NZaSVKLOZTY0EhuP2+mHH77sl5XLqg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BqBJQhB2BTi81gvNKtt+5KE+UVicUbzTqXIUYTCN25rM9EdjT7sFBgt2FxXZQY5b4
+	 omVRq/AGr0pgos0eOM1nIPIbWgND0BD8PF13j5PQ6qMy6+FCx+ID5SowOocMv/lfYl
+	 JLTfHwSRC6Srixo9FEBbTYwM5/LSKxBlZaAGTGqwoCOD6xBoRz+wr29Kj2XOhdO0rI
+	 p3CDQZUU/BU0/iqpFIzAEqcgZ1/e6JLM6hZHwtGr6l2+B+bzLtZEgQPauW69Z8Asnt
+	 z0S9UjfWJjXj9WXSDZJAYKR7pjxlmuE+ZPgSoGSCMWlnFBDRTA7aqizh1cqa4KlBpo
+	 zgsm2KbaGCjxw==
+Date: Tue, 13 Aug 2024 16:33:46 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Chanh Nguyen <chanh@os.amperecomputing.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Justin Ledford <justinledford@google.com>,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+	Open Source Submission <patches@amperecomputing.com>,
+	Phong Vo <phong@os.amperecomputing.com>,
+	Thang Nguyen <thang@os.amperecomputing.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>
+Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
+Message-ID: <20240813-sister-hamburger-586eff8b45fc@spud>
+References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
+ <20240813084152.25002-2-chanh@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="KmLWo4HnUrmMuilX"
+Content-Disposition: inline
+In-Reply-To: <20240813084152.25002-2-chanh@os.amperecomputing.com>
+
+
+--KmLWo4HnUrmMuilX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZrtXReujITKx4rHH@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 13, 2024 at 03:53:25PM +0300, Raag Jadav wrote:
-> On Tue, Aug 13, 2024 at 02:47:27PM +0300, Andy Shevchenko wrote:
-> > On Tue, Aug 13, 2024 at 02:23:13PM +0300, Raag Jadav wrote:
-> > > On Fri, Aug 09, 2024 at 02:48:08PM +0300, Andy Shevchenko wrote:
-> > > > On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
+On Tue, Aug 13, 2024 at 08:41:52AM +0000, Chanh Nguyen wrote:
+> Add device tree bindings and an example for max31790 device.
+>=20
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> ---
+> Changes in v2:
+>  - Update filename of the maxim,max31790.yaml                        [Krz=
+ysztof]
+>  - Add the common fan schema to $ref                                 [Krz=
+ysztof]
+>  - Update the node name to "fan-controller" in maxim,max31790.yaml   [Krz=
+ysztof]
+>  - Drop "driver" in commit title                                     [Krz=
+ysztof]
+> Changes in v3:
+>  - Drop redundant "bindings" in commit title                         [Krz=
+ysztof]
+>  - Add the clocks and resets property in example                     [Krz=
+ysztof]
+>  - Add child node refer to fan-common.yaml                           [Krz=
+ysztof, Conor]
+> ---
+>  .../bindings/hwmon/maxim,max31790.yaml        | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max3179=
+0.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml =
+b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+> new file mode 100644
+> index 000000000000..d28a6373edd3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/maxim,max31790.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: The Maxim MAX31790 Fan Controller
+> +
+> +maintainers:
+> +  - Guenter Roeck <linux@roeck-us.net>
 
-...
+Why Guenter and not you?
 
-> > > > > +	/*
-> > > > > +	 * HW register value is accumulated count of pulses from
-> > > > > +	 * PWM fan with the scale of 2 pulses per rotation.
-> > > > > +	 */
-> > > > > +	rotations = pulses >> 1;
-> > > > 
-> > > > In accordance with the comment the
-> > > > 
-> > > > 	rotations = pulses / 2;
-> > > > 
-> > > > looks better.
-> > > 
-> > > This change seems to cause a build error in v5.
-> > > Something to do with __udivdi3 on i386.
-> > 
-> > No, it's not this change.
-> > Please, read report carefully.
-> 
-> CI seems to point to DIV_ROUND_UP(), but it's been there since v1.
-> So not sure if I entirely understand.
+> +
+> +description: >
+> +  The MAX31790 controls the speeds of up to six fans using six
+> +  independent PWM outputs. The desired fan speeds (or PWM duty cycles)
+> +  are written through the I2C interface.
+> +
+> +  Datasheets:
+> +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max31790
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 1
+> +
+> +patternProperties:
+> +  "^fan-[0-9]+$":
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      fan-controller@21 {
+> +        compatible =3D "maxim,max31790";
+> +        reg =3D <0x21>;
+> +        clocks =3D <&sys_clk>;
+> +        resets =3D <&reset 0>;
+> +      };
+> +    };
 
-Yes, that's the issue. You always can reproduce on your side. LKP sent you
-comprehensive information about their setup.
+What does this example demonstrate? The one below seems useful, this one
+I don't quite understand - what's the point of a fan controller with no
+fans connected to it? What am I missing?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Otherwise, this looks pretty good.
 
+Cheers,
+Conor.
 
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      pwm_provider: fan-controller@20 {
+> +        compatible =3D "maxim,max31790";
+> +        reg =3D <0x20>;
+> +        clocks =3D <&sys_clk>;
+> +        resets =3D <&reset 0>;
+> +        #pwm-cells =3D <1>;
+> +
+> +        fan-0 {
+> +          pwms =3D <&pwm_provider 1>;
+> +        };
+> +
+> +        fan-1 {
+> +          pwms =3D <&pwm_provider 2>;
+> +        };
+> +      };
+> +    };
+> +
+> --=20
+> 2.43.0
+>=20
+
+--KmLWo4HnUrmMuilX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZrt82QAKCRB4tDGHoIJi
+0mfTAQCIh7cHlaxYyQpgjq8jaFAybQNe1wPKzSldTsOMfKR2tgEA9R5fCsaqh07Y
+tdouMeBz+xGCY7U3NBLB02Z6xDiydAc=
+=CZ86
+-----END PGP SIGNATURE-----
+
+--KmLWo4HnUrmMuilX--
