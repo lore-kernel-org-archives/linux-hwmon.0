@@ -1,55 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40649170A2B;
-	Tue, 13 Aug 2024 11:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715631993BA;
+	Tue, 13 Aug 2024 12:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723549656; cv=none; b=S5sAFKc2k1h9pBhQ6kJnrTDwSWGoMN49ntVFBXsxs72pnwUBOWt6pB2hfKagAeRM2jPRj63v1f9ob6oq4cHYt5CwGcj8IOJ6tuBmBT48cLNws/I1fTEpjp36yzp49DF+LVRI5k8IexT/LlEV6tyAjwGCOCXzIs1TvVgYuxTtSMo=
+	t=1723553615; cv=none; b=eKR1ArHv4ntgkqzdJncpJgZWzW2Y5/0Fwp9SgpxWkFA5b/6GVnooAke1XuXyN3lrHqpG5+jQEZ0jmJxSah9x5sSsdKCZKy3EFCoU9uQRSer/uIhmSyC5AhLlRXLqqh+7fcdPF9gaQi0hRz7R20kFNnit3WvVbFiH+6FeKYyNX94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723549656; c=relaxed/simple;
-	bh=G3pOGZVBqXB7sYa2biEjElbdDn1qcCVetk8yRjFI7VY=;
+	s=arc-20240116; t=1723553615; c=relaxed/simple;
+	bh=s3WViNmjNJ6o3NfDc+gVFx6Ybq9EcXt5R1mltnGBdKE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yi/MSFTno3VEvC1H/1hv/9a7r3tvdds/zzYAoC4CbmLd39OzfyAsREJDdsAJd5SrjIHHUjYlDld9dUvPTXr5zX9DorJHvfmhFxES3c9HPYcHnXq1pCPK49n4TuTq4Zgkzc3QsqyvDjIongkLseozvavI/t7Zkomk5IMGkbzhZ1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EnMLezDq; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=HOLJPB7NcVyCOe5P+kQ6tN+ggxihUXBHSIj0KNHQUSiKGE68RX8h5gRTbYlwfc5/cclurs6f8+PUkqbGHN8kf3W4bfsLzKk+NKrt4XOnRUKJ7gv1FKmt64+W8TmAqoFCx/Tlq44zojD/4IPzLrmtkRsaILFS5y93Tjn4eohkA+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FwLVNos1; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EnMLezDq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FwLVNos1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723549655; x=1755085655;
+  t=1723553613; x=1755089613;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=G3pOGZVBqXB7sYa2biEjElbdDn1qcCVetk8yRjFI7VY=;
-  b=EnMLezDqBNHPWTSdYnU33I/gWqbZeP3sN7Q8m0KHQ16ku9RLPuheaWIl
-   hYwRNcAuCktYwr8cWFeXP8dX4pvBkO54iawqae3d3ObTjHPeN0zyMl/+n
-   IGjbd6VdOU0HbyPs2ClowqYtYzvqdxLyQnBflE2wla4gH5KcIf9KpAnAQ
-   PqdfsEz63IaeENuefBdaHU0+K+XLzx8AoY2Ihy2BUxYAUs23tMpHBwJRX
-   CPOuj6T77DO8O05F+ptku4Bhbkx3txC7RaVpd61MvnknU6Vqd8oVMOA7Y
-   jBUb1QhQTR53E1BtOJL8iYjpquCOdcJZfMhwWkIFfobSKp1N7pJv9Ve+Y
-   g==;
-X-CSE-ConnectionGUID: bnvg5LeKS+6PtVjF5/P1DQ==
-X-CSE-MsgGUID: xTutnZ81RxmudOgWL05MBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21523385"
+  bh=s3WViNmjNJ6o3NfDc+gVFx6Ybq9EcXt5R1mltnGBdKE=;
+  b=FwLVNos14bauskWYbsW4bstXfRkXT2Ri3Ts4Ch9vjaIhDMMwxDLuz0DY
+   R+so4HEJKsnv2WDfvRxSbOXOb0PLs+BjHjQJWkXOrSjBK6chnE2WBtsZ0
+   iaDRpfFubCSAVpnQ+ktk/NqQbFSOS6lLMYyOtZX+E28K3NF1qJrbqOEje
+   tpUQwtViHKuhJQVq+JK75FeYFUpsteQDPBwaw2BQSoWvaiX5TGPcawN7N
+   7VhDQufxFc1pCOe7glliGB+/Oz1gubN6KfrrtU42IIRUAZRtlvDYzoNWV
+   FA+moG+J00JLEwtVMT2GdkEEmMJNgJcyivkjZHaXCupKNY3SLNFp+qqKu
+   Q==;
+X-CSE-ConnectionGUID: q6YUYli1Q9SKs7+UwEJ0cg==
+X-CSE-MsgGUID: FsmOBv+RSNG3nPCDoF+2FQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="39163793"
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21523385"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:47:35 -0700
-X-CSE-ConnectionGUID: VQZ2r7WpSwadk3elOT4wXg==
-X-CSE-MsgGUID: EAyy5BgcTr6dvpG+kQFuLw==
+   d="scan'208";a="39163793"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 05:53:32 -0700
+X-CSE-ConnectionGUID: qW8nmxWuQcCi7KvEjkkwXQ==
+X-CSE-MsgGUID: YBZBrvvTRwmZiwNFcbn3DA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="63038013"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:47:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sdpzs-0000000EiH4-0Rht;
-	Tue, 13 Aug 2024 14:47:28 +0300
-Date: Tue, 13 Aug 2024 14:47:27 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
+   d="scan'208";a="96189629"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 05:53:28 -0700
+Date: Tue, 13 Aug 2024 15:53:25 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
 	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
 	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
@@ -59,10 +55,11 @@ Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
 	riana.tauro@intel.com, ashutosh.dixit@intel.com,
 	karthik.poosa@intel.com
 Subject: Re: [PATCH v4] drm/i915/hwmon: expose fan speed
-Message-ID: <ZrtHz1aY_Lf_XIsL@smile.fi.intel.com>
+Message-ID: <ZrtXReujITKx4rHH@black.fi.intel.com>
 References: <20240809061525.1368153-1-raag.jadav@intel.com>
  <ZrYB-GI9L2RSc2bt@smile.fi.intel.com>
  <ZrtCIU8On4ZKILmh@black.fi.intel.com>
+ <ZrtHz1aY_Lf_XIsL@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,35 +68,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZrtCIU8On4ZKILmh@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ZrtHz1aY_Lf_XIsL@smile.fi.intel.com>
 
-On Tue, Aug 13, 2024 at 02:23:13PM +0300, Raag Jadav wrote:
-> On Fri, Aug 09, 2024 at 02:48:08PM +0300, Andy Shevchenko wrote:
-> > On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
-
-...
-
-> > > +	/*
-> > > +	 * HW register value is accumulated count of pulses from
-> > > +	 * PWM fan with the scale of 2 pulses per rotation.
-> > > +	 */
-> > > +	rotations = pulses >> 1;
-> > 
-> > In accordance with the comment the
-> > 
-> > 	rotations = pulses / 2;
-> > 
-> > looks better.
+On Tue, Aug 13, 2024 at 02:47:27PM +0300, Andy Shevchenko wrote:
+> On Tue, Aug 13, 2024 at 02:23:13PM +0300, Raag Jadav wrote:
+> > On Fri, Aug 09, 2024 at 02:48:08PM +0300, Andy Shevchenko wrote:
+> > > On Fri, Aug 09, 2024 at 11:45:25AM +0530, Raag Jadav wrote:
 > 
-> This change seems to cause a build error in v5.
-> Something to do with __udivdi3 on i386.
+> ...
+> 
+> > > > +	/*
+> > > > +	 * HW register value is accumulated count of pulses from
+> > > > +	 * PWM fan with the scale of 2 pulses per rotation.
+> > > > +	 */
+> > > > +	rotations = pulses >> 1;
+> > > 
+> > > In accordance with the comment the
+> > > 
+> > > 	rotations = pulses / 2;
+> > > 
+> > > looks better.
+> > 
+> > This change seems to cause a build error in v5.
+> > Something to do with __udivdi3 on i386.
+> 
+> No, it's not this change.
+> Please, read report carefully.
 
-No, it's not this change.
-Please, read report carefully.
+CI seems to point to DIV_ROUND_UP(), but it's been there since v1.
+So not sure if I entirely understand.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Raag
