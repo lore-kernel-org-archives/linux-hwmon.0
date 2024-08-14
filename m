@@ -1,217 +1,189 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11022073.outbound.protection.outlook.com [40.93.195.73])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5870314373B;
-	Wed, 14 Aug 2024 08:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D919519FA8F;
+	Wed, 14 Aug 2024 10:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723625898; cv=fail; b=BuS/LWSTzsdtrqCzjGFG9av3EUwg+SXKqMSat78w/DoQIN8mmDcxTbq2AXRHJDEV+GG9kpxL03gZlkZzzcpzvHssq143uw6Ppx22Bu/A4GHMm1SPiJJNlU9io3aP3AUijlZYOO1Okcnczlfdwcy/ylw5pxh6daPG5l5eB2A/Mrs=
+	t=1723629628; cv=fail; b=lK7eePgtOdqZQH4euhLvY5+h3pCEbqvOIPvMfLlWXVALKM53NapzVbPJ6bq2RchPrN7SWrY8Dt/446hONkfQcWbPQxnKd7sdRyN2ws+1M0D6mjvFifl7GFvlg/29R1EAo1YOK5dhaq2rLUoSvy2d3cL6z4RuiiH7/9SVc9BU//Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723625898; c=relaxed/simple;
-	bh=ImJsb1Kr/HOwgIagvkSwbQxLUbpgl3KBHDs/JNNdY3k=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YKTTn2E0JUc2RW94o6pZgZD3G93s+1B326Kw1y2QAHdmJPZovUhGMhzRk2q31DGya0y1bqsgI0tZBidsHLq73wBXeT475AVSeHeTI/UHHwPfXenZAloLYxYx0yqv5a6zUNS1Yb0QOKLYM2fyEM+PF81o+04IffoSclOA2G7LqhQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=4HdOuBvF reason="key not found in DNS"; arc=fail smtp.client-ip=40.93.195.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+	s=arc-20240116; t=1723629628; c=relaxed/simple;
+	bh=cqDjiYIoBrKhsf9egtIPOdVMhUIFpTNikj46l3gWq4E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DOZp9Wvg9tM90OfRR6UWQweYAAopEFcHsUwFBaMl5P66SFsVq7uAm9BhpTH/vNn5ZZQe/myktS2vNXbH/E6p/C9edag8oQr+j8Dd2fs/5W91OXmpbzLTGB4BHaDtEZy/x5m/4u4YU5Vylj0ylm5NCs5V4NoZx9Cy0pzVEk9Yx9o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ggcgv55E; arc=fail smtp.client-ip=40.107.93.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="4HdOuBvF"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ggcgv55E"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bnWqDodDBohS4wNE1DvO/NYwVPy3pGHzDVtaPDuWGQoAwVaRMjnEvrA1OSU0+H5b4G/Vpx3y1kEKo0WGhTxfcOO/YJovwGS7hyYPQy1xYaqw1tK7XS7ob/zzhAC7jEfUp5W7QELZKowiI9beSVfV8ZHn9ZZ1pd8IYpYYgGbRxaQ7z2ho+PoNDWDdFIOyCwgDLcTRMWZ34/B+0a47bShVpdb5HvXDdAKRLQnv92PGVp/+hXpY4DnFlA+XnushSNZp5crVmj/enW1K4X8PQrgsjRkAZs7PtmE/dm5dIdKlKi+H+Is2Se826yOgIFevLNyU9WmqATT4/KgSG/9t3xgZAA==
+ b=d/9TP3sTl6wnGF5x+9sMKahNFX1vRKpMzRhAS+e/akq0XkEY81EfhGrCWL5Z6ANo+fOm0f9vl46Opzzj/5Lb5fe8Uj1K8QJHQ7hDj+EOmIdwqcxWRTHHKT5JlxBQQmQheydlhC7zykjGxdpTZUQshB/g227P4w4fU3n8V5dtekg91OK2b2r212qqsMHG9MjXsPnYIQP/etBbr/PUxJN9DF1nLgQFIZNoOmULrobX6n/gGxLmvDp6mdMV/eBgHgLMop0sihVDTXUgm0GEF1EPrLH4CffxuElDzd9Y5yF7W9imnnTRRtbH5bNIFukYYkqkT2baBKDZmmyfUlOSn7HHKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=96cmG06uvFDYQemSDeZYuqDVXCnvM8jHlOh8EnLK8ZY=;
- b=eGcD8jCMSOUknc5ywU5oepd1uWMX0U6LzrRFyn15Nk1IImWjsP5Ychw9FjRFDhZs0EPuSbMOdhBJVQmqVhh0o9RUhRe2iPrT3gZB32VUD/HApm7cx5Cg130qoBsH3G3QcCCtybtLTSnHNtjGfac/Gs+b45u+CMZnGxkp/3z+cl5hrFzrY21S/tNmq+59GXEomP1EnaNZ1SB+gJY6ncsRPwFXs3AtJlr623SaQRzayT0xufVmCIVGMiEIh/o+zFVHbKceLUhY+AURJeW7oBAw9+Ls/veBh18zoYkp1BIfN9lX4OSy1LFobh1F8ZfQXW055l9EHLwVWAQyUPTXlBsgRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ bh=/K9XpMfu51uoFgwpgeXy6TK0/K3vXX3nZzRGSXTybZ0=;
+ b=IqiijnN3mxNoANPmyDc6WiHO33YiuymoGTMRVwQZCugRixAZs7Y0G68Imokl0gxAjP7ysAR+Fc3zK3fda4cvlgKeS6M0bukQFWn5P7TFL2cnIQ6SvQAJxdeZn2yPPIIRo3a5sK2AIIeTXm02dYHtCsQQzryKeiEMkQH9fpwOQs+Ev9TaPvvZR0dRMmJXVKXS0ezGCusoBp5JB8031xt4dF4O1EcD7pxpDy3QTGcMHItdq0p5NuT1WNKw7umqjOmfCTDg4RKZBJNUeBu01so1x3sd0kxNwcTroE3RFUDvhzHs1luN/oM9uZKwZYlIs0y5IA76jw4LJox/27S/xF8Itw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=96cmG06uvFDYQemSDeZYuqDVXCnvM8jHlOh8EnLK8ZY=;
- b=4HdOuBvF8qHL1G5rVlqOxRg5ZBbssxyOTP8lDQjqz6wpMj5PL3DJyoo747xNHaNWwfk0BEU5j2bzxoYips+GM8g07zbuuRpfC1d/q4gXnF/sVZD6L78sOB2RicvnElMclirVz9xObDnWm6YyLCyLosaO/FmGrqZd+oqTSaqgSSk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from BL3PR01MB7057.prod.exchangelabs.com (2603:10b6:208:35c::16) by
- MN0PR01MB7611.prod.exchangelabs.com (2603:10b6:208:376::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7849.22; Wed, 14 Aug 2024 08:58:14 +0000
-Received: from BL3PR01MB7057.prod.exchangelabs.com
- ([fe80::b69e:5684:ed7c:4d09]) by BL3PR01MB7057.prod.exchangelabs.com
- ([fe80::b69e:5684:ed7c:4d09%4]) with mapi id 15.20.7849.021; Wed, 14 Aug 2024
- 08:58:14 +0000
-Message-ID: <8e7f8ca4-4596-464a-a307-0f726863f776@amperemail.onmicrosoft.com>
-Date: Wed, 14 Aug 2024 15:58:02 +0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] dt-bindings: hwmon: Add maxim max31790
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>,
- Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>
-References: <20240813084152.25002-1-chanh@os.amperecomputing.com>
- <20240813084152.25002-2-chanh@os.amperecomputing.com>
- <20240813-sister-hamburger-586eff8b45fc@spud>
- <10680d13-442d-4f12-a77c-2bd05f11dc10@roeck-us.net>
- <20240813-extruding-unfunded-0e14a5c161e1@spud>
- <cff4a562-2ed7-4dbc-9e2f-68ff1a601ef3@linaro.org>
-Content-Language: en-US
-From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <cff4a562-2ed7-4dbc-9e2f-68ff1a601ef3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0032.apcprd02.prod.outlook.com
- (2603:1096:4:195::12) To BL3PR01MB7057.prod.exchangelabs.com
- (2603:10b6:208:35c::16)
+ bh=/K9XpMfu51uoFgwpgeXy6TK0/K3vXX3nZzRGSXTybZ0=;
+ b=ggcgv55EZLXp6AzQRNtRAq1FZjRtfWRd2VO4wXmpos36ag8SbZCHqF2TyfV4QBQHlAsBbQ0UDQB7gz6KnhzbwZWq9NACuCFtFy9V1lm4EbZMjy7qZ25ycFAygkdtTwGhAYgAG3BR46PesnqqicttUTfQBbwW8ApnEfDTpGg/m/8=
+Received: from CH5PR05CA0021.namprd05.prod.outlook.com (2603:10b6:610:1f0::18)
+ by DS0PR12MB8528.namprd12.prod.outlook.com (2603:10b6:8:160::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.22; Wed, 14 Aug
+ 2024 10:00:24 +0000
+Received: from CH2PEPF00000141.namprd02.prod.outlook.com
+ (2603:10b6:610:1f0:cafe::38) by CH5PR05CA0021.outlook.office365.com
+ (2603:10b6:610:1f0::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.17 via Frontend
+ Transport; Wed, 14 Aug 2024 10:00:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH2PEPF00000141.mail.protection.outlook.com (10.167.244.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7849.8 via Frontend Transport; Wed, 14 Aug 2024 10:00:24 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 14 Aug
+ 2024 05:00:15 -0500
+From: Akshay Gupta <akshay.gupta@amd.com>
+To: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <linux@roeck-us.net>, <gregkh@linuxfoundation.org>, <arnd@arndb.de>,
+	<naveenkrishna.chatradhi@amd.com>, Akshay Gupta <akshay.gupta@amd.com>
+Subject: [PATCH v3 0/8] misc: Add AMD side band interface(SBI) functionality
+Date: Wed, 14 Aug 2024 09:59:45 +0000
+Message-ID: <20240814095954.2359863-1-akshay.gupta@amd.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL3PR01MB7057:EE_|MN0PR01MB7611:EE_
-X-MS-Office365-Filtering-Correlation-Id: f357eb0c-0e27-40ce-d088-08dcbc3f3b24
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000141:EE_|DS0PR12MB8528:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43716b57-b8c7-45b1-9104-08dcbc47ea7e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UElmZnF2SGZqZU9xUmlvWTN1biszcFRralJiM2M5b0JJc3pJNkRWazdMZ0Nm?=
- =?utf-8?B?dU10ZHhKRW44RVJ5amJrYUVBTXBJc2I3T2k4T2QzbUVBQmF5b0ovTXcvYjRG?=
- =?utf-8?B?ZlFwWS9kVktuQk1iMDhyd3NzalVoMmxyVzJ0ZjcvclRlWEZsY3QxKzc2eG8y?=
- =?utf-8?B?aVBkKzlrazU4bENRMDJnZUpZOS90QW85SzlrV2VsdWRJMWpKQ2xRdGE3cVpx?=
- =?utf-8?B?Y3VnYkZjUlEyL0xUS3F0dE1UTzF4WG1XWmMxVnNsVU05U251V0d2Unl1Rm9R?=
- =?utf-8?B?QXUxQ290NlpZbXU1S01TTE13R3ZHUTBkbjV2Mzhmci9GVCtvSFl4Vk1OOUpJ?=
- =?utf-8?B?NTcwMzRSSlgwZnl5MGFOMU5BU3BxNEVMUUVmWEQ0TUtoL0hKY2VVaXczQWZG?=
- =?utf-8?B?b1lSK3FiVDZVcU1MTjZSUlAwbStYUFB4V1JyNkQvbGtTcStXYXdBbzVEM3ZS?=
- =?utf-8?B?MEFvWkRBNVB1TGFoenRGZDNtS3RvZ0UxS090U1I3L0F2bEV4NVQxWGJ4Vno3?=
- =?utf-8?B?OWVaOUQ1MFdjdko3T0N1QzZublNOYkN0L25VT1ZUcmNiTW1pZ2RvY3hMa2Ry?=
- =?utf-8?B?ZHMveHpoLzgzdnNSSnRuelJIVUxmNlJTeEpia0hxZlk0dG9wNlAvUmk5cnpC?=
- =?utf-8?B?R1NsZzRWaEkrSlRTN3RvWW84cUVvUXozd1lSdXBpcnBFNkx6a20zWjczek5G?=
- =?utf-8?B?N2VLL3NnTlpFY1lWZXpKTHpiZFFUc2ZoM3A3cGZtd2NwQVRZTFJLK3VxZGsw?=
- =?utf-8?B?bXdjeTl1OEIvRWRRekE0ZUsvc0ZyKzdCRU9yYkZvTzFIejJoYi95bVdCbTkr?=
- =?utf-8?B?d0o1YU1BdllJdHZ2ZlZzR3pVb0hNTE5ET0ZzWXRNSm15aC9XZUNMbk8zcllL?=
- =?utf-8?B?QkVnZ1N0Wk1pWHZQZkM1c1JhUHlPQWlvdVRiKzh3dnJlZjMyM1RSN0J4dGVx?=
- =?utf-8?B?SFowRkw4eWptZ2F6cEtqaWpEZU9WYmlxNjVkeUVlZDZrUVR6b0tUWjcrODhs?=
- =?utf-8?B?NHFRMmJWWXZCOU85YWxzdkR6MlI2L2xDdVAvMlJrQlBiZHdDRDJzVEJmRVZP?=
- =?utf-8?B?TlQvZ2JPZzRlSkZCVW1KRmhqcmZXbzVCckdZMWY2b3ZTQndDalFSQW5jOXFS?=
- =?utf-8?B?VjVlZDkyRnVoNHQ5L1VFQkdsWFFRdHE2UDczaFM0N2tnSTc4WlhDS0lwZXB5?=
- =?utf-8?B?ZTI5UUhvVHpnSnR4QTBSZWNIT3M4RFBhcy9iZ0ZNb20xeTVKTWRiRVovb0Fk?=
- =?utf-8?B?cllGbWZlOExHOHBzMjllYUNrNEhZTjh1SUVxQXVMVktSclUzY0tEV25Pcjcv?=
- =?utf-8?B?M2VETzZDMlZhVnhEWWRQS1lQdFVCVmtSTnM0aTRxUTAzV3Z3SkZVNjhvRXB5?=
- =?utf-8?B?bnQ2elo1endmb0NTZHExVG1iTnZhL2ovV0xyaUEramNJSnRVZ0ZnNk1lSGZx?=
- =?utf-8?B?Y1h4b3ZOa0tqNTgzVHgxdXRQdngwcy9nWHpNNU9tbXVTYXlsNFZUMHNqZ3pJ?=
- =?utf-8?B?Y2hmRlFlM2UrdTJkbzQyN0dxNEI3ekpnbVdHSVEvcXFKeEp5d0ZiSkpYT0hI?=
- =?utf-8?B?U0dnSHJweC9Kc0FCNEtTRG10T0dmYzdyYXdoSy8zeVc4dnVDSklhbkFrTlp0?=
- =?utf-8?B?SkJxdEtLZkVnaGdNRGhYTXhZUE5iTjdMbWl4Sm5YSWxVcTk1MG1wVHpDa25D?=
- =?utf-8?B?RVFzS3A3S1FWMlhuTkxoT1dld2tKZ3EyS2hGbmdnOUFIeEM2UTdoNSs5MVBW?=
- =?utf-8?B?eE9YdGVENDNKQnlKT0tpWVlTNTBMNnErZkpsUStlYXpuV1VsY3FkZkRQSXNt?=
- =?utf-8?B?MFJtazRPYmpmd2p2a2kydz09?=
+	=?us-ascii?Q?0VEjOfnKYwWSoTRHv/iOEbo6p0iDK5LJBIP024g60q5JPAfMm9K/eCiYvrla?=
+ =?us-ascii?Q?dSaqoCUrPIPGvGGqFzJ9+jMBg1aWVeXI0wT4bHqhdC7ip581mOlK+JvzQgF4?=
+ =?us-ascii?Q?oGEEcoYZf2Oczpi4YyjBbEbnIUtNfDieQnfqSFwhzABJ1TkealjvCUygMMWt?=
+ =?us-ascii?Q?a6kyAB6nXP2CLuCBnwQlCTWk7PxCxaVlLrBQUu7+6nTEx/Q3zIuQeoqrUsMi?=
+ =?us-ascii?Q?OqT3hkTzUIa1I297NODKGG4Ourkq2fM07zAwROWFKolyJjQSDoMSYc5vd7CO?=
+ =?us-ascii?Q?WnKJcwK4qm+6B9Kv7PKDrxh2Jvt4sDc6tDbFge92juO1OmbLq+xnEZEIzuD4?=
+ =?us-ascii?Q?seT0qB3CWrqMMZR3qJZimYaImo7RwvPsuuzdRdhbVvJPFn/El2p/qhyO4iku?=
+ =?us-ascii?Q?gYInPlIYEcuJHCX5XhSLj6Zmlppdjw68hZLO8PT2+YbRX3/6l2pKVS5qhKB1?=
+ =?us-ascii?Q?ccmZX150ifXPXux5awjwJQ1GlyKH3xBAM5d9up2l/t2fdRUGhmC9dUQfShV8?=
+ =?us-ascii?Q?dlxPxORKq1qTU+gBSyjzJ6wZi28WBmLioAftGePI8D8KWXI7sXJf4tc5fqnb?=
+ =?us-ascii?Q?TY5kmV4AVYziBpFE90GxMoQRLAEqxkFK9sVRksgzH1XBjWpd/YIsbS0npBOt?=
+ =?us-ascii?Q?ApPq/73dM/Vw10dvfOS0AOjVvmK3NgX+wRQuzE+s+UCDHD/4CbTti9AAOjs+?=
+ =?us-ascii?Q?g9bQig1GJOWUodEzr8ZwYfiiQLmUjKlZdtOaRe4PjqNdbvN35JxQdoKgdyIx?=
+ =?us-ascii?Q?U3jF22w1UBCH334RuTbP/Lfr4PXpuEeyMrEreB2E7lEb0zbYg/dUU6xIFADp?=
+ =?us-ascii?Q?I19PKs9yC8pre8D1GgZoDqMtW0HiW+EpRzeFKnX7m+AMUlLN7HjPvPNqCsWk?=
+ =?us-ascii?Q?CBHbrhVbtNs3wXzQpnovI2mvQFVLjcoftbP8rObIZMywrjVkS+gOf4NHklj8?=
+ =?us-ascii?Q?X5njNoaFwvi5+/xm5LKqkAGAgpzWZa0M/2/Djx6W9gp/TYx+HMkkMC5VtZCC?=
+ =?us-ascii?Q?4oc6ZLPxK73gJp5y2TuilMx86BTPYd7rBraqSW76jUNItawEq6Jh0LTjP6Wm?=
+ =?us-ascii?Q?apoFPWoKac0nGu2Q7YGM3AgaTDxneXvQoUtl7/kcLtC9XmYKJ289RXXZcnUh?=
+ =?us-ascii?Q?Fh0vFgA3adVq0jW8xseiCletTytsXQfbOATIo1Za490+G3iRDAFlYMbp0RMl?=
+ =?us-ascii?Q?nKIhqgxw+ie3mJ71x302fNO/w4swDaR5JERgRe1uFXTklofzXZDZNbnwqexW?=
+ =?us-ascii?Q?zTRxHgDeBcEJmU/Rg+ymMqsiBaJ0wDjQEuqp1QHMUR1O8IK6f9+Z1gJsuxnl?=
+ =?us-ascii?Q?y0mbyb6vDeNROhFeFAQXpeecSTRlg9hqfolmSnKdxlzswo+q7OD/zjjCXQH8?=
+ =?us-ascii?Q?DRecYr2pBJ/OboQjK9BHTqCeEt3+vS59dXn00t2BhxzvZqf2fw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR01MB7057.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RXIwdG5KMEtwaU1qYmZtUXMrRTNMUjd6c1R6ZGE1N1pOSzM0OFVYSVd3S0kx?=
- =?utf-8?B?a2ZjaFJVd1YwRUh6NEFXMWJ6N1VHVkppRzBkbFVabU1OUHlXVS9HcVhwWWt2?=
- =?utf-8?B?RjNpeGcwZnhwZUhhOENPVDljUzh5TVBFejM5NXhrWFhjSHhoaTErYURKaE9q?=
- =?utf-8?B?TlJGTjlOUVo4bVMzS04zYUhtWmZ6T28xRVhabGNFVldYd0l2S0hpaWlwNWJV?=
- =?utf-8?B?L2ZwSW5CQ2lycEFMZFhGcEdLdERSYnJ3R1ZNd1RXOEt3bkk3ZnpmUTQvczdk?=
- =?utf-8?B?blBwMU9HQWZUM05iWmNBU1VGQ0Noanh6Q3dzK1VGRnlNdktHanpPaVpSbE5P?=
- =?utf-8?B?c2pnNXBBa0FRS3BOMitjeEx1WndDQ3Q1NU1MQ200ZkI1M0Zwa3N3K1BRelI2?=
- =?utf-8?B?TnNsRmhsc2Nyb0FKN1Q4MlRIeldDb3VzZzkwZEtseHNrdnFzQ1kvTUZFRU1U?=
- =?utf-8?B?czcvNVhRMUtOYXFqeTV2bENVT0VxcDZhMXkvNzJ6UUpiNm5nNW5LSWI1ZmNl?=
- =?utf-8?B?elJsc0xpdlk4Q0paZ3lXbFRNblN3ekV5VGhPekRpcGYvQnJTUkgwRlQ5YnYr?=
- =?utf-8?B?djB5UlExUk9zSVpTS3BRcW5NV3AzQjZuNnB5em93U1laWm5aanNrWkZvL1VZ?=
- =?utf-8?B?S25yYmRyYXhxemNTbGppM1hPSVZ1WElLeDE0d21ib2FLODJKSmNQclNNdFZn?=
- =?utf-8?B?Z2xoVzFSeHN0TTJvQkRvQnpXZXFEMCtCN21VWitaK2RLeTFWQ0FyakEvV01S?=
- =?utf-8?B?OWZBc3E0ZFNoL09Vc25mM2pKcXc4bW9vQS9LTjNuVkNGYXpUZ0JGR1RKMkcz?=
- =?utf-8?B?UWN4a0lwc2lpRURnRldoSjJGNldhQWFQSGJlRzJNYk1xU0lxZ2QwNGVYMjZ0?=
- =?utf-8?B?Y2NaTlVOVlpxWnNtRGJaaDVpTUVEY2xocmJKanBVcGdMdXZKMFo0aHdTR29O?=
- =?utf-8?B?MVNleEpySSsrallWMVpTNjIyaERudE1mSmcwMndZTE81OFF6MVVhSXVnNTVo?=
- =?utf-8?B?WnhUQWViUGF3OVczTmgzNk9aK2thU0UrNGMxWDBUSHE2VWdHek9JWlFWY2cw?=
- =?utf-8?B?MG1nNHplKzRLZ1poQ2RZZUV2YzJ1UW51UUpHSEladW1LRDF6TWpwYUZuQnoz?=
- =?utf-8?B?OXlqcXo0Tm1MNmNjcFpHc0pGTU15UEt5R2pkUG9BdjIrd3BoeklVYVhDS1VP?=
- =?utf-8?B?aENiQ2NkQ0M0QitXTDQ2OTVEOUhwWEwvblZuMVdYR0ZWazUrb2M4amNQeEk4?=
- =?utf-8?B?d2V5aDBoT3VKNkduQWFNaTVZUmRNYnUzaU1TWmdxblhlbEtGV0FOaC9keWRt?=
- =?utf-8?B?VmpKOGNmeVJSdGpoM3ZucURrNno4b09Vek5ZTVZBNjFJMGMyM3E3M3U3NlpG?=
- =?utf-8?B?Q2FJUE55dlgzbmRaVUI2bkFxNXNkd3FxMHFPOHhhR3krajhDQzNwSlg2NWNl?=
- =?utf-8?B?S3REYTZOMHFGL29tZXZPcVp3bG5GeVFFbS9YNU5STkJhZEJ3Wk1seWMzR2lC?=
- =?utf-8?B?WXdWTlk2bXB1TnQxeVpVSDQ3cGszQWsyT0RIeVh2eXp4bnE2ZFQ5L2gxbWJn?=
- =?utf-8?B?Y3N0SXR5eWc3bkRJbDc3dldjb21YQkNMNDJwcVc3MW96bGVubUNPY1FoZ2pa?=
- =?utf-8?B?TXVpRjRKSzhDRnFHTzJIZkxONi96Y25ZQ1VHZURkT3BzdHk1TzdpSU12Q21Y?=
- =?utf-8?B?cjE3VjlGNDA1RmxTa0NTR0YrTk9QRXZZNEhoNDFZUXZ0NDUwOVBkTDZWU2Jj?=
- =?utf-8?B?eFh4alorNWdLVndLOWFYQTJMd1lOdnZJVlZXc0hKUFV5TGZ3dDV5bEJzQ1F5?=
- =?utf-8?B?bXcwYndOelV2N1hxUlByRmJiQ0FTdHhET2lkVHNveU0yVXNIdXRFSjUzdkor?=
- =?utf-8?B?RGRYQnZnMWFlUjQrdWIyVWFSdGEyV2JSL3A0Q3RDdER4cmQ0Z3lnQWVFRnFw?=
- =?utf-8?B?eFEvelUrOEM2UlNjTkJGTC9GNDRmdlFURUhuSWdxWDMxa2x5TlBBZUdTUktH?=
- =?utf-8?B?VHJSQllHdG04UW4wU0t5WFhEZ0FLQVdOMUpWTER4ZitMVitrQkdrTW1zNUlQ?=
- =?utf-8?B?TzE4cDVCanFQSnJUa2dqdWJ1YjgxNWxuQ293SWRxdXBtQkUvYm05NVpmR1Fj?=
- =?utf-8?B?eGVvZlhITUtvcmplQ1NSTlJNSURCaW1ESEltRkZHTG1oVVQzdnh3VDJ4emd2?=
- =?utf-8?Q?2kKdzr+giWT1a/eNBT8iY1g=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f357eb0c-0e27-40ce-d088-08dcbc3f3b24
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR01MB7057.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2024 08:58:14.4452
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2024 10:00:24.1693
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8htAkMptcanGuPqdvddR0bU/ojfpi+elIdgjBCwU8kDkCxxirVjlrPJ84hYQ5I1sIxSY8dp/muI+NheqqHRNSEvFPdOK8KCnISvgYZeFDUIvVT6N7BUOXBVPtccXCkqN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR01MB7611
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43716b57-b8c7-45b1-9104-08dcbc47ea7e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000141.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8528
 
+AMD's Advanced Platform Management Link (APML) interface provides system
+management functionality accessed by the baseboard management controller (BMC).
+sbrmi driver under hwmon subsystem, which is probed as an i2c driver and
+reports power using APML specified protocol.
+However, APML interface defines few other protocols to support
+full system management functionality out-of-band.
+Out-of-band management is term used for BMC talking to system management unit
+(IP in the processor). AMD's documentation called this link as side band interface.
 
+This patchset is an attempt to add all APML core functionality in one place
+and provide hwmon and user space interface
+1. Move the i2c client probe, hwmon sensors and sbrmi core functionality [Patch 1]
+   from drivers/hwmon to drivers/misc/
+2. Convert i2c to regmap which provides multiple benefits [Patch 2]
+   over direct smbus APIs.
+    a. i2c/i3c support and 
+    b. 1 byte/2 byte RMI register size addressing
+3. Register a misc device which provides [Patch 3, 4]
+    a. An ioctl interface through node /dev/sbrmiX
+    b. Register sets is common across APML protocols. IOCTL is providing
+       synchronization among protocols as transactions may create
+       race condition.
+4. [Subsequent patches 5, 6 and 7] add support for AMD custom protocols
+    a. CPUID
+    b. MCAMSR
+    c. Register xfer
+5. AMD side band description document [Patch 8]
 
-On 13/08/2024 23:21, Krzysztof Kozlowski wrote:
-> On 13/08/2024 18:16, Conor Dooley wrote:
->>>>> +examples:
->>>>> +  - |
->>>>> +    i2c {
->>>>> +      #address-cells = <1>;
->>>>> +      #size-cells = <0>;
->>>>> +
->>>>> +      fan-controller@21 {
->>>>> +        compatible = "maxim,max31790";
->>>>> +        reg = <0x21>;
->>>>> +        clocks = <&sys_clk>;
->>>>> +        resets = <&reset 0>;
->>>>> +      };
->>>>> +    };
->>>>
->>>> What does this example demonstrate? The one below seems useful, this one
->>>> I don't quite understand - what's the point of a fan controller with no
->>>> fans connected to it? What am I missing?
->>>>
->>>
->>> Just guessing, but maybe this is supposed to reflect a system which only monitors fan
->>> speeds but does not implement fan control.
->>
->> Even without any control, I would expect to see fan-# child nodes, just
->> no pwms property in them. Without the child nodes, how does software
->> determine which fan is being monitored by which channel?
-> 
-> Yeah, to me this example is confusing. If device's purpose is to also
-> monitor, then hardware description in "description:" field should be a
-> bit extended.
-> 
-> Best regards,
-> Krzysztof
-> 
+Open-sourced and widely used https://github.com/amd/esmi_oob_library
+will continue to provide user-space programmable API.
 
-Thank all for your comments!
+Akshay Gupta (8):
+  hwmon/misc: amd-sbi: Move core sbrmi from hwmon to misc
+  misc: amd-sbi: Use regmap subsystem
+  misc: amd-sbi: Add support for AMD_SBI IOCTL
+  misc: amd-sbi: Add support for mailbox error codes
+  misc: amd-sbi: Add support for CPUID protocol
+  misc: amd-sbi: Add support for MCA register protocol
+  misc: amd-sbi: Add supoort for register xfer
+  misc: amd-sbi: Add document for AMD SB IOCTL description
 
-I'll keep only complete example. I'm going to push patch v4 in the 
-coming days.
+ Documentation/misc-devices/amd-sbi.rst        | 121 +++++
+ .../userspace-api/ioctl/ioctl-number.rst      |   2 +
+ drivers/hwmon/Kconfig                         |  10 -
+ drivers/hwmon/sbrmi.c                         | 357 -------------
+ drivers/misc/Kconfig                          |   1 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/amd-sbi/Kconfig                  |   9 +
+ drivers/misc/amd-sbi/Makefile                 |   3 +
+ drivers/misc/amd-sbi/rmi-core.c               | 475 ++++++++++++++++++
+ drivers/misc/amd-sbi/rmi-core.h               |  67 +++
+ drivers/misc/amd-sbi/rmi-hwmon.c              | 122 +++++
+ drivers/misc/amd-sbi/rmi-i2c.c                | 135 +++++
+ include/uapi/misc/amd-apml.h                  |  74 +++
+ 13 files changed, 1010 insertions(+), 367 deletions(-)
+ create mode 100644 Documentation/misc-devices/amd-sbi.rst
+ delete mode 100644 drivers/hwmon/sbrmi.c
+ create mode 100644 drivers/misc/amd-sbi/Kconfig
+ create mode 100644 drivers/misc/amd-sbi/Makefile
+ create mode 100644 drivers/misc/amd-sbi/rmi-core.c
+ create mode 100644 drivers/misc/amd-sbi/rmi-core.h
+ create mode 100644 drivers/misc/amd-sbi/rmi-hwmon.c
+ create mode 100644 drivers/misc/amd-sbi/rmi-i2c.c
+ create mode 100644 include/uapi/misc/amd-apml.h
 
-Regards!
-Chanh
+-- 
+2.44.0
+
