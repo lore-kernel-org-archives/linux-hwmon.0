@@ -1,153 +1,626 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505D11E520
-	for <linux-hwmon@vger.kernel.org>; Fri, 16 Aug 2024 14:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3281C230C;
+	Fri, 16 Aug 2024 17:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723818062; cv=none; b=EjNqWJu/t3gI/uJw8eMPs7Z7y76mcT/AwETXMatJ/mefwz46uKpiA/KHr6blbVFy3B+yvZfdJNIFynu6vLeoP8QlIEZFIxhrT1iipvSNaZMAqucos1E/WWSstnMxiJpehlYZ7c3odLvuJkSaOtYhvZTybZeajYlMbr8qxlVw65Y=
+	t=1723828422; cv=none; b=ispZGGjs/Hb+EZoUj8XNoXn/WxqL4uxnQtRVN/FaIaJ40YI27enBZANcipncn7HQRLucrsicwfTPqH0S7nULVs/JDAZsztsrKrWxdL5e+B6b+4IKvCA8TGdjR1C4VUCifbtplLsHSUThhBvuBGavoSgG5Rp5RDKIlHYgYU8LBqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723818062; c=relaxed/simple;
-	bh=dt822B1s7HAdv+Qw8hzss4hoGQONe1credrqN/QGxew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gYGd3mKeJNu+oljKgiaux6ZxjUP2328feYyaxo9df3RCyr1QI6+po5mUPhOStZ93+T5GryAI0TE+wQx8ETrw0vaqRyXJmy0gI4RFWzyHiT1MURFWD0Ds1gbgXwrUOPCLl/4wmHt0//jDmSiV4PuBQtlmflTjt1mKazQMcnVirfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bw74tiq7; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723828422; c=relaxed/simple;
+	bh=VuO0lhV6v1fhCig+xAS2g1N9ON3e+KySvA10Zp/DwMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nx0O7vQmvGeXmAG+Y/gZk04miLaGyIdXOPQyxLmQbm2/enmmWrWykF7O5hQ2Rjz4qYvl+DE0SO+oWlCEQxYeFWm53eCg2S3taLuuIOCWe8aUM2YZay+g8SrbRiH+EKWdkfYPmNS3hVtYD7jRUu1xQISZXPPD7tOPT5jepCjvCxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rj4qRNPJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bw74tiq7"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3dd16257b87so997599b6e.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Aug 2024 07:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723818060; x=1724422860; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jp2bh9g1s9N0Lq/N2dQ26R6rnjVSzWbRkLo9ix9GZ4o=;
-        b=Bw74tiq7toAwEbvxsF+cpaTtZdATndmXkxNtvWXGLF7LbgoIk596l5kXu+U6FIugrY
-         8Uet4dBNQS8RXGGJXGSVFBQSf8DmnzN09+cXZFpAQRz3o/f9zZlifkcdkc+hwiLOn2T5
-         tswHbE6YUL8x4GCUgf6zk9oaSqrJChIVQBL2BuO7iIk9zx4Sj/3iqS9zIdEGRymBntda
-         8leGZtGm45t1UxHswC0NbHFAcVJPaRNQYgt/i/oWH/geb+Y8gEMvlHuCmIHjcf6RskP2
-         ztbeyIsTI7dLfJlG4K7PTKsb/7q7T5ekWZc0Sfyf2y4ox9EKUNwv8rKl+g5iyGaPgrr1
-         9yuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723818060; x=1724422860;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jp2bh9g1s9N0Lq/N2dQ26R6rnjVSzWbRkLo9ix9GZ4o=;
-        b=qS7nFzDm2j6N8MzIXx9Mv/elttvaM8+Zx0pWd8gXjqvIq6qzGgbTVd0bY29Z9/B1ZC
-         v6YzF9gre7RPhslQE3Iw1oxC+e4FQPxV7T5CHB9fMcmm6TD8/MEH+grPmiKwT9LBYVqx
-         5rQ5rcqC51ccdSTvaKvVChhnGk6e8g3vpzs0eWoQVPHN7vs1p0pLK7MqFzYOSTcpXgVw
-         5I0iz35Zb0U/KzqkGmkWixhEabLTydz5Jtlo5JnNkIDKisKNUtIJw0vlffxMB7fiXBjC
-         I/abS/BsyuLOEh1kPVV1XaFH/fsgv3Qbrn5B6/mn4ebd3DXDjI0PNkHTJ+UNQRw5o4wK
-         YTZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZMT5GRsid8yqTtzk7/LCfqmGR4IyZi2aVHAZ5nELH0Ojc4ep6lpXcFr0GKLNAso8uUUIFkpI0i9WKBLQ4lG6J2FiGtCiYNNLGYIk=
-X-Gm-Message-State: AOJu0Yy+qmGcEAANf3UmH2p0kzdSCiEnemZJPBU+awyhxW+G8sE+cABp
-	jQ4xAt7jx7MOWrWSuHDEpNMridXpLz7lN8mslUFssrNn9HxFPcB2
-X-Google-Smtp-Source: AGHT+IHJaZBoDPJljgxeOX+5HW1k4+wiR4L2jL1qZwF9RmzOOOvxnG5Gvm79URUpyFtU8nbwsefV0g==
-X-Received: by 2002:a05:6808:2207:b0:3db:251b:c16 with SMTP id 5614622812f47-3dd3ae17428mr3507142b6e.42.1723818060172;
-        Fri, 16 Aug 2024 07:21:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c6b61e10b8sm3002847a12.47.2024.08.16.07.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Aug 2024 07:20:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <767fdc63-af2f-4234-a887-d34348e0cd15@roeck-us.net>
-Date: Fri, 16 Aug 2024 07:20:58 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rj4qRNPJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4BDC32782;
+	Fri, 16 Aug 2024 17:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723828422;
+	bh=VuO0lhV6v1fhCig+xAS2g1N9ON3e+KySvA10Zp/DwMw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rj4qRNPJr+Krim3X1SYt9Oel1PAau46i7EGUSsB+OnWDim/lksrcq9QGm4rPZabLU
+	 4u+w7kcAfdKMqFsFwrChhRggKfkBrdnxHpg2JqtqWZ3QI2WwmaTZBVrmN/zYBsJlpH
+	 rXJSQXJ0vi17SAq6ZTVzjPXRMkcGjSS4/q0f8cubSQkY4yi6IIorqTsAsxOHnn7+qS
+	 CuhgV+jsuA89CuZyB8S/bHfrGStX9rY7LiSN8vuPiDSourpIzwmREBpXUg8yyM/p2Z
+	 P53yvYHDYlwHZDEulL5vZEYfTdDkcGcrqgxYl2Ce0OQpDw1OodLbFHnb+SD7MfD6Q5
+	 3SE2DpgK/CM8w==
+Date: Fri, 16 Aug 2024 18:13:36 +0100
+From: Lee Jones <lee@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: jdelvare@suse.com, linux@roeck-us.net, dmitry.torokhov@gmail.com,
+	pavel@ucw.cz, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ukleinek@debian.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] mfd: add base driver for qnap-mcu devices
+Message-ID: <20240816171336.GF5853@google.com>
+References: <20240810184743.277248-1-heiko@sntech.de>
+ <20240810184743.277248-3-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: pwmfan: do not force disable pwm controller
-To: mailinglist1@johanneskirchmair.de, linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com, Johannes Kirchmair <johannes.kirchmair@skidata.com>
-References: <20240816063656.275918-1-mailinglist1@johanneskirchmair.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240816063656.275918-1-mailinglist1@johanneskirchmair.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240810184743.277248-3-heiko@sntech.de>
 
-On 8/15/24 23:36, mailinglist1@johanneskirchmair.de wrote:
-> From: Johannes Kirchmair <johannes.kirchmair@skidata.com>
+On Sat, 10 Aug 2024, Heiko Stuebner wrote:
+
+> These MCUs are used in network-attached-storage devices made by QNAP
+> and provide additional functionality to the system.
 > 
-> The pwm1_enable attribute of the pwmfan driver influences the mode of
-> operation, especially in case of a requested pwm1 duty cycle of zero.
-> Especially setting pwm1_enable to two, should keep the pwm controller
-> enabled even if the duty cycle is set to zero [1].
+> This adds the base driver that implements the serial protocol via
+> serdev and additionally hooks into the poweroff handlers to turn
+> off the parts of the system not supplied by the general PMIC.
 > 
-> This is not the case at the moment, as the pwm controller is disabled
-> always if pwm1 is set to zero.
+> Turning off (at least the TSx33 devices using Rockchip SoCs) is twofold.
+
+This sentence doesn't make sense.
+
+"twofold" means "times (multiply by) two".
+
+> Turning off the MCU does not turn off the SoC and turning off the SoC
+> does not turn off the hard-drives. And if the MCU is not turned off,
+> the system also won't start again until it is unplugged from power.
 > 
-> This commit tries to fix this behavior.
+> So on shutdown the MCU needs to be turned off before the general PMIC.
 > 
-> [1] https://docs.kernel.org/hwmon/pwm-fan.html
+> The protocol spoken by the MCU is sadly not documented, but was
+> obtained by listening to the chatter on the serial port, as thankfully
+> the "hal_app" program from QNAPs firmware allows triggering all/most
+> MCU actions from the command line.
 > 
-> Signed-off-by: Johannes Kirchmair <johannes.kirchmair@skidata.com>
+> The implementation of how to talk to the serial device got some
+> inspiration from the rave-sp servdev mfd.
+
+"MFD" or better yet "driver".
+
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 > ---
->   drivers/hwmon/pwm-fan.c | 11 ++++++-----
->   1 file changed, 6 insertions(+), 5 deletions(-)
+>  MAINTAINERS                  |   6 +
+>  drivers/mfd/Kconfig          |  10 +
+>  drivers/mfd/Makefile         |   2 +
+>  drivers/mfd/qnap-mcu.c       | 358 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/qnap-mcu.h |  28 +++
+>  5 files changed, 404 insertions(+)
+>  create mode 100644 drivers/mfd/qnap-mcu.c
+>  create mode 100644 include/linux/mfd/qnap-mcu.h
 > 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index a1712649b07e..10c4e9bcf10c 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -167,7 +167,7 @@ static int pwm_fan_power_on(struct pwm_fan_ctx *ctx)
->   	return ret;
->   }
->   
-> -static int pwm_fan_power_off(struct pwm_fan_ctx *ctx)
-> +static int pwm_fan_power_off(struct pwm_fan_ctx *ctx, int force_disable)
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8766f3e5e87e0..f9f605a3c12a4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18652,6 +18652,12 @@ L:	linux-media@vger.kernel.org
+>  S:	Odd Fixes
+>  F:	drivers/media/tuners/qm1d1c0042*
+>  
+> +QNAP MCU DRIVER
+> +M:	Heiko Stuebner <heiko@sntech.de>
+> +S:	Maintained
+> +F:	drivers/mfd/qnap-mcu.c
+> +F:	include/linux/qnap-mcu.h
+> +
+>  QNX4 FILESYSTEM
+>  M:	Anders Larsen <al@alarsen.net>
+>  S:	Maintained
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index bc8be2e593b6b..ca7289e906a7b 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -2362,6 +2362,16 @@ config MFD_INTEL_M10_BMC_PMCI
+>  	  additional drivers must be enabled in order to use the functionality
+>  	  of the device.
+>  
+> +config MFD_QNAP_MCU
+> +	tristate "QNAP MCU core driver"
 
-Please use bool.
+Now's the time to expand "MCU"
 
-Guenter
+> +	depends on SERIAL_DEV_BUS
 
+You need to depend on the MFD Core too.
+
+> +	help
+> +	  Select this to get support for the QNAP MCU device found in
+> +	  several devices of QNAP network attached storages.
+
+s/storages/storage devices/
+
+> +
+> +	  It implements the base serial protocol to talk to the device
+> +	  and provides functions for the other parts to hook into.
+> +
+>  config MFD_RSMU_I2C
+>  	tristate "Renesas Synchronization Management Unit with I2C"
+>  	depends on I2C && OF
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 02b651cd75352..fc8b825725ff2 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -286,5 +286,7 @@ obj-$(CONFIG_MFD_INTEL_M10_BMC_PMCI)   += intel-m10-bmc-pmci.o
+>  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
+>  obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
+>  
+> +obj-$(CONFIG_MFD_QNAP_MCU)	+= qnap-mcu.o
+> +
+>  obj-$(CONFIG_MFD_RSMU_I2C)	+= rsmu_i2c.o rsmu_core.o
+>  obj-$(CONFIG_MFD_RSMU_SPI)	+= rsmu_spi.o rsmu_core.o
+> diff --git a/drivers/mfd/qnap-mcu.c b/drivers/mfd/qnap-mcu.c
+> new file mode 100644
+> index 0000000000000..be73bd88d7608
+> --- /dev/null
+> +++ b/drivers/mfd/qnap-mcu.c
+> @@ -0,0 +1,358 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+
+Superfluous newline.
+
+> +/*
+> + * MFD core driver for the MCU in Qnap NAS devices that is connected
+
+No such thing as an "MFD".  Please describe the device.
+
+Is it QNAP or Qnap?  Please be consistent.
+
+> + * via a dedicated UART port
+> + *
+> + * Copyright (C) 2024 Heiko Stuebner <heiko@sntech.de>
+> + */
+> +
+> +#include <linux/export.h>
+
+What is this used for?
+
+> +#include <linux/slab.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/qnap-mcu.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/reboot.h>
+> +#include <linux/serdev.h>
+
+Alphabetical.
+
+> +/* The longest command found so far is 5 bytes long */
+> +#define QNAP_MCU_MAX_CMD_SIZE		5
+> +#define QNAP_MCU_MAX_DATA_SIZE		36
+> +#define QNAP_MCU_CHECKSUM_SIZE		1
+> +
+> +#define QNAP_MCU_RX_BUFFER_SIZE		\
+> +		(QNAP_MCU_MAX_DATA_SIZE + QNAP_MCU_CHECKSUM_SIZE)
+> +
+> +#define QNAP_MCU_TX_BUFFER_SIZE		\
+> +		(QNAP_MCU_MAX_CMD_SIZE + QNAP_MCU_CHECKSUM_SIZE)
+> +
+> +/**
+> + * struct qnap_mcu_reply - Reply to a command
+> + *
+> + * @data:	Buffer to store reply payload in
+> + * @length:	Expected reply length, including the checksum
+> + * @received:	So far received number of bytes
+
+"Received number of Bytes, so far"
+
+> + * @done:	Reply received completely
+
+"Triggered when the entire reply has been received"
+
+> + */
+> +struct qnap_mcu_reply {
+> +	u8 *data;
+> +	size_t length;
+> +	size_t received;
+> +	struct completion done;
+> +};
+> +
+> +/**
+> + * struct qnap_mcu - QNAP NAS embedded controller
+> + *
+> + * @serdev:	Pointer to underlying serdev
+> + * @bus_lock:	Lock to serialize access to the device
+> + * @reply_lock:	Lock protecting @reply
+> + * @reply:	Pointer to memory to store reply payload
+> + * @variant:	Device variant specific information
+> + * @version:	MCU firmware version
+> + */
+> +struct qnap_mcu {
+> +	struct serdev_device *serdev;
+> +	/* Serialize access to the device */
+
+Comments and K-doc is OOT.
+
+> +	struct mutex bus_lock;
+> +	/* Protect access to the reply pointer */
+> +	struct mutex reply_lock;
+> +	struct qnap_mcu_reply *reply;
+> +	const struct qnap_mcu_variant *variant;
+> +	u8 version[4];
+
+Please define all magic numbers.
+
+> +};
+> +
+> +/*
+> + * The QNAP-MCU uses a basic XOR checksum.
+> + * It is always the last byte and XORs the whole previous message.
+> + */
+> +static u8 qnap_mcu_csum(const u8 *buf, size_t size)
+> +{
+> +	u8 csum = 0;
+> +
+> +	while (size--)
+> +		csum ^= *buf++;
+> +
+> +	return csum;
+> +}
+> +
+> +static int qnap_mcu_write(struct qnap_mcu *sp, const u8 *data, u8 data_size)
+> +{
+> +	unsigned char tx[QNAP_MCU_TX_BUFFER_SIZE];
+> +	size_t length = data_size + QNAP_MCU_CHECKSUM_SIZE;
+> +
+> +	if (WARN_ON(length > sizeof(tx)))
+
+Are you sure you want to warn like this here?
+
+A dev_err() seems more appropriate.
+
+> +		return -ENOMEM;
+
+Why does this condition signify OOM?
+
+Maybe consider -EINVAL?
+
+> +	memcpy(tx, data, data_size);
+> +	tx[data_size] = qnap_mcu_csum(data, data_size);
+> +
+> +	print_hex_dump_debug("qnap-mcu tx: ", DUMP_PREFIX_NONE,
+> +			     16, 1, tx, length, false);
+
+You can remove this now development is complete.
+
+> +	return serdev_device_write(sp->serdev, tx, length, HZ);
+> +}
+> +
+> +static size_t qnap_mcu_receive_buf(struct serdev_device *serdev,
+> +				   const u8 *buf, size_t size)
+
+Use up to 100-chars to prevent early line-wrap.
+
+> +{
+> +	struct device *dev = &serdev->dev;
+> +	struct qnap_mcu *mcu = dev_get_drvdata(dev);
+> +	struct qnap_mcu_reply *reply = mcu->reply;
+> +	const u8 *src = buf;
+> +	const u8 *end = buf + size;
+> +
+> +	mutex_lock(&mcu->reply_lock);
+> +	if (!reply) {
+> +		dev_warn(dev, "received %zu bytes, we were not waiting for\n",
+> +			 size);
+> +		mutex_unlock(&mcu->reply_lock);
+
+guard(mutex)?
+
+> +		return size;
+> +	}
+> +
+> +	while (src < end) {
+> +		reply->data[reply->received] = *src++;
+> +		reply->received++;
+> +
+> +		if (reply->received == reply->length) {
+> +			complete(&reply->done);
+> +			mutex_unlock(&mcu->reply_lock);
+> +
+> +			/*
+> +			 * We report the consumed number of bytes. If there
+> +			 * are still bytes remaining (though there shouldn't)
+> +			 * the serdev layer will re-execute this handler with
+> +			 * the remainder of the Rx bytes.
+> +			 */
+> +			return src - buf;
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * The only way to get out of the above loop and end up here
+> +	 * is through consuming all of the supplied data, so here we
+> +	 * report that we processed it all.
+> +	 */
+> +	mutex_unlock(&mcu->reply_lock);
+> +	return size;
+> +}
+> +
+> +static const struct serdev_device_ops qnap_mcu_serdev_device_ops = {
+> +	.receive_buf  = qnap_mcu_receive_buf,
+> +	.write_wakeup = serdev_device_write_wakeup,
+> +};
+> +
+> +int qnap_mcu_exec(struct qnap_mcu *mcu,
+> +		  const u8 *cmd_data, size_t cmd_data_size,
+> +		  u8 *reply_data, size_t reply_data_size)
+> +{
+> +	unsigned char rx[QNAP_MCU_RX_BUFFER_SIZE];
+> +	size_t length = reply_data_size + QNAP_MCU_CHECKSUM_SIZE;
+> +	struct qnap_mcu_reply reply = {
+> +		.data     = rx,
+> +		.length   = length,
+> +		.received = 0,
+> +		.done     = COMPLETION_INITIALIZER_ONSTACK(reply.done),
+> +	};
+> +	int ret;
+> +
+> +	if (WARN_ON(length > sizeof(rx)))
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&mcu->bus_lock);
+> +
+> +	mutex_lock(&mcu->reply_lock);
+> +	mcu->reply = &reply;
+> +	mutex_unlock(&mcu->reply_lock);
+> +
+> +	qnap_mcu_write(mcu, cmd_data, cmd_data_size);
+> +
+> +	if (!wait_for_completion_timeout(&reply.done,
+> +					 msecs_to_jiffies(500))) {
+> +		dev_err(&mcu->serdev->dev, "Command timeout\n");
+> +		ret = -ETIMEDOUT;
+> +	} else {
+> +		u8 crc = qnap_mcu_csum(rx, reply_data_size);
+> +
+> +		print_hex_dump_debug("qnap-mcu rx: ", DUMP_PREFIX_NONE,
+> +				     16, 1, rx, length, false);
+> +
+> +		if (crc != rx[reply_data_size]) {
+> +			dev_err(&mcu->serdev->dev,
+> +				"Checksum 0x%02x wrong for data\n", crc);
+> +			ret = -EIO;
+> +		} else {
+> +			memcpy(reply_data, rx, reply_data_size);
+> +			ret = 0;
+> +		}
+> +	}
+> +
+> +	mutex_lock(&mcu->reply_lock);
+> +	mcu->reply = NULL;
+> +	mutex_unlock(&mcu->reply_lock);
+> +
+> +	mutex_unlock(&mcu->bus_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qnap_mcu_exec);
+> +
+> +int qnap_mcu_exec_with_ack(struct qnap_mcu *mcu,
+> +			   const u8 *cmd_data, size_t cmd_data_size)
+> +{
+> +	u8 ack[2];
+> +	int ret;
+> +
+> +	ret = qnap_mcu_exec(mcu, cmd_data, cmd_data_size, ack, sizeof(ack));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Should return @0 */
+> +	if (ack[0] != 0x40 || ack[1] != 0x30) {
+
+Why not use the char variants?
+
+> +		dev_err(&mcu->serdev->dev, "Did not receive ack\n");
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qnap_mcu_exec_with_ack);
+> +
+> +const struct qnap_mcu_variant *qnap_mcu_get_variant_data(struct qnap_mcu *mcu)
+> +{
+> +	return mcu->variant;
+> +}
+> +EXPORT_SYMBOL_GPL(qnap_mcu_get_variant_data);
+> +
+> +static int qnap_mcu_get_version(struct qnap_mcu *mcu)
+> +{
+> +	u8 cmd[] = {
+> +		[0] = 0x25, /* % */
+> +		[1] = 0x56  /* V */
+> +	};
+> +	u8 rx[14];
+> +	int ret;
+> +
+> +	ret = qnap_mcu_exec(mcu, cmd, sizeof(cmd), rx, 6);
+> +	if (ret)
+> +		return ret;
+> +
+> +	memcpy(mcu->version, &rx[2], 4);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * The MCU controls power to the peripherals but not the CPU.
+> + *
+> + * So using the pmic to power off the system keeps the MCU and hard-drives
+> + * running. This also then prevents the system from turning back on until
+> + * the MCU is turned off by unplugging the power-cable.
+> + * Turning off the MCU alone on the other hand turns off the hard-drives,
+> + * LEDs, etc while the main SoC stays running - including its network ports.
+> + */
+> +static int qnap_mcu_power_off(struct sys_off_data *data)
+> +{
+> +	struct qnap_mcu *mcu = data->cb_data;
+> +	int ret;
+> +	u8 cmd[] = {
+> +		[0] = 0x40, /* @ */
+> +		[1] = 0x43, /* C */
+> +		[2] = 0x30  /* 0 */
+> +	};
+
+u8 cmd [] = { '@', 'C', '0' };  ?
+
+
+> +	dev_dbg(&mcu->serdev->dev, "running MCU poweroff\n");
+
+This is unlikely to be useful post-development.
+
+> +	ret = qnap_mcu_exec_with_ack(mcu, cmd, sizeof(cmd));
+> +	if (ret) {
+> +		dev_err(&mcu->serdev->dev, "MCU poweroff failed %d\n", ret);
+> +		return NOTIFY_STOP;
+> +	}
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static const struct qnap_mcu_variant qnap_ts433_mcu = {
+> +	.baud_rate = 115200,
+> +	.num_drives = 4,
+> +	.fan_pwm_min = 51,  /* specified in original model.conf */
+
+Please start sentences with upper-case chars.
+
+> +	.fan_pwm_max = 255,
+> +	.usb_led = true,
+> +};
+> +
+> +static const struct of_device_id qnap_mcu_dt_ids[] = {
+> +	{ .compatible = "qnap,ts433-mcu", .data = &qnap_ts433_mcu },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, qnap_mcu_dt_ids);
+> +
+> +static const struct mfd_cell qnap_mcu_subdevs[] = {
+> +	{ .name = "qnap-mcu-input", },
+> +	{ .name = "qnap-mcu-leds", },
+> +	{ .name = "qnap-mcu-hwmon", }
+> +};
+> +
+> +static int qnap_mcu_probe(struct serdev_device *serdev)
+> +{
+> +	struct device *dev = &serdev->dev;
+> +	struct qnap_mcu *mcu;
+> +	int ret;
+> +
+> +	mcu = devm_kzalloc(dev, sizeof(*mcu), GFP_KERNEL);
+> +	if (!mcu)
+> +		return -ENOMEM;
+> +
+> +	mcu->serdev = serdev;
+> +	dev_set_drvdata(dev, mcu);
+> +
+> +	mcu->variant = of_device_get_match_data(dev);
+> +	if (!mcu->variant)
+> +		return -ENODEV;
+> +
+> +	mutex_init(&mcu->bus_lock);
+> +	mutex_init(&mcu->reply_lock);
+
+Can you not get away with a single lock?
+
+> +	serdev_device_set_client_ops(serdev, &qnap_mcu_serdev_device_ops);
+> +	ret = devm_serdev_device_open(dev, serdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	serdev_device_set_baudrate(serdev, mcu->variant->baud_rate);
+> +	serdev_device_set_flow_control(serdev, false);
+> +
+> +	ret = serdev_device_set_parity(serdev, SERDEV_PARITY_NONE);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set parity\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = qnap_mcu_get_version(mcu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_register_sys_off_handler(dev,
+> +					    SYS_OFF_MODE_POWER_OFF_PREPARE,
+> +					    SYS_OFF_PRIO_DEFAULT,
+> +					    &qnap_mcu_power_off, mcu);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "failed to register poweroff handler\n");
+> +
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, qnap_mcu_subdevs,
+> +				   ARRAY_SIZE(qnap_mcu_subdevs), NULL, 0, NULL);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "adding qnap mfd devices failed\n");
+
+"Failed to add child devices"
+
+> +
+> +	return 0;
+> +}
+> +
+> +static struct serdev_device_driver qnap_mcu_drv = {
+> +	.probe			= qnap_mcu_probe,
+> +	.driver = {
+> +		.name		= "qnap-mcu",
+> +		.of_match_table	= qnap_mcu_dt_ids,
+> +	},
+> +};
+
+This tabbing is odd.
+
+> +module_serdev_device_driver(qnap_mcu_drv);
+> +
+> +MODULE_LICENSE("GPL");
+
+Suggest this goes at the bottom.
+
+> +MODULE_AUTHOR("Heiko Stuebner <heiko@sntech.de>");
+> +MODULE_DESCRIPTION("QNAP MCU core driver");
+> diff --git a/include/linux/mfd/qnap-mcu.h b/include/linux/mfd/qnap-mcu.h
+> new file mode 100644
+> index 0000000000000..f954815d3025b
+> --- /dev/null
+> +++ b/include/linux/mfd/qnap-mcu.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +
+
+As above.
+
+> +/*
+> + * Core definitions for QNAP MCU MFD driver.
+> + * Copyright (C) 2024 Heiko Stuebner <heiko@sntech.de>
+> + */
+> +
+> +#ifndef _LINUX_QNAP_MCU_H_
+> +#define _LINUX_QNAP_MCU_H_
+> +
+> +struct qnap_mcu;
+> +
+> +struct qnap_mcu_variant {
+> +	u32 baud_rate;
+> +	int num_drives;
+> +	int fan_pwm_min;
+> +	int fan_pwm_max;
+> +	bool usb_led;
+> +};
+> +
+> +int qnap_mcu_exec(struct qnap_mcu *mcu,
+> +		  const u8 *cmd_data, size_t cmd_data_size,
+> +		  u8 *reply_data, size_t reply_data_size);
+> +int qnap_mcu_exec_with_ack(struct qnap_mcu *mcu,
+> +			   const u8 *cmd_data, size_t cmd_data_size);
+> +const struct qnap_mcu_variant *qnap_mcu_get_variant_data(struct qnap_mcu *mcu);
+> +
+> +#endif /* _LINUX_QNAP_MCU_H_ */
+> -- 
+> 2.39.2
+> 
+
+-- 
+Lee Jones [李琼斯]
