@@ -1,126 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx8.mail-out.lima-city.de (mx8.mail-out.lima-city.de [91.216.248.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178A6155A59;
-	Mon, 19 Aug 2024 06:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F022E15622E
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Aug 2024 07:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.248.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724050238; cv=none; b=tbjD58ERnuthhjzG9QI3ywVZGT96DPV1ZacZ8dYyTGW16LA3KaQbxdgtreZu6aakANs9EYGtJBoe5q/aglqCR0iy4KBG/GBzPER/x3WGKjhJrkSVb139Ce9F8iIFeYHPmgyYBDwxQxikcyw4Y9FGXWe1e1ZdDgOxJ1rvCok2wvw=
+	t=1724051401; cv=none; b=BFSVg00KCOUV20Uld0pXelWMz57sCSEYbHJBHxmZY512rIoeMNsBhXUnmmEJG2m2UWZ4XkBpfOx9OQ6yQQI1B5VASwC70vWuyY4sG/0q3iRJZww+Ejkpnui7kb3MshZ6KivKycPZpIl3TgtLbnsHH2JfjxPSezyYRZq8K/ijkOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724050238; c=relaxed/simple;
-	bh=oj3Y9pH17xNfiWjKVNwaUDErHrAbG48YkAEs7w5hNqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EvMmW29g580hSlQWSbAX840rsBHEr0k7LNxZeK9eYIWZmbichC8/jQQAqLmYPX9cvyJyDwP3i/mYgrM2MbmaaY/AvT3T96DqM6c7gB0BRi2dLusDIUCQntbcRArbsR6lS5aaejcFILmaEL5RCOwyCmpOPPivS2cDC+hZpWyfxQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q0gKTbfM; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724051401; c=relaxed/simple;
+	bh=wnWvi1Hl5xlc8Acw/SrsRmO2s1GbIUOcKSgtlVx4yHA=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=eUtpLVSkUhjV4S2N2s7xowGsCnDvexj7MTPhn1xT7l3dzozyhIN9evSkpAelQxnwexg8u4/DaPBIKadHU7BfkHj/9hnT4sNsczNYi7ApRVd4kQwBE7rp4toN5TFWpTgzK3dWeuUYGZKASVKe6KbruyFSDUW5gkZi3kMJajHKQmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=johanneskirchmair.de; spf=none smtp.mailfrom=johanneskirchmair.de; dkim=pass (1024-bit key) header.d=johanneskirchmair.de header.i=@johanneskirchmair.de header.b=oxWf/Z5Z; arc=none smtp.client-ip=91.216.248.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=johanneskirchmair.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=johanneskirchmair.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q0gKTbfM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724050237; x=1755586237;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oj3Y9pH17xNfiWjKVNwaUDErHrAbG48YkAEs7w5hNqE=;
-  b=Q0gKTbfMHIrgX8xP21QbFInsKNiBGs446G/Bhe6Rx0NnQ/Wp+bbGYhlV
-   RCX4W6MuNE2qEKIONKyD078PAEcDUzmShpnRTbNw2VCL2byFgCC3i0KMc
-   XJ32BpD19Yx1FdaLduvv3HKZzRHkL5lUcHh1czgSnMaY6kF7MfBG2Nzwn
-   2nN42ogeD+HzV2epsc1V7W6OdYRd9tEgwngD+09JQrQeMYpno4+/d8omr
-   eSPTde5Ma0fRD13Q7spSRYRMNAX+ZBYOqoAvP8M4oHA2ykSqHLNbMzh/s
-   HKCeE10JCVth3Av25Vk2hdVQWDAc0X2ZxpNeR9BFnnWX7fmTR95Kq6Zf3
-   w==;
-X-CSE-ConnectionGUID: wy4VHY29SD6qcsPhY3faGg==
-X-CSE-MsgGUID: KTUA/9/pSa2nXbNHI6Yujg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="26149679"
-X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="26149679"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2024 23:50:34 -0700
-X-CSE-ConnectionGUID: 0atrH+wPTZeHjmFXJYOQxQ==
-X-CSE-MsgGUID: mC6FAfWsTryxmG5IwJ3sBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="91020759"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2024 23:50:16 -0700
-Date: Mon, 19 Aug 2024 09:50:13 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: "Nilawar, Badal" <badal.nilawar@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
-	daniel@ffwll.ch, linux@roeck-us.net,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	anshuman.gupta@intel.com, riana.tauro@intel.com,
-	ashutosh.dixit@intel.com, karthik.poosa@intel.com,
-	andriy.shevchenko@linux.intel.com
-Subject: Re: [PATCH v4] drm/i915/hwmon: expose fan speed
-Message-ID: <ZsLrJVdBmfZhZaaR@black.fi.intel.com>
-References: <20240809061525.1368153-1-raag.jadav@intel.com>
- <23dc7824-50cd-4ba3-be5a-df141e8fe69a@intel.com>
- <ZrXslA1c-BhO6zYr@ashyti-mobl2.lan>
- <88320f60-d55b-4aa5-881f-530375659c27@intel.com>
+	dkim=pass (1024-bit key) header.d=johanneskirchmair.de header.i=@johanneskirchmair.de header.b="oxWf/Z5Z"
+From: <mailinglist1@johanneskirchmair.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=johanneskirchmair.de;
+	s=securedbylima-20161106; t=1724051389;
+	bh=wnWvi1Hl5xlc8Acw/SrsRmO2s1GbIUOcKSgtlVx4yHA=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:From;
+	b=oxWf/Z5Z4ikpkYmC5oX0RwCzGJ1zKFtqV9RVgDst8ruqkxLQ/k4ChHgtds6b00u6y
+	 +V8vNak5gMoKrlFYHphl8qaysqOXJrfulbwrsIbypGuzhanarXe3XUVi0UXy73yE71
+	 Tx0QF0owWO2CGSuZDpk3U4m+IV7xq2Ksaj9fRwGY=
+To: "'Guenter Roeck'" <linux@roeck-us.net>,
+	<linux-hwmon@vger.kernel.org>
+Cc: <jdelvare@suse.com>,
+	"'Johannes Kirchmair'" <johannes.kirchmair@skidata.com>
+References: <20240816063656.275918-1-mailinglist1@johanneskirchmair.de> <767fdc63-af2f-4234-a887-d34348e0cd15@roeck-us.net>
+In-Reply-To: <767fdc63-af2f-4234-a887-d34348e0cd15@roeck-us.net>
+Subject: AW: [PATCH] hwmon: pwmfan: do not force disable pwm controller
+Date: Mon, 19 Aug 2024 09:09:51 +0200
+Message-ID: <000501daf206$c9903e10$5cb0ba30$@johanneskirchmair.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <88320f60-d55b-4aa5-881f-530375659c27@intel.com>
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: de-at
+Thread-Index: AQIHUyWwHWDq46/jiPpNC3txnX987wF3GqwCscmuSZA=
+x-bromium-msgid: 1f544850-76f6-4dac-8b1f-f565df0ccaf0
 
-On Wed, Aug 14, 2024 at 02:07:44PM +0530, Nilawar, Badal wrote:
-> 
-> Hi Andi,
-> 
-> On 09-08-2024 15:46, Andi Shyti wrote:
-> > Hi Badal,
-> > 
-> > > > +static int
-> > > > +hwm_fan_read(struct hwm_drvdata *ddat, u32 attr, long *val)
-> > > > +{
-> > > > +	struct i915_hwmon *hwmon = ddat->hwmon;
-> > > > +	struct hwm_fan_info *fi = &ddat->fi;
-> > > > +	u32 reg_val, pulses, time, time_now;
-> > > > +	intel_wakeref_t wakeref;
-> > > > +	long rotations;
-> > > > +	int ret = 0;
-> > > > +
-> > > > +	if (attr != hwmon_fan_input)
-> > > > +		return -EOPNOTSUPP;
-> > > Using a switch case in rev3 is more logical here. It will also simplify
-> > > adding more fan attributes in the future. This is why switch cases are used
-> > > in other parts of the file.
-> > 
-> > it was my suggestion and to be honest I would rather prefer it
-> > this way. I can understand it if we were expecting more cases in
-> > the immediate, like it was in your case.
-> > 
-> > But I wouldn't have an ugly and unreadable one-case-switch in the
-> > eventuality that something comes in the future. In that case, we
-> > can always convert it.
-> 
-> My rationale for suggesting a switch case is that in the current alignment
-> hwm_XX_read() function is designed to handle all possible/supported
-> attributes of the XX sensor type.
-> With the proposed change, hwm_fan_read() would only manage the
-> hwmon_fan_input attribute.
-> If a single switch case isn’t preferred, I would recommend creating a helper
-> function dedicated to hwmon_fan_input.
-> 
-> hwm_fan_read()
-> {
-> 	if (attr == hwmon_fan_input)
-> 		return helper(); //hwmon_fan_input_read()
-> 	return -EOPNOTSUPP;
-> }
+Hey
 
-Hi Andi,
+> -----Urspr=C3=BCngliche Nachricht-----
+> Von: Guenter Roeck <groeck7@gmail.com> Im Auftrag von Guenter Roeck
+> Gesendet: Freitag, 16. August 2024 16:21
+> An: mailinglist1@johanneskirchmair.de; linux-hwmon@vger.kernel.org
+> Cc: jdelvare@suse.com; Johannes Kirchmair
+> <johannes.kirchmair@skidata.com>
+> Betreff: Re: [PATCH] hwmon: pwmfan: do not force disable pwm =
+controller
+>=20
+> On 8/15/24 23:36, mailinglist1@johanneskirchmair.de wrote:
+> > From: Johannes Kirchmair <johannes.kirchmair@skidata.com>
+> >
+> > The pwm1_enable attribute of the pwmfan driver influences the mode =
+of
+> > operation, especially in case of a requested pwm1 duty cycle of =
+zero.
+> > Especially setting pwm1_enable to two, should keep the pwm =
+controller
+> > enabled even if the duty cycle is set to zero [1].
+> >
+> > This is not the case at the moment, as the pwm controller is =
+disabled
+> > always if pwm1 is set to zero.
+> >
+> > This commit tries to fix this behavior.
+> >
+> > [1] https://docs.kernel.org/hwmon/pwm-fan.html
+> >
+> > Signed-off-by: Johannes Kirchmair <johannes.kirchmair@skidata.com>
+> > ---
+> >   drivers/hwmon/pwm-fan.c | 11 ++++++-----
+> >   1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c index
+> > a1712649b07e..10c4e9bcf10c 100644
+> > --- a/drivers/hwmon/pwm-fan.c
+> > +++ b/drivers/hwmon/pwm-fan.c
+> > @@ -167,7 +167,7 @@ static int pwm_fan_power_on(struct pwm_fan_ctx
+> *ctx)
+> >   	return ret;
+> >   }
+> >
+> > -static int pwm_fan_power_off(struct pwm_fan_ctx *ctx)
+> > +static int pwm_fan_power_off(struct pwm_fan_ctx *ctx, int
+> > +force_disable)
+>=20
+> Please use bool.
+Just send v2.
 
-If you agree with this, please let me know.
-Will send out a v6 accordingly.
+Regards,
+Johannes
+>=20
+> Guenter
 
-Raag
+
