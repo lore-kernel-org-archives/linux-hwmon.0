@@ -1,37 +1,37 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA21A136643
-	for <linux-hwmon@vger.kernel.org>; Thu, 22 Aug 2024 06:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91671386C0
+	for <linux-hwmon@vger.kernel.org>; Thu, 22 Aug 2024 06:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724307756; cv=none; b=BjgEZMmdfNyMBYdTzpn/S7czzGeg6h+YwgS/B0UHivksoEdAh7XKOsmo8iuKsSEtRpfeHyZtIqtEtg+OApIq7BVrRnT9ejuj7Tre7NS3AqjtKaUqtvzhN/GhMgW5RAmxrVHrBzMnUAlJ27IR/3wLJs5aLpRc7LBf6DvioUA4CJU=
+	t=1724307757; cv=none; b=KTlfYoKU3n6WpzCvwP3vfEVAg7NLhJ3KMnBblc4La5piO27IQVGGXYHWo0Iqrlj6EnCzMta0/Hv36DQWdWpMFHLKWt9EIoxAizE83z4c8e1o93TYjwVLK47zbdu43NCZlnFH6W1cUpAD4aL4/DDhgREqA4Kwe8BUQhbX8ukc4cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724307756; c=relaxed/simple;
-	bh=iEENZbCtIGoSS5zb7tD/8mwivYf8UZvRQnGcpB7oN7o=;
+	s=arc-20240116; t=1724307757; c=relaxed/simple;
+	bh=pAeFk9Zwr4ucmpsg5GD41mE0oSnc9ndPpN5yufU+QiI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DemEI6R59yyCjDNLdfYol3KFPYXbAf4wVtS7XIkuNRTKHbeIjISzxLz/nM7tpx4Upv9tySamE6G6N4SpDgB4mdVEExUAIELE7/64TX1bbgyTuMPmP31ShEOWJeeBktR/RVsAbkjvR+ylBa6b6iKN7A6EF+oVITuYQmRVz3O5yO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+	 MIME-Version:Content-Type; b=nvG9KZIrozuJH3M7x9uoZWQHHPC5b3xKA0DuIcsHCvZSj8FrQeHBz90sx8tqeE2kg3f+HS8zlGQxokXqe3YwqJRqeeOv+yAi0O4ipnFKtAxfcZqg1uOeAbsCwPF1JMWiRjqr+aGvzVvCa2lbFr1wOgYcMEhrf0iUZT5U/ava500=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WqClf0QGqz13bv7;
-	Thu, 22 Aug 2024 14:21:50 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WqCkj0NSZzpTbK;
+	Thu, 22 Aug 2024 14:21:01 +0800 (CST)
 Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 171EC1800FF;
-	Thu, 22 Aug 2024 14:22:30 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A4EA6180087;
+	Thu, 22 Aug 2024 14:22:33 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
  (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 22 Aug
- 2024 14:22:29 +0800
+ 2024 14:22:33 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <jdelvare@suse.com>, <linux@roeck-us.net>, <joel@jms.id.au>,
 	<andrew@codeconstruct.com.au>, <linux-hwmon@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH -next 1/8] hwmon: (aspeed-g6-pwm-tacho): Simplify with scoped for each OF child loop
-Date: Thu, 22 Aug 2024 14:29:49 +0800
-Message-ID: <20240822062956.3490387-2-ruanjinjie@huawei.com>
+Subject: [PATCH -next 4/8] hwmon: (lm90): Simplify with scoped for each OF child loop
+Date: Thu, 22 Aug 2024 14:29:52 +0800
+Message-ID: <20240822062956.3490387-5-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240822062956.3490387-1-ruanjinjie@huawei.com>
 References: <20240822062956.3490387-1-ruanjinjie@huawei.com>
@@ -51,33 +51,35 @@ nodes to make code a bit simpler.
 
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- drivers/hwmon/aspeed-g6-pwm-tach.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/hwmon/lm90.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6-pwm-tach.c
-index 08a2ded95e45..75eadda738ab 100644
---- a/drivers/hwmon/aspeed-g6-pwm-tach.c
-+++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
-@@ -456,7 +456,6 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index ca5c52b38c0f..511d95a0efb3 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -2674,19 +2674,16 @@ static int lm90_parse_dt_channel_info(struct i2c_client *client,
+ 				      struct lm90_data *data)
  {
- 	struct device *dev = &pdev->dev, *hwmon;
- 	int ret;
+ 	int err;
 -	struct device_node *child;
- 	struct aspeed_pwm_tach_data *priv;
- 	struct pwm_chip *chip;
+ 	struct device *dev = &client->dev;
+ 	const struct device_node *np = dev->of_node;
  
-@@ -498,10 +497,9 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to add PWM chip\n");
+-	for_each_child_of_node(np, child) {
++	for_each_child_of_node_scoped(np, child) {
+ 		if (strcmp(child->name, "channel"))
+ 			continue;
  
--	for_each_child_of_node(dev->of_node, child) {
-+	for_each_child_of_node_scoped(dev->of_node, child) {
- 		ret = aspeed_create_fan_monitor(dev, child, priv);
- 		if (ret) {
+ 		err = lm90_probe_channel_from_dt(client, child, data);
+-		if (err) {
 -			of_node_put(child);
- 			dev_warn(dev, "Failed to create fan %d", ret);
- 			return 0;
- 		}
++		if (err)
+ 			return err;
+-		}
+ 	}
+ 
+ 	return 0;
 -- 
 2.34.1
 
