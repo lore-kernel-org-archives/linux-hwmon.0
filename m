@@ -1,278 +1,109 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2108.outbound.protection.outlook.com [40.107.223.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19179171088;
-	Thu, 22 Aug 2024 10:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724322061; cv=fail; b=dETYfRQ5TrXmcl8wfRNupnQEgjPlcRL/OgO2I52AMKT/MlfXSM73geHO0En08RK82M2p1wc//vUw/N+0xSfXqHJam3l/6yaVy7lIxS+XzE05Wxl/Gqn5pm4b/691rRh7KqTAdNHsk+vvMWzYIJ2nrSfUZ4Hn5EqwIaNh0bL9BMQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724322061; c=relaxed/simple;
-	bh=Mo8+xM2VrNmAXjMc1NNKUGPeT5AIAdpTqM21qqPqvy8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=lswfmQqS075AK6K6yFxIdZ4S7zyHMSd904p9/Tk3XtLJIan37H9tnYDCijSMvhPOFik9H6DB3d8Lib8Rx1MpWJ6FYOcheA0n23+TLuJzDs3yLg1O6ziV6k4yodUOw2M0YFncbyoSyF09plfATLw0UpPjpgQbmroDsmBNFRnhdZI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=imXIvYFK reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.223.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4513D1CB158;
+	Thu, 22 Aug 2024 13:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724333311; cv=none; b=eaEpt/xDyeE1i6sLFUT4A/LtgB0bXKH+PGjrOQ7XymMTSSbJowlm/QopRfuKDStEyeZxLKsAGYcqK4r45w9dppX2GS7gtvuNMbEZXejxLon0FjNeYbjr5zgi6Elexfh8acmI8zuwa9jdlZ4mGECE+IdV76tagnnacOSwDcgc0BQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724333311; c=relaxed/simple;
+	bh=9N41foLL/2Pxt3ECs2i8yc04fwv+tCy+a3YYGiA2Rlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XNRYiNOaXGrm4VV4x3NG6oV5VVSn3DW+X+imgj1pKlNNfY5rtcCenf241WyuY+6J7yEbsNx8aBnTD83IBUDpOno9KmLTQuDXpZQjSMS6l6s/fS1ngWyrpb5Hl/V1Jlw4pbBHtbWuzuKs4vCTFg3AZ9qw5SqHX3NwtXoZk7lFTxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLBCrCII; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="imXIvYFK"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=M4W9rhnyYW+DgcYyGWTzfGF2FYAy4jSskBVVbeEMno70SMe8KUTeejDkZ+0Su8jbbe4jhIJ7TZiF4Fnt17bAOYCkn7XcIQ2BC3A/Sj7B4jYNlHzSJiJ88UtKWFa0F7aGdCfJNwCu6/T3ldbH+6Xqta3m15p7+dXeLj8a3L2rLK7IRSTopezTeg+qhaeebJmvYslQ+/DJKxU7RD8Ptk9F7XDD4q1WxF/ouMwGzx8UaR+nqs7A31jlwR40mXAAQXqOZcl1g7G8sjRgFuqe9AYBodB6l6ci/yB5bPKdfpFNi5fZ/6tEPrjA8dpk3czH9vcT5A+7/65WOi4tfQaqt7uu2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2T9/WH5WwyRjEYVJPXsKbu/RW1ChtcUf5IDdZiLw3+c=;
- b=fIFiwyJ7kPHoI0fDxSuJEyLtJ4Fa11SM48VVxxcGeS+q82OGnXrjVtJSV54/VAppux15enOYlwRna4pLmOZj6UGayyPc9A0Iaf1FYdVmkU4/Vy66eb9wLtBiS0bxPnAshVB59LNRHr4nntv2+rhOgKAChekm4EKr7OpK0xUUm6TuoQdoZQNhC5jodtk5dCp/huHv1tZY3XdkzL5RIN3t4E4755biT+PhRT6Fad2mVVh3WAOoBwEGT1O+c538tz/J5klA1HwnQkt5My088qOnanltfpCSKNBwEHvuP/xgp5ZW5rfRuo9Y2ZxX/EgLn6puJh6zWc/bzQclq6DMwX36LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2T9/WH5WwyRjEYVJPXsKbu/RW1ChtcUf5IDdZiLw3+c=;
- b=imXIvYFKlAx93PgfALWawHUsxjvCEZebY+eR0NJUDzTTkyeqV+68wkIWzNzpBhD/dy0AUrHR9Hg5tHtmLuDxceBbcPq28v6R13E5PdJBmkbps0qajUGZFordmblm7KpPxVGDt9lmYRWxpiLndSMinIL8g0SPCEgDypQcSibfYo8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from BL3PR01MB7057.prod.exchangelabs.com (2603:10b6:208:35c::16) by
- DS1PR01MB8872.prod.exchangelabs.com (2603:10b6:8:21f::21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.17; Thu, 22 Aug 2024 10:20:54 +0000
-Received: from BL3PR01MB7057.prod.exchangelabs.com
- ([fe80::b69e:5684:ed7c:4d09]) by BL3PR01MB7057.prod.exchangelabs.com
- ([fe80::b69e:5684:ed7c:4d09%4]) with mapi id 15.20.7875.019; Thu, 22 Aug 2024
- 10:20:53 +0000
-Message-ID: <d1ee66fa-e504-409f-97de-a923123f3d44@amperemail.onmicrosoft.com>
-Date: Thu, 22 Aug 2024 17:20:43 +0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] dt-bindings: hwmon: Add maxim max31790
-To: Chanh Nguyen <chanh@os.amperecomputing.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Justin Ledford
- <justinledford@google.com>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- OpenBMC Maillist <openbmc@lists.ozlabs.org>,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>,
- Thang Nguyen <thang@os.amperecomputing.com>,
- Quan Nguyen <quan@os.amperecomputing.com>,
- Khanh Pham <khpham@amperecomputing.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20240822084808.299884-1-chanh@os.amperecomputing.com>
-Content-Language: en-US
-From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-In-Reply-To: <20240822084808.299884-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CYZPR14CA0045.namprd14.prod.outlook.com
- (2603:10b6:930:a0::13) To BL3PR01MB7057.prod.exchangelabs.com
- (2603:10b6:208:35c::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLBCrCII"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724333310; x=1755869310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9N41foLL/2Pxt3ECs2i8yc04fwv+tCy+a3YYGiA2Rlk=;
+  b=cLBCrCIIR8D/Wxec1HA22z56hZvNnmy/0CQwrEVs7vdls9Y4RPmlTbXV
+   UGoBw7RP+dM8B/H03XlXDVgITQuGms/BGQ66uGDCX/g59BhBq0p+6YMTp
+   +e7uNzeeE+dQe9Y1mkyn1kczkSKcBzT6hc8OS5UD+wW2bSzc8hGeCLm92
+   t8+sjfbiSVQSGG6UgYCLSi9YxQ+ZPgG59ADi/kcZagrJWkygaqxLWqwXW
+   +5nt1xK/tmYd84SaFvYpy+CfY+D9kCAXufOc1976cVkcbvFxsVzwgHzdI
+   qVHvApizENEKEoy+wVPnj50mRJLDztfwANDX0ckGUfuS95yrBbhB1qQmV
+   Q==;
+X-CSE-ConnectionGUID: G2H12dyjTzaOKNuscKK1vg==
+X-CSE-MsgGUID: wSTUvatAQraDrno/gX9jJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22614778"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="22614778"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:28:29 -0700
+X-CSE-ConnectionGUID: DuVE3U6PRY6uJ/HMWnMkcw==
+X-CSE-MsgGUID: GGD5zlrgRBqouPAqROU2Rg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="61596851"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:28:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sh7rQ-00000000Snz-2X7J;
+	Thu, 22 Aug 2024 16:28:20 +0300
+Date: Thu, 22 Aug 2024 16:28:06 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
+	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	anshuman.gupta@intel.com, badal.nilawar@intel.com,
+	riana.tauro@intel.com, ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com
+Subject: Re: [PATCH v6] drm/i915/hwmon: expose fan speed
+Message-ID: <Zsc85iQIBpOPJOKp@smile.fi.intel.com>
+References: <20240820062010.2000873-1-raag.jadav@intel.com>
+ <ZsRup8uKiqUvADFl@smile.fi.intel.com>
+ <ZsSWTtew8nCYWrxF@black.fi.intel.com>
+ <ZsSi73YyfKletmgk@smile.fi.intel.com>
+ <ZsbophGauSzh15lz@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL3PR01MB7057:EE_|DS1PR01MB8872:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa7f894b-3bc2-45cd-6705-08dcc2941a2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cExQMytjZVVZR0x4a1BmVHJQdTVzZTBTeGRZT2c5M3NGM3RoQTFjUlZDMWVJ?=
- =?utf-8?B?OFZzTDZuaVVzaytpcnpmbWxCeGhEVnNUUzVILzBNanBubElrK0ZtcDhOUjYy?=
- =?utf-8?B?NFBXSW1nNDV5bEtEcFFuUExhYmRRZG45NXJlOU44UVFnaXFlN04rNXFSTkpl?=
- =?utf-8?B?NWhHRnVMdjBSNWxFN2xRcFN0SVl6YXlEaHJGdFFXbUZ3ZVNCNHJLOGVuS2dV?=
- =?utf-8?B?TkR0MU5oVVQ3Z1B2bTR2OTBlOHJaMldFdHlnWDRGK2RoRm4rWUZaRi9hRHZX?=
- =?utf-8?B?c1ZJMGpJNENFT01KUytNRGFCMGNRa1M2UnUrZVZyYWZYeXlSMWNVeGxRRVZz?=
- =?utf-8?B?K0t4eU5IWVN3cDdKQXRYWEp0NThXNHNycWRMOXNrZ2YwcEFhek1nbGVDMmVO?=
- =?utf-8?B?VS9scTNMdzErWEpvUUxkMk9CQUxFRjQzSlFUdHVCTXo4bkNYQTErRXpMMmFK?=
- =?utf-8?B?Z2hlZCs5VUphaTlFeDZnWWJlRi9scTFpdG1LbDFKQ0sxVTRlbE41Vm5iREFq?=
- =?utf-8?B?YXNUaWUxYmJ4U25wTXA2aGd3S3lMTzFSVUMyMWN4RzRLNnlqZGVCOE4xUkI5?=
- =?utf-8?B?bkkwUVVzRjdWN2lEQUh4UE1wWit5aVB0RklONkc3UURZV3h1dVNHR1M1SW1s?=
- =?utf-8?B?REdiOG81MGI1L09JZGtpRkZHTFVsYjUyaUlFME4xeTZrSmdhNzRlT0pSN1ov?=
- =?utf-8?B?QjZOb29SS0UvV1JFd3lYWUNHT0xtakNqb1pyZGE4RWl0WXZ3M3FJWFlha0RS?=
- =?utf-8?B?cEFwcGYzM3ZhMFZBUy95cjZRcWR1QUYyUGpJVXUwQWpBeHJlVENoRWIxTnZt?=
- =?utf-8?B?MS9iWGNhU3FreENYNGlnMEY0V042a1lSdUpVU3d0aWo2citSSVp5ZURxazhJ?=
- =?utf-8?B?RDZTMEdVTG1VWHlPRnRpVUVBM1pRMEpXckVubzNBRGhqellZelB4SXJ4VmYw?=
- =?utf-8?B?dGJRVHVrWXFlSEcyQjliSkZtc3h6ZG5oNzlucFl0VUY0RmpNVjBncDBGSHEz?=
- =?utf-8?B?YURpQVRDWVpvQUM4SWo2NGl5VHMzOTNpekpDMHBjd1d1OHREZlkraU1MczV1?=
- =?utf-8?B?MWJIZ2t2T2ZiTmU2b0JsQXBCNzlNNlhVbGtsd3dJVUN5cXJucGF1OU5pNjZm?=
- =?utf-8?B?L2ovU2xDa0JsWW9uU084V24weGRtSTlsR0NlU3RlUEk4dnBlS3lUeFRDN0Rt?=
- =?utf-8?B?UnllbVBYMHJWZlF6MExkRHkyRVY5QXZLVU1yc1ZVZnR0UzZwazdxaEdqK1FG?=
- =?utf-8?B?WnVFUFpMWkhxU0lzek90dDBjRXk3QlBKVHJZOXNDNDZ6ZVJGSzVjUkRkZVFG?=
- =?utf-8?B?ZWVNWFZsNEF0Q0M1S2hjbWZ6NlJOai95NnpEOGh3dGRwcnh2amsvMDJFTWE5?=
- =?utf-8?B?Wlh1NmxBRE9CbjduMzR5ZDhYYTBaR2Q3bHAxRmdQTmRydmtYYnRvTXg3Rk5U?=
- =?utf-8?B?N3VvMy9FRmFJazhicW5INzhhZjNpTFpndUhteTk0WHUzQWdmV0VIa01EWUp4?=
- =?utf-8?B?a0tETERzMElOb05uZnNBRWpXQzhXWGtEODFLS09NOVI2ZThjbkV0R2lDeE9t?=
- =?utf-8?B?OGlVdlYrWVRURlRKdFFINnhVcmVBajJFbmlveUJYTTZMcGVxQ1RocmxsMFpk?=
- =?utf-8?B?eVprQitYWjBPbzQxQXhvanlvVWxlUmNrOFNvUFF4SVY5RWk5MjJUT1FNQ1JR?=
- =?utf-8?B?Qk1aWk0xbDFHa3B5THB5elFFTlJFWlJpaUhSVG9LQ1U5MTZRQnZ6OGpSNzE3?=
- =?utf-8?B?TGtuQXN4UWEwVmsydjk2OFc2UDR2dFNlZTQ5SGo0Y3hsdVdZZG95M2lPY05B?=
- =?utf-8?B?c0V2REZvam1ZYkFsengrdz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR01MB7057.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b2UwWjMvT09HcVM2TW1vTkVocTJtOEFCWTU5ZHRGQ3F5N0RrS0NoWGwzdDNU?=
- =?utf-8?B?eUpISjhFUVVyRG5KL09rUzZiU1B4OHRBbSs0UXJ4d1k5dHo4NkE0Sis1MHV5?=
- =?utf-8?B?WHlNMTVsZFlYcFRmNGsrVGV0c3kvSm9SNWFiOWFtZ2QwNGZ4UGIxR2FDTWd6?=
- =?utf-8?B?QitGamhtWVcrZUJ2NnpidG9sMnV2N25hQkprUmNESlhXNW1NS282WWhQb3lK?=
- =?utf-8?B?aUhEZjdZeC9EY1Jib0VxNU9wMlJoZFJXMlk3d2VFd05aV1lDOGV2emxPZlpm?=
- =?utf-8?B?RzZZOE1SeFM1SWExdmtvdWRlaDVuUUFVUkN3UllYZVF1VlZGYW84Q3lvWlRV?=
- =?utf-8?B?L2t2WFZyVTZWT3d0MmRiSG9CTEpSWGtOM1kwOUFDYUxKU3dycU1oL0U3UDdx?=
- =?utf-8?B?cDlFb2ErTWhKb3NVVkxZUG81TnNHMXdiVkxhSXcxM3VzRnJmVWttdHB5QWdG?=
- =?utf-8?B?QnVXRnEvRmlBa2cxamIwUFkrUlZEYnllenJQZlA2Wkt5cTczZzFyZjVXVFUw?=
- =?utf-8?B?SE90bzkrcW9hWFJyanROdHg2Rnc1ZDQxMlVRazdUQjR5NG9yN2NCM1pnL04z?=
- =?utf-8?B?ZmovSlhDQ0hNVzdYS1RjSFpXQVlVSThiVVpRcUhtbG4wZTNzVVdNUmI0TnB4?=
- =?utf-8?B?QlVWeXBRNklFZ21VSHNXNlBad0Z1VnRtMi9nLzBjYUFGcUxZMDIrQjI2azNh?=
- =?utf-8?B?dWpGODJFRTY1YjBBMUFlMXlDWGFNVG9MQ1ZTNGhtbTBBTUFzZklNY1RVNXlu?=
- =?utf-8?B?cGVlR01qc3JhNmNoSDk4NFNwa3lrdDVmbHNGMmRWa2dvVHQzSk0vem0yendN?=
- =?utf-8?B?a3JEVkFXYjNzbmlHekNCcitUVG9HSUltM3VLRWZGa3RSa21WSloxVUtnaXpZ?=
- =?utf-8?B?ZWJuRVMyZUZna1VoNDRNM0xiWU1rVnBIU3pTUEhLTEhyZnBYcmFOTlVZMnR2?=
- =?utf-8?B?L0QzK0M0ZTl3T3p5cWIveDFlcERXcUdYQ0hWZUl6ZEJoQTlPT01FUjJ0MDVI?=
- =?utf-8?B?cW5zdjByQkk4dE9nd2xRbU5nY2QzQ0p6V1JyMTRKc0RjdURHa3lyZGZQYmJW?=
- =?utf-8?B?U3dTVCthYlg0eTFTYkJKNGZSRlJsVTA2bStZQ2RmQjQvM3pLZlM3cGJiajdP?=
- =?utf-8?B?V1JGdlB4NXBOUjJrcEhCQVgycFl4RE4xTTh3UnNLbStjRTZsakNLSXFKUHlE?=
- =?utf-8?B?SGhGeHo4Vlp4eUY2R2cxNHJJeXoyWEpMZFhHSXBOeGFsN3NEMS9TelNsNlBD?=
- =?utf-8?B?Mk5BN0pzRVUySEw0VWVybHlQWkdzRTVjTkhNVXlPN1VJNG5NSllwdDY1Nk9a?=
- =?utf-8?B?QWdMVmNOUkVidDhQUFJOc0dvcjRuVDdPRXdzZ3lHOUEvYWFwTmY4VzhrOTVz?=
- =?utf-8?B?ZDJuKzhlajRuZ0M1cmhmc1d4MWliUEV3eWNSdnhRemtNd1VQV2pacVB3ekR3?=
- =?utf-8?B?TTlBM0M3clhUWXJodld4azZOQmh3aXRpNFY2THpXOVdiSUI2NDVhSWtvWVhN?=
- =?utf-8?B?ZXRudXJiNXUwdG1xZ3NJa0grZmxFSmZnTGFSK3U3blczOXhxNWdhaHhGbDNK?=
- =?utf-8?B?QjZlMWhNQ3k4YkJSVmVZbXpnSVZ5WklOemJsZDFReitYTVZIQUsrd241YzJI?=
- =?utf-8?B?akNQQ2c3NXYzL0ZyUGhEYUxIVDV5S1AwWGY0czFOb09xMUIwekFUcXB0bGU5?=
- =?utf-8?B?NHlseEQyOFNzTzVyV1BvclhCYTNGaEltdnhRUGpSSXdFaGx1dEtWakRaYlFq?=
- =?utf-8?B?TG1KK0ZUZHU0aVJWeHRaVzRrSE1aWXdEenN5dzBOUVBTS3ZRd2doNnVDSHYx?=
- =?utf-8?B?cWhudHBUSCt0WGxTalUwQjIxUEg3bkQ5N2lmdzNsVks0QmlBNzRYOUpNVkJV?=
- =?utf-8?B?NW5GTnFZUzNhTm5WNmRsbUltcUtJQUFyODNTa0ZPVVpBVUVuaHJYQmRTRm9i?=
- =?utf-8?B?clFXeDRsUlliUWYrQk5QY1ZiOUtwRncvcXFuSnJ2US92QWtnWEpRYmU3VjRn?=
- =?utf-8?B?SmNBYWVNcFBaV3YxNVdYR0VTVUV2V0xhS2RUbzIvcTRPK3FSdjZLTHdtZUp2?=
- =?utf-8?B?aGJzVXB0T2h4aU5pV2F1eEFUWGNnTDhScHNvdG1HdjNTSXBLcnZ2YlRoM3RW?=
- =?utf-8?B?TkEzS25tU2hQcWRTSmx0dHo1cXRoejZJd05LajVJRFFrUklLSG1MRjltN2l4?=
- =?utf-8?Q?d/5bioS3/zLob8T7Y6pXrSg=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa7f894b-3bc2-45cd-6705-08dcc2941a2f
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR01MB7057.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 10:20:53.3244
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /CQ5HgnRwPLCMongE2LAb8U0w2yPdg/MUinEB9csWwYmS0SJx8NzbA+hqwR22DREn4teHNXnOk3FoZ6iNBc32yyr++DbmYiYQqy3CO/InAxE8ChtDOQ8y26ZMejPueW8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS1PR01MB8872
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZsbophGauSzh15lz@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi all,
-
-I only linked to patch v3: 
-https://lore.kernel.org/lkml/20240813084152.25002-1-chanh@os.amperecomputing.com/T/#mce666b8184682e4d463d418a294d95512d95c07a 
-
-
-Thanks,
-Chanh
-
-On 22/08/2024 15:48, Chanh Nguyen wrote:
-> Add device tree bindings and an example for max31790 device.
+On Thu, Aug 22, 2024 at 10:28:38AM +0300, Raag Jadav wrote:
+> On Tue, Aug 20, 2024 at 05:06:39PM +0300, Andy Shevchenko wrote:
+> > On Tue, Aug 20, 2024 at 04:12:46PM +0300, Raag Jadav wrote:
+> > > On Tue, Aug 20, 2024 at 01:23:35PM +0300, Andy Shevchenko wrote:
+> > > > On Tue, Aug 20, 2024 at 11:50:10AM +0530, Raag Jadav wrote:
+> > > > 
+> > > > But it still has an issue with 64-bit division on 32-bit platforms, right?
+> > > > 
+> > > > > +	/*
+> > > > > +	 * Calculate fan speed in RPM by time averaging two subsequent
+> > > > > +	 * readings in minutes.
+> > > > > +	 * RPM = number of rotations * msecs per minute / time in msecs
+> > > > > +	 */
+> > > > > +	*val = DIV_ROUND_UP(rotations * (MSEC_PER_SEC * 60), time);
+> > > > 
+> > > > ...somewhere here?
+> > > 
+> > > Use div64_u64() instead? Or is there a better alternative?
+> > 
+> > I don't know the code well to offer anything better. Probably for a starter
+> > you can switch to use DIV_ROUND_UP_ULL().
 > 
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Changes in v2:
->   - Update filename of the maxim,max31790.yaml                        [Krzysztof]
->   - Add the common fan schema to $ref                                 [Krzysztof]
->   - Update the node name to "fan-controller" in maxim,max31790.yaml   [Krzysztof]
->   - Drop "driver" in commit title                                     [Krzysztof]
-> Changes in v3:
->   - Drop redundant "bindings" in commit title                         [Krzysztof]
->   - Add the clocks and resets property in example                     [Krzysztof]
->   - Add child node refer to fan-common.yaml                           [Krzysztof, Conor]
-> Changes in v4:
->   - Add Chanh Nguyen to maintainers list                              [Chanh]
->   - Drop incomplete example                                           [Krzysztof, Conor]
->   - Drop the cover letter because only a patch existed                [Chanh]
-> ---
->   .../bindings/hwmon/maxim,max31790.yaml        | 70 +++++++++++++++++++
->   1 file changed, 70 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> new file mode 100644
-> index 000000000000..b1ff496f87f9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max31790.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max31790.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: The Maxim MAX31790 Fan Controller
-> +
-> +maintainers:
-> +  - Guenter Roeck <linux@roeck-us.net>
-> +  - Chanh Nguyen <chanh@os.amperecomputing.com>
-> +
-> +description: >
-> +  The MAX31790 controls the speeds of up to six fans using six
-> +  independent PWM outputs. The desired fan speeds (or PWM duty cycles)
-> +  are written through the I2C interface.
-> +
-> +  Datasheets:
-> +    https://datasheets.maximintegrated.com/en/ds/MAX31790.pdf
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max31790
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  "#pwm-cells":
-> +    const: 1
-> +
-> +patternProperties:
-> +  "^fan-[0-9]+$":
-> +    $ref: fan-common.yaml#
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      pwm_provider: fan-controller@20 {
-> +        compatible = "maxim,max31790";
-> +        reg = <0x20>;
-> +        clocks = <&sys_clk>;
-> +        resets = <&reset 0>;
-> +        #pwm-cells = <1>;
-> +
-> +        fan-0 {
-> +          pwms = <&pwm_provider 1>;
-> +        };
-> +
-> +        fan-1 {
-> +          pwms = <&pwm_provider 2>;
-> +        };
-> +      };
-> +    };
-> +
+> This one seems to work. Does it warrant an explanation here?
+
+You mean _ULL part? No.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
