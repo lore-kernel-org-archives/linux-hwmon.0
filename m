@@ -1,143 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFC01CFEC1
-	for <linux-hwmon@vger.kernel.org>; Thu, 22 Aug 2024 18:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C661CFEB0;
+	Thu, 22 Aug 2024 18:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724349891; cv=none; b=BYyUTuG0llelTe/Pyry8NPaFMCocZ+IBg8ssKGzAXbEuoEY9hDyhTv44quFWxRo8NzgCNR9hmfoFcixJKet/D0at/F4FZIEtzMmiw0JywQUJv6evYg8KZ31n17fCrxT1nwK2wT8MCQCtJSMy0XISgbVNbnpIvXFePC5d8D0YRSQ=
+	t=1724351731; cv=none; b=UEXQS1gyvQtODs1pbKbUVz+YsWsk1wmbxHubuepEr2J6RJe0n1kr6HQSx8sOcOX+6PT2Yd5KkJbSyXwFCZUilT671fE6UL9dthY1gBvdvhz/Rw8/aIhkZWLyAFuV2XpSNB7pzmnpXie91G6x5qROyObdbIFv3ShaJNrNuXNW1Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724349891; c=relaxed/simple;
-	bh=22LkK5Q1Veaz9Mb1zYBbVIj2dXiCPlbXlwB1IfPgj7g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zklu+lnxYX8y3Lz2m9sBbHwn3RuxTFKJbLR3Nv5QfbG5j0QDwkc1tH7Szv2E80quEh43MB0gT9gMmRZ0aIyfaCwM01/gYMIebFMgc/C10NyUv/KnBW+MEsNktF4rx0kRIY/EO0a8KRIGXD2lNlzEGkozKOfx4LUr0qCWZMogyBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WpgqPYXo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1724351731; c=relaxed/simple;
+	bh=JSsmxqbjjoYwvOrh08zQSUBpCLb1WfuKPuEyQzInGEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OX+nHysafNIsVv2OxDyRuLVYhxYba3NfqEW/FL7it0M5gwwQDi0j7VVx7osGCfE2mkJpTPvn8JkG+iuuXhC321g6pyDNfWZ/rVNed0ZFEYQCxLFyy0f4aFOSQeGnZltjDy+kQmt829+Nn+qBSULQ0NYylyS0kGhvohbml5pw8oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CND65yIg; arc=none smtp.client-ip=209.85.160.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WpgqPYXo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724349888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SEQT24HTH/UP2orz6Wh0q+3NPw1eci4EU9RHhKZFX2g=;
-	b=WpgqPYXo1vw5PYjOCyV4jU1ekIndJ2P8qZflFt/VGSPwjhpohJphnrJeuWSXf5aIw0il3l
-	lRgJpBiy9MCAppT0hHih39U5B5pA7xEJLSywn3/hT5Xja9+4yqMiOp474Bp1pwU90N/ltr
-	8CoYl75ZNrAvVS4tPeUXbuN2EzZ0sD8=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-cy53YKETOe2JncfJ05u8eA-1; Thu, 22 Aug 2024 14:04:47 -0400
-X-MC-Unique: cy53YKETOe2JncfJ05u8eA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3718a4d3a82so512529f8f.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Aug 2024 11:04:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CND65yIg"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-27051f63018so801597fac.3;
+        Thu, 22 Aug 2024 11:35:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724351728; x=1724956528; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=906ufAfSNe/qY3BHyy+uJ63N5beXiwz8DQQgbAogL34=;
+        b=CND65yIg1qsPc7ZzuC8KG3TncTgfKEpkNwQeIZBQTlAgwPTVtJG//kzwNghZo8F862
+         JjtathBlp9lycumkgKeuwnwi6CpLUto6gHGK/6t+hCf25xVKqsod3IRd7bVEAVomJIWt
+         pIpwxQ8Msr9C83msuKbJVSAlIJN5p+ubC5KM3WG1S1QoAG1o2o1gCfKMWL/6tc+fk3pZ
+         hhXgsbrlZVfRHbG4MXMQqfcnrgUrAlZ+rw544diL8dcRyylBneJQ5uoCtwXKNGM/Bbud
+         zMmq70fYPhk4ThS9CO2Oext4d/4I4no+zBN4hrj/MAjDQULVWmZeZ4Lj0VJNRTnRUeyT
+         ZHWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724349886; x=1724954686;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEQT24HTH/UP2orz6Wh0q+3NPw1eci4EU9RHhKZFX2g=;
-        b=mL8ZEuxjACDMG2T1Bj0adoMc3JvpjwicQejm3RVFTB8YIjLftllLlSEeABaESeWmqs
-         6BTZAutUMBZhdjaseEfOwap0BLs9muRE65IuxK70hoCUma5fdZRCoq9kZB0ycwyiQtC4
-         uK1FBEnF0IltfVrHoaz6cyLqKSeCtnyg9caw0rEZNI90/ArqgC/ZuXZsCP/ZPRsqLC8G
-         9scRMit2l4QAT5jAJJ1zofA6hPIxYXP8syeoONBJtfaunStIVg8jgEafvdRLnp8421iQ
-         3x7az+/0pSrEohzmMw/0A7aBSiZuWrJLdCZrzIDKcIYaAheD98ptBPafT1b+4x5NtbTx
-         xT9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXML0qToBuVhGGJxP7jR1jkjccOEZA64ou6bgyuq6iwi0kezP18aCV/zgYCr1ukT/ji41OahVjrkl7LFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yygo6LfxcZ/FCZGtoQDdqpQo3Uu+CJDdNmybDKTWPEe+U1Q/04s
-	0pJC9Zwioq84BAG9fkGmp8SGLr2F+DLBBzdX7rjFuyeUOvCyP65LfEj5w/4VyESzRkU42vWMwhJ
-	T0uK9TzXZA4CQMVDsuraq0f81EGC4h9y1T/C0SSXzl09HFPIolHdwhmHOKtSZ
-X-Received: by 2002:adf:f24d:0:b0:367:9088:fecd with SMTP id ffacd0b85a97d-37308c08c62mr1716044f8f.7.1724349886333;
-        Thu, 22 Aug 2024 11:04:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG6SUIKLE1JQjtqs6HrdTaFyqHHZmF+U8ofr6ynQWzY+vpqwb/HUy6nOYotftRU637wSsXYJg==
-X-Received: by 2002:adf:f24d:0:b0:367:9088:fecd with SMTP id ffacd0b85a97d-37308c08c62mr1716018f8f.7.1724349885823;
-        Thu, 22 Aug 2024 11:04:45 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a4c9064sm1152586a12.73.2024.08.22.11.04.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Aug 2024 11:04:45 -0700 (PDT)
-Message-ID: <f3baa8c0-3363-4f0c-be86-83be2ec4d373@redhat.com>
-Date: Thu, 22 Aug 2024 20:04:44 +0200
+        d=1e100.net; s=20230601; t=1724351728; x=1724956528;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=906ufAfSNe/qY3BHyy+uJ63N5beXiwz8DQQgbAogL34=;
+        b=qII1KQRzI8pIbw/DicpTjiqIbNMGKmFRcQQg2ytZ9K9G0svOB+/v9hh2Fn/9HK9evo
+         f4XSWBClMJ9tLaUnJ622tpHtIQH02z/60NShbajxtp7BylLFNLAmzn4u6vz9TGEsZoFV
+         3l5K9P1jvlkoeEe9/2IaNhdqCTglxEKJBr7a+ca41O0Nqjfia0W1lfTX+9XNuah4qGjU
+         orhobd6I5qd4wKCMuGljDESSKs2IACXmHJqvKKIXfjv2VyJb5P29npqv0T2vGLpiyZud
+         DKmCFLP+HMsgLfJmv0iQNrmng2RzHlwyFdp38seHZX3HrpnT95+UrT1qArbADsux8Y1V
+         NZIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUW6OWyAem3v5G6OCYpWrPt2fJLv2ue/6C5rqku0Gn/3NJUl8YM0e6fEYXOsX668GqR96tchKXZZI3bS568@vger.kernel.org, AJvYcCVLAJV/0mJqHzJ4+bKChLVb/cKDZDA3Ghvl1O12yoP/8OSZaJsm9ypC0jow6bprr1sHspgMcCplNNw=@vger.kernel.org, AJvYcCXzf5DvOKTkPJ261HyWmd7PiovRDqQ8qVuHoX5m0ob1ZujvKQAp4yD/aB7HvHypUBSqWyIo6UBA2a0+WEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3KZ4Kte/skqXaonW/6e5AmfmqvkYmrjpf1wV8KeNGpDH7uFau
+	J2BHPruq4uLD/yHJLZJKNrOMvr1YyHApOct1syzLMzbr+oekV5me
+X-Google-Smtp-Source: AGHT+IHQIuWOV49+E6Gb9IhrP6DxRd1HliN1cIZE/Fm6Mh1QeMiPuVI1Ou6cjM4G+wNdba6NZvazDw==
+X-Received: by 2002:a05:6870:e0d2:b0:25e:1382:864d with SMTP id 586e51a60fabf-273cfcaf18emr2627047fac.30.1724351728473;
+        Thu, 22 Aug 2024 11:35:28 -0700 (PDT)
+Received: from localhost.localdomain (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7cd9acdd0e3sm1691598a12.45.2024.08.22.11.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2024 11:35:28 -0700 (PDT)
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	=?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= <samsagax@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	=?UTF-8?q?Philip=20M=C3=BCller?= <philm@manjaro.org>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] hwmon: (oxp-sensors) Add support for multiple new devices.
+Date: Thu, 22 Aug 2024 11:35:24 -0700
+Message-ID: <20240822183525.27289-1-derekjohn.clark@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] platform/x86: wmi: Pass event data directly to legacy
- notify handlers
-To: Armin Wolf <W_Armin@gmx.de>, james@equiv.tech, jlee@suse.com,
- corentin.chary@gmail.com, luke@ljones.dev, matan@svgalib.org,
- coproscefalo@gmail.com, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: ilpo.jarvinen@linux.intel.com, rafael@kernel.org, lenb@kernel.org,
- platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240822173810.11090-1-W_Armin@gmx.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240822173810.11090-1-W_Armin@gmx.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+This patch adds new devices from AYANEO, OneXPlayer and OrangePi. There are
+also some formatting changes done for improving readability and making the
+lists consistent bewtween the multiple functions, when it made sense to do
+so. These changes have been tested by multiple users since April of this
+year as part of the ChimeraOS and Manjaro Handheld Edition kernels.
 
-On 8/22/24 7:38 PM, Armin Wolf wrote:
-> The current legacy WMI handlers are susceptible to picking up wrong
-> WMI event data on systems where different WMI devices share some
-> notification IDs.
-> 
-> Prevent this by letting the WMI driver core taking care of retrieving
-> the event data. This also simplifies the legacy WMI handlers and their
-> implementation inside the WMI driver core.
-> 
-> The first patch converts all legacy WMI notify handlers to stop using
-> wmi_get_event_data() and instead use the new event data provided by
-> the WMI driver core.
-> The second patch fixes a minor issue discovered inside the
-> hp-wmi-sensors driver, and the remaining patches perform some cleanups.
-> 
-> The patch series was tested on a Dell Inspiron 3505 and a Acer Aspire
-> E1-731 and appears to work.
+v2:
+In addition to fixing the fall-through switch case from the last patch, I
+simplified the match cases for all three version of the OneXPlayer 2 as
+well as the two AYANEO 2 and GEEK models. Some additional testing came
+back identifying the fan speed read register for the 2 series was
+different than previous models, so I adjusted that as well. I also added
+the OneXPlayer X1 series as they use the same registers as the 2 series
+and we were able to finish testing on them.
 
-Thanks, the entire series looks good to me:
+Derek J. Clark (1):
+  Add support for multiple new devices.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+ Documentation/hwmon/oxp-sensors.rst |  54 +++--
+ drivers/hwmon/oxp-sensors.c         | 299 +++++++++++++++++++++++-----
+ 2 files changed, 290 insertions(+), 63 deletions(-)
 
-Guenter / Jean may I have your ack for merging the small
-drivers/hwmon/hp-wmi-sensors.c changes through the pdx86
-tree ?
-
-Regards,
-
-Hans
-
-
-> 
-> Armin Wolf (5):
->   platform/x86: wmi: Pass event data directly to legacy notify handlers
->   hwmon: (hp-wmi-sensors) Check if WMI event data exists
->   platform/x86: wmi: Remove wmi_get_event_data()
->   platform/x86: wmi: Merge get_event_data() with wmi_get_notify_data()
->   platform/x86: wmi: Call both legacy and WMI driver notify handlers
-> 
->  drivers/hwmon/hp-wmi-sensors.c           |  20 +---
->  drivers/platform/x86/acer-wmi.c          |  16 +--
->  drivers/platform/x86/asus-wmi.c          |  19 +--
->  drivers/platform/x86/dell/dell-wmi-aio.c |  13 +--
->  drivers/platform/x86/hp/hp-wmi.c         |  16 +--
->  drivers/platform/x86/huawei-wmi.c        |  14 +--
->  drivers/platform/x86/lg-laptop.c         |  13 +--
->  drivers/platform/x86/msi-wmi.c           |  20 +---
->  drivers/platform/x86/toshiba-wmi.c       |  15 +--
->  drivers/platform/x86/wmi.c               | 143 ++++++-----------------
->  include/linux/acpi.h                     |   3 +-
->  11 files changed, 53 insertions(+), 239 deletions(-)
-> 
-> --
-> 2.39.2
-> 
+-- 
+2.46.0
 
