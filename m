@@ -1,37 +1,38 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBA8487AE;
-	Thu, 22 Aug 2024 17:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175831CF291;
+	Thu, 22 Aug 2024 17:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724348338; cv=none; b=MIth27RuL/8l1jumTYWUdObS6ywwZjr08vf9Ya2/B0h/x9Gn0aTomdBDDnfM6GTRoLqftdl4Dkh5AsQq/DxRT9mt1t5HUxOWlsfDpoO2U79mj+sE0EMhzyaoSf2RoFymKEMI9oJg1CwiT/4YBvlQ6qfxc7AMieNOmyzwviWmX1I=
+	t=1724348341; cv=none; b=fQkDm7Li1p2bMBfXwiI8ni6eRpNQsUv+ak34N1gBS2PxdledfeJ7NOaauEQp2DfoaopBYXJxpkro6Ky5q/0ysbMsExWP2Qz5u8ty+8goJcFJtxa2zqc9aAlCu/i3AtLAe3C52ocn0BKu4KZNBplPDE2/vrpdXlxwCxQUAd0CvJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724348338; c=relaxed/simple;
-	bh=Y6MHZHn0dItdfMB18uEbovy8LuIAhyoEd8b+ahGoCA0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bTlW4HqDtXKDsMsvlRznzo2m6JMnT2LvT9/bZMaTL76fKyCAbnazUz6FvU7wZgntkKG0hYOySdOWtSDph4t/P89E6eqJ+Ullwke8cBPAAeyXnDmGKzpt72Tpfz6oAAUPTIK3cDMePJ7tDH2WnEGoQlKQAykrqWFUbRXJRymQY2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=i04QWz6O; arc=none smtp.client-ip=212.227.17.21
+	s=arc-20240116; t=1724348341; c=relaxed/simple;
+	bh=0mBU2SlCG+z/j3wvMKKRfaR/g6z4m2pjVgYWvs16XQw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=c4J5ms0b5T92K5e3aqS3QnpJLPniON3BwxEDq4o/7a3Y5S5iJinjcIDDJ59zwqvFtNV8e6syWJ+ro3YhjVoZOpAi7GyJXSMrGQvLVQYtCGoEOBtQdPfYjpLRydxAuOLPfx7lVGjbickXG3VKpKKooxzomIta7EmruADnPX3Ac1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=RizIsVRn; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="i04QWz6O"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="RizIsVRn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1724348319; x=1724953119; i=w_armin@gmx.de;
-	bh=ygCqjAHSRsl9Ms8YkRl85gypUcTZyKgxu8OJZt4JFVU=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1724348323; x=1724953123; i=w_armin@gmx.de;
+	bh=p+rLNIe3IFZaI1uPLVO7BH8uG2A2z2pX0gRWi9vzxtI=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=i04QWz6OIIo2qFTTgOKilEfoueHrifHMBXgWnt9YEWLgMkgImsZ7S76WbUa+Vn9B
-	 FY4wbrXu5+y+RYqnNuZ6GJcuxkm9dyA00X9F3fjPT3OcuqQkDfIkmvo6/bEVdhi3Q
-	 6uPUIB82teA5DWll5FMwg9b17ZcB83ujNWZBNbRH3GpuWWtHC3Nv650VNCZYFKk8n
-	 zpZzIYN5jBJRJTorunxlVsa4rPOhBOIunvtbBfE/Kvnv7z490WYHkPA6GK9iUR/Hl
-	 dXSUs6AadtJNji5pz3K8ixOIbkYnnVG2vhLJcf3BeTRa8/RvwUchu7xSgBt3IgVUG
-	 ypkGjmPpyq/oHxoEGw==
+	b=RizIsVRnqSGOP4CrUAabyQPm/orUbdR10+RbdRf4QgaP84hXqiqR1x6F5K48pxnw
+	 6eg9v4RGsPOK2BC0PaBej0il4pjuNDojwaZ+D222VdHZj/Ge0PRMTCN50jOTXhuVa
+	 x0AeS5Qe+GUqMIbrngHiKr8hh09D0zyaRKec7kCyw9SVUOUPZxXjEgzUUErnrgHDc
+	 lvfgHDyrE1P7582E03rgVisXqOh5E6m7UnwC0+EVDyIweMfrSTzTRHSE7ivWqhZ5E
+	 7lzXPQX6ozoVaAP6FOO45v9L3HXlv4A6tVQL05D3AbFe9DQg4ED0dUDk1bi2rPWwf
+	 eGOmukUbHZ5wsNcZTA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N2mBQ-1s0KWZ0Qxw-010ij4; Thu, 22 Aug 2024 19:38:39 +0200
+ 1MFsYx-1suc281Oj1-00FKjd; Thu, 22 Aug 2024 19:38:43 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: james@equiv.tech,
 	jlee@suse.com,
@@ -47,10 +48,12 @@ Cc: hdegoede@redhat.com,
 	linux-hwmon@vger.kernel.org,
 	linux-acpi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] platform/x86: wmi: Pass event data directly to legacy notify handlers
-Date: Thu, 22 Aug 2024 19:38:05 +0200
-Message-Id: <20240822173810.11090-1-W_Armin@gmx.de>
+Subject: [PATCH 2/5] hwmon: (hp-wmi-sensors) Check if WMI event data exists
+Date: Thu, 22 Aug 2024 19:38:07 +0200
+Message-Id: <20240822173810.11090-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240822173810.11090-1-W_Armin@gmx.de>
+References: <20240822173810.11090-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,62 +61,52 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:bZeC1HcLadV+bg6yqYQueB1GjpaYGBy7IqicofIzKeK4h9bAoGW
- eDzZgYiElMARD+9hTTLwTcaMz//GCkVXXWfvCdegpS/HiBCZENtphIW6IO6Oi06aPGKlCkZ
- BjX5EEXJN/+8awHG1y05EedjKLxbFn1W16Ns+hw5dhy51VGvd59BHC7pVWQgrjAPhdd7TgO
- C1KNU9JFLFu4EochCY+6Q==
+X-Provags-ID: V03:K1:nWWC9iET8W1EJA8cU22SEbP5jfzKDDVIdMDAd5lSRWfBkA/qQ3O
+ odDk6FfvB3pU24zvLpEcO7V8Y2UQs48vTf0HhjlNgFCEOuU7IXWE2kS9D3Lptxg6F7a7NpK
+ zn8ImxdlHc46NX2xtyQfCj4YX3K+w81/2T/VtiyL036+Q4muU3k6wKbFUdd78CCGIx4rpE5
+ Nz4LqfS4gcn5e0mkKIz8g==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Mq5Vv18SZrA=;ntV1+pe2Xv0Dp8y7JS6S4MW3SFE
- o37wrXcePso/wmz8qO+rKqvcsGp30GdNGI6xoyrXierNMp/DA8aH+vAwjnEuqYrSzsP6x1+G3
- HwktzJqICJdob5KsNYHb0kiysfU688EoWBIfEzzVi+Vbl7g2a8FjvPGhNKGZhwPI7ONAp+BsK
- HwPSbFf8IPDtHqHk0wOP1dILPgkL8xgdmODIntwwjOz57ep6YD840J0RPXfmD1pYupUlyP3Sc
- k+MqtiphMbp2fw+lpIr9BFvgE3dNoq0dToKWdYC8u+1U/SnzKgjTM2F55fXaBT5DSVKPsLdM0
- 9h7OSUtux/qQjy5seBRrHhuCrKrwvR1waciGsNkDRPCCobCxC8gv/h28GDmHV2L7rvZREq4RB
- /MbDelqM0iHe8mmzLRPzKCg7xL99ppV8n3iZub3V5XayCkpVRlrtAmi3XT5R381Bl5cSf2jPv
- 8AY10VmyEX1X1QeBFL41Spv6p2ukhpMPFDXj2QVNEgdkrtyD0dw6VUWDk9yPUGqLvYzniD4Ep
- 8bIXXvFyjlR4nWIw14LyHIve0bCMNPP0q9fjjv9OuK2RGMVRrtFw5HlaDXGzc3+6ygnZQgHPu
- kveGUPkDbtWvwOJDVI5eNU6Py3zT9GAUk7PZuLUxSNhaBgi9y8uj1S4W/sXKwViq9k2gpdFvz
- xxcUz0GVsrZve0lE7KGKxv511WL2Vc5KzDwlz9HaemlUanRN3ylAMjE3VvtwJm2O5wsKDpn4a
- dMFOw0xmMWFFSsEsY719pdCGtr4Y9elBMi2Cht1G8OR9S28/UgwUbrvJMMGyoHlmn/9wWttld
- sgOSQRy4DO82GH31H4kauHcw==
+UI-OutboundReport: notjunk:1;M01:P0:uqwifykSEpk=;Fhe+LbB+XJYhYBfzcaNqYoW4hN6
+ wdXJWiDteVUmNPx9anmg9JSOJZDo5DRS79vooiK6xX9ddY80Mt235OfK8jefRDdpxaNiuqwj7
+ sDRMxAMVfjqyV1CJr47H3t/c63BKtMCX6pEvj2ZKNA7gvmzGjmQ3ULpZVqOToaEuWIozNBFto
+ mU5JeCVy3UhupnQIy6TDvR/IBli/EWadInbzhQ/a27KLxpCLNvT2ImP68LvATYZGI+9TDqjFX
+ ez1o4XuQKeOMHh/I9yo6Pp6gJ7V+aXgRqhV5QU3srW2x/InJZ/1LCCYr2f0CUXHtxOb+cm4Av
+ jicf6ApLad7W0Tysax1Vr9XOGUWVkjxlAso973RbrhxlhacBLBHWeIYNru9Kb1nBxAhIbqwBR
+ Ps5tSJtLLCbMtViG0yd4ba9Ou3a6J/Qlm9s0ajqvzKRhHXlJWHH+TnfcSsY7XCZ0xaW/PuXAq
+ qJh+A1lanW7iUC8+lvvjDD9Ohum1AusW5tPUf+taRRzDl1khTS4VIC2H0Rm4ef8pAV962IPRo
+ 7hSutwsJxH6LBeM0AkE3aib2x50SWPrMLCQnxvaAG7YPTGsfj2CytgYckF5gwRdgoRY//rhs5
+ aALQGUyNw68tKgh4Fa/kp4QMGYmERAwiWgLZL75gPXVHyke7uxDZN6Q2SPggPPbrlcadUR6ch
+ VBENRXLVzLDt1bSlBLIWIhq98ZuClhtODcp3TS68kFsWigkbg2z/moXY06J5Bff+jIcGnysN2
+ Y3jB7qilJaUi23T2B9o50OY1oDuruEfAPM2Z7ytsY0xowiPTxI89CYkdZBNnctPF+xID1IfoH
+ gi7SJe5vs8pVIudtwevvaJ0A==
 
-The current legacy WMI handlers are susceptible to picking up wrong
-WMI event data on systems where different WMI devices share some
-notification IDs.
+The BIOS can choose to return no event data in response to a
+WMI event, so the ACPI object passed to the WMI notify handler
+can be NULL.
 
-Prevent this by letting the WMI driver core taking care of retrieving
-the event data. This also simplifies the legacy WMI handlers and their
-implementation inside the WMI driver core.
+Check for such a situation and ignore the event in such a case.
 
-The first patch converts all legacy WMI notify handlers to stop using
-wmi_get_event_data() and instead use the new event data provided by
-the WMI driver core.
-The second patch fixes a minor issue discovered inside the
-hp-wmi-sensors driver, and the remaining patches perform some cleanups.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/hp-wmi-sensors.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The patch series was tested on a Dell Inspiron 3505 and a Acer Aspire
-E1-731 and appears to work.
+diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors=
+.c
+index 6892518d537c..d6bdad26feb1 100644
+=2D-- a/drivers/hwmon/hp-wmi-sensors.c
++++ b/drivers/hwmon/hp-wmi-sensors.c
+@@ -1628,6 +1628,9 @@ static void hp_wmi_notify(union acpi_object *wobj, v=
+oid *context)
+ 	 * HPBIOS_BIOSEvent instance.
+ 	 */
 
-Armin Wolf (5):
-  platform/x86: wmi: Pass event data directly to legacy notify handlers
-  hwmon: (hp-wmi-sensors) Check if WMI event data exists
-  platform/x86: wmi: Remove wmi_get_event_data()
-  platform/x86: wmi: Merge get_event_data() with wmi_get_notify_data()
-  platform/x86: wmi: Call both legacy and WMI driver notify handlers
++	if (!wobj)
++		return;
++
+ 	mutex_lock(&state->lock);
 
- drivers/hwmon/hp-wmi-sensors.c           |  20 +---
- drivers/platform/x86/acer-wmi.c          |  16 +--
- drivers/platform/x86/asus-wmi.c          |  19 +--
- drivers/platform/x86/dell/dell-wmi-aio.c |  13 +--
- drivers/platform/x86/hp/hp-wmi.c         |  16 +--
- drivers/platform/x86/huawei-wmi.c        |  14 +--
- drivers/platform/x86/lg-laptop.c         |  13 +--
- drivers/platform/x86/msi-wmi.c           |  20 +---
- drivers/platform/x86/toshiba-wmi.c       |  15 +--
- drivers/platform/x86/wmi.c               | 143 ++++++-----------------
- include/linux/acpi.h                     |   3 +-
- 11 files changed, 53 insertions(+), 239 deletions(-)
-
+ 	err =3D populate_event_from_wobj(dev, &event, wobj);
 =2D-
 2.39.2
 
