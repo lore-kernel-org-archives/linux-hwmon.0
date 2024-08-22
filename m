@@ -1,84 +1,96 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1B61369B6
-	for <linux-hwmon@vger.kernel.org>; Thu, 22 Aug 2024 06:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3951531DD;
+	Thu, 22 Aug 2024 07:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724307766; cv=none; b=CW7NKqddpgFq+uWWsNt10ZrM64N98yQ3B+GZ5PekSpN0syLFPe4vrmJ/HUki/heGZ15Bb0Cw9Px+9FLGXSp3w8jJ1FfaGS/VRqZQ2CuTrBhWfLQWK+vEER1kvp6K0z+HGDZcgODMNzpgSLGhRWKQ+IPlNwfauIWSw3Sz8ImOmgE=
+	t=1724311729; cv=none; b=gZ3dp6LoOAVYz4oucn+K1l3cOL/8aHiYlaHCUguqWFSr8QRYUeVNQ712vx8y61yqGsDk12bSuTe3yVP817geBt5qyTB7Qn07SpNtBCmgCYG61q41Jlq6ecFRxWk1NhbfeUuWJ/S3hGPhRKzyeTWHdJI4xDmLshJJ6mkEQIioCt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724307766; c=relaxed/simple;
-	bh=H1H02w5xu9s6cSoOuKyFMGByHhLzPLYGIMauSgcwB/s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aUrO/FVHygsN/ybNvj9ZoVQcAE8T3/vkSsvIdAo8PCLF0Bfp7+Q+whhGx+aYrtnsjOd0+95YUPBSdjHcfOcESDW8821/CveQ78FbYmrBnTtuWoyWoXLdpcgtErQn/nk1FzZ04P0gG6K6YTNmBFHVkkHaybb4tRsU+zauW/Zj9Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WqCmS6X73z2CnB3;
-	Thu, 22 Aug 2024 14:22:32 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 446C41401F1;
-	Thu, 22 Aug 2024 14:22:36 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 22 Aug
- 2024 14:22:35 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <jdelvare@suse.com>, <linux@roeck-us.net>, <joel@jms.id.au>,
-	<andrew@codeconstruct.com.au>, <linux-hwmon@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH -next 7/8] hwmon: (tmp421): Simplify with scoped for each OF child loop
-Date: Thu, 22 Aug 2024 14:29:55 +0800
-Message-ID: <20240822062956.3490387-8-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240822062956.3490387-1-ruanjinjie@huawei.com>
-References: <20240822062956.3490387-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1724311729; c=relaxed/simple;
+	bh=JOmB3H1enfZrkteU613aUSjuKOs8i3PjWruFo3Cqz08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S1WwDJCHxPjfspuggYhhbqVyBPgIJyxJTTEnVwdaNx9cHEGeNUrBzruExTREG8j0Asi5pYXGY21n/518MJ3LX4aE7kqFetlMXJz0x599TtcyiGhm+KA9BPEy3L3GM2TKmaFPn/+EiZsVbOUt5YrvRvLWETU/JKt6Houzr9fj1zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O8dEVsvb; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O8dEVsvb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724311727; x=1755847727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JOmB3H1enfZrkteU613aUSjuKOs8i3PjWruFo3Cqz08=;
+  b=O8dEVsvbmbzFX8HsYfA+1ksejZsh2ul6ubInl7fzX5z89KaWO97yFbVz
+   QT2JhNW7OX7a6pgM+HVNweqkYMzzyz8nZQauyVIdWAdbm4FHxj5XFkS+y
+   5DFZniDp58YETA6QMgXKaGkVi/F10RSWHQtIfZF0AWYt5uacGAuD/uE+s
+   yczaklqwCh+eQi3I8QsgT9a02WxgxvU+/peUHmgd5xcagbZ0G6Siql00K
+   xgVRZlJjfGDRwiWtuUWhsIMp57Sqo0ndQMfMd7EHn34VzQKDKEH1dJpa2
+   Y9huaKt4pmKEYVWmbTFR+A/rR6cG53dIrV/V9hHCxfB346RNncRrgo9dQ
+   w==;
+X-CSE-ConnectionGUID: w4qhHA+USqGwP0dbnX5HWg==
+X-CSE-MsgGUID: VTnPA6IVSkWcjuUHpYocbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="33371618"
+X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
+   d="scan'208";a="33371618"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 00:28:46 -0700
+X-CSE-ConnectionGUID: JW9dLWMFT2CEn/TH1fuMtw==
+X-CSE-MsgGUID: BbNyJbfDQvmkLO66SzP5Lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
+   d="scan'208";a="65698857"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 00:28:41 -0700
+Date: Thu, 22 Aug 2024 10:28:38 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tursulin@ursulin.net, airlied@gmail.com,
+	daniel@ffwll.ch, linux@roeck-us.net, andi.shyti@linux.intel.com,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	anshuman.gupta@intel.com, badal.nilawar@intel.com,
+	riana.tauro@intel.com, ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com
+Subject: Re: [PATCH v6] drm/i915/hwmon: expose fan speed
+Message-ID: <ZsbophGauSzh15lz@black.fi.intel.com>
+References: <20240820062010.2000873-1-raag.jadav@intel.com>
+ <ZsRup8uKiqUvADFl@smile.fi.intel.com>
+ <ZsSWTtew8nCYWrxF@black.fi.intel.com>
+ <ZsSi73YyfKletmgk@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZsSi73YyfKletmgk@smile.fi.intel.com>
 
-Use scoped for_each_child_of_node_scoped() when iterating over device
-nodes to make code a bit simpler.
+On Tue, Aug 20, 2024 at 05:06:39PM +0300, Andy Shevchenko wrote:
+> On Tue, Aug 20, 2024 at 04:12:46PM +0300, Raag Jadav wrote:
+> > On Tue, Aug 20, 2024 at 01:23:35PM +0300, Andy Shevchenko wrote:
+> > > On Tue, Aug 20, 2024 at 11:50:10AM +0530, Raag Jadav wrote:
+> > > 
+> > > But it still has an issue with 64-bit division on 32-bit platforms, right?
+> > > 
+> > > > +	/*
+> > > > +	 * Calculate fan speed in RPM by time averaging two subsequent
+> > > > +	 * readings in minutes.
+> > > > +	 * RPM = number of rotations * msecs per minute / time in msecs
+> > > > +	 */
+> > > > +	*val = DIV_ROUND_UP(rotations * (MSEC_PER_SEC * 60), time);
+> > > 
+> > > ...somewhere here?
+> > 
+> > Use div64_u64() instead? Or is there a better alternative?
+> 
+> I don't know the code well to offer anything better. Probably for a starter
+> you can switch to use DIV_ROUND_UP_ULL().
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/hwmon/tmp421.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+This one seems to work. Does it warrant an explanation here?
 
-diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
-index 7a6f9532e594..9537727aad9a 100644
---- a/drivers/hwmon/tmp421.c
-+++ b/drivers/hwmon/tmp421.c
-@@ -410,18 +410,15 @@ static int tmp421_probe_from_dt(struct i2c_client *client, struct tmp421_data *d
- {
- 	struct device *dev = &client->dev;
- 	const struct device_node *np = dev->of_node;
--	struct device_node *child;
- 	int err;
- 
--	for_each_child_of_node(np, child) {
-+	for_each_child_of_node_scoped(np, child) {
- 		if (strcmp(child->name, "channel"))
- 			continue;
- 
- 		err = tmp421_probe_child_from_dt(client, child, data);
--		if (err) {
--			of_node_put(child);
-+		if (err)
- 			return err;
--		}
- 	}
- 
- 	return 0;
--- 
-2.34.1
-
+Raag
