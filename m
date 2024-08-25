@@ -1,61 +1,61 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559F17581A;
-	Sun, 25 Aug 2024 22:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE10940855;
+	Sun, 25 Aug 2024 23:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724626235; cv=none; b=YLlAEsXJRRNjrcEIWUpK2x7xz5H5vOq7/cW3YopjXDXKVbQftqO+EQpp7DR1Vq4HYgJbYzvL8ONmtnzq5v0JBv8iLG7nG7TramyBm7GYyjtGcegkpQ0vugiHljCALH28glVjs8+YHB5hKUafnknYYMMuO4hz8W26wmE6L5u9kfU=
+	t=1724626989; cv=none; b=smf2x1bRViksNQ2u9MaNwaEjL0XVcAnglseG7ehbgE6J4JkBqYmlbdrYd6Pru+Qykwh+EP65S77ht9apHogSzQaMZdTtpgLP7znANKFEam9en2Q1RkZeHzrJ/iZMGovRCdLpYlTCvC72A3gdzjLr0CsjhcyxbkCoNnzrFdtU4ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724626235; c=relaxed/simple;
-	bh=+o0i416eH/BxwxgcnKHpFUYR9odI3aGlHBULZvvYdPs=;
+	s=arc-20240116; t=1724626989; c=relaxed/simple;
+	bh=0hyqfZXyzsVQguBaCCyrtVOvKwHyyW5Je/1xW+LrwJ4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fLcOHDatzWPqeI26gWO4Qv9LTfX4eb/o9X4QQ4/Iwvyv1PKSNZ2rBPvC4IBF69FReY6GTsfVFel+Qj5FtZsSTt8yb4bWRKGUdH1rLFFi3lBVvYnQXI3OSayvU/9sAmBWxOgxYI3iPc35//6WEq/L72x4yfHvxqn4HBb+MAZkhj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZArRmazP; arc=none smtp.client-ip=209.85.210.172
+	 In-Reply-To:Content-Type; b=qtFkhSqiS36djwxTezuwsKNGwItkjMUg7xb5A3CIyuKgt6x3rQsrssdAdpupNsw9Lv9X4/JDGBelbNgswoh+GAz/FSEbyI7QEarYu/Mp7Coqt2+2DnKC6Dz458CTZy3+GZaHxL0bTDQinF6k4uMSRFytI7kHEs4C+VEBGZe2Qds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cyji7UKL; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZArRmazP"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so2691316b3a.1;
-        Sun, 25 Aug 2024 15:50:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cyji7UKL"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d3da054f7cso2493716a91.1;
+        Sun, 25 Aug 2024 16:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724626232; x=1725231032; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724626987; x=1725231787; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=46SEPkPAcNFBBen6lrJxu9erFqd1xqy881KN2y/ySws=;
-        b=ZArRmazP5t8DRZlvB3azAZh1OX9CqW1E0dIO0Iw0Mn/IVgP69T1NCeT3pmGj7JQ3TH
-         urLWD72tLI6PnmlUoD4ZFC47P32MLYgsQp9RaKal1LRr8PT51bNXiITssOlfFMG6LFY7
-         ZR8Tr/7aYkP8057XBs6cjxyg5a4BETx4zTs3/8LD5k+qilbFb32lapfhyWllKSb5YiIp
-         11mWxA+t/UDKHf5DLjoQuvSZWkRS2/qyntkMDbdkQ0j+kESudmGfVvpoTLNQz1Jfp5yP
-         qBmVOqK/OVPtz/CKb59WCIu7R9a2S9HucnToOBYvW7JYnEYbzu6CirzCPDZnGT7vlgZd
-         2sjQ==
+        bh=9xLSTg0lgGIAXGxaiAuzz/wbWnPchBb+YdXnSFs36xY=;
+        b=Cyji7UKLkZtf2YPjPBl/eVgEqOcxv7xnrbwjvxufqxYcv843zlZ81bY1UiJfocZogF
+         xVZS9m10oE2JgB1LwlqZ0YkNHBizoV3V5ySDdKdIwCOQIpYM+6w2VzUxwHGQO/7rVqhF
+         ++sFjMJP0wZmCqzQpqqrheSd8ntBgD5ukcT1UCNK6e5B8oX5cGm3P7/k1A+TnWVgBWjT
+         P9bowQZTx/s4je9NWt2RQEgY2B98c1Afnm01p+XK3qOckt68r1Mv0ROsncvVjmIC+xDX
+         mhUdi1u/7u6VknO3ZY/y6/+yKYrJOVO89VeJYFdNBrVCQiEl3I4j8zAvzlcmVA/qfSLY
+         45jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724626232; x=1725231032;
+        d=1e100.net; s=20230601; t=1724626987; x=1725231787;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=46SEPkPAcNFBBen6lrJxu9erFqd1xqy881KN2y/ySws=;
-        b=G1iAFaHbuw90N0NN/uvj0c3XZH6ddr7x8AOgQvlzVsSlUZoHsoFltEgvVYYirGfHjA
-         kbBFVnZqTnwI2/TU5jILnacEkuCkZOzDMnwC3+0fxWlIOkHKLnpAAgn9Dso9WnTQafpZ
-         Kr3cm5LDYx+hBgzRD5TcOTbyi10ehIAT6xt+53AfBphDcpLIoyq/gHNgAW5s0LDRdyBH
-         WRcuyICvZ5Hgf9J0uT+lx4fL6zI/3vr4csVcU6kmIrdQZ6pEOO+PLGtxINDvXOSxdUgx
-         9x63eL3yu6PmskW9szVMRGD6/aWr8LE+52t3Wrn8u8po/dV029n1i/okb3iglbE9kB4P
-         8AEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgYwS19hCcILRMjLovrHrFqbwN0sgVko2Rck+BH7gKFijHFsJyr5GQ7vVbxF0eDTt/hrD183dqyzsKVl01@vger.kernel.org, AJvYcCXn1BjNjqU94AP+R0ucblBJPu0lM0c2Czey+dl2LxH4N/QaW2w1UDwkIZ4WGumacNvEcPs6R3Cs+ZCb8g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj8BEoMfkwpQbbNrOs5YYvHOfMCZQVBnoOENIVt1VaUmayjQC1
-	UXhjtr7QRhHvKeNunfAA6PdCXPipZV0jvXGumpgaVsuv5TsdJ6wuAt6pAA==
-X-Google-Smtp-Source: AGHT+IGUmxSd0fTLZYsVSYDu8yg32LM+0j7JLlXRnD72C6WFur47Kn9ldCKCHX0rGvVBpqLB4yxEsA==
-X-Received: by 2002:a05:6a21:4610:b0:1c4:f247:2046 with SMTP id adf61e73a8af0-1cc89d199f0mr10229660637.11.1724626232434;
-        Sun, 25 Aug 2024 15:50:32 -0700 (PDT)
+        bh=9xLSTg0lgGIAXGxaiAuzz/wbWnPchBb+YdXnSFs36xY=;
+        b=OTdeeieen0TNGFGISw3lP4nvSrwNjEujMZY01UXRTynT746qEOCXp885ggqgYWq9QU
+         OJHkUK7pnwere2KKm2U3I/LIeYvY/hiuO3AV5kGLgvsezj/px4sthD8jYDeTSPSJ/YTk
+         +iEOg16T9dqxi8LgQWur+qudJdK/9Th8fM9EXpcayxJ5N3QObxhVSgfKtNjU+znnk3Fu
+         HF3MYqIZz9GOE0sggDiGftJIDkOT6WLdGo+MmfFQZaAtH5bvDtBczmIA9a0+KfXa6VEM
+         PFBR4kthVqPFaSfsv2ul2ZAfRmVzZA10HbNDeRn+dfrxT6CtJNWUqMChoYaRsy7v8vWx
+         Q/HA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYSJN4l46lA4RvuncDPpV7AP+Rqh4CUWC+SWLsYm5u0+gBcrAMncwTs9y7goi43qkjVwmPLOAuVkEa4CM=@vger.kernel.org, AJvYcCVm5dD84jF2jQyT0gldJTNG9MbTJWJopPNIwGRLFWVAxGSl10T3yRkv/UE00bgFBPlSM2jzJwrsbxHK0/m/@vger.kernel.org, AJvYcCXWH6MUnDbnTOb1eLaTJQJQ0BzJs85B+mceEz55EeFEcBDwQJmmHWFlVTGsgynJG9LSyXAYsbZGFWSG@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQwpH4PRrn0M4dmsCAqOzp4awosypRUELjUmcfYCMEk4osV4en
+	N8CXbAr+LE+lmzh4b0BWy0XNEMi5/D2a1/z5jDA4Txs4R7M25DYd
+X-Google-Smtp-Source: AGHT+IEETF/dvyyyD4yaTj4pECOy8bhNc33aAWnWLpRwp1FUK/qRdfrGuddO+SecpClJ/n2sHiyyaw==
+X-Received: by 2002:a17:90a:1b81:b0:2c8:87e:c2d9 with SMTP id 98e67ed59e1d1-2d646d6f98dmr7273455a91.39.1724626986870;
+        Sun, 25 Aug 2024 16:03:06 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7143424f942sm6068554b3a.65.2024.08.25.15.50.30
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d5ebbe29bcsm10651379a91.55.2024.08.25.16.03.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Aug 2024 15:50:31 -0700 (PDT)
+        Sun, 25 Aug 2024 16:03:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0a1df032-dfb6-4a26-a27d-14cc301cf12c@roeck-us.net>
-Date: Sun, 25 Aug 2024 15:50:29 -0700
+Message-ID: <22f0484c-52da-4845-9c6a-8041d424d775@roeck-us.net>
+Date: Sun, 25 Aug 2024 16:03:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,12 +63,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
-To: Wenliang <wenliang202407@163.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <935f564b-fa3e-4cdf-bf12-19b897369a07@roeck-us.net>
- <20240822074426.7241-1-wenliang202407@163.com>
+Subject: Re: [PATCH v2 1/1] dt-bindings: hwmon/regulator: Convert ltc2978.txt
+ to yaml
+To: Frank Li <Frank.li@nxp.com>
+Cc: Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ imx@lists.linux.dev
+References: <20240819190652.373222-1-Frank.Li@nxp.com>
+ <bea0d3be-6b2a-41a7-8644-44b17d3a26dc@sirena.org.uk>
+ <ZsOfeimD94+mh5gt@lizhi-Precision-Tower-5810>
+ <e63f6e5b-09a8-400f-8425-8dac4284fc9d@roeck-us.net>
+ <ZsO86HQKxmV/xFV9@lizhi-Precision-Tower-5810>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,53 +123,42 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
+In-Reply-To: <ZsO86HQKxmV/xFV9@lizhi-Precision-Tower-5810>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/22/24 00:44, Wenliang wrote:
-> Thank you for bringing up your questions and suggestions.The SQ52205 is a
-> part number specific to the Asian region, which is why you might not be
-> able to find it through a search. I'll provide you the website
-> (https://us1.silergy.com/zh/productsview/SQ52205FBP).
-
-That page does not point to the chip datasheet. The almost identical
-page at https://us1.silergy.com/productsview/SQ52205FBP does.
-The datasheet is _not_ "Publicly available" as claimed in this submission.
-The version I was able to obtain is tagged with "Silergy Confidential For
-<my employer>", so I am not even sure if I can use it to review this driver
-submission.
-
-> Some registers of this chip are similar to those of the INA226, but it has
-> additional registers such as integrators, which is the main reason why I'm
-> offering a new driver.And I plan add drivers of the same series based on
-
-That is not a reason to add a separate driver. Look at, for example, lm90.c,
-which supports a variety of chips in a single driver. The ina2xx driver already
-does support several chips, and adding another one would be straightforward,
-even if it is from a different manufacturer. On top of that, only the EIN and
-ACCUM_CONFIG registers are additional, and the rest appear to be exactly the
-same as INA226.
-
-> this. I commit the new patch and look forward to your reply.
+On 8/19/24 14:45, Frank Li wrote:
+> On Mon, Aug 19, 2024 at 02:37:00PM -0700, Guenter Roeck wrote:
+>> On Mon, Aug 19, 2024 at 03:39:38PM -0400, Frank Li wrote:
+>>> On Mon, Aug 19, 2024 at 08:11:46PM +0100, Mark Brown wrote:
+>>>> On Mon, Aug 19, 2024 at 03:06:51PM -0400, Frank Li wrote:
+>>>>
+>>>>> change from v1 to v2
+>>>>> - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
+>>>>
+>>>> I also shouldn't be the maintainer for this specific binding, it should
+>>>> be someone with knowledge of the devices.  This is a requirement imposed
+>>>> by the DT people, I'd be happy to just not list a specific maintainer.
+>>>
+>>> I remember 'maintainer' is required property for yaml.
+>>> Look like Guenter Roeck contribute many code for this driver.
+>>>
+>>
+>> Yes, but I do not maintain code or documentation outside the hardware
+>> monitoring or watchdog subsystems. You want this file attached to the
+>> regulator subsystem, so you'll have to find a maintainer from that
+>> subsystem or sign up to maintain it yourself.
+> 
+> How about just leave in origial place? I think you are more familar than
+> me about this controller!
 > 
 
-Additonal comments:
-- Please review and follow
-   Documentation/process/submitting-patches.rst
-   Documentation/hwmon/submitting-patches.rst
-- As mentioned before, a reworked version of the ina2xx.c driver is
-   available. I am not inclined to accept a new driver for this chip.
-   Even if I were, I would not accept a driver based on deprecated
-   hwmon APIs. I would strongly advise to have a look into the reworked
-   driver. As mentioned before, it is available in the hwmon-staging branch
-   of git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git.
-- "calculate_avg_power" is (unnecessarily) not a standard attribute and
-   therefore unacceptable. Its value (on top of the already averaged power
-   attribute) seems questionable. I would understand an attempt to report
-   the energy, but I fail to understand the value in reporting yet another
-   power average - even more so one that is not well defined in terms of
-   number of samples used to determine the average.
+I really do not want to be involved in this discussion any further.
+You insisted in moving the file, so you should be willing to bear
+the consequences (meaning: add yourself as maintainer), or at least
+find someone who does. Please keep in mind that the maintainer will have
+to coordinate future patch series if changes to both the devicetree
+property descriptions and to the driver are needed.
 
 Guenter
 
