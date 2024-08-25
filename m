@@ -1,295 +1,261 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BD7B667;
-	Sun, 25 Aug 2024 10:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1558156678
+	for <linux-hwmon@vger.kernel.org>; Sun, 25 Aug 2024 15:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724580644; cv=none; b=MobFB1xUYwOdehuqnVRCBl3H+LAuAY+wPMMbb2VrPKQQvUf5ow5jg8xQW7CAQArCDC9tQFA+0EdZmakabapxkeIOKco1rmtDYLAl8onj+1TDTup0Cfwb/kNSCRBGWuxL7vd257fQAGHGy/l0r2plvLPot7DhCjxt3HF1hp/jwbA=
+	t=1724600867; cv=none; b=fVprZh7Z+BvcsPayOT8lLHrmgq9yyup98bzMJEmSURjsRziDMvgzzVVv/E5JtlyupfuXSA59UDOKTUKS0EDRU5NyCWLmzzmElg739Ur1hAufnkk3GoK9eHdgaF8qZiyCwTH7DmwKj2iWgnKlae+f9xXQVxGmekKJxzswj+YDWMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724580644; c=relaxed/simple;
-	bh=+EYeURRbIpCowLoY9u8LniOecq78WZcm6/b4pt20mCs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WF5XlbHVBMmLMPr98h8ecTBBWIhp7uPyq8cQpejMJSJkHh55uIbDAEKCvdCvgMgf9KSq7dqkH8B2JnHHoMiN1IXZwFhM/4ql5LmYW62EZUlvntahD1frvNWgRGLse0i2cC4FlnB0reH/EnUO2pLXyIJOrILBCQDkRsZzxog9gdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmGAWClh; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724600867; c=relaxed/simple;
+	bh=eAomDUWltMy7tlV7RL7HEGV6x5LjNyf+9kXE8ouBtCY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RuMcVQMD2czWdOEgO6L7eSu1waCakId4ZDuXZTDivFmbCslz5fxIFanPysFQ6isO7JqPvmVvzszJM7fdoXgTN/TmlVLiadR4+ewTdPMQ9WdYW2yQmT8ic4vZFUo8uk/t475DQPi/g+ZPZt4aBS7YrLxywvOvuAIWMIs9DfxNJxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mc05D72w; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmGAWClh"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-371ba7e46easo1946848f8f.0;
-        Sun, 25 Aug 2024 03:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724580641; x=1725185441; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJsxVoOmf0EQuRevpB0M1k1iD8kvCJdvgoRepS+ws2U=;
-        b=dmGAWClhjn+zNoG9CivJdhFEacODNTWx4Aciauuf8JETYf7f54EJzUnIziPoRIcGI7
-         9pwTKdbM6sY7dhlmHhFfcMBJOBHWCJzbNPtSaGTKLkH4gCarljAZmAgarYJuGamOJp29
-         Udrh/5U7Yn8YsoAZ9xKsQsDahzQZUm04zfOlCg3hYr3DxVv5H+mI7jLwdSrvtilwP6FJ
-         b2OrgQfU+nsUSAEbI86Er9NdLqkYv6lJLqUzPueGKh4E7h3Rcrt6mgI1Lt5BsFLilHQm
-         bCMG8gjd+rnBB8kKtShkOUBSGYJo6j7ZfVUxMHFtWJr+ui3sXuPgmccLjCStrYaK8QVA
-         MN7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724580641; x=1725185441;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NJsxVoOmf0EQuRevpB0M1k1iD8kvCJdvgoRepS+ws2U=;
-        b=HyeZEiCYpBAy6hVbN3ie+wTcpJeZ6d4y6Y8jGnjpdw1vE41mUYezk6yQyjx2nH1XRT
-         2zo4vA3cSETuqrNunRz4jdXIhwKUbwfnAkFZkNquahQw+BR0pTCBWDhn7viGzY7MemSL
-         mBAiJ+qz0bF56WSRxMfru+ZkWpgsnX+atG8iPDRkpDacz04WeW9l00SjpEeOF1lzTq2+
-         ixr9c4Oc6/kK+GtOSyvUp+LBINHhEjwNWbGYDINRI66TR+ow+4d7IRzG4R+zaqtw2Iyr
-         bfvVcJu6AVxd4WLiNDkmXSVQcBIdFWPXHsAFjODhc7yHveUDbrycOoX1szNEwyzloZL7
-         jzQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxmDLmYh2m5J+OGCor5EKbtqWQogI+P2Pc7QcU7MdIBqXC+iw3l5XRkUBercrCyfsfg3hkps6ALj3YlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlJil3qhEOndY5B+VPOfSoDvWx/CMZ0HQtxB8GQXZScHrU+v/q
-	2mRihYDazr6p8VZ5tnmNuvSYgDBmQiXNx5p1C5vt4H7M7oECG2gY
-X-Google-Smtp-Source: AGHT+IFkZ9kPKWuyfzfwr7DewT89Ke+PLf1IsZuUU5WlZV2D5wIb2FAEEWRO1WXfokqIo0AQAoqZ9A==
-X-Received: by 2002:adf:b19a:0:b0:36b:c66a:b9fd with SMTP id ffacd0b85a97d-37311841a8dmr3951158f8f.6.1724580640107;
-        Sun, 25 Aug 2024 03:10:40 -0700 (PDT)
-Received: from localhost.localdomain ([78.210.124.20])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3730815b7e3sm8304029f8f.53.2024.08.25.03.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Aug 2024 03:10:39 -0700 (PDT)
-From: Antoni Pokusinski <apokusinski01@gmail.com>
-To: linux@roeck-us.net,
-	jdelvare@suse.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Antoni Pokusinski <apokusinski01@gmail.com>
-Subject: [PATCH v2] hwmon: (sht4x): add heater support
-Date: Sun, 25 Aug 2024 12:09:31 +0200
-Message-Id: <20240825100930.205670-1-apokusinski01@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mc05D72w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724600865; x=1756136865;
+  h=date:from:to:cc:subject:message-id;
+  bh=eAomDUWltMy7tlV7RL7HEGV6x5LjNyf+9kXE8ouBtCY=;
+  b=Mc05D72wHZBCAQPWEy6UFHTai65ClckrZs8mnSXzYHmvZQDaTWDa94fT
+   CzNYfKD7vET21mrJ+jG2oMr1EBvn5RBEKrL4prWQmZcJllNhR09aIUlhv
+   cfBdxQOm7oK1R/ZLtvp1Aht+Pcxva39avf+EELwwJYDqtHV927aZXVGLF
+   xwUZMl19Spe6C/eFpCCavkqdmJqJvtGIGbSO/Val+HWziONkRdWkjFwIN
+   HsvMFv08EU4xd6ru09afxfgIuOco5Q0aACGEzLSgMS087tfnfuh/i22QO
+   2CzWx8lCcHN3Y/1gSCMRfako/kFL0VsWQxhD804d1AzyNafbHlDOrXYoa
+   g==;
+X-CSE-ConnectionGUID: GRZ90zWWQkKZRCYJHyqerA==
+X-CSE-MsgGUID: cJEyQnBBT0esKX7Mn0P9Sg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="25913964"
+X-IronPort-AV: E=Sophos;i="6.10,175,1719903600"; 
+   d="scan'208";a="25913964"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2024 08:47:44 -0700
+X-CSE-ConnectionGUID: kj8LZ6z+Tb+iZjFwo1vnTA==
+X-CSE-MsgGUID: GN31SNB0RemRdQor8AqAcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,175,1719903600"; 
+   d="scan'208";a="62802996"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 25 Aug 2024 08:47:43 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1siFSu-000FGl-2b;
+	Sun, 25 Aug 2024 15:47:40 +0000
+Date: Sun, 25 Aug 2024 23:47:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:fixes] BUILD SUCCESS
+ ba8decd2660a04f898a230bfc2a2b84c660a2a4a
+Message-ID: <202408252308.yXlHWdbP-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add support for manipulating the internal heater of sht4x devices.
-The heater may be used to remove condensed water on the sensor surface
-which disturbs the relative humidity measurements.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
+branch HEAD: ba8decd2660a04f898a230bfc2a2b84c660a2a4a  apparmor: fix policy_unpack_test on big endian systems
 
-The heater can operate at three heating levels (20, 110 or 200
-milliwatts). Also, two heating durations may be selected (0.1 or 1s).
-Once the heating time elapses the heater is automatically switched off.
+elapsed time: 1363m
 
-Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
----
-Changes since v1:
-* explain the use case of the new attributes set
-* heater_enable attr: make it write-only
-* heater_enable_store: define cmd as u8 instead of u8*
-* heater_enable_store: remove unreachable data path
-* heater_enable_store: remove unnecessary lock
-* heater_enable_store: call i2c_master_send only if status==true
-* define attributes as DEVICE_ATTR_* instead of SENSOR_DEVICE_ATTR_*
----
- Documentation/hwmon/sht4x.rst |  11 +++
- drivers/hwmon/sht4x.c         | 126 +++++++++++++++++++++++++++++++++-
- 2 files changed, 136 insertions(+), 1 deletion(-)
+configs tested: 184
+configs skipped: 6
 
-diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
-index daf21e763425..3ff6c08d8267 100644
---- a/Documentation/hwmon/sht4x.rst
-+++ b/Documentation/hwmon/sht4x.rst
-@@ -42,4 +42,15 @@ humidity1_input Measured humidity in %H
- update_interval The minimum interval for polling the sensor,
-                 in milliseconds. Writable. Must be at least
-                 2000.
-+heater_power	The requested heater power, in milliwatts.
-+		Available values: 20, 110, 200 (default: 200).
-+heater_time	The requested operating time of the heater,
-+		in milliseconds.
-+		Available values: 100, 1000 (default 1000).
-+heater_enable	Enable the heater with the selected power
-+		and for the selected time in order to remove
-+		condensed water from the sensor surface. Write-only.
-+
-+			- 0: turn off
-+			- 1: turn on
- =============== ============================================
-diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-index b8916d2735b5..75e092f9b80e 100644
---- a/drivers/hwmon/sht4x.c
-+++ b/drivers/hwmon/sht4x.c
-@@ -11,6 +11,7 @@
- #include <linux/crc8.h>
- #include <linux/delay.h>
- #include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
- #include <linux/i2c.h>
- #include <linux/jiffies.h>
- #include <linux/module.h>
-@@ -31,6 +32,12 @@
-  */
- #define SHT4X_CMD_MEASURE_HPM	0b11111101
- #define SHT4X_CMD_RESET		0b10010100
-+#define SHT4X_CMD_HEATER_20_1	0b00011110
-+#define SHT4X_CMD_HEATER_20_01	0b00010101
-+#define SHT4X_CMD_HEATER_110_1	0b00101111
-+#define SHT4X_CMD_HEATER_110_01	0b00100100
-+#define SHT4X_CMD_HEATER_200_1	0b00111001
-+#define SHT4X_CMD_HEATER_200_01 0b00110010
- 
- #define SHT4X_CMD_LEN		1
- #define SHT4X_CRC8_LEN		1
-@@ -54,6 +61,8 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
-  * @last_updated: the previous time that the SHT4X was polled
-  * @temperature: the latest temperature value received from the SHT4X
-  * @humidity: the latest humidity value received from the SHT4X
-+ * @heater_power: the power at which the heater will be started
-+ * @heater_time: the time for which the heater will remain turned on
-  */
- struct sht4x_data {
- 	struct i2c_client	*client;
-@@ -63,6 +72,8 @@ struct sht4x_data {
- 	long			last_updated;	/* in jiffies */
- 	s32			temperature;
- 	s32			humidity;
-+	u32			heater_power;	/* in milli-watts */
-+	u32			heater_time;	/* in milli-seconds */
- };
- 
- /**
-@@ -215,6 +226,117 @@ static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
-+static ssize_t heater_enable_store(struct device *dev,
-+				   struct device_attribute *attr,
-+				   const char *buf,
-+				   size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	bool status;
-+	ssize_t ret;
-+	u8 cmd;
-+
-+	ret = kstrtobool(buf, &status);
-+	if (ret)
-+		return ret;
-+
-+	if (status) {
-+		if (data->heater_power == 20) {
-+			if (data->heater_time == 100)
-+				cmd = SHT4X_CMD_HEATER_20_01;
-+			else /* data->heater_time == 1000 */
-+				cmd = SHT4X_CMD_HEATER_20_1;
-+		} else if (data->heater_power == 110) {
-+			if (data->heater_time == 100)
-+				cmd = SHT4X_CMD_HEATER_110_01;
-+			else /* data->heater_time == 1000 */
-+				cmd = SHT4X_CMD_HEATER_110_1;
-+		} else if (data->heater_power == 200) {
-+			if (data->heater_time == 100)
-+				cmd = SHT4X_CMD_HEATER_200_01;
-+			else /* data->heater_time == 1000 */
-+				cmd = SHT4X_CMD_HEATER_200_1;
-+		}
-+
-+		ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
-+	}
-+
-+	return ret;
-+}
-+
-+static ssize_t heater_power_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", data->heater_power);
-+}
-+
-+static ssize_t heater_power_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf,
-+				  size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	u32 power;
-+	ssize_t ret;
-+
-+	ret = kstrtou32(buf, 10, &power);
-+	if (ret)
-+		return ret;
-+
-+	if (power != 20 && power != 110 && power != 200)
-+		return -EINVAL;
-+
-+	data->heater_power = power;
-+
-+	return count;
-+}
-+
-+static ssize_t heater_time_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", data->heater_time);
-+}
-+
-+static ssize_t heater_time_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf,
-+				 size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	u32 time;
-+	ssize_t ret;
-+
-+	ret = kstrtou32(buf, 10, &time);
-+	if (ret)
-+		return ret;
-+
-+	if (time != 100 && time != 1000)
-+		return -EINVAL;
-+
-+	data->heater_time = time;
-+
-+	return count;
-+}
-+
-+static DEVICE_ATTR_WO(heater_enable);
-+static DEVICE_ATTR_RW(heater_power);
-+static DEVICE_ATTR_RW(heater_time);
-+
-+static struct attribute *sht4x_attrs[] = {
-+	&dev_attr_heater_enable.attr,
-+	&dev_attr_heater_power.attr,
-+	&dev_attr_heater_time.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(sht4x);
-+
- static const struct hwmon_channel_info * const sht4x_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-@@ -255,6 +377,8 @@ static int sht4x_probe(struct i2c_client *client)
- 
- 	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
- 	data->client = client;
-+	data->heater_power = 200;
-+	data->heater_time = 1000;
- 
- 	mutex_init(&data->lock);
- 
-@@ -270,7 +394,7 @@ static int sht4x_probe(struct i2c_client *client)
- 							 client->name,
- 							 data,
- 							 &sht4x_chip_info,
--							 NULL);
-+							 sht4x_groups);
- 
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc-13.2.0
+alpha                            allyesconfig   gcc-13.3.0
+alpha                               defconfig   gcc-13.2.0
+arc                              allmodconfig   gcc-13.2.0
+arc                               allnoconfig   gcc-13.2.0
+arc                              allyesconfig   gcc-13.2.0
+arc                                 defconfig   gcc-13.2.0
+arc                   randconfig-001-20240825   gcc-13.2.0
+arc                   randconfig-002-20240825   gcc-13.2.0
+arm                              allmodconfig   gcc-13.2.0
+arm                               allnoconfig   gcc-13.2.0
+arm                              allyesconfig   gcc-13.2.0
+arm                         at91_dt_defconfig   clang-20
+arm                                 defconfig   gcc-13.2.0
+arm                          ep93xx_defconfig   clang-14
+arm                         mv78xx0_defconfig   clang-20
+arm                             mxs_defconfig   clang-14
+arm                         nhk8815_defconfig   clang-20
+arm                   randconfig-001-20240825   gcc-13.2.0
+arm                   randconfig-002-20240825   gcc-13.2.0
+arm                   randconfig-003-20240825   gcc-13.2.0
+arm                   randconfig-004-20240825   gcc-13.2.0
+arm                             rpc_defconfig   clang-20
+arm                         socfpga_defconfig   clang-14
+arm                           sunxi_defconfig   clang-20
+arm64                            allmodconfig   gcc-13.2.0
+arm64                             allnoconfig   gcc-13.2.0
+arm64                               defconfig   gcc-13.2.0
+arm64                 randconfig-001-20240825   gcc-13.2.0
+arm64                 randconfig-002-20240825   gcc-13.2.0
+arm64                 randconfig-003-20240825   gcc-13.2.0
+arm64                 randconfig-004-20240825   gcc-13.2.0
+csky                              allnoconfig   gcc-13.2.0
+csky                                defconfig   gcc-13.2.0
+csky                  randconfig-001-20240825   gcc-13.2.0
+csky                  randconfig-002-20240825   gcc-13.2.0
+hexagon                          allmodconfig   clang-20
+hexagon                          allyesconfig   clang-20
+i386                             allmodconfig   clang-18
+i386                             allmodconfig   gcc-12
+i386                              allnoconfig   clang-18
+i386                              allnoconfig   gcc-12
+i386                             allyesconfig   clang-18
+i386                             allyesconfig   gcc-12
+i386         buildonly-randconfig-001-20240825   clang-18
+i386         buildonly-randconfig-002-20240825   clang-18
+i386         buildonly-randconfig-003-20240825   clang-18
+i386         buildonly-randconfig-004-20240825   clang-18
+i386         buildonly-randconfig-004-20240825   gcc-12
+i386         buildonly-randconfig-005-20240825   clang-18
+i386         buildonly-randconfig-006-20240825   clang-18
+i386         buildonly-randconfig-006-20240825   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240825   clang-18
+i386                  randconfig-001-20240825   gcc-12
+i386                  randconfig-002-20240825   clang-18
+i386                  randconfig-002-20240825   gcc-12
+i386                  randconfig-003-20240825   clang-18
+i386                  randconfig-003-20240825   gcc-12
+i386                  randconfig-004-20240825   clang-18
+i386                  randconfig-004-20240825   gcc-12
+i386                  randconfig-005-20240825   clang-18
+i386                  randconfig-006-20240825   clang-18
+i386                  randconfig-011-20240825   clang-18
+i386                  randconfig-012-20240825   clang-18
+i386                  randconfig-012-20240825   gcc-11
+i386                  randconfig-013-20240825   clang-18
+i386                  randconfig-014-20240825   clang-18
+i386                  randconfig-015-20240825   clang-18
+i386                  randconfig-016-20240825   clang-18
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-13.2.0
+loongarch                           defconfig   gcc-13.2.0
+loongarch             randconfig-001-20240825   gcc-13.2.0
+loongarch             randconfig-002-20240825   gcc-13.2.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-13.2.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                                defconfig   gcc-13.2.0
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-13.2.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-13.2.0
+mips                              allnoconfig   gcc-13.2.0
+mips                          rb532_defconfig   clang-14
+mips                          rb532_defconfig   clang-20
+nios2                             allnoconfig   gcc-13.2.0
+nios2                               defconfig   gcc-13.2.0
+nios2                 randconfig-001-20240825   gcc-13.2.0
+nios2                 randconfig-002-20240825   gcc-13.2.0
+openrisc                          allnoconfig   gcc-14.1.0
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-14.1.0
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   gcc-14.1.0
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-14.1.0
+parisc                randconfig-001-20240825   gcc-13.2.0
+parisc                randconfig-002-20240825   gcc-13.2.0
+parisc64                            defconfig   gcc-13.2.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   gcc-14.1.0
+powerpc                          allyesconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                     mpc512x_defconfig   clang-14
+powerpc                 mpc8313_rdb_defconfig   clang-14
+powerpc                      ppc44x_defconfig   clang-20
+powerpc               randconfig-001-20240825   gcc-13.2.0
+powerpc               randconfig-002-20240825   gcc-13.2.0
+powerpc                        warp_defconfig   clang-14
+powerpc64             randconfig-001-20240825   gcc-13.2.0
+powerpc64             randconfig-002-20240825   gcc-13.2.0
+powerpc64             randconfig-003-20240825   gcc-13.2.0
+riscv                            allmodconfig   clang-20
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   gcc-14.1.0
+riscv                            allyesconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-14.1.0
+riscv                    nommu_k210_defconfig   clang-20
+riscv                 randconfig-001-20240825   gcc-13.2.0
+riscv                 randconfig-002-20240825   gcc-13.2.0
+s390                             allmodconfig   clang-20
+s390                              allnoconfig   clang-20
+s390                              allnoconfig   gcc-14.1.0
+s390                             allyesconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   clang-14
+s390                                defconfig   gcc-14.1.0
+s390                  randconfig-001-20240825   gcc-13.2.0
+s390                  randconfig-002-20240825   gcc-13.2.0
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-13.2.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-14.1.0
+sh                    randconfig-001-20240825   gcc-13.2.0
+sh                    randconfig-002-20240825   gcc-13.2.0
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-14.1.0
+sparc64               randconfig-001-20240825   gcc-13.2.0
+sparc64               randconfig-002-20240825   gcc-13.2.0
+um                               allmodconfig   clang-20
+um                               allmodconfig   gcc-13.3.0
+um                                allnoconfig   clang-17
+um                                allnoconfig   gcc-14.1.0
+um                               allyesconfig   gcc-12
+um                               allyesconfig   gcc-13.3.0
+um                                  defconfig   gcc-14.1.0
+um                             i386_defconfig   gcc-14.1.0
+um                    randconfig-001-20240825   gcc-13.2.0
+um                    randconfig-002-20240825   gcc-13.2.0
+um                           x86_64_defconfig   gcc-14.1.0
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240825   gcc-12
+x86_64       buildonly-randconfig-002-20240825   gcc-12
+x86_64       buildonly-randconfig-003-20240825   gcc-12
+x86_64       buildonly-randconfig-004-20240825   gcc-12
+x86_64       buildonly-randconfig-005-20240825   gcc-12
+x86_64       buildonly-randconfig-006-20240825   gcc-12
+x86_64                              defconfig   clang-18
+x86_64                              defconfig   gcc-11
+x86_64                randconfig-001-20240825   gcc-12
+x86_64                randconfig-002-20240825   gcc-12
+x86_64                randconfig-003-20240825   gcc-12
+x86_64                randconfig-004-20240825   gcc-12
+x86_64                randconfig-005-20240825   gcc-12
+x86_64                randconfig-006-20240825   gcc-12
+x86_64                randconfig-011-20240825   gcc-12
+x86_64                randconfig-012-20240825   gcc-12
+x86_64                randconfig-013-20240825   gcc-12
+x86_64                randconfig-014-20240825   gcc-12
+x86_64                randconfig-015-20240825   gcc-12
+x86_64                randconfig-016-20240825   gcc-12
+x86_64                randconfig-071-20240825   gcc-12
+x86_64                randconfig-072-20240825   gcc-12
+x86_64                randconfig-073-20240825   gcc-12
+x86_64                randconfig-074-20240825   gcc-12
+x86_64                randconfig-075-20240825   gcc-12
+x86_64                randconfig-076-20240825   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+xtensa                            allnoconfig   gcc-13.2.0
+xtensa                randconfig-001-20240825   gcc-13.2.0
+xtensa                randconfig-002-20240825   gcc-13.2.0
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
