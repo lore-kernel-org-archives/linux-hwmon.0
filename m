@@ -1,61 +1,61 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE10940855;
-	Sun, 25 Aug 2024 23:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D5639B;
+	Mon, 26 Aug 2024 00:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724626989; cv=none; b=smf2x1bRViksNQ2u9MaNwaEjL0XVcAnglseG7ehbgE6J4JkBqYmlbdrYd6Pru+Qykwh+EP65S77ht9apHogSzQaMZdTtpgLP7znANKFEam9en2Q1RkZeHzrJ/iZMGovRCdLpYlTCvC72A3gdzjLr0CsjhcyxbkCoNnzrFdtU4ME=
+	t=1724631346; cv=none; b=oMDLhEpYn0EfxhdUTcf459FePUNFq5i5vScGax+iRxj+y63w7Ngt6tMfcFPiEKQu+FG03LND50JUqUoKxrsWrFJNxV2++/ebMgL0zqxk7UwtRFqvXi2L1N9v7cALJan1JuCgrrQGP8kTjkTtJbcs9cfA7dpPDshAk7lJHUKl+/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724626989; c=relaxed/simple;
-	bh=0hyqfZXyzsVQguBaCCyrtVOvKwHyyW5Je/1xW+LrwJ4=;
+	s=arc-20240116; t=1724631346; c=relaxed/simple;
+	bh=SUygiDlXacK/hGkl/Lvf1/gNmZcbN7lIP/Z8w44ubyk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qtFkhSqiS36djwxTezuwsKNGwItkjMUg7xb5A3CIyuKgt6x3rQsrssdAdpupNsw9Lv9X4/JDGBelbNgswoh+GAz/FSEbyI7QEarYu/Mp7Coqt2+2DnKC6Dz458CTZy3+GZaHxL0bTDQinF6k4uMSRFytI7kHEs4C+VEBGZe2Qds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cyji7UKL; arc=none smtp.client-ip=209.85.216.41
+	 In-Reply-To:Content-Type; b=mU2WimMlDD1spFEauLUh3kD17lSF1NMzxgccy0e+SYVUoOEKo83UA8jXqjIbR6oQH4uXxZUCeU7LIPKSrwCZWXn9hfwVg9EmBeIBVLVgc8hAgCHeNC9+Ki/mRKkCBwamwmEcMrSj0W789hYig6xT+ErBcdSkQM/laFnI3EHVy64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jR/hCTCc; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cyji7UKL"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d3da054f7cso2493716a91.1;
-        Sun, 25 Aug 2024 16:03:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jR/hCTCc"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7cd9d408040so2538877a12.0;
+        Sun, 25 Aug 2024 17:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724626987; x=1725231787; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724631344; x=1725236144; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9xLSTg0lgGIAXGxaiAuzz/wbWnPchBb+YdXnSFs36xY=;
-        b=Cyji7UKLkZtf2YPjPBl/eVgEqOcxv7xnrbwjvxufqxYcv843zlZ81bY1UiJfocZogF
-         xVZS9m10oE2JgB1LwlqZ0YkNHBizoV3V5ySDdKdIwCOQIpYM+6w2VzUxwHGQO/7rVqhF
-         ++sFjMJP0wZmCqzQpqqrheSd8ntBgD5ukcT1UCNK6e5B8oX5cGm3P7/k1A+TnWVgBWjT
-         P9bowQZTx/s4je9NWt2RQEgY2B98c1Afnm01p+XK3qOckt68r1Mv0ROsncvVjmIC+xDX
-         mhUdi1u/7u6VknO3ZY/y6/+yKYrJOVO89VeJYFdNBrVCQiEl3I4j8zAvzlcmVA/qfSLY
-         45jA==
+        bh=t2U1P9W99OcIUC6HPPl/yk5OuVO/t9mtjIpeajcSxlc=;
+        b=jR/hCTCcMRiTJUPdJQ8R4V10yBH9aXKOCoLUfYG63mAYdlt6SSbapQvmFtwBTSFWYb
+         ST1RDo7AJu4BXM9CNqU8PR6hwrsp/85JYIq3SOsnqAj4dppG6A6eTe5BmASbN1yS5hbK
+         A6Gs0sJf3lwEkcR+3lLuH5wdY3CROfhmAytWw7W4bPhQvPEPxM6AWrg3fcMLuxaCIkTq
+         XKHlqSjuRZM9Wq7pBWMIL0mjXjcsjnHEfglojjm3zzR5iQpbRol4W5M1FkhtGEdDJjO8
+         wMwyHSagR4ci31IEH2vW3i/lFaPDpygmveaqfVWk8hPMLVm7A/rrPjlQXrdn8SlUPQZG
+         oXAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724626987; x=1725231787;
+        d=1e100.net; s=20230601; t=1724631344; x=1725236144;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9xLSTg0lgGIAXGxaiAuzz/wbWnPchBb+YdXnSFs36xY=;
-        b=OTdeeieen0TNGFGISw3lP4nvSrwNjEujMZY01UXRTynT746qEOCXp885ggqgYWq9QU
-         OJHkUK7pnwere2KKm2U3I/LIeYvY/hiuO3AV5kGLgvsezj/px4sthD8jYDeTSPSJ/YTk
-         +iEOg16T9dqxi8LgQWur+qudJdK/9Th8fM9EXpcayxJ5N3QObxhVSgfKtNjU+znnk3Fu
-         HF3MYqIZz9GOE0sggDiGftJIDkOT6WLdGo+MmfFQZaAtH5bvDtBczmIA9a0+KfXa6VEM
-         PFBR4kthVqPFaSfsv2ul2ZAfRmVzZA10HbNDeRn+dfrxT6CtJNWUqMChoYaRsy7v8vWx
-         Q/HA==
-X-Forwarded-Encrypted: i=1; AJvYcCUYSJN4l46lA4RvuncDPpV7AP+Rqh4CUWC+SWLsYm5u0+gBcrAMncwTs9y7goi43qkjVwmPLOAuVkEa4CM=@vger.kernel.org, AJvYcCVm5dD84jF2jQyT0gldJTNG9MbTJWJopPNIwGRLFWVAxGSl10T3yRkv/UE00bgFBPlSM2jzJwrsbxHK0/m/@vger.kernel.org, AJvYcCXWH6MUnDbnTOb1eLaTJQJQ0BzJs85B+mceEz55EeFEcBDwQJmmHWFlVTGsgynJG9LSyXAYsbZGFWSG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQwpH4PRrn0M4dmsCAqOzp4awosypRUELjUmcfYCMEk4osV4en
-	N8CXbAr+LE+lmzh4b0BWy0XNEMi5/D2a1/z5jDA4Txs4R7M25DYd
-X-Google-Smtp-Source: AGHT+IEETF/dvyyyD4yaTj4pECOy8bhNc33aAWnWLpRwp1FUK/qRdfrGuddO+SecpClJ/n2sHiyyaw==
-X-Received: by 2002:a17:90a:1b81:b0:2c8:87e:c2d9 with SMTP id 98e67ed59e1d1-2d646d6f98dmr7273455a91.39.1724626986870;
-        Sun, 25 Aug 2024 16:03:06 -0700 (PDT)
+        bh=t2U1P9W99OcIUC6HPPl/yk5OuVO/t9mtjIpeajcSxlc=;
+        b=nxJo9cVrG775xPJPW+L9XL7CtVDDkFhwiaumQ5pri5WMuMm3WHLNE+47z5eu0bpCLs
+         Z2xC3uK7CYksPIlw3+uYfzvqvwXMkWU45QsvARfH/GsZloBI/LP9r/raymMLY6eK3u3A
+         wZTR5W33ufRen8xE7bE1vvNToisbTtIWW8rdfxO32WXRAlmK46zsafN8XWb3YdoHEgxx
+         m3KKDtQneVds2vmTUEB5ZV31sxgMZmoQ3YlDW3iXP6qq0/CuHzsrMgicwvuWmC6aE8YQ
+         a9EjxbldOPE7H5TaZPDeCSTuxwuR4c72CPqbzbKwfGE2V+NhM4bg1/qDgQeeQm00kKgU
+         zYzA==
+X-Forwarded-Encrypted: i=1; AJvYcCXM62ciQ6okztYnSr/XrBeZaEkbqGz3O4VghhButJnqcfc/iHnIQi2nTSXZlQPRU/8TfxNQkEgFhNuocg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw91wMhU6fBZyPapT1/kJCfZPCLSn+tEOxIMrGqsGN3IQvDu4uY
+	XSTaTWqFHMcD4aWWY5+NF+YqJxWJvLuwLqE93Pde6P6BicpN95nP
+X-Google-Smtp-Source: AGHT+IF3uLmoPgw4XRnXY1ftBGxq1MuOJri4AsYzkaZLKo7nzmWd6Ky0PGqMahnlOtEitHrbxU9fkg==
+X-Received: by 2002:a17:902:e84f:b0:202:3a75:ec89 with SMTP id d9443c01a7336-2039e4cf0d7mr100617655ad.31.1724631343658;
+        Sun, 25 Aug 2024 17:15:43 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d5ebbe29bcsm10651379a91.55.2024.08.25.16.03.05
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855816dcsm58617985ad.112.2024.08.25.17.15.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Aug 2024 16:03:06 -0700 (PDT)
+        Sun, 25 Aug 2024 17:15:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <22f0484c-52da-4845-9c6a-8041d424d775@roeck-us.net>
-Date: Sun, 25 Aug 2024 16:03:04 -0700
+Message-ID: <8e45875a-8af2-4409-8ea8-255281f97e68@roeck-us.net>
+Date: Sun, 25 Aug 2024 17:15:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,21 +63,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] dt-bindings: hwmon/regulator: Convert ltc2978.txt
- to yaml
-To: Frank Li <Frank.li@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- imx@lists.linux.dev
-References: <20240819190652.373222-1-Frank.Li@nxp.com>
- <bea0d3be-6b2a-41a7-8644-44b17d3a26dc@sirena.org.uk>
- <ZsOfeimD94+mh5gt@lizhi-Precision-Tower-5810>
- <e63f6e5b-09a8-400f-8425-8dac4284fc9d@roeck-us.net>
- <ZsO86HQKxmV/xFV9@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v2] hwmon: (sht4x): add heater support
+To: Antoni Pokusinski <apokusinski01@gmail.com>, jdelvare@suse.com
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20240825100930.205670-1-apokusinski01@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,42 +112,244 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZsO86HQKxmV/xFV9@lizhi-Precision-Tower-5810>
+In-Reply-To: <20240825100930.205670-1-apokusinski01@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/19/24 14:45, Frank Li wrote:
-> On Mon, Aug 19, 2024 at 02:37:00PM -0700, Guenter Roeck wrote:
->> On Mon, Aug 19, 2024 at 03:39:38PM -0400, Frank Li wrote:
->>> On Mon, Aug 19, 2024 at 08:11:46PM +0100, Mark Brown wrote:
->>>> On Mon, Aug 19, 2024 at 03:06:51PM -0400, Frank Li wrote:
->>>>
->>>>> change from v1 to v2
->>>>> - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
->>>>
->>>> I also shouldn't be the maintainer for this specific binding, it should
->>>> be someone with knowledge of the devices.  This is a requirement imposed
->>>> by the DT people, I'd be happy to just not list a specific maintainer.
->>>
->>> I remember 'maintainer' is required property for yaml.
->>> Look like Guenter Roeck contribute many code for this driver.
->>>
->>
->> Yes, but I do not maintain code or documentation outside the hardware
->> monitoring or watchdog subsystems. You want this file attached to the
->> regulator subsystem, so you'll have to find a maintainer from that
->> subsystem or sign up to maintain it yourself.
-> 
-> How about just leave in origial place? I think you are more familar than
-> me about this controller!
+On 8/25/24 03:09, Antoni Pokusinski wrote:
+> Add support for manipulating the internal heater of sht4x devices.
+> The heater may be used to remove condensed water on the sensor surface
+> which disturbs the relative humidity measurements.
 > 
 
-I really do not want to be involved in this discussion any further.
-You insisted in moving the file, so you should be willing to bear
-the consequences (meaning: add yourself as maintainer), or at least
-find someone who does. Please keep in mind that the maintainer will have
-to coordinate future patch series if changes to both the devicetree
-property descriptions and to the driver are needed.
+Where is this seen in practice ? "may be" does not mean that the problem
+is actively seen.
 
-Guenter
+> The heater can operate at three heating levels (20, 110 or 200
+> milliwatts). Also, two heating durations may be selected (0.1 or 1s).
+> Once the heating time elapses the heater is automatically switched off.
+> 
+> Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
+> ---
+> Changes since v1:
+> * explain the use case of the new attributes set
+> * heater_enable attr: make it write-only
+> * heater_enable_store: define cmd as u8 instead of u8*
+> * heater_enable_store: remove unreachable data path
+> * heater_enable_store: remove unnecessary lock
+> * heater_enable_store: call i2c_master_send only if status==true
+> * define attributes as DEVICE_ATTR_* instead of SENSOR_DEVICE_ATTR_*
+> ---
+>   Documentation/hwmon/sht4x.rst |  11 +++
+>   drivers/hwmon/sht4x.c         | 126 +++++++++++++++++++++++++++++++++-
+>   2 files changed, 136 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+> index daf21e763425..3ff6c08d8267 100644
+> --- a/Documentation/hwmon/sht4x.rst
+> +++ b/Documentation/hwmon/sht4x.rst
+> @@ -42,4 +42,15 @@ humidity1_input Measured humidity in %H
+>   update_interval The minimum interval for polling the sensor,
+>                   in milliseconds. Writable. Must be at least
+>                   2000.
+> +heater_power	The requested heater power, in milliwatts.
+> +		Available values: 20, 110, 200 (default: 200).
+> +heater_time	The requested operating time of the heater,
+> +		in milliseconds.
+> +		Available values: 100, 1000 (default 1000).
+> +heater_enable	Enable the heater with the selected power
+> +		and for the selected time in order to remove
+> +		condensed water from the sensor surface. Write-only.
+> +
+> +			- 0: turn off
+
+Not really. As implemented, this does not turn off the heater, it does nothing.
+If that is what you want' you'd have to send a command "turn off heater immediately"
+if such a command exists.
+
+> +			- 1: turn on
+>   =============== ============================================
+> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+> index b8916d2735b5..75e092f9b80e 100644
+> --- a/drivers/hwmon/sht4x.c
+> +++ b/drivers/hwmon/sht4x.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/crc8.h>
+>   #include <linux/delay.h>
+>   #include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+>   #include <linux/i2c.h>
+>   #include <linux/jiffies.h>
+>   #include <linux/module.h>
+> @@ -31,6 +32,12 @@
+>    */
+>   #define SHT4X_CMD_MEASURE_HPM	0b11111101
+>   #define SHT4X_CMD_RESET		0b10010100
+> +#define SHT4X_CMD_HEATER_20_1	0b00011110
+> +#define SHT4X_CMD_HEATER_20_01	0b00010101
+> +#define SHT4X_CMD_HEATER_110_1	0b00101111
+> +#define SHT4X_CMD_HEATER_110_01	0b00100100
+> +#define SHT4X_CMD_HEATER_200_1	0b00111001
+> +#define SHT4X_CMD_HEATER_200_01 0b00110010
+>   
+>   #define SHT4X_CMD_LEN		1
+>   #define SHT4X_CRC8_LEN		1
+> @@ -54,6 +61,8 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
+>    * @last_updated: the previous time that the SHT4X was polled
+>    * @temperature: the latest temperature value received from the SHT4X
+>    * @humidity: the latest humidity value received from the SHT4X
+> + * @heater_power: the power at which the heater will be started
+> + * @heater_time: the time for which the heater will remain turned on
+>    */
+>   struct sht4x_data {
+>   	struct i2c_client	*client;
+> @@ -63,6 +72,8 @@ struct sht4x_data {
+>   	long			last_updated;	/* in jiffies */
+>   	s32			temperature;
+>   	s32			humidity;
+> +	u32			heater_power;	/* in milli-watts */
+> +	u32			heater_time;	/* in milli-seconds */
+>   };
+>   
+>   /**
+> @@ -215,6 +226,117 @@ static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>   	}
+>   }
+>   
+> +static ssize_t heater_enable_store(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   const char *buf,
+> +				   size_t count)
+> +{
+> +	struct sht4x_data *data = dev_get_drvdata(dev);
+> +	bool status;
+> +	ssize_t ret;
+> +	u8 cmd;
+> +
+> +	ret = kstrtobool(buf, &status);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (status) {
+> +		if (data->heater_power == 20) {
+> +			if (data->heater_time == 100)
+> +				cmd = SHT4X_CMD_HEATER_20_01;
+> +			else /* data->heater_time == 1000 */
+> +				cmd = SHT4X_CMD_HEATER_20_1;
+> +		} else if (data->heater_power == 110) {
+> +			if (data->heater_time == 100)
+> +				cmd = SHT4X_CMD_HEATER_110_01;
+> +			else /* data->heater_time == 1000 */
+> +				cmd = SHT4X_CMD_HEATER_110_1;
+> +		} else if (data->heater_power == 200) {
+
+Unnecessary "if". Due to the limitations of static checkers, those
+may wrongly conclude that "cmd" is not initialized when passed to
+i2c_master_send().
+
+> +			if (data->heater_time == 100)
+> +				cmd = SHT4X_CMD_HEATER_200_01;
+> +			else /* data->heater_time == 1000 */
+> +				cmd = SHT4X_CMD_HEATER_200_1;
+> +		}
+> +
+> +		ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
+> +	}
+> +
+> +	return ret; > +}
+> +
+> +static ssize_t heater_power_show(struct device *dev,
+> +				 struct device_attribute *attr,
+> +				 char *buf)
+> +{
+> +	struct sht4x_data *data = dev_get_drvdata(dev);
+> +
+> +	return sysfs_emit(buf, "%u\n", data->heater_power);
+> +}
+> +
+> +static ssize_t heater_power_store(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  const char *buf,
+> +				  size_t count)
+> +{
+> +	struct sht4x_data *data = dev_get_drvdata(dev);
+> +	u32 power;
+> +	ssize_t ret;
+> +
+> +	ret = kstrtou32(buf, 10, &power);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (power != 20 && power != 110 && power != 200)
+> +		return -EINVAL;
+> +
+> +	data->heater_power = power;
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t heater_time_show(struct device *dev,
+> +				struct device_attribute *attr,
+> +				char *buf)
+> +{
+> +	struct sht4x_data *data = dev_get_drvdata(dev);
+> +
+> +	return sysfs_emit(buf, "%u\n", data->heater_time);
+> +}
+> +
+> +static ssize_t heater_time_store(struct device *dev,
+> +				 struct device_attribute *attr,
+> +				 const char *buf,
+> +				 size_t count)
+> +{
+> +	struct sht4x_data *data = dev_get_drvdata(dev);
+> +	u32 time;
+> +	ssize_t ret;
+> +
+> +	ret = kstrtou32(buf, 10, &time);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (time != 100 && time != 1000)
+> +		return -EINVAL;
+> +
+> +	data->heater_time = time;
+> +
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_WO(heater_enable);
+> +static DEVICE_ATTR_RW(heater_power);
+> +static DEVICE_ATTR_RW(heater_time);
+> +
+> +static struct attribute *sht4x_attrs[] = {
+> +	&dev_attr_heater_enable.attr,
+> +	&dev_attr_heater_power.attr,
+> +	&dev_attr_heater_time.attr,
+> +	NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(sht4x);
+> +
+>   static const struct hwmon_channel_info * const sht4x_info[] = {
+>   	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
+>   	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> @@ -255,6 +377,8 @@ static int sht4x_probe(struct i2c_client *client)
+>   
+>   	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
+>   	data->client = client;
+> +	data->heater_power = 200;
+> +	data->heater_time = 1000;
+>   
+>   	mutex_init(&data->lock);
+>   
+> @@ -270,7 +394,7 @@ static int sht4x_probe(struct i2c_client *client)
+>   							 client->name,
+>   							 data,
+>   							 &sht4x_chip_info,
+> -							 NULL);
+> +							 sht4x_groups);
+>   
+>   	return PTR_ERR_OR_ZERO(hwmon_dev);
+>   }
 
