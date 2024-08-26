@@ -1,355 +1,180 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D5639B;
-	Mon, 26 Aug 2024 00:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00EA6146018;
+	Mon, 26 Aug 2024 08:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724631346; cv=none; b=oMDLhEpYn0EfxhdUTcf459FePUNFq5i5vScGax+iRxj+y63w7Ngt6tMfcFPiEKQu+FG03LND50JUqUoKxrsWrFJNxV2++/ebMgL0zqxk7UwtRFqvXi2L1N9v7cALJan1JuCgrrQGP8kTjkTtJbcs9cfA7dpPDshAk7lJHUKl+/Q=
+	t=1724660929; cv=none; b=C9c3D/kVWEd51zG8yfZ6jZBgvXyzGTbtia787TCIRmYEE2sRKXOHsNI9pwczyC0icOyLTI5IbNy8ahZCASWWzt0ZB86Re+bnQkT+0L5kmladLFMCtPVtWdpM7QPLhmuNY5XzmvbEh9um5C97MuRef0Jg3uDi24kqFJkK6vLP3Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724631346; c=relaxed/simple;
-	bh=SUygiDlXacK/hGkl/Lvf1/gNmZcbN7lIP/Z8w44ubyk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mU2WimMlDD1spFEauLUh3kD17lSF1NMzxgccy0e+SYVUoOEKo83UA8jXqjIbR6oQH4uXxZUCeU7LIPKSrwCZWXn9hfwVg9EmBeIBVLVgc8hAgCHeNC9+Ki/mRKkCBwamwmEcMrSj0W789hYig6xT+ErBcdSkQM/laFnI3EHVy64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jR/hCTCc; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724660929; c=relaxed/simple;
+	bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SKe4HH29wR9mp3WDS1vNKIiMrEOF4xS6eNnnjczFtEdAFWWEVcgr/aIBSIFJSTxGsSaWYkFvcRpXSU8wk0IBCcT4F37KNTd+tp2JnMaNlex0q9BidT7yB05zPPDt+LXcMXTxi1PO9/ZOSyjvazu0EsPNirUMLoJO/0lIL2SS5eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YwAMOlfY; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jR/hCTCc"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7cd9d408040so2538877a12.0;
-        Sun, 25 Aug 2024 17:15:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724631344; x=1725236144; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=t2U1P9W99OcIUC6HPPl/yk5OuVO/t9mtjIpeajcSxlc=;
-        b=jR/hCTCcMRiTJUPdJQ8R4V10yBH9aXKOCoLUfYG63mAYdlt6SSbapQvmFtwBTSFWYb
-         ST1RDo7AJu4BXM9CNqU8PR6hwrsp/85JYIq3SOsnqAj4dppG6A6eTe5BmASbN1yS5hbK
-         A6Gs0sJf3lwEkcR+3lLuH5wdY3CROfhmAytWw7W4bPhQvPEPxM6AWrg3fcMLuxaCIkTq
-         XKHlqSjuRZM9Wq7pBWMIL0mjXjcsjnHEfglojjm3zzR5iQpbRol4W5M1FkhtGEdDJjO8
-         wMwyHSagR4ci31IEH2vW3i/lFaPDpygmveaqfVWk8hPMLVm7A/rrPjlQXrdn8SlUPQZG
-         oXAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724631344; x=1725236144;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t2U1P9W99OcIUC6HPPl/yk5OuVO/t9mtjIpeajcSxlc=;
-        b=nxJo9cVrG775xPJPW+L9XL7CtVDDkFhwiaumQ5pri5WMuMm3WHLNE+47z5eu0bpCLs
-         Z2xC3uK7CYksPIlw3+uYfzvqvwXMkWU45QsvARfH/GsZloBI/LP9r/raymMLY6eK3u3A
-         wZTR5W33ufRen8xE7bE1vvNToisbTtIWW8rdfxO32WXRAlmK46zsafN8XWb3YdoHEgxx
-         m3KKDtQneVds2vmTUEB5ZV31sxgMZmoQ3YlDW3iXP6qq0/CuHzsrMgicwvuWmC6aE8YQ
-         a9EjxbldOPE7H5TaZPDeCSTuxwuR4c72CPqbzbKwfGE2V+NhM4bg1/qDgQeeQm00kKgU
-         zYzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXM62ciQ6okztYnSr/XrBeZaEkbqGz3O4VghhButJnqcfc/iHnIQi2nTSXZlQPRU/8TfxNQkEgFhNuocg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw91wMhU6fBZyPapT1/kJCfZPCLSn+tEOxIMrGqsGN3IQvDu4uY
-	XSTaTWqFHMcD4aWWY5+NF+YqJxWJvLuwLqE93Pde6P6BicpN95nP
-X-Google-Smtp-Source: AGHT+IF3uLmoPgw4XRnXY1ftBGxq1MuOJri4AsYzkaZLKo7nzmWd6Ky0PGqMahnlOtEitHrbxU9fkg==
-X-Received: by 2002:a17:902:e84f:b0:202:3a75:ec89 with SMTP id d9443c01a7336-2039e4cf0d7mr100617655ad.31.1724631343658;
-        Sun, 25 Aug 2024 17:15:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855816dcsm58617985ad.112.2024.08.25.17.15.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Aug 2024 17:15:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8e45875a-8af2-4409-8ea8-255281f97e68@roeck-us.net>
-Date: Sun, 25 Aug 2024 17:15:41 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YwAMOlfY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724660927; x=1756196927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
+  b=YwAMOlfYko/CJe3neliBI7wbsA4iHZjK+aoeaPiXSkOopIosHle9LmfZ
+   vXWkW1JFmn2TOK0HgzGhhJnKaEyEVfOoeH4G8/fAvlHdiYFDQNy/H71g/
+   oglle/LiZ4mh+vD32G+1zD7p4okG5aoZcOVe6LS90d5CLgQ/LOQmLgVth
+   fx6GR6zVLq/rch8NLjj8P+qplIkzzxiVHmrrwgx12pOGcSKeEiIcUouE+
+   0AfybL+r4oQC96IcqhVba8rbPTRUYjmgKyq4YXx7mcc/r6pVE6qQ1t9FP
+   ZGXpFgkLcs7wbCPVplsWCf43fpoeW4ArEG2Gtuy6PYj8C9Z3t+1hYDlcW
+   Q==;
+X-CSE-ConnectionGUID: 238lqN7VQUCbXwniwUuS/g==
+X-CSE-MsgGUID: z6lKXFYJRiO9Twy6zFBZMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="26863114"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="26863114"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 01:28:47 -0700
+X-CSE-ConnectionGUID: qzDAa/RzQuqTqBcMmesRyg==
+X-CSE-MsgGUID: D/7I0FJIQVO3Zp7Qcviwrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="67337166"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 26 Aug 2024 01:28:45 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1siV5e-000Gfd-1f;
+	Mon, 26 Aug 2024 08:28:42 +0000
+Date: Mon, 26 Aug 2024 16:28:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wenliang <wenliang202407@163.com>
+Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+Message-ID: <202408261627.lm2xKacD-lkp@intel.com>
+References: <20240822074426.7241-1-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (sht4x): add heater support
-To: Antoni Pokusinski <apokusinski01@gmail.com>, jdelvare@suse.com
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20240825100930.205670-1-apokusinski01@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240825100930.205670-1-apokusinski01@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
 
-On 8/25/24 03:09, Antoni Pokusinski wrote:
-> Add support for manipulating the internal heater of sht4x devices.
-> The heater may be used to remove condensed water on the sensor surface
-> which disturbs the relative humidity measurements.
-> 
+Hi Wenliang,
 
-Where is this seen in practice ? "may be" does not mean that the problem
-is actively seen.
+kernel test robot noticed the following build errors:
 
-> The heater can operate at three heating levels (20, 110 or 200
-> milliwatts). Also, two heating durations may be selected (0.1 or 1s).
-> Once the heating time elapses the heater is automatically switched off.
-> 
-> Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
-> ---
-> Changes since v1:
-> * explain the use case of the new attributes set
-> * heater_enable attr: make it write-only
-> * heater_enable_store: define cmd as u8 instead of u8*
-> * heater_enable_store: remove unreachable data path
-> * heater_enable_store: remove unnecessary lock
-> * heater_enable_store: call i2c_master_send only if status==true
-> * define attributes as DEVICE_ATTR_* instead of SENSOR_DEVICE_ATTR_*
-> ---
->   Documentation/hwmon/sht4x.rst |  11 +++
->   drivers/hwmon/sht4x.c         | 126 +++++++++++++++++++++++++++++++++-
->   2 files changed, 136 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
-> index daf21e763425..3ff6c08d8267 100644
-> --- a/Documentation/hwmon/sht4x.rst
-> +++ b/Documentation/hwmon/sht4x.rst
-> @@ -42,4 +42,15 @@ humidity1_input Measured humidity in %H
->   update_interval The minimum interval for polling the sensor,
->                   in milliseconds. Writable. Must be at least
->                   2000.
-> +heater_power	The requested heater power, in milliwatts.
-> +		Available values: 20, 110, 200 (default: 200).
-> +heater_time	The requested operating time of the heater,
-> +		in milliseconds.
-> +		Available values: 100, 1000 (default 1000).
-> +heater_enable	Enable the heater with the selected power
-> +		and for the selected time in order to remove
-> +		condensed water from the sensor surface. Write-only.
-> +
-> +			- 0: turn off
+[auto build test ERROR on linux/master]
 
-Not really. As implemented, this does not turn off the heater, it does nothing.
-If that is what you want' you'd have to send a command "turn off heater immediately"
-if such a command exists.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240826-103932
+base:   linux/master
+patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
+patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/reproduce)
 
-> +			- 1: turn on
->   =============== ============================================
-> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-> index b8916d2735b5..75e092f9b80e 100644
-> --- a/drivers/hwmon/sht4x.c
-> +++ b/drivers/hwmon/sht4x.c
-> @@ -11,6 +11,7 @@
->   #include <linux/crc8.h>
->   #include <linux/delay.h>
->   #include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
->   #include <linux/i2c.h>
->   #include <linux/jiffies.h>
->   #include <linux/module.h>
-> @@ -31,6 +32,12 @@
->    */
->   #define SHT4X_CMD_MEASURE_HPM	0b11111101
->   #define SHT4X_CMD_RESET		0b10010100
-> +#define SHT4X_CMD_HEATER_20_1	0b00011110
-> +#define SHT4X_CMD_HEATER_20_01	0b00010101
-> +#define SHT4X_CMD_HEATER_110_1	0b00101111
-> +#define SHT4X_CMD_HEATER_110_01	0b00100100
-> +#define SHT4X_CMD_HEATER_200_1	0b00111001
-> +#define SHT4X_CMD_HEATER_200_01 0b00110010
->   
->   #define SHT4X_CMD_LEN		1
->   #define SHT4X_CRC8_LEN		1
-> @@ -54,6 +61,8 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
->    * @last_updated: the previous time that the SHT4X was polled
->    * @temperature: the latest temperature value received from the SHT4X
->    * @humidity: the latest humidity value received from the SHT4X
-> + * @heater_power: the power at which the heater will be started
-> + * @heater_time: the time for which the heater will remain turned on
->    */
->   struct sht4x_data {
->   	struct i2c_client	*client;
-> @@ -63,6 +72,8 @@ struct sht4x_data {
->   	long			last_updated;	/* in jiffies */
->   	s32			temperature;
->   	s32			humidity;
-> +	u32			heater_power;	/* in milli-watts */
-> +	u32			heater_time;	/* in milli-seconds */
->   };
->   
->   /**
-> @@ -215,6 +226,117 @@ static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
->   	}
->   }
->   
-> +static ssize_t heater_enable_store(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   const char *buf,
-> +				   size_t count)
-> +{
-> +	struct sht4x_data *data = dev_get_drvdata(dev);
-> +	bool status;
-> +	ssize_t ret;
-> +	u8 cmd;
-> +
-> +	ret = kstrtobool(buf, &status);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (status) {
-> +		if (data->heater_power == 20) {
-> +			if (data->heater_time == 100)
-> +				cmd = SHT4X_CMD_HEATER_20_01;
-> +			else /* data->heater_time == 1000 */
-> +				cmd = SHT4X_CMD_HEATER_20_1;
-> +		} else if (data->heater_power == 110) {
-> +			if (data->heater_time == 100)
-> +				cmd = SHT4X_CMD_HEATER_110_01;
-> +			else /* data->heater_time == 1000 */
-> +				cmd = SHT4X_CMD_HEATER_110_1;
-> +		} else if (data->heater_power == 200) {
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408261627.lm2xKacD-lkp@intel.com/
 
-Unnecessary "if". Due to the limitations of static checkers, those
-may wrongly conclude that "cmd" is not initialized when passed to
-i2c_master_send().
+All errors (new ones prefixed by >>):
 
-> +			if (data->heater_time == 100)
-> +				cmd = SHT4X_CMD_HEATER_200_01;
-> +			else /* data->heater_time == 1000 */
-> +				cmd = SHT4X_CMD_HEATER_200_1;
-> +		}
-> +
-> +		ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
-> +	}
-> +
-> +	return ret; > +}
-> +
-> +static ssize_t heater_power_show(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 char *buf)
-> +{
-> +	struct sht4x_data *data = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%u\n", data->heater_power);
-> +}
-> +
-> +static ssize_t heater_power_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf,
-> +				  size_t count)
-> +{
-> +	struct sht4x_data *data = dev_get_drvdata(dev);
-> +	u32 power;
-> +	ssize_t ret;
-> +
-> +	ret = kstrtou32(buf, 10, &power);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (power != 20 && power != 110 && power != 200)
-> +		return -EINVAL;
-> +
-> +	data->heater_power = power;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t heater_time_show(struct device *dev,
-> +				struct device_attribute *attr,
-> +				char *buf)
-> +{
-> +	struct sht4x_data *data = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%u\n", data->heater_time);
-> +}
-> +
-> +static ssize_t heater_time_store(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 const char *buf,
-> +				 size_t count)
-> +{
-> +	struct sht4x_data *data = dev_get_drvdata(dev);
-> +	u32 time;
-> +	ssize_t ret;
-> +
-> +	ret = kstrtou32(buf, 10, &time);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (time != 100 && time != 1000)
-> +		return -EINVAL;
-> +
-> +	data->heater_time = time;
-> +
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_WO(heater_enable);
-> +static DEVICE_ATTR_RW(heater_power);
-> +static DEVICE_ATTR_RW(heater_time);
-> +
-> +static struct attribute *sht4x_attrs[] = {
-> +	&dev_attr_heater_enable.attr,
-> +	&dev_attr_heater_power.attr,
-> +	&dev_attr_heater_time.attr,
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(sht4x);
-> +
->   static const struct hwmon_channel_info * const sht4x_info[] = {
->   	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
->   	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> @@ -255,6 +377,8 @@ static int sht4x_probe(struct i2c_client *client)
->   
->   	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
->   	data->client = client;
-> +	data->heater_power = 200;
-> +	data->heater_time = 1000;
->   
->   	mutex_init(&data->lock);
->   
-> @@ -270,7 +394,7 @@ static int sht4x_probe(struct i2c_client *client)
->   							 client->name,
->   							 data,
->   							 &sht4x_chip_info,
-> -							 NULL);
-> +							 sht4x_groups);
->   
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
+>> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
+     493 |         sq522xx_regmap_config.max_register = data->config->registers;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
+      67 | static const struct regmap_config sq522xx_regmap_config = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      68 |         .reg_bits = 8,
+         |         ~~~~~~~~~~~~~~
+      69 |         .val_bits = 16,
+         |         ~~~~~~~~~~~~~~~
+      70 | };
+         | ~
+   1 error generated.
 
+
+vim +493 drivers/hwmon/sq52205.c
+
+   460	
+   461	static int sq522xx_probe(struct i2c_client *client)
+   462	{
+   463		struct device *dev = &client->dev;
+   464		struct sq522xx_data *data;
+   465		struct device *hwmon_dev;
+   466		u32 val;
+   467		int ret, group = 0;
+   468		enum sq522xx_ids chip;
+   469	
+   470		if (client->dev.of_node)
+   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
+   472		else
+   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
+   474	
+   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   476		if (!data)
+   477			return -ENOMEM;
+   478	
+   479		/* set the device type */
+   480		data->client = client;
+   481		data->config = &sq522xx_config[chip];
+   482		mutex_init(&data->config_lock);
+   483	
+   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
+   485			val = SQ522XX_RSHUNT_DEFAULT;
+   486	
+   487	
+   488		if (val <= 0 || val > data->config->calibration_factor)
+   489			return -ENODEV;
+   490	
+   491		data->rshunt = val;
+   492	
+ > 493		sq522xx_regmap_config.max_register = data->config->registers;
+   494	
+   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
+   496		if (IS_ERR(data->regmap)) {
+   497			dev_err(dev, "failed to allocate register map\n");
+   498			return PTR_ERR(data->regmap);
+   499		}
+   500	
+   501	
+   502		ret = sq522xx_init(data);
+   503		if (ret < 0) {
+   504			dev_err(dev, "error configuring the device: %d\n", ret);
+   505			return -ENODEV;
+   506		}
+   507		if (chip == sq52205) {
+   508			ret = sq52205_init(data);
+   509			if (ret < 0) {
+   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
+   511				return -ENODEV;
+   512			}
+   513		}
+   514	
+   515		data->groups[group++] = &sq522xx_group;
+   516		if (chip == sq52205)
+   517			data->groups[group++] = &sq52205_group;
+   518	
+   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+   520									data, data->groups);
+   521		if (IS_ERR(hwmon_dev))
+   522			return PTR_ERR(hwmon_dev);
+   523	
+   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+   525			 client->name, data->rshunt);
+   526	
+   527		return 0;
+   528	}
+   529	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
