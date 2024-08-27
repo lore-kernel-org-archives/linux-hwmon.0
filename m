@@ -1,66 +1,65 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F401E520;
-	Tue, 27 Aug 2024 15:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389B51E520
+	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 15:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724771240; cv=none; b=Cj2wS/CIT88BJ2KHuo37Uk8+vJrwhHM/DUQTgwbIAXtvn6IB9PVN5d7qNSsIH+TaWF76n7H5JrD/tc2OnhBQ3i8aH7JIouS5jyrtYU9/BCV2+w6PaRvzhjnfJxIN07+6Ib9opkOPna/iKasmjBtTjKHwzmjfNfGs4xgwtf4Z6Go=
+	t=1724771341; cv=none; b=lhJDW4S2tQjOQi3/kstycjaxTH1aQsDGhUDrguQElha+EdeA6taYjWCFRg+h02TSvNU9CO/6oQ8IQiITB2IVudjCTYVA+bxFQWpzl3rw0KZIzsYtGFSEq0SDJAmvQ35rFMcdNwv4hFOkBxrHk3SMiPY7yUSpaRSxHlpwvaPYwJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724771240; c=relaxed/simple;
-	bh=K5CuyLlWQbNslvs1onkWlOfOKt3uR4nEb4Qzc8SOiLY=;
+	s=arc-20240116; t=1724771341; c=relaxed/simple;
+	bh=l7WxW36O7am6p3vv+/0BRCw81cJKOj86v0+TCt1c754=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NV7nKKwR0nzfvmURr+8kf/h8jztYlgDwhr2efyjb9vzcujG9pqNDM4E9BMcQkTJl4V2h9FP3M3oRK66fmt+qwiHQpLqlnF+D3udanJfhLaOU0HnZTe7Sf7MA4OLHH2al7hQDzyTbUB8jMnTtKSBszcYb5QbcIOR41URklmLuVC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OeqFI+yJ; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrUTxo4psXFEiXnPYfdJ7G0ooIRqj9lkuA5QjhBGu+TC0NzdJk0Pj7z7VXbp678JD/W81d+2PpbQ+3cUPs6cBXnAaJtzJo4bKzLdgU7FJS/+Odx0/Z4Jm08n9EZl2LHJVxPlQjQU9D03dq8NfUEHe90HyWiltLSNbJPjtql9joI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tb2QBC46; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OeqFI+yJ"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-714186ce2f2so4305614b3a.0;
-        Tue, 27 Aug 2024 08:07:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tb2QBC46"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71430e7eaf8so4451128b3a.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 08:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724771238; x=1725376038; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724771338; x=1725376138; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mhY8MlE7WAXySqETyaPueslpGTmo9aoHJrk0EN8U8B4=;
-        b=OeqFI+yJ4MwA11DH1WFD7HOwoqrBqf64zgPYSTkSCF5+Xop+e0hsjJamjlG+/CNoPo
-         FohJAVSyy57jJ/sbDDKdJ5ms++b0hiyInzZ5gSHduzrV4E0lRh/vhC1v63Wv0iYX9HVl
-         I4FNssAfEyrN/YYpTsFmiq6bG53f/u9JgQQCa+70TgNeKRepGgXPRGomnH9WUqU7WHeW
-         4X+FRvypZoI0+PWkzLtuklGTx13rDkZU2rOk4ZGdC9+WMhizPeP6WXKJBboXP/Vf7nsN
-         Bq5RXs8GcWu+ZyktSd/HNN+JNe3AFmnzxYiSd29asWK5M1jOsDH4VCft++yP6X3zVyGh
-         uW6w==
+        bh=3n0Ph4/cZee5xGStGup0GbqMBI9F2UvrvpLrg1CT1eE=;
+        b=Tb2QBC46uCUkMO/r6oXgjGnoY13BOu6wvHlroO1qEk5w8iAqytXNaFdEO7nSCtYO2d
+         O1J6HpflHUuMrmAJWzSMWDEiUq8HjsKH9/IrUhpkDokmbG8TIQsQIJT2+x6X2jYU2f/H
+         X8EHZGkib4SsHr6JqXQMUgLsi0Nvof+6DhyO14KAZ39kZ6gGOjERKWLmcAoXOBUqKy3N
+         aHr805WBPgPvmg7cZvlnaVVTFa4xRiK6ptXoEDid/5+ZJEzDxCm3tsEWTEwhak3BGwPX
+         wCsqgVlDaZHpc0j7hguHaEdUMH5e1B+VlQHo/Jw/yrb50F+DTY1zt520l7/nA4WAwlMF
+         0gPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724771238; x=1725376038;
+        d=1e100.net; s=20230601; t=1724771338; x=1725376138;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mhY8MlE7WAXySqETyaPueslpGTmo9aoHJrk0EN8U8B4=;
-        b=c6P/35aI+c6tAIg7fzGvS5CssRCvhN0HJCyfZQt734RFuEXoRCuMkYD8H6n3OFwT3L
-         leSSk539dQuhOahF3WsKGA4H+yqm2sLssM9XEwuByTYuvIfkNKsrVqbSLApdENS3ch8E
-         YKHsouX3DwE4gssEWVqBC/qfwl8OzUr546xxJtmD5yWXAR1oUQ8Hdtk4A8Pf5z9mDYKa
-         7r+33mKQmGRbzM3I7E7HIGjm1KXnYDPJww5KtlvwKYpOX5NXt37yyVNm6kyb3L6WT/ZR
-         FperrDSwWqBBKD2MGdacBptYp9zfpicjOTwlw9Sebh/EvS5rhS6GCvu4P6mVJFVwlVI/
-         jjwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHxAmEkkg9rVV/kw0VTewz34JZCt+14bNpor4QNnF9955d78bgE4NIGAywXnGl+V8kOw3yS6uCRvRwtg==@vger.kernel.org, AJvYcCXfMRYt69CwiiP8kQSRA/JMrlsXRsQ8B7vMmVXuLAViOTnAwBilD7ligZzrFkCtdN5+z0E7YHLiqhFkJ8tZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrXoIZ/rxMp5SMglQFXU1f37GKMDZHynGo/ZGshrJ8AGY0wFUO
-	QIJEmjLwJ19IAGskYYnUmxsEWkg4do8V7DlMMd5kzIR91JuXR4c7qMGGiw==
-X-Google-Smtp-Source: AGHT+IGpofjCQVU2JyL++Xk3cIYSBN4+TDk7PcY0U2RJluysFz/DcQ3K3mNOPdW/dJciqoHMyDGjjg==
-X-Received: by 2002:a05:6a20:2d21:b0:1c3:ba3d:3ec3 with SMTP id adf61e73a8af0-1cc8a21a05fmr13995963637.36.1724771237979;
-        Tue, 27 Aug 2024 08:07:17 -0700 (PDT)
+        bh=3n0Ph4/cZee5xGStGup0GbqMBI9F2UvrvpLrg1CT1eE=;
+        b=VqFIUAJoz9pFuJ7HyEsXtO6PZFukPuMbldY70KJuhuNvAAHCKmZtxiVj4vmYQK8K+V
+         ztrm+8mKqnN46UShdo5Bl8Bj9nm4t1SENHSmq4auF2kfKWJQE4BxphlAflWMpdvhY5X2
+         3wneQKcAtIx9ic7Z0J/fz+zSy9imSahFLA3vXnl6VDSUeiVH+zG2R4zYRtyK2OxE7Lom
+         6zC3yoEnBkSO40A339TiKIEDmGmejsy4x8MmvV/G4/I5mZsyR6Nj8OIaD/G4tN/JeLPs
+         XwjJduwKWRUhisKRkf0zs3RRr3C8yGiczbSMeCyZmq3GUwLQbPstXkEcDfaOiNh0ScvU
+         quhw==
+X-Gm-Message-State: AOJu0YzYiu8nzlNyjCeSnwcFhM1VhKIsbZumq7jkqysVXvls6rSBLZi9
+	oZR7fdK+Mot6M2pGrIDM94RAXkXRIKPgJGwuTeKyJEbBI1koaguSyoU7fw==
+X-Google-Smtp-Source: AGHT+IH0IFkRvC4y2nD/QqdJdvNsjDJ5QEzApgy5pZnO6TcskmAmCf/Lnja92KlDzHomaaLyjSKetQ==
+X-Received: by 2002:a05:6a20:4f89:b0:1cc:bb4e:a905 with SMTP id adf61e73a8af0-1ccbb4ea95amr3822894637.1.1724771338243;
+        Tue, 27 Aug 2024 08:08:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71434273510sm8858223b3a.90.2024.08.27.08.07.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71434230d1dsm8681882b3a.37.2024.08.27.08.08.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 08:07:16 -0700 (PDT)
+        Tue, 27 Aug 2024 08:08:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 27 Aug 2024 08:07:15 -0700
+Date: Tue, 27 Aug 2024 08:08:56 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Shen Lichuan <shenlichuan@vivo.com>
-Cc: jim.cromie@gmail.com, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] hwmon: (pc87360) Use min() macro
-Message-ID: <10539bd8-5ce3-4f18-96f9-c87e537467f3@roeck-us.net>
-References: <20240827070442.40667-1-shenlichuan@vivo.com>
+To: mailinglist1@johanneskirchmair.de
+Cc: linux-hwmon@vger.kernel.org, groeck7@gmail.com,
+	johannes.kirchmair@skidata.com
+Subject: Re: [PATCH v3] hwmon: pwmfan: do not force disable pwm controller
+Message-ID: <e6ad0833-9af3-438a-995b-b8c15f49b3e7@roeck-us.net>
+References: <20240827054454.521494-1-mailinglist1@johanneskirchmair.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,33 +68,26 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240827070442.40667-1-shenlichuan@vivo.com>
+In-Reply-To: <20240827054454.521494-1-mailinglist1@johanneskirchmair.de>
 
-On Tue, Aug 27, 2024 at 03:04:42PM +0800, Shen Lichuan wrote:
-> Use the min() macro to simplify the pc87360_init_device() function 
-> and improve its readability.
+On Tue, Aug 27, 2024 at 07:44:54AM +0200, mailinglist1@johanneskirchmair.de wrote:
+> From: Johannes Kirchmair <johannes.kirchmair@skidata.com>
 > 
-> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+> The pwm1_enable attribute of the pwmfan driver influences the mode of
+> operation, especially in case of a requested pwm1 duty cycle of zero.
+> Especially setting pwm1_enable to two, should keep the pwm controller
+> enabled even if the duty cycle is set to zero [1].
+> 
+> This is not the case at the moment, as the pwm controller is disabled
+> always if pwm1 is set to zero.
+> 
+> This commit tries to fix this behavior.
+> 
+> [1] https://docs.kernel.org/hwmon/pwm-fan.html
+> 
+> Signed-off-by: Johannes Kirchmair <johannes.kirchmair@skidata.com>
 
 Applied.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/pc87360.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pc87360.c b/drivers/hwmon/pc87360.c
-> index 9e9681b2e8c5..788b5d58f77e 100644
-> --- a/drivers/hwmon/pc87360.c
-> +++ b/drivers/hwmon/pc87360.c
-> @@ -1315,7 +1315,7 @@ static void pc87360_init_device(struct platform_device *pdev,
->  				    (reg & 0xC0) | 0x11);
->  	}
->  
-> -	nr = data->innr < 11 ? data->innr : 11;
-> +	nr = min(data->innr, 11);
->  	for (i = 0; i < nr; i++) {
->  		reg = pc87360_read_value(data, LD_IN, i,
->  					 PC87365_REG_IN_STATUS);
