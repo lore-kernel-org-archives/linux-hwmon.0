@@ -1,93 +1,114 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389B51E520
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 15:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06CC1BC073;
+	Tue, 27 Aug 2024 15:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724771341; cv=none; b=lhJDW4S2tQjOQi3/kstycjaxTH1aQsDGhUDrguQElha+EdeA6taYjWCFRg+h02TSvNU9CO/6oQ8IQiITB2IVudjCTYVA+bxFQWpzl3rw0KZIzsYtGFSEq0SDJAmvQ35rFMcdNwv4hFOkBxrHk3SMiPY7yUSpaRSxHlpwvaPYwJY=
+	t=1724772237; cv=none; b=S/kmF69tflsKmJG8PoPvamsxGbI0HKMrgX5GdIsKGJV7sZ9MIaCA81ugEx9nfi+e5PXtGSSKpudGStQtKkpUfgygcqn7p5Nq2hMHtpf2u6DN3Y6/JPqWVvPVKeMpguqu438HFM/IEoboaWdKbMmqqbsy407oVcJZG42oh1MgQOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724771341; c=relaxed/simple;
-	bh=l7WxW36O7am6p3vv+/0BRCw81cJKOj86v0+TCt1c754=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HrUTxo4psXFEiXnPYfdJ7G0ooIRqj9lkuA5QjhBGu+TC0NzdJk0Pj7z7VXbp678JD/W81d+2PpbQ+3cUPs6cBXnAaJtzJo4bKzLdgU7FJS/+Odx0/Z4Jm08n9EZl2LHJVxPlQjQU9D03dq8NfUEHe90HyWiltLSNbJPjtql9joI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tb2QBC46; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724772237; c=relaxed/simple;
+	bh=NpIXwWfO3vTOMhKP07i5uJz/kib9KeVx8tKhpwWkkDI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SwbFSXcPUh03VsXGmpUC3zDrpvcJ/1BD0P+4AxCvdvE//KOsY/q9sGM0hfGCH+ivmijprgP42Yv6iiDtv46MJ4On83MfUjP31ayFdlk+6mOvNw+8/1i+4rAyyNVaQ1cLYiza9i1O/PibDkdCCaU2qdKra8GiL86E7gGX5jfyfAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VbeWisLO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tb2QBC46"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71430e7eaf8so4451128b3a.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 08:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724771338; x=1725376138; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3n0Ph4/cZee5xGStGup0GbqMBI9F2UvrvpLrg1CT1eE=;
-        b=Tb2QBC46uCUkMO/r6oXgjGnoY13BOu6wvHlroO1qEk5w8iAqytXNaFdEO7nSCtYO2d
-         O1J6HpflHUuMrmAJWzSMWDEiUq8HjsKH9/IrUhpkDokmbG8TIQsQIJT2+x6X2jYU2f/H
-         X8EHZGkib4SsHr6JqXQMUgLsi0Nvof+6DhyO14KAZ39kZ6gGOjERKWLmcAoXOBUqKy3N
-         aHr805WBPgPvmg7cZvlnaVVTFa4xRiK6ptXoEDid/5+ZJEzDxCm3tsEWTEwhak3BGwPX
-         wCsqgVlDaZHpc0j7hguHaEdUMH5e1B+VlQHo/Jw/yrb50F+DTY1zt520l7/nA4WAwlMF
-         0gPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724771338; x=1725376138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3n0Ph4/cZee5xGStGup0GbqMBI9F2UvrvpLrg1CT1eE=;
-        b=VqFIUAJoz9pFuJ7HyEsXtO6PZFukPuMbldY70KJuhuNvAAHCKmZtxiVj4vmYQK8K+V
-         ztrm+8mKqnN46UShdo5Bl8Bj9nm4t1SENHSmq4auF2kfKWJQE4BxphlAflWMpdvhY5X2
-         3wneQKcAtIx9ic7Z0J/fz+zSy9imSahFLA3vXnl6VDSUeiVH+zG2R4zYRtyK2OxE7Lom
-         6zC3yoEnBkSO40A339TiKIEDmGmejsy4x8MmvV/G4/I5mZsyR6Nj8OIaD/G4tN/JeLPs
-         XwjJduwKWRUhisKRkf0zs3RRr3C8yGiczbSMeCyZmq3GUwLQbPstXkEcDfaOiNh0ScvU
-         quhw==
-X-Gm-Message-State: AOJu0YzYiu8nzlNyjCeSnwcFhM1VhKIsbZumq7jkqysVXvls6rSBLZi9
-	oZR7fdK+Mot6M2pGrIDM94RAXkXRIKPgJGwuTeKyJEbBI1koaguSyoU7fw==
-X-Google-Smtp-Source: AGHT+IH0IFkRvC4y2nD/QqdJdvNsjDJ5QEzApgy5pZnO6TcskmAmCf/Lnja92KlDzHomaaLyjSKetQ==
-X-Received: by 2002:a05:6a20:4f89:b0:1cc:bb4e:a905 with SMTP id adf61e73a8af0-1ccbb4ea95amr3822894637.1.1724771338243;
-        Tue, 27 Aug 2024 08:08:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71434230d1dsm8681882b3a.37.2024.08.27.08.08.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 08:08:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 27 Aug 2024 08:08:56 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: mailinglist1@johanneskirchmair.de
-Cc: linux-hwmon@vger.kernel.org, groeck7@gmail.com,
-	johannes.kirchmair@skidata.com
-Subject: Re: [PATCH v3] hwmon: pwmfan: do not force disable pwm controller
-Message-ID: <e6ad0833-9af3-438a-995b-b8c15f49b3e7@roeck-us.net>
-References: <20240827054454.521494-1-mailinglist1@johanneskirchmair.de>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VbeWisLO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E074C61062;
+	Tue, 27 Aug 2024 15:23:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1724772237;
+	bh=NpIXwWfO3vTOMhKP07i5uJz/kib9KeVx8tKhpwWkkDI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VbeWisLO0ZZMTy50gACRdQ3e3E7kVtHV6dKQpKJ/kcz053/FBAhTWq+Vbcjikwi0Z
+	 Gwh4sSrr+1WOdYAdF1ow9okvznMYSXGoNj2HCcOqE1xbR7h5AJIwjkxPd6nt64JLjb
+	 w0WtMDoZQ812ukxA2Smwtpv1EHJucSPOBd5qfc28=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Jim Cromie <jim.cromie@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.1 154/321] hwmon: (pc87360) Bounds check data->innr usage
+Date: Tue, 27 Aug 2024 16:37:42 +0200
+Message-ID: <20240827143844.095930313@linuxfoundation.org>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240827143838.192435816@linuxfoundation.org>
+References: <20240827143838.192435816@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240827054454.521494-1-mailinglist1@johanneskirchmair.de>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 27, 2024 at 07:44:54AM +0200, mailinglist1@johanneskirchmair.de wrote:
-> From: Johannes Kirchmair <johannes.kirchmair@skidata.com>
-> 
-> The pwm1_enable attribute of the pwmfan driver influences the mode of
-> operation, especially in case of a requested pwm1 duty cycle of zero.
-> Especially setting pwm1_enable to two, should keep the pwm controller
-> enabled even if the duty cycle is set to zero [1].
-> 
-> This is not the case at the moment, as the pwm controller is disabled
-> always if pwm1 is set to zero.
-> 
-> This commit tries to fix this behavior.
-> 
-> [1] https://docs.kernel.org/hwmon/pwm-fan.html
-> 
-> Signed-off-by: Johannes Kirchmair <johannes.kirchmair@skidata.com>
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-Applied.
+------------------
 
-Thanks,
-Guenter
+From: Kees Cook <keescook@chromium.org>
+
+[ Upstream commit 4265eb062a7303e537ab3792ade31f424c3c5189 ]
+
+Without visibility into the initializers for data->innr, GCC suspects
+using it as an index could walk off the end of the various 14-element
+arrays in data. Perform an explicit clamp to the array size. Silences
+the following warning with GCC 12+:
+
+../drivers/hwmon/pc87360.c: In function 'pc87360_update_device':
+../drivers/hwmon/pc87360.c:341:49: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+  341 |                                 data->in_max[i] = pc87360_read_value(data,
+      |                                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+  342 |                                                   LD_IN, i,
+      |                                                   ~~~~~~~~~
+  343 |                                                   PC87365_REG_IN_MAX);
+      |                                                   ~~~~~~~~~~~~~~~~~~~
+../drivers/hwmon/pc87360.c:209:12: note: at offset 255 into destination object 'in_max' of size 14
+  209 |         u8 in_max[14];          /* Register value */
+      |            ^~~~~~
+
+Cc: Jim Cromie <jim.cromie@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/20231130200207.work.679-kees@kernel.org
+[groeck: Added comment into code clarifying context]
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/pc87360.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/pc87360.c b/drivers/hwmon/pc87360.c
+index a4adc8bd531ff..534a6072036c9 100644
+--- a/drivers/hwmon/pc87360.c
++++ b/drivers/hwmon/pc87360.c
+@@ -323,7 +323,11 @@ static struct pc87360_data *pc87360_update_device(struct device *dev)
+ 		}
+ 
+ 		/* Voltages */
+-		for (i = 0; i < data->innr; i++) {
++		/*
++		 * The min() below does not have any practical meaning and is
++		 * only needed to silence a warning observed with gcc 12+.
++		 */
++		for (i = 0; i < min(data->innr, ARRAY_SIZE(data->in)); i++) {
+ 			data->in_status[i] = pc87360_read_value(data, LD_IN, i,
+ 					     PC87365_REG_IN_STATUS);
+ 			/* Clear bits */
+-- 
+2.43.0
+
+
+
