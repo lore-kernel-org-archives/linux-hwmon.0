@@ -1,87 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04olkn2024.outbound.protection.outlook.com [40.92.47.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D3A14A90;
-	Tue, 27 Aug 2024 08:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724747825; cv=none; b=YVFwnAd5CIA3zCfDzJZ6NMcGaz6i4XMpFF7o79/3qO3nLLDy+gcgeoCli6C88JgSt5dw0wfjWg9rXFbzfQ+jw6d4RtbGrcRjy4cErq2DU6SMWKGrcFVFjgsoBQ+GFASIGK7v7LtFd5Qy4pe3NiG7n4aKdNQ7kUH4X1FuyGylEds=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724747825; c=relaxed/simple;
-	bh=kxKmRko+Nd8/3GZyz7ozg6g0c2O31F21/uLhOODHrO8=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=K2fMLwrsTEejd9kNua67PR57IyWRhAzfSdy6ovXWO+WAIfjB4TBd/oUxScRpj92dWwL1OGAc8I6VoWNWxPir5Zyq1aMy4Pya+ZpDwc2myKEisuWLeorSnBhf2y3yclhQrJ9lqAzI23FzHv2FFZzt9yRprhOs/LuOfCdDCdjUcLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yq1PXH3l; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD04B14D29C;
+	Tue, 27 Aug 2024 11:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.47.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724758554; cv=fail; b=a8bUI8vWZf+nwHl1xO6NsdBq+Dbop7A/hg/5lOdmh4sHCt1Ardu1vrrJjW4uFrS6N5iiLdq7+8jKpuPDrhurmZAiliLvsIvyG0DGy/tC+QWjH/vkPkNJIkLc8pYD37PIzrE0yM9hjjFrJrji79Q8LHrQD/Kci6J0bSVVgAwOBeQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724758554; c=relaxed/simple;
+	bh=vzFB3ZLv2n4geExks1YqoZU3HHnM6FBcplA8ekwN2nM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lJPvrWJTzU6lji5NLc3/bn9lbR/6KNxpc0mcEN5xOSRer+FLWYzDlxrXdnqMLd8JYrSwojsL97ngmdc+fMsWEk6mPcEwRmkKEfnJSdyAFJKyg3yIoXnEqh8BD2DVSaGKx0BPftdPbLkWdG9cbxWnGE7HNCEl8B0N53UdiPv05Co=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=sf/CuY+S; arc=fail smtp.client-ip=40.92.47.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yq1PXH3l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724747825; x=1756283825;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=kxKmRko+Nd8/3GZyz7ozg6g0c2O31F21/uLhOODHrO8=;
-  b=Yq1PXH3lan1mfHKWiE5Pfp3sK5r8MSxDHhecSMcyOJnghfvBYt7muLWL
-   WZx4Y7r8eamAKv42VAlSFQko0Keih6KR8IWyljjVCb6WimWGSZwVAKOWe
-   RmRif1VVErnmnsul9rejVnKo35J1Ova/JBTEu5pu5vSSrkVYzB7g+Z4Pu
-   2LnM45Z6Hv31prYvuVmIbz/c8CWsnCm2IRWjB8y+Y98b8cWR0kLu4bbqJ
-   tIQ2x/Jtz4os2MQ1xW5TsIGtWBleSosb1D9gJG6gGGONSAMnERxFZsCXb
-   MjBig+57sHTf3Y8OgPC2wpEsIVAMAOJH1LWvSzuj5Eizi0ub55Id9glvW
-   w==;
-X-CSE-ConnectionGUID: yALKWO06RBGi3rK7UIty8A==
-X-CSE-MsgGUID: 3NdYCANwSR2By+ZhSwq+0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23370536"
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="23370536"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 01:37:04 -0700
-X-CSE-ConnectionGUID: HWjlfVLbS6WnaqtQCn3MLg==
-X-CSE-MsgGUID: wfwH5x6QSvigaRb2ct9vVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="66923516"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.17])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 01:36:58 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 27 Aug 2024 11:36:55 +0300 (EEST)
-To: Armin Wolf <W_Armin@gmx.de>
-cc: james@equiv.tech, jlee@suse.com, corentin.chary@gmail.com, luke@ljones.dev, 
-    matan@svgalib.org, coproscefalo@gmail.com, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org, 
-    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    linux-acpi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/5] platform/x86: wmi: Merge get_event_data() with
- wmi_get_notify_data()
-In-Reply-To: <20240822173810.11090-5-W_Armin@gmx.de>
-Message-ID: <eec3f62c-67b3-8504-b87e-69700970f3de@linux.intel.com>
-References: <20240822173810.11090-1-W_Armin@gmx.de> <20240822173810.11090-5-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="sf/CuY+S"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XpyoVkY2/Qcgry2QLHoadZrDBzQ9uFg94i7mxY4pmB8oqsTBvwZSdsINYp0wcCeLMvRRE+uEtOjBd+e2btQKfFByb43PALEJnPCrtzjnopXnioiveOCf8XXo3fXUNtEhi8BaTwgNu0Fm+QQRoaOphQEJi/qiBWup/FKHjqSCqz+7BA/vOcOi2zgTDGCQaU2OJwJflFJeNlg5WRo+LGcfEUM0TLIc+JgdwkIzsJwH36BWiPrUjon0z2twuc6k1aSc+92oFOsmUHUv5bBmz0oogHZVRfkQVOGnl9G03ZJsa9A9d1xZuZZz5ahMcEEWWmyHakANyToH+rvx4u887c2f2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FL9ALtdsHqGaO1a09Y1TAsJGYWHUl7rROAIise8KV/I=;
+ b=Ye6d/gzk8j2z+HG+Wh63zsyBpV3slO/QXmHriiW1BM0G6isTq6Vk3MATppmA8PfXdenc82UyJbO+CWUauDuQJy9+TvOm7ZRAMnJzHgIOPAfNe3fhFi4p/jmiGqYIFqhPkbehZh5fiQpMF3YFuA167ay0cywcRa5e/nes1A+j/OTT+SHJEd7+YZGXFx1LMKFtUgxdrx05GgIAuwZOd0AzWnwExuTBSt2+IBxoz5a+qDzmJChEsasO1exhPV3ug4RttqjIsXz2X8noBQMPnkC0skr5U3MP2TwoQKcZPZRum9y1pr+vEk/M1e5u3xmkQZNVPnMLbhrrkA7+aRKOQbqNhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FL9ALtdsHqGaO1a09Y1TAsJGYWHUl7rROAIise8KV/I=;
+ b=sf/CuY+SbNd2kAiba3spPmTj19Sezo56OamQP0mz+f6ZaA8UKRqdWByihjEY4wL9B1JMKic4jYCGylZs6m8x0U/VoB2vOYTpR1leh2BGaqC9iOqoVJQfRNlRJ/30Ldf8iVV04cFL917gFxRCVgy9xGRP0hx/k/VOtE+h+bxD9Yeetn+P3lUcix6PxxnAQKuC+HXhS1u1WNjXxYj/Rjwhs/PoMCSI2IV6lowu7tJH06gsuQLvzdgyqZ8/rtOTV59AVHsacqxtW/lgeRgAZDC6gtSwOIX1p3eJDqz4b6dXDAhFoYTQMwfvChfeN0sMdITZ84o0c4KrQ6kN1vtJ7PytYw==
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
+ by CH3PR20MB7037.namprd20.prod.outlook.com (2603:10b6:610:1b8::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 11:35:50 +0000
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::ab0b:c0d3:1f91:d149]) by IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::ab0b:c0d3:1f91:d149%4]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
+ 11:35:44 +0000
+From: Inochi Amaoto <inochiama@outlook.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Guo Ren <guoren@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>,
+	Yangyu Chen <cyy@cyyself.name>,
+	Sunil V L <sunilvl@ventanamicro.com>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Hal Feng <hal.feng@starfivetech.com>,
+	Inochi Amaoto <inochiama@outlook.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: (subset) [PATCH v11 0/4] riscv: sophgo: Add SG2042 external hardware monitor support
+Date: Tue, 27 Aug 2024 19:34:45 +0800
+Message-ID:
+ <IA1PR20MB4953A509BE6FB7E05590E3FBBB942@IA1PR20MB4953.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <IA1PR20MB4953DF0AE7210A6D74162952BB822@IA1PR20MB4953.namprd20.prod.outlook.com>
+References: <IA1PR20MB4953DF0AE7210A6D74162952BB822@IA1PR20MB4953.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-TMN: [U7DgGyrQalc7TTsTG8pMr5l5QTyi56JY88DcGqbfdh8=]
+X-ClientProxiedBy: TYCP286CA0109.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:29c::6) To IA1PR20MB4953.namprd20.prod.outlook.com
+ (2603:10b6:208:3af::19)
+X-Microsoft-Original-Message-ID:
+ <172475845236.1309337.9432886632005176363.b4-ty@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-584332887-1724747815=:1032"
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|CH3PR20MB7037:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4aa3f51-e042-4799-2b06-08dcc68c62e0
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199028|6090799003|15080799006|8060799006|5072599009|19110799003|1602099012|440099028|3412199025|4302099013|1710799026;
+X-Microsoft-Antispam-Message-Info:
+	THuzMoXZXz6t+Np69sKKuHvHXO4mpIOhwizpEfygBVJKOD2QMlAF3ZX6f/nyp7PGNHuALyktKrHmy/w+tQp+OLyDMdu0o1eWkYtFFf2ErQJ+2m2suhhIKQa5Q8cSMjiTzqL8ZwvTxcedmuiCKkVvFxEOvQefw5p4yvortS2xK9233PDuiotjxPG5jf32lsvDHtTsihK1qQsrAgDUNfcpD9xW1ONdwnSxwSbKv5rwAhiqwLLWz1vMHhlceHi0dKVpZ3jkvosINOzr4qLoMdGzSY2thoxLK17x+glfevWUXQerV3oh5U1J+5uL8HbpIXELGiiKgI1wLqT3Ece265gGEX48ZJ0BRoy/iFvq5F+kgcArxm5VHsDEepSjIFU8yhWPjGCHPjvVaghzTJ4hoIJ0sIquVGX/HKnczOaKlkJoUqLplNFkHV06sI8gMv0AAYQrbklBqHdV1OODSNSX+3XMQSEYNAfuj8Xl2nIRESoyZtKtXvh8IWQms38VEbIMQ0/ihm4NSS4FiK6Q5FYof1S8Dp31pZ9vHX4HE/XdBf0U+LC2bRIra9RlbcTwuAINOaKpZFCUOgLI7c3I0nvEmH4otyYO8kCce3x+JpvvgCpSInWi1flaUUIZZvMPmxa+j+elQBaubyJPh2O3JtjmuQUVWyPE0NoDJhfsmYb3QPMEEbaMZQxQvS6ZDSIGhB13No8tYMf13YiGbr2UN1Y66nxCrY5tKnvortTqZoGIRwfnpt5JQBJ6iUeGciIwjMfFhNP3HtlOp0/64P2yzNkdP5PLuqQbyqxQGnAN7hvl8Wm5c24yxe0WwzrBwLRmihHseHDY+20EgUDcLyQexcSdxzfL9O6y6fhpKWz3zI6LyLnGVWhMQHIIvLeyMOxwIbiuwLtu
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N0FPU2ZzWklFKzE3Uk9HQzhiZFd6eXZORTV4d3o2WFFIUlZHM3lqbmZzM1c3?=
+ =?utf-8?B?RTFOQW9pcVZIVzhYL1RwTXhVaHlIVDJ1YzllV1RaMDVsWEMySCtRNGpXTlVi?=
+ =?utf-8?B?cXY0TjR4RDJJZ01rdkRjVTV2LzBYbDUzNVYrSlFtSmRnUE03YktIaGt5U3Zk?=
+ =?utf-8?B?bUhUdG95NzluZzY2WUZLZ0c0TjdoTCtYOEdmNUthWmVPVEdJYUIrR2kvelBF?=
+ =?utf-8?B?NSt0U0hSS2pDT0Z5bDNuczd3TFA1MzZjY29rUkRwTldGT2g5OHc5MkpiWTJS?=
+ =?utf-8?B?UVJKSFhoMDRzM2F6VzhrTGxMOC9wMWtocThIUVdUNVRNMFJFTlZ6aHFoWXVN?=
+ =?utf-8?B?ekw2WDl3WVJjK04zaWdtZEJtenVQa1JCZ1h6aFVxSTRBSllqcUFTU1RHMERw?=
+ =?utf-8?B?QkpRaTBPeHplK0paYy95aWFEYk9Kck1lQWpmUTFPSXZFTm9ha0p3TGdLVGY5?=
+ =?utf-8?B?dXR0WkhGVDJGSXo1cnc0RWJPcytmTlUwQXhmY1MrU3BaQjJvZjFwT1REL29r?=
+ =?utf-8?B?elp3Wm1IZXN1RnZ6N3VuSmtTWmx5ODFMRlFaOHFoUE5iZUdSeDVYT0pTRTFZ?=
+ =?utf-8?B?QWUvcGpHU0VGUXFqd1dXN01MeTdBaCtvdmVYWlVvWGhTNERmWEw1dzhHK1BC?=
+ =?utf-8?B?eGViOVFpbTEvWGZFY1NDMjhuU0NXbStrZ1dNQXN6UTQ1N0Q3cjJiOS9MYUdr?=
+ =?utf-8?B?Mk5GbkY5ZWlmaFRwVUF6ZGFaRGtsTUpUZ0JKZHRkY3I4RmdtaHljb0x3amlX?=
+ =?utf-8?B?c0YyU0M2YXlGMHBidzhTeG1HN2UrKyttd2Q5ZzkxMG5yb3FCQVdHWGJ6c2d4?=
+ =?utf-8?B?VWNSQTdHek1jTTc4WXI3a0RlQ1grb01HRVpJc3JvMHpqcVY5Y1RKcUNPQ2ZZ?=
+ =?utf-8?B?Zk54akVRY1lRTEpEWVYzZDd4Q0MxNUpXend4Q0FxNy9IVnFOUmhXN2FFVjMw?=
+ =?utf-8?B?QjVTbzY2Z2NFT1Bzd2hDYlNFK29OandscnRzVitUYVhWd1B1Tm9TempOcDZF?=
+ =?utf-8?B?cU96d2FHSy9kQ043Zm42RThsUTVpZUx4Q2RHRFZ5amE1MnlvMnI4WlI0blV4?=
+ =?utf-8?B?aitGWmNjcnV3TG5tQThKV1Jld09pd01TbUt2anpueWFHNFV4SnRyblJHMito?=
+ =?utf-8?B?dyt0dFhpTEd2RllCSmkvSEkrVkJYRXlKbkUrZlV4bXAxblBIN1BVeFVRa3Bn?=
+ =?utf-8?B?OTNBVnZONEpHTjIwcEUxNXkwL2ZETXc3ZWQxUTlyQnZLdWN4dlp6N1ZPY0Z6?=
+ =?utf-8?B?ckFCMjRZYzdJQ21LVEhqalhleWlTZm1zeURJSUMrN2NjaXIzYmdTMGJDY1FG?=
+ =?utf-8?B?K3RxYXBTZ3J0YmpITVYraE54a0hIdWdQU2pKcXZaSUtFVk04cSt0d2tscm9w?=
+ =?utf-8?B?YnVMRGlYKzhRcGF6TkQ2TXJMZ0wwNDBwUEoxYWE0TERUeEVucCsrQ1paV255?=
+ =?utf-8?B?ODBIRXY1RVVNTWN3U0lJbkp5MUdSZWNYMDJNRkhXNk8zck1pL284MWQrY1FI?=
+ =?utf-8?B?Rm05UGtUMWt4a0RDOUJGQW5hNVMwNkhtMFc1eVNsYTRSYndIbDFaSXJ4ZnJP?=
+ =?utf-8?B?QXhjVG9sWU1VK0M0MnJweW1KQ0VkT2NKK2d2NzByVFhzd0JDRm5zdk1lbmlo?=
+ =?utf-8?B?Zm5tejBaQ3NHTlIxMkFvdUdvbnlqV0E1dHZzUTd5OEJYSnpTd1F4Tm1UczhH?=
+ =?utf-8?Q?rm2sCZT6fXqNek4MwlNH?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4aa3f51-e042-4799-2b06-08dcc68c62e0
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 11:35:43.9152
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR20MB7037
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Sat, 17 Aug 2024 10:21:59 +0800, Inochi Amaoto wrote:
+> Add support for the onboard hardware monitor for SG2042.
+> Can be tested with OpenSBI v1.5.
+> 
+> This patch is based on sophgo/for-next:
+> https://github.com/sophgo/linux/tree/sg2000/for-next
+> 
+> Changed from v10:
+> 1. fix the hwmon entry permission.
+> 2. remention the extra entry postion in the document.
+> 
+> [...]
 
---8323328-584332887-1724747815=:1032
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Applied to sg2042/for-next, thanks!
 
-On Thu, 22 Aug 2024, Armin Wolf wrote:
+[3/4] riscv: dts: sophgo: Add mcu device for Milk-V Pioneer
+      https://github.com/sophgo/linux/commit/cec3f1940b60b057142bd11f7bd421e13d198f75
 
-> Since get_event_data() is only called by wmi_get_notify_data(), it
-> makes sense to merge both functions.
->=20
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Thanks,
+Inochi
 
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---=20
- i.
-
---8323328-584332887-1724747815=:1032--
