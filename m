@@ -1,70 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45BC7A15A;
-	Mon, 26 Aug 2024 19:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1444B14A90;
+	Tue, 27 Aug 2024 03:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724699904; cv=none; b=tohhZC5EQlLMZI1jHz3qIi/6m1RV69iqB0dWmGzSEceL4/3qH2XFYoj9058Z3xKqdwK6nDr0MgbOxjmkxRqcOCBfR8Mhg4dxPAeJgaOW0Xx2gY4XjJ841hnN9ULvqBYJajHtAJUHzJ8XGLUieT/CHbjtz1VY+JClpQWoqGw30VI=
+	t=1724730935; cv=none; b=ptAmZqcXhnjarb5z+8Syo/O5ZOST/V/ZXMQMS9a+KYUoco2Shw22cPGiP9ZrSCIQ641qJSyZpZFj+L8zE/+GYDCnKQHxS8kxbOWKvOl7nT3HJBQAtw0irx6jmIBkB4szqhGpKlz7YQILJB6IMGaWW+LSWISB7LlYb7rTgq/Zo+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724699904; c=relaxed/simple;
-	bh=V0uRwbHGFT0hnqRfD3rsPaGQbmmBOqjtGOD9Tut0qNk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l4aLg/rvgDXAX6LUfdTh5Ev7TPqMi4V52eN4v9nj1fcgoEJ9xnpGXqsYUejRFlzRNk24O/+LucawXCS4GGNRWL4PGSLuSw1KsyTWtdaBukx+8pKwnIEYxND+NQ2uI1ZX0WC4qLVnYDv8bCmQXw9oaLJPfh8CYixliynXRfy/lVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2HnS3eV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724730935; c=relaxed/simple;
+	bh=UIZhClIfNP8RnyFc3uotLakfvAPBysWBHDbazqaO/t4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n7ruaqZRHpxcdHcJilTxq8bTMp11IrXJPZ6pgbC1Dx/E9/exZBQP2vsc/VByaTFmT8WkxlrpoD3dG1qBpSk5euGXOBtTfS5r6sgfpBkyptDSD4GP2UgElQ4W9yKnpZ+4Md1xKaseP57WmyHG3FVxt3PjyRr3ujjmb/guZj4wV6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrMqXrHX; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2HnS3eV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A706C4FF6C;
-	Mon, 26 Aug 2024 19:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724699903;
-	bh=V0uRwbHGFT0hnqRfD3rsPaGQbmmBOqjtGOD9Tut0qNk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=r2HnS3eVr3U0gUojBSugB1keReT16PKzoHDYdKwV9Ug2FuUevKUAWyCNwOxqdyLXY
-	 iIhIennDpQxmXmxrh+UrgaJvz1Jgb287LnVBvGDlnO6UBvzw2D/Yt4vBNMK1NpxO+2
-	 9tTh7PQUuO0EhCou2AF5tyMkk6w4vnyOILwT5ZI/dXvBWi9mJ0djVFILdvAbbSMlT7
-	 GBiqZTixVcs9++kQG0j0k1kfaMIVzz4bJ2o9yHZvciCj3f2EM1YyuVenPvxewEmYHN
-	 jDVBKcNckQtj72gwLzQoAXxy61KcBTIk0ArqTaG/TT9lNHuYB/FZJ1Uvw7drR20fAK
-	 txGBDuzbLFSxg==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrMqXrHX"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-202089e57d8so31990115ad.0;
+        Mon, 26 Aug 2024 20:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724730933; x=1725335733; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h40UklaApWb5EyKvShhCYQi2t5utzRjtxNawvY/2Goo=;
+        b=nrMqXrHX1aeo6EM7VgCFyBxw/IAtxMoqvp2pUn6CzRgkJs0mj40dFs79cxuTDxQu7A
+         FvRv8TPjWSLDoeH6H8Z4sFJ9ytLgApYS4LkQocz4BfMRIZ5O2S2Rr6ozKH/H31GAsyOX
+         JrAhZJbpk7keuP6a79eZApMkK9WWf8/Co6F8f5jGKq2OCX2sCjqiP1bmPHHh8OmNzO6H
+         4y7OQdXuQ0yzHpiAod5aHrwvd6uLgFPyExkrA4f8VcUsnIB2iBa2dqRIEs41Dy5wpkd5
+         u8xOToFdjzs5CPj0d5p/07vzsX0PRvefnjpOBWG6AUdW0FkD3GMKP7nRBZ71K4PL6ib3
+         2Ndg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724730933; x=1725335733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h40UklaApWb5EyKvShhCYQi2t5utzRjtxNawvY/2Goo=;
+        b=F9Kpvm0T6ZaZq2lgxuv+VW0q+5Xszd8Xqi0CwIhyeMOlLlKynrh22VmSbeaEzlhJFl
+         m3WnyEMiWknKAKw/wxRxe86VC+f7ylISonQ0eBj/9/voJIazSA5/Oz3t1eW52UXKsYue
+         sT6G/Simc+HFP3y1+ul1nr8qLC3I7mbQSZvRsZx3p8l75pVAGbFdTF0n3q+AgkiirEr+
+         9Og7Dy3oiFRah79Yt0kF954vUDlTpf5QBFtS8hZu4rVoXQDmc+1THkFBAbps3TrlBvJr
+         dx+C0lRvgtZPZzAiXrj9mLQ67YzZKW7iKLGnVgtsNHw1kP1lsNBb/HPfFG7RWgLynPOc
+         KoTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWAbKQxhH/o/1UP7fKm201GxqTAVbPSXP7oovzWT/ZfGEio+yYEppX0/g27SxhOo/iNbPwpOjPtgwonCw==@vger.kernel.org, AJvYcCWeX10PC4oVWMBsbmV4AR0ZnuSgE6j9hmEUH0R8hEkUadGNE8pXk46PTmBle90hMxsZLnwpEEFIiJnasOjz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhMVwPMEtytEPU8kXHfkgKEzqDFwPmUN8UUTmNx9bPzpEbJQmM
+	4ZLnl6pDtUPIl7vs9IWTpmlt6vgdGdIZLcgWrx5htTLjAtXSqxkt
+X-Google-Smtp-Source: AGHT+IEubpWsuetTzJO1D0T+D1MS0gJWbz/2p9QlqPTAMHbDxAd+8y+dKvihuV64opD3a+HU+x0QJw==
+X-Received: by 2002:a17:902:c713:b0:1fd:6ca4:f987 with SMTP id d9443c01a7336-204ddd25f60mr19655035ad.15.1724730933231;
+        Mon, 26 Aug 2024 20:55:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2038560dc8csm74345875ad.224.2024.08.26.20.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 20:55:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 26 Aug 2024 20:55:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: stts751: Add "st" vendor prefix to "stts751" compatible string
-Date: Mon, 26 Aug 2024 14:18:11 -0500
-Message-ID: <20240826191811.1416011-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] hwmon: stts751: Add "st" vendor prefix to "stts751"
+ compatible string
+Message-ID: <2672447a-67d3-464b-a3e9-acb7373677f3@roeck-us.net>
+References: <20240826191811.1416011-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240826191811.1416011-1-robh@kernel.org>
 
-The documented compatible string is "st,stts751", not "stts751". Even if
-"stts751" was in use, there's no need to list "stts751" in the DT match
-table. The I2C core will strip any vendor prefix and match against the
-i2c_device_id table which has an "stts751" entry.
+On Mon, Aug 26, 2024 at 02:18:11PM -0500, Rob Herring (Arm) wrote:
+> The documented compatible string is "st,stts751", not "stts751". Even if
+> "stts751" was in use, there's no need to list "stts751" in the DT match
+> table. The I2C core will strip any vendor prefix and match against the
+> i2c_device_id table which has an "stts751" entry.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- drivers/hwmon/stts751.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied.
 
-diff --git a/drivers/hwmon/stts751.c b/drivers/hwmon/stts751.c
-index e7632081a1d1..f9e8b2869164 100644
---- a/drivers/hwmon/stts751.c
-+++ b/drivers/hwmon/stts751.c
-@@ -77,7 +77,7 @@ static const struct i2c_device_id stts751_id[] = {
- };
- 
- static const struct of_device_id __maybe_unused stts751_of_match[] = {
--	{ .compatible = "stts751" },
-+	{ .compatible = "st,stts751" },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, stts751_of_match);
--- 
-2.43.0
-
+Thanks,
+Guenter
