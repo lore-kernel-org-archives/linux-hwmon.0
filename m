@@ -1,63 +1,63 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CFAD517
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 15:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440EC1C689C
+	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 15:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724772910; cv=none; b=H4u0mozUh8C6tN5YfVfJXH7bTBVnSxvFO3ZacRzyMqHYmBAABvxLkTRDVYKTc33GucUB5aN65k825SeeC5bcPPRGPdhscwwRb6M2pUGhJEuP/EQIXrHo/pkUZFJOwNDeWQzVyIUTFgymT+o52mIRVV6MlC+ksIeZbYMxSGNvSss=
+	t=1724772911; cv=none; b=r58Bg791MWb3RKtEvbSB6iWtWPePbDwpQ/NPmos2VZFlPJdaybbc+dJFVL4PvBV2/yNmy8fqY3R4A2FQTR10ib9NmkgNDBYJyb3Gv+b7lu52AuyJxm0q4R8MIaOL7O3YxHSssi32cmjz3/CJ0kcHuOTaT+omK9aVLkLLcZ7yZC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724772910; c=relaxed/simple;
-	bh=y0tTXUJ6fv3LfYehZWmN38T/L3SxXV5WI4L4dHBIfYM=;
+	s=arc-20240116; t=1724772911; c=relaxed/simple;
+	bh=DJlFRy411dZPu0MppiGQtfo/VVk7nUL9r/MODlPdWVM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NmUZ8RlciU3Xrtwg0mwb7T7pi/TJYNgD9d4Ds1C/9rOGWN4+f8g6JkzThCh6WL+X1GqegogyRiOGmhqlnmT/Yg4QRw+zz9cVNWtqjFz59tq2/mKkmRDh1iGxgtYfnivJ5F++jgg/NJ553rbgWPAiGJQ1fWH/CmhGKl27Vcftb9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+L4e1XU; arc=none smtp.client-ip=209.85.215.180
+	 MIME-Version; b=fBe0DxcnS/WMKmbmTY8OT6timNOeUUh2bXRWtAc+vyw4hGNRxND4skP6PRJhr9+LZjS481kzCVH3F6LlfLXnYDcu9nH3vrF5tTkHxmh978DSNe69h6/+fSi+/fsdPYF1s7U0ABekrkyfPX1rcYXQZr47KcbpWuHHoRTIrgHYX9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sq2sWUPV; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+L4e1XU"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7cd895682fcso2085299a12.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 08:35:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sq2sWUPV"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-71456acebe8so2572688b3a.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 08:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724772907; x=1725377707; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724772909; x=1725377709; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xGUq6JFJAztt1l0avpHLj1jlRL9d8APQ56On9hKVaj4=;
-        b=C+L4e1XUVJODZT0KZOlRKVk/fg1l1RuHs7eKyd8ZEkn6l2cERVW8/ubPmoE05ocud2
-         0929eBKdUQ6CzRLrD9uG4owsdshpE68EAxOVoNSvgiaZ/tWKdbW1P14hgY8ONZWZiU1e
-         a6UcEja5r+awOAOhpzt4m1P+muW3h1DF0e/nhrusf/tkw3HQj9+P3XchALl9ctJmVa3G
-         BKGcHisPxcquqeTsu2ohz72di3wKay3E6FyPxTagjBGD8sDMoV3ZrRYPxuGdJc48z8bv
-         w1dPgfOx4PFLUo1tFvyIX+c6Ki6IE94FYnDhXn40m+X9IkNJg4RSwj6H/boRmObWgszX
-         3YAw==
+        bh=sWlitGwRDhrBz7IK8sJ6XvrCc8HjGSB5nyxzSojWn2w=;
+        b=Sq2sWUPV9DWdMMfZ316+LBCxHy8jSg/IOkq+TTmXQYT9+sfBRqu90bVUnm9kuyEcHQ
+         jhEYvd/S+Qrdr4ar4ngbXO2J0g7j/6TZOy57Bz7I0FxUt356ZmxViY4A6AJLqaRua2Jg
+         mLaFzcR2Cj9qwahv/zRremceBjn4Bb7+DcnAcFg6pv6NQwphtUTHfY6ZULTL3sGxOuuX
+         l/z5JaG5kiruDeww5vuArs6rSdFaKeo2Q+r9yHx3KV8/j/mdx3cvyLKT7u76zfJ56FkG
+         btIvwXVB30PnPak8pVQ5r9mCKkpkmPN2tx+b1X0zrz4RrutkfOSnjOgBXgiSe0suDYT0
+         FmMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724772907; x=1725377707;
+        d=1e100.net; s=20230601; t=1724772909; x=1725377709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xGUq6JFJAztt1l0avpHLj1jlRL9d8APQ56On9hKVaj4=;
-        b=Wiwlx+T6sQEW4p7EMlHZQbjPdrKoKAP2M+sdQy9fM9jUn1VrJqq5KU0AMXFcwzLKCM
-         ha36YH0UQ24z80Zs99fwbiUvvvDf830G7Qsw8LWVLZOzbbJeKHWULIb8SYkcX3vEt8ko
-         WimLIhwP+ec266t3l0GZTOqk6HUU2ddNT/w0tRpgjthgY4xYKVYssI2wLLD2QoWYmiuv
-         rzb9yElmCq41eBzYy9CUsdKoQpJDu7VERnsBmy/EdBbANNmWvrMwI3l96+2cy/j9eHDS
-         pp4JPdOfkBRfr8sL+Yf6vnmFr66PC1pWPhj3wgjxZVFl8kU/o8SeizXZqZCzavirq0f2
-         ulcg==
-X-Gm-Message-State: AOJu0Yz0gwiE0VjzW+c2S0H747c6FtG+snDuPBEacbc72FBHnAVy8zwz
-	i/i1fKoo+FiSKEyRex88rDmMIqBiI04+epTtkxLNtCR6XuS3RRWWwzeMsg==
-X-Google-Smtp-Source: AGHT+IG9Pkfj4RJLKIwMEt2GvYnuU1QbLZLeiInCoFC6/Yr8pvNxZ+KpaEobnISeqHcONoF2KiT95w==
-X-Received: by 2002:a17:90b:88d:b0:2c3:2557:3de8 with SMTP id 98e67ed59e1d1-2d646d24df4mr13101694a91.33.1724772907470;
-        Tue, 27 Aug 2024 08:35:07 -0700 (PDT)
+        bh=sWlitGwRDhrBz7IK8sJ6XvrCc8HjGSB5nyxzSojWn2w=;
+        b=qLv3ItRoM32GN0FsUGiaIUJpIbyQ3A6YVEuuOdEqAD0eKtIdd/CB9DWII91CSDvEAP
+         LHG5Q9rluhJtqACjEej6zc577z+x1I/i3pJq7tSNHbelWJoShWhNAYmCeLZci8FMcl3S
+         aQG8GurJihIRqg/5oYn37ah8V1QixrVxG8mgXyjd2+Zm9VxYgktD7P/HNRd/Q5W3RkmT
+         SUdVABUTcnMkWM4kOiS+tJgZw4q1yAxc0Ow2PdpX4V4yE9tow5cviiamHKPqM7xwMWPT
+         ty/0slE398Hge5+QuBAYXUrevr1FI6GVfa2rgGQw9f5jZyDlO+ECbdk0cLpDBAoEiI8F
+         p1sw==
+X-Gm-Message-State: AOJu0Yy1nBWlrkMk2fv3Rf+89cmB9uAZm1uhMEyYFsI92hfKAawshT8L
+	Nll/4heDyo2hQeMyfiPB4mVNgVF7DOPR/9bRyJL4pEr+I/kg129+wPscDg==
+X-Google-Smtp-Source: AGHT+IGYRx5k75MlmIv0xVokQgItCpVeBrU+17od+LewRLdf6jB6G8z5voE0aGibejaJhPVJMqlaEg==
+X-Received: by 2002:a05:6a00:1301:b0:710:4d55:4d39 with SMTP id d2e1a72fcca58-7144575e329mr16549162b3a.4.1724772909031;
+        Tue, 27 Aug 2024 08:35:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d5ebbb1726sm14497253a91.37.2024.08.27.08.35.06
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71434336fb3sm8649061b3a.201.2024.08.27.08.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 08:35:06 -0700 (PDT)
+        Tue, 27 Aug 2024 08:35:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 05/11] hwmon: (ina2xx) Use local regmap pointer if used more than once
-Date: Tue, 27 Aug 2024 08:34:49 -0700
-Message-ID: <20240827153455.1344529-6-linux@roeck-us.net>
+Subject: [PATCH 06/11] hwmon: (ina2xx) Re-initialize chip using regmap functions
+Date: Tue, 27 Aug 2024 08:34:50 -0700
+Message-ID: <20240827153455.1344529-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240827153455.1344529-1-linux@roeck-us.net>
 References: <20240827153455.1344529-1-linux@roeck-us.net>
@@ -69,102 +69,129 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If regmap is accessed more than once in a function, declare and used
-local regmap variable.
+If it is necessary to re-initialize the chip, for example because
+it has been power cycled, use regmap functions to update register
+contents. This ensures that all registers, including the configuration
+register and alert registers, are updated to previously configured
+values without having to locally cache everything.
 
-While at it, drop low value debug messages.
+For this to work, volatile registers have to be marked as volatile.
+Also, the cache needs to be bypassed when reading the calibration
+and mask_enable registers. While the calibration register is not
+volatile, it will be reset to 0 if the chip has been power cycled.
+Most of the bits in the mask_enable register are configuration bits,
+except for bit 4 which reports if an alert has ben observed.
+Both registers need to be marked as non-volatile to be updated
+after a power cycle, but it is necessary to bypass the cache when
+reading them to detect if the chip has been power cycled and to
+read the alert status.
+
+Another necessary change is to declare ina226_alert_to_reg() as u16.
+So far it returned an s16 which is sign extended to a large negative
+value which is then sent to regmap as unsigned int, causing an -EINVAL
+error return.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ina2xx.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+ drivers/hwmon/ina2xx.c | 48 ++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 39 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 9d93190874d7..ed8764a29d3f 100644
+index ed8764a29d3f..f7d78588e579 100644
 --- a/drivers/hwmon/ina2xx.c
 +++ b/drivers/hwmon/ina2xx.c
-@@ -210,18 +210,14 @@ static int ina2xx_init(struct ina2xx_data *data)
- static int ina2xx_read_reg(struct device *dev, int reg, unsigned int *regval)
- {
- 	struct ina2xx_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	int ret, retry;
+@@ -91,10 +91,39 @@
+  */
+ #define INA226_TOTAL_CONV_TIME_DEFAULT	2200
  
--	dev_dbg(dev, "Starting register %d read\n", reg);
--
- 	for (retry = 5; retry; retry--) {
--
--		ret = regmap_read(data->regmap, reg, regval);
-+		ret = regmap_read(regmap, reg, regval);
- 		if (ret < 0)
- 			return ret;
++static bool ina2xx_writeable_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case INA2XX_CONFIG:
++	case INA2XX_CALIBRATION:
++	case INA226_MASK_ENABLE:
++	case INA226_ALERT_LIMIT:
++		return true;
++	default:
++		return false;
++	}
++}
++
++static bool ina2xx_volatile_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case INA2XX_SHUNT_VOLTAGE:
++	case INA2XX_BUS_VOLTAGE:
++	case INA2XX_POWER:
++	case INA2XX_CURRENT:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static const struct regmap_config ina2xx_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 16,
+ 	.max_register = INA2XX_MAX_REGISTERS,
++	.cache_type = REGCACHE_MAPLE,
++	.volatile_reg = ina2xx_volatile_reg,
++	.writeable_reg = ina2xx_writeable_reg,
+ };
  
--		dev_dbg(dev, "read %d, val = 0x%04x\n", reg, *regval);
--
- 		/*
- 		 * If the current value in the calibration register is 0, the
- 		 * power and current registers will also remain at 0. In case
-@@ -233,8 +229,7 @@ static int ina2xx_read_reg(struct device *dev, int reg, unsigned int *regval)
+ enum ina2xx_ids { ina219, ina226 };
+@@ -229,16 +258,16 @@ static int ina2xx_read_reg(struct device *dev, int reg, unsigned int *regval)
  		if (*regval == 0) {
  			unsigned int cal;
  
--			ret = regmap_read(data->regmap, INA2XX_CALIBRATION,
--					  &cal);
-+			ret = regmap_read(regmap, INA2XX_CALIBRATION, &cal);
+-			ret = regmap_read(regmap, INA2XX_CALIBRATION, &cal);
++			ret = regmap_read_bypassed(regmap, INA2XX_CALIBRATION, &cal);
  			if (ret < 0)
  				return ret;
  
-@@ -372,17 +367,18 @@ static ssize_t ina226_alert_show(struct device *dev,
+ 			if (cal == 0) {
+ 				dev_warn(dev, "chip not calibrated, reinitializing\n");
+ 
+-				ret = ina2xx_init(data);
+-				if (ret < 0)
+-					return ret;
++				regcache_mark_dirty(regmap);
++				regcache_sync(regmap);
++
+ 				/*
+ 				 * Let's make sure the power and current
+ 				 * registers have been updated before trying
+@@ -340,7 +369,7 @@ static int ina226_reg_to_alert(struct ina2xx_data *data, u32 mask, u16 regval)
+  * Turns alert limit values into register values.
+  * Opposite of the formula in ina2xx_get_value().
+  */
+-static s16 ina226_alert_to_reg(struct ina2xx_data *data, u32 mask, int val)
++static u16 ina226_alert_to_reg(struct ina2xx_data *data, u32 mask, int val)
+ {
+ 	switch (mask) {
+ 	case INA226_SHUNT_OVER_VOLTAGE_MASK:
+@@ -439,16 +468,17 @@ static ssize_t ina226_alarm_show(struct device *dev,
  {
  	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
  	struct ina2xx_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	int regval;
- 	int val = 0;
+-	int regval;
++	unsigned int mask;
+ 	int alarm = 0;
  	int ret;
  
- 	mutex_lock(&data->config_lock);
 -	ret = regmap_read(data->regmap, INA226_MASK_ENABLE, &regval);
-+	ret = regmap_read(regmap, INA226_MASK_ENABLE, &regval);
++	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &mask);
  	if (ret)
- 		goto abort;
+ 		return ret;
  
- 	if (regval & attr->index) {
--		ret = regmap_read(data->regmap, INA226_ALERT_LIMIT, &regval);
-+		ret = regmap_read(regmap, INA226_ALERT_LIMIT, &regval);
- 		if (ret)
- 			goto abort;
- 		val = ina226_reg_to_alert(data, attr->index, regval);
-@@ -400,6 +396,7 @@ static ssize_t ina226_alert_store(struct device *dev,
- {
- 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
- 	struct ina2xx_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
- 	unsigned long val;
- 	int ret;
+-	alarm = (regval & attr->index) &&
+-		(regval & INA226_ALERT_FUNCTION_FLAG);
++	alarm = (mask & attr->index) &&
++		(mask & INA226_ALERT_FUNCTION_FLAG);
++
+ 	return sysfs_emit(buf, "%d\n", alarm);
+ }
  
-@@ -413,18 +410,18 @@ static ssize_t ina226_alert_store(struct device *dev,
- 	 * if the value is non-zero.
- 	 */
- 	mutex_lock(&data->config_lock);
--	ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
-+	ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
- 				 INA226_ALERT_CONFIG_MASK, 0);
- 	if (ret < 0)
- 		goto abort;
- 
--	ret = regmap_write(data->regmap, INA226_ALERT_LIMIT,
-+	ret = regmap_write(regmap, INA226_ALERT_LIMIT,
- 			   ina226_alert_to_reg(data, attr->index, val));
- 	if (ret < 0)
- 		goto abort;
- 
- 	if (val != 0) {
--		ret = regmap_update_bits(data->regmap, INA226_MASK_ENABLE,
-+		ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
- 					 INA226_ALERT_CONFIG_MASK,
- 					 attr->index);
- 		if (ret < 0)
 -- 
 2.45.2
 
