@@ -1,61 +1,61 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A7E179A8
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 04:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76795179A8
+	for <linux-hwmon@vger.kernel.org>; Tue, 27 Aug 2024 04:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724731266; cv=none; b=hIeZlptsHWsk9xawfpeIffMgcum+OjXubEFHUMd/TMktcK/YiNl2kE5Eg7JX2HAaplLTT3+RKIirN+Rhgj46S4jXh4+exftOJBC55THLP+B8lrIBDaCWETUWIyG6YbFhkvC/gUnm+aT0UDublOEkGss5Vuasbc4Hk/ZbPKkwick=
+	t=1724731365; cv=none; b=Z986cG6PqJD0z7DAFWwWLGg7ntlPBhJs4Ew7LAHZWcVo14XSZey0e1xQPuIrpu61XBgN9Ax/6hrBrwAPWR9AbhoEBADFEzbd3z1BWu9ZAVvFPJR1xUEJVQ4B+TYccHR59+vD8MeE2cBlsjOms6nL1yC9u4SsQvg+D2fapcLQxPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724731266; c=relaxed/simple;
-	bh=p2nLf/VmitTe+GH/KMMqwooZcZyXg+4k/UPUulyhuCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fHUfTwrfByIjri4ule1Cbr1xqL2HKSwDaxQ2xBuWSh6M93xJHveJc/Bs1jHc48m7KvjI9SVa9yiuqEVMk8GDN+qgYU/zG6+lY/jvwVxyR6RV9g7SpHZulMzk+mWzn5n0QH/d7OHId3z6DR+8JMHyDp0+rUikBbsMkfWVYIsYwgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VT7Z2WRI; arc=none smtp.client-ip=209.85.161.42
+	s=arc-20240116; t=1724731365; c=relaxed/simple;
+	bh=Qo8HRZosBkIYXHIWaP2qBw9glZ88M6BpYJatZZl3Kw0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mEU9vq/wmYyKDZmrkAWmopN+EL+zNfiILMzOnx0moAGNERZabmk/2lpiZ7GPkWmXlDFQ2mYfQrP+iuIOcp2nxgvfuh0ayjkl7GAqZH63YeOVuw61t5Hc5gyjO6dt+CYUSTVkcJPnij/Gvsw6ws3xkAKf3HHz8IEbVA5/1LA+dAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRyds8hJ; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VT7Z2WRI"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5d5e97b84fbso4083099eaf.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 26 Aug 2024 21:01:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRyds8hJ"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2025031eb60so43513865ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 26 Aug 2024 21:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724731264; x=1725336064; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724731363; x=1725336163; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uQEXbPSwXfolVaTNF8pFBv4C5nehlvOIEpJyunOBBGg=;
-        b=VT7Z2WRIoNcd4UCoCulImeMQsM2y7HoK5h/53Vhm6wHjBv5O5zUxkOBGd2fLtMRug9
-         xD2MIFFUxRkdoT2WKMibWHdiCLHY+k3mdsaINLACLQ0hWamCbrdlJQFHv/TsM/NvGxSa
-         xyhpAaIXxONqLjbmT7PFTxQ0aKfOqDbUjqaozic16IDKmU2+5y9nwdQRij0DhXD9tFJi
-         WmplotPNOx2QJzSsQ1w4Z+PFzuyKNMAUe9warQSL74aOibKgt5rBEeOkei+7cT0gQrmb
-         zdedTx2LGgeoYttMSZgDNwYigRTWbcLBoM4xDbNneaiYoIIHFDGsTPv5+L+LazyQlxfZ
-         VYiQ==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sxj5XA4VQ98pERvtNk+jc+StB2E0pH7LOxlmKgsbWWg=;
+        b=XRyds8hJ+dmc3fkpxeqpdlytXcQmA7xEmBF5PDw7KRqjsVsKdULspsZUoT5+1GDv3S
+         NlnfE7XpKwH4T//b1CZnYNhNoTjti0XQvGVSU6tcyqC5GVl4aitr5+vmLgRQlBVRnDlE
+         Yzn+KtnB6iM/OWvA8y2kH+WoAdT+Rdp18CSJ5BDka6MGJrMVlp207xjFDJ5VUxkbPiAe
+         XVgIDJ+9fevmzl7RUOHtEDcKs+TphcOCjM3aCW9/kIEtAS/rgqyh5PQbxFfgriBZHeJ7
+         J+uQd9M7bdGQur0ab18xD9vyhUoWRURcN9MksHUTup56TLd/kgZ0B/JaahFghLhVAUcB
+         xl2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724731264; x=1725336064;
+        d=1e100.net; s=20230601; t=1724731363; x=1725336163;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uQEXbPSwXfolVaTNF8pFBv4C5nehlvOIEpJyunOBBGg=;
-        b=Bfwd+3OOCxAipQSWBIWbj0fcGvng17BYIsKvMuwAMFqQha4UAZOBfbNsqZ0ERuDy6g
-         m65Ta4wDku4gwAjy8sEU6Rbm8jiNN/kP7itx4SSTI2VrwNnd7am13MzLueAbk0hKh9rC
-         Cyzehm1P/2x0QNIjozY7KtBsIXxlkjkMU/MtqvnPjLKixUo1ghzGk9O4Tvvqh/N7YJ6u
-         1Aa8viL7dlvywpx2Yosmp+FxKefQnJT6q7hWm4VHDWrmhAxIIsCFSyjTXScSZBX+gKK1
-         atLRVc9gSg3Ur7XjUCSW8EucS1+qp03VFtLbCwtah8SeFyrVBxi81Whn1VuTCO5puO1f
-         Dqkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdljUWsnJIzElSro+A4/xePwZAmXbBPbv8jYuplGEYxSH0n2tBlbdZRCFBUPMIH7sZElOmMCM5QYKLmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysOeXM/AnwUCjJ3PHyl1VH6R3+7XVN3JrPdSgwJ9ndXojyi1Qo
-	HTOwYDQkolIXWQBIAEa4pjLwuyO1Uhf45jJhZvyO+H27OAg8Ti26
-X-Google-Smtp-Source: AGHT+IEqntLbysw6zucEJfpwE7mYVJ9LSt7xN6jDox92P2PILznjTYSTR8F5638pKrqD/MAF7Cm9qA==
-X-Received: by 2002:a05:6870:638d:b0:260:71c4:f33a with SMTP id 586e51a60fabf-2775a0385bcmr1909078fac.39.1724731263820;
-        Mon, 26 Aug 2024 21:01:03 -0700 (PDT)
+        bh=sxj5XA4VQ98pERvtNk+jc+StB2E0pH7LOxlmKgsbWWg=;
+        b=KR4P4ecqs+jnu0PFFOR+k+NH2rQCgydshz8XRvWYjOcFC9kLJIGRW72VgFAjyNO6nc
+         Rr1qQIthx1jk0/WVx4ux8YcMSwjdMRJS+JovpdD8bPXotwJV7wPqyerpNzvsD1bbPt9x
+         IN+V3iwGWIlwPj9aQbfCo38d/r3Bv921lvyQ/UUOuR3j+28gxLuoFNq5x4SI/JNIgEB4
+         PLWSvolXwzCN6P21fSiJUcxqWANTCOQosyivocbq62hUrZJ5P23NyaFApwZalbqLNSCg
+         WmcdaojVhebvkemhVMdmTvWx57p/f3dK7YxaJpap1gU7bFByL6aPKUEV6v1FRrFhvcij
+         mcRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDfmYl+eFhgCI/Pl+7gHyGR5NYqk4KErTpVxn9wRWyywNbBRRdlxOhsTxyGySvXE0NDe4GObykLVsBJA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi7MzkiyT5BYDv3r2nvqDPIpfoFSbHuY64Vqguqkfm106rRVTv
+	Lp6k9p9qjGnsyeu63B9d5LAc5pEPcBkRbmTxDryzPEephuVrNhix
+X-Google-Smtp-Source: AGHT+IHlGOIi3wtsWCFow00y04cNqikvrd5AemXxPvLQ0w6lFg29yRk6QTplzDj3y2zBFZnI0ma2Cg==
+X-Received: by 2002:a17:902:db09:b0:1fc:6a13:a39f with SMTP id d9443c01a7336-2039e48a2eemr167532585ad.25.1724731362672;
+        Mon, 26 Aug 2024 21:02:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71434254057sm7708662b3a.77.2024.08.26.21.01.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203859ef177sm74689925ad.243.2024.08.26.21.02.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 21:01:03 -0700 (PDT)
+        Mon, 26 Aug 2024 21:02:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b41a6bd9-dea2-4323-9bc3-e5c48def99d9@roeck-us.net>
-Date: Mon, 26 Aug 2024 21:01:01 -0700
+Message-ID: <6fae9326-808a-433e-bd12-f7776158980a@roeck-us.net>
+Date: Mon, 26 Aug 2024 21:02:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,11 +63,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next 0/8] hwmon: Simplify with scoped for each OF child
-To: Jinjie Ruan <ruanjinjie@huawei.com>, jdelvare@suse.com, joel@jms.id.au,
- andrew@codeconstruct.com.au, linux-hwmon@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-References: <20240822062956.3490387-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCH v2] hwmon: pwmfan: do not force disable pwm controller
+To: mailinflist1@johanneskirchmair.de, linux-hwmon@vger.kernel.org
+Cc: groeck7@gmail.com, Johannes Kirchmair <johannes.kirchmair@skidata.com>
+References: <20240819070649.333505-1-mailinflist1@johanneskirchmair.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,37 +112,83 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240822062956.3490387-1-ruanjinjie@huawei.com>
+In-Reply-To: <20240819070649.333505-1-mailinflist1@johanneskirchmair.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/21/24 23:29, Jinjie Ruan wrote:
-> Use scoped for_each_child_of_node_scoped() when iterating over device
-> nodes to make code a bit simpler.
+On 8/19/24 00:06, mailinflist1@johanneskirchmair.de wrote:
+> From: Johannes Kirchmair <johannes.kirchmair@skidata.com>
 > 
-> Jinjie Ruan (8):
->    hwmon: (aspeed-g6-pwm-tacho): Simplify with scoped for each OF child
->      loop
->    hwmon: (aspeed-pwm-tacho): Simplify with scoped for each OF child loop
->    hwmon: (ina3221): Simplify with scoped for each OF child loop
->    hwmon: (lm90): Simplify with scoped for each OF child loop
->    hwmon: (nct7802): Simplify with scoped for each OF child loop
->    hwmon: (npcm750-pwm-fan): Simplify with scoped for each OF child loop
->    hwmon: (tmp421): Simplify with scoped for each OF child loop
->    hwmon: (tmp464): Simplify with scoped for each OF child loop
+> The pwm1_enable attribute of the pwmfan driver influences the mode of
+> operation, especially in case of a requested pwm1 duty cycle of zero.
+> Especially setting pwm1_enable to two, should keep the pwm controller
+> enabled even if the duty cycle is set to zero [1].
 > 
->   drivers/hwmon/aspeed-g6-pwm-tach.c | 4 +---
->   drivers/hwmon/aspeed-pwm-tacho.c   | 8 +++-----
->   drivers/hwmon/ina3221.c            | 7 ++-----
->   drivers/hwmon/lm90.c               | 7 ++-----
->   drivers/hwmon/nct7802.c            | 7 ++-----
->   drivers/hwmon/npcm750-pwm-fan.c    | 5 ++---
->   drivers/hwmon/tmp421.c             | 7 ++-----
->   drivers/hwmon/tmp464.c             | 7 ++-----
->   8 files changed, 16 insertions(+), 36 deletions(-)
+> This is not the case at the moment, as the pwm controller is disabled
+> always if pwm1 is set to zero.
 > 
+> This commit tries to fix this behavior.
+> 
+> [1] https://docs.kernel.org/hwmon/pwm-fan.html
+> 
+> Signed-off-by: Johannes Kirchmair <johannes.kirchmair@skidata.com>
 
-Series applied.
+I do not accept patches without change log.
 
-Thanks,
 Guenter
+
+> ---
+>   drivers/hwmon/pwm-fan.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index a1712649b07e..c434db4656e7 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -167,7 +167,7 @@ static int pwm_fan_power_on(struct pwm_fan_ctx *ctx)
+>   	return ret;
+>   }
+>   
+> -static int pwm_fan_power_off(struct pwm_fan_ctx *ctx)
+> +static int pwm_fan_power_off(struct pwm_fan_ctx *ctx, bool force_disable)
+>   {
+>   	struct pwm_state *state = &ctx->pwm_state;
+>   	bool enable_regulator = false;
+> @@ -180,7 +180,8 @@ static int pwm_fan_power_off(struct pwm_fan_ctx *ctx)
+>   				    state,
+>   				    &enable_regulator);
+>   
+> -	state->enabled = false;
+> +	if (force_disable)
+> +		state->enabled = false;
+>   	state->duty_cycle = 0;
+>   	ret = pwm_apply_might_sleep(ctx->pwm, state);
+>   	if (ret) {
+> @@ -213,7 +214,7 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+>   			return ret;
+>   		ret = pwm_fan_power_on(ctx);
+>   	} else {
+> -		ret = pwm_fan_power_off(ctx);
+> +		ret = pwm_fan_power_off(ctx, false);
+>   	}
+>   	if (!ret)
+>   		ctx->pwm_value = pwm;
+> @@ -468,7 +469,7 @@ static void pwm_fan_cleanup(void *__ctx)
+>   	del_timer_sync(&ctx->rpm_timer);
+>   	/* Switch off everything */
+>   	ctx->enable_mode = pwm_disable_reg_disable;
+> -	pwm_fan_power_off(ctx);
+> +	pwm_fan_power_off(ctx, true);
+>   }
+>   
+>   static int pwm_fan_probe(struct platform_device *pdev)
+> @@ -661,7 +662,7 @@ static int pwm_fan_suspend(struct device *dev)
+>   {
+>   	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+>   
+> -	return pwm_fan_power_off(ctx);
+> +	return pwm_fan_power_off(ctx, true);
+>   }
+>   
+>   static int pwm_fan_resume(struct device *dev)
+
