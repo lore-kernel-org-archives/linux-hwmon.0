@@ -1,182 +1,163 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013010.outbound.protection.outlook.com [52.101.67.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE97B328DB;
-	Wed, 28 Aug 2024 18:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724870158; cv=fail; b=bLC2WASgiTNFRR8aE1T9R8TNkVE/E6VZJz5cZSVY40Vnk2C/+HmJbUu7yGzQMrJC9jy88n0h8VmVC9UHfyFHALbdlIRWMbxky46Tc7kcaxPVmejlxgFVkWo/nb9A15D2WaXO0Pl1O5XFf5QSH15yKT2bQeLccbhhRwui5Cu3jns=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724870158; c=relaxed/simple;
-	bh=HkUEzBL0KqB8r6c041QzroOHgg6PVyrl95ORtOM3UQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Vnv2/QCgQFzdpZMEvqydBgpKmHazW/DeJda9g/X8dzi0QNSkWaX2mQpYD43zWb3kqbAn2x69Ayo0qT1rKpishx/U+QmvyRMzYXl1A8Mldagc9DR3odEK0rFZlOY0rkxEnZJG/Ez3ebVysbYCuBYt4EQSJGesHx39ic6vynk38OY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ndR3/zj7; arc=fail smtp.client-ip=52.101.67.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD521A2554;
+	Wed, 28 Aug 2024 19:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724874064; cv=none; b=KVoh81aEqibMnXtkHJNSZrBOo3HkukrH+DjxPIh7OedD8RDMz2xqfjOvbi0t4Hv6rLOV0n0QTQvy8pVnAjD8paYvTpwq5mwOCIdQW0KivSaTk6lYXlBXu7LZbrPFxg3H0MwVJ0k0/z+rJ5YdjfJ0EgGDVtwH23yGNNouHE2pyyY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724874064; c=relaxed/simple;
+	bh=MXhQ9Hgtws6rY5qwqhJGDFzt+GBAaEl1yDl+z/rIagE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=loKlC0kBs9scepRfyiBfGaLuMgGBfT9ih+lIdRzoVR3gwSSg6HviNZiJnbGTH/9biee/HlRXc/eUYocKQI4bM3wX+RoQ7ScoyLffioI2Rc9pNbyjmWCVernXzyoNLVelA0pzX19CZXDt4XZeaHRCzm8tyA0NkKTo6rJ5BTOBY7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SEQwLsQo; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ndR3/zj7"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LD8EUi+uuMZPnopE8qxRqaoEMVSnnt8+tofzC6qzlz1JGmUV3NV2IlCOnRRPtZB37Lq0QMsm900FKqKLe23FimM98VtHniMuyForXWOEJAcLzT5625agP3+b1+VOotMhHk3Ha5R6La4RjGCxWwClmwvNYWVo10zglow8/ZfXxhgnSH7V3fKjkx/dplc4cuN+SzWoC1HwvwVH3UNWtcVZ3vLq+s11RGEbmO/rwnpd3gEpc2Yi9ANJsfElkHrN5bQrGs6tVTLbx53oiyZRKPFlIvVgwkfBExaViG65zrezp+hQPctLQhmR6yqFGBOkVb67oX5ZIuHrPq15emce5YT7+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h1PoNo34cistJmalBIFLkbacTllp7l8t5fNA8md8H2Q=;
- b=meEyZijk82sL1zR3nCCQliDRlEjiA8Fw/b3PLeKMqkhU/mnbrjW0Vulx4m5sciHmrDIlyRIILp9/WfQz4SRSK2dF9/nj2jQqOBsH7DLvFu7p2Zs2nnX92XENGG5EcRti+3HgvQYk/PQ7d4gBwof00xVLC+tmGMZ1lm7GrvFMqC3IpqOankjqoNQmlQPDoUkzuNgJl4HnfUxmkZKRPoToLV/IchGHk0u4ibs2Qx3FVLOHsy5ZImObYwEd2HxeTTr6IHyDevuoUoZRaMjMgj1IyyB/KxsBgnVyQ9rIfKFYkDBvxOt/kDXBlcX7DFPZiY65iATH23tN3CR2XHPxtn9T/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h1PoNo34cistJmalBIFLkbacTllp7l8t5fNA8md8H2Q=;
- b=ndR3/zj7dgog280yorKVl+LcNuNwV+MWNGJz9lJ/MzI4GKwjtLh6i8yoI5An3DUuEGpMmgGyBFkEyzhViYkLJOYG39gy608RC0ABZGk6cp2ZqpgbUqcUyr+p8ldML3qBWOQjxdtkIo+aDbs0DJgmx2k2o4Sf0DUs39GdT08G98UX6T2awwcVLKoNknllk005XH1z+x9zRyjUItmWqVbEkQUZd1h+NyXq9cfGcatNhWNrQpcB1/PS4oHDgj5fCY1sEg6Y+ZNix9VEiZTz3NGDJJ7UMH1kGVUfv0zMSv8+2ljifyj23WSEcW9JHr7Apbz7/ZsmzMi2gtkyT0PbNlio7A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DUZPR04MB9748.eurprd04.prod.outlook.com (2603:10a6:10:4e0::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Wed, 28 Aug
- 2024 18:35:52 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7897.027; Wed, 28 Aug 2024
- 18:35:52 +0000
-Date: Wed, 28 Aug 2024 14:35:45 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: robh@kernel.org, broonie@kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev, jdelvare@suse.com,
-	krzk+dt@kernel.org, lgirdwood@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] dt-bindings: hwmon: Convert ltc2978.txt to yaml
-Message-ID: <Zs9uAbUPRqkcRdxL@lizhi-Precision-Tower-5810>
-References: <20240828164133.1131959-1-Frank.Li@nxp.com>
- <54243e7d-2b54-4934-a530-173ac06180ef@roeck-us.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54243e7d-2b54-4934-a530-173ac06180ef@roeck-us.net>
-X-ClientProxiedBy: SA9PR13CA0093.namprd13.prod.outlook.com
- (2603:10b6:806:24::8) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SEQwLsQo"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2d3b5f2f621so5240772a91.1;
+        Wed, 28 Aug 2024 12:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724874062; x=1725478862; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ce1N0tTiPtR4rouCUzpG0LMPRDeIiFvwRX19g+i6YHU=;
+        b=SEQwLsQoh4lUQ77/wa9kiMB04oWqFp+NWmdZTbjUWca0Tgxfcpd7hKJJuP8D2tPq9M
+         eVC5PCSOEFbAaeKi65rolbqua2LrVEklDGIBo7++rotHO3sohmhMcAMWmz7iWhD+JdOR
+         +nU8Bm94HTsiRgmVg+D2tVJ+3P6QT+WT1ODk6TUKgecxWaEowLOWL58e5hnda6/O+2kE
+         8bRooX6A6ESHe0n8hKvwj61eTm9zUp6ynTLe7qwpCMGYuny7WlQfI5ZJg4fFujJsuJwT
+         Saiu3mOhenWd88bwwgPui3jNKf+PqB3TSXeC0suwZV+dPU9qIl8SbzwKYr00UrMrRpln
+         f8Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724874062; x=1725478862;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ce1N0tTiPtR4rouCUzpG0LMPRDeIiFvwRX19g+i6YHU=;
+        b=nQGfZCZv9RWnRvDZHyRij4lHn4x03A0tUigcwBTF5DbDE4bZiwHIlmOxHSFcMaiCe4
+         nF3k6AFUDPEoB5dZeKf6FzncvL9Ygb/CvkTg7RwcfO9SZKHze37L03vbYFtnr5eBN6h8
+         CBzUzzxDhVqCCIPAtMFVz8Y3ETM3j8/DrhJeiVfopAnBQHFSnC3vioCelN3qNJPeBoS2
+         lw1WIB04W8MabWTmXeEXHdD0ux/a1HNNaf9TjG1z7tR+amt24PMtfKPTuYbrVRfKHwti
+         wI/7a2xxME3qmphVra6Hvb44V7cxu2oSFnN8J84GniOLQDFL/E/ovGK7j8BvBWk9Fj7t
+         NZbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJblyBCx1YrRCmli/bcZA5+k8YXndIrQRx8b5vIWNo7e6+r1SSGrZZxKYr2ThH3kg/QgONemV0E5UWNhpo@vger.kernel.org, AJvYcCUZivPLk+K77FYzke5b0RYUIxbJ6frIBah0bmZJo/Zg23f3R5EWGskGpYBXsko5gKQGXvZ7P1N8yv3R@vger.kernel.org, AJvYcCVLpqjgpkiL0vrtbHvIa5WFfFj/lHYgohkKfKc38y76/Jbyq0Kru5Mfeu7Q4PQUuTd/96OuMrBz2lBEiW4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO6Quc1rB8Stas4PRr47FLCjuIF+KyeUcg+NfK1sHABCojgk+f
+	rIPMrlHZNTUzGzusf6IiyZnMwXpvBEkqClzBEwOwc0nBn9Q73m83
+X-Google-Smtp-Source: AGHT+IFJ4eNMqEsFokIt6tr5u4WccKvoFDiG25BeHIQhhWeO2V7WYEfddZEzht0kBa1BPr6IUzbeOg==
+X-Received: by 2002:a17:90a:4201:b0:2c9:6f8d:7270 with SMTP id 98e67ed59e1d1-2d8564a4b84mr354549a91.42.1724874061586;
+        Wed, 28 Aug 2024 12:41:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8445e80absm2316029a91.13.2024.08.28.12.40.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Aug 2024 12:41:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e0fc65c0-45b3-4948-bb00-f34db59fe011@roeck-us.net>
+Date: Wed, 28 Aug 2024 12:40:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DUZPR04MB9748:EE_
-X-MS-Office365-Filtering-Correlation-Id: b98fa86f-e20b-4dd2-b57b-08dcc7903e9c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|7416014|52116014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bgrH93lIPIbqUtCm7E7cx6bZdULKLHZBojILb7+wlXZtvGK8a3ZOWIPW0yqD?=
- =?us-ascii?Q?twfEvn+r3DVB4MCXAybxZYjyR+pjDRWwJzMj1CY+ZzbHOYHaG+iyJ/jLk6ME?=
- =?us-ascii?Q?7tyB24wcF+dXTqy6LE5B12AZuCFyghPTvc3v4gTW5WyxS1IpSID6duhDTJkH?=
- =?us-ascii?Q?zCO2oJHNIyVK+4m9yQHEwYt4i3cY8cGAfaRybn5dyQLgE9+1q8SeNBvaDQAN?=
- =?us-ascii?Q?gUtjvd3VZoWIUmQcsaHQfVS3rggA6T82V5GAgFJ01RwjhtsvNKCVhhTEIubY?=
- =?us-ascii?Q?8DuLsXom8EkkfngFxEKQEkkKlIDiRQWJx9jBEUqnCnAvr7z2r8blz+1884MZ?=
- =?us-ascii?Q?LzkbGY9zG7lXqJDT21xAgfEImXF1AET9G7uQ8Z760QTnk4hUyEpaxprbN9io?=
- =?us-ascii?Q?0f5AitxpR1cRm/IMRdtE3BgZ6sm1zzF4TmOIs05t8ZTMuDn8JnvbW6pjTaj1?=
- =?us-ascii?Q?JNQProv8SOfugMnDiLxxTMz4EAcJJ7QFBxQv083DpZ9wEz0SMbHe8UuWWgkS?=
- =?us-ascii?Q?38cOvA43IrigSlyH39s/1rsG/V9Hg2/vKJg63eNJ0ffz8XxAo/ajDO2t5S84?=
- =?us-ascii?Q?z3IVtmtx+lzPj+cPNcBDmguW9vNWME3ErWknl48OLHdFW7mcpL4xhXixQCEm?=
- =?us-ascii?Q?e7LZdW2+pY7jrLZcTnbAoybfRoLU38E7OfaI9OQ7vXG1qQ5ml0QW2BT9ZWxj?=
- =?us-ascii?Q?JPrbUstsNUSQ1M/AR7BKH7tWzHsFo3yA/TLE0O1uGneXuHmEKbKRAEfQVHR1?=
- =?us-ascii?Q?/B1wSr0jqUJojnygbSc1LbZvmOGB2hukQhQdb6OFraPZFQRdiLO+/GAaxy39?=
- =?us-ascii?Q?VW3y2KBk7OJq4Mx8IKa+qPjywh755d32sfW0Wg0YkpgjjpfuLhZr9RpecP58?=
- =?us-ascii?Q?FuIfRzoZbW4Gk82rg4pEBiqmg/oDSvsANtNbZh4kM0eKHDZl9JAZ06eYMGO2?=
- =?us-ascii?Q?I10wP1d5fDbyLoE6dymuDVP1S7iBV+FYM8LDdDveA6Obk/0WTrXXMmpe9qFI?=
- =?us-ascii?Q?N6DDpeScYFqb8+MsLmFqeZBjf9j1MS1dmbqyaI8bZ/wwHSkJz1sGkRuzu4PQ?=
- =?us-ascii?Q?EVmybESdlID7mzU7BQ9yS3Y6Wq3Lrop24lMczN60Hohybj3L3Nf3qnzqqtut?=
- =?us-ascii?Q?16w5FkRSsSxGyhE2140MWkLb+0eeLZf9yiHYrvFhjoZQjBBB+PsVVcQT7QzO?=
- =?us-ascii?Q?Ph9jVpg7KL5x1ZaK6UGWWoU78GonlU8cJYVquO09YqZi7wsiMl9uEVsSJVu0?=
- =?us-ascii?Q?629/NkyxIFgEmPuw89FbeF1vAL2SUxGXcHYGhJgTNqdLHZYcYsN1IFVJxREq?=
- =?us-ascii?Q?/O58uvCpk+pEY5b+zx6B8Vh4xIGC22ZbNsLT3W2SmCERMjt3bpkrxkC+Evq4?=
- =?us-ascii?Q?lSVmviQbqjHnicbXC4afWqKqyxlJC1npapMW7K/+v1fOWyPmag=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/vSzNM6gAoPrJ9YaAQaujzSbSGrNrxhsOIIEx+PNY+wNY+wOAvntfr3EI1E2?=
- =?us-ascii?Q?Ap+kbpQCK/ta/hdQjJ0XwvrvJSh7xnRqWmzpMhUq7RHUI1P0xWjn5xCp/xKC?=
- =?us-ascii?Q?Kqhoorg8/ZE35+vpd8Aic23yHWsn0zuYUu3Dzl2yWwuL5Ly1j7RfmHI2GuLR?=
- =?us-ascii?Q?jCaJIahR7nuvRo6qbX5KTIQUdrYgM2meFap583lWYw9kKiJ+/Lq8TJQ+Ju3W?=
- =?us-ascii?Q?fMn5wB4vJEysewj1vE2wl96rSw7w8AedABaYqjZDo2rNXsoE8BxV2h8yiGes?=
- =?us-ascii?Q?VgUB/KON9LjNnD0eum8t0g1dRamXHKVrvYX7E2YHgto+/zxKw7ZOXhgDbmvX?=
- =?us-ascii?Q?RjN31si5c+BzOyza68zC66JhXXhy5F1lNU3bfeH1fAIqo46DeAigdtxNhDkp?=
- =?us-ascii?Q?Imbxrsc9x0w5G8M2IUSLhOTLC3HrfISEkZOfl6UiriODOZvSinXXt0gAeZzM?=
- =?us-ascii?Q?kvCQmCxS0af5qPIXzI8Vqulm9mwCPokCjfh5iNGdfu6NJbYjibvJRE//36v+?=
- =?us-ascii?Q?6IVT0OUAPvkznAtU5uCwHTQm8W6LTJbf5DKAR01OcUbzX9Kv81l+Qfwqh0rJ?=
- =?us-ascii?Q?CTsn8XkTM/bq5XX1WfrSma8pXTbCG/ZnAV377mQIiZ+TXNJLtoIPeDt2fp0L?=
- =?us-ascii?Q?lyHTZQPzDZf7DeZNHZA2GdEikXWKdWpPawqyPFpy0LPS+jSykOgPgWdbzc2x?=
- =?us-ascii?Q?i6eYm2Z+/WOWtXGv3gJhKmpgQ/IzmVAJgGLwFoKVPHW+DYBDh5xfwjELxe3d?=
- =?us-ascii?Q?ARvtQciFN7rOxRQkWg31FxS0YafVwUUmpNnAH5HkJMz7yI5+20BG91ZGNWeM?=
- =?us-ascii?Q?HHTwsnhsbDke0nTPBGsDMrEl5XPnOYhDtTFacVf3LUBvT0a6VOuk+g+n3CPj?=
- =?us-ascii?Q?oW1p7IJU1j2V8szl4QTbVxxqtgMY3tN6bkzjHvGSPS0oTxaEyWTIP4n6wewb?=
- =?us-ascii?Q?yBKXbNXW4b3X1aWG810e0BIluJAR1q8rGrblu3gutDOBGKmt2E1+o8db3SDS?=
- =?us-ascii?Q?UmH2WKhTGEGaI3w0lg95lgSG9duAJbGRseZ9WeF6p6H9jpc68ZWCbVg14/gE?=
- =?us-ascii?Q?hfhWT2ezNF7R2ZrvbofujtCMVrdDU1mhqy3+niL3ixBPSYtWIjeFMH7dqR19?=
- =?us-ascii?Q?k+1lVxypIzFTTv67ykRM2t5lanNezvUCwcGuCVVaszZX//1dx44h/ZFma8e+?=
- =?us-ascii?Q?PJmL2hjQBPLYCPu9FcqaqWZOl4hNzdC/bfd4XobXbTwX6YmW1h/kbhQRHRj3?=
- =?us-ascii?Q?kJOktOLYkiAJigT05OKSt+0cTfqd3RjVAij/dvMQvO3bfUeeLEp6gtDiplfa?=
- =?us-ascii?Q?oZgSlwvBKzz5tTJUCKH86j1djNNTLSIvuv3FwrzoDR/tWx1ZGPgG/2UzgSxJ?=
- =?us-ascii?Q?Zs5yN8nrzIySP6zHPb38ujb7RTippEkeXAK7GXogIsGfG142tdWh5QJ6dvHw?=
- =?us-ascii?Q?Ts8c86tf1BQy/lmBmaUI8SM+BPYIr3+N2kXx5QCSbRIod5M5XD780Br4xiX6?=
- =?us-ascii?Q?gRmt/9f0EYeqqoRx0zFd3l3zfAiAhzpdR3GhlQnXvBo8cS2GllmEe9I6vldb?=
- =?us-ascii?Q?pkzQJ9VIXlLQtpvVtU45HuSFTpllWxebbkmvSzRz?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b98fa86f-e20b-4dd2-b57b-08dcc7903e9c
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2024 18:35:52.0238
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J5ghmog4Zr7ww05gPMlKRPR97X7n9bHhCtLQ5+xTkBmrXrcyj67oj/PLZcgD8oiBL6mFub+/HL6MdNwrzWrupg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9748
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/1] dt-bindings: hwmon: Convert ltc2978.txt to yaml
+To: Frank Li <Frank.li@nxp.com>
+Cc: robh@kernel.org, broonie@kernel.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, imx@lists.linux.dev, jdelvare@suse.com,
+ krzk+dt@kernel.org, lgirdwood@gmail.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240828164133.1131959-1-Frank.Li@nxp.com>
+ <54243e7d-2b54-4934-a530-173ac06180ef@roeck-us.net>
+ <Zs9uAbUPRqkcRdxL@lizhi-Precision-Tower-5810>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Zs9uAbUPRqkcRdxL@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 28, 2024 at 10:06:25AM -0700, Guenter Roeck wrote:
-> On 8/28/24 09:41, Frank Li wrote:
-> > Convert binding doc ltc2978.txt to yaml format.
-> > Additional change:
-> > - add i2c node.
-> > - basic it is regulator according to example, move it under regulator.
-> >
-> > Fix below warning:
-> > arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb: /soc/i2c@2000000/i2c-mux@77/i2c@2/regulator@5c:
-> > 	failed to match any schema with compatible: ['lltc,ltc3882']
-> >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> > Change from v3 to v4
-> > - keep under hwmon directory.
-> > Change from v2 to v3
-> > - put my name into maintainers.
-> > change from v1 to v2
-> > - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
-> > - update title to (from ltc2978 data sheet).
-> > octal, digital power-supply monitor, supervisor, sequencer, and margin controller.
-> > ---
-> >   .../bindings/hwmon/lltc,ltc2972.yaml          | 94 +++++++++++++++++++
-> >   .../devicetree/bindings/hwmon/ltc2978.txt     | 62 ------------
->
-> I still fail to understand the rationale for renaming the file from ltc2978
-> to ltc2972. I can see that 2972 is currently the alphabetically first supported
-> chip, but that is, in my opinion, irrelevant, and it will change.
+On 8/28/24 11:35, Frank Li wrote:
+> On Wed, Aug 28, 2024 at 10:06:25AM -0700, Guenter Roeck wrote:
+>> On 8/28/24 09:41, Frank Li wrote:
+>>> Convert binding doc ltc2978.txt to yaml format.
+>>> Additional change:
+>>> - add i2c node.
+>>> - basic it is regulator according to example, move it under regulator.
+>>>
+>>> Fix below warning:
+>>> arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb: /soc/i2c@2000000/i2c-mux@77/i2c@2/regulator@5c:
+>>> 	failed to match any schema with compatible: ['lltc,ltc3882']
+>>>
+>>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>>> ---
+>>> Change from v3 to v4
+>>> - keep under hwmon directory.
+>>> Change from v2 to v3
+>>> - put my name into maintainers.
+>>> change from v1 to v2
+>>> - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
+>>> - update title to (from ltc2978 data sheet).
+>>> octal, digital power-supply monitor, supervisor, sequencer, and margin controller.
+>>> ---
+>>>    .../bindings/hwmon/lltc,ltc2972.yaml          | 94 +++++++++++++++++++
+>>>    .../devicetree/bindings/hwmon/ltc2978.txt     | 62 ------------
+>>
+>> I still fail to understand the rationale for renaming the file from ltc2978
+>> to ltc2972. I can see that 2972 is currently the alphabetically first supported
+>> chip, but that is, in my opinion, irrelevant, and it will change.
+> 
+> Conor suggest use one of compatbile string as filename. I random pick one.
+> I am not care about filename. If you like, I can use lltc,ltc2978.yaml
+> or other filename.
+> 
 
-Conor suggest use one of compatbile string as filename. I random pick one.
-I am not care about filename. If you like, I can use lltc,ltc2978.yaml
-or other filename.
+The rename results in a disconnect between driver name and the associated
+devicetree file. I fail to see the point of introducing that disconnect.
 
-Frank
->
-> If/when support for LTC2971 is added to the file and to the driver, do you plan
-> to rename the file again ?
->
-> Thanks,
-> Guenter
->
+Guenter
+
