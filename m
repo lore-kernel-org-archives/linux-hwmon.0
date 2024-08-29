@@ -1,40 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F501B653D;
-	Thu, 29 Aug 2024 20:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF5641C69;
+	Thu, 29 Aug 2024 21:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724962534; cv=none; b=IMotTApsPHlpOU6BPYgiY95WBudIo2hVk5Z0dZ2UCSstwyvXbZ0kuPNhN8+Lcfo9Qqv0pWUObJ4+CsyOfunt9uM13+Nhl8xhpc8HWzDaHntKzuMAdcov+6NV/+uPR3aU5uOSbqvYN6nxOb3pT2rS93sllHSF2xsu1eVlJ1udDtU=
+	t=1724965440; cv=none; b=iQZKYJawp+6jzLZoN0VgE2dVrbq3+91hMwoxMeBns9udWCPHqZh1P1OtW6/bozhIL79mhhJuFzyBfvo50vnDfTOPNKaEfZegBpaLJtdlBwA/HnXTNMRTjsMthR2ia+1vGdx4ORik6e+o6PCqR/Vz9WryucKF6LaLRokBtryZjzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724962534; c=relaxed/simple;
-	bh=Ct9CPYDZs1D52/P92RNJ8V1FCpwTi5S3g6iSiVFbCWU=;
+	s=arc-20240116; t=1724965440; c=relaxed/simple;
+	bh=f/3CcU9kx1DRhP2xmjnK+4VqbvzJS+x+R4np2vRoChc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8yEsZIYtZE3vJNJwHSJhyQhCRlk4U7p9hGbGaKD586NbCbJd6+ieZGXoLn3G5sRFQl+y5NTFOtWXClykBdP2hgGR0P4TlNacXbVVNgv+OJuvZMS/sqe0l/H0aQELb5ThzHt+ABybQsbA4sijOfeixcctZCskQdfqRUqCBtG5fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q/2iEdVJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cjcovi+nGgwY6oDpTEqT9332KBppO2I2Dc3m9ZKeJelnrCB+RzUFgSvoogiHreO73bHx+Jc9VTIa1LqcZn9PLAWsXTs3uF/qz7ZF3RR96d7KKZDlbN6riJTUayIFqJm9Nkz/+2bBDoRhW2cbGa1nIewifSvywUamH/oy94uJC1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFk+t7yE; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/2iEdVJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485E8C4CEC1;
-	Thu, 29 Aug 2024 20:15:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724962533;
-	bh=Ct9CPYDZs1D52/P92RNJ8V1FCpwTi5S3g6iSiVFbCWU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q/2iEdVJEgmRS1BE1cy9xYNLFAHmZBCjY21XDby7JgvIY0OgdMxFtAVxszBJDX3z+
-	 +gHKb34cHcpHyWFT5m/4KWT1cWMMislOdnvIkdcrnK/YodbmBiZiL6KF2mgqaVrRN0
-	 GG+Lmq1NsyqnjDQomP+t78HWgB64jPw18X51nBSQSvU8Rrzqke7xGZ7EjTfLrzDNZC
-	 fwcyVpWC53EzrIQm9XiwkK1kIlO0oBix8u9EBcuhSRWuRJX1+C+Beex4XOI0D3Wx3z
-	 9GiJdXa2C6w4qKEX3PkNoT3CD8fMzfefSaEdorZyrCvwzAvtNsK2ia9tj1DZPedzdO
-	 wC9/5kTlardNA==
-Date: Thu, 29 Aug 2024 15:15:31 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFk+t7yE"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2d3c5f769d6so745762a91.3;
+        Thu, 29 Aug 2024 14:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724965436; x=1725570236; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u+eq633davczny4idsI+dtvpXGHNdvyYd6tkYsOl3+o=;
+        b=TFk+t7yECr2CCK9l7Dzy+rJUhRPWW2tAUHwxaZSM2sYSRhbCLZ5JEQaj/hFK5F1ioP
+         +4LWzc55bBo6Z+NeAoQTyjTMIhcSPHtiTzZJqZdZ3aReEos0tfx5mHgGJuwVSF9bb0im
+         rTkEyeSS82jZ+2SxkpgsanrLbzhkpNRDwnppmRjnyX8IO9VA+rziNAN4G6MZTract9Jq
+         B8uf+qwvtjL4XhRfd0XVTrJX6Ga1e92F2I9JPCnKDM03wNNROtFLspl5RJXGVQa6shUT
+         Xq0mx+scqj4tkG6wpU4VVrdxxGUfiAFV8FzVuimW7WCPL3tEvNKHmy2qEhzzDcqnH9V3
+         dt+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724965436; x=1725570236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u+eq633davczny4idsI+dtvpXGHNdvyYd6tkYsOl3+o=;
+        b=U9bDOST5SKhRFsiKH/ywMpvtFJ5qq8BQUehLe47+1qBzCqWH2xA99+lPW4DGp33u7v
+         M967jED8en7gO9+jtrgheZ1XriCKxMyt7OCvysM7dVhXVSPLNAICYAu5dPZrhIOjWwBk
+         tHX8TZ3Flpk9blYq1RAgAPTleDcrdVLFoY8MhLZtoXPatVJsgyf/JNJvkDwRikihJKde
+         FTvBvII9pCrraESlF8a1aQ5ZVFrd8RC8dY/H6F+5Xyhmb/fFBhKSk4PPPc4q6l0MukdF
+         pcXgIyiONU6SyU++spFUPeeLw10Mwq21ybLDEdZ5neu2B5wp2wGuTQYRaLcKW4n71sev
+         NTSg==
+X-Forwarded-Encrypted: i=1; AJvYcCU6jLg2j4LlAWHX9ty9XGExlpvhan97Bn26Iwbq/3nEBgTKyF8PJTV6u5Xia6RewD9mSbqFTOePae3a8v1x@vger.kernel.org, AJvYcCUmIlVXzkpqJm52XG/lRqvhYGZm8pzrbVV2t/uCReVoZ7fG/Fl72031gwCBhHAPMU+MQquU2lsYE9hj@vger.kernel.org, AJvYcCWvClSNXdFKbQEXIo6u8aqORzpJE0W/vpmD3l2xqKsFhFzAEhTt1GN198D+25/EAi6gAzudleDX8yYjSSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOG6hioWx3CPyyeN3z1bSMVEBz+0wsbYlgpauFJsJSoJjqRSHk
+	Y/CO6cUjkub+/OvhNqmZWjDGN5tdsfwN36op0bKQjoXF5nLbNaV454K4fA==
+X-Google-Smtp-Source: AGHT+IHtH7SEWGs7imBa/ucRnk9MchQGT6ba/XQus7juUQ0mHiwRjP4hPIgaHURQQuI3486uKczqPA==
+X-Received: by 2002:a17:90a:ec06:b0:2d3:c675:41e7 with SMTP id 98e67ed59e1d1-2d85618a52emr4335212a91.7.1724965436485;
+        Thu, 29 Aug 2024 14:03:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d85b119b9csm2203357a91.15.2024.08.29.14.03.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 14:03:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 29 Aug 2024 14:03:54 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Frank Li <Frank.Li@nxp.com>
-Cc: imx@lists.linux.dev, jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	lgirdwood@gmail.com, linux@roeck-us.net, broonie@kernel.org,
-	devicetree@vger.kernel.org, conor+dt@kernel.org,
-	linux-hwmon@vger.kernel.org, Frank.li@nxp.com, krzk+dt@kernel.org
+Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, jdelvare@suse.com, krzk+dt@kernel.org,
+	lgirdwood@gmail.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh@kernel.org
 Subject: Re: [PATCH v5 1/1] dt-bindings: hwmon: Convert ltc2978.txt to yaml
-Message-ID: <172496253089.1134105.2312367634217065989.robh@kernel.org>
+Message-ID: <1bde904b-7b17-4406-84aa-97742c8a02a3@roeck-us.net>
 References: <20240829150641.1307906-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -46,8 +73,7 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240829150641.1307906-1-Frank.Li@nxp.com>
 
-
-On Thu, 29 Aug 2024 11:06:41 -0400, Frank Li wrote:
+On Thu, Aug 29, 2024 at 11:06:41AM -0400, Frank Li wrote:
 > Convert binding doc ltc2978.txt to yaml format.
 > Additional change:
 > - add i2c node.
@@ -58,24 +84,9 @@ On Thu, 29 Aug 2024 11:06:41 -0400, Frank Li wrote:
 > 	failed to match any schema with compatible: ['lltc,ltc3882']
 > 
 > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> Change from v4 to v5
-> - rename to lltc,ltc2978.yaml
-> Change from v3 to v4
-> - keep under hwmon directory.
-> Change from v2 to v3
-> - put my name into maintainers.
-> change from v1 to v2
-> - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
-> - update title to (from ltc2978 data sheet).
-> octal, digital power-supply monitor, supervisor, sequencer, and margin controller.
-> ---
->  .../bindings/hwmon/lltc,ltc2978.yaml          | 94 +++++++++++++++++++
->  .../devicetree/bindings/hwmon/ltc2978.txt     | 62 ------------
->  2 files changed, 94 insertions(+), 62 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> 
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Applied, after dropping "move it under regulator".
 
+Thanks,
+Guenter
