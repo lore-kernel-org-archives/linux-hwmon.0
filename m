@@ -1,344 +1,403 @@
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2066.outbound.protection.outlook.com [40.107.247.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3411946A1;
-	Thu, 29 Aug 2024 15:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724944023; cv=fail; b=OpcNWCAnD/E1PmPGMMLb76iaIGpPYAaILwjzkTnzF9KxVZjOArmyBeUpXyunXwW0/5DWPVDCz3lyo4M4KNcv5G3J2ZrDwbl8KYPEkjeqpROiGxis3JH3bT276nCA9W88/1WNzVSUS5/gkNukueFJTJjZ8vPs3lcIa7MZrcxUIHY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724944023; c=relaxed/simple;
-	bh=+2fgA9TC+dwBHPxhLaXz9ckHiGb2+kaiUE1u+W4r4hQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=L1JDJCicJAgzVPChQ41UFMTArthDXLCxlN3kAyX2liYmXz1hWiJRBpAhaZ5f5WrROSBrXkpmZxwJ7XTwjcd1PCU4z2c7gW45wAhlRDr/zlCg8JfMoV2dWIjj6NldaaYff36nsGkLMZ7utcQPNdp1DDYGzQjbiMcrpEXJ0J8nOoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=RkAJv2XF; arc=fail smtp.client-ip=40.107.247.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4366A1B3B32;
+	Thu, 29 Aug 2024 16:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724948832; cv=none; b=X1AOIxd4SUUepJCXXC21gvRCtitEJ3s94xWP96Yt9OGbXvraZ7gCoZLoco2Pi8NL6uL+HdWXebYQCpuW3RE67LVMRt1s6dD/YpxIXY2g0Z9lX+b8CHpjmgbx2jI/FPf1vrLranvDFyrxX2cZi4XXlMcYH3F0F6tEcMRhQa/d2U8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724948832; c=relaxed/simple;
+	bh=rUK7cYrfp3ANOIDU3rLaYOEYkyvnUKtRN7aNsL8GQDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ys7E0kmPQI/y7CRyNF4qNS7bJx0s2bYP0acBo513NG57ata5eTT3I7eT/vpji96EtT+c7ZBCSoW0k4Zli2ukjc8uWO2+L5s2WmBha4NjbRAGdD84W4yYD1Lje3m/CTV0+nD7Uy3FrdUHBf5Aoun378uEq27/spZu7KnCIzzi95o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3aSAJAm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="RkAJv2XF"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PJ+EDVcaXr0L34nhj7o36Ucj55T+GhHtZjyMz1l1cIgpufD97fGeDKraDNug+4feN7f4+nrm+YodnkfP+8bLTMmAGOelwR4Xk5xD6C1FSl0UE0brkP821gu6laZWQY+BFqyG62CkYwO0XNmA0kxCqI+NYpL/4SpdGqM92FjkpxL/XtC7tANIw/vukPXcrgb/gAkdeEXW3nsqyj4pkzTWfoIXC6lRJcRsNnmaag1WHkYPafJH9MexyvlDtanur9xPQsfgsGcUQi2GzV6PXW+4KwKzcqfLARYOX7u362qQOpljF+/n/9BAVI2PVO+b4Xlo/mCaq9QNzOK+AvwKu4U5wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Llouk6SmK1N/zD9TTqyLaymBZafmnJCw2vSUCq2JL7M=;
- b=pDdFae86qUcfvFBez2SlycHc5ieijWJh0CLyarNdXN1vpHSTZlFcKhez5Z4HrwE7Y83Ly6lh6B8zpn3SDdeWW21t0jdZV2zttm9mIgayl4UBOL1arKbjyqU2p0q3OrLIfquC2Y5GxwXXjmRiFwER1LmiIQv5BlqnmtQvk4QLnUmwqYjXWZ4VYjwmv1+JCuZSCVvkrIlSm3QUkp2DJIGxHQm62opEeMwA5cHGpf4KZSrDJoeRxbIN1s7kIwAe9MJrHMyhbZV8x2/rCnZJly2FM7dvXjJ0VGaolcTVM5buR8eW14Pn7zpuzsU3XdobgXVPLvrWw/+SWzHA6iuAGBVFaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Llouk6SmK1N/zD9TTqyLaymBZafmnJCw2vSUCq2JL7M=;
- b=RkAJv2XF3Yd3f2gwR41aQgn7Ek6JnNzCYo+BolLtCJ5ttGEFyzpM1S+NGTYtFRsdi0/6RXM9XpFyYAWxEicSCCFle/PhG15VsoZD5UfDvORR96EU+o6wNbkNvtoA5wgp6pkIImQnwj5ME4fQ4/WMzzkn8gSM1vUOpt6ZzwNf8LYU6n84HANbyxcHXQ9In+KUzjkn29y3qlU5T3a5oL9ilMu2kcnrCbJFbFIApFnJWxHOdxEVicQzAAo0qswABLFqToPLKjaHzMs04qN59OWqz3HL4qOGXXPChX41KhDGutw1mfToKYY4rWC+UHuETsemqHvyFir44BYdBnnyQZu5qw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by AS8PR04MB7878.eurprd04.prod.outlook.com (2603:10a6:20b:2af::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Thu, 29 Aug
- 2024 15:06:57 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7897.027; Thu, 29 Aug 2024
- 15:06:57 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: linux@roeck-us.net
-Cc: Frank.li@nxp.com,
-	broonie@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	jdelvare@suse.com,
-	krzk+dt@kernel.org,
-	lgirdwood@gmail.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	robh@kernel.org
-Subject: [PATCH v5 1/1] dt-bindings: hwmon: Convert ltc2978.txt to yaml
-Date: Thu, 29 Aug 2024 11:06:41 -0400
-Message-Id: <20240829150641.1307906-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0097.namprd03.prod.outlook.com
- (2603:10b6:a03:333::12) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3aSAJAm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8BFC4CEC2;
+	Thu, 29 Aug 2024 16:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724948832;
+	bh=rUK7cYrfp3ANOIDU3rLaYOEYkyvnUKtRN7aNsL8GQDU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J3aSAJAmkUXpSwt1M+icllnaM5UhiPpzeCpja5FEKOILNoHE1faNT1islB9c6BLzx
+	 Zr7sVdo+BZ4PvsEmCsflfnl/qt3C5gEGlRvHzB7aZnS43ZI7rtlS009Xm50T1zpjS7
+	 MsYc70pcCEDEQCWonNnsm73gyxnunmxfdf4vsX7Pf8t2XT5S/mYPo3/g9S/qBPhODn
+	 GTFv2MbII2PA9H8Gk3xTFxcEzSf+1rE3nhDSUhQEvpON0zhy0S85i1P4OjXiNKaw0m
+	 6tB2Psy+e0FKIiWS5xvXYoKDy478U2Ao5kbQ82ypDGhDa6jj5mflzN35tq91Lsx2jO
+	 L2iAgG//6rHqw==
+Date: Thu, 29 Aug 2024 17:27:05 +0100
+From: Lee Jones <lee@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jdelvare@suse.com, linux@roeck-us.net, dmitry.torokhov@gmail.com,
+	pavel@ucw.cz, ukleinek@debian.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] leds: add driver for LEDs from qnap-mcu devices
+Message-ID: <20240829162705.GR6858@google.com>
+References: <20240825203235.1122198-1-heiko@sntech.de>
+ <20240825203235.1122198-4-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AS8PR04MB7878:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e5a1cd7-192e-4dd8-e6f6-08dcc83c39b6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|7416014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/dcNV19SoeS+yYuSwZTdxplCu6rpekc9iRVG1F6mL75Z5A3SgFSPwYFpHAO5?=
- =?us-ascii?Q?03bQUPhhi3v2auFjA/xCcs5U6YWYaWKk5B8ES/eBxkqzCWMnDxrpUnVoOx0Y?=
- =?us-ascii?Q?x+FuElelp2ls6yub/v6GFgtyc+iYLWVEOtV/wJmhO+h2aTmkPBanDNm3T2KR?=
- =?us-ascii?Q?N/gAu1B/5UBMuMKeT937XOAatw3ktDGCUVwRUzmYgQ1hmO6EONaHoTWCjqvi?=
- =?us-ascii?Q?ARFgea3oXsWuNMV8JjfjdewRWra+CPAoJDXqcvYFk6WM2q00Pkiv1vGEhAUu?=
- =?us-ascii?Q?wRL/SbBTa9BeX4n/tuxH5O3Yf861gLsV7MojxlVtiZWFFw4OgVNdZ6HFl2e+?=
- =?us-ascii?Q?NM4kdYxZRYb68bQc3oWaMy1aG24l8VYujxlrxle+rpd96eUwgXeAHxtA27jF?=
- =?us-ascii?Q?ZfiHGKfadetE84kMshEa3sPhbREogp0ia1rlWOn1jiFRkG36xIKbLhtKj60S?=
- =?us-ascii?Q?twdRfo8860BghDxtSFVOyzJeuvNRMdHHysdUxOkXNrFqbgyae2uPnE/RPgPR?=
- =?us-ascii?Q?SxDojWN8VGQTMTVMsBvXu15EXTqIztnRDd8x/lASoRSQtmUExedxdLgqfhC4?=
- =?us-ascii?Q?va9k3HkIY1Z762CEg1D744P6wga/lGEMJgnhLp1NJUWLmFYMdJ/Z0dAbcMCN?=
- =?us-ascii?Q?Ma9GaYtDJOiZB9mMhs9Qe89idica4efH6tvtm/Xkq+TATVDzqgQvkNouHaaN?=
- =?us-ascii?Q?Ae+C9DZ4gku1VPVUYxMVV+Jell8ejo90Ft9U0Yl0syddfdk7UvGpzUUCgBvt?=
- =?us-ascii?Q?aP9YQ6gXDj66hqv1fEm09RLKpUg8EpWAQHak7fEpo2HjrDqpPGhCFvb4H5/f?=
- =?us-ascii?Q?9RcTu6btKfqh+MxwkZ8LDYQdwSqAdMFPqCgT5Zq8hxUPDL2CtgFW6aB1zFff?=
- =?us-ascii?Q?FsIniazYKDjrwfigmV66v+geQPX2p42jE2DFcAhan+GsPmrj6k2UIH7vjwNu?=
- =?us-ascii?Q?LE1kWt1SxQTV3ZCLqWlyJXeBliqBGuujefnMXyRho/ZkVP97GnYX2sbviWW9?=
- =?us-ascii?Q?IqQxo/7aRgmaZITH12cBwZRmEkr7d2Azs6OHyqHKN1MmLWpb7ZNQiV1hIBLl?=
- =?us-ascii?Q?KKrqqT6Mt0sxmjm7vyAdSUDmijMJhl8aryoKqsSy5D7GCBYF4JlIGpxDBV7A?=
- =?us-ascii?Q?CklKIAzGybM5Dvp6XXJzxvpHv5+GYYouO/EW7+v8N75+PBHYGQ92WaOKsnm0?=
- =?us-ascii?Q?oGCL51IUra3oGVYTDWcirBQ7nQbuxnYm1Tnoei7gMc0FEmS8l8ATl4pQPblG?=
- =?us-ascii?Q?ecjIOXZTOl2Ydm9b+ODc0Unms7RI8rhru3VqnuHBwqORmXkOiKMXQD5BWG6H?=
- =?us-ascii?Q?C6I8SvhvlevvqlkHfcxu06YAcaN1mb0c64rlz/Im1qbl2UAH8cJ8+1a6GSwz?=
- =?us-ascii?Q?voGANSo=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9mZntt8We4DTmxDTDmOMS/nIAj9uyVcGO3ZAdeydWmbgeidkDiu0MaqAtiOo?=
- =?us-ascii?Q?V8fvIyhWY8qQmgQKrXqDPg2hKLiWoGYEfqizAytqQcAERI+USpeC9Rqx8lbR?=
- =?us-ascii?Q?5Sn9rBqVu35jJUuJ8Ve5OqB8e61V8z/eq6QxCzjCa5GoOUEO2zZPpgAC5qQ4?=
- =?us-ascii?Q?7+wj9pgLBkOF9BW4BfuPjOym5+PMMw1qqYfS0bUvXETePTtjeWnF24QGODkQ?=
- =?us-ascii?Q?LNw2iW61FpziPGsHH3P5u1YE3AOkMSlXJ8Yyw3DxKIML7HObmo2m5TJYkLM6?=
- =?us-ascii?Q?wevXffKO643TAT37GXbjJqUZs96INnYc4hcH7TRawjY0uOxk0vF8Gj9qdv5Y?=
- =?us-ascii?Q?DBzoD+MinvKQgmLFTqwwamNWsFzdLWiKMQRzAqwBQAIiDr61DDX1AO+gKfce?=
- =?us-ascii?Q?1sA8WfWnMs4BcvMCOasdnQvU+x0KJqwOwO5TmNItDvkHJUTDNgYDDCePXcTI?=
- =?us-ascii?Q?7fmrxZGnADQovhdXiVSsD0WasbxNiMFaX9o94YHmiH2jNvuPokn469xgnfvu?=
- =?us-ascii?Q?//cUVFSBYw3VqsxmKaCVQ2BwIf3jPPMdTnN62C/7yYySEWQgp0kELtzNxq9H?=
- =?us-ascii?Q?KPr0f3mzXModzjSfO/kZZpSWI1PkYOOGpxmenNTXQ1780P+yIN96DwVUPTsL?=
- =?us-ascii?Q?ZBokgmYzyAQHwTA8muPahkX4WCbcwXrBtPp2sUD7wS6aaQfdYFbJd+vh9Obn?=
- =?us-ascii?Q?zphDNgGBPjpJarGTCa+CLvTeZJiAUdNov7FS4dRhQXVNKDkdweYkJSlhZRpG?=
- =?us-ascii?Q?H4Mk7cSneLCEFXR/6fM2d4Ja95/mWWoVjB9/IJBGLIydiH916O824HWP8a9u?=
- =?us-ascii?Q?Gf47kBChCJCelzRfffaEy5gxvfN6Y+JvwvKZrccN4EqK/jdjzPby4H6dSn54?=
- =?us-ascii?Q?XzSp/NO6RQY26c2NyUPiwZ3XLjzm9QIlX166kWHp6AnSS7UugpzPjWY5X2zv?=
- =?us-ascii?Q?nwU3BEYkJx9XKmG45SZQQD7/t6vigsMAs8dERbFniKE8o7MD5ATnjXrbDqEr?=
- =?us-ascii?Q?vQvBTovtXtvegRMaMT1dQt0Q3JDmZF+wKjnRBoH2/Beg8pmr4HANzG6U/dMa?=
- =?us-ascii?Q?ojEzVue+MMyj4OnmVt7hut1lhwuqtdhGidEaCHphIqSCy16kqIeJ2t5BR+9L?=
- =?us-ascii?Q?HjMttoUAYg34uM3VjaD0bXiPgd2RnVG4GmM1Vpgj7aVIA4yvnOuXP81NfeCL?=
- =?us-ascii?Q?Q1NDAsl9eokINGOpbwmLkpFAfPlrezMRTa3Da51TYBAWa5KgKl8ryqWpDlb1?=
- =?us-ascii?Q?81sMm+zzgn+WbHmkiXUrrqpX9mBPyoqO3A0Ce+EHSPpu7R+c2mL/ZF7vJWue?=
- =?us-ascii?Q?B7HbZCI08I7ed5BHVDpEXyWbgecxwyE4jY8YInHI/ihwf2/TK06DMNdBTPWt?=
- =?us-ascii?Q?lzBTCsfO8aobkN9m6gjajneEcikAdQtgZRNxYMjHhYT/yOTZWt/dN3/279Hj?=
- =?us-ascii?Q?0mFG+ubAZIOTiyv3Md+Aey0XvANB4AVUGYBOtOyzy9uEvPyTwX08hYcGKBJa?=
- =?us-ascii?Q?igPSykkOkTPo476vmDyQwQVO+DqMT23q8kXV9L11GLso3EOKt9aQ10ZVapOe?=
- =?us-ascii?Q?bgmx2FqstpctmeL1zkA=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e5a1cd7-192e-4dd8-e6f6-08dcc83c39b6
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 15:06:57.4826
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dh1oLyVWBUY2V4Oyv2us58C5zbifIBqLRciACv8Di5xZbcvKR4XNOrDHzXfjDKtbAfeRLvNCzzkg+abUJZquVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7878
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240825203235.1122198-4-heiko@sntech.de>
 
-Convert binding doc ltc2978.txt to yaml format.
-Additional change:
-- add i2c node.
-- basic it is regulator according to example, move it under regulator.
+On Sun, 25 Aug 2024, Heiko Stuebner wrote:
 
-Fix below warning:
-arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb: /soc/i2c@2000000/i2c-mux@77/i2c@2/regulator@5c:
-	failed to match any schema with compatible: ['lltc,ltc3882']
+> This adds a driver that connects to the qnap-mcu mfd driver and provides
+> access to the LEDs on it.
+> 
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  MAINTAINERS                  |   1 +
+>  drivers/leds/Kconfig         |  11 ++
+>  drivers/leds/Makefile        |   1 +
+>  drivers/leds/leds-qnap-mcu.c | 226 +++++++++++++++++++++++++++++++++++
+>  4 files changed, 239 insertions(+)
+>  create mode 100644 drivers/leds/leds-qnap-mcu.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0fbd2d953da4..4dff0e237f22 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18657,6 +18657,7 @@ F:	drivers/media/tuners/qm1d1c0042*
+>  QNAP MCU DRIVER
+>  M:	Heiko Stuebner <heiko@sntech.de>
+>  S:	Maintained
+> +F:	drivers/leds/leds-qnap-mcu.c
+>  F:	drivers/mfd/qnap-mcu.c
+>  F:	include/linux/qnap-mcu.h
+>  
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 8d9d8da376e4..9a337478dd80 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -580,6 +580,17 @@ config LEDS_PCA995X
+>  	  LED driver chips accessed via the I2C bus. Supported
+>  	  devices include PCA9955BTW, PCA9952TW and PCA9955TW.
+>  
+> +config LEDS_QNAP_MCU
+> +	tristate "LED Support for QNAP MCU controllers"
+> +	depends on LEDS_CLASS
+> +	depends on MFD_QNAP_MCU
+> +	help
+> +	  This option enables support for LEDs available on embedded
+> +	  controllers used in QNAP NAS devices.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called qnap-mcu-leds.
+> +
+>  config LEDS_WM831X_STATUS
+>  	tristate "LED support for status LEDs on WM831x PMICs"
+>  	depends on LEDS_CLASS
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index 18afbb5a23ee..c6f74865d729 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -79,6 +79,7 @@ obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
+>  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
+>  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+>  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+> +obj-$(CONFIG_LEDS_QNAP_MCU)		+= leds-qnap-mcu.o
+>  obj-$(CONFIG_LEDS_REGULATOR)		+= leds-regulator.o
+>  obj-$(CONFIG_LEDS_SC27XX_BLTC)		+= leds-sc27xx-bltc.o
+>  obj-$(CONFIG_LEDS_SUN50I_A100)		+= leds-sun50i-a100.o
+> diff --git a/drivers/leds/leds-qnap-mcu.c b/drivers/leds/leds-qnap-mcu.c
+> new file mode 100644
+> index 000000000000..0723ec52e4c5
+> --- /dev/null
+> +++ b/drivers/leds/leds-qnap-mcu.c
+> @@ -0,0 +1,226 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-Change from v4 to v5
-- rename to lltc,ltc2978.yaml
-Change from v3 to v4
-- keep under hwmon directory.
-Change from v2 to v3
-- put my name into maintainers.
-change from v1 to v2
-- maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
-- update title to (from ltc2978 data sheet).
-octal, digital power-supply monitor, supervisor, sequencer, and margin controller.
----
- .../bindings/hwmon/lltc,ltc2978.yaml          | 94 +++++++++++++++++++
- .../devicetree/bindings/hwmon/ltc2978.txt     | 62 ------------
- 2 files changed, 94 insertions(+), 62 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml
- delete mode 100644 Documentation/devicetree/bindings/hwmon/ltc2978.txt
+Superfluous line.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml b/Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml
-new file mode 100644
-index 0000000000000..1f98da32f3feb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/lltc,ltc2978.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Octal Digital Power-supply monitor/supervisor/sequencer/margin controller.
-+
-+maintainers:
-+  - Frank Li <Frank.Li@nxp.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lltc,ltc2972
-+      - lltc,ltc2974
-+      - lltc,ltc2975
-+      - lltc,ltc2977
-+      - lltc,ltc2978
-+      - lltc,ltc2979
-+      - lltc,ltc2980
-+      - lltc,ltc3880
-+      - lltc,ltc3882
-+      - lltc,ltc3883
-+      - lltc,ltc3884
-+      - lltc,ltc3886
-+      - lltc,ltc3887
-+      - lltc,ltc3889
-+      - lltc,ltc7880
-+      - lltc,ltm2987
-+      - lltc,ltm4664
-+      - lltc,ltm4675
-+      - lltc,ltm4676
-+      - lltc,ltm4677
-+      - lltc,ltm4678
-+      - lltc,ltm4680
-+      - lltc,ltm4686
-+      - lltc,ltm4700
-+
-+  reg:
-+    maxItems: 1
-+
-+  regulators:
-+    type: object
-+    description: |
-+      list of regulators provided by this controller.
-+      Valid names of regulators depend on number of supplies supported per device:
-+      * ltc2972 vout0 - vout1
-+      * ltc2974, ltc2975 : vout0 - vout3
-+      * ltc2977, ltc2979, ltc2980, ltm2987 : vout0 - vout7
-+      * ltc2978 : vout0 - vout7
-+      * ltc3880, ltc3882, ltc3884, ltc3886, ltc3887, ltc3889 : vout0 - vout1
-+      * ltc7880 : vout0 - vout1
-+      * ltc3883 : vout0
-+      * ltm4664 : vout0 - vout1
-+      * ltm4675, ltm4676, ltm4677, ltm4678 : vout0 - vout1
-+      * ltm4680, ltm4686 : vout0 - vout1
-+      * ltm4700 : vout0 - vout1
-+
-+    patternProperties:
-+      "^vout[0-7]$":
-+        $ref: /schemas/regulator/regulator.yaml#
-+        type: object
-+        unevaluatedProperties: false
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        regulator@5e {
-+            compatible = "lltc,ltc2978";
-+            reg = <0x5e>;
-+
-+            regulators {
-+                vout0 {
-+                     regulator-name = "FPGA-2.5V";
-+                };
-+                vout2 {
-+                     regulator-name = "FPGA-1.5V";
-+                };
-+            };
-+        };
-+    };
-+
-diff --git a/Documentation/devicetree/bindings/hwmon/ltc2978.txt b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-deleted file mode 100644
-index 4e7f6215a4533..0000000000000
---- a/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-+++ /dev/null
-@@ -1,62 +0,0 @@
--ltc2978
--
--Required properties:
--- compatible: should contain one of:
--  * "lltc,ltc2972"
--  * "lltc,ltc2974"
--  * "lltc,ltc2975"
--  * "lltc,ltc2977"
--  * "lltc,ltc2978"
--  * "lltc,ltc2979"
--  * "lltc,ltc2980"
--  * "lltc,ltc3880"
--  * "lltc,ltc3882"
--  * "lltc,ltc3883"
--  * "lltc,ltc3884"
--  * "lltc,ltc3886"
--  * "lltc,ltc3887"
--  * "lltc,ltc3889"
--  * "lltc,ltc7880"
--  * "lltc,ltm2987"
--  * "lltc,ltm4664"
--  * "lltc,ltm4675"
--  * "lltc,ltm4676"
--  * "lltc,ltm4677"
--  * "lltc,ltm4678"
--  * "lltc,ltm4680"
--  * "lltc,ltm4686"
--  * "lltc,ltm4700"
--- reg: I2C slave address
--
--Optional properties:
--- regulators: A node that houses a sub-node for each regulator controlled by
--  the device. Each sub-node is identified using the node's name, with valid
--  values listed below. The content of each sub-node is defined by the
--  standard binding for regulators; see regulator.txt.
--
--Valid names of regulators depend on number of supplies supported per device:
--  * ltc2972 vout0 - vout1
--  * ltc2974, ltc2975 : vout0 - vout3
--  * ltc2977, ltc2979, ltc2980, ltm2987 : vout0 - vout7
--  * ltc2978 : vout0 - vout7
--  * ltc3880, ltc3882, ltc3884, ltc3886, ltc3887, ltc3889 : vout0 - vout1
--  * ltc7880 : vout0 - vout1
--  * ltc3883 : vout0
--  * ltm4664 : vout0 - vout1
--  * ltm4675, ltm4676, ltm4677, ltm4678 : vout0 - vout1
--  * ltm4680, ltm4686 : vout0 - vout1
--  * ltm4700 : vout0 - vout1
--
--Example:
--ltc2978@5e {
--	compatible = "lltc,ltc2978";
--	reg = <0x5e>;
--	regulators {
--		vout0 {
--			regulator-name = "FPGA-2.5V";
--		};
--		vout2 {
--			regulator-name = "FPGA-1.5V";
--		};
--	};
--};
+> +/*
+> + * Driver for LEDs found on QNAP MCU devices
+> + *
+> + * Copyright (C) 2024 Heiko Stuebner <heiko@sntech.de>
+> + */
+> +
+> +#include <linux/leds.h>
+> +#include <linux/mfd/qnap-mcu.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <uapi/linux/uleds.h>
+> +
+> +enum qnap_mcu_err_led_mode {
+> +	QNAP_MCU_ERR_LED_ON = 0,
+> +	QNAP_MCU_ERR_LED_OFF = 1,
+> +	QNAP_MCU_ERR_LED_BLINK_FAST = 2,
+> +	QNAP_MCU_ERR_LED_BLINK_SLOW = 3,
+> +};
+> +
+> +struct qnap_mcu_err_led {
+> +	struct qnap_mcu *mcu;
+> +	struct led_classdev cdev;
+> +	char name[LED_MAX_NAME_SIZE];
+> +	u8 num;
+> +	u8 mode;
+> +};
+> +
+> +static inline struct qnap_mcu_err_led *
+> +		cdev_to_qnap_mcu_err_led(struct led_classdev *led_cdev)
+> +{
+> +	return container_of(led_cdev, struct qnap_mcu_err_led, cdev);
+> +}
+> +
+> +static int qnap_mcu_err_led_set(struct led_classdev *led_cdev,
+> +				enum led_brightness value)
+
+'value' is a terrible variable name.
+
+Please describe the data.  'brightness' seems appropriate.
+
+> +{
+> +	struct qnap_mcu_err_led *err_led = cdev_to_qnap_mcu_err_led(led_cdev);
+> +	u8 cmd[] = { 0x40, 0x52, 0x30 + err_led->num, 0x30 };
+
+Really not fan of these magic values being used raw like this.
+
+> +	/* Don't disturb a possible set blink-mode if LED is already on */
+
+Why not save cycles and return if blink mode is already enabled?
+
+> +	if (value == 0)
+> +		err_led->mode = QNAP_MCU_ERR_LED_OFF;
+> +	else if (err_led->mode == QNAP_MCU_ERR_LED_OFF)
+> +		err_led->mode = QNAP_MCU_ERR_LED_ON;
+
+Then you can do:
+
+	err_led->mode = value ? QNAP_MCU_ERR_LED_ON : QNAP_MCU_ERR_LED_OFF;
+
+> +	cmd[3] = 0x30 + err_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(err_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_err_led_blink_set(struct led_classdev *led_cdev,
+> +				      unsigned long *delay_on,
+> +				      unsigned long *delay_off)
+> +{
+> +	struct qnap_mcu_err_led *err_led = cdev_to_qnap_mcu_err_led(led_cdev);
+> +	u8 cmd[] = { 0x40, 0x52, 0x30 + err_led->num, 0x30 };
+> +
+> +	/* LED is off, nothing to do */
+> +	if (err_led->mode == QNAP_MCU_ERR_LED_OFF)
+> +		return 0;
+> +
+> +	if (*delay_on < 500) {
+
+Setting delay_on based on the current value of delay_on sounds sketchy.
+
+> +		*delay_on = 100;
+> +		*delay_off = 100;
+> +		err_led->mode = QNAP_MCU_ERR_LED_BLINK_FAST;
+> +	} else {
+> +		*delay_on = 500;
+> +		*delay_off = 500;
+> +		err_led->mode = QNAP_MCU_ERR_LED_BLINK_SLOW;
+> +	}
+
+How do you change from a fast to a slow blinking LED and back again?
+
+> +	cmd[3] = 0x30 + err_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(err_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_register_err_led(struct device *dev, struct qnap_mcu *mcu, int num)
+
+What's num?  I should be able to answer that by the nomenclature.
+
+> +{
+> +	struct qnap_mcu_err_led *err_led;
+> +	int ret;
+> +
+> +	err_led = devm_kzalloc(dev, sizeof(*err_led), GFP_KERNEL);
+> +	if (!err_led)
+> +		return -ENOMEM;
+> +
+> +	err_led->mcu = mcu;
+> +	err_led->num = num;
+> +	err_led->mode = QNAP_MCU_ERR_LED_OFF;
+> +
+> +	snprintf(err_led->name, LED_MAX_NAME_SIZE, "hdd%d:red:status", num + 1);
+
+scnprintf()?
+
+> +	err_led->cdev.name = err_led->name;
+> +
+> +	err_led->cdev.brightness_set_blocking = qnap_mcu_err_led_set;
+> +	err_led->cdev.blink_set = qnap_mcu_err_led_blink_set;
+> +	err_led->cdev.brightness = 0;
+> +	err_led->cdev.max_brightness = 1;
+> +
+> +	ret = devm_led_classdev_register(dev, &err_led->cdev);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to register hdd led %d", num);
+
+"HDD LED"
+
+> +	return qnap_mcu_err_led_set(&err_led->cdev, 0);
+> +}
+> +
+> +enum qnap_mcu_usb_led_mode {
+> +	QNAP_MCU_USB_LED_ON = 1,
+> +	QNAP_MCU_USB_LED_OFF = 3,
+> +	QNAP_MCU_USB_LED_BLINK = 2,
+> +};
+> +
+> +struct qnap_mcu_usb_led {
+> +	struct qnap_mcu *mcu;
+> +	struct led_classdev cdev;
+> +	u8 mode;
+> +};
+> +
+> +static inline struct qnap_mcu_usb_led *
+> +		cdev_to_qnap_mcu_usb_led(struct led_classdev *led_cdev)
+> +{
+> +	return container_of(led_cdev, struct qnap_mcu_usb_led, cdev);
+> +}
+> +
+> +static int qnap_mcu_usb_led_set(struct led_classdev *led_cdev,
+> +				enum led_brightness value)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led = cdev_to_qnap_mcu_usb_led(led_cdev);
+> +	u8 cmd[] = { 0x40, 0x43, 0 };
+> +
+> +	/*
+> +	 * If the led is off, turn it on. Otherwise don't disturb
+
+"LED"
+
+> +	 * a possible set blink-mode.
+> +	 */
+> +	if (value == 0)
+> +		usb_led->mode = QNAP_MCU_USB_LED_OFF;
+> +	else if (usb_led->mode == QNAP_MCU_USB_LED_OFF)
+> +		usb_led->mode = QNAP_MCU_USB_LED_ON;
+
+Same suggestions as above.
+
+> +	/* byte 3 is shared between the usb led target and setting the mode */
+
+"Byte" for two reasons.  Firstly because it's the correct capitalisation
+of Byte and secondly because it's the start of a sentence.
+
+"USB" and "LED" throughout please.
+
+> +	cmd[2] = 0x44 | usb_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(usb_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_usb_led_blink_set(struct led_classdev *led_cdev,
+> +				      unsigned long *delay_on,
+> +				      unsigned long *delay_off)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led = cdev_to_qnap_mcu_usb_led(led_cdev);
+> +	u8 cmd[] = { 0x40, 0x43, 0 };
+> +
+> +	/* LED is off, nothing to do */
+> +	if (usb_led->mode == QNAP_MCU_USB_LED_OFF)
+> +		return 0;
+> +
+> +	*delay_on = 250;
+> +	*delay_off = 250;
+> +	usb_led->mode = QNAP_MCU_USB_LED_BLINK;
+> +
+> +	/* byte 3 is shared between the usb led target and setting the mode */
+> +	cmd[2] = 0x44 | usb_led->mode;
+> +
+> +	return qnap_mcu_exec_with_ack(usb_led->mcu, cmd, sizeof(cmd));
+> +}
+> +
+> +static int qnap_mcu_register_usb_led(struct device *dev, struct qnap_mcu *mcu)
+> +{
+> +	struct qnap_mcu_usb_led *usb_led;
+> +	int ret;
+> +
+> +	usb_led = devm_kzalloc(dev, sizeof(*usb_led), GFP_KERNEL);
+> +	if (!usb_led)
+> +		return -ENOMEM;
+> +
+> +	usb_led->mcu = mcu;
+> +	usb_led->mode = QNAP_MCU_USB_LED_OFF;
+> +	usb_led->cdev.name = "usb:blue:disk";
+> +	usb_led->cdev.brightness_set_blocking = qnap_mcu_usb_led_set;
+> +	usb_led->cdev.blink_set = qnap_mcu_usb_led_blink_set;
+> +	usb_led->cdev.brightness = 0;
+> +	usb_led->cdev.max_brightness = 1;
+> +
+> +	ret = devm_led_classdev_register(dev, &usb_led->cdev);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to register usb led");
+> +
+> +	return qnap_mcu_usb_led_set(&usb_led->cdev, 0);
+> +}
+> +
+> +static int qnap_mcu_leds_probe(struct platform_device *pdev)
+> +{
+> +	struct qnap_mcu *mcu = dev_get_drvdata(pdev->dev.parent);
+> +	const struct qnap_mcu_variant *variant = qnap_mcu_get_variant_data(mcu);
+
+Grab this from platform_data.
+
+> +	int ret, i;
+> +
+> +	for (i = 0; i < variant->num_drives; i++) {
+
+You can use:
+
+	for (int i = 0; ..
+
+> +		ret = qnap_mcu_register_err_led(&pdev->dev, mcu, i);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					"failed to register error led %d\n", i);
+> +	}
+> +
+> +	if (variant->usb_led) {
+> +		ret = qnap_mcu_register_usb_led(&pdev->dev, mcu);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					"failed to register usb led %d\n", i);
+
+The 'i' here looks like a copy/paste error.
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver qnap_mcu_leds_driver = {
+> +	.probe = qnap_mcu_leds_probe,
+> +	.driver = {
+> +		.name = "qnap-mcu-leds",
+> +	},
+> +};
+> +module_platform_driver(qnap_mcu_leds_driver);
+> +
+> +MODULE_ALIAS("platform:qnap-mcu-leds");
+> +MODULE_AUTHOR("Heiko Stuebner <heiko@sntech.de>");
+> +MODULE_DESCRIPTION("QNAP MCU LEDs driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.43.0
+> 
+
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
