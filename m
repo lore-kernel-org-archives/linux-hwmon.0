@@ -1,40 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941AD1AE05A
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 14:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F059A1A7AE4
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 14:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724943297; cv=none; b=GVJ/SGZmLu5fWfkym1lnZ9+RqtWDg9HslLlmxp9Z76+QZE/47/EBdSvfVNm4k3+bBjKzy/yoGAXpUwk1XJ6TG3OJQWjDhkMWiE7GuEOIf12ENQ7sphbDL2Aq+ISNeVnioSsr1zzrj0C3chexTqPHgRcfPIEHWihVn0xh8AnivRs=
+	t=1724943310; cv=none; b=m6mZ4XNhnZw+DZF44EaW8ocrmw/qaQ1SiTx7mT5zPhCVEqhUkWrUfadS5RN9vanVWmnf/DgT4AbaRTKu/WXz3pMVQd3LuuJB6w/vy//mT+NZsT8irFA5TWwcUJKqy0/3/OHLgYOswoyqd50D93k2TSIw1Wd4bD98tL75m9rM+Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724943297; c=relaxed/simple;
-	bh=lgkKTUCTqsSpQ9G27x3jhEZCo3pbRoKY2DAihE7kjOE=;
+	s=arc-20240116; t=1724943310; c=relaxed/simple;
+	bh=q5q6GT7OaA639cUUUr/NuKmEDK1Zb7pH3bvrOb/sUTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mAZ4gMMPMYbHx1u6hCJ2lk5GYHVnS0WB71iuWAY58IE37dOxn3HVsXSFQysA3ukfaY8l57HGpjzeWfIlc0xoGSs/kaXo8LvU6IrgBJe+vfuevsO9nf9KrOROCkAXPLScWPd9CAKGqmTxtQZrzxsla5rtqWYVn1mLyeOpExM24fk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSE6SiDp; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=BGwsz+bwDAX3e5QG3jXoORSwtgiEaSXnYGEmkHhD2qLhD2in8MI4XUtT+qhNKaNPh2L1jypgruSwryDWy8Yykq2Geih5TUbrLC08l0osRGTclPWaYM/uUmNUMog94fsq3dZGPWgvzU4BSoPtNZFmchAwMWCRQ1MWdS36iZCS+4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+OwInAZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSE6SiDp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805ABC4CEC3;
-	Thu, 29 Aug 2024 14:54:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+OwInAZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3902CC4CEC1;
+	Thu, 29 Aug 2024 14:55:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724943297;
-	bh=lgkKTUCTqsSpQ9G27x3jhEZCo3pbRoKY2DAihE7kjOE=;
+	s=k20201202; t=1724943309;
+	bh=q5q6GT7OaA639cUUUr/NuKmEDK1Zb7pH3bvrOb/sUTM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iSE6SiDpPe07q4zHMwJgC7rZKITJBL/lPEk/ZIo8zPCNIatprc6t9RdJXNtBMW1T8
-	 g7uPFp/dX93i0H458vFNpj2vRIEXZCmXQeBG9Zvhozrdb807WDUMjqKpklCzUn/nMg
-	 7rK1zSBPmEijKALHH9ZF+Cd1oAJ/UeRgtNG8SQWLuuen7L37MM62Ko7Hgbcxzpd/lb
-	 4uNdnIwB0pa2WMcQipbNKBz9jAmmVhXLDBkQhzIlSQmAFqwjJUomYXJ3u8YCMdlWL7
-	 NryzlsmYm41Pbf4f0ac/QrfMZRppHQAS06jDLMh9S2pxiuFgzgWsGOzonL8uNQV+Vg
-	 R2Q1mM/SwRrrw==
-Date: Thu, 29 Aug 2024 22:54:53 +0800
+	b=C+OwInAZEn6jE340R7r3V87BkrlLieZEJihAldcp+otgK7LVaSRDJOcNkGBw8Mjc/
+	 yDOvhdpe5S1WaPfWQYxm5i/EY8sRtJnV/sCXZXnCaHdvPgqL2FfZxJV+iCkvtrZHn+
+	 4hbiwwsaYUq2rcUHD86X2D3qnBvVFLTASc9BcsL7sTvCifg20kNQej6MZuwk55XLwt
+	 I1Rm1fOCduBtXF/qUoZWgqmK8Xmy/t33ZyAtOC2nJsQSDAagIQXe2dyI7RB9Ywb6B4
+	 5XxmGwW1LiYc6S2gyr/A/7o0+QPFxwB2POoqE4cEbbKlyCYUiHA5s+Y9UwFoxOCYYy
+	 qufGekeHjE8Vg==
+Date: Thu, 29 Aug 2024 22:55:07 +0800
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 07/11] hwmon: (ina2xx) Set alert latch when enabling
- alerts
-Message-ID: <ZtCLvaC0Ls5zEovD@tzungbi-laptop>
+Subject: Re: [PATCH 08/11] hwmon: (ina2xx) Fix various overflow issues
+Message-ID: <ZtCLy9Y20v2lxwqw@tzungbi-laptop>
 References: <20240827153455.1344529-1-linux@roeck-us.net>
- <20240827153455.1344529-8-linux@roeck-us.net>
+ <20240827153455.1344529-9-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,26 +42,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240827153455.1344529-8-linux@roeck-us.net>
+In-Reply-To: <20240827153455.1344529-9-linux@roeck-us.net>
 
-On Tue, Aug 27, 2024 at 08:34:51AM -0700, Guenter Roeck wrote:
-> @@ -440,7 +441,7 @@ static ssize_t ina226_alert_store(struct device *dev,
->  	 */
->  	mutex_lock(&data->config_lock);
->  	ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
-> -				 INA226_ALERT_CONFIG_MASK, 0);
-> +				 INA226_ALERT_CONFIG_MASK | INA226_ALERT_LATCH_ENABLE, 0);
->  	if (ret < 0)
->  		goto abort;
->  
-> @@ -451,8 +452,8 @@ static ssize_t ina226_alert_store(struct device *dev,
->  
->  	if (val != 0) {
->  		ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
-> -					 INA226_ALERT_CONFIG_MASK,
-> -					 attr->index);
-> +					 INA226_ALERT_CONFIG_MASK | INA226_ALERT_LATCH_ENABLE,
-> +					 attr->index | INA226_ALERT_LATCH_ENABLE);
+On Tue, Aug 27, 2024 at 08:34:52AM -0700, Guenter Roeck wrote:
+> @@ -301,8 +307,8 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+>  		val = DIV_ROUND_CLOSEST((s16)regval, data->config->shunt_div);
+>  		break;
+>  	case INA2XX_BUS_VOLTAGE:
+> -		val = (regval >> data->config->bus_voltage_shift)
+> -		  * data->config->bus_voltage_lsb;
+> +		val = (regval >> data->config->bus_voltage_shift) *
+> +		  data->config->bus_voltage_lsb;
 
-Does it really need to clear and set every time?  Could it set only once in
-ina2xx_probe() just like ina2xx_set_alert_polarity()?
+The change looks irrelevant to the patch.
+
+Either with removing the change or not,
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
