@@ -1,63 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE4E14A09E;
-	Thu, 29 Aug 2024 18:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F501B653D;
+	Thu, 29 Aug 2024 20:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724956425; cv=none; b=DGtlpI5BTRX8qLE9nU5UhwTyngIF23XhAk6B7kPKEmzcrfNr1ReDaDRx2i3mlkAIx0TnCzy1029HlgoIln1J99VAFspzPGAVem8rJBkrsYeo5f829RNEuJigaoEAamCZz7gRBn4ASB4ZcNd42tXU2yOGb2j21iqbM59wF6k4+GU=
+	t=1724962534; cv=none; b=IMotTApsPHlpOU6BPYgiY95WBudIo2hVk5Z0dZ2UCSstwyvXbZ0kuPNhN8+Lcfo9Qqv0pWUObJ4+CsyOfunt9uM13+Nhl8xhpc8HWzDaHntKzuMAdcov+6NV/+uPR3aU5uOSbqvYN6nxOb3pT2rS93sllHSF2xsu1eVlJ1udDtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724956425; c=relaxed/simple;
-	bh=eMVK8MRzStsv9BzBp46JfRMuAjUAzsoY740AMVKaYy8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nbVDOSGnoMBAnq15TXi984Av+QHDmQ8kOx3kZsGYh8kQlI+9nCy5Dz1BgJgmmcL4Y/5s21LI/NcmJBAtTBuFCNzrCY/63eJfFBE8agDdFCI0J/pBjLJs9oSNXTIvppmz8JkcOtVrZUXWPZ3gPURXF0xjo+PZU/RggEGvs+MgmEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJzZAkXr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724962534; c=relaxed/simple;
+	bh=Ct9CPYDZs1D52/P92RNJ8V1FCpwTi5S3g6iSiVFbCWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t8yEsZIYtZE3vJNJwHSJhyQhCRlk4U7p9hGbGaKD586NbCbJd6+ieZGXoLn3G5sRFQl+y5NTFOtWXClykBdP2hgGR0P4TlNacXbVVNgv+OJuvZMS/sqe0l/H0aQELb5ThzHt+ABybQsbA4sijOfeixcctZCskQdfqRUqCBtG5fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q/2iEdVJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJzZAkXr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 244D1C4CEC2;
-	Thu, 29 Aug 2024 18:33:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/2iEdVJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485E8C4CEC1;
+	Thu, 29 Aug 2024 20:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724956425;
-	bh=eMVK8MRzStsv9BzBp46JfRMuAjUAzsoY740AMVKaYy8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=QJzZAkXrU4KbfEhPkaJtWnW2fJ/BTjOGxeJzP4iZ7v97Dd1Lw44cCN57q3qr+piEy
-	 kBSpT0td6k9PixgW+Z5Fmkz7nY8wSANODwFvvPtTcicKKIc3Nxq0KPUFtkOhid5dVE
-	 hywsT/vBTDQlh5aYouuHMNe+K6NAFZ3W8fZvgmaVLbxqW0vu/UnQsUzXi6QSCMtxQL
-	 l/m0WIxX5saC5dJxIKirT8eotJ3srauYDP8TAW8OurQMBb9B2S2PhBrQeQhn866OE7
-	 p6XcZXGd7/fMU2zJBvPiQekMrp20ezy0ZwyM4/fvDNHl1Y3HYo+8qtIutZ0ZREwX+n
-	 x2zlDYH0uihWw==
-Received: from ip-10-30-226-235.us-west-2.compute.internal (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B33C13805D82;
-	Thu, 29 Aug 2024 18:33:46 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon fixes for v6.11-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240829143308.1398637-1-linux@roeck-us.net>
-References: <20240829143308.1398637-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240829143308.1398637-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc6
-X-PR-Tracked-Commit-Id: 7bbc079531fc38d401e1c4088d4981435a8828e3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3b9dfd9e59367eff5f65ef2a850f2df674f1f1c5
-Message-Id: <172495642672.2046318.51285649074487323.pr-tracker-bot@kernel.org>
-Date: Thu, 29 Aug 2024 18:33:46 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1724962533;
+	bh=Ct9CPYDZs1D52/P92RNJ8V1FCpwTi5S3g6iSiVFbCWU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q/2iEdVJEgmRS1BE1cy9xYNLFAHmZBCjY21XDby7JgvIY0OgdMxFtAVxszBJDX3z+
+	 +gHKb34cHcpHyWFT5m/4KWT1cWMMislOdnvIkdcrnK/YodbmBiZiL6KF2mgqaVrRN0
+	 GG+Lmq1NsyqnjDQomP+t78HWgB64jPw18X51nBSQSvU8Rrzqke7xGZ7EjTfLrzDNZC
+	 fwcyVpWC53EzrIQm9XiwkK1kIlO0oBix8u9EBcuhSRWuRJX1+C+Beex4XOI0D3Wx3z
+	 9GiJdXa2C6w4qKEX3PkNoT3CD8fMzfefSaEdorZyrCvwzAvtNsK2ia9tj1DZPedzdO
+	 wC9/5kTlardNA==
+Date: Thu, 29 Aug 2024 15:15:31 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: imx@lists.linux.dev, jdelvare@suse.com, linux-kernel@vger.kernel.org,
+	lgirdwood@gmail.com, linux@roeck-us.net, broonie@kernel.org,
+	devicetree@vger.kernel.org, conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org, Frank.li@nxp.com, krzk+dt@kernel.org
+Subject: Re: [PATCH v5 1/1] dt-bindings: hwmon: Convert ltc2978.txt to yaml
+Message-ID: <172496253089.1134105.2312367634217065989.robh@kernel.org>
+References: <20240829150641.1307906-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240829150641.1307906-1-Frank.Li@nxp.com>
 
-The pull request you sent on Thu, 29 Aug 2024 07:33:08 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc6
+On Thu, 29 Aug 2024 11:06:41 -0400, Frank Li wrote:
+> Convert binding doc ltc2978.txt to yaml format.
+> Additional change:
+> - add i2c node.
+> - basic it is regulator according to example, move it under regulator.
+> 
+> Fix below warning:
+> arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb: /soc/i2c@2000000/i2c-mux@77/i2c@2/regulator@5c:
+> 	failed to match any schema with compatible: ['lltc,ltc3882']
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Change from v4 to v5
+> - rename to lltc,ltc2978.yaml
+> Change from v3 to v4
+> - keep under hwmon directory.
+> Change from v2 to v3
+> - put my name into maintainers.
+> change from v1 to v2
+> - maintainer change to Mark Brown <broonie@kernel.org> (regulator maintainer)
+> - update title to (from ltc2978 data sheet).
+> octal, digital power-supply monitor, supervisor, sequencer, and margin controller.
+> ---
+>  .../bindings/hwmon/lltc,ltc2978.yaml          | 94 +++++++++++++++++++
+>  .../devicetree/bindings/hwmon/ltc2978.txt     | 62 ------------
+>  2 files changed, 94 insertions(+), 62 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/ltc2978.txt
+> 
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3b9dfd9e59367eff5f65ef2a850f2df674f1f1c5
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
