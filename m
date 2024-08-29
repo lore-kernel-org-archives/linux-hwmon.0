@@ -1,60 +1,60 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93B61B29BB
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 16:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73771B580A
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 16:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724949882; cv=none; b=kCrSzD8UifPQu95DB/HDLDQWaVf6AcRHW6A4LhgAJPHJhu8Lfm7NlMmOSnpoDU3sOH2f0ztekWlsAcMoiJl7hLe9YOw9anF0P0g89OMe/QA3z8EmM5iTAPsomQhq5De+MszH/22YmRfSBNLRNNznwfC3NH30uSQupLZeqGRitkI=
+	t=1724949944; cv=none; b=SBH+eXqA4NrGmXiNO5UYZ5OEypTDwwZCJKMXGudJhOH56Xs9Jag54aiLe6dpA1rc1ASWtzgY/cuplIZYC4Vy9zF5K4HeXd7TRFFPTvldBKWYwEsMk29/R7337Jqp6M6dJEWEGlIPX9ac0uJzdhDpG0HdfvFmjC1mcq/v/E/x6pY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724949882; c=relaxed/simple;
-	bh=83/3YLsPQ8MFBeqfBIblcQlJTv7Bc7nldDIQh4GvkC4=;
+	s=arc-20240116; t=1724949944; c=relaxed/simple;
+	bh=eBRnlfafRiiOQDitPcSY/cHCGAfSQEUVWg8oyZvrHDQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p1uIIqaSVefc8vSHqrTVczsSJKrtwwzEK8RPA478Vyu1Y+4HMP16XtWihMs+GqVYAzEDU9eSRzSEyHylV8yksBllaJp1ldAXbAEixjGsH+EO+kGftaVD2F47KFDOimuUiab9OMGIsx34h46FIONzUH7hss4vrnXpzKZdi8iWK8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ro5ve4wB; arc=none smtp.client-ip=209.85.214.181
+	 In-Reply-To:Content-Type; b=KXYsxnhcQCKwm3X+sMMfT70g4f0FsB9apPmyBU0o/3B9RcjyYwi53Ao4fV0fVnGwx1gj2ZT02BLPd9baNaKwsgah9MkVvHF748H5EIfRJJ6Y0eU5NxEH2vtQZ+Emk1T/uxq54anKP4yI4m3fw4gVYxcWmuTFuIwWNdcinRiIxc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f7lHpP2E; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ro5ve4wB"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-201ed196debso7515505ad.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 09:44:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f7lHpP2E"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20219a0fe4dso7348195ad.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 09:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724949880; x=1725554680; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724949942; x=1725554742; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/s19oZgj6F57IBYFZ4y8t8IJmWR0KGLGF4NmkqqPU8=;
-        b=Ro5ve4wB4+ispbTbTLlslmLnEVRNrQ41ywRWVywN3EXyN1KyoNEa9rdN3a5FweIlsU
-         Q7KdUoXWucufqOPihUN5I9OSifTYpI3jYdTgZaq1Mah/0J0Tb1IKO3V/53aBgn9HZc0P
-         dvbsUnSlV7Mr8lW198VJ/pzZnjG1UBRqTuHhSDXRPhTqJkk90y1pmadnsXY6vVUufOhA
-         K95wEYtFfFDZRzVGd2I/5Vj350IALoLOWMJpGyn1/ZpnU4t/v3BRJ29MlwD+NDXUcS/y
-         eAtIvYTu+JCAhM1h+0Js0oe3WgQZ71ZecnPL0VLO33Goo8F3uuRlHD0OePAiMypyxfjY
-         aPew==
+        bh=wg3efP3pcNpkBWQIBOsZ0CaZhvobXZ1xz3gu8GLNRao=;
+        b=f7lHpP2EggmWmewwLx3hGFWiimTvznkSKjLhRBUvW0MbGcKQng8AzaMpqSJCtwzM7O
+         KgPXtoPT5cNMcEGAZaSDB3ByC6rAJbN/mzS09YjO1GgFtbJeeoYSKhjqCHUiVMbpv76x
+         LlJnFWDnq4kxAu7IrnYQI1Dqw0fli1eg/t3MNXcnWtQwcv9dlsBj1f0TMsYirrrFVksn
+         ktNNeLFNvjsnmqxxKZ1j56Y/AT7rKHQ8nXCNeNtJHdFb8P7npn6VOCPjkVIF0LoJlh6P
+         R3DdwyFnZduVVcKTEPhPMkemCuOpRny/ydVgCzcukoXohUR04Gz1syxLtIMt3/mA9XaT
+         2/sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724949880; x=1725554680;
+        d=1e100.net; s=20230601; t=1724949942; x=1725554742;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6/s19oZgj6F57IBYFZ4y8t8IJmWR0KGLGF4NmkqqPU8=;
-        b=wPkksrRdHYc8rAa16/o7G0Icgg1poCLsjzCVU0ZunnFNSK7kcmPdtOHOspZM6IGPK9
-         /kEMtxazDzZ8CMGBooUsl8vxJPq574s380QWY2DEDxOKpXe+Ai3xcQ8xmxlUa4aYT2pG
-         r0djMC7RA6jxS5L9Q1rYrPhTxjuD7AFMs2s0cx/GchgHkbUVb4CIvS1Tk0yezWTrBPhU
-         RWqTUN/AzGqlN6ecTsRIyllCxTp71tJMnrFb7E9ggY729wm+Sp2lONbHGqnuEzFQ4qh2
-         yvftmCpRQh/NIz7ztFOu5TpIKmV7+W4N2yXoEm42qD51F1rZzo+Wj+QFdMMdc/TclE7+
-         Xtjg==
-X-Gm-Message-State: AOJu0Yx7iUDLZ2PdsVNbKirnLRFppzXJmxg0MKfA8fOHpcrmk5BiPJD6
-	HgrrgLI5qQe1g7BL9KmgoHawKVjN9SZQWVp0FaBMER+qZrf+PBh16MMPqQ==
-X-Google-Smtp-Source: AGHT+IGdhd3KTK44SYIRKl5dMKINO8YaqXYoA546U0WWBK2YeR/AEIPehsM/QW2ES76/JgNSRAm9bA==
-X-Received: by 2002:a17:902:c94d:b0:1ff:4967:66b with SMTP id d9443c01a7336-2050c4e0745mr41258235ad.56.1724949879687;
-        Thu, 29 Aug 2024 09:44:39 -0700 (PDT)
+        bh=wg3efP3pcNpkBWQIBOsZ0CaZhvobXZ1xz3gu8GLNRao=;
+        b=xOVjIHAT+IAfgGego8kSOFSXctvcciOkhJV5A42i1ZgMwNiCBTMntxJOa4XR/ByQSq
+         gVCbsQAU1aGcIoqozAqCnk+kdJGwVDzJdXBgiXn/QgB8o+2hn5PbmlmjiUL4jauz40Xo
+         OnCTMlIlKfgUtQePZOArz9P11MuD4nRnZb7f0+Vd6pGwM69Sl4WpqGYxukWEYG1YKFHj
+         Fs4Q8ncthT3lgCVmEZzak7H0dIhdOBI9Snn1b+mXe7YxlcUmjrhXaSZSErBSA1evC2jS
+         V4xLuoneC7giNkAXUIk8W1W62HluSHEngy8Ulr1AJCE5MRam+RilVPsinBozJe4weJtZ
+         PTyQ==
+X-Gm-Message-State: AOJu0Yx9+J3FS4ivsPXflWJCUkK55eIDvjsl3Ijlmve9TvdlZX6CPPUh
+	Scugs0QZfqYFVUGadAR9cMzCtXpQQ8DsRPscWnyJj5rcVgPiSNhVo5T4qw==
+X-Google-Smtp-Source: AGHT+IECexLM2rCUCQV+ppIYVeuHiHfj35MHbFCxywqM6teOs7lnO1oTNElRW61E6GhuOL2z4xvIdA==
+X-Received: by 2002:a17:902:d546:b0:1fc:5462:7eb7 with SMTP id d9443c01a7336-2050c4b167amr34453505ad.58.1724949941981;
+        Thu, 29 Aug 2024 09:45:41 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2051556ace9sm13466555ad.308.2024.08.29.09.44.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152cd998sm13558815ad.80.2024.08.29.09.45.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 09:44:38 -0700 (PDT)
+        Thu, 29 Aug 2024 09:45:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2104a78d-acd7-4b04-b5cc-bb4e73c2d9fb@roeck-us.net>
-Date: Thu, 29 Aug 2024 09:44:37 -0700
+Message-ID: <c2ae37ec-26dc-45bf-a750-d7d2a32475ef@roeck-us.net>
+Date: Thu, 29 Aug 2024 09:45:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,12 +62,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/11] hwmon: (ina2xx) Mark regmap_config as const
+Subject: Re: [PATCH 06/11] hwmon: (ina2xx) Re-initialize chip using regmap
+ functions
 To: Tzung-Bi Shih <tzungbi@kernel.org>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 References: <20240827153455.1344529-1-linux@roeck-us.net>
- <20240827153455.1344529-5-linux@roeck-us.net>
- <ZtCLji0GiNhoA5PB@tzungbi-laptop>
+ <20240827153455.1344529-7-linux@roeck-us.net>
+ <ZtCLpWh-o_n82dpq@tzungbi-laptop>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,39 +114,19 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZtCLji0GiNhoA5PB@tzungbi-laptop>
+In-Reply-To: <ZtCLpWh-o_n82dpq@tzungbi-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/29/24 07:54, Tzung-Bi Shih wrote:
-> On Tue, Aug 27, 2024 at 08:34:48AM -0700, Guenter Roeck wrote:
->> Doing so reveals a potential problem in the driver: If both supported
->> chips are present in a single system, the maximum number of registers
->> may race when devic es are instantiated since max_registers is updated
->                       ^
-
-Fixed, thanks.
-
+> On Tue, Aug 27, 2024 at 08:34:50AM -0700, Guenter Roeck wrote:
+>> [...]
+>> except for bit 4 which reports if an alert has ben observed.
+>                                                    ^
+> With fixing the typo,
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 > 
->> in the probe function. Solve the problem by setting .max_registers to the
->> maximum register address of all supported chips. This does not make a
->> practical difference while fixing the potential race condition and reducing
->> code complexity.
-> 
-> It also makes regmap could access out-of-boundary (e.g. [1]).  Is it harmless?
-> 
-> [1]: https://elixir.bootlin.com/linux/v6.10/source/drivers/base/regmap/regmap-debugfs.c#L441
-> 
+Done, and thanks!
 
-Yes, that is not worth bothering about. Any driver not using regmap but accessing
-i2c registers directly could do the same, after all. The regmap limits are just
-another level of protection against invalid accesses, but they are not essential.
-On top of that, direct i2c accesses to the chip are still possible, even
-while using regmap.
-
-If we wanted to be really paranoid, we could provide chip specific readable_reg /
-writeable_reg / volatile_reg callbacks, but IMO that would be overkill.
-
-Thanks,
 Guenter
 
