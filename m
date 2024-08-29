@@ -1,60 +1,60 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73771B580A
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 16:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307FB1B1405
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 16:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724949944; cv=none; b=SBH+eXqA4NrGmXiNO5UYZ5OEypTDwwZCJKMXGudJhOH56Xs9Jag54aiLe6dpA1rc1ASWtzgY/cuplIZYC4Vy9zF5K4HeXd7TRFFPTvldBKWYwEsMk29/R7337Jqp6M6dJEWEGlIPX9ac0uJzdhDpG0HdfvFmjC1mcq/v/E/x6pY=
+	t=1724950405; cv=none; b=I3W/Q46NeddctLFgwhllqwE9SKcOUWJd/2tR7+Mr3hJsILi+byiNaaq8KCIiW7PV7KzCvRk4dtUC8maJrk03GIjyAGsRWc/srWwJMpU2Xgc4MZnFhUt2YvkUSWVu/HJsruBH401lQwAUTkU7uDu4KdqK4X2Aw12EghsOEqcrm48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724949944; c=relaxed/simple;
-	bh=eBRnlfafRiiOQDitPcSY/cHCGAfSQEUVWg8oyZvrHDQ=;
+	s=arc-20240116; t=1724950405; c=relaxed/simple;
+	bh=aA94mr1NZ5I1gV70ru+k/r3pRzgq0XjVkI2Q4QvLAg4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KXYsxnhcQCKwm3X+sMMfT70g4f0FsB9apPmyBU0o/3B9RcjyYwi53Ao4fV0fVnGwx1gj2ZT02BLPd9baNaKwsgah9MkVvHF748H5EIfRJJ6Y0eU5NxEH2vtQZ+Emk1T/uxq54anKP4yI4m3fw4gVYxcWmuTFuIwWNdcinRiIxc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f7lHpP2E; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=fZUq+VObzAv/xG2c6m/L6idTnKF8P695NVeOjALxfSdlN7coiNniXCbUow+nCR6K9qJW+eoirCITpl0bSNqvc+/Haowb3VacqyXcT8Yt97YqvAthD2N5kiRmfRnOGDT6o2+5RRmnqk0E0GpIvZ+QF9fLT6QXfMGwLYuYJ27Yo7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KRKxCS46; arc=none smtp.client-ip=209.85.161.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f7lHpP2E"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20219a0fe4dso7348195ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 09:45:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KRKxCS46"
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5d5e97b8a22so502739eaf.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 09:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724949942; x=1725554742; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724950403; x=1725555203; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wg3efP3pcNpkBWQIBOsZ0CaZhvobXZ1xz3gu8GLNRao=;
-        b=f7lHpP2EggmWmewwLx3hGFWiimTvznkSKjLhRBUvW0MbGcKQng8AzaMpqSJCtwzM7O
-         KgPXtoPT5cNMcEGAZaSDB3ByC6rAJbN/mzS09YjO1GgFtbJeeoYSKhjqCHUiVMbpv76x
-         LlJnFWDnq4kxAu7IrnYQI1Dqw0fli1eg/t3MNXcnWtQwcv9dlsBj1f0TMsYirrrFVksn
-         ktNNeLFNvjsnmqxxKZ1j56Y/AT7rKHQ8nXCNeNtJHdFb8P7npn6VOCPjkVIF0LoJlh6P
-         R3DdwyFnZduVVcKTEPhPMkemCuOpRny/ydVgCzcukoXohUR04Gz1syxLtIMt3/mA9XaT
-         2/sg==
+        bh=zrko/vv+qxMZ8yS1ksH/yceV01RVII6SKzTLHGAstVE=;
+        b=KRKxCS46x6ttxamDnF3jLvvoZ7sNCAK8jaM4YzVq4LPtcKMfze1y4z+ZwOPAvSKU1+
+         +YstzQNOrJjxKdnpL7IabT7V8ufQ33ztUg7ua89KT3beDPvZhpubqBfvbME2mHzjeEIn
+         zeOLnUYH8tHm4ZuuxuifSOYz5/rjNPmtiTg6g3YvSh/YW2JQmQsjssdR7wiTjbJQwzGA
+         yh27JBMu41tEVtF0125vEVGH6TyQGR23rOQiJJtkEyVknu1mNS8tVC6IhQy+xr0CkH4o
+         OPBlewlN/vnEJlnE+jImfxwLEi6pfdz82Mv7w08Z/hvCpBGuvmNiNlIm7+OscEPBLgHw
+         RFcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724949942; x=1725554742;
+        d=1e100.net; s=20230601; t=1724950403; x=1725555203;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wg3efP3pcNpkBWQIBOsZ0CaZhvobXZ1xz3gu8GLNRao=;
-        b=xOVjIHAT+IAfgGego8kSOFSXctvcciOkhJV5A42i1ZgMwNiCBTMntxJOa4XR/ByQSq
-         gVCbsQAU1aGcIoqozAqCnk+kdJGwVDzJdXBgiXn/QgB8o+2hn5PbmlmjiUL4jauz40Xo
-         OnCTMlIlKfgUtQePZOArz9P11MuD4nRnZb7f0+Vd6pGwM69Sl4WpqGYxukWEYG1YKFHj
-         Fs4Q8ncthT3lgCVmEZzak7H0dIhdOBI9Snn1b+mXe7YxlcUmjrhXaSZSErBSA1evC2jS
-         V4xLuoneC7giNkAXUIk8W1W62HluSHEngy8Ulr1AJCE5MRam+RilVPsinBozJe4weJtZ
-         PTyQ==
-X-Gm-Message-State: AOJu0Yx9+J3FS4ivsPXflWJCUkK55eIDvjsl3Ijlmve9TvdlZX6CPPUh
-	Scugs0QZfqYFVUGadAR9cMzCtXpQQ8DsRPscWnyJj5rcVgPiSNhVo5T4qw==
-X-Google-Smtp-Source: AGHT+IECexLM2rCUCQV+ppIYVeuHiHfj35MHbFCxywqM6teOs7lnO1oTNElRW61E6GhuOL2z4xvIdA==
-X-Received: by 2002:a17:902:d546:b0:1fc:5462:7eb7 with SMTP id d9443c01a7336-2050c4b167amr34453505ad.58.1724949941981;
-        Thu, 29 Aug 2024 09:45:41 -0700 (PDT)
+        bh=zrko/vv+qxMZ8yS1ksH/yceV01RVII6SKzTLHGAstVE=;
+        b=kBUqBusA6k0+UVLxubroKmcjOWCQPqM85wRTvzq+ysAdCpaZQvgp8wfTT9urCTssZu
+         a8vJSEAbH2+zP1FjHdynYgHqLNfEUXPXgapLJroSFZZdizWZt5Gf52zIYA0jh4LkbVl/
+         KhL7cF2yIPE3LfrkUDX1R9xWQ8puNZzggceFj3nM6cQCqoT+piKltQrvq3xts0tT2ZWX
+         hNuAVAHxGKsz4j9IBkIaliCK72zD33HOHc6tZaL6yyjKsfdjlG5aG8sfSkAguYjGm6Dr
+         NfyqsaEA0w8tllwCffyNVwyPAJh3hC0wR7advCKCieaQQIPU3lG4S5F758cza4MhEDmN
+         Qlrg==
+X-Gm-Message-State: AOJu0YwrsMSqeZpx276A8coFc0B+C8KISe9+y0vVqYAF5C2UP8A9R6M+
+	Vca4NTz1zXxLyOROISkh97/6pDzqrFgYUznzaowpYNpsDG5pAgbp9d3BXA==
+X-Google-Smtp-Source: AGHT+IHd2zNQ99Ga/xHmqyefKoxxZ+JAsQIiXYIhFE3/OJgOgRTPTJ4s1rhb5rcoeKcRyZCti/8K0Q==
+X-Received: by 2002:a05:6871:e264:b0:270:4dbb:195a with SMTP id 586e51a60fabf-277900c729cmr3347313fac.15.1724950403099;
+        Thu, 29 Aug 2024 09:53:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152cd998sm13558815ad.80.2024.08.29.09.45.40
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d22e9bd58asm1455316a12.72.2024.08.29.09.53.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 09:45:41 -0700 (PDT)
+        Thu, 29 Aug 2024 09:53:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c2ae37ec-26dc-45bf-a750-d7d2a32475ef@roeck-us.net>
-Date: Thu, 29 Aug 2024 09:45:40 -0700
+Message-ID: <4d03106d-3f64-4493-ac75-94030a584732@roeck-us.net>
+Date: Thu, 29 Aug 2024 09:53:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,13 +62,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/11] hwmon: (ina2xx) Re-initialize chip using regmap
- functions
+Subject: Re: [PATCH 11/11] hwmon: (ina2xx) Convert to use with_info hwmon API
 To: Tzung-Bi Shih <tzungbi@kernel.org>
 Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 References: <20240827153455.1344529-1-linux@roeck-us.net>
- <20240827153455.1344529-7-linux@roeck-us.net>
- <ZtCLpWh-o_n82dpq@tzungbi-laptop>
+ <20240827153455.1344529-12-linux@roeck-us.net>
+ <ZtCL74Hra1pYFuR2@tzungbi-laptop>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,19 +113,40 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZtCLpWh-o_n82dpq@tzungbi-laptop>
+In-Reply-To: <ZtCL74Hra1pYFuR2@tzungbi-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/29/24 07:54, Tzung-Bi Shih wrote:
-> On Tue, Aug 27, 2024 at 08:34:50AM -0700, Guenter Roeck wrote:
->> [...]
->> except for bit 4 which reports if an alert has ben observed.
->                                                    ^
-> With fixing the typo,
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+On 8/29/24 07:55, Tzung-Bi Shih wrote:
+> On Tue, Aug 27, 2024 at 08:34:55AM -0700, Guenter Roeck wrote:
+>> +static int ina2xx_in_read(struct device *dev, u32 attr, int channel, long *val)
+>> +{
+>> +	int voltage_reg = channel ? INA2XX_BUS_VOLTAGE : INA2XX_SHUNT_VOLTAGE;
+>> +	u32 under_voltage_mask = channel ? INA226_BUS_UNDER_VOLTAGE_MASK
+>> +					 : INA226_SHUNT_UNDER_VOLTAGE_MASK;
+>> +	u32 over_voltage_mask = channel ? INA226_BUS_OVER_VOLTAGE_MASK
+>> +					: INA226_SHUNT_OVER_VOLTAGE_MASK;
+>> +	struct ina2xx_data *data = dev_get_drvdata(dev);
+>> +	struct regmap *regmap = data->regmap;
+>> +	unsigned int regval;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_in_input:
+>> +		ret = regmap_read(regmap, voltage_reg, &regval);
+>> +		if (ret)
+>> +			return ret;
+>> +		*val = ina2xx_get_value(data, voltage_reg, regval);
 > 
-Done, and thanks!
+> Doesn't it need to call ina2xx_read_init() too?  Originally, [1][2] call
+> ina2xx_value_show() and then ina2xx_read_reg() and detect if the chip has
+> been reset.
+> 
 
+No, because reading the voltage does not require calibration. If a voltage
+happens to report 0V, it is just 0V, and does not indicate that the chip
+has been reset. That applies to both shunt and bus voltage.
+
+Thanks,
 Guenter
 
