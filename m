@@ -1,122 +1,103 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB5FEACD
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Aug 2024 01:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D877380;
+	Fri, 30 Aug 2024 02:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724979984; cv=none; b=IXNGky9HH3S1UBP6BkWJnFbupNgcjXMoNbw3wc/PeD6bpkvLkfUqghzTbgDlCDpmZnWhqcpGbEwSe6G7+aOHd3lDMoCk8SgUAyy54ZSaeNUrAfFHqucMDmaErkL4hboQwM5O8Bj7diUkSna9wPBOUvdGLGjJd/JkV3DPk93lCNs=
+	t=1724985636; cv=none; b=c27Mns++6aTYWt8dpUllI3v8Eu2HxTpXov0IizlQkzNoNUWbIFaegMYYQC6p0OWuyNGIofbFBh77a8uloWRazddqrN1YcnGagpuKsTodYzOvH2pJjlPg6TIdHfjng6Mfea1MLidPQaSFQ9jedhEKrMtsSCArYVLE64nV0fWsF04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724979984; c=relaxed/simple;
-	bh=DQ8IrRvC18+qbPGoSQyksidnzS9Fu7EIXduD5k6lqhI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X19mZSSzyQTN3WEzuKfoVKOVPaUYsnCRx9hjSGuVr+KY/JnslbPFmqyN5qYo3GIK5IZoqz2KySKGRKIpbrajRYdl1Uyow0x9JoYef1OYE62RRFEjLKqsoO8HqkfOnevrxqo7l7b5FPpAPSUKUOzh8qMrAt++7TEZVvZt1oG3l4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TMk17tzb; arc=none smtp.client-ip=209.85.215.173
+	s=arc-20240116; t=1724985636; c=relaxed/simple;
+	bh=epwxn7dBqW32cxf+5xRIHwjWlChko6uUxNTcXACtVFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hMrp2QlxsliT2ITx07kDZNuFhrO77hpmMua9NYi+AbefCNnRtnHoCjM2jIz8pP94d9SRQ0tK+SNk8uLKkfnJRtMGNnxn1YilVgurJ21SiYkEUmiAeTcEWLeYaUxBdQ+UMGtwNlKp/yOwntMhI23ldLQuJ8HeDV/mqz31Jd2Y0yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnH8e2lq; arc=none smtp.client-ip=209.85.161.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TMk17tzb"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-6bce380eb96so727106a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Aug 2024 18:06:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnH8e2lq"
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5da6865312eso874071eaf.3;
+        Thu, 29 Aug 2024 19:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724979982; x=1725584782; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eKoMTmIMa24CF5rXgpxgytBpmS0Vzby+YrYsIsE0EfI=;
-        b=TMk17tzbk+z7ca+EGrlKGYEmZ5cI4Oiq4BSIvOtk0ApX8gqkrieXWRGBZn8SJPw0Km
-         eYx0n33SrH+4miRbuVhHaAkssMzgSV5oTHtarlH0YHhTAVLo9l+lYsgzL0+enfuQifVY
-         KRV0w+4AaKMYZRlPomVWLHZ1bG+18M2H1ZEJfzQZ/1I+rhs9ArXzywLICNYsyXHhjRkb
-         2/jyJZFz9+24naf9rqEPjBD6TE+MN7tez9hIdZXq0KyVUizeV4XVrP31AfgRMC6XQ4v2
-         aG4nrXv2vR8ggJy3g4RSztP2RuUqBqTdgsUSLKSesVm43t1sxryMqWj+XoLtuZwgg6nT
-         bFIw==
+        d=gmail.com; s=20230601; t=1724985632; x=1725590432; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J+HVqijkTIXEILMWbpv1Z9naApBVGhXsa5ns2Qf6WFs=;
+        b=WnH8e2lqEwRGzzSzPyGOloyBGOV1n0ZkjPfoPKlWGp/shdi1qo63MMuUZlfElm7HQf
+         jlXzyiI3OQ3PuWCgEcSsV1l/8fHDeLllxFJG+sP55PmnYQgolVhp2AbOVZADQo6kq1Gy
+         dQiRccNdN4js2jCfARtKt1HHtRVESQLkw01x3y/heNJSFSWvVqw35/UOQQGgvyr9WdOL
+         99XqnPFdFTO6JVEm+I7aZCXkq9ug1qcyD2O6Nvee3D1MDFTOEh/L0mQnR6QgReXqaqDy
+         QLiIpqltfRbYfhbqhhYujSvCmyIllAlTTwJQD85qOrxMzNJmuip6l8b/Pj8ZaG7YXsDu
+         yXaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724979982; x=1725584782;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eKoMTmIMa24CF5rXgpxgytBpmS0Vzby+YrYsIsE0EfI=;
-        b=Oe5mjvLBYa07lXF2kA7GZTjSRG4GXArFW0ELpAVFu7rbAAZyowImUeqUfodShOAJ9G
-         OwR/t7101a1ARi87BDs6BzV/8QNpaNelZaugZDgGmL4EnCjw53lX1yZIXOGXeNfmmMFD
-         +Y8cgGA4STm6Qoc7FAQ64ov/BfxyHlkNjG0YRykZES9Qy/M0Y7rNGng0EH11U3aPIo3j
-         2ZaRZrgG0Y8jOtX36XxqECrmt8oWN94KhMYvJwVbOPT2fGMEsLz+MOm08SPckM87O0iL
-         RJkIx+xA6rk64PcNLGY95lDqhhejP9bBLHAdXhUKqS5r0Zicqk2th7zjbwfag0YylOcG
-         YsqQ==
-X-Gm-Message-State: AOJu0YwAvqTi0ujQqJpb6OdoGVpoMirEL4+PiLPhV8WpKyXYqFCSpf9i
-	vnbeGlveKbpy+4VPCZnpMGGFPb73BupgVqE+7PCJR4QaWv3+aa/8mXoQzw==
-X-Google-Smtp-Source: AGHT+IHWNM6V7JOQIUn1q7fD5usI6Nvtl+tQiZ4F5kSA86Dsok8AYRknx/R1JHpjkvKsMDTB6t9SMQ==
-X-Received: by 2002:a17:90a:7802:b0:2cb:4c25:f941 with SMTP id 98e67ed59e1d1-2d8561a7107mr4629322a91.17.1724979981981;
-        Thu, 29 Aug 2024 18:06:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724985632; x=1725590432;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J+HVqijkTIXEILMWbpv1Z9naApBVGhXsa5ns2Qf6WFs=;
+        b=kNPhTKL+euIuqvnhVYDTVJI0jJxnlrWsNgNeWTc4fzrPwHkqR2GEsMJvc6ZQIp/tX4
+         0mkENpeRbO1xbosmvcZ/qrTbnKn8yhel5OgzcPMQ//ICE7oQrW4NzWFvWPMyVWJFnHLV
+         hZWbP22BMc1JstIzlIuTGmhras1ToHK0kp/T07uqA/L8OYsVlGu6CkE6uqO7+I3DQeDu
+         JNYS7VkA/xNDCPzZNlXFCwLQfKCNoUL+/7pio1+Bheds1/pMk5/9uQtEhHolXz7PqFjm
+         G4TXAPu6zk+FoXmp2pg96oH67VoNxEpVESUt3na9Uw+C4ZUvkbQpkXtEK4qkycYa4wK9
+         lL5A==
+X-Forwarded-Encrypted: i=1; AJvYcCWdS03qTb8oIEV9A67n5VwmO+BnZvcRpq3BLQtWciHgfNfXLcUt24RjgQJFifwF0lcOgrS+yZFvfQx6EQ==@vger.kernel.org, AJvYcCXwOiQMbfUzjKr0Ycdoby3e5iGobovU6ezAyT7d1TYC39h5WQau9RBpeGKwlZgxOoXEGB/sT8OVHLUt5bZe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGfIB02KTpHIBiwMlJ5gc45QtNu4JimMtPBKqskAdDlDyGlNXU
+	g9TuHTLAfmMFDd1NpObatQpsJnMCNpK7BmsrAWSTx7PqldDLBxp66wM2Ow==
+X-Google-Smtp-Source: AGHT+IFeJaGN5mhTTn2+192nZeojLKG3FQ+88WTKHQwotYDdZrCrJcC0qo8ocLGWSVNXGmE/FO9HaQ==
+X-Received: by 2002:a05:6358:b00f:b0:1ac:1492:8d5a with SMTP id e5c5f4694b2df-1b603c3bc36mr635115755d.14.1724985632329;
+        Thu, 29 Aug 2024 19:40:32 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d85b39d03asm2379129a91.43.2024.08.29.18.06.21
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55b4c9csm1798483b3a.88.2024.08.29.19.40.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 18:06:21 -0700 (PDT)
+        Thu, 29 Aug 2024 19:40:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 29 Aug 2024 19:40:29 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 14/14] hwmon: (ina2xx) Use shunt voltage to calculate current
-Date: Thu, 29 Aug 2024 18:05:54 -0700
-Message-ID: <20240830010554.1462861-15-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240830010554.1462861-1-linux@roeck-us.net>
-References: <20240830010554.1462861-1-linux@roeck-us.net>
+To: Loic Guegan <loic.guegan@mailbox.org>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Add support for the INA260 chip to the INA219 and
+ compatibles driver
+Message-ID: <80ad5b6b-36b5-4d16-8bdb-93b94401a8a8@roeck-us.net>
+References: <ZOILXb-1ObJRB1ck@lguegan-thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOILXb-1ObJRB1ck@lguegan-thinkpad>
 
-Since the shunt voltage and the current register report the same values
-when the chip is calibrated, we can calculate the current directly
-from the shunt voltage without relying on chip calibration.
+Hi,
 
-With this change, the current register is no longer accessed. Its
-register address is only used to indicate if reading or writing
-current or shunt voltage is desired when accessing registers.
+On Sun, Aug 20, 2023 at 02:47:25PM +0200, Loic Guegan wrote:
+> This patch allows to retrieve current, bus voltage and power
+> measurements from the INA260 using its default configuration.
+> 
+> As the INA260 provides integrated shunt, the "ishunt" configuration
+> parameter is introduced. As such, proper attributes can be attached
+> with hwmon and shunt calibration related routnies can be ignored. In
+> addition, the actual INA2XX current register address differ from the
+> INA260 as it does not provide a shunt register. Thus, a specific
+> register address INA2XX_CURRENT_ISHUNT for chips with integrated
+> shunts is proposed.
+> 
+> Signed-off-by: Loic Guegan <loic.guegan@mailbox.org>
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: New patch
+This patch will no longer apply after the series at
+https://lore.kernel.org/linux-hwmon/20240830010554.1462861-1-linux@roeck-us.net/T/#t
+is accepted and applied. It is also less than perfect since it does not 
+support current limits. Adjusting the driver to support ina260 should be
+much more straightforward after the above patches are applied. I'll send a
+follow-up series of patches after I was able to test it with a real chip
+(I am currently waiting for an evaluation board to arrive).
 
- drivers/hwmon/ina2xx.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+In case anyone is curious, the (untested) patches necessary to support
+INA260 are available in the hwmon-staging and testing branches of
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 10c8c475c634..f0fa6d073627 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -480,6 +480,8 @@ static int ina2xx_curr_read(struct device *dev, u32 attr, long *val)
- {
- 	struct ina2xx_data *data = dev_get_drvdata(dev);
- 	struct regmap *regmap = data->regmap;
-+	unsigned int regval;
-+	int ret;
- 
- 	/*
- 	 * While the chips supported by this driver do not directly support
-@@ -492,7 +494,17 @@ static int ina2xx_curr_read(struct device *dev, u32 attr, long *val)
- 	 */
- 	switch (attr) {
- 	case hwmon_curr_input:
--		return ina2xx_read_init(dev, INA2XX_CURRENT, val);
-+		/*
-+		 * Since the shunt voltage and the current register report the
-+		 * same values when the chip is calibrated, we can calculate
-+		 * the current directly from the shunt voltage without relying
-+		 * on chip calibration.
-+		 */
-+		ret = regmap_read(regmap, INA2XX_SHUNT_VOLTAGE, &regval);
-+		if (ret)
-+			return ret;
-+		*val = ina2xx_get_value(data, INA2XX_CURRENT, regval);
-+		return 0;
- 	case hwmon_curr_lcrit:
- 		return ina226_alert_limit_read(data, INA226_SHUNT_UNDER_VOLTAGE_MASK,
- 					       INA2XX_CURRENT, val);
--- 
-2.45.2
-
+Guenter
