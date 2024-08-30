@@ -1,60 +1,61 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71C21B5EA2
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Aug 2024 15:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B988C1B6553;
+	Fri, 30 Aug 2024 16:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725031975; cv=none; b=d3Jn+QphfLh6U0Ncyf1nT5FkGZFU0yIFJQSzVucooYwa62ydp3s0C4Arw4hsKhOb1bVcIrJUNb7NFpRKwUPSmptXrfahdjIhDj8ZumoLoEhe3ejZAq5ISYVWptU8OjHZ/vKZAO++jMrwK7eq3IM1Flms+HXpHeKxtS4AtAPuP18=
+	t=1725034137; cv=none; b=NZlEbfHoFGvmWzKvWmLJdcUVuxiNWDyPr86Uigwvd7S8iYdTvR4v4MsR9uIapA44v7K5+QhjklfdgrJ+jcVtiuNgssjWjLXHh7RGhnER0ob6TG00DxPzW6RFCnqT6vad+FOKjfe5eyxd+CRcQjnkGM1H2shgqOeXZX+rGl7G4Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725031975; c=relaxed/simple;
-	bh=jlfm0e0N8OpEJJOWD2ohXQo8P5hK/qhcjbae7DjoYD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QYVyODQQBAKXPiEVVg2Fagwzxu/Xtqqnwf2oZWCUkEPVfje9NEkpB+qT2ISmlYwfkEK/2dddUdpRUSL5d1fm+AMt2B6cYkd7jfKoqiWAFVEv1MCfwsJj1gZ7dRvC/RqRVxschM8p/giaWYFg3LrHumnvzbFQwo8uoygsxMYPhw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSyWZGad; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1725034137; c=relaxed/simple;
+	bh=sCSR7DekWhYoyEXdsoaR8lnGPtCDDPAbMVUFxTFA1NI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bnMWDDI9lJuVjtsAkLpSnpgtDZ1Dvx56Ws5Oai7Mheue3p8pcsn7e7yBNFnp6uuWUe2we5KuvpDWIsgFMGM4PfrFdfoqjRT4UJuLW0BRViMA109qj/W+iz2TFPOcObLiixaSTVGi/8zU5Oxp7Bl4NNqsn4poQVur1qrcx2xdgM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PMMjTld4; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSyWZGad"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-714187df604so1903072b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Aug 2024 08:32:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMMjTld4"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7143ae1b560so1179104b3a.1;
+        Fri, 30 Aug 2024 09:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725031973; x=1725636773; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJB6+kQg+XuVjWnh6snh5elB0KOqqKsgKhECqidIO6I=;
-        b=NSyWZGadxkNv6cbxvG4ORiAcjuBX3TA8tvAg25thUqzzATbPUeIgDrYqH2XHLGFB2j
-         2Szj/J/bg71AUzmqZrUzG2Rfc84RhCRRs5OWM3THUBrSr3IZkSr64HtM4L+mSop05er1
-         K4SQy9aO66km2KDoFqezVopy65ttCN0z6ejyO1awv4Gp7VVKaTQFPxHHOq7qP/ghcTt9
-         qDv9nXzlfPgToy9z4l1xbtILuajSEbW0XmAUemMmYd228VlE2ZNGtNd8m3oVnNDMJdH5
-         naTal15rxNC9+YpGA0zaw73m1C15drlIhHdkYw/18sCW1Nau6wdVYXIJFJktprcnhKtP
-         zHzQ==
+        d=gmail.com; s=20230601; t=1725034135; x=1725638935; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pC83zwCCufOmhK1B55Wu64mlHcrImo/cGCyO+/g5l6s=;
+        b=PMMjTld4MjRZfqovEFlI6oaKCnrsMqV6vRpr/a8gWA1PKMZHaSW2OvLwmgvowh/R5Z
+         fdR/cgXqoliMuKHtzamyPhKrZFtpGFKuipX1RjTTa7ySf/vhQn079kQv/kat+M3keh0A
+         hkp8B/KnHaycHycUYpCw79pA8AmyhAGM8+RIws4kDSoaENiHNdoXyxt2tNoMi3E/tFMm
+         oEia8JZyg9lK+EDL/NDK1QyLtLkDosRDYKB8F0AEuWOTynae/bFWt3+kBknedWnOlSzw
+         KklcWGEKMjJzs/rK9SBFbA/w+fRxHNfFoOxmcyEqJ3o+QmV2MgE0hn3OG01LwAzbTJ4P
+         UQuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725031973; x=1725636773;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1725034135; x=1725638935;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RJB6+kQg+XuVjWnh6snh5elB0KOqqKsgKhECqidIO6I=;
-        b=KUejA2ujrJtCxaPhBMD+Ni2NmkzgeF4EHDPMqQj0UN6s2tIx8weRwt729KS1CGvnKt
-         qYzKY5MQID0Gql4C9zazn10zPmryprnLLwboJ5hjADK9AQMc6VQNsk2e2m29JTqwWwdH
-         kM/S1NyWbj5DIzxvRgKAtYYW8OLkORP9NRyYEbt0WSVCx1TmpRPaMcEGbLIgHE+X2z9l
-         DuUN8C+nRr5n87z/6sOQSJZF2yyWV3kAif3bcywsUGB2TzwY//Wn7w3tL1LIVBLVMnfC
-         G1NV5gNX67WekRQMUesohERPRt59gfwGoNMiXzHYNRJbBxz20XjMhMPhO4IfOQjgmdXW
-         LcUA==
-X-Gm-Message-State: AOJu0YzAyAqOG0ScgpxYSQuGBXu1ctz6AGccGZBSa2oRUYmRKkQmTlo4
-	TlONHeRK3gcBSpnyBBF0DwNfglZkRXqblHa3CXOSW8VJ8aoIEgo7A6DKQg==
-X-Google-Smtp-Source: AGHT+IEBIu3bcrw/WP9ChIOCjeE9wDhWCnXAzIs6b3x93ZwTzpitPLGDmSJFFwKo7j2QP29zuLObng==
-X-Received: by 2002:a05:6a21:e8a:b0:1cc:b09f:4776 with SMTP id adf61e73a8af0-1ccee5b7d35mr3919002637.0.1725031972777;
-        Fri, 30 Aug 2024 08:32:52 -0700 (PDT)
+        bh=pC83zwCCufOmhK1B55Wu64mlHcrImo/cGCyO+/g5l6s=;
+        b=QPsE6ui5CsMw1M6N96uGN635viWELswe/m+1POlGhhYLFcaun/+dH3qJZzQ/9WMlJr
+         gajYjkcATwAtCG1JKlNKk51Ati5M6HCuegta1bzqfOM7NXnuINgJRPmv3flT6CtG1fXw
+         qriDqjtes1Xi6hBe0LSDqVLcWAXTLX39oaPddHmnPklA6pO2wdfHm4qTh5L9Niom0EaS
+         SPMKBcmDXD7tv3+JezmFOpgk5Xa6PCGNXhyEpq/NugqAU11QfpPhwlBnSaNSfQ5I+D7J
+         XWWUsH7ZacLGeOrWTFFexo0v52iyw/VPTcZe9odivHvwMt6CTpG5RxaiTe2dLDNIstxp
+         kvig==
+X-Forwarded-Encrypted: i=1; AJvYcCWRtQ8ohOoHiwbesoie5VK2fwCQredF05lruxhTSEBggdzrRl7E8a298DRmq328xo6Ia7v5402bJK66Yg==@vger.kernel.org, AJvYcCXR9xhp0TXdFHK0Zy8slTmRcHNtdvCzz/d11Mu6yvozbAwV468zK9oQWX6fC92H5wKVGOodQ4hdfDmyWh9q@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp+H+7fuFaVrMXU6PiQxWQzYLFsXhRjiL99ordQphMmIpdj5U5
+	S4/1biznrDMiPTWj/MPOlEthjRt0gp3FT9F8ac65WxX3YsEoWgiv
+X-Google-Smtp-Source: AGHT+IHYDJEAciZjgbJbvBeCgZlYM2Md6/5R2vTjcFNCFYNvDyxjK1/y7McNhymZfC9S+f9mH1j17g==
+X-Received: by 2002:a05:6a21:9185:b0:1c6:a65f:299 with SMTP id adf61e73a8af0-1cece4fcfc2mr84075637.21.1725034134712;
+        Fri, 30 Aug 2024 09:08:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e569e0edsm2903692b3a.137.2024.08.30.08.32.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55a9a44sm2945166b3a.68.2024.08.30.09.08.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 08:32:51 -0700 (PDT)
+        Fri, 30 Aug 2024 09:08:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <086b55b2-42ab-4cfd-a7aa-31c484ffbd92@roeck-us.net>
-Date: Fri, 30 Aug 2024 08:32:50 -0700
+Message-ID: <7c155638-8c33-4873-9534-17a9454c83e6@roeck-us.net>
+Date: Fri, 30 Aug 2024 09:08:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,15 +63,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 11/14] hwmon: (ina2xx) Convert to use with_info hwmon
- API
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20240830010554.1462861-1-linux@roeck-us.net>
- <20240830010554.1462861-12-linux@roeck-us.net>
- <ZtG7VaILKoZUHTkC@tzungbi-laptop>
-Content-Language: en-US
+Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
 From: Guenter Roeck <linux@roeck-us.net>
+To: Wenliang <wenliang202407@163.com>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <935f564b-fa3e-4cdf-bf12-19b897369a07@roeck-us.net>
+ <20240822074426.7241-1-wenliang202407@163.com>
+ <0a1df032-dfb6-4a26-a27d-14cc301cf12c@roeck-us.net>
+Content-Language: en-US
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -114,101 +115,30 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ZtG7VaILKoZUHTkC@tzungbi-laptop>
+In-Reply-To: <0a1df032-dfb6-4a26-a27d-14cc301cf12c@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/30/24 05:30, Tzung-Bi Shih wrote:
-> On Thu, Aug 29, 2024 at 06:05:51PM -0700, Guenter Roeck wrote:
->> +static int ina2xx_chip_read(struct device *dev, u32 attr, long *val)
->>   {
->> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
->>   	struct ina2xx_data *data = dev_get_drvdata(dev);
->> -	unsigned int mask;
->> -	int alarm = 0;
->> +	u32 regval;
->>   	int ret;
->>   
->> -	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &mask);
->> +	switch (attr) {
->> +	case hwmon_chip_update_interval:
->> +		ret = regmap_read(data->regmap, INA2XX_CONFIG, &regval);
->> +		if (ret)
->> +			return ret;
->> +
->> +		*val = ina226_reg_to_interval(regval);
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +	return 0;
+On 8/25/24 15:50, Guenter Roeck wrote:
+> On 8/22/24 00:44, Wenliang wrote:
+>> Thank you for bringing up your questions and suggestions.The SQ52205 is a
+>> part number specific to the Asian region, which is why you might not be
+>> able to find it through a search. I'll provide you the website
+>> (https://us1.silergy.com/zh/productsview/SQ52205FBP).
 > 
-> ......(1)
-> 
->> +static int ina2xx_power_read(struct device *dev, u32 attr, long *val)
->> +{
->> +	struct ina2xx_data *data = dev_get_drvdata(dev);
->> +
->> +	switch (attr) {
->> +	case hwmon_power_input:
->> +		return ina2xx_read_init(dev, INA2XX_POWER, val);
->> +	case hwmon_power_crit:
->> +		return ina226_alert_limit_read(data, INA226_POWER_OVER_LIMIT_MASK,
->> +					       INA2XX_POWER, val);
->> +	case hwmon_power_crit_alarm:
->> +		return ina226_alert_read(data->regmap, INA226_POWER_OVER_LIMIT_MASK, val);
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
-> 
-> ......(2)
-> 
-> Just noticed a nit: there are some *_read() and *_write() functions mainly
-> contain a switch-case block.  Some of them returns 0 at the end of the function
-> (1); some of them don't (2).  (1) should be unreachable, however, I'm not sure
-> whether some checkers might complain about case (2).
-> 
-Checkers are fine with it as long as each case statement returns. They actually
-complain about unreachable code if there is a return statement at the end.
+> That page does not point to the chip datasheet. The almost identical
+> page at https://us1.silergy.com/productsview/SQ52205FBP does.
 
-I've tried to return directly from a case statement if the return value from
-a call is also the return value from the function. This is to avoid code such as
-		ret = func(...);
-		break;
-...
-	return ret;
+... and that page is no longer available. Given that, if you really need
+support for this chip, you might want to consider adding support for
+SY24655 and/or SY24657 since public datasheets are available for those
+chips. The EIN and ACCUM_CONFIG registers in those chips match the
+definitions in your driver submission, so at least at first glance this
+should work.
 
-or, worse,
-		ret = func(...)
-		if (ret)
-			return ret;
-		break;
-...
-	return 0;
+I noticed that there is also SY24656, which appears to be register compatible
+to INA226/INA230.
 
-and instead use
-		return func(...);
-directly.
-
-On the other side, if there is some code to execute after a function call
-
-		ret = func();
-		if (ret)
-			return ret;
-		do_something;
-		break;
-...
-	return 0;
-
-I tend to use return values and break statements. Maybe that doesn't always
-work out. I'll keep it in mind for the future.
-
-> In either cases, it would be great if make them consistent.
-> 
-> With that,
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-Thanks a lot for this and all the other reviews!
-
+Thanks,
 Guenter
 
