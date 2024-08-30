@@ -1,385 +1,214 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE45D1A4B6C;
-	Fri, 30 Aug 2024 15:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71C21B5EA2
+	for <linux-hwmon@vger.kernel.org>; Fri, 30 Aug 2024 15:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725031206; cv=none; b=BoiKay3eEq/mW+3emXuZFXxw2N2rD2L3D/MPU4Nnbf/PWm4sNBUCWtBRu0Qp147CnVUnETIQgMOqFd7dhBEFmxIpsFD2E5NHn4+W6y9XuAfjpwOEM0AMDIyKGyR7i34ixB2EUcBZlkKUvFoyOfr+CMCdDrmsGTBnrLeUDgGRFoc=
+	t=1725031975; cv=none; b=d3Jn+QphfLh6U0Ncyf1nT5FkGZFU0yIFJQSzVucooYwa62ydp3s0C4Arw4hsKhOb1bVcIrJUNb7NFpRKwUPSmptXrfahdjIhDj8ZumoLoEhe3ejZAq5ISYVWptU8OjHZ/vKZAO++jMrwK7eq3IM1Flms+HXpHeKxtS4AtAPuP18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725031206; c=relaxed/simple;
-	bh=0UXZVK+01YIALbpXvQLWD0w7jNJSs5w4fefocSWUt9Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=shuXxRkTDMPkopEOASRZJcNylTgajMLyRLbNNPoCax4YNEPrhgCGBsYf9bsUSd/fALZsyFqpFIQUXpHCGGCZK2SRcEK2322X7q7aB/AMXrfLqwwFik4t8HRWztjOrPJ9T2aUeO3lDdUa+XlXnaxGJph2KuIa9RnmbDYGZhftl7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g3g7p7+t; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1725031975; c=relaxed/simple;
+	bh=jlfm0e0N8OpEJJOWD2ohXQo8P5hK/qhcjbae7DjoYD4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QYVyODQQBAKXPiEVVg2Fagwzxu/Xtqqnwf2oZWCUkEPVfje9NEkpB+qT2ISmlYwfkEK/2dddUdpRUSL5d1fm+AMt2B6cYkd7jfKoqiWAFVEv1MCfwsJj1gZ7dRvC/RqRVxschM8p/giaWYFg3LrHumnvzbFQwo8uoygsxMYPhw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSyWZGad; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g3g7p7+t"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42bb885f97eso8828365e9.0;
-        Fri, 30 Aug 2024 08:20:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSyWZGad"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-714187df604so1903072b3a.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 30 Aug 2024 08:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725031203; x=1725636003; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwCJQYBFWQH0dOGXuS489tUDvuQt4sjtMeEawT8BUM0=;
-        b=g3g7p7+tpUqBIzT3u5zWDC4VOQr5u1ugf4wF/rJCD1t0vBTw8fxTbeHVssZbJlq5tF
-         RpNxpJAyuLmO5Nz4Wv5YhW1N9hvuCBbyT266kyAMWtncOg6wMhzO4FUaXIJZd9CyxVkN
-         1AOoKOs0webIgse1FNoljgsIUcwq7HYKKeiKRmB63TC+T2b+uf/Eu5v2IHh2hIr0tzkU
-         33PBS64w7XrDlyd5In2rLVnl79vox8lUu6RC/8tiy7uzUMjhGUd/epCOlKjlCRBj3fio
-         wAFO/C0rCmQQnnfvqSYA5EinBubMNi75+yjEXeCDwI/akGlZ2tFP7tiUttJAC7WwtxMR
-         qK9g==
+        d=gmail.com; s=20230601; t=1725031973; x=1725636773; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJB6+kQg+XuVjWnh6snh5elB0KOqqKsgKhECqidIO6I=;
+        b=NSyWZGadxkNv6cbxvG4ORiAcjuBX3TA8tvAg25thUqzzATbPUeIgDrYqH2XHLGFB2j
+         2Szj/J/bg71AUzmqZrUzG2Rfc84RhCRRs5OWM3THUBrSr3IZkSr64HtM4L+mSop05er1
+         K4SQy9aO66km2KDoFqezVopy65ttCN0z6ejyO1awv4Gp7VVKaTQFPxHHOq7qP/ghcTt9
+         qDv9nXzlfPgToy9z4l1xbtILuajSEbW0XmAUemMmYd228VlE2ZNGtNd8m3oVnNDMJdH5
+         naTal15rxNC9+YpGA0zaw73m1C15drlIhHdkYw/18sCW1Nau6wdVYXIJFJktprcnhKtP
+         zHzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725031203; x=1725636003;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wwCJQYBFWQH0dOGXuS489tUDvuQt4sjtMeEawT8BUM0=;
-        b=AZ34sLI+gYJ2s3Ed+Tb0gYV/cCH9Qc7T3udYx+yyMd4X9J2H6vja364rNrEjWRwilv
-         FXmu4av6orV3cMIyQhhZqk25dtZC9ISb4Yjn9pZWTfJUyHOkdG+AgwDvZfQAMpACf+k+
-         S7KWJxKd0XIRQZ9WOOdyH8n6dOv3XvUFu7Lg5fVLDAHl84FOI0rc9C8T6sz/SlEfYEst
-         8eFsDM409DqmGiMg0CZNq58Zj8I6vNwAk6iCo5FiASEuup9wftpR0XuHUukMDsPnHZUy
-         TFNPIsXujEU3dDA3oGzC6U1VEg6BdhNPyVyTLX/8OrPP7hSRXpit2aziI9Yrc+w4L8hi
-         L2Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCVF/H8fLDV7Gjm8O43LU7J/VMb1H+r3kzhSn2RDafuivChHqQYA46BQWlPW3489H7qKi7WJ01tNQFTIKA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxlYIidyncwjjJeyXkdTtwyck0f+wCgXEZsteHpwoLuIuWgSed
-	zXu22eH0WeCSnstTHDN/1CH3c07NdsEahdAJUPz1oIZrUao3yiZO
-X-Google-Smtp-Source: AGHT+IF+udyzry1IDmtCy91l9bClMLrPxmjJcx1kb7Pek9BxSYiO48yR1YlWp4gF9ewCeje+gqKWOA==
-X-Received: by 2002:a5d:6748:0:b0:368:3562:7c76 with SMTP id ffacd0b85a97d-374a916ee7bmr1940789f8f.3.1725031202347;
-        Fri, 30 Aug 2024 08:20:02 -0700 (PDT)
-Received: from localhost.localdomain ([78.209.142.0])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3749ef7f334sm4299778f8f.80.2024.08.30.08.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2024 08:20:01 -0700 (PDT)
-From: Antoni Pokusinski <apokusinski01@gmail.com>
-To: linux@roeck-us.net,
-	jdelvare@suse.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Antoni Pokusinski <apokusinski01@gmail.com>
-Subject: [PATCH v4] hwmon: (sht4x): add heater support
-Date: Fri, 30 Aug 2024 17:17:53 +0200
-Message-Id: <20240830151752.577899-1-apokusinski01@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1725031973; x=1725636773;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RJB6+kQg+XuVjWnh6snh5elB0KOqqKsgKhECqidIO6I=;
+        b=KUejA2ujrJtCxaPhBMD+Ni2NmkzgeF4EHDPMqQj0UN6s2tIx8weRwt729KS1CGvnKt
+         qYzKY5MQID0Gql4C9zazn10zPmryprnLLwboJ5hjADK9AQMc6VQNsk2e2m29JTqwWwdH
+         kM/S1NyWbj5DIzxvRgKAtYYW8OLkORP9NRyYEbt0WSVCx1TmpRPaMcEGbLIgHE+X2z9l
+         DuUN8C+nRr5n87z/6sOQSJZF2yyWV3kAif3bcywsUGB2TzwY//Wn7w3tL1LIVBLVMnfC
+         G1NV5gNX67WekRQMUesohERPRt59gfwGoNMiXzHYNRJbBxz20XjMhMPhO4IfOQjgmdXW
+         LcUA==
+X-Gm-Message-State: AOJu0YzAyAqOG0ScgpxYSQuGBXu1ctz6AGccGZBSa2oRUYmRKkQmTlo4
+	TlONHeRK3gcBSpnyBBF0DwNfglZkRXqblHa3CXOSW8VJ8aoIEgo7A6DKQg==
+X-Google-Smtp-Source: AGHT+IEBIu3bcrw/WP9ChIOCjeE9wDhWCnXAzIs6b3x93ZwTzpitPLGDmSJFFwKo7j2QP29zuLObng==
+X-Received: by 2002:a05:6a21:e8a:b0:1cc:b09f:4776 with SMTP id adf61e73a8af0-1ccee5b7d35mr3919002637.0.1725031972777;
+        Fri, 30 Aug 2024 08:32:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e569e0edsm2903692b3a.137.2024.08.30.08.32.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 08:32:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <086b55b2-42ab-4cfd-a7aa-31c484ffbd92@roeck-us.net>
+Date: Fri, 30 Aug 2024 08:32:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/14] hwmon: (ina2xx) Convert to use with_info hwmon
+ API
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240830010554.1462861-1-linux@roeck-us.net>
+ <20240830010554.1462861-12-linux@roeck-us.net>
+ <ZtG7VaILKoZUHTkC@tzungbi-laptop>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <ZtG7VaILKoZUHTkC@tzungbi-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add support for manipulating the internal heater of sht4x devices.
-Enabling the heater removes condensed water from the sensor surface
-which disturbs the relative humidity measurements.
+On 8/30/24 05:30, Tzung-Bi Shih wrote:
+> On Thu, Aug 29, 2024 at 06:05:51PM -0700, Guenter Roeck wrote:
+>> +static int ina2xx_chip_read(struct device *dev, u32 attr, long *val)
+>>   {
+>> -	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+>>   	struct ina2xx_data *data = dev_get_drvdata(dev);
+>> -	unsigned int mask;
+>> -	int alarm = 0;
+>> +	u32 regval;
+>>   	int ret;
+>>   
+>> -	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &mask);
+>> +	switch (attr) {
+>> +	case hwmon_chip_update_interval:
+>> +		ret = regmap_read(data->regmap, INA2XX_CONFIG, &regval);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		*val = ina226_reg_to_interval(regval);
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +	return 0;
+> 
+> ......(1)
+> 
+>> +static int ina2xx_power_read(struct device *dev, u32 attr, long *val)
+>> +{
+>> +	struct ina2xx_data *data = dev_get_drvdata(dev);
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_power_input:
+>> +		return ina2xx_read_init(dev, INA2XX_POWER, val);
+>> +	case hwmon_power_crit:
+>> +		return ina226_alert_limit_read(data, INA226_POWER_OVER_LIMIT_MASK,
+>> +					       INA2XX_POWER, val);
+>> +	case hwmon_power_crit_alarm:
+>> +		return ina226_alert_read(data->regmap, INA226_POWER_OVER_LIMIT_MASK, val);
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+> 
+> ......(2)
+> 
+> Just noticed a nit: there are some *_read() and *_write() functions mainly
+> contain a switch-case block.  Some of them returns 0 at the end of the function
+> (1); some of them don't (2).  (1) should be unreachable, however, I'm not sure
+> whether some checkers might complain about case (2).
+> 
+Checkers are fine with it as long as each case statement returns. They actually
+complain about unreachable code if there is a return statement at the end.
 
-The heater can operate at three heating levels (20, 110 or 200
-milliwatts). Also, two heating durations may be selected (0.1 or 1s).
-Once the heating time elapses the heater is automatically switched off.
+I've tried to return directly from a case statement if the return value from
+a call is also the return value from the function. This is to avoid code such as
+		ret = func(...);
+		break;
+...
+	return ret;
 
-Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
----
-Changes since v3:
-* struct sht4x_data: add heating_complete timestamp
-* struct sht4x_data: add data_pending flag
-* heater_enable_store: return -EINVAL if input != 1
-* heater_enable_store: check for data->heating_complete and update it
-* heater_enable_store: set data_pending flag after heating request
-* sht4x_read_values: msleep if heating in progress
-* sht4x_read_values: dont send measurement request if data_pending
-* heater_enable attr: make it RW
-* Documentation: update info about heater_enable attr
+or, worse,
+		ret = func(...)
+		if (ret)
+			return ret;
+		break;
+...
+	return 0;
 
-Changes since v2:
-* heater_enable_store: remove unnecessary if
-* Documentation: remove incorrect info about turning off the heater
-* be more specific in the patch description
+and instead use
+		return func(...);
+directly.
 
-Changes since v1:
-* explain the use case of the new attributes set
-* heater_enable attr: make it write-only
-* heater_enable_store: define cmd as u8 instead of u8*
-* heater_enable_store: remove unreachable data path
-* heater_enable_store: remove unnecessary lock
-* heater_enable_store: call i2c_master_send only if status==true
-* define attributes as DEVICE_ATTR_* instead of SENSOR_DEVICE_ATTR_*
+On the other side, if there is some code to execute after a function call
 
----
- Documentation/hwmon/sht4x.rst |  14 +++
- drivers/hwmon/sht4x.c         | 184 ++++++++++++++++++++++++++++++++--
- 2 files changed, 189 insertions(+), 9 deletions(-)
+		ret = func();
+		if (ret)
+			return ret;
+		do_something;
+		break;
+...
+	return 0;
 
-diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
-index daf21e763425..ba094ad0e281 100644
---- a/Documentation/hwmon/sht4x.rst
-+++ b/Documentation/hwmon/sht4x.rst
-@@ -42,4 +42,18 @@ humidity1_input Measured humidity in %H
- update_interval The minimum interval for polling the sensor,
-                 in milliseconds. Writable. Must be at least
-                 2000.
-+heater_power	The requested heater power, in milliwatts.
-+		Available values: 20, 110, 200 (default: 200).
-+heater_time	The requested operating time of the heater,
-+		in milliseconds.
-+		Available values: 100, 1000 (default 1000).
-+heater_enable	Enable the heater with the selected power
-+		and for the selected time in order to remove
-+		condensed water from the sensor surface. The
-+		heater cannot be manually turned off once
-+		enabled (it will automatically turn off
-+		after completing its operation).
-+
-+			- 0: turned off (read-only value)
-+			- 1: turn on
- =============== ============================================
-diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-index b8916d2735b5..6c9b776237c2 100644
---- a/drivers/hwmon/sht4x.c
-+++ b/drivers/hwmon/sht4x.c
-@@ -11,6 +11,7 @@
- #include <linux/crc8.h>
- #include <linux/delay.h>
- #include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
- #include <linux/i2c.h>
- #include <linux/jiffies.h>
- #include <linux/module.h>
-@@ -31,6 +32,12 @@
-  */
- #define SHT4X_CMD_MEASURE_HPM	0b11111101
- #define SHT4X_CMD_RESET		0b10010100
-+#define SHT4X_CMD_HEATER_20_1	0b00011110
-+#define SHT4X_CMD_HEATER_20_01	0b00010101
-+#define SHT4X_CMD_HEATER_110_1	0b00101111
-+#define SHT4X_CMD_HEATER_110_01	0b00100100
-+#define SHT4X_CMD_HEATER_200_1	0b00111001
-+#define SHT4X_CMD_HEATER_200_01 0b00110010
- 
- #define SHT4X_CMD_LEN		1
- #define SHT4X_CRC8_LEN		1
-@@ -49,6 +56,10 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
-  * struct sht4x_data - All the data required to operate an SHT4X chip
-  * @client: the i2c client associated with the SHT4X
-  * @lock: a mutex that is used to prevent parallel access to the i2c client
-+ * @heating_complete: the time that the last heating finished
-+ * @data_pending: true if and only if there are measurements to retrieve after heating
-+ * @heater_power: the power at which the heater will be started
-+ * @heater_time: the time for which the heater will remain turned on
-  * @valid: validity of fields below
-  * @update_interval: the minimum poll interval
-  * @last_updated: the previous time that the SHT4X was polled
-@@ -58,6 +69,10 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
- struct sht4x_data {
- 	struct i2c_client	*client;
- 	struct mutex		lock;	/* atomic read data updates */
-+	unsigned long		heating_complete;	/* in jiffies */
-+	bool			data_pending;
-+	u32			heater_power;	/* in milli-watts */
-+	u32			heater_time;	/* in milli-seconds */
- 	bool			valid;	/* validity of fields below */
- 	long			update_interval;	/* in milli-seconds */
- 	long			last_updated;	/* in jiffies */
-@@ -79,19 +94,30 @@ static int sht4x_read_values(struct sht4x_data *data)
- 	u8 crc;
- 	u8 cmd[SHT4X_CMD_LEN] = {SHT4X_CMD_MEASURE_HPM};
- 	u8 raw_data[SHT4X_RESPONSE_LENGTH];
-+	unsigned long curr_jiffies;
- 
- 	mutex_lock(&data->lock);
--	next_update = data->last_updated +
--		      msecs_to_jiffies(data->update_interval);
- 
--	if (data->valid && time_before_eq(jiffies, next_update))
--		goto unlock;
-+	curr_jiffies = jiffies;
-+	if (time_before(curr_jiffies, data->heating_complete))
-+		msleep(jiffies_to_msecs(data->heating_complete - curr_jiffies));
- 
--	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
--	if (ret < 0)
--		goto unlock;
-+	if (data->data_pending &&
-+	    time_before(jiffies, data->heating_complete + data->update_interval)) {
-+		data->data_pending = false;
-+	} else {
-+		next_update = data->last_updated +
-+			msecs_to_jiffies(data->update_interval);
- 
--	usleep_range(SHT4X_MEAS_DELAY_HPM, SHT4X_MEAS_DELAY_HPM + SHT4X_DELAY_EXTRA);
-+		if (data->valid && time_before_eq(jiffies, next_update))
-+			goto unlock;
-+
-+		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
-+		if (ret < 0)
-+			goto unlock;
-+
-+		usleep_range(SHT4X_MEAS_DELAY_HPM, SHT4X_MEAS_DELAY_HPM + SHT4X_DELAY_EXTRA);
-+	}
- 
- 	ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
- 	if (ret != SHT4X_RESPONSE_LENGTH) {
-@@ -215,6 +241,143 @@ static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
-+static ssize_t heater_enable_show(struct device *dev,
-+				  struct device_attribute *attr,
-+				  char *buf)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", time_before(jiffies, data->heating_complete));
-+}
-+
-+static ssize_t heater_enable_store(struct device *dev,
-+				   struct device_attribute *attr,
-+				   const char *buf,
-+				   size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	bool status;
-+	ssize_t ret;
-+	u8 cmd;
-+	u32 heating_time_bound;
-+
-+	ret = kstrtobool(buf, &status);
-+	if (ret)
-+		return ret;
-+	if (!status)
-+		return -EINVAL;
-+
-+	if (data->heater_time == 100) {
-+		if (data->heater_power == 20)
-+			cmd = SHT4X_CMD_HEATER_20_01;
-+		else if (data->heater_power == 110)
-+			cmd = SHT4X_CMD_HEATER_110_01;
-+		else /* data->heater_power == 200 */
-+			cmd = SHT4X_CMD_HEATER_200_01;
-+
-+		heating_time_bound = 110;
-+	} else { /* data->heater_time == 1000 */
-+		if (data->heater_power == 20)
-+			cmd = SHT4X_CMD_HEATER_20_1;
-+		else if (data->heater_power == 110)
-+			cmd = SHT4X_CMD_HEATER_110_1;
-+		else /* data->heater_power == 200 */
-+			cmd = SHT4X_CMD_HEATER_200_1;
-+
-+		heating_time_bound = 1100;
-+	}
-+
-+	mutex_lock(&data->lock);
-+
-+	if (time_before(jiffies, data->heating_complete)) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
-+
-+	ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
-+	if (ret < 0)
-+		goto unlock;
-+
-+	data->heating_complete = jiffies + msecs_to_jiffies(heating_time_bound);
-+	data->data_pending = true;
-+unlock:
-+	mutex_unlock(&data->lock);
-+	return ret;
-+}
-+
-+static ssize_t heater_power_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", data->heater_power);
-+}
-+
-+static ssize_t heater_power_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf,
-+				  size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	u32 power;
-+	ssize_t ret;
-+
-+	ret = kstrtou32(buf, 10, &power);
-+	if (ret)
-+		return ret;
-+
-+	if (power != 20 && power != 110 && power != 200)
-+		return -EINVAL;
-+
-+	data->heater_power = power;
-+
-+	return count;
-+}
-+
-+static ssize_t heater_time_show(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", data->heater_time);
-+}
-+
-+static ssize_t heater_time_store(struct device *dev,
-+				 struct device_attribute *attr,
-+				 const char *buf,
-+				 size_t count)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+	u32 time;
-+	ssize_t ret;
-+
-+	ret = kstrtou32(buf, 10, &time);
-+	if (ret)
-+		return ret;
-+
-+	if (time != 100 && time != 1000)
-+		return -EINVAL;
-+
-+	data->heater_time = time;
-+
-+	return count;
-+}
-+
-+static DEVICE_ATTR_RW(heater_enable);
-+static DEVICE_ATTR_RW(heater_power);
-+static DEVICE_ATTR_RW(heater_time);
-+
-+static struct attribute *sht4x_attrs[] = {
-+	&dev_attr_heater_enable.attr,
-+	&dev_attr_heater_power.attr,
-+	&dev_attr_heater_time.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(sht4x);
-+
- static const struct hwmon_channel_info * const sht4x_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-@@ -255,6 +418,9 @@ static int sht4x_probe(struct i2c_client *client)
- 
- 	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
- 	data->client = client;
-+	data->heater_power = 200;
-+	data->heater_time = 1000;
-+	data->heating_complete = jiffies;
- 
- 	mutex_init(&data->lock);
- 
-@@ -270,7 +436,7 @@ static int sht4x_probe(struct i2c_client *client)
- 							 client->name,
- 							 data,
- 							 &sht4x_chip_info,
--							 NULL);
-+							 sht4x_groups);
- 
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
--- 
-2.25.1
+I tend to use return values and break statements. Maybe that doesn't always
+work out. I'll keep it in mind for the future.
+
+> In either cases, it would be great if make them consistent.
+> 
+> With that,
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+
+Thanks a lot for this and all the other reviews!
+
+Guenter
 
