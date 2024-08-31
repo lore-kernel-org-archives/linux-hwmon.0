@@ -1,100 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DD2193;
-	Sat, 31 Aug 2024 12:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D1D39FDD;
+	Sat, 31 Aug 2024 19:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725106928; cv=none; b=dD3XzSGgd+2Q6yTcR1CIrcxQPAIB+Rkrlc9marz/99LWAslapeA12ckEUdqtw9jp3ABU+wGP+nULN0VNG9yqhuKhKkyCQJt2BqeY0BsGi0fzP9g43tCMuNHO+9hO1kMiDniJ/wK4RdUsapIgSE6G9fXo9zCBCxDZ9gBEFU43GIs=
+	t=1725132935; cv=none; b=Yy3lXfcljiWI3A7UXiA54bDDpntlZgj0DofrHf7o4Thq+z7lrBT4sdvi280B0nMhLs/BXrSZ5fDikfW3dMRHE1qIupsnBDXUWySyQ+5JOojuKAecEvmOqGnoUnZsUO4ZTK/KjBLAPBiYfkpoKzsDU6HVwvWvCc70yIUmrXW0ZjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725106928; c=relaxed/simple;
-	bh=StmMqtk1qu2rJCc4Il63kXR9JrprhuPEirHNGh6jjdA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XmcMt6vynanE84jddi0oEAIfvC+lgGYRmt+j8tdBGhPK+gJ6MmmTzW7+cufmOMLmdBHi55b/+YfHK71L+fKjt8/8ZOJaQTCwLG8As6o6SwRJrULKnU5fTcQ4wX+ayAq06vzmL1RcT7yz40uPZZsaqBQ0dlsVwDul/ftoDvnvVXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGyMXa+A; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725132935; c=relaxed/simple;
+	bh=88vBedgXwP97HYw2npqq3VYbx8iEQMale+RTN4exJRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YAs7Kb8GwovHbiSVlOCaD3bam0wkOz+n6BY1lVrnWlmZeAnsQ77ZivDjI93MDQVyygtADjwOjmumhaaeZyQVCCDuOfbBHxce5V81TPL6nMkHNtwWmRzojCyN0qD3EdlZBq+oS4MfQ4rt1HTlCYFh9HRpqcy7KE/IB3IrkCsRTeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COVPeyFC; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGyMXa+A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652CCC4CEC0;
-	Sat, 31 Aug 2024 12:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725106927;
-	bh=StmMqtk1qu2rJCc4Il63kXR9JrprhuPEirHNGh6jjdA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rGyMXa+AvBLE+nJZTVXG6eSqU4/vigDsYT2Zob+gujZ+2zTNzpi/uIMhPdGBC3ryn
-	 iOxrP8BK+G2eJwBY7bzmt5MDkC6V77nxprOb/A7+ECKDFzmEhAH+AigJe1ZJ/NmGHC
-	 mJzWZnkqsmxi4tGzsRNCHa7/mOurlheYV7g4fOIHXo2s/cFCdICSNcPT+nMX6yz2qs
-	 YjfH/2xSDSsuWmYPhMwoXRkFSAfxmFCunquPU+temeyhEJIz0CeVAG6IcG0p4c1twZ
-	 V9rOpcyXSiVK88I6gMfu2JMUgJbn3o/c+QuvJ9HJ7gRnCNMjwVk76kIVNI0oudBzlW
-	 7MKmLbPim0Cjg==
-Date: Sat, 31 Aug 2024 13:21:59 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: "Sperling, Tobias" <Tobias.Sperling@softing.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
- <linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
- <conor+dt@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
- linux-iio@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce ADS71x8
-Message-ID: <20240831132159.2073994f@jic23-huawei>
-In-Reply-To: <20240830-chaos-unrivaled-04c5c4c6add9@spud>
-References: <BE1P281MB24208CB90AF549578AA5C384EF972@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-	<20240830-chaos-unrivaled-04c5c4c6add9@spud>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COVPeyFC"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-715cc93694fso2647225b3a.2;
+        Sat, 31 Aug 2024 12:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725132933; x=1725737733; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=efDdo8Rf8FcDNhL/pTn7ObRZiGA/HSHYfyN56iTR4Ok=;
+        b=COVPeyFC4QxfLVQRq1Sgp9SoU55PzeZE6SFR32nuKaTIH5tFHiO7/D7p7/i7X7VwSw
+         Vm9SyNdtijMIVEn5faTghv2M0a4m0ea7tfWSecoiw2CGdrHJkAWrVZl5ViAD5cnNJZ0h
+         06Lq04RxTHHnHaSjBnhhgFg3jOoRa3wCJV23W5yyF5fHKi7i4qQFNlSvU01R8iVcSOiZ
+         hEsKVAzId6Y1PVBhZPQXr1eElrdQG2qkOaAte/JUY5lVZT7cFPAPz9810MBRfSSr1qOA
+         jg2kq9CbrMk2fPcTvscXVG2mvSlXSEtBpUuKL9YzMlmX8vg79VeLHsHBmSBYpZpHrK+c
+         pczg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725132933; x=1725737733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=efDdo8Rf8FcDNhL/pTn7ObRZiGA/HSHYfyN56iTR4Ok=;
+        b=M4F0HtsmeWAp2DmJ6PHaIM016eBIUKlEahK3qKNsgfZLJFsIZj2e8dmOi/nvWmY5A1
+         A81FuVwPX2z3bmiqKuIV9bbPvdgyABlCaNpe2/PjYt4mks8R6lsoCutrbLkc0JPBLjkw
+         B+O02FUQ7nij2j9eO04QYZw7C69pqCk3mB4f77ypdbeTdrM6XltFYPvJF6UF2DSsHq0W
+         JluGPXx44qXXnwfY4CYwZQnrvy+yPyb8pv7+PfQiyuupebo5NYMlYzmumVSJxawS6aow
+         DCJTbvgznolBIYY4NPynzDWd/6SbIaW8i4Y6F6gAnNK0KJT+fOb+nHw/ATJ1ShKhtW0U
+         yTdg==
+X-Forwarded-Encrypted: i=1; AJvYcCWDZT+r8WdyI+xeHBfFa2SnKbohtB2zNu/NrJftY5BbJlpCjChmU5L0x8UXRSgeDv+nygDoWANDgIl+oQ==@vger.kernel.org, AJvYcCXuyYZGzs6XRpcQa4ZPXJD/3ntewTU5DPWhNNMLDPbik1y0Goftf26aW3ZLQ+hFp5sr+7cF0DAcXQIsX8nO@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNQ2BDmkT5iFp/fvIidZGt3qFOhWPXMiMFtN2cp6MrUuVXVfqx
+	R2AOYn7BtFi/m0Lrasd1DveGmxdQ9+vNq3M8Y0IBgu9esc4Sm1zj
+X-Google-Smtp-Source: AGHT+IER2qtkqOh3s9y998ousnaj5IE1Uvj6aAunJLLbT566xMBH/BctBgffU5DEZeWxOix9vEVbdw==
+X-Received: by 2002:a05:6a00:3a05:b0:710:5825:5ba0 with SMTP id d2e1a72fcca58-7173c1e0e87mr2616159b3a.3.1725132932715;
+        Sat, 31 Aug 2024 12:35:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55a94casm4544640b3a.70.2024.08.31.12.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Aug 2024 12:35:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 31 Aug 2024 12:35:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Shen Lichuan <shenlichuan@vivo.com>, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] hwmon: (sht15) Simplify with dev_err_probe()
+Message-ID: <8114389a-46f2-4149-8835-8b2d62e00bc0@roeck-us.net>
+References: <20240830065443.31760-1-shenlichuan@vivo.com>
+ <4792cf2f-1a53-428b-9760-9f8c506c34d7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4792cf2f-1a53-428b-9760-9f8c506c34d7@kernel.org>
 
-
-> > +  ti,mode:
-> > +    $ref: /schemas/types.yaml#/definitions/uint8
-> > +    description: |
-> > +      Operation mode
-> > +      Mode 0 - Manual mode. A channel is only sampled when the according input
-> > +        in the sysfs is read.
-> > +      Mode 1 - Auto mode. All channels are automatically sampled sequentially.
-> > +        Reading an input returns the last valid sample. In this mode further
-> > +        features like statistics and interrupts are available.
-> > +    default: 0  
+On Sat, Aug 31, 2024 at 07:53:14AM +0200, Krzysztof Kozlowski wrote:
+> On 30/08/2024 08:54, Shen Lichuan wrote:
+> > Use dev_err_probe() to simplify the error path and unify a message
+> > template.
+> > 
+> > Using this helper is totally fine even if err is known to never
+> > be -EPROBE_DEFER.
+> > 
+> > The benefit compared to a normal dev_err() is the standardized format
+> > of the error code, it being emitted symbolically and the fact that
+> > the error code is returned which allows more compact error paths.
+> > 
+> > Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+> > ---
+> >  drivers/hwmon/sht15.c | 8 +++-----
+> >  1 file changed, 3 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
+> > index 494f9655f44f..cc3a46a9c68e 100644
+> > --- a/drivers/hwmon/sht15.c
+> > +++ b/drivers/hwmon/sht15.c
+> > @@ -942,11 +942,9 @@ static int sht15_probe(struct platform_device *pdev)
+> >  			data->supply_uv = voltage;
+> >  
+> >  		ret = regulator_enable(data->reg);
+> > -		if (ret != 0) {
+> > -			dev_err(&pdev->dev,
+> > -				"failed to enable regulator: %d\n", ret);
+> > -			return ret;
+> > -		}
+> > +		if (ret != 0)
+> > +			return dev_err_probe(&pdev->dev, ret,
+> > +					     "failed to enable regulator\n");
 > 
-> I don't think this ti,mode property is suitable for bindings. sysfs is a
-> linux implementation detail, when to do sampling is an implementation
-> detail of your driver. Bindings are only supposed to describe properties
-> of the hardware, not set software policy.
-
-Agreed. With an IIO driver this will become a switch based on what usespace
-interfaces are enabled.
-So if events are on or buffered data capture, enable automode.
-If just sysfs reads, then manual mode is fine.
-
-
-> > +
-> > +        ads7138@10 {  
+> This is ridiculous patch created by some low quality automation without
+> any review and thoughts from vivo.com side.
 > 
-> This should just be "dac@".
-
-adc :)
-
+> You change something which cannot defer, while leaving out unchanged
+> other places which actually can defer and could benefit.
 > 
-> > +            compatible = "ti,ads7138";
-> > +            reg = <0x10>;
-> > +            avdd-supply = <&reg_stb_3v3>;
-> > +            ti,mode = /bits/ 8 <1>;
-> > +            ti,interval = /bits/ 16 <1000>;
-> > +            interrupt-parent = <&gpio2>;
-> > +            interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
-> > +            status = "okay";
-> > +        };
-> > +    };  
-> oCheers,
-> Conor.
+> Stop spamming with such low quality patches.
+> 
 
+Agreed. Not only would the driver benefit from using
+devm_regulator_get_enable_optional(), the driver should be reworked to use
+the with_info hardware monitoring API instead of the old deprecated API.
+But that would have to be done by someone actually _using_ that chip.
+If that isn't done, cosmeting driver changes like this really don't add
+any value.
+
+But then the whole driver, or rather its use or non-use of the supply
+voltage, does not really make sense. If the regulator and with it the
+voltage isn't available, the temperature sensor values don't make sense.
+And if the temperature isn't valid, humidity values are also wrong.
+That means using the optional regulator API doesn't make sense to start
+with.  Really, that driver needs a complete overhaul if anyone is still
+using it, not just cosmetic changes.
+
+Guenter
