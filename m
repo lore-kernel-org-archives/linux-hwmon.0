@@ -1,134 +1,166 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D1D39FDD;
-	Sat, 31 Aug 2024 19:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1B616D9DF
+	for <linux-hwmon@vger.kernel.org>; Sat, 31 Aug 2024 20:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725132935; cv=none; b=Yy3lXfcljiWI3A7UXiA54bDDpntlZgj0DofrHf7o4Thq+z7lrBT4sdvi280B0nMhLs/BXrSZ5fDikfW3dMRHE1qIupsnBDXUWySyQ+5JOojuKAecEvmOqGnoUnZsUO4ZTK/KjBLAPBiYfkpoKzsDU6HVwvWvCc70yIUmrXW0ZjE=
+	t=1725137881; cv=none; b=NiyMJHDiz9f0xtUP69oTCPjr+zdUUaQ4i9EI7z69i92xPQ3DFuScjHIcFYzHelMsYh5pEs6jQYX8RJwnnyru+DGJ7Mc8axONOaY1O6DatgpPB5pfNZGFu7HBu1uZwTH+DU2xfErBgiCUan5ar746kqBHSYn2Wwf/7nRAoMjJeN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725132935; c=relaxed/simple;
-	bh=88vBedgXwP97HYw2npqq3VYbx8iEQMale+RTN4exJRw=;
+	s=arc-20240116; t=1725137881; c=relaxed/simple;
+	bh=7BY3vgw7y2pxfquuUqGKMij85qoe+ckABSP0pZ/Y8WU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YAs7Kb8GwovHbiSVlOCaD3bam0wkOz+n6BY1lVrnWlmZeAnsQ77ZivDjI93MDQVyygtADjwOjmumhaaeZyQVCCDuOfbBHxce5V81TPL6nMkHNtwWmRzojCyN0qD3EdlZBq+oS4MfQ4rt1HTlCYFh9HRpqcy7KE/IB3IrkCsRTeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COVPeyFC; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=UeLmTwY8N7IJjzXv8DZ1COunESC30xKHXg1uxJAt0IFC8PGuoY5YZXAoXONWNpJ99/APE66ncHfC6beWhl2dW3m2G/e8IMIoOtUlaXrcwgxa3yv13byOJxJDi+hJWvuDDEFzENYORXxqaDpJ8b7+UJ/tl6bKSE6hwFFHjntwiSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QRR6qaVU; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COVPeyFC"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-715cc93694fso2647225b3a.2;
-        Sat, 31 Aug 2024 12:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725132933; x=1725737733; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=efDdo8Rf8FcDNhL/pTn7ObRZiGA/HSHYfyN56iTR4Ok=;
-        b=COVPeyFC4QxfLVQRq1Sgp9SoU55PzeZE6SFR32nuKaTIH5tFHiO7/D7p7/i7X7VwSw
-         Vm9SyNdtijMIVEn5faTghv2M0a4m0ea7tfWSecoiw2CGdrHJkAWrVZl5ViAD5cnNJZ0h
-         06Lq04RxTHHnHaSjBnhhgFg3jOoRa3wCJV23W5yyF5fHKi7i4qQFNlSvU01R8iVcSOiZ
-         hEsKVAzId6Y1PVBhZPQXr1eElrdQG2qkOaAte/JUY5lVZT7cFPAPz9810MBRfSSr1qOA
-         jg2kq9CbrMk2fPcTvscXVG2mvSlXSEtBpUuKL9YzMlmX8vg79VeLHsHBmSBYpZpHrK+c
-         pczg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725132933; x=1725737733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=efDdo8Rf8FcDNhL/pTn7ObRZiGA/HSHYfyN56iTR4Ok=;
-        b=M4F0HtsmeWAp2DmJ6PHaIM016eBIUKlEahK3qKNsgfZLJFsIZj2e8dmOi/nvWmY5A1
-         A81FuVwPX2z3bmiqKuIV9bbPvdgyABlCaNpe2/PjYt4mks8R6lsoCutrbLkc0JPBLjkw
-         B+O02FUQ7nij2j9eO04QYZw7C69pqCk3mB4f77ypdbeTdrM6XltFYPvJF6UF2DSsHq0W
-         JluGPXx44qXXnwfY4CYwZQnrvy+yPyb8pv7+PfQiyuupebo5NYMlYzmumVSJxawS6aow
-         DCJTbvgznolBIYY4NPynzDWd/6SbIaW8i4Y6F6gAnNK0KJT+fOb+nHw/ATJ1ShKhtW0U
-         yTdg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDZT+r8WdyI+xeHBfFa2SnKbohtB2zNu/NrJftY5BbJlpCjChmU5L0x8UXRSgeDv+nygDoWANDgIl+oQ==@vger.kernel.org, AJvYcCXuyYZGzs6XRpcQa4ZPXJD/3ntewTU5DPWhNNMLDPbik1y0Goftf26aW3ZLQ+hFp5sr+7cF0DAcXQIsX8nO@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNQ2BDmkT5iFp/fvIidZGt3qFOhWPXMiMFtN2cp6MrUuVXVfqx
-	R2AOYn7BtFi/m0Lrasd1DveGmxdQ9+vNq3M8Y0IBgu9esc4Sm1zj
-X-Google-Smtp-Source: AGHT+IER2qtkqOh3s9y998ousnaj5IE1Uvj6aAunJLLbT566xMBH/BctBgffU5DEZeWxOix9vEVbdw==
-X-Received: by 2002:a05:6a00:3a05:b0:710:5825:5ba0 with SMTP id d2e1a72fcca58-7173c1e0e87mr2616159b3a.3.1725132932715;
-        Sat, 31 Aug 2024 12:35:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55a94casm4544640b3a.70.2024.08.31.12.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Aug 2024 12:35:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 31 Aug 2024 12:35:30 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Shen Lichuan <shenlichuan@vivo.com>, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v1] hwmon: (sht15) Simplify with dev_err_probe()
-Message-ID: <8114389a-46f2-4149-8835-8b2d62e00bc0@roeck-us.net>
-References: <20240830065443.31760-1-shenlichuan@vivo.com>
- <4792cf2f-1a53-428b-9760-9f8c506c34d7@kernel.org>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QRR6qaVU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=zNLm
+	AJnyx71Pfq582arlmL8j4PFld3o+5DDO21ix+4Y=; b=QRR6qaVUCK9erdhPo/Kn
+	RM4MzI8VO1I5PIhMNETeU36cX7bmnK3ex8VQVNcx1YJirWFENkhTy/kkHs1oZfdq
+	xJDpjgfENgK7e0KZsUobD0Z4TL/EicgbE9lngHrinfNy72RKisf4crSE+9Hec9jY
+	dt3pJcNXldbjhL6rKMlug5rkW1pCat7yh3hfkoaFbfnFWc46CxzyRV0D90rGH1ju
+	3nOx4C6NiM76+vUp1/eoScCerB2ro1m6bpO7fyzC38UDvcKRSkXR0h3lDzAX0dNP
+	kPNI+wDnc7P9fjWA5xRdfqR5/gdS5bkfSGw+obJxiEN4uigZ1Yg0+d8lQyuJXObC
+	Vw==
+Received: (qmail 3635973 invoked from network); 31 Aug 2024 22:57:53 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Aug 2024 22:57:53 +0200
+X-UD-Smtp-Session: l3s3148p1@KE0j9gAh43xtKnBL
+Date: Sat, 31 Aug 2024 22:57:53 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Quentin Schulz <quentin.schulz@cherry.de>,
+	Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v6 2/8] i2c: muxes: add support for tsd,mule-i2c
+ multiplexer
+Message-ID: <ZtOD0e3ZBnabdK34@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Farouk Bouabid <farouk.bouabid@cherry.de>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Quentin Schulz <quentin.schulz@cherry.de>,
+	Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+References: <20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de>
+ <20240725-dev-mule-i2c-mux-v6-2-f9f6d7b60fb2@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dpR/Rm59Kxtb9gux"
+Content-Disposition: inline
+In-Reply-To: <20240725-dev-mule-i2c-mux-v6-2-f9f6d7b60fb2@cherry.de>
+
+
+--dpR/Rm59Kxtb9gux
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4792cf2f-1a53-428b-9760-9f8c506c34d7@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 31, 2024 at 07:53:14AM +0200, Krzysztof Kozlowski wrote:
-> On 30/08/2024 08:54, Shen Lichuan wrote:
-> > Use dev_err_probe() to simplify the error path and unify a message
-> > template.
-> > 
-> > Using this helper is totally fine even if err is known to never
-> > be -EPROBE_DEFER.
-> > 
-> > The benefit compared to a normal dev_err() is the standardized format
-> > of the error code, it being emitted symbolically and the fact that
-> > the error code is returned which allows more compact error paths.
-> > 
-> > Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-> > ---
-> >  drivers/hwmon/sht15.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-> > index 494f9655f44f..cc3a46a9c68e 100644
-> > --- a/drivers/hwmon/sht15.c
-> > +++ b/drivers/hwmon/sht15.c
-> > @@ -942,11 +942,9 @@ static int sht15_probe(struct platform_device *pdev)
-> >  			data->supply_uv = voltage;
-> >  
-> >  		ret = regulator_enable(data->reg);
-> > -		if (ret != 0) {
-> > -			dev_err(&pdev->dev,
-> > -				"failed to enable regulator: %d\n", ret);
-> > -			return ret;
-> > -		}
-> > +		if (ret != 0)
-> > +			return dev_err_probe(&pdev->dev, ret,
-> > +					     "failed to enable regulator\n");
-> 
-> This is ridiculous patch created by some low quality automation without
-> any review and thoughts from vivo.com side.
-> 
-> You change something which cannot defer, while leaving out unchanged
-> other places which actually can defer and could benefit.
-> 
-> Stop spamming with such low quality patches.
-> 
+Hi,
 
-Agreed. Not only would the driver benefit from using
-devm_regulator_get_enable_optional(), the driver should be reworked to use
-the with_info hardware monitoring API instead of the old deprecated API.
-But that would have to be done by someone actually _using_ that chip.
-If that isn't done, cosmeting driver changes like this really don't add
-any value.
+On Thu, Jul 25, 2024 at 03:27:48PM +0200, Farouk Bouabid wrote:
+> Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
+> among which an amc6821 and devices that are reachable through an I2C-mux.
+> The devices on the mux can be selected by writing the appropriate device
+> number to an I2C config register (amc6821 reg 0xff).
+>=20
+> This driver is expected to be probed as a platform device with amc6821
+> as its parent i2c device.
+>=20
+> Add support for the mule-i2c-mux platform driver. The amc6821 driver
+> support for the mux will be added in a later commit.
 
-But then the whole driver, or rather its use or non-use of the supply
-voltage, does not really make sense. If the regulator and with it the
-voltage isn't available, the temperature sensor values don't make sense.
-And if the temperature isn't valid, humidity values are also wrong.
-That means using the optional regulator API doesn't make sense to start
-with.  Really, that driver needs a complete overhaul if anyone is still
-using it, not just cosmetic changes.
+Seems like DT maintainers are happy with the approach. From the I2C
+perspective, this seems suitable as well. Just a few minor comments. Can
+be fixed incrementally, from my POV. But basically:
 
-Guenter
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+> +static inline int __mux_select(struct regmap *regmap, u32 dev)
+> +{
+> +	return regmap_write(regmap, MUX_CONFIG_REG, dev);
+> +}
+
+Does this really need to be a seperate function? I'd vote for merging it
+into 'mux_select'. Also the __-prefix often means unlocked versions of
+some call, so it is also a bit misleading.
+
+> +static int mule_i2c_mux_probe(struct platform_device *pdev)
+> +{
+> +	struct device *mux_dev =3D &pdev->dev;
+> +	struct mule_i2c_reg_mux *priv;
+> +	struct i2c_client *client;
+> +	struct i2c_mux_core *muxc;
+> +	struct device_node *dev;
+> +	unsigned int readback;
+> +	int ndev, ret;
+> +	bool old_fw;
+> +
+> +	/* Count devices on the mux */
+> +	ndev =3D of_get_child_count(mux_dev->of_node);
+> +	dev_dbg(mux_dev, "%d devices on the mux\n", ndev);
+> +
+> +	client =3D to_i2c_client(mux_dev->parent);
+> +
+> +	muxc =3D i2c_mux_alloc(client->adapter, mux_dev, ndev, sizeof(*priv),
+> +			     I2C_MUX_LOCKED, mux_select, mux_deselect);
+> +	if (!muxc)
+> +		return dev_err_probe(mux_dev, -ENOMEM,
+> +				     "Failed to allocate mux struct\n");
+
+alloc_functions usually print something when failing.
+
+> +		ret =3D i2c_mux_add_adapter(muxc, 0, reg);
+> +		if (ret)
+> +			return dev_err_probe(mux_dev, ret,
+> +					     "Failed to add i2c mux adapter %d\n", reg);
+
+The 'add_adapter' functions for sure print something when failing.
+
+Thanks!
+
+   Wolfram
+
+
+--dpR/Rm59Kxtb9gux
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbTg8kACgkQFA3kzBSg
+Kbal7A/+PM4jZgxWTav2ZDGWds/ujnuVdXWpyfQu+IY/MpQVfmm2dqNa8Ru9RZW8
++RWhVE9EGt18HBsFki7E701Xv9ZwIy925OBGEk/UZEY4z5cjCPpQwCbKTjAy2+LR
+LzDJQ3a1lMShSYyjUHFPdmglAOKcVbk1sBBXUnRVAYrgyXpzmn2XHpro+qLc7VPP
+Xz+qyZfh4hgMFzThbY++4zk6PhH9fz34KDrDOJX8oToWLr84D+ItcXH2hFg2+fi8
+Du0jIGP+zuhbXvaIkldW7yEjQllEXZXySUoVirgx1IRM9eO4Kgrmu35aUrKCMyOp
+2KhKskdPlXDhL0IMYmUtdK3BFo3gqFC0KXNEFaSswdNCt8776BDKQnpCV+78mpTu
+UOIHvYSLrSH2iWGlVJxsMwbT8Y22ty6/XmiRt0kVl2TqbfYIth42zQFjq26XPAOi
+Ku6eQteE5AJs/098KcZpCICiJgOW/AfvuwGwRHu/5G3lUcHSr0EHGhk9TKrewA7w
+n6li/coMHaRt3v5UORaTJ9MopLSW/HNsWg/vm0IKMbQV7KElKd/hELnb7t6PY+46
+i3dIgp3DTSAqjJIJA3VpQCqI6ZptLBt7Me0yhQe50uznOp2jykz+1bfVat5eCuZ9
+r9tgtViUP8BXvjc+yqvaXtnF73dhazVyP4vUasuyhghGYbMwHG0=
+=ems9
+-----END PGP SIGNATURE-----
+
+--dpR/Rm59Kxtb9gux--
