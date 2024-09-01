@@ -1,127 +1,110 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E1161FCF;
-	Sun,  1 Sep 2024 03:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3483A29F;
+	Sun,  1 Sep 2024 13:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725160320; cv=none; b=GR+ZQzjEyLAEbNnhK2Igukj9kcs4g6R5tS4FQMHDFoG9gwYljoQSnMDgdmeI0G72EYMEJ+cdNiuRYjX8WYA0fXGD2+xCbOu038VduIygMWPlr0AFwjiQ4Ypzrn7Iu95T3t+bQgVdMtC70NdkjEDYwqh12dVxsdpaEq8RlWY1G+w=
+	t=1725198022; cv=none; b=GFve+/ST5wEZBsJtMxzgQH55Gr9Osgo6hLhZiRNAD0XzZm0Bju2kuUPYMZZ6sjdKk4P4ZMtyRuWiv7cFVAN6x7fssnPfpOMxzWV41JH+vWqyE7abp+N24bZhYfS+H6LHO2qqtruqQ4lu3b8lpYUH6QdtP0Fldyk6y8YXO33NZFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725160320; c=relaxed/simple;
-	bh=N1SRxLIMiaHEWQcXmpZUWs7IxLXL+xAMhqICn9t2VOY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cNdpI51LJDxNaBW860K4vm7javYWumxQjgGVtmfMKZM9MqTvLiE88T7x4G0QttIw53mROzpxMkIIcvv4h9DYwKxrD9pRYhlIgf2ycMpJ6XjKhA4pvVMRfEhR+PRglYlHYMJHwABJZAA4cq0ZThwevUmtmKIZha0P2TqTanpYHB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Mjl0aqus; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1725198022; c=relaxed/simple;
+	bh=lCud1v0rR2bB8PLBJk5AMKOvsdtpMp2LewJwYiRB7QU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pI5KyAXv1O6W8tU/2vnmGSvOOGUtFFYk8fwPWHuX9zqtQXF3HH5YxEgPIMkfgP5OscsckPg3my00l55EBeCLJqB/B2Nbsshq1lEDOhOmA1zzriPka8nVYZu60O6D2jM3YEq6gXblXIKl5XQ3nRak7X90ZQVVpCIMvUURfwFJJOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJ0Qf9/0; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Mjl0aqus"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1725160287; x=1725765087; i=w_armin@gmx.de;
-	bh=Fh+NRxC7VdSPBTxoHvz8oXusb/Km1qqXvRO90lsQ+bY=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Mjl0aqusaFE6B4ajtDRJ+J/vCGAfF8aze8sRMLciQXVuC3JWTl49F0iplfmn0iSS
-	 e7pHxH9t8vXhIyy6xCTKAWUH4dIPfyk6nUKWUg53laJZ5VZtJBh7XAT3mVv03P9jt
-	 7ETxFKPp0vFJNBkLkrKIs32xOY48oV+D2mBvYFEaPgCXRS9JLTb/kj/MFu/I5mvvo
-	 rfArt5G/DAsL/WY5zm/IZ3fVRyuBXUschMR8u7TguqLn2lUrCykK+84bNSZPAbrS6
-	 I1Xzx/1BarrwaaNgrQ4LAj36YnDGgm+JuIvbxCG+C7PUmpCG9fUumF0lRBqLHT+K/
-	 cVKhoVKrx9t/H1dZdw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N4z6q-1s3X0E3jgS-013fiD; Sun, 01 Sep 2024 05:11:26 +0200
-From: Armin Wolf <W_Armin@gmx.de>
-To: james@equiv.tech,
-	jlee@suse.com,
-	corentin.chary@gmail.com,
-	luke@ljones.dev,
-	matan@svgalib.org,
-	coproscefalo@gmail.com
-Cc: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	rafael@kernel.org,
-	lenb@kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] platform/x86: wmi: Call both legacy and WMI driver notify handlers
-Date: Sun,  1 Sep 2024 05:10:55 +0200
-Message-Id: <20240901031055.3030-6-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240901031055.3030-1-W_Armin@gmx.de>
-References: <20240901031055.3030-1-W_Armin@gmx.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJ0Qf9/0"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7b0c9bbddb4so2289828a12.3;
+        Sun, 01 Sep 2024 06:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725198020; x=1725802820; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YTHaMZtqkTyeTZH7IQINuXTpnisNGkcdp5XTWldTU/E=;
+        b=fJ0Qf9/0VGjbduBWMCVRxLANLDlIEAx7kOrojaMmLIjAiNZI7u8POawBhh8z8TQGXk
+         atCy1t6yoDLgKqyIJOhJUCixos27cwRtgGvn8ikYagRJCLSvRaBhQmIRsz1JK0H3+Pds
+         Q1/yPuj/JsEJR6h9/eOCX+Ps1p26BLQcnJagvIqZ+11ZHkMzAibBARpHM2l35L9uClz7
+         OishMZaP3X4gvrzwBT17m+dy5eYlMw59SStxH7VDAKSj0rpchhkoK0XAK1RCq8TsoOUf
+         ctBorLgjMWdVKPL+ds3A8cUBXmEPhAsppBp8xw1531apH6H4sPp116Fli1ro1SR8I5tE
+         8P4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725198020; x=1725802820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTHaMZtqkTyeTZH7IQINuXTpnisNGkcdp5XTWldTU/E=;
+        b=SB8MBMt1p9O3qZC8BKn/fx3Bxv+EKQ22+f6bDrnJ9Ql2wgtesXBeknA4huj6rkgbEU
+         bjG3b1t66vByb0AkraotLW7FLCEFb5FBgd6+eybwCnyluzPjlWqhreYqyqbYGvJDWxCZ
+         +i/9ybmXkRScAVj9c/Knis84l+twcTl5vck4MTX8M8pW3KnNXF3k/CybZD2OB5PRVjiw
+         KCH75hnat4WhP+72xLcx0ADIgYnVyMbhOiKEZB4Ddkq4zC6PNItW2+Q8TJc6OMB5edop
+         Bdn1L76ckZPKO2CqFhJzbGP6EbziKBMqg+jFIxnroshwalCLm7Tm+V7pyarrHhKwnac7
+         VfvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8ZU+sPmGNTfpV3kOIbo+SAwjAyjN8aquDvWvHxYV85fRcsmZNESPLaFUz6YFlDpNXpFt81xtYt1mg9cE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj3wyYMuA99JbussRcJr1IMr+lr0NfiLLG65luKAxj5EnzRUPv
+	MWqBqSq/SgWQ5vCgFi8I98PbN0VZFaQFDgL1eo4W8T51DYcQ4QMO
+X-Google-Smtp-Source: AGHT+IEiVH8ogskEW1BM525GsXwdJCwMsLZeo16JFZ/p3zEYokdgH3C0Jp5ob70yHVZZ48hsgQ29ZA==
+X-Received: by 2002:a05:6a21:a247:b0:1cc:eb5c:cfae with SMTP id adf61e73a8af0-1cceb5cd08dmr9724060637.52.1725198020429;
+        Sun, 01 Sep 2024 06:40:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e575cd8bsm5396935b3a.199.2024.09.01.06.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Sep 2024 06:40:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 1 Sep 2024 06:40:17 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Pawel Dembicki <paweldembicki@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ltc2991: fix register bits defines
+Message-ID: <02cf392d-57cb-48fe-930d-597f415520a4@roeck-us.net>
+References: <20240830111349.30531-1-paweldembicki@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Q8iapphxleB0wEpmapMSDOSsrBZf3Tuc6vg2za1AvOK0/PAerH7
- gETG8EHGDBFVe/mSiSAGpjOwiDkzQFeVx5HY6x+mpOB2e5oFGXfxPDo5ixAoLqWEXnfOBp5
- syANV0+Okd5jIcGZp7QCTPV4N7xOXoWdfMTuWR4N+obWm/gcjdNCOfe1j1q0QiTB62YWnt1
- RpysFHd2cp8njXU0KZS9w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:5GzjSi1jG/E=;a7fjHAiFAoEAM5Mt1Ki5bigJWza
- sM5wGwL2rEazra1oD7bSgzHUtDm/obKvcbmzP16SLCn75yRjco1/Rf0khfF4gwYhqdcz4izQP
- ILp+Q7AZCShuqPWgbtZi8JI3TPCR2PZBxxwMBLZkr7smpE4+wUUsYy8XU5bL3lWP71QhxYjvU
- 2OWkuRe+y+vl8TgB99yeQ+OMmp5o0gEAsIxPy76HNgyfzKV+WB5+a0V2QB2WuYPiiutbq/W5m
- CWKo4zANdzVBOmS1zT7mdRMC0fFWieJaWrXtxnfGx+Zg2YAnM46GLb5GuHDTsCyp1A2iJfPz8
- lbxNP32n9xkqPIxLM31nNW3h37Kl0CizDNps6ZqPTzrJDc95tYwvBCdUcas0yP3Ujnq5o08Be
- YlW+kTIftN+jymw2AnexkBi5FtV5qsygk05iQ29EqskZRhMbNZNCRWYhxLHNWCXvAw5UfwXqf
- 3c0qWaGEpVG23gliF0juu7cfmLt0xRGiEy9d0p8tt/r8hXa2tYRfzML/Ms2BPV41187zr/Lfu
- IyCOzvUemqUiuYhBTGpPrAm+wSJgB8vm6tGWsvR/H177QMSdvtpXKRJF1CCJCoqqFyDs37QPT
- FND8veLznMXscD4TILdlMEj874l4i6vsHh63xOOhMlPu1op7Tg4ArWrrTUvsnvFwdEV0uJP1D
- QQkT9Ffyd45q3nj1z4pSAJcWcuLEeEiPM4mwD27562AHBClhpC1/RFzw0PrajziVxKlEAk8P7
- QsWbNwZesJBId45TKStbyjsygklsF37v92FwIE5EefpxPTBacEflL/MzZn5PvENeve0US2gRN
- nABUesSbSXm4TV5SI01mf1eA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830111349.30531-1-paweldembicki@gmail.com>
 
-Since the legacy WMI notify handlers are now using the WMI event data
-provided by the WMI driver core, they can coexist with modern WMI
-driver notify handlers.
+On Fri, Aug 30, 2024 at 01:13:50PM +0200, Pawel Dembicki wrote:
+> In the LTC2991, V5 and V6 channels use the low nibble of the
+> "V5, V6, V7, and V8 Control Register" for configuration, but currently,
+> the high nibble is defined.
+> 
+> This patch changes the defines to use the low nibble.
+> 
+> Fixes: 2b9ea4262ae9 ("hwmon: Add driver for ltc2991")
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 
-Remove the precedence of WMI driver notify handlers and call both
-when receiving an event.
+Applied.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/platform/x86/wmi.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Thanks,
+Guenter
 
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index 6b27833ba5d9..3cbe180c3fc0 100644
-=2D-- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -1175,15 +1175,13 @@ static int wmi_notify_device(struct device *dev, v=
-oid *data)
- 	}
-
- 	down_read(&wblock->notify_lock);
--	/* The WMI driver notify handler conflicts with the legacy WMI handler.
--	 * Because of this the WMI driver notify handler takes precedence.
--	 */
--	if (wblock->dev.dev.driver && wblock->driver_ready) {
-+
-+	if (wblock->dev.dev.driver && wblock->driver_ready)
- 		wmi_notify_driver(wblock, obj);
--	} else {
--		if (wblock->handler)
--			wblock->handler(obj, wblock->handler_data);
--	}
-+
-+	if (wblock->handler)
-+		wblock->handler(obj, wblock->handler_data);
-+
- 	up_read(&wblock->notify_lock);
-
- 	kfree(obj);
-=2D-
-2.39.2
-
+> ---
+>  drivers/hwmon/ltc2991.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ltc2991.c b/drivers/hwmon/ltc2991.c
+> index 573cd8f5721b..7ca139e4b6af 100644
+> --- a/drivers/hwmon/ltc2991.c
+> +++ b/drivers/hwmon/ltc2991.c
+> @@ -42,9 +42,9 @@
+>  #define LTC2991_V7_V8_FILT_EN		BIT(7)
+>  #define LTC2991_V7_V8_TEMP_EN		BIT(5)
+>  #define LTC2991_V7_V8_DIFF_EN		BIT(4)
+> -#define LTC2991_V5_V6_FILT_EN		BIT(7)
+> -#define LTC2991_V5_V6_TEMP_EN		BIT(5)
+> -#define LTC2991_V5_V6_DIFF_EN		BIT(4)
+> +#define LTC2991_V5_V6_FILT_EN		BIT(3)
+> +#define LTC2991_V5_V6_TEMP_EN		BIT(1)
+> +#define LTC2991_V5_V6_DIFF_EN		BIT(0)
+>  
+>  #define LTC2991_REPEAT_ACQ_EN		BIT(4)
+>  #define LTC2991_T_INT_FILT_EN		BIT(3)
