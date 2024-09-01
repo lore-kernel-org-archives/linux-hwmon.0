@@ -1,110 +1,127 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB46115C156
-	for <linux-hwmon@vger.kernel.org>; Sat, 31 Aug 2024 21:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C36429A5;
+	Sun,  1 Sep 2024 03:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725138316; cv=none; b=lWEVfIk8YjspBvpr4zWm6fYZrgPc/PHul0SvJVjdXJ3UNffEJ5dLP3kHdTKeS1qW5QxRVb/5qGnAARhA9c/hWimeQoabfRHRePjQ5gm19b+IJ9EEQqWDPW0weSrfs3XFOn9jsSkY2jqFT2Ng0Xpmh18GudHKOaVhuzNQFmCdi94=
+	t=1725160311; cv=none; b=eY0uNFigIHmJztLPsSq+xLXezU2fhCWmwpllQOVwWJSqpOkHpkIwWPx5HPfujYvUlNc4+m74ta2ijFCrytgnp3H4VdSV/GBu1GckErx16dMgU15vkjXpsrR/SGAXLZulJbS9u0audHlAB/iNUHN0Sb+6TK39+UlGlAPPpBh6W8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725138316; c=relaxed/simple;
-	bh=vdy9irpsNcTTyDq7ZzNHqsgF4Q1XutSFwTkVDozkiZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vB2GipjxnmODoSIG4OdRkdyEsKobk661wB8VbYEnzIQRR++gqEH0TGq5V50NSrMcGZarXAI4x+t5XLc8KJCtGGPA5vhpHSN93mOTMGvBpbpiK2u2/F76vfoBH1BBAyO5/orHEyXQo4KKpQu64/2endCW8P+ltm25hUt7q+73IE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=IyoTcNny; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1725160311; c=relaxed/simple;
+	bh=Gn3ZeVq3s2dJ2JDVX0zGK1/0ntK9iJVduGOXDYUA86k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ERQj62M3DyRG2iXEl8GG6WJk5ZeJ+PSpOF9cmn/5hRzkN0EBuaN9MjTEEjEkV5z44Cgft7z8yvjVWBEwd2fyXPw9kDsRPLrRy+C4n9E0Xfo7mXyAGOeKuXhmLZjO+DzqU5OhQ93FeQ+ozGwww+85/fB+jhNzDM5UHhzeM6Ra3hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=QxWwmqpR; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="IyoTcNny"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=vdy9
-	irpsNcTTyDq7ZzNHqsgF4Q1XutSFwTkVDozkiZY=; b=IyoTcNnyXOX2oCMoZn09
-	nvbdCEWf+efnAswEsH1SVCHYRuTbAqsfsYP7mxGtOOU/W2RtLvS4Ql2/4u2LxO0H
-	R5pxF3LMastWQ2Bl+15WgUPfL4YVUqPKGEiLcK4aAHRNbgygwmLIrSmVv97XyiMB
-	mUYPBSWlpZGDXWkc5jElWQUuIKknmqtbtEJm/CJl9rLTaJDBagZ7ebTpZRCDcncr
-	ORwl/Iok0sZSGhHP6ROFpvGLaQMOLEbeAb6sCUMMo+21nQ5SGYbGqXDWbY77GpCG
-	e6K0HbncBPAPgdVTjKi4zDngWdrds4kAVDEAm+IgTqF9EnuePOHbUz81wmRBN/jc
-	BQ==
-Received: (qmail 3637232 invoked from network); 31 Aug 2024 23:05:11 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Aug 2024 23:05:11 +0200
-X-UD-Smtp-Session: l3s3148p1@1bE8EAEhEU5tKnBL
-Date: Sat, 31 Aug 2024 23:05:11 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Farouk Bouabid <farouk.bouabid@cherry.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v6 1/8] dt-bindings: i2c: add support for tsd,mule-i2c-mux
-Message-ID: <ZtOFh5ooDARtYa-n@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-References: <20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de>
- <20240725-dev-mule-i2c-mux-v6-1-f9f6d7b60fb2@cherry.de>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="QxWwmqpR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1725160275; x=1725765075; i=w_armin@gmx.de;
+	bh=61iovUbYzxeFk07bQVInsGZWHQS/VYBUxCJlz8xdIac=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=QxWwmqpR/3JHaQaH/66lZRFRzyvchiFN0Zq75WMEbFsz54rJc8dAK4sGRjC/2B0V
+	 5CMJmhWKvPoJbB0lsgIg7wZiYUWQknZaGn8gj9LpkVOVUAk8fMqlc1K+pfuZFvRdj
+	 atgEo2eVRd+qTOsEVuNFfa8XXdO27x731xE45Gn6PiU3PI4tFw0DwEtUXmzxJrMXY
+	 n/ismuFant5rr9s1pAU6r9ecTtLaKCV7TWvhMVHlv8j9JiXH19puCnVTFlrfWnCqB
+	 dLkJgCQji6MyjMBg902YnQQUNQ9wL0P7UF0q81xl7xrrZXUV/IZiCYlaJgkxJ5Oii
+	 e1E5Cm2J4wKBc5mIhQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1N1OXT-1s3n3I1dHv-015tVz; Sun, 01 Sep 2024 05:11:15 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: james@equiv.tech,
+	jlee@suse.com,
+	corentin.chary@gmail.com,
+	luke@ljones.dev,
+	matan@svgalib.org,
+	coproscefalo@gmail.com
+Cc: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	rafael@kernel.org,
+	lenb@kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] platform/x86: wmi: Pass event data directly to legacy notify handlers
+Date: Sun,  1 Sep 2024 05:10:50 +0200
+Message-Id: <20240901031055.3030-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QboA3ZjoP/b+0a3w"
-Content-Disposition: inline
-In-Reply-To: <20240725-dev-mule-i2c-mux-v6-1-f9f6d7b60fb2@cherry.de>
-
-
---QboA3ZjoP/b+0a3w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:o4u3UKfkDSEUWuZoiSkM7PtXoWy76rIvZ2VcU48CiI7eEcJEO5r
+ hnvReU9imYCvaRBsbOCnGQohxmm6kFYlg8hsfJHA5kyaNk/HO8oKsdsi0xylGoLaAiqF74h
+ a6OZY/uGZ6IYg9zusX2t2W7jNJGTlAGLOwoiLd5To2mhaHp4Y5ve7XEVKvdf3cF67I+uNLK
+ 9snwFUEnKaOj/0GcPOAEg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:T6dhtErzGBg=;/T1T6/xYWinrkcrJReMWvJ1eTSi
+ fs1v3uhXNNlgIMTRiC2V/CQNtcVOOsGlyIHz3DIa1534awQoyxIU/70RqeakeSnF9YBY4yCrr
+ eweYXE6+VEfH+QUFqIyMO4Do3avivR1ehUq5NzUdMT+n1nm6twixMkw++5kk2GPe/dpGS1XfD
+ Rcwo+U85qQYWlWRhXIL2orXVcxBJSu1Vb32Td/YUfEx56rHWB+zPG0Kw3PbiW4/SzyWvPudyg
+ OBAtSbELDPh8bZVl4gWZZbPRN9RCZX5ZDpC71onGSpe5LcO9awzVkErR8FEoIfyQ1ruLYm9HJ
+ IsjGq47xZj4V6DBbRQ9H74vIdrmBMz4vE0jvMBIaNbHyG7dp/f/KRcGrg0xIk5e4/AFRmcHJO
+ XPufnBD3C4puPV8f9noqNF2x6FnZOckeUUNTenYwnmgwqr88sxnT5DLayeHaXbhv0gd0F3ueH
+ WjE2hOO1H9oesWbQBZX8iSb9WiCcEgOi1RwzGBYu6kkIm3zHcYWd2XVAe4EFqDKjtfHrChbiv
+ J6WYtAVvQ5QDbGqA0R18QCb7Pg0ImIjyqbz6UL+hkBC2zO14aDMqhyxILafVfCfSjcVHiK34m
+ 4LDXn7dwkeTna01Tm4drG3kH+cDNll+vuBaFfTNapht2EgF2sJIX6hRXVD9AT28EtyhFZNDT+
+ 9JPK+ij9p0TXflIk06XMeqik8mezI9Y+SblA9xEnfBvKw6Czo/9zdiec7FLeN9itU4oR+EtgG
+ qtPGjIuz9SnEMMlmIIQJoHw3CkvdpvLB/maR1Pcj3Y44Twmn+rywMu0yX1Ud6pz71SzNqQW85
+ kELaOEJJ5IgHIJlG2XToSZ7Q==
 
-On Thu, Jul 25, 2024 at 03:27:47PM +0200, Farouk Bouabid wrote:
-> Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
-> among which devices that are reachable through an I2C-mux. The devices
-> on the mux can be selected by writing the appropriate device number to
-> an I2C config register.
->=20
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+The current legacy WMI handlers are susceptible to picking up wrong
+WMI event data on systems where different WMI devices share some
+notification IDs.
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Prevent this by letting the WMI driver core taking care of retrieving
+the event data. This also simplifies the legacy WMI handlers and their
+implementation inside the WMI driver core.
 
+The fisr patch fixes a minor issue discovered inside the hp-wmi-sensors
+driver.
+The second patch converts all legacy WMI notify handlers to stop using
+wmi_get_event_data() and instead use the new event data provided by
+the WMI driver core.
+The remaining patches finally perform some cleanups.
 
---QboA3ZjoP/b+0a3w
-Content-Type: application/pgp-signature; name="signature.asc"
+The patch series was tested on a Dell Inspiron 3505 and a Acer Aspire
+E1-731 and appears to work.
 
------BEGIN PGP SIGNATURE-----
+Changes since v1:
+- Rework the hp-wmi-sensors patch
+- add Reviewed-by tags
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbThYYACgkQFA3kzBSg
-KbY5Sg//ceGQvqvVmSu+8f+frAs/yQN52m3m1nE4lVbRnHNKmRxFCArx2Fy522yk
-KmK+P10Als0D9IJIV4eHOyGxPPQgU0X/hRw0CjzFwVa7gVh8vEvFRJImBNMEfu9Z
-fYDTKdlXy+Bn33homk0bXumxAK1bzMClmRQtd43XQPvhhuoQ8E+a/kOqHyZ0pe3t
-bOhsWJ43HNQkbxooqfDadc/WIEjX/QSFts63zwQ8FRGC7jcG436dXoi2ZIvyhokL
-WmaHWjLYxJIgpSi9XD5iEKcQSShC1nXH7Z+z6iJNoJm5qEun6DzpTyQfTEsOGiiV
-ZKWNgYYdg6sftOL0iN8YuV0EOg9mL2u3qldxrJ4XNmZ/4CRzDokdh01qUYkPPYAp
-X4bjISpDNWaFqVuwZtG85EMQ/JfsjuhAetIDfjqBo5iNfpfy0fo1q3TEoLT9tYg0
-JHRooxxBPvXplMeTzSjk568jAy+mwhzi2ByGENy5SnpGQQmrH435rRaSfrcLFrgm
-BDy4Ym2hdwButcHUd9PqlRpohOQrZKT4R3CyPmJkgyrOpQSAOlhZzPzbyyVafpTy
-FBe3918uwk8V1bh9HTL0IlkDVGMbXqRsJTudpLHi6pvi8lxGrAwZeKoICPf5UAZc
-dlTK8Qn6sALes3NFX91ZLxpgFBIBLq0nhYD/DJiRoi6c6GenGdY=
-=rzhb
------END PGP SIGNATURE-----
+Armin Wolf (5):
+  hwmon: (hp-wmi-sensors) Check if WMI event data exists
+  platform/x86: wmi: Pass event data directly to legacy notify handlers
+  platform/x86: wmi: Remove wmi_get_event_data()
+  platform/x86: wmi: Merge get_event_data() with wmi_get_notify_data()
+  platform/x86: wmi: Call both legacy and WMI driver notify handlers
 
---QboA3ZjoP/b+0a3w--
+ drivers/hwmon/hp-wmi-sensors.c           |  20 +---
+ drivers/platform/x86/acer-wmi.c          |  16 +--
+ drivers/platform/x86/asus-wmi.c          |  19 +--
+ drivers/platform/x86/dell/dell-wmi-aio.c |  13 +--
+ drivers/platform/x86/hp/hp-wmi.c         |  16 +--
+ drivers/platform/x86/huawei-wmi.c        |  14 +--
+ drivers/platform/x86/lg-laptop.c         |  13 +--
+ drivers/platform/x86/msi-wmi.c           |  20 +---
+ drivers/platform/x86/toshiba-wmi.c       |  15 +--
+ drivers/platform/x86/wmi.c               | 143 ++++++-----------------
+ include/linux/acpi.h                     |   3 +-
+ 11 files changed, 53 insertions(+), 239 deletions(-)
+
+=2D-
+2.39.2
+
