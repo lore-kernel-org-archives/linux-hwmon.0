@@ -1,95 +1,151 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E8519E977;
-	Mon,  2 Sep 2024 14:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8234C1A2622;
+	Mon,  2 Sep 2024 14:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725287293; cv=none; b=Fmt6EXPYg0BOd1KIrqMNjyMDFGoJczrBuCGa5SLB7HN/fRt31GtzTihoOxtUDniVp8pYjgR19U1IcBcggsXXa4+KyOnRUzBCMfKDjVSBEbhuGd9OKV5UEObzeGP2Mtt1nbt7QO/AC0vC5TkU8eHAerzSEOMS3E1ApMAGs8I+Pe8=
+	t=1725287716; cv=none; b=bvQFvz1+x4i7T2MvrdFGwcutlDkn0nw9RzEjqkRxGpDwyNz2uPJVipds01zA4ZRDa9xxF9swsuFNIyqEZtCj1bdTZuei1OYkc4hkPsn+5Ke3nJyUiNV1gKcosNyS010w4uPFyUtiqPyzIPGeBhcmCelXNm1bDUfdBPe7uOtw5S4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725287293; c=relaxed/simple;
-	bh=ZPnSWwOAvZYxsZdh1NfM/VL04M4Nevd+/cCV1R2LmeY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrTV92rJAlHImflhGWSj6QyjBJWPp2IxXaMTR76I2yFvrdB5DmntkaDwi1BHcKJq3DjJzC61azCfAolARNwBpmeXRAYaoijDN+S8jOi7LHQh9xnxulaNTgR0qtn/oOLe+oPYjPMWv5WNlTIDu6blbSKIZ862q2yAqqUYfLxSYJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QA9vBkNd; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1725287716; c=relaxed/simple;
+	bh=00guibkwtRNUAm7l+mrSZBpcT0SVm1AnQYBAkp2gYsM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KYTyQfvdaTHVbThPmrYdfiRrN1N5FboE5hF9MDHYO/EHDS6BBN2k6gPDISPWbRhhD+38GNUm2wrgsAA+i5lSWpbxlkBIrpw7m+s9RXI6ev2/CZUpHcENRtvKMzTHzDCO8gyzlt842bTczXgRjcQqxhA8ULv4wDeBuQQQUHAbeVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WLvWFQ2i; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QA9vBkNd"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7163489149eso2866493a12.1;
-        Mon, 02 Sep 2024 07:28:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WLvWFQ2i"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so3075746b3a.1;
+        Mon, 02 Sep 2024 07:35:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725287292; x=1725892092; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5D9ejrd5Z/h0W9FXVKqYlPN2lrRBlYUuxMm5PZhnygE=;
-        b=QA9vBkNdEfjOnBp6XYqAznDKDH22TSYuH/2KhGe1W2k1gPx6XBQEjDJNQPGFcttKTI
-         2vzyGrsoniPxDu29LEXyy6m3UTLO037Nte+ux9QNozS/BwvzbQwD9TjHH4HME+sz4YO3
-         wEf7TJ2JBRvog51dsvMzzH153w4zIB64UmfT0G/Apnzr2MADw0qviuFUiDB7UdCaQRjc
-         PaP1LuSGGbutXoIvRBFEbUy8QfWg/OaFF2V7T/cPacMqziualK6+hPj1pulaj9i4ttnh
-         7fha/n+zsEVFv4d7xgcLxpYME/fkGABBZklaS/xeGJVDQABy5W/BhkvKHf2jEvrgRSRn
-         XqvQ==
+        d=gmail.com; s=20230601; t=1725287714; x=1725892514; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RvaEgsvt3EmKxcrvNBVRbDBwpGvxKdEq5Ms4mTY66+8=;
+        b=WLvWFQ2ipPTQCrdw47JdCZJzzlz1RF/O+F4k6NszjZlTSfbtOL648smVjfKB65fm/9
+         HvLHxHvr0Ey3yl1bS7pMtyKMQiTJ/HGEXXROWq3iNM05zuKtV3jlruCdlam6OSE96lAn
+         6jBNylh6ztrdCLPTq1KgC4oFxpAnt0DyZwuqRIehuJ9Fp/1vmOQcF6OqME9sAdTevhDq
+         CskaYRkBUQ4TJKSDngz1+j8cV8mMYxuPj8mEOljxA+e3fXKr+RfSQ8eYi0GVOUBUPO7g
+         DBJ8Kk/6eeA64NlIoM8z2/FrGfn40nDWeQUbj7oLoGkL7OAGIsjgm842fNTHtSd5xYRy
+         lRog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725287292; x=1725892092;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5D9ejrd5Z/h0W9FXVKqYlPN2lrRBlYUuxMm5PZhnygE=;
-        b=fhCWnF9I89BI8/UjE9gCerh36hraDcuO0jS//aXPkIO8sg1Jr5C0cdTTZTU2sROYVO
-         BuZt8hTCA2WNVTTfdCvfladqcr+UEa/zPhqQXPap/9nbI44y667ESK+olfO3j2wN0fu6
-         Etxo67VvB/oKrkTZSkX0++g7ORCWAebSqWFprxKaIDzJ6SKFsxf75iRPvtHPGX/XbW+W
-         TFbMdzC9N37SqclrS2eoJqVBytgmZ0HaLH4AkpJQc1a6dEJGNqnba4DZpEOad0jRX4AG
-         NApbJKScWd5iNwAhuItqTqbHlFhA1v/qXBwHwveMAploK6YXwGQ3d9LN/Mz1AYvX2HyW
-         3gHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGe7pzN0vfG5K/W21o7dn5OooZSan7FOM0Q8f+597SO5zz7vh5i3MqniXk7dnslERaWzHtJLA6SXE/fy8=@vger.kernel.org, AJvYcCUNibflHzjgIOKWAIozuAG2B6a8PuhJdPMTVXhJsd1h2pJ53dJOQbG8Qdha5jyW6nxB0zhjCzNOuxZq@vger.kernel.org, AJvYcCUyygRXJYaalXHJw5isI6Twk+h7xxvmOD0RlcZaZff1hswfDiriKV+hIySd5CJlde+G2ffoMznzNGERTDxrQTy8Td3NgQ==@vger.kernel.org, AJvYcCXwyVGArbcjGuUOnZlb4geCqcAexL4zmHZNqhJ2uLFn5CLmB8mtPO9wLPG1lH/D14UPx7nlRXTphR+zmDJk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuWfbeA0sXTjJzTfiugo0cxFdFcsumG5r+RujcvX+tGcaobYTV
-	gO0iDsQhOdCrqa1VFiMNFoxj6Sxe21NuOzEgoB3OSKrOJzLFedRP
-X-Google-Smtp-Source: AGHT+IG9xuQTwx/EcX9g1ocH+WX9E/Rfq4mYvWEqfiVG5vxLUtJSxZyZk9u/rlS6Y6/hL8Ay0zaJoQ==
-X-Received: by 2002:a17:902:f60a:b0:205:76d0:563b with SMTP id d9443c01a7336-205840c8e08mr29580445ad.0.1725287291494;
-        Mon, 02 Sep 2024 07:28:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2056912c543sm22244905ad.247.2024.09.02.07.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 07:28:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725287714; x=1725892514;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RvaEgsvt3EmKxcrvNBVRbDBwpGvxKdEq5Ms4mTY66+8=;
+        b=Lly6a2pDESIQBV9zwEynckXd+/GdpmU0G1ThfD4rHnO/aJFZEwj7x1u4pNqLVpWq54
+         +nddit1lZJLVIlIWUeKa4KKbz5sTqRPheb6MSpIveUUcHGpC5wmuUs7v1aktIhPfSIIK
+         gdFeUgo3McA4fTsua/7nSMsFQe1Cs0ishGn5q7xSTIjgluh2LsbMNQ6tR5i30PL3BLz1
+         W7Ut+gidmxkkN6lJYIGiwffL5hxd2WfhqZia0fSWjsSCurIFkZ8KuGEa6pePanu4f4oH
+         S3D7SqbF62KqJj1Nda6Dk48XjeXU/LxNIjRk5J1RG8LRz8X+ds4bVH3qCFdL4H+gPUh3
+         rYFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlEvQIOQ6Hj2qdbyNz9tkcNQvowo2BGfeAgCrg/gvzUuVNALIhAn9C46v7Gq7SjNemhxFuMNU5aaVbfsu4@vger.kernel.org, AJvYcCWnwlhM0x8h17IOMve26TswFLq5LBbcaBOvnWO4BoqX4W33Tq7jnx1I9eaJQCqPQTLIhfHbtcznntspMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR2ymz31S9gy5vpV59QkurAb0YvTieWrQ5cM3rWiYebIu9wKk/
+	0TqSA20Ox74TLmZeA2fYJZTGe2KoZW64LTmBa4CwEenPUPMIBjJp
+X-Google-Smtp-Source: AGHT+IGbIql4DBM1UPL4+b6z8TFkZXNpV/rNV1zjv2OV0Q8ZhEXfZfcComyGcd9kjMlo3td56B91iw==
+X-Received: by 2002:a05:6a00:1398:b0:714:10d2:baae with SMTP id d2e1a72fcca58-715dfc039cemr17998340b3a.14.1725287713611;
+        Mon, 02 Sep 2024 07:35:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e575c3efsm6909357b3a.202.2024.09.02.07.35.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Sep 2024 07:35:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 2 Sep 2024 07:28:09 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: james@equiv.tech, jlee@suse.com, corentin.chary@gmail.com,
-	luke@ljones.dev, matan@svgalib.org, coproscefalo@gmail.com,
-	hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
-	jdelvare@suse.com, rafael@kernel.org, lenb@kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] hwmon: (hp-wmi-sensors) Check if WMI event data
- exists
-Message-ID: <e90b40e9-b3a5-4228-8f12-b02a77b7789d@roeck-us.net>
-References: <20240901031055.3030-1-W_Armin@gmx.de>
- <20240901031055.3030-2-W_Armin@gmx.de>
+Message-ID: <7ac1f26b-2a1c-433b-96bd-920d1846b04a@roeck-us.net>
+Date: Mon, 2 Sep 2024 07:35:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240901031055.3030-2-W_Armin@gmx.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] hwmon: pmbus: Implement generic bus access delay
+To: Patrick Rudolph <patrick.rudolph@9elements.com>,
+ linux-kernel@vger.kernel.org
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org
+References: <20240902075319.585656-1-patrick.rudolph@9elements.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240902075319.585656-1-patrick.rudolph@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Sep 01, 2024 at 05:10:51AM +0200, Armin Wolf wrote:
-> The BIOS can choose to return no event data in response to a
-> WMI event, so the ACPI object passed to the WMI notify handler
-> can be NULL.
+On 9/2/24 00:53, Patrick Rudolph wrote:
+> Some drivers, like the max15301 or zl6100, are intentionally delaying
+> SMBus communications, to prevent transmission errors. As this is necessary
+> on additional PMBus compatible devices, implement a generic delay mechanism
+> in the pmbus core.
 > 
-> Check for such a situation and ignore the event in such a case.
+> Introduces two delay settings in the pmbus_driver_info struct, one applies
+> to every SMBus transaction and the other is for write transaction only.
+> Once set by the driver the SMBus traffic, using the generic pmbus access
+> helpers, is automatically delayed when necessary.
 > 
-> Fixes: 23902f98f8d4 ("hwmon: add HP WMI Sensors driver")
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> The two settings are:
+> access_delay:
+>    - Unit in microseconds
+>    - Stores the accessed timestamp after every SMBus access
+>    - Delays when necessary before the next SMBus access
+> 
+> write_delay:
+>    - Unit in microseconds
+>    - Stores the written timestamp after a write SMBus access
+>    - Delays when necessary before the next SMBus access
+> 
+> This allows to drop the custom delay code from the drivers and easily
+> introduce this feature in additional pmbus drivers.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Applied.
+Series applied.
 
 Thanks,
 Guenter
+
