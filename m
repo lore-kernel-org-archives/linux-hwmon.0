@@ -1,112 +1,95 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7A919E97B;
-	Mon,  2 Sep 2024 14:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E8519E977;
+	Mon,  2 Sep 2024 14:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725286634; cv=none; b=IIalNgPC+61RNYzLCEnxqll1OodoarSGJTthWw5Vp/V6Pk8xCl6ztYjebwRZytlCuy+K+cD2MEFIYS1VXi9YKJShSvk2RjtUSQP9xGgpiCrdr4YsVakC6CC9fGwTRnNY4TSlTpcQjY1qc7xhWhlsLiHasbNleLX+tdoaraBm/JQ=
+	t=1725287293; cv=none; b=Fmt6EXPYg0BOd1KIrqMNjyMDFGoJczrBuCGa5SLB7HN/fRt31GtzTihoOxtUDniVp8pYjgR19U1IcBcggsXXa4+KyOnRUzBCMfKDjVSBEbhuGd9OKV5UEObzeGP2Mtt1nbt7QO/AC0vC5TkU8eHAerzSEOMS3E1ApMAGs8I+Pe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725286634; c=relaxed/simple;
-	bh=DiqcYK8CgR5lVnVbP4NtFJ4uxP3RlOM1WRhaMpOIZg0=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Eht5Cw1rS6zf+vimIkqNfxerUIDpzAtfvJgsM2t+p6chihMK36RwU0q3cp3fgn1niA1wznnbKWuUgnlzYxBL1gfHdRS6AyRH76jso9lv2qBWJKPTyRc8w8WBzORWJ/E3Duai13yFWCjDhTiY4VCmaR9p98L6wHISmzTNfSvysPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wy9ht5zqTz6K5kP;
-	Mon,  2 Sep 2024 22:13:34 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3EC29140A08;
-	Mon,  2 Sep 2024 22:17:08 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 2 Sep
- 2024 15:17:07 +0100
-Date: Mon, 2 Sep 2024 15:17:06 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Sperling, Tobias" <Tobias.Sperling@Softing.com>
-CC: Jonathan Cameron <jic23@kernel.org>, Conor Dooley <conor@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>, "linux-iio@vger.kernel.org"
-	<linux-iio@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce ADS71x8
-Message-ID: <20240902151706.0000334f@Huawei.com>
-In-Reply-To: <BE1P281MB2420D75334A568E60823BE48EF922@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-References: <BE1P281MB24208CB90AF549578AA5C384EF972@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-	<20240830-chaos-unrivaled-04c5c4c6add9@spud>
-	<20240831132159.2073994f@jic23-huawei>
-	<BE1P281MB2420D75334A568E60823BE48EF922@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1725287293; c=relaxed/simple;
+	bh=ZPnSWwOAvZYxsZdh1NfM/VL04M4Nevd+/cCV1R2LmeY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nrTV92rJAlHImflhGWSj6QyjBJWPp2IxXaMTR76I2yFvrdB5DmntkaDwi1BHcKJq3DjJzC61azCfAolARNwBpmeXRAYaoijDN+S8jOi7LHQh9xnxulaNTgR0qtn/oOLe+oPYjPMWv5WNlTIDu6blbSKIZ862q2yAqqUYfLxSYJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QA9vBkNd; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QA9vBkNd"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7163489149eso2866493a12.1;
+        Mon, 02 Sep 2024 07:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725287292; x=1725892092; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5D9ejrd5Z/h0W9FXVKqYlPN2lrRBlYUuxMm5PZhnygE=;
+        b=QA9vBkNdEfjOnBp6XYqAznDKDH22TSYuH/2KhGe1W2k1gPx6XBQEjDJNQPGFcttKTI
+         2vzyGrsoniPxDu29LEXyy6m3UTLO037Nte+ux9QNozS/BwvzbQwD9TjHH4HME+sz4YO3
+         wEf7TJ2JBRvog51dsvMzzH153w4zIB64UmfT0G/Apnzr2MADw0qviuFUiDB7UdCaQRjc
+         PaP1LuSGGbutXoIvRBFEbUy8QfWg/OaFF2V7T/cPacMqziualK6+hPj1pulaj9i4ttnh
+         7fha/n+zsEVFv4d7xgcLxpYME/fkGABBZklaS/xeGJVDQABy5W/BhkvKHf2jEvrgRSRn
+         XqvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725287292; x=1725892092;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5D9ejrd5Z/h0W9FXVKqYlPN2lrRBlYUuxMm5PZhnygE=;
+        b=fhCWnF9I89BI8/UjE9gCerh36hraDcuO0jS//aXPkIO8sg1Jr5C0cdTTZTU2sROYVO
+         BuZt8hTCA2WNVTTfdCvfladqcr+UEa/zPhqQXPap/9nbI44y667ESK+olfO3j2wN0fu6
+         Etxo67VvB/oKrkTZSkX0++g7ORCWAebSqWFprxKaIDzJ6SKFsxf75iRPvtHPGX/XbW+W
+         TFbMdzC9N37SqclrS2eoJqVBytgmZ0HaLH4AkpJQc1a6dEJGNqnba4DZpEOad0jRX4AG
+         NApbJKScWd5iNwAhuItqTqbHlFhA1v/qXBwHwveMAploK6YXwGQ3d9LN/Mz1AYvX2HyW
+         3gHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGe7pzN0vfG5K/W21o7dn5OooZSan7FOM0Q8f+597SO5zz7vh5i3MqniXk7dnslERaWzHtJLA6SXE/fy8=@vger.kernel.org, AJvYcCUNibflHzjgIOKWAIozuAG2B6a8PuhJdPMTVXhJsd1h2pJ53dJOQbG8Qdha5jyW6nxB0zhjCzNOuxZq@vger.kernel.org, AJvYcCUyygRXJYaalXHJw5isI6Twk+h7xxvmOD0RlcZaZff1hswfDiriKV+hIySd5CJlde+G2ffoMznzNGERTDxrQTy8Td3NgQ==@vger.kernel.org, AJvYcCXwyVGArbcjGuUOnZlb4geCqcAexL4zmHZNqhJ2uLFn5CLmB8mtPO9wLPG1lH/D14UPx7nlRXTphR+zmDJk@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuWfbeA0sXTjJzTfiugo0cxFdFcsumG5r+RujcvX+tGcaobYTV
+	gO0iDsQhOdCrqa1VFiMNFoxj6Sxe21NuOzEgoB3OSKrOJzLFedRP
+X-Google-Smtp-Source: AGHT+IG9xuQTwx/EcX9g1ocH+WX9E/Rfq4mYvWEqfiVG5vxLUtJSxZyZk9u/rlS6Y6/hL8Ay0zaJoQ==
+X-Received: by 2002:a17:902:f60a:b0:205:76d0:563b with SMTP id d9443c01a7336-205840c8e08mr29580445ad.0.1725287291494;
+        Mon, 02 Sep 2024 07:28:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2056912c543sm22244905ad.247.2024.09.02.07.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 07:28:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 2 Sep 2024 07:28:09 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: james@equiv.tech, jlee@suse.com, corentin.chary@gmail.com,
+	luke@ljones.dev, matan@svgalib.org, coproscefalo@gmail.com,
+	hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+	jdelvare@suse.com, rafael@kernel.org, lenb@kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] hwmon: (hp-wmi-sensors) Check if WMI event data
+ exists
+Message-ID: <e90b40e9-b3a5-4228-8f12-b02a77b7789d@roeck-us.net>
+References: <20240901031055.3030-1-W_Armin@gmx.de>
+ <20240901031055.3030-2-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240901031055.3030-2-W_Armin@gmx.de>
 
-On Mon, 2 Sep 2024 13:24:59 +0000
-"Sperling, Tobias" <Tobias.Sperling@Softing.com> wrote:
-
-> > > > +  ti,mode:
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint8
-> > > > +    description: |
-> > > > +      Operation mode
-> > > > +      Mode 0 - Manual mode. A channel is only sampled when the according  
-> > input  
-> > > > +        in the sysfs is read.
-> > > > +      Mode 1 - Auto mode. All channels are automatically sampled  
-> > sequentially.  
-> > > > +        Reading an input returns the last valid sample. In this mode further
-> > > > +        features like statistics and interrupts are available.
-> > > > +    default: 0  
-> > >
-> > > I don't think this ti,mode property is suitable for bindings. sysfs is a
-> > > linux implementation detail, when to do sampling is an implementation
-> > > detail of your driver. Bindings are only supposed to describe properties
-> > > of the hardware, not set software policy.  
-> > 
-> > Agreed. With an IIO driver this will become a switch based on what usespace
-> > interfaces are enabled.
-> > So if events are on or buffered data capture, enable automode.
-> > If just sysfs reads, then manual mode is fine.  
+On Sun, Sep 01, 2024 at 05:10:51AM +0200, Armin Wolf wrote:
+> The BIOS can choose to return no event data in response to a
+> WMI event, so the ACPI object passed to the WMI notify handler
+> can be NULL.
 > 
-> Not quite sure if I understood you correctly. With the mode I intended to give
-> control about the sampling behavior.
-> In manual mode channels are only sampled if they are accessed/read.
-> In auto mode they are sampled all the time sequentially. This also offers to use
-> some extended features, like triggering an interrupt if a measurement crosses a
-> defined limit.
-> So the mode mainly affects the hardware behavior and just offers the possibility
-> to catch that in userspace, if configured accordingly, but that's not a must-have.
+> Check for such a situation and ignore the event in such a case.
 > 
-> Anyway, did I understood it correctly, that you suggest to configure the mode
-> according some symbols in the kconfig and check that with #ifdef? Do you have
-> the specific symbol names for me or a driver as example, so I can have a look?
-No, this is not a build time of firmware config question. It is a question of
-what the user is 'doing' with the device. Configure the mode according to what
-userspace has enabled.
+> Fixes: 23902f98f8d4 ("hwmon: add HP WMI Sensors driver")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-If it enables threshold detection, then turn on continuous mode.
-If it enables capture of data via a chardev (so fast path) then turn on continuous
-mode.  If neither of those, then run in manual mode.
+Applied.
 
-Jonathan
-
-> 
-> Thanks and regards
-> Tobias
-> 
-
+Thanks,
+Guenter
