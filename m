@@ -1,212 +1,256 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D942A8D0;
-	Mon,  2 Sep 2024 16:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725292952; cv=none; b=WuqvvmJCSw2CCjNS0lRgSoiKaogO7wwu/qiaHWPsAO/rpBYREc84q/N3+EwMp80o0iwvddZQTYDE+3QmKLabYosZf3+sYsfosF+QXxlcsO6yoJV8XZkaCoOsDJpaY3hzdyrqUgcoed/pvxc0ErF8ru53jun46S72LlEPbFONGmU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725292952; c=relaxed/simple;
-	bh=6LeCsdM8CqtOIi4hNTfkKo04Af3xwWWjHmr/+DqmEPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WQIxDB2TsYclJM5taWIO0vUnSucY6VFPwbCOAg05wDlb0n7k05cr5pxl4GfDUg1wGXjmvwqNiZvfe2ljkmbNir1eASJLAAK2HT8q9QymXPvZBo6Fc/FenxDoyf9MHEwPnJblJoHYA7T+eBhDUVKAYQy94ltweHJBGj/DQe+xwnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRAXP0Ih; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506DF3B1AC;
+	Mon,  2 Sep 2024 16:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725295121; cv=fail; b=kD72Ao91PT/a3Ak2D7kkkIICTd7Mb8XJlQRiBAm9hfbSXT/OiBuwDhC6FCRicoeBzYi9yb4P4Zyu42UkwXuJhqXy5/BDZ1vrjVLz9ebqZuzHA0EnCLsHmZrTI6n3AMd9TxM0sDCOtMbAA/omtBg+FW10O9T+5F+4V3i4M6ITZaI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725295121; c=relaxed/simple;
+	bh=SfE8/mJSj688fz7/D9o92rF+AocyZF/L3sDEh7JPBVo=;
+	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
+	 To:Cc:MIME-Version; b=BP179XaeEBPkAXPhXwxu4qIkBHO26hXCh5S8jigKWyc2lR4owiBqOPpE9KYUuJ1s0d+DmHiDSq9HWzR+jn/KK9tOYWhjr50OnWoNBORw+gEZZMonnrmajCvC1O2SwKYoqd8RiBqli7I83TALUaVy0YnKaBjJRq6WdQkoWlY3YCM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=ZDQXZaZx; arc=fail smtp.client-ip=40.107.20.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRAXP0Ih"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3D6C4CEC2;
-	Mon,  2 Sep 2024 16:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725292951;
-	bh=6LeCsdM8CqtOIi4hNTfkKo04Af3xwWWjHmr/+DqmEPo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CRAXP0IhQSi+6W2FU8hkG1UG9b9yeW0eF3Dd1kxh2x3nqJ4T/Y/34p1IBpSVix4MD
-	 XS4/rjeoVnkI/VCPvk4xZvpqgsQDosxPhUeZaQVmRWJ81ZCgoFl8ysDcUwEWFoGwXv
-	 psbdS3MPjdcC1BffysLVBd0t+mATAN6jYzv1uqRPI9OeqMpLQ8gE5mRWMOQHE9p0nc
-	 x91ZGo+z/e1fubYOy2IhNmp1ISwnYMWuOXSZwYwA2U2W7dmFFxJIBMOaQwa3/+gOHw
-	 HdCiVD/ckhhKfCvnffXUNO1dvIzWLRAWqaKtQNRWcnPDITAcO83tpWnyqBm9XUqnXO
-	 DEoxU3PHv5eQw==
-Message-ID: <45037518-41b7-4cc1-a7f4-c4a0c9873950@kernel.org>
-Date: Mon, 2 Sep 2024 18:02:24 +0200
+	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="ZDQXZaZx"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b+CBAbf9qtrOLnLCtD2iu9pYrUJd8IiiZ+rvpDDFoMrAsMT9CfWxzhDfuNZasIENpMo8swEvazMtLQch/RC94oJPvojZFtFrGZtwt2CcYOsnDjWVzTESpQoBk9/l9HVNfLhzWECo9qCgcVLSwR3Bhr5+2gdrud5RKsNECtPPimT/Z9iyomZVTqpjjGDb7bziS1uS70qMnGg05O2Ne+jjt/k8PCJigAgtPB/bxhYUO4JkwNydfp3DfzDJeqkJ6qwJgM94zKhT39MzxH+G3x7ZbnkWUzm4dlxpK37cxrHh8JU58KwtXPY2H1hqja39P6IALWAHD54cNDzosHG375Oe/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rcoef2dM8l/6IOP+6VXDoZrZ0qTu1WQx0TD6c7JIpl0=;
+ b=ojL3Be4ZZV6lI8hsM6WLzVl48vjpat8X80oXTM+s+XhzV1joPCYH0K/8wXRHiU1Tt8Ih56sjmMo2BDW2w9zNI+qZYKPKcjWSNVxa+Mqqxx2hUABojcqL7QkhKhxV6B1FD2+Pf7Q06M8zFkYvlbcufMN/ptt77ClsH1RGI5ryCnhpvBiPYf4W9ALKjEMFGdD7IgL5gYiDIcfZYmryfLMT7513qIkUd4MAN0MMX0g/woi+0K/9Xqsfg3P+VvIkQrln9VRxYoppo9rHA2gzOZ5FIKmvRpoQyHlddyVdVHqWLVf/rZopTzn9vjPi+IoI0giWY6reIiWbgEuz9zWEYtrQXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rcoef2dM8l/6IOP+6VXDoZrZ0qTu1WQx0TD6c7JIpl0=;
+ b=ZDQXZaZx05noz2z/2FTTWaAKDZwr7KyztwvD6MZBb97d8rUAeW42NPnwtzO8tXPTpQqGFcuBs6/Zq4jI3li/23KdJJYt51ZNjZHMHi9Xuc7JeEeZ9zGNqF6QOk9ertzEmd/Vlnpsl1Ii9gilQzoBYT8/VV0t1veKxRbGwcxbRmw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Received: from DU0PR04MB9562.eurprd04.prod.outlook.com (2603:10a6:10:321::10)
+ by DB9PR04MB9645.eurprd04.prod.outlook.com (2603:10a6:10:309::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.24; Mon, 2 Sep
+ 2024 16:38:33 +0000
+Received: from DU0PR04MB9562.eurprd04.prod.outlook.com
+ ([fe80::ad4d:8d53:1663:d181]) by DU0PR04MB9562.eurprd04.prod.outlook.com
+ ([fe80::ad4d:8d53:1663:d181%6]) with mapi id 15.20.7918.020; Mon, 2 Sep 2024
+ 16:38:33 +0000
+From: Farouk Bouabid <farouk.bouabid@cherry.de>
+Date: Mon, 02 Sep 2024 18:38:14 +0200
+Subject: [PATCH v7 1/8] dt-bindings: i2c: add support for tsd,mule-i2c-mux
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240902-dev-mule-i2c-mux-v7-1-bf7b8f5385ed@cherry.de>
+References: <20240902-dev-mule-i2c-mux-v7-0-bf7b8f5385ed@cherry.de>
+In-Reply-To: <20240902-dev-mule-i2c-mux-v7-0-bf7b8f5385ed@cherry.de>
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Farouk Bouabid <farouk.bouabid@cherry.de>, 
+ Quentin Schulz <quentin.schulz@cherry.de>, Peter Rosin <peda@axentia.se>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Heiko Stuebner <heiko@sntech.de>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+X-Mailer: b4 0.15-dev-99b12
+X-ClientProxiedBy: VI1PR0502CA0001.eurprd05.prod.outlook.com
+ (2603:10a6:803:1::14) To DU0PR04MB9562.eurprd04.prod.outlook.com
+ (2603:10a6:10:321::10)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: AW: [PATCH 1/2] dt-bindings: hwmon: Introduce ADS71x8
-To: "Sperling, Tobias" <Tobias.Sperling@Softing.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "jdelvare@suse.com" <jdelvare@suse.com>,
- "linux@roeck-us.net" <linux@roeck-us.net>, "robh@kernel.org"
- <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>, "corbet@lwn.net"
- <corbet@lwn.net>
-References: <BE1P281MB24208CB90AF549578AA5C384EF972@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
- <ypez4vjmasehqflgi4ylylpicldabf2dc6wwjco34qr2zmkdvx@enejrjjyaulf>
- <BE1P281MB24208DE67DB0B1E9A75823ECEF922@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <BE1P281MB24208DE67DB0B1E9A75823ECEF922@BE1P281MB2420.DEUP281.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9562:EE_|DB9PR04MB9645:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43064fc0-cf52-455b-2cfd-08dccb6daf9c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|38350700014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YzdxTlNyWjgvSUVXNUt0L3lCMEx1Skdjb25jcmFraDZHMzhzUS9INitEVWND?=
+ =?utf-8?B?bnBISEpNZFh6YTUzUXZEUGlTZ0FwNGNRWFpLaEp2bkJLOWd4Y0VwZU1pK2Yv?=
+ =?utf-8?B?bS9mWTFUcWVEZ0k4QkE0enpTWXlUaERmdjhWWExVcmN4TG1RK3JjTGN6U1oy?=
+ =?utf-8?B?RlpqZ21XQlJMNkI4Y2FhaGJXQ1B6NjF0ZGQ5ZUo2NjZhRVh5bUJHWWJ2TnNt?=
+ =?utf-8?B?MHBWWFZaZ1o4L3lQK0Y4NlVMSkV3SC9FNWJNUFMwWXBoZG9kY25aeUNDT1N0?=
+ =?utf-8?B?aFZDZHNQUnVMemliMmg4V3Z1L25QR0dhczIxRkhZUmxCQWg5OUorMy9pMWFQ?=
+ =?utf-8?B?UWdmQkZjcHV1ZWRycHJyS21oRXh1WmRhQmtnL2hiT3RZanBWN3B1aDVUc3p3?=
+ =?utf-8?B?a2NBVzBEaDhBOTFjMVpPd0JieXlSaWFLcUlRVi9SZ2VWNk1LTGJna3hGQ3Fh?=
+ =?utf-8?B?MGhPZHhqS1NFdWNJVGZ4MTBnZW9ZZmxVUld1UjQxOW9vdlluNjRqZW5kejQx?=
+ =?utf-8?B?cGVjejR2eXdHY09pWGk3RENGeWRlcXg5Zy9DRVlmTjlMZDlrWklpU2ZkTm92?=
+ =?utf-8?B?ZVJER2s4ZHlYUmRLbk1iNXFUcVh4SmplbTFtL0ZMQzFuRStySUUxd2ZXODEw?=
+ =?utf-8?B?MWxNbU0vVXU0bVFCRFdzRGZVT25tZjJiZmZlTFRZZXgwMjRLdHk0c2N6ZERZ?=
+ =?utf-8?B?U3UyTjBHcEkwL3F6NDZzYWN3NlE2WHRMMElZbndsLzdKWUVDMUVxZ2pSRDRy?=
+ =?utf-8?B?Q01kSFo2ZlFWcllkYlJPU29pWUc1YXlTS1ZidzhiakpmTjZlQXZvK3FlaU14?=
+ =?utf-8?B?QnF2di9oalg2aFozU3RSYk1jSWQ1Vnp0Rk96c2E1VHN4eFpnMHlvNkcrVURQ?=
+ =?utf-8?B?SlovSGhScGF4MGJKekxMZU1ybWxob3hoM211Q1JpTjlGVDNLM1J6a2pvWVAv?=
+ =?utf-8?B?aFpYMjdEVXA2MEVGZXhaZkFENmJlOGVFK1JHWlZ1MVNRRGV4eS9xK29nTDIy?=
+ =?utf-8?B?azRlbzF3NXUvMlE2dnh5UmF1WXcwSzRDdnk0Qm9jNjBLMFdzaUxCWDdlODdW?=
+ =?utf-8?B?cjdoaXhqZXJFT2VaaXEwSmU3MkxMTEVwbGkrTmlNQnFTMmVwYmk0czNSVXZI?=
+ =?utf-8?B?UHVtakt5dExqcU44RFl6OFNHVHNTWUZtWVNabTgrWEhPNVZUaVp3dlFIb0ph?=
+ =?utf-8?B?c29meWoxV1RjTkdxenlaNXJsTXNqK0YxV0dQSVRqRUxTR2NNZnQvcE90OVVa?=
+ =?utf-8?B?UmI5dUdHU0JIYXRXdW1GMy9tWEFnRUU0K01xRjB4bnQ5amp0d1pBamtCUkJa?=
+ =?utf-8?B?dktUYS9oVnNZa3VIZ3BabzM4RXhiMEZqVVl5REErd1ZXN3A2Uk9jckZxU3Fn?=
+ =?utf-8?B?ODFoWmpTRzhpd1BWNFRsY0lSVEV1YXMvNUtWL3FPa3VhbGpoWDRFWlBCdmhF?=
+ =?utf-8?B?dmdvb0J2MjdmQUJNTVczL2NjcEFqK3NzcXJOcC9SS3RyL3pidVUxL1FtZHFw?=
+ =?utf-8?B?eE43akRNREUrZmh3SW1mS2JyUFg4ZUFxZTJ5VisvSHBkU2UyUU81WExVMjQ4?=
+ =?utf-8?B?d0s4Z2dSQ2NtdytNOTA1NkdBNHRobkt1K3NEbURwSkprNmJQMnFEckdUcXc5?=
+ =?utf-8?B?WU9saUExYkNyUUF4ZFM4V1JiRzV3eDVnYmw3UU5qdERFVG9qSHNNMHh0czNv?=
+ =?utf-8?B?VzZSNDBpQkZDSDBncVV5OVpHckRMeWZGa1pQWE4vYStLOTZtUGpqbFU4MVZj?=
+ =?utf-8?B?M3pubk84eVJvd0E4WmRIajdnSEhyTDdjTFlUVWFrTU1jRXhNUE9rYUhHNnZP?=
+ =?utf-8?Q?BijC0eatVyldK/AFQAZgwwc3KRVjtgKaMpnL8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9562.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OCtYRVIxTERvWXovWG9nZ0ZQeGt1a2R1dzdXdUlMTEQ4YXVZT1hrbkxxZzUw?=
+ =?utf-8?B?QzBSbDRob2tIbm5OYUJiVUZ4UFBGZzgwaE44MDVnVEtjcmRHbkxyQXFBdnFX?=
+ =?utf-8?B?bkNVUGpTeHJDREQ0OCthS3c1bjBuV25IZEFjdWZXbEIxVlJOQVJQNGlrdVJt?=
+ =?utf-8?B?K3BSTnpldkYxVmxEOHUwRTRpL1dhTndEVnRKaDJCZlBQT2NWeXRYT2FSdUp0?=
+ =?utf-8?B?R0xndE15ajkvYSsrck5YcFF0RXdaTk9KcnN3U1hXMndEL1pEYnNMOU8wTDdh?=
+ =?utf-8?B?dUJ2akhZMFdKOFpQdE1zRzhYSlBWdkZYL0d0TWZFVlFqOHoxbGZiNE45aFBF?=
+ =?utf-8?B?Q3FKTGIxK3lsTHdkSmdFaitscTBncFlCeFpjRnZ1aXlMZVU2TUNYSmVHcTMx?=
+ =?utf-8?B?Rzl6SFJwWlBMOXloY1A5OGRkYk9CSUx6RnJCajBqNGdzSHIzYWVMbDdORHZ6?=
+ =?utf-8?B?RXltczJ6d0x0UTVoMFoyU0svd0QrUlY4eFhLQmxicUg3am5lK1dJRGF0YXNk?=
+ =?utf-8?B?QmhkdGlSRHJLYThHbTlaTlRWNzRNekRrWDFuL2JjVi92TUV5NHVvR0Vid3hT?=
+ =?utf-8?B?UkIyTDdxRzJPYnh4R0dNZ2swUC9jNS9IZmF3c1JBcUNsYjFIT3BBci8zcGQ2?=
+ =?utf-8?B?akRITjJ4NEoyTlF1TVlBQ1BOZjRqU1ZmT2tucjBxWlBHMDZwRXU4aFRzUi9G?=
+ =?utf-8?B?Zkx5RERUM2ZtUUluSTZuS3RqRHF1eXhMa3RES1AwU0hzU0dtUERuUTJwVEo0?=
+ =?utf-8?B?M3gxdi9qY1dsVW9MakVKU0tpbVltVXFqTTVpdy9jbGNqUXlBbWNLOXdtQ1p0?=
+ =?utf-8?B?MkNabklqT2hncCsydDlIRXNhQkxYS0NXZGlnQnlaSXFUbVVFZ3M1RnVZb1JZ?=
+ =?utf-8?B?Tlh2RGRSNkx0azQ2MzQ2WmpRQ0VMSC91QXVFVkx6YjFsYUhiSnowckZjVG1N?=
+ =?utf-8?B?YWd4c3VaNW5YeVpwQXh5Q1NRMnRCcy91c2J2eTdPVG15QndqU3ViRDRZM0Ez?=
+ =?utf-8?B?NGMyQTdQMEpLNU5SR1NzaVk1ZExQd2xOMUhiNjVUaXNTOGJBZEtTdE9lWVph?=
+ =?utf-8?B?WEVaRW0vNWkrZDRFb2JGYnlZdnJ2RDkrYWdHSXdqVHFoNUhkaDlqL0FWWXdj?=
+ =?utf-8?B?cllYc253VkVBeWhyOCs5MFNScHlxM2YzREpQZVdyUVRTZ25SZG1YZkgxcEdW?=
+ =?utf-8?B?MmFSS3h4cEpnM1NnSTNPTDcrSmRJV3lUVXdnZjVCdmhCTVZTSTdFb1FKc09D?=
+ =?utf-8?B?NWZyRUwvZjZIekZYMmJWTGQrY3IwcGNtakRzemZsSTFQNkFiMkNJUE1kOEhj?=
+ =?utf-8?B?dWRDcDdZZW5qMldyL054QzlSd0NRS3ZIeDVkenRLZ0pXYmVlQUxHV2tNcVJM?=
+ =?utf-8?B?eENPbCs4WjVmZW9Pc2hKU1dZUDVnTHhLNHErZmp6a1AyZG9tMEdlNGhMN1dh?=
+ =?utf-8?B?UTN6ZzkxNEhwekhQdHR0YTJZM3hobDFEdGNRc0lsR2hSSXNXajMyOUdVVUFx?=
+ =?utf-8?B?U25hTnVQQWpnMExZY3ZlRWR4TXdWNk1ya2syaEtQYU1KV2RNUnErOW1kcWV6?=
+ =?utf-8?B?TzhkeFNNMWpCc2VyaTlSZnZTQ0N6dzFpK0hNK0ZmdHBHbVVDTE94N2c4RVF6?=
+ =?utf-8?B?Z3BtbVB5dk90dDVyOHpucUNpV1hMck1aTHp5YldhMVZTcUxjc2hZcm1neG9L?=
+ =?utf-8?B?ZERhRzNQTlhHNDhhcWh4bnBKaklKYW5GTDJpZXhKWVJTNUtZSFZtNlpVSjlZ?=
+ =?utf-8?B?WEJleVdPN2RwVTFEZmxJY0N1bU04QXcycmlPNTJqdEVPa0VKVlNGTFgwdnNT?=
+ =?utf-8?B?MGN0VTRtcnRCMkU1TVdTaHF6eVlQcjUvVHU0OVE3MDVvT3hmYkltMGM0QUZB?=
+ =?utf-8?B?dnpKOVZqV1VLZG4xKzYyR0FScFhSbDR3U2pIdVIwcFJXZXAwUkZxanhWWjJl?=
+ =?utf-8?B?TnVEczE4V1hqWjZvTmhOQTJlT2tvL3RyU3VCeXdBcXE3NUl6bnBNVGtnYWhz?=
+ =?utf-8?B?bWtoekh5Mm4ycE9IQkt4ODZ4bjFiMjlqOElJcWhGUkcvcC9TaTdXU25kTDdT?=
+ =?utf-8?B?YzRTUE9HeHdDK3hOeERGNkRFREJzbmVrSml4S1lxRVNyWU9NVE9IZVBrV3FD?=
+ =?utf-8?B?SUxhNng4L3kyZ2x4TGhEak9uR3c0Z05pbkpUSW4zZzNpOU5QMTJiQXlkYVZE?=
+ =?utf-8?B?R1E9PQ==?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43064fc0-cf52-455b-2cfd-08dccb6daf9c
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9562.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2024 16:38:33.8561
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IASnpBhMlf3nXnXArPXZ89HTaWVk461BbMkA8B6Sd2i7wSEhrQPhsjhIaS/AKRvKfyGO/2gPJjzyMJ+Qe2iynIlEu+2XQ2kDsMQnJ1N17lE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9645
 
-On 02/09/2024 15:48, Sperling, Tobias wrote:
->> On Fri, Aug 30, 2024 at 11:49:53AM +0000, Sperling, Tobias wrote:
->>> >From b2e04ce5500faf274654be5284be9db4f3abefce Mon Sep 17 00:00:00
->> 2001
->>
->> Some junk ^^^ above. Please investigate how you send patches.
-> 
-> Yeah also saw this line, but of course tried to apply the patch again after sending it
-> as mail and that worked fine. But just checked again and seems like this line can be
-> dropped.
-> And yes, I sent the patches manually, as we likely have some restrictions for smtp,
-> but as I was able to apply them again it's fine I guess.
-> 
->>> From: Tobias Sperling <tobias.sperling@softing.com>
->>> Date: Fri, 23 Aug 2024 12:08:33 +0200
->>> Subject: [PATCH 1/2] dt-bindings: hwmon: Introduce ADS71x8
->>
->> And all this suggests malformed patch.
-> 
-> Why? If I drop this I'm not able to apply the patch, so I think this should be fine.
+Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
+among which devices that are reachable through an I2C-mux. The devices
+on the mux can be selected by writing the appropriate device number to
+an I2C config register.
 
-OK, it works with b4, but seeing duplicated subject is not expected and
-might not work with all tools.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+---
+ .../devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-> 
->>>
->>> Add documentation for the driver of ADS7128 and ADS7138 12-bit, 8-channel
->>> analog-to-digital converters. These ADCs have a wide operating range and
->>> a wide feature set. Communication is based on an I2C interface.
->>> The driver provides the functionality of manually reading single channels
->>> or sequentially reading all channels automatically.
->>>
->>> Signed-off-by: Tobias Sperling <tobias.sperling@softing.com>
->>> ---
->>>  .../devicetree/bindings/hwmon/ti,ads71x8.yaml |  85 +++++++++++
->>>  Documentation/hwmon/ads71x8.rst               | 140 ++++++++++++++++++
->>>  Documentation/hwmon/index.rst                 |   1 +
->>
->> Please run scripts/checkpatch.pl and fix reported warnings. Then please
->> run  and (probably) fix more warnings.
->> Some warnings can be ignored, especially from --strict run, but the code
->> here looks like it needs a fix. Feel free to get in touch if the warning
->> is not clear.
-> 
-> Had done this already before submitting the patches (at least without --strict),
-> but only reports a warning about splitting the patch (which I got wrong here)
-> and updating the maintainers.
-> I guess you were about suggesting a second script to run. Which one is that?
+diff --git a/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml
+new file mode 100644
+index 000000000000..28139b676661
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/tsd,mule-i2c-mux.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Theobroma Systems Mule I2C multiplexer
++
++maintainers:
++  - Farouk Bouabid <farouk.bouabid@cherry.de>
++  - Quentin Schulz <quentin.schulz@cherry.de>
++
++description: |
++  Theobroma Systems Mule is an MCU that emulates a set of I2C devices, among
++  which devices that are reachable through an I2C-mux. The devices on the mux
++  can be selected by writing the appropriate device number to an I2C config
++  register.
++
++
++      +--------------------------------------------------+
++      | Mule                                             |
++  0x18|    +---------------+                             |
++  -------->|Config register|----+                        |
++      |    +---------------+    |                        |
++      |                         V_                       |
++      |                        |  \          +--------+  |
++      |                        |   \-------->| dev #0 |  |
++      |                        |   |         +--------+  |
++  0x6f|                        | M |-------->| dev #1 |  |
++  ---------------------------->| U |         +--------+  |
++      |                        | X |-------->| dev #2 |  |
++      |                        |   |         +--------+  |
++      |                        |   /-------->| dev #3 |  |
++      |                        |__/          +--------+  |
++      +--------------------------------------------------+
++
++
++allOf:
++  - $ref: /schemas/i2c/i2c-mux.yaml#
++
++properties:
++  compatible:
++    const: tsd,mule-i2c-mux
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c-mux {
++        compatible = "tsd,mule-i2c-mux";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        i2c@0 {
++            reg = <0x0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            rtc@6f {
++                compatible = "isil,isl1208";
++                reg = <0x6f>;
++            };
++        };
++    };
++...
++
 
-Please split the patches.
-
-> 
->>> +$id:
->> https://deu01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.
->> org%2Fschemas%2Fhwmon%2Fti%2Cads71x8.yaml%23&data=05%7C02%7C%7C
->> ff09fedbe2744394f78508dcc9881ee7%7Cfe3606fad3974238999768dcd7851f64
->> %7C1%7C0%7C638606833686313557%7CUnknown%7CTWFpbGZsb3d8eyJWIjoi
->> MC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C
->> %7C%7C&sdata=vZaCpdaNzELpNNnd6wp5P9MNLQTnAmWXYD%2BNKQYCJ78%
->> 3D&reserved=0
->>> +$schema:
->> https://deu01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.
->> org%2Fmeta-
->> schemas%2Fcore.yaml%23&data=05%7C02%7C%7Cff09fedbe2744394f78508dcc
->> 9881ee7%7Cfe3606fad3974238999768dcd7851f64%7C1%7C0%7C63860683368
->> 6326954%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2lu
->> MzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=EJflznuTZYGR
->> BRjULwohiHk8gPF9iRusSbmF8CKkl5Q%3D&reserved=0
->>> +
->>> +title: Texas Instruments ADS7128/ADS7138 Analog to Digital Converter (ADC)
->>> +
->>> +maintainers:
->>> +  - None
->>
->> Fidn a person... otherwise why would we care?
-> 
-> I know it's not nice, but we are likely not implementing further features, but OK, will
-> add myself then.
-> 
->>> +    default: 1
->>> +
->>> +  interrupts:
->>> +    description: |
->>> +      Only considered in mode 1!
->>
->> What is "considered"? Driver considers? This does not matter. Describe
->> the hardware and if this is hardware related, you should have
->> allOf:if:then restricting this.
-> 
-> It's possible to define a mode, either manual sampling or autosampling. In the
-> latter mode, also the hardware capabilities change, e.g. the driver is able to
-> trigger an interrupt so defining the interrupt only makes sense in that mode.
-> Will have a look to allOf:if:then then.
-> 
->>> +            compatible = "ti,ads7138";
->>> +            reg = <0x10>;
->>> +            avdd-supply = <&reg_stb_3v3>;
->>> +            ti,mode = /bits/ 8 <1>;
->>> +            ti,interval = /bits/ 16 <1000>;
->>> +            interrupt-parent = <&gpio2>;
->>> +            interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
->>> +            status = "okay";
->>
->> Drop
-> 
-> I guess, I shall only drop the "status" not the whole section?
-
-Only status
-
-Best regards,
-Krzysztof
+-- 
+2.34.1
 
