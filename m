@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84441E1306;
-	Tue,  3 Sep 2024 20:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04191E4125;
+	Tue,  3 Sep 2024 20:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725396246; cv=none; b=q8l3tID+3qkr+qu25+J9N3vLBI9mmyclhH2XRL5moYFDTNDnT838VqZBOgPG438Cf/rx1CuAgRPWgenpxU8JUCStjnO4i5weUsDg+XTVWMh8yFqNQC57VrFoW3oS/Tn829N7r0t2wFS1oQaA3c29LzwSMKgLYaI0RJH3LXCsQes=
+	t=1725396336; cv=none; b=M12H9CzUCB0lYWqT5DnI6AszdRzSovMv4YzzaTToGF/znYthqwy06dXA6JmKT+LIragd0ftmd8rZLU6wuMwSUnxxJ5Hh8/7rHzzCAcnaXhUcOO9JU2SNN0TGS1MHtXUDAfRRgGlIgA2a6tnWQM391XvlrPC8WuUN111jlU3dmY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725396246; c=relaxed/simple;
-	bh=GOz5CbR1/b4jhEreTAJZNQqDcREvsrbTV5Ozy4YE3Ak=;
+	s=arc-20240116; t=1725396336; c=relaxed/simple;
+	bh=NakiwtTYinhxeOjkF47hrXF4IPqcNM1LMougrhOEANk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qwZ6v/TgHbIQiOE3or/GvhQqE7QFHNt0ZS3f//e/rpc1ToZsHcR3wwYo9cKIGLc9/eOOD+tH/ETsyWTVvydtGq0pXIIxC6qv5B0LoZgB6bNA4xx3BIiUYK+17kpRLpcgJDW/pSMVbZN9J8eFKruPM9mkIt5rJNEY85kuFU6YHEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3gL/Zym; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=KOsBi8TvzIodfAgB3AjhfjZu3F6oXVY9txCw79U5Fxtlsu0kql748Gm/U+blQX+H+EEcRFKQP85Rf8lOMmeM3yeUBwHAzMFS7vw/CkjvvLOxUmSU9bUgOhGUCZqV26DW9tr0AjD5W9xvDWnyNZu9OPkf+frenEW4YF+8RYWex1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cm8+P0uU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3gL/Zym"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89050C4CEC9;
-	Tue,  3 Sep 2024 20:44:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cm8+P0uU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98F1C4CEC5;
+	Tue,  3 Sep 2024 20:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725396245;
-	bh=GOz5CbR1/b4jhEreTAJZNQqDcREvsrbTV5Ozy4YE3Ak=;
+	s=k20201202; t=1725396336;
+	bh=NakiwtTYinhxeOjkF47hrXF4IPqcNM1LMougrhOEANk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L3gL/ZymSOJt+zzdOWDYVDu07hKcsFXBQS5rSX4Gg82IsxAjhzmt0y2QFk40wvdOa
-	 n+qvPHkdmKthRmYoWMpGqdkX/9LUbldPh3aoXfvXvH3QhxelG0E5dB9Kaz6QwvObvt
-	 JNnFwj3pmi5Byyi+c2amBX6hOUERFtv82+vTHIbeNBjT6nSuOSMGj1wJw6TvenpRXY
-	 a3mhsdn2UL2F8xWRWZzT25zK7WUCtUiDF9I3a2joJl/N9CFAAd8d0cuMbO6zr+r/7B
-	 8+5ZUzInTzZIFmWwGvaTn4Du7zSDtRBampeEz/fsGGdwwjac1z1lzV/fGcmRi3xuHv
-	 BJqL/G41IdIRQ==
+	b=cm8+P0uUbw93dCMUrsCtG8i0Tg/V8XT7CL2sn8PUOUJG/I9kkENqHOjtMC0DmBsR9
+	 2UdtYouYNd1DA8VfayRiiYA9WpXlliaL5xY2EZ9IOIQf0Gl8urAs32xb9QwJ9xb58d
+	 mU95amSLL7jTN7wihPiAKk7Hz/wEa8c3T0wB0Z7x90fJCB9Wt10asq1KkZ0oXW1y16
+	 r6vRAucCY4Khaw4ytt9DdsLoOBlPedGBPPjIrjEmB1LpzG1TYrnqY1+KSOEz/VBTmU
+	 AhJpQfjAJNDaD+Z8ukMf+zR2Z2hlggOuULrlDKGT8lUx2bLVAZj89MkzQGbVDpv/wa
+	 MMUoDwOcOQIQQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Ross Brown <true.robot.ross@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 09/20] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
-Date: Tue,  3 Sep 2024 15:23:41 -0400
-Message-ID: <20240903192425.1107562-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 08/17] hwmon: (asus-ec-sensors) remove VRM temp X570-E GAMING
+Date: Tue,  3 Sep 2024 15:25:22 -0400
+Message-ID: <20240903192600.1108046-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240903192425.1107562-1-sashal@kernel.org>
-References: <20240903192425.1107562-1-sashal@kernel.org>
+In-Reply-To: <20240903192600.1108046-1-sashal@kernel.org>
+References: <20240903192600.1108046-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.48
+X-stable-base: Linux 6.1.107
 Content-Transfer-Encoding: 8bit
 
 From: Ross Brown <true.robot.ross@gmail.com>
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 51f9c2db403e7..f20b864c1bb20 100644
+index b4d65916b3c00..d893cfd1cb829 100644
 --- a/drivers/hwmon/asus-ec-sensors.c
 +++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -402,7 +402,7 @@ static const struct ec_board_info board_info_strix_b550_i_gaming = {
+@@ -369,7 +369,7 @@ static const struct ec_board_info board_info_strix_b550_i_gaming = {
  
  static const struct ec_board_info board_info_strix_x570_e_gaming = {
  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
