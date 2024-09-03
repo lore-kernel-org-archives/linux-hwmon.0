@@ -1,187 +1,211 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FB01B12F5
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Sep 2024 11:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393E613DB92;
+	Tue,  3 Sep 2024 15:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725362582; cv=none; b=eMoNdu1PYFTUxse2LLzclkzbrp+EATbankoCv1MSMkhjqbwwCvPjMH/UlGnisJmpZZmwnjyeCNM+qGN7wly1vuUSOV5jLlU5ub3V44A+5utec/N2oxFz1gqpCCP6EiYGfyt01lTiqPLcUgtxYYlplU5vLgNZUjsUlqVXmcpNLgg=
+	t=1725376405; cv=none; b=L8BQ28l2WgqojuF08S6g/ELjt0gxUWTnChFmsE6mJUjrYgYkeBHlY+c71OK0mqQOZAnybCmwJL/CWeCgfcEWoRXPftmcshZQ42dhpT9mJeM84Kufz1dHcmwtYNb/P7vzxs3p1tqbTsPBMKgFD4T6e7Cs4jpn3Q1Uv+csKdp1Kb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725362582; c=relaxed/simple;
-	bh=8wfKjXezrTffOofrWHSMsnWY39H9SNnl6DKuS5oVDo0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rhqdnS2svn0V64wfmqaz8qV2is8c+Yj9bieE5PXHi3bXIAwjdRstC7mCWcblfwg9c7hvi03rA75DTMe4UQ5K3hHkbrhVxrKljoCER8GuUdfPd1rEfyrzY3ARqqKKr2FXPO6DcGu3f4v98AgEikYSxKS9zkPB4D8hyWq58bUvkjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MK92F4OU; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725376405; c=relaxed/simple;
+	bh=mqSG8zmYkLbysxx98xITPffGwNgDwNQDDeyLT76Ts00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W7s6pMyquJTPrlSKLC7dAf6dMEwc2TEinSKdb95xJWIWf7WX5f7vVctvZ+wLRw3x1wY75GqlkazKFx9hcPl7UasaiSLTXyL//Pc4VdXDgE2WGDdlkml6RtuhuXvRbKtHzTFwRvIiV/j18SADWIm/O8lMud2PAg4FPXGdP/g/i4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omWlnZO3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MK92F4OU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725362581; x=1756898581;
-  h=date:from:to:cc:subject:message-id;
-  bh=8wfKjXezrTffOofrWHSMsnWY39H9SNnl6DKuS5oVDo0=;
-  b=MK92F4OUtL0KKDdxa1O8j4qF8brDOjyb0jfQWcXRagjBZjR2Oz5R5POs
-   ZLYqc9WsVKVVDsj5MasEGDlM/oDwd19WW9Z0wJI0fDXE2qWuirHVHBcxp
-   FthesUObDlQN85TDg3czNoTnj0rLHWiSYfOuL88CCIybe7DViYSfrEouD
-   f9egUBcDDsMo2I5tABAJWtiKknSVHMj3yeeMCrAmhz+nhzsimDzsMEgtl
-   FGjrYfQkmbMndvaMqVH9fga9n6lXuCCheVKpltjhO6dqBpaCh68iWSnAw
-   4r03OoAUDDWL3dUVvDy1Wg4VY3qVVkiMXTIHz2z0o5CAZlctsV5nYz+B6
-   g==;
-X-CSE-ConnectionGUID: xxrnlOh1QL+5/YveZcPY4Q==
-X-CSE-MsgGUID: 1pgbkIoGSbivdGkDdJHWTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="41424098"
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="41424098"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 04:23:01 -0700
-X-CSE-ConnectionGUID: puW07GHESiaWsKMaHSe+cQ==
-X-CSE-MsgGUID: uGYsi3xMTvCeI+cJ+ygrYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="69512302"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 03 Sep 2024 04:22:59 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1slRcf-0006Z7-18;
-	Tue, 03 Sep 2024 11:22:57 +0000
-Date: Tue, 03 Sep 2024 19:22:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- a54da9df75cd1b4b5028f6c60f9a211532680585
-Message-ID: <202409031927.cDT6TTkU-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omWlnZO3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31914C4CEC4;
+	Tue,  3 Sep 2024 15:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725376404;
+	bh=mqSG8zmYkLbysxx98xITPffGwNgDwNQDDeyLT76Ts00=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=omWlnZO38v/uzvDFb7eGgU1lN0MaIhjFVkxx2TTKBUa5tV62bj2kd7/YzKn65tk9I
+	 XpbPwxy/aks95eUWT+fjT+2XB0PaeALE/J39M+rZ04HdoMn+6H5AS4IA/ZVxK5gDdH
+	 ykdarH/HyzA6G+oKC33xdzNe+HFElh2lgJU6xu/UwAd4N44HA5/ljCTMuwxm7aN9BG
+	 HOCOcZVg8zKF4Iw7VkeRCDQ5kwfD5FpXpdU+gnonn0yUKSfPWg0EwHxhi7W8MrSkut
+	 dGMxfkf7505s0XX2gWP5qyH1YXbzqx3W0aSHI2i/WEE6QAdym4t8HNnB8BSpZmVU3k
+	 aNlhpRRpN8QYg==
+Date: Tue, 3 Sep 2024 17:13:21 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Quentin Schulz <quentin.schulz@cherry.de>, Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v7 2/8] i2c: muxes: add support for tsd,mule-i2c
+ multiplexer
+Message-ID: <fvk5u2j7wu7pjrlpbbnggp3vhopotctu2vr3fh77kl2icrvnyt@tukh2ytkiwdz>
+References: <20240902-dev-mule-i2c-mux-v7-0-bf7b8f5385ed@cherry.de>
+ <20240902-dev-mule-i2c-mux-v7-2-bf7b8f5385ed@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240902-dev-mule-i2c-mux-v7-2-bf7b8f5385ed@cherry.de>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: a54da9df75cd1b4b5028f6c60f9a211532680585  hwmon: (hp-wmi-sensors) Check if WMI event data exists
+Hi Farouk,
 
-elapsed time: 1200m
+Before jumping into the review, who is going to take this and the
+previous patch?
 
-configs tested: 110
-configs skipped: 4
+Peter shall I take it?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Now to the review :-)
 
-tested configs:
-alpha                             allnoconfig   gcc-14.1.0
-alpha                            allyesconfig   clang-20
-alpha                               defconfig   gcc-14.1.0
-arc                              allmodconfig   clang-20
-arc                               allnoconfig   gcc-14.1.0
-arc                              allyesconfig   clang-20
-arc                                 defconfig   gcc-14.1.0
-arc                        nsim_700_defconfig   clang-20
-arc                        nsimosci_defconfig   clang-20
-arm                              allmodconfig   clang-20
-arm                               allnoconfig   gcc-14.1.0
-arm                              allyesconfig   clang-20
-arm                     davinci_all_defconfig   clang-20
-arm                                 defconfig   gcc-14.1.0
-arm                      jornada720_defconfig   clang-20
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                               defconfig   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                                defconfig   gcc-14.1.0
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   gcc-14.1.0
-hexagon                          allyesconfig   clang-20
-hexagon                             defconfig   gcc-14.1.0
-i386                             allmodconfig   clang-18
-i386                              allnoconfig   clang-18
-i386                             allyesconfig   clang-18
-i386         buildonly-randconfig-001-20240903   gcc-12
-i386         buildonly-randconfig-002-20240903   gcc-12
-i386         buildonly-randconfig-003-20240903   gcc-12
-i386         buildonly-randconfig-004-20240903   gcc-12
-i386         buildonly-randconfig-005-20240903   gcc-12
-i386         buildonly-randconfig-006-20240903   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240903   gcc-12
-i386                  randconfig-002-20240903   gcc-12
-i386                  randconfig-003-20240903   gcc-12
-i386                  randconfig-004-20240903   gcc-12
-i386                  randconfig-005-20240903   gcc-12
-i386                  randconfig-006-20240903   gcc-12
-i386                  randconfig-011-20240903   gcc-12
-i386                  randconfig-012-20240903   gcc-12
-i386                  randconfig-013-20240903   gcc-12
-i386                  randconfig-014-20240903   gcc-12
-i386                  randconfig-015-20240903   gcc-12
-i386                  randconfig-016-20240903   gcc-12
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch                           defconfig   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                                defconfig   gcc-14.1.0
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-mips                         db1xxx_defconfig   clang-20
-mips                     loongson1b_defconfig   clang-20
-nios2                             allnoconfig   gcc-14.1.0
-nios2                               defconfig   gcc-14.1.0
-openrisc                          allnoconfig   clang-20
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-12
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   clang-20
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-12
-parisc64                            defconfig   gcc-14.1.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                        fsp2_defconfig   clang-20
-powerpc                       maple_defconfig   clang-20
-powerpc                 mpc834x_itx_defconfig   clang-20
-powerpc                      pcm030_defconfig   clang-20
-powerpc64                        alldefconfig   clang-20
-riscv                             allnoconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-12
-s390                             allmodconfig   gcc-14.1.0
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                                defconfig   gcc-12
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-12
-sh                ecovec24-romimage_defconfig   clang-20
-sh                        edosk7760_defconfig   clang-20
-sh                          r7780mp_defconfig   clang-20
-sh                           se7619_defconfig   clang-20
-sh                           se7721_defconfig   clang-20
-sh                   sh7724_generic_defconfig   clang-20
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-12
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-20
-um                               allyesconfig   clang-20
-um                                  defconfig   gcc-12
-um                             i386_defconfig   gcc-12
-um                           x86_64_defconfig   gcc-12
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64                              defconfig   clang-18
-x86_64                                  kexec   gcc-12
-x86_64                          rhel-8.3-rust   clang-18
-x86_64                               rhel-8.3   gcc-12
-xtensa                            allnoconfig   gcc-14.1.0
+On Mon, Sep 02, 2024 at 06:38:15PM GMT, Farouk Bouabid wrote:
+> Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
+> among which an amc6821 and devices that are reachable through an I2C-mux.
+> The devices on the mux can be selected by writing the appropriate device
+> number to an I2C config register (amc6821 reg 0xff).
+> 
+> This driver is expected to be probed as a platform device with amc6821
+> as its parent i2c device.
+> 
+> Add support for the mule-i2c-mux platform driver. The amc6821 driver
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Along the driver I expressed some concern about the prefixes.
+
+You should avoid prefixes such as mux_* or MUX_* because they
+don't belong to your driver. You should always use your driver's
+name:
+
+ 1. mule_*
+ 2. mule_mux_*
+ 3. mule_i2c_mux_*
+
+You have used the 3rd, I'd rather prefer the 1st. Because when
+you are in i2c/muxex/ it's implied that you are an i2c mux
+device. But it's a matter of personal taste.
+
+Other than this, there is still, one major error down below.
+
+> support for the mux will be added in a later commit.
+> 
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+
+...
+
+> +#include <linux/i2c-mux.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +
+> +#define MUX_CONFIG_REG  0xff
+> +#define MUX_DEFAULT_DEV 0x0
+
+Please define these as MULE_I2C_MUX_*
+
+> +
+> +struct mule_i2c_reg_mux {
+> +	struct regmap *regmap;
+> +};
+> +
+> +static int mux_select(struct i2c_mux_core *muxc, u32 dev)
+> +{
+> +	struct mule_i2c_reg_mux *mux = muxc->priv;
+> +
+> +	return regmap_write(mux->regmap, MUX_CONFIG_REG, dev);
+> +}
+> +
+> +static int mux_deselect(struct i2c_mux_core *muxc, u32 dev)
+> +{
+> +	return mux_select(muxc, MUX_DEFAULT_DEV);
+> +}
+> +
+> +static void mux_remove(void *data)
+
+Please call these mule_i2c_mux_*(), the mux_ prefix doesn't
+belong to this driver.
+
+> +{
+> +	struct i2c_mux_core *muxc = data;
+> +
+> +	i2c_mux_del_adapters(muxc);
+> +
+> +	mux_deselect(muxc, MUX_DEFAULT_DEV);
+> +}
+
+...
+
+> +	/* Create device adapters */
+> +	for_each_child_of_node(mux_dev->of_node, dev) {
+> +		u32 reg;
+> +
+> +		ret = of_property_read_u32(dev, "reg", &reg);
+> +		if (ret)
+> +			return dev_err_probe(mux_dev, ret,
+> +					     "No reg property found for %s\n",
+> +					     of_node_full_name(dev));
+> +
+> +		if (old_fw && reg != 0) {
+> +			dev_warn(mux_dev,
+> +				 "Mux is not supported, please update Mule FW\n");
+> +			continue;
+> +		}
+> +
+> +		ret = mux_select(muxc, reg);
+> +		if (ret) {
+> +			dev_warn(mux_dev,
+> +				 "Device %d not supported, please update Mule FW\n", reg);
+> +			continue;
+> +		}
+> +
+> +		ret = i2c_mux_add_adapter(muxc, 0, reg);
+> +		if (ret)
+> +			return ret;
+
+do we need to delete the adapters we added in previous cycles?
+
+> +	}
+> +
+> +	mux_deselect(muxc, MUX_DEFAULT_DEV);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mule_i2c_mux_of_match[] = {
+> +	{.compatible = "tsd,mule-i2c-mux",},
+
+if you are going to resend, can you leave one space after the
+'{' and before the '}'
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mule_i2c_mux_of_match);
+> +
+> +static struct platform_driver mule_i2c_mux_driver = {
+> +	.driver		= {
+
+I don't see the need for this '\t' here, the alignment is too
+far. It just looks bad. Your choice, though.
+
+Thanks,
+Andi
+
+> +		.name	= "mule-i2c-mux",
+> +		.of_match_table = mule_i2c_mux_of_match,
+> +	},
+> +	.probe		= mule_i2c_mux_probe,
+> +};
+> +
+> +module_platform_driver(mule_i2c_mux_driver);
+> +
+> +MODULE_AUTHOR("Farouk Bouabid <farouk.bouabid@cherry.de>");
+> +MODULE_DESCRIPTION("I2C mux driver for Theobroma Systems Mule");
+> +MODULE_LICENSE("GPL");
+> 
+> -- 
+> 2.34.1
+> 
