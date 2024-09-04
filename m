@@ -1,61 +1,61 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961F71D47CA
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Sep 2024 15:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871FD1E4119
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Sep 2024 15:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725462975; cv=none; b=UEeSRCFnrl0LrRQeaVCk/b6mWc2CCNFh0e6goqPUKsxNBGghsW7ZqEE2D89FKfg0M/879nHY2pk3kD6iITcKfLhSEMVgwk5+2Jn2HGTVdvD7vphPyERcUG3kffHLpXEt0oAL5FR8VT8ZY8JCD5NjfxsjGj78pF/X/SnFN61F1RY=
+	t=1725465372; cv=none; b=T2gBgaFO8MfZ7nQhEr96cTTfqaVQTq52zhSQcWG2KjlN+ghB0ycTJL1sTITyU2Z44cuU8n718MYUwIuR+fHHljQO4ZRQt8CSVCDBjAvdFnvVk3VAF9/gIpTqoJRy8aehhKlOUaao0/HiTyqwBhxBmPhuby7USwWh59/A1VF7F6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725462975; c=relaxed/simple;
-	bh=s0g2rdOGwh7EzWltaWtKZUd1Inj08iwZZ/fTZFv7IVU=;
+	s=arc-20240116; t=1725465372; c=relaxed/simple;
+	bh=fwYk2YCG6DT8KoOFF445nqBAV32FQ79riQ+MlSChfnM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DyoCsfzQo9XTr7lrQsrZSKK4a5rs5HEN4sPGL9spBDSiULlsw+BbVFRbYuZUYZyH5/snqPLdT1DVbUJ64wFkckoIdlx/sz1gpLZUy8leZQOFuLoCABqz9Z31aJ0NxFKPWAM2dUIZlwtH7aQeeoS4FUGkz8nPlVpkuhBJajKzCY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehHqiFXC; arc=none smtp.client-ip=209.85.215.181
+	 In-Reply-To:Content-Type; b=hOm+KDmrxI+pLhoSpj1UZWQhOBlzb+cm33nkKTfXekRjuyh/KPdWSwSV73APr/wOPUORIg1xYPg9QNM5NM+KIsrWPTB2fezlJjBxTcsD4iNeg/u0rXi+ge5n839Qxd8pBZawbTLJcDi4irhb82D51pq/cy7EHu9b90IWE92Dcns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FzDGOb7d; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehHqiFXC"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7c3ebba7fbbso4687445a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Sep 2024 08:16:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FzDGOb7d"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7d4f8a1626cso1237208a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Sep 2024 08:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725462973; x=1726067773; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725465370; x=1726070170; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqo6uxDJRAozTVmzlJ6rLIoylKPIUftf8WpjPYTdUD0=;
-        b=ehHqiFXC90a/zVgaay2nVqTTRtLrZAPsS6Xzh2Nlnp4DFFzUXUrRKBRjce1MiXhhh0
-         NrkZpTDD0eUDDwJLu2IHE8w4aifTpeCykRl3Ru3f2ihptIYK4skgq42kWInqtp/4eWNC
-         tVQuvZcmYm1pG2HQ4mii9FMUuZnvIbhtQscDlTzQnbLvEGpt/AUJvuA13EfWHIDENLU1
-         SsiTsDy5gtnzqM3i6IZuT0u8TeL+XKkFWGDVzTFH/e1DaLKnRPqEuwWvESiiPmT5WOau
-         Y09qjzo4o8KyFm6/2fbQfMEhAkugxgdFVlBJFOur+YX0K28Tw44owC8Tn8mobtfINVid
-         xlQQ==
+        bh=8jbflLYqIFNVmS+Wc2+II3ndaWj8OVVixWOqRqUwSwo=;
+        b=FzDGOb7dDydRLGMMwwc8FPWQVsl1zNM5iqtHu8uFTEkGE9/Xo94huvxKvixn0i5W8U
+         wD+dUWHKEaJ/plcj0JlMkkiE3882c+N41jHH3BY/wkNkQQ8ETum4Y3nHwLbBWRAX5BCR
+         xPvuKQ62au0KwMDDtdLmiQM4dNhGpriO8HAS1YaTVwLNfqtFPZLnb/E/ztGEGYMLE78C
+         iYW89aV5MRFaSjaJFz5g9xOJSVSCDvMzHjsMq8uP48TyA0heNUWwDsDIiakR6y/sVqB3
+         Ff3Fi7gyoSYKh6byOFbdPJWtKl3BmX20BaITB5dsgRCBHu0iNxz15Z6PeaIlph8NJQIm
+         Yywg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725462973; x=1726067773;
+        d=1e100.net; s=20230601; t=1725465370; x=1726070170;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wqo6uxDJRAozTVmzlJ6rLIoylKPIUftf8WpjPYTdUD0=;
-        b=fvWqWUGbRwCrrijHsCICWTzJ1Q4ksO1UgjrwFwYgBwPi+RNtMbEJDjAfutpLzGTzNM
-         dMsJ/qA88VXgWuiCE36rh4lXNZemKsIQknhOCPwTYAgk3OZHK3gbeany5rN+NJIeJ7ui
-         gAxzgbkgiBk5z8t/e6eZuU+c7R4+9Z8pv1YKH2FbsVZSj6Ev7Zq0mQPca9GfMAg0Z6Kl
-         ActfmXW74pLVCgQ60DSkeXoYbdYjDkIAcwoy3EGSkasG0hcUotaMQuxgRCtSdaAgqJ0e
-         ImoPW+wA0lShgCnmyWXWGnCxhwicTecRodn4In7ZwD9OfUp9szexxgE/IueGjG/bGgLs
-         BgSw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0hFg3v2hYVLSX1psH6QIj+Wq6T0UeRKn4eLUPs8EaM6vrkknheV+6fks4C/2FHr9Bn1AMt1qn5wWaWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZZBjZzXNbO2hpI2HaaMUkgvlYBRV6kK1iTsiHXNRZvGNfGbrY
-	iWbaDkGVSDO/KBfl2gsT8CkEf0aOGbSFc6klDPlCo6wTH+9kWHD0
-X-Google-Smtp-Source: AGHT+IGmsgug3nYjI/N278OLt5VA6HUg/kOGLTawGG0uNpkPysLs4cQVGvf3yO1OlEtJaUjC50VqNw==
-X-Received: by 2002:a05:6a21:3510:b0:1ca:9ca3:2e84 with SMTP id adf61e73a8af0-1cecf4cb344mr17477672637.12.1725462972788;
-        Wed, 04 Sep 2024 08:16:12 -0700 (PDT)
+        bh=8jbflLYqIFNVmS+Wc2+II3ndaWj8OVVixWOqRqUwSwo=;
+        b=DxuzjoLHE7DhiMp8TOw2mNvTv7OIVH9480xuOit4FYNr9hrQcutIMNv9Tzl4JiektE
+         +k4GAjOsja9Muw97kXKjcayCRNPnPiDYCqITLHv2KnMbulHdBXPNvUfinPDGA174b0oP
+         9cs3qfLIUosdqNDV1ZbEOHHmTC2wnOQhFTqFvP30CVyP35pyabi4uUMY404biHRCIv30
+         ppD69KKzRmv/nFa1qgVoavuv5/1KHIvZYFwgbcMqDxz5P2ftqeHSXRvUPm9zuSiLgNq2
+         m3g/h1pgYThdwyJcwbFf+rCkldzgARYK4EGXLd344+TyiT7nJDzquU5ox58wBYekbz17
+         3BbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqpVia+YqbU4/PaF7GbrbgMpl91Fmbw2QcI3ZjdbYaUsypcdkVTG8gSLr/A9OVL87BTUhGd4wNoargjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwfJTiRXPLUksU/T+fMvkDZoOpf23+6PTqLG9St8WvO56RLo4S
+	VlWdhXdUq2vurleLZB1O1RbpBbiZN84eq2L0S2Qr6AD4ftDHeSlteiU/RQ==
+X-Google-Smtp-Source: AGHT+IEwAsTk26SmfO6S+C9XK2KeCblrovr7srtVkGV5Wcjodu3q2nInzY957KXKTLHErqL1tMeddw==
+X-Received: by 2002:a17:90b:196:b0:2d8:6e9c:a765 with SMTP id 98e67ed59e1d1-2d88d4d6832mr17901755a91.0.1725465369671;
+        Wed, 04 Sep 2024 08:56:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbd8529bsm1753994a12.19.2024.09.04.08.16.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2da8497d5e6sm2082944a91.52.2024.09.04.08.56.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 08:16:11 -0700 (PDT)
+        Wed, 04 Sep 2024 08:56:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9724dc83-8bdc-4b93-ad14-bb561805909d@roeck-us.net>
-Date: Wed, 4 Sep 2024 08:16:10 -0700
+Message-ID: <7e3cb7af-384a-4004-a96a-a59c1d7a0c2c@roeck-us.net>
+Date: Wed, 4 Sep 2024 08:56:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,10 +65,13 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Question regarding write-back operation to STATUS register
 To: Patryk <pbiel7@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 References: <CA+DkFDb--ow-Nc35bDh2Nmrf23B2wsrWW82uAQmu9U3_O4r0XQ@mail.gmail.com>
  <97098eef-880d-483c-a6c7-1aa0e46b7c42@roeck-us.net>
  <CA+DkFDaaqvBDdC-tikGotyKDx+KheRrhaCYatfpMdzReNsHyUQ@mail.gmail.com>
+ <9724dc83-8bdc-4b93-ad14-bb561805909d@roeck-us.net>
+ <CA+DkFDY5r4cNS86W6oGAg_g8GJunLRO455hnpTQG9A42t6Mn0g@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -114,97 +117,67 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CA+DkFDaaqvBDdC-tikGotyKDx+KheRrhaCYatfpMdzReNsHyUQ@mail.gmail.com>
+In-Reply-To: <CA+DkFDY5r4cNS86W6oGAg_g8GJunLRO455hnpTQG9A42t6Mn0g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/4/24 08:00, Patryk wrote:
-> śr., 4 wrz 2024 o 16:46 Guenter Roeck <linux@roeck-us.net> napisał(a):
->>
->> On 9/3/24 23:51, Patryk wrote:
->>> Hi
->>> I'm trying to bring-up LTC2977 and LTC2974  devices (I used DC1962CF
->>> demonstration system, it hosts both devices) on our board (NXP
->>> Layerscape basd) using an existing driver, namely LTC2978 ( and I
->>> faced some minor problems which I would like to clarify.
->>> The driver probed successfully for both devices, and various sysfs
->>> attributes have been created under */hwmonX/, however I would like to
->>> focus only on few of them, namely:
->>> - temp1_input: current temperature
->>> - temp1_max: max allowed temperature, any temp value above this
->>> setting will trigger a warning
->>> - temp1_max_alarm: boolean value indicating whether or not alarm
->>> conditions have occurred
->>>
->>> I wanted to test if everything works fine so I conducted the following
->>> test assuming that the temp1_input in my testing environment usually
->>> shows value around 38000:
->>> - I read the temp1_max_alarm using: cat temp1_max_alarm -> it showed "0"
->>> - I set temp1_max to 20000
->>> - I read the temp1_max_alarm using: cat temp1_max_alarm -> it returned
->>> "cat: read error: No such device or address"
->>> It occurred only on LTC2977, never happend on LTC2974.
->>> I traced down what exactly happens when I issue this command and it
->>> seems that the target device, LTC2977 responds with NACK to one of the
->>> issued commands. But what is this command exactly?
->>> When one reads temp1_max_alarm the driver (pmbus_core in this case)
->>> does the following:
->>> - the driver reads STATUS_TEMPERATURE and if 6th bit in this register
->>> (Status_temperature_ot_warn) is set it continues with further commands
->>> - the driver reads READ_TEMPERATURE_1
->>> - the driver reads OT_WARN_LIMIT
->>> - the driver updates the status register (STATUS_TEMPERATURE) with the
->>> same value that it previously read *(see_below)
->>> - the driver compares OT_WARN_LIMIT and READ_TEMPERATURE_1 and then it
->>> returns appropriate value (0 or 1 ) to userspace
->>>
->>> * this was added in 35f165f08950a876f1b95a61d79c93678fba2fd6 commit,
->>> and it seems to be compliant with PMBUS specification that says (PMBus
->>> Specification rev.1.3.1 part II, chapter 10.2.4):
->>> "Any or all of the bits in any status register except STATUS_BYTE and
->>> STATUS_WORD can be directly cleared by issuing the status command with one data
->>> byte that is written. The data byte is a binary value. A 1 in any bit
->>> position indicates
->>> that bit is to be cleared, if set, and unchanged if not set"
->>> Below is the simplified sequence of operations that are performed
->>> while reading temp1_max_alarm:
->>> - smbus_read: i2c-7 a=033 f=0004 c=7d BYTE_DATA /* read
->>> STATUS_TEMPERATURE, returns 0x40 */
->>> - smbus_read: i2c-7 a=033 f=0004 c=8d WORD_DATA /* read READ_TEMPERATURE_1 */
->>> - smbus_read: i2c-7 a=033 f=0004 c=51 WORD_DATA /* OT_WARN_LIMIT */
->>> - smbus_write: i2c-7 a=033 f=0004 c=7d BYTE_DATA l=1 [40] /* write
->>> back status register to clear warn bit */
->>>
->>> The last operation fails due to NACK received.
->>> So I'm wondering - considering that this "write back" operation takes
->>> place in the correct place, in the correct order and so on according
->>> to PMBUS specification, could it be that the device itself does not
->>> implement this correctly and simply responds with NACK to the write
->>> back operation to status register?
->>> On the other hand - why does it work correctly on LTC2974 but would
->>> not work on LTC2977?
->>>
->>> I would be grateful for any insights or guidance on resolving this issue.
->>>
+On 9/4/24 08:24, Patryk wrote:
+[ ... ]
+>  >>> We'll need to add some code to detect that condition and
+>  >>> refrain from clearing the status register if the chip doesn't support
+>  >>> writes (or maybe ignore errors from the clear operation). Ignoring the
+>  >>> error might be the easiest fix.
+>  >>
+>  >> I will apply this fix to our codebase then, unless I come up with a better idea.
+>  >>
+>  >
+>  > If yyou don't mind and have the time, it would be great if you can send a
+>  > patch to be applied to the upstream kernel. If not, please let me know and
+>  > I'll write one myself.
+>  >
+>  > Thanks,
+>  > Guenter
+>  >
 > 
-> Hi, thanks for the response
->> Datasheets will tell you: The status registers are supposed to be read-only
->> on those chips.
-> I'm aware of this. Actually that's why I asked because I was a bit
-> confused when I noticed that the driver actually tries to write
-> something to readonly register which didn't work on LTC2977, but on
-> the other hand worked correctly with LTC2974.
-> 
->> We'll need to add some code to detect that condition and
->> refrain from clearing the status register if the chip doesn't support
->> writes (or maybe ignore errors from the clear operation). Ignoring the
->> error might be the easiest fix.
-> I will apply this fix to our codebase then, unless I come up with a better idea.
+> Sure, I'll send a patch.
 > 
 
-If yyou don't mind and have the time, it would be great if you can send a
-patch to be applied to the upstream kernel. If not, please let me know and
-I'll write one myself.
+Thanks. Additional background: The ability to clear status registers was
+added with PMBus version 1.2, so it is not surprising that older chips
+don't support it. The best fix would probably be to read the revision
+register and use its content to decide if the individual status register
+should be cleared or if the clear_faults command should be executed.
+Something like
+
+struct pmbus_data {
+	...
+	u8 revision;
+	...
+};
+
+In pmbus.h:
+	#define PMBUS_REV_10	0x00
+	#define PMBUS_REV_11	0x11
+	#define PMBUS_REV_12	0x22
+	#definw PMBUS_REV_13	0x33
+
+In pmbus_init_common():
+
+	ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
+	if (!ret)
+		data->revision = ret;
+
+In pmbus_show_boolean():
+
+	if (regval) {
+		if (data->revision >= PMBUS_REV_12)
+	                ret = _pmbus_write_byte_data(client, page, reg, regval);
+		else
+			ret = pmbus_clear_fault_page(client, page);
+
+                 if (ret)
+                         goto unlock;
+         }
 
 Thanks,
 Guenter
