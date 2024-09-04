@@ -1,108 +1,63 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA8913C69B;
-	Wed,  4 Sep 2024 19:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8CF1E633F;
+	Wed,  4 Sep 2024 19:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725476593; cv=none; b=usGphj00URNYZm9E1W/tni/7qQWEl7LLp9FMDeQSnNsC2wUE1rwvP7OkTNf+dFnyzEX03aoMh8Z4eGx7S/G5kKwPoyije2h0uMw2b4C1vvNONUDK95GX3OBiCjsP3Qh2Jjl9O21vEt91lWne2hhi1AueGXl3gizzyjkxozkulzs=
+	t=1725477408; cv=none; b=b6a7bsCQC6x8I3HCVScaDm44iu8NG7WMf9WPUd8Q/UT1ALdC3d0FnDHEsv5Lw6tJGl2I/rQ5952UtiA3+OXZxZro89AocJv9sCBUx005I7yJ2hotXBc8a+NUwgRytW8+mcKFAY/8WmcLEfky+hdNx5qwOsLV0U7SDtIQm/boBmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725476593; c=relaxed/simple;
-	bh=xY9n51PN63KEhEPxxjelhzy7Qf2NkTS9t2rG1XzDiQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a7OBd6gGG0XpCQtUGVjUFWKvgWiY42BpnSG/xQCaw3TwqOQ/IszMKC1w98SMsbA/UnuUIP2hs8MvqgGpy0uJyaV9sFpggfKzTZXD1PCQUmLiSQvWtjlH2iWQ4JG7Uqt1i12F1zon+XjHU7vLMIXHjgficzg9nx43aQWmKVt44Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HY6mxf/Q; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1725477408; c=relaxed/simple;
+	bh=tqn7Dk7wV47Rcnp6pq6TqA7exKgVRLsmQ+/qr0ny9ok=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=NmdGJ7SfrOTP/9/ybdyjelwJRmMUcNzH8klR2UqBCXrMgC5V1sC6fkDuCQzspMSL9yXeS3ltRG6CoA7eHQqa/1ihg0FH4GJnCPKt+Y6Z1qW+rLOiALhNDfZB5V/bPlsPe0WBPywlauN1FRRwxpzsMbMBI8F+MD/zd4lCyW+2gso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCKJaFh9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HY6mxf/Q"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2d8a4bad409so3094750a91.0;
-        Wed, 04 Sep 2024 12:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725476591; x=1726081391; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kMUTvlKFCoe0p/yKImrYnJiSzgd4ECcJ28TTijkg1Nw=;
-        b=HY6mxf/Qisvk14sZsw7S24LWn+VOWKzOqFa7H0bj4DFjCZ+uFOmEpxOVAYFBS+w5EH
-         kbAUPcj6mHgMCtaFypnBEQR7d2QNBYaYu6Hde2i6bpUsmPXEsvHmqvQWuEPOEoFtRC7W
-         nv+RwCo8l8I/w7MnEaMBcR0tAhiyk1eXlHnW+SzfLh5Zs5NNOudbEGfuIH23bnTa3NrU
-         b1+IpO8RThYVsSPy7PlDPhmHH5b9eP0o/XGvWsrYW+ieErFmfgg1BXDr/1KdItU2Q6C3
-         p+z0271Y7vhhBFa8+vjd2LZeVQtCCR/F/JWKLo8g4aFRyNpNTh35Rmkx0k/EePDUgOMU
-         FGMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725476591; x=1726081391;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kMUTvlKFCoe0p/yKImrYnJiSzgd4ECcJ28TTijkg1Nw=;
-        b=dtVGIXx861hmkW+C4YBJv72uHpV4VYkCSE/JspZuEOQjkDib/vXRYqLQyA3cfjsupY
-         uSuWXtfjpW7lHh2ioDe6F10ERutpEm73Fwnpt/GeDUpnWBiRXvYdVczVzY9TG/NJvXUR
-         MzUE4Ane1kFc22emXPD22iNbwSN9T+lsqxOzPcHHrBjcKe0X7zcV5Es3NxgcY7QNO3O/
-         I+95m5UhOa7xq+VZWkB0HmlxZpoymlue7cxsJEOokaJQdn81Sdyl8WujInI7H7P9Ez7l
-         VnEi5A1c791pTQwD5boFsHbz1YuCRGmUsIjJDi9KkC40UJ/BcAefowRWjMSkZ5uU3Koh
-         kHxA==
-X-Forwarded-Encrypted: i=1; AJvYcCURN+r+5NR9aXeFA2bpL8Iy+5lA4wXhG7Gcmp+lVXj7F6opdMd3jyygr0XEdEPtgFPx/j7q8exJIN9M0ig=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf+w9UN5pYqbGKvHyKxwgNRZFTOpXPw5Z0d12B9Mh9N+RhsTeD
-	6k/H0E0BtsYbqoBaJeXpU7QEPVKQI9b3XHhtvBq1ZvpeexCVRojuLOmKHw==
-X-Google-Smtp-Source: AGHT+IEgR9MgYD1NTzMg5Jsi7Gj/XgXckhmwgtgdVyw0YSiMsPdoDsq/8Nl5kZUmMHFN7j7hmrkWDA==
-X-Received: by 2002:a17:90b:104f:b0:2d4:924:8891 with SMTP id 98e67ed59e1d1-2d89467ed3amr14310767a91.38.1725476590947;
-        Wed, 04 Sep 2024 12:03:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8f0e9c7b5sm6125022a91.32.2024.09.04.12.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 12:03:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.11-rc7
-Date: Wed,  4 Sep 2024 12:03:08 -0700
-Message-ID: <20240904190308.226166-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCKJaFh9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEE6C4CEC2;
+	Wed,  4 Sep 2024 19:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725477408;
+	bh=tqn7Dk7wV47Rcnp6pq6TqA7exKgVRLsmQ+/qr0ny9ok=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=KCKJaFh9VXKeAPQNCBL4Yvm5KT0ltaWh8e74oruWFjZiK8hbJaJalcBFYNxzLoWgg
+	 q8uAul36RkoFiwIhkKrQNv5rVtAM3afoNctxF6RS6yDqQRe02bE0o8gpUV1bMYquzI
+	 9FTZ05glLQwsGi40NC4kDkX6blgb7/g5ibvfGpbQRGwCdcWJtv5EI79WHFIPmWW/I/
+	 p4mC2ILTdxWjM/I1QDH8MAh60Qn5KkHIuCXqURZKkynAJsMe8DwLUZDhoID5rs/rAK
+	 C+a4k512JKmgS4yMZdSAVR8v+iJOGSI0jwtq0gSuhRDIVEr0S5KGtBMSRspUyxteKb
+	 STKr0F+0b2aUA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 340153822D30;
+	Wed,  4 Sep 2024 19:16:50 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.11-rc7
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240904190308.226166-1-linux@roeck-us.net>
+References: <20240904190308.226166-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240904190308.226166-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc7
+X-PR-Tracked-Commit-Id: a54da9df75cd1b4b5028f6c60f9a211532680585
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 14a244a9095e9034339c1c9a7b435f238f7d49df
+Message-Id: <172547740889.1139567.12745287904506464387.pr-tracker-bot@kernel.org>
+Date: Wed, 04 Sep 2024 19:16:48 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+The pull request you sent on Wed,  4 Sep 2024 12:03:08 -0700:
 
-Please pull hwmon fixes for Linux v6.11-rc7 from signed tag:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc7
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc7
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/14a244a9095e9034339c1c9a7b435f238f7d49df
 
-Thanks,
-Guenter
-------
+Thank you!
 
-The following changes since commit 431c1646e1f86b949fa3685efc50b660a364c2b6:
-
-  Linux 6.11-rc6 (2024-09-01 19:46:02 +1200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.11-rc7
-
-for you to fetch changes up to a54da9df75cd1b4b5028f6c60f9a211532680585:
-
-  hwmon: (hp-wmi-sensors) Check if WMI event data exists (2024-09-02 07:23:35 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.11-rc7
-
-hp-wmi-sensors: Check if WMI event data exists before accessing it
-
-ltc2991: fix register bits defines
-
-----------------------------------------------------------------
-Armin Wolf (1):
-      hwmon: (hp-wmi-sensors) Check if WMI event data exists
-
-Pawel Dembicki (1):
-      hwmon: ltc2991: fix register bits defines
-
- drivers/hwmon/hp-wmi-sensors.c | 2 ++
- drivers/hwmon/ltc2991.c        | 6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
