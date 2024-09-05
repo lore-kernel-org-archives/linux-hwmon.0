@@ -1,91 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EAED515;
-	Thu,  5 Sep 2024 20:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DCF16BE15;
+	Thu,  5 Sep 2024 20:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725567660; cv=none; b=lnJRwYE0j4DkInL6nkTyodT70kNEgjl/h+W/nebW//XoCn0xYEnvvJpmIuTADaHESRKMqvl4tFeICk9hZ4Vw9/15ttuKuJHaazykZbegqhMh3jwgejlZhIvDrr5DtmLqqle0Npicsm6MC9s83Sbmga2z1U5M/pk6GtMKHVjUjf4=
+	t=1725568434; cv=none; b=WI58tXGpeXG6il3geGO3oeKyVWdAB18mGSRN8QgCDRa9jhz4BO9ZisvIbQ/JTR+SK5ZwKJDlBbBa7/U8PzxxPrQP0vCfwIG643WwQv+q/o2CHJ6SpPsOiJoqqK3GbduwD+iJXRAa9MPNTQ9jMXe8lH4yCxAqctGtIOnBbBRQ430=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725567660; c=relaxed/simple;
-	bh=1lLjn97u5ozr3x2AENQrpqcvwTLIoF8oqz860FWuJxU=;
+	s=arc-20240116; t=1725568434; c=relaxed/simple;
+	bh=H49BPIC9s3SPzT/V3Ja0oEGR0PhQWoDW/01521CaypU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DhMAkUFzmZlAlvothMWz7w9IfBmFJqgsJBnL37sfwaYbk4x0pCfftLkVqZO70PBVn2krG0Es/c1lkmTlX2JFQCZaE+iRWgnYKt3MlHs5FQizU1fPfZn/2wjr9v1kManZibOYvMfe38Z/YgfnqEJ/mlsBwQC1XjfIMyXSCwOCt+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJ34kv5Z; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ieye2vDFvbm1XQEYyl5S6wKr1UZULxjfHVCtFhMAgczi/zMeZvv9avKMAIt2AftPzcaR5Q3EIyIkvbIqoMoodF26YxBkIIVFjlIAW/FKxUCcduTtokz8dQzxMm9/K9sMo+xZdli70gZiFzLhWvOj0ZsdxJP+D8PXIMB5V+D6OWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u2O6pYIB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJ34kv5Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6731AC4CEC4;
-	Thu,  5 Sep 2024 20:20:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u2O6pYIB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C681C4CEC3;
+	Thu,  5 Sep 2024 20:33:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725567660;
-	bh=1lLjn97u5ozr3x2AENQrpqcvwTLIoF8oqz860FWuJxU=;
+	s=k20201202; t=1725568434;
+	bh=H49BPIC9s3SPzT/V3Ja0oEGR0PhQWoDW/01521CaypU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BJ34kv5ZuKyapFcPxiGffv4WgAsKL5TgEhN+kToqlcoE0f9hJfzF/8V1z3FNycmwT
-	 vkIw+D9+Eo3yK828U5V64soeQk63yvcc6yNGXgD8X7iknlgm09SDB4GIVRE9HiwYq5
-	 cCm0HKzHdfmcfQlJKUHjYixqyMz5BWJYH62TCEIUA7LWPeKxWGbNeGFPd+0rdV9hlj
-	 3K29ikCWKLE912gE+KYsz2W7ZfKJAqOWex2HnW0xZWuWi98O0Vrseor4Gt4yJBH7MV
-	 FrE/tEAJwwQz+251cZmKpvXUeQ7x2ZeTJuqFs13dSQAteX6F4V9mAhi61grX8miuE4
-	 4m5chhZzuhlgw==
-Date: Thu, 5 Sep 2024 22:20:55 +0200
+	b=u2O6pYIBtWf7JOB8act6rnR56J4AlqXUypgCXmH/ESWWU6+OhvKbRFxokhuy2lq50
+	 gUUaToEoCTsIk/EpEyS4kc6N8zt8hDvpAVKE/XfTgSceq5m/aPZX1FZn1j2EUx6aX9
+	 Ifoag2Nbe+JSC4TKESBxtxQ/Ym/rrAqeBmtWQzzLzvfAesuLoOFenmi6j6pB8Zr8MZ
+	 35MMl81Fpn1ZSeJtUEcDyD2oAjqQJM+vk1/99ewMB80uRnm1nijIKPliBYh6+nWrVR
+	 De++5WSsivgg/TdRytFRkRlpRzGj3kAcpJSj+5LLBmL03cwfUJytxg94Y94cv+SV32
+	 7kqoA3NEYXumA==
+Date: Thu, 5 Sep 2024 22:33:49 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Peter Rosin <peda@axentia.se>
-Cc: Farouk Bouabid <farouk.bouabid@cherry.de>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Quentin Schulz <quentin.schulz@cherry.de>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Quentin Schulz <quentin.schulz@cherry.de>, Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
 	Wolfram Sang <wsa+renesas@sang-engineering.com>
 Subject: Re: [PATCH v7 2/8] i2c: muxes: add support for tsd,mule-i2c
  multiplexer
-Message-ID: <74anzbicky6zgccg7ao7l446fziwcmqcanycczl264neuts7ym@fyd4sdfyir6e>
+Message-ID: <wncr3gah2qsakgvqj5c2rj6ovm5kja3di2ybqemd3t6i6v7hdv@arkg6mvhozxj>
 References: <20240902-dev-mule-i2c-mux-v7-0-bf7b8f5385ed@cherry.de>
  <20240902-dev-mule-i2c-mux-v7-2-bf7b8f5385ed@cherry.de>
  <fvk5u2j7wu7pjrlpbbnggp3vhopotctu2vr3fh77kl2icrvnyt@tukh2ytkiwdz>
- <45c51083-ee63-45e7-b8d4-3822213530f4@cherry.de>
- <4e4d7c65-3c3f-5208-ce08-b63ad39ab425@axentia.se>
+ <b12ac5ac-306f-4f36-895a-e1472ff86271@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4e4d7c65-3c3f-5208-ce08-b63ad39ab425@axentia.se>
+In-Reply-To: <b12ac5ac-306f-4f36-895a-e1472ff86271@cherry.de>
 
-Hi,
+Hi Farouk,
 
-On Wed, Sep 04, 2024 at 10:59:47AM GMT, Peter Rosin wrote:
-> 2024-09-04 at 10:35, Farouk Bouabid wrote:
-> > On 03.09.24 17:13, Andi Shyti wrote:
+On Wed, Sep 04, 2024 at 12:23:56PM GMT, Farouk Bouabid wrote:
+> On 03.09.24 17:13, Andi Shyti wrote:
+> > > Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
+> > > among which an amc6821 and devices that are reachable through an I2C-mux.
+> > > The devices on the mux can be selected by writing the appropriate device
+> > > number to an I2C config register (amc6821 reg 0xff).
+> > > 
+> > > This driver is expected to be probed as a platform device with amc6821
+> > > as its parent i2c device.
+> > > 
+> > > Add support for the mule-i2c-mux platform driver. The amc6821 driver
+> > Along the driver I expressed some concern about the prefixes.
 > > 
-> > [...]
+> > You should avoid prefixes such as mux_* or MUX_* because they
+> > don't belong to your driver. You should always use your driver's
+> > name:
 > > 
-> >>> +        ret = i2c_mux_add_adapter(muxc, 0, reg);
-> >>> +        if (ret)
-> >>> +            return ret;
-> >> do we need to delete the adapters we added in previous cycles?
-> >>
+> >   1. mule_*
+> >   2. mule_mux_*
+> >   3. mule_i2c_mux_*
 > > 
-> > We calldevm_action_or_reset() before the loop to add adapter-removal to the error path. I think that does the job
+> > You have used the 3rd, I'd rather prefer the 1st. Because when
+> > you are in i2c/muxex/ it's implied that you are an i2c mux
+> > device. But it's a matter of personal taste.
 > > 
-> > for us or am I missing something ?
 > 
-> I missed that too, but it LGTM. It's safe to call i2c_mux_del_adapters() as
-> soon the mux core has been allocated, so there is no risk it is called too
-> early or something.
+> Are you here referring to the commit log, module name or function prefixes ?
+> (becauseÂ  later you suggested that we use "mule_i2c_mux_*" for functions)
 
-Just a question, still: is it the same calling
-i2c_mux_add_adapter() and calling mux_remove()?
+I made a general comment that applies to all the functions,
+defines, and global variables you've made here.
+
+My suggestion to use mule_i2c_mux_* is based on the fact that
+it's the most commonly used prefix in your code, but you don't
+necessarily need to use it. That's why I listed a few options.
+
+> "Mule" is a chip that requires multiple drivers that will be added later on,
+> and I suppose we don't want conflict with other module names ?
+
+It's an unwritten rule that you should avoid using overly generic
+terms as prefixes in your driver, like "smbus_read()" or
+"i2c_read()". Instead, you should incorporate to the prefix the
+chip identifier as named by the vendor. If this device is called
+'Theobroma Systems Mule,' you should stick to that naming as much
+as possible.
+
+Using the correct prefix might seem like overkill, but it's
+essential for debugging, grepping, and avoiding conflicts in
+cases where other developers havenâ€™t used unique identifiers in
+their modules.
+
+Lastly, if you're working within the i2c/muxes directory, you can
+omit the 'mux' prefix. Itâ€™s already clear that you're working
+with an I2C mux device.
 
 Thanks,
 Andi
-
-> With that said, I agree with Andi on the naming and the
-> nitpicks.
-> 
-> Cheers,
-> Peter
