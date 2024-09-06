@@ -1,323 +1,304 @@
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2055.outbound.protection.outlook.com [40.107.215.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C7A13D2BE;
-	Fri,  6 Sep 2024 06:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1CB16415
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Sep 2024 06:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725603309; cv=fail; b=Uw9bAnaIQSKXGnBUk+L6I1oumF9Zbm9z36LqjeK05xnN2hy9yYHVGXvcq1labr44d2wFCGOTmaGbxJasYBqB+wVW6vQGCVMhRd07zCCNShtSmgTRFV7e81RWglwvuWniwhiE1EOeWL4anAW91YvVpq+SMiLk8Z3Y2rsQK8tiZiI=
+	t=1725604020; cv=fail; b=FhKrDtsjSyCW60eBnn/4AkNhUzgqBZmzOvz7d6pww/pjzs23iIoB//Cb82Z2Q5hPU4X303cM7CNolYuJoAwxuMMw9LcKmWztyKjhWVJdPS+LjDYQcUhrfxw6deoTdsaNoUms2H38eLiYQKThvtsCmnn0M+9KD6Xdes1hzd2YoCA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725603309; c=relaxed/simple;
-	bh=tixLFoDRlOvZFLUwjZTvhCpnTkCm3ZcNdrF51v9zfXg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AW3ZE4EyxU7WI18O05I7O9mEsKIMzzOJVYSm0IJpZrdvM6Oh7JF0jLFuoWAbre3jBlIRA8IwxmbN3j9J1Hlls5oPKeNqkg+fgBd/tlVXvrcJ3lsprhqCrnSv1+jyXQZga4Mn+xGjtBzUjb2QBjKpfDLefyrXUpE0NAeuQ/4hlEs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=YuWBRc64; arc=fail smtp.client-ip=40.107.215.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
+	s=arc-20240116; t=1725604020; c=relaxed/simple;
+	bh=NuzWzx/LUsVl3SBUJgNim0LaTM8C1eneehIUCt/AN0k=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=o15sflctQ9PMRRvy9wjI7s3e0BUcSc149ePhzMVX/RxvmXZn5OhT4sXD3jPwoM7zzdK68Sk+O5fykvCu5D2TAuTbbhzu8grqP3ibu0kAeBIY997asWHHSLnH+tL/Y+LMB9IiReEUxPaNRRRt64JHTn+aFdmKbHiYY71kuoeMLc0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C4QxziiG; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="YuWBRc64"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C4QxziiG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725604018; x=1757140018;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=NuzWzx/LUsVl3SBUJgNim0LaTM8C1eneehIUCt/AN0k=;
+  b=C4QxziiG5NAhfq9Ll0bLS8nqr7wOgyOxC4jZCbrp7uTBY/NUQ+SQD25x
+   gmsejS3Nx1FjZPQgA6w4OBntn4ms+yyu0TG/eLLytyiEPtHYHFD/aExHn
+   Uc19UMJDynHMcIO6usE6FRBWjDSlAgVhCQQBkXlJaZuW2UHBPN+pkvCos
+   ryyMfGl4IqOsO+RPuLlInfZXI0M04kKkuToO6CycPEHb6TXChvkKJOOg6
+   TS9bjYUi+yICkzzBhHU7/V9PH9w5rkgQox4YbG7IX51xOz8q0onKckuIe
+   wCSLo3/tbY8aYridcCJASwYZdKu6rrDBG8NKb9ODFpgEl7tFn/PioSwge
+   w==;
+X-CSE-ConnectionGUID: N9pN3LuTTJeeDtXFK2lSqQ==
+X-CSE-MsgGUID: lIrIA6wRSeaCF9zDgeYCNQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23909694"
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="23909694"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 23:26:58 -0700
+X-CSE-ConnectionGUID: L2/4tEJpTR+UBAPIDH/peQ==
+X-CSE-MsgGUID: VUrnbugJQAeBQmdQsWOMTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="66191428"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Sep 2024 23:26:58 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 5 Sep 2024 23:26:57 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 5 Sep 2024 23:26:57 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 5 Sep 2024 23:26:57 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 5 Sep 2024 23:26:56 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CguR4EIHODDpHuxvYxg2LdbnRGSXmc2jVoi+ycpRgxMNMJ30m+KJqEyv18QFR72ZIXbUTV3a4RETxSurcOByLWSWitLBORyakGxpXrKSBF0oYLp8pnOAGg9xoUT58fGPaguGMC40VLYusaY/r87S6S3Kpt5Np5Yn3vwiDAswaPdySHeeXxax38z4i6TLwwa7WdEf4pwN8cU/iATt+I/81Jk3b2exkZGKaXhQ/P34rSBZ/LI2euVDni1Ar7P5LIk5e33UcLwVw9DGErA2uDTgkn+QCMNCi1QgsQ32P1dNkHYA59FoPGi6TxgUSzxKoVdkQE7BBo5HDJZqLa53GrhUqQ==
+ b=YSF/kcgoo0yK1p56VmEVYQhQBLtwfWFkCxYy/wRCJdMJm5vQb1NTvTvOY4e6pCro5/v3br97wAp4dkwWup0Hn4tPbZPd4P6p2RtddKn4xoljNE1MnClvPlo3J5G9RVKYkZa3xV97PnXPerADC8e0pdeKr2bdAA0VkubuasTwl6wkJn+in6ogGmKY3pvyCdpBN1/NBQfEx8gS9Mum01ULa/9ydGM5HsvU102cLXC31JaoUVkVBH8rW4ZMy6Qm6Ct5BJU1F6Yf0I/jKMmR6ht7xNnv85KlhLXjp1VtXt1A9STPwxIgUN+0UwEzGe7T4E5DuHKeQPI74KW42hBJClqPVA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dDRNL8aqBLV1TuuBW7ADbrQVrbs0/GZw0WSSfkNDrCo=;
- b=uYzqdp/Wq5b2nUzyWbnP4RYeX3M8aLuAB9Le242UbwdlPUz8ZR9qpxevH1GbWPtW/oI1tnMIFXREtmW6SW6X4ir+FatHhyx6FLTnK0mEDPx7XYLlxgWtER2M5kV27AmpSc4KG3Dlp2oXxITo+4pNCAMVFsh5Xci/UarPfcwR6XAwKVrbIUHpzflNlx1vUrytXgvvjORzjY8+9LHVrOnKWE7C3MhQqvZxSNnxCnRrMImU1Yg0lwkgfl0TW0Ow+Q9jyJsAUY9S9l0ig2hCXfTjGbfR45/kECtuC7nApvqlSYZ2XrEB6ra1hzYw17xkjjXEf9/IMWrbCrLHJAmMpPeUIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dDRNL8aqBLV1TuuBW7ADbrQVrbs0/GZw0WSSfkNDrCo=;
- b=YuWBRc64yhh3DelzsYtJZYmL56SZoUQaEv26rymJ3tJC7booIWLJ/ZpY7Jf8qcVrcB0hCu2dBV9BrzuENA4GwuLQycD2hBNOBSOXYbFU48plwXCE7Jda98eQ3rdoyAWEEFQ5VPe1i2pgc8yFknBHNsn1dueJhSkQ+xC55nEuVIMytkFozLMWvXAIB/DKOYxAC+P4LyX/WoaIQ6Zu/5Tt/cvo8HgKGPySabDdsT/tEYQOuOU8/P0RkDqJ9qg9Y2hFfD2hs2QhLxHIr28sSepSyBsWthHpHMOhH/dDYeYoHUApiynye2u59KnmVDNX73PouIPCVo8CkqjcXb/4KovnRQ==
-Received: from PS2PR01CA0025.apcprd01.prod.exchangelabs.com
- (2603:1096:300:58::13) by TYSPR04MB7566.apcprd04.prod.outlook.com
- (2603:1096:400:46e::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Fri, 6 Sep
- 2024 06:14:58 +0000
-Received: from HK2PEPF00006FB3.apcprd02.prod.outlook.com
- (2603:1096:300:58:cafe::ec) by PS2PR01CA0025.outlook.office365.com
- (2603:1096:300:58::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.17 via Frontend
- Transport; Fri, 6 Sep 2024 06:14:57 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- HK2PEPF00006FB3.mail.protection.outlook.com (10.167.8.9) with Microsoft SMTP
- Server id 15.20.7918.13 via Frontend Transport; Fri, 6 Sep 2024 06:14:57
- +0000
-From: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-To: patrick@stwcx.xyz,
-	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v6 3/3] hwmon: (isl28022) support shunt voltage for ISL28022 power monitor
-Date: Fri,  6 Sep 2024 14:14:18 +0800
-Message-Id: <20240906061421.9392-4-Delphine_CC_Chiu@wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240906061421.9392-1-Delphine_CC_Chiu@wiwynn.com>
-References: <20240906061421.9392-1-Delphine_CC_Chiu@wiwynn.com>
+ bh=lmasjyUGbpfiH+DJCGVKyINnsHQjXLt1alb26g4KMNw=;
+ b=Y6NXSo4un23eza9yoRSE3CR07tFBo0V78uOokg2ZOggmcIr7HAfsdPPb5/K1QdsVvP+reXofBHEuIDM+57WzqU2OfsAuVrCLZ6qew4N+YBHh0wK1wl/DV0A1xz0x8Zuvkp1AkMVZ3tRxZTA/fXjT5y06cO8hKZ5e3pNwivjK2SKp6YKSnNARZai5V5kLFqXD2h/2mQyxwejCg+U+kn5ynnqHw/eS3Evr0H4NOAO5rWEcstuuIIk4x/dKoBo16UzSUcK+8EC9T3nhvIEnQpb7/H838M+e6Umm68MTJMBkKsrppip0XqRpCWwB36RvbjAh+FADnzp5u3zmGrOucwNkmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com (2603:10b6:930:25::6)
+ by MW4PR11MB6785.namprd11.prod.outlook.com (2603:10b6:303:20c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Fri, 6 Sep
+ 2024 06:26:54 +0000
+Received: from CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::df5a:a32c:8904:15f1]) by CY5PR11MB6211.namprd11.prod.outlook.com
+ ([fe80::df5a:a32c:8904:15f1%6]) with mapi id 15.20.7918.024; Fri, 6 Sep 2024
+ 06:26:52 +0000
+Date: Fri, 6 Sep 2024 11:56:45 +0530
+From: Anshuman Gupta <anshuman.gupta@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>
+CC: "Nilawar, Badal" <badal.nilawar@intel.com>, <jani.nikula@linux.intel.com>,
+	<joonas.lahtinen@linux.intel.com>, <rodrigo.vivi@intel.com>,
+	<tursulin@ursulin.net>, <linux@roeck-us.net>, <andi.shyti@linux.intel.com>,
+	<andriy.shevchenko@linux.intel.com>, <intel-gfx@lists.freedesktop.org>,
+	<linux-hwmon@vger.kernel.org>, <riana.tauro@intel.com>,
+	<ashutosh.dixit@intel.com>, <karthik.poosa@intel.com>
+Subject: Re: [PATCH v1] drm/i915/hwmon: expose package temperature
+Message-ID: <2kraxnckxoucjzdpxx2qqfu4dymegudms7qwdqfmsn2mqofxam@6sr7ymprietf>
+References: <20240828044512.2710381-1-raag.jadav@intel.com>
+ <07c01d49-aa9c-429e-bd4d-65cf2648329e@intel.com>
+ <Ztlx-xAd2JSpolZA@black.fi.intel.com>
+ <56zmt55kfwgeq3bsbci7ghooe4qv3nqxulbaipceng2jqb6dtl@hxvgnwznnzpy>
+ <ZtoD-SoxljuJQuj9@black.fi.intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZtoD-SoxljuJQuj9@black.fi.intel.com>
+X-ClientProxiedBy: MA0PR01CA0096.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:af::12) To CY5PR11MB6211.namprd11.prod.outlook.com
+ (2603:10b6:930:25::6)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK2PEPF00006FB3:EE_|TYSPR04MB7566:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 8083e210-0cb1-4277-f37c-08dcce3b3b96
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6211:EE_|MW4PR11MB6785:EE_
+X-MS-Office365-Filtering-Correlation-Id: fcff767a-3d2b-40f2-d63a-08dcce3ce55f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xJ1dcAzHoWRcg17izxydOxFC8LyyC0oha+hyfedD2M6JbmGfsEJ9VXNwmom3?=
- =?us-ascii?Q?eZfBwQv1DLkpHPwwatrTPMG4INjMiOmM05dBsxbVL0goQcHbKGxbvL73kY+a?=
- =?us-ascii?Q?/ROw5xuQBVAZm+1JT0vJN28Nvd9e8QsUfJnrim2j5guo7pjmC1vD5hfzoFrH?=
- =?us-ascii?Q?N/OZeP3RAlRn1T4tgoV1CFqvSxWUR9SkeOyY7XxQ3udU5Kzfe7eUqbasxvpp?=
- =?us-ascii?Q?0oLyi8iziN0rUfALGbFhIWa4z1IXii2GYcJZpdACX1M2brcruGPYBoEhkYdQ?=
- =?us-ascii?Q?rzYCCG+1boedTRYLYwWX+b66NfJo9fO8eW00cVgWeJhRllE2x9mPc35GtUfH?=
- =?us-ascii?Q?ZPM0Pje1HvY5Ie/RQLaMQ/3r6QsxKQGUuaij7nWLzCxuyDLylwQN6+SuFEny?=
- =?us-ascii?Q?Y2XlUxWbRL9tuU6NpCOONl7CToI1bnS8ogEpTA/snMVsbnlhAmc8rOsnBofN?=
- =?us-ascii?Q?VN7s44qXgWgZ0UeV9siS0XfDFu+KUVSq1an3ENQjPAYghqH3DS/QVvLLgmNq?=
- =?us-ascii?Q?yY3SJTNYt1AxMy0sG4/pM8xWXzUO+gXw1vhZqr6hIxcqiyOkjRJVTPzC0nGP?=
- =?us-ascii?Q?QLBen0AzkaJK+94pnCuYTzJFGC0uJy1mt15CLC6Xu4xr3o4EWmst+j7u7URe?=
- =?us-ascii?Q?W1RncRCvmn5M++/uDdQXXQ3gcIIPzVwX1YgQIZjfW+gSUXQ/FkHVeclnMe8e?=
- =?us-ascii?Q?hFHocluoXTz9lIGLqZOblFuG81wjaP0Ru9WVH8XqgMzrGplGOWlBVC2pSKmU?=
- =?us-ascii?Q?A1a2VrIPyFc8ilwH3GjSmt7Llc6KEUK6PISl/UD4wTE7xZlYmhQ6dptLEPiE?=
- =?us-ascii?Q?ZrNRVi+CXybIJ6XyZl4+obhlndx4ccMPbSiwQYFm6c7ZzPl9k51hPBQT+EnV?=
- =?us-ascii?Q?uROPhTpRwuU0kMzDYzcT4eFjTu7JT3Qg3gspf5wg0c1c3T8B5oDJQW3C08tT?=
- =?us-ascii?Q?ZLXB9ak6zbLCMmhNqACX8x+y8TeCOv0Lf3p8ZeDHbL4CTIoUj07IcLjE/1Pm?=
- =?us-ascii?Q?C9kylo93YgF9/8afaZiSnTfT94FPTz4X83kuyJwtWzesLUrRWMF+7jH+T29E?=
- =?us-ascii?Q?V+4aO2XTuL9nBqYooQ+f1HjwgsTWF8OGsiglAbDppR9NLJqNtwQaQ+DASrEK?=
- =?us-ascii?Q?vp5WOCXenbgDz5Pi/Pu805Gsv2GyeVKds0kqMyAtG5ld3SM6i0s2kQYXu6Ca?=
- =?us-ascii?Q?p3UevqgOpcplc/IrDzEQHQZpjG4Iu4lnxky5twPtARNdqACJV6PhUiVjIZsJ?=
- =?us-ascii?Q?dAAh4/vXRFp8al18j+7+HGHXZpxgRUlvkOYploqESlGN1eV/Iq3VYGGlCOVE?=
- =?us-ascii?Q?ocu1QueAqMp67zor+PUnLLoJJpSY4fW9uCe1W2CELAm6rubZ5qaofEoUXiZC?=
- =?us-ascii?Q?btR2I3E5+QUCkvKwYvnbrZVIJaXN85IZMwKiDnOWPTbLXF/hnexTIiCyat+2?=
- =?us-ascii?Q?HDA8gPH85Us6myz1i0n9UiwlpQuOY7D4?=
-X-Forefront-Antispam-Report:
-	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 06:14:57.4939
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?Y3fJyT6mfvWESjGeqL1oVCbYfxSOXO/cy36M2ue9yJNrOKyBhF9lnRNHGp?=
+ =?iso-8859-1?Q?6cQVtnB4vzY+Y3tX+apcsvMkoyQ/0uQoU8N7xhFF3mT6uxoE0k6xqkkw2X?=
+ =?iso-8859-1?Q?b30AyBNiT+2uUw+xQ976L7/gas+8HsW7uBA7e1HuuAkuIHq1kqKx2fGKqm?=
+ =?iso-8859-1?Q?hoWPeHI+eeL5RHExvE6a2EHryBLFGwx7lPPG/Y/jF3h4QhLRLdgNLXzfLo?=
+ =?iso-8859-1?Q?ahHKGJgDgnVtEUORUMTZaJWssi4EqF6hcD0svlyGeybBpGpITux7Bea+aU?=
+ =?iso-8859-1?Q?jZnLkdjkkOpSqY+QGRJZypwckycRKKE9reISRDzYAT//uwxVHBEoxbPXMq?=
+ =?iso-8859-1?Q?kBn3UHYBQjdLOA2nVCtYqMVECGaf9eqz5V0iV2CgkCquYQzp0Ai2m7+P5U?=
+ =?iso-8859-1?Q?Nsze69mChyBBdydQ5DDnBdi4aUjq8YeMJ2aJbwp/5OPyk85YJsGiQseqxn?=
+ =?iso-8859-1?Q?q65ipH9sVpXkFy+J717HBimGIMMU2xhSPTP3QTOjqjJ0OUzfDwvGyvB1PT?=
+ =?iso-8859-1?Q?x83RSJG8K3VzlEnP1m3+cJxg5JyJwXjjAxrkHjXZF7T2T37eVc+lgpRVLT?=
+ =?iso-8859-1?Q?oBZbwtm0hMsGJb2ob9shFiuKX+EyxdpOX00hKQ7ByfpOtqR7ySBusyEzHn?=
+ =?iso-8859-1?Q?fkobOL5Vj9o87Rdm2QhUHkYYDdUk2Wt6csz0DUSpeSKvMy6yV/iW+1NYdJ?=
+ =?iso-8859-1?Q?+wplKMtEEYUhwJVb6J4BS4Lh9oauqcpLHzP0uXueA46HJoPEstTu3YAdKT?=
+ =?iso-8859-1?Q?dIoGuGUX2j2rOr9LZDGD1wnT7my04RGCyiFV3sYYhL7xps21iKOvqKLwqT?=
+ =?iso-8859-1?Q?bntVTmP48vF/NRIC82UWsOCrId033AtD2LPQSrdfLjUP53kd99Ro7Q2IWh?=
+ =?iso-8859-1?Q?K2Z0o3tpJ8/2garJVN9e+qp+dPTrD2P+vKCVYVz+dM5UA2kkr04jOdIMET?=
+ =?iso-8859-1?Q?QtfX8cHVwraUpQZuantV/9J+gYNkEpnuyickRcvlLJW2uMRzS16yRj5465?=
+ =?iso-8859-1?Q?nxofF74VMWG3Z2WcrY1Rn/IOheYAq/2lH+gm/JI1TT1KySwflI1glB8tYb?=
+ =?iso-8859-1?Q?LK9j/zFq65RMuIuD3zXLR24/VPmN4+W7saJa0rQeseIVRZtp8EOTp/RIyj?=
+ =?iso-8859-1?Q?zPx+Tj2PowsCjm8h4QbdDjH/0sOfzeV7GN3RVrisykd/0OeBQ974QkRAKv?=
+ =?iso-8859-1?Q?6/DuThX4zhqO7vJJo1f9qBca2+DRso43Zjrpl3V+13hRgXDHGokkoKOKTh?=
+ =?iso-8859-1?Q?VwDbI0rYrckraQcZjq4zF1NIvlKa0SVYtn4LimOEAn0fjmwKvAKTCkeS10?=
+ =?iso-8859-1?Q?SlZsai/scJ/4wBNOEVv5MLD3B/giPuFc1xL8nNxyLIcD/s8=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6211.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?ZmDFnI3Chf8il2KGFR4cDmF05RJ+j8X3hcXYjCC2Cn6SGZwbKUNQZJPfML?=
+ =?iso-8859-1?Q?yt7PKaJ/zBdQqPa9SHZl7wNBiuSX16HvriXpa5+2PnTDgZrV+jsp8IaQg+?=
+ =?iso-8859-1?Q?I6/9GZTVRspHr3iqDTBLxHtRFDXLjm8LOP6Eb5rk+1iZLIL9IPzuox3rXR?=
+ =?iso-8859-1?Q?HieURV8EllzBohwtPZRw37bfwNArEgZK4UFkjk2NMnspQjRu7/8kamjTad?=
+ =?iso-8859-1?Q?WIqbBx989wrdxo1ZebHOS3AXcUQHoqM6tULO1Vnge5v6MBFXfzEDO+OAMg?=
+ =?iso-8859-1?Q?5XSfSzSjztluexvzBAvHlVFrpbTBoK3nCd1x6msWUE7GiCbt+BkQEe2p/L?=
+ =?iso-8859-1?Q?ZNWbLF/8EBQx3OySjG33Zl40lf753Q6LB1XNn8zPD9YXHew/sdqwLOpX/F?=
+ =?iso-8859-1?Q?2h6X7VulbqBm1p1Ct02iD1slbPb9vja3cNdw3ytHTqeqc9yYqGVxZGGWSk?=
+ =?iso-8859-1?Q?F3Q9Attq3jXGOIxj8q4pf14YrEg9Rb/T6/HqNOcGdiC+HvSCcx4BzVJhLf?=
+ =?iso-8859-1?Q?eTUFWHycl+VNnU4XMmwpbEYr2IFTL8PKIxQMBdJQwknBENdVCyCgWmMW2U?=
+ =?iso-8859-1?Q?0ot9k69SCxeeBT5iAve+9YJYSEGvNxA3z0lhqpsuk+WhLvATb14LcumaIe?=
+ =?iso-8859-1?Q?km+7jEOPYZWV/q9MnTOeHJfljkoiMwIBYxyllGwWv5xmCUJ07wKTNTMPiy?=
+ =?iso-8859-1?Q?GAEm+5mZFCutB4sB2TZ8T/9NvCgSQ+RzYWxmkk/lDV9r4hmykQEZOuuh/4?=
+ =?iso-8859-1?Q?rOqS5yJyAWys3bXib+9P6BDvxQlK2Ce4uXtAAFbDzGISG2UcGVnwM5rSws?=
+ =?iso-8859-1?Q?v4RB3xodetBDdZZxGY1LuI4NNuwtMEB6wImp97PkKiEL6khsbTBt4kd87L?=
+ =?iso-8859-1?Q?IxwQIaT6ej3/5eOijgNd3I+m+yVlFAGf1AgQcWI4QaKqwZ9WXpRLaH747H?=
+ =?iso-8859-1?Q?P3bTTOCcOML4anqBwqKW3fLbP+Z7ps4GHJCbklIyLJwvoY6QHisLIueLmZ?=
+ =?iso-8859-1?Q?c6QfZWi9Xngp3k4oBPVvBPxwnUJVVf/6JPiE1LNPtGHf9TT5DsOqu4sUP4?=
+ =?iso-8859-1?Q?BmbeIIQ1i318+7loLKwvYyZ5U65ZnSusxTjBRpelFu+eSei/Optaw+aDhR?=
+ =?iso-8859-1?Q?wOFv7b7rRxOtCK5JXTg/aqeRIQNjgU76JRBz7ZPKNYAIaFRcxwypqnrbdS?=
+ =?iso-8859-1?Q?24oCYjXhyWJeHxA1zFeF7bUNxcTyNbpAh2IoZuNoh2UOdKrHey17zb+U+C?=
+ =?iso-8859-1?Q?Qx7eVwqTX57+0W7Dt8mNlq25mDC1UaoCJ8RDA/9FV8q978USL3gYX4TXCD?=
+ =?iso-8859-1?Q?Y8kPWPbIpES9fcn2A1ca5IZOF+sVRTuQuMFYT3yCeK1JVWKFCKAFjkRP23?=
+ =?iso-8859-1?Q?gpXSJZbr6vKANYtwwAu06gyMs6FNpusocA9It/tRsv4iYAzpG/+joFdu3D?=
+ =?iso-8859-1?Q?nwj9m8/Wu/S/0ntJ5RJffHt9Ddno7wjUtyyckinwd0j5Drr2IyRQs5ri0z?=
+ =?iso-8859-1?Q?gf3NwNcmpa2VbaAljwiR733VxiINbrtQfpQJzUDykowLuo+2WOzXmBd+wR?=
+ =?iso-8859-1?Q?ze2ruwXuIGvpsYFSMkgdRM0omLPtWbYhN1RdyK4unYIvOtZLswQoeS4rnT?=
+ =?iso-8859-1?Q?FFeT1IbQPcE4sz2NfegLpvlXsVTNP2BgXvssIi243Ccd1NwnVli/Nb+A?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcff767a-3d2b-40f2-d63a-08dcce3ce55f
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6211.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 06:26:52.4436
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8083e210-0cb1-4277-f37c-08dcce3b3b96
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource:
-	HK2PEPF00006FB3.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR04MB7566
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /39HQsNATAIQ5SvPW40WSWWuQfHaWO3a1xnjifZO37g83Z28QmNyNgJQ42BWDYIZByyBvq3vbSy8ioCIDakq6Weisot59y0+uNLEVMCZ/ok=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6785
+X-OriginatorOrg: intel.com
 
-Added support reading shunt voltage in mV and revise code
-for Renesas ISL28022.
+On 2024-09-05 at 22:18:17 +0300, Raag Jadav wrote:
+> On Thu, Sep 05, 2024 at 07:39:31PM +0530, Anshuman Gupta wrote:
+> > On 2024-09-05 at 11:55:23 +0300, Raag Jadav wrote:
+> > > On Thu, Sep 05, 2024 at 11:56:15AM +0530, Nilawar, Badal wrote:
+> > > > 
+> > > > 
+> > > > On 28-08-2024 10:15, Raag Jadav wrote:
+> > > > > Add hwmon support for temp1_input attribute, which will expose package
+> > > > > temperature in millidegree Celsius. With this in place we can monitor
+> > > > > package temperature using lm-sensors tool.
+> > > > > 
+> > > > > $ sensors
+> > > > > i915-pci-0300
+> > > > > Adapter: PCI adapter
+> > > > > in0:         990.00 mV
+> > > > > fan1:        1260 RPM
+> > > > > temp1:        +45.0°C
+> > > > > power1:           N/A  (max =  35.00 W)
+> > > > > energy1:      12.62 kJ
+> > > > > 
+> > > > > Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/11276
+> > > > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> > > > > ---
+> > > > >   .../ABI/testing/sysfs-driver-intel-i915-hwmon |  8 ++++
+> > > > >   drivers/gpu/drm/i915/i915_hwmon.c             | 39 +++++++++++++++++++
+> > > > >   drivers/gpu/drm/i915/intel_mchbar_regs.h      |  4 ++
+> > > > >   3 files changed, 51 insertions(+)
+> > > > > 
+> > > > > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > > > > index be4141a7522f..a885e5316d02 100644
+> > > > > --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > > > > +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+> > > > > @@ -83,3 +83,11 @@ Contact:	intel-gfx@lists.freedesktop.org
+> > > > >   Description:	RO. Fan speed of device in RPM.
+> > > > >   		Only supported for particular Intel i915 graphics platforms.
+> > > > > +
+> > > > > +What:		/sys/bus/pci/drivers/i915/.../hwmon/hwmon<i>/temp1_input
+> > > > > +Date:		November 2024
+> > > > > +KernelVersion:	6.12
+> > > > > +Contact:	intel-gfx@lists.freedesktop.org
+> > > > > +Description:	RO. GPU package temperature in millidegree Celsius.
+> > > > > +
+> > > > > +		Only supported for particular Intel i915 graphics platforms.
+> > > > > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> > > > > index 17d30f6b84b0..9f1a2300510b 100644
+> > > > > --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> > > > > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> > > > > @@ -7,6 +7,7 @@
+> > > > >   #include <linux/hwmon-sysfs.h>
+> > > > >   #include <linux/jiffies.h>
+> > > > >   #include <linux/types.h>
+> > > > > +#include <linux/units.h>
+> > > > >   #include "i915_drv.h"
+> > > > >   #include "i915_hwmon.h"
+> > > > > @@ -32,6 +33,7 @@
+> > > > >   struct hwm_reg {
+> > > > >   	i915_reg_t gt_perf_status;
+> > > > > +	i915_reg_t pkg_temp;
+> > > > >   	i915_reg_t pkg_power_sku_unit;
+> > > > >   	i915_reg_t pkg_power_sku;
+> > > > >   	i915_reg_t pkg_rapl_limit;
+> > > > > @@ -280,6 +282,7 @@ static const struct attribute_group *hwm_groups[] = {
+> > > > >   };
+> > > > >   static const struct hwmon_channel_info * const hwm_info[] = {
+> > > > > +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> > > > >   	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+> > > > >   	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+> > > > >   	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+> > > > > @@ -310,6 +313,36 @@ static int hwm_pcode_write_i1(struct drm_i915_private *i915, u32 uval)
+> > > > >   				  POWER_SETUP_SUBCOMMAND_WRITE_I1, 0, uval);
+> > > > >   }
+> > > > > +static umode_t
+> > > > > +hwm_temp_is_visible(const struct hwm_drvdata *ddat, u32 attr)
+> > > > > +{
+> > > > > +	struct i915_hwmon *hwmon = ddat->hwmon;
+> > > > > +
+> > > > > +	if (attr == hwmon_temp_input && i915_mmio_reg_valid(hwmon->rg.pkg_temp))
+> > > > > +		return 0444;
+> > > > > +
+> > > > > +	return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static int
+> > > > > +hwm_temp_read(struct hwm_drvdata *ddat, u32 attr, long *val)
+> > > > > +{
+> > > > > +	struct i915_hwmon *hwmon = ddat->hwmon;
+> > > > > +	intel_wakeref_t wakeref;
+> > > > > +	u32 reg_val;
+> > > > > +
+> > > > > +	if (attr == hwmon_temp_input) {
+> > > > > +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
+> > > > > +			reg_val = intel_uncore_read(ddat->uncore, hwmon->rg.pkg_temp);
+> > > > > +
+> > > > > +		/* HW register value is in degrees, convert to millidegrees. */
+> > > > > +		*val = REG_FIELD_GET(TEMP_MASK, reg_val) * MILLIDEGREE_PER_DEGREE;
+> > > > > +		return 0;
+> > > > > +	}
+> > > > > +
+> > > > > +	return -EOPNOTSUPP;
+> > > > > +}
+> > > > Let's try to have synergy between previous attribute, such as hwm_fan_input,
+> > > > and this one.
+> > > 
+> > > This one's simple enough to be inline IMHO.
+> > > Besides, it's already in synergy with hwm_in_read() which has similar
+> > > implementation.
+> > Agree this is pretty simple to have an any helper but IMO it would have been cleaner to have a switch
+> > like hwm_in_read() to return -EOPNOTSUPP in default case. i think that was reason switch case was 
+> > used in entire file.
+> 
+> Extending on the simplicity argument above, if() makes more sense for a single case.
+IMO lets prefer the style which was used in this entire file,
+that is more readable along with other attributes.
+Idea behind switch was scalable attribute for future. 
+It is something related to individual preference therefore
+ let's prefer the symmetry with other hwmon attributes.
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
----
- drivers/hwmon/isl28022.c | 93 ++++++++++++++++++++++++++++------------
- 1 file changed, 66 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index f0494c3bd483..01220fad813d 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -85,8 +85,6 @@ struct isl28022_data {
- 	u32			shunt;
- 	u32			gain;
- 	u32			average;
--	u16			config;
--	u16			calib;
- };
- 
- static int isl28022_read(struct device *dev, enum hwmon_sensor_types type,
-@@ -95,20 +93,61 @@ static int isl28022_read(struct device *dev, enum hwmon_sensor_types type,
- 	struct isl28022_data *data = dev_get_drvdata(dev);
- 	unsigned int regval;
- 	int err;
-+	u16 sign_bit;
- 
- 	switch (type) {
- 	case hwmon_in:
--		switch (attr) {
--		case hwmon_in_input:
--			err = regmap_read(data->regmap,
--					  ISL28022_REG_BUS, &regval);
--			if (err < 0)
--				return err;
--			/* driver supports only 60V mode (BRNG 11) */
--			*val = (long)(((u16)regval) & 0xFFFC);
-+		switch (channel) {
-+		case 0:
-+			switch (attr) {
-+			case hwmon_in_input:
-+				err = regmap_read(data->regmap,
-+						  ISL28022_REG_BUS, &regval);
-+				if (err < 0)
-+					return err;
-+				/* driver supports only 60V mode (BRNG 11) */
-+				*val = (long)(((u16)regval) & 0xFFFC);
-+				break;
-+			default:
-+				return -EOPNOTSUPP;
-+			}
-+			break;
-+		case 1:
-+			switch (attr) {
-+			case hwmon_in_input:
-+				err = regmap_read(data->regmap,
-+						  ISL28022_REG_SHUNT, &regval);
-+				if (err < 0)
-+					return err;
-+			switch (data->gain) {
-+			case 8:
-+				sign_bit = (regval >> 15) & 0x01;
-+				*val = (long)((((u16)regval) & 0x7FFF) -
-+					   (sign_bit * 32768)) / 100;
-+				break;
-+			case 4:
-+				sign_bit = (regval >> 14) & 0x01;
-+				*val = (long)((((u16)regval) & 0x3FFF) -
-+					   (sign_bit * 16384)) / 100;
-+				break;
-+			case 2:
-+				sign_bit = (regval >> 13) & 0x01;
-+				*val = (long)((((u16)regval) & 0x1FFF) -
-+					   (sign_bit * 8192)) / 100;
-+				break;
-+			case 1:
-+				sign_bit = (regval >> 12) & 0x01;
-+				*val = (long)((((u16)regval) & 0x0FFF) -
-+					   (sign_bit * 4096)) / 100;
-+				break;
-+			}
-+			break;
-+			default:
-+				return -EOPNOTSUPP;
-+			}
- 			break;
- 		default:
--			return -EINVAL;
-+			return -EOPNOTSUPP;
- 		}
- 		break;
- 	case hwmon_curr:
-@@ -122,7 +161,7 @@ static int isl28022_read(struct device *dev, enum hwmon_sensor_types type,
- 				(long)data->shunt;
- 			break;
- 		default:
--			return -EINVAL;
-+			return -EOPNOTSUPP;
- 		}
- 		break;
- 	case hwmon_power:
-@@ -136,11 +175,11 @@ static int isl28022_read(struct device *dev, enum hwmon_sensor_types type,
- 				(long)data->shunt) * (long)regval;
- 			break;
- 		default:
--			return -EINVAL;
-+			return -EOPNOTSUPP;
- 		}
- 		break;
- 	default:
--		return -EINVAL;
-+		return -EOPNOTSUPP;
- 	}
- 
- 	return 0;
-@@ -182,7 +221,8 @@ static umode_t isl28022_is_visible(const void *data, enum hwmon_sensor_types typ
- 
- static const struct hwmon_channel_info *isl28022_info[] = {
- 	HWMON_CHANNEL_INFO(in,
--			   HWMON_I_INPUT),	/* channel 0: bus voltage (mV) */
-+			   HWMON_I_INPUT,	/* channel 0: bus voltage (mV) */
-+			   HWMON_I_INPUT),	/* channel 1: shunt voltage (mV) */
- 	HWMON_CHANNEL_INFO(curr,
- 			   HWMON_C_INPUT),	/* channel 1: current (mA) */
- 	HWMON_CHANNEL_INFO(power,
-@@ -368,24 +408,22 @@ static int isl28022_read_properties(struct device *dev, struct isl28022_data *da
- static int isl28022_config(struct isl28022_data *data)
- {
- 	int err;
-+	u16 config;
-+	u16 calib;
- 
--	data->config = (ISL28022_MODE_CONT_SB << ISL28022_MODE_SHIFT) |
-+	config = (ISL28022_MODE_CONT_SB << ISL28022_MODE_SHIFT) |
- 			(ISL28022_BRNG_60 << ISL28022_BRNG_SHIFT) |
- 			(__ffs(data->gain) << ISL28022_PG_SHIFT) |
- 			((ISL28022_ADC_15_1 + __ffs(data->average)) << ISL28022_SADC_SHIFT) |
- 			((ISL28022_ADC_15_1 + __ffs(data->average)) << ISL28022_BADC_SHIFT);
- 
--	data->calib = data->shunt ? 0x8000 / data->gain : 0;
--
--	err = regmap_write(data->regmap, ISL28022_REG_CONFIG, data->config);
--	if (err < 0)
--		return err;
-+	calib = data->shunt ? 0x8000 / data->gain : 0;
- 
--	err = regmap_write(data->regmap, ISL28022_REG_CALIB, data->calib);
-+	err = regmap_write(data->regmap, ISL28022_REG_CONFIG, config);
- 	if (err < 0)
- 		return err;
- 
--	return 0;
-+	return regmap_write(data->regmap, ISL28022_REG_CALIB, calib);
- }
- 
- static int isl28022_probe(struct i2c_client *client)
-@@ -396,8 +434,8 @@ static int isl28022_probe(struct i2c_client *client)
- 	int err;
- 
- 	if (!i2c_check_functionality(client->adapter,
--				     I2C_FUNC_SMBUS_BYTE_DATA |
--				     I2C_FUNC_SMBUS_WORD_DATA))
-+					 I2C_FUNC_SMBUS_BYTE_DATA |
-+					 I2C_FUNC_SMBUS_WORD_DATA))
- 		return -ENODEV;
- 
- 	data = devm_kzalloc(dev, sizeof(struct isl28022_data), GFP_KERNEL);
-@@ -418,7 +456,7 @@ static int isl28022_probe(struct i2c_client *client)
- 
- 	isl28022_debugfs_init(client, data);
- 
--	hwmon_dev = devm_hwmon_device_register_with_info(dev, "isl28022_hwmon",
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &isl28022_chip_info, NULL);
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
-@@ -437,8 +475,9 @@ static struct i2c_driver isl28022_driver = {
- 	.class		= I2C_CLASS_HWMON,
- 	.driver = {
- 		.name	= "isl28022",
-+		.of_match_table = of_match_ptr(isl28022_of_match),
- 	},
--	.probe_new	= isl28022_probe,
-+	.probe	= isl28022_probe,
- 	.id_table	= isl28022_ids,
- };
- 
--- 
-2.25.1
-
+With that
+Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+> 
+> Raag
