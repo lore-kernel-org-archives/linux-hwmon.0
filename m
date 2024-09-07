@@ -1,102 +1,211 @@
-Received: from classfun.cn (unknown [129.204.178.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3484328FC;
-	Sat,  7 Sep 2024 14:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6E828FC
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Sep 2024 14:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725720412; cv=none; b=RhlitEeaJ+1FBHXMD4dSozA+6PolRAtK0S1bdCMHhnJNEEmgR6uLTuYKD8mG541W6+S5uvj6cNq3ayBj8aEHyohjYJphCR7NkjyIgKKugpfT5SxqtHXmG52YHZLaYKr9h0cWSvC9Uf/i+uG6fwe9PFD4plT82QhcNwDEeppDn6w=
+	t=1725720650; cv=none; b=JcwGuV9Av3iKjTee11YWegjxMzQ8z73p1CVRGFPg+wsf7jyW7gUKUdLu8gRacM8DGngopOiBQvxk4MM6h0bq/2E7MOpvSMG/UNm7wDd9TpoUlXEUUH9MZnRFWcOpKsTXuvm9kmLRSgDAda3BSALe111ldc1ozWIWwvf6ONAuO8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725720412; c=relaxed/simple;
-	bh=NHJ0+sU2adxTEFbuq/grgcIZX4veA7f7/RBQCE56QVQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VFBu5aKcFG3nAt01tvYdLbXJJpCVJ4zZ7yyYmYOTsplwq4ptMFoa8MlrY7l0igbUyZjbZ/hLlkRnzW77NNz1haEcosyHmOJ0qm/CTzhRJvzCdOeNrOqecTlEVh99+Ja92OVA3MTb027HEWc9mkBoFeeq5zzfLjeJesqoTYAJoz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=n8Hp9Z5I; arc=none smtp.client-ip=129.204.178.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+	s=arc-20240116; t=1725720650; c=relaxed/simple;
+	bh=wuRb3P68ViiSAW+Zx/dR++zIeIoZYcUIzpCVNRFLO+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=QPmHsM1foEBM11ZwivZgwIoUPKBR3qpJhtn17+/E63g1UGkd0FIra85nWg6EbWHf/HYp/aboCAsrN9Ij85mLppOh00rEnYIC2pLQ3kUV9LGMZCQJMr5nU2jCD1HmyRCEawv3sKBULItV0MfOb18szfIIUBjH9DXuRgrA3x1ldJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMjtuyc+; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="n8Hp9Z5I"
-Received: from [192.168.0.160] (unknown [14.155.100.110])
-	(Authenticated sender: bigfoot)
-	by classfun.cn (Postfix) with ESMTPSA id 0FEC078A04;
-	Sat,  7 Sep 2024 22:46:45 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 0FEC078A04
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
-	s=default; t=1725720405;
-	bh=vEtoINhe3YqLp5wK8FdsELDTQbLLzWqrW7RhTNgkRsE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=n8Hp9Z5I/WAxnS8iFA49TGS8ykMLsm9KqxVy18PU2SezXNKHTVWXySMyCtaJ53mg1
-	 1YCUaNGuArthbZ8+SgcaTpf9kuLqLvaNUctnJP4ysI84mZraFdWDO3FuvOCP9fkoH9
-	 xto2kSiaBr1njBrrCmT4EzHp6O1DKqANgjewI5JY=
-Message-ID: <9051dba0-0483-43dc-9e5d-d19500c019b9@classfun.cn>
-Date: Sat, 7 Sep 2024 22:46:29 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMjtuyc+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725720648; x=1757256648;
+  h=date:from:to:cc:subject:message-id;
+  bh=wuRb3P68ViiSAW+Zx/dR++zIeIoZYcUIzpCVNRFLO+Q=;
+  b=KMjtuyc+TzchIScqwqBR0C2YjTgt8Bg+gq72H1tk3dSX39R50V7DrAvd
+   sCGZveB7qFcG2iNEydUJipDP1iae38fC3tedFcTkpRiCa5hY7FzQ+RmOL
+   cB+kHilf14czS3iKocGGKb+3i3F/hZmj2kj4LooXtH4A+4fgZvRW0Cqah
+   qweak4robcMLgApbEltqJ4l7Scdp26fvh34PH7ErnCZAx09NVfY7P8l8v
+   BMKq1RnFp+DTQqLvgZm9gIk4ms3VjwOzUwM70raQjajvjYx6YEAArza3b
+   fgd6OBS0YdJQRDt4/WFtUYy28tgbHhllvt0EgBPviSCHkZgjlmmrRJnmp
+   Q==;
+X-CSE-ConnectionGUID: 0yH0zjdGQ5ChWH5IRaVeAg==
+X-CSE-MsgGUID: TXBdLDYrTJGHwlc44cxzsQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="35845458"
+X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
+   d="scan'208";a="35845458"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 07:50:47 -0700
+X-CSE-ConnectionGUID: u46dLXKHToaJg7t7ESV9Hw==
+X-CSE-MsgGUID: o+z65LW+Tb6Of3nsXQ2HVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
+   d="scan'208";a="66018044"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Sep 2024 07:50:46 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smwlv-000CdT-2Y;
+	Sat, 07 Sep 2024 14:50:43 +0000
+Date: Sat, 07 Sep 2024 22:49:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
+ a727a8c92a72f77433c53762b58aa83410acc6a7
+Message-ID: <202409072244.xznxTMNU-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
-To: Markus Elfring <Markus.Elfring@web.de>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
- =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Junhao Xie <bigfoot@classfun.cn>
-References: <20240906093630.2428329-2-bigfoot@classfun.cn>
- <d79dbfae-d50b-45e5-b430-be8106bbb03c@web.de>
-Content-Language: en-US
-From: Junhao Xie <bigfoot@classfun.cn>
-In-Reply-To: <d79dbfae-d50b-45e5-b430-be8106bbb03c@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 2024/9/7 16:10, Markus Elfring wrote:
-> …
->> +++ b/drivers/mfd/photonicat-pmu.c
->> @@ -0,0 +1,501 @@
-> …
->> +int pcat_pmu_execute(struct pcat_request *request)
->> +{
-> …
-> 
-> Under which circumstances would you become interested to apply statements
-> like the following?
-> 
-> 
->> +	mutex_lock(&pmu->reply_lock);
->> +	if (request->frame_id == 0)
->> +		request->frame_id = atomic_inc_return(&pmu->frame);
->> +	pmu->reply = request;
->> +	mutex_unlock(&pmu->reply_lock);
-> …
-> 
-> A) guard(mutex)(&pmu->reply_lock);
->    https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/mutex.h#L196
-> 
-> 
-> 
->> +		spin_lock_irqsave(&pmu->bus_lock, flags);
->> +		ret = pcat_pmu_raw_write(pmu, request->frame_id, req->cmd,
->> +					 true, req->data, req->size);
->> +		spin_unlock_irqrestore(&pmu->bus_lock, flags);
-> …
-> 
-> B) guard(spinlock_irqsave)(&pmu->bus_lock);
->    https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/spinlock.h#L572
-> 
-> 
-> Regards,
-> Markus
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+branch HEAD: a727a8c92a72f77433c53762b58aa83410acc6a7  Merge branch 'hwmon-max16065' into hwmon-staging
 
-Thanks for your suggestions, I will try these statements.
+elapsed time: 1373m
 
-Best regards,
-Junhao
+configs tested: 134
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc-14.1.0
+alpha                            allyesconfig   clang-20
+alpha                               defconfig   gcc-14.1.0
+arc                              allmodconfig   clang-20
+arc                               allnoconfig   gcc-14.1.0
+arc                              allyesconfig   clang-20
+arc                                 defconfig   gcc-14.1.0
+arm                              allmodconfig   clang-20
+arm                               allnoconfig   gcc-14.1.0
+arm                              allyesconfig   clang-20
+arm                                 defconfig   gcc-14.1.0
+arm                        neponset_defconfig   clang-15
+arm                          pxa168_defconfig   clang-15
+arm64                            allmodconfig   clang-20
+arm64                             allnoconfig   gcc-14.1.0
+arm64                               defconfig   gcc-14.1.0
+csky                              allnoconfig   gcc-14.1.0
+csky                                defconfig   gcc-14.1.0
+hexagon                          allmodconfig   clang-20
+hexagon                           allnoconfig   gcc-14.1.0
+hexagon                          allyesconfig   clang-20
+hexagon                             defconfig   gcc-14.1.0
+i386                             allmodconfig   clang-18
+i386                              allnoconfig   clang-18
+i386                             allyesconfig   clang-18
+i386         buildonly-randconfig-001-20240907   gcc-12
+i386         buildonly-randconfig-002-20240907   gcc-12
+i386         buildonly-randconfig-003-20240907   gcc-12
+i386         buildonly-randconfig-004-20240907   gcc-12
+i386         buildonly-randconfig-005-20240907   gcc-12
+i386         buildonly-randconfig-006-20240907   gcc-12
+i386                                defconfig   clang-18
+i386                  randconfig-001-20240907   gcc-12
+i386                  randconfig-002-20240907   gcc-12
+i386                  randconfig-003-20240907   gcc-12
+i386                  randconfig-004-20240907   gcc-12
+i386                  randconfig-005-20240907   gcc-12
+i386                  randconfig-006-20240907   gcc-12
+i386                  randconfig-011-20240907   gcc-12
+i386                  randconfig-012-20240907   gcc-12
+i386                  randconfig-013-20240907   gcc-12
+i386                  randconfig-014-20240907   gcc-12
+i386                  randconfig-015-20240907   gcc-12
+i386                  randconfig-016-20240907   gcc-12
+loongarch                        alldefconfig   clang-15
+loongarch                        allmodconfig   gcc-14.1.0
+loongarch                         allnoconfig   gcc-14.1.0
+loongarch                           defconfig   gcc-14.1.0
+m68k                             allmodconfig   gcc-14.1.0
+m68k                              allnoconfig   gcc-14.1.0
+m68k                             allyesconfig   gcc-14.1.0
+m68k                          atari_defconfig   clang-15
+m68k                                defconfig   gcc-14.1.0
+m68k                        m5407c3_defconfig   clang-15
+m68k                       m5475evb_defconfig   clang-15
+microblaze                       allmodconfig   gcc-14.1.0
+microblaze                        allnoconfig   gcc-14.1.0
+microblaze                       allyesconfig   gcc-14.1.0
+microblaze                          defconfig   gcc-14.1.0
+mips                              allnoconfig   gcc-14.1.0
+mips                        vocore2_defconfig   clang-15
+nios2                             allnoconfig   gcc-14.1.0
+nios2                               defconfig   gcc-14.1.0
+openrisc                          allnoconfig   clang-20
+openrisc                         allyesconfig   gcc-14.1.0
+openrisc                            defconfig   gcc-12
+parisc                           allmodconfig   gcc-14.1.0
+parisc                            allnoconfig   clang-20
+parisc                           allyesconfig   gcc-14.1.0
+parisc                              defconfig   gcc-12
+parisc64                            defconfig   gcc-14.1.0
+powerpc                          allmodconfig   gcc-14.1.0
+powerpc                           allnoconfig   clang-20
+powerpc                          allyesconfig   gcc-14.1.0
+powerpc                      cm5200_defconfig   clang-15
+powerpc                       eiger_defconfig   clang-15
+powerpc                  iss476-smp_defconfig   clang-15
+powerpc                         ps3_defconfig   clang-15
+powerpc                     tqm8555_defconfig   clang-15
+riscv                            allmodconfig   gcc-14.1.0
+riscv                             allnoconfig   clang-20
+riscv                            allyesconfig   gcc-14.1.0
+riscv                               defconfig   gcc-12
+riscv             nommu_k210_sdcard_defconfig   clang-15
+s390                             allmodconfig   gcc-14.1.0
+s390                              allnoconfig   clang-20
+s390                             allyesconfig   gcc-14.1.0
+s390                                defconfig   gcc-12
+sh                               allmodconfig   gcc-14.1.0
+sh                                allnoconfig   gcc-14.1.0
+sh                               allyesconfig   gcc-14.1.0
+sh                                  defconfig   gcc-12
+sh                               j2_defconfig   clang-15
+sh                           se7750_defconfig   clang-15
+sparc                            allmodconfig   gcc-14.1.0
+sparc64                             defconfig   gcc-12
+um                               allmodconfig   clang-20
+um                                allnoconfig   clang-20
+um                               allyesconfig   clang-20
+um                                  defconfig   gcc-12
+um                             i386_defconfig   clang-15
+um                             i386_defconfig   gcc-12
+um                           x86_64_defconfig   gcc-12
+x86_64                            allnoconfig   clang-18
+x86_64                           allyesconfig   clang-18
+x86_64       buildonly-randconfig-001-20240907   gcc-12
+x86_64       buildonly-randconfig-002-20240907   gcc-12
+x86_64       buildonly-randconfig-003-20240907   gcc-12
+x86_64       buildonly-randconfig-004-20240907   gcc-12
+x86_64       buildonly-randconfig-005-20240907   gcc-12
+x86_64       buildonly-randconfig-006-20240907   gcc-12
+x86_64                              defconfig   clang-18
+x86_64                                  kexec   gcc-12
+x86_64                randconfig-001-20240907   gcc-12
+x86_64                randconfig-002-20240907   gcc-12
+x86_64                randconfig-003-20240907   gcc-12
+x86_64                randconfig-004-20240907   gcc-12
+x86_64                randconfig-005-20240907   gcc-12
+x86_64                randconfig-006-20240907   gcc-12
+x86_64                randconfig-011-20240907   gcc-12
+x86_64                randconfig-012-20240907   gcc-12
+x86_64                randconfig-013-20240907   gcc-12
+x86_64                randconfig-014-20240907   gcc-12
+x86_64                randconfig-015-20240907   gcc-12
+x86_64                randconfig-016-20240907   gcc-12
+x86_64                randconfig-071-20240907   gcc-12
+x86_64                randconfig-072-20240907   gcc-12
+x86_64                randconfig-073-20240907   gcc-12
+x86_64                randconfig-074-20240907   gcc-12
+x86_64                randconfig-075-20240907   gcc-12
+x86_64                randconfig-076-20240907   gcc-12
+x86_64                          rhel-8.3-rust   clang-18
+x86_64                               rhel-8.3   gcc-12
+xtensa                            allnoconfig   gcc-14.1.0
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
