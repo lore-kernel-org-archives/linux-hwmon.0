@@ -1,174 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1851A55
-	for <linux-hwmon@vger.kernel.org>; Sat,  7 Sep 2024 11:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFA015990E;
+	Sat,  7 Sep 2024 12:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725708333; cv=none; b=u+A1yK7riQRpJiIyCrbG7jKs/WLRYc8j/SqXNsvZzXs6+zlcz5E0yAiJdub0xvESZnSHwGTGwsd0vsdys6XSgdSH2HIoONUk4ezU9/T3DcF+NPa0V7IzjlD46qfKbJo7eghv+KCDTNVhoT33QCOqjcVy+ogXssX/qCgBXqxJKj8=
+	t=1725710745; cv=none; b=DPlTBFTbVqXzZjA0v1+kmg3//BCjraCuD8Nac+VmYOu0w8c/hQYXokan84IQdGBqNnqu71XfndtporLbd1X5bl7R4Kv0YHXWoHoiwv/wPQBTnDZGpS/PGRviZojoaerC61aw95dyL7/3UMX5ygwbI+aOgb+6Hjy4KHVg3FBkgL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725708333; c=relaxed/simple;
-	bh=oLDWCLi85go0t0qWaPThxnG7vTz8xaufmQ+5UCpO/3I=;
+	s=arc-20240116; t=1725710745; c=relaxed/simple;
+	bh=Jh4PwUNysNxdEFJP39u3JzBg34efqUZTVLbPaBatgo8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7wpx3b+QxsTcqBCgdO9nU161XqYbzogdcwpV+B0MI3O3pDNuINpyZmiZhE9SS6liMtDGZmSw+jD+gH72URMmDRuE0UjjoGbwfhUcxlGXXZ+qGO0D6QDIpwz0qKVYRE4nY+pWzRL7m9na1XjAIit4QZOpuISyb3F4tuIT493mIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ar0bVaIx; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=HOnmvhrXvWfbyvBykTTObZy4CzfBanmEXSZzM/iF2eSdy867vP7WJnQFJ2AiTeBzqR1nH/paTAhYaeZTbe3RXSrrBH/Ot+s9zQWiUGoP7uHi0IzwxCiRkBuRGLX2xCIckvp4L1WiyM3lQuuVZ//MawfMDdGzMGsY54TqdtO/W28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4YMcO7d; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ar0bVaIx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4YMcO7d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725708332; x=1757244332;
+  t=1725710741; x=1757246741;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oLDWCLi85go0t0qWaPThxnG7vTz8xaufmQ+5UCpO/3I=;
-  b=ar0bVaIxBa2mNHGH7WTr5fQUqzZJov6oYFJW3lEDy91KSyvtuaLiX7cf
-   FEnPHL4QRSQyZGzkRFGVxGMb+Hh/+ERdWLOEt2pjB3v93mvnF0sGYC7o2
-   o3QIpxIUcXiue9Y/dNXKshSm04Vj8iC5Clbhgon52wofrJd6uK1SHv1w4
-   P4RJmPwG88ef23/1AxFAz01YPrADAmR4/96uKqjnSU5RlyieoFIs0UW7u
-   MltHz/jHILT6N18xZ8gM3tNPkZCvkR5zP49S9t9THhDf5Atr2B0tVmtNu
-   i0EWUw1Z9/BW12IhspxHeAAPWKrUvGGkKEq0zpk/BfaxLCDmzBSff9GOJ
+   mime-version:in-reply-to;
+  bh=Jh4PwUNysNxdEFJP39u3JzBg34efqUZTVLbPaBatgo8=;
+  b=Q4YMcO7dOqqNLWugfY5AeQvtMGXWwnseOWGc9YPFkh6pgqVwe6khaT/7
+   Kd7TPwvR9XeEE9kY8QBRIPb+Guh4cSTg99M6CFZARP7985FpiPUdGXYk2
+   BM/ro2Ww4U3drV1PGGd/3GBsR1qXPzw5IvvlfBUrAPI3y+ChDX/XMo3BI
+   7Y6L+DOeDpdsh5smYqmoQRpbKXTxGq2lIpn7Zmq4/aRoXfVZGINk54ygU
+   4K1bxEQhWiLNOPFcfl1Rt/YsSjEGVQ0jf9O7sDqDnBhpuAvVxtYGGbEyP
+   WqZFKldqA5vWKrjytmfpHc5G/lArd33C5zuPl+TExek26j/gd0FDx77Dj
    Q==;
-X-CSE-ConnectionGUID: 0KqAgLJfSGe8vEhJjZYwJQ==
-X-CSE-MsgGUID: kvmvq7bnQ/SobqSGKPY3zg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="35602832"
+X-CSE-ConnectionGUID: TwjFPAelS/C56GWfgEArdg==
+X-CSE-MsgGUID: d7xySXsKRhmVMR3aZFwF2A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="49872531"
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="35602832"
+   d="scan'208";a="49872531"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 04:25:31 -0700
-X-CSE-ConnectionGUID: CGHw8ydzQ2a20Tzalfbn+A==
-X-CSE-MsgGUID: 3D53xFoXSdC9rdbylNgqtA==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 05:05:40 -0700
+X-CSE-ConnectionGUID: qTGdgX/USkqhGra9JyUMFQ==
+X-CSE-MsgGUID: zMDTSoB0Tr6gGm+EcdIcvA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="70317223"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 04:25:27 -0700
-Date: Sat, 7 Sep 2024 14:25:24 +0300
-From: Raag Jadav <raag.jadav@intel.com>
-To: Riana Tauro <riana.tauro@intel.com>
-Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-	rodrigo.vivi@intel.com, tursulin@ursulin.net, linux@roeck-us.net,
-	andi.shyti@linux.intel.com, andriy.shevchenko@linux.intel.com,
-	intel-gfx@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-	anshuman.gupta@intel.com, badal.nilawar@intel.com,
-	ashutosh.dixit@intel.com, karthik.poosa@intel.com
-Subject: Re: [PATCH v2] drm/i915/hwmon: expose package temperature
-Message-ID: <Ztw4JIWCpsDpMHN0@black.fi.intel.com>
-References: <20240906093118.3068732-1-raag.jadav@intel.com>
- <ec2f4b09-03f7-4866-ae50-2f3b5d093a0d@intel.com>
+   d="scan'208";a="70322273"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 07 Sep 2024 05:05:37 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smuC6-000CXD-1E;
+	Sat, 07 Sep 2024 12:05:34 +0000
+Date: Sat, 7 Sep 2024 20:04:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+	heiko@sntech.de, dmitry.torokhov@gmail.com, pavel@ucw.cz,
+	ukleinek@debian.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: Re: [PATCH v7 1/8] mfd: core: make platform_data pointer const in
+ struct mfd_cell
+Message-ID: <202409071933.IYm8oa1N-lkp@intel.com>
+References: <20240905185232.2899464-2-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ec2f4b09-03f7-4866-ae50-2f3b5d093a0d@intel.com>
+In-Reply-To: <20240905185232.2899464-2-heiko@sntech.de>
 
-On Fri, Sep 06, 2024 at 03:15:01PM +0530, Riana Tauro wrote:
-> Hi Raag
-> 
-> On 9/6/2024 3:01 PM, Raag Jadav wrote:
-> > Add hwmon support for temp1_input attribute, which will expose package
-> > temperature in millidegree Celsius. With this in place we can monitor
-> > package temperature using lm-sensors tool.
-> > 
-> > $ sensors
-> > i915-pci-0300
-> > Adapter: PCI adapter
-> > in0:         990.00 mV
-> > fan1:        1260 RPM
-> > temp1:        +45.0°C
-> > power1:           N/A  (max =  35.00 W)
-> > energy1:      12.62 kJ
-> > 
-> > v2: Use switch case (Anshuman)
-> > 
-> > Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/11276
-> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
-> > ---
-> >   .../ABI/testing/sysfs-driver-intel-i915-hwmon |  8 ++++
-> >   drivers/gpu/drm/i915/i915_hwmon.c             | 40 +++++++++++++++++++
-> >   drivers/gpu/drm/i915/intel_mchbar_regs.h      |  4 ++
-> >   3 files changed, 52 insertions(+)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > index be4141a7522f..a885e5316d02 100644
-> > --- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > +++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
-> > @@ -83,3 +83,11 @@ Contact:	intel-gfx@lists.freedesktop.org
-> >   Description:	RO. Fan speed of device in RPM.
-> >   		Only supported for particular Intel i915 graphics platforms.
-> > +
-> > +What:		/sys/bus/pci/drivers/i915/.../hwmon/hwmon<i>/temp1_input
-> > +Date:		November 2024
-> > +KernelVersion:	6.12
-> > +Contact:	intel-gfx@lists.freedesktop.org
-> > +Description:	RO. GPU package temperature in millidegree Celsius.
-> > +
-> > +		Only supported for particular Intel i915 graphics platforms.
-> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> > index 17d30f6b84b0..0a9f483b4105 100644
-> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> > @@ -7,6 +7,7 @@
-> >   #include <linux/hwmon-sysfs.h>
-> >   #include <linux/jiffies.h>
-> >   #include <linux/types.h>
-> > +#include <linux/units.h>
-> >   #include "i915_drv.h"
-> >   #include "i915_hwmon.h"
-> > @@ -32,6 +33,7 @@
-> >   struct hwm_reg {
-> >   	i915_reg_t gt_perf_status;
-> > +	i915_reg_t pkg_temp;
-> place it alphabetically after rapl_limit
+Hi Heiko,
 
-This follows the ordering of enum hwmon_sensor_types (as the rest of the patch).
+kernel test robot noticed the following build warnings:
 
-> >   	i915_reg_t pkg_power_sku_unit;
-> >   	i915_reg_t pkg_power_sku;
-> >   	i915_reg_t pkg_rapl_limit;
-> > @@ -280,6 +282,7 @@ static const struct attribute_group *hwm_groups[] = {
-> >   };
-> >   static const struct hwmon_channel_info * const hwm_info[] = {
-> > +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> >   	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-> >   	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
-> >   	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
-> > @@ -310,6 +313,37 @@ static int hwm_pcode_write_i1(struct drm_i915_private *i915, u32 uval)
-> >   				  POWER_SETUP_SUBCOMMAND_WRITE_I1, 0, uval);
-> >   }
-> > +static umode_t
-> > +hwm_temp_is_visible(const struct hwm_drvdata *ddat, u32 attr)
-> > +{
-> > +	struct i915_hwmon *hwmon = ddat->hwmon;
-> > +
-> > +	if (attr == hwmon_temp_input && i915_mmio_reg_valid(hwmon->rg.pkg_temp))
-> > +		return 0444;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +hwm_temp_read(struct hwm_drvdata *ddat, u32 attr, long *val)
-> > +{
-> > +	struct i915_hwmon *hwmon = ddat->hwmon;
-> > +	intel_wakeref_t wakeref;
-> > +	u32 reg_val;
-> > +
-> > +	switch (attr) {
-> > +	case hwmon_temp_input:
-> > +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
-> > +			reg_val = intel_uncore_read(ddat->uncore, hwmon->rg.pkg_temp);
-> > +
-> > +		/* HW register value is in degrees, convert to millidegrees. */
-> use millidegree Celsius here
+[auto build test WARNING on next-20240905]
+[also build test WARNING on v6.11-rc6]
+[cannot apply to lee-mfd/for-mfd-next groeck-staging/hwmon-next lee-leds/for-leds-next linus/master lee-mfd/for-mfd-fixes v6.11-rc6 v6.11-rc5 v6.11-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The intent here is to signify the conversion rather than the unit.
-But okay, will add if we have another version.
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/mfd-core-make-platform_data-pointer-const-in-struct-mfd_cell/20240906-025553
+base:   next-20240905
+patch link:    https://lore.kernel.org/r/20240905185232.2899464-2-heiko%40sntech.de
+patch subject: [PATCH v7 1/8] mfd: core: make platform_data pointer const in struct mfd_cell
+config: arm-randconfig-001-20240907 (https://download.01.org/0day-ci/archive/20240907/202409071933.IYm8oa1N-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409071933.IYm8oa1N-lkp@intel.com/reproduce)
 
-Raag
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409071933.IYm8oa1N-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/hid/hid-sensor-hub.c: In function 'sensor_hub_remove':
+>> drivers/hid/hid-sensor-hub.c:745:25: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     745 |                         data->hid_sensor_hub_client_devs[i].platform_data;
+         |                         ^~~~
+
+
+vim +/const +745 drivers/hid/hid-sensor-hub.c
+
+401ca24fb34aee srinivas pandruvada 2012-09-05  732  
+401ca24fb34aee srinivas pandruvada 2012-09-05  733  static void sensor_hub_remove(struct hid_device *hdev)
+401ca24fb34aee srinivas pandruvada 2012-09-05  734  {
+401ca24fb34aee srinivas pandruvada 2012-09-05  735  	struct sensor_hub_data *data = hid_get_drvdata(hdev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  736  	unsigned long flags;
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  737  	int i;
+401ca24fb34aee srinivas pandruvada 2012-09-05  738  
+401ca24fb34aee srinivas pandruvada 2012-09-05  739  	hid_dbg(hdev, " hardware removed\n");
+401ca24fb34aee srinivas pandruvada 2012-09-05  740  	hid_hw_close(hdev);
+f2f13a68c37c13 Axel Lin            2012-09-19  741  	hid_hw_stop(hdev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  742  	spin_lock_irqsave(&data->lock, flags);
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  743  	for (i = 0; i < data->hid_sensor_client_cnt; ++i) {
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  744  		struct hid_sensor_hub_device *hsdev =
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19 @745  			data->hid_sensor_hub_client_devs[i].platform_data;
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  746  		if (hsdev->pending.status)
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  747  			complete(&hsdev->pending.ready);
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  748  	}
+401ca24fb34aee srinivas pandruvada 2012-09-05  749  	spin_unlock_irqrestore(&data->lock, flags);
+401ca24fb34aee srinivas pandruvada 2012-09-05  750  	mfd_remove_devices(&hdev->dev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  751  	mutex_destroy(&data->mutex);
+401ca24fb34aee srinivas pandruvada 2012-09-05  752  }
+401ca24fb34aee srinivas pandruvada 2012-09-05  753  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
