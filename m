@@ -1,112 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFFE1D4611;
-	Fri,  6 Sep 2024 18:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11E71B85E5;
+	Sat,  7 Sep 2024 08:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725649137; cv=none; b=XCsuTD/do6LSSWDYi0QgQvh01JoMJ7JnhVq8RubPB42CQezIuKyO0JDYslJMKzUEXYJaeX6L9UN3p5DEJGeWVcGFBAex2kNhiXi3okX7Zs+e9906fmvK7HIcHHZugiuGvHAaRx0tSFwaYlpM7Hw5MemdLt8LYqULDf0BM0Txb0c=
+	t=1725697030; cv=none; b=WPZZ5x1Ej8mCdnKEFsBkJHlMmiU8wyEiMquPoj0Go5EoTpK7mnbKPeompjwCZNPXBbip/t55u9nm+iiTjacRnOW5/UH1qUAPgTnmM51T/A3tmzfh2h5hDlQPGal5usvnVvQ0NxY9nY6/ilyshjLkkJ4e4qmO9mQZM/gRfAqgyEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725649137; c=relaxed/simple;
-	bh=K86qHkz4k9f+n37Ufn7RJNnR1F5LFAqXIee8+QUk3iU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tUhDn5KBrVFbGfZ7QmiswxJhBHhHfa1Zg4T8QfMYxC7m5PA/m/pLVK6y4oXpAUzjkUywZoFxS1rNOSMWfjKP9rEuITvSfTy4sb/NPynlN9s8HjMoMvqXMjOt+Zu50zTG8YYM60fyZLdTTYeoZHw49rAFFJUToyzKdci9X1CShOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iST5gZpV; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725697030; c=relaxed/simple;
+	bh=gvsW8BNIX7ljcrGWrKD6clzUjbfdkYMLn3v7uub/6MQ=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=izZkvzfm2bgO0AbUy73MfOVt9p6RZi9HBZYN78JKdjOyuK8fz91iUyIv+9S/xcoqqWkDrPXq8p1XyiQHzfmdway1rhJV8u8veIGrQTgg2uIB2AUgQ5WpfZl0cHztRz8LG9vMFVx5NJ8lkVTq3/5GXTUFuLRD3yUNS8SU2X3kNEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=hVLvXf3W; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iST5gZpV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725649136; x=1757185136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K86qHkz4k9f+n37Ufn7RJNnR1F5LFAqXIee8+QUk3iU=;
-  b=iST5gZpVvY4aMbyazjd+w4Z3MdcYeU1CMTuLv/zi1GvR0In0UtqeWQ34
-   Ha4MYbDuGkpbhXCbYHJ5iEG8/gf3f59C1R1KKxnPSHXil5IKpAbY4qCvH
-   156Ae4D1Fywy4TzEkCbaXRgPDf5Bc84q+RtpqfeWwQlw5QPGSrjAR1W9y
-   PaqMkCYdTygFRkK9geGX+ymk6GpSmCjt+kXWY8dY2SrZUPRLmDT0d2bqf
-   uHHUWuboW88Lz82Xrk4NrTd9KQ4bVk/TXnNaHQNGogHHJPeO0pqrVCzZb
-   biaro10TibF5JegcACKGDXN5Ve6B8dNPq+j+n2PanoSn5T7PnDMori9bG
-   w==;
-X-CSE-ConnectionGUID: O1V08nvAS7yqJBn6O2oaIA==
-X-CSE-MsgGUID: kAgiw1sxTeSoOSnVwSaocA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="13414537"
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="13414537"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 11:58:55 -0700
-X-CSE-ConnectionGUID: MW3h8rjTRkeVw3bXotiyPQ==
-X-CSE-MsgGUID: cvw9WHRnRJS3VAwyDRmA3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="96820651"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 06 Sep 2024 11:58:51 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smeAS-000BcF-2B;
-	Fri, 06 Sep 2024 18:58:48 +0000
-Date: Sat, 7 Sep 2024 02:58:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] hwmon: (isl28022) new driver for ISL28022 power
- monitor
-Message-ID: <202409070217.1YB4gnfd-lkp@intel.com>
-References: <20240906061421.9392-2-Delphine_CC_Chiu@wiwynn.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="hVLvXf3W"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1725697009; x=1726301809; i=markus.elfring@web.de;
+	bh=1Mu96APm/7R/w7K+9IvvOwhZsTEP32teqBSIVibe/dU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=hVLvXf3WFsdgdiJPtcuSILojs7qpt2WHEdbgdm5cVtsG4xon+vSeZLZnhXniazQk
+	 vv5pm3O2k+FcAMYOhlufRRjNTcEVfqDvc+cPrz+Un0QQXuGuNyIVSLFSATWxc8U6r
+	 Cxc5HHgJgp77LpT5gUf4W83AwXdVW1u78GCWRcHGg5r1Sho9t9zHTGPPzg7kIotiC
+	 pCSitXocBLx0kJ0N9a+Os4tRML0+sKXCIaEmuVvNdPfg9s8qnO/UdDwRULDs5b4pb
+	 +Vgw7yeFpbJMx/WHaTsv66k/GBTVRi78QU0Di3V/7apVmqlJYsiJMOGMxx7FNQf2+
+	 FlgP1xpQuFeXDLMyqw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MSZHv-1scDWM0IH3-00PRSE; Sat, 07
+ Sep 2024 10:10:27 +0200
+Message-ID: <d79dbfae-d50b-45e5-b430-be8106bbb03c@web.de>
+Date: Sat, 7 Sep 2024 10:10:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240906061421.9392-2-Delphine_CC_Chiu@wiwynn.com>
+User-Agent: Mozilla Thunderbird
+To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20240906093630.2428329-2-bigfoot@classfun.cn>
+Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240906093630.2428329-2-bigfoot@classfun.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3sDZvZ572CstfLRiymj0OEa2v50uxQRQS5dGEo6EFlvxjxYXotF
+ iqSgsOe0U9L+cf9Xd7SKvjmB4Ob5MfVx3nFns3ltwbXYO6Zvkj3hqOxCWZDHFKgRP2B5l7s
+ dnGTu2+IcVzqaedRB5bfzg4zd4MslQitWJZMwCfnV+eEszme1/BaaIf8r3D0eu7hwTiiX2C
+ bc+jMBkrtEYHS4L0Oa85Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:hQwvtSihhyM=;ZvsDh+ewC/rGs/AQZ4pUdxKdguu
+ /7Dlmmzgx7ViXxl9CTTAadFCgTm91BJX01+CMVanf86teKHwyxK7SkgfzcxZPyve5XX+BYTeF
+ oXnMG4+wx5/wIzRHIWE0hJZCJiCFKQ/p/UZ6F5NvVyyXYftPNxq4vQ9IGpc/+P653j9zrguhA
+ +Pj4916QdVnjdR0tkSKf++3qStUvAH5GMcJdpVID7c67Qh6Tk7M3BqB3YiFcbt0KUUzBtxPHU
+ 7gVf2awH+qCdGxzuGg0cIg6XShFH2FVeYk58i5ICM0V97v7X5YDFyUDt1io1TpQu26QekifgJ
+ Cm5pMDya9q2US3bNQWpg1Mc/HF/pqrYN1f05qa0rL2KUgayeT/kXQR4+WOMmfM2hoT5Z2gnw+
+ Uzjy02T697sGHOruySceLgBXsWCA249FnKqinrJYYjEO0vKjihdlywxrjkt8EUOZiFGIQ+qhm
+ 7D64lLz/WllzrR/SpFBsyMSy1CBj/jRoV/2rgywR8vRFZ/X2QegTm/QcRE9Nlv4edn2SrJNfp
+ Mt69oeHmHVQFMVbU6+ZblpjNZqk+otxn/G4wm41jJp1s7vWAca7l6N4MQ3+Db5IUWkaXTspXd
+ Bm8AAtRGtWKFFn8bKs9VxZHJvVOCFHetcuQDg75OeCRXwnAj3mzgfceboyahv2KgO5Vr+rlTp
+ oDvaVc8HMFq55qiNRjJjsIkjOfkTMxYgff3VwssoK9A9UuFffZ7Ao5UjcMDVRM1z6iF8jPNL9
+ vwQ6cSWf4lZAdcOIeup2zLFUoH7YzAMT5Wu43LBnW3tTo+Ab+U3nGmf4qh3X9n4ubmph3dh8d
+ Xe13PuDCHS/ZPGfSqe264SyA==
 
-Hi Delphine,
+=E2=80=A6
+> +++ b/drivers/mfd/photonicat-pmu.c
+> @@ -0,0 +1,501 @@
+=E2=80=A6
+> +int pcat_pmu_execute(struct pcat_request *request)
+> +{
+=E2=80=A6
 
-kernel test robot noticed the following build warnings:
+Under which circumstances would you become interested to apply statements
+like the following?
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.11-rc6 next-20240906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/hwmon-isl28022-new-driver-for-ISL28022-power-monitor/20240906-141717
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240906061421.9392-2-Delphine_CC_Chiu%40wiwynn.com
-patch subject: [PATCH v6 1/3] hwmon: (isl28022) new driver for ISL28022 power monitor
-reproduce: (https://download.01.org/0day-ci/archive/20240907/202409070217.1YB4gnfd-lkp@intel.com/reproduce)
+> +	mutex_lock(&pmu->reply_lock);
+> +	if (request->frame_id =3D=3D 0)
+> +		request->frame_id =3D atomic_inc_return(&pmu->frame);
+> +	pmu->reply =3D request;
+> +	mutex_unlock(&pmu->reply_lock);
+=E2=80=A6
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409070217.1YB4gnfd-lkp@intel.com/
+A) guard(mutex)(&pmu->reply_lock);
+   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/mutex.h=
+#L196
 
-All warnings (new ones prefixed by >>):
 
-   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
-   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
->> Warning: Documentation/hwmon/isl28022.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/isl,isl28022.yaml
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/reserved-memory/qcom
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/exynos/
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
-   Using alabaster theme
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +		spin_lock_irqsave(&pmu->bus_lock, flags);
+> +		ret =3D pcat_pmu_raw_write(pmu, request->frame_id, req->cmd,
+> +					 true, req->data, req->size);
+> +		spin_unlock_irqrestore(&pmu->bus_lock, flags);
+=E2=80=A6
+
+B) guard(spinlock_irqsave)(&pmu->bus_lock);
+   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/spinloc=
+k.h#L572
+
+
+Regards,
+Markus
