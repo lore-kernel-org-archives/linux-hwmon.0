@@ -1,122 +1,61 @@
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11E71B85E5;
-	Sat,  7 Sep 2024 08:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092CF134BD;
+	Sat,  7 Sep 2024 08:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725697030; cv=none; b=WPZZ5x1Ej8mCdnKEFsBkJHlMmiU8wyEiMquPoj0Go5EoTpK7mnbKPeompjwCZNPXBbip/t55u9nm+iiTjacRnOW5/UH1qUAPgTnmM51T/A3tmzfh2h5hDlQPGal5usvnVvQ0NxY9nY6/ilyshjLkkJ4e4qmO9mQZM/gRfAqgyEg=
+	t=1725698070; cv=none; b=V6BMVDa1Q/CqapNe78PZe4HHwwmrL3+41ojacbKoagnDW02MitJMk+WhSyNsv6Saa7mAdYyCncXQYAS3nOb4PPJ2gFYZDz/P19BlsFUDzyPXgBfS9DgFUuJaeRDBYE/bG6ZWgyAkuGCcTOitKhaODAuh+Axti719Uzv3miOaIX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725697030; c=relaxed/simple;
-	bh=gvsW8BNIX7ljcrGWrKD6clzUjbfdkYMLn3v7uub/6MQ=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=izZkvzfm2bgO0AbUy73MfOVt9p6RZi9HBZYN78JKdjOyuK8fz91iUyIv+9S/xcoqqWkDrPXq8p1XyiQHzfmdway1rhJV8u8veIGrQTgg2uIB2AUgQ5WpfZl0cHztRz8LG9vMFVx5NJ8lkVTq3/5GXTUFuLRD3yUNS8SU2X3kNEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=hVLvXf3W; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1725698070; c=relaxed/simple;
+	bh=2TyElHw+gfI3FzJ+ptP6petKvakRl/T5VCaUqGUHAZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jvlh9bJod0qeJtjT+qny1BU+TIZdxjQTS+TcMX1b3cYvrrozWK4fugLx06BA6t4/7mhPlI9ledMXutb76BSSzvxfJsOYTlRpF78vUW8LWbgtc3zohjfn1sCYlLtjreVswGFBzqN/YRniiBBSKz6urmt4iQ7YU5z8xDMCFEK3MjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RngW58No; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="hVLvXf3W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1725697009; x=1726301809; i=markus.elfring@web.de;
-	bh=1Mu96APm/7R/w7K+9IvvOwhZsTEP32teqBSIVibe/dU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=hVLvXf3WFsdgdiJPtcuSILojs7qpt2WHEdbgdm5cVtsG4xon+vSeZLZnhXniazQk
-	 vv5pm3O2k+FcAMYOhlufRRjNTcEVfqDvc+cPrz+Un0QQXuGuNyIVSLFSATWxc8U6r
-	 Cxc5HHgJgp77LpT5gUf4W83AwXdVW1u78GCWRcHGg5r1Sho9t9zHTGPPzg7kIotiC
-	 pCSitXocBLx0kJ0N9a+Os4tRML0+sKXCIaEmuVvNdPfg9s8qnO/UdDwRULDs5b4pb
-	 +Vgw7yeFpbJMx/WHaTsv66k/GBTVRi78QU0Di3V/7apVmqlJYsiJMOGMxx7FNQf2+
-	 FlgP1xpQuFeXDLMyqw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MSZHv-1scDWM0IH3-00PRSE; Sat, 07
- Sep 2024 10:10:27 +0200
-Message-ID: <d79dbfae-d50b-45e5-b430-be8106bbb03c@web.de>
-Date: Sat, 7 Sep 2024 10:10:07 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RngW58No"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36410C4CEC2;
+	Sat,  7 Sep 2024 08:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725698069;
+	bh=2TyElHw+gfI3FzJ+ptP6petKvakRl/T5VCaUqGUHAZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RngW58Noc0cZRSeCi3kqssELiyewIzaE+oPFGP6raoN/XnHRrU23cPBqNZfe+7fSH
+	 b/Is5O/N1K10PPcYurANlsScr2RZAy1PEfbY2dj/qqzra+G/XdPGfu98Mubeo02yCK
+	 Vs+qXVFOGQ0n4AgNkfKfVNVDLRpu8JLD+6MwTvx/RlXBH5mk1CZ17YMNkQO81oKRc0
+	 d9bGAJU7G+Ku6RqnXQYJIX3RxQrrzksOO3rs3l1oKuvWFHbDwzW6a+T89NKDuBHcPf
+	 sSKl/iVoITtJWmr2VaOFzTH4JKtm/6w6XOpixo9TuuGCe+Q9Vo8q/9EJ9MO5iinLvE
+	 1yI5K1CTh2fmA==
+Date: Sat, 7 Sep 2024 10:34:26 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Quentin Schulz <quentin.schulz@cherry.de>, Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v8 0/8] Add tsd,mule-i2c-mux support
+Message-ID: <2iuhzmnarxin74i7okuzppdpxs6jrsocahrbc3isie5b34f6pi@p7pqs7czx7ul>
+References: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
- =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20240906093630.2428329-2-bigfoot@classfun.cn>
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240906093630.2428329-2-bigfoot@classfun.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3sDZvZ572CstfLRiymj0OEa2v50uxQRQS5dGEo6EFlvxjxYXotF
- iqSgsOe0U9L+cf9Xd7SKvjmB4Ob5MfVx3nFns3ltwbXYO6Zvkj3hqOxCWZDHFKgRP2B5l7s
- dnGTu2+IcVzqaedRB5bfzg4zd4MslQitWJZMwCfnV+eEszme1/BaaIf8r3D0eu7hwTiiX2C
- bc+jMBkrtEYHS4L0Oa85Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:hQwvtSihhyM=;ZvsDh+ewC/rGs/AQZ4pUdxKdguu
- /7Dlmmzgx7ViXxl9CTTAadFCgTm91BJX01+CMVanf86teKHwyxK7SkgfzcxZPyve5XX+BYTeF
- oXnMG4+wx5/wIzRHIWE0hJZCJiCFKQ/p/UZ6F5NvVyyXYftPNxq4vQ9IGpc/+P653j9zrguhA
- +Pj4916QdVnjdR0tkSKf++3qStUvAH5GMcJdpVID7c67Qh6Tk7M3BqB3YiFcbt0KUUzBtxPHU
- 7gVf2awH+qCdGxzuGg0cIg6XShFH2FVeYk58i5ICM0V97v7X5YDFyUDt1io1TpQu26QekifgJ
- Cm5pMDya9q2US3bNQWpg1Mc/HF/pqrYN1f05qa0rL2KUgayeT/kXQR4+WOMmfM2hoT5Z2gnw+
- Uzjy02T697sGHOruySceLgBXsWCA249FnKqinrJYYjEO0vKjihdlywxrjkt8EUOZiFGIQ+qhm
- 7D64lLz/WllzrR/SpFBsyMSy1CBj/jRoV/2rgywR8vRFZ/X2QegTm/QcRE9Nlv4edn2SrJNfp
- Mt69oeHmHVQFMVbU6+ZblpjNZqk+otxn/G4wm41jJp1s7vWAca7l6N4MQ3+Db5IUWkaXTspXd
- Bm8AAtRGtWKFFn8bKs9VxZHJvVOCFHetcuQDg75OeCRXwnAj3mzgfceboyahv2KgO5Vr+rlTp
- oDvaVc8HMFq55qiNRjJjsIkjOfkTMxYgff3VwssoK9A9UuFffZ7Ao5UjcMDVRM1z6iF8jPNL9
- vwQ6cSWf4lZAdcOIeup2zLFUoH7YzAMT5Wu43LBnW3tTo+Ab+U3nGmf4qh3X9n4ubmph3dh8d
- Xe13PuDCHS/ZPGfSqe264SyA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
 
-=E2=80=A6
-> +++ b/drivers/mfd/photonicat-pmu.c
-> @@ -0,0 +1,501 @@
-=E2=80=A6
-> +int pcat_pmu_execute(struct pcat_request *request)
-> +{
-=E2=80=A6
+Hi Farouk,
 
-Under which circumstances would you become interested to apply statements
-like the following?
+> Farouk Bouabid (8):
+>       dt-bindings: i2c: add support for tsd,mule-i2c-mux
+>       i2c: muxes: add support for tsd,mule-i2c multiplexer
 
+Patch 1 and 2 merged to i2c/i2c-host.
 
-> +	mutex_lock(&pmu->reply_lock);
-> +	if (request->frame_id =3D=3D 0)
-> +		request->frame_id =3D atomic_inc_return(&pmu->frame);
-> +	pmu->reply =3D request;
-> +	mutex_unlock(&pmu->reply_lock);
-=E2=80=A6
-
-A) guard(mutex)(&pmu->reply_lock);
-   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/mutex.h=
-#L196
-
-
-
-> +		spin_lock_irqsave(&pmu->bus_lock, flags);
-> +		ret =3D pcat_pmu_raw_write(pmu, request->frame_id, req->cmd,
-> +					 true, req->data, req->size);
-> +		spin_unlock_irqrestore(&pmu->bus_lock, flags);
-=E2=80=A6
-
-B) guard(spinlock_irqsave)(&pmu->bus_lock);
-   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/spinloc=
-k.h#L572
-
-
-Regards,
-Markus
+Thanks for following up on the reviews.
+Andi
