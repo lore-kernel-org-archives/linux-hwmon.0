@@ -1,49 +1,41 @@
-Received: from msa.smtpout.orange.fr (smtp-82.smtpout.orange.fr [80.12.242.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m609.netease.com (mail-m609.netease.com [210.79.60.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F301366;
-	Sun,  8 Sep 2024 08:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB894204E;
+	Sun,  8 Sep 2024 09:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.79.60.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725784372; cv=none; b=s/q+1j2FGNRfA5TP7pQfcWW03ci7Qb7RyFOjyvp+kq1DiXii3xWcTDYT1C6UFR7Q8C4fa/AZfg4oMkJ3M3kkNM/drJnMA55Ge83maW78MuyEU26ips/QCP5tehoDQ3/A0/sK/BJUCK4/QClU5A2Z/VbPNFx9ehAQKYNAryqVnwg=
+	t=1725788868; cv=none; b=MShwmuQ4WKwubZqQSuJlaCz7sZvvo4Kubsk1MnWm+Vuw47pDZWb38L3VQsSF3wQyfZAFX+ig+ERVKA3Sb59OKcpJsoiemYHBoVmD/tORXU48llp34FOaONhRyJHkeXQUJeR2oooclTTJvfxBIvglCX+t3eVWLqvAI43rRwCEbnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725784372; c=relaxed/simple;
-	bh=zsZ0ys2e1oNlKEbWk9IGe/z9GanXVYq8rzb+eYVJNzE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AV7t+nzuXmKd5lmxbvSVhcrnE4ljr5NvieBMmG3MvB4abVeHSEpeeRUa2s+BRQ2wqLYohL3S+E/4CX/FFNX0JadWsCOHSr4Fo/7zxUNiMj+H1FztZ6bCfqw9PL3rMRNkJ8iIC15UHCUZS6uW384bdVSEg9T3QaYkvHPVT5c7VwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Mp7Y8QGk; arc=none smtp.client-ip=80.12.242.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Mp7Y8QGk"
-Received: from fedora.home ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id nDLdsf6JjbNNsnDLdsCrGJ; Sun, 08 Sep 2024 10:32:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1725784362;
-	bh=OD7y2O6XhtERo4H6oeABbYtmnm3CLAfuszGvQrmB7Yo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Mp7Y8QGkofcivcaI6dpjIE1u/AWADIy+aC2QhspdwE7z1/4xe/5skkHtse+b9/nfq
-	 01RD2V8/rpYmGUkyidg9+s742xLIhS7tLrml4EpQrwF5KhESjkg7Gzm3dIUQ1f+BW8
-	 MFvzZlts97tPg9ydc+WBSoge1uTfVXHXC5MCH2ewOPW11I1dqIjEzPoaZWAB0iXErh
-	 0dawff0MHo8s1NxQ8rpZ0EKFfAcVVQEROMC0CwG+VPOvnxyJ9PE1EtZnVjjFEef+oS
-	 pVNd/0+r1u2hPjPoRXPwbvwbkiLD3xplmkV5LkDvYBfA3czHlQkd/GrfECgpJTzQhr
-	 w1hQGROAtkEeQ==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 08 Sep 2024 10:32:42 +0200
-X-ME-IP: 90.11.132.44
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Saravanan Sekar <sravanhome@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus/mpq7932) Constify struct regulator_desc
-Date: Sun,  8 Sep 2024 10:32:38 +0200
-Message-ID: <c0585a07547ec58d99a5bff5e02b398114bbe312.1725784343.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1725788868; c=relaxed/simple;
+	bh=PVmzuNEc8v5rWStQSiZ8VF7qRD5aaCjcgn5xVcir2eY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TZrIMCPa3iF/Y2/UuxniBFy9P0N3KmY7GbSLXPnUXblw1xkCDAQnLaryByeGMXsLDza9SOgIhTMqcu7/3Sw1TAUYvxXKyH+swx3JOt0keh7+Q+/jeATkWepO2YUdzxU4z9iUifHwy9xbCRrGO3/n37KMuGBkBUFoTpVY9vtVZWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=210.79.60.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
+Received: from amadeus-Vostro-3710.lan (unknown [58.61.141.10])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id 24CA27E011A;
+	Sun,  8 Sep 2024 17:30:06 +0800 (CST)
+From: Chukun Pan <amadeus@jmu.edu.cn>
+To: bigfoot@classfun.cn
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux@roeck-us.net,
+	wim@linux-watchdog.org,
+	Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH 0/9] Introduce Photonicat power management MCU driver
+Date: Sun,  8 Sep 2024 17:30:02 +0800
+Message-Id: <20240908093002.26317-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240906093630.2428329-1-bigfoot@classfun.cn>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,48 +43,24 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTU0dVk1KTkkfGUhOThodTlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlOQ1VNSlVKT0pVSktZV1kWGg8SFR0UWUFZT0tIVUpLSUJNSEpVSktLVUtZBg
+	++
+X-HM-Tid: 0a91d0f81ae203a2kunm24ca27e011a
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PAg6HRw*KzIxATIoECo8PDRC
+	TD0KCT5VSlVKTElOTENMQ0tNQ0JKVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWU5D
+	VU1KVUpPSlVKS1lXWQgBWUFKTE1NNwY+
 
-'struct regulator_desc' is not modified in this driver.
+Hi Junhao,
 
-Constifying this structure moves some data to a read-only section, so
-increase overall security, especially when the structure holds some
-function pointers.
+> Initial support for the power management MCU in the Ariaboard Photonicat
+> This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
 
-This also makes mpq7932_regulators_desc consistent with
-mpq7932_regulators_desc_one which is already a "static const struct
-regulator_desc".
+The official website says it's "Renesas RA2E1 cortex M23 ultra-low power MCU"
+Perhaps renaming the 'Photonicat MCU' to 'Renesas RA2E1 MCU' would be better?
 
-On a x86_64, with allmodconfig:
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-   3516	   2264	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
-
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-   5396	    384	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
---
-Compile tested only
----
- drivers/hwmon/pmbus/mpq7932.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/mpq7932.c b/drivers/hwmon/pmbus/mpq7932.c
-index 67487867c70f..2dcb6da853bd 100644
---- a/drivers/hwmon/pmbus/mpq7932.c
-+++ b/drivers/hwmon/pmbus/mpq7932.c
-@@ -35,7 +35,7 @@ struct mpq7932_data {
- };
- 
- #if IS_ENABLED(CONFIG_SENSORS_MPQ7932_REGULATOR)
--static struct regulator_desc mpq7932_regulators_desc[] = {
-+static const struct regulator_desc mpq7932_regulators_desc[] = {
- 	PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
- 			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
- 	PMBUS_REGULATOR_STEP("buck", 1, MPQ7932_N_VOLTAGES,
 -- 
-2.46.0
+2.25.1
 
