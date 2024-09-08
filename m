@@ -1,105 +1,103 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A52E181328;
-	Sun,  8 Sep 2024 21:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDF63A1B5;
+	Sun,  8 Sep 2024 23:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725829802; cv=none; b=VnwR+ia6aJo6xPCDlWo/ERCCcSRkp7xNisbYY7BGIlc11WwTKklD+6ldJNwNn2L+2B5Bifg8QkI1ep1H0tDkdOeux5i+xmh2lbuAbyn+OdFCL8z95gb9GLMn7OCmxfStSlVqFL6zQuk0Wf4WO6MjzeAZgLwztpEynpCD0mRJPoE=
+	t=1725838695; cv=none; b=FgTIGBo3/MqRl64CD9FNtJZ6erZvAWTnqaYtqphGvRy56pvrmn8WxdRkcky/6kj50O/k2a3Npk4WM3W5hSnq8dNhw8oeoRD9DZ7SsHdDjL4bkQzkfvokv2jgGielbKTqkEwmkRJJn0bi+IGTmsq1xZ8IocbwsYnpoVvbR3q3UPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725829802; c=relaxed/simple;
-	bh=hr5V3SKs+5sSdOcCMLObBljUvchYcD8eBaaOFqtYTr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e8Wh3ZAhqzbPYfvdy2nkDO0YLB+OwuA/VdbeOhosixPDHLZe3xgI8qql1S97NOfjwNzL6ayioBUvSobngQIVMRBpXSOUJobHJT/g3lVYi6R+hS5eKXITWv+atdp5OkDXNBh0N+g0/4MExVHsBpq0WZsLltRoBqJCPrr1touijSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=YBbXd5wG; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+	s=arc-20240116; t=1725838695; c=relaxed/simple;
+	bh=FY/BjhsgiyH0daYlzg5bOZKtsRLtohljcQZ3TCBxMaU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=If+BFHF/FJHuLrOR3KxD0SJg6Givivsx1fVoVcmoqew6WQGgbYO3VI+wvqXarN6r44dpWq0FBasTtNjkbVrhlh++dvXBPA4ia907Z7QijxixV+a/sVq3m6RTo4rus0agiy+jg3gv/HIbg6+OZpWSo8P9WWHK+iw7gX9bzlFmrXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLoMjLY7; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="YBbXd5wG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=AODWEsE73iZy3ftOFUVpepawKaVLM9NWi8usTPEPRhw=; b=YBbXd5wGMQvFJ78L7z+1sRxDbj
-	lj8ky7GrcW/R8EGhM6SOQe+1YOUnnfUSAemNtm4Hq1xsa15A816rSSH0kk/qWszTu5rJCXhwRSOkO
-	NeHevL5NpBoay96RCGWudg1Z45AkXFxkZ+WZPRNH+IzXC3VqoHPB+3H1BCQN4n/2q2QyBCBZYKEGa
-	gdLwY99LziS6ERU8zhOh7g4vDNAJTHDCZwgUuibqdeTh6iRxkm10SSJfK8j+ni7wiQLPVC82cg8C+
-	KIm2ieNa2Ju72daIBrPau+b7ZDvr8JaInc4p9gEzB0ZiSxJAyLKF9/iH1B5E6xJX8dam384YJTFn3
-	05713NZg==;
-Received: from i5e8616cc.versanet.de ([94.134.22.204] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1snPA1-0003s9-W8; Sun, 08 Sep 2024 23:09:30 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: lee@kernel.org,
-	jikos@kernel.org,
-	jic23@kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	srinivas.pandruvada@linux.intel.com,
-	bentiss@kernel.org,
-	dmitry.torokhov@gmail.com,
-	pavel@ucw.cz,
-	ukleinek@debian.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-input@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-leds@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v8 2/9] mfd: core: make platform_data pointer const in struct mfd_cell
-Date: Sun,  8 Sep 2024 23:07:56 +0200
-Message-ID: <20240908210803.3339919-3-heiko@sntech.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240908210803.3339919-1-heiko@sntech.de>
-References: <20240908210803.3339919-1-heiko@sntech.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLoMjLY7"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7cb3db0932cso2924576a12.1;
+        Sun, 08 Sep 2024 16:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725838693; x=1726443493; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n3eHjycKFrqwvUbRNtshDfNjCTOFbe1oyIgmCT0dxeE=;
+        b=XLoMjLY7IsGTqBEEXhfUL5dVtTvxlCu/ZVIJkjpW9PFY+xdx/lvgSGNBua4TwoISr3
+         w941jg9K5vUPQGuJCpAnsWOkZDSex9GbGDCZz3sHW+XWT7P31KUXcOZ5kYyYJAU3lSEQ
+         qXHPN5JpfC6EBx5EP4ydlP/3l52j05TyNxcBn03ZZq/9KQkrBWFNft1szyST1Y+jm9V2
+         JjA8Lf8OuODh8V/liGgLKkGtuuWjrinOJOPSVvyfLennwLZCq+jh/mQl4UuFptWcVc9H
+         zX+XHndwUBjcoHroTRHDp5nmy5uZw1dxk8lKbDyrUIqdGtgc6fffcONMx0gc+bAa/Mao
+         Bp9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725838693; x=1726443493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n3eHjycKFrqwvUbRNtshDfNjCTOFbe1oyIgmCT0dxeE=;
+        b=sFGW25roKiaBhP+loG+5FgwZObHFzkjDD7GefB3dbaOeAIIDTkAE+FWUJOYhS1S+0W
+         QQboShn9AyTB2gV2kq7Se8pC1vgwyveMiS3VHm/asEo7B+GGjgwHwVvKRe9s50Qu5Nge
+         xz7J5IqLcqPYBhnXc6lyG559w7e7sDwnj644jUT45C6WABBlpGxln8MsrzunC9hGACRH
+         Aqa5tJcOXfEnQQZ2s6owyvt3abl+jrMgcxiCHPLzyYCaQ1Wpbl44snRCHtXvKGL2rD5H
+         VdwW5AhsF2PsuA+od++L3dZmLXmovqU7A1Hsx0uLmN6b6mkGRUHzEzzoOotBAshW/PbX
+         k3ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUgOwDa/NPrpe7I9SvGeSP88EeX0yqK6ut58anKMp2t0h2GfebEjmmaQ97E2PwzYlFyMEVXCEVLAuoSbWJI@vger.kernel.org, AJvYcCV1TEkSuHJdj32DCBLMuDkiIumGWJ71YHRAhrVWfW8TUK6lYBL36Xqd7Ws0ZCMvyEftqeJYYPpt6e8ZcrmURKE=@vger.kernel.org, AJvYcCXnejJITNWE2ujHFsgWoaJubI/mvCM/qwzGtUDuLxYNUY1gcjAFmqedE7sH6huCiJH319wScfUFG+xMi4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ+RKWYRwoWzzR9tQviieZYUga8KQABdxHJbpu1XrPPn7oKA/I
+	7fSi7blVaT4FH9K5jMcfPjXaEtIvSXzM2tyGsb0KvlBQrVkPvAaA
+X-Google-Smtp-Source: AGHT+IGOmnvuP7qDYxfamyY7dTZnsjSbc3Swnm6V4JGaI+iN0fr4DKRu9NEUxrBwfTThDs1aZuxc/A==
+X-Received: by 2002:a05:6a20:718a:b0:1cf:55e:f893 with SMTP id adf61e73a8af0-1cf2a0e58ecmr5896375637.36.1725838692810;
+        Sun, 08 Sep 2024 16:38:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-718e5982ebasm2465733b3a.164.2024.09.08.16.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Sep 2024 16:38:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 8 Sep 2024 16:38:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Saravanan Sekar <sravanhome@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus/mpq7932) Constify struct regulator_desc
+Message-ID: <f6c39166-19bb-4e63-97ce-abf50c6f915d@roeck-us.net>
+References: <c0585a07547ec58d99a5bff5e02b398114bbe312.1725784343.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0585a07547ec58d99a5bff5e02b398114bbe312.1725784343.git.christophe.jaillet@wanadoo.fr>
 
-The content of the platform_data of a struct mfd_cell is simply passed on
-to the platform_device_add_data() call in mfd_add_device() .
+On Sun, Sep 08, 2024 at 10:32:38AM +0200, Christophe JAILLET wrote:
+> 'struct regulator_desc' is not modified in this driver.
+> 
+> Constifying this structure moves some data to a read-only section, so
+> increase overall security, especially when the structure holds some
+> function pointers.
+> 
+> This also makes mpq7932_regulators_desc consistent with
+> mpq7932_regulators_desc_one which is already a "static const struct
+> regulator_desc".
+> 
+> On a x86_64, with allmodconfig:
+> Before:
+> ======
+>    text	   data	    bss	    dec	    hex	filename
+>    3516	   2264	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
+> 
+> After:
+> =====
+>    text	   data	    bss	    dec	    hex	filename
+>    5396	    384	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
 
-platform_device_add_data() already handles the data behind that pointer
-as const and also uses kmemdup to create a copy of the data before
-handing that copy over to the newly created platform-device,
-so there is no reason to not extend this to struct mfd_cell, as the old
-copy in the mfd_cell will be stale anyway.
+Applied.
 
-This allows to pass structs gathered from of_device_get_match_data()
-as platform-data to sub-devices - which is retrieved as const already.
-
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- include/linux/mfd/core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
-index e8bcad641d8c..faeea7abd688 100644
---- a/include/linux/mfd/core.h
-+++ b/include/linux/mfd/core.h
-@@ -72,7 +72,7 @@ struct mfd_cell {
- 	int			(*resume)(struct platform_device *dev);
- 
- 	/* platform data passed to the sub devices drivers */
--	void			*platform_data;
-+	const void		*platform_data;
- 	size_t			pdata_size;
- 
- 	/* Matches ACPI */
--- 
-2.43.0
-
+Thanks,
+Guenter
