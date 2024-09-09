@@ -1,222 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABED1BAEC1
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Sep 2024 14:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C6F44C64
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Sep 2024 15:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725892986; cv=none; b=TEq93T2zRws6v7eJcW5BRyscuR7DqG1eWqVHrVH1ds30JnM+immItHouN+FofN4S1L/t25Alb5i7isQ49CUeDKr9bGRn5wRoU+D2U2dW1LHYQ2nWClKx6je50MmGwp9O3cW7aixufctQh9WvIyW3WOxVOaS9qVbBy7aiF6aHbYU=
+	t=1725896362; cv=none; b=B6Dmi1odVl7qDQmPJfFgYjJp5yqOFg0a6kCtdP0OeR1INV1rMDX9tUVd0Jq+CyYevtDqRmPwmri7UUPc7tNoyNn3jOZJRRQQ07VyFff+BtRJE3sotxSxhxJ5Edr86y+0lpF6Weuydnem5/xiN1vHWxKsa5UP2Vrmarm9zujRkU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725892986; c=relaxed/simple;
-	bh=pmVno2Xle88T+W27x3g404CGwT//c6W/xR8CM45JKPk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sX8aiINSHq+4iTyFGLxTp0vvEEDbpMPLv8cTAXBhLLs/duVQ5/PDVg4ywpXT/mHoZNH2uyBXE/dJXzr/O8PSQv9sZm+5ah+gGgmsjhoGpPwkQOxkFkYamZXkrUt0yaXTas7olLHDLJ1/V+VQsALQ3/RPAV8eGNYFlzfs960eCFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PWPXqn3Q; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725896362; c=relaxed/simple;
+	bh=MbQam2qxm3Rqs7R5Unkd0xpWMZCqWsf25GFP4NDn8YY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=H2VbI7AEM2WsTazZjXPJ9ywglEzuWbyLntJcSZCw6rSxagl3iyE7zZikrMLgb0eU73MRn29czGX+UbvsCGG0a7VJbOmYzKI2SVaN1p1BeL3qYcawBpu/L7cKinE7JEVT19XWHs+u5dvj80HdrUlF/hW5/WJjEQgSd5d3KdLwmUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mAkKvtI3; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PWPXqn3Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725892985; x=1757428985;
-  h=date:from:to:cc:subject:message-id;
-  bh=pmVno2Xle88T+W27x3g404CGwT//c6W/xR8CM45JKPk=;
-  b=PWPXqn3QCp1DD0ZI0MmP8Lf+SGfQl1BSWu8XzWgjm1YbhmoDBmszEKNJ
-   j4l4ZIjAp6SzIjbJ/zMSiy3gXT6/7YSgr9YNXuCyrRQyX2OQyZzJijnM6
-   yhHhLwUhOb+cAkY59cmQwOb1zmg62NVOx8kuAjOsUbAaNE0wr9X7vnUsR
-   iXtMJgbydyaG4G1VsL51d95pPj9OgLUZ0bTcTnW8UCsaVCEF5CCL5wqYY
-   zghaL7597RondC98fYmB34RSCTH60gKIQ1n1y/fPKBhwdVOH4ddesef9C
-   7NnO+ew7hsA4haAipxdmH04LZdR1W9/TjMwwCLU+5UHWacIrKLrcMgvQ/
-   g==;
-X-CSE-ConnectionGUID: 0IaHGjUjQDuk3XBKrL23uw==
-X-CSE-MsgGUID: p/Bxrba6T8etFs4SpGnXEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="28476913"
-X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
-   d="scan'208";a="28476913"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 07:42:26 -0700
-X-CSE-ConnectionGUID: ahx/3GhhRz6d+MUzKzds7Q==
-X-CSE-MsgGUID: SyeY3JpQS3OZnOlJ0LBV3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
-   d="scan'208";a="67215523"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 09 Sep 2024 07:42:25 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snfaw-000Eqg-2r;
-	Mon, 09 Sep 2024 14:42:22 +0000
-Date: Mon, 09 Sep 2024 22:41:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 4a13a8a310eec777677e1644f3a555cb08c5c057
-Message-ID: <202409092244.8CivsAGT-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mAkKvtI3"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-374ca7a10d4so2677214f8f.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Sep 2024 08:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725896358; x=1726501158; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q1CCslGvH+cEKiqCreHe62tX9+GxMbBnRRD70n4wPSQ=;
+        b=mAkKvtI3KTAlgMeDtq+wGbNZ6id1FuY0/ZbL/5kGxQAtjMJk3jH8IkRPZQKFMfpnCT
+         Q1HjgvY5iilVHGq40nK9M6YxLODbm3bOilaWEHIar5xmI5t8zVoegHnLEC8sJL0/fpQ2
+         oth/Bq5Ria5rUN613/FrarDVaS4asm+ACA0stMFJEadAXr2u6/SWbbDAlkeyaO62+6O0
+         R8cd+gLD7R2Q+WM80HzM/19GUC9+mc+WQNfW3a6Lfw8ek6BMsokdB3uYsmw8HlJoJkkZ
+         xIQS00rz7iThfNNYT/7CZCT+ajoFyGxk9XwhNLw4Yr+JL9TiR+5Qhl9tw5ef0LYGGZ6H
+         N9yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725896358; x=1726501158;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q1CCslGvH+cEKiqCreHe62tX9+GxMbBnRRD70n4wPSQ=;
+        b=Qz+g7V0MMcFwKPlSAZ2beBTZpZ2OGxY9TOUw6dqGOEq9hVuDB1Kop/1d5X3mJQ6KRC
+         EX9JA8JLP3e9Kb9Lb/qXbM/qtsAjU5B0E1QnFaGvBw/nb42MZXMmGoEPuAn/eh4YQ4EE
+         zY3xscIFwxRIuYaKAau++zqunXHKykVxX/h3LNGkBDSArP5cAFvSTh8xRoOeSl510rDf
+         CBzfXA+mPT/S8f6Xatqs34pmENbjD0RdSDk9JhDBRtNiO1Aw1zFfNRUryPVe7cPadlbD
+         zA7xLyAXVgetnrzm5OWe0TJJ9WKp5ikecWvPV9Fc1L9fPTenZAQxLqkQG05ry/bw4RSI
+         +1XA==
+X-Gm-Message-State: AOJu0Yy1JS9o8FErSPJ5gVAW3kzuAcSMd2029HvyHD92QeWwfLWjz1lh
+	W00+Hz9gMQmno1BfsOMfPrrW3hGGJrgMiQbhjdGPIkYpDC27spZLsBkremi2m54=
+X-Google-Smtp-Source: AGHT+IFMwpVD9rZcOmHzGbymeIWKFLLsAnXiyFTa8tkM95t4s2kgxxLmeLfwoD9X32FksjzSqR2wNg==
+X-Received: by 2002:a5d:5547:0:b0:374:c31e:971a with SMTP id ffacd0b85a97d-378922b81f4mr4759396f8f.0.1725896358378;
+        Mon, 09 Sep 2024 08:39:18 -0700 (PDT)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:788a:4542:ae86:67f4])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3789564af1asm6305145f8f.18.2024.09.09.08.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 08:39:17 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+Date: Mon, 09 Sep 2024 17:39:03 +0200
+Subject: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
+ documentation
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+In-Reply-To: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-i2c@vger.kernel.org
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2319; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=MbQam2qxm3Rqs7R5Unkd0xpWMZCqWsf25GFP4NDn8YY=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm3xahmW3hnq9FSBBkKIx7xDnCI6AofwQtzIjcD
+ 7ySiMZRekyJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZt8WoQAKCRDm/A8cN/La
+ hSOpD/4xMK9dZ851o6Q01h8xpWmPdIxDZFzaL3tNEuyOKJbskvL8PjZHD2y2J+MrtkkEoFxvnlw
+ nZDbfzjlpEI+QAhNrOpA+xzogiKryYIytJWOVEdl4LkTvzHpqyoudMHlW10aWXGmB2v6MLPxQyE
+ 4FEdbhXWPY1GOLB//Z8rr7Akx0sYonvu82QVHo90wS1UFD4eNtDGRrfwXVzwWbbGmXO/bphmj4e
+ QVkI7o3Ef3XqT3A/Xu4jcdCEfGO5MNjxKEdk5iSz7hDIDxxWj/DTBKAkmO9MEeRgOVIRUIGkJY1
+ USo0HShLwu1HvYtW0AjlC3MYLAXhmMhJE0+q2EWP9rKePCQjIZLd9l0pyLHxxn1oO++c1jmLm44
+ AaARV5lMHMFGFmeTOKQAdbfBGrkaZ2zHXPHkxUQ+GSzmbHhZSbFbu6qGOv96r3QjNGBcttpBanX
+ ijw63q33Rbp/qXyRmz2fxFcqAV1uuVjqS5YLPUCzxayo7DOo6xsk/XXjP3/o5B45V4ymvMqwOBB
+ 55C+pP1PQE0aOFUOSrIbgNI4mlfRQfsuy2Q4OcrBNxgc/HinI+gLGsLBK9+Q8qJMjtFkxWw3r9B
+ 4XwyO4n5JwSNopVyGwiqjBej+nNX9FxwqiFX4Qr7gbbybG/eqHrHgBQaKRvYxursY+aiQxTHDpb
+ DzCaJ0eRkfB4Oug==
+X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
+ fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 4a13a8a310eec777677e1644f3a555cb08c5c057  Merge branch 'fixes-v6.11' into testing
+Add DT binding documentation for the Texas Instruments TPS25990 eFuse
 
-elapsed time: 1097m
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+ .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-configs tested: 145
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc-14.1.0
-alpha                            allyesconfig   clang-20
-alpha                               defconfig   gcc-14.1.0
-arc                              allmodconfig   clang-20
-arc                               allnoconfig   gcc-14.1.0
-arc                              allyesconfig   clang-20
-arc                                 defconfig   gcc-14.1.0
-arm                              alldefconfig   clang-20
-arm                              allmodconfig   clang-20
-arm                               allnoconfig   gcc-14.1.0
-arm                              allyesconfig   clang-20
-arm                         bcm2835_defconfig   clang-20
-arm                                 defconfig   gcc-14.1.0
-arm                      jornada720_defconfig   clang-20
-arm                       multi_v4t_defconfig   clang-20
-arm                        mvebu_v7_defconfig   clang-20
-arm64                            allmodconfig   clang-20
-arm64                             allnoconfig   gcc-14.1.0
-arm64                               defconfig   gcc-14.1.0
-csky                              allnoconfig   gcc-14.1.0
-csky                                defconfig   gcc-14.1.0
-hexagon                          allmodconfig   clang-20
-hexagon                           allnoconfig   gcc-14.1.0
-hexagon                          allyesconfig   clang-20
-hexagon                             defconfig   gcc-14.1.0
-i386                             allmodconfig   clang-18
-i386                             allmodconfig   gcc-12
-i386                              allnoconfig   clang-18
-i386                              allnoconfig   gcc-12
-i386                             allyesconfig   clang-18
-i386                             allyesconfig   gcc-12
-i386         buildonly-randconfig-001-20240909   clang-18
-i386         buildonly-randconfig-002-20240909   clang-18
-i386         buildonly-randconfig-002-20240909   gcc-12
-i386         buildonly-randconfig-003-20240909   clang-18
-i386         buildonly-randconfig-003-20240909   gcc-12
-i386         buildonly-randconfig-004-20240909   clang-18
-i386         buildonly-randconfig-004-20240909   gcc-12
-i386         buildonly-randconfig-005-20240909   clang-18
-i386         buildonly-randconfig-006-20240909   clang-18
-i386         buildonly-randconfig-006-20240909   gcc-12
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240909   clang-18
-i386                  randconfig-002-20240909   clang-18
-i386                  randconfig-002-20240909   gcc-12
-i386                  randconfig-003-20240909   clang-18
-i386                  randconfig-004-20240909   clang-18
-i386                  randconfig-004-20240909   gcc-12
-i386                  randconfig-005-20240909   clang-18
-i386                  randconfig-006-20240909   clang-18
-i386                  randconfig-011-20240909   clang-18
-i386                  randconfig-012-20240909   clang-18
-i386                  randconfig-013-20240909   clang-18
-i386                  randconfig-013-20240909   gcc-12
-i386                  randconfig-014-20240909   clang-18
-i386                  randconfig-015-20240909   clang-18
-i386                  randconfig-016-20240909   clang-18
-i386                  randconfig-016-20240909   gcc-12
-loongarch                        allmodconfig   gcc-14.1.0
-loongarch                         allnoconfig   gcc-14.1.0
-loongarch                           defconfig   gcc-14.1.0
-m68k                             allmodconfig   gcc-14.1.0
-m68k                              allnoconfig   gcc-14.1.0
-m68k                             allyesconfig   gcc-14.1.0
-m68k                         amcore_defconfig   clang-20
-m68k                                defconfig   gcc-14.1.0
-m68k                        m5272c3_defconfig   clang-20
-m68k                       m5475evb_defconfig   clang-20
-microblaze                       allmodconfig   gcc-14.1.0
-microblaze                        allnoconfig   gcc-14.1.0
-microblaze                       allyesconfig   gcc-14.1.0
-microblaze                          defconfig   gcc-14.1.0
-mips                              allnoconfig   gcc-14.1.0
-mips                           gcw0_defconfig   clang-20
-mips                      maltasmvp_defconfig   clang-20
-mips                       rbtx49xx_defconfig   clang-20
-nios2                             allnoconfig   gcc-14.1.0
-nios2                               defconfig   gcc-14.1.0
-openrisc                          allnoconfig   clang-20
-openrisc                         allyesconfig   gcc-14.1.0
-openrisc                            defconfig   gcc-12
-parisc                           allmodconfig   gcc-14.1.0
-parisc                            allnoconfig   clang-20
-parisc                           allyesconfig   gcc-14.1.0
-parisc                              defconfig   gcc-12
-parisc64                            defconfig   gcc-14.1.0
-powerpc                          allmodconfig   gcc-14.1.0
-powerpc                           allnoconfig   clang-20
-powerpc                          allyesconfig   gcc-14.1.0
-powerpc                     kmeter1_defconfig   clang-20
-powerpc                       maple_defconfig   clang-20
-powerpc                    socrates_defconfig   clang-20
-riscv                            allmodconfig   gcc-14.1.0
-riscv                             allnoconfig   clang-20
-riscv                            allyesconfig   gcc-14.1.0
-riscv                               defconfig   gcc-12
-s390                             allmodconfig   gcc-14.1.0
-s390                              allnoconfig   clang-20
-s390                             allyesconfig   gcc-14.1.0
-s390                          debug_defconfig   clang-20
-s390                                defconfig   gcc-12
-sh                               allmodconfig   gcc-14.1.0
-sh                                allnoconfig   gcc-14.1.0
-sh                               allyesconfig   gcc-14.1.0
-sh                                  defconfig   gcc-12
-sh                           se7780_defconfig   clang-20
-sh                              ul2_defconfig   clang-20
-sparc                            allmodconfig   gcc-14.1.0
-sparc64                             defconfig   gcc-12
-um                               allmodconfig   clang-20
-um                                allnoconfig   clang-20
-um                               allyesconfig   clang-20
-um                                  defconfig   gcc-12
-um                             i386_defconfig   gcc-12
-um                           x86_64_defconfig   gcc-12
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240909   gcc-12
-x86_64       buildonly-randconfig-002-20240909   gcc-12
-x86_64       buildonly-randconfig-003-20240909   gcc-12
-x86_64       buildonly-randconfig-004-20240909   gcc-12
-x86_64       buildonly-randconfig-005-20240909   gcc-12
-x86_64       buildonly-randconfig-006-20240909   gcc-12
-x86_64                              defconfig   clang-18
-x86_64                              defconfig   gcc-11
-x86_64                randconfig-001-20240909   gcc-12
-x86_64                randconfig-002-20240909   gcc-12
-x86_64                randconfig-003-20240909   gcc-12
-x86_64                randconfig-004-20240909   gcc-12
-x86_64                randconfig-005-20240909   gcc-12
-x86_64                randconfig-006-20240909   gcc-12
-x86_64                randconfig-011-20240909   gcc-12
-x86_64                randconfig-012-20240909   gcc-12
-x86_64                randconfig-013-20240909   gcc-12
-x86_64                randconfig-014-20240909   gcc-12
-x86_64                randconfig-015-20240909   gcc-12
-x86_64                randconfig-016-20240909   gcc-12
-x86_64                randconfig-071-20240909   gcc-12
-x86_64                randconfig-072-20240909   gcc-12
-x86_64                randconfig-073-20240909   gcc-12
-x86_64                randconfig-074-20240909   gcc-12
-x86_64                randconfig-075-20240909   gcc-12
-x86_64                randconfig-076-20240909   gcc-12
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-14.1.0
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+new file mode 100644
+index 000000000000..e717942b3598
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments TPS25990 Stackable eFuse
++
++maintainers:
++  - Jerome Brunet <jbrunet@baylibre.com>
++
++description: |
++  The TI TPS25990 is an integrated, high-current circuit
++  protection and power management device with PMBUS interface
++
++properties:
++  compatible:
++    const: ti,tps25990
++
++  reg:
++    maxItems: 1
++
++  ti,rimon-milli-ohms:
++    description:
++      milli Ohms value of the resistance installed between the Imon pin
++      and the ground reference.
++
++  interrupts:
++    description: PMBUS SMB Alert Interrupt.
++    maxItems: 1
++
++  regulators:
++    type: object
++    description:
++      list of regulators provided by this controller.
++
++    properties:
++      vout:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - ti,rimon-milli-ohms
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hw-monitor@46 {
++            compatible = "ti,tps25990";
++            reg = <0x46>;
++
++            interrupt-parent = <&gpio>;
++            interrupts = <42 IRQ_TYPE_LEVEL_LOW>;
++            ti,rimon-milli-ohms = <1370000>;
++
++            regulators {
++                cpu0_vout: vout {
++                    regulator-name = "main_cpu0";
++                };
++            };
++        };
++    };
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
