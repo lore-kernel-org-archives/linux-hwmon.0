@@ -1,58 +1,60 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED6B44375
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Sep 2024 15:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67F74D8A3
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Sep 2024 15:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725896362; cv=none; b=rU6ljAZGW7tbvX7kIkl27RdorVDDfMsYMDmS8kY1iYBqlWkex4cS89olGOTJvHIXKQqQuSgLQzvm9LtajY3iuBA0o4zTqdEU9GEmOGcue9/GZNfR4LF4tOM1D2NR56+x8N2Yt6S9qcSichbrbt5xIwWMQKWPctiWcHMb6eWpfH4=
+	t=1725896364; cv=none; b=slmJI0TOtOB5C5x9KgWeG707U8Zju0v2EGgz9EDwjMcbx7bnV9Ivh5dPebMuVPRwTSCgeVfpAZ4ks+ULRk2cdnEa1NiijMcMfp3szPY4KcruDp+sMKhxdaPTc486jE15e9BmNsyG+/eQsB+5qV2qXSe5XvISj6NEEf2twT3oo4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725896362; c=relaxed/simple;
-	bh=tR8kO6PuFrwBBIuqy1jmykEHT6GN8EHwvvkRzwZMc8c=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Xi/y+v7B97cQHCCKkMu3kHlMKGg+14N4HY0GNsKKKyTeoUtAFlcd5uFQ1qI2TlQ2T/bz/izvLN4EC0vXaQt0LZr5X1iqi3i4+XtOjJMydLcBRzBjlRxLf4YhVMm2L+SwmWeWIx/ASd4mppetQYd/Wrq3n5jCAYrVtMlwcvnATMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Z6yQMEBh; arc=none smtp.client-ip=209.85.221.41
+	s=arc-20240116; t=1725896364; c=relaxed/simple;
+	bh=vJ4BQU0XZIcK8J00Oopy9XQQFvb4Ue39E+Oh6NKsto8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WGPc6k9gwUnYYq7pLklsFd2KRRL33ly5W8IVU073BcpFb5fw3gUACnaS+fSfyQJMpBbYV8XWncLcmXlaM3+PckyymEBU/w+Vr9olXVpjrPul9kTssv1stwazLGla4gi3Fcw7KiFuovKfvmwrcvkI8s3cUub7riyJwOUBTVguAwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=3btQtouZ; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Z6yQMEBh"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-374c5bab490so3433707f8f.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 09 Sep 2024 08:39:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="3btQtouZ"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-374c7e64b60so2635723f8f.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Sep 2024 08:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725896358; x=1726501158; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gI3EWry1HeKkrariixrdSUNjJ5pjPrLgpmN89IajSBE=;
-        b=Z6yQMEBhU9uHwdwBwxpBdL6ZAVd2iPL36oQysjCZuN35mhNozIol83cHeA0PWQv7to
-         vlZp1+ddn6nYOKpkFMmZdn602Y8rkP2SyJ+gBW/WAmoKWZL5gFQlgRALfuaCCSZyR0fn
-         j7YKzpdcp9lt+I/tT7OSekZAFnw1edl0Q5xBiOKS6y8GlZS1y6UtK2NC5vh2KUZtkrrw
-         sdP7N48r+vhI1GR+Jrtp7KSWQosKv4gRC4grwSBL5XPLnFwFIYcZ5Ui4TVBRuQF4X6P2
-         pFFYiwLdFta5AQbqEP3k83NP4sn9AdiMuRpPAG1yTiv/Em/siuH8KpRaWkp66Due27CT
-         VsAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725896358; x=1726501158;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725896360; x=1726501160; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gI3EWry1HeKkrariixrdSUNjJ5pjPrLgpmN89IajSBE=;
-        b=WFopeI4GEaSNlzfyYSGUnVXVn+UKGODRgY9hfXRFjLm5DrAd+NBTb4dQoEI2ewsxDL
-         nMk/11M9aFJcTubrYeOL5fhXBRX5iC3+6YBSDh76EIEAfwTSJdoHRMu5ZRQiDK0iKz1Z
-         crhkh+0jK0mhswyiF+me6NIsjFU8zabZBwMg9zywBeLzGXtjIdCJ+15RRQac3/UGNr5t
-         I8ZnnIm0VBWOJPONrNhBCPOXkcaRZcRl5AvswUfQhZKAYGfxHT8UZuOuwoJBZEXGfPfT
-         90l0+ky3atET0ZNRSfjP3iwyW0WQn2u7HalI3JCX49mpKTWhwHjnTC1OA4U6pUymxLSL
-         N0PA==
-X-Gm-Message-State: AOJu0Yw2bn0UT++nFIpLGFVyAHOROVoyh+hg36GsvZba9Ky5KtXBwKGE
-	tqWUq4ujn1ZWNGDYwOJ8zqmLwPjE+sbfNelNA6xinlIpc6lQE9ah+FgDLiBY+xQ=
-X-Google-Smtp-Source: AGHT+IE9XPZXajcl+NEQcJ7P0Jannlu1V5w4PEQDba0+5qseJi/FCOGsmbFLhX7q9rPCx5Jh2uuGmQ==
-X-Received: by 2002:a5d:6284:0:b0:374:cb28:b3f8 with SMTP id ffacd0b85a97d-378a89fd611mr24756f8f.1.1725896357418;
-        Mon, 09 Sep 2024 08:39:17 -0700 (PDT)
+        bh=MhtRCE6PbFntlTL0HxjwIxBidPbr+PaAQPsqAyH1vys=;
+        b=3btQtouZjSEFEJhEddG4Hj8fI2+k7OH9YwCXiRTo/W7VDen/Uf8Sfx/bx3vEDxHgTE
+         W1OuqNYmCcXxunfLDwjyDzK8fkJ1++KU3/3RnAll2O5l31LZ9CkURsELvwu6tn1Z24OG
+         5nifKFfUVebXABpkMf0dz4IXRUrS1HhpHSOLxlXwcPqKP/yl5j0JV9aEj43ojmk3Mr0e
+         /Kel3EzaykHvm/7JmFedq/c8Bj5YXWBUYo6CD9D14i2anaINwJapAOwcqtnYdaZm4Cuq
+         A8xpMp6t2JZ+9cPTYF/l4oWFonvkp0DaUdiIdVNMRaNDSjjah0Ue5mKj+1aOQA6UxkLN
+         0pXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725896360; x=1726501160;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MhtRCE6PbFntlTL0HxjwIxBidPbr+PaAQPsqAyH1vys=;
+        b=MvezEbi5qBEa5ZDvVfbdO5TOJ/34s1z+r6CemqSTsgEMcobOzdxgMTvYNdHWiPLDYK
+         1nnkEp0KCnrHZobPt+9I7ioqycdY+MgG9HdzvAZW+/CaqsfURwyxaZ4OoVG/SjG5fqyM
+         c06P49uktVQ6GKoJ54C/IRTnwMcp6UVt46p/4qvIDRHxY94GDqH4OpDjen+QYzZjid3q
+         2ScnDy7CgY28GUqfT0mnadMZLENR5BTrCOQ/2bn6E8+yTWHaadZ0m2H9Thj6sBpnaY8R
+         hwirHENWHB+9LIRP7XTQJbUv9zi2LihY+jodJDrxkWWTD0jDtAIFKWY3w53gl7U500c3
+         P7qw==
+X-Gm-Message-State: AOJu0Yz4QbsQEmjqtJtYxTU/QyPtwgKp4QABs4Q6kVgVZft5Vvyhb+gT
+	aVqoO5Q0zrsNRML4ZxEw0MtHM2Go2ntyUx/b1UCawnyPq/h8apzmNKGf7YuGBKM=
+X-Google-Smtp-Source: AGHT+IEJgxPHK8MMMPe3LUlF7ZdETXabJsvUYuGFTUOiVywij0WZCN5KQkmE2azknuKxQLLKoQwBnQ==
+X-Received: by 2002:adf:f206:0:b0:371:8ca4:1b76 with SMTP id ffacd0b85a97d-378896121f2mr7228196f8f.32.1725896359182;
+        Mon, 09 Sep 2024 08:39:19 -0700 (PDT)
 Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:788a:4542:ae86:67f4])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3789564af1asm6305145f8f.18.2024.09.09.08.39.16
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3789564af1asm6305145f8f.18.2024.09.09.08.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 08:39:16 -0700 (PDT)
+        Mon, 09 Sep 2024 08:39:18 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Subject: [PATCH 0/3] hwmon: pmbus: add tps25990 efuse support
-Date: Mon, 09 Sep 2024 17:39:02 +0200
-Message-Id: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+Date: Mon, 09 Sep 2024 17:39:04 +0200
+Subject: [PATCH 2/3] hwmon: (pmbus/core) add POWER_GOOD signal limits
+ support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,10 +62,10 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJYW32YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDSwNL3ZKCYiNTS0sDXWOTZIPktDSjpFQDMyWg8oKi1LTMCrBR0bG1tQB
- 8TA00WgAAAA==
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240909-tps25990-v1-2-39b37e43e795@baylibre.com>
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+In-Reply-To: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
@@ -73,53 +75,77 @@ Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-i2c@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1410; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=tR8kO6PuFrwBBIuqy1jmykEHT6GN8EHwvvkRzwZMc8c=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm3xagS7BwL8tqMu7GRBfQetYcJy9MwFpJJwkY3
- 4En3g/50yaJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZt8WoAAKCRDm/A8cN/La
- hcosD/0UO/DTTtUYHOqQv1Mjr4Rhs6b89CikgPS2UZm6E2AtU1DS+9gj9rz+5nfJfHdulRZfmdO
- 0bOPkzrh2ehmTiLO4b9ciE9euq26sERQ4+Fn5Ttf65rAReiLYRKhjoETIXS4wpr4meySZDh5Ngk
- wL3/EhJIiy3Ze5cYX/B6Q4qeQebsQOHf0Eo3USEBkFJaID21y21+WqifLFry++D9mSFh/QO84qv
- JaKjYcr5PYAXN9k/pINqW6TdZEu+1IaxwBkQE232Cir5lHySg8YKtfCXNxlKQD0PLIbA0XU2ekf
- w9JZpkpU8XjG7NY9g0AmcJPUGx7l39Q0EF8SSVeUYOxN4MNrUlOpIwk35s4rABH8eQNfiI0LGON
- 0rCxvAK6ar9UzDK2FIbzWarLMTXlNjTXQ7xECRvLaj8YWHoSqFkjFZBSbll8aNGiRS1Ru/ZBced
- akj2OpTXZzqeE7kwHfLG24YfDOA8wY0JnsSKkfueFnDoBugUphFN1i+OWiV+mOT18wykgVBQH+9
- B1W2USFSi/jHgNQ3pq/ExntCFWvRWzIuh9X7ys95z9UUjaSrjTPb3t5sA02d7jF8N0WQNrAEut/
- 9JfxDit+Bx6lZSjwjEhXAsel3Vdjj6SNfLZraN2GgJ5dmYAnakan3pQP/XBzcutn3aRkUCHBqu0
- PDbFCtiddoSqnGw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1966; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=vJ4BQU0XZIcK8J00Oopy9XQQFvb4Ue39E+Oh6NKsto8=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm3xairYSGGaLEKh/WnARwotxDj4C2L/d3Tc/6d
+ XGKzwAM2g2JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZt8WogAKCRDm/A8cN/La
+ hTWrD/sH/ZzBTCRaI5fuZQnDD53t6rP5XdAGe//eiiyh0tbtCh+pDxadxfodQU3qq5nDnVCAvXN
+ aL5SPFf9V//nKQ6cc2z5OsLTkZ0LgQsKWiad2LAuh9o2vTkM8D48Kwd2DEZWs1z4rxcqD05JtFK
+ cJzC47s3Lpu9YsDmkGVbG18lsNiYLMaN7LeqpkVSWfPyo/OBv+PzlILrQ4YOt+9xb+HjkshEj0q
+ 8yc0bhBOT6gku0d4au/aAkkpTyVZ/AWMUjLn28yG0FpKXY86bmBrVRkX3pTSIphmB/gP7ZIAJgE
+ qT8B1KWLajtWj612KdAYlXeJmQellE/vBpqL6EoVfvNDqrJmE7T0T8qf3k5mLdqISHMc+zq5fTY
+ 3nfb/ahqgVbnr6dqYPDgWnDOZp7NKlNJ5+rN+sOXA6ucZbS27vIvOPk6hZM5RsFsryULFmR/wei
+ /gvpr/DQLt8+8l7mbD9TanXkcBGqKySK+MpHhR31nE5h7m7f0HTWcUTdI4IgqI/DroSAbB+i8Hz
+ a09NrA4s7XGzsl2BW5p/TRLIXlX0ITIMYudIr8ArWi8a6GfU2fLpGvUj6IQp+IC6LGqvEv+5WM4
+ WfWTnzNzCdV9ij4jCEVwVmEv+1j1pDZqQGEbEPyld+O3lsKhvNd7bm6lcZv4n2gHLtcGMjkIBuf
+ WHdzx7vbPcc9N8Q==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-This patchset adds initial support for the Texas Instruments TPS25990
-eFuse. The TPS25990 is an integrated, high-current circuit protection and
-power management device. TPS25895 may be stacked on the TPS25990 for
-higher currents.
+Add support for POWER_GOOD_ON and POWER_GOOD_OFF standard PMBus commands.
 
-This patchset provides basic telemetry support for the device.
-On boot, the device is write protected. Limits can be changed in sysfs
-after removing the write protection, through debugfs. Limits will be
-restored to the default value device on startup, unless saved to NVM.
-Writing the NVM is not supported by the driver at the moment.
+For PMBus devices that offer a POWER_GOOD signal, these commands are used
+for setting the output voltage at which a power good signal should be
+asserted and negated.
 
+Power Good signals are device and manufacturer specific. Many factors other
+than output voltage may be used to determine whether or not the POWER_GOOD
+signal is to be asserted. PMBus device users are instructed to consult the
+device manufacturer’s product literature for the specifics of the device
+they are using.
+
+Note that depending on the choice of the device manufacturer that a device
+may drive a POWER_GOOD signal high or low to indicate that the signal is
+asserted.
+
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
-Jerome Brunet (3):
-      dt-bindings: hwmon: pmbus: add ti tps25990 documentation
-      hwmon: (pmbus/core) add POWER_GOOD signal limits support
-      hwmon: (pmbus/tps25990): add initial support
+ drivers/hwmon/pmbus/pmbus.h      | 3 +++
+ drivers/hwmon/pmbus/pmbus_core.c | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
- .../bindings/hwmon/pmbus/ti,tps25990.yaml          |  73 ++++
- Documentation/hwmon/tps25990.rst                   | 141 ++++++
- drivers/hwmon/pmbus/Kconfig                        |  17 +
- drivers/hwmon/pmbus/Makefile                       |   1 +
- drivers/hwmon/pmbus/pmbus.h                        |   3 +
- drivers/hwmon/pmbus/pmbus_core.c                   |   6 +
- drivers/hwmon/pmbus/tps25990.c                     | 474 +++++++++++++++++++++
- 7 files changed, 715 insertions(+)
----
-base-commit: d22bd451d5606411895ef55cb105277e4f4f6e54
-change-id: 20240909-tps25990-34c0cff2be06
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index 5d5dc774187b..e322d2dd9fb7 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -78,6 +78,9 @@ enum pmbus_regs {
+ 	PMBUS_IIN_OC_FAULT_LIMIT	= 0x5B,
+ 	PMBUS_IIN_OC_WARN_LIMIT		= 0x5D,
+ 
++	PMBUS_POWER_GOOD_ON		= 0x5E,
++	PMBUS_POWER_GOOD_OFF		= 0x5F,
++
+ 	PMBUS_POUT_OP_FAULT_LIMIT	= 0x68,
+ 	PMBUS_POUT_OP_WARN_LIMIT	= 0x6A,
+ 	PMBUS_PIN_OP_WARN_LIMIT		= 0x6B,
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 0ea6fe7eb17c..94ddf0166770 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1768,6 +1768,12 @@ static const struct pmbus_limit_attr vout_limit_attrs[] = {
+ 		.attr = "crit",
+ 		.alarm = "crit_alarm",
+ 		.sbit = PB_VOLTAGE_OV_FAULT,
++	}, {
++		.reg = PMBUS_POWER_GOOD_ON,
++		.attr = "good_on",
++	}, {
++		.reg = PMBUS_POWER_GOOD_OFF,
++		.attr = "good_off",
+ 	}, {
+ 		.reg = PMBUS_VIRT_READ_VOUT_AVG,
+ 		.update = true,
 
-Best regards,
 -- 
-Jerome
+2.45.2
 
