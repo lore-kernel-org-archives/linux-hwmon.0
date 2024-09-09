@@ -1,103 +1,127 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDF63A1B5;
-	Sun,  8 Sep 2024 23:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B846AB67F;
+	Mon,  9 Sep 2024 01:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725838695; cv=none; b=FgTIGBo3/MqRl64CD9FNtJZ6erZvAWTnqaYtqphGvRy56pvrmn8WxdRkcky/6kj50O/k2a3Npk4WM3W5hSnq8dNhw8oeoRD9DZ7SsHdDjL4bkQzkfvokv2jgGielbKTqkEwmkRJJn0bi+IGTmsq1xZ8IocbwsYnpoVvbR3q3UPA=
+	t=1725844466; cv=none; b=at6Vg9QG9JNK/OdlALL6A7oc6bk9sQ0jwR+A/X71coSwl7ILHN+aOJVqPXCk6AyaWnsMMC+n7+2WaX5F77aOPp00eHwRWqROE7z+eRavUEFgVzHeoOkykXQu5BmqtGtHKx3NFJeHWfyziRaaDKnOWdrBtnEAS+lHNlN1cAS9f3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725838695; c=relaxed/simple;
-	bh=FY/BjhsgiyH0daYlzg5bOZKtsRLtohljcQZ3TCBxMaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=If+BFHF/FJHuLrOR3KxD0SJg6Givivsx1fVoVcmoqew6WQGgbYO3VI+wvqXarN6r44dpWq0FBasTtNjkbVrhlh++dvXBPA4ia907Z7QijxixV+a/sVq3m6RTo4rus0agiy+jg3gv/HIbg6+OZpWSo8P9WWHK+iw7gX9bzlFmrXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLoMjLY7; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLoMjLY7"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7cb3db0932cso2924576a12.1;
-        Sun, 08 Sep 2024 16:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725838693; x=1726443493; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n3eHjycKFrqwvUbRNtshDfNjCTOFbe1oyIgmCT0dxeE=;
-        b=XLoMjLY7IsGTqBEEXhfUL5dVtTvxlCu/ZVIJkjpW9PFY+xdx/lvgSGNBua4TwoISr3
-         w941jg9K5vUPQGuJCpAnsWOkZDSex9GbGDCZz3sHW+XWT7P31KUXcOZ5kYyYJAU3lSEQ
-         qXHPN5JpfC6EBx5EP4ydlP/3l52j05TyNxcBn03ZZq/9KQkrBWFNft1szyST1Y+jm9V2
-         JjA8Lf8OuODh8V/liGgLKkGtuuWjrinOJOPSVvyfLennwLZCq+jh/mQl4UuFptWcVc9H
-         zX+XHndwUBjcoHroTRHDp5nmy5uZw1dxk8lKbDyrUIqdGtgc6fffcONMx0gc+bAa/Mao
-         Bp9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725838693; x=1726443493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3eHjycKFrqwvUbRNtshDfNjCTOFbe1oyIgmCT0dxeE=;
-        b=sFGW25roKiaBhP+loG+5FgwZObHFzkjDD7GefB3dbaOeAIIDTkAE+FWUJOYhS1S+0W
-         QQboShn9AyTB2gV2kq7Se8pC1vgwyveMiS3VHm/asEo7B+GGjgwHwVvKRe9s50Qu5Nge
-         xz7J5IqLcqPYBhnXc6lyG559w7e7sDwnj644jUT45C6WABBlpGxln8MsrzunC9hGACRH
-         Aqa5tJcOXfEnQQZ2s6owyvt3abl+jrMgcxiCHPLzyYCaQ1Wpbl44snRCHtXvKGL2rD5H
-         VdwW5AhsF2PsuA+od++L3dZmLXmovqU7A1Hsx0uLmN6b6mkGRUHzEzzoOotBAshW/PbX
-         k3ug==
-X-Forwarded-Encrypted: i=1; AJvYcCUgOwDa/NPrpe7I9SvGeSP88EeX0yqK6ut58anKMp2t0h2GfebEjmmaQ97E2PwzYlFyMEVXCEVLAuoSbWJI@vger.kernel.org, AJvYcCV1TEkSuHJdj32DCBLMuDkiIumGWJ71YHRAhrVWfW8TUK6lYBL36Xqd7Ws0ZCMvyEftqeJYYPpt6e8ZcrmURKE=@vger.kernel.org, AJvYcCXnejJITNWE2ujHFsgWoaJubI/mvCM/qwzGtUDuLxYNUY1gcjAFmqedE7sH6huCiJH319wScfUFG+xMi4w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ+RKWYRwoWzzR9tQviieZYUga8KQABdxHJbpu1XrPPn7oKA/I
-	7fSi7blVaT4FH9K5jMcfPjXaEtIvSXzM2tyGsb0KvlBQrVkPvAaA
-X-Google-Smtp-Source: AGHT+IGOmnvuP7qDYxfamyY7dTZnsjSbc3Swnm6V4JGaI+iN0fr4DKRu9NEUxrBwfTThDs1aZuxc/A==
-X-Received: by 2002:a05:6a20:718a:b0:1cf:55e:f893 with SMTP id adf61e73a8af0-1cf2a0e58ecmr5896375637.36.1725838692810;
-        Sun, 08 Sep 2024 16:38:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-718e5982ebasm2465733b3a.164.2024.09.08.16.38.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Sep 2024 16:38:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 8 Sep 2024 16:38:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Saravanan Sekar <sravanhome@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus/mpq7932) Constify struct regulator_desc
-Message-ID: <f6c39166-19bb-4e63-97ce-abf50c6f915d@roeck-us.net>
-References: <c0585a07547ec58d99a5bff5e02b398114bbe312.1725784343.git.christophe.jaillet@wanadoo.fr>
+	s=arc-20240116; t=1725844466; c=relaxed/simple;
+	bh=Q0xBHys0QgDqAYhHqRXdhWYx9wVlAVaYECwYoVudiBM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GhBEAhibZ2uqGb3GizLkaudW1m4KdZUOstP7NYSBOlIixnnUZdNpSmm9cz0GV9n7utmwa6iG/VdwIIBZozjZWu+Nwp1ak8gCspBjkOGnX3TubiD5ymwYfvzlQuLbCV3ERsSiBQufWVOgca+7ScNE98Rr8X2/TlQlMP/nZ4q40Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X283y0YQGz2Dbxm;
+	Mon,  9 Sep 2024 09:13:50 +0800 (CST)
+Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
+	by mail.maildlp.com (Postfix) with ESMTPS id 509C71400DC;
+	Mon,  9 Sep 2024 09:14:16 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
+ (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Mon, 9 Sep
+ 2024 09:14:15 +0800
+From: Li Zetao <lizetao1@huawei.com>
+To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
+	<gupt21@gmail.com>, <djogorchock@gmail.com>,
+	<roderick.colenbrander@sony.com>, <savicaleksa83@gmail.com>,
+	<me@jackdoan.com>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+	<mail@mariuszachmann.de>, <wilken.gottwalt@posteo.net>, <jonas@protocubo.io>,
+	<mezin.alexander@gmail.com>
+CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: [PATCH -next v2 02/15] HID: cp2112: Use devm_hid_hw_start_and_open in cp2112_probe()
+Date: Mon, 9 Sep 2024 09:23:00 +0800
+Message-ID: <20240909012313.500341-3-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240909012313.500341-1-lizetao1@huawei.com>
+References: <20240909012313.500341-1-lizetao1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0585a07547ec58d99a5bff5e02b398114bbe312.1725784343.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd500012.china.huawei.com (7.221.188.25)
 
-On Sun, Sep 08, 2024 at 10:32:38AM +0200, Christophe JAILLET wrote:
-> 'struct regulator_desc' is not modified in this driver.
-> 
-> Constifying this structure moves some data to a read-only section, so
-> increase overall security, especially when the structure holds some
-> function pointers.
-> 
-> This also makes mpq7932_regulators_desc consistent with
-> mpq7932_regulators_desc_one which is already a "static const struct
-> regulator_desc".
-> 
-> On a x86_64, with allmodconfig:
-> Before:
-> ======
->    text	   data	    bss	    dec	    hex	filename
->    3516	   2264	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
-> 
-> After:
-> =====
->    text	   data	    bss	    dec	    hex	filename
->    5396	    384	      0	   5780	   1694	drivers/hwmon/pmbus/mpq7932.o
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+Currently, the cp2112 module needs to maintain hid resources
+by itself. Use devm_hid_hw_start_and_open helper to ensure that hid
+resources are consistent with the device life cycle, and release
+hid resources before device is released. At the same time, it can avoid
+the goto-release encoding, drop the err_hid_close and err_hid_stop
+lables.
 
-Applied.
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+v1 -> v2: Adjust commit information
+v1:
+https://lore.kernel.org/all/20240904123607.3407364-3-lizetao1@huawei.com/
 
-Thanks,
-Guenter
+ drivers/hid/hid-cp2112.c | 26 +++-----------------------
+ 1 file changed, 3 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/hid/hid-cp2112.c b/drivers/hid/hid-cp2112.c
+index 20a0d1315d90..6d65c65f1b83 100644
+--- a/drivers/hid/hid-cp2112.c
++++ b/drivers/hid/hid-cp2112.c
+@@ -1215,22 +1215,14 @@ static int cp2112_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		return ret;
+ 	}
+ 
+-	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+-	if (ret) {
+-		hid_err(hdev, "hw start failed\n");
++	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
++	if (ret)
+ 		return ret;
+-	}
+-
+-	ret = hid_hw_open(hdev);
+-	if (ret) {
+-		hid_err(hdev, "hw open failed\n");
+-		goto err_hid_stop;
+-	}
+ 
+ 	ret = hid_hw_power(hdev, PM_HINT_FULLON);
+ 	if (ret < 0) {
+ 		hid_err(hdev, "power management error: %d\n", ret);
+-		goto err_hid_close;
++		return ret;
+ 	}
+ 
+ 	ret = cp2112_hid_get(hdev, CP2112_GET_VERSION_INFO, buf, sizeof(buf),
+@@ -1334,10 +1326,6 @@ static int cp2112_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	i2c_del_adapter(&dev->adap);
+ err_power_normal:
+ 	hid_hw_power(hdev, PM_HINT_NORMAL);
+-err_hid_close:
+-	hid_hw_close(hdev);
+-err_hid_stop:
+-	hid_hw_stop(hdev);
+ 	return ret;
+ }
+ 
+@@ -1354,14 +1342,6 @@ static void cp2112_remove(struct hid_device *hdev)
+ 	}
+ 
+ 	gpiochip_remove(&dev->gc);
+-	/* i2c_del_adapter has finished removing all i2c devices from our
+-	 * adapter. Well behaved devices should no longer call our cp2112_xfer
+-	 * and should have waited for any pending calls to finish. It has also
+-	 * waited for device_unregister(&adap->dev) to complete. Therefore we
+-	 * can safely free our struct cp2112_device.
+-	 */
+-	hid_hw_close(hdev);
+-	hid_hw_stop(hdev);
+ }
+ 
+ static int cp2112_raw_event(struct hid_device *hdev, struct hid_report *report,
+-- 
+2.34.1
+
