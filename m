@@ -1,155 +1,159 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46691078B;
-	Mon,  9 Sep 2024 01:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E458F1B78FB;
+	Mon,  9 Sep 2024 09:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725844473; cv=none; b=frcclKfv997zsAMPKL4GqTZEjWOuzAZr9Q8Jm8Gql05TRtjKtan1MMOscWxZEwyREQkz/OoQAzi584fRA9taULgLVt8/P3/zWyex6ry4Td62EblVD+gS8pHrb5J5Gb82Kh/wVq9331QL/Y1ai7npXHrF3GBGTrnSgpGc/l2aS3Y=
+	t=1725874238; cv=none; b=En08b5fFupVpGP9jqZAg/q6ZA6M7xbfYoPn5dtKAzvZu/+y1m7BqFePU19VJtr1euLEvDFDfD3/v53JE4gazV/laJH9XoO5HjWDQT2lsilyMc0mPBzhi/WcBQuAwY90VMR8mXJzi6qEdOyGVUJyBSJA40bgfHsSWuCo7Pjpm6wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725844473; c=relaxed/simple;
-	bh=AP2HopHUUt5Hx6YaR2uv2rICTXiMqOqgayan1s2YR20=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IELcc74DEso9QO1ARrTaAWeRha10pN/3W4kpW50V9/PZl8LQeLH7bXARaXLctN6DHLhxiNN2H8PHrbENetW0+8wzq4JDBwbmHiz0vut5J262GLt/Yb0Alc5McYJjNO058XseIWbA5/akUJXXhFpaFFLl3mYeg614YuS0kr8lMlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4X283n2RpCzyRbm;
-	Mon,  9 Sep 2024 09:13:41 +0800 (CST)
-Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6DFFD1403D5;
-	Mon,  9 Sep 2024 09:14:24 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
- (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Mon, 9 Sep
- 2024 09:14:23 +0800
-From: Li Zetao <lizetao1@huawei.com>
-To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
-	<gupt21@gmail.com>, <djogorchock@gmail.com>,
-	<roderick.colenbrander@sony.com>, <savicaleksa83@gmail.com>,
-	<me@jackdoan.com>, <jdelvare@suse.com>, <linux@roeck-us.net>,
-	<mail@mariuszachmann.de>, <wilken.gottwalt@posteo.net>, <jonas@protocubo.io>,
-	<mezin.alexander@gmail.com>
-CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH -next v2 15/15] hwmon: (nzxt-smart2) Use devm_hid_hw_start_and_open in nzxt_smart2_hid_probe()
-Date: Mon, 9 Sep 2024 09:23:13 +0800
-Message-ID: <20240909012313.500341-16-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240909012313.500341-1-lizetao1@huawei.com>
-References: <20240909012313.500341-1-lizetao1@huawei.com>
+	s=arc-20240116; t=1725874238; c=relaxed/simple;
+	bh=J94kJzZ8E42k12Z+YhHnbi9azY+Almhby4JZF/3alTQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cWQosraB10X1jfi9HuYW0AKa3bgM4nxkOIJSuyiUD8pQpJXB9sDK2o7sQ4qoVrBfPXI07cIA+802P3yySjBfFTfWn2xbKC1Z3ZfwGPi7mI45XvBDU+edrFXjLFP17KzgZJ7tSFL2kf6Q1hLvY7wz6abxfdkLspQSNTFG5kuUbUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7TzRFwa; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7TzRFwa"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f754d4a6e4so28631241fa.3;
+        Mon, 09 Sep 2024 02:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725874235; x=1726479035; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQ2eI4KsB/nkJtqPX6qlu7odSncURe2VJXt3h6n1Reo=;
+        b=V7TzRFwaOyckuZMj0LLY2pwpyAz+AbMO/tDwsXEeQ0dD1/eRNFsqEmY9J6pp7Wyh1g
+         CeT9x+AjiB1WumUXSu1rzsVwoWEsTFG4eANXmWba9r0YQCQD1B1bGRfzbqobN2i/ggsU
+         1ha/P/Bq7o7jLV4751Jll1Nz56m0oW3jb5/JCbJDh2WieZJbaRMEgcBw3Ja2OxUaBz/U
+         pHpfPcC9VaNzsU8r68FUdzusJlUuTPrLclhSrY0SdJcN5eIxmcQil+Ka5n6az5RYmobj
+         I9dPm8Zo/2evdmAK+uGsrV0M/oq2jaKHNTVHpJPd0XYEcPfC+jLvwijlRQG6xuqcW15d
+         Tywg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725874235; x=1726479035;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UQ2eI4KsB/nkJtqPX6qlu7odSncURe2VJXt3h6n1Reo=;
+        b=LfSpXOGmRq7Ua8+AuijEAkRTtYxue9a4YwX9WtLodULhhjYZL6wSQZsSV+b6XWvgmJ
+         N5ICK9kkuQHexVr4BGVLiYm/Ff0UOiPwNW3blq1AJNY4WxnxZidML04aNExo8MirDjYQ
+         V8d6oBl8uwx9CG1KfI2ZlOhd8Frjy+27eWOP9mBmQxFYnStR105WxrCSHL5VZC3NbCET
+         ZoO++vMaZwelrtnXhDvvmdxTXIYyaal4cXLsGbOV+lsihPRcozcQmzybbQWpQy4/WwJB
+         2DXf7jlMHL/QGRU+M2xe5btd01Nl0tZfR24502vs2lgkBURIfcE2uDjpxVI0bSlAnLHJ
+         rqFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPGOxmLoF2DXD/IT4xG34tQ96gNzJIQh5gnfJ9gYMJ3J63zemaSc+Ju0hwVgms2hEDkEc/h32zx5Itwns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCn49IpaRSn/SB/qHL1ot8XZREn4+uoGLpMv7p0b/38MMHW3kZ
+	+/4X+U65X5UadCkYBs8pKo7qhsAe1Lbib4sTTsi5m2NxhywETg25zR83/Msz
+X-Google-Smtp-Source: AGHT+IHcnXUQnUdoUdukMDLLVxf/MuLoflA+Fa4uqh+5TL4/r9kwh12u2meoYQjDl8FTMR8/ruwbsg==
+X-Received: by 2002:a2e:bc12:0:b0:2f0:1f06:2b43 with SMTP id 38308e7fff4ca-2f751fa9403mr41166311fa.41.1725874234049;
+        Mon, 09 Sep 2024 02:30:34 -0700 (PDT)
+Received: from localhost (89-73-120-30.dynamic.chello.pl. [89.73.120.30])
+        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-2f75c098e9esm7586441fa.116.2024.09.09.02.30.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 02:30:33 -0700 (PDT)
+From: Patryk Biel <pbiel7@gmail.com>
+Date: Mon, 09 Sep 2024 11:30:28 +0200
+Subject: [PATCH] hwmon: Conditionally clear individual status bits for
+ pmbus rev >= 1.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemd500012.china.huawei.com (7.221.188.25)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240909-pmbus-status-reg-clearing-v1-1-f1c0d68c6408@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADPA3mYC/x2MywqEMAwAf0Vy3kB9ge6vyB7aGGvArZK4iyD+u
+ 8XTMIeZE4xV2OBdnKD8F5M1ZSlfBdDsU2SUMTtUrmpc71rcvuFnaLvfM5Qj0sJeJUX0gXpyZdd
+ QHSD3m/Ikx/MePtd1A45R/axrAAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Patryk Biel <pbiel7@gmail.com>
+X-Mailer: b4 0.14.1
 
-Currently, the nzxt-smart2 module needs to maintain hid resources
-by itself. Use devm_hid_hw_start_and_open helper to ensure that hid
-resources are consistent with the device life cycle, and release
-hid resources before device is released. At the same time, it can avoid
-the goto-release encoding, drop the out_hw_close and out_hw_stop
-lables, and directly return the error code when an error occurs.
+This change adds fetching PMBus revision and using it to conditionally
+clear individual status bits while calling pmbus_show_boolean, only if
+the device is compliant with PMBus specs >= 1.2.
 
-Further optimization, use devm_hwmon_device_register_with_info to replace
-hwmon_device_register_with_info, the remote operation can be completely
-deleted, and the drvdata no longer needs to hold hwmon device
-
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Signed-off-by: Patryk Biel <pbiel7@gmail.com>
 ---
-v1 -> v2:
-  1) Further optimize using devm_hwmon_device_register_with_info
-and remove the .remove operation
-  2) Adjust commit information
-v1:
-https://lore.kernel.org/all/20240904123607.3407364-20-lizetao1@huawei.com/
+Current implementation of pmbus_show_boolean assumes that all devices
+support write-back operation of status register so as to clear pending
+warning or faults. Since clearing individual bits in the status registers
+was introduced in PMBus specification 1.2, this operation may not be 
+supported by some older devices, thus resulting in error while reading 
+boolean attributes like e.g. temp1_max_alarm. 
 
- drivers/hwmon/nzxt-smart2.c | 38 +++++--------------------------------
- 1 file changed, 5 insertions(+), 33 deletions(-)
+This change adds fetching PMBus revision supported by device and
+modifies pmbus_show_boolean so that it only tries to clear individual
+status bits if the device is compilant with PMBus specs >= 1.2.
 
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index df6fa72a6b59..9c6d020ac896 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -172,7 +172,6 @@ struct set_fan_speed_report {
+Tested on: LTC2971, LTC2971-1, LTC2974, LTC2977.
+---
+ drivers/hwmon/pmbus/pmbus.h      |  6 ++++++
+ drivers/hwmon/pmbus/pmbus_core.c | 12 +++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index fb442fae7b3e..0bea603994e7 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -418,6 +418,12 @@ enum pmbus_sensor_classes {
+ enum pmbus_data_format { linear = 0, ieee754, direct, vid };
+ enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
  
- struct drvdata {
- 	struct hid_device *hid;
--	struct device *hwmon;
++/* PMBus revision identifiers */
++#define PMBUS_REV_10 0x00	/* PMBus revision 1.0 */
++#define PMBUS_REV_11 0x11	/* PMBus revision 1.1 */
++#define PMBUS_REV_12 0x22	/* PMBus revision 1.2 */
++#define PMBUS_REV_13 0x33	/* PMBus revision 1.3 */
++
+ struct pmbus_driver_info {
+ 	int pages;		/* Total number of pages */
+ 	u8 phases[PMBUS_PAGES];	/* Number of phases per page */
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index cb4c65a7f288..50ba093a38e8 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -108,6 +108,8 @@ struct pmbus_data {
  
- 	u8 fan_duty_percent[FAN_CHANNELS];
- 	u16 fan_rpm[FAN_CHANNELS];
-@@ -730,6 +729,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 				 const struct hid_device_id *id)
- {
- 	struct drvdata *drvdata;
-+	struct device *hwmon;
- 	int ret;
+ 	int vout_low[PMBUS_PAGES];	/* voltage low margin */
+ 	int vout_high[PMBUS_PAGES];	/* voltage high margin */
++
++	u8 revision;	/* The PMBus revision the device is compliant with */
+ };
  
- 	drvdata = devm_kzalloc(&hdev->dev, sizeof(struct drvdata), GFP_KERNEL);
-@@ -750,44 +750,17 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 	if (ret)
- 		return ret;
+ struct pmbus_debugfs_entry {
+@@ -1095,7 +1097,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
  
--	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-+	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
- 	if (ret)
- 		return ret;
+ 	regval = status & mask;
+ 	if (regval) {
+-		ret = _pmbus_write_byte_data(client, page, reg, regval);
++		if (data->revision >= PMBUS_REV_12)
++			ret = _pmbus_write_byte_data(client, page, reg, regval);
++		else
++			pmbus_clear_fault_page(client, page);
++
+ 		if (ret)
+ 			goto unlock;
+ 	}
+@@ -2653,6 +2659,10 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 		}
+ 	}
  
--	ret = hid_hw_open(hdev);
--	if (ret)
--		goto out_hw_stop;
--
- 	hid_device_io_start(hdev);
- 
- 	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
- 
--	drvdata->hwmon =
--		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
--						&nzxt_smart2_chip_info, NULL);
--	if (IS_ERR(drvdata->hwmon)) {
--		ret = PTR_ERR(drvdata->hwmon);
--		goto out_hw_close;
--	}
--
--	return 0;
--
--out_hw_close:
--	hid_hw_close(hdev);
--
--out_hw_stop:
--	hid_hw_stop(hdev);
--	return ret;
--}
--
--static void nzxt_smart2_hid_remove(struct hid_device *hdev)
--{
--	struct drvdata *drvdata = hid_get_drvdata(hdev);
--
--	hwmon_device_unregister(drvdata->hwmon);
--
--	hid_hw_close(hdev);
--	hid_hw_stop(hdev);
-+	hwmon = devm_hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
-+						     &nzxt_smart2_chip_info, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon);
- }
- 
- static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
-@@ -807,7 +780,6 @@ static struct hid_driver nzxt_smart2_hid_driver = {
- 	.name = "nzxt-smart2",
- 	.id_table = nzxt_smart2_hid_id_table,
- 	.probe = nzxt_smart2_hid_probe,
--	.remove = nzxt_smart2_hid_remove,
- 	.raw_event = nzxt_smart2_hid_raw_event,
- #ifdef CONFIG_PM
- 	.reset_resume = nzxt_smart2_hid_reset_resume,
++	ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
++	if (ret > 0)
++		data->revision = ret;
++
+ 	if (info->pages <= 0 || info->pages > PMBUS_PAGES) {
+ 		dev_err(dev, "Bad number of PMBus pages: %d\n", info->pages);
+ 		return -ENODEV;
+
+---
+base-commit: c763c43396883456ef57e5e78b64d3c259c4babc
+change-id: 20240905-pmbus-status-reg-clearing-abc9c0184c3b
+
+Best regards,
 -- 
-2.34.1
+Patryk Biel <pbiel7@gmail.com>
 
