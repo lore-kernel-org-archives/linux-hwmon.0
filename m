@@ -1,90 +1,193 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF81A140E5F
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 09:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1F8188013
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 09:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725959412; cv=none; b=gmIWnGN6gLKJ/TQM5viw3JEH13TLbJhepaMGz6tXw8+H4A8nJFlyTeOi4ovIw0RKyAHFTXvsvXB78sH0CPqsZtvfGywmz0NI/RDWXgvmHwQXGxZ5rRStLK6cMQG0IfKIUIAaTHtTP1qwQ7vAA5q11PWV05LX8N/bSs9NZ0OVniM=
+	t=1725960684; cv=none; b=PFF7/n7/dt7kzQ7kgPIzjQnnPuOQD/NmsGaPqsPV1xP8GgXOH5H9teN8ddyXez2JcnEELR0raq9QvudjTpPN1u+eHMNuqLrfR8cR0MZCVFbMTwtVR1N8GTjQm1cmUccRvoLxzqg1yRO/h6likP+mlYQBT40r9Svr3e0riFoBh7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725959412; c=relaxed/simple;
-	bh=WoutYSJf4p4TVUN4tnhGTf7NBveG7svGQnp0PTwJJLU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jvegLwn6LI8mbJP4bV71t7zoIk1B7PizdaDOSITSnQWwGsIlFk/I5b6L8zFCkYvY1lsjvv8iZ+QSjcG0a/sI/YPbk9uMNsKrGme/Ai5Zhk3a76l/QJvFdYRg8ilnFrjujM77rz9FVdtkyKj1/p1NgLnWSpbWLzMokomv6xxinLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBgeYJ2+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725960684; c=relaxed/simple;
+	bh=/yBirLlbsXe5irgaHtC/VRx4dXEPb1T0JzXJA9JBoD8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Q+fIxbr4bLNrXGakd936NPI+UZiT9MzZ4CoXpOVGkejBL/i5KOO3DPe9ZRqTsiKh17kHBjj1Gv9vxrrObS2VCur8R8PlZTWiPBOO7kz/FlQPsUK1NMphDynC6geP2XLfMm297WXvnjE8UCJEb7ff3M0OJuLf8FftoQMR/ASBD2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=i/9hIIwP; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBgeYJ2+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFA3C4CEC3;
-	Tue, 10 Sep 2024 09:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725959411;
-	bh=WoutYSJf4p4TVUN4tnhGTf7NBveG7svGQnp0PTwJJLU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YBgeYJ2+ocrmA2YYAiK8NMGTbcIzfYI78pQfjhCf0Es/yZxGi24Am3SiDH5M6NARf
-	 Y4d132kqp1JA/PKdMbUyuhXPcX9/uSzCQnZTHsa3z2k2sbEVvlS/HAyTCgKQUgNCGW
-	 j+Saf5KokawnbTStymwgQWwpY9m4Nn7fl3WYdaLUFILsBrU1fxW1pSHffsYOzEXNNx
-	 EED9c9q8dwVup0xE0X+PvM7BrADXD81ZJ7iyfBjqTv5kTsAVbEHlgWesccL5jDh6CI
-	 qwfxgpEQ4S2J1I6vemsLh6+OUN+iQ69aC7+vFRx4F8Pj1862shGZvXA8DK3J8rqeaV
-	 y3FTy4/UHkNhw==
-Date: Tue, 10 Sep 2024 11:10:07 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: "Nilawar, Badal" <badal.nilawar@intel.com>
-Cc: "Gupta, Anshuman" <anshuman.gupta@intel.com>, 
-	"Jadav, Raag" <raag.jadav@intel.com>, "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>, 
-	"joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>, "Vivi, Rodrigo" <rodrigo.vivi@intel.com>, 
-	"tursulin@ursulin.net" <tursulin@ursulin.net>, "linux@roeck-us.net" <linux@roeck-us.net>, 
-	"andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>, 
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>, 
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
-	"Tauro, Riana" <riana.tauro@intel.com>, "Dixit, Ashutosh" <ashutosh.dixit@intel.com>, 
-	"Poosa, Karthik" <karthik.poosa@intel.com>
-Subject: Re: [PATCH v2] drm/i915/hwmon: expose package temperature
-Message-ID: <fsh2semsflyxqghmkxb2rk4xtnz5wdcxud73ghepchxkf55p3u@xgbz5o3dp3p2>
-References: <20240906093118.3068732-1-raag.jadav@intel.com>
- <sd5g4sj6t373wu5jfdfaujh73t4uehcri4aqtu7dln4p4huyoh@sa4nivkflc47>
- <CY5PR11MB6211D25D522F6044554B84F7959A2@CY5PR11MB6211.namprd11.prod.outlook.com>
- <6683448a-aeb4-4ab1-9520-c83f70100583@intel.com>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="i/9hIIwP"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42bb6d3e260so5290235e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 02:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725960680; x=1726565480; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NuS9MAxsmvjSgFrYtBO34391Uw04VZwdaHe4kRwnHIs=;
+        b=i/9hIIwPb26ABV+w+ANhRNtPKPtpsEqV90b14y07k1blmy2dTwqgXybA4D06hQO/9C
+         EBjfxlcS+88hXD2DOZMlE9jyFS3N0detA8wupak4v2FOHed1pbcydCKSyObHLwlhWu3M
+         P11AFZeCBpj4sMlavcT4p13OmjPwwyKgsqC2GeN+PST4Yz1HW9PdWMhIypj3P6qFw8ht
+         FecDX5zK2Od4xQATCS3xdxIFf6AOO/bKxyNsDv8H8GV0xzUtmZDpVVb+wLa8FZKIUgHX
+         JbEXeAH7WURAoXARISxbycymvzYB0Y/43F5yyPMX0tJ5X82Ds3Cbz5/mB8Aa0ai33jQ6
+         Frwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725960680; x=1726565480;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NuS9MAxsmvjSgFrYtBO34391Uw04VZwdaHe4kRwnHIs=;
+        b=tbtslJU6sbOYWxr0tPbIyp7ON3fwyJSk0BNDtHpSHdGZbs3x5dXcJt9DVhvhXCfHEY
+         CVet1At10TmL5VW1VmgM6OoflP5ydCHOnr5SeRZ8zxyhdwMaFMSQnj0/Gi9jcERLweWk
+         4nnWJaiC4WLc8n9aloT7Ihtgw3NxaoItTiC4YiiKF9GXHBpHNulcOX14ENeNwWx9moPR
+         Wvfd5JGFzSyB7Quh5TB1lUF6Ni1qPTLzCFJU3DKmWf6COmJ2I0b9y0DyTuyZLom1GBQr
+         sP/IfWiFI2ASWlT7y7rGcy3c4QLgyLmVftZO/nVV3YeuTvn8Am+8Gg2jSMJFXeGf3kTK
+         dNNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwU/p1XXHoO0dVktT1cpBGoqs1u5vCSlWcbBrWAYUeFxyJ7Zwlu9iJPH4Mzuusr5wqi25htpnyq5ESYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB3RQDKUA/a3/ihE5ejQN+c9Hyyk1J6Y1aU1gdriv5kOdf59j5
+	yMaCPoUOduO7rWFAIfoGS6PsREtn6c+nkceSm4fPucSVdmpzb0d0F8jhGVfQ0Rw=
+X-Google-Smtp-Source: AGHT+IHWU9Nsx/+0aSjXLCuH8M7pxPwtBJFXd4QA9DnNUUZvDz4yyjRr1z1CDQ306/ZYKfm0hlNraQ==
+X-Received: by 2002:a5d:54c2:0:b0:374:bb00:31eb with SMTP id ffacd0b85a97d-378895c5c5amr7565976f8f.6.1725960679056;
+        Tue, 10 Sep 2024 02:31:19 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:8ba7:bfe4:fea9:65b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564aef9sm8353891f8f.5.2024.09.10.02.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 02:31:18 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>,
+  Rob Herring <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,
+  Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+  linux-hwmon@vger.kernel.org,  devicetree@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
+  linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
+ documentation
+In-Reply-To: <3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
+	(Krzysztof Kozlowski's message of "Tue, 10 Sep 2024 09:48:34 +0200")
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+	<20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
+	<3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
+Date: Tue, 10 Sep 2024 11:31:18 +0200
+Message-ID: <1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6683448a-aeb4-4ab1-9520-c83f70100583@intel.com>
+Content-Type: text/plain
 
-Hi,
+On Tue 10 Sep 2024 at 09:48, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-> > > > +static int
-> > > > +hwm_temp_read(struct hwm_drvdata *ddat, u32 attr, long *val) {
-> > > > +	struct i915_hwmon *hwmon = ddat->hwmon;
-> > > > +	intel_wakeref_t wakeref;
-> > > > +	u32 reg_val;
-> > > > +
-> > > > +	switch (attr) {
-> > > > +	case hwmon_temp_input:
-> > > > +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
-> > > > +			reg_val = intel_uncore_read(ddat->uncore, hwmon-
-> > > > rg.pkg_temp);
-> > > > +
-> > > > +		/* HW register value is in degrees, convert to millidegrees. */
-> > > > +		*val = REG_FIELD_GET(TEMP_MASK, reg_val) *
-> > > MILLIDEGREE_PER_DEGREE;
-> > > > +		return 0;
-> > > > +	default:
-> > > > +		return -EOPNOTSUPP;
-> > > > +	}
-> > > 
-> > > I don't understand this love for single case switches.
-> > IMHO this is kept to keep symmetry in this file to make it more readable.
-> > Also it readable to return error using default case, which is followed in this entire file.
-> I agree on this. Let’s stick to file-wide approach and ensure it is applied
-> to the fan_input attribute as well.
+> On Mon, Sep 09, 2024 at 05:39:03PM +0200, Jerome Brunet wrote:
+>> Add DT binding documentation for the Texas Instruments TPS25990 eFuse
+>> 
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>  .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 73 ++++++++++++++++++++++
+>>  1 file changed, 73 insertions(+)
+>>
+>
+> A nit, subject: drop second/last, redundant "documentation". The
+> "dt-bindings" prefix is already stating that these are bindings/docs.
+> See also:
+> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> new file mode 100644
+>> index 000000000000..e717942b3598
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> @@ -0,0 +1,73 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +
+>
+> Drop blank line.
+>
+>> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Texas Instruments TPS25990 Stackable eFuse
+>> +
+>> +maintainers:
+>> +  - Jerome Brunet <jbrunet@baylibre.com>
+>> +
+>> +description: |
+>
+> Do not need '|' unless you need to preserve formatting.
+>
+>> +  The TI TPS25990 is an integrated, high-current circuit
+>> +  protection and power management device with PMBUS interface
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ti,tps25990
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  ti,rimon-milli-ohms:
+>> +    description:
+>> +      milli Ohms value of the resistance installed between the Imon pin
+>> +      and the ground reference.
+>
+> Ohms is not enough? We don't have mOhm in property units.
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+>
 
-Yes, that's why I'm giving the r-b. I don't like it, but that's
-how you guys have decided to do it.
+Same discussion as we've had on the driver change.
+At the moment Ohms is enough for the cases I've seen.
 
-Thanks,
-Andi
+Will it be, not sure.
+Using mOhms is' way to avoid "S**t, R is 80.2 Ohms, I
+need another digit to not loose precision " kind of situation and
+introduce a second property just for that.
+
+No idea if Rimon will get that low. Probably not.
+
+I'll switch to Ohms.
+
+>> +
+>> +  interrupts:
+>> +    description: PMBUS SMB Alert Interrupt.
+>> +    maxItems: 1
+>> +
+>> +  regulators:
+>> +    type: object
+>> +    description:
+>> +      list of regulators provided by this controller.
+>
+> You have just one regulator, so drop "regulators" node and use directly
+> vout here.
+
+Just took the example the other pmbus device and did the same for
+consistency.
+
+In that case, there other (possible) regulator called gpdac1 and gpdac2.
+I haven't even tried to implement the support for those.
+
+Since it would not break old DTs to add that later, I thought it would be OK
+to add them later. Should I add them now ?
+
+>
+>> +
+>> +    properties:
+>> +      vout:
+>> +        $ref: /schemas/regulator/regulator.yaml#
+>> +        type: object
+>> +        unevaluatedProperties: false
+>> +    additionalProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - ti,rimon-milli-ohms
+>> +
+>> +additionalProperties: false
+>
+> Best regards,
+> Krzysztof
+
+-- 
+Jerome
