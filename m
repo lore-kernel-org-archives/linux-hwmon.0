@@ -1,288 +1,233 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C770B18595E;
-	Tue, 10 Sep 2024 10:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B34923A6
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 10:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725964389; cv=none; b=B+T8L02rx3Kgy6/pntf5hdKWMuQuIwJq634l7uOM0LdadgCckNSdoOQVkTCJ6BkoPX+7V08AEswlrtbU9xsUBfGCiDeDb8uKBnt6jdaIp+zet8jHW8gfLxI7stNPBmSjbBpE2H5332rqhxKd+5Ovs+oVEpu9Xt4V+KuRAm3lLvA=
+	t=1725965600; cv=none; b=HkqIxo/fcWdXIYtloSxGxObsl+A3QEsg96c9Xoyvn1n0YGbYSgZ5qE3YWNHXlDdzo0QNyTfm4vG3OxA/BwUg7ddBRxJKvCMP2LUzCLeW1FHcmqLJaPi5YQIwnQtV5cfdTKzSTPbyKoMguyDnGC8jHS2FiRwi81xwpu4sKHUiyYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725964389; c=relaxed/simple;
-	bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AnhwS3NVClXnI9uHTF/H5CljJcq0spBLrDXBe60yBi53jsp5LPOOoPnnbyrf+ZaI21sgsLi0qqy0+bDZLuI0bNRd1fEuuyPOfsWxOHJJPakxaHmO5yU+ai8CcTrqBAFSz5RTrMMKcjdEdBAhEBw1uHCwWZac8Ri7prjQrfMfhPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ts3Yzfq+; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1725965600; c=relaxed/simple;
+	bh=gbcfxi3fuUsEpZHDWLOHwSlVL/+BWL9bYFuN88fUQxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=AkpAfvK+j+wIfXSMFlimUSjK/uMpHZ9Fw0mUS25ZRH8yLlo+t3EtJemQQ361CsO9zccj5TUj+MJz+ExwVPmr1WWpbU2X6UDcsVl2IDGpVYBEAc2Jgw0yjeq5+Ypr/CP4sPAgVArVRgjJOhn2uO5G0nKStnrRxF3ABL16Y1Z8f54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQWUHJ/g; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ts3Yzfq+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQWUHJ/g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725964387; x=1757500387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
-  b=Ts3Yzfq+6ql54ALFS7aziWBdVLQzJC9mPhVV1l3bX+45ov+hcNOfp/3N
-   YzQp2jce0bmx+u93bp+eXNoTbrD1IITXVMBHy5kTVbRpysJ+Bd+tKkntg
-   pTZyNW0BDRbW+hDqGr/cau/6Le7rBflh2vtCV5fMEY5VW6125yJi18O3S
-   ykX9xg+gSA8N0yIeHPKwky0CWqMojCMdgvjCgmvSfwZKWJub3NPDFkCIo
-   PL1+6bKxsVQEpAdUGnS+cPW1HIatkRjvC8lSkdDxZJQcAPP1HfWL0y1FG
-   JHXDaqvORNv0iTnmzasCti/AQrGmM8kPQL0BNdTVRXOoFhGOV7uG1rg9d
-   Q==;
-X-CSE-ConnectionGUID: la59HlZ5TRGXFsMgISfezA==
-X-CSE-MsgGUID: Z1LtTAr7TkqQUSHrM6G2eA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24846318"
+  t=1725965598; x=1757501598;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gbcfxi3fuUsEpZHDWLOHwSlVL/+BWL9bYFuN88fUQxM=;
+  b=LQWUHJ/gED4doyyjLgJS43LyWoXeOssy+40Sj0vBcvjtdwP1/znVYZf/
+   a5naTQKPEsfWEyAie17gCzgWIR5uMVmGVyM+vPRsuZOL4rCcvHKHU1ZTM
+   EcMxI0BdIZ0XFt4jDraPbiwl5Ptgfar9FLivy/saP03ZUiB0WcoAx0KVF
+   Zez1ISz9J7la0IwR2ptPpqcE9Do33+H/tK8dYTvmoNPH1DOGNeEwrUDFk
+   qmP8dqoWCKyj2b/Zobh2saN2LHpKmqGiHXlB0quRH3RHnzheYbz9IHB1R
+   qWjRfkLcK7w81OKSf7xYRnEXqUoFOU0ic9g81BDrBu01GFY0NLLrQk1GU
+   A==;
+X-CSE-ConnectionGUID: gst457keR76oW5dQ9uIPHw==
+X-CSE-MsgGUID: lBeVuGG5Sg+Cf6vS+iabPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="35275073"
 X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="24846318"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:32:57 -0700
-X-CSE-ConnectionGUID: gkCTnSf3SbK9cWkk6ZBOTw==
-X-CSE-MsgGUID: YoVJC/vlQDeMAQbmagT15g==
+   d="scan'208";a="35275073"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:53:18 -0700
+X-CSE-ConnectionGUID: n4dJATNFSr2HuNbjet4s6Q==
+X-CSE-MsgGUID: VNgLbFf+Q2uNhrgOqRJHCw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="97683495"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Sep 2024 03:32:53 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snyB1-0001WW-0R;
-	Tue, 10 Sep 2024 10:32:51 +0000
-Date: Tue, 10 Sep 2024 18:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-Message-ID: <202409101807.GjHADcvQ-lkp@intel.com>
-References: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
+   d="scan'208";a="67746274"
+Received: from jraag-nuc8i7beh.iind.intel.com ([10.145.169.79])
+  by orviesa008.jf.intel.com with ESMTP; 10 Sep 2024 03:53:14 -0700
+From: Raag Jadav <raag.jadav@intel.com>
+To: jani.nikula@linux.intel.com,
+	joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com,
+	tursulin@ursulin.net,
+	linux@roeck-us.net,
+	andi.shyti@linux.intel.com,
+	andriy.shevchenko@linux.intel.com
+Cc: intel-gfx@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org,
+	anshuman.gupta@intel.com,
+	badal.nilawar@intel.com,
+	riana.tauro@intel.com,
+	ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com,
+	Raag Jadav <raag.jadav@intel.com>
+Subject: [PATCH v3] drm/i915/hwmon: expose package temperature
+Date: Tue, 10 Sep 2024 16:22:42 +0530
+Message-Id: <20240910105242.3357276-1-raag.jadav@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Jerome,
+Add hwmon support for temp1_input attribute, which will expose package
+temperature in millidegree Celsius. With this in place we can monitor
+package temperature using lm-sensors tool.
 
-kernel test robot noticed the following build errors:
+$ sensors
+i915-pci-0300
+Adapter: PCI adapter
+in0:         990.00 mV
+fan1:        1260 RPM
+temp1:        +45.0°C
+power1:           N/A  (max =  35.00 W)
+energy1:      12.62 kJ
 
-[auto build test ERROR on d22bd451d5606411895ef55cb105277e4f4f6e54]
+v2: Use switch case (Anshuman)
+v3: Comment adjustment (Riana)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/dt-bindings-hwmon-pmbus-add-ti-tps25990-documentation/20240909-234152
-base:   d22bd451d5606411895ef55cb105277e4f4f6e54
-patch link:    https://lore.kernel.org/r/20240909-tps25990-v1-3-39b37e43e795%40baylibre.com
-patch subject: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/reproduce)
+Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/11276
+Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+---
+ .../ABI/testing/sysfs-driver-intel-i915-hwmon |  8 ++++
+ drivers/gpu/drm/i915/i915_hwmon.c             | 40 +++++++++++++++++++
+ drivers/gpu/drm/i915/intel_mchbar_regs.h      |  4 ++
+ 3 files changed, 52 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409101807.GjHADcvQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/tps25990.c:267:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     267 |                 ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-         |                       ^
->> drivers/hwmon/pmbus/tps25990.c:337:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     337 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-         |                                              ^
-   7 warnings and 2 errors generated.
-
-
-vim +/FIELD_GET +267 drivers/hwmon/pmbus/tps25990.c
-
-   254	
-   255	static int tps25990_read_word(struct i2c_client *client,
-   256				      int page, int phase, int reg)
-   257	{
-   258		int ret, addr;
-   259	
-   260		addr = tps25990_get_addr(reg);
-   261		if (addr < 0)
-   262			return addr;
-   263	
-   264		switch (reg) {
-   265		case PMBUS_VIRT_SAMPLES:
-   266			ret = pmbus_read_byte_data(client, page, addr);
- > 267			ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-   268			break;
-   269	
-   270		case PMBUS_IIN_OC_FAULT_LIMIT:
-   271			ret = pmbus_read_byte_data(client, page, addr);
-   272			break;
-   273	
-   274		default:
-   275			ret = pmbus_read_word_data(client, page, -1, addr);
-   276			break;
-   277		}
-   278	
-   279		if (ret >= 0)
-   280			ret = tps25990_read_adapt_value(reg, ret);
-   281	
-   282		return ret;
-   283	}
-   284	
-   285	static int tps25990_write_adapt_value(int reg, int val)
-   286	{
-   287		switch (reg) {
-   288		case PMBUS_VIN_UV_WARN_LIMIT:
-   289		case PMBUS_VIN_UV_FAULT_LIMIT:
-   290		case PMBUS_VIN_OV_WARN_LIMIT:
-   291		case PMBUS_VOUT_UV_WARN_LIMIT:
-   292		case PMBUS_IIN_OC_WARN_LIMIT:
-   293		case PMBUS_OT_WARN_LIMIT:
-   294		case PMBUS_OT_FAULT_LIMIT:
-   295		case PMBUS_PIN_OP_WARN_LIMIT:
-   296		case PMBUS_POWER_GOOD_OFF:
-   297			val >>= TPS25990_8B_SHIFT;
-   298			val = clamp(val, 0, 0xff);
-   299			break;
-   300	
-   301		case PMBUS_VIN_OV_FAULT_LIMIT:
-   302			val -= TPS25990_VIN_OVF_OFF;
-   303			val = DIV_ROUND_CLOSEST(val * TPS25990_VIN_OVF_DIV, TPS25990_VIN_OVF_NUM);
-   304			val = clamp_val(val, 0, 0xf);
-   305			break;
-   306	
-   307		case PMBUS_IIN_OC_FAULT_LIMIT:
-   308			val -= TPS25990_IIN_OCF_OFF;
-   309			val = DIV_ROUND_CLOSEST(val * TPS25990_IIN_OCF_DIV, TPS25990_IIN_OCF_NUM);
-   310			val = clamp_val(val, 0, 0x3f);
-   311			break;
-   312	
-   313		case PMBUS_VIRT_SAMPLES:
-   314			val = clamp_val(val, 1, 1 << PK_MIN_AVG_AVG_CNT);
-   315			val = ilog2(val);
-   316			break;
-   317		}
-   318	
-   319		return val;
-   320	}
-   321	
-   322	static int tps25990_write_word(struct i2c_client *client,
-   323				       int page, int reg, u16 value)
-   324	{
-   325		int addr, ret;
-   326	
-   327		addr = tps25990_get_addr(reg);
-   328		if (addr < 0)
-   329			return addr;
-   330	
-   331		value = tps25990_write_adapt_value(reg, value);
-   332	
-   333		switch (reg) {
-   334		case PMBUS_VIRT_SAMPLES:
-   335			ret = pmbus_update_byte_data(client, page, addr,
-   336						     PK_MIN_AVG_AVG_CNT,
- > 337						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-   338			break;
-   339	
-   340		case PMBUS_IIN_OC_FAULT_LIMIT:
-   341			ret = pmbus_write_byte_data(client, page, addr,
-   342						    value);
-   343			break;
-   344	
-   345		default:
-   346			ret = pmbus_write_word_data(client, page, addr, value);
-   347			break;
-   348		}
-   349	
-   350		return ret;
-   351	}
-   352	
-
+diff --git a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+index be4141a7522f..a885e5316d02 100644
+--- a/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
++++ b/Documentation/ABI/testing/sysfs-driver-intel-i915-hwmon
+@@ -83,3 +83,11 @@ Contact:	intel-gfx@lists.freedesktop.org
+ Description:	RO. Fan speed of device in RPM.
+ 
+ 		Only supported for particular Intel i915 graphics platforms.
++
++What:		/sys/bus/pci/drivers/i915/.../hwmon/hwmon<i>/temp1_input
++Date:		November 2024
++KernelVersion:	6.12
++Contact:	intel-gfx@lists.freedesktop.org
++Description:	RO. GPU package temperature in millidegree Celsius.
++
++		Only supported for particular Intel i915 graphics platforms.
+diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+index 17d30f6b84b0..7dfe1784153f 100644
+--- a/drivers/gpu/drm/i915/i915_hwmon.c
++++ b/drivers/gpu/drm/i915/i915_hwmon.c
+@@ -7,6 +7,7 @@
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/jiffies.h>
+ #include <linux/types.h>
++#include <linux/units.h>
+ 
+ #include "i915_drv.h"
+ #include "i915_hwmon.h"
+@@ -32,6 +33,7 @@
+ 
+ struct hwm_reg {
+ 	i915_reg_t gt_perf_status;
++	i915_reg_t pkg_temp;
+ 	i915_reg_t pkg_power_sku_unit;
+ 	i915_reg_t pkg_power_sku;
+ 	i915_reg_t pkg_rapl_limit;
+@@ -280,6 +282,7 @@ static const struct attribute_group *hwm_groups[] = {
+ };
+ 
+ static const struct hwmon_channel_info * const hwm_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+ 	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+ 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
+ 	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
+@@ -310,6 +313,37 @@ static int hwm_pcode_write_i1(struct drm_i915_private *i915, u32 uval)
+ 				  POWER_SETUP_SUBCOMMAND_WRITE_I1, 0, uval);
+ }
+ 
++static umode_t
++hwm_temp_is_visible(const struct hwm_drvdata *ddat, u32 attr)
++{
++	struct i915_hwmon *hwmon = ddat->hwmon;
++
++	if (attr == hwmon_temp_input && i915_mmio_reg_valid(hwmon->rg.pkg_temp))
++		return 0444;
++
++	return 0;
++}
++
++static int
++hwm_temp_read(struct hwm_drvdata *ddat, u32 attr, long *val)
++{
++	struct i915_hwmon *hwmon = ddat->hwmon;
++	intel_wakeref_t wakeref;
++	u32 reg_val;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
++			reg_val = intel_uncore_read(ddat->uncore, hwmon->rg.pkg_temp);
++
++		/* HW register value is in degrees Celsius, convert to millidegrees. */
++		*val = REG_FIELD_GET(TEMP_MASK, reg_val) * MILLIDEGREE_PER_DEGREE;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static umode_t
+ hwm_in_is_visible(const struct hwm_drvdata *ddat, u32 attr)
+ {
+@@ -692,6 +726,8 @@ hwm_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+ 	struct hwm_drvdata *ddat = (struct hwm_drvdata *)drvdata;
+ 
+ 	switch (type) {
++	case hwmon_temp:
++		return hwm_temp_is_visible(ddat, attr);
+ 	case hwmon_in:
+ 		return hwm_in_is_visible(ddat, attr);
+ 	case hwmon_power:
+@@ -714,6 +750,8 @@ hwm_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	struct hwm_drvdata *ddat = dev_get_drvdata(dev);
+ 
+ 	switch (type) {
++	case hwmon_temp:
++		return hwm_temp_read(ddat, attr, val);
+ 	case hwmon_in:
+ 		return hwm_in_read(ddat, attr, val);
+ 	case hwmon_power:
+@@ -810,6 +848,7 @@ hwm_get_preregistration_info(struct drm_i915_private *i915)
+ 	hwmon->rg.gt_perf_status = GEN12_RPSTAT1;
+ 
+ 	if (IS_DG1(i915) || IS_DG2(i915)) {
++		hwmon->rg.pkg_temp = PCU_PACKAGE_TEMPERATURE;
+ 		hwmon->rg.pkg_power_sku_unit = PCU_PACKAGE_POWER_SKU_UNIT;
+ 		hwmon->rg.pkg_power_sku = PCU_PACKAGE_POWER_SKU;
+ 		hwmon->rg.pkg_rapl_limit = PCU_PACKAGE_RAPL_LIMIT;
+@@ -817,6 +856,7 @@ hwm_get_preregistration_info(struct drm_i915_private *i915)
+ 		hwmon->rg.energy_status_tile = INVALID_MMIO_REG;
+ 		hwmon->rg.fan_speed = PCU_PWM_FAN_SPEED;
+ 	} else {
++		hwmon->rg.pkg_temp = INVALID_MMIO_REG;
+ 		hwmon->rg.pkg_power_sku_unit = INVALID_MMIO_REG;
+ 		hwmon->rg.pkg_power_sku = INVALID_MMIO_REG;
+ 		hwmon->rg.pkg_rapl_limit = INVALID_MMIO_REG;
+diff --git a/drivers/gpu/drm/i915/intel_mchbar_regs.h b/drivers/gpu/drm/i915/intel_mchbar_regs.h
+index 73900c098d59..dc2477179c3e 100644
+--- a/drivers/gpu/drm/i915/intel_mchbar_regs.h
++++ b/drivers/gpu/drm/i915/intel_mchbar_regs.h
+@@ -207,6 +207,10 @@
+ #define PCU_PACKAGE_ENERGY_STATUS              _MMIO(MCHBAR_MIRROR_BASE_SNB + 0x593c)
+ 
+ #define GEN6_GT_PERF_STATUS			_MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5948)
++
++#define PCU_PACKAGE_TEMPERATURE			_MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5978)
++#define   TEMP_MASK				REG_GENMASK(7, 0)
++
+ #define GEN6_RP_STATE_LIMITS			_MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5994)
+ #define GEN6_RP_STATE_CAP			_MMIO(MCHBAR_MIRROR_BASE_SNB + 0x5998)
+ #define   RP0_CAP_MASK				REG_GENMASK(7, 0)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
