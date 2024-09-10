@@ -1,257 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E5313E02D
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 06:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725949656; cv=fail; b=ZG3vo4W/cixcTWVPCEbOD9KBMZVEFi9DGLsMsPaCaHsTLTXm1bqCUu85YDb8pHgMoxZ5rtHqtPrbGFTxAq7g9ZvEV975NC5VcdltIOPiPRuwh7coS/VW8gjy+dP+UCjVdtyJMizgorblYCc0lQM/X9cfuSPjS33B9NWk2aehfIw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725949656; c=relaxed/simple;
-	bh=xJ/H24w/Er0cZsm5j0u2iDC8IZG5dSsqD6GrrEfOB6s=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=j4QL+S71+i6QdthWzHf7fyFWvXKKpycMGG4zXyP+urtGH1tJimMTFvypO3Y3w8bvscxPkcq+nSr/dy/WYzn+PwoquN+nPp+8y9Gfx+Ld/ycQFAkzTeWnd94MhtuaSaD+uSBxuR+F6xlh0DRQ+4g+ukGBzyrlCm2G4nX5T0YkIUQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SidVdeuT; arc=fail smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEC0171088
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Sep 2024 06:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725950602; cv=none; b=tPmx9b+TC7RqlahuHNWzsqGF8rscAsXqrUCcZw/xcrPirOFyDHuQOB6QfTgnmsGd6j3HXCU5o9TaPhpOH6lSGTjMNjJL1qXu7ZUNcpIrJzh4BqLltZ6spTMdOWujOgOe/CuEt0OfXeq0VFFfit3E+aFyFc1/Kp8QC00n3QSLa/0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725950602; c=relaxed/simple;
+	bh=na/rRKAm0dtxvPFcGIyuBVMyz7/vq21KrFg6CQhI+Jg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kXWtxSwZ2tlDYlRd1v72uE9d9VthbfKuutNXITUpLIcf/CMV9e+6Wj160/TLRQLQYweTm5whhroFMrcCHQRiVNN1UY55yXvQIIXLf75kRajTqJZ76LA3r15EZT6RD4ynplWCzElv5FOEarZ5mNr9wS+0ERhj3hNHZmzkcrrerUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bzYO1fCz; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SidVdeuT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725949654; x=1757485654;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=xJ/H24w/Er0cZsm5j0u2iDC8IZG5dSsqD6GrrEfOB6s=;
-  b=SidVdeuTADtRRPi0m8zqQnSMrSc+g95r2i9baHkNPwsm76ETB36vUYEb
-   6ClZmpPnfACHb/t7LzaaG0EVv5WpKF3ui1IzCvFcu18OftUTtIiHXLXju
-   SxEmXReAtavkRrt83AQPVWfcVCxV5mbYOJCFUEVNKUqIdrp1VWwUiF1EX
-   VfiheyOTIMFd+Al77bFqqOhtWONXMZUsoe2ivI6pOZDjQKjBeZMwyi9pV
-   IHkrFSMukQ+wf7GYqJJj05NoPozfK15LWO2w7DT4hdqXPSLpqN+mAn1jl
-   P5kXzLV+HV0ZIoJYsLowOBC8f7t8ONFCsDCs7e2dZ0eIs9cli92doViur
-   w==;
-X-CSE-ConnectionGUID: nuRJmLtaQKmlWba8Zl1HuA==
-X-CSE-MsgGUID: mKfnWWN6RjaX8KabfQSfXQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="36025516"
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="36025516"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 23:27:34 -0700
-X-CSE-ConnectionGUID: fZ/D+3iAQNytZhpesdcLsA==
-X-CSE-MsgGUID: oZLA5egxRhyS7lbbyVONDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="71704630"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Sep 2024 23:27:33 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 9 Sep 2024 23:27:32 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 9 Sep 2024 23:27:32 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 9 Sep 2024 23:27:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FAZv+Ty/B5luuPrRrXWkeS8F01C5ZhRYHTuZGd4w+PQIenBU+44be+AyN1MJrq7ln8DlsSbqizTPkPNnNP/94+BXVOjN7x4HSEQVbMV7wkDXq0+AUBSIS44fqAEzqvpRb4Ftlgj+T/bkw1HJag72/iJCad2tIe+fsxLmeO1v9fO37WrxARuP3FZ4LS+/UL2YoZ3F3Egmj1ZzIpvC5bOmBgxLGMvN4nF98q+eM/SzbyDKJPFQ0ySPrE1qxbVmI+/eRegGb4pb1Kc5ApGeUBT0HaTqNtIa7CqqXzqXwimrW7fz0yTqJEi8QK8KDdAFu/YJM/DfEkHx34XtWoq58r23wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gHCCPEACXbUHyp4p18WHsURUAmIsMSnvFzRnmmmw+hQ=;
- b=OWez2xHCDmmbud2Bo+TxxEFH+chH94wZoY0wTFOR7NJKV6tk4QWEQWIVTQBTgWSphDg0Y+HRPhhEdnoYxTet/GgfRTT3l+rtcaA1eVIo+ikd4b6D3gy+QBg2Rh5vRg104x/VjoogWIUQ4KG2RVomSA829cRF+SAVck9yV/v27wS5yXHldvmfncupqj9zMSn7tseWTaurpVwxe1QNbDLU6++qfpHnYGy4MkOxrxi3paRpPWLvtKYqVIHJGuVuzOdW5n89uzXhOZcIvDucXunX3hpH46Z2lQXSOojU8+hzw//z5bYs+kiMcAWxTvgkxXB9AJDPMafA7syBbiveMTIBzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com (2603:10b6:408:103::8)
- by PH8PR11MB7095.namprd11.prod.outlook.com (2603:10b6:510:215::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Tue, 10 Sep
- 2024 06:27:30 +0000
-Received: from BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::13bd:eb49:2046:32a9]) by BN9PR11MB5530.namprd11.prod.outlook.com
- ([fe80::13bd:eb49:2046:32a9%5]) with mapi id 15.20.7939.022; Tue, 10 Sep 2024
- 06:27:30 +0000
-Message-ID: <6683448a-aeb4-4ab1-9520-c83f70100583@intel.com>
-Date: Tue, 10 Sep 2024 11:57:20 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/i915/hwmon: expose package temperature
-To: "Gupta, Anshuman" <anshuman.gupta@intel.com>, Andi Shyti
-	<andi.shyti@kernel.org>, "Jadav, Raag" <raag.jadav@intel.com>
-CC: "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-	"joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>, "Vivi,
- Rodrigo" <rodrigo.vivi@intel.com>, "tursulin@ursulin.net"
-	<tursulin@ursulin.net>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "Tauro, Riana"
-	<riana.tauro@intel.com>, "Dixit, Ashutosh" <ashutosh.dixit@intel.com>,
-	"Poosa, Karthik" <karthik.poosa@intel.com>
-References: <20240906093118.3068732-1-raag.jadav@intel.com>
- <sd5g4sj6t373wu5jfdfaujh73t4uehcri4aqtu7dln4p4huyoh@sa4nivkflc47>
- <CY5PR11MB6211D25D522F6044554B84F7959A2@CY5PR11MB6211.namprd11.prod.outlook.com>
-Content-Language: en-US
-From: "Nilawar, Badal" <badal.nilawar@intel.com>
-In-Reply-To: <CY5PR11MB6211D25D522F6044554B84F7959A2@CY5PR11MB6211.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MA0PR01CA0033.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:b8::15) To BN9PR11MB5530.namprd11.prod.outlook.com
- (2603:10b6:408:103::8)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bzYO1fCz"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cb57f8b41so25668125e9.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Sep 2024 23:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725950598; x=1726555398; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YHIjfVpopAQsFYDysnM68orgUpUrGZh7owWOhiV6j1E=;
+        b=bzYO1fCzYrmv5YPWOEB9bycB8uZjylGJeE3W/gthNYYr9OcE5qvRx24/QUaAmZdovt
+         YH216OrZFnaMNIo1QWI207ywRnn7gjdwJbSiXmiDdyQyHyCYEwYYYhrhq9Oc7VYOrxxY
+         /CXygSFXaAwbybAyl4j9MS8y2ROQwrJwLgwWeY3XXXbhmZvtZ6KdRFpRsUp3olXjDzTD
+         MlCdfXyhp8+4FPM46z4/NXJEV5dn0rD8skOVTd2asQ+tyYtXp1powov1cJSFpU08WvDQ
+         9qjbguqFVdcRoAQWoif8PNahiyPRbSR0OCGgOfPmGj3/iG0hC6Z3pEU3DaYgJg8WX9TH
+         LuIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725950598; x=1726555398;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YHIjfVpopAQsFYDysnM68orgUpUrGZh7owWOhiV6j1E=;
+        b=GZAXLsrCV3Sbg0D2KZBnP+4BII8DYPb/M1b+p5AqZ+Oig2RvBRp6IuS7akh+3XJ1uk
+         K9+KUVCch8xCjOvkDPUb2imq/BPZn93cnNQ6+WLkCbCLec6aw9uViSJMbxCUrIQDQWbv
+         ycJO8RL9jXWb8aEhv3Wa1cNHfURwzpPmyG16awkbpyTTCGQzELTL/4P1+99tKZ0d5tms
+         4UjmGIrAJF9awhgUjWzAmRPU/yrIrpX/sNxHfbwrJ4urNkKbfE2n2hnDeXsLIVhsxrv6
+         snbdBjy7RJNNn/NoCnOM4bn46BBsjDi2f1IB1Bz706agwTKH6X3eGk5fTbUl01HBBBWn
+         kGYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVetnFLNwBsOVEzjqhokdCgDaI1FtvNBAcU6peJB27+W4atFF/689UtACVSndjVPBPe+Ba8m/eRH2dLiw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7W2Ck2Z7a43DHCvmHn2VqWaKM12qH4HhySuC1MLJn/UUKPwda
+	0e4dN0sHiz7ZkdHcg5Xks0ARncTGUrJpT48jM4xewqSZz/yKacNFF1fmXVglxHs=
+X-Google-Smtp-Source: AGHT+IEGTUNHbTSsmZjzta3HrF24ou/pG5zqXuiZFFF8PEDIjWSL6u1zq98mgz76KtjH/M2c0b8JiQ==
+X-Received: by 2002:a05:600c:1d9f:b0:42c:b220:4769 with SMTP id 5b1f17b1804b1-42cb2204a93mr73976985e9.32.1725950597453;
+        Mon, 09 Sep 2024 23:43:17 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:8ba7:bfe4:fea9:65b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378956d375asm7872010f8f.66.2024.09.09.23.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 23:43:16 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,  Rob Herring <robh@kernel.org>,
+  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
+ <conor+dt@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Delphine CC
+ Chiu <Delphine_CC_Chiu@Wiwynn.com>,  linux-hwmon@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-doc@vger.kernel.org,  linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 2/3] hwmon: (pmbus/core) add POWER_GOOD signal limits
+ support
+In-Reply-To: <d76290e0-f5e7-4192-92b8-94f260270fe3@roeck-us.net> (Guenter
+	Roeck's message of "Mon, 9 Sep 2024 11:16:41 -0700")
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+	<20240909-tps25990-v1-2-39b37e43e795@baylibre.com>
+	<d76290e0-f5e7-4192-92b8-94f260270fe3@roeck-us.net>
+Date: Tue, 10 Sep 2024 08:43:16 +0200
+Message-ID: <1j8qw0t3ej.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5530:EE_|PH8PR11MB7095:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d1cc31b-38eb-4e49-aa2e-08dcd161a5af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?cld3K0lZQjJ0WEdzN0JYakthOG5ZMjAwYnFDQ2ZxdVMrZ0ZGOXpKeC84eEFa?=
- =?utf-8?B?NWdpWGVVdVhEMFBORER1ZVVXbmtEVVFMZTZwVkFkSy9qbE0xQWRqZVdLc28z?=
- =?utf-8?B?N2ZPNW5OVEJlbE5qVkJqSkRyZlNDdGxvYnBuMC9WdHZvVVZkbURBTmNJM0dh?=
- =?utf-8?B?RmU3ZjZmRFNyQ0NqQ0JjcTVvRWdzRVg2Nkkrb3oyblVUY1NxdC93aGVoOEM4?=
- =?utf-8?B?K0F1SXN2YW4vYUlEKzlsc3kyVWw3eGdGQ1Y2M0J5cm9tRWplaGlYNSsycHFT?=
- =?utf-8?B?R3M0WDE3Zkl4ODNBVjdrdkpFemI2RVlWenEwUzlIRThnT1h2cUFzKzQ2TnBs?=
- =?utf-8?B?dnhtajNMQXV1S2JKV0diSjlHNW16Z1QvRzJDekdIc2FzVUJkblh3YS9kcHpX?=
- =?utf-8?B?dFdDczJjWjI5VTdkbEF1RUU1ZVQ5VFUvc2JoZW5lUVIwK1EyeDhDRDVVd0p4?=
- =?utf-8?B?R1ovQVBFZmc2dHdQZ2R1MlRQWlF5OGNKTXBzVlVMUFVIMWJLdUpNS3lESm9M?=
- =?utf-8?B?ZkNpc3VXOTBUTXRxR3ZtY2NEaFZEWU5SWXBPaGpxV0RZSG1nOENSSXdIUmE4?=
- =?utf-8?B?dkFWbXVOR2ErSURkVEpBRTZnWEJTRlUxWlRBcFE3SVNCd3loTEU1cUVRUmFB?=
- =?utf-8?B?M0g0OWRaMlVZZCtJS2lxUmRMeU5YWjNITlIvOUFSRC9PL2JsQWpQbkovdG40?=
- =?utf-8?B?YUwvbTR6YWEzSGtQRmlpTTB5VjJQQ3dsNGMvQ0VtenVSKzQwS2ROZlNzektD?=
- =?utf-8?B?K0p5eTRUQWd5QVdzbUhtSjZCZXkzMnRqekkzL1ZEWUFFT3NYOENwRzhCVmZI?=
- =?utf-8?B?NVZvOFpnUTBMcEFXd1Y5VXdlMllxeEdZd2NnOTRZRW1DQkQwMWg4RVhyWlZl?=
- =?utf-8?B?TCsvUTMrNUZsaml0bjF4TDZtWW9La1ZtWGVOS0RwZG5VVm1wS3VUUFljWE1o?=
- =?utf-8?B?c2dNNnBISHErWXVNd2dhS1ZZdmZRUHRkS2d1dGdFR2FyNS9Ya1QvKzhyMUFh?=
- =?utf-8?B?d0kwL0NoeEZIaEllSlgwT3NpbHAyQ2xtS3Fpa3AyZ29ZTFRoYXRXbFlnbEZH?=
- =?utf-8?B?dWdWK21JS01uRThJWGZJQkJFZXUxWGQ1b1k3RmVLTTNxSDNvYzM4bm51dThy?=
- =?utf-8?B?SDFhdWE5L3E5TDRQTHcvYW5sMUQyR09pSXUzZTFNdG5rMUtZTHluQnNPaDZo?=
- =?utf-8?B?OEQ3ZWcwcisxQkxwMnFSaG5EdkU3WUM1endXKzIxM1NNbXkxTE4zVVEzcFRQ?=
- =?utf-8?B?ZWRnRkZFdmVkR3VROExLWXUzVW9VN1F0WHVTeXpkaWJ6eVQ5WkFaN1l6aS8v?=
- =?utf-8?B?SzEyeWFraXlOS2I3MkcybDdqempKYUszcERNbGp2RFhwV0Jzc015SHFUbGRP?=
- =?utf-8?B?UW9GZDlIQVdOZGNXV3pna3Uvclo5cGxic2RkSG9LMjJUZEpsTVZjRmcyR0d1?=
- =?utf-8?B?Ti9MaEZrak5FOUFLQm4rVHQyTVNVSXQxMU9uK05OQVJiTW92TG5wNkdvZkRs?=
- =?utf-8?B?aUFGQUtrWTU3aDJiL2YvTzBCY05ESnlTZ0F4K0F4QjFjVEhHN0ZWNmpXZzFa?=
- =?utf-8?B?VlBWcmFUaHZiQWpzU0Q3WmpYQzFmcnNLdFNIblhxY3JZNnJmZnNaYlFDdUtw?=
- =?utf-8?B?WkZsWER6YzNHU0dGMUJYWTRpbUVudURQMmNid1VxRjE1Z2FiblRBalExcUhj?=
- =?utf-8?B?NWl6VTBRaDhQQURIZUhNYWJaUXg2ZjFhV1M5NGNQVU83VVZEK1NyWmdIU2xY?=
- =?utf-8?B?T0hsS3A2eW9xWWN5eC93NThGNityNjJ5dVZRMnBud2JCZmJqTXdPRFRRQ1Ez?=
- =?utf-8?B?TGxhbkp1dXdKeFU3THNXQT09?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5530.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qk9wU1RhZm50VnFxZ1E2M2tVR2dNTmhHck11Rm1KUmszK2VDSkZGNGwyMnFo?=
- =?utf-8?B?R01xVDRTTHRaQkY0cDZpbUpYN0J0REludFRLZkQ4cmpYcnEzRVpESzFGTFNZ?=
- =?utf-8?B?YVN6VXR1dDVnOTVOTXRmRjlDNDJ6VmVFYithbVlSRURBeFRCM1dGdnpENHM0?=
- =?utf-8?B?U1Z3WFBaejRsWjFJRUxUM3BRSFBJWWhmRnZwZXZwNld1clEyVm50QzkwRFMz?=
- =?utf-8?B?ZXNLZTVEaE5KWHlyd01qSkZVNlFGNjNHVlV2bHQ0aERNUHR6UVFFclJJeThY?=
- =?utf-8?B?RDRSU1FUSG9RbHowOVR0MjNUOFBEaFNhQ2R6dXVDVHNXcGVnTE8yQXZxc0FM?=
- =?utf-8?B?TjloYnpZRDk4RUpFbVo0ZlNsaGQrRmpuUHNDbXhnMWRWczEzVCsyN2hYeEQw?=
- =?utf-8?B?QW5JWHl0WkJzNTM1bmFEOE5pQkRjbUZ3bWNDN21Ud1JlVHZoQzF5K0l6Wk5P?=
- =?utf-8?B?WDd2QUcrMlVaZjNXcHdDMnVReUdHRTlwRTU0eHgrcWRJZDJkSTI2Sk5wbGto?=
- =?utf-8?B?dkl6ZElHb25ZT3hjd3V3K1lwblptaGluWEdENzU4b2huMXB2Mi9EZTQ4S3M1?=
- =?utf-8?B?cEFGS0FyNzdsYzM0UGdjR2RnS3FiRlFQbmtKQ3ZYSkpsM0QrVGE3cStPaXlj?=
- =?utf-8?B?d2tJQzZSQmRYYjVRdlRJQWViaDJzYk50blZVaW1KMi9sTVQxT1pFNGZQV2hr?=
- =?utf-8?B?SDVINDVMci9kRVVWK2pKNlJOQXZFK3dlWUxLaDR0dkZueUJSSTRkbThqL3FQ?=
- =?utf-8?B?c051VnQ5bHdLNmpNdXdqQkNBY1dxUTNiVlJPbk9YVzRETU1sb2NLSGZFclNi?=
- =?utf-8?B?dnVjRk15Wks1WDJsbSs4U0pPcmY4bWR2aFllNitSNnkwem8rd0RJTkF1OHQ3?=
- =?utf-8?B?dmZpTzJKL2lSbDJuRzZnckNoOFQvczYrUFQyVzlqMW01djh2K2ZETzVnNVNm?=
- =?utf-8?B?WjNMNTNJeC9hcFAwSDZWRU9FWUIvK1FUOHphNS9FaThiUkZjTVhnSC9YT1BE?=
- =?utf-8?B?UjZmS2wxMmJqU0JSQ3djSFNmUUpNa2Q0M1B4cG5HMUtUczJmWHRGdHA3QWhP?=
- =?utf-8?B?QnBhMW5zQ3Y3VUlHRVpiZWhqaFoyMFhsaU9SL3Z0WHRVdTBnL0FndzFYNW1n?=
- =?utf-8?B?NUpmN3ptTmVYSHpWWkNkNVU5czg1NFN0Ti9VSXZ0Z3EyOEhGdUlYajdvc2hj?=
- =?utf-8?B?U3NxbkhwUU1iNFFtQitlMktlQ3c2UEc2MXNOdjQ2YisrSEErSUR0MCtPVGtW?=
- =?utf-8?B?QmYxdzNkOG9DTGlyeGtWSUpiU2lYcEVFdDAxb2tHdHlBeWpJcDNrZjNSTDlD?=
- =?utf-8?B?d0ZzTzRUeldxMXN6aHpOM256alViaHRkQ29oSE1zNVFFYW5NSGdjMk1CZGF4?=
- =?utf-8?B?ZUplaTNaanlEOENSYnJSdUlEV0tQdWNTSFRGN3lJUUpkNkQ0aXJZcjhNTWNC?=
- =?utf-8?B?UFBHcXZXd1ljS0tLT28ySmkxS3psckg1TFkrOXB2aVBucG10N0VieFRmS1Fy?=
- =?utf-8?B?TDczQVN6Nlk3N1BoV05xR2lxZllMZ0t2WVI1TXRYSFQ4RlVVd04zWXMybE4w?=
- =?utf-8?B?Q2wrZVdHdHpNMVczbC85S2lxQjdobTcycndNSnNxMzAyTGVPTXhHZ2hhU1ZK?=
- =?utf-8?B?V2Rqdmw0RHdKNTU0MkJIQVcrNmxQSG1oQ2ZDQy9HUFpxNnhMSjh2b1BuRkNq?=
- =?utf-8?B?UWFNQmJLSHNOSVFaVTlGRXRLb253UGpSOTBUWG1OZ2J1MnhLSm1hMnFKVVha?=
- =?utf-8?B?OTdldXhqYTJxQlg2RkFvY2UrTUlTRmRkMktlSmo3QWhJbmRWOHlJa0dLdVlo?=
- =?utf-8?B?KzRDQ09FZVNMTmkybmxXeWg0TEpiVnNYMEw2aFo0LzRJQ05RUzdaOE1wNXVq?=
- =?utf-8?B?b3FoMlN2bmlla3pNN0cwWWRBQ29QVm8yQTFXNGNsKys0SDlxTXJiQzIyYkh5?=
- =?utf-8?B?a1FuK3g1Vy9PYWpYaFRRc2RoZUQxaG52N1ZQeTJPdDN0UHJIZGI0dlJXNzJY?=
- =?utf-8?B?d2EvZ2RCWkQrQUV6M0g4NFZyOGlNelRZWEJueXcrN2FqelgwN3NDa2wwR1ph?=
- =?utf-8?B?RXltWk5MNER6RGFpK1VoOVNJbDdITDlpS3I1ZzIwcTliYVRXVndzVlp6enVU?=
- =?utf-8?B?b2UwNzY4UGc3aHdJUGducGdlSFNremtmTmhSaENDVTR1Vnh1VXlMNDNpN1Vx?=
- =?utf-8?B?ZUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d1cc31b-38eb-4e49-aa2e-08dcd161a5af
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5530.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2024 06:27:30.4704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZH/pT4LdExmaC3taFTMFMNundIb3A6M9glNIavOvrwqoNaIPaxIVUM5uLxddzAG7surYl4ZMUQ+jpAyZ9DlbrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7095
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Mon 09 Sep 2024 at 11:16, Guenter Roeck <linux@roeck-us.net> wrote:
 
+> On 9/9/24 08:39, Jerome Brunet wrote:
+>> Add support for POWER_GOOD_ON and POWER_GOOD_OFF standard PMBus commands.
+>> For PMBus devices that offer a POWER_GOOD signal, these commands are used
+>> for setting the output voltage at which a power good signal should be
+>> asserted and negated.
+>> Power Good signals are device and manufacturer specific. Many factors
+>> other
+>> than output voltage may be used to determine whether or not the POWER_GO=
+OD
+>> signal is to be asserted. PMBus device users are instructed to consult t=
+he
+>> device manufacturer=E2=80=99s product literature for the specifics of th=
+e device
+>> they are using.
+>> Note that depending on the choice of the device manufacturer that a
+>> device
+>> may drive a POWER_GOOD signal high or low to indicate that the signal is
+>> asserted.
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>   drivers/hwmon/pmbus/pmbus.h      | 3 +++
+>>   drivers/hwmon/pmbus/pmbus_core.c | 6 ++++++
+>>   2 files changed, 9 insertions(+)
+>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+>> index 5d5dc774187b..e322d2dd9fb7 100644
+>> --- a/drivers/hwmon/pmbus/pmbus.h
+>> +++ b/drivers/hwmon/pmbus/pmbus.h
+>> @@ -78,6 +78,9 @@ enum pmbus_regs {
+>>   	PMBUS_IIN_OC_FAULT_LIMIT	=3D 0x5B,
+>>   	PMBUS_IIN_OC_WARN_LIMIT		=3D 0x5D,
+>>   +	PMBUS_POWER_GOOD_ON		=3D 0x5E,
+>> +	PMBUS_POWER_GOOD_OFF		=3D 0x5F,
+>> +
+>>   	PMBUS_POUT_OP_FAULT_LIMIT	=3D 0x68,
+>>   	PMBUS_POUT_OP_WARN_LIMIT	=3D 0x6A,
+>>   	PMBUS_PIN_OP_WARN_LIMIT		=3D 0x6B,
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbu=
+s_core.c
+>> index 0ea6fe7eb17c..94ddf0166770 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -1768,6 +1768,12 @@ static const struct pmbus_limit_attr vout_limit_a=
+ttrs[] =3D {
+>>   		.attr =3D "crit",
+>>   		.alarm =3D "crit_alarm",
+>>   		.sbit =3D PB_VOLTAGE_OV_FAULT,
+>> +	}, {
+>> +		.reg =3D PMBUS_POWER_GOOD_ON,
+>> +		.attr =3D "good_on",
+>> +	}, {
+>> +		.reg =3D PMBUS_POWER_GOOD_OFF,
+>> +		.attr =3D "good_off",
+>>   	}, {
+>>   		.reg =3D PMBUS_VIRT_READ_VOUT_AVG,
+>>   		.update =3D true,
+>>=20
+>
+> Those attributes are not hardware monitoring attributes and therefore not
+> acceptable. In general I am not sure if they should be configurable in the
+> first place, but definitely not from the hardware monitoring subsystem.
+> Maybe the regulator subsystem callbacks set_over_voltage_protection and
+> set_under_voltage_protection would be appropriate (with severity
+> REGULATOR_SEVERITY_PROT), but that should be discussed with regulator
+> subsystem maintainers.
 
-On 10-09-2024 10:07, Gupta, Anshuman wrote:
-> 
-> 
->> -----Original Message-----
->> From: Andi Shyti <andi.shyti@kernel.org>
->> Sent: Tuesday, September 10, 2024 3:54 AM
->> To: Jadav, Raag <raag.jadav@intel.com>
->> Cc: jani.nikula@linux.intel.com; joonas.lahtinen@linux.intel.com; Vivi,
->> Rodrigo <rodrigo.vivi@intel.com>; tursulin@ursulin.net; linux@roeck-us.net;
->> andi.shyti@linux.intel.com; andriy.shevchenko@linux.intel.com; intel-
->> gfx@lists.freedesktop.org; linux-hwmon@vger.kernel.org; Gupta, Anshuman
->> <anshuman.gupta@intel.com>; Nilawar, Badal <badal.nilawar@intel.com>;
->> Tauro, Riana <riana.tauro@intel.com>; Dixit, Ashutosh
->> <ashutosh.dixit@intel.com>; Poosa, Karthik <karthik.poosa@intel.com>
->> Subject: Re: [PATCH v2] drm/i915/hwmon: expose package temperature
->>
->> Hi Raag,
->>
->> ...
->>
->>> +static int
->>> +hwm_temp_read(struct hwm_drvdata *ddat, u32 attr, long *val) {
->>> +	struct i915_hwmon *hwmon = ddat->hwmon;
->>> +	intel_wakeref_t wakeref;
->>> +	u32 reg_val;
->>> +
->>> +	switch (attr) {
->>> +	case hwmon_temp_input:
->>> +		with_intel_runtime_pm(ddat->uncore->rpm, wakeref)
->>> +			reg_val = intel_uncore_read(ddat->uncore, hwmon-
->>> rg.pkg_temp);
->>> +
->>> +		/* HW register value is in degrees, convert to millidegrees. */
->>> +		*val = REG_FIELD_GET(TEMP_MASK, reg_val) *
->> MILLIDEGREE_PER_DEGREE;
->>> +		return 0;
->>> +	default:
->>> +		return -EOPNOTSUPP;
->>> +	}
->>
->> I don't understand this love for single case switches.
-> IMHO this is kept to keep symmetry in this file to make it more readable.
-> Also it readable to return error using default case, which is followed in this entire file.
-I agree on this. Let’s stick to file-wide approach and ensure it is 
-applied to the fan_input attribute as well.
+According to PMBUS spec, there is no protection associated with that
+command. It just tells when the output voltage is considered good, when
+it is not. What it does after that really depends the device, it may
+drive a pin for example (or an LED indicator in my case).
 
-Regards,
-Badal
+It is very similar to 'crit' or other limits in that sense,
+I think. I don't really get why such property is not OK in hwmon then
+and why it should not be configurable, if the other limits are ?
 
+I don't mind dropping that completly, that change is not critical to me.
+The intent was to contribute something to overall pmbus support.
+
+>
 > Thanks,
-> Anshuman.
->>
->> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
->>
->> Thanks,
->> Andi
+> Guenter
+
+--=20
+Jerome
