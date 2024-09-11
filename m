@@ -1,228 +1,169 @@
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949CC224CC
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Sep 2024 17:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340681B142E
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Sep 2024 17:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726074285; cv=none; b=IidDiNxt9Ulu3fl1ThGV/wpU0LRN+PO4o9Ysevdi5VsvAm8LgKxa+6eWa5if3IgyngNFt6WWn2f2gtx9SyqhubuZqeRiRdZjiUh48FQLRM4gB2MEi5dI1+wZ/XPGeo0D0Y/QOapeA97k3BBQrQtEB/AbQJpzkOoVU25o7qPbj84=
+	t=1726075585; cv=none; b=KOZb5qlELJ5ZSOLm7bjm8M5alZmkjZGqRrQPrD5qM8dNfKhorJqWSk1hrdKUb6QiqA/8yeAqeH1jnLhN1zaPf4D4tcXBz3LYJS5i9syzMzh4FUgVBnd0UdKb73YaKA1deX47foC2UnsiWp+IFKZFdjYPafG1rdN/0BHevzbkvvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726074285; c=relaxed/simple;
-	bh=vNKUr+PlXHTmLveBgPfYOag8Zx4qv9OhYWFnEdb6kxs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=idYI9V99AUIgPdY3u8sAG/ZGYeDdwMGQG2GGMQNk7uQcXTbXXGQBFYQknQshKA0seBUh8ROqvYX8QUaKAq6qS2yYnwvdB+ZxNKDxqomRp5z0F2Jexknf7y5V2ItWUz6vDO6rqOTyvhl9v8L7KGWR+oI7HsC/IWp5TJPFe+CLFfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Zm+5NKFB; arc=none smtp.client-ip=80.12.242.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1726075585; c=relaxed/simple;
+	bh=j4LfUsx854x7YJ4n3qpUsMJcQSYqch/FDWG/7MZN6hg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jiQ09JZTFTiZ3VMRESjHvoFF9jxB2MOPgVe0OYRDCZ42v6MwF13I5tFBcTO/FDAplSvITlw/eqK0617CGZBOgdx77Lswkv0B3zk37TOVhixNj9gp52QLrw/VU4uQdW7xlLK6RtEPqUsx4DER9cwoDcW3Q5UhzqyQ3UDE94c2D78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RLTfxw5x; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Zm+5NKFB"
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id oQldsJviCXp4BoQlespP22; Wed, 11 Sep 2024 19:04:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1726074275;
-	bh=lVxjfxwgLA6BvKbaPvJ8C6nRt1xFeiC4zWRZWm346vA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Zm+5NKFB04PJsJD42ovHXnU4hd8pAyTxwChWqc5CYPx7hD9PPtr+gpOl3J7PeE4CF
-	 GdIwhUlQbmOZhJOivcrvh+i+ic99mskRsecOvKJ1uelDZDwAIh8ZnSN7Ut7P3w4YgE
-	 ZjTYhXJF3rFlpXJnK8Vg3kPzzEx03k3OQ6Ebsz/HsoqHOOKrQP2MQJgDOJI1bOBD/3
-	 rLTMWzsjSHQW++SNOiZEIVOIVzICGYCE8XN/tk5CI0r/4R4DziP2KEcHVyjLdFNaHi
-	 4/rHfLG6h60wCGjR7QC9UOhEbAGh63IlhYysd1q4CoWLfsIzpZDCcEi/ih/U1wmasJ
-	 F3nPTXDntauBw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 11 Sep 2024 19:04:35 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <e45d7a0b-c79c-4762-8b78-a8e595789752@wanadoo.fr>
-Date: Wed, 11 Sep 2024 19:04:32 +0200
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RLTfxw5x"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42cb9a0c300so63045e9.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Sep 2024 10:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726075581; x=1726680381; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLZX+SWdHz2tB91UF3usEBJbpzw/IHLAgfNzOfmxmj0=;
+        b=RLTfxw5xjaulz4Fgppqf+838Phf5Qm/KRabvOD/E4QrPBdfU1+YNeBVHUvfxC2kTac
+         FCdGG31ezs//EDw6jyo/9N1W765YOrbwgUddEjZJXjDLkWl0JMoF5SDGRgA8998AUg5W
+         Oy21iDDfyTzIi7pHTN5dFLzuab1m5D11aVKN3DaSyTzUXUvA/guIjWBKZBQVSqEonrgW
+         ewHURwuIM3mznE78SeGlpnOT9TfsIoE7EnYaKiaK9fiE++iQyn8q3r+Gm2yRZKXIcOoe
+         AI1krpr7+3DqzEsLlhIdKa3T5bbif4iwc7pL9PkANyR1O/QFVhmMGXgj/jVS/VzH9UJ/
+         TYbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726075581; x=1726680381;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLZX+SWdHz2tB91UF3usEBJbpzw/IHLAgfNzOfmxmj0=;
+        b=FrBmkGrzloASgZ0vu+GHCNak3GG7WAOYm6Qt7Uyyi7gxKIW0Iq9Hr8sPwXBbBpRmMf
+         C9rEFKWgOAGgCQz8Lu7V2k+HP9yOrQQiUmue3Lk4Zi0x1hBO/N6Urh1PSrpKlKORTSFS
+         JvO9pfxHc6tXaA+EwYiXQO/ekAMe/vPCtDLlIMhQjUmJUJrWEdqvafYFaK/fMl8uohjQ
+         mtfcNyCfc4/ojmdWNCr5Xx6IN6vGqKso/iREXj7OwCtMjdY3KwdGqLadSFZLaCSguNKM
+         4BOYMo/8M6RtKlFDcX5FGZpfs8YesWwKO5jqlpveSzaSMWqWKGPerrC2bPhVfFLn9eg1
+         kT0A==
+X-Forwarded-Encrypted: i=1; AJvYcCV7crbsOm1oRFzt3pkpnWh3qpQDpXaDmeLuqwnEbwCVBZ+4pJEAc2c1Usk8iW1izoZReNJEmJ56YaHttg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbFl5dz/QUdqONRmYqAgeggI2e8tMHMtvVq582Au8zh849DCZ/
+	LBlNwNPqao1bt7bi/MAsfyo1ISTNHdy1YOk9xwi15vEnQEK92ldJcXLLLFxv1DY=
+X-Google-Smtp-Source: AGHT+IFkbjwusK7GBMy+uvOrk1ENPvXDg5jbLTlihJ6/ABtP7FGYUmy39dxdfPmSU+lvToCwURKoow==
+X-Received: by 2002:a05:600c:5123:b0:42c:bae0:f05b with SMTP id 5b1f17b1804b1-42cdb4e6bbcmr2458165e9.1.1726075580979;
+        Wed, 11 Sep 2024 10:26:20 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:7388:2adc:a5d5:ff63])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cb5a66475sm118471705e9.44.2024.09.11.10.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 10:26:20 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,  Jean Delvare
+ <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>,  Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
+  Jonathan Corbet <corbet@lwn.net>,  Delphine CC Chiu
+ <Delphine_CC_Chiu@wiwynn.com>,  linux-hwmon@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-doc@vger.kernel.org,  linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
+ documentation
+In-Reply-To: <20240911144532.GA154835-robh@kernel.org> (Rob Herring's message
+	of "Wed, 11 Sep 2024 09:45:32 -0500")
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+	<20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
+	<3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
+	<1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+	<20240911144532.GA154835-robh@kernel.org>
+Date: Wed, 11 Sep 2024 19:26:19 +0200
+Message-ID: <1j7cbiqeys.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux dev-6.11 1/2] hwmon: modified ina2xx to match
- SY24655(SQ52205)
-To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <7c155638-8c33-4873-9534-17a9454c83e6@roeck-us.net>
- <20240911122518.41393-1-wenliang202407@163.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240911122518.41393-1-wenliang202407@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Le 11/09/2024 à 14:25, Wenliang a écrit :
-> After listening to your advice, I have adapted SQ52205 by rewriting the
-> ina2xx driver.At the same time, I would like to clarify that SY24655 and
-> SQ52205 are different partnumber of the same chip. Therefore, you can
-> refer to SY24655FBP. I have also changed the naming within the driver to
-> SY24655, and I hope to receive your response.
-> 
-> Signed-off-by: Wenliang <wenliang202407@163.com>
-> ---
+On Wed 11 Sep 2024 at 09:45, Rob Herring <robh@kernel.org> wrote:
 
-Hi,
+> gOn Tue, Sep 10, 2024 at 11:31:18AM +0200, Jerome Brunet wrote:
+>> On Tue 10 Sep 2024 at 09:48, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> 
+>> > On Mon, Sep 09, 2024 at 05:39:03PM +0200, Jerome Brunet wrote:
+>> >> Add DT binding documentation for the Texas Instruments TPS25990 eFuse
+>> >> 
+>> >> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> >> ---
+>> >>  .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 73 ++++++++++++++++++++++
+>> >>  1 file changed, 73 insertions(+)
+>> >>
+>> >
+>> > A nit, subject: drop second/last, redundant "documentation". The
+>> > "dt-bindings" prefix is already stating that these are bindings/docs.
+>> > See also:
+>> > https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+>> >
+>> >> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> >> new file mode 100644
+>> >> index 000000000000..e717942b3598
+>> >> --- /dev/null
+>> >> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> >> @@ -0,0 +1,73 @@
+>> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> >> +%YAML 1.2
+>> >> +---
+>> >> +
+>> >
+>> > Drop blank line.
+>> >
+>> >> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
+>> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> >> +
+>> >> +title: Texas Instruments TPS25990 Stackable eFuse
+>> >> +
+>> >> +maintainers:
+>> >> +  - Jerome Brunet <jbrunet@baylibre.com>
+>> >> +
+>> >> +description: |
+>> >
+>> > Do not need '|' unless you need to preserve formatting.
+>> >
+>> >> +  The TI TPS25990 is an integrated, high-current circuit
+>> >> +  protection and power management device with PMBUS interface
+>
+> And wrap at 80.
+>
+>> >> +
+>> >> +properties:
+>> >> +  compatible:
+>> >> +    const: ti,tps25990
+>> >> +
+>> >> +  reg:
+>> >> +    maxItems: 1
+>> >> +
+>> >> +  ti,rimon-milli-ohms:
+>> >> +    description:
+>> >> +      milli Ohms value of the resistance installed between the Imon pin
+>> >> +      and the ground reference.
+>> >
+>> > Ohms is not enough? We don't have mOhm in property units.
+>> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+>> >
+>> 
+>> Same discussion as we've had on the driver change.
+>> At the moment Ohms is enough for the cases I've seen.
+>> 
+>> Will it be, not sure.
+>> Using mOhms is' way to avoid "S**t, R is 80.2 Ohms, I
+>> need another digit to not loose precision " kind of situation and
+>> introduce a second property just for that.
+>> 
+>> No idea if Rimon will get that low. Probably not.
+>> 
+>> I'll switch to Ohms.
+>
+> You can can use "-micro-ohms" too. The reason we don't have every 
+> possible unit is so we have everyone picking their own.
 
-...
+Noted. after discussing with Guenter, I'll use micro-ohms in the next
+version, not ohms
 
-> @@ -103,7 +115,7 @@ static struct regmap_config ina2xx_regmap_config = {
->   	.val_bits = 16,
->   };
->   
-> -enum ina2xx_ids { ina219, ina226 };
-> +enum ina2xx_ids { ina219, ina226, sy24655};
+>
+> Rob
 
-Nitpick: Missing space before }
-
->   
->   struct ina2xx_config {
->   	u16 config_default;
-> @@ -117,12 +129,13 @@ struct ina2xx_config {
->   
->   struct ina2xx_data {
->   	const struct ina2xx_config *config;
-> -
-> +
->   	long rshunt;
->   	long current_lsb_uA;
->   	long power_lsb_uW;
->   	struct mutex config_lock;
->   	struct regmap *regmap;
-> +	struct i2c_client *client;
->   
->   	const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROUPS];
->   };
-
-...
-
-> +static int sy24655_read_reg48(const struct i2c_client *client, u8 reg,
-> +					long *accumulator_24, long *sample_count)
-> +{
-> +	u8 data[6];
-> +	int err;
-
-Maybe adding a blank line here?
-
-> +	*accumulator_24 = 0;
-> +	*sample_count = 0;
-> +
-> +	/* 48-bit register read */
-> +	err = i2c_smbus_read_i2c_block_data(client, reg, 6, data);
-> +	if (err < 0)
-> +		return err;
-> +	if (err != 6)
-> +		return -EIO;
-> +	*accumulator_24 = ((data[3] << 16) |
-> +				(data[4] << 8) |
-> +				data[5]);
-> +	*sample_count = ((data[0] << 16) |
-> +				(data[1] << 8) |
-> +				data[2]);
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t sy24655_avg_power_show(struct device *dev,
-> +					struct device_attribute *da, char *buf)
-> +{
-> +	struct ina2xx_data *data = dev_get_drvdata(dev);
-> +	long sample_count, accumulator_24, regval;
-> +	int status;
-> +
-> +	status = sy24655_read_reg48(data->client, SY24655_EIN,
-> +						&accumulator_24, &sample_count);
-> +	if (status)
-> +		return status;
-> +	regval = DIV_ROUND_CLOSEST(accumulator_24, sample_count);
-> +	regval = regval * data->power_lsb_uW;
-> +
-> +
-
-Nitpick: unneeded extra empty line
-
-> +	return sysfs_emit(buf, "%li\n", regval);
-> +}
-> +
->   /* shunt voltage */
->   static SENSOR_DEVICE_ATTR_RO(in0_input, ina2xx_value, INA2XX_SHUNT_VOLTAGE);
->   /* shunt voltage over/under voltage alert setting and alarm */
-> @@ -589,9 +659,13 @@ static SENSOR_DEVICE_ATTR_RO(power1_crit_alarm, ina226_alarm,
->   /* shunt resistance */
->   static SENSOR_DEVICE_ATTR_RW(shunt_resistor, ina2xx_shunt, INA2XX_CALIBRATION);
->   
-> -/* update interval (ina226 only) */
-> +/* update interval (ina226 and sy24655) */
->   static SENSOR_DEVICE_ATTR_RW(update_interval, ina226_interval, 0);
->   
-> +/* calculate_avg_power (sy24655 only) */
-> +static SENSOR_DEVICE_ATTR_RO(calculate_avg_power, sy24655_avg_power, 0);
-> +
-> +
-
-Nitpick: unneeded extra empty line
-
->   /* pointers to created device attributes */
->   static struct attribute *ina2xx_attrs[] = {
->   	&sensor_dev_attr_in0_input.dev_attr.attr,
-> @@ -624,6 +698,15 @@ static struct attribute *ina226_attrs[] = {
->   static const struct attribute_group ina226_group = {
->   	.attrs = ina226_attrs,
->   };
-
-
-...
-
-> @@ -691,10 +775,17 @@ static int ina2xx_probe(struct i2c_client *client)
->   		dev_err(dev, "error configuring the device: %d\n", ret);
->   		return -ENODEV;
->   	}
-> -
-> +	if (chip == sy24655)
-> +		ret = sy24655_init(data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "error configuring the accum_reg: %d\n", ret);
-> +		return -ENODEV;
-
-return ret;?
-
-> +	}
->   	data->groups[group++] = &ina2xx_group;
->   	if (chip == ina226)
->   		data->groups[group++] = &ina226_group;
-> +	else if (chip == sy24655)
-> +		data->groups[group++] = &sy24655_group;
->   
->   	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
->   							   data, data->groups);
-> @@ -713,6 +804,7 @@ static const struct i2c_device_id ina2xx_id[] = {
->   	{ "ina226", ina226 },
->   	{ "ina230", ina226 },
->   	{ "ina231", ina226 },
-> +	{ "sy24655", sy24655},
-
-Nitpick: missing space before }
-
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(i2c, ina2xx_id);
-> @@ -738,6 +830,10 @@ static const struct of_device_id __maybe_unused ina2xx_of_match[] = {
->   		.compatible = "ti,ina231",
->   		.data = (void *)ina226
->   	},
-> +	{
-> +		.compatible = "silergy,sy24655",
-> +		.data = (void *)sy24655
-> +	},
->   	{ },
-
-Nitpick: Unrelated, but this comma could be removed.
-
-CJ
-
->   };
->   MODULE_DEVICE_TABLE(of, ina2xx_of_match);
-
+-- 
+Jerome
