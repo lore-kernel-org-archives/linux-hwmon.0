@@ -1,104 +1,82 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D0713CFB7;
-	Thu, 12 Sep 2024 21:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4277A548E0;
+	Thu, 12 Sep 2024 21:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726174940; cv=none; b=XrpFBOVxoGz3r38opUoIBYxu6fD9ivYvP99tNfoc8qqtjID5TfNgaJz5G5qNWzCaEEvQUGPLqorQG4wwKssJciiBCDNu8oMdLIi9uBvlulVUePGWfRzWrAZLbOd+RIJ+V+mQEBIHxqQyao7l3np0K2/DsOlne9hP/VRT2RQQ28M=
+	t=1726175868; cv=none; b=n3vt9TJ9kkTWF8G+lLZcV9wSX5rdw71kG1M9zjcTqCJ5pE7yd6HL8zm77sLC87+vwmx1c5LdPKb1RSkmRDqlf1GxLy1ZjV0zSVMbNGbe+5mLEO3GUgtNGHQPPixXyHWDhv5jM92Tescwk172bDw64vBhyyO83GidcP00SJC7Q5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726174940; c=relaxed/simple;
-	bh=rssm9HJWK2a0zh7wx7igItT3UMlUUg3vCxnu4E+AOEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uIY4HZxRgsHbQbGqgtboLkgZeBwTyPtQQH7Mvlpx6KIbJRNOiKg2HBSAhsqfyTMEbyfsuv4w/9BRZkTfCAphfIgHAZOJuuaHjAHlR1L+qr/t6b78nYqdzOugNzE6iojzYWHvDgxT+CQOjXbc8DbLVchIrABhMQg0xsl93u97e1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuzCqWuA; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1726175868; c=relaxed/simple;
+	bh=gZWNDE4UdCE0UdmMR0zKoXdwa7nrr07TzGQ71siE410=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HsctHmEMKSTaEj0dv87VbYWRrIX3KRPzXll+x8/OPSpmVqklMMqM1UdSNotTmQv0q1mVbZVsz1i4rH6AA7VskxQ6rF/Wa2I6sswNWe6qfblpLwFreGVDt32R8UfSIv/MRkoJZHbbfrGrBlw0Qil+r1/LvseDyCuuyd06LehMUBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cutMD+02; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuzCqWuA"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-206b9455460so11938185ad.0;
-        Thu, 12 Sep 2024 14:02:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cutMD+02"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2055136b612so19568665ad.0;
+        Thu, 12 Sep 2024 14:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726174938; x=1726779738; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RrSckW6x9uomKy/ENMgMIUSNKJ25LuLqiiUE4kLcewk=;
-        b=XuzCqWuAEQ2E1RoTUn/nLCgKJOFa4Lt2w77zsd+1Duu9kgfSjUCc5X8ueQnmAZag8R
-         aTuDlf6no4RvfAXwwrc5DKX/92h58bx+uHIG3bAd8uU1zNk3BEfdtLAtSaNeOPrBSdQt
-         ozb5ASUp6m8jXF2Jqn0zhnZGUXzdz3ibAB8rqISZ1iCQnERTbaAoNPxVPeWtO1YaQB98
-         YZ/dz4cejpGzgKxJzR5sxb5PU86nvaF/zvwd7NcOhXdTtQed19jvG0lsNOgfF7EPZOuN
-         9K3WtTiRN3B5/7Hh7wVu4wjgGV3jAIppukBPhGOw1Rcaj2oyGrZ6pREDXINCrpx+8gxH
-         sQZA==
+        d=gmail.com; s=20230601; t=1726175865; x=1726780665; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SCcpbDG2pXlWL7N2ScI52jDb3w6apDJe4uAGoy/8sh8=;
+        b=cutMD+02Z5eJ3oSRTe82DwioJ0o35nvSHl2lh1t8TfALJclQD8ZQ9Og4qoVj4W8Vix
+         W617kBRmGZAuo/MtuxZuej62T7/B4kvUBB5OlikUzk9y9ZpAAzwwDQg/nRRzRfkh30a4
+         cpLYEB83ohknyCrLOtBFkY/UWs52jWJfLFGb9NkJSAkMZVB/ANbSa8lDhsKxmmkCBi3M
+         UpEID0nzGNOKGLEwXDdsV8NZXc/SeEdSeyOPv5VEim2FcSZW9IRT1yq84g5p1Z1jXdK5
+         WLaK/I0P9JqC60g14ZRNOmBjleCIywq5Dvyxo6kJ0n0I70HYWB5++90flw56PbNqcTZ+
+         lkKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726174938; x=1726779738;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RrSckW6x9uomKy/ENMgMIUSNKJ25LuLqiiUE4kLcewk=;
-        b=sBwSWhgr2ZfFAwhrf8BYSnITRlaQ/RVygaXoABlsdrv0W1ihIMRLV+ij3Qj0SbN1jZ
-         0wfKd0pKAKyDrlCFYb8L7K8KzAIefb9oVAbYygFamBCsK2hWvYjAd5GeUcDbSAKdlvfE
-         +JHtmmFaT7Xnz0YSCCbHrspHZ3ITpCNqMMf9x/6Wjb1lt2nJZgEZ/yVY0IFIzNJ0Z/5M
-         d0n7BmTOWYCFScL6ZjsLy+/g0zDyIB0TY8sySyeGA67l8tznYnVKg0+SyVmmhFKqVbe8
-         VsVkxZsXY5AoWBi6mfAaBwVx1BCFb9l21h465EfIPHZ7TB0xDNfaEOK5mxjlOUNNqVk5
-         P+cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXrg6KsWnkuFR4y3fhF/Cz3XoOEpseMQpAz2G8ej8YMdss/7QbUP6An1Zkp16vWBXX/xVyTkdfV3lh9br4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsAwplTGRfLWJHCPzAIXBYNh+5k+BBNWNA4aPuMEJzdrGQqKbh
-	DKj0zNJJTl2Qsp4ub2VqpYRw118ZttqDENEVu3dwr0PPxiVNWrC4XDrpUw==
-X-Google-Smtp-Source: AGHT+IHKG7QyKtTs1qWEPh7TiqTVtdGQobXWdjhjaSGLocZkDEjmhrneg8j2M1Jv8DiBxeNUgaX1+w==
-X-Received: by 2002:a17:903:2a90:b0:206:aa47:adc0 with SMTP id d9443c01a7336-2074c6dcfdbmr153269085ad.24.1726174937843;
-        Thu, 12 Sep 2024 14:02:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726175865; x=1726780665;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SCcpbDG2pXlWL7N2ScI52jDb3w6apDJe4uAGoy/8sh8=;
+        b=xJIQ5hO8STORou5MtONmV5gWmBQOY71YMvdofqyatKviqjZwwgXvSGuJ68Ure9ZU2x
+         v4vUjSfKxssG3m5eFMTnLjVsBaXc/GRxytmuZpDuTxUwgOoUVHRrnpGquwjezODX2uFA
+         vulTnivd6DkSrOlzTJOARfrq+C8K0UlG82wLN3FHyFiP4/8Ewfcs+PCTtfwmuoNmaD9N
+         BNqVdWTS+mFK0igShREsGe5Vy2C8bFDflUfSx4iwQQ9azvsxVVD89ACCafqyxJJ/7hvD
+         JYJAY3Uv8jA9WdJHilieySm88WnHZjP5kFKlegpxLPfvT+W0ZzZK2H4eL8Idar9Kv1WB
+         DJOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2C1dbOTX/RaKcP6ao0tcW1/c0UnIjDHv85KRJTk+eiPb9ZFMyG0+wNO4XDKa0cSql9CW2+xH/AF4zji0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNQetm/5cErVDnk01SmJsz4s0LrPqzCnSfamhPDDuPLQqeOeHi
+	oQzb4BbKNyTmT6Cza5dL0uodD/Y0uUZ1yO+tBhd/hvK7Hxb9oeMUD820Ow==
+X-Google-Smtp-Source: AGHT+IEhBa1zNEvuSpKN0xwf+4TJa8Rd975bNw2dHYqIzXAlFHn330jM9y+vUpbDjz0pXweXE9MnIw==
+X-Received: by 2002:a17:903:2b04:b0:203:a22f:6b09 with SMTP id d9443c01a7336-2076e334c05mr66647675ad.13.1726175865566;
+        Thu, 12 Sep 2024 14:17:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076af25709sm18051745ad.24.2024.09.12.14.02.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076afe918bsm18111515ad.184.2024.09.12.14.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 14:02:16 -0700 (PDT)
+        Thu, 12 Sep 2024 14:17:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 12 Sep 2024 14:17:44 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.11-rc8
-Date: Thu, 12 Sep 2024 14:02:15 -0700
-Message-ID: <20240912210215.1907774-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 1/1] hwmon: (sht21) Use %*ph to print small buffer
+Message-ID: <b6411703-b9cd-4127-8681-2e5e77024af6@roeck-us.net>
+References: <20240911194627.2885506-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911194627.2885506-1-andriy.shevchenko@linux.intel.com>
 
-Hi Linus,
+On Wed, Sep 11, 2024 at 10:46:27PM +0300, Andy Shevchenko wrote:
+> Use %*ph format to print small buffer as hex string.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Please pull hwmon fixes for Linux v6.11-rc8 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc8
+Applied.
 
 Thanks,
 Guenter
-------
-
-The following changes since commit da3ea35007d0af457a0afc87e84fddaebc4e0b63:
-
-  Linux 6.11-rc7 (2024-09-08 14:50:28 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.11-rc8
-
-for you to fetch changes up to 20471071f198c8626dbe3951ac9834055b387844:
-
-  hwmon: (pmbus) Conditionally clear individual status bits for pmbus rev >= 1.2 (2024-09-09 10:58:09 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.11-rc8/v6.11
-
-- Fix clearing status register bits for chips supporting older
-  PMBus versions
-
-----------------------------------------------------------------
-Patryk Biel (1):
-      hwmon: (pmbus) Conditionally clear individual status bits for pmbus rev >= 1.2
-
- drivers/hwmon/pmbus/pmbus.h      |  6 ++++++
- drivers/hwmon/pmbus/pmbus_core.c | 17 ++++++++++++++---
- 2 files changed, 20 insertions(+), 3 deletions(-)
