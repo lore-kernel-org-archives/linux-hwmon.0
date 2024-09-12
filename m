@@ -1,56 +1,39 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035FA18E349;
-	Thu, 12 Sep 2024 07:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06CE18A6A9
+	for <linux-hwmon@vger.kernel.org>; Thu, 12 Sep 2024 09:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726127732; cv=none; b=dacyhsAvLjOykFXReeU6h9OecENu81642d0tVC5M5Nm4A18QHAjt6g6990Bnqpar/RGvlHQA2LSkXKIBsqD5mrwTQODaiRLKXbNWX0TBCWugVeVQGL1St4SyhKUwjcI0TIeOMTEHDDE/0dYQcIvyEOaR6DOYITRPuXeupX2TNo8=
+	t=1726132470; cv=none; b=nxROK3RaG1FDs1eJnMdjh/Fp/2u1BYZe/yFa83/++80kgHwfG8xR9+k4ffsUELZN0UY6tUWGEVPcUdC0n0gep+dhaYHMEXYv+LFKJDM4HJImlXq4huNF0TBConUC5LiGaRq1NXvhCoAI5Nsiymo/N2d+WZFMnLn2r7GZmKlVmFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726127732; c=relaxed/simple;
-	bh=4s+VuwhVbNSAVesYDsrgOzVFuC3dn4Fh96NjWQHHSd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T6c1sWxW5fA2B1SCV5IYRE/M97KXKOLAexRDTrIf17CQUHWmvnfRe6FQIoPmsD0HPKH3tqmqpx7zGyPJf6ClV7B5S3lWkVSZkvQUOkWdpJaSVebTbRRcwaOjjhN/VbKPFlYjDO6HgLFA2XHJYy84rQsYYenCm4IfA7u+vX5R7rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RE4Jpos0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726132470; c=relaxed/simple;
+	bh=wR7KyTTlrcBgeT3DEYjx1z7krjjOgwV0BSM23Gt8to4=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kz/EjjOFMtgCvbYCTyNa4cs69KktJVqZaMhNaBOpPhQulW95mtmxe64xbNQubJeKHFafAqU3ScEjM5BYjP0CLOPjdBZlyaUd4JbwLdnmfwtIarXbk/pyb/E4vpb41pbkeFttmFZl97L4rs6WZntMrRuhiXUoQXVVC5dYfXS1QCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttsande.rs; spf=pass smtp.mailfrom=ttsande.rs; dkim=pass (2048-bit key) header.d=ttsande.rs header.i=@ttsande.rs header.b=aKp9M5ip; arc=none smtp.client-ip=185.70.43.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttsande.rs
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ttsande.rs
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RE4Jpos0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDB5C4CEC3;
-	Thu, 12 Sep 2024 07:55:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726127730;
-	bh=4s+VuwhVbNSAVesYDsrgOzVFuC3dn4Fh96NjWQHHSd4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RE4Jpos0PNEzX+j4gvv4HnNOrUggjKzwMILkyBwl0ysVmjqAOlVX/mQhrIQNly6u5
-	 D4cMLo65bYBMzWlE/3MbcvaGJgeSBNYdVepAt76I+DLSY7juHCYtKFtFSF+NxXRLnf
-	 nw0U9baOT3m36ADEOMsC52DEtH41CuFRaJgFalbX5iXcl4IyQp85V7KiijKjx0cNGT
-	 6KayroEwMI5tGGbabloSBt1YK8gCKXHgprPzBlO8p/mD27xX6IExuLkytas4cCy+Lx
-	 FeyB97LCD7R1E9Adejrws3/2lIKYd4KEQJJgQvTdJ/MZTah6JaIHWY/t17UQPpDuJl
-	 ey2Ge3BBptu3g==
-Date: Thu, 12 Sep 2024 08:55:23 +0100
-From: Lee Jones <lee@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?G=FCnter_R=F6ck?= <linux@roeck-us.net>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Rob Herring <robh@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
-Message-ID: <20240912075523.GB24460@google.com>
-References: <20240906093630.2428329-2-bigfoot@classfun.cn>
- <de5c9c27-56fa-4163-98e1-9a98400d2408@web.de>
- <43918eda-c4e8-471a-9de4-ea72bb090803@classfun.cn>
- <917ac8d8-a483-422c-a408-cdd44793e910@kernel.org>
+	dkim=pass (2048-bit key) header.d=ttsande.rs header.i=@ttsande.rs header.b="aKp9M5ip"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ttsande.rs;
+	s=protonmail; t=1726132460; x=1726391660;
+	bh=UasRgKsHucgEdP6i8Yd5Stdu2vUTHCovW7vAHe0aNJE=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=aKp9M5ipcoDu6di/KOLeBIATKsg2Qk+gOJPTIGN8FGZmwvP1K+X5mTWu7Qc2QR/1n
+	 1wClzjDgMVslm9fdJsvwiyRgJzo5q3IcBwXmImj7DBs5C+3B2lqBLR1v2e/u2euaTC
+	 WWFIvhcGz4I0t4Ue6GXi0LoiQhLL1WKJufIZxBWGChh0S+5d5T2eY8lOsnn5MnmZL2
+	 KWfZfwA7B1g2vq+GYkH1SOIgGvtpfl/BoUtAWZURotOKzrdoYbifwZrY7ePKdU26z+
+	 ISPsRCUpMdOpqcge3iEhcVxiG9/EkspAy9+W9JSWPF/lqERxKNs8hBRF9F5M8+DqTv
+	 Mu++rb614/uDA==
+Date: Thu, 12 Sep 2024 09:14:14 +0000
+To: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+From: Matthew Sanders <m@ttsande.rs>
+Cc: linux-kernel@vger.kernel.org, ppwaskie@kernel.org
+Subject: [PATCH] hwmon: Fix WARN_ON() always called from devm_hwmon_device_unregister()
+Message-ID: <20240912091401.4101-1-m@ttsande.rs>
+Feedback-ID: 116677769:user:proton
+X-Pm-Message-ID: 43e44de0c65e9b70e98738a0aad12dd0e65fcde2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,44 +41,68 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <917ac8d8-a483-422c-a408-cdd44793e910@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 08 Sep 2024, Krzysztof Kozlowski wrote:
+devm_hwmon_device_unregister() only takes parent of a devres-managed
+hwmon device as an argument. This always fails, as devres can't find
+the hwmon device it needs to unregister with the parent device alone.
+Without this patch, the WARN_ON() in devm_hwmon_device_unregister() will
+always be displayed unconditionally:
 
-> On 07/09/2024 16:33, Junhao Xie wrote:
-> > On 2024/9/7 16:44, Markus Elfring wrote:
-> >> …
-> >>> +++ b/include/linux/mfd/photonicat-pmu.h
-> >>> @@ -0,0 +1,86 @@
-> >> …
-> >>> +#ifndef _PHOTONICAT_PMU_H
-> >>> +#define _PHOTONICAT_PMU_H
-> >> …
-> >>
-> >> I suggest to omit leading underscores from such identifiers.
-> >> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+define+a+reserved+identifier
-> >>
-> >> Regards,
-> >> Markus
-> > 
-> > Thanks for your suggestion, does this look better?
-> > #ifndef MFD_PHOTONICAT_PMU_H
-> > #define MFD_PHOTONICAT_PMU_H
+[    7.969746] WARNING: CPU: 1 PID: 224 at drivers/hwmon/hwmon.c:1205 devm_=
+hwmon_device_unregister+0x28/0x30
 
-Yes, this is better.
+This patch adds an extra argument to devm_hwmon_device_unregister(), a
+pointer to a hwmon device which was previously registered to the
+parent using devres.
 
-> <form letter>
-> Feel free to ignore all comments from Markus, regardless whether the
-> suggestion is reasonable or not. This person is banned from LKML and
-> several maintainers ignore Markus' feedback, because it is just a waste
-> of time.
-> </form letter>
+There aren't any drivers which currently make use of this function, so
+any existing users of devm_hwmon_* shouldn't require any changes as a
+result of this patch.
+---
+ drivers/hwmon/hwmon.c | 6 ++++--
+ include/linux/hwmon.h | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-If you really _must_ do this, at least keep it factual.
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index a362080d41fa..84945a276320 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -1199,10 +1199,12 @@ static int devm_hwmon_match(struct device *dev, voi=
+d *res, void *data)
+  * devm_hwmon_device_unregister - removes a previously registered hwmon de=
+vice
+  *
+  * @dev: the parent device of the device to unregister
++ * @hwdev: the hwmon device to unregister
+  */
+-void devm_hwmon_device_unregister(struct device *dev)
++void devm_hwmon_device_unregister(struct device *dev, struct device *hwdev=
+)
+ {
+-=09WARN_ON(devres_release(dev, devm_hwmon_release, devm_hwmon_match, dev))=
+;
++=09WARN_ON(devres_release(dev, devm_hwmon_release, devm_hwmon_match,
++=09=09=09       hwdev));
+ }
+ EXPORT_SYMBOL_GPL(devm_hwmon_device_unregister);
+=20
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index e94314760aab..2434c6fc17a7 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -481,7 +481,7 @@ devm_hwmon_device_register_with_info(struct device *dev=
+,
+ =09=09=09=09const struct attribute_group **extra_groups);
+=20
+ void hwmon_device_unregister(struct device *dev);
+-void devm_hwmon_device_unregister(struct device *dev);
++void devm_hwmon_device_unregister(struct device *dev, struct device *hwdev=
+);
+=20
+ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
+ =09=09       u32 attr, int channel);
+--=20
+2.46.0
 
-To the best of my knowledge Markus is not banned from LKML.
 
--- 
-Lee Jones [李琼斯]
