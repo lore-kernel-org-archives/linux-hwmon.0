@@ -1,200 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10FD81BA86F;
-	Thu, 12 Sep 2024 16:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D0713CFB7;
+	Thu, 12 Sep 2024 21:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726158977; cv=none; b=mWLrV9KXBYf/NEirHHTe2HlLUnhbP6y4KQxuaLDm769Y7/ZbuGlKfczsulocGr2Qzq8lrACgNLqFvKe57NgFig76xTh2ZmpwD67y2yTeluYcuSCcUgTdNwQucUfJI03kV6Yxn4tOX3pbx/ksqf6vaYdFiGGn6H/Y11OGkTliZoc=
+	t=1726174940; cv=none; b=XrpFBOVxoGz3r38opUoIBYxu6fD9ivYvP99tNfoc8qqtjID5TfNgaJz5G5qNWzCaEEvQUGPLqorQG4wwKssJciiBCDNu8oMdLIi9uBvlulVUePGWfRzWrAZLbOd+RIJ+V+mQEBIHxqQyao7l3np0K2/DsOlne9hP/VRT2RQQ28M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726158977; c=relaxed/simple;
-	bh=9ePkSUpvWLm8KN2FGW++zZeyNa08vsr64xdApCrFuGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=buz7YSyYJu8KpqBDM73Bkka0WJbYOWLZzgvbo7rE0CZNHRRSC0dm9GeIGCca1oijuxlB46SGTFdl6b5zy+b5jEIq8rv6a7Kqa/n/RTwGj2rvUSU1Tk5qbln3l76rnJFDwyDA0YvGBTk8SQh/bNiGG1PdsJ7SZ3kSFg/rhGVxXTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+UEPLww; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726174940; c=relaxed/simple;
+	bh=rssm9HJWK2a0zh7wx7igItT3UMlUUg3vCxnu4E+AOEE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uIY4HZxRgsHbQbGqgtboLkgZeBwTyPtQQH7Mvlpx6KIbJRNOiKg2HBSAhsqfyTMEbyfsuv4w/9BRZkTfCAphfIgHAZOJuuaHjAHlR1L+qr/t6b78nYqdzOugNzE6iojzYWHvDgxT+CQOjXbc8DbLVchIrABhMQg0xsl93u97e1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuzCqWuA; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+UEPLww"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726158975; x=1757694975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ePkSUpvWLm8KN2FGW++zZeyNa08vsr64xdApCrFuGw=;
-  b=E+UEPLwwsWcGXo/Vas9erV3gJHrkwvJ23JUEsp2aRwy964Ijz45TKVmA
-   EROCcWztlracy6qtHekglzLuc0GEaETuPah5C5c+nFwCkbBhn8lhQamtf
-   5ieF17jP/frc+L/PJ+/nGkvHDuxVbIJafjqOOYj4PgxPuOwz67kBupc28
-   qbWtdZHmCOT4BELKCBwV9NogilIsPJzsbPNO/tYPYwvJhqnAPmxPQdFeJ
-   6bQrM2h55GXQ0Z2kdpMGj/rMha3d+KLpu/awImOUy3bYIWVHHewS/1SLg
-   ffqneKqnDHc+fms8psXhffyPw5UuKT62TjWKrilu2kVQ2sjRauX+IiF5N
-   w==;
-X-CSE-ConnectionGUID: PekZynJ5QHiU3Adb9RRd3w==
-X-CSE-MsgGUID: T9dXhI5YS5KVE6b5r2qJ9A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24564844"
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="24564844"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 09:36:14 -0700
-X-CSE-ConnectionGUID: o353610kQkmQeqsxkNmmsQ==
-X-CSE-MsgGUID: XkwQ4q6hRvqUVoeEmgD4mg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="68273802"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Sep 2024 09:36:10 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1somng-0005TC-0v;
-	Thu, 12 Sep 2024 16:36:08 +0000
-Date: Fri, 13 Sep 2024 00:36:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Patryk Biel <pbiel7@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Patryk Biel <pbiel7@gmail.com>
-Subject: Re: [PATCH] hwmon: Conditionally clear individual status bits for
- pmbus rev >= 1.2
-Message-ID: <202409122210.audc5WGS-lkp@intel.com>
-References: <20240909-pmbus-status-reg-clearing-v1-1-f1c0d68c6408@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuzCqWuA"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-206b9455460so11938185ad.0;
+        Thu, 12 Sep 2024 14:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726174938; x=1726779738; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RrSckW6x9uomKy/ENMgMIUSNKJ25LuLqiiUE4kLcewk=;
+        b=XuzCqWuAEQ2E1RoTUn/nLCgKJOFa4Lt2w77zsd+1Duu9kgfSjUCc5X8ueQnmAZag8R
+         aTuDlf6no4RvfAXwwrc5DKX/92h58bx+uHIG3bAd8uU1zNk3BEfdtLAtSaNeOPrBSdQt
+         ozb5ASUp6m8jXF2Jqn0zhnZGUXzdz3ibAB8rqISZ1iCQnERTbaAoNPxVPeWtO1YaQB98
+         YZ/dz4cejpGzgKxJzR5sxb5PU86nvaF/zvwd7NcOhXdTtQed19jvG0lsNOgfF7EPZOuN
+         9K3WtTiRN3B5/7Hh7wVu4wjgGV3jAIppukBPhGOw1Rcaj2oyGrZ6pREDXINCrpx+8gxH
+         sQZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726174938; x=1726779738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RrSckW6x9uomKy/ENMgMIUSNKJ25LuLqiiUE4kLcewk=;
+        b=sBwSWhgr2ZfFAwhrf8BYSnITRlaQ/RVygaXoABlsdrv0W1ihIMRLV+ij3Qj0SbN1jZ
+         0wfKd0pKAKyDrlCFYb8L7K8KzAIefb9oVAbYygFamBCsK2hWvYjAd5GeUcDbSAKdlvfE
+         +JHtmmFaT7Xnz0YSCCbHrspHZ3ITpCNqMMf9x/6Wjb1lt2nJZgEZ/yVY0IFIzNJ0Z/5M
+         d0n7BmTOWYCFScL6ZjsLy+/g0zDyIB0TY8sySyeGA67l8tznYnVKg0+SyVmmhFKqVbe8
+         VsVkxZsXY5AoWBi6mfAaBwVx1BCFb9l21h465EfIPHZ7TB0xDNfaEOK5mxjlOUNNqVk5
+         P+cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXrg6KsWnkuFR4y3fhF/Cz3XoOEpseMQpAz2G8ej8YMdss/7QbUP6An1Zkp16vWBXX/xVyTkdfV3lh9br4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsAwplTGRfLWJHCPzAIXBYNh+5k+BBNWNA4aPuMEJzdrGQqKbh
+	DKj0zNJJTl2Qsp4ub2VqpYRw118ZttqDENEVu3dwr0PPxiVNWrC4XDrpUw==
+X-Google-Smtp-Source: AGHT+IHKG7QyKtTs1qWEPh7TiqTVtdGQobXWdjhjaSGLocZkDEjmhrneg8j2M1Jv8DiBxeNUgaX1+w==
+X-Received: by 2002:a17:903:2a90:b0:206:aa47:adc0 with SMTP id d9443c01a7336-2074c6dcfdbmr153269085ad.24.1726174937843;
+        Thu, 12 Sep 2024 14:02:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076af25709sm18051745ad.24.2024.09.12.14.02.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Sep 2024 14:02:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.11-rc8
+Date: Thu, 12 Sep 2024 14:02:15 -0700
+Message-ID: <20240912210215.1907774-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240909-pmbus-status-reg-clearing-v1-1-f1c0d68c6408@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Patryk,
+Hi Linus,
 
-kernel test robot noticed the following build warnings:
+Please pull hwmon fixes for Linux v6.11-rc8 from signed tag:
 
-[auto build test WARNING on c763c43396883456ef57e5e78b64d3c259c4babc]
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc8
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Patryk-Biel/hwmon-Conditionally-clear-individual-status-bits-for-pmbus-rev-1-2/20240909-173838
-base:   c763c43396883456ef57e5e78b64d3c259c4babc
-patch link:    https://lore.kernel.org/r/20240909-pmbus-status-reg-clearing-v1-1-f1c0d68c6408%40gmail.com
-patch subject: [PATCH] hwmon: Conditionally clear individual status bits for pmbus rev >= 1.2
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240912/202409122210.audc5WGS-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409122210.audc5WGS-lkp@intel.com/reproduce)
+Thanks,
+Guenter
+------
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409122210.audc5WGS-lkp@intel.com/
+The following changes since commit da3ea35007d0af457a0afc87e84fddaebc4e0b63:
 
-All warnings (new ones prefixed by >>):
+  Linux 6.11-rc7 (2024-09-08 14:50:28 -0700)
 
->> drivers/hwmon/pmbus/pmbus_core.c:1100:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1100 |                 if (data->revision >= PMBUS_REV_12)
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pmbus_core.c:1105:7: note: uninitialized use occurs here
-    1105 |                 if (ret)
-         |                     ^~~
-   drivers/hwmon/pmbus/pmbus_core.c:1100:3: note: remove the 'if' if its condition is always true
-    1100 |                 if (data->revision >= PMBUS_REV_12)
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1101 |                         ret = _pmbus_write_byte_data(client, page, reg, regval);
-         |                                                                                ~
-    1102 |                 else
-         |                 ~~~~
-    1103 |                         pmbus_clear_fault_page(client, page);
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/pmbus_core.c:1083:9: note: initialize the variable 'ret' to silence this warning
-    1083 |         int ret, status;
-         |                ^
-         |                 = 0
-   1 warning generated.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.11-rc8
 
-vim +1100 drivers/hwmon/pmbus/pmbus_core.c
+for you to fetch changes up to 20471071f198c8626dbe3951ac9834055b387844:
 
-  1050	
-  1051	/*
-  1052	 * Return boolean calculated from converted data.
-  1053	 * <index> defines a status register index and mask.
-  1054	 * The mask is in the lower 8 bits, the register index is in bits 8..23.
-  1055	 *
-  1056	 * The associated pmbus_boolean structure contains optional pointers to two
-  1057	 * sensor attributes. If specified, those attributes are compared against each
-  1058	 * other to determine if a limit has been exceeded.
-  1059	 *
-  1060	 * If the sensor attribute pointers are NULL, the function returns true if
-  1061	 * (status[reg] & mask) is true.
-  1062	 *
-  1063	 * If sensor attribute pointers are provided, a comparison against a specified
-  1064	 * limit has to be performed to determine the boolean result.
-  1065	 * In this case, the function returns true if v1 >= v2 (where v1 and v2 are
-  1066	 * sensor values referenced by sensor attribute pointers s1 and s2).
-  1067	 *
-  1068	 * To determine if an object exceeds upper limits, specify <s1,s2> = <v,limit>.
-  1069	 * To determine if an object exceeds lower limits, specify <s1,s2> = <limit,v>.
-  1070	 *
-  1071	 * If a negative value is stored in any of the referenced registers, this value
-  1072	 * reflects an error code which will be returned.
-  1073	 */
-  1074	static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
-  1075				     int index)
-  1076	{
-  1077		struct pmbus_data *data = i2c_get_clientdata(client);
-  1078		struct pmbus_sensor *s1 = b->s1;
-  1079		struct pmbus_sensor *s2 = b->s2;
-  1080		u16 mask = pb_index_to_mask(index);
-  1081		u8 page = pb_index_to_page(index);
-  1082		u16 reg = pb_index_to_reg(index);
-  1083		int ret, status;
-  1084		u16 regval;
-  1085	
-  1086		mutex_lock(&data->update_lock);
-  1087		status = pmbus_get_status(client, page, reg);
-  1088		if (status < 0) {
-  1089			ret = status;
-  1090			goto unlock;
-  1091		}
-  1092	
-  1093		if (s1)
-  1094			pmbus_update_sensor_data(client, s1);
-  1095		if (s2)
-  1096			pmbus_update_sensor_data(client, s2);
-  1097	
-  1098		regval = status & mask;
-  1099		if (regval) {
-> 1100			if (data->revision >= PMBUS_REV_12)
-  1101				ret = _pmbus_write_byte_data(client, page, reg, regval);
-  1102			else
-  1103				pmbus_clear_fault_page(client, page);
-  1104	
-  1105			if (ret)
-  1106				goto unlock;
-  1107		}
-  1108		if (s1 && s2) {
-  1109			s64 v1, v2;
-  1110	
-  1111			if (s1->data < 0) {
-  1112				ret = s1->data;
-  1113				goto unlock;
-  1114			}
-  1115			if (s2->data < 0) {
-  1116				ret = s2->data;
-  1117				goto unlock;
-  1118			}
-  1119	
-  1120			v1 = pmbus_reg2data(data, s1);
-  1121			v2 = pmbus_reg2data(data, s2);
-  1122			ret = !!(regval && v1 >= v2);
-  1123		} else {
-  1124			ret = !!regval;
-  1125		}
-  1126	unlock:
-  1127		mutex_unlock(&data->update_lock);
-  1128		return ret;
-  1129	}
-  1130	
+  hwmon: (pmbus) Conditionally clear individual status bits for pmbus rev >= 1.2 (2024-09-09 10:58:09 -0700)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+----------------------------------------------------------------
+hwmon fixes for v6.11-rc8/v6.11
+
+- Fix clearing status register bits for chips supporting older
+  PMBus versions
+
+----------------------------------------------------------------
+Patryk Biel (1):
+      hwmon: (pmbus) Conditionally clear individual status bits for pmbus rev >= 1.2
+
+ drivers/hwmon/pmbus/pmbus.h      |  6 ++++++
+ drivers/hwmon/pmbus/pmbus_core.c | 17 ++++++++++++++---
+ 2 files changed, 20 insertions(+), 3 deletions(-)
