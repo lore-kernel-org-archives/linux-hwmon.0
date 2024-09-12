@@ -1,85 +1,63 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1BC273FC;
-	Thu, 12 Sep 2024 21:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786111C1AB7;
+	Thu, 12 Sep 2024 21:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726176474; cv=none; b=sX1aFaHfwJtXHJgdHvFYWkNO4gbBvN+Uw2vjeSZBCeIsmi+N6jCESs3A8Mf5ePfZwMJCRLea+QW/Gh6x2XjvAtSmbAZMemx4XS22aHhb872/DmsfIXqfzMygIMGI1LakT9G0yLr5VwKooLN7IQZzWSMNbl/AAC6DOVaLYpha8so=
+	t=1726178099; cv=none; b=pGG+/gjTGUwXS+FEloIepjyoDpGldn8SeezMYa9TLjuc/1uJLzbM24oaRlUmEAh20D41Yiu2oTOTUfx2dUuckHdCcH0a3NCms2IqzW/0z8tpx2/1XPYVOU5h6/Btvflu9cB91ueC0+POqPHlkLhGlA65CMjgR3bLl6jsJDuHvZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726176474; c=relaxed/simple;
-	bh=w/YgIPhQR9ivOQ+vklFgfxUKH+pnzE7kpK6RShDkoxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8xWqahoa74NWVlq6ovhvThEha419AW3bJPPCMQlIFAfFHZfWRISNCeJDUBHNhJpWr6pjK6wLWCTK209tUcZeYADS3MV4Isxdd4Hyy9pYibCu0iCoOLd3Km/k8yY9eeTVvX9JASxRa2kT2tlJ7Lqw10y2NoF/A5DLH276qvU3nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qe1jx/jV; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726178099; c=relaxed/simple;
+	bh=kmXZvanHM2aP6BvsXflVTH5pL35WMNNx+kY0TRpLKxY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=K6uYQsEV6GBIcDJqixkLO7ls4vazYUDpuJjqwxcrpkjyWvulbHtm/Oujnfv4TcqNVbxKngKeaTiB0fm9cbblapxVq5dehU4r/PHsBOvjtYNsQXmIDdSiyNn7Zp/BUHDzXxabeU/qY0g9Kw8qr5iHCpq0OqF1Ei3pBqJWqS0/y9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WqxU/tJn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qe1jx/jV"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-206b9455460so12097345ad.0;
-        Thu, 12 Sep 2024 14:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726176472; x=1726781272; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=shUfZxXMDRpMKCAQP+MW5jtasId7ndgHn/WYAvIFVIU=;
-        b=Qe1jx/jV9UO9JGFoZP7cGqufV2TnQgHYaTrojcKZU2pHbXBPMoAehnUPYxdAsxJnZM
-         xmd2z5dYa0N3kbbjIBw0Q5JtowkJrq9M3aercnfxezJqk4zjIacDAMizePeO4ABbdii3
-         +zuGYF5deMg3SA7/K9rgB2DH+KfF4j/qZJ1zddASmuAEdm9FBLv3z3Mw123g47qunQxG
-         5rwCzHyAZFr+akj/zKM0FFkn990suNcmAxD1uPL4AUc0brMXsdI7vUZOIJ2kmYQYZV/b
-         ajRw7AlfhHOBpEHP3BvXP2ZbGiC5gtGMPTHm9uwBAau4V0RnNUwuaYCjfsJ2zauaQYtP
-         7cqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726176472; x=1726781272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=shUfZxXMDRpMKCAQP+MW5jtasId7ndgHn/WYAvIFVIU=;
-        b=nWVq/IY+PN5YayywG4NkIpHI/OjJBCMNBzKNDuFf3+8HjbuBP1tbceW8KcXry/FKDc
-         e4V244ylszicceL8DVgOpCJMnNQRfxOieRhgmm+wLmRBRReXjJQEK3sfW8x5Cwvu3W+E
-         16+H1UO3HQxW+RKFRO+iWyltV0VPdGKCF0veGodtz2w/ttvdGMO0+DFY55WXs23hkQgz
-         6g0A3s+Ed13QUpdVn8/aTdTQTfmnMKMf/+mjC4wAweTK8uJ66SGbgLqJumnPBAvuoA45
-         vnRV4GvKkxH39Cf9mH5iSFM8pNnvan4mRrqwdC2q+jTojBG+1/CHA7DTJx/b5G0fJrhO
-         ovdw==
-X-Forwarded-Encrypted: i=1; AJvYcCWChW/lt0tnb8XlpiXOZYJfuQRbfS58DGG6MH4JFWlkD3aV9ALv+BnPzXhhYTj2rlOxV/ycMLUMKZOi294=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWr2r8rfDefx4OSNJ0JeNbu/NWz80a49tpe6cqGFxP1SrBEjlV
-	r0WsU+GBDAFmn4TaSWhyMPUVlXTbXM5PP5b8JboVYnGMS4iF0ddQ
-X-Google-Smtp-Source: AGHT+IGQqkCyfA9xv/r1rKq53mBs1DRUR6bsYBfle2gcyQyqpcuDzxUUzRl1iGnrHIV+DcqpdU9WCw==
-X-Received: by 2002:a17:902:d50b:b0:205:5d71:561e with SMTP id d9443c01a7336-2076e61e061mr59199795ad.26.1726176472195;
-        Thu, 12 Sep 2024 14:27:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076b009724sm18106835ad.251.2024.09.12.14.27.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 14:27:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 12 Sep 2024 14:27:50 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 1/1] hwmon: (sch5636) Print unknown ID in error string
- via %*pE
-Message-ID: <ac9698f5-6ff6-479e-8c13-00e8786ac44b@roeck-us.net>
-References: <20240911201903.2886874-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WqxU/tJn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB84C4CEC3;
+	Thu, 12 Sep 2024 21:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726178099;
+	bh=kmXZvanHM2aP6BvsXflVTH5pL35WMNNx+kY0TRpLKxY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=WqxU/tJnuuqnrEgJEAtn9blwZTZwgIs5dgDtvO/aXmh3uhXBzLGtpmXIEgJ6N1sun
+	 f35IcCL6MtITXMjapHG1NsxRiooMNgCv4ERNbAMdc7x01x4/bGnut/O4M9x3gdixBD
+	 I424zSsSXjeZqcr9f6agoagNwHItDhk/PqpE76XTjF4k09GT+s2oaKDePlXvbfm62f
+	 1J+m8TGuBaaXzrw/YLjji7okpmnF+7IJaRF8sXhtxqcpmXQBcC1X0o6CquU883tdJz
+	 5C6cshZBl/Ui5ILvdCza21eiaCPzkdZ4NwlPiTpda8M3skWSUV/y0maD6UIMy9fm+W
+	 jlFosYVjfnY2A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710343806644;
+	Thu, 12 Sep 2024 21:55:01 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.11-rc8
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240912210215.1907774-1-linux@roeck-us.net>
+References: <20240912210215.1907774-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240912210215.1907774-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc8
+X-PR-Tracked-Commit-Id: 20471071f198c8626dbe3951ac9834055b387844
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fdf042df04634248b65dc88dc4913026a9d1776f
+Message-Id: <172617810007.1733006.4691000440868797187.pr-tracker-bot@kernel.org>
+Date: Thu, 12 Sep 2024 21:55:00 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911201903.2886874-1-andriy.shevchenko@linux.intel.com>
 
-On Wed, Sep 11, 2024 at 11:19:03PM +0300, Andy Shevchenko wrote:
-> Instead of custom approach this allows to print escaped strings
-> via %*pE extension. With this the unknown ID will be printed
-> as a string. Nonetheless, leave hex values to be printed as well.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The pull request you sent on Thu, 12 Sep 2024 14:02:15 -0700:
 
-Applied.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.11-rc8
 
-Thanks,
-Guenter
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fdf042df04634248b65dc88dc4913026a9d1776f
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
