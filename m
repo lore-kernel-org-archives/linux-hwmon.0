@@ -1,61 +1,61 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCB3B672;
-	Fri, 13 Sep 2024 14:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3108880BFC;
+	Fri, 13 Sep 2024 16:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726237695; cv=none; b=qyG7UqZ2TCF4vw+VwJgierUQ/QH4fJ1gn1OSeeHZJSDDMAgtVtyWL4gIym5LF6JOb1Ja4GeQ+ZXaa/vpaRBabSYVaBuXbjl+Tp+I6CecD89xu4+Y52ARDQh7eKskbloMMx6BXob25ZIwbcBmTyEOg1JO3ceHkpUkuaB+J6uUrj4=
+	t=1726246410; cv=none; b=KCs7pOJWOnFXJxZ3chuZkq3rhhFSQHx21oaMe1KX5kKIZVIA5fh3pcRotUFBk3YUeQYHbQRG3K3uqkiDJPztiNOdzFAMo4rjfvFNKIZ2rapoJhQ8WZhpmFmVZKw487eGvIVkTnHA6elqaxnwtgcGtEomf6I9j2Vhig/IF78quXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726237695; c=relaxed/simple;
-	bh=oiI0FQhazTBPigLN4eIjH5kpGKL9+VIp23TCFhEdnok=;
+	s=arc-20240116; t=1726246410; c=relaxed/simple;
+	bh=TdlLgZhGO9xImjCmzjx46hes1PZ1LbyBx74FptCBzYY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Glu8yds6veQ9VQeRfaengus0aEEOB0qXhoZoJs1B50y0jScLj5nWU0ZcvZ3QhsPYWIloLX4/wja7XRdVYBOetd1uTyeyD4jVP0ZVpvDCHrn0Sx0ZRWK75MC9/vFmrkV49RgJYvPkvfuzXjzkFWKtmjSfu9W6AMkd3iXl2+tX9EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lo7P0Unn; arc=none smtp.client-ip=209.85.214.181
+	 In-Reply-To:Content-Type; b=J5/JSfEboQyedqsU3S2mwkzzTrPgP2yalNOa+GQNfx1Ro2fCPWcm4Zt+R9SKjePpEoJzgRn34unbf28uEdlvHidQ/Ue2L2Go1G7B+MOmQN1WM1GsvwfwNAsB3Z6Gaa3RRLhhP0Em/4uqzu4ZN6s3CakL5yyhkI1hG0y+KLWmV6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=inKosYRu; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lo7P0Unn"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2055a3f80a4so15789335ad.2;
-        Fri, 13 Sep 2024 07:28:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="inKosYRu"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7cf5e179b68so1998106a12.1;
+        Fri, 13 Sep 2024 09:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726237693; x=1726842493; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726246408; x=1726851208; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=367i4sannZtVWEIwwL6Mz15M+zUPnTosTJBvIj90qGM=;
-        b=lo7P0UnnO6MSsIJC1scrD/q0Q+hqcN9URyru0feNCWOH6xCTP7XhttUYw7oJxbtn2f
-         YWYTnwYeDwULG4vcxMQriZxHHbU51IHJIueyxhjGkCtAW5oKQtfr6PthxrPUVp8XbdBC
-         gqofg6ETv374kkcyRlEeRX5Jwj4Zquv84hUUFm4Mnrq7u8PKIumpx66BboPIrCwEc6FO
-         nX9BkkM4f7aIq7A/oZtbsgil/A3HkR/wxfapQ0VkNZdzUoeUV76NMCBy6Y7NfzOUnMGH
-         HkYMr9qvZC9ETFe8NpBF2OHrM8RAveu4ZrjDsNOzg05Dkqt1PmMUw2/2oIK1NUer6dQt
-         Do/A==
+        bh=hkVinr6MLPy9cHy7SDa9OE4uUcWlun5U1MjanWu09yo=;
+        b=inKosYRuOR2eLbzEb+5JDJuBr7sPJ51MRGpeP9aq4Zj1iVTHScQl5A8MOT5luthF08
+         Cu/tPLKVAH5NvrKp3kJzEfALJGgjcaBsj7CIB1MQbKN0VRf5yzXp7DKhuTtz3irl2WBh
+         zZmVtoC8eyvvsvNqClAn1Ax9IulCKnN7qoMFbhMxb/ht9siGXd/6Zlopmxx0QaIQT8jA
+         48sYUnz/bd9XtHE5ixjGhH5JjLBwj/XuowmUHvhIRbRrQHhEaVemykSwjjhIzFPj+Ie4
+         t3AzoSDKBRrJOGlwpqAF1rb5J0NDX6Un/hyo/A1XHHxSXrX8bDfXfosNDU1Adq2xPdaS
+         jCww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726237693; x=1726842493;
+        d=1e100.net; s=20230601; t=1726246408; x=1726851208;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=367i4sannZtVWEIwwL6Mz15M+zUPnTosTJBvIj90qGM=;
-        b=t6Dnj51Nsa18DGnmMQgrlWpNIjx5ffJeN7ZoCgIvXJjXBFpiWn0q1dv0vIo7HzoaRf
-         l17o4nDuouTBUbVS2xnZhSXNg603krm70pEBsc4QNafof0lRXul90S62fN7Xp03b0x9R
-         w9r+GJDF3dao6z2wrRrgGfiBFswYarFuR0xaE/zRjwYd1Z0dpG3Xgfr4iJkXj2FNRNXq
-         grD5/qdch7vQhLSg5jSRZYz0FSrDK4P/p3wEjTC0xVtrYEZck4baxDB8WB5nCqZpy488
-         lKDLF6TMvwvQNgwPwY+hVWEHQlPkXLhe0HHmAcWHaQTLfmYuABzQAUU1XQIzROuzpgWD
-         wAJA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDJQiw7pNW4/FsVHehk486F4iAipQOL72Ym3Am/P2ruWET4EOCbLxdboMhhL7ndRUsjI4SpjxCAiOI0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUlBE8IFZ+l/ym6hf+em1ly2+bIyTzQFSRaCGMr9GJTiKlO+GE
-	bU8FeBu2TgVl049QYdHlzS+DPIyPuRv0qM/uBFoKCQnrB9P5macS
-X-Google-Smtp-Source: AGHT+IHTRhCAEa4Qhc5QaRCkeygVrveR4NalMpodIe9yHcLJivanYPPxbEYBK6wj90rWcMtG1AOQ7Q==
-X-Received: by 2002:a17:902:d50a:b0:206:9caf:1e09 with SMTP id d9443c01a7336-2076e47a81amr86461355ad.61.1726237693003;
-        Fri, 13 Sep 2024 07:28:13 -0700 (PDT)
+        bh=hkVinr6MLPy9cHy7SDa9OE4uUcWlun5U1MjanWu09yo=;
+        b=A0Y/13vMLkANeaCe0omn2zVfDz0aAQjrOUghEk84Z2QolBg+oc1pA3gvlHo/eIJrr6
+         CEK72Yn6mORvcM6g1WIiVW/ED0VLIRMljqgbzSZZsn5lEZfCWkxU1YO1zv4NhPc1Un8h
+         C1hRgViiuA//Wu4kzNlE//wsS4Y6Sn6+kfnhP05JS+3I4QL3ALD/Aty7mVXnmSm0ZNNe
+         WDHMRIGkriysWgK13my84RIvSsuqWzq1iuBfYm/PFsgYWee4bJdF0XsuhmGPC8JyX+MH
+         LBM6Tif1lW+Nv5e146uOLGOTbV7xkEfJicYIig4CxkGIzXoNdcTwEp1vr5fPscEK9A2t
+         h5dg==
+X-Forwarded-Encrypted: i=1; AJvYcCVEEYfqRJud2Z1arO6vfFMqwaDz/UvTxmNgPO5CO+ra4RsQQspHi/5MQ11LAxYTqNmAkkIh3WVLCt9ezw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxvxamzL4y8hsRuaXzaqLA92iV5+fymHZjB46EZDrtRzjF/7Gx
+	r869+ZoMtkDC7j0/UFgLyh0GvfUJn8mpC3uLXyi83st22lSHExcV
+X-Google-Smtp-Source: AGHT+IHfW0Nb8coci7Dej6GJSv2gE3tg0mxvjob/Vzmllc2i3FmnA/gN6Fx1wNvaNdYG/l1w3J7fbA==
+X-Received: by 2002:a05:6a21:2d8b:b0:1cc:d9dc:5637 with SMTP id adf61e73a8af0-1cf758dd608mr11268384637.23.1726246408204;
+        Fri, 13 Sep 2024 09:53:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076afe9bf1sm28775065ad.226.2024.09.13.07.28.11
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-719090ad8casm6320441b3a.150.2024.09.13.09.53.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 07:28:12 -0700 (PDT)
+        Fri, 13 Sep 2024 09:53:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <48665660-5cca-4d92-a2b8-cf633ac632a6@roeck-us.net>
-Date: Fri, 13 Sep 2024 07:28:10 -0700
+Message-ID: <153c5be4-158e-421a-83a5-5632a9263e87@roeck-us.net>
+Date: Fri, 13 Sep 2024 09:53:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Fix WARN_ON() always called from
- devm_hwmon_device_unregister()
-To: PJ Waskiewicz <ppwaskie@kernel.org>, Matthew Sanders <m@ttsande.rs>,
- jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-References: <20240912091401.4101-1-m@ttsande.rs>
- <ca09333e-902e-4b2c-8c8c-eb7f0d2d4922@roeck-us.net>
- <488b3bdf870ea76c4b943dbe5fd15ac8113019dc.camel@kernel.org>
+Subject: Re: [PATCH net-next] eth: fbnic: Add hardware monitoring support
+To: Andrew Lunn <andrew@lunn.ch>, Sanman Pradhan <sanmanpradhan@meta.com>
+Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
+ kernel-team@meta.com, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, jdelvare@suse.com, horms@kernel.org,
+ mohsin.bashr@gmail.com, linux-hwmon@vger.kernel.org
+References: <20240913000633.536687-2-sanmanpradhan@meta.com>
+ <29cc431c-0020-4546-8658-6f06d84aa84b@lunn.ch>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,52 +116,59 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <488b3bdf870ea76c4b943dbe5fd15ac8113019dc.camel@kernel.org>
+In-Reply-To: <29cc431c-0020-4546-8658-6f06d84aa84b@lunn.ch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/12/24 23:40, PJ Waskiewicz wrote:
-> On Thu, 2024-09-12 at 07:13 -0700, Guenter Roeck wrote:
->> On 9/12/24 02:14, Matthew Sanders wrote:
->>> devm_hwmon_device_unregister() only takes parent of a devres-
->>> managed
->>> hwmon device as an argument. This always fails, as devres can't
->>> find
->>> the hwmon device it needs to unregister with the parent device
->>> alone.
->>> Without this patch, the WARN_ON() in devm_hwmon_device_unregister()
->>> will
->>> always be displayed unconditionally:
->>>
->>> [    7.969746] WARNING: CPU: 1 PID: 224 at
->>> drivers/hwmon/hwmon.c:1205 devm_hwmon_device_unregister+0x28/0x30
->>>
->>> This patch adds an extra argument to
->>> devm_hwmon_device_unregister(), a
->>> pointer to a hwmon device which was previously registered to the
->>> parent using devres.
->>>
->>> There aren't any drivers which currently make use of this function,
->>> so
->>> any existing users of devm_hwmon_* shouldn't require any changes as
->>> a
->>> result of this patch.
->>
->> If there are no users, there is no need to keep the function. We
->> should drop
->> it instead.
+On 9/13/24 06:28, Andrew Lunn wrote:
+>> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
+>> +{
+>> +	if (type == hwmon_temp)
+>> +		return FBNIC_SENSOR_TEMP;
+>> +	if (type == hwmon_in)
+>> +		return FBNIC_SENSOR_VOLTAGE;
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
 > 
-> There aren't any direct in-tree users of the function.  But some out-
-> of-tree drivers can find it useful to use, hence Matt hitting this
-> issue.
+>> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>> +			    u32 attr, int channel, long *val)
+>> +{
+>> +	struct fbnic_dev *fbd = dev_get_drvdata(dev);
+>> +	const struct fbnic_mac *mac = fbd->mac;
+>> +	int id;
+>> +
+>> +	id = fbnic_hwmon_sensor_id(type);
+>> +	if (id < 0)
+>> +		return -EOPNOTSUPP;
 > 
-> If there's a desire to just remove it, that's fine.  But it would
-> remove a handy hook for out-of-tree stuff.
+> fbnic_hwmon_sensor_id() itself returns EOPNOTSUPP, so just use it.
+> 
+>> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
+>> +{
+>> +	if (!IS_REACHABLE(CONFIG_HWMON))
+>> +		return;
+>> +
+>> +	fbd->hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
+>> +						     fbd, &fbnic_chip_info,
+>> +						     NULL);
+>> +	if (IS_ERR(fbd->hwmon)) {
+>> +		dev_err(fbd->dev,
+>> +			"Cannot register hwmon device %pe, aborting\n",
+>> +			fbd->hwmon);
+> 
+> aborting is probably the wrong word, because you keep going
+> independent of it working or not.
 > 
 
-Any use of this function is most likely wrong. Out-of-tree code is
-completely irrelevant for the upstream kernel. On the contrary - it
-is another reason for removing this function. I'll do that myself.
+I have not seen the original patch, and it doesn't seem to be available
+on the networking mailing list, so I can not really comment on the patch
+as a whole. For hwmon drivers in drivers/hwmon, I don't accept patches
+with dev_err() which is then ignored ... because ignoring the error
+means that it is not really an error. This should be dev_warn()
+or better dev_notice().
 
 Guenter
+
+
 
