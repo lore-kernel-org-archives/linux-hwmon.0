@@ -1,92 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8214254BD4
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Sep 2024 09:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C73D1E505;
+	Fri, 13 Sep 2024 13:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726220775; cv=none; b=QIFgqVxmkiCksON7V9stVli4AtOBKveXaT5ng/onD9HSQvynZ3BXeUXVV85KklOjCLKKxT8c8DYRcCK+cIIV/46XDej23QYasZiCdBoSvXPvPnIZugO/JPnhRiZBj18D530eRP6qiufLlHUo1lXwetc+spylNw619igFz/OM9xY=
+	t=1726234138; cv=none; b=R2R69hl+li9xIcFg6bWjnFD3WDkpsLw+G83hEkfy5UmDr1lVg+pp+EJDz839L3kGHlzmP+qEze/dSAleN4jiSvsnwKAAXtSadIXB/V43IqH6IObJN80g+Ry+ly0pqkgb/jEbFm1Zxni07EcVXj3V5lf8ItR/Znxz/kZkFVu3Zy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726220775; c=relaxed/simple;
-	bh=ISwSCHYkXDb6Th83WAS8dgoZ4YDbI4MwUzDiPaxo5qc=;
+	s=arc-20240116; t=1726234138; c=relaxed/simple;
+	bh=1022RRP340cRSO+QVAi5rBGD8u532BHjh5z/sB2SsCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pdst/drB6jeggLRGBBAKLEmnDyzu0urIkJ3qLLzG+SqGe81R6Jgpjjl+bRxlpAfAGHoESIG1I0TyrZYXjBGMQm48Z2FaZpby9lfrdVUwOCY5KlGA8oXSwFN2ld13gzuwHsEiiMM+/h1HSFA0sT0dqLaOKUoWGs+isOggOyTxBDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sc0KWXyC; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwRtuSuDuzkmf9o4PlAi52XjFz+rNMqg5adPXJKwOI6YY9/S2lviFeTo4UhnHDvEx7tPJDUK8xVCOtr7lcCPD9/UDe7KiousH56E3OvqMfPC6trzNzEfTtI6383trnJ81hdB00XKPS5OWmQwk/cWwRcYVb6ajW0Un5SRTMIpoIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=YXIYAXdS; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sc0KWXyC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2B1C4CEC0;
-	Fri, 13 Sep 2024 09:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726220775;
-	bh=ISwSCHYkXDb6Th83WAS8dgoZ4YDbI4MwUzDiPaxo5qc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sc0KWXyCvO/dVw9q7eg7H3BtMnOLa9t+tfrduo72dHbiVjdOdmmIpEHtAzMr3gzqV
-	 bmpLuTm3wAAxbHzF98UHTRcnjpQjIPhpKGXr3kWqZJ5tQjkoyolpDmbvffrvi64ECN
-	 +HL3QZSrifPQVrozSs71gNxkCVxlFudkS/YEkKRhuGtbBsEA4jXlvuf2hwcFqe2oZB
-	 DJupsqIomQTzlcdLFP52WtJG/BYjQQeBH04t3KiXV6rk4oNrEfAPcg9tHYpBkQMkqo
-	 oHMq03C5KRyPye/wAYHVCogAQW0Z6XTNaCkNiB1qJxk3S86XtRgozInnooVXf/m82w
-	 ornCqAyh/1lPw==
-Date: Fri, 13 Sep 2024 11:46:10 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: Riana Tauro <riana.tauro@intel.com>, andi.shyti@linux.intel.com, 
-	jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com, 
-	tursulin@ursulin.net, linux@roeck-us.net, andriy.shevchenko@linux.intel.com, 
-	intel-gfx@lists.freedesktop.org, linux-hwmon@vger.kernel.org, anshuman.gupta@intel.com, 
-	badal.nilawar@intel.com, ashutosh.dixit@intel.com, karthik.poosa@intel.com
-Subject: Re: [PATCH v3] drm/i915/hwmon: expose package temperature
-Message-ID: <go5gwihnfslcmcxpqiajxg35pniov4pjlpkkb33bp5o3wftk7s@6kodd3ugl7wc>
-References: <20240910105242.3357276-1-raag.jadav@intel.com>
- <b0eb87b5-e42d-4ab0-9d48-7ca07ef80708@intel.com>
- <ZuP9Cvd_LfJS_Yir@black.fi.intel.com>
- <htzuvg2nupr6glndudxywz7uzbbjmgpecge4krll4fz2e35bdq@c7ague67qzx6>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="YXIYAXdS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=EZKyoq/h0g2UuxIPKNChZBl6fkVdBQqin7H4RfFUCmM=; b=YXIYAXdSofv+yeaHtTWBwSNg8m
+	+NnU8R7VyZwmuol2iMiQYicoPZDfxjdUuc1pDVr/EkQnTkWHx1nTV1QxUkCVJAKZUy3o/xBmuDMRZ
+	3/A5m4Z6vEVPcfNsA7Aemeh0kOAgUn5xFe2956ulPAOfggW0l/Wq2WF/4y7mPkz7hDRw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sp6Lq-007Ob0-K0; Fri, 13 Sep 2024 15:28:42 +0200
+Date: Fri, 13 Sep 2024 15:28:42 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Sanman Pradhan <sanmanpradhan@meta.com>
+Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
+	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net,
+	horms@kernel.org, mohsin.bashr@gmail.com,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH net-next] eth: fbnic: Add hardware monitoring support
+Message-ID: <29cc431c-0020-4546-8658-6f06d84aa84b@lunn.ch>
+References: <20240913000633.536687-2-sanmanpradhan@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <htzuvg2nupr6glndudxywz7uzbbjmgpecge4krll4fz2e35bdq@c7ague67qzx6>
+In-Reply-To: <20240913000633.536687-2-sanmanpradhan@meta.com>
 
-Hi Raag,
+> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
+> +{
+> +	if (type == hwmon_temp)
+> +		return FBNIC_SENSOR_TEMP;
+> +	if (type == hwmon_in)
+> +		return FBNIC_SENSOR_VOLTAGE;
+> +
+> +	return -EOPNOTSUPP;
+> +}
 
-On Fri, Sep 13, 2024 at 10:57:00AM GMT, Andi Shyti wrote:
-> On Fri, Sep 13, 2024 at 11:51:22AM GMT, Raag Jadav wrote:
-> > On Fri, Sep 13, 2024 at 11:14:22AM +0530, Riana Tauro wrote:
-> > > On 9/10/2024 4:22 PM, Raag Jadav wrote:
-> > > > Add hwmon support for temp1_input attribute, which will expose package
-> > > > temperature in millidegree Celsius. With this in place we can monitor
-> > > > package temperature using lm-sensors tool.
-> > > > 
-> > > > $ sensors
-> > > > i915-pci-0300
-> > > > Adapter: PCI adapter
-> > > > in0:         990.00 mV
-> > > > fan1:        1260 RPM
-> > > > temp1:        +45.0°C
-> > > > power1:           N/A  (max =  35.00 W)
-> > > > energy1:      12.62 kJ
-> > > > 
-> > > > v2: Use switch case (Anshuman)
-> > > > v3: Comment adjustment (Riana)
-> > > > 
-> > > > Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/11276
-> > > > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > > > Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
-> > > > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> > > Looks good to me
-> > > Reviewed-by: Riana Tauro <riana.tauro@intel.com>
-> > 
-> > Thank you :)
-> > 
-> > Andi, can you pick this one up? Anshuman's machine is down.
-> 
-> Sure!
+> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> +			    u32 attr, int channel, long *val)
+> +{
+> +	struct fbnic_dev *fbd = dev_get_drvdata(dev);
+> +	const struct fbnic_mac *mac = fbd->mac;
+> +	int id;
+> +
+> +	id = fbnic_hwmon_sensor_id(type);
+> +	if (id < 0)
+> +		return -EOPNOTSUPP;
 
-merged to drm-intel-next.
+fbnic_hwmon_sensor_id() itself returns EOPNOTSUPP, so just use it.
 
-Thanks,
-Andi
+> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
+> +{
+> +	if (!IS_REACHABLE(CONFIG_HWMON))
+> +		return;
+> +
+> +	fbd->hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
+> +						     fbd, &fbnic_chip_info,
+> +						     NULL);
+> +	if (IS_ERR(fbd->hwmon)) {
+> +		dev_err(fbd->dev,
+> +			"Cannot register hwmon device %pe, aborting\n",
+> +			fbd->hwmon);
+
+aborting is probably the wrong word, because you keep going
+independent of it working or not.
+
+	Andrew
