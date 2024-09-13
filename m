@@ -1,174 +1,259 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3108880BFC;
-	Fri, 13 Sep 2024 16:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22EB26289;
+	Fri, 13 Sep 2024 23:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726246410; cv=none; b=KCs7pOJWOnFXJxZ3chuZkq3rhhFSQHx21oaMe1KX5kKIZVIA5fh3pcRotUFBk3YUeQYHbQRG3K3uqkiDJPztiNOdzFAMo4rjfvFNKIZ2rapoJhQ8WZhpmFmVZKw487eGvIVkTnHA6elqaxnwtgcGtEomf6I9j2Vhig/IF78quXM=
+	t=1726271376; cv=none; b=lL2BgvT2N6+RjqGkdqQ43AZZUapRLhiUY/zKag/bqsiLHfnqeXaXHGnvd+kjTu30bZ5bAfvhBQtHRcmqyUfgsDQQN5H1AYrm3MomrXRRWY2F8RiXD+lG7AL01eAll+thHdTlhD5fyf2TDuQ3aGuc1hCoLdXPZ72dOUtDDenxr2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726246410; c=relaxed/simple;
-	bh=TdlLgZhGO9xImjCmzjx46hes1PZ1LbyBx74FptCBzYY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J5/JSfEboQyedqsU3S2mwkzzTrPgP2yalNOa+GQNfx1Ro2fCPWcm4Zt+R9SKjePpEoJzgRn34unbf28uEdlvHidQ/Ue2L2Go1G7B+MOmQN1WM1GsvwfwNAsB3Z6Gaa3RRLhhP0Em/4uqzu4ZN6s3CakL5yyhkI1hG0y+KLWmV6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=inKosYRu; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726271376; c=relaxed/simple;
+	bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ueIIBLKu9WY+m70GbEeZXYpVfkQoL0nMUSJg9m70VajpwWAaVP76IJhwyAMSgCWmMTUkaeJ+ifx/8+a+exUCGGb865VuC0AHMVjO4wS9H2W5shmfp247ocdJWn6ELtaGNnaW7dVgcJOVrFBO0XLsx1NMa3ir4zon4kTJKDN7NU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PTfV6vf+; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="inKosYRu"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7cf5e179b68so1998106a12.1;
-        Fri, 13 Sep 2024 09:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726246408; x=1726851208; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hkVinr6MLPy9cHy7SDa9OE4uUcWlun5U1MjanWu09yo=;
-        b=inKosYRuOR2eLbzEb+5JDJuBr7sPJ51MRGpeP9aq4Zj1iVTHScQl5A8MOT5luthF08
-         Cu/tPLKVAH5NvrKp3kJzEfALJGgjcaBsj7CIB1MQbKN0VRf5yzXp7DKhuTtz3irl2WBh
-         zZmVtoC8eyvvsvNqClAn1Ax9IulCKnN7qoMFbhMxb/ht9siGXd/6Zlopmxx0QaIQT8jA
-         48sYUnz/bd9XtHE5ixjGhH5JjLBwj/XuowmUHvhIRbRrQHhEaVemykSwjjhIzFPj+Ie4
-         t3AzoSDKBRrJOGlwpqAF1rb5J0NDX6Un/hyo/A1XHHxSXrX8bDfXfosNDU1Adq2xPdaS
-         jCww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726246408; x=1726851208;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hkVinr6MLPy9cHy7SDa9OE4uUcWlun5U1MjanWu09yo=;
-        b=A0Y/13vMLkANeaCe0omn2zVfDz0aAQjrOUghEk84Z2QolBg+oc1pA3gvlHo/eIJrr6
-         CEK72Yn6mORvcM6g1WIiVW/ED0VLIRMljqgbzSZZsn5lEZfCWkxU1YO1zv4NhPc1Un8h
-         C1hRgViiuA//Wu4kzNlE//wsS4Y6Sn6+kfnhP05JS+3I4QL3ALD/Aty7mVXnmSm0ZNNe
-         WDHMRIGkriysWgK13my84RIvSsuqWzq1iuBfYm/PFsgYWee4bJdF0XsuhmGPC8JyX+MH
-         LBM6Tif1lW+Nv5e146uOLGOTbV7xkEfJicYIig4CxkGIzXoNdcTwEp1vr5fPscEK9A2t
-         h5dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVEEYfqRJud2Z1arO6vfFMqwaDz/UvTxmNgPO5CO+ra4RsQQspHi/5MQ11LAxYTqNmAkkIh3WVLCt9ezw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxvxamzL4y8hsRuaXzaqLA92iV5+fymHZjB46EZDrtRzjF/7Gx
-	r869+ZoMtkDC7j0/UFgLyh0GvfUJn8mpC3uLXyi83st22lSHExcV
-X-Google-Smtp-Source: AGHT+IHfW0Nb8coci7Dej6GJSv2gE3tg0mxvjob/Vzmllc2i3FmnA/gN6Fx1wNvaNdYG/l1w3J7fbA==
-X-Received: by 2002:a05:6a21:2d8b:b0:1cc:d9dc:5637 with SMTP id adf61e73a8af0-1cf758dd608mr11268384637.23.1726246408204;
-        Fri, 13 Sep 2024 09:53:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-719090ad8casm6320441b3a.150.2024.09.13.09.53.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 09:53:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <153c5be4-158e-421a-83a5-5632a9263e87@roeck-us.net>
-Date: Fri, 13 Sep 2024 09:53:25 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PTfV6vf+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726271375; x=1757807375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
+  b=PTfV6vf+w5qBs2eIb0t5qg4j/m5ixmDd3XRcuyTzVwnMwZm002iQiTLh
+   S0KE6WpVdt2lC24qhLU9Kebu+vCP0ynqZr6d/Qqg0ZHOsPacCiRvvAFS5
+   y3jqzfA8cHe5iKhXKfUvT6vBCESTTItWpybJc1bLU0msBI9rJcRjwRSTh
+   CI2yJMu+UT4F5DL94xwn7jWGR4lTnQx6Fp0Wrj0SFhNLUDTRBdwGuJBWU
+   XEjtQHpyL5AcyGBUxzjbMnnCpaFylextBaHPTcNXL8qOoZtw/CoqExv43
+   KjSlSe9Ibowt+nwEjhkI+QZBGLEd7bkQ/TxEC+pIKtp0N1x8AANXr2ZiF
+   A==;
+X-CSE-ConnectionGUID: lnzP+/eAS02VVDs1KAskNA==
+X-CSE-MsgGUID: HxnItlhBSDSI9fMxsIB8EQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25311619"
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="25311619"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 16:49:34 -0700
+X-CSE-ConnectionGUID: tm56/a9ST0O+NtQ8axKrsg==
+X-CSE-MsgGUID: v2Wr+VnwS7uiDWleXfcRHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="105688913"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 13 Sep 2024 16:49:32 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1spG2b-00079G-1s;
+	Fri, 13 Sep 2024 23:49:29 +0000
+Date: Sat, 14 Sep 2024 07:49:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wenliang <wenliang202407@163.com>
+Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+Message-ID: <202409140727.4pErU6oc-lkp@intel.com>
+References: <20240822074426.7241-1-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] eth: fbnic: Add hardware monitoring support
-To: Andrew Lunn <andrew@lunn.ch>, Sanman Pradhan <sanmanpradhan@meta.com>
-Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
- kernel-team@meta.com, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, jdelvare@suse.com, horms@kernel.org,
- mohsin.bashr@gmail.com, linux-hwmon@vger.kernel.org
-References: <20240913000633.536687-2-sanmanpradhan@meta.com>
- <29cc431c-0020-4546-8658-6f06d84aa84b@lunn.ch>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <29cc431c-0020-4546-8658-6f06d84aa84b@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
 
-On 9/13/24 06:28, Andrew Lunn wrote:
->> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
->> +{
->> +	if (type == hwmon_temp)
->> +		return FBNIC_SENSOR_TEMP;
->> +	if (type == hwmon_in)
->> +		return FBNIC_SENSOR_VOLTAGE;
->> +
->> +	return -EOPNOTSUPP;
->> +}
-> 
->> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->> +			    u32 attr, int channel, long *val)
->> +{
->> +	struct fbnic_dev *fbd = dev_get_drvdata(dev);
->> +	const struct fbnic_mac *mac = fbd->mac;
->> +	int id;
->> +
->> +	id = fbnic_hwmon_sensor_id(type);
->> +	if (id < 0)
->> +		return -EOPNOTSUPP;
-> 
-> fbnic_hwmon_sensor_id() itself returns EOPNOTSUPP, so just use it.
-> 
->> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
->> +{
->> +	if (!IS_REACHABLE(CONFIG_HWMON))
->> +		return;
->> +
->> +	fbd->hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
->> +						     fbd, &fbnic_chip_info,
->> +						     NULL);
->> +	if (IS_ERR(fbd->hwmon)) {
->> +		dev_err(fbd->dev,
->> +			"Cannot register hwmon device %pe, aborting\n",
->> +			fbd->hwmon);
-> 
-> aborting is probably the wrong word, because you keep going
-> independent of it working or not.
-> 
+Hi Wenliang,
 
-I have not seen the original patch, and it doesn't seem to be available
-on the networking mailing list, so I can not really comment on the patch
-as a whole. For hwmon drivers in drivers/hwmon, I don't accept patches
-with dev_err() which is then ignored ... because ignoring the error
-means that it is not really an error. This should be dev_warn()
-or better dev_notice().
+kernel test robot noticed the following build errors:
 
-Guenter
+[auto build test ERROR on linux/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240912-002906
+base:   linux/master
+patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
+patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409140727.4pErU6oc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
+     493 |         sq522xx_regmap_config.max_register = data->config->registers;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
+      67 | static const struct regmap_config sq522xx_regmap_config = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      68 |         .reg_bits = 8,
+         |         ~~~~~~~~~~~~~~
+      69 |         .val_bits = 16,
+         |         ~~~~~~~~~~~~~~~
+      70 | };
+         | ~
+   7 warnings and 1 error generated.
 
 
+vim +493 drivers/hwmon/sq52205.c
 
+   460	
+   461	static int sq522xx_probe(struct i2c_client *client)
+   462	{
+   463		struct device *dev = &client->dev;
+   464		struct sq522xx_data *data;
+   465		struct device *hwmon_dev;
+   466		u32 val;
+   467		int ret, group = 0;
+   468		enum sq522xx_ids chip;
+   469	
+   470		if (client->dev.of_node)
+   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
+   472		else
+   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
+   474	
+   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   476		if (!data)
+   477			return -ENOMEM;
+   478	
+   479		/* set the device type */
+   480		data->client = client;
+   481		data->config = &sq522xx_config[chip];
+   482		mutex_init(&data->config_lock);
+   483	
+   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
+   485			val = SQ522XX_RSHUNT_DEFAULT;
+   486	
+   487	
+   488		if (val <= 0 || val > data->config->calibration_factor)
+   489			return -ENODEV;
+   490	
+   491		data->rshunt = val;
+   492	
+ > 493		sq522xx_regmap_config.max_register = data->config->registers;
+   494	
+   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
+   496		if (IS_ERR(data->regmap)) {
+   497			dev_err(dev, "failed to allocate register map\n");
+   498			return PTR_ERR(data->regmap);
+   499		}
+   500	
+   501	
+   502		ret = sq522xx_init(data);
+   503		if (ret < 0) {
+   504			dev_err(dev, "error configuring the device: %d\n", ret);
+   505			return -ENODEV;
+   506		}
+   507		if (chip == sq52205) {
+   508			ret = sq52205_init(data);
+   509			if (ret < 0) {
+   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
+   511				return -ENODEV;
+   512			}
+   513		}
+   514	
+   515		data->groups[group++] = &sq522xx_group;
+   516		if (chip == sq52205)
+   517			data->groups[group++] = &sq52205_group;
+   518	
+   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+   520									data, data->groups);
+   521		if (IS_ERR(hwmon_dev))
+   522			return PTR_ERR(hwmon_dev);
+   523	
+   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+   525			 client->name, data->rshunt);
+   526	
+   527		return 0;
+   528	}
+   529	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
