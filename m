@@ -1,143 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F306E186E46;
-	Fri, 13 Sep 2024 06:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7897015443F
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Sep 2024 08:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726209610; cv=none; b=A6uj370Jsaj6w4KhAsndwFJARYm5oQO44VKSz7AU7pP/8sEQutS1N7bX1ehQcM8+z6caZOue+ivg8nqzq2qE6dKGGqBL1MrDU7gmuRi0n2vkJ72ozBEvwxdCWrXt2TWEWbSCSycJJT0HsRIpnDGGBj/yhfk6C4dlUzfRT7RZ7xQ=
+	t=1726217492; cv=none; b=EvP/d06yJsfO9mLU5HMiP0a4U8jpNg+xHCOWW/P6q726gkz3xs3VTFgpkEgeqlZ+mHSNYakajqJXsLoIn9COT+t3s7rxIzwCs0HbdlNEmq23N2+b5QZMxg9jxEv0/ITMCFKNhGVUZLQEbvKbyIraf2IVcJxLv1AkgkkyMPfIFYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726209610; c=relaxed/simple;
-	bh=T+QA0JQw/tcCgEq6Zy6uk3t1T8mRvpS6RiUFW0kEWT4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=quiS4pW2byxnq4FLCKlfB+fBdS0LvaMAyVb7zWivhroZ3W5qEouvcD/AHvqt87o/GnEh87O4+3TPvjoTkGIuB4nfDIeu9BNyAndxtbWvljzymlRdCdKDq3Mj5RMpIXAcfA0kZK+eVhvBb+BSYQUWYHbwEZfBn2B2v+ZrVrknG/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YF8MT5gc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726217492; c=relaxed/simple;
+	bh=Kuou1UDIR8sRCsdCi3Dz03oGqiLyO92eLFhY9tNaFRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gnZOA1U+MwLSEhkkwDpS3yaAuHgpfebdDL+t1zfPq6SXQfPZ6+pY6syEjuE1xBbC1SutZR98pcnyr8P8Ai0llCzCWegBGg0+tles4Pif6amkuZ0V0UqQtXPdJB5rRqHGFekCmQxAMVt0pFxD/rW3rxd/u4lkvJ4AYQPzUKVO1xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4qPj6Hu; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YF8MT5gc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C11AC4CEC0;
-	Fri, 13 Sep 2024 06:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726209609;
-	bh=T+QA0JQw/tcCgEq6Zy6uk3t1T8mRvpS6RiUFW0kEWT4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=YF8MT5gcxKLKBvDLMde1acPu13DbF602qOUxqhGRYen1xySCmHwy/3cSWMuo3J6B+
-	 D1SBDUWFzSb8fA+xfD4kTpwcaEMZQj/8bOk8oYV5Rh3po5SB0lu7oMiB7YyPkVOIpU
-	 RYyTpMqHrQSQgVFiFkk3CUhy5djkWyPr0X9byR0Y/ekZlHdP4AAOAC0LiicUwrfMMX
-	 jYFBBlqEHgNU7OEsWYtp4uiEaUl+JdKwtKh6iU0TkWnhDvVYYnvKDf/gGnHQY9pUSn
-	 kAmwEW+NkrrypTokMfafFcMp/4LSWsnXxhS0uKiTvL26/f4ajje4ij/vQV6AFhWeE0
-	 38Z7N1aUjWT+w==
-Message-ID: <488b3bdf870ea76c4b943dbe5fd15ac8113019dc.camel@kernel.org>
-Subject: Re: [PATCH] hwmon: Fix WARN_ON() always called from
- devm_hwmon_device_unregister()
-From: PJ Waskiewicz <ppwaskie@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>, Matthew Sanders <m@ttsande.rs>, 
-	jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Date: Thu, 12 Sep 2024 23:40:08 -0700
-In-Reply-To: <ca09333e-902e-4b2c-8c8c-eb7f0d2d4922@roeck-us.net>
-References: <20240912091401.4101-1-m@ttsande.rs>
-	 <ca09333e-902e-4b2c-8c8c-eb7f0d2d4922@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4qPj6Hu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726217490; x=1757753490;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Kuou1UDIR8sRCsdCi3Dz03oGqiLyO92eLFhY9tNaFRY=;
+  b=J4qPj6Hu7vHii1nUYGAicX76IIfXxL7yzuvaUusqEXP2fd/iHH7O0lfl
+   2p30b/999NzCgrySi2BjZ2NPxSGfMorZZIu+B3xd2XxjkFBJC7SF+KFTd
+   h6zOCwCQ3FffakwZrQbgL0kETPsSa8mnQKsg+s28lneHFVUtaY6TCmBZG
+   JSG28UoNugS2Wdz8Zsb7QOmYpEPlY+K/WVxMKT82Xyfh0funCVppFNXml
+   +wi49CChUlujpAFswBhwIn8pCvafjWjwrZVYux6S+XYeeQTwcq29FyrxB
+   mGg+iTBlJWoD9fObreUB0i2QZEFBIjcxlS6gQrl0bUjFaPNay5w5A87ID
+   g==;
+X-CSE-ConnectionGUID: KQMjkCWrQ+OstOcgc7mSng==
+X-CSE-MsgGUID: NtKEfEX9QIqGZ4y9Vsxuog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="36488158"
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="36488158"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 01:51:29 -0700
+X-CSE-ConnectionGUID: pp7l4qToQl+QtMddyvZaIw==
+X-CSE-MsgGUID: hIeNoAJUQgq30dUhb+FB9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="72790718"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 01:51:26 -0700
+Date: Fri, 13 Sep 2024 11:51:22 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Riana Tauro <riana.tauro@intel.com>, andi.shyti@linux.intel.com
+Cc: jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tursulin@ursulin.net, linux@roeck-us.net,
+	andriy.shevchenko@linux.intel.com, intel-gfx@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, anshuman.gupta@intel.com,
+	badal.nilawar@intel.com, ashutosh.dixit@intel.com,
+	karthik.poosa@intel.com
+Subject: Re: [PATCH v3] drm/i915/hwmon: expose package temperature
+Message-ID: <ZuP9Cvd_LfJS_Yir@black.fi.intel.com>
+References: <20240910105242.3357276-1-raag.jadav@intel.com>
+ <b0eb87b5-e42d-4ab0-9d48-7ca07ef80708@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b0eb87b5-e42d-4ab0-9d48-7ca07ef80708@intel.com>
 
-On Thu, 2024-09-12 at 07:13 -0700, Guenter Roeck wrote:
-> On 9/12/24 02:14, Matthew Sanders wrote:
-> > devm_hwmon_device_unregister() only takes parent of a devres-
-> > managed
-> > hwmon device as an argument. This always fails, as devres can't
-> > find
-> > the hwmon device it needs to unregister with the parent device
-> > alone.
-> > Without this patch, the WARN_ON() in devm_hwmon_device_unregister()
-> > will
-> > always be displayed unconditionally:
-> >=20
-> > [=C2=A0=C2=A0=C2=A0 7.969746] WARNING: CPU: 1 PID: 224 at
-> > drivers/hwmon/hwmon.c:1205 devm_hwmon_device_unregister+0x28/0x30
-> >=20
-> > This patch adds an extra argument to
-> > devm_hwmon_device_unregister(), a
-> > pointer to a hwmon device which was previously registered to the
-> > parent using devres.
-> >=20
-> > There aren't any drivers which currently make use of this function,
-> > so
-> > any existing users of devm_hwmon_* shouldn't require any changes as
-> > a
-> > result of this patch.
->=20
-> If there are no users, there is no need to keep the function. We
-> should drop
-> it instead.
+On Fri, Sep 13, 2024 at 11:14:22AM +0530, Riana Tauro wrote:
+> On 9/10/2024 4:22 PM, Raag Jadav wrote:
+> > Add hwmon support for temp1_input attribute, which will expose package
+> > temperature in millidegree Celsius. With this in place we can monitor
+> > package temperature using lm-sensors tool.
+> > 
+> > $ sensors
+> > i915-pci-0300
+> > Adapter: PCI adapter
+> > in0:         990.00 mV
+> > fan1:        1260 RPM
+> > temp1:        +45.0°C
+> > power1:           N/A  (max =  35.00 W)
+> > energy1:      12.62 kJ
+> > 
+> > v2: Use switch case (Anshuman)
+> > v3: Comment adjustment (Riana)
+> > 
+> > Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/11276
+> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> > Reviewed-by: Anshuman Gupta <anshuman.gupta@intel.com>
+> > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> Looks good to me
+> Reviewed-by: Riana Tauro <riana.tauro@intel.com>
 
-There aren't any direct in-tree users of the function.  But some out-
-of-tree drivers can find it useful to use, hence Matt hitting this
-issue.
+Thank you :)
 
-If there's a desire to just remove it, that's fine.  But it would
-remove a handy hook for out-of-tree stuff.
+Andi, can you pick this one up? Anshuman's machine is down.
 
--PJ
-
->=20
-> Also, your patch is not signed and therefore can not be applied.
->=20
-> Guenter
->=20
-> > ---
-> > =C2=A0 drivers/hwmon/hwmon.c | 6 ++++--
-> > =C2=A0 include/linux/hwmon.h | 2 +-
-> > =C2=A0 2 files changed, 5 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > index a362080d41fa..84945a276320 100644
-> > --- a/drivers/hwmon/hwmon.c
-> > +++ b/drivers/hwmon/hwmon.c
-> > @@ -1199,10 +1199,12 @@ static int devm_hwmon_match(struct device
-> > *dev, void *res, void *data)
-> > =C2=A0=C2=A0 * devm_hwmon_device_unregister - removes a previously regi=
-stered
-> > hwmon device
-> > =C2=A0=C2=A0 *
-> > =C2=A0=C2=A0 * @dev: the parent device of the device to unregister
-> > + * @hwdev: the hwmon device to unregister
-> > =C2=A0=C2=A0 */
-> > -void devm_hwmon_device_unregister(struct device *dev)
-> > +void devm_hwmon_device_unregister(struct device *dev, struct
-> > device *hwdev)
-> > =C2=A0 {
-> > -	WARN_ON(devres_release(dev, devm_hwmon_release,
-> > devm_hwmon_match, dev));
-> > +	WARN_ON(devres_release(dev, devm_hwmon_release,
-> > devm_hwmon_match,
-> > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hwdev));
-> > =C2=A0 }
-> > =C2=A0 EXPORT_SYMBOL_GPL(devm_hwmon_device_unregister);
-> > =C2=A0=20
-> > diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> > index e94314760aab..2434c6fc17a7 100644
-> > --- a/include/linux/hwmon.h
-> > +++ b/include/linux/hwmon.h
-> > @@ -481,7 +481,7 @@ devm_hwmon_device_register_with_info(struct
-> > device *dev,
-> > =C2=A0=C2=A0				const struct attribute_group
-> > **extra_groups);
-> > =C2=A0=20
-> > =C2=A0 void hwmon_device_unregister(struct device *dev);
-> > -void devm_hwmon_device_unregister(struct device *dev);
-> > +void devm_hwmon_device_unregister(struct device *dev, struct
-> > device *hwdev);
-> > =C2=A0=20
-> > =C2=A0 int hwmon_notify_event(struct device *dev, enum
-> > hwmon_sensor_types type,
-> > =C2=A0=C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 attr, int channe=
-l);
->=20
-
+Raag
