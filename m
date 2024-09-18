@@ -1,183 +1,122 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0873176FA7
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Sep 2024 12:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1211CD3F;
+	Wed, 18 Sep 2024 13:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726662754; cv=none; b=OZJTpiYangUEEBWzkZx6fMnekWQctPlVYHa6DF7IAGH7FZHc3fJZ4NlLwDUIngLLVLeI6QeJtsTSt9f9aAycLjcD6yk3H/385z5Yc2D/qXPxVtfzL9zQ0Sq/8bnXz/PrXLnMRk83pXLNQ4GZhkdkIKhW7Cw9gHGW7wLhKdv1w70=
+	t=1726664971; cv=none; b=gfcvOBvch0xJqKFyPFCdtgfMXelPuMz71ugxqdQRiRLotGMwSYXXnwb/PmcJwnenp2ROI8fzQ09uc8khbMaxI0iJXNgsuMWUdWDf5LP8ar2l0GgoZsPlp0AyxEvB05jKD3DYS5Q9Db05BUd23LhF+ixUETP4jlOwjwb4oI/qebk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726662754; c=relaxed/simple;
-	bh=k/e8sexnbaLpBkVwmoPdX8j/uxUczSy0iafFq7Y1q/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jVXVA73wSqhy5i9LyxrHBVH128A1kgSmpZdbfUBi/5NscKpZK/IuRHZZQA/eLIzpQUtL/xILDKkji582spaEW8CgDhV5PPjIqnHQ0L8Lu11PDbbCdPgQBopgpctInk8Af4a8n1gbiIIxITqtyaJR9WEfaHUihqtOfXa2E6LViuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BCS+CA4G; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1726664971; c=relaxed/simple;
+	bh=mkprWbpT2wGxmF/c5R7sG5Fz3VUnN6uka/jY6PobMjM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bngIsGnf+RCFGBFU3a0qCGQ1gS09b0/x0Xf4psrtx7l/L1xbqOO7LzuChkRH33UqruYrJgXKIxNLR12hz5xucYTCZ1P3aEb2BXqRVbTyCOpmlnEdJcOOWHrJLZd7x5QsbmVr3vjnftFoPx2VfFyNyLJaawMpfkfESQ/Zjs8aMPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWm/vk8j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BCS+CA4G"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374c4c6cb29so5751491f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Sep 2024 05:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726662749; x=1727267549; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BDK+lSSJW6WOROUYDPuYq7Bhv6BCT719rN9H7IKqmc0=;
-        b=BCS+CA4G9NhlQSRObD3liCVTVjc7glMxzf53akswpPXa7im8RT6Igui7BSSb0vJxH5
-         y48VqlqgBUPFyG+X5Bvm9b+GLcdhoQHvA3ftk+8IW6MuqlUDfNpDNlZdUNhlrnSiHhtz
-         FC5I52G2VH/ufwrTwJ/pEvgvVVajunTpxRCpLEEAHN86ZcVojvOgbY1Lf4DqZMFWlkhP
-         YJyIfcbD8x9QCX8xzxKAOXVh59didQxAthjwjIL8VdxsGvncOAawjBxLnRaibudDCJJI
-         rEigP8TOeBmImCdYoIqJFmaLhRD9ZM1NxmXL2uW+zFWY2WIpPjJI1J5fO1nTv6WNaDrp
-         0Wtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726662749; x=1727267549;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BDK+lSSJW6WOROUYDPuYq7Bhv6BCT719rN9H7IKqmc0=;
-        b=XVZGlqJQBX8g113I/bwi9KKcDVH83wbYEpAA7d8WRBFETvFXQq0GdaEbgdjKIgN0AA
-         7GYHZ6KapyMnwUDDT18AwgzETx6Spf5iaRoMXs4wNAJE0zXa4eYg0Bg1sr98W7iw02DD
-         zwoyPQ4BfnNk12EsAgYc5vAB8IhspkwQS1mOCixawmyATW1uMCA7GRNPEaHGR5hYR4Fw
-         Pinn97vBCl1HckI4nZbQmuFTsyjjiBc+VWYS4rXCcedxi/i2jHj8JQmD2NQt1AWPrV2Y
-         O0fKubhb0lpJctSW9hyEbP66mMkHNFpJ6vQDvDwnAlnJRBUmfjI6Ct4kFxHkBN39wy88
-         YaIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXAghJ0YyKyF/VQHa2TtjVn6JeRlM0yOu87zSFw3RYo7PQFUIZY6hQ4jJVlIPuFHvLvoKHB9t9Wt/zDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz/kpmNqsAwvyRQmPxD6RMuBrDlDQBOsLHPU4l0b9XeNgf/i8s
-	VFr8LuIPtTSW66UuSCdgEaD3nE12kUaaeEyUQn9Fbdc3LVONrvD+Et4aYseMG+0=
-X-Google-Smtp-Source: AGHT+IGA3xaFF0ZJQiWZaLuzIrHBgVr6JiKXj5OQo1uhJICm26AP0EC/WU0hNGBC1dM1J0u5Dri3/w==
-X-Received: by 2002:a05:6000:1f85:b0:374:c318:2190 with SMTP id ffacd0b85a97d-378d625b64cmr19009269f8f.59.1726662749208;
-        Wed, 18 Sep 2024 05:32:29 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:a2bb:f619:b5e9:672f])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9061096735sm585401466b.44.2024.09.18.05.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Sep 2024 05:32:28 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Noah Wang <noahwang.wang@outlook.com>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: Drop explicit initialization of struct i2c_device_id::driver_data to 0
-Date: Wed, 18 Sep 2024 14:31:49 +0200
-Message-ID: <20240918123150.1540161-7-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWm/vk8j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E996FC4CEC3;
+	Wed, 18 Sep 2024 13:09:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726664969;
+	bh=mkprWbpT2wGxmF/c5R7sG5Fz3VUnN6uka/jY6PobMjM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PWm/vk8j+r6e0JzKTmxDKxKo1ODwqGwQafB91zxuZqWJg7cVwzvswsOiduJJYZmzq
+	 5mdOOCBa5eOXD6Uke7i0wuLLRCGBPtIxnrx0feAI6mxdThZ5cw0TDdqh/OqQzcQV4l
+	 RVYks6naXnxAxZkBCD+LODhvvj/hWmsPO3+W4c4Ng2statwIWLNNwzhsT5Iqqh7h9s
+	 PM9Yc+TmZumz2cL7co6qfa5gZ4POnrJn3F7RDTy1fZZJhk5UG7cHSEgU4Lj6Yk6hwJ
+	 /GubvRlIVEZoAHys6mvUGfoJ52e+7H4okTnpYGPfCDdEAshiawhx97ufz00wAwLBCY
+	 rL61OKpdq57Fg==
+Message-ID: <bc13d8fd-4f03-4445-bc4a-1e0ca7c23ef7@kernel.org>
+Date: Wed, 18 Sep 2024 15:09:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: hwmon: Add adt7462
+To: Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+ Thang Nguyen <thang@os.amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>,
+ Khanh Pham <khpham@amperecomputing.com>
+References: <20240918103212.591204-1-chanh@os.amperecomputing.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240918103212.591204-1-chanh@os.amperecomputing.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3337; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=k/e8sexnbaLpBkVwmoPdX8j/uxUczSy0iafFq7Y1q/8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBm6sg6ccP7/u2JfayEbAJjQH7vx0OQGulfTDfb+ dK/B/wPQyOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZurIOgAKCRCPgPtYfRL+ Tt+4B/93lJfpp5mtgCS9tkWygcBTaZpX1gf9VZjRBktTZPv0OC7d5zARiNYrlqyoq7jBXhM7OqG ukwlJuO+tVvYvUPloE+XTKQsgLW6Ihk3zVi7GZn4V/GbUyUWj6csMD5NSL8/N/y3MqylHIbdPHW Q/ztIs+3jcG8cqFvOrvS3OzI538Uq4zk9rHMjyVTe6EzoDgcrvi2gXQ0lbSMwRxvrrWnUMNe94G lG0NeN1M+qq7ZHWVL/Ao6hZnP4bT9gdNSxvOYi2D7Q38/Ua5rNq56enZ2g2bhFvXzSytNSEF69G /9XoQwDh8frLRlzGU2WtveEfhqQO3f9STksq7V2yUwQ91re3
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-These drivers don't use the driver_data member of struct i2c_device_id,
-so don't explicitly initialize this member.
+On 18/09/2024 12:32, Chanh Nguyen wrote:
+> Add device tree binding and example for adt7462 device.
+> 
+> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> ---
+>  .../bindings/hwmon/onnn,adt7462.yaml          | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 
-This prepares putting driver_data in an anonymous union which requires
-either no initialization or named designators. But it's also a nice
-cleanup on its own.
+Where is any user? This is supposed to be sent along driver change
+implementing this compatible.
 
-While touching these structs, also remove commas after the sentinel
-entries and use a consistent indention style.
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/onnn,adt7462.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/onnn,adt7462.yaml b/Documentation/devicetree/bindings/hwmon/onnn,adt7462.yaml
+> new file mode 100644
+> index 000000000000..4a980cca419a
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
- drivers/hwmon/amc6821.c      | 2 +-
- drivers/hwmon/pmbus/mp2891.c | 4 ++--
- drivers/hwmon/pmbus/mp2993.c | 4 ++--
- drivers/hwmon/pmbus/mp9941.c | 4 ++--
- drivers/hwmon/sg2042-mcu.c   | 4 ++--
- drivers/hwmon/spd5118.c      | 2 +-
- 6 files changed, 10 insertions(+), 10 deletions(-)
+Binding looks ok.
 
-diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
-index ac64b407ed0e..e86027f850c9 100644
---- a/drivers/hwmon/amc6821.c
-+++ b/drivers/hwmon/amc6821.c
-@@ -927,7 +927,7 @@ static int amc6821_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id amc6821_id[] = {
--	{ "amc6821", 0 },
-+	{ "amc6821" },
- 	{ }
- };
- 
-diff --git a/drivers/hwmon/pmbus/mp2891.c b/drivers/hwmon/pmbus/mp2891.c
-index bb28b15a9103..94ab4ae5fba0 100644
---- a/drivers/hwmon/pmbus/mp2891.c
-+++ b/drivers/hwmon/pmbus/mp2891.c
-@@ -572,8 +572,8 @@ static int mp2891_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id mp2891_id[] = {
--	{"mp2891", 0},
--	{}
-+	{ "mp2891" },
-+	{ }
- };
- MODULE_DEVICE_TABLE(i2c, mp2891_id);
- 
-diff --git a/drivers/hwmon/pmbus/mp2993.c b/drivers/hwmon/pmbus/mp2993.c
-index 944593e13231..63691dac2281 100644
---- a/drivers/hwmon/pmbus/mp2993.c
-+++ b/drivers/hwmon/pmbus/mp2993.c
-@@ -233,8 +233,8 @@ static int mp2993_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id mp2993_id[] = {
--	{"mp2993", 0},
--	{}
-+	{ "mp2993" },
-+	{ }
- };
- MODULE_DEVICE_TABLE(i2c, mp2993_id);
- 
-diff --git a/drivers/hwmon/pmbus/mp9941.c b/drivers/hwmon/pmbus/mp9941.c
-index 543955cfce67..8ab5fc4d4092 100644
---- a/drivers/hwmon/pmbus/mp9941.c
-+++ b/drivers/hwmon/pmbus/mp9941.c
-@@ -291,8 +291,8 @@ static int mp9941_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id mp9941_id[] = {
--	{"mp9941", 0},
--	{}
-+	{ "mp9941" },
-+	{ }
- };
- MODULE_DEVICE_TABLE(i2c, mp9941_id);
- 
-diff --git a/drivers/hwmon/sg2042-mcu.c b/drivers/hwmon/sg2042-mcu.c
-index 141045769354..aa3fb773602c 100644
---- a/drivers/hwmon/sg2042-mcu.c
-+++ b/drivers/hwmon/sg2042-mcu.c
-@@ -346,8 +346,8 @@ static void sg2042_mcu_i2c_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id sg2042_mcu_id[] = {
--	{ "sg2042-hwmon-mcu", 0 },
--	{},
-+	{ "sg2042-hwmon-mcu" },
-+	{ }
- };
- MODULE_DEVICE_TABLE(i2c, sg2042_mcu_id);
- 
-diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-index fcbce5a01e55..6cee48a3e5c3 100644
---- a/drivers/hwmon/spd5118.c
-+++ b/drivers/hwmon/spd5118.c
-@@ -671,7 +671,7 @@ static int spd5118_resume(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
- 
- static const struct i2c_device_id spd5118_id[] = {
--	{ "spd5118", 0 },
-+	{ "spd5118" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, spd5118_id);
 
-base-commit: 55bcd2e0d04c1171d382badef1def1fd04ef66c5
--- 
-2.45.2
+Best regards,
+Krzysztof
 
