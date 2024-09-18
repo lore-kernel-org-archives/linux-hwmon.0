@@ -1,191 +1,159 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B3213AD1C
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Sep 2024 16:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748401B1505;
+	Wed, 18 Sep 2024 17:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726678659; cv=none; b=S/SdOqwMWbX9Sy4TooSYVzvKh7WT5B8wSezpBFbNyVqDv84tmQjDm2juYbS96KTG7FGQ4BuuK3J7SAYsKiPtErZMgCZ8q27oSl1f+qhOoV+ehb7M5DcCtC74Oj8RMj2xAqgs4GyB+/Rf0oYIvEtq1q/VKzN1pWgc2plhVuLxEkI=
+	t=1726679416; cv=none; b=nYE95VHJwZaVBBW+D3XaZvt6+bHHL9L1IU8u/P7GtQx7MSMt0brpjM+kYjTvL9QiBhcUyiWR9Ivwry9hPn3lGIA/0nTbC8u3On/gc6q2GMisdGIGBDmHe7w501EYv3m1TAxdpptBaqgZTLhrm9Sh+GZCfZnfm5t7kLi1xtW7Gi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726678659; c=relaxed/simple;
-	bh=mK8OOUCq4LK0EraxrvUqCaBNGfDVjebVd5vYxzj2alM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GMAliUkCQyLnO7QXk2M9pKG3BwVBX87llGCtsh58lpk/bBy1s/sxfY1oQZSDfD0/Gg+8XwOJEwGF6KqneJuQhtS66PbWXHzCklOCEZjFDGFKqk5bi4cajcTEelFZcACLNtW4zxYvJLPikLjqVTcrFHhhumHA1CnluNGEcxpXM84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aZa+KkQA; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1726679416; c=relaxed/simple;
+	bh=L4yLwIoVt4BSHIH1bxNEN/Cr/3eewtWIwpTxo4CyP2k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B2TOo0yZJBdLiYs5Jt1+MVLzagEHaZqZby/o6KkCs+/PbFWUHkG8QsO0/+XCOjqsYhuRRGJ4cA/ZgIWQyHpHaG0Truv1nLx026FAGlVK7QHCBps0cR/zqQFSihuf5u0098i7VStaspScGgVLdToh1LP9sz54yDzTx0spr0zbmoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSmAuUc6; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aZa+KkQA"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2da55ea8163so4879311a91.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Sep 2024 09:57:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSmAuUc6"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-205722ba00cso145455ad.0;
+        Wed, 18 Sep 2024 10:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726678657; x=1727283457; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=srVRljVT4v1DraZPCjeuf5/C2spuCDkTooyXSXkCupk=;
-        b=aZa+KkQAzuHd5oZ7tq1RpC7zjD/JTQmelTBIzm/e/Hs0wIEk2CF1PkeZfCNtEh99QY
-         zobGuAx9SNuEd5S7INHunv5QNCIzrHKt32VIP4xVNIG8bdNWHZKfb/+n3Ny7JYHODpO9
-         1O5K7we+HAbkmRRnpIE1rH/ilaNvtpSh0pVFRHOXwvyVy1GdbF8nl08Ov89HlgqZuAPZ
-         raslr8tsTNME5v/j9tVJrD7G5Gws5DrZuEkp/jUICXQqcIUj5EccqMPRl52d7geC+PeR
-         kqTpAyx0xXO0o1UWevldepxzMOfbe8wL7HHkbeiY38G68Tj42TI2Xh51mORxlMG3/dWn
-         VfOA==
+        d=gmail.com; s=20230601; t=1726679415; x=1727284215; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9vYLjiVwTBRNkEh1sg4rE4Yh0l+ekkx9H32x9BbROM=;
+        b=DSmAuUc6ajQ+qXwe2TiwOQNPK7aqd4Zu61Kupr2Gxe2D45jds5Y2e5KNd3kyEZVjAg
+         S5xPqCB4W8NL/eMw5MJGkYxiGFkkPnsACKmQhVLmRuDZhemvhT2in6J5OX1sn0GhvQvY
+         HLSlB876c6RUZPTuUS5QTA9svGYiPh5DlJkHZu02vciMKitg4vqnhJRO8856FQ9Fgrvn
+         1H4kNb9ReJ4XPaivfo34F8MIE7NyQwAomDTk594976Y1IsHOgKpbZAkOw28yGeBoEGr+
+         Pav967xu9oMWMkTX9HlDiVqfuk8cYEIQVPp9Kg6xl6DNxr8hLI7Vb2vG3PJFK4bxPty3
+         GB1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726678657; x=1727283457;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=srVRljVT4v1DraZPCjeuf5/C2spuCDkTooyXSXkCupk=;
-        b=lnWKn1/lDR5uHhE38vEyA5S3427j9ZB33cYFOO5Ukr2LWKvf8KcxbKSzfv54CmPijr
-         heD15Vshav6311sEIKfh7PAg7fLEV2AkW9wc6b+MQl4qNBFbSC1TNEA9Tp3KzFlteFQR
-         7RqX6cvet+WCZ42bMMeNQIriGxf5wthSKfj2Notm00FvXrflPDVDxxjsBsjYP2+Rl+vs
-         fyJCQYrmFDfvPMAQGVH4Xh+j4aNDiZfYjC5KsLFjU01MckGQH6RSMmTlAL2NjVTzMJIY
-         NSLKTKEQnh4Chrj7QyDJb38PtP+0kcARxgb7Djl3CBnzwOG4I9FsuInbV2pEgcVzuwFY
-         lpKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUiD9OK3TV5RGUHLq7iEf3x4abmtVQRobRUgp3Qw/ACHZbbxtf0jm0N6DkU/Y4UDg1ybeB1iVeLcABAkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXZlmAjxiQOiQVyFjZnPOrU7JCcJd7TzKLZcPxFAQu4ZIVlt1E
-	/KSX6GrOmA0ki/cCp7AiAcTCuNdWnqTe9NSf2IaQfZ9vJsAgohg6
-X-Google-Smtp-Source: AGHT+IGBldCAaibh5tWB4uQMpW8lmpEGRS7HJX+v4fpMYgb5wpqgv80Pi9mQyIbGwDA7ttdWdh7dIQ==
-X-Received: by 2002:a05:6a21:58b:b0:1d2:e81c:ac76 with SMTP id adf61e73a8af0-1d2e81caca9mr7369800637.32.1726678657184;
-        Wed, 18 Sep 2024 09:57:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944b9ac28sm7166160b3a.172.2024.09.18.09.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Sep 2024 09:57:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726679415; x=1727284215;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q9vYLjiVwTBRNkEh1sg4rE4Yh0l+ekkx9H32x9BbROM=;
+        b=nmO/lUgcaeEdCp+ZQ23FiMy5MnV41qO+LiVL9NPBSndcev7Du1PUuZGhRewwc7v9q7
+         xP1AG/KyECpZ+DLeMBgHQ89qBhEd51nNqekQTf9UKVwvSBWnBBL3xRtUFjYT7C8n3zcS
+         /0Zo5UbKdjcP+I8RDx9hqfZF2nY+J1ejkMxduPnXaQGAqVTxaBZpfMHAHK3gBLKleq80
+         iQt6pq2FSwg3zo1YMyEcBsmw9GyCfwu3osz6yMM4HH4kNlPf9DBUot958O24FXPGa1Vz
+         RIpqgBnvVsVsyGR9JbxAI17bT8YZ7sfIhJpIPCBhv/Q+00QGGDFt+Vkd0uuJmQFv5g+d
+         6Zuw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgOhww+DZMmZnCmfaLUtpNBQQKm9qczOwBRhkZlqh6aB5TQWbw6o1bNOrsN+lX/uLFtEhCem1sy8IE@vger.kernel.org, AJvYcCUr/icG4zU9JvTSbH/mIz1lavM9Yd6TCI1cW1qJbbNUrK+AxWzOzycmW+2Mc6risZnnyMdjxsOGhHzzhjU/@vger.kernel.org, AJvYcCWUSWyWk/P+FkH8vX6w7moln0bIS7T6nlbZSZNOdGrOb+AMir0DHObj7VU7ulM7wzDCZ1J9IpcPHs8OU28=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygTX6FbolYFEOTUsIHHvDWQwVPXfT0XPYKhgDmB/vmmlAhZdwa
+	qcfXQueoffuXcykeWvBjDdQRV6vujVCk0MUHifb8milOM9Ic/+KA
+X-Google-Smtp-Source: AGHT+IG7GNSvr8+amUbtoVcCNV1j4OWJUtz3aEZS7UZH2lE7/JoEJJo29C7TH56J0oLyU/dh9yhRNQ==
+X-Received: by 2002:a17:902:f78d:b0:205:968b:31cf with SMTP id d9443c01a7336-2076e3f6207mr359427765ad.33.1726679414695;
+        Wed, 18 Sep 2024 10:10:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2079475df17sm67301865ad.298.2024.09.18.10.10.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Sep 2024 10:10:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 18 Sep 2024 09:57:35 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Noah Wang <noahwang.wang@outlook.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: Drop explicit initialization of struct
- i2c_device_id::driver_data to 0
-Message-ID: <3738dbad-bde3-44c4-bfdd-7ec4c641bc38@roeck-us.net>
-References: <20240918123150.1540161-7-u.kleine-koenig@baylibre.com>
+Message-ID: <981f64c0-4625-4af1-8132-7dcae32a457d@roeck-us.net>
+Date: Wed, 18 Sep 2024 10:10:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: hwmon: Add adt7462
+To: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>, Jean Delvare
+ <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Thang Nguyen <thang@os.amperecomputing.com>,
+ Phong Vo <phong@os.amperecomputing.com>,
+ Khanh Pham <khpham@amperecomputing.com>,
+ Quan Nguyen <quan@os.amperecomputing.com>
+References: <20240918103212.591204-1-chanh@os.amperecomputing.com>
+ <bc13d8fd-4f03-4445-bc4a-1e0ca7c23ef7@kernel.org>
+ <6b1fd95a-ef4f-4d2f-af27-6c70a60754fa@amperemail.onmicrosoft.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <6b1fd95a-ef4f-4d2f-af27-6c70a60754fa@amperemail.onmicrosoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240918123150.1540161-7-u.kleine-koenig@baylibre.com>
 
-On Wed, Sep 18, 2024 at 02:31:49PM +0200, Uwe Kleine-K�nig wrote:
-> These drivers don't use the driver_data member of struct i2c_device_id,
-> so don't explicitly initialize this member.
+On 9/18/24 09:07, Chanh Nguyen wrote:
 > 
-> This prepares putting driver_data in an anonymous union which requires
-> either no initialization or named designators. But it's also a nice
-> cleanup on its own.
 > 
-> While touching these structs, also remove commas after the sentinel
-> entries and use a consistent indention style.
+> On 18/09/2024 20:09, Krzysztof Kozlowski wrote:
+>> On 18/09/2024 12:32, Chanh Nguyen wrote:
+>>> Add device tree binding and example for adt7462 device.
+>>>
+>>> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+>>> ---
+>>>   .../bindings/hwmon/onnn,adt7462.yaml          | 51 +++++++++++++++++++
+>>>   1 file changed, 51 insertions(+)
+>>
+>> Where is any user? This is supposed to be sent along driver change
+>> implementing this compatible.
+>>
 > 
-> Signed-off-by: Uwe Kleine-K�nig <u.kleine-koenig@baylibre.com>
+> I'm using this device on my platform, and I'm preparing upstream my device tree. So, I pushed the dt binding before.
+> 
+> I'm also quite surprised that there aren't any platforms using adt7462 yet.
+> 
 
-Applied.
+I am sure there are (or used to be) platforms using it, only there are possibly
+no _devicetree_ based platforms using it. After all, the chip is old. The driver
+was added back in 2008, and the first version of the datasheet was published
+in 2006.
 
-Thanks,
 Guenter
 
-> ---
->  drivers/hwmon/amc6821.c      | 2 +-
->  drivers/hwmon/pmbus/mp2891.c | 4 ++--
->  drivers/hwmon/pmbus/mp2993.c | 4 ++--
->  drivers/hwmon/pmbus/mp9941.c | 4 ++--
->  drivers/hwmon/sg2042-mcu.c   | 4 ++--
->  drivers/hwmon/spd5118.c      | 2 +-
->  6 files changed, 10 insertions(+), 10 deletions(-)
-> 
-> 
-> base-commit: 55bcd2e0d04c1171d382badef1def1fd04ef66c5
-> 
-> diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
-> index ac64b407ed0e..e86027f850c9 100644
-> --- a/drivers/hwmon/amc6821.c
-> +++ b/drivers/hwmon/amc6821.c
-> @@ -927,7 +927,7 @@ static int amc6821_probe(struct i2c_client *client)
->  }
->  
->  static const struct i2c_device_id amc6821_id[] = {
-> -	{ "amc6821", 0 },
-> +	{ "amc6821" },
->  	{ }
->  };
->  
-> diff --git a/drivers/hwmon/pmbus/mp2891.c b/drivers/hwmon/pmbus/mp2891.c
-> index bb28b15a9103..94ab4ae5fba0 100644
-> --- a/drivers/hwmon/pmbus/mp2891.c
-> +++ b/drivers/hwmon/pmbus/mp2891.c
-> @@ -572,8 +572,8 @@ static int mp2891_probe(struct i2c_client *client)
->  }
->  
->  static const struct i2c_device_id mp2891_id[] = {
-> -	{"mp2891", 0},
-> -	{}
-> +	{ "mp2891" },
-> +	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, mp2891_id);
->  
-> diff --git a/drivers/hwmon/pmbus/mp2993.c b/drivers/hwmon/pmbus/mp2993.c
-> index 944593e13231..63691dac2281 100644
-> --- a/drivers/hwmon/pmbus/mp2993.c
-> +++ b/drivers/hwmon/pmbus/mp2993.c
-> @@ -233,8 +233,8 @@ static int mp2993_probe(struct i2c_client *client)
->  }
->  
->  static const struct i2c_device_id mp2993_id[] = {
-> -	{"mp2993", 0},
-> -	{}
-> +	{ "mp2993" },
-> +	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, mp2993_id);
->  
-> diff --git a/drivers/hwmon/pmbus/mp9941.c b/drivers/hwmon/pmbus/mp9941.c
-> index 543955cfce67..8ab5fc4d4092 100644
-> --- a/drivers/hwmon/pmbus/mp9941.c
-> +++ b/drivers/hwmon/pmbus/mp9941.c
-> @@ -291,8 +291,8 @@ static int mp9941_probe(struct i2c_client *client)
->  }
->  
->  static const struct i2c_device_id mp9941_id[] = {
-> -	{"mp9941", 0},
-> -	{}
-> +	{ "mp9941" },
-> +	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, mp9941_id);
->  
-> diff --git a/drivers/hwmon/sg2042-mcu.c b/drivers/hwmon/sg2042-mcu.c
-> index 141045769354..aa3fb773602c 100644
-> --- a/drivers/hwmon/sg2042-mcu.c
-> +++ b/drivers/hwmon/sg2042-mcu.c
-> @@ -346,8 +346,8 @@ static void sg2042_mcu_i2c_remove(struct i2c_client *client)
->  }
->  
->  static const struct i2c_device_id sg2042_mcu_id[] = {
-> -	{ "sg2042-hwmon-mcu", 0 },
-> -	{},
-> +	{ "sg2042-hwmon-mcu" },
-> +	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, sg2042_mcu_id);
->  
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index fcbce5a01e55..6cee48a3e5c3 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -671,7 +671,7 @@ static int spd5118_resume(struct device *dev)
->  static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
->  
->  static const struct i2c_device_id spd5118_id[] = {
-> -	{ "spd5118", 0 },
-> +	{ "spd5118" },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, spd5118_id);
