@@ -1,85 +1,95 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616E819E7F7;
-	Thu, 19 Sep 2024 17:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6E51990D8;
+	Thu, 19 Sep 2024 17:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726765537; cv=none; b=kYpIo12iQm3bkdjIMbNGkDPr1PXgVy8EMA12w6kZkrA1egzSCC6giPjA4ynUiAIpydNT+Ag9zTg+d2u2uYUKPzNU4ABvoq9jEvuQ89HFSAPlErD7m21Qo/b1adCdsLTF/cTTVjnMBJ+815sVeTvgZhhwQEgxKRbyOQuyKsDvGr8=
+	t=1726767287; cv=none; b=JrOKA5Vtc3GjnzgJQznDJ5afRM7LdLvme8vjHGjC2IvheJjBSlZhuLjIF7/tP9BpxFyY7BDMwnVxTTq35ILoVsUi6G840PoPpSZ7HrEiULqb2HOr6sYzMGwH8TdUaeVJCkndB12mt9xCYy8TqbE3ydJFr0F8WY3JCsV6URo06JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726765537; c=relaxed/simple;
-	bh=tmjlpyB85Q6N1sg9vWiYUB6gK+1tvXPXJS8FFJH3dt4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CIgAHYOoZH+NOVJx8WoFFOhIty42dfQIo454O3KSPiGQIVMhndP8o/Wztp4Blao2maBMT8vQArYicRjsc5F8g0EVsqAfHORLR1mwDOYhmBKPIqqfSTiiUqwGy+HWaCjcHJtnRi9r8SeQB9v6dg+WIxs8NS2dvLD91azymVBdd2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JyAJtX+y; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726767287; c=relaxed/simple;
+	bh=guYKRTBp+HoRGl/rUbPzYYRUnzTsljzxQ19fv8/MGos=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qRe6QzyXYdOoRxerg9qzqoUaSoFaCcFY2qS+bGU5Br+DTnxqgMC2TbIdPMX7TpkzeYU+qPExeFFUXgsvSFmPJYv0gA0DGglskro1t2c2uSEtUKAwpMavIfUJxN9T946x2vtRVKIDVcnFqYdUPzVAfIAJ4Wxhs2/RlhrgIdXwuKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FTJ999Gh; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JyAJtX+y"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71970655611so984847b3a.0;
-        Thu, 19 Sep 2024 10:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726765536; x=1727370336; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mV1DknXCkvAZqjV+mRTTW74vVUQgKPm7zmZ+isecTs0=;
-        b=JyAJtX+yhN6DVy7Ow5fRsXoxUvpW8M+B0lWLsYpwXNWcl1xVeh9kTfX3EwkQVKMYeo
-         3TBAgSFH9BkXWoOzOjCffOeIrZS2wbqsb8l/AFxMuDyW+rNIj7YbbgBgGd2uMVLsOQm0
-         uGiOMmw/oPiOqgdlKFO1ktQoUm3kO4FiDxeEKTxfrRynqRe1lQZnIUpq7iuNEbtgqfxg
-         5anh+WPQ/y+4jJrW29p8uGMQXni1oyo/+rW7E6kWOeed9pPdPFEDTc0z/nOnQot05X5f
-         RyP4vSozb1ItUapz5Tu/dwgjdC3IuPcQ1jmiHHNaORAVt0WwrbRNTkOIMUD+Hq/jLwek
-         zXmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726765536; x=1727370336;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mV1DknXCkvAZqjV+mRTTW74vVUQgKPm7zmZ+isecTs0=;
-        b=LiQorZMV2a4SlOC3lB6skt0eSn5Gym87yrTfKdng1vXjOKUBiuno1Pr9uHDuUk7iYW
-         t6GuDUicQLXBF1xzqTRtF2zTE/mw/N+Qha+WB5xR7v3Fc/h4oz9X6AJB7jYc89faGIVj
-         IWUzKVYz8EqmOg6F4as3M3XeN3DRnKezZwzC3q6t/+wuBBfegRJSF9w3bWN9t0BcJ4ti
-         qhrzv7BQLxe8Jegc+LONim/fE9HwF1zm+sC4wzgIZrycvGQTgFXvNLZ6ZNIdDfy+vx3i
-         8dMSzepXektpdRhpPkfN/+ig5RdZN8T0o09JASrq44ETNwSxD4Ly1uypZlb0GmqLzk35
-         t2mw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4+l6NlKUOSwdHwDr5mSmWwbqFarXZFH9KMdPN6WiqgK1TrOFSU5SrRvR8M37O2mij68jd+mkCHj2p2A==@vger.kernel.org, AJvYcCXSiTnK8dmTSu933VUwOdG1KAwqEQN6EYBgQOWwq64Q/2U04RofagwleneYA6tOD6TjtJOOKEeTa4nuBTP/@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvB+/Z5dPphDjXJvCThRyrG+bY76wX/Rpj69ZXImTKNCk1glhn
-	rPufJZiH7FZV005M/OsB0CUNsw0hpmyzrkJnFNbjJwEyKQMmnykI
-X-Google-Smtp-Source: AGHT+IFO6rMn22DhE4EN11UfwN23Tc70d09Wnui03aC7YoZwemtfphARDtS9VnAnXRupCuJbsd20fQ==
-X-Received: by 2002:a05:6a00:1906:b0:70d:2621:5808 with SMTP id d2e1a72fcca58-7192607fcb9mr40445550b3a.9.1726765535601;
-        Thu, 19 Sep 2024 10:05:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944a97e6fsm8498365b3a.26.2024.09.19.10.05.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2024 10:05:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 19 Sep 2024 10:05:32 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Shen Lichuan <shenlichuan@vivo.com>
-Cc: jdelvare@suse.com, ythsu0511@gmail.com, u.kleine-koenig@pengutronix.de,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v2] hwmon: (pmbus/mpq8785) Convert comma to semicolon
-Message-ID: <d58532e4-10e7-43f3-bced-90340a3cd7d0@roeck-us.net>
-References: <20240919064939.3282-1-shenlichuan@vivo.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FTJ999Gh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726767286; x=1758303286;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=guYKRTBp+HoRGl/rUbPzYYRUnzTsljzxQ19fv8/MGos=;
+  b=FTJ999Ghnbgv3nWt8m7z2+KGCcQGtxdbK7j8ym8sZTuqPmSskXQclJSX
+   BrK6bBlCICidDHOUJ+qpm2c7y/Q/JNLman5A9oulZJb6mdAJDLzyqXODI
+   I34DV3uD+D3hYpDCJdk7k2QD6ZCVcKkkPXKJS9X6R56g20RYuy/LX6DDk
+   zcJ+w6mwoJDNZscZWeG3081F8tKxjovLMA5jDKvglQ6Rxs7uxYRwG6VNP
+   0ZfFnei3Nhnw5ygFRt/tbV+s5xwTTLxKWUYJ5YosRBK0F0BTqXdyeLKLr
+   rcdE7mF136FC9W8owSsS5y8cVrVWYnLIikMQ2ElRKPjKfk4PCfr/NfOEb
+   A==;
+X-CSE-ConnectionGUID: wCpPOYY8Rjy240O0bizI3w==
+X-CSE-MsgGUID: wUDXIxhJTGuzU1L/vIRzuw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="25847225"
+X-IronPort-AV: E=Sophos;i="6.10,242,1719903600"; 
+   d="scan'208";a="25847225"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 10:34:45 -0700
+X-CSE-ConnectionGUID: W2tkVgWxSd6RQTFU1Fakvw==
+X-CSE-MsgGUID: Oz0oakV6RN6B+IpTlYheyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,242,1719903600"; 
+   d="scan'208";a="100844311"
+Received: from sj-4150-psse-sw-opae-dev3.sj.altera.com ([10.244.138.109])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 10:34:45 -0700
+From: Peter Colberg <peter.colberg@intel.com>
+To: Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Tianfei zhang <tianfei.zhang@intel.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Russ Weight <russ.weight@linux.dev>,
+	Marco Pagani <marpagan@redhat.com>,
+	Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+	Peter Colberg <peter.colberg@intel.com>,
+	Michael Adler <michael.adler@intel.com>
+Subject: [PATCH] hwmon: intel-m10-bmc-hwmon: relabel Columbiaville to CVL Die Temperature
+Date: Thu, 19 Sep 2024 13:34:17 -0400
+Message-ID: <20240919173417.867640-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919064939.3282-1-shenlichuan@vivo.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 19, 2024 at 02:49:39PM +0800, Shen Lichuan wrote:
-> To ensure code clarity and prevent potential errors, use ';' instead of
-> ',' as a statement separator in the function mpq8785_identify.
-> 
-> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
-> ---
+Consistently use CVL instead of Columbiaville, since CVL is already
+being used in all other sensor labels for the Intel N6000 card.
 
-Applied.
+Fixes: e1983220ae14 ("hwmon: intel-m10-bmc-hwmon: Add N6000 sensors")
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Reviewed-by: Michael Adler <michael.adler@intel.com>
+---
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+index ca2dff158925..96397ae6ff18 100644
+--- a/drivers/hwmon/intel-m10-bmc-hwmon.c
++++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+@@ -358,7 +358,7 @@ static const struct m10bmc_sdata n6000bmc_temp_tbl[] = {
+ 	{ 0x4f0, 0x4f4, 0x4f8, 0x52c, 0x0, 500, "Board Top Near FPGA Temperature" },
+ 	{ 0x4fc, 0x500, 0x504, 0x52c, 0x0, 500, "Board Bottom Near CVL Temperature" },
+ 	{ 0x508, 0x50c, 0x510, 0x52c, 0x0, 500, "Board Top East Near VRs Temperature" },
+-	{ 0x514, 0x518, 0x51c, 0x52c, 0x0, 500, "Columbiaville Die Temperature" },
++	{ 0x514, 0x518, 0x51c, 0x52c, 0x0, 500, "CVL Die Temperature" },
+ 	{ 0x520, 0x524, 0x528, 0x52c, 0x0, 500, "Board Rear Side Temperature" },
+ 	{ 0x530, 0x534, 0x538, 0x52c, 0x0, 500, "Board Front Side Temperature" },
+ 	{ 0x53c, 0x540, 0x544, 0x0, 0x0, 500, "QSFP1 Case Temperature" },
+-- 
+2.46.1
+
