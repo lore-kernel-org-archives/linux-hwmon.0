@@ -1,170 +1,139 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E97214A606;
-	Fri, 20 Sep 2024 13:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B9579C0
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 16:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726838842; cv=none; b=l4t6xXlJBUb0qkDPOs84/mzzdE42twE+5ZmGRziTWGHBVEjxz4SW4HKVkVa0Y1+1EX4jMzCgoRXgWQUp7DQMgqY9jGI+IYqJVJQAXk2qFjwiGXXfigXqIBtVt5K10dmk0XQr1C891ac97LZBUUhxAFEty6X1G55ROrSrPu5CXUM=
+	t=1726850850; cv=none; b=MJlDmVcXE2bHZ9jFt5gLVKN+y9DSv22CQ2FujEdnAi4OMqf3qZuVvnvDT60OY/Suc6WEDZRjYPmK7p6hPgcnimN/r6xVJvL165A9hsueoqXu9NSGnrGwYJzp6NkuzeNbumT6pTGRhzl38ma+6PhV//FRB7Dze8vAA+/jTHbgPk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726838842; c=relaxed/simple;
-	bh=rXsPa9xSAdUkk/XFmSkP8bfB9a5uuGwnFASqjAldOeU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QJ0UnPP7Yghjp+Wvhi4cglejCkQ7T7+0RKjuPX4DKHdNafHZTaUcfllFzFQnDKrsa3Kv86zQlkmyCDIwtGeofGRlejrNTPfGV5DoGnS3w6zrKOqnMpNdkUccEkPCut1b9A0/+Tf0z/zUFtUZp6MOf/DSal/pzdECSEfc/Dj6g6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VCKLZcmP; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726850850; c=relaxed/simple;
+	bh=2mrpQYS0durlIiTO7A9inQC+gazq8OIpoYV9W4sUykQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B/6J8n4XvGduLfcuLOQ9MWfcQOfTWcG+dFOIm0eI64iKVa0OxHIx7lc8CQuXIyQPoMAagVvOXWuDBa+de7Xy5knFIlqmAEUjYdjJywqpeDl/YPXCEZ7MLH6dSXH5H3+bWCkRMhUxdvpW/PXv8H+2Gi+rvQ90DUWJlS+9clkfRlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=WKJbGZJR; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VCKLZcmP"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7d4fa972cbeso1482395a12.2;
-        Fri, 20 Sep 2024 06:27:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WKJbGZJR"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42e748f78d6so18508045e9.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 09:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726838839; x=1727443639; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=t+95CrYRlD3ILIKlPY7ppMRjqe3+c5HDDeYVxNXFlvQ=;
-        b=VCKLZcmPmFKwvsMN4/KbBwNsJBpsz9ri5dANQmMeNXNm+nIp9TMsIuCMJDK+71yui6
-         33DCMye0MOz3wpaqAbzT3tbBUbfE/VBDfr6X1qXQyZ7IWr5cWcQCbF4AyjNzUtgNtk92
-         oLWSbT00PLC1fLB+EqgwEvr8na8/qX4uTwdMcntzsl5egZglmBkmcs7Gt+fdRitHJuf1
-         k1mppyR79liZvK2YdOtmO8FFawZyvNWj9NTl7cV6aW4jLPnfXllRQ8WVCzczwEGV8KgC
-         UadksCr8dTA1bYZCvKWY5kjaphp8UIDvE/yFrrDymdjCAYW4oKMVT0u2Oi2iUJ0+g/Uo
-         X2qw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726850846; x=1727455646; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDzaQlV6GjyEQTNCzKM3UkvH+Kbl13+ehOFDQrsAvdU=;
+        b=WKJbGZJRmZbYQkB6LE/u9NWfJ6rqLdzPGhrKQx3kxnbK70qWR0rL1l7L+TqGOeHWkb
+         QyclYFV8miyAdh+8U2M6O7JPr86NH8VWBlllq/QfgJhxGvIQLtoBey/LZxNlqzIK3AcT
+         zA1HnpkQBwqlKL18XndQDjEHuDAJhTAkj549eNuXcjhTj5MxNdOdbD+BuWJZWg65CYsA
+         JeaAlJDMAZYsudG+ITxbsy3bOdmsIpjs3PXmrWououUE/7gPXjr5Meklng7G56DK2gj8
+         GGQlN52KizwRSc72DrTUBfF9sdpK4cBo8nceG65KBZxuZylUpz1X5g2hhO0JGH5IxQ79
+         HzbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726838839; x=1727443639;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t+95CrYRlD3ILIKlPY7ppMRjqe3+c5HDDeYVxNXFlvQ=;
-        b=Y5FOBLJVGX0Mwzvbx9UpHRfnZZq29BCAfvOkDH6MdTaGIgWsWv+Z1EbX5QSLmSKSj8
-         ebHXFiczUY5tK2PSUuIuLdvhM+XLyekksdoQ8ADZz4r4DrM9BnZefZZCCAjXBqyu2kKS
-         Uog2/GITWDSQf0tj5dRBw0y9E4cTufcUBpAxYjViTpbgIgXM5Fex8Frp7dWyMSxqpAbf
-         JvN4VyF27pGjBc9btXyEfKbsNVxxZLcYRQg1WkW6xA9XfmS8YLXZz60QoDkIwP9tr0Go
-         YYRZGbRvLtDSuCapZKoilXzH+8ctKnvNLvxxK4pX5twaqBJd9F1RkJAXQO06dS4SYKbJ
-         KpuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUAkMuMfJsTFv/w/CNHp+fhUV70RLJ5qJmP4jilfO2kw6XRd4j3gVqNmnq4GvQWR9eL9hkcHS0ZdsYqCuPv@vger.kernel.org, AJvYcCUNcNwc6uFDP/WBXEt8V+EGA9o2O3NAHURT4O+40sImeFZhpx7P6pEBns8iU/bfnImfsIwmNpQcbzaqWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9mOkzTVrqJ8STbY7Xh6xXunZ64phfM0jmvnb8XRyyNMZjjFr3
-	hFGrnXxXkytR7TYJqwjLA3AFS59ZcWFNU/Y0+IIgQeHFU4hMZeHDJUs6AQ==
-X-Google-Smtp-Source: AGHT+IFgZjlxeWDh2cFvYTJamGNPYjhnHFeXlrEkhuxYMg7ConqcfSDCdgxDMMjugBSUHH/ceMeyqw==
-X-Received: by 2002:a05:6a20:9d92:b0:1d0:3a28:d2a7 with SMTP id adf61e73a8af0-1d30cb6b158mr4399585637.41.1726838839457;
-        Fri, 20 Sep 2024 06:27:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944b97302sm10179124b3a.147.2024.09.20.06.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2024 06:27:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <85982eb2-388f-488a-8322-9ba44079eba4@roeck-us.net>
-Date: Fri, 20 Sep 2024 06:27:16 -0700
+        d=1e100.net; s=20230601; t=1726850846; x=1727455646;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zDzaQlV6GjyEQTNCzKM3UkvH+Kbl13+ehOFDQrsAvdU=;
+        b=U9QKtPQj2AtRtTYX0ddHYVT69AzsfAu17nDgv7pnyiYZBHZVyg6r8FDwI9mI3cwkvR
+         dH3XSRnxt+kFAZi3d4BDNnqEOGXypzvznOaDHICRBcV0rpQgSy7pjopFJ6lR4xvQG5KH
+         6CsbVxG1Qk8XiVZBDkZYZDkbXWE4iFduYNz4xPg5EFO68ejtZnT+qCKFNeBRtBpOlJ8s
+         gFPKPfteGrRE0HSssBM488V1b4SB7lSp2UZO+YTX2lIlPpVkSoXiazbzpV31ynVGgUUa
+         EuyK7lDTCfzSzdMaFtb/O/bUJLAlaPuR9mGm0FwQq61U5lVA5u9de4IM8ox7lA5UYbxO
+         BrOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOTdOub4Df4Ndckj80rHcySBpt29mUJRqdPbCmAOfdGQDqsLz0yIFRA2M0OBCUmK/uiWpyS+ISCyqWcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVeeLAHNyJlRrpQ9GLSTg9YV1plPwJpCOaSTS1I9Ro42e2w/Qq
+	bhJZZnCGh28+ezL22ENlM3/u/+vlQic6Pkb+ZT7Vg67InnQLIiw6KuKadTwYZJ0=
+X-Google-Smtp-Source: AGHT+IFjMc3vzunF6CNv8y3iWUpN3w06uz+/DgSL39Gi1S59RRBgBrAtij67Jp8U4eWzEAk8s8rVkw==
+X-Received: by 2002:a05:600c:a49:b0:42c:a802:a8cb with SMTP id 5b1f17b1804b1-42e7c16f939mr21203245e9.15.1726850846526;
+        Fri, 20 Sep 2024 09:47:26 -0700 (PDT)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:8e69:83a7:a29a:ba83])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-378e7804476sm18172250f8f.90.2024.09.20.09.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Sep 2024 09:47:25 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 0/5] hwmon: (pmbus/core) support write protected pmbus
+ regulators
+Date: Fri, 20 Sep 2024 18:47:01 +0200
+Message-Id: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: abituguru: Remove unused
- ABITUGURU_TEMP_NAMES_LENGTH macro
-To: Hans de Goede <hdegoede@redhat.com>, Ba Jing <bajing@cmss.chinamobile.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240903025037.9711-1-bajing@cmss.chinamobile.com>
- <e893f91f-6f78-46ac-b28d-1e45fab892e2@redhat.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <e893f91f-6f78-46ac-b28d-1e45fab892e2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAWn7WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyMD3YLcpNJi3fICXQMjC8M0U5Mk87RUIyWg8oKi1LTMCrBR0bG1tQD
+ hlaBFWgAAAA==
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2067; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=2mrpQYS0durlIiTO7A9inQC+gazq8OIpoYV9W4sUykQ=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm7acYTDjHdY2+lQrqA+9U5haYmGZr1chOY1lL1
+ aO4bPhYN1uJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZu2nGAAKCRDm/A8cN/La
+ hZw4EACkpf8HJYhOshPUQ5iG3WA6Is9QFLS8e4Mm8lqstFfgwI9dHMifuXloyVeh5EF8prjJG5H
+ gjtogm35QpfuWatiMzVmsHZbR2a9f780GoY262uC+oGDIAspSUcfJG1z74iUwx+LAgF3yRTh/26
+ MuG2ban6Yo/+UYW0k/LFm0P7ZiTY4LPqAYXzxmU5fRxw16s5HbwHowlzAPnQYEilgjTOadIlZEQ
+ Ye47ALUMeLgkzKg8abEY8foP4wnYc8wcYoPjLebgrYu95RzXxVERFjx0YGxdj5FgZRd/Xt5Ue1W
+ zlh3gQ5pC9/fm7G1ljOGxHCm0eAEAbzGhpn09qDcZ8ZlCCcORC3NS3Qk8cEyTAAt3ao9YIOBUzS
+ 3mQ4864Y9j7SfGovZnmASItmFMvZoCbN6motn4rpT/a+MDboAwxdkSUPTYWUktp2wsVrZWRY3XB
+ /ujjQ7JV3U56EGlGOkt5zw2ZeTiSSUqObhAHCkQ/GNYk7yoxvbc5GJmIIliC6xm5y9bYXI+I2uq
+ qG0kA3sMiCCHSpQbXWVHS8S4IPlDkS31Gv1qgUPRi4JCmQXHSPYAZQ0oztPY7NVd99NqMmZGoFR
+ G3vzQkD8+rwWFeF8eL6NpS4ZxhHt6nikp2xdXO+NdTzNMISPRIy9J4/1Vg6UFgQ9rfo42ValMlp
+ LR67zgVzvhchu4Q==
+X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
+ fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-On 9/20/24 05:10, Hans de Goede wrote:
-> Hi,
-> 
-> On 3-Sep-24 4:50 AM, Ba Jing wrote:
->> The macro ABITUGURU_TEMP_NAMES_LENGTH is never referenced in the code. Remove it.
->>
->> Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
->> ---
->>   drivers/hwmon/abituguru.c | 5 -----
->>   1 file changed, 5 deletions(-)
->>
->> diff --git a/drivers/hwmon/abituguru.c b/drivers/hwmon/abituguru.c
->> index 93653ea05430..58072af4676b 100644
->> --- a/drivers/hwmon/abituguru.c
->> +++ b/drivers/hwmon/abituguru.c
->> @@ -95,11 +95,6 @@
->>    * in??_{min,max}_alarm_enable\0, in??_beep\0, in??_shutdown\0
->>    */
->>   #define ABITUGURU_IN_NAMES_LENGTH	(11 + 2 * 9 + 2 * 15 + 2 * 22 + 10 + 14)
->> -/*
->> - * sum of strlen of: temp??_input\0, temp??_max\0, temp??_crit\0,
->> - * temp??_alarm\0, temp??_alarm_enable\0, temp??_beep\0, temp??_shutdown\0
->> - */
->> -#define ABITUGURU_TEMP_NAMES_LENGTH	(13 + 11 + 12 + 13 + 20 + 12 + 16)
->>   /*
->>    * sum of strlen of: fan?_input\0, fan?_min\0, fan?_alarm\0,
->>    * fan?_alarm_enable\0, fan?_beep\0, fan?_shutdown\0
-> 
-> ABITUGURU_TEMP_NAMES_LENGTH is used further down buy only in a comment:
-> 
-> /* IN_NAMES_LENGTH > TEMP_NAMES_LENGTH so assume all bank1 sensors are in */
-> #define ABITUGURU_SYSFS_NAMES_LENGTH    ( \
->          ABIT_UGURU_MAX_BANK1_SENSORS * ABITUGURU_IN_NAMES_LENGTH + \
->          ABIT_UGURU_MAX_BANK2_SENSORS * ABITUGURU_FAN_NAMES_LENGTH + \
->          ABIT_UGURU_MAX_PWMS * ABITUGURU_PWM_NAMES_LENGTH)
-> 
-> So IMHO ABITUGURU_TEMP_NAMES_LENGTH should stay so that someone
-> reading the comment will actually be able to understand things,
-> removing ABITUGURU_TEMP_NAMES_LENGTH makes the comment very
-> hard to understand and we want to keep the comment.
-> 
-> So NACK from me for this change.
-> 
+Some PMBus chips may boot in write protected mode by default. If the PMBus
+chip is protected, it essentially becomes a read-only chip. Writing
+protected register will be ignored by the chips and a communication fault
+raised.
 
-Marked as rejected.
+PMBus chips may also provide regulators, but protected chip are not
+properly supported, since write are performed regardless of the protection.
 
-Thanks,
-Guenter
+This patchset adds callback in the regulator framework for drivers to
+perform runtime init, such as checking the write protection status and
+adjust the regulator constraints accordingly.
+
+PMBus then make use of the added callback to adjust the validity of the
+ops. In the future, PMBus could even use this callback to adjust the
+constraints based on the supported registers.
+
+Last, a module parameter is added to allow to set or clear the pmbus write
+protection if necessary. These are 2 simple mode, more could be added
+later.
+
+The patchset targets 2 different subsystems. Please let me know if you
+prefer a respin with 2 patchsets, one for each subsystem.
+
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+Jerome Brunet (5):
+      regulator: core: add callback to perform runtime init
+      regulator: core: remove machine init callback from config
+      hwmon: (pmbus/core) allow drivers to override WRITE_PROTECT
+      hwmon: (pmbus/core) improve handling of write protected regulators
+      hwmon: (pmbus/core) add wp module param
+
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++
+ drivers/hwmon/pmbus/pmbus.h                     |  4 ++
+ drivers/hwmon/pmbus/pmbus_core.c                | 83 ++++++++++++++++++++++---
+ drivers/regulator/core.c                        | 13 ++--
+ include/linux/pmbus.h                           | 14 +++++
+ include/linux/regulator/driver.h                |  2 +
+ include/linux/regulator/machine.h               |  3 +-
+ 7 files changed, 106 insertions(+), 17 deletions(-)
+---
+base-commit: cd87a98b53518e44cf3c1a7c1c07c869ce33bf83
+change-id: 20240920-pmbus-wp-0281f54b7fe2
+
+Best regards,
+-- 
+Jerome
 
