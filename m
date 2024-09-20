@@ -1,62 +1,61 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A19517E01B
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 16:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772FC18309C
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 16:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726850854; cv=none; b=u1GfYgFX35PmGJCot9CQXsVkyzVwnG+/7MTaVwbnLRUiw02qHEp9ifg572qbVle3ZI21+3Xgsoz8KzHSPnoJ0wP8bafNjvBwYNWW+lsAcp8qGG64Fa63ixK8CC+C7qGSrbWtYNB4u/+sLY0DGUlaed7fZQoPKygf0i6jZRGsx7w=
+	t=1726850855; cv=none; b=CBsXVyiVuHLwfRzeQFC3qGIbGKHxWLmZpaN0FQA4Aetm8JPr5b17bfO+EjBdF7ZvPf5YTm6ZlgM0NPqj4H5KQo+Jnptpll1maVyx3MNXvDVk15X3cYU8ayhx6/6TlgYpJiI/3IHV9z9RqrjI/TVx943DOlKOLRaEjWDg8uxGzXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726850854; c=relaxed/simple;
-	bh=7Gd97J5FZJ8x51YDJ0TveVRB+r/ZL3dVmW0gShb0mFQ=;
+	s=arc-20240116; t=1726850855; c=relaxed/simple;
+	bh=CjFFhc9MMW49VE8u5F61A8xLqeMREhaJD452w7fqvfs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qEMMHeEZzP6Ig2lopQ00lV07qrxNDPTMpd8/j3fgjf+/F2soBs0vR9JJjdaffLacI3mvXH8aNDkMAWwv4aIIsqhYKwJ+Ewy1qzWswbCCTpfsUzBaeWmGhGGXdqRT2xEFYJeSEIzRL6k4dzfq/dnoL2amChPhqZuNIWIQbKjltqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=QHV+AA2j; arc=none smtp.client-ip=209.85.221.50
+	 In-Reply-To:To:Cc; b=QkKrwm3j4vm+n3ciAbijYTVlRNXrp8iq5G0LbXHYVmlCPiZmThX4aez/Pr/Jnr8wO1txCRkd4QKeiS6/LZvpToloh+6nkIDWt7ZMjsvEp8jNpzO8jH12WjefEbDt7VcolrjdnNmf+euKavc+DFROd64wiaNXUdszEzxTOznCnTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Am13g7Pp; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="QHV+AA2j"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374cacf18b1so1436249f8f.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 09:47:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Am13g7Pp"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42cbc22e1c4so18188345e9.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 09:47:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726850850; x=1727455650; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726850852; x=1727455652; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Grd6/QarEoX1VDGP2KnV3P4yoP18b6h6fWLKjReB7pQ=;
-        b=QHV+AA2jqm2Xt3VklSL6soiUStVJlv6sJlzGVldo4Y+B6eEvgAb10Dnf1ux737oNLc
-         +hzTlOEvUwJxIvcoyuiaWk2JqMg6CK6BzFoI57wyngJxnuARrawixzNfzga8dKqXjLH1
-         x58suh/P+IvcEpycKAqxQyZCpofFO3UD4H77k+mPUQWJUbd8EUWByEHWkVWG/RAGuMt9
-         c2Ljvx5lraQbW3OTohLVHroEoXGPSiXVpTw1yWgoyyQdXWW3gZibPhf3xO4deULJpFKf
-         LthzEsy8sWkvJvPxyqe0V3I4jvV/Ct8eTilaP06cxfkGxMB7HhejXKvfmLell7iIEdD3
-         VOkA==
+        bh=9qllhEfwvR3O4kFWcLK8tY64jimzQys29VMp9CXwNVU=;
+        b=Am13g7Pp4Th2TNYl0OmOU3HxwArqkgR04NFH39lh+mBc4t76MgCfvoXI7UMAaco9Ec
+         ExnvAtOQjmlyYezI4+edKQ5yeCeb4wk8Vq15yjjIOt2WmI0v2x/nRAVcoCgoh8KyUsy0
+         DEOHVeeg42z9FOsdxESzvV2IU6CAyY7MZsdtoEfHMyFt0iltrY0uUxmxPuF18ZKwXHLN
+         OfaBNgcf5LqGs1fpdbIMeGX4kKtMhYITFRMK4lpaxDnUcF2+FNYxaN01OdUvSwjC/KG2
+         vKYlbXM1b3WZJK8ipM6c7seqWy49GoZJ0wDbvnL5QkaPh67b50SzpHdNqBegC5U6N/UY
+         iZRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726850850; x=1727455650;
+        d=1e100.net; s=20230601; t=1726850852; x=1727455652;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Grd6/QarEoX1VDGP2KnV3P4yoP18b6h6fWLKjReB7pQ=;
-        b=ARbA1wNv9kf9zJguh7gigGavS83PD4+RrHyymdCM/a9x25cQkGDGJNI94wDYhbBa/7
-         69B8qDNOEsG63RlLaI58SzSDo37MJcEB2AXSYT9U1xvPVniRVH5rB0ZfKe4gKFsAOya0
-         mpARAS2H3qf+9GwkrLgZRIkcrY51iDwp+lRzCC6HxYo+NF6oEDxoWtq9BYqaRDQ7apdR
-         a1l0WGgKOSDkave+8bAYqqZT7EVnliyTa7kNvk4J0sMFq3ROXAlPeaGZpOPOhRZ7Uv1+
-         1MO+iyEp+gz+iqJIhkBo35PgLX3wnjQW9pCZTSH9RFLJVWxm23qgkEFk4AxUiBAJtn5f
-         QrgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcr+cQwdm1gblKVcSJvtLAAqRKS73evFjV6muQyiOftFvn/MMCcFRN1fVJOF7dFFcCkfoRQSFbTOlVhw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC8KASeIkV6j1YAYzyLa3hwjBR22YWhM8yfa+L1XP8H1PALXS+
-	hKvA7N2MsXTH+pef2x7npAyq17T1+Vq/TSsDZ2mblZ/nMjlVglevPw/15TqY0paeeU5k0sLr3s2
-	p
-X-Google-Smtp-Source: AGHT+IG8T/Uxxp3O3XxMqRJvOjGpV7ESRsDjpxKRPa7+9h85Ch4V4TUG0cezV+sC11zAQjuSit0j4w==
-X-Received: by 2002:a05:6000:186c:b0:368:5bb4:169b with SMTP id ffacd0b85a97d-37a43128c93mr2271652f8f.4.1726850849724;
-        Fri, 20 Sep 2024 09:47:29 -0700 (PDT)
+        bh=9qllhEfwvR3O4kFWcLK8tY64jimzQys29VMp9CXwNVU=;
+        b=wg6wvgFn6L50Yve6EW9pk+9tafh8ysZKt0NWxxACTcax4IO2u5nOlZj4hL39qTdS5b
+         Oz8ZwIHK6TL/uxALQYwUWnyR25rZTL/KEdKEvZNzRxecP3VcH4rb/91jl10SQxWXSLWu
+         WPEa5I9HwICp+a94TovrwCFjskGUa9+ClpS5leyPmFNCDAWhllTfftMD6TDOML8dGj8i
+         LufSRrzymd40Rm/oVMevE2rQI7GtotXb2TpSMppsEQsm6To3us7hlgmr8wapEKP7J8tI
+         giowBUvRu4v4dYcQZXmjKFhebbsabAZ63rQrLOj64/0fe7zFdImiN3RCAyQdwM0TLMax
+         UDug==
+X-Forwarded-Encrypted: i=1; AJvYcCWtNRTzVoDVraMBYyqZ1y43RzaYiqy0iM4qHBjq/PatcOdQqU17+FrrKgvnOe0HYw/SIgzpicbh6pdgZg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCKBTq4A3vlq/DefVZXHYdovGBaqh28R7dbq+VZ9wl2R+VFEEZ
+	gaUPf2g/NLXclUYgSpWA2+AZ0M75qYcMdWrCvyDfNpwbCePo4gIy2/I4IfAXjgQqYEeSVYvX7Kb
+	m
+X-Google-Smtp-Source: AGHT+IEt0mM17T+QkgiiYQ9Xi5bCM7DZKFGhbLt/nTTYRXLtk0K+n3YEG7uPcLIhjOVfXQUGSIfHYw==
+X-Received: by 2002:a05:600c:4f0c:b0:42c:a7cc:cb64 with SMTP id 5b1f17b1804b1-42e7abe4424mr26563375e9.3.1726850851917;
+        Fri, 20 Sep 2024 09:47:31 -0700 (PDT)
 Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:8e69:83a7:a29a:ba83])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-378e7804476sm18172250f8f.90.2024.09.20.09.47.28
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-378e7804476sm18172250f8f.90.2024.09.20.09.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 09:47:29 -0700 (PDT)
+        Fri, 20 Sep 2024 09:47:31 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Fri, 20 Sep 2024 18:47:04 +0200
-Subject: [PATCH 3/5] hwmon: (pmbus/core) allow drivers to override
- WRITE_PROTECT
+Date: Fri, 20 Sep 2024 18:47:06 +0200
+Subject: [PATCH 5/5] hwmon: (pmbus/core) add wp module param
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,7 +64,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240920-pmbus-wp-v1-3-d679ef31c483@baylibre.com>
+Message-Id: <20240920-pmbus-wp-v1-5-d679ef31c483@baylibre.com>
 References: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
 In-Reply-To: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -74,48 +73,153 @@ To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
  linux-doc@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1110; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=7Gd97J5FZJ8x51YDJ0TveVRB+r/ZL3dVmW0gShb0mFQ=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm7acaXTvdJKP2FMN9pQ4umDAkwEokdT5Fn2ljm
- LQ7DUrb6xaJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZu2nGgAKCRDm/A8cN/La
- haMxD/9QfNw3IwRMsafMz8ch2EJPLc14eq+igVnicuHhSAD2mgJovVwOh6Gk4aOLqCpyMmEBh64
- uoCpwQFDtcKN30sKNarIugge8PvQUQDgXrXQs2Do5QaZx4pYRpviK60KyiTY/yWQOd7iUESYGVo
- xgC3Nl7g+n4PUVlMyjlrrxQTWMky97X2AufoH4/3SdL85E60vOcmbaxb/1CNQnhtTe00Aw8Jxhg
- PC1X832P8pBeHzg6OfoT8poveY6i+fGd8p1dFCXK1gsfHHjRfOSN/mkI02zYNUZRw4ZnLzO1A6l
- AOENu885QxuDVFluRzVFdKsJ7Qph/eyvoiwezXrU3DdFc0WU8YEabOap269ObbADlg/lhQX8F7D
- t9Dgjaj6Ns5tEPaQfXXX8IH/VKy8su5qeYqrU5DGTy6TaFGK3QLCG9u8xZpY1gO1HBPCGjLSGkr
- o1PnicrBJdEwQ2ricOIiyLPGCS0Gbsppq7Of/MGLvvjBLHHiC5sntuSXsvVkm3G3ZoPAps6FhxH
- buhBG2LeT248LMNAUh44JMRcCXKJN8NDTfjNoKqLiQacewAlim/nqmj2RbSWx8ZNL2/US9IKCzT
- uqIsgcDcS5Y1Bzr/8gA9dguykUNuah9qs5PHt3z7l6zhQWZBFVcSr45gOSO25VaZyddRc3JEit+
- 3cD2ojqjflq/7yw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4312; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=CjFFhc9MMW49VE8u5F61A8xLqeMREhaJD452w7fqvfs=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm7accgwF3pAoGMadS0uLmPG3TjPnHKaehiS7BO
+ q/wHo52nMaJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZu2nHAAKCRDm/A8cN/La
+ hTCCD/9bQZablXDI+t6T4xSNVQA9V6jPgrq8Mwr4Qdn3Sb1S6l7rmjLjRCZ+ukYqm8JfNaQjtiU
+ b/z1f1CS+g84eBFCphG1xjCrgNoVAtVToR2fPbE4ugvqFAFeq8VoTKrxh9cbnz7JwrJRtZ16TGM
+ MRPPglExlRbgQcbWfVOMaxa+83bdubMwNqDtWnfmVb+zW57F/iKyAsqka+1PqaZsozpWBvsB7Ak
+ +ePVvPOkkGVT1XtwmeCF4x0vs5PuFIWMZ4ct6Qlca8UVSpLocVwkZ3b1L3cDYjdX3hLMODXsI9+
+ FwcFiNICY75flV9AcriBS3MiPR9vCjWW4vGYIwSAw4/sRfXtwuUWcQyI3rwtKj5uAkp3Oj4DxCR
+ xgwXtj79YOWkfADhVBaB+4i8cLTSIfJlpcYvowhfZKEOUXsuA10cuVr9+ZskgpLVPGDRJd2A2et
+ GOEXHuMdd7xibOoNCypCxEASsGAnz983G0+HkvudeN++D1tv+uyYbxENUa58aXU1cZdMU91gcwO
+ eZvu5FPf/jeZ2B+kRTLwiabTcqhdP0VU+xIPB2jp/QMxcULFZQtW7nsnjHRj+gSBGShnZmvUA0F
+ leJizcwQ/QM9NaCjS8AsaRY74u1TRTTLZd5IrtNIHYGNRuGStjuLIAuOqnmRzftdBi7VKWdonVA
+ INERHNsw978xEAQ==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-Use _pmbus_read_byte_data() rather than calling smbus directly to check
-the write protection status. This give a chance to device implementing
-write protection differently to report back on the actual write protection
-status.
+Add a module parameter to force the write protection mode of pmbus chips.
 
+2 protections modes are provided to start with:
+* 0: Remove the write protection if possible
+* 1: Enable full write protection if possible
+
+Of course, if the parameter is not provided, the default write protection
+status of the pmbus chips is left untouched.
+
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++
+ drivers/hwmon/pmbus/pmbus_core.c                | 74 ++++++++++++++++++-------
+ 2 files changed, 59 insertions(+), 19 deletions(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 09126bb8cc9f..e41d13f46140 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4672,6 +4672,10 @@
+ 			Format: { parport<nr> | timid | 0 }
+ 			See also Documentation/admin-guide/parport.rst.
+ 
++	pmbus.wp=	[HW] PMBus Chips write protection forced mode
++			Format: { 0 | 1 }
++			See drivers/hwmon/pmbus/pmbus_core.c
++
+ 	pmtmr=		[X86] Manual setup of pmtmr I/O Port.
+ 			Override pmtimer IOPort with a hex value.
+ 			e.g. pmtmr=0x508
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 0ea6fe7eb17c..82522fc9090a 100644
+index 363def768888..ca5803bfd24a 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2712,9 +2712,7 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+@@ -31,6 +31,20 @@
+ #define PMBUS_ATTR_ALLOC_SIZE	32
+ #define PMBUS_NAME_SIZE		24
+ 
++/*
++ * PMBus write protect forced mode:
++ * PMBus may come up with a variety of write protection configuration.
++ * 'pmbus_wp' may be used if a particular write protection is necessary.
++ * The ability to actually alter the protection may also depend on the chip
++ * so the actual runtime write protection configuration may differ from
++ * the requested one. pmbus_core currently support the following value:
++ * - 0: write protection removed
++ * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
++ *      registers. Chips essentially become read-only with this.
++ */
++static int wp = -1;
++module_param(wp, int, 0444);
++
+ struct pmbus_sensor {
+ 	struct pmbus_sensor *next;
+ 	char name[PMBUS_NAME_SIZE];	/* sysfs sensor name */
+@@ -2658,6 +2672,45 @@ static void pmbus_remove_pec(void *dev)
+ 	device_remove_file(dev, &dev_attr_pec);
+ }
+ 
++static void pmbus_init_wp(struct i2c_client *client, struct pmbus_data *data)
++{
++	int ret;
++
++	switch (wp) {
++	case 0:
++		_pmbus_write_byte_data(client, 0xff,
++				       PMBUS_WRITE_PROTECT, 0);
++		break;
++
++	case 1:
++		_pmbus_write_byte_data(client, 0xff,
++				       PMBUS_WRITE_PROTECT, PB_WP_ALL);
++		break;
++
++	default:
++		/* Ignore the other values */
++		break;
++	}
++
++	ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
++
++	switch (ret) {
++	case PB_WP_ALL:
++		data->flags |= PMBUS_OP_PROTECTED;
++		fallthrough;
++	case PB_WP_OP:
++		data->flags |= PMBUS_VOUT_PROTECTED;
++		fallthrough;
++	case PB_WP_VOUT:
++		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
++		break;
++
++	default:
++		/* Ignore manufacturer specific and invalid as well as errors */
++		break;
++	}
++}
++
+ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 			     struct pmbus_driver_info *info)
+ {
+@@ -2711,25 +2764,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	 * faults, and we should not try it. Also, in that case, writes into
  	 * limit registers need to be disabled.
  	 */
- 	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
--		pmbus_wait(client);
--		ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
--		pmbus_update_ts(client, false);
-+		ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
+-	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
+-		ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
+-
+-		switch (ret) {
+-		case PB_WP_ALL:
+-			data->flags |= PMBUS_OP_PROTECTED;
+-			fallthrough;
+-		case PB_WP_OP:
+-			data->flags |= PMBUS_VOUT_PROTECTED;
+-			fallthrough;
+-		case PB_WP_VOUT:
+-			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
+-			break;
+-
+-		default:
+-			/* Ignore manufacturer specific and invalid as well as errors */
+-			break;
+-		}
+-	}
++	if (!(data->flags & PMBUS_NO_WRITE_PROTECT))
++		pmbus_init_wp(client, data);
  
- 		if (ret > 0 && (ret & PB_WP_ANY))
- 			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
+ 	if (data->info->pages)
+ 		pmbus_clear_faults(client);
 
 -- 
 2.45.2
