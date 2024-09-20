@@ -1,750 +1,238 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B26E183094
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 16:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8A04F881;
+	Fri, 20 Sep 2024 21:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726851408; cv=none; b=lT8qBMMRWc3sI2ZaGyl07E2zV//5qpqRpEsRZY7A49AUdXzvQy4Uher04YL0SQdcSKqJQmpptbquK0uvp7QCpeKQumnjfZijkv08qeM4BKSs9HvEfPVoemeioIWmvu0A5alufqIQ1micOc4oQ9nE2yFGQdeAaA+SMfSy40/RDCI=
+	t=1726866843; cv=none; b=aBwS1U+UzpjuQOWT86GiSjm7TyTYOp1eASlbRaH/xPLKpuBnp9Ns4N90BC5pTyj1F4rgh0vVnxhZa3sHMTI1cfAUUXRvzGksj2vlE/cY+RwVIeGOptABgP2s7OgoazeY/OYjtumoaVHmbrYBSNN9LRfZ0KZcBKx2zh5ZNOLcFvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726851408; c=relaxed/simple;
-	bh=UgtO+3cWXVEcCkUu4pfa3jXNe3npwZ44KY1zNE8lug8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E/uAKuuxqZkRNwJLp73r9zPDttzqUlpViAvaHit3243PJWLaF/jRsrQDaZari5JuRbWZIEzoAqdhA8CBrzrrg9f1XM8aVSoDLu36Q1vFxuHBpm2AXWQS89aPZGtxXV+4pdn3butNQdAHEiW5GAoKmPa+x4OwIEnMSPgPMZsTyqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=1vHoosNh; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1726866843; c=relaxed/simple;
+	bh=TiRRmhbEVAwHGNWExA83r8+B/uNLuBnFcXDrnZT46EE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=II1z2BcKPLvqXgcfsDhH2+VgszdLGjUxc3pxAwDHNm27EJnS20LgOejyoq9p9S4lwLyn8Fpnwhze4yVvJxS6YgT2oHh3ZOptF2bP5+PaJOgeArXVL48x6T/Jash/9vZSPUXZRgSSTVYdaSEcObHFwbvElmh0OR5qJt8dzdziDxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYGYvROI; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="1vHoosNh"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42cb1e623d1so20417655e9.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Sep 2024 09:56:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYGYvROI"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2068acc8b98so24867515ad.3;
+        Fri, 20 Sep 2024 14:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726851404; x=1727456204; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlqM3Wq2LMBkFmA2JX6btIgMsHeJfMjg4hSFeS+f3ZA=;
-        b=1vHoosNh8SWONZFSikeXnU0VK5dVxgOBLQYA5Qg6TegN9xKy3sHCKMhGLpT5QmUPL4
-         71snRIOzH6nLTmGjW25QS0Fte55QD/15mGNNGRIATN3HBS+fghJRCP7GL+ADkDzZadqR
-         LRx+Ff4Dqz2gTpM/svZgCMtepll1xstP1nveNmKOo0ft6AzdYwR/ws0qWmKK3AUVVB8i
-         2kA+wXYBrpCFjw3HV1BLCVqbR0BBAccOn5buJZCykjtbUNvCfVSuqOS1YmCXMZmx4ZQe
-         i8h0nnHIq63To+p9bP+gQqWmXrsVZA/OfFHxVd2F/pHrllKM8T7HH245F7e45pQcrt5E
-         39jQ==
+        d=gmail.com; s=20230601; t=1726866841; x=1727471641; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=8nUdy8MPKPIAxGyxzJ3XFXFoEECowDzKOLs8aoZBzUo=;
+        b=SYGYvROIS8A6v5CPxOj0u1/yKF0k5QHhnJPwXG0Zn1mBNs3SwVX6+69kja8U6p6Wpe
+         QfxsdTHZb6Cr4fdcekYnBs8y64HsvR2savhALSPXHfN9L1H136stco1Mi1Q7Xw+cyIGk
+         rtpCTqoviHOgoLsQs/ypUoRR+0mrDVPCWLJQz0f6GVSng/KAMwmrKzm2bS15G77B9FAh
+         7sdjpuj7xhEv4rkl7hRNbZMNtkaHkuCY26Iw8v61qkhFT0rbe6YKK4/bnsWFgEfnPA74
+         hyJXGzOeibuDZT/MuJRPF2JLOSJc6vMbtmVzkYhd8Dqjh5zQUcHWbItbxywbtDEgf/1B
+         jDQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726851404; x=1727456204;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zlqM3Wq2LMBkFmA2JX6btIgMsHeJfMjg4hSFeS+f3ZA=;
-        b=uROzREYyWJCqS0Ay6pxq1uVQiivOWcuJIMe0DAqh7+BmEHYgqV34qfenyXNWJDBAjO
-         eQ7JtY5r9uilBjPhdAp+yYjk2hlbwlnOmDbXd1AYRxVzKxlNLhpLw5A5fdFjMSgQJTYN
-         VYlJD+dn1elQE4AMlw6XGljt5UgCr0sxM/srRq+PQDAEIObgcdXqIrUSC9ugrZUHya94
-         nWFK3hbkUL/BTDVHcFfQs7IQioDkKdvX9vVpfdmyR6l+WtaUv6BG5rrSLylNdb0dfnl6
-         pz/eCTWVdnEWY29dVhn3tJYslU4HSaa2lQkB3KPvZVuz3X1P8gvVRtSGbGELQKlvHH/Y
-         NTzQ==
-X-Gm-Message-State: AOJu0Yzyg39u7O4dVqkWhbi62BQub+b1tPR40SaFHu9vQqIwJuwUzW3O
-	Mh6SZET9YVfRPpAHiBhE9dH2LVxnCInm8n22nGXvnquyq5vU3h/GDxg5x+GWjN4=
-X-Google-Smtp-Source: AGHT+IG6Gl6Xf33ZpH5wBoFvM9jlClYdpKUap5d5TKoMTLI9z8bm0sV3RKZOCxo+FeAmimsuIwxYNA==
-X-Received: by 2002:adf:f791:0:b0:373:54c:26a4 with SMTP id ffacd0b85a97d-37a42380d5cmr2263515f8f.54.1726851403615;
-        Fri, 20 Sep 2024 09:56:43 -0700 (PDT)
-Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:8e69:83a7:a29a:ba83])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42e6c718e40sm97430135e9.1.2024.09.20.09.56.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 09:56:43 -0700 (PDT)
-From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Fri, 20 Sep 2024 18:56:14 +0200
-Subject: [PATCH v2 3/3] hwmon: (pmbus/tps25990): add initial support
+        d=1e100.net; s=20230601; t=1726866841; x=1727471641;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8nUdy8MPKPIAxGyxzJ3XFXFoEECowDzKOLs8aoZBzUo=;
+        b=qxNegyMtRXkW900HNCfPbFeiUz1vT1LWLlmjSGHc98pDvG/b/qVvxLwQ8oqVDUfJcK
+         hY+M3UVlf0S2JK1gCRwq0OA+au6dp+yBr5kD8Ux3Dg2+70xE4HUkrNYvRWfOGOLlHUX2
+         GAnaBp3uAq7Liw7DKV5jpjhPBwp/pbfEEFA2rv0I81J3lGYoLRcwqJcWzusfrgsZ5nbY
+         Takkxq8WubDfKCP8MiQTdSFa++4tNR401+16TOLHjTWfv4Dppppyvsmxx9IQPIpGkxIP
+         ekB7GV3T9bj4Jqgn7gQJlUPA2uc7lCPgHYnyaB+jNQ/VHtzm1bPh8FWsZGQKDgolmMHv
+         RQxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYNyezloFzjazgfh/ADHio2v/Mrwa07N61oqD/OzRWT3qu28nkY4n4PZLAQygXAN9yeGyKZpDRuXJfz9A=@vger.kernel.org, AJvYcCXIkBoow9OYY1R2PMURDa7/okl406NNcGbhK1/1sEx1hjhyxaCaumQ3gad6ONvs0h3vWdtm9VswN64=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6TAylCUoLi6UuvQCQ99fjYOgCQLEgX70U9h3MWBygOtB3+tpS
+	G9O/Z1+lzXEQGN2e7yf+qltrT7HKZQpclfnnPZMLTX9nAwRBA2Ky
+X-Google-Smtp-Source: AGHT+IEY4hz33BjyToclZJtvWi5dKNRs3veH0ThYp9YRW9HNEdRhduGZGnE5VaMm5byvelr9sk89xQ==
+X-Received: by 2002:a17:903:946:b0:207:20b0:1380 with SMTP id d9443c01a7336-208d84472c4mr47906575ad.44.1726866840880;
+        Fri, 20 Sep 2024 14:14:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207946d27dasm99003585ad.172.2024.09.20.14.13.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Sep 2024 14:13:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4052294e-7b7f-4238-9b47-92727de4d516@roeck-us.net>
+Date: Fri, 20 Sep 2024 14:13:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] hwmon: (pmbus/core) improve handling of write
+ protected regulators
+To: Jerome Brunet <jbrunet@baylibre.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
+ <20240920-pmbus-wp-v1-4-d679ef31c483@baylibre.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240920-pmbus-wp-v1-4-d679ef31c483@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240920-tps25990-v2-3-f3e39bce5173@baylibre.com>
-References: <20240920-tps25990-v2-0-f3e39bce5173@baylibre.com>
-In-Reply-To: <20240920-tps25990-v2-0-f3e39bce5173@baylibre.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, 
- Naresh Solanki <naresh.solanki@9elements.com>, 
- Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-i2c@vger.kernel.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17286; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=UgtO+3cWXVEcCkUu4pfa3jXNe3npwZ44KY1zNE8lug8=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBm7alGRaKtRDsIMYChQFtqGTkxhgAa3J/6VLsCC
- 1T7XISomguJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZu2pRgAKCRDm/A8cN/La
- hbUtD/9Uh5tsJSPA5EP2pTgBHiPWGlsWRMRyyA9plPxQXT7qylEgLZNt+syGcQB7xv+5Zz4KUD8
- Jqjg+X/5v87vKmRAA6njNh1rGqtr0qpylXFrEqVTu0FOT5/A4uBZ0u7EVSGnG8IZFwFHRdt5FFI
- qDGByGtZ5P1sYXHeKdXkItuT79FNdPcYBA5UJKW2tGKSlXqYk6lzDkDh/7cfW4OCA2HwIe1mJw6
- jLPde/YfvzU3dcAgBtXHMrBZ3WgrADvpALEM6ts9MAefZ9cWDrTL9MMcRwaTRVf3LzGHfL1VE18
- +BmTO7M0RGJbGMDNWJLGW7cpZJP+sI4e5wbcDvt1eAGpv9bV19Wx+U1po6iqpLZv8eQckx0pcUu
- EfBG4U81i39RwH+8JUlHtIdyb+k3BWdbnqS27F1k6CFrf6pVPTlUZOrLgZ5Xq+FEplfPDGAQLff
- f73CdcLc7s+wZ357ezQ6Pnju/oJ4gDGsEkQw9zkgEClTfN6mHeu5YIdoRvvCqd7TJ0jCI7H3bt5
- QbRLnYzciUKjDB4LMP+IQV6DTUYJd+NBJ4piRpZbgxOqFZo16WsIH8NsIf6u/eKjFIskeMWdDO4
- ZBHTSd+VJwhtj1RiIFWY9+ZYDPSVocFPrVPwSh5ZeQcGL9wytTl1c4iS2TbbXYTquCwmUjJSd5t
- TEvGTiT3G93VXBQ==
-X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
- fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-Add initial support for the Texas Instruments TPS25990 eFuse.
-This adds the basic PMBUS telemetry support for the device.
+On 9/20/24 09:47, Jerome Brunet wrote:
+> Writing PMBus protected registers does succeed from the smbus perspective,
+> even if the write is ignored by the device and a communication fault is
+> raised. This fault will silently be caught and cleared by pmbus irq if one
+> has been registered.
+> 
+> This means that the regulator call may return succeed although the
+> operation was ignored.
+> 
+> With this change, the operation which are not supported will be properly
+> flagged as such and the regulator framework won't even try to execute them.
+> 
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>   drivers/hwmon/pmbus/pmbus.h      |  4 ++++
+>   drivers/hwmon/pmbus/pmbus_core.c | 35 ++++++++++++++++++++++++++++++++++-
+>   include/linux/pmbus.h            | 14 ++++++++++++++
+>   3 files changed, 52 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 5d5dc774187b..76cff65f38d5 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -481,6 +481,8 @@ struct pmbus_driver_info {
+>   /* Regulator ops */
+>   
+>   extern const struct regulator_ops pmbus_regulator_ops;
+> +int pmbus_regulator_init_cb(struct regulator_dev *rdev,
+> +			    struct regulator_config *config);
+>   
+>   /* Macros for filling in array of struct regulator_desc */
+>   #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
+> @@ -495,6 +497,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>   		.n_voltages = _voltages,			\
+>   		.uV_step = _step,				\
+>   		.min_uV = _min_uV,				\
+> +		.init_cb = pmbus_regulator_init_cb,		\
+>   	}
+>   
+>   #define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
+> @@ -510,6 +513,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>   		.n_voltages = _voltages,			\
+>   		.uV_step = _step,				\
+>   		.min_uV = _min_uV,				\
+> +		.init_cb = pmbus_regulator_init_cb,		\
+>   	}
+>   
+>   #define PMBUS_REGULATOR_ONE(_name)   PMBUS_REGULATOR_STEP_ONE(_name, 0, 0, 0)
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 82522fc9090a..363def768888 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2714,8 +2714,21 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+>   	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
+>   		ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
+>   
+> -		if (ret > 0 && (ret & PB_WP_ANY))
+> +		switch (ret) {
+> +		case PB_WP_ALL:
+> +			data->flags |= PMBUS_OP_PROTECTED;
+> +			fallthrough;
+> +		case PB_WP_OP:
+> +			data->flags |= PMBUS_VOUT_PROTECTED;
+> +			fallthrough;
+> +		case PB_WP_VOUT:
+>   			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
+> +			break;
+> +
+> +		default:
+> +			/* Ignore manufacturer specific and invalid as well as errors */
+> +			break;
+> +		}
+>   	}
+>   
+>   	if (data->info->pages)
+> @@ -3172,8 +3185,12 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+>   {
+>   	struct device *dev = rdev_get_dev(rdev);
+>   	struct i2c_client *client = to_i2c_client(dev->parent);
+> +	struct pmbus_data *data = i2c_get_clientdata(client);
+>   	int val, low, high;
+>   
+> +	if (data->flags & PMBUS_VOUT_PROTECTED)
+> +		return 0;
+> +
+>   	if (selector >= rdev->desc->n_voltages ||
+>   	    selector < rdev->desc->linear_min_sel)
+>   		return -EINVAL;
+> @@ -3208,6 +3225,22 @@ const struct regulator_ops pmbus_regulator_ops = {
+>   };
+>   EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+>   
+> +int pmbus_regulator_init_cb(struct regulator_dev *rdev,
+> +			    struct regulator_config *config)
+> +{
+> +	struct pmbus_data *data = config->driver_data;
+> +	struct regulation_constraints *constraints = rdev->constraints;
+> +
+> +	if (data->flags & PMBUS_OP_PROTECTED)
+> +		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_STATUS;
+> +
+> +	if (data->flags & PMBUS_VOUT_PROTECTED)
+> +		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_VOLTAGE;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(pmbus_regulator_init_cb, PMBUS);
+> +
 
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/tps25990.rst | 148 ++++++++++++++
- drivers/hwmon/pmbus/Kconfig      |  17 ++
- drivers/hwmon/pmbus/Makefile     |   1 +
- drivers/hwmon/pmbus/tps25990.c   | 427 +++++++++++++++++++++++++++++++++++++++
- 5 files changed, 594 insertions(+)
+I am a bit at loss trying to understand why the constraints can't be passed
+with the regulator init_data when registering the regulator. Care to explain ?
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index ea3b5be8fe4f..205ed31c66ff 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -234,6 +234,7 @@ Hardware Monitoring Kernel Drivers
-    tmp464
-    tmp513
-    tps23861
-+   tps25990
-    tps40422
-    tps53679
-    tps546d24
-diff --git a/Documentation/hwmon/tps25990.rst b/Documentation/hwmon/tps25990.rst
-new file mode 100644
-index 000000000000..ed9e74d43e2c
---- /dev/null
-+++ b/Documentation/hwmon/tps25990.rst
-@@ -0,0 +1,148 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver tps25990
-+======================
-+
-+Supported chips:
-+
-+  * TI TPS25990
-+
-+    Prefix: 'tps25990'
-+
-+  * Datasheet
-+
-+    Publicly available at Texas Instruments website: https://www.ti.com/lit/gpn/tps25990
-+
-+Author:
-+
-+	Jerome Brunet <jbrunet@baylibre.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for TI TPS25990 eFuse.
-+This is an integrated, high-current circuit protection and power
-+management device with PMBUS interface
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+Device supports direct format for reading input voltages,
-+output voltage, input current, input power and temperature.
-+
-+Due to the specificities of the chip, all history reset attributes
-+are tied together. Resetting the history of a sensor, resets the
-+history of all the sensors.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input current:
-+
-+**curr1_average**
-+
-+**curr1_crit**
-+
-+**curr1_crit_alarm**
-+
-+**curr1_highest**
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_max**
-+
-+**curr1_max_alarm**
-+
-+**curr1_reset_history**
-+
-+The driver provides the following attributes for main input voltage:
-+
-+**in1_average**
-+
-+**in1_crit**
-+
-+**in1_crit_alarm**
-+
-+**in1_highest**
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_lcrit**
-+
-+**in1_lcrit_alarm**
-+
-+**in1_lowest**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+**in1_reset_history**
-+
-+The driver provides the following attributes for auxiliary input voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in3_average**
-+
-+**in3_input**
-+
-+**in3_label**
-+
-+**in3_lowest**
-+
-+**in3_min**
-+
-+**in3_min_alarm**
-+
-+**in3_reset_history**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_alarm**
-+
-+**power1_average**
-+
-+**power1_input**
-+
-+**power1_input_highest**
-+
-+**power1_label**
-+
-+**power1_max**
-+
-+**power1_reset_history**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_average**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-+
-+**temp1_highest**
-+
-+**temp1_input**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp1_reset_history**
-+
-+The driver provides the following attributes for sampling:
-+
-+**samples**
-+
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index a4f02cad92fd..a3fd442e0277 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -510,6 +510,23 @@ config SENSORS_TDA38640_REGULATOR
- 	  If you say yes here you get regulator support for Infineon
- 	  TDA38640 as regulator.
- 
-+config SENSORS_TPS25990
-+	tristate "TI TPS25990"
-+	help
-+	  If you say yes here you get hardware monitoring support for TI
-+	  TPS25990.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called tps25990.
-+
-+config SENSORS_TPS25990_REGULATOR
-+	bool "Regulator support for TPS25990 and compatibles"
-+	depends on SENSORS_TPS25990 && REGULATOR
-+	default SENSORS_TPS25990
-+	help
-+	  If you say yes here you get regulator support for Texas Instruments
-+	  TPS25990.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d00bcc758b97..3d3183f8d2a7 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -51,6 +51,7 @@ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
- obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
-+obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
-diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
-new file mode 100644
-index 000000000000..03848d671c10
---- /dev/null
-+++ b/drivers/hwmon/pmbus/tps25990.c
-@@ -0,0 +1,427 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2024 BayLibre, SAS.
-+// Author: Jerome Brunet <jbrunet@baylibre.com>
-+
-+#include <linux/debugfs.h>
-+#include <linux/err.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+#include "pmbus.h"
-+
-+#define TPS25990_READ_VAUX		0xd0
-+#define TPS25990_READ_VIN_MIN		0xd1
-+#define TPS25990_READ_VIN_PEAK		0xd2
-+#define TPS25990_READ_IIN_PEAK		0xd4
-+#define TPS25990_READ_PIN_PEAK		0xd5
-+#define TPS25990_READ_TEMP_AVG		0xd6
-+#define TPS25990_READ_TEMP_PEAK		0xd7
-+#define TPS25990_READ_VOUT_MIN		0xda
-+#define TPS25990_READ_VIN_AVG		0xdc
-+#define TPS25990_READ_VOUT_AVG		0xdd
-+#define TPS25990_READ_IIN_AVG		0xde
-+#define TPS25990_READ_PIN_AVG		0xdf
-+#define TPS25990_VIREF			0xe0
-+#define TPS25990_PK_MIN_AVG		0xea
-+#define  PK_MIN_AVG_RST_PEAK		BIT(7)
-+#define  PK_MIN_AVG_RST_AVG		BIT(6)
-+#define  PK_MIN_AVG_RST_MIN		BIT(5)
-+#define  PK_MIN_AVG_AVG_CNT		GENMASK(2, 0)
-+#define TPS25990_MFR_WRITE_PROTECT	0xf8
-+#define  TPS25990_UNLOCKED		BIT(7)
-+
-+#define TPS25990_8B_SHIFT		2
-+#define TPS25990_VIN_OVF_NUM		525100
-+#define TPS25990_VIN_OVF_DIV		10163
-+#define TPS25990_VIN_OVF_OFF		155
-+#define TPS25990_IIN_OCF_NUM		953800
-+#define TPS25990_IIN_OCF_DIV		129278
-+#define TPS25990_IIN_OCF_OFF		157
-+
-+#define PK_MIN_AVG_RST_MASK		(PK_MIN_AVG_RST_PEAK | \
-+					 PK_MIN_AVG_RST_AVG  | \
-+					 PK_MIN_AVG_RST_MIN)
-+
-+/*
-+ * Arbitrary default Rimon value: 1kOhm
-+ * This correspond to an overcurrent limit of 55A, close to the specified limit
-+ * of un-stacked TPS25990 and makes further calculation easier to setup in
-+ * sensor.conf, if necessary
-+ */
-+#define TPS25990_DEFAULT_RIMON		1000000000
-+
-+static void tps25990_set_m(int *m, u32 rimon)
-+{
-+	u64 val = ((u64)*m) * rimon;
-+
-+	/* Make sure m fits the s32 type */
-+	*m = DIV_ROUND_CLOSEST_ULL(val, 1000000);
-+}
-+
-+static int tps25990_mfr_write_protect_set(struct i2c_client *client,
-+					  u8 protect)
-+{
-+	/*
-+	 * The chip has a single protection mode, set it regardless of
-+	 * the specific protection requested
-+	 */
-+	return pmbus_write_byte_data(client, -1, TPS25990_MFR_WRITE_PROTECT,
-+				     protect ? 0x0 : 0xa2);
-+}
-+
-+static int tps25990_mfr_write_protect_get(struct i2c_client *client)
-+{
-+	int ret = pmbus_read_byte_data(client, -1, TPS25990_MFR_WRITE_PROTECT);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return (ret & TPS25990_UNLOCKED) ? 0 : PB_WP_ALL;
-+}
-+
-+static int tps25990_read_word_data(struct i2c_client *client,
-+				   int page, int phase, int reg)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VIRT_READ_VIN_MAX:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VIN_PEAK);
-+		break;
-+
-+	case PMBUS_VIRT_READ_VIN_MIN:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VIN_MIN);
-+		break;
-+
-+	case PMBUS_VIRT_READ_VIN_AVG:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VIN_AVG);
-+		break;
-+
-+	case PMBUS_VIRT_READ_VOUT_MIN:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VOUT_MIN);
-+		break;
-+
-+	case PMBUS_VIRT_READ_VOUT_AVG:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VOUT_AVG);
-+		break;
-+
-+	case PMBUS_VIRT_READ_IIN_AVG:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_IIN_AVG);
-+		break;
-+
-+	case PMBUS_VIRT_READ_IIN_MAX:
-+		return TPS25990_READ_IIN_PEAK;
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_IIN_PEAK);
-+		break;
-+
-+	case PMBUS_VIRT_READ_TEMP_AVG:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_TEMP_AVG);
-+		break;
-+
-+	case PMBUS_VIRT_READ_TEMP_MAX:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_TEMP_PEAK);
-+		break;
-+
-+	case PMBUS_VIRT_READ_PIN_AVG:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_PIN_AVG);
-+		break;
-+
-+	case PMBUS_VIRT_READ_PIN_MAX:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_PIN_PEAK);
-+		break;
-+
-+	case PMBUS_VIRT_READ_VMON:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   TPS25990_READ_VAUX);
-+		break;
-+
-+	case PMBUS_VIN_UV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_FAULT_LIMIT:
-+	case PMBUS_VIN_OV_WARN_LIMIT:
-+	case PMBUS_VOUT_UV_WARN_LIMIT:
-+	case PMBUS_IIN_OC_WARN_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_PIN_OP_WARN_LIMIT:
-+		/*
-+		 * These registers provide an 8 bits value instead of a
-+		 * 10bits one. Just shifting twice the register value is
-+		 * enough to make the sensor type conversion work, even
-+		 * if the datasheet provides different m, b and R for
-+		 * those.
-+		 */
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			break;
-+		ret <<= TPS25990_8B_SHIFT;
-+		break;
-+
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			break;
-+		ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
-+					TPS25990_VIN_OVF_DIV);
-+		ret += TPS25990_VIN_OVF_OFF;
-+		break;
-+
-+	case PMBUS_IIN_OC_FAULT_LIMIT:
-+		/*
-+		 * VIREF directly sets the over-current limit at which the eFuse
-+		 * will turn the FET off and trigger a fault. Expose it through
-+		 * this generic property instead of a manufacturer specific one.
-+		 */
-+		ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
-+		if (ret < 0)
-+			break;
-+		ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
-+					TPS25990_IIN_OCF_DIV);
-+		ret += TPS25990_IIN_OCF_OFF;
-+		break;
-+
-+	case PMBUS_VIRT_SAMPLES:
-+		ret = pmbus_read_byte_data(client, page, TPS25990_PK_MIN_AVG);
-+		if (ret < 0)
-+			break;
-+		ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-+		break;
-+
-+	case PMBUS_VIRT_RESET_TEMP_HISTORY:
-+	case PMBUS_VIRT_RESET_VIN_HISTORY:
-+	case PMBUS_VIRT_RESET_IIN_HISTORY:
-+	case PMBUS_VIRT_RESET_PIN_HISTORY:
-+	case PMBUS_VIRT_RESET_VOUT_HISTORY:
-+		ret = 0;
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int tps25990_write_word_data(struct i2c_client *client,
-+				    int page, int reg, u16 value)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VIN_UV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_FAULT_LIMIT:
-+	case PMBUS_VIN_OV_WARN_LIMIT:
-+	case PMBUS_VOUT_UV_WARN_LIMIT:
-+	case PMBUS_IIN_OC_WARN_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_PIN_OP_WARN_LIMIT:
-+		value >>= TPS25990_8B_SHIFT;
-+		value = clamp_val(value, 0, 0xff);
-+		ret = pmbus_write_word_data(client, page, reg, value);
-+		break;
-+
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+		value -= TPS25990_VIN_OVF_OFF;
-+		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
-+					  TPS25990_VIN_OVF_NUM);
-+		value = clamp_val(value, 0, 0xf);
-+		ret = pmbus_write_word_data(client, page, reg, value);
-+		break;
-+
-+	case PMBUS_IIN_OC_FAULT_LIMIT:
-+		value -= TPS25990_IIN_OCF_OFF;
-+		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
-+					TPS25990_IIN_OCF_NUM);
-+		value = clamp_val(value, 0, 0x3f);
-+		ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
-+		break;
-+
-+	case PMBUS_VIRT_SAMPLES:
-+		value = clamp_val(value, 1, 1 << PK_MIN_AVG_AVG_CNT);
-+		value = ilog2(value);
-+		ret = pmbus_update_byte_data(client, page, TPS25990_PK_MIN_AVG,
-+					     PK_MIN_AVG_AVG_CNT,
-+					     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-+		break;
-+
-+	case PMBUS_VIRT_RESET_TEMP_HISTORY:
-+	case PMBUS_VIRT_RESET_VIN_HISTORY:
-+	case PMBUS_VIRT_RESET_IIN_HISTORY:
-+	case PMBUS_VIRT_RESET_PIN_HISTORY:
-+	case PMBUS_VIRT_RESET_VOUT_HISTORY:
-+		/*
-+		 * TPS25990 has history resets based on MIN/AVG/PEAK instead of per
-+		 * sensor type. Exposing this quirk in hwmon is not desirable so
-+		 * reset MIN, AVG and PEAK together. Even is there effectively only
-+		 * one reset, which resets everything, expose the 5 entries so
-+		 * userspace is not required map a sensor type to another to trigger
-+		 * a reset
-+		 */
-+		ret = pmbus_update_byte_data(client, 0, TPS25990_PK_MIN_AVG,
-+					     PK_MIN_AVG_RST_MASK,
-+					     PK_MIN_AVG_RST_MASK);
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int tps25990_read_byte_data(struct i2c_client *client,
-+				   int page, int reg)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_WRITE_PROTECT:
-+		ret = tps25990_mfr_write_protect_get(client);
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int tps25990_write_byte_data(struct i2c_client *client,
-+				    int page, int reg, u8 byte)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_WRITE_PROTECT:
-+		ret = tps25990_mfr_write_protect_set(client, byte);
-+		break;
-+
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+#if IS_ENABLED(CONFIG_SENSORS_TPS25990_REGULATOR)
-+static const struct regulator_desc tps25990_reg_desc[] = {
-+	PMBUS_REGULATOR_ONE("vout"),
-+};
-+#endif
-+
-+static const struct pmbus_driver_info tps25990_base_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.m[PSC_VOLTAGE_IN] = 5251,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = -2,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.m[PSC_VOLTAGE_OUT] = 5251,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = -2,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_TEMPERATURE] = 140,
-+	.b[PSC_TEMPERATURE] = 32100,
-+	.R[PSC_TEMPERATURE] = -2,
-+	/*
-+	 * Current and Power measurement depends on the ohm value
-+	 * of Rimon. m is multiplied by 1000 below to have an integer
-+	 * and -3 is added to R to compensate.
-+	 */
-+	.format[PSC_CURRENT_IN] = direct,
-+	.m[PSC_CURRENT_IN] = 9538,
-+	.b[PSC_CURRENT_IN] = 0,
-+	.R[PSC_CURRENT_IN] = -6,
-+	.format[PSC_POWER] = direct,
-+	.m[PSC_POWER] = 4901,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = -7,
-+	.func[0] = (PMBUS_HAVE_VIN |
-+		    PMBUS_HAVE_VOUT |
-+		    PMBUS_HAVE_VMON |
-+		    PMBUS_HAVE_IIN |
-+		    PMBUS_HAVE_PIN |
-+		    PMBUS_HAVE_TEMP |
-+		    PMBUS_HAVE_STATUS_VOUT |
-+		    PMBUS_HAVE_STATUS_IOUT |
-+		    PMBUS_HAVE_STATUS_INPUT |
-+		    PMBUS_HAVE_STATUS_TEMP |
-+		    PMBUS_HAVE_SAMPLES),
-+	.read_word_data = tps25990_read_word_data,
-+	.write_word_data = tps25990_write_word_data,
-+	.read_byte_data = tps25990_read_byte_data,
-+	.write_byte_data = tps25990_write_byte_data,
-+
-+#if IS_ENABLED(CONFIG_SENSORS_TPS25990_REGULATOR)
-+	.reg_desc = tps25990_reg_desc,
-+	.num_regulators = ARRAY_SIZE(tps25990_reg_desc),
-+#endif
-+};
-+
-+static const struct i2c_device_id tps25990_i2c_id[] = {
-+	{ "tps25990" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, tps25990_i2c_id);
-+
-+static const struct of_device_id tps25990_of_match[] = {
-+	{ .compatible = "ti,tps25990" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, tps25990_of_match);
-+
-+static int tps25990_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct pmbus_driver_info *info;
-+	u32 rimon = TPS25990_DEFAULT_RIMON;
-+	int ret;
-+
-+	ret = device_property_read_u32(dev, "ti,rimon-micro-ohms", &rimon);
-+	if (ret < 0 && ret != -EINVAL)
-+		return dev_err_probe(dev, ret, "failed to get rimon\n");
-+
-+	info = devm_kmemdup(dev, &tps25990_base_info, sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	/* Adapt the current and power scale for each instance */
-+	tps25990_set_m(&info->m[PSC_CURRENT_IN], rimon);
-+	tps25990_set_m(&info->m[PSC_POWER], rimon);
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static struct i2c_driver tps25990_driver = {
-+	.driver = {
-+		.name = "tps25990",
-+		.of_match_table = tps25990_of_match,
-+	},
-+	.probe = tps25990_probe,
-+	.id_table = tps25990_i2c_id,
-+};
-+module_i2c_driver(tps25990_driver);
-+
-+MODULE_AUTHOR("Jerome Brunet <jbrunet@baylibre.com>");
-+MODULE_DESCRIPTION("PMBUS driver for TPS25990 eFuse");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
-
--- 
-2.45.2
+Thanks,
+Guenter
 
