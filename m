@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BF519DF81
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Sep 2024 14:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4040519CC09
+	for <linux-hwmon@vger.kernel.org>; Mon, 23 Sep 2024 15:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727101112; cv=none; b=JgbaaRBYMVytnPix5VvpBGXrfofWn5dqO+15kyCrnq74lZlUlkMlboSCEl5TrgTDiPahZ9wNO8o2mIEXX0L2xXV5PBBq1p6jNL0Qx59C+yHlxtLOhRklTumgGvfnFKGU2be7UJbP2zBfeQBhbKz0JnmMBM2hbepE+Rk/Ac5eVLE=
+	t=1727104177; cv=none; b=lkcHWCNQO5qLZJp6h9yFP51MLc1v8azJD6Q/BF1spHvlI17WlDvWVrrc4Y+N2tSMgdY4pkiPj6kBt6P+M8ugb5OgsstaiV5tAo7SmDFlZBXijeAt1ZhIOKXEHaK0Zv0UAPlPFFpMlEW2CMsYkL4F3qgelCWgjla7dYu41j3shEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727101112; c=relaxed/simple;
-	bh=AVzBsjY3fcaf3XtQcR0+dC7xVKhCFr5vNJWHp0egC3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Q5x/0XoYnwyz4NdTUx9y9iWkVO+q6MTe921DaRCeY9CKKX6MFgciDspakZRD8QVlru8I8+RDnaNhs0/CdtqFtGh6hKqI6jMZszNtXXAw8XAwYFUGcsOSlvnQBQCOtX0LulrWNptBmHZX6fPMi4J51frCbDI9MtdWXW8nF2il9vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FD8V6hzV; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1727104177; c=relaxed/simple;
+	bh=tewf9B+SncATs7je+s6KKOFxZ9QD/qe4j7beZjQsHGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=c2IAvgm6xpd48Tam4EHMf8jE3savP//1T3L9Tpdi6c7NJ+d23/FvKp8yCaxgkPXLC/VV1oGLbxO/mXUMsEMNsl7QY4NpJt3rOy88SUjouir8IzGNgzUN9mxC1HFUboRwde7a6LRw10/wxZnRd751TEYgmCLiJQuHIASY5fTSkJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVTQlDOY; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FD8V6hzV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVTQlDOY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727101110; x=1758637110;
+  t=1727104175; x=1758640175;
   h=date:from:to:cc:subject:message-id;
-  bh=AVzBsjY3fcaf3XtQcR0+dC7xVKhCFr5vNJWHp0egC3Y=;
-  b=FD8V6hzVeFzD42GPJ8A0WTJYSfa07SEjmP3x6o17jWVp5coKgr9N7Jxt
-   n7k5fnxJ5pv+c/8M5pwS8qd01Z7dODjZD6JjUCGiuK90JHT6wJDI7Ak7Z
-   L5uloS45aHtU2z1VyOUwoviOSy0ABzsAWVGmaJaQz1yNB6OHuNqiaWYuY
-   mEHEBiIVrg9SkTmw01p8/WofruR6uHEmNbzg7vqq+YOPm/VAJxjckZA/B
-   DsV/LbVC1sEOU6+VOzOrlESy8u4Pm3fIfC9Wdry45al94Z0bxgBO5a5S0
-   Spb9vie6prcntw69Uf9Jjy1o3ktURulXmkkeBatbO5ManoqYAM5nKvAWB
-   w==;
-X-CSE-ConnectionGUID: /HWavPE9QZ2cO2b6GZLv2Q==
-X-CSE-MsgGUID: ac8QOjSPS2qy3aMbbHYUhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="26169595"
+  bh=tewf9B+SncATs7je+s6KKOFxZ9QD/qe4j7beZjQsHGQ=;
+  b=NVTQlDOYgPTEGoUZs1E4u2PBpXNQ1Yergo1yH+L1mmq28OXQww2/4nL2
+   rbqpb02wRCBt9kDa1WZKpqiEOLMM2UR9oEuODH0TcKxAFDCl62UCbCzLH
+   eMMNnLCMy0xSzAZIgI2MJ0cliKWMPZELbzjcKoUWOXgG6ZX4x7acKuOb5
+   F/FIt8/q61pVCtV57AIi1QjI1PL50Xt/+Q1PzxFeli+TXacTxIEbXnJ6S
+   n6IX1EOG7eEGzHVgMPvR0hw5xkpTODOS1EPB6Qsz4lfOdU96EtDIxCgtd
+   rw9FdrsTRgp/EcT6Y8Gz99xR8Y9G/wxJj3BE2xJ1NyJ1A+YkYnjtuuAvH
+   g==;
+X-CSE-ConnectionGUID: HjlG8Ts4Sue/ETLcCnGpgg==
+X-CSE-MsgGUID: RdknQZrAQtmtY+lYypMI9Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="43574221"
 X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="26169595"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 07:18:28 -0700
-X-CSE-ConnectionGUID: NjYoyPTFR3qjed71pM5fRQ==
-X-CSE-MsgGUID: rA02zlvtS7CHaxNLY21v1Q==
+   d="scan'208";a="43574221"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 08:09:33 -0700
+X-CSE-ConnectionGUID: eVaw0HI9Q3O1isoixP2Npg==
+X-CSE-MsgGUID: 5+SZ2FKeRv+CDpB9s/92BQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="76010537"
+   d="scan'208";a="108530003"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 23 Sep 2024 07:18:28 -0700
+  by orviesa001.jf.intel.com with ESMTP; 23 Sep 2024 08:09:29 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ssjtR-000HH6-1U;
-	Mon, 23 Sep 2024 14:18:25 +0000
-Date: Mon, 23 Sep 2024 22:17:44 +0800
+	id 1sskgo-000HJ4-2g;
+	Mon, 23 Sep 2024 15:09:26 +0000
+Date: Mon, 23 Sep 2024 23:08:38 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:fixes] BUILD SUCCESS
- b08bf178cb69af2c2c982faa186fe56a677d1b8e
-Message-ID: <202409232239.J136Rp3T-lkp@intel.com>
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ f8af270d21c9a3bd6855b075c22f838fc1f4932e
+Message-ID: <202409232333.wkXu0wQK-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,10 +59,10 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
-branch HEAD: b08bf178cb69af2c2c982faa186fe56a677d1b8e  resource, kunit: add dependency on SPARSEMEM
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: f8af270d21c9a3bd6855b075c22f838fc1f4932e  Merge branch 'fixes-v6.12' into testing
 
-elapsed time: 869m
+elapsed time: 920m
 
 configs tested: 240
 configs skipped: 3
