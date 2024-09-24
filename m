@@ -1,85 +1,332 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3132214B092;
-	Tue, 24 Sep 2024 08:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B89B154C0B
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Sep 2024 09:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727165538; cv=none; b=cBuS8BjZJHpG1dDqi6AX3YKqAY/RfoG1+mOF7m6LedtnTgRGnngmKbftxAIl6AeZZcJmhnYpQILZSR6qMGLHvObsPw57B0oaD0CikHxd5+HafCUoADoeSgFsphwTKH+RzSsCpiPspgUBktvGWtOVpQsl+FXXdhu6fhMg282nSps=
+	t=1727170203; cv=none; b=mBnxFELRl1XWj3YWqs+DckSTDMWrOOLOzQFzX2O+u74LBXM3HmiANvGs0EzFR3NEadKooqlmcOd1sbBFOQ5WeHspa8RBZYmWSpsu9uImyturZTOCiNTMPfOSEkMVHjv+6dl+wyDiSjuXaRTxEZg2uTmPG6yJnibLdWkxu7GZnwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727165538; c=relaxed/simple;
-	bh=iUpcSaGr7iLjsSYAwxOzfjwVdfOIH/Rhk21DNLcNFV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j2esneXlJaBYt6lStVXxdBLEmVC3uFIr81hrkrz+FtwTaQ/D3R0h1bhdMDq2YSstib2gKGC5cyNBVZHqqi3b/7epZ8VjiSu0NDeq7Ytb/qNMaCxQawpoKGiH8x8gqoYwjb8XZyxJJWhh+NfH/TaBNn7CDlj/ZCAY9A3Ke4lVNuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFdu8cOm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727170203; c=relaxed/simple;
+	bh=wpNjdKQaKx8tNenN2uCAMN9pAjRg9DgHMqGVAJsCkaQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E5CL4r7ZmF8QLJELHJlCDEUyPNJzgHhxaKLBAK1E25eTlDT/upyBbOM3vh+K19DT4i/YjZACWYTsZyFyfHVIhBDCyRjzpmmp63joIOVHObqVqu50aEG0PMNZ0nIFT9dfOQw7D6vBwxui5vG4K3AlgQkf7lDVA8BMZyOGyde/3zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=K3ByFcJD; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFdu8cOm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4FDC4CEC4;
-	Tue, 24 Sep 2024 08:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727165537;
-	bh=iUpcSaGr7iLjsSYAwxOzfjwVdfOIH/Rhk21DNLcNFV0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mFdu8cOmjZsMjW/g/TQA7xx3YjdjRoAmTdLQGnzDDoWIsOwL5OKTwJc3EVuUK33p6
-	 JxJtTWT2tA7yp75DFRsYzJeo60ajsxmq56p03Qda15sD9Vz7l6rsWd8xppUQqsved7
-	 zuoS/GBC7rRpDkxl2IChyWq4SBEDbHOaG1hM/EmPXYsbGJOGonqckTuorW74++8Am4
-	 GtCSVSLnsxBtrfMizWgdObuRlJeqY90BbnguKp84BCoQiwlBsiqm9KGqy6hLbXKOxK
-	 IQ6q6KhuFOclj9k7nXoKzl+MkN5Pt63W7ow6wIJ04YVg9mTQH72Ago+O85Uw1Spk7Y
-	 kzA2GWcIgf2qA==
-Date: Tue, 24 Sep 2024 10:12:12 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/5] regulator: core: remove machine init callback from
- config
-Message-ID: <ZvJ0XIF8FW_HiM0I@finisterre.sirena.org.uk>
-References: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
- <20240920-pmbus-wp-v1-2-d679ef31c483@baylibre.com>
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="K3ByFcJD"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d8b679d7f2so4230873a91.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Sep 2024 02:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1727170200; x=1727775000; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tkJvvTW+sDB+jA/+zeuc8QYof4EepbYZ4z6pWcmkal0=;
+        b=K3ByFcJDhSryO25DbdSRYE715T7lFTjuZ5wqFT8Pl/WcRBmv/PfIoZRC/fWCSqoPXt
+         cYdPcxth+KO4NqvP3+pojTAQatQ0OQGsYosDxWlBsPfTqSEWEFWvks3eIkhpC2s/KuLK
+         Hovjr7cUkEgQnnyLRLeBl9W8/eAwMIl71LZj8VNeHGqyFGUub48SZMi2qqZYWsOg27Ds
+         gfpis/YgR5s8kORU3kLgwEZpbOXn99z2YTsilxYe+OkhdkO5OmOz3W3vw7CsDeF5+OYP
+         d+QcDZJV0YJRqm2D9zNI4gU+0eFm4nVStp4VB3ekhYtGjqEHWSP1yqabUGoOv/qOz6+P
+         n8ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727170200; x=1727775000;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tkJvvTW+sDB+jA/+zeuc8QYof4EepbYZ4z6pWcmkal0=;
+        b=mGirjlI2QRjCda/lwx6mS4AR0e2Tx1TlXOaF76su/j9PEg47HAFdCr/vTdG46PrBNP
+         DVmS9WxB69lEEYyxC5rKP1eIKzFnHSSz/Ul+wOdSy5/UWh3BQot58AFmwPcIzdncWgNN
+         ujHflAdMH/6KCfRLfbwJADEHK4I5/S9SKIt2EXSYcF2w7cmDHN4Kc1Wh5BpdkOx0fekE
+         sMPSzd7SFujroyozWEfXLNPibKldAaxxuoVi1YZvoty1AHgzH6spmV5iPphCMqeFgpe3
+         MIqP60sJktzSCj3c+CGFhTJwy4ZkGgF3q4TdLcGAkxuOEw2RrSYMH1kxMDgjk2Fcbrnw
+         Y3ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYI8UHHhC4fDs34/NOkJy737OYDAc7Ghb6JapbY8dzGWEhGBERzSv3/gH06HZuMiKO/df5P4O2SkkbbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywaxl1dixoM6xAfVcVUqEqeg6ntLStlnb1BLTlwjnYFaHuGy4lp
+	wnT5sjBsh61wxyASaE9asTaahSDJKQQoEo5yoBn23CL/hROKwb7QohV32HglKy+9kLy7HBXM+a5
+	nNkNd2FdWLHhj86tEwdmNV4Tp70zAdyzovthgIw==
+X-Google-Smtp-Source: AGHT+IEc1cYYLo7/FgIuLzY7ekLVjl8PL6R1iVUBBYv/Is+9e1Bu+QZWKpmVNc+VCqggPvmguFvOax/gl0r3beUp+Xs=
+X-Received: by 2002:a17:90a:fa8f:b0:2d8:53f8:77c0 with SMTP id
+ 98e67ed59e1d1-2dd80c05452mr19791103a91.7.1727170199590; Tue, 24 Sep 2024
+ 02:29:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aTcDCwg1q99Fo/13"
-Content-Disposition: inline
-In-Reply-To: <20240920-pmbus-wp-v1-2-d679ef31c483@baylibre.com>
-X-Cookie: Editing is a rewording activity.
+References: <20240628115451.4169902-1-naresh.solanki@9elements.com> <349543e5-21b2-4725-9b33-1fcb4ae124f6@roeck-us.net>
+In-Reply-To: <349543e5-21b2-4725-9b33-1fcb4ae124f6@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Tue, 24 Sep 2024 14:59:49 +0530
+Message-ID: <CABqG17hpqFG-PeyENXnGn9k7V2goBP+k6BtSURoMM7DgXtxWmA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max6639) : Add DT support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Guenter,
+
+Sorry for the late reply,
+
+On Fri, 28 Jun 2024 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 6/28/24 04:54, Naresh Solanki wrote:
+> > Remove platform data & add devicetree support.
+> >
+>
+> Unless I am missing something, this doesn't just add devicetree support,
+> it actually _mandates_ devicetree support. There are no defaults.
+> That is not acceptable.
+I agree with you. It is best to have some defaults & then overwrite
+based on DT properties.
+But in that case we would have to assume that all fans are enabled
+irrespective of their hardware connections in the schematics(example
+fan_enable).
+
+I'm not sure if that is fine. But if you feel that is alright then
+I'll rewrite the driver to assume
+everything is enabled with default values.
+Later based on DT properties, we just overwrite defaults to align with hardware.
 
 
---aTcDCwg1q99Fo/13
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For commit message I'll update it as :
+hwmon: (max6639) : Configure based on DT property
+Remove platform data & initialize driver with defaults & overwrite based on
+DT properties.
+>
+> More comments inline.
+>
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+> >   drivers/hwmon/max6639.c               | 99 ++++++++++++++++++++-------
+> >   include/linux/platform_data/max6639.h | 15 ----
+> >   2 files changed, 73 insertions(+), 41 deletions(-)
+> >   delete mode 100644 include/linux/platform_data/max6639.h
+> >
+> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> > index f54720d3d2ce..9ae7aecb0737 100644
+> > --- a/drivers/hwmon/max6639.c
+> > +++ b/drivers/hwmon/max6639.c
+> > @@ -19,7 +19,6 @@
+> >   #include <linux/hwmon-sysfs.h>
+> >   #include <linux/err.h>
+> >   #include <linux/mutex.h>
+> > -#include <linux/platform_data/max6639.h>
+> >   #include <linux/regmap.h>
+> >   #include <linux/util_macros.h>
+> >
+> > @@ -81,6 +80,7 @@ struct max6639_data {
+> >       /* Register values initialized only once */
+> >       u8 ppr[MAX6639_NUM_CHANNELS];   /* Pulses per rotation 0..3 for 1..4 ppr */
+> >       u8 rpm_range[MAX6639_NUM_CHANNELS]; /* Index in above rpm_ranges table */
+> > +     bool fan_enable[MAX6639_NUM_CHANNELS];
+> >
+> >       /* Optional regulator for FAN supply */
+> >       struct regulator *reg;
+> > @@ -276,6 +276,11 @@ static int max6639_write_fan(struct device *dev, u32 attr, int channel,
+> >
+> >   static umode_t max6639_fan_is_visible(const void *_data, u32 attr, int channel)
+> >   {
+> > +     struct max6639_data *data = (struct max6639_data *)_data;
+> > +
+> > +     if (!data->fan_enable[channel])
+> > +             return 0;
+> > +
+> >       switch (attr) {
+> >       case hwmon_fan_input:
+> >       case hwmon_fan_fault:
+> > @@ -372,6 +377,11 @@ static int max6639_write_pwm(struct device *dev, u32 attr, int channel,
+> >
+> >   static umode_t max6639_pwm_is_visible(const void *_data, u32 attr, int channel)
+> >   {
+> > +     struct max6639_data *data = (struct max6639_data *)_data;
+> > +
+> > +     if (!data->fan_enable[channel])
+> > +             return 0;
+> > +
+> >       switch (attr) {
+> >       case hwmon_pwm_input:
+> >       case hwmon_pwm_freq:
+> > @@ -544,43 +554,85 @@ static int rpm_range_to_reg(int range)
+> >       int i;
+> >
+> >       for (i = 0; i < ARRAY_SIZE(rpm_ranges); i++) {
+> > -             if (rpm_ranges[i] == range)
+> > +             if (range <= rpm_ranges[i])
+>
+> What does this change have to do with adding devicetree support,
+> why is it done, and what is its impact ?
+>
+> So far the assumption was that only valid values would be accepted by
+> the function, returning a default if there was no match. The incoming
+> data is from devicetree, where the range should be well defined and
+> accurate. With that in mind, I don't see the point of accepting values
+> outside the supported ranges.
+>
+> Flexible data makes sense for sysfs attributes, where we can not
+> expect users to know acceptable values. For those, it is acceptable
+> and even desirable to find a closest match. However, that does not apply
+> to data obtained from devicetree.
+Agree. Will remove this change.
+>
+> >                       return i;
+> >       }
+> >
+> >       return 1; /* default: 4000 RPM */
+> >   }
+> >
+> > +static int max6639_probe_child_from_dt(struct i2c_client *client,
+> > +                                    struct device_node *child,
+> > +                                    struct max6639_data *data)
+> > +
+> > +{
+> > +     struct device *dev = &client->dev;
+> > +     u32 i, val;
+> > +     int err;
+> > +
+> > +     err = of_property_read_u32(child, "reg", &i);
+> > +     if (err) {
+> > +             dev_err(dev, "missing reg property of %pOFn\n", child);
+> > +             return err;
+> > +     }
+> > +
+> > +     if (i > 1) {
+> > +             dev_err(dev, "Invalid fan index reg %d\n", i);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     data->fan_enable[i] = true;
+> > +
+> > +     err = of_property_read_u32(child, "pulses-per-revolution", &val);
+> > +
+> > +     if (!err) {
+> > +             if (val < 0 || val > 5) {
+>
+> Accepting 0 seems wrong. Also, val is u32 and will never be < 0.
+Ack.
+Will make variable 'i' as int.
+Also will update if check with:
+if (val < 1 || val > 5) {
+>
+> > +                     dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val, child);
+> > +                     return -EINVAL;
+> > +             }
+> > +             data->ppr[i] = val;
+> > +     }
+> > +
+> > +     err = of_property_read_u32(child, "max-rpm", &val);
+> > +
+> > +     if (!err)
+> > +             data->rpm_range[i] = rpm_range_to_reg(val);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >   static int max6639_init_client(struct i2c_client *client,
+> >                              struct max6639_data *data)
+> >   {
+> > -     struct max6639_platform_data *max6639_info =
+> > -             dev_get_platdata(&client->dev);
+> > -     int i;
+> > -     int rpm_range = 1; /* default: 4000 RPM */
+> > -     int err, ppr;
+> > +     struct device *dev = &client->dev;
+> > +     const struct device_node *np = dev->of_node;
+> > +     struct device_node *child;
+> > +     int i, err;
+> >
+> >       /* Reset chip to default values, see below for GCONFIG setup */
+> >       err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
+> >       if (err)
+> >               return err;
+> >
+> > -     /* Fans pulse per revolution is 2 by default */
+> > -     if (max6639_info && max6639_info->ppr > 0 &&
+> > -                     max6639_info->ppr < 5)
+> > -             ppr = max6639_info->ppr;
+> > -     else
+> > -             ppr = 2;
+> > -
+> > -     data->ppr[0] = ppr;
+> > -     data->ppr[1] = ppr;
+>
+> As mentioned above, this may work for your use case, but it won't work
+> for existing users of this driver.
+Somewhere I was with the assumption that there is no active use of the driver
+as there is no reference to this driver.
+That is why I felt these changes will be good.
+i.e., DT property would indicate if Fan0 or Fan1 should be enabled or not
+instead of assuming that they are always enabled.
 
-On Fri, Sep 20, 2024 at 06:47:03PM +0200, Jerome Brunet wrote:
-> The machine specific regulator_init() appears to be unused.
-> It does not allow a lot of interactiona with the regulator framework,
-> since nothing from the framework is passed along (desc, config,
-> etc ...)
->=20
-> Machine specific init may also be done with the added init_cb() in
-> the regulator description, so remove regulator_init().
+I would need your input here to proceed further.
 
-This makes sense regardless of what happens with the rest of the series.
+Regards,
+Naresh
 
---aTcDCwg1q99Fo/13
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbydFwACgkQJNaLcl1U
-h9Cj0ggAgEOWV5/gcx0JmZoCxeIxvIpNMnR1BVx7O0ufkxYPPWRSPjH+jijsNftG
-qS2xJ9EFhZafzVrSgPs0/w2JiN0AEFPnUnEFU9jT77QNOqUJ+LRNymytO2u6gHhI
-dUTSiDgLD/swzh0cuMF2QaYDPTJMsaUjmlpQqKiRNyu97lfnJ87FvsMsXWLsgI8H
-JZzppy5zIAoXHP1B9+GumG0nn8JM4HuWhqqUvIKHNK9onn1SmFKVJSOW/LsW8hZz
-QHJ3J8WOtkDFwldDFaYxKJQNDIB6jlA7XFe6UgmfP5w1RWdqseiYU2YXqiHo4tXk
-f0yyXlGLdfDQ1BTStP0/vJgQ+1t+HQ==
-=WKI4
------END PGP SIGNATURE-----
-
---aTcDCwg1q99Fo/13--
+>
+> > +     for_each_child_of_node(np, child) {
+> > +             if (strcmp(child->name, "fan"))
+> > +                     continue;
+> >
+> > -     if (max6639_info)
+> > -             rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
+> > -     data->rpm_range[0] = rpm_range;
+> > -     data->rpm_range[1] = rpm_range;
+> > +             err = max6639_probe_child_from_dt(client, child, data);
+> > +             if (err) {
+> > +                     of_node_put(child);
+> > +                     return err;
+> > +             }
+> > +     }
+> >
+> >       for (i = 0; i < MAX6639_NUM_CHANNELS; i++) {
+> > +             if (!data->fan_enable[i])
+> > +                     err = regmap_set_bits(data->regmap, MAX6639_REG_OUTPUT_MASK, BIT(1 - i));
+> > +             else
+> > +                     err = regmap_clear_bits(data->regmap, MAX6639_REG_OUTPUT_MASK, BIT(1 - i));
+> > +             if (err)
+> > +                     return err;
+> > +
+> >               /* Set Fan pulse per revolution */
+> >               err = max6639_set_ppr(data, i, data->ppr[i]);
+> >               if (err)
+> > @@ -593,12 +645,7 @@ static int max6639_init_client(struct i2c_client *client,
+> >                       return err;
+> >
+> >               /* Fans PWM polarity high by default */
+> > -             if (max6639_info) {
+> > -                     if (max6639_info->pwm_polarity == 0)
+> > -                             err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+> > -                     else
+> > -                             err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+> > -             }
+> > +             err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+> >               if (err)
+> >                       return err;
+> >
+> > diff --git a/include/linux/platform_data/max6639.h b/include/linux/platform_data/max6639.h
+> > deleted file mode 100644
+> > index 65bfdb4fdc15..000000000000
+> > --- a/include/linux/platform_data/max6639.h
+> > +++ /dev/null
+> > @@ -1,15 +0,0 @@
+> > -/* SPDX-License-Identifier: GPL-2.0 */
+> > -#ifndef _LINUX_MAX6639_H
+> > -#define _LINUX_MAX6639_H
+> > -
+> > -#include <linux/types.h>
+> > -
+> > -/* platform data for the MAX6639 temperature sensor and fan control */
+> > -
+> > -struct max6639_platform_data {
+> > -     bool pwm_polarity;      /* Polarity low (0) or high (1, default) */
+> > -     int ppr;                /* Pulses per rotation 1..4 (default == 2) */
+> > -     int rpm_range;          /* 2000, 4000 (default), 8000 or 16000 */
+> > -};
+> > -
+> > -#endif /* _LINUX_MAX6639_H */
+> >
+> > base-commit: 52c1e818d66bfed276bd371f9e7947be4055af87
+>
