@@ -1,150 +1,116 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681381B85D5;
-	Tue, 24 Sep 2024 14:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF781AAE0F
+	for <linux-hwmon@vger.kernel.org>; Tue, 24 Sep 2024 14:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727187170; cv=none; b=imPY8T3C2cR/oCjLvacQ7AHxAfi+Wtr0krdjgMYtcVhU7OenXusnU3jJEFfwxbSfB9l/ThWBcF2jHUF+zb0ksXnAIsE2d2uXmc4qfFTHy4P3HRStiFQSRcbzwBddwXXAuIpJ8PBPMrqoU06CmjObpSmTtwv1UCh6eKjEbqGbYN0=
+	t=1727189059; cv=none; b=sFxwiS3I6yEzZsuTNIyQA1V9Q4LEQrJpbQZXb4/yVKpQXKse7xn51CY6dhAlX9sO1b+4hxL4By67zitc3FafjDsYIQ8lQ7wqvvu6w9rG+bS5q3TRj8xTn3NufSoQLfoeuYF+TRb6YHIjJpSGtnO2n049KCsW5OTVmVxcaTkti4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727187170; c=relaxed/simple;
-	bh=xyfowOHiEDqCfBloZHe3hwp/gEHjhYwjqE4eiXF9ORc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ViPeW6krp8p6ErxpOPOU04XGVWLWLxpvJ8fJbzzUAhr7nwRE4IiukXhIUGf55jcKbVFPKk56cTk8pgOg43J/8KheinAPZJjZuv2u/NX9v8vvWxk0mc0E48Cx1+PKcGus4P8lNNSlN9ADRxko7mfh7547mwyZXp+5usAzoF3DeqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5lXrRy2; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1727189059; c=relaxed/simple;
+	bh=OnGN/XN+ee5MdZgun573fNASG088NLEb1co14YIjXWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JB4WVkMycd5G3gAOf6xCMSRQ1eZGlneCKPrt1/q7v10dzIq237V5QO3CW+nXH0a1wODBFjhxPMsni9T+GmEAXSPn6rIrtg5xsbHXSVQzpKYZnvv05a2QariWXwOr5N5tqOmAUELufffSd2enpP3knwP3zOLATxFcbnWfAahtlwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=A34i9DgE; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5lXrRy2"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2053a0bd0a6so55710275ad.3;
-        Tue, 24 Sep 2024 07:12:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="A34i9DgE"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2d8815ef6d2so4408149a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 24 Sep 2024 07:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727187169; x=1727791969; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bPbiRFS9zXZwC8VbAnxGDNIDjjRTnnzFjhlcu1Cr8wk=;
-        b=G5lXrRy2GPy9ThQyooLsF9xzQNwXFDLq0COFkXPo4l0DdTxv0yeziHT2ZetSzYstc6
-         A/pf5sP7kvnliqsQ4Au9gOaqyYVzIPOdRmFxDr+C+lTdoYER2QuKVq2SeoNukdisxK4N
-         k0X/8kbKcAZocKCGdupfCrZ/LeOYs4cO8GrXPmGtld2OMa24mjknTkcjdPsDW2O7Y2Qy
-         ubCPm76B9spkNw0MP7O6IId9SM+ebebQ2LD+lH/9UGSTh+NwsS6E1s7QzKpkGxdFGsHu
-         T0D1rpJJ8QLxuyCiyk+sGADqUVRNOACUtTJmBf001CHLlIaHw8VNJtxRYAo37U2o4eR3
-         DqGA==
+        d=9elements.com; s=google; t=1727189057; x=1727793857; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OnGN/XN+ee5MdZgun573fNASG088NLEb1co14YIjXWE=;
+        b=A34i9DgEADcWy+RGyIPUOW03d5lQe80fHYVsgi/CEOXwnN13aUFEMStHSazg8GM+LB
+         d4LHM0jGu5P1Ibdydlq7sVImD59xcrWbrVfF+9Q8KqEaykoi/P4v95B0/MhQcuW6PF3A
+         Faj3Vrn6xZG6UpijIdp0n4KbgJ0IrCgs9ytJFrZo8cE98r//izJDvwbpx4pAVuq8qECT
+         FOoI2Wx8HQA+dw7czi42QwvONAWWHR+jl7P4HNZz1Yei+5e4LK34cqpWG94szjP33vd2
+         RnV/J63Q4BcYGMiadtpQ5eGOAp9yhmyUWUmHDcEErU9fyl0J8odyo7IiQzEm/xnpt60K
+         SkOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727187169; x=1727791969;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bPbiRFS9zXZwC8VbAnxGDNIDjjRTnnzFjhlcu1Cr8wk=;
-        b=sq4PeoiJMZC/Skr8cVC4ebi4Q9TqDT767qYrXGNHsgYoElBG2bok2jziSlIgfYA9eq
-         AZcSrd62F0yKXa0++70DDjOgk31APk/4hVc1IjAGoqqLRic+waLKijDI66CWhYXCCm1q
-         0kF3h37W3AdYnMSwK0wGN9RF+z1bCN3CbP3MU+XsYNmXGiwO9k36LT2gNXqGeBeD7CQo
-         KMLy8uj6QrG4BKGmPd7Fv5KcBPxfGgfPSt0TIe9IlSQHTYPCZTwDbH9ADSimWUWWTgay
-         5YXY83TOzbdcJaOYs4Mducd7Sd6KB3nwOGN22WY1HucGo7m4EpY81KXop/qt82ey/ewN
-         c2tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVK+QNMO+t152RYWyDETiruk2540ljG2APdzCeAS9frFAoUP8bWTW+szz92ThnkGTVS/c6QL04lYM9JUAwi@vger.kernel.org, AJvYcCXUOIOMozEC2O12ZF2GII8WEzk3b9Na5+6H2eVc8hTcIaLgNz6BJQZPwFlvmv4VfGm+Ym5txq5dW9qluw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeaqC4v8te9Mfc3mSnP4+hR/maYTMiP4KGAxqE5O9600MhyBe7
-	6Ey8jrxq5+108Hj7ILFWe0rOK6+rDfZ4H12g9wquJgHg8FPaKdjA
-X-Google-Smtp-Source: AGHT+IEbbHpOG5yBupGAdt2U5c12BJH85FyBrYiHr+9w0lrMO3yW4EUcFfBJ0TRpOHUzor8H4lmVhQ==
-X-Received: by 2002:a17:903:2341:b0:202:3a78:5d8a with SMTP id d9443c01a7336-208d8306edbmr207583365ad.8.1727187168563;
-        Tue, 24 Sep 2024 07:12:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20af1857fb9sm10824265ad.271.2024.09.24.07.12.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Sep 2024 07:12:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0aaed899-9001-4355-bcca-17855576a928@roeck-us.net>
-Date: Tue, 24 Sep 2024 07:12:46 -0700
+        d=1e100.net; s=20230601; t=1727189057; x=1727793857;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OnGN/XN+ee5MdZgun573fNASG088NLEb1co14YIjXWE=;
+        b=MYtHSdoKVpJZgkabfuZHyoKbrNhkzDC5oKkcDuFQ5zOJUh1tc6icSpV7H10YL1mu+P
+         MfrXsoBcqa6DErCjJp1EWoQ6TUoDUi2qGYKsV8pU/SO5C8emuj9G0f2R/9WarDvBIG8r
+         4dkwxVXmDf5SXWuPV74uIoUhn2FyL9yOuxnzOnx2HQXyRCR3CR+/aBFGsfJNxpic7Ehf
+         38NKutTUQM/GK+CzjrdM+sftAhvjAa2e1keJhxiQBIPEuToprHoYnzE0UgLrLREvNXiN
+         tuXbJJnmBVEjGlZ0TshjwLduH5+vy6u2ZJLLPbowsT4ZKxUoF1XSMwStb5MeyTqg6ie/
+         V/dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVE1xG8ZiMBdV5Qw1JL2mCugh6s45KvVRlpPQUzG9eJ/wTbJHdhwKzLEjBZic4Dx4vcnpOji9GY2TOc9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzk2eV/atV3g2cBgKXxvArbKtiGYDx6NnvG0Rco0SRzDW5jzdML
+	EzhaOURPBSs00ZAPIR9FYq47I+YQZZmP2fF/i79W6RDiSklA+D4xpjhEKButCQIUl8HKzikRyTb
+	IuUrzXqRNx+m2X5/aAAkF8kcLj2d7r7+JQytuuXQMPaX3hlTKIII=
+X-Google-Smtp-Source: AGHT+IEY5FaohvDwhChVCfAb8IAInDakknFlo9kWlRYgAaj5nylT5EknAUxa83Yq83BTkwNcoKuexQZsbJhiVwlewVs=
+X-Received: by 2002:a17:90a:ca96:b0:2cb:e429:f525 with SMTP id
+ 98e67ed59e1d1-2dd7f756480mr20035620a91.33.1727189056764; Tue, 24 Sep 2024
+ 07:44:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (max6639) : Add DT support
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
 References: <20240628115451.4169902-1-naresh.solanki@9elements.com>
- <349543e5-21b2-4725-9b33-1fcb4ae124f6@roeck-us.net>
- <CABqG17hpqFG-PeyENXnGn9k7V2goBP+k6BtSURoMM7DgXtxWmA@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CABqG17hpqFG-PeyENXnGn9k7V2goBP+k6BtSURoMM7DgXtxWmA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <349543e5-21b2-4725-9b33-1fcb4ae124f6@roeck-us.net> <CABqG17hpqFG-PeyENXnGn9k7V2goBP+k6BtSURoMM7DgXtxWmA@mail.gmail.com>
+ <0aaed899-9001-4355-bcca-17855576a928@roeck-us.net>
+In-Reply-To: <0aaed899-9001-4355-bcca-17855576a928@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Tue, 24 Sep 2024 20:14:06 +0530
+Message-ID: <CABqG17h0+HWSCF0PRVBaj37WYYsz17+n1MD1Uiuscqy_dvU41g@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max6639) : Add DT support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/24/24 02:29, Naresh Solanki wrote:
-> Hi Guenter,
-> 
-> Sorry for the late reply,
-> 
-> On Fri, 28 Jun 2024 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 6/28/24 04:54, Naresh Solanki wrote:
->>> Remove platform data & add devicetree support.
->>>
->>
->> Unless I am missing something, this doesn't just add devicetree support,
->> it actually _mandates_ devicetree support. There are no defaults.
->> That is not acceptable.
-> I agree with you. It is best to have some defaults & then overwrite
-> based on DT properties.
-> But in that case we would have to assume that all fans are enabled
-> irrespective of their hardware connections in the schematics(example
-> fan_enable).
-> 
-> I'm not sure if that is fine. But if you feel that is alright then
-> I'll rewrite the driver to assume
-> everything is enabled with default values.
+Hi Guenter,
 
-That would still be a functional change, or am I missing something ?
-It would overwrite any configuration written by a BIOS/ROMMON.
+On Tue, 24 Sept 2024 at 19:42, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 9/24/24 02:29, Naresh Solanki wrote:
+> > Hi Guenter,
+> >
+> > Sorry for the late reply,
+> >
+> > On Fri, 28 Jun 2024 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On 6/28/24 04:54, Naresh Solanki wrote:
+> >>> Remove platform data & add devicetree support.
+> >>>
+> >>
+> >> Unless I am missing something, this doesn't just add devicetree support,
+> >> it actually _mandates_ devicetree support. There are no defaults.
+> >> That is not acceptable.
+> > I agree with you. It is best to have some defaults & then overwrite
+> > based on DT properties.
+> > But in that case we would have to assume that all fans are enabled
+> > irrespective of their hardware connections in the schematics(example
+> > fan_enable).
+> >
+> > I'm not sure if that is fine. But if you feel that is alright then
+> > I'll rewrite the driver to assume
+> > everything is enabled with default values.
+>
+> That would still be a functional change, or am I missing something ?
+> It would overwrite any configuration written by a BIOS/ROMMON.
+With that, driver would take the current chip configuration as default &
+just configure specific config specified in DT(if any) & continue with
+initialization?
+This can keep into account the Chip defaults, BIOS written configuration
+& even DT.
+Is this what you mean ?
+If yes then I'll align the driver accordingly.
+Please let me know if I understood your intent correctly & any other
+thoughts on this.
 
-Guenter
+Regards,
+Naresh
 
+>
+> Guenter
+>
