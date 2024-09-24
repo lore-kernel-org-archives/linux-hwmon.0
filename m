@@ -1,49 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8AF14EC4E;
-	Tue, 24 Sep 2024 08:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3132214B092;
+	Tue, 24 Sep 2024 08:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727165478; cv=none; b=RPf19VRqapH7gmtetQM3kj1O6tgnBn1Z0WHdVzoXlMOtb2ajlzhxIKw/s2N2PdYznsNpRvHWW2z4l/LE+o4Ik5+f3SZDeCjqWt8RqNh4vIktTgHAlJZgaXXIVnHVdLPFPZVbZ2v6Zk+XhQf2aQSYbPzbl9m9m3Fxwg1IzBleFw4=
+	t=1727165538; cv=none; b=cBuS8BjZJHpG1dDqi6AX3YKqAY/RfoG1+mOF7m6LedtnTgRGnngmKbftxAIl6AeZZcJmhnYpQILZSR6qMGLHvObsPw57B0oaD0CikHxd5+HafCUoADoeSgFsphwTKH+RzSsCpiPspgUBktvGWtOVpQsl+FXXdhu6fhMg282nSps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727165478; c=relaxed/simple;
-	bh=MnVSJWbRxqkO6NY7e/f2PauGA5csDQ/WM/hwqPA2+0w=;
+	s=arc-20240116; t=1727165538; c=relaxed/simple;
+	bh=iUpcSaGr7iLjsSYAwxOzfjwVdfOIH/Rhk21DNLcNFV0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AeFkrfSSbyeASOHz1f28oQOvNLSH8QKYkmbI5z3Ig45bV2H5dZO1obvyOA7i+LYdEXcG9rU8+Xl9OW1tahTYf9p6YKodvPrEXgDyM9c/D8UZOkGVD/fQF1ebe2XwZRGoqIElJRKLXau5p1NkZabkv2NOXEREbSmO3DibZwhHmf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CD5N5gaW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=j2esneXlJaBYt6lStVXxdBLEmVC3uFIr81hrkrz+FtwTaQ/D3R0h1bhdMDq2YSstib2gKGC5cyNBVZHqqi3b/7epZ8VjiSu0NDeq7Ytb/qNMaCxQawpoKGiH8x8gqoYwjb8XZyxJJWhh+NfH/TaBNn7CDlj/ZCAY9A3Ke4lVNuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFdu8cOm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CD5N5gaW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3867C4CED6;
-	Tue, 24 Sep 2024 08:11:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFdu8cOm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4FDC4CEC4;
+	Tue, 24 Sep 2024 08:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727165478;
-	bh=MnVSJWbRxqkO6NY7e/f2PauGA5csDQ/WM/hwqPA2+0w=;
+	s=k20201202; t=1727165537;
+	bh=iUpcSaGr7iLjsSYAwxOzfjwVdfOIH/Rhk21DNLcNFV0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CD5N5gaWatbBBM96x8Zy+RSbdxJiihmUO9NPklH+ViGqOaeo041YplrZK+sLGER90
-	 19tlg6TDGqFwJnTSigcEMSUFTFLGFTfTVaHXJQ+5p4gUy4XI+AZevMdff1FX0sEjVx
-	 1TqkrGAqL5Ow8WwaiEH5FuTYE+6NqWxAch3fWKW3nB/hRHKZzao1ZAzJIb1rQrd0Xj
-	 aq8V4X5I6e9PN6TpJLhAl/dM5QZ5IceGLs/ilkfMbLuD/BayXAn7psp4jXtSY43Lwn
-	 8RaYzSU07KBU2evZLua+hNDB5UHFTkpe4E+DjUX5t0WRNbhHMKDCEPQ38c0E4rzGEo
-	 +3S9MmW1VEaDA==
-Date: Tue, 24 Sep 2024 10:11:12 +0200
+	b=mFdu8cOmjZsMjW/g/TQA7xx3YjdjRoAmTdLQGnzDDoWIsOwL5OKTwJc3EVuUK33p6
+	 JxJtTWT2tA7yp75DFRsYzJeo60ajsxmq56p03Qda15sD9Vz7l6rsWd8xppUQqsved7
+	 zuoS/GBC7rRpDkxl2IChyWq4SBEDbHOaG1hM/EmPXYsbGJOGonqckTuorW74++8Am4
+	 GtCSVSLnsxBtrfMizWgdObuRlJeqY90BbnguKp84BCoQiwlBsiqm9KGqy6hLbXKOxK
+	 IQ6q6KhuFOclj9k7nXoKzl+MkN5Pt63W7ow6wIJ04YVg9mTQH72Ago+O85Uw1Spk7Y
+	 kzA2GWcIgf2qA==
+Date: Tue, 24 Sep 2024 10:12:12 +0200
 From: Mark Brown <broonie@kernel.org>
 To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Liam Girdwood <lgirdwood@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 4/5] hwmon: (pmbus/core) improve handling of write
- protected regulators
-Message-ID: <ZvJ0ICVqXrlYaVpd@finisterre.sirena.org.uk>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/5] regulator: core: remove machine init callback from
+ config
+Message-ID: <ZvJ0XIF8FW_HiM0I@finisterre.sirena.org.uk>
 References: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
- <20240920-pmbus-wp-v1-4-d679ef31c483@baylibre.com>
- <4052294e-7b7f-4238-9b47-92727de4d516@roeck-us.net>
- <1jsettz1hh.fsf@starbuckisacylon.baylibre.com>
- <2f3cec6e-7b05-4510-8c62-244ed114ad17@roeck-us.net>
- <1jo74hymsh.fsf@starbuckisacylon.baylibre.com>
- <ZvFdYtwlqsr4mLym@finisterre.sirena.org.uk>
- <1j7cb2z4zw.fsf@starbuckisacylon.baylibre.com>
+ <20240920-pmbus-wp-v1-2-d679ef31c483@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,76 +45,41 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="811CMa6RECgMAk6q"
+	protocol="application/pgp-signature"; boundary="aTcDCwg1q99Fo/13"
 Content-Disposition: inline
-In-Reply-To: <1j7cb2z4zw.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <20240920-pmbus-wp-v1-2-d679ef31c483@baylibre.com>
 X-Cookie: Editing is a rewording activity.
 
 
---811CMa6RECgMAk6q
+--aTcDCwg1q99Fo/13
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 23, 2024 at 06:53:07PM +0200, Jerome Brunet wrote:
-> On Mon 23 Sep 2024 at 14:21, Mark Brown <broonie@kernel.org> wrote:
+On Fri, Sep 20, 2024 at 06:47:03PM +0200, Jerome Brunet wrote:
+> The machine specific regulator_init() appears to be unused.
+> It does not allow a lot of interactiona with the regulator framework,
+> since nothing from the framework is passed along (desc, config,
+> etc ...)
+>=20
+> Machine specific init may also be done with the added init_cb() in
+> the regulator description, so remove regulator_init().
 
-> > So, I know we talked about this a bit on IRC but I didn't register the
-> > specific use case.  Now I see that it's coming down to the fact that the
-> > chip is simply write protected I'm wondering if it might not be simpler
-> > to handle this at the ops level rather than the constraints level.  When
-> > registering the driver could check for write protection and then instead
-> > of registering the normal operations register an alternative set with
-> > the relevant write operations removed.  That would have the same effect
-> > that you're going for AFAICT.  Sorry for not thinking of it earlier.
+This makes sense regardless of what happens with the rest of the series.
 
-> Actually I thaught about it, that was my first idea.
-
-> There is tiny difference between the 2 approach:
-> * A regulator that does not provide enable()/disable() is considered
-> always-on, so it is not really checked if it is enabled or not
-> * A regulator that does provide enable()/disable() but disallow status
-> change will be checked with is_enabled()
-
-> In the second case, we will pick up on regulator that is disabled and we
-> can't enable. In the first case, I don't think we do. I don't know if it
-> is a bug of not but that makes the 2nd case more correct for what we do
-> with pmbus regs I think
-
-I think for that we should just always use the is_enabled() operation if
-it's available.  This is simply an oversight caused by not imagining a
-case where a regulator could have an enable control which is locked out
-like this, the normal case is that either you can control enable or
-the regulator is always on.
-
-> The other thing, although is more a pmbus implemantion consideration,
-> is that the type regulator is opaque in
-> pmbus_regulator_register. Different types could be registered so
-> manipulating the ops is tricky. That's where a callback is helpful=20
-
-> If building the ops dynamically is the preferred way, I'll find a way to
-> make it happen. I'll need to way to identify which one need it, loose
-> the 'const' qualifier in a lot of place, etc ... that will be a bit
-> hackish I'm afraid.
-
-With only a limited set of options it might be better to just have a set
-of static structs and pick one to register (some other drivers do this
-based on hardware options), but the number of combinations with this is
-getting a bit big for that.
-
---811CMa6RECgMAk6q
+--aTcDCwg1q99Fo/13
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbydBUACgkQJNaLcl1U
-h9D9Fwf8Ct+JTTvPEfsG+ZQFhaPsbwYkCrV+h80e80aziIqrbwPizjvv31XpBK3I
-8xmSKZ1JfCK4XaZ+B5OrM+AoWv3a0YeaYQfbRboAYXLGsKZmltmftQBmCVO24PGh
-omogNFrbwa3Io6yoFX7DLi4tSC6Xk8gx/PzFhdy1ryoAxfHa1h6on1mZfgOnnQqU
-NRi9MjT5Fc4nVq3BW9BvXWeQ3P1SeY+b0fZzQar+iMKihlST9BIghEXhgOIq1l8a
-w3hn2GvYGXWuYJGZ2CeLsfYb6fruHrOYGf9Z/3dyf/8wE/2Yn9ERq+7JeocvZcdl
-3LGmiJ/4CSPCWs/qCFdV13YCJLX29g==
-=4UfQ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbydFwACgkQJNaLcl1U
+h9Cj0ggAgEOWV5/gcx0JmZoCxeIxvIpNMnR1BVx7O0ufkxYPPWRSPjH+jijsNftG
+qS2xJ9EFhZafzVrSgPs0/w2JiN0AEFPnUnEFU9jT77QNOqUJ+LRNymytO2u6gHhI
+dUTSiDgLD/swzh0cuMF2QaYDPTJMsaUjmlpQqKiRNyu97lfnJ87FvsMsXWLsgI8H
+JZzppy5zIAoXHP1B9+GumG0nn8JM4HuWhqqUvIKHNK9onn1SmFKVJSOW/LsW8hZz
+QHJ3J8WOtkDFwldDFaYxKJQNDIB6jlA7XFe6UgmfP5w1RWdqseiYU2YXqiHo4tXk
+f0yyXlGLdfDQ1BTStP0/vJgQ+1t+HQ==
+=WKI4
 -----END PGP SIGNATURE-----
 
---811CMa6RECgMAk6q--
+--aTcDCwg1q99Fo/13--
