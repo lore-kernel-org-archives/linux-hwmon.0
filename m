@@ -1,127 +1,98 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5557738FA3;
-	Thu, 26 Sep 2024 09:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7A01384BF;
+	Thu, 26 Sep 2024 14:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727343497; cv=none; b=gej5cWQsnKz9nWuquegr0lE98XmPGOj4U0aJriBtRVaAn0Rwz2HsXfp9qZ9Jvirc9yJ0kLvRSV6jeWlZZTntNcLmkmNOpeUXrmDKKI+3qX+U3UYevCF1y2AclYrCWZMpvN5L6A6X+LgdO2ui/dNDFQNIpr7mc8XlqdrYlEdwhZc=
+	t=1727360390; cv=none; b=eyz+wY3JN1/KVff+0OM3RR6MdJhV8k2U3QIHJt8GLnXb/Z8ibsd8MGBx79euQVhMbCZosxS3STJ3NPUFNi8z9NAcmFJvSXSV9wnxOHT6ZagPtS3F4Z/NcOtXyHcZEOe0hyNfIBkjfSUaQoTqFz3t83cPzerFl3RjiXrdsWJXE6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727343497; c=relaxed/simple;
-	bh=qScvP8P9xx7hLbHKx7dQASxlbWNGucAP1NZhNK5pLRQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QZXnpuKwMeu1vSVJ307leSUcgw34GPV213scWjazbRGX+WG29w1WR1waXuKKoxt0cmOiFSoPuj1oEE7eu64o9ejuEvsuHl6k6H/tGG4q9UbLemHrpxd7fNmeDDEvmzByEaCEitCv4iYrjc07MRdSpKYZu1kHf+NLLVRWkdVhMTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQheAZ1y; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1727360390; c=relaxed/simple;
+	bh=RFqYzT/mEdIgiB6FJ5XM7lwMmktvYt6mzUSzSr6cvaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=usio+AisvlQ2jr4kchHJAPfOuRqI9nWWiIee0Z/YqErxJ4YIoPfNBOWD9xFsVaM++CD9o6og3UptfQ39qtvxCqPDO97DtvQSeSQCrtr1Y9jkrw9BO1ajZCQwmV7TRdXmT/ulHZCs3bv+HU37PRqYUtIMeVAWn5q2PfRgi1TmHRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Og+xLFIq; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQheAZ1y"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a90188ae58eso95839966b.1;
-        Thu, 26 Sep 2024 02:38:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Og+xLFIq"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2059204f448so9479975ad.0;
+        Thu, 26 Sep 2024 07:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727343493; x=1727948293; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6R+5KcNZ/aUYuiGzfFgNRbA94w9SXEb0wbMS+GUYlE=;
-        b=YQheAZ1yhHdGyUgIqu18lsue98sPgn4xY+UwyjYnlWHTYcB7ED9GbfkCvOaFKWNu95
-         DNRklhUCATs1vajmKJ5Kz7XeDtgf290A60fmiV/yMmcmaa/d3PCC2qQ+OUYgfY1qiZVF
-         HnI+YGvowKmrtItmrOVYl1A6YNRmFzGL5HsANhRIKZxpnNeJxkMtplMk2QbAT0RKaqOQ
-         Q5bWFSr1wJN4SGjNpbQsjFQhffVV2rKixuenugI4DLjdCli5aGyy8uXUTLUQ2EDt9Gnr
-         TGQP43M3F6chSVcf9iEpXKkpOm2nu9dtSkTAqnwHKQmGqEwVXKmDlksQxS9GCSkZ6PuW
-         xtTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727343493; x=1727948293;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1727360388; x=1727965188; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i6R+5KcNZ/aUYuiGzfFgNRbA94w9SXEb0wbMS+GUYlE=;
-        b=QZOci0eRtZmnnNJmaDuLE8cGk6Jy0lhpkXK0K6s+LAUWwNClpuwoeSR02u7wGEBubW
-         2yEcTq4cXavINX3n8uA+lQhTMa3iEMgOZVKFpnMLIq3NlVFo8jCr9NF9sRhqM4d6RlrR
-         fa5eUVVOF+jSKWB0peMqsyWy91ra+U9W+w88rwEwAfa0l40cnGMi9EeIMo4LsgTTlyR1
-         ggH0pXlxsOYLSbibNB0WN6Wo9XpXyGJafmb8CgzYbFgdL7jGORyoJ0DT1Iknk7aO5gSx
-         Q+R6ahoLhf5Jy7tIzC82JU/x43gR1eZvEEQSjtq5G97ZKGp4kNRTc+kG9FK9rudRevAk
-         1zqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHx7Of+xB9lMDQm5eFbKvXd4UD2mqDY6OsVYSWxcIAzmXQuwG+eoFGcWnwFShq/acJCqbDp9QV7ohNMrY=@vger.kernel.org, AJvYcCWuh8yGcZPvn4GufCRBdDTgUmNz3mA6SfDq0oZbnOwZ40USdeDGZZSPS7qEsy5JaB6Y7TK4ohrlEclF@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIRBdh9mlJw+3c79yGtM85L1gQ2ny89OytMjXGRzQ03MjvBCOd
-	ep+/QLA+PKrKl0d32NRZ/dRdx+nviKFeRA/mQ41Id27fI+95GvPf
-X-Google-Smtp-Source: AGHT+IGYb31pyij47ajHjWwCsepUA6sCOcNfwXWjrjCXyOLYK5HLzXYFDeIPuoP7S2kEJd00nkx5IQ==
-X-Received: by 2002:a17:907:7ba3:b0:a8d:7b7d:8c39 with SMTP id a640c23a62f3a-a93a05e7985mr489893366b.43.1727343493128;
-        Thu, 26 Sep 2024 02:38:13 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-4e5f-6907-08e4-04ed.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:4e5f:6907:8e4:4ed])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9392f33470sm325743566b.28.2024.09.26.02.38.11
+        bh=ZFkAMzHwxIDRWXfTMuLhfcGNG6C28loXn9aYz20AdFs=;
+        b=Og+xLFIq/uomocsRGxjrKcdEgQ9duXYvlYVrm/WcZzRx5xjRlGKhTptyb9BospriZF
+         29AA8OZXtSEfWZWIlgdB9GtiBAPtzBPQy1njoYqdO3ZC7SaSnLPGZAjpdOFnKx3YlwXQ
+         WFILXN6gr9C+1uSxKzmPSwzQ8Bvt4YdoV2EfT22YVg23gNGmupyJf5Xnak61675k3+c0
+         TH1D2sRoll9q+q2eNjEHTkGv9GgdctARw17H+m4ZIeC3jC3gTCIMxzsMu4jTr3WxBMmV
+         Be+tD9AbxROkk1dzdcJWwEOt/RerLaWsuwwNDecC+uJlxwXY821ZqEXDlaocu4ZYnM8P
+         xocQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727360388; x=1727965188;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZFkAMzHwxIDRWXfTMuLhfcGNG6C28loXn9aYz20AdFs=;
+        b=GfRshpxAnOE8hO55Wo21tWNOif7xlgRuxZ92KiVWJBZ6BoM7rbDC28ivFwSpXibgLE
+         1FDtztXT2F0Eo1M/1yjncmP4atrI+Pd0XJL7INU94ANE45kYhiZFF7FcCc+eKyXRXu0l
+         G9CdeCMR3EWnGDSI736HMPQ0FcSHr02oiM49XyM1/zFcMTmGvV9q0rSmUu+IUAWbEbAS
+         LwMqCZgTTY6tyLkxpU2VtuavaLV2wXkwLKKNYEMIiZblLiR+KHpVm5m2B7hdY82mVkSj
+         tcH7IYCHE6Ltb7ZFuFd5jTzTM75qr+X5w0qOCynX4sdE6fNyu9FEvLMNlUySCQjjcOaS
+         Ab4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXG3xdIZoNkc1gpaIJm7dAJmlCNZ+KOipGfhkM1+hsqU4AgWEqEdRZM0i01k4rGzTeOQkvadoG4xC9o@vger.kernel.org, AJvYcCXM5kNnowF3HFKf6YjfeFmJQe+MRsolV7Sip3wyvypqysEhDbUR83vBZKj/RqeNh8R4Tq0NArE7r8B3Z2Gp@vger.kernel.org, AJvYcCXs6goG4N0wfsLajdCF7TdDNA0es/N0u93s5Ss17R16yRlrZ395V7dsM4FHX/dgxWJA2XVrvOxV/Z06QQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2AvjZmh3piWzwDDQ1JHTOxj35qXgSRG/0qEaWNHtC+G4Bmbic
+	hNhOVcoLY09mZQOn1N5F7bbA26xctvL4ULu0YAVr5wMsiiB4sIsD
+X-Google-Smtp-Source: AGHT+IGZlWj6W0mVeziJb26C6kCddMl29225aY4d1xUjmLvmbE0PNRFaI1Gg5pW0xVVugbaz0OgKOA==
+X-Received: by 2002:a17:903:11c4:b0:203:a0b4:3e28 with SMTP id d9443c01a7336-20afc486301mr87840675ad.27.1727360387713;
+        Thu, 26 Sep 2024 07:19:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20af16e6ba5sm39240055ad.60.2024.09.26.07.19.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Sep 2024 02:38:12 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Thu, 26 Sep 2024 11:38:11 +0200
-Subject: [PATCH] hwmon: (adt7475) Fix memory leak in
+        Thu, 26 Sep 2024 07:19:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 26 Sep 2024 07:19:44 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pwm@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adt7475) Fix memory leak in
  adt7475_fan_pwm_config()
+Message-ID: <ec56554c-b538-48b1-b878-938266d911fb@roeck-us.net>
+References: <20240926-hwmon_adt7475_memleak-v1-1-89b8ee07507a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240926-hwmon_adt7475_memleak-v1-1-89b8ee07507a@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAIIr9WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDSyMz3Yzy3Py8+MSUEnMTc9P43NTcnNTEbF1js9Q0k9SUlFSTJAsloN6
- CotS0zAqwudGxtbUA+DhK62cAAAA=
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pwm@vger.kernel.org, Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727343491; l=1669;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=qScvP8P9xx7hLbHKx7dQASxlbWNGucAP1NZhNK5pLRQ=;
- b=YhaUGPQb20+sdm9JafMG+XuxzE4jkoBPBWOBbjNXeBjq4fp1qEazPQJntFlwgidVBUONQhVMJ
- qhGCSZtLLIdARlKcqQd7ok/LYh0Kp0aH1XdMd+BmGAu7eOCHQHtLoI+
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240926-hwmon_adt7475_memleak-v1-1-89b8ee07507a@gmail.com>
 
-The device_for_each_child_node() loop requires calls to
-fwnode_handle_put() upon early returns to decrement the refcount of
-the child node and avoid leaking memory.
+On Thu, Sep 26, 2024 at 11:38:11AM +0200, Javier Carrasco wrote:
+> The device_for_each_child_node() loop requires calls to
+> fwnode_handle_put() upon early returns to decrement the refcount of
+> the child node and avoid leaking memory.
+> 
+> There are multiple early returns within that loop in
+> adt7475_fan_pwm_config(), but fwnode_handle_put() is never called.
+> Instead of adding the missing calls, the scoped version of the loop can
+> be used to simplify the code and avoid mistakes in the future if new
+> early returns are added.
+> 
+> This issue was recently introduced and it does not affect old kernels
+> that do not support the scoped variant.
+> 
+> Fixes: 777c97ff08d0 ("hwmon: (adt7475) Add support for configuring initial PWM state")
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-There are multiple early returns within that loop in
-adt7475_fan_pwm_config(), but fwnode_handle_put() is never called.
-Instead of adding the missing calls, the scoped version of the loop can
-be used to simplify the code and avoid mistakes in the future if new
-early returns are added.
+Applied.
 
-This issue was recently introduced and it does not affect old kernels
-that do not support the scoped variant.
-
-Fixes: 777c97ff08d0 ("hwmon: (adt7475) Add support for configuring initial PWM state")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/hwmon/adt7475.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index ca466d12475a..5f2541c11fe9 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -1735,11 +1735,10 @@ static int adt7475_pwm_properties_parse_args(struct fwnode_handle *fwnode,
- static int adt7475_fan_pwm_config(struct i2c_client *client)
- {
- 	struct adt7475_data *data = i2c_get_clientdata(client);
--	struct fwnode_handle *child;
- 	struct adt7475_pwm_config cfg = {};
- 	int ret;
- 
--	device_for_each_child_node(&client->dev, child) {
-+	device_for_each_child_node_scoped(&client->dev, child) {
- 		if (!fwnode_property_present(child, "pwms"))
- 			continue;
- 
-
----
-base-commit: 92fc9636d1471b7f68bfee70c776f7f77e747b97
-change-id: 20240926-hwmon_adt7475_memleak-36ef4edde4b8
-
-Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
-
+Thanks,
+Guenter
