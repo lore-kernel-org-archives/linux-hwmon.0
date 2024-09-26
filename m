@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50FC17C9A9;
-	Wed, 25 Sep 2024 14:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC6B1D5ADC;
+	Thu, 26 Sep 2024 00:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727274987; cv=none; b=OxJ0QQlEbMnpiWHGtLzzIj/sPwRiHH4v3NWKdZNEQE6hHLOLxVdPEzM+5vBHGtmIG742YkkyLknlQR/oF84rkAP6FotDR3avB30VJsuRmtH0FWWd54uAhytQjN6y9Ws/rAS9Ud701ppWZzLHM5CajSsrKRkJH3hKLUF5OhMr8PM=
+	t=1727311853; cv=none; b=YzEB14r8guRbb+QH/5u2Gn+77cPVzsoKlBrUZ82Fo+eMtE/27gqdz0mn4IMKP8IX6jtATJgmKJbxluIf0+NpFbjJq+H0yxDni9Z+Wn3iZyy898PGrjOuHjK3D+QjJqjJw9kbOn2hL4jam0Ei8ccCcOeBojsRYs+VVsWK/gzp9U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727274987; c=relaxed/simple;
-	bh=Ud1Wh4GTBi6jLxNAiO/ptsjGRRySTSynM9fjc4WRSqQ=;
+	s=arc-20240116; t=1727311853; c=relaxed/simple;
+	bh=FGhQ/qr3h0kh/2oImWTd5HPE0CXkpLwLKKwCCoWVz1E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=foa8f20uby/v2U8WEGTRR1v/ud2vdeAXITD5QLleD/sagLIBwPykbM7BLQ2Pnu4eMkFNk1jeQqpzVvMCfZnOMsalvkZPh+ma71+zSTYbLsqQnLMhAwZtQ2TsHLMOXEK285GaD7lR0CUGeaQs4HvO6eCtB/b4n1pVP0+zumIq0Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CW6+ZdtE; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=rbBgKVV5HspsJee8BK14dy8rr8Z6VV8suwQkJ8FLigbMy4NPCMzJn6m+YvkLUasoikjCEAp1VPEf4RYtAfPU2ccQks+hwdDVVTzRA+gP5wqPkYULDNfcHg1Gmep3vzYxz8+7Iz+qIzTjnqE7sBFoL513AttOArGCyKA5VU1VK+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=codqAsFA; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CW6+ZdtE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="codqAsFA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727274986; x=1758810986;
+  t=1727311851; x=1758847851;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ud1Wh4GTBi6jLxNAiO/ptsjGRRySTSynM9fjc4WRSqQ=;
-  b=CW6+ZdtEcKo2jz4cZmf3tABdpCIIPqrYvjbdXgQsK9wSsKA1OOqbUrAa
-   3HIoO9mbThIKqJwLbGYGC0V/naShLxrjO2KzuIoD26ac62IRf77PA8mQX
-   +fn4IHuMHYxm2SK88fUJCeFb2I8NvgsOPtf5s5IWK5ZFp/9pbWyc8Yurb
-   IZpy6m6h5RdwsT/ZuZD5whfMVOvO4Y5ibWGYY+w9aWjZD6XPjFkPuSVUp
-   6pkzpd1ffC8i6Tt4i8nFIzbWY4TIk6MqBlFWPinlTlEFtkOsziXTcnFJa
-   OhWU5LP0QmgOlOX6UDuM0Wv944OsDm/XTNs6tM1Ep2SAlLb4ny7nBsB2s
+  bh=FGhQ/qr3h0kh/2oImWTd5HPE0CXkpLwLKKwCCoWVz1E=;
+  b=codqAsFAHUPB8d/rZrdLA88iqfeOxFT7uUKlrAwNBjC9K6SIdKz8v6/w
+   MGviQqRu9rZnzXVrpgANHyXK5HONi54I1at3FLtdn1DKkt3TZp6+7TUQa
+   PaqItyI7v/eI/YJ8v2iAhvw3LtK2J4F5H08+ferlyUlCLL7nfEB8zSS/U
+   COz1NyT6tz6TmN+3ZKhVqmagB8aO1Sp9V3d5SvxOl75gNwIL+8mV4MxmY
+   jWtUqVrnY9QwwagoD6PcbYDMYNzGWaMeVxrb1GmmqS9YVQ93B1Fp6Rn/Q
+   sCHxS5stR0YKldDUlfZecNDy90YJiAV7b5y7FN2lVsRUIBFapQ/l4o73J
    Q==;
-X-CSE-ConnectionGUID: y5yFU8VJSuixvxBRat67mw==
-X-CSE-MsgGUID: BBZLiS6KQlqGjXAyDSRkHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="37710319"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="37710319"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 07:36:26 -0700
-X-CSE-ConnectionGUID: cQ2kt2YvRQeEVrR4a/v3pg==
-X-CSE-MsgGUID: z6MCUjSeSWSLsH3UT/D40A==
+X-CSE-ConnectionGUID: KWhNG+vFQomQs76vkugdWQ==
+X-CSE-MsgGUID: dty2q+RURfKFceHujHgbYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26515071"
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="26515071"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 17:50:51 -0700
+X-CSE-ConnectionGUID: TKCI/WE1Sm23Jm9LJV3Ypw==
+X-CSE-MsgGUID: Gu7jXKYrT7uatElDxhJHkQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="76183373"
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="102716733"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Sep 2024 07:36:20 -0700
+  by orviesa002.jf.intel.com with ESMTP; 25 Sep 2024 17:50:46 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1stT7q-000JbY-1g;
-	Wed, 25 Sep 2024 14:36:18 +0000
-Date: Wed, 25 Sep 2024 22:35:41 +0800
+	id 1stciR-000K5f-2K;
+	Thu, 26 Sep 2024 00:50:43 +0000
+Date: Thu, 26 Sep 2024 08:50:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>, patrick@stwcx.xyz,
 	Jean Delvare <jdelvare@suse.com>,
@@ -56,7 +56,8 @@ To: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>, patrick@stwcx.xyz,
 	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
@@ -64,7 +65,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
 	linux-doc@vger.kernel.org, linux-renesas-soc@vger.kernel.org
 Subject: Re: [PATCH v7 2/2] hwmon: (isl28022) new driver for ISL28022 power
  monitor
-Message-ID: <202409252244.3ZXLJlyK-lkp@intel.com>
+Message-ID: <202409260859.DetsBmBQ-lkp@intel.com>
 References: <20240925031131.14645-3-yikai.tsai.wiwynn@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -90,73 +91,136 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Yikai-Tsai/dt-bindings-hw
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20240925031131.14645-3-yikai.tsai.wiwynn%40gmail.com
 patch subject: [PATCH v7 2/2] hwmon: (isl28022) new driver for ISL28022 power monitor
-config: openrisc-allyesconfig (https://download.01.org/0day-ci/archive/20240925/202409252244.3ZXLJlyK-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409252244.3ZXLJlyK-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240926/202409260859.DetsBmBQ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260859.DetsBmBQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409252244.3ZXLJlyK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409260859.DetsBmBQ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/hwmon/isl28022.c: In function 'isl28022_read_properties':
->> drivers/hwmon/isl28022.c:396:36: error: passing argument 2 of 'dev_err_probe' makes integer from pointer without a cast [-Wint-conversion]
+   In file included from drivers/hwmon/isl28022.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/isl28022.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/isl28022.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/isl28022.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/isl28022.c:396:22: error: incompatible pointer to integer conversion passing 'char[48]' to parameter of type 'int' [-Wint-conversion]
      396 |                 dev_err_probe(dev, "renesas,shunt-range-microvolt invalid value %d\n", val);
          |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                    |
-         |                                    char *
-   In file included from include/linux/device.h:15,
-                    from include/linux/acpi.h:14,
-                    from include/linux/i2c.h:13,
-                    from drivers/hwmon/isl28022.c:11:
-   include/linux/dev_printk.h:278:64: note: expected 'int' but argument is of type 'char *'
+   include/linux/dev_printk.h:278:64: note: passing argument to parameter 'err' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                            ~~~~^~~
->> drivers/hwmon/isl28022.c:396:88: error: passing argument 3 of 'dev_err_probe' makes pointer from integer without a cast [-Wint-conversion]
+         |                                                                ^
+>> drivers/hwmon/isl28022.c:396:74: error: incompatible integer to pointer conversion passing 'u32' (aka 'unsigned int') to parameter of type 'const char *' [-Wint-conversion]
      396 |                 dev_err_probe(dev, "renesas,shunt-range-microvolt invalid value %d\n", val);
          |                                                                                        ^~~
-         |                                                                                        |
-         |                                                                                        u32 {aka unsigned int}
-   include/linux/dev_printk.h:278:81: note: expected 'const char *' but argument is of type 'u32' {aka 'unsigned int'}
+   include/linux/dev_printk.h:278:81: note: passing argument to parameter 'fmt' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                                     ~~~~~~~~~~~~^~~
-   drivers/hwmon/isl28022.c:406:36: error: passing argument 2 of 'dev_err_probe' makes integer from pointer without a cast [-Wint-conversion]
+         |                                                                                 ^
+   drivers/hwmon/isl28022.c:406:22: error: incompatible pointer to integer conversion passing 'char[42]' to parameter of type 'int' [-Wint-conversion]
      406 |                 dev_err_probe(dev, "renesas,average-samples invalid value %d\n", val);
          |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                    |
-         |                                    char *
-   include/linux/dev_printk.h:278:64: note: expected 'int' but argument is of type 'char *'
+   include/linux/dev_printk.h:278:64: note: passing argument to parameter 'err' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                            ~~~~^~~
-   drivers/hwmon/isl28022.c:406:82: error: passing argument 3 of 'dev_err_probe' makes pointer from integer without a cast [-Wint-conversion]
+         |                                                                ^
+   drivers/hwmon/isl28022.c:406:68: error: incompatible integer to pointer conversion passing 'u32' (aka 'unsigned int') to parameter of type 'const char *' [-Wint-conversion]
      406 |                 dev_err_probe(dev, "renesas,average-samples invalid value %d\n", val);
          |                                                                                  ^~~
-         |                                                                                  |
-         |                                                                                  u32 {aka unsigned int}
-   include/linux/dev_printk.h:278:81: note: expected 'const char *' but argument is of type 'u32' {aka 'unsigned int'}
+   include/linux/dev_printk.h:278:81: note: passing argument to parameter 'fmt' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                                     ~~~~~~~~~~~~^~~
-   drivers/hwmon/isl28022.c:414:28: error: passing argument 2 of 'dev_err_probe' makes integer from pointer without a cast [-Wint-conversion]
+         |                                                                                 ^
+   drivers/hwmon/isl28022.c:414:21: error: incompatible pointer to integer conversion passing 'char[51]' to parameter of type 'int' [-Wint-conversion]
      414 |         dev_err_probe(dev, "renesas,shunt-resistor-microvolt invalid value %d\n", data->shunt);
          |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                            |
-         |                            char *
-   include/linux/dev_printk.h:278:64: note: expected 'int' but argument is of type 'char *'
+   include/linux/dev_printk.h:278:64: note: passing argument to parameter 'err' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                            ~~~~^~~
-   drivers/hwmon/isl28022.c:414:87: error: passing argument 3 of 'dev_err_probe' makes pointer from integer without a cast [-Wint-conversion]
+         |                                                                ^
+   drivers/hwmon/isl28022.c:414:76: error: incompatible integer to pointer conversion passing 'u32' (aka 'unsigned int') to parameter of type 'const char *' [-Wint-conversion]
      414 |         dev_err_probe(dev, "renesas,shunt-resistor-microvolt invalid value %d\n", data->shunt);
-         |                                                                                   ~~~~^~~~~~~
-         |                                                                                       |
-         |                                                                                       u32 {aka unsigned int}
-   include/linux/dev_printk.h:278:81: note: expected 'const char *' but argument is of type 'u32' {aka 'unsigned int'}
+         |                                                                                   ^~~~~~~~~~~
+   include/linux/dev_printk.h:278:81: note: passing argument to parameter 'fmt' here
      278 | __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-         |                                                                     ~~~~~~~~~~~~^~~
+         |                                                                                 ^
+   7 warnings and 6 errors generated.
 
 
-vim +/dev_err_probe +396 drivers/hwmon/isl28022.c
+vim +396 drivers/hwmon/isl28022.c
 
    346	
    347	/*
