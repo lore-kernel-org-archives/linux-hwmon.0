@@ -1,66 +1,67 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4441CB32E;
-	Wed,  2 Oct 2024 13:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240761D0977;
+	Wed,  2 Oct 2024 13:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727877283; cv=none; b=B7uB1czK+N3jiSwsQ/JTXbRitjlcIPiOfuJVcEWv14H61t5N28wW/jPTZX4CCHB1oPtSENAME3XVMnupNentiDlW2z20DGuQOutiAk6ayUBB5kMpiYewkEDR6MQs7EPh6aCqaCxtpfBhP6YkmmQNyjEA2GyjpdRWa5ZMb+k/cU8=
+	t=1727877357; cv=none; b=m5UAHGaJ0Z4+THba3vg4tq+BNmsaLcx+SjpvyxzLrKe6WxjG67ikYhq/UNH4c6G1Qf2HIHREtbQ68s/m3D72/h1I+8/nupMPPYRPKgZaUxja3ODRlRVughtheTx35ovelAOApfNyCOhxt0VhklAFR7RsXa5pxXhDvMi1jW/ZWYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727877283; c=relaxed/simple;
-	bh=GpGueWn9GLdS+tziuOQwLRbEPPrZErtjyfFy1fhyJQw=;
+	s=arc-20240116; t=1727877357; c=relaxed/simple;
+	bh=zx/O/05IKwA2MimNi/PFcCEvXS5nsh/mCtOkSIotGzU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cF3RavWKdj7GChRX2Uwf207S20a4pqQg8uvfx6VG3Wxzim3VgTTxEwGm+F42ZtHyAzhCB87OOlZ1gNwC0y7hWegUc5n1Whl9bZNfEnZsQajP+gAGTSC7rEy4qwywXk9BDFUm1+JfVhveaFBrg+iPFRtsdJO1gllR9RkMoAovXwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjYS0IsD; arc=none smtp.client-ip=209.85.215.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=APlt28edLoBg5mgZKAuvX/3eACXZFeQ6cA81tbfeEBfbeGteTwrbeo8gyG9spqbiU4dy2QgcmAmZ1JfP507psHBYfjRV5uFkrZzwuKXfcTw5FJNhee+qzJsiHer1p3JtYVRAfQmCIWMqNYm8LBgeVRT5jVpZRf06MWS5GMRjI6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jkJZftdY; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjYS0IsD"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7e6bb2aa758so2731583a12.2;
-        Wed, 02 Oct 2024 06:54:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkJZftdY"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20b95359440so27551655ad.0;
+        Wed, 02 Oct 2024 06:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727877281; x=1728482081; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727877355; x=1728482155; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fUBxCKfa+ym+ZEKmNdsNEWMFScA4eK4QLDNB9jl0odg=;
-        b=kjYS0IsD9BXbsPPUzeHUdJoUo+Ohh5SVkvIdJeKw/fKAf3UDAy+tc8/GZNHTFmEH8M
-         /IpJ4nmKBc5FVXCSwBuPW5tyBq63CLcIlviahOxEt6aF/wEiggi1C+FArkny9pG1WiEe
-         MwMmkeXuupTy6bJU0qaOLrbEg8+kMznY+JbCxvXFl+eTROuQJ7fx+3qGyeOHhZJpbgf6
-         RJkmt188wL272tRF1ymE6Pdb5A8WwJOBQxO7I3LnR9uAI5UybqjcqHaHPU98SFoKOaPP
-         spM+Pn0rhf0Ui5NMP8RPSbKbqfOD29tuesjrs91VEapdzz6QOBO8zXIqJ5kDlu+NgpQ/
-         gE1A==
+        bh=Okmj3JLJUs+5vHu9gYMhbXC25kwp5zEus8iw9+6aKig=;
+        b=jkJZftdYrnNhyw5v9dmL76dQpFvrBDlx9T9I/a1vsG5XrdDI+sMaCSWqxOqY/iX5EK
+         XfjdSTsCObU2NssDMoWH72/8B5jnebbxIkMobUFsq+PNCrtqyE5SnGLwbg0qb8Np2nch
+         S4osffcFOO6Mjtb4DzAdmChc7PSvKXbShNV8pj4i0KDgRp6+UuwuCXBys886sDxyHweN
+         MtjNtnCb43xnrVSvwG5tRu5AUQbSvz1Ee5UscoVkc5eZT9dpUdX3iF9acFk7kZgKVWuF
+         59hu1rxpM9Kw/a4bLonUBSbE6/aPZ74g0PbSB+Z7v1nEB873zdQ5BYfOZfnWIlol/DuE
+         bYUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727877281; x=1728482081;
+        d=1e100.net; s=20230601; t=1727877355; x=1728482155;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fUBxCKfa+ym+ZEKmNdsNEWMFScA4eK4QLDNB9jl0odg=;
-        b=o59NidbQzxIKW0X12dkSgJvzpVDn6cp1MDBcXt5ppJqaNU42ONZcAORe5xSOFAFRJi
-         OSZ7r/8gdUgTSMtEKEbr3A43iaH6ahthqzoMjIA/X/l7vfeY5T4Scy3USlwghxYamfcr
-         5GSrhXRH2KPqhiXVCuU6Vgdh5UVdJ5rhAfDfG/utebZ2bXner6tlx5gTTdr/4GAt7+aj
-         AVZtLd5OHT7cblduo3tKGJToEFv87jwTup6XQMPz2Nv41KEXnMhn7AKhQVl/WYRyD3rs
-         jA1RNj8Hewuc/gQGXe5PFnL0IZuSJ/kOlExQVgiqBv2epEvLrfikFVlghS23sHlikqsB
-         P+og==
-X-Forwarded-Encrypted: i=1; AJvYcCVNgwGow/98j5WjHD2c5iIefHV/xDaAZ1eoHt7iTDOUGnf5wKeFvo7qaa0g8+eO5WevfsRf/UmIGU+BlsT5@vger.kernel.org, AJvYcCW4RTbEeovhAtXjHmBpntzM+hK/OjyViG312eb2NhSSXg9lVD6ayafx6S6fltrAwEJMA5SRNPZ1vcBZZw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwitQFLqio7t8iMzRVo1Ab6e+/4LHT5utVYSuajkUSRccfWXQ63
-	zNOcIG0ciLjgV15RPDYdODt2NWMNjUqHT0mLH8rhytdhKLgxVdP0
-X-Google-Smtp-Source: AGHT+IG9rH4C5XwjAmhkUBf6RICyhbmVG3gFCpo5Rmt1bSZC9t2yINgQJhGLVNDOTs5fdrVLN8AyDw==
-X-Received: by 2002:a05:6a21:38f:b0:1d4:4a69:a0dc with SMTP id adf61e73a8af0-1d5e2cbf7c3mr4404731637.33.1727877280997;
-        Wed, 02 Oct 2024 06:54:40 -0700 (PDT)
+        bh=Okmj3JLJUs+5vHu9gYMhbXC25kwp5zEus8iw9+6aKig=;
+        b=hTLYyewYcHoHv38ungRlke32uhMdpJ9JdEhZGg9f6QYXP8OH2c3EaJP8piTMqlkdCn
+         3UJsZx51tFHXbrHsF/w0JHLSPKOxhw00k2MFEBeddn4DLbc4IDJ8z+stOkbmRkNNj9kJ
+         UUgwWLIaIrufqIacTbY4Pm7Ml2blYyVR92bnkJ9RoU1NDNALGELNSh1Pkrt4I2OIQP3n
+         /1agj31g02tfJafoxcm1aE9lphrfzU9XbP7IleXKh4w+LmEmTrteA5PiizsRELf0Bd/2
+         byYya+3GmhvqmX85CO8sXdARD4lZASfct04XH7aQwTjYP8maMQfFg7QjH52/+OlVUiNL
+         V3FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/1P176dm8bKhAqGc00HopjYMGcpfmwlICFQqaQ1MmZykuSL7BUUSqmz5jQuCzZ0dozeth3SzhhXLsbQ==@vger.kernel.org, AJvYcCVzNpOeI5Tq+EqZCXCrVcqr6CL1qg5BnXD1nhRStgikW+gnX6DsJOEC8HDomQ1dLCn7C3SqApUH+qRm+/z6@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDtuFGjN3ojGVckgmp4+hZecoyq48XV3+SVpzkbe4+dtsJO6md
+	MJI0D2B4C/6D4q+W70TwR4CLH4G3nMNKjfajQ3UaNnHbnPAYouyA
+X-Google-Smtp-Source: AGHT+IFguJDptTZVWRYNzE3ZITHaM8Lklq9O3m7lEerEvkFQ6Ywci/XIe0tKwtpNRdjVEqB6FU6xDQ==
+X-Received: by 2002:a05:6a20:c909:b0:1cf:4197:6697 with SMTP id adf61e73a8af0-1d5db2324b1mr4889278637.23.1727877355340;
+        Wed, 02 Oct 2024 06:55:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e1990964f1sm1234833a91.51.2024.10.02.06.54.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e63a86sm84298955ad.277.2024.10.02.06.55.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 06:54:40 -0700 (PDT)
+        Wed, 02 Oct 2024 06:55:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 2 Oct 2024 06:54:38 -0700
+Date: Wed, 2 Oct 2024 06:55:53 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Mario Kicherer <dev@kicherer.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (mc34vr500) Add missing dependency on REGMAP_I2C
-Message-ID: <97fa239f-824b-4b7f-875e-4b965202dc84@roeck-us.net>
-References: <20241002-mc34vr500-select-regmap_i2c-v1-1-a01875d0a2e5@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] hwmon: (adm9240) Add missing dependency on REGMAP_I2C
+Message-ID: <fb23f8a8-8a11-4c5e-990b-1fd09c9a4c6f@roeck-us.net>
+References: <20241002-hwmon-select-regmap-v1-0-548d03268934@gmail.com>
+ <20241002-hwmon-select-regmap-v1-1-548d03268934@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +70,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241002-mc34vr500-select-regmap_i2c-v1-1-a01875d0a2e5@gmail.com>
+In-Reply-To: <20241002-hwmon-select-regmap-v1-1-548d03268934@gmail.com>
 
-On Wed, Oct 02, 2024 at 02:31:25AM +0200, Javier Carrasco wrote:
+On Wed, Oct 02, 2024 at 03:08:08AM +0200, Javier Carrasco wrote:
 > This driver requires REGMAP_I2C to be selected in order to get access to
 > regmap_config and devm_regmap_init_i2c. Add the missing dependency.
 > 
-> Fixes: 07830d9ab34c ("hwmon: add initial NXP MC34VR500 PMIC monitoring support")
+> Fixes: df885d912f67 ("hwmon: (adm9240) Convert to regmap")
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
 
 Applied.
 
