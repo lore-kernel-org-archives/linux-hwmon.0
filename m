@@ -1,88 +1,137 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920D51E52C;
-	Wed,  2 Oct 2024 13:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE251D0951;
+	Wed,  2 Oct 2024 13:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727877509; cv=none; b=O76XhvVxhfZIG8UT3nQYvllP9yd/Vcr8FPZ8EM2C6shGTxJx2Nk622XBNjl05yp/+z7m2PB7v8Z6zUUuaMt8H+VR/eoJCbhlI5ppxQ6Qyx2fWYSZoDMbCQAEBwir5Ty1ZzNnUTzx4RWEbyKw2jtlk19WbcwBDeNrP4xTU6Ryo40=
+	t=1727877537; cv=none; b=asE5Jjo0eXew0hJjzjqsaISxHGfa3o34/bHuClSSqVL7Saty8YCATeBuiwGpTY9kYGD3YIJZm15wUbsUzbT4bPi1gujmjia6+jy2BQR23M9xniY6XKGy6nN2MyfQOjVH4IU6s4qa7p23X+Sp6RO5Bdv15R64CymkVOCze807Z5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727877509; c=relaxed/simple;
-	bh=EJNP89px1zjsAleC4L47Viq3XiP8moZtLyBuzzIUGB8=;
+	s=arc-20240116; t=1727877537; c=relaxed/simple;
+	bh=kzEysxO2ap3NSntJagiOFBlB2EHYbnQ40iQCb2oIRLU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QmZmRqeYfPtem2h/sdvjaIN2mBWB5yt7X5jEKCk5VdsGJITy1tLBG3wRJduSf5IXTt9n4GCwxIkM1pX5xALMeJAb4oAvFbE9wFHGNPfCdx2eJm7dwe3aJfj4+jXWEyQnvvKQXk+vJ7zzWT2FYB+DwKO9bMLvUDXBfxcamPoI6VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJNUnUY2; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h5U3fuofiqtK0xf28pnclT5+iJ17IF+D8URnKKaaL73rcNzGd/PpXUsJLrcVKjmxG21zNwAviC0VgWoAcUcXIbftbRKM9yV1bNdHWb+8zbzX8FKWDPmlATzQoQKjsZ1zRKi+cY105ZDmMTcOcFwavEM52IlzslI5LqbsjVILVBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HbNL0Frb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJNUnUY2"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e0af6e5da9so4453731a91.2;
-        Wed, 02 Oct 2024 06:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727877508; x=1728482308; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GN9PV+s+3cEgwu4eEUqyhCUsMLskrQvrEOYkp+sv850=;
-        b=fJNUnUY2vHnwGGYeHX8EGPoLKP57E37sDO6k39UcUWt6W1eEVRIOu+k5ZvY2nDuFXs
-         1K3l8uhF3peUYnullOm0/55hEJuO2vA9DxVfQBfTpB+/Kwq2NwFMIvsS8S4SGzdDL+wf
-         +MMMhW0pNJ9g8LYsKtrVwrokYT5jsxkHqYbs/CHlz/dlH5qxK+IXGrQbNu3pH23JthVB
-         FGV9SWGttMTqxou17/AdtDBpL9ZaMBKEo7vch3CxX4fykqhATrZZNHAOyOK/bfOwH0TQ
-         fXl5b3Dgh3d/xgiHJ1GKo7o798ME8cvxZb1uyBfnp4Qt+pFLY8baffAXdmAhmthKdDjP
-         iAVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727877508; x=1728482308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GN9PV+s+3cEgwu4eEUqyhCUsMLskrQvrEOYkp+sv850=;
-        b=wINJAJa0bbkfGuiuYzW9BiD7yGFcItwu+KRYJgAN9emYmx3JS2uMAuxxSVopHo9C88
-         FpRyRuAMHnRF1jUbnUjXJ4YmX5OZs/k10VnxVeiUP/XzmRNXO/4XSfxTgqq+TnDP6eDN
-         YYXGcF1JuPHVF3VA3Gxv+waGKym4wvxrQKLnPlhUtGDCW8WRoulAD3tCqo4G6zRGo5y3
-         asiXzxzhPIgPJZhvVv2pdsdgB5WXQmIfi7T9enRiSIqRZ4xdelSyJlJO0JTlkn54m9x7
-         EKK0hsk6e9xx/R2r8Stm9CvobUUbY4B4SvxxcHdBhn2vXTtkHFqEl6DXVCIsUxqFMfp5
-         X8nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCLhTOnE1xI2ZYeSDGqRvwOcjz3PlTPa3LKo+ThJW2G3uaITRq1wWtTnWCSR0KsDFV4EzKXl/DlsTlFyQ=@vger.kernel.org, AJvYcCWGwsDB6F1c88cxbwIumFyshV8jkJ/DctpDLBR+LKuG0ZGno7c8ccomHcTi1M6pv5qMgZ2hR9yxdQo=@vger.kernel.org, AJvYcCWrUc8puguIlA/Kb3TklqBBXtVno1y+gfEeA0kROwCtTbOmwlGOPoAf7KCTLZfazdQEBc7pWn86sZtM5/zl@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAvP9WiTUWbSpa26eQwydn8yPm4/cR3TN20SE+M4frNIb/Ti6Z
-	rAzb7kOKaV9NwPH674U9EzBRhFCq6ZdtNnlxSP0fAleZ8TVHqaKZ
-X-Google-Smtp-Source: AGHT+IFcxSts6X+Wo3tYB2PTC0qtpQIfpybH1i4hQboxUVZDjxBhYx+oi5M7rC0CAD8dthOtPlRsDA==
-X-Received: by 2002:a17:90b:4f43:b0:2e0:7560:9338 with SMTP id 98e67ed59e1d1-2e184901f61mr4036661a91.25.1727877507965;
-        Wed, 02 Oct 2024 06:58:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e18f7501cfsm1572160a91.8.2024.10.02.06.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 06:58:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 2 Oct 2024 06:58:26 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Everest K.C." <everestkc@everestkc.com.np>
-Cc: jdelvare@suse.com, corbet@lwn.net, skhan@linuxfoundation.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max31827) Fix spelling errors reported by
- codespell
-Message-ID: <4c12538a-7393-444b-b898-7c38a4f5751f@roeck-us.net>
-References: <20241001011521.80982-1-everestkc@everestkc.com.np>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HbNL0Frb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C46C4CECE;
+	Wed,  2 Oct 2024 13:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727877537;
+	bh=kzEysxO2ap3NSntJagiOFBlB2EHYbnQ40iQCb2oIRLU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HbNL0Frbukj+51wQmYmNT6WV9aa9aA7MwmnkV/9lK15Rew25r0gaXhEnWPjft7UUj
+	 c2fmQLNBp9Sb7TTKMl1QwGaMmDkKl2kndMXJu8Bi69C00FJe2BTcGaGhX2LgdmH1to
+	 8JCPci0I5M+QiemOaMrcsv1OW+14RM6tEYmTz3pghoDGC6puORnZY/owGG2us1ADvI
+	 c+5E9McgeP2F1lLr2fsheVIn9H/RgE48Ms4aiRl/DkQxYk0brod3WpW0LZTg5AZZSV
+	 WPmiUSkEca5NEorG4Gw8yZc+sfbpPRFzVANINoqd6zwhH2Uyz0TxCdHA1dX4MFmGYB
+	 r8+IHxoUnSQ3g==
+Date: Wed, 2 Oct 2024 14:58:50 +0100
+From: Lee Jones <lee@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: jikos@kernel.org, jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+	srinivas.pandruvada@linux.intel.com, bentiss@kernel.org,
+	dmitry.torokhov@gmail.com, pavel@ucw.cz, ukleinek@debian.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v8 1/9] HID: hid-sensor-hub: don't use stale
+ platform-data on remove
+Message-ID: <20241002135850.GE7504@google.com>
+References: <20240908210803.3339919-1-heiko@sntech.de>
+ <20240908210803.3339919-2-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241001011521.80982-1-everestkc@everestkc.com.np>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240908210803.3339919-2-heiko@sntech.de>
 
-On Mon, Sep 30, 2024 at 07:15:17PM -0600, Everest K.C. wrote:
-> Below mentioned spelling errors reported by codesepll
-> were fixed:
-> 	respresents ==> represents
-> 	signifcant ==> significant
-> 	bandwitdh ==> bandwidth
+Intentional top-post!
+
+Just this patch to be reviewed now.
+
+Any of the HID people around?
+
+> The hid-sensor-hub creates the individual device structs and transfers them
+> to the created mfd platform-devices via the platform_data in the mfd_cell.
 > 
-> Signed-off-by: Everest K.C. <everestkc@everestkc.com.np>
+> Before commit e651a1da442a ("HID: hid-sensor-hub: Allow parallel synchronous reads")
+> the sensor-hub was managing access centrally, with one "completion" in the
+> hub's data structure, which needed to be finished on removal at the latest.
+> 
+> The mentioned commit then moved this central management to each hid sensor
+> device, resulting on a completion in each struct hid_sensor_hub_device.
+> The remove procedure was adapted to go through all sensor devices and
+> finish any pending "completion".
+> 
+> What this didn't take into account was, platform_device_add_data() that is
+> used by mfd_add{_hotplug}_devices() does a kmemdup on the submitted
+> platform-data. So the data the platform-device gets is a copy of the
+> original data, meaning that the device worked on a different completion
+> than what sensor_hub_remove() currently wants to access.
+> 
+> To fix that, use device_for_each_child() to go through each child-device
+> similar to how mfd_remove_devices() unregisters the devices later and
+> with that get the live platform_data to finalize the correct completion.
+> 
+> Fixes: e651a1da442a ("HID: hid-sensor-hub: Allow parallel synchronous reads")
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  drivers/hid/hid-sensor-hub.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-sensor-hub.c b/drivers/hid/hid-sensor-hub.c
+> index 26e93a331a51..3cd00afa453a 100644
+> --- a/drivers/hid/hid-sensor-hub.c
+> +++ b/drivers/hid/hid-sensor-hub.c
+> @@ -730,23 +730,30 @@ static int sensor_hub_probe(struct hid_device *hdev,
+>  	return ret;
+>  }
+>  
+> +static int sensor_hub_finalize_pending_fn(struct device *dev, void *data)
+> +{
+> +	struct hid_sensor_hub_device *hsdev = dev->platform_data;
+> +
+> +	if (hsdev->pending.status)
+> +		complete(&hsdev->pending.ready);
+> +
+> +	return 0;
+> +}
+> +
+>  static void sensor_hub_remove(struct hid_device *hdev)
+>  {
+>  	struct sensor_hub_data *data = hid_get_drvdata(hdev);
+>  	unsigned long flags;
+> -	int i;
+>  
+>  	hid_dbg(hdev, " hardware removed\n");
+>  	hid_hw_close(hdev);
+>  	hid_hw_stop(hdev);
+> +
+>  	spin_lock_irqsave(&data->lock, flags);
+> -	for (i = 0; i < data->hid_sensor_client_cnt; ++i) {
+> -		struct hid_sensor_hub_device *hsdev =
+> -			data->hid_sensor_hub_client_devs[i].platform_data;
+> -		if (hsdev->pending.status)
+> -			complete(&hsdev->pending.ready);
+> -	}
+> +	device_for_each_child(&hdev->dev, NULL,
+> +			      sensor_hub_finalize_pending_fn);
+>  	spin_unlock_irqrestore(&data->lock, flags);
+> +
+>  	mfd_remove_devices(&hdev->dev);
+>  	mutex_destroy(&data->mutex);
+>  }
+> -- 
+> 2.43.0
+> 
 
-Applied.
-
-Thanks,
-Guenter
+-- 
+Lee Jones [李琼斯]
