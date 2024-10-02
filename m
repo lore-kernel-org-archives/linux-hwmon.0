@@ -1,106 +1,98 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263A5FC0A;
-	Wed,  2 Oct 2024 01:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5750733EC;
+	Wed,  2 Oct 2024 06:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727831307; cv=none; b=PmtzyJNy9X0gLRm7UEFjhEue8dDzLgOtK0tCR5qRhrqTS6EzvRih4H98jBxvICoXqqqUQ386YysFRu4bZlRi9mHn5MAJrC8ilsovIKwenHlkcHJRi80UUKIlSmzraO1t2hh8frqNesYBNTzMxr+otMPIL3lOBQxS7zSmI/Cn8gM=
+	t=1727851341; cv=none; b=O8cqkDMwklMydvwz0tLyZXjRrRFY1qKP0nrs1gtPui10d+SNs86w5vngp3zBDgsl3ui/C/Wl3JWPKwc6xBhA0oTOw2oYdxRTAm9fOH8YBJamR32Dez9fo6K6lXdWP7kAiBpzdGhXGLb893sdUP37sMEZjYXciLuYowVyMvgkPZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727831307; c=relaxed/simple;
-	bh=snkJ3nSwFJwgGXH0ji1lCUUWy2XEwb+19koyTKj22uc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ozAzJSuJIdaLeeNbpymLUsZq76Fv9la7BUdBPO6cUclhVtgMwgXjPQrekRIbhZkVo6urv4B36d7Uq7RRIGcVn5QKFZ+uXpW+jJHLDgGet9pGNANlE82qjZavPtrtKdxmpRDUHYblDNAQnIs2sjSt+1y+V4PDM71XF+q6F0S3wL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcofwGvE; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1727851341; c=relaxed/simple;
+	bh=MdWuSwkybXUYj063xEzsz/V8JSIpC4VUKS6xkG8i7Ek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o8Olqf+v5o7EhJOmCfr1wQhEdOLUWzezaNreh+INN5gI2RE2sJF6OL9SkxXWpyKlt02lP4PF40iR6xcb37MIeUCCHPpPMq5YsFkWJ7ifJb4331lPMom1pqvopwQsd89EvlXYC6h6dtHbqxfPXTVeIZ9GDL1HY48MyqP9EiSOkSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2KdJVxb; arc=none smtp.client-ip=209.85.218.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcofwGvE"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42e5e1e6d37so56090645e9.3;
-        Tue, 01 Oct 2024 18:08:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2KdJVxb"
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-a8a897bd4f1so929280766b.3;
+        Tue, 01 Oct 2024 23:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727831304; x=1728436104; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ax2FrHt4UFk1dnvLO7sYBILw1D1Td9yJ4ERoVADW/z8=;
-        b=XcofwGvES2ZZ6N1T45Q87vq5s9SI8HY4xGLOncjvpwgV0mIrp/+f/tSrCBAsiLnGPu
-         cMqsw/3HqYfje06io+qoFpuz66JYXAraVKKuUQdGxocePR6m4zH6sHMGXN5HKUvR/f7z
-         0K/DuRL3Z3tkjP0ImHK79sUWwhgInzRps7lnARtUFdcsQKMXhS3K1J6HvHURHKuQhStA
-         k8bQWtvFb22PT/FOh5jWHFJ3l7aekrt3loUwbCJu3WC8lRpvRWlzjNnJhByQRkPmywII
-         MR7QWeK9n6Y8NNyTM31AydpIg4ml33V/AKTylS6zjAMtD72a7DNRmwjsrVri1qK8pWmC
-         819w==
+        d=gmail.com; s=20230601; t=1727851339; x=1728456139; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MdWuSwkybXUYj063xEzsz/V8JSIpC4VUKS6xkG8i7Ek=;
+        b=O2KdJVxbsbYvrfUq9pzp2AmuV9xIJHplRWBP/qOCMecRC8OpOeaHbLV6PLLIPvEofD
+         hjBKtJVogzMDeRYQf1hxVFSPXWCRbxkfogcMwHSpWPCfgEmwPTHIMcrDVAYRGMSymnVi
+         FYMZoZ8BN3PgeVVAdF6eLenud1iACOoOz2wHMv/Ve5rOXbXyWjykCBNDPVp6gVZfWDdm
+         ojIJU3YxosvZtYDmv09jUPYNhLn8LD2Went3VGr72Q96e9gE2LclUbGZZ200eZSQOo9g
+         ea2SfwAtX6up6Rv2oyxN0kLR+IPUefNkYRZMNBnem6smMgP+vTchZYsATTBkfKUJhKV8
+         mMFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727831304; x=1728436104;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1727851339; x=1728456139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ax2FrHt4UFk1dnvLO7sYBILw1D1Td9yJ4ERoVADW/z8=;
-        b=Gp+kKNgqI5jImn5yLXvOPK9WB211aOaP4SHID3k2TrWgMEn0G591cPMO2M4says5BY
-         MdRwxb4bNLfR1j+Tecj2GmcF2rzDXWJdRNnjWHqOK1JNUEGpuA5jsVXeX9kZEvAA/dH5
-         jiTvLIMqTEBpG9kp3fDf/8ol1U4fCfpmtV5FH6Q+RBWNAt3ePWm9C1fg5XWYSFLy4ic8
-         KyTHqw6VZON5EK8Rw078R61AInwBQkUXpOLRp3gqex9WhgUVW9JLirOuq50goNEhvmTI
-         5FcfHjuJ21XgJZGx6S57pVcIeUpPnTaXbcKHlWaXXHf0cD9Z2jwc2AeaMSGMf/DdOZW/
-         slWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUS/1qZBc0VcS5kYuIYfBpVA6+aqTKR4YXSQdqRLFtOaUzsNPvA5qUIEuFGZTWy5QvHctrqPKdDOBsPBLo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOBuHAEQfGqziZKHI3vN5a8Qn72qTD1yPFkIEpfxDnVSwvC2B2
-	3r1z0OqnEoUg7oUsYn5c1ERbrJlsAWeVM7FLm6gYAe8DDsAweZLO+b94ml5g
-X-Google-Smtp-Source: AGHT+IFkSYFW3H0yzZpJUoxdGYcYZw5XTH+EB3G6HKRocpBaJ07TW8MdTpHXteUVupjlD0S9jkfXdw==
-X-Received: by 2002:a5d:62ce:0:b0:37c:c628:51bc with SMTP id ffacd0b85a97d-37cfba19bf7mr599529f8f.57.1727831303830;
-        Tue, 01 Oct 2024 18:08:23 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-325d-7a87-742c-96fa.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:325d:7a87:742c:96fa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd56e89b4sm12881345f8f.53.2024.10.01.18.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 18:08:22 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 02 Oct 2024 03:08:11 +0200
-Subject: [PATCH 4/4] hwmon: (max1668) Add missing dependency on REGMAP_I2C
+        bh=MdWuSwkybXUYj063xEzsz/V8JSIpC4VUKS6xkG8i7Ek=;
+        b=GXfSO1QsBLnR9kGyZrRx52kvgU50/CdqG+jtke5SOqMK3TNVpJ1FLwaQoGczm6o9u/
+         s5SRvxvEUXjQAjH1LOZNxpO0F5t3BrMYUeND9rBtcSMd/aTUj4wEcs32jo8CKXxThy3n
+         NXppUS5RHsAA3b5msDlpXxKoaZgdU82MYga/VDnHPsa9JVB599R2pOtzbpv6I9BRFNuB
+         4t0fnE7/l8Czgl/OrLBPQysJWVKY85MDK2UrvQAvCZYZ3aITKvo6j9eC3a/Bf2c6Vh4A
+         SD4eoy8PskJcqe6WdGBhxL2GP9j1XivDkByVLkE94NsTQtLafwtYbyqJ9X0yWAJIlGM/
+         0g4A==
+X-Forwarded-Encrypted: i=1; AJvYcCU123Z7ei1Gkr8Fa7t7BLMPJ5A9XARgLRtRTZ7wRWAg3ddStj2574K+PnApXA5X0z/xxqSmnohWC3H6@vger.kernel.org, AJvYcCUE8of2zfhK7V8hq9pponsnv84GQqvsvuJRoYmVNfWYOb/UIpMpPD7WgWrafC7clHtB5vXSUUAdNqxNfg3S@vger.kernel.org, AJvYcCUOC8Nw/mg2IZGqrxrVUR/7uvqlj2QlShCYtMVpJTSrLPJ6KCvCbqOq//UBOIj2x0skigDdft/K70dUgBo=@vger.kernel.org, AJvYcCWq0ciaq4zpb/HAxLCkhhPUWdCQqSAAA+x8wvA3+3+HwIoBjdhRUrR0ANBAuTYtaYMfMeQ8CX+5+O+N@vger.kernel.org, AJvYcCX0d/q6BCpJB/Uo+566peewZYkwsJhVgjLUKRhe0v8/NNvc0R6bFEr0txeUY2Xdk672wf0F95KIWRSDFZW32hqDPes=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHfGzxoSli5KE1uaSN4IQt1SHbGPATTrjSGTzRYVnL9OYQev5i
+	GPrd7ySAAJ4iuckUcdHSEy3mjO67ZNvhYZx5eHwBiKtH/auAUY6om8DO3toVeggw1lNIPC1FSEo
+	4yWhGm/GuppTi/oEhprJxDUGU1tU=
+X-Google-Smtp-Source: AGHT+IHo5N+PmxexOIAZW9wy2hU9cuTy5rl7qjrkN/SU1uBB8FGlt4ZcL2RSEzaIwqP4nFhi4TRSgJ7Nzvn0kPnXYJQ=
+X-Received: by 2002:a17:907:6e90:b0:a7a:aa35:408c with SMTP id
+ a640c23a62f3a-a98f82008d3mr181880466b.8.1727851338455; Tue, 01 Oct 2024
+ 23:42:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241002-hwmon-select-regmap-v1-4-548d03268934@gmail.com>
-References: <20241002-hwmon-select-regmap-v1-0-548d03268934@gmail.com>
-In-Reply-To: <20241002-hwmon-select-regmap-v1-0-548d03268934@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727831289; l=780;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=snkJ3nSwFJwgGXH0ji1lCUUWy2XEwb+19koyTKj22uc=;
- b=3uLw60XOrMtCFa39EYNDnfeUWu6WnAW/sQ5G0AGgSD1sEq9eoBNZtGZkdfFRuryuG5IAExJdY
- ipFcpS4vNinCnTK4OXcpkxgCRTtaC4WICAQqaLRePjXVoYuP31kPGvi
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+References: <20240925031131.14645-1-yikai.tsai.wiwynn@gmail.com> <e2sceba6setxuvm5ztygqo5eoihjbts7gl4pfewjunepfhllhq@oblkbeb4wfym>
+In-Reply-To: <e2sceba6setxuvm5ztygqo5eoihjbts7gl4pfewjunepfhllhq@oblkbeb4wfym>
+From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
+Date: Wed, 2 Oct 2024 14:42:08 +0800
+Message-ID: <CAL5-g4VE9kzXewhqOFetuyjZdh-OnaisyProEujuW9dbVCWTmA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] hwmon: (isl28022) new driver for ISL28022 power monitor
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: patrick@stwcx.xyz, Magnus Damm <magnus.damm@gmail.com>, 
+	=?UTF-8?Q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This driver requires REGMAP_I2C to be selected in order to get access to
-regmap_config, regmap_bus, and devm_regmap_init_i2c.
-Add the missing dependency.
+Hi Geert, Krzysztof,
 
-Fixes: 021730acbca6 ("hwmon: (max1668) Convert to use regmap")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/hwmon/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your feedback. I will fix them.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 5152c71402ca..92d051dba52f 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1149,6 +1149,7 @@ config SENSORS_MAX1619
- config SENSORS_MAX1668
- 	tristate "Maxim MAX1668 and compatibles"
- 	depends on I2C
-+	select REGMAP_I2C
- 	help
- 	  If you say yes here you get support for MAX1668, MAX1989 and
- 	  MAX1805 chips.
 
--- 
-2.43.0
+Best regards,
+Yikai
 
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2024=E5=B9=B49=E6=9C=8825=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:35=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Wed, Sep 25, 2024 at 11:11:26AM +0800, Yikai Tsai wrote:
+> > Driver for Renesas ISL28022 power monitor chip.
+> > Found e.g. on Ubiquiti Edgerouter ER-6P
+> >
+> > v7: review comments and code refactoring
+>
+> What exactly happened? That's too vague.
+>
+> Best regards,
+> Krzysztof
+>
