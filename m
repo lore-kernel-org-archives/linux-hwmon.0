@@ -1,180 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1C264A;
-	Thu,  3 Oct 2024 00:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436415E86
+	for <linux-hwmon@vger.kernel.org>; Thu,  3 Oct 2024 02:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727914619; cv=none; b=npU24QZT1SHf/BdiSyxiyTkWUzkAvdbzRi3yz8F9S8CfDkP6nVxHchZW9+AkJALUzzANepkxJPhr4ljadxsyLkNQlTAT7C0RZQe3qoF7xNm0fQW1Aq1Vwyixa/fsL1nLGIWEEa3U0w8o76NKSyy2g48gIeuKoxuTaiEE5jYUk/s=
+	t=1727923254; cv=none; b=sFj9tNdwREf1c3J2p/uQiuy/n3A3BHZjN6A+NnaJJ+6CH4gYXdgCpQbob+H2BQWtjnwpbiC3jymjgPRG+s8VycG3OIxwoNJvQ77vNS+E5o3rGVWFnKk4vexeyO0RFxjUXmSQFsFutlYWX1cihWMdKJ81g7a2Ag3EdxVpfj8Gzrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727914619; c=relaxed/simple;
-	bh=t783UiUjich5X9sa7ujzAR59XVGTzDqvLbn/mKTpiX0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Kv5qYDtcKUg+EvnWQM1MQDjo6glTf3dBF+0dW4b1i2MzL1P5AeYOzlWnROgy4jKcBIQjHqzGrjaMhTe6vgaO4TOBSMR8jYwgeSbIdKmhxPSnJC08XDQFNPJpTMreRPIxOWRXaP+n7hskPkbX2E/R9MYjwzde+GF2l7ULZE6ShVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKI78aLz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1727923254; c=relaxed/simple;
+	bh=Fmq2waQj7nzroCd6luuY5Ts0j5B+I/7HYU6Cgp/HuSE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RbLS3wvxLW/kSA/5Iu/2ja3jzfm4eLBY6gr/odcu/Qqw9d/47gy7d31qPebNWUJXk6zEUI0glW7VYrVD/cOHwpg2Xxg6qKub5+Li58hNnxNwIDgjozXeLaRfU4q8P0MOnIt/0ceWC3jugBkXne9Bjzmo2iD8KaGKfWjBjAzfato=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E2QJQN+g; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKI78aLz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2QJQN+g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727914618; x=1759450618;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=t783UiUjich5X9sa7ujzAR59XVGTzDqvLbn/mKTpiX0=;
-  b=oKI78aLzF16dDX65WzG8yegrEJ21c6mERrt2HiBlZ9xH9EjwsVrCHn0M
-   U7j9ae8204ICw7+DLPrhkXm+Wz5i6PV/34Nft+LjS/9zmTOP+XRh/stju
-   HtSBRlNmEWiZUog91EYDzs10aWHz0jO+JehYl/apKZm38ZlK/3DDQX+zG
-   L8hyDh77nyU6ZCBl0VjO0JkxFuL+GUzTLGIQN2oJkg2vNsglhMzjctTe6
-   kaOUdyMWkcESN5BMIWyBs+TSjazOZ3E73aRoUsYhVFtDR/Zb5E0sv0k/j
-   Mb7Kl7lT3D2kNBHgkNrN+LgfqctSTjk+dflgmpHF2wHcmipMkpiZAOFmF
+  t=1727923252; x=1759459252;
+  h=date:from:to:cc:subject:message-id;
+  bh=Fmq2waQj7nzroCd6luuY5Ts0j5B+I/7HYU6Cgp/HuSE=;
+  b=E2QJQN+g9SmPSo+963kaiDtMZSZzRIDxiWHDz2K4uneTajsTm/ZyzbYy
+   SnkRVo7zSThbFbuRr9ZYw0Jg2+3VB4OpmD2+DPKJGdUJV/LpJ/Y7EJbkG
+   rgywhLboU7+An4cc5722vgMiyW7CTV5AxXrxBvde2phr10dfGmCJ0eQRT
+   e4YhPCo8RKrC0hFQjaqNhpfyu/2J6PdEmSd5z3yJujBRC+hPk4eVzbN1h
+   EDQYPzJwozjcoh3X+jCgyc2NYZLsgY1tuRZixI1xWtFNuHQ60lVGtbI+r
+   13msxEa7c1lIntsD7F5fs53tWLWKPH159Say/0MrB5VNGDsylFTH5ZRk5
    Q==;
-X-CSE-ConnectionGUID: PnbsB371S06a2oHkoLZoKw==
-X-CSE-MsgGUID: gce1vaCFSNezU/I/vkJXKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="38483210"
+X-CSE-ConnectionGUID: 4L9tjYa3S32mdGOc00uzvw==
+X-CSE-MsgGUID: dAEgybE9QPCPxMj/W+5p5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="44635682"
 X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="38483210"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 17:16:57 -0700
-X-CSE-ConnectionGUID: Uj2jFyvbQ+Og+6tBwNr1TA==
-X-CSE-MsgGUID: 5JQtABJwRCq2sp64ZE4utQ==
+   d="scan'208";a="44635682"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 19:40:52 -0700
+X-CSE-ConnectionGUID: D6ZIG2JkT+O+ZLwqykrrrA==
+X-CSE-MsgGUID: PODC5HstSs6Q24Qf+DfwTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="74419035"
-Received: from spandruv-desk1.amr.corp.intel.com ([10.125.109.106])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 17:16:57 -0700
-Message-ID: <edd074ed88830180527417aa45ff222cbb71c1f2.camel@linux.intel.com>
-Subject: Re: [PATCH v8 1/9] HID: hid-sensor-hub: don't use stale
- platform-data on remove
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, jikos@kernel.org, 
-	jic23@kernel.org
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- jdelvare@suse.com,  linux@roeck-us.net, bentiss@kernel.org,
- dmitry.torokhov@gmail.com, pavel@ucw.cz,  ukleinek@debian.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
- linux-iio@vger.kernel.org, linux-leds@vger.kernel.org
-Date: Wed, 02 Oct 2024 17:16:56 -0700
-In-Reply-To: <20240908210803.3339919-2-heiko@sntech.de>
-References: <20240908210803.3339919-1-heiko@sntech.de>
-	 <20240908210803.3339919-2-heiko@sntech.de>
-Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
- keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
- YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
- y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
- NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
- GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
- TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
- oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
- AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
- b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
- AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
- oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
- UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
- ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
- wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
- NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
- J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
- oOfCQxricddC
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+   d="scan'208";a="74206169"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 02 Oct 2024 19:40:50 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swBlo-000UqU-1d;
+	Thu, 03 Oct 2024 02:40:48 +0000
+Date: Thu, 03 Oct 2024 10:40:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 0667a5e1edfa3681b3c607f15c1c4cbf69bd5873
+Message-ID: <202410031022.XgJN8MDZ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Sun, 2024-09-08 at 23:07 +0200, Heiko Stuebner wrote:
-> The hid-sensor-hub creates the individual device structs and
-> transfers them
-> to the created mfd platform-devices via the platform_data in the
-> mfd_cell.
->=20
-> Before commit e651a1da442a ("HID: hid-sensor-hub: Allow parallel
-> synchronous reads")
-> the sensor-hub was managing access centrally, with one "completion"
-> in the
-> hub's data structure, which needed to be finished on removal at the
-> latest.
->=20
-> The mentioned commit then moved this central management to each hid
-> sensor
-> device, resulting on a completion in each struct
-> hid_sensor_hub_device.
-> The remove procedure was adapted to go through all sensor devices and
-> finish any pending "completion".
->=20
-> What this didn't take into account was, platform_device_add_data()
-> that is
-> used by mfd_add{_hotplug}_devices() does a kmemdup on the submitted
-> platform-data. So the data the platform-device gets is a copy of the
-> original data, meaning that the device worked on a different
-> completion
-> than what sensor_hub_remove() currently wants to access.
->=20
-> To fix that, use device_for_each_child() to go through each child-
-> device
-> similar to how mfd_remove_devices() unregisters the devices later and
-> with that get the live platform_data to finalize the correct
-> completion.
->=20
-> Fixes: e651a1da442a ("HID: hid-sensor-hub: Allow parallel synchronous
-> reads")
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 0667a5e1edfa3681b3c607f15c1c4cbf69bd5873  hwmon: (max31827) Fix spelling errors reported by codespell
 
-> ---
-> =C2=A0drivers/hid/hid-sensor-hub.c | 21 ++++++++++++++-------
-> =C2=A01 file changed, 14 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/hid/hid-sensor-hub.c b/drivers/hid/hid-sensor-
-> hub.c
-> index 26e93a331a51..3cd00afa453a 100644
-> --- a/drivers/hid/hid-sensor-hub.c
-> +++ b/drivers/hid/hid-sensor-hub.c
-> @@ -730,23 +730,30 @@ static int sensor_hub_probe(struct hid_device
-> *hdev,
-> =C2=A0	return ret;
-> =C2=A0}
-> =C2=A0
-> +static int sensor_hub_finalize_pending_fn(struct device *dev, void
-> *data)
-> +{
-> +	struct hid_sensor_hub_device *hsdev =3D dev->platform_data;
-> +
-> +	if (hsdev->pending.status)
-> +		complete(&hsdev->pending.ready);
-> +
-> +	return 0;
-> +}
-> +
-> =C2=A0static void sensor_hub_remove(struct hid_device *hdev)
-> =C2=A0{
-> =C2=A0	struct sensor_hub_data *data =3D hid_get_drvdata(hdev);
-> =C2=A0	unsigned long flags;
-> -	int i;
-> =C2=A0
-> =C2=A0	hid_dbg(hdev, " hardware removed\n");
-> =C2=A0	hid_hw_close(hdev);
-> =C2=A0	hid_hw_stop(hdev);
-> +
-> =C2=A0	spin_lock_irqsave(&data->lock, flags);
-> -	for (i =3D 0; i < data->hid_sensor_client_cnt; ++i) {
-> -		struct hid_sensor_hub_device *hsdev =3D
-> -			data-
-> >hid_sensor_hub_client_devs[i].platform_data;
-> -		if (hsdev->pending.status)
-> -			complete(&hsdev->pending.ready);
-> -	}
-> +	device_for_each_child(&hdev->dev, NULL,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor_hub_finalize_pending_fn);
-> =C2=A0	spin_unlock_irqrestore(&data->lock, flags);
-> +
-> =C2=A0	mfd_remove_devices(&hdev->dev);
-> =C2=A0	mutex_destroy(&data->mutex);
-> =C2=A0}
+elapsed time: 722m
 
+configs tested: 118
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                                 defconfig    gcc-14.1.0
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                                 defconfig    gcc-14.1.0
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+i386                             allmodconfig    clang-18
+i386                              allnoconfig    clang-18
+i386                             allyesconfig    clang-18
+i386        buildonly-randconfig-001-20241003    gcc-12
+i386        buildonly-randconfig-002-20241003    gcc-12
+i386        buildonly-randconfig-003-20241003    gcc-12
+i386        buildonly-randconfig-004-20241003    gcc-12
+i386        buildonly-randconfig-005-20241003    gcc-12
+i386        buildonly-randconfig-006-20241003    gcc-12
+i386                                defconfig    clang-18
+i386                  randconfig-001-20241003    gcc-12
+i386                  randconfig-002-20241003    gcc-12
+i386                  randconfig-003-20241003    gcc-12
+i386                  randconfig-004-20241003    gcc-12
+i386                  randconfig-005-20241003    gcc-12
+i386                  randconfig-006-20241003    gcc-12
+i386                  randconfig-011-20241003    gcc-12
+i386                  randconfig-012-20241003    gcc-12
+i386                  randconfig-013-20241003    gcc-12
+i386                  randconfig-014-20241003    gcc-12
+i386                  randconfig-015-20241003    gcc-12
+i386                  randconfig-016-20241003    gcc-12
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                                defconfig    gcc-14.1.0
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    clang-20
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                          allyesconfig    gcc-14.1.0
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    clang-20
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    gcc-12
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sparc                            allmodconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-18
+x86_64                           allyesconfig    clang-18
+x86_64      buildonly-randconfig-001-20241003    clang-18
+x86_64      buildonly-randconfig-002-20241003    clang-18
+x86_64      buildonly-randconfig-003-20241003    clang-18
+x86_64      buildonly-randconfig-004-20241003    clang-18
+x86_64      buildonly-randconfig-005-20241003    clang-18
+x86_64      buildonly-randconfig-006-20241003    clang-18
+x86_64                              defconfig    clang-18
+x86_64                                  kexec    gcc-12
+x86_64                randconfig-001-20241003    clang-18
+x86_64                randconfig-002-20241003    clang-18
+x86_64                randconfig-003-20241003    clang-18
+x86_64                randconfig-004-20241003    clang-18
+x86_64                randconfig-005-20241003    clang-18
+x86_64                randconfig-006-20241003    clang-18
+x86_64                randconfig-011-20241003    clang-18
+x86_64                randconfig-012-20241003    clang-18
+x86_64                randconfig-013-20241003    clang-18
+x86_64                randconfig-014-20241003    clang-18
+x86_64                randconfig-015-20241003    clang-18
+x86_64                randconfig-016-20241003    clang-18
+x86_64                randconfig-071-20241003    clang-18
+x86_64                randconfig-072-20241003    clang-18
+x86_64                randconfig-073-20241003    clang-18
+x86_64                randconfig-074-20241003    clang-18
+x86_64                randconfig-075-20241003    clang-18
+x86_64                randconfig-076-20241003    clang-18
+x86_64                               rhel-8.3    gcc-12
+x86_64                          rhel-8.3-rust    clang-18
+xtensa                            allnoconfig    gcc-14.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
