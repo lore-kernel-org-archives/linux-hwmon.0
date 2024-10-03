@@ -1,221 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FC51D0DD9;
-	Wed,  2 Oct 2024 15:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1C264A;
+	Thu,  3 Oct 2024 00:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727883344; cv=none; b=RYnwtZjO0O+ZFZUIMbf1jmfQUc0dfaONa8+bKtCihN5Wxxcjc8fqJ6dQjcnNOZa4tcwOpRLHZCVdX00/eDwEopBxoR/kQv4RqUi0qSf9j0JQz8TAUhOvK/L4vJJa8qkxaVnrEfplMPFCqIQrlneHsYjsQBDmnYJ5YnNFh71cByo=
+	t=1727914619; cv=none; b=npU24QZT1SHf/BdiSyxiyTkWUzkAvdbzRi3yz8F9S8CfDkP6nVxHchZW9+AkJALUzzANepkxJPhr4ljadxsyLkNQlTAT7C0RZQe3qoF7xNm0fQW1Aq1Vwyixa/fsL1nLGIWEEa3U0w8o76NKSyy2g48gIeuKoxuTaiEE5jYUk/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727883344; c=relaxed/simple;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQ5iwQ/2ABMp30aiiUKMjLqvalzp4G8Jdu+R3KMqHwN0w+qPsrEDsoL/9TLj34Ri7yvKlnUvxezwlsRR6lhdyVula/HAoJgQ25kff4XkrLPXk1KZ5voP4/O8BQSQ2KIo0/h7AhuDRwJAFibA7JOrJLjebK3/il36ize+xN/IiBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvZ48ukx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727914619; c=relaxed/simple;
+	bh=t783UiUjich5X9sa7ujzAR59XVGTzDqvLbn/mKTpiX0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Kv5qYDtcKUg+EvnWQM1MQDjo6glTf3dBF+0dW4b1i2MzL1P5AeYOzlWnROgy4jKcBIQjHqzGrjaMhTe6vgaO4TOBSMR8jYwgeSbIdKmhxPSnJC08XDQFNPJpTMreRPIxOWRXaP+n7hskPkbX2E/R9MYjwzde+GF2l7ULZE6ShVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKI78aLz; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvZ48ukx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF281C4CECD;
-	Wed,  2 Oct 2024 15:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727883343;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gvZ48ukxkvlA/tROM+XWQCC+GQjn1xdlFnYHeifEYVq3bNZE7U+/awWbv/IXObCLK
-	 Ysc1gbU85mEH1o377fQn2byyXFnnUwqVzaCVMUJDVsA8bKlOmU5vmNabqZmvyRGbGc
-	 X/7kX4t1SPLDknV2pBJAyf8aXxdc31pTUtOn2E1xJQ91H6DmdnOUL0nKg75YA48ga8
-	 /xwVQ+krKvfrEpXXbqzBZXcjjpO8Rpksw4EdnWB1XquWOMs6zS79szHrzEoSX0ZE31
-	 jvaKCO00kXJudpcVy4IoBnDzj6q4gdEc1EpMNZp4UTrHDbHjavRHXl1tGXmhrSbzdl
-	 mkgFXnebCgzIw==
-Date: Wed, 2 Oct 2024 16:35:36 +0100
-From: Lee Jones <lee@kernel.org>
-To: Junhao Xie <bigfoot@classfun.cn>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Sebastian Reichel <sre@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
-Message-ID: <20241002153536.GG7504@google.com>
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-8-bigfoot@classfun.cn>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKI78aLz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727914618; x=1759450618;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=t783UiUjich5X9sa7ujzAR59XVGTzDqvLbn/mKTpiX0=;
+  b=oKI78aLzF16dDX65WzG8yegrEJ21c6mERrt2HiBlZ9xH9EjwsVrCHn0M
+   U7j9ae8204ICw7+DLPrhkXm+Wz5i6PV/34Nft+LjS/9zmTOP+XRh/stju
+   HtSBRlNmEWiZUog91EYDzs10aWHz0jO+JehYl/apKZm38ZlK/3DDQX+zG
+   L8hyDh77nyU6ZCBl0VjO0JkxFuL+GUzTLGIQN2oJkg2vNsglhMzjctTe6
+   kaOUdyMWkcESN5BMIWyBs+TSjazOZ3E73aRoUsYhVFtDR/Zb5E0sv0k/j
+   Mb7Kl7lT3D2kNBHgkNrN+LgfqctSTjk+dflgmpHF2wHcmipMkpiZAOFmF
+   Q==;
+X-CSE-ConnectionGUID: PnbsB371S06a2oHkoLZoKw==
+X-CSE-MsgGUID: gce1vaCFSNezU/I/vkJXKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="38483210"
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="38483210"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 17:16:57 -0700
+X-CSE-ConnectionGUID: Uj2jFyvbQ+Og+6tBwNr1TA==
+X-CSE-MsgGUID: 5JQtABJwRCq2sp64ZE4utQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="74419035"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.125.109.106])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 17:16:57 -0700
+Message-ID: <edd074ed88830180527417aa45ff222cbb71c1f2.camel@linux.intel.com>
+Subject: Re: [PATCH v8 1/9] HID: hid-sensor-hub: don't use stale
+ platform-data on remove
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org, jikos@kernel.org, 
+	jic23@kernel.org
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ jdelvare@suse.com,  linux@roeck-us.net, bentiss@kernel.org,
+ dmitry.torokhov@gmail.com, pavel@ucw.cz,  ukleinek@debian.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-leds@vger.kernel.org
+Date: Wed, 02 Oct 2024 17:16:56 -0700
+In-Reply-To: <20240908210803.3339919-2-heiko@sntech.de>
+References: <20240908210803.3339919-1-heiko@sntech.de>
+	 <20240908210803.3339919-2-heiko@sntech.de>
+Autocrypt: addr=srinivas.pandruvada@linux.intel.com; prefer-encrypt=mutual;
+ keydata=mQGNBGYHNAsBDAC7tv5u9cIsSDvdgBBEDG0/a/nTaC1GXOx5MFNEDL0LWia2p8Asl7igx
+ YrB68fyfPNLSIgtCmps0EbRUkPtoN5/HTbAEZeJUTL8Xdoe6sTywf8/6/DMheEUzprE4Qyjt0HheW
+ y1JGvdOA0f1lkxCnPXeiiDY4FUqQHr3U6X4FPqfrfGlrMmGvntpKzOTutlQl8eSAprtgZ+zm0Jiwq
+ NSiSBOt2SlbkGu9bBYx7mTsrGv+x7x4Ca6/BO9o5dIvwJOcfK/cXC/yxEkr1ajbIUYZFEzQyZQXrT
+ GUGn8j3/cXQgVvMYxrh3pGCq9Q0Q6PAwQYhm97ipXa86GcTpP5B2ip9xclPtDW99sihiL8euTWRfS
+ TUsEI+1YzCyz5DU32w3WiXr3ITicaMV090tMg9phIZsjfFbnR8hY03n0kRNWWFXi/ch2MsZCCqXIB
+ oY/SruNH9Y6mnFKW8HSH762C7On8GXBYJzH6giLGeSsbvis2ZmV/r+LmswwZ6ACcOKLlvvIukAEQE
+ AAbQ5U3Jpbml2YXMgUGFuZHJ1dmFkYSA8c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5j
+ b20+iQHRBBMBCAA7FiEEdki2SeUi0wlk2xcjOqtdDMJyisMFAmYHNAsCGwMFCwkIBwICIgIGFQoJC
+ AsCBBYCAwECHgcCF4AACgkQOqtdDMJyisMobAv+LLYUSKNuWhRN3wS7WocRPCi3tWeBml+qivCwyv
+ oZbmE2LcxYFnkcj6YNoS4N1CHJCr7vwefWTzoKTTDYqz3Ma0D0SbR1p/dH0nDgN34y41HpIHf0tx0
+ UxGMgOWJAInq3A7/mNkoLQQ3D5siG39X3bh9Ecg0LhMpYwP/AYsd8X1ypCWgo8SE0J/6XX/HXop2a
+ ivimve15VklMhyuu2dNWDIyF2cWz6urHV4jmxT/wUGBdq5j87vrJhLXeosueRjGJb8/xzl34iYv08
+ wOB0fP+Ox5m0t9N5yZCbcaQug3hSlgp9hittYRgIK4GwZtNO11bOzeCEMk+xFYUoa5V8JWK9/vxrx
+ NZEn58vMJ/nxoJzkb++iV7KBtsqErbs5iDwFln/TRJAQDYrtHJKLLFB9BGUDuaBOmFummR70Rbo55
+ J9fvUHc2O70qteKOt5A0zv7G8uUdIaaUHrT+VOS7o+MrbPQcSk+bl81L2R7TfWViCmKQ60sD3M90Y
+ oOfCQxricddC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240906093630.2428329-8-bigfoot@classfun.cn>
 
-On Fri, 06 Sep 2024, Junhao Xie wrote:
+On Sun, 2024-09-08 at 23:07 +0200, Heiko Stuebner wrote:
+> The hid-sensor-hub creates the individual device structs and
+> transfers them
+> to the created mfd platform-devices via the platform_data in the
+> mfd_cell.
+>=20
+> Before commit e651a1da442a ("HID: hid-sensor-hub: Allow parallel
+> synchronous reads")
+> the sensor-hub was managing access centrally, with one "completion"
+> in the
+> hub's data structure, which needed to be finished on removal at the
+> latest.
+>=20
+> The mentioned commit then moved this central management to each hid
+> sensor
+> device, resulting on a completion in each struct
+> hid_sensor_hub_device.
+> The remove procedure was adapted to go through all sensor devices and
+> finish any pending "completion".
+>=20
+> What this didn't take into account was, platform_device_add_data()
+> that is
+> used by mfd_add{_hotplug}_devices() does a kmemdup on the submitted
+> platform-data. So the data the platform-device gets is a copy of the
+> original data, meaning that the device worked on a different
+> completion
+> than what sensor_hub_remove() currently wants to access.
+>=20
+> To fix that, use device_for_each_child() to go through each child-
+> device
+> similar to how mfd_remove_devices() unregisters the devices later and
+> with that get the live platform_data to finalize the correct
+> completion.
+>=20
+> Fixes: e651a1da442a ("HID: hid-sensor-hub: Allow parallel synchronous
+> reads")
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-> Photonicat has a network status LED that can be controlled by system.
-> The LED status can be set through command 0x19.
-> 
-> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 > ---
->  drivers/leds/Kconfig           | 11 +++++
->  drivers/leds/Makefile          |  1 +
->  drivers/leds/leds-photonicat.c | 75 ++++++++++++++++++++++++++++++++++
->  3 files changed, 87 insertions(+)
->  create mode 100644 drivers/leds/leds-photonicat.c
-> 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 8d9d8da376e4..539adb5944e6 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -381,6 +381,17 @@ config LEDS_PCA9532_GPIO
->  	  To use a pin as gpio pca9532_type in pca9532_platform data needs to
->  	  set to PCA9532_TYPE_GPIO.
->  
-> +config LEDS_PHOTONICAT_PMU
-> +	tristate "LED Support for Photonicat PMU"
-> +	depends on LEDS_CLASS
-> +	depends on MFD_PHOTONICAT_PMU
-> +	help
-> +	  Photonicat has a network status LED that can be controlled by system,
-
-"the system"
-
-> +	  this option enables support for LEDs connected to the Photonicat PMU.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called leds-photonicat.
-> +
->  config LEDS_GPIO
->  	tristate "LED Support for GPIO connected LEDs"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index 18afbb5a23ee..dcd5312aee12 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -76,6 +76,7 @@ obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
->  obj-$(CONFIG_LEDS_PCA955X)		+= leds-pca955x.o
->  obj-$(CONFIG_LEDS_PCA963X)		+= leds-pca963x.o
->  obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
-> +obj-$(CONFIG_LEDS_PHOTONICAT_PMU)	+= leds-photonicat.o
->  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
->  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
->  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
-> diff --git a/drivers/leds/leds-photonicat.c b/drivers/leds/leds-photonicat.c
-> new file mode 100644
-> index 000000000000..3aa5ce525b83
-> --- /dev/null
-> +++ b/drivers/leds/leds-photonicat.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
-> + */
-> +
-> +#include <linux/mfd/photonicat-pmu.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/leds.h>
-
-Alphabetical.
-
-> +struct pcat_leds {
-> +	struct device *dev;
-
-Where is this used?
-
-> +	struct pcat_pmu *pmu;
-
-Why do you need to store this?
-
-Can't you get this at the call-site by:
-
-  dev_get_drvdata(cdev->dev->parent)
-
-> +	struct led_classdev cdev;
-> +};
-> +
-> +static int pcat_led_status_set(struct led_classdev *cdev,
-> +			       enum led_brightness brightness)
+> =C2=A0drivers/hid/hid-sensor-hub.c | 21 ++++++++++++++-------
+> =C2=A01 file changed, 14 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/hid/hid-sensor-hub.c b/drivers/hid/hid-sensor-
+> hub.c
+> index 26e93a331a51..3cd00afa453a 100644
+> --- a/drivers/hid/hid-sensor-hub.c
+> +++ b/drivers/hid/hid-sensor-hub.c
+> @@ -730,23 +730,30 @@ static int sensor_hub_probe(struct hid_device
+> *hdev,
+> =C2=A0	return ret;
+> =C2=A0}
+> =C2=A0
+> +static int sensor_hub_finalize_pending_fn(struct device *dev, void
+> *data)
 > +{
-> +	struct pcat_leds *leds = container_of(cdev, struct pcat_leds, cdev);
-> +	struct pcat_data_cmd_led_setup setup = { 0, 0, 0 };
+> +	struct hid_sensor_hub_device *hsdev =3D dev->platform_data;
 > +
-> +	if (brightness)
-> +		setup.on_time = 100;
-> +	else
-> +		setup.down_time = 100;
-> +	return pcat_pmu_write_data(leds->pmu, PCAT_CMD_NET_STATUS_LED_SETUP,
-> +				   &setup, sizeof(setup));
+> +	if (hsdev->pending.status)
+> +		complete(&hsdev->pending.ready);
+> +
+> +	return 0;
 > +}
 > +
-> +static int pcat_leds_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-
-Small sized variables at the bottom please.
-
-> +	struct device *dev = &pdev->dev;
-> +	struct pcat_leds *leds;
-> +	const char *label;
+> =C2=A0static void sensor_hub_remove(struct hid_device *hdev)
+> =C2=A0{
+> =C2=A0	struct sensor_hub_data *data =3D hid_get_drvdata(hdev);
+> =C2=A0	unsigned long flags;
+> -	int i;
+> =C2=A0
+> =C2=A0	hid_dbg(hdev, " hardware removed\n");
+> =C2=A0	hid_hw_close(hdev);
+> =C2=A0	hid_hw_stop(hdev);
 > +
-> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
-> +	if (!leds)
-> +		return -ENOMEM;
+> =C2=A0	spin_lock_irqsave(&data->lock, flags);
+> -	for (i =3D 0; i < data->hid_sensor_client_cnt; ++i) {
+> -		struct hid_sensor_hub_device *hsdev =3D
+> -			data-
+> >hid_sensor_hub_client_devs[i].platform_data;
+> -		if (hsdev->pending.status)
+> -			complete(&hsdev->pending.ready);
+> -	}
+> +	device_for_each_child(&hdev->dev, NULL,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor_hub_finalize_pending_fn);
+> =C2=A0	spin_unlock_irqrestore(&data->lock, flags);
 > +
-> +	leds->dev = dev;
+> =C2=A0	mfd_remove_devices(&hdev->dev);
+> =C2=A0	mutex_destroy(&data->mutex);
+> =C2=A0}
 
-Where is this used?
-
-> +	leds->pmu = dev_get_drvdata(dev->parent);
-> +	platform_set_drvdata(pdev, leds);
-
-Where do you platform_get_drvdata()
-
-> +	ret = of_property_read_string(dev->of_node, "label", &label);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "No label property\n");
-> +
-> +	leds->cdev.name = label;
-> +	leds->cdev.max_brightness = 1;
-> +	leds->cdev.brightness_set_blocking = pcat_led_status_set;
-> +
-> +	return devm_led_classdev_register(dev, &leds->cdev);
-> +}
-> +
-> +static const struct of_device_id pcat_leds_dt_ids[] = {
-> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
-
-How many LEDs are there?
-
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, pcat_leds_dt_ids);
-> +
-> +static struct platform_driver pcat_leds_driver = {
-> +	.driver = {
-> +		.name = "photonicat-leds",
-> +		.of_match_table = pcat_leds_dt_ids,
-> +	},
-> +	.probe = pcat_leds_probe,
-> +};
-> +module_platform_driver(pcat_leds_driver);
-> +
-> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
-> +MODULE_DESCRIPTION("Photonicat PMU Status LEDs");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.46.0
-> 
-
--- 
-0)
-Lee Jones [李琼斯]
