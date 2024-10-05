@@ -1,143 +1,404 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCF683CC7;
-	Fri,  4 Oct 2024 21:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA133A8F0
+	for <linux-hwmon@vger.kernel.org>; Sat,  5 Oct 2024 04:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728076980; cv=none; b=u3bKv1pWlLCbRRQhVwNO2ahfWOrQf9klZNKRomRvfU/2+gqDRbfcIo10zZXDkvDr79BsOTjZEkU27in3k1gbhSGLif1t4XGCSozu7xkrlwLbqVm7NG0lGok0PkwTJszl3mYKnayqaifKIbyHVB9eLfnxvvzQKrTuvpPqOAHoGaE=
+	t=1728102227; cv=none; b=WKAfQcgfAfQyKguDMByJYHIO46P0Xm7GXyOgpYepJHzajOjhTD5jHqE2A8eM89KR9vc1XFe4eaFa1E2jfnC8jCK0Op+ppBGXgQPCoN60Oq6RwCiRPjhOXQEzo5UM8XAZV7WJ772vPbz2gEzjovUJKejUfk3y5IYvhsxc8B+BE74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728076980; c=relaxed/simple;
-	bh=/Bwgj2NiJEKINhHaCWqUgXYElRIXX06JKUWfNfW0aKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qnQtUqJXBhrsaecSR79HZxw6U0aNnYMq6Hv0tHUzieLPr9LPdihRBaxymtwhGWuFZaq6cWJ+I3FLfj5YGMahFN9ySSbAOMyztez3qef8UPbRUVOxGRVmpPdhPZzuFxe/LidKhlRAqXcMzcBeUN/IMQ1YH7ZrqJUeeMPqYZyppwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m+Tsf7Uk; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728102227; c=relaxed/simple;
+	bh=PHaHD5j4M9JAcRVknaRM9PA5c+jSdcSMmicA/cZeWDQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EyysU5PFZ24r4B4jKWCXkY3UwfxOV1yLWAlKZUiXfw3Lqhzj+kqYpTq4hQU0EjWsflawnwMdvXGk/yMfNI1q4GSB0MuSpXm2s+o1XgYh2V71K3vCMOrB+GmhgM4qKwMdgXU+5MCMCddRR4bfQUPefJkdXKcax6GkVnBWAaujNqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=e85r8zKn; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m+Tsf7Uk"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71b0722f221so2027959b3a.3;
-        Fri, 04 Oct 2024 14:22:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="e85r8zKn"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5366fd6fdf1so3840217e87.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Oct 2024 21:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728076978; x=1728681778; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcyPwLQaZrfdH9oZC3GWPqmUbPa2QOQqEo2igl7O4f8=;
-        b=m+Tsf7Uk1SKOUsSKYcJ2fUjdMooo97KRgo50Ru+woVELdb1IW2AHrv6SR4AmI80/Gs
-         N0VIMZOFiSJZQGPWDUHTkbp23d/GcFb2AdJH9kbud95bv/iOAjp78JOD4pETqevTkEv6
-         OmxI3kFrAKjJLO6hxv343Q9WMD+i9sAE9IiP2x8fwKE3DsxpQOlrBcl4BbLXeVgXBJNQ
-         dJNuDF5/Gm9qMae6ViWrnsPVvtqbg5pe7N2m4e6JtvoVHLUL6tHqP7C3czhQ6kcP8mXH
-         6T9n8zfG7cfEq0wkVvw0nm7Q1wnYe/SrTUiYcwwHjNsD93gOR4e5KgIf/kdPrxODfTXH
-         lPGQ==
+        d=broadcom.com; s=google; t=1728102223; x=1728707023; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CCWFmAP3D7XA4URpz7xTLDfJnnFmWIGXWuczsWDP7EI=;
+        b=e85r8zKnhmICmBtDTqdYQuGWkiktIp72cDiRsjGrGaBny+OJmgZUgplWR9qd5OPGxU
+         ZVhPN81T+884HJVKOuP9nZyPvLY6DDes1CHL4NK/PqT3joBQH4+k8C6/7nSwXluc43dO
+         ZP0sRNadL0rw4nTjKgbgLtFTJ6fize9uRr720=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728076978; x=1728681778;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zcyPwLQaZrfdH9oZC3GWPqmUbPa2QOQqEo2igl7O4f8=;
-        b=UEeK2JL616+teFISusTJK1NiIJdrxO/FIR0bnwrZ487jtB36BdN47CL/OfqlIIV9Wr
-         Cq7U7wfxUCVcHcLGW9Bz2PqyS0GMDfm5wN+bOUK2XpHas6U/BwKHGQpswpOVmcji5pJk
-         bhuOYI287xy84quo7t4UZakkOojkTQFmjA4fuIuWPTNKX5skM+v1tSqtdNjZMqoECwO+
-         p7iJSN6eY0B/jImYxBxYhU0zQSI3UecWbfr6lOWXBC8ubkC39cbe6pMAxBdBIbRtVIFz
-         9lIuu9Z7LNeffV/i5WEW87QEAMsKV5oQgqUicR7xMsRB69lP+QFGorVGKWR38BXjYfYt
-         R+kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUA4hi0mU3tzQg/hZ47wqvUPjZTZ9MEjgaLvpZxVwLMqZ+W0OsGVCkXAQfreX1I9aL5bHKosJrSMMUrjg==@vger.kernel.org, AJvYcCVPVGzCmRl7CvWaTjpNfQyfAFPZVI4/2OwJ6m1bR8xdFpuA3+/3j+Mepc/kiRMeFVHmh4jCaB6/3U5pmGOv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYoHnRsaNglSBR0fOGKO1uJ7/VdMdTNRpLeSZf+OYct59GSYfu
-	wFGzUu5Bh3uITTEHK8BpSnUhjFClFloA/T1pdmP3dXJWJWJ3D2eYvPa8Gw==
-X-Google-Smtp-Source: AGHT+IGzNJRbeA0RJAZH0p6NXzLydsKCw+oV8UXo+pd20sR6ZvR1sVA1jeM1y4U42Cdl+Nj4UiVNlw==
-X-Received: by 2002:a05:6a20:c909:b0:1d5:10d7:2020 with SMTP id adf61e73a8af0-1d6dfae315dmr4801378637.41.1728076978314;
-        Fri, 04 Oct 2024 14:22:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9f6c4cdfdsm432789a12.87.2024.10.04.14.22.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Oct 2024 14:22:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d220f9d1-54df-4d4e-b90f-69bc5de5a22f@roeck-us.net>
-Date: Fri, 4 Oct 2024 14:22:55 -0700
+        d=1e100.net; s=20230601; t=1728102223; x=1728707023;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CCWFmAP3D7XA4URpz7xTLDfJnnFmWIGXWuczsWDP7EI=;
+        b=V9JKwJ9JLGNg+umCFtxHDOpEZOpmctpiYKJb/VRIppXGSrgsPTZf1eGfT/b/oQDvNx
+         QXd4Xg7ak7sIhb80PnWS4MslhjYk52yUHTTpmDwcbp4xg8mQ3MAjRl1R6urAvbzlfQXO
+         JpuRXG31kqFvxYVcqWzMlZgqn7FXxf+rJB75trfYTDlBVRGBU32nolGOGSjiagtBGEG4
+         F/3pQmutSOKk3gE7TB60zVob2WgZsQebdgcP2JldD3zuJRPTeEmi0GoGzv+V33sPVNRR
+         uKsF6lh6j5csmQLguhE/g4rEsm9lxihH0zu5ovWYLq9MMh14s4OGY2ID+vju0+LQvReJ
+         ryZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMKzB8p0IWCBM4WLuE2dk7+tbxE8RCDZXlrHwreUTfwQEuC3AetNGc11vjId1NLyFRxDA86+QZTpYh+w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5QNpvcwv26lZXpse+TnprOYzG2cHI9u2tkI2N8JRwbH8vNrT6
+	MbxbHLYsWlUCVvi4iG6XiidfzbqA+QiVJtyn0zjZM0A5yoMsuLyIuNKmkcrqnM29YvTtTVaXCOV
+	qyjpZLXb11NdMZH8nai5p9oD5fmNM+1ejvZVV
+X-Google-Smtp-Source: AGHT+IFcTRMTcHjGUNjOo2TbAvfaLyRY77q7zaPrDz6VjK0/ZatYp0EdmgjZmmdDQgYuK2AKSVETssloCvsVEDjHU1k=
+X-Received: by 2002:a05:6512:2315:b0:539:94cf:e327 with SMTP id
+ 2adb3069b0e04-539ab8ae2b0mr2624151e87.37.1728102223018; Fri, 04 Oct 2024
+ 21:23:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: hwmon: pmbus: Question about header files
-To: Vasileios Amoiridis <vassilisamir@gmail.com>, jdelvare@suse.com
-Cc: vasileios.amoiridis@cern.ch, federico.vaga@cern.ch,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241003223110.17166-1-vassilisamir@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241003223110.17166-1-vassilisamir@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241004204953.2223536-1-sanman.p211993@gmail.com>
+In-Reply-To: <20241004204953.2223536-1-sanman.p211993@gmail.com>
+From: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
+Date: Sat, 5 Oct 2024 09:53:30 +0530
+Message-ID: <CAH-L+nO6U12TRCUWNxjAFTSwaMfeadt+iHYtYFZHVJFOZH0sdw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3] eth: fbnic: Add hardware monitoring support
+ via HWMON interface
+To: Sanman Pradhan <sanman.p211993@gmail.com>
+Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org, 
+	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net, horms@kernel.org, 
+	mohsin.bashr@gmail.com, sanmanpradhan@meta.com, andrew@lunn.ch, 
+	linux-hwmon@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000002ac6f70623b32701"
 
-On 10/3/24 15:31, Vasileios Amoiridis wrote:
-> Hello hwmon and PMBUS community,
-> 
-> I am currently studying how the PMBUS subsystem works because I am trying to
-> write a driver for a PSU and submit for review. I noticed that the subsystem is
-> quite intelligent and it manages to do most of the stuff in the pmbus_core.c
-> leaving a minimum amount of work to be done in the actual device driver!!
-> 
-> I have a question though, regarding the header files <include/linux/pmbus.h> and
-> <drivers/hwmon/pmbus/pmbus.h>. With my limited experience in kernel development,
-> I would expect that the drivers/hwmon/pmbus/pmbus.h file would include stuff
-> that are used only by the pmbus_core.c/pmbus.c while anything that could be
-> potentially used from the device drivers would go to the include/linux/pmbus.h.
-> 
-> Is my reasoning wrong? What was the reasoning behind the split between those 2
-> files?
-> 
+--0000000000002ac6f70623b32701
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mostly historic. The original idea was to keep platform data in include/linux,
-but at this point that has pretty much no value since all its users are (and
-should be) in drivers/hwmon/pmbus/. Not worth doing anything about.
+Hi Sanman,
 
-Guenter
+It looks like you missed one comment. See in line.
 
+On Sat, Oct 5, 2024 at 2:20=E2=80=AFAM Sanman Pradhan <sanman.p211993@gmail=
+.com> wrote:
+>
+> From: Sanman Pradhan <sanmanpradhan@meta.com>
+>
+> This patch adds support for hardware monitoring to the fbnic driver,
+> allowing for temperature and voltage sensor data to be exposed to
+> userspace via the HWMON interface. The driver registers a HWMON device
+> and provides callbacks for reading sensor data, enabling system
+> admins to monitor the health and operating conditions of fbnic.
+>
+> Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
+>
+> ---
+> v3:
+>   - Add missing "id" initialization in fbnic_hwmon_read
+>   - Change ifm_hwmon_unregister to hwmon_unregister
+>
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20241003173618.2=
+479520-1-sanman.p211993@gmail.com/
+>
+> v1: https://lore.kernel.org/netdev/153c5be4-158e-421a-83a5-5632a9263e87@r=
+oeck-us.net/T/
+>
+> ---
+>  drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
+>  drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
+>  drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
+>  drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |  7 ++
+>  drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  7 +-
+>  5 files changed, 99 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+>
+> diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ether=
+net/meta/fbnic/Makefile
+> index ed4533a73c57..41494022792a 100644
+> --- a/drivers/net/ethernet/meta/fbnic/Makefile
+> +++ b/drivers/net/ethernet/meta/fbnic/Makefile
+> @@ -11,6 +11,7 @@ fbnic-y :=3D fbnic_devlink.o \
+>            fbnic_ethtool.o \
+>            fbnic_fw.o \
+>            fbnic_hw_stats.o \
+> +          fbnic_hwmon.o \
+>            fbnic_irq.o \
+>            fbnic_mac.o \
+>            fbnic_netdev.o \
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethern=
+et/meta/fbnic/fbnic.h
+> index 0f9e8d79461c..2d3aa20bc876 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic.h
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
+> @@ -18,6 +18,7 @@
+>  struct fbnic_dev {
+>         struct device *dev;
+>         struct net_device *netdev;
+> +       struct device *hwmon;
+>
+>         u32 __iomem *uc_addr0;
+>         u32 __iomem *uc_addr4;
+> @@ -127,6 +128,9 @@ void fbnic_devlink_unregister(struct fbnic_dev *fbd);
+>  int fbnic_fw_enable_mbx(struct fbnic_dev *fbd);
+>  void fbnic_fw_disable_mbx(struct fbnic_dev *fbd);
+>
+> +void fbnic_hwmon_register(struct fbnic_dev *fbd);
+> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
+> +
+>  int fbnic_pcs_irq_enable(struct fbnic_dev *fbd);
+>  void fbnic_pcs_irq_disable(struct fbnic_dev *fbd);
+>
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
+ethernet/meta/fbnic/fbnic_hwmon.c
+> new file mode 100644
+> index 000000000000..bcd1086e3768
+> --- /dev/null
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+> @@ -0,0 +1,81 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <linux/hwmon.h>
+> +
+> +#include "fbnic.h"
+> +#include "fbnic_mac.h"
+> +
+> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
+> +{
+> +       if (type =3D=3D hwmon_temp)
+> +               return FBNIC_SENSOR_TEMP;
+> +       if (type =3D=3D hwmon_in)
+> +               return FBNIC_SENSOR_VOLTAGE;
+> +
+> +       return -EOPNOTSUPP;
+> +}
+> +
+> +static umode_t fbnic_hwmon_is_visible(const void *drvdata,
+> +                                     enum hwmon_sensor_types type,
+> +                                     u32 attr, int channel)
+> +{
+> +       if (type =3D=3D hwmon_temp && attr =3D=3D hwmon_temp_input)
+> +               return 0444;
+> +       if (type =3D=3D hwmon_in && attr =3D=3D hwmon_in_input)
+> +               return 0444;
+> +
+> +       return 0;
+> +}
+> +
+> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types =
+type,
+> +                           u32 attr, int channel, long *val)
+> +{
+> +       struct fbnic_dev *fbd =3D dev_get_drvdata(dev);
+> +       const struct fbnic_mac *mac =3D fbd->mac;
+> +       int id;
+> +
+> +       id =3D fbnic_hwmon_sensor_id(type);
+> +       return id < 0 ? id : mac->get_sensor(fbd, id, val);
+> +}
+> +
+> +static const struct hwmon_ops fbnic_hwmon_ops =3D {
+> +       .is_visible =3D fbnic_hwmon_is_visible,
+> +       .read =3D fbnic_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *fbnic_hwmon_info[] =3D {
+> +       HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +       HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+> +       NULL
+> +};
+> +
+> +static const struct hwmon_chip_info fbnic_chip_info =3D {
+> +       .ops =3D &fbnic_hwmon_ops,
+> +       .info =3D fbnic_hwmon_info,
+> +};
+> +
+> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
+> +{
+> +       if (!IS_REACHABLE(CONFIG_HWMON))
+> +               return;
+> +
+> +       fbd->hwmon =3D hwmon_device_register_with_info(fbd->dev, "fbnic",
+> +                                                    fbd, &fbnic_chip_inf=
+o,
+> +                                                    NULL);
+> +       if (IS_ERR(fbd->hwmon)) {
+> +               dev_notice(fbd->dev,
+> +                          "Failed to register hwmon device %pe\n",
+> +                       fbd->hwmon);
+> +               fbd->hwmon =3D NULL;
+> +       }
+> +}
+> +
+> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
+> +{
+> +       if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
+> +               return;
+> +
+> +       hwmon_device_unregister(fbd->hwmon);
+> +       fbd->hwmon =3D NULL;
+> +}
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h b/drivers/net/et=
+hernet/meta/fbnic/fbnic_mac.h
+> index 476239a9d381..05a591653e09 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
+> @@ -47,6 +47,11 @@ enum {
+>  #define FBNIC_LINK_MODE_PAM4   (FBNIC_LINK_50R1)
+>  #define FBNIC_LINK_MODE_MASK   (FBNIC_LINK_AUTO - 1)
+>
+> +enum fbnic_sensor_id {
+> +       FBNIC_SENSOR_TEMP,              /* Temp in millidegrees Centigrad=
+e */
+> +       FBNIC_SENSOR_VOLTAGE,           /* Voltage in millivolts */
+> +};
+> +
+>  /* This structure defines the interface hooks for the MAC. The MAC hooks
+>   * will be configured as a const struct provided with a set of function
+>   * pointers.
+> @@ -83,6 +88,8 @@ struct fbnic_mac {
+>
+>         void (*link_down)(struct fbnic_dev *fbd);
+>         void (*link_up)(struct fbnic_dev *fbd, bool tx_pause, bool rx_pau=
+se);
+> +
+> +       int (*get_sensor)(struct fbnic_dev *fbd, int id, long *val);
+>  };
+>
+>  int fbnic_mac_init(struct fbnic_dev *fbd);
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/et=
+hernet/meta/fbnic/fbnic_pci.c
+> index a4809fe0fc24..debd98ea55e2 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> @@ -289,6 +289,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
+ruct pci_device_id *ent)
+>
+>         fbnic_devlink_register(fbd);
+>
+> +       fbnic_hwmon_register(fbd);
+> +
+>         if (!fbd->dsn) {
+>                 dev_warn(&pdev->dev, "Reading serial number failed\n");
+>                 goto init_failure_mode;
+[Kalesh] You should change this label to "hwmon_unregister" as you
+should unregister hwmon in case of failure here.
+
+> @@ -297,7 +299,7 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
+ruct pci_device_id *ent)
+>         netdev =3D fbnic_netdev_alloc(fbd);
+>         if (!netdev) {
+>                 dev_err(&pdev->dev, "Netdev allocation failed\n");
+> -               goto init_failure_mode;
+> +               goto hwmon_unregister;
+>         }
+>
+>         err =3D fbnic_netdev_register(netdev);
+> @@ -310,6 +312,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
+ruct pci_device_id *ent)
+>
+>  ifm_free_netdev:
+>         fbnic_netdev_free(fbd);
+> +hwmon_unregister:
+> +       fbnic_hwmon_unregister(fbd);
+>  init_failure_mode:
+>         dev_warn(&pdev->dev, "Probe error encountered, entering init fail=
+ure mode. Normal networking functionality will not be available.\n");
+>          /* Always return 0 even on error so devlink is registered to all=
+ow
+> @@ -345,6 +349,7 @@ static void fbnic_remove(struct pci_dev *pdev)
+>                 fbnic_netdev_free(fbd);
+>         }
+>
+> +       fbnic_hwmon_unregister(fbd);
+>         fbnic_devlink_unregister(fbd);
+>         fbnic_fw_disable_mbx(fbd);
+>         fbnic_free_irqs(fbd);
+> --
+> 2.43.5
+>
+
+
+--=20
+Regards,
+Kalesh A P
+
+--0000000000002ac6f70623b32701
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBWowggRSoAMCAQICDDfBRQmwNSI92mit0zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI5NTZaFw0yNTA5MTAwODI5NTZaMIGi
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xHzAdBgNVBAMTFkthbGVzaCBBbmFra3VyIFB1cmF5aWwxMjAw
+BgkqhkiG9w0BCQEWI2thbGVzaC1hbmFra3VyLnB1cmF5aWxAYnJvYWRjb20uY29tMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnv1Reaeezfr6NEmg3xZlh4cz9m7QCN13+j4z1scrX+b
+JfnV8xITT5yvwdQv3R3p7nzD/t29lTRWK3wjodUd2nImo6vBaH3JbDwleIjIWhDXLNZ4u7WIXYwx
+aQ8lYCdKXRsHXgGPY0+zSx9ddpqHZJlHwcvas3oKnQN9WgzZtsM7A8SJefWkNvkcOtef6bL8Ew+3
+FBfXmtsPL9I2vita8gkYzunj9Nu2IM+MnsP7V/+Coy/yZDtFJHp30hDnYGzuOhJchDF9/eASvE8T
+T1xqJODKM9xn5xXB1qezadfdgUs8k8QAYyP/oVBafF9uqDudL6otcBnziyDBQdFCuAQN7wIDAQAB
+o4IB5DCCAeAwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZC
+aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3Iz
+cGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcC
+ARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNV
+HR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNp
+Z24yY2EyMDIwLmNybDAuBgNVHREEJzAlgSNrYWxlc2gtYW5ha2t1ci5wdXJheWlsQGJyb2FkY29t
+LmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGP
+zzAdBgNVHQ4EFgQUI3+tdStI+ABRGSqksMsiCmO9uDAwDQYJKoZIhvcNAQELBQADggEBAGfe1o9b
+4wUud0FMjb/FNdc433meL15npjdYWUeioHdlCGB5UvEaMGu71QysfoDOfUNeyO9YKp0h0fm7clvo
+cBqeWe4CPv9TQbmLEtXKdEpj5kFZBGmav69mGTlu1A9KDQW3y0CDzCPG2Fdm4s73PnkwvemRk9E2
+u9/kcZ8KWVeS+xq+XZ78kGTKQ6Wii3dMK/EHQhnDfidadoN/n+x2ySC8yyDNvy81BocnblQzvbuB
+a30CvRuhokNO6Jzh7ZFtjKVMzYas3oo6HXgA+slRszMu4pc+fRPO41FHjeDM76e6P5OnthhnD+NY
+x6xokUN65DN1bn2MkeNs0nQpizDqd0QxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYD
+VQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25h
+bFNpZ24gMiBDQSAyMDIwAgw3wUUJsDUiPdpordMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcN
+AQkEMSIEID4tH0XwOY8UhRVgVWgQxzOwZealKSKAMKnttrEZsOlaMBgGCSqGSIb3DQEJAzELBgkq
+hkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MTAwNTA0MjM0M1owaQYJKoZIhvcNAQkPMVwwWjAL
+BglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG
+9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBetdFFRfL9
+IuKL71c9LpN2DS3iDnTpTd9Ls/8WQ6NeCmkO8syf/xt2I15pKpcgjRj4glOx3pBWBnrUPnoSKbK7
+gL62TakCnzDLPRRvHRfc9FXBn71VEzdp0udcR9hUe+RvV7VLP43xELsB+DNWRPg3EF+PqlBvvwk7
+ATviUkY/NnyiV1PwS4TX6+BLhI6sKd8rBt2Z5tCZ2/uE0P/JpF7onJ4wqip49l0X6DscxP0s26N6
+58zIV2F0GxvOAwFeVTW2G3exo7TIsZ2YXtKf9m2QV+YB8ds4aD1bCIgn9tll93AdVMjTKvUk4FfM
+wOBZ9EOGMsLMAAZrQbFTPO5mF0vJ
+--0000000000002ac6f70623b32701--
