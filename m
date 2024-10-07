@@ -1,234 +1,202 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C414028EA
-	for <linux-hwmon@vger.kernel.org>; Mon,  7 Oct 2024 09:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3106A1D5CD1;
+	Mon,  7 Oct 2024 18:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728291875; cv=none; b=WvejJ9KksleIJZaW1Ffv+k1Ry7allNLNEn1tekX/4nqAKF+TEFXZVdA6tiKM2SPVIij/e4JzxNxwko/yPB/t+Vp3Wd+g086vKvx57qoPSs3OnFgozd52z7hSzJENTkTzoljcYUL9aRd9oLulQStjaDMqNc2Z4HpfLWC09Zqo8z8=
+	t=1728326057; cv=none; b=rdu2TtIcIt/JWVg5WOe1P39WwNh3HjiM0l0EcGzuH62sBrSSnCOI2GyiuHI01RDjWdWFMxLBGlvz6EmNf/ZdJazVucqhwZNVrpo6rDc/brXu1vytJguUrkx75t71LBloTux1om8aCWBYtz/RLynD9GER87xqK7w0u2r3+eXQqm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728291875; c=relaxed/simple;
-	bh=r4Hefdp7jmqnhB4BcINQYp3uyMwa4Roxp9yO+tqu+pw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I27TdQV2uOLtEus1R6gva+Ze3rb5clEVKJZBBneBz9lIb1+ApnbKf5PmInH/SW6vtKxPnR1xmXeGKBpzy+A2qPyzrP23NkejLXaw9jjizbszfnwi3t80p6K347AOUxYr7jwMbr9C+5c8ac/6D2mCsCjz9EYuazOsDVw720QSwMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=R5AVfZvu; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1728326057; c=relaxed/simple;
+	bh=jNI+TidUFDtFhNS0b2eJLio8CkweC70YVTphaQfuJEU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=Vpr3ZUUl0/TniQan8cJqPD6x3Oz8ybxybNG8fNsR3YC5ZrOrce1ctbzRcxQMLRSKZbWEU1/98H27sEO6E5ZaG00CfJCfEWdnbUJ1oDwlYcL6TrDtxZO1FfCfzRNHTRkd7JfYGm4mPOobBtVKyg3nOsKOuUwvLIJ07aG/IfUylk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UTw4RXAV; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="R5AVfZvu"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cbbb1727eso41822375e9.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 07 Oct 2024 02:04:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UTw4RXAV"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5389e24a4d1so5798820e87.3;
+        Mon, 07 Oct 2024 11:34:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1728291871; x=1728896671; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxQS/l1S5f4q/J7Eu+WPkU1XrzUO7pYeH0O4sjkh4Jc=;
-        b=R5AVfZvuKxt9cH9vYl+8OUpWwsnt09QomoXmAFZ2+H5Vuo+eBVD/4ZfjzwZ0AqRdHP
-         3P8HxWmhjdxxopZHQ/Us95v+jurGNUtob/pnBm6moJsc0FH3AJ8NFrS5nyv/ZeZe0E+V
-         kbX4bdCGa7lS6ndwSlftrr1RcYwaO3XopUcneb9TTNMEa21j+lmtq5GS/TDXLg9PjjxC
-         SF//5cUtDDixb4EzESsM0NOoFHFiERfqfg1U5Kj8klYjQEe+7DwKaGssSglae/R7w1fW
-         QdGP2+9Jh7zF3pxTfp1vEkJURp7fcVd3Zkbdx7SJgNpiGKYmc4va3MWdyqVuMvah/szl
-         FeYw==
+        d=gmail.com; s=20230601; t=1728326054; x=1728930854; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dO8DmCF1ZmLSeDrY9cPbpgugcDiKxCdJ592xu9WHdcI=;
+        b=UTw4RXAVsF8zYgUsor0aEQ32FFXenYoecAPtVoKNLt7AVswZlFR6GEY/WQ3W29VuOh
+         WbBoSkDM2WVatWkOu7wRay3LLOZ1ENuiDXDcuKLddX04wek5DwlGCnSGwbmM/ugE4cdD
+         xl60aTJUq2MCnpS1mPgnvkiaWyAhHjASNJywAyfcbe7VY9HU4/q0dI19FzJl3JU4w/JL
+         pDq8QhxiZlpF3AZJIB8Ow5btbqEY7BrbM0GtPPgszFYDBXmpJKDRf9I2H35fXDxemQKM
+         3NBj0h9DrHNdZndaRHqHLTJvdWH6sh3k1fjO9JZVBucxOL+wJlnSRUAVuLNi3NLAfyKX
+         AjYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728291871; x=1728896671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VxQS/l1S5f4q/J7Eu+WPkU1XrzUO7pYeH0O4sjkh4Jc=;
-        b=EvaTd+3kxbSkac3n5D3btCwQdxPsORXxw1AM7VrwieBojZw5aRRJps/tZmLm9T0SAn
-         31sIM3Uvo+/YlJPnVyeb4q0AH/+T1CGPBASbCnvgG5DSETvCLmYcD794NLW/n15ZZ6cQ
-         KpQX7vynTBHt7SZnf8KHFhw5W80yZtj7528wAmaGl7vFUtZfIslAx8qceEopzdQP2/OO
-         CkocWmdHybcu6tOSL40kp4CD1PXBg1ZKvCMAtWfpp/fnrwpwLC+M9ZsfoJNXD+FMpSPV
-         SHnj3u1XNvrrYkHrm1TMlDyLgE7vQtZR9Y2Hyj+7alNXDvnHj8V0xCbeUz9pgs1sJ9J3
-         OoYg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/VFOcIQ7Dhm8IBd93VEGyBtxgNm/k/CGswzfDcPGIIDa2ScZRzgkfVxXrrAWxMrq8tqOxRJB9NjXzzg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVzpNYeLUhv/ZuS6Fx04r/eZxx1pUcKmhloMxX4R949nLUI6nJ
-	SY9W6AnVMt0Y3uRMKH+VoDeML9qXIc6pN5ySReJ0jniQxjlA9ccuruBSBerXZKA=
-X-Google-Smtp-Source: AGHT+IHu1e2HthveWdVl2pRLqlE63KKxY9R4TlkpOp7LjjomIa4wkuoqQajX4hFx9XtzyKJ8HYywvg==
-X-Received: by 2002:a05:600c:1907:b0:428:e866:3933 with SMTP id 5b1f17b1804b1-42f85ae9d2bmr91093225e9.22.1728291871055;
-        Mon, 07 Oct 2024 02:04:31 -0700 (PDT)
-Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89eda21esm68453185e9.46.2024.10.07.02.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 02:04:30 -0700 (PDT)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: Naresh Solanki <naresh.solanki@9elements.com>
-Subject: [RESEND PATCH v2] hwmon: (max6639) : Configure based on DT property
-Date: Mon,  7 Oct 2024 14:34:24 +0530
-Message-ID: <20241007090426.811736-1-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
+        d=1e100.net; s=20230601; t=1728326054; x=1728930854;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dO8DmCF1ZmLSeDrY9cPbpgugcDiKxCdJ592xu9WHdcI=;
+        b=iI1NyRFvwCc0SQhaxCsNeS6szzCEP/w7JIW7D5QZgm2c1Bu0CNXx5YiKwX26uT0NUc
+         59SrAtVl5xghkfviepyepYGIydbFzLstHqhScqTPw+7RyUFXBExQuJQegeh30IpdY9x2
+         frqGQT056OzSJpDR6AFoGpaKJinO/QV1KVwkNrypZgoCniobkG9E+HdcVeNgfyDn1kBq
+         CCttkItztHCF61AXXlIyznHjNXev3qKx3zYy9ruRCMu9bmDbrkWMELJBi6QSebpRWQ3v
+         iquqJa7gYSJhMrDEWz5wBjHuebkNMblLZs5PWGWUn8n/4q+1bhctQahHpc1Jotl3hSQF
+         DBNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUB+N4rALD689R75zIqYm3tTHXBqfbFxcysnbmmonySmdOtkQoeybXDudd01CuYqXPE/kKnB3/V1wwGHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQkjfGXaLQfSmjvXCU8+TRuTaADaVAtUXcYuuFSoP/Z1vwKObL
+	2Xgr3GY3D9SkXo8Ox4lTaWQFgwJQ8nAcaGR2IHEvGUuaBcMokN5vH49iLg==
+X-Google-Smtp-Source: AGHT+IHVnqlhUAvuG4dqmwDdBCX80tBEfkMiJ9w0UoxTBmUTR9IB7lYywyCBOrJ5q3nSrsrNjyesuA==
+X-Received: by 2002:a05:6512:3b21:b0:535:45d2:abf0 with SMTP id 2adb3069b0e04-539ab8adcb6mr6017463e87.39.1728326054077;
+        Mon, 07 Oct 2024 11:34:14 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:a12d:4f00:a884:c611:9e1:3345? (dynamic-2a02-3100-a12d-4f00-a884-c611-09e1-3345.310.pool.telefonica.de. [2a02:3100:a12d:4f00:a884:c611:9e1:3345])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a99309aa6afsm400953766b.112.2024.10.07.11.34.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Oct 2024 11:34:13 -0700 (PDT)
+Message-ID: <f1658894-4c46-447a-80e6-153c8b788d71@gmail.com>
+Date: Mon, 7 Oct 2024 20:34:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH net-next v2] r8169: add support for the temperature sensor
+ being available from RTL8125B
+To: Realtek linux nic maintainers <nic_swsd@realtek.com>,
+ Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+ David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Content-Language: en-US
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Remove platform data & initialize with defaults
-configuration & overwrite based on DT properties.
+This adds support for the temperature sensor being available from
+RTL8125B. Register information was taken from r8125 vendor driver.
 
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-Changes in V2:
-- Allow initializing the driver with defaults & overrid based on DT
-  properties if specified.
-- Remove unrelated changes.
-- Optimise ppr check to remove unacceptable range.
+v2:
+- don't omit identifiers in definition of r8169_hwmon_is_visible()
 ---
- drivers/hwmon/max6639.c               | 85 +++++++++++++++++++--------
- include/linux/platform_data/max6639.h | 15 -----
- 2 files changed, 62 insertions(+), 38 deletions(-)
- delete mode 100644 include/linux/platform_data/max6639.h
+ drivers/net/ethernet/realtek/r8169_main.c | 44 +++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index c955b0f3a8d3..6eacb5aed96d 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -19,7 +19,6 @@
- #include <linux/hwmon-sysfs.h>
- #include <linux/err.h>
- #include <linux/mutex.h>
--#include <linux/platform_data/max6639.h>
- #include <linux/regmap.h>
- #include <linux/util_macros.h>
- 
-@@ -531,14 +530,51 @@ static int rpm_range_to_reg(int range)
- 	return 1; /* default: 4000 RPM */
+diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+index 305ec19cc..6a9259d85 100644
+--- a/drivers/net/ethernet/realtek/r8169_main.c
++++ b/drivers/net/ethernet/realtek/r8169_main.c
+@@ -16,6 +16,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/ethtool.h>
++#include <linux/hwmon.h>
+ #include <linux/phy.h>
+ #include <linux/if_vlan.h>
+ #include <linux/in.h>
+@@ -5363,6 +5364,43 @@ static bool rtl_aspm_is_safe(struct rtl8169_private *tp)
+ 	return false;
  }
  
-+static int max6639_probe_child_from_dt(struct i2c_client *client,
-+				       struct device_node *child,
-+				       struct max6639_data *data)
-+
++static umode_t r8169_hwmon_is_visible(const void *drvdata,
++				      enum hwmon_sensor_types type,
++				      u32 attr, int channel)
 +{
-+	struct device *dev = &client->dev;
-+	u32 i;
-+	int err, val;
++	return 0444;
++}
 +
-+	err = of_property_read_u32(child, "reg", &i);
-+	if (err) {
-+		dev_err(dev, "missing reg property of %pOFn\n", child);
-+		return err;
-+	}
++static int r8169_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	struct rtl8169_private *tp = dev_get_drvdata(dev);
++	int val_raw;
 +
-+	if (i > 1) {
-+		dev_err(dev, "Invalid fan index reg %d\n", i);
-+		return -EINVAL;
-+	}
++	val_raw = phy_read_paged(tp->phydev, 0xbd8, 0x12) & 0x3ff;
++	if (val_raw >= 512)
++		val_raw -= 1024;
 +
-+	err = of_property_read_u32(child, "pulses-per-revolution", &val);
-+
-+	if (!err) {
-+		if (val < 1 || val > 5) {
-+			dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val, child);
-+			return -EINVAL;
-+		}
-+		data->ppr[i] = val;
-+	}
-+
-+	err = of_property_read_u32(child, "max-rpm", &val);
-+
-+	if (!err)
-+		data->rpm_range[i] = rpm_range_to_reg(val);
++	*val = 1000 * val_raw / 2;
 +
 +	return 0;
 +}
 +
- static int max6639_init_client(struct i2c_client *client,
- 			       struct max6639_data *data)
++static const struct hwmon_ops r8169_hwmon_ops = {
++	.is_visible =  r8169_hwmon_is_visible,
++	.read = r8169_hwmon_read,
++};
++
++static const struct hwmon_channel_info * const r8169_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	NULL
++};
++
++static const struct hwmon_chip_info r8169_hwmon_chip_info = {
++	.ops = &r8169_hwmon_ops,
++	.info = r8169_hwmon_info,
++};
++
+ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
  {
--	struct max6639_platform_data *max6639_info =
--		dev_get_platdata(&client->dev);
--	int i;
--	int rpm_range = 1; /* default: 4000 RPM */
--	int err, ppr;
-+	struct device *dev = &client->dev;
-+	const struct device_node *np = dev->of_node;
-+	struct device_node *child;
-+	int i, err;
+ 	struct rtl8169_private *tp;
+@@ -5537,6 +5575,12 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (rc)
+ 		return rc;
  
- 	/* Reset chip to default values, see below for GCONFIG setup */
- 	err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
-@@ -546,21 +582,29 @@ static int max6639_init_client(struct i2c_client *client,
- 		return err;
- 
- 	/* Fans pulse per revolution is 2 by default */
--	if (max6639_info && max6639_info->ppr > 0 &&
--			max6639_info->ppr < 5)
--		ppr = max6639_info->ppr;
--	else
--		ppr = 2;
-+	data->ppr[0] = 2;
-+	data->ppr[1] = 2;
- 
--	data->ppr[0] = ppr;
--	data->ppr[1] = ppr;
-+	/* default: 4000 RPM */
-+	data->rpm_range[0] = 1;
-+	data->rpm_range[1] = 1;
- 
--	if (max6639_info)
--		rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
--	data->rpm_range[0] = rpm_range;
--	data->rpm_range[1] = rpm_range;
-+	for_each_child_of_node(np, child) {
-+		if (strcmp(child->name, "fan"))
-+			continue;
-+
-+		err = max6639_probe_child_from_dt(client, child, data);
-+		if (err) {
-+			of_node_put(child);
-+			return err;
-+		}
-+	}
- 
- 	for (i = 0; i < MAX6639_NUM_CHANNELS; i++) {
-+		err = regmap_set_bits(data->regmap, MAX6639_REG_OUTPUT_MASK, BIT(1 - i));
-+		if (err)
-+			return err;
-+
- 		/* Set Fan pulse per revolution */
- 		err = max6639_set_ppr(data, i, data->ppr[i]);
- 		if (err)
-@@ -573,12 +617,7 @@ static int max6639_init_client(struct i2c_client *client,
- 			return err;
- 
- 		/* Fans PWM polarity high by default */
--		if (max6639_info) {
--			if (max6639_info->pwm_polarity == 0)
--				err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
--			else
--				err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
--		}
-+		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
- 		if (err)
- 			return err;
- 
-diff --git a/include/linux/platform_data/max6639.h b/include/linux/platform_data/max6639.h
-deleted file mode 100644
-index 65bfdb4fdc15..000000000000
---- a/include/linux/platform_data/max6639.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_MAX6639_H
--#define _LINUX_MAX6639_H
--
--#include <linux/types.h>
--
--/* platform data for the MAX6639 temperature sensor and fan control */
--
--struct max6639_platform_data {
--	bool pwm_polarity;	/* Polarity low (0) or high (1, default) */
--	int ppr;		/* Pulses per rotation 1..4 (default == 2) */
--	int rpm_range;		/* 2000, 4000 (default), 8000 or 16000 */
--};
--
--#endif /* _LINUX_MAX6639_H */
++	/* The temperature sensor is available from RTl8125B */
++	if (IS_REACHABLE(CONFIG_HWMON) && tp->mac_version >= RTL_GIGA_MAC_VER_63)
++		/* ignore errors */
++		devm_hwmon_device_register_with_info(&pdev->dev, "nic_temp", tp,
++						     &r8169_hwmon_chip_info,
++						     NULL);
+ 	rc = register_netdev(dev);
+ 	if (rc)
+ 		return rc;
 -- 
-2.42.0
+2.46.2
+
 
