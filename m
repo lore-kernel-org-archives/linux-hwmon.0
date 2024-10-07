@@ -1,404 +1,234 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA133A8F0
-	for <linux-hwmon@vger.kernel.org>; Sat,  5 Oct 2024 04:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C414028EA
+	for <linux-hwmon@vger.kernel.org>; Mon,  7 Oct 2024 09:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728102227; cv=none; b=WKAfQcgfAfQyKguDMByJYHIO46P0Xm7GXyOgpYepJHzajOjhTD5jHqE2A8eM89KR9vc1XFe4eaFa1E2jfnC8jCK0Op+ppBGXgQPCoN60Oq6RwCiRPjhOXQEzo5UM8XAZV7WJ772vPbz2gEzjovUJKejUfk3y5IYvhsxc8B+BE74=
+	t=1728291875; cv=none; b=WvejJ9KksleIJZaW1Ffv+k1Ry7allNLNEn1tekX/4nqAKF+TEFXZVdA6tiKM2SPVIij/e4JzxNxwko/yPB/t+Vp3Wd+g086vKvx57qoPSs3OnFgozd52z7hSzJENTkTzoljcYUL9aRd9oLulQStjaDMqNc2Z4HpfLWC09Zqo8z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728102227; c=relaxed/simple;
-	bh=PHaHD5j4M9JAcRVknaRM9PA5c+jSdcSMmicA/cZeWDQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EyysU5PFZ24r4B4jKWCXkY3UwfxOV1yLWAlKZUiXfw3Lqhzj+kqYpTq4hQU0EjWsflawnwMdvXGk/yMfNI1q4GSB0MuSpXm2s+o1XgYh2V71K3vCMOrB+GmhgM4qKwMdgXU+5MCMCddRR4bfQUPefJkdXKcax6GkVnBWAaujNqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=e85r8zKn; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1728291875; c=relaxed/simple;
+	bh=r4Hefdp7jmqnhB4BcINQYp3uyMwa4Roxp9yO+tqu+pw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I27TdQV2uOLtEus1R6gva+Ze3rb5clEVKJZBBneBz9lIb1+ApnbKf5PmInH/SW6vtKxPnR1xmXeGKBpzy+A2qPyzrP23NkejLXaw9jjizbszfnwi3t80p6K347AOUxYr7jwMbr9C+5c8ac/6D2mCsCjz9EYuazOsDVw720QSwMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=R5AVfZvu; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="e85r8zKn"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5366fd6fdf1so3840217e87.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 04 Oct 2024 21:23:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="R5AVfZvu"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cbbb1727eso41822375e9.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Oct 2024 02:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1728102223; x=1728707023; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CCWFmAP3D7XA4URpz7xTLDfJnnFmWIGXWuczsWDP7EI=;
-        b=e85r8zKnhmICmBtDTqdYQuGWkiktIp72cDiRsjGrGaBny+OJmgZUgplWR9qd5OPGxU
-         ZVhPN81T+884HJVKOuP9nZyPvLY6DDes1CHL4NK/PqT3joBQH4+k8C6/7nSwXluc43dO
-         ZP0sRNadL0rw4nTjKgbgLtFTJ6fize9uRr720=
+        d=9elements.com; s=google; t=1728291871; x=1728896671; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VxQS/l1S5f4q/J7Eu+WPkU1XrzUO7pYeH0O4sjkh4Jc=;
+        b=R5AVfZvuKxt9cH9vYl+8OUpWwsnt09QomoXmAFZ2+H5Vuo+eBVD/4ZfjzwZ0AqRdHP
+         3P8HxWmhjdxxopZHQ/Us95v+jurGNUtob/pnBm6moJsc0FH3AJ8NFrS5nyv/ZeZe0E+V
+         kbX4bdCGa7lS6ndwSlftrr1RcYwaO3XopUcneb9TTNMEa21j+lmtq5GS/TDXLg9PjjxC
+         SF//5cUtDDixb4EzESsM0NOoFHFiERfqfg1U5Kj8klYjQEe+7DwKaGssSglae/R7w1fW
+         QdGP2+9Jh7zF3pxTfp1vEkJURp7fcVd3Zkbdx7SJgNpiGKYmc4va3MWdyqVuMvah/szl
+         FeYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728102223; x=1728707023;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1728291871; x=1728896671;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CCWFmAP3D7XA4URpz7xTLDfJnnFmWIGXWuczsWDP7EI=;
-        b=V9JKwJ9JLGNg+umCFtxHDOpEZOpmctpiYKJb/VRIppXGSrgsPTZf1eGfT/b/oQDvNx
-         QXd4Xg7ak7sIhb80PnWS4MslhjYk52yUHTTpmDwcbp4xg8mQ3MAjRl1R6urAvbzlfQXO
-         JpuRXG31kqFvxYVcqWzMlZgqn7FXxf+rJB75trfYTDlBVRGBU32nolGOGSjiagtBGEG4
-         F/3pQmutSOKk3gE7TB60zVob2WgZsQebdgcP2JldD3zuJRPTeEmi0GoGzv+V33sPVNRR
-         uKsF6lh6j5csmQLguhE/g4rEsm9lxihH0zu5ovWYLq9MMh14s4OGY2ID+vju0+LQvReJ
-         ryZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMKzB8p0IWCBM4WLuE2dk7+tbxE8RCDZXlrHwreUTfwQEuC3AetNGc11vjId1NLyFRxDA86+QZTpYh+w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5QNpvcwv26lZXpse+TnprOYzG2cHI9u2tkI2N8JRwbH8vNrT6
-	MbxbHLYsWlUCVvi4iG6XiidfzbqA+QiVJtyn0zjZM0A5yoMsuLyIuNKmkcrqnM29YvTtTVaXCOV
-	qyjpZLXb11NdMZH8nai5p9oD5fmNM+1ejvZVV
-X-Google-Smtp-Source: AGHT+IFcTRMTcHjGUNjOo2TbAvfaLyRY77q7zaPrDz6VjK0/ZatYp0EdmgjZmmdDQgYuK2AKSVETssloCvsVEDjHU1k=
-X-Received: by 2002:a05:6512:2315:b0:539:94cf:e327 with SMTP id
- 2adb3069b0e04-539ab8ae2b0mr2624151e87.37.1728102223018; Fri, 04 Oct 2024
- 21:23:43 -0700 (PDT)
+        bh=VxQS/l1S5f4q/J7Eu+WPkU1XrzUO7pYeH0O4sjkh4Jc=;
+        b=EvaTd+3kxbSkac3n5D3btCwQdxPsORXxw1AM7VrwieBojZw5aRRJps/tZmLm9T0SAn
+         31sIM3Uvo+/YlJPnVyeb4q0AH/+T1CGPBASbCnvgG5DSETvCLmYcD794NLW/n15ZZ6cQ
+         KpQX7vynTBHt7SZnf8KHFhw5W80yZtj7528wAmaGl7vFUtZfIslAx8qceEopzdQP2/OO
+         CkocWmdHybcu6tOSL40kp4CD1PXBg1ZKvCMAtWfpp/fnrwpwLC+M9ZsfoJNXD+FMpSPV
+         SHnj3u1XNvrrYkHrm1TMlDyLgE7vQtZR9Y2Hyj+7alNXDvnHj8V0xCbeUz9pgs1sJ9J3
+         OoYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX/VFOcIQ7Dhm8IBd93VEGyBtxgNm/k/CGswzfDcPGIIDa2ScZRzgkfVxXrrAWxMrq8tqOxRJB9NjXzzg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVzpNYeLUhv/ZuS6Fx04r/eZxx1pUcKmhloMxX4R949nLUI6nJ
+	SY9W6AnVMt0Y3uRMKH+VoDeML9qXIc6pN5ySReJ0jniQxjlA9ccuruBSBerXZKA=
+X-Google-Smtp-Source: AGHT+IHu1e2HthveWdVl2pRLqlE63KKxY9R4TlkpOp7LjjomIa4wkuoqQajX4hFx9XtzyKJ8HYywvg==
+X-Received: by 2002:a05:600c:1907:b0:428:e866:3933 with SMTP id 5b1f17b1804b1-42f85ae9d2bmr91093225e9.22.1728291871055;
+        Mon, 07 Oct 2024 02:04:31 -0700 (PDT)
+Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89eda21esm68453185e9.46.2024.10.07.02.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 02:04:30 -0700 (PDT)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: Naresh Solanki <naresh.solanki@9elements.com>
+Subject: [RESEND PATCH v2] hwmon: (max6639) : Configure based on DT property
+Date: Mon,  7 Oct 2024 14:34:24 +0530
+Message-ID: <20241007090426.811736-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241004204953.2223536-1-sanman.p211993@gmail.com>
-In-Reply-To: <20241004204953.2223536-1-sanman.p211993@gmail.com>
-From: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
-Date: Sat, 5 Oct 2024 09:53:30 +0530
-Message-ID: <CAH-L+nO6U12TRCUWNxjAFTSwaMfeadt+iHYtYFZHVJFOZH0sdw@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] eth: fbnic: Add hardware monitoring support
- via HWMON interface
-To: Sanman Pradhan <sanman.p211993@gmail.com>
-Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org, 
-	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com, 
-	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net, horms@kernel.org, 
-	mohsin.bashr@gmail.com, sanmanpradhan@meta.com, andrew@lunn.ch, 
-	linux-hwmon@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002ac6f70623b32701"
+Content-Transfer-Encoding: 8bit
 
---0000000000002ac6f70623b32701
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Remove platform data & initialize with defaults
+configuration & overwrite based on DT properties.
 
-Hi Sanman,
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+Changes in V2:
+- Allow initializing the driver with defaults & overrid based on DT
+  properties if specified.
+- Remove unrelated changes.
+- Optimise ppr check to remove unacceptable range.
+---
+ drivers/hwmon/max6639.c               | 85 +++++++++++++++++++--------
+ include/linux/platform_data/max6639.h | 15 -----
+ 2 files changed, 62 insertions(+), 38 deletions(-)
+ delete mode 100644 include/linux/platform_data/max6639.h
 
-It looks like you missed one comment. See in line.
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index c955b0f3a8d3..6eacb5aed96d 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -19,7 +19,6 @@
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
+ #include <linux/mutex.h>
+-#include <linux/platform_data/max6639.h>
+ #include <linux/regmap.h>
+ #include <linux/util_macros.h>
+ 
+@@ -531,14 +530,51 @@ static int rpm_range_to_reg(int range)
+ 	return 1; /* default: 4000 RPM */
+ }
+ 
++static int max6639_probe_child_from_dt(struct i2c_client *client,
++				       struct device_node *child,
++				       struct max6639_data *data)
++
++{
++	struct device *dev = &client->dev;
++	u32 i;
++	int err, val;
++
++	err = of_property_read_u32(child, "reg", &i);
++	if (err) {
++		dev_err(dev, "missing reg property of %pOFn\n", child);
++		return err;
++	}
++
++	if (i > 1) {
++		dev_err(dev, "Invalid fan index reg %d\n", i);
++		return -EINVAL;
++	}
++
++	err = of_property_read_u32(child, "pulses-per-revolution", &val);
++
++	if (!err) {
++		if (val < 1 || val > 5) {
++			dev_err(dev, "invalid pulses-per-revolution %d of %pOFn\n", val, child);
++			return -EINVAL;
++		}
++		data->ppr[i] = val;
++	}
++
++	err = of_property_read_u32(child, "max-rpm", &val);
++
++	if (!err)
++		data->rpm_range[i] = rpm_range_to_reg(val);
++
++	return 0;
++}
++
+ static int max6639_init_client(struct i2c_client *client,
+ 			       struct max6639_data *data)
+ {
+-	struct max6639_platform_data *max6639_info =
+-		dev_get_platdata(&client->dev);
+-	int i;
+-	int rpm_range = 1; /* default: 4000 RPM */
+-	int err, ppr;
++	struct device *dev = &client->dev;
++	const struct device_node *np = dev->of_node;
++	struct device_node *child;
++	int i, err;
+ 
+ 	/* Reset chip to default values, see below for GCONFIG setup */
+ 	err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
+@@ -546,21 +582,29 @@ static int max6639_init_client(struct i2c_client *client,
+ 		return err;
+ 
+ 	/* Fans pulse per revolution is 2 by default */
+-	if (max6639_info && max6639_info->ppr > 0 &&
+-			max6639_info->ppr < 5)
+-		ppr = max6639_info->ppr;
+-	else
+-		ppr = 2;
++	data->ppr[0] = 2;
++	data->ppr[1] = 2;
+ 
+-	data->ppr[0] = ppr;
+-	data->ppr[1] = ppr;
++	/* default: 4000 RPM */
++	data->rpm_range[0] = 1;
++	data->rpm_range[1] = 1;
+ 
+-	if (max6639_info)
+-		rpm_range = rpm_range_to_reg(max6639_info->rpm_range);
+-	data->rpm_range[0] = rpm_range;
+-	data->rpm_range[1] = rpm_range;
++	for_each_child_of_node(np, child) {
++		if (strcmp(child->name, "fan"))
++			continue;
++
++		err = max6639_probe_child_from_dt(client, child, data);
++		if (err) {
++			of_node_put(child);
++			return err;
++		}
++	}
+ 
+ 	for (i = 0; i < MAX6639_NUM_CHANNELS; i++) {
++		err = regmap_set_bits(data->regmap, MAX6639_REG_OUTPUT_MASK, BIT(1 - i));
++		if (err)
++			return err;
++
+ 		/* Set Fan pulse per revolution */
+ 		err = max6639_set_ppr(data, i, data->ppr[i]);
+ 		if (err)
+@@ -573,12 +617,7 @@ static int max6639_init_client(struct i2c_client *client,
+ 			return err;
+ 
+ 		/* Fans PWM polarity high by default */
+-		if (max6639_info) {
+-			if (max6639_info->pwm_polarity == 0)
+-				err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+-			else
+-				err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+-		}
++		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
+ 		if (err)
+ 			return err;
+ 
+diff --git a/include/linux/platform_data/max6639.h b/include/linux/platform_data/max6639.h
+deleted file mode 100644
+index 65bfdb4fdc15..000000000000
+--- a/include/linux/platform_data/max6639.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_MAX6639_H
+-#define _LINUX_MAX6639_H
+-
+-#include <linux/types.h>
+-
+-/* platform data for the MAX6639 temperature sensor and fan control */
+-
+-struct max6639_platform_data {
+-	bool pwm_polarity;	/* Polarity low (0) or high (1, default) */
+-	int ppr;		/* Pulses per rotation 1..4 (default == 2) */
+-	int rpm_range;		/* 2000, 4000 (default), 8000 or 16000 */
+-};
+-
+-#endif /* _LINUX_MAX6639_H */
+-- 
+2.42.0
 
-On Sat, Oct 5, 2024 at 2:20=E2=80=AFAM Sanman Pradhan <sanman.p211993@gmail=
-.com> wrote:
->
-> From: Sanman Pradhan <sanmanpradhan@meta.com>
->
-> This patch adds support for hardware monitoring to the fbnic driver,
-> allowing for temperature and voltage sensor data to be exposed to
-> userspace via the HWMON interface. The driver registers a HWMON device
-> and provides callbacks for reading sensor data, enabling system
-> admins to monitor the health and operating conditions of fbnic.
->
-> Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
->
-> ---
-> v3:
->   - Add missing "id" initialization in fbnic_hwmon_read
->   - Change ifm_hwmon_unregister to hwmon_unregister
->
-> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20241003173618.2=
-479520-1-sanman.p211993@gmail.com/
->
-> v1: https://lore.kernel.org/netdev/153c5be4-158e-421a-83a5-5632a9263e87@r=
-oeck-us.net/T/
->
-> ---
->  drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
->  drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
->  drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
->  drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |  7 ++
->  drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  7 +-
->  5 files changed, 99 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
->
-> diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ether=
-net/meta/fbnic/Makefile
-> index ed4533a73c57..41494022792a 100644
-> --- a/drivers/net/ethernet/meta/fbnic/Makefile
-> +++ b/drivers/net/ethernet/meta/fbnic/Makefile
-> @@ -11,6 +11,7 @@ fbnic-y :=3D fbnic_devlink.o \
->            fbnic_ethtool.o \
->            fbnic_fw.o \
->            fbnic_hw_stats.o \
-> +          fbnic_hwmon.o \
->            fbnic_irq.o \
->            fbnic_mac.o \
->            fbnic_netdev.o \
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethern=
-et/meta/fbnic/fbnic.h
-> index 0f9e8d79461c..2d3aa20bc876 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic.h
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
-> @@ -18,6 +18,7 @@
->  struct fbnic_dev {
->         struct device *dev;
->         struct net_device *netdev;
-> +       struct device *hwmon;
->
->         u32 __iomem *uc_addr0;
->         u32 __iomem *uc_addr4;
-> @@ -127,6 +128,9 @@ void fbnic_devlink_unregister(struct fbnic_dev *fbd);
->  int fbnic_fw_enable_mbx(struct fbnic_dev *fbd);
->  void fbnic_fw_disable_mbx(struct fbnic_dev *fbd);
->
-> +void fbnic_hwmon_register(struct fbnic_dev *fbd);
-> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
-> +
->  int fbnic_pcs_irq_enable(struct fbnic_dev *fbd);
->  void fbnic_pcs_irq_disable(struct fbnic_dev *fbd);
->
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
-ethernet/meta/fbnic/fbnic_hwmon.c
-> new file mode 100644
-> index 000000000000..bcd1086e3768
-> --- /dev/null
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> @@ -0,0 +1,81 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <linux/hwmon.h>
-> +
-> +#include "fbnic.h"
-> +#include "fbnic_mac.h"
-> +
-> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
-> +{
-> +       if (type =3D=3D hwmon_temp)
-> +               return FBNIC_SENSOR_TEMP;
-> +       if (type =3D=3D hwmon_in)
-> +               return FBNIC_SENSOR_VOLTAGE;
-> +
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t fbnic_hwmon_is_visible(const void *drvdata,
-> +                                     enum hwmon_sensor_types type,
-> +                                     u32 attr, int channel)
-> +{
-> +       if (type =3D=3D hwmon_temp && attr =3D=3D hwmon_temp_input)
-> +               return 0444;
-> +       if (type =3D=3D hwmon_in && attr =3D=3D hwmon_in_input)
-> +               return 0444;
-> +
-> +       return 0;
-> +}
-> +
-> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types =
-type,
-> +                           u32 attr, int channel, long *val)
-> +{
-> +       struct fbnic_dev *fbd =3D dev_get_drvdata(dev);
-> +       const struct fbnic_mac *mac =3D fbd->mac;
-> +       int id;
-> +
-> +       id =3D fbnic_hwmon_sensor_id(type);
-> +       return id < 0 ? id : mac->get_sensor(fbd, id, val);
-> +}
-> +
-> +static const struct hwmon_ops fbnic_hwmon_ops =3D {
-> +       .is_visible =3D fbnic_hwmon_is_visible,
-> +       .read =3D fbnic_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_channel_info *fbnic_hwmon_info[] =3D {
-> +       HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +       HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-> +       NULL
-> +};
-> +
-> +static const struct hwmon_chip_info fbnic_chip_info =3D {
-> +       .ops =3D &fbnic_hwmon_ops,
-> +       .info =3D fbnic_hwmon_info,
-> +};
-> +
-> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
-> +{
-> +       if (!IS_REACHABLE(CONFIG_HWMON))
-> +               return;
-> +
-> +       fbd->hwmon =3D hwmon_device_register_with_info(fbd->dev, "fbnic",
-> +                                                    fbd, &fbnic_chip_inf=
-o,
-> +                                                    NULL);
-> +       if (IS_ERR(fbd->hwmon)) {
-> +               dev_notice(fbd->dev,
-> +                          "Failed to register hwmon device %pe\n",
-> +                       fbd->hwmon);
-> +               fbd->hwmon =3D NULL;
-> +       }
-> +}
-> +
-> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
-> +{
-> +       if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
-> +               return;
-> +
-> +       hwmon_device_unregister(fbd->hwmon);
-> +       fbd->hwmon =3D NULL;
-> +}
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h b/drivers/net/et=
-hernet/meta/fbnic/fbnic_mac.h
-> index 476239a9d381..05a591653e09 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-> @@ -47,6 +47,11 @@ enum {
->  #define FBNIC_LINK_MODE_PAM4   (FBNIC_LINK_50R1)
->  #define FBNIC_LINK_MODE_MASK   (FBNIC_LINK_AUTO - 1)
->
-> +enum fbnic_sensor_id {
-> +       FBNIC_SENSOR_TEMP,              /* Temp in millidegrees Centigrad=
-e */
-> +       FBNIC_SENSOR_VOLTAGE,           /* Voltage in millivolts */
-> +};
-> +
->  /* This structure defines the interface hooks for the MAC. The MAC hooks
->   * will be configured as a const struct provided with a set of function
->   * pointers.
-> @@ -83,6 +88,8 @@ struct fbnic_mac {
->
->         void (*link_down)(struct fbnic_dev *fbd);
->         void (*link_up)(struct fbnic_dev *fbd, bool tx_pause, bool rx_pau=
-se);
-> +
-> +       int (*get_sensor)(struct fbnic_dev *fbd, int id, long *val);
->  };
->
->  int fbnic_mac_init(struct fbnic_dev *fbd);
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/et=
-hernet/meta/fbnic/fbnic_pci.c
-> index a4809fe0fc24..debd98ea55e2 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-> @@ -289,6 +289,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
-ruct pci_device_id *ent)
->
->         fbnic_devlink_register(fbd);
->
-> +       fbnic_hwmon_register(fbd);
-> +
->         if (!fbd->dsn) {
->                 dev_warn(&pdev->dev, "Reading serial number failed\n");
->                 goto init_failure_mode;
-[Kalesh] You should change this label to "hwmon_unregister" as you
-should unregister hwmon in case of failure here.
-
-> @@ -297,7 +299,7 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
-ruct pci_device_id *ent)
->         netdev =3D fbnic_netdev_alloc(fbd);
->         if (!netdev) {
->                 dev_err(&pdev->dev, "Netdev allocation failed\n");
-> -               goto init_failure_mode;
-> +               goto hwmon_unregister;
->         }
->
->         err =3D fbnic_netdev_register(netdev);
-> @@ -310,6 +312,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
-ruct pci_device_id *ent)
->
->  ifm_free_netdev:
->         fbnic_netdev_free(fbd);
-> +hwmon_unregister:
-> +       fbnic_hwmon_unregister(fbd);
->  init_failure_mode:
->         dev_warn(&pdev->dev, "Probe error encountered, entering init fail=
-ure mode. Normal networking functionality will not be available.\n");
->          /* Always return 0 even on error so devlink is registered to all=
-ow
-> @@ -345,6 +349,7 @@ static void fbnic_remove(struct pci_dev *pdev)
->                 fbnic_netdev_free(fbd);
->         }
->
-> +       fbnic_hwmon_unregister(fbd);
->         fbnic_devlink_unregister(fbd);
->         fbnic_fw_disable_mbx(fbd);
->         fbnic_free_irqs(fbd);
-> --
-> 2.43.5
->
-
-
---=20
-Regards,
-Kalesh A P
-
---0000000000002ac6f70623b32701
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBWowggRSoAMCAQICDDfBRQmwNSI92mit0zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI5NTZaFw0yNTA5MTAwODI5NTZaMIGi
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xHzAdBgNVBAMTFkthbGVzaCBBbmFra3VyIFB1cmF5aWwxMjAw
-BgkqhkiG9w0BCQEWI2thbGVzaC1hbmFra3VyLnB1cmF5aWxAYnJvYWRjb20uY29tMIIBIjANBgkq
-hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnv1Reaeezfr6NEmg3xZlh4cz9m7QCN13+j4z1scrX+b
-JfnV8xITT5yvwdQv3R3p7nzD/t29lTRWK3wjodUd2nImo6vBaH3JbDwleIjIWhDXLNZ4u7WIXYwx
-aQ8lYCdKXRsHXgGPY0+zSx9ddpqHZJlHwcvas3oKnQN9WgzZtsM7A8SJefWkNvkcOtef6bL8Ew+3
-FBfXmtsPL9I2vita8gkYzunj9Nu2IM+MnsP7V/+Coy/yZDtFJHp30hDnYGzuOhJchDF9/eASvE8T
-T1xqJODKM9xn5xXB1qezadfdgUs8k8QAYyP/oVBafF9uqDudL6otcBnziyDBQdFCuAQN7wIDAQAB
-o4IB5DCCAeAwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZC
-aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3Iz
-cGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcC
-ARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNV
-HR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNp
-Z24yY2EyMDIwLmNybDAuBgNVHREEJzAlgSNrYWxlc2gtYW5ha2t1ci5wdXJheWlsQGJyb2FkY29t
-LmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGP
-zzAdBgNVHQ4EFgQUI3+tdStI+ABRGSqksMsiCmO9uDAwDQYJKoZIhvcNAQELBQADggEBAGfe1o9b
-4wUud0FMjb/FNdc433meL15npjdYWUeioHdlCGB5UvEaMGu71QysfoDOfUNeyO9YKp0h0fm7clvo
-cBqeWe4CPv9TQbmLEtXKdEpj5kFZBGmav69mGTlu1A9KDQW3y0CDzCPG2Fdm4s73PnkwvemRk9E2
-u9/kcZ8KWVeS+xq+XZ78kGTKQ6Wii3dMK/EHQhnDfidadoN/n+x2ySC8yyDNvy81BocnblQzvbuB
-a30CvRuhokNO6Jzh7ZFtjKVMzYas3oo6HXgA+slRszMu4pc+fRPO41FHjeDM76e6P5OnthhnD+NY
-x6xokUN65DN1bn2MkeNs0nQpizDqd0QxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYD
-VQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25h
-bFNpZ24gMiBDQSAyMDIwAgw3wUUJsDUiPdpordMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcN
-AQkEMSIEID4tH0XwOY8UhRVgVWgQxzOwZealKSKAMKnttrEZsOlaMBgGCSqGSIb3DQEJAzELBgkq
-hkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MTAwNTA0MjM0M1owaQYJKoZIhvcNAQkPMVwwWjAL
-BglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG
-9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBetdFFRfL9
-IuKL71c9LpN2DS3iDnTpTd9Ls/8WQ6NeCmkO8syf/xt2I15pKpcgjRj4glOx3pBWBnrUPnoSKbK7
-gL62TakCnzDLPRRvHRfc9FXBn71VEzdp0udcR9hUe+RvV7VLP43xELsB+DNWRPg3EF+PqlBvvwk7
-ATviUkY/NnyiV1PwS4TX6+BLhI6sKd8rBt2Z5tCZ2/uE0P/JpF7onJ4wqip49l0X6DscxP0s26N6
-58zIV2F0GxvOAwFeVTW2G3exo7TIsZ2YXtKf9m2QV+YB8ds4aD1bCIgn9tll93AdVMjTKvUk4FfM
-wOBZ9EOGMsLMAAZrQbFTPO5mF0vJ
---0000000000002ac6f70623b32701--
