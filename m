@@ -1,111 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748CB1779B1;
-	Tue,  8 Oct 2024 12:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527F01DE88B
+	for <linux-hwmon@vger.kernel.org>; Tue,  8 Oct 2024 12:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728390944; cv=none; b=R8OsQITQyEKBnKKS70ACwNsqcA+NyoWRu3XTlCVpHuFKX/iDcSJXsN32fL132TMUiza1AINIhi/tWb42rqNI9frZyRZUcKhT8ToqQHQ2evtyl2N03CIg3g7zXx2UvBHs1nmmKqA/KTNZuXYDFtcVuuJTRn5EzxMbeIM5N32j5jg=
+	t=1728391481; cv=none; b=R0Vps7MJMXWvvj/fr6O0D5jL4y3NRtQHTwH71WZFxwaJULr881UfZkRfEUhobcz1rWCMjJcmYsdajmECq6DopWQ8tYNWzDoM5et5VuOQTP5WqFzCYEt4vd4lCwEBK/PstuKy+jpePJb3oiQwPQWaSxBz6UbS/aj2zvbcEqdgg4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728390944; c=relaxed/simple;
-	bh=sS4+c1/Go7QA5MGttt5rRnQ5QB/QCY2WVATmiYZmm3I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j1kng//9CenQ7u5Qxwwn3RZkcTWYrqJPnwMe7vwFPYosTnU7vz1K9FdjuYPx8YkboT4jtWibNfijbu2bvSRStO0NxGISgi0m/O5ogby7Ryt3KegreElE3BgAptYWv+qJgX2ujMoqny+cgDMIl9vMPTB96j/nqDCtZcBX5iovKFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ko4jND2D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728391481; c=relaxed/simple;
+	bh=qSOpSf+YsWDnlVAfQYKdd58y+jL1GlvU2G/SV+Dza6Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PKRUmDub+OTEZ9hseEMfyqXSI+UfsLxQmPRr/fusX1YX1eJFZoo7cqwIqtT42QIgpV3yUSUGY3HxQyh7PhxLLNFUCK/wQaZiiWYBHIFa4RkHlzLBKsHzQ1W06rWF5cjZCpNR+VXg1X1XiQJYVWVCaZsyKBCEf3URGTNvjfPlv24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=p/CjKDDQ; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ko4jND2D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FBEC4CECC;
-	Tue,  8 Oct 2024 12:35:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728390944;
-	bh=sS4+c1/Go7QA5MGttt5rRnQ5QB/QCY2WVATmiYZmm3I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ko4jND2DaDgyOWJ22c8TVSudn7duBtsoM35isWDhn+SW55yPYTJ7d0kpjMVrAxdS8
-	 CZzndrSO+HTStxgJFpBTIAd7wsyfX3lyiV5XQ1/8nxpx3NRcxLVHKRGeuIw9He2Yx7
-	 WKPim6tENXiiDYVOJS2NCsnFips1SLSNMNuivPki/9vlrt96dnA6YG1usuPaP7Yi98
-	 zNRB3Tu+yMERRRlqiCRdbTEdyCcVcgde//xf2J0QQ/40N3I6Suo5n/6u3qn/oksg3Z
-	 V/tVFuznpWjXR3tkFQurXLiN17hXZrHNm0FGMa/n15VkIzfEt4O0mHXYmf9q9u/kXz
-	 iJSFqzM/aSTHg==
-Message-ID: <f721966e-4e75-4aa0-8d0a-4e2bf73cf9e9@kernel.org>
-Date: Tue, 8 Oct 2024 14:35:38 +0200
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="p/CjKDDQ"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42cb806623eso52162195e9.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 08 Oct 2024 05:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1728391478; x=1728996278; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7e4/3Ls3/aNu9dK/eI4vdsZOolZWQW7jGRlN4Q4ST1w=;
+        b=p/CjKDDQffUUZoawcEzetWTaqM9zwFMqgqhg3QQbM8WqZH1OED1VwkDrgBXHSuyfWK
+         OHpAUVMMSWm4gakTI9ncUIpcqxqqf3x16mKiTdtmcsKjE7EXKeHBZVRqftJ5aZ3otnJ0
+         0ZRNnjoulywrSfykMvu24zs5AlS78MNCbqoHdOxS/ho/R8VDxoOniDSa/2+A9z6jCxIO
+         OFogICgAPWNJRZqpiL8HFPDgFZc7j2SELAOBf4sNANiJN8mAXDLlNptN5mPCc+j+BNTK
+         Co5ReAEwlsGqWmCDYkZUNgwf0yBAr62sw0FDEU1AgJFGE4dtDqr1FY1sbYxWNmP88CT5
+         +9tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728391478; x=1728996278;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7e4/3Ls3/aNu9dK/eI4vdsZOolZWQW7jGRlN4Q4ST1w=;
+        b=UyBwtyZD9wBLFc0sMqhbFi8+0/GH4GU5NDGfScnLBOXmdDh+Ahukinnv5vB0WPcNYd
+         JHbylXksA9qaLUIzEhylVf0jyFxWo33jx2aYMuf2GvS+LQX0NIRyq1Ud0CRw8DAAzbTd
+         b+1+9cJj61oFvZeHxnqW0e9L89rMOio6SxX+OB7TYwgz0azPP1EbrUTOKSjBfkKFYlFK
+         xXK4Z/ZYBtuQlirHKSVdeKyHKpeGwebGSK+v7UONjNO7o4BhbkHqIuG81HLdXaf6V+V6
+         UgYWJEEVnjDlR+pGzL3TDo1LvRPtHd2Qcxng4uj6zMnDndFSUnORPOoSWLTDqhiYcsJM
+         HEAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMrsRJppH3kr2C3ot2FFlf+s+LBraOka0tYPp2TpBI+D8lkkueqrx07OPBSEO4DBxUxjqQBGxYmUrzBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjpWes9E7zDnpbLEp+MQZBGbHiX6IrjXuxWS1VndAn/VFZVkSM
+	iL/0R9Ucv56w/KS0EqegTMMLqtS30fwW1ls2BZ7lzs3h5MOZmQ7MgEDrtDaXAIw=
+X-Google-Smtp-Source: AGHT+IEsuASKpxtLN1FS9/ppE/nSGh27N+1yhlWxNalTb7cFM5CXlhMi6qIJJ4CYFTRupQZK+UJsOQ==
+X-Received: by 2002:a05:600c:1907:b0:42c:bb96:340e with SMTP id 5b1f17b1804b1-42f85af89ebmr118622545e9.31.1728391477489;
+        Tue, 08 Oct 2024 05:44:37 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:41f2:4244:ce34:c273])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89e832fesm109260625e9.8.2024.10.08.05.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 05:44:36 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Brown <broonie@kernel.org>,  Liam Girdwood <lgirdwood@gmail.com>,
+  Jean Delvare <jdelvare@suse.com>,  Jonathan Corbet <corbet@lwn.net>,
+  linux-kernel@vger.kernel.org,  linux-hwmon@vger.kernel.org,
+  linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/5] hwmon: (pmbus/core) improve handling of write
+ protected regulators
+In-Reply-To: <64c3f6c3-10b5-44c6-a1cd-c796b770c904@roeck-us.net> (Guenter
+	Roeck's message of "Mon, 23 Sep 2024 09:44:11 -0700")
+References: <20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com>
+	<20240920-pmbus-wp-v1-4-d679ef31c483@baylibre.com>
+	<ZvFrWDF6Pn9zOb23@finisterre.sirena.org.uk>
+	<64c3f6c3-10b5-44c6-a1cd-c796b770c904@roeck-us.net>
+Date: Tue, 08 Oct 2024 14:44:35 +0200
+Message-ID: <1j5xq2sr0s.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux dev-6.11 2/2] dt-bindings: modified ina2xx to match
- SY24655(SQ52205)
-To: Conor Dooley <conor@kernel.org>, Wenliang <wenliang202407@163.com>
-Cc: linux@roeck-us.net, jdelvare@suse.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <7c155638-8c33-4873-9534-17a9454c83e6@roeck-us.net>
- <20240911122518.41393-1-wenliang202407@163.com>
- <20240911122518.41393-2-wenliang202407@163.com>
- <20240911-cahoots-wildland-0ea4d25d8cd8@spud>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240911-cahoots-wildland-0ea4d25d8cd8@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 11/09/2024 19:49, Conor Dooley wrote:
-> On Wed, Sep 11, 2024 at 08:25:18AM -0400, Wenliang wrote:
->> Modified the binding of ina2xx to make it compatible with SY24655. 
-> 
-> Rather, you should explain why the sy24655 is compatible with the ina2xx
-> devices.
-> 
->>
+On Mon 23 Sep 2024 at 09:44, Guenter Roeck <linux@roeck-us.net> wrote:
 
-This looks like patch for some forked tree, like the BMC folks are
-doing. At least linux dev suggests it.
+> On 9/23/24 06:21, Mark Brown wrote:
+>> On Fri, Sep 20, 2024 at 06:47:05PM +0200, Jerome Brunet wrote:
+>> 
+>>> +int pmbus_regulator_init_cb(struct regulator_dev *rdev,
+>>> +			    struct regulator_config *config)
+>>> +{
+>>> +	struct pmbus_data *data = config->driver_data;
+>>> +	struct regulation_constraints *constraints = rdev->constraints;
+>>> +
+>>> +	if (data->flags & PMBUS_OP_PROTECTED)
+>>> +		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_STATUS;
+>>> +
+>>> +	if (data->flags & PMBUS_VOUT_PROTECTED)
+>>> +		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_VOLTAGE;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +EXPORT_SYMBOL_NS_GPL(pmbus_regulator_init_cb, PMBUS);
+>> I'm fairly comfortable with this from a regulator point of view, modulo
+>> the suggestion I posted in the other message about registering separate
+>> ops.  The fact that there's three combinations of ops is annoying but
+>> doesn't feel too bad, though I didn't actually write it out so perhaps
+>> it looks horrible.  In general removing permissions is safe, and without
+>> separate steps to remove write protect (which I see in your patch 5) the
+>> writes wouldn't actually work anyway.
+>
+>
+> I still consider the callback to be unnecessary, but I don't really have time
+> to implement a better solution myself. If you accept the regulator patches,
+> I'll have another look at the series as-is.
 
-Best regards,
-Krzysztof
+I'll group the regulator patches and resend to Mark, adjusted as
+requested.
 
+Guenter, should I the resend the hwmon patches here grouped with the
+tps25990 series ? Or is there something you'd like me change before ?
+
+>
+> Guenter
+
+-- 
+Jerome
