@@ -1,46 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6912C18B465;
-	Wed,  9 Oct 2024 08:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FDA194A5A;
+	Wed,  9 Oct 2024 12:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728463289; cv=none; b=kzcvGXOIYxxfWqjpd5Ny10U3YNq7gi+/1YSImMrYAoaqwOiZIONFRHzaopva53lXLA5WzPZNAX101kuWk7kU6mbzVLiqY+QpeVGEJQZD2N3rASU4triBQzWa0AiolDmh9PYHcVrPIUaUYIV6+G3P0lComzEacxR+SJdICFbhmo4=
+	t=1728477072; cv=none; b=tOZM2+QKgi2iV/TB/MEpVN36mMck0RaazzPKRVDngtq8RO6BAj/sB5DJ6RSSSL4o/vI4QLB5Gj8juXX/+Ilj9udTMDR5VQ/qWlAzFeVg9GyD4hZVozn6oCOf9AmIyziUKHr9wKGDtVfAswgF9eLbUXPNBZX2wTo+37H3RqOSToc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728463289; c=relaxed/simple;
-	bh=+M0hTljpFJhCSug/HvxVU/vMs8xMiOATiEGTFmWW7Wg=;
+	s=arc-20240116; t=1728477072; c=relaxed/simple;
+	bh=sBOKIoQd3/OEh/cmcosa+6B5hMfs/jvCCmADiAiS/84=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/9XVzcteGtBOza1ZMDsvx9EKkX6v4sVTh2QvA8ENG3aI665y3vOaTJEhI12+q373epDyBmamGNtMvGA1bU6YN2FllqXtlZmvslTemdlbLPRZORdnu48+YDpCh15/rBo2lIAoBnrJsKZ3WCQos967H9ABcAyxP/XnIWfpx1SiIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWNFSIAN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDxZy1jRDjktZfOVYyITNGiFr/rxrxiXFSnKdqKss82E9RGVFX3c9v2mo7FWDlLx/N/exPLUOLlOM2TJNRC8T6RTdXmpzY3i7uuGTgyfWSbjqsgW7sCPij2AKpa4H3J5smvCkWUypprOsg7U0pF2pGWopfuqPIVGIp77PEXpLMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tb0cz7bn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWNFSIAN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F85C4CEC5;
-	Wed,  9 Oct 2024 08:41:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tb0cz7bn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84AB9C4CEC5;
+	Wed,  9 Oct 2024 12:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728463289;
-	bh=+M0hTljpFJhCSug/HvxVU/vMs8xMiOATiEGTFmWW7Wg=;
+	s=k20201202; t=1728477072;
+	bh=sBOKIoQd3/OEh/cmcosa+6B5hMfs/jvCCmADiAiS/84=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jWNFSIANSpYCFOrIa/lcaOf0qJrFD0TuRH94M3Dk4EUt4qFIU2e2MmFHlILnCDRQ2
-	 HzjxPj5/YaRNgZC9X7BNuy9+VZAKcPQBhJIcBPfVVO95NUPBCQCN48vims1AzDRJO2
-	 PiP5AzMTXP/1//fjIALglyVOtmrCpZ03ceEdnJJa/rj02UGBwlKV9XaMohLOWoULmZ
-	 ydwm1C3LvbqncVaGNiBmdgVXJXY69RM2e59h5p/PYwAqkf68uHWsDmXsgiOFwSmBe5
-	 llsuCVrgTqrYac0Zh1CKNlTvyAnVPaMlkgFPSiYArO8HT7i/SBtwEeAv1P2S9e3Ide
-	 GaMhk+Tp2N6EA==
-Date: Wed, 9 Oct 2024 09:41:24 +0100
+	b=tb0cz7bn83zSrjY78J30KoCFUP3KW5fWnIOCW2P1OpeHlTw4GB6SjhKmWurEntID9
+	 hljx4qorQ+SJ+xGPblm6wVEisCB1eGxdf4wx45juGnW7kmTbsBGT0X470etDpBJOX1
+	 39W0Cvo1HMY2t2FhegTXrEznpXYNVIYFNY6TGWctIVDSkTEP74oodjogz4QEYS3SU0
+	 2ywD/utV9OrJ7jneb3qSGA0KQK0q+w92FAet1+FWQjTsoN9fX+cS2+CqFC2tUWOLQX
+	 LLaOoIWKk0NeuebOuLRnQDQ2zesFIDX4hmcdvETm8641sb4d6mcbNfAKBcd9pf22kt
+	 NeZX6j40CwKvA==
+Date: Wed, 9 Oct 2024 13:31:07 +0100
 From: Simon Horman <horms@kernel.org>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Realtek linux nic maintainers <nic_swsd@realtek.com>,
-	Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] r8169: add support for the temperature
- sensor being available from RTL8125B
-Message-ID: <20241009084124.GG99782@kernel.org>
-References: <f1658894-4c46-447a-80e6-153c8b788d71@gmail.com>
+To: Sanman Pradhan <sanman.p211993@gmail.com>
+Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
+	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net,
+	mohsin.bashr@gmail.com, sanmanpradhan@meta.com, andrew@lunn.ch,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH net-next v4] eth: fbnic: Add hardware monitoring support
+ via HWMON interface
+Message-ID: <20241009123107.GQ99782@kernel.org>
+References: <20241008143212.2354554-1-sanman.p211993@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,16 +46,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1658894-4c46-447a-80e6-153c8b788d71@gmail.com>
+In-Reply-To: <20241008143212.2354554-1-sanman.p211993@gmail.com>
 
-On Mon, Oct 07, 2024 at 08:34:12PM +0200, Heiner Kallweit wrote:
-> This adds support for the temperature sensor being available from
-> RTL8125B. Register information was taken from r8125 vendor driver.
+On Tue, Oct 08, 2024 at 07:32:12AM -0700, Sanman Pradhan wrote:
+> From: Sanman Pradhan <sanmanpradhan@meta.com>
 > 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> v2:
-> - don't omit identifiers in definition of r8169_hwmon_is_visible()
+> This patch adds support for hardware monitoring to the fbnic driver,
+> allowing for temperature and voltage sensor data to be exposed to
+> userspace via the HWMON interface. The driver registers a HWMON device
+> and provides callbacks for reading sensor data, enabling system
+> admins to monitor the health and operating conditions of fbnic.
+> 
+> Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+...
 
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> index a4809fe0fc24..10b9573d829e 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> @@ -289,9 +289,11 @@ static int fbnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+> 
+>  	fbnic_devlink_register(fbd);
+> 
+> +	fbnic_hwmon_register(fbd);
+> +
+>  	if (!fbd->dsn) {
+>  		dev_warn(&pdev->dev, "Reading serial number failed\n");
+> -		goto init_failure_mode;
+> +		goto hwmon_unregister;
+>  	}
+> 
+>  	netdev = fbnic_netdev_alloc(fbd);
+
+Hi Sanman,
+
+The code immediately after the hunk above is:
+
+	if (!netdev) {
+		dev_err(&pdev->dev, "Netdev allocation failed\n");
+		goto init_failure_mode;
+	}
+
+I think it's error-path needs to be update to goto hwmon_unregister
+rather than init_failure_mode.
+
+> @@ -310,6 +312,8 @@ static int fbnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+> 
+>  ifm_free_netdev:
+>  	fbnic_netdev_free(fbd);
+> +hwmon_unregister:
+> +	fbnic_hwmon_unregister(fbd);
+>  init_failure_mode:
+>  	dev_init_failure_modewarn(&pdev->dev, "Probe error encountered, entering init failure mode. Normal networking functionality will not be available.\n");
+>  	 /* Always return 0 even on error so devlink is registered to allow
+
+...
+
+-- 
+pw-bot: cr
