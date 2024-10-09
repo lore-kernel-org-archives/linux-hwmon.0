@@ -1,60 +1,60 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78C21E04A0
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1657E1E04BF
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728504440; cv=none; b=XQN/S5j5itb2QQB59H/GH4KYp4z57jdtd/BpV/P//VDdML8Nk+RHYCwZYMDGXrlJyvLyn1CV167UIcCdYnTDpgIPvIVMxfmTd9YFb1pGTelpRaeec+QXuzPp526RraZ2wYuZk6JwK562+4A+pZH95NjczJn2VoJHiMQ4F47iK0s=
+	t=1728504483; cv=none; b=Gh6LQ9g2OHYDHMYV4Rg6GmdTCziqjAfCow/yc1Vkc3g/w1BMVafaQl7LtV1KZrh+/4z6VCcLFA67h3YhhO5+ImvfS6eDPLdNFycsqnDLqO5FjdPWqnszBuzesz73D+POPu9zzstC8L9fUk1vAqsHVPbZYauWzHOGaZACs/bzLpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728504440; c=relaxed/simple;
-	bh=N87+sndzptkD989mlFOoFvhj/kb9LAtHqe/5aYbp1Cs=;
+	s=arc-20240116; t=1728504483; c=relaxed/simple;
+	bh=NtwPPSiRl1VWRASozVIsjQKII//5XDGFI3+TjvTrBZY=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Z0wC45GrCnxgh4nas2/p3FUL3GZxeBY7dw8J91d8+bDpTgJYtPCPo8m9ryHAF4VWlv+lKyyKd9RVZBK5kddoIKiKpI98Ovu6CUp6ymHE89ADLOd6/L7isRSRacV3J/+/fVqtGATrt6cSroiL2RTUMAv5y3zajw86fFw6BHa5ax8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=foaA5qSF; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:Content-Type; b=Ju27JJHjx0T/PPR3D5JAxJS9yf/C4kHUIrOH/CVzYGrGjeve0Oq+dPhXiHxlrAId09MaF2CG5ya9MyS4+26weSoxkrFGlkwt2DiMZzXmiTxY9OkXwfU3sbLO2Dj0ZNd6bMfmLkeUB8DfS++dj4eRVBdmxpJ9q9cUaKqDSOJt80A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U7CJNDQF; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="foaA5qSF"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a998a5ca499so26672666b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:07:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U7CJNDQF"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9953bdc341so24175066b.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728504437; x=1729109237; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728504480; x=1729109280; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZEtzviNPDfMgnzBnHlmzKZlqYcXcxWCLlGUAEuMExk=;
-        b=foaA5qSF5K820MkBrQJ1RRAzpZ2yh/HmQciKOPnF62gI7wgrPrTOveAgXZhQZrLcs6
-         UyvP13HP6HF4WKv1uRnMidxpA6Ytcj2WXrmk3906RSn9ag+5TjIt1R1Q2K6KOIGthrxU
-         bzCFxqgl2PVcLRxHTbQPzpVl2NUHIOmtSnwGfDWdKH7fZRl8EPGt0/TpLzbPY4PbEQxw
-         19Z2yfeeWRdTfe8jrkwx2UIhNGhbGIvPVDWo4bHoCg5yIPTe4Z0gcd6WQDy54IPjggmB
-         9a3KmCj6jpec0wL9pM/gqths5M/k6JAx2Zal5TDGk993mpvLleOvGKobNpbWzaFdt08b
-         Mo4A==
+        bh=oxwn+c0F7tFj4DWFTXGW18PUE6Q3kXZdDNjic0+jZhk=;
+        b=U7CJNDQF0rHiYn7GfkJHgUWOsqydZ5EtJvAOpyDVfescZNDpXH89BujA+Gl8ytwrXP
+         j7hWxXOJbIfH98mnJVQJfgsX/hLwdPNeK8/pr2pPZXw529/aUvKKOShMm2PMHdAY9RyB
+         YYpO7N9/S+agJaT1YhAH2XU9uAXHQs0YF2Z4fKxPcj1eD0u9qg8yhIJgTm06W6Dsdw/H
+         tyvM/eTyxa18vp8RrDQHdz4GhCusP2ZyWsJlIvR1JS5IAxWFN3IsRcaGI5EAhry/kDwT
+         T1+2xVgOBPYpxlFiRNp3diFp1gmoWcDcFK0Xgu+ySAE8qyKMDGmw0bshyRhdvZcigMwf
+         ssRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728504437; x=1729109237;
+        d=1e100.net; s=20230601; t=1728504480; x=1729109280;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lZEtzviNPDfMgnzBnHlmzKZlqYcXcxWCLlGUAEuMExk=;
-        b=tVfu+lDfceN7bPOxCaorzU2AwEO1s0z8eAcLJy09ju5yrKju/zYfz4EQVVg7cjdy+z
-         BR/huwcc0rYo+OZ28AbpROwYNTvKLmtzM//TCzgBPdAPua3FPqg9BlWgieqBzBLhwwJ4
-         jOtqrzAHxCMOwoUFgaYQB0jLHMVyqe6kNeDHWp+Dm8nhfkvr71OlPwtjlmSzTtBf5YNP
-         u4qr2V3y1Fy7Oqfg9b9/rOyO3b6aw1y5l/TAjXrQJNwOGdJLtKC6poXVmAkwxvuXetrb
-         4KWyB5NUAvQ1EIvTT3IbFFGIjI8ILMtBF/0tMGPS3Dhx8yJi07NIexaOcJLeQ21QbDat
-         LtJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBeYYAZ7hP57Vi9ucV6HUhup5HZDdGiejeUPtrjOf6RM7/aVFDHwDPElN4dhZ/9QIvOdRSZ2OfLTVV+g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw26XbLY/3Bfmj6y6FmzHvd+t8zU3vhST6Xo94UyDa2N7hFk3Bk
-	zrkzqlmSQJ8BYUDcSfVFelb+f3LdStuqCtc3ZNlp9h4quekuWcIL
-X-Google-Smtp-Source: AGHT+IHr+GpFMxEYCu943hvq5llxkSFCkCSemX0T21vVg8cBSMkoT/V863crROgR+RrHPsvbrZuKPw==
-X-Received: by 2002:a17:907:e8d:b0:a86:9d3d:edef with SMTP id a640c23a62f3a-a998d10db4dmr325282566b.12.1728504437080;
-        Wed, 09 Oct 2024 13:07:17 -0700 (PDT)
+        bh=oxwn+c0F7tFj4DWFTXGW18PUE6Q3kXZdDNjic0+jZhk=;
+        b=KfF21vVxLn8Pj0AsuC6i+OQ9qBe/1MSJx7TKLBLihjS1Nb0P+oRT1PM5iY6J58dQZj
+         hRi1uk+n7Fyt/nx5Ag9/B85NNgZSCqBEEr+so9EF96tz+SnZRc8k6o1eA+d1n9h4em1W
+         mVShUYDfrVnsmQ3Yy2KFbRqoH/ZCTbRYJRLG1YUKNepyo0cfSvQDTGa9whFeCrvC72oe
+         fZEIHPckkqe4J12GOqQOsqmadzKOb2ROMBQ8/vL45ENfhAnQtObLjNMtlX8yOgsaA58v
+         q6BmXO3shtta5Tw7WZl79QelBa/zLU/uXqPsH1UdlLtSB4m2IpM+drn3MLm59AUNXK3G
+         3qmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfWGgiWGHGhyVlxO/kMxaZYV+3xGwtxRxM7JLgLlotT/8cRnnTxz0rl7EIb3WKFgHeyI68+PRx7seUrQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBMUdGYR8i8OkWSpFIP3tO7CfqLsX+uH3nP3+D/AqOJTpSs/y4
+	cvp/x3LoZsDXGpnS99FF66eqik17Bqc+nALRIvsTRb1yxcIkelhd
+X-Google-Smtp-Source: AGHT+IFurkqe46bFHp4eUweBKS3wqvnMc65n6eCgeZOkN1PjeZ1RtecnQg+15NM7n2KBBneTeaVTXQ==
+X-Received: by 2002:a17:907:7e95:b0:a99:4aa7:4d77 with SMTP id a640c23a62f3a-a998d120733mr239475866b.3.1728504480278;
+        Wed, 09 Oct 2024 13:08:00 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:b338:6300:ac71:eea5:34f6:504b? (dynamic-2a02-3100-b338-6300-ac71-eea5-34f6-504b.310.pool.telefonica.de. [2a02:3100:b338:6300:ac71:eea5:34f6:504b])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9955cd5207sm460255766b.13.2024.10.09.13.07.16
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a992e664ed8sm707664166b.95.2024.10.09.13.07.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 13:07:16 -0700 (PDT)
-Message-ID: <544b1765-312b-4ad2-9eaa-71994883156d@gmail.com>
-Date: Wed, 9 Oct 2024 22:07:15 +0200
+        Wed, 09 Oct 2024 13:07:59 -0700 (PDT)
+Message-ID: <8eb3e8a0-89e5-4a2e-b0e0-1182c3e43c69@gmail.com>
+Date: Wed, 9 Oct 2024 22:07:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 6/9] hwmon: powerz: Use new helper hwmon_visible_0444
+Subject: [PATCH 7/9] hwmon: raspberrypi: Use new helper hwmon_visible_0444
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Tim Harvey <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
@@ -129,35 +129,35 @@ Use new helper hwmon_visible_0444 to simplify the code.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/hwmon/powerz.c | 8 +-------
+ drivers/hwmon/raspberrypi-hwmon.c | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c
-index cfb635f94..fa66a6471 100644
---- a/drivers/hwmon/powerz.c
-+++ b/drivers/hwmon/powerz.c
-@@ -54,12 +54,6 @@ static const struct hwmon_channel_info *const powerz_info[] = {
- 	NULL
- };
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index 65cc52e47..277ab5dac 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -81,12 +81,6 @@ static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
+ 	return 0;
+ }
  
--static umode_t powerz_is_visible(const void *data, enum hwmon_sensor_types type,
--				 u32 attr, int channel)
+-static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
+-			      u32 attr, int channel)
 -{
 -	return 0444;
 -}
 -
- static int powerz_read_string(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, const char **str)
- {
-@@ -201,7 +195,7 @@ static int powerz_read(struct device *dev, enum hwmon_sensor_types type,
- }
- 
- static const struct hwmon_ops powerz_hwmon_ops = {
--	.is_visible = powerz_is_visible,
-+	.is_visible = hwmon_visible_0444,
- 	.read = powerz_read,
- 	.read_string = powerz_read_string,
+ static const struct hwmon_channel_info * const rpi_info[] = {
+ 	HWMON_CHANNEL_INFO(in,
+ 			   HWMON_I_LCRIT_ALARM),
+@@ -94,7 +88,7 @@ static const struct hwmon_channel_info * const rpi_info[] = {
  };
+ 
+ static const struct hwmon_ops rpi_hwmon_ops = {
+-	.is_visible = rpi_is_visible,
++	.is_visible = hwmon_visible_0444,
+ 	.read = rpi_read,
+ };
+ 
 -- 
 2.47.0
 
