@@ -1,58 +1,60 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50C0183CC5
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469DB1E04A8
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728504142; cv=none; b=suhe45D45F2nYXZ4bbi3ng9idBamBD1qE3cDB4HfCH6xucEl/N28t0YBZRl8rtdcjlIwjiJP547s2weM0p8a03Rysb1REtWcIirnksxzVg5tGuwVg4Bcp1k4/wx9VJosVkgbnV4F8rCPx7Hqy7CvBx7L7ffUhOcJRLeM+Nuf5/Q=
+	t=1728504217; cv=none; b=qpF5DVFb8hMPp7S6DcofsQ/kOfyAIrzgoNkCTSMM+RmuiV24Wvhh4PY3A7aS8t00khNwoCvvNDg76UFS60ZxW1MnttSIUfi3gOvF0xgE6Qm1fTax4I4lV5wmo9skWrMrzsptGNDen42BfxdcGITIhHXlyB7kdZkxvCsAPKoLGxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728504142; c=relaxed/simple;
-	bh=x/Ou+XFddJO1lFDbG4ZZDJdZ1c4twwfeLGIWaZROXbA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=kDXCjl7/ldBYk8G+XMETZ1yddAjIa8IPMOiKDkY0o7JSkKTBZ0AOOMcsywvNXHhMbGItfStD8Xpf6+/1stCQ49dcogIXDEvzKyz0na3gxYjcBcK9QQAawWRNGu5tJ3cYMSFZA86jLw5V9ENdcxINOsU2upndk4twT1IV+AaPego=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P17Lhvcy; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1728504217; c=relaxed/simple;
+	bh=6g+QNjhOrdb8sfdNgFtUCBbMsVcro8HZhnq0tUHugcA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=eWG+ubypkAFKGTmJRQVC2mDtydtH+40Moj7ProYye3gaUD3mquJMx8FN6OH7hqYlmYPESvslXjxo1pN+zdvFolivkDbyRdl6n8mHhmw/Zar6dO+DjULnd5MtydYAE41WAmdu/OfAfaVpzgw+YCUoqh2Fx6OGbIfOLkyAP+Og5ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfJ5VARB; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P17Lhvcy"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a993302fa02so31521966b.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:02:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfJ5VARB"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fac3f20f1dso1597941fa.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728504139; x=1729108939; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vmjfhu8rgH390NbPUQcSwNodTpch+cQzDRf14bb6zeQ=;
-        b=P17Lhvcy/Y5/f5n7t2o5ET4vSsNPOZpARXQyukqLX4W+qOOfTGAELPKm/vsEgyDCK+
-         vrhKNKLnFtoTD939YacYFSESZ0X08LU54xlYe1smBJAWdFNNggoVJ+Z3VOQgRrPlKwqa
-         uU43cpYLKcr9zs57zG9StRD67W55p+72FTSiY/a/AZ4xsJ+lHMv2WXvlrbIDSk6Iq4ti
-         P8stTmFbaNmRJnX24v7uHIRNzK2D7v3OxLzyS7C4bQjlPSfDRcOVRJBVttCGl/BlbwWv
-         xvxFmvPSouTpDMLkHbSbeYfM0l6tnvc0dJd1OPU5lrnuDaVU7pM2tXx0jOOPPCkqWjt7
-         YtjQ==
+        d=gmail.com; s=20230601; t=1728504214; x=1729109014; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+uVHUOU9deIeIerpwAIew5ByM1hiuI7rc50ZxBHn0c=;
+        b=NfJ5VARBs67evtT5Gm6cFDLWuDle3ddSTt3sCRZkmh5ZzTvBnlnHFUIhjgzmS4uIHy
+         QbUNpSF6h02Cg2/1F69S2lESrQWPxdlWADC/icHMFYyh5WmSUzzYdCiT3vipQvCf+hQt
+         6cBsOCaEwdZYC6zNopbjJrKNvDi7niZWxgXdEEZjRGZoHFAZrL90jfgTppmxbi6R0fI3
+         PDGor9TM7XeX9aXVA2rf2OETniE8/n0OjUYHlo3MrmK//KiYOENjPZqDUMCF2kBn6G4C
+         7+XQfgI09wsC6SMn/M6CmxGDRcUIK5UiRKu0F4W04w1w1K+No2BOKTk4+71rWnPbTPbp
+         P0Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728504139; x=1729108939;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vmjfhu8rgH390NbPUQcSwNodTpch+cQzDRf14bb6zeQ=;
-        b=n+L7Ra0Pg2I3GlTi5ifbogjmUK2l3QsZp2nPNUGiBEaF9YpiXF7BsDAu+3yF/BSS07
-         foSxNt94HEYRXc1LBqqYkpudh8XRIJ21vjoEWBRmhuscXngZ50/pK4f691R8bxupC0jw
-         urLOdRmi0Wu7gxKLOPNLBwhdofL6AtC5Tu71Nr8xqQ1jPG350zTrBZ3UBTffplIt+XPj
-         OBQM8/ASA1wSplD5RpBgzCkdcOC4GpngsMUR2pgW+RRbJC/lV1Rn8iK6ydbNMK5sn2vp
-         pAN8aKMpKeG4UYJaMrFqATCd0OMBYxWRsliMZF5hRBTV+OILL9EzfdbFOhKdrhtmFaAE
-         s8aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVzno7zsKsD2OLW+1/T9cBWa5R7L0n2p/S+aNervu+s2CBDoeGVOWStB1kHDJlGWh9zcCd5WU7+15DZIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSNr/6nBRDidqV7qVeXjyMfpjlRKAc1HnKggS9lNisMsV75MhK
-	O/lMkjZpHKBfWnyhMOKglW2UetmkHPeSy9rFyUXwFoKXhJJZW7iA
-X-Google-Smtp-Source: AGHT+IGuSigFiXRDukGYMxhE9xOCL6LlE7ZvgsQ4m6sKYJOHRWtXcHWnQ+gsBgaJ9OzsOqOydREX7g==
-X-Received: by 2002:a17:907:c7e1:b0:a99:4261:e9f7 with SMTP id a640c23a62f3a-a998d25a375mr347553866b.39.1728504138856;
-        Wed, 09 Oct 2024 13:02:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728504214; x=1729109014;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i+uVHUOU9deIeIerpwAIew5ByM1hiuI7rc50ZxBHn0c=;
+        b=eXgZCf4bLRbBAQQH/AUqTAkWJV6hfl9aF+XuUebEC0H3zVKWJhNk6CjFekWq0rdykt
+         pNbZ+18biMlF4R6Pm257TJxNJdJqRtr2MVwKmvDRp/nE8wmq8hSb0gOCIMOekthZa7my
+         LDAXRloUORDOUb0AjprFWFNaCxniH3qTYg7wvwkQJJaFveuJMQ3l//KFmxyepVx6OtUZ
+         LfOsz05Q/+qdQNNZsb3ZPXPM437jWdQ1YoWNpGwsn5pjyxJEdCThph84uKJMtbppQK+I
+         cGaP4FkiKQIQj3XVDqaWiMW+8L930GcDqaFit/ull4AWVEw9xNuAJKfK3gh4fnokD4XM
+         Mixg==
+X-Forwarded-Encrypted: i=1; AJvYcCVChU6xZxg8FRmXtQrIm4qLb6UyRelyHB/JpiUt4rxXsGAsRFyZgr+8n+hlKalLEQucaE/1llyfd5vM3Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC+gRaE/2yCqSo45/JVCKDjTed54N8MJ98RV6oHVlGtd1QYOFT
+	5bqbvKIPEUNECZuI196yNMzMZFeQShudETVJMocbNnH7b1fZQbdJ
+X-Google-Smtp-Source: AGHT+IG4FfWa1XAC4GwW+YDRKpAvCsQhmAUQ1ilaZ0qG2t3YZf0j7u8PGdhBydz9ejeeZiHNICnlmg==
+X-Received: by 2002:a05:6512:31cc:b0:533:42ae:c985 with SMTP id 2adb3069b0e04-539c48e7bfbmr2603871e87.25.1728504214056;
+        Wed, 09 Oct 2024 13:03:34 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:b338:6300:ac71:eea5:34f6:504b? (dynamic-2a02-3100-b338-6300-ac71-eea5-34f6-504b.310.pool.telefonica.de. [2a02:3100:b338:6300:ac71:eea5:34f6:504b])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a992e78498fsm701977966b.107.2024.10.09.13.02.18
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a993a3a1badsm656335466b.161.2024.10.09.13.03.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 13:02:18 -0700 (PDT)
-Message-ID: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
-Date: Wed, 9 Oct 2024 22:02:17 +0200
+        Wed, 09 Oct 2024 13:03:33 -0700 (PDT)
+Message-ID: <8583cf5a-5495-476c-a309-169a83013aa9@gmail.com>
+Date: Wed, 9 Oct 2024 22:03:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,7 +62,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Subject: [PATCH 1/9] hwmon: Add helper hwmon_visible_0444
+From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Tim Harvey <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
  Tom Rix <trix@redhat.com>, Jonas Malaco <jonas@protocubo.io>,
@@ -73,8 +76,8 @@ Cc: Broadcom internal kernel review list
  "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
  linux-rpi-kernel@lists.infradead.org,
  "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 0/9] hwmon: Add and use helper hwmon_visible_0444
+References: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
+Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -118,38 +121,51 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Several drivers simply return 0444 in their is_visible callback.
 Add a helper in hwmon core for this use case to avoid code duplication.
 
-There are more drivers outside drivers/hwmon which would benefit
-from this helper as well.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/hwmon/hwmon.c | 7 +++++++
+ include/linux/hwmon.h | 2 ++
+ 2 files changed, 9 insertions(+)
 
-Heiner Kallweit (9):
-  hwmon: Add helper hwmon_visible_0444
-  hwmon: i5500_temp: Use new helper hwmon_visible_0444
-  hwmon: surface_fan: Use new helper hwmon_visible_0444
-  hwmon: sl28cpld: Use new helper hwmon_visible_0444
-  hwmon: gsc: Use new helper hwmon_visible_0444
-  hwmon: powerz: Use new helper hwmon_visible_0444
-  hwmon: raspberrypi: Use new helper hwmon_visible_0444
-  hwmon: intel-m10-bmc: Use new helper hwmon_visible_0444
-  hwmon: nzxt-kraken2: Use new helper hwmon_visible_0444
-
- drivers/hwmon/gsc-hwmon.c           |  9 +--------
- drivers/hwmon/hwmon.c               |  7 +++++++
- drivers/hwmon/i5500_temp.c          |  8 +-------
- drivers/hwmon/intel-m10-bmc-hwmon.c |  9 +--------
- drivers/hwmon/nzxt-kraken2.c        |  9 +--------
- drivers/hwmon/powerz.c              |  8 +-------
- drivers/hwmon/raspberrypi-hwmon.c   |  8 +-------
- drivers/hwmon/sl28cpld-hwmon.c      |  9 +--------
- drivers/hwmon/surface_fan.c         | 10 +---------
- include/linux/hwmon.h               |  2 ++
- 10 files changed, 17 insertions(+), 62 deletions(-)
-
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 9c35c4d03..7c26e241e 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -108,6 +108,13 @@ static const struct attribute_group hwmon_dev_attr_group = {
+ 	.is_visible	= hwmon_dev_attr_is_visible,
+ };
+ 
++umode_t hwmon_visible_0444(const void *drvdata, enum hwmon_sensor_types type,
++			   u32 attr, int channel)
++{
++	return 0444;
++}
++EXPORT_SYMBOL_GPL(hwmon_visible_0444);
++
+ static const struct attribute_group *hwmon_dev_attr_groups[] = {
+ 	&hwmon_dev_attr_group,
+ 	NULL
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 5c6a421ad..ce38051b6 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -422,6 +422,8 @@ struct hwmon_ops {
+ 		     u32 attr, int channel, long val);
+ };
+ 
++umode_t hwmon_visible_0444(const void *drvdata, enum hwmon_sensor_types type,
++			   u32 attr, int channel);
+ /**
+  * struct hwmon_channel_info - Channel information
+  * @type:	Channel type.
 -- 
 2.47.0
+
 
