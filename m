@@ -1,60 +1,60 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5A21B3F30
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273B81E132D
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728504351; cv=none; b=l4cyd7/xYwVqc5nBQZQGTlImZ/8298yaJXrH+X54VtKY5q0SB/+xVNo8uuhpJ5XDYMLoGrGBfHqsm6goUr13Qke44uFiDr2ZJQWtT5+gT+mHTYIehOKTmluSEtp0aTOBxISlF7dqtTWBAmu0YWmApJc8k8RXaUC1ukky4hvgA3M=
+	t=1728504399; cv=none; b=DXKFcMOAGRHBxkyD7V2ApOR8Qc26G/XQntm40XN/SsyZvG26FUQ0wWG1FNMVFIHjl3Qie+4rOcto1X979wN1hUE3mPTXlRpE+luVkV9Vu7jWhI0p0fzjQHYnGyc3hs/StBbwYAVNCzuvDNOW2tNmJI2iYiq3QgfVtfgk8T8oTYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728504351; c=relaxed/simple;
-	bh=5ReVWaHLB2JW1Lmuy7poN/TLNWwLwirmKypedMcyCWU=;
+	s=arc-20240116; t=1728504399; c=relaxed/simple;
+	bh=x9ULqSe4IxywaIDfPqV+2djpVGrAmytUHtiC4RyMLqU=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KHUnh7nk8GD/nCNPUT7XqHXkVYzSHG8AYGgCu0EoDNBMMsSCPZDVIfvCLQUCTczewF6wDaQlxIVbmkYP0gN1GQh2irhSRm/NQYIMWp5W7BffJW6T7o6oOc8SoJhhswQFCPzIhg1OXlRrUzcxHarVE+n9a1EZ/M8VHE4x6LTtzCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BALTVJc/; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:Content-Type; b=PeN+Io0QSN0qOWxU7D2R3LjE+gtbwHO7FYAC7v6lMEGYcSjEphOKV0t364QRHIT4cKVIw3BCTl7/i751Bvpk5RWUeraddrx4anzPZJYZh7DdCKUOuEaPr32tUE+YDFvGf1S5U6Xm8k0GtMBNebtUpGj2e3K2+fU2X5Bql8qRF4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OyV6OZtS; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BALTVJc/"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5c918c067a1so115446a12.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:05:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OyV6OZtS"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a999521d0c3so30577966b.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728504348; x=1729109148; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728504394; x=1729109194; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tab8ulX/uzp1+6fYBIMdT1It0Zn3BMBbGkpf8f3dsPo=;
-        b=BALTVJc/j80+ijL0TWTVcdH4w2hRkXU9cnenwboStUEa9m9lU/er5JBeeSDWemTVoV
-         oCGj7yVZYOkRNEQEap164F73cnFuKsqeML1zjIzJDwYdugXJktmkQqsbTEi4G33xmSiB
-         dT+rARa3fvzc4+733y42tWJD73wx6N/nVaCny5znX+HUQ8C9PJqwkUcQotJxD78anNOy
-         z6ZNT6SG+SR4PiFQhZWoIfSdmoVEJ44OGw1m1vAkLIjG9kvreMCVsCLPx01GIpprOoFe
-         3H2WXYmUZ4KmbZrtTUkt1lW5JUPsLHMNcyFITTy1O0Xp3DlY5oer8tySpQhJDSwL4A5I
-         PXhA==
+        bh=nb8pOCtDHxPLiKmrGAiwuFobcA2kFtCdxgcgDzWTzq8=;
+        b=OyV6OZtSoFj4VmU8lvRtKp9A8cHttS+RX3UyfQR+y8Y5V4/a+ehCo7+v/3z5nPz+tn
+         tUn5UFZqy+cFYSuBo9Qk++OQeRDBBLiUXRTh7+sdjB9bePaeyRBuyA0HM3pL2kV/pken
+         t5tnZFtuJ4eF7MvyUpLRWogaDgmMfmLeumRJGGR5h8aB2U/KIrKC9rX5hGX2yGmKTvNY
+         3rCPQtvVPwdD0HEw1ZEQrnXL9DwWbIe9ye304WS3s4ilUi77rvk25eYj4B0QRbEMj/Rr
+         Z8zm6DsQtSR2uTBJQ2+zgF0lUDbgo+CqqmZRSxyTRjOENpdqvTmXBlD5HEXL1x1wWNCL
+         ++tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728504348; x=1729109148;
+        d=1e100.net; s=20230601; t=1728504394; x=1729109194;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Tab8ulX/uzp1+6fYBIMdT1It0Zn3BMBbGkpf8f3dsPo=;
-        b=lmOCsVi33QkvqQWfMXQ3rexEVsWaV7jbRxLQIJkGX1eeICxT7g+hJNflQE6urc97CS
-         GgbSWTSaG+ysL6m26NfMpJx3Z1ZO6Jzfasxfct2za8RLsBu9fuPuLTlYF6Et/nGseJFG
-         R4sAUaIg3Zo5iYLZlDzRxWY8z8gMe6a7XD4P3UAwmarS8vEmcma2Y9LnmdQapka9z+yn
-         Nzdr5Q4xvkWvclMiyX1gbaG+1ey3RQyfcRkVGGoXGTVdKy+usjKyYiu008RClD55JtFU
-         hOeEF7KR7cxN5+ATJFYgnOMjnB6/4Q6s+BJdW3pQrlJlF4Kqq2k57ZkV1lhIbMZCciGW
-         ZjZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6KcAJ6CWAkuugHnHJo0alDPC4dCYxhyME4NO5vLHR7K31jSwdxArKgppGbFAQdc/ED/UJUYuPzhb3Xg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysckiUTvI1reHm2TySNWk84Pc11DMgk8HOCx10oLMpqBvb1Rqb
-	8s8tb4kfHRT5JKnbwzYCUrYwEm9FYPcRT5CvBlcHQ4AIbACCAnS0
-X-Google-Smtp-Source: AGHT+IEwn0NyUjw3v519oNipSVIGNzNVzXZgEjNriHyVuj6xRjyAY9rdCtYOt/uqt/1eDX03+JoeEA==
-X-Received: by 2002:a05:6402:3546:b0:5c9:27aa:8421 with SMTP id 4fb4d7f45d1cf-5c927aa8c10mr2235163a12.1.1728504347842;
-        Wed, 09 Oct 2024 13:05:47 -0700 (PDT)
+        bh=nb8pOCtDHxPLiKmrGAiwuFobcA2kFtCdxgcgDzWTzq8=;
+        b=mBKPMzKMy+UovAKb1QCQkFIhjMSFEVYCDRrCDwXx8wD1+OSClKAVe7x2JlBwA0DdTH
+         ctrL5GSUYhdn9j0vjD15J0S7aWg30F0+SnVt6P+SHMK18spKKZwV0bIyEPB0AHisv6ZG
+         bKaqXHMZxV07AnzsxrzOqC2wyQBYm80d0mYnSdkTV5/GcouWB1fzF/OzD9tNBsctCmbH
+         JqKeed7OwDLl/PGMCh/fX4bxv+qdM7SMucJRRPxrEUvfg/ytxJoJvTEFRUen9N9vJArK
+         ZKp0QApRwEJbRia8oQJg194WAYIpiF8LDRieNia8v+ngEOmSev8k+Q2730hWP+hysG9h
+         hA+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUyYnWxKaGZ/jH2LcDY1j83oDwcyn33Y0jLaFWAzlaFpRc7WQbZwo21n57vw4WpjgXYBJEvFMfPPDiDMA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ9P2YPM6kY0YeKtn58PJ2mEW1NA4XK64/+12/Urexp75xXJ8Z
+	QsScPMjcaVfi7qFnWUnrycHpYfoo+OwAqoywsjQ/d8E+kOPYcmMF
+X-Google-Smtp-Source: AGHT+IHC78mKAzsxrz9lriE6NNMOEAx9AAH0501PJyVV3I1pdytg20VZCwdCWODLPoC3c5Q5JVX6rg==
+X-Received: by 2002:a17:907:94cd:b0:a99:5b55:1a75 with SMTP id a640c23a62f3a-a998d208648mr329458566b.29.1728504394210;
+        Wed, 09 Oct 2024 13:06:34 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:b338:6300:ac71:eea5:34f6:504b? (dynamic-2a02-3100-b338-6300-ac71-eea5-34f6-504b.310.pool.telefonica.de. [2a02:3100:b338:6300:ac71:eea5:34f6:504b])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e99440b8sm5294199a12.29.2024.10.09.13.05.45
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9950338d1fsm495383866b.47.2024.10.09.13.06.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 13:05:46 -0700 (PDT)
-Message-ID: <a0226799-0885-441e-91fc-fdc548529433@gmail.com>
-Date: Wed, 9 Oct 2024 22:05:44 +0200
+        Wed, 09 Oct 2024 13:06:33 -0700 (PDT)
+Message-ID: <ca6d225d-9049-48f8-afdf-b3d4d781d55a@gmail.com>
+Date: Wed, 9 Oct 2024 22:06:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 4/9] hwmon: sl28cpld: Use new helper hwmon_visible_0444
+Subject: [PATCH 5/9] hwmon: gsc: Use new helper hwmon_visible_0444
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Tim Harvey <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
@@ -129,36 +129,30 @@ Use new helper hwmon_visible_0444 to simplify the code.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/hwmon/sl28cpld-hwmon.c | 9 +--------
+ drivers/hwmon/gsc-hwmon.c | 9 +--------
  1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/sl28cpld-hwmon.c b/drivers/hwmon/sl28cpld-hwmon.c
-index e020f25c9..07fff262e 100644
---- a/drivers/hwmon/sl28cpld-hwmon.c
-+++ b/drivers/hwmon/sl28cpld-hwmon.c
-@@ -23,13 +23,6 @@ struct sl28cpld_hwmon {
- 	u32 offset;
- };
+diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+index 4514f3ed9..d70b4e305 100644
+--- a/drivers/hwmon/gsc-hwmon.c
++++ b/drivers/hwmon/gsc-hwmon.c
+@@ -231,15 +231,8 @@ gsc_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+ 	return 0;
+ }
  
--static umode_t sl28cpld_hwmon_is_visible(const void *data,
--					 enum hwmon_sensor_types type,
--					 u32 attr, int channel)
+-static umode_t
+-gsc_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type, u32 attr,
+-		     int ch)
 -{
 -	return 0444;
 -}
 -
- static int sl28cpld_hwmon_read(struct device *dev,
- 			       enum hwmon_sensor_types type, u32 attr,
- 			       int channel, long *input)
-@@ -73,7 +66,7 @@ static const struct hwmon_channel_info * const sl28cpld_hwmon_info[] = {
- };
- 
- static const struct hwmon_ops sl28cpld_hwmon_ops = {
--	.is_visible = sl28cpld_hwmon_is_visible,
+ static const struct hwmon_ops gsc_hwmon_ops = {
+-	.is_visible = gsc_hwmon_is_visible,
 +	.is_visible = hwmon_visible_0444,
- 	.read = sl28cpld_hwmon_read,
+ 	.read = gsc_hwmon_read,
+ 	.read_string = gsc_hwmon_read_string,
  };
- 
 -- 
 2.47.0
 
