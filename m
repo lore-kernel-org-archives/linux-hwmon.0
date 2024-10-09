@@ -1,281 +1,155 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71286178378;
-	Wed,  9 Oct 2024 19:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50C0183CC5
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728501622; cv=none; b=AAGS+itOCH9EzvAjnta0+0RB/VEYosE5hvWw6VTgkJXaahkUQJzcc/80W/HDvv/ersMz3foy02m9CBpw7RO0dc5rkpyAL430JV5wgWH4HyyMQdeLG6jZCQhmd5ZhIFavPFWvaf63U+SXr+Yj1GfxPcjC1vym0siW+DbTcVjjPEs=
+	t=1728504142; cv=none; b=suhe45D45F2nYXZ4bbi3ng9idBamBD1qE3cDB4HfCH6xucEl/N28t0YBZRl8rtdcjlIwjiJP547s2weM0p8a03Rysb1REtWcIirnksxzVg5tGuwVg4Bcp1k4/wx9VJosVkgbnV4F8rCPx7Hqy7CvBx7L7ffUhOcJRLeM+Nuf5/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728501622; c=relaxed/simple;
-	bh=IWJ+joWcbxEjc5vmr8FrcsLUPOFIrcSoKDwl3HL2oiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RPZLhWJ4MgX9PfgT9WCO2rcjnxVJhrC9eQJI+U0vr88CcZXFWahTCQkjgU6d527hI4y20+MGdbllrQetamKb0N/8R6ExeJTsKOZw6D7aL3LLH8G5O/hE2TIDvBkZnG2jsq7CSdGlj2CRVrgkp81LV5cgwiwqUCYghGEELLBxgBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W1dGaH2u; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1728504142; c=relaxed/simple;
+	bh=x/Ou+XFddJO1lFDbG4ZZDJdZ1c4twwfeLGIWaZROXbA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=kDXCjl7/ldBYk8G+XMETZ1yddAjIa8IPMOiKDkY0o7JSkKTBZ0AOOMcsywvNXHhMbGItfStD8Xpf6+/1stCQ49dcogIXDEvzKyz0na3gxYjcBcK9QQAawWRNGu5tJ3cYMSFZA86jLw5V9ENdcxINOsU2upndk4twT1IV+AaPego=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P17Lhvcy; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W1dGaH2u"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7d4fa972cbeso94531a12.2;
-        Wed, 09 Oct 2024 12:20:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P17Lhvcy"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a993302fa02so31521966b.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728501620; x=1729106420; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7gxaELvNEFT5M2VIuGKrg16utiwOuClRCF4Ot5zkoA=;
-        b=W1dGaH2ue7TKBDueoZiqNh1oo1IJLFEPRGbSiMvDAzCnQkLFDpmkCGq1Noci5qUOi6
-         Ix6X/qJYDUrdnEhwicmLflgh2EuhnXAd/Ndb8rtzmzMD3eViJhGZqPdpMK5FwzOiQSH5
-         UCQgneMvQo6wAdQ+b4Tiya/kqAlJouOjm4GB7j2MCkRDk4pqTwhNT/TPh9hZu8v2cZN3
-         n8yn9uxfRVqTKG/MG1h0dT8Sf+/KkCaFuexI7NJ966EhawrUtVfFWar1dDYH4yI+7YP9
-         nll0p+Da6c6a81Cbr1AaP+31ChFKSQN6k6FXIJlEEXCj7ywMHzER+kBMS6ZrC0gj16aM
-         gbJQ==
+        d=gmail.com; s=20230601; t=1728504139; x=1729108939; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vmjfhu8rgH390NbPUQcSwNodTpch+cQzDRf14bb6zeQ=;
+        b=P17Lhvcy/Y5/f5n7t2o5ET4vSsNPOZpARXQyukqLX4W+qOOfTGAELPKm/vsEgyDCK+
+         vrhKNKLnFtoTD939YacYFSESZ0X08LU54xlYe1smBJAWdFNNggoVJ+Z3VOQgRrPlKwqa
+         uU43cpYLKcr9zs57zG9StRD67W55p+72FTSiY/a/AZ4xsJ+lHMv2WXvlrbIDSk6Iq4ti
+         P8stTmFbaNmRJnX24v7uHIRNzK2D7v3OxLzyS7C4bQjlPSfDRcOVRJBVttCGl/BlbwWv
+         xvxFmvPSouTpDMLkHbSbeYfM0l6tnvc0dJd1OPU5lrnuDaVU7pM2tXx0jOOPPCkqWjt7
+         YtjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728501620; x=1729106420;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f7gxaELvNEFT5M2VIuGKrg16utiwOuClRCF4Ot5zkoA=;
-        b=Gx84VISSWQmtZBWlVlZmw5PcGudKofTUym4oEInwajchRaI9HyP1LbwZ8PaZYxlCuS
-         x4rwhB13OjejAiOwQggsizt4BJWGz9iIx+mysoIz45HAhpcv8OkmLQ9LhIGPKB9t+1d8
-         SqgBQbwdmqrTB9sdrsuExuYdWdUbW7GlG872sFGtNDCuS29vVmzgnMnP4H/9Ra6Eq2mn
-         cGWz7OQrKhHe+mz/H41Rp44dlpxIhF8QenxYJgBndX+QgA5UQ79pLmSxgDwW6YoSkFy8
-         Qydf2YPE/jldutOezC+RKwpVCwkiIiEmHMwtFXa+MvQ8kib1bAJyb46XhqMU3M54LIx1
-         BqYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVTh1rVGNasIAOfEvkhB1yNRDJd9z5aGGCYq0u7VDKlYNAuQnbIlDMrF20nxeLHjIZAZeleYaLL5P89iioW@vger.kernel.org, AJvYcCVs+6uwnErxFR8oU04sy/qpK/HfE4jEDktKkVw1JfrBRNZaIWvYFizHR4NINi5zc4sLlrWxabN6Yv3k2w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkdLh3HUYWlOBZN/8hhpS3ZWfZQ3ZCt+q+Y8hriYIzIGnditRy
-	2FwmDsQoatqtffklQjUO7BRKGK1TpHtwRo010qHITsouzVDO3jeFl6hHmoTB
-X-Google-Smtp-Source: AGHT+IHi9T66i4vzoFuac6fUCJSS5dD1g+T3MdMOTGUOUUhH5/ZWr/CEMJzgKmZ50eLt60hmBtz9Ig==
-X-Received: by 2002:a05:6a21:3511:b0:1d8:a3ab:7220 with SMTP id adf61e73a8af0-1d8a3b5cac9mr5390238637.0.1728501619571;
-        Wed, 09 Oct 2024 12:20:19 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-012.fbsv.net. [2a03:2880:ff:c::face:b00c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0d47804sm8112688b3a.137.2024.10.09.12.20.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 12:20:19 -0700 (PDT)
-From: Sanman Pradhan <sanman.p211993@gmail.com>
-To: netdev@vger.kernel.org
-Cc: alexanderduyck@fb.com,
-	kuba@kernel.org,
-	kernel-team@meta.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	horms@kernel.org,
-	mohsin.bashr@gmail.com,
-	sanmanpradhan@meta.com,
-	andrew@lunn.ch,
-	linux-hwmon@vger.kernel.org,
-	sanman.p211993@gmail.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v5] eth: fbnic: Add hardware monitoring support via HWMON interface
-Date: Wed,  9 Oct 2024 12:20:18 -0700
-Message-ID: <20241009192018.2683416-1-sanman.p211993@gmail.com>
-X-Mailer: git-send-email 2.43.5
+        d=1e100.net; s=20230601; t=1728504139; x=1729108939;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vmjfhu8rgH390NbPUQcSwNodTpch+cQzDRf14bb6zeQ=;
+        b=n+L7Ra0Pg2I3GlTi5ifbogjmUK2l3QsZp2nPNUGiBEaF9YpiXF7BsDAu+3yF/BSS07
+         foSxNt94HEYRXc1LBqqYkpudh8XRIJ21vjoEWBRmhuscXngZ50/pK4f691R8bxupC0jw
+         urLOdRmi0Wu7gxKLOPNLBwhdofL6AtC5Tu71Nr8xqQ1jPG350zTrBZ3UBTffplIt+XPj
+         OBQM8/ASA1wSplD5RpBgzCkdcOC4GpngsMUR2pgW+RRbJC/lV1Rn8iK6ydbNMK5sn2vp
+         pAN8aKMpKeG4UYJaMrFqATCd0OMBYxWRsliMZF5hRBTV+OILL9EzfdbFOhKdrhtmFaAE
+         s8aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVzno7zsKsD2OLW+1/T9cBWa5R7L0n2p/S+aNervu+s2CBDoeGVOWStB1kHDJlGWh9zcCd5WU7+15DZIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSNr/6nBRDidqV7qVeXjyMfpjlRKAc1HnKggS9lNisMsV75MhK
+	O/lMkjZpHKBfWnyhMOKglW2UetmkHPeSy9rFyUXwFoKXhJJZW7iA
+X-Google-Smtp-Source: AGHT+IGuSigFiXRDukGYMxhE9xOCL6LlE7ZvgsQ4m6sKYJOHRWtXcHWnQ+gsBgaJ9OzsOqOydREX7g==
+X-Received: by 2002:a17:907:c7e1:b0:a99:4261:e9f7 with SMTP id a640c23a62f3a-a998d25a375mr347553866b.39.1728504138856;
+        Wed, 09 Oct 2024 13:02:18 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:b338:6300:ac71:eea5:34f6:504b? (dynamic-2a02-3100-b338-6300-ac71-eea5-34f6-504b.310.pool.telefonica.de. [2a02:3100:b338:6300:ac71:eea5:34f6:504b])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a992e78498fsm701977966b.107.2024.10.09.13.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Oct 2024 13:02:18 -0700 (PDT)
+Message-ID: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
+Date: Wed, 9 Oct 2024 22:02:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Tim Harvey <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
+ Tom Rix <trix@redhat.com>, Jonas Malaco <jonas@protocubo.io>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Michael Walle <mwalle@kernel.org>, Maximilian Luz <luzmaximilian@gmail.com>,
+ Ivor Wanders <ivor@iwanders.net>
+Cc: Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ linux-rpi-kernel@lists.infradead.org,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH 0/9] hwmon: Add and use helper hwmon_visible_0444
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Sanman Pradhan <sanmanpradhan@meta.com>
+Several drivers simply return 0444 in their is_visible callback.
+Add a helper in hwmon core for this use case to avoid code duplication.
 
-This patch adds support for hardware monitoring to the fbnic driver,
-allowing for temperature and voltage sensor data to be exposed to
-userspace via the HWMON interface. The driver registers a HWMON device
-and provides callbacks for reading sensor data, enabling system
-admins to monitor the health and operating conditions of fbnic.
+There are more drivers outside drivers/hwmon which would benefit
+from this helper as well.
 
-Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
+Heiner Kallweit (9):
+  hwmon: Add helper hwmon_visible_0444
+  hwmon: i5500_temp: Use new helper hwmon_visible_0444
+  hwmon: surface_fan: Use new helper hwmon_visible_0444
+  hwmon: sl28cpld: Use new helper hwmon_visible_0444
+  hwmon: gsc: Use new helper hwmon_visible_0444
+  hwmon: powerz: Use new helper hwmon_visible_0444
+  hwmon: raspberrypi: Use new helper hwmon_visible_0444
+  hwmon: intel-m10-bmc: Use new helper hwmon_visible_0444
+  hwmon: nzxt-kraken2: Use new helper hwmon_visible_0444
 
----
-v5:
-  - Drop hwmon_unregister label from fbnic_pci.c
+ drivers/hwmon/gsc-hwmon.c           |  9 +--------
+ drivers/hwmon/hwmon.c               |  7 +++++++
+ drivers/hwmon/i5500_temp.c          |  8 +-------
+ drivers/hwmon/intel-m10-bmc-hwmon.c |  9 +--------
+ drivers/hwmon/nzxt-kraken2.c        |  9 +--------
+ drivers/hwmon/powerz.c              |  8 +-------
+ drivers/hwmon/raspberrypi-hwmon.c   |  8 +-------
+ drivers/hwmon/sl28cpld-hwmon.c      |  9 +--------
+ drivers/hwmon/surface_fan.c         | 10 +---------
+ include/linux/hwmon.h               |  2 ++
+ 10 files changed, 17 insertions(+), 62 deletions(-)
 
-v4: https://patchwork.kernel.org/project/netdevbpf/patch/20241008143212.2354554-1-sanman.p211993@gmail.com/
+-- 
+2.47.0
 
-v3: https://patchwork.kernel.org/project/netdevbpf/patch/20241004204953.2223536-1-sanman.p211993@gmail.com/
-
-v2: https://patchwork.kernel.org/project/netdevbpf/patch/20241003173618.2479520-1-sanman.p211993@gmail.com/
-
-v1: https://lore.kernel.org/netdev/153c5be4-158e-421a-83a5-5632a9263e87@roeck-us.net/T/
-
----
- drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
- drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
- drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
- drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |  7 ++
- drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  3 +
- 5 files changed, 96 insertions(+)
- create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-
-diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ethernet/meta/fbnic/Makefile
-index ed4533a73c57..41494022792a 100644
---- a/drivers/net/ethernet/meta/fbnic/Makefile
-+++ b/drivers/net/ethernet/meta/fbnic/Makefile
-@@ -11,6 +11,7 @@ fbnic-y := fbnic_devlink.o \
- 	   fbnic_ethtool.o \
- 	   fbnic_fw.o \
- 	   fbnic_hw_stats.o \
-+	   fbnic_hwmon.o \
- 	   fbnic_irq.o \
- 	   fbnic_mac.o \
- 	   fbnic_netdev.o \
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethernet/meta/fbnic/fbnic.h
-index 0f9e8d79461c..2d3aa20bc876 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
-@@ -18,6 +18,7 @@
- struct fbnic_dev {
- 	struct device *dev;
- 	struct net_device *netdev;
-+	struct device *hwmon;
-
- 	u32 __iomem *uc_addr0;
- 	u32 __iomem *uc_addr4;
-@@ -127,6 +128,9 @@ void fbnic_devlink_unregister(struct fbnic_dev *fbd);
- int fbnic_fw_enable_mbx(struct fbnic_dev *fbd);
- void fbnic_fw_disable_mbx(struct fbnic_dev *fbd);
-
-+void fbnic_hwmon_register(struct fbnic_dev *fbd);
-+void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
-+
- int fbnic_pcs_irq_enable(struct fbnic_dev *fbd);
- void fbnic_pcs_irq_disable(struct fbnic_dev *fbd);
-
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-new file mode 100644
-index 000000000000..bcd1086e3768
---- /dev/null
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/hwmon.h>
-+
-+#include "fbnic.h"
-+#include "fbnic_mac.h"
-+
-+static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
-+{
-+	if (type == hwmon_temp)
-+		return FBNIC_SENSOR_TEMP;
-+	if (type == hwmon_in)
-+		return FBNIC_SENSOR_VOLTAGE;
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static umode_t fbnic_hwmon_is_visible(const void *drvdata,
-+				      enum hwmon_sensor_types type,
-+				      u32 attr, int channel)
-+{
-+	if (type == hwmon_temp && attr == hwmon_temp_input)
-+		return 0444;
-+	if (type == hwmon_in && attr == hwmon_in_input)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *val)
-+{
-+	struct fbnic_dev *fbd = dev_get_drvdata(dev);
-+	const struct fbnic_mac *mac = fbd->mac;
-+	int id;
-+
-+	id = fbnic_hwmon_sensor_id(type);
-+	return id < 0 ? id : mac->get_sensor(fbd, id, val);
-+}
-+
-+static const struct hwmon_ops fbnic_hwmon_ops = {
-+	.is_visible = fbnic_hwmon_is_visible,
-+	.read = fbnic_hwmon_read,
-+};
-+
-+static const struct hwmon_channel_info *fbnic_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info fbnic_chip_info = {
-+	.ops = &fbnic_hwmon_ops,
-+	.info = fbnic_hwmon_info,
-+};
-+
-+void fbnic_hwmon_register(struct fbnic_dev *fbd)
-+{
-+	if (!IS_REACHABLE(CONFIG_HWMON))
-+		return;
-+
-+	fbd->hwmon = hwmon_device_register_with_info(fbd->dev, "fbnic",
-+						     fbd, &fbnic_chip_info,
-+						     NULL);
-+	if (IS_ERR(fbd->hwmon)) {
-+		dev_notice(fbd->dev,
-+			   "Failed to register hwmon device %pe\n",
-+			fbd->hwmon);
-+		fbd->hwmon = NULL;
-+	}
-+}
-+
-+void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
-+{
-+	if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
-+		return;
-+
-+	hwmon_device_unregister(fbd->hwmon);
-+	fbd->hwmon = NULL;
-+}
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-index 476239a9d381..05a591653e09 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-@@ -47,6 +47,11 @@ enum {
- #define FBNIC_LINK_MODE_PAM4	(FBNIC_LINK_50R1)
- #define FBNIC_LINK_MODE_MASK	(FBNIC_LINK_AUTO - 1)
-
-+enum fbnic_sensor_id {
-+	FBNIC_SENSOR_TEMP,		/* Temp in millidegrees Centigrade */
-+	FBNIC_SENSOR_VOLTAGE,		/* Voltage in millivolts */
-+};
-+
- /* This structure defines the interface hooks for the MAC. The MAC hooks
-  * will be configured as a const struct provided with a set of function
-  * pointers.
-@@ -83,6 +88,8 @@ struct fbnic_mac {
-
- 	void (*link_down)(struct fbnic_dev *fbd);
- 	void (*link_up)(struct fbnic_dev *fbd, bool tx_pause, bool rx_pause);
-+
-+	int (*get_sensor)(struct fbnic_dev *fbd, int id, long *val);
- };
-
- int fbnic_mac_init(struct fbnic_dev *fbd);
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-index a4809fe0fc24..ef9dc8c67927 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-@@ -289,6 +289,8 @@ static int fbnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-
- 	fbnic_devlink_register(fbd);
-
-+	fbnic_hwmon_register(fbd);
-+
- 	if (!fbd->dsn) {
- 		dev_warn(&pdev->dev, "Reading serial number failed\n");
- 		goto init_failure_mode;
-@@ -345,6 +347,7 @@ static void fbnic_remove(struct pci_dev *pdev)
- 		fbnic_netdev_free(fbd);
- 	}
-
-+	fbnic_hwmon_unregister(fbd);
- 	fbnic_devlink_unregister(fbd);
- 	fbnic_fw_disable_mbx(fbd);
- 	fbnic_free_irqs(fbd);
---
-2.43.5
