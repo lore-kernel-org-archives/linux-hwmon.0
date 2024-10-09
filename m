@@ -1,60 +1,60 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70171E04A0
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290861B3F30
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 20:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728504264; cv=none; b=NQYOg/UBvF81fClK+AHGR4h9WqNCQBRrDIXmQnZprgvomuHg3phRetz8hSlnm1oGQzgNqHs4bzlZ4K8xcZjpdb46Tloso5T4nkJ0mAMQ/qfIjUWjujZ2dbgPl32+U0Y3aeWw09nYNAahg3oh5nMAkruyl6c7b7/8rePhi7QWHDc=
+	t=1728504305; cv=none; b=bfCN3YSRQ7sy11M//cEY6pcsiyuOVKd5kauFHRrRcXRWsi4sWUyQ+IgqRKB6bG88iSsSXNAbIoCDQrIk2rCJIYnFY/mqCbGpg8qzN+GwN8QDIdZJ7WlTqM71GZ030vPw2dA+9FOK8YMEJThd9rPMG8kimM5yiSWR4ZbvJPmPlEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728504264; c=relaxed/simple;
-	bh=wo9gfaj+5qVVWziGNmHlE/1NG8BfaReSHIOfLE6Rg44=;
+	s=arc-20240116; t=1728504305; c=relaxed/simple;
+	bh=sCWXV4FxPgIGOT/2VFnKprN0mcc+B0HEHv2UK2jVgFg=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=o//M0iPWB+jzsWbFzXcROBl0jSwRr4DoshjQNGDNBJwrjGgLjmjK/Bb6rJj2MgD6KcLklKsKswww+XOk4fKN51KYhZULXHlE5Qb6lkw+C3S6JuPNzM7rEdZWhRzpMmm2uoS6V9AoDpRVI862z5VxWI8qze9ogfT3LU3qWsZvzvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eY9ygJCn; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:Content-Type; b=o3nMonOk+TQL1w8Z1tq7xNA9d5+kenJfImJ2gxQmjDKilyDpWZ8S81MI+XzqvfbLvmLESb3oOL+O4i8m6oEi/nduL74cxZgVLT/pm+vSGWFB1SM+hJVn5QRco/KUj7U12bV0aRDgcmuo5qmcF9in1UjXTTH/+zXkkkiJNmkCA1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VMNzuri/; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eY9ygJCn"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a93c1cc74fdso34248466b.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:04:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VMNzuri/"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5c5bca6603aso111639a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 13:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728504261; x=1729109061; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728504302; x=1729109102; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTQ0jlOi1mGfVBZ2rR7lFPGy6cv5BdbVknfvj9hIlBw=;
-        b=eY9ygJCnWgNgge6D8q2j720PmK32oy14gPClA/JWq1nPEiTLh0l0s7OIDpmqTqTpv3
-         zH2LgFPKA8YxHJx0Frp7tKyeDw+LQ6mF5na4jYuxAW8A8FavtQy5XDsobh0zsyDwboIo
-         N+L0zo2rUwBAesxHYEN8vNxEw7zeDF/lE7+v9E9PIm5sHlAtqWfhtCS/ebD1zYtOjCeS
-         aF6e+RtckSVGYmfseHp0cPaEkS23uvWr8AwH9hOUnB0Cpubqli2zxHj3ijeS63abHJxq
-         N3OO4twgTeaUsxTLmtCTdJCkOEvMeWiA2e+LrwC8E5a6hmuL11G6MkcLOsieYof5yn8O
-         9HNg==
+        bh=8mZDWEiIlQg7S2xqDiuV0YH/rM3kGck5+SNp5nnXt4U=;
+        b=VMNzuri/3Znfhw7N6BjY4sgiMLnWKC8ssY5YFOXQuNt9EAhHcOGA5k1yRxBDnV+2Sp
+         bSPEQ93yV58SHZFYgO8xsauLRBwdKwQgenL2rOOB0siIwhvAWbb3FDAHYzrDfyCiU4Il
+         PTPBvFClA0Jc+34+3Vv8rlltzQe5C19yMHIeYbbKX73PkbYh5OmIJZHtkRtwxOVbk3gV
+         V2NuZVsDkVGtfE2CI0RhD4vqECyXTNxcqMrC9FVulyDqHIAoMav0HmSjoxeDFNGaEzF1
+         iLf6RL440l49AcDtDNr2cyIeNMyFQJsPw2E0XBz3NLoaBlcsa3yHTzWPFtKQ8uHY0f06
+         Y6Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728504261; x=1729109061;
+        d=1e100.net; s=20230601; t=1728504302; x=1729109102;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QTQ0jlOi1mGfVBZ2rR7lFPGy6cv5BdbVknfvj9hIlBw=;
-        b=Aq0eVqu5JPaoQCo08Rlm7Jl33QKM1YFH1zYn5yr3aaHjxSLNb9r5aIRxP1LxUlNrKd
-         aH2uBkkE+8a8IpleolkcuDHDVtMc334LwbO8TnzgJdaN5z7eeK3A7+B/RwR38QqlYbYF
-         5BkvKmJpuHGYgGBZHuCF/SmkZh4h7Kgr/1aXbTQNYsBAU5WNkp2/1N/bzYUgllVswSb9
-         NfxeGdY5/BCgpD3VjCzGCHoWSfZR6pxpp8zF9zH/QmLKz3mZI8iI06I6V7IYijifXolb
-         j8LUMZ4iP/TPy2swZ6z//Pe+ogUVoGlMBv+Of71L+Mq/uvam8pPs1tRqgXlQHGFxg4t8
-         oZeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWs751JWTX8bZnabVPfmpGhvd1Am7h+P6pRV5QqSOeni0WKYwEUa7jDuuhXykrdWn9LonR4DSf3x5XUfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9RQznMODRI5H48A3/a2DEqH/HKPMbWbv5inNv//qAH2FcrjMV
-	SW2+AfLRKE9cJk+05C/Y3jaEm+yW897Ba/JSH80O+ToVxSsp2JHZ
-X-Google-Smtp-Source: AGHT+IHWX9uLJaSdKp8Ec7A4a4cNw8Y3L9j6ZgHvnh9gxoZDl2eFUmDCMymkwOkfOJgjwpcEQCrTRQ==
-X-Received: by 2002:a17:907:9810:b0:a99:4fce:c343 with SMTP id a640c23a62f3a-a998d1cb499mr351059066b.26.1728504260702;
-        Wed, 09 Oct 2024 13:04:20 -0700 (PDT)
+        bh=8mZDWEiIlQg7S2xqDiuV0YH/rM3kGck5+SNp5nnXt4U=;
+        b=W0qjppSSSdDOLLvQuTmMx5SV3jwf7NAwMPtY2/ZUO4GrmiyR/H/1J9LmzJIuK7XqKN
+         9h3e99X+oR97dVAICoEINMp52JDiqXIzuP5CCzfU3Y3Zk4mpZf2Hci3b0R7ZZ0udhhBT
+         UzAVwzJB4VgF+HtDIbnIiC0s4r4f3gVGIOtrkTQOcda5EWCbxd6KXR+KJDVaz5yupCHP
+         MEyeT0YhQ9YoNHqd4fz3TT110BiJlQmupyrhfTQcD+JR7w6bkxY5bvBn56SCZCaCwopZ
+         d/Lb6Tt63KDvf2cLcpmo3xfhAZR4JQXaaDo/geILIt/yc1cIpZhEKGPPw0tav4lCupR0
+         W0gA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbOE+mFHLSlT9VPxPH/WnBSfv6YV1MJUuKdoUm5fYkdOaN0hPe0PrfxtyfXIwtHPhT6ZCs+7iSpkwctg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgTTUhnP4HU/5ov3k/tXLJn9ISr2xM7G8wZjfuo9lpPHtnC9Tm
+	IKk2hZBmuHTeuffE467k7NjEkKRAGnbhhHyF0NROWrnRS0PaPGlM
+X-Google-Smtp-Source: AGHT+IHZHnjB/xXUwQPxQQfvhZHy+bc8ZdURKjvdyqInkMtPvuOa/xxpUrvLbZYAMMABBGjRj1lSuw==
+X-Received: by 2002:a05:6402:1e90:b0:5c2:1910:8e9 with SMTP id 4fb4d7f45d1cf-5c91d6c98c0mr3339018a12.36.1728504302159;
+        Wed, 09 Oct 2024 13:05:02 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:b338:6300:ac71:eea5:34f6:504b? (dynamic-2a02-3100-b338-6300-ac71-eea5-34f6-504b.310.pool.telefonica.de. [2a02:3100:b338:6300:ac71:eea5:34f6:504b])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9947bf72dcsm567309166b.191.2024.10.09.13.04.19
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05f3bf0sm5848472a12.88.2024.10.09.13.05.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 13:04:20 -0700 (PDT)
-Message-ID: <25079ec8-2b41-472c-a60c-8151fc906dcd@gmail.com>
-Date: Wed, 9 Oct 2024 22:04:19 +0200
+        Wed, 09 Oct 2024 13:05:01 -0700 (PDT)
+Message-ID: <5eba910e-709e-4275-a018-17fa287dfb19@gmail.com>
+Date: Wed, 9 Oct 2024 22:05:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/9] hwmon: i5500_temp: Use new helper hwmon_visible_0444
+Subject: [PATCH 3/9] hwmon: surface_fan: Use new helper hwmon_visible_0444
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Tim Harvey <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Xu Yilun <yilun.xu@intel.com>,
@@ -129,33 +129,35 @@ Use new helper hwmon_visible_0444 to simplify the code.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/hwmon/i5500_temp.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/hwmon/surface_fan.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/hwmon/i5500_temp.c b/drivers/hwmon/i5500_temp.c
-index 7b00b38c7..819be21d3 100644
---- a/drivers/hwmon/i5500_temp.c
-+++ b/drivers/hwmon/i5500_temp.c
-@@ -29,12 +29,6 @@
- #define REG_CTCTRL	0xF7
- #define REG_TSTIMER	0xF8
+diff --git a/drivers/hwmon/surface_fan.c b/drivers/hwmon/surface_fan.c
+index de3c5a240..2f173c51d 100644
+--- a/drivers/hwmon/surface_fan.c
++++ b/drivers/hwmon/surface_fan.c
+@@ -18,14 +18,6 @@ SSAM_DEFINE_SYNC_REQUEST_CL_R(__ssam_fan_rpm_get, __le16, {
+ 	.command_id      = 0x01,
+ });
  
--static umode_t i5500_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
--				int channel)
+-// hwmon
+-static umode_t surface_fan_hwmon_is_visible(const void *drvdata,
+-					    enum hwmon_sensor_types type, u32 attr,
+-					    int channel)
 -{
 -	return 0444;
 -}
 -
- static int i5500_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
- 		      long *val)
- {
-@@ -84,7 +78,7 @@ static int i5500_read(struct device *dev, enum hwmon_sensor_types type, u32 attr
- }
+ static int surface_fan_hwmon_read(struct device *dev,
+ 				  enum hwmon_sensor_types type, u32 attr,
+ 				  int channel, long *val)
+@@ -49,7 +41,7 @@ static const struct hwmon_channel_info *const surface_fan_info[] = {
+ };
  
- static const struct hwmon_ops i5500_ops = {
--	.is_visible = i5500_is_visible,
+ static const struct hwmon_ops surface_fan_hwmon_ops = {
+-	.is_visible = surface_fan_hwmon_is_visible,
 +	.is_visible = hwmon_visible_0444,
- 	.read = i5500_read,
+ 	.read = surface_fan_hwmon_read,
  };
  
 -- 
