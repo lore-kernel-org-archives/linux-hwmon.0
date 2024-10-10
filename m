@@ -1,60 +1,60 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC901CC174
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 15:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B5A1C7B68
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 15:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728574776; cv=none; b=JM1z+lC19B5XhiUR6AVJosIjpprsxLgro6qKDRbATJxSPD/GArUmx9RIaHcBHx20dIWZ97KLlZMpb8vH7RF/xfDoIpJ0iMdY/r4GZEE1Is3tDoSIac1A0Xj34UIy6TtNfhtDJncwnsMoi2qE9EVSylKuXRxa3CRoE1j3FuAI9aM=
+	t=1728575834; cv=none; b=ukfnUMkuzYDa9wUVr0VYVEmjc9GgZM8dV4RZBBZuAsu9HRRS9TybORxvUD8qoaFx9u8QHB9jbnxT/LqqwSrU/dp0TEsnYPMvUEgziYURlfbyd9zOuc8ltM1iF1/Hs5Zg4eeWAmIl8T4l6Uwhnk0yT5dq6ZFbSgS2L5H6k918JVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728574776; c=relaxed/simple;
-	bh=GTwVSap675GZ2wn5pSp6imv3sA9TIL1hFawbXLlTzAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=IvxK2ixeElEyaT5WuNhIgJYv48EGeZFVnuU+3eOqUyRDIhre5EvgjEI3LajI05a4jcib4DcaiUWM9L9YZNoK1p680cyLJSQ62ifuxYd6Q0J/G9r8i64n5GozXpNDralfBVRnQHB01C1PlzbbiILafvdB22zhoKchhEBBIujFyMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m9wimoBx; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1728575834; c=relaxed/simple;
+	bh=X8Tn/XhmWC1IUkTv6rbdwQ2sDCgKKL59a/20Co0i2ak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VBRkcniHIDpXZFszfZ2UZzuxJKYQ7017R6r+Sp+/+jVUfdIWw+oeQoe+rDGySKGFDrNyWGiOi/QD2LOeq5GTqwEpEsfZhqf6/iT2wzhmowr2xfNGjOYexjCBEhkWsvuZJo/ekNkIJ+hUZs/AI6CCBRT/RRFYQ7wsOgYaSmxG8Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3tphnoA; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m9wimoBx"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a995ec65c35so33682266b.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 08:39:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3tphnoA"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e2dc61bc41so486702a91.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 08:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728574773; x=1729179573; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=XovSsIJfl09f3BbVkCo1ffR8hngCppBM4NQODP4d/4U=;
-        b=m9wimoBxY+nfpRDCtD2REWY+CqQVbTRaipnvIJAqZsOdmBj4oXRSYQg+x5X56Kmn/q
-         L1VUhQl9XobLalc8bbugSOdE+1CUJpJkgWF9OfnDeqTML1OYYR9x30YZDAi5dfRp+iqP
-         dNDz+SBYc21zCMXE9D2D7Imf4xCioj4i7wR7AHJUsu7RJheMhRM+w8kObsnImlcd0Scp
-         nIv39u5msy6CR8NXug4HJC/tpHwkoriMaQWvgspmu7hzV7fhDQ+rJoDSJLpsR4NdgWxw
-         07NBdDz0ZBpVgm+AJ8TZrnV/EYV2MjjDoo4+gsQAipn3K1HL7HHylTwIDRIiItbpoxt9
-         FtTw==
+        d=gmail.com; s=20230601; t=1728575832; x=1729180632; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IuyYdDR37h4VZmijZY7QtQAbSoDAnvjdQqsD3nuVhtg=;
+        b=h3tphnoAb43fnDbQeAExsOg5yK1xM4FlByetknv3wRl+ajfR6QwAtQakvSco6s0wBG
+         JYbQxv8jcYjTGb2JMZXAiYJaLhp+Bhx8AbpqeQ1IoIkMSxOAXLjGjrc74r+vdWqnrfoC
+         E7idNtLVFokcW1OojWpjzfho3yGlmGCijYrub2LtVuJXSK82uqH1SvKcHzRGEV5baMqA
+         px1GmIlok0VZzC5W3AHS4bsJR+ebmd1JU52B+tIOk+QFsOUtf+MEleYqhK46H50wP4Vg
+         QpOt3+QyUezUAqozf/84Ji/knm0R7qEhFRj61pTXmay5RZZaToIQE1Fi8sMN+0Hw2QPy
+         aopw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728574773; x=1729179573;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XovSsIJfl09f3BbVkCo1ffR8hngCppBM4NQODP4d/4U=;
-        b=orpJstIjIy9leODortpoE7vYIR7L29zdA8EiiCezOmnyg82qs750REho6DMUr9oS1j
-         KvLFvEDn90FBKxAXqD2RbY1/xCo0s72IsSUBqUHfWyG2r4Y+7AWiHgNgxadP5x81XcFr
-         cOQlwJ/DAJyJCK0mm05QjOj7yrc44pCqMqdNjv+sY/Cj8PqFnnlRVSa2/Kw258m5VkdT
-         QGI/MLnNy5VpzBem7KRAwMEiJY3gjHbLcjzCARCv5/Vqn4IGwuFgV3VQNXPuIGYRF3lW
-         EpWpOeCjSg6/c1QV5Pq4n8k3ESjj4sqBJ9bM+NgKxLK2iyxUCdnvIjhiAm3waiCX3W+I
-         Lqbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ1O0uJKTPcXvB8vAEZtlsz91a33GLQ22h2D++QWD7G7Nl296RVOfF3dSJ7GJif2dLYcHi5z5vzDxl5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2MF8O9cNb+cqppQFm8f7xNoj4l1VHEFjZQY2glxhv9BvtRUGM
-	lytjvH0zx+XGTLXP7mGdi9CbOEX2eLKnaB79lMnPYTl+DzFfgPia
-X-Google-Smtp-Source: AGHT+IEinTQSP/oH4gUHDcBu4Db95r0tte6KgUKqCVjFv/l9aDTDN93/JTRCkoFCQSGnWYjLBIhezg==
-X-Received: by 2002:a17:907:3f07:b0:a99:5587:2a1f with SMTP id a640c23a62f3a-a99a11087b9mr408503466b.15.1728574772996;
-        Thu, 10 Oct 2024 08:39:32 -0700 (PDT)
-Received: from ?IPV6:2a02:3100:ac3e:8500:f101:eb49:ef42:3d5f? (dynamic-2a02-3100-ac3e-8500-f101-eb49-ef42-3d5f.310.pool.telefonica.de. [2a02:3100:ac3e:8500:f101:eb49:ef42:3d5f])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a99a7f27bfasm103611166b.73.2024.10.10.08.39.32
+        d=1e100.net; s=20230601; t=1728575832; x=1729180632;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IuyYdDR37h4VZmijZY7QtQAbSoDAnvjdQqsD3nuVhtg=;
+        b=PvKhjWoL61OaCFBBa0yVHtei3JnI7QgkU/khlorz9m7Zo6XzlknFqHdewnsY1mELMK
+         5xEg4JO2PArKQ3Mvc6ojWzIBSqVoqPqQWFOWCDCvA84Gqk7R2cwAsMQkgBlKokiyubJd
+         bKnKzBH+n/K3QAtJ/O+YX+S99ltwrG38VwffAlV/MTwB2ThRbllbnBPfADC2xU0K6pK1
+         BCxkCLA9ZX1/9/ZyW5BWbadOOVA4PrNo73/eO73QmQIiNpyMIiDX60CKqJE300yTo98d
+         pWW8b0NAZmDzx9AxXxTRSqxaeIeyVTHmOAf1YX9sje91G8tZJFKAwYG0iXO8eO9x6k/C
+         3gmA==
+X-Gm-Message-State: AOJu0Yztg3Y9DS5pVUSDDB2rN0VL2dmGvJwq4pxoLQtvc9QQss/awKCY
+	NE2UWc2oT/kDcmFPxqy1C/tcLymAIM9rVekhGlZYpzYDbHDwu3JsMOsQPg==
+X-Google-Smtp-Source: AGHT+IG9At131DRYnaqbf4XtTEDQ1jZ2yWV8Aek/zFil0xFW7daaT1Dc2X/UvJSlE9QtNNQAgSwe/Q==
+X-Received: by 2002:a17:90a:d24c:b0:2e0:8719:5f00 with SMTP id 98e67ed59e1d1-2e2a24779cemr7196031a91.22.1728575831603;
+        Thu, 10 Oct 2024 08:57:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2a5caa799sm3766404a91.56.2024.10.10.08.57.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 08:39:32 -0700 (PDT)
-Message-ID: <4851f299-ea6d-4744-8610-67e94b1e4151@gmail.com>
-Date: Thu, 10 Oct 2024 17:39:32 +0200
+        Thu, 10 Oct 2024 08:57:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <24441cb5-beb3-4d06-a343-e74510d2fe4f@roeck-us.net>
+Date: Thu, 10 Oct 2024 08:57:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,146 +62,150 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] hwmon: Add and use helper hwmon_visible_0444
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, Tim Harvey <tharvey@gateworks.com>,
- Jean Delvare <jdelvare@suse.com>, Xu Yilun <yilun.xu@intel.com>,
- Tom Rix <trix@redhat.com>, Jonas Malaco <jonas@protocubo.io>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Michael Walle <mwalle@kernel.org>, Maximilian Luz <luzmaximilian@gmail.com>,
- Ivor Wanders <ivor@iwanders.net>
-Cc: Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- linux-rpi-kernel@lists.infradead.org,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
- <5ae4e8b9-1442-4764-9a16-db08d099a1e6@roeck-us.net>
- <fa07443e-4ca7-4bd3-b027-c16a1a60edc4@gmail.com>
- <fd460fb6-0193-4be2-a820-1b0d713452d5@roeck-us.net>
- <85184790-532b-46c2-9b67-2eb8d74a53f2@gmail.com>
+Subject: Re: [PATCH] hwmon: Add static visibility member to struct hwmon_ops
+To: Heiner Kallweit <hkallweit1@gmail.com>, Jean Delvare <jdelvare@suse.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <c16acf3c-6ca6-4033-a115-58f6031ed868@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <85184790-532b-46c2-9b67-2eb8d74a53f2@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <c16acf3c-6ca6-4033-a115-58f6031ed868@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 10.10.2024 17:14, Heiner Kallweit wrote:
-> On 10.10.2024 16:31, Guenter Roeck wrote:
->> On 10/9/24 22:44, Heiner Kallweit wrote:
->>> On 10.10.2024 00:19, Guenter Roeck wrote:
->>>> On 10/9/24 13:02, Heiner Kallweit wrote:
->>>>> Several drivers simply return 0444 in their is_visible callback.
->>>>> Add a helper in hwmon core for this use case to avoid code duplication.
->>>>>
->>>>> There are more drivers outside drivers/hwmon which would benefit
->>>>> from this helper as well.
->>>>>
->>>>> Heiner Kallweit (9):
->>>>>     hwmon: Add helper hwmon_visible_0444
->>>>>     hwmon: i5500_temp: Use new helper hwmon_visible_0444
->>>>>     hwmon: surface_fan: Use new helper hwmon_visible_0444
->>>>>     hwmon: sl28cpld: Use new helper hwmon_visible_0444
->>>>>     hwmon: gsc: Use new helper hwmon_visible_0444
->>>>>     hwmon: powerz: Use new helper hwmon_visible_0444
->>>>>     hwmon: raspberrypi: Use new helper hwmon_visible_0444
->>>>>     hwmon: intel-m10-bmc: Use new helper hwmon_visible_0444
->>>>>     hwmon: nzxt-kraken2: Use new helper hwmon_visible_0444
->>>>>
->>>>>    drivers/hwmon/gsc-hwmon.c           |  9 +--------
->>>>>    drivers/hwmon/hwmon.c               |  7 +++++++
->>>>>    drivers/hwmon/i5500_temp.c          |  8 +-------
->>>>>    drivers/hwmon/intel-m10-bmc-hwmon.c |  9 +--------
->>>>>    drivers/hwmon/nzxt-kraken2.c        |  9 +--------
->>>>>    drivers/hwmon/powerz.c              |  8 +-------
->>>>>    drivers/hwmon/raspberrypi-hwmon.c   |  8 +-------
->>>>>    drivers/hwmon/sl28cpld-hwmon.c      |  9 +--------
->>>>>    drivers/hwmon/surface_fan.c         | 10 +---------
->>>>>    include/linux/hwmon.h               |  2 ++
->>>>>    10 files changed, 17 insertions(+), 62 deletions(-)
->>>>>
->>>>
->>>> I really don't want to add such hwmon-specific but at the same time
->>>> generic helpers. If such a helper is made available in the core kernel,
->>>> I'll be happy to accept patches using it, but otherwise please refrain
->>>> from submitting such patch series.
->>>>
->>> What would you consider a suited place, drivers/base or fs/sysfs or lib or .. ?
->>> For enum hwmon_sensor_types we have to include linux/hwmon.h. None of these
->>> places has any hwmon code, and I would expect concerns if generic core code
->>> includes subsystem headers.
->>>
->>
->> "There are more drivers outside drivers/hwmon which would benefit
->> from this helper as well" very clearly suggests that the function
->> is not hwmon specific. Yet, obviously it is if it requires a hwmon
->> include file.
->>
-> What I was referring to is device drivers in other subsystems which
-> expose e.g. thermal sensor data via hwmon API.
+On 10/10/24 08:38, Heiner Kallweit wrote:
+> Several drivers return the same static value in their is_visible
+> callback, what results in code duplication. Therefore add an option
+> for drivers to specify a static visibility directly.
 > 
->> If this is hwmon specific, I'll want to see a different solution.
->> Instead of calling an exported function, hwmon drivers should set the
->> is_visible callback to a defined value, such as HWMON_VISIBLE_0444.
->> This could be an ERR_PTR() which is converted by the hwmon core.
->> This lets us add, for example, HWMON_VISIBLE_0644, and it avoids the
->> notion that the function could be called by non-hwmon drivers
->> (and the notion that it is a function in the first place). Instead
->> of calling the callback directly, the hwmon core would then have a
->> helper function which evaluates the pointer and either returns
->> a constant or calls the callback.
->>
-> What goes in the same direction, but may be better/cleaner:
-> We could add an umode_t parameter to struct hwmon_ops, and if it's
-> non-zero then hwmon core interprets it as static visibility instead
-> of calling is_visible().
-> 
-I just sent a patch with this approach to have a basis for discussion.
 
->> Guenter
->>
-> Heiner
+Yes, that works. Minor comment below. With that fixed, we are good to go.
+
+Thanks,
+Guenter
+
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>   drivers/hwmon/hwmon.c | 19 +++++++++++++++----
+>   include/linux/hwmon.h |  4 +++-
+>   2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 9c35c4d03..8e9159e8d 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -145,6 +145,17 @@ static const struct class hwmon_class = {
+>   
+>   static DEFINE_IDA(hwmon_ida);
+>   
+> +static umode_t hwmon_ops_is_visible(const struct hwmon_ops *ops,
+> +				    const void *drvdata,
+> +				    enum hwmon_sensor_types type,
+> +				    u32 attr, int channel)
+> +{
+> +	if (ops->visible)
+> +		return ops->visible;
+> +
+> +	return ops->is_visible(drvdata, type, attr, channel);
+> +}
+> +
+>   /* Thermal zone handling */
+>   
+>   /*
+> @@ -267,8 +278,8 @@ static int hwmon_thermal_register_sensors(struct device *dev)
+>   			int err;
+>   
+>   			if (!(info[i]->config[j] & HWMON_T_INPUT) ||
+> -			    !chip->ops->is_visible(drvdata, hwmon_temp,
+> -						   hwmon_temp_input, j))
+> +			    !hwmon_ops_is_visible(chip->ops, drvdata, hwmon_temp,
+> +						  hwmon_temp_input, j))
+>   				continue;
+>   
+>   			err = hwmon_thermal_add_sensor(dev, j);
+> @@ -506,7 +517,7 @@ static struct attribute *hwmon_genattr(const void *drvdata,
+>   	const char *name;
+>   	bool is_string = is_string_attr(type, attr);
+>   
+> -	mode = ops->is_visible(drvdata, type, attr, index);
+> +	mode = hwmon_ops_is_visible(ops, drvdata, type, attr, index);
+>   	if (!mode)
+>   		return ERR_PTR(-ENOENT);
+>   
+> @@ -1033,7 +1044,7 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
+>   	if (!dev || !name || !chip)
+>   		return ERR_PTR(-EINVAL);
+>   
+> -	if (!chip->ops || !chip->ops->is_visible || !chip->info)
+> +	if (!chip->ops || !(chip->ops->visible || chip->ops->is_visible) || !chip->info)
+>   		return ERR_PTR(-EINVAL);
+>   
+>   	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
+> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+> index 5c6a421ad..667229956 100644
+> --- a/include/linux/hwmon.h
+> +++ b/include/linux/hwmon.h
+> @@ -368,7 +368,8 @@ enum hwmon_intrusion_attributes {
+>   
+>   /**
+>    * struct hwmon_ops - hwmon device operations
+> - * @is_visible: Callback to return attribute visibility. Mandatory.
+> + * @visible:	Static visibility. If non-zero, @is_visible is ignored.
+> + * @is_visible: Callback to return attribute visibility. Conditionally mandatory.
+
+"Mandatory unless 'visible' is non-zero".
+
+>    *		Parameters are:
+>    *		@const void *drvdata:
+>    *			Pointer to driver-private data structure passed
+> @@ -412,6 +413,7 @@ enum hwmon_intrusion_attributes {
+>    *		The function returns 0 on success or a negative error number.
+>    */
+>   struct hwmon_ops {
+> +	umode_t visible;
+>   	umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
+>   			      u32 attr, int channel);
+>   	int (*read)(struct device *dev, enum hwmon_sensor_types type,
 
