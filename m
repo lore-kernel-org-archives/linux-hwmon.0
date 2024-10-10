@@ -1,61 +1,60 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19D61917C2
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Oct 2024 22:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F078F6A
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 05:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728512381; cv=none; b=LqPjvG3ORD+NOGAXoVK/EtqUIHcUtKJH55eIhqo7NEt+0uNmHkUt8QOu9s7/SlbB1BoLH0G79Z/Up+5GimXjFHFYFyFL6SmxjFu2iC1Uix03nyu+UXDEiBP43JTjOzeN7NpWaA3csDf3jjABc/9v45dSVgNM4eynETwwQvkkP0M=
+	t=1728539076; cv=none; b=LOTZr6BkRMVVq+ghLukR38n/vlCfrXbzG9SQhKqu5YWAqr9N0xt0sTb9eradeWw0+LrD9Kh/kNaj1eBasX1np6/pFdTumNzYs/qbTUjoeiL6DnLuvHsyEV+u0n6GWOpl08kbUK2OsZEZv4sc5FCmmPjhn/f20Sjg/FTnZ8cHpZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728512381; c=relaxed/simple;
-	bh=H9FYhWPuhPIbmxUdiYurj/CY8Law18fXhi6BVdq2FvU=;
+	s=arc-20240116; t=1728539076; c=relaxed/simple;
+	bh=dyOey0DXOQP1st8E5md7/5NsX9qoI06tVgkc/lvVnUc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y6uSY014g0lP+bwekWzn+vhLpWbXNwogX24RtQe4ZrYb49kyIft0wJy67D5hq4dWPLCVLz7yq+A/6MoHYRE7plFfEWqF4jEf2UQzRYClQONVheSIJH/nCdoe0j+m8UydBK1DwWNTghC/MIP77GmbKvSq3rTTQBVgVBeXCpKRAdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9RNc9sc; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	 In-Reply-To:Content-Type; b=tSNF9IQia/f3gnIJ8kqES2kYPtp3aQjWe3svmH1ma0I/gxOwBxgzwsif2x/XU2EptZdml27/4pMjZuUXWQwfMPuJpIlJcEb287aFXodMV3yr17sZXOjI1XELOB+MvNQr469fPy90pnjYcYpS12ekEhg4U93fipiMZymGaPjHOUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dSEoY6s+; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9RNc9sc"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e038f3835so309106b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 15:19:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dSEoY6s+"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a99650da839so83798666b.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Oct 2024 22:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728512379; x=1729117179; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728539073; x=1729143873; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8P46SOJl7lGSgC8bX0H8n6Uk8zPJOxyCJtRCEyjZWhM=;
-        b=U9RNc9sc9tJFFo4l8Xbjd8un8cAtMUiXRdr9jsLcwhx8yVAT6sBWPFlsqtGRaJd9s+
-         TR9YN3wYfYCtth+Ut+DHmSTQpaXCMsT+Lf/aQ1x2gViYhu+G9ON5GGoK2KxrLG8akLIJ
-         G8MgNvGZJgtCDiWce6DUkN+gmJlqAMz6k4hJDA2fCP+7Lunhx8yH6f+v2qCHBIiZOYKx
-         Z7QmoH8nmze7ZOzrvKGd4rENIVAwr0hsALBgF7TKV/HtcSQBoS9W9Al0kifn1cc82Jhd
-         DTwwqpKOMwjgUFzhl/FnqyhzKZ1EFvUqwj+3XyNTFeHx8bESQ8BSUUVpo3IaCJIM6oaH
-         C8iQ==
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=EfQsfd+nVVrEDaD8ceoc8JhLVjDdY8tnoDBgF98sato=;
+        b=dSEoY6s+8/8Z39lMBnjbU3G9DTQeNkPDYohWkMol/7ngnQtgk8JiuCreuhCIAfpcvM
+         lbG+3yFQzFYtXP1gqoXy/gKBnbTgoHHO+i5Br3xMQpXLWEqszhgPjyGZQBxZWuCMl2vm
+         MrUu8m/xUQd9GjhwnOBXGdS5HT+0nmxSbqCn2DsrBy7xR5ZC3nIPlo2jEJHLdxiVxfRf
+         wi6tUfi8z9aAPhVLUC16a00AEFhHPyHesBIsnbEyjeIcJOmQj84XUU7Scxxb5xp1Idh2
+         OWr3H5lwoOdOs5StYjuWtRji2LjkvhYhgDxT4N7f8CBLsQmyYtc1kjI/hdF/GtM4JbWE
+         T7Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728512379; x=1729117179;
+        d=1e100.net; s=20230601; t=1728539073; x=1729143873;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8P46SOJl7lGSgC8bX0H8n6Uk8zPJOxyCJtRCEyjZWhM=;
-        b=iEg+SOhlgDlIFIJDcq5yrmqyXmHkf/In/7aIBvcrwFW2m2GsvUSAgn2RnyKkPaTajo
-         LdxyVpqTPpAMTFYd/ZvAue35hkD+Ii0rMVV2lbqkpBA5tnOUeId+ZqEzMfAj7zOosv6N
-         9otO2Ei1IlBWbu02Y9T/RnmzCtnPNm6uHD0PECG753fR/nXi3VP82bihFhg4HG/9BXf9
-         gRWmaAmsi3YDLD/0OWRaNr5S58H+Cl209GHWLlTAu+y/Dxg3twU5aauzZKsLA7iTV5vF
-         S1ZSg2c0TVe9azDz2ClcXz+s3Ctsl/uc8dZI3JozweWMp0LCTH/wf6mdaP75Rjxs9TLt
-         2YQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX9NzCK9DSocYILv/wMVTT6kzw1+yM7vtKYQ8T2cFqdLZ4EVq+9ZgZhVg57wZlbg1dCLfWRcdXl9BQn5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze0r/5tibldcYLsmjlrA7lWoUKYLdI5dJ8pb3xivVSB0MmFbNC
-	hoDM0v0Cip+QcRY/L6MqC/+V8+KTIwGM66ugfL4LQwQNUQSUg1Xv
-X-Google-Smtp-Source: AGHT+IEURPct1tGQJs43qEpwNkX+uorLo2HZwA+7DHAB9haRwJj/Oc90wfWeb6KNO7R8/0HHZQvQgw==
-X-Received: by 2002:a05:6a00:180a:b0:714:1d15:663 with SMTP id d2e1a72fcca58-71e1dbcaa32mr6048434b3a.24.1728512378902;
-        Wed, 09 Oct 2024 15:19:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0d7d06dsm8209238b3a.204.2024.10.09.15.19.37
+        bh=EfQsfd+nVVrEDaD8ceoc8JhLVjDdY8tnoDBgF98sato=;
+        b=VOLFvM55CicmgFagqypDrAkyB4GFIdm8nIGT0cqYuMwRQdVMvsmTJMNZPnFUVi6KQh
+         KVezuWgPzrx9b31KZB0K8o1L3/j8XvXCUzOuEZmH8sefinn6k7mSoxzirZNIxseB7HA1
+         tI2bx7iPQ/X0jsjoPVXH123aMWLRcdYFVL4DCzuqR41Wu2t2KIKqG11jkvRJkaIjiySb
+         UwcCuHKE6q1kfCh1CLizf7CBb9E2wbd10uGQelUJrr/FEMUH8f1uUtZGiDr+im6OFDLF
+         GvZGFCl+akp6lKET9QttDwsZsvDa4Ja+U05xp/itUltz1lMC1nlT6S9+ZXkzuL00g3oS
+         T68Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXWWdK2VT5N3d/ukY+JIYeajtuddzk7DUiFpkQQrLeBaHdyiA/m0pwPqFwakN6A1JiSE9Vxqenfs+A2Og==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlC9ADDRVdoxsMA5OJk1LucOV6fS7lI19UFrVY8yYdMP3gSqi3
+	udgpNuQ4pQjb/uS9uN4GkWpEH7mvj1BFJDnxTzJeCQ8iFUUFoB4r
+X-Google-Smtp-Source: AGHT+IEzsbLSY19VELCA7eQ/rojd+v2q6LQLfsslawE1FWr/dU/3CvZHbYq/fUg6C8RycQgC7fNaFw==
+X-Received: by 2002:a17:907:97cd:b0:a7d:c148:ec85 with SMTP id a640c23a62f3a-a998d342119mr356441666b.62.1728539072453;
+        Wed, 09 Oct 2024 22:44:32 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:ac3e:8500:3069:9e6c:9f68:56f8? (dynamic-2a02-3100-ac3e-8500-3069-9e6c-9f68-56f8.310.pool.telefonica.de. [2a02:3100:ac3e:8500:3069:9e6c:9f68:56f8])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a99a80f2928sm34171566b.214.2024.10.09.22.44.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 15:19:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5ae4e8b9-1442-4764-9a16-db08d099a1e6@roeck-us.net>
-Date: Wed, 9 Oct 2024 15:19:36 -0700
+        Wed, 09 Oct 2024 22:44:32 -0700 (PDT)
+Message-ID: <fa07443e-4ca7-4bd3-b027-c16a1a60edc4@gmail.com>
+Date: Thu, 10 Oct 2024 07:44:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,11 +63,11 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/9] hwmon: Add and use helper hwmon_visible_0444
-To: Heiner Kallweit <hkallweit1@gmail.com>, Tim Harvey
- <tharvey@gateworks.com>, Jean Delvare <jdelvare@suse.com>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
- Jonas Malaco <jonas@protocubo.io>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, Florian Fainelli <florian.fainelli@broadcom.com>,
+To: Guenter Roeck <linux@roeck-us.net>, Tim Harvey <tharvey@gateworks.com>,
+ Jean Delvare <jdelvare@suse.com>, Xu Yilun <yilun.xu@intel.com>,
+ Tom Rix <trix@redhat.com>, Jonas Malaco <jonas@protocubo.io>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
  Michael Walle <mwalle@kernel.org>, Maximilian Luz <luzmaximilian@gmail.com>,
  Ivor Wanders <ivor@iwanders.net>
 Cc: Broadcom internal kernel review list
@@ -77,91 +76,99 @@ Cc: Broadcom internal kernel review list
  linux-rpi-kernel@lists.infradead.org,
  "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
 References: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
+ <5ae4e8b9-1442-4764-9a16-db08d099a1e6@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <3aecbfc5-e11b-4425-9c6b-88dac2d32945@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <5ae4e8b9-1442-4764-9a16-db08d099a1e6@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 10/9/24 13:02, Heiner Kallweit wrote:
-> Several drivers simply return 0444 in their is_visible callback.
-> Add a helper in hwmon core for this use case to avoid code duplication.
+On 10.10.2024 00:19, Guenter Roeck wrote:
+> On 10/9/24 13:02, Heiner Kallweit wrote:
+>> Several drivers simply return 0444 in their is_visible callback.
+>> Add a helper in hwmon core for this use case to avoid code duplication.
+>>
+>> There are more drivers outside drivers/hwmon which would benefit
+>> from this helper as well.
+>>
+>> Heiner Kallweit (9):
+>>    hwmon: Add helper hwmon_visible_0444
+>>    hwmon: i5500_temp: Use new helper hwmon_visible_0444
+>>    hwmon: surface_fan: Use new helper hwmon_visible_0444
+>>    hwmon: sl28cpld: Use new helper hwmon_visible_0444
+>>    hwmon: gsc: Use new helper hwmon_visible_0444
+>>    hwmon: powerz: Use new helper hwmon_visible_0444
+>>    hwmon: raspberrypi: Use new helper hwmon_visible_0444
+>>    hwmon: intel-m10-bmc: Use new helper hwmon_visible_0444
+>>    hwmon: nzxt-kraken2: Use new helper hwmon_visible_0444
+>>
+>>   drivers/hwmon/gsc-hwmon.c           |  9 +--------
+>>   drivers/hwmon/hwmon.c               |  7 +++++++
+>>   drivers/hwmon/i5500_temp.c          |  8 +-------
+>>   drivers/hwmon/intel-m10-bmc-hwmon.c |  9 +--------
+>>   drivers/hwmon/nzxt-kraken2.c        |  9 +--------
+>>   drivers/hwmon/powerz.c              |  8 +-------
+>>   drivers/hwmon/raspberrypi-hwmon.c   |  8 +-------
+>>   drivers/hwmon/sl28cpld-hwmon.c      |  9 +--------
+>>   drivers/hwmon/surface_fan.c         | 10 +---------
+>>   include/linux/hwmon.h               |  2 ++
+>>   10 files changed, 17 insertions(+), 62 deletions(-)
+>>
 > 
-> There are more drivers outside drivers/hwmon which would benefit
-> from this helper as well.
+> I really don't want to add such hwmon-specific but at the same time
+> generic helpers. If such a helper is made available in the core kernel,
+> I'll be happy to accept patches using it, but otherwise please refrain
+> from submitting such patch series.
 > 
-> Heiner Kallweit (9):
->    hwmon: Add helper hwmon_visible_0444
->    hwmon: i5500_temp: Use new helper hwmon_visible_0444
->    hwmon: surface_fan: Use new helper hwmon_visible_0444
->    hwmon: sl28cpld: Use new helper hwmon_visible_0444
->    hwmon: gsc: Use new helper hwmon_visible_0444
->    hwmon: powerz: Use new helper hwmon_visible_0444
->    hwmon: raspberrypi: Use new helper hwmon_visible_0444
->    hwmon: intel-m10-bmc: Use new helper hwmon_visible_0444
->    hwmon: nzxt-kraken2: Use new helper hwmon_visible_0444
-> 
->   drivers/hwmon/gsc-hwmon.c           |  9 +--------
->   drivers/hwmon/hwmon.c               |  7 +++++++
->   drivers/hwmon/i5500_temp.c          |  8 +-------
->   drivers/hwmon/intel-m10-bmc-hwmon.c |  9 +--------
->   drivers/hwmon/nzxt-kraken2.c        |  9 +--------
->   drivers/hwmon/powerz.c              |  8 +-------
->   drivers/hwmon/raspberrypi-hwmon.c   |  8 +-------
->   drivers/hwmon/sl28cpld-hwmon.c      |  9 +--------
->   drivers/hwmon/surface_fan.c         | 10 +---------
->   include/linux/hwmon.h               |  2 ++
->   10 files changed, 17 insertions(+), 62 deletions(-)
-> 
+What would you consider a suited place, drivers/base or fs/sysfs or lib or .. ?
+For enum hwmon_sensor_types we have to include linux/hwmon.h. None of these
+places has any hwmon code, and I would expect concerns if generic core code
+includes subsystem headers.
 
-I really don't want to add such hwmon-specific but at the same time
-generic helpers. If such a helper is made available in the core kernel,
-I'll be happy to accept patches using it, but otherwise please refrain
-from submitting such patch series.
-
-Thanks,
-Guenter
+> Thanks,
+> Guenter
+> 
 
