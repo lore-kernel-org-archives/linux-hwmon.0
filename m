@@ -1,383 +1,414 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA5A1F4736
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 04:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEBF1CB33A;
+	Fri, 11 Oct 2024 06:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728621281; cv=none; b=H4o1QqRuqN8U/8gZqSFLsb48Y5Xs0syp5tcqIGKhB+BEnTMjYRcjdjxRucd1QPxVEVmI4d5Cy3RhFGRaAJYkM8cCoHfguNXgCsUoGExHzsbXUgTwJbutFoK/94276sZUU5RjBWsKQsKxDgOWBwHAe14z+8UBCJ2eumhmU7JMnkc=
+	t=1728627598; cv=none; b=Q9T2JEPQvhPIz/8vHdnRJYXtC11pWPDrceHHWK8IzvZAsOfHIhmjc8Mx4/lWONtxi71vHAvFkq6urEAXW9fZHBoXUk939o7qJMS2YjK+S1f0fR9j69Sj90L21b7yzTIw5tD2OZdM5Wd/D/SB+ygy+o58KKc8q7Fu/1g2akB++lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728621281; c=relaxed/simple;
-	bh=c3AmeLv3dREmvdSuMdGvXnbY79PnKw53edBoZ4Ksdn8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K1Fxvd9yAMvuBC9acROubZMZWV7o5MT8/7GqXZos+pJZLbiiducxvmZh5rEaD9jz67Os+z3qK8WrDbiAfi4ZLHXfCMpHeySG59JVVQ2U2xaa2u8EiVBXfGzrM49IROWG34rUArabVPofNRpP7/xlbxlgmeT6i0jsv/7RrBfuc98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=BEpMudBH; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1728627598; c=relaxed/simple;
+	bh=HxKmmTfJ0W4go8rHbnUPDRa0FZRgZ6An1mPbA47ZZF8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g6bHl+OCZN3nFF5ZpBcW08qyUAXchSm4jz+gaa1oSo7dCwjKQWYDuVAKRMm8qoaSVCQpsaUC2xmaV+5urKfnzfKGQX9AzmufJ4iKIT01SDQN9/aRH+vUnM48jkzfjrDDOABuUzzpE28NbZYzJ907JZVLXjMfKzW/s/+9SXu+ZBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=toH7zxqt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="BEpMudBH"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398939d29eso2041541e87.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 21:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1728621278; x=1729226078; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwSVq3aG0SlfXx0AaCOoKLpp8UG6OTAv4lN1JW+cEok=;
-        b=BEpMudBHP/4kVJkaiJgGxcpkCA9G6zdjs7jusM1jE11rHwIbR9cFeQvCWxLaYfTZQQ
-         pw9L77J5YxJHsKxnPRrSt6wUiFbZOuNk0HJABRk7zlHBumVBONvG3MnJZP8O0sn0PLIb
-         ok5n0qmuo3xv9DWO9KWyYasCh9pAmS5iDukbY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728621278; x=1729226078;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SwSVq3aG0SlfXx0AaCOoKLpp8UG6OTAv4lN1JW+cEok=;
-        b=sMQe/jE8N4WJmOFxWql5GBDiYAK8Hfx06/eN4QzADKcn1IvyjO8RiFl8ggy9OjkLGz
-         SYN3kEng0/lyOGuNjU4mgrQY06p0rxtPq1f50RDi70eRrcl1EY5X/O1zlKmvSEez5koH
-         sAz7ORbMfWYqYWfqYK8KbCKE7a95igZ3+2rqwLdhkEBlXtuelQdA90ToFsi4l/pdoIT6
-         2H/jL7949tYd28b3dNAEJI3QruPoQ33Ttfi8idamSXdy9+QoOFZ8//+BiQFnTeiKN7kI
-         +GH+/AH0reQ6qp0U18bCEpxFxUrnW1Nhrw+R8WIWYyPBvcV554NeorxwxtNq/lNzIhMA
-         4jXg==
-X-Forwarded-Encrypted: i=1; AJvYcCUk4y0ySHsFIsVx0YBooXdgSfaB6dC8FqAKv/tPvOPjno/bdVXVfdbCOx0u8Bk0HSyHOrpH/b8usBZhcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJKCr2MdhjxyA29JvjOGVRlbM52VQz6DOUoey8MvxckZWRCGHv
-	57lLBAX8qYKOOQc5oUmadv/JPgWFclOi+EK5HazrYknjWCZYts4ZkvBMgvn0cJWCp5jVgAQYSN0
-	Ce75zqM9/0yPxe4FvjG2QstTH0RBgKQjEW/tM
-X-Google-Smtp-Source: AGHT+IG6TaD0cM5wCMisShIfJnxxnfxKWnx88kZSjTkiQ5cEdhWSjqTdhReXFPOBgG0hSkJZrwwUfRahq1ZrLKv+8NY=
-X-Received: by 2002:a05:6512:3a8d:b0:535:3cdc:8763 with SMTP id
- 2adb3069b0e04-539da3b4383mr384665e87.4.1728621277737; Thu, 10 Oct 2024
- 21:34:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="toH7zxqt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D699C4CEC3;
+	Fri, 11 Oct 2024 06:19:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728627598;
+	bh=HxKmmTfJ0W4go8rHbnUPDRa0FZRgZ6An1mPbA47ZZF8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=toH7zxqtjLx4uPte9NGetyA2BSikaSLRjMsTMplZAeJ/fqYFQIicK5643mvOu70os
+	 Nk561v7XwLD3k7Lsrbciiu3NH4f3zOH1HJzTfxBPC+OGzKdFTQvxAvqgbwWJwepVx4
+	 T8HoAaxHQQP28RrKis9Ntolh6eTTLdtmMuV+onZzEv6bW8QridQ0WtghRL7Ue1Kw4R
+	 qGbTphhicOCyNRUZrJpPiax/r9x7Nm4ocT/m+p4Z7lYi9E3L9/Kl9z/ZiRtyE7Ypl7
+	 QH8l13GjPi91qxQFGWsxovTHsw1VzNXNHRocHO9u2jtts5Y/+3+ZtOZ1pWE9DsDANG
+	 8zupHm60TD6PA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Len Brown <lenb@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: [PATCH v2 1/3] acpi: make EC support compile-time conditional
+Date: Fri, 11 Oct 2024 06:18:17 +0000
+Message-Id: <20241011061948.3211423-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009192018.2683416-1-sanman.p211993@gmail.com>
-In-Reply-To: <20241009192018.2683416-1-sanman.p211993@gmail.com>
-From: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
-Date: Fri, 11 Oct 2024 10:04:25 +0530
-Message-ID: <CAH-L+nO1DMBEmbW0SamSkE+Su2sRPAJc3wO0uyKXNSpvf-qC8A@mail.gmail.com>
-Subject: Re: [PATCH net-next v5] eth: fbnic: Add hardware monitoring support
- via HWMON interface
-To: Sanman Pradhan <sanman.p211993@gmail.com>
-Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org, 
-	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com, 
-	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net, horms@kernel.org, 
-	mohsin.bashr@gmail.com, sanmanpradhan@meta.com, andrew@lunn.ch, 
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000003cd8ff06242c0112"
+Content-Transfer-Encoding: 8bit
 
---0000000000003cd8ff06242c0112
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, Oct 10, 2024 at 12:50=E2=80=AFAM Sanman Pradhan
-<sanman.p211993@gmail.com> wrote:
->
-> From: Sanman Pradhan <sanmanpradhan@meta.com>
->
-> This patch adds support for hardware monitoring to the fbnic driver,
-> allowing for temperature and voltage sensor data to be exposed to
-> userspace via the HWMON interface. The driver registers a HWMON device
-> and provides callbacks for reading sensor data, enabling system
-> admins to monitor the health and operating conditions of fbnic.
->
-> Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
->
-> ---
-> v5:
->   - Drop hwmon_unregister label from fbnic_pci.c
->
-> v4: https://patchwork.kernel.org/project/netdevbpf/patch/20241008143212.2=
-354554-1-sanman.p211993@gmail.com/
->
-> v3: https://patchwork.kernel.org/project/netdevbpf/patch/20241004204953.2=
-223536-1-sanman.p211993@gmail.com/
->
-> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20241003173618.2=
-479520-1-sanman.p211993@gmail.com/
->
-> v1: https://lore.kernel.org/netdev/153c5be4-158e-421a-83a5-5632a9263e87@r=
-oeck-us.net/T/
->
-> ---
->  drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
->  drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
->  drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
->  drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |  7 ++
->  drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  3 +
->  5 files changed, 96 insertions(+)
->  create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
->
-> diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ether=
-net/meta/fbnic/Makefile
-> index ed4533a73c57..41494022792a 100644
-> --- a/drivers/net/ethernet/meta/fbnic/Makefile
-> +++ b/drivers/net/ethernet/meta/fbnic/Makefile
-> @@ -11,6 +11,7 @@ fbnic-y :=3D fbnic_devlink.o \
->            fbnic_ethtool.o \
->            fbnic_fw.o \
->            fbnic_hw_stats.o \
-> +          fbnic_hwmon.o \
->            fbnic_irq.o \
->            fbnic_mac.o \
->            fbnic_netdev.o \
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethern=
-et/meta/fbnic/fbnic.h
-> index 0f9e8d79461c..2d3aa20bc876 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic.h
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
-> @@ -18,6 +18,7 @@
->  struct fbnic_dev {
->         struct device *dev;
->         struct net_device *netdev;
-> +       struct device *hwmon;
->
->         u32 __iomem *uc_addr0;
->         u32 __iomem *uc_addr4;
-> @@ -127,6 +128,9 @@ void fbnic_devlink_unregister(struct fbnic_dev *fbd);
->  int fbnic_fw_enable_mbx(struct fbnic_dev *fbd);
->  void fbnic_fw_disable_mbx(struct fbnic_dev *fbd);
->
-> +void fbnic_hwmon_register(struct fbnic_dev *fbd);
-> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
-> +
->  int fbnic_pcs_irq_enable(struct fbnic_dev *fbd);
->  void fbnic_pcs_irq_disable(struct fbnic_dev *fbd);
->
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
-ethernet/meta/fbnic/fbnic_hwmon.c
-> new file mode 100644
-> index 000000000000..bcd1086e3768
-> --- /dev/null
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
-> @@ -0,0 +1,81 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <linux/hwmon.h>
-> +
-> +#include "fbnic.h"
-> +#include "fbnic_mac.h"
-> +
-> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
-> +{
-> +       if (type =3D=3D hwmon_temp)
-> +               return FBNIC_SENSOR_TEMP;
-> +       if (type =3D=3D hwmon_in)
-> +               return FBNIC_SENSOR_VOLTAGE;
-> +
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t fbnic_hwmon_is_visible(const void *drvdata,
-> +                                     enum hwmon_sensor_types type,
-> +                                     u32 attr, int channel)
-> +{
-> +       if (type =3D=3D hwmon_temp && attr =3D=3D hwmon_temp_input)
-> +               return 0444;
-> +       if (type =3D=3D hwmon_in && attr =3D=3D hwmon_in_input)
-> +               return 0444;
-> +
-> +       return 0;
-> +}
-> +
-> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types =
-type,
-> +                           u32 attr, int channel, long *val)
-> +{
-> +       struct fbnic_dev *fbd =3D dev_get_drvdata(dev);
-> +       const struct fbnic_mac *mac =3D fbd->mac;
-> +       int id;
-> +
-> +       id =3D fbnic_hwmon_sensor_id(type);
-> +       return id < 0 ? id : mac->get_sensor(fbd, id, val);
-> +}
-> +
-> +static const struct hwmon_ops fbnic_hwmon_ops =3D {
-> +       .is_visible =3D fbnic_hwmon_is_visible,
-> +       .read =3D fbnic_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_channel_info *fbnic_hwmon_info[] =3D {
-> +       HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +       HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
-> +       NULL
-> +};
-> +
-> +static const struct hwmon_chip_info fbnic_chip_info =3D {
-> +       .ops =3D &fbnic_hwmon_ops,
-> +       .info =3D fbnic_hwmon_info,
-> +};
-> +
-> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
-> +{
-> +       if (!IS_REACHABLE(CONFIG_HWMON))
-> +               return;
-> +
-> +       fbd->hwmon =3D hwmon_device_register_with_info(fbd->dev, "fbnic",
-> +                                                    fbd, &fbnic_chip_inf=
-o,
-> +                                                    NULL);
-> +       if (IS_ERR(fbd->hwmon)) {
-> +               dev_notice(fbd->dev,
-> +                          "Failed to register hwmon device %pe\n",
-> +                       fbd->hwmon);
-> +               fbd->hwmon =3D NULL;
-> +       }
-> +}
-> +
-> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
-> +{
-> +       if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
-> +               return;
-> +
-> +       hwmon_device_unregister(fbd->hwmon);
-> +       fbd->hwmon =3D NULL;
-> +}
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h b/drivers/net/et=
-hernet/meta/fbnic/fbnic_mac.h
-> index 476239a9d381..05a591653e09 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
-> @@ -47,6 +47,11 @@ enum {
->  #define FBNIC_LINK_MODE_PAM4   (FBNIC_LINK_50R1)
->  #define FBNIC_LINK_MODE_MASK   (FBNIC_LINK_AUTO - 1)
->
-> +enum fbnic_sensor_id {
-> +       FBNIC_SENSOR_TEMP,              /* Temp in millidegrees Centigrad=
-e */
-> +       FBNIC_SENSOR_VOLTAGE,           /* Voltage in millivolts */
-> +};
-> +
->  /* This structure defines the interface hooks for the MAC. The MAC hooks
->   * will be configured as a const struct provided with a set of function
->   * pointers.
-> @@ -83,6 +88,8 @@ struct fbnic_mac {
->
->         void (*link_down)(struct fbnic_dev *fbd);
->         void (*link_up)(struct fbnic_dev *fbd, bool tx_pause, bool rx_pau=
-se);
-> +
-> +       int (*get_sensor)(struct fbnic_dev *fbd, int id, long *val);
-Thank you for addressing the comments. One last question.
-[Kalesh] I do not see the corresponding implementation of this
-function. Am I missing soemthing here?
->  };
->
->  int fbnic_mac_init(struct fbnic_dev *fbd);
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/et=
-hernet/meta/fbnic/fbnic_pci.c
-> index a4809fe0fc24..ef9dc8c67927 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
-> @@ -289,6 +289,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
-ruct pci_device_id *ent)
->
->         fbnic_devlink_register(fbd);
->
-> +       fbnic_hwmon_register(fbd);
-> +
->         if (!fbd->dsn) {
->                 dev_warn(&pdev->dev, "Reading serial number failed\n");
->                 goto init_failure_mode;
-> @@ -345,6 +347,7 @@ static void fbnic_remove(struct pci_dev *pdev)
->                 fbnic_netdev_free(fbd);
->         }
->
-> +       fbnic_hwmon_unregister(fbd);
->         fbnic_devlink_unregister(fbd);
->         fbnic_fw_disable_mbx(fbd);
->         fbnic_free_irqs(fbd);
-> --
-> 2.43.5
->
+The embedded controller code is mainly used on x86 laptops and cannot
+work without PC style I/O port access.
 
+Make this a user-visible configuration option that is default enabled
+on x86 but otherwise disabled, and that can never be enabled unless
+CONFIG_HAS_IOPORT is also available.
 
---=20
-Regards,
-Kalesh A P
+The empty stubs in internal.h help ignore the EC code in configurations
+that don't support it. In order to see those stubs, the sbshc code also
+has to include this header and drop duplicate declarations.
 
---0000000000003cd8ff06242c0112
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+All the direct callers of ec_read/ec_write already had an x86
+dependency and now also need to depend on APCI_EC.
 
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBWowggRSoAMCAQICDDfBRQmwNSI92mit0zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI5NTZaFw0yNTA5MTAwODI5NTZaMIGi
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xHzAdBgNVBAMTFkthbGVzaCBBbmFra3VyIFB1cmF5aWwxMjAw
-BgkqhkiG9w0BCQEWI2thbGVzaC1hbmFra3VyLnB1cmF5aWxAYnJvYWRjb20uY29tMIIBIjANBgkq
-hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnv1Reaeezfr6NEmg3xZlh4cz9m7QCN13+j4z1scrX+b
-JfnV8xITT5yvwdQv3R3p7nzD/t29lTRWK3wjodUd2nImo6vBaH3JbDwleIjIWhDXLNZ4u7WIXYwx
-aQ8lYCdKXRsHXgGPY0+zSx9ddpqHZJlHwcvas3oKnQN9WgzZtsM7A8SJefWkNvkcOtef6bL8Ew+3
-FBfXmtsPL9I2vita8gkYzunj9Nu2IM+MnsP7V/+Coy/yZDtFJHp30hDnYGzuOhJchDF9/eASvE8T
-T1xqJODKM9xn5xXB1qezadfdgUs8k8QAYyP/oVBafF9uqDudL6otcBnziyDBQdFCuAQN7wIDAQAB
-o4IB5DCCAeAwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZC
-aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3Iz
-cGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcC
-ARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNV
-HR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNp
-Z24yY2EyMDIwLmNybDAuBgNVHREEJzAlgSNrYWxlc2gtYW5ha2t1ci5wdXJheWlsQGJyb2FkY29t
-LmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGP
-zzAdBgNVHQ4EFgQUI3+tdStI+ABRGSqksMsiCmO9uDAwDQYJKoZIhvcNAQELBQADggEBAGfe1o9b
-4wUud0FMjb/FNdc433meL15npjdYWUeioHdlCGB5UvEaMGu71QysfoDOfUNeyO9YKp0h0fm7clvo
-cBqeWe4CPv9TQbmLEtXKdEpj5kFZBGmav69mGTlu1A9KDQW3y0CDzCPG2Fdm4s73PnkwvemRk9E2
-u9/kcZ8KWVeS+xq+XZ78kGTKQ6Wii3dMK/EHQhnDfidadoN/n+x2ySC8yyDNvy81BocnblQzvbuB
-a30CvRuhokNO6Jzh7ZFtjKVMzYas3oo6HXgA+slRszMu4pc+fRPO41FHjeDM76e6P5OnthhnD+NY
-x6xokUN65DN1bn2MkeNs0nQpizDqd0QxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYD
-VQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25h
-bFNpZ24gMiBDQSAyMDIwAgw3wUUJsDUiPdpordMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcN
-AQkEMSIEIP6TspvhtA9FoigfmtWA5MMIljE0uyUXj0xg754su4CtMBgGCSqGSIb3DQEJAzELBgkq
-hkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MTAxMTA0MzQzOFowaQYJKoZIhvcNAQkPMVwwWjAL
-BglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG
-9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBDHikRzptf
-NjMux+T2zoGRxfBmUhlh9GnA/o9c3bT6Q+ams5DGTAXYD8YZfHq+8xYIq/8/Xl+nRE1Nc5EWYERl
-BgSzBvnVFyw4nFmbt9UQmPXtglsDFE9QseftGCdLik7JE9C+g6313sJfYp9Yn8vyhhoQpHUEbKDd
-EsUvlDoF6nmb0S49pJEDNBFUY9vYoq/teEOPVxXmQuluoGytxF6fvphBw9ZJHrD1EEliJhjiA0Lg
-3waZ7//W2wQGQRGLi0w+7MICsUHCHljgaWMx+jutRWKevh+I+1CLkPlC7c/4otAioqIPNz4mKmML
-s0hrOE66c8wIFLRljhxCzsZrF5rt
---0000000000003cd8ff06242c0112--
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/acpi/Kconfig               | 11 ++++++++++-
+ drivers/acpi/Makefile              |  2 +-
+ drivers/acpi/internal.h            | 25 +++++++++++++++++++++++++
+ drivers/acpi/sbshc.c               |  9 +--------
+ drivers/char/Kconfig               |  1 +
+ drivers/hwmon/Kconfig              |  3 ++-
+ drivers/platform/x86/Kconfig       | 22 ++++++++++++----------
+ drivers/platform/x86/dell/Kconfig  |  1 +
+ drivers/platform/x86/hp/Kconfig    |  1 +
+ drivers/platform/x86/intel/Kconfig |  2 +-
+ include/linux/acpi.h               |  8 ++++++--
+ 11 files changed, 61 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index d67f63d93b2a..d65cd08ba8e1 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -132,8 +132,17 @@ config ACPI_REV_OVERRIDE_POSSIBLE
+ 	  makes it possible to force the kernel to return "5" as the supported
+ 	  ACPI revision via the "acpi_rev_override" command line switch.
+ 
++config ACPI_EC
++	bool "Embedded Controller"
++	depends on HAS_IOPORT
++	default X86
++	help
++	  This driver handles communication with the microcontroller
++	  on many x86 laptops and other machines.
++
+ config ACPI_EC_DEBUGFS
+ 	tristate "EC read/write access through /sys/kernel/debug/ec"
++	depends on ACPI_EC
+ 	help
+ 	  Say N to disable Embedded Controller /sys/kernel/debug interface
+ 
+@@ -433,7 +442,7 @@ config ACPI_HOTPLUG_IOAPIC
+ 
+ config ACPI_SBS
+ 	tristate "Smart Battery System"
+-	depends on X86
++	depends on X86 && ACPI_EC
+ 	select POWER_SUPPLY
+ 	help
+ 	  This driver supports the Smart Battery System, another
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index 61ca4afe83dc..40208a0f5dfb 100644
+--- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -41,7 +41,7 @@ acpi-y				+= resource.o
+ acpi-y				+= acpi_processor.o
+ acpi-y				+= processor_core.o
+ acpi-$(CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC) += processor_pdc.o
+-acpi-y				+= ec.o
++acpi-$(CONFIG_ACPI_EC)		+= ec.o
+ acpi-$(CONFIG_ACPI_DOCK)	+= dock.o
+ acpi-$(CONFIG_PCI)		+= pci_root.o pci_link.o pci_irq.o
+ obj-$(CONFIG_ACPI_MCFG)		+= pci_mcfg.o
+diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+index ced7dff9a5db..00910ccd7eda 100644
+--- a/drivers/acpi/internal.h
++++ b/drivers/acpi/internal.h
+@@ -215,6 +215,8 @@ extern struct acpi_ec *first_ec;
+ /* External interfaces use first EC only, so remember */
+ typedef int (*acpi_ec_query_func) (void *data);
+ 
++#ifdef CONFIG_ACPI_EC
++
+ void acpi_ec_init(void);
+ void acpi_ec_ecdt_probe(void);
+ void acpi_ec_dsdt_probe(void);
+@@ -231,6 +233,29 @@ void acpi_ec_flush_work(void);
+ bool acpi_ec_dispatch_gpe(void);
+ #endif
+ 
++#else
++
++static inline void acpi_ec_init(void) {}
++static inline void acpi_ec_ecdt_probe(void) {}
++static inline void acpi_ec_dsdt_probe(void) {}
++static inline void acpi_ec_block_transactions(void) {}
++static inline void acpi_ec_unblock_transactions(void) {}
++static inline int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
++			      acpi_handle handle, acpi_ec_query_func func,
++			      void *data)
++{
++	return -ENXIO;
++}
++static inline void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit) {}
++static inline void acpi_ec_register_opregions(struct acpi_device *adev) {}
++
++static inline void acpi_ec_flush_work(void) {}
++static inline bool acpi_ec_dispatch_gpe(void)
++{
++	return false;
++}
++
++#endif
+ 
+ /*--------------------------------------------------------------------------
+                                   Suspend/Resume
+diff --git a/drivers/acpi/sbshc.c b/drivers/acpi/sbshc.c
+index 16f2daaa2c45..2b63cd18cca2 100644
+--- a/drivers/acpi/sbshc.c
++++ b/drivers/acpi/sbshc.c
+@@ -14,6 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/interrupt.h>
+ #include "sbshc.h"
++#include "internal.h"
+ 
+ #define ACPI_SMB_HC_CLASS	"smbus_host_ctl"
+ #define ACPI_SMB_HC_DEVICE_NAME	"ACPI SMBus HC"
+@@ -236,12 +237,6 @@ static int smbus_alarm(void *context)
+ 	return 0;
+ }
+ 
+-typedef int (*acpi_ec_query_func) (void *data);
+-
+-extern int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
+-			      acpi_handle handle, acpi_ec_query_func func,
+-			      void *data);
+-
+ static int acpi_smbus_hc_add(struct acpi_device *device)
+ {
+ 	int status;
+@@ -278,8 +273,6 @@ static int acpi_smbus_hc_add(struct acpi_device *device)
+ 	return 0;
+ }
+ 
+-extern void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit);
+-
+ static void acpi_smbus_hc_remove(struct acpi_device *device)
+ {
+ 	struct acpi_smb_hc *hc;
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 7c8dd0abcfdf..8fb33c90482f 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -238,6 +238,7 @@ config APPLICOM
+ config SONYPI
+ 	tristate "Sony Vaio Programmable I/O Control Device support"
+ 	depends on X86_32 && PCI && INPUT
++	depends on ACPI_EC || !ACPI
+ 	help
+ 	  This driver enables access to the Sony Programmable I/O Control
+ 	  Device which can be found in many (all ?) Sony Vaio laptops.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 65ea92529406..25ae0a00ea2c 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1747,7 +1747,7 @@ source "drivers/hwmon/occ/Kconfig"
+ 
+ config SENSORS_OXP
+ 	tristate "OneXPlayer EC fan control"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on X86
+ 	help
+ 		If you say yes here you get support for fan readings and control over
+@@ -2586,6 +2586,7 @@ config SENSORS_ASUS_WMI
+ config SENSORS_ASUS_EC
+ 	tristate "ASUS EC Sensors"
+ 	depends on X86
++	depends on ACPI_EC
+ 	help
+ 	  If you say yes here you get support for the ACPI embedded controller
+ 	  hardware monitoring interface found in ASUS motherboards. The driver
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 3875abba5a79..0258dd879d64 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -52,6 +52,7 @@ config WMI_BMOF
+ config HUAWEI_WMI
+ 	tristate "Huawei WMI laptop extras driver"
+ 	depends on ACPI_BATTERY
++	depends on ACPI_EC
+ 	depends on ACPI_WMI
+ 	depends on INPUT
+ 	select INPUT_SPARSEKMAP
+@@ -147,7 +148,7 @@ config YT2_1380
+ 
+ config ACERHDF
+ 	tristate "Acer Aspire One temperature and fan driver"
+-	depends on ACPI && THERMAL
++	depends on ACPI_EC && THERMAL
+ 	select THERMAL_GOV_BANG_BANG
+ 	help
+ 	  This is a driver for Acer Aspire One netbooks. It allows to access
+@@ -186,6 +187,7 @@ config ACER_WMI
+ 	depends on SERIO_I8042
+ 	depends on INPUT
+ 	depends on RFKILL || RFKILL = n
++	depends on ACPI_EC
+ 	depends on ACPI_WMI
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
+ 	depends on HWMON
+@@ -334,7 +336,7 @@ config MERAKI_MX100
+ 
+ config EEEPC_LAPTOP
+ 	tristate "Eee PC Hotkey Driver"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on INPUT
+ 	depends on RFKILL || RFKILL = n
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
+@@ -503,7 +505,7 @@ config SENSORS_HDAPS
+ 
+ config THINKPAD_ACPI
+ 	tristate "ThinkPad ACPI Laptop Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_BATTERY
+ 	depends on INPUT
+ 	depends on RFKILL || RFKILL = n
+@@ -682,7 +684,7 @@ config MEEGOPAD_ANX7428
+ 
+ config MSI_EC
+ 	tristate "MSI EC Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_BATTERY
+ 	help
+ 	  This driver allows various MSI laptops' functionalities to be
+@@ -690,7 +692,7 @@ config MSI_EC
+ 
+ config MSI_LAPTOP
+ 	tristate "MSI Laptop Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on BACKLIGHT_CLASS_DEVICE
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
+ 	depends on RFKILL
+@@ -796,7 +798,7 @@ config SAMSUNG_LAPTOP
+ 
+ config SAMSUNG_Q10
+ 	tristate "Samsung Q10 Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	select BACKLIGHT_CLASS_DEVICE
+ 	help
+ 	  This driver provides support for backlight control on Samsung Q10
+@@ -804,7 +806,7 @@ config SAMSUNG_Q10
+ 
+ config ACPI_TOSHIBA
+ 	tristate "Toshiba Laptop Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_BATTERY
+ 	depends on ACPI_WMI
+ 	select LEDS_CLASS
+@@ -904,7 +906,7 @@ config ACPI_CMPC
+ 
+ config COMPAL_LAPTOP
+ 	tristate "Compal (and others) Laptop Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on BACKLIGHT_CLASS_DEVICE
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
+ 	depends on RFKILL
+@@ -949,7 +951,7 @@ config PANASONIC_LAPTOP
+ 
+ config SONY_LAPTOP
+ 	tristate "Sony Laptop Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_VIDEO || ACPI_VIDEO = n
+ 	depends on BACKLIGHT_CLASS_DEVICE
+ 	depends on INPUT
+@@ -972,7 +974,7 @@ config SONYPI_COMPAT
+ 
+ config SYSTEM76_ACPI
+ 	tristate "System76 ACPI Driver"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_BATTERY
+ 	depends on HWMON
+ 	depends on INPUT
+diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
+index 68a49788a396..dc21227dd66e 100644
+--- a/drivers/platform/x86/dell/Kconfig
++++ b/drivers/platform/x86/dell/Kconfig
+@@ -194,6 +194,7 @@ config DELL_WMI
+ config DELL_WMI_PRIVACY
+ 	bool "Dell WMI Hardware Privacy Support"
+ 	depends on DELL_WMI
++	depends on ACPI_EC
+ 	help
+ 	  This option adds integration with the "Dell Hardware Privacy"
+ 	  feature of Dell laptops to the dell-wmi driver.
+diff --git a/drivers/platform/x86/hp/Kconfig b/drivers/platform/x86/hp/Kconfig
+index d776761cd5fd..dd51491b9bcd 100644
+--- a/drivers/platform/x86/hp/Kconfig
++++ b/drivers/platform/x86/hp/Kconfig
+@@ -37,6 +37,7 @@ config HP_ACCEL
+ config HP_WMI
+ 	tristate "HP WMI extras"
+ 	default m
++	depends on ACPI_EC
+ 	depends on ACPI_WMI
+ 	depends on INPUT
+ 	depends on RFKILL || RFKILL = n
+diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+index ad50bbabec61..eb698dcb9af9 100644
+--- a/drivers/platform/x86/intel/Kconfig
++++ b/drivers/platform/x86/intel/Kconfig
+@@ -62,7 +62,7 @@ config INTEL_INT0002_VGPIO
+ 
+ config INTEL_OAKTRAIL
+ 	tristate "Intel Oaktrail Platform Extras"
+-	depends on ACPI
++	depends on ACPI_EC
+ 	depends on ACPI_VIDEO || ACPI_VIDEO=n
+ 	depends on RFKILL && BACKLIGHT_CLASS_DEVICE && ACPI
+ 	help
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 4d5ee84c468b..7dd24acd9ffe 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -1164,8 +1164,6 @@ int acpi_subsys_suspend_noirq(struct device *dev);
+ int acpi_subsys_suspend(struct device *dev);
+ int acpi_subsys_freeze(struct device *dev);
+ int acpi_subsys_poweroff(struct device *dev);
+-void acpi_ec_mark_gpe_for_wake(void);
+-void acpi_ec_set_gpe_wake_mask(u8 action);
+ int acpi_subsys_restore_early(struct device *dev);
+ #else
+ static inline int acpi_subsys_prepare(struct device *dev) { return 0; }
+@@ -1176,6 +1174,12 @@ static inline int acpi_subsys_suspend(struct device *dev) { return 0; }
+ static inline int acpi_subsys_freeze(struct device *dev) { return 0; }
+ static inline int acpi_subsys_poweroff(struct device *dev) { return 0; }
+ static inline int acpi_subsys_restore_early(struct device *dev) { return 0; }
++#endif
++
++#if defined(CONFIG_ACPI_EC) && defined(CONFIG_PM_SLEEP)
++void acpi_ec_mark_gpe_for_wake(void);
++void acpi_ec_set_gpe_wake_mask(u8 action);
++#else
+ static inline void acpi_ec_mark_gpe_for_wake(void) {}
+ static inline void acpi_ec_set_gpe_wake_mask(u8 action) {}
+ #endif
+-- 
+2.39.5
+
