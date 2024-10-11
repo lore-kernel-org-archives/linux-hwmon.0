@@ -1,59 +1,59 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE1D1D0F49
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 20:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FA01CFEB8
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 20:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728676998; cv=none; b=DvTkBdJjsAuyZxDvD+hPcEyF2blKeBN1dsWNmj642hcznuN1yQeHiHhUKYbeIqVbTH4+EwjlkfMfl84SsssSW/QytTS5w1MX6WF6pjKMCzXXvOeAS2lfRJv7ur+KrMBaeRU+iuc0k2UTNOH3we7jO+VrzfR84SU5xNeCNhWX2ZY=
+	t=1728677077; cv=none; b=oBYcwU0iOab5/qWUPgQ95dGKXBQSIr5z8PyTOaLq0szBwwn6JYWE4FOe0t69RfK0sHHDpZFUir11h7/XAefVHcBC5n16uEJZNyX176yA3jjmcQ6MYLRkogEurYFhiB+WA6CWrd7MsJ9JfSca6pGVw1U1v7ETPGujO5tn6jMdBts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728676998; c=relaxed/simple;
-	bh=EWSMT0OZU/llVl0RAk/i+5uYd+JCy/irmlzqd+QCdhA=;
+	s=arc-20240116; t=1728677077; c=relaxed/simple;
+	bh=14QfitH73aZqjSr2FWvNeZ8QDiUgaGRlyjP+8K5KKro=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=vFUXzVgPAuVEl8+n0p1Df81eqmhaCJQc/UnaGeKeNQO6W6/8tg3woFEvgiU04vH3mpRB6s5Rnd6D255Ib9uvTEB3YIPysbxsYVjhb4Q6PnYdKmrZZjCjFBbDRGBKsWUlxwx7u+1qxy5BapAo3iYwpMOVKvlicRQ1RGNH9BKsr1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NVDlAoPj; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:Content-Type; b=PLMeNKoO9Viy7rqSmh7FkylfCNb+qUfe37IjjybB1Om2/yuLddaixLYh3B8LdmSoUINjGdNrX9tK6PuuDZ9F8MF6n7vtg5QkXfKlX2yHVdcQThR+8YVgJ+i5ce+b4WQJ+QfceFAgNYIpyiVPtyWtZr7bS9/MG7YHFNk6QfIA6QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ALw4G/cy; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NVDlAoPj"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a99e3b3a411so44012466b.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 13:03:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ALw4G/cy"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fad5024b8dso28205411fa.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 13:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728676995; x=1729281795; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728677074; x=1729281874; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDz3XI6jFYHfp4NzA95pcy5R9+V6hQKHOygvEK3KB/k=;
-        b=NVDlAoPjUiY4Ofee5DupBCCADzDytff40B2MPpf7k983odtP/YXM3aS8k9TJAH6Ejl
-         1bZPbubpuUvxKo5ZCQrSWCFOJc3ppC4m+CocZGW34+Jak71B9YTqHd/+iZiP0Opi0K8a
-         EtjTVzIT5s3SgnRlxtxV1lWAf/MhpUS5p6yv31RTZJNqDzHNfYFWMRKHDgVeR+JlUDe8
-         FzB56RiobEGNyoYavfZC21zO7gZ1paDUVaAVZxA25ZJtj184myndP+cDkiloZnJbKoRg
-         Cum8yh+JttB7wz/cqqzkErBDlxX+g/6JrxWZOz/Bx5ZHc1wNeSI8jdIhq3xloCLqfqhL
-         ud+A==
+        bh=IH03J0HFNDP/Jl0w2VxxzQlRmOuL3kJdY0NGhLlQEI0=;
+        b=ALw4G/cywJRBJkaGML/HrH0+xTBlzeKudlijhN1fa2B7W2etvAqhPrX6plH0NxQ1mZ
+         fomvryAK/ttxfUtWEtmBx+78oZ3AOhwIqEec/gveJNq5wWfexDo+R3qWTOlD7gZnL8/p
+         Ko4FPHpsHbolt6nXD51UQQPWCjr3XhHsXhD34r+DxEfwXdpwzpnuYhrFAfKmnYy2MjqW
+         Zu40tDrLsYovFEpxH9Pq4aQhwRdo/5hCLSmMwbjkxzTn1mSo2Kx24ftt+svmHAxDCS4d
+         OOqpbFfZewkEhi63sUXcBvtHCJ0r27fbZbqM5QpRWjOLDutxRdWFFaSPp5PaUo3AcnCC
+         Uk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728676995; x=1729281795;
+        d=1e100.net; s=20230601; t=1728677074; x=1729281874;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eDz3XI6jFYHfp4NzA95pcy5R9+V6hQKHOygvEK3KB/k=;
-        b=dIdJ9cmD7w2IpsZ4OZoJLIbPvNR0hu6mpoTtOnwMWOayaPFSkxMA16cuNckXzcM4s5
-         6CO40RFHoalpIjMMQp3GlnciwWtTiRh7piWU1qwa+xLyCKNW9tMVhGeZhR4jlCK4LtRI
-         LCMHx0tXUOrxRXb8Xwxgexy5R0wvmBiUBpWQFSfNRXgR4KR262JG6HsPDUK/pDH6R3u+
-         qAHiQcAtZvXPbjlH2/42GEgCSBIw0XBfv8U2HbKnTYIueRtJrHsf95IxYlbhiGq/XYYa
-         l//HRS6Vb7WguMFIKI+HY9ArPdIax87B9VGCxzXfGZeREpMUcyEykT6csSB6YnglJR/e
-         JomQ==
-X-Gm-Message-State: AOJu0Yxj3hJgvqhu5ZUFvzyR6BSmZhkqghZ4Iq+0ptxTYkJY27O11zsP
-	EcwZqV7TB4F73bZyX1vQ1p9w2qu5kb1cjEalLGU8mtVUzZV2/F1nhnUphA==
-X-Google-Smtp-Source: AGHT+IEOIMpKk6h8g5dnIgoIe+r1R488jY8xsS02OL0Rk9krv9aiTTNsi3AkN605MxTYKgL2aDUCPA==
-X-Received: by 2002:a17:907:e241:b0:a8a:6db7:665d with SMTP id a640c23a62f3a-a99b885b42fmr334756466b.17.1728676995274;
-        Fri, 11 Oct 2024 13:03:15 -0700 (PDT)
+        bh=IH03J0HFNDP/Jl0w2VxxzQlRmOuL3kJdY0NGhLlQEI0=;
+        b=Zu0X5L9YRPiIZ7B+wN1KUSYKiZFJUm9ystmMaJx2POoFbWJCutjTGnuxFDrxJCmUxE
+         8SviOfp14X+csyhG2RdWpB0+jOFqk8wABjFbHqUPqI7FrWK+H70i2yJ1yoFFInK+euSY
+         i3vkL7SKf47vGSC6eohrAgkKz/Lp3RPXc6BIkg73Gt1osHTrEYXfB5hqWMWpBWiGCFAQ
+         KMOZXNMcS2zEvirHwyu3GGbvgWRDvNgOL/yhg1saPDpPGO2/Vnk325aZUjnSd0XOIqc4
+         e/cpohuDvBAwGNOJAijLFdB4mlGYLUXdR/Nae/BITDhgLP1K9cxp03ETKvJSIm3GDYD0
+         p8Cg==
+X-Gm-Message-State: AOJu0YymFKvxw6faLxk8BLnyZCF8joyI5eOA0ZVd18S4XH+DiescNzwH
+	n8TxhJIcfpw6HfifA1mAu465/XO3CC1j9vPQAouwIzPZBiHnEJppG3ZSIQ==
+X-Google-Smtp-Source: AGHT+IEUvE63MGsu4ANz2jqqOJTaOtOe4BTOVn99rCtptmpAWS2KpH1QlW5/V2wkhD01gSg3WYn4rA==
+X-Received: by 2002:a05:651c:19a5:b0:2f7:65b0:ff29 with SMTP id 38308e7fff4ca-2fb32ae7e0fmr20018321fa.38.1728677073907;
+        Fri, 11 Oct 2024 13:04:33 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:afd7:9a00:94ac:542a:1cd2:c9ce? (dynamic-2a02-3100-afd7-9a00-94ac-542a-1cd2-c9ce.310.pool.telefonica.de. [2a02:3100:afd7:9a00:94ac:542a:1cd2:c9ce])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a99a7f5c4c3sm246555766b.95.2024.10.11.13.03.13
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c937153a6asm2232626a12.49.2024.10.11.13.04.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 13:03:14 -0700 (PDT)
-Message-ID: <8ef99170-b37d-4c9a-b3bf-59f4ea76cf29@gmail.com>
-Date: Fri, 11 Oct 2024 22:03:13 +0200
+        Fri, 11 Oct 2024 13:04:32 -0700 (PDT)
+Message-ID: <1ac2be2d-df4f-455a-900d-821fc7bd12c4@gmail.com>
+Date: Fri, 11 Oct 2024 22:04:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,11 +61,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 7/8] hwmon: intel-m10-bmc: Simplify specifying static
+Subject: [PATCH 8/8] hwmon: nzxt-kraken2: Simplify specifying static
  visibility attribute
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+ Jonas Malaco <jonas@protocubo.io>
 Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 References: <6f43a3e1-3622-4595-a1ec-2b3ad94bdf5b@gmail.com>
 Content-Language: en-US
@@ -121,35 +121,35 @@ the static attribute visibility.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/hwmon/intel-m10-bmc-hwmon.c | 9 +--------
+ drivers/hwmon/nzxt-kraken2.c | 9 +--------
  1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index 96397ae6f..e221f2c1f 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -565,13 +565,6 @@ static const struct m10bmc_hwmon_board_data n6000bmc_hwmon_bdata = {
- 	.hinfo = n6000bmc_hinfo,
+diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
+index ed38645a1..034698232 100644
+--- a/drivers/hwmon/nzxt-kraken2.c
++++ b/drivers/hwmon/nzxt-kraken2.c
+@@ -35,13 +35,6 @@ struct kraken2_priv_data {
+ 	unsigned long updated; /* jiffies */
  };
  
--static umode_t
--m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
--			u32 attr, int channel)
+-static umode_t kraken2_is_visible(const void *data,
+-				  enum hwmon_sensor_types type,
+-				  u32 attr, int channel)
 -{
 -	return 0444;
 -}
 -
- static const struct m10bmc_sdata *
- find_sensor_data(struct m10bmc_hwmon *hw, enum hwmon_sensor_types type,
- 		 int channel)
-@@ -729,7 +722,7 @@ static int m10bmc_hwmon_read_string(struct device *dev,
+ static int kraken2_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *val)
+ {
+@@ -81,7 +74,7 @@ static int kraken2_read_string(struct device *dev, enum hwmon_sensor_types type,
  }
  
- static const struct hwmon_ops m10bmc_hwmon_ops = {
--	.is_visible = m10bmc_hwmon_is_visible,
+ static const struct hwmon_ops kraken2_hwmon_ops = {
+-	.is_visible = kraken2_is_visible,
 +	.visible = 0444,
- 	.read = m10bmc_hwmon_read,
- 	.read_string = m10bmc_hwmon_read_string,
+ 	.read = kraken2_read,
+ 	.read_string = kraken2_read_string,
  };
 -- 
 2.47.0
