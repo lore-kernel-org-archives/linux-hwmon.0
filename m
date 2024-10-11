@@ -1,88 +1,383 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F9E1CF7B8
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 20:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA5A1F4736
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 04:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728592465; cv=none; b=gmD578TOGnEbcKKMtM7XwRS/294H+GfVYkbt67AfjQySINVN7PlGtcjB6yMsTRYZ87rPiGyv+cM8d2yRJdsHiid/ETYvg38lJA68ZBtUxjcbMTuEiJ+HlEUG8RhKXAD89xRp7AslnhmrPsnQGh6hjrHjwwuCdXO3FuCrwL52ojk=
+	t=1728621281; cv=none; b=H4o1QqRuqN8U/8gZqSFLsb48Y5Xs0syp5tcqIGKhB+BEnTMjYRcjdjxRucd1QPxVEVmI4d5Cy3RhFGRaAJYkM8cCoHfguNXgCsUoGExHzsbXUgTwJbutFoK/94276sZUU5RjBWsKQsKxDgOWBwHAe14z+8UBCJ2eumhmU7JMnkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728592465; c=relaxed/simple;
-	bh=CtYOoJhFJBN60Utfk0jhb4hKYJOJXQLhtKIlZf7Gh8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWrHCbA51JfUwpB0juUWAHhSiTFATouRjFbk3K4+xBzIa/qQ05O5yxvkig6NpsN0L4dcsU+pfipjKfztpIIpuivaTbcyJh5ynJTFcX655TpxmadKWmpu74nhi39HFgEI4P5Au1j5ojK3FPBzERO/OsD6sJ7yar2JKi++KSPAmfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ak/nMQiB; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728621281; c=relaxed/simple;
+	bh=c3AmeLv3dREmvdSuMdGvXnbY79PnKw53edBoZ4Ksdn8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K1Fxvd9yAMvuBC9acROubZMZWV7o5MT8/7GqXZos+pJZLbiiducxvmZh5rEaD9jz67Os+z3qK8WrDbiAfi4ZLHXfCMpHeySG59JVVQ2U2xaa2u8EiVBXfGzrM49IROWG34rUArabVPofNRpP7/xlbxlgmeT6i0jsv/7RrBfuc98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=BEpMudBH; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ak/nMQiB"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71de9e1f374so1047785b3a.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 13:34:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="BEpMudBH"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398939d29eso2041541e87.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Oct 2024 21:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728592463; x=1729197263; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gA4uVW7tjx9e3AKXci5t+TbG4CkH1fVfsyVdLCAy3JY=;
-        b=ak/nMQiB1fxPEnpq/Z0LlT0Y0vn+M55tjV0cV5tQUhLZ3OuMTUFU5rKhpYnbFMhJme
-         Ab1s7rx1SEaLfsvUQggThp2kbdGhV0R1cihZNXDUOW0nfd4CrcmGXevmgOH1LUc0ftDP
-         /YK2SwnT55sT4sF7WueFyhgww5YubTdZdsXCJWIrP978lzaCjsHZynCHQSmjMsZyhu2H
-         iLLgpELk1i5OvyednQKMd7FgYLCv+N6332F0vZiUqkVMPL+Bq0IXgzO21wpBzhjmj/5/
-         yMva8BcfUtxMGc9l+HofniOLICJLS7zTiXO6qGLzlTWfpQnAYpl+YNrPeU96yly+6hNg
-         vcrA==
+        d=broadcom.com; s=google; t=1728621278; x=1729226078; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwSVq3aG0SlfXx0AaCOoKLpp8UG6OTAv4lN1JW+cEok=;
+        b=BEpMudBHP/4kVJkaiJgGxcpkCA9G6zdjs7jusM1jE11rHwIbR9cFeQvCWxLaYfTZQQ
+         pw9L77J5YxJHsKxnPRrSt6wUiFbZOuNk0HJABRk7zlHBumVBONvG3MnJZP8O0sn0PLIb
+         ok5n0qmuo3xv9DWO9KWyYasCh9pAmS5iDukbY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728592463; x=1729197263;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gA4uVW7tjx9e3AKXci5t+TbG4CkH1fVfsyVdLCAy3JY=;
-        b=qExlaBRo7kosBIuJLgtmTjXeapEKzZuATAYA2c6icmgUis5RepfXGTUR7NqIslgDcV
-         qVwEIcDhGkDgTKnsFVrvWwVXFU7tiknnOrpYebGnSV8kNMOtw63PkH3iDldWMKjv42+1
-         wo/CQ5qWy8dF+TsV5v38zQ3Bl0MXoxFUwo7/QkTHGNPA3qZr31Dm5BPcqsU68uJLw6Ro
-         IVmtePoF+RqPkXKUgBucAsBjTEsYvMJB0d7KenU5Yfm0SaYu5DFAaaW86P/HH1AZztIF
-         2xiDNLE+mBiysLrf0+XGWikriXQczGCOHh9X1mB4WC2lv9/dF/cBF2YY77CEfNRUDCDb
-         YG+A==
-X-Forwarded-Encrypted: i=1; AJvYcCX+BOdhiy78cdo9/g8eJqGtDX2Yr6840JxVVhgKI2cPG53RWVY5suyB3ZMie1bIGADtPGMHpUwJOwV7Rg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz/dvfsVB1M0XLyATFI67UlhFVq8OoywfFsKETPdFFzlzi+Hm5
-	gqbHJ2MJ3tTPqQ6PLl9CDBEjljxuO+qQn1UEbHhB0OpuL+6ip8W4
-X-Google-Smtp-Source: AGHT+IFhjEgoVfowDMBhsmOq9hglzjneAyF30mBZZRqrcM11cWnH4WJ0phQ6TA1wH85CWxdenaYlNg==
-X-Received: by 2002:a05:6a21:a4c2:b0:1d8:a4f7:67ae with SMTP id adf61e73a8af0-1d8bcf2326bmr339616637.17.1728592462350;
-        Thu, 10 Oct 2024 13:34:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2a9f542fsm1429688b3a.64.2024.10.10.13.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 13:34:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 10 Oct 2024 13:34:20 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: Add static visibility member to struct
- hwmon_ops
-Message-ID: <9459c3cf-7f8f-4de0-b7a0-46e531547964@roeck-us.net>
-References: <89690b81-2c73-47ae-9ae9-45c77b45ca0c@gmail.com>
+        d=1e100.net; s=20230601; t=1728621278; x=1729226078;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SwSVq3aG0SlfXx0AaCOoKLpp8UG6OTAv4lN1JW+cEok=;
+        b=sMQe/jE8N4WJmOFxWql5GBDiYAK8Hfx06/eN4QzADKcn1IvyjO8RiFl8ggy9OjkLGz
+         SYN3kEng0/lyOGuNjU4mgrQY06p0rxtPq1f50RDi70eRrcl1EY5X/O1zlKmvSEez5koH
+         sAz7ORbMfWYqYWfqYK8KbCKE7a95igZ3+2rqwLdhkEBlXtuelQdA90ToFsi4l/pdoIT6
+         2H/jL7949tYd28b3dNAEJI3QruPoQ33Ttfi8idamSXdy9+QoOFZ8//+BiQFnTeiKN7kI
+         +GH+/AH0reQ6qp0U18bCEpxFxUrnW1Nhrw+R8WIWYyPBvcV554NeorxwxtNq/lNzIhMA
+         4jXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUk4y0ySHsFIsVx0YBooXdgSfaB6dC8FqAKv/tPvOPjno/bdVXVfdbCOx0u8Bk0HSyHOrpH/b8usBZhcQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJKCr2MdhjxyA29JvjOGVRlbM52VQz6DOUoey8MvxckZWRCGHv
+	57lLBAX8qYKOOQc5oUmadv/JPgWFclOi+EK5HazrYknjWCZYts4ZkvBMgvn0cJWCp5jVgAQYSN0
+	Ce75zqM9/0yPxe4FvjG2QstTH0RBgKQjEW/tM
+X-Google-Smtp-Source: AGHT+IG6TaD0cM5wCMisShIfJnxxnfxKWnx88kZSjTkiQ5cEdhWSjqTdhReXFPOBgG0hSkJZrwwUfRahq1ZrLKv+8NY=
+X-Received: by 2002:a05:6512:3a8d:b0:535:3cdc:8763 with SMTP id
+ 2adb3069b0e04-539da3b4383mr384665e87.4.1728621277737; Thu, 10 Oct 2024
+ 21:34:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <89690b81-2c73-47ae-9ae9-45c77b45ca0c@gmail.com>
+References: <20241009192018.2683416-1-sanman.p211993@gmail.com>
+In-Reply-To: <20241009192018.2683416-1-sanman.p211993@gmail.com>
+From: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
+Date: Fri, 11 Oct 2024 10:04:25 +0530
+Message-ID: <CAH-L+nO1DMBEmbW0SamSkE+Su2sRPAJc3wO0uyKXNSpvf-qC8A@mail.gmail.com>
+Subject: Re: [PATCH net-next v5] eth: fbnic: Add hardware monitoring support
+ via HWMON interface
+To: Sanman Pradhan <sanman.p211993@gmail.com>
+Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org, 
+	kernel-team@meta.com, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, jdelvare@suse.com, linux@roeck-us.net, horms@kernel.org, 
+	mohsin.bashr@gmail.com, sanmanpradhan@meta.com, andrew@lunn.ch, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000003cd8ff06242c0112"
 
-On Thu, Oct 10, 2024 at 09:35:42PM +0200, Heiner Kallweit wrote:
-> Several drivers return the same static value in their is_visible
-> callback, what results in code duplication. Therefore add an option
-> for drivers to specify a static visibility directly.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+--0000000000003cd8ff06242c0112
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Oct 10, 2024 at 12:50=E2=80=AFAM Sanman Pradhan
+<sanman.p211993@gmail.com> wrote:
+>
+> From: Sanman Pradhan <sanmanpradhan@meta.com>
+>
+> This patch adds support for hardware monitoring to the fbnic driver,
+> allowing for temperature and voltage sensor data to be exposed to
+> userspace via the HWMON interface. The driver registers a HWMON device
+> and provides callbacks for reading sensor data, enabling system
+> admins to monitor the health and operating conditions of fbnic.
+>
+> Signed-off-by: Sanman Pradhan <sanmanpradhan@meta.com>
+>
 > ---
+> v5:
+>   - Drop hwmon_unregister label from fbnic_pci.c
+>
+> v4: https://patchwork.kernel.org/project/netdevbpf/patch/20241008143212.2=
+354554-1-sanman.p211993@gmail.com/
+>
+> v3: https://patchwork.kernel.org/project/netdevbpf/patch/20241004204953.2=
+223536-1-sanman.p211993@gmail.com/
+>
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20241003173618.2=
+479520-1-sanman.p211993@gmail.com/
+>
+> v1: https://lore.kernel.org/netdev/153c5be4-158e-421a-83a5-5632a9263e87@r=
+oeck-us.net/T/
+>
+> ---
+>  drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
+>  drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
+>  drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
+>  drivers/net/ethernet/meta/fbnic/fbnic_mac.h   |  7 ++
+>  drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  3 +
+>  5 files changed, 96 insertions(+)
+>  create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+>
+> diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ether=
+net/meta/fbnic/Makefile
+> index ed4533a73c57..41494022792a 100644
+> --- a/drivers/net/ethernet/meta/fbnic/Makefile
+> +++ b/drivers/net/ethernet/meta/fbnic/Makefile
+> @@ -11,6 +11,7 @@ fbnic-y :=3D fbnic_devlink.o \
+>            fbnic_ethtool.o \
+>            fbnic_fw.o \
+>            fbnic_hw_stats.o \
+> +          fbnic_hwmon.o \
+>            fbnic_irq.o \
+>            fbnic_mac.o \
+>            fbnic_netdev.o \
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic.h b/drivers/net/ethern=
+et/meta/fbnic/fbnic.h
+> index 0f9e8d79461c..2d3aa20bc876 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic.h
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic.h
+> @@ -18,6 +18,7 @@
+>  struct fbnic_dev {
+>         struct device *dev;
+>         struct net_device *netdev;
+> +       struct device *hwmon;
+>
+>         u32 __iomem *uc_addr0;
+>         u32 __iomem *uc_addr4;
+> @@ -127,6 +128,9 @@ void fbnic_devlink_unregister(struct fbnic_dev *fbd);
+>  int fbnic_fw_enable_mbx(struct fbnic_dev *fbd);
+>  void fbnic_fw_disable_mbx(struct fbnic_dev *fbd);
+>
+> +void fbnic_hwmon_register(struct fbnic_dev *fbd);
+> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd);
+> +
+>  int fbnic_pcs_irq_enable(struct fbnic_dev *fbd);
+>  void fbnic_pcs_irq_disable(struct fbnic_dev *fbd);
+>
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c b/drivers/net/=
+ethernet/meta/fbnic/fbnic_hwmon.c
+> new file mode 100644
+> index 000000000000..bcd1086e3768
+> --- /dev/null
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
+> @@ -0,0 +1,81 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <linux/hwmon.h>
+> +
+> +#include "fbnic.h"
+> +#include "fbnic_mac.h"
+> +
+> +static int fbnic_hwmon_sensor_id(enum hwmon_sensor_types type)
+> +{
+> +       if (type =3D=3D hwmon_temp)
+> +               return FBNIC_SENSOR_TEMP;
+> +       if (type =3D=3D hwmon_in)
+> +               return FBNIC_SENSOR_VOLTAGE;
+> +
+> +       return -EOPNOTSUPP;
+> +}
+> +
+> +static umode_t fbnic_hwmon_is_visible(const void *drvdata,
+> +                                     enum hwmon_sensor_types type,
+> +                                     u32 attr, int channel)
+> +{
+> +       if (type =3D=3D hwmon_temp && attr =3D=3D hwmon_temp_input)
+> +               return 0444;
+> +       if (type =3D=3D hwmon_in && attr =3D=3D hwmon_in_input)
+> +               return 0444;
+> +
+> +       return 0;
+> +}
+> +
+> +static int fbnic_hwmon_read(struct device *dev, enum hwmon_sensor_types =
+type,
+> +                           u32 attr, int channel, long *val)
+> +{
+> +       struct fbnic_dev *fbd =3D dev_get_drvdata(dev);
+> +       const struct fbnic_mac *mac =3D fbd->mac;
+> +       int id;
+> +
+> +       id =3D fbnic_hwmon_sensor_id(type);
+> +       return id < 0 ? id : mac->get_sensor(fbd, id, val);
+> +}
+> +
+> +static const struct hwmon_ops fbnic_hwmon_ops =3D {
+> +       .is_visible =3D fbnic_hwmon_is_visible,
+> +       .read =3D fbnic_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *fbnic_hwmon_info[] =3D {
+> +       HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +       HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+> +       NULL
+> +};
+> +
+> +static const struct hwmon_chip_info fbnic_chip_info =3D {
+> +       .ops =3D &fbnic_hwmon_ops,
+> +       .info =3D fbnic_hwmon_info,
+> +};
+> +
+> +void fbnic_hwmon_register(struct fbnic_dev *fbd)
+> +{
+> +       if (!IS_REACHABLE(CONFIG_HWMON))
+> +               return;
+> +
+> +       fbd->hwmon =3D hwmon_device_register_with_info(fbd->dev, "fbnic",
+> +                                                    fbd, &fbnic_chip_inf=
+o,
+> +                                                    NULL);
+> +       if (IS_ERR(fbd->hwmon)) {
+> +               dev_notice(fbd->dev,
+> +                          "Failed to register hwmon device %pe\n",
+> +                       fbd->hwmon);
+> +               fbd->hwmon =3D NULL;
+> +       }
+> +}
+> +
+> +void fbnic_hwmon_unregister(struct fbnic_dev *fbd)
+> +{
+> +       if (!IS_REACHABLE(CONFIG_HWMON) || !fbd->hwmon)
+> +               return;
+> +
+> +       hwmon_device_unregister(fbd->hwmon);
+> +       fbd->hwmon =3D NULL;
+> +}
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h b/drivers/net/et=
+hernet/meta/fbnic/fbnic_mac.h
+> index 476239a9d381..05a591653e09 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_mac.h
+> @@ -47,6 +47,11 @@ enum {
+>  #define FBNIC_LINK_MODE_PAM4   (FBNIC_LINK_50R1)
+>  #define FBNIC_LINK_MODE_MASK   (FBNIC_LINK_AUTO - 1)
+>
+> +enum fbnic_sensor_id {
+> +       FBNIC_SENSOR_TEMP,              /* Temp in millidegrees Centigrad=
+e */
+> +       FBNIC_SENSOR_VOLTAGE,           /* Voltage in millivolts */
+> +};
+> +
+>  /* This structure defines the interface hooks for the MAC. The MAC hooks
+>   * will be configured as a const struct provided with a set of function
+>   * pointers.
+> @@ -83,6 +88,8 @@ struct fbnic_mac {
+>
+>         void (*link_down)(struct fbnic_dev *fbd);
+>         void (*link_up)(struct fbnic_dev *fbd, bool tx_pause, bool rx_pau=
+se);
+> +
+> +       int (*get_sensor)(struct fbnic_dev *fbd, int id, long *val);
+Thank you for addressing the comments. One last question.
+[Kalesh] I do not see the corresponding implementation of this
+function. Am I missing soemthing here?
+>  };
+>
+>  int fbnic_mac_init(struct fbnic_dev *fbd);
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c b/drivers/net/et=
+hernet/meta/fbnic/fbnic_pci.c
+> index a4809fe0fc24..ef9dc8c67927 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_pci.c
+> @@ -289,6 +289,8 @@ static int fbnic_probe(struct pci_dev *pdev, const st=
+ruct pci_device_id *ent)
+>
+>         fbnic_devlink_register(fbd);
+>
+> +       fbnic_hwmon_register(fbd);
+> +
+>         if (!fbd->dsn) {
+>                 dev_warn(&pdev->dev, "Reading serial number failed\n");
+>                 goto init_failure_mode;
+> @@ -345,6 +347,7 @@ static void fbnic_remove(struct pci_dev *pdev)
+>                 fbnic_netdev_free(fbd);
+>         }
+>
+> +       fbnic_hwmon_unregister(fbd);
+>         fbnic_devlink_unregister(fbd);
+>         fbnic_fw_disable_mbx(fbd);
+>         fbnic_free_irqs(fbd);
+> --
+> 2.43.5
+>
 
-Applied, with a minor twist: I renamed hwmon_ops_is_visible to
-hwmon_is_visible since the _ops in the function name does not
-really add any value.
 
-Thanks,
-Guenter
+--=20
+Regards,
+Kalesh A P
+
+--0000000000003cd8ff06242c0112
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBWowggRSoAMCAQICDDfBRQmwNSI92mit0zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI5NTZaFw0yNTA5MTAwODI5NTZaMIGi
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xHzAdBgNVBAMTFkthbGVzaCBBbmFra3VyIFB1cmF5aWwxMjAw
+BgkqhkiG9w0BCQEWI2thbGVzaC1hbmFra3VyLnB1cmF5aWxAYnJvYWRjb20uY29tMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnv1Reaeezfr6NEmg3xZlh4cz9m7QCN13+j4z1scrX+b
+JfnV8xITT5yvwdQv3R3p7nzD/t29lTRWK3wjodUd2nImo6vBaH3JbDwleIjIWhDXLNZ4u7WIXYwx
+aQ8lYCdKXRsHXgGPY0+zSx9ddpqHZJlHwcvas3oKnQN9WgzZtsM7A8SJefWkNvkcOtef6bL8Ew+3
+FBfXmtsPL9I2vita8gkYzunj9Nu2IM+MnsP7V/+Coy/yZDtFJHp30hDnYGzuOhJchDF9/eASvE8T
+T1xqJODKM9xn5xXB1qezadfdgUs8k8QAYyP/oVBafF9uqDudL6otcBnziyDBQdFCuAQN7wIDAQAB
+o4IB5DCCAeAwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZC
+aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3Iz
+cGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcC
+ARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNV
+HR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNp
+Z24yY2EyMDIwLmNybDAuBgNVHREEJzAlgSNrYWxlc2gtYW5ha2t1ci5wdXJheWlsQGJyb2FkY29t
+LmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGP
+zzAdBgNVHQ4EFgQUI3+tdStI+ABRGSqksMsiCmO9uDAwDQYJKoZIhvcNAQELBQADggEBAGfe1o9b
+4wUud0FMjb/FNdc433meL15npjdYWUeioHdlCGB5UvEaMGu71QysfoDOfUNeyO9YKp0h0fm7clvo
+cBqeWe4CPv9TQbmLEtXKdEpj5kFZBGmav69mGTlu1A9KDQW3y0CDzCPG2Fdm4s73PnkwvemRk9E2
+u9/kcZ8KWVeS+xq+XZ78kGTKQ6Wii3dMK/EHQhnDfidadoN/n+x2ySC8yyDNvy81BocnblQzvbuB
+a30CvRuhokNO6Jzh7ZFtjKVMzYas3oo6HXgA+slRszMu4pc+fRPO41FHjeDM76e6P5OnthhnD+NY
+x6xokUN65DN1bn2MkeNs0nQpizDqd0QxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYD
+VQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25h
+bFNpZ24gMiBDQSAyMDIwAgw3wUUJsDUiPdpordMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcN
+AQkEMSIEIP6TspvhtA9FoigfmtWA5MMIljE0uyUXj0xg754su4CtMBgGCSqGSIb3DQEJAzELBgkq
+hkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MTAxMTA0MzQzOFowaQYJKoZIhvcNAQkPMVwwWjAL
+BglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG
+9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBDHikRzptf
+NjMux+T2zoGRxfBmUhlh9GnA/o9c3bT6Q+ams5DGTAXYD8YZfHq+8xYIq/8/Xl+nRE1Nc5EWYERl
+BgSzBvnVFyw4nFmbt9UQmPXtglsDFE9QseftGCdLik7JE9C+g6313sJfYp9Yn8vyhhoQpHUEbKDd
+EsUvlDoF6nmb0S49pJEDNBFUY9vYoq/teEOPVxXmQuluoGytxF6fvphBw9ZJHrD1EEliJhjiA0Lg
+3waZ7//W2wQGQRGLi0w+7MICsUHCHljgaWMx+jutRWKevh+I+1CLkPlC7c/4otAioqIPNz4mKmML
+s0hrOE66c8wIFLRljhxCzsZrF5rt
+--0000000000003cd8ff06242c0112--
