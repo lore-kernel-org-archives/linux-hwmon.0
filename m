@@ -1,59 +1,60 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7AA1D1500
-	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 20:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE8A1D0F42
+	for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 20:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728676854; cv=none; b=apmQJZkOxXjv1EQna8o/I+viqCtmpc6t5SochYCzSM/I8x/RwUSN+bqnLpp6Iyvb7KrODVPS9EVOjITxLf3BYhB86eXvJ5qDT11mjC+UnlWCO+nCxcaEqDF75rcKTQte4lFaHAM2SPapOSZJsCRPoG2T1qChEQFLIlIQh9IDPmk=
+	t=1728676922; cv=none; b=TW3cr8QJMwvfHK2Ecg259e6w7TpXFzAz5lKoAMeSt+0hXfp54xi7+RBRZoLbBOY89fPINOuOwkeZX+J16K9vPw6giDDMci32yOnfH/BbVtb3ZZJfXIg5jf51QXAXxXMvXHHS2uPnTX4KsrAXOKUlxJ47hZyOtmj4y3ONSXuZeGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728676854; c=relaxed/simple;
-	bh=jb2K8UDcfBeSW8lORES97VPvEbFaTn883GjHqHOkRxk=;
+	s=arc-20240116; t=1728676922; c=relaxed/simple;
+	bh=nsWvAmwx+RtfNW83M3K++UwS3nYNGMdzYGpoYSlvUtI=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JcGC6hzdsI3+dUVnfqIP6gAg8eEkbFKQCYdUcFjM58Dd8Kmfw6M2R9E3PB6ZScMByltp9FBIF9QS7jM6CIbXpYKdze37PyliJzjwz9t8WpLW+JyGh1lUKhMpdWLn2jdRjcB2LTLtBCURJ6oi18YomcZVHXDsqTVSohgMzo7PrRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FeGNvw+E; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:Content-Type; b=mCJriMFhbAeCwmpoFqEfyQQlB25aNM5zxZDp9xIVN8U+JiVyHiW6yXf7p2Xmkwu55Gun3S6+aoBWGQYTiszhu4Kfugkq34jNugBLJR6COjCxxywjwUFDj352+3vH02hAZorDocJA2987v1qz5YDNp/c52vWsbfTh7M+PT3ZRb5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ue8BE5a9; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FeGNvw+E"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c89f3e8a74so3154194a12.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 13:00:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ue8BE5a9"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5c915308486so3219279a12.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 13:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728676851; x=1729281651; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728676919; x=1729281719; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=D437GkmU+RusUDYzI0z+cKOugcVoV9c5q9FSP2Pkw0c=;
-        b=FeGNvw+EK4xOQ5twZSt2Q8zy76OcaEQDDaLT+r7PmpDsVS9HsrH/yZT7MaaSJJse1e
-         Q+Q8xgLFZZcpnDOtrSWzQNMRHM5oqznXBWdorMib8UELAbB1kzlKXfGjKtgEqRzNrmLU
-         BU1iAu2pL0L3Tg14J7pz0SxW80HfpgYqYLaHu8at+T8LYikrAx4MNuCTbo3TM4p96rb6
-         Y869v023CCdfEE4Cjyx9LqKlMNhYBHU6MZQ1yN+JZeShKf9XTUfspKx6Zbza3A2T9mXE
-         2fUQaqzFRZJRQ41vitFnuhO8P1XNbdCQmNKheYACnf4FhPZ/KQM/BE5QJ8YWO5OVp/fn
-         zeBA==
+        bh=BDQSDW58lL1wX3XCxNH7M1Ks+4iYHlN3+NRWsca0C3g=;
+        b=Ue8BE5a9wYEDk6b/UdQLwENJDM+JxrOyFv3mnte+LQvcpuC9EQfxXR4WngtruHwLc/
+         OW4LpkNP2e6UtQ5KtiXF8+aPFxyPHF00LTie0T3T3KUgxcdoh/gcb92H5Buf9FJ9inBn
+         Ssey/Z/hcB+M2uMWwFCzx/StG/Tw1DX6nT02D++1OGi66HTlOd0LFss0RwerAT6lmmun
+         NNBA9m8ObCDQpuzTwq1AJ5SAYnfTk41WfdOYOYF1IotDlIRmS2BbzxR452PSmQeHr969
+         eb48+B9bxdlMt/Vpg7iWuRUdHxZuFxh9lwmXQ+a81SiL8J/uGCacYEctClgBy/cBjJny
+         MI4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728676851; x=1729281651;
+        d=1e100.net; s=20230601; t=1728676919; x=1729281719;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D437GkmU+RusUDYzI0z+cKOugcVoV9c5q9FSP2Pkw0c=;
-        b=dnncAmtO4tLmaWQWUl9PrxRdCdJkNXCTrc9prGeI3fcVmkWqYOdBUrmYLBiA1YcYP2
-         aRL60J+FRwIpjdKcUIaiVXckhSwCXN8Y58LtOod2N0kuzDu1nEuQT55XREYRk1vIyC8a
-         2f+u8AppHbfTggPH49iOLSjLxukWCWLsrMkhTyJ1hPCKjRarmhfUTXxrN8ji065IaXpL
-         PaLNPLAKbu10xCirqkqQKPBN5y8YOzMHbTk7kK+GzwE7GAi1TZeLNyItRoPV0k/U8ZSp
-         PJ0A66pZLujW644WCpDLtiNG8EzGwfiYxvUDfZcD99iC+rAaBYO/FarCi6qWfupvN4OC
-         Zl4Q==
-X-Gm-Message-State: AOJu0Yx9fyIqWnYO//2yt9yY0wRX5TAIvOprL8Q0Jyjt1HTqOkj47L8S
-	ostbyiPyUP9EShCC/UCaF/1dCbLRjyHhfEpiCWhcs6xJaBdvxdhHCbdVFg==
-X-Google-Smtp-Source: AGHT+IF4rgShnrboygrR3ep8QC1Pu5tuYYKEniRnAzdN10hGetPF2UFsf6eB93XXqNJaLkJ18THZ+w==
-X-Received: by 2002:a05:6402:27d2:b0:5c9:47d9:ad21 with SMTP id 4fb4d7f45d1cf-5c95ac40c72mr220537a12.27.1728676850587;
-        Fri, 11 Oct 2024 13:00:50 -0700 (PDT)
+        bh=BDQSDW58lL1wX3XCxNH7M1Ks+4iYHlN3+NRWsca0C3g=;
+        b=TFrUwHvHAQAKRqPyUg9D+Sa2L8l8KvA5Qqd21zbYBt3itZnjt9TfUPU7ihNluGDpGF
+         GGhev1mFbtJ936+GKTFk8ymW8O6cPWtuSyVho26jTBpSdqPTDUrel+PSWIY9D8iEwjOk
+         H5fRWYhrvL1L7yb5w6qeJ3oITEVRF/Avdt4/Zf+nN4WMLsKARaBS4mmrtYewP32G5hCf
+         g4Ds+F4NbvYt/8KrNh0simwDsfJZSWCspWnKBpj2Ngz0HnJ6XlPAW6hCCKtiXXKPBVFe
+         BXr2uWakNyDakgr04DV6nObie7QG+YLCOYNNCKICu9+evm+nqF/aN8DOiWSC2HXLfvqY
+         sOxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIFHl+9CisH1CdMkMTxTdjg4Z/veiMzXqvLRTvMX00NpkzGsAcHnj2SDCc9yo7Z8r6fP77/pfvsqirqw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtmFdrx2dS0+C8K734UT5oDlu4p6CTdJVu2ndHOEzwEPsPWdQc
+	ObNFxGyfjUmvFlQPzJVg3DOzAJqTiCRCI/AMY+sBpJMnekUW/hNk
+X-Google-Smtp-Source: AGHT+IGSgzy50+5C/g//3og+g/M2IXV8CCJul+nVOD7u0b97IBTr4WDL2UcZbSLMsCybkQpTD+0CyA==
+X-Received: by 2002:a17:907:d596:b0:a99:4159:7e31 with SMTP id a640c23a62f3a-a99b93cb3bcmr291855166b.33.1728676919090;
+        Fri, 11 Oct 2024 13:01:59 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:afd7:9a00:94ac:542a:1cd2:c9ce? (dynamic-2a02-3100-afd7-9a00-94ac-542a-1cd2-c9ce.310.pool.telefonica.de. [2a02:3100:afd7:9a00:94ac:542a:1cd2:c9ce])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c93711add4sm2198223a12.22.2024.10.11.13.00.49
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a99a80dc687sm246882566b.147.2024.10.11.13.01.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 13:00:50 -0700 (PDT)
-Message-ID: <c4b4568b-59f6-43ac-8281-536a82ecd6ab@gmail.com>
-Date: Fri, 11 Oct 2024 22:00:49 +0200
+        Fri, 11 Oct 2024 13:01:57 -0700 (PDT)
+Message-ID: <4e8893a1-b080-4676-97b9-a48ac9ead28a@gmail.com>
+Date: Fri, 11 Oct 2024 22:01:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,12 +62,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 5/8] hwmon: powerz: Simplify specifying static visibility
+Subject: [PATCH 6/8] hwmon: raspberrypi: Simplify specifying static visibility
  attribute
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+ Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, linux-rpi-kernel@lists.infradead.org
 References: <6f43a3e1-3622-4595-a1ec-2b3ad94bdf5b@gmail.com>
 Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
@@ -121,35 +126,35 @@ the static attribute visibility.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/hwmon/powerz.c | 8 +-------
+ drivers/hwmon/raspberrypi-hwmon.c | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c
-index cfb635f94..4e663d5b4 100644
---- a/drivers/hwmon/powerz.c
-+++ b/drivers/hwmon/powerz.c
-@@ -54,12 +54,6 @@ static const struct hwmon_channel_info *const powerz_info[] = {
- 	NULL
- };
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index 65cc52e47..10ef1e1f9 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -81,12 +81,6 @@ static int rpi_read(struct device *dev, enum hwmon_sensor_types type,
+ 	return 0;
+ }
  
--static umode_t powerz_is_visible(const void *data, enum hwmon_sensor_types type,
--				 u32 attr, int channel)
+-static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
+-			      u32 attr, int channel)
 -{
 -	return 0444;
 -}
 -
- static int powerz_read_string(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, const char **str)
- {
-@@ -201,7 +195,7 @@ static int powerz_read(struct device *dev, enum hwmon_sensor_types type,
- }
- 
- static const struct hwmon_ops powerz_hwmon_ops = {
--	.is_visible = powerz_is_visible,
-+	.visible = 0444,
- 	.read = powerz_read,
- 	.read_string = powerz_read_string,
+ static const struct hwmon_channel_info * const rpi_info[] = {
+ 	HWMON_CHANNEL_INFO(in,
+ 			   HWMON_I_LCRIT_ALARM),
+@@ -94,7 +88,7 @@ static const struct hwmon_channel_info * const rpi_info[] = {
  };
+ 
+ static const struct hwmon_ops rpi_hwmon_ops = {
+-	.is_visible = rpi_is_visible,
++	.visible = 0444,
+ 	.read = rpi_read,
+ };
+ 
 -- 
 2.47.0
 
