@@ -1,80 +1,120 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F4A17BA3
-	for <linux-hwmon@vger.kernel.org>; Sat, 12 Oct 2024 00:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5AB8BFF;
+	Sat, 12 Oct 2024 01:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728691372; cv=none; b=PzbRh4ju5txrfW5eF++w+/aLw9VHsmTiAXnj0vU2KRgCEjixD4X+vlx5SRVW8o/j1pI9toHmuntiWyQ9S0/1mesujfnBJOSZEumLF5X4tYGPsFh3lnSqYkoRYUfk84RzQcMv3Vv9mo2oikx5Hy2CLGBiOMSmzmXdcjMkYYurQgk=
+	t=1728696536; cv=none; b=tpZnSLTygqzNS0lQW3I0RW1SPMpHlKVXVHLmSIRg7uKkZxW1CMHx1F0Ku5+IMLvjHyn4qBD43BTusGTC/BKw+kWNm/ZtPF/BDps1GQ4BnnZ+P4zLubm89t2sOy+d4uzzXneiPFS5QqmgvKDUAdP5M3bRFxzPpaisq2ouwg+nd0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728691372; c=relaxed/simple;
-	bh=N4K1dFUrVdSuAYv3Iw4atRv9wX2Ip8sZ3NeLuoXlNMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OsnOTazDPlCigyKdlOZ9+IaQL6SZnxHFlx8gPyIkFTYYKDO6PLbulWjNkedEHrX7TGjqckPgsG30CqLuWlH7QVx4WA+Vn138ukvm905GqCCdSosv1Pk3IIjfzfHNBv8mAdEzVsejUA1eq3zzQQVNaEm6n6srXDmJcBJL+WPOx0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io; spf=pass smtp.mailfrom=protocubo.io; dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b=GfRSHyXd; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protocubo.io
+	s=arc-20240116; t=1728696536; c=relaxed/simple;
+	bh=16qJtVuNU/38QRhzP+3SpP5icDTY+tKQH2jy0ESHtso=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YB5uP4ApjeiQjrM4X73BFYuudxB6QtuQ/yQC0G2gKZu61yodHzAQLGRHuT+ci0vWOxSMoU+nIg/94GrqAQuD9++hLbot5sZcyPKRxIXRN6/t0959G7soFm5qhtPkevYFYzbFnhBncPCK+klbX7E3PfmNS2F2sUNFNO8Q8fMRfIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANE0fbUx; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b="GfRSHyXd"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7e9f377a3c9so211760a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 11 Oct 2024 17:02:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANE0fbUx"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20b93887decso24125825ad.3;
+        Fri, 11 Oct 2024 18:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google; t=1728691370; x=1729296170; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovt7c8v72OBIlgT7Hc370eDYghaW5V2Rs6iOK6xiysk=;
-        b=GfRSHyXd3R0U2s1+95tv79h9Gn/LD1dAnscjN7Cz87cPhlD5chcv6f8BwWbwsAidxy
-         hoeU+/JeIrIyAKAu+Gqqb5dkfJ075U7PV70q18h+GgLzG9PxtFSuogJ76kYkBXanL7EU
-         Zvgx06oxCeRCGXYnJo1UDL592J3vwtAEzaKYQzNrBRVSyI6Z9iuZ2cRuliUhrRjgsQza
-         DW0i4tqf0GgzGF0vkXi/tLay1Jp2+cRTtxneoZzMG4kLpkNdElEfJYTJYlDwtRaS/ID/
-         aqHbjVQMnyJY3pMARbPPPrYbzhxSyokh7s31sfJrHzXFgzIqWu8yd52NuG1psl1xrWVs
-         RLoA==
+        d=gmail.com; s=20230601; t=1728696534; x=1729301334; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+uz3rbpJz9TtBYHIDBHTeD17IgRp0RlMKwvHZrhK6bE=;
+        b=ANE0fbUxhvLWQL1KhJgYF0QZLA8xO91+OkA/eANXDbemrVNdFIfCUTNkAxhdbpplXe
+         +qZ2NiGoejBHTLOJWw+WCMyskMyZq5K0vJevVKPtsszB4+pfdj5hXCE9//QgPprHrRFE
+         WzBHo7jO+2wTLSL4s5OPbXYfWAlwlnCgEyNAqNunnqFjtcRjXdtpWoWVitmPzvKebEP2
+         pwaKtLThUm1BKl9T46Uk2wTEBzX1+sv89wzOtQzgMCbJrIC8pHw/7SqeIc3losZWf4e1
+         TzTqbJjIDATM0toBDV0A022y3nDHCeq7VXYVc6FrsMWfAuFQ0V4bKgpQuIYm03kt97Tn
+         zsbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728691370; x=1729296170;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1728696534; x=1729301334;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ovt7c8v72OBIlgT7Hc370eDYghaW5V2Rs6iOK6xiysk=;
-        b=d7gNn0bQwn1unWdiJw2+5XbVOvSrXwWdbf77WIunYOLjQDza6JvagJTMJAgyXTMcwT
-         xUDoUOwHMdIeIKD5nGlHTIsPPSY5vk5QR2FBAb8TSp8mWgVy+WO1VXLc7sw09IYTEnws
-         aoEYHP/YGMuLa/t2Z2KpPcJ7L+gsU6XJYkLpSlp6msKiWBQIcr/v0k0JA6cKr5lg591R
-         V4TwDtwxZMmAgHFEA+BFciZyjhSNIAduL2Y3P/dFYgeVqISQNqMnDbhvL/4E5GZvend+
-         VIrZdT/AN4NaIdsswhZUmbMS++bNML3rTU32Js9xHYv0qNiasN9N52i+QB0s3+GszMXh
-         CUUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXYmRsxTnxknjmwMw7cP6HqI0JVDviMxy+NPUS80on08BPtwHKyx8zqWHNEp8xWJygLBuljXeLjxQjVeQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCzO5LRf8SiNyMjPewGPFUBitZeHPOr5nCKdtmi/MHeB44c8iB
-	n0Kyp5yoqwVhkeSK4pk0q4JoRTzycxwcMxBdEjqP8rLMoRzS0RjsVVfIQF0J4MA=
-X-Google-Smtp-Source: AGHT+IHplHnuK3bFHnSoz7f5mbdl+thl1himfR4enkgU/+qRRYhXrN8IwGUGUWRnGCEuQmNsaBd1DA==
-X-Received: by 2002:a05:6a00:6f60:b0:71d:fd4f:260e with SMTP id d2e1a72fcca58-71e37c3d7ddmr2947136b3a.0.1728691369700;
-        Fri, 11 Oct 2024 17:02:49 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5e:6038::1000])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2aa963b9sm3300644b3a.99.2024.10.11.17.02.47
+        bh=+uz3rbpJz9TtBYHIDBHTeD17IgRp0RlMKwvHZrhK6bE=;
+        b=P0igWA10KgIRziRLmcM1s/dIDYP14QYzmaKsjdU5CwXWclHgyLTmykopDWbk2lk9s6
+         XE0zwvmXTQqbzoc0mDqZmgo3qErrBjtUVGitDU6oo/orGJCiA24yQpvbLV8XvVW91CcB
+         GNfUuBociGzJDGKrtNnCsNvWmXQfLGrYRyJuFakscM2nrDY91RXyeVIj/LGb4s7LrlCa
+         tMMLEIlSrRk7Mgmw0cKB1b3yqHGv47j8e82nDAd8U4yN5kBeTtGuCxA2yMNCDJpxSI+f
+         BUco/OySdHTXQN7P6Yfd9VfeEYQZxElnWy+ITN+C5CwXvDeoSzAuaPmQZYdmlh1adltB
+         a5fw==
+X-Forwarded-Encrypted: i=1; AJvYcCVxZKmZhohArIC1wchiYt0RMfM+NdD2xkditpOeUMF61lvRZURz4/YU/vf9lM/3BBRDjp8FXUSmysc4rIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQuQ6B4lmjYjBv3cJRyF1aEnZdGXHVuwEKCn+jT6R5srm7PXHj
+	M6cv5TLBM17kpWNqeN4AJqBFait2Oov2QBrH4Y6oxWNJjGAwYeqDmK67Uw==
+X-Google-Smtp-Source: AGHT+IEjZFT3mf8QHZ/bTzsZsfHOzMGGXzGjJ0KbA8FXuFtrabRAyrbPCvXCWbBlD5NeDZPEdD8z6w==
+X-Received: by 2002:a17:903:244e:b0:20c:62e1:6361 with SMTP id d9443c01a7336-20cbb1acfe8mr27580545ad.25.1728696533800;
+        Fri, 11 Oct 2024 18:28:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0eb491sm29663435ad.179.2024.10.11.18.28.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 17:02:49 -0700 (PDT)
-Date: Fri, 11 Oct 2024 21:02:45 -0300
-From: Jonas Malaco <jonas@protocubo.io>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 8/8] hwmon: nzxt-kraken2: Simplify specifying static
- visibility attribute
-Message-ID: <brjrngpwu6tsq6alns7ai5vscyhgtc2x3zmja7dxrfpaamp4qi@rb25dohavidg>
-References: <6f43a3e1-3622-4595-a1ec-2b3ad94bdf5b@gmail.com>
- <1ac2be2d-df4f-455a-900d-821fc7bd12c4@gmail.com>
+        Fri, 11 Oct 2024 18:28:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.12-rc3
+Date: Fri, 11 Oct 2024 18:28:50 -0700
+Message-ID: <20241012012850.1580196-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1ac2be2d-df4f-455a-900d-821fc7bd12c4@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 11, 2024 at 10:04:31PM +0200, Heiner Kallweit wrote:
-> Use new member visible of struct hwmon_ops to simplify specifying
-> the static attribute visibility.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Hi Linus,
 
-Acked-by: Jonas Malaco <jonas@protocubo.io>
+Please pull hwmon fixes for Linux v6.12-rc3 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.12-rc3
+
+Thanks,
+Guenter
+------
+
+The following changes since commit 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b:
+
+  Linux 6.12-rc2 (2024-10-06 15:32:27 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.12-rc3
+
+for you to fetch changes up to 2d6c668902e5834f54d7eb673318455492730cbf:
+
+  hwmon: (max1668) Add missing dependency on REGMAP_I2C (2024-10-07 08:42:32 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.12-rc3
+
+- Add missing dependencies on REGMAP_I2C for several drivers
+
+- Fix memory leak in adt7475 driver
+
+- Relabel Columbiaville temperature sensor in intel-m10-bmc-hwmon driver
+  to match other sensor labels
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (tmp513) Add missing dependency on REGMAP_I2C
+
+Javier Carrasco (6):
+      hwmon: (adt7475) Fix memory leak in adt7475_fan_pwm_config()
+      hwmon: (mc34vr500) Add missing dependency on REGMAP_I2C
+      hwmon: (adm9240) Add missing dependency on REGMAP_I2C
+      hwmon: (adt7470) Add missing dependency on REGMAP_I2C
+      hwmon: (ltc2991) Add missing dependency on REGMAP_I2C
+      hwmon: (max1668) Add missing dependency on REGMAP_I2C
+
+Peter Colberg (1):
+      hwmon: intel-m10-bmc-hwmon: relabel Columbiaville to CVL Die Temperature
+
+ drivers/hwmon/Kconfig               | 6 ++++++
+ drivers/hwmon/adt7475.c             | 3 +--
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
+ 3 files changed, 8 insertions(+), 3 deletions(-)
