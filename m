@@ -1,120 +1,82 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5AB8BFF;
-	Sat, 12 Oct 2024 01:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA2E10940;
+	Sat, 12 Oct 2024 07:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728696536; cv=none; b=tpZnSLTygqzNS0lQW3I0RW1SPMpHlKVXVHLmSIRg7uKkZxW1CMHx1F0Ku5+IMLvjHyn4qBD43BTusGTC/BKw+kWNm/ZtPF/BDps1GQ4BnnZ+P4zLubm89t2sOy+d4uzzXneiPFS5QqmgvKDUAdP5M3bRFxzPpaisq2ouwg+nd0E=
+	t=1728716840; cv=none; b=ctMe8o5xokR5lpPfOQSdE+psKUN6sq8k3hOR/wkg8IkJ3Jcs9bJWVqWa+QnE/GpLnvr+TyPbe49v3jMyg5ZfVIL41Fme8ttHhYVDQrcvL5a2nBXQBWqFtKgQDOTN1fP65piXhhxKJ1wLxW5pvyqUu9ZhBUa/UNvnq1LYfRHXrNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728696536; c=relaxed/simple;
-	bh=16qJtVuNU/38QRhzP+3SpP5icDTY+tKQH2jy0ESHtso=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YB5uP4ApjeiQjrM4X73BFYuudxB6QtuQ/yQC0G2gKZu61yodHzAQLGRHuT+ci0vWOxSMoU+nIg/94GrqAQuD9++hLbot5sZcyPKRxIXRN6/t0959G7soFm5qhtPkevYFYzbFnhBncPCK+klbX7E3PfmNS2F2sUNFNO8Q8fMRfIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANE0fbUx; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728716840; c=relaxed/simple;
+	bh=qTkGrv0p7+4vinrP3/grAVnhUVtY10seEVTYYhHkma4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Jw/ms3Mx5T+TV9s/EFm72VfUZrTld9BE5lD+qD3kZCVz474DhiY5N2O2RrepvvwZcy92Edwbe7kWTvbI2W9Rx610cpJ64z2jLVZpHqhlA/XY3jGoEdlhr5XdCdinrYfwmo/AkyVCFTYHmarOnh+HC3YcpeLPksThiM8KKUk/Now=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FQ/qmjW5; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANE0fbUx"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20b93887decso24125825ad.3;
-        Fri, 11 Oct 2024 18:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728696534; x=1729301334; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+uz3rbpJz9TtBYHIDBHTeD17IgRp0RlMKwvHZrhK6bE=;
-        b=ANE0fbUxhvLWQL1KhJgYF0QZLA8xO91+OkA/eANXDbemrVNdFIfCUTNkAxhdbpplXe
-         +qZ2NiGoejBHTLOJWw+WCMyskMyZq5K0vJevVKPtsszB4+pfdj5hXCE9//QgPprHrRFE
-         WzBHo7jO+2wTLSL4s5OPbXYfWAlwlnCgEyNAqNunnqFjtcRjXdtpWoWVitmPzvKebEP2
-         pwaKtLThUm1BKl9T46Uk2wTEBzX1+sv89wzOtQzgMCbJrIC8pHw/7SqeIc3losZWf4e1
-         TzTqbJjIDATM0toBDV0A022y3nDHCeq7VXYVc6FrsMWfAuFQ0V4bKgpQuIYm03kt97Tn
-         zsbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728696534; x=1729301334;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uz3rbpJz9TtBYHIDBHTeD17IgRp0RlMKwvHZrhK6bE=;
-        b=P0igWA10KgIRziRLmcM1s/dIDYP14QYzmaKsjdU5CwXWclHgyLTmykopDWbk2lk9s6
-         XE0zwvmXTQqbzoc0mDqZmgo3qErrBjtUVGitDU6oo/orGJCiA24yQpvbLV8XvVW91CcB
-         GNfUuBociGzJDGKrtNnCsNvWmXQfLGrYRyJuFakscM2nrDY91RXyeVIj/LGb4s7LrlCa
-         tMMLEIlSrRk7Mgmw0cKB1b3yqHGv47j8e82nDAd8U4yN5kBeTtGuCxA2yMNCDJpxSI+f
-         BUco/OySdHTXQN7P6Yfd9VfeEYQZxElnWy+ITN+C5CwXvDeoSzAuaPmQZYdmlh1adltB
-         a5fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVxZKmZhohArIC1wchiYt0RMfM+NdD2xkditpOeUMF61lvRZURz4/YU/vf9lM/3BBRDjp8FXUSmysc4rIk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQuQ6B4lmjYjBv3cJRyF1aEnZdGXHVuwEKCn+jT6R5srm7PXHj
-	M6cv5TLBM17kpWNqeN4AJqBFait2Oov2QBrH4Y6oxWNJjGAwYeqDmK67Uw==
-X-Google-Smtp-Source: AGHT+IEjZFT3mf8QHZ/bTzsZsfHOzMGGXzGjJ0KbA8FXuFtrabRAyrbPCvXCWbBlD5NeDZPEdD8z6w==
-X-Received: by 2002:a17:903:244e:b0:20c:62e1:6361 with SMTP id d9443c01a7336-20cbb1acfe8mr27580545ad.25.1728696533800;
-        Fri, 11 Oct 2024 18:28:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0eb491sm29663435ad.179.2024.10.11.18.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 18:28:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FQ/qmjW5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=quz+2hMWjcczLuJItS
+	DKvNUVNrU4bXl5LbBt2SkvvLc=; b=FQ/qmjW595pERdGdNqUZx73pAwXZwHuPr8
+	DzchcGeRWQjhguTRc+M7lqYvxiZlnOBthqNGgP2F013qM2ygWuyc9ccRNSJxJ832
+	gExP+oqHnK3zSk22P1cAx9uINjoFj3vcKFOaBBjG0l4VEd05EayWzVBfH1mo9fCe
+	IF2K5O1AE=
+Received: from 100ask.localdomain (unknown [36.18.172.102])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3nwP1HwpnNwWcAg--.5517S3;
+	Sat, 12 Oct 2024 15:06:39 +0800 (CST)
+From: Wenliang <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: Wenliang <wenliang202407@163.com>,
+	jdelvare@suse.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.12-rc3
-Date: Fri, 11 Oct 2024 18:28:50 -0700
-Message-ID: <20241012012850.1580196-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+Subject: [PATCH linux dev-6.11 2/2] v3: dt-bindings: modified ina2xx to match SY24655
+Date: Sat, 12 Oct 2024 03:06:27 -0400
+Message-Id: <20241012070627.20788-2-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20241012070627.20788-1-wenliang202407@163.com>
+References: <f7653d58-9cee-4496-91b8-55dda44289bc@roeck-us.net>
+ <20241012070627.20788-1-wenliang202407@163.com>
+X-CM-TRANSID:_____wD3nwP1HwpnNwWcAg--.5517S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFyfGr1fGw4DZw4DJryfCrg_yoWDArcEga
+	yxAw18XFZ8XFyYgF1DA395Jr1ayw4a9r48Aw15JrsYywn3ZrWqga4kJ3sxAr4xWay3uF13
+	uan5GrWvqrsrKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUbiL0UUUUUU==
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiRwt202cKG1NL7QAAsq
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+Modified the binding of ina2xx to make it compatible with SY24655. 
 
-Please pull hwmon fixes for Linux v6.12-rc3 from signed tag:
+Signed-off-by: Wenliang <wenliang202407@163.com>
+---
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.12-rc3
+SY24655 is a fixed gain power monitor from Silergy, with a power supply
+of 2.7-5.5V and communication mode of IIC capable of detecting bus voltage
+and voltage on shunt resistors. Its first 5 registers are identical to
+ina226, and also have alert and limit functions. So, the sy24655 is
+compatible with the ina2xx devices.
 
-Thanks,
-Guenter
-------
+ Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following changes since commit 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b:
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+index 6ae961732e6b..05a9cb36cd82 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+@@ -20,6 +20,7 @@ description: |
+ properties:
+   compatible:
+     enum:
++      - silergy,sy24655
+       - ti,ina209
+       - ti,ina219
+       - ti,ina220
+-- 
+2.17.1
 
-  Linux 6.12-rc2 (2024-10-06 15:32:27 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.12-rc3
-
-for you to fetch changes up to 2d6c668902e5834f54d7eb673318455492730cbf:
-
-  hwmon: (max1668) Add missing dependency on REGMAP_I2C (2024-10-07 08:42:32 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.12-rc3
-
-- Add missing dependencies on REGMAP_I2C for several drivers
-
-- Fix memory leak in adt7475 driver
-
-- Relabel Columbiaville temperature sensor in intel-m10-bmc-hwmon driver
-  to match other sensor labels
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (tmp513) Add missing dependency on REGMAP_I2C
-
-Javier Carrasco (6):
-      hwmon: (adt7475) Fix memory leak in adt7475_fan_pwm_config()
-      hwmon: (mc34vr500) Add missing dependency on REGMAP_I2C
-      hwmon: (adm9240) Add missing dependency on REGMAP_I2C
-      hwmon: (adt7470) Add missing dependency on REGMAP_I2C
-      hwmon: (ltc2991) Add missing dependency on REGMAP_I2C
-      hwmon: (max1668) Add missing dependency on REGMAP_I2C
-
-Peter Colberg (1):
-      hwmon: intel-m10-bmc-hwmon: relabel Columbiaville to CVL Die Temperature
-
- drivers/hwmon/Kconfig               | 6 ++++++
- drivers/hwmon/adt7475.c             | 3 +--
- drivers/hwmon/intel-m10-bmc-hwmon.c | 2 +-
- 3 files changed, 8 insertions(+), 3 deletions(-)
