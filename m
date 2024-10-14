@@ -1,173 +1,181 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D221319F432
-	for <linux-hwmon@vger.kernel.org>; Mon, 14 Oct 2024 12:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062DD1AB52F
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Oct 2024 13:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728907929; cv=none; b=rodVDcj0LEng390NXIo4GHW0PHl6qNiAZI9JGmVFmuPvRYC0uvedK9Z8B9u4yATa1ImM+4PpqQrCqezbx5eI1wAz02kQJmB00AJw7gdRm8f675ujUwE7Su1ybC6vUXQTgPwPGw5IvwrNHbnL7GMRcVDsSM83sz0y8LCyrCsZ1tQ=
+	t=1728913969; cv=none; b=fqDMGxlKVpdfZvUFIfSCrXyE/2X0iw+n+YmClUzVsPxHc4MTc/Bo8ckSNGCFHvrFk49ydasldHynkpsjwqz9hS/PscOcgiKfWABlfMdsx0g1y+ptS+LCGbOkRtCaYtb4d8zJRvablBDRdcUJcKHZs1qPk3Z4mRs7Nf/ZN63L3Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728907929; c=relaxed/simple;
-	bh=TNN2c2lfgqUmSOxQkFtTkMc0uo2ozKjxPZyKijCk4ew=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KN2YQLuROPtNih0F97z0SmHYbY1rFD/etc5Moi/P3ukYxo5b9HfobjezPvY/LwVWrovWKI6j/+DWkxWc64ShMQdMCidegTWIyf5S8iyawb6aGYccCKQX8N9rKooSfgwClQBBCU4d98DKJmvkE0Tq5VobDlm67f0xVlQSPecirFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=h51zXOHO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ujtok4lc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MLvlWaj6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sgs1x8pN; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1728913969; c=relaxed/simple;
+	bh=cvZ45xt1Zdy40OLzcas7nXrRRLFDEi3mNij5HGrTRRI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m6s0k+4hwTUPWw43AM1lumEu5SrRrYpdcRz0TJ/MyLMjAzFlmFnYb8MjuJVwu0caKAfAh1Hm8PAG8pbtal9Arv2zzZUU/McyBbhmQ57OJZ3bc+mh99Q2WsVQyG0BRl5KB49Lakc8Ghzt0i5nriBGY5qoQhAp5XrZbVqq6c316jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkLlLa2y; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="h51zXOHO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ujtok4lc";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MLvlWaj6";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sgs1x8pN"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id ED14921A03;
-	Mon, 14 Oct 2024 12:12:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728907926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYIjL0xhoCaLZ/bLOQqQgqUqjSmxk1IgfzRV3b0pZxc=;
-	b=h51zXOHO3i7UawvOq5dgRgSnnz1VJlHtkgmiNyaYmuZYDAHKdy+yEQRJYn/vcLaC+MQMLa
-	umQgELaZp4La9GDOPMPuFbhPZGyqXOvNOTRtyKvF36B/JXBUgoST2TahiC0m0NyfZ/B5nA
-	HNGonmDslHehLrZJ7KWCTtNfFlGeLTU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728907926;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYIjL0xhoCaLZ/bLOQqQgqUqjSmxk1IgfzRV3b0pZxc=;
-	b=Ujtok4lcrilgvearut3CQuXZhmaf98bsSyGHigE7OIMPukZWt1LL9fZjz+6kBUQUsiUQNd
-	SLavXnvLY+Ji4+Bg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728907925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYIjL0xhoCaLZ/bLOQqQgqUqjSmxk1IgfzRV3b0pZxc=;
-	b=MLvlWaj6+c81FcwM3RR/tp8lFbc07TDAgaozpUNvDAhLBJD9eEbbxfphW+qrUxDYc/7q/w
-	uHNR2C6URfV4g6dox9+KBx+sGQ/wdqFMlQdJn2vxSM9dREwq4ZuJQpZxq6CnvvnZau1g3v
-	nBJwq2tW+zMDU78QnNw6oVJagRvn3Ig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728907925;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYIjL0xhoCaLZ/bLOQqQgqUqjSmxk1IgfzRV3b0pZxc=;
-	b=sgs1x8pN5pQDJbOpoeb9Hsw0AscVqrxWa413IStArkYGcZrTEuVGVVhHYw8r6joKX9ndLn
-	X8eU6XQwlq32jsBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C780E13A51;
-	Mon, 14 Oct 2024 12:12:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QNquLpUKDWf9PAAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Mon, 14 Oct 2024 12:12:05 +0000
-Date: Mon, 14 Oct 2024 14:12:04 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] hwmon: (jc42)  Strengthen detect function
-Message-ID: <20241014141204.026f4641@endymion.delvare>
-In-Reply-To: <20240630202028.1874325-1-linux@roeck-us.net>
-References: <20240630202028.1874325-1-linux@roeck-us.net>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkLlLa2y"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7ea12e0dc7aso2689674a12.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 14 Oct 2024 06:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728913967; x=1729518767; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyHAbs9c+qq4FOxHNG7gejbhdNwxGQtyOp/KoXKN+B4=;
+        b=RkLlLa2y+FIBR6QW/7MeW6qUjT+wQBZWYW3N2vHVLZ3xRWF7vm+ldV/VZkGjQPw5Hu
+         9QTdUah7LHgaeKlfDqTh6p6PJuT3QPanalQ4Jd6rTRcjFu2YE6ZInJ5JBUtbLp/3KriG
+         +W/+yGgPvqzCeq9k46h0IneESfKUD2voiHgEBFqmowHqAQYQKGMs/MWxwApZC7nKl+iK
+         xz70z9W02MEm2gCKq+RDc1kD949cF09f9guEcE38bGzCZClOfty4eaPRSSBR8uyOeC/4
+         lJDEmgQxUW6HRf9gWnWG4QUfHZVCrOTlqcbEIuECYLWTh6BOA53P6scxc3y7yeH+T1YG
+         wQrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728913967; x=1729518767;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JyHAbs9c+qq4FOxHNG7gejbhdNwxGQtyOp/KoXKN+B4=;
+        b=Hweb4879AXpmP8eqWXW5w3z0BQwiiGT9tqXYp9JuZ6J6kqsJ4YbDwrAWmcDcYNSgXR
+         rGpRX25okhLrVbQN+SSSCH+5oCd9x5j1OI1OIuC26aWvViokEF1zO55v9zIIF+xPb/9N
+         0liDNLZeDf7/zGsN8jbwRLXj2/TVCucu98WoV5Aj2uzq2WwSMqixT+84Z8uOwxZfHLID
+         IOLDJpUsDCRYJmrD+HuovID9jValnI6gljfqo7x8hIyPkx4jMq1BAZKy55prVVRp/aMn
+         veCNViSnZQUAHlzeow9/8DxlSfr2dqsQ2xNeH0PcdWVs0Ah0UdHc0dOSvmTMIqSSfuSL
+         g0wQ==
+X-Gm-Message-State: AOJu0YyY1DvZRIafFgmWKE/tv8ahdwmj6ufNze33VyjBr2QRjBokCKnp
+	LuhpyJEcD+nF7GtoGiWW++ps1HpDlLmAJWCMLRQ3x/dyXbRiDRcqvfXqwg==
+X-Google-Smtp-Source: AGHT+IFR3UmWNZz5UQC68V9FmTfoiAIPzqYNxb2toh8PhnOuhUMW9pwbP2X8i+LYt7lcM+K8wobHmA==
+X-Received: by 2002:a05:6a21:38f:b0:1cf:7123:86a6 with SMTP id adf61e73a8af0-1d8c96ba856mr14312626637.49.1728913967251;
+        Mon, 14 Oct 2024 06:52:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c356250sm66232145ad.299.2024.10.14.06.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Oct 2024 06:52:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b33ea745-5acd-4019-aeff-59bee4d50e5a@roeck-us.net>
+Date: Mon, 14 Oct 2024 06:52:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (jc42) Strengthen detect function
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+References: <20240630202028.1874325-1-linux@roeck-us.net>
+ <20241014141204.026f4641@endymion.delvare>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241014141204.026f4641@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	MIME_TRACE(0.00)[0:+]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-Hi Guenter,
-
-On Sun, 30 Jun 2024 13:20:28 -0700, Guenter Roeck wrote:
-> Configuration register bit 5 must read 0 for all JC42.4 compliant chips.
-> Several capability register bits must be set for all TSE2004 compliant
-> chips. Use that information to strengthen the detect function.
+On 10/14/24 05:12, Jean Delvare wrote:
+> Hi Guenter,
 > 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/jc42.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> On Sun, 30 Jun 2024 13:20:28 -0700, Guenter Roeck wrote:
+>> Configuration register bit 5 must read 0 for all JC42.4 compliant chips.
+>> Several capability register bits must be set for all TSE2004 compliant
+>> chips. Use that information to strengthen the detect function.
+>>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>   drivers/hwmon/jc42.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+>> index 1180af1b1638..a260cff750a5 100644
+>> --- a/drivers/hwmon/jc42.c
+>> +++ b/drivers/hwmon/jc42.c
+>> @@ -413,7 +413,11 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
+>>   	if (cap < 0 || config < 0 || manid < 0 || devid < 0)
+>>   		return -ENODEV;
+>>   
+>> -	if ((cap & 0xff00) || (config & 0xf800))
+>> +	if ((cap & 0xff00) || (config & 0xf820))
+>> +		return -ENODEV;
+>> +
+>> +	if ((devid & TSE2004_DEVID_MASK) == TSE2004_DEVID &&
+>> +	    (cap & 0x00e7) != 0x00e7)
+>>   		return -ENODEV;
+>>   
+>>   	for (i = 0; i < ARRAY_SIZE(jc42_chips); i++) {
 > 
-> diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-> index 1180af1b1638..a260cff750a5 100644
-> --- a/drivers/hwmon/jc42.c
-> +++ b/drivers/hwmon/jc42.c
-> @@ -413,7 +413,11 @@ static int jc42_detect(struct i2c_client *client, struct i2c_board_info *info)
->  	if (cap < 0 || config < 0 || manid < 0 || devid < 0)
->  		return -ENODEV;
->  
-> -	if ((cap & 0xff00) || (config & 0xf800))
-> +	if ((cap & 0xff00) || (config & 0xf820))
-> +		return -ENODEV;
-> +
-> +	if ((devid & TSE2004_DEVID_MASK) == TSE2004_DEVID &&
-> +	    (cap & 0x00e7) != 0x00e7)
->  		return -ENODEV;
->  
->  	for (i = 0; i < ARRAY_SIZE(jc42_chips); i++) {
+> I have a user reporting that this change is causing the jc42 driver to
+> no longer bind to his memory module temperature sensor devices after
+> updating to kernel v6.11. I asked for a register dump:
+> 
+>       0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
+> 00: 7f00 0000 0000 0000 0000 6ac2 091b 3022
+> 
+> After swapping the bytes, I see that this is a TSE2004-compliant device
+> (devid = 0x2230) and the capabilities register reads 0x007f. This
+> doesn't pass the 0x00e7 mask test you added, as bit 7 isn't set in his
+> case.
+> 
+> The JEDEC standard indeed says that bit 7 should be set, but apparently
+> this isn't always the case in the real world.
+> 
+> Also note that I looked at the Renesas TSE2004GB2B0 datasheet and it
+> shows bit 2 (RANGE) as not always set. The ST STTS2004 datasheet shows
+> bits 0 (EVENT) and 2 (RANGE) as possibly reading 0. So I wonder how
+> much we can rely on these capability bits being set in the detect
+> function. Unfortunately I don't have any TS2004-compliant device at
+> hand to verify, nor do I own register dumps of such devices. Would it
+> be OK with you if we relax the check to at least ignore bit 7, and
+> possibly also bits 0 and 2?
+> 
 
-I have a user reporting that this change is causing the jc42 driver to
-no longer bind to his memory module temperature sensor devices after
-updating to kernel v6.11. I asked for a register dump:
-
-     0,8  1,9  2,a  3,b  4,c  5,d  6,e  7,f
-00: 7f00 0000 0000 0000 0000 6ac2 091b 3022 
-
-After swapping the bytes, I see that this is a TSE2004-compliant device
-(devid = 0x2230) and the capabilities register reads 0x007f. This
-doesn't pass the 0x00e7 mask test you added, as bit 7 isn't set in his
-case.
-
-The JEDEC standard indeed says that bit 7 should be set, but apparently
-this isn't always the case in the real world.
-
-Also note that I looked at the Renesas TSE2004GB2B0 datasheet and it
-shows bit 2 (RANGE) as not always set. The ST STTS2004 datasheet shows
-bits 0 (EVENT) and 2 (RANGE) as possibly reading 0. So I wonder how
-much we can rely on these capability bits being set in the detect
-function. Unfortunately I don't have any TS2004-compliant device at
-hand to verify, nor do I own register dumps of such devices. Would it
-be OK with you if we relax the check to at least ignore bit 7, and
-possibly also bits 0 and 2?
+Sigh. I guess it would have been a miracle if vendors followed the standard.
+Let's ignore all three bits, with explanation. Care to send a patch, or do
+you want me to do it ?
 
 Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+Guenter
+
