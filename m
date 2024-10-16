@@ -1,54 +1,54 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6857D206040
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Oct 2024 09:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EAB206956
+	for <linux-hwmon@vger.kernel.org>; Wed, 16 Oct 2024 10:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729072268; cv=none; b=BZhu2O4nBJ44J0DDdp9MzmqUJo3itec0bwL1bnV9rFz+4lgtKVpVpWPAIG9n54L2+ApIHyNZl1fdcDsuWxLmMJDCOGl8TTqLMU3tGwFGWCPiMPplfB5/eiSEFsoPt/GglKQBCqkcpg10F+U4wU0LMRmURPmSUtG4rPZiNmjW2ck=
+	t=1729074032; cv=none; b=DY0u4Eeo0l0F6duVlAJeaeFG0pYwZ5tSbahvaMva8Qqmqx2nWCZotjk+ixbPqmqnEfI5mUaIxDizWJoTBD+qg/bgVlue8d9CM6bixFlOz//fJIs4zL0wCBhLt0J5Qhnd5R5cUGHo5kabjIHAYpeA3mdQFDejGz+n16vuTdzhTyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729072268; c=relaxed/simple;
-	bh=Cj86NyIswgKoqmx4W92A+phSXUB2YaLiIZDYapAeldo=;
+	s=arc-20240116; t=1729074032; c=relaxed/simple;
+	bh=JprLKTC6HJjybS1n1cL4X9uzLlKWlrTcyJd8jH5iYLw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tm3CU3hHlqshGAXPM3Zxzz+MRxqQCyDgibxpHqiDfLpMFPKjyVcsUhXROBbMqIALjq5sFnhVooF8StDdT9gToiOp39jgLAZSzIh1UzcwVfgRZsJbfd66qcZtb9cK99gD4+FdxK54DXrTa7OwF6rmgNIaKFDRvKFviP/wHzzDMa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=CGEPSZOd; arc=none smtp.client-ip=209.85.215.173
+	 To:Cc:Content-Type; b=GDaHK2aDBmNEdcPpAdQ5eTBBqamR1hShJEZEO04DOCdiPTXLH0fa66YxU0TPY/b+7oJ/ZVh2JoTQfDrQW6uI1d5XACE29cB9UUCDkDO0rTQJCtX9cWLwmrutbCIX0K7IxDg0hjLiyuALGrdlbb9bx83x0czstGhKJ5O29jfZJ+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=VUninvBx; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="CGEPSZOd"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7db1f13b14aso5307811a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Oct 2024 02:51:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="VUninvBx"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ea6a4f287bso2621697a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Oct 2024 03:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1729072267; x=1729677067; darn=vger.kernel.org;
+        d=9elements.com; s=google; t=1729074030; x=1729678830; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=55z7MQbfeSSb5xwJVgndR9t0TWHNOqYIoBbegmDTohc=;
-        b=CGEPSZOdx/fiuZNgETUbHRFOd4P3A04qoFoeK1v7tnCAv05pTpUnEtPmeyNXLurQ5m
-         KZvqjfH7YjFFZ1GaJv+QmodZ2BDEkLMBhBuG2tyPdx4GVoC0AfSFHkJ7EVGbtJXhdRrI
-         VM5r0216pr3mjaSsRX/SfqMoV6buERrmI7U141c6ueAD1LJeZTClQPYt4TEE8aLQpUjs
-         2gUiGkJt8edGcxbz1+F5Cvv5NL4l55Wv+/f8xfaEP4yBsqn8XHY91BdmZCXNY0MT3goW
-         zEcglYJKeX4XqcwFJDmY+RClpg0IQpa1n1smLTik4vAflHui/wOx4ERfvuTFfw/45Xfc
-         A60Q==
+        bh=eu9n9kTYZMIYrnQIr/xJejQUar2J34x4A7S5/oQVpRg=;
+        b=VUninvBxgYCjAkAm62Gl1Xvwq3IXqkKp/UQQu9PgF3djl83vKohArpt6XgRiJROTyb
+         XV9fdvaujli8oZZHRKnlxN8zad/RMVs2V0OyulDXbjvwyj9TREP+rIkNaTUnEo8Wssc/
+         mDq5sRWcjgJLDYP+3QrTEBXxQJvLzHqHKGMHYCRdFs4IxZETBh/J7l+Kio0wdFlhoyfo
+         j8nSJsdlFzsdp1hb/RFPEeUe0CzSLPLwM4/Y7eBvDEbmPbAZirfNhXSys2YaO166Gd3e
+         xKx/2l/G06ESiFDeoGcK5J5r30e8CR/GRbiWv9K2lERt4ZwoClarztoPrXNEAXGKLdZ+
+         EpLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729072267; x=1729677067;
+        d=1e100.net; s=20230601; t=1729074030; x=1729678830;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=55z7MQbfeSSb5xwJVgndR9t0TWHNOqYIoBbegmDTohc=;
-        b=ZrLfRfOqdPuTS1jQvf79bNgB1F39SPnm9qQEXDg7VjxXDpzQ+YV7kHSmlRa8eHbITM
-         QtIaMZhlnCpvesjx1M3zYDXfvp7s2GTNyBBEyiU4oi/ZttRuO/Hu9kJQo1DUPx0cc19c
-         UmI9N52Uxxk3b32nHwa9QZvg2uI+06cdOlveYvA0FDBtySq1aO5q7NggUuxd0gQ9C5Ri
-         VEP/PeSrvrnztp4W3LCelPqrOonrzPZyF44BpcT0/4fmX98+Vh5ytzHH2mxopaqHY8wh
-         ufd4e0sKKOEpFbUvH3B1HO0qg9eTiLsfr5Se7kr6nNSz2B/tVRHQz5of5ak70loHSXYo
-         XyWw==
-X-Forwarded-Encrypted: i=1; AJvYcCXGbMKvHFihBvK0U1hzVyRuS0Tqht2KzLdoer7fd3CbPYv9aa3LnECNBdFnzyMg29m8iXXCcDvF5BCnNg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbi8wfMvQ9yhkCQBQmkmqsMVIbL6z1rrNLZWkyXi8E7s0RoV/p
-	9ypegUfyjyzfCno0eAkQ1aktwDBsgl185VfLKC83gx0Kj9cdJABJdFu9y9XC+ybanOLizul6wtM
-	rTTPiS49i739c87Bn0U3UYk6kllEY/VKO2E/P7S2dkzVfZpUZOVoWLxwi
-X-Google-Smtp-Source: AGHT+IEFyMfBHqpooctvg2iThMuJ2EZL7X1ymRn7DPngXS/aofDO/dY9X6Azot0jpV1C8esxg0Ncunf+8mxEudBKvL0=
-X-Received: by 2002:a05:6a21:38f:b0:1d8:a29b:8f6f with SMTP id
- adf61e73a8af0-1d905ebfe64mr5058933637.16.1729072266720; Wed, 16 Oct 2024
- 02:51:06 -0700 (PDT)
+        bh=eu9n9kTYZMIYrnQIr/xJejQUar2J34x4A7S5/oQVpRg=;
+        b=B+Cx1dt1f8e4fPIWBY3WNm+VwH+Do0Ew7icoO/usLKHNEuPQMrRR0UxhJv5zHVBOqF
+         u44ioPiVa3dxVQ/Bz90BYYHGZ30sfvU+cL8uqFq+CK+3UEnTN6fs9hRLJoW7zXVpPxOL
+         S5He4YgJJjXCriHoVMXYfDkv9hMYlDVZ2o6cip5f/WOOzB7kjBCDdAF/5zzYGIqCZ1Cb
+         6YWmqmqpSjWOc0/Klo60vZVAlsvEP5BNArXljjw+9twNn8dqzm5kB9V1xdpSHyLm0F1A
+         IzsK105MPzrOPAleADr10jhgsXWgCK92ImR7KBwi50bid0u4ajdvvfx+MnJ9scgxyl+h
+         zBEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMpbytrV4nuGQP+FKQkLW8xGbHqq95CnjQBPSDh1ifUoHJ9DvQe9Wk7UW4PDjjF7cPwshxZyAcc8TL4g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUinORSiV1Va7IA7kxs56Nsq7oz/B5obsr3P5cEs8YEOH17IVy
+	lADkVg9msw7UDWzMjWacGplPINX4HCRvQfE1O36kQnqwRQNJsWtKzaekQYw+EojkaR3o5r+ngo5
+	Ta0Q38PVOqVI38LwlRt4BkvD/9+Ae7QCfRgdKsA==
+X-Google-Smtp-Source: AGHT+IH0NF5PxQ3frSjJAxZyupIfoZEdqDvzpH+HOYXoFDZ6HVhysB/row6aeG7r9j1NrxBIXdKi1U2gHx81js9QOnY=
+X-Received: by 2002:a05:6a21:1706:b0:1d8:f048:c0e4 with SMTP id
+ adf61e73a8af0-1d8f048c30cmr8138462637.36.1729074030317; Wed, 16 Oct 2024
+ 03:20:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -57,53 +57,136 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241015113329.667831-1-naresh.solanki@9elements.com>
  <20241015113329.667831-2-naresh.solanki@9elements.com> <c07435f5-af3f-46e2-8e4d-b0a42969b60a@kernel.org>
- <30089bac-e764-45ca-b0fd-f0eb0333e632@roeck-us.net> <b981df66-2501-40ad-8064-158cf93407f7@kernel.org>
-In-Reply-To: <b981df66-2501-40ad-8064-158cf93407f7@kernel.org>
+In-Reply-To: <c07435f5-af3f-46e2-8e4d-b0a42969b60a@kernel.org>
 From: Naresh Solanki <naresh.solanki@9elements.com>
-Date: Wed, 16 Oct 2024 15:20:56 +0530
-Message-ID: <CABqG17hNSOA6onnH6Bp2oOGRiS_8EMnp4fGyWYZEYG5+HQYceQ@mail.gmail.com>
+Date: Wed, 16 Oct 2024 15:50:20 +0530
+Message-ID: <CABqG17irpNCUks=zg5OpEXqSCUNtWm9X3CpdcZ7AkL0fBdEySA@mail.gmail.com>
 Subject: Re: [PATCH 2/2] dt-bindings: hwmon: pmbus: pli209bc: Add bindings
 To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>, 
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sylvester Bauer <sylv@sylv.io>, 
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Krzysztof, Guenter,
+Hi Krzysztof,
 
-On Tue, 15 Oct 2024 at 20:19, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Tue, 15 Oct 2024 at 17:18, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> On 15/10/2024 16:10, Guenter Roeck wrote:
-> > On 10/15/24 04:48, Krzysztof Kozlowski wrote:
-> >> On 15/10/2024 13:33, Naresh Solanki wrote:
-> >>> Add bindings for Vicor pli1209bc.
-> >>> It a Digital Supervisor with Isolation for use with BCM Bus Converter
-> >>> Modules.
-> >>>
-> >>> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> >>> ---
-> >>>   .../bindings/hwmon/pmbus/vicor,pli1209bc.yaml | 65 +++++++++++++++++++
-> >>
-> >> This has to be squashed with previous patch.
-Ack
-> >>
+> On 15/10/2024 13:33, Naresh Solanki wrote:
+> > Add bindings for Vicor pli1209bc.
+> > It a Digital Supervisor with Isolation for use with BCM Bus Converter
+> > Modules.
 > >
-> > Neither me nor the hwmon mailing list was copied on that previous patch
-> > (or on an intro patch if there was one), so I have no idea what this
-> > is about.
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+> >  .../bindings/hwmon/pmbus/vicor,pli1209bc.yaml | 65 +++++++++++++++++++
 >
-> Heh... that's even worse because without that visibility you would pick
-> up this patch only leading to duplicated compatibles warnings.
+> This has to be squashed with previous patch.
 >
-> Naresh, sending such patchsets is really not correct. Be sure you
-> organize them logically and in fully bisectable way, and then you CC
-> relevant people.
-Yes this definitely causes confusion. I should have organised it better.
-Will make sure I handle it properly. Pardon me for the confusion
+> >  1 file changed, 65 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
+> > new file mode 100644
+> > index 000000000000..3647d14e9111
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
+> > @@ -0,0 +1,65 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+>
+> Drop blank line
+Ack
+>
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/vicor,pli1209bc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Vicor PLI1209BC Power Regulator
+> > +
+> > +maintainers:
+> > +  - Marcello Sylvester Bauer <sylv@sylv.io>
+> > +  - Naresh Solanki <naresh.solanki@9elements.com>
+> > +
+> > +description: |
+>
+> Do not need '|' unless you need to preserve formatting.
+Ack
+>
+> > +  The Vicor PLI1209BC is a Digital Supervisor with Isolation for use
+> > +  with BCM Bus Converter Modules.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - vicor,pli1209bc
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  regulators:
+>
+> Drop the node and define vout2 here directly.... unless anything needs
+> such layout? Then explain this in commit msg.
+This is expected by pmbus regulator driver:
+https://github.com/torvalds/linux/blob/master/drivers/hwmon/pmbus/pmbus.h#L512
+>
+> > +    type: object
+> > +    description:
+> > +      List of regulators provided by this controller.
+> > +
+> > +    properties:
+> > +      vout2:
+> > +        $ref: /schemas/regulator/regulator.yaml#
+> > +        type: object
+> > +
+>
+> Drop blank line.
+Ack
+>
+> > +        unevaluatedProperties: false
+> > +
+> > +    additionalProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+>
+> Drop, not used.
+Ack
+>
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        pli1209bc_p12v_d: regulator@5f {
+>
+> Drop unused prefix
+Ack
 
-Thanks
+Regards,
 Naresh
+>
+> > +            compatible = "vicor,pli1209bc";
+> > +            reg = <0x5f>;
+> > +
+> > +            regulators {
+> > +                p12v_d: vout2 {
+> > +                    regulator-name = "bcm3";
+> > +                    regulator-boot-on;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
 >
 > Best regards,
 > Krzysztof
