@@ -1,201 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEDA179BC
-	for <linux-hwmon@vger.kernel.org>; Sun, 20 Oct 2024 10:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00A31E0087
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Oct 2024 10:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729421082; cv=none; b=V9biTagbyDkKRB0uFxA9mRuRuvd/cPWZxO0YhfVeLDGGGURuQsIj7gVBejty/4V7MQ/oy1ppGz71fduH3W2izW0+obBhas/3x2qFsPjYQsJ9sxASIbRa4R2kHJ4eCS42YckJxUvofei6/jgTy8gnptT0Aqq6mVD7Tlkh7lQDZU8=
+	t=1729505271; cv=none; b=gi3mc/d9zqfZoHgJh1Cmrt2FTb4oGsj3va1v1LKzXfmnv3RNoMnbbY+cDe/edmprpZjKpTQX7IKoPxS946wNDh/TzIzkhquwD7RFbEgOnDCNUt/JN+oahIJywq5aP19duHpm77tLP8sULKB4awO5HhZ4GtUhsp1CC+5K1hJiMx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729421082; c=relaxed/simple;
-	bh=3rZbz2y44zxRUV9+EDcE5TLdujEB9/ok+N7tvWS+WX0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=N44IEEKD88wI5ZnkXxTA8h1bjvZCnx7sSeIjKgEQXFJtz3xiTmBaoDvnp5aHf6+I02n1sL52P5MmEzv4PltGLuOO82q9h1zyFHWWOzglewTA5Bhg8pKrrWtEsKdkll7tsoypAs/kUti/DzLaSVXPWphkDObJXm4gOAMqHWaN90o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M8sIqCR3; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729505271; c=relaxed/simple;
+	bh=QdZWSFTeGpOWzSib81TVg25Rz1n0HWmtYu4OVad4FCo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=KTTSbS5fpOBXMKp+H3b6+BDr07InhGDlQZ9cLMdWwGwP36XjYBla5u2rRySpqnRt6WSnDwjf3IsaVfWObRnweemH9lctjtuAITg7rlzIujSK+2AcHAbCfqDmp4BMp5DF5dn3nP2VBtWtqFcRYguzM/v7TgnmK5hLZSEWqWvB3Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=fKGgLyPP; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M8sIqCR3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729421080; x=1760957080;
-  h=date:from:to:cc:subject:message-id;
-  bh=3rZbz2y44zxRUV9+EDcE5TLdujEB9/ok+N7tvWS+WX0=;
-  b=M8sIqCR3Qib4kFtTN49Luwa31VHbCGUmb72X9YbsLP1MKyqR99lb3H3q
-   01XonSiE8V5nVm/bgOKKwehgcojUE1LIxg7jg9hzZqxYJ72T+E7kYbiXk
-   RG/UYOoM5yW7G+VSu33j8gQvyz7IKp8Zs6jJ8DfXK7LXHXn/c1EyqLdes
-   Gq0qjL3Jy9J/EIowev+KDk26NjTxHmYNKz5oATaS9BSpUXwozng5j0LHl
-   jJdSPwbVV5c5NtDEaT3PJWC1HRr4Hk4L6Aj/L6qUDblaeQgCodwEhLJlc
-   8j8WIUNKDPZP+Eb8OB4QYRmbCiLRl++DQKgJh+lENhEU0rX9n+CGYynYP
-   g==;
-X-CSE-ConnectionGUID: zDprUTUyTCSyThHLv8e5Mw==
-X-CSE-MsgGUID: tSurIO4gSAKDGWu9rXYSvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="54321245"
-X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="54321245"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 03:44:39 -0700
-X-CSE-ConnectionGUID: z/ZD9vpgSo6v5fQGtn3Kfg==
-X-CSE-MsgGUID: iFhiSNkbStWVSTfFQIns+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="110018742"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Oct 2024 03:44:39 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t2TQK-000QDB-19;
-	Sun, 20 Oct 2024 10:44:36 +0000
-Date: Sun, 20 Oct 2024 18:44:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 516ddbfef736c843866a0b2db559ce89b40ce378
-Message-ID: <202410201812.C3swsglw-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="fKGgLyPP"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4314c4cb752so45217385e9.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 21 Oct 2024 03:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1729505267; x=1730110067; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EBql76qWJOBLXqDBsTH119HC7QDwlYFKmnY1odQsxTU=;
+        b=fKGgLyPPWt0pLp1mFM2RVXcHs3xb1bnBBHtwjK0YLN8z6sAgqtD5boV4LreoFYVkQT
+         aQW/aiVRvpURun99vbkNXbJ2eF+WFfzKwwK3fFU6Gr/9RELP13wRpHrd1gBcSh9+j4k6
+         vP8X9Hdg+OAbS7bV3KfuN0m53+zPcmTCjD/Qf7a4pdITFbIQD4oPKzlwF83BGv2+yDnl
+         /wN8HAnagq73w+KgdI5S9jHGUSo4DzhitBA7OjpEaJ3iJOZmmw9a0mJkeO4h60oUSSUh
+         xnkKX6WMO08E9JAL5mHEqHVkkcuNXVjBq7DyCVu10H6jEKxQzwkI+LxoWz6cvJFVWysb
+         v7FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729505267; x=1730110067;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EBql76qWJOBLXqDBsTH119HC7QDwlYFKmnY1odQsxTU=;
+        b=Cjxc4TYUgxjD2/9HOOQ/5RqoJ/12RcdCzm2Md9qJzmLB5NDAKYXZ1syCK6GDnEstAf
+         9qpZEXe9qYkI8BQeLO4dHYzyLGakkkGMkLZFGKGHbCOkqbU+jUQ6v+Uy+vgvVlGw//Ez
+         qO+YBrEtOQVYQ4ykT3H7bTI9VlF5O3eDgQM2VWx4KLk/2fYDQA+JFgaJpz3kzg80JYFP
+         BlE8ubUtd54nkv5tTdVsNPBZry0yyiJf+3PpfXlWBhvZSsrj/lzMbrfvq1HvB84g9Bvn
+         TAc6yFTusyy0EarHxTBaj1nGRt8gR3xQEPMD9tD/PP3MyAfPXd0qDVrQyQ2lqKn4LQVl
+         cMIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXy2FPYLeSndT6f/5PNwZwVdcj1QXNOwJ+dgLQC70xzeOjH/4SZGjLoynDg2pxP4NrEs5DWZrXtk2SssA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPkMiuxvkjM3xowJNKxOvaCZ6tCJEinnMMCDq1eAOHbjaitM14
+	qbg6QqUvFiV6P/ds3XmBY4JCbOtqslrfQGgSwVZEOY3Iv8FGF2WtbOKisQ+a6rU=
+X-Google-Smtp-Source: AGHT+IEq7dO7gIDeubgjOK5nBjj3N26LiS79UsNXDGMVSWLjEXQrVDIOmL3jcj587GAFbmPX3U5X5g==
+X-Received: by 2002:a05:600c:45c3:b0:42f:8515:e490 with SMTP id 5b1f17b1804b1-4316161f58bmr98151325e9.5.1729505266808;
+        Mon, 21 Oct 2024 03:07:46 -0700 (PDT)
+Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f57fc17sm51394775e9.15.2024.10.21.03.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 03:07:45 -0700 (PDT)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	sylv@sylv.io,
+	linux-hwmon@vger.kernel.org,
+	Naresh Solanki <naresh.solanki@9elements.com>
+Subject: [PATCH v2] dt-bindings: hwmon: pmbus: Add bindings for Vicor pli1209bc
+Date: Mon, 21 Oct 2024 14:44:29 +0530
+Message-ID: <20241021091430.3489816-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 516ddbfef736c843866a0b2db559ce89b40ce378  hwmon: (nct6775) Add 665-ACE/600M-CL to ASUS WMI monitoring list
+Remove vicor,pli1209bc from trivial-devices as it requires additional
+properties and does not fit into the trivial devices category.
 
-elapsed time: 1163m
+Add new bindings for Vicor pli1209bc, a Digital Supervisor with
+Isolation for use with BCM Bus Converter Modules.
 
-configs tested: 124
-configs skipped: 5
+VR rails are defined under regulator node as expected by pmbus driver.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+Changes in V2:
+- Squash the two patch in patch into one.
+- Update commit message.
+---
+ .../bindings/hwmon/pmbus/vicor,pli1209bc.yaml | 62 +++++++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |  2 -
+ 2 files changed, 62 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
 
-tested configs:
-alpha                            alldefconfig    clang-20
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.1.0
-arc                        nsimosci_defconfig    clang-20
-arc                        vdk_hs38_defconfig    clang-20
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.1.0
-arm                            dove_defconfig    clang-20
-arm                          ep93xx_defconfig    clang-20
-arm                          moxart_defconfig    clang-20
-arm                        neponset_defconfig    clang-20
-arm                         nhk8815_defconfig    clang-20
-arm                             rpc_defconfig    clang-20
-arm                        spear6xx_defconfig    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-i386                             allmodconfig    clang-18
-i386                              allnoconfig    clang-18
-i386                             allyesconfig    clang-18
-i386        buildonly-randconfig-001-20241020    gcc-12
-i386        buildonly-randconfig-002-20241020    gcc-12
-i386        buildonly-randconfig-003-20241020    gcc-12
-i386        buildonly-randconfig-004-20241020    gcc-12
-i386        buildonly-randconfig-005-20241020    gcc-12
-i386        buildonly-randconfig-006-20241020    gcc-12
-i386                                defconfig    clang-18
-i386                  randconfig-001-20241020    gcc-12
-i386                  randconfig-002-20241020    gcc-12
-i386                  randconfig-003-20241020    gcc-12
-i386                  randconfig-004-20241020    gcc-12
-i386                  randconfig-005-20241020    gcc-12
-i386                  randconfig-006-20241020    gcc-12
-i386                  randconfig-011-20241020    gcc-12
-i386                  randconfig-012-20241020    gcc-12
-i386                  randconfig-013-20241020    gcc-12
-i386                  randconfig-014-20241020    gcc-12
-i386                  randconfig-015-20241020    gcc-12
-i386                  randconfig-016-20241020    gcc-12
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                          atari_defconfig    clang-20
-m68k                                defconfig    gcc-14.1.0
-m68k                           sun3_defconfig    clang-20
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                         bigsur_defconfig    clang-20
-mips                     loongson1b_defconfig    clang-20
-mips                          rb532_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-openrisc                       virt_defconfig    clang-20
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc64                            defconfig    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                     asp8347_defconfig    clang-20
-powerpc                     ep8248e_defconfig    clang-20
-powerpc                     tqm8540_defconfig    clang-20
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                          debug_defconfig    clang-20
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                         ap325rxa_defconfig    clang-20
-sh                                  defconfig    gcc-12
-sh                          rsk7264_defconfig    clang-20
-sh                           se7712_defconfig    clang-20
-sh                           se7780_defconfig    clang-20
-sh                        sh7763rdp_defconfig    clang-20
-sh                              ul2_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-18
-x86_64                           allyesconfig    clang-18
-x86_64                              defconfig    clang-18
-x86_64                                  kexec    clang-18
-x86_64                                  kexec    gcc-12
-x86_64                               rhel-8.3    gcc-12
-x86_64                           rhel-8.3-bpf    clang-18
-x86_64                         rhel-8.3-kunit    clang-18
-x86_64                           rhel-8.3-ltp    clang-18
-x86_64                          rhel-8.3-rust    clang-18
-xtensa                            allnoconfig    gcc-14.1.0
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
+new file mode 100644
+index 000000000000..026a835da58e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/vicor,pli1209bc.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/vicor,pli1209bc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Vicor PLI1209BC Power Regulator
++
++maintainers:
++  - Marcello Sylvester Bauer <sylv@sylv.io>
++  - Naresh Solanki <naresh.solanki@9elements.com>
++
++description:
++  The Vicor PLI1209BC is a Digital Supervisor with Isolation for use
++  with BCM Bus Converter Modules.
++
++properties:
++  compatible:
++    enum:
++      - vicor,pli1209bc
++
++  reg:
++    maxItems: 1
++
++  regulators:
++    type: object
++    description:
++      List of regulators provided by this controller.
++
++    properties:
++      vout2:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++
++  additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        regulator@5f {
++            compatible = "vicor,pli1209bc";
++            reg = <0x5f>;
++
++            regulators {
++                p12v_d: vout2 {
++                    regulator-name = "bcm3";
++                    regulator-boot-on;
++                };
++            };
++        };
++    };
++
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 15f89d7ecf73..00361b5cfc3c 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -404,8 +404,6 @@ properties:
+           - ti,tps546d24
+             # I2C Touch-Screen Controller
+           - ti,tsc2003
+-            # Vicor Corporation Digital Supervisor
+-          - vicor,pli1209bc
+             # Winbond/Nuvoton H/W Monitor
+           - winbond,w83793
+ 
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+base-commit: d79616b04f0e08178ceb716a5d2ef60ab723d532
+-- 
+2.42.0
+
