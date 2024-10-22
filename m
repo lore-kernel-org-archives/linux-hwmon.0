@@ -1,100 +1,117 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from bits.crawford.emu.id.au (bits.crawford.emu.id.au [116.255.43.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905DC126BEF;
-	Tue, 22 Oct 2024 09:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FCB18E02D;
+	Tue, 22 Oct 2024 10:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.255.43.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729588414; cv=none; b=F/oow2kx5+n7scaYCY07exwnrO6mFNMBbFe+gVe6GBDwzDOjNrV8mpkf8zksMg6E6f4ihElAChJ1Pw58Ov75+0GHxaZmmkkF2Uzfmsj0rA3dq3FYGJMGVp5ZD7md5AA2nFDLRCq/MiD8ueiWGZnIg/IZpww9727SX6gdLV2uRJ0=
+	t=1729592638; cv=none; b=LCtLKV/Y05coCQ+SbbbL2WrCxw/2aLojWqIYS5QqaFwA5w1e90j6kl5fPVvRI0boB1n7i/PqRPlawMzBnIupJZoIhsVIix7UqOgFDVIe6Efrcw6NuhtoZ9GoEUs1n1pKPaJ+PVhK6BEGwilJSSi0CD/RHsm6wcxNu5RpEJZONHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729588414; c=relaxed/simple;
-	bh=uQcyeGfEjADvn9CvG8A/aNb4Gl2ZXTR8CoS9QNJrcws=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d8/P908FL76NupAvbNeKjWdaenGt5bJ+B4wh7EU3iAou+sdi/nIJq3R+FtP0p3O9vmadF1ZP6aPrj8vpU5DKywUcyG4Bj3hejBfi0y8wqRM8cafyIwkFgWNHmBPr3433NXLv4hRNN/U6rmyjH2SLkBVm1wlGn2LiX8EzkGu2fZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: e2d43bfe905511efa216b1d71e6e1362-20241022
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:b04e0f17-d009-490e-a540-7c357ec1aeba,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:82c5f88,CLOUDID:4510cec1fe48b4281143ad123859e318,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,URL:0
-	,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-	NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e2d43bfe905511efa216b1d71e6e1362-20241022
-Received: from node4.com.cn [(10.44.16.170)] by mailgw.kylinos.cn
-	(envelope-from <aichao@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 48288663; Tue, 22 Oct 2024 17:13:22 +0800
-Received: from node4.com.cn (localhost [127.0.0.1])
-	by node4.com.cn (NSMail) with SMTP id 396041600208F;
-	Tue, 22 Oct 2024 17:13:22 +0800 (CST)
-X-ns-mid: postfix-67176CB1-7483232368
-Received: from localhost.localdomain (unknown [172.25.120.86])
-	by node4.com.cn (NSMail) with ESMTPA id 5EA671600208F;
-	Tue, 22 Oct 2024 09:13:21 +0000 (UTC)
-From: Ai Chao <aichao@kylinos.cn>
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ai Chao <aichao@kylinos.cn>
-Subject: [PATCH v2] hwmon: (it87) Add support for IT8625E
-Date: Tue, 22 Oct 2024 17:13:19 +0800
-Message-Id: <20241022091319.82503-1-aichao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1729592638; c=relaxed/simple;
+	bh=SRqzvbaoKeZkrjxlkdfsxvkrPl82yGUEMUAs26nt2sg=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eASd/NUDR4n9sHWAWdj7/up22t2q+IR6urcTZGEidwStg+E6IL2s3w1f84kW1xz0BGM3xonqVtdIypEhmB+v2UwxZ2D3Le7hD8XwFwGjPAwfGVaaovMkz5HnF/7A1xHQ638Tbg5lhu7SXqaxlKP114PJriDdsYBgEZAUZaoi+sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au; spf=pass smtp.mailfrom=crawford.emu.id.au; dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b=Xy87yng0; arc=none smtp.client-ip=116.255.43.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crawford.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crawford.emu.id.au
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=crawford.emu.id.au header.i=@crawford.emu.id.au header.b="Xy87yng0"
+Received: from agc.crawford.emu.id.au (agc.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc07])
+	(authenticated bits=0)
+	by bits.crawford.emu.id.au (8.18.1/8.17.2) with ESMTPSA id 49MADgsv3932404
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Tue, 22 Oct 2024 21:13:42 +1100
+Authentication-Results: bits.crawford.emu.id.au; arc=none smtp.remote-ip=fdd2:7aad:d478:1::cb10:cc07
+DKIM-Filter: OpenDKIM Filter v2.11.0 bits.crawford.emu.id.au 49MADgsv3932404
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crawford.emu.id.au;
+	s=s1; t=1729592022; bh=o7T3ggDWd/F5kuHCX1ncp7Ta/8DpEI2p5RILtO4r0ng=;
+	h=Subject:From:To:Date:In-Reply-To:References:From;
+	b=Xy87yng0Uz7jalo2f6F+D5NxY//edtgRdctpwbYtg3cMsAsBk+HluLYwAZQ1lN1kG
+	 N7vQJlq5rBIW/swBjC4WiRG+yG0dGtfIgRoq7Zc17KDEug85a9LfotFZBRxJVeeA/A
+	 S91fw9vJ0hP3+m9uktPOkOUu+cCPwhqYJu7X1uGCkZGfX0rVtGPPOdi+GJMGnzZsy3
+	 7K/WW/S5z7e4KzpRU3GB3XqA67/HdQ3JCVO7fseqeWDPl+JoGb0N3KwumDoGoPWpbS
+	 o9JfrPNZPnEd7vhm30tHhClZpNAfvQJEVCpCyqyiklmo98WIeIzgnr0+lKiv5M9J3/
+	 EH7Tmnkur5tgw==
+Message-ID: <6cab565f05820eb2e1a1c55644be057427ecdf2e.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8625E
+From: Frank Crawford <frank@crawford.emu.id.au>
+To: Ai Chao <aichao@kylinos.cn>, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 22 Oct 2024 21:13:42 +1100
+In-Reply-To: <20241022091319.82503-1-aichao@kylinos.cn>
+References: <20241022091319.82503-1-aichao@kylinos.cn>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (bits.crawford.emu.id.au [IPv6:fdd2:7aad:d478:1:0:0:cb10:cc01]); Tue, 22 Oct 2024 21:13:42 +1100 (AEDT)
+X-Virus-Scanned: clamav-milter 1.0.7 at bits.crawford.emu.id.au
+X-Virus-Status: Clean
 
-Add support for IT8625E on Centerm P410.
-
-Signed-off-by: Ai Chao <aichao@kylinos.cn>
----
-change for v2
- - Move IT8625E_DEVID after IT8623E_DEVID
----
- drivers/hwmon/it87.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index e233aafa8856..4aeb09f3bfdf 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -15,6 +15,7 @@
-  *            IT8620E  Super I/O chip w/LPC interface
-  *            IT8622E  Super I/O chip w/LPC interface
-  *            IT8623E  Super I/O chip w/LPC interface
-+ *            IT8625E  Super I/O chip w/LPC interface
-  *            IT8628E  Super I/O chip w/LPC interface
-  *            IT8705F  Super I/O chip w/LPC interface
-  *            IT8712F  Super I/O chip w/LPC interface
-@@ -161,6 +162,7 @@ static inline void superio_exit(int ioreg, bool noexi=
+On Tue, 2024-10-22 at 17:13 +0800, Ai Chao wrote:
+> Add support for IT8625E on Centerm P410.
+>=20
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+> ---
+> change for v2
+> =A0- Move IT8625E_DEVID after IT8623E_DEVID
+> ---
+> =A0drivers/hwmon/it87.c | 3 +++
+> =A01 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index e233aafa8856..4aeb09f3bfdf 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -15,6 +15,7 @@
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8620E=A0 Super I/O chip w/LPC in=
+terface
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8622E=A0 Super I/O chip w/LPC in=
+terface
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8623E=A0 Super I/O chip w/LPC in=
+terface
+> + *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8625E=A0 Super I/O chip w/LPC inte=
+rface
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8628E=A0 Super I/O chip w/LPC in=
+terface
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8705F=A0 Super I/O chip w/LPC in=
+terface
+> =A0 *=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 IT8712F=A0 Super I/O chip w/LPC in=
+terface
+> @@ -161,6 +162,7 @@ static inline void superio_exit(int ioreg, bool noexi=
 t)
- #define IT8620E_DEVID 0x8620
- #define IT8622E_DEVID 0x8622
- #define IT8623E_DEVID 0x8623
-+#define IT8625E_DEVID 0x8625
- #define IT8628E_DEVID 0x8628
- #define IT87952E_DEVID 0x8695
-=20
-@@ -2782,6 +2784,7 @@ static int __init it87_find(int sioaddr, unsigned s=
+> =A0#define IT8620E_DEVID 0x8620
+> =A0#define IT8622E_DEVID 0x8622
+> =A0#define IT8623E_DEVID 0x8623
+> +#define IT8625E_DEVID 0x8625
+> =A0#define IT8628E_DEVID 0x8628
+> =A0#define IT87952E_DEVID 0x8695
+> =A0
+> @@ -2782,6 +2784,7 @@ static int __init it87_find(int sioaddr, unsigned s=
 hort *address,
- 	case IT8622E_DEVID:
- 		sio_data->type =3D it8622;
- 		break;
-+	case IT8625E_DEVID:
- 	case IT8628E_DEVID:
- 		sio_data->type =3D it8628;
- 		break;
---=20
-2.25.1
+> =A0 case IT8622E_DEVID:
+> =A0 sio_data->type =3D it8622;
+> =A0 break;
+> + case IT8625E_DEVID:
+> =A0 case IT8628E_DEVID:
+> =A0 sio_data->type =3D it8628;
+> =A0 break;
 
+Can I just add that it isn't a good idea to use the same type for
+different chips.  There are some specific differences between the
+chips, which mean that it should have its own entry in
+
+static const struct it87_devices it87_devices[]
+
+even if currently they are very similar.
+
+Even one of the most basic items is that it will report the wrong
+chipID in the logs.
+
+Regards
+Frank
