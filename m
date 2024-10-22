@@ -1,55 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA3513E41A;
-	Tue, 22 Oct 2024 20:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EC53EA83;
+	Tue, 22 Oct 2024 20:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729628882; cv=none; b=UHz64Jt3cimMBYmbO66rQS+Kat+C+ZAiMZrhnnwXJAav0qYuhX3RrJn9IUBq4u/3W0GKA7EQb9kuPADxLn8gVmYptRE4iHGyvcRrsNX2AoVofOYQgAmGhb6b54bbMmgSvNIN2yfNCoC9QaPqEiWQNP4F6PGRdoVpR7wwjm9u4/s=
+	t=1729630290; cv=none; b=qT0xP2mdrL3p8zNZmleEsQVNJbJVG6ZBAUsz/d2b/2r9phbRX7lx/IatZFjPeRQkkMTQMEYRjZ0PlyyIqra0jWF/kA7ge5NcVxcZcTkBQuA0uj6XAPV3mxhRBzJbG/OMN40+FHA3eH1WUVpGKm9bhIaOVG1NZjAz75Rhx6NLBHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729628882; c=relaxed/simple;
-	bh=eB+G15xfaY4bHAPIyob9xvK0LsnVIUuRF0OF6XIwSEQ=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=TI3WVxxTijB3K1sSsYjK1kVCMilrWCUBF2n1MzZpG4mIi89pXpvT1IR+brynHHs6jz9r7R354pHz0PczVUrJR5pZ2qwNQRcKmUwK90h4aOEBPyXx6CbZjD8Iy456sJuaxtZxHBiK8+1JmvbzSCam27nOs8xtbPqS3WwiLm0lkzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oyA5vfY3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729630290; c=relaxed/simple;
+	bh=T7ynAVUY7DBCuv9NfDUAka/Z40tskGF/joAaV59XcUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KpcA4U7lWzbq8nALI9LXmU3Z/+KqXsA3LDiw2Prsk65oecFxfzGjdqKihqB33KEym02vRhNO1r5OXiVgc9pSzaj0jUJ8rQG73gi6NZVaIXMAZ/Z814uTdpXL6e7qUIs9ogDKzWxjcKUTkBJkmqkjDEw0Htd9picIkL1Zljcph1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=knKEmJZS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oyA5vfY3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF61C4CEC3;
-	Tue, 22 Oct 2024 20:28:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="knKEmJZS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942B2C4CEC3;
+	Tue, 22 Oct 2024 20:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729628880;
-	bh=eB+G15xfaY4bHAPIyob9xvK0LsnVIUuRF0OF6XIwSEQ=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=oyA5vfY3xmzutNmxhHDfHhD0LRUw7ZwCdefnjwc42G5VgXqDOSnSmWcd0g/XwCyOi
-	 z352UWpX42p1RWHKZ3uLYJBilvmkmzDSWNxLCka1q96LMzoPN0c2vbBDOnvou5em5j
-	 CC+ONX8dpGatg5e8Nw/jAfMkNndbGCTf2bRxQ3bxC+maEIJeH2gkbDd5Nlr7vprKOy
-	 phBc7C6t8CU6ROL9ldCWPo23gXYavat5jlf+Li5Y87CGOKw/AIOtCTOSeCjYEF5U3c
-	 JR45eOUvI3ZlA9Yw1TOF4o/5uvyTLO4JsiCdmpryhxmBnywunEVMQkwlzsossceo7r
-	 ms2rIpPaqUj9A==
-Date: Tue, 22 Oct 2024 15:27:59 -0500
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1729630289;
+	bh=T7ynAVUY7DBCuv9NfDUAka/Z40tskGF/joAaV59XcUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=knKEmJZSYqLQIaaZtBeoA41e4uMeb1eqHSRrGS7kcS/+Jfxekw/2eakFDBBQKzZez
+	 /NXwau8cr/9XvQmLfD+Oi6y0n+7jvK+9ktTVjiYfQD3uiNqOSrNHATLxPhUiwHhBib
+	 EUSxFkiBfIe71nS+MYEND4mul3aAop5nIpWeIXPj0aFMykCu4b4qYZbkXF2+r094KI
+	 lW/c7X5GHxsIaSZv4LDwDnjtqtYP6iYuZwNQwdwYkO9ZJSco8oYUfCIcs+ytFy+UST
+	 UjVtxyfwyy3arDvWIpxqpQkD0oOg03rFr+dJQwo2QkFc8xRd94TK4p7LqoavNu3gex
+	 Kw0Sg/jaSXsaA==
+Date: Tue, 22 Oct 2024 15:51:28 -0500
+From: Rob Herring <robh@kernel.org>
+To: Grant Peltier <grantpeltier93@gmail.com>
+Cc: linux@roeck-us.net, geert+renesas@glider.be, magnus.damm@gmail.com,
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <20241022205128.GA1535894-robh@kernel.org>
+References: <cover.1729622189.git.grantpeltier93@gmail.com>
+ <858d8af3ae9d15b62e36dc3deb50275f9c9869b0.1729622189.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Grant Peltier <grantpeltier93@gmail.com>
-Cc: brandon.howell.jg@renesas.com, linux@roeck-us.net, 
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
- grant.peltier.jg@renesas.com, magnus.damm@gmail.com, 
- geert+renesas@glider.be, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <858d8af3ae9d15b62e36dc3deb50275f9c9869b0.1729622189.git.grantpeltier93@gmail.com>
-References: <cover.1729622189.git.grantpeltier93@gmail.com>
- <858d8af3ae9d15b62e36dc3deb50275f9c9869b0.1729622189.git.grantpeltier93@gmail.com>
-Message-Id: <172962887960.1517973.1871578164946455870.robh@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: isl68137: add bindings to
- support voltage dividers
 
-
-On Tue, 22 Oct 2024 14:25:39 -0500, Grant Peltier wrote:
+On Tue, Oct 22, 2024 at 02:25:39PM -0500, Grant Peltier wrote:
 > Add devicetree bindings to support declaring optional voltage dividers to
 > the rail outputs of supported digital multiphase regulators. Some
 > applications require Vout to exceed the voltage range that the Vsense pin
@@ -63,33 +62,157 @@ On Tue, 22 Oct 2024 14:25:39 -0500, Grant Peltier wrote:
 >  1 file changed, 133 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+> new file mode 100644
+> index 000000000..12004da53
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+> @@ -0,0 +1,133 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas Digital Multiphase Voltage Regulators with PMBus
+> +
+> +maintainers:
+> +  - Grant Peltier <grant.peltier.jg@renesas.com>
+> +
+> +description:
 
-My bot found errors running 'make dt_binding_check' on your patch:
+You need '>' to preserve paragraphs.
 
-yamllint warnings/errors:
+> +  Renesas digital multiphase voltage regulators with PMBus.
+> +
+> +  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - renesas,isl68137
+> +      - renesas,isl68137
+> +      - renesas,isl68220
+> +      - renesas,isl68221
+> +      - renesas,isl68222
+> +      - renesas,isl68223
+> +      - renesas,isl68224
+> +      - renesas,isl68225
+> +      - renesas,isl68226
+> +      - renesas,isl68227
+> +      - renesas,isl68229
+> +      - renesas,isl68233
+> +      - renesas,isl68239
+> +      - renesas,isl69222
+> +      - renesas,isl69223
+> +      - renesas,isl69224
+> +      - renesas,isl69225
+> +      - renesas,isl69227
+> +      - renesas,isl69228
+> +      - renesas,isl69234
+> +      - renesas,isl69236
+> +      - renesas,isl69239
+> +      - renesas,isl69242
+> +      - renesas,isl69243
+> +      - renesas,isl69247
+> +      - renesas,isl69248
+> +      - renesas,isl69254
+> +      - renesas,isl69255
+> +      - renesas,isl69256
+> +      - renesas,isl69259
+> +      - renesas,isl69260
+> +      - renesas,isl69268
+> +      - renesas,isl69269
+> +      - renesas,isl69298
+> +      - renesas,raa228000
+> +      - renesas,raa228004
+> +      - renesas,raa228006
+> +      - renesas,raa228228
+> +      - renesas,raa229001
+> +      - renesas,raa229004
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^channel@([0-3])$":
+> +    type: object
+> +    description: |
+> +      Represents
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml: properties:compatible:enum: ['renesas,isl68137', 'renesas,isl68137', 'renesas,isl68220', 'renesas,isl68221', 'renesas,isl68222', 'renesas,isl68223', 'renesas,isl68224', 'renesas,isl68225', 'renesas,isl68226', 'renesas,isl68227', 'renesas,isl68229', 'renesas,isl68233', 'renesas,isl68239', 'renesas,isl69222', 'renesas,isl69223', 'renesas,isl69224', 'renesas,isl69225', 'renesas,isl69227', 'renesas,isl69228', 'renesas,isl69234', 'renesas,isl69236', 'renesas,isl69239', 'renesas,isl69242', 'renesas,isl69243', 'renesas,isl69247', 'renesas,isl69248', 'renesas,isl69254', 'renesas,isl69255', 'renesas,isl69256', 'renesas,isl69259', 'renesas,isl69260', 'renesas,isl69268', 'renesas,isl69269', 'renesas,isl69298', 'renesas,raa228000', 'renesas,raa228004', 'renesas,raa228006', 'renesas,raa228228', 'renesas,raa229001', 'renesas,raa229004'] has non-unique elements
-	hint: "enum" must be an array of either integers or strings
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml: $id: 'http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml' does not match 'http://devicetree.org/schemas/.*\\.yaml#'
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml: ^channel@([0-3])$: Missing additionalProperties/unevaluatedProperties constraint
+???
 
-doc reference errors (make refcheckdocs):
+> +
+> +    properties:
+> +      reg:
+> +        description: |
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/858d8af3ae9d15b62e36dc3deb50275f9c9869b0.1729622189.git.grantpeltier93@gmail.com
+Don't need '|' if there's no formatting.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> +          The channel (rail) index.
+> +        items:
+> +          minimum: 0
+> +          maximum: 3
+> +
+> +      vout-voltage-divider:
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Needs a vendor prefix.
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> +        description: |
+> +          Resistances of a voltage divider placed between Vout and the voltage
+> +          sense pin for the given channel (rail). It has two numbers
+> +          representing the resistances of the voltage divider provided as
+> +          <R1 R2> which yields an adjusted Vout as
+> +          Vout_adj = Vout * (R1 + R2) / R2 given the original Vout as reported
+> +          by the Vsense pin.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +        minItems: 2
+> +        maxItems: 2
+> +
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      isl68239@60 {
+> +        compatible = "renesas,isl68239";
+> +        reg = <0x60>;
+> +      };
+> +    };
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      isl68239@60 {
+> +        compatible = "renesas,isl68239";
+> +        reg = <0x60>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        channel@0 {
+> +          reg = <0>;
+> +          vout-voltage-divider = <1000 1000>;  // Reported Vout/Pout would be scaled by 2
+> +        };
+> +      };
+> +    };
+> -- 
+> 2.39.5
+> 
