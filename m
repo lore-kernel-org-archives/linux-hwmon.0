@@ -1,61 +1,61 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CD919DF8B;
-	Tue, 22 Oct 2024 13:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907BE1A0BFE;
+	Tue, 22 Oct 2024 15:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729604463; cv=none; b=l/miD0NaQE9ObFK0al/leYByYoeCclBoKDzUzvbhb9qoRY9B18oAwDxBXbuCUCQBV/8I9G7rfz6cXQaMeXr0f2iUgxH4+Cf7DoXLPCIBs4c+oPT1k50+gOma2nx5jfVbvIgkKlpITeylF/UpK9Dhl5m/Fp1ELrw61+EftUl+7Zg=
+	t=1729610061; cv=none; b=J/aYU4u2YuR1B27wDJYPppd4+qOHQQHX/gNROr0gugNR056BjVpo8VuhGywVhungWsMz53TQSeE7I6ki2vdR1NCO24kRvvPmaeEBaWgN1HIbNp0YTRZiU4WVMvTuHLtWc382d5et6fRfuKdLgxqeWEHDcoMRDuZ+u7mcWZmLSk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729604463; c=relaxed/simple;
-	bh=4O/7KDxMFjOWDBpuAEtR0doNNDjMTMvF+Fwhzdn5MFI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=KGZZrcPPVK3/Wxe44Uod5zCjGxyZy/zaF/64AMjT9tEk7Ylf35Pp45cxxAhoiiUGcexdtNlFjX+LlCZQqx0AXkjy2VeZcgJwqW1SVFJB4WnbaO9v5RpDShcuFPDwva+2eSolT/gfJat1DAnnnpA2frPKiYmVFG1/+qJdv4bDfkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AEei8IEg; arc=none smtp.client-ip=209.85.215.173
+	s=arc-20240116; t=1729610061; c=relaxed/simple;
+	bh=GO9vmWxSWOv2/g83ik6OUO02XbMUtx8PCovxiIgB4kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hsCG1o5GawSkaD7+FkkR2HeSqWQG4+M9VxC0oLXBCzhvb+cihiMpZxZKBg7VY4rM/m/n1NZkEuawWUxSXtupClF6+DHVU3e0gBnp3tD+iRR3y/ok1j4QE6irNHNFvyw2Q6KBHChM1klIgG5bsfqGIwo06HDgnlrAcrxVIhhXZUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPdHjBtl; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AEei8IEg"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7163489149eso4296446a12.1;
-        Tue, 22 Oct 2024 06:41:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPdHjBtl"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7ae3d7222d4so4299303a12.3;
+        Tue, 22 Oct 2024 08:14:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729604460; x=1730209260; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729610059; x=1730214859; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SfKItWQUZx73+PacVcMxGJfBO/K3tCWg/hGLlJ6Cx/E=;
-        b=AEei8IEghpHSBteTG+VFyEE7ZDEWkVOqCx3e8s2HipNwJF706ABuRgecz0wlvAsvM1
-         9kbManEo9Fyzy32ghoKrrc050rLzxSj3/6hvchTRmTSOSuIMfKAntIiWEfxnVodQd4O2
-         MtmHtdFoSrnEGJ3x5TUicq7A5g1qkNEbk7DKBHRXaL52oRF1Cd8pvKl8WT/1zwpHkCog
-         2dnhhNWA2/wGjlC4u08vgtP3E+FRPEqZHP8W9cAy2W4wdwwvPrrKqfHzihiehGtZYBuI
-         dozPaoMZHVcCQJjy17PglrcmN4fioba/UuFjupqV69twLrFWRr5zUv0K3VAi2x+lXbFy
-         bkZw==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=NW/rEIqVYk20Bagh13hOd3nJbOnRwuYybRFg+LGZWqs=;
+        b=mPdHjBtlO8cDDToQNjFq7klQfYaP4xq3aqTRxpspIvIi9JpBrAUGn3NnhK9IooMmuq
+         0xi6C+jYHLrmahG+l95a7fYOWHBNvq3sWtaEUD2tug41nr+pOU5ievU2CRmmazTi7n2Y
+         3UrXPKBhD5sfEJs5AbRxTVHjNuV7mbAnGlN+U952nxXW8/H/94qNezs2jLdfqL5I1RIi
+         8+tXTC5c8hDfFGeJNd/MDMRRkXOcQ2I88rQZu2I5yFDpCGzKdyT8Ik3UAwzoSgrXb1MQ
+         CmfkASuRPHMZmyvalleCyRlhtjpOvnUIIaVNr1D8goXQC44BWjC7qu55MhAMsiyDiD2e
+         iPBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729604460; x=1730209260;
+        d=1e100.net; s=20230601; t=1729610059; x=1730214859;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SfKItWQUZx73+PacVcMxGJfBO/K3tCWg/hGLlJ6Cx/E=;
-        b=MJ269YCp6IUytpv95BeW196zRN6mnfBPoYE03gjDkE4ze+++fF9C+csmhlo5vJkWKG
-         UDVXTPAtFX8JAHMCjpEav7bo9uMHBe389x2v6jRiiJL563mIO1/UoV3GRFJyiI7RdoHx
-         Uk+F3jHGDNV5wGSII/kdr0ZZFYhBGRqLT2ieB3r1XU+bcbznecP+fbZ7FuaZdGp+Kb2T
-         KaqIhG77nmRJaGHeiPMblNW5KNw0vDjetPRygZhAUZueMpYfFjiDnAWihDFpzrxiS2E6
-         h0Qt8J8yG6VgccfzMy1SBaH1WZDx0PYsih7tHO5xph2WgmT0B/+kd6fkHdBrKhXBXJgR
-         9Enw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3YKqRnnvUSkQTSfcqWKcW5abNNda6T40/WaF0gD+2ZxlbtEqQVCQDwJqJCritHrYwlhRHteIsVtYZyD/t@vger.kernel.org, AJvYcCUxUSKwnUyy8vaHL05QITuT/UEJ33zVNo3qbKkuF1008uX+lG1yGbm1AN3Bw0VLUoczQUEYMy3mI07xjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf3GdHRUIv0dRB1HykvvqV7yx2z56zX+ta4BAQDWIJD8N9a25U
-	qKM6OY/8yMfIE5qkxjm6wiQVZDbCZBE9E5AUWMNZ3I16CEjWjfeH1x0Tew==
-X-Google-Smtp-Source: AGHT+IGkwA982N++bVwNeezp1PgWJoM9VWLHxnVhoatXhk75PGwXZ3DQBAHbwC8dPkp9X7vV0vZrLg==
-X-Received: by 2002:a05:6a21:3a94:b0:1d9:21c7:5af7 with SMTP id adf61e73a8af0-1d92c4e0698mr21643709637.15.1729604460347;
-        Tue, 22 Oct 2024 06:41:00 -0700 (PDT)
+        bh=NW/rEIqVYk20Bagh13hOd3nJbOnRwuYybRFg+LGZWqs=;
+        b=kW5M0T7+j8XA+oIAy7SfvCSrKehcOuFnNfJ/ekop0/D8NBpalz7K6Z7iEVl7gtsDFt
+         jtRP2KKJAOfkFC9tnGyDNq6fiNme2rQMLEpp/9dQ86ZXPNiC/4j/G2GOOKR50wvOx162
+         Y9KvmcTZtf261gM3Gpz9SUuLARU4pPA2qGtUb9fkEEAZ5F56osBbY56t0M03WHyp/fkx
+         LB7iWgvHGnePdE2I1fzpJFNFcTHo/swOCB+w/ubKiFWcgKKjR0ZOo7VeFXlX1kaiE/17
+         MipT/XR5fTKM8ZNzI+GT7YZGSm94faBrkk7oqdfTr4CiNhfkqim3YCV9uu4mwAYdVxIu
+         hKwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhLySQyaTmYe1hcS/TQxxLaayQX0ofirzXbZu0y+GV4NpssOcHj0RR9gIxtoVe23fM8sZg9nPq+5KD+2yL@vger.kernel.org, AJvYcCXIFsiq1VKrMLMJP/h7dcRKnnv6wow2+TodNlO69Bca1cixcMIrg9DiFyxTs8acSdLjhxCgoUZlIejZ@vger.kernel.org, AJvYcCXqT0miyiyAfmU3CgxKbqs3y8afsZ1HmHWcrqubVwPt/g+ORFiWjhdZRXbByF6Nm5VeHYwviRZToSHW@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDZg9b8NE0aqnv/U9OgLHtYgC/SXj4/GbeO/dHCwlBxghcekRp
+	7LpqOab042INdrdc8p4XIk9v6UIvDYoxJMocM8QAAXkTmpFrf93GYmu3fg==
+X-Google-Smtp-Source: AGHT+IEyly+eku+lEevkwvNw0Dq8/4qrGbtFxG7XfkvLcDDrgen1PINyCP0GLvsiXBtPJMqUnrWhSw==
+X-Received: by 2002:a17:90b:4c12:b0:2e2:ffb0:89f6 with SMTP id 98e67ed59e1d1-2e5ddb7018amr3032961a91.15.1729610058716;
+        Tue, 22 Oct 2024 08:14:18 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec1407f3csm4705988b3a.211.2024.10.22.06.40.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5ad25cb0asm6329691a91.10.2024.10.22.08.14.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 06:40:59 -0700 (PDT)
+        Tue, 22 Oct 2024 08:14:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <300383ee-3ead-439e-893e-895f3ed49805@roeck-us.net>
-Date: Tue, 22 Oct 2024 06:40:57 -0700
+Message-ID: <f6846ac5-55ee-405c-939b-1199ea362fb5@roeck-us.net>
+Date: Tue, 22 Oct 2024 08:14:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,11 +63,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8625E
-To: Frank Crawford <frank@crawford.emu.id.au>, Ai Chao <aichao@kylinos.cn>,
- jdelvare@suse.com, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241022091319.82503-1-aichao@kylinos.cn>
- <6cab565f05820eb2e1a1c55644be057427ecdf2e.camel@crawford.emu.id.au>
+Subject: Re: [PATCH v6 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, baneric926@gmail.com,
+ jdelvare@suse.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com,
+ DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
+References: <20241022052905.4062682-1-kcfeng0@nuvoton.com>
+ <20241022052905.4062682-3-kcfeng0@nuvoton.com>
+ <2339841b-034b-440f-83ac-139d95059727@wanadoo.fr>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,67 +119,23 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <6cab565f05820eb2e1a1c55644be057427ecdf2e.camel@crawford.emu.id.au>
+In-Reply-To: <2339841b-034b-440f-83ac-139d95059727@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/22/24 03:13, Frank Crawford wrote:
-> On Tue, 2024-10-22 at 17:13 +0800, Ai Chao wrote:
->> Add support for IT8625E on Centerm P410.
->>
->> Signed-off-by: Ai Chao <aichao@kylinos.cn>
->> ---
->> change for v2
->>   - Move IT8625E_DEVID after IT8623E_DEVID
->> ---
->>   drivers/hwmon/it87.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
->> index e233aafa8856..4aeb09f3bfdf 100644
->> --- a/drivers/hwmon/it87.c
->> +++ b/drivers/hwmon/it87.c
->> @@ -15,6 +15,7 @@
->>    *            IT8620E  Super I/O chip w/LPC interface
->>    *            IT8622E  Super I/O chip w/LPC interface
->>    *            IT8623E  Super I/O chip w/LPC interface
->> + *            IT8625E  Super I/O chip w/LPC interface
->>    *            IT8628E  Super I/O chip w/LPC interface
->>    *            IT8705F  Super I/O chip w/LPC interface
->>    *            IT8712F  Super I/O chip w/LPC interface
->> @@ -161,6 +162,7 @@ static inline void superio_exit(int ioreg, bool noexit)
->>   #define IT8620E_DEVID 0x8620
->>   #define IT8622E_DEVID 0x8622
->>   #define IT8623E_DEVID 0x8623
->> +#define IT8625E_DEVID 0x8625
->>   #define IT8628E_DEVID 0x8628
->>   #define IT87952E_DEVID 0x8695
->>   
->> @@ -2782,6 +2784,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
->>    case IT8622E_DEVID:
->>    sio_data->type = it8622;
->>    break;
->> + case IT8625E_DEVID:
->>    case IT8628E_DEVID:
->>    sio_data->type = it8628;
->>    break;
+On 10/22/24 00:20, Christophe JAILLET wrote:
+[ ... ]
+>> +    hwmon_dev =
+>> +        devm_hwmon_device_register_with_info(dev, client->name, data,
+>> +                             &nct7363_chip_info, NULL);
 > 
-> Can I just add that it isn't a good idea to use the same type for
-> different chips.  There are some specific differences between the
-> chips, which mean that it should have its own entry in
-> 
-> static const struct it87_devices it87_devices[]
-> 
-> even if currently they are very similar.
+> return devm_hwmon_device_register_with_info()?
 > 
 
-According to the information I have, the ADC voltage is different,
-and 8628 supports PECI but 8625 doesn't. Most importantly, 8625
-has multiple register banks. There are also some differences in
-fan control; 8628 can explicitly turn fans off using register bits.
-
-Just mapping the chip to it8628 may be convenient, but it is not
-acceptable.
+No, because the function needs to return an integer, not a pointer.
+And
+	return PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(...));
+would look a bit awkward.
 
 Guenter
 
