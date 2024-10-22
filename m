@@ -1,70 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29C6225D6;
-	Tue, 22 Oct 2024 05:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35471465BB;
+	Tue, 22 Oct 2024 07:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729575029; cv=none; b=uzRq6ZeEtDR2soRA5KPHweb/bK0n4V9KBoz1/xb3djs86T/uZuKzz79/X/PC4BwIEZqXT1OzQTQnrFsd/LqEYrRz9Jo+ndZSTabPukLWFVMxy3Gla7+vK2vd6XBBV3RpnxnekDy7M01eFm+ahRFrdArNBh401p6RC5EPaMdgGjw=
+	t=1729581705; cv=none; b=oLfTmmOk4e2IIzHr5RoCGknhb7BgqdzbjtPAt9b6KWjHuRTVnPBNeOs0HtkLT4ThQYBqnmPt0vX1Aa9uDZ1Q3ordIw6g9E2mMx2desHh8JzeDxWs2urKAKZwCrfkaZMbb1H2PomMsdsbexzmhehCmxWWvfFbrk9As+vLbErN9uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729575029; c=relaxed/simple;
-	bh=OhuEP3iAmT3aVRy1EVC97fMg4aiD6lXm5gqGEzG6WIY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ChAHuGHBlclyHOPVyzea+x3dK6IQZdXypHrSKiwTfmF49Tdw1IAzBnf5dIpxwnciModUxo5zOec/+n6APoPo9tNtRXwH0iJtu9hz82zvj2t4cbNHSCnHcdfs6RnhjmHAzOj6ttT3Yi6llX1JnTgoTZYqSLJ/gj4n/nuXYyMs2Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdeJe7zu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729581705; c=relaxed/simple;
+	bh=mncV6XjcLUPuWRXPPqMYWxkt3/1zcuG6fht9FXcpTgo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pBKK5tJPN5YHV2Od2j9kBexQe66RBuC2D3ghdhh08qwVU7nDu6YC0ElzoaTxSE1JXN04jHjv8vFNlUBqF2d2qZRASlNvkE2gtltgCzJ2qngFUQzkhH59fh4aiFPjirAeoyNLr3JVYnQduQD7rSkqEpXt42R1nGuuauxJOXOrjEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=E4xyxVML; arc=none smtp.client-ip=80.12.242.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdeJe7zu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8300BC4CEC3;
-	Tue, 22 Oct 2024 05:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729575028;
-	bh=OhuEP3iAmT3aVRy1EVC97fMg4aiD6lXm5gqGEzG6WIY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hdeJe7zuMVC0rx/cef/VKjc06YSYGx+9FB99smfpTncLLzqB8sv5+jsoArBSblOfz
-	 7yYM1be2/XbC2qpoFPEP7+e4RgFd1j0P29PdYWhDf9RhoxwFQ82dmKRnrNQjuUVY/v
-	 9EWJpY6W11EQZjRVfmOPgAqERNR82pcbMdhJPK3NjvH5fPxkIy2hKYc+Gu11gcbzRI
-	 yZTnfspjzdlVHwZHXk8UofNmgQ/R+BwEQ/dKfamx1u745d7s/rHaKqqk63sGmEbGsS
-	 n+EOSz/zscq2bTbmw95+zFuYUEMXMP5cgMR2LcYUvqLeogxHmroirvE9mRF4IklxMd
-	 0Ll8t0pN6KThw==
-Date: Tue, 22 Oct 2024 07:30:24 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, jdelvare@suse.com, 
-	linux@roeck-us.net, sylv@sylv.io, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: hwmon: pmbus: Add bindings for Vicor
- pli1209bc
-Message-ID: <nruailq552fzhxfmahtlzkw3smqkvi373htlmfbcvbxjqybfh6@g4jzuyiabw3c>
-References: <20241021123044.3648960-1-naresh.solanki@9elements.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="E4xyxVML"
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id 39BptoyFQvtq839BptCJaI; Tue, 22 Oct 2024 09:20:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1729581629;
+	bh=jbeACBlKmPATg9TY9lfakh5orbRiwjpJqN6f+njt1iU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=E4xyxVMLGKUcuxP9Sl0vRgZc8l0ppDa1X8iJXl/F+xBewJYFCUrXgS+sUyBezfk5U
+	 Uo810xRWboULP0HeTAVTmKN19iCzuPNiAkfW32RFTzPSYKvkgO5Z/s5gze4X6u0nMq
+	 UN+sn1Rt6q2kL1shkVZv7RYhi5OrX/sC3CxWjkTAkzau2dHj01iI6NJrjwRvqhc8pU
+	 fQ/9FChq06JTrKg16ixQo8zC0l55lsoCRNi+ZSVHSMRx2xEPMK6tPpnnE4LuLe22yl
+	 eUJXPrm/wgxLYv5tFrsUkcABOFbjShqMINvfVV90uT2xRwTHTvbm8vWUkXgAomPul8
+	 E/bUg2KN5infw==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 22 Oct 2024 09:20:29 +0200
+X-ME-IP: 90.11.132.44
+Message-ID: <2339841b-034b-440f-83ac-139d95059727@wanadoo.fr>
+Date: Tue, 22 Oct 2024 09:20:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241021123044.3648960-1-naresh.solanki@9elements.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
+To: baneric926@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com,
+ DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
+References: <20241022052905.4062682-1-kcfeng0@nuvoton.com>
+ <20241022052905.4062682-3-kcfeng0@nuvoton.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20241022052905.4062682-3-kcfeng0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 21, 2024 at 06:00:43PM +0530, Naresh Solanki wrote:
-> Remove vicor,pli1209bc from trivial-devices as it requires additional
-> properties and does not fit into the trivial devices category.
+Le 22/10/2024 à 07:29, baneric926@gmail.com a écrit :
+> From: Ban Feng <kcfeng0@nuvoton.com>
 > 
-> Add new bindings for Vicor pli1209bc, a Digital Supervisor with
-> Isolation for use with BCM Bus Converter Modules.
+> The NCT7363Y is a fan controller which provides up to 16
+> independent FAN input monitors. It can report each FAN input count
+> values. The NCT7363Y also provides up to 16 independent PWM
+> outputs. Each PWM can output specific PWM signal by manual mode to
+> control the FAN duty outside.
 > 
-> VR rails are defined under regulator node as expected by pmbus driver.
-> 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 > ---
-> Changes in V3:
-> - Fix indentation
-> Changes in V2:
-> - Squash the two patch in patch into one.
-> - Update commit message.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Best regards,
-Krzysztof
+a few nitpick, should there be a v7 and if they make sense to you.
+
+> +static const struct of_device_id nct7363_of_match[] = {
+> +	{ .compatible = "nuvoton,nct7363", },
+> +	{ .compatible = "nuvoton,nct7362", },
+> +	{ },
+
+Usually, a comma is not added after a terminator entry.
+
+> +};
+> +MODULE_DEVICE_TABLE(of, nct7363_of_match);
+> +
+> +struct nct7363_data {
+> +	struct regmap		*regmap;
+> +
+> +	u16			fanin_mask;
+> +	u16			pwm_mask;
+> +};
+> +
+> +static int nct7363_read_fan(struct device *dev, u32 attr, int channel,
+> +			    long *val)
+> +{
+> +	struct nct7363_data *data = dev_get_drvdata(dev);
+> +	unsigned int reg;
+> +	u8 regval[2];
+> +	int ret = 0;
+
+No need to init.
+
+> +	u16 cnt;
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		/*
+> +		 * High-byte register should be read first to latch
+> +		 * synchronous low-byte value
+> +		 */
+> +		ret = regmap_bulk_read(data->regmap,
+> +				       NCT7363_REG_FANINX_HVAL(channel),
+> +				       &regval, 2);
+> +		if (ret)
+> +			return ret;
+> +
+> +		cnt = (regval[0] << 5) | (regval[1] & NCT7363_FANINX_LVAL_MASK);
+> +		*val = fan_from_reg(cnt);
+> +		return 0;
+> +	case hwmon_fan_min:
+> +		ret = regmap_bulk_read(data->regmap,
+> +				       NCT7363_REG_FANINX_HL(channel),
+> +				       &regval, 2);
+> +		if (ret)
+> +			return ret;
+> +
+> +		cnt = (regval[0] << 5) | (regval[1] & NCT7363_FANINX_LVAL_MASK);
+> +		*val = fan_from_reg(cnt);
+> +		return 0;
+> +	case hwmon_fan_alarm:
+> +		ret = regmap_read(data->regmap,
+> +				  NCT7363_REG_LSRS(channel), &reg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		*val = (long)ALARM_SEL(reg, channel) > 0 ? 1 : 0;
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+
+...
+
+> +static int nct7363_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device_node *child;
+> +	struct nct7363_data *data;
+> +	struct device *hwmon_dev;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->regmap = devm_regmap_init_i2c(client, &nct7363_regmap_config);
+> +	if (IS_ERR(data->regmap))
+> +		return PTR_ERR(data->regmap);
+> +
+> +	for_each_child_of_node(dev->of_node, child) {
+
+for_each_child_of_node_scoped() to slightly simplify code and save a few 
+lines?
+
+> +		ret = nct7363_present_pwm_fanin(dev, child, data);
+> +		if (ret) {
+> +			of_node_put(child);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	/* Initialize the chip */
+> +	ret = nct7363_init_chip(data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	hwmon_dev =
+> +		devm_hwmon_device_register_with_info(dev, client->name, data,
+> +						     &nct7363_chip_info, NULL);
+
+return devm_hwmon_device_register_with_info()?
+
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+
+...
+
+CJ
 
