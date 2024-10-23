@@ -1,41 +1,35 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.notyourfox.coffee (mail.notyourfox.coffee [92.63.193.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2C213B7BE;
-	Wed, 23 Oct 2024 22:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8717A156C6F;
+	Wed, 23 Oct 2024 22:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.63.193.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729722301; cv=none; b=foYGMyaYGuzCgjEnumqqz+MmxO6K6S7HMqmte4ltuCl073Tt9IlF5GgXZS9VtcDAGDyIhq2tg0HmRQCumUPqdRCMFgZ7k9cWHarjZAV/mmYzaFWTxVeal4q6UzKLTPNxlgZjkXO21w7CXwVa9SHJZA6gFsOoS7RM2gghTsAlIXU=
+	t=1729722716; cv=none; b=q3vuSn1p3c97UrS+1/8igS+d2zV4MGkUzQfYPYZIYixRDNsplNqK39LH+qM8YoPgUyVu5EwEmPDYFcd6+CatuaTVawmofLVbxFQxt9AqpvHP8+wTt46WdgEryR5bMgUOaISxgxIajJGTJC04h36+czba5ZlGhvJ627LfhA+TeH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729722301; c=relaxed/simple;
-	bh=OQBKlEE0ABXql7WTGw1oZWICI3HlfF4Y4Noq0IQc2hU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MQJXZjk0d/ScN2uFdowZreoDUCRPucRCviNOdtXz9o3o0ge34aG783F7T7QVUxlElngiUWEWpXLagY39uJcDZXt7wG1lmmCzoHoFAxjCay1A8yHsSpQnoAwVlSjrAS1nFXsNaAuMTYaXfQXX6C6s4PVhWOyNxBY4/ZG8irLQdh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Jcjj2vrw; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1729722716; c=relaxed/simple;
+	bh=lBqM5PBwzs7x9XceHQ9rfZgT7htaBeYa/E3GDqF9nXU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=WB337mOGkhic3fNsyKeUY7XtqugTyJsmFsSwSXo+scTxrZOwEvZkXdfnUsuqYjTgMwE155hCPJ2faWh84m5/LKqT2Mse7TfJMF8c0nWdTNaKuFnMlsxgqfQnWtG3m2G2BY63BNs6CnC016blMzFzw7YYwwhNgFw36Wc44zyzKX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=notyourfox.coffee; spf=pass smtp.mailfrom=notyourfox.coffee; dkim=pass (2048-bit key) header.d=notyourfox.coffee header.i=@notyourfox.coffee header.b=Qzx5NnIV; arc=none smtp.client-ip=92.63.193.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=notyourfox.coffee
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=notyourfox.coffee
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Jcjj2vrw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1729722282; x=1730327082; i=w_armin@gmx.de;
-	bh=OQBKlEE0ABXql7WTGw1oZWICI3HlfF4Y4Noq0IQc2hU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Jcjj2vrwsyxb0LaRM3d8qHMEt1S5NQcYmvXykU97XkBmxsn+GJngmoZYsmtbLPiJ
-	 lUk0uBa/6iGA0hP1O1YDbT+jzEODzXOyp+42ypBBkoJgMWg3kpy2YN95NuX0ZcpyI
-	 4nQGJcA+N175kc2Yn4oA2Vm2NzVXb6XjX8JimN2k/xpneODzVGCL9gGHB4K3gZKN7
-	 34kPgnZGR3BUfRlteNGoJD9Hi5u5eM5Ryhd7mG4cEsxaAJQwfGeiHGK+D+5TzFC7K
-	 0CnRwYgKZRFh75BW58gJx9+kYN9FMjkHN7R89EoCB8MvMYZg1QHYfosFaUisz1mVA
-	 6NngdcDJxh6HtjXC0A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlw3X-1tm6o50wVv-00ePX5; Thu, 24
- Oct 2024 00:24:42 +0200
-Message-ID: <98dc2657-ac1c-41e7-b9c7-302bae5a3556@gmx.de>
-Date: Thu, 24 Oct 2024 00:24:41 +0200
+	dkim=pass (2048-bit key) header.d=notyourfox.coffee header.i=@notyourfox.coffee header.b="Qzx5NnIV"
+DKIM-Signature: a=rsa-sha256; bh=21ozGVKPYTmOqYBKOcOmOK+mSJIkuon14lUJ9oaW7vM=;
+ c=relaxed/relaxed; d=notyourfox.coffee;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@notyourfox.coffee; s=mail; t=1729721693; v=1; x=1730153693;
+ b=Qzx5NnIVSz7GYrDq8cD6l5rVz4+yd3Yy0awiIXQ74n7AFlsPGnqrWQg6R6416QT+gDRK9zC8
+ 9xhmK/sXgtRFfrZuRTrJT44F2y0hvsfoeDKX+jvRt/xYJezg0GvKvAfTGTChJHSFh9G5Px8JJDQ
+ ItihhXdHyhCSdjbd56F+uiNFCT1zCuJG/Ri/sCwEuVj440Wyh1yTbfFA2uTKwQh8BGf1pSB7Ve+
+ G1ukignizWPp5P6QKWyCjWYu/mi/HkS83y71a1L99yqksWnODf1S+p7ekZij6dMqSGCUF0KoEae
+ Q6vlmTQmE/I5KlptBRFhJuu+uy+Wxrv/d/yn77tWE1ZEg==
+Received: by mail.notyourfox.coffee (envelope-sender
+ <contact@notyourfox.coffee>) with ESMTPS id 9d61df4a; Wed, 23 Oct 2024
+ 22:14:53 +0000
+Message-ID: <bd0c85d0-6941-4693-bae5-a3f6613f829c@notyourfox.coffee>
+Date: Thu, 24 Oct 2024 01:14:51 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,65 +37,51 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: remove me from nzxt-smart2 maintainers
-To: Guenter Roeck <linux@roeck-us.net>,
- Aleksandr Mezin <mezin.alexander@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Jonas Malaco <jonas@protocubo.io>,
- Aleksa Savic <savicaleksa83@gmail.com>
-References: <20241023201334.250764-1-mezin.alexander@gmail.com>
- <e78714f8-ab24-4853-99ae-4ace59ae25ca@roeck-us.net>
+To: torvalds@linux-foundation.org
+Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
+ dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
+ geert@linux-m68k.org, gregkh@linuxfoundation.org,
+ hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru, jeffbai@aosc.io,
+ kexybiscuit@aosc.io, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+ manivannan.sadhasivam@linaro.org, mattst88@gmail.com,
+ netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev,
+ patches@lists.linux.dev, richard.henderson@linaro.org, s.shtylyov@omp.ru,
+ serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org,
+ tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com,
+ wsa+renesas@sang-engineering.com, xeb@mail.ru
+References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
+ compliance requirements."
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <e78714f8-ab24-4853-99ae-4ace59ae25ca@roeck-us.net>
+From: NotYourFox <contact@notyourfox.coffee>
+In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:w+bue30PCTlTBhNsBh871TXrKyeYCgfKWTQjLc45hEtxfnO7CiI
- VIZBIqLglcxnCiBba69J/cpAgwTnRprqkPh4pka76ABKQKymld+TOx5p3HOs/XpYbnK9ZPW
- BZS6GNVdOpUL27Ujcm7iC38TOT3Ifi8ZX3TRasRWqWFbOurRk4qJSBd60G0uvqgvLW9lD+D
- XpfMNIMDzc+US3GxJOFrQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:7n8+Cq+1BYU=;vRrPqkxU7KcX1wQPg61TT0txv9J
- Y8Hc7QUOzSJOLy4TpZN3WNfebr7LXOEIgZOcRQU9BGgm1N/eHR9kcwqoRJd83xMnM1Vl7KO8J
- eIyvS0TB+gr1yS3muxMuXnAtzBvbx42FfZ11/TRU+hcN/Pzq8MUjW7ZYjs6Sk491FVl4Z41In
- WgRLMRCK+AO+4yfhrD3AN6yGN8nf4lCAYOZmR+6VEi8aWaMjPw51v4IpMeRoXRGT4twEUyGqN
- srrmjjmOd816GzfeEirMg6JzS3b09kVknO727jUW6nrUxpLL58XgRZwYw8L/wBpTWK4+5U1n2
- SeejcgFZXi+ELQVigJanI7+57o/DPUvb3EHNfb7gNYjMHR9V2W5BuOjkjVhmkF0F75rWgRTQW
- 7II5m9q6uCw7mK3DYVBTzWTMOxdVfEvCX/YC8nzw0Y7Zh5whQXMu6At3LQjji33XwMM6Tu+nO
- nKxlfEAsbm1WKFRDvC1tlQ8ViHGwN7nZHTB6UHcMqYDiB6GNR8DyUivVmvvWmS9BpvRc1Ogv2
- hAv7kkXm+pYj1OgZF/S3voVjx9R1CePqXubOVHNkEmdOWiYmUR5HhAqA+G3srcRxL2uMgV25H
- E7aodzzdehBDo1q7MnZsvBdtfRfKVjQZ55kzKHa8lSLErlZ3tPuYW+YDqePLzI4fpk34L0/GJ
- em0fUe0jsiKcefAl3Q+eeOBqpT9NTrWxfV3f/vasST57//Y0alqy6m17Iw6zw0XsyXHhRDs1E
- AgPvUxLOTNuGCcbILCW/EdpMr96VtOfJEDUtrLjK0ggh58LN3sgCstxOGeFXqwRR05MtaCOdW
- ythAFYEKX4WHIEAILJ9+t8zQ==
 
-Am 24.10.24 um 00:03 schrieb Guenter Roeck:
+Dear Linus,
 
-> On 10/23/24 13:12, Aleksandr Mezin wrote:
->> I'm a Russian troll. So remove myself from the maintainers list.
->>
->
-I am assuming that you are not a Russian troll and are instead offended by
-Linus comment regarding the maintainer de-listing.
+Yet another of probably a million "actual innocent Russian bystanders" 
+is here. For quite a reason. While I do not contribute to Linux kernel, 
+I am a long-time user of Linux and a big fan of FOSS. You may consider 
+it a spam, and it might as well be, but this just blew up our IT-related 
+media.
+I am, or, rather, many of us are disappointed in the way you put 
+politics over software freedom now.
+This move did nothing against Russian aggression, but rather 
+disappointed a lot of us, who don't support or have anything to do with 
+the ongoing war. The contributors you dropped for, as it seems, no 
+reason other than "compliance requirements" have done some actual work 
+to improve Linux, so kicking them for apparently just being from Russia 
+is... just plain discrimination.
+If that's the law you have to follow, go on. If it's your own actual 
+choice - you need to revisit what "free software" means.
 
-Lets just say that i too do not like it if someone calls people "Russian trolls"
-without any proofs. And i too agree that a more open approach regarding such
-decisions is necessary.
+If I am blatantly wrong about all this, knowing it would only be a balm 
+for my soul.
 
-It would be a shame if we loose maintainers because of this. Is there something
-i can do to change your decision?
 
-Thanks,
-Armin Wolf
-
-> I will not accept political statements into the hwmon subsystem.
-> Please chose a different description.
->
->> Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
->
-> There are no "orphaned" hwmon drivers. Those automatically fall back
-> to the hwmon subsystem maintainers. Please remove the entry entirely.
->
-> Thanks,
-> Guenter
->
->
