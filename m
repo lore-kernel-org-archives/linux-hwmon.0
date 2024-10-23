@@ -1,61 +1,61 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6882EAEA;
-	Wed, 23 Oct 2024 15:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4861C830E
+	for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 15:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729698128; cv=none; b=N9zxDWXO+4Z4sv3Mt0X+boggUEbMg1mKPjQd4PW3TsgusgPLDbKwDq9UNiqKiU7spxpeSEMQA/fgc86T0t+F2XXqjO8S3lQZbyLjZAoLbDcJgyj6ieGvUffNSeht5gc78cmzCM+OUFhVwcFLfurCtYA/TYEhQD3kpKibE4mnn4I=
+	t=1729698607; cv=none; b=nsTHvFyhOsQmUzzh/jYb0TSWdqSIakCn1x1Uit+YDKbFoBuFWTjPha9ZKXo37I5kqT8PCR2L6qv8jZNAT1RM2R7n8XOwHOO2Ow9wD950ToEPo+umCEDAF5OrM4QKEG73CfFvB4Gzk1E23xSURuichfuuidSIi4M3eA3+0jUDkSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729698128; c=relaxed/simple;
-	bh=oRzebAgWxDGd+jZWWHdVlWB9VsltfF8Fs6igx86te0g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=c1odBLbvj1NaS7WUtbTbn1qSE4djbvOjnFpSC7+yKdmdtJpC6NLnRqjIYkcYSerhl1Cn4YxoJxw6jFNlZaVEHIRSzzIAxUL1l7jM9UxXDzgEx/qhg1GF5vGY6CxMQSNcOn3Du3Qr1OJy8YSemr4c2XH/XVokN5T7C75UdKiHlUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nsshWBvR; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1729698607; c=relaxed/simple;
+	bh=qJAqQL53I9JhU1//pGmBr6zzJ8utCrFA84/MJJnK7d0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FCvR4mRsIp4Gi6fxVK4ydAxRzo6KieBOVbJjJqID5kCatHtqGUAbZp292x9NmU4X3Tvr7soi/pFFP0jqgqF6CAR4VaK6Ksz3gGhjakH0lv/nNLtOhWpOH0YMxGWd4fph+06RLgoJhWukUREc8l+WXgpp/Y9e5wWo/Czt1IeEb+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+AzavUm; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nsshWBvR"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20ce5e3b116so55620795ad.1;
-        Wed, 23 Oct 2024 08:42:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+AzavUm"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7163489149eso5341816a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 08:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729698125; x=1730302925; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729698605; x=1730303405; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IZNGY4vDjRIRwIdOWiybxIO0837tQlwIzSyK2AgLhs=;
-        b=nsshWBvRAn5qUC853yAiQO34OVhyfkaNfzLF8lg3JDbOLnIEZySOU3l2gtLKhMXXtg
-         KgnE4GYDY9TMXCA5TWdJ80LAJEUL/mpRaV5KTlTlvZep1Ez08dFAvuYeJYLcedA3VtmE
-         cyJBdm0QY8o6dRedZt+m5piOkeHpK0cTwMvNB7wi5/eaoF1HFfUynxrXKeIY/HWVqBoA
-         SoMig46DaXgLh0e2yY4caxIb/79n/TdbGd0nqYt1hrhac29UAutYubyV7l2gUF786Ihm
-         711jGaJc7jvWiWL0JKBxmYQv/5qvUHwlvQJ42wm3fKBP+8AKQYfI7UrbzsH1yz0cGh8o
-         hdkA==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=F6djbOMjor+RzU8DgIL8LPehBCXnBkpUOZQCXxYrXR0=;
+        b=S+AzavUm4joXvOs3NPreQVlQMfm7cA7buISuPR6PuFRwvGYMtgtyHVpfdSrfPiGN+M
+         50YOny29r5acTZz4fhNqPANr32VjW4WQPQpR+/EeIuAxnAR9erDCXoPkrKBZNPtziX2q
+         REggjP0lgal1MjTtLRbgNFXcGIFq3AWfRBus14awgJchx9IDNuwn/l/lyWRu5JJ48P+m
+         oRq0vSMMAQAGDekecWBBtgHXia/VF7C3t0yeWeMowZprYvh6iKwltlFS57TEE8m3NvSB
+         9b8rIKnmCoBGC2BYzh4X1I8AuWbjlFhwuYO+RD6c27FJfJiLU3vfj+GygAv7zobe8ihQ
+         UuYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729698125; x=1730302925;
+        d=1e100.net; s=20230601; t=1729698605; x=1730303405;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1IZNGY4vDjRIRwIdOWiybxIO0837tQlwIzSyK2AgLhs=;
-        b=OTddutdbT2Y190myzVY/92YkBaodBUDVyEBaQ5SC1xZkqXbTDhNBjaifA+dLum3+NA
-         QptehuE5r/ASFMVfYgiuaA6sX7fLqz1gCKoHXnZ0gqH19YhrX4bExZAQbo2A4/UivrK5
-         R9WLJOBQ9v2D9WzRwIjGs2DFqe6ufoH72bwoPXiHyrIyS5ljC0IMClnrRpv4CYgBQ9Z9
-         9s5aqmvvN/kRZNTiJcplJLoKfxIODOSxociC9wsFkEwXYH77cmXBU6MEjf3BfFyJre1A
-         8+VFJ7ks/jooQyGBetBCz5JmscDMAWh/v2AVX3Cz3SzX5GHNQN6GCsMguxGE4G4x81cZ
-         EPeA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIoZDuUUEXWf4QUGosLjSfZT0klXTodaaw1Q5DnnMG2WkKImLtynPnJ1g/WFUqTmELmxS3pQ6wEYZf3w==@vger.kernel.org, AJvYcCXKqlwBX/G9Ig6KZHpLbCaDySq7j1oDMtvYMHCX6UlXa5C3J0keU5vI/iP+05JWr51oAxNKw1HmCM5xu0qo@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+3S/IOm/amwN5nXAtDQT+cyPXpenMoxk372kRvwL344Vap5/j
-	yyM8tMyjRXMu6k82cwuslhpsnl8/pg9yVm0R/hKdFjY38uYJ/u6J
-X-Google-Smtp-Source: AGHT+IHJ1MSAlbYsONoYA4T4mVppJWmjY8/XMmRspaM3qukr8CjaHj2czmXaOe+03O6ttoLUgaacWw==
-X-Received: by 2002:a17:902:eccd:b0:20b:a10c:9be3 with SMTP id d9443c01a7336-20fa9e26271mr42699345ad.21.1729698125349;
-        Wed, 23 Oct 2024 08:42:05 -0700 (PDT)
+        bh=F6djbOMjor+RzU8DgIL8LPehBCXnBkpUOZQCXxYrXR0=;
+        b=cY01Vu9FvZr9njV5fNtN01AHmFIisNUjAHoEzSNWRk5JWaJGQUP/cVz7naVGuELWon
+         knPmuU0QsxkAjp69R4hbAAHg9ZAblKmY86OHqqJ7NSGg5cIOyKEMoRzhDuov+9fXeB5g
+         Dx3REPVIx09jZJGOdbG741vbnC4Rf7bqWhwQhGONZQX1Zn2yEG4riGQ1sLwZxrfK61qr
+         gp8bffxweUItsIaYZpVlXsm3I5SMWAcOlNgWjiXxAzWV1QIS2nU9bbpgPv+3dbRHVvfv
+         IoeP3GHbK3ZJnCMSu1fPz3NLrOCipxQK9p2FINzdAq8j+nJ6mOO0knrG5v5iisLCfLyA
+         RvKg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcACLUwGMRSJGmf6OSLg1HJRUiei27SjvATOryEDkkVdrh64ZGBVyWAqozYcdpFYzaZxUGkfqe2DO0aA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyve8Frs0Spo1KPZb76x8X/+omCQlfsjz+MJJLwUIpGpR7vutF2
+	qCmDZp6gHavodED6kZ7KTEw2DD6Jdhll1LMgNGs1zlawP1gS/ESf
+X-Google-Smtp-Source: AGHT+IEwa/C1vOiK/y4fMKbNZNfA6HMeH/GaQTDYv/Se2HZ9z0UsqCD9OqAC6B8/hqHZYYq/K9vR9w==
+X-Received: by 2002:a05:6a21:1690:b0:1d8:b81c:4e10 with SMTP id adf61e73a8af0-1d978ba05e2mr3669311637.38.1729698604612;
+        Wed, 23 Oct 2024 08:50:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0bf197sm59103155ad.150.2024.10.23.08.42.03
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13ea197sm6483523b3a.163.2024.10.23.08.50.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 08:42:04 -0700 (PDT)
+        Wed, 23 Oct 2024 08:50:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b6c2731b-8fac-4e7a-ab0c-2f36e8a64a69@roeck-us.net>
-Date: Wed, 23 Oct 2024 08:42:02 -0700
+Message-ID: <6f8eba9b-0f3e-49f2-9cff-140037318f96@roeck-us.net>
+Date: Wed, 23 Oct 2024 08:50:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,14 +63,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8625E
-To: Ahmad Khalifa <ahmad@khalifa.ws>,
- Frank Crawford <frank@crawford.emu.id.au>, Ai Chao <aichao@kylinos.cn>,
- jdelvare@suse.com, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241022091319.82503-1-aichao@kylinos.cn>
- <6cab565f05820eb2e1a1c55644be057427ecdf2e.camel@crawford.emu.id.au>
- <300383ee-3ead-439e-893e-895f3ed49805@roeck-us.net>
- <103a68d6-d0b8-4e6f-ac8f-c6186b340f81@khalifa.ws>
+Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+To: Rob Herring <robh+dt@kernel.org>, Billy Tsai <billy_tsai@aspeedtech.com>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20210923023448.4190-1-akinobu.mita@gmail.com>
+ <20211011143421.GA2374570@roeck-us.net>
+ <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com>
+ <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+ <CAL_Jsq+yvRXAfZtVXHJjVZPd+n0x9E=KWyX6-+-M9OC_NJfBew@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -116,65 +118,33 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <103a68d6-d0b8-4e6f-ac8f-c6186b340f81@khalifa.ws>
+In-Reply-To: <CAL_Jsq+yvRXAfZtVXHJjVZPd+n0x9E=KWyX6-+-M9OC_NJfBew@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/23/24 05:41, Ahmad Khalifa wrote:
-> On 22/10/2024 14:40, Guenter Roeck wrote:
->> On 10/22/24 03:13, Frank Crawford wrote:
->>> On Tue, 2024-10-22 at 17:13 +0800, Ai Chao wrote:
->>>> Add support for IT8625E on Centerm P410.
-> ...
->>> Can I just add that it isn't a good idea to use the same type for
->>> different chips.  There are some specific differences between the
->>> chips, which mean that it should have its own entry in
->>>
->>> static const struct it87_devices it87_devices[]
->>>
->>> even if currently they are very similar.
+On 10/23/24 08:24, Rob Herring wrote:
+> On Wed, Oct 23, 2024 at 1:08 AM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
 >>
->> According to the information I have, the ADC voltage is different,
->> and 8628 supports PECI but 8625 doesn't. Most importantly, 8625
->> has multiple register banks. There are also some differences in
->> fan control; 8628 can explicitly turn fans off using register bits.
+>> Hi All,
 >>
->> Just mapping the chip to it8628 may be convenient, but it is not
->> acceptable.
+>> I found that these patches have been rejected.
 > 
-> Side question here. The standard for an acceptable chip driver is pretty
-> high (and rightfully so). But a common use case centres around readonly
-> display of information: temp/fan/in readings. Even just 2-3 readings are
-> better than nothing.
-> 
-> Example, I still have to use Frank's out of tree it87 for my IT8688.
-> It works perfectly fine for me, but still not possible to merge that
-> device into hwmon's it87.
-> This IT8625 is another example. The NCT6701D-R will be one more shortly.
+> Where did that happen?
 > 
 
-For the most part you can use the kernel driver with force_id parameter.
-That is no different than your suggested patch.
+https://patchwork.kernel.org/project/linux-hwmon/patch/20210923023448.4190-1-akinobu.mita@gmail.com/
 
-Nuvoton is usually very supportive, so I don't see a problem adding
-support for NCT6701D-R if someone is willing to spend the time to write
-a driver (or adding support to an existing driver if the chip is similar).
-
-> A readonly driver that is configurable from userspace would help in that
-> use case. It can be configured for known devices without datasheets or
-> for testing new devices. Wouldn't even need to access superio config
-> space.
-> 
-> Filesystem has fuse, i2c has i2c-dev, input has evdev, ...
-> Would something similar be acceptable for hwmon?
-> 
-
-I would have to details of a proposal, but It seems unlikely.
-After all, chip details have to be sufficiently known to provide
-any driver, even a userspace one. Also, the hwmon ABI (i.s., its set
-of sysfs entries) isn't that special that it would warrant such a
-kernel infrastructure. If at all, it might make more sense to add
-support for this, for example, to libsensors.
+It has been a long time, but from the available history I guess I marked
+it as rejected because the DT patch was never approved. That is just a
+guess, though; I really don't remember.
 
 Guenter
+
+>> Is there any other reason why it can't be merged into the mainline?
+> 
+> I don't see any replies on the binding. Perhaps that's because it
+> wasn't sent to the DT list and it doesn't get reviewed if not. In any
+> case, lots has changed in 3 years such as we have a fan binding now.
+> 
+> Rob
 
