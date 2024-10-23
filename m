@@ -1,150 +1,87 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4861C830E
-	for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 15:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0E31CDFA7;
+	Wed, 23 Oct 2024 16:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729698607; cv=none; b=nsTHvFyhOsQmUzzh/jYb0TSWdqSIakCn1x1Uit+YDKbFoBuFWTjPha9ZKXo37I5kqT8PCR2L6qv8jZNAT1RM2R7n8XOwHOO2Ow9wD950ToEPo+umCEDAF5OrM4QKEG73CfFvB4Gzk1E23xSURuichfuuidSIi4M3eA3+0jUDkSA=
+	t=1729700934; cv=none; b=SQMC0TuUwjqVnNHzfMtYIBtS0I6lf0es32nuJbgCWALvWMm4VK8FYr8dt/CM9ylh/+Kwd2HdqKallVaoPsHs70zH13bqjozl8P3i0G3s+hxExny86gURHlHXwRnxRL2d/VjTsnOK6HOniIlXj+1rlh1KC8pyvez3dhQLjncXv4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729698607; c=relaxed/simple;
-	bh=qJAqQL53I9JhU1//pGmBr6zzJ8utCrFA84/MJJnK7d0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCvR4mRsIp4Gi6fxVK4ydAxRzo6KieBOVbJjJqID5kCatHtqGUAbZp292x9NmU4X3Tvr7soi/pFFP0jqgqF6CAR4VaK6Ksz3gGhjakH0lv/nNLtOhWpOH0YMxGWd4fph+06RLgoJhWukUREc8l+WXgpp/Y9e5wWo/Czt1IeEb+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+AzavUm; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729700934; c=relaxed/simple;
+	bh=ImGCMCLcj/skCiYbANA7Nn2kAh541W4YFyorni/4W34=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q+y91WcOkYhHbSmdH2D9tRbYrdWM8GalV3s3Fol55u2mAO2sP17Yn+OMROlMZNM+h8LsqGfoRU/eY8Ulvxz1802AL/5TW/xYSz2r3b/wBXAgnryV4rpcdY4Z0du5cIMJ1BAFqQw0sJ9Qcb/vkRSziB0XCSKkgSkUs7HQHNRtr9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=mBhD5Z2i; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+AzavUm"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7163489149eso5341816a12.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 08:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729698605; x=1730303405; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=F6djbOMjor+RzU8DgIL8LPehBCXnBkpUOZQCXxYrXR0=;
-        b=S+AzavUm4joXvOs3NPreQVlQMfm7cA7buISuPR6PuFRwvGYMtgtyHVpfdSrfPiGN+M
-         50YOny29r5acTZz4fhNqPANr32VjW4WQPQpR+/EeIuAxnAR9erDCXoPkrKBZNPtziX2q
-         REggjP0lgal1MjTtLRbgNFXcGIFq3AWfRBus14awgJchx9IDNuwn/l/lyWRu5JJ48P+m
-         oRq0vSMMAQAGDekecWBBtgHXia/VF7C3t0yeWeMowZprYvh6iKwltlFS57TEE8m3NvSB
-         9b8rIKnmCoBGC2BYzh4X1I8AuWbjlFhwuYO+RD6c27FJfJiLU3vfj+GygAv7zobe8ihQ
-         UuYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729698605; x=1730303405;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F6djbOMjor+RzU8DgIL8LPehBCXnBkpUOZQCXxYrXR0=;
-        b=cY01Vu9FvZr9njV5fNtN01AHmFIisNUjAHoEzSNWRk5JWaJGQUP/cVz7naVGuELWon
-         knPmuU0QsxkAjp69R4hbAAHg9ZAblKmY86OHqqJ7NSGg5cIOyKEMoRzhDuov+9fXeB5g
-         Dx3REPVIx09jZJGOdbG741vbnC4Rf7bqWhwQhGONZQX1Zn2yEG4riGQ1sLwZxrfK61qr
-         gp8bffxweUItsIaYZpVlXsm3I5SMWAcOlNgWjiXxAzWV1QIS2nU9bbpgPv+3dbRHVvfv
-         IoeP3GHbK3ZJnCMSu1fPz3NLrOCipxQK9p2FINzdAq8j+nJ6mOO0knrG5v5iisLCfLyA
-         RvKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcACLUwGMRSJGmf6OSLg1HJRUiei27SjvATOryEDkkVdrh64ZGBVyWAqozYcdpFYzaZxUGkfqe2DO0aA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyve8Frs0Spo1KPZb76x8X/+omCQlfsjz+MJJLwUIpGpR7vutF2
-	qCmDZp6gHavodED6kZ7KTEw2DD6Jdhll1LMgNGs1zlawP1gS/ESf
-X-Google-Smtp-Source: AGHT+IEwa/C1vOiK/y4fMKbNZNfA6HMeH/GaQTDYv/Se2HZ9z0UsqCD9OqAC6B8/hqHZYYq/K9vR9w==
-X-Received: by 2002:a05:6a21:1690:b0:1d8:b81c:4e10 with SMTP id adf61e73a8af0-1d978ba05e2mr3669311637.38.1729698604612;
-        Wed, 23 Oct 2024 08:50:04 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13ea197sm6483523b3a.163.2024.10.23.08.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 08:50:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6f8eba9b-0f3e-49f2-9cff-140037318f96@roeck-us.net>
-Date: Wed, 23 Oct 2024 08:50:02 -0700
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="mBhD5Z2i"
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id E875424F55;
+	Wed, 23 Oct 2024 18:23:23 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LM4QKJJ_KumL; Wed, 23 Oct 2024 18:23:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1729700603; bh=ImGCMCLcj/skCiYbANA7Nn2kAh541W4YFyorni/4W34=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mBhD5Z2iVFfmKpdSW/evjvBUJawTiTTumRRO/Q+FtBNYlc+tp3mwM4tCBMcXP/Hvh
+	 5l+8+NeYW5sllWZuLhhLWUGokX3pZNdf9ZZWbb+vKUjjDiu3AXuHz5BGJa8Lw/Wc4Z
+	 4mTOtkQR9Xc2DESVrl5IcQ3Oo/Z1IPJjJERSmoIu5Rhk2RZ+Izzf3gqLT9EdPE8y8k
+	 nvFCD8bkddNgrha80K6ja47euJ3Pp9jmZhFiOIAuOzrNXQuKQch1CWQsu3Uqta8WG4
+	 AYKkovqFgO11xipB9v5pp7TPiGHCF36nhchbDp1B0i8owc4T+PmVTKNXgM9BASQ/Sx
+	 qygChoYVCzn9A==
+Date: Wed, 23 Oct 2024 16:22:58 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
+	gregkh@linuxfoundation.org, wangyuli@uniontech.com,
+	torvalds@linux-foundation.org
+Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
+	dmaengine@vger.kernel.org, dushistov@mail.ru,
+	fancer.lancer@gmail.com, geert@linux-m68k.org,
+	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
+	ntb@lists.linux.dev, patches@lists.linux.dev,
+	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
+	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
+	wsa+renesas@sang-engineering.com, xeb@mail.ru
+Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
+ compliance requirements."
+Message-ID: <Zxki4gooqoZfPoqD@pineapple>
+References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <20241023080935.2945-2-kexybiscuit@aosc.io>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
-To: Rob Herring <robh+dt@kernel.org>, Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: Akinobu Mita <akinobu.mita@gmail.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20210923023448.4190-1-akinobu.mita@gmail.com>
- <20211011143421.GA2374570@roeck-us.net>
- <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com>
- <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
- <CAL_Jsq+yvRXAfZtVXHJjVZPd+n0x9E=KWyX6-+-M9OC_NJfBew@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAL_Jsq+yvRXAfZtVXHJjVZPd+n0x9E=KWyX6-+-M9OC_NJfBew@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023080935.2945-2-kexybiscuit@aosc.io>
 
-On 10/23/24 08:24, Rob Herring wrote:
-> On Wed, Oct 23, 2024 at 1:08 AM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
->>
->> Hi All,
->>
->> I found that these patches have been rejected.
-> 
-> Where did that happen?
-> 
+On Wed, Oct 23, 2024 at 04:09:34PM +0800, Kexy Biscuit wrote:
+> Are the "compliance requirements" documented on docs.kernel.org? Who are
+> responsible for them? Are all that are responsible employees of
+> The Linux Foundation, which is regulated by the U.S. legislature?
 
-https://patchwork.kernel.org/project/linux-hwmon/patch/20210923023448.4190-1-akinobu.mita@gmail.com/
+These should be answered publicly, but IMHO too emotional to be included
+in commit message.
 
-It has been a long time, but from the available history I guess I marked
-it as rejected because the DT patch was never approved. That is just a
-guess, though; I really don't remember.
+As a newcoming contributor, I work on some ARM SoCs unpaid. It's really
+a neat thing to write useful stuff for others, but this sort of removal
+is weakening my and definitely others' trust to maintainers: people's
+rights to maintain stuff written by themselves got removed silencely.
+It doesn't sound like a good sign to me.
 
-Guenter
+We need an explanation. The patch except the last paragraph looks good
+to me.
 
->> Is there any other reason why it can't be merged into the mainline?
-> 
-> I don't see any replies on the binding. Perhaps that's because it
-> wasn't sent to the DT list and it doesn't get reviewed if not. In any
-> case, lots has changed in 3 years such as we have a fan binding now.
-> 
-> Rob
-
+Reviewed-by: Yao Zi <ziyao@disroot.org>
