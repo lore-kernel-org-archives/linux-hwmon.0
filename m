@@ -1,227 +1,152 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2095.outbound.protection.outlook.com [40.107.117.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC7E3B298;
-	Wed, 23 Oct 2024 01:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729648731; cv=none; b=uPdouEtwWgAdP8VBcybKkTZb32C006WtRa2nWM7BZZt1IEJh2Er/je2NluEUDKCiL6Q3G5PcRn4Gc2uiGEs6T3nFj+8FTyBghSzIMrqN7FyucSvtREz82Sl3lG99wOQbdP2X/k5gwqQkc7vSR9hxGV32dLBw5MXTpoed70ZXKQ8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729648731; c=relaxed/simple;
-	bh=FYj61WXwisPzXtbemi6EdvR6xgwUd1lYYm1eBThKgXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FxwW2pHDbdoHFN2yR+fNSiZMLtOAoKZKpHSa+T9FmfUxep8dM6vWrkyPuAK3L5RefMGeSuyTc6+FSENjMYe6wr2wRnoZk/0qVFyY7j1+8OvgNY+UPJ5gVCrN+8KbuDbvhY6UvBNLqvEHZ5MzHJ3vWG1YPGLANWudlRVlJRwCxYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y8LhtuFB; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AE913775E
+	for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 06:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729663721; cv=fail; b=owI+W1qnCqTLHEg0xlD1rsN1T9PS1Mfnt2swbtYTKXU/ZdtH90NIcJiJxBcFif3ZbpZL77NXx3n4LLzqgQkiNYlxqcidJ628uzzgVCf8zihJKRgGQV0fMGRoftMmncQ7fyC5KwD7+kdj/q+u1WpTQ5u4jhrql6gL3i/lGvha774=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729663721; c=relaxed/simple;
+	bh=o8408Y+tpQw21/xggVULYYtdZkZG8kzphfUDChYD3Ok=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=MaRqFP3Le93M/P55sU/kiC7BF2H+Tb/X/RZhXVCbLE/Eh65zBpcugLy4HJ3lgZvmDO8/Zjz0P925sfBuF3YvLWTb3XKn0ntERkb1flMg7d47EdNcG7d7xuWkJzQP4/mQtsVV/N8wIyQFxkaeFtQ3zpkzs1IrjryLsqJRu3u1i90=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=FsLtx22W; arc=fail smtp.client-ip=40.107.117.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y8LhtuFB"
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2872134c806so2074737fac.3;
-        Tue, 22 Oct 2024 18:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729648728; x=1730253528; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=unwvQEJpU2auNKArz08woZdbyl7ZgOvJVRSR8P4z/fI=;
-        b=Y8LhtuFBuni/5idHPrBqyHvBzGf9AkGCKgK90SX8cdfZcH31cfu75kTnYugMZuycHp
-         Hjvdbe+j60ezNxrDuSEMVZ7Xit/M6agUxB+ClcvTNKDLuXXM0Xt/JrrdJNDIbNaBWynE
-         J4/A3DsCLLTBoyZJWwrxm9lOKeAGGUKpA0Tz5p+FXSxP/naoq23mGJ3ON52o00ch5GdT
-         ZrYR/A12gryVU5Gaj4wMCT98WhtlbpBuGhBWtO60czrcBcc6fP6a9pQJiVrhD4vjCDBi
-         4YbMi0habUSdZ8mtNLXuXtjvsqMwclvpdHIKDd9Vsi2xCCtl10/LL4W3NlqX6K4lnNEu
-         eNqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729648728; x=1730253528;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=unwvQEJpU2auNKArz08woZdbyl7ZgOvJVRSR8P4z/fI=;
-        b=n2opbKrs7X6ztqUDLrDlNS84lkYgsUEZhzl0bMaaicc1yYDPlDSo1caV/VZGhIXjMW
-         giYBN8GLtigZF6uGShK+QiPPd2bm2eagWPHqQJU2LU41XwHN2BjUMI+V8BLlLev1iZjT
-         cVcvzY1sBMt2ij+qfUsY7UDAoGHRh30aemc0TOI6PMEdj4L7SAzvuJihyE2G+vvlns8B
-         oCSWQhK/t8a9Sn7Saq8QmbeqVDcv2A/REQSjAb1XN5TmAviKGT8mf7MIbuv9L7IuA0qd
-         aUwtr23OpujECCairmhn2g5kRXJ45cbNTAPKoDFN9DXWIUcY2sewalHaIKgLxp2i4Fdz
-         p3/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUgLPICBMthDZcpcUu2NLaiLfmR7UUMax8m43gGl/uZW1Q4nFfHIR5vTObAESO8KmUI6M7PBLA12goZ@vger.kernel.org, AJvYcCVmVOX9ZpbMORn2aKN15RWevSvm5rd2I8Y4QO+XWzO2cosRcO9vnwPTNZ2HJyGhgg73Ryulq0rB2OHy@vger.kernel.org, AJvYcCWVuUf91RnoMouhrWGEnp5gQeUUjbsxPizttMRE1i65HhqRU4lj+pMYingsSsNalwEuUKX+fz9329LAoXo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxghXItSpRM5I7TrqN5Qj+wOHmiW4dNZgq+KKWmfxl0F34yDZJc
-	f6+39qB9/jNSjbMovLUPTZjHf7xqCxxDzucY55kFI0gWnGWLqF7T
-X-Google-Smtp-Source: AGHT+IEsZ4UAWFhNS97IobAaHyzP39PM6que6NvbrHHKBo8MseJYa4hRCHGjrEDqYSeDVjEH8gqzew==
-X-Received: by 2002:a05:6870:391f:b0:288:2b43:e0e3 with SMTP id 586e51a60fabf-28ccb97a8c6mr1149373fac.35.1729648728382;
-        Tue, 22 Oct 2024 18:58:48 -0700 (PDT)
-Received: from raspberrypi ([2600:1700:90:4c80::f])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-28c792509e7sm2214528fac.14.2024.10.22.18.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 18:58:48 -0700 (PDT)
-Date: Tue, 22 Oct 2024 20:58:45 -0500
-From: Grant Peltier <grantpeltier93@gmail.com>
-To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
-	magnus.damm@gmail.com
-Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: hwmon: isl68137: add bindings to support
- voltage dividers
-Message-ID: <8532fec7938144abe938b7d884612052c7d121ca.1729646466.git.grantpeltier93@gmail.com>
-References: <cover.1729646466.git.grantpeltier93@gmail.com>
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="FsLtx22W"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dtQgBW586ge2gojJWkWEEqY5aoYadO1lWGMKH3DgA5p6MFqR4ulOq6+VQDB7bgRBQ3B/rXverlCakq4v9Cp3vtF2dbnNpGRpOy4agA5C9gmaLIy7Z7VSDcsJzub5yWaObDlBii4AFtv4ZTGQzaw2QrqmRKJpLj2IlGAzxnsoxEm8vGR0GJGW/uZPNV58af0MHhZiZDq7DFtIuwzm/Jll3m788SJK+P8uC2gcT6qdH/PLR0mSUAvta83MUvy9OB4dSXiYYnjL1I8uJHnG+qpvsqJ86Q9Ss9HDg1djsN/gnWMdlPIKsHxL/WfvqIzFYLjrte1CRR0j7GP4pFwbNl3SdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o8408Y+tpQw21/xggVULYYtdZkZG8kzphfUDChYD3Ok=;
+ b=xiwUoLrIdWVi43JfhLHYnzZde0DKWFkRBEcwB3vSocqHGbY68PCRs27fuYBN7NGEPKX3kKZWBvmNStkxaz4jqnrhBPI3wNShk7PF3wpBz0gmqZWMnYJfsX4oJ2vCDByvc091Ak4WMo9Aep+Sw65HAY7U6rULar9kMexdfSPR7koI6HwTEdzxdmvJ7cHAerM56GkLDhcF/56+X626aeSu/EugxC9zh0DF4OqYNNZLrUEqp4cEOPz6uLb5C9JEBIm0c35EMwzvxdUM7ssduo4tzFm2ibxzgb2KS6TCUDTzRrKYvAGj2GDULfMseoLAGm+SlrpTIfWn/SSSAc1TWpor7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o8408Y+tpQw21/xggVULYYtdZkZG8kzphfUDChYD3Ok=;
+ b=FsLtx22W5kTYrLxI0K+yyz0huryuFDhyQLVndfGrpOp085bpJw2/cNlu6/AxEmvgtIciXBfohihhFdUDlRzLL+p6G4zSbs9DVbsPA9uanrmcarBLHQe+bzDzoIbj46M32fK/tQYrxJjsMR3nSKY9rY3C2x+s8pY4ZlNcbmj4xfDDlfuS2p7KzS1hqinvDc5YrC1RpUSHUrnfr1HCl3cNUejjjY1fQ9E8rGV5KlID8xTOIBk9tX5pi37c0p5YTf0i+pNOli2o5cmb0qVS7MaI6ZHbH62reAyq7OkeewTIUvBm4bXYHH2/v628DtAAunn+UG8bAuHZh7zjyScKs6WI5A==
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com (2603:1096:604:29c::6)
+ by SEYPR06MB4992.apcprd06.prod.outlook.com (2603:1096:101:50::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Wed, 23 Oct
+ 2024 06:08:33 +0000
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::814e:819a:7d52:7448]) by OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::814e:819a:7d52:7448%7]) with mapi id 15.20.8093.014; Wed, 23 Oct 2024
+ 06:08:33 +0000
+From: Billy Tsai <billy_tsai@aspeedtech.com>
+To: Guenter Roeck <linux@roeck-us.net>, Akinobu Mita <akinobu.mita@gmail.com>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+Thread-Topic: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+Thread-Index: AQHXsCOe2FNL8sJbDk+9evk0Fc7dCqvN+eGAgeQSdQCE6LbGbQ==
+Date: Wed, 23 Oct 2024 06:08:33 +0000
+Message-ID:
+ <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+References: <20210923023448.4190-1-akinobu.mita@gmail.com>
+ <20211011143421.GA2374570@roeck-us.net>
+ <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com>
+In-Reply-To: <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSQPR06MB7252:EE_|SEYPR06MB4992:EE_
+x-ms-office365-filtering-correlation-id: 39dd9863-7906-4a91-d780-08dcf3291fbb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?QQATYej2tUD40M2gNAUnGDT0CAWs8dmt21wXXyVW7Y6d+QRTvXm47AGfjv?=
+ =?iso-8859-1?Q?LKRjjxX7bZw1L9Zmz1rEvpXV8WeactTyB/KUZ67pl4Vx7g592XmtkYGrOl?=
+ =?iso-8859-1?Q?gBmS1mFF0D9SDV9G0lO7oeNvTs2GJa5AyG/kcoIPwNa3QPaOF3uwwzGsBC?=
+ =?iso-8859-1?Q?91ZTvvHkrzqPZMpemm7/MGjrTb0lotjm7CiLInNaZDmV8E5w92cRosEj/F?=
+ =?iso-8859-1?Q?PlYRwthZjqraYfcg3EQHWA8089IP6i7Oqp3EAOXlYXdRP9N7ZWkeHdPz0x?=
+ =?iso-8859-1?Q?6sDnFaVg7Z46zr0cNYeaasLJPenpj4ZElozDOYA6jMm7YaJJf0iKLlTzao?=
+ =?iso-8859-1?Q?hwrSDxw2/xNDkE4hQ3yljIBFhyBRfW/AbVobYAO78labZDWDjPyIo8Y+OL?=
+ =?iso-8859-1?Q?Sgq4bHISyi6x0ej4XC/HrvtCdXmC4PbYBCfCYh8rqSMGO3TiJtFYuo5MCs?=
+ =?iso-8859-1?Q?giJyqD1Ey8l2zPZyeGB6JwuI8Bd048Sg46TItCQefXT66Ld+cGmbMs2WFu?=
+ =?iso-8859-1?Q?gqc5BmXMbQaE7TCVC08KQdQagktaM4sp3In3BO3sVNnndPaexHmwjXdisx?=
+ =?iso-8859-1?Q?YplkTgXHdj4UgYxvz0I7Zdbfl59mh2aMmJ48TaENyzC3/CuiladsdP2ftr?=
+ =?iso-8859-1?Q?l8yDt+CEJq8P1E/w1FyBY6RbZfS4vlYPgnGp/leRiM46XmRFqb9X+piGO0?=
+ =?iso-8859-1?Q?fF2Q1T9/Oj4odxlg/3u8sH/4X+/ORcInyMDLbD9dLxa2d+jP22cGX9B+pa?=
+ =?iso-8859-1?Q?5y7C2ENl99zHvENadCgVd6HHC5XZz+Udu6BU7Ss22SGnk2xx6HJj+VMigJ?=
+ =?iso-8859-1?Q?x/KCVHr/4mN38jXY4+QzMh/Qk0JVNLAVB+sjL4LLRO0pCVaGltANB9Lv3c?=
+ =?iso-8859-1?Q?viBnw7Gu8UFr+J2Vpc15B49zeuOBGTUHc1XhDHGaKU0U6aZ1TwjwZYaPx8?=
+ =?iso-8859-1?Q?9vm7A+p6cVLFO2Dg4t0H/62psJxObDl6Z9tkLNlpA966Raxi4K/ldT+8Bi?=
+ =?iso-8859-1?Q?5h9eKlZfbnrw+C0i/Ap8b33UE9ZNOa3E9Ar80h7Lf9K3HI0FV9ziK3XUds?=
+ =?iso-8859-1?Q?3F6zq7t6yoHQ4LfD8wl+FcbdnvxV+5gHirnNbw3Zqm1X4pGC3BqEYJTcSD?=
+ =?iso-8859-1?Q?GD7IO8Sxg7+zkVD8RYoQStSSiORd0Vrsz4uNwtr+vIrt6qDht3K4W5XNEy?=
+ =?iso-8859-1?Q?vYGLSP0jwoJdwtHGF1OlPdLuAPLGOhkCVjdD4Jou1axbD9xMaiqEtBJpDD?=
+ =?iso-8859-1?Q?brAPUvoq8QVH46Ngulk8NX3uP7tj+7DYFXJv4qXJZN16qKLtocWrkp3dck?=
+ =?iso-8859-1?Q?OR4PUqZK+3KbH0PEXHarUZlGyEjz7xNfZJn94VylpwocLV+LZ3m5qgkGXO?=
+ =?iso-8859-1?Q?GtyAYzPyJva4eeq8RyiYEwW8gmzvQzEX2HGN6VeWA1PyFXaEQTyi4=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQPR06MB7252.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?JsxEJGso3S8QpNqbhUPnSgxUMJa2FLNF9LhixDCoJjj+bhMbaHoRNpYzHr?=
+ =?iso-8859-1?Q?CmZomWVQaBt3OOQyfxqGXuAC7O/yX4kd4EQ+umVOcWjn6dw+0XqWq+RcQs?=
+ =?iso-8859-1?Q?kIWT2rnvHa6hWftjcaqlb33qyBzrP0f3tmhTJNLjfcOqDElrgRgQwJlTTt?=
+ =?iso-8859-1?Q?rCdt7lrbViQ7ucikDLlsDmos6HYi5B+olUc7/AWuceqw2fftt4MkJyzWpd?=
+ =?iso-8859-1?Q?D5oa2X41mCCiAjBzE1q/p2hTfcuyw/q/5s7r2f495ZjpcYgeFzT/FkhhrW?=
+ =?iso-8859-1?Q?7WdabrZP0rcZHM6/GlOCQMjJr/T7mxTt9xbJwOlhotryuLj0E2HOchX6aC?=
+ =?iso-8859-1?Q?lrpLnssOmj19RvbiAD9n/zCn60nj1dbatZ+7+eIDT49PYVCdudKGv0n+KF?=
+ =?iso-8859-1?Q?fUULERn0EPyFvtkU/Y2CMVqBvQZCdkqCIhgUY79RJJPtF2ILPmeVh9IlzJ?=
+ =?iso-8859-1?Q?qK3kg7Wx5zXS+jXobHpDBB+LDPlgoWlAiugL2IZzKgdJH52QEZl+FL198I?=
+ =?iso-8859-1?Q?iXK6Iiw9iHgEEgsxo3BgbUvOqzegzPc5D5Dx5lUPGWIhtjIIuNxJXJr569?=
+ =?iso-8859-1?Q?MCbEzvMzbx95sOx+oLCuHw5viIHBivGj7BR4ZbTq7ANrnawU3Zhqn+9hR5?=
+ =?iso-8859-1?Q?9/d5nZ+yWy74/ezz/jqCe5rv6dFWa1V7/mcEQgD6Dput9ooxr3oTtOlq7V?=
+ =?iso-8859-1?Q?vgXRKmtvnwua5iXvFfVsDo+5g7dUMuez22TSDPtRht+nVApOlzgfZ9eMLv?=
+ =?iso-8859-1?Q?+pQJNgVDwRmjVVl5kI2ctMT59nVLhZsunSiWUnJpV4I8oryVmllNBS17nt?=
+ =?iso-8859-1?Q?Xd39hUbLYnSbWdi4Xtyuq9Tl7FdtfVtpVlE3Pjvd2o+iad+vaKrIigOhUN?=
+ =?iso-8859-1?Q?ujbhIkTSFAjLt9NSPnsAPdctiJ/ZWvUjXP4BFpjeSPZ4dSISVi2ws4lqTo?=
+ =?iso-8859-1?Q?buddIFG2mooBhe9jCrI8NpX3p+LhblvkOJ71bqrrajv076oXVIh1dOTK0U?=
+ =?iso-8859-1?Q?Gx3VNDwGWq6bC5e8ojT6MXCLOR1eEu9OGKvOBtznGzrfUAvMzpUV6Tg/Eo?=
+ =?iso-8859-1?Q?JYmtSuZ/OtpG4+PScfNJr0Vtxn2xli497PIltWtciZrg61T3Aqkc1SzH85?=
+ =?iso-8859-1?Q?PMG63bLA35U5cnw66h9zvz9YkqBgwJN8B+DcRurpRK81VQvyw1EtzQqvBy?=
+ =?iso-8859-1?Q?shzHTM9l6HUYSsrKcOlGim4esPoCaXONm0H7pZa2yVV9mziMqF2Ns0Mez5?=
+ =?iso-8859-1?Q?TSXLKsJe9mvnyRdphLNv/xsLEkn4q/T8lovM4oEKuUTqqnbfjyOqclaZ7r?=
+ =?iso-8859-1?Q?BClTkd7blj4i1qFUU2WIaX5ulYjuJraRJREX6m6qFlys9t6funUV7O3JVn?=
+ =?iso-8859-1?Q?HdkjyRys7FxHFqqxlcaq9J3ridtQ4ENHOZwO0Pgq3W+966Wdc0fD/hTZz6?=
+ =?iso-8859-1?Q?LQ5RWh3im1sVfGW7afqF25XI+JPuks+PnRle1suUB01upXx4sTfmuOj4ca?=
+ =?iso-8859-1?Q?xBnP+YEMx4bvEvjaawkSxBMXyp8UkELXwbLZ+wuABbuZS+4eSGK0xknudA?=
+ =?iso-8859-1?Q?Hl4I71BtRa6pbPBTSdvD7spG2G52hwvURC2ngKBlA5bCFMClZi9Rf5LkS8?=
+ =?iso-8859-1?Q?JeP0Gb7KmLM8+cmUj8rKkSpvZ84AUZFMrn?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1729646466.git.grantpeltier93@gmail.com>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSQPR06MB7252.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39dd9863-7906-4a91-d780-08dcf3291fbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2024 06:08:33.0972
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HFZ6KfH6/j5zG1nfgbClohd2XxbZKEiMDBAxAkZ8T8VyGhuykOV/ihnnqHZ5NrPUt0TbQ6578CgGlUs+ASWV4gX+uDYlClyYHXytdl+hhLU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB4992
 
-Add devicetree bindings to support declaring optional voltage dividers to
-the rail outputs of supported digital multiphase regulators. Some
-applications require Vout to exceed the voltage range that the Vsense pin
-can detect. This binding definition allows users to define the
-characteristics of a voltage divider placed between Vout and the Vsense
-pin for any rail powered by the device.
-
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
----
- .../hwmon/pmbus/renesas,isl68137.yaml         | 131 ++++++++++++++++++
- 1 file changed, 131 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-new file mode 100644
-index 000000000000..af10c55d547f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-@@ -0,0 +1,131 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas Digital Multiphase Voltage Regulators with PMBus
-+
-+maintainers:
-+  - Grant Peltier <grant.peltier.jg@renesas.com>
-+
-+description: |
-+  Renesas digital multiphase voltage regulators with PMBus.
-+  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,isl68220
-+      - renesas,isl68221
-+      - renesas,isl68222
-+      - renesas,isl68223
-+      - renesas,isl68224
-+      - renesas,isl68225
-+      - renesas,isl68226
-+      - renesas,isl68227
-+      - renesas,isl68229
-+      - renesas,isl68233
-+      - renesas,isl68239
-+      - renesas,isl69222
-+      - renesas,isl69223
-+      - renesas,isl69224
-+      - renesas,isl69225
-+      - renesas,isl69227
-+      - renesas,isl69228
-+      - renesas,isl69234
-+      - renesas,isl69236
-+      - renesas,isl69239
-+      - renesas,isl69242
-+      - renesas,isl69243
-+      - renesas,isl69247
-+      - renesas,isl69248
-+      - renesas,isl69254
-+      - renesas,isl69255
-+      - renesas,isl69256
-+      - renesas,isl69259
-+      - renesas,isl69260
-+      - renesas,isl69268
-+      - renesas,isl69269
-+      - renesas,isl69298
-+      - renesas,raa228000
-+      - renesas,raa228004
-+      - renesas,raa228006
-+      - renesas,raa228228
-+      - renesas,raa229001
-+      - renesas,raa229004
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^channel@([0-3])$":
-+    type: object
-+    description:
-+      Container for properties specific to a particular channel (rail).
-+
-+    properties:
-+      reg:
-+        description: The channel (rail) index.
-+        items:
-+          minimum: 0
-+          maximum: 3
-+
-+      renesas,vout-voltage-divider:
-+        description:
-+          Resistances of a voltage divider placed between Vout and the voltage
-+          sense pin for the given channel (rail). It has two numbers
-+          representing the resistances of the voltage divider provided as
-+          <R1 R2> which yields an adjusted Vout as
-+          Vout_adj = Vout * (R1 + R2) / R2 given the original Vout as reported
-+          by the Vsense pin.
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+      };
-+    };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        channel@0 {
-+          reg = <0>;
-+          renesas,vout-voltage-divider = <1000 1000>;  // Reported Vout/Pout would be scaled by 2
-+        };
-+      };
-+    };
--- 
-2.39.5
-
+Hi All,=0A=
+=0A=
+I found that these patches have been rejected. =0A=
+Is there any other reason why it can't be merged into the mainline?=0A=
+=0A=
+Thanks=0A=
