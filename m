@@ -1,112 +1,84 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90751CDA0F
-	for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 17:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1C01D0420;
+	Wed, 23 Oct 2024 17:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729705913; cv=none; b=PxUckZJW6VR9gIYNxopOFmBKZmre0JbJGarIn0pSXiCdMICokc4Kunv9tk8jv06bHEw00tV4HqG5E2FVQSfnXnSE+ly5WgCfTGBUgG+8PPK1xkDHHLGTMAzia6AI+lydNyp2P0BkTsqR5LmgRUXxq4K6qF3qdPYJsAeN0ht870Q=
+	t=1729706371; cv=none; b=pFu8nM4CQCa/xp71DiMVeW+KxDJoD6Y+IADK+VlXBrywA70ixrnivuGU4kHac0TdCfNxA99vlPyhbFOQctFPyEI+mSoDmfjMJPiWbPWCm35x8YRjULCBh2bXlhlTE1CETCqC7rjqTbJxlVtPMjA2ixHsLjMs7s34FnQcGHYxa7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729705913; c=relaxed/simple;
-	bh=HhCRM8LXsD648EezB/Ag71ruZTVUBPWIrjPd9FGl4yA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cxzPi8ezsjk1mBN0XvGMKlZHHw51AuorBl5EUQOw5A8rhOkHT5vg5mrTNWrUiag2LXAzOfOtHp2nudQauMgrG4fVtSWLEFXWzt0HwLQ4kgU3dS7L1IQ/aI1S97m9JxM1raWA4JYzzn8TpOFhminE6gsHk07bCuXRli3Yy242tEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fi9jTksZ; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1729706371; c=relaxed/simple;
+	bh=cjzX0jTQee5FfQePq9zcsyQjuG5lIlyKCskZKxzBuCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=RHYr2PWYSoUG4j7WAKmShc4BOcHh5JQZkjV8bUVenTuqzoGZCHdR6+4FrF9aJMl31/hG61eHS5J40dFF3rTwqByGMqsf/Fd/RTKSaoJEsH5OODxb/MPR6CgNWPTK+AYhwGnbTJd8QJoIbXrpUQKp16+vroEgaaDcVUzLWOiANd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hzGPFcoF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fi9jTksZ"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e63c8678so64986e87.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 10:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1729705910; x=1730310710; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FLwni55Q0o3LkpPoGPWHU+nZClL0F1PcEd+W91uMukA=;
-        b=fi9jTksZojN11gKq00T82zQYyOXza6tSRYeNWlytAt/TBbIoFWCyFPBprNmnQJiwny
-         dxYAa1nV/t9PCOkYd3tcw2/t0sB86dcTXyjEiGO88okeqq+9RwKdeXKjZfOAg6F9lxnb
-         nE70pK1lrRSLjH9c1j1pL43vCx7x9U+dT4zE0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729705910; x=1730310710;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FLwni55Q0o3LkpPoGPWHU+nZClL0F1PcEd+W91uMukA=;
-        b=b2T+OWumCsvudA61NVgeQvSIgA5Zz5OuBAuzhgwOC3Bl3cjEpNabReGd09fLRAW24q
-         TFA6HVXLg/Alvp59zetMM1ywEUx9cAPxDt663cIB1gwIK5o4Y1iSk8XjE4dEQfgRekIB
-         dPmO+KUvYu4geT5laF60VVgVmtAUAS3xSbCDWQJBu4TAfLzldhGaZq9CVB/nBfoaAdqe
-         mPhNE4avgMuCs+baBUkajplBxe3aHgVhO+zg8y98AYxUV3SXFBd1ckp5tcKYKdgH5yoc
-         Wg8yRSFazaqpvaIzGTnru1cs3VKf+p6WN9SwxCAKOhdsxbXjxrzrAt97l0/VteYJ3z+g
-         CnVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhMRKiKhM/uvqxJgGC7G4hsqabO5VQ8KCjeupu7ViSak9q0jP4zXw3jI15iuM7X2jW7h34/B5+Ajt1aA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9FqW4JzN6fHHK4P4vI/abkfoOL/pChNmF28856hNRJEQvjcwK
-	eakzoXPDS28gurUvWeoSUJUnKldsNOForRiXLBSy5Gz/o7hpfMZdu60adLeKs2vF1D3y9P2is9J
-	QOVBnkQ==
-X-Google-Smtp-Source: AGHT+IH1Ccd4/hXmtHKNfxMvqY+SERXCvfHSQccTDKZmt+L17BZ6+KPLXU++lQ0+cqykBkzbfzB65w==
-X-Received: by 2002:a05:6512:3d27:b0:539:d870:9a51 with SMTP id 2adb3069b0e04-53b1a36b818mr2084842e87.48.1729705909928;
-        Wed, 23 Oct 2024 10:51:49 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a22440476sm1123574e87.290.2024.10.23.10.51.48
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 10:51:48 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e63c8678so64937e87.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 10:51:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXVnDjESDYfUvRYenI5ZiTw26kQjafiHjxp1+5Fk0lQwjS51F+qEqqtSdnt9hScD7vFThnErgi6rVX2xQ==@vger.kernel.org
-X-Received: by 2002:a17:907:94c3:b0:a9a:8042:bbb8 with SMTP id
- a640c23a62f3a-a9abf94d4b2mr369489566b.47.1729705563762; Wed, 23 Oct 2024
- 10:46:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hzGPFcoF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59993C4CEC6;
+	Wed, 23 Oct 2024 17:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729706370;
+	bh=cjzX0jTQee5FfQePq9zcsyQjuG5lIlyKCskZKxzBuCQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=hzGPFcoF1xsvePVXzi/+x3kpBYslriAo63a8iApJOnaqybyOotFSPKH/sYsKMACSQ
+	 7LkKYCKRPVOCepkDhy0L0ZEtSMvy2gyv9cU8IQXaUeFJJCNYG77FJIrZho/J58avff
+	 dWguJycTksNZ3JUjyH5bg0I6Rp3+H92coJEC4pNHHBZ/1fUiBBZ8pqAw+jGIrYSJmn
+	 CkeoRXtx2lWdUX1LrW6f8ZvFscvTi4ImuQR7I2BQmouKCcdN99RDYCwjq+RrRFRwKw
+	 knOfLzwg1fAzLWXByUZO2D8eyk7NBzGI0pIDXEiAaXdLple5mveosfOiqj5zb7aXY4
+	 nXcaRM13ZQX8A==
+Date: Wed, 23 Oct 2024 12:59:28 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
+	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
+	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
+Subject: Re: [PATCH 00/16] AMD NB and SMN rework
+Message-ID: <20241023175928.GA921475@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io> <20241023080935.2945-2-kexybiscuit@aosc.io>
- <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
-In-Reply-To: <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 23 Oct 2024 10:45:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-Message-ID: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-To: Tor Vic <torvic9@mailbox.org>
-Cc: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io, gregkh@linuxfoundation.org, 
-	wangyuli@uniontech.com, aospan@netup.ru, conor.dooley@microchip.com, 
-	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org, dushistov@mail.ru, 
-	fancer.lancer@gmail.com, geert@linux-m68k.org, hoan@os.amperecomputing.com, 
-	ink@jurassic.park.msu.ru, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-ide@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org, 
-	manivannan.sadhasivam@linaro.org, mattst88@gmail.com, netdev@vger.kernel.org, 
-	nikita@trvn.ru, ntb@lists.linux.dev, patches@lists.linux.dev, 
-	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru, 
-	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, 
-	wsa+renesas@sang-engineering.com, xeb@mail.ru
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023172150.659002-1-yazen.ghannam@amd.com>
 
-Ok, lots of Russian trolls out and about.
+On Wed, Oct 23, 2024 at 05:21:34PM +0000, Yazen Ghannam wrote:
+> Hi all,
+> 
+> The theme of this set is decoupling the "AMD node" concept from the
+> legacy northbridge support.
+> 
+> Additionally, AMD System Management Network (SMN) access code is
+> decoupled and expanded too.
+> 
+> Patches 1-3 begin reducing the scope of AMD_NB.
+> 
+> Patches 4-9 begin moving generic AMD node support out of AMD_NB.
+> 
+> Patches 10-13 move SMN support out of AMD_NB and do some refactoring.
+> 
+> Patch 14 has HSMP reuse SMN functionality.
+> 
+> Patches 15-16 address userspace access to SMN.
+> 
+> I say "begin" above because there is more to do here. Ultimately, AMD_NB
+> should only be needed for code used on legacy systems with northbridges.
+> Also, any and all SMN users in the kernel need to be updated to use the
+> central SMN code. Local solutions should be avoided.
 
-It's entirely clear why the change was done, it's not getting
-reverted, and using multiple random anonymous accounts to try to
-"grass root" it by Russian troll factories isn't going to change
-anything.
+Glad to see many of the PCI device IDs going away; thanks for working
+on that!
 
-And FYI for the actual innocent bystanders who aren't troll farm
-accounts - the "various compliance requirements" are not just a US
-thing.
+The use of pci_get_slot() and pci_get_domain_bus_and_slot() is not
+ideal since all those pci_get_*() interfaces are kind of ugly in my
+opinion, and using them means we have to encode topology details in
+the kernel.  But this still seems like a big improvement.
 
-If you haven't heard of Russian sanctions yet, you should try to read
-the news some day.  And by "news", I don't mean Russian
-state-sponsored spam.
-
-As to sending me a revert patch - please use whatever mush you call
-brains. I'm Finnish. Did you think I'd be *supporting* Russian
-aggression? Apparently it's not just lack of real news, it's lack of
-history knowledge too.
-
-                      Linus
+Bjorn
