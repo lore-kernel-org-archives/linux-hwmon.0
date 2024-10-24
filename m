@@ -1,54 +1,67 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E725C1EB9FF
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 15:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3931EBFF9
+	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 15:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729784126; cv=none; b=rbUnkF5z2tE/O+AdxQIOBOs/JQG5sATcPX9Xd42nLD9RrxDAh14242GQGhOgPn4Bi1UHiV6Thv2vNd04qVh96iMMTxNqIwmmF/G/B18MuDKCfJDFFRg0qb0AYKAU7lUU4pxANmYEyh7phb6CdQEudnJrihRmIzGgB6UwHvVLki4=
+	t=1729784462; cv=none; b=OB38BAbgYaD0dsQ0/rgFVDos7/3F9FjhpiNdAJCmRVZSQEICJl4j81GtnUq6pwz94y4U469uLCXBbefTVh244JtJGbrUBnWgxnN8HNkpXUrTRpOqsemBBj7bJTyCOagS19aMCH3YRsMmNQZqrfao5EVY78BcHZ34ADBpcsjLy7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729784126; c=relaxed/simple;
-	bh=CN8P9Y2BisqH7A6ZALnGt0nbNcWLhB/EW/0TAqNdOfQ=;
+	s=arc-20240116; t=1729784462; c=relaxed/simple;
+	bh=xpmWqBMMZY+ldlsuyI71jzCpxTAScS3Agp69Pc+fSVc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ScybGmGd3gK0Le12SkuLe+sXrngjze+6UEaZSOqbp7EYwKcuxd7h224YX08o9a5BTOBOmlOfreSAkSkYCR4s5znihxJkoQHSqSBqCKVwEXmgiA+FOnEePYr6Q8c0Ujj/5oiuJpO7in8+WCDSre08AGTziuyEl7cD6/P11+14Qv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3zrQ-0005ut-4t; Thu, 24 Oct 2024 17:34:52 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3zrP-000DoH-0H;
-	Thu, 24 Oct 2024 17:34:51 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 934ED35DE9F;
-	Thu, 24 Oct 2024 15:34:50 +0000 (UTC)
-Date: Thu, 24 Oct 2024 17:34:50 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241024-pumpkin-parrot-of-excellence-299c57-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FiswjFZb/VQln8gF2Nnv2LkcKd7hr9eQYNJGcsdnyfkO5n2swZWZIZ6QX1VK9ZfoBWWGsFFVXIDFYPS3pPYAfSDBLICS1K9UqQivlXKj8I6yUjLybOB2A3YGvSF46fwgQagrIBCgmgq4FCKDMdZuplUC7TN5ftytmoWy/J8r6No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=h/15Vaty; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="h/15Vaty"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-37d49a7207cso757252f8f.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 08:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729784459; x=1730389259; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0bCYWtAOVAoz7K5tYQKyYohM0VdNcKN2It0cd1+edXw=;
+        b=h/15VatyTE3kOoIkNvZiFQJnFvB/d8SgzXcLMJTbo1DgSiL/FcuwA+cztwU+NEaC9s
+         qIxiiQxFbYDCtY47DBVJjIzw2BQDVFX/gZYJ83b+iL/RDsLGcwFDaiKq4oVEIFE50DnE
+         xhmNPw5XOYBCDthAnv9ZNOKylH2o3k1nLOVSLqfkB/Sg1pOn/sRMT62jbNGUNvlW7HZj
+         1m6QegbG71tmcuPeeB7mWfoU7H2GA8idHyA6zKK6OiS4shhmUzMi9T5kj+/sW5OTSaZy
+         b17slhlt37WZ6uOkPvQbgqg/2L/yrtJDB46WeGr+zX+3z8KnEwDpjdpKgOGImpRxVodL
+         grEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729784459; x=1730389259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0bCYWtAOVAoz7K5tYQKyYohM0VdNcKN2It0cd1+edXw=;
+        b=OsZYbmtiRSth9F/d6QIVGKF6JVjI1a6zhTLWkT3Nvqjq6wm7/5V52y95BB+BeyPUIP
+         15Z/En4DthDhk8L22u039zWuttWlcs7q2xsNeEvKfAv7jfnMrAdH1CpPzFVeQTia2dxp
+         Uy7GgbfIaPAUXoFuxaG54XWA8IwKNsE49vkouOnWbEkKAEedQ7LCzJ8wyDQ9EjzPAPEM
+         kLJ44Xe+J9/xBrQ1f8S9zvr6iq596tRz7NhVWPF+HeH+AWiUGL1S3hpha3YqzLSHfjU8
+         A4uCXWqoIgcT6teooFcdE/2PKlrtscqoyyhYhycTCH3fP0U+uni3uEhkFDPbVJAWaLrN
+         DgNg==
+X-Forwarded-Encrypted: i=1; AJvYcCVokJUYYtpXc9Vc4obEjCaLdU/0PGWlUID7jJO/qjv/Trp8eG6CpPrgml+KQaZrWetxdCSr2pHXo0s3hw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWN8gTVN6t0oma+8/QYxaDzpgfVhJWSicGS22AXh5AaNgXgVTb
+	KSZw+CoVV3/TwUerS9RSu5cj+Y8UpF96sBOGQxvgmhvxHAZekxD4kjqZYUO911o=
+X-Google-Smtp-Source: AGHT+IERp2/eNZzsX4yv8fUUuhjp6KA5+OA5MDnyg6uPYvR/RwNU6G6ctkdJPcWzcvsaqhcAR5Qg3w==
+X-Received: by 2002:adf:f7cb:0:b0:37d:461d:b1ea with SMTP id ffacd0b85a97d-37efcf898d0mr4107198f8f.48.1729784458868;
+        Thu, 24 Oct 2024 08:40:58 -0700 (PDT)
+Received: from localhost (p50915d2d.dip0.t-ipconnect.de. [80.145.93.45])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a64dc1sm11574470f8f.65.2024.10.24.08.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 08:40:58 -0700 (PDT)
+Date: Thu, 24 Oct 2024 17:40:55 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Billy Tsai <billy_tsai@aspeedtech.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v1 0/2] Enable WDT reload feature
+Message-ID: <nm4ckxv6swajr6hnqlkq5uoo6ncjzlg6yfxroftat6dubiefyi@xbhi4dvqacxm>
+References: <20241024071548.3370363-1-billy_tsai@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,110 +69,49 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wnpvn5ew6ixufwbw"
+	protocol="application/pgp-signature"; boundary="a7vvl5mbgvv3nbps"
 Content-Disposition: inline
-In-Reply-To: <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20241024071548.3370363-1-billy_tsai@aspeedtech.com>
 
 
---wnpvn5ew6ixufwbw
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
+--a7vvl5mbgvv3nbps
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+Subject: Re: [PATCH v1 0/2] Enable WDT reload feature
 MIME-Version: 1.0
 
-On 24.10.2024 17:20:57, Marc Kleine-Budde wrote:
+Hello,
 
-[...]
-
-> > +	nct6694->cmd_buffer =3D devm_kcalloc(dev, CMD_PACKET_SZ,
-> > +					   sizeof(unsigned char), GFP_KERNEL);
-> > +	if (!nct6694->cmd_buffer)
-> > +		return -ENOMEM;
-> > +	nct6694->rx_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
-> > +					  sizeof(unsigned char), GFP_KERNEL);
-> > +	if (!nct6694->rx_buffer)
-> > +		return -ENOMEM;
-> > +	nct6694->tx_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
-> > +					  sizeof(unsigned char), GFP_KERNEL);
-> > +	if (!nct6694->tx_buffer)
-> > +		return -ENOMEM;
-> > +	nct6694->int_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
-> > +					   sizeof(unsigned char), GFP_KERNEL);
-> > +	if (!nct6694->int_buffer)
-> > +		return -ENOMEM;
-> > +
-> > +	nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> > +	if (!nct6694->int_in_urb) {
-> > +		dev_err(&udev->dev, "Failed to allocate INT-in urb!\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	/* Bulk pipe maximum packet for each transaction */
-> > +	bulk_pipe =3D usb_sndbulkpipe(udev, BULK_OUT_ENDPOINT);
-> > +	nct6694->maxp =3D usb_maxpacket(udev, bulk_pipe);
-> > +
-> > +	mutex_init(&nct6694->access_lock);
-> > +	nct6694->udev =3D udev;
-> > +	nct6694->timeout =3D URB_TIMEOUT;	/* Wait until urb complete */
-> > +
-> > +	INIT_LIST_HEAD(&nct6694->handler_list);
-> > +	spin_lock_init(&nct6694->lock);
-> > +
-> > +	usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
-> > +			 nct6694->int_buffer, maxp, usb_int_callback,
-> > +			 nct6694, int_endpoint->bInterval);
-> > +	ret =3D usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
-> > +	if (ret)
-> > +		goto err_urb;
-> > +
-> > +	dev_set_drvdata(&udev->dev, nct6694);
-> > +	usb_set_intfdata(iface, nct6694);
-> > +
-> > +	ret =3D mfd_add_hotplug_devices(&udev->dev, nct6694_dev,
-> > +				      ARRAY_SIZE(nct6694_dev));
-> > +	if (ret) {
-> > +		dev_err(&udev->dev, "Failed to add mfd's child device\n");
-> > +		goto err_mfd;
-> > +	}
-> > +
-> > +	nct6694->async_workqueue =3D alloc_ordered_workqueue("asyn_workqueue"=
-, 0);
+On Thu, Oct 24, 2024 at 03:15:46PM +0800, Billy Tsai wrote:
+> Aspeed PWM controller has the WDT reload feature, which changes the duty
+> cycle to a preprogrammed value after a WDT/EXTRST#.
 >=20
-> Where is the async_workqueue used?
+> Billy Tsai (2):
+>   hwmon: (aspeed-g6-pwm-tacho): Extend the #pwm-cells to 4
+>   hwmon: (aspeed-g6-pwm-tacho): Support the WDT reload
 
-Sorry - it's used in the driver, which live in separate directories -
-you can ignore this comment.
+Huh, I'm not convinced that extending #pwm-cells for that feature is a
+good idea. Unless I'm missing something none of the other supported PWM
+chips can do that, so I hesitate to change a standard for it. I suggest
+to make this a separate property instead.
 
-But then the question comes up, it looks racy to _first_ add the devices
-and _then_ the workqueue.
+Best regards
+Uwe
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---wnpvn5ew6ixufwbw
+--a7vvl5mbgvv3nbps
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaaRcACgkQKDiiPnot
-vG/fsQf5AT540awLLu44vdz0zDdKD5R2NLLug4ZfmbzvVp2Opxvknvb8e5KL/26b
-d8ISI6r0m0RhQ2ok1x73GeY4py7o5bOKIXcz7ZFGBLyWEaZZs/4ZOdJNij0au5GZ
-tuNW/EXe7WiVSxJwD3ntTOy0YniudIvK9nFuPWayh9sKUj2RRFcc4KX5mEkIn6TN
-pBep8mwT4cx1y2azhwaEXI7uGiumNPl6tHOCIIIkDnhek3d2u8/NhkFALvNk0F6k
-sBNkEQv2r9xH4Nqj6nyMwXLcKMCzpl/joGpLWB9r7BSZYHWKUd/2ns47LciaMLBN
-7M1Nbpn9wCh3h9zr9D0Tk6YZEjIbAQ==
-=MwIJ
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmcaaoUACgkQj4D7WH0S
+/k7IrAgArevIMEswllDmtB0TRJ5jEVNA4EsDQ9gZpjcVMdMbOCk91dxWPNaRWLqz
+ZUO6YMK+BjGJDbYkAI1x0i73kN3YXUSAxcAAAiKeltHm3LgGqmJgNYFSGiGfyWfr
+RZTNj7fkFkLBIJvsuuTV3JpVFuYpd0Sb9kWnsClMTwGoY8macjZEJU9E7syerxE4
+soEUTZpYo8Rnj7qAIoBQJaj8R8wjlpzlT2Mge6xQ+DefHx4fCKuACjtmR+wzQVuq
+4EE/51+wMfTDdzk2ZTjJwjYHQYTSGHoNSUhgBxtSqve5A8Onb4NRidJbXj2Hk51x
+GC8JYGqYPWON7jZmu5rUFjw8yD+kLw==
+=TvtQ
 -----END PGP SIGNATURE-----
 
---wnpvn5ew6ixufwbw--
+--a7vvl5mbgvv3nbps--
