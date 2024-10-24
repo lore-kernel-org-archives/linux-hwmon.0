@@ -1,225 +1,140 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15C81FF02C;
-	Thu, 24 Oct 2024 19:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919E81CF96;
+	Thu, 24 Oct 2024 19:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729799017; cv=none; b=R3tzyUxFszYBwWBL7AA5b4gxqc9rIT6dmgXUq2oY//bnQ8dEQlLU8XNqI/Adrxu/xnBl31VsqMU8Lv1jZdPX/dCLHVSWeOJlBMpm/1W2k9J/nv9s0cpUggxqQzG/0z4xOBR9K3kzlDCniyTspk0FNHvNk5WvIJm0fxfsT5b+qY8=
+	t=1729799232; cv=none; b=FHSB3aP/mpmu/eAdxlv300Q5qXZlHLwv/WDy7q+08gKKqmboH58MrUt7xNvltjWAWDsr1Q2H8PHlBbw3hyDfsllXtflqqTLsKAql9HQAdZJK2sshavXZOh/ZjA9Ya4dy4qSCcIA8XVkulxq8CxKPE+4tq21x0PC0G3NrQ9dBvFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729799017; c=relaxed/simple;
-	bh=yZ/K6dqDsGzjb6K/FzxlpFPTOwMfQtT9lhO1k2nevX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oStj7IUKDc2rv5rkjN6bYdRwd92Ih1a7g8Mhw+04+liVrQO8Rrb+KeKYvq1ZwnribdFqmWUDcuYW6fO2v4NsVKaVu6cuGDUGTmeXCIwmc32NvVwAxRcVLVARXWCOYm+l73y3OFeumwty1ErMbcTs6zqpVT+Bm1880Ua5+Rq2pYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xy75vLzG; arc=none smtp.client-ip=209.85.210.47
+	s=arc-20240116; t=1729799232; c=relaxed/simple;
+	bh=lIMOl16Oc+gkmljkhXJFmkCvewir3f7Gjx9L1UYJb1g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SJVoo2mzBn3T/OKggFGQXk+tMh0g6cuDoFp1PIlSBPoRJ1JCPvmofhyU+HswAxyyONbzQeIUKvwUA6Z0r6mXe4faAjMwtoe04s3BC8f9I14laupZV5t/58oElSVocOvQ4TTwq5NJuYdAyHHeRvyQLUA0RsiTpb8hlQYIHXlrsp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RQjevexA; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xy75vLzG"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7181eb9ad46so841627a34.1;
-        Thu, 24 Oct 2024 12:43:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RQjevexA"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2e3c0d1ccc6so215582a91.3;
+        Thu, 24 Oct 2024 12:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729799014; x=1730403814; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fzk7F6oUmjqDhYJuo0PpkPkgeOk+vBWt9cR54GKynl0=;
-        b=Xy75vLzGNL4NN8FtwoNmSeZ/RbxySibZpOty8cF62YUAzENTR93v/tXehZZQ2csGnw
-         YmWuuU+XFcNehSUVCSloychBdfshutWteKxF4aI6B6njL+gwCVDi0vYuovbc69VWGQOR
-         7XAeRtc6cO/zzsXl8NEG1KpBUCOMMReELJXoosQXe7i3WZI1jlliu3rjctFPlEmtcvQT
-         lXXp778JGeFSZBCd3tbDgeZbUbqEtmkFA7t2J2qE6pS4lUYF/0rAJAF+ke9TNob1X+qw
-         nnw5orV9v712s5xKKGdIhBZnJK8m8dsDjIkc7Rm1n28jsY6NOok94gyMCDKHFbFA2Mzq
-         BYmA==
+        d=gmail.com; s=20230601; t=1729799230; x=1730404030; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lIMOl16Oc+gkmljkhXJFmkCvewir3f7Gjx9L1UYJb1g=;
+        b=RQjevexAYGo4XdaqFinIYW7Kwo45vQqwDxBklimIeDDp8zrYeYpy72/LTe0DVBWyWd
+         WriqnivJ+RY69cLwJdjy3xklHZ/9B8Va0EEKYlOZZhuzS3ypSFlc22yDZO7IpL2c3EMw
+         Ip7jFavnFw0jA43+MnV6NeD+UWnqA9dghwxbYPA2tXPNVGa3/m/CM1h8cifeidAD1EFN
+         Z/UYj1aOOKkxHemHAJNM0deN4jjml9ru1z/+a8rQoOFwAbYrk2BL8R4B2rzKFeiwpzX6
+         uX6ac85L4lS9zqb9nutLJGAsUBbnAjLBlnR8An+HFNOxLYE3lsRfgZeeGsUFMasyawYc
+         Fc1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729799014; x=1730403814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fzk7F6oUmjqDhYJuo0PpkPkgeOk+vBWt9cR54GKynl0=;
-        b=uyLyA5xjIBoIMQp3RtDICM1ZVVm4gJ9fUlKsybSQHVxpgm2kgVVMmZ8zoep151W9Py
-         fCxG1VpYdLf0BFndffCf0xvP4XWmURs8IrZGLVsUsngxDzswBOfTppE4BtcZYL12iGdn
-         2j4qVJqytlb0K/fhF13cXdrU+yPE2262hYN8AEjH06g9ZcQmaMZBN8RbNZYHB4fdkKRM
-         RbqQTXnwOYbuWMsOMVQ8Y0EimzrS9clBKO70kWBMVNbE7N0ElVQTK082R+KNkbbls4Uo
-         NWxg4KM2Hq/05xpCXvLRZ8yy8ti59X0n89d1qeVroFb+RM2agc7OXzb7zudfDUpJXm6D
-         pCEg==
-X-Forwarded-Encrypted: i=1; AJvYcCVvhP8Fq0I2ALMxk7n8PLiDFbYntXRQUskyG+Oi/Qr/PRaP+mX7uve5OeHFBruUnK2bhm+x1Gs2ld0njSA=@vger.kernel.org, AJvYcCWDYuK4HAza4DIC19bEUDOuVuKAwdlDkfKgUUsqNacS97QlsIniqkIY/pZG9Dm3AzBvIT9XKYMB0l+1@vger.kernel.org, AJvYcCXOsxnC9bqCdMH1JYhjsIPvMMh0iNn7pOMcAQQdHyRgN/lLZ/MlK8IBI6n/N1X4qbA3kteCejp0pUeo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXary5WPjjob6myG448lofSm0Qev8d0LsVurFFbSJqT95qiq6b
-	TTXT5xZCb5LOR+dN4YupLuw7SuW6wGTajKqbj/WXswgZUnDVGuid
-X-Google-Smtp-Source: AGHT+IGAmjBs9KPnqhzVymUJWLtawEh8mKaCboI+u4oJBXp9Mw9fgh2Y7T2TbFiEefA8jFOtXibqSw==
-X-Received: by 2002:a05:6830:719d:b0:709:42dc:a024 with SMTP id 46e09a7af769-7185971d8efmr2990920a34.15.1729799014444;
-        Thu, 24 Oct 2024 12:43:34 -0700 (PDT)
-Received: from raspberrypi ([2600:1700:90:4c80::f])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7182ebd47acsm2236909a34.58.2024.10.24.12.43.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 12:43:33 -0700 (PDT)
-Date: Thu, 24 Oct 2024 14:43:31 -0500
-From: Grant Peltier <grantpeltier93@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: robh@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/isl68137) add support for voltage
- divider on Vout
-Message-ID: <ZxqjY-5MvsZfzf3U@raspberrypi>
-References: <cover.1729646466.git.grantpeltier93@gmail.com>
- <422a40e992e047e250a3b1295503e3b81b5515ae.1729646466.git.grantpeltier93@gmail.com>
- <7d705ac9-a109-4b49-9ac6-78bd2e9ca091@roeck-us.net>
+        d=1e100.net; s=20230601; t=1729799230; x=1730404030;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lIMOl16Oc+gkmljkhXJFmkCvewir3f7Gjx9L1UYJb1g=;
+        b=VFWp5OUgsmFYJ7gabna6LVM5YKwLS/vTloPu2WI5yHzrn2RaFjcORQZkYxxFJwjJnq
+         pHobEa21OyoocHewqYa2eZhAIbdr7k0ygNtkBRJ8l1DC90aP75to27m0yz97n/3Q1WuX
+         Cs0rk/QR8tlMj9IUyA+iPFY2aSfM0gXtRITW7xqcLvfp5CSxAsxxpVsloiAqrJyVCEii
+         8WO/en5X8kYiafeZiRStBVL9rLXtPexMt/IWfq8P/HAc0y9weZifVHRWjBm3wTIfz3sm
+         wa6t164QXfdUZYhgrA70ugLEporM26ttHsCVvnMrbCDxZ3VWL3gWybiutopafS2LSED9
+         H6QA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8HyLAeflvOVxyBRRvKSGdjp2Z2egKhj2Eb4ft6qbCejiZnGPV7jcdlu5RqeaKatnfjWJGEw6QnIiz@vger.kernel.org, AJvYcCUxDz8rJKxbNMGquuSyae7WQvRmbbbAEJVyduLUukzsDpMzE+bSOe8oLqW98pyBQUa3AWetfe1TTui1qsIA@vger.kernel.org, AJvYcCVE/RdsvZq4OjSeDcp2OGWilmP+uyVAek/GAaHdab4KR1g7YKxk4K3PJdErxQipSWFLH87aQR42JAhzZ0XMQdwnA9U=@vger.kernel.org, AJvYcCVMXKfrpiurityyeLA/o1IpW0vyt6wCrgbJ6SHhe4081ZfT/9yjzN2wYjbLlTjx/hKVKoE+GrBArfgNyw==@vger.kernel.org, AJvYcCW36kTMsp8bbh6XvKQ2Qiz413lNraxrW5KYu/YXOSRNWTEQgvMMHQdW8G4hg072LEz0crqaliaIVgA=@vger.kernel.org, AJvYcCW85/cEXYARmFXTrr6o70T4wpd8nOw0z+V5MjtONRbYXonX6AlQg4k83r/Jpppd4KdfwyFv+9ae@vger.kernel.org, AJvYcCW9fmwZZXnDyUyOroM71M3NxmbygTpKLvTRQRBHLRNS4H3h8DsjOjbQEc3KrNGb855GoM/E7ZN0ul0c2jL4@vger.kernel.org, AJvYcCWKvJ/KG0jW91h6vUDwUgFC+77Ib2fMiH0FuVF6zPBz+lLN4oJcCTQtK9HVEwOu8RNyt1fl5MLVBzNj@vger.kernel.org, AJvYcCWRg/9ggIzDeKreAvZWeTkesSDK6FEAMxsdG+q6lgB0grccmIiubEu+mRlW8pAnHqYkKGHjfmRKqv8NpT4=@vger.kernel.org, AJvYcCWsIVVozFQ5fB27keACV9QUMqlFdGRD/0+Nc/OOck4Hy8OWF1OpVQXOZoPC52XKv9fQvOrorYDd8yoj3g==@vger.kernel.org, AJvYcCX3T0psBBSkVHpxQCIzzUSCr55w0wfGPXf676HTDcZ04OkZqL+yWpniAeaDrXFdgpyn6mNQSh/D9yTk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHsm624rjmSOe8Y3b7N3Fg9XMdgvCXb4yh1L8GeV8632CEI1G1
+	65h4a9crDs9iXADmzZ9xe+p2VsLpq3ZUYsxlsSlgMWp+LJq/IQHV9iLwoTYx+UBaRiIQs0kVjCV
+	1bwiYVp0dMku8x39aklTZ5VUoC8o=
+X-Google-Smtp-Source: AGHT+IGNwTEvTbFWLMloYKQZCr/zKAp0DdNKMjGQfdnRQjfPBj0mdcky5TmmQt/Pc5lbMRaat58vPrZb6iSfoQeDocM=
+X-Received: by 2002:a17:90a:474f:b0:2e2:9026:8bee with SMTP id
+ 98e67ed59e1d1-2e76b84f393mr3469899a91.9.1729799229802; Thu, 24 Oct 2024
+ 12:47:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d705ac9-a109-4b49-9ac6-78bd2e9ca091@roeck-us.net>
+References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+ <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+ <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net> <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
+ <ZxqK75WdFBod0rZ9@smile.fi.intel.com>
+In-Reply-To: <ZxqK75WdFBod0rZ9@smile.fi.intel.com>
+From: =?UTF-8?Q?Dragan_Milivojevi=C4=87?= <d.milivojevic@gmail.com>
+Date: Thu, 24 Oct 2024 21:46:58 +0200
+Message-ID: <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
+Subject: Re: linux: Goodbye from a Linux community volunteer
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Peter Cai <peter@typeblog.net>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>, 
+	Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>, ntb@lists.linux.dev, 
+	Kory Maincent <kory.maincent@bootlin.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
+	dmaengine@vger.kernel.org, Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
+	Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org, 
+	Paul Burton <paulburton@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, linux-pci@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>, 
+	Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Yanteng Si <siyanteng@loongson.cn>, netdev@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org, 
+	Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
+	Nikita Shubin <nikita.shubin@maquefel.me>, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Guenter,
+> Yeah, with my hat of the person whose home town is under (Russian) attack for
+> the 10+ years (don't be surprised, please, the war lasts more than a decade
+> already) on I am fully understand Linus' arguments about history and being not
+> very friendly about Russians.
 
-Thank you for the review!
+How about your hat off to the people in the Donbas,
+~12K of them that had died from Ukrainian artillery fire,
+that were under imminent threat of being overrun by
+the Ukrainian forces in February 2022? Are you going
+to scream about Russian propaganda when I link
+the OSCE reports about a 10 fold increase in attacks
+at that same time?
 
-On Thu, Oct 24, 2024 at 10:48:16AM -0700, Guenter Roeck wrote:
-> On 10/22/24 18:58, Grant Peltier wrote:
-> > + [...]
-> > +	switch (reg) {
-> > +	case PMBUS_VOUT_MAX:
-> > +		/*
-> > +		 * In cases where a voltage divider is attached to the target
-> > +		 * rail between Vout and the Vsense pin, Vout related PMBus
-> > +		 * commands should be scaled based on the expected voltage
-> > +		 * at the Vsense pin.
-> > +		 * I.e. Vsense = Vout * R2 / (R1 + R2)
-> > +		 */
-> > +		fallthrough;
-> > +	case PMBUS_VOUT_MARGIN_HIGH:
-> > +		fallthrough;
-> > +	case PMBUS_VOUT_MARGIN_LOW:
-> > +		fallthrough;
-> > +	case PMBUS_VOUT_OV_FAULT_LIMIT:
-> > +		fallthrough;
-> > +	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> > +		fallthrough;
-> 
-> Just add the comment after the last case and drop all the fallthrough;
-> Same above.
+BTW can I be racist towards Germans and Croats since
+their ancestors exterminated my kin in their death camps?
+
 >
+> As you showed above seems like you also will benefit from digging to the
+> history a bit. The nice questions to be answered (but not limited to) are:
+> 1) What had happened to Finland in 1939?
+> 2) Has Finland territory been changed (occupied by another country) in time?
+> 2a) (bonus Q) How many times and by which countries / empires?
+> 3) (speaking of WW II) How many Jews were killed by Finland?
 
-Will fix in v4
+Maybe you should look up the Finnish concentration camps
+ (they called them work camps), that had death percentages
+similar to some of Nazi death camps, where Russians, Roma,
+Serbs and plenty of other E.Europeans perished, including children?
 
-> > +	case PMBUS_VOUT_COMMAND:
-> > +		if (data->channel[page].vout_voltage_divider[0]
-> > +			&& data->channel[page].vout_voltage_divider[1]) {
-> 
-> It would be better to set defaults instead of having to check this
-> for every executed command (for example by setting R1:=0 and R2:=1).
->
+The fact that they fought alongside Nazis and that they were allowed
+to remain independent (and neutral) after the war is, I hope, common
+knowledge.
 
-Sounds reasonable. I will adjust the channel initialization process to
-set defaults instead and will remove the checks in v4.
+How TF in this day and age is it considered acceptable to be openly
+racist towards some people
+because you hold historical grievances from 70 years ago?
 
-> > [...]
-> > +static int isl68137_probe_child_from_dt(struct device *dev,
-> > +					struct device_node *child,
-> > +					struct isl68137_data *data)
-> > +{
-> > +	u32 channel;
-> > +	int err;
-> > +
-> > +	err = of_property_read_u32(child, "reg", &channel);
-> > +	if (err) {
-> > +		dev_err(dev, "missing reg property of %pOFn\n", child);
-> > +		return err;
-> > +	}
-> > +	if (channel >= MAX_CHANNELS) {
-> 
-> The actual number of channels (pages) supported by the chip is known here
-> and should be checked, either by passing the number of channels or a pointer
-> to the entire info structure to this function.
-> 
+And for those of you doubting my words, here is a test: Replace the
+statements from various
+prominent figures, including USA officials, about Russians and Russia
+with Jews and Israel and post
+them on your social media accounts. See how fast you will be denounced
+as a racist.
 
-Will fix in v4.
-
-> > +		dev_err(dev, "invalid reg %d of %pOFn\n", channel, child);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	of_property_read_u32_array(child, "renesas,vout-voltage-divider",
-> 
-> Ultimately this potentially applies to _all_ hardware monitoring chips,
-> so I would very much prefer a generic voltage divider property definition.
->
-
-There is a parallel conversation on PATCH v3 2/2 about this. Would you
-prefer that I match the implementation for maxim20730?
-
-> > +				data->channel[channel].vout_voltage_divider,
-> > +				ARRAY_SIZE(data->channel[channel].vout_voltage_divider));
-> 
-> The returned data should be be validated here.
-> 
-
-Fixed in v3.
-
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int isl68137_probe_from_dt(struct device *dev,
-> > +				  struct isl68137_data *data)
-> > +{
-> > +	const struct device_node *np = dev->of_node;
-> > +	struct device_node *child;
-> > +	int err;
-> > +
-> > +	for_each_child_of_node(np, child) {
-> > +		if (strcmp(child->name, "channel"))
-> > +			continue;
-> > +
-> > +		err = isl68137_probe_child_from_dt(dev, child, data);
-> > +		if (err)
-> > +			return err;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static int isl68137_probe(struct i2c_client *client)
-> >   {
-> > +	struct device *dev = &client->dev;
-> >   	struct pmbus_driver_info *info;
-> > +	struct isl68137_data *data;
-> > +	int i, err;
-> > -	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
-> > -	if (!info)
-> > +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> > +	if (!data)
-> >   		return -ENOMEM;
-> > -	memcpy(info, &raa_dmpvr_info, sizeof(*info));
-> > +
-> > +	for (i = 0; i < MAX_CHANNELS; i++)
-> > +		memset(data->channel[i].vout_voltage_divider,
-> > +			0,
-> > +			sizeof(data->channel[i].vout_voltage_divider));
-> 
-> Under what circumstance would this not already be 0 after devm_kzalloc() ?
->
-
-Mental lapse on my end. Will change to set harmless defaults discussed
-above.
-
-> > + [...]
-> > +	if (dev->of_node) { 
-> This conditional should not be necessary because for_each_child_of_node()
-> ultimately calls __of_get_next_child() which checks if the node pointer
-> is NULL.
-> 
-
-Will remove in v4.
-
-> > +		err = isl68137_probe_from_dt(dev, data);
-> > +		if (err)
-> > +			return err;
-> > + [...]
-
-Thanks again,
-Grant 
+To paraphrase Noam Chomsky: Approved racism.
