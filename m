@@ -1,131 +1,137 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CB520011A
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 14:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787361E5731;
+	Thu, 24 Oct 2024 14:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779648; cv=none; b=WjrZeSgsJrCGPqN4dnMvMOa1pWqII9widDNV1WcRjvm3RpdGYptR6b2pcDAH2e6gA0MaGDnllsf0+mWH10VbCpkHj44Kj9oSfVGESIznjtW9zY74bvP5EOo6oSM0ViKlRMpVDjxSkRpZTqG2byrUwzpAb7dIhUBar6Ccw7d7wJo=
+	t=1729781428; cv=none; b=TW+tbzyG4FQxow0/DINTgdI2YHMJxdWQDIS/ajlVZqm2M+ciKaykGMVvs1nD/6iv2NfVMWHCuvQXqkEXJxYj0i8a4hn9OEANwyrKBwM1N3w+ikfcXlExYUwtc3Ql6RmGZbgUiIau0I97OpdgG67Bxj7pUSoVGA/oiDU6MwBBxBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779648; c=relaxed/simple;
-	bh=CeH6d9jYHaUoXOEafD41IQtDoDuY9WGiGrn3lPFqJ9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9gox1AIiJPT7jyupcBPhu0SbmcvQBzSoWssf6A8gQNNDdIOAMVHByN80ypAOhIfLmA8S9dIc1MrVSwVdb2nOqWqdMabKabe1O6I1UfkLG0WC3GGG3T16yVJE9UuZmLioqediHCMVAklB2MKhIIBZgufmYkP6dB6v3y9TKftuP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yhJ-000452-8g; Thu, 24 Oct 2024 16:20:21 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yhI-000DEt-35;
-	Thu, 24 Oct 2024 16:20:20 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	s=arc-20240116; t=1729781428; c=relaxed/simple;
+	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=upeQYk2UkLathXsZKBzasC5rfh9SGn0/8LeB+zKtVsY9TRzjnpf/Ff/qpHCxICUH3wMOmbfNOqjjPDB3l3sqJThyVT2D+FGudecDKAxcJTkebxZgWA/+5zp0dPcWokTJHUp6M9lu5xARJGMEdmUglrGil3zEhtIBMg9j1JT20Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=E2iK3IST; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=E2iK3IST; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="E2iK3IST";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="E2iK3IST"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1729781424;
+	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=E2iK3ISTp30X2+aGDqLS5ovzA+ZxuPF+Qs1/qm/BZZE5Y8Z7cYne9E6BkM/JjFKW5
+	 KNcQGDDjwV8ftEehohuSqC2Zfc/yjYs3MfiDr7hQvVDwC2ObzLDyFNHL1Zs2snoNMc
+	 9TxtlJXCErz4t/Zjx2NkCSxIy/O4N5ISUZrncBWo=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 313D01281D6E;
+	Thu, 24 Oct 2024 10:50:24 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id hmjYRFYioZ5c; Thu, 24 Oct 2024 10:50:24 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1729781424;
+	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=E2iK3ISTp30X2+aGDqLS5ovzA+ZxuPF+Qs1/qm/BZZE5Y8Z7cYne9E6BkM/JjFKW5
+	 KNcQGDDjwV8ftEehohuSqC2Zfc/yjYs3MfiDr7hQvVDwC2ObzLDyFNHL1Zs2snoNMc
+	 9TxtlJXCErz4t/Zjx2NkCSxIy/O4N5ISUZrncBWo=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
 	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 8119C35DCED;
-	Thu, 24 Oct 2024 14:20:20 +0000 (UTC)
-Date: Thu, 24 Oct 2024 16:20:20 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-5-tmyu0@nuvoton.com>
- <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 430D21281CC7;
+	Thu, 24 Oct 2024 10:50:20 -0400 (EDT)
+Message-ID: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+Subject: Re: linux: Goodbye from a Linux community volunteer
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>, 
+ Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
+ ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Kory Maincent
+ <kory.maincent@bootlin.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
+ dmaengine@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ linux-spi@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
+ linux-ide@vger.kernel.org, Paul Burton <paulburton@kernel.org>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>,  linux-mips@vger.kernel.org, Bjorn
+ Helgaas <bhelgaas@google.com>, Manivannan Sadhasivam
+ <manivannan.sadhasivam@linaro.org>, Yoshihiro Shimoda
+ <yoshihiro.shimoda.uh@renesas.com>,  linux-pci@vger.kernel.org, "David S.
+ Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>, Russell King
+ <linux@armlinux.org.uk>, Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
+ <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>, 
+ netdev@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+ linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>, 
+ linux-edac@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,  linux-serial@vger.kernel.org
+Cc: Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Alexander Shiyan
+ <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,  Sergey Shtylyov
+ <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Sergio Paracuellos
+ <sergio.paracuellos@gmail.com>,  Nikita Shubin <nikita.shubin@maquefel.me>,
+ linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 24 Oct 2024 10:50:19 -0400
+In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+References: 
+	<2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="umhghwnwqoavy3lt"
-Content-Disposition: inline
-In-Reply-To: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 7bit
 
+On Thu, 2024-10-24 at 07:27 +0300, Serge Semin wrote:
+> Hello Linux-kernel community,
+> 
+> I am sure you have already heard the news caused by the recent Greg'
+> commit 6e90b675cf942e ("MAINTAINERS: Remove some entries due to
+> various compliance requirements."). As you may have noticed the
+> change concerned some of the Ru-related developers removal from the
+> list of the official kernel maintainers, including me.
+> 
+> The community members rightly noted that the _quite_ short commit log
+> contained very vague terms with no explicit change justification. No
+> matter how hard I tried to get more details about the reason, alas
+> the senior maintainer I was discussing the matter with haven't given
+> an explanation to what compliance requirements that was.
 
---umhghwnwqoavy3lt
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-MIME-Version: 1.0
+Please accept all of our apologies for the way this was handled.  A
+summary of the legal advice the kernel is operating under is
 
-On 24.10.2024 16:17:52, Marc Kleine-Budde wrote:
-> On 24.10.2024 16:59:17, Ming Yu wrote:
-> > This driver supports Socket CANfd functionality for NCT6694 MFD
-> > device based on USB interface.
-> >=20
-> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> > ---
-> >  MAINTAINERS                     |   1 +
-> >  drivers/net/can/Kconfig         |  10 +
-> >  drivers/net/can/Makefile        |   1 +
-> >  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
+   If your company is on the U.S. OFAC SDN lists, subject to an OFAC
+   sanctions program, or owned/controlled by a company on the list, our
+   ability to collaborate with you will be subject to restrictions, and
+   you cannot be in the MAINTAINERS file.
 
-|   CC [M]  drivers/net/can/nct6694_canfd.o
-| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_start=
-_xmit=E2=80=99:
-| drivers/net/can/nct6694_canfd.c:282:22: error: variable =E2=80=98echo_byt=
-e=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-|   282 |         unsigned int echo_byte;
-|       |                      ^~~~~~~~~
-| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_rx_wo=
-rk=E2=80=99:
-| drivers/net/can/nct6694_canfd.c:677:34: error: variable =E2=80=98stats=E2=
-=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-|   677 |         struct net_device_stats *stats;
-|       |                                  ^~~~~
-| cc1: all warnings being treated as errors
+Anyone who wishes to can query the list here:
 
-If compiling with C=3D1, sparse throws the following errors:
+https://sanctionssearch.ofac.treas.gov/
 
-| drivers/net/can/nct6694_canfd.c:417:14: warning: cast to restricted __le32
-| drivers/net/can/nct6694_canfd.c:750:9: warning: cast to restricted __le32
-| drivers/net/can/nct6694_canfd.c:777:32: warning: cast to restricted __le32
+In your specific case, the problem is your employer is on that list. 
+If there's been a mistake and your employer isn't on the list, that's
+the documentation Greg is looking for.
 
-Marc
+I would also like to thank you for all your past contributions and if
+you (or anyone else) would like an entry in the credit file, I'm happy
+to shepherd it for you if you send me what you'd like.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Again, we're really sorry it's come to this, but all of the Linux
+infrastructure and a lot of its maintainers are in the US and we can't
+ignore the requirements of US law.  We are hoping that this action
+alone will be sufficient to satisfy the US Treasury department in
+charge of sanctions and we won't also have to remove any existing
+patches.
 
---umhghwnwqoavy3lt
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
+James Bottomley
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaV6EACgkQKDiiPnot
-vG+E+Qf8CIIlMRqAUgax6FgoXWP0LDl3JVfJSfoClGvwvTGIR6r0hAAYhY6YXdy9
-gUPusFE69CRe780ZIu4/gR45YWIRpof1exG4JAIoKbU/4Bdq/42x1BKSXifWPayo
-Rm/mm+HyVCjb7WTpopxM7ZCnZMks9xOUwl6A+/ShIRZA3pWBz8ll4yRCtTq1V6xy
-GMKhYsYP4mDY3YyD1+hUfLBmiBu2XvhnGksdoLRZHNMNKlNhZnpRSLeQew5EHSy1
-03BltphJ6YsdAgTfyR7AT4nTisdNyYl+IhnJq1+FSKsWxdHcelNMaM3JwlLrXMBO
-FbotT17CV8J3M14xFrwqL7cRROi57A==
-=lV4A
------END PGP SIGNATURE-----
-
---umhghwnwqoavy3lt--
