@@ -1,115 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.tlmp.cc (unknown [148.135.104.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1A11E5714;
-	Thu, 24 Oct 2024 14:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6631E282B;
+	Thu, 24 Oct 2024 14:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.135.104.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779053; cv=none; b=ZYBCcoTsXYayFQdYce0jaWxqjkx2FzbGSPEMExHi7pNj9L8FydjWn3iFWNF/kIr4bBeKsj52JffdAsruqHjvMzGge6aY0A5badeTqKEWFCrVvlgCM9yVTPh9LYq1gMilkzoIIdBbJAnHSyb7Oki2DnXrTv4I9g5HTc7GK9eDeS0=
+	t=1729779238; cv=none; b=JcUK9CR64Kf6O8wvpTwSKGkJf0j4r8q4CzWGMCTgK8HypsrIqtzPjjieFySoIZIk5J7TEpM1YrwxXNkEXgnb5fXA4Ssul5/40cfmbsDvug2HdmnyfmX06Re2BWYx+jHlYWovc0o9XBmS0S4V4FDq+4Pshci7MkbLWmfxgr8Yzns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779053; c=relaxed/simple;
-	bh=krhQtm4zm/FOYnIE/tGTH1SAlqRa2tX6XY57qn26xao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T21duchDOeVfpP0QfOiScf4DVlEEej3HJicdcoWUiNLOW5MCTQ7PZ4rBYCA4G7R008B6HcgMwNBZwBcVmKPewAqcHnGIbr45zcx9kvTSyclkLbDz89I24XN2dlol7J2fYBVvcxz7E/Odv5lpkBtSN60yORf4ZP0cRmHLS7O9h4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZaXSy15T; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZaXSy15T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C82EC4CEC7;
-	Thu, 24 Oct 2024 14:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729779052;
-	bh=krhQtm4zm/FOYnIE/tGTH1SAlqRa2tX6XY57qn26xao=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZaXSy15To3yTWqZHs3NhtB2LSgH6UAKPlDgAu9RHa7JIE32YuivGXDueV4FJsc0Tw
-	 lRqaPHtdG3qBZYD5Qa1rFHI60A/Ycbt1R3a0Tvi4UHj/XI79cjebGX+eXnhOtMxebT
-	 LoVkkICu07poQAwYKfRkUyk5ghneAKiIaEcs7Y5cUeRXiNWO8eTopBCuATsoWN8OuE
-	 3htET69XX7c7wzvKmIDpHgkiikShCdERETvy10+a/a4DeA1uG3N4db1hJ5VMJ3olRw
-	 kH3yqNZuYnYbEr90UV3GeLXvIRW3KNvQZ740p0vydbItEgdY/nMt1vF2bvHHOnMyUn
-	 ZO8TO5vQq8cwQ==
-Date: Thu, 24 Oct 2024 09:10:50 -0500
-From: Rob Herring <robh@kernel.org>
-To: Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, krzk+dt@kernel.org,
-	conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
-	ukleinek@kernel.org, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com
-Subject: Re: [PATCH v1 1/2] hwmon: (aspeed-g6-pwm-tacho): Extend the
- #pwm-cells to 4
-Message-ID: <20241024141050.GA246869-robh@kernel.org>
-References: <20241024071548.3370363-1-billy_tsai@aspeedtech.com>
- <20241024071548.3370363-2-billy_tsai@aspeedtech.com>
+	s=arc-20240116; t=1729779238; c=relaxed/simple;
+	bh=FqtmwA94oipzr+62VsJdTfpQcYtuXccvlcXq2Sfzq50=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=au0COAI16dULNcXGdUNXTIlCCCN8p0UrTKKClTGFc0uKlFqvWQtzaanUE9v5OMLUoBz7kxP9rfQUlOrV5wNiBphk1gmpaVXI2I4PKpVEyZi1hhslLuyl39FuupbU87wJii41XnF8gJSTD/5RuOu0p2rwTPgQibTNqCQwvyhJmo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru; spf=fail smtp.mailfrom=kremlin.ru; arc=none smtp.client-ip=148.135.104.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kremlin.ru
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 434E85E5C5;
+	Thu, 24 Oct 2024 10:03:59 -0400 (EDT)
+From: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
+To: torvalds@linux-foundation.org
+Cc: aospan@netup.ru,
+	conor.dooley@microchip.com,
+	ddrokosov@sberdevices.ru,
+	dmaengine@vger.kernel.org,
+	dushistov@mail.ru,
+	fancer.lancer@gmail.com,
+	geert@linux-m68k.org,
+	gregkh@linuxfoundation.org,
+	hoan@os.amperecomputing.com,
+	ink@jurassic.park.msu.ru,
+	jeffbai@aosc.io,
+	kexybiscuit@aosc.io,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com,
+	netdev@vger.kernel.org,
+	nikita@trvn.ru,
+	ntb@lists.linux.dev,
+	patches@lists.linux.dev,
+	richard.henderson@linaro.org,
+	s.shtylyov@omp.ru,
+	serjk@netup.ru,
+	shc_work@mail.ru,
+	torvic9@mailbox.org,
+	tsbogend@alpha.franken.de,
+	v.georgiev@metrotek.ru,
+	wangyuli@uniontech.com,
+	wsa+renesas@sang-engineering.com,
+	xeb@mail.ru,
+	LKML <linux-kernel@vger.kernel.org>,
+	Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
+Subject: [PATCH 0/2] MAINTAINERS: Remove few Chinese Entries
+Date: Thu, 24 Oct 2024 22:03:51 +0800
+Message-ID: <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024071548.3370363-2-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Oct 24, 2024 at 03:15:47PM +0800, Billy Tsai wrote:
-> Add an option to support #pwm-cells up to 4. The additional cell is used
-> to enable the WDT reset feature, which is specific to the ASPEED PWM
-> controller.
+Hi, Linux Community.
 
-Use subject prefixes matching the subsystem.
+If you haven't heard of Chinese sanctions yet, you should try to read
+the news some day.  And by "news", I don't mean Chinese
+state-sponsored spam like Central China Television some kind of BS.
 
-> 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> Change-Id: Iefcc9622ac3dc684441d3e77aeb53c00f2ce4097
+So I hereby submit another two patches to remove the entries owned by
+two US-sanctioned entities Huawei[1] and LoongSon[2]. "They can come
+back in the future if sufficient documentation is provided."
 
-Drop.
+Best Regards,
 
-> ---
->  .../bindings/hwmon/aspeed,g6-pwm-tach.yaml    | 25 ++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-> index 9e5ed901ae54..0cc92ce29ece 100644
-> --- a/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,g6-pwm-tach.yaml
-> @@ -31,7 +31,11 @@ properties:
->      maxItems: 1
->  
->    "#pwm-cells":
-> -    const: 3
-> +    enum: [3, 4]
-> +    description: |
-> +      The value should be 4 to enable the WDT reload feature, which will change the duty cycle to
-> +      a preprogrammed value after WDT/EXTRST#.
-> +      The range for the fourth cell value supported by this binding is 0 to 255.
+Vladimir Vladimirovich Putin
 
-Wrap lines at 80.
+---
+Привет, Linux-сообщество.
 
->  
->  patternProperties:
->    "^fan-[0-9]+$":
-> @@ -69,3 +73,22 @@ examples:
->          pwms = <&pwm_tach 1 40000 0>;
->        };
->      };
-> +  - |
-> +    #include <dt-bindings/clock/aspeed-clock.h>
-> +    pwm_tach: pwm-tach-controller@1e610000 {
-> +      compatible = "aspeed,ast2600-pwm-tach";
-> +      reg = <0x1e610000 0x100>;
-> +      clocks = <&syscon ASPEED_CLK_AHB>;
-> +      resets = <&syscon ASPEED_RESET_PWM>;
-> +      #pwm-cells = <4>;
-> +
-> +      fan-0 {
-> +        tach-ch = /bits/ 8 <0x0>;
-> +        pwms = <&pwm_tach 0 40000 0 128>;
-> +      };
-> +
-> +      fan-1 {
-> +        tach-ch = /bits/ 8 <0x1 0x2>;
-> +        pwms = <&pwm_tach 1 40000 0 160>;
-> +      };
-> +    };
-> -- 
-> 2.25.1
-> 
+Если вы еще не слышали о китайских санкциях, попробуйте прочитать
+новости когда-нибудь.  И под «новостями» я не имею в виду китайские
+спам, спонсируемый государством, типа Центрального китайского
+телевидения, какая-то чушь.
+
+Поэтому я отправляю еще два патча для удаления записей, принадлежащих
+две компании, находящиеся под санкциями США, Huawei[1] и LoongSon[2]. 
+«Они могут прийтив будущем, если будет предоставлена
+достаточная документация».
+
+С наилучшими пожеланиями,
+
+Владимир Владимирович Путин
+
+[1]: https://sanctionssearch.ofac.treas.gov/Details.aspx?id=30947
+[2]: https://en.wikipedia.org/wiki/Loongson
+
+Vladimir Vladimirovich Putin (2):
+  MAINTAINERS: Remove Huawei due to compilance requirements.
+  MAINTAINERS: Remove Loongson due to compilance requirements.
+
+ MAINTAINERS | 96 -----------------------------------------------------
+ 1 file changed, 96 deletions(-)
+
+-- 
+2.47.0
+
