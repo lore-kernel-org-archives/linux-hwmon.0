@@ -1,167 +1,200 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4531D63E5;
-	Thu, 24 Oct 2024 16:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D95A1F8920;
+	Thu, 24 Oct 2024 16:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729788909; cv=none; b=Qdt9vWa8piqoFBkyeZk6OFRnmSBfx4xNaFphCreAqzoZ0Ez15u2tYZ9962Jsq0OTp4iKXNFFoRQ9Uopn0nNnpw/VAuc8zBUSLzX0t/BXXnK/upQCqLx3BpmIndF5G3nnjgZpj83yRRiy8WF3zLxOfC2eoek2P95UOaFQW3Ho+bg=
+	t=1729789125; cv=none; b=uwRDB8gQIlo3x5D8qDL1jFQWoRbNGG60NJsft5H0823WzbcKZdB6wNN5vxVeww6Hxkl/1Pg+CdAdh3yyCyGoairGo7wHyhu5EAer7fDvOt3J+/m/INkY1lXGQaNG3J6dFhDgDqVD5MkmAHsAfQIZW32z67FMq/ZfCF329mEZsUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729788909; c=relaxed/simple;
-	bh=a8ahRRcrY594S4Mt9NvQKGbibrLN5Ofloy8eC4cJUCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s0EFiG8aL1ruyQQ6CvB4Xau5dvHlQGUJEhJjq24OrLC89MSu3rvjJh4ALAMECGcDWsxFVGvZaqYA5mMuMoPVaDHohzxoIdbvBx+hnYbM9PHvAInz5NZrAygUX1FLuDsl/QJz/mib7XnJzhPm6kMPLQfy0/T2kpkvF148BmmcY4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iiWk+83h; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1729789125; c=relaxed/simple;
+	bh=LQUqq41rKKi2DZ6ziCnRzGqwgHnRtqlW6CGDMmHRRV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KGQrBwInP+7O6ZC04BeGBenD9agI/00MRmAD/858NYwn1Hw6qefFKkwusvioK745UQTx0fmpW5jjHJd4PIkx1W8WXFfilymkgzcZNXohV+SnXQ25Kmp1brADGXlsRCBZ3DT4Tim+iieHtM4u2qyZ8zG5vfb9vzWgqEYuhVr6bHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GdRrAud4; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iiWk+83h"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2e2c6bc4840so896151a91.2;
-        Thu, 24 Oct 2024 09:55:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GdRrAud4"
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-7ed9c16f687so789336a12.0;
+        Thu, 24 Oct 2024 09:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729788906; x=1730393706; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=d7PBxxlBiwJrhbNFRgnIYKYzTkgRlcrjAX2t06Ip96w=;
-        b=iiWk+83hgsbjVKcIcnrf8Sasb59VNnpcbvLT78mwcq+aN+kbZu1qos07lT+wBY4omE
-         LbsfH7TF71siQpiqQyauLvDBbfgP70WqRh3B8nr7PTa1kAdlXouBunJzQHMfBI8f9uDB
-         Kj2OIIjFMW+6ynrtEATpAjGXaZgEyVeQQ/OTvOSWyYdwcjYrL/6jstfrVpoatnclfPud
-         jPyYuWCh5fdBbnWxBbm+vDhDEl4LYy/J3rBIUNUrCFkLkGbIvtLqXf+nhq2PSxFPE4Wz
-         2VbWehaOpcaJm9IvTJK5GA1Q+dzO6zzVN0zYXCN7aUw1e+sNk17CK+C+8NIV9ziaABKA
-         jzlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729788906; x=1730393706;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1729789122; x=1730393922; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d7PBxxlBiwJrhbNFRgnIYKYzTkgRlcrjAX2t06Ip96w=;
-        b=qZDLnMkmGNjhKEujHx/E6KtKsGUI3eBazlHvB1qKKW+w5hYBI0IUUZpsI9map3gCOS
-         sHoHGpUyi13+krO4h+2XzupgQqPRNRCBLBrjynH/xh2snv5ztFv25WFdZuQxP5lHPpph
-         ZqGo9iIMKnlvhWsGct5ryp75rbhTFb3VPyihsEs+XaKuR8+yYFcCRV2KJ4ZUBQhDjwXd
-         F6gjOUazzrqS1cAtptJvUozw9gUa4G8W6vSYoNn5Wk/BTnbwn1vUPk+1Yomn4Jw0qvH9
-         +yujKgE1mTXdeI6sYCMRmfMzLFdRr4CUCcnjj6V0kbItA7Dypwhq27OPEm60Qva+mv5c
-         XM/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU1PCv4C/jNZbZX5UIEiVWP/s3aYQsaxvw/FEQguTM/QQacieoY472jO2f/YsBruLRleVA11uDCDeLjMA==@vger.kernel.org, AJvYcCUMsCbJQXbCLzdU70cqACPM3QzWMdtoNESB54Lkk6fl2nIFssXjuw0O9ImosAZXEyu1OtOBysV2C+wpkyNI@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVhroPKBPDFWJIixJEXF/RnssT4QBQdG3/miPl/oy0b7ajO8E1
-	gIshI0sAA2ap/6M2fCEj3fUhyW/6j/9Oz4n9aFGTpJzyjWpXiM76
-X-Google-Smtp-Source: AGHT+IF7mz4K47c5JjT4sJY07QawDK9gtl9POxdES20/c+qKG0W0YJ1aSNy6XEBJZYGdtMcIX/XH/Q==
-X-Received: by 2002:a17:90a:c7d5:b0:2e2:9e64:c481 with SMTP id 98e67ed59e1d1-2e76b60c552mr7153085a91.22.1729788906484;
-        Thu, 24 Oct 2024 09:55:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e48d008sm1748531a91.0.2024.10.24.09.55.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 09:55:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e028943e-2acb-4b19-b2eb-dd603855b3a8@roeck-us.net>
-Date: Thu, 24 Oct 2024 09:55:04 -0700
+        bh=xfJ8p+8q2+xxwuBNnMevVX62Z8jej5Rz7JLXYkmoeTk=;
+        b=GdRrAud4sBuMip099zZ1gjZUCAcpFpVaf6tUQmzZiB+fqLRR9sWZcb3ta3oMj2CiwY
+         TV4qbu6vYPrZsCnoSTsTV2RmTrBAG1uZ0TP4ioCKkF+Z6KYlIsGQH5UuZCQ1L/TASDEh
+         eUKVB927Xn5mzBkRVawsCap+F2hQ5UhaVPOYhdt0mulXUclspSdwlLLNP3LHQxmHiLQe
+         YFG7mc54BLSYfJtcWt1HrhKUHyn+Krz7HOXtSXiACkumDZ0EXQ/lo601sIOIj9EzNWv8
+         3d2e6LoC/BiHj1Vi0J3FyTJ7+8m++t2/++JKtONXHcmN0LgiRKOGHikuV30EjZyOePvy
+         0r/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729789122; x=1730393922;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xfJ8p+8q2+xxwuBNnMevVX62Z8jej5Rz7JLXYkmoeTk=;
+        b=hOQ2ukPUNmh8YIr7LBkmwc3CYEdxpSn7WAO2Nc8riIteEgG3KbGVNWoyR3AduwjvGk
+         8S4YusAzwX4Lp7kvLgF0E8l04Xg50flTChmwoSe5CxeHVh8qCg6RtFHMZiEmhyKrefeN
+         aIuodW9ON2FIrIa5gCdk4vk3Gk8A6ZCw1TEWSlQ5XfqaFcxd4x1iz7ps7tnaHDTaZkUi
+         s3SwQF3Vbk4F3fSsfhPwZR6/ZLOfAtXe0vq/wuLCZZMatBAQib0+nwBGyvMGANLZxhky
+         H1fUPG7KhSP/7SQAhLp4J3hIK7on2ly0cE4d5jACehwEt95Bn++DtJ92l9XeGPOwsWOC
+         giCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKiGZ96egjcbAUQDKpmXa1AYRQMsthzWB9PC/aB01BBG04BlU8t30QkntRKGsZ1TP3vxP3daZD@vger.kernel.org, AJvYcCUhAdcCLRe9ev1/BvD4IfTM3Ul+Od0QLT7yQCPph/VyTxiohVv2d9Mz5pJPr/NAsLP7IzbVDSqOYOc=@vger.kernel.org, AJvYcCUk05f0jIdFIIWoZWALXr9PcPuS4JHc+28ZX2XF2YO8b5hxOhjxsNwT/JRbZ2QwF7COSNkROuVg1+9m@vger.kernel.org, AJvYcCVgHb6MZvwJoATLBipaEwXFZ3URjzSF4uijAPp+uu7grjwgKHHnN1pVLDP5tVAkLTHtQupt2XaNrRkVvA==@vger.kernel.org, AJvYcCVyJ6SpKy0/TJ9UIc59nEKSohkryFOqxKbPMM6mvROBq8etqKm44z/TG4Z+fX2sScpm0cUs1PiaupqBFg==@vger.kernel.org, AJvYcCW2MpX+vmo3YYA+4ROsl/lMtdQhdc1ZQURUTFvZkYiNP64aGN90cMavBIGYrgm4bG0420o6GQ+P+VLE3DM=@vger.kernel.org, AJvYcCW5ZMrGyK3ezS8lW7OVIjCkco+PZONEiuMwmivG68imGzXYuY+bNIg0mg6LCzik51YMjCSgn9W6pf2n@vger.kernel.org, AJvYcCWALFz59CqB35Em6cM1//ZoXwoBEbS1PIVHzCKXCtfZhh9Q0MckZrN2b4DDDIPHeTAYFXCqGQdxknL+@vger.kernel.org, AJvYcCWdZUvCC2B4wYBkPn6VBXFMm/MdT67uw85l3/TUFiJ8Ge2GAB+sPl0I2FIQLtYYtXRrPKDLfqyNSMhuSFo4@vger.kernel.org, AJvYcCX6uhRMM17fI/xEG4SElr8UaGwjyiFExqNavztQvB+4Q9GoIC+FC2f1T/f42V2Mgw9qy0ii9VI5u2xDh/pb@vger.kernel.org, AJvYcCX9t8XQzPxCVjCEtf6Nkj6k2+tpWqLtnUgCnO8GqX0d6mFQevHJomF4dpeP26AJt6LMEQ8HQz7GJj//IPqiTkHVPvU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQQxMY3x2L2mkXje97qUq2p4abElq9M8zu4r1Y3ViuQWHAMKsb
+	mE3Vg/KbinLNlppjmmWm6mTFBiE/gvcY44DozzKCUVktPo1HPBeQ
+X-Google-Smtp-Source: AGHT+IHkRrL+646WJX5jMNiRVOq7St1d5iL/wDNXUA9UQNOX6Gcj9xqgJzmbGWgDaCdtnMTv+h1KbQ==
+X-Received: by 2002:a05:6a21:4a4c:b0:1d9:175a:c2ba with SMTP id adf61e73a8af0-1d978b0245fmr8971311637.20.1729789122186;
+        Thu, 24 Oct 2024 09:58:42 -0700 (PDT)
+Received: from localhost.localdomain ([240b:4001:20c:6000::1])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm8203615b3a.46.2024.10.24.09.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 09:58:41 -0700 (PDT)
+From: Hantong Chen <cxwdyx620@gmail.com>
+To: james.bottomley@hansenpartnership.com
+Cc: ajhalaney@gmail.com,
+	allenbh@gmail.com,
+	andrew@lunn.ch,
+	andriy.shevchenko@linux.intel.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	broonie@kernel.org,
+	cai.huoqing@linux.dev,
+	dave.jiang@intel.com,
+	davem@davemloft.net,
+	dlemoal@kernel.org,
+	dmaengine@vger.kernel.org,
+	dushistov@mail.ru,
+	fancer.lancer@gmail.com,
+	geert@linux-m68k.org,
+	gregkh@linuxfoundation.org,
+	ink@jurassic.park.msu.ru,
+	jdmason@kudzu.us,
+	jiaxun.yang@flygoat.com,
+	keguang.zhang@gmail.com,
+	kory.maincent@bootlin.com,
+	krzk@kernel.org,
+	kuba@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux@armlinux.org.uk,
+	linux@roeck-us.net,
+	manivannan.sadhasivam@linaro.org,
+	netdev@vger.kernel.org,
+	nikita.shubin@maquefel.me,
+	nikita@trvn.ru,
+	ntb@lists.linux.dev,
+	olteanv@gmail.com,
+	pabeni@redhat.com,
+	paulburton@kernel.org,
+	robh@kernel.org,
+	s.shtylyov@omp.ru,
+	sergio.paracuellos@gmail.com,
+	shc_work@mail.ru,
+	siyanteng@loongson.cn,
+	tsbogend@alpha.franken.de,
+	xeb@mail.ru,
+	yoshihiro.shimoda.uh@renesas.com
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Date: Thu, 24 Oct 2024 16:56:50 +0000
+Message-ID: <20241024165650.174-1-cxwdyx620@gmail.com>
+X-Mailer: git-send-email 2.47.0.windows.1
+In-Reply-To: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+References: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: modified ina2xx to match SY24655
-To: Wenliang <wenliang202407@163.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org,
- krzk+dt@kernel.org
-References: <80bfd968-8f12-46b1-9b72-837502ccdb2a@roeck-us.ne>
- <20241024083055.82047-1-wenliang202407@163.com>
- <20241024083055.82047-2-wenliang202407@163.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241024083055.82047-2-wenliang202407@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On 10/24/24 01:30, Wenliang wrote:
-> Adding Silergy's sy24655 as an adapter chip for Ina2xx drivers.
-> 
-> Because it is similar to INA226, the supply voltage and pin definitions
-> are the same. It also supports IIC communication, with only two
-> additional registers added for configuring and calculating average power.
-> 
-
-Again, please consult
-	Documentation/process/submitting-patches.rst
-for both description and subject.
-
-"dt-bindings: Add SY24655 to ina2xx devicetree bindings" or similar
-would be a much better subject, and something like
-
-"SY24655 is similar to INA226. Its supply voltage and pin definitions
-are therefore the same. Compared to INA226, SY24655 has two additional
-registers for configuring and calculating average power."
-
-would be a much better patch description.
-
-Also, as already requested by Conor, please copy the devicetree mailing list
-on devicetree patches to enable automated testing.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Wenliang <wenliang202407@163.com>
-> ---
->   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> index 6ae961732e6b..05a9cb36cd82 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> @@ -20,6 +20,7 @@ description: |
->   properties:
->     compatible:
->       enum:
-> +      - silergy,sy24655
->         - ti,ina209
->         - ti,ina219
->         - ti,ina220
-
+> If you haven't heard of Russian sanctions yet, you should try to read=0D
+> the news some day.  And by "news", I don't mean Russian=0D
+> state-sponsored spam.=0D
+=0D
+> As to sending me a revert patch - please use whatever mush you call=0D
+> brains. I'm Finnish. Did you think I'd be *supporting* Russian=0D
+> aggression? Apparently it's not just lack of real news, it's lack of=0D
+> history knowledge too.=0D
+=0D
+Hi James,=0D
+=0D
+Here's what Linus has said, and it's more than just "sanction."=0D
+=0D
+Moreover, we have to remove any maintainers who come from the following cou=
+ntries or regions, as they are listed in *Countries of Particular Concern* =
+and are subject to impending sanctions:=0D
+=0D
+- Burma, People=E2=80=99s Republic of China, Cuba, Eritrea, Iran, the Democ=
+ratic People=E2=80=99s Republic of Korea, Nicaragua, Pakistan, Russia, Saud=
+i Arabia, Tajikistan, and Turkmenistan.=0D
+- Algeria, Azerbaijan, the Central African Republic, Comoros, and Vietnam.=
+=0D
+=0D
+For People=E2=80=99s Republic of China, there are about 500 entities that a=
+re on the U.S. OFAC SDN / non-SDN lists, especially HUAWEI, which is one of=
+ the most active employers from versions 5.16 through 6.1, according to sta=
+tistics. This is unacceptable, and we must take immediate action to address=
+ it, with the **same** reason.=0D
+=0D
+On 10/24/24 10:50 AM, James Bottomley wrote:=0D
+> On Thu, 2024-10-24 at 07:27 +0300, Serge Semin wrote:=0D
+>> Hello Linux-kernel community,=0D
+>>=0D
+>> I am sure you have already heard the news caused by the recent Greg'=0D
+>> commit 6e90b675cf942e ("MAINTAINERS: Remove some entries due to=0D
+>> various compliance requirements."). As you may have noticed the=0D
+>> change concerned some of the Ru-related developers removal from the=0D
+>> list of the official kernel maintainers, including me.=0D
+>>=0D
+>> The community members rightly noted that the _quite_ short commit log=0D
+>> contained very vague terms with no explicit change justification. No=0D
+>> matter how hard I tried to get more details about the reason, alas=0D
+>> the senior maintainer I was discussing the matter with haven't given=0D
+>> an explanation to what compliance requirements that was.=0D
+> =0D
+> Please accept all of our apologies for the way this was handled.  A=0D
+> summary of the legal advice the kernel is operating under is=0D
+> =0D
+>     If your company is on the U.S. OFAC SDN lists, subject to an OFAC=0D
+>     sanctions program, or owned/controlled by a company on the list, our=
+=0D
+>     ability to collaborate with you will be subject to restrictions, and=
+=0D
+>     you cannot be in the MAINTAINERS file.=0D
+> =0D
+> Anyone who wishes to can query the list here:=0D
+> =0D
+> https://sanctionssearch.ofac.treas.gov/=0D
+> =0D
+> In your specific case, the problem is your employer is on that list.=0D
+> If there's been a mistake and your employer isn't on the list, that's=0D
+> the documentation Greg is looking for.=0D
+> =0D
+> I would also like to thank you for all your past contributions and if=0D
+> you (or anyone else) would like an entry in the credit file, I'm happy=0D
+> to shepherd it for you if you send me what you'd like.=0D
+> =0D
+> Again, we're really sorry it's come to this, but all of the Linux=0D
+> infrastructure and a lot of its maintainers are in the US and we can't=0D
+> ignore the requirements of US law.  We are hoping that this action=0D
+> alone will be sufficient to satisfy the US Treasury department in=0D
+> charge of sanctions and we won't also have to remove any existing=0D
+> patches.=0D
+> =0D
+> Regards,=0D
+> =0D
+> James Bottomley=0D
+> =0D
