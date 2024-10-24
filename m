@@ -1,165 +1,224 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC041FE0EA;
-	Thu, 24 Oct 2024 18:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2EB12FB1B;
+	Thu, 24 Oct 2024 18:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729794026; cv=none; b=iLS4Cr8xPYzWBKaYhJVB2te/QRZ3XEB0+mpHbm7hWPNEvCGA5EWhnYmyWlcD537+r+BWaMVq2/BUbpU8XwykDxMbD7nITQmU22Aldm2UcInQNh8tjd1HOSYhxBI5haghMlsrpOGPuWFyM1xbPRp6yE5YQFT0XvaN860EfME7Llo=
+	t=1729794736; cv=none; b=rOt8BHQHf/E86wnNFltyFDCX08Nk7h0qcJq8dG5wItweAADOBJvFaaTioyJGSXnAgIwgzagvnbwWv7drbWPmD4ir7k5ct+gQcJXNpniRDdpmOJ2Fi/kONdidf5a/J2D75tyO1uYWT6AKPIoqOQJ2mcEVeBCKkbRmBiuUhwWdDfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729794026; c=relaxed/simple;
-	bh=wEkB3zq4LCxabrUV4KO/q95T5XBmhZmXXKdUWSfGc14=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GLuE/Oi45QRHDk2B5Ngtewx5T97rkW0Cb3DVhEnqXptdue3NeN0hfG5sE6GFgx8D1Fc0JKg+fdgrZ65YGK77q5tljAog6Y0Nrdvx4+oVx4WsQ1sKyDSBUzzfjtnlkW5eClW68IRRoszoz9o26Fp69VRFsb6YaU+rSoMP3vhr/60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZ4bFe1/; arc=none smtp.client-ip=209.85.214.193
+	s=arc-20240116; t=1729794736; c=relaxed/simple;
+	bh=x5TMrkcwVFwITI+kj6H73SBtq079kG0wMhxTYuJpNWc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AEHJ+0c+2J4AO1gYuyc+XzZS7fOd+ZsV/yxJa7nGMTZPDm9slx5J43t8o8Cgi9DBg96nf19f/2iIfcdYy8v4ww2c9W7nOMhDU3kWMvlC77CMaCKTvKRDITTMDsEsmid/Fk1NYwjzyTE6EbmXsJDC9uuq4eYft8El33+iScXgkdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ei+G5WtI; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZ4bFe1/"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-20caea61132so9311355ad.2;
-        Thu, 24 Oct 2024 11:20:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ei+G5WtI"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5e98bfea0ceso619250eaf.0;
+        Thu, 24 Oct 2024 11:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729794024; x=1730398824; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BJRMzi03Xu9OgYRc3CEyzmmOuaUb/klqYsHXiTiyAMg=;
-        b=ZZ4bFe1/iPRMb1EawhaHXUrhrW+71UYzE1XFHM7zo/rOpdmY6H0bURQXUnxwmQt5Nc
-         X4h477KIb0/8vOncDbbCjLG9LJCobSkv6rSj/0OkZ7jMbPIXOjdcfnX8M0H8dNjQNYGA
-         wYoKop8elWT5bsoI8F3Qxx/UE+5PnQC+q/W6yOnxTSjzKgCPkLFiwgOZnu3ccHWMfjrL
-         SJL6obE9V7LOXRqJ03akjN+hAcV4wAS3+qpntdKjyNRaVRGuguDxURihn5XWuXoecbDv
-         ToB06sFO9DGZn8bfxgLTOh5S8Y/cWAYVNdIgioQ1TnH3jHOIiE5wscnxiFs8z3JGPAPc
-         x/lg==
+        d=gmail.com; s=20230601; t=1729794733; x=1730399533; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gRKHkVHowCvUdaOL63DeqZvn2vxTeBbKPQmJOLnaQLU=;
+        b=Ei+G5WtIj5wCcQS0z2hrTd5zdwHCmeYU6PYVnl7gEVch8kRXuu3rHdMTaybCKYOTEi
+         ub13b9QUIAMKhY+WA9Zwqou+wbqqpoHkF2/a5/UksK6us56HMtX66jFLRqwoCaXWU29O
+         YzJ1nG4uGpL4Kaa0o4w6433q2U8pbrgKJz6KV0Yh2XHd2mNFiQEG98nF9LzwTQUsfWvw
+         t+DVOnvFlNtfY+tunuXKcMPodabDqnGRB5I1/4Ek3taX7pJcEFqcu1SxAEheoLxRzXFT
+         sPwUR+7t1OzMtFDfAxAJa0/pzLMKlZqTN7gkMjQVmouqRJTu+ElaaHbHPOhv/IbfhdrO
+         I5iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729794024; x=1730398824;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BJRMzi03Xu9OgYRc3CEyzmmOuaUb/klqYsHXiTiyAMg=;
-        b=GQq9uqoC2uv8OB6Q1zcBJwLitnhITUymiLb7tCeYNld1klwQdgRhHnvixM1ci9jGMQ
-         dL5kEAEZqomOGtL+5s9gLsXO+XMkzm6Bbz0lVsk9P9rnXhHV3kgKRuDCavN92qfhHBb7
-         RD5oBhS+Aqaj0BSmqm0fveMy/RI75dKYtg/UVF1kyVamFk7PHboBcwRoHhebvyzXIkY6
-         zyJeUZKL202lfxmgyRBeLGLzVOPUpW2G3C9TOKgciZA9nF9/DarTCbqy5omKZoWKFKkl
-         xsGZWRrs5O7UIIePiV7ECuFbJPRhJB8jyJzHP5ceYoR9PtZQDeJCI8PcgYCKPVDRZqkW
-         jG2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUfce/kltyyVvh8b1WCJYwEXJTJ2WXaMegbfLcQMYHvKQNUujIch9VdmsdV0ytf6g0YZ95qzLf/@vger.kernel.org, AJvYcCUuVMWUSCG7JrAZEK0pU21yFjVN1PQOBwNgEye5nxW3h0R8BXV0HCIiClorbFCKYxkz+ZGMjUAqvssBDJo=@vger.kernel.org, AJvYcCW4uJu9mG4i7clgF9NpgbWyQNbrxMtU5mwQ02SKLEmiZjVm5umMEREnrObgyZoCnaN4AgIgJ8tyQ/SL@vger.kernel.org, AJvYcCWJ8sGfC4tBhwKLFFiRiVN4dGZF0+wIe2gP0mVso7JQkbP7ltBeu+zya85/AIjfZvvFE1qNRg7sG2P1WARQ@vger.kernel.org, AJvYcCWRVzNyhHBIQsi/B/u4g4Ta/5zIa4UEYXVSkgV8tYHaXugraZiK8tCo1GLItqvtgeU0uUTt5Wm7qhel@vger.kernel.org, AJvYcCWed/noCn+IujYXy2k0Rl4YMznU1mUvXq/ZyF7tDrp3CV5U3qZpjaT9/bgtEGjzKpnlvt7lEIcn3babrZMSFQyfc2Q=@vger.kernel.org, AJvYcCX0q6YTiVGjpufQYlJXYxdclsuQDC2DyYPcG8M183OPdaDg3/Y0gDFffrK1+IUc0TM4y0fOimWdG6HPg529@vger.kernel.org, AJvYcCX5DYB2Fgc4ch9AkyZOozndo3wFuiteHnfqj8rHQwzU9u9KMXEVbpTDAHV3r6kamVtSuEXmTPN74NdYxw==@vger.kernel.org, AJvYcCXjiRB7/kGZgbGmGMJj4RgiDtp7ojutaLNKZIHoUZl/UFMYkgezNhTEW8MSWr0jikQm9H4OCoIupG7B@vger.kernel.org, AJvYcCXlbektPWH1PNRQcznzJu9kiq9d31vwPcjZ31IqQk2P2k5BbdsR5awHod9uZqCR5BAsNyulLcIsTTI=@vger.kernel.org, AJvYcCXmEgtwQqSpWlQSYBXBDcnuvW76U8Hnuv3Z9XBeTbsM3oF74LhB7RtUL0p+ywE7OjvMW3UX/eLQbFUtsQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaSJH10gSKfyVBSZ0HmRZtKELdDIYflDgiXsuZezk1Wgg5tstc
-	r/nwiBPhoBEPLhVzhztg0B/sPZD19SyhHUvkG1xPpCQG3YzTii/B
-X-Google-Smtp-Source: AGHT+IGYKpMxQstbgNZ3LiMaRt+C1kt3vQ5CO9mGWGwaEAcyM8hDC2KY72x67dsHopqzCGRceRlU4w==
-X-Received: by 2002:a17:902:f785:b0:1fb:57e7:5bb4 with SMTP id d9443c01a7336-20fa9e9f8c6mr74829205ad.37.1729794024010;
-        Thu, 24 Oct 2024 11:20:24 -0700 (PDT)
-Received: from localhost.localdomain ([240b:4001:20c:6000::1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0bd53dsm74915625ad.122.2024.10.24.11.19.43
+        d=1e100.net; s=20230601; t=1729794733; x=1730399533;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gRKHkVHowCvUdaOL63DeqZvn2vxTeBbKPQmJOLnaQLU=;
+        b=NJYJbWxBH+o18C5vnSDo8l9eG3YgYPdGtrj1bp6eoYp4EuVQjVnsW9d2L+4/VEEajU
+         UFVR+vuwucHtOZZpJCD3gifu0QZPXlLBC61lhQtuVjG7EkMrYggO4W9rvcPSreJxbSMT
+         IcKkqUduA15tqvbYq8cllC/0fGPDwfxVmNdw93vDjCD9TWwD5982r6+P73LB+hKNk+gM
+         FIZJERIxDj3xf+r5VwDgKksz3jR06OywYiYmNW38wtYul66Tq6fVNnK1QHWbaPkntNcC
+         aJvPPuqo+6QEU8EdPfCXh2kYLxSq4j141URpvcvrw+r9Vj2KNA2d2aja2i7tk4t+Ri4B
+         TJ8g==
+X-Forwarded-Encrypted: i=1; AJvYcCUqjZLRFUEI7Tdfd5+wAuARmcL2bh7lKEMhGjHPAM7ga+bghnHG18tRtuLgn/7hOGkcjJ3am5uBbTcaxDo=@vger.kernel.org, AJvYcCUtzNXWXkmqMrMjrET3HibrA8hIYT/+eLCOUAYgMpxGOdwQZh7PMf3PIXI1TDa7LootANyXyyp+b65B@vger.kernel.org, AJvYcCV5ZjcvUR9fz8eDB02gSFrYAuncDUFVwnkSD1IeQEFS5npCCjnbvTDJJQm08sjFZkPuyYEr8qw36/SJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUCCXOdwnGpwy4LEvg2Se6/+ss8qhgYHsuagnWShNECA067ncO
+	/tuuyx2PiX18DVHzsjvGZmH1Q4QCyJw3yfyaNACws4Sucq8f8mpt1Ln1kP8b
+X-Google-Smtp-Source: AGHT+IE4AC5dww3WVXBCkrX1t76OvrQk3DQ3teSiOoE+Z3M+gzefPD7Exfv1+/fP+4a4xqIE5xEj2w==
+X-Received: by 2002:a05:6820:610:b0:5e7:cb2e:e01c with SMTP id 006d021491bc7-5ebee96e08dmr6199210eaf.7.1729794733384;
+        Thu, 24 Oct 2024 11:32:13 -0700 (PDT)
+Received: from raspberrypi ([2600:1700:90:4c80::f])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5ec02aee518sm449494eaf.4.2024.10.24.11.32.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 11:20:23 -0700 (PDT)
-From: Hantong Chen <cxwdyx620@gmail.com>
-To: tytso@mit.edu
-Cc: ajhalaney@gmail.com,
-	allenbh@gmail.com,
-	andrew@lunn.ch,
-	andriy.shevchenko@linux.intel.com,
-	andy@kernel.org,
-	arnd@arndb.de,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	broonie@kernel.org,
-	cai.huoqing@linux.dev,
-	cxwdyx620@gmail.com,
-	dave.jiang@intel.com,
-	davem@davemloft.net,
-	dlemoal@kernel.org,
-	dmaengine@vger.kernel.org,
-	dushistov@mail.ru,
-	fancer.lancer@gmail.com,
-	geert@linux-m68k.org,
-	gregkh@linuxfoundation.org,
-	ink@jurassic.park.msu.ru,
-	james.bottomley@hansenpartnership.com,
-	jdmason@kudzu.us,
-	jiaxun.yang@flygoat.com,
-	keguang.zhang@gmail.com,
-	kory.maincent@bootlin.com,
-	krzk@kernel.org,
-	kuba@kernel.org,
-	linux-edac@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux@armlinux.org.uk,
-	linux@roeck-us.net,
-	manivannan.sadhasivam@linaro.org,
-	netdev@vger.kernel.org,
-	nikita.shubin@maquefel.me,
-	nikita@trvn.ru,
-	ntb@lists.linux.dev,
-	olteanv@gmail.com,
-	pabeni@redhat.com,
-	paulburton@kernel.org,
-	robh@kernel.org,
-	s.shtylyov@omp.ru,
-	sergio.paracuellos@gmail.com,
-	shc_work@mail.ru,
-	siyanteng@loongson.cn,
-	tsbogend@alpha.franken.de,
-	xeb@mail.ru,
-	yoshihiro.shimoda.uh@renesas.com
-Subject: Re: linux: Goodbye from a Linux community volunteer
-Date: Thu, 24 Oct 2024 18:19:16 +0000
-Message-ID: <20241024181917.1119-1-cxwdyx620@gmail.com>
-X-Mailer: git-send-email 2.47.0.windows.1
-In-Reply-To: <20241024173504.GN3204734@mit.edu>
-References: <20241024173504.GN3204734@mit.edu>
+        Thu, 24 Oct 2024 11:32:11 -0700 (PDT)
+Date: Thu, 24 Oct 2024 13:32:09 -0500
+From: Grant Peltier <grantpeltier93@gmail.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
+	magnus.damm@gmail.com, grant.peltier.jg@renesas.com,
+	brandon.howell.jg@renesas.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	jic23@kernel.org, Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH v3 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <ZxqSqcN11fTambT4@raspberrypi>
+References: <cover.1729715599.git.grantpeltier93@gmail.com>
+ <2cc99616ff3dd9bcecb1309cd4d103d70aea862b.1729715599.git.grantpeltier93@gmail.com>
+ <20241024-corporate-faceted-811e8e5a8c58@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024-corporate-faceted-811e8e5a8c58@spud>
 
-> However, note that China is *not* actively attacking Taiwai=0D
-> militarily, while there are Russian missiles and drones, some of which=0D
-> may controlled by embedded Linux systems, that are being used against=0D
-> Ukraine even as we speak.  Hence, it should not be surprising that the=0D
-> rules imposed by the US Government might be different for Huawei=0D
-> compared to other sanctioned entities that are directly or indirectly=0D
-> controlled by the Russian Military-Industrial complex.=0D
-=0D
-I wonder some of Ukrainian misiles and drones might also be using=0D
-the embedded Linux controllers, and why aren't there any sanctions.=0D
-This cannot be used as an excuse.=0D
-=0D
-What LF and Linus done will inevitably create a climate of fear where=0D
-contributors and maintainers from the *Countries of Particular Concern*=0D
-feels endangered.=0D
-=0D
-This is clearly NOT what contributors truly want. People from around the wo=
-rld=0D
-once firmly believed that Linux was a free and open-source project. However=
-, =0D
-Greg's commit and Linus' response deeply disappoint them.=0D
-=0D
-Open-source projects might be international, but the people or organization=
-s=0D
-controlling them are not. This is the source of concern and disappointment.=
-=0D
-=0D
-> Of course, if China were to militarily attack Taiwan or some other=0D
-> country in Asia, circumstances might change at some point in the=0D
-> future.  Hopefully Chinese leaders will pursue a path of wisdom and=0D
-> those consequences won't come to pass.  Ultimately, though, that's not=0D
-> up to any of us on this mail thread.=0D
-=0D
-Finally, I must point out that Taiwan's status as part of China has never=0D
-changed and will never change. The term "military attack" is therefore=0D
-**inappropriate**. The move to solve the Taiwan question and achieve=0D
-China's reunification is coming soon and before that China must make full=0D
-preparation for the upcoming *sanctions* from the U.S. government, includin=
-g=0D
-handling the issue of high dependence on any international open-source=0D
-projects.=0D
+Hi Conor,
+
+Thank you for your review!
+
+On Thu, Oct 24, 2024 at 06:01:11PM +0100, Conor Dooley wrote:
+> On Wed, Oct 23, 2024 at 03:53:51PM -0500, Grant Peltier wrote:
+> > + [...]
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - renesas,isl68220
+> > +      - renesas,isl68221
+> > +      - renesas,isl68222
+> > +      - renesas,isl68223
+> > +      - renesas,isl68224
+> > +      - renesas,isl68225
+> > +      - renesas,isl68226
+> > +      - renesas,isl68227
+> > +      - renesas,isl68229
+> > +      - renesas,isl68233
+> > +      - renesas,isl68239
+> > +      - renesas,isl69222
+> > +      - renesas,isl69223
+> > +      - renesas,isl69224
+> > +      - renesas,isl69225
+> > +      - renesas,isl69227
+> > +      - renesas,isl69228
+> > +      - renesas,isl69234
+> > +      - renesas,isl69236
+> > +      - renesas,isl69239
+> > +      - renesas,isl69242
+> > +      - renesas,isl69243
+> > +      - renesas,isl69247
+> > +      - renesas,isl69248
+> > +      - renesas,isl69254
+> > +      - renesas,isl69255
+> > +      - renesas,isl69256
+> > +      - renesas,isl69259
+> > +      - renesas,isl69260
+> > +      - renesas,isl69268
+> > +      - renesas,isl69269
+> > +      - renesas,isl69298
+> > +      - renesas,raa228000
+> > +      - renesas,raa228004
+> > +      - renesas,raa228006
+> > +      - renesas,raa228228
+> > +      - renesas,raa229001
+> > +      - renesas,raa229004
+> 
+> Damn, that;s a list and a half, innit! Looking briefly at the driver
+> change, the match data implies that quite a few of these actually would
+> be suitable for fallback compatibles.
+
+Yes, there are quite a few part numbers (and likely to be more in the
+future). My intention was to make the driver more user friendly since the
+variants listed in the driver do not map to something in any of the
+datasheets. So using those instead would require users to inspect the
+source of the driver instead of simply referencing their part number(s).
+
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +patternProperties:
+> > +  "^channel@([0-3])$":
+> > +    type: object
+> > +    description:
+> > +      Container for properties specific to a particular channel (rail).
+> > +
+> > +    properties:
+> > +      reg:
+> > +        description: The channel (rail) index.
+> > +        items:
+> > +          minimum: 0
+> > +          maximum: 3
+> > +
+> > +      renesas,vout-voltage-divider:
+> 
+> There's already a binding for voltage dividers: voltage-divider.yaml
+> That said, I have no idea how that would work with an extant driver for
+> the hardware like we have here. I'd imagine it would really have to be
+> used with iio-hwmon? + Peter and Jonathan, since I don't know how the
+> driver side of using the voltage divider works.
+
+In his recent revier, Guenter requested using a standard voltage divider
+schema as well. I see there is an implementation in maxim,maxim20730.yaml
+but that differs from the one in voltage-divider.yaml. Should I opt to
+match maxim,maxim20730.yaml?
+
+> 
+> > +        description:
+> > +          Resistances of a voltage divider placed between Vout and the voltage
+> > +          sense pin for the given channel (rail). It has two numbers
+> > +          representing the resistances of the voltage divider provided as
+> > +          <R1 R2> which yields an adjusted Vout as
+> > +          Vout_adj = Vout * (R1 + R2) / R2 given the original Vout as reported
+> > +          by the Vsense pin.
+> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +        minItems: 2
+> > +        maxItems: 2
+> > +
+> > +    required:
+> > +      - reg
+> > +
+> > +    additionalProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +      #address-cells = <1>;
+> > +      #size-cells = <0>;
+> > +
+> > +      isl68239@60 {
+> > +        compatible = "renesas,isl68239";
+> > +        reg = <0x60>;
+> > +      };
+> > +    };
+> 
+> Without any channels, what does this actually do? If you've got no
+> channels you cannot measure anything making this example invalid?
+> 
+> Thanks,
+> Conor.
+> 
+> > + [...]
+
+The channel structures are optional to allow users to arbitrarily define
+voltage dividers for any particular rail. Omitting the channel definitions
+still allow the device to be instantiated and probed as an I2C device
+along with all related hwmon PMBus telemetry dictated by the part variant.
+
+Thanks again,
+Grant
+
