@@ -1,404 +1,346 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31C61AB52D
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 07:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99391B0F1A;
+	Thu, 24 Oct 2024 08:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729755183; cv=none; b=dPnUOd9UOdqTZrfty/0KbANlhWFx5pP0I0ihlmxXLz9tDK/ZwTYl4aDjMjH2lpy0G9a0k6uCNHcJABOV+3YYNWAGDOGsJ4DkSuAhXrC4BD3fEnvMowxnvF+tVSTL2V8nfGoEYFtmODjkDR+t3QyxVRchQ20yj6PbjYNWlb9f6Ts=
+	t=1729758690; cv=none; b=RgN4WuG+l0ZyGMATiD3lJxPVG9fkMhKCPbVFxquQ4oz2kSJE1npKiENzHKXMbYa3+m/iGPC9S2sArtJbwo0GQNRThbC/XUm4qKDHmunqGFXmkG+eIpAVoXlNj/rsGbbX0wuDuej2/NkLMzE/bndki6m9bG3vrUCjtjZkQPtRrEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729755183; c=relaxed/simple;
-	bh=xJk9DEO+3X/GcCNVC4idOyP3Q8DzjJsvWHkQBNNuUiI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HxuOcmOd5YgjlUqrDmeqnSj+5/AOjM8ujWrEBHEQ8YN9ZqavnvbGxyHuvhgMTvIE01cHX640mJj1GM40jB75VAhcmNDnCBOfBN2XVs89g0YEomWxadQS8bhRcEFBJNia6RSyf4UimRp4+CTe1YjMspkkGl1uxS3IussR5MxzeBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NPYBlPus; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1729758690; c=relaxed/simple;
+	bh=FIyL9wTlJVY8UykGGvmUpzDcH1Vwsy+uNN4CYmXaqMo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Irv9cqytDSKPYMsix8pEwoMr9NfLyWLK7ZOAILjufggd2+9eIih1wVn4LSFk5HVwKj6H1FZz0AxaYmldOMTaQc/4JBdi8B+KgOTws4HGUac60LwGb3T3soI5JjD+tJ1h6XW/VjCTiuRN24M9OXzFRS/NKAOOwBDcv6DjAoWzcHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IoeNJWSA; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NPYBlPus"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729755177;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6QtnlkYe/1PnWLS5Ii6raZ83O0JHoz7C7QG5MqJpjr0=;
-	b=NPYBlPus2ErWhnfc5pjFKNkzb04Mij/NUKYpingANTTyjfd8F2sZtyToBjKi4+VCoCUcOn
-	D97Ffl5OhPC8DCSLkZvtg42uPcner62C5jIUEhYrpjuRx/63sDT1vj06tGhrt+F1dTpG6p
-	M6+2Ot0UMofKiqq/CVqPK7OgHDS3fGA=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-633-iWBRQVp1N3elByhZdMeMsg-1; Thu, 24 Oct 2024 03:32:55 -0400
-X-MC-Unique: iWBRQVp1N3elByhZdMeMsg-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-6e3529d80e5so11268527b3.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 00:32:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729755175; x=1730359975;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6QtnlkYe/1PnWLS5Ii6raZ83O0JHoz7C7QG5MqJpjr0=;
-        b=ZFLKbgAeuv9JipWPe5IMFeZCkXJSx5+fwTBVoF/40aLtRNbn6MaaOfF9qNVYIZJirR
-         739Nge//iosZskQzQ2/7jbM9aTYIn1+CTe7ESYIQLEcNvxVY5oWxnbSndEWSZySXnEL8
-         YlCrRGQdOGStJEJ9SlfqIG34Zt9tecMal0bXZRDC2At56YT5dSI0QZrwuXm7YAj4zZ6U
-         yz6w129E2bC5OfQvgqngAYN+s9fQ6fjrATPbnbk7swEn4N/Y6Rg5QNQWDewxY9cCmkBT
-         stKjvzsnT6+qL2UWIW2f0CE8wrmRomTA4iQnKPX/xGmEL7AGctPnWoZ+EJFKTAL4ZpGq
-         b1yw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRlK7wtg4mi7ojlFKD2kbw8TExmsSmYnG0Y8JtEzDG6/JYOh6M0EIPZ7XdGxnJTJ+p6VRq+tFdA9IiYQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN5mPnH6CqK7zGQVHveQaUJcxyTrJgZhwzB6EnrRMSFg4pabaA
-	YEHM8pzxWWVmkyUCOnwCSEDIZsSVosmAblQrvBRU4aTAvevGVIf15qL617GporOMBb4r71xMaif
-	lUqqwRWkgpcdnf7g3Y0sGGjlJ0+ol4y99toRnbEl4w8C9MLYjxpaEG6NztApu
-X-Received: by 2002:a05:690c:6e03:b0:6db:cf6c:a7c4 with SMTP id 00721157ae682-6e866331c20mr10690507b3.45.1729755174538;
-        Thu, 24 Oct 2024 00:32:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFwjzENxysw+j7YRfDKeQxYY43g6inqzMz9Yd8c7a5bPrsRFqYGaOrxa6Un2MKjvPM7S1dLyw==
-X-Received: by 2002:a05:690c:6e03:b0:6db:cf6c:a7c4 with SMTP id 00721157ae682-6e866331c20mr10690047b3.45.1729755174061;
-        Thu, 24 Oct 2024 00:32:54 -0700 (PDT)
-Received: from dhcp-64-16.muc.redhat.com (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6ce008ac8f1sm47141046d6.26.2024.10.24.00.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 00:32:53 -0700 (PDT)
-Message-ID: <7be870fc2b2fa01b89708208c78cc041029252aa.camel@redhat.com>
-Subject: Re: linux: Goodbye from a Linux community volunteer
-From: Philipp Stanner <pstanner@redhat.com>
-To: Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>, 
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Kory Maincent
- <kory.maincent@bootlin.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
- dmaengine@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- linux-spi@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
- linux-ide@vger.kernel.org, Paul Burton <paulburton@kernel.org>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>,  linux-mips@vger.kernel.org, Bjorn
- Helgaas <bhelgaas@google.com>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Yoshihiro Shimoda
- <yoshihiro.shimoda.uh@renesas.com>,  linux-pci@vger.kernel.org, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>, Russell King
- <linux@armlinux.org.uk>, Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>, 
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>, 
- linux-edac@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,  linux-serial@vger.kernel.org
-Cc: Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Alexander Shiyan
- <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,  Sergey Shtylyov
- <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Sergio Paracuellos
- <sergio.paracuellos@gmail.com>,  Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 24 Oct 2024 09:32:46 +0200
-In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-References: 
-	<2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IoeNJWSA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=9j1jVInBa3aoNuEyXN
+	llBIdcnOIOKZMzOu6HCDyuF2c=; b=IoeNJWSAI/03rHewRsmO3M/rmSAPAhneQy
+	VjkgzmekxjUHBZSvOouuaTGTPdYSFyAGJhk4It4BIzIbSVUow+MFXm4F9ROGcm1w
+	u3LLr0ladIEjzMq2FHmWGZftJtEWRz7i9tCU96pfkNVKNW1Vq+68HJwSk5gSxLtl
+	YosGRgD7M=
+Received: from 100ask.localdomain (unknown [36.18.166.195])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3v07CBRpnboiLDA--.18S2;
+	Thu, 24 Oct 2024 16:31:00 +0800 (CST)
+From: Wenliang <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: Wenliang <wenliang202407@163.com>,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] hwmon: modified ina2xx to match SY24655
+Date: Thu, 24 Oct 2024 04:30:54 -0400
+Message-Id: <20241024083055.82047-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <80bfd968-8f12-46b1-9b72-837502ccdb2a@roeck-us.ne>
+References: <80bfd968-8f12-46b1-9b72-837502ccdb2a@roeck-us.ne>
+X-CM-TRANSID:_____wD3v07CBRpnboiLDA--.18S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3GF1rWFyUGrW8XrWkJrW7twb_yoWfKF4Upr
+	ZxGa4ftrWUtF9xXr4kt3y5Gr15Awn7ArWUCr18G34ru3W5A34v934Utr10yFWUGrykAFWU
+	tFyktr18Gr1UJrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRS_MwUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbioxaC02caAfpBuAAAsb
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2024-10-24 at 07:27 +0300, Serge Semin wrote:
-> Hello Linux-kernel community,
->=20
-> I am sure you have already heard the news caused by the recent Greg'
-> commit
-> 6e90b675cf942e ("MAINTAINERS: Remove some entries due to various
-> compliance
-> requirements."). As you may have noticed the change concerned some of
-> the
-> Ru-related developers removal from the list of the official kernel
-> maintainers,
-> including me.
->=20
-> The community members rightly noted that the _quite_ short commit log
-> contained
-> very vague terms with no explicit change justification. No matter how
-> hard I
-> tried to get more details about the reason, alas the senior
-> maintainer I was
-> discussing the matter with haven't given an explanation to what
-> compliance
-> requirements that was. I won't cite the exact emails text since it
-> was a private
-> messaging, but the key words are "sanctions", "sorry", "nothing I can
-> do", "talk
-> to your (company) lawyer"... I can't say for all the guys affected by
-> the
-> change, but my work for the community has been purely _volunteer_ for
-> more than
-> a year now (and less than half of it had been payable before that).
-> For that
-> reason I have no any (company) lawyer to talk to, and honestly after
-> the way the
-> patch has been merged in I don't really want to now. Silently, behind
-> everyone's
-> back, _bypassing_ the standard patch-review process, with no affected
-> developers/subsystem notified - it's indeed the worse way to do what
-> has been
-> done. No gratitude, no credits to the developers for all these years
-> of the
-> devoted work for the community. No matter the reason of the situation
-> but
-> haven't we deserved more than that? Adding to the GREDITS file at
-> least, no?..
->=20
-> I can't believe the kernel senior maintainers didn't consider that
-> the patch
-> wouldn't go unnoticed, and the situation might get out of control
-> with
-> unpredictable results for the community, if not straight away then in
-> the middle
-> or long term perspective. I am sure there have been plenty ways to
-> solve the
-> problem less harmfully, but they decided to take the easiest path.
-> Alas what's
-> done is done. A bifurcation point slightly initiated a year ago has
-> just been
-> fully implemented. The reason of the situation is obviously in the
-> political
-> ground which in this case surely shatters a basement the community
-> has been built
-> on in the first place. If so then God knows what might be next (who
-> else might
-> be sanctioned...), but the implemented move clearly sends a bad
-> signal to the
-> Linux community new comers, to the already working volunteers and
-> hobbyists like
-> me.
+v3:Support the SY24655 for current and voltage detection as well as
+power calculation.
 
-I'm also quite shocked and even baffled about how this has been
-handled. This is not how leaders should communicate difficult or big
-decisions. It's the most disappointing event I have witnessed in the
-project.
-
-There is the form and there is the content =E2=80=93 about the content one
-cannot do much, when the state he or his organization resides in gives
-an order.
-
-But about the form one can indeed do much. No "Thank you!", no "I hope
-we can work together again once the world has become sane(r)"... srsly,
-what the hell.
-
-No idea why they felt the need to do it that way, but it certainly is
-not the open source way, neither is it decent or honorable.
+SY24655 provides a power accumulator, thus adding the power1_average
+parameter to output the average power, which can be used to calculate
+energy; In order to achieve average power, adding extra EIN register
+and ACCUM_CONFIG register addresses for SY24655. Due to the 48 bit
+read-only nature of the EIN register, a function has been added
+specifically for average power reading.
 
 
-That said, thank you for all your work, Serge!
-
-I believe that nothing that has been accomplished with a candid mindset
-and decent intentions is ever done for nothing, although it often pays
-off way differently than expected.
-So I hope this will be the case for you, too.
-
-Take care,
-Philipp
+Signed-off-by: Wenliang <wenliang202407@163.com>
+---
 
 
->=20
-> Thus even if it was still possible for me to send patches or perform
-> some
-> reviews, after what has been done my motivation to do that as a
-> volunteer has
-> simply vanished. (I might be doing a commercial upstreaming in future
-> though).
-> But before saying goodbye I'd like to express my gratitude to all the
-> community
-> members I have been lucky to work with during all these years.
-> Specifically:
->=20
-> NTB-folks, Jon, Dave, Allen. NTB was my starting point in the kernel
-> upstream
-> work. Thanks for the initial advices and despite of very-very-very
-> tough reviews
-> with several complete patchset refactorings, I learned a lot back
-> then. That
-> experience helped me afterwards. Thanks a lot for that. BTW since
-> then I've got
-> several thank-you letters for the IDT NTB and IDT EEPROM drivers. If
-> not for you
-> it wouldn't have been possible.
->=20
-> Andy, it's hard to remember who else would have given me more on my
-> Linux kernel
-> journey as you have. We first met in the I2C subsystem review of my
-> DW I2C
-> driver patches. Afterwards we've got to be frequently meeting here
-> and there -
-> GPIO, SPI, TTY, DMA, NET, etc, clean/fixes/features patch(set)s.
-> Quite heat
-> discussions in your first reviews drove me crazy really. But all the
-> time we
-> managed to come up with some consensus somehow. And you never quit
-> the
-> discussions calmly explaining your point over and over. You never
-> refused to
-> provide more detailed justification to your requests/comments even
-> though you
-> didn't have to. Thanks to that I learned how to be patient to
-> reviewers
-> and reviewees. And of course thank you for the Linux-kernel
-> knowledges and all
-> the tips and tricks you shared.
->=20
-> * Andy, please note due to the situation I am not going to work on my
-> DW DMAC
-> fixes patchset anymore. So if you ever wish to have DW UART stably
-> working with the
-> DW DMA-engine driver, then feel free to pick the series up:
-> Link:
-> https://lore.kernel.org/dmaengine/20240911184710.4207-1-fancer.lancer@gma=
-il.com/
->=20
-> Linus (Walleij), after you merged one of my pretty much heavy
-> patchset in you
-> suggested to me to continue the DW APB GPIO driver maintaining. It
-> was a first
-> time I was asked to maintain a not-my driver. Thank you for the
-> trust. I'll
-> never forget that.
->=20
-> Mark, thank you very much for entrusting the DW APB SSI driver
-> maintenance to
-> me. I've put a lot of efforts into making it more generic and less
-> errors-prune,
-> especially when it comes working under a DMA-engine control or
-> working in the
-> mem-ops mode. I am sure the results have been beneficial to a lot of
-> DW
-> SPI-controller users since then.
->=20
-> Damien, our first and last meeting was at my generic AHCI-platform
-> and DW AHCI
-> SATA driver patches review. You didn't make it a quick and easy path.
-> But still
-> all the reviews comments were purely on the technical basis, and the
-> patches
-> were eventually merged in. Thank you for your time and experience
-> I've got from
-> the reviews.
->=20
-> Paul, Thomas, Arnd, Jiaxun, we met several times in the mailing list
-> during my
-> MIPS P5600 patches and just generic MIPS patches review. It was
-> always a
-> pleasure to discuss the matters with such brilliant experts in the
-> field. Alas
-> I've spent too much time working on the patches for another
-> subsystems and
-> failed to submit all the MIPS-related bits. Sorry I didn't keep my
-> promise, but
-> as you can see the circumstances have suddenly drawn its own
-> deadline.
->=20
-> Bjorn, Mani, we were working quite a lot with you in the framework of
-> the DW
-> PCIe RC drivers. You reviewed my patches. I helped you to review
-> another patches
-> for some time. Despite of some arguing it was always a pleasure to
-> work with
-> you.=C2=A0 Mani, special thanks for the cooperative DW eDMA driver
-> maintenance. I
-> think we were doing a great work together.
->=20
-> Paolo, Jakub, David, Andrew, Vladimir, Russell. The network subsystem
-> and
-> particularly the STMMAC driver (no doubt the driver sucks) have
-> turned to be a
-> kind of obstacle on which my current Linux-kernel activity has
-> stopped. I really
-> hope that at least in some way my help with the incoming STMMAC and
-> DW XPCS
-> patches reviews lightened up your maintainance duty. I know Russell
-> might
-> disagree, but I honestly think that all our discussions were useful
-> after all,
-> at least for me. I also think we did a great work working together
-> with Russell
-> on the DW GMAC/QoS ETH PCS patches. Hopefully you'll find a time to
-> finish it up
-> after all.=20
->=20
-> Rob, Krzysztof, from your reviews I've learned a lot about the most
-> hardwary part
-> of the kernel - DT sources and DT-bindings. All your comments have
-> been laconic
-> and straight to the point. That made reviews quick and easy. Thank
-> you very
-> much for that.
->=20
-> Guenter, special thanks for reviewing and accepting my patches to the
-> hwmon and
-> watchdog subsystems. It was pleasure to be working with you.
->=20
-> Borislav, we disagreed and argued a lot. So my DW uMCTL2 DDRC EDAC
-> patches even
-> got stuck in limbo for quite a long time. Anyway thank you for the
-> time
-> you spent reviewing my patches and trying to explain your point.
->=20
-> * Borislav, it looks like I won't be able to work on my Synopsys EDAC
-> patchsets
-> anymore. If you or somebody else could pick them up and finish up the
-> work it
-> would be great (you can find it in the lore archive). The patches
-> convert the
-> mainly Zynq(MP)-specific Synopsys EDAC driver to supporting the
-> generic DW
-> uMCTL2 DDRC. It would be very beneficial for each platform based on
-> that
-> controller.
->=20
-> Greg, we met several times in the mailing lists. You reviewed my
-> patches sent
-> for the USB and TTY subsystems, and all the time the process was
-> straight,
-> highly professional, and simpler than in the most of my other case.
-> Thank you very much for that.
->=20
-> Yoshihiro, Keguang, Yanteng, Kory, Cai and everybody I was lucky to
-> meet in the
-> kernel mailing lists, but forgot to mention here. Thank you for the
-> time spent
-> for our cooperative work on making the Linux kernel better. It was a
-> pleasure to
-> meet you here.
->=20
-> I also wish to say huge thanks to the community members trying to
-> defend the kicked off maintainers and for support you expressed in
-> these days. It means a lot.
->=20
-> A little bit statics of my kernel-work at the end:
->=20
-> Signed-off patches:		518
-> Reviewed and Acked patches:	253
-> Tested patches:			80
->=20
-> You might say not the greatest achievement for seven years comparing
-> to some
-> other developers. Perhaps. But I meant each of these tags, be sure.
->=20
-> I guess that's it. If you ever need some info or consultation
-> regarding the
-> drivers I used to maintain or the respective hardware or the Synopsys
-> IP-cores
-> (about which I've got quite comprehensive knowledge by this time),
-> feel free to
-> reach me out via this email. I am always willing to help to the
-> community
-> members.
->=20
-> Hope we'll meet someday in more pleasant circumstances and drink a
-> couple or more beers together. But now it's time to say good bye.
-> Sorry for a long-read text. I wish good luck on your Linux-way.
->=20
-> Best Regards,
-> -Serge(y)
->=20
+
+ Documentation/hwmon/ina2xx.rst | 25 ++++++++-
+ drivers/hwmon/Kconfig          |  2 +-
+ drivers/hwmon/ina2xx.c         | 97 ++++++++++++++++++++++++++++++++--
+ 3 files changed, 118 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/hwmon/ina2xx.rst b/Documentation/hwmon/ina2xx.rst
+index 1ce161e6c0bf..eac8bb1deda0 100644
+--- a/Documentation/hwmon/ina2xx.rst
++++ b/Documentation/hwmon/ina2xx.rst
+@@ -63,6 +63,16 @@ Supported chips:
+ 
+ 	       https://www.ti.com/
+ 
++  * Silergy SY24655
++
++
++    Prefix: 'sy24655'
++    Addresses: I2C 0x40 - 0x4f
++
++    Datasheet: Publicly available at the Silergy website
++
++	       https://us1.silergy.com/
++
+ Author: Lothar Felten <lothar.felten@gmail.com>
+ 
+ Description
+@@ -85,6 +95,11 @@ bus supply voltage.
+ INA260 is a high or low side current and power monitor with integrated shunt
+ resistor.
+ 
++The SY24655 is a high- and low-side current shunt and power monitor with an I2C
++interface. The SY24655 both shunt drop and supply voltage, with programmable
++calibration value and conversion times. The SY24655 can also calculate average
++power for use in energy conversion.
++
+ The shunt value in micro-ohms can be set via platform data or device tree at
+ compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
+ refer to the Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml for bindings
+@@ -108,7 +123,7 @@ power1_input		Power(uW) measurement channel
+ shunt_resistor		Shunt resistance(uOhm) channel (not for ina260)
+ ======================= ===============================================
+ 
+-Additional sysfs entries for ina226, ina230, ina231, and ina260
++Additional sysfs entries for ina226, ina230, ina231, ina260, and sy24655
+ ---------------------------------------------------------------
+ 
+ ======================= ====================================================
+@@ -130,6 +145,14 @@ update_interval		data conversion time; affects number of samples used
+ 			to average results for shunt and bus voltages.
+ ======================= ====================================================
+ 
++Sysfs entries for sy24655 only
++------------------------------------------------
++
++======================= ====================================================
++power1_average		calculate average power from last reading to the
++			present.
++======================= ====================================================
++
+ .. note::
+ 
+    - Configure `shunt_resistor` before configure `power1_crit`, because power
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 64fefb22ecee..48b446c366f2 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2178,7 +2178,7 @@ config SENSORS_INA2XX
+ 	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for INA219, INA220, INA226,
+-	  INA230, INA231, and INA260 power monitor chips.
++	  INA230, INA231, INA260, and SY24655 power monitor chips.
+ 
+ 	  The INA2xx driver is configured for the default configuration of
+ 	  the part as described in the datasheet.
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index cecc80a41a97..9270af69ef6f 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -51,12 +51,20 @@
+ #define INA226_ALERT_LIMIT		0x07
+ #define INA226_DIE_ID			0xFF
+ 
+-#define INA2XX_MAX_REGISTERS		8
++/* SY24655 register definitions */
++#define SY24655_EIN				0x0A
++#define SY24655_ACCUM_CONFIG	0x0D
++
++#define INA2XX_MAX_REGISTERS		0x0D
+ 
+ /* settings - depend on use case */
+ #define INA219_CONFIG_DEFAULT		0x399F	/* PGA=8 */
+ #define INA226_CONFIG_DEFAULT		0x4527	/* averages=16 */
+ #define INA260_CONFIG_DEFAULT		0x6527	/* averages=16 */
++#define SY24655_CONFIG_DEFAULT		0x4527	/* averages=16 */
++
++/* (only for sy24655) */
++#define SY24655_ACCUM_CONFIG_DEFAULT	0x044C	/* continuous mode, clear after read*/
+ 
+ /* worst case is 68.10 ms (~14.6Hz, ina219) */
+ #define INA2XX_CONVERSION_RATE		15
+@@ -84,6 +92,8 @@
+ #define INA226_ALERT_CONFIG_MASK	GENMASK(15, 10)
+ #define INA226_ALERT_FUNCTION_FLAG	BIT(4)
+ 
++#define SY24655_EIN_OVERFLOW_FLAG	BIT(6)
++
+ /*
+  * Both bus voltage and shunt voltage conversion times for ina226 are set
+  * to 0b0100 on POR, which translates to 2200 microseconds in total.
+@@ -97,6 +107,7 @@ static bool ina2xx_writeable_reg(struct device *dev, unsigned int reg)
+ 	case INA2XX_CALIBRATION:
+ 	case INA226_MASK_ENABLE:
+ 	case INA226_ALERT_LIMIT:
++	case SY24655_ACCUM_CONFIG:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -127,7 +138,7 @@ static const struct regmap_config ina2xx_regmap_config = {
+ 	.writeable_reg = ina2xx_writeable_reg,
+ };
+ 
+-enum ina2xx_ids { ina219, ina226, ina260 };
++enum ina2xx_ids { ina219, ina226, ina260, sy24655 };
+ 
+ struct ina2xx_config {
+ 	u16 config_default;
+@@ -149,6 +160,8 @@ struct ina2xx_data {
+ 	long power_lsb_uW;
+ 	struct mutex config_lock;
+ 	struct regmap *regmap;
++	struct i2c_client *client;
++
+ };
+ 
+ static const struct ina2xx_config ina2xx_config[] = {
+@@ -181,6 +194,16 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 		.has_alerts = true,
+ 		.has_ishunt = true,
+ 	},
++	[sy24655] = {
++		.config_default = SY24655_CONFIG_DEFAULT,
++		.calibration_value = 2048,
++		.shunt_div = 400,
++		.bus_voltage_shift = 0,
++		.bus_voltage_lsb = 1250,
++		.power_lsb_factor = 25,
++		.has_alerts = false,
++		.has_ishunt = false,
++	},
+ };
+ 
+ /*
+@@ -485,6 +508,49 @@ static int ina2xx_in_read(struct device *dev, u32 attr, int channel, long *val)
+ 	return 0;
+ }
+ 
++/*
++ * Configuring the READ_EIN (bit 10) of the ACCUM_CONFIG register to 1
++ * can clear accumulator and sample_count after reading the EIN register.
++ * This way, the average power between the last read and the current
++ * read can be obtained. By combining with accurate time data from
++ * outside, the energy consumption during that period can be calculated.
++ */
++static int sy24655_average_power_read(struct ina2xx_data *data, u8 reg, long *val)
++{
++	u8 template[6];
++	int ret;
++	long accumulator_24, sample_count;
++	unsigned int regval;
++
++	ret = regmap_read_bypassed(data->regmap, INA226_MASK_ENABLE, &regval);
++	if (ret)
++		return ret;
++
++	if (regval & SY24655_EIN_OVERFLOW_FLAG)
++		return -ENOMEM;
++
++	/* 48-bit register read */
++	ret = i2c_smbus_read_i2c_block_data(data->client, reg, 6, template);
++	if (ret < 0)
++		return ret;
++	if (ret != 6)
++		return -EIO;
++	accumulator_24 = ((template[3] << 16) |
++				(template[4] << 8) |
++				template[5]);
++	sample_count = ((template[0] << 16) |
++				(template[1] << 8) |
++				template[2]);
++	if (sample_count <= 0) {
++		*val = 0;
++		return 0;
++	}
++
++	*val = DIV_ROUND_CLOSEST(accumulator_24, sample_count) * data->power_lsb_uW;
++
++	return 0;
++}
++
+ static int ina2xx_power_read(struct device *dev, u32 attr, long *val)
+ {
+ 	struct ina2xx_data *data = dev_get_drvdata(dev);
+@@ -492,6 +558,8 @@ static int ina2xx_power_read(struct device *dev, u32 attr, long *val)
+ 	switch (attr) {
+ 	case hwmon_power_input:
+ 		return ina2xx_read_init(dev, INA2XX_POWER, val);
++	case hwmon_power_average:
++		return sy24655_average_power_read(data, SY24655_EIN, val);
+ 	case hwmon_power_crit:
+ 		return ina226_alert_limit_read(data, INA226_POWER_OVER_LIMIT_MASK,
+ 					       INA2XX_POWER, val);
+@@ -702,6 +770,8 @@ static umode_t ina2xx_is_visible(const void *_data, enum hwmon_sensor_types type
+ 			if (has_alerts)
+ 				return 0444;
+ 			break;
++		case hwmon_power_average:
++			return 0444;
+ 		default:
+ 			break;
+ 		}
+@@ -734,7 +804,8 @@ static const struct hwmon_channel_info * const ina2xx_info[] = {
+ 	HWMON_CHANNEL_INFO(curr, HWMON_C_INPUT | HWMON_C_CRIT | HWMON_C_CRIT_ALARM |
+ 			   HWMON_C_LCRIT | HWMON_C_LCRIT_ALARM),
+ 	HWMON_CHANNEL_INFO(power,
+-			   HWMON_P_INPUT | HWMON_P_CRIT | HWMON_P_CRIT_ALARM),
++			   HWMON_P_INPUT | HWMON_P_CRIT | HWMON_P_CRIT_ALARM |
++			   HWMON_P_AVERAGE),
+ 	NULL
+ };
+ 
+@@ -840,6 +911,18 @@ static int ina2xx_init(struct device *dev, struct ina2xx_data *data)
+ 						FIELD_PREP(INA226_ALERT_POLARITY, active_high));
+ 	}
+ 
++	if (data->chip == sy24655) {
++		/*
++		 * Initialize the power accumulation method to continuous
++		 * mode and clear the EIN register after each read of the
++		 * EIN register
++		 */
++		ret = regmap_write(regmap, SY24655_ACCUM_CONFIG,
++				   SY24655_ACCUM_CONFIG_DEFAULT);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	if (data->config->has_ishunt)
+ 		return 0;
+ 
+@@ -868,6 +951,7 @@ static int ina2xx_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	/* set the device type */
++	data->client = client;
+ 	data->config = &ina2xx_config[chip];
+ 	data->chip = chip;
+ 	mutex_init(&data->config_lock);
+@@ -906,6 +990,7 @@ static const struct i2c_device_id ina2xx_id[] = {
+ 	{ "ina230", ina226 },
+ 	{ "ina231", ina226 },
+ 	{ "ina260", ina260 },
++	{ "sy24655", sy24655 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ina2xx_id);
+@@ -935,7 +1020,11 @@ static const struct of_device_id __maybe_unused ina2xx_of_match[] = {
+ 		.compatible = "ti,ina260",
+ 		.data = (void *)ina260
+ 	},
+-	{ },
++	{
++		.compatible = "silergy,sy24655",
++		.data = (void *)sy24655
++	},
++	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ina2xx_of_match);
+ 
+-- 
+2.17.1
 
