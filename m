@@ -1,114 +1,118 @@
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB411F76A3;
-	Thu, 24 Oct 2024 17:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C011E1FC7F2;
+	Thu, 24 Oct 2024 17:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729791968; cv=none; b=Cjb6STv6dXmPbCcrhgtaIlxM49genq/hh843eUlnSTxHJT5cucQZRwu4k2TRPuqCgFqqq43/UFxa5lVgWkiGca6MVEw5mOQou1rb0yGWIBkRQZc3l2nYNX6KA8N3GDql3DAyGm+ZNUho27+mYJG+lZ3cEcF+AukbGqwa2T9Q+O0=
+	t=1729792010; cv=none; b=Z6jqXldqq6UhS0IBMiKR/ZOFj+mhK0Z2U9VGJUG9pK+jnKE0oBBexuGYrCUNb0vLN42iJQfAfFFva/r/nsUGva3+IE293CxOiPnX5e00VE/s8oRemLP47U9ru6ALN2ftDXh74b8hihpAK9HBxyW6vk5bI9mXyIsKgjCZkfV5uJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729791968; c=relaxed/simple;
-	bh=I9Q4P1XK4E+Wu/v/AH+WHEDOhWLlmc7Q+i47sR0qHAE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=csFIvibFHb/161y3uufrFVmG/8fcDNCokzCvoN7M3SIUyy631T004XCbTDpyw45/PA2mQXQsF4Tzu1xPTXRfoi71I78Bkn1ENSxE0LL8x60sPVleQXcqGbKDXy2Cc7xT3b7Ws+72smUQzMDGCIEqMFGe9KEMxHYNtBd5ScW+QsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
-Received: from [192.168.2.102] (213.87.90.120) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 24 Oct
- 2024 20:45:45 +0300
-Message-ID: <884de5fe-9f3b-4720-8be6-88972d8fc897@omp.ru>
-Date: Thu, 24 Oct 2024 20:45:44 +0300
+	s=arc-20240116; t=1729792010; c=relaxed/simple;
+	bh=UugEXA+hKGT0SIXPq6iPiE2aXDLoum/5sIjmSbSh8Bw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=BLfuCyVRpjh5o5bjMJn0iOw/CEECZJh8Mx839czmj4Ta8XYaJ2CTnP2+RSv0Onc8SbXQuQyFgRjVYEOFLyWPuRdCj4PoukqVvCiyR7/JNF7qptbzvnHb0RmHed0SNmKrMB66sXH7I/BHZMl2KQdomFDGIbjWhPcWrbYkMuRCfOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RRwu/kVj; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RRwu/kVj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA04C4CEE5;
+	Thu, 24 Oct 2024 17:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729792010;
+	bh=UugEXA+hKGT0SIXPq6iPiE2aXDLoum/5sIjmSbSh8Bw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=RRwu/kVjJckgvZRc7yr26KXyzMTozeyIzV6DX/j6pLBrq0F643UBta2Ce4eWftBvk
+	 vFoJAKuDIztTXUjIrBIQt0tZWWzwIcAfY++nBjhtYW+x0YrxgwjRF5JHFR0+dEc1Wd
+	 XFGwzScxPa9ruErNkfycwj+FSaXaQgtQA9ORojAT6XTf1dZKmze1y1l8Q6dD6QTKS+
+	 F6nHlH6zPb1kjfrUt8T5tup1uuZhDO1QAFHjRELs4Rw9JdXdpfrjpcSq4njkhDRxcS
+	 uGxaWjjxOda7VIi/PQnIGf7QQr09UmtcsE1kmQLl9U6sCgvfjrEn5BRSDTaNxbc31P
+	 hENPIaqZZC+Uw==
+Date: Thu, 24 Oct 2024 12:46:47 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
+	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
+	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
+Subject: Re: [PATCH 00/16] AMD NB and SMN rework
+Message-ID: <20241024174647.GA964607@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-To: Ivan Epifanov <isage.dna@gmail.com>, <andriy.shevchenko@intel.com>
-CC: <aospan@netup.ru>, <conor.dooley@microchip.com>,
-	<ddrokosov@sberdevices.ru>, <dmaengine@vger.kernel.org>, <dushistov@mail.ru>,
-	<fancer.lancer@gmail.com>, <geert@linux-m68k.org>,
-	<gregkh@linuxfoundation.org>, <hoan@os.amperecomputing.com>,
-	<ink@jurassic.park.msu.ru>, <jeffbai@aosc.io>, <kexybiscuit@aosc.io>,
-	<linux-alpha@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-fpga@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-	<linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <manivannan.sadhasivam@linaro.org>,
-	<mattst88@gmail.com>, <netdev@vger.kernel.org>, <nikita@trvn.ru>,
-	<ntb@lists.linux.dev>, <patches@lists.linux.dev>,
-	<richard.henderson@linaro.org>, <serjk@netup.ru>, <shc_work@mail.ru>,
-	<torvalds@linux-foundation.org>, <torvic9@mailbox.org>,
-	<tsbogend@alpha.franken.de>, <v.georgiev@metrotek.ru>,
-	<wangyuli@uniontech.com>, <wsa+renesas@sang-engineering.com>, <xeb@mail.ru>
-References: <Zxpqnf1M8rPTB4DN@black.fi.intel.com>
- <20241024170743.241144-1-isage.dna@gmail.com>
-Content-Language: en-US
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20241024170743.241144-1-isage.dna@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.0, Database issued on: 10/24/2024 17:32:48
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 19
-X-KSE-AntiSpam-Info: Lua profiles 188703 [Oct 24 2024]
-X-KSE-AntiSpam-Info: Version: 6.1.0.4
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 40 0.3.40
- cefee68357d12c80cb9cf2bdcf92256b1d238d22
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_arrow_text}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.90.120 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.90.120 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.90.120
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 19
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 10/24/2024 17:35:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 10/24/2024 2:57:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024160159.GB965@yaz-khff2.amd.com>
 
-On 10/24/24 8:07 PM, Ivan Epifanov wrote:
-[...]
-
->> $ git log --author="andriy.shevchenko@intel.com"
->> $ 
+On Thu, Oct 24, 2024 at 12:01:59PM -0400, Yazen Ghannam wrote:
+> On Wed, Oct 23, 2024 at 12:59:28PM -0500, Bjorn Helgaas wrote:
+> > On Wed, Oct 23, 2024 at 05:21:34PM +0000, Yazen Ghannam wrote:
+> > > Hi all,
+> > > 
+> > > The theme of this set is decoupling the "AMD node" concept from the
+> > > legacy northbridge support.
+> > > 
+> > > Additionally, AMD System Management Network (SMN) access code is
+> > > decoupled and expanded too.
+> > > 
+> > > Patches 1-3 begin reducing the scope of AMD_NB.
+> > > 
+> > > Patches 4-9 begin moving generic AMD node support out of AMD_NB.
+> > > 
+> > > Patches 10-13 move SMN support out of AMD_NB and do some refactoring.
+> > > 
+> > > Patch 14 has HSMP reuse SMN functionality.
+> > > 
+> > > Patches 15-16 address userspace access to SMN.
+> > > 
+> > > I say "begin" above because there is more to do here. Ultimately, AMD_NB
+> > > should only be needed for code used on legacy systems with northbridges.
+> > > Also, any and all SMN users in the kernel need to be updated to use the
+> > > central SMN code. Local solutions should be avoided.
+> > 
+> > Glad to see many of the PCI device IDs going away; thanks for working
+> > on that!
+> > 
+> > The use of pci_get_slot() and pci_get_domain_bus_and_slot() is not
+> > ideal since all those pci_get_*() interfaces are kind of ugly in my
+> > opinion, and using them means we have to encode topology details in
+> > the kernel.  But this still seems like a big improvement.
 > 
-> Look who's talking
+> Thanks for the feedback. Hopefully, we'll come to some improved
+> solution. :)
+> 
+> Can you please elaborate on your concern? Is it about saying "thing X is
+> always at SBDF A:B:C.D" or something else?
 
-$ git shortlog | grep "Andy Shevchenko"
-Andy Shevchenko (5564):
-[...]
+"Thing X is always at SBDF A:B:C.D" is one big reason.  "A:B:C.D" says
+nothing about the actual functionality of the device.  A PCI
+Vendor/Device ID or a PNP ID identifies the device programming model
+independent of its geographical location.  Inferring the functionality
+and programming model from the location is a maintenance issue because
+hardware may change the address.
 
-   Even I was surprised!
+PCI bus numbers are under software control, so in general it's not
+safe to rely on them, although in this case these devices are probably
+on root buses where the bus number is either fixed or determined by
+BIOS configuration of the host bridge.
 
-MBR, Sergey
+I don't like the pci_get_*() functions because they break the driver
+model.  The usual .probe() model binds a device to a driver, which
+essentially means the driver owns the device and its resources, and
+the driver and doesn't have to worry about other code interfering.
 
+Unlike pci_get_*(), the .probe()/.remove() model automatically handles
+hotplug without extra things like notifiers in the driver.  Hotplug
+may not be an issue in this particular case, but it requires specific
+platform knowledge to be sure.  Some platforms do support CPU and PCI
+host bridge hotplug.
+
+Thanks again for doing all this work.  It's a huge improvement
+already!
+
+Bjorn
