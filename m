@@ -1,59 +1,60 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371262022F7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F60202643
 	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 18:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729793472; cv=none; b=TNtPhUWRiB4h1cTOU8vQXwhA1zbVKKBToPxf1lpETvpMknscnsXavOeS0tn6rWamlbVQNawIXGnMG6FDQwrmbB8pueW12gnc2M+4EAje5Nt42FWbsZoTLmFiiA/xNTSxz5cikLjl3LMPHCRzg0dquU8FthxC579lb/n+QUChFxU=
+	t=1729793472; cv=none; b=MoanSBNYFPuo8tYKmlSk1jfZuXyLiGS319YRj+DMu2+D/1WjHOvjxoitm1s+LJddKR1QWw9AsUpth1VIKJhtayhg7wq+rhhw2eotzp+Aia8dAMZ9XKGVsZpoGnPAPlPdFT0ChyNVCJ2NYTwSBt5MKVRSzqBlQwZrMIcJQl3rfHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729793472; c=relaxed/simple;
-	bh=1RUvmeu4nLIw4F/R4FU3E8L2fpBrm/KNeTkrcWULZz8=;
+	bh=CcZS2lMSjKQk5DMr0lcBympx6MFOZa91kBCFmmmRsgU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ERqJ5It8ujs9l1FbqbomHYpQnqpjQeUScK+AS5QaKwaRJYdz19QFM9adaKNPbfkfTLA1GW4Jqv0+CzmGut0Nak08IMnsJjehjRdw/btvqUAj4sKW1x81b3TGMFVN/7K+CIkx+TgMpZMQWOOZ1Vg6a+IJAGOSghrqUo7tBKgQOts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=zhZ093l2; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:To:Cc; b=ZGtSyTkfZBxXhwiChvveRI6P843usJeL1UaqqI+qcE/DoWXyYTKygnB/QmftFes4GpG14ztVc999o1kdAtCplhl22gVyMK29ySA618ERGun5uSLj27PU7F5grUDSvba4Jxmzq0VxZTVzxWUub0cKjk85MbJFd4b9BftRqiJwjWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=y31vqQRN; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="zhZ093l2"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37d538fe5f2so834311f8f.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 11:11:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="y31vqQRN"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4315839a7c9so12576975e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 11:11:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729793467; x=1730398267; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729793468; x=1730398268; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+eOmi43Jby+szoL0o0TudIR+Wk2BylfVEIJOGm6GajI=;
-        b=zhZ093l25vd54dJPG9i1i7L7xuIoImFfGqDUpchrcaKuy3uhK17kpDjPepddUazbNg
-         eIwJBRlavMm8OnCTDXVH3wBgdth0TGiS+QNLhHKkOox4QUtWkXNqz+VIGGzUrygvd+9F
-         KvNZUIGsE8Zo/kJIrzasvCz/LM8fm5akO0Af33qXRss0JtUcPwm4YBU9Vp4ZvNBebu3Q
-         xBlk+T4vsQAgPRM0nWUsU8z4X5HmyVVgrCaPiD5M7EKTmA7eCI0uy6Zv1YwFD+xQqQ8S
-         JlMxFqT8tiXjRBQF8aktAZJVtVqA9A3i66YupL0bxFTvHZ5Lrxlg/vig55OCXWtDE9Z0
-         E6/Q==
+        bh=s4za7fmNR/tTyyrtswW0yMGY0yUgT5apkN6SQXTSibU=;
+        b=y31vqQRNYFwt3d/d/JzDCaaQ61/MkK8Ov1UI+ayTIqMiKi6AP88ytfxKqMlG9soWNw
+         D2YnFPaMvp7zWEBdi8GrHw3fSXMS3TiMhC88MuQ/yl3eZ4F7cousLH4CjDnYmzloLJQ8
+         AG6NLKuq54EsZ/O7yOXVsb2EVWtLKYz9c1jUc4FfVvgP0aC4Hxn0t6ujXwwy8sN7LFbo
+         sj4ppd8UzvC7AtoVolhQkBZkIHkNIqSKkaIaoG9Z/w2Y0EzQGRm+bqdxOPjtoSsM+Hbo
+         i7yt8nIOwRwqWq+71kIUc+s3cQouRX3P6J0HKqQFbZffi7aWGf6qeg+YO63pVUGqjQkM
+         Qmbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729793467; x=1730398267;
+        d=1e100.net; s=20230601; t=1729793468; x=1730398268;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+eOmi43Jby+szoL0o0TudIR+Wk2BylfVEIJOGm6GajI=;
-        b=HyWX8u5vVuzdmXh8hPmQlDSyphtPNLQV1pnk1p6IdlnnJvDEy0LSkOFYyYdm29FRBr
-         4yIItp1jqBuZW634AVZjjsMsMySt7e7TkAqmnkKg2OJzz+9LPtp+dVbnWSkJJmERCBoh
-         32XnRb3PpI+TyKRV1JJfzQXeoJWH5Srf+HWMHCEAVWCYteSsg7Fz9LD/fuow5wQ6IHFd
-         4AtnFS4BTW+Dj06VpIfSi7EsUHMVZ64Ii+VHgMJi3u2Xzvvhxjy/4d1orZks+sVXmmfK
-         gBhy5TBSKH4MP4lRhvC6SU8HyoCih6UyJ76QcOlGwRkT9xiGvuxmK6rv2Jdeux5vF/N8
-         rK1A==
-X-Gm-Message-State: AOJu0YwNT0R0HvYLxeJDad7+wk8n+/XYuJIFVop/bT5YD6vPNu+11WQ8
-	YZlYnxqjCamtn3rcqWs+hVWPAFcpPozgYnzuxeAL2TIigf2PpxSdRZv6lJLuSdo=
-X-Google-Smtp-Source: AGHT+IFLZgWsGUPyWhrcipgaMB5PPuZFsd4gBEIEpZg9BK409FgjZ9vFaXq5SD7emAtHfO/sPfR5TQ==
-X-Received: by 2002:adf:e311:0:b0:37d:37b8:3778 with SMTP id ffacd0b85a97d-37efcf8460bmr4558854f8f.45.1729793467135;
-        Thu, 24 Oct 2024 11:11:07 -0700 (PDT)
+        bh=s4za7fmNR/tTyyrtswW0yMGY0yUgT5apkN6SQXTSibU=;
+        b=pp7Yzuwwk0xNFqQTN/d+/jvOZ7cSty3so7ubOOpJxr+MEe2Fw1TrJVZPDycG7oZZfz
+         i1gsu2p7OO9zkNBDfOlXOPUhAngDCk/MyY4+c1UNrKKdgscGlD4++uVccoS+yZ9E7K/O
+         9WqUEs07UE0HACvmjl48u84cua/Y5tXZHnV6sjyfrsD312puKf64adwpipfjozkFF0SP
+         MsmCDqpgQMVMs1j19TqpxSkPRhElMn0qVSIf4aC9KMCpdBEqQtBp23j7rmfWIIOh/3AO
+         J5kT70VvJGRvvvgmK+ysG8NRL+YE16T4FyRC4fwT/DLNdZKUWPIjyf3ur1TScfZk3ehT
+         A1vw==
+X-Gm-Message-State: AOJu0YyhF7glknQc1cEEKELDb5z2qAx6S9XUGNOR93MsfUAPMJx0dFV+
+	LgHhpYnFMBKdvcg0KZ1gui1y0E6Lpk3XqeMnXLD+jC6XhJeWVcc9nbK/bHXIypE=
+X-Google-Smtp-Source: AGHT+IGHJg0fHhXtA8gDbMxMxbB2At5z4+omPGcUx0dUgnP8DW+c0l41BYOBqmo1S0mPMy+ZYI8YRg==
+X-Received: by 2002:a05:600c:1390:b0:431:12a8:7f1a with SMTP id 5b1f17b1804b1-4318c703d37mr26782415e9.16.1729793468158;
+        Thu, 24 Oct 2024 11:11:08 -0700 (PDT)
 Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:c04c:f30a:b45c:dbb])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43186c0f248sm52551275e9.37.2024.10.24.11.11.05
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43186c0f248sm52551275e9.37.2024.10.24.11.11.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 11:11:06 -0700 (PDT)
+        Thu, 24 Oct 2024 11:11:07 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Thu, 24 Oct 2024 20:10:37 +0200
-Subject: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
+Date: Thu, 24 Oct 2024 20:10:38 +0200
+Subject: [PATCH v3 4/6] hwmon: (pmbus/core) clear faults after setting
+ smbalert mask
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,7 +63,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
+Message-Id: <20241024-tps25990-v3-4-b6a6e9d4b506@baylibre.com>
 References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
 In-Reply-To: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
@@ -76,153 +77,64 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-i2c@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4442; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=1RUvmeu4nLIw4F/R4FU3E8L2fpBrm/KNeTkrcWULZz8=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnGo2x9dk7+jpaxTWiAk61vydnQ6U77tni0qxKx
- dgiMCLMPK2JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZxqNsQAKCRDm/A8cN/La
- hcS8EACMq9Gnoa8PyayjPvYHtF8zQaQktxGrW+pGWTERlZCNM/QSiUU12WlScMwXfp7bBlZ9crM
- 9H46BLLbqkNLIjDDUdEeSg/HKqCc8fCN82efJ8dh+UxknRYQLo8hQsW8u+FOXORcVoS0fG5TJmF
- qvSws41TL7TGuaRC5VqeN9KQ2fIT58VxjVqViOJxSVZy/aqENZbMM0xG3oDKGoEr0KXWI3Ir1Jw
- KE7KRLtytyjznNiYhwHXhks1VRXdInUXKPqtLO/i5yWtGQCwoOxl54BduXSfgyhdATK6oYBbNKG
- QdYb9X1oykTzkgMX7ExNp18WEP/wWZ55mh1TgU0t+kkxSdfXmj6JN7jODVWnghhLNNrwl4kRYBy
- 7smnJ7zPVY3aDxShzjjJ7etNALkoSzflsiCwjxCsTpRqS4zZOVjV0PHSuGcwINXmLfnnZbI2FDb
- M0WeEGmbpasGCC/NPDVqho9FzIcta8WJbPRNV7K/5j6XNdsjSjfDOw+w6rt95DZJ778LK44YdYE
- BZhsXh2a1falIF4ukLu1cTaqUXLz73NmaBJmK4WPDs9UsvWk5v4gl2XxnEayfEAyNs/7LMzl8h6
- Kz9PuCnwLi1pRF9KtAXRzHsKnhoQ3HmKc3LjU8uyu1tgQKGkYuDVbVjwks7v/iCm8U3mhIcTx9F
- koUs+9ok3zDRGBg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1725; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=CcZS2lMSjKQk5DMr0lcBympx6MFOZa91kBCFmmmRsgU=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnGo2yVz0maAGcDLQLTYmUMd/l96aXLzFYemkLH
+ HthHzP6Qe2JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZxqNsgAKCRDm/A8cN/La
+ hTMfD/0Zb/NqTaM5V+B4N89l1jXZzBdwslbuWfKti7RPxJq0nYeYJNGQbFWDiPU1yfQehuHIc24
+ MbpugM2sV6qvbcMHzvohZrTArL0ysRvU6HjJxzhhfLIi/Ptcgw1dTAhG8jP0Tl3OwSqXhs9PI0t
+ OLI6M2GfN3AziKwNiDUrZwRvFJ984bsvNB1/EuXy5/k0iPio9/coBjxB88/ozaXz3yNtlR+es66
+ 0S/UapET8t5/1UpIIYceRbrEIQhzcODE4w3E9UMUVli4mHsrcPfqwV8jc2QGeyIYWngdTrX8YYB
+ sfXMdXPfhEvvGaN8xGhY++SFFHn8irLpHXNLb/QjvMIVNj1PEyg5yYVZyI3aQSwzliBGkwGLh4B
+ Lexfzef62pbSb+14e5rOCE36dF1uAGlvvatJPbLvb7ETMExQA+CxZKnRfjugSTXBt/p4BQztvOx
+ 7FrJuiCeRXHYk05qMz3TCSmdWGkjCXevxP1Su0jXM/3nG32rejxShKx/G3QeGG6dHLrtSzjK/CU
+ 1EdSjTVE+kBNhqoVy0ri0rhEgLTeg3mO5p6jn+wSOUsca7ElHzepWoHkUMOMMPiAHWAfEvqSLSD
+ oUWrNOMX7dVFK1bQm6lPpkPD6nOaDDNgnYs0OO9kMgQQ7n4bYVbQ/uwM9F3tZevtA9hpApUb+NV
+ qeJPns3qZ+2f5LA==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-Add a module parameter to force the write protection mode of pmbus chips.
+pmbus_write_smbalert_mask() ignores the errors if the chip can't set
+smbalert mask the standard way. It is not necessarily a problem for the irq
+support if the chip is otherwise properly setup but it may leave an
+uncleared fault behind.
 
-2 protections modes are provided to start with:
-* 0: Remove the write protection if possible
-* 1: Enable full write protection if possible
+pmbus_core will pick the fault on the next register_check(). The register
+check will fails regardless of the actual register support by the chip.
 
-Of course, if the parameter is not provided, the default write protection
-status of the pmbus chips is left untouched.
+This leads to missing attributes or debugfs entries for chips that should
+provide them.
+
+We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
+
+Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
+avoid the problem.
 
 Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  4 ++
- drivers/hwmon/pmbus/pmbus_core.c                | 74 ++++++++++++++++++-------
- 2 files changed, 59 insertions(+), 19 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 1518343bbe2237f1d577df5656339d6224b769be..aa79242fe0a9238f618182289f18563ed63cba1c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4733,6 +4733,10 @@
- 			Format: { parport<nr> | timid | 0 }
- 			See also Documentation/admin-guide/parport.rst.
- 
-+	pmbus.wp=	[HW] PMBus Chips write protection forced mode
-+			Format: { 0 | 1 }
-+			See drivers/hwmon/pmbus/pmbus_core.c
-+
- 	pmtmr=		[X86] Manual setup of pmtmr I/O Port.
- 			Override pmtimer IOPort with a hex value.
- 			e.g. pmtmr=0x508
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 7bdd8f2ffcabc51500437182f411e9826cd7a55d..ce697ca03de01c0e5a352f8f6b72671137721868 100644
+index ce697ca03de01c0e5a352f8f6b72671137721868..a0a397d571caa1a6620ef095f9cf63d94e8bda1d 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -31,6 +31,20 @@
- #define PMBUS_ATTR_ALLOC_SIZE	32
- #define PMBUS_NAME_SIZE		24
+@@ -3346,7 +3346,12 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
  
-+/*
-+ * PMBus write protect forced mode:
-+ * PMBus may come up with a variety of write protection configuration.
-+ * 'pmbus_wp' may be used if a particular write protection is necessary.
-+ * The ability to actually alter the protection may also depend on the chip
-+ * so the actual runtime write protection configuration may differ from
-+ * the requested one. pmbus_core currently support the following value:
-+ * - 0: write protection removed
-+ * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
-+ *      registers. Chips essentially become read-only with this.
-+ */
-+static int wp = -1;
-+module_param(wp, int, 0444);
-+
- struct pmbus_sensor {
- 	struct pmbus_sensor *next;
- 	char name[PMBUS_NAME_SIZE];	/* sysfs sensor name */
-@@ -2665,6 +2679,45 @@ static void pmbus_remove_pec(void *dev)
- 	device_remove_file(dev, &dev_attr_pec);
- }
- 
-+static void pmbus_init_wp(struct i2c_client *client, struct pmbus_data *data)
-+{
+ static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+ {
+-	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
 +	int ret;
 +
-+	switch (wp) {
-+	case 0:
-+		_pmbus_write_byte_data(client, 0xff,
-+				       PMBUS_WRITE_PROTECT, 0);
-+		break;
++	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
++	pmbus_clear_fault_page(client, -1);
 +
-+	case 1:
-+		_pmbus_write_byte_data(client, 0xff,
-+				       PMBUS_WRITE_PROTECT, PB_WP_ALL);
-+		break;
-+
-+	default:
-+		/* Ignore the other values */
-+		break;
-+	}
-+
-+	ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
-+
-+	switch (ret) {
-+	case PB_WP_ALL:
-+		data->flags |= PMBUS_OP_PROTECTED;
-+		fallthrough;
-+	case PB_WP_OP:
-+		data->flags |= PMBUS_VOUT_PROTECTED;
-+		fallthrough;
-+	case PB_WP_VOUT:
-+		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
-+		break;
-+
-+	default:
-+		/* Ignore manufacturer specific and invalid as well as errors */
-+		break;
-+	}
-+}
-+
- static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 			     struct pmbus_driver_info *info)
- {
-@@ -2718,25 +2771,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	 * faults, and we should not try it. Also, in that case, writes into
- 	 * limit registers need to be disabled.
- 	 */
--	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
--		ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
--
--		switch (ret) {
--		case PB_WP_ALL:
--			data->flags |= PMBUS_OP_PROTECTED;
--			fallthrough;
--		case PB_WP_OP:
--			data->flags |= PMBUS_VOUT_PROTECTED;
--			fallthrough;
--		case PB_WP_VOUT:
--			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
--			break;
--
--		default:
--			/* Ignore manufacturer specific and invalid as well as errors */
--			break;
--		}
--	}
-+	if (!(data->flags & PMBUS_NO_WRITE_PROTECT))
-+		pmbus_init_wp(client, data);
++	return ret;
+ }
  
- 	ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
- 	if (ret >= 0)
+ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
 
 -- 
 2.45.2
