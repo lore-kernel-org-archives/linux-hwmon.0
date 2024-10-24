@@ -1,79 +1,99 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9AC38F83;
-	Thu, 24 Oct 2024 01:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DA8136E21
+	for <linux-hwmon@vger.kernel.org>; Thu, 24 Oct 2024 03:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729733122; cv=none; b=o8yVFJCCbBMKa1NlxQqFfFMERsxW3BSKjc1930i+f1/unh15fTUFnI31aNpWtzjaZys9UCXUdL3JtU/8wAQbPBwZO6EwunzmPDIF8nLT/V1S5Yr1N3FK8hwuMjo68AbOiRE/+8av80GZ8TUMep3wQvP8QDvSPPznI0r6uXqdBhs=
+	t=1729741083; cv=none; b=dvW6ilhSyEUmI0sLpNfkGcRcmwARRh5vMqANdaWmn5cMrXjvlJrFld2p6RqDQA1Cfj0riMKnZU1vch4R0NnonGzJNT1K9WThEbewTQJsiJmEyxieT5YnTtfSwF3QeocQvTCaVRJdUDnD5JXE2h+COkQpsuc4z/Maomv95quJINs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729733122; c=relaxed/simple;
-	bh=HZAjDepNGFjniRITjLSU2iycvb8R5mnw6oTUxwBl2lE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P6vKqw5YUqQbpx4x+l2mAq1UAQhMxeQdjH40oSDAAe1qi/q9BUA5ud/dYKU+zBg8628Zuhr71NsRt9x/MiCLy0Whm6u1mmzHUPlgr7Ug3oKsICJ3CzmHw28q/XGfVN4vdg077jq0np4gIe97a84/sgK5BNg6YrNHiXri7mtZ8i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iVS/P8Ic; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1729741083; c=relaxed/simple;
+	bh=pHoeaOwWJmx0u8QijgNn7bMrWBP0M50nYvQCZF61TZ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BKH+D43bOA1sMv7sEm9OroU6D/UbgB6fL2vNLHulj4se4DCYP9MDn0cDK/z2iDwftD++Q2gDCMD4t1+7b//8+QF0eGonVfVge3Y+5mv0D5xt4Gs/LcO8ygSqJ7sJc2YJCvyMKLhZALzeyqoJTOsstpQLVZVNahmEoZfyZXuJMjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gSoQmt01; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVS/P8Ic"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5ebc0dbc566so196741eaf.3;
-        Wed, 23 Oct 2024 18:25:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gSoQmt01"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e34a089cd3so406110a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Oct 2024 20:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729733120; x=1730337920; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HZAjDepNGFjniRITjLSU2iycvb8R5mnw6oTUxwBl2lE=;
-        b=iVS/P8IcqvZcGueVADBba22R9wQedv7OrXOQE2vwoRHBk8WjJ9i6HupW6cO0ERhSye
-         cpReESPtSYwoFs7Pu260jf37BcpY67m9EK64IQV5Ag+nZc7s5ACJy2BMEhuBig+tdJIt
-         NI1WfDFOIQyH6YvhOdGxwebzIJXpdYee4lyVuxFMdLJQAqPg8J+EU92tcjEFk2clzQF3
-         h51HSBNZWes12GpRbt+BJO842WFWJi3vksFYhSxaMzf5tlC9i5WopJJiBn662oDYPRDT
-         FnTWHsBI2VYdEAP7Z8bI6/oeWkLtn855Z7tIwGz5BTOuoyqi0EcslqnrQJgUi7iTBkDM
-         a+XA==
+        d=gmail.com; s=20230601; t=1729741079; x=1730345879; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mv1RaFjR+1mpTr8P4V73cauYTc/iIF4X4IbNfBetV+I=;
+        b=gSoQmt01FpPnpGMvH/u/dSs62uRA/8TLBW2QNYZtmG3wFXoeNrHy/1O+ylC9Vk2VaG
+         9rrk9J5RtjG6EnfavhGDrsspUspkKbs8E/2COjYuyfBjtY+9/2KGAsZy/zqoY8+hGLhi
+         fLGGmjMGnw2auhZ/5Un8/PkLdZfouiSrxlyiExKzHteV3Tpy6nR7TE+vCHCfMIKRGJOK
+         trDTzpysVZ+EOlFUV7/ZwFzonbr67ba1L7pma0CtfGE6wSSXZ3noVuMRix+tBlJkKltc
+         IhKANlB3snhsqUaZmcPMT/SwLBY6tGQZ3cA7o6qLa6hsY6FHBcTrAOaJFGFmcdhfjM0V
+         sF5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729733120; x=1730337920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HZAjDepNGFjniRITjLSU2iycvb8R5mnw6oTUxwBl2lE=;
-        b=vRxL7udi+6nefZJlKjD5olxmHg0K1jPDWNu8iDDDsbl6HUPw0v76rhkIiUYUk4xSEU
-         ISV8SiSJorPI1hBUEQSnv7yPeXbtCZ1L5kipXRXKyDQ8MHYaq2Ix/27/yoEuI0htigkI
-         fCiR2UhqpjsMMsH7SXDkH5Zkk/8WnP9d1MkwSJk3wJC3CfmGTZGk41uye2bDbq9l4PR6
-         /X/AZU+o4rJ06Emo3JCHgICiveP1QnCRMWvdz8hT1X7GgGwDUOYaIf/+aFEvh4v3CsV6
-         JD2vPGMAyeRtWFDuYivOG6Q1kiKQEQZ86HLpb/obMVUkYuaiYTKRZWmtXrfcLYKlwwsL
-         VaoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8h5Q68J8jcjuoCBsVwLQxGVN6Aoj1yUfiwdKNbFf7yw7GCopDnrBfdU9gfHt2TfSGJ/s27kfIxisG0cw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV14UBrFEo6WwYEiDViQVsu2I9svdjPDBxIWIgIB7BpOlay87n
-	FzRMHqgGDrc9/pOQs4rDlcc9cnI4drM8maSHX6dlx0+l3dA4sKrW/Wnzt/sNUJTYrTSHC7dWdAt
-	r3a5k2zgJG+nyaURyng8TegGeW+c=
-X-Google-Smtp-Source: AGHT+IEdFC3TFHl6lmnWSoJZ4aB76VAm3Z/sbzQHoTIF9FUX4iGpl9fBFnU0npT9FupKp5yBmEEHDF3b94xrOGJlA6A=
-X-Received: by 2002:a05:6870:89a4:b0:261:1f7d:cf70 with SMTP id
- 586e51a60fabf-28ced44c158mr229864fac.36.1729733119848; Wed, 23 Oct 2024
- 18:25:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729741079; x=1730345879;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mv1RaFjR+1mpTr8P4V73cauYTc/iIF4X4IbNfBetV+I=;
+        b=wXCfJqcf82hwUbrp/voe5oMkD+QHrnKnFy/J/mkSppr2rGfPyYptBx2u+giynVLdUB
+         YxyCsE3DNO+8N3WJ5qWGi/P0LsbOtv5yoTL++FFv72VWcpwSrly4lSCcT8ZiEjG5CUgA
+         GXokvPEcAbwzR2cyJidLSYAOf5HXHhl0bLfISrxibMvZtKcijhq6iTy8w+R4K9ypuDkF
+         I9FiikD7/KgpFVCc56f2mKP0TGtgqNtkgoTAarhf7BlNRBVfCp7GbM/8WqAdLsjch0es
+         NJXbRYevzVZz+AfVfxcaKFZoVC7Gcabchue6YH2oG2fYjA4NGv+i2dvwao/h9+OK2QPH
+         Zu3A==
+X-Gm-Message-State: AOJu0YzEiICm+rMjCvtrhYHel8S/ZdHVYafdRF+2gGmrh8qH+VylPVno
+	6vXC+y2BlRd4w6WD4Tc3EJA+SA+pnkbOoS9oz7PPPgJf7xNin2RG/0R0BA==
+X-Google-Smtp-Source: AGHT+IF4c2YoPRScqrLSuNRuGJ1PLFd/wC7yuEz+BhMYp8c/k541Qx7f3iaw8O3n64OwdEuIDKV62Q==
+X-Received: by 2002:a17:90a:4ce3:b0:2cf:fe5d:ea12 with SMTP id 98e67ed59e1d1-2e77f47f026mr780207a91.24.1729741079510;
+        Wed, 23 Oct 2024 20:37:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e56f468sm299738a91.41.2024.10.23.20.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 20:37:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Aleksandr Mezin <mezin.alexander@gmail.com>
+Subject: [PATCH] MAINTAINERS: Remove Aleksandr Mezin as NZXT-SMART2 driver maintainer
+Date: Wed, 23 Oct 2024 20:37:55 -0700
+Message-ID: <20241024033756.685930-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023201334.250764-1-mezin.alexander@gmail.com> <e78714f8-ab24-4853-99ae-4ace59ae25ca@roeck-us.net>
-In-Reply-To: <e78714f8-ab24-4853-99ae-4ace59ae25ca@roeck-us.net>
-From: Aleksandr Mezin <mezin.alexander@gmail.com>
-Date: Thu, 24 Oct 2024 04:25:08 +0300
-Message-ID: <CADnvcf++bWv=Ohwc=dwSA-Hy5_G3jNS5hjWgA_-yx5HSiS1f4A@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: remove me from nzxt-smart2 maintainers
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jonas Malaco <jonas@protocubo.io>, Aleksa Savic <savicaleksa83@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 24, 2024 at 1:03=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+Per his request, remove Aleksandr Mezin as maintainer of the
+NZXT-SMART2 hardware monitoring driver.
 
-> I will not accept political statements into the hwmon subsystem.
-> Please chose a different description.
+Cc: Aleksandr Mezin <mezin.alexander@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ MAINTAINERS | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Could you remove me correctly with a patch description that you like,
-please? I can't make up anything good-looking and non-political. And
-I'm not going to submit any patches anymore. Sorry.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 867cdda2f834..ca7e827da33e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16792,13 +16792,6 @@ S:	Maintained
+ F:	Documentation/hwmon/nzxt-kraken3.rst
+ F:	drivers/hwmon/nzxt-kraken3.c
+ 
+-NZXT-SMART2 HARDWARE MONITORING DRIVER
+-M:	Aleksandr Mezin <mezin.alexander@gmail.com>
+-L:	linux-hwmon@vger.kernel.org
+-S:	Maintained
+-F:	Documentation/hwmon/nzxt-smart2.rst
+-F:	drivers/hwmon/nzxt-smart2.c
+-
+ OBJAGG
+ M:	Jiri Pirko <jiri@resnulli.us>
+ L:	netdev@vger.kernel.org
+-- 
+2.45.2
+
