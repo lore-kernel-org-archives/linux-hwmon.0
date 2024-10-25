@@ -1,189 +1,91 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509071B0F3F
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 07:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141341B3923
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 07:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729840296; cv=none; b=X8gI/Tt7cl9Fd2/nB7zx9OfTyjSFjS+Qdrq1PAq/C9kwJUDH4MLTS23At8hwT8JNENY+TdM4nxbkf3QUb3Pi3CedxrGwJfB0+H2wzF6gK8zpgjSdIUFobrozFfofGEzXpO8HsiAJwkveeXBo0ItGb4dGVF5iWDMtsxfb5vCZI9s=
+	t=1729840370; cv=none; b=YtRCOYVhUEtykyeV74NyBt1kg4jHu6olyS72iP4t5kf1AVwHC9MZTCUBILOGNQHqNaJmza8RbkXcFj/APnsOeb57QwMe52FS1XSgROe38DnxvqmmaQ5vazFjXOaLEJjnu2aYI+j7ypY84nsQmcIyxfQeJmL2duvrujyjwYmbLxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729840296; c=relaxed/simple;
-	bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GWIRKaBgGhCuv/3qNRYS9jDGjTWmXQQhcq7OqUSG4IgLgzMPJN3g1nK3suN7IlUUmB1VK2YGlPHDkxzjpDtdH9RO7UBr2Qk6+xlaXfBYwiXRLn+BuvgQWA57dxWLCaQFhCklRj6wDNFQYTKlCxjw4VgANhpUcFUCBISq5MkXoZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldum.net; spf=pass smtp.mailfrom=oldum.net; dkim=pass (2048-bit key) header.d=oldum-net.20230601.gappssmtp.com header.i=@oldum-net.20230601.gappssmtp.com header.b=IwMlbUTZ; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldum.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldum.net
+	s=arc-20240116; t=1729840370; c=relaxed/simple;
+	bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ot2VgBzbJF+DGWe2+2wMlDRFpqS8wMQtLaQ/mBNwrqTIcSMXLx5eCfCypxehESseeZLn3rtR0yGlzwcwpk2jLxnLWHPvSKvJT3lrh3yTDTsZQhs4AYfyvTxuqbPYPn3W1kOv7i6MwWTximEMDuD7NLOqxZG+yhTl23rTc6xR4q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VwDx68tr; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldum-net.20230601.gappssmtp.com header.i=@oldum-net.20230601.gappssmtp.com header.b="IwMlbUTZ"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c96b2a10e1so2491077a12.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 00:11:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VwDx68tr"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539e63c8678so1838504e87.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 00:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oldum-net.20230601.gappssmtp.com; s=20230601; t=1729840292; x=1730445092; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-        b=IwMlbUTZwZ2V4lgyH/Q3JZmhuSQBx8rzI9GCTTNjvLGy2h0vZsjxX1Fws8FEjvRUSo
-         2/8pkIokWFpMNxu1NBMrO60d76GLvhEd1DdZO4Xi/lNzzyDLSi8hPRA4oMZPcWVYIh9f
-         RSHnmNk8wjdKb/vcc6ztEXWzfGuURa+B2L6RzVGtHmUXLVQrQkjGQXnUzUJEQIN+fWyj
-         JGvG/BdJMBHskchqRLCsi3YlNOHREcS3tFEn5PBhM5kwOGbm17gn5PAGjKF+WlPCVAAA
-         cyYIU/kM9ASp8sGNTlgu6rJL7f4sI2YDThYywtmGsIJ67yUgSH3QOYNKp9hjSeE2tSDX
-         OY7w==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729840366; x=1730445166; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+        b=VwDx68trJOHSsWQo9WUGnSEAmOFysRMKlJZscIBWsPaJtCO1t65rbNP0HAMjqdS4Jk
+         h6NPU4t327TVnN8dC6S0ypDA2c1Anl5ucr8MaqIY2mnc8QMxGo6NTbyF7e5+SMhE1cdn
+         BLXlc5wYPVFeeEcOElP9NWLhpGi9MN3Bl1bCJHT0Bzppmy6s+nSJprQ9LlCtq4aqMisF
+         kz0SS06afT6Xz9kHIH1wyj38ZPX6z7YtU3rFv6KdMNOG0P1O380HK8zy7oa9n6VLPOOB
+         R2/zv0jTcGfkzXDweDau9yeUmGBRStcyj105kGrJfpiCW1Lr4/D0P831SAmhjJBsRle/
+         eXug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729840292; x=1730445092;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-        b=wxT7qy94wicd8qIbQy7kwzHlWGVJxYI5qANbmioM/KEpTy9bXlt7CyP5QtJCE9qPhE
-         dTUj4zVJ5fFsSB8lqa7iEhOwA35LB9gQSpcPgZXTB8RGybbyN0xbNr4QAmn2kxGKy7pA
-         1ylMETXCcq7jRk7OU9G6DL5Wuahfe//2W+/HxUj4aD0iJ5CckWmiG+GPuBgopXc784/a
-         ua0378SAMBshUhL2nSex7iCFpr83QmelYSBEbhAIns4OHckYcE4fN4Mzc3m2SUltwp8f
-         BskfLw4YYAfEgwVq3xLnBLBAKHwb0zOUCsvFfQyugh4CGWPbVJT11a0oTSm6phEiiger
-         RZhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbbvEFccS5L8IItxBJ8AQ6ccp2P2e2g8XghJcUCK7k1tgnRnc8O5hhKJhog+U6DzXW7tVN5Y8ADQmUag==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg13zK/o3dALIugYRWeGFe2nkzfyDZyKlBae9uy2l4AXnOHa6/
-	jN9fWeVf5CzHir3W9dr2aIOCclugQJEok233lsrpwFe5ChQlvLGrxbLCAE7/S4Y=
-X-Google-Smtp-Source: AGHT+IGBdf9M+MhMVkkAf67M7SvMWvUIw/h/7r8rJ3Hdx2EtRLd3htedYCpRhV8dD7bWUo1PL92GzA==
-X-Received: by 2002:a17:907:3e9f:b0:a9a:bbcc:508c with SMTP id a640c23a62f3a-a9ad2710a64mr438727766b.2.1729840291504;
-        Fri, 25 Oct 2024 00:11:31 -0700 (PDT)
-Received: from [10.1.0.200] (178-169-191-169.parvomai.ddns.bulsat.com. [178.169.191.169])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9b1f0298e7sm35760066b.75.2024.10.25.00.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 00:11:31 -0700 (PDT)
-Message-ID: <3ace1329d4ef99b87780d0ef07db179d27d04d44.camel@oldum.net>
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-From: Nikolay Kichukov <nikolay@oldum.net>
-To: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>, 
-	torvalds@linux-foundation.org
-Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru, 
- dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com, 
- geert@linux-m68k.org, gregkh@linuxfoundation.org,
- hoan@os.amperecomputing.com,  ink@jurassic.park.msu.ru, jeffbai@aosc.io,
- kexybiscuit@aosc.io,  linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,  linux-fpga@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-hwmon@vger.kernel.org,
- linux-ide@vger.kernel.org,  linux-iio@vger.kernel.org,
- linux-media@vger.kernel.org,  linux-mips@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org,  linux-spi@vger.kernel.org,
- manivannan.sadhasivam@linaro.org, mattst88@gmail.com, 
- netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev, 
- patches@lists.linux.dev, peter@typeblog.net, richard.henderson@linaro.org, 
- s.shtylyov@omp.ru, serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org, 
- tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com, 
- wsa+renesas@sang-engineering.com, xeb@mail.ru, rms@gnu.org,
- campaigns@fsf.org
-Date: Fri, 25 Oct 2024 10:11:27 +0300
-In-Reply-To: <20241024210120.4126-1-m.novosyolov@rosalinux.ru>
-References: 
-	<CAHk-=wjw0i-95S_3Wgk+rGu0TUs8r1jVyBv0L8qfsz+TJR8XTQ@mail.gmail.com>
-	 <20241024210120.4126-1-m.novosyolov@rosalinux.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 
+        d=1e100.net; s=20230601; t=1729840366; x=1730445166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+        b=jd7l6IFJcWZwuPmC9JPiDMebdtmh4WAjQySGNIJFBgAP/vpNqCt3fGAKmvIJgEOiap
+         r9AjpVjEO4y68PhUCRjd0vTczIpTloWslgF6hugSKhPAu7bLXR6g5q/pEW7XcpcrIu6s
+         93ti0GhPVWRkehLu7EfCgEhOJjPJ3tcQ/zJR1qBEOPKjaMLT6V2247jOLcamx+xxkOvi
+         5tcVUs5hvL3QOc/RMBAETUVxkBiyqtBzpEzUmwcKw0pOOAzjabC0yrVehGlBZL2Fqg06
+         g7aNASOuuBWQZVWOLZiFAKd6RGE0g+IjjoDLbrzOttDHeZCDxSGiiZ94zX4gqslaHue+
+         QyhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXC53kfhaM70GhNQW36wc5JVywoMva7T4tOmShZPbTWQV+fYH2KxtVbUcXIg55QJJDacmh5NzAIgUv1iQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3jOS1Y7+JvAeoSDy+0pEUPquP7EMzcyL7JP+mWJs+fzip/srW
+	9JYDnYw1VbPoF/HFjC17OlKDjq80VSIFNspvJf8rtPaBpT9XMAdLNXCBZ3DFwJ3m00NkqEDijO2
+	EoX/vixH4S+Nr1ALiY5ttQuxv+l+I0h8B0/TdLA==
+X-Google-Smtp-Source: AGHT+IG4ZkZxGF4NwcleHDZ3mgXgDSPpilfwYHN2H/azOjoznqSNOFszAT/+13NowS/a3VwELdmMHRhJSJW6LQ/W5NU=
+X-Received: by 2002:a05:6512:3185:b0:536:a533:c03a with SMTP id
+ 2adb3069b0e04-53b1a3069bfmr4629650e87.17.1729840365974; Fri, 25 Oct 2024
+ 00:12:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-3-tmyu0@nuvoton.com>
+ <CAMRc=Mc+SZN=EytxY=qA-qBEAY_F17GP-7FRE9oLojLbdUoPaQ@mail.gmail.com> <CAOoeyxUUOCSaDLK8=ox3hwDVu=Ej-ds4=FsS8F+9GfiE-8HYvg@mail.gmail.com>
+In-Reply-To: <CAOoeyxUUOCSaDLK8=ox3hwDVu=Ej-ds4=FsS8F+9GfiE-8HYvg@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Fri, 25 Oct 2024 09:12:34 +0200
+Message-ID: <CAMRc=Mcbs_Qtac-jPDU2BgT0WNy4PgCaGJT6H2i7SQAg+JfycA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/9] gpio: Add Nuvoton NCT6694 GPIO support
+To: =?UTF-8?B?5ri45a2Q5rCR?= <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, 
+	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-10-25 at 00:01 +0300, Mikhail Novosyolov wrote:
-> Linus, Greg,
->=20
-> First of all thanks to you for taking by far not the most harmful
-> actions to achieve what your lawyers very kindly asked you to do.
->=20
-> Unfortunately, already a lot of highly qualified people have started
-> thinking that you acted very badly. Of course, there are questions
-> like why removed maintainers were not properly notified and did not
-> receive any additional explanations, but, to my mind, it is useless to
-> try to find 100% justice -- it is not possible. Overton windows has
-> been opened a bit more.
->=20
-> Usually the first contribution is much harder to make then the
-> following ones. A big problem here is that now many people even will
-> not try to contribute to the Linux kernel and other open source
-> projects: their pride for themselves, their homeland, their colleagues
-> has been severely hurt (we are ready to fight for all that).
->=20
-> It is not clear what to do with this problem. Any ideas?
->=20
-> I am sure that people from any country and of any nationality will
-> have similar feelings if you act with them or their colleagues in a
-> similar way.
->=20
-> Thanks to people who were not afraid to say something against this
-> action. Chinese, Latin American, African and other people probably
-> understand that they may be the next ones to be dropped from
-> maintainers. Hope that we will not have to form another Linux kernel
-> upstream one day...
->=20
-> I am sorry that you have to read a lot of text from people who you
-> call trolls -- it is hard to keep calm.
->=20
-> You know, you have really made it much harder to motivate people to
-> contribute into the kernel. There is such problem among developers of
-> hardware that they do not feel comfortable enough to show their code,
-> for example because they think that it is not perfect. Let=E2=80=99s take
-> Baikal Electronics. They do publish their kernel code, but in a form
-> of tarballs without git. They slowly, but constantly worked on
-> contributing support of their hardware into the upstream kernel,
-> fixing not Baikal-related bugs by the way. One day someone told them
-> that =E2=80=9Cwe are not comfortable with accepting your patches=E2=80=9D=
-. And they
-> stopped their work on upstream. Now that man has been removed from
-> maintainers of previously contributed code (code for not Russian
-> hardware, by the way).
->=20
-> What do I suggest to do? Well, I don=E2=80=99t know, but I do not see dir=
-ect
-> legal reasons why doing this was required and why patches from Baikal
-> could not be accepted (the fact that I do not see does not mean that
-> they do not exist, but please show them). Politicians and activists
-> can be shown a finger in some places, by both developers and lawyers,
-> at least to prevent them from being too ambitious, when they decide to
-> break something working next time... But maybe I do not know something
-> about truly democratic regimes :-)
->=20
-> Thanks for reading.
->=20
-Hi folks,
+On Fri, Oct 25, 2024 at 4:53=E2=80=AFAM =E6=B8=B8=E5=AD=90=E6=B0=91 <a02825=
+24688@gmail.com> wrote:
+>
+> Dear Bart,
+>
+> Thank you for your comments.
+>
 
-I also do not consider what's happened here as normal. The maintainers
-removal stands against the key principles and values of our GNU/Linux
-communities and the FOSS ideology. Values and ideas most of us have been
-protecting and advocating for since we can remember!
+I'm not going to read HTML email. Please resend as plain text.
 
-This hurt so badly! Really. This is betrial.
-
-Even if this is now reverted, or the upstream kernel is forked and a new
-upstream kernel repository is elected, the history of it will remain and
-haunt us all.
-
-Turned out our beloved and "free" as in freedom kernel has been
-compromised by compliance to a government.
-
-But this is the Linux kernel, how could this have happened?! It is used,
-improved and copied all over the world, not just one country! Why did we
-let this happen?
-
-This is a precedent that tells everybody what can come next, due to
-"compliance" reasons the kernel could receive code produced by a
-government institution that serves not the Linux community, but the
-governement.
-
-Surely it is not just me thinking towards what can change so we never
-again have to comply to a government of a country when fighting for
-freedom!
-
-FSF, any comments on this?
-
-Resist!
-
-+rms and fsf
-
-Thanks,
-Nikolay
+Bart
