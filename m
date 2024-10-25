@@ -1,208 +1,324 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E4C1F7566;
-	Fri, 25 Oct 2024 13:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B97670820;
+	Fri, 25 Oct 2024 14:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729863573; cv=none; b=OIj3Y4GPZWvdjEJO1HMmv5F4rUa/bW8fROhlJ/tl5gvX2VDShThgX8huBbnBZe6GmiMwEI1Rk3AFmtoWkHbZVwT0hgLN9ea2pWeIAGAJu92BWzvXBU/Sxb3OduD9whWGaBrj5lIBKNF4BCLtbkkmWxC5ekKdAawIq/HgLPw/QKo=
+	t=1729865116; cv=none; b=RECBBVIzQfCM0+8VV0CcsdhBS4cx1EhTHPXpYArFlzMlSrVAR4iM+Q+K/nWxodg40vHK7/dHMJzusJjtpAoiEBFuMhROuaP/juFOMqLwK8yeU6CtSYBsRUypqdijEUgAOm21/G3rrCili8+CpRnafJHvLNxF/wgZ2dtl7hEjyDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729863573; c=relaxed/simple;
-	bh=/HnzH8LIxgCAWX0/LLh1puQjwqcQ1NSbusIo7Y2Mm3Q=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=gu2G+DRsc/IDw/hI/yWgdzXNE6/dQ7fZkL9yPY3JaeUb0WyF/L1EJe8pDJ3o31w2qMRWD4he0UO9BTSGQftLYoOkWd3hOA9C+mG4R8q0xVRlWAJweAxGPS/MxXwVf7vpF65TVf0jrGQtbgVY3xyL0NqL9Vqva0EeNgQmMrQpPB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TzUt3tKJ; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1729865116; c=relaxed/simple;
+	bh=GawgxtbvGI7SYUVxeirf1cDfVMXixlC3Z+RP/triwAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDnvcDcnpGUu3ZkNNiU8eToQY+RLw1y5qBm+tPR5Vf43M0uHnzCEmuurBPVcGTaMZQXnoRoVuIDDI/KJoMRisi86PH47/btPe8DMP8Ksc6P3OqtJBpwSw0YcmtQfBJdH820o3MP3Ict9lIBKbs2M2sqDcxgPO2CeVZ6aA2q8m9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vq3ZG9LP; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TzUt3tKJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vq3ZG9LP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729863571; x=1761399571;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=/HnzH8LIxgCAWX0/LLh1puQjwqcQ1NSbusIo7Y2Mm3Q=;
-  b=TzUt3tKJKFyWLwOZpsSNOr/CnNVKenZRKHG7W7CnzmIvtePLpj65CEuU
-   i4u/9oKhYKSrhXR/JTgJHIcyNSgqvDtCrYYWdGpQTkJPZxZITte1aymn8
-   STXIxnuchSQd/hrem4IxS7CRquATMxqGrmJIvg2frEEIFa4qI7O+0VKrd
-   UUkPIbkGLiB9X9jAg6EeXYkzSpxAQl3fcDpOU6hFU505upV33xK7C+Cc9
-   /7YDBgL5qNQSRaWNZ+O50IhUirpZXMsEqTajvWj8Bx/7y5ZDs/ChO9aMc
-   4YFLLhUE9E23MS5lPKBSydenv0cT8kXujCpplEglmYBWV1Ide7PwAZkwi
-   Q==;
-X-CSE-ConnectionGUID: uVvo5VE1Q9egw6uoeGAbIA==
-X-CSE-MsgGUID: 8uQtQPinRPihbf92JuzMWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="33229180"
+  t=1729865114; x=1761401114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GawgxtbvGI7SYUVxeirf1cDfVMXixlC3Z+RP/triwAI=;
+  b=Vq3ZG9LPO4eTuYlnpPeL4fqMGHgzrDOIDo4wRhmHwh8NZGRWrO1iCGOv
+   +9FNyQ7snFDY3aXVTVnD5m0M9y88zGd/jF52ACkoMmywl24pjDZdlCV8/
+   8p6SPueo5aytfEXZbJY4bmQjBmHK7l3EweLDdcKMPP1DlId0l6Xvvyyhm
+   rxAmCSySVPVBBb52nTBGx6O/kYpxb9TMSVwmBT7D6+CdjFaIDSceyjeAI
+   f8hry4woCPiu9bXcAeMTH+YzIrWnIJ1aJKhhw7EL/3wn3MPfdj6RvENY3
+   gL0U15As4cMnedo1SM43pnTmsa5YUMYZpz4dNegcQpFBtLkiFEcUza7DL
+   A==;
+X-CSE-ConnectionGUID: d8NX55DhT3+PNh/iSeuiJg==
+X-CSE-MsgGUID: gS2j/dQkTBeCjJh7PFNm+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="46998585"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="33229180"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:39:30 -0700
-X-CSE-ConnectionGUID: 2L9XHif8SVm9IHuMKA3KaQ==
-X-CSE-MsgGUID: m60xT2EDQUCcPtzhB4axHA==
+   d="scan'208";a="46998585"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 07:05:14 -0700
+X-CSE-ConnectionGUID: LeEsCIqSTim0B3IIZc6TtQ==
+X-CSE-MsgGUID: qBDnZ+SMQd2GWJdpJqfSsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="111752941"
-Received: from ettammin-desk.ger.corp.intel.com (HELO localhost) ([10.245.244.225])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:39:25 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 25 Oct 2024 16:39:21 +0300 (EEST)
-To: Yazen Ghannam <yazen.ghannam@amd.com>
-cc: linux-edac@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com, 
-    john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com, 
-    Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com, 
-    linux@roeck-us.net, clemens@ladisch.de, 
-    Hans de Goede <hdegoede@redhat.com>, linux-pci@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-    naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
-Subject: Re: [PATCH 14/16] x86/amd_smn, platform/x86/amd/hsmp: Have HSMP use
- SMN
-In-Reply-To: <20241024160625.GC965@yaz-khff2.amd.com>
-Message-ID: <d44f45c1-a550-de07-d1fa-91dfe0adb47f@linux.intel.com>
-References: <20241023172150.659002-1-yazen.ghannam@amd.com> <20241023172150.659002-15-yazen.ghannam@amd.com> <2797ecc5-935d-21a2-bb43-273a7eae3a12@linux.intel.com> <20241024160625.GC965@yaz-khff2.amd.com>
+   d="scan'208";a="81759791"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 25 Oct 2024 07:05:07 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4Kw5-000YKb-09;
+	Fri, 25 Oct 2024 14:05:05 +0000
+Date: Fri, 25 Oct 2024 22:04:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Vaishnav Achath <vaishnav.a@ti.com>
+Subject: Re: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
+Message-ID: <202410252141.XSGtEsDP-lkp@intel.com>
+References: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-983401245-1729863561=:946"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Jerome,
 
---8323328-983401245-1729863561=:946
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+kernel test robot noticed the following build errors:
 
-On Thu, 24 Oct 2024, Yazen Ghannam wrote:
+[auto build test ERROR on 516ddbfef736c843866a0b2db559ce89b40ce378]
 
-> On Thu, Oct 24, 2024 at 04:23:55PM +0300, Ilpo J=E4rvinen wrote:
-> > On Wed, 23 Oct 2024, Yazen Ghannam wrote:
-> >=20
-> > > The HSMP interface is just an SMN interface with different offsets.
-> > >=20
-> > > Define an HSMP wrapper in the SMN code and have the HSMP platform dri=
-ver
-> > > use that rather than a local solution.
-> > >=20
-> > > Also, remove the "root" member from AMD_NB, since there are no more
-> > > users of it.
-> > >=20
-> > > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> > > ---
-> > >  arch/x86/include/asm/amd_nb.h    |  1 -
-> > >  arch/x86/include/asm/amd_smn.h   |  3 +++
-> > >  arch/x86/kernel/amd_nb.c         |  1 -
-> > >  arch/x86/kernel/amd_smn.c        |  9 +++++++++
-> > >  drivers/platform/x86/amd/Kconfig |  2 +-
-> > >  drivers/platform/x86/amd/hsmp.c  | 32 +++++-------------------------=
---
-> > >  6 files changed, 18 insertions(+), 30 deletions(-)
-> > >=20
-> > > diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd=
-_nb.h
-> > > index 55c03d3495bc..cbe31e316e39 100644
-> > > --- a/arch/x86/include/asm/amd_nb.h
-> > > +++ b/arch/x86/include/asm/amd_nb.h
-> > > @@ -27,7 +27,6 @@ struct amd_l3_cache {
-> > >  };
-> > > =20
-> > >  struct amd_northbridge {
-> > > -=09struct pci_dev *root;
-> > >  =09struct pci_dev *misc;
-> > >  =09struct pci_dev *link;
-> > >  =09struct amd_l3_cache l3_cache;
-> > > diff --git a/arch/x86/include/asm/amd_smn.h b/arch/x86/include/asm/am=
-d_smn.h
-> > > index 6850de69f863..f0eb12859c42 100644
-> > > --- a/arch/x86/include/asm/amd_smn.h
-> > > +++ b/arch/x86/include/asm/amd_smn.h
-> > > @@ -8,4 +8,7 @@
-> > >  int __must_check amd_smn_read(u16 node, u32 address, u32 *value);
-> > >  int __must_check amd_smn_write(u16 node, u32 address, u32 value);
-> > > =20
-> > > +/* Should only be used by the HSMP driver. */
-> > > +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value=
-, bool write);
-> > > +
-> > >  #endif /* _ASM_X86_AMD_SMN_H */
-> > > diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> > > index 10cdeddeda02..4c22317a6dfe 100644
-> > > --- a/arch/x86/kernel/amd_nb.c
-> > > +++ b/arch/x86/kernel/amd_nb.c
-> > > @@ -73,7 +73,6 @@ static int amd_cache_northbridges(void)
-> > >  =09amd_northbridges.nb =3D nb;
-> > > =20
-> > >  =09for (i =3D 0; i < amd_northbridges.num; i++) {
-> > > -=09=09node_to_amd_nb(i)->root =3D amd_node_get_root(i);
-> > >  =09=09node_to_amd_nb(i)->misc =3D amd_node_get_func(i, 3);
-> > >  =09=09node_to_amd_nb(i)->link =3D amd_node_get_func(i, 4);
-> > >  =09}
-> > > diff --git a/arch/x86/kernel/amd_smn.c b/arch/x86/kernel/amd_smn.c
-> > > index 997fd3edd9c0..527dda8e3a2b 100644
-> > > --- a/arch/x86/kernel/amd_smn.c
-> > > +++ b/arch/x86/kernel/amd_smn.c
-> > > @@ -18,6 +18,9 @@ static DEFINE_MUTEX(smn_mutex);
-> > >  #define SMN_INDEX_OFFSET=090x60
-> > >  #define SMN_DATA_OFFSET=09=090x64
-> > > =20
-> > > +#define HSMP_INDEX_OFFSET=090xc4
-> > > +#define HSMP_DATA_OFFSET=090xc8
-> > > +
-> > >  /*
-> > >   * SMN accesses may fail in ways that are difficult to detect here i=
-n the called
-> > >   * functions amd_smn_read() and amd_smn_write(). Therefore, callers =
-must do
-> > > @@ -100,6 +103,12 @@ int __must_check amd_smn_write(u16 node, u32 add=
-ress, u32 value)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(amd_smn_write);
-> > > =20
-> > > +int __must_check amd_smn_hsmp_rdwr(u16 node, u32 address, u32 *value=
-, bool write)
-> > > +{
-> > > +=09return __amd_smn_rw(HSMP_INDEX_OFFSET, HSMP_DATA_OFFSET, node, ad=
-dress, value, write);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(amd_smn_hsmp_rdwr);
-> > > +
-> > >  static int amd_cache_roots(void)
-> > >  {
-> > >  =09u16 node, num_nodes =3D amd_num_nodes();
-> > > diff --git a/drivers/platform/x86/amd/Kconfig b/drivers/platform/x86/=
-amd/Kconfig
-> > > index f88682d36447..e100b315c62b 100644
-> > > --- a/drivers/platform/x86/amd/Kconfig
-> > > +++ b/drivers/platform/x86/amd/Kconfig
-> > > @@ -8,7 +8,7 @@ source "drivers/platform/x86/amd/pmc/Kconfig"
-> > > =20
-> > >  config AMD_HSMP
-> > >  =09tristate "AMD HSMP Driver"
-> > > -=09depends on AMD_NB && X86_64 && ACPI
-> > > +=09depends on AMD_SMN && X86_64 && ACPI
-> > >  =09help
-> > >  =09  The driver provides a way for user space tools to monitor and m=
-anage
-> > >  =09  system management functionality on EPYC server CPUs from AMD.
-> > > diff --git a/drivers/platform/x86/amd/hsmp.c b/drivers/platform/x86/a=
-md/hsmp.c
-> > > index 8fcf38eed7f0..544efb0255c0 100644
-> > > --- a/drivers/platform/x86/amd/hsmp.c
-> > > +++ b/drivers/platform/x86/amd/hsmp.c
-> >=20
-> > FYI, there has been major restructuring done for this driver in=20
-> > pdx86/for-next.
-> >
->=20
-> Yep, no problem. I can rebase these changes on top of those.
->=20
-> Any comments on the general approach?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/hwmon-pmbus-core-allow-drivers-to-override-WRITE_PROTECT/20241025-021525
+base:   516ddbfef736c843866a0b2db559ce89b40ce378
+patch link:    https://lore.kernel.org/r/20241024-tps25990-v3-6-b6a6e9d4b506%40baylibre.com
+patch subject: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20241025/202410252141.XSGtEsDP-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252141.XSGtEsDP-lkp@intel.com/reproduce)
 
-I deemed looking deeper into the patch waste of my time due to the=20
-expected changes, so no comments at this time.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410252141.XSGtEsDP-lkp@intel.com/
 
---=20
- i.
+All errors (new ones prefixed by >>):
 
---8323328-983401245-1729863561=:946--
+   drivers/hwmon/pmbus/tps25990.c: In function 'tps25990_read_word_data':
+>> drivers/hwmon/pmbus/tps25990.c:201:28: error: implicit declaration of function 'FIELD_GET' [-Wimplicit-function-declaration]
+     201 |                 ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
+         |                            ^~~~~~~~~
+   drivers/hwmon/pmbus/tps25990.c: In function 'tps25990_write_word_data':
+>> drivers/hwmon/pmbus/tps25990.c:260:46: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
+     260 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
+         |                                              ^~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+
+
+vim +/FIELD_GET +201 drivers/hwmon/pmbus/tps25990.c
+
+    85	
+    86	static int tps25990_read_word_data(struct i2c_client *client,
+    87					   int page, int phase, int reg)
+    88	{
+    89		int ret;
+    90	
+    91		switch (reg) {
+    92		case PMBUS_VIRT_READ_VIN_MAX:
+    93			ret = pmbus_read_word_data(client, page, phase,
+    94						   TPS25990_READ_VIN_PEAK);
+    95			break;
+    96	
+    97		case PMBUS_VIRT_READ_VIN_MIN:
+    98			ret = pmbus_read_word_data(client, page, phase,
+    99						   TPS25990_READ_VIN_MIN);
+   100			break;
+   101	
+   102		case PMBUS_VIRT_READ_VIN_AVG:
+   103			ret = pmbus_read_word_data(client, page, phase,
+   104						   TPS25990_READ_VIN_AVG);
+   105			break;
+   106	
+   107		case PMBUS_VIRT_READ_VOUT_MIN:
+   108			ret = pmbus_read_word_data(client, page, phase,
+   109						   TPS25990_READ_VOUT_MIN);
+   110			break;
+   111	
+   112		case PMBUS_VIRT_READ_VOUT_AVG:
+   113			ret = pmbus_read_word_data(client, page, phase,
+   114						   TPS25990_READ_VOUT_AVG);
+   115			break;
+   116	
+   117		case PMBUS_VIRT_READ_IIN_AVG:
+   118			ret = pmbus_read_word_data(client, page, phase,
+   119						   TPS25990_READ_IIN_AVG);
+   120			break;
+   121	
+   122		case PMBUS_VIRT_READ_IIN_MAX:
+   123			return TPS25990_READ_IIN_PEAK;
+   124			ret = pmbus_read_word_data(client, page, phase,
+   125						   TPS25990_READ_IIN_PEAK);
+   126			break;
+   127	
+   128		case PMBUS_VIRT_READ_TEMP_AVG:
+   129			ret = pmbus_read_word_data(client, page, phase,
+   130						   TPS25990_READ_TEMP_AVG);
+   131			break;
+   132	
+   133		case PMBUS_VIRT_READ_TEMP_MAX:
+   134			ret = pmbus_read_word_data(client, page, phase,
+   135						   TPS25990_READ_TEMP_PEAK);
+   136			break;
+   137	
+   138		case PMBUS_VIRT_READ_PIN_AVG:
+   139			ret = pmbus_read_word_data(client, page, phase,
+   140						   TPS25990_READ_PIN_AVG);
+   141			break;
+   142	
+   143		case PMBUS_VIRT_READ_PIN_MAX:
+   144			ret = pmbus_read_word_data(client, page, phase,
+   145						   TPS25990_READ_PIN_PEAK);
+   146			break;
+   147	
+   148		case PMBUS_VIRT_READ_VMON:
+   149			ret = pmbus_read_word_data(client, page, phase,
+   150						   TPS25990_READ_VAUX);
+   151			break;
+   152	
+   153		case PMBUS_VIN_UV_WARN_LIMIT:
+   154		case PMBUS_VIN_UV_FAULT_LIMIT:
+   155		case PMBUS_VIN_OV_WARN_LIMIT:
+   156		case PMBUS_VOUT_UV_WARN_LIMIT:
+   157		case PMBUS_IIN_OC_WARN_LIMIT:
+   158		case PMBUS_OT_WARN_LIMIT:
+   159		case PMBUS_OT_FAULT_LIMIT:
+   160		case PMBUS_PIN_OP_WARN_LIMIT:
+   161			/*
+   162			 * These registers provide an 8 bits value instead of a
+   163			 * 10bits one. Just shifting twice the register value is
+   164			 * enough to make the sensor type conversion work, even
+   165			 * if the datasheet provides different m, b and R for
+   166			 * those.
+   167			 */
+   168			ret = pmbus_read_word_data(client, page, phase, reg);
+   169			if (ret < 0)
+   170				break;
+   171			ret <<= TPS25990_8B_SHIFT;
+   172			break;
+   173	
+   174		case PMBUS_VIN_OV_FAULT_LIMIT:
+   175			ret = pmbus_read_word_data(client, page, phase, reg);
+   176			if (ret < 0)
+   177				break;
+   178			ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
+   179						TPS25990_VIN_OVF_DIV);
+   180			ret += TPS25990_VIN_OVF_OFF;
+   181			break;
+   182	
+   183		case PMBUS_IIN_OC_FAULT_LIMIT:
+   184			/*
+   185			 * VIREF directly sets the over-current limit at which the eFuse
+   186			 * will turn the FET off and trigger a fault. Expose it through
+   187			 * this generic property instead of a manufacturer specific one.
+   188			 */
+   189			ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
+   190			if (ret < 0)
+   191				break;
+   192			ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
+   193						TPS25990_IIN_OCF_DIV);
+   194			ret += TPS25990_IIN_OCF_OFF;
+   195			break;
+   196	
+   197		case PMBUS_VIRT_SAMPLES:
+   198			ret = pmbus_read_byte_data(client, page, TPS25990_PK_MIN_AVG);
+   199			if (ret < 0)
+   200				break;
+ > 201			ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
+   202			break;
+   203	
+   204		case PMBUS_VIRT_RESET_TEMP_HISTORY:
+   205		case PMBUS_VIRT_RESET_VIN_HISTORY:
+   206		case PMBUS_VIRT_RESET_IIN_HISTORY:
+   207		case PMBUS_VIRT_RESET_PIN_HISTORY:
+   208		case PMBUS_VIRT_RESET_VOUT_HISTORY:
+   209			ret = 0;
+   210			break;
+   211	
+   212		default:
+   213			ret = -ENODATA;
+   214			break;
+   215		}
+   216	
+   217		return ret;
+   218	}
+   219	
+   220	static int tps25990_write_word_data(struct i2c_client *client,
+   221					    int page, int reg, u16 value)
+   222	{
+   223		int ret;
+   224	
+   225		switch (reg) {
+   226		case PMBUS_VIN_UV_WARN_LIMIT:
+   227		case PMBUS_VIN_UV_FAULT_LIMIT:
+   228		case PMBUS_VIN_OV_WARN_LIMIT:
+   229		case PMBUS_VOUT_UV_WARN_LIMIT:
+   230		case PMBUS_IIN_OC_WARN_LIMIT:
+   231		case PMBUS_OT_WARN_LIMIT:
+   232		case PMBUS_OT_FAULT_LIMIT:
+   233		case PMBUS_PIN_OP_WARN_LIMIT:
+   234			value >>= TPS25990_8B_SHIFT;
+   235			value = clamp_val(value, 0, 0xff);
+   236			ret = pmbus_write_word_data(client, page, reg, value);
+   237			break;
+   238	
+   239		case PMBUS_VIN_OV_FAULT_LIMIT:
+   240			value -= TPS25990_VIN_OVF_OFF;
+   241			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
+   242						  TPS25990_VIN_OVF_NUM);
+   243			value = clamp_val(value, 0, 0xf);
+   244			ret = pmbus_write_word_data(client, page, reg, value);
+   245			break;
+   246	
+   247		case PMBUS_IIN_OC_FAULT_LIMIT:
+   248			value -= TPS25990_IIN_OCF_OFF;
+   249			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
+   250						TPS25990_IIN_OCF_NUM);
+   251			value = clamp_val(value, 0, 0x3f);
+   252			ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
+   253			break;
+   254	
+   255		case PMBUS_VIRT_SAMPLES:
+   256			value = clamp_val(value, 1, 1 << PK_MIN_AVG_AVG_CNT);
+   257			value = ilog2(value);
+   258			ret = pmbus_update_byte_data(client, page, TPS25990_PK_MIN_AVG,
+   259						     PK_MIN_AVG_AVG_CNT,
+ > 260						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
+   261			break;
+   262	
+   263		case PMBUS_VIRT_RESET_TEMP_HISTORY:
+   264		case PMBUS_VIRT_RESET_VIN_HISTORY:
+   265		case PMBUS_VIRT_RESET_IIN_HISTORY:
+   266		case PMBUS_VIRT_RESET_PIN_HISTORY:
+   267		case PMBUS_VIRT_RESET_VOUT_HISTORY:
+   268			/*
+   269			 * TPS25990 has history resets based on MIN/AVG/PEAK instead of per
+   270			 * sensor type. Exposing this quirk in hwmon is not desirable so
+   271			 * reset MIN, AVG and PEAK together. Even is there effectively only
+   272			 * one reset, which resets everything, expose the 5 entries so
+   273			 * userspace is not required map a sensor type to another to trigger
+   274			 * a reset
+   275			 */
+   276			ret = pmbus_update_byte_data(client, 0, TPS25990_PK_MIN_AVG,
+   277						     PK_MIN_AVG_RST_MASK,
+   278						     PK_MIN_AVG_RST_MASK);
+   279			break;
+   280	
+   281		default:
+   282			ret = -ENODATA;
+   283			break;
+   284		}
+   285	
+   286		return ret;
+   287	}
+   288	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
