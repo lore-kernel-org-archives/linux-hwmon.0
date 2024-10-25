@@ -1,174 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B47718BC06
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B091C878E
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729845113; cv=none; b=Zoq7i/K35cTAK/sHgcLrznWZiSizUKos7Tj+ngKR8KkX3iQEA1YDrUF/8uDJO/juU1rm6oZFkfazN0TmHHLgrVvJ99FkDxZYZ7XlfjaM5TwWEE7Z/Pi5CPvO+WEmu0R/CR5yb0Ako039xV7ra/Ewa+IGtlcYG/+7P/82vkfIysA=
+	t=1729845250; cv=none; b=NE+yvze5Lc5U9Evu/VjgN7hE7pKlHi1gIsfjlq+h0N9my2/9+2x2YmkDif8oHdrpad4BvwbUyfgNk9Vv8S38k+X3QdQR3YLniVS/QrB2z8gpim1ZMXWDUxrlGLk0R4qwO+Tfq8BQ80Qolvcv17J4YGhWrchy4bI9KD0LF1HiSZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729845113; c=relaxed/simple;
-	bh=c/+psHASy6Cdwd3u8Sie3uQgNAr0JI0YcxUkmaoFrMw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MNJCny6/6APa50y8yiBYRMkWTlHwhRlV3RjbucydycaZ1RNw7AaZfdXPOVKEqMf5KD29CAKHNcHn7+/e6GR8n4hL0HedQKsM81TPWvdfYa4lDCOUVH/oY8WAr3+FeF/niHVnMBJdbAH8gr/vrefMfwhKRloRomVekfkhvZjHTsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ud/Z9tNK; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ud/Z9tNK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729845111; x=1761381111;
-  h=date:from:to:cc:subject:message-id;
-  bh=c/+psHASy6Cdwd3u8Sie3uQgNAr0JI0YcxUkmaoFrMw=;
-  b=Ud/Z9tNKF4vTM0qNPwQuGFSzhKGwil/Ggz5q1BZHsrXiMJiwhcFBVOad
-   esgIMQnYr6mgjWu4fyT8M7AWaVglADiTpO60Z4tD59ZqqLdIAPi36120b
-   G1/3vlNdjLt6oNzr6/+F5KxHdLa3cTF0Cp5EhjdDYxeltgfMkZ/Isg3QH
-   4rfHbd2/mmfc4G+WNB2yvQ6sJXXY/rbA+8w0ZVrvz0qM5N11+8BBBgd1q
-   IqB/ezuSNg3cklfLvIOG+c8wETsohMfNUT78yqctt28JsACDRyNxKqGuf
-   G12mtotUpftvDYZV7iqjy//cQ5jJ8l7U5Yf3oCSp10WOXdDr0aSo2UkwN
-   g==;
-X-CSE-ConnectionGUID: rstst26NR8aNwKDfmCKp4g==
-X-CSE-MsgGUID: BiiMCBkgSrqnCvc3YYcCdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="17138629"
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="17138629"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 01:31:51 -0700
-X-CSE-ConnectionGUID: t4+IvZcoQ3SU9fmN1bqZpA==
-X-CSE-MsgGUID: PmyOmAw4RLyjtABtK9B8fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="85435020"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 25 Oct 2024 01:31:50 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4FjX-000XrQ-32;
-	Fri, 25 Oct 2024 08:31:47 +0000
-Date: Fri, 25 Oct 2024 16:31:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- f866ccd8e3afb7d55070fbc8f1a16622b560a7bc
-Message-ID: <202410251620.AwsexbkL-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1729845250; c=relaxed/simple;
+	bh=N9YSX9KMs4EMi/FGose8Zz5enxtQrn/oOuSKDs2gz0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aaIXiJy5fGqAHZ1+H0vddwKPwtgSYOKhC3wl6agmfwO/CEW/TQdJa7hyqI1mjtDmyeCvDXTLhXkYQcL5TIv6txYMqDfgLQrzP6V6r5pmgcT8zf5lGzCjeqUgqIRJ+uGKoR99iWGt7nSdVEKopdIL4KkRIq4XxvRYGBcB75Zl9NQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t4FlK-0007ay-2o; Fri, 25 Oct 2024 10:33:38 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t4FlH-000Km0-0P;
+	Fri, 25 Oct 2024 10:33:35 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 9F4C835E803;
+	Fri, 25 Oct 2024 08:33:34 +0000 (UTC)
+Date: Fri, 25 Oct 2024 10:33:34 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+Message-ID: <20241025-modest-hasty-angelfish-1e9193-mkl@pengutronix.de>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+ <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
+ <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mwge3767c6xu2iui"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: f866ccd8e3afb7d55070fbc8f1a16622b560a7bc  Merge branch 'fixes-v6.12' into testing
 
-elapsed time: 1058m
+--mwge3767c6xu2iui
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+MIME-Version: 1.0
 
-configs tested: 97
-configs skipped: 3
+On 25.10.2024 16:22:01, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=88=
+24=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:57=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > On 24.10.2024 16:59:13, Ming Yu wrote:
+> > > This patch series introduces support for Nuvoton NCT6694, a peripheral
+> > > expander based on USB interface. It models the chip as an MFD driver
+> > > (1/9), GPIO driver(2/9), I2C Adapter driver(3/9), CANfd driver(4/9),
+> > > WDT driver(5/9), HWMON driver(6/9), IIO driver(7/9), PWM driver(8/9),
+> > > and RTC driver(9/9).
+> > >
+> > > The MFD driver implements USB device functionality to issue
+> > > custom-define USB bulk pipe packets for NCT6694. Each child device can
+> > > use the USB functions nct6694_read_msg() and nct6694_write_msg() to i=
+ssue
+> > > a command. They can also register a handler function that will be cal=
+led
+> > > when the USB device receives its interrupt pipe.
+> >
+> > What about implementing a proper IRQ demux handler instead?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> I think the currently planned IRQ process meets expectations.
+> Is there anything that needs improvement?
 
-tested configs:
-alpha                  allnoconfig    gcc-14.1.0
-alpha                 allyesconfig    clang-20
-alpha                    defconfig    gcc-14.1.0
-arc                   allmodconfig    clang-20
-arc                    allnoconfig    gcc-14.1.0
-arc                   allyesconfig    clang-20
-arc                      defconfig    gcc-14.1.0
-arm                   allmodconfig    clang-20
-arm                    allnoconfig    gcc-14.1.0
-arm                   allyesconfig    clang-20
-arm                      defconfig    gcc-14.1.0
-arm              lpc32xx_defconfig    gcc-14.1.0
-arm              s3c6400_defconfig    gcc-14.1.0
-arm               sp7021_defconfig    gcc-14.1.0
-arm         vt8500_v6_v7_defconfig    gcc-14.1.0
-arm64                 allmodconfig    clang-20
-arm64                  allnoconfig    gcc-14.1.0
-arm64                    defconfig    gcc-14.1.0
-csky                   allnoconfig    gcc-14.1.0
-csky                     defconfig    gcc-14.1.0
-hexagon               allmodconfig    clang-20
-hexagon                allnoconfig    gcc-14.1.0
-hexagon               allyesconfig    clang-20
-hexagon                  defconfig    gcc-14.1.0
-i386                  alldefconfig    gcc-14.1.0
-i386                  allmodconfig    clang-19
-i386                   allnoconfig    clang-19
-i386                  allyesconfig    clang-19
-i386                     defconfig    clang-19
-loongarch             allmodconfig    gcc-14.1.0
-loongarch              allnoconfig    gcc-14.1.0
-loongarch                defconfig    gcc-14.1.0
-m68k                  allmodconfig    gcc-14.1.0
-m68k                   allnoconfig    gcc-14.1.0
-m68k                  allyesconfig    gcc-14.1.0
-m68k                     defconfig    gcc-14.1.0
-microblaze            allmodconfig    gcc-14.1.0
-microblaze             allnoconfig    gcc-14.1.0
-microblaze            allyesconfig    gcc-14.1.0
-microblaze               defconfig    gcc-14.1.0
-mips                   allnoconfig    gcc-14.1.0
-mips                 gpr_defconfig    gcc-14.1.0
-mips                jazz_defconfig    gcc-14.1.0
-nios2                  allnoconfig    gcc-14.1.0
-nios2                    defconfig    gcc-14.1.0
-openrisc               allnoconfig    clang-20
-openrisc               allnoconfig    gcc-14.1.0
-openrisc              allyesconfig    gcc-14.1.0
-openrisc                 defconfig    gcc-12
-parisc                allmodconfig    gcc-14.1.0
-parisc                 allnoconfig    clang-20
-parisc                 allnoconfig    gcc-14.1.0
-parisc                allyesconfig    gcc-14.1.0
-parisc                   defconfig    gcc-12
-parisc64                 defconfig    gcc-14.1.0
-powerpc               allmodconfig    gcc-14.1.0
-powerpc                allnoconfig    clang-20
-powerpc                allnoconfig    gcc-14.1.0
-powerpc               allyesconfig    gcc-14.1.0
-powerpc          sequoia_defconfig    gcc-14.1.0
-powerpc           tqm8xx_defconfig    gcc-14.1.0
-powerpc             warp_defconfig    gcc-14.1.0
-riscv                 allmodconfig    gcc-14.1.0
-riscv                  allnoconfig    clang-20
-riscv                  allnoconfig    gcc-14.1.0
-riscv                 allyesconfig    gcc-14.1.0
-riscv                    defconfig    gcc-12
-s390                  allmodconfig    gcc-14.1.0
-s390                   allnoconfig    clang-20
-s390                  allyesconfig    gcc-14.1.0
-s390                     defconfig    gcc-12
-sh                    allmodconfig    gcc-14.1.0
-sh                     allnoconfig    gcc-14.1.0
-sh                    allyesconfig    gcc-14.1.0
-sh                       defconfig    gcc-12
-sh              ecovec24_defconfig    gcc-14.1.0
-sh             edosk7705_defconfig    gcc-14.1.0
-sh               kfr2r09_defconfig    gcc-14.1.0
-sh          magicpanelr2_defconfig    gcc-14.1.0
-sh                se7619_defconfig    gcc-14.1.0
-sh                se7705_defconfig    gcc-14.1.0
-sparc                 allmodconfig    gcc-14.1.0
-sparc64                  defconfig    gcc-12
-um                    allmodconfig    clang-20
-um                     allnoconfig    clang-17
-um                     allnoconfig    clang-20
-um                    allyesconfig    clang-20
-um                       defconfig    gcc-12
-um                  i386_defconfig    gcc-12
-um                x86_64_defconfig    gcc-12
-x86_64                 allnoconfig    clang-19
-x86_64                allyesconfig    clang-19
-x86_64                   defconfig    clang-19
-x86_64                       kexec    clang-19
-x86_64                       kexec    gcc-12
-x86_64                    rhel-8.3    gcc-12
-xtensa                 allnoconfig    gcc-14.1.0
+You can register the IRQs of the MFD device with the Linux kernel. This
+way the devices can request a threaded IRQ handler directly via the
+kernel function, instead of registering the callback.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With a threaded IRQ handler you can directly call the
+nct6694_read_msg(), nct6694_write_msg() without the need to start a
+workqueue from the callback.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--mwge3767c6xu2iui
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcbV9oACgkQKDiiPnot
+vG8jyQf7B92f0Ky8Hj3PYj0THmVCD2KKL5jNJPqmaGEYPNCv69g9R0AyA4eLf8X1
+FS6KS/SDR5wAufDLlXM//4HWXyerJa+fCIiBJte2O3qK+KKxsMBkFztu3LFuIBGL
+5MFlo//aAyys6LfYiEJWHreUs/PutGrzaAROk4bsZxC38RoN4Qe5dUOqUeg/6dxn
+Azs1tQzB/MNhtCT7uTIlTAk1tmNfw/qB2t6iEHGmGDlFX6O7QI9gSVR9bNCWW6Z4
+QECCM6/eC2TIAhljxMe+tqrrjZZkDDAuN84cFgDBB51XQuoUcRaRa83ehLnk/Hin
+CTvVqBxAZwY5o0EVGjWXE45BAmjisA==
+=nrcE
+-----END PGP SIGNATURE-----
+
+--mwge3767c6xu2iui--
