@@ -1,44 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5707D20CCF9;
-	Thu, 24 Oct 2024 21:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0CCFC0E;
+	Fri, 25 Oct 2024 00:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729806475; cv=none; b=VW9le635j3eu4AKzGpxU9/Jo4Ciswfr/IlAAqJzEIPamrfnRbJlP0SAa/VuFiH17OqMvcCHu6EcT8hd58JvR0BWf2M9N0CsgEJvR+Zn7QQC1p9sgQQWfIYd6FZbq6f0q/HleKDXVdyMb7xiz4FIKMwSKbfagFBMQxfhj7X0ikmQ=
+	t=1729816724; cv=none; b=VfF4x50bUddBjk46sqqlOBOt/UmC1nDSY7ofcDmXDvCSwZppb/yO2DJjRJuGabj1UKQQY8YVKhJp7aw5PWppPgIeLGSTOyafbbHE1p9bpHG9yen7bwYAClQzPBasDaX79l186tvVTbJdQGqcfVG0XPpQexWu7BYu+giZ3wC6LEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729806475; c=relaxed/simple;
-	bh=hPDnop8lHMn8XH2CX7LLI3sQbn57tFmmwkFyeyycoao=;
+	s=arc-20240116; t=1729816724; c=relaxed/simple;
+	bh=Z+GlSaKGUcGFkk+9JQT75VCXJBPwwDugVMzGFa29DDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=lIryKdU5qBuKn0f6aAHD7HmdVNwFnM71PwhFcUNdBjJZmHscL78AL4q5J4AmcEwC4nuH+kQGivh0W9VPy7UD0v/sESSa0/J5JSG392OaQ58UmN/6U+6LKxrVDrCXv85FIdNhkhBzBcQ7qfUM+FuGJIjuHhrDoeUeKIZ0vMsx4d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqs6KHxw; arc=none smtp.client-ip=10.30.226.201
+	 Content-Disposition; b=n4UyWELZ1k8U0izKAt9A1URxDkkCNNrS2+ofLYHeaopzLU8/61rivLeLs4zipVyPBc86CZgDofda+0/qJZrIP39Dg1NWzGMIjR7GkutFGaax4Oj6NHj5MncbKia52JHGcVPmYcm+DhWE6UdKuhT/tSosciqIoIcEaP8H+18Iq/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cydp3JRM; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqs6KHxw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A064DC4CEC7;
-	Thu, 24 Oct 2024 21:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729806474;
-	bh=hPDnop8lHMn8XH2CX7LLI3sQbn57tFmmwkFyeyycoao=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=aqs6KHxwvjYXjC/D4fGmGr+EnD7z1U1QdeUsPo88VjhCSmkBXTqB7UEwU8sLaLqmb
-	 GPo/v0YKn5sLPP3SaA5UkIgj+/9ZD3Gd6XQvdbzvY14aECH/E4iWp4FXY+SqDeIS4V
-	 rO5nFU0USMaeOMovkX7z0tHVVt3hhEykYEuV1xENIu/EGVPA3lcHG9UGErQ3Pn2aEe
-	 gbgT4CFNWKGdDRzCM6rlMxDnMp8duDHTLsS8I/PO/B7OpzGiTEDVbL4AppXOklz7RR
-	 JT0UFJfnrfA38ZnMBipLOCYjZRV8i5ZJbE/pD9SR7ej8qOzSZYf8yT8VMm4kFWhY+f
-	 r8npU6e9nPNBg==
-Date: Thu, 24 Oct 2024 16:47:53 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-	avadhut.naik@amd.com, john.allen@amd.com, bhelgaas@google.com,
-	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
-	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
-Subject: Re: [PATCH 00/16] AMD NB and SMN rework
-Message-ID: <20241024214753.GA1005373@bhelgaas>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cydp3JRM"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3e602994635so1063671b6e.0;
+        Thu, 24 Oct 2024 17:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729816721; x=1730421521; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P6BlrmuLAXWYvwAmVHQ53OJ6Dh1T9KAqkcBtL/LePC0=;
+        b=Cydp3JRMe9UsL8N7XZXzN2sWn6DXj0G+hSktpORNp+tub/MZTUKMd1AAaMQZ6QokKF
+         nyGbkrWrPkUMY1M3avlS9H3AvXgY4GD8S5iAsibBZq3Hnuc0mucgGgfhyUJML7MhBDyo
+         J5uVRO/qmJ0wwp2zc5kbNxTCG9boUr5nu0FRGZvmqqgMtk4HupUfkmw6lMcpuzki9mjp
+         yA7Q5MToTkrP8aXJcZtN39pCxjDe9JMQ1yVOnZrs+IhEwuE2J7/qxlUNdOgBcYRLBH/I
+         ZIucW8BGRc/8TH6vZfr1ZGA7xdAzY4MXjBmJfoKdk4pEkot/p/Du+G5EQHB11QMNmHDS
+         +UOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729816721; x=1730421521;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6BlrmuLAXWYvwAmVHQ53OJ6Dh1T9KAqkcBtL/LePC0=;
+        b=heN95W5nk+NrW22unnZ29mhKRkPbBh8KyUIiFV1RB4ktfEiRKlXGxE/1HTkDbccMzg
+         QRZHKeKCbyBLHck4xl7Di+jPc7OcDiNxkDseUFDd7IOjIddRwQcD1Kye2x3+TvCFH5s4
+         EHk1ii5gEQjcmc875fKMBYYSf68uON4fI2XyKDP/EoWpS2r5fX662G37PQf477WJ15lS
+         dQ6rBuENpxxicCBuKgUYFoVC2IGDc9H+rsbTu1BHJ/nBFnXmwN0oGWUh0BTEvdxVXddV
+         c6ZCdyj7g34IF2xPaSoqys5kbxihqcS7EDA2LayQS1M4X69f8dNNVZBxi3GRHNkeEgEs
+         tAzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWb3ltSdDK/KR03olPWdworiZ4r1yFMw0K3pwyj/xcUT6/tUtapQLCo/SMiy8Uhq+LIAR3eKfetTmcF@vger.kernel.org, AJvYcCXeBhqbzkyvsbZvf09q0IJsawuAXThu5z09G3rDofndEl+jCn521jLpMFCS/BAkeG+88Zs1owxzfekuB3s=@vger.kernel.org, AJvYcCXzbvQEr6iiopo5Si0sAtaQDOt9tqWSanH67zWheLQ6PJQbP5tEgS4L21v/Qoafa2K+mYG7H/pGXMTF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOeMJZLqkweK5tKykKaXeRA9Wuhs9J1MeCJG4NDvD6yA4a19uX
+	B5+LWB4kstS6KsxwjHUp7FqIIDopp+AOGs2TTwZrAiiaWfCbj2dJ
+X-Google-Smtp-Source: AGHT+IFcU4zmgz3biJ/NgZxSBTi42IlGakpwNHfhpUH5jg5ibq9nRM1MCmGtLGhLYqN/FeQyEMajMQ==
+X-Received: by 2002:a05:6808:338a:b0:3e6:2464:9b16 with SMTP id 5614622812f47-3e624649f82mr8059081b6e.34.1729816721329;
+        Thu, 24 Oct 2024 17:38:41 -0700 (PDT)
+Received: from raspberrypi ([2600:1700:90:4c80::f])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e63248d0e2sm33607b6e.15.2024.10.24.17.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 17:38:39 -0700 (PDT)
+Date: Thu, 24 Oct 2024 19:38:37 -0500
+From: Grant Peltier <grantpeltier93@gmail.com>
+To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
+	magnus.damm@gmail.com
+Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v4 0/2] dt-bindings: hwmon: pmbus: add bindings for isl68137
+Message-ID: <cover.1729812789.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,99 +67,49 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0018d26a-ffd5-42fc-8cc4-9e689834a808@amd.com>
 
-On Thu, Oct 24, 2024 at 04:20:35PM -0500, Mario Limonciello wrote:
-> On 10/24/2024 16:06, Bjorn Helgaas wrote:
-> > On Thu, Oct 24, 2024 at 03:08:41PM -0500, Mario Limonciello wrote:
-> > > On 10/24/2024 12:46, Bjorn Helgaas wrote:
-> > > > On Thu, Oct 24, 2024 at 12:01:59PM -0400, Yazen Ghannam wrote:
-> > > > > On Wed, Oct 23, 2024 at 12:59:28PM -0500, Bjorn Helgaas wrote:
-> > > > > > On Wed, Oct 23, 2024 at 05:21:34PM +0000, Yazen Ghannam wrote:
-> > > ...
-> > 
-> > > > > > The use of pci_get_slot() and pci_get_domain_bus_and_slot() is not
-> > > > > > ideal since all those pci_get_*() interfaces are kind of ugly in my
-> > > > > > opinion, and using them means we have to encode topology details in
-> > > > > > the kernel.  But this still seems like a big improvement.
-> > > > > 
-> > > > > Thanks for the feedback. Hopefully, we'll come to some improved
-> > > > > solution. :)
-> > > > > 
-> > > > > Can you please elaborate on your concern? Is it about saying "thing X is
-> > > > > always at SBDF A:B:C.D" or something else?
-> > > > 
-> > > > "Thing X is always at SBDF A:B:C.D" is one big reason.  "A:B:C.D" says
-> > > > nothing about the actual functionality of the device.  A PCI
-> > > > Vendor/Device ID or a PNP ID identifies the device programming model
-> > > > independent of its geographical location.  Inferring the functionality
-> > > > and programming model from the location is a maintenance issue because
-> > > > hardware may change the address.
-> > > > 
-> > > > PCI bus numbers are under software control, so in general it's not
-> > > > safe to rely on them, although in this case these devices are probably
-> > > > on root buses where the bus number is either fixed or determined by
-> > > > BIOS configuration of the host bridge.
-> > > > 
-> > > > I don't like the pci_get_*() functions because they break the driver
-> > > > model.  The usual .probe() model binds a device to a driver, which
-> > > > essentially means the driver owns the device and its resources, and
-> > > > the driver and doesn't have to worry about other code interfering.
-> > > 
-> > > Are you suggesting that perhaps we should be introducing amd_smn (patch 10)
-> > > as a PCI driver that binds "to the root device" instead?
-> > 
-> > I don't know any of the specifics, so I can't really opine on that.
-> > 
-> > The PCI specs envision that a Vendor/Device ID defines the programming
-> > model of the device, and you would only use a new Device ID when that
-> > programming model changes.
-> > 
-> > Of course, vendors like to define a new set of Device IDs for every
-> > new chipset even when no driver changes are required, so even if a new
-> > SMN works exactly the same as in previous chipsets, you're probably
-> > back to having to add a new Device ID for every new chipset.
-> 
-> Yeah; this I believe is why we're here today and trying to find something
-> more manageable (IE this series).
+Renesas digital multiphase voltage regulators are capable of regulating
+output voltages that exceed the range that their Vsense pins can detect.
+In such applications, users may place a voltage divider between Vout and
+the Vsense pin for a given rail. However, the driver currently has no
+way of knowing if a voltage divider is being used which results in
+erroneous telemetry being reported over hwmon.
 
-Another alternative would be an ACPI device where you can use the same
-_HID (or at least a _CID) for all the chipsets.
+This patch set defines a devicetree bindings schema for Renesas digital
+multiphase voltage regulators that are supported by the isl68137 driver
+to allow users to add voltage divider definitions for any rail powered
+by the device. This patch set also includes the required changes to the
+isl68137 driver to enable scaling Vout/Pout telemetry for rails with a
+defined voltage divider.
 
-> > The Subsystem Vendor ID and Subsystem ID exist to solve a similar
-> > problem (sort of in reverse).  If AMD could allocate a Subsystem ID
-> > for this SMN programming model and use that same ID in every chipset,
-> > you could make a pci_driver.id_table entry that would match them all,
-> > e.g.,
-> > 
-> >    .vendor = PCI_VENDOR_ID_AMD,
-> >    .device = PCI_ANY_ID,
-> >    .subvendor = PCI_VENDOR_ID_AMD,
-> >    .subdevice = PCI_SUBSYSTEM_AMD_SMN,
-> > 
-> > (pci_device_id.subdevice is misnamed; the spec calls it "Subsystem ID")
-> 
-> Isn't the subsystem ID based typically upon the platform it's
-> running on?  For example I seem to recall on Dell systems it's used
-> the value that was in the SBMIOS ProductSKU field here (IoW not
-> something AMD would control).
+v4:
+- Revert devicetree property name to "vout-voltage-divider" and refactor
+  property description and driver implementation to match existing
+  vout-voltage-divider implementation in max20730 as no suitable generic
+  voltage divider schema exists.
+- Minor fixes based on Guenter's review of v2.
+- Initialize voltage dividers for all channels to defaults that simplify
+  logic in PMBus word read/write functions.
 
-Right, it is typically based on the platform; that's why I said "in
-reverse."  I think all these devices are integrated into the chipset,
-so I'm speculating that platform vendors would have no need (maybe
-even no way) to use the Subsystem ID.  But maybe that's not the case.
+v3:
+- Report and return errors reading the vout-voltage-divider property from
+  the devicetree when the property is defined
+- Change u64 division/rounding operations to use explicit math64 macros
 
-> I mean I guess maybe we could do a:
-> 
->     .vendor = PCI_VENDOR_ID_AMD,
->     .device = PCI_ANY_ID,
->     .class = PCI_CLASS_BRIDGE_HOST << 8
-> 
-> And then in probe() figure out if it's the right one, but that's still
-> pretty ugly, eh?
+v2:
+- Fix devicetree bindings schema errors
+- Add "renesas," vendor prefix to "vout-voltage-divider" property
+- Rebase patch series on v6.12-rc1
 
-I think there are some drivers that do this, and it's not completely
-terrible.  The probe() can just return failure if it doesn't want the
-device.
+Grant Peltier (2):
+  hwmon: (pmbus/isl68137) add support for voltage divider on Vout
+  dt-bindings: hwmon: isl68137: add bindings to support voltage dividers
 
-Bjorn
+ .../hwmon/pmbus/renesas,isl68137.yaml         | 147 +++++++++++++
+ drivers/hwmon/pmbus/isl68137.c                | 207 +++++++++++++++++-
+ 2 files changed, 349 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+
+-- 
+2.39.5
+
