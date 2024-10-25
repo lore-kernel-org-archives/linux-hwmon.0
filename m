@@ -1,67 +1,64 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E695A20C313;
-	Fri, 25 Oct 2024 17:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C5A20C318;
+	Fri, 25 Oct 2024 17:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729876657; cv=none; b=K2ibDu078tWRZld+A4XWIga4TALGKhewt2g4lHj+IXYXlMRMjmCBIWdkUfF42/MRaozPcmQJMzO5GyW+0CafnC2iPF76RJp4bjKwk1oQQgjJNYrJZcTHOVaxXGxhav9YypmFN6zdux10ro4bCdMg4z46iVtCdogCyMWD8alW8pY=
+	t=1729878147; cv=none; b=f/hOFtWtHSUNhigqtGs1wyqwYv+pmNv3OkeeAjjWKILocABKrYdtphUq59Qcxn8WS+sRLjIIf+NqoZ0s2Qj36pF3fI4B5PYWZ2knHPux+EyCYYTcVN6YzFSNQGYqwZgJjxAK5CcEvgnavHgbKmS5EDFPS1bQh2kuyQCWSrMNnXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729876657; c=relaxed/simple;
-	bh=jynsn9/HWlcVF/RtcXOBBMh/eWxekmobiKJIJIJNrCw=;
+	s=arc-20240116; t=1729878147; c=relaxed/simple;
+	bh=Ycie9i9H8jgO/IYo5ZunlI08GrGRYK/YwVVH90+m7eI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M1wkbCY39RjJhhoI6BboPkfp18n85ikAS4mDTij3q02UJNij4XxkhDW3QiGnrNkQBwjClD+XypdjjU2n+/Fms30z8jO8Iw7ezhu9/AdWSCGdCT0orEKAqPD5dTx2Ouoe9T7jurBx5aN2ZkpGLx5VxBHYzusdEuu7EUF55dXlZzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fp6aUPLk; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=JWqARP3ZUESmZdhPPyH8G4wpW6noywpFhHizSTeRzqulYCkCcw2ekDSckW+MaW1IawXILR8VpJPzhj1rtFP9tCvNTvGX/GkIiSBJR9gK8tHNPwtI/MrvD5Nv5AgyWRNJgEW4aWiMn00JqHyFFm16lbxNNivlHzp/VOgR0Gl42YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YlPVIVZx; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fp6aUPLk"
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3e600add5dcso1262445b6e.2;
-        Fri, 25 Oct 2024 10:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729876653; x=1730481453; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhMkcmQi5eySEw7AhhvMJzQm41DgM0WGXgc488nr5sA=;
-        b=Fp6aUPLkRaP89ifXoHr9nHrq3nOo8mNA4vgGlKEdaieXBN9d2zxd1pi5EphyQSw7X3
-         JqZKkrsI3MHJDvBb7fZ0B/VyJVKtv3JP6zsoXxh6+1AwGjfWDNengpdsBEwfGmrZYS57
-         KcrDu8yKFGq4HcCSfIljGaD6Q56L6EVjMYopSDBc+n9hO5W71SOSQYU1EBuiTN2dL+vM
-         67fFYYFEHWJnktQLvBSwTz+mmz9tvYUIOBVyBEwe84sNg+sf+LQW+aXRLe8rAjWeuHdc
-         C0DwHY9HietzVBJX2Yxi2yODzeCJQ8aLUHiJNhhTfZCc4hec2mWl/0DT/EcBqK2xhjUy
-         ssGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729876653; x=1730481453;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FhMkcmQi5eySEw7AhhvMJzQm41DgM0WGXgc488nr5sA=;
-        b=th4OpyTlI4zlQa6SVH6W9EB2T2egieZ/hZkdAHPD+QkcaeI4XBi1b5DMRSsE9YN4J5
-         9obUE1WydAh1LM+XvNaRY4+psGapqW/GBOuBic5LbMTi0AWQxEmacDcDMj3CNzb9pBrL
-         ILgs4/Efgpyc9BK7Y1SekqxdfqnK/9w+vqPmVbpyFsL6u37vqZVc2Dbg7nZFZN33SBqs
-         H5K8PBYVcw+5njyiZZNndv8Ip1086NDigBIskYq6+pCsGodH0X5G187pEzLYLELUEwY1
-         0YHET+h3Z0uT8eNayDXGD53Rn6X1krIquZsNtiIzLIKoz6UT8ceyt4EcmqSZXxnMx2F4
-         NAPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTrNBwbvtrGfwbCROJTYZ/WgaIuTF1x9nOQheORxGP7aFS9ZNXvOxzW4tmlZ0vhKmdRO4XSRiQROEKIXg=@vger.kernel.org, AJvYcCVfRpTyi5QcbcUO9HAkG3D05Ae2/C5RE6wOKZN2AL2xpWYRQzHe1kvYcFB6OKfWA6kzxH6QuqCPdWwm@vger.kernel.org, AJvYcCWcxKW1e7beYaYLdsOkFbwjrOg1vvazqWQvtQtV6ve7GhZ8NsaEqauX71OFrL5zW5XRPKGJWXaavT3U@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWuZt79fRDufGWicOkrR9e7/ANdvrMJZAzU8z/ApwMZGGENP7Z
-	GgYoC423VUa5Mzsf8Wm8pfWlAspJWV4smLgH3OzWL2h7ovMHy3qu
-X-Google-Smtp-Source: AGHT+IFzeZJtPFe48xpCoqJ3zXgFC+ikYqxX6jnH6EPCyvOpx9aWahguhhu28Ghv6jUaIDdLs17PeA==
-X-Received: by 2002:a05:6830:7002:b0:710:f926:709c with SMTP id 46e09a7af769-7186827b830mr327995a34.25.1729876652709;
-        Fri, 25 Oct 2024 10:17:32 -0700 (PDT)
-Received: from raspberrypi ([2600:1700:90:4c80::f])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7186189e1e6sm302315a34.56.2024.10.25.10.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 10:17:31 -0700 (PDT)
-Date: Fri, 25 Oct 2024 12:17:28 -0500
-From: Grant Peltier <grantpeltier93@gmail.com>
-To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
-	magnus.damm@gmail.com
-Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YlPVIVZx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729878145; x=1761414145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ycie9i9H8jgO/IYo5ZunlI08GrGRYK/YwVVH90+m7eI=;
+  b=YlPVIVZx4g3xcxvwv0d26IquCY/Bg9+qwWlfGdHWpp3ijipOe4KsDY48
+   AHTuRd68pI7jaFDmtjHbeLBU8G67xjVOpaE8za28h4YwY4y8Qu7aQYgvN
+   Et71GgBsUmFNAFL0uLLGn4Oq3c863K6Nj/xOV+JVmg/IaMpsjItKZx4cK
+   JCASeyrIZfS7LwX2WgjNxucVnEGHg8g71UTzlxyIxolrxXqVzWvT762dc
+   /LUp/JOAtv4TWiBXjS6zJyxScqi65sknTCqbnziALMIUd/CgOuzkyf6FP
+   xO1Dli8ZuVyenpvnaLSpWYuTvLhoviniD5/YDredOSswMwbiyu4jZIIZC
+   g==;
+X-CSE-ConnectionGUID: eSgiXBjjS/Sz8kETuAHRTg==
+X-CSE-MsgGUID: cNuSTDLGRruA82IZaMJmcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29731656"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29731656"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:42:24 -0700
+X-CSE-ConnectionGUID: Tj9iM2H1TqGVO+WlmBRfAQ==
+X-CSE-MsgGUID: 7VH+Vh8oQTSm8YucGqr8Hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
+   d="scan'208";a="81127118"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 25 Oct 2024 10:42:21 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4OKI-000Ygp-1D;
+	Fri, 25 Oct 2024 17:42:18 +0000
+Date: Sat, 26 Oct 2024 01:41:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Grant Peltier <grantpeltier93@gmail.com>, robh@kernel.org,
+	linux@roeck-us.net, geert+renesas@glider.be, magnus.damm@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v5 2/2] dt-bindings: hwmon: isl68137: add bindings to support
- voltage dividers
-Message-ID: <42eadc3942a70bef73ecdf601459aa8b9ea0bcaa.1729874904.git.grantpeltier93@gmail.com>
-References: <cover.1729874904.git.grantpeltier93@gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: (pmbus/isl68137) add support for voltage
+ divider on Vout
+Message-ID: <202410260128.PgaaslPr-lkp@intel.com>
+References: <7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,174 +67,296 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1729874904.git.grantpeltier93@gmail.com>
+In-Reply-To: <7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93@gmail.com>
 
-Add devicetree bindings to support declaring optional voltage dividers to
-the rail outputs of supported digital multiphase regulators. Some
-applications require Vout to exceed the voltage range that the Vsense pin
-can detect. This binding definition allows users to define the
-characteristics of a voltage divider placed between Vout and the Vsense
-pin for any rail powered by the device.
+Hi Grant,
 
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
----
- .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+kernel test robot noticed the following build errors:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-new file mode 100644
-index 000000000000..ed659c2baadf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas Digital Multiphase Voltage Regulators with PMBus
-+
-+maintainers:
-+  - Grant Peltier <grant.peltier.jg@renesas.com>
-+
-+description: |
-+  Renesas digital multiphase voltage regulators with PMBus.
-+  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,isl68220
-+      - renesas,isl68221
-+      - renesas,isl68222
-+      - renesas,isl68223
-+      - renesas,isl68224
-+      - renesas,isl68225
-+      - renesas,isl68226
-+      - renesas,isl68227
-+      - renesas,isl68229
-+      - renesas,isl68233
-+      - renesas,isl68239
-+      - renesas,isl69222
-+      - renesas,isl69223
-+      - renesas,isl69224
-+      - renesas,isl69225
-+      - renesas,isl69227
-+      - renesas,isl69228
-+      - renesas,isl69234
-+      - renesas,isl69236
-+      - renesas,isl69239
-+      - renesas,isl69242
-+      - renesas,isl69243
-+      - renesas,isl69247
-+      - renesas,isl69248
-+      - renesas,isl69254
-+      - renesas,isl69255
-+      - renesas,isl69256
-+      - renesas,isl69259
-+      - renesas,isl69260
-+      - renesas,isl69268
-+      - renesas,isl69269
-+      - renesas,isl69298
-+      - renesas,raa228000
-+      - renesas,raa228004
-+      - renesas,raa228006
-+      - renesas,raa228228
-+      - renesas,raa229001
-+      - renesas,raa229004
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^channel@([0-3])$":
-+    type: object
-+    description:
-+      Container for properties specific to a particular channel (rail).
-+
-+    properties:
-+      reg:
-+        description: The channel (rail) index.
-+        items:
-+          minimum: 0
-+          maximum: 3
-+
-+      vout-voltage-divider:
-+        description: |
-+          Resistances of a voltage divider placed between Vout and the voltage
-+          sense (Vsense) pin for the given channel (rail). It has two numbers
-+          representing the resistances of the voltage divider provided as
-+          <Rout Rtotal> which yields an adjusted Vout as
-+          Vout_adj = Vout * Rtotal / Rout given the original Vout as reported
-+          by the Vsense pin. Given a circuit configuration similar to the one
-+          below, Rtotal = R1 + Rout.
-+
-+            Vout ----.
-+                     |
-+                  .-----.
-+                  | R1  |
-+                  '-----'
-+                     |
-+                     +---- Vsense
-+                     |
-+                  .-----.
-+                  | Rout|
-+                  '-----'
-+                     |
-+                    GND
-+
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+      };
-+    };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        channel@0 {
-+          reg = <0>;
-+          vout-voltage-divider = <1000 2000>;  // Reported Vout/Pout would be scaled by 2
-+        };
-+      };
-+    };
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Grant-Peltier/hwmon-pmbus-isl68137-add-support-for-voltage-divider-on-Vout/20241025-084244
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93%40gmail.com
+patch subject: [PATCH v4 1/2] hwmon: (pmbus/isl68137) add support for voltage divider on Vout
+config: powerpc-randconfig-002-20241025 (https://download.01.org/0day-ci/archive/20241026/202410260128.PgaaslPr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260128.PgaaslPr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260128.PgaaslPr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/isl68137.c:233:3: error: expected expression
+                   u64 temp = DIV_U64_ROUND_CLOSEST((u64)word *
+                   ^
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:53: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                       ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:53: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                       ^
+   include/linux/minmax.h:276:59: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                             ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned int)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:52: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^~~
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:66: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                    ^
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                             ^
+   include/linux/minmax.h:112:21: note: expanded from macro '__clamp_once'
+           __auto_type ulo = (lo);                                                 \
+                              ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned int)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:65: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:112:21: note: expanded from macro '__clamp_once'
+           __auto_type ulo = (lo);                                                 \
+                              ^~
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:78: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                                ^
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                                 ^
+   include/linux/minmax.h:113:21: note: expanded from macro '__clamp_once'
+           __auto_type uhi = (hi);                                                 \
+                              ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned int)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:77: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:113:21: note: expanded from macro '__clamp_once'
+           __auto_type uhi = (hi);                                                 \
+                              ^~
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:66: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                    ^
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                             ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                                    ^
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned int)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:65: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+   drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:78: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                                ^
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                                 ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                                    ^
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned int)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:77: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+>> drivers/hwmon/pmbus/isl68137.c:236:7: error: assigning to 'int' from incompatible type 'void'
+                   ret = clamp_val(temp, 0, 0xffff);
+                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   13 errors generated.
+
+
+vim +236 drivers/hwmon/pmbus/isl68137.c
+
+   211	
+   212	static int raa_dmpvr2_write_word_data(struct i2c_client *client, int page,
+   213					      int reg, u16 word)
+   214	{
+   215		const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+   216		const struct isl68137_data *data = to_isl68137_data(info);
+   217		int ret;
+   218	
+   219		switch (reg) {
+   220		case PMBUS_VOUT_MAX:
+   221		case PMBUS_VOUT_MARGIN_HIGH:
+   222		case PMBUS_VOUT_MARGIN_LOW:
+   223		case PMBUS_VOUT_OV_FAULT_LIMIT:
+   224		case PMBUS_VOUT_UV_FAULT_LIMIT:
+   225		case PMBUS_VOUT_COMMAND:
+   226			/*
+   227			 * In cases where a voltage divider is attached to the target
+   228			 * rail between Vout and the Vsense pin, Vout related PMBus
+   229			 * commands should be scaled based on the expected voltage
+   230			 * at the Vsense pin.
+   231			 * I.e. Vsense = Vout * Rout / Rtotal
+   232			 */
+   233			u64 temp = DIV_U64_ROUND_CLOSEST((u64)word *
+   234					data->channel[page].vout_voltage_divider[0],
+   235					data->channel[page].vout_voltage_divider[1]);
+ > 236			ret = clamp_val(temp, 0, 0xffff);
+   237			break;
+   238		default:
+   239			ret = -ENODATA;
+   240			break;
+   241		}
+   242		return ret;
+   243	}
+   244	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
