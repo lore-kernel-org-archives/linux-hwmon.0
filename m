@@ -1,115 +1,159 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8AA1CEEB8;
-	Fri, 25 Oct 2024 08:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3B71CF7C9
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844535; cv=none; b=oCS0QTUQcYbyTf88sI6z8IMQSVv0kQv8EZEITpwF+RpsMPrfyzDqBvwOncLAepls1qJ+Ncnw0X2fgLbBOMNel+gQMTAwFHWQ38mJ9blm/TwP94r3OEZOumlFnUOHLxv/lPihiosZJN9wL4F+5D/GQ1NeTezUwfReKAkMJdDfd6A=
+	t=1729844693; cv=none; b=Ddpd7DUVCw/Rm6bv0hIoiuJS6q3Nc8jRQRCI+uKWw/vu+27gWVXkN1gIJ75sHOFf+H2LSk5ebWX83NubiQXYbkcBSjMbJLa5rwCJReiWYriPYzL1v0/Gexbsxq38/izSjH0LXGknYVgwwDqM0uWsFuYZ0gNm/pdtutMblotlOo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844535; c=relaxed/simple;
-	bh=x8rZodnf8ac0ZpEWU2b8KZAV0PQi91+L5iJHdiYtySo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DDr0KZJ3b/Yj/C29KvyH/fErdJo+kXoaOWEsfeROZKGqqmoDZk312ij+9WFBneWUF4jRihuNifQs6w4bYdawca8x6BVPtyKQiQpuXC/9YdD1MkiSA7itEvT2oJILOWmXtwx48E+58ZsKqOtyZNc7uLQfG3m1L3cHm9S0bdAJQug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eQYhnB4o; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729844693; c=relaxed/simple;
+	bh=R9znE4/7ZuxT6tzv5tsxC2/m/7JNfqGKK+4fp28e1RY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ePO12+ZG4WAC7vN8LwplRspy3ThHqxMGyrLI/gC5FiiD36yXUnouid8UB4BF1x2380E/YDZxrRV9XQ6u8SzMrFz+NlRpnojB9zqpVEcKvq2e92Dnuuj6Xsp/jFc7Px6B4yFUk85qrdsofQZYU8nrGftROoL6XDgDLEFJ8EFhICs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b54lbkCM; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eQYhnB4o"
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e29047bec8fso2367882276.0;
-        Fri, 25 Oct 2024 01:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729844532; x=1730449332; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lL2oS0YktvrsPrRrJIeMnN8NVRP/4oerPn2G6Of3l+4=;
-        b=eQYhnB4o6+7uxjiKH6+3beHm0ItS14c2wk+McYzOsvW/TkZCm4EwAnqMaYTQe1GDDF
-         t0wcoOpVrMoygWGs2SfGw9NYeIc4Gx0+vyHJgFZf3CRmL19UMogK6OE4qCgXa0UlUzZP
-         AoeVRFjZLM4PpkwP0zDQl/QvDweGObvOCWAoBjZ6jobeJ2swcxw3Ujvg7jtEpZVnu5rg
-         goTXcRYLmm+BdN4kCwtn1j4fUkexE63BLAMoEYdg27wZdjUCXYZm3cFEQPqQ9YPOFaJI
-         Ydf0cGJD2xmuSbDdJsNkTupL7p0DkKAiINNgTtuwsppJfCGosqn4oy1GrjKG53Jlyla5
-         5Q4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729844532; x=1730449332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lL2oS0YktvrsPrRrJIeMnN8NVRP/4oerPn2G6Of3l+4=;
-        b=h6chT5Rv38/CtJX2fH2FNV0O/BPOu01fWXSjx89tPZiTadSzZ4lL0GMtPlaa6Lkhq4
-         lO9rV8MPlWHW7MfcuU6GgWf+py11NqasCJHJzZCS4A0FvdvSgD+VPsjIoMnQcm2G6tHe
-         nqaiZf3oYjJMRgD/A+HDqD9PHrAPOC5TJ1i7pqXAw/mHh9J/0a1yDAQHUTetHskmX5sv
-         h8pWBzGLpDchEQ2Us9fElxadrR7qP4mBRKEO8YxflGyOQI7i4srxXWMOI3fmdib5UP3Q
-         4M2vHOgoOW0XoB3lxphwlhaQFACTaondkXKVjmSMCwgfJGY3iVlfjC0Kqo1N3I+f/eGD
-         xD5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUh4k2PIh8x8Sbk71pdXsIPtHpW2n9O0m4+9Y5aYYysh/9QLwOM4jrUO/D+A15fQX3axYuMmH7TL0Wj@vger.kernel.org, AJvYcCUiCIarmEyiCDaXNJqNzzhiWzjNpe+yUmexPvXrKVSNI8FFfGr9pPr8bIZO35X4k/mFdnRZkQUpDfHL5zLj@vger.kernel.org, AJvYcCUkSz0/NhKt73nakDq+HR0PCzRU7Y8XqDq4EAnT8q41WB6qm1ZJ/y6/EnKuLWSv8uUIrBp/25Af@vger.kernel.org, AJvYcCVC81WJ9UZlbprCmzy+YC09lJIRnmLAjSjCxtIngvCAc/adoIuSEaJKRVLpbNOhyTs2btnukYAu5a6X@vger.kernel.org, AJvYcCVh2DnWAApZqyJuWatTxJ4sl+9Kbwruz8XkCDnzVDNNvv7jf866TuZUWUSdILcGeFpk+KjCaMARATo=@vger.kernel.org, AJvYcCW3OxEaQvqhSDBsMrwo5/y1g87a7XowdnhXbu1nAS3KJP1ELpFkJH2hcDO+wzW1lzARSoOdm2NMJd+fLg==@vger.kernel.org, AJvYcCWKHthdLV29VrY9eevUrkx4oAwmAKr5tk0JQH19t/i5pbXoYlfc869XSZpubUCazCRg098s8vOxQMfE+nx9AoY=@vger.kernel.org, AJvYcCWh5su91xfsD1/2uRkOyLz/6qOvm0rfnyjRPkeTHAYxDIxvzwv2/EkYED7sje3DhZF/1x9sdtCWsUgt@vger.kernel.org, AJvYcCWj0yXr+vB7Mj+Ex+VaGDciG0MOF6yWsQFGl+Vze5c3vI5jkAhx0MB36tIGAlrF47hkBjpPeWZ3BLHT@vger.kernel.org, AJvYcCXmBJ0jHCnm7osQQoE8SYaEE+OaIQGErFk1YUMx3yMMB6qGJ+te7NOLmGyGcTkhbn7PhrDFOsfkAYcQSmw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxraOD1XTosJxbXDYdaVB1SnZ35wqghyBBOPnGYkhiCyhkKl/GM
-	ndd3BJY+kzpQ1nM8tDk7JWExZZtBBg1sTPg/l4Jcev8Qu9DA9QKlC/r5VNL7CX0MBbVIFz2lOli
-	n2ai+0Olprb20vVFdZxTAffaeG0k=
-X-Google-Smtp-Source: AGHT+IGswWLtmTH2YZsqayr1ackkkF40ut5Lz5EUzWoFXyNGEnqBEMH07NaaK55v6Pgq3zgx07E6YGfxRTIviZtiysk=
-X-Received: by 2002:a05:6902:1785:b0:e29:3359:e127 with SMTP id
- 3f1490d57ef6-e2eb38fe011mr3541344276.4.1729844532190; Fri, 25 Oct 2024
- 01:22:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b54lbkCM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729844691; x=1761380691;
+  h=date:from:to:cc:subject:message-id;
+  bh=R9znE4/7ZuxT6tzv5tsxC2/m/7JNfqGKK+4fp28e1RY=;
+  b=b54lbkCMqglyV+3k+PByKIABVw+WBabsFNfQswHFgUD6926ALHBN52xj
+   gqZiBX3ay9dE+2sLLoBjLkdJ8JEjRG6IONjs6ghQ+IDBAxeYWF2u1RG6z
+   lH56+lEN6AyMcusECckSByJAttXgtx/MKjosBW2+7VOJhIfg50z7UlArl
+   n4Z+gPI8rYGfiwIBazOrlUM8mBaspPbDqe4F9U1S54zmvLjNxHqBpu2SR
+   NhERShpiFfsWdongl4INHm0tYxjdpQEVQa7Z2j0Lg/6yZKK3DJJa1cjfS
+   5Sp5G3aralbi/gGesi3oV9NxA6JUfQwr3Rxi1T0Ow5xA9vSDSQ2J5ALbR
+   A==;
+X-CSE-ConnectionGUID: TJdkuh+yS+iK4q6wxorZag==
+X-CSE-MsgGUID: B4PHHQb6Q3ih06FA86jMvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="33417474"
+X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
+   d="scan'208";a="33417474"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 01:24:50 -0700
+X-CSE-ConnectionGUID: Q/NfcqZEQAaFD50URoWytA==
+X-CSE-MsgGUID: u304LeESRrmDEYXphCZi5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
+   d="scan'208";a="84811894"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 25 Oct 2024 01:24:50 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4Fcl-000Xqe-1b;
+	Fri, 25 Oct 2024 08:24:47 +0000
+Date: Fri, 25 Oct 2024 16:24:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 893acae4cdaf34fdde0e7285d5922af70775e5f7
+Message-ID: <202410251617.R76c0g1e-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
-In-Reply-To: <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 25 Oct 2024 16:22:01 +0800
-Message-ID: <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Marc,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 893acae4cdaf34fdde0e7285d5922af70775e5f7  MAINTAINERS: Remove Aleksandr Mezin as NZXT-SMART2 driver maintainer
 
-I think the currently planned IRQ process meets expectations.
-Is there anything that needs improvement?
+elapsed time: 903m
 
-Thanks,
-Ming
+configs tested: 82
+configs skipped: 2
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8824=
-=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:57=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On 24.10.2024 16:59:13, Ming Yu wrote:
-> > This patch series introduces support for Nuvoton NCT6694, a peripheral
-> > expander based on USB interface. It models the chip as an MFD driver
-> > (1/9), GPIO driver(2/9), I2C Adapter driver(3/9), CANfd driver(4/9),
-> > WDT driver(5/9), HWMON driver(6/9), IIO driver(7/9), PWM driver(8/9),
-> > and RTC driver(9/9).
-> >
-> > The MFD driver implements USB device functionality to issue
-> > custom-define USB bulk pipe packets for NCT6694. Each child device can
-> > use the USB functions nct6694_read_msg() and nct6694_write_msg() to iss=
-ue
-> > a command. They can also register a handler function that will be calle=
-d
-> > when the USB device receives its interrupt pipe.
->
-> What about implementing a proper IRQ demux handler instead?
->
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                  allnoconfig    gcc-14.1.0
+alpha                 allyesconfig    clang-20
+alpha                    defconfig    gcc-14.1.0
+arc                   allmodconfig    clang-20
+arc                    allnoconfig    gcc-14.1.0
+arc                   allyesconfig    clang-20
+arm                   allmodconfig    clang-20
+arm                    allnoconfig    gcc-14.1.0
+arm                   allyesconfig    clang-20
+arm              lpc32xx_defconfig    gcc-14.1.0
+arm              s3c6400_defconfig    gcc-14.1.0
+arm               sp7021_defconfig    gcc-14.1.0
+arm         vt8500_v6_v7_defconfig    gcc-14.1.0
+arm64                 allmodconfig    clang-20
+arm64                  allnoconfig    gcc-14.1.0
+csky                   allnoconfig    gcc-14.1.0
+hexagon               allmodconfig    clang-20
+hexagon                allnoconfig    gcc-14.1.0
+hexagon               allyesconfig    clang-20
+i386                  alldefconfig    gcc-14.1.0
+i386                  allmodconfig    clang-19
+i386                   allnoconfig    clang-19
+i386                  allyesconfig    clang-19
+i386                     defconfig    clang-19
+loongarch             allmodconfig    gcc-14.1.0
+loongarch              allnoconfig    gcc-14.1.0
+m68k                  allmodconfig    gcc-14.1.0
+m68k                   allnoconfig    gcc-14.1.0
+m68k                  allyesconfig    gcc-14.1.0
+microblaze            allmodconfig    gcc-14.1.0
+microblaze             allnoconfig    gcc-14.1.0
+microblaze            allyesconfig    gcc-14.1.0
+mips                   allnoconfig    gcc-14.1.0
+mips                 gpr_defconfig    gcc-14.1.0
+mips                jazz_defconfig    gcc-14.1.0
+nios2                  allnoconfig    gcc-14.1.0
+openrisc               allnoconfig    clang-20
+openrisc              allyesconfig    gcc-14.1.0
+openrisc                 defconfig    gcc-12
+parisc                allmodconfig    gcc-14.1.0
+parisc                 allnoconfig    clang-20
+parisc                allyesconfig    gcc-14.1.0
+parisc                   defconfig    gcc-12
+powerpc               allmodconfig    gcc-14.1.0
+powerpc                allnoconfig    clang-20
+powerpc               allyesconfig    gcc-14.1.0
+powerpc          sequoia_defconfig    gcc-14.1.0
+powerpc           tqm8xx_defconfig    gcc-14.1.0
+powerpc             warp_defconfig    gcc-14.1.0
+riscv                 allmodconfig    gcc-14.1.0
+riscv                  allnoconfig    clang-20
+riscv                 allyesconfig    gcc-14.1.0
+riscv                    defconfig    gcc-12
+s390                  allmodconfig    gcc-14.1.0
+s390                   allnoconfig    clang-20
+s390                  allyesconfig    gcc-14.1.0
+s390                     defconfig    gcc-12
+sh                    allmodconfig    gcc-14.1.0
+sh                     allnoconfig    gcc-14.1.0
+sh                    allyesconfig    gcc-14.1.0
+sh                       defconfig    gcc-12
+sh              ecovec24_defconfig    gcc-14.1.0
+sh             edosk7705_defconfig    gcc-14.1.0
+sh               kfr2r09_defconfig    gcc-14.1.0
+sh          magicpanelr2_defconfig    gcc-14.1.0
+sh                se7619_defconfig    gcc-14.1.0
+sh                se7705_defconfig    gcc-14.1.0
+sparc                 allmodconfig    gcc-14.1.0
+sparc64                  defconfig    gcc-12
+um                    allmodconfig    clang-20
+um                     allnoconfig    clang-20
+um                    allyesconfig    clang-20
+um                       defconfig    gcc-12
+um                  i386_defconfig    gcc-12
+um                x86_64_defconfig    gcc-12
+x86_64                 allnoconfig    clang-19
+x86_64                allyesconfig    clang-19
+x86_64                   defconfig    clang-19
+x86_64                       kexec    clang-19
+x86_64                       kexec    gcc-12
+x86_64                    rhel-8.3    gcc-12
+xtensa                 allnoconfig    gcc-14.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
