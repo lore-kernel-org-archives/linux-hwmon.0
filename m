@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107751C2DA2
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F39118BC06
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844943; cv=none; b=ZZZ7xIA3uLJGtVEg0HzVhdT5+i8hsIRfQtA8Gults4V0hhsGaj/sooqpNooZWhQV/NyEmuCy3ea+0TtYMbrdGsg7TLlTMTC8gdTDWSslP+uDGviBpwCEhRJoGqYuUhSuvH0THWabAY4yEcJq2FDqwFKOfkJWdgR4oTmpj9gB9CE=
+	t=1729845065; cv=none; b=g95LIv1/31ZoEmQhLLPWdQJbGayricW0Rz2g9wpPEGI9Y3HpnB8Yt6OkBdAWxzm9Tb5qoOrlRrOaqHKba3W+YyNHn3cSMGfYrspd9qbZZsLPfjqY1FfPp+ponpPZLrm+gBMN/IjdSU8S4N/494Hfq6s3QSbILTS9DxCkHDJgTR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844943; c=relaxed/simple;
-	bh=8ufc0/Vtoy5hJ/DdFIDqYgDwj7MZEDUvCX7xW2DqYhg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bknSZpy73V1rAwOmYzZp81a2h4VfP+gPLaPMX8yh8TlNKv6ro4T9Txynn1yh8j/TX/7C791c5h7iHtqrHyWCrLft8I5tST3Ivh7y/PI0da8Zzg0dbSGy127YF3pBn+DPvoP8bIIh6KiTs2rU1UF1+akX/hE5/Z6UZSG90S/OHeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3C1XZNe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729845065; c=relaxed/simple;
+	bh=5twPV66cc6AFbuV072hKYma0kJ68BeQs/6PKeHfTu8s=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Fg6Fqw2ImFtjpKuQFq6rgeFxGIq/kGKo/wf2CLRmcx5R6/FdbIdSufNP4fCOpTkTHluc4kX3I/pXD5bXGJ6ungnQajOilLkokg1gxtVQksqRvoJJfw4Rwfot1ca8lwmnJDp0NzkKr2Nr7jQXzpfEYu4+8gXA6wgGmoV7/ioh5Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWekbfs8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3C1XZNe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1625CC4CEC3;
-	Fri, 25 Oct 2024 08:28:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWekbfs8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAEC7C4CEC3;
+	Fri, 25 Oct 2024 08:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729844942;
-	bh=8ufc0/Vtoy5hJ/DdFIDqYgDwj7MZEDUvCX7xW2DqYhg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L3C1XZNeLXOj0MoGv7Z0fwk+1rVnt4qQtAq0h+FxhzQ1Be2S2yWngbsHDzTiGoBEP
-	 17QtY4MHqMzr1kxrizsKkqI92SVmRmIXsdmSWNjhXTHtcPQN6u234thTY/MKbRZIXR
-	 mUaPwlW7i1he/X5gvrEl42H8U5MCCZoCA6/Mho2uIM41vufHe8t1RCPWeASyUHzZsZ
-	 UpdiVi4XW/2p063HZnPZkDR3Op/Ib1YPVCtm6PlOZP0xJSFhh1PUpEE4bP2yngUHOq
-	 NRDspsBky15eqf6HXfwk2I8VufMvZ93VIYqmIVw77QnZXOkwmv0lT1I75pXr1e4c5W
-	 RdeCWGTx55JtQ==
-Message-ID: <ff02beb4-0e75-4ac9-b1c7-ccd56407e305@kernel.org>
-Date: Fri, 25 Oct 2024 10:28:57 +0200
+	s=k20201202; t=1729845065;
+	bh=5twPV66cc6AFbuV072hKYma0kJ68BeQs/6PKeHfTu8s=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=SWekbfs87FC+dM6Knvz2K/xOdcNr/UsouxK8q6bUNG6libtNaCS02kUQKKbkFhthA
+	 6Sov4QqmcHQPPqJzbqxk+TCIlBMFSE0VoEO5/7Wh8wl9fO8v+JBpBazvHdLS3flP8a
+	 XaZpxcLahX6YZn9yr35VYF8vQLaKkjomkW8tAQjw/z0G+LwaZKJ0nt9HjLusXm1FoB
+	 wpSy2Ibv6Lz8tx4L+7rf9U80U5LNwgHqFZw//OuKcN04jmf4c5BdPwG45ugpeG+PS7
+	 pckWb9ByZsVOushZeRUc8YGlEaNZBUotRnUaGvH83nedJ8OTVKQeCDdD7twA2cIMDX
+	 gGdnXcHqzAUpg==
+Message-ID: <c64f41de-b3cd-4e6e-b76e-bcf44a86d295@kernel.org>
+Date: Fri, 25 Oct 2024 10:31:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -37,13 +37,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/2] dt-bindings: hwmon: (pwm-fan) add
  retain-state-shutdown property
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Akinobu Mita <akinobu.mita@gmail.com>, linux-hwmon@vger.kernel.org
 Cc: Rob Herring <robh+dt@kernel.org>,
  Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
  Guenter Roeck <linux@roeck-us.net>, Billy Tsai <billy_tsai@aspeedtech.com>
 References: <20210923023448.4190-1-akinobu.mita@gmail.com>
  <20210923023448.4190-2-akinobu.mita@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <ff02beb4-0e75-4ac9-b1c7-ccd56407e305@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -88,40 +89,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20210923023448.4190-2-akinobu.mita@gmail.com>
+In-Reply-To: <ff02beb4-0e75-4ac9-b1c7-ccd56407e305@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/09/2021 04:34, Akinobu Mita wrote:
-> Document new retain-state-shutdown property.
+On 25/10/2024 10:28, Krzysztof Kozlowski wrote:
+> On 23/09/2021 04:34, Akinobu Mita wrote:
+>> Document new retain-state-shutdown property.
+>>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
+>> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 > 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> You develop on some very old kernel, please don't and rather use mainline.
 
-You develop on some very old kernel, please don't and rather use mainline.
+And I need to start checking dates of messages which lei brings to me.
 
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
+Sorry for the noise, although missing cc to DT is still valid argument.
 
 Best regards,
 Krzysztof
