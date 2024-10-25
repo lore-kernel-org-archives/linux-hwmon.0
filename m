@@ -1,194 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393551D2202
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107751C2DA2
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Oct 2024 08:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844813; cv=none; b=Sx5iTOFgvKPt2ZXMAt6N9oyMv/ZM8ZMxieNCLqxQurxmj3YWxcfq4B+EjKpmb7GMMkiS2HBRiCLD+onn2tZ1R/1AHS28i+/4LGudf+T6t7g0M18/I5No2ZfBvXujKz4QKmGqIz6GHT78kJB+gzGZ6kAUbFzE/423yMJWTSZwcN0=
+	t=1729844943; cv=none; b=ZZZ7xIA3uLJGtVEg0HzVhdT5+i8hsIRfQtA8Gults4V0hhsGaj/sooqpNooZWhQV/NyEmuCy3ea+0TtYMbrdGsg7TLlTMTC8gdTDWSslP+uDGviBpwCEhRJoGqYuUhSuvH0THWabAY4yEcJq2FDqwFKOfkJWdgR4oTmpj9gB9CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844813; c=relaxed/simple;
-	bh=JFjX/cDVtQOtKSLt6JUT0kkrJLRhVADdeVPI0uJsodM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MEGfI/X/zh9so67sFPwYhHv1L/mL5zekb2oBN71YVtg307jW0jcwmST7BJZOQ2+pe486UCESr32b34cXTvxVPcLFVNbKWB01fbrIBAiLf1lwnL/yYoZnYYri/qLqwlpDhXgk1lIcfHghvuGbv6k42Xn4eMnmFOfFUXsRKG1qcQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MJZhp2qx; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729844943; c=relaxed/simple;
+	bh=8ufc0/Vtoy5hJ/DdFIDqYgDwj7MZEDUvCX7xW2DqYhg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bknSZpy73V1rAwOmYzZp81a2h4VfP+gPLaPMX8yh8TlNKv6ro4T9Txynn1yh8j/TX/7C791c5h7iHtqrHyWCrLft8I5tST3Ivh7y/PI0da8Zzg0dbSGy127YF3pBn+DPvoP8bIIh6KiTs2rU1UF1+akX/hE5/Z6UZSG90S/OHeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3C1XZNe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MJZhp2qx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729844811; x=1761380811;
-  h=date:from:to:cc:subject:message-id;
-  bh=JFjX/cDVtQOtKSLt6JUT0kkrJLRhVADdeVPI0uJsodM=;
-  b=MJZhp2qxKX7yT6maU4zE7gKLIHSDwVq1nBUXM+UOl30dsMGBl884JVxO
-   /wnQMJoUjeetCARb+5YZygOMVGC7z3SWdVVKHUS2QlvpOny14M0AHOYc6
-   GQ6zz/nI9NCBCNnYNGtFHpScWI6r0zV2k44YG7/bnCiJu82P1Qpe9clvW
-   O2jgBZ6kjxYnLsGuRBDizXlUeUZiXW8UF1uvC8kNrpaiZZQWwcHo1YhqY
-   it+G6BWxo0PCUmH14DC7YxCp9ZkmmuZIkA0+yYAr8WCd+SYuN+V5WoPtp
-   T/tkwcXf6DbLzi2QjKo5C1ThSYFJtpSr/zFkUdYeUykvEthLd1PZEvH+x
-   Q==;
-X-CSE-ConnectionGUID: x/2iWmKaSRWvSbl6U7TAGQ==
-X-CSE-MsgGUID: 2TUwaeI/RZG2Z465wl78Ow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="40094016"
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="40094016"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 01:26:50 -0700
-X-CSE-ConnectionGUID: unj2WEBoTcSPy6ck6T2SAQ==
-X-CSE-MsgGUID: wY78k8l0SMO+fJERRu2BEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="104165868"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 25 Oct 2024 01:26:49 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4Feh-000Xqu-21;
-	Fri, 25 Oct 2024 08:26:47 +0000
-Date: Fri, 25 Oct 2024 16:25:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:fixes] BUILD SUCCESS
- 1a8c8dda9093b8483fe145462ba45f05030bee01
-Message-ID: <202410251643.74d39zH3-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3C1XZNe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1625CC4CEC3;
+	Fri, 25 Oct 2024 08:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729844942;
+	bh=8ufc0/Vtoy5hJ/DdFIDqYgDwj7MZEDUvCX7xW2DqYhg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=L3C1XZNeLXOj0MoGv7Z0fwk+1rVnt4qQtAq0h+FxhzQ1Be2S2yWngbsHDzTiGoBEP
+	 17QtY4MHqMzr1kxrizsKkqI92SVmRmIXsdmSWNjhXTHtcPQN6u234thTY/MKbRZIXR
+	 mUaPwlW7i1he/X5gvrEl42H8U5MCCZoCA6/Mho2uIM41vufHe8t1RCPWeASyUHzZsZ
+	 UpdiVi4XW/2p063HZnPZkDR3Op/Ib1YPVCtm6PlOZP0xJSFhh1PUpEE4bP2yngUHOq
+	 NRDspsBky15eqf6HXfwk2I8VufMvZ93VIYqmIVw77QnZXOkwmv0lT1I75pXr1e4c5W
+	 RdeCWGTx55JtQ==
+Message-ID: <ff02beb4-0e75-4ac9-b1c7-ccd56407e305@kernel.org>
+Date: Fri, 25 Oct 2024 10:28:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: (pwm-fan) add
+ retain-state-shutdown property
+To: Akinobu Mita <akinobu.mita@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+ Guenter Roeck <linux@roeck-us.net>, Billy Tsai <billy_tsai@aspeedtech.com>
+References: <20210923023448.4190-1-akinobu.mita@gmail.com>
+ <20210923023448.4190-2-akinobu.mita@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20210923023448.4190-2-akinobu.mita@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
-branch HEAD: 1a8c8dda9093b8483fe145462ba45f05030bee01  resource: Remove dependency on SPARSEMEM from GET_FREE_REGION
+On 23/09/2021 04:34, Akinobu Mita wrote:
+> Document new retain-state-shutdown property.
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 
-elapsed time: 1052m
+You develop on some very old kernel, please don't and rather use mainline.
 
-configs tested: 117
-configs skipped: 2
+<form letter>
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                       aspeed_g5_defconfig    clang-20
-arm                         lpc32xx_defconfig    gcc-14.1.0
-arm                         s3c6400_defconfig    gcc-14.1.0
-arm                           sama5_defconfig    clang-20
-arm                          sp7021_defconfig    gcc-14.1.0
-arm                    vt8500_v6_v7_defconfig    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-i386                             alldefconfig    gcc-14.1.0
-i386                             allmodconfig    clang-19
-i386                              allnoconfig    clang-19
-i386                             allyesconfig    clang-19
-i386        buildonly-randconfig-001-20241025    gcc-12
-i386        buildonly-randconfig-002-20241025    gcc-12
-i386        buildonly-randconfig-003-20241025    gcc-12
-i386        buildonly-randconfig-004-20241025    gcc-12
-i386        buildonly-randconfig-005-20241025    gcc-12
-i386        buildonly-randconfig-006-20241025    gcc-12
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241025    gcc-12
-i386                  randconfig-002-20241025    gcc-12
-i386                  randconfig-003-20241025    gcc-12
-i386                  randconfig-004-20241025    gcc-12
-i386                  randconfig-005-20241025    gcc-12
-i386                  randconfig-006-20241025    gcc-12
-i386                  randconfig-011-20241025    gcc-12
-i386                  randconfig-012-20241025    gcc-12
-i386                  randconfig-013-20241025    gcc-12
-i386                  randconfig-014-20241025    gcc-12
-i386                  randconfig-015-20241025    gcc-12
-i386                  randconfig-016-20241025    gcc-12
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                           sun3_defconfig    clang-20
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                        bcm63xx_defconfig    clang-20
-mips                         bigsur_defconfig    clang-20
-mips                            gpr_defconfig    clang-20
-mips                            gpr_defconfig    gcc-14.1.0
-mips                           jazz_defconfig    gcc-14.1.0
-mips                        omega2p_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-powerpc                    adder875_defconfig    clang-20
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                    ge_imp3a_defconfig    clang-20
-powerpc                 mpc832x_rdb_defconfig    clang-20
-powerpc                     sequoia_defconfig    gcc-14.1.0
-powerpc                     tqm8560_defconfig    clang-20
-powerpc                      tqm8xx_defconfig    gcc-14.1.0
-powerpc                        warp_defconfig    gcc-14.1.0
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-s390                       zfcpdump_defconfig    clang-20
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                         ecovec24_defconfig    gcc-14.1.0
-sh                        edosk7705_defconfig    gcc-14.1.0
-sh                          kfr2r09_defconfig    gcc-14.1.0
-sh                     magicpanelr2_defconfig    gcc-14.1.0
-sh                      rts7751r2d1_defconfig    clang-20
-sh                           se7619_defconfig    gcc-14.1.0
-sh                           se7705_defconfig    clang-20
-sh                           se7705_defconfig    gcc-14.1.0
-sh                  sh7785lcr_32bit_defconfig    clang-20
-sh                             shx3_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64                              defconfig    clang-19
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                               rhel-8.3    gcc-12
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                  cadence_csp_defconfig    clang-20
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Please kindly resend and include all necessary To/Cc entries.
+</form letter>
+
+Best regards,
+Krzysztof
+
