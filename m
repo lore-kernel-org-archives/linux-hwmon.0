@@ -1,108 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100191C0DF0;
-	Fri, 25 Oct 2024 11:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97CF1E47DB;
+	Fri, 25 Oct 2024 12:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729855156; cv=none; b=s8TcqKkio1Z9JEXLS4x8hHxMj93axLIx2V/h1nayGM54SRNtGqG1kqKaCAkcxuOHQFBkYEiybp4OfD6+KnCFBrXX6s8QZYMeRy9EybzBdiUq9DC4E6/o1Smg13qQ0KVqOMOTfu8OB2CXKGswyiLQ9VcvuFFXBQ57/UE8nvPsbXE=
+	t=1729857663; cv=none; b=VNbvXgPszPFvhx/Nt+kVcsZ96hPOvOVdNFKyoCG31Awlw+R8XpwcQ0rAtpzylC+tERptKN9mX0oyRcKxBa5TxVXWxB8yK5qHafEgrZPV6Iv1+pdG1vhlFC8hwKAQOtplqOjauKhZ8RHt6nEz8kCVSgIeMr76mLAqx1pBCwR7N78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729855156; c=relaxed/simple;
-	bh=vCGAignBD2aACKDs7S5GJuHf9mCuUXHCpGJFImU69cA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gd58L8PE2MbBanuUSwUat+OcxQmBQK4bKN7BhI0oCDey796XUmldK7D1lRE0x0zqarfQniCfiPssEJTi8Cd0c972SP5EltS/pO0pIFK0flJvLE4sWZfFzED4AJn0bEJOJLQ5JbYrtdJlLIrybDvd7HnnERkd+s5wJo4whLISlcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WEcU7ct/; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729857663; c=relaxed/simple;
+	bh=mEN1+3VhWjr5X3RuBbsVZ0hbnhfF1z7OWwlsV9ECEzI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DqjjzilIhwdxmTSxppW9Z9h8co3EDKiFmJoI03/SOChgzt5oQyujqfs2iIsjLB3x1ePWmxenesmjPiDYVwNtrLKYhGs2cNt5zprSV4Wm5T5MlcYWCiFcO1EOKQRDwEMWTHhbfLiBUEjaMEQ6zWGjkyzvJuPn1ttn6XMRuBYyI1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FCAag47M; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WEcU7ct/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729855154; x=1761391154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vCGAignBD2aACKDs7S5GJuHf9mCuUXHCpGJFImU69cA=;
-  b=WEcU7ct/FIg9kA2Y7FyQYiVPdqMiOqfozi+oge87XYMl0zhUUXzOvUy6
-   a0Clyod5Ig+C+c3prbNPG+ldJ/jz+76GBUEhaFjRjCIUl1y8wCbSB+H3j
-   t8RV4E5saBsFSdWvBc1z9kmj9rblSMxDGqr0G9wy2it1AErvsRMWziBOe
-   SFIm7hTD77dKzB9GNN0Bn36485+T4/tE1YKdGKesXa0L/p8JYJdvBX7NF
-   GeN8ALVG6PGI+OzoFV32BaegtD3eQ4kRZox5XO6VEVOLmZaHjowx1IZxg
-   vz3M623lPehupCJdSxkHNpoKiv5tKzThIHH6UhIDvKOQIhpw92A5BRDdE
-   A==;
-X-CSE-ConnectionGUID: GUgupysyTuyekhI78fhiHA==
-X-CSE-MsgGUID: +AmmUj8eQYCNdsrkaBy4lw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29381352"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29381352"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 04:19:12 -0700
-X-CSE-ConnectionGUID: Nq9Fh6YPQYKn0TJAHVXvOg==
-X-CSE-MsgGUID: 8G3UHRYvS4SIIxB3oCH72Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="80803511"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 25 Oct 2024 04:19:00 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4ILJ-000Y8A-2O;
-	Fri, 25 Oct 2024 11:18:57 +0000
-Date: Fri, 25 Oct 2024 19:18:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com, jic23@kernel.org,
-	lars@metafoo.de, ukleinek@kernel.org, alexandre.belloni@bootlin.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <202410251825.ZVzMFUSc-lkp@intel.com>
-References: <20241024085922.133071-5-tmyu0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FCAag47M"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49P7Lp6K027923;
+	Fri, 25 Oct 2024 08:00:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=JErI5NNee6NaaSl0zqZCyvKEi01
+	/BOods/kMqUZjtQ8=; b=FCAag47M2ay6ezMVFpJX88/WSUOKUl/L4lMFgW4E9BQ
+	alrxpriCRg/VIftqvUnU7x6PegRI0k5jrVNAeGNVtEvXUc8Oqg7IMvAmj+XdIaa7
+	xGBbwoZsBm3e94ivjX2mAAgFPnb9h4cVqRwqu3XdLlgiNSJbAJnrPXULDLC2R1C1
+	gTxpASCvcJ/hr53FO8c2d7hoEfVtY8zExnhnLiskEIW4kpfnztnO/Yy0atkeXTVw
+	QPo6Tuv9jKaBE7JTiEpuMjbJZbDTnkIk+pctJEdpJEsf/Sc6oyEfp4Abzv0OPobz
+	cpDZ6YjjKudtdFYt3nIGGc6zhV1EOJ9aeVwTbNjSp+g==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 42fjqqp1tk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Oct 2024 08:00:45 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 49PC0hSb045682
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 25 Oct 2024 08:00:43 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 25 Oct 2024 08:00:43 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 25 Oct 2024 08:00:43 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 25 Oct 2024 08:00:43 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.117])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 49PC0XRs016585;
+	Fri, 25 Oct 2024 08:00:35 -0400
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Add Support for LTC4296-1
+Date: Fri, 25 Oct 2024 14:56:09 +0300
+Message-ID: <20241025115624.21835-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024085922.133071-5-tmyu0@nuvoton.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 8vvpOwC_eONBbYm_4PqKy7MNUEjTv-Ak
+X-Proofpoint-ORIG-GUID: 8vvpOwC_eONBbYm_4PqKy7MNUEjTv-Ak
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ mlxscore=0 malwarescore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0 mlxlogscore=794
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410250092
 
-Hi Ming,
+This is an initial driver support containing the features that are
+used in current projects.
 
-kernel test robot noticed the following build errors:
+The LTC4296-1 is an IEEE 802.3cg-compliant, five port, single-pair
+power over Ethernet (SPoE), power sourcing equipment (PSE)
+controller. SPoE simplifies system design and installation with
+standardized power and Ethernet data over a single-pair cable.
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on brgl/gpio/for-next andi-shyti/i2c/i2c-host mkl-can-next/testing groeck-staging/hwmon-next jic23-iio/togreg abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.12-rc4 next-20241024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Antoniu Miclaus (2):
+  dt-bindings: hwmon: add ltc4296-1 support
+  hwmon: ltc4296-1: add driver support
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Yu/mfd-Add-core-driver-for-Nuvoton-NCT6694/20241024-170528
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20241024085922.133071-5-tmyu0%40nuvoton.com
-patch subject: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20241025/202410251825.ZVzMFUSc-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251825.ZVzMFUSc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410251825.ZVzMFUSc-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> make[6]: *** No rule to make target 'drivers/net/can/nct6604_canfd.o', needed by 'drivers/net/can/built-in.a'.
-   make[6]: Target 'drivers/net/can/' not remade because of errors.
+ .../bindings/hwmon/adi,ltc4296-1.yaml         | 105 +++
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/ltc4296-1.c                     | 644 ++++++++++++++++++
+ 4 files changed, 760 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc4296-1.yaml
+ create mode 100644 drivers/hwmon/ltc4296-1.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.2
+
