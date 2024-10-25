@@ -1,324 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B97670820;
-	Fri, 25 Oct 2024 14:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803F31FB8B9;
+	Fri, 25 Oct 2024 14:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729865116; cv=none; b=RECBBVIzQfCM0+8VV0CcsdhBS4cx1EhTHPXpYArFlzMlSrVAR4iM+Q+K/nWxodg40vHK7/dHMJzusJjtpAoiEBFuMhROuaP/juFOMqLwK8yeU6CtSYBsRUypqdijEUgAOm21/G3rrCili8+CpRnafJHvLNxF/wgZ2dtl7hEjyDs=
+	t=1729866134; cv=none; b=Gfy9//U9B+cePzBVRUFCEtQYjgUy/NglIIZKNJCgWsINKGqj/hNH6chec6IApz8N2C8ChWAoGtuCHOy9IPJwMr1FJfoip6Jy1Y/2F5ruTEPxzAJxQS7iL8oyw+Af4dOKztZqkNTGK6GcSaBAyLDeg9th2+xIGgeXJeFUT7KfuCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729865116; c=relaxed/simple;
-	bh=GawgxtbvGI7SYUVxeirf1cDfVMXixlC3Z+RP/triwAI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HDnvcDcnpGUu3ZkNNiU8eToQY+RLw1y5qBm+tPR5Vf43M0uHnzCEmuurBPVcGTaMZQXnoRoVuIDDI/KJoMRisi86PH47/btPe8DMP8Ksc6P3OqtJBpwSw0YcmtQfBJdH820o3MP3Ict9lIBKbs2M2sqDcxgPO2CeVZ6aA2q8m9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vq3ZG9LP; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729866134; c=relaxed/simple;
+	bh=G4atOyxM9jgJYS0gyVFPokvnqnRIuTR8/gUzRdXWmR8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=THOZaCs8H2krfnCGJFfU5CpAh6jM1CvejsBLXXKBi2m6T91zd8Bp28QgJi0npA5kZhUofXHQxE8uwDQ3bejyh6n0ZTSVSBIX3wwW2CqCa1gNL5aJUEOvwlia0mjKLgghRzzKq9PBVYyVu5hP/AnTQ1k0cAeVef38FSgKmIUQV0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VvpyJaVJ; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vq3ZG9LP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729865114; x=1761401114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GawgxtbvGI7SYUVxeirf1cDfVMXixlC3Z+RP/triwAI=;
-  b=Vq3ZG9LPO4eTuYlnpPeL4fqMGHgzrDOIDo4wRhmHwh8NZGRWrO1iCGOv
-   +9FNyQ7snFDY3aXVTVnD5m0M9y88zGd/jF52ACkoMmywl24pjDZdlCV8/
-   8p6SPueo5aytfEXZbJY4bmQjBmHK7l3EweLDdcKMPP1DlId0l6Xvvyyhm
-   rxAmCSySVPVBBb52nTBGx6O/kYpxb9TMSVwmBT7D6+CdjFaIDSceyjeAI
-   f8hry4woCPiu9bXcAeMTH+YzIrWnIJ1aJKhhw7EL/3wn3MPfdj6RvENY3
-   gL0U15As4cMnedo1SM43pnTmsa5YUMYZpz4dNegcQpFBtLkiFEcUza7DL
-   A==;
-X-CSE-ConnectionGUID: d8NX55DhT3+PNh/iSeuiJg==
-X-CSE-MsgGUID: gS2j/dQkTBeCjJh7PFNm+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="46998585"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="46998585"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 07:05:14 -0700
-X-CSE-ConnectionGUID: LeEsCIqSTim0B3IIZc6TtQ==
-X-CSE-MsgGUID: qBDnZ+SMQd2GWJdpJqfSsw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="81759791"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 25 Oct 2024 07:05:07 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4Kw5-000YKb-09;
-	Fri, 25 Oct 2024 14:05:05 +0000
-Date: Fri, 25 Oct 2024 22:04:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Vaishnav Achath <vaishnav.a@ti.com>
-Subject: Re: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
-Message-ID: <202410252141.XSGtEsDP-lkp@intel.com>
-References: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VvpyJaVJ"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20cdb889222so19014305ad.3;
+        Fri, 25 Oct 2024 07:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729866132; x=1730470932; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:cc:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=J+SkgqVJgNuicstP3JsGRFLErFj8SbUewOJTdMcB2kY=;
+        b=VvpyJaVJ1jFuifwPcA8rMEGM9rbL2Qu6+Gt8QqLiNsd3Yqv4OgjYe1AmuvZdRr//q+
+         Vv4axi23PDH1vHCIwkMm8cHslq4mCuPy+z4+HnGsreajbnrNxysXVwHoZP2sD9QKrIkH
+         MI+h/rxR+ITtetAMLTp36CNw2/RG180kTB4v6+8MVX2O71fJRBR28reoqkE9P00WfEBN
+         YuTBqru2I5AXB69+4bJqFCC4+wLwDrmVRt7Z/Aip26XZAsjl4ArDRT9EaUH7hPAHKnZW
+         sUjxxBTy6EdMGzendLn1bPlD5mKy/HY1/5ecApnb3nHN0LtLR81UrP2+e5ndFIQKpxiU
+         iyTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729866132; x=1730470932;
+        h=content-transfer-encoding:in-reply-to:cc:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J+SkgqVJgNuicstP3JsGRFLErFj8SbUewOJTdMcB2kY=;
+        b=Ex8CpNJWqlgRVBdAj/qRjL5f7jzK/wt2evs1fXpfmT36Vjl++56hlWXkClC4P0BYdX
+         feuWZ0hQA5vpjdeK420irKu1mbP5MEyO8Hymo7E4Q0HMVkfE/ztUhDtpVTQV+WaTeJgn
+         iLjEby5bzrlnH1rPtmAM/qNIDLKSOAQh4w72APtYq99iRkWLI6UFDufM9mibApzKEk6l
+         APFZXGKzyCFqbuunCJfIyrxpPQCX54FKz2LvjTQ+UxDRU+kdKbJUUP1+s8yrFG8aqn+k
+         ynW9V4eBmcVdEs1Z+ar25BxnzlCxCWRwlxMT/gH4uH+AMa7JyZGLqh0iGJdbT3ir+XYM
+         gNeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+mTDUdiXoKMfOkv7UD7xsHuBetQUQM1FIpgEaZaYHDyAdlWUYWd67wFyzFwXHJzp42WDV467y@vger.kernel.org, AJvYcCUl4kJaPs5Jf0xYQsIyKfsZ2dDCXIrUaVwCpLtd3OBSdy8tetn53fGakF4a7r25PTyLHIA/U35gxQJF@vger.kernel.org, AJvYcCVYDoTzX3H+VFwKJOWu9G20buASZ0FQ7ulZDHMptgYSNgoB/Ta7++PZ4QsEeKl9SlLHZDTLhV+OcP+x6Z+F@vger.kernel.org, AJvYcCW/Q23dfmuiippNcN8xuwPAA5aK7x4FAliae5sh/it2amk+GlUovh8IOq4tAXhHcpzhrmPr8FdKlinTClc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyotf6DZaqY8JGVJ4wr7Le8EG65KvHKJvpYU8cJvcdeQ9jkYwGC
+	8MZob9+XoOHgGRY9LLzsl84/+CGMaAuc4oUxoMUOW30RCU/wtcB3
+X-Google-Smtp-Source: AGHT+IE0HJgh3tgcsL6OQ6cerJSSzvl2kzimxZhUmfqvyOZzTwOE9jF1+jxbo9KS4avg/g5ONz8VRg==
+X-Received: by 2002:a17:903:2a8e:b0:20c:d428:adf4 with SMTP id d9443c01a7336-20fa9eb92b9mr144717375ad.38.1729866131679;
+        Fri, 25 Oct 2024 07:22:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bbf44743sm9914485ad.21.2024.10.25.07.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Oct 2024 07:22:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6955c8b6-58df-4b1a-bdd6-759de3d3c46b@roeck-us.net>
+Date: Fri, 25 Oct 2024 07:22:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: ltc4296-1: add driver support
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241025115624.21835-1-antoniu.miclaus@analog.com>
+ <20241025115624.21835-3-antoniu.miclaus@analog.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+ Kory Maincent <kory.maincent@bootlin.com>,
+ Network Development <netdev@vger.kernel.org>
+In-Reply-To: <20241025115624.21835-3-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Jerome,
+Hi,
 
-kernel test robot noticed the following build errors:
+On 10/25/24 04:56, Antoniu Miclaus wrote:
+> Add support for LTC4296-1 is an IEEE 802.3cg-compliant,
+> five port, single-pair power over Ethernet (SPoE), power
+> sourcing equipment (PSE) controller.
+> 
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
 
-[auto build test ERROR on 516ddbfef736c843866a0b2db559ce89b40ce378]
+...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/hwmon-pmbus-core-allow-drivers-to-override-WRITE_PROTECT/20241025-021525
-base:   516ddbfef736c843866a0b2db559ce89b40ce378
-patch link:    https://lore.kernel.org/r/20241024-tps25990-v3-6-b6a6e9d4b506%40baylibre.com
-patch subject: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20241025/202410252141.XSGtEsDP-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252141.XSGtEsDP-lkp@intel.com/reproduce)
+> +	hwmon_dev = devm_hwmon_device_register_with_groups(&spi->dev,
+> +							   spi->modalias,
+> +							   st, ltc4296_1_groups);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410252141.XSGtEsDP-lkp@intel.com/
+New drivers must use the the with_info() hardware monitoring API.
 
-All errors (new ones prefixed by >>):
+The API use is inappropriate: _enable attributes are supposed to enable
+monitoring, not a power source. The hardware monitoring subsystem is
+responsible for hardware _monitoring_, not control. It can be tied to
+the regulator subsystem, but even that seems to be be inappropriate here.
+I think the driver should probably reside in drivers/net/pse-pd/.
+That doesn't mean it can not support hardware monitoring, but that
+isn't really the chip's primary functionality.
 
-   drivers/hwmon/pmbus/tps25990.c: In function 'tps25990_read_word_data':
->> drivers/hwmon/pmbus/tps25990.c:201:28: error: implicit declaration of function 'FIELD_GET' [-Wimplicit-function-declaration]
-     201 |                 ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-         |                            ^~~~~~~~~
-   drivers/hwmon/pmbus/tps25990.c: In function 'tps25990_write_word_data':
->> drivers/hwmon/pmbus/tps25990.c:260:46: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
-     260 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-         |                                              ^~~~~~~~~~
+Yes, I see that we already have ti,tps23861 in the hardware monitoring
+subsystem, but that may be just as wrong.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [y]:
-   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+I am copying the PSE subsystem maintainers and mailing list for advice.
 
+Thanks,
+Guenter
 
-vim +/FIELD_GET +201 drivers/hwmon/pmbus/tps25990.c
-
-    85	
-    86	static int tps25990_read_word_data(struct i2c_client *client,
-    87					   int page, int phase, int reg)
-    88	{
-    89		int ret;
-    90	
-    91		switch (reg) {
-    92		case PMBUS_VIRT_READ_VIN_MAX:
-    93			ret = pmbus_read_word_data(client, page, phase,
-    94						   TPS25990_READ_VIN_PEAK);
-    95			break;
-    96	
-    97		case PMBUS_VIRT_READ_VIN_MIN:
-    98			ret = pmbus_read_word_data(client, page, phase,
-    99						   TPS25990_READ_VIN_MIN);
-   100			break;
-   101	
-   102		case PMBUS_VIRT_READ_VIN_AVG:
-   103			ret = pmbus_read_word_data(client, page, phase,
-   104						   TPS25990_READ_VIN_AVG);
-   105			break;
-   106	
-   107		case PMBUS_VIRT_READ_VOUT_MIN:
-   108			ret = pmbus_read_word_data(client, page, phase,
-   109						   TPS25990_READ_VOUT_MIN);
-   110			break;
-   111	
-   112		case PMBUS_VIRT_READ_VOUT_AVG:
-   113			ret = pmbus_read_word_data(client, page, phase,
-   114						   TPS25990_READ_VOUT_AVG);
-   115			break;
-   116	
-   117		case PMBUS_VIRT_READ_IIN_AVG:
-   118			ret = pmbus_read_word_data(client, page, phase,
-   119						   TPS25990_READ_IIN_AVG);
-   120			break;
-   121	
-   122		case PMBUS_VIRT_READ_IIN_MAX:
-   123			return TPS25990_READ_IIN_PEAK;
-   124			ret = pmbus_read_word_data(client, page, phase,
-   125						   TPS25990_READ_IIN_PEAK);
-   126			break;
-   127	
-   128		case PMBUS_VIRT_READ_TEMP_AVG:
-   129			ret = pmbus_read_word_data(client, page, phase,
-   130						   TPS25990_READ_TEMP_AVG);
-   131			break;
-   132	
-   133		case PMBUS_VIRT_READ_TEMP_MAX:
-   134			ret = pmbus_read_word_data(client, page, phase,
-   135						   TPS25990_READ_TEMP_PEAK);
-   136			break;
-   137	
-   138		case PMBUS_VIRT_READ_PIN_AVG:
-   139			ret = pmbus_read_word_data(client, page, phase,
-   140						   TPS25990_READ_PIN_AVG);
-   141			break;
-   142	
-   143		case PMBUS_VIRT_READ_PIN_MAX:
-   144			ret = pmbus_read_word_data(client, page, phase,
-   145						   TPS25990_READ_PIN_PEAK);
-   146			break;
-   147	
-   148		case PMBUS_VIRT_READ_VMON:
-   149			ret = pmbus_read_word_data(client, page, phase,
-   150						   TPS25990_READ_VAUX);
-   151			break;
-   152	
-   153		case PMBUS_VIN_UV_WARN_LIMIT:
-   154		case PMBUS_VIN_UV_FAULT_LIMIT:
-   155		case PMBUS_VIN_OV_WARN_LIMIT:
-   156		case PMBUS_VOUT_UV_WARN_LIMIT:
-   157		case PMBUS_IIN_OC_WARN_LIMIT:
-   158		case PMBUS_OT_WARN_LIMIT:
-   159		case PMBUS_OT_FAULT_LIMIT:
-   160		case PMBUS_PIN_OP_WARN_LIMIT:
-   161			/*
-   162			 * These registers provide an 8 bits value instead of a
-   163			 * 10bits one. Just shifting twice the register value is
-   164			 * enough to make the sensor type conversion work, even
-   165			 * if the datasheet provides different m, b and R for
-   166			 * those.
-   167			 */
-   168			ret = pmbus_read_word_data(client, page, phase, reg);
-   169			if (ret < 0)
-   170				break;
-   171			ret <<= TPS25990_8B_SHIFT;
-   172			break;
-   173	
-   174		case PMBUS_VIN_OV_FAULT_LIMIT:
-   175			ret = pmbus_read_word_data(client, page, phase, reg);
-   176			if (ret < 0)
-   177				break;
-   178			ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
-   179						TPS25990_VIN_OVF_DIV);
-   180			ret += TPS25990_VIN_OVF_OFF;
-   181			break;
-   182	
-   183		case PMBUS_IIN_OC_FAULT_LIMIT:
-   184			/*
-   185			 * VIREF directly sets the over-current limit at which the eFuse
-   186			 * will turn the FET off and trigger a fault. Expose it through
-   187			 * this generic property instead of a manufacturer specific one.
-   188			 */
-   189			ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
-   190			if (ret < 0)
-   191				break;
-   192			ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
-   193						TPS25990_IIN_OCF_DIV);
-   194			ret += TPS25990_IIN_OCF_OFF;
-   195			break;
-   196	
-   197		case PMBUS_VIRT_SAMPLES:
-   198			ret = pmbus_read_byte_data(client, page, TPS25990_PK_MIN_AVG);
-   199			if (ret < 0)
-   200				break;
- > 201			ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-   202			break;
-   203	
-   204		case PMBUS_VIRT_RESET_TEMP_HISTORY:
-   205		case PMBUS_VIRT_RESET_VIN_HISTORY:
-   206		case PMBUS_VIRT_RESET_IIN_HISTORY:
-   207		case PMBUS_VIRT_RESET_PIN_HISTORY:
-   208		case PMBUS_VIRT_RESET_VOUT_HISTORY:
-   209			ret = 0;
-   210			break;
-   211	
-   212		default:
-   213			ret = -ENODATA;
-   214			break;
-   215		}
-   216	
-   217		return ret;
-   218	}
-   219	
-   220	static int tps25990_write_word_data(struct i2c_client *client,
-   221					    int page, int reg, u16 value)
-   222	{
-   223		int ret;
-   224	
-   225		switch (reg) {
-   226		case PMBUS_VIN_UV_WARN_LIMIT:
-   227		case PMBUS_VIN_UV_FAULT_LIMIT:
-   228		case PMBUS_VIN_OV_WARN_LIMIT:
-   229		case PMBUS_VOUT_UV_WARN_LIMIT:
-   230		case PMBUS_IIN_OC_WARN_LIMIT:
-   231		case PMBUS_OT_WARN_LIMIT:
-   232		case PMBUS_OT_FAULT_LIMIT:
-   233		case PMBUS_PIN_OP_WARN_LIMIT:
-   234			value >>= TPS25990_8B_SHIFT;
-   235			value = clamp_val(value, 0, 0xff);
-   236			ret = pmbus_write_word_data(client, page, reg, value);
-   237			break;
-   238	
-   239		case PMBUS_VIN_OV_FAULT_LIMIT:
-   240			value -= TPS25990_VIN_OVF_OFF;
-   241			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
-   242						  TPS25990_VIN_OVF_NUM);
-   243			value = clamp_val(value, 0, 0xf);
-   244			ret = pmbus_write_word_data(client, page, reg, value);
-   245			break;
-   246	
-   247		case PMBUS_IIN_OC_FAULT_LIMIT:
-   248			value -= TPS25990_IIN_OCF_OFF;
-   249			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
-   250						TPS25990_IIN_OCF_NUM);
-   251			value = clamp_val(value, 0, 0x3f);
-   252			ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
-   253			break;
-   254	
-   255		case PMBUS_VIRT_SAMPLES:
-   256			value = clamp_val(value, 1, 1 << PK_MIN_AVG_AVG_CNT);
-   257			value = ilog2(value);
-   258			ret = pmbus_update_byte_data(client, page, TPS25990_PK_MIN_AVG,
-   259						     PK_MIN_AVG_AVG_CNT,
- > 260						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-   261			break;
-   262	
-   263		case PMBUS_VIRT_RESET_TEMP_HISTORY:
-   264		case PMBUS_VIRT_RESET_VIN_HISTORY:
-   265		case PMBUS_VIRT_RESET_IIN_HISTORY:
-   266		case PMBUS_VIRT_RESET_PIN_HISTORY:
-   267		case PMBUS_VIRT_RESET_VOUT_HISTORY:
-   268			/*
-   269			 * TPS25990 has history resets based on MIN/AVG/PEAK instead of per
-   270			 * sensor type. Exposing this quirk in hwmon is not desirable so
-   271			 * reset MIN, AVG and PEAK together. Even is there effectively only
-   272			 * one reset, which resets everything, expose the 5 entries so
-   273			 * userspace is not required map a sensor type to another to trigger
-   274			 * a reset
-   275			 */
-   276			ret = pmbus_update_byte_data(client, 0, TPS25990_PK_MIN_AVG,
-   277						     PK_MIN_AVG_RST_MASK,
-   278						     PK_MIN_AVG_RST_MASK);
-   279			break;
-   280	
-   281		default:
-   282			ret = -ENODATA;
-   283			break;
-   284		}
-   285	
-   286		return ret;
-   287	}
-   288	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
