@@ -1,74 +1,97 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7A9217F3D
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 08:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD7B217F5E;
+	Sat, 26 Oct 2024 09:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729930099; cv=none; b=Se+sKMHuY3A186EhtNtL54vWDLzCzZ4APhvbGI3XUv7xTycFcCCQjRaKJ00HQzOjXdkQ0WtFD/r6GndzbgAId6hNiP2tOSYW5znpjmJaWBtcLCX45HrbvNEGZaPvCttJE68yfUXqiYz5vjYtwKTT/N/TvXLcfKfxFvc46qAFqSo=
+	t=1729933731; cv=none; b=dNrQBQAIWT2AHbIKdZN9XpR87VacaPM7u1UBYkd2D16pS8CbDxcTeX+vUXerVBx29QVfLTGsKX0L7ScXZARwg/UBeXyDR9PNrYWVPryBvRUfftJlyYQipwLd22xkc/8g8mWIVm3TcZ7+422Y/vQfB3sliKfgnM1NVLm+Hq+NZ6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729930099; c=relaxed/simple;
-	bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ome2nD0onyVchPq+Gp9Ria6OD3e4vY2kluMe5nJE49QNRi+AoK73Lok3ITPow0pcz8tiH4ZLEEHHeXrW9w6+ZUxHaPHFbnFxIhOuiHmBxc+g5grSqW+S6Rfxf6pECdV6Ee25PtiW/rFWvUR3Na/gxMOsQS0JWqAp6lGZZoNl+jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpKGDeXn; arc=none smtp.client-ip=209.85.219.51
+	s=arc-20240116; t=1729933731; c=relaxed/simple;
+	bh=RSN9ic9K/Ut+YDWJ2FWRiKaKIHsNfnpXRZOz7BrfrY8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LsD1OhggC5S0OAl81NOoXZae/0Zh/EkVkn7g+srGZymqyTvll1p6QAJtM+f9YCtV0/s/2GfmzTiD/KvufUIoKWLnc0mgZkcGmagln8kmaHyOI8un4ZQXrLCFQ4hYfs/Zmqk0MxBWsFE3IVLy9m5bFZd+iE1IvvFKzvlfuyIiIxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I7b/THSr; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpKGDeXn"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbce9e4598so17291966d6.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 01:08:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I7b/THSr"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9a4031f69fso376494366b.0;
+        Sat, 26 Oct 2024 02:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729930096; x=1730534896; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
-        b=EpKGDeXnHUZ9BiYp3cc9sdTJn4C3YQMD1Y5cVmynbBXQ4xAgOMUi25sNJHg9gksJA2
-         83tYlzR4GYu/nMRYSw6slDe4mPJZf9pDV6QDZ3+aw9vQv3jvikCiEH28J3LdhsmUJeDx
-         nVrSUKM0lh7oCQdJTVN1ppoyzmCctyAAZcVAl7cib/j4dNpZ2FXNoJCK4VVrRL8il9iw
-         FCxoB2hliDc2NoAJQYb8AfH1KrA5x7Zbvx4D1dD9gdGFpGMEMSLHfFiVRfGrZcGEJT6L
-         DF3MsDUjC0/PThQUbdyIcW7mfETiNzdp2qYn/x2IngB9WfkHvHHpFKzyOVtr5NhU0XY9
-         yegg==
+        d=gmail.com; s=20230601; t=1729933728; x=1730538528; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uCIJLuA6muWOiLwe3bt6iFWGsmI+thbuxm3D0I6OTuk=;
+        b=I7b/THSr1q5gvTH89kLRygzMwfFuhpiVqUKwCxAmOekWDz6jCXU0NloMeUXKa8Y50j
+         1Gf7qWBBzWSIPDVh9W7wjhcizhbhFMLwEzm6UfnxnWLugBlyfkZPFVRVUqrRJ0Ff9M4T
+         vYTUobxL6ZEAQFDt930HTwxL7ib+jMpqLx7192EOIf2YgxUwXHoiqeD0G+NQZyQAOqZq
+         3Mt2JYOPk+gtqXpTvpe1hwE/asAkgBybKqiQSRbgzqbIyut24LBnLmVAoiFOK2WvEiKS
+         4HnpAflBuNrkr/bUVlwXkx7ztFer40dX6OS8kzUAIrJ7LPs+wfP+QGg8wuI4YJYaHt7m
+         q0Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729930096; x=1730534896;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1729933728; x=1730538528;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
-        b=eWfSkiljs0s3F+35Y4JdPY0t9Quxy7tf6/vX0nasTuFo9l4OHNRxS5RuV/O5PO/dbi
-         N5qUHvpFBio3vOTeE65JGC9f+KN/0VqCPaoEoYvNO+Workrms4qAMGMCRr0ND/rTVRBC
-         awql9qUxYFogtxbOu8rXWWtE4B57DJq9xawn+J5mN0zhRbMLNBWwGzuxKuOJlROsxbMi
-         guPMJXzl0vWgpGYNRBQ8dBlLrcyaoSBB7mPxxmNoRSN7a/uTGTwBF4sDKILy1ri0IOBr
-         4WMzcYsrMIUR2JIoU86pfg08UpM+3yXs8PtABYTpPDY7UAJEgSAsCevJMpCpRKJMCXPf
-         UPRA==
-X-Forwarded-Encrypted: i=1; AJvYcCXu4kWlTjY2bT9Btd4ETdxhXDbss0pKl6IT4FO6nbsS7yh1xMMsakjPZMkcX0cFXwm5HAqdubTRqWgxZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv8GxRAZ/LGwfeT10cdQIytWYaMEjm3tOKjlwwceEkMsP7xylY
-	xc2ZFbZamp/ALk3yy6DebvadY4d/eT7s/i2mkDCN+QnMEZJo+O4hW71ee/w/Z/XgpRChO4qSJhh
-	GR5v2YfAEjSJwhm7Ibwu7CoVigXWes0Km
-X-Google-Smtp-Source: AGHT+IETzUX/oQIqVJBLrUnTUASPRcKoCflD/pzp4OX8HzkGgSpAUUIp3DvhpUPa5w8HK9RJxTuEAT2FyGAlw43MvIQ=
-X-Received: by 2002:a05:6214:5a0b:b0:6cc:2d3c:6472 with SMTP id
- 6a1803df08f44-6d1856b4898mr26880816d6.14.1729930096029; Sat, 26 Oct 2024
- 01:08:16 -0700 (PDT)
+        bh=uCIJLuA6muWOiLwe3bt6iFWGsmI+thbuxm3D0I6OTuk=;
+        b=dorJ6CYZUmofa0kjRqrNjHarhIxwpRR92hxwRebMxpzisbmTLgfaap6/ZEwmuKvKCZ
+         2BiKvPoXKwf++S3WyNqDBDjBfRtadusMIjzNepSeEHlP2CMpkeBSwn+QDuLaKHOTzdfY
+         jK91BkYF72qQmLlANyWb4w6tYcBCzTnkedUyf5LYkkO1Jlokc64br3oxZwpCmd/H82hG
+         wIrWYOLHqeJVplaw+NlAC3gita7+InJ/Qg2qAqgz7ldPxGfx2CZco02gtsreO6p397SH
+         v5DjEGCH6mHY0od8Fzr0a092bzcSuMh5uw8QaBfkdwnXvuP/1FkukHjXQ6fziU+ptjpQ
+         bASg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoUifriEjAYyoh7bMg9E3mbT1atIR6V8hPAFXeIwQFYQ6RNBcNOMtBlDIfig1UUqkHwFxmv+xDDDv/ZpT/@vger.kernel.org, AJvYcCVgBCDvtyQbF2rOqMeTZdWZAF1m7Lkl1odngItOy8G8Z8gCDRLh9KewQf69FmCJigHvOiVrn2Qr9UHy@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmKVSKm+xJnfyTscxRrAYbqTTWJm7Ex4J98BLOvh/tpIGhWPat
+	R/WxlFyMPSJ+/QBYcbt2glR5vhfbZuqyVZNpB+h5Eh3V6TaG4L3k
+X-Google-Smtp-Source: AGHT+IFiTArWsZ7bqEuvvcec5QUqM9skKob+qZCDa0gSJUMRL9sVcXzYmbvYEFPqlUdOJSgY16dNKQ==
+X-Received: by 2002:a17:907:94c1:b0:a99:ffef:aec5 with SMTP id a640c23a62f3a-a9de5d774d0mr139759266b.23.1729933727678;
+        Sat, 26 Oct 2024 02:08:47 -0700 (PDT)
+Received: from localhost (89-73-120-30.dynamic.chello.pl. [89.73.120.30])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-a9b30c7ae0bsm154063666b.156.2024.10.26.02.08.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Oct 2024 02:08:47 -0700 (PDT)
+From: Patryk Biel <pbiel7@gmail.com>
+Subject: [PATCH 0/2] Add support for LTC2971 power manager
+Date: Sat, 26 Oct 2024 11:08:43 +0200
+Message-Id: <20241026-add-ltc2971-v1-0-109ec21687bc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20210923023448.4190-1-akinobu.mita@gmail.com> <20211011143421.GA2374570@roeck-us.net>
- <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com> <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
-In-Reply-To: <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
-From: Akinobu Mita <akinobu.mita@gmail.com>
-Date: Sat, 26 Oct 2024 17:08:05 +0900
-Message-ID: <CAC5umyh8QXkUnqJFs4TK5YpvjSB7tJV3pFGv8ChsCbDfDS4zFA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
-To: Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, 
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJuxHGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDS2MD3cSUFN2ckmQjS3NDXcMkE0vjtBQjwyQzEyWgjoKi1LTMCrBp0bG
+ 1tQAo1tbdXQAAAA==
+X-Change-ID: 20240930-add-ltc2971-1b493fd21b64
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Patryk Biel <pbiel7@gmail.com>
+X-Mailer: b4 0.14.2
 
-Hi Billy,
+This series introduces support for LTC2971 power manager.
+The LTC2971 is similiar to already supported LTC2972 in terms of the
+number of channels and the register set, it differs however in
+the supported voltage range.
 
-I have updated and resubmitted these patches. I don't have the hardware to test
-at the moment, so is it possible for you to test it?
+Signed-off-by: Patryk Biel <pbiel7@gmail.com>
+---
+Patryk Biel (2):
+      hwmon: pmbus: Add support for ltc2971
+      dt-bindings: hwmon: Add ltc2971 bindings
+
+ .../devicetree/bindings/hwmon/lltc,ltc2978.yaml    |  2 ++
+ drivers/hwmon/pmbus/ltc2978.c                      | 34 ++++++++++++++++++++--
+ 2 files changed, 33 insertions(+), 3 deletions(-)
+---
+base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
+change-id: 20240930-add-ltc2971-1b493fd21b64
+
+Best regards,
+-- 
+Patryk Biel <pbiel7@gmail.com>
+
