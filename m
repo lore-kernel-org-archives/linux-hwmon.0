@@ -1,110 +1,74 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308731D017C;
-	Sat, 26 Oct 2024 08:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7A9217F3D
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 08:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729929957; cv=none; b=EAeSIDNxGtRat4ftSTwVi89ebgbhJ6XtzAAGI4ae1fbJ8WRGtZEdOfkBRDl5yrb2tUhpc4o98IQrV0YRLJS15wRdrooufQ1tYDZEGKtdlFXtbw6ic2GQ9/pwaJhn+8gedJ/z2/M+Dn/uxcWwu3ZbAk5QxUNl/FwoL+1lVhhjxW0=
+	t=1729930099; cv=none; b=Se+sKMHuY3A186EhtNtL54vWDLzCzZ4APhvbGI3XUv7xTycFcCCQjRaKJ00HQzOjXdkQ0WtFD/r6GndzbgAId6hNiP2tOSYW5znpjmJaWBtcLCX45HrbvNEGZaPvCttJE68yfUXqiYz5vjYtwKTT/N/TvXLcfKfxFvc46qAFqSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729929957; c=relaxed/simple;
-	bh=NxdHChZpaxMvrQZp5izJA5Wszc6rJQNIcts2Lnowl1Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QYVnzSXo7A0CUrZIiccaLgfyVg0bveHQeZSL56YV0zitdtbD32zzUmvl21sYVNstWeISAE2NsKAeCDbUGtscqncXHALIwMIo2c35jCO5coURaTcNRkCmX7l8Jxb8IDAUqC8S7EbihH8I270aagA+j/lYvVx67nofM0f+UvxsLys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z3Ss08Ix; arc=none smtp.client-ip=209.85.215.179
+	s=arc-20240116; t=1729930099; c=relaxed/simple;
+	bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ome2nD0onyVchPq+Gp9Ria6OD3e4vY2kluMe5nJE49QNRi+AoK73Lok3ITPow0pcz8tiH4ZLEEHHeXrW9w6+ZUxHaPHFbnFxIhOuiHmBxc+g5grSqW+S6Rfxf6pECdV6Ee25PtiW/rFWvUR3Na/gxMOsQS0JWqAp6lGZZoNl+jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpKGDeXn; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z3Ss08Ix"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7cd8803fe0aso1952550a12.0;
-        Sat, 26 Oct 2024 01:05:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpKGDeXn"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbce9e4598so17291966d6.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 01:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729929954; x=1730534754; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sS++5JF7RgkdCtoajXZbGFhvxGfG+eo22CWm24y1teY=;
-        b=Z3Ss08IxynpevHj6kZDbU6SGbOcG9K3GPMLIP/kx5dLBexaUrA/UgLU9M4x1qhC9hH
-         +SngUgTogyGElZngv+1GiUHtihn6zYuekGA26MqDkAN95nhq/mowdvxp8TMFnApWsVt/
-         ChBWl3T5uTxJ6rW0zfWduDje6xgFVb2xYQf4Rf0yagBkkZeSngBSqz+UCKYTVj21pj9I
-         ydlkPFYD6Q8nyKHN4QhJgERfTKZg2YFutEmK+fpvS5s+231OwrdUbLDslkQQaQYJMQav
-         ehH0CzgbGmAZMcXMBjGsLmA/rvVlc4yZyln+I31XTQQGcVA7PqLOAIQ1iB/hL2SM43f/
-         ccLA==
+        d=gmail.com; s=20230601; t=1729930096; x=1730534896; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
+        b=EpKGDeXnHUZ9BiYp3cc9sdTJn4C3YQMD1Y5cVmynbBXQ4xAgOMUi25sNJHg9gksJA2
+         83tYlzR4GYu/nMRYSw6slDe4mPJZf9pDV6QDZ3+aw9vQv3jvikCiEH28J3LdhsmUJeDx
+         nVrSUKM0lh7oCQdJTVN1ppoyzmCctyAAZcVAl7cib/j4dNpZ2FXNoJCK4VVrRL8il9iw
+         FCxoB2hliDc2NoAJQYb8AfH1KrA5x7Zbvx4D1dD9gdGFpGMEMSLHfFiVRfGrZcGEJT6L
+         DF3MsDUjC0/PThQUbdyIcW7mfETiNzdp2qYn/x2IngB9WfkHvHHpFKzyOVtr5NhU0XY9
+         yegg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729929954; x=1730534754;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sS++5JF7RgkdCtoajXZbGFhvxGfG+eo22CWm24y1teY=;
-        b=WRzNepYRPAmetJN+aYIh2nsuwNlnAR1pq6VvLqcvw0VPKTmL0BmajKi9esHMTUSqi2
-         UhK6B53jEJyiMl4nxJrhhorlrOIntU4O5yfwX7bALIgwN/5n8Av5KPK0mh5Q1AEYHyCa
-         dzp4Gm8tnheyl3V9/981D2xtfArpcl6qX5M94Vxc83xn+yg43DDIHmEFSPhGu3+BsBiH
-         AwbxJJEz5DldEsQC/arwXIRWe2ExHq4WjkZE5vRA+weaK3vYPHYA/iVpv5Hem6wtWpni
-         L1wwB8ks+wJMc/PIkZi0YUd0mY2QEdq0ftXzN03xl+7YVHArgH9RFxk3CoPOg3yNNS9Z
-         tYJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmRr1+mvQCWc/NVax4iKIN3hhWIyte21evuI8cfkLONLFqG3CIkkri0EpH4/7KQmxkX2iPLioZPVDU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0L2y/eIu6O9sHxJ7lu2IMs/hpGjo3tLQ5i0OMDYtVOsis9qv5
-	0UH2RUGSr+L8R7FRrd/qvOFjQa5mkKSbG+ma55FFrhuoaXg+Ojk926rO1g==
-X-Google-Smtp-Source: AGHT+IGQrl20bh5ZTQUueT1jvS2kpWHro/MS438xRanv0t6t5Uvlt6KaxCmDrL1AcSJXudxgZbRo7A==
-X-Received: by 2002:a05:6a21:394a:b0:1d8:b060:37c6 with SMTP id adf61e73a8af0-1d9a81db7edmr3148071637.0.1729929954211;
-        Sat, 26 Oct 2024 01:05:54 -0700 (PDT)
-Received: from localhost.localdomain ([240f:34:212d:1:4618:4c6a:7feb:e53b])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7edc8a46f68sm2288666a12.89.2024.10.26.01.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Oct 2024 01:05:53 -0700 (PDT)
-From: Akinobu Mita <akinobu.mita@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	akinobu.mita@gmail.com,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Billy Tsai <billy_tsai@aspeedtech.com>
-Subject: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add retain-state-shutdown property
-Date: Sat, 26 Oct 2024 17:05:35 +0900
-Message-Id: <20241026080535.444903-3-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241026080535.444903-1-akinobu.mita@gmail.com>
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
+        d=1e100.net; s=20230601; t=1729930096; x=1730534896;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g8mree3qD96qt+EmXfdq15Ufm2ggSgiN/BnGAz2GNQs=;
+        b=eWfSkiljs0s3F+35Y4JdPY0t9Quxy7tf6/vX0nasTuFo9l4OHNRxS5RuV/O5PO/dbi
+         N5qUHvpFBio3vOTeE65JGC9f+KN/0VqCPaoEoYvNO+Workrms4qAMGMCRr0ND/rTVRBC
+         awql9qUxYFogtxbOu8rXWWtE4B57DJq9xawn+J5mN0zhRbMLNBWwGzuxKuOJlROsxbMi
+         guPMJXzl0vWgpGYNRBQ8dBlLrcyaoSBB7mPxxmNoRSN7a/uTGTwBF4sDKILy1ri0IOBr
+         4WMzcYsrMIUR2JIoU86pfg08UpM+3yXs8PtABYTpPDY7UAJEgSAsCevJMpCpRKJMCXPf
+         UPRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXu4kWlTjY2bT9Btd4ETdxhXDbss0pKl6IT4FO6nbsS7yh1xMMsakjPZMkcX0cFXwm5HAqdubTRqWgxZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv8GxRAZ/LGwfeT10cdQIytWYaMEjm3tOKjlwwceEkMsP7xylY
+	xc2ZFbZamp/ALk3yy6DebvadY4d/eT7s/i2mkDCN+QnMEZJo+O4hW71ee/w/Z/XgpRChO4qSJhh
+	GR5v2YfAEjSJwhm7Ibwu7CoVigXWes0Km
+X-Google-Smtp-Source: AGHT+IETzUX/oQIqVJBLrUnTUASPRcKoCflD/pzp4OX8HzkGgSpAUUIp3DvhpUPa5w8HK9RJxTuEAT2FyGAlw43MvIQ=
+X-Received: by 2002:a05:6214:5a0b:b0:6cc:2d3c:6472 with SMTP id
+ 6a1803df08f44-6d1856b4898mr26880816d6.14.1729930096029; Sat, 26 Oct 2024
+ 01:08:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210923023448.4190-1-akinobu.mita@gmail.com> <20211011143421.GA2374570@roeck-us.net>
+ <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com> <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+In-Reply-To: <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+From: Akinobu Mita <akinobu.mita@gmail.com>
+Date: Sat, 26 Oct 2024 17:08:05 +0900
+Message-ID: <CAC5umyh8QXkUnqJFs4TK5YpvjSB7tJV3pFGv8ChsCbDfDS4zFA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+To: Billy Tsai <billy_tsai@aspeedtech.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Document new retain-state-shutdown property.
+Hi Billy,
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-index 4e5abf7580cc..86a069969e29 100644
---- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-@@ -40,6 +40,10 @@ properties:
-     maximum: 4
-     default: 2
- 
-+  retain-state-shutdown:
-+    description: Retain the state of the PWM on shutdown.
-+    $ref: /schemas/types.yaml#/definitions/flag
-+
-   pwms:
-     description: The PWM that is used to control the fan.
-     maxItems: 1
--- 
-2.34.1
-
+I have updated and resubmitted these patches. I don't have the hardware to test
+at the moment, so is it possible for you to test it?
