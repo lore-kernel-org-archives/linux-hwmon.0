@@ -1,61 +1,33 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8075A225D7
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 16:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60341C148;
+	Sat, 26 Oct 2024 18:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729959667; cv=none; b=cCsNV2wqQK09xw3VBooMxro/sG0JtT2a0Xhmle9HW3Ic9cJCO5OFEQisVvGp1StO+Llkc0SC+e6kfoG2aCEDYAgNkPqFgVxrmDfdSE1fYLy82qUtInK32cNATXmCRgSISbnznRjTMCONiS4VCPgIFEppbUD7YFIUSgYUka1rNw8=
+	t=1729966724; cv=none; b=nD7MSIL1SL/ikELTJ5PlrtYXstkZ5draW+/IlrDaLKpJx7NIA6BZ7mnhIxb3Meky5gIMn1RPWJu2AG/TPcMkar9HxvHMr47s71GbgT7IKZtBe5Fesly2wQ+mAdi0BbvF8qKdmsHAxd5THBiaUo7x4GwENddoBgo9sbVy/FNiO8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729959667; c=relaxed/simple;
-	bh=0zA6YFCkdnF5I+VJIZ6MI1lqh+S5rke1cNRfu3fFRq4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=klk4F7jtBB+s0ZEFfFlATL0Xs83G/o82NbeqMFyjlp0INJJmA18BTOj0CzFiuZhVvlZdDSctEhY0mwBlihRCjiMyASJneukq8GtjjZtGEzPpnFocDWD08t9frBDJ6DDSJMmXl/Fw/OzWl5bodgsMVjoAXWMeJ0jlbsQyzurLJNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUjTknRW; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729966724; c=relaxed/simple;
+	bh=W+kYIdxtGJb2DsD/FIKtLqKbF5o6f7e3WRxDqf9L5LA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MbyifV+3XVEukG7QxhmtKCksHd1sV7nzqLSKKnv8IP+9MUeVSrI57qomHC4FZe5p28W9DsTWi9Ysch4DcFzQ4gYq7RTJ/xHJF8BeQ0qSpcV2tE2WvUhm699ZrbIIr7x2m3shizHZ2mVToNiPW5FwP7TWQHkA2OiMnqd+ScNFC8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpF5GOIl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUjTknRW"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20cf3e36a76so29951515ad.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 09:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729959665; x=1730564465; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEQJLnbkTlUfL2jx9yECJAXnOfxYYyjeW127XtvNsRg=;
-        b=bUjTknRWwsVvFE6ssbDQJVRHGDJl3OBLDqws/92Wa1b0qiFjrOYnVnyj9toSdyhvhO
-         W0jcz8UNM4dnS0aY5C7Iq0GDYzYlaMK7kSuo6wI7vIUZJnxzJCLXRzhI6HVMSxwdbYXp
-         8/5AiBPUfPGOqWmz/bHJF2d0DiLY8FWec9Gy/oelH2dNMXi8dhnXKhZQVSnTR7edAgts
-         SECo5c+R+tTNSNW5UJQnoG88CuQgpzT2Lx48sT52oTMOYC3beZdVYdfNBPTQPjyeNDkh
-         EkDVvNBTadjuw4T36AuUcCSCxFBo3eY4Ti+uC6maT/5k7S4suGhV682En2DagpFNa+q/
-         d6tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729959665; x=1730564465;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SEQJLnbkTlUfL2jx9yECJAXnOfxYYyjeW127XtvNsRg=;
-        b=l6TlBiQxkNGlAYxhqXS8hKCAFIWXm+K7M1iI8yZ0OguI+vQxYmMQ+h5WZhym0Ybj5w
-         kOWYvExyk8H7IMRuJ8hIbtnc5lFTfRp0mIdKV5xrlKH2SuAG7fblh0AuO0XIJDlgQs16
-         JUWGvX3OjKhjzBFlMFi96MI2Nk9/GAaMQOat92voNVPeyh4MHMIa4yIhyjVLKpBgT8cj
-         RHd2+KcBTf2RKHmzPhb+jm7bh0EfjSIulWIKaEoQ+FPymN/7Ym8yhlm85gc6pSMkQVyL
-         5biN4KkStCQnq+2zXDkx0+ng9Ma5NgjduRlXgwj+VTWrWZC572HTXBNW6paXhfmkeVGp
-         qQ2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWFMduNACQR156cEylnQbNdO/a7oOh9ygtUNirJZutdLAuEGQbFhru6+QKDF8NiDLjV2TaC69mmcjou0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz30z6bEDwujVoCRH2Mlc27X0ELFGVglL0keQf7ENtS35fjdrW/
-	Y7UL1a9Qfdsu3CuGUZrnvFSrQ6WcQjb+YNXvAF4EwlMQ/Bs06wopv+m/GQ==
-X-Google-Smtp-Source: AGHT+IEmGtoNSX38GIfMGlarhwqMnWOaEMgLFsx8ycccas4+XAUQk28RnRMyJm9r69o+mjX5qOUFow==
-X-Received: by 2002:a17:903:1c7:b0:20b:6f02:b4e5 with SMTP id d9443c01a7336-210c6874bf5mr37752145ad.9.1729959664573;
-        Sat, 26 Oct 2024 09:21:04 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc04bdb6sm25694655ad.255.2024.10.26.09.21.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Oct 2024 09:21:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <70dd11a8-6f1e-499c-8c82-ed2f0c28d791@roeck-us.net>
-Date: Sat, 26 Oct 2024 09:21:02 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpF5GOIl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0D8C4CEC6;
+	Sat, 26 Oct 2024 18:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729966723;
+	bh=W+kYIdxtGJb2DsD/FIKtLqKbF5o6f7e3WRxDqf9L5LA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LpF5GOIl78/8Bm5rHsoOhHRSrmKODQcq1DP7/GawqrebkvlQPFokcmEUtBec2NscT
+	 HFHc8a/MHSnN73SQFzkQSoxxNDFdb+gpV8mrt6aX8SWtAjXURtlE+8m+m3I3wkkcfy
+	 v7jZqvr8mjKamMZouDIlMXTTOsBh7f8nauI8Zzp2KzJ9SN/I7QuwCypCXDOo9KXtA8
+	 xNOk1he4aUODN6CTboNoZp5DM99/q1FazMrgeJbfEPC7uFPCzirJ3JBTB7FvessWFG
+	 ZyYd53Qd85kYbbZg8mB7l9xxTaIX5LFdWA6VJb2i3hVMCpcuBAx3dN9hAM4UYmfw9i
+	 dKF0la5Y7veIw==
+Message-ID: <717a7de9-369b-403e-bb69-7438bc676f1c@kernel.org>
+Date: Sat, 26 Oct 2024 20:18:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,132 +35,73 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: ads7830 sensors declared in ACPI show up as ads7830-virtual-0,
- not as i2c device
-To: Mikael Lund Jepsen <mlj@danelec.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <AS4P189MB21333CF67856C181281114C5BA7E2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
- <AS4P189MB2133236F43AF4D3A60E49BAFBA792@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
- <c91afc26-61c9-4cb8-8993-ef2a750f2fc0@roeck-us.net>
- <AS4P189MB21337DDF47CAEB6C9ED28BE0BA4F2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add ltc2971 bindings
+To: Patryk Biel <pbiel7@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20241026-add-ltc2971-v1-0-109ec21687bc@gmail.com>
+ <20241026-add-ltc2971-v1-2-109ec21687bc@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <AS4P189MB21337DDF47CAEB6C9ED28BE0BA4F2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241026-add-ltc2971-v1-2-109ec21687bc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/25/24 03:55, Mikael Lund Jepsen wrote:
-> On 11/11/24 06:24, Guenter Roeck wrote:
->> On 10/11/24 06:24, Mikael Lund Jepsen wrote:
->>> I'm trying to add ACPI definitions for two i2c-based ads7830 sensors. Problem is that lm-sensor reports both devices as "ads7830-virtual-0", which makes it impossible to define separate configs for multiple sensors of the same type. If I register the sensors via sysfs, lm-sensors reports them as I would expect, with <bus#>-<address> in the chip name (e.g. ads7830-i2c-0-4a).
->>>
->>> The adapter on an ACPI defined sensor is being reported as "Virtual device", not "Synopsys DesignWare I2C adapter" as when registered via sysfs, so it seems that the i2c bus is not identified properly in the ACPI case.
->>>
->>> I've followed the documentation for ACPI Based Device Enumeration, using PRP0001 as _HID to match the driver via the compatible property:
->>>
->>>           Device (ADS0)
->>>           {
->>>                   Name (_HID, "PRP0001")
->>>                   Name (_DSD, Package ()
->>>                   {
->>>                           ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
->>>                           Package ()
->>>                           {
->>>                                   Package () { "compatible", "ti,ads7830" },
->>>                           }
->>>                   })
->>>                   Method (_CRS, 0, Serialized)
->>>                   {
->>>                           Name (SBUF, ResourceTemplate ()
->>>                           {
->>>                                   I2cSerialBusV2 (0x4a, ControllerInitiated,
->>>                                   100000, AddressingMode7Bit,
->>>                                   "\\_SB.PC00.I2C0", 0x00,
->>>                                   ResourceConsumer, , Exclusive,)
->>>                           })
->>>                           Return (SBUF)
->>>                   }
->>>           }
->>>
->>> The difference between declaring in ACPI (addr 0x4a) vs. registering via sysfs (addr 0x4b) is clear in /sys/bus/i2c/devices/:
->>> 0-004b ->
->>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0/0-004b
->>> i2c-0 ->
->>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0
->>> ...
->>> i2c-PRP0001:00 ->
->>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0/i2c-PR
->>> P0001:00
->>>
->>> I'm not sure if this is correct behaviour, or if this is a symptom of the Adapter being identified as Virtual rather than an i2c bus adapter.
->>>
->>> Does anyone have an idea what I'm doing wrong in my ACPI definition, or is this an issue in the driver/hwmon?
->>>
->>
->> The driver doesn't know anything about ACPI. The identification as virtual device is done by libsensors. That code is supposed to find ACPI devices, but maybe something has changed and that doesn't work anymore. One would have to debug the libsensors code to find a solution.
->>
->> Note that the driver does not currently support device properties, meaning that reading individual properties from ACPI is not currently supported. There is only a single property, "ti,differential-input", which you don't seem to use, so that probably does not matter. If you do need that property, the driver would have to be updated.
->>
->> Guenter
+On 26/10/2024 11:08, Patryk Biel wrote:
+> Add device-tree bindings and documentation for LTC2971.
 > 
-> Thanks for the suggestion.
-> 
-> I did some debugging of libsensors as suggested, and what I find is that classify_device() gets called with dev_name=i2c-PRP0001:00, not 0-004b, which it tries to parse to find chip.bus.nr and chip.addr. This obviously fails for the ACPI declared sensor.
-> The dev_name comes from listing nodes under /sys/bus/i2c/devices as far as I can see, so I wonder if this is a sysfs/acpi problem, rather than libsensors?
-> 
-> Theoretically, libsensors could find the bus number from parsing the realpath of the i2c-PRP0001:00 node, but I cannot see how it could find the chip.addr via sysfs the way it is represented now.
-> 
-> When i2c devices are defined in DTS on arm systems, they also get added as <bus.nr>-<chip.addr> nodes (same as when registering via sysfs), so it is only ACPI defined sensors which are represented differently in sysfs.
-> Should I post this to linux-acpi using a more precise subject, or is there another more suitable list I should try?
-> 
+> Signed-off-by: Patryk Biel <pbiel7@gmail.com>
 
-I really don't know anything about ACPI, sorry.
+ABI documentation goes before its user, so please re-order the patches.
 
-Guenter
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Thanks,
-> Mikael
+Best regards,
+Krzysztof
 
