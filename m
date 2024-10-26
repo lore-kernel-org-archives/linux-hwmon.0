@@ -1,60 +1,61 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A81168BE
-	for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 16:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8075A225D7
+	for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 16:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729959619; cv=none; b=BvrP4RxpFm2Y7FxnxRFxWHvyyeRp/0SR/kmfoA8hXZGeOyxfLFOA1udwMH2Ci2yWqSf4kbhdYdmkAjtInjaYx2hmMyRgoeh54ZYBpLWqqXG2JxnbJKiBiXuQmoWSFa6zzNx6MsxkVLKJWIYv/9tZaeN+C0dePwQhBFrtPsbK5/Y=
+	t=1729959667; cv=none; b=cCsNV2wqQK09xw3VBooMxro/sG0JtT2a0Xhmle9HW3Ic9cJCO5OFEQisVvGp1StO+Llkc0SC+e6kfoG2aCEDYAgNkPqFgVxrmDfdSE1fYLy82qUtInK32cNATXmCRgSISbnznRjTMCONiS4VCPgIFEppbUD7YFIUSgYUka1rNw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729959619; c=relaxed/simple;
-	bh=wtRJcT5QF70m4ZI8QH/V13/SVTqpd8GreuGIIKC3vj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RfR3Zn6Datm2pt+rUU1HRHwlFeNrC86+iQ46HbbjRkwUMhBxNGk2au95JViZyN0fhLbjc4HL9aB2axs9LImpDdDH83wWQRdLMlLSrzptCxRQe3kbFmbE1NkaXOZ+2pMjcN6KtHz47G5wv5l+E3EU8LaC3ds8ew6+893tj7WSbPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CBFlxdhE; arc=none smtp.client-ip=209.85.210.177
+	s=arc-20240116; t=1729959667; c=relaxed/simple;
+	bh=0zA6YFCkdnF5I+VJIZ6MI1lqh+S5rke1cNRfu3fFRq4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=klk4F7jtBB+s0ZEFfFlATL0Xs83G/o82NbeqMFyjlp0INJJmA18BTOj0CzFiuZhVvlZdDSctEhY0mwBlihRCjiMyASJneukq8GtjjZtGEzPpnFocDWD08t9frBDJ6DDSJMmXl/Fw/OzWl5bodgsMVjoAXWMeJ0jlbsQyzurLJNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUjTknRW; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CBFlxdhE"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-71e467c3996so2241319b3a.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 09:20:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUjTknRW"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20cf3e36a76so29951515ad.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Oct 2024 09:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729959617; x=1730564417; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729959665; x=1730564465; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=re6it7QNT5pvkhKgtFCJFOJQJhXl10l1Jg+uGFaA4mQ=;
-        b=CBFlxdhEAVOKCFFCWlvvoOomBd+Ht2ZI0WnwHW7jQbe7P58yMkLRtgKf4YdT2LPVBB
-         KedzdtmUZISTgowkzKDvOFKLZq2ZUZqu29+WhFLeBLYdRM9wAB+ZeFE0DZQjS+MD0frA
-         7gy4DP8or6d3PkNJczZtFOhqBVH0hXkjQylYo64eO2bvq0jGjafBbYnN+cyeMioIZmaM
-         j5ATWHSvgQpz9pE29PB69AFVIQ7NR3Z0NzYfd19BIcHUb3JCJ+X+i0Pjq8ZMaUQzT4Wy
-         R1MSMH0RgGw/v+LMorEzNTaAQynpL1uWZIoImcbYzJiTFtJ0EZrbs37TDxOqiaw1Nt3v
-         /8/A==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=SEQJLnbkTlUfL2jx9yECJAXnOfxYYyjeW127XtvNsRg=;
+        b=bUjTknRWwsVvFE6ssbDQJVRHGDJl3OBLDqws/92Wa1b0qiFjrOYnVnyj9toSdyhvhO
+         W0jcz8UNM4dnS0aY5C7Iq0GDYzYlaMK7kSuo6wI7vIUZJnxzJCLXRzhI6HVMSxwdbYXp
+         8/5AiBPUfPGOqWmz/bHJF2d0DiLY8FWec9Gy/oelH2dNMXi8dhnXKhZQVSnTR7edAgts
+         SECo5c+R+tTNSNW5UJQnoG88CuQgpzT2Lx48sT52oTMOYC3beZdVYdfNBPTQPjyeNDkh
+         EkDVvNBTadjuw4T36AuUcCSCxFBo3eY4Ti+uC6maT/5k7S4suGhV682En2DagpFNa+q/
+         d6tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729959617; x=1730564417;
+        d=1e100.net; s=20230601; t=1729959665; x=1730564465;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=re6it7QNT5pvkhKgtFCJFOJQJhXl10l1Jg+uGFaA4mQ=;
-        b=DNYNy8y6gA+jzQpuCQ1JqmsX4UpbSYWBFZqo6FO5fObMPz+3S6UC6+YNXjb24Hqn5T
-         vrF+Pqz2k4iB/T/rJd/IhQeus8ISe/MXEu0JAtuhFifNphcVOdcQyCtLvBouapaK07/h
-         xMG+gfe5NkAryfzcQWBPm81X1RSFmBSUz1RCGrT7XNOk19c1OufWxCRZ5ZQ/TKiB8G73
-         wmqTYYqPl08fZ5B42FH58zaYtEDO5IfBFVCdk+ML9RzzhRbWH8IbkzjhYe2i0fRbBr/i
-         ldG+GIa/uCpFtFa6Cs05qRl+lAcRScJZ4NVYFkQj61b2CdLlsIXsJCcwI0LgR/aDNqsY
-         zLyA==
-X-Gm-Message-State: AOJu0YwPewNX4hAaRYlrvw78czZjIMZFqjPhUrHG+j+7TaPVDZ/x5gyi
-	63sPrUuVgVbiZvb10SvoYCQ2M0dwZEqaRY0yMiI05ClyOFy1rXRlPEoFWA==
-X-Google-Smtp-Source: AGHT+IElUgAwC1bEre8uxWXxP7RP4LJUHgw/jEOGcDak88KMQH0/EOHz7SQVFUVm7sy1SMdaR6fwBw==
-X-Received: by 2002:a05:6a20:cf84:b0:1d9:2a8:ce1e with SMTP id adf61e73a8af0-1d9a840d44dmr4370530637.30.1729959617367;
-        Sat, 26 Oct 2024 09:20:17 -0700 (PDT)
+        bh=SEQJLnbkTlUfL2jx9yECJAXnOfxYYyjeW127XtvNsRg=;
+        b=l6TlBiQxkNGlAYxhqXS8hKCAFIWXm+K7M1iI8yZ0OguI+vQxYmMQ+h5WZhym0Ybj5w
+         kOWYvExyk8H7IMRuJ8hIbtnc5lFTfRp0mIdKV5xrlKH2SuAG7fblh0AuO0XIJDlgQs16
+         JUWGvX3OjKhjzBFlMFi96MI2Nk9/GAaMQOat92voNVPeyh4MHMIa4yIhyjVLKpBgT8cj
+         RHd2+KcBTf2RKHmzPhb+jm7bh0EfjSIulWIKaEoQ+FPymN/7Ym8yhlm85gc6pSMkQVyL
+         5biN4KkStCQnq+2zXDkx0+ng9Ma5NgjduRlXgwj+VTWrWZC572HTXBNW6paXhfmkeVGp
+         qQ2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWFMduNACQR156cEylnQbNdO/a7oOh9ygtUNirJZutdLAuEGQbFhru6+QKDF8NiDLjV2TaC69mmcjou0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz30z6bEDwujVoCRH2Mlc27X0ELFGVglL0keQf7ENtS35fjdrW/
+	Y7UL1a9Qfdsu3CuGUZrnvFSrQ6WcQjb+YNXvAF4EwlMQ/Bs06wopv+m/GQ==
+X-Google-Smtp-Source: AGHT+IEmGtoNSX38GIfMGlarhwqMnWOaEMgLFsx8ycccas4+XAUQk28RnRMyJm9r69o+mjX5qOUFow==
+X-Received: by 2002:a17:903:1c7:b0:20b:6f02:b4e5 with SMTP id d9443c01a7336-210c6874bf5mr37752145ad.9.1729959664573;
+        Sat, 26 Oct 2024 09:21:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057950457sm2979727b3a.95.2024.10.26.09.20.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc04bdb6sm25694655ad.255.2024.10.26.09.21.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Oct 2024 09:20:16 -0700 (PDT)
+        Sat, 26 Oct 2024 09:21:04 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b41d5ddf-757c-4e78-ace0-927e381d94c4@roeck-us.net>
-Date: Sat, 26 Oct 2024 09:20:15 -0700
+Message-ID: <70dd11a8-6f1e-499c-8c82-ed2f0c28d791@roeck-us.net>
+Date: Sat, 26 Oct 2024 09:21:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,17 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
-To: Akinobu Mita <akinobu.mita@gmail.com>,
- Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20210923023448.4190-1-akinobu.mita@gmail.com>
- <20211011143421.GA2374570@roeck-us.net>
- <D056E665-7386-42E0-8A16-383B66FA3179@aspeedtech.com>
- <OSQPR06MB7252105381A0A3E8E7B80F6F8B4D2@OSQPR06MB7252.apcprd06.prod.outlook.com>
- <CAC5umyh8QXkUnqJFs4TK5YpvjSB7tJV3pFGv8ChsCbDfDS4zFA@mail.gmail.com>
+Subject: Re: ads7830 sensors declared in ACPI show up as ads7830-virtual-0,
+ not as i2c device
+To: Mikael Lund Jepsen <mlj@danelec.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <AS4P189MB21333CF67856C181281114C5BA7E2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
+ <AS4P189MB2133236F43AF4D3A60E49BAFBA792@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
+ <c91afc26-61c9-4cb8-8993-ef2a750f2fc0@roeck-us.net>
+ <AS4P189MB21337DDF47CAEB6C9ED28BE0BA4F2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,19 +116,79 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAC5umyh8QXkUnqJFs4TK5YpvjSB7tJV3pFGv8ChsCbDfDS4zFA@mail.gmail.com>
+In-Reply-To: <AS4P189MB21337DDF47CAEB6C9ED28BE0BA4F2@AS4P189MB2133.EURP189.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/26/24 01:08, Akinobu Mita wrote:
-> Hi Billy,
+On 10/25/24 03:55, Mikael Lund Jepsen wrote:
+> On 11/11/24 06:24, Guenter Roeck wrote:
+>> On 10/11/24 06:24, Mikael Lund Jepsen wrote:
+>>> I'm trying to add ACPI definitions for two i2c-based ads7830 sensors. Problem is that lm-sensor reports both devices as "ads7830-virtual-0", which makes it impossible to define separate configs for multiple sensors of the same type. If I register the sensors via sysfs, lm-sensors reports them as I would expect, with <bus#>-<address> in the chip name (e.g. ads7830-i2c-0-4a).
+>>>
+>>> The adapter on an ACPI defined sensor is being reported as "Virtual device", not "Synopsys DesignWare I2C adapter" as when registered via sysfs, so it seems that the i2c bus is not identified properly in the ACPI case.
+>>>
+>>> I've followed the documentation for ACPI Based Device Enumeration, using PRP0001 as _HID to match the driver via the compatible property:
+>>>
+>>>           Device (ADS0)
+>>>           {
+>>>                   Name (_HID, "PRP0001")
+>>>                   Name (_DSD, Package ()
+>>>                   {
+>>>                           ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>>>                           Package ()
+>>>                           {
+>>>                                   Package () { "compatible", "ti,ads7830" },
+>>>                           }
+>>>                   })
+>>>                   Method (_CRS, 0, Serialized)
+>>>                   {
+>>>                           Name (SBUF, ResourceTemplate ()
+>>>                           {
+>>>                                   I2cSerialBusV2 (0x4a, ControllerInitiated,
+>>>                                   100000, AddressingMode7Bit,
+>>>                                   "\\_SB.PC00.I2C0", 0x00,
+>>>                                   ResourceConsumer, , Exclusive,)
+>>>                           })
+>>>                           Return (SBUF)
+>>>                   }
+>>>           }
+>>>
+>>> The difference between declaring in ACPI (addr 0x4a) vs. registering via sysfs (addr 0x4b) is clear in /sys/bus/i2c/devices/:
+>>> 0-004b ->
+>>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0/0-004b
+>>> i2c-0 ->
+>>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0
+>>> ...
+>>> i2c-PRP0001:00 ->
+>>> ../../../devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-0/i2c-PR
+>>> P0001:00
+>>>
+>>> I'm not sure if this is correct behaviour, or if this is a symptom of the Adapter being identified as Virtual rather than an i2c bus adapter.
+>>>
+>>> Does anyone have an idea what I'm doing wrong in my ACPI definition, or is this an issue in the driver/hwmon?
+>>>
+>>
+>> The driver doesn't know anything about ACPI. The identification as virtual device is done by libsensors. That code is supposed to find ACPI devices, but maybe something has changed and that doesn't work anymore. One would have to debug the libsensors code to find a solution.
+>>
+>> Note that the driver does not currently support device properties, meaning that reading individual properties from ACPI is not currently supported. There is only a single property, "ti,differential-input", which you don't seem to use, so that probably does not matter. If you do need that property, the driver would have to be updated.
+>>
+>> Guenter
 > 
-> I have updated and resubmitted these patches. I don't have the hardware to test
-> at the moment, so is it possible for you to test it?
+> Thanks for the suggestion.
+> 
+> I did some debugging of libsensors as suggested, and what I find is that classify_device() gets called with dev_name=i2c-PRP0001:00, not 0-004b, which it tries to parse to find chip.bus.nr and chip.addr. This obviously fails for the ACPI declared sensor.
+> The dev_name comes from listing nodes under /sys/bus/i2c/devices as far as I can see, so I wonder if this is a sysfs/acpi problem, rather than libsensors?
+> 
+> Theoretically, libsensors could find the bus number from parsing the realpath of the i2c-PRP0001:00 node, but I cannot see how it could find the chip.addr via sysfs the way it is represented now.
+> 
+> When i2c devices are defined in DTS on arm systems, they also get added as <bus.nr>-<chip.addr> nodes (same as when registering via sysfs), so it is only ACPI defined sensors which are represented differently in sysfs.
+> Should I post this to linux-acpi using a more precise subject, or is there another more suitable list I should try?
+> 
 
-
-You did not provide a change log. I do not review patch resubmissions
-without change log.
+I really don't know anything about ACPI, sorry.
 
 Guenter
+
+> Thanks,
+> Mikael
 
