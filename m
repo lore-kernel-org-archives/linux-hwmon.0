@@ -1,84 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1513B558BB;
-	Sun, 27 Oct 2024 20:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDA257C9F;
+	Sun, 27 Oct 2024 23:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730061527; cv=none; b=PwL1EpoATwqIsiqqigkF3QIZ7Y3Zzn0GRv5N3kqZJV2RXPmgX8+jiVB87QsF8SDM/NWdBUizzGw9Un4QP5K0ICwnh77cL4dYBKnv+k5zUPW57FbJkBcBFLlaYPWqKV7sSg3v+Sqe+G5xVTVWo22A/Ns/omWPnXUDryZkeDcix0w=
+	t=1730070112; cv=none; b=pp70ybxNyJvZOoBrRA9weFM8v8U2oo32LmFeUQT3qz047CZxh5oWNZYPslPpbmbzn/Bu4GV0LuOkfyUgw5muq+kLsOKl+ZOvTmGVMuxz0bljp4ejpYD5riFtbSRmjrkBR6R3ArDUq8uHEGpzdOyETUsms1rFH7zB353NX2o4woo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730061527; c=relaxed/simple;
-	bh=ktAYV2rb117r2Bc7owXHB7R3E7/79Vvp6m8NcDaF0pc=;
+	s=arc-20240116; t=1730070112; c=relaxed/simple;
+	bh=pjTcQxgrNOe7nu1x7YejBgUbsxFEPWbjcuUJFrSfjMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l5dE16zpM2QNTUv/2OYrJgFwnnH6s02kvatHWSEXnfE/iIpz9hNQGEHAQn7vnXJ2poF2mGTBv4DW6O0fRz6LOuC6rXZ+ZzpQL/krDd/e1OKYtYDKFVNYk6ts7L8Z06ThSIQoUksDiVJXztAvuzt/u01C3Bct3kSAqFOmSRTbdkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rlNoq0eI; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=D3hGqmNSRC5p+foVYcjEo9Tym4ng4xQGNCQHO2j9//F7sHl2oWOzRPqh0rVwFpnR6fTcwaX7xQVYlzKRhKWLoI/BzIW5JCny2nYw27aXbwZEIbsFG35/8LGf8HexmmSzTFv50VUDftVbCAT3a8X6FacFoPF9dgo6iW79ArKCClg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxexDpKv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rlNoq0eI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 094DDC4CEC3;
-	Sun, 27 Oct 2024 20:38:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxexDpKv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E09C4CEC3;
+	Sun, 27 Oct 2024 23:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730061526;
-	bh=ktAYV2rb117r2Bc7owXHB7R3E7/79Vvp6m8NcDaF0pc=;
+	s=k20201202; t=1730070112;
+	bh=pjTcQxgrNOe7nu1x7YejBgUbsxFEPWbjcuUJFrSfjMY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rlNoq0eIeeLHbFbBOqGqYn8aaRS2vepFibIKaPyafeUC84ZVVrrlVjLOgFJOF3uOr
-	 IJCZefi8rdA6a4lO1HP3q1PRytsD8QMtSRVDIkLl2KC4eh6//fI0gV99kBke+AaCSh
-	 kChXvp4uPjchdwlH+5hcrBiyXKmV4NRrmq1L7i65XPFaFKuGYHDjWnKmoKvUoWME5d
-	 Rz/mUdgAwMFdlhWER1Vc2Wv4bacZRKt6xPvJdEwfZDUwB7k5P97pnqEwijjUv7YKTv
-	 zQ10P6xb9JbbG4os1a3iBrOlNRM8FFdsGyDPlYacrStN3EJK9vTFGVYzUKYfMOV8FS
-	 BJMiY7orvEBdw==
-Date: Sun, 27 Oct 2024 21:38:43 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Akinobu Mita <akinobu.mita@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Billy Tsai <billy_tsai@aspeedtech.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add
- retain-state-shutdown property
-Message-ID: <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
- <20241026080535.444903-3-akinobu.mita@gmail.com>
+	b=fxexDpKvMsPyMAgv7621a0tr0Du3eac6OapqT+IUinF4ATcg45HOPhcQLNHadmPUY
+	 yMJX9QjI7zMciEgNce6yPQ7WUujliHvYWoe3hwMJ3Q8LLO0vK001LxiQQwu3W4zGOi
+	 LKVEuZy0G3iU5xf7ZdkRGfSSlDj7WZeYPfodnFq2bYa90dTOMJrQ5bjPlJvJy7+yH7
+	 AxzGZS9t3LB7Skurun+5lkWXTNYNlD9LF9Bzx0HHftGDOYAoIgU2v1dvOOlHipcq6p
+	 oObxuGlcrUOQbrEEnPpzu622QPYH1aVFWsxWORJDYn0udldW8/xM9LbgbEPmXRyIMu
+	 vOWzUKs8y6uGw==
+Date: Sun, 27 Oct 2024 18:01:50 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Grant Peltier <grantpeltier93@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux@roeck-us.net,
+	brandon.howell.jg@renesas.com, magnus.damm@gmail.com,
+	grant.peltier.jg@renesas.com, geert+renesas@glider.be,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <173007007071.202481.10271317017452995463.robh@kernel.org>
+References: <cover.1729874904.git.grantpeltier93@gmail.com>
+ <42eadc3942a70bef73ecdf601459aa8b9ea0bcaa.1729874904.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241026080535.444903-3-akinobu.mita@gmail.com>
+In-Reply-To: <42eadc3942a70bef73ecdf601459aa8b9ea0bcaa.1729874904.git.grantpeltier93@gmail.com>
 
-On Sat, Oct 26, 2024 at 05:05:35PM +0900, Akinobu Mita wrote:
-> Document new retain-state-shutdown property.
+
+On Fri, 25 Oct 2024 12:17:28 -0500, Grant Peltier wrote:
+> Add devicetree bindings to support declaring optional voltage dividers to
+> the rail outputs of supported digital multiphase regulators. Some
+> applications require Vout to exceed the voltage range that the Vsense pin
+> can detect. This binding definition allows users to define the
+> characteristics of a voltage divider placed between Vout and the Vsense
+> pin for any rail powered by the device.
 > 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
 > ---
->  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
+>  1 file changed, 147 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> index 4e5abf7580cc..86a069969e29 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> @@ -40,6 +40,10 @@ properties:
->      maximum: 4
->      default: 2
->  
-> +  retain-state-shutdown:
-> +    description: Retain the state of the PWM on shutdown.
 
-You described the desired Linux feature or behavior, not the actual
-hardware. The bindings are about the latter, so instead you need to
-rephrase the property and its description to match actual hardware
-capabilities/features/configuration etc.
-
-Best regards,
-Krzysztof
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
