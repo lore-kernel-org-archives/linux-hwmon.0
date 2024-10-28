@@ -1,125 +1,116 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0ECA59;
-	Mon, 28 Oct 2024 10:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88DE1DA2E0;
+	Mon, 28 Oct 2024 12:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730110735; cv=none; b=sPm+rvPkJEhkm1TiP4KCrDPNb11w49qnpZRg1SxHqxf3VMjY9UzfPMv/MQAMQN3b0gphdSnBlI7twaHZsYquDHTaeOK3vEkmdkA9iDdJr+iJPMQOTmuNHWo2H1H4Qqp+UilaK7ICWRqqslptfShoXEfkdjvWOeQNrnIHI3dgA80=
+	t=1730119340; cv=none; b=ddef5CQKJaaH9iP6epJO5NHkZM8UKcp/6K0PO5LGDPyYk0sYQ3sUacR8ZSQNi/wVn/lDGFcBL8Maay8WxTQm9s3xEiIzhDeEH2N9fAZn06IKdze46B2IQ6JVSUst70VY0o7L8Mz5DZUhw8LldrgNT+hzY1PyxrYygCHdI3v06J0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730110735; c=relaxed/simple;
-	bh=CvcmwJx68ibSr1FgYSs0BYn4vbK2dH2bI1Id4paFMiQ=;
+	s=arc-20240116; t=1730119340; c=relaxed/simple;
+	bh=2z2vAZJSINxFgk04FZyyCBPQt6tnf3YvM+5pNdERrCs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y8W2zKJGcPeHtmRGjrbeW7+VrEx2XhfgeAu4lF+p9KB4BnKXHQ3BDaFtGPzgQTznmctz8Nr2t9TkebjGalPm0rkKC6IaV7QjJJKHbYFWLRlhIRL4bbj7S1uLeUXOM1cuV7lREF0eZ9gpjZ9fhfNVQuiMvDKbeVhmwyLPwNYZxT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=aOGPh9xzE0/xUyTWTKi1iy9EvpAGhiHUx+0l/obl9w4MLzXdogzm26FMSk2R+JVFyeg0/LEzsSp5gUR6oW5247/1qRNXdY86SrJuY88HCEjCL5gYYAcH4f8ckXu1jEtN0qSn7VX5govFlbZoxX8vl22dhp+ApPJF2rwQWohNSN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRgn8+Qd; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6e3cdbc25a0so43690717b3.2;
-        Mon, 28 Oct 2024 03:18:53 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRgn8+Qd"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6d18cdab29dso12999456d6.0;
+        Mon, 28 Oct 2024 05:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730119338; x=1730724138; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UPDTP6OcnSRUiLPs44+AfRECa7TiYhhPi6crVGIBcxE=;
+        b=mRgn8+Qdi9pknUBFVxKjx3xsjIMKXWO5ZY7Fj9tV4BBlJQprmLl5nEqRCZYvlOGeoN
+         WFVjmwItRjglEGqAKUK1WWaIRJLGBnJg8wOTmzfbU+fllfYvjf9QfUB/1aTYMmjyEbSU
+         WjAPFjbz7bxuIaQHxB98azHcX0SwP46dPej6xUpZrSuwN7Tzbd8dRQfjECgtkxbdw7C3
+         rGAmkV8XPd/9r/ZWrCC0pH3rj7bAGjom74iOjp1l4LBt+9UCuF/5qcU+FAHZReG9CWUg
+         zsPfMkf38MaBVugaDkcfSrnVigggKN/cf3A/dYccbETDNzJOWu7kGhxiU2ukbdj32Hre
+         6hkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730110732; x=1730715532;
+        d=1e100.net; s=20230601; t=1730119338; x=1730724138;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3p3W4EQbrJIJC/nea0IOGVy7gYy/irssqjHdBTm9iqU=;
-        b=os25eig5cyD3qUrFsqZdIfrjq+tkcftU2Q15ieWOJlj2xX0Lxvg2MCxfb5UdTUYudh
-         4gKz2v0pG4NTF6V5CTzW7zfFVHNb+ugDs7PQFogvtzW/4rJsENCFh6E98/VkKZSq67db
-         TDNa8kM3YxQBRjicmVLgkTpVU6ro8d+l7x3EIAPBFQJHJg2xgQUDTF2X+W68OX3Gzhxc
-         cgKb1pBhCQpR4iRswJAfp2mzToRh4DErdiU5W1PzamrnKbbvnNc/sDLvSACm530MweAf
-         dFqpRldFJRX4QwE/htSQh58UrAJJXoY5ZAlMyZ4fWgjIjK7LZAOn08O08GXgsPDA0F1P
-         Agdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVHkosU+dzMcnvsWPDy4/r3taQjaBUIrbW4BFkTgl8akTI+fgMo/mtJv3ikqNXDcckyqfuGTsCzMipJ@vger.kernel.org, AJvYcCVKUwU7ckhtoS/V3+OhjT3qUlfhQXlZJNOP9sZwQKvWGTIGMuKQPj2fmt/JatGGoeBHKhxd6qqoTNj/1U4=@vger.kernel.org, AJvYcCVSd3T+HgxXo4kfoNAFG0FQXuVOPTS3L5TMzEqWxquA6pf+wikQ0EEnlWvgRP5Jm9QiqPiH8tUGzop3@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKTvY/Cz7j1dl3t5d+zFRXfTaEOZrtgIR1dEmEkR8qeikZ3A8Y
-	ddAXWDbqWjAzr3ziZaL3Y3T+m9pf+o60RWU1OMfsVrOb0BE2IyzDS8CWoz/B
-X-Google-Smtp-Source: AGHT+IHRQoFMZd7V8eMC6qtdDgsQ8w4+UFvpb2pTlzvSiEyPWT27T6iQbZxxk4VRPGNJ0+IbuFOszg==
-X-Received: by 2002:a05:690c:87:b0:6c3:7d68:b400 with SMTP id 00721157ae682-6e9d892546dmr60202167b3.10.1730110732434;
-        Mon, 28 Oct 2024 03:18:52 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e9c6bafebbsm13456837b3.15.2024.10.28.03.18.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 03:18:52 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e3b7b3e9acso37026847b3.1;
-        Mon, 28 Oct 2024 03:18:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUCWYUN0AGOXcPfe8BPOahj1WLkIFaH6EirnxJdP18HnETCfM9xq80jn97u8Dsb/Noj5Ih2Zwh8ffNV@vger.kernel.org, AJvYcCVRLfUN/Bh+4CONzJWe02yuIn6px8Mse20wbxdCZEJ3BN0ryoVuTE4ThqD3pKkpaGCd1dg0cFEZwtMr@vger.kernel.org, AJvYcCXA1dZYkZfTzExgzG8eUzlTVHkHqvDQ0GCWw1awjBlIH+8rWu9GG+BTkoRJLlXbPIA4z81UWcB9Wnhn2MQ=@vger.kernel.org
-X-Received: by 2002:a05:690c:2508:b0:6e3:153a:ff62 with SMTP id
- 00721157ae682-6e9d897c8damr57542137b3.23.1730110731964; Mon, 28 Oct 2024
- 03:18:51 -0700 (PDT)
+        bh=UPDTP6OcnSRUiLPs44+AfRECa7TiYhhPi6crVGIBcxE=;
+        b=phayPrGPVSUhLILQnW68F/LNaBvy1uh098LaBqlS0obYPIs0OD7eI59lAwnmp3cOnZ
+         DNL3tPKmuMy49GKb1RrEdnqWMcSEhvzWkfkAw2iLxbBY62yLK+fNzA4+nIagY1rKgWFl
+         UJH71Kc2BvQtg9k3N41dPUsMw0sBGlxLF/4WYYLW11pKQwIZnBMjIMT1QcBPSbQ1pvCl
+         Q3LaKzVwUotid8XZis9w2/p/svQykZlXWNKPQ43rOHxjgd++0vf9Kp6CXC/q0yv2q7Vv
+         yFQqLFJE5SrdNje4+22RjBDUsAyGo7MR3CJIm7UOAuHzx+mz9lbD1Er7a2nu9AHhX5DY
+         RGsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhsN9Gl0+umx47Jg8cWPO9uFmr9dtqW3oNBFFNVSJH2AJHRly4vD/vUdCb3lvVse0RgTJcMQ6PKf1hVBA=@vger.kernel.org, AJvYcCVL1NsMPwuYUMHHs2hN2lK2Bc07CxvxaE6UYP8KIisvR65bNnzJqAhs+q2pS4gGytB5jrZ4iUH6p/5D@vger.kernel.org
+X-Gm-Message-State: AOJu0YyT0luxNwDltb4rUvrgxicmSCu7e+E9D/fjaaCX2HcikzLUiIxZ
+	v9rTfoM6IpRP0PlVkTVWXAh7mSVzs5TxHr5f9Q5r7zlReLa6sIjwkjR3OpiaU/Th+csjVJneldF
+	pV06qvncRUq1Y82CKW43JKWvWO88=
+X-Google-Smtp-Source: AGHT+IFu30iVXKwfWOcaOmTLg0tzryyCqD5zvDtTitfx78e0NqXH+jxdsHIG/Ij1k8Kyf7CVM6WHH5Ee3xjuLN4KbnA=
+X-Received: by 2002:a05:6214:3292:b0:6cc:74e0:4fef with SMTP id
+ 6a1803df08f44-6d1856744efmr108892196d6.1.1730119337611; Mon, 28 Oct 2024
+ 05:42:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1729874904.git.grantpeltier93@gmail.com>
-In-Reply-To: <cover.1729874904.git.grantpeltier93@gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 28 Oct 2024 11:18:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWHZR9pN3h=Jdsqs5Qb0mi_4CobBtu82PRgzrm5TRgE4A@mail.gmail.com>
-Message-ID: <CAMuHMdWHZR9pN3h=Jdsqs5Qb0mi_4CobBtu82PRgzrm5TRgE4A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] dt-bindings: hwmon: pmbus: add bindings for isl68137
-To: Grant Peltier <grantpeltier93@gmail.com>
-Cc: robh@kernel.org, linux@roeck-us.net, magnus.damm@gmail.com, 
-	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-doc@vger.kernel.org
+References: <20241026080535.444903-1-akinobu.mita@gmail.com>
+ <20241026080535.444903-3-akinobu.mita@gmail.com> <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
+In-Reply-To: <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
+From: Akinobu Mita <akinobu.mita@gmail.com>
+Date: Mon, 28 Oct 2024 21:42:06 +0900
+Message-ID: <CAC5umyitFp7oGR-eYXMVaS8bY1AGe3QwEuSPoEz3DxWwH=dUsA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add
+ retain-state-shutdown property
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Billy Tsai <billy_tsai@aspeedtech.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Grant,
-
-On Fri, Oct 25, 2024 at 7:16=E2=80=AFPM Grant Peltier <grantpeltier93@gmail=
-.com> wrote:
-> Renesas digital multiphase voltage regulators are capable of regulating
-> output voltages that exceed the range that their Vsense pins can detect.
-> In such applications, users may place a voltage divider between Vout and
-> the Vsense pin for a given rail. However, the driver currently has no
-> way of knowing if a voltage divider is being used which results in
-> erroneous telemetry being reported over hwmon.
+2024=E5=B9=B410=E6=9C=8828=E6=97=A5(=E6=9C=88) 5:38 Krzysztof Kozlowski <kr=
+zk@kernel.org>:
 >
-> This patch set defines a devicetree bindings schema for Renesas digital
-> multiphase voltage regulators that are supported by the isl68137 driver
-> to allow users to add voltage divider definitions for any rail powered
-> by the device. This patch set also includes the required changes to the
-> isl68137 driver to enable scaling Vout/Pout telemetry for rails with a
-> defined voltage divider.
+> On Sat, Oct 26, 2024 at 05:05:35PM +0900, Akinobu Mita wrote:
+> > Document new retain-state-shutdown property.
+> >
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> > Cc: Conor Dooley <conor+dt@kernel.org>
+> > Cc: Billy Tsai <billy_tsai@aspeedtech.com>
+> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Doc=
+umentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> > index 4e5abf7580cc..86a069969e29 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+> > @@ -40,6 +40,10 @@ properties:
+> >      maximum: 4
+> >      default: 2
+> >
+> > +  retain-state-shutdown:
+> > +    description: Retain the state of the PWM on shutdown.
 >
-> v5:
-> - Fix clang compilation errors related to C23 syntax
+> You described the desired Linux feature or behavior, not the actual
+> hardware. The bindings are about the latter, so instead you need to
+> rephrase the property and its description to match actual hardware
+> capabilities/features/configuration etc.
 
-Thanks for the update!
+Is this description okay?
+(Reused the description of retain-state-shutdown in leds-gpio.yaml)
 
-> v4:
-> - Revert devicetree property name to "vout-voltage-divider" and refactor
->   property description and driver implementation to match existing
->   vout-voltage-divider implementation in max20730 as no suitable generic
->   voltage divider schema exists.
-
-Can you please elaborate (or point to the email that did so, in case
-I missed it)?
-
-In reply to v2, G=C3=BCnter wrote:
-
-   "I would prefer, in the order of preference,
-
-    1) an applicable generic property definition
-    2) a definition that is already used elsewhere
-    3) a new chips specific definition"
-
-https://lore.kernel.org/all/3f460b62-4cd1-49dd-a98b-1fbcfdbd3af0@roeck-us.n=
-et
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+description:
+  Retain the state of the PWM on shutdown. Useful in BMC systems, for
+  example, when the BMC is rebooted while the host remains up, the fan
+  will not stop.
