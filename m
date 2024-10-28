@@ -1,282 +1,209 @@
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D945191F84;
-	Mon, 28 Oct 2024 08:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3374190692
+	for <linux-hwmon@vger.kernel.org>; Mon, 28 Oct 2024 08:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730104300; cv=none; b=o9vGYbLUyUpk531Pei+mLc/RW9PAYoiS/rBwUndffSQPvVFVxy4bctNjLT25lZsuun8YBMiZ6wU3YItXRvxO2c/EUYzsixOfnLe1zc0274OtC6fRN8qUY2nnZ/+JrnjfA4ie1qg2FGukXru/jMiECir+1HGuHxfvO22cX5JtKtA=
+	t=1730104907; cv=none; b=mA9nO62Jo7WrcnrK4tdpZT2PjpedXXuZhSrOlcZ60C1mu6xn4TQidgHG++tTFa2g8I4g8NKbxIaW2MBo/PQ8DP1/IbuAiVxx28x8r8LtnUZWq34SIezSOGS3noWA+Jd6XRWMLVInChAm+xuUH2L5xkncb+6dj8Di47H2FjCiRo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730104300; c=relaxed/simple;
-	bh=SHaV7a8m2yz52E+nctbzbDnlDwcDJN29F+Nh6Cj9wQs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i+mlMJKcq96R0YZpt7ia/q5WhwxjAtclR+17/AB4An9McDAwiNN46xM/Uejjm1gLNyr31U7KTVaJKQRDFTlVJc/DW0kuuejS6ZJrwRdkbxIXh1JiAzjFJVnaaa1Sd2kKCR8S2PqEvdgCyEhlYqMr1XxyA58LKRuyHDonXq24r8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gObW1FKn; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730104907; c=relaxed/simple;
+	bh=R919hcESRoMVCnk+FDiXmFKBm/V+o/Gl1HjKteDFH4c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mUMd4HbEIJkBSRF5RsXCiFfXHk1SI7gevg9MDG91299at0z4U9VeGmt27vFKIFwx8t391fP8G0xe1JuHtQSYUQKKpBEPPDZQ6Uw9cpC8GLtcMAe/EC6Wwgy/VQ73Vt4JAb94yjg3ekQQ1R5/Mq4lEN0iyW4iOeqe2HW4YYJPMuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mUak3lpq; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gObW1FKn"
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e2e444e355fso3664556276.1;
-        Mon, 28 Oct 2024 01:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730104296; x=1730709096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZcY948jfGgx8uvT7sMECMiIeahovGQ0fYVq8akwUcN4=;
-        b=gObW1FKn7gVFSkWlYYBfJmYhu6fuB+D9CD/d5iJIoVeF16+Rm/HUQac7Qkg4ij7syP
-         L4UZrUpmkVOLcU10uBWm1g3lovmQIys7UumRJr4r4H138Du47MWefT3KHzMynaWw6Yc/
-         0dYouKkmP0LBOqiW1Qcl7p4z9n3yLc9VnEkd2IUYfJle9sBZ7SaxbTetS+/1NiA9oNGV
-         NyHnTuaajqOiJQqpnphjwf6B8oYMvYhKQGxEKIoWZ3cY+XNJaoMqg0ol6pPkSLDIXO4+
-         F3IhO3s0A+8o3SgZTJomu5tK9cTYDfrEvozbtrIFd3mlcMXH8xi5310c6E78cZ8M2VC2
-         NY6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730104296; x=1730709096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZcY948jfGgx8uvT7sMECMiIeahovGQ0fYVq8akwUcN4=;
-        b=So8rKw+xnR9Tv3sXBx677+557y+nalWwtOkIvn/6jnPUHEMBjeeJdxGZwu/2HKmWZ0
-         KrVQwP0mWlwlTg1Zd59qQsw83Wq1+ecq88A0eHBGNuMxe9PL6FzRh2wsCdZzVkMuKc3L
-         H+6RAfUdopLdpFHIC/KrSM4XPYqirNbB4BX3ZviqOk4oWznBB2lqu7PRhX4O1sRcBmem
-         iY8XApqRqPpxSiyzYLJ3jcMYhRjx5sIzDkKal624R31UdS3+z8n2irGiONNKrIS5AA3f
-         oXvd1SkQ8GWgRVJCeCBKcZ5xUp4pfm1NlY1N+392mKn724GujzZlODNfMLHneccHyBRl
-         n+ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4IQo+2n7W6oyTsq+GBD/zOrurB0ozX/mOPiebsBeuR5nyBhN5CRyqQpPKAgIctcG9AA/xZziS+KzW@vger.kernel.org, AJvYcCUTWaDCtf7zE1CYL6dkUp2yRSqxSe/7zNR7LFE+hTV8cudcceEMaltWgKmpNL++X5p0tiAXdG2r+Nyz484=@vger.kernel.org, AJvYcCUeks932INjtR+EyYO3U5ddxEKrpbSRJOqS/dq5Wssd9SuGI9ZWie81ISfpBKp67eRE187Cc6S5nbSxuA==@vger.kernel.org, AJvYcCUhW7XKnj32CiOm3Kb1hIO8hi7fu/UFZxsYzlR65Fh5lbYu+/RDPgScfaH9X33GZCMHjYJy9Nk1@vger.kernel.org, AJvYcCV2pqpLT3bd0QS/DRlOhVlaQ7RdCMnhf2rFhuCSQ4FmT5f82MDKaAMzuml5KJ6MyPS+Anv7g0WYXzvY@vger.kernel.org, AJvYcCVj4uUHlOVgUN3cYJ8IrQJ4+1D0V/S5L8Gpx7CokN2qd8bGBTaXkHX7QzriNkHJ9K3eipKGf4i0OKRw@vger.kernel.org, AJvYcCVsNwKvCzw/9bBKegBex4duvgK9Xz3ZMkVeuEaJvAS7R1cSo2+pxTgKmLqWbF/jMgKz63UdrTXRbsw=@vger.kernel.org, AJvYcCWonxI+173RcA/of9X08tr3uwTwRY8jFEGm/qUICd/RUu87nnN0WLKd3W5uCbJUne8V+pamExJaHIW0Xljh@vger.kernel.org, AJvYcCWsmoGtEc/Tkor++bbhwNl5D3ygkrZPDTOKNX47WucbTzIg9yu6Q/Rf7tmDnSB7hvtCo71rF72ZiYjU@vger.kernel.org, AJvYcCXUTHqRjdCdc2NF0mHpXgWyP1y+f0Cilli7tFe19Ff5gAFTXrnQzH2t8EplD3HsEVRVAowpkcjWEfK5qgXyteg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHJa3+3o39EE84881NRL9ebhN6mMgPq8uqHeJ8/BvX1roZuTGR
-	uj0/iDrHQ2+OBaeRrxZV5f3SZ0cxeJcP7ZQAoCPcs87Q7mjdWvxUacHesE3C8idM+XjK1girLyx
-	XG/a84XN1k0ysIozX34RFt9Lqaps=
-X-Google-Smtp-Source: AGHT+IHfwraBh0NJHVkb+HlEoXQBoeg+ynvlKolAIoDyidN1EgkxWY3yAqaQR4x8wGosSDNGXeaBP4zu0x6f9HQRy2Q=
-X-Received: by 2002:a05:6902:100b:b0:e28:e700:2821 with SMTP id
- 3f1490d57ef6-e30875dd6ffmr4666457276.25.1730104296331; Mon, 28 Oct 2024
- 01:31:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mUak3lpq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730104905; x=1761640905;
+  h=date:from:to:cc:subject:message-id;
+  bh=R919hcESRoMVCnk+FDiXmFKBm/V+o/Gl1HjKteDFH4c=;
+  b=mUak3lpqMOjp3pTDk1QebIBM/JEcCLXUZt50FL/bJUxkt8SIOr/PqTMp
+   LaU+Y0vMISyF/T3g91z0kViYYpqRGH6frCUh1cFKB6IZ2AIvVhfPI2RA0
+   A/TkpSPwaVwtlJtE6etXZOIcSiORZzlH8kL1LWoaIYtfa3MniKpCnDoQ4
+   E3LAkfUY1LztnYmqZu8Kk+e/K0nGr9OCdrVZ92k2CXCqOy2rLxsOJyVc6
+   20gew43FacDmAA4946QhTZSQ6z6eUDxfO+AnqPyiF+WPX4gRqoNQsQptO
+   WLUzAQVFC/1udlMo79CYXq1g0s6eXzUGC/X6b/DYNezjbvCGbOLLlXYzn
+   A==;
+X-CSE-ConnectionGUID: IPo/gXM3REOpIBcZw28fkQ==
+X-CSE-MsgGUID: QuhDwj0eTBuM8CnSycDqBg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29653823"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29653823"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 01:41:44 -0700
+X-CSE-ConnectionGUID: B5BwBnjSQRG9Mi1xtYALDQ==
+X-CSE-MsgGUID: lVU+rgJpSRmrCvJk9VBHhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,238,1725346800"; 
+   d="scan'208";a="81652957"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Oct 2024 01:41:43 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5LJl-000cDM-02;
+	Mon, 28 Oct 2024 08:41:41 +0000
+Date: Mon, 28 Oct 2024 16:40:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ a5b94a7500c9d45a64b921b757f32872a56a9003
+Message-ID: <202410281640.7JYQuKZv-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
- <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de> <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
- <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
- <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com> <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
-In-Reply-To: <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 28 Oct 2024 16:31:25 +0800
-Message-ID: <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8828=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:52=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On 28.10.2024 15:33:08, Ming Yu wrote:
-> > Dear Marc,
-> >
-> > Thank you for your comments,
-> >
-> > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=
-=8825=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:24=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > >
-> > > On 25.10.2024 19:03:55, Ming Yu wrote:
-> > > > Oh! I'm sorry about that I confused the packet size.
-> > > > The NCT6694 bulk maximum packet size is 256 bytes,
-> > > > and USB High speed bulk maximum packet size is 512 bytes.
-> > > >
-> > > > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=
-=9C=8825=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:08=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > > >
-> > > > > On 25.10.2024 16:08:10, Ming Yu wrote:
-> > > > > > > > +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 =
-offset, u16 length,
-> > > > > > > > +                  u8 rd_idx, u8 rd_len, unsigned char *buf=
-)
-> > > > > > >
-> > > > > > > why not make buf a void *?
-> > > > > >
-> > > > > > [Ming] I'll change the type in the next patch.
-> > > > > >
-> > > > > > >
-> > > > > > > > +{
-> > > > > > > > +     struct usb_device *udev =3D nct6694->udev;
-> > > > > > > > +     unsigned char err_status;
-> > > > > > > > +     int len, packet_len, tx_len, rx_len;
-> > > > > > > > +     int i, ret;
-> > > > > > > > +
-> > > > > > > > +     mutex_lock(&nct6694->access_lock);
-> > > > > > > > +
-> > > > > > > > +     /* Send command packet to USB device */
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_MOD_IDX] =3D mod;
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_CMD_IDX] =3D offset & 0xF=
-F;
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_SEL_IDX] =3D (offset >> 8=
-) & 0xFF;
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_HCTRL_IDX] =3D HCTRL_GET;
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_LEN_L_IDX] =3D length & 0=
-xFF;
-> > > > > > > > +     nct6694->cmd_buffer[REQUEST_LEN_H_IDX] =3D (length >>=
- 8) & 0xFF;
-> > > > > > > > +
-> > > > > > > > +     ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK=
-_OUT_ENDPOINT),
-> > > > > > > > +                        nct6694->cmd_buffer, CMD_PACKET_SZ=
-, &tx_len,
-> > > > > > > > +                        nct6694->timeout);
-> > > > > > > > +     if (ret)
-> > > > > > > > +             goto err;
-> > > > > > > > +
-> > > > > > > > +     /* Receive response packet from USB device */
-> > > > > > > > +     ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK=
-_IN_ENDPOINT),
-> > > > > > > > +                        nct6694->rx_buffer, CMD_PACKET_SZ,=
- &rx_len,
-> > > > > > > > +                        nct6694->timeout);
-> > > > > > > > +     if (ret)
-> > > > > > > > +             goto err;
-> > > > > > > > +
-> > > > > > > > +     err_status =3D nct6694->rx_buffer[RESPONSE_STS_IDX];
-> > > > > > > > +
-> > > > > > > > +     /*
-> > > > > > > > +      * Segmented reception of messages that exceed the si=
-ze of USB bulk
-> > > > > > > > +      * pipe packets.
-> > > > > > > > +      */
-> > > > > > >
-> > > > > > > The Linux USB stack can receive bulk messages longer than the=
- max packet size.
-> > > > > >
-> > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes for=
- this MFD device.
-> > > > > > The core will divide packet 256 bytes for high speed USB device=
-, but
-> > > > > > it is exceeds
-> > > > > > the hardware limitation, so I am dividing it manually.
-> > > > >
-> > > > > You say the endpoint descriptor is correctly reporting it's max p=
-acket
-> > > > > size of 128, but the Linux USB will send packets of 256 bytes?
-> > > >
-> > > > [Ming] The endpoint descriptor is correctly reporting it's max pack=
-et
-> > > > size of 256, but the Linux USB may send more than 256 (max is 512)
-> > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/host/xh=
-ci-mem.c#L1446
-> > >
-> > > AFAIK according to the USB-2.0 spec the maximum packet size for
-> > > high-speed bulk transfers is fixed set to 512 bytes. Does this mean t=
-hat
-> > > your device is a non-compliant USB device?
-> >
-> > We will reduce the endpoint size of other interfaces to ensure that MFD=
- device
-> > meets the USB2.0 spec. In other words, I will remove the code for manua=
-l
-> > unpacking in the next patch.
->
-> I was not talking about the driver, but your USB device. According to
-> the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
-> transfers. So your device must be able to handle 512 byte transfers or
-> it's a non-compliant USB device.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: a5b94a7500c9d45a64b921b757f32872a56a9003  Merge branch 'fixes-v6.12' into testing
 
-I understand. Therefore, the USB device's firmware will be modified to supp=
-ort
-bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
+elapsed time: 724m
 
->
-> > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=3D =
-packet_len) {
-> > > > > > > > +             if (len > nct6694->maxp)
-> > > > > > > > +                     packet_len =3D nct6694->maxp;
-> > > > > > > > +             else
-> > > > > > > > +                     packet_len =3D len;
-> > > > > > > > +
-> > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(ud=
-ev, BULK_IN_ENDPOINT),
-> > > > > > > > +                                nct6694->rx_buffer + nct66=
-94->maxp * i,
-> > > > > > > > +                                packet_len, &rx_len, nct66=
-94->timeout);
-> > > > > > > > +             if (ret)
-> > > > > > > > +                     goto err;
-> > > > > > > > +     }
-> > > > > > > > +
-> > > > > > > > +     for (i =3D 0; i < rd_len; i++)
-> > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
-> > > > > > >
-> > > > > > > memcpy()?
-> > > > > > >
-> > > > > > > Or why don't you directly receive data into the provided buff=
-er? Copying
-> > > > > > > of the data doesn't make it faster.
-> > > > > > >
-> > > > > > > On the other hand, receiving directly into the target buffer =
-means the
-> > > > > > > target buffer must not live on the stack.
-> > > > > >
-> > > > > > [Ming] Okay! I'll change it to memcpy().
-> > > > >
-> > > > > fine!
-> > > > >
-> > > > > > This is my perspective: the data is uniformly received by the r=
-x_bffer held
-> > > > > > by the MFD device. does it need to be changed?
-> > > > >
-> > > > > My question is: Why do you first receive into the nct6694->rx_buf=
-fer and
-> > > > > then memcpy() to the buffer provided by the caller, why don't you
-> > > > > directly receive into the memory provided by the caller?
-> > > >
-> > > > [Ming] Due to the bulk pipe maximum packet size limitation, I think=
- consistently
-> > > > using the MFD'd dynamically allocated buffer to submit URBs will be=
-tter
-> > > > manage USB-related operations
-> > >
-> > > The non-compliant max packet size limitation is unrelated to the
-> > > question which RX or TX buffer to use.
-> >
-> > I think these two USB functions can be easily called using the buffer
-> > dynamically
-> > allocated by the MFD. However, if they transfer data directly to the
-> > target buffer,
-> > they must ensure that it is not located on the stack.
->
-> You have a high coupling between the MFD driver and the individual
-> drivers anyways, so why not directly use the dynamically allocated
-> buffer provided by the caller and get rid of the memcpy()?
+configs tested: 132
+configs skipped: 4
 
-Okay! I will provide a function to request and free buffer for child device=
-s,
-and update the caller's variables to use these two functions in the next pa=
-tch.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+tested configs:
+alpha                             allnoconfig    gcc-13.3.0
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                                 defconfig    gcc-14.1.0
+arc                           tb10x_defconfig    clang-20
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                                 defconfig    gcc-14.1.0
+arm                          ep93xx_defconfig    clang-20
+arm                         nhk8815_defconfig    clang-20
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+arm64                               defconfig    gcc-14.1.0
+csky                             alldefconfig    clang-20
+csky                              allnoconfig    gcc-14.1.0
+csky                                defconfig    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+hexagon                             defconfig    gcc-14.1.0
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241028    gcc-12
+i386        buildonly-randconfig-002-20241028    clang-19
+i386        buildonly-randconfig-003-20241028    clang-19
+i386        buildonly-randconfig-004-20241028    clang-19
+i386        buildonly-randconfig-005-20241028    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+loongarch                           defconfig    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                                defconfig    gcc-14.1.0
+m68k                        m5307c3_defconfig    clang-20
+m68k                        m5407c3_defconfig    clang-20
+m68k                            q40_defconfig    clang-20
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                          defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                          ath79_defconfig    clang-20
+mips                        bcm63xx_defconfig    clang-20
+nios2                             allnoconfig    gcc-14.1.0
+nios2                               defconfig    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    clang-20
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+parisc                generic-32bit_defconfig    clang-20
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                          allyesconfig    gcc-14.1.0
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    clang-20
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    clang-20
+riscv                               defconfig    gcc-12
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sh                               j2_defconfig    clang-20
+sh                            migor_defconfig    clang-20
+sh                          rsk7264_defconfig    clang-20
+sh                          sdk7780_defconfig    clang-20
+sh                           se7343_defconfig    clang-20
+sparc                            allmodconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241028    gcc-12
+x86_64      buildonly-randconfig-002-20241028    gcc-12
+x86_64      buildonly-randconfig-003-20241028    gcc-12
+x86_64      buildonly-randconfig-004-20241028    gcc-12
+x86_64      buildonly-randconfig-005-20241028    gcc-12
+x86_64      buildonly-randconfig-006-20241028    gcc-12
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20241028    gcc-12
+x86_64                randconfig-002-20241028    gcc-12
+x86_64                randconfig-003-20241028    gcc-12
+x86_64                randconfig-004-20241028    gcc-12
+x86_64                randconfig-005-20241028    gcc-12
+x86_64                randconfig-006-20241028    gcc-12
+x86_64                randconfig-011-20241028    gcc-12
+x86_64                randconfig-012-20241028    gcc-12
+x86_64                randconfig-013-20241028    gcc-12
+x86_64                randconfig-014-20241028    gcc-12
+x86_64                randconfig-015-20241028    gcc-12
+x86_64                randconfig-016-20241028    gcc-12
+x86_64                randconfig-071-20241028    gcc-12
+x86_64                randconfig-072-20241028    gcc-12
+x86_64                randconfig-073-20241028    gcc-12
+x86_64                randconfig-074-20241028    gcc-12
+x86_64                randconfig-075-20241028    gcc-12
+x86_64                randconfig-076-20241028    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                           rhel-8.3-bpf    clang-19
+x86_64                         rhel-8.3-kunit    clang-19
+x86_64                           rhel-8.3-ltp    clang-19
+x86_64                          rhel-8.3-rust    clang-19
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                generic_kc705_defconfig    clang-20
 
-Thanks,
-Ming
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
