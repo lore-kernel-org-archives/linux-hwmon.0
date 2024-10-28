@@ -1,116 +1,221 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88DE1DA2E0;
-	Mon, 28 Oct 2024 12:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9F11DB95E
+	for <linux-hwmon@vger.kernel.org>; Mon, 28 Oct 2024 14:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730119340; cv=none; b=ddef5CQKJaaH9iP6epJO5NHkZM8UKcp/6K0PO5LGDPyYk0sYQ3sUacR8ZSQNi/wVn/lDGFcBL8Maay8WxTQm9s3xEiIzhDeEH2N9fAZn06IKdze46B2IQ6JVSUst70VY0o7L8Mz5DZUhw8LldrgNT+hzY1PyxrYygCHdI3v06J0=
+	t=1730124433; cv=none; b=TWKISlK/FGaP80mCHjjYbdaJbe43qYvJz/aEYP0Ho2coOw7MbAb5ZuaWV+1KJoqN2/7n+vp/7vJZOA+T2AGslZhMHXIH93zDCgxWjFerN/jYWyAed6L49gj0vOiLMr9qnNKC8wJejCyX+ibgr3bizZAuTB7x5cd9Gu/kSwyRraI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730119340; c=relaxed/simple;
-	bh=2z2vAZJSINxFgk04FZyyCBPQt6tnf3YvM+5pNdERrCs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aOGPh9xzE0/xUyTWTKi1iy9EvpAGhiHUx+0l/obl9w4MLzXdogzm26FMSk2R+JVFyeg0/LEzsSp5gUR6oW5247/1qRNXdY86SrJuY88HCEjCL5gYYAcH4f8ckXu1jEtN0qSn7VX5govFlbZoxX8vl22dhp+ApPJF2rwQWohNSN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRgn8+Qd; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRgn8+Qd"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6d18cdab29dso12999456d6.0;
-        Mon, 28 Oct 2024 05:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730119338; x=1730724138; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UPDTP6OcnSRUiLPs44+AfRECa7TiYhhPi6crVGIBcxE=;
-        b=mRgn8+Qdi9pknUBFVxKjx3xsjIMKXWO5ZY7Fj9tV4BBlJQprmLl5nEqRCZYvlOGeoN
-         WFVjmwItRjglEGqAKUK1WWaIRJLGBnJg8wOTmzfbU+fllfYvjf9QfUB/1aTYMmjyEbSU
-         WjAPFjbz7bxuIaQHxB98azHcX0SwP46dPej6xUpZrSuwN7Tzbd8dRQfjECgtkxbdw7C3
-         rGAmkV8XPd/9r/ZWrCC0pH3rj7bAGjom74iOjp1l4LBt+9UCuF/5qcU+FAHZReG9CWUg
-         zsPfMkf38MaBVugaDkcfSrnVigggKN/cf3A/dYccbETDNzJOWu7kGhxiU2ukbdj32Hre
-         6hkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730119338; x=1730724138;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UPDTP6OcnSRUiLPs44+AfRECa7TiYhhPi6crVGIBcxE=;
-        b=phayPrGPVSUhLILQnW68F/LNaBvy1uh098LaBqlS0obYPIs0OD7eI59lAwnmp3cOnZ
-         DNL3tPKmuMy49GKb1RrEdnqWMcSEhvzWkfkAw2iLxbBY62yLK+fNzA4+nIagY1rKgWFl
-         UJH71Kc2BvQtg9k3N41dPUsMw0sBGlxLF/4WYYLW11pKQwIZnBMjIMT1QcBPSbQ1pvCl
-         Q3LaKzVwUotid8XZis9w2/p/svQykZlXWNKPQ43rOHxjgd++0vf9Kp6CXC/q0yv2q7Vv
-         yFQqLFJE5SrdNje4+22RjBDUsAyGo7MR3CJIm7UOAuHzx+mz9lbD1Er7a2nu9AHhX5DY
-         RGsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhsN9Gl0+umx47Jg8cWPO9uFmr9dtqW3oNBFFNVSJH2AJHRly4vD/vUdCb3lvVse0RgTJcMQ6PKf1hVBA=@vger.kernel.org, AJvYcCVL1NsMPwuYUMHHs2hN2lK2Bc07CxvxaE6UYP8KIisvR65bNnzJqAhs+q2pS4gGytB5jrZ4iUH6p/5D@vger.kernel.org
-X-Gm-Message-State: AOJu0YyT0luxNwDltb4rUvrgxicmSCu7e+E9D/fjaaCX2HcikzLUiIxZ
-	v9rTfoM6IpRP0PlVkTVWXAh7mSVzs5TxHr5f9Q5r7zlReLa6sIjwkjR3OpiaU/Th+csjVJneldF
-	pV06qvncRUq1Y82CKW43JKWvWO88=
-X-Google-Smtp-Source: AGHT+IFu30iVXKwfWOcaOmTLg0tzryyCqD5zvDtTitfx78e0NqXH+jxdsHIG/Ij1k8Kyf7CVM6WHH5Ee3xjuLN4KbnA=
-X-Received: by 2002:a05:6214:3292:b0:6cc:74e0:4fef with SMTP id
- 6a1803df08f44-6d1856744efmr108892196d6.1.1730119337611; Mon, 28 Oct 2024
- 05:42:17 -0700 (PDT)
+	s=arc-20240116; t=1730124433; c=relaxed/simple;
+	bh=cphWtKkhhPCR0SL0T9ODiGPD3s6cDdHQ8iEsC3GcO3g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YA/JfaLtDsokq3ng3GT6pi7iZcpNRaP8kgnqUtngNjfBNo6++AReibsj9puqvAPHUP7Q/KgNEuKHgJuYlbsC8iZROncYey3lGnFMKbCBMe1BUrm37fH4p6f9QXoNkyjkG6O/ees+2B+4NZhChU2E1p7r/rsOS/vd4g4ehMUzLvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t5QOJ-0001De-10; Mon, 28 Oct 2024 15:06:43 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t5QOG-000rfn-1t;
+	Mon, 28 Oct 2024 15:06:40 +0100
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 174A6360944;
+	Mon, 28 Oct 2024 14:06:40 +0000 (UTC)
+Date: Mon, 28 Oct 2024 15:06:39 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+ <20241024085922.133071-2-tmyu0@nuvoton.com>
+ <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+ <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
+ <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de>
+ <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
+ <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
+ <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
+ <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
+ <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
- <20241026080535.444903-3-akinobu.mita@gmail.com> <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
-In-Reply-To: <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
-From: Akinobu Mita <akinobu.mita@gmail.com>
-Date: Mon, 28 Oct 2024 21:42:06 +0900
-Message-ID: <CAC5umyitFp7oGR-eYXMVaS8bY1AGe3QwEuSPoEz3DxWwH=dUsA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add
- retain-state-shutdown property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Billy Tsai <billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2vg3oknj3uphvbvf"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+
+
+--2vg3oknj3uphvbvf
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+MIME-Version: 1.0
 
-2024=E5=B9=B410=E6=9C=8828=E6=97=A5(=E6=9C=88) 5:38 Krzysztof Kozlowski <kr=
-zk@kernel.org>:
->
-> On Sat, Oct 26, 2024 at 05:05:35PM +0900, Akinobu Mita wrote:
-> > Document new retain-state-shutdown property.
+On 28.10.2024 16:31:25, Ming Yu wrote:
+> > > > > > > > The Linux USB stack can receive bulk messages longer than t=
+he max packet size.
+> > > > > > >
+> > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes f=
+or this MFD device.
+> > > > > > > The core will divide packet 256 bytes for high speed USB devi=
+ce, but
+> > > > > > > it is exceeds
+> > > > > > > the hardware limitation, so I am dividing it manually.
+> > > > > >
+> > > > > > You say the endpoint descriptor is correctly reporting it's max=
+ packet
+> > > > > > size of 128, but the Linux USB will send packets of 256 bytes?
+> > > > >
+> > > > > [Ming] The endpoint descriptor is correctly reporting it's max pa=
+cket
+> > > > > size of 256, but the Linux USB may send more than 256 (max is 512)
+> > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/host/=
+xhci-mem.c#L1446
+> > > >
+> > > > AFAIK according to the USB-2.0 spec the maximum packet size for
+> > > > high-speed bulk transfers is fixed set to 512 bytes. Does this mean=
+ that
+> > > > your device is a non-compliant USB device?
+> > >
+> > > We will reduce the endpoint size of other interfaces to ensure that M=
+FD device
+> > > meets the USB2.0 spec. In other words, I will remove the code for man=
+ual
+> > > unpacking in the next patch.
 > >
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> > Cc: Conor Dooley <conor+dt@kernel.org>
-> > Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> > index 4e5abf7580cc..86a069969e29 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> > @@ -40,6 +40,10 @@ properties:
-> >      maximum: 4
-> >      default: 2
-> >
-> > +  retain-state-shutdown:
-> > +    description: Retain the state of the PWM on shutdown.
->
-> You described the desired Linux feature or behavior, not the actual
-> hardware. The bindings are about the latter, so instead you need to
-> rephrase the property and its description to match actual hardware
-> capabilities/features/configuration etc.
+> > I was not talking about the driver, but your USB device. According to
+> > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
+> > transfers. So your device must be able to handle 512 byte transfers or
+> > it's a non-compliant USB device.
+>=20
+> I understand. Therefore, the USB device's firmware will be modified to su=
+pport
+> bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
 
-Is this description okay?
-(Reused the description of retain-state-shutdown in leds-gpio.yaml)
+Then you don't need manual segmentation of bulk transfers anymore!
 
-description:
-  Retain the state of the PWM on shutdown. Useful in BMC systems, for
-  example, when the BMC is rebooted while the host remains up, the fan
-  will not stop.
+> > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
+=3D packet_len) {
+> > > > > > > > > +             if (len > nct6694->maxp)
+> > > > > > > > > +                     packet_len =3D nct6694->maxp;
+> > > > > > > > > +             else
+> > > > > > > > > +                     packet_len =3D len;
+> > > > > > > > > +
+> > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(=
+udev, BULK_IN_ENDPOINT),
+> > > > > > > > > +                                nct6694->rx_buffer + nct=
+6694->maxp * i,
+> > > > > > > > > +                                packet_len, &rx_len, nct=
+6694->timeout);
+> > > > > > > > > +             if (ret)
+> > > > > > > > > +                     goto err;
+> > > > > > > > > +     }
+> > > > > > > > > +
+> > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
+> > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
+> > > > > > > >
+> > > > > > > > memcpy()?
+> > > > > > > >
+> > > > > > > > Or why don't you directly receive data into the provided bu=
+ffer? Copying
+> > > > > > > > of the data doesn't make it faster.
+> > > > > > > >
+> > > > > > > > On the other hand, receiving directly into the target buffe=
+r means the
+> > > > > > > > target buffer must not live on the stack.
+> > > > > > >
+> > > > > > > [Ming] Okay! I'll change it to memcpy().
+> > > > > >
+> > > > > > fine!
+> > > > > >
+> > > > > > > This is my perspective: the data is uniformly received by the=
+ rx_bffer held
+> > > > > > > by the MFD device. does it need to be changed?
+> > > > > >
+> > > > > > My question is: Why do you first receive into the nct6694->rx_b=
+uffer and
+> > > > > > then memcpy() to the buffer provided by the caller, why don't y=
+ou
+> > > > > > directly receive into the memory provided by the caller?
+> > > > >
+> > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I thi=
+nk consistently
+> > > > > using the MFD'd dynamically allocated buffer to submit URBs will =
+better
+> > > > > manage USB-related operations
+> > > >
+> > > > The non-compliant max packet size limitation is unrelated to the
+> > > > question which RX or TX buffer to use.
+> > >
+> > > I think these two USB functions can be easily called using the buffer
+> > > dynamically
+> > > allocated by the MFD. However, if they transfer data directly to the
+> > > target buffer,
+> > > they must ensure that it is not located on the stack.
+> >
+> > You have a high coupling between the MFD driver and the individual
+> > drivers anyways, so why not directly use the dynamically allocated
+> > buffer provided by the caller and get rid of the memcpy()?
+>=20
+> Okay! I will provide a function to request and free buffer for child devi=
+ces,
+> and update the caller's variables to use these two functions in the next =
+patch.
+
+I don't see a need to provide dedicated function to allocate and free
+the buffers. The caller can allocate them as part of their private data,
+or allocate them during probe().
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--2vg3oknj3uphvbvf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcfmm0ACgkQKDiiPnot
+vG/OvQf+OF2IzP8yZ65Ke0Cq9hXkJZCpDCF4vKc3f2pLJQ/RjGNeubOY0v36mFwD
+5tZBs5Y7Md645uvjFh9VNg8YzW45+0dnzgzjGC28wj7hZpAW+yxnjNJ0zdpfBOPF
+pdwcIa8OLdqZ6exM1yGAyzV/en/klaL3oHu6RB8TmEMig/NQljdIF9nyslaqIAa4
+T1f+B7NmyH4nauAdBBhAOheqdJiO+eciscoFtxmOh4U5PQqGqR7VoBhkWrkx3JD1
+CqF6D9sNT+SP91/wuNPin6n85l/YDxSFkiKBG59p2do0l/vcwcWQ0denp4PT0dhk
+ZBpf0j8jPbNWS+ad8NpEyLE42beDRw==
+=o2YF
+-----END PGP SIGNATURE-----
+
+--2vg3oknj3uphvbvf--
