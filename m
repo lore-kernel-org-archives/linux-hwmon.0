@@ -1,126 +1,128 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0611DD88F;
-	Mon, 28 Oct 2024 14:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4873A268;
+	Mon, 28 Oct 2024 18:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730127472; cv=none; b=m/fhY0izV/GnWu6xBrGhBw/PwuuZkvjtVe9vO0XZjGeu/kqHF+SrXvnWtZyj9hZolD2BCAu/aTXazXZj6guRloM5W9NPFql+i15PvY5j9kIz+a361rgz2sXJzdAFO8ydjYulVi/JtGHd7aVV3dC9PZxzdNB0pa31I2pLwN4hBgw=
+	t=1730141668; cv=none; b=aoArrMviq3n86DrfCQCc8u6D0HU7vb200fbMll+miLf1njisWVrUCst3REJIDijDfr2PRVaKBswnUkiDVucoIgUQLFU8OhLtpA2T3B8pCDpevh8m/bhZznnTcgO66I1rnElLY3FZrlT/nLh8KibZHMljSdQs5tWUJRypr+KAWto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730127472; c=relaxed/simple;
-	bh=JNw2e73J2eV1h/GOBlklRjBzAVe8uwhGIZtJa6t1djk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M6qGSjlPGf00g00/xbnlveTOb4pep1DQKkZvXIyzNQR0FFtBy8nYcblFpIDgUZ/6b8zFqcp+AGx6V8MntgOQEVnkestmU1MyuSCZHFtRCRiaR78mlhbuLkDccJCl2PUe7eMwsxh/0HEIt4VzVhDtI+4Knhai+4Ne06T5crHm5dY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LfhnR8EB; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730141668; c=relaxed/simple;
+	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hdFLplWPAyc69aNByuijthAxKBbbriIRvMajr6iPquUlyH+e3JN4sZJYKG1aD5fJDYXdAC/UsJkL4cAkTp0RshUSr53MQ6w1kHKoP9KvzRQpYNSoXnOuuVaseliKh96BbDETHt3z06e8Wvr8maJhSnKW/E0gMpc3MgDzedUVxjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVzHeTEN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LfhnR8EB"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3e6104701ffso2693231b6e.0;
-        Mon, 28 Oct 2024 07:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730127470; x=1730732270; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u/YrC2RdmmDYfu70L7fvVu1XlTAzhSEEMTC8WHyyWhM=;
-        b=LfhnR8EBlGvUex8qbC/pO4cfyu95hEkT/wJfbtQSlUoL2HBRI87HGwLY6HMVmhwWio
-         LOLRUBBtVaWy3QxxurWCSB9jc4smOqVverjwpEUjWZV3ghDrLBtBBZ7gHL3v/e5gv9hL
-         NnXgOyAaga6mi+f/ldivIkdg8oLuWWVtQdfJXrCv2/WyrhHOrdPU/nfC2O9c+nB08HkI
-         XTg1Se4k2ka+7jKbHl44g7PkNO6YxF7Kl2K4DuG5OrXrPvSPMjLLFpLwz7ztCpES1dI5
-         zugurF/iHdz9T5ODNi/6Yjlg+5gUcqJk5fyFncEgiQ9sVZ/iNuxhV3ns2ucSBUgybMuU
-         y0pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730127470; x=1730732270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u/YrC2RdmmDYfu70L7fvVu1XlTAzhSEEMTC8WHyyWhM=;
-        b=vadS5UWyu0C/4VxiiM9zddkMjYQej+3+LSytFKoxeOkTFeUgVGxNNqi913VhVM0EZs
-         Za9Ag5YvwLYjI+Kcfh13eUIo9NgiI6ZRzRlAp0OY/+lGg+nANv+6J/8w6DWw+j/c5MFS
-         Lz6r2wJ2tIAIswAhgUPZZPCIsycW2ABBKkbgplGXlpAhOeLKBIQOvvi2LZS2+LNREZ8m
-         FwECUwZOoiGOTrEFoyzfltlNgvACnWM9ZGnSfQZwjP0Axgg1CQ32qYxRBxIjx+myYWjV
-         IdxL1vDkeKFZokpLmCTR2z3bs2QqMHPA+zFu4Rc9vOyBYlvm58h4IgrkexKOvHDWV9YY
-         Wxug==
-X-Forwarded-Encrypted: i=1; AJvYcCVJDJJGYDoVLuylogWE8f6XWaV+YvBE9rzvS8Bhsn8qg/FmvC4gY2lCtMYdT/vQYqrchGxC9d6UMZFX@vger.kernel.org, AJvYcCWmJOGD2Xx7E1lbQYW54e+4Zz1nhPTHLBL8MFDHpFw4zME1hugkk0U0ZTmLFcXALk/tnrwxPLn4VY8SHvA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSYDj4l218xE+wD11fAXC8k9z6wdtEpKFyp8GkjBtds9uev+no
-	LW8q+JM+HXFVMqeMUKbW2kTaTxQXQ/S7TRKSI1xRrf0iVWP8CS3l8M9AFF/8+kj3su33Uu+NHPe
-	8NhRMOYnTt34qZNkUCjC4wL7Ka90=
-X-Google-Smtp-Source: AGHT+IEovg7l3McEchPGNAiGLqs0R+bGRzw4K7In1sEPtWvN8y+JE2vHv+bjCZeySecw9FNgdOOBzza6Da50FfDZ3Wg=
-X-Received: by 2002:a05:6808:13c8:b0:3e5:fbdd:e33a with SMTP id
- 5614622812f47-3e6384430edmr7443523b6e.13.1730127468844; Mon, 28 Oct 2024
- 07:57:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVzHeTEN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEACEC4CEC3;
+	Mon, 28 Oct 2024 18:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730141667;
+	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hVzHeTENHMRNzDW3+KoT1ZR10ZxgtOU2dYGXd9+qjI7sGIXekTjlWGJ3QlHZpX333
+	 m5sd7l4u3A6e4KsRDqXzjwzflDfK0/to5CzePmJNw4VOulXUgz9OISBalHm75SzJYO
+	 9VQ2dh+2YTTwiEwGP3zjFwzsZr84qNKDKS8dEx2zk2hdGydSIFNV0bsk76zSFWm8HV
+	 pflgGv5/4GIwx2OwzHndpsshfKrVQ+i6eN1rnbb1+LSY8T8i55MEV5NyHWYd1vuDCv
+	 bPwfRWdxS5sWjeLr/TZXMjbDddRjGTSgXtmFrmInNeUP2sitIPfdswQQvnyl2lPWU3
+	 QzxqydZz+LTOQ==
+Date: Mon, 28 Oct 2024 18:54:14 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Kalesh Anakkur Purayil
+ <kalesh-anakkur.purayil@broadcom.com>, tmyu0@nuvoton.com, lee@kernel.org,
+ linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+ mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
+ lars@metafoo.de, ukleinek@kernel.org, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <20241028185414.65456203@jic23-huawei>
+In-Reply-To: <CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+	<20241024085922.133071-7-tmyu0@nuvoton.com>
+	<CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
+	<62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net>
+	<CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
+	<817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net>
+	<02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
+	<CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
- <20241026080535.444903-3-akinobu.mita@gmail.com> <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
- <CAC5umyitFp7oGR-eYXMVaS8bY1AGe3QwEuSPoEz3DxWwH=dUsA@mail.gmail.com> <e29e2c9e-60c1-4f32-ab71-e74f331e1921@kernel.org>
-In-Reply-To: <e29e2c9e-60c1-4f32-ab71-e74f331e1921@kernel.org>
-From: Akinobu Mita <akinobu.mita@gmail.com>
-Date: Mon, 28 Oct 2024 23:57:37 +0900
-Message-ID: <CAC5umyhCw+62Y+h3Jvh3=0Ocs8XJsSu_vaiPpO_g=65Jo4vUFg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add
- retain-state-shutdown property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Billy Tsai <billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-2024=E5=B9=B410=E6=9C=8828=E6=97=A5(=E6=9C=88) 23:22 Krzysztof Kozlowski <k=
-rzk@kernel.org>:
->
-> On 28/10/2024 13:42, Akinobu Mita wrote:
-> > 2024=E5=B9=B410=E6=9C=8828=E6=97=A5(=E6=9C=88) 5:38 Krzysztof Kozlowski=
- <krzk@kernel.org>:
-> >>
-> >> On Sat, Oct 26, 2024 at 05:05:35PM +0900, Akinobu Mita wrote:
-> >>> Document new retain-state-shutdown property.
-> >>>
-> >>> Cc: Jean Delvare <jdelvare@suse.com>
-> >>> Cc: Guenter Roeck <linux@roeck-us.net>
-> >>> Cc: Rob Herring <robh@kernel.org>
-> >>> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> >>> Cc: Conor Dooley <conor+dt@kernel.org>
-> >>> Cc: Billy Tsai <billy_tsai@aspeedtech.com>
-> >>> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 4 ++++
-> >>>  1 file changed, 4 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/D=
-ocumentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> >>> index 4e5abf7580cc..86a069969e29 100644
-> >>> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> >>> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> >>> @@ -40,6 +40,10 @@ properties:
-> >>>      maximum: 4
-> >>>      default: 2
-> >>>
-> >>> +  retain-state-shutdown:
-> >>> +    description: Retain the state of the PWM on shutdown.
-> >>
-> >> You described the desired Linux feature or behavior, not the actual
-> >> hardware. The bindings are about the latter, so instead you need to
-> >> rephrase the property and its description to match actual hardware
-> >> capabilities/features/configuration etc.
-> >
-> > Is this description okay?
-> > (Reused the description of retain-state-shutdown in leds-gpio.yaml)
-> >
-> > description:
-> >   Retain the state of the PWM on shutdown. Useful in BMC systems, for
-> >   example, when the BMC is rebooted while the host remains up, the fan
-> >   will not stop.
->
-> Nothing improved in the property. You still say what the system should
-> do. This is user-space choice, not DT.
+On Mon, 28 Oct 2024 15:58:00 +0800
+Ming Yu <a0282524688@gmail.com> wrote:
 
-It seems better to implement it as a device attribute.
+> Dear Guenter,
+>=20
+> The original plan was to use the IIO driver to access the temperature
+> and voltage sensors, and the HWMON driver to access the tachometers.
+> However, since the device is a hot-plug USB device, as far as I know,
+> IIO-HWMON is not applicable. I will merge the IIO driver part into the
+> HWMON driver in the next patch.
+> In  other words, the driver will be used to access TIN, VIN and FIN.
+See drivers/mfd/sun4i-gpadc.c
+for an example of an mfd using the iio-hwmon bridge.
+
+Jonathan
+
+>=20
+> Best regards
+> Ming
+>=20
+> Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B410=E6=9C=8826=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > On 10/25/24 08:44, Guenter Roeck wrote: =20
+> > > On 10/25/24 08:22, Ming Yu wrote:
+> > > [ ... ]
+> > > =20
+> > >>>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int c=
+hannel,
+> > >>>>> +                            long val)
+> > >>>>> +{
+> > >>>>> +       struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
+> > >>>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] =3D {0};=
+ =20
+> > >>>> [Kalesh] Please try to maintain RCT order for variable declaration=
+ =20
+> > >>>
+> > >>> Ok, but that is already the case here ? =20
+> > >>
+> > >> [Ming] Is there anything that needs to be changed?
+> > >> =20
+> > >
+> > > I don't think so, If two lines have the same length, the order is up
+> > > to the developer to decide.
+> > >
+> > > Question though is if the buffer needs to be initialized. You should =
+drop
+> > > the initialization if it is not necessary. In that case the second li=
+ne
+> > > would be shorter anyway, and the order question would not arise.
+> > > =20
+> >
+> > Actually, I just noticed that you also submitted an IIO driver which
+> > reports the same data again. If a chip has an IIO driver, there should
+> > be no HWMON driver since the IIO -> HWMON bridge can then be used if
+> > necessary. So please drop this driver.
+> >
+> > Thanks,
+> > Guenter
+> >
+> > =20
+>=20
+
