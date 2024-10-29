@@ -1,168 +1,230 @@
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023074.outbound.protection.outlook.com [40.107.44.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C79F1D7E4E;
-	Tue, 29 Oct 2024 02:35:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730169303; cv=fail; b=f9qYwMMdZPJjeQStJnCPtc9FSMBndry41szMFBNXVDjRH8esC1977ueiEURF3xbvyLgrWYPJH6bBzWO7swD4UEl1kfkn0TVc/StWfoF5O1gFh+CjTyzF4mrtzo1VP9wQzxcB11/cYlU2Aj+P/QGmJzHPIWXoeaOHP2QsfcWs1cY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730169303; c=relaxed/simple;
-	bh=A5gDvFczkkbmM+HObtKEd+YRhRKMtlswkiaDGrAuDSM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Jl+ajX9UCawX3K29n+lsnaUn70pwNljG7V/VextcQQxDHGRYzWmy0eeH+SARE6Y/y3o4OIE9D+P+RgAWrg7DENN6ltC/pJrIC7fnjrPTU1Z0d0XZ/wOZnGnQP5ydvfJjHuVJ2APCM5M19BL9eDljExg/hRyxyipyApZKzMQU9/8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=m8tORYM3; arc=fail smtp.client-ip=40.107.44.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC34282FB;
+	Tue, 29 Oct 2024 03:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730173545; cv=none; b=cU7VKgyN9Tbvo4XaXV/Z9jcFkjBu/61ZvBF71HWbW2+z2ElSZ3zPizBqzwhtni4HG87khRIMTjkAyUyFtQJdsbMJpfzChO9VgjovyiioqkMgcRxaVn6Fpe/TLMcL0y+77SsK7jwMe2T1saPLDxsa2QKH/CK6Vov0kjv0pQ36C6Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730173545; c=relaxed/simple;
+	bh=XYnM6DX+CYxWd6ljUMrgeFtnN/QrAB98BtTRnD5Ohn8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MiR/hcCUb0gDngSvQhBeGQPD+IZPoTW4Xq9DDjwYwu9NUQ/h/AG4qCdlLjGD+UJyudlbaMZZztjdpOeXGBx1ieFPpGM11lRP5sRV+oQ2/vIgyo+dO1IgY+C0l60yFiqIj+cQuWjvkhEjAGd/PkrNe1JtXRx7Mn2cBi2dhZVHQnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gtowu2h4; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="m8tORYM3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VISdrrqjuL0wv/G0BtVBo+XHqZaF8W/Td0MrmkWjkBwLXw4VDtjHtAednOP6oNIlxh0RwUF29kOUrbKvHqNEggbbuWuFguknWch5Af+FjjeDGedeBkMw0JtXiRq/oqtmUA89AF7UisT1unkqlAuCKn/8TH8EUtZYorVJTni+KP/sopWKeL0LWTDCC5G41F7vqKRMqwLWwWeEaYrEjKyxrBix7GBkgcfsNQTS9Ju+LRBCQjQCxtQumWGZtU/DJ5Xv0M0c3a0Neh2C6slVHdVrhIK6gXFK1iH3gSJLdk+n33pjixpB7z1GYji3RwaW0iKkEaNrKmA9RM+LONEwdb5Q2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D0GdqqQBDrFM4iGHBl7CCpRuGs/yGKVAa9FIlBDnwDw=;
- b=c8V6a3ACH38hQDXVg130E4uACP1stob3lRp/X8L8xGTftU5Yx+38z+rYzUnZJ3UZ2TA0aoO3DJi6Z/NV97khGWjTSd7tpDv0QdYDyw+PfOI28C2SWNgSMa5Qs0yoRC5Z3jzr6/lCIseHM7N7W4j96UeK7th2/QsUSb8VPsIRztghXIgfuOMz8JVlRST+5GBLa5wCc2fnqXa+d2Te8fIYfK9X3qh5wOctiaJcm1S874wIBDFs1NjaRBUUlj7KmJUApdT8eVVfz3gLeLsc/cW9RU9qRvGEoKPDwTYn2VW7b2tDL1Mb36TleWDR4e0xj+UMSqDaNzlv3OxjxfphZVCu9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D0GdqqQBDrFM4iGHBl7CCpRuGs/yGKVAa9FIlBDnwDw=;
- b=m8tORYM3HKgINy5d00lXPI73hit6EItz/io5uRoG7IOopfAb9mSXgEX5DpRlNKYS8yvcw+S87fIrh5rCwOBN1rQMpkTsCcDiUgj2CxOJPjOy+/6oQXGeCM4/JMlmqg+SJmYMWA9TUoJ0zYz/RazQZedrapcdpUlH84xZ1b5HDkKq8oFedKoFFDUQLt5a9ST2zy5Ug7tRShvo8pbBPCeTuuei+2EYSYkoO6HNErz3b001y+wX1j2r2Ukju7CYPToGZrndUpZ5yZWdoFA1BAYC7wJhTs8EYx5H0ZsccbofBIWdlIIj0OjwomKr9eUaYJfxCq59+yAj3PCBvRv3rhELIA==
-Received: from OSQPR06MB7252.apcprd06.prod.outlook.com (2603:1096:604:29c::6)
- by SEZPR06MB4999.apcprd06.prod.outlook.com (2603:1096:101:4a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.13; Tue, 29 Oct
- 2024 02:34:56 +0000
-Received: from OSQPR06MB7252.apcprd06.prod.outlook.com
- ([fe80::814e:819a:7d52:7448]) by OSQPR06MB7252.apcprd06.prod.outlook.com
- ([fe80::814e:819a:7d52:7448%7]) with mapi id 15.20.8093.014; Tue, 29 Oct 2024
- 02:34:55 +0000
-From: Billy Tsai <billy_tsai@aspeedtech.com>
-To: Akinobu Mita <akinobu.mita@gmail.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Jean Delvare
-	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>
-Subject: Re: [PATCH v2 1/2] hwmon: (pwm-fan) add option to leave fan on
- shutdown
-Thread-Topic: [PATCH v2 1/2] hwmon: (pwm-fan) add option to leave fan on
- shutdown
-Thread-Index: AQHbJ33jrtn4+8YK0kKUwbKwIO1tD7KdBnF0
-Date: Tue, 29 Oct 2024 02:34:55 +0000
-Message-ID:
- <OSQPR06MB72524578F1E5BA93772A12728B4B2@OSQPR06MB7252.apcprd06.prod.outlook.com>
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
- <20241026080535.444903-2-akinobu.mita@gmail.com>
-In-Reply-To: <20241026080535.444903-2-akinobu.mita@gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSQPR06MB7252:EE_|SEZPR06MB4999:EE_
-x-ms-office365-filtering-correlation-id: fb2ef633-b8e7-4d4c-1cb6-08dcf7c24684
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?xvyFJef66bwoWhbK3q0/hQQcf6oynktlMCRNP1SPksmWDlVSmeZS3Ykvyd?=
- =?iso-8859-1?Q?QjdtTuJzutLY5bF+GDeryQT5PmSOsujOHedPe7DCE77JDyKcepdmc7CR7q?=
- =?iso-8859-1?Q?Ulex/KY+BjYImkwb9DUwtYq2UO6eX+nDXHMW12t6p6VrkAQZwDrimhTmX1?=
- =?iso-8859-1?Q?EYDyrgYgDgVkW110pJ/BFSttC5WI7SKSWsMhpLl5Re/IaIN4RSNUxs3OzO?=
- =?iso-8859-1?Q?t4sR2w8FN+yIcs7cFMmw5p0U+kVhVA3urNyKFyw5ObGGTA1lXrvpCDdQ5D?=
- =?iso-8859-1?Q?pfMLs6z9OcQKS4vFA+Q0szqJHHe5ZvcXwd6CgJok2SVu5h81j3zhc5gQ5Q?=
- =?iso-8859-1?Q?RnTxBxjKN2NYkWBSf4pRxfH0HA9N/ZR910ax9vr/xO4Sd63cvMtM154Nqp?=
- =?iso-8859-1?Q?q2+n00i6y+JTVAz3Ba1ypr6jnaFchDy+PGrevRLiu71kYhLDpYxw3tSzzb?=
- =?iso-8859-1?Q?WT3rk7FhFdLqACSZs7KT/dYYnY+fm85vXV7KjdU7HQgE0lqlvuRzQnOgSf?=
- =?iso-8859-1?Q?TXborGBdNcMOYXFSwTL3RwuykCfXJHDkl06KGpTjra0dgVwLNYEIypraqv?=
- =?iso-8859-1?Q?Dcnv95JJ8ViTpynYFgSBgS8PtBe7aL/qJy9NRJKTJSHi5Zo8tqlr3g9xcP?=
- =?iso-8859-1?Q?tayfW4Mwtc0g3ItULNdawPNhwQ3H8O2DNOTPZ5VoICcYx2da6cyv91oUsc?=
- =?iso-8859-1?Q?YA7hwibj0qqs/BwNQl2QeOtu0/qCa1egQri1eubd5PXfHw2ZWprB/5XLsN?=
- =?iso-8859-1?Q?oBRQnI4IQmwoPy/hnxumbNsuQ6jw0+HM0ER5Ypb35COBjBhSEq6QefkoU8?=
- =?iso-8859-1?Q?3GOIm3z8IbI9yUaVvOo21P+CMb0S9X5iR68W7bMNbN6UBxuYAkU0v6O7bx?=
- =?iso-8859-1?Q?tKOuDmO1Ol9kG3CimpPDFa8H/XtGv9spg5AEWlQVy5k+t6rEdZbJ/M2Uw1?=
- =?iso-8859-1?Q?PjtldmMfVF6TEtlWcIO/mzw4BcPhSonXqRNkG9+9miU0Z5IXqwy0dRhTjd?=
- =?iso-8859-1?Q?qXgMxOz4rYLcFeouAK9Gx5stjmAolAdkYkQqnTspIGAfN5f2/WsZKT1tPr?=
- =?iso-8859-1?Q?RQ0wvY03Gq6axoLhC1Rt003avKwCdoTkWKlSKEw2y5LIDXbf20l/Lddof+?=
- =?iso-8859-1?Q?tFiOWmeB0Zfgskc35x8gVrLyLcyksdUS4BMS8ikBv8Bb/xI4ctb/KnWpf2?=
- =?iso-8859-1?Q?S+g7XwMQM9rMpHbRaKibfZrloHlTzjyZ5yiNbc/dxyMc1TQPf4R4EKgVaC?=
- =?iso-8859-1?Q?IS/xPW6Z1QKLC6g0w5nclGcjfCFpHOnANd3SBPGl/YreUiLxtdpnya+MmF?=
- =?iso-8859-1?Q?epDbLnUjiX/0wW+vezO9jOlaIShnGa9+BziwR7dfq46Dv/bHOl8UbJ5HtL?=
- =?iso-8859-1?Q?hIZCnQIxp2bl6pmNv4sXPmkky9PeaR+C+y/Cr1xSwnQtCxMHMRHeA=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQPR06MB7252.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?1Szu/4TaYX7TGMJACeY2YvFqyMDNXWum0ElNLeGHMa5tPoeJo/ghnPpucr?=
- =?iso-8859-1?Q?7x1g/PgzAJ5h8w86CCQPf18rMfg4Ofgk3lEYsIw8pZbWMrfEHCsw6goxke?=
- =?iso-8859-1?Q?bQIjj6dP8gygDczI5+0V+kk0SAd4Ve6Cj+Kyn6qMkyBuPmVx+U/qs201eB?=
- =?iso-8859-1?Q?rN75qwH3MuaEFIolsBlQIDXmHFzAh1Ohcq4EUT4wVAV4OeR6FPtd0nwYOz?=
- =?iso-8859-1?Q?3ckZ5JJ5kbP9hGtqThiEkgTYISYZ2Zt/I45yfAALI+FPCyrNTpghCBG20H?=
- =?iso-8859-1?Q?RMZSsem+QeBcwuo4nB+2NyL+ePt4vwbH1bawOU1/kFOPEBYeF5djN5ksbg?=
- =?iso-8859-1?Q?sPTeLBMZPN7qZgCVQbYbIcnmWBaA8CpvFKICquexAnMuKHCuHyF5LMnivc?=
- =?iso-8859-1?Q?b1NXhUeskwtX/bznPpnRDLM1r5j0d0nBkKzwSBon7aPtve8McLiSBx7gy1?=
- =?iso-8859-1?Q?9p4hxlGN96epyJjyEpzMmAAq0uPIpYla+bBo3iw0o3Vn9gyElLa0o2Qjm8?=
- =?iso-8859-1?Q?0+MdtXlan2lqTAYfPh0TTZagIlARbb/qY1LNilDwKQDNgB1R204Pgqtwaa?=
- =?iso-8859-1?Q?VRLvidFGYP7qXPrrV5R/6HvtxEgRylLKaj6Jat6udTQtY/18hRrGV2cS1K?=
- =?iso-8859-1?Q?hpertKeLnCd/iDnAZkR1xJ6LvpCf43cMGOo84W5rpzdvih1I+A/pdOBi+Q?=
- =?iso-8859-1?Q?FkNO0kw/rJB8mS7p8+6FTc5kaxVzLi7YgO+W2+ENSE4XVPCyujtFJLc1lH?=
- =?iso-8859-1?Q?Xk9ep15J1LssFfTDGEZ2jFM/zak+KrtvmEL2zC1JGcGMNSb4GRM6bKzqet?=
- =?iso-8859-1?Q?HnPgry9zGQt7v7OmUf43DfOWAb2IC5fD839DW4oBcH22lXxirjOgOYFaRn?=
- =?iso-8859-1?Q?jzHrfb7Uev6AIjoSyIefAXBVstIYhYFW7QsP3WOo8GLaiN/yRpp2mHtSCf?=
- =?iso-8859-1?Q?i1472aa2EOlVl0YvXQlYwAqkLuvXeLvT1X32BL3uizI5x987xC/MrniH+h?=
- =?iso-8859-1?Q?gkJcNHcUgaJyRAtPy0S2UuGNvvU76XTSj0TY052pX0FUw09YZWKjn/Hei2?=
- =?iso-8859-1?Q?vku4dnBJvIlB98TIRkUQ0LH5v7FPMsFQy2LAOz02unF29/zrHsn47uRKY+?=
- =?iso-8859-1?Q?rnF8YDQTjUvEzb/JzsT2Fz4uXEjAFE/MNkV0my9PGbnmp4q+8oUyUzl2Ly?=
- =?iso-8859-1?Q?68fGRHFXKzOAcynrBrYMXKCoByG09X9RrZ7UINRwy2taRI9Cif/uNqwdJC?=
- =?iso-8859-1?Q?z0xqPkrxuUkpIwYpt6gIH4c4ZCwFhQUzFSJ9Qnyt8fYqPjBOpthqY81fbn?=
- =?iso-8859-1?Q?lHwc6dA3p0K/U9XhIyxrLdFZyYyuN6H4OiKpRM6ogWxD9EuQA9lPCvPtaV?=
- =?iso-8859-1?Q?hLYV6yOMNH8wR0/z48bn8qR4iK4dPr69UuDF+eihLoTKmqPmvuSUwZ3J9j?=
- =?iso-8859-1?Q?c++v/YipyWHIVjo1MyiIzawj/BfzJ3kE3Jt2hCscNe12DTdSJHie7Ka4Be?=
- =?iso-8859-1?Q?8AMMLuj7nDEbI1flWBYY1h7Mw/tum3c1sLn8TGQH5gYK4IoAwW6O1r7vl9?=
- =?iso-8859-1?Q?ZlX3AsLcbVKBuXq0FGhsvxmdYJzIqAQxVLqfaln5zR5IOSml/xlXirJ6mn?=
- =?iso-8859-1?Q?IPfvpBqJutR0jR3vCsgdfV+KM/KSCsZtOv?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gtowu2h4"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e2974743675so4472896276.1;
+        Mon, 28 Oct 2024 20:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730173542; x=1730778342; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
+        b=Gtowu2h4SGC7DktSemUBNe3r4C20PuuQUK1Gu13xI6e/FzBpc6IK+U5Xtv2IntjXSo
+         E/mdfhK58XXJ6Nmo511UJF8+qnTHJ3QvrtDdBQirngGPLaK4iv/qJx9re8QSbQ3XYhtt
+         W4Hm8gNlTjDjX3FZ7MxCSx4KJGQXa/hsQQpTuDwUN89K5E4Hi9QagrHiuifwTOTtI6gA
+         +b1QLEEATwH7r0iBWRsC+hHQyPqtchS6ycs94PG2YO3inqkwSVolknfWdGjfQduQbhZS
+         4qutj6pb2Gpa/EOuXiHiuEH4iPTSaH29O+HQflMy0BvcFUB0bYmsC10NCYE5SGNy3OWo
+         ifbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730173542; x=1730778342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
+        b=t5i8r6dSCwm8eh0UCn896urLAM+3epkSM9lcBqYB6b3P1aoI4KXVqFRjR1O/cqW2je
+         BMgH5cLTwqJ+cvnGbmwJBrrPWbpL0spBB2RAd5XZmbkyU7RKtpRIPTbQ2U3l9xbFl4KU
+         Gw253pZRTdsSQSMNQHMIR6hValDX6getVKGCKPMYFUz4UYS6I7u+RUe4+9Pl5nJuQTt4
+         ut/fjBngAFYXY4XD5OejU+3fbotvFmv6pJPMP8DXRpRNKcjC1oqiZ44/JW9tdO10l6Qt
+         Y5HVHmiouDUp7qhhJtgmO8cLpWpOinM/H5faPk7oR3yS4BRzk7JntSlAcyFjd2HxFU1A
+         ubdA==
+X-Forwarded-Encrypted: i=1; AJvYcCURcLGxst1+NU9cIT5bXYzfKvq1OhgGIkaKyW7Ri6MdUap5aSYEpgl7z8GnVuiNu0hp96JUC34I@vger.kernel.org, AJvYcCVLpI+LIcNFeJPFqtgZIQ2tsbWzTQ7YWsnaPoLNBB2vBBlnLNjri45qawrDzCh0urB8T24MSogosFlGCg==@vger.kernel.org, AJvYcCVXEz+IAHGrePm4MZiwdutlNHBRGkpnm5G1vcZWgRH68ka4v13M4aCe9iM5LepavSF4ciqqVSpVNG8=@vger.kernel.org, AJvYcCW0hbK0CU9DKLaZRoRV1/cDBjvrfeDOwlaiZZYpiSlQ3nTWMZvFG/nK28Iv3FTuiQxN8Du0nRVq9L3TQJaF@vger.kernel.org, AJvYcCWAPdNVkHsOdMKm82yQiPuJodMGvS9cLfznjib4cu/RpZoHf3DAXM4NfnVy8R9XPN80OWxKjQ5/lyGX/sGDzxU=@vger.kernel.org, AJvYcCWZkA/Ebsvrsm1nzQqmVI2QoA1ZLgpgTRitgXjN8jvi04UxfTJXUSdvJJZBI29dEHCW19EocshcjMsD@vger.kernel.org, AJvYcCWkG26bwOBYdHuWuIx/w2ArSIw3v87kU1Y4rlaRyWYjU2BOAb7kM0cLziyhhTStxp9nn8JjpB2oIZmG@vger.kernel.org, AJvYcCWuMZkQ6fiBJUd6dKzdOqopu9ee/4dLre2VnjOYGotjP8a2gaFhmngHb70e9lgWIL+Kf7t2PCK6twu8@vger.kernel.org, AJvYcCXQ9JdtvqAXoRNx/prs/2BJ1/R5lr+9AN9OJrqABJIqbhtaB8GOL7kBwuXkw12C7k2tW+FfHJPkHZTMyXg=@vger.kernel.org, AJvYcCXWHd0MgKNNBFnsAHuLjCoPlYuEUNExlw2sttxwdG7itDJKcHe38WKblEkalUz8d8Ebu0alXzNU+97Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXuBDcQF97Vo9aOSBY2QbzEN1iEoyEskfpXMznDbVuFeJHiGq2
+	JIRFRrYrFA/4rwSxWfoURJb/LvIvvRHnE8HDCUl65E04W88xv3VvrwGjfWotcyiVg7ZrPX+Smna
+	jUxy+V7JjyNEx1npWxMvPC9R4Rek=
+X-Google-Smtp-Source: AGHT+IGfm8i1NTOjdK59ar/oHoMjiqsPSqbc0JD5K9R4kxYreI+daaN7dVKfGowPbsaVFEJzyIlEL4zXfN95OO4rnFY=
+X-Received: by 2002:a05:6902:12cc:b0:e28:faf8:5cd7 with SMTP id
+ 3f1490d57ef6-e3087a6c107mr8166564276.15.1730173542428; Mon, 28 Oct 2024
+ 20:45:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSQPR06MB7252.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb2ef633-b8e7-4d4c-1cb6-08dcf7c24684
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2024 02:34:55.8342
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +xqFT/huYmNPRZWUbKHDZKLR+s/70wBsBz2IlFpW3b75Bznht1v3+Lvq1JuoiN0SHFZggaXA5mVfvKcKd51aV0qGYK2zTwpULzvYnY1nS0Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB4999
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
+ <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+ <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
+ <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de> <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
+ <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
+ <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
+ <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
+ <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com> <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
+In-Reply-To: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Tue, 29 Oct 2024 11:45:30 +0800
+Message-ID: <CAOoeyxWh1-=NVQdmNp5HBzf1YPo9tQdh=OzUUVFmvC-F7sCHWg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> This adds an optional property "retain-state-shutdown" as requested by=0A=
-> Billy Tsai.=0A=
-=0A=
-> Billy said:=0A=
->  "Our platform is BMC that will use a PWM-FAN driver to control the fan=
-=0A=
->  on the managed host. In our case, we do not want to stop the fan when=0A=
->  the BMC is reboot, which may cause the temperature of the managed host=
-=0A=
->  not to be lowered."=0A=
-=0A=
-I confirmed that it works properly.=0A=
-=0A=
-Reviewed-by: Billy Tsai <billy_tsai@aspeedtech.com>=0A=
-Tested-by: Billy Tsai <billy_tsai@aspeedtech.com>=0A=
-=0A=
-Thanks=
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8828=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8810:06=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On 28.10.2024 16:31:25, Ming Yu wrote:
+> > > > > > > > > The Linux USB stack can receive bulk messages longer than=
+ the max packet size.
+> > > > > > > >
+> > > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes=
+ for this MFD device.
+> > > > > > > > The core will divide packet 256 bytes for high speed USB de=
+vice, but
+> > > > > > > > it is exceeds
+> > > > > > > > the hardware limitation, so I am dividing it manually.
+> > > > > > >
+> > > > > > > You say the endpoint descriptor is correctly reporting it's m=
+ax packet
+> > > > > > > size of 128, but the Linux USB will send packets of 256 bytes=
+?
+> > > > > >
+> > > > > > [Ming] The endpoint descriptor is correctly reporting it's max =
+packet
+> > > > > > size of 256, but the Linux USB may send more than 256 (max is 5=
+12)
+> > > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/hos=
+t/xhci-mem.c#L1446
+> > > > >
+> > > > > AFAIK according to the USB-2.0 spec the maximum packet size for
+> > > > > high-speed bulk transfers is fixed set to 512 bytes. Does this me=
+an that
+> > > > > your device is a non-compliant USB device?
+> > > >
+> > > > We will reduce the endpoint size of other interfaces to ensure that=
+ MFD device
+> > > > meets the USB2.0 spec. In other words, I will remove the code for m=
+anual
+> > > > unpacking in the next patch.
+> > >
+> > > I was not talking about the driver, but your USB device. According to
+> > > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
+> > > transfers. So your device must be able to handle 512 byte transfers o=
+r
+> > > it's a non-compliant USB device.
+> >
+> > I understand. Therefore, the USB device's firmware will be modified to =
+support
+> > bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
+>
+> Then you don't need manual segmentation of bulk transfers anymore!
+
+Understood, thank you very much.
+
+>
+> > > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
+=3D packet_len) {
+> > > > > > > > > > +             if (len > nct6694->maxp)
+> > > > > > > > > > +                     packet_len =3D nct6694->maxp;
+> > > > > > > > > > +             else
+> > > > > > > > > > +                     packet_len =3D len;
+> > > > > > > > > > +
+> > > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpip=
+e(udev, BULK_IN_ENDPOINT),
+> > > > > > > > > > +                                nct6694->rx_buffer + n=
+ct6694->maxp * i,
+> > > > > > > > > > +                                packet_len, &rx_len, n=
+ct6694->timeout);
+> > > > > > > > > > +             if (ret)
+> > > > > > > > > > +                     goto err;
+> > > > > > > > > > +     }
+> > > > > > > > > > +
+> > > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
+> > > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx]=
+;
+> > > > > > > > >
+> > > > > > > > > memcpy()?
+> > > > > > > > >
+> > > > > > > > > Or why don't you directly receive data into the provided =
+buffer? Copying
+> > > > > > > > > of the data doesn't make it faster.
+> > > > > > > > >
+> > > > > > > > > On the other hand, receiving directly into the target buf=
+fer means the
+> > > > > > > > > target buffer must not live on the stack.
+> > > > > > > >
+> > > > > > > > [Ming] Okay! I'll change it to memcpy().
+> > > > > > >
+> > > > > > > fine!
+> > > > > > >
+> > > > > > > > This is my perspective: the data is uniformly received by t=
+he rx_bffer held
+> > > > > > > > by the MFD device. does it need to be changed?
+> > > > > > >
+> > > > > > > My question is: Why do you first receive into the nct6694->rx=
+_buffer and
+> > > > > > > then memcpy() to the buffer provided by the caller, why don't=
+ you
+> > > > > > > directly receive into the memory provided by the caller?
+> > > > > >
+> > > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I t=
+hink consistently
+> > > > > > using the MFD'd dynamically allocated buffer to submit URBs wil=
+l better
+> > > > > > manage USB-related operations
+> > > > >
+> > > > > The non-compliant max packet size limitation is unrelated to the
+> > > > > question which RX or TX buffer to use.
+> > > >
+> > > > I think these two USB functions can be easily called using the buff=
+er
+> > > > dynamically
+> > > > allocated by the MFD. However, if they transfer data directly to th=
+e
+> > > > target buffer,
+> > > > they must ensure that it is not located on the stack.
+> > >
+> > > You have a high coupling between the MFD driver and the individual
+> > > drivers anyways, so why not directly use the dynamically allocated
+> > > buffer provided by the caller and get rid of the memcpy()?
+> >
+> > Okay! I will provide a function to request and free buffer for child de=
+vices,
+> > and update the caller's variables to use these two functions in the nex=
+t patch.
+>
+> I don't see a need to provide dedicated function to allocate and free
+> the buffers. The caller can allocate them as part of their private data,
+> or allocate them during probe().
+
+Okay, so each child device may allocate a buffer like this during probe():
+priv->xmit_buf =3D devm_kcalloc(dev, MAX_PACKET_SZ, sizeof(unsigned char),
+GFP_KERNEL), right?
+
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+Thanks,
+Ming
