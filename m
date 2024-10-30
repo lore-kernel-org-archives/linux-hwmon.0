@@ -1,141 +1,121 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CA11F4FB5;
-	Wed, 30 Oct 2024 13:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2A6C13C;
+	Wed, 30 Oct 2024 14:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730296246; cv=none; b=qghXuSt6HuEzojwTRh973jzdqy7nNtCYkUqx0GaKHENUeFa6JUwW5ALoCOCzd6idfJhKUnEMAipFjos6EuF467fTb3LIIwVmUBNk01AreMlQgEXW+Vy25l9rr/+MJjIrZBQT9o+E+OlYIOZyKKG6zVBcmn+Xi51rcrcU11vL3HI=
+	t=1730298084; cv=none; b=kKWRR/HOtxtFigYpTVFpyYti8tLbZOJzzwld3YH16mJXQMWEvDLskKg/Tip5OAeTk5Xu9RCGUZ2EW9F1NlORAKyEmVc/lcHJOkMG9Lh8LT2dffGHlmHyEbDmpxgDuNAock7jgDHwvRhpGCedj6PkG8nbIcTyIpjHIfe1QVXSz20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730296246; c=relaxed/simple;
-	bh=D7AqZoX4gYwteb6RFEF1+ZVpyBKM5MFuI9FZMJjT8pA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NzjIvZVrBwHJ8xA9b1jflLGbBGbyDeCdBsXczkVTfq6DGWyFDEQUxXMWrLpPYKX8nsF0K4h7egmwlLJOThCGYnehapTRYAOumIsplEJtzqK1R0st3fJI8ksRxhoB7iucIgYOcPoazSrt24PPRFIxx5UqI1jBla8YD0GGDLrrqZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=Yh3moyUG; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1730298084; c=relaxed/simple;
+	bh=bgOvNyxM1biWcyfhRvIlKkBu8+hSrIZJM9KA7N8pO9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VpnRGxs1Bd97AwOUAi6nm3ZLdzf9ueXSxfg+ZWHkBKNe9305hQjxP7htb1/Tka3QGPJSVnDc3k4Tewz7qv8KCnS42PADGQ2g81g3Gkc5cN0HNC0xDuSLj3mAZxyoE0a8/9spWg6uKspRl8u3cu/YFNpZBUeXh5V09PMHUrbcT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZRfhihB; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="Yh3moyUG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1730296100; x=1730900900; i=metux@gmx.de;
-	bh=D7AqZoX4gYwteb6RFEF1+ZVpyBKM5MFuI9FZMJjT8pA=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Yh3moyUGQiWIS5M+hsYMxsskv2Uv6AVjW1tdiExk6hc2qFHctV/5S+d5s0VDetbM
-	 ddXzSOgh4H9xiXZWdQQ9p/bxvJbpfC0cdzm2GjGMdqdGKR57jEv3O/HGnXyhdweD7
-	 ccaRv5YiORcBs53mTe9MAMZYMlaZpugACFe7+1ZbAb3e16vRosw+4uqYuCKyFoPSh
-	 ebsVFbcCQx46mA6re4AGlNQES/piXbnlltBhxqaooB41ez9ls791F95cmnbKf5nr/
-	 8wGbqi5BkhpQ516UfzX6Hh0kPqS8AZWmCVzVbglOwE3a8FbBCeynePOSL575ZcOid
-	 Dd1YAX2gyFNCokhe8Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3DO3-1t9iMT01nh-006fzu; Wed, 30
- Oct 2024 14:48:20 +0100
-Message-ID: <b410a7fb-58c0-4d17-b818-54ec3476833a@gmx.de>
-Date: Wed, 30 Oct 2024 14:48:37 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZRfhihB"
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e290e857d56so6273141276.1;
+        Wed, 30 Oct 2024 07:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730298081; x=1730902881; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=OZRfhihB1RSFRiQZIYCRpM+xQwtPAw8+ag3cxQPvjFlIsuEST4eQM5ctBi4SiY92fV
+         +TP5C3Ll7MM21/TOkewjYvrNtJmL9fvpDqBZwTuHDfhR3xifjcnzIjeA05uL3oRrJucR
+         hPi1LIsz2c4kkrYxMqFsAM39OQBsnLiZE+KmkT979UXT0MGTxJWFYUdrkGsaJQy6PhfS
+         gx+waNAI1UkQQ+axm6GWr23yhNTE7VfyV3wsbFyeYCHL7iq2Uhjds7VnPViiS0a1PTZh
+         QZiZp1YKdB7utIFkehqOLzGJQK1dBGFT867ThBTd7vw8cPHpwkLUjV3xFED1/CyB+9et
+         QqFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730298081; x=1730902881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=mdbXyxq7IuG9D5H+iOEVZpH1wVM9wwV2+udq0Y8SyTZo5ngTgl/DlR1t9C5RPpc9bG
+         UVrnRIxhqfVMVRzoh0tcFtf3SlMXZGY+Y1uomu1tR7nE2vxEN/mkZ5THOSzS2Zl4wOry
+         N9Hja4wzJ8CwfGpNGg5m/lv53Wg1OSooizK9Y+S6x0gtjywlT0Q6EorsO3/uZqhiXhnE
+         dXAhssopgQARqpHQQPuwSKLjKxk7IG10tH4LlhEg+gFLEvbY063VXC1FMEinrySUoSyx
+         Cv/HQOz/hUmy9gMKnK6uj3DUZt2P9KEYwPTKnbhGXqqcy0+QETJQkcyjPiSTydAXSRyE
+         gxiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdmjxWA5HaRz9eOBWnJwBvbikO3ijEkjrT9S5vcJw3f7uWgT/VjfbKnBlZDaFMGKRFHh/EZVUHnI38ew==@vger.kernel.org, AJvYcCUyme4PEsCO+7fM+2oQ8C4KnVj9Djtbfi2L+c+26AIc8G3xqubTJlNdnS6W71cAalEpKJ7D5yw8PqEa@vger.kernel.org, AJvYcCV0BeRSyuKjNekrJ+pvjF4EHv6PE0rXNw682geKf0TgOyTxyvLy04v/PfdTZEC6sN9WUST6/awI+CR+@vger.kernel.org, AJvYcCVCE8FIzPk6Gp5GH7n3+W4KehWfmJVkd5w8nuQ9zkX6H5QSV5ZcAcXgcGcRb2rl6BP3od5dR5k8lGjc@vger.kernel.org, AJvYcCWHdGZnO1uoEI+8PcfYVqo8jP6kleNRvU0O6eh+M+k61/4EzZXMje8klVkWMXLfG00Wwyqiunf97L4=@vger.kernel.org, AJvYcCWxomMWOISYgN/oljYLCdEQNjBgk8MVClwWl8s+i+lsCpzKGyNeDziAN6BPWq0czFxNdsgJJUcPQrFCHOQkzbM=@vger.kernel.org, AJvYcCXD6NYzciX1DThfUJlygTHZ+YJwt4AHZnABpUiO4uPhk/lcm23t/mL46p4HdkUCPcSidfnEyWCZbIOewWiH@vger.kernel.org, AJvYcCXQMleB2sakRCeoVoau1nbftjjXuOaA4mlPflJQaTvUob9G0dDfJBPc/YgmJ1eZryo/GfJV+gbUBtnJ@vger.kernel.org, AJvYcCXc3wFUTw7chbWZvoRpspylZbazFRP7grt9Sn8q+M3YZXoCDIYrs3l6DBUIdTXgL9ppVTONKT/pO8Yo+2s=@vger.kernel.org, AJvYcCXg7lBdSrWD00Rqk5I7GpHJ1nnKeWcJX5BoCezDuLQVUmGxYgAwG0WU+H9z74PG1lSaA5XBLSDf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9taKdlZ7n38xhsxTiz4wWdpWcXnrUpOqZiApuF6kHv1GHps5C
+	2ePChBf+5KjTbxZjkHohBF5yNWmfxcc/54+Ys5845QClfU4T03Bu+b9uwGRYMpsZ7eDAo/19xNE
+	IxIBAKX2vkyXEmMykO1USuOtgygk=
+X-Google-Smtp-Source: AGHT+IGKheT7lugnX8JlgJMn7QT/nmS4FJcCiGvJE3Pk7raMagj1Ij4TOsIejWemk17tl9iiaN1879b2lAZo9ua6oSM=
+X-Received: by 2002:a05:6902:c10:b0:e24:a0da:f89c with SMTP id
+ 3f1490d57ef6-e3087b7c21bmr15483239276.30.1730298081498; Wed, 30 Oct 2024
+ 07:21:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Kernel maintainer *CENSORED* on LKML [WAS: linux: Goodbye from a
- Linux community volunteer]
-To: =?UTF-8?Q?Dragan_Milivojevi=C4=87?= <d.milivojevic@gmail.com>,
- "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc: Peter Cai <peter@typeblog.net>, phoronix@phoronix.com,
- Goran <g@odyss3us.net>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Kory Maincent <kory.maincent@bootlin.com>,
- Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
- Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>,
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- Linus Torvalds <torvalds@linux-foundation.org>, "[DNG]"
- <dng@lists.dyne.org>, redaktion@golem.de, dev mail list <dev@suckless.org>
-References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
- <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
- <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net>
- <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
- <6d37175d-1b0b-4b82-80f0-c5b4e61badbf@metux.net>
- <2f12ee89-af9f-4af1-8ec8-ede1d5256592@metux.net>
- <CALtW_agiJyX3sTaBKgwPF7X920=+fFrRgXMPt4x_GCDOMfZy_w@mail.gmail.com>
- <CALtW_aimN531aZKSSG4hVLeQDk6bUoujopkhCh57xsaxfJrYgA@mail.gmail.com>
-Content-Language: tl
-From: metux <metux@gmx.de>
-In-Reply-To: <CALtW_aimN531aZKSSG4hVLeQDk6bUoujopkhCh57xsaxfJrYgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
+ <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
+ <20241025-modest-hasty-angelfish-1e9193-mkl@pengutronix.de>
+ <CAOoeyxU9VwsM=mRZy5AtjH=V3iSGQxkKw18qL+yeUxkh1OVHgQ@mail.gmail.com> <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+In-Reply-To: <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 30 Oct 2024 22:21:07 +0800
+Message-ID: <CAOoeyxUiFoU6hdj96ih4x_rUCBSzSCQ+vvab45=woZ3wLhNE7g@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:02/JYljBFpt12zmY0Go6Xkn401QYmKavoXnaT8EeSlrAHbRsx8n
- Zdvv/lLJxVdM8nFQizZfTKEW37UKSRmLg/f7sd3o97CFe9/qm8RP0UtwctZ+qxVObR/jFNw
- m13fSOqomvd7q+gMqAZ942T8v05wPOrYZpb9mIQDrg5MXcznAOy7aytPmL3VlgdapjHCO2n
- gp70ijx1LoNifjgVmNeng==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:XMcg9mQEW00=;8p/Sr9f43i/VMDKIw0uuN4zeFJj
- 4TzNACOpE4r2YbLQxZ5xl1PnYM+gpaKmM07XslwcqNngCXLB/XttSLHNSdEvR8s3B47NjhE4Z
- gzCXT1FKQIMCgB4RbRzC6MGKa+z4KYaV7xlHwMBOtWQFO7JG1x6IekOpKNRsdDBnGGQUPlX5Q
- NpiKIH7f7dZZbkUks6KHEL7Cw1yhhM+DDxR9v+J8Y3EbhOl+pqDAa5zkW031TMU6RP1NAEh8L
- w5W3BMaUImgWK3HjJCuWDQJW/uapa9utlZeZFhk75sKmzP+v1VvDNGawPrYnM7ZqwfhA2BDLH
- xCLmFjHW61xtNh01x6lEDKLLctnwXP5AGjDyUp+umcxFONS2fffaPA+V8uvn5YPPgJmqGElw7
- ALecE9QNd4O+9zMnfh5BS1I72wVO3CM0k8ewBwd2TTSh2X2ZZKSjE9eFtU23D8SV6SNHGq3VL
- hAB1H7fXdigm8b9aLmTxZjJ/1RMDu8ef4YggBoz1+WVG2VnrSKtNta/WWzAI3QtcBoZnsWcrO
- It2zyC6kJ8mGD8XBqofmwTlL3LP2+cvIE18rL7d36PTROQgvVSW7DFkJU1AspI6covtd35jCZ
- FXHGPfFDc+r41fAp7tjNc4DHJlUFZ3ga4LaJitNOM1JvBfmrazXfH21sxmaO6nAmN2F7MmKun
- 5BG2jzR0E2loJkz+FDYujXL4ittyLdbZ0KAQFKHl+5A+k48zyYBpc/peSRZITevB55Kav7VlS
- TchpkcgA4n3JLFkMgA95jPXj+i2mXrTz9GOVbUHx3l0Nfa7L3hALf6Ni2Zqc97rk3b9xf1z4d
- 4miKQK+swI7CsaCsEeJgfj+GwJ6elj8XkjCLKiEWjNXvk=
 
-On 29.10.24 20:33, Dragan Milivojevi=C4=87 wrote:
+Hi Marc,
 
-Hi,
+okay, I will implement it in the next patch,
+thank you very much!
 
->>> First I've thought it's just when replying specific mails, but now
->>> turned out *all* my mails are blocked, even totally unrelated things.
->>> I can confirm it's not by the message content, but my mail address or
->>> domain. I'm blocked from whole kernel.org
->>
->> Same thing on my end, partial sample: https://imgur.com/a/l4Jcfhk
+Best regards
+Ming
+
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8830=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:12=E5=AF=AB=E9=81=93=EF=BC=
+=9A
 >
-> And it is spreading, previous message to dng@lists.dyne.org was rejected=
- with:
+> On 30.10.2024 16:30:37, Ming Yu wrote:
+> > I am trying to register interrupt controller for the MFD deivce.
+> > I need to queue work to call handle_nested_irq() in the callback
+> > of the interrupt pipe, right?
 >
-> "Message rejected by filter rule match"
-
-Do you have some evidence that Devuan's mail server is really blocking
-us ?
-
-If so, I'd be exceptionally surprised.
-
-
-=2D-mtx
+> I think you can directly demux the IRQ from the interrupt endpoint
+> callback. But handle_nested_irq() only works from threaded IRQ context,
+> so you have to use something like generic_handle_domain_irq_safe().
+>
+> Have a look for how to setup the IRQ domain:
+>
+> | drivers/net/usb/lan78xx.c
+> | drivers/net/usb/smsc95xx.c
+>
+> But the IRQ demux in the lan78xx only handles the PHY IRQ. The ksz
+> driver does proper IRQ demux:
+>
+> | net/dsa/microchip/ksz_common.c
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
