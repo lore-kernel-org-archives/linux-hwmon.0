@@ -1,66 +1,66 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925A21BD9EB;
-	Wed, 30 Oct 2024 22:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4C11BD9EB;
+	Wed, 30 Oct 2024 22:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730328065; cv=none; b=IY6AwYmgFqZLMggErXvwzKzd+z8zoF5zvJFcFih5mPEv50RsHfLMRZ2O0K0XdJ7WRD0XpvHkNbOXk6L0YtwSUlh+SbVAPQc7MBxLGKjx7NlDevAtHf4fmW45OhyPI30OZZRzhMmARZamqUln+BKWs8yxWGRfM4uw+6JtRGWmsc4=
+	t=1730328106; cv=none; b=Xij7fsx1k9I3oxpiYpcdcfG1z94UuZfLtOBjDf9wyRYmznLDM7sGsY0pBwzE9hVjbZb7tBbGmjvEQKODWYWYWtXKuwAO3toTH88QDDFlZ32cdy5QC/t8fWQGrvhyHCKsJjLx89Aje73/lTrXpk798RQHpQ44Td8fdGupROLZLgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730328065; c=relaxed/simple;
-	bh=HSY4QFx4H2RKFrb4+AwGYoJidZl3g7aMM9z8fHlk2L0=;
+	s=arc-20240116; t=1730328106; c=relaxed/simple;
+	bh=Bd+9S1wV4kUjogO+1kzUX1OPC3IJ1vjNfiqjaf+r+Pc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uD+ENd6EWL5uStstfRBPqy1pHidXDL6IQ1J/e7+MaqZZiDPd2Hu1DKcrQ3uDp7OhfktPfnopLhPWXbe+AmWZSeKwczcE9XPcJc3+01jUKTlccFSdMWgGXhvIoukvY6tP3whNBB6EN4AG07VSrhBm1KW/xnBbU5C3D/u3LwqYpUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCP7aDcm; arc=none smtp.client-ip=209.85.161.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=plHqcM8zG9+lg1syj7sw9ugZACgul5n6cQqm6/wSJ45PH1oYg2GX09crFLYALcQ5sOabvmCv+cMAh4HsPsWQtBCWpYkkfS6r2KXSNss4FC8iC7kfP23pF25LsMF04z2c31kHNrMWioxB1EC6B4rumMS9BO2KDM9B6uGw/OptF8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bnlK+A62; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCP7aDcm"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5eb60f6b4a7so144256eaf.0;
-        Wed, 30 Oct 2024 15:41:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bnlK+A62"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5eba450531eso738066eaf.1;
+        Wed, 30 Oct 2024 15:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730328061; x=1730932861; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730328103; x=1730932903; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NeW30jfrwUohCRmAQNXhpS4+Q2CX5xqoGyIMowFcCh8=;
-        b=TCP7aDcmEc30ogIxQCwKgimQKQDCZALQeJeok1U7Fh1aMjAoG4XGceyGz4V3/CUkFl
-         rgoonrWMXLGAcHiBRm3c2pU5dw+odT8aZSlYnEUKmAXYwpEnroq6FQh6iWe4kKQQoCD6
-         yk5rhGmHztxH/vimQ7u+KTaQF5W8nYylBs7jAQUdei+mL2gZ2E/1MG2p4hbJiQS5fuGp
-         lCynhOkJDXyrUcnLD+2jjxCsZgcJsR39wMbmM227hJQpwL0xdyMtXA0fg43GkrBN0/WU
-         OCLLJuAfEwp7gLZkqMcZ5A7JqVD8YV2Rxgbbtpe1UaGzw3oXgKvTOgWyIUYyEAXeIo2I
-         j7Eg==
+        bh=5+DwSwN+f1TWnzqmhelfmmEne6kIMIbAyJKh/tFg1yA=;
+        b=bnlK+A62Qc1zKLL0C05/pETHS2N+cqE2cr4KtA2wJq40fMgm+86gOsiLEeRhDMyie0
+         0H6BuH8OSe//flAhjQ7+esPpJbGyaqYH2v1IyfI1LbNYc3LmLqNX0pcXzKxLPASSaSpF
+         YEUxzaSoxvUhy7D7GMUXW8pJL/1eS2r5b7QAIsGv1VAxm9MV7B1l7hn6tRQ5nJYVXiwQ
+         6D4AZbrUc/7/JpoioLU+iLwCF3rtUHSCiqS5T4CVTads0jLYRWXLyPBCU9Jmvll5+Q19
+         6Pywn0pK6fYu1wpH6Pjf+xgbOSfZ2EVhv1uXyyKXzk1lNwK45I/AzKGBWGeyfFyY1sj+
+         UgdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730328061; x=1730932861;
+        d=1e100.net; s=20230601; t=1730328103; x=1730932903;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NeW30jfrwUohCRmAQNXhpS4+Q2CX5xqoGyIMowFcCh8=;
-        b=Qe9w7DCLAmyhpzOVjKgkFWH/J82EuxSwDMWdoUJl2bvaOFch/MKfwiq6XN9npBz9Ed
-         uOfN68C62qUQbYbU/jaHfkM+oFf5BQxwrg6/HbJLKFFcBzOPTXgFIr6dVEdlKVz+82OD
-         j9ELN6bhHKH59fq6KB8Cl52fbgBCWSxJa5iM0HMcgkfaAnP45yCsWPwH5CVGaOJNnWnK
-         /LPXLOHfEotZIelTdawp0ACwL4/NjI20SpvZ7ZjbgCG8ahUi2BT/F1IVL2h34Y459Scc
-         vLADKfVmcBHrzCV5mZXGnEF6CBBCkDEevovGnIU5xJzpqU1WN0haIPKnLKUVHQG9Ucbn
-         4PDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVtq++lYrIOpGhx9idmhQozDqqSn9Lse7RRGXJ4FMzauUfeEOV/fDIeM17rnwUbRuVFC83/KaE4Zmy5@vger.kernel.org, AJvYcCW2ncdMnFORyr7OJZd0daP7SCBnLYurKzHanONAUQ8Sh0Ybw0x8Nz1Tgc+WhYFv3QVTD3e+deY2M7JBw1M=@vger.kernel.org, AJvYcCXr7HGtRqKZWhGH/t9xMyUw7Ch02ObfiihCstV14bLY5QCQiAHaYMjij/Fcw3QmnXnS6Dxllz65n0qU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrezXLvO0RbF2Oy31fI4JTyjUKaF9RHgC+cO2HT6j2OoutKF+M
-	4qMWVQhLT7lpEl83cCSWVOZ5zkUS4nySJmLY7BZVE5Hc6zkkvg+25j6eOOQf
-X-Google-Smtp-Source: AGHT+IFFn0Nk860biVolgWGFhLVE4FHknRY0i9XVI8UdRKjqK5zzvo8TW2/S/nhVsv6aS9BVgD4mgg==
-X-Received: by 2002:a05:6820:1501:b0:5e7:caf5:ae1f with SMTP id 006d021491bc7-5ec238a7adcmr10998214eaf.2.1730328061648;
-        Wed, 30 Oct 2024 15:41:01 -0700 (PDT)
+        bh=5+DwSwN+f1TWnzqmhelfmmEne6kIMIbAyJKh/tFg1yA=;
+        b=A7IIyEe2LLUqxgjQrM02pg3d2pMoDxWIgn8+sTZY1OlUR+WbgnJA76mEVNSb5jO1IH
+         1Mv3xZ4s2t1eq/NSr6lLwzvd3z8GqtxKKsliw12h4mEx3+MrHpAnwkh6SmuCp40ScJzz
+         0gJ/ViXrXmEeDfa52jcSB9enbjECXdLabfgk9a4O7JSycLK0jTBaUw6xWjLE3jn0XyIL
+         4y75WB6uMiQHbIOcLlFgKs3WS9h6RApwpOU641tvZm3Y60RUIyxWItybYoxYekCdPl28
+         xvph8+cOAeh81mGEx1U8FyN5dv9WcajusRWUEf4K/ipoClgRkx9RGVXw4ueSnwGUNEUw
+         55lg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFXQcMfEObpRjqGdWdOTxLgs4Y7WeynbxHfjTQDMpGk0/WXr8zxSDKCiYmJXd66JAqA7fWnDXLY2BMiOc=@vger.kernel.org, AJvYcCWHVWWSSvBzAmS6P9MuCWebOF+B5Q/uEM8isaenMY/p5hbqzwmNeeppdTZ6biYmEZj0Sd7aI76lLLam@vger.kernel.org, AJvYcCXDN/1goy2y6N61jQTWgoUtJJ/atpEN4hLcW+rLF2OcDuco/ZhRM796P1C/Y8qQNapQpt75J0vhk29x@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/jkz0XvlW3Vdiwc5vehLEp79oKWnOSNy8vBgwBeVyAewjbTae
+	pDRVsdZYTKTwbJAhS9x6gGDeCjTY/3PJDsC0bSJ3FMbEwSkc4LGc
+X-Google-Smtp-Source: AGHT+IHhBzFSSyu1erQl9J1Slu2oQqdHzl0pXPnKk6X8Y/5j/q3GxGOnUB+3x5wRJK7C0Vv4lkeONg==
+X-Received: by 2002:a05:6870:d622:b0:288:4407:55cc with SMTP id 586e51a60fabf-294887709e5mr181601fac.8.1730328102124;
+        Wed, 30 Oct 2024 15:41:42 -0700 (PDT)
 Received: from raspberrypi ([2600:1700:90:4c80::3b])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5ec70532d1dsm39502eaf.27.2024.10.30.15.40.59
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-29487429f8csm115166fac.7.2024.10.30.15.41.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 15:41:01 -0700 (PDT)
-Date: Wed, 30 Oct 2024 17:40:58 -0500
+        Wed, 30 Oct 2024 15:41:41 -0700 (PDT)
+Date: Wed, 30 Oct 2024 17:41:39 -0500
 From: Grant Peltier <grantpeltier93@gmail.com>
 To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
 	magnus.damm@gmail.com
 Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v6 1/2] hwmon: (pmbus/isl68137) add support for voltage
- divider on Vout
-Message-ID: <2189696bf68e64e8f8e41e71f11194c1f8a2889f.1730326916.git.grantpeltier93@gmail.com>
+Subject: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to support
+ voltage dividers
+Message-ID: <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
 References: <cover.1730326915.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -72,333 +72,179 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1730326915.git.grantpeltier93@gmail.com>
 
-Some applications require Vout to be higher than the detectable voltage
-range of the Vsense pin for a given rail. In such applications, a voltage
-divider may be placed between Vout and the Vsense pin, but this results
-in erroneous telemetry being read back from the part. This change adds
-support for a voltage divider to be defined in the devicetree for a (or
-multiple) specific rail(s) for a supported digital multiphase device and
-for the applicable Vout telemetry to be scaled based on the voltage
-divider configuration.
+Add devicetree bindings to support declaring optional voltage dividers to
+the rail outputs of supported digital multiphase regulators. Some
+applications require Vout to exceed the voltage range that the Vsense pin
+can detect. This binding definition allows users to define the
+characteristics of a voltage divider placed between Vout and the Vsense
+pin for any rail powered by the device.
 
-This change copies the implementation of the vout-voltage-divider
-devicetree property defined in the maxim,max20730 bindings schema since
-it is the best fit for the use case of scaling hwmon PMBus telemetry. The
-generic voltage-divider property used by many iio drivers was determined
-to be a poor fit because that schema is tied directly to iio and the
-isl68137 driver is not an iio driver.
+These bindings copy the vout-voltage-divider property defined in the
+maxim,max20730 bindings schema since it is the best fit for the use case
+of scaling hwmon PMBus telemetry. The generic voltage-divider property
+used by many iio drivers was determined to be a poor fit because that
+schema is tied directly to iio for the purpose of scaling io-channel
+voltages and the isl68137 driver is not an iio driver.
 
 Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
 ---
- drivers/hwmon/pmbus/isl68137.c | 209 ++++++++++++++++++++++++++++++++-
- 1 file changed, 204 insertions(+), 5 deletions(-)
+ .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
 
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 7e53fb1d5ea3..cd0cc82c18e7 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -13,6 +13,7 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/string.h>
- #include <linux/sysfs.h>
- 
-@@ -20,6 +21,7 @@
- 
- #define ISL68137_VOUT_AVS	0x30
- #define RAA_DMPVR2_READ_VMON	0xc8
-+#define MAX_CHANNELS            4
- 
- enum chips {
- 	isl68137,
-@@ -72,6 +74,17 @@ enum variants {
- 	raa_dmpvr2_hv,
- };
- 
-+struct isl68137_channel {
-+	u32 vout_voltage_divider[2];
-+};
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+new file mode 100644
+index 000000000000..ed659c2baadf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+@@ -0,0 +1,147 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
 +
-+struct isl68137_data {
-+	struct pmbus_driver_info info;
-+	struct isl68137_channel channel[MAX_CHANNELS];
-+};
++$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#define to_isl68137_data(x)	container_of(x, struct isl68137_data, info)
++title: Renesas Digital Multiphase Voltage Regulators with PMBus
 +
- static const struct i2c_device_id raa_dmpvr_id[];
- 
- static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
-@@ -163,13 +176,32 @@ static const struct attribute_group *isl68137_attribute_groups[] = {
- static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 				     int phase, int reg)
- {
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	const struct isl68137_data *data = to_isl68137_data(info);
- 	int ret;
-+	u64 temp;
- 
- 	switch (reg) {
- 	case PMBUS_VIRT_READ_VMON:
- 		ret = pmbus_read_word_data(client, page, phase,
- 					   RAA_DMPVR2_READ_VMON);
- 		break;
-+	case PMBUS_READ_POUT:
-+	case PMBUS_READ_VOUT:
-+		/*
-+		 * In cases where a voltage divider is attached to the target
-+		 * rail between Vout and the Vsense pin, both Vout and Pout
-+		 * should be scaled by the voltage divider scaling factor.
-+		 * I.e. Vout = Vsense * Rtotal / Rout
-+		 */
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret > 0) {
-+			temp = DIV_U64_ROUND_CLOSEST((u64)ret *
-+				data->channel[page].vout_voltage_divider[1],
-+				data->channel[page].vout_voltage_divider[0]);
-+			ret = clamp_val(temp, 0, 0xffff);
-+		}
-+		break;
- 	default:
- 		ret = -ENODATA;
- 		break;
-@@ -178,6 +210,40 @@ static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 	return ret;
- }
- 
-+static int raa_dmpvr2_write_word_data(struct i2c_client *client, int page,
-+				      int reg, u16 word)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	const struct isl68137_data *data = to_isl68137_data(info);
-+	int ret;
-+	u64 temp;
++maintainers:
++  - Grant Peltier <grant.peltier.jg@renesas.com>
 +
-+	switch (reg) {
-+	case PMBUS_VOUT_MAX:
-+	case PMBUS_VOUT_MARGIN_HIGH:
-+	case PMBUS_VOUT_MARGIN_LOW:
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+	case PMBUS_VOUT_COMMAND:
-+		/*
-+		 * In cases where a voltage divider is attached to the target
-+		 * rail between Vout and the Vsense pin, Vout related PMBus
-+		 * commands should be scaled based on the expected voltage
-+		 * at the Vsense pin.
-+		 * I.e. Vsense = Vout * Rout / Rtotal
-+		 */
-+		temp = DIV_U64_ROUND_CLOSEST((u64)word *
-+				data->channel[page].vout_voltage_divider[0],
-+				data->channel[page].vout_voltage_divider[1]);
-+		ret = clamp_val(temp, 0, 0xffff);
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+	return ret;
-+}
++description: |
++  Renesas digital multiphase voltage regulators with PMBus.
++  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
 +
- static struct pmbus_driver_info raa_dmpvr_info = {
- 	.pages = 3,
- 	.format[PSC_VOLTAGE_IN] = direct,
-@@ -220,14 +286,91 @@ static struct pmbus_driver_info raa_dmpvr_info = {
- 	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
- };
- 
-+static int isl68137_probe_child_from_dt(struct device *dev,
-+					struct device_node *child,
-+					struct isl68137_data *data)
-+{
-+	u32 channel, rout, rtotal;
-+	int err;
++properties:
++  compatible:
++    enum:
++      - renesas,isl68220
++      - renesas,isl68221
++      - renesas,isl68222
++      - renesas,isl68223
++      - renesas,isl68224
++      - renesas,isl68225
++      - renesas,isl68226
++      - renesas,isl68227
++      - renesas,isl68229
++      - renesas,isl68233
++      - renesas,isl68239
++      - renesas,isl69222
++      - renesas,isl69223
++      - renesas,isl69224
++      - renesas,isl69225
++      - renesas,isl69227
++      - renesas,isl69228
++      - renesas,isl69234
++      - renesas,isl69236
++      - renesas,isl69239
++      - renesas,isl69242
++      - renesas,isl69243
++      - renesas,isl69247
++      - renesas,isl69248
++      - renesas,isl69254
++      - renesas,isl69255
++      - renesas,isl69256
++      - renesas,isl69259
++      - renesas,isl69260
++      - renesas,isl69268
++      - renesas,isl69269
++      - renesas,isl69298
++      - renesas,raa228000
++      - renesas,raa228004
++      - renesas,raa228006
++      - renesas,raa228228
++      - renesas,raa229001
++      - renesas,raa229004
 +
-+	err = of_property_read_u32(child, "reg", &channel);
-+	if (err) {
-+		dev_err(dev, "missing reg property of %pOFn\n", child);
-+		return err;
-+	}
-+	if (channel >= data->info.pages) {
-+		dev_err(dev, "invalid reg %d of %pOFn\n", channel, child);
-+		return -EINVAL;
-+	}
++  reg:
++    maxItems: 1
 +
-+	err = of_property_read_u32_array(child, "vout-voltage-divider",
-+				data->channel[channel].vout_voltage_divider,
-+				ARRAY_SIZE(data->channel[channel].vout_voltage_divider));
-+	if (err && err != -EINVAL) {
-+		dev_err(dev,
-+			"malformed vout-voltage-divider value for channel %d\n",
-+			channel);
-+		return err;
-+	}
++  '#address-cells':
++    const: 1
 +
-+	rout = data->channel[channel].vout_voltage_divider[0];
-+	rtotal = data->channel[channel].vout_voltage_divider[1];
-+	if (rout == 0) {
-+		dev_err(dev,
-+			"Voltage divider output resistance must be greater than 0\n");
-+		return -EINVAL;
-+	}
-+	if (rtotal < rout) {
-+		dev_err(dev,
-+			"Voltage divider total resistance is less than output resistance\n");
-+		return -EINVAL;
-+	}
++  '#size-cells':
++    const: 0
 +
-+	return 0;
-+}
++patternProperties:
++  "^channel@([0-3])$":
++    type: object
++    description:
++      Container for properties specific to a particular channel (rail).
 +
-+static int isl68137_probe_from_dt(struct device *dev,
-+				  struct isl68137_data *data)
-+{
-+	const struct device_node *np = dev->of_node;
-+	struct device_node *child;
-+	int err;
++    properties:
++      reg:
++        description: The channel (rail) index.
++        items:
++          minimum: 0
++          maximum: 3
 +
-+	for_each_child_of_node(np, child) {
-+		if (strcmp(child->name, "channel"))
-+			continue;
++      vout-voltage-divider:
++        description: |
++          Resistances of a voltage divider placed between Vout and the voltage
++          sense (Vsense) pin for the given channel (rail). It has two numbers
++          representing the resistances of the voltage divider provided as
++          <Rout Rtotal> which yields an adjusted Vout as
++          Vout_adj = Vout * Rtotal / Rout given the original Vout as reported
++          by the Vsense pin. Given a circuit configuration similar to the one
++          below, Rtotal = R1 + Rout.
 +
-+		err = isl68137_probe_child_from_dt(dev, child, data);
-+		if (err)
-+			return err;
-+	}
++            Vout ----.
++                     |
++                  .-----.
++                  | R1  |
++                  '-----'
++                     |
++                     +---- Vsense
++                     |
++                  .-----.
++                  | Rout|
++                  '-----'
++                     |
++                    GND
 +
-+	return 0;
-+}
++        $ref: /schemas/types.yaml#/definitions/uint32-array
++        minItems: 2
++        maxItems: 2
 +
- static int isl68137_probe(struct i2c_client *client)
- {
-+	struct device *dev = &client->dev;
- 	struct pmbus_driver_info *info;
-+	struct isl68137_data *data;
-+	int i, err;
- 
--	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
--	if (!info)
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
- 		return -ENOMEM;
--	memcpy(info, &raa_dmpvr_info, sizeof(*info));
++    required:
++      - reg
 +
-+	/*
-+	 * Initialize all voltage dividers to Rout=1 and Rtotal=1 to simplify
-+	 * logic in PMBus word read/write functions
-+	 */
-+	for (i = 0; i < MAX_CHANNELS; i++)
-+		memset(data->channel[i].vout_voltage_divider,
-+			1,
-+			sizeof(data->channel[i].vout_voltage_divider));
++    additionalProperties: false
 +
++required:
++  - compatible
++  - reg
 +
-+	memcpy(&data->info, &raa_dmpvr_info, sizeof(data->info));
-+	info = &data->info;
- 
- 	switch (i2c_match_id(raa_dmpvr_id, client)->driver_data) {
- 	case raa_dmpvr1_2rail:
-@@ -242,6 +385,7 @@ static int isl68137_probe(struct i2c_client *client)
- 	case raa_dmpvr2_1rail:
- 		info->pages = 1;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
-+		info->write_word_data = raa_dmpvr2_write_word_data;
- 		break;
- 	case raa_dmpvr2_2rail_nontc:
- 		info->func[0] &= ~PMBUS_HAVE_TEMP3;
-@@ -250,9 +394,11 @@ static int isl68137_probe(struct i2c_client *client)
- 	case raa_dmpvr2_2rail:
- 		info->pages = 2;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
-+		info->write_word_data = raa_dmpvr2_write_word_data;
- 		break;
- 	case raa_dmpvr2_3rail:
- 		info->read_word_data = raa_dmpvr2_read_word_data;
-+		info->write_word_data = raa_dmpvr2_write_word_data;
- 		break;
- 	case raa_dmpvr2_hv:
- 		info->pages = 1;
-@@ -263,11 +409,16 @@ static int isl68137_probe(struct i2c_client *client)
- 		info->m[PSC_POWER] = 2;
- 		info->R[PSC_POWER] = -1;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
-+		info->write_word_data = raa_dmpvr2_write_word_data;
- 		break;
- 	default:
- 		return -ENODEV;
- 	}
- 
-+	err = isl68137_probe_from_dt(dev, data);
-+	if (err)
-+		return err;
++additionalProperties: false
 +
- 	return pmbus_do_probe(client, info);
- }
- 
-@@ -318,11 +469,59 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
- 
- MODULE_DEVICE_TABLE(i2c, raa_dmpvr_id);
- 
-+static const struct of_device_id isl68137_of_match[] = {
-+	{ .compatible = "renesas,isl68137", .data = (void *)raa_dmpvr1_2rail },
-+	{ .compatible = "renesas,isl68220", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl68221", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl68222", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl68223", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl68224", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl68225", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl68226", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl68227", .data = (void *)raa_dmpvr2_1rail },
-+	{ .compatible = "renesas,isl68229", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl68233", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl68239", .data = (void *)raa_dmpvr2_3rail },
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
 +
-+	{ .compatible = "renesas,isl69222", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69223", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl69224", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69225", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69227", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl69228", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl69234", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69236", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69239", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl69242", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69243", .data = (void *)raa_dmpvr2_1rail },
-+	{ .compatible = "renesas,isl69247", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69248", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69254", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69255", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69256", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69259", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69260", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69268", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,isl69269", .data = (void *)raa_dmpvr2_3rail },
-+	{ .compatible = "renesas,isl69298", .data = (void *)raa_dmpvr2_2rail },
++      isl68239@60 {
++        compatible = "renesas,isl68239";
++        reg = <0x60>;
++      };
++    };
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
 +
-+	{ .compatible = "renesas,raa228000", .data = (void *)raa_dmpvr2_hv },
-+	{ .compatible = "renesas,raa228004", .data = (void *)raa_dmpvr2_hv },
-+	{ .compatible = "renesas,raa228006", .data = (void *)raa_dmpvr2_hv },
-+	{ .compatible = "renesas,raa228228", .data = (void *)raa_dmpvr2_2rail_nontc },
-+	{ .compatible = "renesas,raa229001", .data = (void *)raa_dmpvr2_2rail },
-+	{ .compatible = "renesas,raa229004", .data = (void *)raa_dmpvr2_2rail },
-+	{ },
-+};
++      isl68239@60 {
++        compatible = "renesas,isl68239";
++        reg = <0x60>;
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
-+MODULE_DEVICE_TABLE(of, isl68137_of_match);
-+
- /* This is the driver that will be inserted */
- static struct i2c_driver isl68137_driver = {
- 	.driver = {
--		   .name = "isl68137",
--		   },
-+		.name = "isl68137",
-+		.of_match_table = isl68137_of_match,
-+	},
- 	.probe = isl68137_probe,
- 	.id_table = raa_dmpvr_id,
- };
++        channel@0 {
++          reg = <0>;
++          vout-voltage-divider = <1000 2000>;  // Reported Vout/Pout would be scaled by 2
++        };
++      };
++    };
 -- 
 2.39.5
 
