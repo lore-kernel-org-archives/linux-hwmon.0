@@ -1,129 +1,112 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81831E1023;
-	Wed, 30 Oct 2024 12:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8B51E9066;
+	Wed, 30 Oct 2024 12:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292044; cv=none; b=Lg6v0DVz5fZjoZJZD2L6Jvck8zRpv4ZhgIgQk/qSQn+pltJqp9eXQeWe/a1jzSScEqe6CMDgrN8GkJgr6nvkLM6jNAVbU8i5mXuGISZeVvUNQVgPKB5rUQgF4LlK9zQmuKi9DEQkE3ScDVBMhgTDplXnfSpujWXSINRgCdPYEKg=
+	t=1730292587; cv=none; b=tTBqZdEbrR6j1L0WV7aTvrbcOhp/wn9myBG0TKQ41+VmI7zMf/vLPnnQ3SObAXUxNib8+KZSeq2WwNNb5gaW0B3EWrIXWMvnIWgYe87vsFdynU1jQkUGlhHc8rhruVblYSNNLDzGL6HN/LiSTcBAu0DPFBBKeHW1gEjswYBiS5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292044; c=relaxed/simple;
-	bh=0qAAzGekVtowe4cps1erqjPh++mnzXN1zf/BuEP3m4U=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=h6r/pABxOTnhPl6S1QVEXGpVRkCC8fpvWlRMG+BatohQSMhDlifn48fnXa85hUsjND5MkdnLWddhWVpih7GQAzSZPI5XjJgiJGbTLT0FZVsCCRNPSQRhbHz3kYSWkTyuXZoU66gZarGMCQ3+vbZ88lwKsLBezOWiQvv7b2G5j8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D+QsQA4F; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KQ345wXD; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1730292587; c=relaxed/simple;
+	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OwPtEP3D/a3ACyOXZS2HVEF7dK4/AyQzb7VLQfdEEomhe6oS+Wz9o41KmnN58L7qj/wMkMw8u5ZvVbt358Yhv9Zw6qkgwitjzfxDke2GpKYJhYWjgfsw/BeqqrEz3yQsIn5ofkeUQig1lHEeQsLzi6uuc1Xt8nVL0jQS790QoDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=UxbVmpXW; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D+QsQA4F";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KQ345wXD"
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id C90CE138021D;
-	Wed, 30 Oct 2024 08:40:39 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Wed, 30 Oct 2024 08:40:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1730292039;
-	 x=1730378439; bh=3/PyFIXHNwwlaFvxYykZOeb+fLtobP6/CYzQcrA2KAg=; b=
-	D+QsQA4FRY/8ASWL5YsRhv+9koR30qp+3O9GDYhtfannboPHAlDxTItLzipaT0Ay
-	jLEVuzVtnuQOgZrIPlF88mHICVocgbkPQWOofmbEKMfCjCImLWdVg7aSNu17CEI8
-	XjvXPR8w3w0OGOv1J++B06ed80CuwSSebh9JzT7kyHV2vk1vd/nQZD8fPe1ljMdr
-	KbF+Odgbp/9f51m4YM9GT7ZQlkXTXvaTRbRFV7I8yAaXQDL+/mFkDoC1LJtZ41nF
-	bRG+1dXvy65ZlJZruNwSNmJqLLYeVTX+gUpNIGsbKpbBpOaQTbvUbF18dU2rbSZo
-	h42CxIeSV1o0SHsiKeI7Hw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730292039; x=
-	1730378439; bh=3/PyFIXHNwwlaFvxYykZOeb+fLtobP6/CYzQcrA2KAg=; b=K
-	Q345wXDk/nPB3d/CqCW52yCIm+RpLnpA5NKv9NaEjvOH3RkR5xaB1AQ1HSVgWkzP
-	74vDHkfTXkeUcJ7ZjEkHZyaO4ODNZ3KddPage1n0G/U/OuSmM1gyK0AMENUrtUik
-	tjyRcY6X6otN09Ml1QxZsxqjEDiyIjaw5GrCR4k4e/KMhpXh1g2Nw6WjjQQdVsb9
-	UGrBqYjVqE9qKtoM7251gMvOiOddEOgoZdnJP9CEJ7HAXUJPvj5TMaFO29iLUtt2
-	XTeqwd9JEaB/vBzZSHCkZAxxJ2OCDkFlnM8GlH0ynWZMplXZfvPHz7IMENG4a5hH
-	K1a2XEg6M5BkCHMj2CpkA==
-X-ME-Sender: <xms:RykiZ2f3IqHF9f5UT5p3s9lpyCWltVEMbe3XL9fWSbYb_qoEMsqeMg>
-    <xme:RykiZwP9E7Oo1IsLrRus_PQkVuzpgBmliUqTEvGss4e8DbDtnBAsYaRJ3Ixzaiv3e
-    bFpev9tQ4Bk6KobH3o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekfedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudef
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehjohhnrghthhgrnhdrtggrmhgvrh
-    honheshhhurgifvghirdgtohhmpdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfh
-    grvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehilhhpohdrjhgrrhhvihhnvghn
-    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuh
-    igfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohephhguvghgohgvuggvsehrvggu
-    hhgrthdrtghomhdprhgtphhtthhopehlihhnuhigsehrohgvtghkqdhushdrnhgvthdprh
-    gtphhtthhopehjuggvlhhvrghrvgesshhushgvrdgtohhm
-X-ME-Proxy: <xmx:RykiZ3jE9wRvtMd7ykr9VA2jmaLtOIsUhT6X8S8mv1MTQKJOcWBBoA>
-    <xmx:RykiZz_jhStJmuADBQwO0N0-CAgcF54ooRyRGTIuQpadK65hSGNt0w>
-    <xmx:RykiZysghC6avGitncwY5ua74hKtCta3CXNaUEkdc8Rg6COJlxevMA>
-    <xmx:RykiZ6HwsvUWHgN6hJDO2E0KmT-ZgV6s7V1zefHJypnNqCVzU01nDw>
-    <xmx:RykiZzHXtXVCf-1-f7KdRUW9WpB1zhtavEXzHr3-4j-lTezpRj77Gkzg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 58DF52220071; Wed, 30 Oct 2024 08:40:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="UxbVmpXW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1730292502; x=1730897302; i=metux@gmx.de;
+	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UxbVmpXWvyWFMdu+GATuiw1ytz1oNpvm5GNdgPbapjupaP25dsmWNYV/SdmkFCpE
+	 VX+3bwgCyi7J1vZWt8hxBFNjCqYXAs/90EF5MTi5XI4T3wPAud49gsLSmSGWAgCFH
+	 L/MlMEdcnBrC3Z6I/Y0EX4qgIzoVFOZM2ueUS8NENLEQofE14R0wXa31OvlhCEm1F
+	 9lgOEB79j/9vjsYX9KbXu2T/UCUxO61Yl+VZqyc98kF/0soDrfczquDVKjoNkb+Qg
+	 C3a2MT2iG3Shr2kXGTjhv+n6z7zTnhYsIVyC7TaB+61rRJr4ZYE9Z0EHkdrRrpF0j
+	 0MTyH7Gn6TRMn1XJ3Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUXpK-1tExqH3yV6-00WDT5; Wed, 30
+ Oct 2024 13:48:22 +0100
+Message-ID: <d769ffcf-95e6-4db9-8f80-fe8a7dae0441@gmx.de>
+Date: Wed, 30 Oct 2024 13:48:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 30 Oct 2024 12:40:18 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Len Brown" <lenb@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jean Delvare" <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>,
- "Hans de Goede" <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Message-Id: <43b6bbd9-ef5e-4031-9322-fecfa2a5c5cd@app.fastmail.com>
-In-Reply-To: 
- <CAJZ5v0iCvPuey3EN5D5+0QNt5ZkQN5TtfKhA7Qod0_JBFbsB=g@mail.gmail.com>
-References: <20241011061948.3211423-1-arnd@kernel.org>
- <CAJZ5v0jX1Ga9g8BweYJT2GQsJh03pD_imrY7tCP-Xg_gq0EbOA@mail.gmail.com>
- <CAJZ5v0iCvPuey3EN5D5+0QNt5ZkQN5TtfKhA7Qod0_JBFbsB=g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] acpi: make EC support compile-time conditional
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla Thunderbird
+Subject: lore.kernel.org getting senile ? [WAS: [PATCH 1/2] MAINTAINERS:
+ Remove Huawei due to compilance requirements.
+To: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>,
+ torvalds@linux-foundation.org
+Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
+ dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
+ geert@linux-m68k.org, gregkh@linuxfoundation.org,
+ hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru, jeffbai@aosc.io,
+ kexybiscuit@aosc.io, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+ manivannan.sadhasivam@linaro.org, mattst88@gmail.com,
+ netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev,
+ patches@lists.linux.dev, richard.henderson@linaro.org, s.shtylyov@omp.ru,
+ serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org,
+ tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com,
+ wsa+renesas@sang-engineering.com, xeb@mail.ru,
+ LKML <linux-kernel@vger.kernel.org>, phoronix@phoronix.com,
+ redaktion@golem.de
+References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+ <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
+ <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
+Content-Language: tl
+From: metux <metux@gmx.de>
+In-Reply-To: <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:1/p4ha3marvAu2CXeYNmBSD+weQhVbztKCP0nISPKnffRdbsPI3
+ zPctzMmHLcQZTqlh2zjZzgis1SjXx91Sovsuto7k7PtiaIGSg5OcFzLBWgRcu14kWBAZy2V
+ 6iBOO6GAd+WQX6yFBtItp11ISEXll6ojoO2a1WoqxVo2LnaaL9WPMNYPLxG752dUTxTITZF
+ LcInJHKfb0M4bP+h7xstA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4vaZnIPP94U=;1c9up5UAbh4Ag/QzXUXNQvA2l0p
+ 44Ceg39Q9FQgjnuFRb4ctiEQZ6+ThY3ohI4R7ghaxJvwW9GLmQklj8ELuO6HJZM3haO1kBQuj
+ lPf9DjnCWUfcGZ6Ecr8v4m+aEFlTj6r1/zlhPs8EVJwnS4Pe706PuXTBJpkg5WIn7GxOQO2JW
+ XajGhvRcjBrJhZNk7taO4FNBbp5dLDGkB6UepQiBXV68RMT6oTpFOwswwn3/eBeat+lHalNB/
+ gw+WciTtplBXIMbtRlqxaAJboJIHQLy0eXfzWRe/U26hY4FalvSL6RW63w2giJVSyCEe63Xf2
+ pnU7T294h4NAY+Lk1Uh+0usTGhMn+kqSHhbyz6XuQ9SUym/02iNMzOAUQU4B9rMEU5q6ZVIUd
+ 0PZ3f2zoM/AhE/8kfql73M86UBv0ANHdx6CqwXixMw8ZaIdo+GaFI0OcAUT9fQKIyYZczFTBp
+ AGABaZ971CQOkfqz9ZNcYAdXDG9laz6+7WLmruYJKXEeAyGdx7twTMJrs8FULcTe1ZOzQm3ZB
+ DT9XeRboVEyBNz53wj4/qAD1UsQODVRq/XAMxGruSGXdp9S8U1GLjLvbeblVDHTp4i143RIfc
+ UOHfXVzYXn7bC0uCHBJq1Wwe+j/PPMUEteRmxPqlOJxW/zJnk/+MhQ+nsjD3nQeqM4mO62C+8
+ cGyUVjqqCH9JFck+CUdFeZs+muR6CcuaNof+jRlxFMXiRxLHv+44RU3hyg04PrdKE21G5zjmC
+ EK9fu4IcYIpfrqOOb5TemzZQb0+1b1bsoLkyszrXyxOXZlQryGt702z9+snDKhQG4NhdmMGOd
+ ZwypTOh+SvzsGp5g+0qej1rGVGE9aJPkSwI0X0drGzsuc=
 
-On Thu, Oct 24, 2024, at 15:49, Rafael J. Wysocki wrote:
-> On Mon, Oct 21, 2024 at 1:39=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
-el.org> wrote:
->> On Fri, Oct 11, 2024 at 8:19=E2=80=AFAM Arnd Bergmann <arnd@kernel.or=
-g> wrote:
->> >
->> > All the direct callers of ec_read/ec_write already had an x86
->> > dependency and now also need to depend on APCI_EC.
->> >
->> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>
->> I think I can pick up this one as the other two patches in the series
->> don't depend on it.
->>
->> Any concerns about doing that?
+On 24.10.24 16:03, Vladimir Vladimirovich Putin wrote:
+> Huawei Corp was added to the US Entity List[1] on 08/20/2020.
 >
-> No concerns, so applied (as 6.13 material, with minor edits in the sub=
-ject).
->
-> The other two patches in the series need to be updated AFAICS.
+> The Entity List is a trade restriction list published by the United
+> States Department of Commerce's Bureau of Industry and Security (BIS),
+> consisting of certain foreign persons, entities, or governments.
+> It is published as Supplement 4 of Part 744 of the Code
+> of Federal Regulations. [2]
 
-Thanks for picking up the first patch, I sent the other
-updated patches as well now.
+Interesting to see that this message got removed from lore.kernel.org.
 
-    ARnd
+Google still has it in it's index, and marc.info still has the whole threa=
+d.
+
+The internet doesn't forget.
+
+
+=2D-mtx
