@@ -1,139 +1,94 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B24B672;
-	Wed, 30 Oct 2024 14:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F68043173;
+	Wed, 30 Oct 2024 14:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730299324; cv=none; b=IdwG8VIBvJX8aZZwjrHaRVVvrLsSLa5Q9XpUCvqGGJgP9d7hr8As5Ir7BGX/BgRdp/TacbAKnvmJgDLQPg6k+Xf7KsMgzTEh9GSVXP9J5R0aecg8AYzuGYWryDBE9sgopYkBSooK0TpGYlLu6OU0ErxuZ1ynxuO9+WdJDTFzZAY=
+	t=1730300122; cv=none; b=tH0sdud0rcGgR2Q+RqqFKVubPGRHB2vuSBQqTSkQZkoXUeT0oQdrtft1IIO40jDC2S2OKzvXqTOQ1feF838OqmNzvY+pmJiXA8gaufyu5jpxd5Mi5Hc/KwzxxI5aV80fG68H9F26WhtZlVoeWgOx7Avimej4ZZ2ybzfeZ343Rkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730299324; c=relaxed/simple;
-	bh=0xq5+svYIejF1GKfVoLp6LlzglGNcusoL7m0UN9Vuzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HgotEVh3s9fTegc8Kh8/1q0Va+NZg8Y8C3jXoH+RSkjyCUW1AlkfJenceyINplV0g21AFO79CM3q7J83CVSj8GKnNTcoD2lL52T0Uc1Df3tNEc+YL4Ii/Gh77IkChdD6wgwREzWLFJ0HnZ7t0roDWZBKbsFG04OTvFppsIqH4SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=pVLNb/Zu; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1730300122; c=relaxed/simple;
+	bh=+rCWZ55g6lEO9DEzgUrUV6wM9NGbz+RzKyLC4yixhkM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bimpdod32E+tLx9b43/RrKxM0U+AX1KmpisfNZUS9Uxgp+qtA2EkKqJKsSOqoqTiltgRjoRQgEofFx3PZcHVYqgb8WANkDfBnVn91/wEbbV9eOTSet0sg0GBcj+u9QL93lwGAcNTJXyBp9alKmImesEYMN7HZ5gCwqc6lFqALAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y57Bfle1; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="pVLNb/Zu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1730299241; x=1730904041; i=metux@gmx.de;
-	bh=0xq5+svYIejF1GKfVoLp6LlzglGNcusoL7m0UN9Vuzc=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=pVLNb/ZuHRr1Pn+Pjp2jG3tYW4IlU/Y+hBQ+152btxdt66p35TIqTsTT49ZFaw6Z
-	 um5WIqCBjgJTKH3xGelsZoSGOrO0d2uDFPCvDhBYYlsDla33B/7m9n8AWEEajnQDp
-	 uShiFqkUN3/VN8NW8b+9imhYqgXCa5Hx0K1cFX0is/AQxGb6go2D72hxjmQ68AknA
-	 bsZ2U9jZZrY7XRdmo+vhoFCgZbOS22vdxHB2cn9i8D+F26Q5aAnfoMNqGyVjF1mio
-	 3CYSYXdgy+XrjkIdgZ4LFIHz8HinXxQM/HP680zmiVBeOjldun9lmV7PDaPFV7VnR
-	 zbEYWzuIummDuFIJDg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWRVh-1tLH4l3NLX-00UIow; Wed, 30
- Oct 2024 15:40:41 +0100
-Message-ID: <0d385451-6882-4919-8c47-1b360dbfc2d4@gmx.de>
-Date: Wed, 30 Oct 2024 15:40:57 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y57Bfle1"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6cbf340fccaso8542266d6.1;
+        Wed, 30 Oct 2024 07:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730300119; x=1730904919; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S26NapLVOsHBop+Zv7sCn9r3u8VbS5I1a8U6RuCxeHQ=;
+        b=Y57Bfle1oDBFK4NTgNviPxQ1DswEJL/2n8PVW+YnjO01Ti9ogikW+6ed0177Pz0jW5
+         /zz9sl9BQAKTbN0ca/xJN2C25HfnWpYc2IQhWq2GZF8jsnyaUqa5EeCBmdvlIPEglE+s
+         wGBFeyulZhriJf5mBNfcsa11TQoOfCdJcW/rw5EP2A+aUWajfdjZ8cBNWA7NEVnMle1T
+         xigIQ7jyJdJfVzC3PYwrJmuDZ3t9dZhulCnnNt6TtJUcExfZ0/nfNOpNwTBLd4bxzFcD
+         1L+ag+fJ4r8/w/eYKJEdk0GFA1UpSRt3GOeKoaN9HA8U20Ta0fiw4moPKAQ5/WXsoPWl
+         +5YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730300119; x=1730904919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S26NapLVOsHBop+Zv7sCn9r3u8VbS5I1a8U6RuCxeHQ=;
+        b=WOtXN4KBUz4CSM6hnM8+2Qll5s5QK2/dK2WvuhSizwgS+Xy/vSFJx8Nao+rHX2Y9uD
+         Arbh9JKbAj1GoYkn369ae7jFwofJyj7PrC2Xifb/OZFE+H9t+034G9E1ryBGzgp1UPwe
+         ow6dmk8oUGK8OBNJ9bRElVMMk0LAFYXEGcSLsL4CyZg/Rl+qIs/8Sn78mIwCRW3Plksm
+         OnPHalav3+hVfkF43/2RzZoFmXNQ1gf03gYGOe+/30XzBSUDQ5V7fBA6+Ro1u68C8zdn
+         ph2ww9N/rfVe33Ja7NfdKjjFHe/epk4Dy8oF09U7wj5MAVv7LMXSY84Q5tNTnx7buCXl
+         fApg==
+X-Forwarded-Encrypted: i=1; AJvYcCWq2+NqS99y44j5PI5fqJ9uIjDpzWelUnfB1ZeseKbRIAcvyirkA7/zeyQTQg1U/bkjPxNablZaFdxB6/w=@vger.kernel.org, AJvYcCXD5DLWs2ZS47c4NJ2Kr1eyxb7i0fjRlTewPJdjP49DFjKqsRHs/7ieURqXNpeTdd6Xr3GoIk6lWpE6@vger.kernel.org
+X-Gm-Message-State: AOJu0YypQVW2HJW//adzjyaUdIhB/uEKx6fU3QOdAL7q/j7tBizYOijN
+	yUA57WRRr4P7Ur7J6fnpZidzFj2Fn88EQJnt3p2hPkRs3jr1Y3u+xYmCbU4w70w4Ln9HXODinJs
+	Mu41ttk0DCRyFG8Csganag+HKeSU=
+X-Google-Smtp-Source: AGHT+IGQSEIiHVhnvfX6tnD/WSIxLI4s5a65e/sH1b80CfA4RZVB1nl/zI7uDJ/g6XFe4jN6q6h/OVKOAV93dso9Mfk=
+X-Received: by 2002:a05:6214:b6e:b0:6cb:5ef6:93e9 with SMTP id
+ 6a1803df08f44-6d348486daamr44883466d6.9.1730300118909; Wed, 30 Oct 2024
+ 07:55:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux: Goodbye from a Linux community volunteer
-To: =?UTF-8?Q?Dragan_Milivojevi=C4=87?= <d.milivojevic@gmail.com>,
- Andy Shevchenko <andy@kernel.org>
-Cc: Peter Cai <peter@typeblog.net>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Kory Maincent <kory.maincent@bootlin.com>,
- Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
- Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>,
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
- linux-edac@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-serial@vger.kernel.org, Andrew Halaney <ajhalaney@gmail.com>,
- Nikita Travkin <nikita@trvn.ru>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- Linus Torvalds <torvalds@linux-foundation.org>
-References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
- <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
- <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net>
- <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
- <ZxqK75WdFBod0rZ9@smile.fi.intel.com>
- <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
-Content-Language: tl
-From: metux <metux@gmx.de>
-In-Reply-To: <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20241026080535.444903-1-akinobu.mita@gmail.com>
+ <20241026080535.444903-2-akinobu.mita@gmail.com> <OSQPR06MB72524578F1E5BA93772A12728B4B2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+In-Reply-To: <OSQPR06MB72524578F1E5BA93772A12728B4B2@OSQPR06MB7252.apcprd06.prod.outlook.com>
+From: Akinobu Mita <akinobu.mita@gmail.com>
+Date: Wed, 30 Oct 2024 23:55:07 +0900
+Message-ID: <CAC5umyjtCaYPjtgDnJ69c87w825MFSHgm92JA1kWORwP4Hdjww@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: (pwm-fan) add option to leave fan on shutdown
+To: Billy Tsai <billy_tsai@aspeedtech.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OcaI0MgLZANUz/sgtgPUoWCFpAIiw9s1BR7zIWC9hSVK/3u0w1C
- EmjrTPrNIpJOHRhqUky0yMcGGPRfxY/t3zfIu+ZGJqJX9Zs9s7tKmfRMp0x3/P4eAOQjZsF
- 6aXf+MCHd8GC61j8+Shh0zIlaciPo5djqE4HxSmFtvoWodF9CmrwLsA7BZwYK5Pgt7STN/K
- dYRxlcTUlrU3Htf1k5ERg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:yH4Fl1yjr84=;qFDqc+qa7t/oEadwViPVtxqohRU
- 2Tl44NvyL3GLkYPfcMVu0RDaLiKcPzOYKO1Z5ddYoN7pbF3Ri5FFPTBK3PTkur2LMFJi1DA0k
- o5tesBh/h1NImAty93KlTFaQabP3LGjlyYa2y+PXT458anjXhH7PYevb9R4t8toJ9CIC4kZ+9
- aGMQuH5tHeM6P6qwGFtjMM/5OUWZ188Ap32NZOpQHHQhzpjL1HtY+ApAOCuiZnFKJaFA00Opi
- rjDMiqaDikHYqoxsUIwNq4Cbsm847YsylGC+tiPIDrbv3e/ZfLkWsr4/FafZlQnIArn3mz4cg
- PjY6nvGr1UtkL7yKu2fA2CTgU1jczVG5qfj7KOX1oHauWtmV9gEiBeU+EtuWbmpDX+5g1goh5
- UkFcDi0v6Ar855c6NsWM2Lv4lJrPhENfZN9b06I2qcxmzReDbDpM77v9WPiA+IkP4KgaVs+W4
- gTEBpsacOs7y4K8t6A2ua3XGWUdJr/pfEl3oFW77TfJN/yfUgs0rlm33Rv1ZEAJi2n/rUM00y
- DzcECiDUOBw2AoKGRhPHou0vl8BJxGztD1LdMzPa/QLqyd6v0CNkCj2IuIZPsFE41JC+K223h
- Z4hmnaRpQWT43l0er0VpjTQCzsfuyGR1W6XZ4RZEO/RkOR0YJXr8YY8NvvaCnRiJa5eWzNiD0
- J0sdVqmz8f/RWmmNSckcciimVLb93jbRyOufvrMB5Yp5H/8DjqJijhqU3Eu3kz/IxeFHJwNkb
- kJPNAZ2V0kPJ+X/f3w0a6uB88WLK6R1t8svCm/TJeOCpNTIx6whA2FS9+n/BOY+DV+aGj+sdN
- 7yD9Kwomp+XMmp5CC06ahKUOR8R7rvXX6P2ZkfUASEu8E=
 
-On 24.10.24 21:46, Dragan Milivojevi=C4=87 wrote:
+2024=E5=B9=B410=E6=9C=8829=E6=97=A5(=E7=81=AB) 11:35 Billy Tsai <billy_tsai=
+@aspeedtech.com>:
+>
+> > This adds an optional property "retain-state-shutdown" as requested by
+> > Billy Tsai.
+>
+> > Billy said:
+> >  "Our platform is BMC that will use a PWM-FAN driver to control the fan
+> >  on the managed host. In our case, we do not want to stop the fan when
+> >  the BMC is reboot, which may cause the temperature of the managed host
+> >  not to be lowered."
+>
+> I confirmed that it works properly.
+>
+> Reviewed-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> Tested-by: Billy Tsai <billy_tsai@aspeedtech.com>
 
-> How about your hat off to the people in the Donbas,
-> ~12K of them that had died from Ukrainian artillery fire,
-> that were under imminent threat of being overrun by
-> the Ukrainian forces in February 2022? Are you going
-> to scream about Russian propaganda when I link
-> the OSCE reports about a 10 fold increase in attacks
-> at that same time?
-
-Let's also add the Serbia. The one that had been attacked by the North
-Atlantic Terror Organisation under the pretext of allged "ethnical
-cleansing". One day before NATO (including Germany, btw) started it's
-war of aggression, the German military intelligence said: "there's
-*STILL* *NO SIGN* of ethnical cleansing done by the Serbs".
-
-Have been developers / maintainers coming from NATO countries been
-banned from the kernel ? And have critics been hard-banned on the
-Linux project's mail servers for just criticising the leadership ?
-(that happened to me few days agao - let that sink in: a maintianer
-being blocked from mailing to any Linux maillist nor individuals !)
-
-The best thing we, the FOSS community, can do is STAY OUT of those
-conflicts, no matter what. Otherwise FOSS becomes POSS - politware,
-exactly what now happened to Linux.
-
-
-=2D-mtx
+Thank you very much for testing.
+However, I plan to change this option to device attribute
+(/sys/class/hwmon/hwmonX/retain-state-shutdown) instead of the device tree.
