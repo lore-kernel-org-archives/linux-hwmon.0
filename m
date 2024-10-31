@@ -1,250 +1,244 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4C11BD9EB;
-	Wed, 30 Oct 2024 22:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730328106; cv=none; b=Xij7fsx1k9I3oxpiYpcdcfG1z94UuZfLtOBjDf9wyRYmznLDM7sGsY0pBwzE9hVjbZb7tBbGmjvEQKODWYWYWtXKuwAO3toTH88QDDFlZ32cdy5QC/t8fWQGrvhyHCKsJjLx89Aje73/lTrXpk798RQHpQ44Td8fdGupROLZLgI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730328106; c=relaxed/simple;
-	bh=Bd+9S1wV4kUjogO+1kzUX1OPC3IJ1vjNfiqjaf+r+Pc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=plHqcM8zG9+lg1syj7sw9ugZACgul5n6cQqm6/wSJ45PH1oYg2GX09crFLYALcQ5sOabvmCv+cMAh4HsPsWQtBCWpYkkfS6r2KXSNss4FC8iC7kfP23pF25LsMF04z2c31kHNrMWioxB1EC6B4rumMS9BO2KDM9B6uGw/OptF8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bnlK+A62; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5440C28379;
+	Thu, 31 Oct 2024 00:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730336019; cv=fail; b=cxKpmh6B09IulXhwuk4+BtEtYIh2evMQFICVZdbXFwEBE7KlzQ6lUX0mM7w5IuvjErZd3rU+gtGd/U7/DSzr+8iQ793U03elgsd6MFb4P5ojf1Oj3To995xzszHIsDaYktDD2TxetmZqUn1qJj2vw5FRcHfVDXyXHIbgOJakbcI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730336019; c=relaxed/simple;
+	bh=ZNsH9HurspWmoC9qPgQn0uTuAKDWPly56yJucXsKV3s=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rIAUbL28NAWcmOktw2VVPNFR3EtVXsXLy9USzaOKUUadyntEZXCU0WBYO4VKkkMHV2GFOMocAd32tU0f2Wg+tF6iJu0BW06klsv1GC6tGghlwySvf9ACtTi+bb+MJF+gfEfanjEENOWiemfVboHqM6WJosoZvvGQ6jlK29yBsMs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZaivwkF; arc=fail smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bnlK+A62"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5eba450531eso738066eaf.1;
-        Wed, 30 Oct 2024 15:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730328103; x=1730932903; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+DwSwN+f1TWnzqmhelfmmEne6kIMIbAyJKh/tFg1yA=;
-        b=bnlK+A62Qc1zKLL0C05/pETHS2N+cqE2cr4KtA2wJq40fMgm+86gOsiLEeRhDMyie0
-         0H6BuH8OSe//flAhjQ7+esPpJbGyaqYH2v1IyfI1LbNYc3LmLqNX0pcXzKxLPASSaSpF
-         YEUxzaSoxvUhy7D7GMUXW8pJL/1eS2r5b7QAIsGv1VAxm9MV7B1l7hn6tRQ5nJYVXiwQ
-         6D4AZbrUc/7/JpoioLU+iLwCF3rtUHSCiqS5T4CVTads0jLYRWXLyPBCU9Jmvll5+Q19
-         6Pywn0pK6fYu1wpH6Pjf+xgbOSfZ2EVhv1uXyyKXzk1lNwK45I/AzKGBWGeyfFyY1sj+
-         UgdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730328103; x=1730932903;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+DwSwN+f1TWnzqmhelfmmEne6kIMIbAyJKh/tFg1yA=;
-        b=A7IIyEe2LLUqxgjQrM02pg3d2pMoDxWIgn8+sTZY1OlUR+WbgnJA76mEVNSb5jO1IH
-         1Mv3xZ4s2t1eq/NSr6lLwzvd3z8GqtxKKsliw12h4mEx3+MrHpAnwkh6SmuCp40ScJzz
-         0gJ/ViXrXmEeDfa52jcSB9enbjECXdLabfgk9a4O7JSycLK0jTBaUw6xWjLE3jn0XyIL
-         4y75WB6uMiQHbIOcLlFgKs3WS9h6RApwpOU641tvZm3Y60RUIyxWItybYoxYekCdPl28
-         xvph8+cOAeh81mGEx1U8FyN5dv9WcajusRWUEf4K/ipoClgRkx9RGVXw4ueSnwGUNEUw
-         55lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFXQcMfEObpRjqGdWdOTxLgs4Y7WeynbxHfjTQDMpGk0/WXr8zxSDKCiYmJXd66JAqA7fWnDXLY2BMiOc=@vger.kernel.org, AJvYcCWHVWWSSvBzAmS6P9MuCWebOF+B5Q/uEM8isaenMY/p5hbqzwmNeeppdTZ6biYmEZj0Sd7aI76lLLam@vger.kernel.org, AJvYcCXDN/1goy2y6N61jQTWgoUtJJ/atpEN4hLcW+rLF2OcDuco/ZhRM796P1C/Y8qQNapQpt75J0vhk29x@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/jkz0XvlW3Vdiwc5vehLEp79oKWnOSNy8vBgwBeVyAewjbTae
-	pDRVsdZYTKTwbJAhS9x6gGDeCjTY/3PJDsC0bSJ3FMbEwSkc4LGc
-X-Google-Smtp-Source: AGHT+IHhBzFSSyu1erQl9J1Slu2oQqdHzl0pXPnKk6X8Y/5j/q3GxGOnUB+3x5wRJK7C0Vv4lkeONg==
-X-Received: by 2002:a05:6870:d622:b0:288:4407:55cc with SMTP id 586e51a60fabf-294887709e5mr181601fac.8.1730328102124;
-        Wed, 30 Oct 2024 15:41:42 -0700 (PDT)
-Received: from raspberrypi ([2600:1700:90:4c80::3b])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-29487429f8csm115166fac.7.2024.10.30.15.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 15:41:41 -0700 (PDT)
-Date: Wed, 30 Oct 2024 17:41:39 -0500
-From: Grant Peltier <grantpeltier93@gmail.com>
-To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
-	magnus.damm@gmail.com
-Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to support
- voltage dividers
-Message-ID: <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
-References: <cover.1730326915.git.grantpeltier93@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZaivwkF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730336017; x=1761872017;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ZNsH9HurspWmoC9qPgQn0uTuAKDWPly56yJucXsKV3s=;
+  b=LZaivwkFbyol+sOt4VWlkxo+4K+XqDltp7mvznwxFmog0D6LWvUsjVuo
+   5fNlpllrBFrQKoKPdC/oGKZribSkjur7oT35CmtDEG7/vXbX6OjlAjdF3
+   5t0HSN33vXZoN+7YoI6ScGY4GbJP67YRsOIKb/igM7JhuAKbanetxDu31
+   6p7DW2gUkHi5uhCCMw0sdZaO4Cfe8jrJAnctBUamJsyt7sBvV1GgfHR5N
+   tDHUsMCx5WJsRuYbzAHdmPE3WfzgDxL8gZW7Z20T4htE58+Wg8FgP03Tf
+   t+kD/kKaTu8hvi9deJsB4c969DLdkZpHooSyBY1zmnV9hFqipl0CDahjB
+   Q==;
+X-CSE-ConnectionGUID: kTjJwAaPRcuR075n1lNzRg==
+X-CSE-MsgGUID: bMoT46IHRauKnMtCA5buBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="30167248"
+X-IronPort-AV: E=Sophos;i="6.11,246,1725346800"; 
+   d="scan'208";a="30167248"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 17:53:36 -0700
+X-CSE-ConnectionGUID: tw0ko2J1Ry2r1R8CmKjOFw==
+X-CSE-MsgGUID: Cj4R/CVgQJ66ljOJBNnWAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,246,1725346800"; 
+   d="scan'208";a="82021572"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Oct 2024 17:53:35 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 30 Oct 2024 17:53:35 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Wed, 30 Oct 2024 17:53:35 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 30 Oct 2024 17:53:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=q971s0RA8u20NG/WMpOjk8FS2dbtsSvD+6QNmKIw3Y0T53j9mjczI2UaikVF8uidlvV9eHDKJibgDzD9MWfGEotCTOfLTtMnqRd7d/RD2+BRV4o/bGQEgp5VPrsuAimwVwRY+e4qvaXHUB1jP7B5pr9l9BbpqBF7Z7b51sAYHye1pFhzXUobP1cxHUTJrB1WN1fJqOQ0hp3E4+lCVU3LeBtV3XgBt7XviibPgYjqtNd57350UgnMwuh5eD/NHK6QP3uNMdSs7nV9nTasJgl9ABjLRV3MtXxPeB5L8A/P+Ik1630Ia/I8k1FFUXN/owWNR5Pp5TKaNdvM3EDYNUj7VA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8ad8NIfOOBWNml+IwLRZ0xNYkZnp/gKxQxVLSTI2+Q8=;
+ b=QaYtfheYQ40UZ3sRp9C+anxgbq2Q4paJrfmhWOep5Y2kEoccyI+T7wFqCWfFzaMzFa+cqwWK/T6btA+uOiUP3K8pww+8bBoYU2xPsJFGrcCJ3QlK+2ocBTneYOprK1LbnIoM2R5Z3TEFNHiaRP4lApmqgKzayut3TCZSi98h5cLX8zKGrn8NnOL3M6sf2/9UF9zns1K4MCl4AkmPtgEBt9Iaai/+PJEeCQk6RtTBqZJ6ELSYBlmqNyWaIoR+vFYAkcbvy3tNDL/TUQ0j9EFB+YVZmsGXSV8asW3rQYRDPb0hBTifvb/mZFTQNHXE4O6LFz1j3Y5dtJUmGDXYhERR8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+ by IA0PR11MB7864.namprd11.prod.outlook.com (2603:10b6:208:3df::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.18; Thu, 31 Oct
+ 2024 00:53:32 +0000
+Received: from BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
+ ([fe80::e8c4:59e3:f1d5:af3b%5]) with mapi id 15.20.8093.024; Thu, 31 Oct 2024
+ 00:53:32 +0000
+Message-ID: <c2894e47-f902-4603-84e7-a9aca545b18c@intel.com>
+Date: Wed, 30 Oct 2024 17:53:30 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/16] x86/amd_nb: Clean up early_is_amd_nb()
+To: Yazen Ghannam <yazen.ghannam@amd.com>, "Luck, Tony" <tony.luck@intel.com>,
+	Borislav Petkov <bp@alien8.de>
+CC: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>, "avadhut.naik@amd.com"
+	<avadhut.naik@amd.com>, "john.allen@amd.com" <john.allen@amd.com>,
+	"mario.limonciello@amd.com" <mario.limonciello@amd.com>,
+	"bhelgaas@google.com" <bhelgaas@google.com>, "Shyam-sundar.S-k@amd.com"
+	<Shyam-sundar.S-k@amd.com>, "richard.gong@amd.com" <richard.gong@amd.com>,
+	"jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
+	<linux@roeck-us.net>, "clemens@ladisch.de" <clemens@ladisch.de>,
+	"hdegoede@redhat.com" <hdegoede@redhat.com>, "ilpo.jarvinen@linux.intel.com"
+	<ilpo.jarvinen@linux.intel.com>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "platform-driver-x86@vger.kernel.org"
+	<platform-driver-x86@vger.kernel.org>, "naveenkrishna.chatradhi@amd.com"
+	<naveenkrishna.chatradhi@amd.com>, "carlos.bilbao.osdev@gmail.com"
+	<carlos.bilbao.osdev@gmail.com>
+References: <20241023172150.659002-1-yazen.ghannam@amd.com>
+ <20241023172150.659002-4-yazen.ghannam@amd.com>
+ <20241025155830.GQZxvAJkJnfLfNpSRx@fat_crate.local>
+ <20241029143928.GA1011322@yaz-khff2.amd.com>
+ <20241029150847.GLZyD6f-Hk6pRTEt2c@fat_crate.local>
+ <SJ1PR11MB6083AA7B2E28F2DA24E4B456FC4B2@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20241030142138.GA1304646@yaz-khff2.amd.com>
+Content-Language: en-US
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <20241030142138.GA1304646@yaz-khff2.amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0041.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::16) To BYAPR11MB3320.namprd11.prod.outlook.com
+ (2603:10b6:a03:18::25)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1730326915.git.grantpeltier93@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|IA0PR11MB7864:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98638dfd-614a-4c0e-3726-08dcf946716f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?bWR4VE0wSnU4OEpEY0xvMldtcmVpZjYwdzVPa2tJZ3pJYllwVTd3TlZmVDVi?=
+ =?utf-8?B?U2VkbkpPS1JSMVJPUHA1RVMrbHc1VmVLMFJBdm1BbUxKcU4yWERzQWhrV0Vr?=
+ =?utf-8?B?a3oxT1VaZnd1U2E1T0htZk13QUNlVlY0Vm16Zmk5REkwdW1FRGFPelFMQ0pU?=
+ =?utf-8?B?cGxJSy9QOWhiSnlZTVZjaXV4NG9ZeDFNM2VlajBXSXJsOS9YYkE0YVVJN2hk?=
+ =?utf-8?B?SmxkOVByb0VrWm00MmNoZGxxYlowbThRZ3VuZTYxeGF2NEpwTjc4cWxPaVhE?=
+ =?utf-8?B?Qm42Tmo0SkVYSEY1WUVGc2tZZkpXSkhLWTY0L3N6bFhKUWI4UUNBY2s4L3hq?=
+ =?utf-8?B?bC92TXBEVmUrWVB3T1I0dnBkTVE5TGhPRjBIcWVZUk9XTTBSUlpTR1VGNlBT?=
+ =?utf-8?B?cnphcmxDbnV4emxBTDM0WHhxWmJKVjVCSkZ1N1Y2VTNjOW5IZ3BwcThzZ1Fw?=
+ =?utf-8?B?aXkzTjJkR0JLOE4xbVc4YnAyVkNmRUY2QVFhaTh6cWlHQjN5TERIY3FsVW54?=
+ =?utf-8?B?UFNEU0hjRnV5Vkx0Sno1bmwwTVdQdGNrMTZFdTRzSUhjSitQVEp2R0dSWmR3?=
+ =?utf-8?B?NUdzT0tSN0dVZUhOclkyQSt4ZVc2aDdaczlMQnRZeVVmNER6bExFNWxTME1w?=
+ =?utf-8?B?L0xKWnZ3bVRPSFdCK3JuWW5RRnZneDZNZk1GTml1cWtlVlpPUDhIS2MxVXo1?=
+ =?utf-8?B?YzJEUUdGUE5EYUx4bGtSb1VwYWo5VklCNC8zd25wWnA3bWkzNGhGUHhaSm9C?=
+ =?utf-8?B?SDVDTjZSc1g0MDNLTFlKd3ZtVVRmMUllbkkzKy95SytxRzI1cEVoOUgwWXlU?=
+ =?utf-8?B?dTM2Q01yY2tUWmwzY2RZbkV0THVlWmFtN3cycnVINXl0Q0trdktyNVhVdCs1?=
+ =?utf-8?B?Zks2WkVILzh5U0NsbVVTeDVSeWZydnVvWW9yamhnOXEvTDQvUXV2Ukp1Y0pl?=
+ =?utf-8?B?RlRUUWVOZmRSQzBCbVZEeGQrTVpMUjE0UTd6WVFmWGcwNHFpdHlmQyt3ZmFn?=
+ =?utf-8?B?WWhEZEp1TEJHWnZNejNoUE9TZzNMdkJCWFZ6ZDFtWTZDazFqUmg0LzdTTWV0?=
+ =?utf-8?B?cnBlbWpvckZxeVd3RVg4YkZ3M2JjOTl0MlRseVNlaHpuV2pMckF0cG8wTjk1?=
+ =?utf-8?B?RXFIVUsxNWVmZGh1WUV3YXJlQm0xUnBTZWVyMEdYbWNxU0V4OUJvclovRXh1?=
+ =?utf-8?B?K0FKRnZWd3YzT05qRDJYNmJKS0xhQWx1ZVQzUnlVVFBDNWRHaDZhYVBPa2NR?=
+ =?utf-8?B?YUF6SVdIdGE4WjROdTRxaVFIUnEwL1p6M1Fqa00xaWNlR3VSbkJkd3FtYnUv?=
+ =?utf-8?B?Rk9DUDMxN2k3Rm04cWZtU0ZoVXdmSmJwMkMxRXVvck9EcEtLMHdxMmJCekNO?=
+ =?utf-8?B?a203RUt6U2ZnZkoxRnQzTlBkbWNqYWRGeFFPWlZVWTdqb2RpQ0E3Wm1oam0v?=
+ =?utf-8?B?UXhtRFJSc0pLYWxOanVEZFJlL3JrcDI2bHQ2N3Z6NFNTUHcxZEc1Rk03K3dk?=
+ =?utf-8?B?cWd0OGZjaUZQRXl5aDNtUmxBM0hrYS9uaUlpbEVjSDFjU2FsMk5Sb3hHYW0v?=
+ =?utf-8?B?MWI1K1Z4T3hrVTJEVm16aHlBRTdUMDljYmxUaFFSOGs5Q0xoV1pyUERROU9V?=
+ =?utf-8?B?SDk0anNqY2NSejlXbDNTRlFibmdsbjRYbTY3bHloNzh3Y1BhZVp2WjB2RXBH?=
+ =?utf-8?B?NzlPd0hSZmh3ckpiaHYxZVFpdERNQzR1ckFsVCtOb2U5STVFRmJMS1ErVFdF?=
+ =?utf-8?Q?pv9TN0eLOkM0MPlzPSKKzHK8+2AkdmoVFTrTbGG?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWYrVlJDc3hrTTArUkNXVE42UjBmdjRYOXMra3ZmZVNYQWxnRVZEWHdzbTk4?=
+ =?utf-8?B?RGp5N0dvM2tLU0kzSWJkVFRJVGNGOW11K1VvckFGU0NkSFpjOXordXRvdlB2?=
+ =?utf-8?B?SGVnUXYrWHVUR2VpMVgzOHNQU3pGclBlNzFzMDZmeDdKN1F6TWtoRThLOHJT?=
+ =?utf-8?B?ekdKMkZZNmRyd1FsY3ZtT2lSWDg0OUhMTTZ4WXgwQ3RYR1lsTXVicDlkL3B6?=
+ =?utf-8?B?cGlDNElLOE9oZ3o5anZDZHF0azlES1B1RlJLS2JJeU9YWWh1cTVXWlNIZlQ4?=
+ =?utf-8?B?dVVrb0ZicUpaMGdSOWVaYlVCN1MrdkllNXJiZ0NBNEZGOFduWUdCK2lPMFJT?=
+ =?utf-8?B?V01LSEdrVmsyNmgxMjFzcmkrNGdNZFBnSEJUTXVpZENvYmw0YmdsZ2VreXd5?=
+ =?utf-8?B?a3IvdHo1KzJMbEs4NXh4UlFHTHRjOGhsTWdDUlZKWUxkdzFqZjV0b3d0VGh6?=
+ =?utf-8?B?M083TVJZelAzcE10Q0FPT2NDSEtzb2JRT2lTRzVBVGZBWUYvRUx4OHRCVVBG?=
+ =?utf-8?B?eDlTZmdMeVRlSldsS3BRNzAvM0pJSWpPS2c5QVZwYnRTUCtpc3BQZTFDaDJh?=
+ =?utf-8?B?UzlidDZXNmpXZXVPRXJnMGJlSE55V2laZkdLcFpRK08vRmNMQ0hTMXpsRWZX?=
+ =?utf-8?B?b0VVblVwUzZUd1lzZEpmWTQ3dTBTejVrN0lZUUdFNjI2S3FBVm1aRUpEc0VZ?=
+ =?utf-8?B?VVQ0V2hZK2tKRUpucnkzSmVFZ1pQQXZUTmVPenN1M2FMT290djE1SGdiVis0?=
+ =?utf-8?B?ZURlY2FOdlBxVFVCcmZIRVBTQzBCZU5jNjloMkV3Y2ZtQnZyeVdiSDlMVTg4?=
+ =?utf-8?B?WXZaSzRWeS9FbE9kT3QvaDVkMTBkQi90aHREQVd0ZWhrWk94SjltWVRHNG5Z?=
+ =?utf-8?B?L2N6a0ttSUZsODJNekxTMGgxcDlCQVVNSVVuTm9JT0hzQXJBQTdweUU3eUJh?=
+ =?utf-8?B?NXZOUHdJZUFGQm05U21adFZQMzVyd0JrdmpFbW1OYncwTlB1dWJUTG81SVJ4?=
+ =?utf-8?B?aE5CbnhCRWZoaUlDQzlsRWwrK1lRSUlMbFhRejFmWnhKK3BEb0J6OHlwVCtv?=
+ =?utf-8?B?MldTWFFLV2J0Z1dWQ3NpTHhHVUtzQzM3eWRnWUtyRWR1dW82N3JQUVJhRHJr?=
+ =?utf-8?B?TmVnaUhyQUlFY05oMGVPV2tCWE13WnExSWk2b1FMNHNwb0tlOTd1ZFNjMWtJ?=
+ =?utf-8?B?cmpiREdDMXg5ZkxBNUFaeXZtQ2hjdGxKaXpxTStLZlA0WjZwZzVIdXZwSGFs?=
+ =?utf-8?B?bXhxOFFjUkZERmxDaTVwREZYSExUVjdaOXZ2RDlwR0RGRXpSaUtCNHlUdDFj?=
+ =?utf-8?B?Q3dvemsyQkRDcjFTTUZHR0Q1NXByM1RIaTVUbWhWMHpWMGF3d0RMMFVLdGxv?=
+ =?utf-8?B?MGc3TkpxRklZZEFrMjV1b2FPNUE5SlA2RWUwbGRqTE5YbWxRa3p6cm9pNlVw?=
+ =?utf-8?B?RHFpSWpNNUNKd2JkY255UzZrNFg3enl4L3I3cFhyTVY3bGFHc3BhanVhWTJB?=
+ =?utf-8?B?dzdYVmtYcURUVmJpSFViWndsT1k5ZU9CcHpvWkFXaDNabzFVMit0RytyeEVG?=
+ =?utf-8?B?RDJiRTUxcCt5UEtKa3JlOFJxeDNHT0VlY3c3R3lnSkROaDJaRWJ3NGZXd2NK?=
+ =?utf-8?B?aTlQd1hFQXNsc3lGUnBrNzdOeENCdVp0RFB3MEVPMzU0ZTczaGo1c0lZNm4y?=
+ =?utf-8?B?eHZpL2J6Y3U3TWhnMlBlTmVYdm8rZWVxL0J6Ym5ZTTNSQ215S09zd0JCSngy?=
+ =?utf-8?B?aURXbU5aelZ5ZHlLdjdnVW95dzNLZVRxcFcvM1cvbmY3elhueTNqZFZ0L2U5?=
+ =?utf-8?B?bVdKd0F5RDEwSGRJMkJlU1EwOU5RRGgyM1NCeTVtK0Y3MkpINGhJZzB2RDhj?=
+ =?utf-8?B?cTFxQml6dDk1RkVHK3gxUFdvMG9VUkgraDVXNVdWQ21FMmhBNldVakNWb0I2?=
+ =?utf-8?B?VVJPdkVmZHVqYnY0OXV3TFc1N0ZvbGlaQ0k4RGpwa3NScHZVNS8zc1F4Q25Q?=
+ =?utf-8?B?dGEraVlpa2JFZHVIR3VUMVZ4cVdrOEVuTnBLR0orL2tWazlFRE5GN2p2WGJG?=
+ =?utf-8?B?cEdkUzFycFh3UHF5VVdMOUh1NnNZMUVJWG1Pblg2TUlhOXBHRERFOEFhYVZz?=
+ =?utf-8?Q?smolNCHmExITAKAq61Bx1njgz?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98638dfd-614a-4c0e-3726-08dcf946716f
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 00:53:32.7389
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UBOmShD7wXgeteMuw+weC3cjxfSIfGwF5DQm4naUsNMU9vXVXT+Tv/CAun5AWYK6pJgM2oH2DZRT4vu0PCdpIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7864
+X-OriginatorOrg: intel.com
 
-Add devicetree bindings to support declaring optional voltage dividers to
-the rail outputs of supported digital multiphase regulators. Some
-applications require Vout to exceed the voltage range that the Vsense pin
-can detect. This binding definition allows users to define the
-characteristics of a voltage divider placed between Vout and the Vsense
-pin for any rail powered by the device.
 
-These bindings copy the vout-voltage-divider property defined in the
-maxim,max20730 bindings schema since it is the best fit for the use case
-of scaling hwmon PMBus telemetry. The generic voltage-divider property
-used by many iio drivers was determined to be a poor fit because that
-schema is tied directly to iio for the purpose of scaling io-channel
-voltages and the isl68137 driver is not an iio driver.
+> On Tue, Oct 29, 2024 at 04:15:33PM +0000, Luck, Tony wrote:
+>>>>>> -       if (boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+>>>>>> -               misc_ids = hygon_nb_misc_ids;
+>>>>>> +       if (boot_cpu_has(X86_FEATURE_ZEN))
+>>>>>
+>>>>> check_for_deprecated_apis: WARNING: arch/x86/kernel/amd_nb.c:395: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
+>>>>
 
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
----
- .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
- 1 file changed, 147 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-new file mode 100644
-index 000000000000..ed659c2baadf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-@@ -0,0 +1,147 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas Digital Multiphase Voltage Regulators with PMBus
-+
-+maintainers:
-+  - Grant Peltier <grant.peltier.jg@renesas.com>
-+
-+description: |
-+  Renesas digital multiphase voltage regulators with PMBus.
-+  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,isl68220
-+      - renesas,isl68221
-+      - renesas,isl68222
-+      - renesas,isl68223
-+      - renesas,isl68224
-+      - renesas,isl68225
-+      - renesas,isl68226
-+      - renesas,isl68227
-+      - renesas,isl68229
-+      - renesas,isl68233
-+      - renesas,isl68239
-+      - renesas,isl69222
-+      - renesas,isl69223
-+      - renesas,isl69224
-+      - renesas,isl69225
-+      - renesas,isl69227
-+      - renesas,isl69228
-+      - renesas,isl69234
-+      - renesas,isl69236
-+      - renesas,isl69239
-+      - renesas,isl69242
-+      - renesas,isl69243
-+      - renesas,isl69247
-+      - renesas,isl69248
-+      - renesas,isl69254
-+      - renesas,isl69255
-+      - renesas,isl69256
-+      - renesas,isl69259
-+      - renesas,isl69260
-+      - renesas,isl69268
-+      - renesas,isl69269
-+      - renesas,isl69298
-+      - renesas,raa228000
-+      - renesas,raa228004
-+      - renesas,raa228006
-+      - renesas,raa228228
-+      - renesas,raa229001
-+      - renesas,raa229004
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^channel@([0-3])$":
-+    type: object
-+    description:
-+      Container for properties specific to a particular channel (rail).
-+
-+    properties:
-+      reg:
-+        description: The channel (rail) index.
-+        items:
-+          minimum: 0
-+          maximum: 3
-+
-+      vout-voltage-divider:
-+        description: |
-+          Resistances of a voltage divider placed between Vout and the voltage
-+          sense (Vsense) pin for the given channel (rail). It has two numbers
-+          representing the resistances of the voltage divider provided as
-+          <Rout Rtotal> which yields an adjusted Vout as
-+          Vout_adj = Vout * Rtotal / Rout given the original Vout as reported
-+          by the Vsense pin. Given a circuit configuration similar to the one
-+          below, Rtotal = R1 + Rout.
-+
-+            Vout ----.
-+                     |
-+                  .-----.
-+                  | R1  |
-+                  '-----'
-+                     |
-+                     +---- Vsense
-+                     |
-+                  .-----.
-+                  | Rout|
-+                  '-----'
-+                     |
-+                    GND
-+
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+      };
-+    };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        channel@0 {
-+          reg = <0>;
-+          vout-voltage-divider = <1000 2000>;  // Reported Vout/Pout would be scaled by 2
-+        };
-+      };
-+    };
--- 
-2.39.5
+Do the comments in cpufeature.h need updating? It seems to recommend
+boot_cpu_has() in most cases and suggests using static_cpu_has() (which
+is used by cpu_feature_enabled()) only in fast paths.
+
+
+/*
+ * Static testing of CPU features. Used the same as boot_cpu_has(). It
+ * statically patches the target code for additional performance. Use
+ * static_cpu_has() only in fast paths, where every cycle counts. Which
+ * means that the boot_cpu_has() variant is already fast enough for the
+ * majority of cases and you should stick to using it as it is generally
+ * only two instructions: a RIP-relative MOV and a TEST.
+ *
+ ...
+
+ */
+static __always_inline bool _static_cpu_has(u16 bit)
+
+
+> 
+> And if not to checkpatch, then maybe it can be included in the TIP
+> maintainers' handbook? That is, if others are using it or something
+> similar.
+> 
+
 
