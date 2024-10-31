@@ -1,244 +1,925 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5440C28379;
-	Thu, 31 Oct 2024 00:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730336019; cv=fail; b=cxKpmh6B09IulXhwuk4+BtEtYIh2evMQFICVZdbXFwEBE7KlzQ6lUX0mM7w5IuvjErZd3rU+gtGd/U7/DSzr+8iQ793U03elgsd6MFb4P5ojf1Oj3To995xzszHIsDaYktDD2TxetmZqUn1qJj2vw5FRcHfVDXyXHIbgOJakbcI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730336019; c=relaxed/simple;
-	bh=ZNsH9HurspWmoC9qPgQn0uTuAKDWPly56yJucXsKV3s=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=rIAUbL28NAWcmOktw2VVPNFR3EtVXsXLy9USzaOKUUadyntEZXCU0WBYO4VKkkMHV2GFOMocAd32tU0f2Wg+tF6iJu0BW06klsv1GC6tGghlwySvf9ACtTi+bb+MJF+gfEfanjEENOWiemfVboHqM6WJosoZvvGQ6jlK29yBsMs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZaivwkF; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0BE84DF5
+	for <linux-hwmon@vger.kernel.org>; Thu, 31 Oct 2024 04:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.135
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730350081; cv=none; b=nCbk6iMEiXyli2ixiPz58OkYS6FE7fUgfyH9wrJnvnrFQHxqTSX59hypF1jyMjOglmLn9QhYECj5E6qWVIgnPGnaahoayXgUS61dtPRMMcMtzX2ITCRQpNhrVxBSRDYTk5GGUUV36s1YhQN2R2aGsWxcOnaVMxgyJ6duh/n03mU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730350081; c=relaxed/simple;
+	bh=VxRvxeJt23ScGPNCK+TPtJcPoXangFHHf2a2fin5yA4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Gab+vMM+1KZfp8OFiLZYT02idnLS76FthOCfgKOYs77SlZdoRQ5++F3zC79nFOOoGZjHyQoxy5Yy41XbX+yPkEZ6Up2QI7lza1tlhL+F0E/auJ/KcnsC24qUB0SXAHDk2m78zR/RqYzzQlxfx/blheKOJtc0XkV62kuza65b+GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=iMRNIdtu; arc=none smtp.client-ip=185.70.40.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZaivwkF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730336017; x=1761872017;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZNsH9HurspWmoC9qPgQn0uTuAKDWPly56yJucXsKV3s=;
-  b=LZaivwkFbyol+sOt4VWlkxo+4K+XqDltp7mvznwxFmog0D6LWvUsjVuo
-   5fNlpllrBFrQKoKPdC/oGKZribSkjur7oT35CmtDEG7/vXbX6OjlAjdF3
-   5t0HSN33vXZoN+7YoI6ScGY4GbJP67YRsOIKb/igM7JhuAKbanetxDu31
-   6p7DW2gUkHi5uhCCMw0sdZaO4Cfe8jrJAnctBUamJsyt7sBvV1GgfHR5N
-   tDHUsMCx5WJsRuYbzAHdmPE3WfzgDxL8gZW7Z20T4htE58+Wg8FgP03Tf
-   t+kD/kKaTu8hvi9deJsB4c969DLdkZpHooSyBY1zmnV9hFqipl0CDahjB
-   Q==;
-X-CSE-ConnectionGUID: kTjJwAaPRcuR075n1lNzRg==
-X-CSE-MsgGUID: bMoT46IHRauKnMtCA5buBA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="30167248"
-X-IronPort-AV: E=Sophos;i="6.11,246,1725346800"; 
-   d="scan'208";a="30167248"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 17:53:36 -0700
-X-CSE-ConnectionGUID: tw0ko2J1Ry2r1R8CmKjOFw==
-X-CSE-MsgGUID: Cj4R/CVgQJ66ljOJBNnWAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,246,1725346800"; 
-   d="scan'208";a="82021572"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Oct 2024 17:53:35 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 30 Oct 2024 17:53:35 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Wed, 30 Oct 2024 17:53:35 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 30 Oct 2024 17:53:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=q971s0RA8u20NG/WMpOjk8FS2dbtsSvD+6QNmKIw3Y0T53j9mjczI2UaikVF8uidlvV9eHDKJibgDzD9MWfGEotCTOfLTtMnqRd7d/RD2+BRV4o/bGQEgp5VPrsuAimwVwRY+e4qvaXHUB1jP7B5pr9l9BbpqBF7Z7b51sAYHye1pFhzXUobP1cxHUTJrB1WN1fJqOQ0hp3E4+lCVU3LeBtV3XgBt7XviibPgYjqtNd57350UgnMwuh5eD/NHK6QP3uNMdSs7nV9nTasJgl9ABjLRV3MtXxPeB5L8A/P+Ik1630Ia/I8k1FFUXN/owWNR5Pp5TKaNdvM3EDYNUj7VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8ad8NIfOOBWNml+IwLRZ0xNYkZnp/gKxQxVLSTI2+Q8=;
- b=QaYtfheYQ40UZ3sRp9C+anxgbq2Q4paJrfmhWOep5Y2kEoccyI+T7wFqCWfFzaMzFa+cqwWK/T6btA+uOiUP3K8pww+8bBoYU2xPsJFGrcCJ3QlK+2ocBTneYOprK1LbnIoM2R5Z3TEFNHiaRP4lApmqgKzayut3TCZSi98h5cLX8zKGrn8NnOL3M6sf2/9UF9zns1K4MCl4AkmPtgEBt9Iaai/+PJEeCQk6RtTBqZJ6ELSYBlmqNyWaIoR+vFYAkcbvy3tNDL/TUQ0j9EFB+YVZmsGXSV8asW3rQYRDPb0hBTifvb/mZFTQNHXE4O6LFz1j3Y5dtJUmGDXYhERR8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by IA0PR11MB7864.namprd11.prod.outlook.com (2603:10b6:208:3df::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.18; Thu, 31 Oct
- 2024 00:53:32 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e8c4:59e3:f1d5:af3b%5]) with mapi id 15.20.8093.024; Thu, 31 Oct 2024
- 00:53:32 +0000
-Message-ID: <c2894e47-f902-4603-84e7-a9aca545b18c@intel.com>
-Date: Wed, 30 Oct 2024 17:53:30 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/16] x86/amd_nb: Clean up early_is_amd_nb()
-To: Yazen Ghannam <yazen.ghannam@amd.com>, "Luck, Tony" <tony.luck@intel.com>,
-	Borislav Petkov <bp@alien8.de>
-CC: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>, "avadhut.naik@amd.com"
-	<avadhut.naik@amd.com>, "john.allen@amd.com" <john.allen@amd.com>,
-	"mario.limonciello@amd.com" <mario.limonciello@amd.com>,
-	"bhelgaas@google.com" <bhelgaas@google.com>, "Shyam-sundar.S-k@amd.com"
-	<Shyam-sundar.S-k@amd.com>, "richard.gong@amd.com" <richard.gong@amd.com>,
-	"jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
-	<linux@roeck-us.net>, "clemens@ladisch.de" <clemens@ladisch.de>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>, "ilpo.jarvinen@linux.intel.com"
-	<ilpo.jarvinen@linux.intel.com>, "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "platform-driver-x86@vger.kernel.org"
-	<platform-driver-x86@vger.kernel.org>, "naveenkrishna.chatradhi@amd.com"
-	<naveenkrishna.chatradhi@amd.com>, "carlos.bilbao.osdev@gmail.com"
-	<carlos.bilbao.osdev@gmail.com>
-References: <20241023172150.659002-1-yazen.ghannam@amd.com>
- <20241023172150.659002-4-yazen.ghannam@amd.com>
- <20241025155830.GQZxvAJkJnfLfNpSRx@fat_crate.local>
- <20241029143928.GA1011322@yaz-khff2.amd.com>
- <20241029150847.GLZyD6f-Hk6pRTEt2c@fat_crate.local>
- <SJ1PR11MB6083AA7B2E28F2DA24E4B456FC4B2@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20241030142138.GA1304646@yaz-khff2.amd.com>
-Content-Language: en-US
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20241030142138.GA1304646@yaz-khff2.amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0041.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::16) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="iMRNIdtu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1730350074; x=1730609274;
+	bh=VxRvxeJt23ScGPNCK+TPtJcPoXangFHHf2a2fin5yA4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=iMRNIdturSNxfa2cV4aE3RANq90ivscQzArSwBgN/ydT9ZWh947CwTnFzG0h/sOHv
+	 96eSUmKqiSL+/n5BG6jyywiHSN4fTV81bLwLbPwgQhGFgOYbmvBd2rDEl+JutuNabB
+	 2vVR51UVgYgXuoKMMxcPckn+gs1DnJ1QdBv9kneRbvTLkQmhRnJYwVAouxnQ6s30h3
+	 nXVRxqWSt9mAhsPBVEZesd/Dui++ltObbQydYKJU1xkSCUp6FMWvlvT97qVrQc/2SR
+	 pmLZnGv7lFZG0OpM4oXVHjoAHLeYUQuqs9qqlvNxliABVwrYG97CzKa8tW0awOQBY4
+	 pqqwxVvNYzlRw==
+Date: Thu, 31 Oct 2024 04:47:50 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+From: M3 <mys3lf@protonmail.com>
+Cc: "jdelvare@suse.com" <jdelvare@suse.com>, "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "christian@heusel.eu" <christian@heusel.eu>
+Subject: Re: module nct6775 reporting wrong values after resume from suspend
+Message-ID: <mnheUmdqjrbjzj_b0GKn0aEWPg2bcHoTaIfMuzpeLYS1skS3zXlJ-zfeFlCLg5k94y4U49t-m9LqXsJEcIwjU9-XWKUhOsJo9na_KI_kYkY=@protonmail.com>
+In-Reply-To: <8d4f8eb5-e74f-4fe2-a103-2093939b3662@roeck-us.net>
+References: <H72gIiX824bcqCLZswVX0V1dfbF-tiUMcWeoPM6-EzxaqNQQNaVn9NPsuDJ0_wyOxhf3gfiIUBtR-L9fEEvpnFWMzDHHyePvTBvl1xfiCeo=@protonmail.com> <193d6c42-7e0b-49c9-9e95-db458d4baaa7@roeck-us.net> <4HSarOaep_et3LczEcUF4Lh9A_pdubxt7V6hoFo6p58U1g122wUcZkg0qZ-_mCgWOntT1KpU3n1nRSGEaNTt2WfWiuMUo61rfkxQAB36OTc=@protonmail.com> <f7deecc7-cb88-4de9-942d-5db9fa903707@roeck-us.net> <Z5-0Xhu6ktFbb5Qqlw0q2sShCgCm2SPAZvnyReOZI3jZ7HbCZmFXgiI4kzVDABv9E5B-KkvgQpf6OEyHkaSHq3AEG6NsyU7rGKtbd7GVY7Q=@protonmail.com> <8c86b8b1-55db-43e1-a1ab-4b65905f7f05@roeck-us.net> <f37xE-WxXY0daAFO1Mi_Q_7IxzSWn2u29oqeJ2v7io0Gt_Ta6HS4P6P-bps1aendiUo6ivNsbPKvl38f7uaSeNrhE_6ZFj56PcYSI572L9E=@protonmail.com> <8d4f8eb5-e74f-4fe2-a103-2093939b3662@roeck-us.net>
+Feedback-ID: 1225101:user:proton
+X-Pm-Message-ID: f2d4fb7f891c658eb9089be8ad688131081f8659
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|IA0PR11MB7864:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98638dfd-614a-4c0e-3726-08dcf946716f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?bWR4VE0wSnU4OEpEY0xvMldtcmVpZjYwdzVPa2tJZ3pJYllwVTd3TlZmVDVi?=
- =?utf-8?B?U2VkbkpPS1JSMVJPUHA1RVMrbHc1VmVLMFJBdm1BbUxKcU4yWERzQWhrV0Vr?=
- =?utf-8?B?a3oxT1VaZnd1U2E1T0htZk13QUNlVlY0Vm16Zmk5REkwdW1FRGFPelFMQ0pU?=
- =?utf-8?B?cGxJSy9QOWhiSnlZTVZjaXV4NG9ZeDFNM2VlajBXSXJsOS9YYkE0YVVJN2hk?=
- =?utf-8?B?SmxkOVByb0VrWm00MmNoZGxxYlowbThRZ3VuZTYxeGF2NEpwTjc4cWxPaVhE?=
- =?utf-8?B?Qm42Tmo0SkVYSEY1WUVGc2tZZkpXSkhLWTY0L3N6bFhKUWI4UUNBY2s4L3hq?=
- =?utf-8?B?bC92TXBEVmUrWVB3T1I0dnBkTVE5TGhPRjBIcWVZUk9XTTBSUlpTR1VGNlBT?=
- =?utf-8?B?cnphcmxDbnV4emxBTDM0WHhxWmJKVjVCSkZ1N1Y2VTNjOW5IZ3BwcThzZ1Fw?=
- =?utf-8?B?aXkzTjJkR0JLOE4xbVc4YnAyVkNmRUY2QVFhaTh6cWlHQjN5TERIY3FsVW54?=
- =?utf-8?B?UFNEU0hjRnV5Vkx0Sno1bmwwTVdQdGNrMTZFdTRzSUhjSitQVEp2R0dSWmR3?=
- =?utf-8?B?NUdzT0tSN0dVZUhOclkyQSt4ZVc2aDdaczlMQnRZeVVmNER6bExFNWxTME1w?=
- =?utf-8?B?L0xKWnZ3bVRPSFdCK3JuWW5RRnZneDZNZk1GTml1cWtlVlpPUDhIS2MxVXo1?=
- =?utf-8?B?YzJEUUdGUE5EYUx4bGtSb1VwYWo5VklCNC8zd25wWnA3bWkzNGhGUHhaSm9C?=
- =?utf-8?B?SDVDTjZSc1g0MDNLTFlKd3ZtVVRmMUllbkkzKy95SytxRzI1cEVoOUgwWXlU?=
- =?utf-8?B?dTM2Q01yY2tUWmwzY2RZbkV0THVlWmFtN3cycnVINXl0Q0trdktyNVhVdCs1?=
- =?utf-8?B?Zks2WkVILzh5U0NsbVVTeDVSeWZydnVvWW9yamhnOXEvTDQvUXV2Ukp1Y0pl?=
- =?utf-8?B?RlRUUWVOZmRSQzBCbVZEeGQrTVpMUjE0UTd6WVFmWGcwNHFpdHlmQyt3ZmFn?=
- =?utf-8?B?WWhEZEp1TEJHWnZNejNoUE9TZzNMdkJCWFZ6ZDFtWTZDazFqUmg0LzdTTWV0?=
- =?utf-8?B?cnBlbWpvckZxeVd3RVg4YkZ3M2JjOTl0MlRseVNlaHpuV2pMckF0cG8wTjk1?=
- =?utf-8?B?RXFIVUsxNWVmZGh1WUV3YXJlQm0xUnBTZWVyMEdYbWNxU0V4OUJvclovRXh1?=
- =?utf-8?B?K0FKRnZWd3YzT05qRDJYNmJKS0xhQWx1ZVQzUnlVVFBDNWRHaDZhYVBPa2NR?=
- =?utf-8?B?YUF6SVdIdGE4WjROdTRxaVFIUnEwL1p6M1Fqa00xaWNlR3VSbkJkd3FtYnUv?=
- =?utf-8?B?Rk9DUDMxN2k3Rm04cWZtU0ZoVXdmSmJwMkMxRXVvck9EcEtLMHdxMmJCekNO?=
- =?utf-8?B?a203RUt6U2ZnZkoxRnQzTlBkbWNqYWRGeFFPWlZVWTdqb2RpQ0E3Wm1oam0v?=
- =?utf-8?B?UXhtRFJSc0pLYWxOanVEZFJlL3JrcDI2bHQ2N3Z6NFNTUHcxZEc1Rk03K3dk?=
- =?utf-8?B?cWd0OGZjaUZQRXl5aDNtUmxBM0hrYS9uaUlpbEVjSDFjU2FsMk5Sb3hHYW0v?=
- =?utf-8?B?MWI1K1Z4T3hrVTJEVm16aHlBRTdUMDljYmxUaFFSOGs5Q0xoV1pyUERROU9V?=
- =?utf-8?B?SDk0anNqY2NSejlXbDNTRlFibmdsbjRYbTY3bHloNzh3Y1BhZVp2WjB2RXBH?=
- =?utf-8?B?NzlPd0hSZmh3ckpiaHYxZVFpdERNQzR1ckFsVCtOb2U5STVFRmJMS1ErVFdF?=
- =?utf-8?Q?pv9TN0eLOkM0MPlzPSKKzHK8+2AkdmoVFTrTbGG?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWYrVlJDc3hrTTArUkNXVE42UjBmdjRYOXMra3ZmZVNYQWxnRVZEWHdzbTk4?=
- =?utf-8?B?RGp5N0dvM2tLU0kzSWJkVFRJVGNGOW11K1VvckFGU0NkSFpjOXordXRvdlB2?=
- =?utf-8?B?SGVnUXYrWHVUR2VpMVgzOHNQU3pGclBlNzFzMDZmeDdKN1F6TWtoRThLOHJT?=
- =?utf-8?B?ekdKMkZZNmRyd1FsY3ZtT2lSWDg0OUhMTTZ4WXgwQ3RYR1lsTXVicDlkL3B6?=
- =?utf-8?B?cGlDNElLOE9oZ3o5anZDZHF0azlES1B1RlJLS2JJeU9YWWh1cTVXWlNIZlQ4?=
- =?utf-8?B?dVVrb0ZicUpaMGdSOWVaYlVCN1MrdkllNXJiZ0NBNEZGOFduWUdCK2lPMFJT?=
- =?utf-8?B?V01LSEdrVmsyNmgxMjFzcmkrNGdNZFBnSEJUTXVpZENvYmw0YmdsZ2VreXd5?=
- =?utf-8?B?a3IvdHo1KzJMbEs4NXh4UlFHTHRjOGhsTWdDUlZKWUxkdzFqZjV0b3d0VGh6?=
- =?utf-8?B?M083TVJZelAzcE10Q0FPT2NDSEtzb2JRT2lTRzVBVGZBWUYvRUx4OHRCVVBG?=
- =?utf-8?B?eDlTZmdMeVRlSldsS3BRNzAvM0pJSWpPS2c5QVZwYnRTUCtpc3BQZTFDaDJh?=
- =?utf-8?B?UzlidDZXNmpXZXVPRXJnMGJlSE55V2laZkdLcFpRK08vRmNMQ0hTMXpsRWZX?=
- =?utf-8?B?b0VVblVwUzZUd1lzZEpmWTQ3dTBTejVrN0lZUUdFNjI2S3FBVm1aRUpEc0VZ?=
- =?utf-8?B?VVQ0V2hZK2tKRUpucnkzSmVFZ1pQQXZUTmVPenN1M2FMT290djE1SGdiVis0?=
- =?utf-8?B?ZURlY2FOdlBxVFVCcmZIRVBTQzBCZU5jNjloMkV3Y2ZtQnZyeVdiSDlMVTg4?=
- =?utf-8?B?WXZaSzRWeS9FbE9kT3QvaDVkMTBkQi90aHREQVd0ZWhrWk94SjltWVRHNG5Z?=
- =?utf-8?B?L2N6a0ttSUZsODJNekxTMGgxcDlCQVVNSVVuTm9JT0hzQXJBQTdweUU3eUJh?=
- =?utf-8?B?NXZOUHdJZUFGQm05U21adFZQMzVyd0JrdmpFbW1OYncwTlB1dWJUTG81SVJ4?=
- =?utf-8?B?aE5CbnhCRWZoaUlDQzlsRWwrK1lRSUlMbFhRejFmWnhKK3BEb0J6OHlwVCtv?=
- =?utf-8?B?MldTWFFLV2J0Z1dWQ3NpTHhHVUtzQzM3eWRnWUtyRWR1dW82N3JQUVJhRHJr?=
- =?utf-8?B?TmVnaUhyQUlFY05oMGVPV2tCWE13WnExSWk2b1FMNHNwb0tlOTd1ZFNjMWtJ?=
- =?utf-8?B?cmpiREdDMXg5ZkxBNUFaeXZtQ2hjdGxKaXpxTStLZlA0WjZwZzVIdXZwSGFs?=
- =?utf-8?B?bXhxOFFjUkZERmxDaTVwREZYSExUVjdaOXZ2RDlwR0RGRXpSaUtCNHlUdDFj?=
- =?utf-8?B?Q3dvemsyQkRDcjFTTUZHR0Q1NXByM1RIaTVUbWhWMHpWMGF3d0RMMFVLdGxv?=
- =?utf-8?B?MGc3TkpxRklZZEFrMjV1b2FPNUE5SlA2RWUwbGRqTE5YbWxRa3p6cm9pNlVw?=
- =?utf-8?B?RHFpSWpNNUNKd2JkY255UzZrNFg3enl4L3I3cFhyTVY3bGFHc3BhanVhWTJB?=
- =?utf-8?B?dzdYVmtYcURUVmJpSFViWndsT1k5ZU9CcHpvWkFXaDNabzFVMit0RytyeEVG?=
- =?utf-8?B?RDJiRTUxcCt5UEtKa3JlOFJxeDNHT0VlY3c3R3lnSkROaDJaRWJ3NGZXd2NK?=
- =?utf-8?B?aTlQd1hFQXNsc3lGUnBrNzdOeENCdVp0RFB3MEVPMzU0ZTczaGo1c0lZNm4y?=
- =?utf-8?B?eHZpL2J6Y3U3TWhnMlBlTmVYdm8rZWVxL0J6Ym5ZTTNSQ215S09zd0JCSngy?=
- =?utf-8?B?aURXbU5aelZ5ZHlLdjdnVW95dzNLZVRxcFcvM1cvbmY3elhueTNqZFZ0L2U5?=
- =?utf-8?B?bVdKd0F5RDEwSGRJMkJlU1EwOU5RRGgyM1NCeTVtK0Y3MkpINGhJZzB2RDhj?=
- =?utf-8?B?cTFxQml6dDk1RkVHK3gxUFdvMG9VUkgraDVXNVdWQ21FMmhBNldVakNWb0I2?=
- =?utf-8?B?VVJPdkVmZHVqYnY0OXV3TFc1N0ZvbGlaQ0k4RGpwa3NScHZVNS8zc1F4Q25Q?=
- =?utf-8?B?dGEraVlpa2JFZHVIR3VUMVZ4cVdrOEVuTnBLR0orL2tWazlFRE5GN2p2WGJG?=
- =?utf-8?B?cEdkUzFycFh3UHF5VVdMOUh1NnNZMUVJWG1Pblg2TUlhOXBHRERFOEFhYVZz?=
- =?utf-8?Q?smolNCHmExITAKAq61Bx1njgz?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98638dfd-614a-4c0e-3726-08dcf946716f
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 00:53:32.7389
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UBOmShD7wXgeteMuw+weC3cjxfSIfGwF5DQm4naUsNMU9vXVXT+Tv/CAun5AWYK6pJgM2oH2DZRT4vu0PCdpIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7864
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+I cannot offer insight to an impact. Actual or possible.
+When I reported the issue to archlinux forum (https://bbs.archlinux.org/vie=
+wtopic.php?id=3D300507) the fan rpm had also dropped by ~20% but it is not =
+reproducible every time.
+If you take a look at the link you will immediately observe the rpm differe=
+nces. It is not what you asked (grep) but the fans are revving slower.
+
+So my concern is whether this leads to an overheating of the box?
+
+If you think it is of minor importance, I guess we can drop it.
+By no means do I want to occupy your valuable time.
+
+I dealt with the issue by means of a systemd service.
 
 
-> On Tue, Oct 29, 2024 at 04:15:33PM +0000, Luck, Tony wrote:
->>>>>> -       if (boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
->>>>>> -               misc_ids = hygon_nb_misc_ids;
->>>>>> +       if (boot_cpu_has(X86_FEATURE_ZEN))
->>>>>
->>>>> check_for_deprecated_apis: WARNING: arch/x86/kernel/amd_nb.c:395: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
->>>>
 
 
-Do the comments in cpufeature.h need updating? It seems to recommend
-boot_cpu_has() in most cases and suggests using static_cpu_has() (which
-is used by cpu_feature_enabled()) only in fast paths.
+Sent with Proton Mail secure email.
 
+On Wednesday, October 30th, 2024 at 11:24 PM, Guenter Roeck <linux@roeck-us=
+.net> wrote:
 
-/*
- * Static testing of CPU features. Used the same as boot_cpu_has(). It
- * statically patches the target code for additional performance. Use
- * static_cpu_has() only in fast paths, where every cycle counts. Which
- * means that the boot_cpu_has() variant is already fast enough for the
- * majority of cases and you should stick to using it as it is generally
- * only two instructions: a RIP-relative MOV and a TEST.
- *
- ...
-
- */
-static __always_inline bool _static_cpu_has(u16 bit)
-
-
-> 
-> And if not to checkpatch, then maybe it can be included in the TIP
-> maintainers' handbook? That is, if others are using it or something
-> similar.
-> 
-
-
+> On 10/30/24 11:00, M3 wrote:
+>=20
+> > I added the other participants because I erroneously replied in the pre=
+vious message. Sorry about that.
+>=20
+>=20
+> Maybe one of them sees the problem. I have no idea why the reported
+> temperature is wrong after resume; I don't see another attribute which
+> might be wrong and/or which might trigger the wrong value.
+>=20
+> What I do see, though, is that pwm1, which ties to temp1, still reports
+> a value of 158 at the "wrong" temperature after resume, even though the
+> lowest pwm limit temperature is set to 30 degrees C and the reported
+> temperature is 21 degrees C.
+>=20
+> > pwm1:158
+>=20
+> > pwm1_auto_point1_pwm:153
+>=20
+> > pwm1_auto_point1_temp:30000
+>=20
+> ...
+>=20
+> > pwm1_temp_sel:1
+>=20
+> ...
+>=20
+> > temp1_input:21000
+>=20
+>=20
+> I don't see any differences in other pwm values (of fan speeds) either.
+> The only "off" value seems to be the reported temperature for temp1.
+>=20
+> That makes me wonder: What actual impact do you see from this problem ?
+>=20
+> Thanks,
+> Guenter
+>=20
+> > After resume from suspend
+> >=20
+> > /sys/class/hwmon/hwmon5]$ grep . * 2>/dev/null
+> >=20
+> > beep_enable:0
+> > fan1_alarm:0
+> > fan1_beep:0
+> > fan1_input:0
+> > fan1_min:0
+> > fan1_pulses:2
+> > fan1_target:0
+> > fan1_tolerance:0
+> > fan2_alarm:0
+> > fan2_beep:0
+> > fan2_input:1162
+> > fan2_min:0
+> > fan2_pulses:2
+> > fan2_target:27000
+> > fan2_tolerance:1082
+> > fan3_alarm:0
+> > fan3_beep:0
+> > fan3_input:0
+> > fan3_min:0
+> > fan3_pulses:2
+> > fan3_target:0
+> > fan3_tolerance:0
+> > fan4_alarm:0
+> > fan4_beep:0
+> > fan4_input:0
+> > fan4_min:0
+> > fan4_pulses:2
+> > fan4_target:0
+> > fan4_tolerance:0
+> > fan5_alarm:0
+> > fan5_beep:0
+> > fan5_input:533
+> > fan5_min:0
+> > fan5_pulses:2
+> > fan5_target:0
+> > fan5_tolerance:0
+> > fan6_alarm:0
+> > fan6_input:534
+> > fan6_min:0
+> > fan6_pulses:2
+> > fan6_target:0
+> > fan6_tolerance:0
+> > fan7_input:759
+> > fan7_min:0
+> > fan7_pulses:2
+> > fan7_target:0
+> > fan7_tolerance:0
+> > in0_alarm:0
+> > in0_beep:0
+> > in0_input:696
+> > in0_max:1744
+> > in0_min:0
+> > in10_alarm:1
+> > in10_beep:0
+> > in10_input:1056
+> > in10_max:0
+> > in10_min:0
+> > in11_alarm:1
+> > in11_beep:0
+> > in11_input:848
+> > in11_max:0
+> > in11_min:0
+> > in12_alarm:1
+> > in12_beep:0
+> > in12_input:1000
+> > in12_max:0
+> > in12_min:0
+> > in13_alarm:1
+> > in13_beep:0
+> > in13_input:472
+> > in13_max:0
+> > in13_min:0
+> > in14_alarm:1
+> > in14_beep:0
+> > in14_input:1504
+> > in14_max:0
+> > in14_min:0
+> > in1_alarm:1
+> > in1_beep:0
+> > in1_input:1680
+> > in1_max:0
+> > in1_min:0
+> > in2_alarm:1
+> > in2_beep:0
+> > in2_input:3424
+> > in2_max:0
+> > in2_min:0
+> > in3_alarm:1
+> > in3_beep:0
+> > in3_input:3392
+> > in3_max:0
+> > in3_min:0
+> > in4_alarm:1
+> > in4_beep:0
+> > in4_input:1000
+> > in4_max:0
+> > in4_min:0
+> > in5_beep:0
+> > in5_input:904
+> > in5_max:0
+> > in5_min:0
+> > in6_alarm:1
+> > in6_beep:0
+> > in6_input:1360
+> > in6_max:0
+> > in6_min:0
+> > in7_alarm:1
+> > in7_beep:0
+> > in7_input:3424
+> > in7_max:0
+> > in7_min:0
+> > in8_alarm:1
+> > in8_beep:0
+> > in8_input:3248
+> > in8_max:0
+> > in8_min:0
+> > in9_alarm:1
+> > in9_beep:0
+> > in9_input:1056
+> > in9_max:0
+> > in9_min:0
+> > intrusion0_alarm:1
+> > intrusion0_beep:0
+> > intrusion1_alarm:1
+> > intrusion1_beep:0
+> > name:nct6798
+> > pwm1:158
+> > pwm1_auto_point1_pwm:153
+> > pwm1_auto_point1_temp:30000
+> > pwm1_auto_point2_pwm:255
+> > pwm1_auto_point2_temp:70000
+> > pwm1_auto_point3_pwm:255
+> > pwm1_auto_point3_temp:70000
+> > pwm1_auto_point4_pwm:255
+> > pwm1_auto_point4_temp:70000
+> > pwm1_auto_point5_pwm:255
+> > pwm1_auto_point5_temp:100000
+> > pwm1_crit_temp_tolerance:0
+> > pwm1_enable:5
+> > pwm1_floor:0
+> > pwm1_mode:1
+> > pwm1_start:1
+> > pwm1_step_down_time:400
+> > pwm1_step_up_time:400
+> > pwm1_stop_time:24000
+> > pwm1_target_temp:0
+> > pwm1_temp_sel:1
+> > pwm1_temp_tolerance:2000
+> > pwm2:101
+> > pwm2_auto_point1_pwm:51
+> > pwm2_auto_point1_temp:20000
+> > pwm2_auto_point2_pwm:178
+> > pwm2_auto_point2_temp:70000
+> > pwm2_auto_point3_pwm:255
+> > pwm2_auto_point3_temp:75000
+> > pwm2_auto_point4_pwm:255
+> > pwm2_auto_point4_temp:75000
+> > pwm2_auto_point5_pwm:255
+> > pwm2_auto_point5_temp:100000
+> > pwm2_crit_temp_tolerance:0
+> > pwm2_enable:5
+> > pwm2_floor:0
+> > pwm2_mode:1
+> > pwm2_start:1
+> > pwm2_step_down_time:800
+> > pwm2_step_up_time:800
+> > pwm2_stop_time:24000
+> > pwm2_target_temp:50000
+> > pwm2_temp_sel:7
+> > pwm2_temp_tolerance:2000
+> > pwm2_weight_duty_base:0
+> > pwm2_weight_duty_step:0
+> > pwm2_weight_temp_sel:0
+> > pwm2_weight_temp_step:0
+> > pwm2_weight_temp_step_base:0
+> > pwm2_weight_temp_step_tol:0
+> > pwm3:175
+> > pwm3_auto_point1_pwm:153
+> > pwm3_auto_point1_temp:30000
+> > pwm3_auto_point2_pwm:255
+> > pwm3_auto_point2_temp:70000
+> > pwm3_auto_point3_pwm:255
+> > pwm3_auto_point3_temp:70000
+> > pwm3_auto_point4_pwm:255
+> > pwm3_auto_point4_temp:70000
+> > pwm3_auto_point5_pwm:255
+> > pwm3_auto_point5_temp:100000
+> > pwm3_crit_temp_tolerance:0
+> > pwm3_enable:5
+> > pwm3_floor:0
+> > pwm3_mode:1
+> > pwm3_start:1
+> > pwm3_step_down_time:400
+> > pwm3_step_up_time:400
+> > pwm3_stop_time:24000
+> > pwm3_target_temp:0
+> > pwm3_temp_sel:7
+> > pwm3_temp_tolerance:2000
+> > pwm4:158
+> > pwm4_auto_point1_pwm:153
+> > pwm4_auto_point1_temp:30000
+> > pwm4_auto_point2_pwm:255
+> > pwm4_auto_point2_temp:70000
+> > pwm4_auto_point3_pwm:255
+> > pwm4_auto_point3_temp:70000
+> > pwm4_auto_point4_pwm:255
+> > pwm4_auto_point4_temp:70000
+> > pwm4_auto_point5_pwm:255
+> > pwm4_auto_point5_temp:100000
+> > pwm4_crit_temp_tolerance:0
+> > pwm4_enable:5
+> > pwm4_floor:0
+> > pwm4_mode:1
+> > pwm4_start:1
+> > pwm4_step_down_time:400
+> > pwm4_step_up_time:400
+> > pwm4_stop_time:24000
+> > pwm4_target_temp:0
+> > pwm4_temp_sel:1
+> > pwm4_temp_tolerance:2000
+> > pwm5:94
+> > pwm5_auto_point1_pwm:51
+> > pwm5_auto_point1_temp:20000
+> > pwm5_auto_point2_pwm:178
+> > pwm5_auto_point2_temp:55000
+> > pwm5_auto_point3_pwm:255
+> > pwm5_auto_point3_temp:60000
+> > pwm5_auto_point4_pwm:255
+> > pwm5_auto_point4_temp:60000
+> > pwm5_auto_point5_pwm:255
+> > pwm5_auto_point5_temp:100000
+> > pwm5_crit_temp_tolerance:0
+> > pwm5_enable:5
+> > pwm5_floor:0
+> > pwm5_mode:1
+> > pwm5_start:1
+> > pwm5_step_down_time:400
+> > pwm5_step_up_time:400
+> > pwm5_stop_time:24000
+> > pwm5_target_temp:0
+> > pwm5_temp_sel:1
+> > pwm5_temp_tolerance:2000
+> > pwm6:94
+> > pwm6_auto_point1_pwm:51
+> > pwm6_auto_point1_temp:20000
+> > pwm6_auto_point2_pwm:178
+> > pwm6_auto_point2_temp:55000
+> > pwm6_auto_point3_pwm:255
+> > pwm6_auto_point3_temp:60000
+> > pwm6_auto_point4_pwm:255
+> > pwm6_auto_point4_temp:60000
+> > pwm6_auto_point5_pwm:255
+> > pwm6_auto_point5_temp:100000
+> > pwm6_crit_temp_tolerance:0
+> > pwm6_enable:5
+> > pwm6_floor:0
+> > pwm6_mode:1
+> > pwm6_start:1
+> > pwm6_step_down_time:400
+> > pwm6_step_up_time:400
+> > pwm6_stop_time:24000
+> > pwm6_target_temp:0
+> > pwm6_temp_sel:1
+> > pwm6_temp_tolerance:2000
+> > pwm7:157
+> > pwm7_auto_point1_pwm:153
+> > pwm7_auto_point1_temp:30000
+> > pwm7_auto_point2_pwm:255
+> > pwm7_auto_point2_temp:75000
+> > pwm7_auto_point3_pwm:255
+> > pwm7_auto_point3_temp:75000
+> > pwm7_auto_point4_pwm:255
+> > pwm7_auto_point4_temp:75000
+> > pwm7_auto_point5_pwm:255
+> > pwm7_auto_point5_temp:100000
+> > pwm7_crit_temp_tolerance:0
+> > pwm7_enable:5
+> > pwm7_floor:0
+> > pwm7_mode:1
+> > pwm7_start:1
+> > pwm7_step_down_time:400
+> > pwm7_step_up_time:400
+> > pwm7_stop_time:24000
+> > pwm7_target_temp:0
+> > pwm7_temp_sel:1
+> > pwm7_temp_tolerance:2000
+> > temp10_input:0
+> > temp10_label:PCH_CHIP_TEMP
+> > temp11_input:0
+> > temp11_label:PCH_CPU_TEMP
+> > temp12_input:0
+> > temp12_label:PCH_MCH_TEMP
+> > temp1_beep:0
+> > temp1_crit:100000
+> > temp1_input:21000
+> > temp1_label:SYSTIN
+> > temp1_max:80000
+> > temp1_max_hyst:75000
+> > temp1_offset:0
+> > temp1_type:4
+> > temp2_alarm:0
+> > temp2_beep:0
+> > temp2_crit:100000
+> > temp2_input:21000
+> > temp2_label:CPUTIN
+> > temp2_max:121000
+> > temp2_max_hyst:111000
+> > temp2_offset:0
+> > temp2_type:4
+> > temp3_alarm:0
+> > temp3_beep:0
+> > temp3_crit:100000
+> > temp3_input:7000
+> > temp3_label:AUXTIN0
+> > temp3_max:80000
+> > temp3_max_hyst:75000
+> > temp3_offset:0
+> > temp3_type:4
+> > temp4_alarm:0
+> > temp4_beep:0
+> > temp4_crit:100000
+> > temp4_input:23000
+> > temp4_label:AUXTIN1
+> > temp4_max:80000
+> > temp4_max_hyst:75000
+> > temp4_offset:0
+> > temp4_type:4
+> > temp5_alarm:0
+> > temp5_beep:0
+> > temp5_crit:100000
+> > temp5_input:34000
+> > temp5_label:AUXTIN2
+> > temp5_max:80000
+> > temp5_max_hyst:75000
+> > temp5_offset:0
+> > temp5_type:4
+> > temp6_alarm:0
+> > temp6_beep:0
+> > temp6_crit:100000
+> > temp6_input:-1000
+> > temp6_label:AUXTIN3
+> > temp6_max:80000
+> > temp6_max_hyst:75000
+> > temp6_offset:0
+> > temp6_type:4
+> > temp7_alarm:0
+> > temp7_beep:0
+> > temp7_input:38000
+> > temp7_label:PECI Agent 0
+> > temp7_max:80000
+> > temp7_max_hyst:75000
+> > temp8_alarm:0
+> > temp8_beep:0
+> > temp8_crit:100000
+> > temp8_input:31000
+> > temp8_label:AUXTIN4
+> > temp8_max:80000
+> > temp8_max_hyst:75000
+> > temp9_input:0
+> > temp9_label:PCH_CHIP_CPU_MAX_TEMP
+> >=20
+> > Issuing rmmod && modprobe module nct6775
+> >=20
+> > /sys/class/hwmon/hwmon5]$ grep . * 2>/dev/null
+> >=20
+> > beep_enable:0
+> > fan1_alarm:0
+> > fan1_beep:0
+> > fan1_input:0
+> > fan1_min:0
+> > fan1_pulses:2
+> > fan1_target:0
+> > fan1_tolerance:0
+> > fan2_alarm:0
+> > fan2_beep:0
+> > fan2_input:1165
+> > fan2_min:0
+> > fan2_pulses:2
+> > fan2_target:27000
+> > fan2_tolerance:1082
+> > fan3_alarm:0
+> > fan3_beep:0
+> > fan3_input:0
+> > fan3_min:0
+> > fan3_pulses:2
+> > fan3_target:0
+> > fan3_tolerance:0
+> > fan4_alarm:0
+> > fan4_beep:0
+> > fan4_input:0
+> > fan4_min:0
+> > fan4_pulses:2
+> > fan4_target:0
+> > fan4_tolerance:0
+> > fan5_alarm:0
+> > fan5_beep:0
+> > fan5_input:536
+> > fan5_min:0
+> > fan5_pulses:2
+> > fan5_target:0
+> > fan5_tolerance:0
+> > fan6_alarm:0
+> > fan6_input:535
+> > fan6_min:0
+> > fan6_pulses:2
+> > fan6_target:0
+> > fan6_tolerance:0
+> > fan7_input:754
+> > fan7_min:0
+> > fan7_pulses:2
+> > fan7_target:0
+> > fan7_tolerance:0
+> > in0_alarm:0
+> > in0_beep:0
+> > in0_input:696
+> > in0_max:1744
+> > in0_min:0
+> > in10_alarm:1
+> > in10_beep:0
+> > in10_input:1056
+> > in10_max:0
+> > in10_min:0
+> > in11_alarm:1
+> > in11_beep:0
+> > in11_input:848
+> > in11_max:0
+> > in11_min:0
+> > in12_alarm:1
+> > in12_beep:0
+> > in12_input:1000
+> > in12_max:0
+> > in12_min:0
+> > in13_alarm:1
+> > in13_beep:0
+> > in13_input:472
+> > in13_max:0
+> > in13_min:0
+> > in14_alarm:1
+> > in14_beep:0
+> > in14_input:1504
+> > in14_max:0
+> > in14_min:0
+> > in1_alarm:1
+> > in1_beep:0
+> > in1_input:1680
+> > in1_max:0
+> > in1_min:0
+> > in2_alarm:1
+> > in2_beep:0
+> > in2_input:3424
+> > in2_max:0
+> > in2_min:0
+> > in3_alarm:1
+> > in3_beep:0
+> > in3_input:3392
+> > in3_max:0
+> > in3_min:0
+> > in4_alarm:1
+> > in4_beep:0
+> > in4_input:1000
+> > in4_max:0
+> > in4_min:0
+> > in5_beep:0
+> > in5_input:904
+> > in5_max:0
+> > in5_min:0
+> > in6_alarm:1
+> > in6_beep:0
+> > in6_input:1352
+> > in6_max:0
+> > in6_min:0
+> > in7_alarm:1
+> > in7_beep:0
+> > in7_input:3424
+> > in7_max:0
+> > in7_min:0
+> > in8_alarm:1
+> > in8_beep:0
+> > in8_input:3248
+> > in8_max:0
+> > in8_min:0
+> > in9_alarm:1
+> > in9_beep:0
+> > in9_input:1056
+> > in9_max:0
+> > in9_min:0
+> > intrusion0_alarm:1
+> > intrusion0_beep:0
+> > intrusion1_alarm:1
+> > intrusion1_beep:0
+> > name:nct6798
+> > pwm1:158
+> > pwm1_auto_point1_pwm:153
+> > pwm1_auto_point1_temp:30000
+> > pwm1_auto_point2_pwm:255
+> > pwm1_auto_point2_temp:70000
+> > pwm1_auto_point3_pwm:255
+> > pwm1_auto_point3_temp:70000
+> > pwm1_auto_point4_pwm:255
+> > pwm1_auto_point4_temp:70000
+> > pwm1_auto_point5_pwm:255
+> > pwm1_auto_point5_temp:100000
+> > pwm1_crit_temp_tolerance:0
+> > pwm1_enable:5
+> > pwm1_floor:0
+> > pwm1_mode:1
+> > pwm1_start:1
+> > pwm1_step_down_time:400
+> > pwm1_step_up_time:400
+> > pwm1_stop_time:24000
+> > pwm1_target_temp:0
+> > pwm1_temp_sel:1
+> > pwm1_temp_tolerance:2000
+> > pwm2:101
+> > pwm2_auto_point1_pwm:51
+> > pwm2_auto_point1_temp:20000
+> > pwm2_auto_point2_pwm:178
+> > pwm2_auto_point2_temp:70000
+> > pwm2_auto_point3_pwm:255
+> > pwm2_auto_point3_temp:75000
+> > pwm2_auto_point4_pwm:255
+> > pwm2_auto_point4_temp:75000
+> > pwm2_auto_point5_pwm:255
+> > pwm2_auto_point5_temp:100000
+> > pwm2_crit_temp_tolerance:0
+> > pwm2_enable:5
+> > pwm2_floor:0
+> > pwm2_mode:1
+> > pwm2_start:1
+> > pwm2_step_down_time:800
+> > pwm2_step_up_time:800
+> > pwm2_stop_time:24000
+> > pwm2_target_temp:50000
+> > pwm2_temp_sel:7
+> > pwm2_temp_tolerance:2000
+> > pwm2_weight_duty_base:0
+> > pwm2_weight_duty_step:0
+> > pwm2_weight_temp_sel:0
+> > pwm2_weight_temp_step:0
+> > pwm2_weight_temp_step_base:0
+> > pwm2_weight_temp_step_tol:0
+> > pwm3:175
+> > pwm3_auto_point1_pwm:153
+> > pwm3_auto_point1_temp:30000
+> > pwm3_auto_point2_pwm:255
+> > pwm3_auto_point2_temp:70000
+> > pwm3_auto_point3_pwm:255
+> > pwm3_auto_point3_temp:70000
+> > pwm3_auto_point4_pwm:255
+> > pwm3_auto_point4_temp:70000
+> > pwm3_auto_point5_pwm:255
+> > pwm3_auto_point5_temp:100000
+> > pwm3_crit_temp_tolerance:0
+> > pwm3_enable:5
+> > pwm3_floor:0
+> > pwm3_mode:1
+> > pwm3_start:1
+> > pwm3_step_down_time:400
+> > pwm3_step_up_time:400
+> > pwm3_stop_time:24000
+> > pwm3_target_temp:0
+> > pwm3_temp_sel:7
+> > pwm3_temp_tolerance:2000
+> > pwm4:158
+> > pwm4_auto_point1_pwm:153
+> > pwm4_auto_point1_temp:30000
+> > pwm4_auto_point2_pwm:255
+> > pwm4_auto_point2_temp:70000
+> > pwm4_auto_point3_pwm:255
+> > pwm4_auto_point3_temp:70000
+> > pwm4_auto_point4_pwm:255
+> > pwm4_auto_point4_temp:70000
+> > pwm4_auto_point5_pwm:255
+> > pwm4_auto_point5_temp:100000
+> > pwm4_crit_temp_tolerance:0
+> > pwm4_enable:5
+> > pwm4_floor:0
+> > pwm4_mode:1
+> > pwm4_start:1
+> > pwm4_step_down_time:400
+> > pwm4_step_up_time:400
+> > pwm4_stop_time:24000
+> > pwm4_target_temp:0
+> > pwm4_temp_sel:1
+> > pwm4_temp_tolerance:2000
+> > pwm5:94
+> > pwm5_auto_point1_pwm:51
+> > pwm5_auto_point1_temp:20000
+> > pwm5_auto_point2_pwm:178
+> > pwm5_auto_point2_temp:55000
+> > pwm5_auto_point3_pwm:255
+> > pwm5_auto_point3_temp:60000
+> > pwm5_auto_point4_pwm:255
+> > pwm5_auto_point4_temp:60000
+> > pwm5_auto_point5_pwm:255
+> > pwm5_auto_point5_temp:100000
+> > pwm5_crit_temp_tolerance:0
+> > pwm5_enable:5
+> > pwm5_floor:0
+> > pwm5_mode:1
+> > pwm5_start:1
+> > pwm5_step_down_time:400
+> > pwm5_step_up_time:400
+> > pwm5_stop_time:24000
+> > pwm5_target_temp:0
+> > pwm5_temp_sel:1
+> > pwm5_temp_tolerance:2000
+> > pwm6:94
+> > pwm6_auto_point1_pwm:51
+> > pwm6_auto_point1_temp:20000
+> > pwm6_auto_point2_pwm:178
+> > pwm6_auto_point2_temp:55000
+> > pwm6_auto_point3_pwm:255
+> > pwm6_auto_point3_temp:60000
+> > pwm6_auto_point4_pwm:255
+> > pwm6_auto_point4_temp:60000
+> > pwm6_auto_point5_pwm:255
+> > pwm6_auto_point5_temp:100000
+> > pwm6_crit_temp_tolerance:0
+> > pwm6_enable:5
+> > pwm6_floor:0
+> > pwm6_mode:1
+> > pwm6_start:1
+> > pwm6_step_down_time:400
+> > pwm6_step_up_time:400
+> > pwm6_stop_time:24000
+> > pwm6_target_temp:0
+> > pwm6_temp_sel:1
+> > pwm6_temp_tolerance:2000
+> > pwm7:157
+> > pwm7_auto_point1_pwm:153
+> > pwm7_auto_point1_temp:30000
+> > pwm7_auto_point2_pwm:255
+> > pwm7_auto_point2_temp:75000
+> > pwm7_auto_point3_pwm:255
+> > pwm7_auto_point3_temp:75000
+> > pwm7_auto_point4_pwm:255
+> > pwm7_auto_point4_temp:75000
+> > pwm7_auto_point5_pwm:255
+> > pwm7_auto_point5_temp:100000
+> > pwm7_crit_temp_tolerance:0
+> > pwm7_enable:5
+> > pwm7_floor:0
+> > pwm7_mode:1
+> > pwm7_start:1
+> > pwm7_step_down_time:400
+> > pwm7_step_up_time:400
+> > pwm7_stop_time:24000
+> > pwm7_target_temp:0
+> > pwm7_temp_sel:1
+> > pwm7_temp_tolerance:2000
+> > temp10_input:0
+> > temp10_label:PCH_CHIP_TEMP
+> > temp11_input:0
+> > temp11_label:PCH_CPU_TEMP
+> > temp12_input:0
+> > temp12_label:PCH_MCH_TEMP
+> > temp1_beep:0
+> > temp1_crit:100000
+> > temp1_input:30000
+> > temp1_label:SYSTIN
+> > temp1_max:80000
+> > temp1_max_hyst:75000
+> > temp1_offset:0
+> > temp1_type:4
+> > temp2_alarm:0
+> > temp2_beep:0
+> > temp2_crit:100000
+> > temp2_input:21000
+> > temp2_label:CPUTIN
+> > temp2_max:121000
+> > temp2_max_hyst:111000
+> > temp2_offset:0
+> > temp2_type:4
+> > temp3_alarm:0
+> > temp3_beep:0
+> > temp3_crit:100000
+> > temp3_input:7000
+> > temp3_label:AUXTIN0
+> > temp3_max:80000
+> > temp3_max_hyst:75000
+> > temp3_offset:0
+> > temp3_type:4
+> > temp4_alarm:0
+> > temp4_beep:0
+> > temp4_crit:100000
+> > temp4_input:23000
+> > temp4_label:AUXTIN1
+> > temp4_max:80000
+> > temp4_max_hyst:75000
+> > temp4_offset:0
+> > temp4_type:4
+> > temp5_alarm:0
+> > temp5_beep:0
+> > temp5_crit:100000
+> > temp5_input:34000
+> > temp5_label:AUXTIN2
+> > temp5_max:80000
+> > temp5_max_hyst:75000
+> > temp5_offset:0
+> > temp5_type:4
+> > temp6_alarm:0
+> > temp6_beep:0
+> > temp6_crit:100000
+> > temp6_input:-1000
+> > temp6_label:AUXTIN3
+> > temp6_max:80000
+> > temp6_max_hyst:75000
+> > temp6_offset:0
+> > temp6_type:4
+> > temp7_alarm:0
+> > temp7_beep:0
+> > temp7_input:37500
+> > temp7_label:PECI Agent 0
+> > temp7_max:80000
+> > temp7_max_hyst:75000
+> > temp8_alarm:0
+> > temp8_beep:0
+> > temp8_crit:100000
+> > temp8_input:31000
+> > temp8_label:AUXTIN4
+> > temp8_max:80000
+> > temp8_max_hyst:75000
+> > temp9_input:0
+> > temp9_label:PCH_CHIP_CPU_MAX_TEMP
+> >=20
+> > Sent with Proton Mail secure email.
+> >=20
+> > On Wednesday, October 30th, 2024 at 7:36 PM, Guenter Roeck linux@roeck-=
+us.net wrote:
+> >=20
+> > > On 10/30/24 09:42, M3 wrote:
+> > >=20
+> > > > I have no clue what you are asking. I am happy to provide but...
+> > > > Could you please guide me ?
+> > >=20
+> > > cd /sys/class/hwmon/hwmon5
+> > >=20
+> > > grep . * 2>/dev/null
+> > >=20
+> > > > Sent from my iDev
+> > > >=20
+> > > > Sent with Proton Mail secure email.
+> > > >=20
+> > > > On Wednesday, October 30th, 2024 at 6:34 PM, Guenter Roeck linux@ro=
+eck-us.net wrote:
+> > > >=20
+> > > > > On 10/30/24 09:19, M3 wrote:
+> > > > >=20
+> > > > > > ok here are the temps of motherboard.
+> > > > > >=20
+> > > > > > After resume from suspend
+> > > > > > $ cat /sys/class/hwmon/hwmon5/temp1_input
+> > > > > > 20000
+> > > > > >=20
+> > > > > > And after rmmod nct6775 && modprobe nct6775
+> > > > > > $ cat /sys/class/hwmon/hwmon5/temp1_input
+> > > > > > 30000
+> > > > >=20
+> > > > > That is even more useless. I see that below. I would need to see =
+all values
+> > > > > to be able to determine if there are some discrepancies (for exam=
+ple in
+> > > > > temperature offset values).
+> > > > >=20
+> > > > > Guenter
+> > > > >=20
+> > > > > > Sent with Proton Mail secure email.
+> > > > > >=20
+> > > > > > On Wednesday, October 30th, 2024 at 6:08 PM, Guenter Roeck linu=
+x@roeck-us.net wrote:
+> > > > > >=20
+> > > > > > > On 10/30/24 08:36, M3 wrote:
+> > > > > > > [ ... ]
+> > > > > > >=20
+> > > > > > > > sensors reporting before systemctl suspend
+> > > > > > > >=20
+> > > > > > > > $ sensors nct6798-isa-02a0
+> > > > > > > >=20
+> > > > > > > > nct6798-isa-02a0
+> > > > > > > > Adapter: ISA adapter
+> > > > > > > > CPU Fan: 1162 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Front Fan1: 495 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Rear Fan: 491 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Front Fan2: 742 RPM (min =3D 0 RPM)
+> > > > > > > > Motherboard: +30.0=C2=B0C (high =3D +80.0=C2=B0C, hyst =3D =
++75.0=C2=B0C)
+> > > > > > > > (crit =3D +100.0=C2=B0C) sensor =3D thermistor
+> > > > > > > >=20
+> > > > > > > > ----------
+> > > > > > > > sensors reporting after resume from suspend (fan rpm's are =
+now similar)
+> > > > > > > >=20
+> > > > > > > > $ sensors nct6798-isa-02a0
+> > > > > > > >=20
+> > > > > > > > nct6798-isa-02a0
+> > > > > > > > Adapter: ISA adapter
+> > > > > > > > CPU Fan: 1165 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Front Fan1: 494 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Rear Fan: 510 RPM (min =3D 0 RPM)
+> > > > > > > > Chassis Front Fan2: 716 RPM (min =3D 0 RPM)
+> > > > > > > > Motherboard: +21.0=C2=B0C (high =3D +80.0=C2=B0C, hyst =3D =
++75.0=C2=B0C)
+> > > > > > > > (crit =3D +100.0=C2=B0C) sensor =3D thermistor
+> > > > > > >=20
+> > > > > > > It is impossible to say what might be wrong from this informa=
+tion. Any chance to provide
+> > > > > > > output from hwmon device attributes (from sys/class/hwmon/hwm=
+onX/) from before and after
+> > > > > > > re-loading the module ?
+> > > > > > >=20
+> > > > > > > Guenter
