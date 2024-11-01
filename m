@@ -1,103 +1,99 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F2E146D45;
-	Fri,  1 Nov 2024 06:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074E71BF24;
+	Fri,  1 Nov 2024 14:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730441773; cv=none; b=ShHGNanyNGGjz6mUwOTVmrQz/nCmM+VlPcQGGSHiRQIii252XwBMTjYW+zkiBM2e/5rgM9W6zkhYG/TvgQDsn/i/d21VuE5cUtt93qXz95VhkWvdEZWd4ZROIvDHR/2p0JEuKdPWE/TjR1/k2+/GUubaRdBb4g/rrjtphjkKk7M=
+	t=1730471305; cv=none; b=ZeLqPxsBc4K6LTf1oJd5f/mvWTHlznUd2UTRo8+Nf/S7NdlunXAWMZl+GlgJL4PmVLGffdmU5lx5EsdVX3tRDOpei4IBSMedyqvGHk/OI5V8o291ZNFpZuB0TE12TashYjNsPLHr6+Um94AUf0D1pXQT+con6DZU7CkwBzp4y4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730441773; c=relaxed/simple;
-	bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oEruR6D/7CDIPYiB2DoG3HdQ9ifmrWHIU0iuZmlSfWYhqIkE0m5TCO/mCSC5FD/lndsCo7Uz+TipyiFAXrmwwuVzSMKadCk6QcjEIaWSNDMnKbUa3odDfljKmcFTwLZjRnmD3VItzfhHntS24N7IrKjl1I9MKXTtGsk+1RIs3VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+7qA85W; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1730471305; c=relaxed/simple;
+	bh=JJOTGDsJTC0/vFf6QQmSD03I7QVCGkcddc1fNIPBBH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JrdMSRWqAAOmZf/9hnPmtra4cGIqGJ1xx96nrFBrVp5sKxQZ6xEQt9i15La7YOd5JxgSM8ilHFe14SuhdqVtsB7EluHXKNzqu8J2xObUw5UoVJtDf4w53lMpAId9VyTBbbs+F8u46PSJtK+VzzgU1NyLIE82sh97w2vVK4uOxb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bPk/nBfp; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+7qA85W"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e290554afb4so1869905276.0;
-        Thu, 31 Oct 2024 23:16:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bPk/nBfp"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-72061bfec2dso1727601b3a.2;
+        Fri, 01 Nov 2024 07:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730441771; x=1731046571; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-        b=T+7qA85WAX5jK3hEFj9YDnQSf/giHGB/mf5YmJ17lXrCocKr2fNxlF5ZaACob2xq++
-         vKXgJKLtqn4m+Z2HK0s8qT9LiYWkSUeKhbkocSo9UehL7mFQdwb93whltSRRmwFtEMGG
-         1EW+UCfRQTFCyUgeU7Sz2CNxckms5NxsQ1su8KmzoyvoDK+smsacjnxuFIsjJvOmsZx8
-         EhWmhWufbkcO+k4vbL2QyHV7ZiBmoFPyZUZnpYTqcvG9xlrnbplJqYR7O/0vdX5UoIW5
-         ByFDrbC75N5WoNpllUNN65X3MT1yHO+e+fewyS6R2BAmj5eRG7VtfuGNOp8raXp/l01R
-         aSJQ==
+        d=gmail.com; s=20230601; t=1730471303; x=1731076103; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XFmWdX7p8UW/OnDmfSeyrMc2Et7zZ5YN9L5u0UlMjL4=;
+        b=bPk/nBfpLMykXFWTgMERGo95Atv5Qj+dXHY/grWNqlNQz0smNsCp2dceVmrx3BZPcc
+         qo1YcuPSU+LG4OrlGSJqeHShgE6aSu+MNuzzq8BX2Zu1yC2nqQtP9OM0bzmJnpbHa8rq
+         wz5+lm309GgkwnbhSVEjBI4v8RNcQGQe3efTjoWhBbT/fQq2QIMzQI+ZQZjUP3nXkCFL
+         cobmTVKrt5zxMuFpanxnoA9p9x05gt6I5cX8GJZENYAlOTpmA5wqZVhJeis7jijhP6+p
+         zk21xRMu80s91V9aLzFgGaBOJ1i6DnEnLIbh5eDXlLcFrK6j7UDXz8Dsx9GDy9gpA0ph
+         4X5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730441771; x=1731046571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1730471303; x=1731076103;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-        b=rwgpvDQmVzvoa32jE9YgOzKYyO0e0F3LgJfjsmZs4XIdsSdIyo5FKfyOn52nYLNzmo
-         H7ZU7B0l5iGtbeaszfN0GXMS8E64ioU/hTVFv/kxM5uf2Yn8Us+TOcWeYw/x2LYWLUw9
-         M7MAWZrPUmOzyoqhINMViVsk+mcruXHZGmXZCObI+XSRJw8cak2h1Qo7sHTwD6zoWHxA
-         6SkQa8CD9qvf55ZXlT2dCa3NM1wh1a3ESZNVtnWGtmbALMHNOj0PhdOvv/eh3tIRyIwb
-         9KMBSED7ZQc73AwjFnWJO3v/ubjemPNcW0pRaiqha96pc+Y38z9rFMpSyObGiKBIeQO8
-         QY/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU1sMvc3n/ZuPv66+ba5gQLh3/+kq/CtTJUC2/03bFtuwe/60UsvMmiTEUxT8OGqm+38q0NYRxh@vger.kernel.org, AJvYcCUCx95UwCIr5ZCWKNsJfH3pePJ0Ez+WzRNFoe0dli+BiOHgpsS3UYaAhT7zaOr0/qzdj1/+SM86xWp1X6I=@vger.kernel.org, AJvYcCULzWCz/It5QbJHQoBotEIUNjUQApi9UGnXdtc/vSsBQq/r3AWmBMhvb4kBoEOYkL9iy/xIVAbLgepe@vger.kernel.org, AJvYcCUQikgN4lUAwAwDH61LL9ljCGSbQav7Fm3qMKT65jPzCfVvxDk0xvRxkAWf8S3G+6nV4+svMdEstHrmv2+A@vger.kernel.org, AJvYcCUfZ9Ele1myXUTjJzI497aGDEjUd3CjCSsvyGRfCJcgRRhxMPj60yMbV7ISl8d62TF3wnzbb294Ydbikm7ndLw=@vger.kernel.org, AJvYcCV+kSvEzuZA059Q3P034Jq4xxnIGVpNNgeae3fsUEDzZczDw/evvN841xXb3yzZG+UtXkaQ5CertIhN@vger.kernel.org, AJvYcCVkWK2yK3iRZgVYM9ljtyuCHh2jxURWzH1LH6xK44YYE6bkhMWC+fMVUDPv9Q7tt7Wxf0IbO7rzx/aT@vger.kernel.org, AJvYcCWj1AyzL1G3J8WbSEAu/P3LzgxKaCrc69osF6ruZTJ00g9wonElOFVOl6pBH1Sw3GazlyJomIylUE7h8Q==@vger.kernel.org, AJvYcCWpokYfRiebrKDWDlArpTZtIIjbfjIW/NpkGeb5hNFNjR4jGVsrI3D4lg1jaMLtDwJjyVE/q9xmCqn9@vger.kernel.org, AJvYcCXHvN8ES3MqGfIK1EyFM1LvYpdoiuslBbbt44kkUho9nc3GeRx3CGYkXuB3SyM3RTZgUL/Ip2B+VG8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6dF5STPBTz6pPDByyLKINCuy0Y/ow7jcshE+6wQgzFhOWd6Dx
-	5+pxncY3En+N/e8/D8r/bWZ0q95TB8Uh73d9MbqPGPirlHpdOaFkbACZDlKfIT8saoLNodgdf4C
-	jHcGCGjLz0dwY4lJzJjde6fuJfq4=
-X-Google-Smtp-Source: AGHT+IFqMKdP/PNKGwnzDQJmnqEp+I7YNFa7RnoAoYOmar2xUzZgcR5eeFveEUZVqb1Er5ED63rd6vgk5E5KJ56d+nU=
-X-Received: by 2002:a05:6902:33c7:b0:e30:e0ab:8eed with SMTP id
- 3f1490d57ef6-e30e5a3e0eemr5326265276.17.1730441770787; Thu, 31 Oct 2024
- 23:16:10 -0700 (PDT)
+        bh=XFmWdX7p8UW/OnDmfSeyrMc2Et7zZ5YN9L5u0UlMjL4=;
+        b=S46sJPDRs+OVfv1hRrM1XwFsJ2u6IUQdvXhEuP2UagkUE2T+JBXMHYURO/oKFWUjFh
+         hqHR+9jJhpMn7SJhH1EJCAtJofOKm2P5HZCV1sIcp38woTL+NDbJduPkU+eNjvDBqfse
+         ONjmMOQJUkg3BSCWxkjR35YXoef/GDPmhGiRcyRbgOrAgY6UY50AaVlW0bt3TR+k0FlY
+         7T1Y+2jG1OChVCvqzjSh0TRm2JR0Ye+oUV7K51+Os0kaxZjM3A80Kl+mhefoTVSggkGV
+         bSg/s955kY9F7P/lsz5RZyqWwu0OYi4hbB+84OQh3gAn9X64lTbK2ZOkyuGbozlXxxOt
+         oz2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUCFAyVTNEVgIzfbkArW+Xez53fp6cXIGxn+IKOZjqAgrsMAcl3m7KuJy3NlWB01OibCkKl8reOuypA@vger.kernel.org, AJvYcCUSSSSDHvz0dJf16IXOS2w/Uns7tr1w47SzF43Dd1oPx8rDvY6sRnzdVSftn3TCCpZ+iOMYZBNjdN2V@vger.kernel.org, AJvYcCUh08XUZKQ3rWBzD/EIXx9vjovZ0A/7utOp/iJe7qmSpcs8b4vh2erOHVcdVUvUMD6LMA1yWo8EEPSiAwc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUf808w7z25yy6Qk+x9TLry22HcMRbL1Jmp4Qu08iIenqDoYjG
+	L48KM9WwFYqkD/vnG0flkNJ7pJ9z85YlGLcm9UrK1sZ9q+cqC3pUFqQ4+w==
+X-Google-Smtp-Source: AGHT+IGRzSa7VeVFuEmHm5dbtnCna16zr18z8jeBGaFurcodmaam2po6f5ay80Mki0j25xDwKrhtng==
+X-Received: by 2002:a05:6a00:2e15:b0:71d:eb7d:20e4 with SMTP id d2e1a72fcca58-720c98d0527mr5231224b3a.8.1730471302963;
+        Fri, 01 Nov 2024 07:28:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc20f64asm2784783b3a.96.2024.11.01.07.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Nov 2024 07:28:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 1 Nov 2024 07:28:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Grant Peltier <grantpeltier93@gmail.com>
+Cc: robh@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <8feb1581-4c0b-40fa-8aa4-8c2691921125@roeck-us.net>
+References: <cover.1730326915.git.grantpeltier93@gmail.com>
+ <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-3-tmyu0@nuvoton.com>
- <CAMRc=Mc+SZN=EytxY=qA-qBEAY_F17GP-7FRE9oLojLbdUoPaQ@mail.gmail.com>
- <CAOoeyxW4=+5-QMcd_wgncFC9jgx_1Zf1Tq8RTnBvVqZ1JcUBQg@mail.gmail.com>
- <CAMRc=MexqwSCDrsBS0mK0fo_MCwngAH9XVgjRuDQjw0TVUBmPw@mail.gmail.com>
- <CAOoeyxXRrDuKJRMb3O2h3BF1vC=pwNN3DKfnEN9LnA+jiBCTQg@mail.gmail.com> <CAMRc=Me+R_i1WxFGeVe-MRREGn1YJvUon73A4FHDOPgs8wVaCg@mail.gmail.com>
-In-Reply-To: <CAMRc=Me+R_i1WxFGeVe-MRREGn1YJvUon73A4FHDOPgs8wVaCg@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 1 Nov 2024 14:15:59 +0800
-Message-ID: <CAOoeyxWo5CjJooM1nG_0Z4ZMaWmcDtt=ysRC5Z6JnpZ7cTcL7A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] gpio: Add Nuvoton NCT6694 GPIO support
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, 
-	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
 
-Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2024=E5=B9=B410=E6=9C=8831=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=883:32=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> > > No for line names - as this is a dynamic USB expander, I'd suggest to
-> > > have them in the driver and assign to gc->names.
-> >
-> > Could I create an array to map each of the GPIO pins?
-> >
->
-> Please trim the quoted email to only the relevant parts.
->
-> I'm not sure what you mean by that. There's a field in struct
-> gpio_chip which you can use to set the line names from the driver
-> code.
->
+On Wed, Oct 30, 2024 at 05:41:39PM -0500, Grant Peltier wrote:
+> Add devicetree bindings to support declaring optional voltage dividers to
+> the rail outputs of supported digital multiphase regulators. Some
+> applications require Vout to exceed the voltage range that the Vsense pin
+> can detect. This binding definition allows users to define the
+> characteristics of a voltage divider placed between Vout and the Vsense
+> pin for any rail powered by the device.
+> 
+> These bindings copy the vout-voltage-divider property defined in the
+> maxim,max20730 bindings schema since it is the best fit for the use case
+> of scaling hwmon PMBus telemetry. The generic voltage-divider property
+> used by many iio drivers was determined to be a poor fit because that
+> schema is tied directly to iio for the purpose of scaling io-channel
+> voltages and the isl68137 driver is not an iio driver.
+> 
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Understood, thank you very much.
+Applied.
 
-Best regards
-Ming
+Thanks,
+Guenter
