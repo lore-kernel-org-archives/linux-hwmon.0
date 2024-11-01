@@ -1,72 +1,76 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848871AA7B1;
-	Fri,  1 Nov 2024 14:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA561A76C7;
+	Fri,  1 Nov 2024 14:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730472517; cv=none; b=mooJyoRey1T9FmcNWsY/+hFgJO6zp62iTayceu79ID/PWfFYKP05Z8BrVJRkiQ7P7F0cpeIIuHHUckOupNNWD6HEuCW8vUxn+ArlaRTLUSyTgsjF+ZZdjoVNwPUs/GnCl1axf0v8VW6me9EW5yGcFhb38PnDTsnxDzYj4J24qKg=
+	t=1730473198; cv=none; b=OcTz/rDK94vDf0fkIDW7/4Wm/mHZVfYw3qA80H+AWfRM6vDnwku9f6304fiS1DqxWid3Y4Ukpa+wApRQ5mehimfhOqsoKPgofLRQ1iHPCNIRXnQ9+Qm08C7p7syyqSkSXqA1ORjzgM3p7fua5YtXxGBkVQxvvEdmkIA8+mTiFeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730472517; c=relaxed/simple;
-	bh=Aez5D/Z2QBMWreCJuN4mdsM+v5hdj55CjDvG7IsGxh0=;
+	s=arc-20240116; t=1730473198; c=relaxed/simple;
+	bh=3bMwQVXOgP3wNeVR1dq0E85K3PeuAuQVja79ikYM2XM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MqlNtGZgWuimfQe/nO2v4PrkkwXeFn3auhEzWWAtzQwIYywbnAgE8rU6w4zmGs6Gh+BOpIhUn6vdRNOc2uf2Hl2Dfv1FP07zdrtneMLil8xzTYxKLV5nPFK/l2yeD2ujCBopWpCde3yAehjESU/w8HfbBXKX52EZqzN3IeGn3HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6oeG0eL; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=T9Ha1JdH1LRsoDQPhe5c4csOP77MtTRgeAh2+dDNej+UAbJqEyQ3WRKVn2RHk1i/uAl1sQ8ACbqwcUKrMKmwRGrg1YJmfOh+iWRUXF0uPmgxmyDvdx07gk/Ic6wwJaBBB8/3s/p3JH7YyDE6c42L0ZYv/oHZo38LTpU1WI9TfnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l0Yo/xoB; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6oeG0eL"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e4c2e36daso2210560b3a.0;
-        Fri, 01 Nov 2024 07:48:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l0Yo/xoB"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20caea61132so18142745ad.2;
+        Fri, 01 Nov 2024 07:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730472514; x=1731077314; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730473196; x=1731077996; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ikLF17TGv2d8/HjXENzyIcikHXnbEzedUUKC+eQvlMo=;
-        b=e6oeG0eL/RJoUEgpVHOAJmlkuT/O30XGxQKQcJ6xxgTeAins8RICq477wLzwSKIO0e
-         POJNtL/kTF5gj85kIgcaakBDlzhGhiSVRwPaUkIL5ejje96/YT68NCB6llFAfOtyPpTB
-         /h8A1fIc+1ab7H7xsz625kvaUww/8YyrIDKmZeFVSnj+FHXYtKI2oT2RZ9ZO1mrKhB2n
-         X+BwzQRK9cTlxdJqZ/DN28DScc+goJNbIJ/N9cqmiM8IznLW0huesaBrjWsuGB5JDMuC
-         TmB1ungs/WXCZP8Xvq4QlK8T4/KKLl0SgKhur9FCm+Z6BA6pKvbhkPYr5hrTRZNcW0i4
-         //OQ==
+        bh=9eGIngRauW1UIGfd9PdLFIGiBeWYjimj/krraQmp0L0=;
+        b=l0Yo/xoBNjKNO7d1EgmkFS66RNKyimKWmC8Ui2z85tm4/7oWXGNTWaq7YGE1FsX44W
+         VZYHYZ4IoQmiK8Onq/+E95IboRX57zNIrbXggienIRXKH3UcLappt8+5PApEGykaMw7I
+         +JngFu1slAKG/GfXxQMHLtV/SWbr9zZjvmh7j77AX7Vlkr2PPUkVoYKOD5Ljv5WS/aYe
+         zQIW+tx4q1ScvIoPvpOEh+o0Y/zS42wAaofeCghrM89VshDDe4hnkxeZZKRrjziYCJ9n
+         AmIoDCxn8w5gv5NHNGtQc8CUfbVWRY7eQL8+kw+hyAK8AtW5qO2XegXo2mDPrZnx2tuX
+         eXfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730472514; x=1731077314;
+        d=1e100.net; s=20230601; t=1730473196; x=1731077996;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ikLF17TGv2d8/HjXENzyIcikHXnbEzedUUKC+eQvlMo=;
-        b=oxAobOtcx0IjRUAIXjaV7EyXPk3Lp000YKRI0zWiE/B7LccGG39xbj/6WJNhFRaUAp
-         BjJJ+ig4DiJiyDmqE2DfSqBzzZdfQivAYoaZNt5qzPb3nTfE0ZoF2U0be13FU7rYdrwH
-         hriJ33fOI91jgQ1S5gkb9IZ0bMg6VMd2b7yucGXyzmp67NFgx+bSDuRE9Jlf4DjYwHe2
-         7bwaZ6SzGqItoGIzmx4c8El94M9QqXVzeTiF0OeZW0AeqkkVaT3BLTmQX4n1CPP1Nm90
-         6h1jusgp0PdqetJmGxDzCF1qJoZs8WpofhKuiQ3Y9Bl9Z7ySeQYxtKd+AZu0lZkVNoM5
-         elkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPHPsop0wrBiktTusIgLInmRwtkxdmti8zoxIT4G+WmuEKzXCNPOfyLWMkg4T50ugAvDLP5jU6XiqEzGif@vger.kernel.org, AJvYcCUSnoaHxQJQRwRKeYjXNNaTLEw8BCw3A/P8mmN4R15mX1vRU2ymfeDiwuJOGE/+IQvMRc2He+SHncJg@vger.kernel.org, AJvYcCVlQwDfoGZi8beYOJI60PcAHpQz9FJ9SzdN6/or0L4vnL4ltSlo4pvynwcuvY+mF2+cIW5QN4qMNJQ8IoI=@vger.kernel.org, AJvYcCWoLL0EMhrHyQGINONtsqeFMOpponIw9d9k7p4SEa641pndABIsK82zsP+aRnpllCckHvkqwENRp4NP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZjSTk5EMQqvEvsF47Aq72zsnKGpaq6z6Z0C5hEueBnop/nx5E
-	mWLaqx2xRinaIW36cOTzKio8ggop4WpH9JhjznQ3KDiXVPSH+NMB
-X-Google-Smtp-Source: AGHT+IEud0i2QRxm/ssibxG0ytuDAv7M+mnTsOZohBA1h7lUg1MTloaGNER2mbVW0mDknyn5OpCdQQ==
-X-Received: by 2002:a05:6a20:4c21:b0:1d9:15b2:83e with SMTP id adf61e73a8af0-1db94f6467emr8939450637.7.1730472513686;
-        Fri, 01 Nov 2024 07:48:33 -0700 (PDT)
+        bh=9eGIngRauW1UIGfd9PdLFIGiBeWYjimj/krraQmp0L0=;
+        b=gSB9SyW7ieUAf5vOVIWKdL6fomzSEWk9KlHjOkDw+gi4qQ4H4/8lSPFSQsbyZ9ddo0
+         cSeA8H81JnrSpCnk331c6pBGuVwWmnm1JNKSI33aR53+flwtwA2mzaOPUhBVxv6gnIpl
+         LXnyEo0yDSU8szYc6EfOmmCAJoxV79zCOnXzzwwS/bJY9YP3P+5uL7EVMS/VyKDN6EKL
+         GtIBFAtMs6Ypxf6MjcffmEqd7XbRROc0hWsRrK1ad8bbnxJ4t5Al8mtuuIIitbdfXoU4
+         h9erOySE/E/zpccQ6MJbXj960dXEEP55whB9xDZ+CWA6jqL2sdBf4GZv58BSN7MjJiPG
+         Q4PA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNzNg9ot+AzFhttjEqdm503ayXuKNQTe8RRwQXFfzK32cSXXhcFn4UJpXQtFk5S+L272BDPr5AjLjD@vger.kernel.org, AJvYcCVhmSI9gIyxaev+Cm3ZxCIut1/WWDc7D3BA5kXoOrOKaBTdDi+GjqeIBZgWs4SwHksGOUXWCOXDQeLd@vger.kernel.org, AJvYcCWSTcyrdOcITNFluqd0q9N4/TxrBOvsIAPTHZOCa+Wpa+XMoANY+WsEAP8r4jD3oNO1bUmwWGDN/tvWYUKh@vger.kernel.org, AJvYcCXFEOTzNnexWUbYAUWPBaxMrQK1Es5S/y8bfjd2UvxSplsvlyIwzGRA3vDmZWOmMzXz6/ZakgDEKMEz7E0=@vger.kernel.org, AJvYcCXe2XoqjebOciOnJaOXK+wFFATcIK6r8BMb1AqnIzK6vOiRBigqzAFyT8ATR0DLGdJt1jRY2jLtPiHM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxt/y8udTTw7O68Q4npJwf/chxuDgiUMGyE2MYOG2+jj2Ppo/dF
+	/RiQi/EWFQp4NdNyYTmducnxsrn05AcAUF2NcAVujoNher7Ndg3t
+X-Google-Smtp-Source: AGHT+IFJV6XaO9ugF55WOE9V5wx/QZRvczx+bhWTlXqEzysfABS2WlJPihoaAQfK4h8sO7bqmkBTPg==
+X-Received: by 2002:a17:903:22ce:b0:20c:a692:cf1e with SMTP id d9443c01a7336-2111af5aa61mr49596165ad.43.1730473195830;
+        Fri, 01 Nov 2024 07:59:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b8987sm2745643b3a.7.2024.11.01.07.48.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057f5872sm22280565ad.295.2024.11.01.07.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 07:48:32 -0700 (PDT)
+        Fri, 01 Nov 2024 07:59:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 1 Nov 2024 07:48:31 -0700
+Date: Fri, 1 Nov 2024 07:59:54 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: baneric926@gmail.com
-Cc: jdelvare@suse.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	corbet@lwn.net, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
-	kwliu@nuvoton.com, kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com,
-	Bonnie_Lo@wiwynn.com
-Subject: Re: [PATCH v6 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
-Message-ID: <319d7395-680b-478a-aec3-08bae9177f73@roeck-us.net>
-References: <20241022052905.4062682-1-kcfeng0@nuvoton.com>
- <20241022052905.4062682-3-kcfeng0@nuvoton.com>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] hwmon: (pmbus/core) improve handling of write
+ protected regulators
+Message-ID: <228997a3-fd6e-4028-a822-1507d43bcf84@roeck-us.net>
+References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
+ <20241024-tps25990-v3-2-b6a6e9d4b506@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,23 +79,76 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241022052905.4062682-3-kcfeng0@nuvoton.com>
+In-Reply-To: <20241024-tps25990-v3-2-b6a6e9d4b506@baylibre.com>
 
-On Tue, Oct 22, 2024 at 01:29:05PM +0800, baneric926@gmail.com wrote:
-> From: Ban Feng <kcfeng0@nuvoton.com>
+On Thu, Oct 24, 2024 at 08:10:36PM +0200, Jerome Brunet wrote:
+> Writing PMBus protected registers does succeed from the smbus perspective,
+> even if the write is ignored by the device and a communication fault is
+> raised. This fault will silently be caught and cleared by pmbus irq if one
+> has been registered.
 > 
-> The NCT7363Y is a fan controller which provides up to 16
-> independent FAN input monitors. It can report each FAN input count
-> values. The NCT7363Y also provides up to 16 independent PWM
-> outputs. Each PWM can output specific PWM signal by manual mode to
-> control the FAN duty outside.
+> This means that the regulator call may return succeed although the
+> operation was ignored.
 > 
-> Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
+> With this change, the operation which are not supported will be properly
+> flagged as such and the regulator framework won't even try to execute them.
+> 
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  drivers/hwmon/pmbus/pmbus.h      |  4 ++++
+>  drivers/hwmon/pmbus/pmbus_core.c | 35 ++++++++++++++++++++++++++++++++++-
+>  include/linux/pmbus.h            | 14 ++++++++++++++
+>  3 files changed, 52 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index d605412a3173b95041524285ad1fde52fb64ce5a..ddb19c9726d62416244f83603b92d81d82e64891 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -487,6 +487,8 @@ struct pmbus_driver_info {
+>  /* Regulator ops */
+>  
+>  extern const struct regulator_ops pmbus_regulator_ops;
+> +int pmbus_regulator_init_cb(struct regulator_dev *rdev,
+> +			    struct regulator_config *config);
+>  
+>  /* Macros for filling in array of struct regulator_desc */
+>  #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
+> @@ -501,6 +503,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>  		.n_voltages = _voltages,			\
+>  		.uV_step = _step,				\
+>  		.min_uV = _min_uV,				\
+> +		.init_cb = pmbus_regulator_init_cb,		\
+>  	}
+>  
+>  #define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
+> @@ -516,6 +519,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>  		.n_voltages = _voltages,			\
+>  		.uV_step = _step,				\
+>  		.min_uV = _min_uV,				\
+> +		.init_cb = pmbus_regulator_init_cb,		\
+>  	}
+>  
+>  #define PMBUS_REGULATOR_ONE(_name)   PMBUS_REGULATOR_STEP_ONE(_name, 0, 0, 0)
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 085a4dc91d9bad3d2aacdd946b74a094ea9ae458..7bdd8f2ffcabc51500437182f411e9826cd7a55d 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2721,8 +2721,21 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+>  	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
+>  		ret = _pmbus_read_byte_data(client, 0xff, PMBUS_WRITE_PROTECT);
+>  
+> -		if (ret > 0 && (ret & PB_WP_ANY))
+> +		switch (ret) {
 
-Applied. I did fix a couple of the nitpicks raised by Christophe,
-but I did not replace for_each_child_of_node() with
-for_each_child_of_node_scoped() since I can not test the code
-and did not want to make a functional change.
+This changes semantics. The mask for PB_WP_ANY was there explicitly to
+avoid situations where vendors set more than those bits for whatever
+reason. With this change, write protect status will no longer be
+recognized for such devices.
 
-Thanks,
+Yes, I know, "the standard says", but standard violations are common
+with PMBus devices. That is the whole point of all those callbacks.
+
+Long story short, please do not make changes like this. "ret" still needs
+to be masked.
+
 Guenter
