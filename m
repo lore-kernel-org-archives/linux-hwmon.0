@@ -1,67 +1,68 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8940C49620;
-	Fri,  1 Nov 2024 14:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580D349620;
+	Fri,  1 Nov 2024 14:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730472005; cv=none; b=RNGaLhD8x1fnRF77Z8B3p+gH8lfDAaLU2J/cIFNfffpSrSRdZBS1dwnUfLYwMp3FRAR69FvR9jgLDFbRizWxdT1+QjrrHvCGD4gq0vZz5dW/XRSlyTXotONRhpLrui4KQ8B1frqJs42SbafZQh+4ys/GiFgjUayNCNdMynZh8ks=
+	t=1730472141; cv=none; b=Kxi67Lpcvxu0Oy8Wu2/V/GiWLI2KEHww2+36nkHwIGhwh9bvhQoyIwAi6BoWfSkNCbCrRqmldzoblMOY4BtsJlt69B5HDvr50hpOyk8VNS92Eh4RsxD8p+4sbHGsKEI/ubHi691VF2p94JjTBQq84xyUyG/NS3ruXTlEiXxxWJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730472005; c=relaxed/simple;
-	bh=6YLQlHvi/p4VdDm7l0sIzl6HHY18ceHijPCewbNDRj4=;
+	s=arc-20240116; t=1730472141; c=relaxed/simple;
+	bh=92BeyP9szRN14N3wpUCDFdAw3lp0H1Hv95G+mqqYqaI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Alz9XY+wOmiDhqMLXL5ZCsyhIW3n1v69xza7Y4hOyPpZ7ZAXnTk1p1R2rqCKnL4Kqb35UCMYVvvvbz/Q3A9xBOXEAhe7AQ07jtsBzOUEP8wRPQJw5vlyQv8Eng07nFmtdiy0oZwh/LUc9AZyFuaRVwdWp4axgyFniypeuGQLy1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWnRu1WW; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=ojRUj/58I/1Om7PuQLzIEQ6J0PnoTob0sdOPQqtaBDEA1oFaZoq0DWG/5ebsp/gozW5TYP+edxTXzW0nGj7w161ApqLn3g2k63LfVMx53LhiqwHpQsWurQmZckeFiTY1U8pxAx4vPOqGJwezkOq+zWU968cArWNXCwpMMKBF6Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cAbVCABe; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWnRu1WW"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20ca1b6a80aso21634775ad.2;
-        Fri, 01 Nov 2024 07:40:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAbVCABe"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20ce5e3b116so16981115ad.1;
+        Fri, 01 Nov 2024 07:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730472003; x=1731076803; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730472137; x=1731076937; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/LaKq2sZDJssQEEm2ipuTPYg2jD93ktOnyJ+1GFezS0=;
-        b=NWnRu1WWcVjCm9HKsigJ4sHm0UHYimEe2rwqAC+gubS8Y3mAo63+ZQyPpjFCqTEleQ
-         xKEPKVnGdUOBPHYPdyHnEqj0SWR0R7lj6FnlbpxLKeZgae/aEobGPqy7i89DyJQCVHSG
-         MF7ieu8c6940prf6hn7S42Qk4BVl4pGHc43URobIIDH1jTuJ7xdtRtT7fMFlsX6htYHG
-         5NgoKud9LuefPKaFHDMIq+7/SZVykcrOZ2xZUBRKadaRdpPu7knDgrAz9WZDJAoc1nW7
-         Bl93qseGhvaCOi7GwvFd3XXJpwBj8efGRO5agLboVJVUT/IRTm7pPiqbBQChoxzs/FJY
-         akew==
+        bh=tmGGUqAxRqXwlTKSg6HXoGDBCceWY6mb1JAL6Pmy3vU=;
+        b=cAbVCABeMN3imhtUHM/3dbNhWJlctwcUz2HpKM4kpdPUnXLN3x2nOJOrzYCg1L0HnP
+         kkP9MXRYIHvxMU5eeLeFt/LlhYFJwQcZQdOXnzRqwh650TivbG1hBVFpuP75MKUlzw7H
+         aU8YJStV9Xssb+ehxnf67j2LcKu6/sFK1CYC0lAI+3W2oXZ64GgxEKUFNsFpFO6NSXqW
+         9xcao6+c4insCcHbpNAd7bPQ0y1iMSoBR6Wan4HIqntnjhbo2n/AFL0DhtTpQOqQM/Hz
+         zPU0b/brk3DPFyomBdBNMsq9osshLRLXZEI7/unp4MldHcePP327zuxPJsW+Ibo/cx5O
+         XefA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730472003; x=1731076803;
+        d=1e100.net; s=20230601; t=1730472137; x=1731076937;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/LaKq2sZDJssQEEm2ipuTPYg2jD93ktOnyJ+1GFezS0=;
-        b=SFNsijC7dek6V5XoIrOWAH8qSTiNZh1iTbVSC37Q/WiEPSZJlJo6DUUoXO0eFDT0mc
-         HRbnCn4viRldCcOUqz0nqawJL5r/kAZzomh4ASfcJ6hqJJV5RsEjVUnhn3dEWmb8Twpe
-         RdzBjvz9XnnZ0+zxU2hm16PIYA1iepqzoyRmP8niPnWdHwua+wipUdSrd+ZPJ3v0PGiO
-         F/zjLIwrOSqEpbNuEY4V9vP12+grhL+3hYeYLxa9A4aJ/7gYHYS/jefcVSzTBl2hLc8R
-         PW8eg6G3s3HXc4X1qd4YApnSf7Mj2O7T7ncDsA8nM4R+Tr1wgLyFgEKG50fvWCAOTDc4
-         Ux4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUEKtgxE5cwp9pZbsOSOmH2OYtEHJwwuUVoXoJYCPf7nAVITz65xMCSCjkbZn7Rcf31cgoLHd9+uJqDR1I=@vger.kernel.org, AJvYcCUW3XJI6h9IMvOQ8pUtB2O9IlT1zV2/QIIPHmUnru1eGRe4CxuDktvGi+dHQuE3gR0NEkhZqjU20Fld@vger.kernel.org, AJvYcCWRxN5tziDsSiTVyvUl8Ds0qwgPZqlowEZj3Nywud4hAJyHgqj/J99It/qkjge7ht2Mu5xu+eyhauVaDgPx@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPj09DjFWug79AlRYM1T9JRSgFrpWTzk/JJCsaaohVpOoXtg3e
-	idoDj/6O1THX32Fycm39s+SGl8BCm8tHM5rmTklecQVFk01z/mdX
-X-Google-Smtp-Source: AGHT+IGcQP/Qh6G76gJ9k9+oQKhCOXfTSChXqE8x5NSOWwVBYYU7/qXMYXPudXeeXjWUS+RjC9HE5w==
-X-Received: by 2002:a17:903:22c8:b0:20c:7796:5e76 with SMTP id d9443c01a7336-2111af3cb6cmr53047615ad.18.1730472002704;
-        Fri, 01 Nov 2024 07:40:02 -0700 (PDT)
+        bh=tmGGUqAxRqXwlTKSg6HXoGDBCceWY6mb1JAL6Pmy3vU=;
+        b=KXEANJI2JmdEnR8Rv/unFIrvW/z0YkQayb2WDLXCjn5ix17tAqgBQVxu840xgnXETM
+         HDQn3gK1QwUg0hWmH9C453awTAI4bm6iezpg/mZmJQh/hcHUkibtA8JTkv/exaG6WAWz
+         NT/HjSEChp2WxfhMjPmjHi+GZTRjZMw8vB49eeYx48dVSVBqdT2jAz0FBi7b7QnxxFyy
+         cECHWnLLB55MhOoRTuV+HUrHqd0lePAHUKzTVdYZl6bQQh7G+YEn0M044V/7hE2KzSK8
+         clFljM4qy1iuGkBhuaCEBu9E+T8m/4kfK4xeoxGH9uis3VPS31W8hLk4ul+4qSqZhkSw
+         rh0w==
+X-Forwarded-Encrypted: i=1; AJvYcCU+mBHSEoqhOn31R0Yw66FrcOfmv0p8+DDBY9Fsm2j6GGsUmQjny7TiGp2UNHgKG8vBfOep5kozZTEi/cc=@vger.kernel.org, AJvYcCUDWWYToQlzlPayOW4/kQ1BN5QD0Qu5apvqka93i4mfpAKSRB35dSq+H4RqEOhJ5VUBjzvS0fQ0P6HL@vger.kernel.org, AJvYcCV0J0D8OWR3zTs0ze8iwBKcA0droWW8wVO4hg03MMb2tMnFWyMc8TUichL/il0ElzhGBBQ+aGEeN7uDORmG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv5aFkwD7y+rKeE5lM22BxxuvXDNBSLsUqeUl7iXng2eu/85KZ
+	J2orS+mof4+acO0R+AacOztVdBXl9ai5qtFiDEjFXeB2TLhZUntI
+X-Google-Smtp-Source: AGHT+IENuLZ97F2bqe7sJK5q+NTYtNe1xmrkuozpFQsm9HFqDqbxgnDPZGAl6IXcgt1vzUu5vsGJ1A==
+X-Received: by 2002:a17:902:ccc9:b0:20b:8642:9863 with SMTP id d9443c01a7336-2111af3fbf0mr46632445ad.18.1730472137542;
+        Fri, 01 Nov 2024 07:42:17 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a60f9sm22438845ad.167.2024.11.01.07.40.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c083fsm22142835ad.187.2024.11.01.07.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 07:40:02 -0700 (PDT)
+        Fri, 01 Nov 2024 07:42:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 1 Nov 2024 07:40:01 -0700
+Date: Fri, 1 Nov 2024 07:42:16 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Naresh Solanki <naresh.solanki@9elements.com>
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	jdelvare@suse.com, sylv@sylv.io, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: pmbus: Add bindings for MPS MP297x
-Message-ID: <300df630-fab8-4017-981c-181b87280f60@roeck-us.net>
-References: <20241022103750.572677-1-naresh.solanki@9elements.com>
+Subject: Re: [PATCH v3] dt-bindings: hwmon: pmbus: Add bindings for Vicor
+ pli1209bc
+Message-ID: <ff50f611-8d1a-4e17-a922-b6b2b1d94e42@roeck-us.net>
+References: <20241021123044.3648960-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,19 +71,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241022103750.572677-1-naresh.solanki@9elements.com>
+In-Reply-To: <20241021123044.3648960-1-naresh.solanki@9elements.com>
 
-On Tue, Oct 22, 2024 at 04:07:49PM +0530, Naresh Solanki wrote:
-> Remove mps297x from trivial-devices as it requires
-> additional properties and does not fit into the trivial
-> devices category.
+On Mon, Oct 21, 2024 at 06:00:43PM +0530, Naresh Solanki wrote:
+> Remove vicor,pli1209bc from trivial-devices as it requires additional
+> properties and does not fit into the trivial devices category.
 > 
-> Add new bindings for MPS mp2971, mp2973 & mp2975.
-> It is Dual-Loop, Digital Multi-Phase Controller with PMBUS
-> interface
+> Add new bindings for Vicor pli1209bc, a Digital Supervisor with
+> Isolation for use with BCM Bus Converter Modules.
+> 
+> VR rails are defined under regulator node as expected by pmbus driver.
 > 
 > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
