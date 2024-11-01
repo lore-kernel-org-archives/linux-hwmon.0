@@ -1,97 +1,119 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7791E347C7;
-	Thu, 31 Oct 2024 19:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8187711F;
+	Fri,  1 Nov 2024 01:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730402154; cv=none; b=U4CbbPH3KHqOX1f3SeutZfuTk0KfHLbyw935gJG+RADZ+MTslZmzQEXEdI3phFYEcRzFH3OpLyNGySahL5PDiO+0F5wfBlgNAEQvkPQsXwVKEbXr0ZzWaDoGMssIqfFbdJszWe9Kynx5c0H1r3yxIiq8dPeIZ7UygqLUqxdPL5M=
+	t=1730425076; cv=none; b=q69UR8mhJq1rn/BzH2hw2yHSzCQWz7nl/M4bt9IjB17des/dzg6yK9aY6aLNfuXfQFLjgczlaPWHWeBkLyWA5wvFxAM9lrjmzdVwudcgK8AdLqhG5YvNXg4aS9SBfmXLOHXEPykc/5xNlRBS9uukVeFn9csQppkSiGFI4of94vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730402154; c=relaxed/simple;
-	bh=iz/mcCGKzKAF+54183Qep4jiiK7skiftWfkF3ZQ9fck=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=D+BEr9nHiDAecP0GwEd3JjuWA6q0kTApWXSMY9vngc25MwiDPfsvyM5CKcVibLp8URtchZc2G7yBjw0Bsux1HjWbrTIznmay7GL3wPyFgTRMsRLXOpeGp2TMa9Q8stkdLWzkt9K9MRpPRTGDB5wnIPAk9E+196DfDIz9NFy+Cs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=HAO/lXId; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1730425076; c=relaxed/simple;
+	bh=3OAYULfp98mPfTYoSG7P+xyokyLv+MDuyg6w9vj+u8w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dhQJyOqb3PhKKtWmIuEJsAoR4boKdiqx76fJ7HyBtXvXHipQkMB5hYOvOxp7O8Z8Hd20yCoF3eh0p7Spdx38kQtRnsn9p6yKe6oSWsJIfuUe9UsIal/ftmy8ODgi7aVZsZFxd/ogfoPG8D1hXr4hQxDLO6ZeH39TyQafcEAgt3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhh8Bb/f; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="HAO/lXId"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8E54E40E021C;
-	Thu, 31 Oct 2024 19:15:48 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ODtb6AuBZVDC; Thu, 31 Oct 2024 19:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1730402142; bh=TjBac+vUXA/VaGYTwTi6FQkjFjIMoAJ+klVbchu+St0=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=HAO/lXIdBMw3mLgc3LD9+uFBFW9EQDK2KX2jeJPdfe92n1O18NX440RAsMqu2qUmY
-	 J7DvHEU0App/3VYoCssSdJ/NrxFFZEdVW8sIhgfmoy6CwM0Iuqfj+ZCG6ivc8J72cV
-	 10ihGjL/FAFv1GH2Wi5EIz5P/oBuEHPnsO358Dc3Dm6DYXy06zBqGL5VSmmDIDvYNC
-	 l2GXMMAN56VMz3X/kYfU8FNLrLHKgyAkqnNJwnmztwRAlPTBNRfko79Aty0+JR9Xwt
-	 YBkwfJL92K+pRbcmvP9d6INbvsUb+pUVE2+ywlrhfWYP2KYRn9zcR/1BaiLpfvWY/x
-	 P0YXcmi45qC5jjwhDKvn1uzUTvUdPZfpaUhcZSu5VOtDZ6ylssbBuU1fovpvZe+x5K
-	 4Bsh/fWrnItoPSymNIaTMQm0noPkM5fW78zxq71os9XkbycSh0HzVpEtnSImIjjf8S
-	 /vZTn66Kzkyo04GAzIRZfiBUvWjRsDCxwKJcQKLG3gH/tX6XUL9VevKnSwrlncQMeR
-	 W96nGkXqaHuxtoRisIo5EHzIOCPcNJ3T5EPsh2401NKSrsp+irERAFk1+cOhrQ8+Yt
-	 9YM57SRGpAUxb6fO4wEzdgm19sVqS1uT0P2T6M0nPFrsLp1xym/Qhi5yRaI1iSwztx
-	 Cu8EgO60eyhxE5dQT77PGhGs=
-Received: from [IPv6:::1] (unknown [IPv6:2a02:3033:209:eccc:5132:adc4:8c65:1ae1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4B42940E0219;
-	Thu, 31 Oct 2024 19:15:18 +0000 (UTC)
-Date: Thu, 31 Oct 2024 20:15:11 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Sohil Mehta <sohil.mehta@intel.com>
-CC: Yazen Ghannam <yazen.ghannam@amd.com>, "Luck, Tony" <tony.luck@intel.com>,
- Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
- "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "avadhut.naik@amd.com" <avadhut.naik@amd.com>,
- "john.allen@amd.com" <john.allen@amd.com>,
- "mario.limonciello@amd.com" <mario.limonciello@amd.com>,
- "bhelgaas@google.com" <bhelgaas@google.com>,
- "Shyam-sundar.S-k@amd.com" <Shyam-sundar.S-k@amd.com>,
- "richard.gong@amd.com" <richard.gong@amd.com>,
- "jdelvare@suse.com" <jdelvare@suse.com>,
- "linux@roeck-us.net" <linux@roeck-us.net>,
- "clemens@ladisch.de" <clemens@ladisch.de>,
- "hdegoede@redhat.com" <hdegoede@redhat.com>,
- "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
- "naveenkrishna.chatradhi@amd.com" <naveenkrishna.chatradhi@amd.com>,
- "carlos.bilbao.osdev@gmail.com" <carlos.bilbao.osdev@gmail.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_x86/cpufeature=3A_Document_cpu?=
- =?US-ASCII?Q?=5Ffeature=5Fenabled=28=29_as_the_default_to_use?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <f9cd603d-8a3f-43fc-a670-75b4d9a6c729@intel.com>
-References: <20241023172150.659002-1-yazen.ghannam@amd.com> <20241023172150.659002-4-yazen.ghannam@amd.com> <20241025155830.GQZxvAJkJnfLfNpSRx@fat_crate.local> <20241029143928.GA1011322@yaz-khff2.amd.com> <20241029150847.GLZyD6f-Hk6pRTEt2c@fat_crate.local> <SJ1PR11MB6083AA7B2E28F2DA24E4B456FC4B2@SJ1PR11MB6083.namprd11.prod.outlook.com> <20241030142138.GA1304646@yaz-khff2.amd.com> <c2894e47-f902-4603-84e7-a9aca545b18c@intel.com> <20241031103401.GBZyNdGQ-ZyXKyzC_z@fat_crate.local> <f9cd603d-8a3f-43fc-a670-75b4d9a6c729@intel.com>
-Message-ID: <74D1358D-952F-4D33-8A5A-1D6F87B49443@alien8.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhh8Bb/f"
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e290e857d56so1442200276.1;
+        Thu, 31 Oct 2024 18:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730425070; x=1731029870; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmlvJeeA7f+8fFGrXM3GeA8saPwvYrRvzv4KSfHdsH0=;
+        b=dhh8Bb/fPgR3PxvDavHCom/aMjgi4uBafJrQ0BiZ9hVdLGxU0zdxQIuPwreDt7XRbi
+         5YC5r/1wNWTGbBwe+BbupvfCdLkYH3kSdtrsrNVtxbY8Dex8X4g3FM8EdyFtYZrMDz3+
+         ewifm7Uw6hsJbOAYWZDWahTyJdX76gsFrqUuMgk82hDPBFSmuXVLKvtvRgMttL2J8y3R
+         +ocZr+3NkFR8q/Zmi6p2wXhybkK2mW9/BUArAKEiLymmrdqs3dSJy1Ao7s0JlfLsYo0U
+         BxOkw7s6EUbbCO/GDcfea9LwTfBHiVYGLutLEgp+O9M4qfsTPHPSOV3btSvs9SOR7TWQ
+         Pwcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730425070; x=1731029870;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lmlvJeeA7f+8fFGrXM3GeA8saPwvYrRvzv4KSfHdsH0=;
+        b=fcGonGu1IcgLquiCqrT1ilh5XKmmme6s9XfznKaF1TK1JNI84a34L/ZmmY3jFjcTdW
+         yZDrgUWMTp8mDhtjtqpvdQDT2GaaO9xYtQj628ppWumCDVRFxRevIpwngvLRB+2fvGNq
+         WLPkD0G7Q5wevxSfyxhK4TR+16PADh96f3JrqlckxZqGGX7rPmIgI47UVRtF1lNarsWO
+         qbb9S9thGH9r6j2M+vLUCBI14zJPDMKiG1MEGW+7utURTIPnZNdFok39OUc6Zlvn9ZEE
+         mDXJ3RPqVwSBP+MDGnP7Lz8o1+6X3UdMwbsp6Vp9kim8TxoUdK2CFYsz2At6zYTTPaNc
+         7Ipw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2Zc1Y7AfA3WrUQCz6/aot+73UeXL0orZfDaSQbpLWXSCOM2Qyn22o2m6rcUWQ+bLS7YxxjfX/T6Y9b+Y=@vger.kernel.org, AJvYcCUP2BG6RCJHDG/h9ef4h7C7j7AnBPKmpxWV7r2A7AOSgBORa+sTvaOnY1NwmGuvr9KVq/Sgga8njNhh@vger.kernel.org, AJvYcCUdc4h1Ay8b069Wvsmd1inhCVvI3ELXMzqcTTQxNw1uoA/PWbQHz97uyc9TTOHHQlA46l2c4cxVL2BB@vger.kernel.org, AJvYcCVyjQ9tPVDFEPSLyyjnxAdA56r346a/mRyGUKKAZH12pZpLpMe/bzzV0WFVO0FcgBWa37GK/c8u84o8gd9YaTw=@vger.kernel.org, AJvYcCX+9bZc4qdhx0bCO20nwsWW0g9lj3YG9OGSX053ervM5IuPbDlGJG2NAT3DkQXwUhD1w+FoVIHneATVO4Pw@vger.kernel.org, AJvYcCX202FdVYhxppFwOSWDvs9T8O0qfcm8baXxjvYoIEU+1WOEVYV8DbrP+/nGGuNkIDqIqlCQ7iZJt9uY@vger.kernel.org, AJvYcCXW9YQB7vptsK5EemAaOZN3XGjbMB0QPHN91thWaLmIHRBrXSWLtFJnfc1uXx0xLZy+AbFvjsKpg90=@vger.kernel.org, AJvYcCXXyZGuwftHPaItE5Kc+MM1PfIcya2OwbL5mYzV7J7vFdWfgCYdzv9IF8A9DT+EBeMW6kU0JTdZ@vger.kernel.org, AJvYcCXcCZKa5wu66IQQeZZpJF9VkiLhPMyMPqNWMUPaHiFT4odF7pbh4iTdyU2kd1Z84dU/NKr6RFj3V4jSHQ==@vger.kernel.org, AJvYcCXg0sPOyqrGPJr3AKG+ga5zFJMJPwwmBPAm8UYRDosKP4+GxlWRinP9MO+J4cEjgbaimUSJtDa4BR+U@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4MSf/6188/GMKwq7R5V95onJXgk58aZF4j+lo0az0/9HdkrWq
+	3gtmyNvhUiyKl06GY0LDV8Q7z5OF9Crs18TBcP3wvX7pEj2/pTRY9L4EczWWByEP3t3RdQO7h64
+	SFMSI1orhbsxgQB5qUB8EuIAYb0U=
+X-Google-Smtp-Source: AGHT+IGUCFRCbOABKarC+7/IZgd0y9bKHTlvWQq1cBwZjmdD+cAjLmqd2MBJvCw7CLHhYxbwbCQuHhy48gGHRVd5dNQ=
+X-Received: by 2002:a05:690c:6807:b0:6e2:43ea:54e with SMTP id
+ 00721157ae682-6e9d8996ecemr242741927b3.21.1730425069827; Thu, 31 Oct 2024
+ 18:37:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-5-tmyu0@nuvoton.com>
+ <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+In-Reply-To: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 1 Nov 2024 09:37:38 +0800
+Message-ID: <CAOoeyxXp+2SSV06Zk_6roYeGNyCcRo+26CejJahR1j03v45DqA@mail.gmail.com>
+Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On October 31, 2024 7:26:27 PM GMT+01:00, Sohil Mehta <sohil=2Emehta@intel=
-=2Ecom> wrote:
->Does "default CPU feature testing macro" roll better than "default CPU
->features testing macro"?
+> >  MAINTAINERS                     |   1 +
+> >  drivers/net/can/Kconfig         |  10 +
+> >  drivers/net/can/Makefile        |   1 +
+> >  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
+>
+> FTBFS:
+>
+> | make[5]: *** No rule to make target 'drivers/net/can/nct6604_canfd.o', needed by 'drivers/net/can/'.  Stop.
+>
+> [...]
+>
+> > diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+> > index a71db2cfe990..825c011aead5 100644
+> > --- a/drivers/net/can/Makefile
+> > +++ b/drivers/net/can/Makefile
+> > @@ -28,6 +28,7 @@ obj-$(CONFIG_CAN_JANZ_ICAN3)        += janz-ican3.o
+> >  obj-$(CONFIG_CAN_KVASER_PCIEFD)      += kvaser_pciefd.o
+> >  obj-$(CONFIG_CAN_MSCAN)              += mscan/
+> >  obj-$(CONFIG_CAN_M_CAN)              += m_can/
+> > +obj-$(CONFIG_CAN_NCT6694)    += nct6604_canfd.o
+>                                    ^^^^^^^^^^^^^^^
 
-Waaay too finicky to me=2E No one cares, I'd say=2E =F0=9F=A4=97=F0=9F=98=
-=82
+^^^^^^^^^^^^^^^^
+> >  obj-$(CONFIG_CAN_PEAK_PCIEFD)        += peak_canfd/
+> >  obj-$(CONFIG_CAN_SJA1000)    += sja1000/
+> >  obj-$(CONFIG_CAN_SUN4I)              += sun4i_can.o
+> > diff --git a/drivers/net/can/nct6694_canfd.c b/drivers/net/can/nct6694_canfd.c
+> > new file mode 100644
+> > index 000000000000..d873a9fd656d
+> > --- /dev/null
+> > +++ b/drivers/net/can/nct6694_canfd.c
+>                         ^^^^^^^^^^^^^^^
+>
+> This doesn't compile :(
+>
 
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
+Sorry for the typo, it should be nct6694_canfd.o in the Makefile,
+I will modify it in the next patch,
+
+Thanks,
+Ming
