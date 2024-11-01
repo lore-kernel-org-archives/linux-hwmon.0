@@ -1,59 +1,59 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1581A7273;
-	Fri,  1 Nov 2024 14:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848871AA7B1;
+	Fri,  1 Nov 2024 14:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730472301; cv=none; b=A42dIjEoVHEbiSdYRPwonM9yYwNxt/wQjzJy+tuTj/ZEtmHzu1/pAo9tTuYLHAcHUvzD+M/tmW3uyf51KsXIIPRLg77sPiGL77Vv81dPl23ztTYuHhhVoQTAtfkv4H2K9SrfUUtdCdkXBbcueV8F/Vg4H5KvqhHllqXseaBl7SE=
+	t=1730472517; cv=none; b=mooJyoRey1T9FmcNWsY/+hFgJO6zp62iTayceu79ID/PWfFYKP05Z8BrVJRkiQ7P7F0cpeIIuHHUckOupNNWD6HEuCW8vUxn+ArlaRTLUSyTgsjF+ZZdjoVNwPUs/GnCl1axf0v8VW6me9EW5yGcFhb38PnDTsnxDzYj4J24qKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730472301; c=relaxed/simple;
-	bh=XrPLkYhc9KMv8mJsqXJQNqryPfxpatNX1XegManFB6k=;
+	s=arc-20240116; t=1730472517; c=relaxed/simple;
+	bh=Aez5D/Z2QBMWreCJuN4mdsM+v5hdj55CjDvG7IsGxh0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a4plnAaepV2AAcudNrK2zbjcUPjaJCnC1zYVzJp9esDSvVj04nFyZoogU5F1sJwUJErE+lVn/lkonQ3m6Ej1mMPSdSIxPqy9HwRx2bDu6ntPkNBfkhVr2T/RhV/2opldw8ZtRBpgls3x3I+fowhh44zt4JOfeXPAncJqs6DCXaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b+IulWqz; arc=none smtp.client-ip=209.85.210.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=MqlNtGZgWuimfQe/nO2v4PrkkwXeFn3auhEzWWAtzQwIYywbnAgE8rU6w4zmGs6Gh+BOpIhUn6vdRNOc2uf2Hl2Dfv1FP07zdrtneMLil8xzTYxKLV5nPFK/l2yeD2ujCBopWpCde3yAehjESU/w8HfbBXKX52EZqzN3IeGn3HU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6oeG0eL; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b+IulWqz"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e8235f0b6so1815444b3a.3;
-        Fri, 01 Nov 2024 07:44:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6oeG0eL"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e4c2e36daso2210560b3a.0;
+        Fri, 01 Nov 2024 07:48:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730472299; x=1731077099; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730472514; x=1731077314; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nFB9X8+bXdjRMgra+BnrPwuOPpZev8yICCAZV0Ubx6Y=;
-        b=b+IulWqz4PsD2BjLWEnMbMkVjEUtlb8ln8ZbWkQxOkwN71Yvvnj5vVLGVju0EZBzLe
-         K3KVstRcczho8m3+Vynmc3B+uBpYC4WslRN9yIteJBgCZ8dEZXgjM4wbeUyAdpYkbHf4
-         NtpNrDtr0K/094819MP4SsKdmernRD/4rlM2qBdc/SLkyx+vjrgCDLYp/zfoLlJ4WKv4
-         LaD9fkY8WBhhE7zyvOjtU3E/hdbR+oq0lG7CKzqp+XwOnjuy+Q+CZCpCpLxS8RQNlSL+
-         kL/nFskBI8LekMqNWWzhRDWwUBCFrov3uMtN9SSNbZr31RHZBHLY7HI/mTzFFt63HW09
-         pWKg==
+        bh=ikLF17TGv2d8/HjXENzyIcikHXnbEzedUUKC+eQvlMo=;
+        b=e6oeG0eL/RJoUEgpVHOAJmlkuT/O30XGxQKQcJ6xxgTeAins8RICq477wLzwSKIO0e
+         POJNtL/kTF5gj85kIgcaakBDlzhGhiSVRwPaUkIL5ejje96/YT68NCB6llFAfOtyPpTB
+         /h8A1fIc+1ab7H7xsz625kvaUww/8YyrIDKmZeFVSnj+FHXYtKI2oT2RZ9ZO1mrKhB2n
+         X+BwzQRK9cTlxdJqZ/DN28DScc+goJNbIJ/N9cqmiM8IznLW0huesaBrjWsuGB5JDMuC
+         TmB1ungs/WXCZP8Xvq4QlK8T4/KKLl0SgKhur9FCm+Z6BA6pKvbhkPYr5hrTRZNcW0i4
+         //OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730472299; x=1731077099;
+        d=1e100.net; s=20230601; t=1730472514; x=1731077314;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nFB9X8+bXdjRMgra+BnrPwuOPpZev8yICCAZV0Ubx6Y=;
-        b=dO3Tg5Pw2fQDd/AWoM6brFvjChwcI2afx6IQ7TqCI+hDG87FTDiAbuRX9e3fKAFN/t
-         u7ANx7zy6zzeXGA+OY1xvpU7vhNO0wHvK+XFfJXQQ013fVUr1qpIaWkkz44duaLEeySI
-         cuqTNEIqsfiLPiQW9iSkcKQ0Sk2l2+vfb0SF+sNXqTVlq1+sczkNMb4vfYtQ9liFIPKn
-         +BL4MsQmP0krE8vm4g/nb85YjrFkCj8JNEFAwku7zzx4x41Hmo3XEp8afF+Fpb/GugTC
-         Olvepemf91fSaUNRXYp3HosgvyljxuwH+glh4N9FQXV8rU5ilCk8GrOStj/HCRAXUSle
-         DykA==
-X-Forwarded-Encrypted: i=1; AJvYcCUES1bW6HBUfTbuwvPeVv3ZHS/VNenadiW7ciYlLsEaBV/ld0WuPrlYl/irutK4y+5yCHJpc5OdOrcvinGq@vger.kernel.org, AJvYcCVB6UOYHJV9uaOpmp1K/17vlwYWwNSbAq87S/9mYbuzO2HFJJpAFljGxx4UWAnxR8F8RrEe8OGd96IejAc=@vger.kernel.org, AJvYcCW7HKE50iHlRumLvdL9wrMxwyjClMK5kKwxQ2kLVoJ4qjdyXsCDn3742Yj4zoAUnLctnSqMTigZnGSm@vger.kernel.org, AJvYcCWvTpoTtMuuh4SpkBP2nvSRoqpbxz3ZCkmNwFxEcxUc2MBWRAd1AfyCxwt+FJvtaCsYvP0NKA40+XT9@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdDaZnc6mABbZNnL7whElhJqVYBR5oVBFhLAxQiqYM18Qdz3Oa
-	vjB+maHrQQH5YKrZimAKG6SJUBx5j4eIBDPWcnz/R6CLsaMJ3fXHOV11lw==
-X-Google-Smtp-Source: AGHT+IFZY3czgShWLwMr8vZLa84ReNl80JQc2dqSAqMUDR9vtbY6B9GhV3hjeKXgXWBUnMGYXjB86w==
-X-Received: by 2002:a05:6a20:d493:b0:1d9:111f:4b46 with SMTP id adf61e73a8af0-1db91d86c41mr9750731637.12.1730472299120;
-        Fri, 01 Nov 2024 07:44:59 -0700 (PDT)
+        bh=ikLF17TGv2d8/HjXENzyIcikHXnbEzedUUKC+eQvlMo=;
+        b=oxAobOtcx0IjRUAIXjaV7EyXPk3Lp000YKRI0zWiE/B7LccGG39xbj/6WJNhFRaUAp
+         BjJJ+ig4DiJiyDmqE2DfSqBzzZdfQivAYoaZNt5qzPb3nTfE0ZoF2U0be13FU7rYdrwH
+         hriJ33fOI91jgQ1S5gkb9IZ0bMg6VMd2b7yucGXyzmp67NFgx+bSDuRE9Jlf4DjYwHe2
+         7bwaZ6SzGqItoGIzmx4c8El94M9QqXVzeTiF0OeZW0AeqkkVaT3BLTmQX4n1CPP1Nm90
+         6h1jusgp0PdqetJmGxDzCF1qJoZs8WpofhKuiQ3Y9Bl9Z7ySeQYxtKd+AZu0lZkVNoM5
+         elkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPHPsop0wrBiktTusIgLInmRwtkxdmti8zoxIT4G+WmuEKzXCNPOfyLWMkg4T50ugAvDLP5jU6XiqEzGif@vger.kernel.org, AJvYcCUSnoaHxQJQRwRKeYjXNNaTLEw8BCw3A/P8mmN4R15mX1vRU2ymfeDiwuJOGE/+IQvMRc2He+SHncJg@vger.kernel.org, AJvYcCVlQwDfoGZi8beYOJI60PcAHpQz9FJ9SzdN6/or0L4vnL4ltSlo4pvynwcuvY+mF2+cIW5QN4qMNJQ8IoI=@vger.kernel.org, AJvYcCWoLL0EMhrHyQGINONtsqeFMOpponIw9d9k7p4SEa641pndABIsK82zsP+aRnpllCckHvkqwENRp4NP@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZjSTk5EMQqvEvsF47Aq72zsnKGpaq6z6Z0C5hEueBnop/nx5E
+	mWLaqx2xRinaIW36cOTzKio8ggop4WpH9JhjznQ3KDiXVPSH+NMB
+X-Google-Smtp-Source: AGHT+IEud0i2QRxm/ssibxG0ytuDAv7M+mnTsOZohBA1h7lUg1MTloaGNER2mbVW0mDknyn5OpCdQQ==
+X-Received: by 2002:a05:6a20:4c21:b0:1d9:15b2:83e with SMTP id adf61e73a8af0-1db94f6467emr8939450637.7.1730472513686;
+        Fri, 01 Nov 2024 07:48:33 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1e5625sm2693424b3a.53.2024.11.01.07.44.58
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b8987sm2745643b3a.7.2024.11.01.07.48.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 07:44:58 -0700 (PDT)
+        Fri, 01 Nov 2024 07:48:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 1 Nov 2024 07:44:57 -0700
+Date: Fri, 1 Nov 2024 07:48:31 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: baneric926@gmail.com
 Cc: jdelvare@suse.com, robh+dt@kernel.org,
@@ -62,13 +62,11 @@ Cc: jdelvare@suse.com, robh+dt@kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org,
 	kwliu@nuvoton.com, kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com,
-	Bonnie_Lo@wiwynn.com, Rob Herring <robh@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: Add NCT7363Y documentation
-Message-ID: <9435b7e9-abac-4d02-9969-b35a50fb538b@roeck-us.net>
+	Bonnie_Lo@wiwynn.com
+Subject: Re: [PATCH v6 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
+Message-ID: <319d7395-680b-478a-aec3-08bae9177f73@roeck-us.net>
 References: <20241022052905.4062682-1-kcfeng0@nuvoton.com>
- <20241022052905.4062682-2-kcfeng0@nuvoton.com>
+ <20241022052905.4062682-3-kcfeng0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,19 +75,23 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241022052905.4062682-2-kcfeng0@nuvoton.com>
+In-Reply-To: <20241022052905.4062682-3-kcfeng0@nuvoton.com>
 
-On Tue, Oct 22, 2024 at 01:29:04PM +0800, baneric926@gmail.com wrote:
+On Tue, Oct 22, 2024 at 01:29:05PM +0800, baneric926@gmail.com wrote:
 > From: Ban Feng <kcfeng0@nuvoton.com>
 > 
-> Add bindings for the Nuvoton NCT7363Y Fan Controller
+> The NCT7363Y is a fan controller which provides up to 16
+> independent FAN input monitors. It can report each FAN input count
+> values. The NCT7363Y also provides up to 16 independent PWM
+> outputs. Each PWM can output specific PWM signal by manual mode to
+> control the FAN duty outside.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 
-Applied.
+Applied. I did fix a couple of the nitpicks raised by Christophe,
+but I did not replace for_each_child_of_node() with
+for_each_child_of_node_scoped() since I can not test the code
+and did not want to make a functional change.
 
 Thanks,
 Guenter
