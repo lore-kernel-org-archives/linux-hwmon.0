@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2635082D98;
-	Sun,  3 Nov 2024 16:46:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FE3165EE8;
+	Sun,  3 Nov 2024 16:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730652407; cv=none; b=RqbOT6FRqlBdygDPhkRBcnwsWm0wRe0UPfUXZ8+APQgj4UNgY/+AvnrCzNX8FMq7+miHSnLhIBZE4kSQlfHwKCtYV5bDc4aeifMarMPxMxAkZBA8lk7dKRVSRBybfLbh1DOYq4Ii9MfmmXOdRn5GiD+wuY+P4z3+YVTxHvq2VQQ=
+	t=1730652787; cv=none; b=CV5bfcTtvJJ48C8xl31pJ2oyeMT0upSFZIrnyDq/dFi4Ryq0AiZQ17XJ5pTrwiAXA6KdMaCKVmGhtyFwYoNP0TaLHOnqCw8YSJufC0JhNbKmMWOBIdwf6Kd6x8ZCcOjaFXKr/LhMLyFcDrmIubULV5VWvQFu0uLmhPc/pCNXaW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730652407; c=relaxed/simple;
-	bh=h4FJ2Qo3AzoyJwS9J1Xjg2cFdI4TxMdY0L6w3I+W9oM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PIavSUM0tghny9rKPeWtOnNgV5gVvuiarvv8eING2Bt4J8+ju6IRrMOSmAkK9br1arFuiVQPNXbkvS6LgmszF5TUCiNO/LPcun/SKTKrAAV+/JQrZGnAylw2kPQp0K2SSNiuOFhhzRZqhjlxNu333Y4SCWYeLSGav3jp7Ob+P/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxgcZQyS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730652787; c=relaxed/simple;
+	bh=30Muez/0nExhgoUAUaGN96nrhiWuGG/8YAypO7DPpts=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TsZ/kOLQFD6hZ4iDJTPWrYHK1W+GLVY62sWbJF9gSUJAw2x3VeuhfXTIoS6OLcdX6Eyw8pEjdSrkp8UFSGATDjrPYr/IrkSPEKxR6ACitHK5S0KbBQMjC3kZX+tvFrbq7BAAKi/m2Zbl9xa3OAXh1x1DM+HVWEoAv4rjR4dgAlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHQhVkK+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxgcZQyS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5BEC4CECD;
-	Sun,  3 Nov 2024 16:46:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHQhVkK+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95794C4CECD;
+	Sun,  3 Nov 2024 16:53:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730652406;
-	bh=h4FJ2Qo3AzoyJwS9J1Xjg2cFdI4TxMdY0L6w3I+W9oM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KxgcZQySbsDwz51ae6uP+7b+bLArTlFnstmNNi3TALroTifK4zS6e2Xh5gXB3tBnG
-	 oMLd0I1R1UmOkVUKXoWgzc+ZegOy1U5hNKFXtJgXenOZ+JP+9kEzSYP1yjKoZzJ9bx
-	 kg+fMXzbte9wzQULVvx+oAPGZ9GCv5Hp+2MCLg7jyEWzGsc5EfUlrLg1ZWCwnastwg
-	 TAMtHuieivZwViO5NsACZdJu5d3qJnTIK3AVrE1CIiAWA5rdEqj0t3xAOYfILAoccg
-	 UXIb9t9d/ped7hanaSFo2QmzTKyd6HBMLaZneK3zosky+oa/gXhzXkp08XzqDzc6PH
-	 6tYWbo5FnCNXA==
-Message-ID: <f5188173-21c4-4921-b7c8-5685c661a157@kernel.org>
-Date: Sun, 3 Nov 2024 17:46:41 +0100
+	s=k20201202; t=1730652787;
+	bh=30Muez/0nExhgoUAUaGN96nrhiWuGG/8YAypO7DPpts=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=sHQhVkK+20ANNW4CjMlxF91Boukf4uIz/VytTpnEBEW922TIpsUC6sRsGz+OxFpQY
+	 E+Ayax4g6AGuZ1UEKv8vmC52ejr5OrYaCKvksLEflB/nJd5YB9fnG9/JWzjympn9fv
+	 zzFXDiwSj7NVTGjYMWxekZZPoDY4wbGAZTET0KWw5iKJByZBwQ57aR39j2Dksx/oV0
+	 teXQA8SKPwp1CyMUwFPtaUKHyA4knV5Tqrdv5nx1KIzvAxX7644abeShdefaqzhkdt
+	 aSsCBZRBAaZHQOLSzQcbTWawUARdrEYe7ORTbmVr/DyacHQR1ixEEvWIS+UDlmVFav
+	 iwQ5Gg2Dmi+Gg==
+Message-ID: <b2d1e4cf-b068-4bab-9735-d9d4ff449a09@kernel.org>
+Date: Sun, 3 Nov 2024 17:52:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -37,6 +37,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH linux dev-6.11 v3 2/2] dt-bindings: Add SY24655 to ina2xx
  devicetree bindings
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
 Cc: book <book@100ask.localdomain>, jdelvare@suse.com,
  linux-hwmon@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
@@ -45,7 +46,7 @@ Cc: book <book@100ask.localdomain>, jdelvare@suse.com,
 References: <706d4821-2637-4aac-869b-822f69aebbfa@roeck-us.net>
  <20241103163908.11890-1-wenliang202407@163.com>
  <20241103163908.11890-2-wenliang202407@163.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <f5188173-21c4-4921-b7c8-5685c661a157@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -90,24 +91,34 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241103163908.11890-2-wenliang202407@163.com>
+In-Reply-To: <f5188173-21c4-4921-b7c8-5685c661a157@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/11/2024 17:39, Wenliang wrote:
-> From: book <book@100ask.localdomain>
+On 03/11/2024 17:46, Krzysztof Kozlowski wrote:
+> On 03/11/2024 17:39, Wenliang wrote:
+>> From: book <book@100ask.localdomain>
+>>
+>> SY24655 is similar to INA226. Its supply voltage and pin definitions
+>> are therefore the same. Compared to INA226, SY24655 has two additional
+>> registers for configuring and calculating average power.
+>>
+>> Signed-off-by: book <book@100ask.localdomain>
+>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > 
-> SY24655 is similar to INA226. Its supply voltage and pin definitions
-> are therefore the same. Compared to INA226, SY24655 has two additional
-> registers for configuring and calculating average power.
+> NAK, this never happened. If you think otherwise: provide proof, please.
+
+Hm, now I found previous v3, so ack happened, but patch still has
+incorrect author.
+
+Please really carefully read submitting patches document, especially
+parts about sending new versions, changelogs, subjects.
+
+
 > 
-> Signed-off-by: book <book@100ask.localdomain>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Nothing improved in this binding, actually it got even worse with fake
+> email and probably name as well.
 
-NAK, this never happened. If you think otherwise: provide proof, please.
-
-Nothing improved in this binding, actually it got even worse with fake
-email and probably name as well.
 
 Best regards,
 Krzysztof
