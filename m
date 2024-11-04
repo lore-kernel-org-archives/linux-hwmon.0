@@ -1,146 +1,134 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E571AF0AB
-	for <linux-hwmon@vger.kernel.org>; Mon,  4 Nov 2024 14:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ADA1B6CE9;
+	Mon,  4 Nov 2024 14:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731150; cv=none; b=O/As9iKrrRkXHDezZM9n2p7dKySKpYQk6GW2ENjD618OOrjgEG3XlxLruilJME1+WipgqpxDLyD6pyhmuANAZAb6cWLQ9j2v3ybWfkLapAhcu/9Lh4VQid7z9O0CJ9mEldsVGY1ICwg08WTvs74ueV9kqA4eXsPYvAYGgmOh558=
+	t=1730731163; cv=none; b=aWtYHgzIhGMDIBLV66HHB+5IyWvXADnxFuumM2WtZXe2A2s0tlukNicpapZOF6/EKcz9ry3J0LrjmHBDhlnRqTW1fwXGQJYgg6SCSxlhzjuYL7UzSuEV2SkfbW1Xzg6hrxNqQnXrBcVDJKkcUyA27H5mG/GuvqzwUP45Vswp23c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731150; c=relaxed/simple;
-	bh=N9mNTgS7KydKjujfpo8o+RMYb3M2ubWeqVEZYIZNbvY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PqfnzBApcSwLOf9AxvFyG8gKW/eTAwXi7OuGKAu8FxVv+M+d9e339duFljOOnSM7ajf7M5Hmay/Eq2OYzAk++hhwQDvFQ3G8dOxhC93A2aV6FH9cap8UanrBoJLZlOG9TiBFzsU7GPaERM84pIdvHDhdVf7pCPbVAXYdrPBbai4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=K+f7yHOq; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1730731163; c=relaxed/simple;
+	bh=f3+wrner1fvmQYtpg3rzuW+v/F9Y1jdlOE7AWj4oHxw=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=olrV4OR2PvzTV/TGolGOEplWXy11zlhnxNi+0sWFRInACKh3rt6v1yvh/aY3xeOdG71AiysBVVR6kuSrfZYl3BSVUHZLbO0oTcMlCTvR+exuWEqLQW4SEvKuQZOkX3LtWFr/1yw+Eant35oyP1sQByeiY5TZ5p3hxKfSwcUICyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAq/bWwt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="K+f7yHOq"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4315baec69eso37138815e9.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Nov 2024 06:39:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730731147; x=1731335947; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xpNFk8hvdBrc0E2hQPlR3zKBSGiQuhict/6bGeGu0=;
-        b=K+f7yHOq5S1lh7AD2ez4PM4me8oYXnj5UNBnNruXUhJAPHo4e73cIN0RGxX1f03Xqb
-         ElACQYVew7z5byW2nH1Gd4c206wTqPvjvXXy5HHQ4BbmddfBYiWltjkvRfMzIwQNcJ3F
-         2189AQfn84FG2NvnBmWXPILW1rGvtL67Er/Ub/oawIXnBH7Ng/gys7iAtplvqHeDQWOF
-         2GwOClTK+pr97pzJcze3dXTYg8mxi/xj8A/rJ/5FQLF70y5CmzLx+6H+Ic/pNlndrDLG
-         c+Ys2MqHOW+ADAK0rexJK7BydnB3OdVCEQoO7vmEK4h9bAZO1X5rM9wXAFIYOWOLkKAc
-         zjvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730731147; x=1731335947;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xpNFk8hvdBrc0E2hQPlR3zKBSGiQuhict/6bGeGu0=;
-        b=bPxECkyZZQn8nTheMTCoa0DqyeySBvw0grnFMB+VRDE5/o3/hJXSWtXHOvKopIODxF
-         boS9KCt02DZx1l1GmjrOVO+6WKrYKOzm9cNGlDhoOGCdxe9cbnLnzM8P9L5sK7c3sb9E
-         q5ZprFWn57sGuMkF3iQAfiLkmpW/TL+ONRT9IQmc0MsQi/RDZ4jkr50YuyiSuC1UfoFK
-         tfC+jYKUH2BbOMR0Rr5lH5CUuP6Ip0r31moQYaFUXLUZ8r58VkOr8qf+inHUNxdUeW49
-         16kIb/GzcqrUzd0WQqy32YA8hzQkP13Nw8QyWroZ/Bo/mjPwH4/U7h6OYyLLfCseyMAO
-         QEFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwgxjDVbkE9DJFfiBO0c+gP9dysj1o6iUNMD9vC1DrCugZpt+3NjOsKtrALzj5jTqvtDhRuRxdwH+Rrw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTfr3LJOAHWn6ki0Y9+eyIadp4xtAuErqedJQ9aW9YvNmE+qvd
-	KIgAsoNNq8Jsy2Yic3niX3GFhEls06KjPOttTbMMq/eioq4euRJQbRvon+leAPc=
-X-Google-Smtp-Source: AGHT+IEkd7fCxmipKdK/jhPqqpXWWRduRKJdf1Fys48euGtYO2BQbNuoCcaPoeGNZkFLXLCk4YE8xA==
-X-Received: by 2002:a5d:5847:0:b0:37d:4d3f:51e9 with SMTP id ffacd0b85a97d-381c7aa451dmr10370065f8f.40.1730731147068;
-        Mon, 04 Nov 2024 06:39:07 -0800 (PST)
-Received: from localhost ([2a01:e0a:3c5:5fb1:4393:a9f:472d:9404])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c116abf3sm13387483f8f.101.2024.11.04.06.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 06:39:06 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>,  Jonathan Corbet <corbet@lwn.net>,
-  Patrick Rudolph <patrick.rudolph@9elements.com>,  Naresh Solanki
- <naresh.solanki@9elements.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
- Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
-  Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-  linux-hwmon@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-doc@vger.kernel.org,  devicetree@vger.kernel.org,
-  linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
-In-Reply-To: <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net> (Guenter
-	Roeck's message of "Mon, 4 Nov 2024 06:18:27 -0800")
-References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
-	<20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
-	<47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
-	<1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
-	<fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
-Date: Mon, 04 Nov 2024 15:39:05 +0100
-Message-ID: <1jfro783na.fsf@starbuckisacylon.baylibre.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAq/bWwt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265FFC4CED1;
+	Mon,  4 Nov 2024 14:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730731163;
+	bh=f3+wrner1fvmQYtpg3rzuW+v/F9Y1jdlOE7AWj4oHxw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=WAq/bWwtL9b8OUOen7NK86oyDS9GaRNhjAAE5tMWd3n/pfhFGJEqRNOqDJNDa0IKo
+	 eMI5B9Pf39qdDVoa/xNCTjaMnZUZffVhC9nivynkiB2Gl6AAe17qTL38OU6Du3VeEk
+	 HUYeFOWMcTDr9CubWdJydXnTmvUN5so6PXTpqhO1/Q4UPVdNoiYwcejzzeUxjTwgKb
+	 jzU3qfJibM0Atev218lUSfgGhANg6vfSb81st1Et4lvEwrfWc0QimhZK8HsySDtAHC
+	 I1OpEoQ9NZsrU4YlTC9vYZS0thS4Sl+GXEIcywBaYufCksiIBIQfrE3SRnRqd8Wnti
+	 SBDNdz1ZZovXA==
+Date: Mon, 04 Nov 2024 08:39:21 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: jdelvare@suse.com, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Conor Dooley <conor.dooley@microchip.com>, linux-aspeed@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ krzk+dt@kernel.org, sylv@sylv.io, linux-arm-kernel@lists.infradead.org, 
+ linux-hwmon@vger.kernel.org, linux@roeck-us.net, 
+ Joel Stanley <joel@jms.id.au>, conor+dt@kernel.org
+In-Reply-To: <20241104092220.2268805-1-naresh.solanki@9elements.com>
+References: <20241104092220.2268805-1-naresh.solanki@9elements.com>
+Message-Id: <173072771091.3690717.11563964377469449295.robh@kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: arm: aspeed: add IBM SBP1 board
 
-On Mon 04 Nov 2024 at 06:18, Guenter Roeck <linux@roeck-us.net> wrote:
 
-> On 11/4/24 00:43, Jerome Brunet wrote:
->
->>>> +/*
->>>> + * PMBus write protect forced mode:
->>>> + * PMBus may come up with a variety of write protection configuration.
->>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
->>>> + * The ability to actually alter the protection may also depend on the chip
->>>> + * so the actual runtime write protection configuration may differ from
->>>> + * the requested one. pmbus_core currently support the following value:
->>>> + * - 0: write protection removed
->>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
->>>> + *      registers. Chips essentially become read-only with this.
->>>
->>> Would it be desirable to also suppport the ability to set the output voltage
->>> but not limits (PB_WP_VOUT) ?
->> I was starting simple, it is doable sure.
->> It is not something I will be able to test on actual since does not
->> support that.
->> Do you want me to add "2: write protection enable execpt for
->> VOUT_COMMAND." ?
->> 
->
-> Please add it. I have a number of PMBus test boards and will be able to test it.
->
-> Thee are three options, though. Per specification:
+On Mon, 04 Nov 2024 14:52:14 +0530, Naresh Solanki wrote:
+> Document the new compatibles used on IBM SBP1.
+> 
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes in V4:
+> - Retain Acked-by from v2.
+> - Fix alphabetic order
+> ---
+>  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Any preference for the value mapped to each mode ? Using the one from
-the spec does not seem practical (32768, 16384, 8192).
 
-The bit number, maybe (7, 6, 5) ?
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-or just by order strongest locking ?
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
->
-> 1000 0000 Disable all writes except to the WRITE_PROTECT command
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-3
+  pip3 install dtschema --upgrade
 
-> 0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
->           PAGE commands
 
-2
+New warnings running 'make CHECK_DTBS=y aspeed/aspeed-bmc-ibm-sbp1.dtb' for 20241104092220.2268805-1-naresh.solanki@9elements.com:
 
-> 0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
->           PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: timer: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/timer/arm,arch_timer.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /sdram@1e6e0000: failed to match any schema with compatible: ['aspeed,ast2600-sdram-edac', 'syscon']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: bus@1e600000: compatible: ['aspeed,ast2600-ahbc', 'syscon'] is too long
+	from schema $id: http://devicetree.org/schemas/bus/aspeed,ast2600-ahbc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: syscon@1e6e2000: 'smp-memram@180' does not match any of the regexes: '^interrupt-controller@[0-9a-f]+$', '^p2a-control@[0-9a-f]+$', '^pinctrl(@[0-9a-f]+)?$', '^silicon-id@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e6e0000/syscon@1e6e2000/smp-memram@180: failed to match any schema with compatible: ['aspeed,ast2600-smpmem']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e6e0000/syscon@1e6e2000/interrupt-controller@560: failed to match any schema with compatible: ['aspeed,ast2600-scu-ic0']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e6e0000/syscon@1e6e2000/interrupt-controller@570: failed to match any schema with compatible: ['aspeed,ast2600-scu-ic1']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e6e0000/display@1e6e6000: failed to match any schema with compatible: ['aspeed,ast2600-gfx', 'syscon']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: adc@1e6e9000: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/iio/adc/aspeed,ast2600-adc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: adc@1e6e9100: 'interrupts' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/iio/adc/aspeed,ast2600-adc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: crypto@1e6fa000: 'aspeed,ahbc' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/crypto/aspeed,ast2600-acry.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/video@1e700000: failed to match any schema with compatible: ['aspeed,ast2600-video-engine']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: sdc@1e740000: sdhci@1e740100:compatible: ['aspeed,ast2600-sdhci', 'sdhci'] is too long
+	from schema $id: http://devicetree.org/schemas/mmc/aspeed,sdhci.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: sdc@1e740000: sdhci@1e740200:compatible: ['aspeed,ast2600-sdhci', 'sdhci'] is too long
+	from schema $id: http://devicetree.org/schemas/mmc/aspeed,sdhci.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/sdc@1e740000/sdhci@1e740100: failed to match any schema with compatible: ['aspeed,ast2600-sdhci', 'sdhci']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/sdc@1e740000/sdhci@1e740200: failed to match any schema with compatible: ['aspeed,ast2600-sdhci', 'sdhci']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e780000/timer@1e782000: failed to match any schema with compatible: ['aspeed,ast2600-timer']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: lpc@1e789000: lpc-snoop@80: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed-lpc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: lpc@1e789000: reg-io-width: 4 is not of type 'object'
+	from schema $id: http://devicetree.org/schemas/mfd/aspeed-lpc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: kcs@24: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/ipmi/aspeed,ast2400-kcs-bmc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: kcs@28: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/ipmi/aspeed,ast2400-kcs-bmc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: kcs@2c: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/ipmi/aspeed,ast2400-kcs-bmc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: kcs@114: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/ipmi/aspeed,ast2400-kcs-bmc.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e780000/lpc@1e789000/lhc@a0: failed to match any schema with compatible: ['aspeed,ast2600-lhc']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e780000/lpc@1e789000/ibt@140: failed to match any schema with compatible: ['aspeed,ast2600-ibt-bmc']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e780000/bus@1e78a000/i2c@280/bmc-slave@10: failed to match any schema with compatible: ['ipmb-dev']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: fsi@1e79b000: compatible: ['aspeed,ast2600-fsi-master', 'fsi-master'] is too long
+	from schema $id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e790000/fsi@1e79b000: failed to match any schema with compatible: ['aspeed,ast2600-fsi-master', 'fsi-master']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: fsi@1e79b100: compatible: ['aspeed,ast2600-fsi-master', 'fsi-master'] is too long
+	from schema $id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e790000/fsi@1e79b100: failed to match any schema with compatible: ['aspeed,ast2600-fsi-master', 'fsi-master']
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dtb: /ahb/apb@1e790000/dma-controller@1e79e000: failed to match any schema with compatible: ['aspeed,ast2600-udma']
 
-1 ?
 
->
-> The driver uses OPERATION and VOUT_COMMAND, so we should have options
-> to disable them separately. It may be desirable, for example, to be able
-> to turn on a regulator but not to change the voltages. Also, since
-> full write protection also disables writes to the page register,
-> the impact of full write protection on multi-page chips needs to be
-> documented.
 
-Noted. I'll update the documentation.
 
->
-> Thanks,
-> Guenter
 
--- 
-Jerome
