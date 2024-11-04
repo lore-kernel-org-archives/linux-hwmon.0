@@ -1,33 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA6F1B4F29;
-	Mon,  4 Nov 2024 11:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9358170805;
+	Mon,  4 Nov 2024 13:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730720842; cv=none; b=cEmeC3aPe2f84WQlAd2jLK7GZxmE8OIPF1pSs+r1jQ+Fx22vVSR4deIIu7Zo3D5mfecqBJpTgdRuVpF2K4K9JEVYHz10uv4FjLMVDREuinmneUYSxgbVUoq5gP5Qvn61z0G1oMUla8vjvPZUFeWD/OkHjCj8JSHlO2Nf8eaPnq0=
+	t=1730728291; cv=none; b=dbXpktEvqr5gztR6BuKoNKA3I5UjzJdSKe9AyTpcLyaztXtJh0s18NqVUU67k1TreQfupfaRj/FwgrJvyC8+jvhf8EZ5OUX9NiqpOehXoua+27diAcbJwUVLlWv3dzPi1JLyrr3J229PLSZDMKG5vYevapCkZ1GQYsiwFn2qZ/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730720842; c=relaxed/simple;
-	bh=e1nzHk0cpcCIC/llfwkEOi5lrvUtOPMV7NJH5JG9+0k=;
+	s=arc-20240116; t=1730728291; c=relaxed/simple;
+	bh=1w2eRE72QIY6UPS8PbgUFDNBykn84o7fCfcWxqfb9Ng=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eoRNnIYCRS6Vu40tz017rdLEBsm5l+vM/ESjzFmJbH65fPwq1q43gs7QZwJ9JhdBnlJ2hKlcPXeC8GpXEcjBFZP/KXToLIWEgD2a//6PsSee4hGNGvkJPBh+zPiBXwO0qLF1FyfQ+YvcRDliva/qFU2a+W8g5WnqPGh91HferPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmB1wf01; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=FJ2AHASgZ16beLihUuhZmGIxmMjaeGMCteltDniUdDMsGTHhkZ4h/umyd6PNanZRcXnwOr/lqrPfdDxXg+UPgZTFRR1duwwzSfYpwpd/9FiESKtUyzTxZoFBcx1QNA+3ktDQOF+FXq+HSqfgJdoa6f7r6UwrlVqwTPFaplFazkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP4oibdr; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmB1wf01"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7683CC4CECE;
-	Mon,  4 Nov 2024 11:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730720842;
-	bh=e1nzHk0cpcCIC/llfwkEOi5lrvUtOPMV7NJH5JG9+0k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mmB1wf01Pp6MR+T1Qs6Fb2/RhTQSvLDCOVKV9u+3AzczWUn7PpPA3NXh4IEnpFc4q
-	 mWH758J4t0LsSS0P2evQFY5lWwnpnH5z15/D9u1u5kIUlsWaQ+mtqY9w7AqZ1z9b0N
-	 Oel+V21OuqdUt5OWfWmp9YgffnXG6We0wFcTfEZ4Zvd/Wb/EkEli+NLuU67VfVo+CY
-	 jY+YHwpJimq/AXWBa5YCZh2oH3y24qFYfnKMGHPhDYv8WVRc/CWgOXcTDp2tGjDrjZ
-	 NMVLxEKZ7mAqG82nIEyXjaucK6osBJsk7gAzOC5UL43ctJrf3Y0brQx6OPX4PtYNuZ
-	 spq3GGEnX40Eg==
-Message-ID: <62e24ed4-3579-46ff-a77a-c5733125012c@kernel.org>
-Date: Mon, 4 Nov 2024 12:47:16 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP4oibdr"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71e953f4e7cso3315603b3a.3;
+        Mon, 04 Nov 2024 05:51:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730728289; x=1731333089; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RisdBhDozfhIAK5Mme80AcSFBcqV8wUI4AjA2PHwUtc=;
+        b=eP4oibdr+S4V+J/Yyb5+ZndTWPPnr3v9DkwJLzWgIYmG7gk/IxYQ0RdOjYY89C1mZQ
+         19fSqi6luHvak9YoKXfLIHOIVu2+2JbfseVuucCuxvmp+m5Wu2cJYfi79vaJ26tEKKgE
+         3hbaj9WqE/bLEBM4p3eWBvP/HrH5+xkDX6TrstUZrCBgRrcqNgOJ+24C2XU1OHY3c8UG
+         H304yM9QNq0vwWAamlwRtAyvYBN3R2BHHCq1yfWHsj6P8Z1/liuFmaV5meQjN6pa7qPE
+         u9MvCQ1Oxry2KDYIlj7gkN8Fs0vNAR3TtXNC2li89zwPSuJEzrLQAPc0CfDnJRGQQr75
+         YuYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730728289; x=1731333089;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RisdBhDozfhIAK5Mme80AcSFBcqV8wUI4AjA2PHwUtc=;
+        b=tr7lC2z5ltf+pGaCHDXoAa3iO11llgOu/TmN+GTiUAAGPDFoB5IpKdMlQdFg09Tmuu
+         bNGeGzIKDZsViQhSujLHaF31jEXkGFJBs/LpM7EnxTKXVOc7JPUhRhFjbJvG5xQcWnPJ
+         3cp9wiLr9iPZ5+gIJomPMwyJy/KvLHpTGUdmhOfJLCAbXx4dZWMwiyuC9TQ5nrEpGSXu
+         u8QneRU+Bi4/LeFUArt3KpFD5BJ4F/AYiPmGyctosjhcRwdB/n8Ity7Y+kWMY46ov7SK
+         J9A0jz6AUAugt+aDKUUihxL9vYDwK7mnsxvxOE/VKkHTiOggmqbAUO4tPTKkUYkYzrLI
+         oRlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIfZt/Gv58XMSKFW8QHG/GEisqNaXDrXD9WJZGUS/ky6D2SKIvta9rVPNZ3WeiBDaBeAACBz/jRg0aJb4=@vger.kernel.org, AJvYcCVTRBpt8sNAuBcaX1sb4azzO7kn5rfxYr3hDITlNFeU6HVKBIcgv+Dz+jgQQ6q8+2oz8Ll6+gyS4SeX@vger.kernel.org, AJvYcCWIi+BNZsxqyA8a2EjBhicLsb7D5TKS5R3dHXjRwQ3en6h7fF6wjwaGIO8h5C0CHqf8WFYrTJdWEu2l@vger.kernel.org, AJvYcCWx3AsyjxDBltN7oyqkf5gPOEKzKrvouw8Q+5yMosBgtdoLg2ogmbE+JFTUXyjniHnPe/rbbuIwekqUnZe6@vger.kernel.org, AJvYcCWxUg1YaeXcPl6BSYb+TW17Oi+0j7o2a6iAzMBz1tg/61UwqAeG7HOg+cTWkmSDAZx1QpSOGwCtSrDs@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGIIk7wdvWnCPmaU/Wr0Nv1n7FYF3fHAqQT4Wz7xMF/oHWzkvZ
+	v1uTGenBBx60YiICu5pjctIJx6QuMPVg/ytVFJWbEsxMvlSvkLlN
+X-Google-Smtp-Source: AGHT+IFT9MWN3Z5rfIFhSF9LIZsbbBcASg5951HhUUaBr+5y8PILt51QH8l3yj+ywBZD5Kub3Sm5ng==
+X-Received: by 2002:a05:6a00:14d3:b0:71d:fe64:e3fa with SMTP id d2e1a72fcca58-720c9990cc3mr18918463b3a.19.1730728288694;
+        Mon, 04 Nov 2024 05:51:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b91d3sm7397947b3a.38.2024.11.04.05.51.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 05:51:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2a5c17c9-db8c-492d-87e7-c9872b2d5100@roeck-us.net>
+Date: Mon, 4 Nov 2024 05:51:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,127 +63,120 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: pwm-fan: add
- retain-state-shutdown property
-To: Billy Tsai <billy_tsai@aspeedtech.com>,
- Akinobu Mita <akinobu.mita@gmail.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <20241026080535.444903-1-akinobu.mita@gmail.com>
- <20241026080535.444903-3-akinobu.mita@gmail.com>
- <ijdk5uuurnfd2shnwwj2nm64bno6lmrhdyqp42pzjc3i2e5cyh@v5ljkrsgo6ac>
- <CAC5umyitFp7oGR-eYXMVaS8bY1AGe3QwEuSPoEz3DxWwH=dUsA@mail.gmail.com>
- <e29e2c9e-60c1-4f32-ab71-e74f331e1921@kernel.org>
- <CAC5umyhCw+62Y+h3Jvh3=0Ocs8XJsSu_vaiPpO_g=65Jo4vUFg@mail.gmail.com>
- <e4985609-0642-4ff4-b074-8c5a34f88a24@kernel.org>
- <CAC5umyhrNCA4BHqC_k_tSaSOANcvP_vt485650xtFTPwJ+6snQ@mail.gmail.com>
- <OSQPR06MB72525057883A59578441E0988B512@OSQPR06MB7252.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 4/6] hwmon: (pmbus/core) clear faults after setting
+ smbalert mask
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
+ <20241024-tps25990-v3-4-b6a6e9d4b506@baylibre.com>
+ <fa3ccd3b-7dab-45b2-92ec-49400e39114c@roeck-us.net>
+ <1jo72v5rnp.fsf@starbuckisacylon.baylibre.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <OSQPR06MB72525057883A59578441E0988B512@OSQPR06MB7252.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <1jo72v5rnp.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 04/11/2024 08:45, Billy Tsai wrote:
->>>
->>> On 28/10/2024 15:57, Akinobu Mita wrote:
->>>>>>>
->>>>>>> You described the desired Linux feature or behavior, not the actual
->>>>>>> hardware. The bindings are about the latter, so instead you need to
->>>>>>> rephrase the property and its description to match actual hardware
->>>>>>> capabilities/features/configuration etc.
->>>>>>
->>>>>> Is this description okay?
->>>>>> (Reused the description of retain-state-shutdown in leds-gpio.yaml)
->>>>>>
->>>>>> description:
->>>>>>   Retain the state of the PWM on shutdown. Useful in BMC systems, for
->>>>>>   example, when the BMC is rebooted while the host remains up, the fan
->>>>>>   will not stop.
->>>>>
->>>>> Nothing improved in the property. You still say what the system should
->>>>> do. This is user-space choice, not DT.
->>>>
->>>> It seems better to implement it as a device attribute.
->>>
->>> I don't know about that. To repeat: if you say what system is supposed
->>> to be doing, it is a policy. Describe the hardware and its configuration
->>> and maybe this would be suitable for DT.
+On 11/4/24 00:28, Jerome Brunet wrote:
+> On Fri 01 Nov 2024 at 08:10, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
->> Billy, could you please write a proper description for this property?
->> I'm not the right person for this.
+>> On Thu, Oct 24, 2024 at 08:10:38PM +0200, Jerome Brunet wrote:
+>>> pmbus_write_smbalert_mask() ignores the errors if the chip can't set
+>>> smbalert mask the standard way. It is not necessarily a problem for the irq
+>>> support if the chip is otherwise properly setup but it may leave an
+>>> uncleared fault behind.
+>>>
+>>> pmbus_core will pick the fault on the next register_check(). The register
+>>> check will fails regardless of the actual register support by the chip.
+>>>
+>>> This leads to missing attributes or debugfs entries for chips that should
+>>> provide them.
+>>>
+>>> We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
+>>>
+>>> Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
+>>> avoid the problem.
+>>>
+>>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+>>> Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
+>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>>> ---
+>>>   drivers/hwmon/pmbus/pmbus_core.c | 7 ++++++-
+>>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>>> index ce697ca03de01c0e5a352f8f6b72671137721868..a0a397d571caa1a6620ef095f9cf63d94e8bda1d 100644
+>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>>> @@ -3346,7 +3346,12 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+>>>   
+>>>   static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+>>>   {
+>>> -	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+>>> +	int ret;
+>>> +
+>>> +	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+>>> +	pmbus_clear_fault_page(client, -1);
+>>
+>> Why -1 and not page ?
 > 
-> In our hardware, if the system reboots and power remains on the PWM controller
-> will retain its original settings. However, the pwm-fan.c driver currently disables
-> the PWM controller during a system reboot. I need this property to prevent pwm-fan.c
+> The idea was to clear the fault on the page we are on, basically just skipping
+> setting the page again.
+> 
+> I'll change to 'page'
+> 
+Or just add a comment explaining the '-1'.
 
-If we change the PWM core not to disable it, then we have to change
-bindings?
-
-How is this binding applicable on system (e.g. on *BSD) which does not
-disable PWM on reboot?
-
-> from disabling the PWM when the system reboots.
-> In my point of view, the description can be:
-> Retain the state of the PWM on shutdown. Some platforms (e.g., BMC) will maintain
-> the PWM status after the system reboot. Add this property to prevent the PWM from being
-> disabled during the system reboot.
-
-You again describe what OS should do. First and last sentences are the same.
-
-Probably what you want to say is that fan is some critical component
-which should not be turned off or left unattended. Or that this hardware
-keeps last state of register on reset, so some boards might want to use
-it? If the first, then probably different property name. If the second,
-current seems fine, just choose some description describing actual hardware.
-
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
