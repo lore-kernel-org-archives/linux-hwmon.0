@@ -1,154 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273801BFE06;
-	Mon,  4 Nov 2024 15:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D9C70816;
+	Mon,  4 Nov 2024 15:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730732918; cv=none; b=h0gPI9b8OD0nKPSVPrjflbc0rjcIkhYrVxPd+enpX3HW+OZWf1aB0xZjyKYwvobiPAwugtAFle/+iuJkDblilyvzmY/4MFNlJ7TvJuUUinsXjc0VpksUYZJt3HlgaskSoMl3ItXOrlZ277T29ibNyRrm/gmBgCAt8ooPCL5dh2A=
+	t=1730735309; cv=none; b=ucjX/36LvDUUwU7bGM7ZfXVtCREYsPNBDOfUzmn2LRD+cteOYCk9e8Zy+b0IuvmoFiWcFnStsZ1mAXFhJ2ZUC8sXDiqA3juSJfY+IR8FCCNaN5uFCIFgAZgExZigg7j22T4xislsr9kAmQtaM17AQtcbISpC4Nlvkr9O2EEp8XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730732918; c=relaxed/simple;
-	bh=aCcYfdU0Q+jbJmWBtJhf1SBpQ++QF9TaBJeYMGrxrKg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ELWQFNbwxFwP3BP+C7m8rHH72PAgBuJzzx1ebQLK/GOqAXrHJjXf3IjKNbAWedTk/uJLrOhvL+ZcE5znzxM5rWaLNzYwoLBcrBxls8oTykPfp1x8LOUdBmFOqBw70Oc6MfCBI9IONYuekWYBnHtsS4HsxMdOxgSsh/hhUSNjFwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oyy1QO/J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730735309; c=relaxed/simple;
+	bh=bggjSsff92I5nfqkHZKLXAtnYfyMCNcWpoDAFa1s/UY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=vEJ9YdXp1mOaxNGJ7pyC0PlGvNJSJag5RZABomuq1KfH4SUpa6g4HJD3TyllF7njFw7vxejJz4R9lI0PQcM7pqJ7/cjaRGPEOJSWeCEYtDVS2dDaKMh+HgrlV376bVYR8civyCZNRuRFRaL8thMnsRYVfYTE0SGWMENA0oaNUoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lsLqCTsY; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oyy1QO/J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB60C4CED5;
-	Mon,  4 Nov 2024 15:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730732917;
-	bh=aCcYfdU0Q+jbJmWBtJhf1SBpQ++QF9TaBJeYMGrxrKg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oyy1QO/JnB5WGVdEuMNweuk20cDyY2GhqSj7mUcCIRZTK9umCV1CD91xOFBc3fOg4
-	 O/Vl/EIb8FFK5KTnIsO4mycVc6R5gsR5dIQAHrnJaeQfajYHRu9ACkOY7rgiWez676
-	 mk3z7JwJ3mT7kvUCWm00JmRCgbg9JbPI2iMAWiOhJ+8bXJjbuBhExdwjyZ7kDyYtzk
-	 6/SjFDhc1DRaCWE3YBniXeRhWP5sYVmGW8uyp7CYXxafbED0q0xaH0QTgXGd4oUu/t
-	 SyRHl08MiYIVObwoG/UfMFBFf5AhF6akLvGveu9bUP/xiFza8NLfjHe3gIcy7ll+ls
-	 yM4TQM1YcAH+w==
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e28fe3b02ffso3718134276.3;
-        Mon, 04 Nov 2024 07:08:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUvLPC/LE3wO28Z//SathiqdwcUpRbQuRIhgKGvhqaLvteWhpFOwri8fcCxpzfnNssA6zyt/qITYML2@vger.kernel.org, AJvYcCWKVysyQjEVapZkkMhKbDhLYdZgY7rP0Yt/6srJQmGFf5GKu6qbE8XGrIPjUUWnXlTLR1YJmWngj20K@vger.kernel.org, AJvYcCXpKlgICfZcG7PAeYU9hLy2b2tsCr4k5fWy7EYJCNdGtT22uLXl3mQcjYMwCtzI+um85KqwyG5TnTimp8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxb6tGnnV6wh4E2raIL3y5fqVV/AP5K6awdWvmnk47RIhPHYadD
-	HY1XQ0+jNqe1Bb5otjGVBj2ebRCrbjkJy/aA8d+gdrtAjgFSxh2RCJo2JKq9GjoSsDWdSrzj928
-	DghfQIJEp5lMvimOXHTRVXs5kZQ==
-X-Google-Smtp-Source: AGHT+IF4ODCVM5LJpqXkmxMdu5G3rUJur0n+5iNYKMlkY8DKa8KLzX/GaIwsSP1M3kVSAtulHsZ85uuLiDf724+J+Wo=
-X-Received: by 2002:a05:690c:61ca:b0:6e3:252c:408 with SMTP id
- 00721157ae682-6ea523cb2c8mr157949527b3.20.1730732916661; Mon, 04 Nov 2024
- 07:08:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lsLqCTsY"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3FC3C6000C;
+	Mon,  4 Nov 2024 15:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730735300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PWKzQLDi1P0e2NgDvgc4yHfOyzr35Ho5+wgbJLaL+w0=;
+	b=lsLqCTsYOXiqpGyaY0s8b0IrYsMHGrgefc5xY3Zp8Gu+0j6Vqa5EQxYSTBUZN3Y7Ruw58a
+	ZfCqd3fqTkEsv6EJf0kH0F7MGpzbm6cybdT4hmMr5X44csOQYGKg0mig1G8C3A1BtBS3fr
+	jyXAYkrY6ONkKfi/r7EVXVxIc+G2+DNHI6q1fBP/cpNUBehwiy0E7GCfsqm2a52COAM7lH
+	l7J5DbKpS/P3d/38dnGUgai2Mw+Fm6yphsxQsBxf0JlNPON3NiFDbrErsPAxvGDAXrRZvd
+	bCmxWJUUfNycGGq9MSws1egP0OUB9CtbFnYKFrlAd1+IPULLjDENoZeuvKRcaQ==
+From: Thomas Richard <thomas.richard@bootlin.com>
+Date: Mon, 04 Nov 2024 16:48:08 +0100
+Subject: [PATCH 2/2] mfd: cgbc: add a hwmon cell
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1730326915.git.grantpeltier93@gmail.com> <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
-In-Reply-To: <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 4 Nov 2024 09:08:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJqhxcMu2yeqvJvUOJ_g3uDv3t1JwaMxAfZQGXFj3rAvw@mail.gmail.com>
-Message-ID: <CAL_JsqJqhxcMu2yeqvJvUOJ_g3uDv3t1JwaMxAfZQGXFj3rAvw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to
- support voltage dividers
-To: Grant Peltier <grantpeltier93@gmail.com>
-Cc: linux@roeck-us.net, geert+renesas@glider.be, magnus.damm@gmail.com, 
-	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241104-congatec-board-controller-hwmon-v1-2-871e4cd59d8e@bootlin.com>
+References: <20241104-congatec-board-controller-hwmon-v1-0-871e4cd59d8e@bootlin.com>
+In-Reply-To: <20241104-congatec-board-controller-hwmon-v1-0-871e4cd59d8e@bootlin.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Lee Jones <lee@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
+ Thomas Richard <thomas.richard@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On Wed, Oct 30, 2024 at 5:41=E2=80=AFPM Grant Peltier <grantpeltier93@gmail=
-.com> wrote:
->
-> Add devicetree bindings to support declaring optional voltage dividers to
-> the rail outputs of supported digital multiphase regulators. Some
-> applications require Vout to exceed the voltage range that the Vsense pin
-> can detect. This binding definition allows users to define the
-> characteristics of a voltage divider placed between Vout and the Vsense
-> pin for any rail powered by the device.
->
-> These bindings copy the vout-voltage-divider property defined in the
-> maxim,max20730 bindings schema since it is the best fit for the use case
-> of scaling hwmon PMBus telemetry. The generic voltage-divider property
-> used by many iio drivers was determined to be a poor fit because that
-> schema is tied directly to iio for the purpose of scaling io-channel
-> voltages and the isl68137 driver is not an iio driver.
->
-> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
-> ---
->  .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
->  1 file changed, 147 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas=
-,isl68137.yaml
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl681=
-37.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.ya=
-ml
-> new file mode 100644
-> index 000000000000..ed659c2baadf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
-> @@ -0,0 +1,147 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas Digital Multiphase Voltage Regulators with PMBus
-> +
-> +maintainers:
-> +  - Grant Peltier <grant.peltier.jg@renesas.com>
-> +
-> +description: |
-> +  Renesas digital multiphase voltage regulators with PMBus.
-> +  https://www.renesas.com/en/products/power-management/multiphase-power/=
-multiphase-dcdc-switching-controllers
-> +
-> +properties:
-> +  compatible:
-> +    enum:
+The Board Controller has some internal sensors.
+Add a hwmon cell for the cgbc-hwmon driver which adds support for
+temperature, voltage, current and fan sensors.
 
-Somehow "isl68137" is missing from your list. "make
-dt_compatible_check" reports it as not documented.
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+ drivers/mfd/cgbc-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +      - renesas,isl68220
-> +      - renesas,isl68221
-> +      - renesas,isl68222
-> +      - renesas,isl68223
-> +      - renesas,isl68224
-> +      - renesas,isl68225
-> +      - renesas,isl68226
-> +      - renesas,isl68227
-> +      - renesas,isl68229
-> +      - renesas,isl68233
-> +      - renesas,isl68239
-> +      - renesas,isl69222
-> +      - renesas,isl69223
-> +      - renesas,isl69224
-> +      - renesas,isl69225
-> +      - renesas,isl69227
-> +      - renesas,isl69228
-> +      - renesas,isl69234
-> +      - renesas,isl69236
-> +      - renesas,isl69239
-> +      - renesas,isl69242
-> +      - renesas,isl69243
-> +      - renesas,isl69247
-> +      - renesas,isl69248
-> +      - renesas,isl69254
-> +      - renesas,isl69255
-> +      - renesas,isl69256
-> +      - renesas,isl69259
-> +      - renesas,isl69260
-> +      - renesas,isl69268
-> +      - renesas,isl69269
-> +      - renesas,isl69298
-> +      - renesas,raa228000
-> +      - renesas,raa228004
-> +      - renesas,raa228006
-> +      - renesas,raa228228
-> +      - renesas,raa229001
-> +      - renesas,raa229004
+diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
+index 93004a6b29c1..7cc2872235ac 100644
+--- a/drivers/mfd/cgbc-core.c
++++ b/drivers/mfd/cgbc-core.c
+@@ -236,6 +236,7 @@ static struct mfd_cell cgbc_devs[] = {
+ 	{ .name = "cgbc-gpio"	},
+ 	{ .name = "cgbc-i2c", .id = 1 },
+ 	{ .name = "cgbc-i2c", .id = 2 },
++	{ .name = "cgbc-hwmon"	},
+ };
+ 
+ static int cgbc_map(struct cgbc_device_data *cgbc)
+
+-- 
+2.39.5
+
