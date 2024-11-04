@@ -1,55 +1,55 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17ED7171E43;
-	Mon,  4 Nov 2024 08:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4848D165F04;
+	Mon,  4 Nov 2024 08:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730707953; cv=none; b=mQMOTRPYfnQGtCNISLK32Qw3sJY67nJdSY0RjxmbV+W5PCzpEohyXyq2vAo1dll7FWjRhS9WgCRhLw2oq1Vfa8waUpojD/Xmuzo5g52+D2/N/CQrB4RYNX2p9aTrThnh5TSMzM0Hd5mD2IbGnG96EAbBYbYLKRzXqORWu+hmGNo=
+	t=1730708439; cv=none; b=rL0KoU8BIw/tmTmLLa9OTkNlNMuktksnvT5ujq10E/RdnY+VaAkeo8F4YUtjhfIUcV3ItUnXWjetPklZHPk9oX00dCSGOYrsrimyA1Bd85r6Vg6kvKJaIoRYzN00FW3ogSsc3AGKk/NAMLCcM000KsSXqXL0WmpuIsfIg2Jvwic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730707953; c=relaxed/simple;
-	bh=XCX6qrzCMImbBpxh+YBej+RlpN9TLIbz23OhwpXYnmc=;
+	s=arc-20240116; t=1730708439; c=relaxed/simple;
+	bh=Nfv0dt+GZMKlMN5KP/ZwxnVWZP74CulOtAsGT3GgNpA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GDVXjPVv4Ms+8LrH/+husEGOMWQc8XnisY+7EjwfjiFi5cLVzgxMsqwNrXEsEaFHgR63OpOsSaoaGz+mRpaH1/5KfIi2ksSLf35lqMQtdcUngDTvbLJfV4X/WrNWZfg85Z9bku1ul0dzo7Jznd8/lOeTOAhDhK4jfeFeIpXsH7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KK+oTxFF; arc=none smtp.client-ip=209.85.167.177
+	 To:Cc:Content-Type; b=JomgYyyNYlVKcFb7ULGcUf3NVeCe2AnPeUL0pHxRXo0vw5rMqbTfCur18IdHSHYovF6i7z9TctGrVaX1mNmUSvfg15jnPdU/1/LRfcvlcstLApLVDvfjmNfhVlRNmlzz/Zjoy+ixxLD3mQi98yFvMy3YSyGxWeundV+/oqN3m3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGb+odqR; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KK+oTxFF"
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3e60f6ea262so1817098b6e.1;
-        Mon, 04 Nov 2024 00:12:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGb+odqR"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6cbf340fccaso31933346d6.1;
+        Mon, 04 Nov 2024 00:20:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730707950; x=1731312750; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730708436; x=1731313236; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XCX6qrzCMImbBpxh+YBej+RlpN9TLIbz23OhwpXYnmc=;
-        b=KK+oTxFFcs+u1i9CwjG4zVojW2e+ghWt9HKgipoDkavZwKtbKWcsjHrYc8FqcvY78n
-         3svg1HhDulsgcqPuvy3y0+eJCKQDMUEKmCsYziSeOQfEZfHkwB4k5j7AbRfYDdGhrel7
-         oaVqmymH/oShujOcy5Jr28bRnhxmnOFw1+BGvOyjA2wnegPQrcC96gunjNaSFjcaK+os
-         4TDJ85hRhXX6x0Un8j/dd1hXhwdv8imgqSN/yP9XPe35qYAYmmTUKHGgyvlhffOLHuzy
-         5MXMb30blvSdFXIvSA3HLBhUEKGGoAP2T6HMzV0g3xwzfubAKxlVjFvrRm3fLXTXLApj
-         D+AA==
+        bh=p1jVXbPTVzBsjqPi6FFutxVJsnea7PWQ8s+9/ntA9tg=;
+        b=hGb+odqRa0YLlR6Kbmuzr8kyazisbgIh+VMOjNG3cmG9booW8TpadzotKzxkjDj7yc
+         eWkDVNk4h/NQ/65ScCCloDckE//uuLtZZs3PucZUjDCe5oAgNbgLbeswO2aAXPRGhZrd
+         1qWUZ4hX6R3cmeoKnZfqcBmlM4OLRxNu82ud/RJIaT8oMH2s09Sre+njFFeCQTjhCWPJ
+         FRSXtk5tPPryBnSKO4cqmj/ptbsjXV7r5SJgRkD8mssexoZgeeShPUjNveOshCUTpMDB
+         mzqqNacZrvB4qF+kAn/7ZDNwecC4aQErPlB/MXPjMxZqhMhCPOsV8frOeeEMF8zTRqEP
+         ZN8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730707950; x=1731312750;
+        d=1e100.net; s=20230601; t=1730708436; x=1731313236;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XCX6qrzCMImbBpxh+YBej+RlpN9TLIbz23OhwpXYnmc=;
-        b=AZEod8kNasDJ1PgFK+QevTNfC0JhA9hysft6W/UXYI93ZAbgC1Sr0qTiFJaJRfvW0l
-         2qqt+P1QsbrFq1BFE4KPFV4JDxE9Au1yxaawkwjzoXEVK+OK6On1g2iypRt5kigL705C
-         ALz77FHhu3yAmcrJmUxHAOFc09mRVxPxPalDAGj0opZFL/dL3pwGqOYeLxfDyLiKmSVz
-         pVMMM44ApM1+0USRpg5WE8z2qehScK1Zq7tkdDnF3FqER7C7yzANcA3DaRUuGQO9cyxN
-         UgL4tniGbgkx60K/OlrBnYJRY3b7qvVEnCGgrG0Ew+ssvN22yFJTQsGlzQnx29tFqxE9
-         Mtjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVV7KER+SdLRgxBaTYEQqpUC4T4qdyveaQvJUHVlcIdz6GXxyvDkwrfIt1VmhNtea5telUI29JQHdH9@vger.kernel.org, AJvYcCWpaOGpU//TvlLWcQUFGnNYrg41T6Z452EmOXyUB7jnIfdm4hztUrs7hzmdo3ILsroDDnizW10VY0ZZ@vger.kernel.org, AJvYcCX2uiiDVX1wByIwWmnMzOEffG3sng6vLbtp3JXnnSp+3sdfE4PtejfDXTr3MNkf4ndDlrssUO1jiiBeXfk=@vger.kernel.org, AJvYcCXY6xK2uyHlmQS3XDC/upY8ZP0skZuj68dJ/dcN687cKOlG8z81Qo6YrLMdXQ47liaKF+YjYfHd5m6hIs+I@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZbAqZatLQecCMRLF6dWP3/xkEHG4OXWc48vBUth8+ZwFfrjMC
-	iB2LGlXvGZOWMaQ0upngb/U0ysMJo1EudX9SMphq3Sm/YZFFPR14MUHVOSSvieWyTjfl7NRp+/N
-	B0yc70Dxb3eP/rVgkvwJwdQW8Py8=
-X-Google-Smtp-Source: AGHT+IHyNmXIv/Qkf7hr1oDZ5RSdZMwySKzbkHyHElTN8xOk9/nD1kciEaKHao+bZTDKxz2iSJGs2BZ1r4zKnk+g5NA=
-X-Received: by 2002:a05:6808:448b:b0:3e6:23b7:bf4c with SMTP id
- 5614622812f47-3e63846135emr26460681b6e.13.1730707950027; Mon, 04 Nov 2024
- 00:12:30 -0800 (PST)
+        bh=p1jVXbPTVzBsjqPi6FFutxVJsnea7PWQ8s+9/ntA9tg=;
+        b=fCgPEz+yWrOIw3xajeO8HyTQiYnKSlVT4kLfEJ717nylXRxEN8aNGhhhys1G8r0hDK
+         mjNNVfb3d9mKwnsjEvsoJjkJ8LQQ57x6bLCoeSsj4gsTHzWroe8jKox7auKP9vAd653c
+         mvRta5+mdQZ781xRjibzfIRbNPuilBAS5w0GEDR2MdnBOAB9KWadjA9qmqbxiyDnuBO6
+         LWuzNfmdILVS+HXvUo2XkU3hOvVUmBcLLibgVpE1u7NYheJdzoPZwKswuVXq2Q0Zx/WC
+         q5qGqsYu1fUZkdCT2dZxjxJ18SM/EvzSvCwJ8DcfwllBcX8Q0xukQkVDf0pR2gEQtY71
+         7ICA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDLWEKDDLuqCBJuByfLZ8CnUq9/2BCs2g/UQ9V1fkhTNuZbzKf556i4/q4U/ydhV5cY7JDzoLF03Bi6i0A@vger.kernel.org, AJvYcCWJ+MkeANpLuP0Y1Es7kxFLP+kAxvCMEukeEI5xU2PG6pMZGb4/t6zIMYKSFwcopNPuwhcVJC6RNRba2mo=@vger.kernel.org, AJvYcCX+rnswRaYQC7h8bljaIvX8YiKg+115s8kPkMIxbvN47mFwcGPqRUgX35Mz43mvDNsZeek/zvIp4rS8@vger.kernel.org, AJvYcCXvsZQOxdZJ/su90H1XpjdLyC7HRiP6CFg83IYZBen7YmkXRvDfJivuaXqN73H7oiiab2ymX/vKyUM5@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZhrXCuH2zCDAQJstgnzDgmUbxdgL4fnM0br3jbCbKZ9dHuVs5
+	cUlonlNpqv1DR3pH4eLrtbSSnJUO5ouzHbMcU8eKVqVthY0UNQ98eVg+6faTqZH/co6s42pSuBq
+	WgkujO5kdor5jqL9vzEOiljUKBuQ=
+X-Google-Smtp-Source: AGHT+IHLgcrkYBUwDtz8eL6HLBbEFOCEwinDtbXkm6C8XHnjj2JY5Dc4znzcgnq5rs2Dq/efGZ+wJLDtRfgCTcX864k=
+X-Received: by 2002:a05:6214:4a8c:b0:6cb:ef36:5fbe with SMTP id
+ 6a1803df08f44-6d35424a60amr251831156d6.3.1730708436288; Mon, 04 Nov 2024
+ 00:20:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -57,48 +57,46 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241022052905.4062682-1-kcfeng0@nuvoton.com> <20241022052905.4062682-3-kcfeng0@nuvoton.com>
- <319d7395-680b-478a-aec3-08bae9177f73@roeck-us.net>
-In-Reply-To: <319d7395-680b-478a-aec3-08bae9177f73@roeck-us.net>
+ <2339841b-034b-440f-83ac-139d95059727@wanadoo.fr> <f6846ac5-55ee-405c-939b-1199ea362fb5@roeck-us.net>
+In-Reply-To: <f6846ac5-55ee-405c-939b-1199ea362fb5@roeck-us.net>
 From: Ban Feng <baneric926@gmail.com>
-Date: Mon, 4 Nov 2024 16:12:18 +0800
-Message-ID: <CALz278a9ypz+2j7yfHQ1t9M_HxJW_8oW6rmYOOgUSKCTxMz+Vg@mail.gmail.com>
+Date: Mon, 4 Nov 2024 16:20:25 +0800
+Message-ID: <CALz278ZtciLq3gVyB_66zNPDh+n2oypLOmVSUQq4yR5sO-CoNg@mail.gmail.com>
 Subject: Re: [PATCH v6 2/2] hwmon: Add driver for I2C chip Nuvoton NCT7363Y
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, openbmc@lists.ozlabs.org, kwliu@nuvoton.com, 
-	kcfeng0@nuvoton.com, DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, jdelvare@suse.com, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, corbet@lwn.net, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kcfeng0@nuvoton.com, 
+	DELPHINE_CHIU@wiwynn.com, Bonnie_Lo@wiwynn.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 1, 2024 at 10:48=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+On Tue, Oct 22, 2024 at 11:14=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
+ wrote:
 >
-> On Tue, Oct 22, 2024 at 01:29:05PM +0800, baneric926@gmail.com wrote:
-> > From: Ban Feng <kcfeng0@nuvoton.com>
+> On 10/22/24 00:20, Christophe JAILLET wrote:
+> [ ... ]
+> >> +    hwmon_dev =3D
+> >> +        devm_hwmon_device_register_with_info(dev, client->name, data,
+> >> +                             &nct7363_chip_info, NULL);
 > >
-> > The NCT7363Y is a fan controller which provides up to 16
-> > independent FAN input monitors. It can report each FAN input count
-> > values. The NCT7363Y also provides up to 16 independent PWM
-> > outputs. Each PWM can output specific PWM signal by manual mode to
-> > control the FAN duty outside.
+> > return devm_hwmon_device_register_with_info()?
 > >
-> > Signed-off-by: Ban Feng <kcfeng0@nuvoton.com>
 >
-> Applied. I did fix a couple of the nitpicks raised by Christophe,
-> but I did not replace for_each_child_of_node() with
-> for_each_child_of_node_scoped() since I can not test the code
-> and did not want to make a functional change.
+> No, because the function needs to return an integer, not a pointer.
+> And
+>         return PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(...))=
+;
+> would look a bit awkward.
 >
-> Thanks,
 > Guenter
+>
 
-Hi Guenter,
+Hi Guenter and Christophe,
 
-Appreciate your kind support,
-I'll keep following your version and check the part of
-for_each_child_of_node_scoped.
+I'll keep following this driver and check with these suggestions.
 
 Thanks,
 Ban
