@@ -1,190 +1,154 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B82B9A2;
-	Mon,  4 Nov 2024 15:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273801BFE06;
+	Mon,  4 Nov 2024 15:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730732891; cv=none; b=YathMAfJ+HAEr4Zn9U0sEs8qyhJdp9mPEV5U0yNKIJBAe8tgaL0uYDYYOSJGp5jlyyhhJO5T2T8GZF717l9UWX11Cda71vQyeB1CrhemA0RnEbXKPojTs1GREl15yv9ssobWThYV3lSgBiYO7jBN5mj2fxu9lfX1FCwMtqt2BSo=
+	t=1730732918; cv=none; b=h0gPI9b8OD0nKPSVPrjflbc0rjcIkhYrVxPd+enpX3HW+OZWf1aB0xZjyKYwvobiPAwugtAFle/+iuJkDblilyvzmY/4MFNlJ7TvJuUUinsXjc0VpksUYZJt3HlgaskSoMl3ItXOrlZ277T29ibNyRrm/gmBgCAt8ooPCL5dh2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730732891; c=relaxed/simple;
-	bh=IsoBeoOuXvcoft0v4lHIDZ8sMTlBJsV7lMY+XpcmlMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jte/2WosBEQRDglYNgJ64syM97RTp6z6H4OC6KM7iEc1ozhhlIGHGdqpUP9HE9OifzeWDEJGUsJFHIErnGR1fflonB7ojL0Lvvvk6QchA4IK76hAkQ2OQzPIRL+zT6iTqyekunPHd8lP8faIlE3Ms9Sj/PEpVP8+8cBCAIWh+RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WBlbkZno; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730732918; c=relaxed/simple;
+	bh=aCcYfdU0Q+jbJmWBtJhf1SBpQ++QF9TaBJeYMGrxrKg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ELWQFNbwxFwP3BP+C7m8rHH72PAgBuJzzx1ebQLK/GOqAXrHJjXf3IjKNbAWedTk/uJLrOhvL+ZcE5znzxM5rWaLNzYwoLBcrBxls8oTykPfp1x8LOUdBmFOqBw70Oc6MfCBI9IONYuekWYBnHtsS4HsxMdOxgSsh/hhUSNjFwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oyy1QO/J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBlbkZno"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21116b187c4so28593155ad.3;
-        Mon, 04 Nov 2024 07:08:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730732889; x=1731337689; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
-        b=WBlbkZnoVKp6iDPdrhg5FfAdWXo08J6ktItzytK7C6qR4PIe+feXU62XM0H91PybX9
-         9LaUiR2LCONoXuT/t3YsIhDeMjy9pR67RcI7BxQ55HAr/Lp2iL7A+8K4MzDoSNhmmWmq
-         xS2D6yAFQBztBHYiXONTtBglPx1KzyBI+NsARWLLycie/QVzSXl/R8z/MLC0JyL0Z6Bh
-         fMga8Shs+brvxO1MY1t3hha7WRCrGXGCFmAsHmakQk8H87IIXec+9+jAimjTk8aGp9CA
-         8p1GnE6cM8ee4upg22vD/GxcBG/Lc5ykTRlJEYx3RVcfsCKAFDH3o19XEvRWQebTwVOo
-         Nz4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730732889; x=1731337689;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
-        b=DHC49YY3uy5FnW9+ztZF2P6uILegB3wN7C+oWBEioI1L+4RpFP4e/x6tZ1XyV0/DYn
-         oPqQuz5eb73xzuSLhzZXxnXXP0YyawMJ6g8qKo4BL7zpVOHo2N5/gYWkz31jIEl2vSuK
-         g3Z2Rw4BpdRu3K/8OCugt75ckpbCkCMsoUMWDhgMMCrctWNqwzJ952vqrZSBQj0T2Pe8
-         HnpZs5tHbCgc7qzu0vTVuaIOz1ipC/dDdEw1pUJiYrju9LfYX+2AgVxt6kai3hEWJ8HX
-         aVOCBwvQqKa3b464UtNf/quyjgtLqLiLhx9d4SVBdQgCMaJnvcIuIOzWDQcxOoeEu/0a
-         wJKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGBRYdaZrgCdKtA3O1YNFXY7xNpBfEcOq8bE+5Oa8+zwnwjWrLKuWl0Vcg63vNX5IBM39q/KedRrrt6JsG@vger.kernel.org, AJvYcCWFro5CnVt8NdzkAskj+Tns+quUjiyeFrMc6hnYfnJldEThsBT4T8i6/OY/a85XK0BMKEthYRSW5Qpw@vger.kernel.org, AJvYcCWGIUtjefeVBIT64gWOtbC1tH8hbJX3M7En1Itt2KUdZW/6YlfZbKq7ptl0VU7wcSBpFGw0980JoGS8@vger.kernel.org, AJvYcCWfmptIG6Jm7vrAjkCde6qEcdTnq7i8X2VNsjlIrgwQ1ldHAI7duYEPdh0ZxLfB1mybqExbAK2PcuZa@vger.kernel.org, AJvYcCXKJBaoBaHsCArsExncFBGw9jHEUlCgoMr/0v16QntopvOh1CPu9Y4YVd1UqbdlORk2AyLlYJlFV9w6AmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2dBgeV16AgzLW4FrxmGnxCEQJNGlEJaTeKc/s8ZmjlbBzdw/s
-	AibNJ/tJKSlAanCF2YEILMsZynTZYN5RaMnTiLCEVPBmaSe/ZVjC
-X-Google-Smtp-Source: AGHT+IG+OuQXOInv0hxhYMn5CM696EiVv8dRR1LoB+4lm8OEQdDhYosPpUxZEDavQa4HFPHpOSZbEA==
-X-Received: by 2002:a17:903:22c8:b0:20c:b090:c87 with SMTP id d9443c01a7336-2111af6b706mr183688035ad.29.1730732888510;
-        Mon, 04 Nov 2024 07:08:08 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057087dasm62416555ad.85.2024.11.04.07.08.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 07:08:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8af73d65-cc16-4219-892d-d49f0d5581e7@roeck-us.net>
-Date: Mon, 4 Nov 2024 07:08:05 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oyy1QO/J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB60C4CED5;
+	Mon,  4 Nov 2024 15:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730732917;
+	bh=aCcYfdU0Q+jbJmWBtJhf1SBpQ++QF9TaBJeYMGrxrKg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=oyy1QO/JnB5WGVdEuMNweuk20cDyY2GhqSj7mUcCIRZTK9umCV1CD91xOFBc3fOg4
+	 O/Vl/EIb8FFK5KTnIsO4mycVc6R5gsR5dIQAHrnJaeQfajYHRu9ACkOY7rgiWez676
+	 mk3z7JwJ3mT7kvUCWm00JmRCgbg9JbPI2iMAWiOhJ+8bXJjbuBhExdwjyZ7kDyYtzk
+	 6/SjFDhc1DRaCWE3YBniXeRhWP5sYVmGW8uyp7CYXxafbED0q0xaH0QTgXGd4oUu/t
+	 SyRHl08MiYIVObwoG/UfMFBFf5AhF6akLvGveu9bUP/xiFza8NLfjHe3gIcy7ll+ls
+	 yM4TQM1YcAH+w==
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e28fe3b02ffso3718134276.3;
+        Mon, 04 Nov 2024 07:08:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUvLPC/LE3wO28Z//SathiqdwcUpRbQuRIhgKGvhqaLvteWhpFOwri8fcCxpzfnNssA6zyt/qITYML2@vger.kernel.org, AJvYcCWKVysyQjEVapZkkMhKbDhLYdZgY7rP0Yt/6srJQmGFf5GKu6qbE8XGrIPjUUWnXlTLR1YJmWngj20K@vger.kernel.org, AJvYcCXpKlgICfZcG7PAeYU9hLy2b2tsCr4k5fWy7EYJCNdGtT22uLXl3mQcjYMwCtzI+um85KqwyG5TnTimp8s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb6tGnnV6wh4E2raIL3y5fqVV/AP5K6awdWvmnk47RIhPHYadD
+	HY1XQ0+jNqe1Bb5otjGVBj2ebRCrbjkJy/aA8d+gdrtAjgFSxh2RCJo2JKq9GjoSsDWdSrzj928
+	DghfQIJEp5lMvimOXHTRVXs5kZQ==
+X-Google-Smtp-Source: AGHT+IF4ODCVM5LJpqXkmxMdu5G3rUJur0n+5iNYKMlkY8DKa8KLzX/GaIwsSP1M3kVSAtulHsZ85uuLiDf724+J+Wo=
+X-Received: by 2002:a05:690c:61ca:b0:6e3:252c:408 with SMTP id
+ 00721157ae682-6ea523cb2c8mr157949527b3.20.1730732916661; Mon, 04 Nov 2024
+ 07:08:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Naresh Solanki <naresh.solanki@9elements.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
- <20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
- <47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
- <1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
- <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
- <1jfro783na.fsf@starbuckisacylon.baylibre.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <1jfro783na.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1730326915.git.grantpeltier93@gmail.com> <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
+In-Reply-To: <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 4 Nov 2024 09:08:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJqhxcMu2yeqvJvUOJ_g3uDv3t1JwaMxAfZQGXFj3rAvw@mail.gmail.com>
+Message-ID: <CAL_JsqJqhxcMu2yeqvJvUOJ_g3uDv3t1JwaMxAfZQGXFj3rAvw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+To: Grant Peltier <grantpeltier93@gmail.com>
+Cc: linux@roeck-us.net, geert+renesas@glider.be, magnus.damm@gmail.com, 
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/4/24 06:39, Jerome Brunet wrote:
-> On Mon 04 Nov 2024 at 06:18, Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On 11/4/24 00:43, Jerome Brunet wrote:
->>
->>>>> +/*
->>>>> + * PMBus write protect forced mode:
->>>>> + * PMBus may come up with a variety of write protection configuration.
->>>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
->>>>> + * The ability to actually alter the protection may also depend on the chip
->>>>> + * so the actual runtime write protection configuration may differ from
->>>>> + * the requested one. pmbus_core currently support the following value:
->>>>> + * - 0: write protection removed
->>>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
->>>>> + *      registers. Chips essentially become read-only with this.
->>>>
->>>> Would it be desirable to also suppport the ability to set the output voltage
->>>> but not limits (PB_WP_VOUT) ?
->>> I was starting simple, it is doable sure.
->>> It is not something I will be able to test on actual since does not
->>> support that.
->>> Do you want me to add "2: write protection enable execpt for
->>> VOUT_COMMAND." ?
->>>
->>
->> Please add it. I have a number of PMBus test boards and will be able to test it.
->>
->> Thee are three options, though. Per specification:
-> 
-> Any preference for the value mapped to each mode ? Using the one from
-> the spec does not seem practical (32768, 16384, 8192).
-> 
-> The bit number, maybe (7, 6, 5) ?
-> 
-> or just by order strongest locking ?
-> 
->>
->> 1000 0000 Disable all writes except to the WRITE_PROTECT command
-> 
-> 3
-> 
->> 0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
->>            PAGE commands
-> 
-> 2
-> 
->> 0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
->>            PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
-> 
-> 1 ?
-> 
+On Wed, Oct 30, 2024 at 5:41=E2=80=AFPM Grant Peltier <grantpeltier93@gmail=
+.com> wrote:
+>
+> Add devicetree bindings to support declaring optional voltage dividers to
+> the rail outputs of supported digital multiphase regulators. Some
+> applications require Vout to exceed the voltage range that the Vsense pin
+> can detect. This binding definition allows users to define the
+> characteristics of a voltage divider placed between Vout and the Vsense
+> pin for any rail powered by the device.
+>
+> These bindings copy the vout-voltage-divider property defined in the
+> maxim,max20730 bindings schema since it is the best fit for the use case
+> of scaling hwmon PMBus telemetry. The generic voltage-divider property
+> used by many iio drivers was determined to be a poor fit because that
+> schema is tied directly to iio for the purpose of scaling io-channel
+> voltages and the isl68137 driver is not an iio driver.
+>
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+> ---
+>  .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++++++++++
+>  1 file changed, 147 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/renesas=
+,isl68137.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl681=
+37.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.ya=
+ml
+> new file mode 100644
+> index 000000000000..ed659c2baadf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68137.yaml
+> @@ -0,0 +1,147 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas Digital Multiphase Voltage Regulators with PMBus
+> +
+> +maintainers:
+> +  - Grant Peltier <grant.peltier.jg@renesas.com>
+> +
+> +description: |
+> +  Renesas digital multiphase voltage regulators with PMBus.
+> +  https://www.renesas.com/en/products/power-management/multiphase-power/=
+multiphase-dcdc-switching-controllers
+> +
+> +properties:
+> +  compatible:
+> +    enum:
 
-Bit number does not make sense since those are just commands which happen
-to use individual bits. Also, module parameters should as much as possible
-be abstract and not reflect HW 1:1. Strongest locking as you suggested as
-second option makes more sense, since 0 means "no locking".
+Somehow "isl68137" is missing from your list. "make
+dt_compatible_check" reports it as not documented.
 
-Thanks,
-Guenter
-
+> +      - renesas,isl68220
+> +      - renesas,isl68221
+> +      - renesas,isl68222
+> +      - renesas,isl68223
+> +      - renesas,isl68224
+> +      - renesas,isl68225
+> +      - renesas,isl68226
+> +      - renesas,isl68227
+> +      - renesas,isl68229
+> +      - renesas,isl68233
+> +      - renesas,isl68239
+> +      - renesas,isl69222
+> +      - renesas,isl69223
+> +      - renesas,isl69224
+> +      - renesas,isl69225
+> +      - renesas,isl69227
+> +      - renesas,isl69228
+> +      - renesas,isl69234
+> +      - renesas,isl69236
+> +      - renesas,isl69239
+> +      - renesas,isl69242
+> +      - renesas,isl69243
+> +      - renesas,isl69247
+> +      - renesas,isl69248
+> +      - renesas,isl69254
+> +      - renesas,isl69255
+> +      - renesas,isl69256
+> +      - renesas,isl69259
+> +      - renesas,isl69260
+> +      - renesas,isl69268
+> +      - renesas,isl69269
+> +      - renesas,isl69298
+> +      - renesas,raa228000
+> +      - renesas,raa228004
+> +      - renesas,raa228006
+> +      - renesas,raa228228
+> +      - renesas,raa229001
+> +      - renesas,raa229004
