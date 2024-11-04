@@ -1,61 +1,61 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C662B9A2
-	for <linux-hwmon@vger.kernel.org>; Mon,  4 Nov 2024 15:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B82B9A2;
+	Mon,  4 Nov 2024 15:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730732642; cv=none; b=k0eJurs4t/dyqZ0vlDZtqi58BFI5iJd0NVEfkmkwnJVbS2jkT2CYqQl2+VANOTKHcPoKvMM2hPbiGDjb/oYNpX4oQ1TaSZYWzK002ifZ/uqANOneGUbJQCmoolvO24RAyp+xjCMAg++iaA6eypyvMpBY7pbhziQ4sBv5A0ykM/w=
+	t=1730732891; cv=none; b=YathMAfJ+HAEr4Zn9U0sEs8qyhJdp9mPEV5U0yNKIJBAe8tgaL0uYDYYOSJGp5jlyyhhJO5T2T8GZF717l9UWX11Cda71vQyeB1CrhemA0RnEbXKPojTs1GREl15yv9ssobWThYV3lSgBiYO7jBN5mj2fxu9lfX1FCwMtqt2BSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730732642; c=relaxed/simple;
-	bh=JA78MqzMLYF/rZIIXSLbq2ezrV130pnaTCD9BdvDqso=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=HlSyOGHfPOM5BSS24yEs6VJTFzBDBVG1utJ4Ukmb3SlIt36Ar5n8Lx1oeUnHT1Pyxe/6kddoblUj9uRigsefMGoaG11A9oEqvaQssNYKJmAHj1eJwgii9khT7Rxd2h6tL/XWlovtX/KM4xiyooZN2iZrSpSomqOU7+9OfbaMz5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhNfQK5H; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1730732891; c=relaxed/simple;
+	bh=IsoBeoOuXvcoft0v4lHIDZ8sMTlBJsV7lMY+XpcmlMQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jte/2WosBEQRDglYNgJ64syM97RTp6z6H4OC6KM7iEc1ozhhlIGHGdqpUP9HE9OifzeWDEJGUsJFHIErnGR1fflonB7ojL0Lvvvk6QchA4IK76hAkQ2OQzPIRL+zT6iTqyekunPHd8lP8faIlE3Ms9Sj/PEpVP8+8cBCAIWh+RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WBlbkZno; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhNfQK5H"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e467c3996so3652831b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 04 Nov 2024 07:04:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBlbkZno"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21116b187c4so28593155ad.3;
+        Mon, 04 Nov 2024 07:08:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730732640; x=1731337440; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730732889; x=1731337689; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tUTt03eVpe0ssMqJVv+XySSin+XRbpdo7Fs+nC70IVY=;
-        b=dhNfQK5HlTylLWaLz0xGy0D/3DZkMTqWGrCRAnH9ukIzcXKGbce0Z+XTr0uiW0kteC
-         pReIoDbM7kZ8QazYQg5my/pU8MGpD25K18GB7iILoOaUNS7ReglqvoPtGjjbN6RlskkJ
-         58mRfVSgBKhgQSgpZw4C1pYRTCrCb2EQM3ZJixMmM0BIkyet261tNW4ibplAfq8JPJlW
-         YdXA80L0h4jSsxQqM+iHTNPuTCVfdFg/T1wiqJZhCMJ1iXveJDG454G643RTAGrYtdtO
-         dBhzEzm/t7qW3D/NY0MNEyEdNp5GTgxh1Thvan1pPxpApZAEYdMgU94j204WLA1wAQMN
-         ymhQ==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
+        b=WBlbkZnoVKp6iDPdrhg5FfAdWXo08J6ktItzytK7C6qR4PIe+feXU62XM0H91PybX9
+         9LaUiR2LCONoXuT/t3YsIhDeMjy9pR67RcI7BxQ55HAr/Lp2iL7A+8K4MzDoSNhmmWmq
+         xS2D6yAFQBztBHYiXONTtBglPx1KzyBI+NsARWLLycie/QVzSXl/R8z/MLC0JyL0Z6Bh
+         fMga8Shs+brvxO1MY1t3hha7WRCrGXGCFmAsHmakQk8H87IIXec+9+jAimjTk8aGp9CA
+         8p1GnE6cM8ee4upg22vD/GxcBG/Lc5ykTRlJEYx3RVcfsCKAFDH3o19XEvRWQebTwVOo
+         Nz4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730732640; x=1731337440;
+        d=1e100.net; s=20230601; t=1730732889; x=1731337689;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tUTt03eVpe0ssMqJVv+XySSin+XRbpdo7Fs+nC70IVY=;
-        b=VMpisN9Ci+KJpojkIiCu1uzUGEv1myzC6Pnd3B0ScBaiP9WnN7w2FKsS4eUeHdGQ/L
-         9Dc5vc1WnKXPKXzV2pgwsUFNaTA5vOeasQZYnJL+64T6s2uJXGvEa2Lap90/ZtVlRQet
-         /FhGi9SvUjeWb5zOSM14BDgT57y+n2NeUOAQ4fDGe0COUZ+1iVTN3hU5IA8Hfn9Pg6Cw
-         bi5pg/dDVUWw8Pl2ygcn3+xfsIPa22WFTAXz0HMXqpDVCgKyarbWMK4O5mUu0hn2Tk8k
-         Gfe40p1JNs9wD+oRLNANpxLXERIWD9NR6dtvddMI9Qn5K+LBs4HVGYI8+WT10f/qoDCh
-         8f1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWF35/+2O/9OY8tP6j5w/cENp5ZJ0+F6CB3EN17ZZyJz0mYlr3sIeS9Nk8MZtCfBQ+g4k+DL2F/gU+lPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsfVKiqIGpNrk5hpI7HgDbK/3u1BW944qXXsJszJ4FS48r95FX
-	p9fQcl87lYEuxmnPbaTrZ5pAUcvAvDurdqe1/XQwcOUBceKKSBtuzEO7sQ==
-X-Google-Smtp-Source: AGHT+IFdnSNifjrEe0Qb+iUjJff+zCu2Yl2HbG6CFPUgsTo6bZcN8AITmmI4UCMNYYhy0a+1Acgmrw==
-X-Received: by 2002:a05:6a00:2282:b0:71e:6ca4:6f60 with SMTP id d2e1a72fcca58-72062f825e3mr47910733b3a.12.1730732639021;
-        Mon, 04 Nov 2024 07:03:59 -0800 (PST)
+        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
+        b=DHC49YY3uy5FnW9+ztZF2P6uILegB3wN7C+oWBEioI1L+4RpFP4e/x6tZ1XyV0/DYn
+         oPqQuz5eb73xzuSLhzZXxnXXP0YyawMJ6g8qKo4BL7zpVOHo2N5/gYWkz31jIEl2vSuK
+         g3Z2Rw4BpdRu3K/8OCugt75ckpbCkCMsoUMWDhgMMCrctWNqwzJ952vqrZSBQj0T2Pe8
+         HnpZs5tHbCgc7qzu0vTVuaIOz1ipC/dDdEw1pUJiYrju9LfYX+2AgVxt6kai3hEWJ8HX
+         aVOCBwvQqKa3b464UtNf/quyjgtLqLiLhx9d4SVBdQgCMaJnvcIuIOzWDQcxOoeEu/0a
+         wJKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGBRYdaZrgCdKtA3O1YNFXY7xNpBfEcOq8bE+5Oa8+zwnwjWrLKuWl0Vcg63vNX5IBM39q/KedRrrt6JsG@vger.kernel.org, AJvYcCWFro5CnVt8NdzkAskj+Tns+quUjiyeFrMc6hnYfnJldEThsBT4T8i6/OY/a85XK0BMKEthYRSW5Qpw@vger.kernel.org, AJvYcCWGIUtjefeVBIT64gWOtbC1tH8hbJX3M7En1Itt2KUdZW/6YlfZbKq7ptl0VU7wcSBpFGw0980JoGS8@vger.kernel.org, AJvYcCWfmptIG6Jm7vrAjkCde6qEcdTnq7i8X2VNsjlIrgwQ1ldHAI7duYEPdh0ZxLfB1mybqExbAK2PcuZa@vger.kernel.org, AJvYcCXKJBaoBaHsCArsExncFBGw9jHEUlCgoMr/0v16QntopvOh1CPu9Y4YVd1UqbdlORk2AyLlYJlFV9w6AmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2dBgeV16AgzLW4FrxmGnxCEQJNGlEJaTeKc/s8ZmjlbBzdw/s
+	AibNJ/tJKSlAanCF2YEILMsZynTZYN5RaMnTiLCEVPBmaSe/ZVjC
+X-Google-Smtp-Source: AGHT+IG+OuQXOInv0hxhYMn5CM696EiVv8dRR1LoB+4lm8OEQdDhYosPpUxZEDavQa4HFPHpOSZbEA==
+X-Received: by 2002:a17:903:22c8:b0:20c:b090:c87 with SMTP id d9443c01a7336-2111af6b706mr183688035ad.29.1730732888510;
+        Mon, 04 Nov 2024 07:08:08 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc2eb5a1sm7549432b3a.150.2024.11.04.07.03.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057087dasm62416555ad.85.2024.11.04.07.08.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 07:03:58 -0800 (PST)
+        Mon, 04 Nov 2024 07:08:07 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ed296133-4139-4618-b8de-f8826064576f@roeck-us.net>
-Date: Mon, 4 Nov 2024 07:03:56 -0800
+Message-ID: <8af73d65-cc16-4219-892d-d49f0d5581e7@roeck-us.net>
+Date: Mon, 4 Nov 2024 07:08:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,9 +63,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] hwmon: Add trivial userspace-configured monitor
-To: Ahmad Khalifa <ahmad@khalifa.ws>, linux-hwmon@vger.kernel.org
-References: <20241102174639.102724-1-ahmad@khalifa.ws>
+Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
+ <20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
+ <47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
+ <1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
+ <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
+ <1jfro783na.fsf@starbuckisacylon.baylibre.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -111,61 +124,67 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241102174639.102724-1-ahmad@khalifa.ws>
+In-Reply-To: <1jfro783na.fsf@starbuckisacylon.baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/2/24 10:46, Ahmad Khalifa wrote:
-> Add a userspace-configured driver that can receive IOCTRL
-> commands to monitor devices over IO or ACPI access.
+On 11/4/24 06:39, Jerome Brunet wrote:
+> On Mon 04 Nov 2024 at 06:18, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> - registers a miscdevice at /dev/trim-control
-> - awaits attach/detach ioctrl commands with device details
-> - reads sensor values from: 1. IO select registers, 2. IO direct
->    registers or 3. ACPI method calls (single arg)
-> - applies basic conversions: multiply, divide, dividend divisor
+>> On 11/4/24 00:43, Jerome Brunet wrote:
+>>
+>>>>> +/*
+>>>>> + * PMBus write protect forced mode:
+>>>>> + * PMBus may come up with a variety of write protection configuration.
+>>>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
+>>>>> + * The ability to actually alter the protection may also depend on the chip
+>>>>> + * so the actual runtime write protection configuration may differ from
+>>>>> + * the requested one. pmbus_core currently support the following value:
+>>>>> + * - 0: write protection removed
+>>>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
+>>>>> + *      registers. Chips essentially become read-only with this.
+>>>>
+>>>> Would it be desirable to also suppport the ability to set the output voltage
+>>>> but not limits (PB_WP_VOUT) ?
+>>> I was starting simple, it is doable sure.
+>>> It is not something I will be able to test on actual since does not
+>>> support that.
+>>> Do you want me to add "2: write protection enable execpt for
+>>> VOUT_COMMAND." ?
+>>>
+>>
+>> Please add it. I have a number of PMBus test boards and will be able to test it.
+>>
+>> Thee are three options, though. Per specification:
 > 
-> Useful when there is prior knowledge of the device or when
-> experimenting with newer devices using old device info.
-> Another use is for debugging other drivers when raw reg values
-> need to be compared with what the full driver prints out.
+> Any preference for the value mapped to each mode ? Using the one from
+> the spec does not seem practical (32768, 16384, 8192).
 > 
-> Drawbacks: Not aware of any device. It's readonly. Readonly does
-> not make it safe as it still writes for address select and bank
-> select. Needs an ioctrl and cannot be modloaded through config
-> or modalias
+> The bit number, maybe (7, 6, 5) ?
 > 
-[ ... ]
+> or just by order strongest locking ?
+> 
+>>
+>> 1000 0000 Disable all writes except to the WRITE_PROTECT command
+> 
+> 3
+> 
+>> 0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
+>>            PAGE commands
+> 
+> 2
+> 
+>> 0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
+>>            PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
+> 
+> 1 ?
+> 
 
-> diff --git a/trivialmon.c b/trivialmon.c
-> new file mode 100644
-> index 0000000..11e5829
-> --- /dev/null
-> +++ b/trivialmon.c
-> @@ -0,0 +1,844 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * trivialmon - Trivial Hardware Monitor Driver (Trim)
-> + *
-> + * Userspace-configured monitor controlled through IOCTL
-> + *
-> + * DISCLAIMER: Don't run this with other hwmon modules for the same device.
-> + * You could easily FRY your motherboard! You could also easily FRY YOUR CPU!
-> + *
+Bit number does not make sense since those are just commands which happen
+to use individual bits. Also, module parameters should as much as possible
+be abstract and not reflect HW 1:1. Strongest locking as you suggested as
+second option makes more sense, since 0 means "no locking".
 
-This is way too risky to add to the kernel. I think it is much better kept
-out-of-tree, with lots of disclaimers and users (hopefully) understanding
-what they get into when loading this module.
-
-I had thought about something similar some time ago, though limited to i2c
-devices and using some kind of command language, not open ended ioctls.
-I gave up on it for the same reason: For some i2c devices, just reading from
-a register may be understood as command, such as "restore factory configuration".
-If such a command is executed on the wrong chip, such as a power controller
-or a display controller, it can easily make the hardware unusable. It is bad
-enough that this can happen with a kernel driver as well, or with someone
-executing i2c commands from userspace directly. I really don't want to make that
-even easier.
-
+Thanks,
 Guenter
 
