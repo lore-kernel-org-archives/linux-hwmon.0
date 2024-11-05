@@ -1,60 +1,59 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8E81E7C2B
-	for <linux-hwmon@vger.kernel.org>; Tue,  5 Nov 2024 17:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB821E9076
+	for <linux-hwmon@vger.kernel.org>; Tue,  5 Nov 2024 17:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730829554; cv=none; b=dOPQUYNPXYMAIVHPgszWTkTnBfb5VT3PfVvFmaXKeIo5yzeQEZR23So7xzJMF/PWBp2ADyha038tNWb0nd0KmI0kMbJ4M7kyDJuS5cYXwk98b4esEJ7TG5wswnJIonCPS4SdqraGErPahkPgAID8LPBDBfahxldnImDkZU466+g=
+	t=1730829555; cv=none; b=VDWnGRgggGgYvwJN8oiBUzK48V5vKOYltGLw0bKVfYP6EscDriMFw8byj6KPPLgvvlMIeSDdGB9C4d7TEnLI+XLiPhBTHiJWYqgekeLgKC+6c6+ukgx1bt5NALWmBk3rNRP+iGHvC8fuAJyIiKqqg5fGI9MR8jMJhA33A/+rNP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730829554; c=relaxed/simple;
-	bh=3ST615/WKBOUP7DVs97z4oxIoplQnIGJh9CorU8thlg=;
+	s=arc-20240116; t=1730829555; c=relaxed/simple;
+	bh=4qS+gFi5nKp/GGt3OYkpTJvCjfNdC5khoZpxCsaCS3U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XjDrZNY0dqG8y1Pu4mKS6tav+zo4BiCmProXjibP2VpVBave+QYXgU6U+NjSv0zTlM5HHJR/Xl8Zl0iXByQorpsRtJdibf5kqm8mJjdf+qrQtLdg3VtJ04xdh0fn38Zy/zbtKr8BZCLYtzhlCYuX2pu4L/mrDNHSJpC3Cu8z6CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SmaFCG6N; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:To:Cc; b=Bi9iiiN2jPwwbJhowM0lqkCRN0LvCxATXmJLuslT7VdJaxsP7K2xsSDBx75a4ujD2PSx3IM3AQhaHsWlcu2rFRxcc5OFUmNiQBIO6CRcrBZrKHmGchKN7Cp/+78rvLC5A8FXVF4VgCXCpZ5Q66pCtgt6plXIzJdHUPid17JKWRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=M6Q25mjp; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SmaFCG6N"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d538fe5f2so3884594f8f.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 05 Nov 2024 09:59:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="M6Q25mjp"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d6ff1cbe1so4189683f8f.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 05 Nov 2024 09:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730829550; x=1731434350; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730829551; x=1731434351; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QwqNpmvgjUkGiS2uMPA2izOqYYRfRdFZCIk57WKV4D0=;
-        b=SmaFCG6NdEZ644t0OONTXI5cAuXyXcWWOp+hgWdH1spbJtLbHX7PZMBMn3u7gWnpOg
-         06fQVSJKfVCDjChfE+yalTkf8dgZvsVhOtqUtAGnTuKfr0E79c6Xc37Aw9oFqvfL2Mi6
-         m4EWvws+nMi9RFlOenyUVQWQs1axLHAhf2SJS1F2ObUy560893p4kpUh/vCESKAslmJK
-         1UzrsEPKTlWGgoRZe+qiuCvoOU7b/vRDun4YYgpXMdq8Jv3iiGPsVm0CjjWmB0TCVMS0
-         1iZN2/swRCWtW8vNVdfd0mEVwNJgATFyasQSppHsbO7tVOqkWSxPRFzd8zWy7yMATKUt
-         GXAA==
+        bh=2hzGnF74fKvSxleWYkjh3q2LhCWSn4JOo48Ee3jEMF4=;
+        b=M6Q25mjpuxAZtyeO2xoFaugkB5KmuipSi3ofF2tBs4vOwkdWCsZwTrZaUGaU+E7Srb
+         URYyRM3gsOp4T0Zzin797BqhgjkBq5NrXDMoY/IFxCpEAsGhf8z256vRqX/gHBIRMCU7
+         pbFCnJWzmhjrMZpdNuMrZconFACHZ9YyB8skMrbg/lFswZ3EJk/mBv8BZDkAzHm7Pxaq
+         eF0STdFEL/2qX89VPL4H0Hgxwbd0baudnbkBCd5ifNosTMzWfsrjs4jI9G1UN1LPx1wD
+         D5iQsyWQMLWSq8AnXZBqwUcmU1WYO8tb8uki8eMNk0Vf4V/XOuiiAmJHc01AsAk+8nDI
+         nygA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730829550; x=1731434350;
+        d=1e100.net; s=20230601; t=1730829551; x=1731434351;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QwqNpmvgjUkGiS2uMPA2izOqYYRfRdFZCIk57WKV4D0=;
-        b=GOdS7zhrUgawzDNqP4FmaLYs7Yy7d716RlAGy4jbDiqIPIol2hHUnuaQGr7fHYgct8
-         kzTT8JQbTpvApRvrqDcVp1UM4/sFirHIHlFcK/5t21bzgRRig3XweRYuGuKpWaC6yws4
-         k47w1vhnRsgcP4R+QNVUrgkiqJK4nZ4kiAB1s4ekMq47BOiWWP6Gcc7CBdbzG5gYqm8V
-         IgioSLe+rw4n0g0x4Mz1NoXf86hSI/7jj5/y8c+OAnaDbj5Ri0EKQDc+eHhkuH4VnM63
-         /Ih1Rl9iQpmXBBwKYvWm0yLVqnxaKSOoLGYK1MIkFpjNuQPb93hHy0z/XjZj8afMnCUL
-         5Zaw==
-X-Gm-Message-State: AOJu0YzEZ7adh2tr3O6ST6MSP3+xfptpozcZVOrlt2Cjo8876HnOAvvV
-	EgmJHnsq1OxWjMfmwwMnilxxQoVJ2KGYtcO1StAjE+XwZc0qVhyx9CVLO6GJmNU=
-X-Google-Smtp-Source: AGHT+IGvNe8IqS9e7Lmw7xrZyZhUqojjNTzHoxPSQVUkUzGKVRzmb/Of4Bq3RH4GRZFjMxf1vbusnQ==
-X-Received: by 2002:a5d:6da9:0:b0:37d:5035:451 with SMTP id ffacd0b85a97d-381be7ad026mr17660775f8f.10.1730829549749;
-        Tue, 05 Nov 2024 09:59:09 -0800 (PST)
+        bh=2hzGnF74fKvSxleWYkjh3q2LhCWSn4JOo48Ee3jEMF4=;
+        b=KK1jFVGVcCd5c89VHTUcuRkTN1SNj51NzAk4lBc829cbxCwiFy9rTT7SQERrrIFv+Y
+         SQ9B1x7kgUEqcn87Grx8v8v5b50hVJASqfjn0YbI4wlTy98Jdj5TgnIICPt80c2nGw7u
+         87pjW1GCQKA++brN89SF5dEi+5whh5PcDacOvA1VhTnlqdrMkOBHzQbLweoP5D5CvlbG
+         G2ZZQ90X4I5sO/kMwQF6R7bKusPdqi1mcDK6dxqvFU1dUY5xH/92BAqkt+OcN8zKc0NH
+         kAInO4PA8oMbA+tTUbUPGfMEmJIONEPcJivbgdBPjTFnlS624amI9CpRoOXTm6iTkmfU
+         Crhw==
+X-Gm-Message-State: AOJu0YyUHMZOXknJxhR51hlM9IS5vnmT+tHXURp6C3LjHeuqwoeBh09+
+	p3zqg2wNJ1bc+JHLZY97ofPo/AhnOIUBcLcfJSlxQrvQmu/Q1lPssKxvWWY0sPs=
+X-Google-Smtp-Source: AGHT+IHmHzqgujp0oLgMa5LYyUv1JpGusD09X4051kObgpHOgBb1wazAwy+bT+RCClKnh942uofhFA==
+X-Received: by 2002:a05:6000:2a8a:b0:37d:47b3:7b82 with SMTP id ffacd0b85a97d-381bea27d6amr17176334f8f.57.1730829550844;
+        Tue, 05 Nov 2024 09:59:10 -0800 (PST)
 Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:5b9b:df02:2761:7a57])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-381c113dd7fsm16959481f8f.70.2024.11.05.09.59.08
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-381c113dd7fsm16959481f8f.70.2024.11.05.09.59.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2024 09:59:09 -0800 (PST)
+        Tue, 05 Nov 2024 09:59:10 -0800 (PST)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Tue, 05 Nov 2024 18:58:42 +0100
-Subject: [PATCH v4 5/7] hwmon: (pmbus/core) clear faults after setting
- smbalert mask
+Date: Tue, 05 Nov 2024 18:58:43 +0100
+Subject: [PATCH v4 6/7] dt-bindings: hwmon: pmbus: add ti tps25990 support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,7 +62,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241105-tps25990-v4-5-0e312ac70b62@baylibre.com>
+Message-Id: <20241105-tps25990-v4-6-0e312ac70b62@baylibre.com>
 References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
 In-Reply-To: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
@@ -75,71 +74,140 @@ To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
  Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-i2c@vger.kernel.org
+ linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1855; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=3ST615/WKBOUP7DVs97z4oxIoplQnIGJh9CorU8thlg=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnKlzl5gi1TYDIejCzu8R3vp4mgID+tO+zMWZcw
- 3kSCGwK7MSJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZypc5QAKCRDm/A8cN/La
- hcHVEACekBfX8Gky+nw3t3qYZF5f4bzKlqw0jcUoo+LdWGbdoZ+1+kzRGyYMpUJGnjZDCR17AIG
- ojHD0aiQuEQR1bI9PivcUmQtJsPOZyKxeGJPkYuCZw9XOpWPR9Ii58Hmq+JyQ/awtVxZkfbeLFl
- M5Wct3k9+Vm7EiaOG7sCRYLJRTfecDb2xfoaR3Kh6Uc4omh1ily7C0IZhUVfypmQvwFGS7vlbc9
- b6dj20qRZ+BPlIqrgn3VdktjH7Ig5wUcQ2Xrl5vTl3lF/N0HCWiEsvpR9qKSQIN0LC5prMctZaL
- S5rSD4bbAswYTTyfs+UBKnDxiHPsEscQ0325B349J/8Epttqml0VkQ+Ydhf5SbNbZyzQvlzRn30
- XQZ9CWenf8t2D0Z6VBcSW05+2HGjMrdef2SA68wYPe632QZnVRLdcrRIPa42Ish9U4AfiOsclSq
- P/KQn0A6AgUerOvdsUqdNJVc6auU6Rme6HcNZi/RuhQxwCeGtaG2Awl6kGmbhKwOeChPvTXk4BZ
- 35ORx1S8vx/1U9kPzmbwKZHREYy7Uch6eLWzPDnY0m7PqPA3W8KsfYanWjaM3ACRpGcdyf3/PL6
- kWF4CBfg4TF6yuXb9pzvhF8f40Rbi2ieWHt4BoFWxtv4/rtnrXO64kkhULz3aKxlDf7rjr6XbO1
- eUKRtRtPvhVURug==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3392; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=4qS+gFi5nKp/GGt3OYkpTJvCjfNdC5khoZpxCsaCS3U=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnKlzmpazkOrtvEzPBePlhaB62J/qGxrV2Flczp
+ 2VCxcuvB0GJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZypc5gAKCRDm/A8cN/La
+ hTL5D/99j/aVkMx0yWsZoKMy1hzOBqS/DHbLauJRozIieek3ykySemjg7d5NxQj7u6cLAMbaAKr
+ WQLKNAh2wEZNTKIBO9EcQGUy+GKwa5U3wS00gl0WdTUwN21AuI+fSkfgW7gCRQrqqA8axseknXW
+ yZrsfKqdKDKfR7414xfYtHhfrTNdlKqSLBTjbGmKqFN3i1w5W9lcQYTjDNDuSMrygYIjfue7LSV
+ EPUXljEGVkQCF/0RM7cD9Y64FKh2UR5wGFX6Lju+JurOMllLD3DYo+XdR40MoQjVK4/PdwU0h44
+ r7apQQpm0X98xH1gkJrRBPB1bRr5n+MBsvf/YgAdIasLrWFuPFnO2P3jBDu/9sozWbVkHpAB8uV
+ vFMJjp+kh3ldbu5fz/8X5sgDXpE8/V7MAbgTAE86Y0jBgXK64lK/VcV1j6OWoXIHBGilNcle++E
+ D3eBN4hKXoQfZmL2/tZ4T6LM6FfPbvHBPhAyri+aAkXcRUtG4E0EdCQ/u7MD7FGLGk18PUoGCgP
+ 9GNxu/lCSM4CbB0wLzpTJsLPzwEzhfbKC4UvfMdTlRqEWLBDO/WA5XMdWI/w0u1lEadqttVmaZC
+ r1OiMts4q4jA+xouokVIqOmsGM00sEgSXiKl6m/FO6SC8HmHih3q9qzlcczKKY9YF33nhtzon9+
+ xmkb7wJY7lcqksA==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-pmbus_write_smbalert_mask() ignores the errors if the chip can't set
-smbalert mask the standard way. It is not necessarily a problem for the irq
-support if the chip is otherwise properly setup but it may leave an
-uncleared fault behind.
+Add DT binding for the Texas Instruments TPS25990 eFuse
 
-pmbus_core will pick the fault on the next register_check(). The register
-check will fails regardless of the actual register support by the chip.
-
-This leads to missing attributes or debugfs entries for chips that should
-provide them.
-
-We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
-
-Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
-avoid the problem.
-
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 83 ++++++++++++++++++++++
+ MAINTAINERS                                        |  6 ++
+ 2 files changed, 89 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index d355e3fb0d6b7bea392c7dd5551a1c904a05f21b..55167e195e2a22154ae8fee693169d6f0829ffca 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3346,7 +3346,17 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..f4115870e4509425e88c913f350789ffc8d396c2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments TPS25990 Stackable eFuse
++
++maintainers:
++  - Jerome Brunet <jbrunet@baylibre.com>
++
++description:
++  The TI TPS25990 is an integrated, high-current circuit
++  protection and power management device with PMBUS interface
++
++properties:
++  compatible:
++    const: ti,tps25990
++
++  reg:
++    maxItems: 1
++
++  ti,rimon-micro-ohms:
++    description:
++      micro Ohms value of the resistance installed between the Imon pin
++      and the ground reference.
++
++  interrupts:
++    description: PMBUS SMB Alert Interrupt.
++    maxItems: 1
++
++  regulators:
++    type: object
++    description:
++      list of regulators provided by this controller.
++
++    properties:
++      vout:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++
++      gpdac1:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++
++      gpdac2:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++        unevaluatedProperties: false
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - ti,rimon-micro-ohms
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        hw-monitor@46 {
++            compatible = "ti,tps25990";
++            reg = <0x46>;
++
++            interrupt-parent = <&gpio>;
++            interrupts = <42 IRQ_TYPE_LEVEL_LOW>;
++            ti,rimon-micro-ohms = <1370000000>;
++
++            regulators {
++                cpu0_vout: vout {
++                    regulator-name = "main_cpu0";
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1b56b163f1219b73085cb5a45b130e2c96a2cb2b..4f21d7d2ce992f14d8c533f0c8742edb22a0db3f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22811,6 +22811,12 @@ F:	include/linux/dma/k3-udma-glue.h
+ F:	include/linux/dma/ti-cppi5.h
+ X:	drivers/dma/ti/cppi41.c
  
- static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
- {
--	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
-+	int ret;
++TEXAS INSTRUMENTS TPS25990 HARDWARE MONITOR DRIVER
++M:	Jerome Brunet <jbrunet@baylibre.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
 +
-+	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
-+
-+	/*
-+	 * Clear fault systematically in case writing PMBUS_SMBALERT_MASK
-+	 * is not supported by the chip.
-+	 */
-+	pmbus_clear_fault_page(client, page);
-+
-+	return ret;
- }
- 
- static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+ TEXAS INSTRUMENTS TPS23861 PoE PSE DRIVER
+ M:	Robert Marko <robert.marko@sartura.hr>
+ M:	Luka Perkov <luka.perkov@sartura.hr>
 
 -- 
 2.45.2
