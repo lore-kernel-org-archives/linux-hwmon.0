@@ -1,246 +1,168 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ABB1D5AB2;
-	Tue,  5 Nov 2024 14:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730815966; cv=none; b=a1pM1We17sPEFMTNb3Rr4Tj5SAY5mRl+X5yRbDXvb/FCHxcB9hyjAUxI7QcDfcz8oUDXTxF7jUt2PyTFCvY+WLBttiAQ3H9+cAm576q+NrzlJiJhx1a249ntyeJkGEVjDm9m6q1qXEGBsg79/NbCU4kNSE8EVfL6aaj92YNS2ak=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730815966; c=relaxed/simple;
-	bh=bOdM7QTxL5XnzD0/f0/HgRtJuN20FxRy3HEuMvNP51s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=clYu5JDurb04NmI+3IaHee7UyvasZrVzykiLzqZ2CfXkXy2ca8V4QG67fpjGnpbkoo8HOkctpO4CgVAi3AIBaxpYAaKv4i/aM1WevHJLw1ZYalS5Q4eW43JNBlxxHsuCvsthN1H9l645vMO8kSRa+qLiXyPyMxFlyKsOfR5cK/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWuue1z4; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9631D86CE;
+	Tue,  5 Nov 2024 14:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730818459; cv=fail; b=O22Pfg7Uj+RnNUMk9T7LEviAMPQLFNnqBib9naUORTmu9jDwhGvIUJsgxRHaUBL5J1dIj8jqO2UQfI2EEsRStzE+dKHdh8EXa9OEWwnIrEsoE0fTYDXkhaQyCIb7ocxJ1a4llZYH/1uIuw+pMz0M7vXVEN/cdvR6Qe4HcxIaHsI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730818459; c=relaxed/simple;
+	bh=d7PnnAl6NTlVxC0jGtQXNzcDi7FVxOgMvSKlxyHKUtE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bPc+2DOdMS6YFFwG+Qc23njWy8kEa6BzCUBiAgQFse5CTq7Tn3vpMV+z/JwAo0rN1+RsqpxrpBSIkCgkPe/ahGPRtYpGkEGvLISaejiOU6FbIl9Ht9OmBgYSd1bAcXS3inCiPZlGshyq/HG9KLbWUnD7GR/ZsoU3bwlvPCmE7us=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XJlEu3i8; arc=fail smtp.client-ip=40.107.223.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWuue1z4"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20cbca51687so52324765ad.1;
-        Tue, 05 Nov 2024 06:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730815964; x=1731420764; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=huvQb84k9zFRsY6lvh/t2ldg8OxUrx7o2jsYpgN4XRQ=;
-        b=iWuue1z4mC0DA0F7gaskFfVJ/vNgQlytInIR1E7LU1pTt9MJ0XsL6s2QnPpnwavdzF
-         n2dCfuQvah7vYlc3oOMy8tabC7fteULYAVqoKQpSXaQeCs/+FTI3UkjhF7hFCjZMllQE
-         aApPPq92FP9UDOBgyZGbGhyrgC94Aa85+t4fx850OokNkvf80Ww6Mh4AJ9o6ubXVEFGW
-         siQA2PIHnbHl9ESO+5UTwu5ks9xmCJW3TJ8KMSZLZDqa6dmJRtlPLsE5fOzY6fOGpUEH
-         tGIhCoUHJ8xO40PrfpGEpd2mxDR+8c0g063CAaKUgv1nRQ40EbL1TfXWV6+lGbNrJsOK
-         eRUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730815964; x=1731420764;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=huvQb84k9zFRsY6lvh/t2ldg8OxUrx7o2jsYpgN4XRQ=;
-        b=okNTVcW6hvUbcwxdN9p7UpGu8kXkXemEILZ2mNcPnR5BZKgS+ohvRQV2uyVbmaF5nJ
-         m9uRT7v6GU4O+AqaPog9Z3POL8C8rJSww/H1g5IFCdEgkU8bg2NHnM56XXcm4eXNqDgc
-         91AJFbBAk1UUM18BFHSBxIyLtstIHDv+/v2qGWi26swY/WV/NhK37MZZVV6PVcz1UhTH
-         dFuM2JfMSwPb0UmFK+isABXna+KsXpBENemdSSy1rsGT7bToAyUR+O4Qe/MWkkGpgqBE
-         oUAK5+xMDN0A49wVHwUl3vtCw3oikT6T+fqa5Fs721guNR7ML7FlMxDsgIspid7+cqe5
-         UJHg==
-X-Forwarded-Encrypted: i=1; AJvYcCVnHofcPxjxGGDZpypP5CetFK7KGYIdPS4GsC+v1ZBtK99R7sKcQYrOk33MuA64zUlyjtg2GR1NfQaiGSs=@vger.kernel.org, AJvYcCWu60mtGp9yMSOTr6Hs0GGVbPQY7rKKFcljfHP0P25xy2NlGNTFaDBjyMu6ixbgHC0VtKNqJudY8S39@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/9sJjI5kpnWleMvwhYCYw4GOwieDVE/U6jhS2Uerdln3v5tBn
-	6JcaRJC+RDhJN4LpA46JhgdUOim0DpfiHEkYMxFcM7Zz9Iz9rGFPdl62Aw==
-X-Google-Smtp-Source: AGHT+IH+f4g0IgcY+43tADscIQn+U9PKHENhgbG6TvlHMyrUCXErktXhXaG7iDx2h+za3VT4qiCC+Q==
-X-Received: by 2002:a17:902:ec83:b0:20c:9d79:cf82 with SMTP id d9443c01a7336-2111af968efmr209914645ad.58.1730815964289;
-        Tue, 05 Nov 2024 06:12:44 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2110572008dsm77597575ad.114.2024.11.05.06.12.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2024 06:12:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7d761be5-15c8-4d73-9ee8-34025769d08e@roeck-us.net>
-Date: Tue, 5 Nov 2024 06:12:42 -0800
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XJlEu3i8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SuX5LiJq0um/lyjxF4nL+gNtkOU5S1RWcfy/AwAmBLYsJBM+d5KHeAn9yu7iCia89yJR+DbTu8XkWmY+sA1QlIrkDBv/Dj/RRNWZkxaB0QXjH/XY3C+fpfGbBrgd72GhuBzBXmapd9OsmX4AmaNdQ/I4Jo7P7gg+WlkSVcCMbIibHjCU0EaxddlDYfrFLafeu8dkeQv6YukZBLYJr0BcYugwevfzlJA5PV8KN1AUIlWIzi9sq5rjqS6HrsC1ob+2SwkYlQIS/inO0sdsNLRqQYu5Gx8y8AWqGAkGws7XL8YcPmE3rlghbHyA1mWfzwpsAi2724GuvF9rjIH2CvmThg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ug7z6l4J4oiIOE+LqhsZyXuuXr7C103KqxNAlrEhprg=;
+ b=UQYXyQLX38AWuqCsXcnU01GAmTPsf05LR1IP8D5BXGSlWQaUmTuoeAAJWcpjdSw8Zs8+gqnmcMdZSTFuj7Lo8871w6xhKMYgjDIVkE9sUgN3oZpkivdVFh6eKchg4cHdhNl9nSwB+7KhkEk/21bB8I6f0uoAUWw7SPVgILSPqMdxGp0+XMg4vFw69zZ2K32eaaW4jab5y3qYQbFlHZV8nR10D3ngVdaosDE1/jSjdIlD0IanzDfpEmBy4lNIz0VUQGtSYMSUfBMY5DbmQHOJ+He82mPS5oZoeQ5NwboVFTF57xNk6HBi4zw9LcE/5Uh8xYg3i49zzqAsS7YmaWvMyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ug7z6l4J4oiIOE+LqhsZyXuuXr7C103KqxNAlrEhprg=;
+ b=XJlEu3i8F06lrZ0GIbrxZkJblPRibW1Cyl3M+Q+f3ivO/yWS5V+HaxhHU+cZl9DkT+vuQFS4nUGT7M+3ahyrPTmrAhw2kBNwVKkBvE+0d33+lFPyGYOTlVKaSFou+ZP//Q4qF5/JQBcuHrwi8x2Z4/6AV18ayiuy1HphVQ4+m6A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ DM3PR12MB9351.namprd12.prod.outlook.com (2603:10b6:8:1ac::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8114.30; Tue, 5 Nov 2024 14:54:14 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%5]) with mapi id 15.20.8137.018; Tue, 5 Nov 2024
+ 14:54:14 +0000
+Date: Tue, 5 Nov 2024 09:54:09 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
+	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
+	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
+Subject: Re: [PATCH 09/16] x86/amd_nb, x86/amd_node: Simplify
+ amd_pci_dev_to_node_id()
+Message-ID: <20241105145409.GB916505@yaz-khff2.amd.com>
+References: <20241023172150.659002-1-yazen.ghannam@amd.com>
+ <20241023172150.659002-10-yazen.ghannam@amd.com>
+ <20241104142329.GUZyjY4Zwb6WyB2JYv@fat_crate.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104142329.GUZyjY4Zwb6WyB2JYv@fat_crate.local>
+X-ClientProxiedBy: BN0PR02CA0034.namprd02.prod.outlook.com
+ (2603:10b6:408:e5::9) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop
- handling
-To: Marek Vasut <marex@denx.de>, linux-hwmon@vger.kernel.org
-Cc: Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org
-References: <20241105135259.101126-1-marex@denx.de>
- <20241105135259.101126-2-marex@denx.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241105135259.101126-2-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|DM3PR12MB9351:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1529b84-1d38-4770-2482-08dcfda9b723
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?fS125CHwkce6fN22dtpkMrr+Q+y7ZTZCHxjhjL1V2Mr3aAvKvBsi76v6279f?=
+ =?us-ascii?Q?4l88PBHMASuZDgl4GQ4wHGK3eF7QstP83XG5foCjbxV3FnPiCrT0tEVuj8eM?=
+ =?us-ascii?Q?ia0kLQ2nG/cbBlN9eEKFW5qjXlAPdFe9aCXlUW6CUJFBpQSvzyxHB3dnxwwG?=
+ =?us-ascii?Q?NIT8n3g63XNeiDvmyu5uSR1ZyZWYvGdT1Jez5kn5IhM0mJx75gYNtBlXUuv1?=
+ =?us-ascii?Q?S44sehQBc2UKe8s4VjoDaz0C+jQxhCbuB3POJAzLJGJ26hQ5X0PziOQfgNOy?=
+ =?us-ascii?Q?cqcfBy2a3ayeV0pAvdu2N6ed8TxmdSQGeD8RyWM8A1/uerMR7OWT8Qj5jAQP?=
+ =?us-ascii?Q?+QgqI/uKBePvPSnVMHulBOwS04eQ+D4hOrRZcj/to4CoPeI8l2+Wff4A/4p+?=
+ =?us-ascii?Q?4et6JdYjEczd4gq5TV7a9L1wrM9z79jkXl1ojSCYuxil2X7YEC83eHSO9Tbt?=
+ =?us-ascii?Q?aFUgpQOLgNH3C25FdmcB4+aKlJERckXozsIF9++TCI8phiTJG5/3TeX7f4+A?=
+ =?us-ascii?Q?NUbglMCek46AfIrLLukxrtxleND3ZLADB4iX6gO/RYG7eKTqAssLOUdPVmoM?=
+ =?us-ascii?Q?lTuFoR6iFiSN5l/vrSx8lpm4QiyA7TVTQUDZ6O5tuOMLJHew9/LxiCNudpiF?=
+ =?us-ascii?Q?4IaKPNr7YVvwJXlGVne4qh6GjyfPXAeRWWT7PBqKYJiNT8grosuJWOJlsbh/?=
+ =?us-ascii?Q?2LAEGOztp3+lJXPhM8877Dmhn0zFJgeBQNwSDMfJzzERqTTw4cJfFbj60t7l?=
+ =?us-ascii?Q?nuiG11iIN1ac293W56cpnhVFcMXApztaSG39J2D70LDI3nScUcrpphEBpZdn?=
+ =?us-ascii?Q?7DS8y4VgLwQ+Qq90UrCPA9AOYWFI8GSBqRLxktELntGin6W9qiIxoz5UQKMN?=
+ =?us-ascii?Q?SIvSK27R8PC2teGkdnWDDg/nQ9viZj991MR1MPEcQw+7uIQM+wsKHIlcHnJg?=
+ =?us-ascii?Q?8NaPwXOKSgwVwwCJL9zP1bkEd98qxgGgXc4+PmZ8e1gVq82qdu5Bpgck3H0E?=
+ =?us-ascii?Q?7PsQv9TwvWZlPbV9PiPGZvyoPQdmLUEbj6l/wMcmpMiqzBMw4BWUFllqkkeG?=
+ =?us-ascii?Q?L1JENAFG4O/KALbHToCVMNWZeOBe6xyyBR223xZHcKgXhZpjFYSTIRaoCaSy?=
+ =?us-ascii?Q?vc5dnjU3D+JFk1TxSBuReX7Pd6l90I95tnLCfRfEXMtobLPlbL3AswtmVr1y?=
+ =?us-ascii?Q?ZCUgbT7zbvEkJMZq3EQ8IKU1Tfk4lTqOxKs7lYHkgCRhtqSumi/UvdYndg9E?=
+ =?us-ascii?Q?jbh9xU6EvfABnwmgHhfxU9XxO81p74dglKllZpd0L0tEwznHcBjKNSj24bKO?=
+ =?us-ascii?Q?IgsbQ83SRcrgLITM2qXMzr3b?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?jGwboCMmHxu3wsa2NjfWJPREgDaU91qPWCHj8j9A7oqHv1pYYsIN2oOfqJ6u?=
+ =?us-ascii?Q?OXdpcVSQKRfZ8F+AmSHq2hZOEADmKFxJeEBjWZq2CqoVDAIK+srU6UV9EO2p?=
+ =?us-ascii?Q?RPBVy+xIijsslX04YwXuCezw1YpevKaz5r/yPhmd5PJ7QB4a5R7kglQZOXgG?=
+ =?us-ascii?Q?AscWN2ND7Pw6SFLLxHwEl+db7ihCmoxiGnWvrod7nCbznak9tX0RUR3xeouC?=
+ =?us-ascii?Q?+YwmTL8HZcpq4mh7diP3DYJzzUbxeD4i8oQnUbWkWZgl835dUwY6no3B8Q88?=
+ =?us-ascii?Q?oOAGxtoqbyFHGph+UdriUKLE/1BBEwqN/2bAoUx9BUa0pYPSzwPzImEqlKjN?=
+ =?us-ascii?Q?Q4tAbhB6mzgEEs0Hne3rxAHR427ueeS/QugZN8qxhDSD8/Ur4/daNPdruKAQ?=
+ =?us-ascii?Q?98GNgnhwADBZy0PS0rdkDwjXBwv2Bs5X2FabO0cNdxQNwO0S41KYxRhoHAnp?=
+ =?us-ascii?Q?4jhi6YJgR3Q1A78S02PGebTbbZgNC+nyDHS68GwCxZV1Fb9VDc/U+T+WtJHi?=
+ =?us-ascii?Q?BRhrf6/P46Mns8Bhdi0WyIfSfML1DIp846idnzr9R73M0GdWDqUHfMd1/vnd?=
+ =?us-ascii?Q?Y6Mhc4bwVNGn2ktQYlwWRTIMmVXqCV6+2/S7lahdf+P5gSQmQnvMFsOpth3C?=
+ =?us-ascii?Q?24d1QdhfAnE9kBYm4twZmC3VPPceD+xDNvkqHEqWQKpBWqugZ0kFMXL6WjvP?=
+ =?us-ascii?Q?egUerd03tu50VH44io4pxJSvZA3uMDjrlx4Fsjvnm6VnlUNXBZNF6YVewucv?=
+ =?us-ascii?Q?uozBUjpPm8WgUjcViVUwnDjRBOOZfzFB7tn8jzt8xaRVS8iYQyAv1XDXtzJJ?=
+ =?us-ascii?Q?iL+YZ+lumpeg9KmWsTKd8LkXGrZmsuqXmKjmHWXWTXjDnjfadtytAyVgoBOA?=
+ =?us-ascii?Q?Lb35rgZyzP2k8/wzgo39n3wdcbz7tagxUJkX61wqja8F9yifOcCZ2bGXILmP?=
+ =?us-ascii?Q?Ms7PpD3c2NRg+TbJj3pUej19Gk66uxJSdhmp2CdGf+YpqjOHOg7jTGVSdb8w?=
+ =?us-ascii?Q?87ncRhToDbHIL9QXCTzrD5e5+2LeF4v9jYqxrXo4ZcxIPPKnuTdRZOuIoC0/?=
+ =?us-ascii?Q?fNyxBhnnxiqvbRVdxEMG82mK+Hpo/ryqmRSb4hsYOGH3A2vNPVc48IkhFGMM?=
+ =?us-ascii?Q?4Yqk2xG8vS9AXqwQGFbO+TDMQz8MUfGVcLw+mK509zWetD8iuAkcy3LfVUd1?=
+ =?us-ascii?Q?7w9zIZk7oRpA748Ays7VcFK6e6WkbMk3fxxDv0/3JdJz93ZQqjdyuDtouW4x?=
+ =?us-ascii?Q?80YYlKOgvMAKStdZ5ZwLHgAHdrB+Q50L/6lZcHxipwXxouHqMOfzcnfRpCrT?=
+ =?us-ascii?Q?3nal9W2kFLF7ugmA8qUTrPvnwCnrHJenzRf2lfAxV1PTwKFvBM7hqbo8B3F9?=
+ =?us-ascii?Q?K/tIlxKjU49rvEgVJLbVRWPhr9KbaoTnzR+2chpobtb0EahlIQZNbKOrjMYd?=
+ =?us-ascii?Q?NS3pwmNSbg8UDF4PnD3O9fp5EGRgcmHW8MhZOYAq2KI5LND5lpY7zTMqVS3C?=
+ =?us-ascii?Q?60SHG1y9vxIMmF/M3bPaUMdPndAIDfEGjGOkSwuZTQuNK+RdzZrItm6RoGei?=
+ =?us-ascii?Q?dglWkv99HpjlcYZrBFzBEDEa8aBT4kxVCTL8hyix?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1529b84-1d38-4770-2482-08dcfda9b723
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 14:54:14.5283
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2VUUMqzFpAaVlY89iRjP8JjFWrTaOsxAb9yNpp4ol5pxsFGlcAi9yifkD8vktWJwZQc67+gp+eMAAYKQpd3rzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9351
 
-On 11/5/24 05:52, Marek Vasut wrote:
-> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
-> to spin up from a dead stop, and can be afterward throttled down to
-> lower PWM duty cycle. Introduce support for operating such fans which
-> need to start at higher PWM duty cycle first and can slow down next.
+On Mon, Nov 04, 2024 at 03:23:29PM +0100, Borislav Petkov wrote:
+> On Wed, Oct 23, 2024 at 05:21:43PM +0000, Yazen Ghannam wrote:
+> > diff --git a/arch/x86/include/asm/amd_node.h b/arch/x86/include/asm/amd_node.h
+> > index 419a0ad13ef2..8e473a293706 100644
+> > --- a/arch/x86/include/asm/amd_node.h
+> > +++ b/arch/x86/include/asm/amd_node.h
+> > @@ -30,4 +30,10 @@ static inline u16 amd_num_nodes(void)
+> >  	return topology_amd_nodes_per_pkg() * topology_max_packages();
+> >  }
+> >  
+> > +/* Caller must ensure the input is an AMD node device. */
 > 
-> Introduce two new DT properties, "fan-dead-stop-start-percent" and
-> "fan-dead-stop-start-usec". The former describes the minimum percent
-> of fan RPM at which it will surely spin up from dead stop. This value
-> can be found in the fan datasheet and can be converted to PWM duty
-> cycle easily. The "fan-dead-stop-start-usec" describes the minimum
-> time in microseconds for which the fan has to be set to dead stop
-> start RPM for the fan to surely spin up.
+> You can ensure that yourself by checking the PCI vendor in the PCI device,
+> right?
 > 
-> Adjust the PWM setting code such that if the PWM duty cycle is below
-> the minimum duty cycle needed by the fan to spin up from dead stop,
-> then first set the PWM duty cycle to the minimum duty cycle needed
-> by the fan to spin up from dead stop, then wait the time necessary
-> for the fan to spin up from dead stop, and finally set the PWM duty
-> cycle to the one desired by user.
-> 
+> IOW, pdev->vendor...
+>
 
-As with the other patch, I don't think "dead" adds any value anywhere.
+Yes, there can be a vendor and/or bus,device check.
 
-Guenter
+I'll add them.
 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->   drivers/hwmon/pwm-fan.c | 33 ++++++++++++++++++++++++++++++++-
->   1 file changed, 32 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index c434db4656e7d..264b7ddf8bb40 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -7,6 +7,7 @@
->    * Author: Kamil Debski <k.debski@samsung.com>
->    */
->   
-> +#include <linux/delay.h>
->   #include <linux/hwmon.h>
->   #include <linux/interrupt.h>
->   #include <linux/mod_devicetable.h>
-> @@ -60,6 +61,9 @@ struct pwm_fan_ctx {
->   
->   	struct hwmon_chip_info info;
->   	struct hwmon_channel_info fan_channel;
-> +
-> +	u64 pwm_duty_cycle_from_dead_stop;
-> +	u32 pwm_usec_from_dead_stop;
->   };
->   
->   /* This handler assumes self resetting edge triggered interrupt. */
-> @@ -199,7 +203,9 @@ static int pwm_fan_power_off(struct pwm_fan_ctx *ctx, bool force_disable)
->   static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
->   {
->   	struct pwm_state *state = &ctx->pwm_state;
-> +	unsigned long final_pwm = pwm;
->   	unsigned long period;
-> +	bool update = false;
->   	int ret = 0;
->   
->   	if (pwm > 0) {
-> @@ -208,11 +214,22 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
->   			return 0;
->   
->   		period = state->period;
-> -		state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
-> +		update = state->duty_cycle < ctx->pwm_duty_cycle_from_dead_stop;
-> +		if (update)
-> +			state->duty_cycle = ctx->pwm_duty_cycle_from_dead_stop;
-> +		else
-> +			state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
->   		ret = pwm_apply_might_sleep(ctx->pwm, state);
->   		if (ret)
->   			return ret;
->   		ret = pwm_fan_power_on(ctx);
-> +		if (!ret && update) {
-> +			pwm = final_pwm;
-> +			state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
-> +			usleep_range(ctx->pwm_usec_from_dead_stop,
-> +				     ctx->pwm_usec_from_dead_stop * 2);
-> +			ret = pwm_apply_might_sleep(ctx->pwm, state);
-> +		}
->   	} else {
->   		ret = pwm_fan_power_off(ctx, false);
->   	}
-> @@ -480,6 +497,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->   	struct device *hwmon;
->   	int ret;
->   	const struct hwmon_channel_info **channels;
-> +	u32 pwm_min_from_dead_stop = 0;
->   	u32 *fan_channel_config;
->   	int channel_count = 1;	/* We always have a PWM channel. */
->   	int i;
-> @@ -620,6 +638,19 @@ static int pwm_fan_probe(struct platform_device *pdev)
->   		channels[1] = &ctx->fan_channel;
->   	}
->   
-> +	ret = of_property_read_u32(dev->of_node, "fan-dead-stop-start-percent",
-> +				   &pwm_min_from_dead_stop);
-> +	if (!ret && pwm_min_from_dead_stop) {
-> +		ctx->pwm_duty_cycle_from_dead_stop =
-> +			DIV_ROUND_UP(pwm_min_from_dead_stop *
-> +				     (ctx->pwm_state.period - 1),
-> +				     100);
-> +	}
-> +	ret = of_property_read_u32(dev->of_node, "fan-dead-stop-start-usec",
-> +				   &ctx->pwm_usec_from_dead_stop);
-> +	if (ret)
-> +		ctx->pwm_usec_from_dead_stop = 250000;
-> +
->   	ctx->info.ops = &pwm_fan_hwmon_ops;
->   	ctx->info.info = channels;
->   
-
+Thanks,
+Yazen
