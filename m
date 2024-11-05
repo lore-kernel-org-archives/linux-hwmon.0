@@ -1,142 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD2B1D516F;
-	Tue,  5 Nov 2024 18:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79AF17BEB7;
+	Tue,  5 Nov 2024 19:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730832799; cv=none; b=M8QaCU6oDOqjp4q3h4MmxtJSDFiFQqvTpFnLtfz264j2ehj2H4kWu9PaCLJ51TC5u5lHgI/VbJZmwmq/a5pR8t4N5ouRIVKRH2fmdbZ9hr1xnbzoIwo86ZdN12W/E/yFZpGwkyOsC4rT6ZLnFM4ZV43beos+eW+K/fogaIKWz7A=
+	t=1730834520; cv=none; b=TwEiXNiXADuA5tDl4CGZXoUzhBrGpl3A7k/kBN5HRN/XS3HRG908tdnnTIGy8l9bU+O28QnAkbWCyqGiSaQLDobYBvWH635KGDkItTDGTv05jhSwkzGIgaVdW4H9IrmeIJx/uDtr+6ktScMRlinoOdc4BfgzoTbsDLsZugJB4fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730832799; c=relaxed/simple;
-	bh=ehmuV0mGF+56Q7DGeN7/B0OGtD8FDHl8tJhMc+L5J7c=;
+	s=arc-20240116; t=1730834520; c=relaxed/simple;
+	bh=rjSmDAqas44E73Jc89rJS4/Gi+iOC33uC+9A+dpOFLM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GVW4gSC926cGwjsfGCahDkGSXIGggYuIAXpARHZ1JrdbjfL/TpHe1JDH9Qm/rjxF7eS6TYaAfrdBqryzN3ddeQTowmFmIU9Keqb93JLGQvo0vTiGXJht54Y0bIybPwFC9TMVLeSAMIbKXfa8sqM3ezg61NNVVHf8z4isMEauhUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ci6r5DV2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gnQGClNHCyNKYHMIqjyEOU3//nHCWb9+PZUERkvNBbYAqOIPl8ER0u86PM2hT30srqyUvyg7PGUh2PNGQBfoSfd+4WrhDe1NZXM0xZ7G56cZMv30wEA4pzeQYN4sm1YZFTkGb31b9PAoPMsk86hu+H/5ynJvcOYwY474mnx0r/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ZJ17AfwW; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ci6r5DV2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4656C4CECF;
-	Tue,  5 Nov 2024 18:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730832798;
-	bh=ehmuV0mGF+56Q7DGeN7/B0OGtD8FDHl8tJhMc+L5J7c=;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ZJ17AfwW"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 5B77640E0191;
+	Tue,  5 Nov 2024 19:21:55 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 5ILfy9COutIC; Tue,  5 Nov 2024 19:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1730834511; bh=ioOwYX7zIxRjEwWRkmoYKIBtPhnM5jWoFFIAP6pf7+I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ci6r5DV2VqvCag1s6EuF1aRwGbPKGH/tDqYybfvWC09acB+ugQ+GjwdbjAN+mH/zy
-	 9wUzO9DRDwMJO7FtUVQzTMYgujVqO3KDgHY6kXbZXUUv/ACutVQBpo4uUAU1A/dmrA
-	 0KPfpjx8ruV3QgyNqLAhbXp661aM0b5hHIqO6Q2jXxAeyAXVw/K/s/nkR+0nALKWUP
-	 k02jNQE3NdHiPOnuxzyXcaNHbBKmTI5cdXXbf4xnd5JEjzX8tA8vLQma1VRzkDEE3c
-	 J1e2RY1kEInd06J27owPH5EGn3nsxBG2etos92r1tCCT23IH726/PaZyDU2W8/1lel
-	 4nKNe9OV3BcCQ==
-Date: Tue, 5 Nov 2024 18:53:13 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>,
-	Naresh Solanki <naresh.solanki@9elements.com>, jdelvare@suse.com,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, krzk+dt@kernel.org, sylv@sylv.io,
-	linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-	linux@roeck-us.net, Joel Stanley <joel@jms.id.au>,
-	conor+dt@kernel.org
-Subject: Re: [PATCH v6 1/2] dt-bindings: arm: aspeed: add IBM SBP1 board
-Message-ID: <20241105-regroup-busily-adbb9b342abc@spud>
-References: <20241104092220.2268805-1-naresh.solanki@9elements.com>
- <173072771091.3690717.11563964377469449295.robh@kernel.org>
- <20241104-saturate-device-d020a0d7321f@spud>
- <f468a5c0a0112cee35815fb6c7b7f9933934adc2.camel@codeconstruct.com.au>
+	b=ZJ17AfwWZkQt6i/32mOI1xzrqkSltK/Z9h/F7OPbMbfJxM50Y1MtQ6OEymCAJDMWj
+	 snOjxzT7GmAt44c47R8JQJFv9FkeoXbRCOBS9lR7JTAmrmP/dQAS/Ok7eIlNB0HTy5
+	 BVECZL5upaAJcc+uNuNLh/Yyt2j7+a4QLVXZVe/cVSIh79JnoD+QwQ7wOA9xhkD08x
+	 ztJeQVenWIeST16Ja55l5qo6QWhDEVJcC+t1sAsV+jY4aLWQM8Ey44nwRIE+fH9UGR
+	 OD8BzfK/tf7A+iOmEnNRiX+CCUyDeZ1t4vLxZZFfBCPXJyRdDQ9IdlOl0CV659yxi2
+	 LD2k6Iyx6/enHx6usys64T3ZI1Ug/Vg0zVumbVrShy01p8inaMyW5o+kAzdevSrFtX
+	 39mLiE95vrpVjcpgMfQoE6VufwsJGVgyMkeH+1gvYQQ6XEyuw17QU+Mzv+jJuUY2fq
+	 f/+vaOl0ot5jd7UvxvaMuL3tyfOLebB9vaGdmXuTkXTuD2ZSbHxG5ON2aV6k5pG1lA
+	 /hsSJIcC9QrMWr7kSNNNJc04lOy5WGJzHrjhFT+RcGi2L+HdSOqgRT3nBnDV8BT+HE
+	 9Mhh2C82SmkuJ00n/dgsHk3HDAaaF3tudvsVchLpHgufr4KX8j6BaOHP1/fmi4rD7W
+	 4uxJsgwH2ndzWf2PikfHehmc=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C33D540E0028;
+	Tue,  5 Nov 2024 19:21:29 +0000 (UTC)
+Date: Tue, 5 Nov 2024 20:21:24 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+	tony.luck@intel.com, x86@kernel.org, avadhut.naik@amd.com,
+	john.allen@amd.com, mario.limonciello@amd.com, bhelgaas@google.com,
+	Shyam-sundar.S-k@amd.com, richard.gong@amd.com, jdelvare@suse.com,
+	linux@roeck-us.net, clemens@ladisch.de, hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	naveenkrishna.chatradhi@amd.com, carlos.bilbao.osdev@gmail.com
+Subject: Re: [PATCH 16/16] x86/amd_smn: Add support for debugfs access to SMN
+ registers
+Message-ID: <20241105192124.GXZypwNJ26qqahcpOZ@fat_crate.local>
+References: <20241023172150.659002-1-yazen.ghannam@amd.com>
+ <20241023172150.659002-17-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="R4RpYoaHCnWgW7y6"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f468a5c0a0112cee35815fb6c7b7f9933934adc2.camel@codeconstruct.com.au>
+In-Reply-To: <20241023172150.659002-17-yazen.ghannam@amd.com>
 
+On Wed, Oct 23, 2024 at 05:21:50PM +0000, Yazen Ghannam wrote:
+> +static ssize_t smn_value_write(struct file *file, const char __user *userbuf,
+> +			       size_t count, loff_t *ppos)
+> +{
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = kstrtouint_from_user(userbuf, count, 0, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
 
---R4RpYoaHCnWgW7y6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That looks like a TAINT_CPU_OUT_OF_SPEC to me.
 
-On Tue, Nov 05, 2024 at 10:39:34AM +1030, Andrew Jeffery wrote:
-> Hi Conor,
->=20
-> On Mon, 2024-11-04 at 18:49 +0000, Conor Dooley wrote:
-> > On Mon, Nov 04, 2024 at 08:39:21AM -0600, Rob Herring (Arm) wrote:
-> > >=20
-> > > On Mon, 04 Nov 2024 14:52:14 +0530, Naresh Solanki wrote:
-> > > > Document the new compatibles used on IBM SBP1.
-> > > >=20
-> > > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > ---
-> > > > Changes in V4:
-> > > > - Retain Acked-by from v2.
-> > > > - Fix alphabetic order
-> > > > ---
-> > > > =A0Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
-> > > > =A01 file changed, 1 insertion(+)
-> > > >=20
-> > >=20
-> > >=20
-> > > My bot found new DTB warnings on the .dts files added or changed in
-> > > this
-> > > series.
-> > >=20
-> > > Some warnings may be from an existing SoC .dtsi. Or perhaps the
-> > > warnings
-> > > are fixed by another series. Ultimately, it is up to the platform
-> > > maintainer whether these warnings are acceptable or not. No need to
-> > > reply
-> > > unless the platform maintainer has comments.
-> > >=20
-> > > If you already ran DT checks and didn't see these error(s), then
-> > > make sure dt-schema is up to date:
-> > >=20
-> > > =A0 pip3 install dtschema --upgrade
-> > >=20
-> > >=20
-> > > New warnings running 'make CHECK_DTBS=3Dy aspeed/aspeed-bmc-ibm-
-> > > sbp1.dtb' for
-> > > 20241104092220.2268805-1-naresh.solanki@9elements.com:
-> >=20
-> > Really? This many warnings on a v6?
-> >=20
->=20
-> I understand that it's surprising and disappointing, however these
-> warnings are from the Aspeed DTSIs and not directly from the proposed
-> DTS. Many are an artefact of history, and I'm (slowly) working to clean
-> them up. Recently I haven't had any time to dedicate to that effort,
-> and as I'm somewhat responsible for the state of things, I'm not
-> prepared to block other people's patches and push my own
-> responsibilities onto them.
+> +	ret = amd_smn_write(debug_node, debug_address, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +DEFINE_SHOW_STORE_ATTRIBUTE(smn_node);
+> +DEFINE_SHOW_STORE_ATTRIBUTE(smn_address);
+> +DEFINE_SHOW_STORE_ATTRIBUTE(smn_value);
+> +
+>  static int amd_cache_roots(void)
+>  {
+>  	u16 node, num_nodes = amd_num_nodes();
+> @@ -180,6 +257,12 @@ static int __init amd_smn_init(void)
+>  	if (err)
+>  		return err;
+>  
+> +	debugfs_dir = debugfs_create_dir("amd_smn", arch_debugfs_dir);
+> +
+> +	debugfs_create_file("node",	0600, debugfs_dir, NULL, &smn_node_fops);
+> +	debugfs_create_file("address",	0600, debugfs_dir, NULL, &smn_address_fops);
+> +	debugfs_create_file("value",	0600, debugfs_dir, NULL, &smn_value_fops);
 
-Ah, you see that's where I would say "no new warnings" and get the
-submitter to fix them ;) And were I the submitter, I'd want to resolve
-the warnings rather than run into issues down the road when things get
-"fixed"/documented. But I guess that's why I have the schmucks task of
-reviewing bindings innit..
+Can we pls stick this behind a module param which is off by default? I don't
+want that crap exposed even in debugfs, by default.
 
-> I've been replying to those proposing new Aspeed-based devicetrees to
-> separate the warnings they're introducing from the warnings that
-> already exist, and requiring them to fix the issues they're responsible
-> for. I hope that I'll have time to continue to improve the situation,
-> as this is obviously a tedious task for me too.=20
+Thx.
 
-Well, it is your platform and if you're confident that these nodes are
-correct despite the warnings, who am I to stop you!
+-- 
+Regards/Gruss,
+    Boris.
 
---R4RpYoaHCnWgW7y6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyppmQAKCRB4tDGHoIJi
-0gl3AQDYMKKpv+VRW+O5chJQqZbIqtD3TSwbPLzL+iwv7LwutgD/SjKnZdTS+eIj
-kcZPtile9/G6QpMnUwj4wo/u+c6FAwU=
-=6O1S
------END PGP SIGNATURE-----
-
---R4RpYoaHCnWgW7y6--
+https://people.kernel.org/tglx/notes-about-netiquette
