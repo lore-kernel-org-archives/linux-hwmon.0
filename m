@@ -1,123 +1,107 @@
-Received: from doubleyoutf.uk (doubleyoutf.uk [109.228.47.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735F31D5159
-	for <linux-hwmon@vger.kernel.org>; Tue,  5 Nov 2024 13:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.228.47.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7363118C938;
+	Tue,  5 Nov 2024 13:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730811853; cv=none; b=KIs/Wuxkl2YMSLri1W6c4uizyWMx6vgMwhFRZBvqSZiWnci+UNsKPWpjrh5CNlb2B/qxURsNNsTkykBfUfr6obR0V3mgSK4aaq5EFCZjigHKq/wD/RlpP5pf/uXcCgEpCU9pxOedkYfHAxhhJNuyBqWz0UQGqmUrtFSHEHBPwfE=
+	t=1730814801; cv=none; b=A3HtekT+HM4u4a2KVcYHvnqqpfsUWCu2jiE01l0fMpzYKzqFRZC434zEGgNyJj//oRSnfTPoRnFhR8prJd6KlT/SlC8b/mM8ETJ5Cv4mqCOQX3L03S7IIcfPC+T2lyka/YugY1CxyOjr+3ptGlDPOEjpLMNxjg+7jNtEZ6eXa7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730811853; c=relaxed/simple;
-	bh=gOFCNFnHE5wjys3fGl0fWdxeWq7iObkG7nH7r5cLmHM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=faH4TiPejsmxdjQn6DrSAKyOfLW+p6n/cId8P/o7dLa5Ll+9HdFcI9aXOdlcX/6U5pwufLztcEXHdqCI1cA4Yp/Fela6P2lmRh6w7hvJ4t6LKajYKe4ehakoWL9M5kYO1j3G0iFPsb62ETYkZS4g2/dopB7T9KkF1CWr80y5lQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=khalifa.ws; spf=pass smtp.mailfrom=khalifa.ws; dkim=pass (1024-bit key) header.d=khalifa.ws header.i=@khalifa.ws header.b=ASxuQQKc; arc=none smtp.client-ip=109.228.47.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=khalifa.ws
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=khalifa.ws
+	s=arc-20240116; t=1730814801; c=relaxed/simple;
+	bh=xoNg+eIzxEtiIlEGndvr1nhq1j/wP8PdYBmy6bLK3pI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GIQ2PeATsk3uR6KbCJDgB/32e8zrE5ZN6scac4KKNblmgPXgY/fHMarrqZx1lW8Dj9UXTFSz/fub0pwwV4zPkYhI26SNy5NuypwMV1RKhbnwMtq2ynXh317oeSOXFT3xnkSioVaM0UeGLFITavHK7Mqj6Lvme+PznMZKSWujSY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=oAufRZPB; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=khalifa.ws header.i=@khalifa.ws header.b="ASxuQQKc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=khalifa.ws;
-	s=rsasel; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=yEId2RzWlYZ6cB8k+HhSMoBISOIkblh3N5MwnGTcy+Q=; b=ASxuQQKcfYcsnpPOf/nR5SIvnr
-	FSRM8bLe6+wycAOBSFwqnLtzrCN76KCAd7YkDz6t4PHnLGG8TZeLhO4gJcDzpGa+H1NksErGtB4WQ
-	jc358o9Ynw5/TyCtAToXTV+YdKbabyLZyFj7WaVigZ4DRJ4DSma9TIw+ea0IWEx5bP8c=;
-Received: from [2a00:23cc:d220:b33::b56]
-	by doubleyoutf.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.94.2)
-	(envelope-from <ahmad@khalifa.ws>)
-	id 1t8JE3-00Bye7-Ps; Tue, 05 Nov 2024 13:04:03 +0000
-Message-ID: <c43b0364-660e-474e-b789-134970ca587c@khalifa.ws>
-Date: Tue, 5 Nov 2024 13:04:03 +0000
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="oAufRZPB"
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id 4ACEF88CF1;
+	Tue,  5 Nov 2024 14:53:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1730814797;
+	bh=5CJT2Dmd1DEjDmnpLpEgnd/PONCNFSzoP0zzP2v0lJc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oAufRZPBq+kKftIpGDuJAZvC3Jp3ItPg45/R3KD8XElQSJ6w1OgsNSfifeHlzIuTd
+	 gthW6ThDLWsgf6MeEphWq3bx/x/YQuhT/gK0lI9o7wX9anxu4DRa4YNafZYEuTlXCG
+	 6oA4Qhh1+fGwhpWzjZpniDi2IaIoBfhc9LEX/LQSY3rv9A71d14lwx6UpQnnzm31eO
+	 PV7bktEakHZtAMBS/RXrbPT7951RLuvcTezM19Yt8D79SD+7wnqcyVEO7p6F3PWrlr
+	 8/W6aimZF4Ko5Xs9cyd8A/dyieHqUMe3DOOTJnGFe+3gCjuPPaBv97Hde8ekwyZk1T
+	 n4nZYaZkihquA==
+From: Marek Vasut <marex@denx.de>
+To: linux-hwmon@vger.kernel.org
+Cc: Marek Vasut <marex@denx.de>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document start from dead stop properties
+Date: Tue,  5 Nov 2024 14:52:15 +0100
+Message-ID: <20241105135259.101126-1-marex@denx.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] hwmon: Add trivial userspace-configured monitor
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-References: <20241102174639.102724-1-ahmad@khalifa.ws>
- <ed296133-4139-4618-b8de-f8826064576f@roeck-us.net>
-Content-Language: en-GB
-From: Ahmad Khalifa <ahmad@khalifa.ws>
-In-Reply-To: <ed296133-4139-4618-b8de-f8826064576f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-On 04/11/2024 15:03, Guenter Roeck wrote:
-> On 11/2/24 10:46, Ahmad Khalifa wrote:
->> Add a userspace-configured driver that can receive IOCTRL
->> commands to monitor devices over IO or ACPI access.
->>
->> - registers a miscdevice at /dev/trim-control
->> - awaits attach/detach ioctrl commands with device details
->> - reads sensor values from: 1. IO select registers, 2. IO direct
->>    registers or 3. ACPI method calls (single arg)
->> - applies basic conversions: multiply, divide, dividend divisor
->>
->> Useful when there is prior knowledge of the device or when
->> experimenting with newer devices using old device info.
->> Another use is for debugging other drivers when raw reg values
->> need to be compared with what the full driver prints out.
->>
->> Drawbacks: Not aware of any device. It's readonly. Readonly does
->> not make it safe as it still writes for address select and bank
->> select. Needs an ioctrl and cannot be modloaded through config
->> or modalias
->>
-> [ ... ]
-> 
->> diff --git a/trivialmon.c b/trivialmon.c
->> new file mode 100644
->> index 0000000..11e5829
->> --- /dev/null
->> +++ b/trivialmon.c
->> @@ -0,0 +1,844 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * trivialmon - Trivial Hardware Monitor Driver (Trim)
->> + *
->> + * Userspace-configured monitor controlled through IOCTL
->> + *
->> + * DISCLAIMER: Don't run this with other hwmon modules for the same 
->> device.
->> + * You could easily FRY your motherboard! You could also easily FRY 
->> YOUR CPU!
->> + *
-> 
-> This is way too risky to add to the kernel. I think it is much better kept
-> out-of-tree, with lots of disclaimers and users (hopefully) understanding
-> what they get into when loading this module.
+Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
+to spin up from a dead stop, and can be afterward throttled down to
+lower PWM duty cycle. Introduce support for operating such fans which
+need to start at higher PWM duty cycle first and can slow down next.
 
-Understood. Could be considered a "safe" tool if in tree.
+Document two new DT properties, "fan-dead-stop-start-percent" and
+"fan-dead-stop-start-usec". The former describes the minimum percent
+of fan RPM at which it will surely spin up from dead stop. This value
+can be found in the fan datasheet and can be converted to PWM duty
+cycle easily. The "fan-dead-stop-start-usec" describes the minimum
+time in microseconds for which the fan has to be set to dead stop
+start RPM for the fan to surely spin up.
 
-> I had thought about something similar some time ago, though limited to i2c
-> devices and using some kind of command language, not open ended ioctls.
-> I gave up on it for the same reason: For some i2c devices, just reading 
-> from
-> a register may be understood as command, such as "restore factory 
-> configuration".
-> If such a command is executed on the wrong chip, such as a power controller
-> or a display controller, it can easily make the hardware unusable. It is 
-> bad
-> enough that this can happen with a kernel driver as well, or with someone
-> executing i2c commands from userspace directly. I really don't want to 
-> make that
-> even easier.
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
+---
+ Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Just curious, how were you thinking of passing those commands? sysfs?
-over i2c-dev?
-
-Looking around, the documentation for configfs seemed like it would
-could useful for this, but that's not in much use as I can see. (And
-involves lots of text parsing)
-
-
+diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+index 4e5abf7580cc6..f1042471b5176 100644
+--- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+@@ -31,6 +31,17 @@ properties:
+       it must be self resetting edge interrupts.
+     maxItems: 1
+ 
++  fan-dead-stop-start-percent:
++    description:
++      Minimum fan RPM in percent to start from dead stop.
++    minimum: 0
++    maximum: 100
++
++  fan-dead-stop-start-usec:
++    description:
++      Time to wait in microseconds after start from dead stop.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
+   pulses-per-revolution:
+     description:
+       Define the number of pulses per fan revolution for each tachometer
 -- 
-Regards,
-Ahmad
+2.45.2
+
