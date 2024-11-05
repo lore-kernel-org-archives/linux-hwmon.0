@@ -1,43 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D5C1E571A;
-	Tue,  5 Nov 2024 18:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDD11E7660;
+	Tue,  5 Nov 2024 18:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730830717; cv=none; b=TtcxtW3dpIxmEHdxxeXkbzKUM3dWTlIUz6RMjdoLC2FcqhVuxs4yavvJ3HB/9nwiNXElpprH5nOg1fOpm5JhmgJS6ASXM4ke8TbRF7hr94LTGBZYwpHe8kS1a4hWT9RKeLoP2zJp1YGjSQ5oJzSyjgCJnXGZy5+OkhbROwQvMf4=
+	t=1730831729; cv=none; b=GQ8/IMY2XMlA9H0v2i51zi9qtru9S+PYp6aB9RBrK5F/OVdwL/R9484fKS8l7XBuajaT3d/3vZjVjNmeoyS93lk5HePi9kTi8e46V4GcrHBlpoRtcALg2toN0wuv0uI3XAWBCoN6XOb3zGNcj4Gb/dNI3b/DDwEMDSX8AuYZf1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730830717; c=relaxed/simple;
-	bh=nBIG5rWdpNBhBcj6jUFiMB071F5saYr4spyqmz/+t7I=;
+	s=arc-20240116; t=1730831729; c=relaxed/simple;
+	bh=bMSQCGFq2evhThsweoqyuAkdfCwXzIXVb15Da3lP4qA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gy8uWAEmefurlv7kWFCr+7uVyuWMQEIZZCQQh5AEJV0HMby0V0ZHwS1KdVlRI8xlL/LtAOOXgjXXmVgSFVLTVIaDYtR/V/IGitVEUY5Z7f4B7yf9Cydbd5aWW2ZGaxPp3CV/lT5ElERFa+9jWrrTZOl0pe/oc1wH63bQtOFPw1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8R4Fc6w; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyQVClAw6Sp0y4ZBpjXWwU+HxBAZ8ggi0O2T5w8EiI8zs+T/tqk26T8sVoVtTTNAzhZ9Lb4x4phmn4BDrgFb+LEWfVFH+wHv4sgkk3Wjg1m4qBUuVve86PSx/Gyv9sDhl9VJ+IoT5Np94Sx5WnqXDiV2UttLChNKOgE6R8Tt4Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SA7k0fsh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8R4Fc6w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7D3C4CED1;
-	Tue,  5 Nov 2024 18:18:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SA7k0fsh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E98C4CECF;
+	Tue,  5 Nov 2024 18:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730830716;
-	bh=nBIG5rWdpNBhBcj6jUFiMB071F5saYr4spyqmz/+t7I=;
+	s=k20201202; t=1730831729;
+	bh=bMSQCGFq2evhThsweoqyuAkdfCwXzIXVb15Da3lP4qA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W8R4Fc6wrUoJl+L+VYYKNNXlamPbGW3zwimqrRlgqwJV+A6X4bKWg1FNjRuVhEC9v
-	 rp6yTYcn82cCRnEWh95nI/euctDfBC4ont01ctK5TF8okct7C91BdWMWjqWEKHAzvH
-	 acmr4O4bj8WDA4zRhKnCvFYUW8D1huN38A2id/eN1cqiVp40AO1eaM2ZobyISQSPDV
-	 UYWeL8Le751AlpLKYSmncEEqqp9OSA3HajE0xHcOvkQYxfu6TPZDjwmK47ufaAbVay
-	 37mCD51Xa4dsYLygr+vUxGHSAhcFm7LzgGTnacx6Y5G0wAbJZOX5x1iAY99HPmg7HJ
-	 wqfcAdG2Kracg==
-Date: Tue, 5 Nov 2024 18:18:32 +0000
+	b=SA7k0fshvL5dS2I1nSkDVCJN/nEU9rdY4yzqRGiVRBs5fLQwURKO4a245i0r42cs4
+	 /h1/UYJgUwLkTUuX5xYO/d6w/lKrKZq+XMnDTvXhE0w0KhUYWqQkFWNvaXOFuXwrEj
+	 dGH4ZyatCzMdNZB6m4ipTna6Bh3DEWUE16B3rD0WG3VkV+5uAmNm862BenNBfRaxWG
+	 Xxhr6oWDCH/+AYa/7G4hSKZ/awx5NS/Q0dYCeAD1f3Q/rTG4grOY1QdVfZkn5g7cbS
+	 RPn4U6fn6XbQ1vu4811msHD1+gWruDDSn3DRZn5p8dNsA41OuCKnzOHywd62wp39M4
+	 N7f7bC7kRm9ug==
+Date: Tue, 5 Nov 2024 18:35:25 +0000
 From: Conor Dooley <conor@kernel.org>
-To: Marek Vasut <marex@denx.de>
-Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document start from
- dead stop properties
-Message-ID: <20241105-sensuous-lather-d9edfb9c0196@spud>
-References: <20241105135259.101126-1-marex@denx.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh@kernel.org>, Grant Peltier <grantpeltier93@gmail.com>,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <20241105-imprecise-unharmed-ec1474ad1acc@spud>
+References: <cover.1730326915.git.grantpeltier93@gmail.com>
+ <1dff1f63a2e122788e2c17f192472705491aa5b8.1730326916.git.grantpeltier93@gmail.com>
+ <CAL_JsqJqhxcMu2yeqvJvUOJ_g3uDv3t1JwaMxAfZQGXFj3rAvw@mail.gmail.com>
+ <0f855c81-ce0e-41e8-ae08-5f653d3ca8b0@roeck-us.net>
+ <CAL_JsqK=kgoKvusMMqdtx7b4z2aveE5O9Q=UHXCgook5UBS4bA@mail.gmail.com>
+ <2afabeb7-9cf7-4092-965d-55a9c0762948@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,82 +50,121 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qGy9xWgkR3+wDVgW"
+	protocol="application/pgp-signature"; boundary="WmC+ioyJ71bF6Ooh"
 Content-Disposition: inline
-In-Reply-To: <20241105135259.101126-1-marex@denx.de>
+In-Reply-To: <2afabeb7-9cf7-4092-965d-55a9c0762948@roeck-us.net>
 
 
---qGy9xWgkR3+wDVgW
-Content-Type: text/plain; charset=us-ascii
+--WmC+ioyJ71bF6Ooh
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 05, 2024 at 02:52:15PM +0100, Marek Vasut wrote:
-> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
-> to spin up from a dead stop, and can be afterward throttled down to
-> lower PWM duty cycle. Introduce support for operating such fans which
-> need to start at higher PWM duty cycle first and can slow down next.
+On Tue, Nov 05, 2024 at 07:45:38AM -0800, Guenter Roeck wrote:
+> On 11/5/24 04:19, Rob Herring wrote:
+> > On Mon, Nov 4, 2024 at 7:20=E2=80=AFPM Guenter Roeck <linux@roeck-us.ne=
+t> wrote:
+> > >=20
+> > > On 11/4/24 07:08, Rob Herring wrote:
+> > > > On Wed, Oct 30, 2024 at 5:41=E2=80=AFPM Grant Peltier <grantpeltier=
+93@gmail.com> wrote:
+> > > > >=20
+> > > > > Add devicetree bindings to support declaring optional voltage div=
+iders to
+> > > > > the rail outputs of supported digital multiphase regulators. Some
+> > > > > applications require Vout to exceed the voltage range that the Vs=
+ense pin
+> > > > > can detect. This binding definition allows users to define the
+> > > > > characteristics of a voltage divider placed between Vout and the =
+Vsense
+> > > > > pin for any rail powered by the device.
+> > > > >=20
+> > > > > These bindings copy the vout-voltage-divider property defined in =
+the
+> > > > > maxim,max20730 bindings schema since it is the best fit for the u=
+se case
+> > > > > of scaling hwmon PMBus telemetry. The generic voltage-divider pro=
+perty
+> > > > > used by many iio drivers was determined to be a poor fit because =
+that
+> > > > > schema is tied directly to iio for the purpose of scaling io-chan=
+nel
+> > > > > voltages and the isl68137 driver is not an iio driver.
+> > > > >=20
+> > > > > Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+> > > > > ---
+> > > > >    .../hwmon/pmbus/renesas,isl68137.yaml         | 147 ++++++++++=
+++++++++
+> > > > >    1 file changed, 147 insertions(+)
+> > > > >    create mode 100644 Documentation/devicetree/bindings/hwmon/pmb=
+us/renesas,isl68137.yaml
+> > > > >=20
+> > > > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/renesa=
+s,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl=
+68137.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..ed659c2baadf
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/renesas,isl68=
+137.yaml
+> > > > > @@ -0,0 +1,147 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +
+> > > > > +$id: http://devicetree.org/schemas/hwmon/pmbus/renesas,isl68137.=
+yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: Renesas Digital Multiphase Voltage Regulators with PMBus
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Grant Peltier <grant.peltier.jg@renesas.com>
+> > > > > +
+> > > > > +description: |
+> > > > > +  Renesas digital multiphase voltage regulators with PMBus.
+> > > > > +  https://www.renesas.com/en/products/power-management/multiphas=
+e-power/multiphase-dcdc-switching-controllers
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    enum:
+> > > >=20
+> > > > Somehow "isl68137" is missing from your list. "make
+> > > > dt_compatible_check" reports it as not documented.
+> > > >=20
+> > >=20
+> > > Turns out it is also documented as "isil,isl68137" in trivial-devices=
+=2Eyaml
+> > > (together with isil,isl69260). Both are referenced in .dts files. How=
+ should
+> > > that be handled ?
+> >=20
+> > Move those compatibles here. And this file should be renamed to
+> > isil,isl68137.yaml or some other actual compatible value.
+> >=20
 >=20
-> Document two new DT properties, "fan-dead-stop-start-percent" and
-> "fan-dead-stop-start-usec". The former describes the minimum percent
-> of fan RPM at which it will surely spin up from dead stop. This value
-> can be found in the fan datasheet and can be converted to PWM duty
-> cycle easily. The "fan-dead-stop-start-usec" describes the minimum
-> time in microseconds for which the fan has to be set to dead stop
-> start RPM for the fan to surely spin up.
+> I guess that is a bit more complicated since Renesas acquired Intersil.
+> Is there a common guidance explaining how new compatibles should be defin=
+ed
+> in such situations ?
 >=20
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Docum=
-entation/devicetree/bindings/hwmon/pwm-fan.yaml
-> index 4e5abf7580cc6..f1042471b5176 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> @@ -31,6 +31,17 @@ properties:
->        it must be self resetting edge interrupts.
->      maxItems: 1
-> =20
-> +  fan-dead-stop-start-percent:
-> +    description:
-> +      Minimum fan RPM in percent to start from dead stop.
-> +    minimum: 0
-> +    maximum: 100
-> +
-> +  fan-dead-stop-start-usec:
+> Anyway, I had the patches queued in linux-next. I dropped them until
+> this is sorted out.
 
-s/usec/us/ and you get the type from property-units.yaml automagically.
+The old ones with existing compatibles should keep their names, the new ones
+should probably match whatever is in their datasheet so that people can
+have an easier time.
 
-> +    description:
-> +      Time to wait in microseconds after start from dead stop.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
->    pulses-per-revolution:
->      description:
->        Define the number of pulses per fan revolution for each tachometer
-> --=20
-> 2.45.2
->=20
-
---qGy9xWgkR3+wDVgW
+--WmC+ioyJ71bF6Ooh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZypheAAKCRB4tDGHoIJi
-0n5mAP99NIET0o+gGftjjKd0IQJoj5WFHzLRefxK/4uFdNI/KwD/WsljTlf8AZqq
-vISz6iB7f+zuD3DPD1nT+DuAbGj38Ak=
-=iaNX
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyplbQAKCRB4tDGHoIJi
+0t9tAP0Zeky4MyfN6WerUHYooW/BMdBZjvewJj2H3t4wKAlKRQEA7nrMXj5xWETF
+4rCql8ak8bH5QQXLnEo2jmUAh71a0wM=
+=uLS9
 -----END PGP SIGNATURE-----
 
---qGy9xWgkR3+wDVgW--
+--WmC+ioyJ71bF6Ooh--
