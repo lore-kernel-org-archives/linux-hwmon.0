@@ -1,51 +1,52 @@
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF70313C9DE;
-	Tue,  5 Nov 2024 23:21:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111D41D31A9;
+	Tue,  5 Nov 2024 23:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730848878; cv=none; b=qG2jznM5fwxKmfQPvbMUDzcOFNx3zyd8AWGJhZ4dSJIeLLfzdNX3uoMzEvTVAU2nheO00vkny0bj3ltG2/XRbHsiIXRKXo0V8FzQAN1VPXNrl4F7TT6Jza79BJ0iHhNv6gcW7rQxmsFUEJx6YTnAfGZKH2Jy5MpgMWMihU6y7Zw=
+	t=1730849690; cv=none; b=usAg5NlKPFpm7jQXaUR3PS3Gkn0MHiL39AdJ2igOMLstInwHdWkbwVqMnaCZ1X7p47JpERF7vodQ2rMKEn3s/hpWYvJhQSHnhRcTusEqRK+ZPLExbnu3plBNL6/nCYu3kK9r00LQ9+brAp5xfUj+GJMOdBiTQ00hNPNTKkMi7J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730848878; c=relaxed/simple;
-	bh=9xVg8S5A3dEOoVAga7+s67CM1EOce2OgL3F1GFpjD6c=;
+	s=arc-20240116; t=1730849690; c=relaxed/simple;
+	bh=SU8DwkNDTzeQ2NIK+yrgU5JF0OSH+sCfFE5Eac/5L1o=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KQIumiZfyLc6GuJ9IbSMDgr9QlPvqMVMcgYZmgemD8UoOw3WrCoRxIVsUxtKJtRwpHKLofDjir7zCAyiZOquQ2tY/3+ZOgvyE2iTaMQnHjSqbru7b1qJaV46yDMI0l6MW6hvglt1tyknYhun1SidHD/eNEX8MN3oxRCD3CLEKvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=i2BNR8di; arc=none smtp.client-ip=203.29.241.158
+	 Content-Type:MIME-Version; b=KbQAcLyrhZMSQqThh7VNlEWgo95fxrn1y3v87JKhvSIipzSqK/I+ggCDmHfWIXnFbRHXb/v+1KcOeteHaSjViz/zwIQLMQCCi38aqNYJtHyL+sS/pOPmfIceEaV25y7bDAknsl/jRx0T29nmoogPPBrJMyg0E9TtYCkb0p1jSKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=LSI/exDI; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="i2BNR8di"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="LSI/exDI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1730848873;
-	bh=9xVg8S5A3dEOoVAga7+s67CM1EOce2OgL3F1GFpjD6c=;
+	d=codeconstruct.com.au; s=2022a; t=1730849685;
+	bh=SU8DwkNDTzeQ2NIK+yrgU5JF0OSH+sCfFE5Eac/5L1o=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=i2BNR8diE+bStAGqu0zYAfibKHrcVQtX9N4pflhBAUSdqW9IEM2OcclPJ48QwPlVa
-	 GJPIcEHQ2ASnJHrarkOPjgskPbban8Hn+uqI1IOaTF34Pfo5YCoVfWsf+M2n/6+Yxe
-	 HUa69kNuNSNjMIUOTEmvYkCVcN5Q/9vBrNM23GmsBzlOUSO+nApi1KChXTFYz2UACw
-	 gBWe1Ztlchpgua51i8VwZSFqf0nNaVWpteN1aCTfocGyuikG5JnjYkFT1p4m0xtrkb
-	 nhmZHYnuBrC3msnJr5cCJa0Cba3PJcLzi6usLnTXHfmaZceCbF7l2wHkSgwbwqJjl1
-	 fivt5GIneEFaA==
+	b=LSI/exDIwaTfqG20PDM3xVYWO4hEIO011twPHfviMD7kYq8tmjuruuV5scTmfWXUo
+	 PLpzOR4VeZR6BazKffzpoBqfihezqQ5rqTkrB5TwxQq5xW8dU44xlRq1gb7WEDDwPM
+	 ob7xrZzfkoOG8hhZYKEBXmVPV777crqx4z59yXxBLxBUzkz35SyLmL54mlZB5eslnW
+	 Gks3AYlypU74C0L1j+bxnKGXNAbSonX93xWZn9IPSKCZGdGrOyrU3Gwz4vlwh0zuKn
+	 YAb/LJxfkEKUNb4yW2zfLW65a09HK7nwFOPOYZWOUADL+LjdoD/3oYHELgEPIq9pl7
+	 cdHCmd46bCKBg==
 Received: from [192.168.68.112] (ppp118-210-162-114.adl-adc-lon-bras34.tpg.internode.on.net [118.210.162.114])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 52A0D6B407;
-	Wed,  6 Nov 2024 07:21:11 +0800 (AWST)
-Message-ID: <9e9bf461b2ef8993bb46206b3cdf40806a528856.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6 2/2] ARM: dts: aspeed: sbp1: IBM sbp1 BMC board
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 91CD16B1F7;
+	Wed,  6 Nov 2024 07:34:44 +0800 (AWST)
+Message-ID: <ebdc6c112457db0ec73b43a404e240052dd3c7e4.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v6 1/2] dt-bindings: arm: aspeed: add IBM SBP1 board
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Guenter Roeck <linux@roeck-us.net>, Naresh Solanki
-	 <naresh.solanki@9elements.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- jdelvare@suse.com,  sylv@sylv.io, linux-hwmon@vger.kernel.org, Joel Stanley
- <joel@jms.id.au>,  Patrick Rudolph <patrick.rudolph@9elements.com>,
- linux-arm-kernel@lists.infradead.org,  linux-aspeed@lists.ozlabs.org
-Date: Wed, 06 Nov 2024 09:51:10 +1030
-In-Reply-To: <7d9657ff-1c4a-4167-982a-9f07e7b51f77@roeck-us.net>
+To: Conor Dooley <conor@kernel.org>
+Cc: "Rob Herring (Arm)" <robh@kernel.org>, Naresh Solanki
+ <naresh.solanki@9elements.com>, jdelvare@suse.com, Conor Dooley
+ <conor.dooley@microchip.com>, linux-aspeed@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ krzk+dt@kernel.org,  sylv@sylv.io, linux-arm-kernel@lists.infradead.org,
+ linux-hwmon@vger.kernel.org,  linux@roeck-us.net, Joel Stanley
+ <joel@jms.id.au>, conor+dt@kernel.org
+Date: Wed, 06 Nov 2024 10:04:44 +1030
+In-Reply-To: <20241105-regroup-busily-adbb9b342abc@spud>
 References: <20241104092220.2268805-1-naresh.solanki@9elements.com>
-	 <20241104092220.2268805-2-naresh.solanki@9elements.com>
-	 <ac9698862598f0d09d35872d0e091537f822fbcd.camel@codeconstruct.com.au>
-	 <CABqG17j8RhFpNV+nJ=nLY8+uO_XXjbN55+Ce8op=6Dj5Z=_WOA@mail.gmail.com>
-	 <7d9657ff-1c4a-4167-982a-9f07e7b51f77@roeck-us.net>
+	 <173072771091.3690717.11563964377469449295.robh@kernel.org>
+	 <20241104-saturate-device-d020a0d7321f@spud>
+	 <f468a5c0a0112cee35815fb6c7b7f9933934adc2.camel@codeconstruct.com.au>
+	 <20241105-regroup-busily-adbb9b342abc@spud>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -56,32 +57,102 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2024-11-05 at 07:47 -0800, Guenter Roeck wrote:
-> On 11/4/24 20:10, Naresh Solanki wrote:
-> [ ... ]
->=20
-> > > =C2=A0From a spot check, the warnings seem legitimate. Did you send
-> > > the right
-> > > patches?
-> > Just checked again. They are resolved. But I guess the dtbinding
-> > patch
-> > for the above warning are merged in hwmon-next branch & not in
-> > dt/next
+On Tue, 2024-11-05 at 18:53 +0000, Conor Dooley wrote:
+> On Tue, Nov 05, 2024 at 10:39:34AM +1030, Andrew Jeffery wrote:
+> > Hi Conor,
 > >=20
+> > On Mon, 2024-11-04 at 18:49 +0000, Conor Dooley wrote:
+> > > On Mon, Nov 04, 2024 at 08:39:21AM -0600, Rob Herring (Arm)
+> > > wrote:
+> > > >=20
+> > > > On Mon, 04 Nov 2024 14:52:14 +0530, Naresh Solanki wrote:
+> > > > > Document the new compatibles used on IBM SBP1.
+> > > > >=20
+> > > > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > > > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > ---
+> > > > > Changes in V4:
+> > > > > - Retain Acked-by from v2.
+> > > > > - Fix alphabetic order
+> > > > > ---
+> > > > > =C2=A0Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | =
+1
+> > > > > +
+> > > > > =C2=A01 file changed, 1 insertion(+)
+> > > > >=20
+> > > >=20
+> > > >=20
+> > > > My bot found new DTB warnings on the .dts files added or
+> > > > changed in
+> > > > this
+> > > > series.
+> > > >=20
+> > > > Some warnings may be from an existing SoC .dtsi. Or perhaps the
+> > > > warnings
+> > > > are fixed by another series. Ultimately, it is up to the
+> > > > platform
+> > > > maintainer whether these warnings are acceptable or not. No
+> > > > need to
+> > > > reply
+> > > > unless the platform maintainer has comments.
+> > > >=20
+> > > > If you already ran DT checks and didn't see these error(s),
+> > > > then
+> > > > make sure dt-schema is up to date:
+> > > >=20
+> > > > =C2=A0 pip3 install dtschema --upgrade
+> > > >=20
+> > > >=20
+> > > > New warnings running 'make CHECK_DTBS=3Dy aspeed/aspeed-bmc-ibm-
+> > > > sbp1.dtb' for
+> > > > 20241104092220.2268805-1-naresh.solanki@9elements.com:
+> > >=20
+> > > Really? This many warnings on a v6?
+> > >=20
+> >=20
+> > I understand that it's surprising and disappointing, however these
+> > warnings are from the Aspeed DTSIs and not directly from the
+> > proposed
+> > DTS. Many are an artefact of history, and I'm (slowly) working to
+> > clean
+> > them up. Recently I haven't had any time to dedicate to that
+> > effort,
+> > and as I'm somewhat responsible for the state of things, I'm not
+> > prepared to block other people's patches and push my own
+> > responsibilities onto them.
 >=20
-> Did I apply some patches which should have been applied elsewhere ?
+> Ah, you see that's where I would say "no new warnings" and get the
+> submitter to fix them ;) And were I the submitter, I'd want to
+> resolve
+> the warnings rather than run into issues down the road when things
+> get
+> "fixed"/documented.But I guess that's why I have the schmucks task of
+> reviewing bindings innit..
+
+I have to manage that in tension with my concern of people simply not
+upstreaming their devicetrees in response. I'd prefer to have them
+merged upstream than to encourage more forks in this corner of the
+world. If people would like to take the initiative and do the binding
+conversions, corrections and devicetree fixes themselves, I'll
+definitely review them.
+
 >=20
-> If so, please let me know, and I'll drop them.
+> > I've been replying to those proposing new Aspeed-based devicetrees
+> > to
+> > separate the warnings they're introducing from the warnings that
+> > already exist, and requiring them to fix the issues they're
+> > responsible
+> > for. I hope that I'll have time to continue to improve the
+> > situation,
+> > as this is obviously a tedious task for me too.=20
+>=20
+> Well, it is your platform and if you're confident that these nodes
+> are
+> correct despite the warnings, who am I to stop you!
 
-No need to drop anything for now: It was just that bindings for some
-hwmon devices defined in hwmon-next are used in Naresh's devicetree
-here.
-
-Merging hwmon-next and applying his patches resolves my concerns.
-
-Unless anyone feels otherwise, I expect we can can carry on
-independently with the understanding it will be resolved in the same
-way at the next rc1 (barring any other concerns with Naresh's patches).
+I think where things stand currently is a bit fuzzier than anyone would
+like. The nodes are not incorrect to the point of being non-functional
+with respect to their intent, but clearly they're not so correct that
+they do not have room for improvement.
 
 Andrew
-
