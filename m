@@ -1,61 +1,61 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E981D5AB2;
-	Tue,  5 Nov 2024 14:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ABB1D5AB2;
+	Tue,  5 Nov 2024 14:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730815905; cv=none; b=Rm1E+g0gH1OPJFJi7CPru6OBvarWLwhz8iP7rK5Se7iPlEo6//TkjM4OG3IKGJShkio5mYcpTNa3tNcYYbpKFAkjrZNvdiompjyQhXjsQ7AfLh/avQ34B7kror4JBc6P4MYbVTn+WWrNlN4XUBFQSMBvSt2oCbvaZx2GNaUL48M=
+	t=1730815966; cv=none; b=a1pM1We17sPEFMTNb3Rr4Tj5SAY5mRl+X5yRbDXvb/FCHxcB9hyjAUxI7QcDfcz8oUDXTxF7jUt2PyTFCvY+WLBttiAQ3H9+cAm576q+NrzlJiJhx1a249ntyeJkGEVjDm9m6q1qXEGBsg79/NbCU4kNSE8EVfL6aaj92YNS2ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730815905; c=relaxed/simple;
-	bh=KAmosABcY//LvUIistxErNs0QaF+wfIpi4hAoGtVv/k=;
+	s=arc-20240116; t=1730815966; c=relaxed/simple;
+	bh=bOdM7QTxL5XnzD0/f0/HgRtJuN20FxRy3HEuMvNP51s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gyyhd5mE24RwP6Mhx7SyuGy47yJkh8GqrQI6Rh45chh29zEFOsIJ4H5x9SL74jeL8wUhB7zMyGbr2aU1Y1nyCRW3D+RtofoThtpDOcW44XgsgL8dPr0oVdRUCh9twnzWA+YJyA33+1YCvuWLDCDUYWe77FTikclOg4VsOs2Xhks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OndaoUDU; arc=none smtp.client-ip=209.85.210.174
+	 In-Reply-To:Content-Type; b=clYu5JDurb04NmI+3IaHee7UyvasZrVzykiLzqZ2CfXkXy2ca8V4QG67fpjGnpbkoo8HOkctpO4CgVAi3AIBaxpYAaKv4i/aM1WevHJLw1ZYalS5Q4eW43JNBlxxHsuCvsthN1H9l645vMO8kSRa+qLiXyPyMxFlyKsOfR5cK/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWuue1z4; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OndaoUDU"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e7086c231so4794298b3a.0;
-        Tue, 05 Nov 2024 06:11:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWuue1z4"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20cbca51687so52324765ad.1;
+        Tue, 05 Nov 2024 06:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730815903; x=1731420703; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730815964; x=1731420764; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh0cQeTaKDFLnMA6STcXowxEluTjQai12rpqgAAbyVQ=;
-        b=OndaoUDUPxmz3L4yVjUnyLPj07EvWCgrnjrxx6nFc/RIbxbbcKmcK7p4XHttVqQhr9
-         U3WN1Tmh9w4Pt28GUnRWG9s5pCC1byYE6Xc2/lKJfoOgiLifd3nmvbd9FbTQXMTGLICL
-         3vCdiCDcz/xyicqsAWxd2Ws3Idz1lNUqOH9h2E2onJ0jNsZ4TyVWBn5AJGpY+zOVw9kg
-         1fTKn6TTU1uDc9hBMb+y8E2aF3bqAowAJv92fQQeSQc3Zvewpgtzati/5q5fV4Gw1+5z
-         Tia9Lodk+BpUBTnuo4JoQOClOd6ufOo/s9nyv3L3W318uc6p68gc9adDx2F/13bXtXrV
-         qYRA==
+        bh=huvQb84k9zFRsY6lvh/t2ldg8OxUrx7o2jsYpgN4XRQ=;
+        b=iWuue1z4mC0DA0F7gaskFfVJ/vNgQlytInIR1E7LU1pTt9MJ0XsL6s2QnPpnwavdzF
+         n2dCfuQvah7vYlc3oOMy8tabC7fteULYAVqoKQpSXaQeCs/+FTI3UkjhF7hFCjZMllQE
+         aApPPq92FP9UDOBgyZGbGhyrgC94Aa85+t4fx850OokNkvf80Ww6Mh4AJ9o6ubXVEFGW
+         siQA2PIHnbHl9ESO+5UTwu5ks9xmCJW3TJ8KMSZLZDqa6dmJRtlPLsE5fOzY6fOGpUEH
+         tGIhCoUHJ8xO40PrfpGEpd2mxDR+8c0g063CAaKUgv1nRQ40EbL1TfXWV6+lGbNrJsOK
+         eRUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730815903; x=1731420703;
+        d=1e100.net; s=20230601; t=1730815964; x=1731420764;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jh0cQeTaKDFLnMA6STcXowxEluTjQai12rpqgAAbyVQ=;
-        b=m85ndnHmmOKWhWRZIk9kMfSlbGNwzwA5GBrvzxeXFG1b4ADvV/+wqB2l8e3BCojL2E
-         LcEwpJiF9Gtfl8xiCzzDD0ZXRVC9VSrHy7TObrSlc0lgr7Ip9qu4hdi1aVD20cOa6zLj
-         r0bZ9dafsZJEi+gnQXpssyhg30LBk/zeyUiTe3FGdKvH2mFkuQKLY/VjCY8stFP0I2hR
-         cEDsVuGtGYcX92bFrd8Joz8Zn7cxGciXiehIknFSNLvPMJ9gsDfuMR3XkC+nzgVK3yGl
-         es6S9QgsJL5xClR72VXBAjxmLU8bGgAl88fgF5bYV707NKWBN/wjXEJ7EDeIrOsIZryx
-         YOGA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKa4DCOEC2hnQb57KGBBlz9p82DZQVA/mMi9KLs9K4LKFrzUlcDE9MsBL84vtkeqPc39PWcZKuJbN4@vger.kernel.org, AJvYcCWuExbML0t9snFDblFwilWRlUWA74VC7Er9toArLRjFjbKu8NYopB9hIk5YuHpmgyoF7+CMTOb7hIeOHOk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww0aj/WQV09GA2c0SNUPgMkRBHSNrcwMY34TNkZq04q9zUp9je
-	z+zFlLe82bhVCZRxtXGKavfFxnCd/Zo4amvxuT++F6YUAd85RuWe
-X-Google-Smtp-Source: AGHT+IEQXpfmwmcIlk/1c32YG4XNxk//3bsjHLomr42D2DhT0EpPn7qS479JNV8N8AOWNy+d2Gz1xg==
-X-Received: by 2002:a05:6a21:1193:b0:1d9:61:e779 with SMTP id adf61e73a8af0-1d9a83ab127mr52947194637.4.1730815902884;
-        Tue, 05 Nov 2024 06:11:42 -0800 (PST)
+        bh=huvQb84k9zFRsY6lvh/t2ldg8OxUrx7o2jsYpgN4XRQ=;
+        b=okNTVcW6hvUbcwxdN9p7UpGu8kXkXemEILZ2mNcPnR5BZKgS+ohvRQV2uyVbmaF5nJ
+         m9uRT7v6GU4O+AqaPog9Z3POL8C8rJSww/H1g5IFCdEgkU8bg2NHnM56XXcm4eXNqDgc
+         91AJFbBAk1UUM18BFHSBxIyLtstIHDv+/v2qGWi26swY/WV/NhK37MZZVV6PVcz1UhTH
+         dFuM2JfMSwPb0UmFK+isABXna+KsXpBENemdSSy1rsGT7bToAyUR+O4Qe/MWkkGpgqBE
+         oUAK5+xMDN0A49wVHwUl3vtCw3oikT6T+fqa5Fs721guNR7ML7FlMxDsgIspid7+cqe5
+         UJHg==
+X-Forwarded-Encrypted: i=1; AJvYcCVnHofcPxjxGGDZpypP5CetFK7KGYIdPS4GsC+v1ZBtK99R7sKcQYrOk33MuA64zUlyjtg2GR1NfQaiGSs=@vger.kernel.org, AJvYcCWu60mtGp9yMSOTr6Hs0GGVbPQY7rKKFcljfHP0P25xy2NlGNTFaDBjyMu6ixbgHC0VtKNqJudY8S39@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/9sJjI5kpnWleMvwhYCYw4GOwieDVE/U6jhS2Uerdln3v5tBn
+	6JcaRJC+RDhJN4LpA46JhgdUOim0DpfiHEkYMxFcM7Zz9Iz9rGFPdl62Aw==
+X-Google-Smtp-Source: AGHT+IH+f4g0IgcY+43tADscIQn+U9PKHENhgbG6TvlHMyrUCXErktXhXaG7iDx2h+za3VT4qiCC+Q==
+X-Received: by 2002:a17:902:ec83:b0:20c:9d79:cf82 with SMTP id d9443c01a7336-2111af968efmr209914645ad.58.1730815964289;
+        Tue, 05 Nov 2024 06:12:44 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc2ebebcsm9975234b3a.172.2024.11.05.06.11.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2110572008dsm77597575ad.114.2024.11.05.06.12.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2024 06:11:42 -0800 (PST)
+        Tue, 05 Nov 2024 06:12:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <df2eaf57-a4ea-4378-8f24-a843084eb1d6@roeck-us.net>
-Date: Tue, 5 Nov 2024 06:11:40 -0800
+Message-ID: <7d761be5-15c8-4d73-9ee8-34025769d08e@roeck-us.net>
+Date: Tue, 5 Nov 2024 06:12:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,13 +63,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document start from dead
- stop properties
+Subject: Re: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop
+ handling
 To: Marek Vasut <marex@denx.de>, linux-hwmon@vger.kernel.org
 Cc: Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
  devicetree@vger.kernel.org
 References: <20241105135259.101126-1-marex@denx.de>
+ <20241105135259.101126-2-marex@denx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -115,7 +116,7 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241105135259.101126-1-marex@denx.de>
+In-Reply-To: <20241105135259.101126-2-marex@denx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
@@ -123,14 +124,9 @@ On 11/5/24 05:52, Marek Vasut wrote:
 > Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
 > to spin up from a dead stop, and can be afterward throttled down to
 > lower PWM duty cycle. Introduce support for operating such fans which
-
-Doesn't this imply that a minimum pwm value is needed as well ?
-Super-IO chips such as the NCT67xx series typically have two separate
-registers, one for the pwm start value and one for the minimum pwm value.
-
 > need to start at higher PWM duty cycle first and can slow down next.
 > 
-> Document two new DT properties, "fan-dead-stop-start-percent" and
+> Introduce two new DT properties, "fan-dead-stop-start-percent" and
 > "fan-dead-stop-start-usec". The former describes the minimum percent
 > of fan RPM at which it will surely spin up from dead stop. This value
 > can be found in the fan datasheet and can be converted to PWM duty
@@ -138,6 +134,18 @@ registers, one for the pwm start value and one for the minimum pwm value.
 > time in microseconds for which the fan has to be set to dead stop
 > start RPM for the fan to surely spin up.
 > 
+> Adjust the PWM setting code such that if the PWM duty cycle is below
+> the minimum duty cycle needed by the fan to spin up from dead stop,
+> then first set the PWM duty cycle to the minimum duty cycle needed
+> by the fan to spin up from dead stop, then wait the time necessary
+> for the fan to spin up from dead stop, and finally set the PWM duty
+> cycle to the one desired by user.
+> 
+
+As with the other patch, I don't think "dead" adds any value anywhere.
+
+Guenter
+
 > Signed-off-by: Marek Vasut <marex@denx.de>
 > ---
 > Cc: Conor Dooley <conor+dt@kernel.org>
@@ -148,41 +156,91 @@ registers, one for the pwm start value and one for the minimum pwm value.
 > Cc: devicetree@vger.kernel.org
 > Cc: linux-hwmon@vger.kernel.org
 > ---
->   Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+>   drivers/hwmon/pwm-fan.c | 33 ++++++++++++++++++++++++++++++++-
+>   1 file changed, 32 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> index 4e5abf7580cc6..f1042471b5176 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> @@ -31,6 +31,17 @@ properties:
->         it must be self resetting edge interrupts.
->       maxItems: 1
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index c434db4656e7d..264b7ddf8bb40 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -7,6 +7,7 @@
+>    * Author: Kamil Debski <k.debski@samsung.com>
+>    */
 >   
-> +  fan-dead-stop-start-percent:
-
-Personally I don't think that "dead-stop" in the property name adds any value.
-On the contrary, I think it leads to confusion. I head to read the description
-to understand.
-
-
-> +    description:
-> +      Minimum fan RPM in percent to start from dead stop.
-
-"to start when stopped" should be sufficient.
-
-> +    minimum: 0
-> +    maximum: 100
+> +#include <linux/delay.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/mod_devicetable.h>
+> @@ -60,6 +61,9 @@ struct pwm_fan_ctx {
+>   
+>   	struct hwmon_chip_info info;
+>   	struct hwmon_channel_info fan_channel;
 > +
-> +  fan-dead-stop-start-usec:
-> +    description:
-> +      Time to wait in microseconds after start from dead stop.
-
-Same as above for both name and description.
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +	u64 pwm_duty_cycle_from_dead_stop;
+> +	u32 pwm_usec_from_dead_stop;
+>   };
+>   
+>   /* This handler assumes self resetting edge triggered interrupt. */
+> @@ -199,7 +203,9 @@ static int pwm_fan_power_off(struct pwm_fan_ctx *ctx, bool force_disable)
+>   static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+>   {
+>   	struct pwm_state *state = &ctx->pwm_state;
+> +	unsigned long final_pwm = pwm;
+>   	unsigned long period;
+> +	bool update = false;
+>   	int ret = 0;
+>   
+>   	if (pwm > 0) {
+> @@ -208,11 +214,22 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+>   			return 0;
+>   
+>   		period = state->period;
+> -		state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+> +		update = state->duty_cycle < ctx->pwm_duty_cycle_from_dead_stop;
+> +		if (update)
+> +			state->duty_cycle = ctx->pwm_duty_cycle_from_dead_stop;
+> +		else
+> +			state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+>   		ret = pwm_apply_might_sleep(ctx->pwm, state);
+>   		if (ret)
+>   			return ret;
+>   		ret = pwm_fan_power_on(ctx);
+> +		if (!ret && update) {
+> +			pwm = final_pwm;
+> +			state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+> +			usleep_range(ctx->pwm_usec_from_dead_stop,
+> +				     ctx->pwm_usec_from_dead_stop * 2);
+> +			ret = pwm_apply_might_sleep(ctx->pwm, state);
+> +		}
+>   	} else {
+>   		ret = pwm_fan_power_off(ctx, false);
+>   	}
+> @@ -480,6 +497,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   	struct device *hwmon;
+>   	int ret;
+>   	const struct hwmon_channel_info **channels;
+> +	u32 pwm_min_from_dead_stop = 0;
+>   	u32 *fan_channel_config;
+>   	int channel_count = 1;	/* We always have a PWM channel. */
+>   	int i;
+> @@ -620,6 +638,19 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   		channels[1] = &ctx->fan_channel;
+>   	}
+>   
+> +	ret = of_property_read_u32(dev->of_node, "fan-dead-stop-start-percent",
+> +				   &pwm_min_from_dead_stop);
+> +	if (!ret && pwm_min_from_dead_stop) {
+> +		ctx->pwm_duty_cycle_from_dead_stop =
+> +			DIV_ROUND_UP(pwm_min_from_dead_stop *
+> +				     (ctx->pwm_state.period - 1),
+> +				     100);
+> +	}
+> +	ret = of_property_read_u32(dev->of_node, "fan-dead-stop-start-usec",
+> +				   &ctx->pwm_usec_from_dead_stop);
+> +	if (ret)
+> +		ctx->pwm_usec_from_dead_stop = 250000;
 > +
->     pulses-per-revolution:
->       description:
->         Define the number of pulses per fan revolution for each tachometer
+>   	ctx->info.ops = &pwm_fan_hwmon_ops;
+>   	ctx->info.info = channels;
+>   
 
