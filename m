@@ -1,70 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64821DE8AE;
-	Wed,  6 Nov 2024 16:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FDF2064F3;
+	Wed,  6 Nov 2024 16:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730908908; cv=none; b=GszCXHa1LYHf1w+FVj99OWnpSt1xqyivlsbnxf3tWNP7iYuFH/OuC38qprbIWo6uXLireroryL/HdH7LJQWJCUEjw94IgPXn5jDN99bG21/Vtcp4mmvhD7gf8FD1wahMsdN+pA8yyuHPy9jdkiodGX40jwHsqrQbc/Rg8wrgnX8=
+	t=1730909014; cv=none; b=loNXQEwgs8jFUpAjdGddldY4BvY7HJYYa794iirQVfPNtTZ1GXcLefkX6tZDmsU18b+lG+wm4vjTyCA4mxGMU3wMhCokPDzZcEfBeHyPo4U3QHE9L2fRis7R7U0gHgVWropBI1aIKSuDZXf35wlJsZ5dc2J9EzlskAxSub4F6DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730908908; c=relaxed/simple;
-	bh=0gZo0LpDDy6OaOxYoZPg0q/9CHab4Xlz711plnJ6z5c=;
+	s=arc-20240116; t=1730909014; c=relaxed/simple;
+	bh=eYa9wlnu9E3P2y1lCWwcPAwQK8qAERsjwqOa/z4hWc4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NS94FvYPZphFLfwa5gmgEFYQ6WMhoEDlMHof1d3b2Wy5qi3yk2dxGEOdhmj8vlwSDQ19IbmfIIJocgouY/KTpenVC/b6+R2bu5Kfrys96dhBsgCr3Vpts8Z2TS7dopvPVuj/zirlj/KXKI1BLX4Aax/nqwLXXF8d42k9uQ1oykI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TnQ3AabS; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=tEZ/guxHexr2G2WS4b2K1fM4lpVmrsl7XETLOm4Y9XfX+2TZi8N2idLnEef0C2xgEshdqHji66b7Ebt0rSsLUKMV+5YVNJ/INKPcA1tH5I19ZQu2KWvtTtP4WcXcbKyh7APc7+rv11pWV3hG/U7Yg+LlttA0KSm8JgzHRplE7mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QHHnBIlT; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TnQ3AabS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730908906; x=1762444906;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0gZo0LpDDy6OaOxYoZPg0q/9CHab4Xlz711plnJ6z5c=;
-  b=TnQ3AabSqhqCSSyv76EdQqARdfWfvtR4Aziqm1wnl5h1ZUoKGLy2rqXD
-   Oq/3ipK3eGhiSgYK67ID1/yEV8E3miSP/KfywQ34kORw4OXtzNS+ygRNN
-   OvaV4TgtnkXWiwM4ZLT0DT1+4uGVQpwgG7FFiZeKD/nLsOrqwRABY9MQA
-   KjUmiUapj82w1dIh2o8NAgbxQuvqHCVlO2kGCqrH/40szxeyVvF1eexZz
-   dYhS78yaPQ4F/zJIHv4/YaqVUFFr0Pq2V1lw/j0+FZbQzJg3vQR7TFkEz
-   W+n9boeBZEXgxrNsBLpm9eZpPvaZC04aJRRfa+4Auzw3GV4n3eiXWSql5
-   g==;
-X-CSE-ConnectionGUID: YR5/PAtsTzC4TpBal0ow9g==
-X-CSE-MsgGUID: VD3mSEazRFmwMiZPUYYlyQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="34495837"
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="34495837"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 08:01:22 -0800
-X-CSE-ConnectionGUID: KH3judhSRne8HkDe75e1aw==
-X-CSE-MsgGUID: wl0MarRxSzOTkDoX8dB+ow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="84247091"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 08:01:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t8iT7-0000000ByXm-0yBV;
-	Wed, 06 Nov 2024 18:01:17 +0200
-Date: Wed, 6 Nov 2024 18:01:16 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Alexis Cezar Torreno <alexisczezar.torreno@analog.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Radu Sabau <radu.sabau@analog.com>,
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QHHnBIlT"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2110a622d76so53008775ad.3;
+        Wed, 06 Nov 2024 08:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730909011; x=1731513811; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZNocM+WdbV87f0ucaFRRKZx/lGWrptiPjNjZfE8UDfY=;
+        b=QHHnBIlTTdxUri1LN2nFWB1u8sT05bUs4n4T+IsT9Fhhqo+n2Wxh82bMfl30cCb267
+         U+TIxHSrgZlnGdi+qjfKti8hbnjHhBDI9IhQVJ64kh0eeAL8uV16MhjJngr2WT3VdzQK
+         nSEQJlC9yCUEREXCMLom6GIjps6iE3cS8m2u1gFwwu94MVaV5joV6UsFKmOWmYUjJS/F
+         I+fQxO5o5QBncQ6tE0lD6T/Ko1vQ4wF1hGign4yX3zaBINrjuMR/Q94LZWrRupqkeS3t
+         bBDVY2uW2j2xSFR5Y7E33242YjvnJ+FbJnGw5RN1r/RFUA4FGqDBqYZrhAEgqp8tkwqa
+         RaUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730909011; x=1731513811;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZNocM+WdbV87f0ucaFRRKZx/lGWrptiPjNjZfE8UDfY=;
+        b=imWXyZnKjVewDkgnCujhcMxKRhDfi79wXL18y9ai+mL+QXt569bKZQu557xKx8eyXV
+         aQyAAJiDAvdcLIwCmNd/QGQNhtjVzCEWZGBmtdh9RM6BcN2I+fDAIo1KKGqZLEAYORg+
+         d5saYE+fGKCy0h6DCk4d0hRbkPkz0HrdCLMxDNaGmquoHVd94PIQUrkOBKLBGes2HTmE
+         TgCpioqM37cyErbiUhjtQ079cNyUVvIdOm6WvlI0B2t0xVTfCjXObO2Ay/Y9OCuimIxd
+         MvwZyXz16lI+JJnd6bBODgudcSG9EU6xaJRYKtsXn1ayoj/E8qYRK8TWdmWu5L/sPVtR
+         KqwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUG8jfpNLiELropoReaAi5funYiFC48dsuEBgF7hRDztAabHV1/OqkbQSLa7FBWnE051rvWxXWILMqh@vger.kernel.org, AJvYcCUu3zh77npibqT7XMHZ0ETBoMz+lVHyOxpbvVcegOFYheYAqY1EfBMIHf4+QmbhlYJBrKJQsDser74j@vger.kernel.org, AJvYcCVoYc0ah9RmxTxu9kxNEZHVZsF1X58RF5qtKQCRVqv3c6Kz1dGEVIggW/mRAdm+qv0DOT+1fo5mRXRY@vger.kernel.org, AJvYcCWkwogD2YYlwpoEvBxMNHYv0nlLsY2b0JVhak0Y5dHUxr+4nssSyMBWRwHqsWuLM3i8+XV+yttTR5QDcRRH@vger.kernel.org, AJvYcCX1DaVTx1cb8IpgMv2aFU4DQ9tZDJeweJcsOWXr9wDhVMItmb4XJOnwwFh9ZAe/lFZpAG3PeyPiyk9c03g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYQVPuuuLFulTTnNbFJGOdT2vEYYce7F+uaNp/cqiSiRlz2HH8
+	oZOAiYxmftcr7xbYzAJYN0K7HZNk3+bniUcSl6sG3QRJ2By3u9iV
+X-Google-Smtp-Source: AGHT+IFhRVrWIpPInnku4WjWMhMV/MtkoROR+ZMVi9n99hUzxhu1sEQlSsIAG0pSadilzV6mPYRygA==
+X-Received: by 2002:a17:902:da91:b0:20c:82ea:41bd with SMTP id d9443c01a7336-210c68d4349mr539228785ad.18.1730909010905;
+        Wed, 06 Nov 2024 08:03:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a541cfbsm1699958a91.18.2024.11.06.08.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2024 08:03:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 6 Nov 2024 08:03:29 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): Support adp1051 and adp1055
-Message-ID: <ZyuSzPXnxRYG4Gk3@smile.fi.intel.com>
-References: <20241106090311.17536-1-alexisczezar.torreno@analog.com>
- <20241106090311.17536-3-alexisczezar.torreno@analog.com>
- <ZytSCD0dViGp-l2b@smile.fi.intel.com>
- <55825e91-b111-4689-bb3e-ede2c241728d@roeck-us.net>
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 5/7] hwmon: (pmbus/core) clear faults after setting
+ smbalert mask
+Message-ID: <ec18ced0-c113-4925-8096-3f776f0f11d9@roeck-us.net>
+References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
+ <20241105-tps25990-v4-5-0e312ac70b62@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,51 +79,30 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55825e91-b111-4689-bb3e-ede2c241728d@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20241105-tps25990-v4-5-0e312ac70b62@baylibre.com>
 
-On Wed, Nov 06, 2024 at 07:55:30AM -0800, Guenter Roeck wrote:
-> On 11/6/24 03:24, Andy Shevchenko wrote:
-> > On Wed, Nov 06, 2024 at 05:03:11PM +0800, Alexis Cezar Torreno wrote:
-> > > ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
-> > > ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
-> > 
-> > Missing blank line and perhaps you can add Datasheet: tag(s) for these HW?
-> > (see `git log --no-merges --grep Datasheet:` for the example)
+On Tue, Nov 05, 2024 at 06:58:42PM +0100, Jerome Brunet wrote:
+> pmbus_write_smbalert_mask() ignores the errors if the chip can't set
+> smbalert mask the standard way. It is not necessarily a problem for the irq
+> support if the chip is otherwise properly setup but it may leave an
+> uncleared fault behind.
 > 
-> Is that an official tag ? Frankly, if so, I think it is quite useless
-> in the patch description because datasheet locations keep changing.
-> I think it is much better to provide a link in the driver documentation.
-
-I believe it's semi-official, meaning that people use it from time to time.
-I'm fine with the Link in the documentation. Actually with any solution that
-saves the respective link in the kernel source tree (either in form of commit
-message or documentation / comments in the code).
-
-...
-
-> > > +static struct pmbus_driver_info adp1055_info = {
-> > > +	.pages = 1,
-> > > +	.format[PSC_VOLTAGE_IN] = linear,
-> > > +	.format[PSC_VOLTAGE_OUT] = linear,
-> > > +	.format[PSC_CURRENT_IN] = linear,
-> > > +	.format[PSC_TEMPERATURE] = linear,
-> > > +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_VOUT
-> > > +		   | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3
-> > > +		   | PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_VOUT
-> > > +		   | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT
-> > > +		   | PMBUS_HAVE_STATUS_TEMP,
-> > 
-> > Ditto.
+> pmbus_core will pick the fault on the next register_check(). The register
+> check will fails regardless of the actual register support by the chip.
 > 
-> That one slipped through with the original driver submission.
-> I thought that checkpatch complains about that, but it turns out that
-> it doesn't. I agree, though, that the usual style should be used.
+> This leads to missing attributes or debugfs entries for chips that should
+> provide them.
+> 
+> We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
+> 
+> Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
+> avoid the problem.
+> 
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Oh, okay, that's up to you then.
+Applied.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Guenter
