@@ -1,76 +1,70 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F932EAE0;
-	Wed,  6 Nov 2024 15:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64821DE8AE;
+	Wed,  6 Nov 2024 16:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730908714; cv=none; b=tY83StX1cFTJmVdb0OQuuJKWrw+cjgQaazZ4bzPWBoW823vQliwxnoHx9DgbkU8nAiJpVyBMCf0wImGqW++O026Xhl0CEufdhRkxkMBd8t+CQkXwxn97oui1Rf3487Kdsr6yozKFAlqM+9KaI7R6yUM3NJkZoCkouQe/tE0C1kI=
+	t=1730908908; cv=none; b=GszCXHa1LYHf1w+FVj99OWnpSt1xqyivlsbnxf3tWNP7iYuFH/OuC38qprbIWo6uXLireroryL/HdH7LJQWJCUEjw94IgPXn5jDN99bG21/Vtcp4mmvhD7gf8FD1wahMsdN+pA8yyuHPy9jdkiodGX40jwHsqrQbc/Rg8wrgnX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730908714; c=relaxed/simple;
-	bh=HdoUy9fkRfHNMPI/Zqx1R8MVO28AwhfbFFuB5nPrHjU=;
+	s=arc-20240116; t=1730908908; c=relaxed/simple;
+	bh=0gZo0LpDDy6OaOxYoZPg0q/9CHab4Xlz711plnJ6z5c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFLFzFDdF1Fs9GcgiMVD1MhpAP4fuaNcDnzjgnqQ9kfRZTHRAmCqHpmQP5lhMZEuAanvSqG5aDWyIfQoGOLm2rOMDnUPmQNSrRMzv1oTEt7vHLhYriJMZGsiSLl9lxB+BQBDNUnfRppr/vkhEtG8BSoYbbaE3eqEQY6lXoe3X3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzSL+JHt; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=NS94FvYPZphFLfwa5gmgEFYQ6WMhoEDlMHof1d3b2Wy5qi3yk2dxGEOdhmj8vlwSDQ19IbmfIIJocgouY/KTpenVC/b6+R2bu5Kfrys96dhBsgCr3Vpts8Z2TS7dopvPVuj/zirlj/KXKI1BLX4Aax/nqwLXXF8d42k9uQ1oykI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TnQ3AabS; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzSL+JHt"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e34a089cd3so5446494a91.3;
-        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730908712; x=1731513512; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
-        b=LzSL+JHt9nR1sCsruX+0lGMDbHtvZ/7XbRnoqRAUZNQ0YG6pTPGK8xsjlJ/nKXsL3C
-         1zC7mF8bXW+zUyFjRKJ7HtchVWLaepzsMC4+Tuqp/wVvM+48SCfHMKlkMNvN9J2hGjMy
-         wsotIhRvmWdk/nEtuplvWLafBgR5xcVu2P0ZAu2zfsoWkX/SLBG2yvaIUU7DA9JxypJo
-         Ue+lrQ6q4nGtxBIlzcz4dvOdehvUBXG+rxj3kd0AEpEh+cKIgI/BfUd6cxgkSFM8BJ2C
-         M+WG4AICAhtDucRDw0xtVh+CCbC7BmOF/ZrGssGqlEmoZaRcmECxjOXce7Mdmr252GWm
-         0n/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730908712; x=1731513512;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
-        b=BIKsaqda4pNQEQKaNlLirhNNJn742rJu7s50bhhaiqsmw4hBYHrys3LA2fST+MZESm
-         Mdd3CdH5hKVVTzwHah65PIQx3+9R/gBZPjM5JGLBv9jNt4UgdoTawVD9teG/mjZjhvoZ
-         Wgb+It4/CPhPfQeLyNN25qC/1J+2paMTBAL1HgavmnweKKr1u9ToBkGahx5vYJ34snZy
-         LlNxaycwzC31sTetbsc+36dC9IeKRfDI+F6JNJ8P9pLF3F39H9JRZEUrK1VcQoK6XWVb
-         b0u9HOKiQL7F+X87Fpn+mkoNONX4sFs3w5kJz54sRWp89EE1JqhZEW07uA5qA24wmTPV
-         9pGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVw+FT1VwfWF/TDVyzuxiKDIM43sLZLhGiuu/udRo/EI6/zth0ZU2bu1z7PGZb7XYGW/yJQ4hr2sg0RrSaR@vger.kernel.org, AJvYcCX76DJ7Xu2YsPZBFTjFDXZ4O2SoF9YLVd8r8DiUL8GiSke9DS/53XBLheB7+lBdau78g2nN4RtnfldWfkE=@vger.kernel.org, AJvYcCXXexhdO/JKw/Yl9ckOpoKIDyf7dUevHH4U1x5s/YbK/AVlQB57fhK6rTO1cML39EXiyuP42wMAhUIg@vger.kernel.org, AJvYcCXYKElhiDdWOIJpibC8D+rUplE6RmoFPz+ukTblap9ODyz4yZbpqtMHBeeebXnSh7nvsYFqnrDsN4CI@vger.kernel.org, AJvYcCXpk4uel+rHVBMtAcwQT1BXj8mI7PsfBEJoJk5jhX1TVW6LR5sPdLP/bv3t6zJtXGAQd9aDlPRXAff7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlRTH91ppURDzn+v1vGg4cvvagySKph8OYj866PAFkc33+WAhK
-	IPnKrV5fMt4jXKt5KOvgmllfHjgAk7pDd4UDJDupIlE16atv4CFs
-X-Google-Smtp-Source: AGHT+IGg5WQMsEr9pnJxspcf4pALiyC/ozBfwqFSU5i1wYsgWEJ/S94GrDgJEKjrQof/TQOVShKsxw==
-X-Received: by 2002:a17:90a:43c3:b0:2e2:c9c1:aacf with SMTP id 98e67ed59e1d1-2e8f10a7276mr43122388a91.29.1730908712314;
-        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a5a2f95sm1668475a91.34.2024.11.06.07.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 07:58:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 6 Nov 2024 07:58:30 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	Rob Herring <robh@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TnQ3AabS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730908906; x=1762444906;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0gZo0LpDDy6OaOxYoZPg0q/9CHab4Xlz711plnJ6z5c=;
+  b=TnQ3AabSqhqCSSyv76EdQqARdfWfvtR4Aziqm1wnl5h1ZUoKGLy2rqXD
+   Oq/3ipK3eGhiSgYK67ID1/yEV8E3miSP/KfywQ34kORw4OXtzNS+ygRNN
+   OvaV4TgtnkXWiwM4ZLT0DT1+4uGVQpwgG7FFiZeKD/nLsOrqwRABY9MQA
+   KjUmiUapj82w1dIh2o8NAgbxQuvqHCVlO2kGCqrH/40szxeyVvF1eexZz
+   dYhS78yaPQ4F/zJIHv4/YaqVUFFr0Pq2V1lw/j0+FZbQzJg3vQR7TFkEz
+   W+n9boeBZEXgxrNsBLpm9eZpPvaZC04aJRRfa+4Auzw3GV4n3eiXWSql5
+   g==;
+X-CSE-ConnectionGUID: YR5/PAtsTzC4TpBal0ow9g==
+X-CSE-MsgGUID: VD3mSEazRFmwMiZPUYYlyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="34495837"
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="34495837"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 08:01:22 -0800
+X-CSE-ConnectionGUID: KH3judhSRne8HkDe75e1aw==
+X-CSE-MsgGUID: wl0MarRxSzOTkDoX8dB+ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="84247091"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 08:01:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t8iT7-0000000ByXm-0yBV;
+	Wed, 06 Nov 2024 18:01:17 +0200
+Date: Wed, 6 Nov 2024 18:01:16 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Alexis Cezar Torreno <alexisczezar.torreno@analog.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Radu Sabau <radu.sabau@analog.com>,
+	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] hwmon: (pmbus/core) allow drivers to override
- WRITE_PROTECT
-Message-ID: <36a1a209-18dc-4cb5-b2ef-80045eb306bc@roeck-us.net>
-References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
- <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
+	Jonathan Corbet <corbet@lwn.net>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): Support adp1051 and adp1055
+Message-ID: <ZyuSzPXnxRYG4Gk3@smile.fi.intel.com>
+References: <20241106090311.17536-1-alexisczezar.torreno@analog.com>
+ <20241106090311.17536-3-alexisczezar.torreno@analog.com>
+ <ZytSCD0dViGp-l2b@smile.fi.intel.com>
+ <55825e91-b111-4689-bb3e-ede2c241728d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,17 +73,51 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
+In-Reply-To: <55825e91-b111-4689-bb3e-ede2c241728d@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Nov 05, 2024 at 06:58:39PM +0100, Jerome Brunet wrote:
-> Use _pmbus_read_byte_data() rather than calling smbus directly to check
-> the write protection status. This give a chance to device implementing
-> write protection differently to report back on the actual write protection
-> status.
+On Wed, Nov 06, 2024 at 07:55:30AM -0800, Guenter Roeck wrote:
+> On 11/6/24 03:24, Andy Shevchenko wrote:
+> > On Wed, Nov 06, 2024 at 05:03:11PM +0800, Alexis Cezar Torreno wrote:
+> > > ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+> > > ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+> > 
+> > Missing blank line and perhaps you can add Datasheet: tag(s) for these HW?
+> > (see `git log --no-merges --grep Datasheet:` for the example)
 > 
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> Is that an official tag ? Frankly, if so, I think it is quite useless
+> in the patch description because datasheet locations keep changing.
+> I think it is much better to provide a link in the driver documentation.
 
-Applied,
+I believe it's semi-official, meaning that people use it from time to time.
+I'm fine with the Link in the documentation. Actually with any solution that
+saves the respective link in the kernel source tree (either in form of commit
+message or documentation / comments in the code).
 
-Thanks,
-Guenter
+...
+
+> > > +static struct pmbus_driver_info adp1055_info = {
+> > > +	.pages = 1,
+> > > +	.format[PSC_VOLTAGE_IN] = linear,
+> > > +	.format[PSC_VOLTAGE_OUT] = linear,
+> > > +	.format[PSC_CURRENT_IN] = linear,
+> > > +	.format[PSC_TEMPERATURE] = linear,
+> > > +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_VOUT
+> > > +		   | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3
+> > > +		   | PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_VOUT
+> > > +		   | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT
+> > > +		   | PMBUS_HAVE_STATUS_TEMP,
+> > 
+> > Ditto.
+> 
+> That one slipped through with the original driver submission.
+> I thought that checkpatch complains about that, but it turns out that
+> it doesn't. I agree, though, that the usual style should be used.
+
+Oh, okay, that's up to you then.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
