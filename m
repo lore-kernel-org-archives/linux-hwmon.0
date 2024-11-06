@@ -1,39 +1,61 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B55188920;
-	Wed,  6 Nov 2024 01:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACB5188920;
+	Wed,  6 Nov 2024 01:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730856542; cv=none; b=drWvRkXhdxaxx4aBIDU2/Pz47dVlFO39gxbi68fqGZWJnXvPE4IOtJDDTX+QCBFjT6OP5JsLavl9cwpvHAPgduc/G+iq/VyGoSaVdPCcLci0nhQA/ETXNOLdt4MWUiZTQjdhZAQoUzo7ZoxrsYF1KbrQoaMKPi7D1DlVaHfkYgs=
+	t=1730858144; cv=none; b=D5O9R7GjkN0i3HY90/mvg5+1bguFAREML9UrixegC2ooLMKnhGMriI8R5OkPBKd62umPiaWsGd9ygTsCXZM46JBpDUv8rgl+yIkW6sKkUQ3jn8noMyfkTcaQYTBjxnw3y0HlAhLacOhdjvbncsoWEt5TIIsExWBOEH2NZSDPdH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730856542; c=relaxed/simple;
-	bh=o5Dl+Ekk7PBOSeuj0+Ib82+Q37tovreTS26Ub1zSL/o=;
+	s=arc-20240116; t=1730858144; c=relaxed/simple;
+	bh=yom5fVc1TdM0VX7YeivKBEf4JA/nOPIA/UpA6hcSE9I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SCLYwAV/B8NbKnDnByDc/KlR+G+McqLT2amqVkH/Xnofo3pV3O6OvHTriI5//i0GYyzSt6aBwWngXuOM5YO2I6R+jwknLWTZff5y1EevDMkw/k/taUsh0VVwbN8c6Os9iXTF37kgU0TSfyV+xE/omBTPmyGcSM2m0qAW6ZteocU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=nsEPCaag; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+	 In-Reply-To:Content-Type; b=k9try/RQ9Y4Lb54oxyS5RtxOaofpWi3jR5N1r86vyTUlOjTSDSVCgzYydLMk7YUn/ptbmYjWAsQbxI7f7G9u/CIFvoFr+4SOFUl2+GFvaYF7Ou9m3FkpaIL40yN2MXMa9jX642NpZlMpDsLgfMp4Ru9Dv0pKlyIjfqbmkc102sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSLnKI71; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="nsEPCaag"
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id CEACD880E6;
-	Wed,  6 Nov 2024 02:28:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1730856538;
-	bh=rxk1FRnn5JUygOIoLuUm7o31M1LQ3MgnCaC8+hOApbE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nsEPCaagLhbWH6PaqwKuyTtlzqpmPmAQ3s7Ak/IeTVkLfZJnsLXfar/uAfe4FYEkp
-	 NjjYIz7gOWbCuj7MwDwxy737MR9sm/DNx6nYKVuMhMm0jRQfWS447t0Y2XMlK5mmpi
-	 dhLBlyLfqgAc5KxPda8NrG8as/Z8ljVOgeRTpew5SEx4/q1ef+Q2qjGFuBTwMQIYgJ
-	 m0hJA4N0I969hRmqZqziFdAbhiE9fqGQ7QlZpkokXf+vf9yJ6aQrMDpHK50Fcl4hk5
-	 fUQdx9nnUCBL1gGyOSSrInZfy+xzUASzu+vtUcCwrtsmZAASsmdgjQq8Qx+KFyibdu
-	 3hkFBnaP0AmDw==
-Message-ID: <0b32eda6-4071-4707-a8c6-447073638707@denx.de>
-Date: Wed, 6 Nov 2024 02:28:57 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSLnKI71"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20cb47387ceso59730695ad.1;
+        Tue, 05 Nov 2024 17:55:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730858141; x=1731462941; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yom5fVc1TdM0VX7YeivKBEf4JA/nOPIA/UpA6hcSE9I=;
+        b=iSLnKI71nCBaIUMpPV5eQmTVIJis/klJhfnEO48z0784Au5nb5GDahJFDcFATF3m1S
+         1axTFLa3klM9HG61ZhG+cRw0K9a54ZPLoM3ivGGCytKxC5cCdBGKmcFMAekV0Y3CJPdB
+         cHfvhKXNlbJJw3msU2h4rLUNJAjK5AnPbwQhEtLIT5G/xkDYK5MSgEKZaYe//C+DGXT+
+         FXoXoQPbJ/+lgxEVFDv0YwZ5y3eTLn9ff2UJ93Rs91wvlbDDT9J2GfCZbwujhbWkJmiH
+         McJLSWw5/u/DqhTBPkqKzGTpHjS3umxil6lYcXuhdd5d996AU3tSDtZ+53dDua7ny81n
+         FCjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730858141; x=1731462941;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yom5fVc1TdM0VX7YeivKBEf4JA/nOPIA/UpA6hcSE9I=;
+        b=Uw71EPbJtjaerwFMcofxU7hcKWw+ocZFC2oPAuWOlHAa9NMdhwK/EmaI4bWQPLEb12
+         n87Hx0K6Xo75yVe8Tix1c3VfUVyAbmKqn53loU4bcVeU0brykDGUEq67Q72+LZw3ev/6
+         WGyAz7qdo5nh1tDV0UxGWbg/nSFJDFtVuT7p9JR39lBgJ8lHhi7zMlWsslsgShus3dCM
+         AbdGyL+m0fWiv7XitPNPIV0yCj6As1X84qMQSMUA2I6qB44XrKDfUcxTDTW/d+Mm7oZT
+         HKjVQtWe6Y238SrVlmdpSQtD3GLe4dnHQseNyuCqURgLiKN8drLhRSK6hJfIyh+Bqxbc
+         uZ7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ7gVl/EiBPKP0dj5nHLWsSVF1KCGkqVK2NU5PdaW6JFwRpgih9yFyhkL0ValDRwmdjRWbGwKX/bpG@vger.kernel.org, AJvYcCV+9Hcs1xxwfZNCTSfYD2+9AIcHZu/lwqSQkt/Qw9h902GqwkBeva+wq3H+3wl7G+O6W4kDZoxWuATmCiU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGpbxLHzzcrKkccXNjQ1Az6Jnfzhb+ISWoQ7QquaSlAkjcMe7g
+	KANDFgWlEcMEfxXrEyZ2Qx5vpNlNk6Ff4HGUIoSB55TTFz3/ocyH
+X-Google-Smtp-Source: AGHT+IHy1KS3xjCkhbyJy867YDZRNdqS6YyR3EdbsH4CzcMZHpOrs5nIjwDUWitD4tpGoiI+rOnJoA==
+X-Received: by 2002:a17:902:fc4c:b0:202:26d:146c with SMTP id d9443c01a7336-210c68728f3mr519605205ad.5.1730858141348;
+        Tue, 05 Nov 2024 17:55:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057087cfsm85277575ad.87.2024.11.05.17.55.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Nov 2024 17:55:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1107c12b-9d1e-46d8-b356-73077c7a218a@roeck-us.net>
+Date: Tue, 5 Nov 2024 17:55:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,7 +65,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document start from dead
  stop properties
-To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+To: Marek Vasut <marex@denx.de>, linux-hwmon@vger.kernel.org
 Cc: Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
  devicetree@vger.kernel.org
@@ -51,93 +73,137 @@ References: <20241105135259.101126-1-marex@denx.de>
  <df2eaf57-a4ea-4378-8f24-a843084eb1d6@roeck-us.net>
  <189cd4b5-005b-4311-a5de-2b376eb0b9d8@denx.de>
  <1a8b0024-97db-4c1c-9d04-45057a2ba800@roeck-us.net>
+ <0b32eda6-4071-4707-a8c6-447073638707@denx.de>
 Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <1a8b0024-97db-4c1c-9d04-45057a2ba800@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <0b32eda6-4071-4707-a8c6-447073638707@denx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
 
-On 11/6/24 1:34 AM, Guenter Roeck wrote:
-> On 11/5/24 10:53, Marek Vasut wrote:
->> On 11/5/24 3:11 PM, Guenter Roeck wrote:
->>> On 11/5/24 05:52, Marek Vasut wrote:
->>>> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
->>>> to spin up from a dead stop, and can be afterward throttled down to
->>>> lower PWM duty cycle. Introduce support for operating such fans which
+On 11/5/24 17:28, Marek Vasut wrote:
+> On 11/6/24 1:34 AM, Guenter Roeck wrote:
+>> On 11/5/24 10:53, Marek Vasut wrote:
+>>> On 11/5/24 3:11 PM, Guenter Roeck wrote:
+>>>> On 11/5/24 05:52, Marek Vasut wrote:
+>>>>> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
+>>>>> to spin up from a dead stop, and can be afterward throttled down to
+>>>>> lower PWM duty cycle. Introduce support for operating such fans which
+>>>>
+>>>> Doesn't this imply that a minimum pwm value is needed as well ?
 >>>
->>> Doesn't this imply that a minimum pwm value is needed as well ?
->>
->> It depends. For this fan, yes, it does stop at around 8% PWM duty cycle.
->>
->>> Super-IO chips such as the NCT67xx series typically have two separate
->>> registers, one for the pwm start value and one for the minimum pwm 
->>> value.
->>
->> I use plain SoC PWM output to operate the fan. This one needs to be 
->> set to higher PWM duty cycle first, to spin up, and can be reduced to 
->> lower PWM duty cycle afterward without stopping.
->>
-> 
-> Yes, exactly. That is what many fans require.
-> 
->>>> need to start at higher PWM duty cycle first and can slow down next.
->>>>
->>>> Document two new DT properties, "fan-dead-stop-start-percent" and
->>>> "fan-dead-stop-start-usec". The former describes the minimum percent
->>>> of fan RPM at which it will surely spin up from dead stop. This value
->>>> can be found in the fan datasheet and can be converted to PWM duty
->>>> cycle easily. The "fan-dead-stop-start-usec" describes the minimum
->>>> time in microseconds for which the fan has to be set to dead stop
->>>> start RPM for the fan to surely spin up.
->>>>
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> ---
->>>> Cc: Conor Dooley <conor+dt@kernel.org>
->>>> Cc: Guenter Roeck <linux@roeck-us.net>
->>>> Cc: Jean Delvare <jdelvare@suse.com>
->>>> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
->>>> Cc: Rob Herring <robh@kernel.org>
->>>> Cc: devicetree@vger.kernel.org
->>>> Cc: linux-hwmon@vger.kernel.org
->>>> ---
->>>>   Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 11 +++++++++++
->>>>   1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/ 
->>>> Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>>> index 4e5abf7580cc6..f1042471b5176 100644
->>>> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>>> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
->>>> @@ -31,6 +31,17 @@ properties:
->>>>         it must be self resetting edge interrupts.
->>>>       maxItems: 1
->>>> +  fan-dead-stop-start-percent:
+>>> It depends. For this fan, yes, it does stop at around 8% PWM duty cycle.
 >>>
->>> Personally I don't think that "dead-stop" in the property name adds 
->>> any value.
->>> On the contrary, I think it leads to confusion. I head to read the 
->>> description
->>> to understand.
+>>>> Super-IO chips such as the NCT67xx series typically have two separate
+>>>> registers, one for the pwm start value and one for the minimum pwm value.
+>>>
+>>> I use plain SoC PWM output to operate the fan. This one needs to be set to higher PWM duty cycle first, to spin up, and can be reduced to lower PWM duty cycle afterward without stopping.
+>>>
 >>
->> The documentation refers to this behavior as a "dead stop" , hence the 
->> property name. I can change it to fan-stop-to-start-percent ?
-> 
-> I do not understand the need for that much complexity in the property name,
-> and I don't think it makes sense to name a property based on a specific
-> chip documentation. I have seen that before, where different vendors use
-> different names for the same functionality. That doesn't mean that the
-> vendor-determined name has to make it into the property name.
-> 
-> As an example, Nuvoton calls the values "Start-Up Value" and "Stop Value".
-> ITE calls the start value "start PWM value" (and as far as I can see 
-> doesn't
-> have a separate stop value). I am sure pretty much every vendor uses a
-> different description.
-> 
-> I am personally not a friend of long property names. Having said that,
-> I'll let you use whatever DT maintainers accept. They may have a different
-> opinion.
-Do you have a different suggestion for the property name ? Else I'll 
-just send a V2 .
+>> Yes, exactly. That is what many fans require.
+>>
+>>>>> need to start at higher PWM duty cycle first and can slow down next.
+>>>>>
+>>>>> Document two new DT properties, "fan-dead-stop-start-percent" and
+>>>>> "fan-dead-stop-start-usec". The former describes the minimum percent
+>>>>> of fan RPM at which it will surely spin up from dead stop. This value
+>>>>> can be found in the fan datasheet and can be converted to PWM duty
+>>>>> cycle easily. The "fan-dead-stop-start-usec" describes the minimum
+>>>>> time in microseconds for which the fan has to be set to dead stop
+>>>>> start RPM for the fan to surely spin up.
+>>>>>
+>>>>> Signed-off-by: Marek Vasut <marex@denx.de>
+>>>>> ---
+>>>>> Cc: Conor Dooley <conor+dt@kernel.org>
+>>>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>>>> Cc: Jean Delvare <jdelvare@suse.com>
+>>>>> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+>>>>> Cc: Rob Herring <robh@kernel.org>
+>>>>> Cc: devicetree@vger.kernel.org
+>>>>> Cc: linux-hwmon@vger.kernel.org
+>>>>> ---
+>>>>>   Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 11 +++++++++++
+>>>>>   1 file changed, 11 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/ Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+>>>>> index 4e5abf7580cc6..f1042471b5176 100644
+>>>>> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
+>>>>> @@ -31,6 +31,17 @@ properties:
+>>>>>         it must be self resetting edge interrupts.
+>>>>>       maxItems: 1
+>>>>> +  fan-dead-stop-start-percent:
+>>>>
+>>>> Personally I don't think that "dead-stop" in the property name adds any value.
+>>>> On the contrary, I think it leads to confusion. I head to read the description
+>>>> to understand.
+>>>
+>>> The documentation refers to this behavior as a "dead stop" , hence the property name. I can change it to fan-stop-to-start-percent ?
+>>
+>> I do not understand the need for that much complexity in the property name,
+>> and I don't think it makes sense to name a property based on a specific
+>> chip documentation. I have seen that before, where different vendors use
+>> different names for the same functionality. That doesn't mean that the
+>> vendor-determined name has to make it into the property name.
+>>
+>> As an example, Nuvoton calls the values "Start-Up Value" and "Stop Value".
+>> ITE calls the start value "start PWM value" (and as far as I can see doesn't
+>> have a separate stop value). I am sure pretty much every vendor uses a
+>> different description.
+>>
+>> I am personally not a friend of long property names. Having said that,
+>> I'll let you use whatever DT maintainers accept. They may have a different
+>> opinion.
+> Do you have a different suggestion for the property name ? Else I'll just send a V2 .
+
+
+fan-start-percent and fan-stop-percent would be good enough for me.
+However, the existing cooling-levels property uses duty cycle values
+from 0 ..255. Using % for the new properties will create an inconsistency.
+It will be up to DT maintainers to decide how the properties should be
+defined.
+
+Guenter
+
