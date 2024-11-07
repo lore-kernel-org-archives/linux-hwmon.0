@@ -1,79 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11829212D00;
-	Thu,  7 Nov 2024 14:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C18DDBE;
+	Thu,  7 Nov 2024 17:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730990077; cv=none; b=Pr96kurTKoK+gA+XzSsZqRObtgUtQYrDuBXNprx/ghZA8gM1rwwVaknA77IwoXVKuVf51VXh61MXcERqO914Bwb3LOcHBtDrURmjcVLrhU9hFc/zGW13VhMxx6EYt8fQCBa1Vr/EXvc7PSf/KDFFYCXYB7jKK7sagZVZCpryHZs=
+	t=1731000270; cv=none; b=I3gGPhaRfncLBCVxdNluAvxdw5fAglv9myfm6M7R4uTGBBbCqQnoUVj39srs6e6SbANbdxdEuMl3EHOkPB+QtPGsJvT0D3DiCODcUmjiRDyxpbL7MKz3L0xvSkZfCbV46cClbDiWspKp/DUO6qfKrDnM91GlFDPzhlrArci/J3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730990077; c=relaxed/simple;
-	bh=cPfsizR0GhWQSjoMoj6ev7y0kRO6mxVltbXk9yQ6RCw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=V7pDPbqDc+BiMHh29Ct10M+TotTeMS07IdZLpWJKlMCRjWPk/aM4a5m+dZjcp7mUiPtLHkGvegmR8CK3v+WWpp1Arpag8s+aIA/0DvWFbl0JnpKKlm8eqNQqpHn9HwEHupW1A+mJtOhZP2i+ZaQDaCM8SLEAJG+ToIA5AoXVILM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKF4NHK9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731000270; c=relaxed/simple;
+	bh=9jYdA9WdY6+zR7BA/ctc1BsYzyCsgu4a3s6Nj9xnw9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V7y2HrwHYevTu+oD5G7tKvadhenxN1cyxtmPYZiLrYr3BdBJpKOEC0R2+igtPyoqU/nNSYXG8nKotM7oB1ZaBIegNf/ZzvkXhrFYKn1tLaIEzIlCbH3m7Qx5fP+yz+6l+TdyjGeQfcQOh1JQucqMTu6PUe8qpahgyf3o+LK65ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vF9zVZn9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKF4NHK9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C0CC4CECC;
-	Thu,  7 Nov 2024 14:34:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vF9zVZn9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30752C4CECC;
+	Thu,  7 Nov 2024 17:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730990076;
-	bh=cPfsizR0GhWQSjoMoj6ev7y0kRO6mxVltbXk9yQ6RCw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=mKF4NHK9r1+8tE9VEE779JEN4YPJLcLdTe0ttAjyIwDylxoTTtqzFbRIggnKq6uO6
-	 h0ALIHV3VWB3WAFXjQfzSLL0my3BWqJfXs4I7YMzmIOnpVxYEU8JG+OMCC8Aw5lx5Y
-	 P4X6ee9KvpVlu/bdq1FZZJu1k1GlZFJdrz5LM13BCPXSr54i109bus6IZWoj9hSMzh
-	 oSRr+qhDaLaA5MkqRK7XwxLsFRkjTbTmOfHzQzur7abh7e+N2u0P4BjreVSRnErD//
-	 G8Px6e6FJtL+VivgnxwhJaqhTXu8wxx9Q4cnHk/ZFAHffhIUx5iGO1pogYTgw6Fbgi
-	 a5kieyYvbkBrg==
-Date: Thu, 7 Nov 2024 15:34:33 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: =?ISO-8859-15?Q?Heiko_St=FCbner?= <heiko@sntech.de>
-cc: lee@kernel.org, jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-    conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net, 
-    srinivas.pandruvada@linux.intel.com, bentiss@kernel.org, 
-    dmitry.torokhov@gmail.com, pavel@ucw.cz, ukleinek@debian.org, 
-    devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org, 
-    linux-iio@vger.kernel.org, linux-leds@vger.kernel.org, 
-    stable@vger.kernel.org
-Subject: Re: [PATCH v9 1/9] HID: hid-sensor-hub: don't use stale platform-data
- on remove
-In-Reply-To: <4934964.GXAFRqVoOG@diego>
-Message-ID: <nycvar.YFH.7.76.2411071534110.20286@cbobk.fhfr.pm>
-References: <20241107114712.538976-1-heiko@sntech.de> <20241107114712.538976-2-heiko@sntech.de> <nycvar.YFH.7.76.2411071358210.20286@cbobk.fhfr.pm> <4934964.GXAFRqVoOG@diego>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	s=k20201202; t=1731000269;
+	bh=9jYdA9WdY6+zR7BA/ctc1BsYzyCsgu4a3s6Nj9xnw9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vF9zVZn9mSTAy6aPZEhP1K+5Y5N1CfIM7c54XV8A8NpO/4x6zordS3joNYIkkXMfv
+	 A1jSQHc1Z76a0EP1aPpKyEzT25RdGvdAJCBxUO7ZFaEhPQgcxpoLgM00+sbfosbw3l
+	 jPA7wI9EGfJpi30kQT3dij6CnVzSzIJ3Zo6qqfQG2xWAthDgP/RpKHFgH+nGeRNGyR
+	 EaBIMy6aphg4txaB7LdLzEAy/iruynv4beghrJOx1Qz6xES1yN/h1hCZDF57HRPv9R
+	 FTppYI2eozitJqClkYBeotCtvfh4HCbw7BqiXtM8TIcQdN/YvdW6onPD+caTH5iwsF
+	 icwINBYbPB3SA==
+Date: Thu, 7 Nov 2024 17:24:25 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Marek Vasut <marex@denx.de>
+Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pwm-fan: Document start from
+ stopped state properties
+Message-ID: <20241107-skirmish-paparazzi-dbde65870267@spud>
+References: <20241106185925.223736-1-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Yej4ON283G7ccAAm"
+Content-Disposition: inline
+In-Reply-To: <20241106185925.223736-1-marex@denx.de>
 
-On Thu, 7 Nov 2024, Heiko St=FCbner wrote:
 
-> This change was more or less a surprise find, because I wanted to make
-> the platform_data pointer in the mfd_cell struct const and this the hid
-> sensor hub stood out as doing something strange ;-) .
+--Yej4ON283G7ccAAm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Nov 06, 2024 at 07:59:04PM +0100, Marek Vasut wrote:
+> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
+> to spin up from a stopped state, and can be afterward throttled down to
+> lower PWM duty cycle. Introduce support for operating such fans which
+> need to start at higher PWM duty cycle first and can slow down next.
 >=20
-> So patch 2 of this series actually depends on this change to not cause
-> build errors.
+> Document two new DT properties, "fan-stop-to-start-percent" and
+> "fan-stop-to-start-usec". The former describes the minimum percent
+> of fan RPM at which it will surely spin up from stopped state. This
+> value can be found in the fan datasheet and can be converted to PWM
+> duty cycle easily. The "fan-stop-to-start-usec" describes the minimum
+> time in microseconds for which the fan has to be set to stopped state
+> start RPM for the fan to surely spin up.
+>=20
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
-Ah, right.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> But seeing that we're after -rc6 alredy, I would assume the brunt of the=
-=20
-> mcu series might need to wait after 6.13-rc1 anyway - but I guess that=20
-> depends on how Lee sees things ;-) .
+--Yej4ON283G7ccAAm
+Content-Type: application/pgp-signature; name="signature.asc"
 
-OK, I am keeping my hands off it for the time being.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyz3yQAKCRB4tDGHoIJi
+0mj9AQD6zLs1dv6ul0S/L8bIA2WEpv3ENOa94fobfkbsunB33gD/W/Wa7cJpicN4
+nRIrCwFisLvNJGWVmONo30KB+0hlxQI=
+=FiRR
+-----END PGP SIGNATURE-----
 
---=20
-Jiri Kosina
-SUSE Labs
-
+--Yej4ON283G7ccAAm--
