@@ -1,202 +1,112 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B6615B0F7
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 Nov 2024 17:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E288A233D80;
+	Fri,  8 Nov 2024 21:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731086558; cv=none; b=bno/S2fKHaeYFOBtnCWgUpjWK3cG3dzlE3Po7y3wIpJty+86ky/MVBFCtCTToxbNPMpd7W366GVb2aW1E3m3mpmOdQVJJHbE/l33vDgZCg0Xf/sF4ajjAFh82i1zFYmykCDFCwVpTf3V32mFOSs95FoodQdgUcxQjnzQam5O+S8=
+	t=1731100927; cv=none; b=PYlIScuJ1uEo4qqe543uExDTSJ1uqd+OwGIg3SCPOEx+q1E/yH7wWpts38HjUVsiH04GO1As+idi1bLkBWU1EGsf+gaRIFKae6RxTTT1aN+GDJl4Ra9/wWfeUpJWEa/lIse3Bpb3zNdG9sExe3JpvWxtR1ZpzZ4cKRNR0M5lkL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731086558; c=relaxed/simple;
-	bh=+JtIc2ghPqV9cfXlXpGCOwoqyFL1IMoCWLXNe4ObHb4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AbhEJjunN6EExRuH8JQBlwOTGm4VKhsg3zgAleIL4C/1qQ3xAqERcm3ePzdPLZiMdl387p8V2EIdbPfJp5HZPOTHqcLULhheX8JSjcUDW2AGEYZeVTpqfQUURuNc/9koINJWDATbe7Wsls46IMhizVm21TFHqx+RA8u05vmeMpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=QEmRpXDS; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1731100927; c=relaxed/simple;
+	bh=tgXJh3XRRK9yCYpYIy2cKjBM6UWh1IfIQ7+irJcbel0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JHclGNhQvyEeeFwqE0mQOPwbaYZGmdRQM9GBWFQgzx4m4JgC/m5YUgtA167dU7aORD/jsyS0/DZ3Y9qmd21tTnt9I9GALvAtuWCeUdfFvDv0cCR2pmFBT57WoHhTryxfoVTfGovOgyjihmNJFMmq/x/xAJtMXQJXmy5ynaIw0K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hFwPB+qS; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="QEmRpXDS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1731086537; x=1731691337; i=w_armin@gmx.de;
-	bh=+JtIc2ghPqV9cfXlXpGCOwoqyFL1IMoCWLXNe4ObHb4=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=QEmRpXDSAeGBBUq2CPWcjTUrj0J49TzoJtDXGd0dszFiLcDeR/F/CZdgL6CoEiMC
-	 bzC5IbXB7MgUvcZe2eef9QoYJM5qQ2n7wR9TvC6YF46fvcotoNuUix/16LkyxlrxO
-	 7QwjAQDt+EI8+WMqElflCZXU6IKbkPIKJX572jmTjLv9z870mPzIGZMsJBIITGJkA
-	 sIjr2tAHjUlyVkL+8APXgpTWLIhbRDDatg3PJx6ERLp3d1vqINeBpgBa17OyvphGB
-	 ohh9gJtiwJWLnl7U1zXZLkSlvmcydXio4o40YM/4L0VB8EjQjP1d4v7jZMjcXsbEX
-	 u3oFDFXu8q38quSWBQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmULx-1taJ7w2Y0f-00kNb2; Fri, 08
- Nov 2024 18:22:17 +0100
-Message-ID: <5ed69c5d-11e6-4c3f-b934-886525f91b87@gmx.de>
-Date: Fri, 8 Nov 2024 18:22:16 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hFwPB+qS"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-720d5ada03cso2650116b3a.1;
+        Fri, 08 Nov 2024 13:22:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731100925; x=1731705725; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aIJNpgzllF0luBBdwCdbbhKpUYPl641j+I8yTy1pQhg=;
+        b=hFwPB+qSMfnNVv8FbmARxGjnf361UjpD58T/JN+DLA0ccGcGYhkzXeM+mRkZMp5qa5
+         hj58CjpG7p0cAPsGZY+77zASxmt1vspaDO5FJn+9kSs8dwV17pMQd3eH7kHdN6yOnFNg
+         3mWl1R0rV/R1UodOFP+bL3WOerGze0FKraRxgHUCttsz8ivFW4Ro615Qbb+nAr5OY46G
+         paDywD6nW5PUtpDpGQZbb33U/NvdGJ6JfD1+vFRDuarXJHLPpb1Q/uC3nUjk4ViD12JR
+         RXfK95L206K3tf5DNJ6mN9/4qUTpBFOQjjZXU9+/sQ1sUDh141QpGrcAxqzvMJXBEqZf
+         Kzbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731100925; x=1731705725;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aIJNpgzllF0luBBdwCdbbhKpUYPl641j+I8yTy1pQhg=;
+        b=FqcoN3FdFj9GxOcF13k0x0HSH9iJW7FgYJupIHxmDldCLLkbG5knXUNQaAxuo0xeHr
+         wh8ZWxq+ZrRAvxwbhsdSsmg4qz9bew9uCgr9kND3hLpAESLFcwLMaAOTdqTbIZFG0Q7i
+         CvXadooCBFBBhSc+/9BUCbHTJQ4ho/AWdYsVzRbIB+vadjfTcQ9qX6RxtlJkUjQTyH3h
+         3u6F5uY1XputSn91BlS/gEwTviPyng5X7NsDxbtqHExJ+CPfKPuTehQQQS7FXR6qD0yn
+         92HW1s+F33KWBiEhp2cKTmh8lyHue9bapI56Dg2tklWrnUienYdsdzKZx9XYSJMFiC7m
+         VVcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUoVhgxBjdLbQ0UQ8khTNML2fAx4pE7ZFRG8ZGoGVM0vi0C0Gn5fMI2YWyMAystDGmROihEzx66jgLzRJo=@vger.kernel.org, AJvYcCUoXYKAaqknhJ/mmCsrW9OWVrjULdWO4kVm4Md5k7Q9Wi/kJ7IMbiow92kLZ/v3YT/rB5D0HDU2CYe96t6p@vger.kernel.org, AJvYcCV39tBfcTNS3UYSZgTq5NH2aBYkEvxtSTiKaCRzpB6PkgBgxznyVoxiu0E1c3vVyMH9QFwOmGC/QhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4qKgjIoAB7CYnG3fkrkyD4BCXnhEBEJZggVtkrHbbttPouiT+
+	7V+lR9buzi/XhXe5ZA4ZtYOHoYYUAVHaqb4RUZo/dw+HFZC7rA+B8o8Hdw0J
+X-Google-Smtp-Source: AGHT+IEJSOSqCoEiLbDmGxkTwgRA85tStmV6AjEYt3tk0HUllCvqvyC0E6GvttSnoac0a8U2/G/PkQ==
+X-Received: by 2002:a05:6a20:244c:b0:1dc:2a02:913b with SMTP id adf61e73a8af0-1dc2a02928fmr3185727637.15.1731100925000;
+        Fri, 08 Nov 2024 13:22:05 -0800 (PST)
+Received: from 1337.tail8aa098.ts.net (ms-studentunix-nat0.cs.ucalgary.ca. [136.159.16.20])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f643a60sm3972595a12.56.2024.11.08.13.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2024 13:22:04 -0800 (PST)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Abhinav Saxena <xandfury@gmail.com>
+Subject: [PATCH] docs: hwmon: Fix typos in sch5627 and max31827
+Date: Fri,  8 Nov 2024 14:22:01 -0700
+Message-Id: <20241108212201.144482-1-xandfury@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: CPU/GPU fan control with safety via hwmon
-To: Werner Sembach <wse@tuxedocomputers.com>,
- Guenter Roeck <linux@roeck-us.net>, Hans de Goede <hdegoede@redhat.com>,
- linux-hwmon@vger.kernel.org
-Cc: Juno Computers USA <usa@junocomputers.com>
-References: <172b7acd-4313-4924-bcbc-41b73b39ada0@tuxedocomputers.com>
- <f26d867e-f247-43bb-a78b-be0bce35c973@roeck-us.net>
- <a73488bf-fd53-4894-a47f-8d76148b5e10@tuxedocomputers.com>
- <94683c23-ac6e-4bcd-836e-a1f3dfea5768@roeck-us.net>
- <f7fd21ac-b286-4c5c-ad97-7d8d64d175b4@tuxedocomputers.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <f7fd21ac-b286-4c5c-ad97-7d8d64d175b4@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:auX7cZ3AwCUXb0uWsvlDIkw7XM8IKTa+9Ppt3hQs1zcL6xIKVfS
- xc55zycTfRKvL6ZdTeMP1cslXKB/7dUPN5NVH54P4Kos7Fp4dEINTEYFWxuZms4ef38+RtK
- cJmm7miTobsjTfunQOkF9OT/2hsq8thn3RBWQDuoRC6VXMF+MTHSAYMhUzflT4eqBWYzdZ1
- 7xFp4rPTS86gOt1HwGkrg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:owpxvw22Kys=;TzpzO5qeyXR353CrAfjuFgHHCGr
- 0u6a5W82p3TQznqJqmFg6nOHveaRaXEJqgYN69Ke68xXw61bTnYycYfJihmkbPeoCEWO8zOo4
- 9fOQOLs9v5x8HNf+DIdDNZv10peSF/keDP35qAAGAK5d/NF0k0dXz7R0uA86/LP8sxhe5rsNt
- TDhp3T1GaEBDSmDOucaQlb5eBWhc51TfQqp6YNfg97HYPTSjIVJMlm/uVrwPBKBOVQ2XFh+Um
- 1++OqsX0ZTYRc5kHqswR+M/CdWICNm+QW5pBNWCkuEokYnPk38D1Am86/QfD0GY2+zeCw4jPE
- s3az5Pz/R3ATLIojASZAA1qaqvmjrQULITD/yOnivBTqTI8g6KBBtSITYdIUOBedVKbprDpm2
- ilFiJvRrWjCK+tAckJ49tq8ZX55OEyGjsutPJmykwAwZLpOLK9nRCLQpqE8Ea66mUZLuY6KzX
- RbtO9/rE7Z9Fyl5JqFUlqdLxcNhoIKFQvuk0pi10YRW3jZg4le4TjwPeYpQTMQEQ3JFCOGoLT
- Y37+a2bwQLSdmUwCeS8YEHL3yxCGXNU/QGk8dFYhsEh/OdMPUdhjoWLwDMIlqMMDHlcTQDl0k
- kB+cG4Wu4fserKZj1UGhcnjmBRz3zi77U5VCiVEqjCJW+p9pHLsqTcDyCq1c9cw1qwQiz1gGK
- pEBJ2lLwzvjPtxYdNJLgqKun0AmAAhTbPyWFGiyXW2LXniHUDF44rvNZhZcZ0SpJHTbrXuuBv
- vGxl99DA+sM3SWSE1Oc4NtMmOV7RTbm8m3XKhkTUuZGRWDwzt965DGg5iXeLBHlCjkEmBHht1
- ZbMW9vPHBdpI2VJpqBZk951IoXDPLfa4Er+02r9Ga08Y16ENHIORJsjQPgiOCJLOEyz51l89L
- Sfm691uVQZecAQB3yct5ovxt7W+yq5fIndgtfK7EmoT++lwcXC7QGPjGW
+Content-Transfer-Encoding: 8bit
 
-Am 08.11.24 um 17:57 schrieb Werner Sembach:
+Fix some typos in hwmon/sch5627 and hwmon/max31827 reported by
+checkpatch.pl. These changes are purely documentation cleanup with no
+functional modifications.
 
-> Hi Guenter,
->
-> Am 08.11.24 um 17:26 schrieb Guenter Roeck:
->> On 11/8/24 08:13, Werner Sembach wrote:
->>> Hi,
->>>
->>> Am 08.11.24 um 15:30 schrieb Guenter Roeck:
->>>> On 11/8/24 04:05, Werner Sembach wrote:
->>>>> Hi everyone,
->>>>>
->>>>> I'm currently conceptualizing an upstream implementation for the
->>>>> fan control on our Sirius 16 Gen 1 & 2 devices which has the
->>>>> following custom WMI functions (pseudo code):
->>>>>
->>>>> void SMOD(bool mode): Toggle firmware controlled fans vs manually
->>>>> (aka via the commands below) controlled fans
->>>>> bool GMOD(): Get current SMOD setting
->>>>> int GCNT(): Get number of fans
->>>>> enum GTYP(int index): Returns "CPU-fan" or "GPU-fan"
->>>>> void SSPD(int index, int value): Set fan speed target as a
->>>>> fraction of max speed
->>>>> int GSPD(int index): Get current fan speed target as a fraction of
->>>>> max speed
->>>>> int GRPM(int index): Get current actual fan speed in revolutions
->>>>> per minute
->>>>> int GTMP(int index): Get temperature of thing fan with respective
->>>>> index is pointed at (CPU or GPU die, see GTYP)
->>>>>
->>>>> However there are some physical limitations that are not in the
->>>>> firmware and I would like to implement as low as possible in
->>>>> software, aka the driver, to avoid hardware damage:
->>>>>
->>>>> 1. Valid fan speeds are 0% (fan off) and 25-100%. Values from
->>>>> 1%-24% must not be written.
->>>>>
->>>>> 2. As long as GTMP is > 80=C2=B0C fan speed must be at least 30%.
->>>>>
->>>>> We would love to see the same driver enforced restrictions in the
->>>>> Uniwil driver Armin is working on and the Clevo driver Juno
->>>>> Computers is working on.
->>>>>
->>>>> My Idea so far:
->>>>>
->>>>> 1. Round SSPD input: 0-12% -> 0%, 13-25% -> 25%
->>>>>
->>>>
->>>> That is acceptable.
->>>>
->>>>> 2. Periodically check GTMP (every second should be enough) in
->>>>> driver and if the temperature is over 80=C2=B0C set current and
->>>>> incoming speed commands to at at least 30%.
->>>>>
->>>>> Is this legitimate with the hwmon design?
->>>>>
->>>>
->>>> No. That would have to utilize the thermal subsystem. hwmon is not
->>>> intended to
->>>> _control_ the environment, only to monitor it.
->>>
->>> Thanks for the hint, I was not aware of the thermal subsystem until
->>> now.
->>>
->>> But still wondering, doesn't have the hwmon interface also some
->>> write functionality? Or am I completely mistaken here?
->>>
->>
->> That is to set limits and other chip configuration, not for active
->> environmental control.
->
-> From the thermal subsystem I found my way to this page:
-> https://www.kernel.org/doc/html/latest/driver-api/thermal/nouveau_therma=
-l.html
-> -> "1: The fan can be driven in manual (use pwm1 to change the speed);"
->
-> So it seems like the thermal subsystem is exposing a pwm hwmon
-> attribute itself which can be used for manual control.
->
-I don't think so, the hwmon interface is exposed by the nouveau driver its=
-elf, see drivers/gpu/drm/nouveau/nouveau_hwmon.c for details.
+Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+---
+ Documentation/hwmon/max31827.rst | 2 +-
+ Documentation/hwmon/sch5627.rst  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Armin Wolf
+diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
+index 9c11a9518c67..6cc5088b26b7 100644
+--- a/Documentation/hwmon/max31827.rst
++++ b/Documentation/hwmon/max31827.rst
+@@ -136,7 +136,7 @@ PEC Support
+ 
+ When reading a register value, the PEC byte is computed and sent by the chip.
+ 
+-PEC on word data transaction respresents a signifcant increase in bandwitdh
++PEC on word data transaction represents a significant increase in bandwidth
+ usage (+33% for both write and reads) in normal conditions.
+ 
+ Since this operation implies there will be an extra delay to each
+diff --git a/Documentation/hwmon/sch5627.rst b/Documentation/hwmon/sch5627.rst
+index 8639dff234fc..5f521c6e90ab 100644
+--- a/Documentation/hwmon/sch5627.rst
++++ b/Documentation/hwmon/sch5627.rst
+@@ -39,7 +39,7 @@ Controlling fan speed
+ ---------------------
+ 
+ The SCH5627 allows for partially controlling the fan speed. If a temperature
+-channel excedes tempX_max, all fans are forced to maximum speed. The same is not
++channel exceeds tempX_max, all fans are forced to maximum speed. The same is not
+ true for tempX_crit, presumably some other measures to cool down the system are
+ take in this case.
+ In which way the value of fanX_min affects the fan speed is currently unknown.
+-- 
+2.34.1
 
->>
->>>>
->>>>> Second question: Is there a good way to implement a userspace
->>>>> controlled switch between auto and manual mode?
->>>>>
->>>>
->>>> Only if that is a direction to the chip to switch between modes.
->>> Yes, via WMI you can set the mode to "manual", then you can use the
->>> wmi to set the fan speed to whatever speed you like. When it is set
->>> to auto, the EC itself applies an internal fixed fan curve.
->>
->> The standard attribute for that would be pwmX_enable (since fans are
->> usually controlled through pwm).
->
-> Thanks for the input so far. I have to look deeper into the thermal
-> subsystem.
->
-> Regards,
->
-> Werner
->
->>
->> Guenter
->>
->>>>
->>>> Thanks,
->>>> Guenter
->>>>
->>> Kind regards,
->>>
->>> Werner
->>>
->>> PS.: By missclick I accidentally sent an empty email before. just
->>> ignore it.
->>
->>
->
