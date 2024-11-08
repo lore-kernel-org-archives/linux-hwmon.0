@@ -1,39 +1,39 @@
 Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0AA42AA2
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 Nov 2024 16:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D841D191F8E
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 Nov 2024 16:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731081997; cv=none; b=TN0hpqmnmrvXTA1JUi0NykUp/GAtIVQPGR1z8JrRYtjQ7BDgiPxP4atUQwgGuz+98O04jfEeQg/rlsPt6Pt6QDGwfnjf1IBpZjoTvk169Oz0ynZw2aXjPwsFX5bN+1jnWmbYEsnCROCRD91+hnxiKQFWgaKtxG8Czrdm4srCnM4=
+	t=1731082443; cv=none; b=Cw6wDSiIjcYUcdOC8s4Se5tjUh2706CNSSo6wd//xShg1VT+SGaBdPWd6YiBXWOlpfDA7cT9fsK/XpsndmrKLDeEHfPqp1zClO7qbRWu325DoDm//WSHmtsBYPi09LYickMn3r21r4co5MtnKF5cZ0NOHeZMQD8nDQi4LAyp3Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731081997; c=relaxed/simple;
-	bh=mw+zJFOz7cGY9SfTjRNmJMmMhyQTYFnAcPCQZl3/O4w=;
+	s=arc-20240116; t=1731082443; c=relaxed/simple;
+	bh=L2fvUnNpiImIwbOsAFvJPfgvUhn/j9AgyjnrX0YXBQI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xe2gewnl5f2NLyI2J06QBkyRGsOZCKxN6nYEIjVKGra/XgfOVDVnEzJGRZsdNxA5OpT77BVCtXrgObTEFguKma8TJMwpYyp7pkz6QCb9BM5TF2wCF9mlP8q7XbvcZmkXDNMXfrJWVlK0JiWVkEyeygVEDhGjpkgzUuNykc0NZUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=bQZvK/c8; arc=none smtp.client-ip=157.90.84.7
+	 In-Reply-To:Content-Type; b=VrPm/cFeCaRv9YUaW5LpBtE5uCYvBrOsl8Xz3AsItJ1CF5oD5E67nCk57a3WIAJFLsjoh6FOD9ahyV4rV0eVJNYmGTHa1xcLFieiT6V7kh6xAvm4mxrW3RCDTi4exwajbqwEfAMtBOXhkvX2WTEXzQQ/HmZB7f3N4iZW+hCjPOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=rC6mKHcg; arc=none smtp.client-ip=157.90.84.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="bQZvK/c8"
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="rC6mKHcg"
 Received: from [192.168.42.96] (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
 	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id E9FEE2FC005F;
-	Fri,  8 Nov 2024 17:06:30 +0100 (CET)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id C18F92FC0061;
+	Fri,  8 Nov 2024 17:13:56 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1731081991;
+	s=default; t=1731082436;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+R82A/Dc7eCKpNHSxw9f/+lxgJsOzQgu8eHswswR/XI=;
-	b=bQZvK/c8rCWDFriUzbIAtmASUM9PRtOEeiqgMJgg7B+I6HuZ40Et4Qg2uhffw5BT50n3Dg
-	kCV5Cr6eh1RwPnFKcn0y5Y2FLo+bpaFxsNfwCJ9hRN1MToQy8g0h1bAkDcSeemd1n8WHYV
-	AfRYShIfpHEw01am9rzhud/ciIPFS7Y=
+	bh=Qx6fpSQd7Y//GfnzaBfTLsQxuKqe5onDij814QCOXx0=;
+	b=rC6mKHcgEWqRtk3F+O1eqYQAg4Djj0s2dRn4WBESBV6JfapVL18o4sVFxlUXIR3572G59Q
+	2qAJDCgGAhmH2KMe/E2vTOMqenu37wXdTsRPVOWFZRKyQqOO73BsyJaFB+ecmRp2k27CUa
+	WLc5ncnruE0nkmJwgcA7LANLFz05LkA=
 Authentication-Results: mail.tuxedocomputers.com;
 	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <63c16064-3f3e-4216-9dbe-435277bec5f8@tuxedocomputers.com>
-Date: Fri, 8 Nov 2024 17:06:30 +0100
+Message-ID: <a73488bf-fd53-4894-a47f-8d76148b5e10@tuxedocomputers.com>
+Date: Fri, 8 Nov 2024 17:13:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,6 +53,7 @@ In-Reply-To: <f26d867e-f247-43bb-a78b-be0bce35c973@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Hi,
 
 Am 08.11.24 um 15:30 schrieb Guenter Roeck:
 > On 11/8/24 04:05, Werner Sembach wrote:
@@ -101,13 +102,27 @@ Am 08.11.24 um 15:30 schrieb Guenter Roeck:
 >
 > No. That would have to utilize the thermal subsystem. hwmon is not intended to
 > _control_ the environment, only to monitor it.
+
+Thanks for the hint, I was not aware of the thermal subsystem until now.
+
+But still wondering, doesn't have the hwmon interface also some write 
+functionality? Or am I completely mistaken here?
+
 >
 >> Second question: Is there a good way to implement a userspace controlled 
 >> switch between auto and manual mode?
 >>
 >
 > Only if that is a direction to the chip to switch between modes.
+Yes, via WMI you can set the mode to "manual", then you can use the wmi to set 
+the fan speed to whatever speed you like. When it is set to auto, the EC itself 
+applies an internal fixed fan curve.
 >
 > Thanks,
 > Guenter
 >
+Kind regards,
+
+Werner
+
+PS.: By missclick I accidentally sent an empty email before. just ignore it.
