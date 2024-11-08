@@ -1,61 +1,61 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6631E47C7
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 Nov 2024 14:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A9192B95;
+	Fri,  8 Nov 2024 14:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731076234; cv=none; b=YsI0LkAtprNcQWdDgmdsjLzAlQL61Lfmusd2W67f6IpzvENaBpLwZNz61HHb1C5u/ZAQ5aya18aP9URy9tssSAqijflJUhZKta6IiMEIpfKVGGQCkDUsjDjmpFv3xnukhNHQhHspxnmn5qsPe+PK4fWK9t016k3J7wozjyqFCRs=
+	t=1731076278; cv=none; b=ctWiNF5Sz3X1nH5Edhufnpjsuy85fKYyqcZwp33DBBNEO/xYzgpYp1Lh3oehXoDp1eR05G2hkEtko5ZkmfawNdkzaFbS79aVH/p2BsqRyj7g7bCguFow1nYc98Qc2pT2ApKAsu90rQUQx/o2PgsOd58y2TkLqPxP1SGN9SvtEGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731076234; c=relaxed/simple;
-	bh=LavlpM1so8PpvdVb9eHtIEE6VpTCBT4sTXd7I3DrX2c=;
+	s=arc-20240116; t=1731076278; c=relaxed/simple;
+	bh=prGBn97B5Be4zo4X5v0514bV7f/nDC54PVHDF3VDcQs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JixCskfuDuHn33EwOdESoSZriv3vSV7XeWs+BMkiLhpF/BIei2Ilcz8mHbkayctKlJGW4s5oEHcAhBTMjTKsI6kFH6LJNNS2nO4W6Prd7M3kYMktVdnZFZND/C0QndO+uYtDEO5+FbgYgzbgYjj1P2TY5Jm5Rueoj5rMadhhBoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MXWwh0s1; arc=none smtp.client-ip=209.85.210.172
+	 In-Reply-To:Content-Type; b=Z+yLP5q5Year28+VpEuQRfP0NN1DsoNMm492Plazf5ag651Vd3yN4EfggYC0aificW+ZdjixLDwKRRTFLe+O1FHiaZXIav8KF2kqzGKjRCXG8hJtE5bUeVPfNye415PlL/PLlmEpDTk0FVL+2S+MWMSvoa8uL8zrR0tJIc8ebd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HGgR5Gri; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXWwh0s1"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7240d93fffdso1391622b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 Nov 2024 06:30:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HGgR5Gri"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e2eb9dde40so1774547a91.0;
+        Fri, 08 Nov 2024 06:31:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731076232; x=1731681032; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731076276; x=1731681076; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=odSgpTP6RPmM0og3gH/+dEqpX2KzJIH2kEwhnYT1pKY=;
-        b=MXWwh0s1NOgM4S+O0cMgemgmPYDEi9Gkm8LRLRM8KtJ0k35qoV4ez0BPZgJz4FsbCK
-         p4owLjSJqkRFgAXG1wudBcmpdlo+IXg+PxEi+V12Z3HOYmzrASywfG8gHJkUlMuDVZX5
-         w2o41hZdah5/juTUMvz2nooaMWFMc7dHRxntnBP/3j7pL1maFQq04j1U1eaH0wBM4Z2P
-         k6ecc9noe3rV2YSz4S7+r/kwnKb/XpMY3GQK00v49mRH92PbN8LjMO+HkBwTOQZbmiIr
-         A/YZdSHBuqsjQwsuaqXnh62f3z+clVlYz5XHfWytkUt7elY0UnMQunY1zP11t9zXUOwu
-         P/pw==
+        bh=Jn3SiAgzI6AioBPH9bVjAZEwx2ghOtXqF4SLZHNkKLE=;
+        b=HGgR5GritE1CY3woxMYWRRk/unxu+0OTmQTe3+GXRA9GdAMTdhQycPI6heecrmYB+/
+         WKuFWLl3XdGQ9cW72ty27SI+30kGbcCPPlAmiYL91UI5dJ86rnfbhBbRnEVbLtPrndjc
+         XwFoddEdnOaf+/0qB7al7/4gW9XVGrzbLoK3TxiUXXa5YTl5VX+MOeFmxuB/YLtSdMcj
+         G9PhRgDlHf44GhhFjW1KxTiiVeK+npJaW96e1j2eVLWLy2fSPyFHWTDdxiwi5pGqtmD8
+         X1dx5nN9Llf0px9GbZLZodJs6J5YUdR+2R3WhqAvUR67wuzjoDOwOEgAwxrrX+KV8Mv6
+         Eq1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731076232; x=1731681032;
+        d=1e100.net; s=20230601; t=1731076276; x=1731681076;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=odSgpTP6RPmM0og3gH/+dEqpX2KzJIH2kEwhnYT1pKY=;
-        b=khUqKKKMhQbafNulaemfPzdaaj+fQ0NWBA6sRi4cIoGJ9hOWm8YhOyb9WHW1N19KT+
-         RPw9dg6F9ob6UKoWKd3bnaw5lj+rf5xN8lDj2Bx1EOxjFzfZjurv8lTYb/7TEF/A1FCW
-         Jq8R6s9qTld9ecxZTbi8aJA7vrhFkQGiyvtUJx0PenjNlKmiLB3nDdhenrAfqEugRiCH
-         Z1uKxNhYIxAOymwIi6/SSQGg7IQFc0JqFtJTN5Af1jvzT99f0tx5BW+yT1orF67WsTCU
-         DFHy52winZRj3xC2LBJjm5uy/EtZNtJKlBKsIvydtocV/aVChOhkjvY+5+aA0FpbqHBL
-         AKuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULH3EgKL/I1b9mQwZZIK5P/35LP05hY88RccHgDZhSCzNFcGLSXi/BObt61UZBrlXAfgL9riQeuUT49Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr8m3bYMCNeBgyME4nflOt9CqO7hb4YkuZYZ82GJQ+obt9oeoS
-	gsYPoDgI1TguXoxQfoCsra8pgGeYjHs+FnLd4f7XJwKV9U1n7UOrDtT61g==
-X-Google-Smtp-Source: AGHT+IF++Fb0o74ffYZpbQK48zi3wH8sNy965HGzg1udhufa6PuOJNKuAnsSNE3YgtLGwds6+BRXfA==
-X-Received: by 2002:a05:6a00:138c:b0:71d:f4ef:6b3a with SMTP id d2e1a72fcca58-7241336bc75mr4149841b3a.21.1731076232217;
-        Fri, 08 Nov 2024 06:30:32 -0800 (PST)
+        bh=Jn3SiAgzI6AioBPH9bVjAZEwx2ghOtXqF4SLZHNkKLE=;
+        b=oBAdMn66SRMfFQ3fBzjYU/9EIFMqZ+ueHPRrmjEggBUABTULbimj4ZeoPTGzUowd8u
+         jnMA8LdCGoArEkJVMsNksWFN08aSlF+v+E69bD0a45aXKrMUuWRq1XVJgVoinpbSVkpg
+         nazTRKAjDgoI13hnxdGKbBPBI0CiXn/br6eydYAeIvo7aVatSVHixqD99y0fCi6Cpmec
+         fnjRfYKCVgpcL0AyNO2vuFwMX2mijlFWgnR/2hm6DmAuNKDyG3dgYnSqiaz5PKtKeOgl
+         Jb5yep91QAbAVWKs1VqnCMJH7/PR8WfQ/ZboZdfqz517K2izA5Le8Slsug/exL/6R5DR
+         8iWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhqIcgWJjj0jrCthVsl2WPx5dqE9Ig/hUKq55yxCQNwYF8r2y/sjgLG3fwo3m+K1fp/4jvfoYk45RD1H8=@vger.kernel.org, AJvYcCW9pG12IHA5CE3S4K8mQbSyMtcQIykFJHeH3ImoIXgSzE2ahYPewhvEyiynNxLlMpXEYplqAAbpZQNyXsE+@vger.kernel.org, AJvYcCX8PKlUDNMqg9WpbUva/kCIAgqUonCLOPPsCqJDkukVq99rhe56FJYu9E6OvHv9h60I1CHXec8zffB7@vger.kernel.org, AJvYcCXIuNQhrfd3hLxyDLlvE/jTAYbqnwFVTvsBmJCZyzvKvRnJPxwFgM/gFUuqGxSjrVOoaRpMwk+8NaPG@vger.kernel.org, AJvYcCXiXjCpYIr/oAW5mY+6bLbzlsgeBpPHSq8ZeAN2lwhG36D/oTv9ZyWYjSVygDNWXjyxc0zKSZPtrfHb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLHRDzKIhCKNr5ESihqbdqn6UJv5aHnptF1J4KGSeqGFg5s05N
+	HjRjQSKXivHJBryKwx2ItLGKZ5fjCfAZkns+l5ZLqPWYnwSM1ijm
+X-Google-Smtp-Source: AGHT+IGZM7BORZHYd1ECKtWCNiUq7cTPyLDkw7XowYaKmlJagEZq7YOHxzvkuB6FtCwSBT04tUY6iw==
+X-Received: by 2002:a17:90b:1649:b0:2e2:bad3:e393 with SMTP id 98e67ed59e1d1-2e9b165642amr3718946a91.3.1731076275479;
+        Fri, 08 Nov 2024 06:31:15 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7240785ffd8sm3714813b3a.18.2024.11.08.06.30.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e6a388sm30683975ad.245.2024.11.08.06.31.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 06:30:31 -0800 (PST)
+        Fri, 08 Nov 2024 06:31:14 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f26d867e-f247-43bb-a78b-be0bce35c973@roeck-us.net>
-Date: Fri, 8 Nov 2024 06:30:30 -0800
+Message-ID: <c6b1718a-1a16-4670-b9b6-d8d9bebad4f0@roeck-us.net>
+Date: Fri, 8 Nov 2024 06:31:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,11 +63,24 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: CPU/GPU fan control with safety via hwmon
-To: Werner Sembach <wse@tuxedocomputers.com>,
- Hans de Goede <hdegoede@redhat.com>, linux-hwmon@vger.kernel.org
-Cc: Armin Wolf <W_Armin@gmx.de>, Juno Computers USA <usa@junocomputers.com>
-References: <172b7acd-4313-4924-bcbc-41b73b39ada0@tuxedocomputers.com>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
+ ltp8800-4a, and ltp8800-2
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Yin <peteryin.openbmc@gmail.com>,
+ Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+ Lukas Wunner <lukas@wunner.de>
+References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
+ <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+ <697a9596-f5aa-48d0-ad26-ebe06b831ee8@roeck-us.net>
+ <PH0PR03MB693869F52D961845C8388D258E5D2@PH0PR03MB6938.namprd03.prod.outlook.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -113,51 +126,67 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <172b7acd-4313-4924-bcbc-41b73b39ada0@tuxedocomputers.com>
+In-Reply-To: <PH0PR03MB693869F52D961845C8388D258E5D2@PH0PR03MB6938.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/8/24 04:05, Werner Sembach wrote:
-> Hi everyone,
+On 11/7/24 23:44, Encarnacion, Cedric justine wrote:
+>> -----Original Message-----
+>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>> Sent: Thursday, November 7, 2024 9:45 AM
+>> To: Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>;
+>> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>> i2c@vger.kernel.org; linux-doc@vger.kernel.org; linux-
+>> hwmon@vger.kernel.org
+>> Cc: Jean Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
+>> Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>; Rob Herring
+>> <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor Dooley
+>> <conor+dt@kernel.org>; Peter Yin <peteryin.openbmc@gmail.com>; Noah
+>> Wang <noahwang.wang@outlook.com>; Marek Vasut <marex@denx.de>;
+>> Lukas Wunner <lukas@wunner.de>
+>> Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
+>> ltp8800-4a, and ltp8800-2
+>>
+>> [External]
+>>
+>> On 11/5/24 19:09, Cedric Encarnacion wrote:
+>>> LTP8800-1A 54V, 150A DC/DC µModule Regulator with PMBus Interface
+>>> LTP8800-4A 54V, 200A DC/DC µModule Regulator with PMBus Interface
+>>> LTP8800-2 54V, 135A DC/DC μModule Regulator with PMBus Interface
+>>>
+>>> The LTP8800 is a family of step-down μModule regulators that provides
+>>> microprocessor core voltage from 54V power distribution architecture. It
+>>> features telemetry monitoring of input/output voltage, input current,
+>>> output power, and temperature over PMBus.
+>>>
+>>> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+>>
+>> Looking closer into the datasheets, I found that the PMBus commands are
+>> identical
+>> to those of ADP1055, and an extension of the ADP1050 driver to support
+>> ADP1055
+>> has been submitted.
+>>
+>> With this in mind, please explain why this series warrants a new driver instead
+>> of just extending the existing driver to support LTP8800.
 > 
-> I'm currently conceptualizing an upstream implementation for the fan control on our Sirius 16 Gen 1 & 2 devices which has the following custom WMI functions (pseudo code):
-> 
-> void SMOD(bool mode): Toggle firmware controlled fans vs manually (aka via the commands below) controlled fans
-> bool GMOD(): Get current SMOD setting
-> int GCNT(): Get number of fans
-> enum GTYP(int index): Returns "CPU-fan" or "GPU-fan"
-> void SSPD(int index, int value): Set fan speed target as a fraction of max speed
-> int GSPD(int index): Get current fan speed target as a fraction of max speed
-> int GRPM(int index): Get current actual fan speed in revolutions per minute
-> int GTMP(int index): Get temperature of thing fan with respective index is pointed at (CPU or GPU die, see GTYP)
-> 
-> However there are some physical limitations that are not in the firmware and I would like to implement as low as possible in software, aka the driver, to avoid hardware damage:
-> 
-> 1. Valid fan speeds are 0% (fan off) and 25-100%. Values from 1%-24% must not be written.
-> 
-> 2. As long as GTMP is > 80°C fan speed must be at least 30%.
-> 
-> We would love to see the same driver enforced restrictions in the Uniwil driver Armin is working on and the Clevo driver Juno Computers is working on.
-> 
-> My Idea so far:
-> 
-> 1. Round SSPD input: 0-12% -> 0%, 13-25% -> 25%
+> It also appears that the LTP8800-1A regulator makes use of
+> factory-programmed ADP1055 but this is not explicitly stated for other
+> variants. Initially, I thought a new client driver would be reasonable
+> since this device is intended as a regulator while ADP1050/ADP1055 is a
+> more customizable digital controller, and both have their own multiple
+
+We use the same driver for many variants of ltc2978. We should do the same here.
+
+> variants. Indeed, it may be more reasonable to extend existing driver since
+> they are exposing the same feature. In this case, can this be done in
+> succeeding version/s of this series?
 > 
 
-That is acceptable.
-
-> 2. Periodically check GTMP (every second should be enough) in driver and if the temperature is over 80°C set current and incoming speed commands to at at least 30%.
-> 
-> Is this legitimate with the hwmon design?
-> 
-
-No. That would have to utilize the thermal subsystem. hwmon is not intended to
-_control_ the environment, only to monitor it.
-
-> Second question: Is there a good way to implement a userspace controlled switch between auto and manual mode?
-> 
-
-Only if that is a direction to the chip to switch between modes.
+Succeeding version, but please synchronize with the engineer adding support
+for adp1055 to the adp1050 driver. Another option would be to make adding support
+for adp1051/adp1055 and adding support for ltp880X chips a patch series. The
+introductory patch could then reference the original patch series.
 
 Thanks,
 Guenter
