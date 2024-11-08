@@ -1,87 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C18DDBE;
-	Thu,  7 Nov 2024 17:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06B17462;
+	Fri,  8 Nov 2024 00:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731000270; cv=none; b=I3gGPhaRfncLBCVxdNluAvxdw5fAglv9myfm6M7R4uTGBBbCqQnoUVj39srs6e6SbANbdxdEuMl3EHOkPB+QtPGsJvT0D3DiCODcUmjiRDyxpbL7MKz3L0xvSkZfCbV46cClbDiWspKp/DUO6qfKrDnM91GlFDPzhlrArci/J3o=
+	t=1731027138; cv=none; b=EeUfi0bWeyNqjrNCNtNNSI14l/vKqlvAz3hfXtZ+EMzUYg53JxK1leU0b2MJAp721+okcgfs3CxZ1F8wlWF/R+AXRo2xF5NQVLStDh5sOY6axbpnP72Q0htC/wby5AYDK3ElG3f+1glrsGhY3nXEBEhUIpo4mUkw+OGCKrGYbPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731000270; c=relaxed/simple;
-	bh=9jYdA9WdY6+zR7BA/ctc1BsYzyCsgu4a3s6Nj9xnw9I=;
+	s=arc-20240116; t=1731027138; c=relaxed/simple;
+	bh=RvxY4a3WCb96CrFLRYIXYbqrR9Gkr0oINd/naqKrMBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V7y2HrwHYevTu+oD5G7tKvadhenxN1cyxtmPYZiLrYr3BdBJpKOEC0R2+igtPyoqU/nNSYXG8nKotM7oB1ZaBIegNf/ZzvkXhrFYKn1tLaIEzIlCbH3m7Qx5fP+yz+6l+TdyjGeQfcQOh1JQucqMTu6PUe8qpahgyf3o+LK65ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vF9zVZn9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tob13h4+oxZ/cUWnedDKgXO9/nkjZh1zVf32XzkZ0il8s7aSMZwKVnzMpXroDilJM86IwllY5svLgizoTncp1qyw0ex2F6HssIycKtTD5fULvkehTyniSbirGUmqf7JsBkcHUp2FEWd5SZ8bYJB62loWffBngTXROy3q/KtZOLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HRP0eL9r; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vF9zVZn9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30752C4CECC;
-	Thu,  7 Nov 2024 17:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731000269;
-	bh=9jYdA9WdY6+zR7BA/ctc1BsYzyCsgu4a3s6Nj9xnw9I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vF9zVZn9mSTAy6aPZEhP1K+5Y5N1CfIM7c54XV8A8NpO/4x6zordS3joNYIkkXMfv
-	 A1jSQHc1Z76a0EP1aPpKyEzT25RdGvdAJCBxUO7ZFaEhPQgcxpoLgM00+sbfosbw3l
-	 jPA7wI9EGfJpi30kQT3dij6CnVzSzIJ3Zo6qqfQG2xWAthDgP/RpKHFgH+nGeRNGyR
-	 EaBIMy6aphg4txaB7LdLzEAy/iruynv4beghrJOx1Qz6xES1yN/h1hCZDF57HRPv9R
-	 FTppYI2eozitJqClkYBeotCtvfh4HCbw7BqiXtM8TIcQdN/YvdW6onPD+caTH5iwsF
-	 icwINBYbPB3SA==
-Date: Thu, 7 Nov 2024 17:24:25 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Marek Vasut <marex@denx.de>
-Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: pwm-fan: Document start from
- stopped state properties
-Message-ID: <20241107-skirmish-paparazzi-dbde65870267@spud>
-References: <20241106185925.223736-1-marex@denx.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HRP0eL9r"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ea68af2f62so1310217a12.3;
+        Thu, 07 Nov 2024 16:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731027136; x=1731631936; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/vmX3lXsTDc4GilAspkSHux0yJlii6bjqc6VWWGKkGY=;
+        b=HRP0eL9r5oyOzWGpxFSNrMnbYIH17qIs77u3fqfc5AHs2o27xR76pP+eoW5Kpja2Qt
+         azQCIJh6l890s6OnifyPpS8c+Ml5pvEJkDZt9I+osX/ing5MqjY8QQaYCHijTRA7WPMx
+         thrkqGRfp2sOqM3+EBEWRl57Q8n6uuHUMtFw91cjhDh8Za7bLZbkTIHGnl3QLXvFagMk
+         EpD+KPx4CNQKZjrrMoS1w9IPkCQZ3GMfZCMEvvSByj7t+z4B5yHn0+3gaXvofEnqAqN5
+         yH4ceyl/Gqn5pxDuw6mUIZ30v0utdFUifk+KQH8FasTb0Twp+1MxYFVddLNRZhaVRdzt
+         A7YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731027136; x=1731631936;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/vmX3lXsTDc4GilAspkSHux0yJlii6bjqc6VWWGKkGY=;
+        b=LlXwunXQKE24R8cCuBTnz54ZHwts+w+74bfMNt5Sgq01FTun4RJrNJhKFs/2WmKaDh
+         41FxZE/d4iAbcEcxwFkYY5k6o8GjEcZVfcShW33lQUpZf2T3rrZEiP6kWoIZl71sXMMT
+         +hu/7jho8ezYEY5F+aWnhfGd3ppOz9SeLVEHQk+LOVe5dm14UxrkysslUjFioBEWLfZp
+         TZavH0C7SqmC0DTjWpEoJfrOp992Rvy69d2O602nEzk4L8+HlyEFmV+GIK2kVXnz6VKD
+         QHHuDHeroM3YVIeaPuK7+S56bSEmJP4g36S4K95G5TMK8Aw2nRBjfpzHaZWR44wlxNOy
+         d5mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/B0etPVQmBGlt1yN3AKz7WYKdkalZyI+gFOpPz0IMUOn78ID1gGsgzeG10kv0dYdy+E9QHzR/QqY=@vger.kernel.org, AJvYcCVWeXaUUaTT+jsy6PEWZa7taqj5YpcoKeoLRkvuRG6jB+K3oTg8/panoujQNFchy1teNQKcULdiHfgFKJU=@vger.kernel.org, AJvYcCXxHuRPMLHjAFkp25rJYtye1Zha1Reaa0aY2jmhUIdcgpB8VQii47t5TGcMdTXELNo9EIQcR27cPhWNmrSF@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJWfjYCsJUTrU1P/eUQo6kIBzCgBSAmJlJJWjDawxdiNhas00p
+	I4uRzwLpcigGD5XF14FS7I4OBJr1UB4u9RVoDom/gs/Fxq+xoOOf
+X-Google-Smtp-Source: AGHT+IHZukLAtGIpoxOU6vQP3kwwzNCueeorSKv/5xKNmHlTvDCD0P3IMlLzdm6raX4gDbGTWLEinw==
+X-Received: by 2002:a05:6a20:7fa8:b0:1db:ec07:3436 with SMTP id adf61e73a8af0-1dc228930fcmr1458163637.9.1731027136133;
+        Thu, 07 Nov 2024 16:52:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724079a403fsm2447659b3a.105.2024.11.07.16.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2024 16:52:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 7 Nov 2024 16:52:14 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] hwmon: Documentation: Fix grammar in fan speed trip
+ points explanation
+Message-ID: <07b90400-7f6b-478d-80af-c7e71ac205de@roeck-us.net>
+References: <20241107013849.47833-1-xandfury@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Yej4ON283G7ccAAm"
-Content-Disposition: inline
-In-Reply-To: <20241106185925.223736-1-marex@denx.de>
-
-
---Yej4ON283G7ccAAm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241107013849.47833-1-xandfury@gmail.com>
 
-On Wed, Nov 06, 2024 at 07:59:04PM +0100, Marek Vasut wrote:
-> Delta AFC0612DB-F00 fan has to be set to at least 30% PWM duty cycle
-> to spin up from a stopped state, and can be afterward throttled down to
-> lower PWM duty cycle. Introduce support for operating such fans which
-> need to start at higher PWM duty cycle first and can slow down next.
->=20
-> Document two new DT properties, "fan-stop-to-start-percent" and
-> "fan-stop-to-start-usec". The former describes the minimum percent
-> of fan RPM at which it will surely spin up from stopped state. This
-> value can be found in the fan datasheet and can be converted to PWM
-> duty cycle easily. The "fan-stop-to-start-usec" describes the minimum
-> time in microseconds for which the fan has to be set to stopped state
-> start RPM for the fan to surely spin up.
->=20
-> Signed-off-by: Marek Vasut <marex@denx.de>
+On Wed, Nov 06, 2024 at 06:38:49PM -0700, Abhinav Saxena wrote:
+> Fix several grammatical issues in the fan speed trip points documentation:
+> - Replace awkward "which % the fan should run at at" construction with
+>  clearer "that specify the percentage at which"
+> - Fix incorrect "is chip depended" to "are chip dependent" for correct
+>  verb agreement and adjective form
+> - Improve readability by reorganizing first sentence and separating the
+>  complex explanation into simpler parts
+> - Add hyphen before "see" to improve readability
+> - Remove redundant "at" in temperature description
+> 
+> No functional changes, documentation only.
+> 
+> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Applied, after fixing the subject (which needs to include the affected
+driver).
 
---Yej4ON283G7ccAAm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyz3yQAKCRB4tDGHoIJi
-0mj9AQD6zLs1dv6ul0S/L8bIA2WEpv3ENOa94fobfkbsunB33gD/W/Wa7cJpicN4
-nRIrCwFisLvNJGWVmONo30KB+0hlxQI=
-=FiRR
------END PGP SIGNATURE-----
-
---Yej4ON283G7ccAAm--
+Thanks,
+Guenter
