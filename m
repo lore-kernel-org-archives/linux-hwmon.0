@@ -1,90 +1,102 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0985C194A68;
-	Fri,  8 Nov 2024 14:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B411F4702;
+	Fri,  8 Nov 2024 15:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731076394; cv=none; b=dz8WCaJeHQLSQzHTCZJsLidZElwhrKI3ahDkOwGyHX3Oqu5OgevynpTcQff6D95i7LxQ+CmJIgGz+GGOdH51OqW32p0lKbw40bo4b1HwvpcP7/hD6LBO1QzZXIUz30bo1idRIxBS+YCfQiopN+i4PYhv5iVL7AEz/DTBzIc14vs=
+	t=1731078540; cv=none; b=WHK9bnN59pu7ZVzAuMdNqSEkudTbMa3mMqVSgH8NgqSAaNAjgY49WB2psqVz36rjfAO7lmUC+slQ+dOM45pmV50Xcfuk+4+OoIs5L37wHDGAHEuqMfIHCgLWb4cerJ7NEANjX4539wZJQ4cd2tlV5Na8t4AYpAsE3BkdwNimpZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731076394; c=relaxed/simple;
-	bh=QzIANtt6MFJtAm9Fyh2xfcDFCSxf058tE3VX25yTCg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N2RoZj1MNGACC0OnEtsRwYZlJFi2KlvY2i5qAljCrYHfcZ3Ym2n800jKKR/JUGKAe+TjFjSMNOpoSubnTrx+kfHRgIYgbdF53bhwy1P88xjk4HF+6k4MlSHYuBgdUnMtJVuMeqJgRh4Hf5w8IGpMpBkHKfiw1HIzNc9gf6PoZ4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FlFzGX/G; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731078540; c=relaxed/simple;
+	bh=gRwhlyf/2DdEGELPpUcGdjTanah2nSvW6Ry1ETe3P2I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ek41n+4QEeAJ229vTTFLWSVtWApie+W9EU4aeUopS3Zcec7hjK4bc3bOLYrYE9BykVAWKotKyImcV2/bK0W4j0eHXKjbf3lOY6e3suLJKPkWDkwaQhYDxIImBE/gzbS9NJHTWrJBTcin/Lg4BEV4iK8+XN9J73+YdPMuJeibyoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=purw+VUj; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FlFzGX/G"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7d4f85766f0so1609944a12.2;
-        Fri, 08 Nov 2024 06:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731076392; x=1731681192; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NzIGKe4I0gwdT6IhaF7t/XIcwROf+ySP8Indd98HhXI=;
-        b=FlFzGX/Gdljrq8MqFf6o5h6zgjCpwKNpNUvltG2eeN9cKk42GzRfboMK6day3iB+E4
-         NHk62Z3jp/oVhDPkyoRnDRQvvVFg+BuoGy9OdH7Lm7GWHMQroSLVGYeunD0i74YcsXph
-         WxudL8Mm1n4XlTtLzZtzowE+GlhOES4F3Nk9SqSZLCSYQf62ospGMnu7o62qMskfzRTe
-         a1NwbCDtzU/H12i3jX3KzhjfcvHCskSEUzp1YnVcY+6DrEK7aNbvlMtXchn6HyqSHNrz
-         BVV88IJ9Yk7PIyS6OWtCL92j3zVRvESc4U3LipXxkv8KlDjKycsnovi9ZqdvEZnk9Vyg
-         djzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731076392; x=1731681192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NzIGKe4I0gwdT6IhaF7t/XIcwROf+ySP8Indd98HhXI=;
-        b=tG6fuYv27kUtzHDplH8OeCQEqG8pnpB9usavqN+KUmLvs7RZ76pfl+zEOSOgqDye/8
-         wgvUR8+SclkN7J8DseUG6UkK2Jm3e7z9zZkwip3TxoxUVA7x1gCvHdnxp3XYdko5S+R2
-         ZDr1N9zBzci4+ajGYsBNjAqAJ4Gp5695eNxO22nuls8tTj4AIiQhf+Ha385NNckZaXLv
-         H2L1Feg4E00etaK1mgTYMrelFFf8hdn5v19UfV2dMetTdErlgADwTO8QL10DA1oyVAV2
-         9d/JJPLA9rjL3uKMOs4oeS+miUmbiwSC+DjA7k88q4vy08IynrC+ISPfa+SsefzAOiA8
-         LKhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdFIeCcLsVuwhZR6/0ZFr1ntreLicgyhzbBlGeQC3j1iqENHe/HNXs+tnEsR1DxJchOewqbFqp8ERS3AQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnrJCF52lA47b6zz6Y6XQV4UFteBNY/xHeKWLxyHlaxAD9vJ7K
-	xxC3PBda7ykdf/c2wiktGETKYmkpTc6PfVctsVvb05bo1f6LXAQn
-X-Google-Smtp-Source: AGHT+IE4pSclE+22SOn4t5zbOxg10aUFH7ys0Z9wC98xMjNdq8MkT5NJI+24WBS8nBC9UV7IQg0TKQ==
-X-Received: by 2002:a17:90b:3cc5:b0:2e2:eacc:3227 with SMTP id 98e67ed59e1d1-2e9b172b02fmr3662512a91.23.1731076392220;
-        Fri, 08 Nov 2024 06:33:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9a5f90bafsm3565906a91.28.2024.11.08.06.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 06:33:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 8 Nov 2024 06:33:10 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>, Florian Eckert <fe@dev.tdt.de>,
-	Konstantin Aladyshev <aladyshev22@gmail.com>
-Subject: Re: [PATCH v1 1/1] hwmon: (jc42) Drop of_match_ptr() protection
-Message-ID: <a1504a6c-a3b7-4540-ba08-f1dfb648b8ba@roeck-us.net>
-References: <20241108124348.1392473-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="purw+VUj"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E752B20008;
+	Fri,  8 Nov 2024 15:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731078536;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6z6N6MS2IrSq64I2YYr9dqdQedW4NZ/480SQrwmjR/Y=;
+	b=purw+VUjbf2ADLbsRytqacTj7IgpSmKMA+cmZ1oG2aZjfgYb5M/c0Ad5nLhHSQ5XgOn2hk
+	Ce0tl4eyNTtBln/EwQqZ+qKE5OR1XcUakAuzqCY2n5eMsydfc7XyUOBI/uDGd4kPUge/15
+	MirSy6IXza0qWKJo+17g8X7Y4RVDRFTNoyK1nXVmcq05RZ0qvvvUveuEFn8P1n9Q98EEA6
+	ruYQiRlG2RwwUONK6vhCtwM8MkQ6MW20/rljuUWWh2SxQMTuIXx9rJN6eJVZuJWjAwKbU4
+	51vw2WhWMIiytejjs0rFiDIimZLOg1k0F2O30umnBCqpDZeyCoh3nc2QfdzfCg==
+From: Thomas Richard <thomas.richard@bootlin.com>
+Subject: [PATCH v2 0/2] Enable sensors support for the Congatec Board
+ Controller
+Date: Fri, 08 Nov 2024 16:08:50 +0100
+Message-Id: <20241108-congatec-board-controller-hwmon-v2-0-16e337398527@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241108124348.1392473-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIIpLmcC/4WOTW7DIBBGr2LNulRgMIaseo8qC37GMZINLRCnV
+ eS7FzsH6G7eLN73nlAwByxw6Z6QcQslpNigf+vAzSbekATfGHraC6qoJi7Fm6noiE0m+wNrTsu
+ CmcyPNUWCGiX3ehg959AsXxmn8HMufF5fnPH73obq6wnWFGyedQ310rFpQkfVIMdJ9NIwN2iOl
+ CtnvJPMetdOK+QIh2sOpab8e8Zv7JQdnYxR8W/nxgglamQonB+0V/hhU6pLiO8tBa77vv8B/Yh
+ ivRwBAAA=
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Lee Jones <lee@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
+ Thomas Richard <thomas.richard@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On Fri, Nov 08, 2024 at 02:43:48PM +0200, Andy Shevchenko wrote:
-> This prevents use of this driver with ACPI via PRP0001 and
-> is an example of an anti pattern I'm trying to remove from
-> the kernel. Hence drop from this driver.
-> 
-> Also switch of.h for mod_devicetable.h include given use of
-> struct of_device_id which is defined in that header.
-> 
-> Reported-by: Konstantin Aladyshev <aladyshev22@gmail.com>
-> Closes: https://lore.kernel.org/r/CACSj6VW7WKv5tiAkLCvSujENJvXq1Mc7_7vtkQsRSz3JGY0i3Q@mail.gmail.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+This is the second iteration of this series which enables sensors support
+for the Congatec Board Controller.
 
-Applied.
+The main change in the hwmon driver is that now a channel id always refers
+to the same sensor. So in0 is always "CPU voltage", temp1 is always "CPU
+Temperature", ...
 
-Thanks,
-Guenter
+Regards,
+
+Thomas
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+Changes in v2:
+- hwmon: use unsigned int type instead of u8 in struct cgbc_hwmon_sensor
+  and struct cgbc_hwmon_data.
+- hwmon: in cgbc_hwmon_probe_sensors() no need to request data for the
+  first sensor as the Board Controller returns data of the first sensors
+  with the number of sensors.
+- hwmon: fix typos in comments and improve them.
+- hwmon: remove dead code in cgbc_hwmon_read() and in
+  cgbc_hwmon_read_string() (deadcode was the 'return -ENODEV').
+- hwmon: remove useless platform_set_drvdata().
+- hwmon: channel id always refers to the same sensor.
+- hwmon: add a enum cgbc_sensor_types.
+- Link to v1: https://lore.kernel.org/r/20241104-congatec-board-controller-hwmon-v1-0-871e4cd59d8e@bootlin.com
+
+---
+Thomas Richard (2):
+      hwmon: Add Congatec Board Controller monitoring driver
+      mfd: cgbc: add a hwmon cell
+
+ MAINTAINERS                |   1 +
+ drivers/hwmon/Kconfig      |   9 ++
+ drivers/hwmon/Makefile     |   1 +
+ drivers/hwmon/cgbc-hwmon.c | 314 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/cgbc-core.c    |   1 +
+ 5 files changed, 326 insertions(+)
+---
+base-commit: 1ffec08567f426a1c593e038cadc61bdc38cb467
+change-id: 20240809-congatec-board-controller-hwmon-e9e63d957d33
+
+Best regards,
+-- 
+Thomas Richard <thomas.richard@bootlin.com>
+
