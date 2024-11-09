@@ -1,140 +1,210 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAA01E231C;
-	Fri,  8 Nov 2024 23:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D171186A;
+	Sat,  9 Nov 2024 00:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731110270; cv=none; b=ZBTVSLP4nispGVLhg1omJcUObKaIgseb7o2EqiEwqA3nLkzw/NqxhmWmVFMa1Y7AFt81ujcLG5+//Fr5QZgSBrQbkSOe0N9gprpGZHesMDqaUuQ41JIxGefW5wWPinldTplEgvCfqrbM/Ps08zmYehqyU0jD3Yswb4CDotY1DQ0=
+	t=1731111016; cv=none; b=MjB//0jC/0mJw9q0quPrRO0SYECKPaznpz7N5NLALdNbZw0iCiSMgZmU5b2F7UU028GYVSNfSBwB/EeYtXlp6kFohnfrhiJubJpPZe2yZYA1s1AOe55x7s0+kEl6A+cUHEZDjZbROV42byWIQgPoTf0CJxJWTTvu8BzoDtbyprY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731110270; c=relaxed/simple;
-	bh=5MygCCliXOQIPYExnAgpq36Qgh4XXuyOqtJQoNoZ5Eo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o2qZiFqPatsEMmD2UM+fIr+dj75KJN6sgZgXaSWkyTphNgAhOpzvHx1AdI/2rTXEPRG80vWrwhZz90Eq2q0RL0ksWm9YxokRnKU45d4ZXDcyfeDXFW+9Eoz3Q5JY2dpHtjBTsrrmZmL4FwJ9Iu08cp2wicRZ8oJ6RE67Af4cqSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZkvKrRtG; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1731111016; c=relaxed/simple;
+	bh=Rq5/UEu0gOVxKSYuydXs4m6hSlqhobcG+iKkGrIrTKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZXfe4feeGWeKwKh2ZLRJqI1+pnBxL183mAjgn91jVpPTd9r8sCCZjeinaXuil5Qffb95VqUgtKhi0CV0xCakGg50TjMwFjSQ3GTzA1XwSP04hLjRnj7fRxwBCURpwqAKR5k+AYA64fxvzMIA/1Y096bHa6YnWRfMjjEJgQEilzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jUTwJtMx; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZkvKrRtG"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20caccadbeeso29927055ad.2;
-        Fri, 08 Nov 2024 15:57:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jUTwJtMx"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2e2e2d09decso2987840a91.1;
+        Fri, 08 Nov 2024 16:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731110268; x=1731715068; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uq/HleutbBsgjDYtAH2w9gnQgvSfXJu8kVx54tjEWPs=;
-        b=ZkvKrRtGkyy7CdSlZYZTZd6D5xvfiRvAJp2hHIgoGNVSGXT+DX9shbMqJej8FG7cEs
-         0QcCPv5Y+JznhwLt89zZGiLRVvrNiw0jo9BbyuWwbd9kcfyFaorUjEIPtu7cSpCX5B0s
-         l4VSBDsJDwGYFHbiXRbxZs2NxaRLapjfn3eaHQOi/9ZAGNtRGBw/pzYbf0JxM9dYIbWq
-         24w6xJcLUetFJTo/a4MlZRfu7wyMf/ion/ceLZU4c0wIxC95uXNcOo7TtKErGbKcPMGk
-         dYjhkRfPeI/4YkOR8cjX5dxQIjLwe4okRlWbftJT9xO3yvuyXKMDVx8oiugk62vWr/cv
-         +big==
+        d=gmail.com; s=20230601; t=1731111014; x=1731715814; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qkuxRBhUdrMqZHEYYqrRzS7syIb4x9GA940/XJZey40=;
+        b=jUTwJtMxn7IqVIjLu8R9zPd+gv1KlAtrQE9QPmA60iyIsyi5fYoXtbfYwMqreWK6u1
+         zVyXafwj8/BMML0PB3FabZm9IG70ssS+Qrg3PJIxPxqlKspqsAJhRS097PzD9cvQ21aF
+         xk3pLV01bnSVhgIphowpcdzmBDHs/DPiQpCocxNOiG2I7QjalMkCODcrVvA/ZG6BA9m+
+         hEJ5PXDYBvhSqCluMmi5rWX0CEiKuQopw7ypUP7YCz1gw39OuPBiHtbh+LqVfDItNTnP
+         9x+NGxGqOPZ+igoVjqAOVKVHPf8H3pPFVe2JmOPmVC13HeXI3li7WqNxbZzNQEm0b3+1
+         LdCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731110268; x=1731715068;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1731111014; x=1731715814;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uq/HleutbBsgjDYtAH2w9gnQgvSfXJu8kVx54tjEWPs=;
-        b=C+Aobu2+2sc1/52Zx9wFsUnVEI9t5QsnTW6Xp9BpfKQYKK0qPaMcVjS+Sw9Fk/G7ZU
-         VZd+AsdlRUA+82J7ITIds7fGu3h7NrRH/Lo0vlaS2qmj5eRFvvqril4Ak+b70xBy38uO
-         jV8dO7GgYBVnNj8n5p2b9FzhLJaVPqk6ICeO+3qbqxe9S18WAbkLk1MfiTbtmMOZFpba
-         9CIjLaSLOPXTv4xR/rND5lG2KBLtrIAKrgGmckp71wjCnekrg+qYkL6T8vJHjuDdUvyC
-         heF26s/QQuE8TNQ048iqQnvFjFmAIqkx/2pN/ts6vXUVEhpOu7WVeOyLrbrjjeweHF0I
-         lnDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrCp9dwydWG63H4Nypob98x2aOF7HhX4fqc7JIqTfnoB4QLh7MUitcBK2XFp5i7VSSIy3oao44Cm4=@vger.kernel.org, AJvYcCWaWBbz9OTIJ3WEgbNKl7kBfQ0WvogcaFuMypgxw48MEHEVVJRSMFDMvP9/ZGuENQA7Le2RoBnpVZa8ltc=@vger.kernel.org, AJvYcCWpvFGAMPa8hqdStKTY8NFQ27gSnoYMsDiWO7XLgBogZwUCkuhvMosAddfex/ym8pJZUNEKVDBZMd6kFDcH@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZHH+UL6BWDFvBIvKhmDHFXFLB+xkuMo7XYKO9YycQkR17FADz
-	voM5YI4yG6l9/Ani/2RCYmzmfmXtiZ5GxcoazQYItPIx9nT71M0y
-X-Google-Smtp-Source: AGHT+IHsqYMoJaZR7DEU7+RH7csowchtdMKT8eN0fEPfCSshXzgwgvSMaWsCEdbws5SrloYWRHxKNA==
-X-Received: by 2002:a17:902:db0a:b0:20b:70b4:69d8 with SMTP id d9443c01a7336-2118359ae3cmr54561975ad.37.1731110267757;
-        Fri, 08 Nov 2024 15:57:47 -0800 (PST)
-Received: from archie.me ([103.124.138.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e6938csm36445735ad.229.2024.11.08.15.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 15:57:45 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id CDD1541F52F8; Sat, 09 Nov 2024 06:57:40 +0700 (WIB)
-Date: Sat, 9 Nov 2024 06:57:40 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Abhinav Saxena <xandfury@gmail.com>,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] docs: hwmon: Fix typos in sch5627 and max31827
-Message-ID: <Zy6ldOPnnl5ocf6V@archie.me>
-References: <20241108212201.144482-1-xandfury@gmail.com>
+        bh=qkuxRBhUdrMqZHEYYqrRzS7syIb4x9GA940/XJZey40=;
+        b=oZllpnbqYW8D8lqMdQHvimECwokXOmoWYzqqgQjUviqJunLCEzmu8okOfC5O1omev5
+         I3tSXQg+VABra/cgkOvLPjkGHFw7lwxE6zophg26DVSKXH7w2SvdjJ14LoJzmhkazOa+
+         pCZJuJ3Vez0EM/TsObREgWK2zCRmTaIEf+aTZ5yCh5Uov7uk7grUUlCvKc4sB24IuaEt
+         6/Nhx6KGJqPw6P6WsA5w+xszJ241K3owGOA7jt0+MxWzHe4cx/IuXK+y25LpPqaCdQBl
+         nRZ5ijZd3l4zxVxpP+bpe4wP5vwaGmg8xVWAvn5tvh1oRWb2ZiuywWqvXvNIOUGZ58CC
+         zktA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjIxDd+k9JGE+YbeMrY86S0sUda957NXwOlHtqwaVFzJTeYNkUUzQcg0P1pJZ7b0KbZE2Kw+3NMN7BQA==@vger.kernel.org, AJvYcCVhPxxQgcWEGSn+l1xQZjMqHmERHLvX0UqJ16E7ot/MdUnEwFyxaxbsFxXr3v4OpaFe2ip1RPoc1Nsd@vger.kernel.org, AJvYcCWnI78eLID9iXRbZ5dTLEI424BVEst+sFjI0ButdzViB0Y0E3jfsRT4Pg1F1yEi2HPpbR+p/ZZJWPidMJtk@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRiYxLADM1DQ8ZrOfJfTYT2NLb8kkHQ28csrxPiL5SpDye02Ih
+	fiy+41v4CemYpYPlWF2pWOWgqJpFY0NS6z2Ntg6vM0QXSxXGOUoa
+X-Google-Smtp-Source: AGHT+IHIJjoErnvnQ8M35ks2Kzb8DXfptuyNI+D7IwxYCzr2yibZDe70aA2CeUtxRv8l9Gw9P306pg==
+X-Received: by 2002:a17:90b:4b0f:b0:2e9:20d8:414c with SMTP id 98e67ed59e1d1-2e9b0a30173mr7016077a91.5.1731111014538;
+        Fri, 08 Nov 2024 16:10:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9be866bdasm415822a91.16.2024.11.08.16.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2024 16:10:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <805495d8-b1d0-4258-8f86-35c92b2b0e61@roeck-us.net>
+Date: Fri, 8 Nov 2024 16:10:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8KwVmF4c1EsaXBVK"
-Content-Disposition: inline
-In-Reply-To: <20241108212201.144482-1-xandfury@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] hwmon: tmp108: Add support for I3C device
+To: Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Jean Delvare <jdelvare@suse.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, Krzysztof Kozlowski <krzk@kernel.org>,
+ linux-hwmon@vger.kernel.org
+References: <20241108-p3t1085-v2-0-6a8990a59efd@nxp.com>
+ <20241108-p3t1085-v2-3-6a8990a59efd@nxp.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241108-p3t1085-v2-3-6a8990a59efd@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 11/8/24 14:26, Frank Li wrote:
+> Add support for I3C device in the tmp108 driver to handle the P3T1085
+> sensor. Register the I3C device driver to enable I3C functionality for the
+> sensor.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>   drivers/hwmon/tmp108.c | 31 +++++++++++++++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+> index bfbea6349a95f..83d6847cb542c 100644
+> --- a/drivers/hwmon/tmp108.c
+> +++ b/drivers/hwmon/tmp108.c
+> @@ -13,6 +13,8 @@
+>   #include <linux/mutex.h>
+>   #include <linux/of.h>
+>   #include <linux/i2c.h>
+> +#include <linux/i3c/device.h>
+> +#include <linux/i3c/master.h>
+>   #include <linux/init.h>
+>   #include <linux/jiffies.h>
+>   #include <linux/regmap.h>
+> @@ -442,6 +444,35 @@ static struct i2c_driver tmp108_driver = {
+>   
+>   module_i2c_driver(tmp108_driver);
+>   
+> +#ifdef CONFIG_REGMAP_I3C
 
---8KwVmF4c1EsaXBVK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+REGMAP_I3C needs to be selected in Kconfig. Maybe with "select REGMAP_I3C if I3C" or
+similar, but we'll also need to cover situations where I2C=y and I3C=n. That means
+that an additional "depends on I3C || I3C=n" may be necessary. In summary,
 
-On Fri, Nov 08, 2024 at 02:22:01PM -0700, Abhinav Saxena wrote:
-> diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31=
-827.rst
-> index 9c11a9518c67..6cc5088b26b7 100644
-> --- a/Documentation/hwmon/max31827.rst
-> +++ b/Documentation/hwmon/max31827.rst
-> @@ -136,7 +136,7 @@ PEC Support
-> =20
->  When reading a register value, the PEC byte is computed and sent by the =
-chip.
-> =20
-> -PEC on word data transaction respresents a signifcant increase in bandwi=
-tdh
-> +PEC on word data transaction represents a significant increase in bandwi=
-dth
->  usage (+33% for both write and reads) in normal conditions.
-> =20
->  Since this operation implies there will be an extra delay to each
-> diff --git a/Documentation/hwmon/sch5627.rst b/Documentation/hwmon/sch562=
-7.rst
-> index 8639dff234fc..5f521c6e90ab 100644
-> --- a/Documentation/hwmon/sch5627.rst
-> +++ b/Documentation/hwmon/sch5627.rst
-> @@ -39,7 +39,7 @@ Controlling fan speed
->  ---------------------
-> =20
->  The SCH5627 allows for partially controlling the fan speed. If a tempera=
-ture
-> -channel excedes tempX_max, all fans are forced to maximum speed. The sam=
-e is not
-> +channel exceeds tempX_max, all fans are forced to maximum speed. The sam=
-e is not
->  true for tempX_crit, presumably some other measures to cool down the sys=
-tem are
->  take in this case.
->  In which way the value of fanX_min affects the fan speed is currently un=
-known.
+	config SENSORS_TMP108
+         tristate "Texas Instruments TMP108 and P3T1085"   <--
+         depends on I2C
+	select REGMAP_I2C
+	depends on depends on I3C || I3C=n                <--
+	select REGMAP_I3C if I3C                          <--
+         help
+           If you say yes here you get support for Texas Instruments TMP108
+           and compatible sensor chips.                    <--
 
-Looks OK, thanks!
+           This driver can also be built as a module. If so, the module
+           will be called tmp108.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Thanks,
+Guenter
 
---=20
-An old man doll... just what I always wanted! - Clara
+> +static const struct i3c_device_id p3t1085_i3c_ids[] = {
+> +	I3C_DEVICE(0x011b, 0x1529, NULL),
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i3c, p3t1085_i3c_ids);
+> +
+> +static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
+> +{
+> +	struct regmap *regmap;
+> +
+> +	regmap = devm_regmap_init_i3c(i3cdev, &tmp108_regmap_config);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(&i3cdev->dev, PTR_ERR(regmap),
+> +				     "Failed to register i3c regmap\n");
+> +
+> +	return tmp108_common_probe(&i3cdev->dev, regmap, "p3t1085_i3c");
+> +}
+> +
+> +static struct i3c_driver p3t1085_driver = {
+> +	.driver = {
+> +		.name = "p3t1085_i3c",
+> +	},
+> +	.probe = p3t1085_i3c_probe,
+> +	.id_table = p3t1085_i3c_ids,
+> +};
+> +module_i3c_driver(p3t1085_driver);
+> +#endif
+> +
+>   MODULE_AUTHOR("John Muir <john@jmuir.com>");
+>   MODULE_DESCRIPTION("Texas Instruments TMP108 temperature sensor driver");
+>   MODULE_LICENSE("GPL");
+> 
 
---8KwVmF4c1EsaXBVK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZy6lcAAKCRD2uYlJVVFO
-oyqwAQDDPN2bC6IWGqOVlsjF9FqVbpegaenlIOkDCdTywIVMVAD/aLzSDrWOH9PV
-Mnp0H17MyQPDx5DN+4UDoroJMn27LQE=
-=i2CI
------END PGP SIGNATURE-----
-
---8KwVmF4c1EsaXBVK--
