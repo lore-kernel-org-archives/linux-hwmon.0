@@ -1,203 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A511FA55
-	for <linux-hwmon@vger.kernel.org>; Sat,  9 Nov 2024 04:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF7C4EB38;
+	Sat,  9 Nov 2024 10:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731127896; cv=none; b=TrPPc4sgoXt0UgfAQCaFUwTwne8Uxkef9GbnuYoY2tY1ChP888YWbHXv6YqAhUY51hJHJ4HUeI8lYJcklLELvWGwXP5u6A9rJSrXEJw7iyp05k/OkiS9t8hLZeC1uJdSt/85HpQ/9ja741YZTlw7cDhRmLtcfjqp3ja8JvNZ9Ok=
+	t=1731148678; cv=none; b=GGJF2G9ch2eKirCRKViSHBVkJ9rzSstwQE/87gd3+/nYpo9BKDNvlWi8+mncyxQYUxp2d2hlzHddXQTwHEt16yiDc3rwZZ9v+L4wC2GkBdqtV6MAQsvE/AuAo6D+dFm5UIFubP7zFguEoeJjH2vDdCC62eSw9Ep8SXbto5h8uEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731127896; c=relaxed/simple;
-	bh=ZxRPqcfou5p/H5a++rRguc2xxlmmVIffvIYS+mkjMQs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VC8d4foTh8M+DEnLMC+UrHyR5muiIV+gGSFMalMqAdNV2WogmPv2TSSLp202JBoTK12vBHGKvuibginLy88Thp/st+zuIB4F357lnTBxRdvvmGvmYRp0IQgikuJ7tDKf3KSFZlu+WfHzbkn56jeu/YkL/wx4IF2ZO5qbwcLAUhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MCltCd6p; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731148678; c=relaxed/simple;
+	bh=O8bmZTnkzt/k76wgmpN7lbyrRgnPKEQqG7lovjyj04A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQCVX4TSaY8STKaJLavdmdnWLrxtZBGxcVxdlANA3epbSD3g93Th3j2jago2d5MsnqZh3hg9fA76nc/WMu41Bgrv8/prCX57ldQ/sgwWn2xCNMMHhktc6uQfJthU/kXcMbsVYkN7mM4b6A3O4w0u7j0Q33NP9qdqDGY9k3yyTno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJs1L+sh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MCltCd6p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731127894; x=1762663894;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZxRPqcfou5p/H5a++rRguc2xxlmmVIffvIYS+mkjMQs=;
-  b=MCltCd6prQodWM9zRRuL1wndIbUgQG8viQGPoV1Q7MXGSR7eBa4CaAt0
-   8qYEaRF3aq8SrvXwHfx9OJNImg0bgn/iLi2PPXzOxqaKw5P66Og5TuMjH
-   myTm2u8N/jQwyNCWOONrgA4hTH18c8MfJm+LU/W06Tzo8ANNERDSm1oQy
-   RtXv/sSFvb9QCx4YK4X6ziPKRmkiU7l3LntpGdYeSW4unOXWCY5GJU1Wv
-   haqwo5HSYme1FWeSvZfXdkQDFwA6cnvNacThFLJI9LqD8XP2fDiUglRX6
-   1VnW0Gue6r/DTqXknd71UnKmpGdIp7a01MDIA9IRqoNEbC5EiyrFkE5Wv
-   Q==;
-X-CSE-ConnectionGUID: CNtLoU5ZT0ihzdlidHad2w==
-X-CSE-MsgGUID: C+FkGuyJToaiiS1dpANPJQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="41630396"
-X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
-   d="scan'208";a="41630396"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 20:51:33 -0800
-X-CSE-ConnectionGUID: 4YuBtIcASvqExQ+QKkP1bA==
-X-CSE-MsgGUID: tdOhvKhZSgu3vLi+5n0cvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
-   d="scan'208";a="90736764"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Nov 2024 20:51:32 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9dRZ-000s5O-2e;
-	Sat, 09 Nov 2024 04:51:29 +0000
-Date: Sat, 09 Nov 2024 12:50:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- e98d562cd5075710b3b0cfcb8ea146c829041ef0
-Message-ID: <202411091235.jXpl37UC-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJs1L+sh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA19C4CECE;
+	Sat,  9 Nov 2024 10:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731148677;
+	bh=O8bmZTnkzt/k76wgmpN7lbyrRgnPKEQqG7lovjyj04A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eJs1L+shyI6Ycc7P7puwVKIizrQ8AKXI44qJmCsZdX25CZ8C6r4BJCX6HAlzHQNTT
+	 3+e3EkPHdBk/O5KhXq2mJv0oDqcRDbYDIzwKLJZ+9aV7qwRxZqlzpm5dis/cvPkV4d
+	 im2cDcY/4oTH8XslPvkd/Scw7dEM6ycAD5bWfr0a61wuCx/UZUcbLFLwfWAU2oaAPS
+	 IS4gqarNrqaHjBrFondPbRXjyYWqnVh3Zo67BYrViV/1FY3WniF8UMp7ZB71pBdSxi
+	 2Fbbc7u+THZx6tzcJcgkt2iD2rVS9yDtRtoYAaQhsGs2h3FoCRDjWokYtaiNuyMLig
+	 mEJEXnhElHkBw==
+Date: Sat, 9 Nov 2024 11:37:54 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: ti,tmp108: Add nxp,p3t1085
+ compatible string
+Message-ID: <vd4xjzsdfdtfybz2njsinvfgbb4vrvcqenegfrl26bahypucxc@2ic3adferu2z>
+References: <20241108-p3t1085-v2-0-6a8990a59efd@nxp.com>
+ <20241108-p3t1085-v2-1-6a8990a59efd@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241108-p3t1085-v2-1-6a8990a59efd@nxp.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: e98d562cd5075710b3b0cfcb8ea146c829041ef0  hwmon: (jc42) Drop of_match_ptr() protection
+On Fri, Nov 08, 2024 at 05:26:55PM -0500, Frank Li wrote:
+> The register layout of P3T1085 is the same as ti,tmp108. Add compatible
+> string nxp,p3t1085 for it. The difference of P3T1085 is support I3C.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 
-elapsed time: 802m
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-configs tested: 126
-configs skipped: 5
+Best regards,
+Krzysztof
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                    allnoconfig    gcc-14.2.0
-alpha                   allyesconfig    clang-20
-alpha                   allyesconfig    gcc-14.2.0
-alpha                      defconfig    gcc-14.2.0
-arc                     allmodconfig    clang-20
-arc                     allmodconfig    gcc-13.2.0
-arc                      allnoconfig    gcc-14.2.0
-arc                     allyesconfig    clang-20
-arc                     allyesconfig    gcc-13.2.0
-arc                        defconfig    gcc-14.2.0
-arc                haps_hs_defconfig    clang-14
-arm                     allmodconfig    clang-20
-arm                     allmodconfig    gcc-14.2.0
-arm                      allnoconfig    gcc-14.2.0
-arm                     allyesconfig    clang-20
-arm                     allyesconfig    gcc-14.2.0
-arm                at91_dt_defconfig    clang-15
-arm                        defconfig    gcc-14.2.0
-arm               neponset_defconfig    clang-14
-arm                  tegra_defconfig    clang-15
-arm                  u8500_defconfig    clang-14
-arm                wpcm450_defconfig    clang-15
-arm64                   allmodconfig    clang-20
-arm64                    allnoconfig    gcc-14.2.0
-arm64                      defconfig    gcc-14.2.0
-csky                     allnoconfig    gcc-14.2.0
-csky                       defconfig    gcc-14.2.0
-hexagon                 allmodconfig    clang-20
-hexagon                  allnoconfig    gcc-14.2.0
-hexagon                 allyesconfig    clang-20
-hexagon                    defconfig    gcc-14.2.0
-i386                    allmodconfig    clang-19
-i386                    allmodconfig    gcc-12
-i386                     allnoconfig    clang-19
-i386                     allnoconfig    gcc-12
-i386                    allyesconfig    clang-19
-i386                    allyesconfig    gcc-12
-i386                       defconfig    clang-19
-loongarch               allmodconfig    gcc-14.2.0
-loongarch                allnoconfig    gcc-14.2.0
-loongarch                  defconfig    gcc-14.2.0
-m68k                    allmodconfig    gcc-14.2.0
-m68k                     allnoconfig    gcc-14.2.0
-m68k                    allyesconfig    gcc-14.2.0
-m68k                 amiga_defconfig    clang-15
-m68k                       defconfig    gcc-14.2.0
-m68k              m5249evb_defconfig    clang-14
-microblaze              allmodconfig    gcc-14.2.0
-microblaze               allnoconfig    gcc-14.2.0
-microblaze              allyesconfig    gcc-14.2.0
-microblaze                 defconfig    gcc-14.2.0
-mips                     allnoconfig    gcc-14.2.0
-mips               bcm63xx_defconfig    clang-15
-mips                   gpr_defconfig    clang-15
-mips             maltaaprp_defconfig    clang-14
-mips                 rb532_defconfig    clang-14
-mips               vocore2_defconfig    clang-15
-nios2                    allnoconfig    gcc-14.2.0
-nios2                      defconfig    gcc-14.2.0
-openrisc                 allnoconfig    clang-20
-openrisc                 allnoconfig    gcc-14.2.0
-openrisc                allyesconfig    gcc-14.2.0
-openrisc                   defconfig    gcc-12
-parisc                  alldefconfig    clang-14
-parisc                  allmodconfig    gcc-14.2.0
-parisc                   allnoconfig    clang-20
-parisc                   allnoconfig    gcc-14.2.0
-parisc                  allyesconfig    gcc-14.2.0
-parisc                     defconfig    gcc-12
-parisc64                   defconfig    gcc-14.2.0
-powerpc                 allmodconfig    gcc-14.2.0
-powerpc                  allnoconfig    clang-20
-powerpc                  allnoconfig    gcc-14.2.0
-powerpc                 allyesconfig    clang-20
-powerpc                 allyesconfig    gcc-14.2.0
-powerpc             arches_defconfig    clang-14
-powerpc              eiger_defconfig    clang-15
-powerpc            ep8248e_defconfig    clang-14
-powerpc               fsp2_defconfig    clang-14
-powerpc         iss476-smp_defconfig    clang-14
-powerpc        mpc8313_rdb_defconfig    clang-14
-powerpc        mpc836x_rdk_defconfig    clang-14
-powerpc         mpc885_ads_defconfig    clang-14
-powerpc             pmac32_defconfig    clang-15
-powerpc            redwood_defconfig    clang-14
-riscv                   allmodconfig    clang-20
-riscv                   allmodconfig    gcc-14.2.0
-riscv                    allnoconfig    clang-20
-riscv                    allnoconfig    gcc-14.2.0
-riscv                   allyesconfig    clang-20
-riscv                   allyesconfig    gcc-14.2.0
-riscv                      defconfig    gcc-12
-riscv           nommu_virt_defconfig    clang-15
-s390                    allmodconfig    clang-20
-s390                    allmodconfig    gcc-14.2.0
-s390                     allnoconfig    clang-20
-s390                    allyesconfig    gcc-14.2.0
-s390                       defconfig    gcc-12
-sh                      allmodconfig    gcc-14.2.0
-sh                       allnoconfig    gcc-14.2.0
-sh                      allyesconfig    gcc-14.2.0
-sh                         defconfig    gcc-12
-sh                ecovec24_defconfig    clang-15
-sh                    espt_defconfig    clang-15
-sh          secureedge5410_defconfig    clang-15
-sh               sh7757lcr_defconfig    clang-15
-sparc                   allmodconfig    gcc-14.2.0
-sparc64                    defconfig    gcc-12
-um                      allmodconfig    clang-20
-um                       allnoconfig    clang-17
-um                       allnoconfig    clang-20
-um                      allyesconfig    clang-20
-um                      allyesconfig    gcc-12
-um                         defconfig    gcc-12
-um                    i386_defconfig    gcc-12
-um                  x86_64_defconfig    gcc-12
-x86_64                   allnoconfig    clang-19
-x86_64                  allyesconfig    clang-19
-x86_64                     defconfig    clang-19
-x86_64                     defconfig    gcc-11
-x86_64                         kexec    clang-19
-x86_64                         kexec    gcc-12
-x86_64                      rhel-8.3    gcc-12
-xtensa                  alldefconfig    clang-15
-xtensa                   allnoconfig    gcc-14.2.0
-xtensa                 iss_defconfig    clang-15
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
