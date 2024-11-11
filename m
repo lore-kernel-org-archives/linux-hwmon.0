@@ -1,203 +1,290 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012031.outbound.protection.outlook.com [52.101.66.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1DB1AB515;
-	Mon, 11 Nov 2024 19:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731353088; cv=fail; b=WmGs+1EERgNctDk82dyVkcqjcIKa3pBk8ekyABtFVJBJ/iTOiFnTnAEtUQ2PX7VBCmV+OMN3PKTYYqqQMTxdAtB87NQ3ljHAxfD07dNnOqT9Hx4FEakGQSi+lAZNV+7MLeUbewLV85es14yT0z+a5RGiC89qc+xnBZg2vh1RoqY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731353088; c=relaxed/simple;
-	bh=NdTaeTFk0fNlNVtzi7Tnh8YdbovoxP1qgeEYPFT2GFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=URAs2YxXVCAqHb7uSUHQBqROvaKEC6EzzJwmjjr0PNEBw+nqyX30gfqlWmfLPzamm1TIZ6MUh4uMRbmdiZKwkVzp391qYV0mFEDyJ7LJv7+uJJ2CFy7QzxVInqMrl5DYmlAaXo2nTccHCj9MWgPknJ9UepF2pyd4N2fANL9ybcI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=enN0HYOI; arc=fail smtp.client-ip=52.101.66.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9141BB6BE;
+	Mon, 11 Nov 2024 19:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731353479; cv=none; b=WlumgOwsqLmXi/aEiIBifwtI5GV3TgLrGuzEQenmIheLBjyO6CiWv+cXCAd4Tkppw9EXdlUzknmHIHtcS4jDLscUJsBgUdjV1c0jm/iIwaxnqTZGzaDKc0c+o+CcYf7VOFoYkEg2sjbpv/yEus7Ge35WIy+dSZpfRLp3MewEvpc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731353479; c=relaxed/simple;
+	bh=aWyLdd9/dmux+xmcpmgsuOlC7XGUqZCUd42vUE/kKn0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ky0h1mEech69rVP4rv3aIzBxRcMYwxr2uKQ/ej1SPImVR8f2FOB3FQN26JiVVVY6+Zh1GKmORn4jKfCFOM/qZgxp1GunuHwyVO37WiCEs8XLADOMyXyvAOk6BIxYTLPnO9cPchTn4pd8Fi20K7OqOhEYm1cxWhbPVqkNCgeR+M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SayCeDbO; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="enN0HYOI"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AcR+CrFTF5L2uWXsG4IHIcqiOPXlfzlErjDObvl5PwF3LeSic3YI4uR7HZcdFvIMs7Pf5Ee5WNYxYBjBmaRK8lG3+EL7NLq3XXtZTuaD75y6mndrOEBI93wEmy88GA/dyXV2vdB9gsE3Xv0oEkTr2rYPuFTTGHPyQrlzM3/rKwn2sS9cTKkd6JAxseMl8a+PTKolAAEpuceaZEQj6qEmK5GQi7y5p13pEIqwF6GtwPdW++Voy13UD7ke1cltDEiP4z86WXRVzlykkjGc4l9QexTm25RppOC0PZT8HT6OK1f+SSdJy/Jo8RqfwsIlWCmx3IYymw4RiTi/2I5yNfKS9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zIGlxsUzD18y4KL9f6ulpi7FZ2vNeWVymDj4IADuKWo=;
- b=zCRl6qYgS10lMpwXfCZ9ZNfdimiHlvNeD+LGT3f5HrGEHN+iObPZIk/tpbAtuJVb9xrYLMBfDdxxVkpZa3hoqiF3Bm2Cypzk08dnPg6KOa8uFT2hSTqQrZXfPaArkTgsnRKjQ6PIMLFPVPtaXe736zxdXkP9HkCcqtCT946iJCcECjHdeYSOm1CRNC1tJJHvYBIo0WSI+9dhXEVlO2nbxyl9pSJB2ZNj9Rr+Jnjuv8fcjN2lMWRRoQTbxDilW0x1ypiEtQdMOTOrO411Aeoa4svLz8nvj8eJLqnRca+Sbml4hLEzAWcKvsLNO1awy2/dSVMnvj6C24TwcKX68V63vA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zIGlxsUzD18y4KL9f6ulpi7FZ2vNeWVymDj4IADuKWo=;
- b=enN0HYOIYZ0hjNj/XSZCU2jFUnGXQueqK73Swy+5SX23heQRTs9PG3F1m/59mB/A2QkPPeb0xkUlQRF2aXcEKjrtl/+KRgdue4kX08dTKeWI8/HMaywrU7Rm9wQZTzoBDRrWEZLH6EWfuzPmTPwnI5k0ZprpfRgqOkbukBvqcKtdHN3eeG1d/1I5KtJg9UvZWDodmMf6c6bylgdlYJXEWhep7P5wrzPyfnD40c/V9ESH1kYvfhKT9T9Z6zjXh5nmKFLIXmJQMpirsS4IUVoqsZtPHecHoftAVbcvY3DQaIpLKb1AInvm2Yc0B0VzRBcUqYTES9dhPoqOtGwC1ufBTQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DBAPR04MB7207.eurprd04.prod.outlook.com (2603:10a6:10:1b2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Mon, 11 Nov
- 2024 19:24:42 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.8137.027; Mon, 11 Nov 2024
- 19:24:42 +0000
-Date: Mon, 11 Nov 2024 14:24:33 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 5/5] arm64: dts: imx93-9x9-qsb: add temp-sensor
- nxp,p3t1085
-Message-ID: <ZzJZ8d9pG3O47wIP@lizhi-Precision-Tower-5810>
-References: <20241111-p3t1085-v3-0-bff511550aad@nxp.com>
- <20241111-p3t1085-v3-5-bff511550aad@nxp.com>
- <20241111191311.qallf3xrz2vlylak@pengutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241111191311.qallf3xrz2vlylak@pengutronix.de>
-X-ClientProxiedBy: SJ0PR03CA0131.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::16) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SayCeDbO"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71e52582cf8so3811697b3a.2;
+        Mon, 11 Nov 2024 11:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731353477; x=1731958277; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbuqf46y5oFcvCYLEnKQhR4Sj2irKhfbrLFisV+GHII=;
+        b=SayCeDbOg6T7VLrRZQNxp7l3Ikg5JbngFH+wrpiwNzGkhNEbbcbut/qHN8OwSWu2Xb
+         n0CU59GW7bc+ACYF2kutYIuKuZ7MKNUmEgX+TWz3ZzuhCzcWcmjXGdLbeXlRTN/BeyIk
+         LV7l03fyREE91FVvhd1Y/q7WfT8K3IvKPiXWCcVj/p0os9OyBrbHuzsNwqE5T7YgwMXN
+         XetGCnekWPxm1HjgdrwxE6Nzxs/pGclHzwBMz9mu1ra1XtzGiaHEgtbdhqCIB+tcPyDK
+         0UPw57H5DKAuEEEJH5GQaRYb5bs4O9EvgrWOdgDfVnbm3OHZkbEfpmThcxXhGZ5x1kZi
+         VL8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731353477; x=1731958277;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qbuqf46y5oFcvCYLEnKQhR4Sj2irKhfbrLFisV+GHII=;
+        b=KKzew/K+6C2vzUJg5rcC4m8csNkItNS0pgjJztecdhYWxuxiY9Vgk+cv9tcN6tXVUw
+         NG1ZCbTsdeUc09Qv8mRPXETuA/ACGdfeDqnl741EEYu6ma1Iv54jgxtrzgI0icK51NjC
+         mFoYVY7Ve37NtGTMAjLoy/5N0Ub4Jm52qrf8sY22Vgcz35MClgqVfFukNEpDyb/GC7ch
+         ZiVrvfv34nFf5NlDMwXNwdQF8QwG/gjA12ggNf+mwx764UZnYpsi4AyS6M0aeaCMTZ7B
+         oAZzI++a0CBiWS2UomP+PLZ0etEI9uXS+v3XuUCW44BJoj9chc0IaKQv1j3LuoRZRCkt
+         mVWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWhPHV6XcnLziSo4VKwnTme9mO/AcGQP+aqMiSUN7b5fZHsrUqhoDMGbEImTD0YPQZDrMdb/yfIQqEsuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRKJ4+9oMG56aVL7n6qxxkFziekUaMoVJEu4La1LdcQ64jb/OP
+	moQwwpapmUFFdTHdu752yzrZ9vQcocc5VIRrKFc+l7OTKq870OuLbJOPxA==
+X-Google-Smtp-Source: AGHT+IHXQ9lj6UmHroIsIc/NCYZ0o0U8SaJlnwJjy5kbifZJ8LkgNO/GUL/m6sM9Dk3H8IB0N/vY4g==
+X-Received: by 2002:a05:6a20:840f:b0:1d9:18b7:496 with SMTP id adf61e73a8af0-1dc22b7551cmr18050882637.45.1731353476885;
+        Mon, 11 Nov 2024 11:31:16 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a41cfsm9632638b3a.41.2024.11.11.11.31.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Nov 2024 11:31:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <609715ff-973a-484d-9267-ff80be7e36f3@roeck-us.net>
+Date: Mon, 11 Nov 2024 11:31:14 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DBAPR04MB7207:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0304b7f-b449-4205-0092-08dd02867e58
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fCmEnDegKpRAVEi1rH4+2xl7WQzzTYUqKzjeKid08AtKlWmh5xGMTohEl8ge?=
- =?us-ascii?Q?uaTDfNabdeqynjVS6lbI4OjhIEgWbtPsYja2s0t6nwBgYoORrUGyprbodIxw?=
- =?us-ascii?Q?mp7t/MeYnzsw6I7C4DKeBnJ1PYBe8q13wcPTIkd13K31s1dFW4SUzDVyiEPA?=
- =?us-ascii?Q?3bhWrlO5rNa5/YFUpOUkRFLpk6farVRux/uVK3fPWTW1UxomvGrLQISFIwsL?=
- =?us-ascii?Q?tLrU7TPXfhJPYzA2VDeKOHcRozc8UYn3jxFSZOTv03ODEkGyWDHAfHW5uGEt?=
- =?us-ascii?Q?FAyL3XY9zw9RoerVzvwCycka6Ssii4K7FUJ1YIE4Hj6OR44+r1zbD9s2fMCl?=
- =?us-ascii?Q?LqtgN7N2WgrG9xSs04kPu4lriaCHa8PTpx0lMjnugq5R7etZCLQGwci5YZgf?=
- =?us-ascii?Q?WVk77e94a+/kPxXy1Gasf+rCKrKp72r/HItezM0eckLCQ6BuOrfAkjD/gHKU?=
- =?us-ascii?Q?7WNQxhKgLoE+yKt7uPB4wWA3DUPi8uPpnxnej0kvIRb7Cimz2pkcc+XbRn1h?=
- =?us-ascii?Q?sXl8eTSDAN7d6ebaY2AK13AX3jsJAjOlDCTdWW7bnMqLEADp/BFjkhpJ2cbV?=
- =?us-ascii?Q?k7CLN7cAF14xHIsZrLXkgN1nhBJU9nUOTcrVycAyTMSXBs10kPnuUN1wGvdJ?=
- =?us-ascii?Q?0K5ZJhumQlHLKA8g0y3zqbh7dot1kbCxroaWE/nJuHgI5sr/Mj626MHJ80hr?=
- =?us-ascii?Q?rYOEC297Eh2vkOcbyyFzUt6nEx5/TQoSrkwH7WAD6TAEnpxK5DhNDEKkqRL0?=
- =?us-ascii?Q?P8OOXoDxD7doup/LIN7Ol0dB7oaU+KC7miN/aKNzQt5vznEkXg8iFaUTsx+s?=
- =?us-ascii?Q?l3IEF8BBscr5ICbEA6po2eXMjpcVtznuym5e/g+HdoLt65lOftgnML4l9ogR?=
- =?us-ascii?Q?PS15AyE1R7tXMXT9y6KkHTDl0zRTgqh44KahgEPrLSOHaq2c0s7dTFVRfAg4?=
- =?us-ascii?Q?0B1cT7fdisYxlyVFe3mcdZ2iA9MIpUuaODtcXc+fqzIM9jwLxuRL0kqBzNi4?=
- =?us-ascii?Q?EoB6EAoHQ3XIqhE6txaPQk8FMMJrdfCMJz7zEvLsIOmUSQSoz7Fl1dWZLrEu?=
- =?us-ascii?Q?sjLDVHEJ8g+tTNKCXZM0Nl3QnO5U9graaQH3g+62p3TERK84M657/EYEJ5RS?=
- =?us-ascii?Q?nDixEcnypKLDb74kN4MDJ8Zje9CRMMuP3KxIM/ieF2h5HpOi65+RQcl47FXf?=
- =?us-ascii?Q?qGmRlO7HFaHYFsc8kgDujcSFiZO2D8rRzb3dcnP86KdZUOz/dTizKCPUkWrr?=
- =?us-ascii?Q?QiJgYtY2HyR98/MBrAMSjDMmuY8tC8KoWGGEke1LXTw787lS8zZLKDZqQPLB?=
- =?us-ascii?Q?tsPUN3cZ73kinqlGePnXFlU08sBn7njaOkUvf4xEsTXb27Mcy4yP7GLQ5gXm?=
- =?us-ascii?Q?PuLAK7c=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ud74NM8U6ZdrMXp5YIyF57TY44oY2saiTomusOwsec9Fn8jUuQ+/AJ8VXTb8?=
- =?us-ascii?Q?RoUh94FDo8/pgihqPSEK8Km8D/lXio5h6nkWb8zG0xAUOC4tv86CNiIlA9Tg?=
- =?us-ascii?Q?hK2yRDaEzWsu3PcUv0kFsj0dJwU4gcqKlbQQLXXnuYparxutVG07ViazUjyt?=
- =?us-ascii?Q?rcHl4OFNfdyhqHYfcslt4gGUhBxvzF0qeLPmZsAt7hIJjEaHyseQLvEG+cDC?=
- =?us-ascii?Q?jmYa0JsUS3JhggQL6TRKT4o5nnRPCmWsCb0UObkotKI0PE5i8Pby9wbKqDf7?=
- =?us-ascii?Q?3VqsJ5vd0FG/DSzNqfHnXZSvcXWYr7e42tntr6/oigUelV5B6VynKI2fbW+O?=
- =?us-ascii?Q?UCNrk6rZKLJ8IuGI6DvuXvd/hRcR5VR8jJAKVFOWvYfx0PoewlOgDs4ZpKIV?=
- =?us-ascii?Q?Mw1y6vqc966eHMPa20xytsXNBQkkYBsWw43sNss8RICMT3+y1eIAKMOp3acL?=
- =?us-ascii?Q?ArMhDHQQcB3MLQMkwjjPYHZt9Ozsxc9tXNk4mvDqC8zu4kZt1FfVPFGM23ar?=
- =?us-ascii?Q?iFHVf/nLiY39mpiwQ0PQKdP2pV72rAJLyT+BjmMbAOnC+OyUYpyY+wNf37N6?=
- =?us-ascii?Q?cvZDQEF4hngq9doiR77vbb78io5LZAi3C1WEs621iPKxBbltsR+uL+JF+edw?=
- =?us-ascii?Q?vdvRRp3m1WxCuHeJjvr4WoIdwzy4qlMzLGUGEW3ZRw8uDVGYvZb4KVK6Xm7a?=
- =?us-ascii?Q?t2uo/AIfuK8bccyjKpBXCcUagkXzuUbEwf0u2ddvoWAcKRr3dZbiXjIkB1rY?=
- =?us-ascii?Q?1Y0cTnI01rvei90yvJ8h7LfAwo1ZvR0xCf0PdgG1OxU2/mpBsNuDiaZq37OJ?=
- =?us-ascii?Q?NE9uxLS6MwA7iX6ig45SkOv+7trEt8L9RpzWeqaVE4AJlqXv9S2Qw/O+02Qy?=
- =?us-ascii?Q?7s6VzJROzgO3t8xhQynp24rIa8W8J04FEbc08asccXHJSGS3meFWpdINjA5/?=
- =?us-ascii?Q?krROoR42F2xiWzNCrfgf6YQw6TS+CaLiqEtDjdeLCwJhN4mIzB1d5fhBgFvr?=
- =?us-ascii?Q?NiQ6FWCCV0efusp4tWaFrsuolOhUX0H6tJ7cDtO0o8zMpTtqC2w7JkTa4Gff?=
- =?us-ascii?Q?u2lllmJ8vRojh3qb1nSf1LXVvWuLZP4bKVGtoRkahHrMasnad2nXPtsgOVUK?=
- =?us-ascii?Q?+/Mkkxsmmpb/wlHKwvD6UBTkyLhdQq4TIcJL8CMw6U/EQwTreIxljpj7NlbX?=
- =?us-ascii?Q?rutIyQca4H9qQ95WGh48pxlLvky16wRGSSkqZd0KehS7Ru2PmDfhWdPfX0aI?=
- =?us-ascii?Q?ak82+7+pwmxsONVd9Zy5KdD4cdyLzPf6gZiLjIMMOCiZ6s6MFNpdHDmOtr56?=
- =?us-ascii?Q?QSYnuR6mPQdJtkFSrJ6C3GXK4yBCGLngHGydtVo/jbMhhNDiKtqkY+DLQOWR?=
- =?us-ascii?Q?UE/mZ2NFiYMzZOJkSnr9InbzxqEev4ermbA6Csra3kW6fxfaYctPKRXDfjAy?=
- =?us-ascii?Q?v6HSyx6mX6ARbl+uF+YgOvmINV9M0iIJSBd++IQEOWmUeDHf7vorufxL2dbk?=
- =?us-ascii?Q?e1mPRNSBzSZcn8Mqyoxu20FN2HblTlDIWRaTJNBXEL2dWuUXmKQXkUQQXoKn?=
- =?us-ascii?Q?kIStEnv4jFU9iqFINdg=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0304b7f-b449-4205-0092-08dd02867e58
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2024 19:24:42.6213
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iXFWybtMzHzIzhN+nZ9mRDrMxqUZJimLI5/vm9kJegPaiocMSHXCBP33EZCt21zfrQLzqOc7DJ+7O2LT+Xq18A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7207
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] hwmon: Add Congatec Board Controller monitoring
+ driver
+To: Thomas Richard <thomas.richard@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>, Lee Jones <lee@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+References: <20241108-congatec-board-controller-hwmon-v2-0-16e337398527@bootlin.com>
+ <20241108-congatec-board-controller-hwmon-v2-1-16e337398527@bootlin.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241108-congatec-board-controller-hwmon-v2-1-16e337398527@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 11, 2024 at 08:13:11PM +0100, Marco Felsch wrote:
-> Hi,
->
-> On 24-11-11, Frank Li wrote:
-> > Add temp-sensor nxp,p3t1085 for imx93-9x9-qsb boards.
-> >
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > ---
-> > change from v1 to v3
-> > - none
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx93-9x9-qsb.dts | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx93-9x9-qsb.dts b/arch/arm64/boot/dts/freescale/imx93-9x9-qsb.dts
-> > index 20ec5b3c21f42..36f2995acbe29 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx93-9x9-qsb.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx93-9x9-qsb.dts
-> > @@ -221,6 +221,11 @@ wm8962: audio-codec@1a {
-> >  		>;
-> >  	};
-> >
-> > +	p3t1085: temperature-sensor@48 {
-> > +		compatible = "nxp,p3t1085";
-> > +		reg = <0x48>;
-> > +	};
->
-> Out of curiosity, did you tested that the I3C is working on a real
-> device, since you added the node here as I2C device? If not, please skip
-> adding the I3C part and keep it as TODO for later.
+On 11/8/24 07:08, Thomas Richard wrote:
+> Add support for the Congatec Board Controller. This controller exposes
+> temperature, voltage, current and fan sensors.
+> 
+> The available sensors list cannot be predicted. Some sensors can be
+> present or not, depending the system.
+> The driver has an internal list of all possible sensors, for all Congatec
+> boards. The Board Controller gives to the driver its sensors list, and
+> their status (active or not).
+> 
+> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+> ---
+>   MAINTAINERS                |   1 +
+>   drivers/hwmon/Kconfig      |   9 ++
+>   drivers/hwmon/Makefile     |   1 +
+>   drivers/hwmon/cgbc-hwmon.c | 314 +++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 325 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3507df3381b1..5e96646593b1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5784,6 +5784,7 @@ CONGATEC BOARD CONTROLLER MFD DRIVER
+>   M:	Thomas Richard <thomas.richard@bootlin.com>
+>   S:	Maintained
+>   F:	drivers/gpio/gpio-cgbc.c
+> +F:	drivers/hwmon/cgbc-hwmon.c
+>   F:	drivers/i2c/busses/i2c-cgbc.c
+>   F:	drivers/mfd/cgbc-core.c
+>   F:	drivers/watchdog/cgbc_wdt.c
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index cfb4e9314c62..c7b6e93aeb9b 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -463,6 +463,15 @@ config SENSORS_BT1_PVT_ALARMS
+>   	  the data conversion will be periodically performed and the data will be
+>   	  saved in the internal driver cache.
+>   
+> +config SENSORS_CGBC
+> +	tristate "Congatec Board Controller Sensors"
+> +	depends on MFD_CGBC
+> +	help
+> +	  Enables sensors support for the Congatec Board Controller.
+> +
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called cgbc-hwmon.
+> +
+>   config SENSORS_CHIPCAP2
+>   	tristate "Amphenol ChipCap 2 relative humidity and temperature sensor"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index b827b92f2a78..318da6d8f752 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -59,6 +59,7 @@ obj-$(CONFIG_SENSORS_ASUS_ROG_RYUJIN)	+= asus_rog_ryujin.o
+>   obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
+>   obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+>   obj-$(CONFIG_SENSORS_BT1_PVT)	+= bt1-pvt.o
+> +obj-$(CONFIG_SENSORS_CGBC)	+= cgbc-hwmon.o
+>   obj-$(CONFIG_SENSORS_CHIPCAP2) += chipcap2.o
+>   obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+>   obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
+> diff --git a/drivers/hwmon/cgbc-hwmon.c b/drivers/hwmon/cgbc-hwmon.c
+> new file mode 100644
+> index 000000000000..6352d3f38516
+> --- /dev/null
+> +++ b/drivers/hwmon/cgbc-hwmon.c
+> @@ -0,0 +1,314 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * cgbc-hwmon - Congatec Board Controller hardware monitoring driver
+> + *
+> + * Copyright (C) 2024 Thomas Richard <thomas.richard@bootlin.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/device.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/mfd/cgbc.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define CGBC_HWMON_CMD_SENSOR		0x77
+> +#define CGBC_HWMON_CMD_SENSOR_DATA_SIZE	0x05
+> +
+> +#define CGBC_HWMON_TYPE_MASK	GENMASK(6, 5)
+> +#define CGBC_HWMON_ID_MASK	GENMASK(4, 0)
+> +#define CGBC_HWMON_ACTIVE_BIT	BIT(7)
+> +
+> +struct cgbc_hwmon_sensor {
+> +	enum hwmon_sensor_types type;
+> +	bool active;
+> +	unsigned int index;
+> +	unsigned int channel;
+> +	const char *label;
+> +};
+> +
+> +struct cgbc_hwmon_data {
+> +	struct cgbc_device_data *cgbc;
+> +	unsigned int nb_sensors;
+> +	struct cgbc_hwmon_sensor *sensors;
+> +};
+> +
+> +enum cgbc_sensor_types {
+> +	CGBC_HWMON_TYPE_TEMP = 1,
+> +	CGBC_HWMON_TYPE_IN,
+> +	CGBC_HWMON_TYPE_FAN
+> +};
+> +
+> +static const char * const cgbc_hwmon_labels_temp[] = {
+> +	"CPU Temperature",
+> +	"Box Temperature",
+> +	"Ambient Temperature",
+> +	"Board Temperature",
+> +	"Carrier Temperature",
+> +	"Chipset Temperature",
+> +	"Video Temperature",
+> +	"Other Temperature",
+> +	"TOPDIM Temperature",
+> +	"BOTTOMDIM Temperature",
+> +};
+> +
+> +static const struct {
+> +	enum hwmon_sensor_types type;
+> +	const char *label;
+> +} cgbc_hwmon_labels_in[] = {
+> +	{ hwmon_in, "CPU Voltage" },
+> +	{ hwmon_in, "DC Runtime Voltage" },
+> +	{ hwmon_in, "DC Standby Voltage" },
+> +	{ hwmon_in, "CMOS Battery Voltage" },
+> +	{ hwmon_in, "Battery Voltage" },
+> +	{ hwmon_in, "AC Voltage" },
+> +	{ hwmon_in, "Other Voltage" },
+> +	{ hwmon_in, "5V Voltage" },
+> +	{ hwmon_in, "5V Standby Voltage" },
+> +	{ hwmon_in, "3V3 Voltage" },
+> +	{ hwmon_in, "3V3 Standby Voltage" },
+> +	{ hwmon_in, "VCore A Voltage" },
+> +	{ hwmon_in, "VCore B Voltage" },
+> +	{ hwmon_in, "12V Voltage" },
+> +	{ hwmon_curr, "DC Current" },
+> +	{ hwmon_curr, "5V Current" },
+> +	{ hwmon_curr, "12V Current" },
+> +};
+> +
+> +#define cgbc_hwmon_compute_curr_channel(channel)				\
+> +	({									\
+> +		int i, cnt = 0;							\
+> +		for (i = 0; i < ARRAY_SIZE(cgbc_hwmon_labels_in); i++) {	\
+> +			if (cgbc_hwmon_labels_in[i].type == hwmon_in)		\
+> +				cnt++;						\
+> +		}								\
+> +		(channel) + cnt;						\
+> +	 })
+> +
 
-Yes, it work as i3c. I3C device can auto probe according to PID
-information, needn't add dt node for i3c device if it needn't power-supply
-or some special settings.
+ From Documentation/hwmon/submitting-patches.rst:
 
-Frank
+* Avoid calculations in macros and macro-generated functions. While such macros
+   may save a line or so in the source, it obfuscates the code and makes code
+   review more difficult. It may also result in code which is more complicated
+   than necessary. Use inline functions or just regular functions instead.
 
->
-> Regards,
->   Marco
->
-> >  	ptn5110: tcpc@50 {
-> >  		compatible = "nxp,ptn5110", "tcpci";
-> >  		reg = <0x50>;
-> >
-> > --
-> > 2.34.1
-> >
-> >
-> >
+I don't understand why this would be needed anyway. The current channel
+index is well known, so adding or subtracting a constant should do it.
+
+Guenter
+
