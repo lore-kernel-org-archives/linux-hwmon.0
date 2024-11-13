@@ -1,43 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6AA1FF035;
-	Wed, 13 Nov 2024 18:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C491D20125C;
+	Wed, 13 Nov 2024 20:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731521687; cv=none; b=hVJoepspMohbES9GSQa5zYUttfjy93P0tYJrtlkraMSJRDEV0+5aNSHFMmawWTFy/MvsaX2xO9rCbKNGP+VHkMhoVASrUJnBXSqFzev8fKtqt5CV8/U41x7a4BF5IuHsYxq0z4KhxWEujMck7J4591vL7eacH6vAERtnHmX14ZY=
+	t=1731528271; cv=none; b=kbjtu3NSantw3DZe8THYeNAwtHIhzqM/M5e1Rh28zJdtHqKhT5qaDidMHgEccdq77AgzbvX7UtoBqO9mvrjZedvbQZIPMSg9oNIZlT9zHAFmdPkqFS2U0N/swk3IM75TfqERUNpFx64Tu/FZSXDJUWrCj35OxrzTus474p1XNLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731521687; c=relaxed/simple;
-	bh=tlth/xEOYB6Y5Ki7U78pP9+5Q7ncBJCFV0cKZDTpLYs=;
+	s=arc-20240116; t=1731528271; c=relaxed/simple;
+	bh=OO/csDBZnt3H01sR9vNwf0Ps8MUJZWjIvkSAdcClfug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XMY+4CDsrrIzFsAuEFElFIXOQnW5kuUOTQ9oOkPDdxUxIET+y61562zu+9JoNDq00DAED7uz9kVCo3N2lUoxe5FbgudhajUCgzCrosVLtbX5YhVjhu2/ANr6cEp+7hWiUDvsB7ksHUDKQERUqLeRmyTkXDIMYSLFs65IMnAynAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZiSopK4; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KdWtNcBlydY+Ev/iZdUZM6sx1AeE9c/iaLnBSRfaq9WuqNuU5inIGSuhJfSctPckSEmM+pHn7xoMx+eoOzFv35uuyRHJwhbue4IE/w+U177cfbZ0oQG1rLJIVZJ7jK5Fdz9lGOcbAPFhvZtExbV2GLvoK6v+e+STrSytVqPzb7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WN53rCqL; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZiSopK4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3442C4CEC3;
-	Wed, 13 Nov 2024 18:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731521686;
-	bh=tlth/xEOYB6Y5Ki7U78pP9+5Q7ncBJCFV0cKZDTpLYs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tZiSopK4Mfn9vu+RyK92HujgWd8nH0bcnyIwfYxYjvtGDiytu9mx4UNdFOiJWj27l
-	 igzaXn8I3OT4wgfcwrNRq2i1yLz+FsCUvZLrNxbuel5Ex/44X6jjZLoTUfnDv+yXUd
-	 1Yae0Aeax87AvbTsW1+qMgdXQmBn+G8sTyQvDg8SS8Esj7bCZshX46FsYpEH7lRNGd
-	 Je5y1fu7THO4/jPjT6Ifv6/SraB3qb6psaPOsBTKc9UNVt9OF9yUP9PJt0J1crVssc
-	 O0LPKASkWIc7X5rkG5KLwQC57kE1DEhIrbuJTp7TTdCeRTb6/oSZzqQsYAjdhvKBWz
-	 uRrIJft47erSw==
-Date: Wed, 13 Nov 2024 12:14:43 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Grant Peltier <grantpeltier93@gmail.com>
-Cc: linux-doc@vger.kernel.org, magnus.damm@gmail.com,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux@roeck-us.net, geert+renesas@glider.be,
-	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com
-Subject: Re: [PATCH v7 2/2] dt-bindings: hwmon: isl68137: add bindings to
- support voltage dividers
-Message-ID: <173152167698.1019669.14314934819662197070.robh@kernel.org>
-References: <cover.1731439797.git.grantpeltier93@gmail.com>
- <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WN53rCqL"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c70abba48so72523615ad.0;
+        Wed, 13 Nov 2024 12:04:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731528269; x=1732133069; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8VmfrEBEOwrXT4ejKwABTTLL9J9eLHOG9o0zbLKMsD8=;
+        b=WN53rCqLbYMVehw8SLo3GIkidc6rwL+1WsrPcFZgARk7o2OnmHhKImEjlTRLNj0IVH
+         NewgLmCmPcZfYjRxHdHQg2rH9azselJDLqu87boJ1u2larG/otceohF/juYt2YUBOm3j
+         7++FSXlJsPOzPYZF6R8yod14NYlL6h6y9mMn3voKUY0L/UI7OFPzUJ2JxzRjOkYDY7ve
+         qXP2J4Nb31C81oyHQDIpC+R3NzFVfZqedTVvhwrLwsfj1xuWxLAubheAZniRJJODTgbr
+         ROEP4VijZTHxtXVs/52SkG4R5M7ck69w43llrYVk5S0iPHUqQV3bcKUZjTFBMlzI4DHb
+         b8mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731528269; x=1732133069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VmfrEBEOwrXT4ejKwABTTLL9J9eLHOG9o0zbLKMsD8=;
+        b=H7mbuEYIXMujcE1Eycfa26g44i2aDzppunZXB6A4wS8O0gO4fHrFAg71EPWyTP4RHD
+         BukqJsvM1+KEVdWZVb56e0FDCqW0y/XODN6WSVm7vyfSr6EWZKFy6stlmnlsPm+BxC8y
+         71encUey0GA0VEJlDits5p0sijZgIK53uRIGXy9XJCZyoACUBmaDicDtROq+Ow5XiMA0
+         ojVY+pnpxdvOO4bNeVzkaI/QpQzwG9bFwCEHxfe7cgnkyysvUTN+b5IWdUSQp/9FpBhh
+         6elb10s3XpXfpnUcIwpP6qLU97Gy3Jj/sfbN+6Ps4vPP7jYrAUBXuPAdcCNvqbw0vr9w
+         Z9pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3yft3eRw7x55GdC+4t3M3FGqYF8/c1jxghhOsxf42Oh5rG3JrdQA/4/3cvhuXSdzKvSrlv+WD32FYVQ==@vger.kernel.org, AJvYcCX36v8aC8ppfrTKjSL8ofrwk4sQ/cOXTn0qGv+6RS2V0D0ByS7eWZirypNGq8Fo3j2Mxw/AFQ5jKSlX9GAh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYRL5seV/9jYWoUhR6dyzojyZvAxoInxx6+XYWhEzmRWYqUKY4
+	MMm+xHRyNbklpvphWZTPHV42D9JvyhcqPqQl3EgGV5IT7gV9dzr3
+X-Google-Smtp-Source: AGHT+IGGs8AXKCF2M+ePKguX6/PKGZP+dYxHxuIw5JoXxbUYN0W1iHbVgBps6cVkpFGUwRTsse7hJQ==
+X-Received: by 2002:a17:902:e843:b0:20c:ca83:31c7 with SMTP id d9443c01a7336-21183d7cc28mr297750885ad.54.1731528268938;
+        Wed, 13 Nov 2024 12:04:28 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a7d9esm13976103b3a.66.2024.11.13.12.04.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2024 12:04:28 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 13 Nov 2024 12:04:26 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Frank Li <Frank.Li@nxp.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: tmp108: fix I3C dependency
+Message-ID: <8104966f-8e46-47b8-9e20-acefb667b5cf@roeck-us.net>
+References: <20241113175615.2442851-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,37 +70,25 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
+In-Reply-To: <20241113175615.2442851-1-arnd@kernel.org>
 
+On Wed, Nov 13, 2024 at 06:55:33PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> It's possible to build a kernel with tmp108 built-in but i3c support
+> in a loadable module, but that results in a link failure:
+> 
+> x86_64-linux-ld: drivers/hwmon/tmp108.o: in function `p3t1085_i3c_probe':
+> tmp108.c:(.text+0x5f9): undefined reference to `i3cdev_to_dev'
+> 
+> Add a Kconfig dependency to ensure only the working configurations
+> are allowed.
+> 
+> Fixes: c40655e33106 ("hwmon: (tmp108) Add support for I3C device")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 12 Nov 2024 14:10:06 -0600, Grant Peltier wrote:
-> Add devicetree bindings to support declaring optional voltage dividers to
-> the rail outputs of supported digital multiphase regulators. Some
-> applications require Vout to exceed the voltage range that the Vsense pin
-> can detect. This binding definition allows users to define the
-> characteristics of a voltage divider placed between Vout and the Vsense
-> pin for any rail powered by the device.
-> 
-> These bindings copy the vout-voltage-divider property defined in the
-> maxim,max20730 bindings schema since it is the best fit for the use case
-> of scaling hwmon PMBus telemetry. The generic voltage-divider property
-> used by many iio drivers was determined to be a poor fit because that
-> schema is tied directly to iio for the purpose of scaling io-channel
-> voltages and the isl68137 driver is not an iio driver.
-> 
-> New schema file named isil,isl68137.yaml to align with the corresponding
-> driver name and pre-existing bindings ported from trivial bindings.
-> However, all new device bindings use renesas as the vendor prefix
-> since Renesas acquired Intersil and now maintains all documentation
-> for the devices.
-> 
-> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
-> ---
->  .../bindings/hwmon/pmbus/isil,isl68137.yaml   | 148 ++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |   6 -
->  2 files changed, 148 insertions(+), 6 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-> 
+I knew I missed something ;-).
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Thanks a lot for the patch. Applied.
 
+Guenter
