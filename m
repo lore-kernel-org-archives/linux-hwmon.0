@@ -1,78 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B31A2040B2;
-	Wed, 13 Nov 2024 17:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6AA1FF035;
+	Wed, 13 Nov 2024 18:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731520581; cv=none; b=NBtGmwhdb28BusdDBdLBj0nDHKTt7z4ASg3eWtKTHEjXoxpRlv8zPafce2Y3ayEd7dzifFdFt8bwO/vX9ScCgN4bBFZEerb3ZGo5ZF2uMXxJirHrbBIbqUL8e3d00Yi8PDIi9k0WyS/VP5pZo7Oh780BAaP+8ppIIbuXcv3WCHc=
+	t=1731521687; cv=none; b=hVJoepspMohbES9GSQa5zYUttfjy93P0tYJrtlkraMSJRDEV0+5aNSHFMmawWTFy/MvsaX2xO9rCbKNGP+VHkMhoVASrUJnBXSqFzev8fKtqt5CV8/U41x7a4BF5IuHsYxq0z4KhxWEujMck7J4591vL7eacH6vAERtnHmX14ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731520581; c=relaxed/simple;
-	bh=AWo3GO4KFiwPMorT9Fffr4FZc9Q28ZY7KkvSFl3qFdw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EYUTHLY9kf7QeI79slUmZxmLIiDB70mT+SsUTKpMAJLM5AakTLUYbYAdck/x0sQKeFCcDJ2hQGF/k/bmQzdF2BEX8LJT+lElZpGIAVXX5bZC+76DUoU13lerj/8S51CIo92aDPvfWU1z5aJxOfZAsJ6AkmCyXQpqaBZ5JqTyNLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uKG05vaX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731521687; c=relaxed/simple;
+	bh=tlth/xEOYB6Y5Ki7U78pP9+5Q7ncBJCFV0cKZDTpLYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XMY+4CDsrrIzFsAuEFElFIXOQnW5kuUOTQ9oOkPDdxUxIET+y61562zu+9JoNDq00DAED7uz9kVCo3N2lUoxe5FbgudhajUCgzCrosVLtbX5YhVjhu2/ANr6cEp+7hWiUDvsB7ksHUDKQERUqLeRmyTkXDIMYSLFs65IMnAynAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZiSopK4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uKG05vaX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9880EC4CECF;
-	Wed, 13 Nov 2024 17:56:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZiSopK4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3442C4CEC3;
+	Wed, 13 Nov 2024 18:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731520580;
-	bh=AWo3GO4KFiwPMorT9Fffr4FZc9Q28ZY7KkvSFl3qFdw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uKG05vaXuHUg8KIHza6x4TdUnyxJEwXRvYkOH0g0wMRnD6rVC5sQGYb/AjMqurRGb
-	 56DIOYtKRs/8vV7jQRQYT1+HsGnby+QFd1sXVZgc7nvdyD86Rkzjv40A1H5YEMp8C4
-	 WNEyhm5RMxsXPRE6NedXIfFw3PZL7inUkNpf+8WCY9H3GHoCJpbuxGeLPBph1gFVui
-	 MvRCs4eU9+ul+/JrB9wYLKXjP5R0/aVLb4dxa7v83XthO2ud3a/TrH60HYDR//Naxx
-	 ymzB2ENPvD1Q3jzCUo9fClz3EY7OLfE52/A1WWykPwzjmnjpN5hW1BMiB6KWFL+Z3X
-	 ks3qhzUweUVQw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Frank Li <Frank.Li@nxp.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: tmp108: fix I3C dependency
-Date: Wed, 13 Nov 2024 18:55:33 +0100
-Message-Id: <20241113175615.2442851-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=k20201202; t=1731521686;
+	bh=tlth/xEOYB6Y5Ki7U78pP9+5Q7ncBJCFV0cKZDTpLYs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tZiSopK4Mfn9vu+RyK92HujgWd8nH0bcnyIwfYxYjvtGDiytu9mx4UNdFOiJWj27l
+	 igzaXn8I3OT4wgfcwrNRq2i1yLz+FsCUvZLrNxbuel5Ex/44X6jjZLoTUfnDv+yXUd
+	 1Yae0Aeax87AvbTsW1+qMgdXQmBn+G8sTyQvDg8SS8Esj7bCZshX46FsYpEH7lRNGd
+	 Je5y1fu7THO4/jPjT6Ifv6/SraB3qb6psaPOsBTKc9UNVt9OF9yUP9PJt0J1crVssc
+	 O0LPKASkWIc7X5rkG5KLwQC57kE1DEhIrbuJTp7TTdCeRTb6/oSZzqQsYAjdhvKBWz
+	 uRrIJft47erSw==
+Date: Wed, 13 Nov 2024 12:14:43 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Grant Peltier <grantpeltier93@gmail.com>
+Cc: linux-doc@vger.kernel.org, magnus.damm@gmail.com,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux@roeck-us.net, geert+renesas@glider.be,
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com
+Subject: Re: [PATCH v7 2/2] dt-bindings: hwmon: isl68137: add bindings to
+ support voltage dividers
+Message-ID: <173152167698.1019669.14314934819662197070.robh@kernel.org>
+References: <cover.1731439797.git.grantpeltier93@gmail.com>
+ <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-It's possible to build a kernel with tmp108 built-in but i3c support
-in a loadable module, but that results in a link failure:
+On Tue, 12 Nov 2024 14:10:06 -0600, Grant Peltier wrote:
+> Add devicetree bindings to support declaring optional voltage dividers to
+> the rail outputs of supported digital multiphase regulators. Some
+> applications require Vout to exceed the voltage range that the Vsense pin
+> can detect. This binding definition allows users to define the
+> characteristics of a voltage divider placed between Vout and the Vsense
+> pin for any rail powered by the device.
+> 
+> These bindings copy the vout-voltage-divider property defined in the
+> maxim,max20730 bindings schema since it is the best fit for the use case
+> of scaling hwmon PMBus telemetry. The generic voltage-divider property
+> used by many iio drivers was determined to be a poor fit because that
+> schema is tied directly to iio for the purpose of scaling io-channel
+> voltages and the isl68137 driver is not an iio driver.
+> 
+> New schema file named isil,isl68137.yaml to align with the corresponding
+> driver name and pre-existing bindings ported from trivial bindings.
+> However, all new device bindings use renesas as the vendor prefix
+> since Renesas acquired Intersil and now maintains all documentation
+> for the devices.
+> 
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+> ---
+>  .../bindings/hwmon/pmbus/isil,isl68137.yaml   | 148 ++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |   6 -
+>  2 files changed, 148 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
+> 
 
-x86_64-linux-ld: drivers/hwmon/tmp108.o: in function `p3t1085_i3c_probe':
-tmp108.c:(.text+0x5f9): undefined reference to `i3cdev_to_dev'
-
-Add a Kconfig dependency to ensure only the working configurations
-are allowed.
-
-Fixes: c40655e33106 ("hwmon: (tmp108) Add support for I3C device")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hwmon/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index f15e72b319af..dd376602f3f1 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2297,6 +2297,7 @@ config SENSORS_TMP103
- config SENSORS_TMP108
- 	tristate "Texas Instruments TMP108"
- 	depends on I2C
-+	depends on I3C || !I3C
- 	select REGMAP_I2C
- 	select REGMAP_I3C if I3C
- 	help
--- 
-2.39.5
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
