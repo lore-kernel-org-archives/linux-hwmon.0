@@ -1,70 +1,70 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3248206040;
-	Wed, 13 Nov 2024 20:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C06204F66;
+	Wed, 13 Nov 2024 20:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731528475; cv=none; b=Xq0R17ciYJOpmrAMyhU+Gh5Vsfwb039hq6ZhEpApeChwlae8bUr56uAMsUdpRFB8t8tKhK6Z6vrLbnwEZuxxYDfPlAHkBVOgv1AX4RirsWzhu7KUXC8F2/B9MEqqKVbr0uTrpwFiZZPcBRf/rM/d51Kyy1oEGHWEoDzLsNN6bj0=
+	t=1731528512; cv=none; b=ECqyM6F2T5oEGEeLnfFt6b76O3c7EDOgbR3IMmkv3I6dVcpdsTREGPdRAG0AD1I+zc+T/RsBVvXyaN9/5muPkUDsPu7dvt4SN+J8JH/mfZxCFA9/4e8fLT+XL3179vhkYtB4Tkh1L69e7vI0Ia1/d8MqJBQayVyFdj0ec6VcMEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731528475; c=relaxed/simple;
-	bh=W2wLfm9TAFNqf6cHkoLkrjTWBslIgZ7B9w9GL8icBFQ=;
+	s=arc-20240116; t=1731528512; c=relaxed/simple;
+	bh=cjaxfP3K2+vqhGLJnlRta9XnHUBsBBTtsoQobxaWEc0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nv+9sdG7vAzwZ4UQfubYHK7EpQRlyAFJX8Wfgh0Rx7Isqeo3YTyLuBvGrtIBNQkeIhU0Y1gEBmS8CJNU49Pr5eR0RRSVcmIWgR37sAYuV7+SRuid7ArQy7AfadTRuaPwrFpeVRvZSV5EruDyTk/yjinrlii3+annUovNjPm65Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WpyheLxO; arc=none smtp.client-ip=209.85.216.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=hnlzUXxCdOnIhtGek0opJ36wnlZYDjfBf5b52SiNsO1J9NOJi6d8NXLfBnITTVhLSFw0LPeU55t14/us/TFx2t0+zcHEHSf3J2b2aUdLSxp19atxxVhAKsPzaqq4m4IHJgKFO+UjMYYQUiY1uZ9oHdxx8aWdQHjyjKeryIxRTpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QmhbD5yf; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WpyheLxO"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e5a0177531so5813934a91.2;
-        Wed, 13 Nov 2024 12:07:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QmhbD5yf"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c714cd9c8so76044725ad.0;
+        Wed, 13 Nov 2024 12:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731528473; x=1732133273; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731528510; x=1732133310; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y4j1vJGFRxVrpDPuAyXQWtm8jyY2k87uymDRiXPcMJE=;
-        b=WpyheLxOGoQPXzmU0e7eziLizE1Yu/Q5h3eNSLT93B8Y3FK1Oy7cWmMpqREfYC0q5i
-         2sVcaw2urNwaGD7+1I6GNOzJ9jY03C8CwFTUh07HpEjy6i3Y0s/nE+6v0NFH0PNCpnLV
-         RgSRJk3cIWoI0goMBnkOCV77Padde//AfswjmE+YaHqgUjLA+DWUcAC2eDfN783Skc+B
-         a6Is/WGZPuCpgW7IRUBspYx71zqQhdkMhv2EOlgkcCjnrw8VmjZGKji1XOqPKEy/rzQt
-         swJL04OsqmVLpVaIm7agxLznFp67jxqn9Spfj0t1SQKJxlhVxz2u8lW7jnk0218Ne23M
-         VqOA==
+        bh=KjULDMvD6L6UJTTrMaZgXK2gf1klZ78cKDDqW9QajSs=;
+        b=QmhbD5yfW6LmivcoflPleNDpJFX4voL7J8PnVG6hU7yJ/RCAkzgWkpV1HJyEzBWmZT
+         eXgOyQixquS0ln2EmSrGJj6eVcu0fAIrV62HQoAkpkPgJc3ebQXUNo7HRVDxqnyzo1uj
+         sCsgai/64sXTu7DO1+aKN/OUsWQbdmA5W1rOozuf/WsD42VAE+oE07kQAi+yxlFsKWdZ
+         KMPfZ1yDk6X+HV2Sw5X6x0mqYjtO71xpBxRO1J00QsXV5Fen6r0hH2Cjs+WjGv9a24Jg
+         mvOywEvc7czjBq//oqfWqXQCUJwMs8Z2aC5LO38sO0E/kbzJh0hRuL55ww4bx8xejqC4
+         likQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731528473; x=1732133273;
+        d=1e100.net; s=20230601; t=1731528510; x=1732133310;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y4j1vJGFRxVrpDPuAyXQWtm8jyY2k87uymDRiXPcMJE=;
-        b=e7zf+TlhMRkgGg3H+ZWO+SIMAsYFReT3zmN7LYvF1xmRZrdw3DF6OveZo/1n8QTE3k
-         y83hZwToxEVhvEgBCW+2KflVWFnSF4FLsu/utW6JGT6/9f6MqA/ZeUWoeYMg/2lyEvNJ
-         rzj3OUBnJvyBYMuBgyQ0dW+lrcq8r5CrFoTsDVzXa6RCFFD5rbkbSJlrC46jDOtfxo8d
-         QspnNL5FIptXrCumTZewvQ+wU1s5Wp83hbWhqDKfPAqgPtF1t9RLEI9S0IWEPjpe9i2l
-         xxwimrJJ8YAZ2Uy2ibJKMCRZjIyavbja3nQN9yNNyE6Z9Dpl52xpTRmotL/hAa0Jaa/r
-         5m6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVIHEdybrwAYxFxo8y4IaODOfok3Qj5CpuaBsOzsM2GBvaMiiYRyY4nSPX/eOPVzdYgFWBfQsvE6SNjVDc=@vger.kernel.org, AJvYcCWUXQeF+zOkVDAU8ebQAPVq5FAVzmCuUXxVPBX8auGQoYAnbDMWPybnxheXZpe05+m/iBV0T10mZ1gH@vger.kernel.org, AJvYcCWs1hoGwttatner82GooI0++tZSjWeH3KgTgFD7bJa8B4kuUXmH2NxDKXDFTWy8/Bd9emFKRB8Qstcs@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGX6IZHV4DLS+tnb0UcldfoR9E1hnobNjB9/SQbBBqxcyoMK29
-	xNYlN+u1L7V3CfExaK2ah5y9HxngxMERKnCBLvwlVBL8b7jUkh4Q
-X-Google-Smtp-Source: AGHT+IHztoxmba7AYF4jfx70m7aN3IyXMskiky85+dy1DFP1JIKL4oEy4WkNQfoCK1+rHATeDQkn0g==
-X-Received: by 2002:a17:90b:1f81:b0:2e2:d821:1b77 with SMTP id 98e67ed59e1d1-2e9b1780c38mr27849736a91.24.1731528473255;
-        Wed, 13 Nov 2024 12:07:53 -0800 (PST)
+        bh=KjULDMvD6L6UJTTrMaZgXK2gf1klZ78cKDDqW9QajSs=;
+        b=QH/ClTwuReLF93hA1Cr3+ljOs73A9+8td9FtblYQlnZRiZ8l+ZTMRYOBeGgX4HrXwE
+         vig2FJog93C15al2TvZ91H7IsQSGJLE5FOKOBTw0DW21ESIn7bUDkMLLAB9D6qpTJDoR
+         pK7Wf0H4tE46BYX3tJEDWfSkT4gI+D4jay8LNxgExwB3WkOWxfxevghCAAgmrZdhocwK
+         YGYK+Yqe9eTSXITj004GKhZ3xUyODTqwdIN5exbMqW+iZOAPOLqxaxx4g+J8k52NP8h4
+         cxDJcEZPibVtw6FIaOo+kK+iVq8WL4UmdLsJdDzMjW7T+YnLSidX47HprOi+ubhvetFd
+         X2xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNvm0YntEXAU/Fm3T1Z/4Jz72VBuKFlyI4iY8Zl5cj7qOllqAz1iM5GkWJai2bRCYaKgywXkOw5nJJ@vger.kernel.org, AJvYcCV2FIvkAeKU3EYzdCJr4qwH5KNFLJxlpwVRxMTopunEMLIcMyhZcNJthdO285S0WPEP6REB2RHkp3nUADY=@vger.kernel.org, AJvYcCWbC7cEeo5qkFrtinLMPGVgcPIyZ7mgH/xQ382S7rEIsAVCVTRMm1xXY5U+IBCVeLf8iwlv4+oyoPTk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNrPcVgux/MKm56Ebs1od2NoosIJT79NA5zxpW2nXzMIn+TDVN
+	/iPFMBhWoPm7bCuxhLdKKSCALIGKnSgjFIHOdf70l94sJ961yRpx4KzEZw==
+X-Google-Smtp-Source: AGHT+IEfX/6VXsH/46gb2dd20hEXeNyda1cJCDwfObzPE/fL4S9iczScSXbGw2hTHJZIJB2sjoVf5g==
+X-Received: by 2002:a17:903:1d2:b0:20c:c15c:96ab with SMTP id d9443c01a7336-21183e4a120mr299032685ad.48.1731528510245;
+        Wed, 13 Nov 2024 12:08:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea00464f00sm17129a91.18.2024.11.13.12.07.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177ddd62csm113419915ad.59.2024.11.13.12.08.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 12:07:52 -0800 (PST)
+        Wed, 13 Nov 2024 12:08:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 13 Nov 2024 12:07:51 -0800
+Date: Wed, 13 Nov 2024 12:08:28 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Grant Peltier <grantpeltier93@gmail.com>
 Cc: robh@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
 	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 2/2] dt-bindings: hwmon: isl68137: add bindings to
- support voltage dividers
-Message-ID: <6c546fdb-4511-4942-9171-287687bca32d@roeck-us.net>
+Subject: Re: [PATCH v7 1/2] hwmon: (pmbus/isl68137) add support for voltage
+ divider on Vout
+Message-ID: <0ccfb361-0c20-41f2-b5b7-3c37c5226110@roeck-us.net>
 References: <cover.1731439797.git.grantpeltier93@gmail.com>
- <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
+ <8c2d048f87282bcf66313afbf5e923d8fc17b4d7.1731439797.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,31 +73,26 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
+In-Reply-To: <8c2d048f87282bcf66313afbf5e923d8fc17b4d7.1731439797.git.grantpeltier93@gmail.com>
 
-On Tue, Nov 12, 2024 at 02:10:06PM -0600, Grant Peltier wrote:
-> Add devicetree bindings to support declaring optional voltage dividers to
-> the rail outputs of supported digital multiphase regulators. Some
-> applications require Vout to exceed the voltage range that the Vsense pin
-> can detect. This binding definition allows users to define the
-> characteristics of a voltage divider placed between Vout and the Vsense
-> pin for any rail powered by the device.
+On Tue, Nov 12, 2024 at 02:09:28PM -0600, Grant Peltier wrote:
+> Some applications require Vout to be higher than the detectable voltage
+> range of the Vsense pin for a given rail. In such applications, a voltage
+> divider may be placed between Vout and the Vsense pin, but this results
+> in erroneous telemetry being read back from the part. This change adds
+> support for a voltage divider to be defined in the devicetree for a (or
+> multiple) specific rail(s) for a supported digital multiphase device and
+> for the applicable Vout telemetry to be scaled based on the voltage
+> divider configuration.
 > 
-> These bindings copy the vout-voltage-divider property defined in the
-> maxim,max20730 bindings schema since it is the best fit for the use case
-> of scaling hwmon PMBus telemetry. The generic voltage-divider property
-> used by many iio drivers was determined to be a poor fit because that
-> schema is tied directly to iio for the purpose of scaling io-channel
-> voltages and the isl68137 driver is not an iio driver.
-> 
-> New schema file named isil,isl68137.yaml to align with the corresponding
-> driver name and pre-existing bindings ported from trivial bindings.
-> However, all new device bindings use renesas as the vendor prefix
-> since Renesas acquired Intersil and now maintains all documentation
-> for the devices.
+> This change copies the implementation of the vout-voltage-divider
+> devicetree property defined in the maxim,max20730 bindings schema since
+> it is the best fit for the use case of scaling hwmon PMBus telemetry. The
+> generic voltage-divider property used by many iio drivers was determined
+> to be a poor fit because that schema is tied directly to iio and the
+> isl68137 driver is not an iio driver.
 > 
 > Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 Applied.
 
