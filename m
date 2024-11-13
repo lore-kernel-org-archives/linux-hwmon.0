@@ -1,275 +1,133 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69819219C8D;
-	Tue, 12 Nov 2024 20:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACB11422D4
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 Nov 2024 02:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731442212; cv=none; b=KlQn3XjePOmh4FZeLTmPOyc8HLoX2xH59WXz/z6F0k8M4aW/MG+juCETNA6ZIslZSEAPp7wOyW291hqGt4cH/PdcvTcbL/WeZT972xKi/ShbiAi6FJFxWMKHJxbrDW+bfM6CXa2gF3gAQp6HT9iTWLU/Sn/RLAGTS2wl1TvDoek=
+	t=1731465631; cv=none; b=soyrvVda3Ld2lsIQ2jWDjZSJf0UWrUZ3JHGugl3ydbif+BE/kE07/Vvyd9WFq6n7ylYINxo5C/ClrPzmbdN456n+k4T5Rta2y5iikTUz4KVi9So7KeltTZwo23ew1YSnSM522sa1I7SpKWyPTygC63kscVMrD/IyeOzQRQQSoTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731442212; c=relaxed/simple;
-	bh=Ft4reouLgmooGNp1IzuEgObU1EGpzYrvBVstwPJi/I4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pkdJEKDr6lx5A4cHvJRuIYutoXlocLJ5MZzmVo1blUWQvXF5qGRL0oBaYgynAYuiTh/pxJI6Uw19RgjPOG3rE/ToQyMk9i31TZwXKh5Ivrm/CRD2AfCacicAKceCVYouR76ohAaSVt2qNldzcIebHQwGgjYEbsfryQ2ocGu2CC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8quB+Ph; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731465631; c=relaxed/simple;
+	bh=T13dYZj5wf2Zd3XF41N7aemiKFJr6ayRHpqcY9xRpR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=liISqKNNsv7N6wKmIro4+jZOS/JySuvskG8Hs7GA4yqews0aemeFXJKplFE/gz9PcBXl4d+eXF/ZFikufvXOouCkQPqBeHXGnO2QJbZ9biGUTalCUUO6e54wFZF+2vghkqIx60qpahOSS8AXvOYs7jiEnLEcLVOB3x1KE+Cr9iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=L1aCocgA; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8quB+Ph"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3e604425aa0so3543129b6e.0;
-        Tue, 12 Nov 2024 12:10:10 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L1aCocgA"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-210e5369b7dso66251935ad.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 Nov 2024 18:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731442209; x=1732047009; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8gaVCPXgww8S01oVPq24IM08aAIF+M/sEyh1exT53yE=;
-        b=h8quB+PhAoBh2WGKBX4B8XjswMrgMZYRS9WBDulzGU9XEzIHqb84ThaK6vFupekTcS
-         6mGfhqubq06IEJFL0iaaktbMv5l0r/M9YQ3grE/vce5l6C1bJaGP7rWTLSrpnQWzQ/SS
-         KZ2XtvbVjz6BDCRlwPTf+2UcQ1uccg22+577ai2AQeC5YyHfv8zBdC1oo7ouc2FsBM9x
-         S3WGDL1E/buWW9HqO5gJktrcBrLrSH0OL7mgORFqHDU2ZUjN/Dz8cLOXgiO2QgIR9t2S
-         pArtJAhDnX3dJsh8DSm6NKH+Z0yH9g00V7ItMi+IzL80qk/ro7RP1EniMXVISzY9NVi7
-         JOLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731442209; x=1732047009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1731465627; x=1732070427; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8gaVCPXgww8S01oVPq24IM08aAIF+M/sEyh1exT53yE=;
-        b=T20ZSW+P5TqcaXA3hxm9bnuWRp9dREWo/rV2nXWKxnlKesRbB8u9sVXmrmoTQEBzff
-         tdwrghBMpnMplcqQc1nW1W7X4jAUa1fdhEhOcroY/gISe1rQhIxtr+ObGIfz+EbwaRl/
-         tPZrTF6ulbPoaL6hscy517OHzqtE/cb44wTZBl0sO+hpI2VWkeAfA9RLbKXjO/ufrpTE
-         hrr7ZlTMaiFlOl6mggjvlxZCoiVA95jsUdK9Phw5C6U4QCNM1Q8uymJidCABJQOOEnMR
-         XzRRMjiNpOV0g+69lPBgCCzuKzzWO/89UNTTNS0Mwebn/wz6ykEkXqDurLOVfM4md9aT
-         cPPw==
-X-Forwarded-Encrypted: i=1; AJvYcCU93nq77alP5ogLE9hhsvJjjPSxToenCh/KVFlv/Vzd9VUqT3dcMBnmCrpIE0Ae4jHKn1gGxWSPidk69pA=@vger.kernel.org, AJvYcCWOqr6vxk2iOSPElTEr5k9y08F8pW6Ex3cBg1dGwNM4FX0YWQiICr1x6/FajOPT6Yggk/ZdJquPKiF4@vger.kernel.org, AJvYcCWij9fOJ9En79RgIWJss1ImaqfO3CnT3W3PbTtbMOjBF6HfAlNxxL8y18b9Hbr8h+D/AIJlN13Lvz1C@vger.kernel.org
-X-Gm-Message-State: AOJu0YzL2c466OU/KItYXqWLT2VVK0bWdSRg88bVnbtVQffeqKJh0MKI
-	O4gqeDZE92SWDjonP/24y8ugLrLbZiw6dduE+Tne6Gp2DEjhGMaG
-X-Google-Smtp-Source: AGHT+IHHe3B1JqqFy8F72j5meLToyh+TFOncLelRarysE4VBAHZgBlb5vFh8P2CQ8ScXCIgpB3hI2g==
-X-Received: by 2002:a05:6870:5a6:b0:288:865e:1864 with SMTP id 586e51a60fabf-2955fc63dd2mr15035475fac.0.1731442208545;
-        Tue, 12 Nov 2024 12:10:08 -0800 (PST)
-Received: from raspberrypi ([2600:1700:90:4c80::3b])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-295e8eb8c83sm60791fac.4.2024.11.12.12.10.07
+        bh=lUswgydF4ecDD8gA1hGl988rFxQMVbM/Q/QpWYHHIvg=;
+        b=L1aCocgABbOP+l5rs4E+n5MoRU/dkQ19pizpfIMviXxj6JeXoVoybwwbKXG2t5DAMe
+         mqByfrPGu3LZKftd/PmD+92SBWEyK6m8GoHwPN3u+T9jszMNQopopHfDoIQBH+MARRec
+         T91Ye0rXtFMS/AoNf2wPAyRGLRxGbTES49cpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731465627; x=1732070427;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lUswgydF4ecDD8gA1hGl988rFxQMVbM/Q/QpWYHHIvg=;
+        b=V4QyuQkpNJExdYbnTZFXgYILL+QPa99x3huQj4nQr6lKa74rk9XJMYM+yxoUj+pdW4
+         ppCVGfeGavCk/ptr55hz9h0sm3P+upsCZlNBFf71z/Pl8Xu6NVCYivKn36HVJoCg5h++
+         bOWbVTnGA8HcQUMTm8eji/pv8Z58jlDvt1JRw7c2j0UbnEFqk50qDZhAU6YQwo5C1wkc
+         Tf+nUzCIRuML6OrfxeZxmkAGcXsN0Zw3rIGmfDfqMdkqT/q9cbP6A92GLAzg8OX4rqfz
+         57fd02UHEPyMMpA+4xxddwh7XustE4RnOQb/gAQKdbKRsQeAk1KHCNMgPG1VrkKoo2CG
+         ad7w==
+X-Forwarded-Encrypted: i=1; AJvYcCXRxn2P4nneVKzEokSry7HxBrlZPR5RNPuh0xNLiwauyYUby/uQbyYFybx6l0au3a+DuQKpfDn5S/60qg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6v97saJSPyEsnkdIGcOxo907KU3FQrznRQOzf07DUX3SQ/3EJ
+	Hsl0Q/RXwuH74/uWsVoUusKhD29nboyjo0KMENvK1ZkJ7hfzU/QITcrJTkxVOC62JMmZweX45Og
+	=
+X-Google-Smtp-Source: AGHT+IGby99YKs2n1DW3eqEgTozJAq71CGujBYHsrQ+I43rpaTsytkJKH0YHFTNW8GkOp0t5qemLMg==
+X-Received: by 2002:a17:902:d505:b0:20b:8e18:a396 with SMTP id d9443c01a7336-21183c7e137mr245463495ad.9.1731465627355;
+        Tue, 12 Nov 2024 18:40:27 -0800 (PST)
+Received: from lschyi-p920.tpe.corp.google.com ([2401:fa00:1:10:3dd4:86fa:9696:4236])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e418d6sm101831325ad.142.2024.11.12.18.40.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 12:10:07 -0800 (PST)
-Date: Tue, 12 Nov 2024 14:10:06 -0600
-From: Grant Peltier <grantpeltier93@gmail.com>
-To: robh@kernel.org, linux@roeck-us.net, geert+renesas@glider.be,
-	magnus.damm@gmail.com
-Cc: grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v7 2/2] dt-bindings: hwmon: isl68137: add bindings to support
- voltage dividers
-Message-ID: <f7ac200e982961ff733de27a5c4505c04d68b6f3.1731439797.git.grantpeltier93@gmail.com>
-References: <cover.1731439797.git.grantpeltier93@gmail.com>
+        Tue, 12 Nov 2024 18:40:26 -0800 (PST)
+From: "Sung-Chi, Li" <lschyi@chromium.org>
+To: 
+Cc: "Sung-Chi, Li" <lschyi@chromium.org>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	devicetree@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v3 1/2] hwmon: (cros_ec) register thermal sensors to thermal framework
+Date: Wed, 13 Nov 2024 10:39:51 +0800
+Message-ID: <20241113024000.3327161-1-lschyi@chromium.org>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+In-Reply-To: <20241111074904.1059268-1-lschyi@chromium.org>
+References: <20241111074904.1059268-1-lschyi@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1731439797.git.grantpeltier93@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Add devicetree bindings to support declaring optional voltage dividers to
-the rail outputs of supported digital multiphase regulators. Some
-applications require Vout to exceed the voltage range that the Vsense pin
-can detect. This binding definition allows users to define the
-characteristics of a voltage divider placed between Vout and the Vsense
-pin for any rail powered by the device.
+cros_ec hwmon driver probes available thermal sensors when probing the
+driver.  Register these thermal sensors to the thermal framework as well
+via setting HWMON_C_REGISTER_TZ as a chip info, such that thermal
+framework can adopt these sensors as well.
 
-These bindings copy the vout-voltage-divider property defined in the
-maxim,max20730 bindings schema since it is the best fit for the use case
-of scaling hwmon PMBus telemetry. The generic voltage-divider property
-used by many iio drivers was determined to be a poor fit because that
-schema is tied directly to iio for the purpose of scaling io-channel
-voltages and the isl68137 driver is not an iio driver.
+To make cros_ec registrable to thermal framework, the cros_ec dts need
+the corresponding changes:
 
-New schema file named isil,isl68137.yaml to align with the corresponding
-driver name and pre-existing bindings ported from trivial bindings.
-However, all new device bindings use renesas as the vendor prefix
-since Renesas acquired Intersil and now maintains all documentation
-for the devices.
+&cros_ec {
+	#thermal-sensor-cells = <1>;
+};
 
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
 ---
- .../bindings/hwmon/pmbus/isil,isl68137.yaml   | 148 ++++++++++++++++++
- .../devicetree/bindings/trivial-devices.yaml  |   6 -
- 2 files changed, 148 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
+ Changes in v2:
+   - Rename `cros_ec_sensor_data` to `cros_ec_hwmon_thermal_zone_data`.
+   - Rename `addr` in struct `cros_ec_hwmon_thermal_zone_data` to `idx`.
+   - Use `cros_ec_hwmon_temp_to_millicelsius` to do value conversion in
+     `cros_ec_thermal_get_temp` function.
+   - Rename `cros_ec_thermal_get_temp` to `cros_ec_hwmon_thermal_get_temp` to
+     make `cros_ec_hwmon` a prefix.
+   - Use `%pe` in `cros_ec_hwmon_probe_temp_sensors` when printing out
+     `data->tz_dev` if failed register thermal device.
+   - Remove `cros_ec_hwmon_remove`, and the `.remove` value in
+     `cros_ec_hwmon_driver` since there is no need to call
+     `devm_thermal_of_zone_unregister` for clean up.
+   - Revert function signature of `cros_ec_hwmon_probe_temp_sensors` since all
+     needed parameters are presented.
+   - Revert include of `linux/list.h` because no list data structure is used.
+---
+ Changes in v3:
+   - Revert all changes and just as add HWMON_C_REGISTER_TZ as a chip info.
+   - Remove unneeded Change-Id tag in commit message.
+---
+ drivers/hwmon/cros_ec_hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-new file mode 100644
-index 000000000000..bac5f8e352aa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/isil,isl68137.yaml
-@@ -0,0 +1,148 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/pmbus/isil,isl68137.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas Digital Multiphase Voltage Regulators with PMBus
-+
-+maintainers:
-+  - Grant Peltier <grant.peltier.jg@renesas.com>
-+
-+description: |
-+  Renesas digital multiphase voltage regulators with PMBus.
-+  https://www.renesas.com/en/products/power-management/multiphase-power/multiphase-dcdc-switching-controllers
-+
-+properties:
-+  compatible:
-+    enum:
-+      - isil,isl68137
-+      - renesas,isl68220
-+      - renesas,isl68221
-+      - renesas,isl68222
-+      - renesas,isl68223
-+      - renesas,isl68224
-+      - renesas,isl68225
-+      - renesas,isl68226
-+      - renesas,isl68227
-+      - renesas,isl68229
-+      - renesas,isl68233
-+      - renesas,isl68239
-+      - renesas,isl69222
-+      - renesas,isl69223
-+      - renesas,isl69224
-+      - renesas,isl69225
-+      - renesas,isl69227
-+      - renesas,isl69228
-+      - renesas,isl69234
-+      - renesas,isl69236
-+      - renesas,isl69239
-+      - renesas,isl69242
-+      - renesas,isl69243
-+      - renesas,isl69247
-+      - renesas,isl69248
-+      - renesas,isl69254
-+      - renesas,isl69255
-+      - renesas,isl69256
-+      - renesas,isl69259
-+      - isil,isl69260
-+      - renesas,isl69268
-+      - isil,isl69269
-+      - renesas,isl69298
-+      - renesas,raa228000
-+      - renesas,raa228004
-+      - renesas,raa228006
-+      - renesas,raa228228
-+      - renesas,raa229001
-+      - renesas,raa229004
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^channel@([0-3])$":
-+    type: object
-+    description:
-+      Container for properties specific to a particular channel (rail).
-+
-+    properties:
-+      reg:
-+        description: The channel (rail) index.
-+        items:
-+          minimum: 0
-+          maximum: 3
-+
-+      vout-voltage-divider:
-+        description: |
-+          Resistances of a voltage divider placed between Vout and the voltage
-+          sense (Vsense) pin for the given channel (rail). It has two numbers
-+          representing the resistances of the voltage divider provided as
-+          <Rout Rtotal> which yields an adjusted Vout as
-+          Vout_adj = Vout * Rtotal / Rout given the original Vout as reported
-+          by the Vsense pin. Given a circuit configuration similar to the one
-+          below, Rtotal = R1 + Rout.
-+
-+            Vout ----.
-+                     |
-+                  .-----.
-+                  | R1  |
-+                  '-----'
-+                     |
-+                     +---- Vsense
-+                     |
-+                  .-----.
-+                  | Rout|
-+                  '-----'
-+                     |
-+                    GND
-+
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "isil,isl68137";
-+        reg = <0x60>;
-+      };
-+    };
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl68239@60 {
-+        compatible = "renesas,isl68239";
-+        reg = <0x60>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        channel@0 {
-+          reg = <0>;
-+          vout-voltage-divider = <1000 2000>;  // Reported Vout/Pout would be scaled by 2
-+        };
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 0108d7507215..5afe09026938 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -155,12 +155,6 @@ properties:
-           - isil,isl29028
-             # Intersil ISL29030 Ambient Light and Proximity Sensor
-           - isil,isl29030
--            # Intersil ISL68137 Digital Output Configurable PWM Controller
--          - isil,isl68137
--            # Intersil ISL69260 PMBus Voltage Regulator
--          - isil,isl69260
--            # Intersil ISL69269 PMBus Voltage Regulator
--          - isil,isl69269
-             # Intersil ISL76682 Ambient Light Sensor
-           - isil,isl76682
-             # JEDEC JESD300 (SPD5118) Hub and Serial Presence Detect
+diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+index 5514cf780b8b..9991c3fa020a 100644
+--- a/drivers/hwmon/cros_ec_hwmon.c
++++ b/drivers/hwmon/cros_ec_hwmon.c
+@@ -141,6 +141,7 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
+ }
+ 
+ static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(fan,
+ 			   HWMON_F_INPUT | HWMON_F_FAULT,
+ 			   HWMON_F_INPUT | HWMON_F_FAULT,
 -- 
-2.39.5
+2.47.0.338.g60cca15819-goog
 
