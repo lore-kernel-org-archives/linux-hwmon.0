@@ -1,224 +1,148 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E7B163;
-	Thu, 14 Nov 2024 07:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F8814EC47
+	for <linux-hwmon@vger.kernel.org>; Thu, 14 Nov 2024 09:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731569828; cv=none; b=dNyNSkC8PytPWDUQ28/FPfCWIrNWhNE+NCVykPnE18n2YwQEZnlRnJSmD+9YmDe0WUm+x7QYvRivDIhjkrGeVFhLfRfsYJ3OnXqlxWRjZDkGHL5NLSWkJKCryvdY/Ir7j2MWM5lFFZl6MNeTDSILXHXl5MwQ0vwnlYRsBcmaKrQ=
+	t=1731578001; cv=none; b=oqDGpokDGx4gM2d1TPcawPgcBXSZGztiMo86nTGB+A+Dy+LWQLj+ZobBXx+wgPORZ1O8cJ14YHYa1JfgsmHi7oItTL3f51S8VganOJVb6gERB+LBBfXOx5mcGGFjq0tlIdqc2Pj0fzfN6sMu/oDMWdedLPbsb7GLWe+WqOT2auE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731569828; c=relaxed/simple;
-	bh=kOb2ZYhLdcrt1/fmMbUCYgTRegwUoDmTiVsCsnAKezo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eguN2m533fkQ4imrohO9iP7rpecBaIUC8ztgqU2bf7RTBAelr9JRkYGZVG0hO2FzOGuwV1s+PHmqiLTY4kypTTuq4NS3aZ7mzPpC++tkDvlF4woReYYczwfPI22HuBh4BflehH+HvStjuunJbhB03LiEfHNaPPz2LQJRGllDkO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWzq816e; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1731578001; c=relaxed/simple;
+	bh=xSOf03MawRYQ2Jt5bMZ/BL9E0a9vJXfietHbqAOaR5c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PeOSONHt6Av3OT6JlCjETAPmbUWrb2Nb2JDtOI0yQP2AJtwfKJSKwaYyOCZ8IkUpFk9ejr72o4H8dVzIIF9fgGkurojCVnCCZN8Cy+lhbGWsaUX5pn1bRqb5XYoT5YsFezsuIGHO7o7P8bAAgeHGNgOlSeZg+csi1HOAL7xgh4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vn3zXCJM; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWzq816e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vn3zXCJM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731569826; x=1763105826;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kOb2ZYhLdcrt1/fmMbUCYgTRegwUoDmTiVsCsnAKezo=;
-  b=FWzq816eE5WIoF9nDNlP6i949aeydRXCin3+B6Q2Y5YKMaZ/sMCSQQLW
-   6PrX3nhLmFJqRqiUSE22yoOwKyeMz4lAR9voB7w208Sifqo5dop9K022A
-   fCWiQY36Gj5SKZJ2Pi9F3EUCzklz00KGBN+h9e8Px3i+5l7ypXh9Thwba
-   fzhg9UYqddLgMDIQJ9htDJGm+3f/u7cosN+KvnF+V9A+Q1jVdmxcFihnV
-   PUfxmbr00sWxjtFr9jdae9A9CFcC5aSDawgnFSiHswItsD73LgIaXcMb4
-   aekQH0gR/l23J3pVWcZQcgb639t1ibmCd0feuOS4d/Ym5HWwCtTVoYp/z
-   w==;
-X-CSE-ConnectionGUID: aOVBqoU4QOmmoiIGaMsVzg==
-X-CSE-MsgGUID: bbTByMGwSnCYUXMHhthH7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="30901576"
+  t=1731578000; x=1763114000;
+  h=date:from:to:cc:subject:message-id;
+  bh=xSOf03MawRYQ2Jt5bMZ/BL9E0a9vJXfietHbqAOaR5c=;
+  b=Vn3zXCJMtbGkBJi8ivP4Kz/4z4+nY75AkahIW9Gmnpc04SU+GEriJDMV
+   Lr1DvyhhMK3YN7+nenIFDvY2+NGfTpsaNpSQwWvHJYbj3AdFgAMicOhCl
+   ojDuM76/MNcyc360/vkRNxES7ap82kWLX8+bxTUXdgN2FtPPz/ljl8yMn
+   uBBUzijtBkYOOg8xL4pVOCuAfq5LUdgJkcEGUqyG2ZkqMyhBfLOCoT+OU
+   ENFtQtAmk0XOjmlnSkmGG2XEnerVkZB/yWIDsMlIM56Sn3XiGRQqx8Z4x
+   rp0J2Zoi1+GtWTHd2GybQ+4jrbFHPtK952CpxHs5Y1kT8AVFabs4SItqD
+   A==;
+X-CSE-ConnectionGUID: WMHHmFCWS5unwpd80JxM0A==
+X-CSE-MsgGUID: n9Th/kKPSUud/aYqrZv/Fg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="30916574"
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="30901576"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 23:37:05 -0800
-X-CSE-ConnectionGUID: x7vsDg8DR/+0mjqnT6TiPg==
-X-CSE-MsgGUID: jfLzm6z/S9yFSOX6eaLqkA==
+   d="scan'208";a="30916574"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 01:53:19 -0800
+X-CSE-ConnectionGUID: JEoBBVi5Q6SYqS8xjwKeDA==
+X-CSE-MsgGUID: /gHe2epqRwy9yXHP+DlRUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
-   d="scan'208";a="93059751"
-Received: from lkp-server01.sh.intel.com (HELO 8eed2ac03994) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 13 Nov 2024 23:37:01 -0800
-Received: from kbuild by 8eed2ac03994 with local (Exim 4.96)
+   d="scan'208";a="119083437"
+Received: from lkp-server01.sh.intel.com (HELO cf353f978a24) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Nov 2024 01:53:18 -0800
+Received: from kbuild by cf353f978a24 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tBUPS-00005j-30;
-	Thu, 14 Nov 2024 07:36:58 +0000
-Date: Thu, 14 Nov 2024 15:36:22 +0800
+	id 1tBWXM-00002L-0a;
+	Thu, 14 Nov 2024 09:53:16 +0000
+Date: Thu, 14 Nov 2024 17:52:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-hwmon@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v3 4/5] hwmon: tmp108: Add support for I3C device
-Message-ID: <202411141530.qTxjCzf7-lkp@intel.com>
-References: <20241111-p3t1085-v3-4-bff511550aad@nxp.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 3996187f80a0e24bff1959609065d49041cf648d
+Message-ID: <202411141745.XTolJjoz-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241111-p3t1085-v3-4-bff511550aad@nxp.com>
 
-Hi Frank,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 3996187f80a0e24bff1959609065d49041cf648d  hwmon: (pmbus/isl68137) add support for voltage divider on Vout
 
-kernel test robot noticed the following build errors:
+elapsed time: 733m
 
-[auto build test ERROR on 74741a050b79d31d8d2eeee12c77736596d0a6b2]
+configs tested: 71
+configs skipped: 1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/dt-bindings-hwmon-ti-tmp108-Add-nxp-p3t1085-compatible-string/20241112-013721
-base:   74741a050b79d31d8d2eeee12c77736596d0a6b2
-patch link:    https://lore.kernel.org/r/20241111-p3t1085-v3-4-bff511550aad%40nxp.com
-patch subject: [PATCH v3 4/5] hwmon: tmp108: Add support for I3C device
-config: arc-randconfig-001-20241114 (https://download.01.org/0day-ci/archive/20241114/202411141530.qTxjCzf7-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411141530.qTxjCzf7-lkp@intel.com/reproduce)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411141530.qTxjCzf7-lkp@intel.com/
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20241114    gcc-13.2.0
+arc                   randconfig-002-20241114    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-20
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20241114    gcc-14.2.0
+arm                   randconfig-002-20241114    gcc-14.2.0
+arm                   randconfig-003-20241114    gcc-14.2.0
+arm                   randconfig-004-20241114    clang-14
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241114    clang-20
+arm64                 randconfig-002-20241114    gcc-14.2.0
+arm64                 randconfig-003-20241114    gcc-14.2.0
+arm64                 randconfig-004-20241114    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20241114    gcc-14.2.0
+csky                  randconfig-002-20241114    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-20
+hexagon               randconfig-001-20241114    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241114    clang-19
+i386        buildonly-randconfig-002-20241114    gcc-11
+i386        buildonly-randconfig-003-20241114    gcc-12
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-20
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+s390                             allmodconfig    clang-20
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-17
+um                               allyesconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                               rhel-8.3    gcc-12
+xtensa                            allnoconfig    gcc-14.2.0
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/device/driver.h:21,
-                    from include/linux/device.h:32,
-                    from drivers/hwmon/tmp108.c:8:
->> include/linux/module.h:131:49: error: redefinition of '__inittest'
-     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^~~~~~~~~~
-   include/linux/device/driver.h:262:1: note: in expansion of macro 'module_init'
-     262 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/i3c/device.h:233:9: note: in expansion of macro 'module_driver'
-     233 |         module_driver(__drv, i3c_driver_register, i3c_driver_unregister)
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:473:1: note: in expansion of macro 'module_i3c_driver'
-     473 | module_i3c_driver(p3t1085_driver);
-         | ^~~~~~~~~~~~~~~~~
-   include/linux/module.h:131:49: note: previous definition of '__inittest' with type 'int (*(void))(void)'
-     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^~~~~~~~~~
-   include/linux/device/driver.h:262:1: note: in expansion of macro 'module_init'
-     262 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/i2c.h:965:9: note: in expansion of macro 'module_driver'
-     965 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:444:1: note: in expansion of macro 'module_i2c_driver'
-     444 | module_i2c_driver(tmp108_driver);
-         | ^~~~~~~~~~~~~~~~~
->> include/linux/module.h:133:13: error: redefinition of 'init_module'
-     133 |         int init_module(void) __copy(initfn)                    \
-         |             ^~~~~~~~~~~
-   include/linux/device/driver.h:262:1: note: in expansion of macro 'module_init'
-     262 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/i3c/device.h:233:9: note: in expansion of macro 'module_driver'
-     233 |         module_driver(__drv, i3c_driver_register, i3c_driver_unregister)
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:473:1: note: in expansion of macro 'module_i3c_driver'
-     473 | module_i3c_driver(p3t1085_driver);
-         | ^~~~~~~~~~~~~~~~~
-   include/linux/module.h:133:13: note: previous definition of 'init_module' with type 'int(void)'
-     133 |         int init_module(void) __copy(initfn)                    \
-         |             ^~~~~~~~~~~
-   include/linux/device/driver.h:262:1: note: in expansion of macro 'module_init'
-     262 | module_init(__driver##_init); \
-         | ^~~~~~~~~~~
-   include/linux/i2c.h:965:9: note: in expansion of macro 'module_driver'
-     965 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:444:1: note: in expansion of macro 'module_i2c_driver'
-     444 | module_i2c_driver(tmp108_driver);
-         | ^~~~~~~~~~~~~~~~~
->> include/linux/module.h:139:49: error: redefinition of '__exittest'
-     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^~~~~~~~~~
-   include/linux/device/driver.h:267:1: note: in expansion of macro 'module_exit'
-     267 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/i3c/device.h:233:9: note: in expansion of macro 'module_driver'
-     233 |         module_driver(__drv, i3c_driver_register, i3c_driver_unregister)
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:473:1: note: in expansion of macro 'module_i3c_driver'
-     473 | module_i3c_driver(p3t1085_driver);
-         | ^~~~~~~~~~~~~~~~~
-   include/linux/module.h:139:49: note: previous definition of '__exittest' with type 'void (*(void))(void)'
-     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^~~~~~~~~~
-   include/linux/device/driver.h:267:1: note: in expansion of macro 'module_exit'
-     267 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/i2c.h:965:9: note: in expansion of macro 'module_driver'
-     965 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:444:1: note: in expansion of macro 'module_i2c_driver'
-     444 | module_i2c_driver(tmp108_driver);
-         | ^~~~~~~~~~~~~~~~~
->> include/linux/module.h:141:14: error: redefinition of 'cleanup_module'
-     141 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^~~~~~~~~~~~~~
-   include/linux/device/driver.h:267:1: note: in expansion of macro 'module_exit'
-     267 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/i3c/device.h:233:9: note: in expansion of macro 'module_driver'
-     233 |         module_driver(__drv, i3c_driver_register, i3c_driver_unregister)
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:473:1: note: in expansion of macro 'module_i3c_driver'
-     473 | module_i3c_driver(p3t1085_driver);
-         | ^~~~~~~~~~~~~~~~~
-   include/linux/module.h:141:14: note: previous definition of 'cleanup_module' with type 'void(void)'
-     141 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^~~~~~~~~~~~~~
-   include/linux/device/driver.h:267:1: note: in expansion of macro 'module_exit'
-     267 | module_exit(__driver##_exit);
-         | ^~~~~~~~~~~
-   include/linux/i2c.h:965:9: note: in expansion of macro 'module_driver'
-     965 |         module_driver(__i2c_driver, i2c_add_driver, \
-         |         ^~~~~~~~~~~~~
-   drivers/hwmon/tmp108.c:444:1: note: in expansion of macro 'module_i2c_driver'
-     444 | module_i2c_driver(tmp108_driver);
-         | ^~~~~~~~~~~~~~~~~
-
-
-vim +/__inittest +131 include/linux/module.h
-
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  128  
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  129  /* Each module must use one module_init(). */
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  130  #define module_init(initfn)					\
-1f318a8bafcfba9 Arnd Bergmann  2017-02-01 @131  	static inline initcall_t __maybe_unused __inittest(void)		\
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  132  	{ return initfn; }					\
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08 @133  	int init_module(void) __copy(initfn)			\
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  134  		__attribute__((alias(#initfn)));		\
-92efda8eb15295a Sami Tolvanen  2022-09-08  135  	___ADDRESSABLE(init_module, __initdata);
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  136  
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  137  /* This is only required if you want to be unloadable. */
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  138  #define module_exit(exitfn)					\
-1f318a8bafcfba9 Arnd Bergmann  2017-02-01 @139  	static inline exitcall_t __maybe_unused __exittest(void)		\
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  140  	{ return exitfn; }					\
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08 @141  	void cleanup_module(void) __copy(exitfn)		\
-cf68fffb66d60d9 Sami Tolvanen  2021-04-08  142  		__attribute__((alias(#exitfn)));		\
-92efda8eb15295a Sami Tolvanen  2022-09-08  143  	___ADDRESSABLE(cleanup_module, __exitdata);
-0fd972a7d91d6e1 Paul Gortmaker 2015-05-01  144  
-
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
