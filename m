@@ -1,102 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25D1290F
-	for <linux-hwmon@vger.kernel.org>; Thu, 14 Nov 2024 00:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A42D1632E7;
+	Thu, 14 Nov 2024 04:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731544021; cv=none; b=RkYq8wKHWbkINKQp0jQCuPTNTnzf+WOg0XCNp8ukxCPw1WflsG2xvNfeYHeVcZGbumwfmpHCRiVWCKLqvSIFhfXoKNsAlkOf/MrU9hSVgQunqjPF3BM4BKk/8iYwwyZWJr/Vw4besu6msqOcM2SJwhf1M1fR+DOVKsH+l0tzxWI=
+	t=1731559272; cv=none; b=q9gHfOxkvJ5+/H/mkR7sO4ZasFBSbUW0lwSvadHM92iEvBH4j+4Lyqo2obYMGwvuEJu8EIHCNzqitM+kT9TxDthC/e3mx9bNcc3uF78ox2odlyKYbD8VX7I+wnqxjdvCb49zbM+hsc8lnfyRWya56V+f1vp6j4NVLgxWwGj3nlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731544021; c=relaxed/simple;
-	bh=I9s4Agbqvy1CHt0OpmoLnQhDQeknrdfVGktSs5X66HQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=r6PZG4GpQWctvpDVsD/4a10zUxeFhL8ChNpET2jyqNtZvg3+SPeBcS2XAraiJj540kpqkSikD26vryMe1iu/9axcFXauvHhQwwFHaSftnkFv7mkXqASu6s7moGCiqjsBLXEVceB5srSPQASWhCDvyvA59xS7KMzs93V30IBw/oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e+xfJhq0; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731559272; c=relaxed/simple;
+	bh=Tmib4jjLJqIBLcCrkSlX7oaas0R9RgMKIBI6zShGvI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gVhERToYTXoC7rAgHQOiStL4HQudGTcGFx/vYfKy+qWdRX8wX5ODrg9/3jOS5KWXMKxGp0j1j1sv9UiXb9QoFi2uQLZm1m2Dy8sx7/nFwkuNSmQe/z3jhJj4qL7EBu7Meq21pf+CbaWquXd1+RUjRLzTtSy56iE5Guw7dAMF9lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=NPvYCuzj; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e+xfJhq0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731544019; x=1763080019;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I9s4Agbqvy1CHt0OpmoLnQhDQeknrdfVGktSs5X66HQ=;
-  b=e+xfJhq0fS9km3OCOrF3gTDiBrPfORhQpd26Xuag0baj0LG9tjwKiJkc
-   bKUhEShmK9Jo6jShoxLwRBlOhZStRFaYEiehyKqiAMam25lKa4MKmRMua
-   +HJlsdIRvb20cCmMm6j2M+831QvpG63RgXWYxoBRkYbDVmBHaas9phy0b
-   103j2Q3BAG0ykDhhCjQY899voxanFnr9xaQM1DsY3X1bX+UIIWxU/W8d7
-   6IaE3yrWnNHAdgrJ9oxAm0fpnlV01ck9DYHT5Iimb7SpR3y37s0pFnTzs
-   MZIms8E3T6j8jUR5TwtE6jaVyHKAh13DNZhf1RnuRbFTS9LHoz2f96P7Q
-   w==;
-X-CSE-ConnectionGUID: 8Kbh788iS5iTNYeIKQqxeg==
-X-CSE-MsgGUID: lACfpKgNRFCLvu3o5s7xtA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="42024308"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="42024308"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 16:26:59 -0800
-X-CSE-ConnectionGUID: WrSJlhRdTvy4UHIjfl4YHA==
-X-CSE-MsgGUID: ITWvMZYgRkunkLUBgZcTTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="88450142"
-Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Nov 2024 16:26:57 -0800
-Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tBNhH-0000xd-01;
-	Thu, 14 Nov 2024 00:26:55 +0000
-Date: Thu, 14 Nov 2024 08:26:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 47/51] drivers/hwmon/tmp108.c:452:
- undefined reference to `i3cdev_to_dev'
-Message-ID: <202411140803.kNbykFMj-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="NPvYCuzj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1731559256;
+	bh=Tmib4jjLJqIBLcCrkSlX7oaas0R9RgMKIBI6zShGvI4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NPvYCuzj2p4SEyVkL00gdajRVwzh0v0JUjakfyta9Ai+Y4/pZVu8H1M5QV9Rrcnaa
+	 cxpJebdCz+4wum6ChuS2VUUZo+nEktXRyGJMna2ErFxcW2BnJgMW6wITY2wpD7WBy+
+	 DnqKPT5P5ioVexvN61DyNzzu0EaZ4p+VvZOqAsNY=
+Date: Thu, 14 Nov 2024 05:40:55 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (core) Avoid ifdef in C source file
+Message-ID: <b6ed8499-bf84-486c-be5f-0ef13311eb18@t-8ch.de>
+References: <20241113-hwmon-thermal-v1-1-71270be7f7a2@weissschuh.net>
+ <041a52c7-ac0b-4a78-8b39-4fc4ac4d2fd2@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <041a52c7-ac0b-4a78-8b39-4fc4ac4d2fd2@roeck-us.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   3996187f80a0e24bff1959609065d49041cf648d
-commit: c40655e3310649866c4ebf7a10f0d53802ebdfa9 [47/51] hwmon: (tmp108) Add support for I3C device
-config: x86_64-randconfig-015-20241113 (https://download.01.org/0day-ci/archive/20241114/202411140803.kNbykFMj-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140803.kNbykFMj-lkp@intel.com/reproduce)
+Hi Guenter,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411140803.kNbykFMj-lkp@intel.com/
+On 2024-11-12 22:52:36-0800, Guenter Roeck wrote:
+> On 11/12/24 20:39, Thomas Weißschuh wrote:
+> > Using an #ifdef in a C source files to have different definitions
+> > of the same symbol makes the code harder to read and understand.
+> > Furthermore it makes it harder to test compilation of the different
+> > branches.
+> > 
+> > Replace the ifdeffery with IS_ENABLED() which is just a normal
+> > conditional.
+> > The resulting binary is still the same as before as the compiler
+> > optimizes away all the unused code and definitions.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> > This confused me a bit while looking at the implementation of
+> > HWMON_C_REGISTER_TZ.
+> > ---
+> >   drivers/hwmon/hwmon.c | 21 ++++++---------------
+> >   1 file changed, 6 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> > index 9c35c4d0369d7aad7ea61ccd25f4f63fc98b9e02..86fb674c85d3f54d475be014c3fd3dd74c815c57 100644
+> > --- a/drivers/hwmon/hwmon.c
+> > +++ b/drivers/hwmon/hwmon.c
+> > @@ -147,11 +147,6 @@ static DEFINE_IDA(hwmon_ida);
+> >   /* Thermal zone handling */
+> > -/*
+> > - * The complex conditional is necessary to avoid a cyclic dependency
+> > - * between hwmon and thermal_sys modules.
+> > - */
+> > -#ifdef CONFIG_THERMAL_OF
+> >   static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> >   {
+> >   	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
+> > @@ -257,6 +252,9 @@ static int hwmon_thermal_register_sensors(struct device *dev)
+> >   	void *drvdata = dev_get_drvdata(dev);
+> >   	int i;
+> > +	if (!IS_ENABLED(CONFIG_THERMAL_OF))
+> > +		return 0;
+> > +
+> >   	for (i = 1; info[i]; i++) {
+> >   		int j;
+> > @@ -285,6 +283,9 @@ static void hwmon_thermal_notify(struct device *dev, int index)
+> >   	struct hwmon_device *hwdev = to_hwmon_device(dev);
+> >   	struct hwmon_thermal_data *tzdata;
+> > +	if (!IS_ENABLED(CONFIG_THERMAL_OF))
+> > +		return;
+> > +
+> >   	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
+> >   		if (tzdata->index == index) {
+> >   			thermal_zone_device_update(tzdata->tzd,
+> 
+> There is no dummy function for thermal_zone_device_update().
+> I really don't want to trust the compiler/linker to remove that code
+> unless someone points me to a document explaining that it is guaranteed
+> to not cause any problems.
 
-Note: the groeck-staging/hwmon-next HEAD 3996187f80a0e24bff1959609065d49041cf648d builds fine.
-      It only hurts bisectability.
+I'm fairly sure that a declaration should be enough, and believe
+to remember seeing such advise somewhere.
+However there is not even a function declaration with !CONFIG_THERMAL.
+So I can add an actual stub for it for v2.
 
-All errors (new ones prefixed by >>):
+What do you think?
 
-   ld: drivers/hwmon/tmp108.o: in function `p3t1085_i3c_probe':
->> drivers/hwmon/tmp108.c:452: undefined reference to `i3cdev_to_dev'
-   ld: drivers/hwmon/tmp108.o: in function `i3c_i2c_driver_unregister':
->> include/linux/i3c/device.h:277: undefined reference to `i3c_driver_unregister'
-   ld: drivers/hwmon/tmp108.o: in function `i3c_i2c_driver_register':
->> include/linux/i3c/device.h:257: undefined reference to `i3c_driver_register_with_owner'
+Thomas
 
-
-vim +452 drivers/hwmon/tmp108.c
-
-   449	
-   450	static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
-   451	{
- > 452		struct device *dev = i3cdev_to_dev(i3cdev);
-   453		struct regmap *regmap;
-   454	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > @@ -293,16 +294,6 @@ static void hwmon_thermal_notify(struct device *dev, int index)
+> >   	}
+> >   }
+> > -#else
+> > -static int hwmon_thermal_register_sensors(struct device *dev)
+> > -{
+> > -	return 0;
+> > -}
+> > -
+> > -static void hwmon_thermal_notify(struct device *dev, int index) { }
+> > -
+> > -#endif /* IS_REACHABLE(CONFIG_THERMAL) && ... */
+> > -
+> >   static int hwmon_attr_base(enum hwmon_sensor_types type)
+> >   {
+> >   	if (type == hwmon_in || type == hwmon_intrusion)
+> > 
+> > ---
+> > base-commit: 3022e9d00ebec31ed435ae0844e3f235dba998a9
+> > change-id: 20241113-hwmon-thermal-2d2da581c276
+> > 
+> > Best regards,
+> 
