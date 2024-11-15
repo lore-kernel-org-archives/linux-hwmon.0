@@ -1,232 +1,146 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901861BC49;
-	Thu, 14 Nov 2024 16:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8B11B6CE3;
+	Fri, 15 Nov 2024 12:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731600438; cv=none; b=JT5eEkUpC9w4Yi96AH9NEeG8VxQb+z6fCjm0uTVoYODf1TqFQMPsVL8Lbb9uj6CUlMcHIyEcdgZTU+GC1tE88OsEeYZqkcy0vIp/kIYSRJ2qge/DBDeATjU/SO/LdT1bPUhr76oufu9haZsAI06dd8J4IMeHhufx3pz2YXkYKow=
+	t=1731674783; cv=none; b=c2YagYFSQ7e3zVdrmr9ELUullnHQXrCyP1SUsQm9oLRoAkUqi/FiUC4J4Sdk9QOE9uAIU/VaVEOq8In8wAYV0bNPnu4/J/chb67ypso0W/LVbir5dNZeysi7Vrw1CFEYyyB8F5CX/7o/9AqMukXKbdPYF+Vorj9BD0ameh/WxHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731600438; c=relaxed/simple;
-	bh=jh2oRSzx6u5z+iH44W8gFAvDdTaQNNoevLV18Ll2k48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UVajXqnqw5PQX2SJ+ErLDsPRoZHPP/MYQJA9QymA3PgMNhJCxis5mHYswhn6OAzg0IjSYXUOMRLXT/kabl8V9Lw9QYcqTaeUWLb4Yx9yRvGFQDKtgNlSC9Z6CYOoj827ha+3U2NHr4WUcvdzq+0k3wBKPhONp77D8edhUONQTl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=kUELYSU2; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1731674783; c=relaxed/simple;
+	bh=QVuaUSvmy/mhWm+lc29DRjWFrc2PsNoMAp2YQuh1c/s=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Or+c37eVlwv7jjQCyxbJGsahm5E41o71MsRdtrCB9tpj5B+uurALPVsYQY7+JFhFr28V8JFDsTS6kb2yzQ/zH9N0+TW5XHuHGny53GCK/yisj6Imc8/ljGIgkhlEI0dV0Y/Nro08qMeZ5wu2A16xXiuTtPevTlfu54OoRSVdaDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=VDNS5mud; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="kUELYSU2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1731600429;
-	bh=jh2oRSzx6u5z+iH44W8gFAvDdTaQNNoevLV18Ll2k48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kUELYSU2r2QcM7Kshr4NdJouIK1/QTyc4xNhAXyrU3IdWqypHdzvPW9gfA6wFvpMw
-	 DVXQxTwx289k+c+ocnO1gJisCa2AaD9sk/jldI1aAm+Vlj/AuW4n0R/1RhNNhcypD9
-	 M4Vpe+LaKf1xV00QS5JnzUbcBVqey001zmW/dx0Y=
-Date: Thu, 14 Nov 2024 17:07:08 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (core) Avoid ifdef in C source file
-Message-ID: <2b1b5e06-062b-442d-be13-da02d3233fba@t-8ch.de>
-References: <20241113-hwmon-thermal-v1-1-71270be7f7a2@weissschuh.net>
- <041a52c7-ac0b-4a78-8b39-4fc4ac4d2fd2@roeck-us.net>
- <b6ed8499-bf84-486c-be5f-0ef13311eb18@t-8ch.de>
- <3f1914da-4f94-415e-8c46-8731834e51a2@roeck-us.net>
- <c3aaf724-a1d2-438c-851a-dedb0e9a3f34@t-8ch.de>
- <7a01e398-c8fb-43fd-9b47-7fefb7a692cb@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="VDNS5mud"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1731674762; x=1732279562; i=markus.elfring@web.de;
+	bh=b1h073xk2VbAnT3Phba46TVvE1MlsVQw4HAW0gXyXlc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=VDNS5mudP2zKJjiJVyDVjin6mZYo9d50ORfgWfpSmTeqz2S60cy6qDedarZB8lFE
+	 T2DwR0RCPM+OgCy9iiy3R9eTjHP3cU6dO4WhaMjPcdBeOrJP6VNFLVigxhFe8K02V
+	 waW7UX7xSDLtYoyIPdbXJIXil2EPNAYMDfBce3Siu5HTF6ddT0OnpWyr3/1aygyGB
+	 IZdXW0mGsOARBZ9FRUpqjPv1zw93aBIJ9/taV0kSbClvzwCNzZNwvLB1kbOLjJ9Um
+	 9/aXr+cVvcdvgils+h6Df5FYeAur/AJVQICyfdqr4Mk1tnpVKeUHppc2401IvLNpi
+	 9gFmKYZKJCWc6n7s/g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.81.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MnG2Q-1tbP6k2ebU-00qZyC; Fri, 15
+ Nov 2024 13:46:02 +0100
+Message-ID: <945b113c-516d-4d35-9d45-224c03a344e4@web.de>
+Date: Fri, 15 Nov 2024 13:45:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a01e398-c8fb-43fd-9b47-7fefb7a692cb@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+To: linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org,
+ Avi Fishman <avifishman70@gmail.com>, Benjamin Fair
+ <benjaminfair@google.com>, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?=
+ <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Nancy Yuen <yuenn@google.com>, Patrick Venture <venture@google.com>,
+ Tali Perry <tali.perry1@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Rosen Penev <rosenp@gmail.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] hwmon: (npcm750-pwm-fan) Use
+ devm_platform_ioremap_resource_byname() in npcm7xx_pwm_fan_probe()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zvtwJmbmg0PXPGIXT71pqkzzYsC/7bRRW3nuOzd86p4fLSesLTs
+ QPiqTagiHgD0mYjEBLnYpdkUStiSMnevQewINmsgsF01CLSYBdfMH/jnmx8vB/LDe/riTmO
+ Z56lzISgaxu6TLOrz7gR5UYJoTPj2liwjhQQiOjnzup3/ipTdYWHoF24Ibfb6l3Abppy0vc
+ VPbC9+kojGVxcwGdRmqxA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:w0BWDFwVXKE=;TH57WovQEGADRNMK/dam/KRqdb/
+ VvAmLQqZ0QL4arsIs7geyZK7Jz0SDQAFmG5Esva37z4HwcBhiydEIf56cTfktZZ1+kzGC3PQf
+ exKqHbRRVwEv01A36q7oKclIzAaVLWjgWUsnRQKfYHwKEQm22TKBuLv9vpcbZBju+csfZKT2K
+ zkgSk9pCc3qfagjckZY20HjORz6uQ3itUsW+sPeIxCb2SZ61LJQXOtnue4uMghZy5fZgpNNvu
+ rvp1+omVKRyeiLEIm1zbzQkpwLUI2lPRJCaQuvRDsn6p8WFH00BVte3dZIxqNqugQVSQgzxcG
+ 5eSksRPG1cgEjUVrJPo6JCTzgDuqktunt4R8ZZThJ5RbmWPCWvTiqu4+Na4h11HoEL92vmT68
+ OiOx3Wl6G1twIQbT5sNRcIYqjev08sQaxDTD99rhEqWc05Il/3U8TIRPqn26j+qqaWoSJgdZT
+ pfAHh4553bGrZcg+ul5GqUv+NWnb2355S1z5oiKTidu0ftEZ9mm06UfW4kenAyxNgToO/DHKh
+ 7LsXkgoGsrvAftYoV/ZnPwju30hHRh83ZeZ4BudFhrdsaQpOeWsq9/DwiEFrEtYb6wuMq1hK5
+ WS/FZm+Ykie4g+iFoASJfRRG5h79xThbETvVgSdNbMLlbWCrfWQj/0RGnnjsGrzeGz73UA+6T
+ Rxk9xJdjUWIWn8l0zTGIoo3YjNRBfRwmPiYFL3rdW57Ahl213tejPJkX+eguof886FBLf2vUv
+ DkScdqHKJmTfLqSbdM74XcMcIFLmfqsgk9nx5arK7bod1L1heDzyxXwytRJI5ZYXVxnM1CgA4
+ uMFv6IBQn2D6S0WwJqFGDKekUcjeB3tN7Pa65Gri4xa2W7N3/kYFO1F6pCYAgE+8Ziz1Lz4kA
+ lVml/srN8D92tr/9g9glcLElPTANnmh1aPrHeurhRJNmsjsa4Q1X2G3mY
 
-On 2024-11-14 06:40:03-0800, Guenter Roeck wrote:
-> On 11/13/24 23:27, Thomas Weißschuh wrote:
-> > On 2024-11-13 22:51:37-0800, Guenter Roeck wrote:
-> > > On 11/13/24 20:40, Thomas Weißschuh wrote:
-> > > > On 2024-11-12 22:52:36-0800, Guenter Roeck wrote:
-> > > > > On 11/12/24 20:39, Thomas Weißschuh wrote:
-> > > > > > Using an #ifdef in a C source files to have different definitions
-> > > > > > of the same symbol makes the code harder to read and understand.
-> > > > > > Furthermore it makes it harder to test compilation of the different
-> > > > > > branches.
-> > > > > > 
-> > > > > > Replace the ifdeffery with IS_ENABLED() which is just a normal
-> > > > > > conditional.
-> > > > > > The resulting binary is still the same as before as the compiler
-> > > > > > optimizes away all the unused code and definitions.
-> > > > > > 
-> > > > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > > > > > ---
-> > > > > > This confused me a bit while looking at the implementation of
-> > > > > > HWMON_C_REGISTER_TZ.
-> > > > > > ---
-> > > > > >     drivers/hwmon/hwmon.c | 21 ++++++---------------
-> > > > > >     1 file changed, 6 insertions(+), 15 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> > > > > > index 9c35c4d0369d7aad7ea61ccd25f4f63fc98b9e02..86fb674c85d3f54d475be014c3fd3dd74c815c57 100644
-> > > > > > --- a/drivers/hwmon/hwmon.c
-> > > > > > +++ b/drivers/hwmon/hwmon.c
-> > > > > > @@ -147,11 +147,6 @@ static DEFINE_IDA(hwmon_ida);
-> > > > > >     /* Thermal zone handling */
-> > > > > > -/*
-> > > > > > - * The complex conditional is necessary to avoid a cyclic dependency
-> > > > > > - * between hwmon and thermal_sys modules.
-> > > > > > - */
-> > > > > > -#ifdef CONFIG_THERMAL_OF
-> > > > > >     static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> > > > > >     {
-> > > > > >     	struct hwmon_thermal_data *tdata = thermal_zone_device_priv(tz);
-> > > > > > @@ -257,6 +252,9 @@ static int hwmon_thermal_register_sensors(struct device *dev)
-> > > > > >     	void *drvdata = dev_get_drvdata(dev);
-> > > > > >     	int i;
-> > > > > > +	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-> > > > > > +		return 0;
-> > > > > > +
-> > > > > >     	for (i = 1; info[i]; i++) {
-> > > > > >     		int j;
-> > > > > > @@ -285,6 +283,9 @@ static void hwmon_thermal_notify(struct device *dev, int index)
-> > > > > >     	struct hwmon_device *hwdev = to_hwmon_device(dev);
-> > > > > >     	struct hwmon_thermal_data *tzdata;
-> > > > > > +	if (!IS_ENABLED(CONFIG_THERMAL_OF))
-> > > > > > +		return;
-> > > > > > +
-> > > > > >     	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
-> > > > > >     		if (tzdata->index == index) {
-> > > > > >     			thermal_zone_device_update(tzdata->tzd,
-> > > > > 
-> > > > > There is no dummy function for thermal_zone_device_update().
-> > > > > I really don't want to trust the compiler/linker to remove that code
-> > > > > unless someone points me to a document explaining that it is guaranteed
-> > > > > to not cause any problems.
-> > > > 
-> > > > I'm fairly sure that a declaration should be enough, and believe
-> > > > to remember seeing such advise somewhere.
-> > > > However there is not even a function declaration with !CONFIG_THERMAL.
-> > > > So I can add an actual stub for it for v2.
-> > > > 
-> > > > What do you think?
-> > > > 
-> > > You mean an extern declaration without the actual function ?
-> > 
-> > Stub as in empty inline function:
-> > 
-> > static inline void thermal_zone_device_update(struct thermal_zone_device *,
-> >                                               enum thermal_notify_event)
-> > { }
-> > 
-> 
-> Sure, that would work, but it would have to be declared in the thermal subsystem.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Fri, 15 Nov 2024 13:30:58 +0100
 
-Of course.
+* Reuse existing functionality from devm_platform_ioremap_resource_byname(=
+)
+  instead of keeping duplicate source code.
 
-> > > I'd really want to see that documented. It would seem rather unusual.
-> > 
-> > > From Documentation/process/coding-style.rst
-> > 
-> > 	21) Conditional Compilation
-> > 	---------------------------
-> > 
-> > 	Wherever possible, don't use preprocessor conditionals (#if, #ifdef) in .c
-> > 	files; doing so makes code harder to read and logic harder to follow.  Instead,
-> > 	use such conditionals in a header file defining functions for use in those .c
-> > 	files, providing no-op stub versions in the #else case, and then call those
-> > 	functions unconditionally from .c files.  The compiler will avoid generating
-> > 	any code for the stub calls, producing identical results, but the logic will
-> > 	remain easy to follow.
-> > 
-> > 	[..]
-> > 
-> > 	Within code, where possible, use the IS_ENABLED macro to convert a Kconfig
-> > 	symbol into a C boolean expression, and use it in a normal C conditional:
-> > 
-> > 	.. code-block:: c
-> > 
-> > 		if (IS_ENABLED(CONFIG_SOMETHING)) {
-> > 			...
-> > 		}
-> > 
-> > 	The compiler will constant-fold the conditional away, and include or exclude
-> > 	the block of code just as with an #ifdef, so this will not add any runtime
-> > 	overhead.
-> > 
-> > 	[..]
-> > 
-> > While this primarily talks about stubs, the fact that
-> > "the compiler will constant-fold the conditional away" can be understood
-> > that the linker will never see those function calls and therefore the
-> > functions don't have to be present during linking.
-> 
-> Yes, I am aware of that. However, that is not a formal language definition.
+  This issue was transformed by using the Coccinelle software.
 
-Formal as in ANSI/ISO? I don't think these ever say anything about
-optimizations. And also the compilers don't really write down the
-details AFAIK.
+* Omit the local variable =E2=80=9Cres=E2=80=9D which became unnecessary
+  with this refactoring.
 
-> Yes, in normal builds with a modern compiler it will be optimized away.
-> However, I don't think that will happen if the kernel is built with -O0.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/hwmon/npcm750-pwm-fan.c | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
 
-The kernel is never built with -O0. It's either -O2 or -Os.
-It's a Kconfig choice between CC_OPTIMIZE_FOR_PERFORMANCE or
-CC_OPTIMIZE_FOR_SIZE, one is always enabled.
-This is not clear from the logic in Makefile.
+diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-f=
+an.c
+index db3b551828eb..d66edb184bca 100644
+=2D-- a/drivers/hwmon/npcm750-pwm-fan.c
++++ b/drivers/hwmon/npcm750-pwm-fan.c
+@@ -929,7 +929,6 @@ static int npcm7xx_pwm_fan_probe(struct platform_devic=
+e *pdev)
+ 	struct device *dev =3D &pdev->dev;
+ 	struct device_node *np;
+ 	struct npcm7xx_pwm_fan_data *data;
+-	struct resource *res;
+ 	struct device *hwmon;
+ 	char name[20];
+ 	int ret, cnt;
+@@ -948,14 +947,7 @@ static int npcm7xx_pwm_fan_probe(struct platform_devi=
+ce *pdev)
 
-With -O0 more or less everything breaks.
+ 	data->pwm_modules =3D data->info->pwm_max_channel / NPCM7XX_PWM_MAX_CHN_=
+NUM_IN_A_MODULE;
 
-> > So a declaration would be enough. But an actual stub doesn't hurt either.
-> > 
-> 
-> I disagree. You did not point to a formal language definition saying that dead code
-> shall be optimized away and that functions called by such dead code don't have
-> to actually exist.
-> 
-> Do we really have to argue about this ? Please provide examples from elsewhere
-> in the kernel which implement what you have suggested (not just the use of
-> IS_ENABLED(), but the call to functions without stub which don't exist
-> if the code is not enabled), and we can go from there.
+-	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "pwm");
+-	if (!res) {
+-		dev_err(dev, "pwm resource not found\n");
+-		return -ENODEV;
+-	}
+-
+-	data->pwm_base =3D devm_ioremap_resource(dev, res);
+-	dev_dbg(dev, "pwm base resource is %pR\n", res);
++	data->pwm_base =3D devm_platform_ioremap_resource_byname(pdev, "pwm");
+ 	if (IS_ERR(data->pwm_base))
+ 		return PTR_ERR(data->pwm_base);
 
-None of the hwmon functions have stubs if !CONFIG_HWMON, only declarations.
-And there are multiple drivers that use the pattern from above.
+@@ -965,14 +957,7 @@ static int npcm7xx_pwm_fan_probe(struct platform_devi=
+ce *pdev)
+ 		return PTR_ERR(data->pwm_clk);
+ 	}
 
-One example from drivers/net/wireless/mediatek/mt76/mt7921/init.c
+-	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "fan");
+-	if (!res) {
+-		dev_err(dev, "fan resource not found\n");
+-		return -ENODEV;
+-	}
+-
+-	data->fan_base =3D devm_ioremap_resource(dev, res);
+-	dev_dbg(dev, "fan base resource is %pR\n", res);
++	data->fan_base =3D devm_platform_ioremap_resource_byname(pdev, "fan");
+ 	if (IS_ERR(data->fan_base))
+ 		return PTR_ERR(data->fan_base);
 
-	static int mt7921_thermal_init(struct mt792x_phy *phy)
-	{
-		struct wiphy *wiphy = phy->mt76->hw->wiphy;
-		struct device *hwmon;
-		const char *name;
+=2D-
+2.47.0
 
-		if (!IS_REACHABLE(CONFIG_HWMON))
-			return 0;
-
-		name = devm_kasprintf(&wiphy->dev, GFP_KERNEL, "mt7921_%s",
-				      wiphy_name(wiphy));
-		if (!name)
-			return -ENOMEM;
-
-		hwmon = devm_hwmon_device_register_with_groups(&wiphy->dev, name, phy,
-							       mt7921_hwmon_groups);
-		return PTR_ERR_OR_ZERO(hwmon);
-	}
-
-
-
-*But* the thermal subsystem is actually using stubs.
-So the same should be done for thermal_zone_device_update().
-As mentioned before, my original claim that declarations of the thermal
-functions are already usable when !CONFIG_THERMAL was wrong.
-And if the thermal header is to be touched, it should as well be a stub
-for consistency.
-Given that there are already stubs for all kinds of thermal functions,
-this doesn't seem like it would be an issue.
-
-
-Thomas
