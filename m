@@ -1,109 +1,83 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5749A1E4A6;
-	Fri, 15 Nov 2024 16:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B37C1D63ED;
+	Fri, 15 Nov 2024 16:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731688600; cv=none; b=X/waVjWm42vj3bhp7i02WA4abx+BOtT8Rzd0ebUDpfSnXvMslqvp2RuewhXMy++56sV0BaxSgFIy0sOM9vfzXlfCv3WgBfSudwVfjsJ/XYvnfIh7+nnKnUCAwOlcIx8RJWvXpgXASm+0c0cU/FPywQXsqIcAQM9rjNQfZQOG31Y=
+	t=1731688838; cv=none; b=aDKQZouT2wCJHfLgE4Bn3SfAicc7u/66Y38NpZeoKHcbzN3sSTdz4+7JwQUKi6I34XpVbBBKAKVMwztdW4gnoQJYGwC+mBLNXu5z06+UTIDsD4nbIYBtGESY9J5xmxPKeJDj7oSVP832WKtyJj0IPG0R1fvM9Zjqd6TEwKgO2Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731688600; c=relaxed/simple;
-	bh=y+PbtP+vn6mx5pVaEDZFsg7iVYw3KU0kEFAepCEBgf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BnJaSw4OFQxH3NpKx0r9nL+R2t69LPqAiuN5INFrVI0LED1vMwbx8+44ZBeM+s9cP10OTYuOEnay+jqcHw57HlNbaNmyDAcIJ6eyt8jR/RrY2Y8T+PM4fY4/qKdZal53NEyB2TCNtAT1dz4OQNbxT+NC/0TUVwIa6kYZ6Y9nxcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I7g+fzjB; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731688838; c=relaxed/simple;
+	bh=ReJ9dLJkmJ51yM3qtvDgNGGTzsQWCETDqLee/2ZGECU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=QfviTu993UlkGHM8jX5lJH8JhYZLvYP844NqLE0lXfI8OXzney75WUJ15xue8uCaUNrwBnotj4+zAfUW1yQFIlPVQBZKM+9J7G/QbhUTGCsgcOuF+muX76u5vd9rodvDZilG7jFAt9WwB/TUagi0IN0D4n7llstYn9MoZAnltnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=slEGHZr3; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I7g+fzjB"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7247ebab977so550334b3a.3;
-        Fri, 15 Nov 2024 08:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731688597; x=1732293397; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WNOdDdSV1Z0oUqfYyXXzrSfaZYOowO1TNJ4A5Rc5Khc=;
-        b=I7g+fzjBYuMbZlT5DxQEGzVjCpOtiJn9tei1LaksVvFco6QgNy/8uBQDc0kIuJ75CI
-         0+DaMD15giW6YUweucRNufL1UPO00t9G1KFD8vZ8BdBtjX++XXkYZ3tXahhLkc6N+Nnf
-         AMyj00QqpRoJA2WMiQ93YHI1k+a3wwMIX4+rFjnhyJVLmBMkHgyQ/RJ8WsF29RWK7Pa0
-         jshf4lcy+f9kTwxPcTfgNG4Z++W1Vtx/Mab0DRwwnIba+cqYutZHZT0lvbZcmmONU6vm
-         CVsKKVeXIJ/QA/TalTMrSyG7rt+geQq0Wx8yRaZHaqN7VIvpLuk1rIu+al2aregw2ZwL
-         KX9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731688597; x=1732293397;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WNOdDdSV1Z0oUqfYyXXzrSfaZYOowO1TNJ4A5Rc5Khc=;
-        b=pEirbPrekFDWNrR2f1PySbC/Dp2Ehj11w66egrx783faQjZD6JTimraQp/9LUCHv3A
-         EQZTFL6So3eau9pQ8zVYrA1ieEXUW3kAgGnEgIR/DXQrPZDextdxagv+WwVGHPk+h/rC
-         4e6kmg7+5yCmdKC44FCpp1E5KEvHANG39uCYvKcTa84fh3OY8ZcZ+dj7Vs2L4cu8PGGp
-         OUzBvM0KlTsIVDCcbuBvk3UwiMTWGz306VBcLsCr+EnEhbvvC4x0t0vdbTNozm0a03Wg
-         WQ4iyV6Js3JHconErN8JY0RTguFJfgoxM3B7UgUV6BkRogeamnJTRqDhx4dnojQlk/0g
-         mmpA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEWHJV4UFiC3gwLKuEe8/ujHwb756G/zpAHHiHN+QI+31LtWdIJv0B50wPFp1JKBIpzgMATVbP5a6DTIfm@vger.kernel.org, AJvYcCW+/KmHw2tJ12Mrgqaerm4YE5GGGsWZ8SaOpiSLdHKRU7fkkTdEFqQULzBYXAvrJvV4ti2Xda9QPeyhBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0Da+NL2yNnlDR6G/Q1If7DDO7ns6IVABJnCsZ+MNXHtbTjk96
-	PSfGqKfJiybyxBE/uSw1zu5VmefmvQM7e9qLscnk3nn/8kCNoEJliKwrhQ==
-X-Google-Smtp-Source: AGHT+IHLRXUrvO/FSpUkSwIOqI4NgtwIXaRbEzAWdH0RZpCjHH+b7ipJ0iAec7vzqzNEsn/WAPz0oQ==
-X-Received: by 2002:aa7:88c5:0:b0:71e:5f2c:c019 with SMTP id d2e1a72fcca58-72476b87648mr3428783b3a.9.1731688597530;
-        Fri, 15 Nov 2024 08:36:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72477120abfsm1538313b3a.53.2024.11.15.08.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 08:36:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 15 Nov 2024 08:36:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (core) Avoid ifdef in C source file
-Message-ID: <51c9b886-be97-4fe4-bc22-35d1c727b93c@roeck-us.net>
-References: <20241113-hwmon-thermal-v1-1-71270be7f7a2@weissschuh.net>
- <20fde375-a88a-4279-a849-520063217de9@roeck-us.net>
- <3dfa3859-cef0-4311-b0c5-ff1c04284e88@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="slEGHZr3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1731688833;
+	bh=ReJ9dLJkmJ51yM3qtvDgNGGTzsQWCETDqLee/2ZGECU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=slEGHZr3q5L3EQXl9KA6zoJ0gygaovxX3gl9AQ9v7dhqZNuBRGodaiFT0QReAqa81
+	 fkdsNyC6mDKjTt7UepodSw1tmiDFqmmmd+ybxPwM6mLYf+UG1woSp5YzcLOwreI+YA
+	 o7oFigGABVMwEqAabgXKblItwGs7jTVJ9TgUFPz0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Fri, 15 Nov 2024 17:40:21 +0100
+Subject: [PATCH v2 1/2] thermal: core: Add stub for
+ thermal_zone_device_update()
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3dfa3859-cef0-4311-b0c5-ff1c04284e88@roeck-us.net>
+Message-Id: <20241115-hwmon-thermal-v2-1-c96f0c0984b2@weissschuh.net>
+References: <20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net>
+In-Reply-To: <20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731688832; l=979;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=ReJ9dLJkmJ51yM3qtvDgNGGTzsQWCETDqLee/2ZGECU=;
+ b=2cRIq3RMhZMNSp+W/2tI2ZAdtQSuWltRIMZ43F5qnGgb3jPt6HKBTKeqgAat97HQ4pU5ne5bv
+ xQJN6T4RnQkB4rlhuIogobSfYvQlpFXu0KjV9JpieFyARKvBCsw6DqF
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Fri, Nov 15, 2024 at 08:34:47AM -0800, Guenter Roeck wrote:
-> On Fri, Nov 15, 2024 at 08:31:29AM -0800, Guenter Roeck wrote:
-> > Hi Thomas,
-> > 
-> > On Wed, Nov 13, 2024 at 05:39:16AM +0100, Thomas Weißschuh wrote:
-> > > Using an #ifdef in a C source files to have different definitions
-> > > of the same symbol makes the code harder to read and understand.
-> > > Furthermore it makes it harder to test compilation of the different
-> > > branches.
-> > > 
-> > > Replace the ifdeffery with IS_ENABLED() which is just a normal
-> > > conditional.
-> > > The resulting binary is still the same as before as the compiler
-> > > optimizes away all the unused code and definitions.
-> > > 
-> > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > > ---
-> > 
-> > I decided to apply the patch despite my concerns about the lack
-> > of dummy functions. Let's see if it blows up in our face; if so,
-> > I'll revert it.
-> 
-> Ah, no, that didn't work, because if CONFIG_THERMAL=n there isn't
-> even an external declaration for thermal_zone_device_update().
-> 
+To simplify the !CONFIG_THERMAL case in the hwmon core,
+add a !CONFIG_THERMAL stub for thermal_zone_device_update().
 
-allnoconfig+CONFIG_HWMON:
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ include/linux/thermal.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-drivers/hwmon//hwmon.c: In function ‘hwmon_thermal_notify’:
-drivers/hwmon//hwmon.c:302:25: error: implicit declaration of function ‘thermal_zone_device_update’; did you mean ‘thermal_zone_device_disable’? [-Werror=implicit-function-declaration]
-  302 |                         thermal_zone_device_update(tzdata->tzd,
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 25ea8fe2313e6d0a53192974a80d92f50f0ff03e..93880b7bd7d92df5a631f297664b9ba37146fd6a 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -289,6 +289,10 @@ static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
+ static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ { }
+ 
++static inline void thermal_zone_device_update(struct thermal_zone_device *,
++					      enum thermal_notify_event)
++{ }
++
+ static inline struct thermal_cooling_device *
+ thermal_cooling_device_register(const char *type, void *devdata,
+ 	const struct thermal_cooling_device_ops *ops)
 
-Guenter
+-- 
+2.47.0
+
