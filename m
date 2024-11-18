@@ -1,260 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2C02E419
-	for <linux-hwmon@vger.kernel.org>; Sun, 17 Nov 2024 20:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30C57F460
+	for <linux-hwmon@vger.kernel.org>; Mon, 18 Nov 2024 03:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731874943; cv=none; b=EChrTFB2fnsjrXKZUSc/pxcLffUb4yYuDBymz1pwCPTacuPjAup9brFF3/dQ5c3FQ9Ma2pS6pgw38uZWUzb1q6CRIQHJYtEVolXqGQ2iErx4UnbXNATKT9iKeFdIbE1q97FdClJZnOfqef5+UDjRM1UZueUdHhyIwxsWf35FTv0=
+	t=1731900550; cv=none; b=CLxSt2pqVELmuKpApQoez6LzZJUJ8CAXjmN6PCATYUprbXQuiRbsf0dfzTubtoUk9oTsk+sWc6VgtiG+aog1RHV5U5tU/sZgV8IMiexuA/Z0HOyOqyI1vRL3qiv/fz9+tfCnH2d3FcPRUzyFwqkcKKxaHGlB40zU8YE14DR+5WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731874943; c=relaxed/simple;
-	bh=Iwu2l+H56w/1b0bH9MOV+h6ojSQGtX268PtrWGtjcMc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=h4ptx43nviO42gZx5G//NuRZGcxJkVsI1mglkme9/yR4sobyOLAvv9HUsgKHrE7FzT5Cd3KOVG51HmftK1oWt18Xki49o9okbTisgFWNhkSu9Qbu2v5IkoSsek4aOkJwwus+OzNRnx8YgUWJ5Pi9woeTA/1SVgEJa8XUzQlhr1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hq9OV/bE; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1731900550; c=relaxed/simple;
+	bh=6f1NSIdRd6+/CpUkRF1KlNpyc2ZT9rvP8tGWDkbt/iQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=URI7j75VprRmT79hzYbAP1KOZojl3Ln7ZZlVjnP6U2kTAJvhP5GPfL17HIXRZkr9OdhWR/+qz7DkST9zoh0aY3IxTiaUlL4+091UenNzq9j0VnwkaSUcfQ6Xp0cTI6ncRAAl9WvDHI/N2xJHczH/IkrHDi5N7oyeYmUmEiXIXrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MsR+ips3; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hq9OV/bE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MsR+ips3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731874940; x=1763410940;
-  h=date:from:to:cc:subject:message-id;
-  bh=Iwu2l+H56w/1b0bH9MOV+h6ojSQGtX268PtrWGtjcMc=;
-  b=hq9OV/bEGigMZi4lAr32A0ESMJWoBroO8/5fvo32RKFVvYnXDT+xX/sz
-   XxIxavbBvfe3T3zCYgQLDOvO3EG/TYbjS1iZ0EoSn5R6T8+EHD8w4mEBB
-   pmu+7Fk8HErTenlsyTUD67OxS/ItLa9QURElxUGNfCWaBAeNQFerwVL13
-   3XFvrUHX01q804HHGsCBKwpxVDJa9XHE3yj7fBYpabQDxjKtfCOlTFjNV
-   uq52C4CraQcbz0npciB7HCeuw2hqHTYAX91Fw2gbMbQTsgB5CvEvNUq/Q
-   pnWC9eu1ul2ggZrRxpc3GInfJPoYsiwTXco7A0uPY61lht+B0LWkF//El
-   Q==;
-X-CSE-ConnectionGUID: a/CcjrrPQDGtQx54QQcHXw==
-X-CSE-MsgGUID: UW6k9dJtQeyobaGOrJPijA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="32062244"
-X-IronPort-AV: E=Sophos;i="6.12,162,1728975600"; 
-   d="scan'208";a="32062244"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 12:22:20 -0800
-X-CSE-ConnectionGUID: 4IVD8eS4SJa/1bqvellEZg==
-X-CSE-MsgGUID: 7g9LxLzEToeJRV0vq1/2Tg==
+  t=1731900548; x=1763436548;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6f1NSIdRd6+/CpUkRF1KlNpyc2ZT9rvP8tGWDkbt/iQ=;
+  b=MsR+ips3kYci03ChBTrlUJipFBEvJnh36LkILSQiJI0TZDpVyLHqBQxp
+   Uu4EnmOEO/waaDMw/68ILqyhiInlrcGj22GShPjm9wv7S35N8twVGPVje
+   cM8817Sx3XUiqNq/4C5KD0555NjDchgPDZ43q51bb4TdBsTYgU7qGzATz
+   AZKVevokNz1wU2AMEcDv5Tg9gGw1x/9+tfC1SWKXmw69qq1Gpl4N7XwMW
+   U2rjOLFVi6vc/KSnffL75E1Qv6j5CHG+PzxgeqmIubdFLNLx7L7NSlFqx
+   gEMRgT7BfC19kNHnaEaOHqGZ+/tFPUBfQZXnL2HFucEWuNQOsXBEObdle
+   A==;
+X-CSE-ConnectionGUID: r7CiySOSQqSCGupV9ONOyQ==
+X-CSE-MsgGUID: li2+YkqlTxSZFzQuvzSeVA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="43225860"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="43225860"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 19:29:08 -0800
+X-CSE-ConnectionGUID: FxhtnAjHQf6gmtlUUtMNwA==
+X-CSE-MsgGUID: ZdO4lhc+SRuIajzlqA6lLg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,162,1728975600"; 
-   d="scan'208";a="93969940"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="93173607"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 17 Nov 2024 12:22:19 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 17 Nov 2024 19:29:06 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tClmi-00021x-1y;
-	Sun, 17 Nov 2024 20:22:16 +0000
-Date: Mon, 18 Nov 2024 04:21:40 +0800
+	id 1tCsRj-0002FZ-2K;
+	Mon, 18 Nov 2024 03:29:03 +0000
+Date: Mon, 18 Nov 2024 11:29:01 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 69d7b9391aea96f48d05963516c21717eac620f7
-Message-ID: <202411180434.ZrXTW9yX-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-staging 70/86] include/linux/i2c_spi.h:34:23:
+ error: implicit declaration of function 'i2c_add_driver'
+Message-ID: <202411181128.dvbT1ThQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 69d7b9391aea96f48d05963516c21717eac620f7  Merge branch 'hwmon-staging' into testing
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+head:   777e5239066dfc6a3e170ec937370aa35faffdb3
+commit: 11f8d85dc8f0dd5d13fedcd58af9f014cd3e77db [70/86] Revert "i2c: Dummy functions for i2c_register_driver and i2c_del_driver"
+config: i386-randconfig-013-20241118 (https://download.01.org/0day-ci/archive/20241118/202411181128.dvbT1ThQ-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411181128.dvbT1ThQ-lkp@intel.com/reproduce)
 
-elapsed time: 1320m
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411181128.dvbT1ThQ-lkp@intel.com/
 
-configs tested: 183
-configs skipped: 6
+All errors (new ones prefixed by >>):
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+   In file included from drivers/hwmon/ltc2947.c:14:
+   include/linux/i2c_spi.h: In function 'i2c_spi_driver_register':
+>> include/linux/i2c_spi.h:34:23: error: implicit declaration of function 'i2c_add_driver' [-Werror=implicit-function-declaration]
+      34 |                 ret = i2c_add_driver(i2cdrv);
+         |                       ^~~~~~~~~~~~~~
+>> include/linux/i2c_spi.h:40:17: error: implicit declaration of function 'i2c_del_driver' [-Werror=implicit-function-declaration]
+      40 |                 i2c_del_driver(i2cdrv);
+         |                 ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-tested configs:
-alpha                            alldefconfig    gcc-13.2.0
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.2.0
-arc                     nsimosci_hs_defconfig    gcc-13.2.0
-arc                   randconfig-001-20241117    clang-20
-arc                   randconfig-002-20241117    clang-20
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.2.0
-arm                       imx_v4_v5_defconfig    gcc-14.2.0
-arm                       imx_v6_v7_defconfig    gcc-14.2.0
-arm                   randconfig-001-20241117    clang-20
-arm                   randconfig-002-20241117    clang-20
-arm                   randconfig-003-20241117    clang-20
-arm                   randconfig-004-20241117    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20241117    clang-20
-arm64                 randconfig-002-20241117    clang-20
-arm64                 randconfig-003-20241117    clang-20
-arm64                 randconfig-004-20241117    clang-20
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20241117    clang-20
-csky                  randconfig-002-20241117    clang-20
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.2.0
-hexagon               randconfig-001-20241117    clang-20
-hexagon               randconfig-002-20241117    clang-20
-i386                             allmodconfig    clang-19
-i386                              allnoconfig    clang-19
-i386                             allyesconfig    clang-19
-i386        buildonly-randconfig-001-20241117    clang-19
-i386        buildonly-randconfig-002-20241117    clang-19
-i386        buildonly-randconfig-003-20241117    clang-19
-i386        buildonly-randconfig-004-20241117    clang-19
-i386        buildonly-randconfig-005-20241117    clang-19
-i386        buildonly-randconfig-006-20241117    clang-19
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241117    clang-19
-i386                  randconfig-002-20241117    clang-19
-i386                  randconfig-003-20241117    clang-19
-i386                  randconfig-004-20241117    clang-19
-i386                  randconfig-005-20241117    clang-19
-i386                  randconfig-006-20241117    clang-19
-i386                  randconfig-011-20241117    clang-19
-i386                  randconfig-012-20241117    clang-19
-i386                  randconfig-013-20241117    clang-19
-i386                  randconfig-014-20241117    clang-19
-i386                  randconfig-015-20241117    clang-19
-i386                  randconfig-016-20241117    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20241117    clang-20
-loongarch             randconfig-002-20241117    clang-20
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                        bcm63xx_defconfig    gcc-14.2.0
-mips                          eyeq6_defconfig    gcc-14.2.0
-mips                           gcw0_defconfig    gcc-14.2.0
-mips                           ip30_defconfig    gcc-14.2.0
-mips                           mtx1_defconfig    gcc-13.2.0
-mips                          rb532_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20241117    clang-20
-nios2                 randconfig-002-20241117    clang-20
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-12
-parisc                           alldefconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-12
-parisc                generic-64bit_defconfig    gcc-13.2.0
-parisc                randconfig-001-20241117    clang-20
-parisc                randconfig-002-20241117    clang-20
-parisc64                            defconfig    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                     ksi8560_defconfig    gcc-13.2.0
-powerpc                 mpc8313_rdb_defconfig    gcc-13.2.0
-powerpc                     rainier_defconfig    gcc-13.2.0
-powerpc               randconfig-001-20241117    clang-20
-powerpc               randconfig-002-20241117    clang-20
-powerpc               randconfig-003-20241117    clang-20
-powerpc                     sequoia_defconfig    gcc-13.2.0
-powerpc64             randconfig-001-20241117    clang-20
-powerpc64             randconfig-002-20241117    clang-20
-powerpc64             randconfig-003-20241117    clang-20
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.2.0
-riscv                               defconfig    gcc-12
-riscv                 randconfig-001-20241117    clang-20
-riscv                 randconfig-002-20241117    clang-20
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20241117    clang-20
-s390                  randconfig-002-20241117    clang-20
-s390                       zfcpdump_defconfig    gcc-13.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-12
-sh                        edosk7705_defconfig    gcc-14.2.0
-sh                               j2_defconfig    gcc-13.2.0
-sh                               j2_defconfig    gcc-14.2.0
-sh                    randconfig-001-20241117    clang-20
-sh                    randconfig-002-20241117    clang-20
-sh                           se7206_defconfig    gcc-13.2.0
-sh                           se7705_defconfig    gcc-14.2.0
-sh                           se7750_defconfig    gcc-13.2.0
-sh                        sh7785lcr_defconfig    gcc-13.2.0
-sh                        sh7785lcr_defconfig    gcc-14.2.0
-sh                          urquell_defconfig    gcc-13.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20241117    clang-20
-sparc64               randconfig-002-20241117    clang-20
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241117    clang-20
-um                    randconfig-002-20241117    clang-20
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241117    gcc-12
-x86_64      buildonly-randconfig-002-20241117    gcc-12
-x86_64      buildonly-randconfig-003-20241117    gcc-12
-x86_64      buildonly-randconfig-004-20241117    gcc-12
-x86_64      buildonly-randconfig-005-20241117    gcc-12
-x86_64      buildonly-randconfig-006-20241117    gcc-12
-x86_64                              defconfig    clang-19
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241117    gcc-12
-x86_64                randconfig-002-20241117    gcc-12
-x86_64                randconfig-003-20241117    gcc-12
-x86_64                randconfig-004-20241117    gcc-12
-x86_64                randconfig-005-20241117    gcc-12
-x86_64                randconfig-006-20241117    gcc-12
-x86_64                randconfig-011-20241117    gcc-12
-x86_64                randconfig-012-20241117    gcc-12
-x86_64                randconfig-013-20241117    gcc-12
-x86_64                randconfig-014-20241117    gcc-12
-x86_64                randconfig-015-20241117    gcc-12
-x86_64                randconfig-016-20241117    gcc-12
-x86_64                randconfig-071-20241117    gcc-12
-x86_64                randconfig-072-20241117    gcc-12
-x86_64                randconfig-073-20241117    gcc-12
-x86_64                randconfig-074-20241117    gcc-12
-x86_64                randconfig-075-20241117    gcc-12
-x86_64                randconfig-076-20241117    gcc-12
-x86_64                               rhel-8.3    gcc-12
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                  cadence_csp_defconfig    gcc-14.2.0
-xtensa                randconfig-001-20241117    clang-20
-xtensa                randconfig-002-20241117    clang-20
 
---
+vim +/i2c_add_driver +34 include/linux/i2c_spi.h
+
+e29c31c78716c5 Guenter Roeck 2024-11-14  14  
+e29c31c78716c5 Guenter Roeck 2024-11-14  15  /**
+e29c31c78716c5 Guenter Roeck 2024-11-14  16   * i2c_spi_driver_register() - Register an I2C and a SPI driver
+e29c31c78716c5 Guenter Roeck 2024-11-14  17   * @i2cdrv: the I2C driver to register
+e29c31c78716c5 Guenter Roeck 2024-11-14  18   * @spidrv: the SPI driver to register
+e29c31c78716c5 Guenter Roeck 2024-11-14  19   *
+e29c31c78716c5 Guenter Roeck 2024-11-14  20   * This function registers both @i2cdev and @spidev, and fails if one of these
+e29c31c78716c5 Guenter Roeck 2024-11-14  21   * registrations fails. This is mainly useful for devices that support both I2C
+e29c31c78716c5 Guenter Roeck 2024-11-14  22   * and SPI modes.
+e29c31c78716c5 Guenter Roeck 2024-11-14  23   * Note that the function only registers drivers for the enabled protocol(s).
+e29c31c78716c5 Guenter Roeck 2024-11-14  24   * If neither I2C nor SPI are enabled, it does nothing.
+e29c31c78716c5 Guenter Roeck 2024-11-14  25   *
+e29c31c78716c5 Guenter Roeck 2024-11-14  26   * Return: 0 if enabled registrations succeeded, a negative error code otherwise.
+e29c31c78716c5 Guenter Roeck 2024-11-14  27   */
+e29c31c78716c5 Guenter Roeck 2024-11-14  28  static inline int i2c_spi_driver_register(struct i2c_driver *i2cdrv,
+e29c31c78716c5 Guenter Roeck 2024-11-14  29  					  struct spi_driver *spidrv)
+e29c31c78716c5 Guenter Roeck 2024-11-14  30  {
+e29c31c78716c5 Guenter Roeck 2024-11-14  31  	int ret = 0;
+e29c31c78716c5 Guenter Roeck 2024-11-14  32  
+e29c31c78716c5 Guenter Roeck 2024-11-14  33  	if (IS_ENABLED(CONFIG_I2C))
+e29c31c78716c5 Guenter Roeck 2024-11-14 @34  		ret = i2c_add_driver(i2cdrv);
+e29c31c78716c5 Guenter Roeck 2024-11-14  35  	if (ret || !IS_ENABLED(CONFIG_SPI))
+e29c31c78716c5 Guenter Roeck 2024-11-14  36  		return ret;
+e29c31c78716c5 Guenter Roeck 2024-11-14  37  
+e29c31c78716c5 Guenter Roeck 2024-11-14  38  	ret = spi_register_driver(spidrv);
+e29c31c78716c5 Guenter Roeck 2024-11-14  39  	if (ret && IS_ENABLED(CONFIG_I2C))
+e29c31c78716c5 Guenter Roeck 2024-11-14 @40  		i2c_del_driver(i2cdrv);
+e29c31c78716c5 Guenter Roeck 2024-11-14  41  
+e29c31c78716c5 Guenter Roeck 2024-11-14  42  	return ret;
+e29c31c78716c5 Guenter Roeck 2024-11-14  43  }
+e29c31c78716c5 Guenter Roeck 2024-11-14  44  
+
+:::::: The code at line 34 was first introduced by commit
+:::::: e29c31c78716c57e9779ad846255ff0012e058fa Add infrastructure for supporting both I2C and SPI in single driver
+
+:::::: TO: Guenter Roeck <linux@roeck-us.net>
+:::::: CC: Guenter Roeck <linux@roeck-us.net>
+
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
