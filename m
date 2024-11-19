@@ -1,88 +1,91 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D572F13AD2F;
-	Mon, 18 Nov 2024 06:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155C21C32FD
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 Nov 2024 10:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731910568; cv=none; b=lG4XopcDJodagJw0+jR0US40f5uisLIiP1m1hgrMGL8V155RMa9ImX/K15A4zvcjHCfa3XkUsDhtr3vCpp2bAo89Z027WzZCcL5EZwmpOm+J1qZ2+EXJk9nUPSgSzzzr2f8lD9KLf+VYwENXvf67usNa1zZxYPA9tmhtNOp84XQ=
+	t=1732011616; cv=none; b=htsRmNRWD3bV4vlttZ90UXqUo4jfEN5Ej6DE/PqPoB9jBNh/6vMvSWwGHl5fx1F31dnV7A6miaw4GZr3F5ThtYAYsB8Dn0q2r3aotLtu9i9CLwaTrPqLFI9Gi5R2E/sru1bijI6OQ//0Jwov/HpVaWdWkOU73Y3pBnHs6Xm7Xeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731910568; c=relaxed/simple;
-	bh=wwbsn1gz1zmNUJOUm/SsveOx12mGn+wDuAGKbxt50fU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ScRh1JUT9LGqSaUHlIkhfjI7zAerRpolE4HAWL4W1WcExfBSJs46udTDncSoegaNfoVcNKtTy4l+D9XTRo+xopnmI7XNibMXUZMxUkdxrlfWYzdggdfI0VAZG6zQl6WZZ4yZGJnu8NOomte8o+OjLpX/uVzjqJya1f2v2MRNYJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=cZK+Gpur; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1732011616; c=relaxed/simple;
+	bh=VddMon7KGsoAO+8uNG9DoNYGSEVrl+SvzfCAy5RVITw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KbwE2fAOf/ftVXDjD7ZsaTVRR1AN6Hm3VPy68obC2ZxYjWdnAcTQHv0Yuzi6ZAQfu/bSZX2u+r9CrJdUDXeoh2Aefgp4Mef2cnt1UakcDbyzLo6uRQVAvbXu+zMAsMy03neRc5OjaW88mqBl0eU8vy1NP1oWK4MzzEb+8bndZRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=YWolq7yx; arc=none smtp.client-ip=220.197.31.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="cZK+Gpur"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1731910561;
-	bh=wwbsn1gz1zmNUJOUm/SsveOx12mGn+wDuAGKbxt50fU=;
-	h=From:Subject:Date:To:Cc:From;
-	b=cZK+Gpurd3QEqA7WuaVvRL+N2nobz3e0VgtZiG4RuWLdg2zDusSmURClcPIKFAUh2
-	 U52nyZ0cFNfiPN+jZ+FO0DkNmjqAh6OFERgjcNvGVgUw0YmbYGh4i7T+CVpyhG2KUE
-	 14wkpR6sQ6VDpZHsQuKheBTge2YWF+azWP7efM1c=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 0/2] hwmon: (core) Avoid ifdef CONFIG_THERMAL in C
- source file
-Date: Mon, 18 Nov 2024 07:15:57 +0100
-Message-Id: <20241118-hwmon-thermal-v3-0-9c17973e7342@weissschuh.net>
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="YWolq7yx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cHi0m
+	zq8NWBijK4Ly2A3LsdTUocLcPH7MQG+4r3jEMc=; b=YWolq7yxnqTIwgPNhIPA3
+	t5fgsU1j28lr9EL93Cw5kOEKpvZk3nhOS5kJTvf1iMNRpquQuUZ3S/BvWWyKoCW4
+	RgPt2TuBd9tXdLIeuPMNbBbD55+WOlWM4J3XHGNaemqAbeUpKN2GvZyzjpw504hl
+	ExYaKFWpHEhjYmObinu3zs=
+Received: from localhost.localdomain (unknown [122.225.16.198])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD334BFZjxnBiVXBQ--.51824S2;
+	Tue, 19 Nov 2024 18:20:01 +0800 (CST)
+From: JuenKit Yip <hunterteaegg@126.com>
+To: linux-hwmon@vger.kernel.org
+Cc: JuenKit Yip <hunterteaegg@126.com>
+Subject: [PATCH 1/2] hwmon: (sht3x) add devicetree support
+Date: Tue, 19 Nov 2024 05:04:43 -0500
+Message-Id: <20241119100443.74393-1-hunterteaegg@126.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJ3bOmcC/3XMSw6CMBSF4a2Yjr2mvTwKjtyHcVDKxTaRYlosG
- sLeLYyMxuF/kvPNLJC3FNhxNzNP0QY7uBTZfse0Ue5KYNvUDDnmQogMzNQPDkZDvlc3wBZbVVR
- CoyxZ+tw9dfa5eedLamPDOPjXxkexrv+kKECAFCh5Q7KTCk8T2RCCNg9zcDSylYv4SRTfBAIHX
- Zcd17yu8uaXWJblDXldcxzyAAAA
-X-Change-ID: 20241113-hwmon-thermal-2d2da581c276
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731910561; l=1080;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=wwbsn1gz1zmNUJOUm/SsveOx12mGn+wDuAGKbxt50fU=;
- b=1zdfUsJ1IyIH/OEZafiPGR1dqdanw89Is6p7+iwGMlWwm0mhKecJHS9j7deVt/7Yf99A72Vjj
- GQZMcjzPZSOCPnVoP5TM5pI9OyKbKKNe8uxXFJiDo3sOGpN3UYyNh8p
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-CM-TRANSID:_____wD334BFZjxnBiVXBQ--.51824S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy8Xw1rurW5Ar17CF4kWFg_yoW8Gw48p3
+	Wrur9aqF15WF4fX39Iqay09Fy5Cwn3A3yIkr9rGas09FWDJ34jqa1ftFyDA3Z8Zry5Xr12
+	gFykt34fGF48AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi1xRxUUUUU=
+X-CM-SenderInfo: xkxq3v5uwhtvljj6ij2wof0z/1tbifg2c7Gc8WpmkUAAAsv
 
-Replace some confusing ifdeffery with IS_ENABLED() conditionals.
-The ifdefs confused me while looking at the implementation of
-HWMON_C_REGISTER_TZ.
+add "compatible" property for supporting devicetree
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: JuenKit Yip <hunterteaegg@126.com>
 ---
-Changes in v3:
-- Fix warning "omitting the parameter name in a function definition is a C23 extension [-Werror,-Wc23-extensions]"
-- Link to v2: https://lore.kernel.org/r/20241115-hwmon-thermal-v2-0-c96f0c0984b2@weissschuh.net
+ drivers/hwmon/sht3x.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Add stub for thermal_zone_device_update()
-- Link to v1: https://lore.kernel.org/r/20241113-hwmon-thermal-v1-1-71270be7f7a2@weissschuh.net
-
----
-Thomas Weißschuh (2):
-      thermal: core: Add stub for thermal_zone_device_update()
-      hwmon: (core) Avoid ifdef CONFIG_THERMAL in C source file
-
- drivers/hwmon/hwmon.c   | 21 ++++++---------------
- include/linux/thermal.h |  4 ++++
- 2 files changed, 10 insertions(+), 15 deletions(-)
----
-base-commit: f66d6acccbc08b4146f4c2cf9445241f70f5517d
-change-id: 20241113-hwmon-thermal-2d2da581c276
-
-Best regards,
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index 650b0bcc2359..2ac1537b3e3e 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -954,6 +954,19 @@ static int sht3x_probe(struct i2c_client *client)
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+ }
+ 
++/* devicetree ID table */
++static const struct of_device_id sht3x_of_match[] = {
++	{ .compatible = "sensirion,sht30", .data = (void *)sht3x },
++	{ .compatible = "sensirion,sht31", .data = (void *)sht3x },
++	{ .compatible = "sensirion,sht35", .data = (void *)sht3x },
++	{ .compatible = "sensirion,sts30", .data = (void *)sts3x },
++	{ .compatible = "sensirion,sts31", .data = (void *)sts3x },
++	{ .compatible = "sensirion,sts35", .data = (void *)sts3x },
++	{},
++};
++
++MODULE_DEVICE_TABLE(of, sht3x_of_match);
++
+ /* device ID table */
+ static const struct i2c_device_id sht3x_ids[] = {
+ 	{"sht3x", sht3x},
+@@ -964,7 +977,10 @@ static const struct i2c_device_id sht3x_ids[] = {
+ MODULE_DEVICE_TABLE(i2c, sht3x_ids);
+ 
+ static struct i2c_driver sht3x_i2c_driver = {
+-	.driver.name = "sht3x",
++	.driver = {
++		.name = "sht3x",
++		.of_match_table = sht3x_of_match,
++	},
+ 	.probe       = sht3x_probe,
+ 	.id_table    = sht3x_ids,
+ };
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.39.5
 
