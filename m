@@ -1,33 +1,33 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155C21C32FD
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 Nov 2024 10:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.8])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC661C330D
+	for <linux-hwmon@vger.kernel.org>; Tue, 19 Nov 2024 10:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732011616; cv=none; b=htsRmNRWD3bV4vlttZ90UXqUo4jfEN5Ej6DE/PqPoB9jBNh/6vMvSWwGHl5fx1F31dnV7A6miaw4GZr3F5ThtYAYsB8Dn0q2r3aotLtu9i9CLwaTrPqLFI9Gi5R2E/sru1bijI6OQ//0Jwov/HpVaWdWkOU73Y3pBnHs6Xm7Xeo=
+	t=1732011637; cv=none; b=pyCUOfDWkzHxD6olSw9WjT4bGORYOzaCJYpA66wi/CZuT+p31f8tO+BJUwWPgqnhBt21TtGvuzrfYLzHdrjEzXWPBu2CMYR8tUH7rMLJSrOEQJx8OCLIDlrMNH3xn4FWXwzj9wLB67ldY1e/OSRj+r+CfzpqW9NSx9pvWQbLl78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732011616; c=relaxed/simple;
-	bh=VddMon7KGsoAO+8uNG9DoNYGSEVrl+SvzfCAy5RVITw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KbwE2fAOf/ftVXDjD7ZsaTVRR1AN6Hm3VPy68obC2ZxYjWdnAcTQHv0Yuzi6ZAQfu/bSZX2u+r9CrJdUDXeoh2Aefgp4Mef2cnt1UakcDbyzLo6uRQVAvbXu+zMAsMy03neRc5OjaW88mqBl0eU8vy1NP1oWK4MzzEb+8bndZRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=YWolq7yx; arc=none smtp.client-ip=220.197.31.9
+	s=arc-20240116; t=1732011637; c=relaxed/simple;
+	bh=cr80setFQkb+HicAmRHKidwGqzhdJSMoba5ZQwQOueQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OUoWSVVvlrjCe7QQwXHo/BcppXVEs2Kj/TY9Cy1P8PWIVML6oxf2oOCD/vN6LHUsrimoy9T+UfUhkVxeH2eOdKxyMHF9MWZPRo4nit7etrKh1PDdq7OXVJljmpubE3Euj68CVaMeUL8KvPMpxOQTlewqlSD6f8+WUxxOa+fd6fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=ZfBjdG2l; arc=none smtp.client-ip=117.135.210.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="YWolq7yx"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="ZfBjdG2l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cHi0m
-	zq8NWBijK4Ly2A3LsdTUocLcPH7MQG+4r3jEMc=; b=YWolq7yxnqTIwgPNhIPA3
-	t5fgsU1j28lr9EL93Cw5kOEKpvZk3nhOS5kJTvf1iMNRpquQuUZ3S/BvWWyKoCW4
-	RgPt2TuBd9tXdLIeuPMNbBbD55+WOlWM4J3XHGNaemqAbeUpKN2GvZyzjpw504hl
-	ExYaKFWpHEhjYmObinu3zs=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Y2Rlk
+	M23+q/RmSNnamSnu5n9SxZAH/rknzHQi6Lbzeo=; b=ZfBjdG2lqOUWkN9uEicFz
+	ZsLi7qWl4ovg/k1+vDq0QfyMq5LQlRIjSCKBubKZ3jNSH0QBn4rSUwTS15+aLgXj
+	kvYl3tZwJGCTeyqufq+JjMz+nFsh6iT5yssvIFp9jI9u4EXrM79yOjw4/UVazQwQ
+	p0jcsoecToL61lYVQ89qz4=
 Received: from localhost.localdomain (unknown [122.225.16.198])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD334BFZjxnBiVXBQ--.51824S2;
-	Tue, 19 Nov 2024 18:20:01 +0800 (CST)
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3X51iZjxn3rAbBw--.55581S2;
+	Tue, 19 Nov 2024 18:20:30 +0800 (CST)
 From: JuenKit Yip <hunterteaegg@126.com>
 To: linux-hwmon@vger.kernel.org
 Cc: JuenKit Yip <hunterteaegg@126.com>
-Subject: [PATCH 1/2] hwmon: (sht3x) add devicetree support
-Date: Tue, 19 Nov 2024 05:04:43 -0500
-Message-Id: <20241119100443.74393-1-hunterteaegg@126.com>
+Subject: [PATCH 2/2] dt-bindings: trivial-devices: add sensirion,sht3x
+Date: Tue, 19 Nov 2024 05:20:16 -0500
+Message-Id: <20241119102016.74418-1-hunterteaegg@126.com>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -36,56 +36,33 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD334BFZjxnBiVXBQ--.51824S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uFy8Xw1rurW5Ar17CF4kWFg_yoW8Gw48p3
-	Wrur9aqF15WF4fX39Iqay09Fy5Cwn3A3yIkr9rGas09FWDJ34jqa1ftFyDA3Z8Zry5Xr12
-	gFykt34fGF48AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi1xRxUUUUU=
-X-CM-SenderInfo: xkxq3v5uwhtvljj6ij2wof0z/1tbifg2c7Gc8WpmkUAAAsv
+X-CM-TRANSID:_____wD3X51iZjxn3rAbBw--.55581S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr1DZFyrGry5Kw1UuFy7GFg_yoWfZrc_A3
+	Wxuw1kAr48JF95t39Ikr1xJr1Yk3yIkFn7Cw1Uta97uw1xu39xKFyvqa4av3y7GrWUu3Wr
+	urn7KrZFqwnrGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtg4S7UUUUU==
+X-CM-SenderInfo: xkxq3v5uwhtvljj6ij2wof0z/1tbiOhGc7Gc8V2bWagAAsN
 
-add "compatible" property for supporting devicetree
+add sensirion,sht3x as trivial device for devicetree support
 
 Signed-off-by: JuenKit Yip <hunterteaegg@126.com>
 ---
- drivers/hwmon/sht3x.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 650b0bcc2359..2ac1537b3e3e 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -954,6 +954,19 @@ static int sht3x_probe(struct i2c_client *client)
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
-+/* devicetree ID table */
-+static const struct of_device_id sht3x_of_match[] = {
-+	{ .compatible = "sensirion,sht30", .data = (void *)sht3x },
-+	{ .compatible = "sensirion,sht31", .data = (void *)sht3x },
-+	{ .compatible = "sensirion,sht35", .data = (void *)sht3x },
-+	{ .compatible = "sensirion,sts30", .data = (void *)sts3x },
-+	{ .compatible = "sensirion,sts31", .data = (void *)sts3x },
-+	{ .compatible = "sensirion,sts35", .data = (void *)sts3x },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(of, sht3x_of_match);
-+
- /* device ID table */
- static const struct i2c_device_id sht3x_ids[] = {
- 	{"sht3x", sht3x},
-@@ -964,7 +977,10 @@ static const struct i2c_device_id sht3x_ids[] = {
- MODULE_DEVICE_TABLE(i2c, sht3x_ids);
- 
- static struct i2c_driver sht3x_i2c_driver = {
--	.driver.name = "sht3x",
-+	.driver = {
-+		.name = "sht3x",
-+		.of_match_table = sht3x_of_match,
-+	},
- 	.probe       = sht3x_probe,
- 	.id_table    = sht3x_ids,
- };
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 9bf0fb17a05e..be006b21b1ea 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -333,6 +333,8 @@ properties:
+           - sensirion,sgp40
+             # Sensirion low power multi-pixel gas sensor with I2C interface
+           - sensirion,sgpc3
++            # Sensirion SHT3x-DIS humidity and temperature sensor with I2C interface
++          - sensirion,sht3x
+             # Sensirion temperature & humidity sensor with I2C interface
+           - sensirion,sht4x
+             # Sensortek 3 axis accelerometer
 -- 
 2.39.5
 
