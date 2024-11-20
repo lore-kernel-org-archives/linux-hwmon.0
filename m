@@ -1,69 +1,74 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5205E1A9B3B;
-	Wed, 20 Nov 2024 15:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C009413BC02;
+	Wed, 20 Nov 2024 16:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732115011; cv=none; b=uw8pTTT527D/S36Vq7PHq3oaHSwAK2Jxi/I9Lbl3qo2sV22TlzT+hTF6gV5cJ4vxv7xf8/RSqgs67MtjmLXKLbJKytrHpq2q7UiHDUc+6JsuHta0XMaItVGTllWneA8pS2XD9vFs5JVL+Uje2whWGjDVr+Ae7E+6HtA602ep36M=
+	t=1732120149; cv=none; b=OSTv4UFUppDgzHs8Om6Fz8JpUZiiZ2hfdaGZwpEZjqDAFSHlgQ8U6/6mWJYXIYOagVh+MR1CE/8Z9qodBSbVUtP72N27nWK0xa4MQN3gkzalXkRC/VOnzm7d4HZMEczgk8bPQWRwGHz6xhGEUcrA3KK2jJaz2mczoFA2KP9QB9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732115011; c=relaxed/simple;
-	bh=dqi/7Y/5vqnK735gTVWKtScHAGuc8EoDAdnnSptK3rs=;
+	s=arc-20240116; t=1732120149; c=relaxed/simple;
+	bh=dUhZDVQ5AGIqcHNaQLGwT3Us1ByBOPuck7DpHE24sjE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSg8rLQ9dM4hvSQVxewcnBq5j6VxwAA6EzUEyKQri8t5LgnfHlsdiIk0MRknUF8QUMtZwWy2SDQX6dGy+N9dX/OeG0sDELeG4aEITGeQNGpts7D5eH/w1KWGqPGi3gpwW5NHz0ZnDILoYnJQJa+LOAxMYwR6ayC0HbVvqp1o+3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Te10CrgT; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wl0002z3rLXLaHSZSgQHG4pBYlax3FQxGlRIEvXLjKAOPGEpLNCWymwt1YqgTXCz6NVwsEfMmZIwpr1IfwETqI9lZN+GLWeyAHEndB5YaQOL0lT8yp5aGERs4v04b03yu+dmGyL/0ibc3XgPWidORsYHPZhkXrPNuol4t3VfQuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FaDiOvIn; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Te10CrgT"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7edb6879196so1658826a12.3;
-        Wed, 20 Nov 2024 07:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732115009; x=1732719809; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yEu8uOzlG6eyZ2h9eHSBpdbchV8xscDCROkv96eRgu0=;
-        b=Te10CrgTgoMQPdiO0b8J4romIaFtOYCJ3uDPbZq5YAZL7iccKsnXxSuL/pTxHy7TJr
-         nGme9RjVgJZz9/eH9Qt9ccsDyqyKGzmxeXcOHpQ7yZa9tKhudLRK+ZFvYGQBgf3qPrkT
-         PgZAu/5mnn823RFr2NWmm/wlgk7ucakPcPsYzn9e7FzE1FU6w9NdTi61szDSdX6xrifG
-         Iy2UTJ2wKUou6nhVbaSImcxqi/vpF14iz5bPMQ6RTMV8SFCBjXBNTNLQ/0quLkZ3Tbqa
-         ZPFNjr2/X59SodV3neN6qZVTrzu/sh245KUneVxLep+3HtXQiSIi24SsCHKMP14ywQQ+
-         xCOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732115009; x=1732719809;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yEu8uOzlG6eyZ2h9eHSBpdbchV8xscDCROkv96eRgu0=;
-        b=G24FC9gkSC2kJ4DOmkO9UVKC63MNL3Eevq6Rjn8ZhK23zRBaGX1z7mjHFwEuga7vN/
-         iC0zbw6bhyCNw4DNq0JpMYQ278eeyJP8nsE6tw292xmZtDNIcQweegFiSZkSHuPSV6Nv
-         hmzmtcv/iMrqedZXl/f44eK+qQAi19mvU16r88rV/eMEQwLUOGOq8ZtXi/Ddajs9x0lL
-         jtjGzx+UxodPNr0AapIFvXrOvJtMSPBjB2lYB6lX+DGMp7tUJHJvWAdBO/2UAm6Kc5hg
-         gvVYEzw5/2npuS2SVnxhjZTfVVU6NlvpnkXj4W4qhbWZPwEE8TbYr7q9HiKV8KYMd5Fc
-         W2uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSvBC8gORNRxmR/7rO7RkTSb0uIRhhLwYf/F5MVxx/A7rEWG2ukBhlAN8DEOp7UQYfCRvxOkhKGTa4Fg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKbR0nIRFqT7ltOZ3fYJ+B6ZaJ73Bey9OgWEWnUaYvo+oCwSO9
-	+WCt4Kr5zl98pQPmU9XjpeiOQLmuA9OcHThclWQSIf6yl3cYIvprKoILFw==
-X-Google-Smtp-Source: AGHT+IFRZvU552BH5pGuzeGgfR9xh2OxF5DiqF5B2TBqJ0fArJW6IOKGm1J9OTqxL5jsoRVtqIGdcQ==
-X-Received: by 2002:a05:6a20:72aa:b0:1db:f087:5b1d with SMTP id adf61e73a8af0-1ddb0338a66mr3866113637.37.1732115009383;
-        Wed, 20 Nov 2024 07:03:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724bef8da6asm1786565b3a.123.2024.11.20.07.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 07:03:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 20 Nov 2024 07:03:27 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (isl28022) apply coding style to module
- init/exit
-Message-ID: <47ce8ae6-fe80-467c-a177-1a8c3812956f@roeck-us.net>
-References: <20241120083349.22226-5-wsa+renesas@sang-engineering.com>
- <20241120083349.22226-8-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FaDiOvIn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732120148; x=1763656148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dUhZDVQ5AGIqcHNaQLGwT3Us1ByBOPuck7DpHE24sjE=;
+  b=FaDiOvInT7ijDimFIsHcXSgyeSr6yhNo2V/jbDHftLMAqSF2aJWyU/LO
+   +BoaRi8hZvMRKgL3FplBrDTN8bDNc+o3se3bQuIjUL/GGJTUKunFYa/HL
+   MwPV9ueD7OudmLjrOIeIFudoI1+vnKI7Noz+LwFvCsKqYbj1zf+BfbXvd
+   Jy5YOUnAHW1C94T8ZqhP+NKyrMS7jaJZq2DzDJYZrrxT1eKaVuNImqx6P
+   wlsjiCFPiaUPGEKBaBJzz4wcY3+G146aD4DeS8oylsfq6oKesl3e+bo7G
+   Q295SNDQijzbPx9pZxdAvcKQIULFCgMSRzODzbFUsY4PAPXOBGhJ0c9/x
+   g==;
+X-CSE-ConnectionGUID: UYIeXRUZQvyyC0uSCrReVw==
+X-CSE-MsgGUID: DhiFSVVLTQKOCJ8g7IsBZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="32120414"
+X-IronPort-AV: E=Sophos;i="6.12,170,1728975600"; 
+   d="scan'208";a="32120414"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 08:29:07 -0800
+X-CSE-ConnectionGUID: I/2O9r3CQFSWHPFT0atoOQ==
+X-CSE-MsgGUID: ITmw+jxSSlKfybpX78XRMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,170,1728975600"; 
+   d="scan'208";a="89547097"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 08:29:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tDnZc-0000000Gm2Z-1Kir;
+	Wed, 20 Nov 2024 18:29:00 +0200
+Date: Wed, 20 Nov 2024 18:29:00 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <Zz4OTBF66WfvnP2P@smile.fi.intel.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+ <Zz3plZOyMcxn54_h@smile.fi.intel.com>
+ <4cfb8bd8-4ce7-4474-b7c0-0fd2693ce34f@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,15 +77,71 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241120083349.22226-8-wsa+renesas@sang-engineering.com>
+In-Reply-To: <4cfb8bd8-4ce7-4474-b7c0-0fd2693ce34f@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Nov 20, 2024 at 09:33:52AM +0100, Wolfram Sang wrote:
-> Function declarations can be in one line. module_init|exit macros should
-> be tied to the function.
+On Wed, Nov 20, 2024 at 06:53:58AM -0800, Guenter Roeck wrote:
+> On 11/20/24 05:52, Andy Shevchenko wrote:
+> > On Wed, Nov 20, 2024 at 11:58:26AM +0800, Cedric Encarnacion wrote:
+
+...
+
+> > > +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
+> > 
+> > Why? Is the data type undefined without this?
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Look into other drivers. That is how it is implemented there,
+> and not really the point. One has to know about an alternative to use it.
+> 
+> > > +static const struct regulator_desc adp1050_reg_desc[] = {
+> > > +	PMBUS_REGULATOR_ONE("vout"),
+> > > +};
+> > > +#endif /* CONFIG_SENSORS_ADP1050_REGULATOR */
+> > 
+> > Note, this can be dropped anyway in order to use PTR_IF() below, if required.
+> 
+> FWIW, PTR_IF() isn't widely used, and I for my part was not aware that
+> it exists.
 
-Applied.
+Yeah, it's a relatively new one...
 
-Thanks,
-Guenter
+...
+
+> > > +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
+> > > +	.num_regulators = 1,
+> > > +	.reg_desc = adp1050_reg_desc,
+> > > +#endif
+> > 
+> > Ditto, are the fields not defined without the symbol?
+> 
+> They are, but they must be 0/NULL. PTR_IF() would be an alternative.
+> It is a bit odd to use it for a non-pointer, but it is type-agnostic,
+> so using it should be ok to avoid the #ifdefs. We should maybe adopt
+> that mechanism for other PMBus drivers.
+
+I see, thanks for elaboration on all of this.
+
+...
+
+> > Please, split this patch to at least two:
+> > 1) Introduce chip_info;
+> 
+> That would really be "Use driver data to point to chip info".
+
+I agree on the title, what I meant is the rough description of what
+should be done in the change.
+
+> > 2) add new devices.
+> 
+> I don't really care much about separating those two (after all, they are
+> related), but adding regulator support to the driver is a major change
+> and should be a separate patch. On top of that, it isn't even mentioned
+> in the patch description.
+
+Indeed, that's why I mentioned "at least" in the reply.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
