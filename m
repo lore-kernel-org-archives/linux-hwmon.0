@@ -1,63 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07AD01CF2BD;
-	Tue, 19 Nov 2024 19:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDE243179;
+	Wed, 20 Nov 2024 03:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732045966; cv=none; b=Wm+hwmirf5WzS/ajQ8yaLK/+GMblnX0wIQKNCw/rGmiwspvgzJBDbv5GwVjcoGEEtoMt5hWvJAw7owtH3r5M0yNGQtLUg0aRgbd+k7oF5rmdQZIMS9DhbP1iaEV/I3//PA6IfCULOvENyOHpbvBi/afZmzW8iOlNjbTG42KLqHo=
+	t=1732075177; cv=none; b=I2UhmcZSHNSUO5Mdh3yL6hgE9fXLdcgUUGjPRRObB+BK59W2aW426CDs7KvpCjhuGCuIuRB+GKJERGcIVdnx7jEGra0y6ba3NrGESznrkvXF12nYWrMYXlVIa2ftg2soRgJHoDOAeK7/PdqOwgadv1vob8ZZmtHVAOJKMAFwJwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732045966; c=relaxed/simple;
-	bh=u/Oc9PfpWDaqe9WRUg0vP6SCrb6k4DOoQXBZDcreQ60=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=DnWF3/GoU7qXKGXYFx35tAjeWO8+D7+qtQZ0XACxwk0tVWge3p0EtHJo6jBg/VP1Avag88yWumsIKI8TUbuyQt3PqMoK7GN3aOE3JosFEgtHYhvg3ojopOmdOVgC2BXcvasa+qgEgnAN0U8FRKHzVQOf6KTrFkMroH6upFpZZWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1su0qEq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732075177; c=relaxed/simple;
+	bh=dwQD5PiPjmvNB4xBLjwVEgDTENZ1YHqqS7aXgbXU1Sc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WBvIBC3cLn34Iea9ZqPre1MZ5E25OwneKVgc9a9N5yHIyDa8I86CYbb5OsNaHwOpG+VYoLhyy3zgAFurHRVzXpx6CBUP12QC1li9f9tK2aExl3OuYF3DKFHH5a3hDdJJ2AcwF+iGKs6lbErezLQZzbkdSYXvf7BpRV3C/Ekz61E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=U2r/mlmj; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1su0qEq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14A1C4CECF;
-	Tue, 19 Nov 2024 19:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732045965;
-	bh=u/Oc9PfpWDaqe9WRUg0vP6SCrb6k4DOoQXBZDcreQ60=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=P1su0qEqTtC+FkhnAI0scAd6niJNuW44JkGaJ1EGYWHjxrYLD7ov6gOa233VTBaFM
-	 OosRTpcHEHA1q0fkcJkdL5CeMS1bZ3aEIizSOEI/pCbSS1ND/a6pGRtRhVVhxqbn/8
-	 0s3DESvhKaM6H50ORwEoTCJiZBwYw5uFALlbtfu0YQrixz4s291YQYvaPUNbk8AvP4
-	 JRb3fYLmUlGqBH4Pvd8E2kojaCe2PiV3VBV2oQy/PRh1NsdCpIsryBqyMIteoK6wlx
-	 KNnNv9VL4BPErRMhyMl2HFb2oFunighokSpBZ60mn2/GSjqroaVfys6+o12UGdeOfe
-	 KOtPOo2MiREag==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD513809A80;
-	Tue, 19 Nov 2024 19:52:58 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon updates for v6.13-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20241118033837.3586271-1-linux@roeck-us.net>
-References: <20241118033837.3586271-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20241118033837.3586271-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.13-rc1
-X-PR-Tracked-Commit-Id: 3996187f80a0e24bff1959609065d49041cf648d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2b5d5f23d4056543757919bb2db06d0829835f7e
-Message-Id: <173204597717.668199.12429408067726554757.pr-tracker-bot@kernel.org>
-Date: Tue, 19 Nov 2024 19:52:57 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="U2r/mlmj"
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AK2RDx5015516;
+	Tue, 19 Nov 2024 22:59:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=G1cAy
+	/USucuQvgQhGsPIV7Nf+joe8pU5htvjOJTf24U=; b=U2r/mlmjTPWvSLjtvCbKV
+	XltF+d7fgnsxSWOWZqHPIbQAL0CqOHFxH56TDxNso6va1QsViTcbJ3jDFC0PQ40T
+	5OCxdP52MtvqmgmhUCndhE/r/D0iRnM/ERbpRm5FvkmWobvR1wYmkYYHdiqMaffB
+	jqt+SQ8+jV+HnP1QQX555ILya/aK7Mj86UH9z1pqZQir7/GPrz8oxeyreVsCuTtV
+	cwCj/shm+zfFoUB6dhQ3/66rGks+lyrf13BAerm2AzQzvXOVbTbp1dFtgH9dU3Ig
+	ZdwO1zKexgBM2JBX76KH02PEuIWra1aq12idHROWpRoOvioCHc8+l3XP03MXzowy
+	w==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 43170framh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 22:59:06 -0500 (EST)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 4AK3x5L3029651
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 19 Nov 2024 22:59:05 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 19 Nov
+ 2024 22:59:05 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 19 Nov 2024 22:59:05 -0500
+Received: from CENCARNA-L02.ad.analog.com (CENCARNA-L02.ad.analog.com [10.116.39.203])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 4AK3wWZk027365;
+	Tue, 19 Nov 2024 22:58:53 -0500
+From: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+To: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+CC: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Delphine CC Chiu
+	<Delphine_CC_Chiu@Wiwynn.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Radu
+ Sabau <radu.sabau@analog.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=
+	<u.kleine-koenig@pengutronix.de>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>,
+        Cedric Encarnacion
+	<cedricjustine.encarnacion@analog.com>,
+        Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings for adp1051, adp1055 and ltp8800
+Date: Wed, 20 Nov 2024 11:58:25 +0800
+Message-ID: <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: rm8orIlgiTXAtLX57RSmLljpxBPU-A4O
+X-Proofpoint-ORIG-GUID: rm8orIlgiTXAtLX57RSmLljpxBPU-A4O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411200028
 
-The pull request you sent on Sun, 17 Nov 2024 19:38:36 -0800:
+add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+    ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+    ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+    LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.13-rc1
+Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+---
+ .../bindings/hwmon/pmbus/adi,adp1050.yaml         | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2b5d5f23d4056543757919bb2db06d0829835f7e
-
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+index 10c2204bc3df..af7530093942 100644
+--- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+@@ -10,16 +10,27 @@ maintainers:
+   - Radu Sabau <radu.sabau@analog.com>
+ 
+ description: |
+-   The ADP1050 is used to monitor system voltages, currents and temperatures.
++   The ADP1050 and similar devices are used to monitor system voltages,
++   currents, power, and temperatures.
++
+    Through the PMBus interface, the ADP1050 targets isolated power supplies
+    and has four individual monitors for input/output voltage, input current
+    and temperature.
+    Datasheet:
+      https://www.analog.com/en/products/adp1050.html
++     https://www.analog.com/en/products/adp1051.html
++     https://www.analog.com/en/products/adp1055.html
++     https://www.analog.com/en/products/ltp8800-1a.html
++     https://www.analog.com/en/products/ltp8800-2.html
++     https://www.analog.com/en/products/ltp8800-4a.html
+ 
+ properties:
+   compatible:
+-    const: adi,adp1050
++    enum:
++      - adi,adp1050
++      - adi,adp1051
++      - adi,adp1055
++      - adi,ltp8800
+ 
+   reg:
+     maxItems: 1
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.5
+
