@@ -1,96 +1,115 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC77848C
-	for <linux-hwmon@vger.kernel.org>; Wed, 20 Nov 2024 08:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E351A2C0E;
+	Wed, 20 Nov 2024 13:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732091651; cv=none; b=bRUzDnR4bLoNEX/NGZ75MhSo9iDefDGzLonI4ZFNcMS6Y+k9q/e84FBkeHHFezwnVjkzlqMZ5TvrZAg1xcFYOXz1MMVV2f43cmTbg/kSJ1RgzVgteTMnjlFugmhL7g/6O9ROVg8a4khHN22HIS1DwzwT2jTglgFdw3XJtpaiUK0=
+	t=1732110326; cv=none; b=mlQCZmPwqTh3c94UzTo2BnxaZvwI7k17B6hS867qjoZJdTYdJu0APxtQA4/4RNThSATcFQuuylEr74smQkA6iR/sjT1cuagpex4gYNMZpoDWYyBDgZ8RkMR2lmfyP+as1MAksQ2zfUhbw1vCCYwfJ0I+qZqZT0vJn8wseD/hHI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732091651; c=relaxed/simple;
-	bh=p5wNypndlNtZ9iYw46NAdmF91h1AuzQSfvow7/G4AlY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QWLiI+JAFgCpbpu7aGsDrBUcrKUaXi3mv5ED6TnL62efYoKQcnaddbKm/BCcNTNtJ5ib+z0+3x2MNv4svBwr7itTI/bMEXdIDj9+t3g2qeQjBHIRpfFcTzW0xp5ex64lH3W8y+YA2zJeXE18O6O09pAj6Y1wXcw5o1vfpqxa7/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eJ36Z6k0; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1732110326; c=relaxed/simple;
+	bh=jhRxJ1OvazakiB3N14Kmm9lyLfmW7hvqPJ5VI0xlsxA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JvvWzuHXec8vkID6ofhjTGm3djC2ZmvE70mI40+GYkEInPkKr/kXsKzYKIJnx8YbTK1YM3Qge/ENz2gwl8YGvxY1fLo2YgVOJpnwmK0sz6LqeYOaZSuNG6YMJRwGyNFeVmt7xpYwntnSUewJIC6NWflYYiqm5O5N9u4T7E6r6pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MNzRVDMS; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eJ36Z6k0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-type
-	:content-transfer-encoding; s=k1; bh=flniR+Y5Awg7qv7rHZn0LlVf+5Q
-	eXyXgrD4+/TW/z2o=; b=eJ36Z6k06n+h+aiqX/i9U/JX+b++3B9dvrDDvFxbBMb
-	ehHlYj5M6X0y+kKgiOF5DxRTwRAt7x2qfpGo4r/27bHPtKHvtZ0kxjefuWYYVr+o
-	Ykf38wvu/87LyUa0f1nSWGK50esfUksBnMXoTrXxv31jwzdS0+GKq/WbY9CPNCSY
-	tYx4qeN7/zC96E2U9MYItWZbaUH12QkYLiQGvao/Dhhbtc6Xgv68PtZ6a0WrOZXd
-	hCwpN14FQ9wx2NTspTKFMIONUp7kmXKGvxlmGaXbc7/Qg5nSdXSbj7JOfJWsHKvE
-	HuQHGNbEy0X0E/dS9HtsQczaMOOOEOTe9aV/Sy2D88Q==
-Received: (qmail 832337 invoked from network); 20 Nov 2024 09:34:05 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Nov 2024 09:34:05 +0100
-X-UD-Smtp-Session: l3s3148p1@bXw5A1QnzrIgAwDPXxznANR4Jedc6XSv
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: (isl28022) apply coding style to module init/exit
-Date: Wed, 20 Nov 2024 09:33:52 +0100
-Message-ID: <20241120083349.22226-8-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241120083349.22226-5-wsa+renesas@sang-engineering.com>
-References: <20241120083349.22226-5-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MNzRVDMS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732110325; x=1763646325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=jhRxJ1OvazakiB3N14Kmm9lyLfmW7hvqPJ5VI0xlsxA=;
+  b=MNzRVDMS+GAicc67deXMjl0RJ0wNUcvyTNF/LU0cCh9D4NaIOpCohldC
+   V9CjSnTD52e5Ve0ibkcvPH+zSS23Ft2S9oWEwCpOuLxO2Ndg6q8ELOxTN
+   HIIZWfW3DOj6Dk0iN30OZmQ9e07eMgUJCUlFnDCvaToSObppRN3yHbLjY
+   q08NaiMY6X8sQ2O/p56MnzPIqZlqBm92YLB7NIxX/rtBiA4E3wnqcYTkh
+   UicpjlYiNSr+AS0nzk7GAJrmHntnO8HZ+fQsurnrnjyUTxz19NpqhNgNp
+   t838c0KMBRrMmlDC5H3VY0wL+Alc1HlHjTDYcAqk9sW1TdcGq30yRXP3y
+   A==;
+X-CSE-ConnectionGUID: btArdX5BRB23tXWouYGzWg==
+X-CSE-MsgGUID: J4BsryVoQXmEDOUjdCDT7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="54669515"
+X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
+   d="scan'208";a="54669515"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:45:24 -0800
+X-CSE-ConnectionGUID: 86xaPbn1T6Cfa0pRt7M8Jg==
+X-CSE-MsgGUID: 9XOE3H3qRRSXb6yjPTfQiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
+   d="scan'208";a="120857080"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:45:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tDl1B-0000000Gisy-3QTr;
+	Wed, 20 Nov 2024 15:45:17 +0200
+Date: Wed, 20 Nov 2024 15:45:17 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <Zz3n7afQgdW9nsEz@smile.fi.intel.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+ <4c13b4dc-da2c-4548-910a-cf4138d8422a@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <4c13b4dc-da2c-4548-910a-cf4138d8422a@infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Function declarations can be in one line. module_init|exit macros should
-be tied to the function.
+On Tue, Nov 19, 2024 at 09:00:28PM -0800, Randy Dunlap wrote:
+> On 11/19/24 7:58 PM, Cedric Encarnacion wrote:
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/hwmon/isl28022.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+...
 
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index f9edcfd164c2..7748f6b8a534 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -506,8 +506,7 @@ static struct i2c_driver isl28022_driver = {
- 	.id_table	= isl28022_ids,
- };
- 
--static int __init
--isl28022_init(void)
-+static int __init isl28022_init(void)
- {
- 	int err;
- 
-@@ -519,15 +518,13 @@ isl28022_init(void)
- 	debugfs_remove_recursive(isl28022_debugfs_root);
- 	return err;
- }
-+module_init(isl28022_init);
- 
--static void __exit
--isl28022_exit(void)
-+static void __exit isl28022_exit(void)
- {
- 	i2c_del_driver(&isl28022_driver);
- 	debugfs_remove_recursive(isl28022_debugfs_root);
- }
--
--module_init(isl28022_init);
- module_exit(isl28022_exit);
- 
- MODULE_AUTHOR("Carsten Spie√ü <mail@carsten-spiess.de>");
+> > +config SENSORS_ADP1050_REGULATOR
+> > +	bool "Regulator support for ADP1050 and compatibles"
+> > +	depends on SENSORS_ADP1050 && REGULATOR
+> > +	help
+> > +	  If you say yes here you get regulator support for Analog Devices
+> > +	  LTP8800-1A, LTP8800-4A, and LTP8800-2. LTP8800 is a family of DC/DC
+> > +	  µModule regulators that can provide microprocessor power from 54V
+> > +	  power distribution architecture.
+
+> FYI:
+> 
+> The 'micro' symbol displays as a blank space in 'menuconfig' or 'nconfig'.
+> (It shows up correctly in gconfig and xconfig.)
+> 
+> This problem is not unique to this driver entry.
+> See https://lore.kernel.org/all/20231006202942.GA865945@bhelgaas/ from 2023.
+> 
+> AFAIK no one is working on this issue.
+> Feel free to change the help text or leave it...
+
+If it's part of the commercial / official name, I would leave it.
+The bug is not in the help text anyway.
+
 -- 
-2.45.2
+With Best Regards,
+Andy Shevchenko
+
 
