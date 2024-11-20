@@ -1,180 +1,207 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1893D1AAE38;
-	Wed, 20 Nov 2024 13:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97CD1A9B20;
+	Wed, 20 Nov 2024 14:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732110750; cv=none; b=Wo8aZ/NdCE9sn6vUpPgN0k2iWtN0IT9XmC/YQ+7ul5DR1qL0S3SlI2eHmezS6oaibIJYTR2+w8ILWrZNZ56KKoWeqj0XDD/kg6xnoSzY9N/CkOOCnCYw3KbBcXEng7YO5epZ8lZumH8EIM1xVrl0Z7A8EzXP/P9S6HF7CAPlhOA=
+	t=1732113584; cv=none; b=TDdV1jeH0tBjenImpHy35MuO73QXga5p4Jcr0DGBOxpUKY2Cm/Xb/0OyUNgrJSSXAAwQiM44zXAf5viOXB8vu0fx6AmJlcwg4AGwPSswsAJk97K9ysQYEyDjjLNoUKs2f4EH1WL01yHYxsHM2AiZbpd3FZu+lMqbBiVTm9Yl4Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732110750; c=relaxed/simple;
-	bh=PQrcyJYdhYqVRHp1hFJ6nsEgP+ywNZS0Nb4DS9YUiyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKVDZc3lj/7NI6INANoBGyhSKONNlx6odZxoXRgxvktamTXyciL7cAqpbDBGS6OE/7DJu6bFESFrQP65lr23BYq/7maOYGJSJkbzLQEekX8F3MV1LaBeVppqhECQxXC4oz6mnUKvElZTqgXNOrZbT9cChPFGLk4it+8c8M+ipGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d4v0JyRq; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1732113584; c=relaxed/simple;
+	bh=jCOqnJI1jSfMbdikbviwyyXbQRNLkjTouIoyWIbfo1c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rmEojRS1qI/B+82qZ1ERiszHcQcSzOT3MRh22rS47JsDqwHERT6H0InxvqMoWDb1CFbvawYizYREwpMyjfhymv2YT+DkEoAg+yuaHGBrJegrJT7wn9bk1xSRizJwtWOxFUejrIgwWiGpRYIjFCumaDYj+90cV7c5KPtxduRCgHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hod7eXOf; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d4v0JyRq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732110749; x=1763646749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=PQrcyJYdhYqVRHp1hFJ6nsEgP+ywNZS0Nb4DS9YUiyk=;
-  b=d4v0JyRqzVOpyXBXV6plXgeKV4TLLnAnPIDumP626OEQcFXv58HhQ2na
-   rjZfj4mpxcpjwU+Kv8EDBCP8D2GIs2DDlIU9LI9ept6WjkYej9G8buDht
-   a/QHEOtTcvsCmMLXzMqmN+nPNgXkzobpfmgWByshyIhdZDan2HOLIDsCc
-   WvkW/snUIk5Gr9clGbXQ7//94WMkwHluSp6ZWuWJyua1S1dXK2FTo9bkt
-   3e7GO3cR4Lza9qiG/5797w8bqDte/OSROl0qNMq0p/70Uc4YMfCG1QR7C
-   SVvkNbX4h/5sCh3s4YZ5AxJPfygnKhm3Kj7K7gvLSl2tVMpMkP/2aZWf/
-   w==;
-X-CSE-ConnectionGUID: wzH90gTlTYG4/mhsXQ9elA==
-X-CSE-MsgGUID: FbB2pMccRpm8dhRi8nYrPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="35950582"
-X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="35950582"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:52:29 -0800
-X-CSE-ConnectionGUID: ewyTpNRjTmiV5Njm8LNmjg==
-X-CSE-MsgGUID: gcsYJZEzQxOLfSRDFTU9kQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="94378389"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:52:25 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tDl82-0000000Gj02-0ORK;
-	Wed, 20 Nov 2024 15:52:22 +0200
-Date: Wed, 20 Nov 2024 15:52:21 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <Zz3plZOyMcxn54_h@smile.fi.intel.com>
-References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
- <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hod7eXOf"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21207f0d949so42397885ad.2;
+        Wed, 20 Nov 2024 06:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732113581; x=1732718381; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zabGifVxpVy+avsG3rCPsHo6MQzgl8H9BAM18fNKYAU=;
+        b=hod7eXOf930nJiau4zfm8AMUEribF5ND0eWAOBK73GrLhOgiGkui2LzdQcNWsCro2S
+         9rub3BaTUZ6NBlkBVbiVLgoUmx3sP2AhV4GHab4Xq2T/CPZndX9AUgdo9ZoceQk9va/x
+         BxS/DRQtkfM8hc1A30ogMLAfBiUCGkxZXIHIFBS5ENgkd8NoUROfHlNeyXfE0F2tHjLR
+         VEax5722Ih4TqlYUR7KHZabfcA+8y3cngV5npfuPT9IaZCG0VAKiCTZ5FZ2Joz+aBH2U
+         ha6Ukc7Y6xxEtrGHTaNHAg7gefm1jgxX6MvcVffOPPZ6Q9h7TEgDjzCzV5n/eztL+YrE
+         hgQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732113581; x=1732718381;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zabGifVxpVy+avsG3rCPsHo6MQzgl8H9BAM18fNKYAU=;
+        b=vNinHtGuaFX+HQNEiqp/hCbzRHHjhPi8WvoSV6jbeCRmc4sdj6mdPlBjAZRWVTMMPh
+         cTCsfqeQWbPQUdrYjRuc2/xBFVsQDMtqH/nLlafEsMZjRPUpgGpXKMX99LQ6jxGe0e0b
+         lAL4C8TSkTYJJfsX+y+iW+VdP51JuHP6NFBNpH69CuMn6Lf/93BK5kwFj/GkQT4D5zbT
+         UJ767YBk7rVRyZf/mpy0P4wOyOgpMT1KTHXKfvlfJbIFprg+Uj3a9D1DUqjlgoOTRRfl
+         ROwJJXQPl7ll9Cegem23eklp/2pIEadU7dX5XJ/NGY9jG21igqJhEw9Z5S3AnqMWcO42
+         fkgw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6GbcHQku7IY4ZAeV1I0BuuBl7BC3WF8nQDIVU39PZFsB7KG9vC+qj3EKR1VZT1kbL9stnuekLTaZU@vger.kernel.org, AJvYcCVXxm3wwvdHDQjfWFVH52mKGiF8GdcNr0n1ponBqi6sTVyoIte/p1OBBC31BbnCWocnggR0XJ/qSYoP194l@vger.kernel.org, AJvYcCVsowFz3B7gKy5C7JTynrXoMsUprjHAYtybvMPxczRCFO4ynPzJw6c7NAQcJV3FXe+0HJlyI7ko2fze@vger.kernel.org, AJvYcCVyGHIjPeDjh9iff5rxtXK+MMFct+YNSCikYjy5evGDX90Ovdqee5jSdR67E2/54bvGoWWz8Tkg92wD@vger.kernel.org, AJvYcCW+zCXjUYTQwdIpctE0nQyhCJFsFz+KQd11iX8Pgz1wtHkMOupmxDbWiS2qJduGy7wMWWwRehCMu11VBKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjay+rJPRB51VCxYPJmr91PxhhyM5ONAb0rScrSPWafLo/ZxPm
+	4BGR5lGkQRDrPngZThyVC/ZbmyDs3p4KvvxDTF2zgNz//3UiTuq+
+X-Google-Smtp-Source: AGHT+IHRii0hD75xSkktHp2W+X5T+R33piATj8nmXJpALNeeMbH64uAdw6Rbga1ucavvsOxTjAgFvQ==
+X-Received: by 2002:a17:902:ccc9:b0:20c:8dff:b4ed with SMTP id d9443c01a7336-2126fb34cabmr25636265ad.16.1732113580802;
+        Wed, 20 Nov 2024 06:39:40 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212037e004asm65327835ad.205.2024.11.20.06.39.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Nov 2024 06:39:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f1b338a0-fe51-48a1-a35e-41041df79b63@roeck-us.net>
+Date: Wed, 20 Nov 2024 06:39:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Radu Sabau <radu.sabau@analog.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
 In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 20, 2024 at 11:58:26AM +0800, Cedric Encarnacion wrote:
-
-I would start the commit message with the plain English sentence that describes
-the list given below. E.g., "Introduce support for the following components:".
-
->     ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->     ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->     LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+On 11/19/24 19:58, Cedric Encarnacion wrote:
+>      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+>      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+>      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
 > 
 > The LTP8800 is a family of step-down μModule regulators that provides
 > microprocessor core voltage from 54V power distribution architecture.
 > LTP8800 features telemetry monitoring of input/output voltage, input
 > current, output power, and temperature over PMBus.
-
-...
-
->    - Radu Sabau <radu.sabau@analog.com>
->  
+> 
+> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> ---
+>   Documentation/hwmon/adp1050.rst | 63 +++++++++++++++++++++++++++--
+>   drivers/hwmon/pmbus/Kconfig     |  9 +++++
+>   drivers/hwmon/pmbus/adp1050.c   | 72 +++++++++++++++++++++++++++++++--
+>   3 files changed, 137 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/adp1050.rst b/Documentation/hwmon/adp1050.rst
+> index 8fa937064886..1692373ee5af 100644
+> --- a/Documentation/hwmon/adp1050.rst
+> +++ b/Documentation/hwmon/adp1050.rst
+> @@ -13,18 +13,43 @@ Supported chips:
+>   
+>       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1050.pdf
+>   
+> +  * Analog Devices ADP1051
+> +
+> +    Prefix: 'adp1051'
+> +
+> +    Addresses scanned: I2C 0x70 - 0x77
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1051.pdf
+> +
+> +  * Analog Devices ADP1055
+> +
+> +    Prefix: 'adp1055'
+> +
+> +    Addresses scanned: I2C 0x4B - 0x77
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1055.pdf
+> +
+> +  * Analog Devices LTP8800-1A/-2/-4A
+> +
+> +    Prefix: 'ltp8800'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-1A.pdf
+> +         https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-2.pdf
+> +         https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-4A.pdf
+> +
+>   Authors:
+>   
+>     - Radu Sabau <radu.sabau@analog.com>
+>   
 > -
->  Description
->  -----------
 
-Stray change.
+Unrelated
 
-...
-
+>   Description
+>   -----------
+>   
 > -This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
 > -Controller for Isolated Power Supply with PMBus interface.
 > +This driver supports hardware monitoring for Analog Devices ADP1050, ADP1051, and
 > +ADP1055 Digital Controller for Isolated Power Supply with PMBus interface.
->  
+>   
 > -The ADP1050 is an advanced digital controller with a PMBus™
 > +The ADP105X is an advanced digital controller with a PMBus™
 
-Can we use small x to make it more visible that it's _not_ the part of the
-name, but a glob-like placeholder?
+Please refrain from using device name wildcards, There is no guarantee that
+all chips in the name range of ADP105[0-9] will have the same functionality.
+Either name the chips, or say something like "The supported chips are ...".
 
->  interface targeting high density, high efficiency dc-to-dc power
->  conversion used to monitor system temperatures, voltages and currents.
-
-...
-
-> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
-
-Why? Is the data type undefined without this?
-
-> +static const struct regulator_desc adp1050_reg_desc[] = {
-> +	PMBUS_REGULATOR_ONE("vout"),
-> +};
-> +#endif /* CONFIG_SENSORS_ADP1050_REGULATOR */
-
-Note, this can be dropped anyway in order to use PTR_IF() below, if required.
-
-...
-
-> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
-> +	.num_regulators = 1,
-> +	.reg_desc = adp1050_reg_desc,
-> +#endif
-
-Ditto, are the fields not defined without the symbol?
-
-...
-
->  static int adp1050_probe(struct i2c_client *client)
->  {
-> -	return pmbus_do_probe(client, &adp1050_info);
-> +	const struct pmbus_driver_info *info;
-> +
-> +	info = device_get_match_data(&client->dev);
-
-Why not i2c_get_match_data()?
-
-> +	if (!info)
-> +		return -ENODEV;
-> +
-> +	return pmbus_do_probe(client, info);
->  }
-
-...
-
->  static const struct i2c_device_id adp1050_id[] = {
-> -	{"adp1050"},
-> +	{ .name = "adp1050", .driver_data = (kernel_ulong_t)&adp1050_info},
-
-Please, split this patch to at least two:
-1) Introduce chip_info;
-2) add new devices.
-
-> +	{ .name = "adp1051", .driver_data = (kernel_ulong_t)&adp1051_info},
-> +	{ .name = "adp1055", .driver_data = (kernel_ulong_t)&adp1055_info},
-> +	{ .name = "ltp8800", .driver_data = (kernel_ulong_t)&ltp8800_info},
->  	{}
->  };
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Guenter
 
