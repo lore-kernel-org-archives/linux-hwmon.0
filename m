@@ -1,113 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6621CB9E1
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 11:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3B51C6F76
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 12:18:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732188048; cv=none; b=FqbjEdXW/CTWr1znp2usEb97wgPvOGhnpY+67dZXkz17FUJc4XoqqMteqa8sDpgeKWMqrxWlO0FGtz4q6SQX3KYpyfw2Y7v3/4Ev7HVKrItMzxJhcopEIio8DpQee+vkWs400oqUI2tXQyZtjAdZBCKv7ZKPM+Xvwh+1o2ZJFVc=
+	t=1732191508; cv=none; b=qSp4GQziHV/1U1UDi1+iBbCHY+Mqc9SHtIVZR9PakAQkT+vFNr0O70+OY6OHhD1PfpJn0tUF+dEKgeGG1NFb5QSg2yA7B6DxJcTuaeKGK1ikqDCT+FGqWkjaS87A1nKhyzrHP5LtzhVleQyQrAk1av9XxF870mzhpQ29Spy1Jhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732188048; c=relaxed/simple;
-	bh=EMYtenlYzh62udWgkkT6GSwJFi42owO56AGmFQcG3G8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LewAw9LoQO6uoSRZeaQvCTrj1QapRfEYCp5zdXSzVqbVFugFCh39gc9BTleBMdzra5xD62gvQc6klCvAo+8IXEI4o4PqqXKhcjSPLO4qEZOvH69K2c7O5GZE4LevR2OuAngxD1uAACwsTPxd3poiHx0A54WcdleFCAgEdkN2PXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BlgtKB5b; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732191508; c=relaxed/simple;
+	bh=w1GT8u9LhZuFjvunp8xyoZ0ltpUBijG3KqDlLJrGbcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wk2/KLLaV56yhTHFSJm7FJ/vGOGyqbQuD0omgS9bBh0/YixrqEjoodlx8/Zyc5/A7iw1Nlb0xa5/rctZRv4TK/a4YWVFy7Cz3kGAGJ1Ia5az6B3Dk9pb7Qd7VqrqpKrdObZf2PpVOwiXjZqpwIJ36PU3ZKw5XBHdoWjE5qC2LDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PKBUSNNh; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BlgtKB5b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PKBUSNNh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732188047; x=1763724047;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EMYtenlYzh62udWgkkT6GSwJFi42owO56AGmFQcG3G8=;
-  b=BlgtKB5boSkf7xoevzoePtF7wLiunsa/DgcOp69qOcEfp5l+XOHebJFs
-   XE5JSjE8qC/LQbXF5yWZqtxgPNIWpZ+eVvAipLgryWu1hyn8m3tH0QgcA
-   6lCoGedS6LTvqIUkc8L7yeMWTrkU+PdpI4uDeJfXhbOL60j8PloTSDMom
-   z1Tsuafh6JQ1bpTtndzsaTh2gGk/Gmhf2kXDEyj0VCIGzjF5A6w5zvExF
-   tAEKFgiaUiv1kNh8sJmSJ5u+5QcdCwP/ar77WWRZaCxyoj7uYO/buqP+l
-   22ZTpuX9ewcXR6By1kJXP8uQ8eI5Cm3SstCt5Y9HeZMFavq8jysqukr7K
-   Q==;
-X-CSE-ConnectionGUID: lL5GprFzTfOI2gM7IgGoqg==
-X-CSE-MsgGUID: Y3GJCZAmQ8CVa1f4wjZsWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="49719385"
+  t=1732191507; x=1763727507;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w1GT8u9LhZuFjvunp8xyoZ0ltpUBijG3KqDlLJrGbcY=;
+  b=PKBUSNNhM3NdO5fEegnzbb7thT25B9s4luLUsA9XbS1ueV4BjJ0Zl8y/
+   7CPCzudaifQJNj3XiLzxKWsVpogyzdS5cq4aLMlg+RlUH5ypTPv/V5n30
+   3GVkq9WcODCbEySeg/JEF1SNNfimQ+h5DSTKGKvRAy9hOGIpCJMKrH7hd
+   xa2djfNUJPZxx5rSwpldshNvFVMeIXAR+WtX/dHFvXihqWmenLxSbwJKL
+   Nzkrkr2lJSqGNEYjuR8HL5I/ZKKIj6FLvN5GFPNcc4QrZbgHlLRkTj+cv
+   gGz4riOpCWp4LxRz6g4CWZ9Aa01MfAF/q9DDpNAUN2yMii3r+uNegT+e8
+   g==;
+X-CSE-ConnectionGUID: 66fgeexxRfC63mYCGIDWEg==
+X-CSE-MsgGUID: rDyzNxrgTvSD9JwgaHqepQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="49825295"
 X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="49719385"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 03:20:46 -0800
-X-CSE-ConnectionGUID: U4tSn1ARSrCQyWM9LOGTQQ==
-X-CSE-MsgGUID: I23+vgVfTIuEpPnIT3WzvQ==
+   d="scan'208";a="49825295"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 04:18:26 -0800
+X-CSE-ConnectionGUID: Rh4lGZiTS32H8l9ZqoXe0Q==
+X-CSE-MsgGUID: BR4gJesbQ1KPhvcrmEj3Fw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="95284330"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 21 Nov 2024 03:20:44 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tE5Eo-0002tb-2G;
-	Thu, 21 Nov 2024 11:20:42 +0000
-Date: Thu, 21 Nov 2024 19:20:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing 1/42] drivers/hwmon/hwmon.c:432:84: warning:
- pointer type mismatch in conditional expression
-Message-ID: <202411211946.6XukCd3K-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
+   d="scan'208";a="94689093"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.151])
+  by fmviesa005.fm.intel.com with ESMTP; 21 Nov 2024 04:18:25 -0800
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Frank Li <Frank.Li@nxp.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] hwmon: (tmp108) Do not fail in I3C probe when I3C regmap is a module
+Date: Thu, 21 Nov 2024 14:18:19 +0200
+Message-ID: <20241121121819.393104-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-head:   b731b2c24d88f6782fdf6e1c19d735cd5aadeb3b
-commit: 2c67fcdff546bc261761a3d66aa165a627b71458 [1/42] hwmon: Introduce 64-bit energy attribute support
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20241121/202411211946.6XukCd3K-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241121/202411211946.6XukCd3K-lkp@intel.com/reproduce)
+I3C device probe fails when CONFIG_REGMAP_I3C=m:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411211946.6XukCd3K-lkp@intel.com/
+	p3t1085_i3c 0-23615290090: error -ENODEV: Failed to register i3c regmap
 
-All warnings (new ones prefixed by >>):
+Fix this by using the IS_ENABLED(CONFIG_REGMAP_I3C) macro in the code.
 
-   drivers/hwmon/hwmon.c: In function 'hwmon_attr_show':
->> drivers/hwmon/hwmon.c:432:84: warning: pointer type mismatch in conditional expression
-     432 |                                hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-         |                                                                                    ^
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/hwmon/tmp108.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-vim +432 drivers/hwmon/hwmon.c
-
-   422	
-   423	static ssize_t hwmon_attr_show(struct device *dev,
-   424				       struct device_attribute *devattr, char *buf)
-   425	{
-   426		struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-   427		s64 val64;
-   428		long val;
-   429		int ret;
-   430	
-   431		ret = hattr->ops->read(dev, hattr->type, hattr->attr, hattr->index,
- > 432				       hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-   433		if (ret < 0)
-   434			return ret;
-   435	
-   436		if (hattr->type != hwmon_energy64)
-   437			val64 = val;
-   438	
-   439		trace_hwmon_attr_show(hattr->index + hwmon_attr_base(hattr->type),
-   440				      hattr->name, val64);
-   441	
-   442		return sprintf(buf, "%lld\n", val64);
-   443	}
-   444	
-
+diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+index 1f36af2cd2d9..3dcbbb05ab2b 100644
+--- a/drivers/hwmon/tmp108.c
++++ b/drivers/hwmon/tmp108.c
+@@ -452,7 +452,7 @@ static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
+ 	struct device *dev = i3cdev_to_dev(i3cdev);
+ 	struct regmap *regmap;
+ 
+-#ifdef CONFIG_REGMAP_I3C
++#if IS_ENABLED(CONFIG_REGMAP_I3C)
+ 	regmap = devm_regmap_init_i3c(i3cdev, &tmp108_regmap_config);
+ #else
+ 	regmap = ERR_PTR(-ENODEV);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
