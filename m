@@ -1,142 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6F1155C9E;
-	Wed, 20 Nov 2024 18:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BA944C6F
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 03:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732127950; cv=none; b=Mtst6W+apPD5BjfSxAvE6sjsHpN87/25fpZ68IDKHqW/Jrv5XUXXJn6QHp/oyL0toeJogu+gDnFWDD+SgSo4ui7y/lsMPtZcUeU1vSuThqLK4mJOMdx25P2I4dcH5cWCoBQZV+jfxVfshASr++WYccxUfpyYmQ8vB/czBnaEPc0=
+	t=1732159954; cv=none; b=EjkpGXH7ZLsftS/O2JfFbheUSfDrIYRj5fbDRUUGurSEiJb1w+BJeCBS4NSQBFsViBtJJC+qOFCjONTJpozt/i1g8sMq12KaqMSA+O0Boy3p5Hgp8msy0qQSwQWsedSbKDi24aGgOltDox29N9fdpgZAXCswS9fjfDDjN5YzjZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732127950; c=relaxed/simple;
-	bh=UXMlFytvYrHCfFZWYtSAFPtM120qL1+pkap/yp8A7SU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Afc2B9E+OHXCaB9cqShQCxIgZvH2f+GJnGKy+JdVoshn7AfczspeI3giX9xAQeQpmsxbW8ufYVyLxcZSQQNeFxgxDkm9M97PTaTKCyiwkNX/HEqL6DhakSJAyRBVEgB7d8hHzngvseFjj6LhbF1Mp3ZsfiMaSZGMxPSmNzO4RxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/OiW2bx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732159954; c=relaxed/simple;
+	bh=FahZSEP+N6e7Q1ih4oEKLBYVeHcwLCzGppiE00cfFlA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VSs+tWDudNhnPP1BfwN/dUMoGNZG2xVXrdUmFmNzngZAKkG11Z4mlaMM/OB7GzCz6BF9VflYgokQui0XfYYfvTh92+SVTJJCp3SIj9YrzpksZhQx2fUO+7m6E19gA0ZB0kz127js35CV18JP/wXZCD3BF7PYvExqw4hfo6xQK1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TvYkWUxT; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/OiW2bx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20175C4CECD;
-	Wed, 20 Nov 2024 18:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732127949;
-	bh=UXMlFytvYrHCfFZWYtSAFPtM120qL1+pkap/yp8A7SU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=J/OiW2bx5pFDOBALUB3vynVFgfEqW9j4QHsbFn+nnA0t3NYmlCPICs8ZLXuBORAnB
-	 1Oc0VkhtgEMAT38COHCc+/8iwwosVZ45t5Y4H2Rybik8+DTd4HXzPQ/uTwWImMptYJ
-	 NvZncNsKv1x5Rc0QWyOFenyn0VhLkjbGSxohYI+RYVExqisnGx53UfwnM0XNvNGuP+
-	 EE4l/w62nTM0soe3zESN7DJjwWYypnUhdC/FIdMMo6+R/jg5SQ1AGijf1QS9mtFWgJ
-	 LLbJF5VhWpnpXJSuAhvvO2STau7NqkeOrQWealFuDtUmBtVnpCL+cTfuesbh5FsoQJ
-	 Vevy+gJ6BWr+Q==
-Message-ID: <4d907ddf-16ca-4136-b912-f571a691dc90@kernel.org>
-Date: Wed, 20 Nov 2024 19:39:01 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TvYkWUxT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732159952; x=1763695952;
+  h=date:from:to:cc:subject:message-id;
+  bh=FahZSEP+N6e7Q1ih4oEKLBYVeHcwLCzGppiE00cfFlA=;
+  b=TvYkWUxTFL1RhSwyMIz+Ss6OGQBMUe5Nwf9joCiMo7F06VSEpA9H041v
+   jFTZRGqwYp0nBtUgwH8EeN54BxNCOFVKABV83RD4PHi0eGPtNNmOJwpD/
+   2wvoVbUFBG6Pg8RgZI8uSwGNK9TgVENeVbWogc2FGeCxEUXkVhtrrnbmZ
+   D0Eo+okgoN+bL5qEYh0KCFkNzHG2AIsuxEGWUgApAB7TDFZ/REtfV2ikE
+   +RNqfkjWwu7PcepE6sY9J2TxjN9gy7zo+RckvJKYk91zjv0M59KRdSHDO
+   cflFY5hsA4yIDHrrnSGyGTmn8Y9Uy3DGzkORqCjpDHcbk/8xKlkJcxpB/
+   w==;
+X-CSE-ConnectionGUID: aZP6YujWTvmWUGstOQIoUQ==
+X-CSE-MsgGUID: eihz2WMlQJuAsIOAVBlvUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="19838984"
+X-IronPort-AV: E=Sophos;i="6.12,171,1728975600"; 
+   d="scan'208";a="19838984"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 19:32:32 -0800
+X-CSE-ConnectionGUID: BLoTtXTiS8+Remwxvgaqjw==
+X-CSE-MsgGUID: 6HrPTG8mSZ2FDTg4CBMcpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,171,1728975600"; 
+   d="scan'208";a="127650957"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 20 Nov 2024 19:32:31 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tDxvg-0001bD-2w;
+	Thu, 21 Nov 2024 03:32:28 +0000
+Date: Thu, 21 Nov 2024 11:32:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:fixes] BUILD SUCCESS
+ 06bfc0d9cd85458378e67c82c27383e0a013a3d6
+Message-ID: <202411211108.XJWSx2NA-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings for
- adp1051, adp1055 and ltp8800
-To: Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor@kernel.org>,
- Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Radu Sabau <radu.sabau@analog.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
- <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
- <20241120-process-hulk-ecedcbf088f7@spud>
- <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
- <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 20/11/2024 19:07, Guenter Roeck wrote:
-> On 11/20/24 09:35, Krzysztof Kozlowski wrote:
->> On 20/11/2024 18:11, Conor Dooley wrote:
->>> On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrote:
->>>> add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
->>>>      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->>>>      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->>>>      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
->>>>
->>>> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
->>>> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
->>>> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
->>>
->>> Why did you drop my ack?
->>> https://lore.kernel.org/all/20241106-linoleum-kebab-decf14f54f76@spud/
->> So that's a v2? Or v3? Then should be marked correctly. Please start
->> using b4. I already asked analog.com for this in few cases. Feel free
->> not to use b4 if you send correct patches, but this is not the case here.
->>
-> 
-> In general I agree, but this is a combination of two patch series, as mentioned
-> in the summary. I am not sure how to use versioning in such situations. Is it
-> v2 of one series or v3 of the other ?
-I would say the highest and keep the b4 changeset. This allows to use b4
-diff easily. Choice done here - v1, no usage of b4  - breaks everything,
-look:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
+branch HEAD: 06bfc0d9cd85458378e67c82c27383e0a013a3d6  io_uring: add separate freeptr type for slab
 
-b4 diff '<20241120035826.3920-1-cedricjustine.encarnacion@analog.com>'
-Grabbing thread from
-lore.kernel.org/all/20241120035826.3920-1-cedricjustine.encarnacion@analog.com/t.mbox.gz
----
-Analyzing 13 messages in the thread
-Could not find lower series to compare against.
+elapsed time: 1442m
 
+configs tested: 79
+configs skipped: 1
 
-Best regards,
-Krzysztof
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                   allnoconfig    gcc-14.2.0
+alpha                  allyesconfig    gcc-14.2.0
+arc                    allmodconfig    gcc-13.2.0
+arc                     allnoconfig    gcc-13.2.0
+arc                    allyesconfig    gcc-13.2.0
+arc         randconfig-001-20241121    gcc-13.2.0
+arc         randconfig-002-20241121    gcc-13.2.0
+arm                    allmodconfig    gcc-14.2.0
+arm                     allnoconfig    clang-20
+arm                    allyesconfig    gcc-14.2.0
+arm         randconfig-001-20241121    clang-20
+arm         randconfig-002-20241121    gcc-14.2.0
+arm         randconfig-003-20241121    clang-20
+arm         randconfig-004-20241121    gcc-14.2.0
+arm64                  allmodconfig    clang-20
+arm64                   allnoconfig    gcc-14.2.0
+arm64       randconfig-001-20241121    clang-20
+arm64       randconfig-002-20241121    clang-20
+arm64       randconfig-003-20241121    gcc-14.2.0
+arm64       randconfig-004-20241121    gcc-14.2.0
+csky                    allnoconfig    gcc-14.2.0
+csky        randconfig-001-20241121    gcc-14.2.0
+csky        randconfig-002-20241121    gcc-14.2.0
+hexagon                allmodconfig    clang-20
+hexagon                 allnoconfig    clang-20
+hexagon                allyesconfig    clang-20
+hexagon     randconfig-001-20241121    clang-20
+hexagon     randconfig-002-20241121    clang-15
+i386                   allmodconfig    gcc-12
+i386                    allnoconfig    gcc-12
+loongarch              allmodconfig    gcc-14.2.0
+loongarch               allnoconfig    gcc-14.2.0
+loongarch   randconfig-001-20241121    gcc-14.2.0
+loongarch   randconfig-002-20241121    gcc-14.2.0
+m68k                   allmodconfig    gcc-14.2.0
+m68k                    allnoconfig    gcc-14.2.0
+m68k                   allyesconfig    gcc-14.2.0
+microblaze             allmodconfig    gcc-14.2.0
+microblaze              allnoconfig    gcc-14.2.0
+microblaze             allyesconfig    gcc-14.2.0
+mips                    allnoconfig    gcc-14.2.0
+nios2                   allnoconfig    gcc-14.2.0
+nios2       randconfig-001-20241121    gcc-14.2.0
+nios2       randconfig-002-20241121    gcc-14.2.0
+openrisc                allnoconfig    gcc-14.2.0
+openrisc               allyesconfig    gcc-14.2.0
+parisc                 allmodconfig    gcc-14.2.0
+parisc                  allnoconfig    gcc-14.2.0
+parisc                 allyesconfig    gcc-14.2.0
+parisc      randconfig-001-20241121    gcc-14.2.0
+parisc      randconfig-002-20241121    gcc-14.2.0
+powerpc                allmodconfig    gcc-14.2.0
+powerpc                 allnoconfig    gcc-14.2.0
+powerpc     randconfig-001-20241121    clang-15
+powerpc     randconfig-002-20241121    gcc-14.2.0
+powerpc     randconfig-003-20241121    clang-20
+powerpc64   randconfig-001-20241121    gcc-14.2.0
+powerpc64   randconfig-002-20241121    clang-20
+powerpc64   randconfig-003-20241121    clang-20
+riscv                   allnoconfig    gcc-14.2.0
+riscv       randconfig-001-20241121    gcc-14.2.0
+riscv       randconfig-002-20241121    gcc-14.2.0
+s390                   allmodconfig    clang-20
+s390                    allnoconfig    clang-20
+s390                   allyesconfig    gcc-14.2.0
+s390        randconfig-001-20241121    gcc-14.2.0
+s390        randconfig-002-20241121    clang-20
+sh                     allmodconfig    gcc-14.2.0
+sh                     allyesconfig    gcc-14.2.0
+sh          randconfig-001-20241121    gcc-14.2.0
+sh          randconfig-002-20241121    gcc-14.2.0
+sparc                  allmodconfig    gcc-14.2.0
+um                     allmodconfig    clang-20
+um                      allnoconfig    clang-17
+um                     allyesconfig    gcc-12
+x86_64                  allnoconfig    clang-19
+x86_64                    defconfig    gcc-11
+x86_64                        kexec    clang-19
+x86_64                     rhel-9.4    gcc-12
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
