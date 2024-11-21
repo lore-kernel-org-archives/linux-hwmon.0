@@ -1,226 +1,133 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928641DDA2F;
-	Thu, 21 Nov 2024 21:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DE583CDA;
+	Thu, 21 Nov 2024 21:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732225509; cv=none; b=hac2YJaUqrpjo86RrWVgylsmA3IOEt5R7zGiQ+beAtAKKN7Bi9u9OvovRAGbFdkxlAKlcdVNiAVpvyTA9tFZjWqrEqkmsGVtAbo5UNgcK8PHOa/VqEkRb880WoaBm4f0vVP04k3Ow2HxF/CYrpdMkwTkYU23B0hgwoDSkrJI1qA=
+	t=1732226163; cv=none; b=tqUQMmC7Uojpohy860LMyzHwcES4zjh+AKbT+ZmFK5yYHYAETIOVc1sI0uH8KNhFfEi4PGpajqsg6Sgr9S4761J1u2+yvFWphYi4WtUUNHTBQadMsHL53NznW9JVmOCnckfZakcMO3PeNekMpr4ExRTelStDEdV3TyFtAtDfWds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732225509; c=relaxed/simple;
-	bh=cAPRlqfmem4ZUOZNsb73Kqr8EsdpJovMlH2T1kFWOXM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A5tWCMM596I7dyukX38WLjaesFXZ0IN910+3/wzzhS+d/UMAkzpO8gPsTdryc7EhnBR3JJnY22YP4WFbQCRaVnbTNzhVxXDe6zWcS3xR5ExmankdK7moKbYTIh/C48N4M1ydJJZDXxNplXrEvoBWH6Kmi25bc+WweK3TN1hSV5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiNv2vpk; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732226163; c=relaxed/simple;
+	bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gsGf6wS1WUtofrNlq63n9PTwBjGNQN9NS0yuKlU4mJ97gOtIc1PCy1CPkB5np5u96NzADHrrwruseJNRoH6ff6r0HBNSlOHh2XglFUX6hIpL6LFkLeafj8H7XY7BoQcwAwUkY7BrrS6pe7juY5BxXuMO9g33ZmoEuSm9NAGOZAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QGlu0Iby; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiNv2vpk"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3824a8a5c56so922004f8f.3;
-        Thu, 21 Nov 2024 13:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732225506; x=1732830306; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bsO5TXWUmIJB0UF9EZfURqtCuTGKyAOmc2IK79hH25k=;
-        b=QiNv2vpkZiTsbLJFeRFMavl2c19DJs1VuyqhYsyWyZIx0pFEmz/qdAaUv8014WMAc8
-         Gj1xryKtgvlylc3JG6wJYnuNAY2AGb3kjJphJhfhS24oLu+9q/oLHnsSCx8LDh29Shrp
-         gI+HTGM5JqQTbpjl69iM/LBQJySoUia9iUwMABTpwtGCcj7w0Kxq4CF/1V1s0aQOKKJI
-         owdVizS+6lLfmF47UvvDIUVC4GyM2fxelycpqYzTE3zlPcIzxnikZNR2h31d/ZhImFey
-         k18R1q0iX+6Q7b5ztLfaWpNGYjOfbymRodLRPLaViOehVgvbZO884p5Ja8togRO+wWqF
-         DzTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732225506; x=1732830306;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bsO5TXWUmIJB0UF9EZfURqtCuTGKyAOmc2IK79hH25k=;
-        b=YbwKnsbzpStvvEYLglVDhWLA+f1mSek8aOUgGBaFdRehYgBEF7MOJPk49ZjfgJpW2U
-         1d+VUCCOnIvdugInKSSouTk95hTDSgcUorkplyWEi2AGl+IpNzkgn79F4voZ4FaUF8L6
-         qP9pDdxw6/dMZhVhqocDqFE1/58hE//i6OrOPqtOzNB1NJYMTR22cB2Dd2vho4zByjAZ
-         9wBRMb30Hat0KBpoGB6Ocrb20YkR2mJYfska2b6WFh0bwDiW7ItPYDqN50Lm92zyu3fa
-         3Awh1yuQAyinWDb9F7lmXcccSkgf7XoXFErr+9jb6GC5XTGkrMRpQqCmMaAwFYN1Ia1q
-         kRTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWrEh5j6x9cTJXoUqw+5GiaibDfteDy9SpsaxKeQRNYBY0qwZnf45A6QGezvQc3DiZZ+dV5esn9JBK5Nw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXrjNV9dk8/8Y4FilmNkeKF1qm9e7Bfk2FKT9hzMK4gWbahid7
-	tqkvPXL01H1GWjaUPsrNLxqBjc447w5l74dmglh9YUNX8ReJ2DS7
-X-Gm-Gg: ASbGncsvmwbDPkhDh5GaK15RSp6JrF+L5YPg7pyccHDPtfC8nqljHXvHXdE8Z5lZdJ1
-	PdRN5Jpao2J9E/cqUXVYx0ys4fiV6KTGzl9Ca8cpV+I4DTEffxCdQ03zOqrjkx9qrPMq5eIKYgc
-	ROioDuhqi3xzzEhqEA+WJ2CdOufp+TbuoKFL/txOJMEKYe3GYbPc3rQV874cLUyUP+VCySyP0JT
-	T4lpO9XfzFah8bzy4fs8b/WPAaDBm21MpPWv+CvbKyMMZ8KhQuPLZmGqkvw8PwLLbU16ls+BfO+
-	YzwzLREdEQdHLwUXNXh0RCl8AzX+Jy/fX/vMA75Uh4gbyiGv0S0+80q9zDcX7hZNxL/SbZPE
-X-Google-Smtp-Source: AGHT+IECyXWoa3vNC6aG+mGBIil4TrFWvVZHen3azU0MomrvCyNE6ChZKRoohVA5IsGJ/8moQEvjew==
-X-Received: by 2002:a5d:588f:0:b0:382:4851:46d2 with SMTP id ffacd0b85a97d-38260b45c95mr572678f8f.1.1732225505587;
-        Thu, 21 Nov 2024 13:45:05 -0800 (PST)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-7b6a-90cc-9bcd-a2c3.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:7b6a:90cc:9bcd:a2c3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fb53858sm636694f8f.62.2024.11.21.13.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 13:45:05 -0800 (PST)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Thu, 21 Nov 2024 22:44:56 +0100
-Subject: [PATCH 2/2] hwmon: (chipcap2) Switch to guard() for mutext
- handling
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QGlu0Iby"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732226162; x=1763762162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
+  b=QGlu0IbyLJU2/RNwn29EG7ENIsVehgsxdkFe1gzeyvRDAEB60Ryvrn2S
+   7C1zP8+Predzx48hxwd1j/M6XLnbAenf5IFmb/h3X07nS/16yAdErJaRX
+   4+Oltzzv5wvp5G5T52tY/xJ8lZM4P3IXLGEMG94vFVanIsNef8Iv6VNbi
+   rX/QBuG+DNGjixn8xk8pWuQsvFmhRUwVamdH2MG2a0lF2GnsoICXeGD73
+   RppeZXGVoIFY4iAdOH/8XKFN/92XA7w9lAgCuohG/yy0epJIhOx+2qt68
+   9xHknFnDHJfYzpGzhg2TxEtxnnuvvqszC76gK1E+vCr8YPCFJWdDZ8uoQ
+   A==;
+X-CSE-ConnectionGUID: W6XjVuczQ9m2rp/ObaKBoQ==
+X-CSE-MsgGUID: YjH2JAfhT9S4ewyGNSl/Fw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="36146985"
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="36146985"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:56:01 -0800
+X-CSE-ConnectionGUID: umi9aa9ESiO+m450r70/Og==
+X-CSE-MsgGUID: ssMEiMNuSPSKEiEAD/cNgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="90183953"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 21 Nov 2024 13:55:56 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEF9W-0003Od-17;
+	Thu, 21 Nov 2024 21:55:54 +0000
+Date: Fri, 22 Nov 2024 05:54:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202411220500.414mHL27-lkp@intel.com>
+References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241121-chipcap_no_iio-v1-2-6c157848a36f@gmail.com>
-References: <20241121-chipcap_no_iio-v1-0-6c157848a36f@gmail.com>
-In-Reply-To: <20241121-chipcap_no_iio-v1-0-6c157848a36f@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732225501; l=3960;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=cAPRlqfmem4ZUOZNsb73Kqr8EsdpJovMlH2T1kFWOXM=;
- b=jk/nhwFA9U5gAWsQlRrkxtnSLmtgSRavfXDCD7rTFNPFtnNfJbGbEbqg7O9x3906nlVIxjAgo
- mLeq7kDrZ4pDEaAGeRAdxrbqWp6snw3H7zeuEOGhcPy45T/MgVluUW8
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 
-Switch to guard() for mutex handling to simplify the code, getting rid
-of the 'ret = x, break; return ret;' construct and returning the result
-of the operation instead.
+Hi Cedric,
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/hwmon/chipcap2.c | 63 ++++++++++++++----------------------------------
- 1 file changed, 18 insertions(+), 45 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/hwmon/chipcap2.c b/drivers/hwmon/chipcap2.c
-index edf454474f11..9d071f7ca9d2 100644
---- a/drivers/hwmon/chipcap2.c
-+++ b/drivers/hwmon/chipcap2.c
-@@ -13,6 +13,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/bits.h>
-+#include <linux/cleanup.h>
- #include <linux/completion.h>
- #include <linux/delay.h>
- #include <linux/hwmon.h>
-@@ -556,55 +557,40 @@ static int cc2_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		    int channel, long *val)
- {
- 	struct cc2_data *data = dev_get_drvdata(dev);
--	int ret = 0;
- 
--	mutex_lock(&data->dev_access_lock);
-+	guard(mutex)(&data->dev_access_lock);
- 
- 	switch (type) {
- 	case hwmon_temp:
--		ret = cc2_measurement(data, type, val);
--		break;
-+		return cc2_measurement(data, type, val);
- 	case hwmon_humidity:
- 		switch (attr) {
- 		case hwmon_humidity_input:
--			ret = cc2_measurement(data, type, val);
--			break;
-+			return cc2_measurement(data, type, val);
- 		case hwmon_humidity_min:
--			ret = cc2_get_reg_val(data, CC2_R_ALARM_L_ON, val);
--			break;
-+			return cc2_get_reg_val(data, CC2_R_ALARM_L_ON, val);
- 		case hwmon_humidity_min_hyst:
--			ret = cc2_get_reg_val(data, CC2_R_ALARM_L_OFF, val);
--			break;
-+			return cc2_get_reg_val(data, CC2_R_ALARM_L_OFF, val);
- 		case hwmon_humidity_max:
--			ret = cc2_get_reg_val(data, CC2_R_ALARM_H_ON, val);
--			break;
-+			return cc2_get_reg_val(data, CC2_R_ALARM_H_ON, val);
- 		case hwmon_humidity_max_hyst:
--			ret = cc2_get_reg_val(data, CC2_R_ALARM_H_OFF, val);
--			break;
-+			return cc2_get_reg_val(data, CC2_R_ALARM_H_OFF, val);
- 		case hwmon_humidity_min_alarm:
--			ret = cc2_humidity_min_alarm_status(data, val);
--			break;
-+			return cc2_humidity_min_alarm_status(data, val);
- 		case hwmon_humidity_max_alarm:
--			ret = cc2_humidity_max_alarm_status(data, val);
--			break;
-+			return cc2_humidity_max_alarm_status(data, val);
- 		default:
--			ret = -EOPNOTSUPP;
-+			return -EOPNOTSUPP;
- 		}
--		break;
- 	default:
--		ret = -EOPNOTSUPP;
-+		return -EOPNOTSUPP;
- 	}
--
--	mutex_unlock(&data->dev_access_lock);
--
--	return ret;
- }
- 
- static int cc2_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		     int channel, long val)
- {
- 	struct cc2_data *data = dev_get_drvdata(dev);
--	int ret;
- 	u16 arg;
- 	u8 cmd;
- 
-@@ -614,41 +600,28 @@ static int cc2_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 	if (val < 0 || val > CC2_RH_MAX)
- 		return -EINVAL;
- 
--	mutex_lock(&data->dev_access_lock);
-+	guard(mutex)(&data->dev_access_lock);
- 
- 	switch (attr) {
- 	case hwmon_humidity_min:
- 		cmd = CC2_W_ALARM_L_ON;
- 		arg = cc2_rh_to_reg(val);
--		ret = cc2_write_reg(data, cmd, arg);
--		break;
--
-+		return cc2_write_reg(data, cmd, arg);
- 	case hwmon_humidity_min_hyst:
- 		cmd = CC2_W_ALARM_L_OFF;
- 		arg = cc2_rh_to_reg(val);
--		ret = cc2_write_reg(data, cmd, arg);
--		break;
--
-+		return cc2_write_reg(data, cmd, arg);
- 	case hwmon_humidity_max:
- 		cmd = CC2_W_ALARM_H_ON;
- 		arg = cc2_rh_to_reg(val);
--		ret = cc2_write_reg(data, cmd, arg);
--		break;
--
-+		return cc2_write_reg(data, cmd, arg);
- 	case hwmon_humidity_max_hyst:
- 		cmd = CC2_W_ALARM_H_OFF;
- 		arg = cc2_rh_to_reg(val);
--		ret = cc2_write_reg(data, cmd, arg);
--		break;
--
-+		return cc2_write_reg(data, cmd, arg);
- 	default:
--		ret = -EOPNOTSUPP;
--		break;
-+		return -EOPNOTSUPP;
- 	}
--
--	mutex_unlock(&data->dev_access_lock);
--
--	return ret;
- }
- 
- static int cc2_request_ready_irq(struct cc2_data *data, struct device *dev)
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.12 next-20241121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
+config: loongarch-randconfig-r064-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411220500.414mHL27-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/adp1050.c: In function 'adp1050_probe':
+>> drivers/hwmon/pmbus/adp1050.c:88:39: warning: passing argument 2 of 'pmbus_do_probe' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      88 |         return pmbus_do_probe(client, info);
+         |                                       ^~~~
+   In file included from drivers/hwmon/pmbus/adp1050.c:12:
+   drivers/hwmon/pmbus/pmbus.h:541:73: note: expected 'struct pmbus_driver_info *' but argument is of type 'const struct pmbus_driver_info *'
+     541 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+
+vim +88 drivers/hwmon/pmbus/adp1050.c
+
+    79	
+    80	static int adp1050_probe(struct i2c_client *client)
+    81	{
+    82		const struct pmbus_driver_info *info;
+    83	
+    84		info = device_get_match_data(&client->dev);
+    85		if (!info)
+    86			return -ENODEV;
+    87	
+  > 88		return pmbus_do_probe(client, info);
+    89	}
+    90	
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
