@@ -1,121 +1,105 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E42B189B99;
-	Thu, 21 Nov 2024 18:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16AB1DDA3C;
+	Thu, 21 Nov 2024 21:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732213607; cv=none; b=p8nwYrK9ua5XnJRD5hrRog+Si81l7WEnPBUPVksEmhhYHUIgFwZbiq2pNWVw3tnVpTweXmZ6AtLD1+XhH2G4X02x3yULhXmBj4EV8RoOy9gO7cz4/JvGBRtfoUqrntkJb3wviZ+DXKlzjj8kH+4SQy4lUD/30MGpKCQ2puvY7Bg=
+	t=1732225506; cv=none; b=gT4J05O7Se9qC+1CRgrrhTcKx+dpqn/GjJgPogujkQIJ+xwar+voKg0AXOv8bIizMwrYk76/onDM9dq7XF5RkIzKRngK37OLpXPEx1aRuboeoTs/7qmZN6+pvpglmBarSULaszf09GgTdHjrElx3RDP3vuLJtkwp4ZwefPRZt2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732213607; c=relaxed/simple;
-	bh=jJVlHXxkvOxMmOVSOLNHWjb0L09n1HTV9VN/a4Pr+Co=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CKfnisM5zFsN1fmHKjqJuuUQzRgkkyMx62lnGEqw519ZzPnvkVPGK2amR23Z02fDbhF4+AP+RWrQGALUfaMIdhCCuXNyfQH40aWNPBb6RD4tJnRRw27gVhib/loYFEJxaIxQHKDzU47QU07dDHi8erTeKCZwPGQ+bBxm38LRxU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eI6U8O+S; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1732225506; c=relaxed/simple;
+	bh=VOQRmfCf0BFv+WjkM03vRFzQtwbS5FU6xRa3ysdE+HM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RoRugSyPO8Rahs0x/pH6YBWpmfnyYzp+fokoTyS7qPch5jazpsXsXo6OpB6i/KkU+Zh8wqxS2YrawgDzpPzUHzE6vlfNkaeW+Us6OwshQVESqUTeQGIZSZWytB/OsPb/PY/Dl+nXCXehXEqVShgYCDniZM0CsTkxSaHrSl/oQQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpKkT5BE; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eI6U8O+S"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7f43259d220so1018914a12.3;
-        Thu, 21 Nov 2024 10:26:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpKkT5BE"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-431688d5127so11344995e9.0;
+        Thu, 21 Nov 2024 13:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732213605; x=1732818405; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SVOBFOKuqBGbfrg3WBc/6wZEOqghmHz/iJmzqxnnw8I=;
-        b=eI6U8O+SEGb7wyaoQTZ1hiHyhEAGlH0qdSTpasoHs/9PWL3uUoA2l1fk/As0oal1xm
-         j99XEuI4NrpsiO3ySn5C67Ewg6OD7jUgd2atG6jpjGBJDlgu2AjVwQaA13QVNfx58hHe
-         XguvTfDtfyJEPNTDhkYPTEPgqW8poZZlyhOPcWFhqUoHOaIUmC6dwshdM5ZHn9oD2/oO
-         cRLFazTEl7cU2PhZutfEcCElc7mxZU/UHZ8qsksf8WEcJ4//8aGgaVBVhLYnJwc1G5Ss
-         o5U7D4JbsTS2JJa6i30vG7MZ8cVM+FLHXgPFGV+pVdUdeamyshvqfaiKlB3kszmQWvvp
-         76/Q==
+        d=gmail.com; s=20230601; t=1732225503; x=1732830303; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+vBJIxlTXCdDgKLk0dzLGrsKcGo3+bHCDMJbCtUdOXM=;
+        b=PpKkT5BEOBwgwHyHPoXRXk8yHMDq0dL2f3GuL6DSCQyQFkuOmLrcurpWB7Xd9NCNkP
+         XRycz5brVKc7XMaLKoqzQtUrf30UaCZt1ra3cLs2e7TeIoHgffwuFues1nFFBm0oaStn
+         BdXQAgl8LS03rL4r+Vsa2UJ0dlZru2qTwA5D7Qkl72WAQX0ZxUZxkgvU68MxzsbJkw0A
+         F5wGvHOOe8/6fXBRriOpIs9IUjraWnJJ+adpCsRWapRFhZP7ZiVciBgVTRZGfeYJQQkp
+         HdW047s18L6+xKpQV38DuOrm3xQV7klXePH2IjkA8VDlc22COJNAxUoCYnL1Qv9RN3sM
+         akCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732213605; x=1732818405;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SVOBFOKuqBGbfrg3WBc/6wZEOqghmHz/iJmzqxnnw8I=;
-        b=g4Ehuey6IXev11qzmnRJzZEDdHZh4WxA9+fmCDFek/rbWEcqa16T3mp40ZmTo2HYf0
-         sAsMAGSFFcb8bRuPRva1UJrkZnTk+JgSCcV1acy2+6XlKIc3IAYGeCYnc+ILFHo4YWrZ
-         s67Jh5ke/QNopXzFtlJig3LeY3EiMGCJP/Pn8tqEthfdnlrcPa9RZRpYOcJU/sMlUbQ0
-         MhNMX6+2M+gmq8grZkP16NsxM97rJAETs16YNLSQqObr4mvW/X8JR5MB0Q1V/T8Z+gM+
-         +Qc2ZpGpWWcJhr5TEEdiaA2cnNZl9FjEmjeCmwAjUSQXZRQgETPY4oOo3m9AnmnjFGXm
-         cCzA==
-X-Forwarded-Encrypted: i=1; AJvYcCV10W97inshI2R0PDUm/UKpBFtL/MB9/o9MKe8rJJxEO2lqO0oVphTdNp9vrs1GPUA/mh7oej7MxVmc6g==@vger.kernel.org, AJvYcCWNOCD9LGKu6NFec4pq+c/ecgcqLiRHrI/fTWOIWUnkQsxVdg5QrI69D0gExKfn+6HjGqziHoFhooFuaqIy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2LF306ljwA+s6HOF6gtlmuVqo0t/NNH+YIPgW8NU/gzj/CYko
-	5gGcMJgLqP18qVFFV71xUfubyNmg337q1DZ2Jj5dBBek7fFkzR6r
-X-Gm-Gg: ASbGncv3B0ZrWGGxQeyOcaPNBzzc5C94IWNZzWQV/EUEr4Z1LbyfoW2e4Oo8OgMXAdf
-	BR8bC4bQG2two7IpM+YjK1+vvM/UMugcn5EJ090hNturw6U4Moy1J+CUMz/RfRYnZ5f2B3TELEJ
-	MV/MJdpNFjEgxIOp45JABQAwO3WsISJyOJB69jYA0Mf1fIapaiA70vsmmtuYbnGBPTeqzLtQV/m
-	JSRoSFLuBB/pSAvjt14a0LtlpRT6RJWHUHJGJt6XksI9HR/IIBf8Q1/Kw495XI=
-X-Google-Smtp-Source: AGHT+IH4par6O8k+Xi5rb1GPyYYMD7Avbr4dl/CNjcfGuleH0je1qkVYecwOYXAN7JtwdjwDFq+Hdw==
-X-Received: by 2002:a05:6a21:6d97:b0:1dc:c1af:e7e1 with SMTP id adf61e73a8af0-1ddae5dc725mr10963106637.16.1732213605209;
-        Thu, 21 Nov 2024 10:26:45 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de470c50sm70046b3a.74.2024.11.21.10.26.43
+        d=1e100.net; s=20230601; t=1732225503; x=1732830303;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+vBJIxlTXCdDgKLk0dzLGrsKcGo3+bHCDMJbCtUdOXM=;
+        b=tgDPfOUskiKXN8oaG7I3gW6KMGxWM54ECwxyA6dclWYc2OiWQqB8T6GwrPZwiWu6eK
+         exmvTup+LgNkqajA5o0cDLc707zMBDINAEz0EIONiPQdKIWfaq/A/4cpOMQ4uonSHwnz
+         NaY5gcY7jVHOmUR1/3qh9gIwJgqmrbfsvo4ae53kBn2eXkvLUYLZTIQdzP+HenptCNOY
+         KwQGMcXP8SvC1Gj5BQA5dvmaTkIz4WhOZlDxNYahYsz6hYTUGBcrmdTQ1ntWsrl2QSZX
+         DXB3nBCD1f3gaoEpI+VTzPTqjLA9rH1oal5qg7yEF1PlPjz/CFxkjd1nSxyhcUtziteP
+         f+vA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfFZFVnJBkRvqDoE9k0TwGnxsjozqy1VK5xcfs0UYBOKB1ROtOCS3G/vZdAYF8SoK+m7umnEtVWf+i5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL9pBj4Fq7t13O5ihJ8dNQkDwM/z6PwYPIFH3Leg4HGgkOCo1i
+	+CguEycjuRSRuVsYUG71oHSpX4YaMkVsx+qo04MurP1nS21/qnUJ
+X-Gm-Gg: ASbGnct7rAlq7H7/B8NnsjaiKAKGiVAeVoBTUkn6At55nYQsDJ6NHwKEXxeWYmpUj34
+	mrwQtRJgOo1zGrcTEBRqihd+GJu7Wh9lvsQ3I5Y4Grfv3ZjnRdaGYiMPtfM4xvds3uqIkWKaTn0
+	pjDMrk1sE9XjoRpfyofGiBV2mCqbQE8i38eCeYgLsNqHfp2mZcV6GdnjRa3k0r5k3jj8CHF7k5y
+	aDpueZyjvvNud1+I6E4vjcjoOfEDhUQHYNPo2llPFOU6otIo7okccBUmbRzNLQ3lBNOzhQJjBN/
+	6vlr/36xz/OyZoeT/ojwJEulrOxlAE9K9IbepWf+SYp8vH8dRoqOYDXXaPLdDGEmKIO17NCR
+X-Google-Smtp-Source: AGHT+IH/hpz9oWNvg+L3wcPu6JUnGofTntSkqo/Z1jfI2l4MR/d472iQlA95pTwX5EBz4DABeSKR/w==
+X-Received: by 2002:a05:600c:3d8d:b0:431:4e25:fe42 with SMTP id 5b1f17b1804b1-433ce4e9e39mr2514675e9.32.1732225503019;
+        Thu, 21 Nov 2024 13:45:03 -0800 (PST)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-7b6a-90cc-9bcd-a2c3.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:7b6a:90cc:9bcd:a2c3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fb53858sm636694f8f.62.2024.11.21.13.45.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 10:26:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 21 Nov 2024 10:26:42 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Murad Masimov <m.masimov@maxima.ru>
-Cc: Robert Marko <robert.marko@sartura.hr>,
-	Luka Perkov <luka.perkov@sartura.hr>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] hwmon: (tps23861) Cast unsigned temperature register
- value to signed
-Message-ID: <c51416af-518e-477f-8177-2d39c6dd4dbc@roeck-us.net>
-References: <20241121173604.2021-1-m.masimov@maxima.ru>
+        Thu, 21 Nov 2024 13:45:02 -0800 (PST)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/2] hwmon: (chipcap2) Drop IIO in MAINTAINERS and simplify
+ with guard()
+Date: Thu, 21 Nov 2024 22:44:54 +0100
+Message-Id: <20241121-chipcap_no_iio-v1-0-6c157848a36f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241121173604.2021-1-m.masimov@maxima.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANapP2cC/x3MQQqAIBBA0avIrBN0KJCuEiFmY85GRSEC6e5Jy
+ 7f4v0OjytRgFR0q3dw4pwE9CfDRpYskn8OACmetUUsfuXhXbMqWOUs6jFqUwyUYhBGVSoGff7j
+ t7/sBxOL4BmAAAAA=
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732225501; l=720;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=VOQRmfCf0BFv+WjkM03vRFzQtwbS5FU6xRa3ysdE+HM=;
+ b=HXplWNbEuG+vTy+WAyzjPbxda8dORC+wfLsK1mRvOnnRYyg2Kp161UoMSU9886lY2RCR2ggif
+ qIthVjvvvfSDcSpOh1sxY/o0OAK35gFPRNV3Zf4fDYiHUa5TYYn03/i
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On Thu, Nov 21, 2024 at 08:36:03PM +0300, Murad Masimov wrote:
-> Since the temperature is supposed to be a signed value in this case, cast
-> unsigned raw register value to signed before performing the calculations.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: fff7b8ab2255 ("hwmon: add Texas Instruments TPS23861 driver")
-> Signed-off-by: Murad Masimov <m.masimov@maxima.ru>
+Simple series for the chipcap2 driver that I maintain to provide proper
+description in MAINTAINERS and simplify the code with guard().
 
-The patch is correct, but both subject and description miss the point.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (2):
+      MAINTAINERS: Drop IIO from the title of the Chipcap 2 hwmon driver
+      hwmon: (chipcap2) Switch to guard() for mutext handling
 
-The problem is that negative values resulting from subtracting 20000
-from an unsigned value are translated to large positive values because
-there is no sign extension from unsigned int to long. So the patch fixes
-a real issue, but both subject and description make it sound like a
-formality.
+ MAINTAINERS              |  2 +-
+ drivers/hwmon/chipcap2.c | 63 ++++++++++++++----------------------------------
+ 2 files changed, 19 insertions(+), 46 deletions(-)
+---
+base-commit: 414c97c966b69e4a6ea7b32970fa166b2f9b9ef0
+change-id: 20241121-chipcap_no_iio-eb8050a25f82
 
-No need to resend, I'll fix it up myself.
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Guenter
-
-> ---
->  drivers/hwmon/tps23861.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-> index dfcfb09d9f3c..80fb03f30c30 100644
-> --- a/drivers/hwmon/tps23861.c
-> +++ b/drivers/hwmon/tps23861.c
-> @@ -132,7 +132,7 @@ static int tps23861_read_temp(struct tps23861_data *data, long *val)
->  	if (err < 0)
->  		return err;
-> 
-> -	*val = (regval * TEMPERATURE_LSB) - 20000;
-> +	*val = ((long)regval * TEMPERATURE_LSB) - 20000;
-> 
->  	return 0;
->  }
-> --
-> 2.39.2
-> 
