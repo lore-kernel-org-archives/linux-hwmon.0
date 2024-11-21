@@ -1,119 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860C11D0E11
-	for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 12:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCB01D86C6
+	for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 13:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732191777; cv=none; b=YbAlhRBxJUhH+QGaJlX0JOyz9K4XQc+aybmg92xmLQibNZZ7N8EjSWkNDZ6LKKZlSWeSonsbtIL12e/dYY7RCuDhCk9SbrWu1//8ET1QstARjXA6rRDbFxu2CRDvCFcL20W29y6AcJwLupCyZt5Jr5FVftjMU3VujCykvBQX3YE=
+	t=1732197391; cv=none; b=O+bMf7540Y6WDLfSeEj4GEqzS60wtV0F/iYXsWs+g1pmKJzH3HvSQD60C9UcdhzS8gnp5o/PJjWAwcZddLS0WlWENkJGZ25fhQSzDxrfZvZlRQhXTVvy2jodgLz6W6KOjpD6bj6WUY4cnV1ABpTiHtiiDBG8u0tA9eU9GZ9gZzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732191777; c=relaxed/simple;
-	bh=actMK6DFw01vWPIz59e4lkZSbx45mYCouqbDhLkeUAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hdI1yrwc2CKaaRzKVAY2HCbUO/8cbOfyLA9+sUljBiiXBpjVJV1VyldFDjlFwWFMJ++VOopQQIcDfPYCXZKuZVwCjwi7tSQ6seUGgGGg1XH65NtZv+m4Bdq7677ifAZnP87QY81nwprAzzYn4EW37OawCpRAL26fQxFTT3YQb0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ou21jecH; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732197391; c=relaxed/simple;
+	bh=2CM+HO8UOVSFwLlBPrRXAk6XrVcyUQqYrZB8JWY5hMw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AYSsMutmfC5SQa3TIK4P0ntyIud0eX2obtdiUL4yvgt+UnlT48pxaFpk56tK7cCMtvSuCTvfwZza/TpvkuOZMRB7JmkJC4Ne23RKyY5K7OJamqbavZJjvYDvmGBEMLeYnzby1dytSBHPLnvk6biO2+uK5Xpxp5WZhfIzPlM0vok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Li+/DNNt; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ou21jecH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732191775; x=1763727775;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=actMK6DFw01vWPIz59e4lkZSbx45mYCouqbDhLkeUAE=;
-  b=Ou21jecHLmNPgmHrLaQYXZpOYWztrRENpW1p+K47tCwbWzV0fIuNlBAw
-   I8pPoNzEI2Cn6yyLPqAOkF7DnstA5+deZb9VkteeI5tDAtzL7sRFMkOJA
-   3g84SzDNh3RhF5SE+t5pwe15npbnIRY3tWZlAqm/key/bkVagBFKDptk4
-   8GO/bGwJKWBun2wCFHC4Qi/DTcGjRk+BZW8q8A4queSc8tyO9lAf8ocf/
-   zlfO++2JB3lxXfmv6KbcCgdaGKsQCbKZBHtqHlmXyVdTPtWviubIYGGR1
-   G5cp5qqEfgpUT21CFiUOJpIrTSKEX27di+43Eob0GjihKf6xyzUdM0U6w
-   w==;
-X-CSE-ConnectionGUID: oYQ41fkZQ7GS6BsML7cMSA==
-X-CSE-MsgGUID: Ww8caDpvQAaGqx5mNxYjSg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="49825710"
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="49825710"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 04:22:54 -0800
-X-CSE-ConnectionGUID: qsYENnK6RZmjwzTuKa+hAQ==
-X-CSE-MsgGUID: yHibpBhESVOKeQSNlwLUfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="94689576"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 21 Nov 2024 04:22:53 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tE6Cw-0002xX-2Q;
-	Thu, 21 Nov 2024 12:22:50 +0000
-Date: Thu, 21 Nov 2024 20:22:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing 1/42] drivers/hwmon/hwmon.c:432:84: error:
- pointer type mismatch in conditional expression
-Message-ID: <202411212020.XoC2kJ47-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Li+/DNNt"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-720d01caa66so912870b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 21 Nov 2024 05:56:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732197389; x=1732802189; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=/nMFUrrvjPKG/gRq2OuQKkXTIUfSAqdD5kzA5bCrYIk=;
+        b=Li+/DNNtDZQl5hFv3WAG06M+pW2T+GPZ0sDfQwjoHNM4U0/AXFzNI+0mjbU5NrWztI
+         jbH4NBVSJxtLWeZRaXNpXWimgciswzVrBdM2lJnrMvyhemQkGWFQjqofzL2t5ilSg6uk
+         C7u8c8keZcVDUqQAAiUPMpiODCAFkmxl/2BPg70tBJnPQ0x0A+9t7Wd/dpoI3P27mleK
+         P7/oviuluHPafSUV64R+WDe0fQRJmasM/lcIcIMxsu+GjH91yGmb39XhdEICBM9SpKXH
+         ZYIEVVIGYDqYoooteoPghs1EjHSW1PjiJQJ2pA/3qGulSY/4SXSOTc9QHq0d4nuq2651
+         FgLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732197389; x=1732802189;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/nMFUrrvjPKG/gRq2OuQKkXTIUfSAqdD5kzA5bCrYIk=;
+        b=AMLxiYw1RZs/8uun6hXAUjjYPrZTBojKLppMxHfFpueWmofKTMa/JH1c0vYej9RRwl
+         BJQC1WrnC++ftuSTXGHxk59jq1Dk9s3bfr5vI1OiExPq8Es1c1xUVtv51AnpjqsNF95f
+         f8r4jjKq1E6heTXMIKpaeX+AbBVpUteCMIfGxjK6IInJdsbZ6WHjCzLZ/gadcE7q07K2
+         ElqE8ftN/2s/qcxUDYPOiL5u2RpPL/kHWlR71NTJLkXTR6KM+DHI7DriJGni1RqNEuL9
+         Ovz91b7ZOKfnQHBuPnTiEG0xQu2WLT0XGVSnc1uSHVK1jVfQVPyB29SPbcVOtLkZHdut
+         /VmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtrDpG+iTlD+O9pZ/H4cJa6hdH45ydJAMsiXq1hFMT//WW+q61g6eeJzMR5jqNPewUsdBApiMEtJ6m+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeeZWM4SMHiBbGzP+GbbmXpIEnJFFG9lvNberjHf6aYLqNFmgb
+	0LPVHGxo1qDkdMUwDxY2ZsEBf/zvQ96tQLS0Hi19Kt6HphPeAM8j
+X-Gm-Gg: ASbGncuEaMacxWx7r+7bxasKXCuLZ5w27oDPL+QAV7L1FXOS1VwnY1Za5j57/evslgD
+	byCZCWx/rXFXPXCqaQeMFsGc597STJmd6qBS38QuQGcC6uLiybod7wvI9NpnfV2qAlRyZ4cxHB+
+	yKMiiZQ3ibMTHDr433FG3nYEPks+gID7nP1uppAWLr6i5dJDmIA48bkbsbT+yGETqF5o/WhOlEx
+	2t+sf3kfsMT95fS2POfiuEVXZ2kmD9kVjUsbzBoWfVeosj6DW0aoHUVYQwEts8KPoNhZGi5vv0M
+	JqW3ru+zRjgVNhrCPB+suVw=
+X-Google-Smtp-Source: AGHT+IEbFSDrkNoU3vaRHpAWp8t8+V+kD5AvOn/gqVZOTdEF7TK5OzuSVgEKHuQAVIFI5VC7mE9zMQ==
+X-Received: by 2002:a17:90a:d40e:b0:2ea:95ac:54c7 with SMTP id 98e67ed59e1d1-2eaca732926mr7923282a91.19.1732197388678;
+        Thu, 21 Nov 2024 05:56:28 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ead0392f0asm3203614a91.43.2024.11.21.05.56.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Nov 2024 05:56:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bb64fe04-2c49-4f21-9dd4-5dc4d98af870@roeck-us.net>
+Date: Thu, 21 Nov 2024 05:56:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (tmp108) Do not fail in I3C probe when I3C regmap
+ is a module
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Frank Li <Frank.Li@nxp.com>
+References: <20241121121819.393104-1-jarkko.nikula@linux.intel.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241121121819.393104-1-jarkko.nikula@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-head:   b731b2c24d88f6782fdf6e1c19d735cd5aadeb3b
-commit: 2c67fcdff546bc261761a3d66aa165a627b71458 [1/42] hwmon: Introduce 64-bit energy attribute support
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241121/202411212020.XoC2kJ47-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241121/202411212020.XoC2kJ47-lkp@intel.com/reproduce)
+Hi Jarkko,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411212020.XoC2kJ47-lkp@intel.com/
+On 11/21/24 04:18, Jarkko Nikula wrote:
+> I3C device probe fails when CONFIG_REGMAP_I3C=m:
+> 
+> 	p3t1085_i3c 0-23615290090: error -ENODEV: Failed to register i3c regmap
+> 
+> Fix this by using the IS_ENABLED(CONFIG_REGMAP_I3C) macro in the code.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-All errors (new ones prefixed by >>):
+Thanks a lot for the report and the patch. Turns out the ifdef isn't necessary
+to start with. I have a patch waiting to remove it which I wanted to send
+after the commit window closes. I'll just take yours instead and modify it
+to remove the #ifdef.
 
-   drivers/hwmon/hwmon.c: In function 'hwmon_attr_show':
->> drivers/hwmon/hwmon.c:432:84: error: pointer type mismatch in conditional expression [-Wincompatible-pointer-types]
-     432 |                                hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-         |                                                                                    ^
-   drivers/hwmon/hwmon.c:432:64: note: first expression has type 'long long int *'
-     432 |                                hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-         |                                                                ^~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/hwmon.c:432:86: note: second expression has type 'long int *'
-     432 |                                hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-         |                                                                                      ^~~~
+Thanks,
+Guenter
 
+> ---
+>   drivers/hwmon/tmp108.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+> index 1f36af2cd2d9..3dcbbb05ab2b 100644
+> --- a/drivers/hwmon/tmp108.c
+> +++ b/drivers/hwmon/tmp108.c
+> @@ -452,7 +452,7 @@ static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
+>   	struct device *dev = i3cdev_to_dev(i3cdev);
+>   	struct regmap *regmap;
+>   
+> -#ifdef CONFIG_REGMAP_I3C
+> +#if IS_ENABLED(CONFIG_REGMAP_I3C)
+>   	regmap = devm_regmap_init_i3c(i3cdev, &tmp108_regmap_config);
+>   #else
+>   	regmap = ERR_PTR(-ENODEV);
 
-vim +432 drivers/hwmon/hwmon.c
-
-   422	
-   423	static ssize_t hwmon_attr_show(struct device *dev,
-   424				       struct device_attribute *devattr, char *buf)
-   425	{
-   426		struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-   427		s64 val64;
-   428		long val;
-   429		int ret;
-   430	
-   431		ret = hattr->ops->read(dev, hattr->type, hattr->attr, hattr->index,
- > 432				       hattr->type == hwmon_energy64 ? (long long *)&val64 : &val);
-   433		if (ret < 0)
-   434			return ret;
-   435	
-   436		if (hattr->type != hwmon_energy64)
-   437			val64 = val;
-   438	
-   439		trace_hwmon_attr_show(hattr->index + hwmon_attr_base(hattr->type),
-   440				      hattr->name, val64);
-   441	
-   442		return sprintf(buf, "%lld\n", val64);
-   443	}
-   444	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
