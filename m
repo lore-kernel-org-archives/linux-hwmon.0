@@ -1,85 +1,106 @@
-Received: from mout.web.de (mout.web.de [212.227.15.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A294A3F9FB;
-	Fri, 22 Nov 2024 14:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512891DF972;
+	Fri, 22 Nov 2024 17:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286778; cv=none; b=eZZlwPOP0mWa2zkmHiX5zTATRXra/etxDCWTKIGIGAwgmX5m+EAnY3UQz46P+1TFSOV4ITnQ53vtJCw8oMJFosZ6vX9k0nUkWBT1hp6omjBD2I+1Et9vx2hvrzNLg8K9kyeUemvVyyqnJpjw7VWgVJb+N160kVtpo1LzRxCo1a4=
+	t=1732297669; cv=none; b=cdLw9kMYCM7jjlRu+8zsuXtxIbaaqgQdoYIOy1b+CzRx4JZe0HodOQeXRfO+cgJypUhoNiLNsZVWEiKLXwJRoiI0ewxmuQfIqtvMEaUTvqygYSVFDEr/swM+Pw9UUOk1gV/pP69EMJlSo/8LPMnk66YDGphZuWjTLriFx/cfrmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286778; c=relaxed/simple;
-	bh=uuKUsOajQgM80O8VvkAX5tv435pauF973/vP1CI5xTI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=kZTUOQ9oglmR5PBRZkKUay497v54X/Nxhs0+K6FUilPuaQs9dBiUouKjCY9pTJzRAt3qokY/tOwiUSHvyuP6H3TdL2CQb9yUd4rVWg8FEvgHN3QUd9syLw5N3u0IJzzRTNgtbRToLZ1IoHcu4ZE0xtl1MCWjcvnbmBFh3QdrfoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=t5SCQr5M; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1732297669; c=relaxed/simple;
+	bh=Du+Neyr/WNcJrPpbWCuDG16ayhTygLRPR+kbur4hjTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DAVaROeUlR2Cpal/g4l8aPb27CavXpK1hdNGqLXkmWkkkB3gdrpkOB+D52jmGjBg8AYNUbO7LaLs+ZWQMP3pTL+11TvhwOfaf0vZF8rOEa/0AIfXHg+X0fWnRB+bT4Yymk8+hAartUB35jhV8E43A3gp1TWnVz6ISaFFxlIIq0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKQbXSMe; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="t5SCQr5M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1732286759; x=1732891559; i=markus.elfring@web.de;
-	bh=uuKUsOajQgM80O8VvkAX5tv435pauF973/vP1CI5xTI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=t5SCQr5MlXPwnj62/Gu3Q3slJRtRyreYUSLX9imsubMTJ1jMhYo8MRnGZ8a3V/Yj
-	 iYcUAfbAt/0wBMwnz+KezgWXwK6J4yxGFe3tynO6bkyomTBJB9qIMvA1TJlIll4Rk
-	 w9rNUrDoKXDhxONNBXLjqsw2TgQvVxEjTY/R+tSM+wdvJNDP12BDKbgvau6K/qR7I
-	 qfVzUE+EsnsMfMwWCt6k9yC0JLs/X2cazHrkOczGFYe0gU2kZtfyjcBT42uS6VM6t
-	 BRrAUd6yfio5OLZDrIPwwngRgPNazspK+xBIOiIQawniaSH/6L/tW4/7vqfzE+Hh4
-	 Der5O+K9V0N5jUJSRA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.88.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MK574-1t0ocT1BHC-00MWE4; Fri, 22
- Nov 2024 15:45:59 +0100
-Message-ID: <a5f7928a-1628-4e37-9a49-07e0562ef463@web.de>
-Date: Fri, 22 Nov 2024 15:45:58 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKQbXSMe"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21288ce11d7so20375565ad.2;
+        Fri, 22 Nov 2024 09:47:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732297666; x=1732902466; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RozJxbbhHAnxyuf0zMlnjub0R1dzjd+pDVDSVch830c=;
+        b=KKQbXSMeTwha/lley64CH2lahYN9Ez875jGlr+q3gn394Z8ktd1g8tLfYj8XoncTQd
+         kvGCie7uIliHMQIFtAWF1sgy9sGJI98DMDV2pf6vWkOpESGGXUeG2dhLZdBUwq6wvmh/
+         Xo77e3It/WpT5BNsYqVmbZzAbWKsRg0HvZ9qysE7F7nQy5YapbREPXumms6KKLiZVech
+         ZBOTDTmmXQ7dXJs1ePXkoDQ5VoHncRgAA/CqEAkv5/CwJuVP85oMgWzIdZkudX4EF4pr
+         5bG/eig+qWajVSiXWRtK7yB5LbwEnh4O7AD9jDqKCsbSwlEfMT/+mU09JGceiLOcvY2y
+         xUrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732297666; x=1732902466;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RozJxbbhHAnxyuf0zMlnjub0R1dzjd+pDVDSVch830c=;
+        b=xLAdQif6mNGroFCo6uYbwORh3uIMYc5glLJF5wtvUF8RknvUJY9Gmsw7Jmbomse8eb
+         56H1RXMCt6W6Vaf09xZbJ/BZ4flKlqkUf96Xp4wnkVmASJPG1T2VNlhPZgw8NaFEkcH3
+         Xacdxp0Ilo2CwZr7CV3Dr+Kuuy5D6softthqR278d6A1Y8hrIqbZpOZB8pFNTtQ6BNzw
+         tvFZ/tjWE4l0MkGDU5KuFIMjrnERrCm9pps/hVh59Y0gZJ5+0ZdD+7UCEL6SXz8K+n67
+         0kGQuMLHe9iJ7MjT6xDIblZO59SPQQlAcPTrfWpJcLVV2748VM/Eoas6mEthPERtrdJO
+         Wqsg==
+X-Forwarded-Encrypted: i=1; AJvYcCXVVa7hTbgt6bJp/3HirWd4rMMdl+NZksGPkBMic+m7RccX0nXj0vg5RMUN4yF6wMOdgbEWir3HrW77eXYW@vger.kernel.org, AJvYcCXZeAE0SssFsCRHrcP/lZKmfug4hMDiMFVPDhYTMC2H99qaM9IjHGOwkVaDj87Pt1LCuFA4DaErKKeI2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI0/JqlbgIfqkds8TPXDyOvm3v8XrhKIofvVH/+4NSdz3kv6Qs
+	4gNL1Rxb9Y9lOaQvOndpH06P7j/3URJfrDHACry4ErA6jqcF168r
+X-Gm-Gg: ASbGncv/KcTaZhOvqkPprXi+pQxpOpDWqqMWkRqqJfp6dwQ+zKHlutTEkh+XWzyCjbg
+	8Bg99ts2VyezgeCEh8Up7QoUS0If6uubI8MqLG2lKVOYoDClHnEtPZhvmFchQCI5z3Epa87Hle9
+	jzXgK/MYVDro1UyldFTT4hOomGqP8kU5BMAzagLkaAInuWaNKlXeCEXTkJlh7k+Glf/qcXsxMmE
+	9MsZk1+nCc6bMMQcy1IHzW/nY218ubc4Y7bQuB+Y+RSOHsEKEZrMcgSr71bcjE=
+X-Google-Smtp-Source: AGHT+IEfK5ryvaugeTTLu3sx6/23KRTihc6Bh63s+mr3xDzzH/z+sTHpO8P3eez+WU5pUzK5G9ChWw==
+X-Received: by 2002:a17:902:dac8:b0:211:e686:760 with SMTP id d9443c01a7336-2129f2a53a6mr57737585ad.53.1732297666562;
+        Fri, 22 Nov 2024 09:47:46 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dbfeafdsm18979145ad.143.2024.11.22.09.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Nov 2024 09:47:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 22 Nov 2024 09:47:44 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] MAINTAINERS: Drop IIO from the title of the Chipcap
+ 2 hwmon driver
+Message-ID: <bd3f8926-4e9b-4323-9cf2-8f2e9ca86298@roeck-us.net>
+References: <20241121-chipcap_no_iio-v1-0-6c157848a36f@gmail.com>
+ <20241121-chipcap_no_iio-v1-1-6c157848a36f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- linux-hwmon@vger.kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?=
- <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20241121-chipcap_no_iio-v1-2-6c157848a36f@gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (chipcap2) Switch to guard() for mutext
- handling
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20241121-chipcap_no_iio-v1-2-6c157848a36f@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:42xoAbuinLYVrB5vXZkPFcB8xWPF9XDfgxX2ZFC1AYAHhCIkWrR
- UKE25j66jwJRuP84w5kSqDhKYPZDtS17zCrtL9T0knl9nXyPEAKJu1V4YnYbf2UDj+AEkhg
- mhdA0Rqs1b165kQw3OtqQp79Sk31Z8byJlnxnD57KNppVTdKzAq/z2Nx2uAwnsG2OXPvP6G
- gUorEipxzhsEptIx4iSLw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zTuWA0vXtrs=;9C+EBkwKGMKdQ/TCtVN6RoI6lWg
- dPkTYP2E5/C5H+uS/MSkPSd1s7PixlJAg/lkNuE/Qa1gqoA9MmJb7e0gOuVSTId36tvvPvAeC
- rfEetgaUT0QHakre5z/HuSOz2q1aHxz/TjXRCRvfDJzssG9yUrCm/uVJBA5l0pLsPfjj2jdel
- jSUzqWt077YPM9lyVmFsU6SDwEDTTTOZTbnNrO+HxtwRWcny55hi7Y72buwKZ5zVPcNyN5SiS
- s4JdqXJGUdNj9yrQNWVGfQkbvFLdAYbgTjhdnWtvdtTxQ5rvoElq8YEhi+6fwecel4apbI/qh
- ZNpI7K08B8YT7YsfhDkT4zI+7I3bpH/Y1CyLc7Y0TZl64Bi7xFVu1qgsmXKPy+EOUsg491moi
- hu4gWvZ8SokuNwMpBsrLvQFq1E4iGqEsptgeaJ0SdVvyAFgOIfU0YKf23J99pbMcF7m8iQZg0
- OWg0Byoj8VTpTbU+k1ZJ7gQdjtTUUQqO9q903+Kq6iw1tvQdaEOKM+O9ci72L8ACop1TrCTx3
- jptmWfbQz3dBgX13M9nPdaQW8+WzgMmjtW/UWPahIzh++sqSu59RBJ+PUMojpQceQNJELMm2A
- gf0hqdKdF7L3x66xhAI4wg7Zv4GNtCl0xk1UWuYOefFOZZpsk387HAUFFXjj2zLmnRcWKI2S8
- pP9RZjbgGLmQqMSs2kubdZtENbQkqYCTdSSQhU36hsuMBc2BKJ5q+fSeIf+hti0x13m3e0Wns
- zNqHiHVnmOfgzvqAqW5dUtPf8A+RANkkrJOyoud8Zy7LsdnOXwSdyUULFDEPhclNFjtIFjL8i
- wSVJfCcx86vWdJkC3oevBZg9XrWjxmWjhcXL355Zxe4IJoK4GAZT5e5NNfNinClPAL6h4SK47
- L4Vf0kr9zP+2zHC88ZUjMUOQ04EKS088+XQyhsXEijWL3v4kcnXxR7+2araxrTpvR/5HKqHgc
- Kne76cGOLPyBGLEF7uCnB1npamNuLOK5FDk/6sLzGeZntYtzEQj2wJVlRz0n1j+xOVF2masly
- WiNzHcdbEX9At22LkTd+Szt2O25uIYQKku0L1/aWifW2SDiuOc43xkD+zfdLmBsp1WpORxFOH
- Ry2mkocpE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121-chipcap_no_iio-v1-1-6c157848a36f@gmail.com>
 
-> Switch to guard() for mutex handling to simplify the code, =E2=80=A6
+On Thu, Nov 21, 2024 at 10:44:55PM +0100, Javier Carrasco wrote:
+> The Chipcap 2 driver belongs to hwmon, and not to iio. When at it,
+> drop the sensor type description, as that is documented elsewhere.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 20df6282d1d2..91936a9ba56f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1226,7 +1226,7 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml
+>  F:	drivers/rtc/rtc-amlogic-a4.c
+>  
+> -AMPHENOL CHIPCAP 2 HUMIDITY-TEMPERATURE IIO DRIVER
+> +AMPHENOL CHIPCAP 2 DRIVER
 
-I suggest to avoid a typo in the summary phrase accordingly.
+I am not entirely sure I understand why you want to have
+"HUMIDITY-TEMPERATURE" dropped, but then I figured that
+you are the driver maintainer and that it should be your call.
 
-Regards,
-Markus
+Applied.
+
+Guenter
