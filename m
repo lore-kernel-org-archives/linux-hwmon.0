@@ -1,143 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF05223741;
-	Fri, 22 Nov 2024 13:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A294A3F9FB;
+	Fri, 22 Nov 2024 14:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732283257; cv=none; b=tFtEi1JW4fUr4b8jtQl+5sVF4CcjJjERPAcxmanWrNwbLLngXkkOXTVhiISdW8gI5EpfD23QdYO2wgDqm/Mqg/nYWtV0EqzEkazGV+fI0Vp7MpErSN7Zm2mSPJMI8tVmOX0HEF2Q+TiRXsVESe3Fh8HNJme2qE3N5WFqanXsi7I=
+	t=1732286778; cv=none; b=eZZlwPOP0mWa2zkmHiX5zTATRXra/etxDCWTKIGIGAwgmX5m+EAnY3UQz46P+1TFSOV4ITnQ53vtJCw8oMJFosZ6vX9k0nUkWBT1hp6omjBD2I+1Et9vx2hvrzNLg8K9kyeUemvVyyqnJpjw7VWgVJb+N160kVtpo1LzRxCo1a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732283257; c=relaxed/simple;
-	bh=EVVq2Cqaf1z5IkK+BzTRksvS9eOhQkxJl5rsZKtwTe0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dbrrUiO6EuBRT95x83O2wMkroUWBkSwfcRhZ4llLgpCnSSBDTpCnny3AvkLjIsuyger8uTaSn9rC34xwnwCxWnxtpCIe+qBWlL2WIGNfYeIYloaTpYfBW67IIlkvFEr2hEGm5cmCLaBJ0ZFB+kIwbX7YaxU9OhEiGMOYro0G8Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFG5ZbX0; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732286778; c=relaxed/simple;
+	bh=uuKUsOajQgM80O8VvkAX5tv435pauF973/vP1CI5xTI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=kZTUOQ9oglmR5PBRZkKUay497v54X/Nxhs0+K6FUilPuaQs9dBiUouKjCY9pTJzRAt3qokY/tOwiUSHvyuP6H3TdL2CQb9yUd4rVWg8FEvgHN3QUd9syLw5N3u0IJzzRTNgtbRToLZ1IoHcu4ZE0xtl1MCWjcvnbmBFh3QdrfoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=t5SCQr5M; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFG5ZbX0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732283256; x=1763819256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EVVq2Cqaf1z5IkK+BzTRksvS9eOhQkxJl5rsZKtwTe0=;
-  b=VFG5ZbX0W+eyb5ml1cAwtBwYYuPnmL7jTUlQWFMk8cMlPslmj08EquTu
-   UUQVH1d1oPxh87XcLG5phXvbyvJJaR+37kLwV4Dv2EhSE6WKV9irRSjzn
-   mhKNcP9CDwoBQpMyfc/INDvaJlIN8q2j29ZAwPRl55rXFGH+DEJnanG2G
-   lYFco28kjvSItxaKirjITwJRAyn5N/CHPBJLnnFz+rgUykQnyViNkmww/
-   44TeLCExSqVJLGPhzHq/JooIvMA7DO59Hyt1YyM6D78tmjD4lmlzkI0BO
-   cSbAjlw2kCQRvFLucnX0nAohmEjOG3m7OmxGQdYW+5CItUUUMNpTAF4+y
-   g==;
-X-CSE-ConnectionGUID: fkbdgRaMR1KAeUpPk89NDw==
-X-CSE-MsgGUID: A9U5P6ACSk+wx/gLXAPTlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="35297349"
-X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="35297349"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 05:47:35 -0800
-X-CSE-ConnectionGUID: gwJu5Cn3S7648obOxWUOhw==
-X-CSE-MsgGUID: V/Vy3jg+TcSJXsIE9BfUCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="90994961"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 22 Nov 2024 05:47:30 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEU0O-0003x1-1Y;
-	Fri, 22 Nov 2024 13:47:28 +0000
-Date: Fri, 22 Nov 2024 21:46:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <202411222109.6PmpUvSa-lkp@intel.com>
-References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="t5SCQr5M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1732286759; x=1732891559; i=markus.elfring@web.de;
+	bh=uuKUsOajQgM80O8VvkAX5tv435pauF973/vP1CI5xTI=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=t5SCQr5MlXPwnj62/Gu3Q3slJRtRyreYUSLX9imsubMTJ1jMhYo8MRnGZ8a3V/Yj
+	 iYcUAfbAt/0wBMwnz+KezgWXwK6J4yxGFe3tynO6bkyomTBJB9qIMvA1TJlIll4Rk
+	 w9rNUrDoKXDhxONNBXLjqsw2TgQvVxEjTY/R+tSM+wdvJNDP12BDKbgvau6K/qR7I
+	 qfVzUE+EsnsMfMwWCt6k9yC0JLs/X2cazHrkOczGFYe0gU2kZtfyjcBT42uS6VM6t
+	 BRrAUd6yfio5OLZDrIPwwngRgPNazspK+xBIOiIQawniaSH/6L/tW4/7vqfzE+Hh4
+	 Der5O+K9V0N5jUJSRA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.88.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MK574-1t0ocT1BHC-00MWE4; Fri, 22
+ Nov 2024 15:45:59 +0100
+Message-ID: <a5f7928a-1628-4e37-9a49-07e0562ef463@web.de>
+Date: Fri, 22 Nov 2024 15:45:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+User-Agent: Mozilla Thunderbird
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+ linux-hwmon@vger.kernel.org, =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?=
+ <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20241121-chipcap_no_iio-v1-2-6c157848a36f@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (chipcap2) Switch to guard() for mutext
+ handling
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20241121-chipcap_no_iio-v1-2-6c157848a36f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:42xoAbuinLYVrB5vXZkPFcB8xWPF9XDfgxX2ZFC1AYAHhCIkWrR
+ UKE25j66jwJRuP84w5kSqDhKYPZDtS17zCrtL9T0knl9nXyPEAKJu1V4YnYbf2UDj+AEkhg
+ mhdA0Rqs1b165kQw3OtqQp79Sk31Z8byJlnxnD57KNppVTdKzAq/z2Nx2uAwnsG2OXPvP6G
+ gUorEipxzhsEptIx4iSLw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:zTuWA0vXtrs=;9C+EBkwKGMKdQ/TCtVN6RoI6lWg
+ dPkTYP2E5/C5H+uS/MSkPSd1s7PixlJAg/lkNuE/Qa1gqoA9MmJb7e0gOuVSTId36tvvPvAeC
+ rfEetgaUT0QHakre5z/HuSOz2q1aHxz/TjXRCRvfDJzssG9yUrCm/uVJBA5l0pLsPfjj2jdel
+ jSUzqWt077YPM9lyVmFsU6SDwEDTTTOZTbnNrO+HxtwRWcny55hi7Y72buwKZ5zVPcNyN5SiS
+ s4JdqXJGUdNj9yrQNWVGfQkbvFLdAYbgTjhdnWtvdtTxQ5rvoElq8YEhi+6fwecel4apbI/qh
+ ZNpI7K08B8YT7YsfhDkT4zI+7I3bpH/Y1CyLc7Y0TZl64Bi7xFVu1qgsmXKPy+EOUsg491moi
+ hu4gWvZ8SokuNwMpBsrLvQFq1E4iGqEsptgeaJ0SdVvyAFgOIfU0YKf23J99pbMcF7m8iQZg0
+ OWg0Byoj8VTpTbU+k1ZJ7gQdjtTUUQqO9q903+Kq6iw1tvQdaEOKM+O9ci72L8ACop1TrCTx3
+ jptmWfbQz3dBgX13M9nPdaQW8+WzgMmjtW/UWPahIzh++sqSu59RBJ+PUMojpQceQNJELMm2A
+ gf0hqdKdF7L3x66xhAI4wg7Zv4GNtCl0xk1UWuYOefFOZZpsk387HAUFFXjj2zLmnRcWKI2S8
+ pP9RZjbgGLmQqMSs2kubdZtENbQkqYCTdSSQhU36hsuMBc2BKJ5q+fSeIf+hti0x13m3e0Wns
+ zNqHiHVnmOfgzvqAqW5dUtPf8A+RANkkrJOyoud8Zy7LsdnOXwSdyUULFDEPhclNFjtIFjL8i
+ wSVJfCcx86vWdJkC3oevBZg9XrWjxmWjhcXL355Zxe4IJoK4GAZT5e5NNfNinClPAL6h4SK47
+ L4Vf0kr9zP+2zHC88ZUjMUOQ04EKS088+XQyhsXEijWL3v4kcnXxR7+2araxrTpvR/5HKqHgc
+ Kne76cGOLPyBGLEF7uCnB1npamNuLOK5FDk/6sLzGeZntYtzEQj2wJVlRz0n1j+xOVF2masly
+ WiNzHcdbEX9At22LkTd+Szt2O25uIYQKku0L1/aWifW2SDiuOc43xkD+zfdLmBsp1WpORxFOH
+ Ry2mkocpE=
 
-Hi Cedric,
+> Switch to guard() for mutex handling to simplify the code, =E2=80=A6
 
-kernel test robot noticed the following build errors:
+I suggest to avoid a typo in the summary phrase accordingly.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.12 next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
-config: i386-buildonly-randconfig-003-20241122 (https://download.01.org/0day-ci/archive/20241122/202411222109.6PmpUvSa-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411222109.6PmpUvSa-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411222109.6PmpUvSa-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/adp1050.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/adp1050.c:88:32: error: passing 'const struct pmbus_driver_info *' to parameter of type 'struct pmbus_driver_info *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      88 |         return pmbus_do_probe(client, info);
-         |                                       ^~~~
-   drivers/hwmon/pmbus/pmbus.h:541:73: note: passing argument to parameter 'info' here
-     541 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
-         |                                                                         ^
-   1 warning and 1 error generated.
-
-
-vim +88 drivers/hwmon/pmbus/adp1050.c
-
-    79	
-    80	static int adp1050_probe(struct i2c_client *client)
-    81	{
-    82		const struct pmbus_driver_info *info;
-    83	
-    84		info = device_get_match_data(&client->dev);
-    85		if (!info)
-    86			return -ENODEV;
-    87	
-  > 88		return pmbus_do_probe(client, info);
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Markus
