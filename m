@@ -1,133 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DE583CDA;
-	Thu, 21 Nov 2024 21:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A5C15B987;
+	Fri, 22 Nov 2024 07:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732226163; cv=none; b=tqUQMmC7Uojpohy860LMyzHwcES4zjh+AKbT+ZmFK5yYHYAETIOVc1sI0uH8KNhFfEi4PGpajqsg6Sgr9S4761J1u2+yvFWphYi4WtUUNHTBQadMsHL53NznW9JVmOCnckfZakcMO3PeNekMpr4ExRTelStDEdV3TyFtAtDfWds=
+	t=1732260019; cv=none; b=S1Ow8DcubwEnhbBAfED2VhnOAJNUxzQoZIwcyWescPYnYsmwigpNv5WJ/Av1P4ixqGbJR1/rsuYiekNHI3YDGf7lkGIHERrQtQ9vvLdBSWHNgCiqGnUtnfv4C5J+HPOOMY9mOPZWCTWDkuhnYLBrCKxG9ABCqdCFfCHqslNXljU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732226163; c=relaxed/simple;
-	bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gsGf6wS1WUtofrNlq63n9PTwBjGNQN9NS0yuKlU4mJ97gOtIc1PCy1CPkB5np5u96NzADHrrwruseJNRoH6ff6r0HBNSlOHh2XglFUX6hIpL6LFkLeafj8H7XY7BoQcwAwUkY7BrrS6pe7juY5BxXuMO9g33ZmoEuSm9NAGOZAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QGlu0Iby; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732260019; c=relaxed/simple;
+	bh=sBFVC7C9RINBCv8fmIUVR8aRbHxatozvHOs/XUgRHwk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LcqXhhUM21pVJijXJcpHkxIGfk04a0cAQE4avFL+1K7RqiYu50MUOY94fl2Z1hBydBaG6Mdbw3vzed7g76N3HW08fpWyTmM1Z7qKOMMj3iezuAjHuH9rUpTzwgB4KTHk4C/ZioLWNs6/pFhMeN9VdczG8dIWjfXG72E8POYRS4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dZHyrcmh; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QGlu0Iby"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732226162; x=1763762162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
-  b=QGlu0IbyLJU2/RNwn29EG7ENIsVehgsxdkFe1gzeyvRDAEB60Ryvrn2S
-   7C1zP8+Predzx48hxwd1j/M6XLnbAenf5IFmb/h3X07nS/16yAdErJaRX
-   4+Oltzzv5wvp5G5T52tY/xJ8lZM4P3IXLGEMG94vFVanIsNef8Iv6VNbi
-   rX/QBuG+DNGjixn8xk8pWuQsvFmhRUwVamdH2MG2a0lF2GnsoICXeGD73
-   RppeZXGVoIFY4iAdOH/8XKFN/92XA7w9lAgCuohG/yy0epJIhOx+2qt68
-   9xHknFnDHJfYzpGzhg2TxEtxnnuvvqszC76gK1E+vCr8YPCFJWdDZ8uoQ
-   A==;
-X-CSE-ConnectionGUID: W6XjVuczQ9m2rp/ObaKBoQ==
-X-CSE-MsgGUID: YjH2JAfhT9S4ewyGNSl/Fw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="36146985"
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="36146985"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:56:01 -0800
-X-CSE-ConnectionGUID: umi9aa9ESiO+m450r70/Og==
-X-CSE-MsgGUID: ssMEiMNuSPSKEiEAD/cNgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="90183953"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Nov 2024 13:55:56 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEF9W-0003Od-17;
-	Thu, 21 Nov 2024 21:55:54 +0000
-Date: Fri, 22 Nov 2024 05:54:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <202411220500.414mHL27-lkp@intel.com>
-References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZHyrcmh"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e388c3b0b76so1529394276.0;
+        Thu, 21 Nov 2024 23:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732260017; x=1732864817; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=815PRNAXGixKSoavwJ5I7tnTzuqoesWmtEB/fULSXqw=;
+        b=dZHyrcmhAVuMbbK8SA4sxXyh2C9Qa9DP7/0Ibjp4RWUPHNXSzLwCrLIc9ZE6L5CACE
+         wThQYCteTbEPAoo5DxC/s0mIxiYMPqpf5nWeU2k5dxlyH9mhQVD++llrORBTXq+1xW5J
+         2hZZJ0EQPMJNmrTFyqvWHR9hq8AMNU/wddf24LJ5fnez49uL2zpAY7PLFNHWTIn0MUWA
+         OjQYg57lcx+q7uKFJ82oPPJBULaUp9qHIwP7+hB1+V/AenKQHJSJQAFmqNU5h9NjVnCS
+         JAk/6LbnX1+MyM5hL6E5PrlCjfVGI7be88Gb8+R8FpQnagrQKwMrOREY+5bE4jqvSzTI
+         gIBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732260017; x=1732864817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=815PRNAXGixKSoavwJ5I7tnTzuqoesWmtEB/fULSXqw=;
+        b=WeGZHeJc5m6d4uYc3qS2F2AGUchkyr2x7iILG/ohGoeVrZOtEYhFjfjVNc71z948VX
+         u+IhzlPyx8lzSxz1aJCwm17ZDmHjWJwCV6z6l192cHuoy2D/mBHcrU0xdsO3R2NMjVtx
+         k/rmwCw2q9HkHflVbAUD07+r5Hvi5znjEayZ7txXvSbyIm8fkQE3nnAXvXLOakAOwlxp
+         uHoJkAMXUB6akSHLkEZH8iHRHWFCmgwoc/DksyVjjwiIKPUO7GMTOOFMwkmXgWt+DvhV
+         Fq3q0WK2LN4n46ktECySUr87/jHeZP/bYlF+cX26VD4/b5BucxJMWZaiHJlOmIxSu8w3
+         X9VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF4XUvY4poZ3dNFFKGjVWjuCM54CxWitCGyfRaAzc8ioggQvaodNvhgBd+aCRGqTzqPM1S55WYI2OOqTFX@vger.kernel.org, AJvYcCVILqoG4reSE/HhktxRv9V+xuX9B6KP51o58ZFNX7aKbuo/86W2mua9IEi1V0XVRgF+WbBaK9bOx6f/I22Lvsk=@vger.kernel.org, AJvYcCViAtX8Qu/zwr9cUgewfQUgGI0pDEKV87KeH0JldFPK0ma3+OsQZgcEEAS7CN/Squ93rLIdUSrDL/sRpA==@vger.kernel.org, AJvYcCVj0yDbwFpVlo6w54EWmQ+RtX5xg8ALnCiEOOE7txifhsYfcdO437l1mNB9hy60ozI3eEoufJeD4utrB7I=@vger.kernel.org, AJvYcCW7mWRC4dA0e7wn56as4yX0iUOjErqjTaMhsFaFaRt4tQq2V+F1349z7bGS1UL+5l7oSjGzuhnP1Fg=@vger.kernel.org, AJvYcCWBMy2CSp6WnyLhH6lFb2nkA9R67+kcnHB68tTyv+5WpOjnv6+KVL5nxhHiwRhfDOTTo575OCA2pLnb@vger.kernel.org, AJvYcCWGG0yPKLiL2biTMr6C04ScIubQWj3woIQsoo46VnH4B2Iqa12YC/emg1lScNMVQYSKOq/21IS/EkwT@vger.kernel.org, AJvYcCXa+joCqNVSA0edxD2f4HDiCzQ6IOYt2Am1UNcom7jc3l+RLgeVSL1l75ZCQD727tqQUIeQTTTd@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx2Wk7fXhHFsHFA0Wj9xo4xqnJGAgKAnRho3/ZtYJZMulenrgA
+	5s5j6pMu8vnB7cXWn9J9hykpXmVQU4tXBNIJx3dzwR8Nqp4xLNgZPDUjNs3YLkNepKHGhpPU9n+
+	oxdxwI7eSTnLP5Q1uZoiR+8A9o34=
+X-Gm-Gg: ASbGncsbK27821sCgQ0yBn1GI9r4Wo9BJm0U2NV9ArM078W9y9Of42txhz8dB0o5r1r
+	0lamvdjAd8BPiZ00K/hFdbby0wf/QuLk=
+X-Google-Smtp-Source: AGHT+IEo9z3KG+qp+L7Dv7o9KTWLJa02iuVvebytFW0OHFU307Dg/AvnlIih0s/Axe8p+7QfLYX633cDQcq1B3yoR4c=
+X-Received: by 2002:a05:6902:114d:b0:e38:b48b:5fc2 with SMTP id
+ 3f1490d57ef6-e38f8bda124mr1654950276.36.1732260017069; Thu, 21 Nov 2024
+ 23:20:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+References: <20241121064046.3724726-1-tmyu0@nuvoton.com> <20241121064046.3724726-3-tmyu0@nuvoton.com>
+ <CAMRc=MdT_iXoRJeGFEhuCvjVXVPpJVNeddPc6pi5agTaTm+QpQ@mail.gmail.com>
+In-Reply-To: <CAMRc=MdT_iXoRJeGFEhuCvjVXVPpJVNeddPc6pi5agTaTm+QpQ@mail.gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 22 Nov 2024 15:20:06 +0800
+Message-ID: <CAOoeyxVzVF0Jiiv1MeY6b=2XR5HFuGx+4q8Kvw3kFrgC+_LnBw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Cedric,
+Dear Bartosz,
 
-kernel test robot noticed the following build warnings:
+Thank you for your comments,
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.12 next-20241121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2024=E5=B9=B411=E6=9C=8821=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:28=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> > +struct nct6694_gpio_data {
+> > +       struct nct6694 *nct6694;
+> > +       struct gpio_chip gpio;
+> > +       struct mutex lock;
+> > +       /* Protect irq operation */
+> > +       struct mutex irq_lock;
+> > +
+> > +       unsigned char xmit_buf;
+> > +       unsigned char irq_trig_falling;
+> > +       unsigned char irq_trig_rising;
+> > +
+> > +       /* Current gpio group */
+> > +       unsigned char group;
+> > +
+> > +       /* GPIO line names */
+> > +       char **names;
+>
+> You only use this in probe() and after assigning it to gc->names, you
+> never reference it again. You don't need this field here, it can be a
+> local variable in probe().
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
-config: loongarch-randconfig-r064-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/reproduce)
+Understood. I will modify it in the next patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411220500.414mHL27-lkp@intel.com/
+> > +};
+...
+> > +
+> > +       data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > +       if (!data)
+> > +               return -ENOMEM;
+> > +
+> > +       data->names =3D devm_kzalloc(dev, sizeof(char *) * NCT6694_NR_G=
+PIO,
+>
+> devm_kcalloc()?
+>
 
-All warnings (new ones prefixed by >>):
+Okay, fix it in v3.
 
-   drivers/hwmon/pmbus/adp1050.c: In function 'adp1050_probe':
->> drivers/hwmon/pmbus/adp1050.c:88:39: warning: passing argument 2 of 'pmbus_do_probe' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      88 |         return pmbus_do_probe(client, info);
-         |                                       ^~~~
-   In file included from drivers/hwmon/pmbus/adp1050.c:12:
-   drivers/hwmon/pmbus/pmbus.h:541:73: note: expected 'struct pmbus_driver_info *' but argument is of type 'const struct pmbus_driver_info *'
-     541 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
-         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+> > +                                  GFP_KERNEL);
+...
+> > +       mutex_init(&data->irq_lock);
+> > +
+> > +       platform_set_drvdata(pdev, data);
+>
+> There is no corresponding platform_get_drvdata() so you don't need this.
+>
+
+Okay, I'll drop it.
+
+> > +
+...
+> > +module_platform_driver(nct6694_gpio_driver);
+> > +
+> > +MODULE_DESCRIPTION("USB-GPIO controller driver for NCT6694");
+> > +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> > +MODULE_LICENSE("GPL");
+>
+> It's an MFD device, don't you need a MODULE_ALIAS() for this module to lo=
+ad?
+>
+
+I will add MODULE_ALIAS() for each child driver.
 
 
-vim +88 drivers/hwmon/pmbus/adp1050.c
-
-    79	
-    80	static int adp1050_probe(struct i2c_client *client)
-    81	{
-    82		const struct pmbus_driver_info *info;
-    83	
-    84		info = device_get_match_data(&client->dev);
-    85		if (!info)
-    86			return -ENODEV;
-    87	
-  > 88		return pmbus_do_probe(client, info);
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Ming
