@@ -1,126 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAD62AE90;
-	Sat, 23 Nov 2024 03:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738BD17C2;
+	Sat, 23 Nov 2024 19:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732331523; cv=none; b=k676LCLp+YzHcZ3jrY0iMqHpbn7CQx09qiF9Fj9bNLjUoPM6zv6dCCY6W5Cxq7epm3XG0/+mM2V7bFw47/6+3FGM1J/PAoj9EiTBgOj6T0ZOANHk6hJP9hKybysuxIGgvh0x/1elA8mt4w+r9gNey9xGH+KDf130R7gkwie6u7U=
+	t=1732391787; cv=none; b=R1ORmjCeZbADofhqI8UtSMs2zw2P7FoXoq7pAY4GBi6ejnt8k+5p6FP8Z/61CvWdEGmBsFFSMzZ5HCV6LHotOKTQkJfLgpXOaorQZSZgo7milH8KfMo4qGmTQ7rPEsZvH4PAUbT2K8DGTg8HfFGX16fwFCJadc6l9+d0jCVOsvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732331523; c=relaxed/simple;
-	bh=my0sdPbCbL8tbsUq7oPzvstqctD2sVWOdIYw0qX9VXU=;
+	s=arc-20240116; t=1732391787; c=relaxed/simple;
+	bh=2Dr+1/xy0c9O2O7Rh/iTI4pCCprRhp25smGc9hLCi6E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YcLTWo0WKv9W72YoUsXtq9fF2z2mYuvBk5gsndDYQrajdhHwwqPUIYaZJFwoHBwueVmIUwOrKMP4rTkj2seuD8q//o/763TsX+qLkj4GKEM7641AYDiaIT8Ovwk7hp8sVSRE8qH00gS1sbLt9kmuu67CvTOWX2qYPUwRzLVh+Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tt25ql+B; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XXIZQVkAhIvTjtb5UKo5UNswIcfuO7qsoG8WNmeDUvdnft5dCWqYqOb633489glChEABogTaukhZz1RkyPYO5Uoq9+jGt/KZIFZ7MvCf+mZa33xpa7yXQsXvB/yQQhott4CbqfGJIwOQGQU7ya4UC5IiZfnARvKJfjmnMZcoj3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8I7xdrb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tt25ql+B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732331522; x=1763867522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=my0sdPbCbL8tbsUq7oPzvstqctD2sVWOdIYw0qX9VXU=;
-  b=Tt25ql+BhzWDl7qTYott/MMd+OFjQEThIkT0gddFu8kjnqybNJsqBsho
-   H5M7sG97b1Com2fXOk0ILip2JgofiI3PCM4mQny009oAcNutjBahCSi29
-   aBdVFIjB1t+ub7FB27lbrr7dB6hy1ZZLKp9JPxPuO3cRdAs0jqadxXQ2e
-   2P7Mg2vI0TXw1ofZQIlK7zkBxxTKIMbhaU3vcan0hoCzf1MNFgOceIi8c
-   UwA8AVkNr5d6AhQzFQHjDzA5eWH7x5RKnx7j6d1k0bLY31oXVLETSyCXd
-   NOFJTNiliaMbG+nf/mUDKgxZ/qM6hja1bJ3ZThjPi8XIB9yHINagpdXrw
-   w==;
-X-CSE-ConnectionGUID: xLNfb9EdTASG4GCo6hlfXg==
-X-CSE-MsgGUID: 9py0CTYlQp2axVX8xqCnWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="50015387"
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="50015387"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 19:12:01 -0800
-X-CSE-ConnectionGUID: x0paM7rRQPiyVYKCEYUY0w==
-X-CSE-MsgGUID: WgtPotOpRRyTBS+VLlxiJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="95804544"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 22 Nov 2024 19:11:57 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEgYs-0004NL-28;
-	Sat, 23 Nov 2024 03:11:54 +0000
-Date: Sat, 23 Nov 2024 11:11:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8I7xdrb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF279C4CECD;
+	Sat, 23 Nov 2024 19:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732391786;
+	bh=2Dr+1/xy0c9O2O7Rh/iTI4pCCprRhp25smGc9hLCi6E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f8I7xdrb//OBg2l83AFpc7Fje5EKN7IGO7qK2tiqxk2xJ2p0GxKLoGvO4sj9+xFvF
+	 qi3+hIUCibrrzVSvUNLzSyy8k0qy5s8ukt07t7Zkr4OI7kaFk0Yv98U7x7PVRTfvj2
+	 w6PAkAOubeX2OYTmnsfeFj3Jx9pLp5+KICFUQvME5plZe/5qBITB89d4rThmR6d5tj
+	 xnzeUvLgkdeFV9TA1PjXB0L1njrOexJh+h+FourJqSp9dYk08ICUk32IZ/EnHsvmrC
+	 1Sy6XX/Q6mc4z9oR8nKsBTPMmbw1/KHCCV2AlBtHZsih0X+XPwHnZria3S1k/VVEUT
+	 jgpQZHlW+00sQ==
+Date: Sat, 23 Nov 2024 19:56:21 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
 	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <202411231030.hhgCtzrl-lkp@intel.com>
-References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
+ for adp1051, adp1055 and ltp8800
+Message-ID: <20241123-paced-osmosis-007bf72c4b02@spud>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+ <20241120-process-hulk-ecedcbf088f7@spud>
+ <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AWQlxOs3FPQWb1p8"
 Content-Disposition: inline
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+In-Reply-To: <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
 
-Hi Cedric,
 
-kernel test robot noticed the following build warnings:
+--AWQlxOs3FPQWb1p8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.12 next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Wed, Nov 20, 2024 at 10:00:19AM -0800, Guenter Roeck wrote:
+> On 11/20/24 09:11, Conor Dooley wrote:
+> > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrote:
+> > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+> > >      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+> > >      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+> > >      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC =B5Module Regulator
+> > >=20
+> > > Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.c=
+om>
+> > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> > > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.c=
+om>
+> >=20
+> > Why did you drop my ack?
+> > https://lore.kernel.org/all/20241106-linoleum-kebab-decf14f54f76@spud/
+> >=20
+>=20
+> There:
+>=20
+> > +    enum:
+> > +      - adi,adp1050
+> > +      - adi,adp1051
+> > +      - adi,adp1055
+> >
+>=20
+> Here:
+>=20
+> >> +    enum:
+> >> +      - adi,adp1050
+> >> +      - adi,adp1051
+> >> +      - adi,adp1055
+> >> +      - adi,ltp8800   <--
+>=20
+> This is a combination of two patch series. I'd personally hesitant to car=
+ry
+> Acks along in such situations.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
-config: loongarch-randconfig-r111-20241122 (https://download.01.org/0day-ci/archive/20241123/202411231030.hhgCtzrl-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20241123/202411231030.hhgCtzrl-lkp@intel.com/reproduce)
+Ah, I didn't notice that. Thanks for pointing it out. Cedric, in the
+future please mention things like this if you drop an ack.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231030.hhgCtzrl-lkp@intel.com/
+--AWQlxOs3FPQWb1p8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/hwmon/pmbus/adp1050.c:88:39: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct pmbus_driver_info *info @@     got struct pmbus_driver_info const *[assigned] info @@
-   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     expected struct pmbus_driver_info *info
-   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     got struct pmbus_driver_info const *[assigned] info
+-----BEGIN PGP SIGNATURE-----
 
-vim +88 drivers/hwmon/pmbus/adp1050.c
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0IzZQAKCRB4tDGHoIJi
+0vhZAQDzdL7go7DxZ7U0c+qzOvYnfw4FgyQ089ccvliFWD8PsQD/ZJDSQHtnAw5R
+xP46Hg3dSbXJIo2G1CZhmP0gbIAitw0=
+=LmCI
+-----END PGP SIGNATURE-----
 
-    79	
-    80	static int adp1050_probe(struct i2c_client *client)
-    81	{
-    82		const struct pmbus_driver_info *info;
-    83	
-    84		info = device_get_match_data(&client->dev);
-    85		if (!info)
-    86			return -ENODEV;
-    87	
-  > 88		return pmbus_do_probe(client, info);
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--AWQlxOs3FPQWb1p8--
