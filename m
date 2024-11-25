@@ -1,33 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EF61714AC;
-	Mon, 25 Nov 2024 15:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DD718C345;
+	Mon, 25 Nov 2024 15:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732547921; cv=none; b=p7ph1idGgccK8tP+PF//4bZBza8pBO1F4frKaGjhKofLBBBOFmWbU5h2/BWRyMps2TGCJ7C+Wp/qDE3/YxEym+11J1jVMybWrknhGxaBVeWdHGfvFJIe15o6hdxqCQ8VremLYglpyrLvR7eR9A4LU0TCNUcyQl3g0owzAsV9tSs=
+	t=1732548180; cv=none; b=kZAa1q5XXAd7ZO3Q2gctwKU5uyn0sPhtQ+gfKyh4qtVaO+ATMRo0drDvruCqyEsTuo+EjhGnms1Sx5TdwdpuH/3uwoW4Xgy7b8omT+gsWK/qfce/tLE98aqS+k15qc0xi0O/NctowhbAXMPM7NGVqeCaXU3YHwlM2JJzAKTEUqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732547921; c=relaxed/simple;
-	bh=X7JqZLtQ3bni3tHdVbRaOXV/whaW1WmbALUZDh6XMDs=;
+	s=arc-20240116; t=1732548180; c=relaxed/simple;
+	bh=jjfffoSdffwZDcXh85Zc3K0LtTwymYrtKYWfLl9rkDI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VLv1fZyN4aZFEWH+jNmIY4X9Y5phsmq4l06UkNYVSk+RMlMOE+CfWV9XUMw00nT6pYH6n6vtiQGIRI8qU+R1hmselOcO6O3O9i4QinJWy9RmtkG5rtEH2qsmDvxCl45Bynrm27681YNSUquAerYzrX6kKidZjl3qowvYW1ZEvzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wmq8HQFi; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=WEushQ2Fwyxoxdow6qrJz9Mb1l8j6HQVCaNnAh/GFovoOPdjAXh0MHxeTjReS8SYs8XhFnbysHSlxZVwgUb95tsgQ1HGbrrXUk8ivx4QtVSf0AojIQtB/nQPl9z5SuBLTR/6k3IkLotV6ZLqzp0D78ovqie5/pqUdQOOCGJtLdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F8vKl1G/; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wmq8HQFi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0CBC4CECE;
-	Mon, 25 Nov 2024 15:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732547920;
-	bh=X7JqZLtQ3bni3tHdVbRaOXV/whaW1WmbALUZDh6XMDs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Wmq8HQFiA0/D93V4dKKrQ09dEzj9Zp6at/Fi2MjM2fnJ1U0GufpCc51xqiHcw5HIr
-	 oQA7rdvtXps+ZSDK9Kci25qBNaL6oCnuiCsahNMVx8+OK9x2w/1Ol/TIBiE4RGhDNx
-	 mKuBwNKaR6ikCA5wDzqwcjCLyc4/tMYyAEEAcYLEXJ5aQILuXtTMY48GzZN+CFLh/F
-	 W60E7SiJn8rl97p+204XrrbL9HtuaF2mKqjXPRoHCUoRdCEUZGZdE3x3iKgOnXR8SP
-	 AGacBQF1NiK1nNM4H5JEOV6jGTjreAwWfN99j9klwNNDM2B8ws6YPinog1Vdw6gx1i
-	 mdhjgp0+HaSIA==
-Message-ID: <61541768-1b32-4473-a569-850323a6c7a1@kernel.org>
-Date: Mon, 25 Nov 2024 16:18:34 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F8vKl1G/"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7f8b01bd40dso3195075a12.0;
+        Mon, 25 Nov 2024 07:22:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732548177; x=1733152977; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pA5keJmCUO7eMYiuFODcV9OmUyA9RUw96yl+dfKJWZU=;
+        b=F8vKl1G/ysF6HtKVb3UauYPo0Vic/x7ySq2Z6L52aMrve7r7jUdqdPkByUby6Ftk8M
+         B2WDimQU6QDVEZ19b2cUjKCxO+ORu5+wiqDA8SMMsm1t8fOksS+VRexEVPNQZFmAfdyD
+         ei6skvuKfBnmxl7/ocNuu+Tfj18/FkCAmZhTBWT9sM0/znuEBahsDswAGujg7DrOzeiZ
+         fADbsQM/laP9Pd8gZfF74nZrKPpIZnDUHepqd4qld7Bj/rpwO4/VeP0Epjc0zMuTzS+C
+         nPUhBnCIgLaV7ooYxNgA6Nn3eXjIJqQd41nHVJsJNEIb7bbhMKln2EpblhkZI+BYJw6y
+         A9oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732548177; x=1733152977;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pA5keJmCUO7eMYiuFODcV9OmUyA9RUw96yl+dfKJWZU=;
+        b=KLlXGC/FkHzNCmrAN+me252S5fMHGSWU4QZpw3LPe9ceYgH4hREvZQGpRJHkw+x0i2
+         fKrS9+yESvkQL4zJEhhpfQUtKG1r0frTul95ttzDfzqt8kxpqNASN8H9wrS8VJbVhX9I
+         hukWgwbW08HMkJvLlaugMSsvQbfBAt4yBShXeCEnzTsL4BgVljPR5LyVGT/Gg+9C08iK
+         FbYndix6JvgOP0bOw8ogT+SpjGx+hoeSQS4kmixDmddYDzX7Hay0msKN0UIKQmbpuckD
+         yuHYhNlWLljqjAXrUxqeOAq47zsslrcp7qyZHXD3VvLv6ru743jPpXS9OT/TK3fu4UHT
+         R/Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTLsDN/mlws1xgriroFcvYrfXEDNNybA5hmcni3veMa0gLWK7aESye2qWv/8oxOQHTWwBO84hCgBQekw==@vger.kernel.org, AJvYcCVnOIFb0/v7hSQy3bgg4+IwiZNZQGrDhmYxC/NQAYZHCxaXPnJk74SvD+F64nVZrNmPfQyrImW13KyC+yCB@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC5pREwfAJbDYhoU5knr+QPuqcQE76ptVCUMZQVPI6a0qfREGn
+	uAz04CUJd5z4LAfBB8UNdBTGpkF8rr3e7xIdpR72k6SFBgevszHdagubkA==
+X-Gm-Gg: ASbGncuJnWFMNlp/a6cJIvOJ1ITP6IHmMFv/eH7btxG/V6ePV09KLdYzR7tClyOcxcz
+	lMJEqKOQgy5ANJEMpuK/cuULSLcBGcVUVO0olFBRWsPtvF0fQYwLi7JpzKQ5dgjTEg08W7IaL1V
+	sZbji13tk54m4hTwxz7WBOwe4ZKjINM+l3jVtDAsLx/3fHM1Bi6u1DEe7x412qY83DQdZQlnClk
+	iiQFRlMbi0ijFcG0uztUqz3c978YuGTzh3B+6rd3phIwTGrm6pErj2a8dQUiyv1VConFCYkZYxN
+	5TBQ+r1/eGkcxS3Q2hLWbtc=
+X-Google-Smtp-Source: AGHT+IEgiIh8M72lh4VSB6EkU9yUrwERGhfYKyRL8dVCHnNR+ajhKa6zMXiPKeR4BpgIejOhfhJrcw==
+X-Received: by 2002:a17:902:e943:b0:212:10ea:a4a1 with SMTP id d9443c01a7336-21283c86ac6mr258919105ad.15.1732548177132;
+        Mon, 25 Nov 2024 07:22:57 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de4549a1sm6753301b3a.24.2024.11.25.07.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 07:22:56 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7acbc41a-f822-4464-8bcb-b7379fa78a86@roeck-us.net>
+Date: Mon, 25 Nov 2024 07:22:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,122 +68,103 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: Add properties for thermal
- sensor cells
-To: Guenter Roeck <linux@roeck-us.net>, "Sung-Chi, Li" <lschyi@chromium.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Benson Leung <bleung@chromium.org>,
- Guenter Roeck <groeck@chromium.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <thomas@weissschuh.net>, Jean Delvare <jdelvare@suse.com>,
- devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20241111074904.1059268-1-lschyi@chromium.org>
- <20241113024000.3327161-1-lschyi@chromium.org>
- <20241113024000.3327161-2-lschyi@chromium.org>
- <4efe981f-f7ae-41c7-9c12-2aa3a5d2d046@roeck-us.net>
- <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
- <893bbd30-300f-4138-8f68-64573e1f0140@roeck-us.net>
+Subject: Re: [PATCH v1 2/4] hwmon: (acpi_power_meter) Fix update the power
+ trip points on failure
+To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
+ zhenglifeng1@huawei.com
+References: <20241125093415.21719-1-lihuisong@huawei.com>
+ <20241125093415.21719-3-lihuisong@huawei.com>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <893bbd30-300f-4138-8f68-64573e1f0140@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241125093415.21719-3-lihuisong@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 25/11/2024 16:13, Guenter Roeck wrote:
-> On 11/25/24 00:52, Krzysztof Kozlowski wrote:
->> On 13/11/2024 04:05, Guenter Roeck wrote:
->>> On 11/12/24 18:39, Sung-Chi, Li wrote:
->>>> The cros_ec supports reading thermal values from thermal sensors
->>>> connect to it. Add the property '#thermal-sensor-cells' bindings, such
->>>> that thermal framework can recognize cros_ec as a valid thermal device.
->>>>
->>>> Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
->>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>>> ---
->>>>    Changes in v2:
->>>>      - Add changes for DTS binding.
->>>>    Changes in v3:
->>>>      - Remove unneeded Change-Id tag in commit message.
->>>> ---
->>>
->>> I can't apply this one (not in hwmon space), so
->>>
->>> Acked-by: Guenter Roeck <linux@roeck-us.net>
->>>
->>> with the assumption that Lee will pick it up.
->>
->> This was merged, while I was AFK, so the ship has sailed, but let me
->> state here objection for any future discussions:
->>
->> NAK, this is not a thermal sensor. The commit msg explains what they
->> want to achieve, but that's not a valid reason to add property from
->> different class of devices.
->>
->> This is some hardware/temperature monitoring device or power supply, not
->> part of SoC, not integrated into any SoC thermal zone. Calling it
+On 11/25/24 01:34, Huisong Li wrote:
+> The power trip points maintained in local should not be updated when '_PTP'
+> method fails to evaluate.
 > 
-> I am confused. We have several thermal sensors registering as thermal
-> zone, and fan controllers registering themselves as thermal cooling devices.
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>   drivers/hwmon/acpi_power_meter.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> Are you saying that this is all not permitted because they are not part
-> of a SoC ?
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index 4c3314e35d30..95da73858a0b 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -292,8 +292,8 @@ static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
+>   	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+>   	struct acpi_device *acpi_dev = to_acpi_device(dev);
+>   	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+> +	unsigned long temp, trip_bk;
+>   	int res;
+> -	unsigned long temp;
+>   
+>   	res = kstrtoul(buf, 10, &temp);
+>   	if (res)
+> @@ -302,8 +302,11 @@ static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
+>   	temp = DIV_ROUND_CLOSEST(temp, 1000);
+>   
+>   	mutex_lock(&resource->lock);
+> +	trip_bk = resource->trip[attr->index - 7];
+>   	resource->trip[attr->index - 7] = temp;
+>   	res = set_acpi_trip(resource);
+> +	if (!res)
+> +		resource->trip[attr->index - 7] = trip_bk;
 
+Unless I am missing something, this restores the old value if setting
+the new value succeeded. Please explain.
 
-These are fine, because they monitor or cool down the SoC.  Sensor can
-be under the die.  Fan for battery or for battery charger also would be
-fine, because it is a real cooling device.  It literally cools.
+Thanks,
+Guenter
 
-But treating battery charger as cooling device is not correct, IMHO.
-Battery charger does not cool anything down and already we have there
-properties for managing thermal and current aspects.
+>   	mutex_unlock(&resource->lock);
+>   
+>   	if (res)
 
-BTW, if power supply bindings miss some thermal aspects, then let's grow
-the common binding first and agree on common aspects.
-
-
-Best regards,
-Krzysztof
