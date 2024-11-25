@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F8C1822E5;
-	Mon, 25 Nov 2024 08:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F21188CCA;
+	Mon, 25 Nov 2024 08:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732524752; cv=none; b=giQs3RNUfZdOG1NO0nfhElOYlm+n80Tmac7XVS5jo25qbmLSvRDLsZPTYbaNn+5MpH9fM1g3bjXjkqD2JQVGKQFlPJoRbdQpj3ssiKBueVUxmWQ4868i2w6AdMANuc0tTeQCbhkcyBTKprZU9wiaGanEAknJaQ5ylvuZSp98sSo=
+	t=1732524896; cv=none; b=bPrYIpGFgG4op6ajMgzp2fhngDT3L1Cyk2tVrzqhjucm7p+5iV6pw3xsZM8CjmgETm7R3Yno/NpuYgYS5/u5NCWIlOMd5AD5WLL+Wzkr000unFRUUXhtUwosL8j7i9oesNEefYEGIysDjSgW1yxGMUEVmYq8T8F1Th1IQ9fIJzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732524752; c=relaxed/simple;
-	bh=cH90h61AUV4LpwprWh+tLTuWX6j99tWsESpmJGhyUFA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jdfZRzyx13jzhgiguEsRokZukP1OqVVGRBMS1pC+KCiu+b3Gkt2almz058GZtQeykzs+Ua55CfDA0BObOsPhusOL9uVe1NwbgPFeQlWmZT4dWVsLL2zqsEWStUvIDCzBgim3jldjJUebwWOh4P/OR1bPOxf+rjU/1Ef/qve6mPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8imVia/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732524896; c=relaxed/simple;
+	bh=iaNsWPWDjcGFwI1ZyeF+SqRDiyySO+8B77jMM1quNVw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=C/347GksjkHhlDESD3rx/cn8kRr3c/UHNwLL6h0uPeyE57MX61NJF+5a1HuEkhN3xOsaGm78FyH61urMBBoqzEQaSrOvFNXaERAfXATfAiC6ac3OIteRKStORzu1Yhswak/jLgWz2HL0kZqxgYbhPs7Qkjt8ZLYkGSwo8gyblH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkAg04s8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8imVia/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37084C4CECE;
-	Mon, 25 Nov 2024 08:52:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkAg04s8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0F6C4CECE;
+	Mon, 25 Nov 2024 08:54:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732524752;
-	bh=cH90h61AUV4LpwprWh+tLTuWX6j99tWsESpmJGhyUFA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=d8imVia/VoEbB/rpAx/V5I+CCxj4kbiKCd9u2UKNskdecygJBnXalp7s8xtdZpzry
-	 ur+drpDAwJbw9L15HBye5r3PkmfqjGRR8hH3V9NGjlCldijDLzeWObL5DtWvsV9XBO
-	 9Fwv+CX8lO/PVR5mdlGAr5XjNBBYFXDdQO24zE4/rmY/LcKrquCTRVLsJjiIpC4BmY
-	 lH3LyVkYj3FLY0HpeOA8/weMMppJeiNfjQ0Sz0RoAzgEJdaScJkpOK+z3ZK9g1AIXy
-	 jvSDtexo3dY9armXHtNwc5DG+vyGm5c0EBQc6TSW7OTKu6E+EoGtV+UKhgE9PyaJtC
-	 yrOstmMzanXQA==
-Message-ID: <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
-Date: Mon, 25 Nov 2024 09:52:24 +0100
+	s=k20201202; t=1732524895;
+	bh=iaNsWPWDjcGFwI1ZyeF+SqRDiyySO+8B77jMM1quNVw=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=TkAg04s8jG1zM/3NgskqWuiq89y82n2+DnTv4Y5F8c6Tl0dvIHr5jd8saK0m7Vq/f
+	 9pL33pp8aixuFfMf7XIGzkZdhNrtDid1cz8JqwWauZp+Q76qJBQRdy3wxWpI0pfRbu
+	 XeYzRkY3Npw1NSvv7LONKopwu9B5PYI2gt+EV86iMv+neiNNz/X9rEVSK+SjNNwDDh
+	 mQDJsAW7CUOimXKK4dwzB9H94U2DwFsBDa0LRQgvFBMT/iU9oQzTY6mssYkeLej8JZ
+	 tF1gAa7/OUwU3gq+lrK8FmNmGYHwo666FYOi9QKzdlTXKEFlA43B7Hg/wXJDQLvM2l
+	 V4S45yeIZXCKg==
+Message-ID: <1c1604b7-baf2-466d-a46c-4ed8d407ed9c@kernel.org>
+Date: Mon, 25 Nov 2024 09:54:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -37,6 +37,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: Add properties for thermal
  sensor cells
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>, "Sung-Chi, Li" <lschyi@chromium.org>
 Cc: Conor Dooley <conor.dooley@microchip.com>, Lee Jones <lee@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -49,7 +50,7 @@ References: <20241111074904.1059268-1-lschyi@chromium.org>
  <20241113024000.3327161-1-lschyi@chromium.org>
  <20241113024000.3327161-2-lschyi@chromium.org>
  <4efe981f-f7ae-41c7-9c12-2aa3a5d2d046@roeck-us.net>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -94,43 +95,49 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <4efe981f-f7ae-41c7-9c12-2aa3a5d2d046@roeck-us.net>
+In-Reply-To: <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/11/2024 04:05, Guenter Roeck wrote:
-> On 11/12/24 18:39, Sung-Chi, Li wrote:
->> The cros_ec supports reading thermal values from thermal sensors
->> connect to it. Add the property '#thermal-sensor-cells' bindings, such
->> that thermal framework can recognize cros_ec as a valid thermal device.
+On 25/11/2024 09:52, Krzysztof Kozlowski wrote:
+> On 13/11/2024 04:05, Guenter Roeck wrote:
+>> On 11/12/24 18:39, Sung-Chi, Li wrote:
+>>> The cros_ec supports reading thermal values from thermal sensors
+>>> connect to it. Add the property '#thermal-sensor-cells' bindings, such
+>>> that thermal framework can recognize cros_ec as a valid thermal device.
+>>>
+>>> Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
+>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>   Changes in v2:
+>>>     - Add changes for DTS binding.
+>>>   Changes in v3:
+>>>     - Remove unneeded Change-Id tag in commit message.
+>>> ---
 >>
->> Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
->> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
->>   Changes in v2:
->>     - Add changes for DTS binding.
->>   Changes in v3:
->>     - Remove unneeded Change-Id tag in commit message.
->> ---
+>> I can't apply this one (not in hwmon space), so
+>>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> with the assumption that Lee will pick it up.
 > 
-> I can't apply this one (not in hwmon space), so
+> This was merged, while I was AFK, so the ship has sailed, but let me
+> state here objection for any future discussions:
 > 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> NAK, this is not a thermal sensor. The commit msg explains what they
+> want to achieve, but that's not a valid reason to add property from
+> different class of devices.
 > 
-> with the assumption that Lee will pick it up.
+> This is some hardware/temperature monitoring device or power supply, not
+> part of SoC, not integrated into any SoC thermal zone. Calling it
+> thermal sensor is huge stretch and inappropriate hardware description
+> leading to next patches like calling it a SoC cooling device, instead of
+> simple power supply (for which we have bindings!).
+Ah, wait, this was not merged, so I can actually NAK it.
 
-This was merged, while I was AFK, so the ship has sailed, but let me
-state here objection for any future discussions:
-
-NAK, this is not a thermal sensor. The commit msg explains what they
-want to achieve, but that's not a valid reason to add property from
-different class of devices.
-
-This is some hardware/temperature monitoring device or power supply, not
-part of SoC, not integrated into any SoC thermal zone. Calling it
-thermal sensor is huge stretch and inappropriate hardware description
-leading to next patches like calling it a SoC cooling device, instead of
-simple power supply (for which we have bindings!).
+BTW, all your patches are incorrectly ordered - bindings are always
+before the users. You cannot merge user of a binding without or before
+the binding.
 
 Best regards,
 Krzysztof
