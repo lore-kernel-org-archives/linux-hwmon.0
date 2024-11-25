@@ -1,100 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE481B4126;
-	Mon, 25 Nov 2024 14:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFDA1AC453;
+	Mon, 25 Nov 2024 15:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543978; cv=none; b=LKG6sFopCGiC7ySZUHSlPFUnhpiPt8XFQwAFmDqmaiBuVH+MM7vt3jV95e0Vnwq432jv9HepckpO0lSyPiXw8tV+ImWhjYF/40Gge/sGUdwCmhzzuwzwtzoGApXtWn4bN8MFU53zCN8N1NnMvSYgDXPmI/glI8MItRPm1Y723Kk=
+	t=1732547595; cv=none; b=Ufi/7WQjBE694fVpXgOhkAUhVeoLybghVdZACM2dEGGoc1SHhRmg3ec0ly1J+emcPhdGvRFRuEtFVnNGxpjNdxKQWVrDHUdf5lmAHbdgCx335jiI2EAgiqdQEtnMw2lfHR1esN/lqKwQj08VT11KiuUC5qvDt2zUy1hPKf4c3kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543978; c=relaxed/simple;
-	bh=xrivQPMZdpaUD1ZOIgTpZSgKNYbghzMeckLij8AhdtE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aXDoEBkGRGyqDYd5QIQ19gWgQ3ynhaLvFEElBzsnTbKBSQ81rDJ4DNw12w1fMfsmr67a+NYLALpeckjfba6N840Q+9S99+kAoCnxXQ+mSnXiiX+COjGTU5wXzSHryMGbzxlY+q0505sZHmU9dgzF5IoSS0NVcze68NlltGlfQrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSFQdhsg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732547595; c=relaxed/simple;
+	bh=BsyKX6vvZXO6hyTAnWAhmcMb39KdsKIPgutxDoUf/8g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bIGv1WkKnc41Kz2CCnLSNkdJSrKIHMeRzDoeoMXcc0Jt34OnOO5e6S7+0o8oFymUKRGDC6Uv/88kgRTw2HmguqpOuYog1QW5+YsShaPYGtPUxwRDSJe3JAQMXLCO1PJw5KgfF9q3EF8c1zdkBs3QXXWOABu5e2cpQzPAAXzzuvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P6ruaafA; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSFQdhsg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7119CC4CED7;
-	Mon, 25 Nov 2024 14:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732543978;
-	bh=xrivQPMZdpaUD1ZOIgTpZSgKNYbghzMeckLij8AhdtE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pSFQdhsgO7C7SbaCYAT0sEf0PgN9M1hO9eAxRycrZDtMnz6Fkvzk74Vy70b/WVO6a
-	 J1i3doiYw08TH0Yr4T1SNAusPwxAQAUInG/z9qg6mRaGo1kCB1/xgLjcD+QvpesTO/
-	 X40jrYisnN/5cifsQy0BuKlqI3fXG/ukpTsC4Qs1tozIU2F3Aavsrkjvk3jU+J/gI1
-	 GBMe2cij10xWF1zIXHYNoR7B79vHeQwKGZWJYitlMlzhxtWQnc+KAyPL64vcW4R0/s
-	 NDWrzeU8o1NINIXfrZr46IRc1lkDCyMUBHwKVBuzTC0fXL4R61WScSys0LakJJrRXZ
-	 V+IGaEUE5g+ew==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2967fb53621so2537860fac.0;
-        Mon, 25 Nov 2024 06:12:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUmJqipkGXsPVpYgHgYUGPFwduSkFW1O5UAL2G7sCvFmnOj7ZbvMf8oi0x4f3EwLsXHCQata7HH8tC75Q==@vger.kernel.org, AJvYcCUwo4DdTaiuSvffTwxd4FwGSUqgIU60E+tqkKByeATGlDZ6gXF2mTNKjDghs7ORv7UXqssIiVvjfCJvhZ8n@vger.kernel.org, AJvYcCXPhZmxz1LxuYc5sW608WZqOnoVYSH7UyYQYfOdvHtAzRI+LDpH13VcPs522WC8bCaGAUBLEoIIbdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJRuF63JesD988Y4YMd95U+MhmtoYognrAJrXWD7l7clUIJVMz
-	5GxvGK2JpYVjWN+UuYMQxlGV1G6rrbsmNFTt1YA/vZGSZczhLVHpNf7pSHRqLYyCKO9SivL7S1R
-	mXespVEDXyB/hfwhiNFeVwUJyyAI=
-X-Google-Smtp-Source: AGHT+IEUalT/+k/nt8RXO9y4VhfUvKEe3Mx8CnrfxRbIyWHtuU76FKGn8hkRZey+URZ5mKbXbG0YRRnXwz4CLPlladw=
-X-Received: by 2002:a05:6870:5d88:b0:296:bc75:6c6a with SMTP id
- 586e51a60fabf-2971e9b1c9dmr7634787fac.17.1732543977707; Mon, 25 Nov 2024
- 06:12:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6ruaafA"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20cf3e36a76so44030845ad.0;
+        Mon, 25 Nov 2024 07:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732547593; x=1733152393; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWIkfUGCL9W1Zq8MHpEKhoEtRwgrNR9DLJVdVZwUULI=;
+        b=P6ruaafAcaqKRhlOZdeewkOz10xGdSsHzkKpq+gXsd3N6Zh2avrZEaPjlJrNm7m7f8
+         mCqPAOcf4LtRN8C5b+sD9Mi3c70EjcSMYPYCdI+S8/9jJsjiBHZSpYsid41LxahYSs0w
+         NJkwm9Wpt1EWhqAimrCfvErtmd2WgPB/su34jw4KFXd8FALpU6bH/WvyvudEDjgVqzU/
+         ilo15fmaAaSinOcaq4+EeL3gf3o69S8Dj5uswCYvQaTuuys5tn8skMRobsSy+GjjJ0g9
+         1rV+TYuTTRTeCrGyUQlgE1HR3iuasMgTOMkdyHJX12ujN6bC14PsH26cmLIMTG6HS57v
+         DQIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732547593; x=1733152393;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hWIkfUGCL9W1Zq8MHpEKhoEtRwgrNR9DLJVdVZwUULI=;
+        b=dLDYrFB27tBbyuKSGDtV9QWPruG967xINgo5T5vTMgHsoDGixC6gffmgYRMWqanTKA
+         FTTZ1y1WT+OGHSGkM7ML3tsHTunVcAD/afbhDWrcsahFsR7uc8S3etT8xu0MBvX60woh
+         +ZrfIour3/1Ar33KtzW70t8v2Lw64QrU3Z4w9VgPiLX/H8XxOOMxidEcZ7a0luYPmqN0
+         ELLKWhHSHYNMPbZCoWpvnza59Fp7mzfecmW2Exaiuw1+CR81KU1PzQwRzyVtD7xyZ7y/
+         6DanjuODeNpe4A++wWWDSdtMWoaInLt2Ua/Pwg3t5DKbeZOlL1dgfDHpOHuo1Pr0tfP+
+         0KkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgkpn+tm55ZciCAbuQVRn95s99zswTpeX5PeKyhVGkJ/X1BTYxc2FM3Uea9nGEln0CtxbEJkU/FtCELJo=@vger.kernel.org, AJvYcCUxM5jjSCQDhBKQCdrQzkm6/KEnY9WT5juRx9ACP5zL1wWDJXh/P18wiMm6MqrtSr/PYDBK6BWHzliBAUaA@vger.kernel.org, AJvYcCXCiWqmBLMN05haLRm90+Xayt+BMTWB9yMBC4IFuuGQn8dNn2RqP8pn2uufx0wWszGdSRkCsXSqPLnu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmv7/99sS9M3MpRIUA/ktm5bHYv3J1yCB6woktEvRNpoaQSDJW
+	7ssmbW8AHIYO20LblSKI5GVAsDuF821IvJblg6Y72QfBNQfvPyQundnhUQ==
+X-Gm-Gg: ASbGncu9osjOZpOtgXO+vPmXN2Rh8cHTnY/OdrhrwBGO+ql0KlWvuCBdZyM1HpW8qq5
+	PxTo/G+5IMhghdM+4NALdT3/tp3AqSMzHpA54k0EW0iso1Ro22RGZ933JMKACgSp05em7qMLxEN
+	hMQLhHurp9OiA9VShOXLptaVTqd9vup1DKJpGf0lDqfiAwK7Ej1SUYN17QuEowEg1BvBlDV/WwN
+	pthYwWm3DuLYMtCP7vViJ6RWYIWqtJ+8abLoRID8kD0kW1zDCqS9uTj/MCijuavZ80OhVBdb0R8
+	+GzBcFlJOCwZ/cod4i4ha1A=
+X-Google-Smtp-Source: AGHT+IH3avj46PI2YmdHD4XdBJ/CME2+CtrwR1lq6ajtQWeRonWYz4xkncuORRFHdz7BiObxVsK+Lg==
+X-Received: by 2002:a17:902:e743:b0:20c:f261:2516 with SMTP id d9443c01a7336-2129f67b19amr188974355ad.8.1732547592793;
+        Mon, 25 Nov 2024 07:13:12 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dc23a35sm66188195ad.250.2024.11.25.07.13.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 07:13:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <893bbd30-300f-4138-8f68-64573e1f0140@roeck-us.net>
+Date: Mon, 25 Nov 2024 07:13:09 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241118-hwmon-thermal-v3-0-9c17973e7342@weissschuh.net> <20241118-hwmon-thermal-v3-1-9c17973e7342@weissschuh.net>
-In-Reply-To: <20241118-hwmon-thermal-v3-1-9c17973e7342@weissschuh.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 25 Nov 2024 15:12:46 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i8p=jxnWepLHpH3uuxrtkpPhuWcPYwHQnQnzX=hTERRw@mail.gmail.com>
-Message-ID: <CAJZ5v0i8p=jxnWepLHpH3uuxrtkpPhuWcPYwHQnQnzX=hTERRw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] thermal: core: Add stub for thermal_zone_device_update()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: Add properties for thermal
+ sensor cells
+To: Krzysztof Kozlowski <krzk@kernel.org>, "Sung-Chi, Li"
+ <lschyi@chromium.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Benson Leung <bleung@chromium.org>,
+ Guenter Roeck <groeck@chromium.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <thomas@weissschuh.net>, Jean Delvare <jdelvare@suse.com>,
+ devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20241111074904.1059268-1-lschyi@chromium.org>
+ <20241113024000.3327161-1-lschyi@chromium.org>
+ <20241113024000.3327161-2-lschyi@chromium.org>
+ <4efe981f-f7ae-41c7-9c12-2aa3a5d2d046@roeck-us.net>
+ <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 18, 2024 at 7:16=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> To simplify the !CONFIG_THERMAL case in the hwmon core,
-> add a !CONFIG_THERMAL stub for thermal_zone_device_update().
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 11/25/24 00:52, Krzysztof Kozlowski wrote:
+> On 13/11/2024 04:05, Guenter Roeck wrote:
+>> On 11/12/24 18:39, Sung-Chi, Li wrote:
+>>> The cros_ec supports reading thermal values from thermal sensors
+>>> connect to it. Add the property '#thermal-sensor-cells' bindings, such
+>>> that thermal framework can recognize cros_ec as a valid thermal device.
+>>>
+>>> Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
+>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>    Changes in v2:
+>>>      - Add changes for DTS binding.
+>>>    Changes in v3:
+>>>      - Remove unneeded Change-Id tag in commit message.
+>>> ---
+>>
+>> I can't apply this one (not in hwmon space), so
+>>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> with the assumption that Lee will pick it up.
+> 
+> This was merged, while I was AFK, so the ship has sailed, but let me
+> state here objection for any future discussions:
+> 
+> NAK, this is not a thermal sensor. The commit msg explains what they
+> want to achieve, but that's not a valid reason to add property from
+> different class of devices.
+> 
+> This is some hardware/temperature monitoring device or power supply, not
+> part of SoC, not integrated into any SoC thermal zone. Calling it
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+I am confused. We have several thermal sensors registering as thermal
+zone, and fan controllers registering themselves as thermal cooling devices.
 
-and please route it through hwmon.
+Are you saying that this is all not permitted because they are not part
+of a SoC ?
 
-> ---
->  include/linux/thermal.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 25ea8fe2313e6d0a53192974a80d92f50f0ff03e..455e0814b9165dbb96d698e67=
-0f160136a017cc4 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -289,6 +289,10 @@ static inline struct thermal_zone_device *thermal_tr=
-ipless_zone_device_register(
->  static inline void thermal_zone_device_unregister(struct thermal_zone_de=
-vice *tz)
->  { }
->
-> +static inline void thermal_zone_device_update(struct thermal_zone_device=
- *tz,
-> +                                             enum thermal_notify_event e=
-vent)
-> +{ }
-> +
->  static inline struct thermal_cooling_device *
->  thermal_cooling_device_register(const char *type, void *devdata,
->         const struct thermal_cooling_device_ops *ops)
->
-> --
-> 2.47.0
->
+Guenter
+
