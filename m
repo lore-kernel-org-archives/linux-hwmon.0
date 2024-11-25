@@ -1,66 +1,66 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803102500D2;
-	Mon, 25 Nov 2024 16:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97C21B4136;
+	Mon, 25 Nov 2024 16:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732550635; cv=none; b=QJpeuoiELrfy27aPGWS3OiKpxFf7v0YUfeW4Ywe/JM3B6+T7pIt7StRbhrxwPPaqfuMY8cO5PG38naH1/rfGsvCK1DTFJ0IAyEZL51EP77bF8DpNyM9V4RDpPUYtKeSnhwKUjxC4EgEsYt4pdunSz8iKPOGWhYbK6HtpYMcfTBA=
+	t=1732551201; cv=none; b=VU1g+9j7D5e9F0zMrkyQTVI3+puBFZ/fJy//xIA5clZ/CpB0iPyNrorIzdsMSzXKEGzMoBzF13PjG7EFBVTHLfczOfci3F+GLeogr6TcUT3kYOlX7G9AznWNtJMficesUcTNg/S9XlyT4t6z7xdRFUUNI9/chglp5ABQRc5+J0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732550635; c=relaxed/simple;
-	bh=JVXBK3ERxck06dJhXYlrGQ7pXqtyYDTznRZmJGZYn2U=;
+	s=arc-20240116; t=1732551201; c=relaxed/simple;
+	bh=RtG/gOn6MPjTIDicfx0CuZjHw14DfuYhQnK9bNPOVQc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PGxL/aeOYefxLNb5GFYHTe5i61hNloWwUFNdbQcE34JIv7HI2qDRgO2zjkpOMy1hf1O/QBRPlEj+Lq5g0ZtV+kGyS49r5aq6Bz4VQ5z8/v1Wp9ELBEMx6XI1rFafzfAf1evLIpfAy5i9LfOKiDYxji/dRLf1oQJ+ApBJk6DNEiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WPw3n7CV; arc=none smtp.client-ip=209.85.215.177
+	 In-Reply-To:Content-Type; b=VcuTawbUziVUuPK1LkG2TKQcMTEAEmlEOaasqe93ZosvShNMtPlag0JCIu+R63RkEEXKZbPmLwRFxdIBolWMgWdRQGDrzIY5WZaIE+Hsafb+PxTpI2+LcFeFe/cquYE79rXUyThq5wdPdQUTXZpZKVwXainDwVRVovNuDqflPSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cPKb4ut8; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPw3n7CV"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7e6cbf6cd1dso3198837a12.3;
-        Mon, 25 Nov 2024 08:03:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cPKb4ut8"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7fc1f1748a3so1346411a12.1;
+        Mon, 25 Nov 2024 08:13:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732550633; x=1733155433; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732551199; x=1733155999; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=elxA+QAbEFAffsAeNupzq/iG+gMISth7fVEgLGnkeWE=;
-        b=WPw3n7CVe+UlNnY1snJaEun699X7zElUtAkIoIewrQGnURfu5ynSKXEt+iSwlCj3Ja
-         7wQNSOJt1B7susr3kouc8a+xWsMZCtkxGCdpXpd74Afzw6wBIc34nQ3gIhpGdMOvg6YI
-         uzBLeVfv2FNqz/YI2YAucn083qUQilS5sBYsufYyCLKoEZA91ateA8SYvrQDAe2rG7hd
-         ia7GyWQUsQp+eLQqU8+b0pk661EHKaXfTuXYDYA/5UTHeiXkb9mRzKYav9yDEHNMB48Z
-         6FIT1NK4fqOjzwsfY1QGu2/OdCSDbRHvSfokOog3QFPXMSg/3lNLj8FUPwOikqc11x/B
-         7dXQ==
+        bh=r3FR3d5ILuvQwVafGOMqBhBgqAdgY2ts6TkOzxc8ZO0=;
+        b=cPKb4ut8eZODe+F2IpvxOwciOiBlYDujNckVq3u06R+DsB6XrpDaSZsm5Nc3lcXbDK
+         QahFKUz9oOfk1bfI+RZNYRzcmTg2wtVOWigeScO/n7/nyaeyX3Dk9oAO1ByKy70tS/r7
+         6qXkqQKxCVLXA1BzDLmdUHNrghbUAdbnbpdJZL2chohSOPSkf7DybhoT2xzfUtwQNHAF
+         0xUbfjxryXFsQqGtV/aKKbbqlbvxtJM/wQBatiJZds7EaXhCIuECvnNaIgYhwxvnxuOw
+         lGwU1pkHTMaAbQ2APq9YeB4VwlrclcfrRZ2aAfTXPw5EaGWgihVt9KOdd/I56NmtXHIJ
+         iwuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732550633; x=1733155433;
+        d=1e100.net; s=20230601; t=1732551199; x=1733155999;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=elxA+QAbEFAffsAeNupzq/iG+gMISth7fVEgLGnkeWE=;
-        b=mRVoVCBA3EUHRqI4elBpUYscnmPewVX6MiGj3Ns1VAhLWe1J2COgO7xMUT1wp730nj
-         V/kkLeZXw5EBF8xKXXays/WKPQT57oHCivgy+Ko3i5YjyFmawy6pGNfZCuDcYmihQczy
-         g2sBcXrCovBOjZTnY5ifO+QQjDid5nDBoaonpNYq7Tez4mbt2oYLrTLrBkn/mZzrfaQN
-         TdEKeeRxM92hhiRHjx0Kv+5Bw5ETB49BnHIA9zwghDEqDK6AvaPqmTT2Byc1G8GGCFhJ
-         d9TO0ia8yxIM866ATS2Gus5hcjRbYSfn2ZaUww65NRt6OqN3So2CgfK0m+nGCOceppHx
-         +XLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/7s/aaW1u5+yEMvSZ/JsYLRn0qmX9jQ6zeQL/6OU2eNpg7fbUNMG9moOPOtFFeJt65KJIsXbmrvmQmg==@vger.kernel.org, AJvYcCWjGQE9xtMgdxyirwgUXJXem9Q0Lm2z2hIcTWSARPUISMMavIiJZzS4ms4atdoB1W1dqYY4dURgHDAGtgjj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmHwt4XIi/YRn6p+FXg1VClhuEH+qpo5AHTilwgG32jVVY0XT8
-	uBh7LqWTZFEOrCGCgHaZUE3JZjvDN5W0zGkvDH2m1V/QIJRJa/wS
-X-Gm-Gg: ASbGncuuYfdln4XfZcWSnbjJe/WTxgT9b6SjTXQ5tXW5iuhF/b2HduuErWA97tKQSBX
-	9ppBMJvsyF8p/qtFMVYfnabOE9MUGBC1cvzcIBLfixpCIsuKlvItiDA4OTfcSsMPDkdA/aMbLrd
-	xVM7+TtgVKCwJ/Nr8PPnTK8E2YbnWnjkC2UX6R6ACGknLF5Z+++H/lBJEkf8O+2LYAs5Uom/hGL
-	2rrMNM9R9s6Lbni9gtchpYIx31wD8dvK+VDv5C805S39aG7e/FXVTWEBrnLEXME+spa5m4/Eb25
-	m1Cj8DiWM3zxnheWnIDnv/w=
-X-Google-Smtp-Source: AGHT+IFiHeksOOn2dQw+NCO2y2yE31fa/Zhla1Dv2vwD+MZoKSifgz+oHD3/ZfkK/3GCZlvb4j/9Sw==
-X-Received: by 2002:a05:6a20:3d8d:b0:1db:a33e:2c6 with SMTP id adf61e73a8af0-1e09e420a72mr20284082637.18.1732550632721;
-        Mon, 25 Nov 2024 08:03:52 -0800 (PST)
+        bh=r3FR3d5ILuvQwVafGOMqBhBgqAdgY2ts6TkOzxc8ZO0=;
+        b=jG8H/oplBL7bgTxjIaQ2kZfMUdUSyz35rN2u3fThebotW24py+ykg7c06Pkg1kGiNJ
+         b5FFQgIQo1g2FyPoGx+dqJZTpfhXo0rY+aOcOa/7izG3gME14KETYrH1ouZN5G4M62Ef
+         nIDsTTNFMl21zQl74HlUcOD0h4fKRXVYnioyMj7URczLVlIH5H2R/aA6dAhQSiGX1pv3
+         Ij7n7BlbONnvWyhPj7ojWXbyMLKYPu/8Al5ulOHCXgLuq5DSAezEVfodlY1yXSevRhaN
+         mL2if5HhVf7pVuAyIOluyeOU80jG4AbVkVkRIHVnHahMV56MbM819VTQnUmF6hFP5dBR
+         VjXA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4lTUV7KeNAQtqjPiO55hAaPHadCYuqW/YgueLankEkKa4QfkOffyN4W7xxMbTRLsFhmwTE0TR3wN73w==@vger.kernel.org, AJvYcCXKLeDFhT5O2cZ3OGBYfBG0aPN5bpYbXgZ65MOPwx6lyGC5s36cq3fObhsSsAcT55mIHHTVQsJBCcjM7b8i@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQmaFxjNobtReVAfM00XOfV0A2taeo2xZy3635sLpK1BYqzzfh
+	lNcSF7Mh2phrNmL1aKLuIbCTpBKCVNnOFZ68KPMlhskUJAGM0cgY
+X-Gm-Gg: ASbGncv6OiirxExdoTuB5fuTkYi0irWMQdPJHxozaIivKO1yT37lc6chbyVUqcRht2Q
+	APtCSt6od5SR3Mujqy6C/bF7Yccvan4CmOzydxIzv6cTGGoPC9C4PLWXTWYWtxaUccOLGiT+l4t
+	F5740kfiAz+h6tWVmuL/xHRBuZlM4GV7S2OKoxvdJLcx9Y2Ye0TpShVcs+EX9Fzi1giWTcduMmo
+	RKJUSg0tUCzaxIdg1vlyleaFchutFP304D2IeKsMY3eRxuHa/fE9lDhQwS5eamHgrCFkcfIvTv8
+	ee0ANiON/oICiqzcRaqqbfo=
+X-Google-Smtp-Source: AGHT+IGWowUripRU8V2mWSHOlLFWRNc7ArnZjOb/sXCeclglLDyNWP15s+uXaVCwWirEyK6gKHTCmg==
+X-Received: by 2002:a05:6a20:7492:b0:1db:f823:109f with SMTP id adf61e73a8af0-1e09e588d0dmr21414261637.31.1732551198694;
+        Mon, 25 Nov 2024 08:13:18 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcbfc0501sm5795172a12.1.2024.11.25.08.03.50
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de456444sm6814088b3a.28.2024.11.25.08.13.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 08:03:51 -0800 (PST)
+        Mon, 25 Nov 2024 08:13:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
-Date: Mon, 25 Nov 2024 08:03:50 -0800
+Message-ID: <f7274b8d-cb91-4975-be94-69f041e9c4ee@roeck-us.net>
+Date: Mon, 25 Nov 2024 08:13:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] hwmon: (acpi_power_meter) Fix using uninitialized
- variables
+Subject: Re: [PATCH v1 4/4] hwmon: (acpi_power_meter) Add the print of no
+ notification that hardware limit is enforced
 To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 Cc: jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
  zhenglifeng1@huawei.com
 References: <20241125093415.21719-1-lihuisong@huawei.com>
- <20241125093415.21719-2-lihuisong@huawei.com>
+ <20241125093415.21719-5-lihuisong@huawei.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,63 +121,55 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241125093415.21719-2-lihuisong@huawei.com>
+In-Reply-To: <20241125093415.21719-5-lihuisong@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 11/25/24 01:34, Huisong Li wrote:
-> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
-> acpi_power_meter_resource structure. However, these two fields are just
-> updated when user query 'power' and 'cap' attribute, or hardware enforced
-> limit. If user directly query the 'power1_alarm' attribute without queryng
-> above two attributes, driver will use the uninitialized variables to judge.
-> In addition, the 'power1_alarm' attribute needs to update power and cap to
-> show the real state.
+> As ACPI spec said, the bit3 of the supported capabilities in _PMC indicates
+> that the power meter supports notifications when the hardware limit is
+> enforced. If one platform doesn't report this bit, but support hardware
+> forced limit through some out-of-band mechanism. Driver wouldn't receive
+> the related notifications to notify the OSPM to re-read the hardware limit.
+> So add the print of no notifcation that hardware limit is enforced.
 > 
 > Signed-off-by: Huisong Li <lihuisong@huawei.com>
 > ---
->   drivers/hwmon/acpi_power_meter.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+>   drivers/hwmon/acpi_power_meter.c | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
 > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> index 2f1c9d97ad21..4c3314e35d30 100644
+> index 3500859ff0bf..d3f144986fae 100644
 > --- a/drivers/hwmon/acpi_power_meter.c
 > +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -396,6 +396,9 @@ static ssize_t show_val(struct device *dev,
->   	struct acpi_device *acpi_dev = to_acpi_device(dev);
->   	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
->   	u64 val = 0;
-> +	int ret;
-> +
-> +	guard(mutex)(&resource->lock);
+> @@ -712,6 +712,10 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
+>   			goto skip_unsafe_cap;
+>   		}
 >   
->   	switch (attr->index) {
->   	case 0:
-> @@ -423,6 +426,13 @@ static ssize_t show_val(struct device *dev,
->   			val = 0;
->   		break;
->   	case 6:
-> +		ret = update_meter(resource);
-> +		if (ret)
-> +			return ret;
-> +		ret = update_cap(resource);
-> +		if (ret)
-> +			return ret;
+> +		if (resource->caps.flags & POWER_METER_CAN_NOTIFY == 0)
+
+== has higher precedence than &, so this expression will never be true.
+
+And, indeed:
+
+drivers/hwmon/acpi_power_meter.c: In function ‘setup_attrs’:
+drivers/hwmon/acpi_power_meter.c:701:42: error: suggest parentheses around comparison in operand of ‘&’
+
+> +			dev_info(&resource->acpi_dev->dev,
+> +				 "no notifcation when the hardware limit is enforced.\n");
 > +
->   		if (resource->power > resource->cap)
->   			val = 1;
+>   		if (resource->caps.configurable_cap)
+>   			res = register_attrs(resource, rw_cap_attrs);
 >   		else
 
+On top of that, I don't see the value in this patch.
 
-While technically correct, the implementation of this attribute defeats its
-purpose. It is supposed to reflect the current status as reported by the
-hardware. A real fix would be to use the associated notification to set or
-reset a status flag, and to report the current value of that flag as reported
-by the hardware.
-
-If there is no notification support, the attribute should not even exist,
-unless there is a means to retrieve its value from ACPI (the status itself,
-not by comparing temperature values).
+Overall, really, this driver could benefit from a complete overhaul.
+Its use of the deprecated hwmon_device_register() should tell it all.
+There is lots of questionable code, such as the unprotected calls to
+remove_attrs() followed by setup_attrs() in the notification handler.
+Any updates should be limited to bug fixes and not try to make minor
+improvements for little if any gain.
 
 Guenter
 
