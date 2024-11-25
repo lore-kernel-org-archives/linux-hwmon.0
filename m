@@ -1,81 +1,100 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D32818FDCC;
-	Mon, 25 Nov 2024 09:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE481B4126;
+	Mon, 25 Nov 2024 14:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732527945; cv=none; b=ZtWQxqnigXNEoGMtAtnEaARmfjHR7ONiSXMB8Fbmg7cd2sUVpPa0+KVoHnj9uj1ka/rhfNwNOT7KxrYYe+8Mf52ecVAXow64a/BzL2zt1ebXSJfCT4MfZekJgU0eFgVgA16OkWUaRyLOIATfMES7VzpFWGrRZCnnld6nbIY4UN8=
+	t=1732543978; cv=none; b=LKG6sFopCGiC7ySZUHSlPFUnhpiPt8XFQwAFmDqmaiBuVH+MM7vt3jV95e0Vnwq432jv9HepckpO0lSyPiXw8tV+ImWhjYF/40Gge/sGUdwCmhzzuwzwtzoGApXtWn4bN8MFU53zCN8N1NnMvSYgDXPmI/glI8MItRPm1Y723Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732527945; c=relaxed/simple;
-	bh=7vH7tYyL6BlYXxoUVeJHgaS5gYbRQQP4StN4V2vcqP8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PiWCt4zDvEHXYsezsm952QmRRlCukY+v6+DlubTYdlwcjyjjVstMw3vaaznJtVTYZa58MtnH77Ztn1t3439aMkiUC5peXJAgqYYMhb0Juojb3DrQNY/lsf1W62uJfwqmXbNCrLPwpUMrQwtpGDyUWUI3xUCM53V2JeHsdLe/QU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Xxgn83QMGz1yqxY;
-	Mon, 25 Nov 2024 17:45:48 +0800 (CST)
-Received: from dggemv704-chm.china.huawei.com (unknown [10.3.19.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 96671140202;
-	Mon, 25 Nov 2024 17:45:34 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 25 Nov 2024 17:45:34 +0800
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 25 Nov 2024 17:45:33 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <linux@roeck-us.net>, <jdelvare@suse.com>, <liuyonglong@huawei.com>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH v1 4/4] hwmon: (acpi_power_meter) Add the print of no notification that hardware limit is enforced
-Date: Mon, 25 Nov 2024 17:34:15 +0800
-Message-ID: <20241125093415.21719-5-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20241125093415.21719-1-lihuisong@huawei.com>
-References: <20241125093415.21719-1-lihuisong@huawei.com>
+	s=arc-20240116; t=1732543978; c=relaxed/simple;
+	bh=xrivQPMZdpaUD1ZOIgTpZSgKNYbghzMeckLij8AhdtE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aXDoEBkGRGyqDYd5QIQ19gWgQ3ynhaLvFEElBzsnTbKBSQ81rDJ4DNw12w1fMfsmr67a+NYLALpeckjfba6N840Q+9S99+kAoCnxXQ+mSnXiiX+COjGTU5wXzSHryMGbzxlY+q0505sZHmU9dgzF5IoSS0NVcze68NlltGlfQrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSFQdhsg; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSFQdhsg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7119CC4CED7;
+	Mon, 25 Nov 2024 14:12:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732543978;
+	bh=xrivQPMZdpaUD1ZOIgTpZSgKNYbghzMeckLij8AhdtE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pSFQdhsgO7C7SbaCYAT0sEf0PgN9M1hO9eAxRycrZDtMnz6Fkvzk74Vy70b/WVO6a
+	 J1i3doiYw08TH0Yr4T1SNAusPwxAQAUInG/z9qg6mRaGo1kCB1/xgLjcD+QvpesTO/
+	 X40jrYisnN/5cifsQy0BuKlqI3fXG/ukpTsC4Qs1tozIU2F3Aavsrkjvk3jU+J/gI1
+	 GBMe2cij10xWF1zIXHYNoR7B79vHeQwKGZWJYitlMlzhxtWQnc+KAyPL64vcW4R0/s
+	 NDWrzeU8o1NINIXfrZr46IRc1lkDCyMUBHwKVBuzTC0fXL4R61WScSys0LakJJrRXZ
+	 V+IGaEUE5g+ew==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2967fb53621so2537860fac.0;
+        Mon, 25 Nov 2024 06:12:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUmJqipkGXsPVpYgHgYUGPFwduSkFW1O5UAL2G7sCvFmnOj7ZbvMf8oi0x4f3EwLsXHCQata7HH8tC75Q==@vger.kernel.org, AJvYcCUwo4DdTaiuSvffTwxd4FwGSUqgIU60E+tqkKByeATGlDZ6gXF2mTNKjDghs7ORv7UXqssIiVvjfCJvhZ8n@vger.kernel.org, AJvYcCXPhZmxz1LxuYc5sW608WZqOnoVYSH7UyYQYfOdvHtAzRI+LDpH13VcPs522WC8bCaGAUBLEoIIbdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJRuF63JesD988Y4YMd95U+MhmtoYognrAJrXWD7l7clUIJVMz
+	5GxvGK2JpYVjWN+UuYMQxlGV1G6rrbsmNFTt1YA/vZGSZczhLVHpNf7pSHRqLYyCKO9SivL7S1R
+	mXespVEDXyB/hfwhiNFeVwUJyyAI=
+X-Google-Smtp-Source: AGHT+IEUalT/+k/nt8RXO9y4VhfUvKEe3Mx8CnrfxRbIyWHtuU76FKGn8hkRZey+URZ5mKbXbG0YRRnXwz4CLPlladw=
+X-Received: by 2002:a05:6870:5d88:b0:296:bc75:6c6a with SMTP id
+ 586e51a60fabf-2971e9b1c9dmr7634787fac.17.1732543977707; Mon, 25 Nov 2024
+ 06:12:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+References: <20241118-hwmon-thermal-v3-0-9c17973e7342@weissschuh.net> <20241118-hwmon-thermal-v3-1-9c17973e7342@weissschuh.net>
+In-Reply-To: <20241118-hwmon-thermal-v3-1-9c17973e7342@weissschuh.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 25 Nov 2024 15:12:46 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i8p=jxnWepLHpH3uuxrtkpPhuWcPYwHQnQnzX=hTERRw@mail.gmail.com>
+Message-ID: <CAJZ5v0i8p=jxnWepLHpH3uuxrtkpPhuWcPYwHQnQnzX=hTERRw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] thermal: core: Add stub for thermal_zone_device_update()
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As ACPI spec said, the bit3 of the supported capabilities in _PMC indicates
-that the power meter supports notifications when the hardware limit is
-enforced. If one platform doesn't report this bit, but support hardware
-forced limit through some out-of-band mechanism. Driver wouldn't receive
-the related notifications to notify the OSPM to re-read the hardware limit.
-So add the print of no notifcation that hardware limit is enforced.
+On Mon, Nov 18, 2024 at 7:16=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisss=
+chuh.net> wrote:
+>
+> To simplify the !CONFIG_THERMAL case in the hwmon core,
+> add a !CONFIG_THERMAL stub for thermal_zone_device_update().
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/hwmon/acpi_power_meter.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 3500859ff0bf..d3f144986fae 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -712,6 +712,10 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
- 			goto skip_unsafe_cap;
- 		}
- 
-+		if (resource->caps.flags & POWER_METER_CAN_NOTIFY == 0)
-+			dev_info(&resource->acpi_dev->dev,
-+				 "no notifcation when the hardware limit is enforced.\n");
-+
- 		if (resource->caps.configurable_cap)
- 			res = register_attrs(resource, rw_cap_attrs);
- 		else
--- 
-2.22.0
+and please route it through hwmon.
 
+> ---
+>  include/linux/thermal.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 25ea8fe2313e6d0a53192974a80d92f50f0ff03e..455e0814b9165dbb96d698e67=
+0f160136a017cc4 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -289,6 +289,10 @@ static inline struct thermal_zone_device *thermal_tr=
+ipless_zone_device_register(
+>  static inline void thermal_zone_device_unregister(struct thermal_zone_de=
+vice *tz)
+>  { }
+>
+> +static inline void thermal_zone_device_update(struct thermal_zone_device=
+ *tz,
+> +                                             enum thermal_notify_event e=
+vent)
+> +{ }
+> +
+>  static inline struct thermal_cooling_device *
+>  thermal_cooling_device_register(const char *type, void *devdata,
+>         const struct thermal_cooling_device_ops *ops)
+>
+> --
+> 2.47.0
+>
