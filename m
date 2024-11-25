@@ -1,66 +1,66 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E34B1B4122;
-	Mon, 25 Nov 2024 15:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803102500D2;
+	Mon, 25 Nov 2024 16:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732549133; cv=none; b=hlN+dLNxE3Bj7Wvavg2ZSTe0tgTIo9t66nfOTs99TFGzxFo8NlmCId79+sVvGkcvZO/cx4gVyCKg/k6l5bT2+o1st4gTxnU69/YgSGLzIml5lhnegDnoLf9y7nZVheVIDI2+9yBWfRoK/Rz3GPtx79HulWAyiOpplmmg50vCNWs=
+	t=1732550635; cv=none; b=QJpeuoiELrfy27aPGWS3OiKpxFf7v0YUfeW4Ywe/JM3B6+T7pIt7StRbhrxwPPaqfuMY8cO5PG38naH1/rfGsvCK1DTFJ0IAyEZL51EP77bF8DpNyM9V4RDpPUYtKeSnhwKUjxC4EgEsYt4pdunSz8iKPOGWhYbK6HtpYMcfTBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732549133; c=relaxed/simple;
-	bh=Sme9ditUgQHkaJXoxj2JfK2GPTydrcxm+3DpKcOeTG4=;
+	s=arc-20240116; t=1732550635; c=relaxed/simple;
+	bh=JVXBK3ERxck06dJhXYlrGQ7pXqtyYDTznRZmJGZYn2U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QkjAVBCN3ocEUfXT74dIg7LeoR9cXFanr7NvcKBqxYB/fkrNP71ytTpEwvkSN1Z0Bk2DM0TsjlWFGXb2zLyvrcN5F2PzA+HGiEX9mZouHOxRTWUIUSX7DNgujgemUpFS6um6pXHE4sNFaeMa604qpdd//qeBTHOhZyv0rJ5ZyUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KG/QFD08; arc=none smtp.client-ip=209.85.215.174
+	 In-Reply-To:Content-Type; b=PGxL/aeOYefxLNb5GFYHTe5i61hNloWwUFNdbQcE34JIv7HI2qDRgO2zjkpOMy1hf1O/QBRPlEj+Lq5g0ZtV+kGyS49r5aq6Bz4VQ5z8/v1Wp9ELBEMx6XI1rFafzfAf1evLIpfAy5i9LfOKiDYxji/dRLf1oQJ+ApBJk6DNEiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WPw3n7CV; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KG/QFD08"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7e6d04f74faso3190124a12.1;
-        Mon, 25 Nov 2024 07:38:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPw3n7CV"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7e6cbf6cd1dso3198837a12.3;
+        Mon, 25 Nov 2024 08:03:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732549131; x=1733153931; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732550633; x=1733155433; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7HMd93l2XhUd6boAHs8/96tfHEGlnZQLIbe3woCtHLI=;
-        b=KG/QFD08wxFS67QSKwx/1Myz8hiEYIiPxnPHZkJLrm23dneOhby9LLVC/hiCtd+DOs
-         9X98dt/O/CTePujlABvzao4cDkgoVYwHzUBPu3YqjunNOM1gfFuWiVqmqJklz9Fb5g/R
-         SC6L5OpWVfkwd64rH3Eynq033VM232uLLJ0q8p0saHYBrU20ZglMSQtmQtLuBHAYhwsZ
-         BgQ+A+vyY7aGVOeJYKGzhL3WAMUvNx5vXXdwpe5pJ5GmmrMboNcHAdVOG9ckWziQUljV
-         RsTAwIs2E64ZCj3lKxepA6NLXlviyEE2x6EGCxu1HF2GBOps/TcMzZt5TKxrUK3FjJ8k
-         c8cQ==
+        bh=elxA+QAbEFAffsAeNupzq/iG+gMISth7fVEgLGnkeWE=;
+        b=WPw3n7CVe+UlNnY1snJaEun699X7zElUtAkIoIewrQGnURfu5ynSKXEt+iSwlCj3Ja
+         7wQNSOJt1B7susr3kouc8a+xWsMZCtkxGCdpXpd74Afzw6wBIc34nQ3gIhpGdMOvg6YI
+         uzBLeVfv2FNqz/YI2YAucn083qUQilS5sBYsufYyCLKoEZA91ateA8SYvrQDAe2rG7hd
+         ia7GyWQUsQp+eLQqU8+b0pk661EHKaXfTuXYDYA/5UTHeiXkb9mRzKYav9yDEHNMB48Z
+         6FIT1NK4fqOjzwsfY1QGu2/OdCSDbRHvSfokOog3QFPXMSg/3lNLj8FUPwOikqc11x/B
+         7dXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732549131; x=1733153931;
+        d=1e100.net; s=20230601; t=1732550633; x=1733155433;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7HMd93l2XhUd6boAHs8/96tfHEGlnZQLIbe3woCtHLI=;
-        b=b1RtcP8X/2MuEhWZ9b2fdh5hX8w27IwS7CjPt+lXSToSADA5HtHsczslfyMwaM5Q1n
-         mvRRnUkPJBEfm7ngr5Stbm6Z3lzwsUlE2hLChd7vLNhOcGpkaSyLf7vOBmXXt9BwlGGy
-         cFvCueC1KMurS6RAbK4bzC+shVbbzrn+U/gbQ+Cvw30pKlaqSC1QwRL4R7gsEVxAWFY0
-         gyNcl+8xTJf5cQC338/OUljz4qKKpdPoVUEWnZUxaTr99w7ATuRExtCAnGMxbvYCY3CF
-         TwAlqsJBUSWmhPNcW4G9OM2FSx5BI1kFVjRlPjnVbNwg02La7nU3lQ6WF8HPgLpuwM74
-         xHBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrQq12PSfsjGTwstxxTHt4o5jH/CQ541cgAGZui1HXFRfNkmu1JhqV+yajxoxK+sk1RlpIyKqeFI1kq3I4@vger.kernel.org, AJvYcCWdl+gs/Aq5BEB96Nlk+QGyeTo+tLU1KEwe30YFj2lZ2ijGnD2jAzsxCb3rMniGIpLYD8NEYYfgc7aoqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf1djwvyfOgDzcqWAIfLK5fLn+AwsSmPK0ryyFnU9UYvl/jENa
-	bQd5pEcloY4FU+LCZJzIVk1kmPqTPtxZxK2S38arIuFhYyNn01jk
-X-Gm-Gg: ASbGncuNZJX/n8CLOAX01oy/EhI137wF991TAn5YafMjXkF8P2f6eIN3BQEE0dxr+Gt
-	StFxOHJ24puNruyEuNKbaafToo1bMe90k70PiHdVfnKfGLnBjF5fz6POHrmrg6/FXHGxrJp+g5E
-	JScE8DzU5TyLfqH+aYDQuL4t4kUscEt/vTUfP3dNx/S4rtPnslJHU7xX8vVAnovf8v9jTm6373i
-	SLd/+5Lic7PgF/TXowO6v+sdSUpUdzcmgAhYHD92651R07jjq3g5aX5kdAXpMPZcJDGrKKhwH/F
-	1aom9lvWW41iNxU8dnmBCfw=
-X-Google-Smtp-Source: AGHT+IH16T9jkJyFrSeZ/PuvFVS+40nU9LO1WInhBICnYXlB4w+IbMoUSn3QOAMMeWDTwVfDWF20fA==
-X-Received: by 2002:a17:903:41c2:b0:20c:5d5a:af6f with SMTP id d9443c01a7336-2129fe288bcmr186057005ad.10.1732549130782;
-        Mon, 25 Nov 2024 07:38:50 -0800 (PST)
+        bh=elxA+QAbEFAffsAeNupzq/iG+gMISth7fVEgLGnkeWE=;
+        b=mRVoVCBA3EUHRqI4elBpUYscnmPewVX6MiGj3Ns1VAhLWe1J2COgO7xMUT1wp730nj
+         V/kkLeZXw5EBF8xKXXays/WKPQT57oHCivgy+Ko3i5YjyFmawy6pGNfZCuDcYmihQczy
+         g2sBcXrCovBOjZTnY5ifO+QQjDid5nDBoaonpNYq7Tez4mbt2oYLrTLrBkn/mZzrfaQN
+         TdEKeeRxM92hhiRHjx0Kv+5Bw5ETB49BnHIA9zwghDEqDK6AvaPqmTT2Byc1G8GGCFhJ
+         d9TO0ia8yxIM866ATS2Gus5hcjRbYSfn2ZaUww65NRt6OqN3So2CgfK0m+nGCOceppHx
+         +XLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/7s/aaW1u5+yEMvSZ/JsYLRn0qmX9jQ6zeQL/6OU2eNpg7fbUNMG9moOPOtFFeJt65KJIsXbmrvmQmg==@vger.kernel.org, AJvYcCWjGQE9xtMgdxyirwgUXJXem9Q0Lm2z2hIcTWSARPUISMMavIiJZzS4ms4atdoB1W1dqYY4dURgHDAGtgjj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmHwt4XIi/YRn6p+FXg1VClhuEH+qpo5AHTilwgG32jVVY0XT8
+	uBh7LqWTZFEOrCGCgHaZUE3JZjvDN5W0zGkvDH2m1V/QIJRJa/wS
+X-Gm-Gg: ASbGncuuYfdln4XfZcWSnbjJe/WTxgT9b6SjTXQ5tXW5iuhF/b2HduuErWA97tKQSBX
+	9ppBMJvsyF8p/qtFMVYfnabOE9MUGBC1cvzcIBLfixpCIsuKlvItiDA4OTfcSsMPDkdA/aMbLrd
+	xVM7+TtgVKCwJ/Nr8PPnTK8E2YbnWnjkC2UX6R6ACGknLF5Z+++H/lBJEkf8O+2LYAs5Uom/hGL
+	2rrMNM9R9s6Lbni9gtchpYIx31wD8dvK+VDv5C805S39aG7e/FXVTWEBrnLEXME+spa5m4/Eb25
+	m1Cj8DiWM3zxnheWnIDnv/w=
+X-Google-Smtp-Source: AGHT+IFiHeksOOn2dQw+NCO2y2yE31fa/Zhla1Dv2vwD+MZoKSifgz+oHD3/ZfkK/3GCZlvb4j/9Sw==
+X-Received: by 2002:a05:6a20:3d8d:b0:1db:a33e:2c6 with SMTP id adf61e73a8af0-1e09e420a72mr20284082637.18.1732550632721;
+        Mon, 25 Nov 2024 08:03:52 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dba14fbsm66566835ad.81.2024.11.25.07.38.49
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcbfc0501sm5795172a12.1.2024.11.25.08.03.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 07:38:50 -0800 (PST)
+        Mon, 25 Nov 2024 08:03:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <370185ed-4418-4c84-a7dc-3faa56edade2@roeck-us.net>
-Date: Mon, 25 Nov 2024 07:38:48 -0800
+Message-ID: <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
+Date: Mon, 25 Nov 2024 08:03:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/4] hwmon: (acpi_power_meter) Remove redundant
- 'sensors_valid' variable
+Subject: Re: [PATCH v1 1/4] hwmon: (acpi_power_meter) Fix using uninitialized
+ variables
 To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 Cc: jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
  zhenglifeng1@huawei.com
 References: <20241125093415.21719-1-lihuisong@huawei.com>
- <20241125093415.21719-4-lihuisong@huawei.com>
+ <20241125093415.21719-2-lihuisong@huawei.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,96 +121,63 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241125093415.21719-4-lihuisong@huawei.com>
+In-Reply-To: <20241125093415.21719-2-lihuisong@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/25/24 01:34, Huisong Li wrote:
-> The 'sensors_valid' in acpi_power_meter_resource structure is always one
-> after querying power once. The default value of this variable is zero which
-> just ensure user can query power successfully without any time requirement
-> at first time. We can get power and fill the 'sensors_last_updated' field
-> at probing phase to make sure that a valid value is returned to user at
-> first query within the sampling interval. Then this redundant variable can
-> be safely removed.
+> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
+> acpi_power_meter_resource structure. However, these two fields are just
+> updated when user query 'power' and 'cap' attribute, or hardware enforced
+> limit. If user directly query the 'power1_alarm' attribute without queryng
+> above two attributes, driver will use the uninitialized variables to judge.
+> In addition, the 'power1_alarm' attribute needs to update power and cap to
+> show the real state.
 > 
 > Signed-off-by: Huisong Li <lihuisong@huawei.com>
 > ---
->   drivers/hwmon/acpi_power_meter.c | 18 +++++++++---------
->   1 file changed, 9 insertions(+), 9 deletions(-)
+>   drivers/hwmon/acpi_power_meter.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
 > 
 > diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> index 95da73858a0b..3500859ff0bf 100644
+> index 2f1c9d97ad21..4c3314e35d30 100644
 > --- a/drivers/hwmon/acpi_power_meter.c
 > +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -84,7 +84,6 @@ struct acpi_power_meter_resource {
->   	u64		power;
->   	u64		cap;
->   	u64		avg_interval;
-> -	int			sensors_valid;
->   	unsigned long		sensors_last_updated;
->   	struct sensor_device_attribute	sensors[NUM_SENSORS];
->   	int			num_sensors;
-> @@ -316,15 +315,14 @@ static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
->   }
->   
->   /* Power meter */
-> -static int update_meter(struct acpi_power_meter_resource *resource)
-> +static int update_meter(struct acpi_power_meter_resource *resource, bool check)
->   {
->   	unsigned long long data;
->   	acpi_status status;
->   	unsigned long local_jiffies = jiffies;
->   
-> -	if (time_before(local_jiffies, resource->sensors_last_updated +
-> -			msecs_to_jiffies(resource->caps.sampling_time)) &&
-> -			resource->sensors_valid)
-> +	if (check && time_before(local_jiffies, resource->sensors_last_updated +
-> +			msecs_to_jiffies(resource->caps.sampling_time)))
->   		return 0;
->   
->   	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PMM",
-> @@ -336,7 +334,6 @@ static int update_meter(struct acpi_power_meter_resource *resource)
->   	}
->   
->   	resource->power = data;
-> -	resource->sensors_valid = 1;
->   	resource->sensors_last_updated = jiffies;
->   	return 0;
->   }
-> @@ -349,7 +346,7 @@ static ssize_t show_power(struct device *dev,
+> @@ -396,6 +396,9 @@ static ssize_t show_val(struct device *dev,
+>   	struct acpi_device *acpi_dev = to_acpi_device(dev);
 >   	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+>   	u64 val = 0;
+> +	int ret;
+> +
+> +	guard(mutex)(&resource->lock);
 >   
->   	mutex_lock(&resource->lock);
-> -	update_meter(resource);
-> +	update_meter(resource, true);
->   	mutex_unlock(&resource->lock);
->   
->   	if (resource->power == UNKNOWN_POWER)
-> @@ -429,7 +426,7 @@ static ssize_t show_val(struct device *dev,
+>   	switch (attr->index) {
+>   	case 0:
+> @@ -423,6 +426,13 @@ static ssize_t show_val(struct device *dev,
 >   			val = 0;
 >   		break;
 >   	case 6:
-> -		ret = update_meter(resource);
-> +		ret = update_meter(resource, true);
->   		if (ret)
->   			return ret;
->   		ret = update_cap(resource);
-> @@ -699,6 +696,10 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
->   		return res;
->   
->   	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
-> +		res = update_meter(resource, false);
-> +		if (res)
-> +			goto error;
+> +		ret = update_meter(resource);
+> +		if (ret)
+> +			return ret;
+> +		ret = update_cap(resource);
+> +		if (ret)
+> +			return ret;
 > +
+>   		if (resource->power > resource->cap)
+>   			val = 1;
+>   		else
 
-This forces an update of the meter attribute even if no one reads it
-subsequently for a long period of time. Avoiding that is the whole point
-of the flag. Otherwise every driver using the flag could just read its
-entire set of attributes to avoid it. I don't see the value of this patch,
-sorry. You'd have to explain why it is better to do the unnecessary read
-to avoid the flag.
+
+While technically correct, the implementation of this attribute defeats its
+purpose. It is supposed to reflect the current status as reported by the
+hardware. A real fix would be to use the associated notification to set or
+reset a status flag, and to report the current value of that flag as reported
+by the hardware.
+
+If there is no notification support, the attribute should not even exist,
+unless there is a means to retrieve its value from ACPI (the status itself,
+not by comparing temperature values).
 
 Guenter
 
