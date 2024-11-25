@@ -1,66 +1,66 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97C21B4136;
-	Mon, 25 Nov 2024 16:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906C32500CB;
+	Mon, 25 Nov 2024 16:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732551201; cv=none; b=VU1g+9j7D5e9F0zMrkyQTVI3+puBFZ/fJy//xIA5clZ/CpB0iPyNrorIzdsMSzXKEGzMoBzF13PjG7EFBVTHLfczOfci3F+GLeogr6TcUT3kYOlX7G9AznWNtJMficesUcTNg/S9XlyT4t6z7xdRFUUNI9/chglp5ABQRc5+J0k=
+	t=1732552894; cv=none; b=OM3/U9ZUvlvRzCNe/sZPHJqotzoo6xfd12Xf5a6Y++b0gzoQbANczoWkLeBAMfM3Hc8ofBf/q6030HRu0EAL9lRQAp+xUDWjQYJCA0468bl5nBWpTv2xhC4ftnWvqbMKuF/jw9zRFMuYy/LgD2Ii+hotMJsZCqLjfZhAR81nmqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732551201; c=relaxed/simple;
-	bh=RtG/gOn6MPjTIDicfx0CuZjHw14DfuYhQnK9bNPOVQc=;
+	s=arc-20240116; t=1732552894; c=relaxed/simple;
+	bh=jF/ERztw44bK32OJljuv2VfQwBEi6pkAMaxilDGplUA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VcuTawbUziVUuPK1LkG2TKQcMTEAEmlEOaasqe93ZosvShNMtPlag0JCIu+R63RkEEXKZbPmLwRFxdIBolWMgWdRQGDrzIY5WZaIE+Hsafb+PxTpI2+LcFeFe/cquYE79rXUyThq5wdPdQUTXZpZKVwXainDwVRVovNuDqflPSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cPKb4ut8; arc=none smtp.client-ip=209.85.215.172
+	 In-Reply-To:Content-Type; b=bXZUPkUinwuHtk7+ADq0+tzDor6eCOX3zxngwxQoMHMkJxd2OLutXZq98oW0KLzRz3b4Yyxi815fgk+3HMMSe4jLcIGEmn8UGddT9ZcralgNy9JK0XgdiTYLFe+14Gv9F3tCZ8M3C3B+A/ou5NO5UQhM6zg7a5y430Puyk8bDZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XF/7413d; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cPKb4ut8"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7fc1f1748a3so1346411a12.1;
-        Mon, 25 Nov 2024 08:13:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XF/7413d"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-212874cd62cso31892735ad.3;
+        Mon, 25 Nov 2024 08:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732551199; x=1733155999; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732552892; x=1733157692; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=r3FR3d5ILuvQwVafGOMqBhBgqAdgY2ts6TkOzxc8ZO0=;
-        b=cPKb4ut8eZODe+F2IpvxOwciOiBlYDujNckVq3u06R+DsB6XrpDaSZsm5Nc3lcXbDK
-         QahFKUz9oOfk1bfI+RZNYRzcmTg2wtVOWigeScO/n7/nyaeyX3Dk9oAO1ByKy70tS/r7
-         6qXkqQKxCVLXA1BzDLmdUHNrghbUAdbnbpdJZL2chohSOPSkf7DybhoT2xzfUtwQNHAF
-         0xUbfjxryXFsQqGtV/aKKbbqlbvxtJM/wQBatiJZds7EaXhCIuECvnNaIgYhwxvnxuOw
-         lGwU1pkHTMaAbQ2APq9YeB4VwlrclcfrRZ2aAfTXPw5EaGWgihVt9KOdd/I56NmtXHIJ
-         iwuQ==
+        bh=nBrNYtNQzEwXYNxHWnsi/6PaMJ3GpRjnVgxUp7Rk5OU=;
+        b=XF/7413d45l0iT06Zf1zmt1/eCwb60xR3G1Oy6LoaU+dNvvNeSmaJoGR1O1VS+vW8y
+         ZHTvwmgu+QUzLHOzYJHSim4e3sMeKB5Dy1FCOylWw77AQ1fhrkWd8Np9zvdDlTBzmI5y
+         FZ7beru+aS7IAQIXWSJfLU7dS0HPL11OZZVT7MG76TUYRGG/KzCRE7YClSQEpzjJEwEl
+         Xb/uJEDb4GP97oY4NF/ecmHCZ4wc3TwenTTJzGk1sAu6iDfgdDn2aXkqATK3BVTD/H16
+         4I0yp3FbFpox/GU93uu/MCVQO/8tSFNXqfXie6Dyh1l3XMIeNeY9//Z+zct4UGxryQT5
+         0mng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732551199; x=1733155999;
+        d=1e100.net; s=20230601; t=1732552892; x=1733157692;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r3FR3d5ILuvQwVafGOMqBhBgqAdgY2ts6TkOzxc8ZO0=;
-        b=jG8H/oplBL7bgTxjIaQ2kZfMUdUSyz35rN2u3fThebotW24py+ykg7c06Pkg1kGiNJ
-         b5FFQgIQo1g2FyPoGx+dqJZTpfhXo0rY+aOcOa/7izG3gME14KETYrH1ouZN5G4M62Ef
-         nIDsTTNFMl21zQl74HlUcOD0h4fKRXVYnioyMj7URczLVlIH5H2R/aA6dAhQSiGX1pv3
-         Ij7n7BlbONnvWyhPj7ojWXbyMLKYPu/8Al5ulOHCXgLuq5DSAezEVfodlY1yXSevRhaN
-         mL2if5HhVf7pVuAyIOluyeOU80jG4AbVkVkRIHVnHahMV56MbM819VTQnUmF6hFP5dBR
-         VjXA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4lTUV7KeNAQtqjPiO55hAaPHadCYuqW/YgueLankEkKa4QfkOffyN4W7xxMbTRLsFhmwTE0TR3wN73w==@vger.kernel.org, AJvYcCXKLeDFhT5O2cZ3OGBYfBG0aPN5bpYbXgZ65MOPwx6lyGC5s36cq3fObhsSsAcT55mIHHTVQsJBCcjM7b8i@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQmaFxjNobtReVAfM00XOfV0A2taeo2xZy3635sLpK1BYqzzfh
-	lNcSF7Mh2phrNmL1aKLuIbCTpBKCVNnOFZ68KPMlhskUJAGM0cgY
-X-Gm-Gg: ASbGncv6OiirxExdoTuB5fuTkYi0irWMQdPJHxozaIivKO1yT37lc6chbyVUqcRht2Q
-	APtCSt6od5SR3Mujqy6C/bF7Yccvan4CmOzydxIzv6cTGGoPC9C4PLWXTWYWtxaUccOLGiT+l4t
-	F5740kfiAz+h6tWVmuL/xHRBuZlM4GV7S2OKoxvdJLcx9Y2Ye0TpShVcs+EX9Fzi1giWTcduMmo
-	RKJUSg0tUCzaxIdg1vlyleaFchutFP304D2IeKsMY3eRxuHa/fE9lDhQwS5eamHgrCFkcfIvTv8
-	ee0ANiON/oICiqzcRaqqbfo=
-X-Google-Smtp-Source: AGHT+IGWowUripRU8V2mWSHOlLFWRNc7ArnZjOb/sXCeclglLDyNWP15s+uXaVCwWirEyK6gKHTCmg==
-X-Received: by 2002:a05:6a20:7492:b0:1db:f823:109f with SMTP id adf61e73a8af0-1e09e588d0dmr21414261637.31.1732551198694;
-        Mon, 25 Nov 2024 08:13:18 -0800 (PST)
+        bh=nBrNYtNQzEwXYNxHWnsi/6PaMJ3GpRjnVgxUp7Rk5OU=;
+        b=KJi9r73AqbZpPPuNjxa1VD/qgTAH91E5WThFzF2CJAIzV46k5eI1rz6+cyPQ72dA2O
+         bgdUqmtppmN1P7TNLdnoCSVQJgNtrAywqTA0rlZqV7nngvS45hbrs2lXyT4buassaNfy
+         +95pxVAq/M0PYgjXvosx6junRmNDxob8v94UOkTWyvRUJWuJkA2d2+TYd0wU+9guWWGB
+         qeCtnm/sfi9jtlCBc20pMpgck3xa9PID1CJcnkXm4TDDIFZoi2mbchrmuqr9f16+z25v
+         hX2dAeBCq3QC2l9KeltiVNpYnJ0qJHH8drwzYcoONs/oKHyVJKX9lIl8uiwkSfgq7Lwc
+         Z03Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUX8pLYQ8pOj3YD0nerd//irw17dYBbZZvppoj3bks9A9x5y7ruNr2rrTqFZ00rHGs80MHkfwtnXpP1u4g=@vger.kernel.org, AJvYcCW4NzG2XgLeLUI7WgT4RxB8gpIFxjf62+ziiFyMa08NZoxXosJ4vyecOX+XLrwnl0MWLalNe1GYYeMDs+QN@vger.kernel.org, AJvYcCXrlmxnIgqhHwhxJr08bpRvPyfolOPEImqwyL+CEHCrx/GdtSUgFq9+xcrNaGghewEs320Yo49PnLfJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqB+memF+5GfAs/BRF4NiE4J9hNEU5DgAdqsHEm70y98VJ/rHb
+	2r3ImOKQEvvAk2Z4S+XDfo1sroSRMr2C7vgXk/Jera04bFuEHEiq
+X-Gm-Gg: ASbGncvJkpye2HpQrUlii8kKt50R0aR+Lnvh15AlykgZHWHjgPwSXjTbZu3kCjIbrrW
+	RnrYC/8JS1W4oOMxH/Ef65SqWfeNIgtOvAAPzRi3ioX6pPAsPU2QiIKgwvBoQP5RAINVEat/vtF
+	35TyM9xzbwfEd2nziSkjldl9dwHd4EMOlVbssLSqLprqEXfHqRbfIgiN0+tPRlk9otbkT5729dL
+	fOW+Rif18dWJY8W7vJISP97qAqtZ3MydNJGJ1vcCT9svg7ZphkxCXwiRVQGkvUswbVDChcvmS+l
+	y6FbhklLTAW4iWzqJC66SY4=
+X-Google-Smtp-Source: AGHT+IGXVga3kfHh5g4xM/HP5awF9elnHHUod4WhaqtWpvHDg+zRrHgvqc8XQnexAHb8fP1B3xmtTQ==
+X-Received: by 2002:a17:902:e885:b0:211:152:e1e6 with SMTP id d9443c01a7336-2129f69f23emr210228605ad.48.1732552891881;
+        Mon, 25 Nov 2024 08:41:31 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de456444sm6814088b3a.28.2024.11.25.08.13.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2129dbff549sm66965225ad.130.2024.11.25.08.41.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 08:13:18 -0800 (PST)
+        Mon, 25 Nov 2024 08:41:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f7274b8d-cb91-4975-be94-69f041e9c4ee@roeck-us.net>
-Date: Mon, 25 Nov 2024 08:13:16 -0800
+Message-ID: <eda10481-d1f2-45c4-a5ff-0f26398fe6bf@roeck-us.net>
+Date: Mon, 25 Nov 2024 08:41:28 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,24 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/4] hwmon: (acpi_power_meter) Add the print of no
- notification that hardware limit is enforced
-To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
- zhenglifeng1@huawei.com
-References: <20241125093415.21719-1-lihuisong@huawei.com>
- <20241125093415.21719-5-lihuisong@huawei.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: Add properties for thermal
+ sensor cells
+To: Krzysztof Kozlowski <krzk@kernel.org>, "Sung-Chi, Li"
+ <lschyi@chromium.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Benson Leung <bleung@chromium.org>,
+ Guenter Roeck <groeck@chromium.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <thomas@weissschuh.net>, Jean Delvare <jdelvare@suse.com>,
+ devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20241111074904.1059268-1-lschyi@chromium.org>
+ <20241113024000.3327161-1-lschyi@chromium.org>
+ <20241113024000.3327161-2-lschyi@chromium.org>
+ <4efe981f-f7ae-41c7-9c12-2aa3a5d2d046@roeck-us.net>
+ <eb1c249c-5f42-4878-8934-09d6ea5c43f2@kernel.org>
+ <893bbd30-300f-4138-8f68-64573e1f0140@roeck-us.net>
+ <61541768-1b32-4473-a569-850323a6c7a1@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,55 +131,96 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241125093415.21719-5-lihuisong@huawei.com>
+In-Reply-To: <61541768-1b32-4473-a569-850323a6c7a1@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/25/24 01:34, Huisong Li wrote:
-> As ACPI spec said, the bit3 of the supported capabilities in _PMC indicates
-> that the power meter supports notifications when the hardware limit is
-> enforced. If one platform doesn't report this bit, but support hardware
-> forced limit through some out-of-band mechanism. Driver wouldn't receive
-> the related notifications to notify the OSPM to re-read the hardware limit.
-> So add the print of no notifcation that hardware limit is enforced.
+On 11/25/24 07:18, Krzysztof Kozlowski wrote:
+> On 25/11/2024 16:13, Guenter Roeck wrote:
+>> On 11/25/24 00:52, Krzysztof Kozlowski wrote:
+>>> On 13/11/2024 04:05, Guenter Roeck wrote:
+>>>> On 11/12/24 18:39, Sung-Chi, Li wrote:
+>>>>> The cros_ec supports reading thermal values from thermal sensors
+>>>>> connect to it. Add the property '#thermal-sensor-cells' bindings, such
+>>>>> that thermal framework can recognize cros_ec as a valid thermal device.
+>>>>>
+>>>>> Signed-off-by: Sung-Chi, Li <lschyi@chromium.org>
+>>>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>> ---
+>>>>>     Changes in v2:
+>>>>>       - Add changes for DTS binding.
+>>>>>     Changes in v3:
+>>>>>       - Remove unneeded Change-Id tag in commit message.
+>>>>> ---
+>>>>
+>>>> I can't apply this one (not in hwmon space), so
+>>>>
+>>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>>>>
+>>>> with the assumption that Lee will pick it up.
+>>>
+>>> This was merged, while I was AFK, so the ship has sailed, but let me
+>>> state here objection for any future discussions:
+>>>
+>>> NAK, this is not a thermal sensor. The commit msg explains what they
+>>> want to achieve, but that's not a valid reason to add property from
+>>> different class of devices.
+>>>
+>>> This is some hardware/temperature monitoring device or power supply, not
+>>> part of SoC, not integrated into any SoC thermal zone. Calling it
+>>
+>> I am confused. We have several thermal sensors registering as thermal
+>> zone, and fan controllers registering themselves as thermal cooling devices.
+>>
+>> Are you saying that this is all not permitted because they are not part
+>> of a SoC ?
 > 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->   drivers/hwmon/acpi_power_meter.c | 4 ++++
->   1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-> index 3500859ff0bf..d3f144986fae 100644
-> --- a/drivers/hwmon/acpi_power_meter.c
-> +++ b/drivers/hwmon/acpi_power_meter.c
-> @@ -712,6 +712,10 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
->   			goto skip_unsafe_cap;
->   		}
->   
-> +		if (resource->caps.flags & POWER_METER_CAN_NOTIFY == 0)
+> These are fine, because they monitor or cool down the SoC.  Sensor can
+> be under the die.  Fan for battery or for battery charger also would be
+> fine, because it is a real cooling device.  It literally cools.
+> 
 
-== has higher precedence than &, so this expression will never be true.
+Sorry, I don't get the distinction since you specifically refer to the SoC.
+How about drive temperatures ? RAM temperatures ? Temperatures reported
+by networking chips ? Power supply temperatures ? We have all those registering
+thermal zones. The ASUS EC controller driver registers thermal zones
+for its temperature sensors. Dell and HP drivers do the same.
 
-And, indeed:
+> But treating battery charger as cooling device is not correct, IMHO.
 
-drivers/hwmon/acpi_power_meter.c: In function ‘setup_attrs’:
-drivers/hwmon/acpi_power_meter.c:701:42: error: suggest parentheses around comparison in operand of ‘&’
+Confused. The patch you object to isn't introducing a cooling device,
+it is introducing #thermal-sensor-cells. The EC reports temperature
+sensor results, and the driver wants to register those as thermal zones.
+Yes, it may well be that one of those temperature sensors is close to
+a battery charger, but I am not even sure if that is really the case.
 
-> +			dev_info(&resource->acpi_dev->dev,
-> +				 "no notifcation when the hardware limit is enforced.\n");
-> +
->   		if (resource->caps.configurable_cap)
->   			res = register_attrs(resource, rw_cap_attrs);
->   		else
+> Battery charger does not cool anything down and already we have there
+> properties for managing thermal and current aspects.
+> 
+Agreed, but unless I am missing something that isn't done here.
 
-On top of that, I don't see the value in this patch.
+> BTW, if power supply bindings miss some thermal aspects, then let's grow
+> the common binding first and agree on common aspects.
+> 
 
-Overall, really, this driver could benefit from a complete overhaul.
-Its use of the deprecated hwmon_device_register() should tell it all.
-There is lots of questionable code, such as the unprotected calls to
-remove_attrs() followed by setup_attrs() in the notification handler.
-Any updates should be limited to bug fixes and not try to make minor
-improvements for little if any gain.
+I don't even know how the two patches are associated with power supplies
+or battery chargers in the first place. All they try to do is to enable
+adding the temperature sensor values reported by the EC in Chromebooks
+to thermal zones. I don't recall any previous limitations on the ability
+to register thermal sensors as thermal zone with the thermal subsystem,
+and I am trying to understand what those limitations are.
 
+So far my approach was "ok, someone wants to register a thermal sensor as
+thermal zone - fine, let's do that. We have close to 50 thermal sensors on
+a variety of devices - including but not limited to disk drives, memory,
+Ethernet controllers, Ethernet PHYs, SFPs, RTCs, and ECs - registering
+as thermal zones from hardware monitoring drivers. I don't recall anyone
+ever saying "no, you can't do that".
+
+I am trying to understand if some of those are inappropriate and, if so,
+why that is the case.
+
+Thanks,
 Guenter
 
