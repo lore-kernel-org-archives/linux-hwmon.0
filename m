@@ -1,139 +1,146 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6088638DE1;
-	Mon, 25 Nov 2024 18:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9E1B85CA;
+	Mon, 25 Nov 2024 18:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732558342; cv=none; b=mMzhNmoHFlexHBzNJgmAELSrKugcPBcbMq47tGwW35VyJhwork0xb6BiiNAddllwD1HunwiU9mUeoN4pm35N/LY+BqE0l7XFat8gLsPSvdAbtIOXnlBfsGQdgTYtIec91zpXfdPq7evafYxgYObs4OX6yQpM31glWVcEJidXoEo=
+	t=1732560516; cv=none; b=FJgl8YTUPiXzeQ4h+DiEIt1FteN0HqtVAwxTU8XvdM1Vrl4bZX3PteueLdad/CkCNIMsb9xr4ZlWiSFKk2SsVL5gIiIX6X2GRRlHTQNZw9E2vkvbmUWvBt1hyR7Wq2fUE6B+DlDbJpsLCiauj8DwrNWJLzgT8/6NKPBk5kirUV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732558342; c=relaxed/simple;
-	bh=HZGnN7ZvK9l3vjhc4ka/Nd1jhI6jhPdZF/eYCoBVsFk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E+qOeRJaLI1AJ+TBMNuBEwr0iREX0jWl+fNruu4f1y6G+hH0OyZj11G3aHPL8cpxz4ayJTw9fPKQXOMe+8GbEbmqOLXMAafOs63FZynLUpoePxkRvpSxyv7RvvwD/lM5f9kIsBl8nkZolYwXfhbGD7JC4KPq2YfRbZ5JRVmgA6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HaXWQ3/a; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732560516; c=relaxed/simple;
+	bh=iIoOus4blNmLJvI367kCSBxRvmQLM+vJ+uL517h3aaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bascef8rtvh3JSnvUkMdpTy5FmvW1lVF+BV5hrqKShT5cP/QqjjrppVF1FrahDlvq3ZdorbyLgqgpuXS/IsUfA+cWiCPRfsc+voXvlzK62B88VTTC3A6AAvpfrioDZH+TbSBHi6VKEqc+31+DbwHDaTzz6aP2UG46wUqK/3acCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjye1Ri1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HaXWQ3/a"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-724d57a9f7cso3756208b3a.3;
-        Mon, 25 Nov 2024 10:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732558341; x=1733163141; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZGnN7ZvK9l3vjhc4ka/Nd1jhI6jhPdZF/eYCoBVsFk=;
-        b=HaXWQ3/ab9KqMtTL6VA9/3hdIygqpWkmHez7UuggdYPywrJP7KBdzewn3Sk5nnP8Gl
-         xNklT0M/15fwHV4Z6A/bDpoS9RMZVnHRVS8qZnejU5nY+YLiI7tJ/PH1vVycIIYkTdjZ
-         S5UWfRHZ3fgBKh0u+KNYG4/lqMsgSSmBnJu7q4OH+ljVAlk+NsB02TZcj0xgLE4EdYTY
-         xa63YqrR7FMSFwgDsBC/Eli/MZO9rGx6dFCf5zn8Yi+yjbp7JlCvJ7uXd5WCLEfTrn8q
-         fL30azJNU+AjcMtb/kPhZLqoRtTbXc1ggEr49gaOZqWCgumAJVjR/NCpKZ/vLZ7iZuqc
-         SvlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732558341; x=1733163141;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HZGnN7ZvK9l3vjhc4ka/Nd1jhI6jhPdZF/eYCoBVsFk=;
-        b=LS/52mAUPwuphKNkqYXQ9huq0RmociTwY7k6jDaOgsu21apUALJMcc39yjJhPAW9sv
-         asrHH0S5AbHaS3PBx4yZYhKTRj+zffDHJ6UdsIfiHndzLLtBdrfBZijCy+MI1h1vLvvv
-         TaTSMIubww/fUkM/mEFTI6BDqBgBLG2tV0yILDYCOr7kKV32Y6So/LUFAmITVqQCp127
-         d1H+AueYNCJStXImEzZ7/ATRnbXpHwg8PIaR8ZcVskR/VijX7gZKwJBGGHHK1A4eIbHG
-         4aLfkfONEJv8JHU+ESswDG0NbgX0c2sAN9wdTswVQTBWHOJK8T6rZwHzIXw/6VDZf4hn
-         r/cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVTLYEKpRFXR9n/qqpuLUXIoIuRvGVumbXj12NTwMOD6IpOA36jlTDi7IAXsiREcPoFfdLxvmKdM3P@vger.kernel.org, AJvYcCVkEbS0pJ1gWwoEzvy9eJbakQX4zXWbtG4t+YZ9cWNgJIOP6667SqI+cJvMn/eNBjQxuNrkZRl60Nto/GQ=@vger.kernel.org, AJvYcCWWL9pZseHTL2UBDufhHjZfzz4h91DatRzW412DHAXMaN1D5Y8q6UawMsUZZMQLea5f0jKVEvfw/Jz5@vger.kernel.org, AJvYcCWlaLAOB6STTHochJdrZU2bn4EZ0bNAC7WvUixTmFZRa0N1toegox6Gz1aRGzw9eOQAXLTPn1rQ8+btrx94@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2rk/WliNhUujZGFLicEhRYIrvoTu2tb2AHmOiNUIAQO1hs6J0
-	IYEHBRgWc7PkwSFZd6QxhQeP2gU6N2NZ+SqN2E7X4O1o84gbwLiY
-X-Gm-Gg: ASbGncv0VGsYCu3jMFz9Nj08a7GPjCRnh2bkJsr6fcUbSEz85tb5yBEC6EqNDtmPP/D
-	vxEa0MezeU4e9hUQ63BmGQMtycydTGrbXHobICLIJ9LvFiZAKBpEXq5KWLPKOqowxyfxUw5yRdb
-	X+dx58n+mtPOkSWoggf7Q6K9kOVxTuZW8LxZ7BmBF6zJGV6WAnFD/9/9c6AUoawTTyCF1ykxVhZ
-	al80CWRFLVfQaxrL5yVaR5i+u8UxDMH8Ui54bLqS9yBFgMkqEjiniQXqvcujYZCJupCiYlrMfO/
-	lfkGgg4GLDNACrfPRXBooUM=
-X-Google-Smtp-Source: AGHT+IEUEbyZ/Kpur7hRBQ4uW7UnROr06ax8gY4d8PF7fVW4aGOa8CMU3yI63lRaIQJqWZUyZD7mHA==
-X-Received: by 2002:a05:6a00:92a2:b0:71e:cc7:c507 with SMTP id d2e1a72fcca58-724df6b566emr22723763b3a.23.1732558340583;
-        Mon, 25 Nov 2024 10:12:20 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de5346basm6935817b3a.108.2024.11.25.10.12.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 10:12:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d8b9adb8-9f04-4c52-a1c5-18c00ccbc627@roeck-us.net>
-Date: Mon, 25 Nov 2024 10:12:18 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjye1Ri1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18686C4CECE;
+	Mon, 25 Nov 2024 18:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732560516;
+	bh=iIoOus4blNmLJvI367kCSBxRvmQLM+vJ+uL517h3aaA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kjye1Ri15GPM/2NjsSO7bpfi3t1tkh6/0ikAD89I8KHnorIec93jo3Ul//+0Dn6xG
+	 Dz2/a4+IaJGu0TUP1GHj4YfWxjd+uhqyUmo5rZGa53My4VtPyIdLoePH2grM/Gxx2h
+	 QPIH77cJ6ShYAXPaSzgmghCnCQ/vBT0t64wadjbbhXWar4NZVyVhisfCsDnYPw4rNT
+	 J21D28kIztoBwmsvlNkA6UkamD7ZIzyPDrtu+lAr1vXKfr+HJQY0PlJscYZxTpGIYE
+	 4AGJOZFQyjw1rtjvxNoiojHFy8ZOu5JRt2AJy1I5NHBAjMhZlpy6rkI6Dl5zSOkKl6
+	 JaVHtFb8nwXWA==
+Date: Mon, 25 Nov 2024 18:48:30 +0000
+From: Conor Dooley <conor@kernel.org>
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Sabau, Radu bogdan" <Radu.Sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	"Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
+ for adp1051, adp1055 and ltp8800
+Message-ID: <20241125-clever-unpeeled-61362034cf24@spud>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+ <20241120-process-hulk-ecedcbf088f7@spud>
+ <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
+ <20241123-paced-osmosis-007bf72c4b02@spud>
+ <20241123-submersed-overdue-ce999ccccc72@spud>
+ <PH0PR03MB69389916EC3C46C3A1F228AE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: LTC2978 HWMON PATCHES
-To: "Jones, Michael-A1" <Michael-A1.Jones@analog.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: "robh+dt@kernel.org" <robh+dt@kernel.org>, "corbet@lwn.net"
- <corbet@lwn.net>, "jdelvare@suse.com" <jdelvare@suse.com>
-References: <PH0PR03MB69779A87462D5888E8526E77F62E2@PH0PR03MB6977.namprd03.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB69779A87462D5888E8526E77F62E2@PH0PR03MB6977.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="a4xeAmARkWBmeFmd"
+Content-Disposition: inline
+In-Reply-To: <PH0PR03MB69389916EC3C46C3A1F228AE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
 
-Michael,
 
-On 11/25/24 09:55, Jones, Michael-A1 wrote:
+--a4xeAmARkWBmeFmd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please do not send patches as attachments, but as patch series.
-Note that the devicetree patch should come first. An intro patch
-is not necessary, but attachments simply don't work.
+On Mon, Nov 25, 2024 at 02:44:32AM +0000, Encarnacion, Cedric justine wrote:
+> > On Sat, Nov 23, 2024 at 07:56:21PM +0000, Conor Dooley wrote:
+> > > On Wed, Nov 20, 2024 at 10:00:19AM -0800, Guenter Roeck wrote:
+> > > > On 11/20/24 09:11, Conor Dooley wrote:
+> > > > > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrot=
+e:
+> > > > > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+> > > > > >      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+> > > > > >      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temper=
+ature
+> > > > > >      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC =B5Module Regulator
+> > > > > >
+> > > > > > Co-developed-by: Alexis Czezar Torreno
+> > <alexisczezar.torreno@analog.com>
+> > > > > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@anal=
+og.com>
+> > > > > > Signed-off-by: Cedric Encarnacion
+> > <cedricjustine.encarnacion@analog.com>
+> > > > >
+> > > > > Why did you drop my ack?
+> > > > > https://lore.kernel.org/all/20241106-linoleum-kebab-
+> > decf14f54f76@spud/
+> > > > >
+> > > >
+> > > > There:
+> > > >
+> > > > > +    enum:
+> > > > > +      - adi,adp1050
+> > > > > +      - adi,adp1051
+> > > > > +      - adi,adp1055
+> > > > >
+> > > >
+> > > > Here:
+> > > >
+> > > > >> +    enum:
+> > > > >> +      - adi,adp1050
+> > > > >> +      - adi,adp1051
+> > > > >> +      - adi,adp1055
+> > > > >> +      - adi,ltp8800   <--
+> > > >
+> > > > This is a combination of two patch series. I'd personally hesitant =
+to carry
+> > > > Acks along in such situations.
+> > >
+> > > Ah, I didn't notice that. Thanks for pointing it out. Cedric, in the
+> > > future please mention things like this if you drop an ack.
+> >=20
+> > Whoops, forgot to mention that Cedric can grab the ack from the link
+> > above when they resubmit.
+>=20
+> Okay. I will be carrying on acks in the future for cases like this.
 
-Thanks,
-Guenter
+I mean, I don't disagree with Guenter that in this case he would
+hesitate to carry the ack as I probably would drop it too.
+The difference compared to what happened here is that I would mention
+/why/ I dropped it.
+If you're going to carry it while merging two series and resetting the
+patch number, it's good to reference where you got the ack from to
+avoid confusing people, particularly given the patch was modified
+compared to what got acked.
 
+--a4xeAmARkWBmeFmd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0TGfgAKCRB4tDGHoIJi
+0jzGAQCnTzuHvmQrqBEoH6S7P+Si69DXAWR9mQvLGRyvDxIObQD/ad/f6nCtiHM4
+9BCEFdcooDYlT2W/I8QN8v4X8BS+JQ4=
+=41g9
+-----END PGP SIGNATURE-----
+
+--a4xeAmARkWBmeFmd--
