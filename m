@@ -1,120 +1,157 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EAC2107;
-	Tue, 26 Nov 2024 04:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D9317BB6;
+	Tue, 26 Nov 2024 07:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732594705; cv=none; b=bbsOgHOYmlYHcifWg6p3DGVJhnHrE/AmP0iS2cUL5/UoNfn0nFvMMERMxJ64KR8LBfmlqZ0f+86sThlH9nUa3wEOkS5L7xRkQzMoqJKTQHQ4SObzk7j6lVDyooHkMbYCq7UEbGQPnN1J+nhCZR2eoHcO8iWoadEmT0mcVUGEq0A=
+	t=1732604589; cv=none; b=pGIoptui7kzlKHyByUr+EvPmCAGJ/69oL2wGVeI+ZZZyjJIZDHZ/bwcZ78botofDZzAvOIZ3Cdlw+u8k7URoX3yinpIKu5Mjv88wbPQzslVB5y932SWuolr+dFLy3CKnzZvN6/09ksBbs5l6BzXpw1m+Uv01D4/9ZXgCk09qo7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732594705; c=relaxed/simple;
-	bh=oRM0HsFTk2wU7HvCLDT6Pa5hXmoyMl0puEFlGUmMJyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LoDziP0y1xwjZWMb+oMrFLoSp8rNGiXZUNf85RKABdga8AT/PrteS1O+ICTRtQ5MSzOyjt5/KkPob6KtffHGqh9VrVLFOh+/P/DlRzmKr7vF+o5V5mCWSCcXZD6PtVGs4zgoeWJSZiIM1YABhi4qnCcP0kXiS+uthyyKSEHMHS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQQ2IydN; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQQ2IydN"
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3ea3cc9a5ddso1143088b6e.3;
-        Mon, 25 Nov 2024 20:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732594702; x=1733199502; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lSDE9com4R7x0vADv5rq1zwIlnAyk6rKDwmzqFciQVE=;
-        b=YQQ2IydNZi0j4QwwjY8qIL/LY7hoPBhVwPkrKVvadLrk48PiCcjHh6i3nFpN4sfHbL
-         aITIzAckJtsMjkc0UbmqgMcwcxi3bAXe3AZhJ13rnkPEUpHhl6WH0eBv0r062+4e9PJd
-         tOk62F/IIH4KhMIgoJNna0tWjOhYu35zKud0eZbxd9g6niuJX+gzRwkS3NrhcHJNuCEM
-         oQwtI48D/e67QZg4PPVlJgrUOlFzrNW8YhTXOo3iVgjoGNpRIRDjIMDFmvqr9na/lNPo
-         m2k3nyoJ2E6Y5OMKA/sjPEWtRyo6sh2ciLgAvu18jDf5Rzv2LJP3FElFyj55Fa7z9fcZ
-         NhFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732594702; x=1733199502;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lSDE9com4R7x0vADv5rq1zwIlnAyk6rKDwmzqFciQVE=;
-        b=LoQaJIcYpZ301aneX9F1W0gwfL1IfGUNahAZqU1bP/QYwZe8dCiJ3i5qWGaxv9lNQ+
-         sBuqtYErmT97/UVKT7XmE0IeeNEsLRRS5ibKb+6rN4qNnVyeUNNhDIYZUKqFiMdScs5X
-         syceGok2k00E8MEWxYqj85VtuW9kHd4fVwtfrNH7wxs4PG9tuKR1zwZbK8b6lygxxPvs
-         +lXK+x+LKEA5l6wus69gytpOvrlu9hyLNIiTU4JdXzEVaoIDxUh0+ljAVSFIzN/r3sVi
-         Y0NdD7wFE7zX9cAWJo7dzNqp/q1gsnDOaxu3evym1Lwpqnpc3vPIECq8wVytFD3CnY8Z
-         ba3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVbsoaYsLtZhkdCODv20uW00U6vvGHaN9ZKYthikL/d5zrihF/2XRAu9Jye3J7odmFXr0BecfOqKocE1z0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2fiyXjTPAuyGXv3ulyDR9IIajEexEOhZJCYQOnUF5MkcjGMt4
-	JIY1wZd+n2mnIVYBgkX6sjxePZYw5IaFBbv/ohKghfXakEayMLQTUwT+Fw==
-X-Gm-Gg: ASbGncv1daPrM//qWqfMLgerLAw2cRTBE2YkquXBcx6wnp8iwtWPwg+eSq666j81LTp
-	XxtL4M8UrWU531HirWh6Y/hY5CfITgMtfJiwVbDlfpIS0BU4nU0pf+kjLQ+irFZJcR01zDfj39x
-	al7WV2tsWZHZttgHV6TJef++V7ZtRDlASnH2oOatzV6EeYbFOBfIZ1KIqzwieu/wI7mtu/R8NS3
-	c6BHIFjl0yKyaPrybWfgbX90HdTeWgGqgroTOOjPbDQlJ/kcPqMCyu2zuKcVao=
-X-Google-Smtp-Source: AGHT+IGH3QP1vr1ATj0dpTi1qcaFjNCXKQSq7paSS5U4BWl9rBzN+7PAYRfr3lsM5NlVOCJ64/XKCw==
-X-Received: by 2002:a05:6808:23c3:b0:3e6:3860:596b with SMTP id 5614622812f47-3e9157ab4abmr16562123b6e.8.1732594702488;
-        Mon, 25 Nov 2024 20:18:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724de53c05csm7334985b3a.98.2024.11.25.20.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Nov 2024 20:18:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.13-rc1 (take 2)
-Date: Mon, 25 Nov 2024 20:18:20 -0800
-Message-ID: <20241126041820.1054214-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1732604589; c=relaxed/simple;
+	bh=aaal02n+NK1iBOmQspWckMtY/YkTMynOBFN6OaxQVXQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=AUh1jh/rCyqJ6msajaOwM4uZM7PnTtSQm4fvs+gUtNzxqNq735Yt2MDfzIrRAfKGirdeK2DkrpoZVJFe0SvUrMT6BIJuXI1yyHGf30ZsVZhUqumissknxOXMuW9DAgDzx64yx2UOPbEJVR1n8M7QZ10SKSbdbOChF++ZtXUNbfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4XyD3j37rZzxWGS;
+	Tue, 26 Nov 2024 15:00:17 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 93ACE14011F;
+	Tue, 26 Nov 2024 15:03:03 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 26 Nov 2024 15:03:03 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 26 Nov
+ 2024 15:03:02 +0800
+Message-ID: <c66d312a-098a-84d3-0895-02d78ae3ecc9@huawei.com>
+Date: Tue, 26 Nov 2024 15:03:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 1/4] hwmon: (acpi_power_meter) Fix using uninitialized
+ variables
+To: Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <jdelvare@suse.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>
+References: <20241125093415.21719-1-lihuisong@huawei.com>
+ <20241125093415.21719-2-lihuisong@huawei.com>
+ <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
+ <b801388b-6bc7-5e96-dd29-e68ed8c970df@huawei.com>
+ <f9fc4989-f416-4d88-bc3e-ab7b9fddb4d9@roeck-us.net>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <f9fc4989-f416-4d88-bc3e-ab7b9fddb4d9@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-Hi Linus,
 
-Please pull hwmon fixes for Linux v6.13-rc1 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.13-rc1-take2
-
-Thanks,
-Guenter
-------
-
-The following changes since commit 228a1157fb9fec47eb135b51c0202b574e079ebf:
-
-  Merge tag '6.13-rc-part1-SMB3-client-fixes' of git://git.samba.org/sfrench/cifs-2.6 (2024-11-22 21:54:14 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.13-rc1-take2
-
-for you to fetch changes up to 998b5a78a9ce1cc4378e7281e4ea310e37596170:
-
-  hwmon: (aquacomputer_d5next) Fix length of speed_input array (2024-11-24 07:36:47 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v6.13-rc1 (take 2)
-
-Three fixes for v6.13-rc1
-
-- aquacomputer_d5next: Fix length of speed_input array
-
-- tps23861: Fix reporting of negative temperatures
-
-- tmp108: Do not fail in I3C probe when I3C regmap is a module
-
-----------------------------------------------------------------
-Aleksa Savic (1):
-      hwmon: (aquacomputer_d5next) Fix length of speed_input array
-
-Jarkko Nikula (1):
-      hwmon: (tmp108) Do not fail in I3C probe when I3C regmap is a module
-
-Murad Masimov (1):
-      hwmon: (tps23861) Fix reporting of negative temperatures
-
- drivers/hwmon/aquacomputer_d5next.c | 2 +-
- drivers/hwmon/tmp108.c              | 5 -----
- drivers/hwmon/tps23861.c            | 2 +-
- 3 files changed, 2 insertions(+), 7 deletions(-)
+在 2024/11/26 12:04, Guenter Roeck 写道:
+> On 11/25/24 17:56, lihuisong (C) wrote:
+>> Hi Guente,
+>>
+>> Thanks for your timely review.
+>>
+>> 在 2024/11/26 0:03, Guenter Roeck 写道:
+>>> On 11/25/24 01:34, Huisong Li wrote:
+>>>> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
+>>>> acpi_power_meter_resource structure. However, these two fields are 
+>>>> just
+>>>> updated when user query 'power' and 'cap' attribute, or hardware 
+>>>> enforced
+>>>> limit. If user directly query the 'power1_alarm' attribute without 
+>>>> queryng
+>>>> above two attributes, driver will use the uninitialized variables 
+>>>> to judge.
+>>>> In addition, the 'power1_alarm' attribute needs to update power and 
+>>>> cap to
+>>>> show the real state.
+>>>>
+>>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>>>> ---
+>>>>   drivers/hwmon/acpi_power_meter.c | 10 ++++++++++
+>>>>   1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/drivers/hwmon/acpi_power_meter.c 
+>>>> b/drivers/hwmon/acpi_power_meter.c
+>>>> index 2f1c9d97ad21..4c3314e35d30 100644
+>>>> --- a/drivers/hwmon/acpi_power_meter.c
+>>>> +++ b/drivers/hwmon/acpi_power_meter.c
+>>>> @@ -396,6 +396,9 @@ static ssize_t show_val(struct device *dev,
+>>>>       struct acpi_device *acpi_dev = to_acpi_device(dev);
+>>>>       struct acpi_power_meter_resource *resource = 
+>>>> acpi_dev->driver_data;
+>>>>       u64 val = 0;
+>>>> +    int ret;
+>>>> +
+>>>> +    guard(mutex)(&resource->lock);
+>>>>         switch (attr->index) {
+>>>>       case 0:
+>>>> @@ -423,6 +426,13 @@ static ssize_t show_val(struct device *dev,
+>>>>               val = 0;
+>>>>           break;
+>>>>       case 6:
+>>>> +        ret = update_meter(resource);
+>>>> +        if (ret)
+>>>> +            return ret;
+>>>> +        ret = update_cap(resource);
+>>>> +        if (ret)
+>>>> +            return ret;
+>>>> +
+>>>>           if (resource->power > resource->cap)
+>>>>               val = 1;
+>>>>           else
+>>>
+>>>
+>>> While technically correct, the implementation of this attribute 
+>>> defeats its
+>>> purpose. It is supposed to reflect the current status as reported by 
+>>> the
+>>> hardware. A real fix would be to use the associated notification to 
+>>> set or
+>>> reset a status flag, and to report the current value of that flag as 
+>>> reported
+>>> by the hardware.
+>> I know what you mean.
+>> The Notify(power_meter, 0x83) is supposed to meet your proposal IIUC.
+>> It's good, but it depands on hardware support notification.
+>>>
+>>> If there is no notification support, the attribute should not even 
+>>> exist,
+>>> unless there is a means to retrieve its value from ACPI (the status 
+>>> itself,
+>>> not by comparing temperature values).
+>> Currently, the 'power1_alarm' attribute is created just when platform 
+>> support the power meter meassurement(bit0 of the supported 
+>> capabilities in _PMC).
+>> And it doesn't see if the platform support notifications.
+>>  From the current implementation of this driver, this sysfs can also 
+>> reflect the status by comparing power and cap,
+>> which is good to the platform that support hardware limit from some 
+>> out-of-band mechanism but doesn't support any notification.
+>>
+>
+> The point is that this can also be done from userspace. Hardware 
+> monitoring drivers
+> are supposed to provide hardware attributes, not software attributes 
+> derived from it.
+>
+So this 'power1_alarm' attribute can be exposed when platform supports 
+hardware enforced limit and notifcations when the hardware limit is 
+enforced, right?
+If so, we have to change the condition that driver creates this sysfs 
+interface.
+>
+>
+> .
