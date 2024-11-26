@@ -1,146 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9E1B85CA;
-	Mon, 25 Nov 2024 18:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1BBDF60;
+	Tue, 26 Nov 2024 01:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732560516; cv=none; b=FJgl8YTUPiXzeQ4h+DiEIt1FteN0HqtVAwxTU8XvdM1Vrl4bZX3PteueLdad/CkCNIMsb9xr4ZlWiSFKk2SsVL5gIiIX6X2GRRlHTQNZw9E2vkvbmUWvBt1hyR7Wq2fUE6B+DlDbJpsLCiauj8DwrNWJLzgT8/6NKPBk5kirUV0=
+	t=1732586202; cv=none; b=JMFswWWdvsYUE5IWh61fuV+y6cbI1lzZ/zVokX0NkXed/OXoegP1M1zX987gI4KAtf1rZjORw02IXFrbssfJYlB8dK8yuXwI+XBDuCnNk625caVXnuRM8d4b7P3pKEGSY4Noi2ZvA3kzrxMr9R1XAo2fEdY1JuzdR3ydpN5PKNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732560516; c=relaxed/simple;
-	bh=iIoOus4blNmLJvI367kCSBxRvmQLM+vJ+uL517h3aaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bascef8rtvh3JSnvUkMdpTy5FmvW1lVF+BV5hrqKShT5cP/QqjjrppVF1FrahDlvq3ZdorbyLgqgpuXS/IsUfA+cWiCPRfsc+voXvlzK62B88VTTC3A6AAvpfrioDZH+TbSBHi6VKEqc+31+DbwHDaTzz6aP2UG46wUqK/3acCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjye1Ri1; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjye1Ri1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18686C4CECE;
-	Mon, 25 Nov 2024 18:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732560516;
-	bh=iIoOus4blNmLJvI367kCSBxRvmQLM+vJ+uL517h3aaA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kjye1Ri15GPM/2NjsSO7bpfi3t1tkh6/0ikAD89I8KHnorIec93jo3Ul//+0Dn6xG
-	 Dz2/a4+IaJGu0TUP1GHj4YfWxjd+uhqyUmo5rZGa53My4VtPyIdLoePH2grM/Gxx2h
-	 QPIH77cJ6ShYAXPaSzgmghCnCQ/vBT0t64wadjbbhXWar4NZVyVhisfCsDnYPw4rNT
-	 J21D28kIztoBwmsvlNkA6UkamD7ZIzyPDrtu+lAr1vXKfr+HJQY0PlJscYZxTpGIYE
-	 4AGJOZFQyjw1rtjvxNoiojHFy8ZOu5JRt2AJy1I5NHBAjMhZlpy6rkI6Dl5zSOkKl6
-	 JaVHtFb8nwXWA==
-Date: Mon, 25 Nov 2024 18:48:30 +0000
-From: Conor Dooley <conor@kernel.org>
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Sabau, Radu bogdan" <Radu.Sabau@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	"Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
- for adp1051, adp1055 and ltp8800
-Message-ID: <20241125-clever-unpeeled-61362034cf24@spud>
-References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
- <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
- <20241120-process-hulk-ecedcbf088f7@spud>
- <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
- <20241123-paced-osmosis-007bf72c4b02@spud>
- <20241123-submersed-overdue-ce999ccccc72@spud>
- <PH0PR03MB69389916EC3C46C3A1F228AE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+	s=arc-20240116; t=1732586202; c=relaxed/simple;
+	bh=OxJe9T4YNUqcUJuE7w/XKLYO21BA2S9yyd1HdvrUy0E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=aUZ7hhm4YIvASQRyuAsz6yByOclbGYb5538A8a9Ffmi0YWqgYGXUgS9ZoNbqgdI5tOw3pstj+VtLaKnvbvS0Ee8Om1Df0P/i0zo4oYta3i5qlM/q40/9Cv0hm5l7JNF3HiccWlfa6UrwoWlkCvAwYQNzwbeDzea9Ko0HC9U6D0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Xy5G54WVVzxT1x;
+	Tue, 26 Nov 2024 09:53:49 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 86C88140154;
+	Tue, 26 Nov 2024 09:56:35 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 26 Nov 2024 09:56:35 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 26 Nov
+ 2024 09:56:34 +0800
+Message-ID: <b801388b-6bc7-5e96-dd29-e68ed8c970df@huawei.com>
+Date: Tue, 26 Nov 2024 09:56:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="a4xeAmARkWBmeFmd"
-Content-Disposition: inline
-In-Reply-To: <PH0PR03MB69389916EC3C46C3A1F228AE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 1/4] hwmon: (acpi_power_meter) Fix using uninitialized
+ variables
+To: Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <jdelvare@suse.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>
+References: <20241125093415.21719-1-lihuisong@huawei.com>
+ <20241125093415.21719-2-lihuisong@huawei.com>
+ <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
+Hi Guente,
 
---a4xeAmARkWBmeFmd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your timely review.
 
-On Mon, Nov 25, 2024 at 02:44:32AM +0000, Encarnacion, Cedric justine wrote:
-> > On Sat, Nov 23, 2024 at 07:56:21PM +0000, Conor Dooley wrote:
-> > > On Wed, Nov 20, 2024 at 10:00:19AM -0800, Guenter Roeck wrote:
-> > > > On 11/20/24 09:11, Conor Dooley wrote:
-> > > > > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrot=
-e:
-> > > > > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
-> > > > > >      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
-> > > > > >      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temper=
-ature
-> > > > > >      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC =B5Module Regulator
-> > > > > >
-> > > > > > Co-developed-by: Alexis Czezar Torreno
-> > <alexisczezar.torreno@analog.com>
-> > > > > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@anal=
-og.com>
-> > > > > > Signed-off-by: Cedric Encarnacion
-> > <cedricjustine.encarnacion@analog.com>
-> > > > >
-> > > > > Why did you drop my ack?
-> > > > > https://lore.kernel.org/all/20241106-linoleum-kebab-
-> > decf14f54f76@spud/
-> > > > >
-> > > >
-> > > > There:
-> > > >
-> > > > > +    enum:
-> > > > > +      - adi,adp1050
-> > > > > +      - adi,adp1051
-> > > > > +      - adi,adp1055
-> > > > >
-> > > >
-> > > > Here:
-> > > >
-> > > > >> +    enum:
-> > > > >> +      - adi,adp1050
-> > > > >> +      - adi,adp1051
-> > > > >> +      - adi,adp1055
-> > > > >> +      - adi,ltp8800   <--
-> > > >
-> > > > This is a combination of two patch series. I'd personally hesitant =
-to carry
-> > > > Acks along in such situations.
-> > >
-> > > Ah, I didn't notice that. Thanks for pointing it out. Cedric, in the
-> > > future please mention things like this if you drop an ack.
-> >=20
-> > Whoops, forgot to mention that Cedric can grab the ack from the link
-> > above when they resubmit.
->=20
-> Okay. I will be carrying on acks in the future for cases like this.
-
-I mean, I don't disagree with Guenter that in this case he would
-hesitate to carry the ack as I probably would drop it too.
-The difference compared to what happened here is that I would mention
-/why/ I dropped it.
-If you're going to carry it while merging two series and resetting the
-patch number, it's good to reference where you got the ack from to
-avoid confusing people, particularly given the patch was modified
-compared to what got acked.
-
---a4xeAmARkWBmeFmd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0TGfgAKCRB4tDGHoIJi
-0jzGAQCnTzuHvmQrqBEoH6S7P+Si69DXAWR9mQvLGRyvDxIObQD/ad/f6nCtiHM4
-9BCEFdcooDYlT2W/I8QN8v4X8BS+JQ4=
-=41g9
------END PGP SIGNATURE-----
-
---a4xeAmARkWBmeFmd--
+在 2024/11/26 0:03, Guenter Roeck 写道:
+> On 11/25/24 01:34, Huisong Li wrote:
+>> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
+>> acpi_power_meter_resource structure. However, these two fields are just
+>> updated when user query 'power' and 'cap' attribute, or hardware 
+>> enforced
+>> limit. If user directly query the 'power1_alarm' attribute without 
+>> queryng
+>> above two attributes, driver will use the uninitialized variables to 
+>> judge.
+>> In addition, the 'power1_alarm' attribute needs to update power and 
+>> cap to
+>> show the real state.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   drivers/hwmon/acpi_power_meter.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/acpi_power_meter.c 
+>> b/drivers/hwmon/acpi_power_meter.c
+>> index 2f1c9d97ad21..4c3314e35d30 100644
+>> --- a/drivers/hwmon/acpi_power_meter.c
+>> +++ b/drivers/hwmon/acpi_power_meter.c
+>> @@ -396,6 +396,9 @@ static ssize_t show_val(struct device *dev,
+>>       struct acpi_device *acpi_dev = to_acpi_device(dev);
+>>       struct acpi_power_meter_resource *resource = 
+>> acpi_dev->driver_data;
+>>       u64 val = 0;
+>> +    int ret;
+>> +
+>> +    guard(mutex)(&resource->lock);
+>>         switch (attr->index) {
+>>       case 0:
+>> @@ -423,6 +426,13 @@ static ssize_t show_val(struct device *dev,
+>>               val = 0;
+>>           break;
+>>       case 6:
+>> +        ret = update_meter(resource);
+>> +        if (ret)
+>> +            return ret;
+>> +        ret = update_cap(resource);
+>> +        if (ret)
+>> +            return ret;
+>> +
+>>           if (resource->power > resource->cap)
+>>               val = 1;
+>>           else
+>
+>
+> While technically correct, the implementation of this attribute 
+> defeats its
+> purpose. It is supposed to reflect the current status as reported by the
+> hardware. A real fix would be to use the associated notification to 
+> set or
+> reset a status flag, and to report the current value of that flag as 
+> reported
+> by the hardware.
+I know what you mean.
+The Notify(power_meter, 0x83) is supposed to meet your proposal IIUC.
+It's good, but it depands on hardware support notification.
+>
+> If there is no notification support, the attribute should not even exist,
+> unless there is a means to retrieve its value from ACPI (the status 
+> itself,
+> not by comparing temperature values).
+Currently, the 'power1_alarm' attribute is created just when platform 
+support the power meter meassurement(bit0 of the supported capabilities 
+in _PMC).
+And it doesn't see if the platform support notifications.
+ From the current implementation of this driver, this sysfs can also 
+reflect the status by comparing power and cap,
+which is good to the platform that support hardware limit from some 
+out-of-band mechanism but doesn't support any notification.
