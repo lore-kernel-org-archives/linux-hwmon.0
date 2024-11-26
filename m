@@ -1,35 +1,35 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A27C1773A;
-	Tue, 26 Nov 2024 02:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA52313FFC;
+	Tue, 26 Nov 2024 03:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732587962; cv=none; b=ISQRYrEGORy43rSnp3Wg4kb3MTkzs8WWUSGQNlKL3DiPKhNrbpCDJ3Co2/gIVxuk85oCvK4gx/PsmFpDH2jSHsNjuaTDlAc1iBVQRNBsmnZpK8/gURZWnhzx+5L+9szup+8yXCn3f1JTglXK/CqavodgY6hSGMnY4Rz19BJHV8c=
+	t=1732590963; cv=none; b=sGLm2tKAzegcWKKpXqlq3Px+L01WoPSXoFTooK8x32b6mdvz0E3q/Y6GOmrnP9v/9Uo8kTScwOb9sa+1w3B6Ub8FSpAAvo2yb9p+lwF/8EZK0HGYi40jHLumI+xYBWMY52G79i8FqUXAX4sYaGcbO8hb8HI8c7vfAMCG2YgU7vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732587962; c=relaxed/simple;
-	bh=y71PfbdHf9VG3+O7mJckbxQrN+JhRuRc57A5Q4HwMac=;
+	s=arc-20240116; t=1732590963; c=relaxed/simple;
+	bh=xcnPI9TUgTHcMBQHI2bOmcVwS+vUJr/MFNjNe43dVS4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=G+PNLrMiLgxeLJAMnkDNxbKJE4oaOOXx4fS+5tWNAchPs2llhLMNYAl7AQgpQf4GbU9GYoT5DAHjg8woN9SghFyF9IK/PKURdmNgjotp4rdB8LMVDWRHueo4nKQtvzs7S2CxsWSUKxTsWNi9DCBa1NAGnXqUhFgN+rKndORohk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+	 In-Reply-To:Content-Type; b=V+Usl7hVsY2+wMj6GZZ3PuWDgL7UAJdJw49SPwjYkxZzR3qRRF8Bt0dEcD3ZnZU3bkhH30Dx/ZT72X91Dqc1x2w1GK7o3mQOps8/g/hESDYvNzFE5EMANdsuReekh5jjd+yj5J8hN8vEscFoqbAlaMj3mvmjmXAv6VFsMbVqdlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Xy5wk0gvhz2Gbqp;
-	Tue, 26 Nov 2024 10:23:50 +0800 (CST)
-Received: from dggemv704-chm.china.huawei.com (unknown [10.3.19.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 50B621402CC;
-	Tue, 26 Nov 2024 10:25:56 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Xy6z84WLRz1JB6V;
+	Tue, 26 Nov 2024 11:11:00 +0800 (CST)
+Received: from dggemv703-chm.china.huawei.com (unknown [10.3.19.46])
+	by mail.maildlp.com (Postfix) with ESMTPS id 24C771400D5;
+	Tue, 26 Nov 2024 11:15:58 +0800 (CST)
 Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 26 Nov 2024 10:25:56 +0800
+ 15.1.2507.39; Tue, 26 Nov 2024 11:15:57 +0800
 Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
  (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 26 Nov
- 2024 10:25:55 +0800
-Message-ID: <56a54d22-8248-b115-2781-de74e3e8692c@huawei.com>
-Date: Tue, 26 Nov 2024 10:25:54 +0800
+ 2024 11:15:57 +0800
+Message-ID: <1e7e5737-8dd8-172f-f5f7-9cc7967e129e@huawei.com>
+Date: Tue, 26 Nov 2024 11:15:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -38,129 +38,95 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v1 3/4] hwmon: (acpi_power_meter) Remove redundant
- 'sensors_valid' variable
+Subject: Re: [PATCH v1 4/4] hwmon: (acpi_power_meter) Add the print of no
+ notification that hardware limit is enforced
 To: Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
 CC: <jdelvare@suse.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
 	<zhenglifeng1@huawei.com>
 References: <20241125093415.21719-1-lihuisong@huawei.com>
- <20241125093415.21719-4-lihuisong@huawei.com>
- <370185ed-4418-4c84-a7dc-3faa56edade2@roeck-us.net>
+ <20241125093415.21719-5-lihuisong@huawei.com>
+ <f7274b8d-cb91-4975-be94-69f041e9c4ee@roeck-us.net>
 From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <370185ed-4418-4c84-a7dc-3faa56edade2@roeck-us.net>
+In-Reply-To: <f7274b8d-cb91-4975-be94-69f041e9c4ee@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemn100009.china.huawei.com (7.202.194.112)
 
-Hi Guenter,
 
-在 2024/11/25 23:38, Guenter Roeck 写道:
+在 2024/11/26 0:13, Guenter Roeck 写道:
 > On 11/25/24 01:34, Huisong Li wrote:
->> The 'sensors_valid' in acpi_power_meter_resource structure is always one
->> after querying power once. The default value of this variable is zero 
->> which
->> just ensure user can query power successfully without any time 
->> requirement
->> at first time. We can get power and fill the 'sensors_last_updated' 
->> field
->> at probing phase to make sure that a valid value is returned to user at
->> first query within the sampling interval. Then this redundant 
->> variable can
->> be safely removed.
+>> As ACPI spec said, the bit3 of the supported capabilities in _PMC 
+>> indicates
+>> that the power meter supports notifications when the hardware limit is
+>> enforced. If one platform doesn't report this bit, but support hardware
+>> forced limit through some out-of-band mechanism. Driver wouldn't receive
+>> the related notifications to notify the OSPM to re-read the hardware 
+>> limit.
+>> So add the print of no notifcation that hardware limit is enforced.
 >>
 >> Signed-off-by: Huisong Li <lihuisong@huawei.com>
 >> ---
->>   drivers/hwmon/acpi_power_meter.c | 18 +++++++++---------
->>   1 file changed, 9 insertions(+), 9 deletions(-)
+>>   drivers/hwmon/acpi_power_meter.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
 >>
 >> diff --git a/drivers/hwmon/acpi_power_meter.c 
 >> b/drivers/hwmon/acpi_power_meter.c
->> index 95da73858a0b..3500859ff0bf 100644
+>> index 3500859ff0bf..d3f144986fae 100644
 >> --- a/drivers/hwmon/acpi_power_meter.c
 >> +++ b/drivers/hwmon/acpi_power_meter.c
->> @@ -84,7 +84,6 @@ struct acpi_power_meter_resource {
->>       u64        power;
->>       u64        cap;
->>       u64        avg_interval;
->> -    int            sensors_valid;
->>       unsigned long        sensors_last_updated;
->>       struct sensor_device_attribute    sensors[NUM_SENSORS];
->>       int            num_sensors;
->> @@ -316,15 +315,14 @@ static ssize_t set_trip(struct device *dev, 
->> struct device_attribute *devattr,
->>   }
->>     /* Power meter */
->> -static int update_meter(struct acpi_power_meter_resource *resource)
->> +static int update_meter(struct acpi_power_meter_resource *resource, 
->> bool check)
->>   {
->>       unsigned long long data;
->>       acpi_status status;
->>       unsigned long local_jiffies = jiffies;
->>   -    if (time_before(local_jiffies, resource->sensors_last_updated +
->> -            msecs_to_jiffies(resource->caps.sampling_time)) &&
->> -            resource->sensors_valid)
->> +    if (check && time_before(local_jiffies, 
->> resource->sensors_last_updated +
->> +            msecs_to_jiffies(resource->caps.sampling_time)))
->>           return 0;
->>         status = acpi_evaluate_integer(resource->acpi_dev->handle, 
->> "_PMM",
->> @@ -336,7 +334,6 @@ static int update_meter(struct 
+>> @@ -712,6 +712,10 @@ static int setup_attrs(struct 
 >> acpi_power_meter_resource *resource)
->>       }
->>         resource->power = data;
->> -    resource->sensors_valid = 1;
->>       resource->sensors_last_updated = jiffies;
->>       return 0;
->>   }
->> @@ -349,7 +346,7 @@ static ssize_t show_power(struct device *dev,
->>       struct acpi_power_meter_resource *resource = 
->> acpi_dev->driver_data;
->>         mutex_lock(&resource->lock);
->> -    update_meter(resource);
->> +    update_meter(resource, true);
->>       mutex_unlock(&resource->lock);
->>         if (resource->power == UNKNOWN_POWER)
->> @@ -429,7 +426,7 @@ static ssize_t show_val(struct device *dev,
->>               val = 0;
->>           break;
->>       case 6:
->> -        ret = update_meter(resource);
->> +        ret = update_meter(resource, true);
->>           if (ret)
->>               return ret;
->>           ret = update_cap(resource);
->> @@ -699,6 +696,10 @@ static int setup_attrs(struct 
->> acpi_power_meter_resource *resource)
->>           return res;
->>         if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
->> +        res = update_meter(resource, false);
->> +        if (res)
->> +            goto error;
+>>               goto skip_unsafe_cap;
+>>           }
+>>   +        if (resource->caps.flags & POWER_METER_CAN_NOTIFY == 0)
+>
+> == has higher precedence than &, so this expression will never be true.
+Indeed.
+>
+> And, indeed:
+>
+> drivers/hwmon/acpi_power_meter.c: In function ‘setup_attrs’:
+> drivers/hwmon/acpi_power_meter.c:701:42: error: suggest parentheses 
+> around comparison in operand of ‘&’
+What compilation parameters did you use to intercept this?😁
+>
+>> + dev_info(&resource->acpi_dev->dev,
+>> +                 "no notifcation when the hardware limit is 
+>> enforced.\n");
 >> +
+>>           if (resource->caps.configurable_cap)
+>>               res = register_attrs(resource, rw_cap_attrs);
+>>           else
 >
-> This forces an update of the meter attribute even if no one reads it
-> subsequently for a long period of time. Avoiding that is the whole point
-> of the flag. Otherwise every driver using the flag could just read its
-> entire set of attributes to avoid it. I don't see the value of this 
-> patch,
-> sorry. You'd have to explain why it is better to do the unnecessary read
-> to avoid the flag.
-It's just to make sure that the first query after driver is initialized 
-can return a valid value when user echo the sysfs
-within the sampling time(namely, jiffies < sensors_last_updated + 
-caps.sampling_time).
-The default value of the 'sensors_valid' in resource is zero, which just 
-ensure user can query power successfully without any time requirement at 
-first query.
-This read without check during probing phase is just for not to change 
-the original behavior of the first query.
-Maybe my commit log didn't make it clear. Please take a look at the 
-commit log of this patch again. Thanks.
+> On top of that, I don't see the value in this patch.
+ From the current implement, the value of this patch is little. It's 
+just telling the user that he won't be notified. Notifications are not 
+available.
+
+Actually, I'd like to add some necessary updates in the notification 
+handler when OSPM receive some notifications, like 0x82, 0x83 event.
+These updates are necessary for this driver, which more follow ACPI spec.
+But I don't know how do handle the notify 0x81 to fix the trip points, 
+so I don't modify it yet.
 >
+> Overall, really, this driver could benefit from a complete overhaul.
+> Its use of the deprecated hwmon_device_register() should tell it all.
+Yes, I also found it.
+But I don't know how to handle struct hwmon_chip_info and if it is 
+appropriate to this driver yet.
+It will be a big modification if it is ok.
+> There is lots of questionable code, such as the unprotected calls to
+> remove_attrs() followed by setup_attrs() in the notification handler.
+Agreed.
+In addition, using struct sensor_template  to create sysfs interface is 
+hard to maintain and not good to me.
+The show_val and show_str are to display based on the index in struct 
+sensor_template.
+> Any updates should be limited to bug fixes and not try to make minor
+> improvements for little if any gain.
 >
+Yes
 >
 > .
