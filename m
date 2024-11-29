@@ -1,157 +1,192 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA1F3C3C
-	for <linux-hwmon@vger.kernel.org>; Fri, 29 Nov 2024 03:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79020143C40;
+	Fri, 29 Nov 2024 09:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732849980; cv=none; b=JphwOMRPmp+FdkRtZ+jWLL97f6T6OZGsUrjbvTk9eXqd0gpVoa0v8aAfy4kiuSCJAj6BaTbNHYV1SsdNTNyDybHa357YHHB6NIw5Z07aoR7s19Ixcw2AkYTsJxlWxCVZmURlV1ZyRLnpL/VT5Le4h/1s0fT2ArgibTsf4yibsGo=
+	t=1732871569; cv=none; b=IN+Z3ychhzf8YQoh7dZkLnrAxCtCewdZRJBG2pMAMS2GBNL/IVNk1MkbsFwx7Wf6cOg1D7xsXdB4kvPi6WSEqJv50wtwPGwB9uhLVXjwrxuQCuX5SquF+9jDdMt5sqdvQRb9hD1CujoNqjNkqMqEyjQaB8cFROh298Wz7yxf0Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732849980; c=relaxed/simple;
-	bh=FUXj7X0MQKmg0LjFbpkkLsGvPLY1K95oUsj1BMgAp50=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FaJLqhqfl4n1wSrZzm8ffQLEnoTPRERAgvmuDnsXGIFYfndlMH1cRRrJ62pYmDUZz9FzL/uRSps+GCETSYmzj7u3b5PQWJUZELWUXXN52HHOkVldgboYPtpiuJbehoubt5YJAIur7wzxf2Mk9HR7B/oBGRICPQhlq7gZeQeGuNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PiFV1exX; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1732871569; c=relaxed/simple;
+	bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=U6+QnQQEiNh2Ri5xb8aoY+L/YC+OzUIPl1xiXIvGky8X52oybBWAy53tCBnwVJrW1cPtM4x+sxbFvNkg+FUbjWd/G7owFqt3hqJdsFRRWdC9Co+oquIPb0TcxCY9J23w5vJ2CM/2DWGdbzTvWHp+sf2D2PCAH1uHJXlEl62n9W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nh5hDs9j; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PiFV1exX"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7fc1f1748a3so790103a12.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 28 Nov 2024 19:12:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nh5hDs9j"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43494a20379so15018755e9.0;
+        Fri, 29 Nov 2024 01:12:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732849978; x=1733454778; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=08YUY8oEKIlalckcq6l3aTgWV8GjO0TipYS9RV7kUDc=;
-        b=PiFV1exX7Jsx0R2LsNFSPYnREh1AIcVYRmw4FPCfDjAmACSDvPTO3UNgQdsCC1QTnR
-         rBrHlWfVCiLmn3DcolZZpOHL8D6dtZt6MEx8vY/5tBIzhlE0dT6GvGkkA8+FeDfsdAYE
-         tmIEthgxx96mBwPKbL/VpmKvoHPpnD7OXgGOiX1IXLOUpMbIBfIulWTD1S/m1RHjiQ8n
-         GEfnPp7xESwmJ2mVbU4UP+aNPvswdH5mfhS7x/MDfup4N/0aaig1AF6n8eHK8hxYwjWI
-         T0opXqc0ImknQFO8CE7l8Axx1Ir996N4Vd3en6nYa6reKF2nbiF46hE3Nx9QkPAhlx3G
-         13kA==
+        d=gmail.com; s=20230601; t=1732871566; x=1733476366; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+        b=Nh5hDs9jvWHa7g6XKUzzk6RbohMA4yWRH/0FyVqTamfleTR2jDmhtBV6vVtsF0Yp3q
+         hYvDSa/U1xh1Vq7nfQIUII8WtLUocOUv8N4kYFlm4ly8wmrTJLhU9/+adaPap6FSj2Wx
+         SunBZzurAuCbg8Ijot8JKmnV6tdRfIg9KkhkKQqVcmwqMur0w9N7hfIwToxCD/EHCQGW
+         0PxFNNCkiLRXO6axwy49zT1OTNdyqKF4vr6Crp2Pf1Ld++WceeI9q23PlthTzOiTZOgw
+         UrI6qwuUELItoJ0uDuKqWHcMguFqp0RVucjgOnZ98LrLSjaHevp691w/cUe4zHr5xG5A
+         se2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732849978; x=1733454778;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=08YUY8oEKIlalckcq6l3aTgWV8GjO0TipYS9RV7kUDc=;
-        b=DNSn5wfW6F8G1AISPB0JRP7yj7vT5mLb+OkRhb1mlEzyHl37m/56i7uRKV7UHp2B8T
-         n6EgbcFY9dETz9H6d/EwYKLmrSdFm2KGPn6jZfBjW2dMhlfvfJ9kUmUzXHhNvuvT7w16
-         +XFTECMkNwQWtsvq/AR98Z9oayGTMnJEVb3uopTK3vPNIIAU0J4pbavUh/tD8ZVrbAzg
-         H2xruwO0HCPs6UTKhdKMCs3crPGD1Syp/PIuiA2SrJjImbiw6+4PMS4sNdkLegAwxWFM
-         ijk7mLQyRORAaFzVvg9lpP+qg5ekf2MdHZ6gzR/MQk4g2ug3RsGi8PoT8+gcbF9ujZm2
-         VX7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUUwEjokLgt7oGbx2Tr0qx8fbgT9h2GWr60HhsbZHuGf1O7d4aMH2/0F0z6Q7HklRnHTKuPuUnp+fLNRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMMMoyNbhgsAkV5ltT48InfRUtaRaj2IHQkFoqjiB63RkHzZg9
-	ZYsrsW4o0qIbfcknVY5j3bTARZ1n+vqO0pU+fmgEezcGMsSZFI05
-X-Gm-Gg: ASbGncuFpsZZg9yvwCYVMGvHeuUCdnIw8K1WFONAVp22AcvT7qvdC8ymB3XBKpqHtpI
-	pPcvGrRH41Z6Qn3ZSumeJwLirJpnOt/g8FZ047kPTQMYNAYF1Ll4WqxCcR6Sw9qZsAq6gIkTil6
-	+cKIbeCiDhPUWjFwJ4av/0ZwlJ4xK2p14JBjAZKOzHb8dVb8940x+G/+nRCU43nBXqPkiK6Yd9m
-	j+qRDJsUwD0hsa17ggMQSry8QXd0/syaNQGYkxfF3F48Ga46kzXMs4SyawF7qrgWfg1doL9Z2ac
-	mIRoRw5c7JtlFW3E0rj9J9U=
-X-Google-Smtp-Source: AGHT+IGvFi7XS9zAJgqjuuW9JnSQ1yqgRo8hc/kFCKNhGf789R2ewqklKfFkkVAVJxeSrjdqUO3amg==
-X-Received: by 2002:a05:6a21:7187:b0:1e0:ed9b:14f6 with SMTP id adf61e73a8af0-1e0ed9b155cmr6127785637.32.1732849978049;
-        Thu, 28 Nov 2024 19:12:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c3a0766sm2092257a12.78.2024.11.28.19.12.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Nov 2024 19:12:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9d25b97d-9570-42c2-b951-4cc708f38be0@roeck-us.net>
-Date: Thu, 28 Nov 2024 19:12:56 -0800
+        d=1e100.net; s=20230601; t=1732871566; x=1733476366;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+        b=ramd/flqrfUgYbvUePutpmzEwbbJpu/hwToSsboVrquCYPXTpZgRGYw4Yu7p/R3CjP
+         UeObpS0tFrWqiNK2PfhJSOG69W0QpfMemM4q1t3t0ZVFUhLkiMsh1LNXJ0bIrnc71HAN
+         NUv/eCp1jqNc5SulWjeAhdMlCED0abrNTEDO97q6pn3xOGAbvfPmli+F3ztqx1MSZDZC
+         3d0ZXeDmZk2w0UIuzIVtO4FNcRnyvOuNMnXWz1VlSs5+tCWSbhmjEziaL7SVANvF30zw
+         ZwnmElTWTYhcQQiHQLjZ2rTj4syhEeu4XwraQ7jinpamnqhjf0j3o32RpqAOJPyd9wdO
+         tLCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUorMr5T8BhlRLTWs9G7wArGnJ2Dqch5fFivwy/N13NzAnB0YiV0snTpSux39g//jmykWbdOmywhNE=@vger.kernel.org, AJvYcCV/XDpPPxCzmxNchsMYnuO6n4MnQpQYlJMS2udTjRr1tUqYY5yw1GJRiu1sXz5XYn/D87wsRXZVprXl@vger.kernel.org, AJvYcCWfY7VinHM6slJVnLqBMDpNFsfd1DTgeWGqXj5TzJ+dkaZidf53EyVoPNKcl9GQC6cMOGwDWdW75kbmRteA@vger.kernel.org, AJvYcCXCCjz3R5dICvkgMGVYZSfmLNxR8gSboDFSrKwcW6DY4WcMVa+j4Cz6LeOe0cm7i/DwEltw2saga9U8OE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGzXBWzp5xqMm3EeLJH070GBH8VxXgtcZMT2n/ZGmMam1ICPPt
+	H3oGfov6wtb5rms0l0p1SGlH6jzgrPJrnpxRZ4ZtUg+mIBaJzzU0
+X-Gm-Gg: ASbGncuEsvqY6TIi8MP4HKsLPRphrBD0pzkfWqgGvVgIXZpZyQ0eh+YdG+Jb5Z1tIkw
+	YcD0dwec2RvgN1gvG5tJ3hME71lMPeGhxO+mrMHGXsNbMRI8b+FwtVustezx2/hpRgOh0T/bD9V
+	Ym4W6bkSvxfXUoprK8f1ZOE+Q+to8x7u7iajkGY417bfMrSkV63iHX3pCkOZ9HVeTjjxu492Snw
+	jXn5E23oZN/cWcILg8v43qRzNMzyoNIg3IeFJpJoUw4fR4HZNq0FLJEUNJNpXFNE3sm5b7K6Gpk
+	hFyVZ8DvqlxMHNcbqNQu5BI=
+X-Google-Smtp-Source: AGHT+IGF5USQPPQnUyvNi/ekI6n1SlDmZye8w3YoCpMzfV67iTqVMeWXyPxA03INAS0aAlQ6wy7ufA==
+X-Received: by 2002:a05:600c:4e8a:b0:431:5ab3:d28d with SMTP id 5b1f17b1804b1-434a9dc3cc3mr100465735e9.9.1732871565606;
+        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
+Received: from ?IPv6:2a01:599:923:c59f:ea19:16d1:ab07:4803? ([2a01:599:923:c59f:ea19:16d1:ab07:4803])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd36855sm3905633f8f.36.2024.11.29.01.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
+Message-ID: <f0cbbbe4b20f828fbd48b504a58437c06ef90908.camel@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
+ for adp1051, adp1055 and ltp8800
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>, 
+ Krzysztof Kozlowski
+	 <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Conor Dooley
+	 <conor@kernel.org>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Jean Delvare
+ <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu
+ <Delphine_CC_Chiu@wiwynn.com>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Sabau,
+ Radu bogdan" <Radu.Sabau@analog.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, "Torreno, Alexis Czezar"
+ <AlexisCzezar.Torreno@analog.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>
+Date: Fri, 29 Nov 2024 10:12:45 +0100
+In-Reply-To: <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+	 <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+	 <20241120-process-hulk-ecedcbf088f7@spud>
+	 <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
+	 <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
+	 <4d907ddf-16ca-4136-b912-f571a691dc90@kernel.org>
+	 <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Question about enabling ACPI power meter capping
-To: "Shinji Nomoto (Fujitsu)" <fj5851bi@fujitsu.com>,
- 'Jean Delvare' <jdelvare@suse.com>,
- "'linux-hwmon@vger.kernel.org'" <linux-hwmon@vger.kernel.org>
-References: <OS3PR01MB9382B4EB50C4C797AD47F73AD9292@OS3PR01MB9382.jpnprd01.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <OS3PR01MB9382B4EB50C4C797AD47F73AD9292@OS3PR01MB9382.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 11/27/24 20:02, Shinji Nomoto (Fujitsu) wrote:
-> Hi there, We are planning to support ACPI power meter capping in our machines we are manufacturing, so I have a question regarding the capping code in the acpi_power_meter driver.
-> For the capping feature to be enabled in the current code, the following conditions for the setup_attrs function in drivers/hwmon/acpi_power_meter.c must be properly satisfied:
-> 
->           if (resource->caps.flags & POWER_METER_CAN_CAP) { // Condition 1
->                   if (!can_cap_in_hardware()) { // Condition 2
->                           dev_warn(&resource->acpi_dev->dev,
->                                    "Ignoring unsafe software power cap!\n");
->                           goto skip_unsafe_cap;
->                   }
-> 
-> * Condition 1
-> The capabilities bit3 (indicates that the power meter supports notifications when the hardware limit is enforced) of the ACPI _PMC object is set to 1.
-> 
-> * Condition 2
-> The then statement is skipped if any of the following conditions are met:
-> + The module parameter force_cap_on is 1 The Manufacturer string of the
-> + DMI System Information information has "IBM" embedded
-> 
-> After checking the ACPI specifications, I understand that there is no problem as long as condition 1 is met.
-> It seems like it would be better to enable the capping feature as long as condition 1 is met. So, can we remove the condition 2?
-> I would appreciate your opinions on whether condition 2 is necessary.
-> 
+On Mon, 2024-11-25 at 02:44 +0000, Encarnacion, Cedric justine wrote:
+> > -----Original Message-----
+> > From: Krzysztof Kozlowski <krzk@kernel.org>
+> > Sent: Thursday, November 21, 2024 2:39 AM
+> > To: Guenter Roeck <linux@roeck-us.net>; Conor Dooley <conor@kernel.org>=
+;
+> > Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>
+> > Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> > i2c@vger.kernel.org; linux-doc@vger.kernel.org; linux-hwmon@vger.kernel=
+.org;
+> > Jean Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
+> > Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>; Rob Herring
+> > <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor Dool=
+ey
+> > <conor+dt@kernel.org>; Sabau, Radu bogdan <Radu.Sabau@analog.com>; Uwe
+> > Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>; Torreno, Alexis Cze=
+zar
+> > <AlexisCzezar.Torreno@analog.com>; Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com>
+> > Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindi=
+ngs
+> > for adp1051, adp1055 and ltp8800
+> >=20
+> > [External]
+> >=20
+> > On 20/11/2024 19:07, Guenter Roeck wrote:
+> > > On 11/20/24 09:35, Krzysztof Kozlowski wrote:
+> > > > On 20/11/2024 18:11, Conor Dooley wrote:
+> > > > > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrot=
+e:
+> > > > > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1051: 6 PWM for I/O Voltage, I/O Cu=
+rrent, Temperature
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1055: 6 PWM for I/O Voltage, I/O Cu=
+rrent, Power, Temperature
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 LTP8800-1A/-2/-4A: 150A/135A/200A DC/D=
+C =C2=B5Module Regulator
+> > > > > >=20
+> > > > > > Co-developed-by: Alexis Czezar Torreno
+> > <alexisczezar.torreno@analog.com>
+> > > > > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@anal=
+og.com>
+> > > > > > Signed-off-by: Cedric Encarnacion
+> > <cedricjustine.encarnacion@analog.com>
+> > > > >=20
+> > > > > Why did you drop my ack?
+> > > > > https://urldefense.com/v3/__https://lore.kernel.org/all/20241106-
+> > linoleum-kebab-
+> > decf14f54f76@spud/__;!!A3Ni8CS0y2Y!7Q2KluGdg8cJW_wYUd-
+> > vh5mP66Ns62VZOkPG4Jf7NY9ULtTfjiwYqrUHbik_tI9X4izI6fAQS_7eVscdEFK_X
+> > OEm$
+> > > > So that's a v2? Or v3? Then should be marked correctly. Please star=
+t
+> > > > using b4. I already asked analog.com for this in few cases. Feel fr=
+ee
+> > > > not to use b4 if you send correct patches, but this is not the case=
+ here.
+> > > >=20
+>=20
+> Okay, I will start exploring b4 for future patches.
+>=20
 
-The problem here is that it is impossible to prove that the condition is
-_not_ necessary. The existence of a specification does not guarantee
-that implementations follow it.
+Next time, reach out to me. I have been pointing everbody to b4 (if asked n=
+aturally).
 
-On top of that, driver is completely out of date, and only minimal changes
-should be made to it. I would suggest to add your system to pm_dmi_table.
+> > >=20
+> > > In general I agree, but this is a combination of two patch series, as=
+ mentioned
+> > > in the summary. I am not sure how to use versioning in such situation=
+s. Is it
+> > > v2 of one series or v3 of the other ?
+> > I would say the highest and keep the b4 changeset. This allows to use b=
+4
+> > diff easily. Choice done here - v1, no usage of b4=C2=A0 - breaks every=
+thing,
+> > look:
+> >=20
+> > b4 diff '<20241120035826.3920-1-cedricjustine.encarnacion@analog.com>'
+> > Grabbing thread from
+> > lore.kernel.org/all/20241120035826.3920-1-
+> > cedricjustine.encarnacion@analog.com/t.mbox.gz
+> > ---
+> > Analyzing 13 messages in the thread
+> > Could not find lower series to compare against.
+>=20
+> This is v2 of one and v3 of another. For the upcoming versions, should I
+> proceed to v4 which succeeds the highest or continue to v2 based on this
+> series?
+>=20
 
-Guenter
+It seems to me the highest is the preferred...
+
+- Nuno S=C3=A1
 
