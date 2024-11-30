@@ -1,66 +1,66 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082271922F1;
-	Sat, 30 Nov 2024 16:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3472B1A3BD5;
+	Sat, 30 Nov 2024 17:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732985570; cv=none; b=IOmfqOf+XLlBMyQYQ9QIYj6c9llc87GNTZ+B4djb/di9ODIdmSI5Y3LNA9tmEZ+SnwH0AkhrU0yS/wFXcLVFSGqOcmxnsllN5ZMBfkjrbfzrBw8Ph3ScYs14IK9IsRY/ZlKzJgLvkYUOmeXRa+TKrO2nKOkOh9TZiXb7CLFV4w8=
+	t=1732989501; cv=none; b=TXNLk+FnjpEfBohOTAAGDZJSJaPmCyQTmHf7ZcHdveqLNxNQK4DhxfrLfvDBKM/jgBTswm5vcyADIt8w/xc7Pn4fHx2kdKZKxba9BQju2paHBBjWK/sw/uEfGOvVm7TC9Hm1ttXia6+p4JUDs+F0XdWyISMp/8yN1qIhPyA38Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732985570; c=relaxed/simple;
-	bh=qK012MOKjo/DdO+iPYPNzwrb0I9jjlABwSvNAjlnZ1s=;
+	s=arc-20240116; t=1732989501; c=relaxed/simple;
+	bh=STvU6bgqFJGzdDVQRbsBPbfg2Qza9Pjril3rE9JdYj8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W6DwtWw4Y2xuPFPjQOjKqQWfg6GLM59QnXl/gP2/0h6LPZob6Otb4sqSrihKoO3AnTxxXFT4lE/hUEVSK8ZS0uFiWGtLhtiGDvCbK4SBn11Srd5oePe2bFK2uYI6k0clbch4iQoQJSWgdMXoQlgXiaPp8tpK17FRY3utXmcGRLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HcYyZQEi; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:Content-Type; b=AgotnZ0YkZS6DlPhAxjgpokuOS8qgpVpbN8OB2yvUJ+G3W1z86lB5MdXuuArAAwccW+7dVXi06PtMyY6JhnDUClbBBcYigkNdxIi1MbA8+EN0lGYe8fFsbXiowWryaVnVHM0EgEiQHVxqfttgNRsHWfjvrxEFFC1TWJcvxz53pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZgUDMrT; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HcYyZQEi"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21561af95c3so4312345ad.3;
-        Sat, 30 Nov 2024 08:52:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZgUDMrT"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-724fc1aaa91so2630160b3a.3;
+        Sat, 30 Nov 2024 09:58:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732985568; x=1733590368; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732989499; x=1733594299; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2F2dTosiAf2t/hqtpNg9kLil//AQHtCi8gSiX9bgYj0=;
-        b=HcYyZQEil4d5br5mRvg3s4JVjjW4gNceMGkRGXQPmM/jxw+c+4lAZ/igHXDF0MN31l
-         xzq+jAfy2JVIBf3DawWDgFkxl2ySvXPI+NeoKCjsZdY/cGhjVCb/z8hcnUTh8EAxG7U9
-         dP4F6w6kwsO8QKee+dIRa7eeMhgCl20FA1n7KUDe5pCxbKwu2iH8nCuLNpMHDe5szeqR
-         0BC3xit0J78VXrlbMsvKV4nvWf8V+fCcQ332uP4Op11IO3ruGbKhVblWOnGDVOOTu8wz
-         hwg/s6wSPJ6MV0tpzUAWNVx7Vj6V2pLrerhHuSvJv4a/Ti4MPW21y1H6HJ1adifHLy9N
-         3C7Q==
+        bh=EW/0da8K2VHNaYJltUzc1fWYpfK+bQDkVqio8uz+pI0=;
+        b=gZgUDMrTNpo/yYw5/YZbixS9T2wzUzX+nXwpVmb4AurWC6YiLG2NiErWfz1v92H8ni
+         N49AtuIWmhSc0aCt5ATEVU6HCVmP7IJMPQ/fsbBnemBdClEntNHuhjuRxLnC4FTxRCcE
+         klWuu827zIdsQN6yGSU9qJwJp0NVmRxr5zP3218tU2siuNX/M8oVZvK8tRmjlhz5yCD0
+         E3QqUntQSJNsxi4kClnXTlrrZNaYxF7QBDOI60u30gCLLInk8A+aUKCOtTw5qgfkFpbe
+         TaYJZ7CTTOQTlVt337QhL9TPPTUi1KRzvCKakDXxUOh3d4lQcH8bdioh6zwki7GQqO5U
+         +EJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732985568; x=1733590368;
+        d=1e100.net; s=20230601; t=1732989499; x=1733594299;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2F2dTosiAf2t/hqtpNg9kLil//AQHtCi8gSiX9bgYj0=;
-        b=nqIc+cyTlDP4PxhdOyseeSFl1Mkf2ettv6xuIMbopYHzRkPY0qsf8hH9cq2Ukbsn3a
-         fOHGFkAQQQ/TazvouLXxu08dYXNQDTnWjAWvLxRQaaC99YpCf+Is7/RlBxk8jmaiVzYl
-         rOp0c5vebAkQ+v/w0Xx6LOwNmxkgWwQnnYDsn19O3RPnECxUGU5MjSONx6jol3h2ONyK
-         YxR06sNCiWqc6aKpHEqVxJmMA7KVUefY0GYP1jqxXb0QPtZiWsZcO+2X5pP5BFS88jHa
-         utuGnTbyan0f5HAFCQV+hx8AfffVRmgP+QGRkpy5v8cycvuuczvDkiNEB/5TFuYu8COH
-         1v1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU1P+eq6OZU/sGi2A1HdQpr1Fjq/9lxt1QA7bYv0HPBqt4JsoNpQnjX5fofD5xnG09GCFi+YqQvtPeESl/C@vger.kernel.org, AJvYcCWyg+W2WCP8Pw1TeN8l12gpyNGWyGoHd+64MWCsBp0fgM6F1FZp0H3dL3OzmIr51cm05GHGX8zJyIsZcSw=@vger.kernel.org, AJvYcCXDNtm5vN031PrN5uXYnoOsjz8T0TMiL6ZRdUfvVpvQUpAerKxM6Z3a4LQ2OdpVQxE+AkTkolGfqgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydQXjm+NSQGALs5fHhwDNvOeskipF7lUKIoAx/rePE7hc5Tw/P
-	f3man01k9thaq8i9VbTq0PKAPzaEBZGvxdqqssQ2jJuqZBFsBALt
-X-Gm-Gg: ASbGncsXy8HrZQETEOkunFp/OcDZMxhDoGupcjCJ7RGE9OfAiSEOTKpixHm9akZNyVR
-	V1BrnkulnxEfoalfpKIPZYu5BclC5pMhDw2G9DdtO/Gb0PVzsElrFMAaC2QSqpj8Dxo5b57oHVH
-	HHBcGQwDWi8W4zItmE33WlbUkrEMkwDdIt2r+BmcqxCK0crQtN/DlWsj5f2oGU/iXOt6vdFMZvr
-	iVpib6OZRCGNwqhbAyz+0+1hcUyS+kyanxPR83jAy5pQOdyxsXAseYt7rd2DanyqLhasTEwMLwA
-	ruZhRGT1urH6y3l9v1FLyh0=
-X-Google-Smtp-Source: AGHT+IHRR/Wg8MSXoSRf2ZFdLhRQhbHbJEkx/6NanZPZJt+34nJu3TBALCItle0ZULBIi/ZTjg2jAA==
-X-Received: by 2002:a17:902:dac8:b0:20c:70ab:b9c3 with SMTP id d9443c01a7336-21501a44acfmr219881885ad.34.1732985568321;
-        Sat, 30 Nov 2024 08:52:48 -0800 (PST)
+        bh=EW/0da8K2VHNaYJltUzc1fWYpfK+bQDkVqio8uz+pI0=;
+        b=JiriTF6AwrMHVLrhLOpCqB5wMTkgAYpmMGU4yljhPrJSbBHHQZbg+aHGatgq7RCU9I
+         ssFP4iHPK8HokTAYb1QpS6UszuMkLZpwekqOjurSrrxBuLkfaE3RM8qPhjGMN8wjEnqj
+         F2T2iHziHAxq5P1YLiuyF1i9K9vVZLmhD73QZVh7/rA3/5bim4SaRoxbb2jOwe6mdq5j
+         hLTVEFmAqDcbZ4t6Apf0TzaJVx8Xfjf2T+LCKupJBcPQk/CkqoDrOII6Y0fukQwjgLte
+         FbD8YsFGNfC05FkVoM4vgOr0DL2QbwgUFXnDMh6FeGCHo6OWBKLP7RxEGXJ5jaKjT6jm
+         oA1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWKBPTI27WJAK5Fv7LOFYIyOgODIP4RIE1cfIWtgrLo/KZv08zAZ/2TqhIJB5tdtdzilYngEkNDJDLM4Yg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/Wc7WFLspWpUQLai1/KjEW9uKdEo50C3BJytiBjTIZ8QAH4bo
+	kZCAhcuA2dVyWHjRt7jhzKE7aA94ldiPGpEibpCpen/T/Q2RzCs8
+X-Gm-Gg: ASbGncs9fx5Byv0mpC1ifKlLSRuaBxbbqmf9iBJ4yoO3Q/knSt1fTuXTFQ6BC9z0XcI
+	WOSXBa12kiZStzrIpDEPP79FHAnBPQFgcfmu+OjhpblAU7DOdBQfbizLYEy8H+feBrR0q9tYLBq
+	1yXSx5p91GVqM+RwcQ2WRvLvqSCj+un0luBZKfDGQmaQTaTp3x0qO2fkXqUjaBOaWkxE40sG50L
+	LZNZkqLWoXk+nR4S1KrWQDbUBwXTtQwz22BqxwPsRNGJkBgJex07J2zBEMJJ7JBh1HNv15K3XzV
+	fxP58c0BR19QjK6rkYyV5V0=
+X-Google-Smtp-Source: AGHT+IGOspVBeCRywftg/WOFcwxmZZeB+BjrNZAkL1m1H/jofGq2xR2mqEQvpmqvUNFHsmYu+UWjMA==
+X-Received: by 2002:a05:6a00:2381:b0:71e:55e2:2c43 with SMTP id d2e1a72fcca58-7253005a02bmr22033365b3a.14.1732989499442;
+        Sat, 30 Nov 2024 09:58:19 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21530753d15sm41270945ad.52.2024.11.30.08.52.46
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725417725e9sm5449028b3a.80.2024.11.30.09.58.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Nov 2024 08:52:47 -0800 (PST)
+        Sat, 30 Nov 2024 09:58:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <72181994-c982-49e8-beae-4ee16a789f4a@roeck-us.net>
-Date: Sat, 30 Nov 2024 08:52:46 -0800
+Message-ID: <fcf06424-c014-4e87-9ac5-ced1ea679fdd@roeck-us.net>
+Date: Sat, 30 Nov 2024 09:58:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,15 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Li XingYang <yanhuoguifan@gmail.com>, corbet@lwn.net, jdelvare@suse.com,
- linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
- <20241130144733.51627-1-yanhuoguifan@gmail.com>
- <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
- <CAB95QATeOynGJ=MMJrsMXatMms0u9ec+qJbh6QfAEUTnjNmZdA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (tmp108) Add basic regulator support
+To: Stanislav Jakubek <stano.jakubek@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Frank Li <Frank.Li@nxp.com>
+References: <Z0WJg5MMu_1AFYog@standask-GA-A55M-S2HP>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,63 +119,49 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAB95QATeOynGJ=MMJrsMXatMms0u9ec+qJbh6QfAEUTnjNmZdA@mail.gmail.com>
+In-Reply-To: <Z0WJg5MMu_1AFYog@standask-GA-A55M-S2HP>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/30/24 07:47, Eugene Shalygin wrote:
-> Hi Günter,
+On 11/26/24 00:40, Stanislav Jakubek wrote:
+> TMP108/P3T1085 are powered by the V+/VCC regulator, add support for it.
 > 
->>> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
->>> index ca38922f4ec5..d049a62719b0 100644
->>> --- a/Documentation/hwmon/asus_ec_sensors.rst
->>> +++ b/Documentation/hwmon/asus_ec_sensors.rst
->>> @@ -17,6 +17,7 @@ Supported boards:
->>>     * ROG CROSSHAIR VIII IMPACT
->>>     * ROG CROSSHAIR X670E HERO
->>>     * ROG CROSSHAIR X670E GENE
->>> + * TUF GAMING X670E PLUS
->>>     * ROG MAXIMUS XI HERO
->>>     * ROG MAXIMUS XI HERO (WI-FI)
->>>     * ROG STRIX B550-E GAMING
->>
->> I don't understand how this is "sorted". What is the sorting criteria ?
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+>   drivers/hwmon/tmp108.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> I believe the list in  static const struct dmi_system_id dmi_table[]
-> and the list in the .rst file are in the same order, and I want the
-> board declarations to follow that.
-> 
+> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+> index 1f36af2cd2d9..85e4466259a3 100644
+> --- a/drivers/hwmon/tmp108.c
+> +++ b/drivers/hwmon/tmp108.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/init.h>
+>   #include <linux/jiffies.h>
+>   #include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+>   #include <linux/slab.h>
+>   
+>   #define	DRIVER_NAME "tmp108"
+> @@ -331,6 +332,10 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
+>   	u32 config;
+>   	int err;
+>   
+> +	err = devm_regulator_get_enable(dev, "vcc");
+> +	if (err)
+> +		return dev_err_probe(dev, err, "Failed to enable regulator\n");
+> +
 
-So you don't care about alphabetic order, just about using the same order
-in both files ? Fine with me, and I don't have to understand it, but it is a
-deviation from the current model and should be documented for reference to
-ensure that I don't call out people for not using non-alphabetic order
-in the future. If there is some other order, it would be even more important
-to document it to help people understand what it is supposed to be.
+Problem with this is that existing devicetree bindings do not provide
+a reference to the regulator. Those would now fail to instantiate,
+which would be unacceptable. I think you'll need something like
 
->>> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
->>> index 9555366aeaf0..f02e4f5cc6db 100644
->>> --- a/drivers/hwmon/asus-ec-sensors.c
->>> +++ b/drivers/hwmon/asus-ec-sensors.c
->>> @@ -250,6 +250,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
->>>                EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
->>>        [ec_sensor_temp_water_out] =
->>>                EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
->>> +     [ec_sensor_fan_cpu_opt] =
->>> +             EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
->>
->> This is an unrelated change. It affects other boards of the same family.
->> It needs to be a separate patch, it needs to be explained, and it needs to
->> get some confirmation that it works on the other boards of the same series.
-> 
-> Well, it is the same register as in the previous generation, and while
-> it would be nice to confirm that it works in other models of the 600th
-> family, I can't see how XingYang can do that. I can check with the AMD
-> 800th series though...
-> 
+	err = devm_regulator_get_enable_optional(dev, "vcc");
+	if (err && err != -ENODEV)
+		return dev_err_probe(dev, err, "Failed to enable regulator\n");
 
-Ok with me if you confirm it, but it still needs to be a separate patch
-since it it not about adding support for a specific board.
+Even though the regulator is now mandatory, existing devicetree bindings
+don't know that.
 
 Guenter
 
