@@ -1,214 +1,122 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F10146A68;
-	Sat, 30 Nov 2024 15:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1153433BC;
+	Sat, 30 Nov 2024 15:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732980566; cv=none; b=cbOA6NdaaLKh1Hm6c68Sz38k/tYzyUZD8ZQhkudbdWI/9R5gJ26uYJpqQ1DXdAZLSgcjVufJJwGIAIuAlNJ8Dxxx4IE7xGwLKxPP0pE3X3hp8I8WU/3o30KB7ltSlDK/j+Vmqti2xoAA0gTuZleJx4ELj6E5OZcH9oq7CjBL6kk=
+	t=1732981658; cv=none; b=eKSTt+k6UmDEb3UsRm9sW6MDo/otD//i7hexFzJq1+ZQFA5HTbt3dYNolGK/AtbnplS3CDEzakaO71nKc7lVj/yDpU6q/GrPSIGoYmTLtOxH5ybZ3KRNlvLHukri6JKYc2UvFH1mtumXVnGqJUhKeQYrzhDlV3sv4jw+Pt/Abpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732980566; c=relaxed/simple;
-	bh=nBpdmeqQ1aDgCywTUlFEwV1arUKE3aW/Y5sFimXK0wk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o2ZiWrKhqGU5IxjMtsHEzvoqFZJfRHPn0Pmj9wCeInyKQI7FebPBX2jFx1QgEgVk3JF7TOyySd/3cLnIVjaVc3+mvlucZB3wygWJtCeSLvjhE2R6zdjxjWFTxOkU2+4FK3wPCHLLFLxnMlxVom5gikpQFkTZqMC8gJz3gI73RwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fbLWw5f7; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1732981658; c=relaxed/simple;
+	bh=1PTGhRyjIsm7QAHdu0cXr1QWFjEZVZBsyohXvUoURU4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yf+wzdRSJQcnShZZX3+h1O8/TEj+CoQaR+yervsqjUC1whXs3jjG7m10xDH1vNqANwOmDptgLUqQ3z4gjXgikJDCXiSgW8xkkgqOT43AqtcDrm5McoGIMhSvdpwFbilONBaDg04lqRL5Ll+jPlS99MgmDAiAT4tHp0wueRONLDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MNcK/LAw; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fbLWw5f7"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-720c286bcd6so2307159b3a.3;
-        Sat, 30 Nov 2024 07:29:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MNcK/LAw"
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3a75cad5eddso10055675ab.3;
+        Sat, 30 Nov 2024 07:47:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732980564; x=1733585364; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1aGUz/icPzYAAjH2gYaLQH8T/F8G+YovWHSrtFJgoY=;
-        b=fbLWw5f77I+er1zIK1lBTjPPDm7qqVq+TqTPXUppOfU1pl6G6oLWZ4a2YcBSjan2I5
-         HjWn6Cl8l+ISAENiqOaD0DXX1olDPcEW2fx/rsgxTWft4Ov1HYrQvPHV82e82WUL1usv
-         QX4kGEopvEOejfOyj7Q6Sgqjr4E5bVp6Z6e9fpHLj5NKEsOj9OTNmaa5qrjrMSPasbqN
-         wpW5Qt9nFTApRJzvI4KEMSmX2wvlIgrI+hZAWImVslUwVv7cMwpbV5JNi6fqoDh6YTg7
-         MTnFZ+Q/ePrQwBudvXnYDYjCdpfSkarM6VHz4/rPGfjSqZplPlwS630snobNoX6eAFKY
-         +WOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732980564; x=1733585364;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1732981656; x=1733586456; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/1aGUz/icPzYAAjH2gYaLQH8T/F8G+YovWHSrtFJgoY=;
-        b=DwRQmS/GLqA6TNh+XMpc1Di5Z4CG8dfnnUpaYvGECizeIz6fUb0y1QtuOBUJdOOn6E
-         JTkV/O6tH5RauRvFT/nEpq8EQgk4TmqkviqOrns46icvXpXPZlIBXpuRkZR2NKdMID6w
-         MJFK1CUt3DW6YIGXwAx6I9qRuVAHNIJxH/lphQH4Ila0LGDjlBr7c+rBMLiEYXg9gSZV
-         XQm9Jg1LUz5O3h5hSpcfNa1Wh0Nm+HJidOZhsU0Lb10ozhxV1sLDyUhte9m26ffiKcT5
-         HCPqOKYoBVLXM1rIRCjJd4dWVxZp6qjtN3Kp6Ewn/xjXg5wg7tsRo2aI7F2JFfN3M01I
-         R6gg==
-X-Forwarded-Encrypted: i=1; AJvYcCURcCsLy9eem0cYxGlXXL+6/5BMmd9KOK8qC3P1wXXv6XdfaUWa4VeSQFlP3eNnuWtddmKUYAi9cqo=@vger.kernel.org, AJvYcCX768Rm5z8YWoFJBciyjKkdejOwjSxvlMOPI6g23GCM3jdlkFTJwnA6ddOgVuRhy0xcXn46yCd4xQGmEbVp@vger.kernel.org, AJvYcCXdOJlUgcznafQHPn+rj8dQR7vbP7gksLuyCW3YB6afniLMiHBnIFdC8e6jRzkOkv+TD9k2KVINK/0GyzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfOejvPqwUbf63k4XaC6hFF2XVP32tElOYm5hrBsPg3w8RQVq2
-	odo9AJu1ZUqDok2NuAuniDEEgCvPDiWG+EEeRG4KmLsbfDy9nQ8azmq+Bw==
-X-Gm-Gg: ASbGnctdCrI5Gty2sDRjCVpn5ah0wdmFbOCcEAK4NX2jXncENGWbQFMmXMQwGzvmQZO
-	VV054a7ECKrh5HqG3Lb7++BUMyvadj+6B7TBOHunVZbjwEhxKInkmB++bi9kFaNxEz1WuyKdiNC
-	eRpo/o4oK2cNzYYq+1k9FhXc81NWXBzy6WhKFdMenf010oiNBsRJfoU3Bh3cOo7JMY2jR4GaZM0
-	aclvWLqjySEh/2//kNZv+MCWwOL8TBDCUa6xpxMKVLfeB1jEw0oOHDwx2J91arKib96oaVkFX0k
-	itzRmRVtTXiCcXk6WMCs4i8=
-X-Google-Smtp-Source: AGHT+IESAnIsKZ1ekp3hBFEffXRNLZDVfi2J/7qu72MN+WAWDZL5FwTrGkP1u6bVVsDWFnioUCOb7g==
-X-Received: by 2002:a05:6a00:806:b0:717:9154:b5d6 with SMTP id d2e1a72fcca58-72530149e64mr22697731b3a.22.1732980563873;
-        Sat, 30 Nov 2024 07:29:23 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7254177d4e4sm5297432b3a.86.2024.11.30.07.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Nov 2024 07:29:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
-Date: Sat, 30 Nov 2024 07:29:21 -0800
+        bh=+2gu9jQw3HbQ16UbphazRXckspOvL+0inOOjzZzc/yw=;
+        b=MNcK/LAwGrXJIiTFGHhnquV1cnYDJF56JX2wOR/59R0U/JNLL5GaIbncktRxsFmJ66
+         7973y/as3IbXeVFIH8ogZfakvHdtfLjo2yKdQ3QqV0fz+2bIys9tIPGZj8vPPrZuK1Xi
+         5QQ40p/L5ZMnzZFwWmvq5mqzYEmzcMZYGmx+2XMzUSf2UC6Xfi69X9rRZuWt1o8bW1tu
+         BD7w7e/0/BeBOjQynUl+TS0kQs88ttQIrreTxkkwuqUI8ZbVzKnknNk8IvcRETpq83fU
+         DgIG6ybazZtACQt/etECt0aPTC2DGuWbKqaBVx2bAap28yJ76eyGQa7GFZrctCmgnR25
+         jrYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732981656; x=1733586456;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+2gu9jQw3HbQ16UbphazRXckspOvL+0inOOjzZzc/yw=;
+        b=dal4QSRFiH8deZ2qQWPKxTym9KVjloKqk1L94AYMv3gL92k5nlfsyuKak0PKdT15we
+         92i7TS8dyQ4RjPJ4nsNODKN1MGT+BLea7oRCypQLf2hTmVnMXnEIFAcz4rp1nSeeFvgz
+         uGaNhyrVrqWUxWM17A+NFl5sgla5E7p7c2kbKw0PSNwgbhpHsQgTSMoyPRH5WmaRdPFn
+         EWrueFkypZxXnv1Uk5dP02uRK0px6u1fsXa8kcNzre5OSTaLkJN1c6P0NE1Yxb2lzjTH
+         xTRxvFlzR9uvZc1Avn9F+wwwcFQlMf8Yc3yrdqMaX7QSvOZz+zXfFFQu+x7gCJWBqAcX
+         P7+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUuH5cW8HmqIccHmkiZ9v7Ghnbk7wAC43rtfvrS9Hympqu8XARYqHQu6/3vrQVfqA/TIkg4k0EqEK8=@vger.kernel.org, AJvYcCVwbGzlfeG1Zdl1l7eyn0fiszImGs0JVNLaOEsbO1MsygMHDa9/yk1PkJVOUp6JOVwEbQjnpXf3xFG1FN93@vger.kernel.org, AJvYcCWjlPvDdSlCdHJHdG4NgevONreV/IQA2ukWGTUl+XHmiOmcxRwDipbhRNSg5gp/G1D4rFMS4LHhszQHJBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywyq2GR6S9tH39pV8SsFnm1hXFnjZTBPOZI+EaWQU1JEXCt1/6E
+	qSt4kjSn/++0uGfrazU6EBCm+3ew12rHtf2U8OMZxNKNVX2s8SH3QFWC+ZCuWWFgPCF6wrZM/Ut
+	xOFI6CvStXRXt3j7zmK5ZOerAU4k=
+X-Gm-Gg: ASbGncv/JOzoUnpIxBTICSe3HJiZrGljCucAMTluW0+ZJn/U2ps7ZcudEelUIt43e6K
+	iGmXwhUZLqeC0oW1naDwnZXTPpYcPic4GtRgxp6OophT9Rq2YkufgF6hhYwohgMQ=
+X-Google-Smtp-Source: AGHT+IEO4+JdYtmV/84bIpy4ugipz6EYeX2s8ToGjwlW2k1F3Wg3+V3kTanZ/qHxMkZhC+lLzUYQ+gwOfyihbvPszdE=
+X-Received: by 2002:a05:6e02:164d:b0:3a7:e592:55cd with SMTP id
+ e9e14a558f8ab-3a7e59258d4mr13106515ab.14.1732981655375; Sat, 30 Nov 2024
+ 07:47:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
-To: Li XingYang <yanhuoguifan@gmail.com>, eugene.shalygin@gmail.com
-Cc: corbet@lwn.net, jdelvare@suse.com, linux-doc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
- <20241130144733.51627-1-yanhuoguifan@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241130144733.51627-1-yanhuoguifan@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20241130144733.51627-1-yanhuoguifan@gmail.com> <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
+In-Reply-To: <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+Date: Sat, 30 Nov 2024 16:47:24 +0100
+Message-ID: <CAB95QATeOynGJ=MMJrsMXatMms0u9ec+qJbh6QfAEUTnjNmZdA@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Li XingYang <yanhuoguifan@gmail.com>, corbet@lwn.net, jdelvare@suse.com, 
+	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/30/24 06:47, Li XingYang wrote:
-> add asus-ec-sensors on the mainboard TUF GAMING X670E PLUS
+Hi G=C3=BCnter,
 
-as/add/Add/
+> > diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hw=
+mon/asus_ec_sensors.rst
+> > index ca38922f4ec5..d049a62719b0 100644
+> > --- a/Documentation/hwmon/asus_ec_sensors.rst
+> > +++ b/Documentation/hwmon/asus_ec_sensors.rst
+> > @@ -17,6 +17,7 @@ Supported boards:
+> >    * ROG CROSSHAIR VIII IMPACT
+> >    * ROG CROSSHAIR X670E HERO
+> >    * ROG CROSSHAIR X670E GENE
+> > + * TUF GAMING X670E PLUS
+> >    * ROG MAXIMUS XI HERO
+> >    * ROG MAXIMUS XI HERO (WI-FI)
+> >    * ROG STRIX B550-E GAMING
+>
+> I don't understand how this is "sorted". What is the sorting criteria ?
 
-Same for subject.
+I believe the list in  static const struct dmi_system_id dmi_table[]
+and the list in the .rst file are in the same order, and I want the
+board declarations to follow that.
 
-> support these sensors:
-> SENSOR_TEMP_CPU, SENSOR_TEMP_CPU_PACKAGE, SENSOR_TEMP_MB
-> SENSOR_TEMP_VRM, SENSOR_TEMP_WATER_IN, SENSOR_TEMP_WATER_OUT
-> and SENSOR_FAN_CPU_OPT
-> 
+> > diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-se=
+nsors.c
+> > index 9555366aeaf0..f02e4f5cc6db 100644
+> > --- a/drivers/hwmon/asus-ec-sensors.c
+> > +++ b/drivers/hwmon/asus-ec-sensors.c
+> > @@ -250,6 +250,8 @@ static const struct ec_sensor_info sensors_family_a=
+md_600[] =3D {
+> >               EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
+> >       [ec_sensor_temp_water_out] =3D
+> >               EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
+> > +     [ec_sensor_fan_cpu_opt] =3D
+> > +             EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+>
+> This is an unrelated change. It affects other boards of the same family.
+> It needs to be a separate patch, it needs to be explained, and it needs t=
+o
+> get some confirmation that it works on the other boards of the same serie=
+s.
 
-The individual sensors supported by this board are irrelevant for the
-patch description.
+Well, it is the same register as in the previous generation, and while
+it would be nice to confirm that it works in other models of the 600th
+family, I can't see how XingYang can do that. I can check with the AMD
+800th series though...
 
-> Signed-off-by: Li XingYang <yanhuoguifan@gmail.com>
-
-Please do not send new revisions of a patch as response of an older
-series, and please always provide a change log.
-
-> ---
->   Documentation/hwmon/asus_ec_sensors.rst |  1 +
->   drivers/hwmon/asus-ec-sensors.c         | 13 +++++++++++++
->   2 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index ca38922f4ec5..d049a62719b0 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -17,6 +17,7 @@ Supported boards:
->    * ROG CROSSHAIR VIII IMPACT
->    * ROG CROSSHAIR X670E HERO
->    * ROG CROSSHAIR X670E GENE
-> + * TUF GAMING X670E PLUS
->    * ROG MAXIMUS XI HERO
->    * ROG MAXIMUS XI HERO (WI-FI)
->    * ROG STRIX B550-E GAMING
-
-I don't understand how this is "sorted". What is the sorting criteria ?
-
-
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 9555366aeaf0..f02e4f5cc6db 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -250,6 +250,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
->   		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
->   	[ec_sensor_temp_water_out] =
->   		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> +	[ec_sensor_fan_cpu_opt] =
-> +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-
-This is an unrelated change. It affects other boards of the same family.
-It needs to be a separate patch, it needs to be explained, and it needs to
-get some confirmation that it works on the other boards of the same series.
-
-Thanks,
-Guenter
-
->   };
->   
->   static const struct ec_sensor_info sensors_family_intel_300[] = {
-> @@ -362,6 +364,15 @@ static const struct ec_board_info board_info_crosshair_x670e_gene = {
->   	.family = family_amd_600_series,
->   };
->   
-> +static const struct ec_board_info board_info_tuf_gaming_x670e_plus = {
-> +	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-> +		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
-> +		SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT |
-> +		SENSOR_FAN_CPU_OPT,
-> +	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-> +	.family = family_amd_600_series,
-> +};
-> +
->   static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
->   	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
->   		SENSOR_TEMP_T_SENSOR |
-> @@ -512,6 +523,8 @@ static const struct dmi_system_id dmi_table[] = {
->   					&board_info_crosshair_x670e_hero),
->   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
->   					&board_info_crosshair_x670e_gene),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X670E-PLUS",
-> +					&board_info_tuf_gaming_x670e_plus),
->   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
->   					&board_info_maximus_xi_hero),
->   	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
-
+Kind regards,
+Eugene
