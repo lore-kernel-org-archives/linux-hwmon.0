@@ -1,165 +1,130 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7447494;
-	Sun,  1 Dec 2024 01:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4996F382;
+	Sun,  1 Dec 2024 03:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733017723; cv=none; b=JYZ6hHXJ2fWKb2+h24WxE9y2LNafc9PznJmxyLtXpnd0mSPb1v9yO0/qc3EozGXQmjx0Xea0f54+0LCR2+zkp/WS5YS9Kt9w3ZRuzm5xRd2gtZpXiDCmvtPHEgYnEZpzTPN04DmasYVDb8NsNeamUxi8An+8LUvacdz9ptAD3cg=
+	t=1733024891; cv=none; b=otGOr0Z+mRDHWTbtm3//fqdlBpNQ6wGVCMBvuYGWtRosCC6fR7UYzAzJpB8eT57FCkqRe7PAuaRdW7n72wB0P90NLT55D5UwsX+HuWALB3Wu4uHJ9edqkhnGqWNe0nWYl30naGS5FHKbqt0PXhbqMpJpyk8uNZGxysH0Yolr6/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733017723; c=relaxed/simple;
-	bh=pHfRH4Ecn1vw3+tR8nxlPZC8y7ty2oeAEbB8n+ynOfE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gw+WyuYNh7nM4snfYj6X8zJlBoFAW8cBZw3oYcPcfIadxLJVjVNvFgi2+WhvyDmEoYnpfZuUPGnhNfw76wDrI8KIt/Qj1imp+q1i/Hj2Cu/UPT0Aki5n7DIAgZjDqHFOq+bknct5SW2znCh7L3CASG4LULmARB0T+E5oh3YEXNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W6rq2SxE; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1733024891; c=relaxed/simple;
+	bh=6i2DoYjg0VzS2u5IbfoZOmLFNlbaUglivETR3+4a8Zc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c15M1aQdgBziGirbqDz+QNUlWn8dSON80w7il7qLfLa4fLjEhF8QVqn4POWpEdE+xuPCtep7V5IyidXPn2IEIstKiyEhJRaIZPMjLqcWP0PN65hqViOeMT1u4/jqK3KRTWRJ4l2riCe/9ZI9tI+fTOzOQIJbMyYYp+H48lTEScs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QketRCb7; arc=none smtp.client-ip=209.85.215.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6rq2SxE"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-724f383c5bfso2293338b3a.1;
-        Sat, 30 Nov 2024 17:48:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QketRCb7"
+Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-7ee51d9ae30so1988384a12.1;
+        Sat, 30 Nov 2024 19:48:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733017721; x=1733622521; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=og0xKAxL559d+qRruRz7WQP6LUEOG7PmoTfo4EUcMBE=;
-        b=W6rq2SxEK7buYMNuC4JugJuh+AirWpCAMRzgO/RFM0ORofflUAM/uqQB5V93uYsHlW
-         TrA5cQIvG4ipIjDKeoBqZ9U3COgsskvs9Z3nCYZ2IHwq4MXRfZ11cGWQatMeiFvv6F+e
-         SOl7pXkW+6w7G4Gb+XbnLngtndh9/ggCHKFaxxJQ2qPu8VSuJIzMLkwOHaji1Ku70GYx
-         6pk6BS9KHT6Tz6GWpczml9T34qewUcZwQduWlS7oIdPBT4S9uFparIzsIw06/oJLTD4v
-         TzZ1+0458SbQH9I6GSqlNfSb0yOuNXXRhfNo3m0r0hDMpW4viAunr3YiU9BViKmUuav1
-         G3yg==
+        d=gmail.com; s=20230601; t=1733024889; x=1733629689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGF6HUFugfIp+0XASUHwacgWSOyYD6gUV2jCUySMzR0=;
+        b=QketRCb7WJQd3oaj2vZy9QFy/n6W0z/7XhJdfM1k6LEr4waa2pvwX4qDLPjfBxxR52
+         fS00udAOwUeJp+7hT+vnXzOsrESQ4659rphQajeh/Xh/IGP3yJ5wnH9RRsPNdy6zrlJS
+         YHmT7Yo5QTGIdCs679MODnf0bKdEMKeDeT/tgOGrb1UsuJoW+O2sWb4pjBNtMdIytFd7
+         lC08stnp9SDeXupYs6szSS43SNBPp6qY2qRAYmyXnTaXjAjE+snL1i8qHHStt3jQGx8N
+         CQ91n3I3FL02iwDUGOhsE/ESfQDcvR3z7Kae5S0hLRx6z6ysSf1L6j/JUFc+GI/syBVJ
+         n19Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733017721; x=1733622521;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=og0xKAxL559d+qRruRz7WQP6LUEOG7PmoTfo4EUcMBE=;
-        b=h20peRqYnY6YzKJ7ukuT3r4/urNPo30XDLNEEjJJ7wRaS0Hr8tU5EuFdtlU+bAQ2lK
-         znpEB4iLiG0rSqgdOxhPhhrNYj4FEhenKUTnkGXc8rztAt/Ygy4aH+1MZVwjY3PG9c0o
-         zvTDyHG+wzvpLWr/liVNib2LlkaS4UQk4llRGRpRb8sr/+EAvL4FhwQRSr9c7JehXuTK
-         IDfwvdYZkCpj/084AJozH3qzFhNCEXtHUzplL9maSlqexqyTFajAQUyfQkR84gG1BsAJ
-         OZBdzo4MzjEXqYTc0Zgtes9RgfzMVT7mCxAuuatmEh+zJjx+tA84zJ4F5JKcMAa5G+sR
-         EPig==
-X-Forwarded-Encrypted: i=1; AJvYcCUYH88PeEp0HPsmRJhG1aVicdU5Rum5gUwTPwXVEuuerq7sEw+7GwLewWmmIht9ERBlyDt+rX3O6qlKOPs=@vger.kernel.org, AJvYcCVUoDE44hz2RmmAe+V0CC5owUcpgWL/UsbI/wMy/t4TG1eET6roWGst0T37FVSq3nBDuoJfjK5yOwU=@vger.kernel.org, AJvYcCXoryPp05O6qgMBy0J3iZDU5f/8b5YKiyjTIC1BIdCTVlAPcpXoKSy5Ags7LaFgUvdIejq5YBipSy6hcDrm@vger.kernel.org
-X-Gm-Message-State: AOJu0YxExgj2UrVxtFkNhSvxjJ1EzFa4CgCgr2XPYWicenwJI0ExivdB
-	EtrJsEbbcdmgPy6tA6geJ0qPcz+NgUqqX3pVF8nECeSP6S6Kt3Lu7ufTqA==
-X-Gm-Gg: ASbGnctIiNml/C4dz0O9nK5Nzx9+5JmPgl8AJTyH/SI5HpdZYrHGdv8w4tlWDdgeEmB
-	1+1on74Ih5A9dk05G7g+ukgUTXUb+2BfYrHMUylzWK8pWunHC42v6YR4/YSNqQjcD8j3avLf1EU
-	RwT5MjFwMNo3NV6jOUj8/b8SKsA7YSOOBR6O5bMjGL3/Nnj8vL5z1xZD6QPf1wt6SLWeXPhOkfH
-	iOB5x9dHhL4AkK9Ijco+m4SOlVZG+yOawtTxUrkIDcfXEoOceipNv5/SlE4Gv5k/WmZfV2H7cXG
-	eSSQEPzLMBHrFyc6S/Jt25E=
-X-Google-Smtp-Source: AGHT+IFxwalVNBSI4x+49VrLerz4nhU+5cgmJA1iPtpB45swsE132SMN6oirGZ9ItFAF4Br9UtgvzA==
-X-Received: by 2002:a17:90b:1dc7:b0:2ea:853b:276d with SMTP id 98e67ed59e1d1-2ee08fca57fmr25883558a91.17.1733017720626;
-        Sat, 30 Nov 2024 17:48:40 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee45ec551asm4509105a91.16.2024.11.30.17.48.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Nov 2024 17:48:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <64783a84-5f21-4c33-b74b-5e6d79107c33@roeck-us.net>
-Date: Sat, 30 Nov 2024 17:48:38 -0800
+        d=1e100.net; s=20230601; t=1733024889; x=1733629689;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jGF6HUFugfIp+0XASUHwacgWSOyYD6gUV2jCUySMzR0=;
+        b=egw0qH5RGBtSGpGwetalCgwjCFZbpsdKdiW1t3+EtikmrndtNwaaXHdmAv7QYYDEz6
+         NTWQS2NL1XCZOHw8NiDahPd5Njaa6wyFD11KULR4tEbU1b9k8FeC0VrofGMR1zjAlaSB
+         ZwC0uEhSyJXXlcniJL1Um6CtdccdQ+nixD0wrX8zsjGkFKaeFQSMKT0DrIgcIqf1KdzZ
+         4Ctub9wcSj/Nn++wE/w86fqUg1rQM4A365QQjtgIcHaMVOuMAaF7h+kmH9BihKKosJoV
+         SelLME0AglT9gWg8mW6hhw9LyGhpPa596Y4ecOs5/ue8DJVn2pF1ujCwKeLKOh20yq7/
+         aDKg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1ne8TVvdgu6RBGeK4XOu3jiVN/XIga7gQt7nlQ1dw3csYXgr+J7fGFDC1dHCyV72ds0Pguv4DO24E0v7f@vger.kernel.org, AJvYcCWpjj2MQuU6tzSbeZWR3hHY0DINa5J97V8poaJuO18T1K5SgDH/LTEK8w6X9h3J+Wc3GM4j6QmV+kE=@vger.kernel.org, AJvYcCXKq/WJ6KbpgKLHzk0osy/dN77OVtdLIDmkxcZP8Q9nY0WiflSwTYKBZhzii00f50ZkP6+UEHRSFKt+Tws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBx4g2gI8w8G3ZNYKwFNXrpr2F5C1/99UlR4zaKWq3zy5T0/sD
+	MP8TxBkywFF8EmywaN1zvS979+uYPR2p98VJAA/Yo8wdyiENYOyOqSeGydXO
+X-Gm-Gg: ASbGncty0XEIxVNdyXCqtxFku8KlmF5p9N6nMCx45RY3O/pdu9KS8GuSYVB2Wazqgl1
+	KtKX1O0IVisELq5+lo5owK9yqYPXDbfy+NFzLMWPBaMKVzn2YhjjirbYgSC+xGfrfvePY78JMEE
+	141Un3xcf2FI4Q6ssfCLTu2eOom9k23mD07KZo5UgF8VQNIF6EeWCfkc5HF/THr0oDxeYbqa1Mw
+	qSIv+MwGtnGEpLgvmTb2bru2/fiE+3xv5yMOhxAwUjASMgwiKPiS9TP4D1pxgrv
+X-Google-Smtp-Source: AGHT+IFm6ABroHWsiBLzumLUURQUloAjNeJ/w9i0iDA5CeS2xhtgx5XOVO5BdYuoTcDB60O/8c9TDw==
+X-Received: by 2002:a05:6a20:a10f:b0:1e0:cc21:19a2 with SMTP id adf61e73a8af0-1e0e0aaf55bmr24288684637.1.1733024889235;
+        Sat, 30 Nov 2024 19:48:09 -0800 (PST)
+Received: from localhost.localdomain ([38.47.127.59])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c321125sm5442471a12.45.2024.11.30.19.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Nov 2024 19:48:08 -0800 (PST)
+From: Li XingYang <yanhuoguifan@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Li XingYang <yanhuoguifan@gmail.com>
+Subject: [PATCH v3 0/2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
+Date: Sun,  1 Dec 2024 11:47:43 +0800
+Message-ID: <20241201034803.584482-1-yanhuoguifan@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
-To: Li XingYang <yanhuoguifan@gmail.com>
-Cc: eugene.shalygin@gmail.com, corbet@lwn.net, jdelvare@suse.com,
- linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
- <20241130144733.51627-1-yanhuoguifan@gmail.com>
- <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
- <Z0u5QWzWSXGUTUO0@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Z0u5QWzWSXGUTUO0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/30/24 17:17, Li XingYang wrote:
-[ ... ]
->> Please do not send new revisions of a patch as response of an older
->> series, and please always provide a change log.
->>
-> Sorry, I cannot fully understand this meaning.
-> Should I use the new version of the patch to reply to the old version of
-> the patch instead of responding to the questions raised
+this is my mainboard:
+dmidecode | grep -A3 "Base Board"
+Base Board Information
+        Manufacturer: ASUSTeK COMPUTER INC.
+        Product Name: TUF GAMING X670E-PLUS
+        Version: Rev 1.xx
 
-If you send new revisions of a patch or patch series as reply to older
-versions of that patch series, it may get lost because it is not identified
-as updated patch but as reply to an older patch or patch series. Also see
-"Explicit In-Reply-To headers" in Documentation/process/submitting-patches.rst
+i use the version of BIOS:
+TUF-GAMING-X670E-PLUS-ASUS-3042
 
-[ ... ]
->> This is an unrelated change. It affects other boards of the same family.
->> It needs to be a separate patch, it needs to be explained, and it needs to
->> get some confirmation that it works on the other boards of the same series.
->>
->> Thanks,
->> Guenter
-> I found that in the LibreHardwareMonitor project,
-> the registers used by Amd600 to operate FanCPUOpt are described:
-> https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/LibreHardwareMonitorLib/Hardware/Motherboard/Lpc/EC/EmbeddedController.cs
-> BoardFamily.Amd600, new Dictionary<ECSensor, EmbeddedControllerSource>
-> {
-> { ECSensor.FanCPUOpt,  new EmbeddedControllerSource("CPU Optional Fan", SensorType.Fan, 0x00b0, 2) },
-> }
-> 
-> I think this is suitable for the AMD 600 motherboard, and it does work on my motherboard as well.
+asus-ec-sensors show when use this patch:
+sensors 'asusec-*'
+asusec-isa-0000
+Adapter: ISA adapter
+CPU_Opt:      914 RPM
+CPU:          +39.0°C
+CPU Package:  +48.0°C
+Motherboard:  +31.0°C
+VRM:          +46.0°C
+Water_In:     +35.0°C
+Water_Out:    +33.0°C
 
-That makes sense, but it is still unrelated to this patch and, worse,
-not even mentioned in the patch description. See "Separate your changes"
-in Documentation/process/submitting-patches.rst.
+Signed-off-by: Li XingYang <yanhuoguifan@gmail.com>
 
-Guenter
+-- 
+Changes in v3:
+- Separate AMD 600's support for fanCPuOPT into a separate PATCH
+- Sort TUF GAMING X670E PLUS in alphabetical order
+- Link to v2: https://lore.kernel.org/linux-hwmon/20241130133837.24454-1-yanhuoguifan@gmail.com/T/#t
+
+Changes in v2:
+- Keep the sorting of TUF GAMING X670E PLUS consistent between the source file and RST files
+- Link to v1: https://lore.kernel.org/linux-hwmon/20241130133837.24454-1-yanhuoguifan@gmail.com/T/#t
+-- 
+
+Li XingYang (2):
+  hwmon: (asus-ec-sensors) AMD 600 motherboard add support for fan cpu
+    opt
+  hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
+
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+
+-- 
+Best regards,
+-- 
+Li XingYang <yanhuoguifan@gmail.com>
+
+-- 
+2.47.1
 
