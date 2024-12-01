@@ -1,162 +1,165 @@
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C0BEC4;
-	Sun,  1 Dec 2024 01:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7447494;
+	Sun,  1 Dec 2024 01:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733015881; cv=none; b=klFgNy4ehYIFMbe3rLdz+snCH2mZf2DU4oTgEeNO1MGROwU4lEHJvQSq4G7obCPVm39sgVXk7J1XpqtVmNNuVWL6gZNxrp4QtLmG/6wvMHMALi6aPo9FAFKyjaW33helP7PD9fi9KPbjR0jag/mX/Xr6UHnhyq+qFaMcAv9F9HE=
+	t=1733017723; cv=none; b=JYZ6hHXJ2fWKb2+h24WxE9y2LNafc9PznJmxyLtXpnd0mSPb1v9yO0/qc3EozGXQmjx0Xea0f54+0LCR2+zkp/WS5YS9Kt9w3ZRuzm5xRd2gtZpXiDCmvtPHEgYnEZpzTPN04DmasYVDb8NsNeamUxi8An+8LUvacdz9ptAD3cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733015881; c=relaxed/simple;
-	bh=1RKHU/9kjqCeYg2xFIGadgv8N23RTn9tJPmMdkrO/0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eddua8pWXF9YQUmuivke56N8NQSYCSJlrjGdgpFOyhebXUKTU7a4owuvJPb4dOb5ndvfMWn21F0bthtv2/hlz/jWDZR0fI14iFAgb5R4/3DotbN6S0VgeQ7Pwph9ZKWPdN+FfDHpJ7sg0F20N8EYRVKCQ0WmnjinGRSEk2vV9OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWYUJW7W; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1733017723; c=relaxed/simple;
+	bh=pHfRH4Ecn1vw3+tR8nxlPZC8y7ty2oeAEbB8n+ynOfE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gw+WyuYNh7nM4snfYj6X8zJlBoFAW8cBZw3oYcPcfIadxLJVjVNvFgi2+WhvyDmEoYnpfZuUPGnhNfw76wDrI8KIt/Qj1imp+q1i/Hj2Cu/UPT0Aki5n7DIAgZjDqHFOq+bknct5SW2znCh7L3CASG4LULmARB0T+E5oh3YEXNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W6rq2SxE; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWYUJW7W"
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-21285c1b196so30131445ad.3;
-        Sat, 30 Nov 2024 17:17:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6rq2SxE"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-724f383c5bfso2293338b3a.1;
+        Sat, 30 Nov 2024 17:48:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733015879; x=1733620679; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4TiJ+S3HHsOqNWSIm1djWyuj6jJoTd08hyt0pMQLz2U=;
-        b=LWYUJW7WcVnUg9pWoQzCGI2tmvaH+FxSe1SxAM6/4qI104aIE67eYCiBL2PgZM0mOC
-         +AHcCJevW7umGB/tkBUliA2e8/IffI8WjhVahanr99kTNxm4noWAC+U8e7P+ygTgOPTg
-         BYNvSo3V3mIUUZbuF/+bK9ZSJF5n/U+pH//ElN/wqwYBpgCilLJxLqrkZAETyrwsyrv1
-         MbtwxfGdeq7hVxSYVJ3QHinve/oiMKxUgPNR3h2syKgYCDoNut8fZ6WcBP7S4MyCWPIB
-         WAIJOCaUCtKCB1VxLspG0i/PS8e9ZpFOSL6EIrDmvp/UFpTcT473unD1MtzXdMedKd13
-         pneQ==
+        d=gmail.com; s=20230601; t=1733017721; x=1733622521; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=og0xKAxL559d+qRruRz7WQP6LUEOG7PmoTfo4EUcMBE=;
+        b=W6rq2SxEK7buYMNuC4JugJuh+AirWpCAMRzgO/RFM0ORofflUAM/uqQB5V93uYsHlW
+         TrA5cQIvG4ipIjDKeoBqZ9U3COgsskvs9Z3nCYZ2IHwq4MXRfZ11cGWQatMeiFvv6F+e
+         SOl7pXkW+6w7G4Gb+XbnLngtndh9/ggCHKFaxxJQ2qPu8VSuJIzMLkwOHaji1Ku70GYx
+         6pk6BS9KHT6Tz6GWpczml9T34qewUcZwQduWlS7oIdPBT4S9uFparIzsIw06/oJLTD4v
+         TzZ1+0458SbQH9I6GSqlNfSb0yOuNXXRhfNo3m0r0hDMpW4viAunr3YiU9BViKmUuav1
+         G3yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733015879; x=1733620679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1733017721; x=1733622521;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4TiJ+S3HHsOqNWSIm1djWyuj6jJoTd08hyt0pMQLz2U=;
-        b=LpZNOvQ3S435LqrVdJcaHI61X3m+TOIrqwjQEOqxv7CV3fyirNjLuBL9f2mk4heNvi
-         kXgcpJfiYsHscCEfhlM1OJUI3L/nv1s3H3VP4/UXO2MlGZZHymVVrCnr+43SiQnFir4p
-         2LXvHeTR6ycr8NWrxIsB2vTjCHkqqezhFhgz7kh/cfCWmp8s8Ca2l8nJqX8HXHKtKOHp
-         +talILAE+NJ0RF7KWOdh7EpcEr3rltbyf9oX1z3TfyzSuqsQaEgTS5rjVNcNfWhd1cuZ
-         UVb7wCakUA2V9RpdnE0xvq++l9Zkq5se6M8aJ2cBnoL5XcMnvSFBKdE0Fs2hugaJ51Kg
-         wquA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Cyxm7+DG7eM1BZY2dScN6R/acnYmWkEU7y8dcg9m1ZEdnAevkA6WTCNEKUOdPy2hkXw2FogJYERlxoA=@vger.kernel.org, AJvYcCWn7kYkIhTxaJAXvaCffLJDx3LIybzt06zpcrNcE8LtFbJ/ftsoLwsz6+xRKqRsFpxp/p0wzSVVPk4=@vger.kernel.org, AJvYcCXec2ugzvqHrqbZbQwhhs0YkRimHlphwHyjN2DJXxrGDWBWmVry9S9Edbnu2QdYPeLjfqSlgqP2+VbdeZu+@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAtnLAv19Q25WUO7PzVVtPpydH1KfNRDCLG/ox00zWwhj7rG6F
-	MPQikz+3VCBTjPmukuMsFtG06tBpGSjGlw7lfb0L34y9dRWg/cV+
-X-Gm-Gg: ASbGncu0WnpPNQIbkX1eCdrSuxhyC66Zdz9YMTpvHzUYXpTyZkbHkmrk2mRdTmvEnCN
-	EHxlMM+rySibA3HNO/1+//KoamYVg+ngD7WXYbEOPmAfvHDVS+hpe5c7xyi27fcVt+TrSnk5rsi
-	QEAgb3xYgXJqXJLO5NN1TSU/6GFnV2J+usD+fyWcf9+eIJlGideJaa1yXwl9rTf7VWICjorXufv
-	bUmzpA8QfV2vfeN/vC8wwsX7qVv
-X-Google-Smtp-Source: AGHT+IEuPwr29SpeQVTe35LfPTNpX0Np6MpDW5OHIFWHqTMCf7Fpy1t+qx78yR9adXTFxKuG+2/Udg==
-X-Received: by 2002:a17:902:f601:b0:215:2f00:67b1 with SMTP id d9443c01a7336-2152f0069b2mr171362015ad.6.1733015879091;
-        Sat, 30 Nov 2024 17:17:59 -0800 (PST)
-Received: from gmail.com ([2a12:f8c1:50:4::4fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2152191dcc9sm51901105ad.112.2024.11.30.17.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Nov 2024 17:17:58 -0800 (PST)
-Date: Sun, 1 Dec 2024 09:17:53 +0800
-From: Li XingYang <yanhuoguifan@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: eugene.shalygin@gmail.com, corbet@lwn.net, jdelvare@suse.com,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
-Message-ID: <Z0u5QWzWSXGUTUO0@gmail.com>
-References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
- <20241130144733.51627-1-yanhuoguifan@gmail.com>
- <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
+        bh=og0xKAxL559d+qRruRz7WQP6LUEOG7PmoTfo4EUcMBE=;
+        b=h20peRqYnY6YzKJ7ukuT3r4/urNPo30XDLNEEjJJ7wRaS0Hr8tU5EuFdtlU+bAQ2lK
+         znpEB4iLiG0rSqgdOxhPhhrNYj4FEhenKUTnkGXc8rztAt/Ygy4aH+1MZVwjY3PG9c0o
+         zvTDyHG+wzvpLWr/liVNib2LlkaS4UQk4llRGRpRb8sr/+EAvL4FhwQRSr9c7JehXuTK
+         IDfwvdYZkCpj/084AJozH3qzFhNCEXtHUzplL9maSlqexqyTFajAQUyfQkR84gG1BsAJ
+         OZBdzo4MzjEXqYTc0Zgtes9RgfzMVT7mCxAuuatmEh+zJjx+tA84zJ4F5JKcMAa5G+sR
+         EPig==
+X-Forwarded-Encrypted: i=1; AJvYcCUYH88PeEp0HPsmRJhG1aVicdU5Rum5gUwTPwXVEuuerq7sEw+7GwLewWmmIht9ERBlyDt+rX3O6qlKOPs=@vger.kernel.org, AJvYcCVUoDE44hz2RmmAe+V0CC5owUcpgWL/UsbI/wMy/t4TG1eET6roWGst0T37FVSq3nBDuoJfjK5yOwU=@vger.kernel.org, AJvYcCXoryPp05O6qgMBy0J3iZDU5f/8b5YKiyjTIC1BIdCTVlAPcpXoKSy5Ags7LaFgUvdIejq5YBipSy6hcDrm@vger.kernel.org
+X-Gm-Message-State: AOJu0YxExgj2UrVxtFkNhSvxjJ1EzFa4CgCgr2XPYWicenwJI0ExivdB
+	EtrJsEbbcdmgPy6tA6geJ0qPcz+NgUqqX3pVF8nECeSP6S6Kt3Lu7ufTqA==
+X-Gm-Gg: ASbGnctIiNml/C4dz0O9nK5Nzx9+5JmPgl8AJTyH/SI5HpdZYrHGdv8w4tlWDdgeEmB
+	1+1on74Ih5A9dk05G7g+ukgUTXUb+2BfYrHMUylzWK8pWunHC42v6YR4/YSNqQjcD8j3avLf1EU
+	RwT5MjFwMNo3NV6jOUj8/b8SKsA7YSOOBR6O5bMjGL3/Nnj8vL5z1xZD6QPf1wt6SLWeXPhOkfH
+	iOB5x9dHhL4AkK9Ijco+m4SOlVZG+yOawtTxUrkIDcfXEoOceipNv5/SlE4Gv5k/WmZfV2H7cXG
+	eSSQEPzLMBHrFyc6S/Jt25E=
+X-Google-Smtp-Source: AGHT+IFxwalVNBSI4x+49VrLerz4nhU+5cgmJA1iPtpB45swsE132SMN6oirGZ9ItFAF4Br9UtgvzA==
+X-Received: by 2002:a17:90b:1dc7:b0:2ea:853b:276d with SMTP id 98e67ed59e1d1-2ee08fca57fmr25883558a91.17.1733017720626;
+        Sat, 30 Nov 2024 17:48:40 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee45ec551asm4509105a91.16.2024.11.30.17.48.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Nov 2024 17:48:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <64783a84-5f21-4c33-b74b-5e6d79107c33@roeck-us.net>
+Date: Sat, 30 Nov 2024 17:48:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
+To: Li XingYang <yanhuoguifan@gmail.com>
+Cc: eugene.shalygin@gmail.com, corbet@lwn.net, jdelvare@suse.com,
+ linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
+ <20241130144733.51627-1-yanhuoguifan@gmail.com>
+ <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
+ <Z0u5QWzWSXGUTUO0@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Z0u5QWzWSXGUTUO0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 30, 2024 at 07:29:21AM -0800, Guenter Roeck wrote:
+On 11/30/24 17:17, Li XingYang wrote:
+[ ... ]
+>> Please do not send new revisions of a patch as response of an older
+>> series, and please always provide a change log.
+>>
+> Sorry, I cannot fully understand this meaning.
+> Should I use the new version of the patch to reply to the old version of
+> the patch instead of responding to the questions raised
 
+If you send new revisions of a patch or patch series as reply to older
+versions of that patch series, it may get lost because it is not identified
+as updated patch but as reply to an older patch or patch series. Also see
+"Explicit In-Reply-To headers" in Documentation/process/submitting-patches.rst
 
-> > support these sensors:
-> > SENSOR_TEMP_CPU, SENSOR_TEMP_CPU_PACKAGE, SENSOR_TEMP_MB
-> > SENSOR_TEMP_VRM, SENSOR_TEMP_WATER_IN, SENSOR_TEMP_WATER_OUT
-> > and SENSOR_FAN_CPU_OPT
-> > 
+[ ... ]
+>> This is an unrelated change. It affects other boards of the same family.
+>> It needs to be a separate patch, it needs to be explained, and it needs to
+>> get some confirmation that it works on the other boards of the same series.
+>>
+>> Thanks,
+>> Guenter
+> I found that in the LibreHardwareMonitor project,
+> the registers used by Amd600 to operate FanCPUOpt are described:
+> https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/LibreHardwareMonitorLib/Hardware/Motherboard/Lpc/EC/EmbeddedController.cs
+> BoardFamily.Amd600, new Dictionary<ECSensor, EmbeddedControllerSource>
+> {
+> { ECSensor.FanCPUOpt,  new EmbeddedControllerSource("CPU Optional Fan", SensorType.Fan, 0x00b0, 2) },
+> }
 > 
-> The individual sensors supported by this board are irrelevant for the
-> patch description.
->
+> I think this is suitable for the AMD 600 motherboard, and it does work on my motherboard as well.
 
-My original intention was to describe the sensors supported by this new motherboard.
-If you think it's irrelevant, I can delete the descriptions of these sensors.
+That makes sense, but it is still unrelated to this patch and, worse,
+not even mentioned in the patch description. See "Separate your changes"
+in Documentation/process/submitting-patches.rst.
 
-> > Signed-off-by: Li XingYang <yanhuoguifan@gmail.com>
-> 
-> Please do not send new revisions of a patch as response of an older
-> series, and please always provide a change log.
->
-Sorry, I cannot fully understand this meaning.
-Should I use the new version of the patch to reply to the old version of
-the patch instead of responding to the questions raised
-> > ---
-> >   Documentation/hwmon/asus_ec_sensors.rst |  1 +
-> >   drivers/hwmon/asus-ec-sensors.c         | 13 +++++++++++++
-> >   2 files changed, 14 insertions(+)
-> > 
-> > diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> > index ca38922f4ec5..d049a62719b0 100644
-> > --- a/Documentation/hwmon/asus_ec_sensors.rst
-> > +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> > @@ -17,6 +17,7 @@ Supported boards:
-> >    * ROG CROSSHAIR VIII IMPACT
-> >    * ROG CROSSHAIR X670E HERO
-> >    * ROG CROSSHAIR X670E GENE
-> > + * TUF GAMING X670E PLUS
-> >    * ROG MAXIMUS XI HERO
-> >    * ROG MAXIMUS XI HERO (WI-FI)
-> >    * ROG STRIX B550-E GAMING
-> 
-> I don't understand how this is "sorted". What is the sorting criteria ?
-> 
-> 
-At first, I saw that the ROG CROSSHAIR X670E GENE was the
-last motherboard in the x670e series on this list, 
-so I placed the new x670e motherboard after it.
-Now I realize that this list originally followed alphabetical order,
-perhaps it would be better for me to put the new motherboard first,
-as well as the source files first
-> > diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> > index 9555366aeaf0..f02e4f5cc6db 100644
-> > --- a/drivers/hwmon/asus-ec-sensors.c
-> > +++ b/drivers/hwmon/asus-ec-sensors.c
-> > @@ -250,6 +250,8 @@ static const struct ec_sensor_info sensors_family_amd_600[] = {
-> >   		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
-> >   	[ec_sensor_temp_water_out] =
-> >   		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> > +	[ec_sensor_fan_cpu_opt] =
-> > +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> 
-> This is an unrelated change. It affects other boards of the same family.
-> It needs to be a separate patch, it needs to be explained, and it needs to
-> get some confirmation that it works on the other boards of the same series.
-> 
-> Thanks,
-> Guenter
-I found that in the LibreHardwareMonitor project,
-the registers used by Amd600 to operate FanCPUOpt are described:
-https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/LibreHardwareMonitorLib/Hardware/Motherboard/Lpc/EC/EmbeddedController.cs
-BoardFamily.Amd600, new Dictionary<ECSensor, EmbeddedControllerSource>
-{
-{ ECSensor.FanCPUOpt,  new EmbeddedControllerSource("CPU Optional Fan", SensorType.Fan, 0x00b0, 2) },
-}
+Guenter
 
-I think this is suitable for the AMD 600 motherboard, and it does work on my motherboard as well.
-Of course, I cannot guarantee that all ASUS AMD600 motherboards can use this interface,
-In fact, the ec_sensor_temp_t_sensor originally defined in sensors_family_amd_600
-is also not applicable on my motherboard.
-I think sensors_family_amd_600 only provides a common interface,
-and the specific motherboard selection still needs to be tested.
-
-I will dismantle this part into a separate patch.
