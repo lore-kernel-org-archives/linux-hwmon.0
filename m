@@ -1,214 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B9320370D
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 14:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EB51FE461
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 14:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733148381; cv=none; b=oT0BjKYfcnLoIDRrCwcav3f/YviqJesV04XCf4XnsShir+1RWMEdhstbNbkiBECQjNUrxDUIxMGT3XMBXMYtlima9LzJHklQ9qQUEy+ed1zjVTp4HCf0T7s07za1rwcJhEqWUdNrHJdaETbNNzn4pjWSaOYS8qNOg1tGlHX7fQ8=
+	t=1733149275; cv=none; b=cePU9GGER0fUitn4mzYTF3mOGh0/psD3rummRo9t88LAL3F3kHhEZLFq23jHjIiTgFSaDQ4mqGzewVpm+/EBJ/LEiAZZ5dED/SLoHnc0HGGvZ6Aam2VYQ/sgKef0nFkIAL0huZbMkWQbBk+7UDpGcmKNJGZULhf1ZFd/EnEHEco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733148381; c=relaxed/simple;
-	bh=ttz0HHSnAT969y1k/9Vq7+ziJkVe3O+3eHkU/MPbroY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=US77ZeTr2Oq84JEJPDsUxmDbD/oJQSJjIRbmYE1ErKNwQbXE+M3JztrrVTKpvXTSlWDrG0r5vyvTMi1TvCenS1ewCmImi9fJAmPr3TcSolzMNBQz5BiirzGBqKtvPe6rJIu4m3R3YlPJf94pJokN/cD6S5VvAh8ldr6AGUaw6wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JYOK79CK; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733149275; c=relaxed/simple;
+	bh=Whg2JQMlNNDEsQt9H0MFW06uMZjKJ9GcJi8b47Et6AQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=AXP7Vck3U8GQRVwF9EzaUZZhhg9mIprE7ajKm9/Wx8aksr7o6uZOwWrA00U3piWz2UujtifJuRoXuLFadV2TPBTgJoqBGw9nL+RXS8eCJBRrT9jZgKqCPYeYjndOQVc7ZofXem8NxKtDXhFl8OWefpNtOChAa/e2Fjz9b31oVVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Kd9a4Jz+; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JYOK79CK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733148380; x=1764684380;
-  h=date:from:to:cc:subject:message-id;
-  bh=ttz0HHSnAT969y1k/9Vq7+ziJkVe3O+3eHkU/MPbroY=;
-  b=JYOK79CKyCkNEtP8mSMjkLg1rGnZmnm6r1/UDuHkbTebApVoQg9yjmRG
-   NHzdk+ge5ETWYUKPoRzE2bja2SoqsrwJnI5yVIXuTHhv4y4neHIGD3DrL
-   zVEcd/G37cogg1TCHLy5LadMeynkM1QJRffuzS8iewRs9OpIKTb/YRrlt
-   B3A50ke59JMfXeWY7839p4T49NcGt4ywV9TXDvJZdNgHMCORXVVD6sZ/O
-   tBFv5Zy0Dn7OMNiYx0MEMr59Qj63nVN6m0z0yW+KENEFi/Z0W/NiPqIq2
-   nRpRVhS40N9qx7sQHrj1IHi1UeTUyk+OoEFmrDFNSMMa1/jqQEvYLDEtI
-   g==;
-X-CSE-ConnectionGUID: Kx2ZM7NeT7yY7FkwbcZEwQ==
-X-CSE-MsgGUID: IMJ1cRxRRw+y2rYdxWppUg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="55806080"
-X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
-   d="scan'208";a="55806080"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 06:06:18 -0800
-X-CSE-ConnectionGUID: 7vTj/3OQR/SfcGemAcKLpQ==
-X-CSE-MsgGUID: ju8itG60SHqD4l9qZQ8pxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
-   d="scan'208";a="93286117"
-Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Dec 2024 06:06:17 -0800
-Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tI742-0002TZ-2x;
-	Mon, 02 Dec 2024 14:06:14 +0000
-Date: Mon, 02 Dec 2024 22:03:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- a7f3166624f6e06c896178fb045a424ef5499858
-Message-ID: <202412022238.OaINBV33-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Kd9a4Jz+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1733149268; x=1733754068; i=w_armin@gmx.de;
+	bh=Whg2JQMlNNDEsQt9H0MFW06uMZjKJ9GcJi8b47Et6AQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Kd9a4Jz+gxcYyJlWTmHkja61eZsJi0XJM/Cw/hxnXQOJJhNfvGazyMXFyIZuFMc4
+	 xXrlgek20INHntKGeKjZ45/2HpgL3d7YbyJA+Pe2/bB3brMIhxiEJ0MThk9aZmFCN
+	 SDGqkWbmYCFQNJHYh6kZw49Ns7RKz5C/cyIcLQEmdOBlilrJH8zgAFKkEZpOh+evH
+	 YeGuLFbzNH2aUqRpcXqMGwbU21BIptCS+00h5+lCMMmfKW+9oo3necYRRnYxFeviD
+	 FyKpLOpeH3rmI+9NDcWMV8secOPQouodNE7tpKIHEV8Po8qiOT/3rqnQKGcWXt57W
+	 kwFOX8ur/lIeMDB8Pw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MXp9i-1tAPeK0vIy-00Lifo; Mon, 02
+ Dec 2024 15:21:08 +0100
+Message-ID: <f7a4c4da-36ca-487a-839c-7f23b2caae08@gmx.de>
+Date: Mon, 2 Dec 2024 15:21:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Bug report] Regression in kernel 6.12.1 preventing asus_nb_wmi
+ from loading
+To: Edoardo Brogiolo <brogioloedoardo@gmail.com>, hdegoede@redhat.com,
+ linux-hwmon@vger.kernel.org
+References: <0bc76531-d88f-4288-8a3c-023dbe04dfb2@gmail.com>
+ <06787c88-5f04-4ffe-bfde-829edcb553f9@gmx.de>
+ <ab155793-c2a6-4ee4-9c7a-2209c66143d3@gmail.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <ab155793-c2a6-4ee4-9c7a-2209c66143d3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lmpCZXwfVfndHoh06qSO+LzBqpCLBxaDNBd/JAmTIP7M6G+bCek
+ VceXPvMbUqC4VBOR8z5egHlh75/1BWgmPscc7tEA2A8zxdC98LAuOIY1hTKaOLTaiYpkaQB
+ fIaXvoz+AbbKl2PDEgl4XlY5ehHc1XgWs4OezNlt6J/GXYW6bWHvDkL30MhjJLzNbxWNPHY
+ s5j1Y5HRbfLvhc3l3cP1A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:pk6u84n1xm4=;tWTUAVvuJTl3lXAK41t1oCSJpxC
+ u8n1slQ+12knpO4p8KycI36fmgac/6APqSVzxdOVLcKwHwi28sakM7V8Kd0UxUEt5RMpFAgzM
+ AqMs90ofp0EhvgxubkF68Rq1Sf2kMiJ8jzR+JuUF/h6UO0QK2GpSt4uB43aHZkz1Ot6Dv+7Nz
+ Wl/DiRIyfgAi2S0f3ZIqSPzcMX6l5MhjYq6KntdjNKIM35pS94NnnLnB1jGWu4QdUCj4Rb1XR
+ /2MhrQJsBC7XIFfsC9t3RfkI9OnC+N1/7CSNAgCUlAigayUx+V06Do9VtLyGrfPBZ2JaUhH7o
+ h/pxwW8jmQ+b8mnGaDHrAOAxH/hpcNXKKwmLC9RWi8ecoFlLsb9mz1gArj1mbZGSNbiJppypM
+ rTMJZG57GUlMA5TCRon0us0lzkHHOzGL4JZ0pmOLuGxRQ9gI2unS4mkNaVJ4spCxsAK2EPnxF
+ SYLKr88D/3iuJSEno8MGIimZSl1cntgwK21dun4dEcNNZnlX0AdQCtzQRNl0C/FOVb1sYKIz5
+ orUdX5hSb/zfKs+YtN5yZYbUX8aIhnPa0SzNbMOJkk57hZb/JRqMrUehnwB8bqCSot5eZjWpR
+ PVHaIRtvQNSiS5i60HAfbHMvodQLU7//4GoGG6M10kxeyHDQV05G4HIQZYT/x1FbjocpL9nJE
+ 2B3CY16gdcyX+szBBR8aXa3NvBZXAWTSRce0F3sMzuhLi5wcSuKJKUp6hGsGH4B/OW7cDc4H/
+ Q+IRWFuo8cLo+Ba7B0MxGmM7hIhrD+kiUbNB+TrcSE9r9be+QFbMMdIlG04jRkFMedJT52brF
+ RzyhQ6ibGHF73SO3vuaCb7bS2b4tQQ7XmbFs0nWwWvsyRK1IhmsogSTipc6n9omoacCaQYq01
+ p187Z4ENfeWjjQoEBdkQddCd+v3v9FxOs63mj80Vl54+drJmUpb4fgc3jxIGa5zDhd6rHde6k
+ 458GuKPhJv33efYGLb+BKiPCOuOspD1tw0/FTmP97vzX/q80vqKjJ/CoOtD8ufC/UKzlgr3He
+ wCwu7IaUyOfEPl9gipv6Xm2+dCN9XpkWM0UDQFwEbplzitpWsFozRHv17xCLsJhZq3fkXRaHE
+ zYtcfGyoXgsG2T9hyeg4vNoFO7b2a2
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: a7f3166624f6e06c896178fb045a424ef5499858  Merge branch 'fixes-v6.13' into testing
+Am 02.12.24 um 01:56 schrieb Edoardo Brogiolo:
 
-elapsed time: 790m
+> Dear Armin,
+>
+>
+> Please find below the acpidump outputs for
+>
+> Linux 6.12.1
+> https://www.brogiolo.eu/nextcloud/s/NFPKR6gPErTAnnn
+>
+> Linux 6.12.1 with patch b012170fed282151f7ba8988a347670c299f5ab3 reverse=
+d
+> https://www.brogiolo.eu/nextcloud/s/NePsSABrnHTfQNf
+>
+> I would be happy to test your patch at
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D219517, but lack
+> experience compiling the Linux kernel.
+> How would I be able to fit the diff file in the following step-by-step
+> guide? https://wiki.archlinux.org/title/Compile_kernel_module
+>
+> Thank you,
+>
+> Edoardo
+>
+After looking at the ACPI tables, i do not think that you need to test tho=
+se patches again, since your device has the same issue as the device from
+the bugzilla bug report.
 
-configs tested: 137
-configs skipped: 18
+However if you still want to give it a try, then you can apply the patch t=
+o the linux git tree using git am <patch file>. Then you just need to buil=
+d
+the x86 platform drivers (make M=3Ddrivers/platform/x86).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I will try to get the patch upstream ASAP so that it can be included in th=
+e next stable kernels.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-20
-arc                              allmodconfig    clang-20
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-20
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20241202    gcc-13.2.0
-arc                   randconfig-001-20241202    gcc-14.2.0
-arc                   randconfig-002-20241202    gcc-13.2.0
-arc                   randconfig-002-20241202    gcc-14.2.0
-arc                        vdk_hs38_defconfig    clang-14
-arm                              allmodconfig    clang-20
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-20
-arm                              allyesconfig    gcc-14.2.0
-arm                           imxrt_defconfig    gcc-14.2.0
-arm                           omap1_defconfig    gcc-14.2.0
-arm                          pxa168_defconfig    gcc-14.2.0
-arm                          pxa3xx_defconfig    clang-20
-arm                            qcom_defconfig    clang-20
-arm                   randconfig-001-20241202    gcc-14.2.0
-arm                   randconfig-002-20241202    clang-20
-arm                   randconfig-002-20241202    gcc-14.2.0
-arm                   randconfig-003-20241202    gcc-14.2.0
-arm                   randconfig-004-20241202    clang-20
-arm                   randconfig-004-20241202    gcc-14.2.0
-arm                         s5pv210_defconfig    clang-14
-arm                        spear6xx_defconfig    clang-14
-arm                         wpcm450_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20241202    gcc-14.2.0
-arm64                 randconfig-002-20241202    gcc-14.2.0
-arm64                 randconfig-003-20241202    gcc-14.2.0
-arm64                 randconfig-004-20241202    clang-14
-arm64                 randconfig-004-20241202    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-20
-i386        buildonly-randconfig-001-20241202    clang-19
-i386        buildonly-randconfig-001-20241202    gcc-12
-i386        buildonly-randconfig-002-20241202    clang-19
-i386        buildonly-randconfig-002-20241202    gcc-12
-i386        buildonly-randconfig-003-20241202    clang-19
-i386        buildonly-randconfig-003-20241202    gcc-12
-i386        buildonly-randconfig-004-20241202    clang-19
-i386        buildonly-randconfig-005-20241202    clang-19
-i386        buildonly-randconfig-006-20241202    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                          amiga_defconfig    gcc-14.2.0
-m68k                       m5275evb_defconfig    gcc-14.2.0
-m68k                        m5307c3_defconfig    gcc-14.2.0
-m68k                       m5475evb_defconfig    clang-20
-m68k                        mvme16x_defconfig    gcc-14.2.0
-m68k                        stmark2_defconfig    clang-20
-m68k                          sun3x_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                      mmu_defconfig    clang-14
-mips                              allnoconfig    gcc-14.2.0
-mips                  cavium_octeon_defconfig    gcc-14.2.0
-mips                         db1xxx_defconfig    clang-20
-mips                           ip30_defconfig    gcc-14.2.0
-mips                        maltaup_defconfig    clang-20
-mips                   sb1250_swarm_defconfig    gcc-14.2.0
-nios2                         10m50_defconfig    clang-14
-nios2                             allnoconfig    gcc-14.2.0
-openrisc                          allnoconfig    clang-20
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-20
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-20
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                    amigaone_defconfig    clang-14
-powerpc                   bluestone_defconfig    gcc-14.2.0
-powerpc                          g5_defconfig    gcc-14.2.0
-powerpc                      katmai_defconfig    clang-20
-powerpc                   motionpro_defconfig    clang-20
-powerpc                 mpc8313_rdb_defconfig    clang-20
-powerpc               mpc834x_itxgp_defconfig    clang-14
-powerpc                  mpc885_ads_defconfig    gcc-14.2.0
-powerpc                    mvme5100_defconfig    clang-14
-powerpc                    mvme5100_defconfig    clang-20
-powerpc                     ppa8548_defconfig    gcc-14.2.0
-powerpc                      ppc6xx_defconfig    clang-14
-powerpc                     tqm8555_defconfig    clang-20
-powerpc64                        alldefconfig    clang-20
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    gcc-14.2.0
-riscv             nommu_k210_sdcard_defconfig    gcc-14.2.0
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                          rsk7201_defconfig    gcc-14.2.0
-sh                           se7619_defconfig    gcc-14.2.0
-sh                           se7780_defconfig    clang-14
-sh                     sh7710voipgw_defconfig    gcc-14.2.0
-sh                        sh7757lcr_defconfig    clang-20
-sh                              ul2_defconfig    clang-14
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-17
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                           x86_64_defconfig    gcc-14.2.0
-x86_64      buildonly-randconfig-001-20241202    clang-19
-x86_64      buildonly-randconfig-002-20241202    clang-19
-x86_64      buildonly-randconfig-002-20241202    gcc-12
-x86_64      buildonly-randconfig-003-20241202    clang-19
-x86_64      buildonly-randconfig-003-20241202    gcc-12
-x86_64      buildonly-randconfig-004-20241202    clang-19
-x86_64      buildonly-randconfig-005-20241202    clang-19
-x86_64      buildonly-randconfig-005-20241202    gcc-12
-x86_64      buildonly-randconfig-006-20241202    clang-19
-x86_64      buildonly-randconfig-006-20241202    gcc-12
-xtensa                           alldefconfig    gcc-14.2.0
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                  audio_kc705_defconfig    gcc-14.2.0
+Thanks,
+Armin Wolf
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> On 01/12/2024 16:46, Armin Wolf wrote:
+>> Am 01.12.24 um 11:40 schrieb Edoardo Brogiolo:
+>>
+>>> Dear all,
+>>>
+>>> I hope this e-mail finds you well.
+>>> I am writing to bring up an issue I have experienced since upgrading
+>>> to the Linux kernel 6.12.1:
+>>>
+>>> I have been unable to set max battery charging, keyboard brightness,
+>>> and actioning special keys (micmute, enable touchpad, etc.).
+>>>
+>>>
+>>> With the help of the Archlinux devs
+>>> (https://bbs.archlinux.org/viewtopic.php?id=3D301341), the issue was
+>>> found to have been introduced by
+>>>
+>>> kernel patch b012170fed282151f7ba8988a347670c299f5ab3
+>>> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?id=3Db012170fed282151f7ba8988a347670c299f5ab3),
+>>>
+>>> leading to the kernel being unable to load=C2=A0 asus_nb_wmi.
+>>>
+>>>
+>>> Reverting that patch fixes all of the aforementioned issues. Please
+>>> see the Archlinux bbs thread for full logs and steps taken to identify
+>>> said patch as the cause of the regression.
+>>> While I do not possess the technical skills to help developing and
+>>> implementing a fix, I would be keen to help out testing possible
+>>> solutions on my hardware.
+>>>
+>> Interesting, can you share the output of "acpidump"? Can you also try
+>> the patch proposed in a similar bug report
+>> (https://bugzilla.kernel.org/show_bug.cgi?id=3D219517)?
+>>
+>> Thanks,
+>> Armin Wolf
+>>
+>>> Thank you, and kind regards,
+>>>
+>>>
+>>> Edoardo Brogiolo
