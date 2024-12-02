@@ -1,64 +1,65 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E335A1FCF6B
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 10:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC641FC10E
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 10:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733135304; cv=none; b=PgHBgHIPnzq4I7/TnTWcuFQlk9lOzx2dYkbX1QOniHrN8/UHXWURQbGAwN6daRNCU7lWNy6nI+LZIGp2dvxnrNgw0mtAfkOiEw1BY2msVeWI10ibUAJIOrBRppvEf24FZ7m+vCOJC0OEbHnap3myYjkWRFD95Rr8KuGyvptPwQk=
+	t=1733135304; cv=none; b=kZfHkpGSH22au6RPQj3b0VuOTz3kcDamHgUsPN9VGWEJPKQITsyYL+yQ5Dfxx302VnU202edDQaASZQwi1dkYyYjwlqE3EDSKnifJBKDl23+Woa1qtZYuXvAN1BxqgUFjxiKLoKPwFU2u6art1zD94aZPMMr0eCGkTl0XCk9o50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733135304; c=relaxed/simple;
-	bh=3DyzDba3kopqeRQ1K/a+gHesiQRfQ1yKAi7khNpqLwo=;
+	bh=yz66sYraGJiZqu2qZJ/3WAnzyWuW1S1L5f4P+rm54nU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ASZ1GI3ZWeea9PUWRNvFtcqmpTWE3BcQY4uQpoONlTfXkxZ3y5ayY6TJfB4lFYO/7fQ/xK48W1FWEKx+yzC11dY1aU33RnlEkra6l3wW4E4EOYQv4hTX99wK66e5fy7qtpnWPq0PEaRc/21srcoksrnFywaTyo5eA5IE6euVACU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=jVHLEH5p; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:To:Cc; b=eJSVCPY5X98aipY6r/4+so3+W3tnf0o9OnS0aM3kJbBEk1S5iJ31CoUWsdGuVxywwQClFLFD07KC/O42wN0HS+apjLYaD/PdfafZXaIgII2w3WUgHpPhxkZ8chdiwDiBeWtod1DcivKuATv9yfqYWtb7Ae6nPlGwiJ4BO+LMwZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=fY/P+cne; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="jVHLEH5p"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4349f160d62so33971185e9.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Dec 2024 02:28:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="fY/P+cne"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-385e25c5d75so1362922f8f.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Dec 2024 02:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733135300; x=1733740100; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733135299; x=1733740099; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XO7Tr0oqyOuX/5RGvAdaU0JDvqHNjvQ/glrffhR8miI=;
-        b=jVHLEH5p6V7WUaB7EjCJHuKQyYDIusIRil5HblPk6oEjK/stYq1C0zlCZd3rDyuwIz
-         RQf5jiuLwk2Id1Sf2rNKf92d4vh2ROhl+2FgpNE7mRDPi6XfpvHTYqyEVleyTy+WTo3q
-         /R4/k0LxhWHoDs6op9cJCMJcsHzhp4p/xGGqOiLhfBs3t4TrONL7hbkT0GfaIsAWL24w
-         vSPUFlEx/heqoKP0y/I3j/8+MC69ykHpbKGzaTUUMSglzn9VzeVs/JKp8BYMwlX8IT9X
-         AzgW8u/RbkRfwukKzHzd1yhcbx0G3ifU/vnQNisfZX9tSnDRKZ5tXAGJXZXUrJMuQGmN
-         zIHg==
+        bh=JRvqS+cxdz+2aYEHdWqks8Xo1SolLTxNaReMoEcROZE=;
+        b=fY/P+cnefiMNXaiYnA9Vf2efgMEWkbyrH0v1dr4MAok/bwNjrna3CGsNKKlcrpW+C6
+         kwr46YFo/UAqQG779Aeo5NhAI0iQ9yCG3ppP/0FDJsfPET82SH+ZS9LNBgP/VGgAtQgA
+         tl93RuX8XNuIojEJc0pq8KIhfp/OKPNp8ySkxqeQBOdHZzU8GR899BBJVOh657yJGySp
+         fPRtPMyL1h24tEmvMgO3TBHvtPDwDEFANhPCg0iy50AkszgKzP7jhtaG5dscmBV7gi2w
+         KzYrnWls9gqYAnzLSqdShn6PgmToa6aPfx88av0ASAIPsbYY+Hjn6qc7zbF2GRhhuxCj
+         c9cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733135300; x=1733740100;
+        d=1e100.net; s=20230601; t=1733135299; x=1733740099;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XO7Tr0oqyOuX/5RGvAdaU0JDvqHNjvQ/glrffhR8miI=;
-        b=UYk7F4FmvpLYGR+v4NUllG2VUnCGMtEpmvZHe6Wf6ke/PLbMoagkW5IhytjKrOWo0Z
-         je4pfuezMJTor2GQSc1K6jljlnAyTurRAM6W3jyGwPou7Ey2NtjpHaKuvnYc+Tox5pDK
-         Qkl/a7sRxFqlhVaAXYNUVoo2Sxk9WI5c4f6ip+LPCgIw+WzOyGDnDqDrFR4brkwVMKV8
-         ZiLh6OCuLpk7zHloCR6dmedD2qWAXJtKvYr51rXywzqiYTbrKucCx3lyUZ4GzMwAheLc
-         F37jlQRWJt3dpPYwobHP9aI8BD/48MdUzoHgAFQKE2nG1SQaA/Xq8jXeUWAUhvDbUH6W
-         lglQ==
-X-Gm-Message-State: AOJu0YwbrW51BHXLpnYCgSbWjay3vzuNjmNpqBgRW5qb/wfcBPm8lUoy
-	uiT+UHIACb/fJ/jG2mOY9z1oEBMQEpDZyyDTpaxla0qmkSElh0P+fzJldwF+r0+Z0sWLsPrR/Zc
-	2
-X-Gm-Gg: ASbGncsYo7d0wm6mP5Gzjedi/r9LJyddLIO8AiS7c32T7cPXMSV1HJJN6aP9JJIVB2t
-	O4yHdiOwiqQNZF1iRg3ZkkLBLa6v97+2mKMVZEUHFOKZT0dCyruyluqMJ+AFIljUthztXz5bQk4
-	urQw9fOm+JhwiJEYGxxFuSIyKpo/l8D+ESMeoiJABqbCdog6X90rzAUQdzs9kWqWid17/LFu9Jf
-	CJNYtZnnccTiTormRFAu5zy0xek1F5BFJcdnPP3gO6qihijlzUMEyqSySUnrw==
-X-Google-Smtp-Source: AGHT+IG6uItkG+/EyIz2ExIrsRZ9Ufr1FGwtNB+JiBOzK+GKrORAmjno5MykzH+8443W3ZtyQ+9/AA==
-X-Received: by 2002:a05:600c:6d46:b0:434:a5d1:9917 with SMTP id 5b1f17b1804b1-434a9de4533mr163840155e9.21.1733135300296;
-        Mon, 02 Dec 2024 02:28:20 -0800 (PST)
-Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:2380:13:b62c:611c])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-385e940fef3sm5757614f8f.42.2024.12.02.02.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=JRvqS+cxdz+2aYEHdWqks8Xo1SolLTxNaReMoEcROZE=;
+        b=HlzO0E6L/azigMdi93g34d419LT0tpnPptfnRv6RlMNxTPx5ITl3IL3G/nTEYf9Emz
+         gRxWJWnRi0u2CJU47EsiG/0fCybo5lGMvi3+ouxWr2YWu6MNSQIBNiBxD5uSyLBxlU+9
+         79IJSi5K58YmhRJ4ZnJLpOWDVxlb3wW8mglC0JkNzNDHQ4Bi3x1ttP+gV3OXwOBNA12q
+         BV0YOXBviDxhrYTPNEtTFyvRc+zx80YvCg5IF1yCTOJGjF+dmOcwG/lPeRot4IvoInoc
+         HCJ5Gf5sqMUzXE/AuTMbQ1YGmS8tUYjcxbHg+YFiXha4wVwU9bXoPXq75KI/2hjRYdn+
+         IRZg==
+X-Gm-Message-State: AOJu0Yx+l12WuJCHc8V+UKILs7QwzpkWHY61h4x+BcHHlO1dyROrYIJ2
+	NYODlV2xTzBWGBc/bMZcnqN/RjoW/hQrGkN4v/E21HAiF6s2vDS7zm0e2M8jlCJzMXf7f9ijug7
+	r
+X-Gm-Gg: ASbGncv5TKKw8rBpnaDcgh/pgMRxjU33nwAApMvVAf43lB8a/X6XUbCl/FqX9gii3p7
+	e2NaFBK8k4mAGb+EnoNyfe25lcO7A2s5ZEGFCgZPFYNOeja/9vhKdXw7OAZHFeVaqxY6Y0H1jea
+	J1iIEBhn9F0MgGYtJPxYjIiVLRm3x6KEaZswtGqraJBzUGrUPjN4w7eSUqzBXUEtVuISpHkt4D2
+	7ZGgJUmgvY1lnm5gaZsyCvvhKQhFrNgToEFmMIEA03Qd+YB+DtZchaD2LdLbg==
+X-Google-Smtp-Source: AGHT+IHsSx3gs1sZha/rYDLkNYukVwt8XSspxOLea4PEJWonWzfJ1JHlAKJNbBSxy8X+vrAcoXO0yQ==
+X-Received: by 2002:a05:6000:1fad:b0:385:dc45:ea06 with SMTP id ffacd0b85a97d-385dc45f2cbmr11884719f8f.13.1733135299407;
         Mon, 02 Dec 2024 02:28:19 -0800 (PST)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:2380:13:b62c:611c])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-385e940fef3sm5757614f8f.42.2024.12.02.02.28.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 02:28:18 -0800 (PST)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Mon, 02 Dec 2024 11:28:01 +0100
-Subject: [PATCH v4 2/3] hwmon: (pmbus/core) add wp module param
+Date: Mon, 02 Dec 2024 11:28:00 +0100
+Subject: [PATCH v4 1/3] hwmon: (pmbus/core) improve handling of write
+ protected regulators
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,7 +68,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-tps25990-v4-2-bb50a99e0a03@baylibre.com>
+Message-Id: <20241202-tps25990-v4-1-bb50a99e0a03@baylibre.com>
 References: <20241202-tps25990-v4-0-bb50a99e0a03@baylibre.com>
 In-Reply-To: <20241202-tps25990-v4-0-bb50a99e0a03@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
@@ -76,119 +77,211 @@ To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3509; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=3DyzDba3kopqeRQ1K/a+gHesiQRfQ1yKAi7khNpqLwo=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnTYu/ZSGEokuc+lm2iUhKSc/nTRxEiPA5pmuTK
- XJB9trbV82JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ02LvwAKCRDm/A8cN/La
- hcJ+D/4gKJaHaEL5SU02alG9ZM0bq4XITk2so6lmkr2BWKpLFFjTiX20K0d/wHoAe5i1cP1i744
- aspxWxk75Cs1bksGR0i6drgjhPXDkejehL+VGRZx/f1uE9iXsqrI8h6Co4H8mXpLhzOo39K7469
- 5E2R+7GRq70aFtr+ly+5/uzXRU8MLxTOywm2tz3VbHoW7kbsNQpE+2HS79IVHSX65L/cwQPMRoy
- 5gcQ0lUwffCgQLHfsRWfamx05GCWbkCDguj/KS1naqeEJJxMlQt+c5dm8LR6gejYwtpsJtat/79
- 2F7Dwhh5rj4GB4d1/SmU0DqmJ+ydn1viz4V2I3UvlFZ/lcV+pJgKyu+O5nNkh8ZbalFORPfPE8v
- Lkuv2YRkCXKTiIElLw5MUBkMtFifQ3xbbQqdLWxEPdINeGgrgn42VDB571QaE7Z50jbWT1v2aYC
- tE4SuFUyFHPxb2TlOF0Hk7E77bGMUy9+deoATKlPJtp43hIVVhV3Z9HX7ASwYhW634mPZVxR6cM
- hBwjG40YrytDCl1QK/URpzy8wBeQnQpdeRsCpr0e6zq0+YdsZ4WoDuL+bHJ+elt+BOWESWHpIQ9
- /bE0esTdVcCD3cF+Fld9CTCB4BILVGv+7gXEIHaenxAoUIEd6Bm9L0SUJPJTWKhBfDVF6tPOWsl
- jxEGjohgC3UI6+w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6746; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=yz66sYraGJiZqu2qZJ/3WAnzyWuW1S1L5f4P+rm54nU=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnTYu+w067LtutAt7V0wzL053QA36cXty+3RBeF
+ /scAAyP83mJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ02LvgAKCRDm/A8cN/La
+ hWduD/4oM5uREsdTxSEflsgsvfoAr+OHVpis/8xy5V2A3rS4vINxfMdL/var0t1CU2xeWDVUlXd
+ 8+e0cFAVrEWnER4kphX7ZuLXAXDjVHrerXAFPSbAsBuYBJnybQO5Vy9iBMxp84o+MIo3nVboAA0
+ RMN9PLnyxmSqY0Z3t6pauCtlL3m59I0MDvifrFX37+PQ/NcfatE9Cglk7bUnE0Rrrrdwey+Xtqt
+ GC28TWwyAXttBjm1sdF0ZLUnW71b2iOaK361ep/0HC0WqlflQ9F968Xw8x3obLdTu1XnYyu7ENh
+ UJIY/BW9WzSb2rCeAsYwttfYW3/oHIHBxWwzrxDDmP8nKKYpqh36od48QlCZB7yH966RBv1Z9K+
+ +Dslt1tLWlVPoN9TeNgjwExfl6LNnMh1RuSuIl6c2ffQzqTtSEq4Mca7fbnX1HCi1rmlZXmW27m
+ lyJzPpXQ8SvPlkmXUbEXMVDQ4u6wMCYa2RCZJWPdT7/jnLLgYWP2F3eZRToLbVsKgWdk2BpXnId
+ P96RE3l78lHQtIP5JinpZLAx+5WAvDembClU1R7bCGcJjA68mRJCRtZvrXzpw/XE1XOnltiEXbw
+ N7vK52sR1AxpE0ksnOxyfWEqnrH220o7uJjPGiyfLy6AmKInlOv8Aiw4YP01177QUW3VZqd2a03
+ MZ0wkdTV+Q2OtAQ==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-Add a module parameter to force the write protection mode of pmbus chips.
+Writing PMBus protected registers does succeed from the smbus perspective,
+even if the write is ignored by the device and a communication fault is
+raised. This fault will silently be caught and cleared by pmbus irq if one
+has been registered.
 
-4 protections modes are provided to start with:
-* 0: Remove the write protection
-* 1: Disable all writes except to the WRITE_PROTECT, OPERATION,
-     PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
-* 2: Disable all writes except to the WRITE_PROTECT, OPERATION and
-     PAGE commands
-* 3: Disable all writes except to the WRITE_PROTECT command
+This means that the regulator call may return succeed although the
+operation was ignored.
 
-Of course, if the parameter is not provided, the default write protection
-status of the pmbus chips is left untouched.
+With this change, the operation which are not supported will be properly
+flagged as such and the regulator framework won't even try to execute them.
 
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- Documentation/hwmon/pmbus-core.rst | 21 +++++++++++++++++++++
- drivers/hwmon/pmbus/pmbus_core.c   | 29 +++++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+)
+ Documentation/hwmon/pmbus-core.rst | 14 ++++++++++
+ drivers/hwmon/pmbus/pmbus.h        |  4 +++
+ drivers/hwmon/pmbus/pmbus_core.c   | 52 +++++++++++++++++++++++++++++++++-----
+ include/linux/pmbus.h              | 14 ++++++++++
+ 4 files changed, 78 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
-index 0a251960f8910ffb121d82b45e729d06f98424ef..fdfb237731486ce9977b337586333d28f7419d1d 100644
+index 686a00265bf71231c684afad6df41d6266303919..0a251960f8910ffb121d82b45e729d06f98424ef 100644
 --- a/Documentation/hwmon/pmbus-core.rst
 +++ b/Documentation/hwmon/pmbus-core.rst
-@@ -387,3 +387,24 @@ PMBUS_VOUT_PROTECTED
+@@ -312,6 +312,10 @@ currently provides a flags field with four bits used::
  
- Set if the chip VOUT_COMMAND command is protected and protection is not
- determined by the standard WRITE_PROTECT command.
+ 	#define PMBUS_USE_COEFFICIENTS_CMD		BIT(5)
+ 
++	#define PMBUS_OP_PROTECTED			BIT(6)
 +
-+Module parameter
-+----------------
++	#define PMBUS_VOUT_PROTECTED			BIT(7)
 +
-+pmbus_core.wp: PMBus write protect forced mode
+ 	struct pmbus_platform_data {
+ 		u32 flags;              /* Device specific flags */
+ 
+@@ -373,3 +377,13 @@ PMBUS_USE_COEFFICIENTS_CMD
+ 
+ When this flag is set the PMBus core driver will use the COEFFICIENTS
+ register to initialize the coefficients for the direct mode format.
 +
-+PMBus may come up with a variety of write protection configuration.
-+'pmbus_core.wp' may be used if a particular write protection is necessary.
-+The ability to actually alter the protection may also depend on the chip
-+so the actual runtime write protection configuration may differ from
-+the requested one. pmbus_core currently support the following value:
++PMBUS_OP_PROTECTED
 +
-+* 0: write protection removed.
-+* 1: Disable all writes except to the WRITE_PROTECT, OPERATION,
-+  PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands.
-+* 2: Disable all writes except to the WRITE_PROTECT, OPERATION and
-+  PAGE commands.
-+* 3: Disable all writes except to the WRITE_PROTECT command. Note that
-+  protection should include the PAGE register. This may be problematic
-+  for multi-page chips, if the chips strictly follows the PMBus
-+  specification, preventing the chip from changing the active page.
++Set if the chip OPERATION command is protected and protection is not
++determined by the standard WRITE_PROTECT command.
++
++PMBUS_VOUT_PROTECTED
++
++Set if the chip VOUT_COMMAND command is protected and protection is not
++determined by the standard WRITE_PROTECT command.
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index d605412a3173b95041524285ad1fde52fb64ce5a..ddb19c9726d62416244f83603b92d81d82e64891 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -487,6 +487,8 @@ struct pmbus_driver_info {
+ /* Regulator ops */
+ 
+ extern const struct regulator_ops pmbus_regulator_ops;
++int pmbus_regulator_init_cb(struct regulator_dev *rdev,
++			    struct regulator_config *config);
+ 
+ /* Macros for filling in array of struct regulator_desc */
+ #define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
+@@ -501,6 +503,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+ 		.n_voltages = _voltages,			\
+ 		.uV_step = _step,				\
+ 		.min_uV = _min_uV,				\
++		.init_cb = pmbus_regulator_init_cb,		\
+ 	}
+ 
+ #define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
+@@ -516,6 +519,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+ 		.n_voltages = _voltages,			\
+ 		.uV_step = _step,				\
+ 		.min_uV = _min_uV,				\
++		.init_cb = pmbus_regulator_init_cb,		\
+ 	}
+ 
+ #define PMBUS_REGULATOR_ONE(_name)   PMBUS_REGULATOR_STEP_ONE(_name, 0, 0, 0)
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 94252e420ad79fd3e932c0f1df9e1c9a5d8a13d0..f6753004e40af3c258a2d85e3aea3e412ae4029e 100644
+index a0109296a9949bfe3a351cbb13787011ed54254b..94252e420ad79fd3e932c0f1df9e1c9a5d8a13d0 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -31,6 +31,9 @@
- #define PMBUS_ATTR_ALLOC_SIZE	32
- #define PMBUS_NAME_SIZE		24
+@@ -2665,6 +2665,30 @@ static void pmbus_remove_pec(void *dev)
+ 	device_remove_file(dev, &dev_attr_pec);
+ }
  
-+static int wp = -1;
-+module_param(wp, int, 0444);
++static void pmbus_init_wp(struct i2c_client *client, struct pmbus_data *data)
++{
++	int ret;
 +
- struct pmbus_sensor {
- 	struct pmbus_sensor *next;
- 	char name[PMBUS_NAME_SIZE];	/* sysfs sensor name */
-@@ -2669,6 +2672,32 @@ static void pmbus_init_wp(struct i2c_client *client, struct pmbus_data *data)
- {
- 	int ret;
- 
-+	switch (wp) {
-+	case 0:
-+		_pmbus_write_byte_data(client, -1,
-+				       PMBUS_WRITE_PROTECT, 0);
-+		break;
++	ret = _pmbus_read_byte_data(client, -1, PMBUS_WRITE_PROTECT);
++	if (ret < 0)
++		return;
 +
-+	case 1:
-+		_pmbus_write_byte_data(client, -1,
-+				       PMBUS_WRITE_PROTECT, PB_WP_VOUT);
-+		break;
-+
-+	case 2:
-+		_pmbus_write_byte_data(client, -1,
-+				       PMBUS_WRITE_PROTECT, PB_WP_OP);
-+		break;
-+
-+	case 3:
-+		_pmbus_write_byte_data(client, -1,
-+				       PMBUS_WRITE_PROTECT, PB_WP_ALL);
++	switch (ret & PB_WP_ANY) {
++	case PB_WP_ALL:
++		data->flags |= PMBUS_OP_PROTECTED;
++		fallthrough;
++	case PB_WP_OP:
++		data->flags |= PMBUS_VOUT_PROTECTED;
++		fallthrough;
++	case PB_WP_VOUT:
++		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
 +		break;
 +
 +	default:
-+		/* Ignore the other values */
 +		break;
 +	}
++}
 +
- 	ret = _pmbus_read_byte_data(client, -1, PMBUS_WRITE_PROTECT);
- 	if (ret < 0)
- 		return;
+ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 			     struct pmbus_driver_info *info)
+ {
+@@ -2718,12 +2742,8 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	 * faults, and we should not try it. Also, in that case, writes into
+ 	 * limit registers need to be disabled.
+ 	 */
+-	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
+-		ret = _pmbus_read_byte_data(client, -1, PMBUS_WRITE_PROTECT);
+-
+-		if (ret > 0 && (ret & PB_WP_ANY))
+-			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
+-	}
++	if (!(data->flags & PMBUS_NO_WRITE_PROTECT))
++		pmbus_init_wp(client, data);
+ 
+ 	ret = i2c_smbus_read_byte_data(client, PMBUS_REVISION);
+ 	if (ret >= 0)
+@@ -3183,8 +3203,12 @@ static int pmbus_regulator_list_voltage(struct regulator_dev *rdev,
+ {
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	int val, low, high;
+ 
++	if (data->flags & PMBUS_VOUT_PROTECTED)
++		return 0;
++
+ 	if (selector >= rdev->desc->n_voltages ||
+ 	    selector < rdev->desc->linear_min_sel)
+ 		return -EINVAL;
+@@ -3219,6 +3243,22 @@ const struct regulator_ops pmbus_regulator_ops = {
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 
++int pmbus_regulator_init_cb(struct regulator_dev *rdev,
++			    struct regulator_config *config)
++{
++	struct pmbus_data *data = config->driver_data;
++	struct regulation_constraints *constraints = rdev->constraints;
++
++	if (data->flags & PMBUS_OP_PROTECTED)
++		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_STATUS;
++
++	if (data->flags & PMBUS_VOUT_PROTECTED)
++		constraints->valid_ops_mask &= ~REGULATOR_CHANGE_VOLTAGE;
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(pmbus_regulator_init_cb, PMBUS);
++
+ static int pmbus_regulator_register(struct pmbus_data *data)
+ {
+ 	struct device *dev = data->dev;
+diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+index fa9f08164c365a541ee1c6480bafd8c3a8f98138..884040e1383bf41d2eb3b6de72c40e2650178dc6 100644
+--- a/include/linux/pmbus.h
++++ b/include/linux/pmbus.h
+@@ -73,6 +73,20 @@
+  */
+ #define PMBUS_USE_COEFFICIENTS_CMD		BIT(5)
+ 
++/*
++ * PMBUS_OP_PROTECTED
++ * Set if the chip OPERATION command is protected and protection is not
++ * determined by the standard WRITE_PROTECT command.
++ */
++#define PMBUS_OP_PROTECTED			BIT(6)
++
++/*
++ * PMBUS_VOUT_PROTECTED
++ * Set if the chip VOUT_COMMAND command is protected and protection is not
++ * determined by the standard WRITE_PROTECT command.
++ */
++#define PMBUS_VOUT_PROTECTED			BIT(7)
++
+ struct pmbus_platform_data {
+ 	u32 flags;		/* Device specific flags */
+ 
 
 -- 
 2.45.2
