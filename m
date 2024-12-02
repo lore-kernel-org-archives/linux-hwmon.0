@@ -1,100 +1,143 @@
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E90F70803;
-	Sun,  1 Dec 2024 20:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BDB4A29
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 00:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733086096; cv=none; b=qjZ7sfV7bKStCryNOPWz1YPoQRNeA3kxwoVQE7IGN8OpPYBE8mMDULtM4T15Pz3tD0eAGjn3tIO38SWI8exFuTgfSu97GgSZg5M3V6d2RkaW2xst3w6J4+qGMqeBAekmCQycM9cDh1BIW4oJ84ml4Y7fwD1ccOC2psqvHQ4sRhU=
+	t=1733101003; cv=none; b=FcfzOghOwjb79ogdapP4CGHiklUncN/H2u7mo/u7IP6C/cDRRlhDgaeJrB8ssAzFcTANm/zZRbY78z6x6l8r/eR6iCneqx3WMXYZW/X+r0Yg3VtRYjVMtj19aS7rHTnPMzkahj4nKRGLDS+y8Nbi6rw1moGbSr9sbrkE75+Q650=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733086096; c=relaxed/simple;
-	bh=oEUek/oLoEOUG2Zsp9jaU7h3xjAClbKuAkjW6nkgCQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fj+BZ3a8x4+24+QPlaG9La2aScOWxcpC/cuTuWjMgIZeLax/Wu3XwNRKXwGd3aD0QcQ1JsElg3y4X59Abmx4R4SgESOyr/K+5gx04pyCdFNe24BhoLuDtmG1DARDanI6OKdKPn/Amrk7knE2VW2alkhwj1XsLbFQ4eGkleve5Tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDpNEHwV; arc=none smtp.client-ip=209.85.166.172
+	s=arc-20240116; t=1733101003; c=relaxed/simple;
+	bh=LVCViXc3Pcl/HejWyeigQOkF1DFaGAFfaFpiFP3PSYQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=MfY5URL/gtta5XJqzMZSJNDG4Bj4oKVY8ShMNgu4HMQbQ8PAFnA6IU3XahGCQzB++D1uowL/ojgpKulPYo4CDb35nQDYdIU6RbDDmFBeZdXv9oSd92W5Bh3vAplAobxuQzYVnkQO/fBVA6p5UP0elrn2OB8HnCQ6Q5MEqG/a1WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlVjBHyR; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDpNEHwV"
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a7d94b545aso10569035ab.3;
-        Sun, 01 Dec 2024 12:48:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlVjBHyR"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-434a766b475so33481475e9.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Dec 2024 16:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733086094; x=1733690894; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GPHxfSACZ+2h2VPEaq6+rYqVaulrzLUGki8m/llPT3c=;
-        b=jDpNEHwVu8xAU/b6krZjMfOrLRJPuSZyaIbXhoa+pdnGn55IFwEVZA0Owo2e9U/3i4
-         B4ZcRyAUxkXIGdPFZnVaqAsY3Z12dUZCzwmkTtqAeS0hJGIukZT7/2WJcAMvoix+EnN5
-         uPfbUhJuELuq/0y1PU72HZMYjh1u21F0Nxl60N9q+sXFeQHgS2Yai9nM+ozlhJdVBTPF
-         A/yruA9PWI67cs3HMf8ZPwy99i0GZqDWzYTTljVPe0UtDcKN+RgnJxTdiwPCDpoT7l/O
-         qYVefj8awHLCWAcQUjXiLLaiW77CL7lDPACZ2XzOV4eYKq8n1A11L6C0VLZqP9fzfiV8
-         79Rw==
+        d=gmail.com; s=20230601; t=1733100999; x=1733705799; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:disposition-notification-to
+         :from:content-language:references:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ALPU+2PeukaPnFx78mlwSi00lo6u2JqOhopUJ0XPL4=;
+        b=IlVjBHyROh8Bt7QdwbqRl8Ce4IBTg+ygM6qktJMQKsAWcs5jhfmi3xtZR+2vr7J15O
+         XKSL9xUK1STw9bkRDxpt7BkmAZZbd4syysXJkct74wCbKLnbuhu9DYeKVqE94Blk2QUu
+         aMQdPuY1v9pycU/OkNkanXFcHZWobuWnU//s3991ApH318qmAbG8lZc/tPVpZuCQcIDP
+         CH0df/mKfHWL3Dcd72Jdohrz+aExdTzmCmaVd4397XtSVUoPc6wlqJ0dXCq1sALpfEzq
+         YJfdOQvk7TIz42udwvzCV6g6xQ6v2wvuFMnj+rMyDrb0MuCqSkimAne8TEGIvbg3N4J8
+         DHRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733086094; x=1733690894;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GPHxfSACZ+2h2VPEaq6+rYqVaulrzLUGki8m/llPT3c=;
-        b=Av62Hs+AF033C7h1AoT7welkAjsLwczKLVSzDwTOmae9gvDeBuaLcQwuakuRNJjOnB
-         PO7eJUWFOA7EeImZMHKqzlg9Mhi/UbCHwZuYn1+4XIqz5Ldo4zVUHil5zlhz5+azVF8N
-         Xf4bPMb7Ouejl9SnMBvMPbTRAO2Ki1zFVWn8Hm9fP7LilcJ/u76V+bOGp97fPtqUYkxO
-         mEAhvPNLRqow1rgZXsp2mubEBthfDfk/Tee45f/b1hRfDshUt6Dd9Ru3cwDf48jQMxZz
-         tr60rlTZSJbYfl2CerU2bI5IJVJpF4ku7oHMgQBtaZqIWgVLW/mtHSSA8ypr+RFwN2p8
-         SZcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwoEhUToP5vMLYuLOf2sL11FX8Cc/L77dGtSZT09AyToMlhCcGKKgjS8F792PoLPuxgsthPLz6IR4NhILC@vger.kernel.org, AJvYcCVTNxrmneBg09OHCKsqLfOKSIV77tb9RoygcVVou/mawNyCFrj2cJ8IsG0vl6ByOLShz/KkZvG8ATOqjRs=@vger.kernel.org, AJvYcCWzV30JxY0vVIAqUo+f5+EvZZlw2zA6G/Arr9BSOoBG9ZeV2IZ+qTSyDbMLKtYFMFJlkPx+5/TQArc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1BSOxPxNC/RrOp0u+ZN4/tj9jhWpG6/pVQw11/Nh4+5rj4iME
-	S5lLrtjhIfSfcQ9lvnKULL8ptZu8G34koMrbfkb46WQWXCameXbNav7oAsx1pVcP9Fzl1dazlSr
-	vO7T8ve3DhHG0j8a9B/QtbMzbAbc=
-X-Gm-Gg: ASbGnctG06ri94AbAGHjdWqIzO/+JXJRVKy31BsNcailScn4r8fLK7P7kbv6QtQlKpS
-	NWbtgtn+xF2Y9pYlDSVbYzrZiTiaYaT6wTNSEk3hr5ERuOsD3TKlQQQVHGqQ6/E4=
-X-Google-Smtp-Source: AGHT+IHw0PoW86iu90bgBJH5l9I3IFB97my7HbCGQAgg8zibDjFR3wOY92iHdJmWWUjUCCEJP9pzqDq/0AokWh1FtHE=
-X-Received: by 2002:a05:6e02:4518:20b0:3a7:c5b1:a55e with SMTP id
- e9e14a558f8ab-3a7c5b1a735mr113260755ab.0.1733086094131; Sun, 01 Dec 2024
- 12:48:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733100999; x=1733705799;
+        h=content-transfer-encoding:in-reply-to:disposition-notification-to
+         :from:content-language:references:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4ALPU+2PeukaPnFx78mlwSi00lo6u2JqOhopUJ0XPL4=;
+        b=wi9Tof7hDFaHB5HM+QeN+9X3EM/AwcopsR4DPAAY1Goz9FinkJbfmZerSiiWfxjjoo
+         V+ZJMxwhzE+irlYGTkr4zokcy+bztfJ8ouYqnDG6UoVJ3TsmwOPn+mnIy5V4B3LjD1Ty
+         +zo+HbRwNI0zTf7V6IndKAGAuiuaN3FVIPT1XgVR1uSkV9vaG4GbhsZM2nRidkzR64Jz
+         nmH2djl8quGwWbZXMIDl3QU/LKLJVSLBBd+b3upg0yFFcRQDDJr1sty1S+hbqgxTN+i8
+         X4pRk+TlyuDSqLYExKXr34rcIPmUUqbdOIKmRQfRwP4NJI7lk7YWcV5P8haq9g6aiFMv
+         6LkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUN+416oOJMPiizyRuVQHGCfwm+/fq3KUmXMmkrC0FYjQz2zk88BQcLDU/x2htOO21PZCzXhzG35rZMyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy42K4yh4bmhL8k453v9TB4YMYbTaSrv+ec9fW2phtiYzVINhPy
+	lcOxK72tDrCPVd/u/qZMuXt41SOf2AkW2bW3ykmoCUxGJHgJ8dc3
+X-Gm-Gg: ASbGncuAE1LVCkoAlW+rHphM6kLvMVK7h4DYQej3RccD5GMYe3FRGbN/10mMnxnFg7+
+	SJZgB8nuLiMbCDhn0+UpajLzu+jV6c0vEBtjn8cQ7VBa+iz/djSeb5QgTYxkjiWZlNA0vQsI5lw
+	H+rjbRBqWu5sYaNqY4PlPSRPpqXXWPfEovVJR1tzhBKCOZ8gtjZw157zNcKNodAP6DC81pdZUmg
+	FrhyHQ9nWKM0rDaIWClrbwEk1DNC/B/LAgrezf+aYJq+xwlLZITpw==
+X-Google-Smtp-Source: AGHT+IFPODb6sC95pHo2MfpfBNDyOzrbYVuKN4JKcprt0OVXgaeDgAjy5GHutHf/PkxQ39bCDFNHNw==
+X-Received: by 2002:a05:6000:4612:b0:385:f00a:a45b with SMTP id ffacd0b85a97d-385f00aa53dmr2489609f8f.21.1733100999376;
+        Sun, 01 Dec 2024 16:56:39 -0800 (PST)
+Received: from [10.2.0.2] ([146.70.83.68])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d0bf67ab0dsm2727840a12.24.2024.12.01.16.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Dec 2024 16:56:38 -0800 (PST)
+Message-ID: <ab155793-c2a6-4ee4-9c7a-2209c66143d3@gmail.com>
+Date: Mon, 2 Dec 2024 00:56:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAB95QAROXwFPZB8gSkz0-thPtuzWkhAHmbqEy2QBg4fMmx7NKQ@mail.gmail.com>
- <20241130144733.51627-1-yanhuoguifan@gmail.com> <d8e00909-a946-4ce4-811d-ac968bc54c7b@roeck-us.net>
- <Z0u5QWzWSXGUTUO0@gmail.com> <64783a84-5f21-4c33-b74b-5e6d79107c33@roeck-us.net>
-In-Reply-To: <64783a84-5f21-4c33-b74b-5e6d79107c33@roeck-us.net>
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-Date: Sun, 1 Dec 2024 21:48:03 +0100
-Message-ID: <CAB95QATT51L7FtVKdhTpTMo6sCwkihqyb5GtQBbLRR0jyRmMUg@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Li XingYang <yanhuoguifan@gmail.com>, corbet@lwn.net, jdelvare@suse.com, 
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Bug report] Regression in kernel 6.12.1 preventing asus_nb_wmi
+ from loading
+To: Armin Wolf <W_Armin@gmx.de>, hdegoede@redhat.com,
+ linux-hwmon@vger.kernel.org
+References: <0bc76531-d88f-4288-8a3c-023dbe04dfb2@gmail.com>
+ <06787c88-5f04-4ffe-bfde-829edcb553f9@gmx.de>
+Content-Language: en-GB
+From: Edoardo Brogiolo <brogioloedoardo@gmail.com>
+In-Reply-To: <06787c88-5f04-4ffe-bfde-829edcb553f9@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Dear Armin,
 
-> >> This is an unrelated change. It affects other boards of the same family.
-> >> It needs to be a separate patch, it needs to be explained, and it needs to
-> >> get some confirmation that it works on the other boards of the same series.
 
-> > I found that in the LibreHardwareMonitor project,
-> > the registers used by Amd600 to operate FanCPUOpt are described:
-> > https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/LibreHardwareMonitorLib/Hardware/Motherboard/Lpc/EC/EmbeddedController.cs
-> > BoardFamily.Amd600, new Dictionary<ECSensor, EmbeddedControllerSource>
-> > {
-> > { ECSensor.FanCPUOpt,  new EmbeddedControllerSource("CPU Optional Fan", SensorType.Fan, 0x00b0, 2) },
-> > }
-> >
-> > I think this is suitable for the AMD 600 motherboard, and it does work on my motherboard as well.
+Please find below the acpidump outputs for
+
+Linux 6.12.1
+https://www.brogiolo.eu/nextcloud/s/NFPKR6gPErTAnnn
+
+Linux 6.12.1 with patch b012170fed282151f7ba8988a347670c299f5ab3 reversed
+https://www.brogiolo.eu/nextcloud/s/NePsSABrnHTfQNf
+
+I would be happy to test your patch at 
+https://bugzilla.kernel.org/show_bug.cgi?id=219517, but lack experience 
+compiling the Linux kernel.
+How would I be able to fit the diff file in the following step-by-step 
+guide? https://wiki.archlinux.org/title/Compile_kernel_module
+
+Thank you,
+
+Edoardo
+
+
+On 01/12/2024 16:46, Armin Wolf wrote:
+> Am 01.12.24 um 11:40 schrieb Edoardo Brogiolo:
 >
-> That makes sense, but it is still unrelated to this patch and, worse,
-> not even mentioned in the patch description. See "Separate your changes"
-> in Documentation/process/submitting-patches.rst.
-
-Can confirm CPU_Opt is still at 0xb0 for ProArt X870E Creator Wifi, so
-it is the same in AMD families 500 to 800. The introduction of the
-sensor to the 600th family should not affect other boards, because
-they do not use it yet,
-
-Kind regards,
-Eugene
+>> Dear all,
+>>
+>> I hope this e-mail finds you well.
+>> I am writing to bring up an issue I have experienced since upgrading
+>> to the Linux kernel 6.12.1:
+>>
+>> I have been unable to set max battery charging, keyboard brightness,
+>> and actioning special keys (micmute, enable touchpad, etc.).
+>>
+>>
+>> With the help of the Archlinux devs
+>> (https://bbs.archlinux.org/viewtopic.php?id=301341), the issue was
+>> found to have been introduced by
+>>
+>> kernel patch b012170fed282151f7ba8988a347670c299f5ab3
+>> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b012170fed282151f7ba8988a347670c299f5ab3), 
+>>
+>> leading to the kernel being unable to load  asus_nb_wmi.
+>>
+>>
+>> Reverting that patch fixes all of the aforementioned issues. Please
+>> see the Archlinux bbs thread for full logs and steps taken to identify
+>> said patch as the cause of the regression.
+>> While I do not possess the technical skills to help developing and
+>> implementing a fix, I would be keen to help out testing possible
+>> solutions on my hardware.
+>>
+> Interesting, can you share the output of "acpidump"? Can you also try 
+> the patch proposed in a similar bug report 
+> (https://bugzilla.kernel.org/show_bug.cgi?id=219517)?
+>
+> Thanks,
+> Armin Wolf
+>
+>> Thank you, and kind regards,
+>>
+>>
+>> Edoardo Brogiolo
