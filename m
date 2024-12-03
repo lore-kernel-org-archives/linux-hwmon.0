@@ -1,161 +1,223 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from pv50p00im-zteg10011501.me.com (pv50p00im-zteg10011501.me.com [17.58.6.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EB51FE461
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Dec 2024 14:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EAC1BF37
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Dec 2024 00:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733149275; cv=none; b=cePU9GGER0fUitn4mzYTF3mOGh0/psD3rummRo9t88LAL3F3kHhEZLFq23jHjIiTgFSaDQ4mqGzewVpm+/EBJ/LEiAZZ5dED/SLoHnc0HGGvZ6Aam2VYQ/sgKef0nFkIAL0huZbMkWQbBk+7UDpGcmKNJGZULhf1ZFd/EnEHEco=
+	t=1733186103; cv=none; b=dzn+We5CRaeCXTFhBYDULVN60V4SNlh/SPYbLc/QFFTKXAresCNhDBjgUqg2ZEYgBk8PEVOAEW7Loux953dN5tmpylfI9Y3YQyKAKz0elXaKX8T8Vyw3CANLqJ+4frNF+F8HgcMffVDK2PZih0WMN3xVm5UJZ+Y1TveDBa54u3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733149275; c=relaxed/simple;
-	bh=Whg2JQMlNNDEsQt9H0MFW06uMZjKJ9GcJi8b47Et6AQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AXP7Vck3U8GQRVwF9EzaUZZhhg9mIprE7ajKm9/Wx8aksr7o6uZOwWrA00U3piWz2UujtifJuRoXuLFadV2TPBTgJoqBGw9nL+RXS8eCJBRrT9jZgKqCPYeYjndOQVc7ZofXem8NxKtDXhFl8OWefpNtOChAa/e2Fjz9b31oVVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Kd9a4Jz+; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1733186103; c=relaxed/simple;
+	bh=90Z3uIVjxiaduJ4fj5p/v/pFRaVs8rKzXxaWEN8s1Fs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jJLHz+DhdYA44HMsS0SVnwnyf05bn8QaBuf3ot4Jv690B+8otuSqIwIsdzI9jemv6lINn1btfQ7DvhEFbJY03u+wcfSTDOTIkwNelPhxj2yJla+fIJifyiDRITEY0btAHReGgPFbTYLXLcvB8MJ+jq+A08ncfqyFwbJgtm/JyyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=miqyYlVd; arc=none smtp.client-ip=17.58.6.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Kd9a4Jz+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1733149268; x=1733754068; i=w_armin@gmx.de;
-	bh=Whg2JQMlNNDEsQt9H0MFW06uMZjKJ9GcJi8b47Et6AQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Kd9a4Jz+gxcYyJlWTmHkja61eZsJi0XJM/Cw/hxnXQOJJhNfvGazyMXFyIZuFMc4
-	 xXrlgek20INHntKGeKjZ45/2HpgL3d7YbyJA+Pe2/bB3brMIhxiEJ0MThk9aZmFCN
-	 SDGqkWbmYCFQNJHYh6kZw49Ns7RKz5C/cyIcLQEmdOBlilrJH8zgAFKkEZpOh+evH
-	 YeGuLFbzNH2aUqRpcXqMGwbU21BIptCS+00h5+lCMMmfKW+9oo3necYRRnYxFeviD
-	 FyKpLOpeH3rmI+9NDcWMV8secOPQouodNE7tpKIHEV8Po8qiOT/3rqnQKGcWXt57W
-	 kwFOX8ur/lIeMDB8Pw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MXp9i-1tAPeK0vIy-00Lifo; Mon, 02
- Dec 2024 15:21:08 +0100
-Message-ID: <f7a4c4da-36ca-487a-839c-7f23b2caae08@gmx.de>
-Date: Mon, 2 Dec 2024 15:21:07 +0100
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="miqyYlVd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733186099;
+	bh=oHbx7nufqBC9FciDzS/LGxt7hmN8dQX6iuRN6cbwUA4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:
+	 x-icloud-hme;
+	b=miqyYlVd243flQ1IvVsliQiE9DHrrSD+z1j3Ao2U3BsVp7icRgsik+yX27rSCj4D+
+	 T5K/safPmJG6H2G4WE9j7bBQvaFexypWm7FZEDou1MHIH9tDRRWMiQ1UPriELs/+hg
+	 sXJNUkBBU1moy8uzw4v/v66n2uZ4nRbGFXnHbTcyy0JERpSfQmvHQ8NAx4kDoEqPtw
+	 K44qvDlYPQIBfuW/hOl+sPtWJcXOrD96VbESU02KGCiiJXJdFSzYBJ54ViTlBPnRB9
+	 QOAY9cdzyUWJL5EMG594jIK63Bf2SXcNzUNd7nw2qi11pPaZME4OnmSK9qWoRG15E/
+	 2icgiJHx3EH4g==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-zteg10011501.me.com (Postfix) with ESMTPSA id A517C4A0115;
+	Tue,  3 Dec 2024 00:34:38 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Subject: [PATCH v2 00/32] driver core: Constify API device_find_child() and
+ adapt for various existing usages
+Date: Tue, 03 Dec 2024 08:33:22 +0800
+Message-Id: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Bug report] Regression in kernel 6.12.1 preventing asus_nb_wmi
- from loading
-To: Edoardo Brogiolo <brogioloedoardo@gmail.com>, hdegoede@redhat.com,
- linux-hwmon@vger.kernel.org
-References: <0bc76531-d88f-4288-8a3c-023dbe04dfb2@gmail.com>
- <06787c88-5f04-4ffe-bfde-829edcb553f9@gmx.de>
- <ab155793-c2a6-4ee4-9c7a-2209c66143d3@gmail.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <ab155793-c2a6-4ee4-9c7a-2209c66143d3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lmpCZXwfVfndHoh06qSO+LzBqpCLBxaDNBd/JAmTIP7M6G+bCek
- VceXPvMbUqC4VBOR8z5egHlh75/1BWgmPscc7tEA2A8zxdC98LAuOIY1hTKaOLTaiYpkaQB
- fIaXvoz+AbbKl2PDEgl4XlY5ehHc1XgWs4OezNlt6J/GXYW6bWHvDkL30MhjJLzNbxWNPHY
- s5j1Y5HRbfLvhc3l3cP1A==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:pk6u84n1xm4=;tWTUAVvuJTl3lXAK41t1oCSJpxC
- u8n1slQ+12knpO4p8KycI36fmgac/6APqSVzxdOVLcKwHwi28sakM7V8Kd0UxUEt5RMpFAgzM
- AqMs90ofp0EhvgxubkF68Rq1Sf2kMiJ8jzR+JuUF/h6UO0QK2GpSt4uB43aHZkz1Ot6Dv+7Nz
- Wl/DiRIyfgAi2S0f3ZIqSPzcMX6l5MhjYq6KntdjNKIM35pS94NnnLnB1jGWu4QdUCj4Rb1XR
- /2MhrQJsBC7XIFfsC9t3RfkI9OnC+N1/7CSNAgCUlAigayUx+V06Do9VtLyGrfPBZ2JaUhH7o
- h/pxwW8jmQ+b8mnGaDHrAOAxH/hpcNXKKwmLC9RWi8ecoFlLsb9mz1gArj1mbZGSNbiJppypM
- rTMJZG57GUlMA5TCRon0us0lzkHHOzGL4JZ0pmOLuGxRQ9gI2unS4mkNaVJ4spCxsAK2EPnxF
- SYLKr88D/3iuJSEno8MGIimZSl1cntgwK21dun4dEcNNZnlX0AdQCtzQRNl0C/FOVb1sYKIz5
- orUdX5hSb/zfKs+YtN5yZYbUX8aIhnPa0SzNbMOJkk57hZb/JRqMrUehnwB8bqCSot5eZjWpR
- PVHaIRtvQNSiS5i60HAfbHMvodQLU7//4GoGG6M10kxeyHDQV05G4HIQZYT/x1FbjocpL9nJE
- 2B3CY16gdcyX+szBBR8aXa3NvBZXAWTSRce0F3sMzuhLi5wcSuKJKUp6hGsGH4B/OW7cDc4H/
- Q+IRWFuo8cLo+Ba7B0MxGmM7hIhrD+kiUbNB+TrcSE9r9be+QFbMMdIlG04jRkFMedJT52brF
- RzyhQ6ibGHF73SO3vuaCb7bS2b4tQQ7XmbFs0nWwWvsyRK1IhmsogSTipc6n9omoacCaQYq01
- p187Z4ENfeWjjQoEBdkQddCd+v3v9FxOs63mj80Vl54+drJmUpb4fgc3jxIGa5zDhd6rHde6k
- 458GuKPhJv33efYGLb+BKiPCOuOspD1tw0/FTmP97vzX/q80vqKjJ/CoOtD8ufC/UKzlgr3He
- wCwu7IaUyOfEPl9gipv6Xm2+dCN9XpkWM0UDQFwEbplzitpWsFozRHv17xCLsJhZq3fkXRaHE
- zYtcfGyoXgsG2T9hyeg4vNoFO7b2a2
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANJRTmcC/2XMQQ6CMBCF4auQWVvTFozgynsYQsp0KrOwxRaJh
+ vTuVrYu/5e8b4NEkSnBpdog0sqJgy+hDxXgZPydBNvSoKVulJZKYPBpGazDwQZPwhjCs6J6HMl
+ AOc2RHL938NaXnjgtIX52f1W/dadkq/6oVQkpOtueqHZdU+N4fb4Y2eMRwwP6nPMXYHxV6a4AA
+ AA=
+X-Change-ID: 20241201-const_dfc_done-aaec71e3bbea
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Martin Tuma <martin.tuma@digiteqautomotive.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Andreas Noever <andreas.noever@gmail.com>, 
+ Michael Jamet <michael.jamet@intel.com>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Yehezkel Bernat <YehezkelShB@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>, 
+ Vladimir Oltean <olteanv@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Dan Williams <dan.j.williams@intel.com>, 
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+ Ira Weiny <ira.weiny@intel.com>, Takashi Sakamoto <o-takashi@sakamocchi.jp>, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>, 
+ Mike Christie <michael.christie@oracle.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Nilesh Javali <njavali@marvell.com>, 
+ Manish Rangankar <mrangankar@marvell.com>, 
+ GR-QLogic-Storage-Upstream@marvell.com, Davidlohr Bueso <dave@stgolabs.net>, 
+ Jonathan Cameron <jonathan.cameron@huawei.com>, 
+ Alison Schofield <alison.schofield@intel.com>, 
+ Andreas Larsson <andreas@gaisler.com>, Stuart Yoder <stuyoder@gmail.com>, 
+ Laurentiu Tudor <laurentiu.tudor@nxp.com>, Jens Axboe <axboe@kernel.dk>, 
+ Sudeep Holla <sudeep.holla@arm.com>, 
+ Cristian Marussi <cristian.marussi@arm.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pwm@vger.kernel.org, nvdimm@lists.linux.dev, 
+ linux1394-devel@lists.sourceforge.net, linux-serial@vger.kernel.org, 
+ linux-sound@vger.kernel.org, open-iscsi@googlegroups.com, 
+ linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+ sparclinux@vger.kernel.org, linux-block@vger.kernel.org, 
+ arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
+ linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-GUID: cTyu1VL48UqVhY7zPwUQPPYeAfZYowdo
+X-Proofpoint-ORIG-GUID: cTyu1VL48UqVhY7zPwUQPPYeAfZYowdo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-02_14,2024-12-02_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412030002
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-Am 02.12.24 um 01:56 schrieb Edoardo Brogiolo:
+This patch series is to constify the following API:
+struct device *device_find_child(struct device *dev, void *data,
+		int (*match)(struct device *dev, void *data));
+To :
+struct device *device_find_child(struct device *dev, const void *data,
+				 device_match_t match);
+typedef int (*device_match_t)(struct device *dev, const void *data);
 
-> Dear Armin,
->
->
-> Please find below the acpidump outputs for
->
-> Linux 6.12.1
-> https://www.brogiolo.eu/nextcloud/s/NFPKR6gPErTAnnn
->
-> Linux 6.12.1 with patch b012170fed282151f7ba8988a347670c299f5ab3 reverse=
-d
-> https://www.brogiolo.eu/nextcloud/s/NePsSABrnHTfQNf
->
-> I would be happy to test your patch at
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D219517, but lack
-> experience compiling the Linux kernel.
-> How would I be able to fit the diff file in the following step-by-step
-> guide? https://wiki.archlinux.org/title/Compile_kernel_module
->
-> Thank you,
->
-> Edoardo
->
-After looking at the ACPI tables, i do not think that you need to test tho=
-se patches again, since your device has the same issue as the device from
-the bugzilla bug report.
+Why to constify the API?
 
-However if you still want to give it a try, then you can apply the patch t=
-o the linux git tree using git am <patch file>. Then you just need to buil=
-d
-the x86 platform drivers (make M=3Ddrivers/platform/x86).
+- Protect caller's match data @*data which is for comparison and lookup
+  and the API does not actually need to modify @*data.
 
-I will try to get the patch upstream ASAP so that it can be included in th=
-e next stable kernels.
+- Make the API's parameters (@match)() and @data have the same type as
+  all of other device finding APIs (bus|class|driver)_find_device().
 
-Thanks,
-Armin Wolf
+- All kinds of existing device matching functions can be directly taken
+  as the API's argument, they were exported by driver core.
 
-> On 01/12/2024 16:46, Armin Wolf wrote:
->> Am 01.12.24 um 11:40 schrieb Edoardo Brogiolo:
->>
->>> Dear all,
->>>
->>> I hope this e-mail finds you well.
->>> I am writing to bring up an issue I have experienced since upgrading
->>> to the Linux kernel 6.12.1:
->>>
->>> I have been unable to set max battery charging, keyboard brightness,
->>> and actioning special keys (micmute, enable touchpad, etc.).
->>>
->>>
->>> With the help of the Archlinux devs
->>> (https://bbs.archlinux.org/viewtopic.php?id=3D301341), the issue was
->>> found to have been introduced by
->>>
->>> kernel patch b012170fed282151f7ba8988a347670c299f5ab3
->>> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/?id=3Db012170fed282151f7ba8988a347670c299f5ab3),
->>>
->>> leading to the kernel being unable to load=C2=A0 asus_nb_wmi.
->>>
->>>
->>> Reverting that patch fixes all of the aforementioned issues. Please
->>> see the Archlinux bbs thread for full logs and steps taken to identify
->>> said patch as the cause of the regression.
->>> While I do not possess the technical skills to help developing and
->>> implementing a fix, I would be keen to help out testing possible
->>> solutions on my hardware.
->>>
->> Interesting, can you share the output of "acpidump"? Can you also try
->> the patch proposed in a similar bug report
->> (https://bugzilla.kernel.org/show_bug.cgi?id=3D219517)?
->>
->> Thanks,
->> Armin Wolf
->>
->>> Thank you, and kind regards,
->>>
->>>
->>> Edoardo Brogiolo
+How to constify the API?
+
+- Now, no (@match)() argument of the API usages is modifying its match
+  data @*data after previous cleanup, so it is easy and safe to make its
+  parameter @data take const void * as type.
+
+- Simplify involved codes further if it is possbile with benefits
+  brought by constifying the API.
+
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+Changes in v2:
+- Series v1 have no code review comments and are posted a long time ago, so may ignore differences.
+- Link to v1: https://lore.kernel.org/r/20240811-const_dfc_done-v1-0-9d85e3f943cb@quicinc.com
+- Motivation link: https://lore.kernel.org/lkml/917359cc-a421-41dd-93f4-d28937fe2325@icloud.com
+
+---
+Zijun Hu (32):
+      driver core: Constify API device_find_child()
+      driver core: Introduce device_match_type() to match device with a device type
+      drm/mediatek: Adapt for constified device_find_child()
+      hwmon: Adapt for constified device_find_child()
+      media: pci: mgb4: Adapt for constified device_find_child()
+      thunderbolt: Adapt for constified device_find_child()
+      gpio: sim: Remove gpio_sim_dev_match_fwnode()
+      net: dsa: Adapt for constified device_find_child()
+      pwm: Adapt for constified device_find_child()
+      nvdimm: Adapt for constified device_find_child()
+      libnvdimm: Simplify nd_namespace_store() implementation
+      firewire: core: Adapt for constified device_find_child()
+      serial: core: Adapt for constified device_find_child()
+      usb: typec: class: Remove both cable_match() and partner_match()
+      usb: typec: class: Adapt for constified device_find_child()
+      slimbus: core: Simplify of_find_slim_device() implementation
+      slimbus: core: Constify slim_eaddr_equal()
+      slimbus: core: Adapt for constified device_find_child()
+      scsi: iscsi: Constify API iscsi_find_flashnode_sess()
+      scsi: qla4xxx: Adapt for constified iscsi_find_flashnode_sess()
+      scsi: iscsi: Adapt for constified device_find_child()
+      cxl/region: Adapt for constified device_find_child()
+      cxl/pmem: Remove match_nvdimm_bridge()
+      cxl/core/pci: Adapt for constified device_find_child()
+      cxl/test: Adapt for constified device_find_child()
+      sparc: vio: Adapt for constified device_find_child()
+      bus: fsl-mc: Adapt for constified device_find_child()
+      block: sunvdc: Adapt for constified device_find_child()
+      firmware: arm_scmi: Adapt for constified device_find_child()
+      efi: dev-path-parser: Adapt for constified device_find_child()
+      rpmsg: core: Adapt for constified device_find_child()
+      driver core: Simplify API device_find_child_by_name() implementation
+
+ arch/sparc/kernel/vio.c                |  6 +++---
+ drivers/base/core.c                    | 30 ++++++++++--------------------
+ drivers/block/sunvdc.c                 |  6 +++---
+ drivers/bus/fsl-mc/dprc-driver.c       |  6 +++---
+ drivers/cxl/core/pci.c                 |  4 ++--
+ drivers/cxl/core/pmem.c                |  9 +++------
+ drivers/cxl/core/region.c              | 21 ++++++++++++---------
+ drivers/firewire/core-device.c         |  4 ++--
+ drivers/firmware/arm_scmi/bus.c        |  4 ++--
+ drivers/firmware/efi/dev-path-parser.c |  4 ++--
+ drivers/gpio/gpio-sim.c                |  7 +------
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 +-
+ drivers/hwmon/hwmon.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c     |  4 ++--
+ drivers/nvdimm/bus.c                   |  2 +-
+ drivers/nvdimm/claim.c                 |  9 +--------
+ drivers/pwm/core.c                     |  2 +-
+ drivers/rpmsg/rpmsg_core.c             |  4 ++--
+ drivers/scsi/qla4xxx/ql4_os.c          |  3 ++-
+ drivers/scsi/scsi_transport_iscsi.c    | 10 +++++-----
+ drivers/slimbus/core.c                 | 17 +++++------------
+ drivers/thunderbolt/retimer.c          |  2 +-
+ drivers/thunderbolt/xdomain.c          |  2 +-
+ drivers/tty/serial/serial_core.c       |  4 ++--
+ drivers/usb/typec/class.c              | 31 ++++++++++++++-----------------
+ include/linux/device.h                 |  4 ++--
+ include/linux/device/bus.h             |  1 +
+ include/scsi/scsi_transport_iscsi.h    |  4 ++--
+ net/dsa/dsa.c                          |  2 +-
+ tools/testing/cxl/test/cxl.c           |  2 +-
+ 30 files changed, 89 insertions(+), 119 deletions(-)
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241201-const_dfc_done-aaec71e3bbea
+
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
