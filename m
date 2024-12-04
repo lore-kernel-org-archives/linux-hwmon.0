@@ -1,258 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2065.outbound.protection.outlook.com [40.107.105.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCA920A5FC
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Dec 2024 14:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733323501; cv=none; b=ZQHav/ncPcFAnehjOphCmeEBj/Wheooet6AGXCg1nSXrRD9Y0eHVvp47cXbj3w3IupMl3vzQFjfGRrcr58lV4GCStt1LEDh7XEV6LAbD47qZONymRlUS16AuZylaZ65euBqLe3q8AOg0nF3eKAqm4sbtRXo2F1Rr17JfwDzpFEM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733323501; c=relaxed/simple;
-	bh=QlgF5ENU9nZ+Kiaoxn3GU2dH2Jq62DImztHqQiIi3cQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tGlHzxEclrB42bsG5KO7zUXVpZfZgAr/vk7ralh0y2Fkiz1rtGBkTv56joJfUGdhDSQvgTDKtWXWM6SaELFxpTb66BwohqR2QpfRtdRV56IrbqSPgyQ25V37G0PXBpx3y+eEUgWSk3xYRQce2tFXu7ZIzsJX6vrcoaTZbjuB5J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePy2R5yC; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC6C1885A0
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Dec 2024 16:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733329245; cv=fail; b=b8ianIKtyXShRcFHE1Xquk8HDcb7+7VfwyJfn+B0L+Fi31ClfPXoBG4Fk6D89SXKap99H8Of8l/wMxv3GywfzWv6QTkDXUmC7oSCSoAmaPROcyo3nWrNaMvibzQhQ7uhvhhQONPCpJubX0FQp3YGC49Rw2xHpNC9SVsgERpQDGA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733329245; c=relaxed/simple;
+	bh=+jH/LUutG6oGyADP/r9xNBsVR5uQ8zFkBzblER9s9+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uCKt/vV3J+rgbzT0Z6soboQDpJeVUIa34IBtcivO52fJlJJ/XsqBWHKt+Jqbdiduzb+bpUZvVUrVVT18A0Tno+sexw/AE69fYC84wrYJO1K7hNkQC/nR+Hnx0vwVwq5jhSEBZiXeStoHjT89qjRbVRXFr+oXd/l91sfM8+ax27k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=fkcIODrD; arc=fail smtp.client-ip=40.107.105.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePy2R5yC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733323500; x=1764859500;
-  h=date:from:to:cc:subject:message-id;
-  bh=QlgF5ENU9nZ+Kiaoxn3GU2dH2Jq62DImztHqQiIi3cQ=;
-  b=ePy2R5yC19SY781QqdnM/A3lLwUneKuiARjXOa+zTF4jNri8OIuvepVT
-   Y70rKomA8GX+iEH5q8a5ghY7neFXoXz6ErdvJo9GM76BOVp58STdztLt6
-   srzafJAL6+o0tTDZPADTmpmJWP6b/sp2XHoNBLKH6T9cnMXhxt7My3OMy
-   8mX6LkFPaKGw0maPY9HbGTu6QgnS9kRZJ/S9k7N48X0UD9oqFkY5wxR5n
-   cth4Gm0fP1dmdDiy+MRgmRDvgObtTcToMp5lb3bqINXL1sYy/BVwmKmBt
-   axWCctxkSXI7VEOTqe51EYqSX9nn8oA1TXqMdJRp1+PY1MFrZjKKJdgqA
-   g==;
-X-CSE-ConnectionGUID: cpzSpx4tTKyov8ompSudXw==
-X-CSE-MsgGUID: dYLE0Xu5Q2y/8hLGGfKC2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44970353"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="44970353"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 06:44:59 -0800
-X-CSE-ConnectionGUID: rmgz45MYSjiDxz76ymnxRQ==
-X-CSE-MsgGUID: bMK6cwh3TPml9yZj/BywZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="93673964"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 04 Dec 2024 06:44:57 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIqcZ-00037w-0b;
-	Wed, 04 Dec 2024 14:44:55 +0000
-Date: Wed, 04 Dec 2024 22:42:16 +0800
-From: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="fkcIODrD"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=E8/W6fQgl8UOi4JzCRn+3CK3hTK1RPHgjfDwtO1+vGjO6CwEM+G0W7TspOpIStHkD3vdAr+b5HuVK82j5Zbmwy1deKCBkTWNArrEyAU+FaUxX4FdkL/UYClJ9nTxIdJSuljGJuW0LW968B8Pe6isPaPel/9rYdKzot2BzhJWHSUflXFHUj6SWuMP369zkO1HRGKIhTD9GzOWJLlApZdh/NTjIZ5M9rVmrM609QMrrSiYjZGVNtOoOL6iJcW2rsM5bmcaTnALy7QCrZGHCYO2C9NTJPTUBMa6a/yXCjMA0T69NNtv8vj4OrGGfzUHzvwG4bkXlvaTL8pFP3Lpg9vS+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SuyRIGKjX0pvxM3CwQYnzoVlLr6sBbzC9g7NgwIvSBM=;
+ b=yblbFDVB8r6bYthp3wQD5LF3Z/oTT5H6/1uFvR1rEXkCTMHRH0Yv3C4g0ZkTkm5qVZhjeGDf1YayZYGZYD/IP/DyFNhMDRMSg7J2Q7IdGExHT38MYu3C9OSmN0yOqOYbk0m7ROljdVn9twryrCZjFxhmTxwFIjH5rZkmgD5IHkphyn4fO8kpfRO9L8zVOn5DmdGz/N7n5IAm30O+ik8dSmx4hIv5LWTCEqWrt8N5Qc1mrn2iLMdjIIHxsXFG50ufEa/8BkEjbQn7UhYMHNGhmYPYOToMTdecqpKxcS3LbtmJ9DhJ+3/eSBwnyzBcXw7TTNtIjP6jF+IZdLEqDT6cew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SuyRIGKjX0pvxM3CwQYnzoVlLr6sBbzC9g7NgwIvSBM=;
+ b=fkcIODrDF7B8nYkhpm4XHCcQG8ktKj+/yoj9MCXKNHPB9uenho8TH1VHdHt3l1FdBZaw42Uvq4GULjc8GcRDVx/axlCUCXU1Q5wGGRiQOndMHpV4e4aY1aUg4yytqScdDq1npN46TpNG2zaSjpeg/xlpTWeLWFrOCoCFzHdju1cJJgEYvovi1FWXB/4xplgu3sqA0mM5MPf5P4FMj1GRsL5HG0mD+SVnQ2dAP1N3yB8nCsOcjBo7hJq21puch4T7wrTppfegOMoB1gIRpm2XMbcYmpQ1FGJ4q4NZwhfTHOh6hcZrPFxN42+qTxKnF7tjM8L7DeDi6hjjSda4CsfaVw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by DB8PR04MB6859.eurprd04.prod.outlook.com (2603:10a6:10:119::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Wed, 4 Dec
+ 2024 16:20:40 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.8207.017; Wed, 4 Dec 2024
+ 16:20:40 +0000
+Date: Wed, 4 Dec 2024 11:20:35 -0500
+From: Frank Li <Frank.li@nxp.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
- 8e179a4a80e64a1ccfc87e6377a195078df5b109
-Message-ID: <202412042206.IehlHh6G-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Subject: Re: [PATCH] hwmon: (tmp108) Drop of_match_ptr() protection
+Message-ID: <Z1CBU1wGEALtEBmO@lizhi-Precision-Tower-5810>
+References: <20241204141754.4051186-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241204141754.4051186-1-linux@roeck-us.net>
+X-ClientProxiedBy: SA1PR04CA0004.namprd04.prod.outlook.com
+ (2603:10b6:806:2ce::9) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB8PR04MB6859:EE_
+X-MS-Office365-Filtering-Correlation-Id: aaed39e6-f35a-4735-5c83-08dd147f986d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?FEq7p/bIB7pf4or6u/4WOgOFP7md0QuVEZn5cyyDIDTL8bkF9H7aVuWZ3bAd?=
+ =?us-ascii?Q?SODGcUGlncRTg08VkVOSCpOXyde//O+qYFiNyQL9UoRWOGttXng6sGtyVjIO?=
+ =?us-ascii?Q?9QxBWyIX48LbUvAGyiUb1fqeFZ+EPKfVS3LgJQH0tGKW+gfroG0UjHoLqCGt?=
+ =?us-ascii?Q?r0EK+NH9dzJT8aRqt1hUXjeML74+qm5SAF3sEORdRtdWF96DGOHo49wjeeVn?=
+ =?us-ascii?Q?QMX9+LgmTIvzAmZq+oG5IfKqHnyNBT7GzgMnPcBROfLXo9j7QUlLCwpXQM7a?=
+ =?us-ascii?Q?HekjWKeDQxoeui9DaZHvfeoXzxWz7mkYBSGt+pK4f+nMBAJ/rP8+1rrZQPv2?=
+ =?us-ascii?Q?kqM+1xlYui+01MOLcrnVV5FssvwCgC4bkAYzXLCAKJfI5QEBllnZorsmjvSC?=
+ =?us-ascii?Q?7DXGYiqY6fwDfyACtLJ1wqwM63ilYh54FO+9LGLrEOA3NCCCfu9FGoepmnmX?=
+ =?us-ascii?Q?rteNjQs0EHuT433tUKDtWHw4TLUP0T3hDXMc8a1fUzIhqpDGwyZE24zIER3W?=
+ =?us-ascii?Q?AoWlb5S48acPhYyMrAhYsQukvzI0TEVTpY9kZN9E9w6mZXeiZ00bf5W31jxq?=
+ =?us-ascii?Q?2sVIzqvnO1+EkgC0rlOw6LFlX6a5dt0XqZvIo85KQRfU6RboJUQSTtF4bz/M?=
+ =?us-ascii?Q?LtovOZg0FUVoMuYV5mHG9AdYpIUHGClLsFQQN/ytjQwrJxle8M8O6XhSG3mF?=
+ =?us-ascii?Q?0xSXnK9m7+/Lre+rhkoXcUlk5PB3rQSammikR+JoZEhd9WRuepTKiFv8KbRM?=
+ =?us-ascii?Q?pwPm6/ADDbylDJoTUwXt29hunuLNyUpSsJdkKVLYJjft3LyU0RAGsJrMAzgY?=
+ =?us-ascii?Q?KQpl+wXeFFqK1+GRjNkNRJEDBxlhVjHosqJa+bNBkn9q4Ug3Os5hx1Ki8laJ?=
+ =?us-ascii?Q?Il0VR79Lt+Y/ubfwEasGdBN4gMV9qlLXfiH0W9zN4evZn/CxubYVAZldFkvb?=
+ =?us-ascii?Q?MHTfrqZ8bBr1Zg1gUznq0vhlS87Edsxsfi93KapqgOKGML6paS75FVMJEHYU?=
+ =?us-ascii?Q?hW6KGRdGlEy5qtzzETpa9KetLCgu4OEiGPtcAQvkIUwXbFH0NiYnz+QqnnOX?=
+ =?us-ascii?Q?wIInyikuB7ipuPe7b/G7pC8WNEAzgtkp2jYExa2d/ePiPnlYa7mzAGoFs7kd?=
+ =?us-ascii?Q?QcS259ZtCqazHPwGgBRDz2ltr/QIUjUtb+nTzgEUUUe/y7lU9jFkhxVkgfLa?=
+ =?us-ascii?Q?SXpPxll/JKlGVY2ZJQ7cEokOkqvBtZ0hFqVqMsix4U3Em29HZQdzW94Q8syc?=
+ =?us-ascii?Q?4AtX2/yRUTipZL8eu2kOr9gLl/PXl+yRexhRUNI0vZ0WvvBEIIIRtnZbvU3s?=
+ =?us-ascii?Q?Xc+bAuvi0axS1Qmp/7m3I8b1uDnnMNQ41EotF9csiSVp6Ihfs0q2nKGup6M0?=
+ =?us-ascii?Q?6T6LrqNEUNT2O4DMeCV8r/FZloZYB4QQKeFISXEkMDPWu9kz1Q=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?aVe+CmA7wPV41uv7v4ZiZpDxqTvQEj8fQycql9RcvZIPurcGEj/trDmLi1vP?=
+ =?us-ascii?Q?v3X9yj/67JzK5eSMM1snbygCWV/gnvdjOGHkjPud/JtMJjhdvYckmkVvBC6z?=
+ =?us-ascii?Q?Rlv+tDHsFPs6hdcEaoR/bAHIV8lL0vQEE6iq2Cls1VFtbix7GOxZfZCuny3D?=
+ =?us-ascii?Q?qUpeBNmwvNYcO4DLZsCEyBJWznN40EAKZsowhYIgGWp1sRMAp7Fkj+r6+6Jg?=
+ =?us-ascii?Q?snS4a3H3h2g+5DpYCZj61v5sAUYbKLZuPDB4dPlAwIkh/CRKxnv1yQ21o2g6?=
+ =?us-ascii?Q?w0kpFKmto+IKNfjmjHe2O4EC4AaTJefuPxQKO5880tASnHSaS0nuyU+bav3g?=
+ =?us-ascii?Q?IrzktvqO6lhXePus9PWT8ZjxvgATZ6HdIqOCqwJ/f0e8Bkmjz9oKEF3mOCEQ?=
+ =?us-ascii?Q?ZNh7UEQD4N6tsLW/b22xqeg/uWrtgRx2IY2Y73vCqBx1swJJiMT98lOLEMGJ?=
+ =?us-ascii?Q?LjFLW2gPpFqhxzrgZVio/Es/BhAGJgrSQkLbRgwr8Zesk6n19bvpwyxLQKns?=
+ =?us-ascii?Q?LFcgAuUSA7V1U3YdWRRIsxkD/8/osCPtjmyi8K9Ewm6ry0jdGatZpYUmo7tm?=
+ =?us-ascii?Q?SNyAhzS/CrFZWaVzhrXtjDUWuJpDNjSHzSeVfJDf1HvTw44q/pq3jaDnCZZh?=
+ =?us-ascii?Q?uo0hG0i9gyELymV2rADP+Zep14pl8KK9yev0laOxmQ8MHxtiKppQE37hv6BN?=
+ =?us-ascii?Q?VZsTdW/crucc1+jzOGTAzrBjroRVlnjB75UJmgbzDr90FxHRFSrKIXEQT4Gf?=
+ =?us-ascii?Q?zlrG5ANoOl1fU3DdTU0sFFiDPePSZnamg/13bqX/3AvRDCXjwKpBDL/P9tm/?=
+ =?us-ascii?Q?7rgb0uT81g8nOpERoYuXpJMUnMic0BuzueNv2Iwg+D/IPor4gR4Ha0VcJpVt?=
+ =?us-ascii?Q?+iMPIYIDqrgHYbs23PtEG7puQNbFFEWeh3nsjHeBVIHPlpe22fXLhw+wDCPA?=
+ =?us-ascii?Q?Tpc2+N9FKXIjNEb4PK1qxokK7MrnVJbpfu6hBW2HD/YQivRgKR+HozG/nUSF?=
+ =?us-ascii?Q?2jVTH+ixcfUAZ2euT3calt68tTzg64f4z7xrDzVEDC9y1ULi5xEy5o/7GkUk?=
+ =?us-ascii?Q?2zbe7MvfBJmu+F+JxwxVmi/N3r4Sf3TptfuYGD9yJ/NBMQA26JvV3Af3LtbB?=
+ =?us-ascii?Q?JQ1zFjbkRNbLLJxHlVAW1qeiJEtbs/8L6hcmDb6AS0ah2zJOPcQ7O3IuBJJ/?=
+ =?us-ascii?Q?ZLK7lkZImUw4qyYKNX2Rj9DEUgQ7Rz4A4e1yEK5Cw8OFAMzrCQYzcNY2qt01?=
+ =?us-ascii?Q?CFRYwLiGEsByDoDFYDO+rJWZH7HNrlKAVDzfQUXd2YmmRXXLx0YHZ3DmA3Ib?=
+ =?us-ascii?Q?F9gS0Ednih0Nm+MKZJppMVo8Zk0LUzUUfHTRHj/pFqCNA5h1+c/531YMbaVU?=
+ =?us-ascii?Q?LcWZ9G14eHhgbRzKpxVS8nzaTEsCX01rwURWTsuV+ekjRPtuoXIOpea5xHAg?=
+ =?us-ascii?Q?OUe0n3kNqXVXW5EoADiTUjaneRZC8toD3X/rtKExp/FIyr+9TOy0wARlziDb?=
+ =?us-ascii?Q?179Xm4IPUpkB6CvBDtU1bW6JXE5z4/ZVxzA1tTTM4sq8GOSpbJRt5SKQ7Ild?=
+ =?us-ascii?Q?/8eKoXV+yN7/Dzt6SRNTByq7Suvy17ONd3qxpv80?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aaed39e6-f35a-4735-5c83-08dd147f986d
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2024 16:20:40.8430
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ps/vi/egPR6g31qcbzkpMt806PAw6F9mnFm+jyLiMZuwiGs2XRIot3e9L/l6apvXjezT9sBA7MNcGs0IoK0Bng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6859
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
-branch HEAD: 8e179a4a80e64a1ccfc87e6377a195078df5b109  Merge branch 'hwmon-max16065' into hwmon-staging
+On Wed, Dec 04, 2024 at 06:17:54AM -0800, Guenter Roeck wrote:
+> Limiting the scope of devicetree support to CONFIG_OF prevents use of this
+> driver with ACPI via PRP0001. Drop the dependency.
+>
+> While at it,
+> - Switch of.h for mod_devicetable.h include given the use of struct
+>   of_device_id which is defined in that header
+> - Add I2C device ID for p3t1085
+> - Drop the unnecessary include of hwmon-sysfs.h.
+>
+> Cc: Frank Li <Frank.Li@nxp.com>
 
-elapsed time: 725m
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-configs tested: 181
-configs skipped: 7
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            alldefconfig    gcc-14.2.0
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-20
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-20
-arc                      axs103_smp_defconfig    gcc-14.2.0
-arc                 nsimosci_hs_smp_defconfig    clang-20
-arc                            randconfig-001    clang-20
-arc                   randconfig-001-20241204    clang-14
-arc                            randconfig-002    clang-20
-arc                   randconfig-002-20241204    clang-14
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-20
-arm                       aspeed_g4_defconfig    clang-20
-arm                         at91_dt_defconfig    clang-20
-arm                          ep93xx_defconfig    gcc-14.2.0
-arm                       imx_v6_v7_defconfig    clang-20
-arm                          ixp4xx_defconfig    gcc-14.2.0
-arm                        keystone_defconfig    gcc-14.2.0
-arm                         lpc18xx_defconfig    clang-20
-arm                          moxart_defconfig    gcc-14.2.0
-arm                        mvebu_v5_defconfig    gcc-14.2.0
-arm                          pxa3xx_defconfig    clang-15
-arm                          pxa3xx_defconfig    gcc-14.2.0
-arm                            qcom_defconfig    clang-15
-arm                            qcom_defconfig    clang-20
-arm                            randconfig-001    clang-20
-arm                   randconfig-001-20241204    clang-14
-arm                            randconfig-002    clang-20
-arm                   randconfig-002-20241204    clang-14
-arm                            randconfig-003    clang-20
-arm                   randconfig-003-20241204    clang-14
-arm                            randconfig-004    clang-20
-arm                   randconfig-004-20241204    clang-14
-arm                             rpc_defconfig    gcc-14.2.0
-arm                        shmobile_defconfig    clang-18
-arm                        shmobile_defconfig    gcc-14.2.0
-arm                          sp7021_defconfig    clang-20
-arm                           spitz_defconfig    gcc-14.2.0
-arm                         wpcm450_defconfig    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.2.0
-arm64                          randconfig-001    clang-20
-arm64                 randconfig-001-20241204    clang-14
-arm64                          randconfig-002    clang-20
-arm64                 randconfig-002-20241204    clang-14
-arm64                          randconfig-003    clang-20
-arm64                 randconfig-003-20241204    clang-14
-arm64                          randconfig-004    clang-20
-arm64                 randconfig-004-20241204    clang-14
-csky                             alldefconfig    clang-20
-csky                              allnoconfig    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-20
-i386                 buildonly-randconfig-001    gcc-12
-i386        buildonly-randconfig-001-20241204    gcc-12
-i386                 buildonly-randconfig-002    gcc-12
-i386        buildonly-randconfig-002-20241204    gcc-12
-i386                 buildonly-randconfig-003    gcc-12
-i386        buildonly-randconfig-003-20241204    gcc-12
-i386                 buildonly-randconfig-004    gcc-12
-i386        buildonly-randconfig-004-20241204    gcc-12
-i386                 buildonly-randconfig-005    gcc-12
-i386        buildonly-randconfig-005-20241204    gcc-12
-i386                 buildonly-randconfig-006    gcc-12
-i386        buildonly-randconfig-006-20241204    gcc-12
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                 loongson3_defconfig    clang-18
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                          atari_defconfig    clang-18
-m68k                          atari_defconfig    gcc-14.2.0
-m68k                       bvme6000_defconfig    gcc-14.2.0
-m68k                        m5407c3_defconfig    gcc-14.2.0
-m68k                            q40_defconfig    clang-15
-microblaze                       alldefconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          ath25_defconfig    clang-20
-mips                          ath79_defconfig    gcc-14.2.0
-mips                      bmips_stb_defconfig    clang-18
-mips                           ci20_defconfig    clang-18
-mips                          eyeq5_defconfig    gcc-14.2.0
-mips                          eyeq6_defconfig    clang-20
-mips                          eyeq6_defconfig    gcc-14.2.0
-mips                           ip22_defconfig    clang-15
-mips                           ip22_defconfig    gcc-14.2.0
-mips                           ip28_defconfig    gcc-14.2.0
-mips                           ip32_defconfig    gcc-14.2.0
-mips                           jazz_defconfig    clang-20
-mips                     loongson1b_defconfig    clang-15
-mips                          rb532_defconfig    clang-18
-mips                         rt305x_defconfig    clang-20
-mips                        vocore2_defconfig    clang-15
-mips                           xway_defconfig    clang-20
-nios2                         10m50_defconfig    gcc-14.2.0
-nios2                         3c120_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-openrisc                         alldefconfig    gcc-14.2.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                       virt_defconfig    clang-20
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.2.0
-parisc                generic-64bit_defconfig    clang-15
-powerpc                    adder875_defconfig    clang-15
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                        fsp2_defconfig    clang-15
-powerpc                     kmeter1_defconfig    gcc-14.2.0
-powerpc                 linkstation_defconfig    clang-20
-powerpc                 linkstation_defconfig    gcc-14.2.0
-powerpc                   motionpro_defconfig    clang-18
-powerpc                   motionpro_defconfig    gcc-14.2.0
-powerpc                 mpc8313_rdb_defconfig    clang-20
-powerpc                 mpc8315_rdb_defconfig    clang-15
-powerpc                  mpc866_ads_defconfig    clang-20
-powerpc                      pmac32_defconfig    gcc-14.2.0
-powerpc                     ppa8548_defconfig    clang-20
-powerpc                     skiroot_defconfig    gcc-14.2.0
-powerpc                  storcenter_defconfig    clang-15
-powerpc                     stx_gp3_defconfig    clang-20
-powerpc                     tqm5200_defconfig    gcc-14.2.0
-powerpc                      tqm8xx_defconfig    clang-20
-powerpc                         wii_defconfig    gcc-14.2.0
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.2.0
-riscv                    nommu_k210_defconfig    clang-20
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                ecovec24-romimage_defconfig    clang-20
-sh                ecovec24-romimage_defconfig    gcc-14.2.0
-sh                         ecovec24_defconfig    gcc-14.2.0
-sh                            hp6xx_defconfig    gcc-14.2.0
-sh                          landisk_defconfig    clang-20
-sh                          rsk7264_defconfig    gcc-14.2.0
-sh                          sdk7780_defconfig    gcc-14.2.0
-sh                          sdk7786_defconfig    clang-20
-sh                           se7343_defconfig    clang-20
-sh                           se7619_defconfig    gcc-14.2.0
-sh                           se7712_defconfig    gcc-14.2.0
-sh                           se7722_defconfig    gcc-14.2.0
-sh                           se7751_defconfig    clang-20
-sh                           se7780_defconfig    gcc-14.2.0
-sh                   secureedge5410_defconfig    clang-20
-sh                     sh7710voipgw_defconfig    gcc-14.2.0
-sh                        sh7757lcr_defconfig    gcc-14.2.0
-sh                            shmin_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                       sparc32_defconfig    gcc-14.2.0
-sparc                       sparc64_defconfig    clang-15
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                             i386_defconfig    gcc-14.2.0
-um                           x86_64_defconfig    gcc-14.2.0
-x86_64      buildonly-randconfig-001-20241204    clang-19
-x86_64      buildonly-randconfig-002-20241204    clang-19
-x86_64      buildonly-randconfig-003-20241204    clang-19
-x86_64      buildonly-randconfig-004-20241204    clang-19
-x86_64      buildonly-randconfig-005-20241204    clang-19
-x86_64      buildonly-randconfig-006-20241204    clang-19
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                  nommu_kc705_defconfig    clang-20
-xtensa                    smp_lx200_defconfig    gcc-14.2.0
-xtensa                         virt_defconfig    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/tmp108.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+> index fbe673009126..8110601263bb 100644
+> --- a/drivers/hwmon/tmp108.c
+> +++ b/drivers/hwmon/tmp108.c
+> @@ -8,10 +8,9 @@
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/hwmon.h>
+> -#include <linux/hwmon-sysfs.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> -#include <linux/of.h>
+>  #include <linux/i2c.h>
+>  #include <linux/i3c/device.h>
+>  #include <linux/init.h>
+> @@ -417,25 +416,24 @@ static int tmp108_resume(struct device *dev)
+>  static DEFINE_SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
+>
+>  static const struct i2c_device_id tmp108_i2c_ids[] = {
+> +	{ "p3t1085" },
+>  	{ "tmp108" },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, tmp108_i2c_ids);
+>
+> -#ifdef CONFIG_OF
+>  static const struct of_device_id tmp108_of_ids[] = {
+>  	{ .compatible = "nxp,p3t1085", },
+>  	{ .compatible = "ti,tmp108", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, tmp108_of_ids);
+> -#endif
+>
+>  static struct i2c_driver tmp108_driver = {
+>  	.driver = {
+>  		.name	= DRIVER_NAME,
+>  		.pm	= pm_sleep_ptr(&tmp108_dev_pm_ops),
+> -		.of_match_table = of_match_ptr(tmp108_of_ids),
+> +		.of_match_table = tmp108_of_ids,
+>  	},
+>  	.probe		= tmp108_probe,
+>  	.id_table	= tmp108_i2c_ids,
+> --
+> 2.45.2
+>
