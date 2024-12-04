@@ -1,115 +1,184 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C6320C480
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Dec 2024 14:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906B7198A05;
+	Wed,  4 Dec 2024 14:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733321351; cv=none; b=MYjf+23pWavuX1xo1jqBrBJ7nmCytE+Ao48vjecb0Kf9Jd9XI3K1jJyve8syHj4iIBStlk+5XkSpJLZVBYvM9Z6BByg9F0HOnzGJkpmx+Ejy6+EJuqnqrQmaKFRslbFyJnLcz7hpg/EPu1Se6LFXu0oUrVTDtUC2qzUcRhzAyZg=
+	t=1733321718; cv=none; b=PfanSOIQvRpuRfGb53U33VQGTNY/lAPliawxysRJS1zRLBqjcAgUGnF0FNLeq4OjsDQ1bqCiDzQ48PoNCtr3gT/XwMC/OBSU74d2PqjjYcINSIm+bXH4Pp7iiuy7YVh1XgC8oOqfGXaRKrQ+yRjm2bq14pVLWs6lqxeX6aRvggw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733321351; c=relaxed/simple;
-	bh=lyxNlPKFK0fUfsPZwq96q9xb2ayv6nRF7fY1B72CA28=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oBPCUTy894cPQx6ZxifPbNM1DE/Uie6tNdUXf1QtwGaH1Mo9UcjaLhM8jEJlON6w3C6ohoiEZEcvKqG+SWGO6iUXEw40vhIHv0lqCj9nWesO4j7q+297EdGWeVdyD8VniciUPHe9JJVlMDSRq7FLLaJ6joNoJ3yUYLJKZzGhekI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ziycCv+6; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1733321718; c=relaxed/simple;
+	bh=mp0xMakOZkAYjldngtXkYlJ2l7ooeSfFDMdWWpxIjjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fPBwKxEc80IKDogY2H2OxvJ5hbc99Y8FTn3Agh2NRIyPEIONsvjqgBh/0zrxrFPACrYHvwqtndO+P7kMh2/wK34cqn24zG2NVzmsGj1bavIcz7PptSelFLJe0fDb6Y+TApkH95hUqwucSwKgcJtqllSbtrLkpMR5HXNOmpfMnRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTYS6Go0; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ziycCv+6"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385e1f3f2a6so3387392f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Dec 2024 06:09:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTYS6Go0"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-724f41d520cso4080048b3a.1;
+        Wed, 04 Dec 2024 06:15:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733321346; x=1733926146; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=T2laJEmUYoPmzqUxxETrKsHa5VTx3uGueMnpKP0QoPI=;
-        b=ziycCv+6DYMoxu8LMQP5+z4uD16JnjzNqtQHiO4mGYd7xxzDf5ZS4qPspJw5gCwZb6
-         dmf0fWgFXALSzBulZxwdKimKPYfz2HpTzQ8x86Rapxh46TrvcrgknP2Gb+ta0ZOeIhIO
-         MbVomRu7+ecNuA1iyC914Ge60pU5MUgAKTsxYqTukyf29b/xuV6ORoJ/pJWQT2T2y9fv
-         qKfA+a+YCXSLNiUKevs6HXkEDnXAliyWZp2h1eB0JktYvngYH2O0AAfM6ot7UM1ipGg+
-         TRMGCVxerPHH4JQyRko5LGtCwVxxAyD7hXusVHEwVt00mcqEyFHV0zcDos5UiNcRaJYw
-         Rthg==
+        d=gmail.com; s=20230601; t=1733321716; x=1733926516; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+VfkMqaoR1PBkGjD27i7J8fTO8qVxs7ERpfayJy5Vxg=;
+        b=hTYS6Go0UaMEX2ab/IoglCeywF7BDS0dUQpI6NA6MvDdfTrh4clw+mvAav+7HRc/1j
+         9ml2D5HPK5fG9mnormPx0TAJAbEeNnU+YdoMUGHqiiNXW4Q0Zg5+KsYlp1wP4GYna0oH
+         BInqdiPigUqzehAiNDgb/NBYWM9SaW9t1u3MU3w7e9rCKmTWhJruKhnFVuTDMTacLJJb
+         cHKdcdcL7/UcEOPl3Las8VTUythi58KWRU5Ov2pkX/gbZhEet6yQ4pv2F80u1GrhtCXp
+         3aHzBs+KYGd/8kQuvQLXefaJX3jKHIYIC00N5Khve3ky+zA8soAXipHl0zdpKoCyPRzO
+         MdFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733321346; x=1733926146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T2laJEmUYoPmzqUxxETrKsHa5VTx3uGueMnpKP0QoPI=;
-        b=DfgKblczshi0g4a70nB9/wJ3Vce8Q4PZiQUfaYo/Bb28UbhyjXPg+sFlTlp8LItgvi
-         CuclGvLkPCwKYCDeXBvKOD4HmAHJmH+mo4cHydq3Ccor5MiLEOvQ/Up6BFcWf8zL4btM
-         adUb2z/bZ3+FD7GX4j+wzxw9fV9d27rFMeaHONprRlJB/tOvdMa84mqA+9NCqNKz/fG8
-         dU9w0m3QtX1dZdGrNHI+r++O6LI9shFl/KvclhkUfarXPPXaVclt9iWAss6ooU7YuOUa
-         g2JwOIMQkPkrgKfcaVq5cRC5gNH1lu5qvpv9FUz6fp5dBOSSNlqTURqHBe7E7XDeABvU
-         bpZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVh80h/NDnz0I+LVuGZ/0kGY76Ex+mXdaunlsaB3GwQ9x2yBqv+k/FtQPTznKkTDYmXVw41Z7Ggh0VGVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbvQucQ7BbBKyHMKh6yio4Ji4LhvICP/3sxnauf+ZpJyA5aWvL
-	ljNcZ+5bLCmHEMKmOZZ321fuaLlWTEpTC4yvOBkcnKrTf7SUn+yAJcSHHKPxEGY=
-X-Gm-Gg: ASbGncvzznSQHB0S57ch9LDE/Iv0v201T70NlhEkHVvyiLPsjfLQaTogli4E/OwmCZ1
-	ieyvm64y9BaLh1SU6S6pRuc2wiIrG26EcN8fKtBWfqg+HPs6gTCILMC1uiTmQI2YTvE4nqGDugk
-	3Gczl7RSJzAYsDfMKVOz0BCfp3m8FxXAbIWCs/u+K2f6xfyJiwdagfZ3n3wjX4vxlYnut1nI//p
-	RXX8HEeX0eRM/oLoQXZkFKmx+CDheU013JxIQQtVhny8yKVM7jygw==
-X-Google-Smtp-Source: AGHT+IHOZ7VV8g+R1ZI8ItpgKGutzNjQXQcDDqy8Di2aeZe8v65qtmMVoTe4WdcidoFtf6exZssyPg==
-X-Received: by 2002:a05:6000:1ac7:b0:385:df73:2f3a with SMTP id ffacd0b85a97d-385fd3e7b1dmr5883858f8f.14.1733321345603;
-        Wed, 04 Dec 2024 06:09:05 -0800 (PST)
-Received: from localhost ([2a02:8071:b783:6940:a61:1a22:4d43:1670])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385e90949cdsm12034424f8f.17.2024.12.04.06.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 06:09:05 -0800 (PST)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: =?utf-8?q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (isl28022) Drop explicit initialization of struct i2c_device_id::driver_data to 0
-Date: Wed,  4 Dec 2024 15:08:57 +0100
-Message-ID: <20241204140857.1691402-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1733321716; x=1733926516;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+VfkMqaoR1PBkGjD27i7J8fTO8qVxs7ERpfayJy5Vxg=;
+        b=e/0iZL/EaaAZJ2onStszeiPoU11yrJE13kxPdqya6CO+BjL2VMHu+Q6JwYH1VozE42
+         NDXhQoD0I21yF7wf+B7N9ee8IK5MmDcztt0Fye7xzeXnGm6R//T7g9d+nW9xPzSu3Qgo
+         nJKp7ZF9D3BbKoU8eAm6LMPhywNWoYdIqTMX3LuJ3y1MgZTjki3Cn2xBZwh8NZ5953Zw
+         BtR4GK+AvflEECDnKvvJuwVB/FvvNlzc1lUfeHY7ejOR3Uu6zpRG4Q3glLnjM35hJmt9
+         GcnHTmrc9KIqGl5u907xG7Ly9uLX5np/5PycykuJc5FGvVo+wBp9lQND4LEwhIHKfChE
+         N0Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+9e9T3mX2ze8uUHetdfywIErNvBBnNM0gUkrhSfgbazWd3c8zq9Tc4tmLekmRlPDid2zjmO90G96qtg==@vger.kernel.org, AJvYcCWi7SMLDDVSnKC6R6XO+eGMX8BvJs/EVFcyqHUifx16IsQgCaV8LnrP0tw8148Q5yR8qKujCp5cqpd/mFDG@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh1SDsMGFBB+E7qPFR+YBDfOqJ68Yb8qlE5epjyb9cES8cKy8a
+	aIS77LWDMwD2/igLLi+93j+zKviCySq1IhomGxMBdG8kaQdk5xsQAf3eqA==
+X-Gm-Gg: ASbGncuy89Mo1euJCz9ERaEiuaQF2UjNkIJEA1vRPjf/UtTNlE5Li/Cn3E0KejkPFaY
+	/AnCNyg3m+4h5Q0/C5tC6yglAD/nBXNOsKWrjF2Tgh/Rqz9vv1kKtkRn4MfAFxHe6xjU7lh74ta
+	hyVAeloUJ9D0Ez07VMs3zcTqcchDYOjq5KysZd5TZ2P43AHbHMDhCngj2MkL0Wa+dyAMFYvre6e
+	IQvrHcpBfIfpHPhLF3KxCIa1/cT84Jyp57q+1wDEnjTWybGqixSpXoN4H47qjhH1mu/YAm2CwsC
+	0anwE/LD80TGKlBjnfcLt2s=
+X-Google-Smtp-Source: AGHT+IF4BMho+McDM6sfMlrjrjxQhMsX4MFYD4/yc5eKajq86g9yksIm7j5Jp6utqHxGo7h21QOwCw==
+X-Received: by 2002:a17:902:e5c1:b0:215:ab2a:46c3 with SMTP id d9443c01a7336-215bd25458bmr77190435ad.51.1733321715766;
+        Wed, 04 Dec 2024 06:15:15 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c324943sm9989962a12.48.2024.12.04.06.15.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Dec 2024 06:15:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <be920ecb-7aa9-4222-a909-41d6c0f27463@roeck-us.net>
+Date: Wed, 4 Dec 2024 06:15:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1153; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=lyxNlPKFK0fUfsPZwq96q9xb2ayv6nRF7fY1B72CA28=; b=owGbwMvMwMXY3/A7olbonx/jabUkhvSApCrF/EOt66YkF5zR67ld+Wnapyh+uWJZZ+2GkgMFQ QYfqg91MhqzMDByMciKKbLYN67JtKqSi+xc++8yzCBWJpApDFycAjCR8lD2vxJ/rzFdZPx6JvZd 7R8nj441TCwmVaeWFKnOzXzk03n6o/E5ra7Dr6feuz6z2/ji6Vfm2Xpyvzj0mzyE3zF6VJs+SxB bLhiwtDu5z2Wjr2lg3P0HCnGJclGyk09Wz1OdWpbv+ppri+mCA+nuqVPUbx5o2OcVGeS88dTlNJ 4MpcbpTKe35ab7hVtM/F78drKD5fnTaiW/DYPmdxWzX9g2o2Oa6NdiFQbpKdJhXU3lJeJROY+mP 9YR0bmjK3vL0OfMO1kx2fYUqw0L331/M8HYwC3I/aLHE0uLi7Wfb0x7YLUi6r/7w19rHDbeM6kU X3E04BK/vcK03MKmy/U6bPXL/eMDV3Us2VeYVfTMkEkWAA==
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (tmp108) Add basic regulator support
+To: Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
+References: <Z0WJg5MMu_1AFYog@standask-GA-A55M-S2HP>
+ <fcf06424-c014-4e87-9ac5-ced1ea679fdd@roeck-us.net>
+ <Z1AZXzw5XnsapWT5@standask-GA-A55M-S2HP>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Z1AZXzw5XnsapWT5@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This driver doesn't use the driver_data member of struct i2c_device_id,
-so don't explicitly initialize it.
+On 12/4/24 00:57, Stanislav Jakubek wrote:
+> On Sat, Nov 30, 2024 at 09:58:17AM -0800, Guenter Roeck wrote:
+>> On 11/26/24 00:40, Stanislav Jakubek wrote:
+>>> TMP108/P3T1085 are powered by the V+/VCC regulator, add support for it.
+>>>
+>>> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+>>> ---
+>>>    drivers/hwmon/tmp108.c | 5 +++++
+>>>    1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+>>> index 1f36af2cd2d9..85e4466259a3 100644
+>>> --- a/drivers/hwmon/tmp108.c
+>>> +++ b/drivers/hwmon/tmp108.c
+>>> @@ -17,6 +17,7 @@
+>>>    #include <linux/init.h>
+>>>    #include <linux/jiffies.h>
+>>>    #include <linux/regmap.h>
+>>> +#include <linux/regulator/consumer.h>
+>>>    #include <linux/slab.h>
+>>>    #define	DRIVER_NAME "tmp108"
+>>> @@ -331,6 +332,10 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
+>>>    	u32 config;
+>>>    	int err;
+>>> +	err = devm_regulator_get_enable(dev, "vcc");
+>>> +	if (err)
+>>> +		return dev_err_probe(dev, err, "Failed to enable regulator\n");
+>>> +
+>>
+>> Problem with this is that existing devicetree bindings do not provide
+>> a reference to the regulator. Those would now fail to instantiate,
+>> which would be unacceptable. I think you'll need something like
+> 
+> Doesn't devm_regulator_get_enable fallback to a dummy regulator when
+> a reference to the regulator isn't provided?
+> 
+> lm90 does it this way too.
+> 
 
-This prepares putting driver_data in an anonymous union which requires
-either no initialization or named designators. But it's also a nice
-cleanup on its own.
+Ah yes, you are correct. I misinterpreted the code. I'll apply the patch.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
-Hello,
+Thanks,
+Guenter
 
-this driver didn't exist yet when I created the patch that has become
-a7e03f96791e ("hwmon: Drop explicit initialization of struct
-i2c_device_id::driver_data to 0"). So it's converted here on it's own.
-
-Best regards
-Uwe
-
- drivers/hwmon/isl28022.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index f9edcfd164c2..04414075afe8 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -486,7 +486,7 @@ static int isl28022_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id isl28022_ids[] = {
--	{ "isl28022", 0},
-+	{ "isl28022" },
- 	{ /* LIST END */ }
- };
- MODULE_DEVICE_TABLE(i2c, isl28022_ids);
-
-base-commit: c245a7a79602ccbee780c004c1e4abcda66aec32
--- 
-2.45.2
+> Regards,
+> Stanislav
+> 
+>>
+>> 	err = devm_regulator_get_enable_optional(dev, "vcc");
+>> 	if (err && err != -ENODEV)
+>> 		return dev_err_probe(dev, err, "Failed to enable regulator\n");
+>>
+>> Even though the regulator is now mandatory, existing devicetree bindings
+>> don't know that.
+>>
+>> Guenter
+>>
 
