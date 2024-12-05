@@ -1,86 +1,104 @@
-Received: from bout3.ijzerbout.nl (bout3.ijzerbout.nl [136.144.140.114])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72CB419ABC6;
-	Thu,  5 Dec 2024 19:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.140.114
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974A13A1BF;
+	Thu,  5 Dec 2024 21:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733428225; cv=none; b=R4FbGDm5PhLihNG9vycO7OpjQmVtScdJsjZp3clOo5ckkes8vjiwJJd1w/9lsGDEazWdpSyENb+Yd18L5C+qvd+LgU0zNNH52oM/ixJJyFC7caL2UAN69HKQjmULIz2t7naYlWezQMo3TI31QMbmlH4yV4JTA8gxt/A4ADw8s+E=
+	t=1733434402; cv=none; b=ojrm/vkJdeJeYiHfi9CE+DFjJ6GqIX7wxHmfXV+1GMT/85OIaP4/3kkyYDSEF+z5VkVpZhj2LNSok8U6/TkHsZGFprlE++Ty1RI19e/2y+SYiA2Ptz0pGYxmFR91Gf2mCfqvPz+XPWmtoAgjx0w9b2HlkwHuofkjb/IZOs5D1hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733428225; c=relaxed/simple;
-	bh=YbwFw+E4aKyUl5eKWEN/nZ+GKgdxjpTjfO7xGnRiWeA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B2v/yhxyBxdzEhscCedxRVDRnhFigKn+L68FI86j7l+L7zFa6UxviXUOGK2aEPHLOhdo1iXoGPvWXbMfVp6xTOOvSfu7KDz3Xu3P6zfJZYUPV4KTtzdcbCGauK3ND7tqSMfVt6lB8ay5UDzASXXM54rzcFS6C83N/acxz8T8+2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl; spf=pass smtp.mailfrom=ijzerbout.nl; dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b=RVUI6abm; arc=none smtp.client-ip=136.144.140.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ijzerbout.nl
+	s=arc-20240116; t=1733434402; c=relaxed/simple;
+	bh=HUOXxkGz2gXCR6o1hCI5S+nZ0frDZ8AEK2vcrjyTOC4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lrc3ZrxGaESZOH5492WvWfI1woNRfvGzUKyjkVBiVQXZ6uK/KvUzWUY/nXeNz0zwyd8ZREI9qbEAKgCo1HWtNpM9N4udgHGOfNKnOVwL8/a90ABDCig2xLvX53IZee5aoziMcRTP4OWHHpxr28i6VNVEjuI4GoOU2ldp2S1ZGqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uze7RWOz; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b="RVUI6abm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ijzerbout.nl; s=key;
-	t=1733428216; bh=YbwFw+E4aKyUl5eKWEN/nZ+GKgdxjpTjfO7xGnRiWeA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RVUI6abmPvpgaoy/W3tb0CwqY54O4+5aY/ttRx+nHWmCvj2EUZ/bPdLahbEroCFI3
-	 /FrPcuH4qT5lj4kxdAqf5AGFoCwtPvoHWc8JrRHQsBfeiKE50GZ6dMsml4U70E0cKt
-	 xAVJpVOc0483J39EuHkD/Q5Ebb6mDnxMT3r+kvgqy641ojYDccta4TqzK+H463raHs
-	 NLEdIK+xXoh+VW2CO/vDszgegLcVXjx2LvX7qj74A2D6d7lTmri6bAbCPQZdAWr0CB
-	 D6Y+yJjDWHLTKWxw3qWihyAsosZ2ZQAhxkLvjp4hPbQym5j/hxFC3WR+FlyvE8lz4U
-	 EwZfQ2H/ZwC1CE/gcY0onWVlvLcEOQBWDB7P+MN1/f5faRMJtV4jiI/ajhh/wAcL+C
-	 IO42a9OZjWHzbNPNZmFg7kODV1d288Sq1kUBY02oc2RRrI8gsqre41u3+Q3sQ+Tp/L
-	 p/1rWrGTKrEq9yPWYGN8rlQKj3GColHN2s3Kbq+ojrsi7kvgmz36MP3ztsOsxZKkoV
-	 ymWWHStb6uMMI9CCzzA+o4ndZhjbykcgU9GQ7Z5qtfNbFPGJAqv8IUKWlTRQhnf06x
-	 wYW09FUbm+xOzIxSslFcPuml/rJDcKs4Kl8gXAMId/G328Z2A/RQSe4N653nXxSogD
-	 o5S5dOysCbCmGCbmtnZrz8HI=
-Received: from [IPV6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a] (racer.ijzerbout.nl [IPv6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a])
-	by bout3.ijzerbout.nl (Postfix) with ESMTPSA id 3832018BC4C;
-	Thu,  5 Dec 2024 20:50:16 +0100 (CET)
-Message-ID: <72486280-1852-41a2-ae17-2288d7fedd54@ijzerbout.nl>
-Date: Thu, 5 Dec 2024 20:50:14 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uze7RWOz"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d122cf8e52so2236676a12.1;
+        Thu, 05 Dec 2024 13:33:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733434399; x=1734039199; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6bcJ+adG+PTC8FsMnuLdxJ2qQh/RKRqifnJAV/qUxPQ=;
+        b=Uze7RWOzYXkRkB/qk8bUjDX7GSfMAHCYHNLWcaAFBLfW8kVsW5MeBsLtNu5T0o4s/v
+         YVQmDPZWn6UZpsbaUn3Eeo9+849Cn7DWa/pzjugoLW9d7UBS/KKBwqIdtwOhD9ubz9fk
+         FRmi9H7LzhRWpFxT+XPJBqnDTJPAApvLSx63q5X75MqVP/35oVvBN0xPU+/tCrhlGWV5
+         4e+Pe66vHUdwGmDPrbonA5XOQ+d3tdeYPSZbn3eQbIMB0t5ZTDgOQ8cz8O8wou+zxaZW
+         qQG8PIg6JMsbSWuvCYlIFYOfiJNUy7D8EuqFlG94mTv0hR4YB/AWO8U+SkxUJFos4Xob
+         7PSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733434399; x=1734039199;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6bcJ+adG+PTC8FsMnuLdxJ2qQh/RKRqifnJAV/qUxPQ=;
+        b=PRd0FYJTWl/pydu9RHggvNsHXMryazdIxxWIUgw9pxxHEd9hcbpf2IfN53c5ONU+wi
+         nzqyY9KY+QvaxFbMXpt3iZOnJlt0H8j/GjPO+Z6bJDs/sMY2yd8PFw35tCUI+/UpNCLw
+         C7zKQV4KyxWj2X6nvoGxWo7najEaqFEWYebDEiSFDA/OYSehBwDYvijRthgA5sqGr0jL
+         /eS2K2sDDJ66Cj9JC/Y2cLGhdnOJRm63cAKM3g3Y1Ws4DPZqtNF767WgT5iovNI8DfLQ
+         XWf13skcuPSuR1AsNGoczKHFfHYPQuiaTMXbaImowSKoP1iiPHtI7CFS3qAAlRhVaegT
+         v4/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWYfuS2tFzfXyJ9CKbRP1e3YUwv1VmhTpYT6t4AG9MHhO+gDikcpowdWQnxCK8m80M5AjNVV8YLYoxAj38=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsBiLx7MCc9DeHRLbzgaoPlS1jZG22UiQnJ1myMrc/TOxBaFzI
+	CimUWWg9ZJhgKXtZtPI26rJJSlAPET0c6zfT0XwhEaREDOQSSsAc
+X-Gm-Gg: ASbGncsZedZkTd8z0zIm2FvhgheRxkZwKXPA7OZaDovvZ4gkDwbTLE3I+hIaOU+qTa/
+	c31CtC7F1SbN+fzTIt2NZw+qaWVBPZ8D8PODV2kbW+5zFoucaGKKSfOEaTQyjPFH75qJC3e7ftM
+	jSoZK15tx6r3MGeQhFbA6/+qNZEAju+xIptWTRWfpwfbguGhwTvHFzGZoibTBbKEjtFTn787lnW
+	KUUoWBkHcyRJR17i2shi9aaflznJsMCOrIwEQWvCFzenOkGSVUHo5hlm3Kx
+X-Google-Smtp-Source: AGHT+IF/FvMHqVKEDwOojM1aSQV+L/Bz+DGKiOQubIm1awf08FCWcLO+KqwSvrc4esN06W6kBRxWYA==
+X-Received: by 2002:a05:6402:5d4:b0:5d2:7199:ae6 with SMTP id 4fb4d7f45d1cf-5d3be6b46ebmr516111a12.9.1733434398597;
+        Thu, 05 Dec 2024 13:33:18 -0800 (PST)
+Received: from localhost.localdomain ([83.168.79.145])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d149a2602esm1311768a12.18.2024.12.05.13.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 13:33:17 -0800 (PST)
+From: Karol Przybylski <karprzy7@gmail.com>
+To: karprzy7@gmail.com,
+	skhan@linuxfoundation.org,
+	jbrunet@baylibre.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: tps25990: Fix unreachable code in tps25990_read_word_data
+Date: Thu,  5 Dec 2024 22:33:15 +0100
+Message-Id: <20241205213315.3073207-1-karprzy7@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] hwmon: (pmbus/tps25990): add initial support
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- Vaishnav Achath <vaishnav.a@ti.com>
-References: <20241202-tps25990-v4-0-bb50a99e0a03@baylibre.com>
- <20241202-tps25990-v4-3-bb50a99e0a03@baylibre.com>
-Content-Language: en-US
-From: Kees Bakker <kees@ijzerbout.nl>
-In-Reply-To: <20241202-tps25990-v4-3-bb50a99e0a03@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Op 02-12-2024 om 11:28 schreef Jerome Brunet:
-> Add initial support for the Texas Instruments TPS25990 eFuse.
-> This adds the basic PMBUS telemetry support for the device.
->
-> Tested-by: Vaishnav Achath <vaishnav.a@ti.com>
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->   Documentation/hwmon/index.rst    |   1 +
->   Documentation/hwmon/tps25990.rst | 148 +++++++++++++
->   MAINTAINERS                      |   2 +
->   drivers/hwmon/pmbus/Kconfig      |  17 ++
->   drivers/hwmon/pmbus/Makefile     |   1 +
->   drivers/hwmon/pmbus/tps25990.c   | 437 +++++++++++++++++++++++++++++++++++++++
->   6 files changed, 606 insertions(+)
->
-> [...]
-> diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..0a267014c88997fca5e83b2ec974a0d521808512
-> [...]
-> +	case PMBUS_VIRT_READ_IIN_MAX:
-> +		return TPS25990_READ_IIN_PEAK;
-> +		ret = pmbus_read_word_data(client, page, phase,
-> +					   TPS25990_READ_IIN_PEAK);
-> +		break;
-> [...]
-Is the return intended? Or some left-over debug code?
+The tps25990_read_word_data function contains a block of unreachable code caused by the syntactic structure in the PMBUS_VIRT_READ_IIN_MAX case.
+
+Specifically, the return TPS25990_READ_IIN_PEAK; statement immediately exits the function, making the next lines unreachable.
+
+This patch removes the return statement, leaving the expected handling.
+
+Discovered in coverity: CID 1602227
+
+Signed-off-by: Karol Przybylski <karprzy7@gmail.com>
+---
+ drivers/hwmon/pmbus/tps25990.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
+index cc0f5c7ce..0d2655e69 100644
+--- a/drivers/hwmon/pmbus/tps25990.c
++++ b/drivers/hwmon/pmbus/tps25990.c
+@@ -130,7 +130,6 @@ static int tps25990_read_word_data(struct i2c_client *client,
+ 		break;
+ 
+ 	case PMBUS_VIRT_READ_IIN_MAX:
+-		return TPS25990_READ_IIN_PEAK;
+ 		ret = pmbus_read_word_data(client, page, phase,
+ 					   TPS25990_READ_IIN_PEAK);
+ 		break;
 -- 
-Kees
+2.34.1
+
