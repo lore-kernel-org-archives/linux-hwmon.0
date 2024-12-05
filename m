@@ -1,139 +1,145 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E4E21D5AE
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Dec 2024 16:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE5E2F29;
+	Thu,  5 Dec 2024 16:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733415902; cv=none; b=rL0q7mlJJvIFH0e6bN/+FoyBHFhexL95zxYRUU/wp9DE4evfYabxqgG66qOj7pG+HcGhRqF60zsjM+Pw/yyS6HG2D2RbTX+k5r9X5/0f3L7S+LwflVHs0FY6pMKW5Bx0GcUiCY74OfFxhNGbCdARfcJMudWyUHoTJPFOxe+2TOE=
+	t=1733416041; cv=none; b=cD2TiT4ka/fk+FKV1ctcQLwX5+ZNzDVDDf7XvWMGGziGgZlGhqQ4o/m7WpNxBhndLTUMsU4aMqfnfTddlHTxCN1YClRabJ5iGBW1okT4uqqJhtwpeh7bgWjytWHqg8o9ZJ50NcE7/OHVz0Wdf2x9P2LLkxVeYTRyCEAFbb76oks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733415902; c=relaxed/simple;
-	bh=R7CVb9LI65y/3Qu32CYYXvSxOe5U0ZYewJNDLJ5FwCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FM5HR8Pgp5Njq4Wo339ucuAt8Nn0faem34HwYyOssFDbeN3+z2ymfGJpKcUE1oqONtINhTSZYXTiBy+xwexXuqVoNuYqpIhtnaqv9KezOdqCJ8DPki6Rq1C5Foabpl/lhpQB/C5JkB/doU3fl6Snfn1/Rjjltk1ho7Dea5f8K5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=3ZpoIMZn; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1733416041; c=relaxed/simple;
+	bh=KIKU7vNg+z/Wt1u6A5HZLGcWAsp5tnmkpoh9k7jl7fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gl5U1QPimNv0IQVXUgQm90c1K5tCh8ZS2GSeKelaJDIf5ecENraxhyrw/0mqCR5acY2b7j9Bf0KLzCCfujeMk9nWWjtZ23OepGwjKY8DEjRuieYY1b5HyFsnXxL++F20/KVOhtr/ekoSbLtcGQUctIDJmJytxf2R9VZICShTGlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kGeMbJqD; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="3ZpoIMZn"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-53dd57589c8so2474116e87.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Dec 2024 08:24:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kGeMbJqD"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7fcfb7db9bfso933574a12.1;
+        Thu, 05 Dec 2024 08:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733415897; x=1734020697; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ItHEVA7I8S1EP8oyTKl1F93KEEHRVDFUauUtw/1Acb0=;
-        b=3ZpoIMZnwjCl4Vv5bu6PGSXVdDmY7k4Cj1zgHc6F/cvtw8CM1rNR1LTJDsCfgmd0g2
-         BceSlvbQiLyYiwl1rdWJ3jv2Ns4UxCWRnsrFu4TQEusFPgx7FkT2UIodCH6L3llBjvZX
-         XNAHzd6Taqadu0P2fGi/yUIsqcbc2LJaCMf0KU5YlqUl8Ra8J04m6hedyjqo7k0PtBfa
-         YzZpvhommBUg5ON/+IUYW1PeMHGPsGOGeDu3G435iCu3IM89jIWqEOC9Hd0bT3dOemUj
-         +5wiSeoDLmTU2wBbs3vqgyCGSboeppp2+z3qZoXORDMgU0UpKaORWbQqfQFXw+JpXtdd
-         NE3A==
+        d=gmail.com; s=20230601; t=1733416038; x=1734020838; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UmVy9retQhH8au80HraGWl14e7NomlL+OC1Ht0/e3l4=;
+        b=kGeMbJqDvgaIwdf5xmi43ddHftwlzjgB655O/f8tR9kzPoR0d+9oV1kCR4CVy+iB6I
+         XSMlWrZ+e1I9zmmcqOvVU3UZJTEixj3h4DvLTBC0Ie+AWnSbZbNqWmo2k/mBjQa9RGVa
+         QNRX8S15tDB4pedUIvk8EVAO08cVHoC/GQ/B/GQOCH+nGCa8DQzCePH+YLRh/JPh0tOw
+         3QsaAq7H9KjHwxhqasJHPImi4xSU02u3GYDhkUUJTxbc3nPNSuPXbsMEMvzspl5BYUhm
+         6kVP6+xY3k59LuOzhDY4Om9YDf4gLtsqMqLbjrBdHpRE0ht1keTL+BCl5nHghxqp0zJw
+         DOsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733415897; x=1734020697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ItHEVA7I8S1EP8oyTKl1F93KEEHRVDFUauUtw/1Acb0=;
-        b=Sge82RrVhWvXoeLCvaIOWx25bESo5ihnpzuENaopa0HhZ4NZLi7RjMNRcsdQP3CuOA
-         KmG53bwrk6k4SU2WIUiM4w0Ub2HC012hn8+LbowdJruhAkNASFq2RSNrqJXAfG8/kNWY
-         2SCgDfQ673pg71XG5dpsOpZV7SAR92E578vpd13GFnOb2THWmLNak5dq04iLE3wO7php
-         tFX2gYQ+kVR1aSa+R+sbTwOJvjmQmo6ktG3HtArMPjbcUl2rZXg0s97nZhIlu9+Pe1sF
-         duNraarq5CvgEoLr0PKxrpnQf5RXjkcJ/H2ahHPfv23bqhSim8wsalaeusEygOrKnSdy
-         x3iw==
-X-Forwarded-Encrypted: i=1; AJvYcCUpPtbRaZeIXbeD25q4u+zMMLU+XF8AyT1efPAOE/6LEBgwHBnshg2dDFmDJNjLK2gDuwE6BWHeiebiQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvRQK0U1lTAcLKR7+zFKgHDO4Mn4IkZSGFTH5hPfI2h6Ah810g
-	/v0MQOZ5AWNU3lVGpeJ0PqChzib4HLkuy6+rp0dN8XChNVY23WKeVwzFV5UV/UvlL2FtQ1QdsEA
-	qdf8h1lHJ1aF+ABMsa0CDBWY5iuzEdob7I1ZShg==
-X-Gm-Gg: ASbGncslCavKFF4ewum1Kfo3XCoGKfwRuBa0/Y7/iiPmrMNXjExnkrSqd2/gngWGj4N
-	4BuBjhCqUS9fd7Io2cc4VFs1v9MC9OyAWLRG3Wl1byUyCxS4/232m8UlLnhC6lA==
-X-Google-Smtp-Source: AGHT+IErYJU9bnmgh/S4XgU0jcrMWfkUEiJSX94XfyJ1xliCjLlWQwaDM6P30GxT6teJ6fjjXCYzQKweIZQ1ynm3Yi8=
-X-Received: by 2002:a05:6512:4006:b0:53d:f6bc:23ec with SMTP id
- 2adb3069b0e04-53e216f74ecmr1077273e87.5.1733415897149; Thu, 05 Dec 2024
- 08:24:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733416038; x=1734020838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UmVy9retQhH8au80HraGWl14e7NomlL+OC1Ht0/e3l4=;
+        b=qqkurgkZmSzCEKVDZGOKl9uR8H6XfH4EuYeLvqm/2RCj11lpXh/8KaReSOUBhNZLfd
+         ZUPoChdz3FUpvZy7OUVxyD/uaKzGFVqsr3VcfPzULUT6dKKkIqwIhT+lBHEuk3W2tTbt
+         3guLIkm84+HS1L8Jiu9zutwmbEfOYnVFiUAOofx1DMVJ8VPCqbPeDsBGJqwRA2uZpk0J
+         /swg93GxpeQSV2D8kaeLDezthsqs3Olamm5CnhPavJkMph1xEJgqffrq8ge+ZztsvsXq
+         v61m2ajRRqheVnO6diJAhw3x6iKCIrvZmbiM50lzCqE3cnONLZUPpdGGnWufhS1NdN4K
+         WNhw==
+X-Forwarded-Encrypted: i=1; AJvYcCV0AXk0MOJnEg4oqXRHoZVYJ+wO8+udqHUm2vM4JSgiPd0J8TvUYnnoJE07aAnEYIZzSDUilrWsZlwD+Q==@vger.kernel.org, AJvYcCWk6murul07BFPZkoPfPdHI20iu0YwlRrlKE2yq8s/mG41bGthFVaUP5Z0JoU+G8R3VslAHlnmJ65E8@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeyeJ8i2HvGcbYdtOls/D5THJWWYwjrHCui6mUl15WUEU3Sf/R
+	JVKOppwSct8msZd5R/ZsXBKubtsD3/bx+2SBumIVnNyHkLu0fdyR
+X-Gm-Gg: ASbGncsRMMlP9G5fHJ4aHXswEWeqzq5VPeFwARFeM+/mTcDZxIDD6ZGd2NDGqQzJ6gY
+	mO8zbVnXjBYd2OwMvoAQQd80Ji+q8kCmZHHDqikTPVIPvtdhST88oHx09lYHs/yIM300WahFQSI
+	NtrTx+33BaeEqHF4MWO3CbB4ocKC2W7go4HGaZWWcq1u/P/hnCqhA912oiyeHTRlHV08Sn7NgL1
+	rnpypa5TZkPmY3kefuntbqqd07KeN7x9EPP3y/Un5AdN1nN0QH4vfiSYCTXK2U=
+X-Google-Smtp-Source: AGHT+IEfMtihQO9z97g/N9babHIuzjUsUU5ANaygqGEoAOe77AI6HGqvZzZIxjE45atU0Z9Uubajrg==
+X-Received: by 2002:a05:6a21:78a0:b0:1db:e8dc:4ae1 with SMTP id adf61e73a8af0-1e1653b996amr13655152637.17.1733416037557;
+        Thu, 05 Dec 2024 08:27:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2a90317sm1429268b3a.113.2024.12.05.08.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 08:27:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Dec 2024 08:27:15 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	George Joseph <george.joseph@fairview5.com>,
+	Juerg Haefliger <juergh@proton.me>,
+	Riku Voipio <riku.voipio@iki.fi>,
+	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
+	Zev Weiss <zev@bewilderbeest.net>,
+	Eric Tremblay <etremblay@distech-controls.com>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Rob Herring <robh@kernel.org>,
+	Mariel Tinaco <Mariel.Tinaco@analog.com>,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Potin Lai <potin.lai.pt@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Konstantin Aladyshev <aladyshev22@gmail.com>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Initialize i2c_device_id structures by name
+Message-ID: <89b8d605-c5ac-490f-977d-76315d6d5f46@roeck-us.net>
+References: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com> <20241205-const_dfc_done-v3-8-1611f1486b5a@quicinc.com>
-In-Reply-To: <20241205-const_dfc_done-v3-8-1611f1486b5a@quicinc.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 5 Dec 2024 17:24:46 +0100
-Message-ID: <CAMRc=Mf--vRm15N2au-zvP89obcxRuk+3OOLqFtrjgg61_LotA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/11] gpio: sim: Remove gpio_sim_dev_match_fwnode()
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	linux-sound@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
-	linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com, 
-	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
-	netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
 
-On Thu, Dec 5, 2024 at 1:15=E2=80=AFAM Zijun Hu <zijun_hu@icloud.com> wrote=
-:
->
-> From: Zijun Hu <quic_zijuhu@quicinc.com>
->
-> gpio_sim_dev_match_fwnode() is a simple wrapper of device_match_fwnode()
-> Remvoe the unnecessary wrapper.
->
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
->  drivers/gpio/gpio-sim.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index 370b71513bdb529112e157fa22a5451e02502a17..b1f33cbaaaa78aca324f99c45=
-a868e7e79a9d672 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -413,11 +413,6 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip=
- *chip)
->         return devm_add_action_or_reset(dev, gpio_sim_sysfs_remove, chip)=
-;
->  }
->
-> -static int gpio_sim_dev_match_fwnode(struct device *dev, const void *dat=
-a)
-> -{
-> -       return device_match_fwnode(dev, data);
-> -}
-> -
->  static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device=
- *dev)
->  {
->         struct gpio_sim_chip *chip;
-> @@ -503,7 +498,7 @@ static int gpio_sim_add_bank(struct fwnode_handle *sw=
-node, struct device *dev)
->         if (ret)
->                 return ret;
->
-> -       chip->dev =3D device_find_child(dev, swnode, gpio_sim_dev_match_f=
-wnode);
-> +       chip->dev =3D device_find_child(dev, swnode, device_match_fwnode)=
-;
->         if (!chip->dev)
->                 return -ENODEV;
->
->
-> --
-> 2.34.1
->
->
+On Thu, Dec 05, 2024 at 04:28:33PM +0100, Uwe Kleine-König wrote:
+> I intend to change the definition of struct i2c_device_id to look as
+> follows:
+> 
+>         struct i2c_device_id {
+>                char name[I2C_NAME_SIZE];
+>                /* Data private to the driver */
+>                union {
+>                        kernel_ulong_t driver_data;
+>                        const void *driver_data_ptr;
+>                };
+>         };
+> 
+> That the initializers for these structures also work with this new
+> definition, they must use named members.
+> 
+> The motivation for that change is to be able to drop many casts from
+> pointer to kernel_ulong_t. So once the definition is updated,
+> initializers that today use:
+> 
+> 	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
+> 
+> can be changed to
+> 
+>         { .name = "adp4000", .driver_data_ptr = &pmbus_info_one },
+> 
 
-Please use get_maintainers.pl to get the complete list of addresses to Cc.
+How about introducing a macro for that instead, similar to I3C_DEVICE() ?
+That would enable hiding the data field definition completely from drivers.
 
-Bartosz
+> and some more casts when the driver data is used can be dropped, too.
+> (e.g.
+> 
+> 	-       device_info = (struct pmbus_device_info *)i2c_match_id(pmbus_id, client)->driver_data;
+> 	+       device_info = i2c_match_id(pmbus_id, client)->driver_data_ptr;
+
+That code could (should ?) probably use i2c_get_match_data() even today
+to avoid the type cast. It would also be nice to have a similar API
+function returning ->driver_data as kernel_ulong_t to be able to avoid
+dereferencing ->driver_data directly if the value is not used as pointer.
+
+This way ->driver_data and its use could be made internal to the I2C code,
+with dereferencing completely handled in the I2C core.
+
+Thanks,
+Guenter
