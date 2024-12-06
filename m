@@ -1,147 +1,101 @@
-Received: from pv50p00im-ztdg10012101.me.com (pv50p00im-ztdg10012101.me.com [17.58.6.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372332BB09
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Dec 2024 01:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC7813C816;
+	Fri,  6 Dec 2024 06:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733446993; cv=none; b=S5oa2pSMVaBvroRv85zw+3tkJXQaJ//r0attRoIe7hSh1yAxHS/RDBn6Ej58dPhki/tOK5UzId3pl85o04XTBubqEyZlY2jtk8fwrxvRGwztwGQ94OqHwwSIwv+f/8ay2a/GAnVS3k/LvmkJRV6nJvRFcn2TMKFhjL5GxyK/xOI=
+	t=1733466527; cv=none; b=dDA2HPLqL6rDvgL/u5FB/cB9aeLHoRaKrDjxfF4jqOCM5eEORgN67xWO682njXClgMjzLo33XJAeIjQYNKjKViJuudhdTQWkLfng9u4L74myjJwUPkqvC5XLbR36JSpYxHmEO/hpapSUF0vlkToXlwKfu1PS8isY3WT8FdTO6xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733446993; c=relaxed/simple;
-	bh=mXKzMLG9P0/fFy8yPc/3Wnedq5fjCqRwp/fSEiqY4jg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F3BjdAiW8bTo+xHyhDb31GrSBJtxsV2N6Di7tecxv1Q+RD1gwNXrunGNbT34vvUCx8KNJZ8WIqyirA+w8pON68ZZspzAFvjFJDR3rHuRVisXxBJlYt3G27PYveTbEyzC9R9TEkHbkNSoYd1EPwWAAT9o9y9NIFlot9r4bZ2QePE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=O0gm/SRx; arc=none smtp.client-ip=17.58.6.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1733466527; c=relaxed/simple;
+	bh=ku2GDyfP0I4a3ChkgQTl2m4UxEP/9euymMyhGZ8Qq6Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hQLs8Gv55BhFlVUZ4DH69lwmdwg/7aelrwToNUx5FrR59aApab13GTynweiE3a75QSSVtIhBiSlLICPosTILBbDX7YlZ6Xa3aCkqEGHDRQ4L1i0OzfGEAVQy0WJse28jTAC1yTYaP6S64OSqJWSRlTDMCCJ9a2tr4qCuMdGQ0/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AYGaQj/b; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="O0gm/SRx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733446990;
-	bh=MLA/o3eoWdFJOEkeLQDHb3UrBR7EySOllMZRXPDaXaQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=O0gm/SRxvbNugGvJblrfWTbeL81Zh+NhIgrv+vxCeahtE+oxwN3nZC3HwwKuihfnx
-	 4cXiY5M5FcD5fV/sMsHvjU5WBmCcNVT7ZwGkknlvZVnSXD+x6XGDkkFFIF/04e6gQZ
-	 Zg2fxY0KWh5ofbG3L8rwEFb9qCszciEJ1vWxrZ9PoginG+0DqELBU5tErjcEkVaLcU
-	 oGYsHPfXPbZWAglOVp26uGDUXsLkxY8ORVxthbd4ILpIbk0Z7w+bUHoMKXTrki4Gnv
-	 JzRHbqv5bfO46l/pgkQl/5OuD1YtgQ+8yIZfoBNlV5SY0vot5qXT1Zg0ppVHga6NSk
-	 Y07hiEdKxi0sw==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10012101.me.com (Postfix) with ESMTPSA id DC943740313;
-	Fri,  6 Dec 2024 01:03:01 +0000 (UTC)
-Message-ID: <9d2de147-8fc6-419f-bf3e-03f6b86cbb44@icloud.com>
-Date: Fri, 6 Dec 2024 09:02:58 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AYGaQj/b"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2155157c31fso13281465ad.1;
+        Thu, 05 Dec 2024 22:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733466525; x=1734071325; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l0H6wnCNakC8ef4Sgz33EY7S2rn0hXbOGHGBAe0xGoY=;
+        b=AYGaQj/bE46iJnG5Croa3b+h2TJ60BzXYQ7/h4NC4VkCdH92FQdf0X3Brv54jJS7FD
+         Re3aKwc7YdHN1zF96QgXlYORiYoyRvVGHsJbDT6vQ5R0VlzFMDRFUtvFyT1YLp7kEh73
+         MFwameai1z8QxgdSdHSGCzyKiD8OnFppfdw+TdYpu8yrejbJG3a0+JiCxnQt0mb48jDQ
+         EWPsbuGeUO8wpd2v1vBVdn4GnRYVRQVtVvkwlN9F4oJ0SK1QW8sH/z+BXZoaFAvLKwLf
+         itjrTub/+igItsiykbvGpFU5du3yQWyZe4sBmNgQXF/v+ZR7DNcVRo9qUshZxTu5nbVw
+         gpag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733466525; x=1734071325;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l0H6wnCNakC8ef4Sgz33EY7S2rn0hXbOGHGBAe0xGoY=;
+        b=MQT+zGkXe6Y6A8mOLVAVksqUFK4xyX+xshYm2jf8MxmrKu2XUxYlC5548HaBy1k/PM
+         Zlf0YL+pHifjncI277XQNYBx3Fqx8yAZEoIRG5OghakBs5g7htaS9bYapPqp4MNSGBNr
+         6SYZlnc7viMLHypvlsy44tzooOqoIj0bU4cVPLWN5KwN0xT6nwUKmKK0bnpY5zZm15WX
+         CETWC/Miy2K9GVsoY/OGA1F3FeC1YZoZnAUorR8uJSSwMQrRirgJf9V0REWgxD50lz1j
+         hGAo53sLPyqxCT49SRNMCoLH8ZQr/bUboEO+0ELEgIHhT2i8R+KhijO/MXzHR48AS8Q4
+         Bskg==
+X-Forwarded-Encrypted: i=1; AJvYcCVO7QY3bOxF1Yx4rQN61jVJ1KyUPxqGg1+LR5xn/7Jwjd5LIDvvHeSIUXWitKFIdkFIFW7dCoDwpN8uoEwZ@vger.kernel.org, AJvYcCWrpDT/UaGzW5Fk3phFcOnHALB9Cg6PL7YCwkYPZqvrk9FGksKIgC7zyN1IIrbNUhlkbAoDKVu/1Z63vA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxX9j9TtAW9gkn4pC6ikxUSCI8oKRstDCzgZdOwYkvFRT9OUbNR
+	WYJXxzk4OHkuUDhZCxsS9MzgwEmY/yimEq7LmFXh06b8kRNjTFHH
+X-Gm-Gg: ASbGncs6zn27GYqej/F0e5MG+IMLLdoOJMCr9lmJX348qo4m1kQzq0NJYcRv2/gY05J
+	UalVNdh4dkZzbbZ0Bz7SYlxnTIwT1iO63/gtNQy1yw8tTQ8A9/pHObK+ph6cp9pbNMhsm4Txt7g
+	A9lNlNp0f7630gqZW1QKilzFqNda3b1ez7/ApvWJ/mse4q84dT47r6HLskwHVFNbPk08LasxXrg
+	hAxwqdfZYfq/kqO4Z7E6EH8YqJ4KO2M46K7+1YC5HtcQOIwiAsqrTU=
+X-Google-Smtp-Source: AGHT+IEynxMlK7XFyqJw2A+uhIBlT5Obz4BprLBL5iELA9B/m000mUOYzDOZzAsT+E6QBVEAVgNT5g==
+X-Received: by 2002:a17:902:ce8c:b0:20c:d71d:69c5 with SMTP id d9443c01a7336-21610821347mr29971235ad.4.1733466525453;
+        Thu, 05 Dec 2024 22:28:45 -0800 (PST)
+Received: from HOME-PC ([223.185.130.193])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8f29bcbsm21889075ad.262.2024.12.05.22.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 22:28:45 -0800 (PST)
+From: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
+To: jbrunet@baylibre.com,
+	linux-hwmon@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-kernel@vger.kernel.org,
+	Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
+Subject: [PATCH hwmon-next] hwmon: (pmbus/tps25990) Remove unnecessary call
+Date: Fri,  6 Dec 2024 11:58:39 +0530
+Message-Id: <20241206062839.313292-1-dheeraj.linuxdev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/11] cxl/pmem: Remove match_nvdimm_bridge()
-To: Alison Schofield <alison.schofield@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
- linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
- linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
- linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
- linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
- netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-10-1611f1486b5a@quicinc.com>
- <Z1It83v8xuNuLrOt@aschofie-mobl2.lan>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <Z1It83v8xuNuLrOt@aschofie-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: Mj6KRfIlz3zE_ytOMK9rghPIY_t2GqYx
-X-Proofpoint-ORIG-GUID: Mj6KRfIlz3zE_ytOMK9rghPIY_t2GqYx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-05_16,2024-12-05_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 adultscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412060008
+Content-Transfer-Encoding: 8bit
 
-On 2024/12/6 06:49, Alison Schofield wrote:
-> On Thu, Dec 05, 2024 at 08:10:19AM +0800, Zijun Hu wrote:
->> From: Zijun Hu <quic_zijuhu@quicinc.com>
-> 
-> Suggest conveying more detail in the commit msg:
-> 
-> cxl/pmem> Replace match_nvdimm_bridge() w device_match_type()
-> 
+This commit addresses a structurally dead code issue detected by
+Coverity (CID 1602227). An integer is returned early in one of the
+switch cases causing the later statements to never be called. The
+return statement is removed following convention in the other switch
+cases.
 
-good suggestions
-will take it in v4.
+Signed-off-by: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
+---
+ drivers/hwmon/pmbus/tps25990.c | 1 -
+ 1 file changed, 1 deletion(-)
 
->>
->> match_nvdimm_bridge(), as matching function of device_find_child(), is to
->> match a device with device type @cxl_nvdimm_bridge_type, and is unnecessary
-> 
-> Prefer being clear that this function recently become needless.
-> Something like:
-> 
-> match_nvdimm_bridge(), as matching function of device_find_child(),
-> matches a device with device type @cxl_nvdimm_bridge_type. The recently
-> added API, device_match_type, simplifies that task.
->  
-> Replace match_nvdimm_bridge() usage with device_match_type().
-> 
-
-sure. will do it in v4 by following these good comments.
-
-> With that you can add:
-> 
-> Reviewed-by: Alison Schofield <alison.schofield@intel.com>
-> 
->>
->> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->> ---
->>  drivers/cxl/core/pmem.c | 9 +++------
->>  1 file changed, 3 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/cxl/core/pmem.c b/drivers/cxl/core/pmem.c
->> index a8473de24ebfd92f12f47e0556e28b81a29cff7c..0f8166e793e14fc0b1c04ffda79e756a743d9e6b 100644
->> --- a/drivers/cxl/core/pmem.c
->> +++ b/drivers/cxl/core/pmem.c
->> @@ -57,11 +57,6 @@ bool is_cxl_nvdimm_bridge(struct device *dev)
->>  }
->>  EXPORT_SYMBOL_NS_GPL(is_cxl_nvdimm_bridge, "CXL");
->>  
->> -static int match_nvdimm_bridge(struct device *dev, const void *data)
->> -{
->> -	return is_cxl_nvdimm_bridge(dev);
->> -}
->> -
->>  /**
->>   * cxl_find_nvdimm_bridge() - find a bridge device relative to a port
->>   * @port: any descendant port of an nvdimm-bridge associated
->> @@ -75,7 +70,9 @@ struct cxl_nvdimm_bridge *cxl_find_nvdimm_bridge(struct cxl_port *port)
->>  	if (!cxl_root)
->>  		return NULL;
->>  
->> -	dev = device_find_child(&cxl_root->port.dev, NULL, match_nvdimm_bridge);
->> +	dev = device_find_child(&cxl_root->port.dev,
->> +				&cxl_nvdimm_bridge_type,
->> +				device_match_type);
->>  
->>  	if (!dev)
->>  		return NULL;
->>
->> -- 
->> 2.34.1
->>
->>
+diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
+index cc0f5c7cecb0..0d2655e69549 100644
+--- a/drivers/hwmon/pmbus/tps25990.c
++++ b/drivers/hwmon/pmbus/tps25990.c
+@@ -130,7 +130,6 @@ static int tps25990_read_word_data(struct i2c_client *client,
+ 		break;
+ 
+ 	case PMBUS_VIRT_READ_IIN_MAX:
+-		return TPS25990_READ_IIN_PEAK;
+ 		ret = pmbus_read_word_data(client, page, phase,
+ 					   TPS25990_READ_IIN_PEAK);
+ 		break;
+-- 
+2.34.1
 
