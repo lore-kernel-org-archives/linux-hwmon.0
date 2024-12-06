@@ -1,115 +1,86 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602D71DE8AB
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Dec 2024 09:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E333199E92;
+	Fri,  6 Dec 2024 10:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733478361; cv=none; b=khj0/axrqCb6sMGZprS5v+pYDcRuov9vaoHnVjh02QwIsZZhMHI6/VCqKKZmMrxa7/29wlG7KaTfxN2XszFgE4/5dsiRyhhvCQsFjPyatRmPMzNXUSlg2hlyTSiUrNsORkXMF0c/tmvZ2XCTUoN2tj1pPCpVsKzaKjR9g9WnRv4=
+	t=1733481280; cv=none; b=RSI8tzAs9nd1Oj4bqq7qkIU1K9f/IWAZkrarvk7os6vVwfzBQmSjVJ1ZXuwBpyUSOqj3yyHy9EsI7LpaQIKibVaDsWhQZ64TsfJ4EuBaC9NlIv5LzmlSacbeomP0fONGkplvOOjIHTu6AJJ6T7EXrfPnvK9aOW2V3eaXpbfJa9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733478361; c=relaxed/simple;
-	bh=EXpaOzMIJO2JzlWxcLt/F19POk1LLWLqxGnBEUnF9O4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NUTgK+Pxd1i/7ZVPdVlSByN7QfMkUr8Bgej4rRwDIJy782FDgKd+dG7yWsNLLWnm+bEjQdZxRxZVR/xpFhZLxyGzmG66WaZF3nxZ7GnhKh3hFGb1JSxt/OixTn0R0cEeQzxoTgwLwn1J5tGPl1/kfQbfggl8eQnz8XbIMs09BdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=x8QeLDF8; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1733481280; c=relaxed/simple;
+	bh=i+zfIBw5DvlGVG+5jujERRBXQi9e8CjS112aE93QRYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SSEeJ+7b6rQ7FZEUYXdj6tO80LsnSEw4HQperMtdQOa62uyyG6oGnkGtsF8O+EmpCokxZAV9blqAJy5vFUFUmHm9OvpvAXLVjcumft8tEyLnh1o/emOmRaHX//Xbs58oZJOC7JkcA0ascA7HvXI/2ftdAUN6U8LVt4yGhoXTxHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NI0ddyqe; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="x8QeLDF8"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3862d16b4f5so213861f8f.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Dec 2024 01:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733478357; x=1734083157; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RAgxhRkt3GIK9XtEmGgQLQ0NoGPO7kAzWDCkDDiu6YY=;
-        b=x8QeLDF8mGvJKzsdwWB5CVfPjm+2K4kPgRirKvHtUjy7NgyV8eaNysBbix6rmjaJS2
-         Wht49uAypXJ4KqiHCwySkl3Y+8ZJUxsmRRkXX8QVpKUbOY0M+MzYIH0z4F1FqBhb6kFj
-         qzBk5R2VH1TNmOhbGd8G7UAGC1ws7bX7WdL6m6OCgz3WSosx8Mpt+rYuuOQVIhIibqAY
-         f4KRUACoJBStrC3dg6PWcwmvo9zRNCjGso3AlcXECm+nGlaQTket03F8mWf26FPtBXpq
-         HCEz4dDqTTxSNDuMEPmenWbTTGL0uQBqmjTgA69JoUqH08xIEKFvo6zmFlLfhtY9EUrM
-         EuqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733478357; x=1734083157;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RAgxhRkt3GIK9XtEmGgQLQ0NoGPO7kAzWDCkDDiu6YY=;
-        b=sE2rHtsK8gzzu80g0jYtiiyVjLeYZXm+juHmZKnxeisl/9+ZZEaPcIylJZtDnNaiau
-         OY4mFTCvDiapCQoZUOxG3RO9sN50FiLYKY/5AfVseunCv9pkD77JFyWmh68B+5brB1Cm
-         wZpSWIWVNDOIb6US/XoOoRl+p39SWkLUavMHBUoBITcFYzDxEH7OJK536Rjpqwgm0hd/
-         sF9MXp5ImUi6LcvtzUGEWPCi8R3FIOU1DLEv+LQSYxmHpaP/Krs2Sag1CKFEWtRmgMtO
-         5wzYncXtYIrOBRCuJ7nKSpjp4lfZkU3IIR6UEuY0gEFZQ7m7T/7EJw984kNKwVybZohG
-         6TnQ==
-X-Gm-Message-State: AOJu0YxguIHz0rUhRrSjae/Q7DjRUK5ZxGmt7XkmMPoJjQms9fMrlKiF
-	6fIhFfUBx4ZNJyEMWUvRz+f1xH1BhkQABp5kY9k4Tl7GtFQFfXgXjJ1elUvl1bs=
-X-Gm-Gg: ASbGncsuPvaGH2Q9d5ZZcwMqmE9eRTq6WCq6pr4FZlnAfLaVNF0XryVcQcNuHYGBYKM
-	7JJxHfdox/9yr4uowSfThf6w5cCwjRdAFvn1/wtxgc3gzZnVZI8EaqXWQ2d7eWW0hWcZegZYO1Y
-	Y+EZ36LEHJy60KL//otmrflc/ZTKMFhWSlqTZE+rMmPiPN/INBJ5gKVn68Ip+dJbN+IHfry7Csn
-	+wKM8osG8SP8khfR+pqbC78AxLoP1te+DL/xCZD23GmtiQx
-X-Google-Smtp-Source: AGHT+IFpWnz6cknA/FLLo/mpoGRgYLat+BZu8YGcPpp2rwce+nNI4fye2NV2ENM+Li0+R/b45TW8VA==
-X-Received: by 2002:a5d:64ab:0:b0:385:e10a:4d97 with SMTP id ffacd0b85a97d-3862a914a05mr1834992f8f.21.1733478356654;
-        Fri, 06 Dec 2024 01:45:56 -0800 (PST)
-Received: from localhost ([2a01:e0a:3c5:5fb1:3ba0:2e9:e83e:9420])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3863002d29fsm182533f8f.111.2024.12.06.01.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2024 01:45:56 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [bug report] hwmon: (pmbus/tps25990) Add initial support
-In-Reply-To: <b2b550ae-a2b0-41f8-a0ce-9dafd1714f8c@stanley.mountain> (Dan
-	Carpenter's message of "Fri, 6 Dec 2024 12:37:40 +0300")
-References: <b2b550ae-a2b0-41f8-a0ce-9dafd1714f8c@stanley.mountain>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Fri, 06 Dec 2024 10:45:55 +0100
-Message-ID: <1jplm5jga4.fsf@starbuckisacylon.baylibre.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NI0ddyqe"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B760CFF80A;
+	Fri,  6 Dec 2024 10:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1733481276;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2ajKPXRG0k9JASC73/ZnAiBhOVfRI5UgSWHK8cjfgbY=;
+	b=NI0ddyqe3dsSmjff9NxKmmSpGUb/70r3vZO6id9LQjdJEOUuO8puBx6QNzi6QYjbbDgWMy
+	jOoQj7fjpmsmBCObRsCjDUchSgkQiC/vapFzgkffT+dVyut43lFdzMWovHQtuSVMXRvRL/
+	xjhX+D64S+6PvEAs4Q1sEEW7D/s4HDvZpH5l72zASCfxyqR6tK20wPs9jvk2wk7ex1mo/K
+	+rhvjXEWF+28Tb74KI81KpR0f8P6yceD5rn8L7jyohcQAMzE7gOIEa/Z6Ky1Eiq2fVSsFd
+	p/cAMQPJTGgFbKskLK7AazwTAvBwulMFaU+4wsLjKgZcoKOKULpFTNVpYM9hxQ==
+Message-ID: <02c38a22-6196-4b53-b092-5185b4df134c@bootlin.com>
+Date: Fri, 6 Dec 2024 11:34:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] hwmon: Add Congatec Board Controller monitoring
+ driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Lee Jones <lee@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+References: <20241115-congatec-board-controller-hwmon-v3-0-1c45637c8266@bootlin.com>
+ <20241115-congatec-board-controller-hwmon-v3-1-1c45637c8266@bootlin.com>
+ <e91a3c4a-6324-471a-a1eb-47eb329d2d6b@roeck-us.net>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <e91a3c4a-6324-471a-a1eb-47eb329d2d6b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On Fri 06 Dec 2024 at 12:37, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+On 11/15/24 16:57, Guenter Roeck wrote:
+> On Fri, Nov 15, 2024 at 04:39:08PM +0100, Thomas Richard wrote:
+>> Add support for the Congatec Board Controller. This controller exposes
+>> temperature, voltage, current and fan sensors.
+>>
+>> The available sensors list cannot be predicted. Some sensors can be
+>> present or not, depending the system.
+>> The driver has an internal list of all possible sensors, for all Congatec
+>> boards. The Board Controller gives to the driver its sensors list, and
+>> their status (active or not).
+>>
+>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+>> ---
+>>  MAINTAINERS                |   1 +
+>>  drivers/hwmon/Kconfig      |   9 ++
+>>  drivers/hwmon/Makefile     |   1 +
+>>  drivers/hwmon/cgbc-hwmon.c | 304 +++++++++++++++++++++++++++++++++++++++++++++
+> 
+> Two problems:
+> - Documentation/hwmon/cgbc-hwmon.rst is missing.
+> - "git am" fails due to a conflict in MAINTAINERS, meaning it is not based
+>   on the mainline kernel.
 
-> Hello Jerome Brunet,
->
-> Commit 6fbd1e5d9876 ("hwmon: (pmbus/tps25990) Add initial support")
-> from Dec 2, 2024 (linux-next), leads to the following Smatch static
-> checker warning:
->
-> 	drivers/hwmon/pmbus/tps25990.c:134 tps25990_read_word_data()
-> 	warn: ignoring unreachable code.
->
-> drivers/hwmon/pmbus/tps25990.c
->     127         case PMBUS_VIRT_READ_IIN_AVG:
->     128                 ret = pmbus_read_word_data(client, page, phase,
->     129                                            TPS25990_READ_IIN_AVG);
->     130                 break;
->     131 
->     132         case PMBUS_VIRT_READ_IIN_MAX:
->     133                 return TPS25990_READ_IIN_PEAK;
->                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
-> --> 134                 ret = pmbus_read_word_data(client, page, phase,
->     135                                            TPS25990_READ_IIN_PEAK);
->
-> Is this supposed to be stubbed out?
+It is based on linux-next, as the MFD driver was not yet merged mainline.
+Now v6.13-rc1 is available. So I will rebase the serie.
 
-Thanks for the report Dan, silly mistake indeed.
-This has already been taken care of by Guenter.
+Regards,
 
->
->     136                 break;
->     137 
->     138         case PMBUS_VIRT_READ_TEMP_AVG:
->     139                 ret = pmbus_read_word_data(client, page, phase,
->     140                                            TPS25990_READ_TEMP_AVG);
->
-> regards,
-> dan carpenter
-
--- 
-Jerome
+Thomas
