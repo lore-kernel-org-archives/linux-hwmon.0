@@ -1,71 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C46184A22;
-	Thu,  5 Dec 2024 23:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEEF7464;
+	Fri,  6 Dec 2024 00:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733441436; cv=none; b=lVMEzHdGXTXL06qGtcbW6aRJUdmjOLzNff8MZ1racwgmdoeEgpQ+/T1IjOdDZbO2RpdAhTkFjh7VxDdO1nKsSpLf8eHaNzYwrVdv4Tb/M1GkYmdiHCbMIK5KPWgswRvm5LwIp6tZGVFORPCdv0xnqKU9tzhU+4wKD/OUBD0rJew=
+	t=1733444153; cv=none; b=bUmlsK6yWjDFa3+vW/hQ6/ZfvAZpyX5d5EXBRYNUsFt9pArxrDtSyoTiLN7tiirDnwpzrVqxDJwOd8TCW10js1GE+Bvmq7fegdzd/rQ7o7RnjXkJI4yBMtVx5PyFFR83ZEbtjFJIgusWDwK7O2spFxU/lcuQSOKcljM7Ru/O1Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733441436; c=relaxed/simple;
-	bh=I/Bbmecpn8RogQU7kB8TZf0KJSzLC1/N7kmtot7TRMo=;
+	s=arc-20240116; t=1733444153; c=relaxed/simple;
+	bh=asUNDkcijp3U+7fxw/p4+0+/xLSjHkZ0HqaVhow09Co=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HB3tA11pz7riu8Tb1uuAQuBp++WkYM9+IglloJ5HZcVYz06JpoRb1tdKkphj2xFIUcGveJ8Nonlem0Ba0PLSyWFC/etGKrRYbI8H/+9DqZS6eTrMQrzGrJhn0Aioex14RlSBJpJGhbAas8B3IiW5vPguqV/pUQBqw7PrMEMj2iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FikzC+30; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qU0dLGDKD+AG08ef/qitRTsfbhQMGIN7qhc5FloKjhbyKlZlc1Zhi0p+kAc2zL6mv0XJhqT4z0ESr9ZMp7kvuDF6UlGl+W52RQuS0tg/gbYaX8VmJ90zDUOE0fEIszyfLBmWY3Yl9oXvRPwvzI54YffH45FzY/Qnm5KLa985UUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0y2TAyq; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FikzC+30"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733441435; x=1764977435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I/Bbmecpn8RogQU7kB8TZf0KJSzLC1/N7kmtot7TRMo=;
-  b=FikzC+30XI/iOT68dPbfSDHYtDqlGzCwcZQrXiSb3bYr+dxGfq7A6xKX
-   KxaiRp1tf0bwojA7cF+ZMpgDzil6yhfURnBiAOuxmkxNtQMgj4RpupWnf
-   7h2hTotgTGp+TmTuFSqIXbzYULFSf4cLSVPdHec281IBG4FrQYU7U/rmD
-   kCzSnb3V11V6V7QKpJGowrKvP4vjcDL9qdyJFLN8mYUTWdWxDyeJ1zXJh
-   waL6/IjMUXdeCz6Lb4k6FBAQ9uY4+5zmfWqYlQ3/DGbUMCDD2kvOZXmJb
-   OJIMdy0BncCbBUQ3leUyvIfhjH98cAGFito+iy3NMUUCXd8rmOW5rBh+i
-   A==;
-X-CSE-ConnectionGUID: +EcI7RVmT4yfbM0C3nTsmg==
-X-CSE-MsgGUID: jhjbj5ekQpqQd+5KiQf1WQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="37564427"
-X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
-   d="scan'208";a="37564427"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 15:30:34 -0800
-X-CSE-ConnectionGUID: kigTlvqHQOmnUT1IudSx6A==
-X-CSE-MsgGUID: FlGBZXefRl6sPWVdfnP/5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
-   d="scan'208";a="98312134"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2.lan) ([10.125.108.192])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 15:30:31 -0800
-Date: Thu, 5 Dec 2024 15:30:29 -0800
-From: Alison Schofield <alison.schofield@intel.com>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
-	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
-	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
-	netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: Re: [PATCH v3 01/11] libnvdimm: Simplify nd_namespace_store()
- implementation
-Message-ID: <Z1I3lSpcnIIbc7S1@aschofie-mobl2.lan>
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-1-1611f1486b5a@quicinc.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0y2TAyq"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-725ad59ad72so812621b3a.2;
+        Thu, 05 Dec 2024 16:15:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733444151; x=1734048951; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IUoTZbFvvzJufe6Ikwk0n1WmgUHmEpV1FCvkXH9qPWo=;
+        b=W0y2TAyqwHSVypYQ0s7EnLPdoA35+2rfVPcI35hgpLxJrhGuPogHfPvV11MUaAM27S
+         EeFlXwi7WEcSF34BnbpQUSEk44diUDB1G6gvQ6stvSjhJf3bVoQ7QzT/WV/kylrO51Jw
+         nY8Oi+a+QylUnGduCZ862cUxYFzj/vypMWSxobH7lN3FnX7oi84ayRbDUQCNMozcZbYv
+         Dc2+J8/Z2MRhbEdZCdjGBKY7loGYcpmgxKnL8yxqBoipLm6NeSc5MD2A1sjiDf7A8/Ym
+         cXyJkxqtbKzXEbIW7MJwHZC8sCQiIIICwM766HCDEr70JQeFIUk0BRVjLXBaVObpO9Ne
+         uXuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733444151; x=1734048951;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IUoTZbFvvzJufe6Ikwk0n1WmgUHmEpV1FCvkXH9qPWo=;
+        b=EBQd2yEi1wTP4f2EAbWHHIdwuciaxmD40KbnsePJNftJ7goQXVe/+wzp6g9zin9FzK
+         FCURXJvwXDnY/EO9emrD/BVLRZzYriKWbnGz5/B37RYrzuhpCn/Z0gkl4KM/eJbJiDKx
+         kMZj0KtQPzAVRvv5uXwzj7HhfSiIh2bPyJYWYzScfmLkOsGbsXnMqb+g3H+lsNYzaJkr
+         rJ9rqv50z5YjE7p1w1p2Q7atvpjoOVzM3aYf6ugZUB56yjHOS5UreGcceWmShlzcBN4O
+         ATkDM31xBK6qQJDmh5mFw08s9NskTiAx+4ByBfuREQe/cuSzlGSL1yS8iLtgpr9+S4iS
+         WQmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVHLeZouwLJ8RVshndOkXcEAU0wzG+mxxYFybpHcnRAag1VPQvuAbcZUC18Y+Tbcddslay8ITc17N8/eOBU@vger.kernel.org, AJvYcCXrz0VGvBouPkwN1LomNZJcaiK1LROdVaxjin+3wmT11EFGvx68BmhRaJx8RUErlFPR4fccKM+d3cXlCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCfdDr/6ZJ6Tp0w73Pt0MMej13JEPZHl867pFW9UCqHEBhlw+H
+	TAQSpZFySyaEIhzbd/sffvn/Kiw8FOfcFMxKKYuS58FGXpFjwO0GlwrshA==
+X-Gm-Gg: ASbGncvZkFRfEz+yX0ey4FjiGBjRTlZW+GY6hg6MJcRj+1s8zfCcBRTQVE9AvyF7n0m
+	SPbbK0xjBdFj09Qkz95KqL7nG10W+pSKNM92xHDniP8kfQDQEab36xytGrLaoLDDTIXy3FKGzDa
+	oyXBnpMzAnNBvr40VSPvR0GvDOLlewHscRcKEJvo1HTaxmJFRCgQkLewzc1H3TzeoIuGwKQJaE+
+	pgWj9ps8LlNIDQfFH0hZJPUxGxuK8ms/ieXtDQZWeJHpkNLE6Lr8OjybyRn+8g=
+X-Google-Smtp-Source: AGHT+IGFysXISviEnPrP+igegefzLQRo8Zaot9DQVeBNJpxWdeJ+Jp/723Yb2ksHuTavKQX60Iod/Q==
+X-Received: by 2002:a05:6a00:18a5:b0:71e:6489:d06 with SMTP id d2e1a72fcca58-725b7ee94dcmr1978936b3a.0.1733444151196;
+        Thu, 05 Dec 2024 16:15:51 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2a9050asm1876308b3a.123.2024.12.05.16.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 16:15:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Dec 2024 16:15:49 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Karol Przybylski <karprzy7@gmail.com>
+Cc: skhan@linuxfoundation.org, jbrunet@baylibre.com, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: tps25990: Fix unreachable code in
+ tps25990_read_word_data
+Message-ID: <0fa164c7-5562-40bf-b2d9-92ed1efaff8a@roeck-us.net>
+References: <20241205213315.3073207-1-karprzy7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,60 +74,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241205-const_dfc_done-v3-1-1611f1486b5a@quicinc.com>
+In-Reply-To: <20241205213315.3073207-1-karprzy7@gmail.com>
 
-On Thu, Dec 05, 2024 at 08:10:10AM +0800, Zijun Hu wrote:
-> From: Zijun Hu <quic_zijuhu@quicinc.com>
-
-Hi Zihun,
-
-Similar to my comment on Patch 10/11, this commit msg can be
-explicit:
-
-libnvdimm: Replace namespace_match() w device_find_child_by_name()
-
+On Thu, Dec 05, 2024 at 10:33:15PM +0100, Karol Przybylski wrote:
+> The tps25990_read_word_data function contains a block of unreachable code caused by the syntactic structure in the PMBUS_VIRT_READ_IIN_MAX case.
 > 
-> Simplify nd_namespace_store() implementation by  device_find_child_by_name()
-                                                  ^using 
+> Specifically, the return TPS25990_READ_IIN_PEAK; statement immediately exits the function, making the next lines unreachable.
+> 
+> This patch removes the return statement, leaving the expected handling.
+> 
+> Discovered in coverity: CID 1602227
+> 
+> Signed-off-by: Karol Przybylski <karprzy7@gmail.com>
 
-Otherwise you can add:
-Reviewed-by: Alison Schofield <alison.schofield@intel.com>
+Thanks a log for the patch. I squashed it into the patch introducing the
+problem. Please note that the above commit message is missing line breaks.
 
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
->  drivers/nvdimm/claim.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/nvdimm/claim.c b/drivers/nvdimm/claim.c
-> index 030dbde6b0882050c90fb8db106ec15b1baef7ca..9e84ab411564f9d5e7ceb687c6491562564552e3 100644
-> --- a/drivers/nvdimm/claim.c
-> +++ b/drivers/nvdimm/claim.c
-> @@ -67,13 +67,6 @@ bool nd_attach_ndns(struct device *dev, struct nd_namespace_common *attach,
->  	return claimed;
->  }
->  
-> -static int namespace_match(struct device *dev, void *data)
-> -{
-> -	char *name = data;
-> -
-> -	return strcmp(name, dev_name(dev)) == 0;
-> -}
-> -
->  static bool is_idle(struct device *dev, struct nd_namespace_common *ndns)
->  {
->  	struct nd_region *nd_region = to_nd_region(dev->parent);
-> @@ -168,7 +161,7 @@ ssize_t nd_namespace_store(struct device *dev,
->  		goto out;
->  	}
->  
-> -	found = device_find_child(dev->parent, name, namespace_match);
-> +	found = device_find_child_by_name(dev->parent, name);
->  	if (!found) {
->  		dev_dbg(dev, "'%s' not found under %s\n", name,
->  				dev_name(dev->parent));
-> 
-> -- 
-> 2.34.1
-> 
-> 
+Thanks,
+Guenter
