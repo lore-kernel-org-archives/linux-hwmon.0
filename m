@@ -1,158 +1,102 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AB51DDC35;
-	Fri,  6 Dec 2024 07:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12ABF1DE8AB
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Dec 2024 09:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733471861; cv=none; b=gBV+KBFmc2UK8FP1+Bt8j6/6Ij8hSt9hQt6+jrhSqDlRIYpsMSZS1rTKo7rpx2iuGKnPvUMc6YqWm7sH39EcL9l48NVUseCGSwFLUIDtBYVbBlFZwYhumc90iti21Obi75ZQFN2Tm87fOWYjAvDJ4roGfVDyu2Ab9Ljf3t9R/lA=
+	t=1733477868; cv=none; b=WMfYMOLyN7MnxTIN9ux25LmQQw+1ZvUL2WhhqxX1+bmLy3JuqMHICM17hHDPe7j+3EMIWQOYNKDZcmUQw++P6w9+zd2vbKB4bgB+lPKbJancfUPIfF8/jS0h/YBfHmM/rNPsko/kIIXJ3x+PeFuTFFrqB2IPxcTvZa7tE7BWXpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733471861; c=relaxed/simple;
-	bh=8OrMea/xIU2cwzPlbMQkP7OcK7sxWVxVmB/AxQnACV4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rMgzurmFsbVs1coVDJX+sLMkfyipWueOCcEegUy8XGOP8vOigyW6hV8+/AJAzX2iLMLQ/FUj8VPwOFfDHmRGQaY79qEEjAP+a6EgJ0H/zhYnleIbx5g3LZml/ZhsMs+eJhrSVY/IiTaFb+bpsjishBumRePjkYv1+VCwgNKb840=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kWp8B4XH; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733477868; c=relaxed/simple;
+	bh=XisWVnbBRFPxwrQpVjeDFOvmw6S/8wKdHd0D8NuHYdM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aR6fNa8YXPzgN9CiZO8j+/GciR8B30ALng/EOdTr8MDrhizgH8KseVoex6gORoUpTaXL8JC+qRQmrgN1I95ByYK3Q23JJFPJ6pw/QvhwJv07V08Jt2MZfs6ina3l6upuZQYNIs85hGA9mOJOX4rhVWNYVBYS6O9MFX/vXuUZlNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jYRooBbA; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kWp8B4XH"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7258cf2975fso1561911b3a.0;
-        Thu, 05 Dec 2024 23:57:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jYRooBbA"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53e384e3481so54027e87.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Dec 2024 01:37:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733471859; x=1734076659; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DETPLh5NU5fGD9XXgwxH82PGpe+Abr3cYt0MEQToEo=;
-        b=kWp8B4XHcubrOjK8K8r+9b0apiKyQEKEbxPUicoh8X/YkTrqFLDy88ogmR/NApP198
-         OFxCdZEQUH/PCzmCot6uxw1JiTtQP9WsE3M3yQ6XS305Y5VC+xikYNT3zKCxexYof1ld
-         kJqImIaaUgNSKFeanPAHUZgfn9yf5atzylT6rJVl22vVS391SfCuxkEJdmZEmiQ6ES1o
-         97ObHB3IHZqLnwzcYQqdOJpt8Gf2exB4TSwV3ZCHR8inBND9prDGE3cwP08gwsNoBlTl
-         fcSjbu4IsvgKE7bXGzPFLHmIkfHApo57iBzuGAAlkqbXXoGY5tpDbBosVCRI1de37OjQ
-         4X2A==
+        d=linaro.org; s=google; t=1733477865; x=1734082665; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=46xnEZBaNMSheCCiZJiDbfdEocNDp9CvRZTpUgOVQPE=;
+        b=jYRooBbAix+PMUZmdTYIc7UuC1oi2UjT1pMR2GKgWcmb4pPPHGTR10p3uVjx8PEhw9
+         hQT1gTjtRFx7dkjpwIDnm1EV/RhEj0j6KP/wlys2lApiqfvoxIzJ6LYgRlIg3qrnqnzV
+         VHSDhWy54YoVSwG12CYZT50vYsguli3Ia/IjvafrFA9zgEeZ6nOCaZTJHRtRH1D3IOA2
+         zfW+RoQlPAiHsWvIiYTa3Ku6WKNEnN1hP2asAe9HUJbWKRTeOOnBceHvac0QqAR2J50G
+         KcQcm8n+ze7UqEYkTeG4E7LaGmyeVTMF7NhHBb0c2yNnqmDUggY3CxIL9pFpmJHniEtl
+         H49A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733471859; x=1734076659;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7DETPLh5NU5fGD9XXgwxH82PGpe+Abr3cYt0MEQToEo=;
-        b=NNk43ALYdOeTcdvxaY6l/dqmvpzG5UQPWBjnupRDamMSUGjXEH0pzb4pRyWeXtCjyM
-         E9NA8tWnmR824fgI+iRp97V70Pz9XostzI1RTL/Rbbaf8Thxqs0aPdPhXekiYg1soZ7n
-         3wSyzM7apdSqhGxBVt3Gs8Dm7YxoSifgzY/vlDxnNZgdb7M9BenH0w41trLGGYY4FyyY
-         gjmw1UgsFdQFmk3DwFZYCLi0526Rod2GAb7gPgCyQRogrRMpYt6GyzdVeGOH+Pj9fGHP
-         hd+b7ECFyXOHxYwlzmZqBQcW2NyQ8Tl4ES2RsrSM9W/jJzkK2VnDEIrpMSr16Xw5Idb5
-         J1kA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5aMvBzha0L5dK2zRH5m3UjovfqNFZEUNPEtrdJi6bucYyWczbWef3LXw3z5iHXuwFEjzxtAS24KPlNg==@vger.kernel.org, AJvYcCXVPQnUDDKS/sJgEseOM3YN/8q/84M+JWd9wzc+AJxjEzPRsHR+oDYFaoq7LhE23mtjtwmIBcrBxMUIk1iR@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaniiJUUcHdN9LtInt4F8ym1oV5FA6QgPWqIjgkPt5EOGdX46Y
-	aKqKFw3X38sS+3oIKA9/tEPiEweVPfphuffjwbIwY4FfHgcFatOh
-X-Gm-Gg: ASbGncsy4Qp8RHnvFxpIbrZBV4JWerqpp3R+8plbZFsuQxG0O9FKOOZ393DltXBo5gW
-	RzOOUsbzxhZe4g9LFM4D5GKxLj0fIjMCQgB5e1T8U8kjubKUbRVUsHxPyhgHhn0epNMcYfqerAI
-	3xzRJtrRiMkkI91UGOFdv+7Tdi/I9yAcnbQPrcef1X7g+oBUVhJn/mSrmbJTSd50dGZjNFQTLeX
-	pCltGbhHYVck5anON55sftK5+3T2DLmFFnbGGT4ZiUf2wIBTsUJY1QGsyUX0WY+mx5ecLcY328g
-	HU2p2mVVCbgn8eNeUQBmMGM=
-X-Google-Smtp-Source: AGHT+IF7mviBvc5rZ6kHRodBPhWtyVuJ8NEqADmHP8RTrsYOuZfv0gozUu7KEexDPV2xAvwjjothKA==
-X-Received: by 2002:a05:6a00:b46:b0:71e:1722:d019 with SMTP id d2e1a72fcca58-725b81f81a2mr3414793b3a.22.1733471859266;
-        Thu, 05 Dec 2024 23:57:39 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a29ca9d1sm2478549b3a.23.2024.12.05.23.57.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2024 23:57:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <57aa83c3-c063-44f7-ba66-c252e3984aa7@roeck-us.net>
-Date: Thu, 5 Dec 2024 23:57:37 -0800
+        d=1e100.net; s=20230601; t=1733477865; x=1734082665;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=46xnEZBaNMSheCCiZJiDbfdEocNDp9CvRZTpUgOVQPE=;
+        b=eClhiCUWYo2D6SAdYW5/rxbwY44jeRp5d3YN45Le/u0+BTwTU803RxAb1i/hApWRT5
+         5a2Pbg3dgA9nc2umWTfzxXnAr1E8f7KH0uack17aeQ4ZbtGOPOBHnoWCyllzrpW60mSX
+         T1x0JR/R4dULBptdsnTo1qiWPM+hITmMSVlE2so8OdotDRVuy2U22S1nQeIVNG5mBz72
+         yUJhaiYpdu0Xzqgl+QaiwKt2lHsrRwl49csesRNOQc4FwJxSF9Tl/Ix/uVkpurUge9x5
+         zI/ae87AZ73CMCTstMPptDdkL1UZinHtS7lzuK/BHMWINtlke3nU4ONizItswZo8OdCE
+         rhBw==
+X-Gm-Message-State: AOJu0YxLCO5sOte5T7FJsXCvfjVID3rDdjAwPbnni0+0s/gZEpS3sYMV
+	ryLUUT+3Vd/sIfTUPEFX8DKAuSU9soK1oRgKqwss7QzGbv0jUQ4Nz1Vu7kF1xY4=
+X-Gm-Gg: ASbGncuVK0/UdQrGbHfBAIWOrI5d/GaDAgXGhTGAQy+hw2V8X/srAZnPzwIWT+7pVa7
+	w2SX7SFpO/XqsF7ZV+M+1Wb9hc24a80jlTJjzu8rPx4a8MaWshTokF9Lmda/30YSlRVH8nf2AHS
+	fy3h+VS1XiE1lR1kjHbVF2+viv2t18Ra2LHpH25fcuuFO3pLkbrIXCOmhcg8reGiErYgxxQkay6
+	VW3oSX8CLSBEuJoeitk/y9XT8I9hfxwkRCovKvFCmLxniTHlq1F6ns=
+X-Google-Smtp-Source: AGHT+IGMRBAi/Li6P96LN7i/X9zmLh063bXK3BTdutJqDKf+5emjBEJsjRE5mUFk+lrsqJzsYUUOgg==
+X-Received: by 2002:a05:6512:2354:b0:53e:20d6:a951 with SMTP id 2adb3069b0e04-53e2c2b0d9dmr1040262e87.4.1733477865232;
+        Fri, 06 Dec 2024 01:37:45 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11387dsm50974015e9.30.2024.12.06.01.37.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 01:37:44 -0800 (PST)
+Date: Fri, 6 Dec 2024 12:37:40 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [bug report] hwmon: (pmbus/tps25990) Add initial support
+Message-ID: <b2b550ae-a2b0-41f8-a0ce-9dafd1714f8c@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hwmon-next] hwmon: (pmbus/tps25990) Remove unnecessary
- call
-To: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>,
- jbrunet@baylibre.com, linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org
-References: <20241206062839.313292-1-dheeraj.linuxdev@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241206062839.313292-1-dheeraj.linuxdev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+Hello Jerome Brunet,
 
-On 12/5/24 22:28, Dheeraj Reddy Jonnalagadda wrote:
-> This commit addresses a structurally dead code issue detected by
-> Coverity (CID 1602227). An integer is returned early in one of the
-> switch cases causing the later statements to never be called. The
-> return statement is removed following convention in the other switch
-> cases.
-> 
-> Signed-off-by: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
+Commit 6fbd1e5d9876 ("hwmon: (pmbus/tps25990) Add initial support")
+from Dec 2, 2024 (linux-next), leads to the following Smatch static
+checker warning:
 
-This has already been fixed.
+	drivers/hwmon/pmbus/tps25990.c:134 tps25990_read_word_data()
+	warn: ignoring unreachable code.
 
-Thanks,
-Guenter
+drivers/hwmon/pmbus/tps25990.c
+    127         case PMBUS_VIRT_READ_IIN_AVG:
+    128                 ret = pmbus_read_word_data(client, page, phase,
+    129                                            TPS25990_READ_IIN_AVG);
+    130                 break;
+    131 
+    132         case PMBUS_VIRT_READ_IIN_MAX:
+    133                 return TPS25990_READ_IIN_PEAK;
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-> ---
->   drivers/hwmon/pmbus/tps25990.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
-> index cc0f5c7cecb0..0d2655e69549 100644
-> --- a/drivers/hwmon/pmbus/tps25990.c
-> +++ b/drivers/hwmon/pmbus/tps25990.c
-> @@ -130,7 +130,6 @@ static int tps25990_read_word_data(struct i2c_client *client,
->   		break;
->   
->   	case PMBUS_VIRT_READ_IIN_MAX:
-> -		return TPS25990_READ_IIN_PEAK;
->   		ret = pmbus_read_word_data(client, page, phase,
->   					   TPS25990_READ_IIN_PEAK);
->   		break;
+--> 134                 ret = pmbus_read_word_data(client, page, phase,
+    135                                            TPS25990_READ_IIN_PEAK);
 
+Is this supposed to be stubbed out?
+
+    136                 break;
+    137 
+    138         case PMBUS_VIRT_READ_TEMP_AVG:
+    139                 ret = pmbus_read_word_data(client, page, phase,
+    140                                            TPS25990_READ_TEMP_AVG);
+
+regards,
+dan carpenter
