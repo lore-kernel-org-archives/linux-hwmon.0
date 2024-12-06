@@ -1,94 +1,140 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-zteg10021301.me.com (pv50p00im-zteg10021301.me.com [17.58.6.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEEF7464;
-	Fri,  6 Dec 2024 00:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9BB41C71
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Dec 2024 00:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733444153; cv=none; b=bUmlsK6yWjDFa3+vW/hQ6/ZfvAZpyX5d5EXBRYNUsFt9pArxrDtSyoTiLN7tiirDnwpzrVqxDJwOd8TCW10js1GE+Bvmq7fegdzd/rQ7o7RnjXkJI4yBMtVx5PyFFR83ZEbtjFJIgusWDwK7O2spFxU/lcuQSOKcljM7Ru/O1Fc=
+	t=1733446601; cv=none; b=j1DBCeYOqB5GBsB9g2Vs6xX5MOyDrDyaDXSxRyfcMc7kLOWjM4bKwcJkqP+lHbVIe7GvXGcwaN1Ao7yFRg66rwGdPoEEC7eyWeLem3xUSI19MVf2rVYB+0gxueMU99wggWGBePntf8z86dzAdusX7tAAg3GxDIIc3n/peNRbD+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733444153; c=relaxed/simple;
-	bh=asUNDkcijp3U+7fxw/p4+0+/xLSjHkZ0HqaVhow09Co=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qU0dLGDKD+AG08ef/qitRTsfbhQMGIN7qhc5FloKjhbyKlZlc1Zhi0p+kAc2zL6mv0XJhqT4z0ESr9ZMp7kvuDF6UlGl+W52RQuS0tg/gbYaX8VmJ90zDUOE0fEIszyfLBmWY3Yl9oXvRPwvzI54YffH45FzY/Qnm5KLa985UUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0y2TAyq; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733446601; c=relaxed/simple;
+	bh=192sas5/3dB52EZjfRuQhdzd9qENarFp7gqCphryGrg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P6cNCrL00KyENpzyYxzS5vfD1jtUN7mXp9lRkrWBNjN4oNMZ6pmJ/KT7+uk5llm/fhkR01XPDkl9tShcGjnO9YHhfxvCcbZ5DiLtJj5sRoLmJ7GPLSzTpJDuCxF30LRcmKobwvnSMvaqCEqKd70Z4jl7mf0Dol4iYYA3I9F3otY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=kb+PAfJg; arc=none smtp.client-ip=17.58.6.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0y2TAyq"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-725ad59ad72so812621b3a.2;
-        Thu, 05 Dec 2024 16:15:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733444151; x=1734048951; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IUoTZbFvvzJufe6Ikwk0n1WmgUHmEpV1FCvkXH9qPWo=;
-        b=W0y2TAyqwHSVypYQ0s7EnLPdoA35+2rfVPcI35hgpLxJrhGuPogHfPvV11MUaAM27S
-         EeFlXwi7WEcSF34BnbpQUSEk44diUDB1G6gvQ6stvSjhJf3bVoQ7QzT/WV/kylrO51Jw
-         nY8Oi+a+QylUnGduCZ862cUxYFzj/vypMWSxobH7lN3FnX7oi84ayRbDUQCNMozcZbYv
-         Dc2+J8/Z2MRhbEdZCdjGBKY7loGYcpmgxKnL8yxqBoipLm6NeSc5MD2A1sjiDf7A8/Ym
-         cXyJkxqtbKzXEbIW7MJwHZC8sCQiIIICwM766HCDEr70JQeFIUk0BRVjLXBaVObpO9Ne
-         uXuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733444151; x=1734048951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IUoTZbFvvzJufe6Ikwk0n1WmgUHmEpV1FCvkXH9qPWo=;
-        b=EBQd2yEi1wTP4f2EAbWHHIdwuciaxmD40KbnsePJNftJ7goQXVe/+wzp6g9zin9FzK
-         FCURXJvwXDnY/EO9emrD/BVLRZzYriKWbnGz5/B37RYrzuhpCn/Z0gkl4KM/eJbJiDKx
-         kMZj0KtQPzAVRvv5uXwzj7HhfSiIh2bPyJYWYzScfmLkOsGbsXnMqb+g3H+lsNYzaJkr
-         rJ9rqv50z5YjE7p1w1p2Q7atvpjoOVzM3aYf6ugZUB56yjHOS5UreGcceWmShlzcBN4O
-         ATkDM31xBK6qQJDmh5mFw08s9NskTiAx+4ByBfuREQe/cuSzlGSL1yS8iLtgpr9+S4iS
-         WQmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHLeZouwLJ8RVshndOkXcEAU0wzG+mxxYFybpHcnRAag1VPQvuAbcZUC18Y+Tbcddslay8ITc17N8/eOBU@vger.kernel.org, AJvYcCXrz0VGvBouPkwN1LomNZJcaiK1LROdVaxjin+3wmT11EFGvx68BmhRaJx8RUErlFPR4fccKM+d3cXlCw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCfdDr/6ZJ6Tp0w73Pt0MMej13JEPZHl867pFW9UCqHEBhlw+H
-	TAQSpZFySyaEIhzbd/sffvn/Kiw8FOfcFMxKKYuS58FGXpFjwO0GlwrshA==
-X-Gm-Gg: ASbGncvZkFRfEz+yX0ey4FjiGBjRTlZW+GY6hg6MJcRj+1s8zfCcBRTQVE9AvyF7n0m
-	SPbbK0xjBdFj09Qkz95KqL7nG10W+pSKNM92xHDniP8kfQDQEab36xytGrLaoLDDTIXy3FKGzDa
-	oyXBnpMzAnNBvr40VSPvR0GvDOLlewHscRcKEJvo1HTaxmJFRCgQkLewzc1H3TzeoIuGwKQJaE+
-	pgWj9ps8LlNIDQfFH0hZJPUxGxuK8ms/ieXtDQZWeJHpkNLE6Lr8OjybyRn+8g=
-X-Google-Smtp-Source: AGHT+IGFysXISviEnPrP+igegefzLQRo8Zaot9DQVeBNJpxWdeJ+Jp/723Yb2ksHuTavKQX60Iod/Q==
-X-Received: by 2002:a05:6a00:18a5:b0:71e:6489:d06 with SMTP id d2e1a72fcca58-725b7ee94dcmr1978936b3a.0.1733444151196;
-        Thu, 05 Dec 2024 16:15:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2a9050asm1876308b3a.123.2024.12.05.16.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 16:15:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 5 Dec 2024 16:15:49 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Karol Przybylski <karprzy7@gmail.com>
-Cc: skhan@linuxfoundation.org, jbrunet@baylibre.com, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: tps25990: Fix unreachable code in
- tps25990_read_word_data
-Message-ID: <0fa164c7-5562-40bf-b2d9-92ed1efaff8a@roeck-us.net>
-References: <20241205213315.3073207-1-karprzy7@gmail.com>
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="kb+PAfJg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733446598;
+	bh=gD/eV8FniOqkvsbchGLbTggCmSZ3+Zy4ZNoHJzav1qY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=kb+PAfJgaCYIQRvFMLki16gYica5tRz/08+GznpmNX7VeO+OH27EOPjbOCq88Bq5G
+	 C85X8m08IvDSJIBUkQpWDkm/U+UPvjMndrTjwaHPdxebzthJxcCvzNq1UluTMsOJE0
+	 f/0ApVaydU3tkF/jonXQ6he1D/A1oPkgLYw3/ROwGhr2XOvjy8TJ9vq91JoxTwmWUc
+	 ba2JcPh21U8etDOzQaiUpPg1qZtmIP7MChQkfEtsT7WmDEkJB7EJJI67OyQh+q5UI+
+	 YN2aWgZIZGmaIvEcoooWNySYWbIvD/XfFw0E7Ta1fRv2r40AtsA3NMQGWCkVFfGaKX
+	 jqpQZGpB+nUgg==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-zteg10021301.me.com (Postfix) with ESMTPSA id 86E9E5001C0;
+	Fri,  6 Dec 2024 00:56:29 +0000 (UTC)
+Message-ID: <288fe563-bd3b-4075-bcf6-5fc4782a6cb9@icloud.com>
+Date: Fri, 6 Dec 2024 08:56:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241205213315.3073207-1-karprzy7@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 01/11] libnvdimm: Simplify nd_namespace_store()
+ implementation
+To: Alison Schofield <alison.schofield@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+ linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+ netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
+ <20241205-const_dfc_done-v3-1-1611f1486b5a@quicinc.com>
+ <Z1I3lSpcnIIbc7S1@aschofie-mobl2.lan>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <Z1I3lSpcnIIbc7S1@aschofie-mobl2.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: m6MvnGCh7TgcaO5x_qBwHR0pa2QT6zvQ
+X-Proofpoint-GUID: m6MvnGCh7TgcaO5x_qBwHR0pa2QT6zvQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-05_16,2024-12-05_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412060007
 
-On Thu, Dec 05, 2024 at 10:33:15PM +0100, Karol Przybylski wrote:
-> The tps25990_read_word_data function contains a block of unreachable code caused by the syntactic structure in the PMBUS_VIRT_READ_IIN_MAX case.
+On 2024/12/6 07:30, Alison Schofield wrote:
+> On Thu, Dec 05, 2024 at 08:10:10AM +0800, Zijun Hu wrote:
+>> From: Zijun Hu <quic_zijuhu@quicinc.com>
 > 
-> Specifically, the return TPS25990_READ_IIN_PEAK; statement immediately exits the function, making the next lines unreachable.
+> Hi Zihun,
 > 
-> This patch removes the return statement, leaving the expected handling.
+> Similar to my comment on Patch 10/11, this commit msg can be
+> explicit:
 > 
-> Discovered in coverity: CID 1602227
+> libnvdimm: Replace namespace_match() w device_find_child_by_name()
 > 
-> Signed-off-by: Karol Przybylski <karprzy7@gmail.com>
+>>
+>> Simplify nd_namespace_store() implementation by  device_find_child_by_name()
+>                                                   ^using 
+> 
 
-Thanks a log for the patch. I squashed it into the patch introducing the
-problem. Please note that the above commit message is missing line breaks.
+thank you Alison for code review.
 
-Thanks,
-Guenter
+will send v4 with your suggestions.
+(^^)
+
+> Otherwise you can add:
+> Reviewed-by: Alison Schofield <alison.schofield@intel.com>
+> 
+>>
+>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+>> ---
+>>  drivers/nvdimm/claim.c | 9 +--------
+>>  1 file changed, 1 insertion(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/nvdimm/claim.c b/drivers/nvdimm/claim.c
+>> index 030dbde6b0882050c90fb8db106ec15b1baef7ca..9e84ab411564f9d5e7ceb687c6491562564552e3 100644
+>> --- a/drivers/nvdimm/claim.c
+>> +++ b/drivers/nvdimm/claim.c
+>> @@ -67,13 +67,6 @@ bool nd_attach_ndns(struct device *dev, struct nd_namespace_common *attach,
+>>  	return claimed;
+>>  }
+>>  
+>> -static int namespace_match(struct device *dev, void *data)
+>> -{
+>> -	char *name = data;
+>> -
+>> -	return strcmp(name, dev_name(dev)) == 0;
+>> -}
+>> -
+>>  static bool is_idle(struct device *dev, struct nd_namespace_common *ndns)
+>>  {
+>>  	struct nd_region *nd_region = to_nd_region(dev->parent);
+>> @@ -168,7 +161,7 @@ ssize_t nd_namespace_store(struct device *dev,
+>>  		goto out;
+>>  	}
+>>  
+>> -	found = device_find_child(dev->parent, name, namespace_match);
+>> +	found = device_find_child_by_name(dev->parent, name);
+>>  	if (!found) {
+>>  		dev_dbg(dev, "'%s' not found under %s\n", name,
+>>  				dev_name(dev->parent));
+>>
+>> -- 
+>> 2.34.1
+>>
+>>
+
