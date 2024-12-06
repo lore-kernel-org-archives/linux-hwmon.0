@@ -1,37 +1,37 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E333199E92;
-	Fri,  6 Dec 2024 10:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399E7155C94
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Dec 2024 11:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733481280; cv=none; b=RSI8tzAs9nd1Oj4bqq7qkIU1K9f/IWAZkrarvk7os6vVwfzBQmSjVJ1ZXuwBpyUSOqj3yyHy9EsI7LpaQIKibVaDsWhQZ64TsfJ4EuBaC9NlIv5LzmlSacbeomP0fONGkplvOOjIHTu6AJJ6T7EXrfPnvK9aOW2V3eaXpbfJa9s=
+	t=1733483333; cv=none; b=VH3z14kodM5H/CFIHhHbZ2MWXGVhke0omDe6P4mdBN9gmWmtZ+vIHl3QkHHML1NT+aVx7nb3VhD1GZZ1hH8Q1tgsTm87fn8L7Jxccsh3nEfdQXLgBtz4BVLSwRRYfiCh3ZUDeDzowroR+WD+uByAzAZ++Nf4SGMK/utRaORgVMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733481280; c=relaxed/simple;
-	bh=i+zfIBw5DvlGVG+5jujERRBXQi9e8CjS112aE93QRYE=;
+	s=arc-20240116; t=1733483333; c=relaxed/simple;
+	bh=W4VuhT+Jm07xuaoOKTSneZ6zXj4xO3p37XsQxo6QhR4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SSEeJ+7b6rQ7FZEUYXdj6tO80LsnSEw4HQperMtdQOa62uyyG6oGnkGtsF8O+EmpCokxZAV9blqAJy5vFUFUmHm9OvpvAXLVjcumft8tEyLnh1o/emOmRaHX//Xbs58oZJOC7JkcA0ascA7HvXI/2ftdAUN6U8LVt4yGhoXTxHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NI0ddyqe; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	 In-Reply-To:Content-Type; b=NmcrlLNHC+kNug5KOAa2BbqNEbU6zGLgQKiMH7X9woqCjtGQQDpCDC6P7+Do5KFYF74vszzos3jxBVqmZ4v5szhKI3s7RoZyPMx97aRffZh64IysAE2EzmaX8mkSXXbJd6oEd2F/F8w7/Jpxi2ZmQRGB78+69sEn7o4EVOM2ieU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=MgjiqdzZ; arc=none smtp.client-ip=17.58.6.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NI0ddyqe"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B760CFF80A;
-	Fri,  6 Dec 2024 10:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1733481276;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2ajKPXRG0k9JASC73/ZnAiBhOVfRI5UgSWHK8cjfgbY=;
-	b=NI0ddyqe3dsSmjff9NxKmmSpGUb/70r3vZO6id9LQjdJEOUuO8puBx6QNzi6QYjbbDgWMy
-	jOoQj7fjpmsmBCObRsCjDUchSgkQiC/vapFzgkffT+dVyut43lFdzMWovHQtuSVMXRvRL/
-	xjhX+D64S+6PvEAs4Q1sEEW7D/s4HDvZpH5l72zASCfxyqR6tK20wPs9jvk2wk7ex1mo/K
-	+rhvjXEWF+28Tb74KI81KpR0f8P6yceD5rn8L7jyohcQAMzE7gOIEa/Z6Ky1Eiq2fVSsFd
-	p/cAMQPJTGgFbKskLK7AazwTAvBwulMFaU+4wsLjKgZcoKOKULpFTNVpYM9hxQ==
-Message-ID: <02c38a22-6196-4b53-b092-5185b4df134c@bootlin.com>
-Date: Fri, 6 Dec 2024 11:34:35 +0100
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="MgjiqdzZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733483330;
+	bh=NhyG+EmDBcuL7ITc5tFv2+rP51hoW90ADGxMFzERI+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=MgjiqdzZfTmb/mVFTbzsypOWruuPXKPmqalwnrapBSSPRX9ZBXWuKx/rXEQNHK2pa
+	 Owdt0fT/DfIcknjmrc9RiPQm03DTgyCIfZaA0Ct84DRgRPn41GH/9ATt9WarD4oB7Z
+	 kp1tye/lvFsVtcUt9wEaRY3KIi4c4XR2lvGXACZO95dn1BzrfkmojzfeVy6LNqPP4n
+	 cuKwE61BSO3ibR5Zaj2OZLFYfkZ3aOGDENNFUeS+do+P7PcdFzPCx3SylOoxqhlQzu
+	 3vBrnTd0dnstMjHvqU/2HZ8ig8tIq43Kbs7RsrkBBEg+Xa3q76Kaj+3nG3pAqDsniz
+	 8LIg8qyWiAoMg==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 604B31801BD;
+	Fri,  6 Dec 2024 11:08:42 +0000 (UTC)
+Message-ID: <71d9c99f-aa7d-4697-8561-17b54cfe97c6@icloud.com>
+Date: Fri, 6 Dec 2024 19:08:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -39,48 +39,89 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] hwmon: Add Congatec Board Controller monitoring
- driver
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Lee Jones <lee@kernel.org>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
-References: <20241115-congatec-board-controller-hwmon-v3-0-1c45637c8266@bootlin.com>
- <20241115-congatec-board-controller-hwmon-v3-1-1c45637c8266@bootlin.com>
- <e91a3c4a-6324-471a-a1eb-47eb329d2d6b@roeck-us.net>
+Subject: Re: [PATCH v3 04/11] driver core: Constify API device_find_child()
+ then adapt for various usages
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+ linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+ netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
+ <20241205-const_dfc_done-v3-4-1611f1486b5a@quicinc.com>
+ <7ylfj462lf6g3ej6d2cmsxadawsmajogbimi7cl4pjemb7df4h@snr73pd7vaid>
 Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <e91a3c4a-6324-471a-a1eb-47eb329d2d6b@roeck-us.net>
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <7ylfj462lf6g3ej6d2cmsxadawsmajogbimi7cl4pjemb7df4h@snr73pd7vaid>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: UViy4Z1HSo-8jLvn8-7u7fwR8c_nYln5
+X-Proofpoint-GUID: UViy4Z1HSo-8jLvn8-7u7fwR8c_nYln5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-06_07,2024-12-05_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 suspectscore=0
+ spamscore=0 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2308100000 definitions=main-2412060082
 
-On 11/15/24 16:57, Guenter Roeck wrote:
-> On Fri, Nov 15, 2024 at 04:39:08PM +0100, Thomas Richard wrote:
->> Add support for the Congatec Board Controller. This controller exposes
->> temperature, voltage, current and fan sensors.
->>
->> The available sensors list cannot be predicted. Some sensors can be
->> present or not, depending the system.
->> The driver has an internal list of all possible sensors, for all Congatec
->> boards. The Board Controller gives to the driver its sensors list, and
->> their status (active or not).
->>
->> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
->> ---
->>  MAINTAINERS                |   1 +
->>  drivers/hwmon/Kconfig      |   9 ++
->>  drivers/hwmon/Makefile     |   1 +
->>  drivers/hwmon/cgbc-hwmon.c | 304 +++++++++++++++++++++++++++++++++++++++++++++
+On 2024/12/6 15:21, Uwe Kleine-König wrote:
+> Hello,
 > 
-> Two problems:
-> - Documentation/hwmon/cgbc-hwmon.rst is missing.
-> - "git am" fails due to a conflict in MAINTAINERS, meaning it is not based
->   on the mainline kernel.
+> On Thu, Dec 05, 2024 at 08:10:13AM +0800, Zijun Hu wrote:
+>> From: Zijun Hu <quic_zijuhu@quicinc.com>
+>>
+>> Constify the following API:
+>> struct device *device_find_child(struct device *dev, void *data,
+>> 		int (*match)(struct device *dev, void *data));
+>> To :
+>> struct device *device_find_child(struct device *dev, const void *data,
+>>                                  device_match_t match);
+>> typedef int (*device_match_t)(struct device *dev, const void *data);
+>> with the following reasons:
+>>
+>> - Protect caller's match data @*data which is for comparison and lookup
+>>   and the API does not actually need to modify @*data.
+>>
+>> - Make the API's parameters (@match)() and @data have the same type as
+>>   all of other device finding APIs (bus|class|driver)_find_device().
+>>
+>> - All kinds of existing device match functions can be directly taken
+>>   as the API's argument, they were exported by driver core.
+>>
+>> Constify the API and adapt for various existing usages by simply making
+>> various match functions take 'const void *' as type of match data @data.
+> 
+> With the discussion that a new name would ease the conversion, maybe
+> consider device_find_child_device() to also align the name (somewhat) to
+> the above mentioned (bus|class|driver)_find_device()?
+> i finally select this squashing method after considerations as shown by
+link below:
+https://lore.kernel.org/all/3a4de1bb-3eb2-469a-8ff7-ff706804f5bb@icloud.com
 
-It is based on linux-next, as the MFD driver was not yet merged mainline.
-Now v6.13-rc1 is available. So I will rebase the serie.
+device_find_child() is consist with existing device_find_child_by_name()
+and device_find_any_child, device's child is also a device, so we may
+not need the tail _device().
 
-Regards,
+> Do you have a merge plan already? I guess this patch will go through
+> Greg's driver core tree?
+> 
 
-Thomas
+this patch series is already squashing solution.
+
+yes. hope it move toward mainline by Greg's driver core tree.
+
+(^^)(^^)
+
+> Best regards
+> Uwe
+
