@@ -1,41 +1,66 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C63140E2E;
-	Sat,  7 Dec 2024 21:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA97C28F5;
+	Sat,  7 Dec 2024 21:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733606819; cv=none; b=D+6gax/MZgUBn8g4Fp422mvApoStfduYdP/+ykKhppaSiFGUZSq7/42Az9XxkTwIwknXE4lFNz8BkBPRx3jqOLmhKZ/2OUv0lhT17le5ltDJfGPns58Isjt/aSZhHoZ5Rdh/YHnz62bbGmrOUmAaqa2KKYR5Hz+4KVQdlQ7Q/rM=
+	t=1733608324; cv=none; b=t8Iwi814fm6RF6dcJ5Yib9p/VR43FSMwbftpZ4Np/XTtZfGveGlDqd0f2udYD7QbpwwLzTYPwrbWSDXcuGZ8TnqXxeQSTMQ5LvNdxJVwpnZD4h2vpKGzgxdQUeP3BX36Tfy/LbW05JTkVkFWc8PE7T7WX9aJ12wbaXXu0BU/IqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733606819; c=relaxed/simple;
-	bh=BkTU6JwU8h/ZZhUtvDaV4zZpcxcl7uN2qj34MO/H3F4=;
+	s=arc-20240116; t=1733608324; c=relaxed/simple;
+	bh=GE1X2Ca0WwBARx8F2w97JAt4zOFvg95dKYbSc9c4DRY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tBJGCkU9a3av/wpz6st8U888+0ZQyRIjaHPwj0ssGo9ErVMB4gZy4TxNHpZTdbbR10SfePdWwy4ae3oWB6vSzxubX4c4EcSfIuZW3k1YDsTNQpKp59f3SW3LrUujcEeeODWfv6TptfzkjQ47FLtGSA2Qrpp9PwbOfZ5lIuOKz50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=uL3b1FZB; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=QtEPyeZomLIFcSF5swwSHw5kv0fbcKClFyiG6Za8xnhOdd2UVQPfqJg69rdYitVrme6uH1dwiZv8GkWwPsgS8iW+2Q7gn/Z0Mb15IKNb27KcTeN+jE9z1Gn4IROd2voKj/A/rozWKd17C2xe/rDqyXixACTGvoLTb8qbYfkAXYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Etgrf03q; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="uL3b1FZB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1733606794; x=1734211594; i=w_armin@gmx.de;
-	bh=lbxwWAIzvB3xXlSH6gAQr2bOhtsrtgXqv3pNOIaaw7M=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=uL3b1FZBJtA9xQCC2QwL8PPO1anlg5g+mAmcXkVYJsMKDuJ6spXXWWK6mP98o7NF
-	 qTU5BgBe2UejacDG0dqj8UlZ7qSZmKisKsbMSoR2iEH+biLg6z08DsoyRh7k9YdA1
-	 ZcQ9RTooKkzknXryXJeUn9+CdvGpfbVbsWfocyW5ghuUla7M4tKXxL2pxWP6vjtLc
-	 lYoP90rUJV9fnrj5iHQtCICfSuNc6pjlWVGXas9I8H24p/QMFQ9cqWc/CJyGknDH7
-	 Tb4udI2Tf7Y8Bt6mmionfZDSuR4bDGXqrZnEsgNubMQaZnxQvEkVbfqeuIdvS1Ccq
-	 8ytvhTSw99ETqYimgQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.14] ([91.14.230.110]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOzOw-1szB1K1g32-00X5Fq; Sat, 07
- Dec 2024 22:26:34 +0100
-Message-ID: <fa78f27a-a92c-452d-b710-c4b3c8c52629@gmx.de>
-Date: Sat, 7 Dec 2024 22:26:31 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Etgrf03q"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-215936688aeso29158355ad.1;
+        Sat, 07 Dec 2024 13:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733608322; x=1734213122; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zAj6gtJfioS4xK7LHPGlCxzVIIF5H0+uZSsS6TYVe1o=;
+        b=Etgrf03quRb5GvOmJcDauWl8iT4qB5oGNLl1A9MHWEqxLNsAyYcXNBkEklHjAotR6M
+         wYC74jUGCtDUXhGjaz5xBp546daNEzxpsSQU3sJFJymcUGOGerxuH1qbzwEPECk25b8N
+         T2pg9PGQNmvB+YkPl2EnIgDlthqFR7F9gv1txw4y5Ur9vLyt8c3SlznZdJ6hyxNUqPCR
+         H5mO3LmoXKV9hc7DlBfZsyKRLs4tAKMJBc+TTNIlBUsH7/2MUblNBuaTU9HUZJuZ4B98
+         TTimpDKM4y64nTDw7ctUM83WYNqYg8XuLKVsyjdfwIAfK/iYA7GDh3fgSjzP5GV0mI63
+         NBqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733608322; x=1734213122;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zAj6gtJfioS4xK7LHPGlCxzVIIF5H0+uZSsS6TYVe1o=;
+        b=B0pQsNm7me5n//buuDxgqYsKgogJgjKax4cV4fGK4Xt2nendvMybDLlPDyLNud7FrP
+         +94QOdF8bsUWFTEwTvYqK4VWjLect56JJHUySI3G9MSxlHgiAC57qGHyqMUxXhCS5tH3
+         WRy+83Qe5eOmN3BpJHlTXhhG3sYsz5bwU7SUFZ6Gpp6Y83Xedf17FuTTKVw+pxkjkPz+
+         4CrEZRYPmQw9s/f0SWwG3C4DTPxyYZK6eDqARAYtpQvUNx+1FWYnVMJmFAvlIXGwdCOx
+         gvITvfTO+ZRtfJuwmi2oArMLQVPdTEPuBHtx6Rlm8olfQ6W5M5hXUJ/tO3kTqT8OnrPI
+         eUgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBKeAlk/4A0UCZOf6k4rf48bdulg1qhlSxMFUDyHKczHc1e11ghrPkod5zyLOWURVr7aKTt6gHlSj9wg==@vger.kernel.org, AJvYcCUpiNRrJs9CdJ/krGlIHUfc76AQ/8V6G0dAgNaEzqr8VeasdxOS6HyroYhuNsTl8TPnqA6Z67j2sSPe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZzkZ77JF/vBmIBhYSA5qHOD5jt3hT28UhmwaBFPKVyVzWxxaI
+	JKLjF4HaaeBdgjQBAEgsh5HMW+xy22itl8wS0Fa4bejcFEUX/RNu
+X-Gm-Gg: ASbGnctsezCxdCEFXXdRIi2X+55vs81GdsIFeR9/CU+sh1U1WaShldjuBCGPfHOfO/A
+	b5iq3ZaLQ6Dc2XEMrGEIRHzHSOdErG8ZXs4ySCSHvn42VjSlMHiUaq4iU2w0UtEPhSvtweJBysf
+	+DE5oCRhFpUeG6N4Oqwupm1cNceGE0UoyxmBMhdwptIxbYbPe4qTH7p0Pw4bed+DnULE/Vuavwn
+	FvoHMQFaUjA0y/FMPdVveAiUcXsLcygUzTxEgILiY6kVmNHEQ+6gPO3kDnPhYuRDKQULv2SULGH
+	06OpLxqONxB23oGfAWDRw9o=
+X-Google-Smtp-Source: AGHT+IEqSyvW/mSb1we8S0LUc8yKCY25Y+BXTkXFjO8wXMooRwSNcx5m3sT6eslbfzllHtbFmcKE6Q==
+X-Received: by 2002:a17:903:2348:b0:212:996:3559 with SMTP id d9443c01a7336-21614d2e567mr120128485ad.5.1733608322144;
+        Sat, 07 Dec 2024 13:52:02 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21631118cedsm12914285ad.150.2024.12.07.13.51.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Dec 2024 13:52:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <28e42a85-4985-4cfc-b152-43506c118a6b@roeck-us.net>
+Date: Sat, 7 Dec 2024 13:51:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,75 +68,147 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell XPS 9370 to fan control
- whitelist
-To: Povilas Kanapickas <povilas@radix.lt>, pali@kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <e5d65c8a-4785-4635-ad77-d5155f517155@radix.lt>
+Subject: Re: [PATCH] hwmon: Initialize i2c_device_id structures by name
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ George Joseph <george.joseph@fairview5.com>,
+ Juerg Haefliger <juergh@proton.me>, Riku Voipio <riku.voipio@iki.fi>,
+ =?UTF-8?Q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>,
+ Zev Weiss <zev@bewilderbeest.net>,
+ Eric Tremblay <etremblay@distech-controls.com>,
+ Greg KH <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>,
+ Grant Peltier <grantpeltier93@gmail.com>,
+ Conor Dooley <conor.dooley@microchip.com>, Rob Herring <robh@kernel.org>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>,
+ Peter Yin <peteryin.openbmc@gmail.com>, Potin Lai <potin.lai.pt@gmail.com>,
+ Konstantin Aladyshev <aladyshev22@gmail.com>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Eddie James <eajames@linux.ibm.com>, Lakshmi Yadlapati
+ <lakshmiy@us.ibm.com>, linux-i2c@vger.kernel.org
+References: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
+ <89b8d605-c5ac-490f-977d-76315d6d5f46@roeck-us.net>
+ <3qfvfqjp53yhfaf327rqyxzrrxrataawubetwcipv5dmrplsez@pe2ressulfxp>
+ <403cc23e-db63-4091-932d-0ec82a32c52b@roeck-us.net>
+ <Z1SXnV93Q_1iqM6q@smile.fi.intel.com>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <e5d65c8a-4785-4635-ad77-d5155f517155@radix.lt>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <Z1SXnV93Q_1iqM6q@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:z70uc1uHaZvNgS7lDcq1+/aMOpyT6N6jsTBA4WrGdaGvJvbTlxx
- bwtQdtZqH+7KAYj9ZEVe1/vkLnRlHO22S5Vay5XHQzbLg+N+3rI4swrJYoZrDhrQdj8LAyl
- 72hNBoFKxva8MLDQCIXLjp8VJEJCMrkhTyonAvZeciaq5k5hEMUuCNVXkpntD93XoAJZs7y
- O5yjTCr6RtSMYjk41WpSA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:kgwqr7U45aI=;RZeVQfepZleAdZTnniCXBFRziux
- z/I+yO8GbQof4M9bSG57AGNQnt7cn0pdyfBr6wy5HXAYSMbtnSz0qcDCy7nbmA1TNuqMpMq9c
- 1qQV3DRCmk8hDlWuvOTiOR/f+tx0ENKBxqadAUBpN58zFzBMn1chNqIaRRD4R0FuN+0ijc49k
- rwP9JQvXEdoFxA0fJL/BT9k5l5OliypFhBB3w/tkYEX7//rAWbwxSakydBp1b51hNs10kPucU
- UP3AarvkhKot9l82TZoAkLm8ys8Rqu0u8cpvzu4/PFkUGn8sswjZW3o3d9x/1ZJqmj7OLMlLH
- UJLR+idiDk/5I66Xprx6laCTWr1eOR2uZ4Cd5uJ0gdgcz6cziQGyyrIpvJBwJAfiWCMyiT9Jg
- Za3KQcVX1eV7CbVADsa9nPEMLAjKwUM18UkkRqg5vCAdmF3LBAxR8evqmarpHuIQq/+gKdLIB
- R4EdEDJHpuBNDpmvDoFTAylWbq+8/AydNlJyirEWPey8wBM4GAb2p3osqmnt9TOF7QkZQZ17N
- 5fN999JOuo1PST60HhwFI0jp6VkY4tYfgIA7xfFSb5rIBmfeXxOAaPJIeyusVMDqfj5yXgpKX
- 8riLJIqyyOLHYRbLwxCnO6YjsiaYOihfW4ii/vY4bdL6fsJsJHt0z7acIcxlnbSIEDVW7zZ2b
- UrnwEza6+5w004tkZIz/cHYGPVWYPl0xuEcLokAgxYDSG02vkJsILD6TG50FYMlAStL1kRB1J
- eBieSo35gcc3WyaNo2Z7Sxh4qxVnirqHWz4jV5uXcWcZBy793FEesSwttS8rj/u19uiDfQDli
- fxOXCiC74QvldfUcGV4ajgSfAa2hFSnuJteZIcyi6UFbtSPbZfsMhAbwejos2UibHxveBUvbw
- FT36BFL82vKW61BFgG3Y0TsmZcOxjMmF1+TEDxtrPyuKk9aOuddo28fSmlGS4rrdMc7XOtu3b
- 2OrC0dJ+4vhNzryiRUeSoXqhDQYLxkhnknLDFpXJZO20JA50LTnbr9AK99HmhFZnR8vZIjN2V
- EY+gMcYSxZturTRTNZQgfcE4qyXHY1nedlWMtWBikbkpC0Q5bFaO7t+MxuvAUu30FrAwu+/U2
- gEB3nOGDlDk6PIjZ7yk94dj30qxhKC
+Content-Transfer-Encoding: 8bit
 
-Am 07.12.24 um 21:26 schrieb Povilas Kanapickas:
+On 12/7/24 10:44, Andy Shevchenko wrote:
+> On Sat, Dec 07, 2024 at 07:32:43AM -0800, Guenter Roeck wrote:
+>> On 12/7/24 01:13, Uwe Kleine-König wrote:
+>>> Hello Guenter,
+>>>
+>>> [dropped Jose Ramon San Buenaventura from Cc: who's address bounced]
+>>>
+>>> On Thu, Dec 05, 2024 at 08:27:15AM -0800, Guenter Roeck wrote:
+>>>> On Thu, Dec 05, 2024 at 04:28:33PM +0100, Uwe Kleine-König wrote:
+>>>>> I intend to change the definition of struct i2c_device_id to look as
+>>>>> follows:
+>>>>>
+>>>>>           struct i2c_device_id {
+>>>>>                  char name[I2C_NAME_SIZE];
+>>>>>                  /* Data private to the driver */
+>>>>>                  union {
+>>>>>                          kernel_ulong_t driver_data;
+>>>>>                          const void *driver_data_ptr;
+>>>>>                  };
+>>>>>           };
+>>>>>
+>>>>> That the initializers for these structures also work with this new
+>>>>> definition, they must use named members.
+>>>>>
+>>>>> The motivation for that change is to be able to drop many casts from
+>>>>> pointer to kernel_ulong_t. So once the definition is updated,
+>>>>> initializers that today use:
+>>>>>
+>>>>> 	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
+>>>>>
+>>>>> can be changed to
+>>>>>
+>>>>>           { .name = "adp4000", .driver_data_ptr = &pmbus_info_one },
+>>>>>
+>>>>
+>>>> How about introducing a macro for that instead, similar to I3C_DEVICE() ?
+>>>
+>>> OK, for now we'd have then:
+>>>
+>>> 	#define I2C_DEVICE_ID_PTR(_name, _driver_data_ptr)	\
+>>> 		{ .name = (_name), .driver_data = (kernel_ulong_t)_driver_data_ptr }
+>>>
+>>> 	#define I2C_DEVICE_ID_ULONG(_name, _driver_data)	\
+>>> 		{ .name = (_name), .driver_data = _driver_data }
+>>>
+>>> plus maybe:
+>>>
+>>> 	#define I2C_DEVICE_ID(_name)	\
+>>> 		{ .name = (_name) }
+>>>
+>>> for the drivers that don't need driver data?
+>>>
+>>
+>> Something like that, though I'd even hide the parameter type and just have
+>>
+>> 	#define I2C_DEVICE_ID_DATA(_name, _data)	\
+>> 		{ .name = (_name), .driver_data = (kernel_ulong_t)_data }
+>>
+>> 	#define I2C_DEVICE_ID(_name)	\
+>> 		{ .name = (_name) }
+> 
+> It's better, if we go this way, to keep this in sync with above by changing as
+> 
+> 	#define I2C_DEVICE_ID(_name)	I2C_DEVICE_ID_DATA(_name, 0)
+> 
 
-> Add the Dell XPS 9370 to the fan control whitelist to allow
-> for manual fan control.
-
-Can you check if using i8k_fan_control_data[I8K_FAN_30A3_31A3] also works?
-
-The reason for this is that the official Dell software seems to use those SMM calls
-to enable/disable automatic fan control. If this does not work then you can keep
-the i8k_fan_control_data[I8K_FAN_34A3_35A3].
+Makes sense.
 
 Thanks,
-Armin Wolf
+Guenter
 
-> Signed-off-by: Povilas Kanapickas <povilas@radix.lt>
-> ---
->   drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index f5bdf842040e..bcb295ea3319 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1544,6 +1544,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
->                  },
->                  .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
->          },
-> +       {
-> +               .ident = "Dell XPS 13 9370",
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +                       DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 9370"),
-> +               },
-> +               .driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +       },
->          {
->                  .ident = "Dell Optiplex 7000",
->                  .matches = {
