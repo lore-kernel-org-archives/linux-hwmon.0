@@ -1,161 +1,191 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2818C206282;
-	Fri,  6 Dec 2024 16:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CE812B73
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Dec 2024 09:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733503100; cv=none; b=Zxxnh7qlnGQPyZkO6HOUBNSM02X4nd4LaiFUd5cuLK5ZQltzBiiYge97NW1qafT/k+VLDtgB94ssyRRBnw2hKPA+rJdOYeDDRqEoWMhAYk83ResSEjqJCnne2lwZWEw2PQliWSavpkATVbJ1UQdeM81Z+6c/9ujdiNdmHaSco64=
+	t=1733562844; cv=none; b=m4yVEyaKuCx4FCtCozp4WUH5TNGXaL0qk112iA7V6XguhAgbP37D5hVhDuzYw27YZtWMoe1Hsose9zoobNzAL9qLHjn/sWxI/TOMEtJILHKlsd5/7Gc5jolsFdeFmKcH8A6KYrq6nxFqgrd3GbOBPF25XYgfbLDMt5mIdG3CdqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733503100; c=relaxed/simple;
-	bh=8HjIVg8Q7AA5TKAQZ/UOH+7uuqAsH+wKs9KM11XZzhw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p6W6kYqV/Xku/cRZ5B4hK0pBk1vfZu8Bp5aQHdgQhKJWZQkFowUKzGcySW8ydaDOGywS8dopSar/NsZSqzu59KK74zeV4HVzWfU9oOirdeEe4lVDOk+dS0JH/4zT4baWt5lpQ4ruAHFirxL+QgUVK+IdsYN4Sa4PG1u4AIDpxPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nekQRKo/; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733562844; c=relaxed/simple;
+	bh=GaP2m7+gewbgxasItmgoa6OskM9hEMHHwgOMkxTMqKU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sR7HBRcon9ES1Xtd7oE/zNEMK6KDi5nxpOARGTJBaVUl4mANVAUF7mjcwcoQ5V0vORNH1nAuGbgE3Ci4LZ72PrIjhVMsGPn0YtAVzfDzPoH8+CRLZj9nweEgz1MSO2lds9kJl6xwXeW0lr1lAC95JvaVRTYRjlHPcKDthgdOyyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=lyaRSXZh; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nekQRKo/"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-29e65257182so1360477fac.2;
-        Fri, 06 Dec 2024 08:38:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="lyaRSXZh"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-aa5500f7a75so380124566b.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Dec 2024 01:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733503098; x=1734107898; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUtyIe7GyZ1qnAGrnhHO6jZfnl/bJDmJX9w6y5HU/x0=;
-        b=nekQRKo/k6WMACYvJP6Q/d0jEM75wBKVKrxVTvi7Q57B7yF9AhxAnBgdyRWQME5pFD
-         /2hYcG/IJ3UyDJc4sxl6z6ItkOaindxMDgvoPk/TKqC2NKVaNjQbh7DX013z/ycB9WCC
-         ZMCCUXMSaIzkAvDP/KSClQmDK97RbounfvzdhmkPEZZdntcs0g8+L9Px2bcn7ohE37SS
-         xTXQDoPXjJe0AfNCwZ/2sEekh5NM5HrJ2zTyjKjyWPX9oaoktCCx4upI/ANHu2cmD1Zd
-         96svJk+ssvx8xgwsdBOCQsti8ft4N3lGup3XxEYX6rYS8CVZiBj74NfH8XzxUeLDQrJ5
-         Hqcw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733562841; x=1734167641; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7aWLngRiqO8WHMdwigYnffvFiIotz7popveEtuBc/M=;
+        b=lyaRSXZhL7pLljhELe77wnKhEiYe0fZYqQMK+8CXSiht6VHsubyZrgq2CfLklWvX/C
+         ezyoq0DdPwb/Dql80YQhTr4/nbFuklbuTHAWmGaIFCd/nB+QpFpplYHMr+T/dySel0Dk
+         +mj+EHJaW94pQR6FFG7M3YXzDiv4pbPH/OqHbfznSk52IgmTE+TxBACDfGIz+MmeVoEv
+         TM5s2mYC+ZJKcxBFkxCVrMrk4xx/B44oFSHNpl8h81z/VlaD1jEw++pzTbI1WCpzmyrd
+         n5x+H8AbUWGH8LHHCDnfsLt6/xW2J1icVvfD5mQIOUVKJejJXg0AmVnNOqB7PZiQtwv8
+         i2Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733503098; x=1734107898;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1733562841; x=1734167641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OUtyIe7GyZ1qnAGrnhHO6jZfnl/bJDmJX9w6y5HU/x0=;
-        b=UuTaC3bnJW0BIKJ6Bb/9QhjL/IQs5YSYUfVYTgWOJxhR0oV7BmF6NnekfdBcXyd9Ez
-         QiwbqEuRyCfEm7aT+06m22D4dlmAK1LwuPzcORR4PpMKHGwrT2Lyti0S9zrsYnx4Fjob
-         nz35B80dd2H0q5/LlvgSfHxNCh1hhOPQ9qka7URRmq7kk7zpPWhjqr9v21CoPLFRiev9
-         tn7a4+GuiHtvYFCDsjEn4uQPZJiRzuwXrY82MAPjHEm+D0Odxt+tgNTFycvGOUSFg4Rv
-         Y8SYfQkC+2Nh0qDmpTCzJptdRrwqj3ZyZ3Hj4crjZvdBfI99mcqcdNjiwB6fEeK6r7MS
-         pulw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+1zxwX93POZgyfRP3lFTMFWUa4+bexJvVGpJu5uyLznW42qHipPvXYSBp4nIgPAV0/vUS+MczbUBS@vger.kernel.org, AJvYcCWF+LfqmCdx7Yt9QRSqZtVft8oTmgy+DjbtxEy18cg+7YNaGyhaoUy+qzhv7Wf37587iktP8kQASrruyoo=@vger.kernel.org, AJvYcCX8kbaGRtxK1Xhnugqiz2gyTymHvaryyRQWFAlut416RYBOFpMPUSrKxFIZuhOkP4wuVjSSQl/QSdQI@vger.kernel.org, AJvYcCXq6recn+bSzwKMkiIwNi37aMGEePeOGPQZ1EeOVTqdrW85QWB7pB/xNTA5vHocYrNoZbyHsFgz9BcN3Ma4bkC+XJ6Xcg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7V0MWS+uzS0ovE3uW6dZaSErh4zhMxVXUh1if9RMrTFZzuQwr
-	njD5Fgn3ZdFf68/4mQMokcx9qKW5Y+t5C9pvykUnh3ze0kKfA2n1
-X-Gm-Gg: ASbGncufMeXEvB7Eo6rlxpnf8XUcDTKgx2c5Qm4iNo3cMO4Iyi2uyKES47sptLNfbDl
-	q4KdbYIemCpI8oen5O/Bw6UHNLhiqscIhIFtr7o5ssOqUnDuxCHoN0sGTwLMOoV1BG7GDHXTm9h
-	+WDH2FsDoHRirKbll4/IrkfyEdzaAkLPdA7y5vZqqACPkA5HSamyBes7d3EsUxSjXZdMuYDKRYW
-	K3r1uJB+vlaslt/Lk1G1UmyIv4fMf4I+6jvwZ9xaiuFppBfttWpRnbs+7nx5haFpzIyQqogWIlT
-	8XYxCUb7oR0IZL9jEXs0oC8=
-X-Google-Smtp-Source: AGHT+IGoXYPM0I+mAe7yUjNA6q2L0/CNK+6uzHAQbo7IsFfUj+O/131z1tjwI2LRhsUFPH0ZokM00g==
-X-Received: by 2002:a05:6870:8991:b0:29e:554b:f47d with SMTP id 586e51a60fabf-29f734d39cbmr4506172fac.27.1733503097310;
-        Fri, 06 Dec 2024 08:38:17 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd157b0171sm2872334a12.66.2024.12.06.08.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2024 08:38:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <82d7c96a-af68-4c7f-acb8-e4a883098a2e@roeck-us.net>
-Date: Fri, 6 Dec 2024 08:38:13 -0800
+        bh=s7aWLngRiqO8WHMdwigYnffvFiIotz7popveEtuBc/M=;
+        b=TQa/Q7ovvp+mzdA7nA7XcdyVvXN774tERK8lz8W/+Z+Malko05IMor2MPEhU4CFwJn
+         CKWecuOj/xVpQMX0V2o3UZPYWCQknRJwcukOmdqXZ5SOnSMNr8WvUu+z2wV+vfXOyNzY
+         Uuo4OEO8IwBfymZSBaZecxtx3dAOImnFspzJM5oxCmU/vkvgyXNk5uURuTGk9Pddnm2N
+         0NJKIp2KVrTeH8G4rz4wHiKpNSJ6fO5SDHIDzenqM/kerex4W39B/mmDPlD9bMGinbjz
+         JlNVSJGx0wDwk3V0Qrgr1JN6bHJee/atlVh0hhab7lziq4fLUBr7OomrtY4RS01cYoDh
+         GNjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1j87+Hn4zL0bVUokgjF17zFz/87xiu+RPoeSZzGgTlwXwp/DdtmTsEFV811/fAWi6SYuQ17qEEG2LYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqv1qt6z+GgTtDfkY7K8c/GJGgAbe4dVgNSZXBhvF/pn6FbDsj
+	jHT7ZmQ67hOz0CBnWUFFmvMyFbWst6loQdoQlLTdCnBm5T50GhYV1oQQBPtwgA8=
+X-Gm-Gg: ASbGncvPzOzZnqpU0pRbY1B8v16WIVDV4Ma2c/gzpSp8ifdkqy0yuFazQhIUQysdqka
+	EFFyDz9aRPkUkCmLBfTRONSkfrFPhDFxhCtNOBwE3bG0ZufZXRCo+Q/VMFIaCVhSm9QvoTcsFpg
+	kThhDV9oCXkJAPU7zH4R7FFt9ZSW3cqAVpfOc3hbqXnxsPMpST8hkRHQ9VpA+NGE1lqRlf1HP1o
+	9Nd0tZAE5u84vSdAMNrQP2eLDU1zIB+N6L27z/19BxMWXqQRVNNPw0=
+X-Google-Smtp-Source: AGHT+IFlgDt8bGuN9Jc1LWQbaHF0RoApQkBJ/4mrDE3rNU3GNy9s89zGkr2LAMOOdFc5PerI7iCBCw==
+X-Received: by 2002:a17:906:32d0:b0:aa6:1c4b:9c5b with SMTP id a640c23a62f3a-aa639fa5cfamr357253866b.7.1733562840571;
+        Sat, 07 Dec 2024 01:14:00 -0800 (PST)
+Received: from localhost ([2a02:8071:b783:6940:e614:87a3:d4c7:31de])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e4f571sm355646466b.18.2024.12.07.01.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Dec 2024 01:13:59 -0800 (PST)
+Date: Sat, 7 Dec 2024 10:13:57 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	George Joseph <george.joseph@fairview5.com>, Juerg Haefliger <juergh@proton.me>, 
+	Riku Voipio <riku.voipio@iki.fi>, Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>, 
+	Zev Weiss <zev@bewilderbeest.net>, Eric Tremblay <etremblay@distech-controls.com>, 
+	Greg KH <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Grant Peltier <grantpeltier93@gmail.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Rob Herring <robh@kernel.org>, Mariel Tinaco <Mariel.Tinaco@analog.com>, 
+	Peter Yin <peteryin.openbmc@gmail.com>, Potin Lai <potin.lai.pt@gmail.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Konstantin Aladyshev <aladyshev22@gmail.com>, 
+	Patrick Rudolph <patrick.rudolph@9elements.com>, Eddie James <eajames@linux.ibm.com>, 
+	Lakshmi Yadlapati <lakshmiy@us.ibm.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Initialize i2c_device_id structures by name
+Message-ID: <3qfvfqjp53yhfaf327rqyxzrrxrataawubetwcipv5dmrplsez@pe2ressulfxp>
+References: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
+ <89b8d605-c5ac-490f-977d-76315d6d5f46@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/16] x86/amd_nb, hwmon: (k10temp): Simplify
- amd_pci_dev_to_node_id()
-To: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
- Tony Luck <tony.luck@intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Jean Delvare <jdelvare@suse.com>,
- Clemens Ladisch <clemens@ladisch.de>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
- Suma Hegde <suma.hegde@amd.com>
-Cc: linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-References: <20241206161210.163701-1-yazen.ghannam@amd.com>
- <20241206161210.163701-10-yazen.ghannam@amd.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241206161210.163701-10-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ea5rlukmxm7r6wgz"
+Content-Disposition: inline
+In-Reply-To: <89b8d605-c5ac-490f-977d-76315d6d5f46@roeck-us.net>
 
-On 12/6/24 08:12, Yazen Ghannam wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> amd_pci_dev_to_node_id() tries to find the AMD node ID of a device by
-> searching and counting devices.
-> 
-> The AMD node ID of an AMD node device is simply its slot number minus
-> the AMD node 0 slot number.
-> 
-> Simplify this function and move it to k10temp.c.
-> 
-> [Yazen: Update commit message and simplify function]
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 
-I assume this patch will be applied together with the series.
-With that in mind:
+--ea5rlukmxm7r6wgz
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] hwmon: Initialize i2c_device_id structures by name
+MIME-Version: 1.0
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Hello Guenter,
 
-Thanks,
-Guenter
+[dropped Jose Ramon San Buenaventura from Cc: who's address bounced]
 
+On Thu, Dec 05, 2024 at 08:27:15AM -0800, Guenter Roeck wrote:
+> On Thu, Dec 05, 2024 at 04:28:33PM +0100, Uwe Kleine-K=F6nig wrote:
+> > I intend to change the definition of struct i2c_device_id to look as
+> > follows:
+> >=20
+> >         struct i2c_device_id {
+> >                char name[I2C_NAME_SIZE];
+> >                /* Data private to the driver */
+> >                union {
+> >                        kernel_ulong_t driver_data;
+> >                        const void *driver_data_ptr;
+> >                };
+> >         };
+> >=20
+> > That the initializers for these structures also work with this new
+> > definition, they must use named members.
+> >=20
+> > The motivation for that change is to be able to drop many casts from
+> > pointer to kernel_ulong_t. So once the definition is updated,
+> > initializers that today use:
+> >=20
+> > 	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
+> >=20
+> > can be changed to
+> >=20
+> >         { .name =3D "adp4000", .driver_data_ptr =3D &pmbus_info_one },
+> >=20
+>=20
+> How about introducing a macro for that instead, similar to I3C_DEVICE() ?
+
+OK, for now we'd have then:
+
+	#define I2C_DEVICE_ID_PTR(_name, _driver_data_ptr)	\
+		{ .name =3D (_name), .driver_data =3D (kernel_ulong_t)_driver_data_ptr }
+
+	#define I2C_DEVICE_ID_ULONG(_name, _driver_data)	\
+		{ .name =3D (_name), .driver_data =3D _driver_data }
+
+plus maybe:
+
+	#define I2C_DEVICE_ID(_name)	\
+		{ .name =3D (_name) }
+
+for the drivers that don't need driver data?
+
+And usage would look as follows:
+
+	static const struct i2c_device_id pmbus_id[] =3D {
+		I2C_DEVICE_ID_PTR("adp4000", &pmbus_info_one),
+		...
+		{ }
+	};
+
+or for the ulong case:
+
+	static const struct i2c_device_id ads7828_device_ids[] =3D {
+		I2C_DEVICE_ID_ULONG("ads7828", ads7828),
+		I2C_DEVICE_ID_ULONG("ads7830", ads7830),
+		{ }
+	};
+
+When all drivers are converted accordingly, we could change the
+definition of i2c_device_id in a commit that only touches i2c core
+things to introduce the stronger type checking.
+
+One additional small but nice thing about that is that it could be
+applied to the other *_device_ids, too and then the inconsistencies
+between those (e.g. for dmi_system_id .driver_data is a void * and for
+mei_cl_device_id the kernel_ulong_t member is called driver_info) could
+be addressed without having to touch all drivers again.
+
+I would be open for that. Wolfram?
+
+Best regards
+Uwe
+
+--ea5rlukmxm7r6wgz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdUEdMACgkQj4D7WH0S
+/k6SHQf/YA3pwdSIn8tMdHpMCEagpGqIxr243cm/0kHyBiGBIJ80U2CA+h9W9CeJ
+wKE6/3oxKOT6da7tkGX6iJguCeuljZoxU5+ZWhuBIWHkGmIVk/MpKW1TS3pk0RnQ
+awcaIZhZ2aWgw/nC660tgMYVK8Rq4O0GzUtuEEByqf/LEzDGuvLy7NAmEpnKWBSy
+m8u5KbSD8fFvDn1bwEY0v4AJycgUPWxm6wlYL5JXGlytkO7c0aUqwvm2vIIxttEt
+lIBztLeoU0oQtaD9G51VnajMCMfa5eWbKy0Z6sB2YAMtQqitzcaAqlB7h5EPkryQ
++nJDsUYOf9SHW0fa/ssT0nAO+EHglg==
+=rQOX
+-----END PGP SIGNATURE-----
+
+--ea5rlukmxm7r6wgz--
