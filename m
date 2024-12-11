@@ -1,69 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D01422A8;
-	Wed, 11 Dec 2024 01:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162E7C148;
+	Wed, 11 Dec 2024 02:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733882185; cv=none; b=MgGLFIFw9/6NnyOoA+44Kc+5eL1pYlhGqMdlP+Yo9iR0CaJKqT7I4qLLX8hFYE5lMNHJdeiXNjtql863dJ02ERC1cW1gFarfRtXFx1GNlu24hlJIDmgOQWjXBb8MMtQFzNSJccY7lfkOgP9uIpYoiZcFrD6paS3m5SGk4CRPy8M=
+	t=1733884487; cv=none; b=PdtWaR7vUQiI0xPzB/RBiyLJ9RTd+59r2BYwau2oTVUg2vpKoF2AELFng8QtcNLOvvtmd8WCvwPK1hxrZc8JXZFIHRUgbcln6Qq/uxXsClKzAkiYDyMnU3GKIh8JNA1BnbNxvEZx2RuwZWqkGQh2oAMEoA6KmPFDWZ72iRLRApQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733882185; c=relaxed/simple;
-	bh=L9hpu8B4bEbv4BWzFDWIU58mS0NmeBwiwVL18jWxcmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ym8DKZ14/g6ux4T4o3nMApf9CA+yG7xcWoYb01dGuDWM+XPP3kRFtUbbmHwuCDouAT5BR/FnfMom9NXdoVSuYtRqWqF13JkFUzC9CFtLkSsrnX3s+IJBLwsnnx9WpFN5xONkuJ1ruGpsOqcyJRgI/PsZgj0v/tdcapa7bBLyfdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRHcntU6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733884487; c=relaxed/simple;
+	bh=s0Bs64y7FoyD6L6Sh39cziYAn9mVQUwKgqGRObQRdSM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uM587zU5Oa5L26wK4b4twFrPXpHvU0WK6iLbz6l4RFWU7LTp+O8ncigGopPgsw+valqMONARz5BzK5H+RKHQvvf+3LlMSPnUVafaIhbmNFJYwfU1N0NmfcfBNPIwvtra0tces5H+tab3LFBrEDRzjOY3C2LJrLumsBj9VMxlkF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=H1QHUjf3; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRHcntU6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A8BC4CED6;
-	Wed, 11 Dec 2024 01:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733882185;
-	bh=L9hpu8B4bEbv4BWzFDWIU58mS0NmeBwiwVL18jWxcmk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eRHcntU6PUTaQAoAcl1WW2JDRXgUKIXE7WBD7o897zJVjdXb+uAiSlKSMQNPpDzh/
-	 CBJkfx8GA0/BK7W2DxurNJNOHL0weszqvRbEy8rzexSz9ta3UBrxKwe2UcGKEtu/0I
-	 Vm0SIlF3cQ25hub1vkMJbn8v7uxSo1NusbEq1EBA8lIsJbnMPbSr+/OFukp161Alfv
-	 Mf9skIEs60bLDHpHFv5HQGSDlxF2cGKr2azC27J4VbIb8skxdprs/As1YbPvmXa3Qf
-	 s6APl4ww4KZXiib2CpXNuzIpWorqL83QDNashcBW2pkabbAF4S0zvLXVHk1hxvBwDW
-	 P/hlfzaglAtKA==
-Date: Tue, 10 Dec 2024 17:56:23 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mateusz Polchlopek <mateusz.polchlopek@intel.com>
-Cc: Ming Yu <a0282524688@gmail.com>, <tmyu0@nuvoton.com>, <lee@kernel.org>,
- <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <andi.shyti@kernel.org>,
- <mkl@pengutronix.de>, <mailhol.vincent@wanadoo.fr>,
- <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
- <pabeni@redhat.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
- <jdelvare@suse.com>, <alexandre.belloni@bootlin.com>,
- <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>, <linux-can@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
- <linux-hwmon@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241210175623.748da1b8@kernel.org>
-In-Reply-To: <2d6e82ff-9f68-427e-a8a6-8dd31b3c94e4@intel.com>
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
-	<20241210104524.2466586-2-tmyu0@nuvoton.com>
-	<2d6e82ff-9f68-427e-a8a6-8dd31b3c94e4@intel.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="H1QHUjf3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zFGk1
+	X8bslnZ8rtCSbiUTceJnb+BrvDhUTUUtZ9FewE=; b=H1QHUjf3zppP6vktDrpeS
+	9AJmZSLVvQK6/MWBP9go64kKIAKfT0ihlUS34dfGvfxpPNpObKLImigoa7fzfOcI
+	2lIYu01uDtt8tbPRG9DaL6C4l+AgNVbdilC9hy8dkRnpE8RKiKkSVkXeTThhwsjh
+	J9yCHBtZ/fHAXhYwjpyLB8=
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgBXqEwf+lhnQvH4CA--.29221S4;
+	Wed, 11 Dec 2024 10:34:12 +0800 (CST)
+From: Ma Ke <make_ruc2021@163.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	jic23@kernel.org,
+	punitagrawal@gmail.com
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ma Ke <make_ruc2021@163.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] hwmon: Check dev_set_name() return value
+Date: Wed, 11 Dec 2024 10:34:04 +0800
+Message-Id: <20241211023404.2174629-1-make_ruc2021@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgBXqEwf+lhnQvH4CA--.29221S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFy8GryUZFW5Ww1fKFyxAFb_yoWftrcEgr
+	409ry3GrnrJFnIyrnrArZ3ZryjyF48GF4fZF1Iy393ArZ5Wrn8Xr1vvFsxJa4Uu3s8GFy8
+	Zw42qw4fAr4UCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRirgWJUUUUU==
+X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/xtbBFRCyC2dY9FefogAAsd
 
-On Tue, 10 Dec 2024 11:57:41 +0100 Mateusz Polchlopek wrote:
-> > +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
-> > +		     u16 length, void *buf)
-> > +{
-> > +	struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
-> > +	struct nct6694_response_header *response_header = nct6694->response_header;  
-> 
-> RCT violation
+It's possible that dev_set_name() returns -ENOMEM. We could catch and
+handle it by adding dev_set_name() return value check.
 
-This code is not under net not drivers/net
-As a general rule please focus on functional review, formatting and
-process issues are harder to judge unless you read all of the mailing
-list traffic.
+Cc: stable@vger.kernel.org
+Fixes: d560168b5d0f ("hwmon: (core) New hwmon registration API")
+Signed-off-by: Ma Ke <make_ruc2021@163.com>
+---
+ drivers/hwmon/hwmon.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index bbb9cc44e29f..8b9bdb28650d 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -955,7 +955,10 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	hdev->of_node = tdev ? tdev->of_node : NULL;
+ 	hwdev->chip = chip;
+ 	dev_set_drvdata(hdev, drvdata);
+-	dev_set_name(hdev, HWMON_ID_FORMAT, id);
++	err = dev_set_name(hdev, HWMON_ID_FORMAT, id);
++	if (err)
++		goto free_hwmon;
++
+ 	err = device_register(hdev);
+ 	if (err) {
+ 		put_device(hdev);
+-- 
+2.25.1
+
