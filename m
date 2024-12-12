@@ -1,129 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DFD25948B
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Dec 2024 19:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734033436; cv=none; b=im9QNiwynyXFMmVeBaOn9+yOmPjEl7t2hxbDlogf94/A+++oJJfyBXgJ/RQySrcFgn5pqmHLLa4OM7fseQat3j6gO3AZ6Z6KJuqZE3ovItC9cJ05EL5qOsFiLHtjwVoPwiAUZaHeVcudU5gYQh3CF14fq0U4ACAG1+SaPUDpHEY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734033436; c=relaxed/simple;
-	bh=B0vxr/CLSQlFnuePs0bJgo44dgvz6gyg8b25VaLl7J4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=f69zkHKPyZ/rMMoi+lsZGfLzkD1+30RqnDmwLYNAlyTKUsS+e1bNQIFHHaJ1mubxaJ+S1hslvmLiWrF9+zZK21hIAEQoFAE6yBdOjefpPDKMzbYGE1p5yU9FPaRb8ZbZKvm3QCbRpDb38eHvM1tqbbbVHf3U+JNxI29x0prraa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XrIkcSqC; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69EB1714BF;
+	Thu, 12 Dec 2024 21:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734040006; cv=fail; b=qjxyi+UoeNavPDRS03RUxxfL9tyVbeWdZV9m1kwnI5VMhWEg0Jx79dV0rsfVhSVEEdMb2HU25GHkxrKdAUVKgQq5cPgwdkxsBd0BQXOvlawD4+7QCGuOVfJACKUSPdSi1785ALFosDLCVg3oMDl6Gzlwgmo7zQTbIqnonoZpHJU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734040006; c=relaxed/simple;
+	bh=HXUeF/JQ9lmSaks4ikD3PpCXBhwztA/FHcVV0/nnwSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bhgvjtKc68vCy91c/tyMHE+bUptHWMLAQfEjfHp3N2ILPZP9e7ivOk6aZDnAYUs1fN4XSObe/fIIOhQQV2URb5TjfnJ4Os4orjgYwTXrRHy6EAdvldt8g/QZDDKdNoWK1zPtOjpg42lHlEl9j8EuY5OLADB8g5N5cMDfeg8nZUw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=fail (1024-bit key) header.d=amd.com header.i=@amd.com header.b=VyOJ1JjP reason="signature verification failed"; arc=fail smtp.client-ip=40.107.93.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XrIkcSqC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734033431; x=1765569431;
-  h=date:from:to:cc:subject:message-id;
-  bh=B0vxr/CLSQlFnuePs0bJgo44dgvz6gyg8b25VaLl7J4=;
-  b=XrIkcSqCPDb1GQyTQvZztEF8lP2dEwjathDB9wZEf0jaTEVZdAUyV/7z
-   1THJTR+vAGWmMBaIvTlUQDuRB6VkXoN4ZQIFxReHfXxZ6nwUiwz4+VQn4
-   MkDKCoxAKGsSDB8X2rk0B5BHctedLIhVFUbeAzBP89Mgd5EeAnfLNU9ot
-   iAeZtqMZF1edbM4CsG0uEMwu26QlIQoYwr1hWUe+yRinuaIjdTkmsWD11
-   X5vG4VccIXPwsr6Yw8+Up/865ZPo4Z86p1gZeXmYJ/H5UA35cqyG7TF0T
-   L0fUqsI3u6GZf78tmXRY3oFWVCJ1XabyVko/DSEH1B8Zf2PPsocPf0Zrz
-   A==;
-X-CSE-ConnectionGUID: iguyUYeXRqegDlOqjaQTYA==
-X-CSE-MsgGUID: w7A/QI40Qi+zUHpx+OQPUQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45480585"
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="45480585"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 11:57:09 -0800
-X-CSE-ConnectionGUID: j9Gaq17wRtSsq4HNnNmJ3g==
-X-CSE-MsgGUID: 0ohnhHrZT76kO+ayAv9SpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="100487488"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Dec 2024 11:57:09 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLpJ4-000BHD-2c;
-	Thu, 12 Dec 2024 19:57:06 +0000
-Date: Fri, 13 Dec 2024 03:56:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:fixes] BUILD SUCCESS
- 025c7b0657825d4441946323a9bfea596635ebd9
-Message-ID: <202412130311.4Rq46ipo-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amd.com header.i=@amd.com header.b="VyOJ1JjP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZPIJaiDLmlG+OUme3hAnMq1uEyi39xKe8N1iqi0LRBIV/UJ/EVOz8EViBAeA3x0ph3LeK4fLfNk/jo85aFOjVLcgjFgZ9zZnsRQy/4yYWfITSSXGgXr4KiNX9uyEEXsO2nHr0CMjg2gwsJ48kekHHQun8HE8iNn3QMdTvmdJ9lXoOuhgU2kWuQxF4cOJ/uEg6NeYU/XS+JFpH+6nkCE/5zuhF9LcQqD5SO8b1dk9mKbBgqDX4K/UQVEipmtmmWOq8WajenGZ6FFQzOCyte4o0FocPqaeObbYRmXflkYnnCxaz5Fv3r9cE6LMPHGHUHWoqtl+QF0xKN+QlrGsKASY7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qb7/NjgwXjEowoRyApeb9QNEyqs0Et59nVrN5KUNJgU=;
+ b=gA9gura7BfYHiwnE31D1qQ6SULHbbQk9MxPwhNLp52whBSD055L2+dh6UM00VQB+uGG8dJvRMcjAj5YNq3iAnQ+RiUByd/Ax0xidl579cesWbl2lfiSHIIO48i5ZvZq0+ej8ocEwpUIbDVmPYPLkit9ECHUWfv4jpy35nxh604Xi3CjQsAFxt892+NsTjVPh+MMudsLG3Tx/D+nKcfr525sOSLatmgAAu0utzGzga/wYo2HtOeNCbaXpwl4QjbTq9HNMBoRB/5g2UjLKfOg982DQYo2zwR/Pvg0jRmv5jxTP+M9V5CAKdC+A8ohtd4DyErRR7kbFUsMcc/esocME0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qb7/NjgwXjEowoRyApeb9QNEyqs0Et59nVrN5KUNJgU=;
+ b=VyOJ1JjPG7n4U1jo47oIZwjpuPMrfxFl+dgnMLCcjkvC2Pfdq6sJxGxDxGnL0hQA6uBN7XwZ9kv+CPJ0JVaREK8a+/rFFZN+4Tk5HGTuP1m8A4sRyHpfzfc2i/MI402oNBMk77rJP/pGguWgbXDodOFuFRHPpCG+15f9X6BfZBo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
+ SJ1PR12MB6147.namprd12.prod.outlook.com (2603:10b6:a03:45a::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.16; Thu, 12 Dec
+ 2024 21:46:41 +0000
+Received: from DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
+ ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.8251.015; Thu, 12 Dec 2024
+ 21:46:41 +0000
+Date: Thu, 12 Dec 2024 16:46:37 -0500
+From: Yazen Ghannam <yazen.ghannam@amd.com>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: x86@kernel.org, tony.luck@intel.com, mario.limonciello@amd.com,
+	bhelgaas@google.com, jdelvare@suse.com, linux@roeck-us.net,
+	clemens@ladisch.de, Shyam-sundar.S-k@amd.com,
+	Hans de Goede <hdegoede@redhat.com>,
+	naveenkrishna.chatradhi@amd.com, suma.hegde@amd.com,
+	LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2.1] x86/amd_node, platform/x86/amd/hsmp: Have HSMP use
+ SMN through AMD_NODE
+Message-ID: <20241212214637.GA80677@yaz-khff2.amd.com>
+References: <20241212172711.1944927-1-yazen.ghannam@amd.com>
+ <65375593-f2e0-e03b-7e7f-ad8be58772d4@linux.intel.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <65375593-f2e0-e03b-7e7f-ad8be58772d4@linux.intel.com>
+X-ClientProxiedBy: BN9PR03CA0461.namprd03.prod.outlook.com
+ (2603:10b6:408:139::16) To DM4PR12MB6373.namprd12.prod.outlook.com
+ (2603:10b6:8:a4::7)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|SJ1PR12MB6147:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28eb9d39-ea70-4cc2-8f09-08dd1af676c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?h3aMtBsrzUQsK9NeXJxCK4Zfxm0zFRnd0dm34OtwJvZlEvdAdOoFx+AFQd?=
+ =?iso-8859-1?Q?hSu2XzS35/duHw94EBGO7aHM4Hq9PKAlmA1CfMHkQx4KMoHlBZnh+5oZXm?=
+ =?iso-8859-1?Q?RLcNRb/8OSxAZbQ1LiGQ+ggFMNiyBFGsaQKg6Alyvg7ENumdAGY02nU+hr?=
+ =?iso-8859-1?Q?EHFF2PU2pJMLLFxbmRdiYTj0NFd7rUYui2jl0xyg7orwAF4A9GJnmuCswI?=
+ =?iso-8859-1?Q?J9TVSI8vM9gG8ebZCtMY6Uxc4YVUG5/fBkA4nitJsttxtPgkBRsDzKBoTy?=
+ =?iso-8859-1?Q?8ESXPnJncyzM3uwmw2UnfRbhUk5lip4xE9TJZP26OFqvDp4ewKCTE3sGsG?=
+ =?iso-8859-1?Q?/+JNSen6QqFwB70zFt2XlC0wWZMHTdUUZV0NJ9jknpzKEElAtMr1ljGz+T?=
+ =?iso-8859-1?Q?PqrsFoHE1WBwsbmwiCAfLAyL8mfDRZapSTWV3gWYxuZUMJ/3GCRPopXuNX?=
+ =?iso-8859-1?Q?JBqW52dJOgnt+n9aqUnI4/GvmDAsbIrhGrHnSVoNWusLcCL8lUo8VK2/s6?=
+ =?iso-8859-1?Q?MC+v9OXNVscowFwTqQ0+o2ADgAE6x5Xi02XkM1ZlZCmZ6MLJX+ETaVkaWf?=
+ =?iso-8859-1?Q?E1nrAhLMHYidHbEYnFbsUIEjV8DPDtRF6jd0JJDOQDB8GyoHB4PW5VHU18?=
+ =?iso-8859-1?Q?gcL3L72gfoaFCLUQIa5BKG4PuLQskx2b9XRckA70wVLTzjZTuRiyx4wtmZ?=
+ =?iso-8859-1?Q?dTd0Y68D6ccuyGk4iGBujYUKN7pkDsPoA/uawGdZNbRPDwKkUs/8iBpYO2?=
+ =?iso-8859-1?Q?LcP5fjgqDcIcdVNN6zgzSeb5ufC28TXvx796EAJxmvxnSGA9wUQuXZ/m6w?=
+ =?iso-8859-1?Q?eEHgxJoOveez2n9CN788FH5c5wxf3uc6/5BcGJWLEuwka4wXvKl+v109Ha?=
+ =?iso-8859-1?Q?GTK4oun8kCNMxHnShxC64c7NLWd4zAQNK/TGJKB9T9DR0z/16k9Jh5Lv4J?=
+ =?iso-8859-1?Q?IUjRuL6McTSr5N80Ui9C6HOKENgLBdFSVWmbvaJ7FIRBudAQ0Repcv6D2b?=
+ =?iso-8859-1?Q?3BnWR70wcXKn0qDSY/NYMbrpDBXteWzgw5R2KnBIzs22CqhRgA5UfmwV5a?=
+ =?iso-8859-1?Q?N0j+6FJmqp1WkcNRN8FlVk6j8xgvPZh6pkfdykIEsuVer3Fru2+15aDeTH?=
+ =?iso-8859-1?Q?6mWHPV2zoHcdDUFPdLbPBph74zehlSpWIQA73hB+03QJ+DVyJ5ebwFmfcv?=
+ =?iso-8859-1?Q?a1id9ML2eHW/5BJQBOSWoQoCBu3ITwmnZuNrpbs+lFc81EZX0MbDgcqvy6?=
+ =?iso-8859-1?Q?LWoRJhkPcA60PQ+QGkj1ThvSweDFhB5iLMsc1OJcqJ4sCNLMg78ci6uVhg?=
+ =?iso-8859-1?Q?DtmQlHc9np8njYj86lEIhF31mXHGA/GGyD6fmer2PXkbaboQ6Pl5SrO+6q?=
+ =?iso-8859-1?Q?sxHaNQ1KikgfyCEPac05+OB56Q7su+3A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?QxyyCn0BaJTr/CrhFUu6KXD5QXlsyYwK8HhcR2PRIKnMUaB/wXEroknsqQ?=
+ =?iso-8859-1?Q?iFOE0Q/x7UWBG+fKR59UFlJ/oQpYtz185ui8TcDy7gC0pLQpENk06BUVha?=
+ =?iso-8859-1?Q?9uVnk6tYeoLQ2SneVIlXCnZv4bYLhPvknYJh6qWaAUSNZ/5lzIctFHGY1O?=
+ =?iso-8859-1?Q?EeYpgVyO5tMiRBrh29yN2XXxUKA20Y5WYv53fUg7Uo6dWPmI3pMBkUewOZ?=
+ =?iso-8859-1?Q?W5eeA5u1PJhZpVZ9a4iURvovGT/ETAfzKMdl6T1Bp+lpeyCClp23BpVilE?=
+ =?iso-8859-1?Q?6w4M4GtZXbsqZonwME1myjGr1h7FndMeVcrlBZSSi978RIMkbC3me1uLJa?=
+ =?iso-8859-1?Q?c3HchZvzD7Pztgrt5c+wbxV3dGvbDuRnIu4wixNjsN4gCnMk/C5cV55kmu?=
+ =?iso-8859-1?Q?OV0NrbqtCk+TojC9ACn9wyA7GetayLVaTR1DZiB03XVcwYL7BRHDX0Is7j?=
+ =?iso-8859-1?Q?j/2DBPSZpejtCUMOULrAEesKwDZAE1RvSn8cx6M1nT+LuvVKVUsdDJz0wq?=
+ =?iso-8859-1?Q?dqB59UkMCAui2liZBHwTce4RI7tAI+59cySmUHpvLV+RqoanM+PCxxM5u2?=
+ =?iso-8859-1?Q?T0AFp/PbK0pwPRMXWBDEV5ceK2zzfj5aBxOwsn/OUnqm27MfyWE+6bPo3v?=
+ =?iso-8859-1?Q?9WWRIFur0oZRYz4/PeFIUrN8J4F7Gew6wVZW5VEftBerR/KiWRhVGtcN98?=
+ =?iso-8859-1?Q?ZzqoiP4F2IHH9gyN9OQ3dzgjY2GqtMYX8R5pH2BWFm+n/11qM1l6WPG385?=
+ =?iso-8859-1?Q?Wn/EPsOmkrc2gueDINnqVSBpKSpdK6WtI5Fl9D3zil/TCZ8onza3d9l1Wi?=
+ =?iso-8859-1?Q?EdOKE9dGpwpvVmpjgkfHiisJILnMIRHQlQhkMwGHHuSLvC0Dkc19BC5ewn?=
+ =?iso-8859-1?Q?vZ9QSMKH0Y6PE8slVVvtyCKJp42ms9P3un+ff+rrzVsHbDJIdi2C3ozSk3?=
+ =?iso-8859-1?Q?MQhElh8I+kyJHmKDjMxYptBYoQODpBJXqa1mADOTKclMWpYYvkEdATTEF0?=
+ =?iso-8859-1?Q?zEHMKFnqFioHNEg19TGX85aL7pzeSRT5VZtpE+HHN6AmmBVmIT1JmbzmrM?=
+ =?iso-8859-1?Q?4VsOJwfkrZKwcmQrJ6OTDYU8AFumkfz3vCu0NH3No5RErQNCfpWi7c5Wyp?=
+ =?iso-8859-1?Q?tlaCac7W+2BmEeyQVvi8TRPd2SK2/gkvAsKvJeq26BQw6A0s6MxdB5l4iL?=
+ =?iso-8859-1?Q?nwUnbCFrQcm6rzGdIh3W4jfCVJ9yxIHExot8JBYu7gkmSkW+eDkONNlKBO?=
+ =?iso-8859-1?Q?QjDG+GwwX0i+tSDvLk9BqWw7xsNUPERuysc8zIpcWb0Z++XQye0JGZx0SG?=
+ =?iso-8859-1?Q?+kdlU153+IBdjbrHrayfAGliuM3oSOvZOj7zBpDUlGIe6x4SVnOUsERNHH?=
+ =?iso-8859-1?Q?PoAWl5AD9VhQK2IKLm/4NP7n4TsvyhV11ODVPKoX5/VCW8m0BfmUuYiHBp?=
+ =?iso-8859-1?Q?YzC3lGW9LQ4a69Z3tCHCiL+FivDragJcYntBqvnef5ZOSrovVfmOk8b24E?=
+ =?iso-8859-1?Q?EkQ2jysC/MBV4tlZX1uXP+EN9wuPqs6XxuSB8acFjA5Libe7TWqSXBlS+E?=
+ =?iso-8859-1?Q?Qq/7y/0hA/pFMYbks+IeIVce2RtZySCxxM87MsciLifCe10/QaXpz12yzD?=
+ =?iso-8859-1?Q?zW43EA4xF6HalCE+xStFGvcSzGkdboomgZ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28eb9d39-ea70-4cc2-8f09-08dd1af676c6
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2024 21:46:41.5256
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5QskZbxYldxAoZ2PIuUcKLcQyAXhyYxSfh7/++SW6nhrQ2dpkJHO8VF182uqNwXT21oeHjpjqZdEzpPW9SH30w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6147
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
-branch HEAD: 025c7b0657825d4441946323a9bfea596635ebd9  staging: gpib: Fix i386 build issue
+On Thu, Dec 12, 2024 at 08:50:26PM +0200, Ilpo Järvinen wrote:
+> On Thu, 12 Dec 2024, Yazen Ghannam wrote:
 
-elapsed time: 1449m
+[...]
 
-configs tested: 52
-configs skipped: 0
+> > @@ -95,7 +80,12 @@ static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
+> >   * Static array of 8 + 1(for NULL) elements is created below
+> >   * to create sysfs groups for sockets.
+> >   * is_bin_visible function is used to show / hide the necessary groups.
+> > + *
+> > + * Validate the maximum number against MAX_AMD_NUM_NODES. If this changes,
+> > + * then the attributes and groups below must be adjusted.
+> >   */
+> > +static_assert(MAX_AMD_NUM_NODES == 8);
+> 
+> Please also add the #include for it.
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Just to confirm, you mean for static_assert()?
 
-tested configs:
-arc                  randconfig-001-20241212    gcc-13.2.0
-arc                  randconfig-002-20241212    gcc-13.2.0
-arm                  randconfig-001-20241212    gcc-14.2.0
-arm                  randconfig-002-20241212    clang-20
-arm                  randconfig-003-20241212    clang-19
-arm                  randconfig-004-20241212    clang-20
-arm64                randconfig-001-20241212    clang-20
-arm64                randconfig-002-20241212    clang-15
-arm64                randconfig-003-20241212    clang-20
-arm64                randconfig-004-20241212    gcc-14.2.0
-csky                 randconfig-001-20241212    gcc-14.2.0
-csky                 randconfig-002-20241212    gcc-14.2.0
-hexagon              randconfig-001-20241212    clang-14
-hexagon              randconfig-002-20241212    clang-16
-i386       buildonly-randconfig-001-20241212    clang-19
-i386       buildonly-randconfig-002-20241212    clang-19
-i386       buildonly-randconfig-003-20241212    clang-19
-i386       buildonly-randconfig-004-20241212    clang-19
-i386       buildonly-randconfig-005-20241212    clang-19
-i386       buildonly-randconfig-006-20241212    gcc-12
-loongarch            randconfig-001-20241212    gcc-14.2.0
-loongarch            randconfig-002-20241212    gcc-14.2.0
-nios2                randconfig-001-20241212    gcc-14.2.0
-nios2                randconfig-002-20241212    gcc-14.2.0
-parisc               randconfig-001-20241212    gcc-14.2.0
-parisc               randconfig-002-20241212    gcc-14.2.0
-powerpc              randconfig-001-20241212    gcc-14.2.0
-riscv                randconfig-001-20241212    clang-17
-riscv                randconfig-002-20241212    clang-20
-s390                            allmodconfig    clang-19
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20241212    clang-18
-s390                 randconfig-002-20241212    clang-20
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20241212    gcc-14.2.0
-sh                   randconfig-002-20241212    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20241212    gcc-14.2.0
-sparc                randconfig-002-20241212    gcc-14.2.0
-sparc64              randconfig-001-20241212    gcc-14.2.0
-sparc64              randconfig-002-20241212    gcc-14.2.0
-um                   randconfig-001-20241212    gcc-12
-um                   randconfig-002-20241212    clang-20
-x86_64     buildonly-randconfig-001-20241212    clang-19
-x86_64     buildonly-randconfig-002-20241212    gcc-12
-x86_64     buildonly-randconfig-003-20241212    clang-19
-x86_64     buildonly-randconfig-004-20241212    clang-19
-x86_64     buildonly-randconfig-005-20241212    gcc-11
-x86_64     buildonly-randconfig-006-20241212    clang-19
-xtensa               randconfig-001-20241212    gcc-14.2.0
-xtensa               randconfig-002-20241212    gcc-14.2.0
+  #include <linux/build_bug.h>
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yazen
