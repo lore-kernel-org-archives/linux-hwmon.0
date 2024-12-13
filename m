@@ -1,41 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782261C07FC;
-	Fri, 13 Dec 2024 11:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11821CBEB9;
+	Fri, 13 Dec 2024 11:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734087991; cv=none; b=dHMjf0ZbONk8BsxP90lNsHbHLRtPN1W8gKY5UtSzpaQEx5f4xYNupt9lIBW3+1p9a/b/BMkHNIIS2lYOUBlEYro4vafi8z54gL4B+Y0WSgA4WKH4DwG1uf3vzt8CQply3bbw0L2Q0SI2wSEdKo121EST0vpK0JcMkcrqVjeD8j4=
+	t=1734088133; cv=none; b=ROpWFdh5kZjkrprMPXfd/CNm5ThAOAonXUPb+NC4+O540RZPV8MI4dtozNYGA1bghIAL10z1WPNxzFSUnWDkmymZJEjiYUCXe073g3CpdFeGetpV7BrxNNLgzsTzz36fArIndj+iw8iTAXwGiKuEGjQWCOOMbuG+GFbHE55DqfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734087991; c=relaxed/simple;
-	bh=gfNtJViyjv6IWzkrbJzLL6JeNTj+0uEA9pj0kqDGYdk=;
+	s=arc-20240116; t=1734088133; c=relaxed/simple;
+	bh=Q0PS8MAQEZybHHbs6FZGtMT3Ml/Nc1Pc3JSPi4pTUNI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aw6KcfqFgwXvLR3jMgIm5Cu9976XeKaH9mSdsn4MW2ps3WfpCekVIFV/4FkzqwgoI9/tUyPAjSfHCAaD5OwWTbiDKA5Q54CzcTVQo6Guqee3tTAgUmb9Kmnvtf4QTBe5GXquYfJrhUm1T6wyaIrXRxScrrUIWXqrE5C/tPpWXM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0DrOFzW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Imb5Te4811pr9ds1Us8PYEdW7bT2tdeV4ukHQq2utUzigG3GF8H6bCgqXozoVQwSUROr3hlIj9GqFt5DsWBuh1GfdomaEsWraLBiQmEtnPTwUQLw6CyZX6Fm7cJ8z1/7o3ZTW7BaiIiraXbeg8p/bTKNYdXjREZPCO0p0mKLBwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IlcsphOa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0DrOFzW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C13C4CED4;
-	Fri, 13 Dec 2024 11:06:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IlcsphOa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CD1C4CED0;
+	Fri, 13 Dec 2024 11:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734087991;
-	bh=gfNtJViyjv6IWzkrbJzLL6JeNTj+0uEA9pj0kqDGYdk=;
+	s=k20201202; t=1734088132;
+	bh=Q0PS8MAQEZybHHbs6FZGtMT3Ml/Nc1Pc3JSPi4pTUNI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H0DrOFzW1lzj5avOj3VsULdBxX1szCjke3bk3l9X3tPOptnSVhjtOm1yY4EupAmsX
-	 732bY1I7KbmuE4efk+iMzdltyGMsPt6WRbS2PR+pb4kdRdIddXCa9ddMs7BEZx4vml
-	 /csW5g/BXKgPSFmYYPqWMAQS98jBF97G8IWZXmHAsKfogWmV5LxuFJ9TMpX9kmrGKR
-	 Blc1FLw0CbYC2kZBfiiwqr9pqP6jQ22bZgJQtUR5XA3J3ZccDu0wgqsFQFE86bFUj9
-	 Qo0CYSf52VCQrFNeTiCQu6Ddxv0pq1zketrHigUbnvxbAfyJSLSRnfvoQD3294p/gg
-	 dBBesW0QHBHmg==
-Date: Fri, 13 Dec 2024 12:06:27 +0100
+	b=IlcsphOaglpa/Gsl9aKRBly3XeRAr0If8i6t5nFnfRmgB6ceeGeNIGWtVi6G9/Frh
+	 XuTUB5aSm5m+KNbzwd8wBa6Uj2Zok1IY/DflaxxbK7gWMc9YZbnDC65ZzHBMcnZQNT
+	 qiat+WoiHbJiWvwxOZ2/rDl7VpSz8677MdFJWtxpR/IBNjTNIzHbJc4Og/5TdZRGm8
+	 gfrWVUrp7HZMVvX9djfxSw1QuamrtXb35JV2bHlO1mr3ZbGjT+9+ezmAp/Wt7xYjOc
+	 K0QoRvQL+Y9ZDrFau8tziqI8fQ3Ml6W5eaFlr5iN/mwgEhPyIBcNvk7N3uUh5yQMsF
+	 UTzREiyjFn4tA==
+Date: Fri, 13 Dec 2024 12:08:48 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Hermes Zhang <Hermes.Zhang@axis.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, kernel@axis.com, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add D3-323-AA
-Message-ID: <wy7nyg3cztixe5y5rg4kbsbbly32h547hwumwwvrfme4fdgsj5@znfpypleebrb>
-References: <20241212042412.702044-1-Hermes.Zhang@axis.com>
- <20241212042412.702044-2-Hermes.Zhang@axis.com>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	eajames@linux.ibm.com, jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, 
+	joel@jms.id.au, andrew@codeconstruct.com.au, Delphine_CC_Chiu@wiwynn.com, 
+	broonie@kernel.org, peteryin.openbmc@gmail.com, noahwang.wang@outlook.com, 
+	naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com, 
+	patrick.rudolph@9elements.com, gregkh@linuxfoundation.org, peterz@infradead.org, 
+	pbiel7@gmail.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] dt-bindings: hwmon: intel,crps185: Add to trivial
+Message-ID: <au4mmpxa6tbznu3pcxeu7tri4elvcoyy7l5m5ujdpj7ah3xqrz@ule3ymdiisyj>
+References: <20241212214927.3586509-1-ninad@linux.ibm.com>
+ <20241212214927.3586509-4-ninad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -44,113 +50,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241212042412.702044-2-Hermes.Zhang@axis.com>
+In-Reply-To: <20241212214927.3586509-4-ninad@linux.ibm.com>
 
-On Thu, Dec 12, 2024 at 12:24:09PM +0800, Hermes Zhang wrote:
-> Add Devicetree binding documentation for Nicera D3-323-AA Pyroelectric
-> IR sensor.
-> 
-> Signed-off-by: Hermes Zhang <Hermes.Zhang@axis.com>
-> ---
->  .../bindings/hwmon/nicera,d3-323-aa.yaml      | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nicera,d3-323-aa.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/nicera,d3-323-aa.yaml b/Documentation/devicetree/bindings/hwmon/nicera,d3-323-aa.yaml
-> new file mode 100644
-> index 000000000000..31690e630b5f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/nicera,d3-323-aa.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/nicera,d3-323-aa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nicera D3-323-AA Pyroelectric IR sensor
-> +
-> +maintainers:
-> +  - Hermes Zhang <Hermes.Zhang@axis.com>
-> +
-> +description: |
-> +  Nicera D3-323-AA Pyroelectric IR sensor
-> +
-> +  datasheet:
-> +    https://www.nicera.co.jp/wordpress/wp-content/uploads/2022/01/D3-323-AA_e.pdf
-> +
-> +properties:
-> +  compatible:
-> +    const: nicera,d3-323-aa
+On Thu, Dec 12, 2024 at 03:49:02PM -0600, Ninad Palsule wrote:
+> Add INTEL Common Redundant Power Supply Versions crps185 bindings as
+> trivial.
 
-Undocumented vendor prefix.
+becuse they are trivial or you don't care? Some broader context would be
+useful here.
 
-It does not look like you tested the bindings, at least after quick
-look. Please run 'make dt_binding_check' (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint. Don't rely on
-distro packages for dtschema and be sure you are using the latest
-released dtschema.
-
-It does not look like you tested the DTS against bindings. Please run
-'make dtbs_check W=1' (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-Maybe you need to update your dtschema and yamllint. Don't rely on
-distro packages for dtschema and be sure you are using the latest
-released dtschema.
-
-> +
-> +  reset-gpios:
-> +    description: The GPIO pin connected to the reset pin on the sensor
-> +    maxItems: 1
-> +
-> +  clk-gpios:
-> +    description: The GPIO pin connected to the clk pin on the sensor
-
-What is a clk pin? Usually clock pins are clocks, not GPIOs. This needs
-explanation
-
-
-> +    maxItems: 1
-> +
-> +  si-gpios:
-> +    description: The GPIO pin connected to the si pin on the sensor
-
-In all description please drop redundant pieces. It cannot be anything
-else than GPIO pin and cannot be connected to something else than the
-sensor.
-
-So basically the only useful information you wrote above - after
-dropping obvious and redundant pieces - is "si".
-
-Write something useful, what is "si"? This applies also to "clk".
-reset-gpios can be without description, because it is obvious - cannot
-be anything else than reset pin. OTOH, you could say if pin is active
-low or high.
-
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reset-gpios
-> +  - clk-gpios
-> +  - si-gpios
-> +
-
-Just one blank line.
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    sensor {
-> +        compatible = "nicera,d3-323-aa";
-> +        reset-gpios = <&gpio4 12 0>;
-
-Include the header and use standard defines for GPIO flags.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
