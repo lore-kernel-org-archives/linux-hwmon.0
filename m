@@ -1,148 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2A2154C00;
-	Sat, 14 Dec 2024 11:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F9C653;
+	Sat, 14 Dec 2024 14:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734176772; cv=none; b=A0EjFaWRdop/U6x/0hw/t+vEmKpF718cwQJJnzxbog6ZrQf8VZAoYNBZ6uOL4uHvb2lbE3VimK7smMp7hAAKeJzXks3azUwPDF19CvP7xLLHiSWBoQE7O2SCBQ2bLtQd53I6tMmcOjvurMz2XjRLlMvBW/2KRDr4Jz91/SLw0vk=
+	t=1734185961; cv=none; b=c8J+ODr/VoxKo6t9CMky1kiLkIB2E/D7AqwGjfz1b1HWE3ZkP3fwGMLebTjFrNb+ueh2jCMop7NoLRikQfByGAnO34Bz1xl6hDeG+zJkRa7PeZ/EhEsYIHXt0u76kIRZ9Jjk86Pg1VonhYMKQI1f2YwvWXGzLhBrWhFz5EjIpDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734176772; c=relaxed/simple;
-	bh=LiDT+4Sqgdk41JHmh264e+RxJgrj5cF6Q+GLadxXmRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y0c5UtVbhtfh2fwE+0NU5dXGoik8NW1sEVP2LMIygule2VKbsw4/M0c7j5YRsoEC3n7gAIxf46px9SrXDLWB/zOyNtdB7tLGZUwmySV5wxdYcDc2P9egIvFvGIS1pZEnKaHoC1hldiVE1jyFZAJzQxA7SoymyXZDjb17BMVGNgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isDfM8xF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734185961; c=relaxed/simple;
+	bh=25RasokLyChhOVVT2Chv9e9Q+gGQ31N19UM+0O9sjZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gG+nPideSgI6BUx2Mt9HBUcXDgQFrYednK+SpXEZt3zLEkl67U22HX4jEWCn5pwN28Rokvbr4nzlpig76md76gP7CG3ziumdNaqcz91heEivYT8/61dfE1+lJX6Yd0YC6giD1+3x0itQOZkx1w2nSz5oSHg3lSSmaI8cj6PiUvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CPqz+uA2; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isDfM8xF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE64DC4CED1;
-	Sat, 14 Dec 2024 11:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734176772;
-	bh=LiDT+4Sqgdk41JHmh264e+RxJgrj5cF6Q+GLadxXmRM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=isDfM8xFVwh2FdN7tQAcXFJZSTx9kCtWqn61QiOszlCRQB1YFO+CPWn4GcyFbEfZW
-	 yuwlCZAQYh+OvSDa4genjEMJ8D5IkQNaRId0s9JgQZxlT2lTwGRUJ92ohRJD2Jr26c
-	 +kT56j/unPeTZR0K/zT2Vof72CugqnxONTD7uzMaeMoLrEZt9w3gcSbgKQ7sDYGcyF
-	 T7CW5Di1iY5KWlMG5QCdVo8C36Hm3+LuiS5ayilQj55a9+LSGGt3Sc9jGK4/TGHrQk
-	 vVmzn6xRCrwVrYSrQ20Gf9bJqygNjaZwGkarKcbVJQvGQ8N1FB2dwWGC+SIO8MpsyY
-	 vxa99RIcxJ1zA==
-Date: Sat, 14 Dec 2024 11:46:03 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Hermes Zhang <chenhuiz@axis.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Guenter Roeck
- <linux@roeck-us.net>, Hermes Zhang <Hermes.Zhang@axis.com>,
- jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, kernel@axis.com, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, "linux-iio@vger.kernel.org"
- <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: Add support for D3-323-AA Pyroelectric IR
- sensor
-Message-ID: <20241214114603.7db6bdbc@jic23-huawei>
-In-Reply-To: <3a5c0c73-0d80-bbd0-b53b-522e2f3e936e@axis.com>
-References: <20241212042412.702044-1-Hermes.Zhang@axis.com>
-	<20241212042412.702044-3-Hermes.Zhang@axis.com>
-	<5b53cffd-ae7f-45e5-b265-8e700d753275@roeck-us.net>
-	<20241212165945.0000584b@huawei.com>
-	<3a5c0c73-0d80-bbd0-b53b-522e2f3e936e@axis.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPqz+uA2"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso1811033a91.1;
+        Sat, 14 Dec 2024 06:19:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734185959; x=1734790759; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yk5XBAk/i7wDHB6m8Y4uJ3Q0G9Do6PD2px0diyjbZA8=;
+        b=CPqz+uA2tzw4Qtsz1OGy6n+FE281K73h5M/EQkGUqwCJQPcXgX2sP+WHEM987zcfJ+
+         4cNqQLx4lDC1m6tOqt1iw2DY6mxmQWNRZU/JEjrF6YAEtHNuqcOhWbUPL3IXFpzAUxwZ
+         JFqb6yJBv8p+cd2Hm3nV+wlvdJe3pK7H2+Pu8T6OKAA4nEb1ti5WBgDBy5Dz8onClTPJ
+         ZTdxLPZZE3nagaN4G7nIQHOu1b34NQ7cLeMEyBiIQVowDzIZMJZi50debf5cpPiYM1PA
+         dcseffXhc7UGwAA5Chxe/490FWCZRtN2fZXklv4QVjXuA/jhamLQKnKWsEHHRvj0HZaI
+         VhoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734185959; x=1734790759;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yk5XBAk/i7wDHB6m8Y4uJ3Q0G9Do6PD2px0diyjbZA8=;
+        b=ZKrJ8J3XWtHh+xllMUBZQ3Qfz4SkpLI3HQfQnOauzFyC3vU5ycLnKcKpxv9i1ope5P
+         /N8MzKYOyqenv9nfEM+5UVL2Z6Fdcf58JzhQXuozMAbYW8dZZGUuEQQUM//3O5MHhfjD
+         k2Dx4gCX6NPVNogsEMly9O0VM5aNjAzHwAPwZdbwoMckWvlhh/bi0rfIcWjdNh1orLe4
+         DHWuu7k75c2kEHlWGHCr0ZAhzIA3RF4plxiI1/1KHJz2XJ+3DKbtVyqL55WRfVcePruK
+         w4N46kZOsxc/9n4fjipXYQK3wc0wHzN8qjq8T1c1eNjx0mnKUFjFel72+kzCqr1uXQHL
+         S3gw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlssUctWqitYK/OsFf/cFdA7vGOyGMbVmZxqXSehS2UwctyTD5G3sm0rJfAsrE04TYmRWl0fRyQaJ5t29VTB8GblM=@vger.kernel.org, AJvYcCXuKIcevXrcq43S/+fB/hzQcbfVpaxCPDgDpMVeRD6kHbvE2ICBRJJ/c/+/tC5flU28fG0KmxgQ7j30sQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1ybkfI2Y2Je0SQIzcfmVQalh7BuNRR2JWCxFyTDUzJRZTt73a
+	Tq/TAHzfbBTryblSGF7RgxnBlUsam8TINGKSWVeOgLjiM6qYkUpt
+X-Gm-Gg: ASbGncunwCqafJggsCpO1Pu9h3LfSXrhYDw5IfsSdcv+5hNOHtaun5uoIa5MHMCQ7vy
+	xQIoKV9wn31akrZ9HXTGiV3I7V9OX4H2kMVuuq6Q0DmDcrKxT5XMYDZ+aCN8RK1iTN2pnibqvKn
+	DA8r8lRGMAHTd01cuQZKGVdO/QQt0R4W0jz3MqhwxDO2L+GCAtwTr89GPYNOz3/6NCE2r5kNmAg
+	I7hJsWaHvnZxEryxna98vE7BCnDX5EOcW14Bz/CskuVAkcu8NDLtkAaF+FAdRJFLRRMDZfvUzMj
+	kFW51wV/jXJmcMKlTSAVD0hNAp3aTQ==
+X-Google-Smtp-Source: AGHT+IEr3b421LIOwuq1Y2750TJ9EKSitYSrdGFp/R/ZrY0Ek2xjNdcszYxoifj35YNgK1fUXs7PdQ==
+X-Received: by 2002:a17:90b:1c8f:b0:2ee:7a4f:9265 with SMTP id 98e67ed59e1d1-2f28fb6e8d0mr10476603a91.15.1734185959014;
+        Sat, 14 Dec 2024 06:19:19 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142d90bbdsm4895387a91.1.2024.12.14.06.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Dec 2024 06:19:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6fec7aa8-32b4-47de-8fb5-4ab6890c1f46@roeck-us.net>
+Date: Sat, 14 Dec 2024 06:19:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-renesas-soc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
+ <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 13 Dec 2024 13:39:01 +0800
-Hermes Zhang <chenhuiz@axis.com> wrote:
-
-> Hi
+On 12/14/24 00:58, Wolfram Sang wrote:
+> There are multiple open coded implementations for getting the parity of
+> a byte in the kernel, even using different approaches. Take the pretty
+> efficient version from SPD5118 driver and make it generally available by
+> putting it into the bitops header. As long as there is just one parity
+> calculation helper, the creation of a distinct 'parity.h' header was
+> discarded. Also, the usage of hweight8() for architectures having a
+> popcnt instruction is postponed until a use case within hot paths is
+> desired. The motivation for this patch is the frequent use of odd parity
+> in the I3C specification and to simplify drivers there.
 > 
-> On 2024/12/13 0:59, Jonathan Cameron wrote:
-> > On Wed, 11 Dec 2024 22:17:49 -0800
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> >  
-> >> Hi,
-> >>
-> >> On 12/11/24 20:24, Hermes Zhang wrote:  
-> >>> Add support for Nicera D3-323-AA Pyroelectric IR sensor. The sensor
-> >>> support to config the threshold/filter_type/filter_step and return the
-> >>> detect result in sysfs attribute.
-> >>>
-> >>> Signed-off-by: Hermes Zhang <Hermes.Zhang@axis.com>
-> >>> ---
-> >>>     
-> >> ...
-> >>  
-> >>> +
-> >>> +static DEVICE_ATTR_WO(pir_threshold);
-> >>> +static DEVICE_ATTR_WO(pir_filter_step);
-> >>> +static DEVICE_ATTR_WO(pir_filter_type);
-> >>> +static DEVICE_ATTR_RO(pir_detector);
-> >>> +
-> >>> +static struct attribute *d3323aa_attrs[] = {
-> >>> +	&dev_attr_pir_threshold.attr,
-> >>> +	&dev_attr_pir_filter_step.attr,
-> >>> +	&dev_attr_pir_filter_type.attr,
-> >>> +	&dev_attr_pir_detector.attr,
-> >>> +	NULL,
-> >>> +};
-> >>> +
-> >>> +ATTRIBUTE_GROUPS(d3323aa);
-> >>> +  
-> >> I don't know what this is, but it is most definitely not a hardware
-> >> monitoring device. I don't see a definition of those attributes,
-> >> so I have no idea what they represent.
-> >>
-> >> Maybe this is an iio device, but given the unusual attributes
-> >> I am not even sure about that. Jonathan, any thoughts ?  
-> > New type of sensor, but sure could be in IIO.
-> >
-> > Seems mostly a human presence sensor. Not that different from some
-> > types of proximity sensor and indeed that might be the path to take
-> > here.
-> >
-> > Taking a quick look at the driver suggests there is lots more information
-> > needed to understand the ABI.  At very least needs ABI docs so we can
-> > discuss how that is generalized. So if submitting an IIO driver
-> > I want to see
-> > Documenation/ABI/testing/sysfs-bus-iio-xxxx
-> > with significant detail. The datasheet provides no where near enough
-> > info.
-> >
-> > Jonathan  
+> Changes compared to the original SPD5118 version are the addition of
+> kernel documentation, switching the return type from bool to int, and
+> renaming the argument of the function.
 > 
-> Thanks for your suggestions. For the new sensor, it seems require three 
-> attributes, e.g. /sys/bus/iio/devices/iio:deviceX/in_threshold 
-> (in_filter_step, in_filter_type), then one data to indicate if it is 
-> been triggerred (bool), but I'm not sure what is sutible IIO type could 
-> it used? Do you have any suggestion?
 
-Look at the existing ABI in Documentation/ABI/testing/sysfs-bus-iio
-and aim to fit within that scheme.
+Curious: Why not bool ?
 
-I'm hoping you have access to a datasheet that tells you something about the
-filters that lets you map them to something standard.  Normally we aim
-for something like 3DB frequency.  Filter types are harder but there tend to
-only be so many types people actually build.
-
-Channel type wise, I'm thinking this is kind of a form of proximity sensor
-so IIO_PROXIMITY is probably appropriate.  That has always been a bit vague
-as many proximity sensors are kind of 'there is something nearish' rather
-than providing actual units etc.
-
-It's a little different as I believe these only detect movement rather
-than entirely static people, but in the case of the ones for presence detection
-they work on tiny movements so more or less the same as detecting proximity.
-
-Jonathan
-
-
-
-> 
-> Best Regards,
-> Hermes
-> 
-> 
+Thanks,
+Guenter
 
