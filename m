@@ -1,96 +1,148 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF5B262BE;
-	Sat, 14 Dec 2024 10:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2A2154C00;
+	Sat, 14 Dec 2024 11:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734171747; cv=none; b=tlEUygATUztVr8D1LXV7dzkAEvXplxzFPCr8kCCYmxRgfB0AG+e0ql7jaqXxbf6SdRMmVfV6aSGPg6uSwztKBuz0Ti+FXmnp66UzLltVR1RntD1bxvRi5wLevuJpHNfJugANwmgZuqYFnlvhYgPoXQBzgBY4nsOMO7u58iV4c7A=
+	t=1734176772; cv=none; b=A0EjFaWRdop/U6x/0hw/t+vEmKpF718cwQJJnzxbog6ZrQf8VZAoYNBZ6uOL4uHvb2lbE3VimK7smMp7hAAKeJzXks3azUwPDF19CvP7xLLHiSWBoQE7O2SCBQ2bLtQd53I6tMmcOjvurMz2XjRLlMvBW/2KRDr4Jz91/SLw0vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734171747; c=relaxed/simple;
-	bh=TI9oprvG7Qgynm0Jsa8YgWjcQmv53gHW7nzqAswmXqA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uI7zF5bxM+ecAzL1aQofSFOfNxuvkhNk7f8LxT1twRIXi5mXinFkKOvqC4B+up34L5U3CGT7XYLz+zjB6CGlGRV5UB+F3PhjtKtyWWP/r/ycwIpvVWcYaHL//soH6RBb8t9K3Yixw2h+5Wz4LSRqVJRUW8ML1NEYPDDvoqMbZJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maxammann.org; spf=pass smtp.mailfrom=maxammann.org; dkim=pass (2048-bit key) header.d=maxammann.org header.i=@maxammann.org header.b=rmrxbY8G; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=maxammann.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maxammann.org
+	s=arc-20240116; t=1734176772; c=relaxed/simple;
+	bh=LiDT+4Sqgdk41JHmh264e+RxJgrj5cF6Q+GLadxXmRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y0c5UtVbhtfh2fwE+0NU5dXGoik8NW1sEVP2LMIygule2VKbsw4/M0c7j5YRsoEC3n7gAIxf46px9SrXDLWB/zOyNtdB7tLGZUwmySV5wxdYcDc2P9egIvFvGIS1pZEnKaHoC1hldiVE1jyFZAJzQxA7SoymyXZDjb17BMVGNgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isDfM8xF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maxammann.org header.i=@maxammann.org header.b="rmrxbY8G"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Y9MhN3nPKz9spF;
-	Sat, 14 Dec 2024 11:22:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxammann.org;
-	s=MBO0001; t=1734171732;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FOcJNEE6Ruq6z82qmua45rResUYjl5YozfkY2UrlkGg=;
-	b=rmrxbY8G6zFFAV1thyGqP8mozjPkV6O2UN9jD++xVVwrEjPHUzAwDkL1c9kNfa3QZkRSSf
-	NGFQNM7pbhetN+Hl7b1+ruPmJOZOxoqyxdiR6QOXp+md3wxr/xVjSz5nKgzLh++uH2+wRH
-	CJU9HHqrqF8KNEm8kTCcTMLctqo9sHVVV7fNZXJVNROd4JVBdnEy9QiRFRJHoSwN5KrC1q
-	Pck+A/oRWCGi4ZdLqoppcIPGOf9KM9RpnCgnry+Zmws1pd0Skq0+bvO44vAQ984tMmdoyw
-	xRadq5E508pspq//LhU0QA2YC0RZw6pZ3mkTQmP8uA4m41M39x7jpcsDk+bqtQ==
-From: Max Ammann <max@maxammann.org>
-To: jdelvare@suse.com
-Cc: linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Max Ammann <max@maxammann.org>
-Subject: [PATCH] hwmon: (nct6683) Add customer ID for ASRock B650 Steel Legend WiFi
-Date: Sat, 14 Dec 2024 11:22:01 +0100
-Message-ID: <20241214102201.122851-1-max@maxammann.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isDfM8xF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE64DC4CED1;
+	Sat, 14 Dec 2024 11:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734176772;
+	bh=LiDT+4Sqgdk41JHmh264e+RxJgrj5cF6Q+GLadxXmRM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=isDfM8xFVwh2FdN7tQAcXFJZSTx9kCtWqn61QiOszlCRQB1YFO+CPWn4GcyFbEfZW
+	 yuwlCZAQYh+OvSDa4genjEMJ8D5IkQNaRId0s9JgQZxlT2lTwGRUJ92ohRJD2Jr26c
+	 +kT56j/unPeTZR0K/zT2Vof72CugqnxONTD7uzMaeMoLrEZt9w3gcSbgKQ7sDYGcyF
+	 T7CW5Di1iY5KWlMG5QCdVo8C36Hm3+LuiS5ayilQj55a9+LSGGt3Sc9jGK4/TGHrQk
+	 vVmzn6xRCrwVrYSrQ20Gf9bJqygNjaZwGkarKcbVJQvGQ8N1FB2dwWGC+SIO8MpsyY
+	 vxa99RIcxJ1zA==
+Date: Sat, 14 Dec 2024 11:46:03 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Hermes Zhang <chenhuiz@axis.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Guenter Roeck
+ <linux@roeck-us.net>, Hermes Zhang <Hermes.Zhang@axis.com>,
+ jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, kernel@axis.com, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, "linux-iio@vger.kernel.org"
+ <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: Add support for D3-323-AA Pyroelectric IR
+ sensor
+Message-ID: <20241214114603.7db6bdbc@jic23-huawei>
+In-Reply-To: <3a5c0c73-0d80-bbd0-b53b-522e2f3e936e@axis.com>
+References: <20241212042412.702044-1-Hermes.Zhang@axis.com>
+	<20241212042412.702044-3-Hermes.Zhang@axis.com>
+	<5b53cffd-ae7f-45e5-b265-8e700d753275@roeck-us.net>
+	<20241212165945.0000584b@huawei.com>
+	<3a5c0c73-0d80-bbd0-b53b-522e2f3e936e@axis.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-This value was found on an ASRock B650 Steel Legend WiFi with an
-NCT6686D chip.
+On Fri, 13 Dec 2024 13:39:01 +0800
+Hermes Zhang <chenhuiz@axis.com> wrote:
 
-Signed-off-by: Max Ammann <max@maxammann.org>
----
- Documentation/hwmon/nct6683.rst | 1 +
- drivers/hwmon/nct6683.c         | 3 +++
- 2 files changed, 4 insertions(+)
+> Hi
+> 
+> On 2024/12/13 0:59, Jonathan Cameron wrote:
+> > On Wed, 11 Dec 2024 22:17:49 -0800
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> >  
+> >> Hi,
+> >>
+> >> On 12/11/24 20:24, Hermes Zhang wrote:  
+> >>> Add support for Nicera D3-323-AA Pyroelectric IR sensor. The sensor
+> >>> support to config the threshold/filter_type/filter_step and return the
+> >>> detect result in sysfs attribute.
+> >>>
+> >>> Signed-off-by: Hermes Zhang <Hermes.Zhang@axis.com>
+> >>> ---
+> >>>     
+> >> ...
+> >>  
+> >>> +
+> >>> +static DEVICE_ATTR_WO(pir_threshold);
+> >>> +static DEVICE_ATTR_WO(pir_filter_step);
+> >>> +static DEVICE_ATTR_WO(pir_filter_type);
+> >>> +static DEVICE_ATTR_RO(pir_detector);
+> >>> +
+> >>> +static struct attribute *d3323aa_attrs[] = {
+> >>> +	&dev_attr_pir_threshold.attr,
+> >>> +	&dev_attr_pir_filter_step.attr,
+> >>> +	&dev_attr_pir_filter_type.attr,
+> >>> +	&dev_attr_pir_detector.attr,
+> >>> +	NULL,
+> >>> +};
+> >>> +
+> >>> +ATTRIBUTE_GROUPS(d3323aa);
+> >>> +  
+> >> I don't know what this is, but it is most definitely not a hardware
+> >> monitoring device. I don't see a definition of those attributes,
+> >> so I have no idea what they represent.
+> >>
+> >> Maybe this is an iio device, but given the unusual attributes
+> >> I am not even sure about that. Jonathan, any thoughts ?  
+> > New type of sensor, but sure could be in IIO.
+> >
+> > Seems mostly a human presence sensor. Not that different from some
+> > types of proximity sensor and indeed that might be the path to take
+> > here.
+> >
+> > Taking a quick look at the driver suggests there is lots more information
+> > needed to understand the ABI.  At very least needs ABI docs so we can
+> > discuss how that is generalized. So if submitting an IIO driver
+> > I want to see
+> > Documenation/ABI/testing/sysfs-bus-iio-xxxx
+> > with significant detail. The datasheet provides no where near enough
+> > info.
+> >
+> > Jonathan  
+> 
+> Thanks for your suggestions. For the new sensor, it seems require three 
+> attributes, e.g. /sys/bus/iio/devices/iio:deviceX/in_threshold 
+> (in_filter_step, in_filter_type), then one data to indicate if it is 
+> been triggerred (bool), but I'm not sure what is sutible IIO type could 
+> it used? Do you have any suggestion?
 
-diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
-index 2a7a78eb1b46..f224639229d2 100644
---- a/Documentation/hwmon/nct6683.rst
-+++ b/Documentation/hwmon/nct6683.rst
-@@ -63,6 +63,7 @@ Intel DH87MC	NCT6683D EC firmware version 1.0 build 04/03/13
- Intel DB85FL	NCT6683D EC firmware version 1.0 build 04/03/13
- ASRock X570	NCT6683D EC firmware version 1.0 build 06/28/19
- ASRock X670E	NCT6686D EC firmware version 1.0 build 05/19/22
-+ASRock B650 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 11/09/23
- MSI B550	NCT6687D EC firmware version 1.0 build 05/07/20
- MSI X670-P	NCT6687D EC firmware version 0.0 build 09/27/22
- =============== ===============================================
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index f71615e06a8f..3d31b8e2c835 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -178,6 +178,7 @@ superio_exit(int ioreg)
- #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
- #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
- #define NCT6683_CUSTOMER_ID_ASROCK3	0x1631
-+#define NCT6683_CUSTOMER_ID_ASROCK4	0x163e
- 
- #define NCT6683_REG_BUILD_YEAR		0x604
- #define NCT6683_REG_BUILD_MONTH		0x605
-@@ -1233,6 +1234,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK3:
- 		break;
-+	case NCT6683_CUSTOMER_ID_ASROCK4:
-+		break;
- 	default:
- 		if (!force)
- 			return -ENODEV;
--- 
-2.47.0
+Look at the existing ABI in Documentation/ABI/testing/sysfs-bus-iio
+and aim to fit within that scheme.
+
+I'm hoping you have access to a datasheet that tells you something about the
+filters that lets you map them to something standard.  Normally we aim
+for something like 3DB frequency.  Filter types are harder but there tend to
+only be so many types people actually build.
+
+Channel type wise, I'm thinking this is kind of a form of proximity sensor
+so IIO_PROXIMITY is probably appropriate.  That has always been a bit vague
+as many proximity sensors are kind of 'there is something nearish' rather
+than providing actual units etc.
+
+It's a little different as I believe these only detect movement rather
+than entirely static people, but in the case of the ones for presence detection
+they work on tiny movements so more or less the same as detecting proximity.
+
+Jonathan
+
+
+
+> 
+> Best Regards,
+> Hermes
+> 
+> 
 
