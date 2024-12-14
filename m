@@ -1,88 +1,94 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F4918BC1D;
-	Sat, 14 Dec 2024 15:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC06E38DE0
+	for <linux-hwmon@vger.kernel.org>; Sat, 14 Dec 2024 16:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734189125; cv=none; b=Ds/FYWL1tFQas3NLtrQ0zYXLi620W6q+x+zJX9/0kKRN3Sa2jo94l642JOrn+vE7j/F32YITcrP0D5oOgIzg62MmAEaUjuYJI269ZFeJGP82SZFg4WjiQsLAe3vod/+NI9lq32EdljSzhbhVooAbK+8ipkVVuT2QBO09qLz68J4=
+	t=1734194448; cv=none; b=RYcfbhOI99b9vKrIPIw82LoAHS80elb5tPUv0qji6p/OEW9kj17Ei5z1ROzd01O1+bNVcdW/8ci48vI9VDNC/F/HhGTxCUnCTp5NQl+fWHwVG1PMqnTGzkMW7wIBgoyJwTeZaIwkgWZQvJcXOJWbk2+WQSyFr/wlAQhgnspYLi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734189125; c=relaxed/simple;
-	bh=CuihegCetP2wfXBh+GgH8wCcWkpri8WuSu5R8isN6pI=;
+	s=arc-20240116; t=1734194448; c=relaxed/simple;
+	bh=37m51vzvfSdZ8BLzlKnTToy6RDiKeslUTgn/GzffmX4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S4LaQ1IA0x0ZGeXpQVQXZusA1JKvPW0wCh369whO/pXeEhr6VMIl2j19jPlj7+Indr9WWpk2AyDBO26DcybbIKyBEERV20C6lbHkD/3JSPRonR8R0kV7+lWhxDLzeGByLZHho0Wt59Bk93BVsoZ8V+MP3cwsEDbaViF4ukNnXG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P825Ir0b; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=WmQQ3+72hXjn9/Pj1AIytWQHfPBr7/ol2W8LkpMrZZEVQBIW/XTJia6XnmyzYMGeUUg25WSP7iUOKnVCABEVxD44v4EQGkiSMeFKWp5PWaer0jNxM+WXgxCw3p8cISo5D8hXog4EdOi6IuKdv4lOXplkqG9AQzbWF3S0Jg8oddo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=c9gifcEO; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P825Ir0b"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-728eccf836bso2359161b3a.1;
-        Sat, 14 Dec 2024 07:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734189123; x=1734793923; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MBnGHcbvsr9vY569ODSEr2yMGTsezdkq5pbSt8hzCg4=;
-        b=P825Ir0bkMLiLttNUMQOlTEMZQFc/jSVMvaJi40mJsrkQeuwMgA5Y9yDyxjuWK92HN
-         JPdDMpJaRNV8ayMNuMUToSsphz8gzVwY9gr7yWtP2/O9/HSHMuyrUcQjqb2z3eD1db7y
-         NjLnbEjAn/dkXj2JBCL924tmHZMd9GQh0Y+uqnpEymb7nuU/YWI2pjGo27UNDBCjhFP/
-         VAaO9LxeiNyj+uPfi3dvK5531xnR/n6V5of1QQs7fMnDGl0o2HZ2NJ2XDaVbEtJ5B0qS
-         JXA5J8JIjnahWmQ5P7EwuncHfqpIbAviOjsZusPtkdHzwkVyaQgfU6d8nZoa3sP3DHt5
-         AYuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734189123; x=1734793923;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MBnGHcbvsr9vY569ODSEr2yMGTsezdkq5pbSt8hzCg4=;
-        b=aua7hdBRmhhQyE8ZzdJeb3542y9WmochDJiDM0mRD48j4Gsgv3/Puac4L23U+rzaji
-         rTYCAnoZzGXU6tr486zlcV4xPYk8buzToxDv/YA+NSOYlZJJYVpL/MhXIeMnfM3Noxsx
-         j+CJ25PRgAM3IW/bwjDtPMyeWiE5VsAmvrrjxK8ZOIufDXBtpnIgLCA4uPfukvpJcPvp
-         bmiRwLmRaC6ik/13GMDcfUh5Y952VgL1gI/C9zgBYN63UxxOIYb2W5P7r0wUtRyOmYCn
-         zPO5FXCqdmwNg/060rT/H5Lpbu+MJdjKrBE2VlufDMuBU6sGHAu4/z+BfULGhmZ8mM85
-         1Kyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDqDQd4MR6SXvFmRORjUa1076+Lz7+Bwal3r8/GLSgsIUkemtMJzOT1DdGnZOn5PJe/GViVgYgM6ONMHZ1@vger.kernel.org, AJvYcCWe7J5LVgeUs+WbQESplxBk4n2UugBPlIckBhJdrOHIn7oK5Dx94z5EKFx+WMJnAL0fG0k6wrRoM7Chxw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzGpE3n3oGkK8/6896KvaD+Uu2rNVlcqs/tOrI8bdR6/M/FCcl
-	vxmAHBAXwnpajQb1QahLtx9867hxFFPzNkYumsV5OD4YUMCU81tA/ihy2g==
-X-Gm-Gg: ASbGncsLKwHNjMoJAMHOWpIvIpjNqkrQmqnpLDMvHu7aBFgJRXPztR+xbLIqap0011g
-	P+cCDX3/pxtTTnMEkX5J8VSbP9WPG71pnyJ8O4D07StuPGj6gUvxWT3bPo+wiQfe8s3Vuz7MKNQ
-	QznJRgYASUpngb30j5iC/4yH22tTp0sBF8pLP2j5Qf+7HTNS99LSkCb7JBcr7peD4M7zsNH0MqM
-	kXVMOcu/ZFq3AVwrH80COD9W1nLLj9+NLu/yLEK5TgrkRywvHwnR7ebJiSx/1ETV88b1A==
-X-Google-Smtp-Source: AGHT+IFp4NctrZXEabka/02Mv+6VSdCrDzIaIIVfMwyKrKoenK0HetRm+LEaAb918aNwn5Akgboesw==
-X-Received: by 2002:a05:6a21:3287:b0:1e0:da90:5f1f with SMTP id adf61e73a8af0-1e1dfd58f6emr10336531637.16.1734189123597;
-        Sat, 14 Dec 2024 07:12:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142de3473sm4919117a91.24.2024.12.14.07.12.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Dec 2024 07:12:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 14 Dec 2024 07:12:01 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Max Ammann <max@maxammann.org>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6683) Add customer ID for ASRock B650 Steel
- Legend WiFi
-Message-ID: <a27654c7-c017-435a-aa60-ab9ccd27cb15@roeck-us.net>
-References: <20241214102201.122851-1-max@maxammann.org>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="c9gifcEO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=37m5
+	1vzvfSdZ8BLzlKnTToy6RDiKeslUTgn/GzffmX4=; b=c9gifcEOXaSYgSXrmUKK
+	GaN5ZafnHSdQBzrYkMYh04Bx7MzK0R5oDZTZ2wyuruZPVrxfJllTaN75O4MJa515
+	cE8JN5gXAG9jK1CpuIZAzuKRlSPAFKR3+d917JtAn3dkOAfkDilUmY7YlHaK4E4h
+	xQNQMzAyg2AK/Yq2udaBVHBTZwoIFN2E3CD1D/aFoURNzRbmnknq2z+ucRFkVDuS
+	yOjrUiRDH7PxPOi3cvrXzgLZFHsGsrcciFNgJBQav5dpowqcLcQLlbaFSJ0nfh/V
+	i0rm/9GWkBu4osXk44PlvamGQ8YYIxE67h8O3rU7Y7aG3VXss+4SIcH5nbncM8JB
+	2A==
+Received: (qmail 3134564 invoked from network); 14 Dec 2024 17:40:41 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Dec 2024 17:40:41 +0100
+X-UD-Smtp-Session: l3s3148p1@s+Kemz0puIVehhtJ
+Date: Sat, 14 Dec 2024 17:40:39 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
+Message-ID: <Z121Bx1RcykazXLB@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
+ <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+ <6fec7aa8-32b4-47de-8fb5-4ab6890c1f46@roeck-us.net>
+ <2e8e63f2-3a1b-4ca4-b095-4a6cbb20ae25@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sgcR6tjkyL9NvYfH"
+Content-Disposition: inline
+In-Reply-To: <2e8e63f2-3a1b-4ca4-b095-4a6cbb20ae25@roeck-us.net>
+
+
+--sgcR6tjkyL9NvYfH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241214102201.122851-1-max@maxammann.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 14, 2024 at 11:22:01AM +0100, Max Ammann wrote:
-> This value was found on an ASRock B650 Steel Legend WiFi with an
-> NCT6686D chip.
-> 
-> Signed-off-by: Max Ammann <max@maxammann.org>
 
-Applied.
+> > Curious: Why not bool ?
+>=20
+> Never mind. It returns the parity, after all, not "parity is odd".
 
-Thanks,
-Guenter
+Yes, this was my reasoning.
+
+
+--sgcR6tjkyL9NvYfH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmddtQcACgkQFA3kzBSg
+Kba+Qg//dmKvI3QW/SN2fFzzpI8DiaqJXReHtZrmwCmN5cb3CjHGVpAQGsEUv2k9
+5hVt8AyFq80aUONmYHvWZIJXxNHz7BT+bMs3d/LyIMSH92bYj6GMcSyrJDe0mY5P
+o39717yAdg8hnUPCiKWujaLyIXARqbDe8zQLmlsaS6rYxo6smSgd/5jLfRolZ+9w
+TmNT+1HieiYQUYX/lK3ODIMrxtKLTFNAkfCCSFcVsuXhQ4xFYIFOWwmd2QibLKoQ
+gt5jIijt8c8sVC2TxcYfGb5o9FafAJOJYh443WrhRW6uA92cUXbKngCymTJvq4bz
+onhEc1BD9rc/4nZGUjQluvAvJbpoquHQo3iWThD9skaNBBHH2v8uaGHCLAjtiyr4
+Pjxq0YRK1nokGHXH9a9Js0ozruTJSxnbBEGi4RPkqd2TrNoU7W7ruuSW+HLH4E6G
+dnYat8C8s3gqAIypGiGB5MuWIZTgZ54VPS82WTLkF+sRgYHzwgVjkRBh9o2Fekvb
+DJP0PkhcnIvCgS+YdcNpDIFog4TmQRUIp96Wno45vcG/lM6F04dFwFnI51zVHsgd
+n3b0WtG4WBA+xsESZ92QfhKEWlml7cd6EMBdMakgHA+5iTBvOuzvK1vS07wZz6rZ
+cL9sbxDlPdccW19dvKeMLl8VM+MYFrPMaJi5RM8pIKxLWgyJeIg=
+=n5IT
+-----END PGP SIGNATURE-----
+
+--sgcR6tjkyL9NvYfH--
