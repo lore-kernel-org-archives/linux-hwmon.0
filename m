@@ -1,92 +1,89 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A40440C;
-	Sun, 15 Dec 2024 15:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B62148FE6;
+	Sun, 15 Dec 2024 16:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734275956; cv=none; b=aBx3IxQmAA1kHs7XFN2OiIRuic3f6tv6xq4wBjB74tIIf8lg74JmujA5jHazvwlgoh6zX6cd2WTneEIudNU3Y7Dert+cl/rX07mo4ObfWa7sa8umnEkaH2D795P/7m1OzegnkfGbgQUS6BOgvI/wiV7L4VNjaWv+FK7wDj55bbk=
+	t=1734278988; cv=none; b=HG46ypgmUzapXBXHUZDL8YROFY6EtDX2BHeDhnYZAVUK7Hi5OTZHI5lmx/wkOp0UdKQHQNmKUUtxQi9jC+sMxf6kSScEouBu0sxdZiYjPrXWhuWkOLjzFDprlyFd8hAjfouih0XTtquuBRsiCmSTItybWrDV3hpb4YlzbuhBO60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734275956; c=relaxed/simple;
-	bh=UKZwM/MViNPNuJQk0soam9BhTTERDMWu87Mborqf0hM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=b7CYkbaHrEUgKJ41adliQimxL7hISaeBJWawcpSQrVr4SGYziV3jAGcdeYhiL1H/VYtV8nf1c6az+gAsD5/lSv0Vv3H2hF0CnHQ+ayTB23l7FsaAXFsUL5Ey8rvWrYvL8rQUyRCHH5DH0qqvnL6vJs2ueIITxt9/Eec8UAi/RYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=PMTe/a6o; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="PMTe/a6o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734275952;
-	bh=UKZwM/MViNPNuJQk0soam9BhTTERDMWu87Mborqf0hM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=PMTe/a6oxJEG2/LK1YZmNZEQYrGUIjN2egp20Ib5KZXOYWSl7r4c57YOeZp3Qs+ak
-	 O+Hs0hfgZtrmp/BkR6j9RxT2ORA6hvIM7FtXoxFjuNGQMF3JB31XAV13Q4Z4fdDS6Q
-	 rqD7yKpSBXXXVQnWFPWOhy28Sf3akaPp5jVoc2lM=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 15 Dec 2024 16:19:04 +0100
-Subject: [PATCH] hwmon: (occ/p9_sbe) Constify 'struct bin_attribute'
+	s=arc-20240116; t=1734278988; c=relaxed/simple;
+	bh=qhFseBubiVHHwLzVxNpYvAjEdglCvUWh0q0fOWY7KmU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KKZzXjzj/rXULfhtmh5MoGS5lbzPeSK+VAAtQ4DIzVNowrfRyow6DoOyz7hEBIi1LTBwGnIMXlz2K6kyFR0j875wH3Y5Tlnqtt6RszVGbUTXLRea9EB02A1KhmtOl7IRJqY0j93c1CrajeB3dhTBbuO8Rlwr7wgkMRQrYFXS2GQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshuagrisham.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshuagrisham.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-844e1020253so103175639f.3;
+        Sun, 15 Dec 2024 08:09:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734278986; x=1734883786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6ON1gH7cnZrQUQ1/fl7tmHbVu74bmczwJzXNMdn/fj0=;
+        b=KAvTwMiMtNzIha46MMkCn9LZo43BfGcQXOpLmWmr3VytuJjvqgWPAuq0UtF8mhiqzZ
+         9y3RzW4JWzUzTlhSHo/bliSwyXajxudLlk4xQBpgJuzllTYncQgbDOLzfbss5IN9t+KW
+         gSfCiNm3LjmRuHocpWhLMc93C/u8AQI8dL3gICN19jKgRvK8zXvRiFjPZNwLt/dg32qT
+         YX2zx1knuOWoSNo4digxVfH5xeWijkHtz4qsp1NIcGRbyQmXxF+IR/26KRgdSGLjTEQW
+         OOPwdxBmCEKCXIqWtbGEnyLVDx0WqAUsdH5jkClnZ3C8LSrIDz/EX2AlX5CSXu1dQhIA
+         WhMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMPoDFiqFP02RB73IN6i1ng99Dww0CGWqIM8Bnepov/Os7si4xOjRTajEwuOgrhGMeNG6jm7unsdxwuuAX@vger.kernel.org, AJvYcCV7q3WvKuk7gvVSXkZD8J+cGe5MFokU28nb125cvu4PUQOfqRV609SOSKqsM+W5iRW9bbUF20erS/ky9sk=@vger.kernel.org, AJvYcCXEuLCXoa3/1dqJZPmNZ0WJA1HK2sTfqTV2DHdWbdP6aOUL6UJsKGVZBqYAqcraapLq8H/89r+FRjg=@vger.kernel.org, AJvYcCXorqqK2ozdDC5xUpwbvUs8MGFnQLjp7BiemvOfIm8cunNogU1g+IJ8VdnfkAnXMI5hMS1W+6AaVE41yypTv3yOjQ4lRg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLMXcgcvRAOXvvdux8ZD58ywHcmow19rNmnMdXEVS7y+hYQodJ
+	6zLhUR9X1lV6+49ctA+pIRyUytChYmVZ6WovtR12WtEI9ANrbn5upbVEp1Chf1s=
+X-Gm-Gg: ASbGncv7o0yu6gl1MIJ5FzFFpRU28uyvsGO43otOzR1/Rjuj3y1Dmmmsx4G2TYocKO9
+	813jXkWoisWNy4EaINtEfGwL9oN9WFDqyVxg5Vis8NVNNKNiXwj6xfEtPR2cW0NZoNvDfCdV4nJ
+	x0U0sBKBvYJgYbblrKgaUubdGCODjRw5pS+Yrz77c4drVOwgJONAOWhCpCnw3OZAJH7w+GElsSZ
+	Y5iCzBbpvTXIQllx8DppBukWikbqjEGrtoW+Y/VDWjPulSj7eOIWG8Ux6k+bciRWlT49N1FTA4S
+	T+l1BKLYUOjhlVqDCYACUrXi7w==
+X-Google-Smtp-Source: AGHT+IH49yx7pNIueQuVutTxTAImpRcHmFxwER+daZTh+wxWZxjBxuifefH3F8TZhgCkHSrvHyRhtQ==
+X-Received: by 2002:a05:6602:2d88:b0:835:4931:b110 with SMTP id ca18e2360f4ac-844e87f096bmr771636839f.5.1734278985707;
+        Sun, 15 Dec 2024 08:09:45 -0800 (PST)
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com. [209.85.166.177])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-844f626b622sm85442739f.15.2024.12.15.08.09.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Dec 2024 08:09:45 -0800 (PST)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3a9d9c86920so10545215ab.2;
+        Sun, 15 Dec 2024 08:09:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUROGPnsdvr89YWfIDJfnSSQMQW90UcH8sit5IuvqDL9AttBu7/4z4ybdGhga0infrSt7MSVy/6y8WtyLg=@vger.kernel.org, AJvYcCWkRwqUUAPEKsGiKTaKxyB2ixx/4UhUcCxEzSRt4de+qfFjhU/OO1qh/2dwm6S7zA92BPeJ2kl3G51KGZUb@vger.kernel.org, AJvYcCWydpiQgXjz7EyxIIPB6ZFXxQhq3bCuLb0G8lJxIYvjNs8pIm8IhHmINurBCAGilLUc877OuANzTiGehPawx/oAL0PYyA==@vger.kernel.org, AJvYcCX0zhIKPvD4qbh5F0tkeuiEwvHSGap14npekseUmBGJt3+28q5Blr6Ojp3GkL6ijnqfRdADGElcG8c=@vger.kernel.org
+X-Received: by 2002:a05:6e02:168a:b0:3a7:819c:5129 with SMTP id
+ e9e14a558f8ab-3aff243f6f5mr95903055ab.18.1734278984700; Sun, 15 Dec 2024
+ 08:09:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241215-sysfs-const-bin_attr-hwmon-v1-1-ea72a6a46c36@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAGfzXmcC/x3MwQqDMAwA0F+RnA3Y0grzV2RIV6PmsHQ0RTfEf
- 1/x+C7vBKXMpDA0J2TaWTlJhWkbiFuQlZDnarCddcYaj/rTRTEm0YIvlimUknE73kmwdw/fGR/
- n3juowSfTwt87H5/X9Qc6Y85AbAAAAA==
-X-Change-ID: 20241215-sysfs-const-bin_attr-hwmon-6495015cd654
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734275952; l=1420;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UKZwM/MViNPNuJQk0soam9BhTTERDMWu87Mborqf0hM=;
- b=68K9hOwlB8nHNntTl4AgEja0dXeFrqn1PJMueHYTZJNJAhfYxqhsgCUoSh9UpwDSgLv/giWoL
- 1B4RturPZ1tBrauqO8CF/HXvcsKAC28xnEMSb+3lgw541ld2tjw2kAS
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20241209163720.17597-1-josh@joshuagrisham.com> <797b248c-7542-43fd-8e44-f2c7d650ccff@infradead.org>
+In-Reply-To: <797b248c-7542-43fd-8e44-f2c7d650ccff@infradead.org>
+From: Joshua Grisham <josh@joshuagrisham.com>
+Date: Sun, 15 Dec 2024 17:09:33 +0100
+X-Gmail-Original-Message-ID: <CAMF+Keb0cXc8t8J_T39WJUKydpD2EME92ZWT7SFr_taiCXfvww@mail.gmail.com>
+Message-ID: <CAMF+Keb0cXc8t8J_T39WJUKydpD2EME92ZWT7SFr_taiCXfvww@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86: samsung-galaxybook: Add samsung-galaxybook driver
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Joshua Grisham <josh@joshuagrisham.com>, ilpo.jarvinen@linux.intel.com, 
+	hdegoede@redhat.com, platform-driver-x86@vger.kernel.org, corbet@lwn.net, 
+	linux-doc@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net, 
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The sysfs core now allows instances of 'struct bin_attribute' to be
-moved into read-only memory. Make use of that to protect them against
-accidental or malicious modifications.
+Den m=C3=A5n 9 dec. 2024 kl 18:04 skrev Randy Dunlap <rdunlap@infradead.org=
+>:
+>
+> Also needs <linux/sysfs.h>.
+> Maybe <linux/printk.h>.
+> Maybe <linux/err.h>.
+>
+> --
+> ~Randy
+>
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/hwmon/occ/p9_sbe.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Also done in v2 of the patch, thanks Randy! (though no printk.h
+anymore as I removed all pr_* functions.. maybe I should explicitly
+add <linux/dev_printk.h> though? or is it good enough to get it via
+platform_device.h <=3D device.h <=3D dev_printk.h  ?)
 
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 89761a9c8892fe4ac20da6207e32e3b4c9c6a712..1e3749dfa598c8a90341e6456d6175d9a7aef5b5 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -30,7 +30,7 @@ struct p9_sbe_occ {
- #define to_p9_sbe_occ(x)	container_of((x), struct p9_sbe_occ, occ)
- 
- static ssize_t ffdc_read(struct file *filp, struct kobject *kobj,
--			 struct bin_attribute *battr, char *buf, loff_t pos,
-+			 const struct bin_attribute *battr, char *buf, loff_t pos,
- 			 size_t count)
- {
- 	ssize_t rc = 0;
-@@ -48,7 +48,7 @@ static ssize_t ffdc_read(struct file *filp, struct kobject *kobj,
- 
- 	return rc;
- }
--static BIN_ATTR_RO(ffdc, OCC_MAX_RESP_WORDS * 4);
-+static const BIN_ATTR_RO(ffdc, OCC_MAX_RESP_WORDS * 4);
- 
- static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- 				 size_t resp_len)
-
----
-base-commit: 2d8308bf5b67dff50262d8a9260a50113b3628c6
-change-id: 20241215-sysfs-const-bin_attr-hwmon-6495015cd654
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+Joshua
