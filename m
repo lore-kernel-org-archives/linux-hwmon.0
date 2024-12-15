@@ -1,94 +1,143 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC06E38DE0
-	for <linux-hwmon@vger.kernel.org>; Sat, 14 Dec 2024 16:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEA928FD
+	for <linux-hwmon@vger.kernel.org>; Sun, 15 Dec 2024 03:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734194448; cv=none; b=RYcfbhOI99b9vKrIPIw82LoAHS80elb5tPUv0qji6p/OEW9kj17Ei5z1ROzd01O1+bNVcdW/8ci48vI9VDNC/F/HhGTxCUnCTp5NQl+fWHwVG1PMqnTGzkMW7wIBgoyJwTeZaIwkgWZQvJcXOJWbk2+WQSyFr/wlAQhgnspYLi0=
+	t=1734233578; cv=none; b=rEWJiioDzqKMUmKzJMw1X+bCphYtSLyuw1rln11SdBnPHZfP8u8PTdpfmr0WGDYtatEKMFKitSSFX0swnGItai9U+E+wB4hLzUBZ3GJFz1n7zu+fvH2gzcN2oIf+myXDUw7nDbxo8DMSuIxThg+wqKlxbrlV1XiRvDdqoCsJONY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734194448; c=relaxed/simple;
-	bh=37m51vzvfSdZ8BLzlKnTToy6RDiKeslUTgn/GzffmX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WmQQ3+72hXjn9/Pj1AIytWQHfPBr7/ol2W8LkpMrZZEVQBIW/XTJia6XnmyzYMGeUUg25WSP7iUOKnVCABEVxD44v4EQGkiSMeFKWp5PWaer0jNxM+WXgxCw3p8cISo5D8hXog4EdOi6IuKdv4lOXplkqG9AQzbWF3S0Jg8oddo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=c9gifcEO; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1734233578; c=relaxed/simple;
+	bh=F8GKkDJEbmvOjyEVag+2H1brsKerzdbdlTb+OvThKww=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ao2BqG/SQi/2B4tt3rDZZuEIhzhtwcBqRaLTn8D9i1SU7G5kUTRAUw/4xXRh4+ZbBOrwHfGg7RmuLc4nloN1ItyhX2XdZA+Q0Y3xzVw2qmpdnyF2Z6rviRzJpIDOIKXx0n4dqMI/FqZMBDHRVcWehkwJK9DLiirJtaXTw2i9RUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HFNhKGHp; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="c9gifcEO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=37m5
-	1vzvfSdZ8BLzlKnTToy6RDiKeslUTgn/GzffmX4=; b=c9gifcEOXaSYgSXrmUKK
-	GaN5ZafnHSdQBzrYkMYh04Bx7MzK0R5oDZTZ2wyuruZPVrxfJllTaN75O4MJa515
-	cE8JN5gXAG9jK1CpuIZAzuKRlSPAFKR3+d917JtAn3dkOAfkDilUmY7YlHaK4E4h
-	xQNQMzAyg2AK/Yq2udaBVHBTZwoIFN2E3CD1D/aFoURNzRbmnknq2z+ucRFkVDuS
-	yOjrUiRDH7PxPOi3cvrXzgLZFHsGsrcciFNgJBQav5dpowqcLcQLlbaFSJ0nfh/V
-	i0rm/9GWkBu4osXk44PlvamGQ8YYIxE67h8O3rU7Y7aG3VXss+4SIcH5nbncM8JB
-	2A==
-Received: (qmail 3134564 invoked from network); 14 Dec 2024 17:40:41 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Dec 2024 17:40:41 +0100
-X-UD-Smtp-Session: l3s3148p1@s+Kemz0puIVehhtJ
-Date: Sat, 14 Dec 2024 17:40:39 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HFNhKGHp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734233576; x=1765769576;
+  h=date:from:to:cc:subject:message-id;
+  bh=F8GKkDJEbmvOjyEVag+2H1brsKerzdbdlTb+OvThKww=;
+  b=HFNhKGHp3gAY4UR72IoApgMO2LRFCJoYbRsEGGXj5fGNFYPI0r2rW37m
+   9z4mXH50g0X9Ecw+mLuXGZO93dOxZUA0jaHC4BkTg6C+lOxToIl/fhJYZ
+   MYQlRLEHFUV3oBNjT6izxbMSkwfoWq+Bfzb2wdLEs59CJK7AbEK+RWK+Q
+   X/fibA2H0khfwO0gaVv8ffPUEVVV9bumudhxNPbzR0QT0IvxHfD4N5e1S
+   kDtV0IthIcyt7ALQ46/gZoNslVtsfM8x7CC3MONe3aWWAvJkDVkyoYvAU
+   ab1MwKC7NZkOXTAJW0OTpwgZ6ndSRGV0+wambqlpagUiI/lmCmT/ma02l
+   Q==;
+X-CSE-ConnectionGUID: /tuFLfZHScmylErJuhmvbw==
+X-CSE-MsgGUID: nFMBQsF2SyuN4SWAO4VXrw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="38579019"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="38579019"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 19:32:56 -0800
+X-CSE-ConnectionGUID: BuusSu7DQsGClUelb68O/w==
+X-CSE-MsgGUID: BogbEzdBRXqOLfzYypArQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="96734344"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 14 Dec 2024 19:32:55 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tMfNE-000DPS-22;
+	Sun, 15 Dec 2024 03:32:52 +0000
+Date: Sun, 15 Dec 2024 11:32:12 +0800
+From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
-Message-ID: <Z121Bx1RcykazXLB@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
- <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
- <6fec7aa8-32b4-47de-8fb5-4ab6890c1f46@roeck-us.net>
- <2e8e63f2-3a1b-4ca4-b095-4a6cbb20ae25@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 1687ad473fd6a4743ed5ef319787fda9d857117f
+Message-ID: <202412151107.UJMZiAXR-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sgcR6tjkyL9NvYfH"
-Content-Disposition: inline
-In-Reply-To: <2e8e63f2-3a1b-4ca4-b095-4a6cbb20ae25@roeck-us.net>
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 1687ad473fd6a4743ed5ef319787fda9d857117f  Merge branch 'fixes-v6.13' into testing
 
---sgcR6tjkyL9NvYfH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 1442m
 
+configs tested: 66
+configs skipped: 2
 
-> > Curious: Why not bool ?
->=20
-> Never mind. It returns the parity, after all, not "parity is odd".
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Yes, this was my reasoning.
+tested configs:
+arc                             allmodconfig    gcc-13.2.0
+arc                             allyesconfig    gcc-13.2.0
+arc                  randconfig-001-20241214    gcc-13.2.0
+arc                  randconfig-002-20241214    gcc-13.2.0
+arm                             allmodconfig    gcc-14.2.0
+arm                  randconfig-001-20241214    gcc-14.2.0
+arm                  randconfig-002-20241214    clang-15
+arm                  randconfig-003-20241214    gcc-14.2.0
+arm                  randconfig-004-20241214    gcc-14.2.0
+arm64                randconfig-001-20241214    clang-15
+arm64                randconfig-002-20241214    clang-20
+arm64                randconfig-003-20241214    clang-15
+arm64                randconfig-004-20241214    gcc-14.2.0
+csky                 randconfig-001-20241214    gcc-14.2.0
+csky                 randconfig-002-20241214    gcc-14.2.0
+hexagon              randconfig-001-20241214    clang-20
+hexagon              randconfig-002-20241214    clang-14
+i386       buildonly-randconfig-001-20241214    gcc-12
+i386       buildonly-randconfig-002-20241214    gcc-12
+i386       buildonly-randconfig-003-20241214    clang-19
+i386       buildonly-randconfig-004-20241214    clang-19
+i386       buildonly-randconfig-005-20241214    gcc-11
+i386       buildonly-randconfig-006-20241214    gcc-12
+loongarch            randconfig-001-20241214    gcc-14.2.0
+loongarch            randconfig-002-20241214    gcc-14.2.0
+mips                         eyeq5_defconfig    gcc-14.2.0
+nios2                randconfig-001-20241214    gcc-14.2.0
+nios2                randconfig-002-20241214    gcc-14.2.0
+openrisc                         allnoconfig    gcc-14.2.0
+openrisc                        allyesconfig    gcc-14.2.0
+openrisc                   or1ksim_defconfig    gcc-14.2.0
+parisc                          allmodconfig    gcc-14.2.0
+parisc                           allnoconfig    gcc-14.2.0
+parisc                          allyesconfig    gcc-14.2.0
+parisc               randconfig-001-20241214    gcc-14.2.0
+parisc               randconfig-002-20241214    gcc-14.2.0
+powerpc                          allnoconfig    gcc-14.2.0
+powerpc                    kmeter1_defconfig    gcc-14.2.0
+powerpc              randconfig-001-20241214    clang-20
+powerpc              randconfig-002-20241214    clang-15
+powerpc              randconfig-003-20241214    clang-20
+powerpc64            randconfig-001-20241214    gcc-14.2.0
+powerpc64            randconfig-003-20241214    clang-20
+riscv                            allnoconfig    gcc-14.2.0
+riscv                randconfig-001-20241214    clang-20
+riscv                randconfig-002-20241214    clang-20
+s390                             allnoconfig    clang-20
+s390                 randconfig-001-20241214    gcc-14.2.0
+s390                 randconfig-002-20241214    gcc-14.2.0
+sh                   randconfig-001-20241214    gcc-14.2.0
+sh                   randconfig-002-20241214    gcc-14.2.0
+sparc                randconfig-001-20241214    gcc-14.2.0
+sparc                randconfig-002-20241214    gcc-14.2.0
+sparc64              randconfig-001-20241214    gcc-14.2.0
+sparc64              randconfig-002-20241214    gcc-14.2.0
+um                               allnoconfig    clang-18
+um                   randconfig-001-20241214    clang-20
+um                   randconfig-002-20241214    clang-17
+x86_64     buildonly-randconfig-001-20241214    gcc-11
+x86_64     buildonly-randconfig-002-20241214    clang-19
+x86_64     buildonly-randconfig-003-20241214    gcc-12
+x86_64     buildonly-randconfig-004-20241214    gcc-12
+x86_64     buildonly-randconfig-005-20241214    gcc-12
+x86_64     buildonly-randconfig-006-20241214    clang-19
+xtensa               randconfig-001-20241214    gcc-14.2.0
+xtensa               randconfig-002-20241214    gcc-14.2.0
 
-
---sgcR6tjkyL9NvYfH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmddtQcACgkQFA3kzBSg
-Kba+Qg//dmKvI3QW/SN2fFzzpI8DiaqJXReHtZrmwCmN5cb3CjHGVpAQGsEUv2k9
-5hVt8AyFq80aUONmYHvWZIJXxNHz7BT+bMs3d/LyIMSH92bYj6GMcSyrJDe0mY5P
-o39717yAdg8hnUPCiKWujaLyIXARqbDe8zQLmlsaS6rYxo6smSgd/5jLfRolZ+9w
-TmNT+1HieiYQUYX/lK3ODIMrxtKLTFNAkfCCSFcVsuXhQ4xFYIFOWwmd2QibLKoQ
-gt5jIijt8c8sVC2TxcYfGb5o9FafAJOJYh443WrhRW6uA92cUXbKngCymTJvq4bz
-onhEc1BD9rc/4nZGUjQluvAvJbpoquHQo3iWThD9skaNBBHH2v8uaGHCLAjtiyr4
-Pjxq0YRK1nokGHXH9a9Js0ozruTJSxnbBEGi4RPkqd2TrNoU7W7ruuSW+HLH4E6G
-dnYat8C8s3gqAIypGiGB5MuWIZTgZ54VPS82WTLkF+sRgYHzwgVjkRBh9o2Fekvb
-DJP0PkhcnIvCgS+YdcNpDIFog4TmQRUIp96Wno45vcG/lM6F04dFwFnI51zVHsgd
-n3b0WtG4WBA+xsESZ92QfhKEWlml7cd6EMBdMakgHA+5iTBvOuzvK1vS07wZz6rZ
-cL9sbxDlPdccW19dvKeMLl8VM+MYFrPMaJi5RM8pIKxLWgyJeIg=
-=n5IT
------END PGP SIGNATURE-----
-
---sgcR6tjkyL9NvYfH--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
