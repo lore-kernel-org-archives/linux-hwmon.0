@@ -1,91 +1,87 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C444C80;
-	Sun, 15 Dec 2024 17:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C301119A;
+	Sun, 15 Dec 2024 17:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734283159; cv=none; b=OTuCNl0m61T8Zx5vIOl8q1YE5dFJGuKDchvgtWpdgGdVDRNOobg/pdV4Ss/0rgL1y4vqQpqYKaq4ySo/fvL9AJzPNbR+P17gN8sAdZQJ8d8riZuURVRtefJDkICH26ARzKDP+AWr/GIEKCX2nFLp69HEoi6P3buxX+WqsobaLFE=
+	t=1734284815; cv=none; b=Mm+1QXWHRVNmwB78UrA1hrAmrY/VN21Kuj24UHueaS2fcojG8sjfVc12zLh74c+jEJIHPN9LpbjZM9p5M9JiKPMm39xVv/FL0A1q3LS8LTd43D/zMoPymmf34kUQlznGkPv+hiXeEjRg4YkHsR3pJKLkmIW8/QipdRIaPQ/5T9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734283159; c=relaxed/simple;
-	bh=VLLIFFfZjRNCqSFV9N7ouWWj+51Vsf6GkaxwTk6pktY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=udI+kO6IAM7ktXOpfueAk2KQHdBXjMu0mZ3XGBQJs1U+J5qWFKuHrbr7tzRmLET3E7Sht22Uj9668eoAtmD7RFys3CbiRjEV+0JdbVfvmipsVZ9VDO9GBBoUAM7lJ2r4d/bKZj/YcARuLfVovHaAka42DHOdJdQDxodaujxgA1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshuagrisham.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joshuagrisham.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3a9628d20f0so24906685ab.2;
-        Sun, 15 Dec 2024 09:19:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734283157; x=1734887957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VLLIFFfZjRNCqSFV9N7ouWWj+51Vsf6GkaxwTk6pktY=;
-        b=G62X6QKsu3wSuvA7WA27Lr9sjFtPgq44inibLWZwYayw+j/JIclhWwHugZxcpO+1DU
-         meRFl4r8PBsnFVRl7wbq2DYhmMZ8G4bBdOcGD5kalIHw2nH1Q49ev1/cJwLyFF/ipSl2
-         lMNxqd+jvesQwdqyw1JnTVdpAv8D2RTnb1kOBvVWAhqwAUw5xrsBjsm9qI3itHU/Dqga
-         gcSHboalXIneS993Sk9TYx7QAXK7IlmRRFEfxWI6Z4/899Cs8VUCxk71K2SZzqLBQ3fI
-         UzEM28uCnBVDpSXObTvc3E90DjztYzuz4/PlimrBSdKv06ZtWVIaer1rGuSmnbPgCYVB
-         1g5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUKpyueJvDBatPtjFYeZQBgAzt+xmTpxOdY0pG98tktOqk5aSCDITzf7tLhm57wZE9l6jYsRzFeMOixcM+7@vger.kernel.org, AJvYcCV/Wh4fB1bSeXqXa9RuRaJlywOf28+9OKFvGqTy/6YBEmTvZwq4MroeB2ikbCegjxlTUhGa92BbuwU4AL8=@vger.kernel.org, AJvYcCVxqKAG3yFXxnZGfTLHXpZmRPBJ+hTD2Ublgn4w2MabtPbH4stdpAzbiPmhbhsX1OV4yGS2uGT+3As=@vger.kernel.org, AJvYcCXsf1XPGEJEuIY7GHNxAGyr+S/KfrO57hXK5lO1ww5j7ujXvtzS/6biltEvFowu/I7b5NJKKlvvgrdVyaVWfssTwOOXNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTPQywRoCDYRcL4wAInPHPCNrRU2XYZdwQQ6oKksJ+M/NjUFiu
-	mAkHLrT4sG23zJZjoOFcOE8MSZqa6cUY+KyuG5WAgITlHj6/BRUtf+RGw8IdQsY=
-X-Gm-Gg: ASbGncsrnyml0zNVrVMzsv175E/SMw+1XtHWHtp0OF/Q+9rs5DZTAC0OtpjX+FIxsas
-	jydzufbp1VRaAmEEYbEtHJgXKKLM5E77kNv+NNkvvKUH+ofe8MMKuOEFAEgrZuooWAHDLvJSb2Z
-	MQQvdUuuz7uP8xNoLu9n0ZXiHMaUg7z4uX5v0vG89Ht8sPLhY+dwX0mPqzD4wbKGoedYYHfnqub
-	u6HSpQy0T7hAdrY4zS3tKVdUXlPXKmZJri4AKoMJSx4a5VHkXJ5z3JCJ1KHsPwpuNnUIY35W1Ma
-	e+CdrSEDF0VtQCMes1HopQ==
-X-Google-Smtp-Source: AGHT+IGDnS6htgyeYwgN8UIWy811+V2pQ6j/vx6lcoSMVf67K+GmREOHICZc0pcKrjcHl1lnmSxE8A==
-X-Received: by 2002:a05:6e02:138b:b0:3a7:e0c0:5f25 with SMTP id e9e14a558f8ab-3afed372568mr81492905ab.4.1734283157020;
-        Sun, 15 Dec 2024 09:19:17 -0800 (PST)
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3b2475af322sm11024845ab.4.2024.12.15.09.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Dec 2024 09:19:16 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-844ee15d6f4so181149839f.1;
-        Sun, 15 Dec 2024 09:19:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUTgZWN4C9jNsp2SPWl3MWBjqM1RwyixFvnyNZfI99pH78GhTTDkkHTIyvZ51LhXoGttu6RNH8nb70=@vger.kernel.org, AJvYcCUmnl194c8/0tVUptA/suGHe3/uan83UG8nwtkNAlLi0GWaK5iLJCj2iQ6CRhR/nDJguRjLWMIX0bkeIO/9el5AMC5oHQ==@vger.kernel.org, AJvYcCUmu0DeR0tj6W1uNm15lU3pxKFRhcnfRz6SSxB7JoaHATNhbA1cb5RL3xrmsxKzhys+z7tb1n0EZG1iawRi@vger.kernel.org, AJvYcCXFD8SXP58t5udyItjLjDgLykY6nQZ1btGqKnTVbjHmKKFgqfDKCnGUXOtrLyac/J/qKHSZtpmG/hF9v4k=@vger.kernel.org
-X-Received: by 2002:a05:6e02:19cf:b0:3a7:6a98:3fdf with SMTP id
- e9e14a558f8ab-3afeee7a120mr76941105ab.14.1734283156279; Sun, 15 Dec 2024
- 09:19:16 -0800 (PST)
+	s=arc-20240116; t=1734284815; c=relaxed/simple;
+	bh=P+D5NOuscZiwdPVJ/Fz1S/W7kfcMJ8SsQQwV7AfKeFg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kYE81t+v0qEspl3VRblQ0CHqeZtthHwADWrilNlortc929jyTj5BcEl7Vp5YkrkOX1Z+NBgNe2l2h9To3QiTIEHp71woowA2pus0qQCqkXr3mUECh+z0xjgPs0Jv4FvvJVzvSXxyCgOaXl02vptC31cEaQxM5Rd4DWs+DsXsoeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VF8NOEru; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VF8NOEru"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=9OY8ueUm4CR5UDIgHGg7Qyv//mhOC72otISc2Hlc4wM=; b=VF8NOErupEGkx3Efz/1IfnM2ay
+	zmE5nMaIDXsHEe/YPuWnrjRJAMDFgBPwVI83IANd2/iDwMfUtrxW222pyMuAJKUGh3wwcTzUNzdvP
+	XoGghKYtwf9+d+GvAbzJyQ1z66IR6hZz+cnx7191tRIM4i96drl7L9Y+njl6VhgBOJISmV6wSjXi9
+	ZErRab9/aryHDkvY1alrD//cF6QxKLNublQJr3q0M2hAj/UJMMu0kTJJbFthdZhGGxni5iYnK3QuX
+	NIXE3vIkNM/xmlpDUcZQXSUtLYK7fNnz0viu+rnT+EJIeGFXaxyH51Iea5SYOohm6yAi3TEAD9dzA
+	aEQrQn+g==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tMrrn-00000004iKt-2pj8;
+	Sun, 15 Dec 2024 16:53:16 +0000
+Message-ID: <d9f04bf6-18a0-4f6b-a6ff-2c6e493005e3@infradead.org>
+Date: Sun, 15 Dec 2024 08:53:09 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] platform/x86: samsung-galaxybook: Add samsung-galaxybook
+ driver
+To: Joshua Grisham <josh@joshuagrisham.com>
+Cc: ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com,
+ platform-driver-x86@vger.kernel.org, corbet@lwn.net,
+ linux-doc@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20241209163720.17597-1-josh@joshuagrisham.com>
- <797b248c-7542-43fd-8e44-f2c7d650ccff@infradead.org> <CAMF+Keb0cXc8t8J_T39WJUKydpD2EME92ZWT7SFr_taiCXfvww@mail.gmail.com>
- <90e6a8f6-666b-45cc-ae66-4ccbee0ba08e@roeck-us.net>
-In-Reply-To: <90e6a8f6-666b-45cc-ae66-4ccbee0ba08e@roeck-us.net>
-From: Joshua Grisham <josh@joshuagrisham.com>
-Date: Sun, 15 Dec 2024 18:19:05 +0100
-X-Gmail-Original-Message-ID: <CAMF+KebEX+AM_6O5j=ym6GzZ64qac=Kknd1SKLx6VhJsZG-eiQ@mail.gmail.com>
-Message-ID: <CAMF+KebEX+AM_6O5j=ym6GzZ64qac=Kknd1SKLx6VhJsZG-eiQ@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: samsung-galaxybook: Add samsung-galaxybook driver
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Joshua Grisham <josh@joshuagrisham.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com, 
-	platform-driver-x86@vger.kernel.org, corbet@lwn.net, 
-	linux-doc@vger.kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <797b248c-7542-43fd-8e44-f2c7d650ccff@infradead.org>
+ <CAMF+Keb0cXc8t8J_T39WJUKydpD2EME92ZWT7SFr_taiCXfvww@mail.gmail.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAMF+Keb0cXc8t8J_T39WJUKydpD2EME92ZWT7SFr_taiCXfvww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Den s=C3=B6n 15 dec. 2024 kl 17:35 skrev Guenter Roeck <linux@roeck-us.net>=
-:
->
-> Your v2 is highly unusual. The patch description is the change log,
-> and the patch itself seems to be a diff against v1. Did someone ask you
-> to do that ? Just wondering.
->
-> Guenter
->
 
-Hi Guenter, here I was just following a patch guide (or at least,
-attempting to?); should it instead be a whole new patch against
-for-next instead of a diff from the v1 of the first patch itself?
 
-Thank you,
-Joshua
+On 12/15/24 8:09 AM, Joshua Grisham wrote:
+> Den mån 9 dec. 2024 kl 18:04 skrev Randy Dunlap <rdunlap@infradead.org>:
+>>
+>> Also needs <linux/sysfs.h>.
+>> Maybe <linux/printk.h>.
+>> Maybe <linux/err.h>.
+>>
+>> --
+>> ~Randy
+>>
+> 
+> Also done in v2 of the patch, thanks Randy! (though no printk.h
+> anymore as I removed all pr_* functions.. maybe I should explicitly
+> add <linux/dev_printk.h> though? or is it good enough to get it via
+> platform_device.h <= device.h <= dev_printk.h  ?)
+> 
+> Joshua
+
+from Documentation/process/submit-checklist.rst:
+
+1) If you use a facility then #include the file that defines/declares
+   that facility.  Don't depend on other header files pulling in ones
+   that you use.
+
+
+-- 
+~Randy
+
