@@ -1,115 +1,141 @@
-Received: from ksmg02.maxima.ru (ksmg02.maxima.ru [81.200.124.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E0E2063D1;
-	Mon, 16 Dec 2024 17:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C6F206F14
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Dec 2024 17:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734371207; cv=none; b=TWinzQJ+Q6PQs5EcUbh7dtEuEOv2yxGOun6PuSz8Usj3QutHNF6VOt81QA3gYYQyeQVGjkZPQhLWAZRYG855Olrq7lJhpBNnQlnN028DfeH2WWMLDzACVAnsAh6F83c+YfsZOakpTBhV+5ZD5yqqEu1jhwmcsMugmUNnAn2x4OQ=
+	t=1734371481; cv=none; b=lsLSfyYjkQMJfFtnnotBNdTZFp3CGLI77eX3lwKcJ2tYic+eVQdkg8oZSAU6lXc8viuint36flooLIZpSaWUlG6oSCcLyhIjSq93loEpW1en4hLBH1tF9/vQQSOamR7GPzboSYWQ3oXfQw/Pvvl7z4vffTatvVRHL/6ODuMYut0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734371207; c=relaxed/simple;
-	bh=fY6y0lXzXOqF3TKLW5TwyP1WKuAZswB9Lwop6yYCl4o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ope3rCIvvi0TgKVCbBJdHCjbO17S3cdthXWPaQ2CCfyk3d3fKYVjps63ufqYdOZkcanzwKurGnSokkD00nIHtbC7ePprm0xXcTCpXj1Wh2jH4tgL1Rw22hK+1EdI7RcU9FCUZk76E8vdb4UiFWSzIDg5lWDfD3lpeKySg+NLLG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxima.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b=GfLJ7qTG; arc=none smtp.client-ip=81.200.124.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxima.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
+	s=arc-20240116; t=1734371481; c=relaxed/simple;
+	bh=mjZQ8rK+pUEXIUChPL+kvAmxmKeQ+x7/2IBXpHjsjvo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kLa1NqDSHNRq++F6mZpMf14XuA3qwjIG+B4POznBpuFlMo2y0rNtA/fZNBCpzODnfT0m8k8Rq19VJLbCGYw+wV1hkPMafxYTdJpG6Plhd9tAX4gPmYRBpUFFu8DosApjeE2SGL0L/r0m6DfJXu6bUB/JELysDC4LVXVoCb1wz7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kvxYPqVO; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b="GfLJ7qTG"
-Received: from ksmg02.maxima.ru (localhost [127.0.0.1])
-	by ksmg02.maxima.ru (Postfix) with ESMTP id CA4A71E000C;
-	Mon, 16 Dec 2024 20:37:19 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru CA4A71E000C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxima.ru; s=sl;
-	t=1734370639; bh=2NtiqvLaYzpruvxpMSHj0sXsF8gaZ7HqQVWmKbuJ5gI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=GfLJ7qTGMOUCZmr0eSQcoJn3WLtloUANwvEqZNHZ+C8S0PGLxhk7lI829FydQP7qh
-	 sYeHII+Nlf0HreASjRtwDgukxK5BEfe8It2KW7RWBfRRmYW6R0TtJ5e3mxhskSG8O3
-	 paY2ZFC+jmD877CRiqQKBTGsOxGC6zQXBitKSsMZ0orMRvHnfPwmeeHKdif4/5Z5Bq
-	 AGViGycpsQCqgEWJvJN3W9fS8HWhYMXyqeGfsjy90DA0P5MAxNN9t199UbdfYilTwD
-	 Uy5jNKOzGaJZvHN5Ly3KioD7G8lGWAcN/9QcI310EnBlAak+0ygXQq4LcCMeMyjsLl
-	 5qTfayvS4aYqg==
-Received: from ksmg02.maxima.ru (mail.maxima.ru [81.200.124.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "*.maxima.ru", Issuer "GlobalSign GCC R3 DV TLS CA 2020" (verified OK))
-	by ksmg02.maxima.ru (Postfix) with ESMTPS;
-	Mon, 16 Dec 2024 20:37:19 +0300 (MSK)
-Received: from GS-NOTE-190.mt.ru (10.0.246.113) by mmail-p-exch02.mt.ru
- (81.200.124.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.4; Mon, 16 Dec
- 2024 20:37:16 +0300
-From: Murad Masimov <m.masimov@maxima.ru>
-To: Eric Tremblay <etremblay@distech-controls.com>
-CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<lvc-project@linuxtesting.org>, Murad Masimov <m.masimov@maxima.ru>
-Subject: [PATCH 3/3] hwmon: (tmp513) Fix interpretation of values of Temperature Result and Limit Registers
-Date: Mon, 16 Dec 2024 20:36:48 +0300
-Message-ID: <20241216173648.526-4-m.masimov@maxima.ru>
-X-Mailer: git-send-email 2.46.0.windows.1
-In-Reply-To: <20241216173648.526-1-m.masimov@maxima.ru>
-References: <20241216173648.526-1-m.masimov@maxima.ru>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kvxYPqVO"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-728d1a2f180so3270527b3a.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Dec 2024 09:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734371478; x=1734976278; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3YCQt2G8MPMcbpEhuKmdlLdgE7QDUSM0q9mZbt64Qgw=;
+        b=kvxYPqVOGxDIt+p8iKcn314w11o5PZX+Gr3S7RivKi86TZOacwguoWW3bhEBtTXB1G
+         QSN+GPY3XCCSRe/oBrD8N0cVu5JNba5kFP4SXLkUEttHXu6QycxUfmUG8aLPxYVIo04u
+         LpvTuMeQbPn4OcJYV33k2V2XBgU4dw/yfiM94uf01H5Bh0cG5/u3CGhOFMblZRy5NhuU
+         g8K8HYypZ9V+jG5Usf7ETY/zvUcaN8F0YsGIffyD9E6T5WdIUMEXu3LXv11D8qjT+cKG
+         2X2a4Wf628Blv7j47eknyhPaDujxJeCoNPaNA2ggnnSx6nMVMMP0smHKdJ3zwxRT9to7
+         HaDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734371478; x=1734976278;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3YCQt2G8MPMcbpEhuKmdlLdgE7QDUSM0q9mZbt64Qgw=;
+        b=w4GQ/arvP0PoedvK8xHTorNpAKPf7gOdbUPR8ED1YRKomCGTtTJHivcBBqH7KyPnun
+         r3LJhUHDUHyHid4mLo4e0HC+G6dsuWM4o5JVGzUY3a7vXl6+99AppNH4doUMqBPenvq+
+         Rr5UlYREzIer8JLpdLHCJ6AgTn4hKzxgHXlMiSXJRqpnPUbZU0seBiYJWyyuq4dCSdvG
+         zAdmqoRu5HzpaZYgf0PrSUAEGousXFV/RnsmZeQL6Gq7H6cFbNUS1AC4PQeUoh25xkP3
+         +9sFVheLwSaMl8ig07U+5kPtI+S1zfBbelf/qNwVS5u/T+iwHTWikkTGropnCr0tyHbO
+         uyMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVhPk1NSDY2qhnFY6Irwbdl1XynbTPucYnTqesD3/10Z4FHwWJlDjojfiqgk77kPQaWRaMYigQ9OhxdpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYA7Cg8gqOxUSHTycxuiguMPCXYU+MSg7eTkszYajSnGycvOiw
+	ZV79BWmX3GR0t1zQY7SipttojqTQlC/VxqWNL/NSYfpCHmCqNL5WclFugQ==
+X-Gm-Gg: ASbGncvI5bCN52NUWIBd6C89fvAlOPkSj0kQ9MuGB2VvA69CiavHrG/ax43IwyqdT2r
+	qWKadGJnE7JfCutbATTPyKgI+Jja2GeBuxjUHQeB6LKiG9INeXuKGHfRlrQLHFj3xEefFEF/0F6
+	h+Fu9ouwfhSi8zbuSOXEjgF2YZjfjkDwJPhih8A41wXpG135aSZGQnLoaXPBActM2hkWiTPkQS1
+	B/PixnzNhlNixlXDXMmz1h40fmoo1rNmRyveiolGGVBtIW1uXCS84k1Tp+0LLFhxn+X5CBuokZ8
+	W9bmwm1DRaEGAdR2u6B8enwR6pkxKg==
+X-Google-Smtp-Source: AGHT+IHF0FxR/tSEhJ01BKMhngwVdqYXqPrDcMQ1Q4r1HbOqNjrSgLV/KM70mGrNhOvZr+YLax643A==
+X-Received: by 2002:a05:6a00:1ad1:b0:728:f266:cb09 with SMTP id d2e1a72fcca58-72a787ef7c2mr247272b3a.13.1734371478606;
+        Mon, 16 Dec 2024 09:51:18 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bac570sm5019645b3a.131.2024.12.16.09.51.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2024 09:51:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e036243c-912d-49a2-ae9a-52bc8c923352@roeck-us.net>
+Date: Mon, 16 Dec 2024 09:51:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: Issue with Accessing All Temperatures on EMC1438 with emc1403
+ Driver
+To: fiona galla <fiona.ga92@gmail.com>, linux-hwmon@vger.kernel.org
+References: <CALeoAQygKXoM4_Pq_5QDSaFWMK=Au-E5VOrp1UpdX3j_ucs2Hg@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CALeoAQygKXoM4_Pq_5QDSaFWMK=Au-E5VOrp1UpdX3j_ucs2Hg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mt-exch-01.mt.ru (91.220.120.210) To mmail-p-exch02.mt.ru
- (81.200.124.62)
-X-KSMG-Rule-ID: 7
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 189867 [Dec 16 2024]
-X-KSMG-AntiSpam-Version: 6.1.1.7
-X-KSMG-AntiSpam-Envelope-From: m.masimov@mt-integration.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dmarc=none header.from=maxima.ru;spf=none smtp.mailfrom=mt-integration.ru;dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 47 0.3.47 57010b355d009055a5b6c34e0385c69b21a4e07f, {rep_avail}, {Tracking_smtp_not_equal_from}, {Tracking_from_domain_doesnt_match_to}, 81.200.124.62:7.1.2;mt-integration.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;ksmg02.maxima.ru:7.1.1;maxima.ru:7.1.1, {Tracking_smtp_domain_mismatch}, {Tracking_smtp_domain_2level_mismatch}, FromAlignment: n, ApMailHostAddress: 81.200.124.62
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/12/16 14:34:00 #26899616
-X-KSMG-AntiVirus-Status: Clean, skipped
 
-The values returned by the driver after processing the contents of the
-Temperature Result and the Temperature Limit Registers do not correspond to the
-TMP512/TMP513 specifications. A raw register value is converted to a signed
-integer value by a sign extension in accordance with the algorithm provided
-in the specification, but due to the off-by-one error in the sign bit index,
-the result is incorrect.
+On 12/16/24 09:21, fiona galla wrote:
+> Hello,
+> 
+> I am currently working with an EMC1438 temperature sensor using the
+> `emc1403` driver.
+> However, I am facing an issue where only 3 temperature sensors are
+> being detected, while the sensor should report 8.
+> Here is the Device Tree entry I’m currently using:
+> 
+> emc1438@4c { reg = <0x4c>; compatible = "microchip,emc1403"; };
+> 
 
-According to the TMP512 and TMP513 datasheets, the Temperature Result (08h to 0Bh)
-and Limit (11h to 14h) Registers are 13-bit two's complement integer values,
-shifted left by 3 bits. The value is scaled by 0.0625 degrees Celsius per bit.
-E.g., if regval = 1 1110 0111 0000 000, the output should be -25 degrees,
-but the driver will return +487 degrees.
+The compatible statement says it is an emc1403. That chip only has three
+sensors. The driver works exactly as intended. Did you try the following ?
+	compatible = "microchip,emc1408";
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: 59dfa75e5d82 ("hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.")
-Signed-off-by: Murad Masimov <m.masimov@maxima.ru>
----
- drivers/hwmon/tmp513.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-index dacce7417bfd..be63a049923a 100644
---- a/drivers/hwmon/tmp513.c
-+++ b/drivers/hwmon/tmp513.c
-@@ -234,7 +234,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
- 	case TMP51X_REMOTE_TEMP_LIMIT_2:
- 	case TMP513_REMOTE_TEMP_LIMIT_3:
- 		// 1lsb = 0.0625 degrees centigrade
--		*val = sign_extend32(regval, 16) >> TMP51X_TEMP_SHIFT;
-+		*val = sign_extend32(regval, 15) >> TMP51X_TEMP_SHIFT;
- 		*val = DIV_ROUND_CLOSEST(*val * 625, 10);
- 		break;
- 	case TMP51X_N_FACTOR_AND_HYST_1:
---
-2.39.2
+Guenter
 
