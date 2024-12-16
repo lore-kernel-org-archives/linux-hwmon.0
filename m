@@ -1,92 +1,135 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509001804E;
-	Mon, 16 Dec 2024 09:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADF2203D53;
+	Mon, 16 Dec 2024 10:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734342643; cv=none; b=uHALOf+dB5ZuI4HBWNzpYjjKZM3hffYBxC65YhsVLKqIK0aMJg70mbWeexTzL56/iPjKfLVfwlV2DTppskuJWOSq9qMnlhquV08m5IhZj03SUoevwAezTpJx9iDRmnkYAT40rTGJXfZoEHWZ4LJ19yeNlv11M8iTWSOPakcwp9w=
+	t=1734345732; cv=none; b=QMbf2g+A3PD+T9DbKYtvLeMFeaeKOOdw7Xj+nLz1kSdnBzIwGD1DQIvDHg5o3E8rukl8wK8HpGa4rT5VaUMvMvh7EVef0SjshMnBb2SKDOsLah5WMOg8d2vWySEu3TtGQdVXo6z+jxuuCj2Acu0TMQnqOD3TIALOFE/enivvQqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734342643; c=relaxed/simple;
-	bh=dtAoDEbX46mZegb7X6Da4LHRZfjcermuAfvrjrI63CM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gzPr3kQz4P0Pbv7VHwGEt7j9QEdSzU68UFuVI0kRNJNTuc10xd0sUSDGrpfRdKpf+kuBfJ2PN8a9xHwrVXsExVTtFqQrcnsAkjsojj3ubw5LYsy1lYcvcZsXf7pQlo7fLrQ+NptCcsy0WE0cNQ8bCiQIfq0NxvzSV53kpzCTPn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-51619b06a1cso2083582e0c.3;
-        Mon, 16 Dec 2024 01:50:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734342639; x=1734947439;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nEQxriZsKIJoW//6ZrtlM9VA8MpLHKD2JU7uy8gFOdM=;
-        b=DzZsaGuG2Ika+FYqNvQQdFvYUqizyp/9otpVxzk/ZQBd1VpVPY76wj7Z4T32fK9xM8
-         slwRyGNnZivf2Dp43ezT9wz8EvXbvF+82bxO7zO95dMgM7NBLs39ZgunyvHb1cJD5Ux2
-         +JMIMBNzI5ooCS5EkWpWT7SU5Zx3qzzJ5Vg7HLWoxzscdJ0raNAlcXY2zTeniKm7Wwhd
-         hTU4NvIbbYxTWZX2uJaGIl5UbepRky1d+POfOGsezwabb+xfEYqnRTAkBibEVKXSsmhK
-         PWbypb2SfirSWz8cQzmEZGPiR+UnJung/5b8Mh8lnOo+6QXhfBSljZ2BsxoeT+KwFWyb
-         ifVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUiStQDapC/QgWDbJm1ZhFE8ee5fK8UV6Wsl/utmrobLY8o5JIc7aGj0h64sE69KwIicy+TIP4+LOsTAA==@vger.kernel.org, AJvYcCV96Vmp8sED39wv+TgC9F5bAfS1Iy44vzNW/Y77ONgqhyBB/JzWQHR3BfQbqddjblPfzwh5EcFE3rh+iDQC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsBSBk32NosTMZcAx84ExjV2c57OulTJe4+5I0z7q8nUZOY4JZ
-	Ccvb0CcPib0ZomkuI5OoiY8aokLUoTBOZEd8xwrY3b96mxd2z690ey5Fub+P
-X-Gm-Gg: ASbGncugyEXqaPD6DnjHVAoBTGgjFc/4zAwMp4SKrVmoHhBhSgpMislgVeSjKUUT3H1
-	A5WBsolD7wJTySTmHNNJ8hlvzSQJOzLm0f4oXeZeQYq/CXpWxtXY5aQePlVTCoO0eV5nLyNiRN2
-	WOtRt/OeV6ywNe0WR8RyqjXXGviLGu9V2lBXPm+ELk/ir9DNisfQF3hQ8SwRnSFivJVITuLzpHN
-	TaXLrksNYodMzH8555XD1275WlTF0lfoABzk3s2AQye2YYkUlueQ2Y7mKrEaqlrMQtgsNA5Lfne
-	8qyGLCcWZAIGOMEFAc1srCU=
-X-Google-Smtp-Source: AGHT+IG0LP+HNGEatty8YkJZ+h+ttV2GofdRa4rDVB0sipwEqaFLFA3U3tJSgVj5eiY2Tj3Ce77p1g==
-X-Received: by 2002:a05:6122:1d43:b0:516:1ab2:9955 with SMTP id 71dfb90a1353d-518ca3b6a2fmr11218971e0c.6.1734342639607;
-        Mon, 16 Dec 2024 01:50:39 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-519eb6fcd1asm546090e0c.33.2024.12.16.01.50.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 01:50:39 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-51623968932so2117457e0c.1;
-        Mon, 16 Dec 2024 01:50:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXkxmw6E8QhlrGV7g1SYN6qY+vPKWiDQ9mjPcRaCNQaM1MzIHVaZidkfDjAFzJ5Gbxydg+QRxXpDp9WcVQZ@vger.kernel.org, AJvYcCXm65wQyiCXetAVCww35jCLibBTOE2+zjMi1BtLlLg2PAyQvNb+WLndeFc73vIlj/BRZuj4dvN2lDtw0g==@vger.kernel.org
-X-Received: by 2002:a05:6102:32c1:b0:4b2:5c4b:517d with SMTP id
- ada2fe7eead31-4b25d99ee96mr11219600137.10.1734342638986; Mon, 16 Dec 2024
- 01:50:38 -0800 (PST)
+	s=arc-20240116; t=1734345732; c=relaxed/simple;
+	bh=wYHyds/oC/bIXn1FOZ3FfxUd/venFVAC8H+IayFbp3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QtkXSChmdno7FZUD88RKGWX0co0ApuxJ4twtpeqGIYCZrzjVCIF21lmujyBYthM84J0cuEZdClDNcj7DQvKPj6BXAIqwwt7n4mAeCz7rQr33fHJTmPV/3qOCsYE+MA2rrdL91tCalyj5oMOJXEbWOM4e9zYPCB5IF1Kf2UOwdh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oqcYIiEa; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oqcYIiEa"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FC2620003;
+	Mon, 16 Dec 2024 10:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734345721;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tcrvnYxItVVme/Ppg4krYaiv+M+aU8FG8UoKAi5Pjng=;
+	b=oqcYIiEad4rgc71cps3pZPHKUjfxnfC/h+9Jwv86EATSIos1zHyfSWk0LI7LT6ruTObGbA
+	rOv1o9iGgNyEIPgAc8S1O7SkW7RkpYvZXVM8V5s3aesCLvyN8WouNZu0RvxHl/sCSbokqv
+	xSoEHHqTbFg6JTl9ouXJRkPTZKjOy2J7iVx9s/beUky1KvE7Qtsq/4agmdKpBk6Oy8/t9o
+	G9YxkPW1ihIBDt/5pydjLpdqmKtPxdZBGXFWoLjaqHTO6l45paRdc1pPAyA6QEVXuwyiwY
+	NLG6lYdezTCu25nVlYFS+LuxzTCiwqWiwyvZA1Qu5jfhipEHVRkCSpwH9jwp7A==
+Date: Mon, 16 Dec 2024 11:41:58 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Message-ID: <202412161041586ed7c0ff@mail.local>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
+ <20241210104524.2466586-8-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com> <20241214085833.8695-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20241214085833.8695-3-wsa+renesas@sang-engineering.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 16 Dec 2024 10:50:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVg84XWfjXRmt8Hw1Gwh71-QOwo8jRRzWDSt1r2SEgQ9w@mail.gmail.com>
-Message-ID: <CAMuHMdVg84XWfjXRmt8Hw1Gwh71-QOwo8jRRzWDSt1r2SEgQ9w@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] hwmon: (spd5118) Use generic parity calculation
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241210104524.2466586-8-tmyu0@nuvoton.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Sat, Dec 14, 2024 at 9:58=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Make use of the new generic helper for calculating the parity.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 10/12/2024 18:45:24+0800, Ming Yu wrote:
+> +static int nct6694_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct nct6694_rtc_data *data;
+> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
+> +	int ret, irq;
+> +
+> +	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
+> +	if (!irq)
+> +		return -EINVAL;
+> +
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
+> +				      sizeof(unsigned char), GFP_KERNEL);
+> +	if (!data->xmit_buf)
+> +		return -ENOMEM;
+> +
+> +	data->rtc = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(data->rtc))
+> +		return PTR_ERR(data->rtc);
+> +
+> +	data->nct6694 = nct6694;
+> +	data->rtc->ops = &nct6694_rtc_ops;
+> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> +
+> +	mutex_init(&data->lock);
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+You should use rtc_lock/rtc_unlock instead of having your own lock. The
+core will take and release the lock appropriately before calling the
+rtc_ops so you only have to do it in the irq handler.
 
-Gr{oetje,eeting}s,
+> +
+> +	device_set_wakeup_capable(&pdev->dev, 1);
 
-                        Geert
+This will cause a memory leak later on, see the discussion here:
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +					nct6694_irq, IRQF_ONESHOT,
+> +					"nct6694-rtc", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
+> +
+> +	/* Register rtc device to RTC framework */
+> +	return devm_rtc_register_device(data->rtc);
+> +}
+> +
+> +static struct platform_driver nct6694_rtc_driver = {
+> +	.driver = {
+> +		.name	= "nct6694-rtc",
+> +	},
+> +	.probe		= nct6694_rtc_probe,
+> +};
+> +
+> +module_platform_driver(nct6694_rtc_driver);
+> +
+> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:nct6694-rtc");
+> -- 
+> 2.34.1
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
