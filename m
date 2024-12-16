@@ -1,117 +1,104 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D1129CA;
-	Mon, 16 Dec 2024 07:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEB21804E;
+	Mon, 16 Dec 2024 09:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734332653; cv=none; b=GMZNyLX9bQyVoFNPaY5uF04v+4WJBTcoMrWUSgBEJlnX731vOfPTSIekcIzx112N/BV7KcdGyMKOnLeelYQOGO4kCxl7sqigd2kAh8SsD3LJ3qCdfEdyxQgoRLWYQFfskBS8JROND7CU8+QpySZwfrUtlvJyITGDBh8WKPegl7Y=
+	t=1734342564; cv=none; b=gZ10hRNhptBGTvj9hMx1C2UEop4GTUIbC1MqBp1vU1GAhoVktfsF17p4b/Xrtn94TtXfkEAWpz9OqCk7RIKurAnnaS6VTSxlc7oEoEYbgXS5H6NaQ3hPolcDx3sB/KvwP8tPZBeju907+bEBV5zGqsFTH2vLMQgM1uf6W0dyJAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734332653; c=relaxed/simple;
-	bh=KeSpEDkKtZpQhSch1YgBwfAeYb9z/c43PHmS5zAo9i0=;
+	s=arc-20240116; t=1734342564; c=relaxed/simple;
+	bh=n0x3WRqr4ADX31+h2v0g99ljCXGAP3sn1bme2h1rOT0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fFZrmEbiXsdri2EF6dNOXy/qBqdn0fhJmUNIWBDWgsDZvdxEr5lxS3nyhKUhqR3GJtUbQDRA5fa6BIfYqXSLCJ7CUtwn+wUC5QWTnmCMV73Y0GK1qHmWco7dAoFk+DX+cuwJQPk2RRLvSmshC8ZIxbGWWd9q4roKo39wt/BHxbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WevJQVgb; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=JZh09kOp0XDuwg8M3e5h1c9+L/s7R7PCnLe67LiicjTlzRhA9YmP2cWYdkO6UenGkos1H3PLcqP1kZ5YAyYq+A3T27t8hmW77HX/1SHv6nMDWdNAiRQL/dTTsPHPRU185ezyoEx/GgEEiZUqcioTeVaQjX55IfRr2n+2SCAB7C8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WevJQVgb"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e3a0d2d15adso2453106276.0;
-        Sun, 15 Dec 2024 23:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734332651; x=1734937451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tsU5wmh2P4K8mF9Ggmz3hxOZU+54LH8riOqnst6ceWc=;
-        b=WevJQVgbmXC1pclM8jpkZfyO8o9H4dSFa6ABjrT/c+AxQKnewTsDhp/j2p281yhSrY
-         B8oMI2Law1CM7NYLVAm2I0NLqyM0PGNSZX41Unn7qVUb8kF+YACMvYHqAGOMYuewpK9l
-         6tnnfATxDLsG0mA1LifEWm6tZtkey/MiaayomMBcje/nsSdF6C8Y/bC7WWl+DGht76to
-         luEcr9I2qT/UzcUonSXKBClAFAmUMEoj+H+mDxr1IktlR2XQwiAQY6BMxvN1XfP1sW4h
-         /9ykvBcM9bdvXxtMeSuFKkPa4Bg/isOPYImcjWrR+MddJct8MlIoHeH6p39Uk+wXi1Ki
-         Hg/w==
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-51873e55d27so2130390e0c.1;
+        Mon, 16 Dec 2024 01:49:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734332651; x=1734937451;
+        d=1e100.net; s=20230601; t=1734342559; x=1734947359;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tsU5wmh2P4K8mF9Ggmz3hxOZU+54LH8riOqnst6ceWc=;
-        b=C3rHQvOYzv54LmzyuMhBHrdZcVuYkEndznqxOO34/2frpXDPyUlzF782TOMZId+G5b
-         7sLUIF5JOvgWS3Xy6CaMY9ouNFx1MDI8LLElp0IFy5Rvbcel3tjectbpIS2zPA405Z/Q
-         dCbf5RRV130LoMQfMCYDfIq4DisgrOE+S36r7AVuTTWYzGJ6im0UJQjmSL6IplKtJOwW
-         KJj4O/vJNU3T9fFIwYdz/Qv2usY7pOCdNKVt6K9u3c7NvECYReCJs+G1JxxVX4H4nXMq
-         R6rFsuqWg9YuspTbCOCsBVJLfuq4UL/iJS8ykpYYuBNIuxSVJKHIFNisv6I8fcilnycQ
-         Vt1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUw/Uar9vBZrZMC4NwBlmFfYUC8b1pdpgagOO+6J1bKEeMhpXo21Y5P3C53inatx2i3bZp7ZYRn9LSRxA==@vger.kernel.org, AJvYcCVLP2Sj64uMbAh3nhkjpyJEFK5fbQ3OhXnbbxfI11mRS7WYGj/VPmAWAEQsMvAzn6kE4WzvPheOOYYVAmY=@vger.kernel.org, AJvYcCVUnD2BN+6ofahDPqhklkTYEwFLYWVqWoIesUKRlXxojCCH5LlVWvnJuUUWwq/5k2xThLpqRyeJky0=@vger.kernel.org, AJvYcCVY4SHocZ7gMqjJ3OlfGI9wg2EZddo2OfSFG/FOQoJb2xYvD14CSzbfSVOoRfiKf/4UFy/dmplQ2B7f3xWYees=@vger.kernel.org, AJvYcCWE+3MhRmV/3D7WwzPFN1iSAjDdhNl0CgzIteV1Mxp9Wj+BoCuldaTzAZIzsdfwxL0oz74T/ebLRICX@vger.kernel.org, AJvYcCWSU1P6s1hO1hkSw06UUGwITro85/4EsOTD95KN09fx83pxcZcDbRMZ8SjeZMhSesA9LW1mO1FTHhwYtG1J@vger.kernel.org, AJvYcCWf9PrTyIV9ZZ2DDCceFJ9dXFPO3UOej1iESsY+elW7Q7M1Ku0kO6FkaMsFY5VQnxj6EG3jUReC@vger.kernel.org, AJvYcCX5k9u8xsoJov1/CFrKNCqyyhIaSC/htrzcQdFoo/zdBA8uLHXnn9q/YYgG69/Cn2r/HKSh9yjk9a9T@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW2oR3tCX0RXx8Qa+fioDHhtdxd72CR5RGIP4/B6znPwiJXXD6
-	Yob6rX6dCGXDQhcnkZLytJAiSgqnrcQ9yWAKQIY7JU3/H04JVwArCk5/nPlr57MAlUhVe9yKIas
-	CJBo2r07vtZfxZX0sUyRRJgI2UQM=
-X-Gm-Gg: ASbGnctqYft5gHoREbzjO/BcdUZf7GFMDymiBj7+0Mp7UGMz4WBAD9ch5mcyDLBTcgS
-	lf86GBvrtj6pz6iVyG1M+H/r5yaYgsnt3AjTgRtxdl7IAYaCi48tt3COmKUE68tqeVkv0XPs=
-X-Google-Smtp-Source: AGHT+IHLFDXpcf4og2XrYkLAxxhOSZA2+BQlHOzPM0PO9nHe4iVqax2MnRn2XR8QWV2Gsxx89csWs78ajaevICvrWAc=
-X-Received: by 2002:a05:6902:11ce:b0:e39:92ec:b5f6 with SMTP id
- 3f1490d57ef6-e434f084c2amr8834964276.41.1734332651424; Sun, 15 Dec 2024
- 23:04:11 -0800 (PST)
+        bh=QMssFc4WlUyziRcYZ7/lgFWbIJiPIdNq0Bs3CRb6Zv8=;
+        b=uIIKGeVrQd0U0mEG9F9ERJomEmVYNaUeg46dfRkqw4TGw8bzkZj7etu+vNa9J/AQGy
+         tpOOzyoUBIrNR6T8UBsNi3MK5w2KHI2jj0JdSxPi8JhlWYbzKCqzxDnsbl0eZHzO062G
+         Gw9R7qKo24CL6Nc919QsVm+YSVJXBAY48sCLqiCuYTqwF2JLnKoCaJQl5dsryGoJkprO
+         XyPbmZNwXOmFWUSIWH42uHPxW/qlSixPMJFIOa8bawBQRYN03YQ/Ne3bIYpXJrPbsCQu
+         Otu7I1/Y1SxiYwSFg0jSp9HifcQ5NjMEUp90jRs/sZG8KvyRzAJYYXM7RKFK/Tp5MYXE
+         OrWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVO94BnYMsJEOF3mBVr3nyH70r4b3Jt/BtaYoM/qinpDlepll8z6LeEL5fEwofU0+nM0GZd4S1m2EMaj8LP@vger.kernel.org, AJvYcCWz4a7NBw7aQaIDKr3/mRx6entlazWgx+9VmNl9Kawdf+VaAzR0Mpfx7y9kQea7h7YCg6DQ6Hq9uetzzw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ4cOzwamxQ1yQlWLqzDYwSsNY+jCNAwjPaglRuaVK46iuTZyD
+	4KeItzVWPJGe5l1vKJmY6J4c4QHaGVZ+G+BAbv9arnlNbLrqdQHigPX7WeeL
+X-Gm-Gg: ASbGncs8V0ZWGs3qTvwIa0BrF43HzELoVLH4HXtDpQFhliOlkmvx3NyV82pOFqvWGdL
+	OlD4kE9/4A+uLALqP4+H4g3Pa+2D8hST4WZr9VxfBnDbN7tGW7PkxqPYbXrXjpk++KwZgyymE8m
+	ag81KC3tJbXHes45eYpL0s3uFoycs5Dqc427BOifo4pEznWt05v6IK5CtOsAyf4A5wDsXIGPCZ/
+	BN7UWggqA6cToE2VYe5Spzcd8aB7FkhPXDYhUvkNLXk/Gj2CRRa+tbyaxZ6/5qLm/EEvEm9KCRV
+	bNFv5YtMZhOIuR+K1LM=
+X-Google-Smtp-Source: AGHT+IFJjSdtCpKMJAcE1XCO1DNQDIJeYeyK3bYxW0gzjcIZc3zjAJ1McrxY7oVn648HI6AaE8+kuw==
+X-Received: by 2002:a05:6122:318b:b0:518:8915:89ec with SMTP id 71dfb90a1353d-518c5bd8a2amr11598612e0c.1.1734342559232;
+        Mon, 16 Dec 2024 01:49:19 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-860ab6d6de6sm816758241.22.2024.12.16.01.49.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2024 01:49:18 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-85c436db302so1895522241.0;
+        Mon, 16 Dec 2024 01:49:18 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW+vXYCm68dYDxTHlLSWTV4MNzfQ3YDfqIewsOho3KGfDeV29nMNr7XjflSvjYIMI17QajTa4OT9yp58zI8@vger.kernel.org, AJvYcCWhn8hDyk3ppUzpMpkn0dNqELG5nde4ye5wXvVdOhnv05lk4IzanZ3B19hH4Uo7QeeBdmT8Kn0gY8YOkA==@vger.kernel.org
+X-Received: by 2002:a05:6102:1483:b0:4af:d263:de23 with SMTP id
+ ada2fe7eead31-4b257b156damr12193210137.9.1734342558479; Mon, 16 Dec 2024
+ 01:49:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-7-tmyu0@nuvoton.com>
- <CAMZ6RqK+B3nc9bLWR49vwDJX3=pbjOKKoa=e=Pnc7wJNQx7JPQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqK+B3nc9bLWR49vwDJX3=pbjOKKoa=e=Pnc7wJNQx7JPQ@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 16 Dec 2024 15:04:00 +0800
-Message-ID: <CAOoeyxXNvnsdbrhjaKq13x=27-nK0U73+6yvRfTjJLAY+v_OcA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
+References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com> <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 16 Dec 2024 10:49:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVZ6_LCZcPiL59A05XkNt88-2OwDTHZDdT0c7GMuFQNag@mail.gmail.com>
+Message-ID: <CAMuHMdVZ6_LCZcPiL59A05XkNt88-2OwDTHZDdT0c7GMuFQNag@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Vincent,
+On Sat, Dec 14, 2024 at 9:59=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> There are multiple open coded implementations for getting the parity of
+> a byte in the kernel, even using different approaches. Take the pretty
+> efficient version from SPD5118 driver and make it generally available by
+> putting it into the bitops header. As long as there is just one parity
+> calculation helper, the creation of a distinct 'parity.h' header was
+> discarded. Also, the usage of hweight8() for architectures having a
+> popcnt instruction is postponed until a use case within hot paths is
+> desired. The motivation for this patch is the frequent use of odd parity
+> in the I3C specification and to simplify drivers there.
+>
+> Changes compared to the original SPD5118 version are the addition of
+> kernel documentation, switching the return type from bool to int, and
+> renaming the argument of the function.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Thank you for your comments,
-I understand, I will make the modifications for these drivers,
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thanks,
-Ming
+Gr{oetje,eeting}s,
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2024=E5=B9=B412=E6=
-=9C=8813=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=8812:10=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-...
-> > +struct nct6694_hwmon_data {
-> > +       struct nct6694 *nct6694;
-> > +       struct mutex lock;
-> > +       unsigned char *xmit_buf;
-> > +       unsigned char hwmon_en[NCT6694_HWMON_CMD0_LEN];
-> > +};
->
-> A global comment on this series: do not declare your buffers as some
-> opaque unsigned char arrays. Instead, make it a structure (or an array
-> of structures if needed) using the little endian types for the
-> different fields.
->
-> You already applied this change to the CAN driver after I made a
-> comment, please do the same throughout the series.
->
-> The same applies with any other comments made by anyone else: do not
-> only apply to the patch where the comment is made, but apply it
-> broadly to the series.
->
-> Thank you.
->
->
-> Yours sincerely,
-> Vincent Mailhol
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
