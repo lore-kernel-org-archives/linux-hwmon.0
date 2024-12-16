@@ -1,73 +1,73 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E144842A9B;
-	Mon, 16 Dec 2024 23:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC8D1D45F2;
+	Mon, 16 Dec 2024 23:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734393232; cv=none; b=a3ouCw3aZj0gHzQdt3b2CgUbnbVZAosXAx6noO3xSug3ns2/6W9QccvZHrtpjzJIGSUVuOLZWiWetENwdHwWXdZqgQhuMVkNyuEIJBx0xjrGf2ktoAZPX0rgW5H1oHDDeG+zgvWdw87fDDHXMQU9fsTiWUgEelicSgItNs8J9bQ=
+	t=1734393334; cv=none; b=mqz8Q0dgXamusCpj+hxYjteMI1EhKmO0M/RyEH5KYhiZjRNS6aeLTn/jXlZrMvKxeewUqH5AJtGf1WRPCQRPEoLWnDqAwzwaSlpG13SXzIjC13xXPAfBlAdgSRSgfRT3tDNuwlu3RGQ8vzpUIdBhkQafJtnMwP/kphynQylEB0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734393232; c=relaxed/simple;
-	bh=0q+3VBopVRsuWei478P2PzsJh3jZpBMy2zKrno2FNpo=;
+	s=arc-20240116; t=1734393334; c=relaxed/simple;
+	bh=qcHiewX+vr3/Az4ll4cLmuIeb2/zHSNvQ//ODJgqH5A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f9+uzWFCs4MtyxLWCNnCfSOn2o3mUTVV07CwKTq0ABf3nMWV+lJQ415+f+MQVczddmdI3hu5FFP8yBML8k/GPXPaqw2OoKBGeGHE/jcEZkXNyyhH3TmO0rbztR972f+o+9fV+EvHylyQP7Wam/7yUnYMzZmc63rR9C7cTgXqpQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4Pe/Edh; arc=none smtp.client-ip=209.85.210.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=FmS/hY7nFl3I0tET346J8k1+iKLpW7xLEe/rJLjZcX0RPhW2NWLax9BZIh7TLGuFqsoly3xGBbMnJ6xMzg9K5VD3zW0D8NqrwnLN4HbBMvW4hFbFuzxVHLKzHBQ+Z4YyE+GORMrXN3Slf3dOC3+ZISsU5KVvpYU8uRj52fsE5Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLhAfij6; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4Pe/Edh"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-725ee6f56b4so4040532b3a.3;
-        Mon, 16 Dec 2024 15:53:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLhAfij6"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2163b0c09afso41397125ad.0;
+        Mon, 16 Dec 2024 15:55:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734393230; x=1734998030; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734393331; x=1734998131; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3AYsCzgj/5ODkiEST6+6L5KNVoz2P7jT/ZqfLUwWWO0=;
-        b=C4Pe/EdhqDwJ99zi6oJe5LzBRiwcTmmD7dEmB5peypO4pcD66rQIka+n50Y60t7xmg
-         JEyK7GUByCxsVmUCOP57NAmBsIj6veIhHV8K0YWNs0Epp+BJTS9LGwObk7LQTRVa4qPM
-         yo8upAKBHFMC6I7HWEWf2XC+UoyG693DA76Q62csgB+aExj6dPBk3OjQw0sI7a4ifWp+
-         af2SJ8qBNq9pstnPtWDEXxzd4B8sJelNXut5KR5jRpb5mAQXdy1PbJVs4n/4Zuzw2JGn
-         axuGj4w4Ew3VkrSAgW7sIfRK1xmK3YcFfoZu7RjWp1Bnow6hPQ2qObeuBKkY9xZs3R/1
-         0MeQ==
+        bh=4wTsNWNRPHTgTo4+QxL64lGOH0MS+Fi8hjHOqgs2z8Y=;
+        b=FLhAfij6uq8+GB689ow4SgFEf14KccKSeJvzg8K/dLKu+ZYcRUeMqInloGh89nd4NL
+         ua9WiEGwKvPet8ova9vNTX6lDsJJILjmZ5YUBiun8gFzIwbrKRsfGf6y9LznhUmuRCWf
+         5q6havdAyNwqkOye09E0OAj4k66g9sjnLzn82kV1Ogm98d+eG9AuWqF74r4Eg9toW9FZ
+         F/tvCqq+3/mF/f0FF5U6Psfs0jNpM1vCmI7g66PUApAgt/NrGpSNPio9J9eORWSYzSOB
+         2zUVk+roIcOE8u2Tbu8vYXgFZoj9zIEr9qDI8sNqNgPASPQD0gnkVDpL3Tr/uFaiWdyr
+         Gk6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734393230; x=1734998030;
+        d=1e100.net; s=20230601; t=1734393331; x=1734998131;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3AYsCzgj/5ODkiEST6+6L5KNVoz2P7jT/ZqfLUwWWO0=;
-        b=qlS5riZKQdIoQXQpuqaHUefW5UBHdhZJHuoN090I5+MylDgUZA9Gc8eMhO4jhLtYFY
-         wR8X9K5ZJcjYO4VK+uXskqbxGHhu8Cx3DNK9TowNPnMFWRQ49IqeL4SIjflRYGC0//H8
-         dipylr7sDp89lJZLyInYCnqWcH/aYGuZKC54NSr3nx0ik76ZzxwTJkrNNlbkEs3TpYho
-         ILFIB4cHbr/GeukzVHnFUJRQkIqN83HzKqyiVCibeJGzzy38ZEff0J4cGVfW9zsNh9OG
-         rOf/jbBRp6jkJKPrjdqth/6MMzQYm0YkFSNn1WslhzomGx+VnRCB96UQu2sMhgQoqTwm
-         JATA==
-X-Forwarded-Encrypted: i=1; AJvYcCVMykE1vjOJPNb437Fa9uMOnzEnzjwj5+xa0lYFv1C/hU3l1jUQCMsODewSa1QakLDhQfiedb+hT8frlEpq@vger.kernel.org, AJvYcCWhX9f8RrlZhF5AYaCRzzaiSnmZu8dOBicS7mEbHKLGFjyWHrQzvPmkdC5QZMiN0XcGfvNsTEU4ubZLuA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi6/QlogZQazgklup1VrBnz7cDz5aRV2d1l+ctaxaScor9iVHW
-	pW41+3XR0oPu29DKMm38Pt/Gwr8tVyyB5LfMF0WRz/pL4NEM2kL8
-X-Gm-Gg: ASbGncvO3FYWcpXvrfw7j+xMe372jm92UGZuESkyIrCNTaQeE4mWoLLE5gAQYHopCYn
-	EBxGYp1pFscozelRbg/ZPceXEI5bX+w83crjKIlqMF7vUS4YcHezMDh1kFd/CwfrNhvOw2sSjNl
-	37XqulX2L4KxA76BDEoBWaUNlDt2RKtunugwtpJ5JC8XBY/EYhdrGxZjZxx5q89k7mp8igRy/mF
-	gy3MSStV8yplpjmRJO3mR3LLBURM2UTsvDA2A3rDJdpp82H34+6nUn5GB9Dk9oDqECpoA==
-X-Google-Smtp-Source: AGHT+IFlq67BlFxxYbTnNq3eqbfnNG8TL9UMXNRaExmf/FIKrMOnklGUHDXCbo3jvFTms/P5ipHnfw==
-X-Received: by 2002:a05:6a00:4285:b0:725:f18a:da42 with SMTP id d2e1a72fcca58-7290c0e1af9mr22662779b3a.2.1734393230068;
-        Mon, 16 Dec 2024 15:53:50 -0800 (PST)
+        bh=4wTsNWNRPHTgTo4+QxL64lGOH0MS+Fi8hjHOqgs2z8Y=;
+        b=Je2cU74a2wP0k34/AWDbekree72eqiGcn43Zu3rZcQwJXagKEvbP+7KuoJJujO95DG
+         h+P6QJ/HymuEwO3iTqZFpKL7lIU/ad8NgVOYNpJY5kD27rUMWBtld84BewSEI1rbH+Uj
+         DJO8GmacFPf1d7sVr8rKnVDwRUL+H69i0tWeQFJ2dLBZxzDaS/ysuRRnxo8JpaeaLjOz
+         0yThatH2KzfLw7bMaRLY5vUo6EH160P3h3LYYqLJfbuutkE/MVpkRM6Pw7DfQh8z5NV6
+         g+V5tXfMyNqjdlpu9jdpes8+MS0JefUrE5XLhmdpa6nD8W+4QcIDeqLTNZSFqAPLywVV
+         IgNA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1dighKFSZzYZPnxCWG1luDP/5nWPMhjx6MkOxxpay+bAl2y2cbwt75oLEloCHhpb5koVpAKXCEUXEdA==@vger.kernel.org, AJvYcCXzUv26n/Jl3GN6OEaIbT4pcrWa6EaXI0jTM4TOIiRI9Zugbozj1yMsxMP5FKo8+PEoOug4QpMD5IgwudNh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzhj1m13WRuT/3Rch0EjgWRgDv/8EY/t2apuukE74wLyaXKEaPy
+	Cv7LwYvrv/mNlhgaYJER/ns6VTTRssn8HWJQ+I2aIkkFAptbnoFH
+X-Gm-Gg: ASbGncvsNVSEq92L65WAP9+iNvD49OMQEuN+6S6LwmYCv6BQiQ2QHTfw+bj9MBLBeT5
+	P9tOuiUJtvySrW/ohvbUPAFhbegmhwPHHlWcOiFiHhQPxUDjzQxPt4DQ6N/iri0z9qcGKConJVc
+	kilSFj3FAZSaRmrFSEZwVmOj6KaIO2PrnKWk/2oe6SV24qdT+U9D4VoKovFIRzMxwoOU1sUUeSx
+	Z2r5kkfj+KTVDqfSn/j7kktbM+cUkuw1YwiZoZp+GRSVw7zViO5UB97bG9sXMfB2AYOSQ==
+X-Google-Smtp-Source: AGHT+IE0SpGpDxkCpz81oeAK2UC6rPnNZPTM4DwIHcEMUmU4YwsHkmM7Sq1SYKdjoDDRFEIU2DHKcA==
+X-Received: by 2002:a17:902:f68c:b0:216:48f4:4f1a with SMTP id d9443c01a7336-218929c3556mr180996245ad.16.1734393331014;
+        Mon, 16 Dec 2024 15:55:31 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918b77335sm5304805b3a.118.2024.12.16.15.53.49
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e5499dsm46766075ad.126.2024.12.16.15.55.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 15:53:49 -0800 (PST)
+        Mon, 16 Dec 2024 15:55:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 16 Dec 2024 15:53:48 -0800
+Date: Mon, 16 Dec 2024 15:55:29 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Murad Masimov <m.masimov@maxima.ru>
 Cc: Eric Tremblay <etremblay@distech-controls.com>,
 	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH 1/3] hwmon: (tmp513) Fix interpretation of values of
- Shunt Voltage and Limit Registers
-Message-ID: <64188480-09e3-4064-92e1-c1fa0a368cd2@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: (tmp513) Fix Current Register value
+ interpretation
+Message-ID: <b2168d93-12c1-443b-bb5c-bfe6df71fd8f@roeck-us.net>
 References: <20241216173648.526-1-m.masimov@maxima.ru>
- <20241216173648.526-2-m.masimov@maxima.ru>
+ <20241216173648.526-3-m.masimov@maxima.ru>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,33 +76,23 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241216173648.526-2-m.masimov@maxima.ru>
+In-Reply-To: <20241216173648.526-3-m.masimov@maxima.ru>
 
-On Mon, Dec 16, 2024 at 08:36:46PM +0300, Murad Masimov wrote:
-> The values returned by the driver after processing the contents of the
-> Shunt Voltage Register and the Shunt Limit Registers do not correspond to the
-> TMP512/TMP513 specifications. A raw register value is converted to a signed
-> integer value by a sign extension in accordance with the algorithm provided in
-> the specification, but due to the off-by-one error in the sign bit index, the
-> result is incorrect. Moreover, the PGA shift calculated with the
-> tmp51x_get_pga_shift function is relevant only to the Shunt Voltage Register,
-> but is also applied to the Shunt Limit Registers.
+On Mon, Dec 16, 2024 at 08:36:47PM +0300, Murad Masimov wrote:
+> The value returned by the driver after processing the contents of the Current
+> Register does not correspond to the TMP512/TMP513 specifications. A raw
+> register value is converted to a signed integer value by a sign extension in
+> accordance with the algorithm provided in the specification, but due to the
+> off-by-one error in the sign bit index, the result is incorrect. Moreover,
+> negative values will be reported as large positive due to missing sign
+> extension from u32 to long.
 > 
-> According to the TMP512 and TMP513 datasheets, the Shunt Voltage Register (04h)
-> is 13 to 16 bit two's complement integer value, depending on the PGA setting.
-> The Shunt Positive (0Ch) and Negative (0Dh) Limit Registers are 16-bit two's
-> complement integer values. Below are some examples:
+> According to the TMP512 and TMP513 datasheets, the Current Register (07h) is a
+> 16-bit two's complement integer value. E.g., if regval = 1000 0011 0000 0000,
+> then the value must be (-32000 * lsb), but the driver will return (33536 * lsb).
 > 
-> * Shunt Voltage Register
-> If PGA = 8, and regval = 1000 0011 0000 0000, then the decimal value must
-> be -32000, but the value calculated by the driver will be 33536.
-> 
-> * Shunt Limit Register
-> If regval = 1000 0011 0000 0000, then the decimal value must be -32000, but
-> the value calculated by the driver will be 768, if PGA = 1.
-> 
-> Fix sign bit index, and also correct misleading comment describing the
-> tmp51x_get_pga_shift function.
+> Fix off-by-one bug, and also cast data->curr_lsb_ua (which is of type u32) to
+> long to prevent incorrect cast for negative values.
 > 
 > Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
