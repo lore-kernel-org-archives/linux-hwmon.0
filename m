@@ -1,135 +1,105 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADF2203D53;
-	Mon, 16 Dec 2024 10:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF97B29CA;
+	Mon, 16 Dec 2024 13:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734345732; cv=none; b=QMbf2g+A3PD+T9DbKYtvLeMFeaeKOOdw7Xj+nLz1kSdnBzIwGD1DQIvDHg5o3E8rukl8wK8HpGa4rT5VaUMvMvh7EVef0SjshMnBb2SKDOsLah5WMOg8d2vWySEu3TtGQdVXo6z+jxuuCj2Acu0TMQnqOD3TIALOFE/enivvQqg=
+	t=1734357452; cv=none; b=QU+PGKfC7ntNoP0R1MaNyM2FxnoMTR1M5H+pKmOI2Zn2Hsq11s5izX+ewi7IRctT+WThSzCM+iT8iraDtlml6KoLZAJtgY948Ud+MDZ4lL6NJEpDyxi8Z7OcPIYAZeyTvSD/ReMuTAU6/J33zkD1rIXjhwmPQzZjIfiBq1Z3L5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734345732; c=relaxed/simple;
-	bh=wYHyds/oC/bIXn1FOZ3FfxUd/venFVAC8H+IayFbp3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtkXSChmdno7FZUD88RKGWX0co0ApuxJ4twtpeqGIYCZrzjVCIF21lmujyBYthM84J0cuEZdClDNcj7DQvKPj6BXAIqwwt7n4mAeCz7rQr33fHJTmPV/3qOCsYE+MA2rrdL91tCalyj5oMOJXEbWOM4e9zYPCB5IF1Kf2UOwdh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oqcYIiEa; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1734357452; c=relaxed/simple;
+	bh=asW/rEU97Lhupbtp+ldMp9ntQdvITH9HiMPFa8DHXXU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mjypnTvzrP0IL366geKqEU+B8JzOIRSXN/Kzkt/vxtnYl2FY39e61Yo279x9y24jbgn+0cv5FcqhWx/avif59qPR43qk3fLeaVNC+ouDPYlfScAD7GnmV6HEZjr43mt2rvGcdd7JOqAVOadSiTRC2fPkaAH1Cv29+prhv7l0lsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CvNmGMQ6; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oqcYIiEa"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FC2620003;
-	Mon, 16 Dec 2024 10:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734345721;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tcrvnYxItVVme/Ppg4krYaiv+M+aU8FG8UoKAi5Pjng=;
-	b=oqcYIiEad4rgc71cps3pZPHKUjfxnfC/h+9Jwv86EATSIos1zHyfSWk0LI7LT6ruTObGbA
-	rOv1o9iGgNyEIPgAc8S1O7SkW7RkpYvZXVM8V5s3aesCLvyN8WouNZu0RvxHl/sCSbokqv
-	xSoEHHqTbFg6JTl9ouXJRkPTZKjOy2J7iVx9s/beUky1KvE7Qtsq/4agmdKpBk6Oy8/t9o
-	G9YxkPW1ihIBDt/5pydjLpdqmKtPxdZBGXFWoLjaqHTO6l45paRdc1pPAyA6QEVXuwyiwY
-	NLG6lYdezTCu25nVlYFS+LuxzTCiwqWiwyvZA1Qu5jfhipEHVRkCSpwH9jwp7A==
-Date: Mon, 16 Dec 2024 11:41:58 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <202412161041586ed7c0ff@mail.local>
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-8-tmyu0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CvNmGMQ6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734357451; x=1765893451;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=asW/rEU97Lhupbtp+ldMp9ntQdvITH9HiMPFa8DHXXU=;
+  b=CvNmGMQ6AYqJjGOyKKU6MoQACL9olKgfBKDe/64qjkJCd3T8i039axKt
+   ufHiaOc4KD2xpMQJYkluiLzmXNVT/qOfhRtTUtYKbtaU0IURqvgn2U115
+   9puY2fSfOR68tsv82fGgrqOsw4fujVDV1qErjd+9xlUa986u9802u6PfX
+   JSD+gLuajdfzvvEgQ1R27cKDn6iCUERMhmNpbYVTnxbGYr0O1gTmTx+56
+   JKDAftrsPCGdnAWDzqZHQ4y0neC9sbpfctM23ttVQJ8a44Res9EUo2ZES
+   cOcBrnhVckRJw44MHyGWuwg1sv8UpvrYiN8YZIoQwnO/Sq+evUSndGiJk
+   Q==;
+X-CSE-ConnectionGUID: eWgx9HNnRAyfqGGWPMA4mw==
+X-CSE-MsgGUID: Qh8+q7+2QX2eMtlP3MXnoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="22327530"
+X-IronPort-AV: E=Sophos;i="6.12,238,1728975600"; 
+   d="scan'208";a="22327530"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 05:57:30 -0800
+X-CSE-ConnectionGUID: XOBIYAXUQuSw0lBEwcrp+A==
+X-CSE-MsgGUID: 76n3K51WRmioP0fo0HJzmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,238,1728975600"; 
+   d="scan'208";a="96971982"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.29])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 05:57:25 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 16 Dec 2024 15:57:23 +0200 (EET)
+To: Yazen Ghannam <yazen.ghannam@amd.com>
+cc: x86@kernel.org, tony.luck@intel.com, mario.limonciello@amd.com, 
+    bhelgaas@google.com, jdelvare@suse.com, linux@roeck-us.net, 
+    clemens@ladisch.de, Shyam-sundar.S-k@amd.com, 
+    Hans de Goede <hdegoede@redhat.com>, naveenkrishna.chatradhi@amd.com, 
+    suma.hegde@amd.com, LKML <linux-kernel@vger.kernel.org>, 
+    linux-edac@vger.kernel.org, linux-pci@vger.kernel.org, 
+    linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2.1] x86/amd_node, platform/x86/amd/hsmp: Have HSMP use
+ SMN through AMD_NODE
+In-Reply-To: <20241212214637.GA80677@yaz-khff2.amd.com>
+Message-ID: <ff59d4e9-15da-37b3-1a8c-1ae688fa4094@linux.intel.com>
+References: <20241212172711.1944927-1-yazen.ghannam@amd.com> <65375593-f2e0-e03b-7e7f-ad8be58772d4@linux.intel.com> <20241212214637.GA80677@yaz-khff2.amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241210104524.2466586-8-tmyu0@nuvoton.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: multipart/mixed; boundary="8323328-1223704678-1734357443=:941"
 
-On 10/12/2024 18:45:24+0800, Ming Yu wrote:
-> +static int nct6694_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct nct6694_rtc_data *data;
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	int ret, irq;
-> +
-> +	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-> +	if (!irq)
-> +		return -EINVAL;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
-> +				      sizeof(unsigned char), GFP_KERNEL);
-> +	if (!data->xmit_buf)
-> +		return -ENOMEM;
-> +
-> +	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(data->rtc))
-> +		return PTR_ERR(data->rtc);
-> +
-> +	data->nct6694 = nct6694;
-> +	data->rtc->ops = &nct6694_rtc_ops;
-> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	mutex_init(&data->lock);
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-You should use rtc_lock/rtc_unlock instead of having your own lock. The
-core will take and release the lock appropriately before calling the
-rtc_ops so you only have to do it in the irq handler.
+--8323328-1223704678-1734357443=:941
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-> +
-> +	device_set_wakeup_capable(&pdev->dev, 1);
+On Thu, 12 Dec 2024, Yazen Ghannam wrote:
 
-This will cause a memory leak later on, see the discussion here:
+> On Thu, Dec 12, 2024 at 08:50:26PM +0200, Ilpo J=E4rvinen wrote:
+> > On Thu, 12 Dec 2024, Yazen Ghannam wrote:
+> > > @@ -95,7 +80,12 @@ static umode_t hsmp_is_sock_attr_visible(struct ko=
+bject *kobj,
+> > >   * Static array of 8 + 1(for NULL) elements is created below
+> > >   * to create sysfs groups for sockets.
+> > >   * is_bin_visible function is used to show / hide the necessary grou=
+ps.
+> > > + *
+> > > + * Validate the maximum number against MAX_AMD_NUM_NODES. If this ch=
+anges,
+> > > + * then the attributes and groups below must be adjusted.
+> > >   */
+> > > +static_assert(MAX_AMD_NUM_NODES =3D=3D 8);
+> >=20
+> > Please also add the #include for it.
+> >
+>=20
+> Just to confirm, you mean for static_assert()?
+>=20
+>   #include <linux/build_bug.h>
 
-https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
+I saw you already made that change but yes, it is what I meant.
 
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +					nct6694_irq, IRQF_ONESHOT,
-> +					"nct6694-rtc", data);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-> +
-> +	/* Register rtc device to RTC framework */
-> +	return devm_rtc_register_device(data->rtc);
-> +}
-> +
-> +static struct platform_driver nct6694_rtc_driver = {
-> +	.driver = {
-> +		.name	= "nct6694-rtc",
-> +	},
-> +	.probe		= nct6694_rtc_probe,
-> +};
-> +
-> +module_platform_driver(nct6694_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-rtc");
-> -- 
-> 2.34.1
-> 
+--=20
+ i.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--8323328-1223704678-1734357443=:941--
