@@ -1,51 +1,54 @@
 Received: from ksmg02.maxima.ru (ksmg02.maxima.ru [81.200.124.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D38206281;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E0E2063D1;
 	Mon, 16 Dec 2024 17:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734371207; cv=none; b=lKeuuicG/3UUHnPLd0QSHB40qXFK34uTNzlvREOp8zxTjySX12AGcPiiSeXi7V7fpyqpuUptnQSnPRuCy3LdRJI18rVvEtfUAyoKp3BKqiYHsOxxO9yKjzPWcpa/vFns1yYwhrcEnwnHG/3KQC4CrQ20tqxsj39mE2Rnzo6Fpsc=
+	t=1734371207; cv=none; b=TWinzQJ+Q6PQs5EcUbh7dtEuEOv2yxGOun6PuSz8Usj3QutHNF6VOt81QA3gYYQyeQVGjkZPQhLWAZRYG855Olrq7lJhpBNnQlnN028DfeH2WWMLDzACVAnsAh6F83c+YfsZOakpTBhV+5ZD5yqqEu1jhwmcsMugmUNnAn2x4OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734371207; c=relaxed/simple;
-	bh=n5GrITLofBs3MhLhgri3ma6FpHw1Y8YCh65bccUSHMY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k8P/ydNYDaWSs+nsUvNHs44luHb+miBi+DDFwqUUowMrAEXDQTPFk2s0XDgxsjWQFfRtnNIwLa8H7MuPl+CiXJJ9MygwPrMvpOtPFLFVyLyi66tvzIgy4bvHtCNaEhAQPPnSSszuUq0XkpN3y3+yhoQejUcrBS711gZqt2FMo/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxima.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b=I0GgU6FW; arc=none smtp.client-ip=81.200.124.39
+	bh=fY6y0lXzXOqF3TKLW5TwyP1WKuAZswB9Lwop6yYCl4o=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ope3rCIvvi0TgKVCbBJdHCjbO17S3cdthXWPaQ2CCfyk3d3fKYVjps63ufqYdOZkcanzwKurGnSokkD00nIHtbC7ePprm0xXcTCpXj1Wh2jH4tgL1Rw22hK+1EdI7RcU9FCUZk76E8vdb4UiFWSzIDg5lWDfD3lpeKySg+NLLG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxima.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b=GfLJ7qTG; arc=none smtp.client-ip=81.200.124.39
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maxima.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b="I0GgU6FW"
+	dkim=pass (2048-bit key) header.d=maxima.ru header.i=@maxima.ru header.b="GfLJ7qTG"
 Received: from ksmg02.maxima.ru (localhost [127.0.0.1])
-	by ksmg02.maxima.ru (Postfix) with ESMTP id 9F8151E0008;
-	Mon, 16 Dec 2024 20:37:11 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru 9F8151E0008
+	by ksmg02.maxima.ru (Postfix) with ESMTP id CA4A71E000C;
+	Mon, 16 Dec 2024 20:37:19 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru CA4A71E000C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxima.ru; s=sl;
-	t=1734370631; bh=hUoK+bZxSqL9gvfRrWQBdNzp2e5n4XUHkuDaF9wc7g4=;
+	t=1734370639; bh=2NtiqvLaYzpruvxpMSHj0sXsF8gaZ7HqQVWmKbuJ5gI=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=I0GgU6FWMuDTpk9OT/7cElU3ota7MmgWQNZzyppGHyEj4WOc8NVKjWOEg+fTR22pL
-	 6zTAFatwZkepYyt4OeNsGcXBY17O9PuSwqAZS/+A/fSm4bKiAmDYXpnc2aqiE5rHTC
-	 WDiWZ9obnwDenRfHrw2sL3+qZB5MCIIQtbumXaNLd8Wu09bbI354MitPwIwPc8s6Fn
-	 g3vTEDyKBCmCM70/FZwvJ4hAz+JtWbYpHWopmKFRlwz5nDJ+TT/bY3VN1NOlmFhi4d
-	 pIxqrRbkyFaugMZmPhfxtOO4K9EV1yA3iWVsYo1wy11EXFiC90PlOfTJxDOjiZaY3r
-	 RRzglXXX8xJ4Q==
+	b=GfLJ7qTGMOUCZmr0eSQcoJn3WLtloUANwvEqZNHZ+C8S0PGLxhk7lI829FydQP7qh
+	 sYeHII+Nlf0HreASjRtwDgukxK5BEfe8It2KW7RWBfRRmYW6R0TtJ5e3mxhskSG8O3
+	 paY2ZFC+jmD877CRiqQKBTGsOxGC6zQXBitKSsMZ0orMRvHnfPwmeeHKdif4/5Z5Bq
+	 AGViGycpsQCqgEWJvJN3W9fS8HWhYMXyqeGfsjy90DA0P5MAxNN9t199UbdfYilTwD
+	 Uy5jNKOzGaJZvHN5Ly3KioD7G8lGWAcN/9QcI310EnBlAak+0ygXQq4LcCMeMyjsLl
+	 5qTfayvS4aYqg==
 Received: from ksmg02.maxima.ru (mail.maxima.ru [81.200.124.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(Client CN "*.maxima.ru", Issuer "GlobalSign GCC R3 DV TLS CA 2020" (verified OK))
 	by ksmg02.maxima.ru (Postfix) with ESMTPS;
-	Mon, 16 Dec 2024 20:37:11 +0300 (MSK)
+	Mon, 16 Dec 2024 20:37:19 +0300 (MSK)
 Received: from GS-NOTE-190.mt.ru (10.0.246.113) by mmail-p-exch02.mt.ru
  (81.200.124.62) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.4; Mon, 16 Dec
- 2024 20:37:08 +0300
+ 2024 20:37:16 +0300
 From: Murad Masimov <m.masimov@maxima.ru>
 To: Eric Tremblay <etremblay@distech-controls.com>
 CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
 	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<lvc-project@linuxtesting.org>, Murad Masimov <m.masimov@maxima.ru>
-Subject: [PATCH 0/3] hwmon: (tmp513) Fix interpretation of values of TMP513 registers
-Date: Mon, 16 Dec 2024 20:36:45 +0300
-Message-ID: <20241216173648.526-1-m.masimov@maxima.ru>
+Subject: [PATCH 3/3] hwmon: (tmp513) Fix interpretation of values of Temperature Result and Limit Registers
+Date: Mon, 16 Dec 2024 20:36:48 +0300
+Message-ID: <20241216173648.526-4-m.masimov@maxima.ru>
 X-Mailer: git-send-email 2.46.0.windows.1
+In-Reply-To: <20241216173648.526-1-m.masimov@maxima.ru>
+References: <20241216173648.526-1-m.masimov@maxima.ru>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,29 +76,40 @@ X-KSMG-LinksScanning: Clean
 X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/12/16 14:34:00 #26899616
 X-KSMG-AntiVirus-Status: Clean, skipped
 
-The function tmp51x_get_value returns processed values of the TMP513 device
-registers. Raw register values are converted to signed integer values by sign
-extension in accordance with the algorithm provided in the specification, but
-due to the off-by-one error in the sign bit index, the result is incorrect.
-There are also some other mistakes, such as incorrect cast.
+The values returned by the driver after processing the contents of the
+Temperature Result and the Temperature Limit Registers do not correspond to the
+TMP512/TMP513 specifications. A raw register value is converted to a signed
+integer value by a sign extension in accordance with the algorithm provided
+in the specification, but due to the off-by-one error in the sign bit index,
+the result is incorrect.
 
-Changes introduced by these patches are based on the TMP512/TMP513 datasheets
-that are specified in Documentation/hwmon/tmp513.rst. They have not actually
-been tested in any real or virtual environment. However the calculations have
-been tested separately to make sure they work as expected.
+According to the TMP512 and TMP513 datasheets, the Temperature Result (08h to 0Bh)
+and Limit (11h to 14h) Registers are 13-bit two's complement integer values,
+shifted left by 3 bits. The value is scaled by 0.0625 degrees Celsius per bit.
+E.g., if regval = 1 1110 0111 0000 000, the output should be -25 degrees,
+but the driver will return +487 degrees.
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Murad Masimov (3):
-  hwmon: (tmp513) Fix interpretation of values of Shunt Voltage and
-    Limit Registers
-  hwmon: (tmp513) Fix Current Register value interpretation
-  hwmon: (tmp513) Fix interpretation of values of Temperature Result and
-    Limit Registers
+Fixes: 59dfa75e5d82 ("hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.")
+Signed-off-by: Murad Masimov <m.masimov@maxima.ru>
+---
+ drivers/hwmon/tmp513.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/hwmon/tmp513.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index dacce7417bfd..be63a049923a 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -234,7 +234,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
+ 	case TMP51X_REMOTE_TEMP_LIMIT_2:
+ 	case TMP513_REMOTE_TEMP_LIMIT_3:
+ 		// 1lsb = 0.0625 degrees centigrade
+-		*val = sign_extend32(regval, 16) >> TMP51X_TEMP_SHIFT;
++		*val = sign_extend32(regval, 15) >> TMP51X_TEMP_SHIFT;
+ 		*val = DIV_ROUND_CLOSEST(*val * 625, 10);
+ 		break;
+ 	case TMP51X_N_FACTOR_AND_HYST_1:
 --
 2.39.2
 
