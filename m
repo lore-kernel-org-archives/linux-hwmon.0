@@ -1,201 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CF51F7096
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 15:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A09142E77;
+	Tue, 17 Dec 2024 17:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734448180; cv=none; b=gBgP/Di5xxcNKZZJzJw/PooIbBOgCQVtxZvkkC/NhPGGn5McewJythV8g2sxmZRpjghlq7Z+RG31rzZzDMQqh/jF5geX36+VvZSzEfysW9O6NJXCvAI7WTl5YCpWcU2wplAI1KfcUQ64GN9grVs3oEWhsnrbuTUwIurcOdCtAtI=
+	t=1734456986; cv=none; b=QhRyG6oSsUgLgd8bFnE9b2xvBpuQcF7A7U5YQZSrREQ3WRC+uq3hU5ZD4b4Z7VvcPSANw0w/6x8mVB/5xRpt3GCfYzwxiUba1B6ZKm109jIYzmrH93/e+oauzDazVtRxn3AFxm8ZEPgbKrevPCao9RyurW8I9oKUxDJS4uPqKEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734448180; c=relaxed/simple;
-	bh=/kmaFVq3davhGXLhZ7tqNxrLaucF7/nXy1FPcL/hWWs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ql64RGK/4SIVSONGGUxc5e2b4BpMZWrtUxNRFGe53RBIdBRtREWo36xTFCn/eqKwfbRAhGPJtH5CgRW1oWe1fY4+uT34aWApLAYeHthLRf/dP68Mj0RQ3btcgaEHxfBc4DwSRMqAil8S94t7ppQJJTOVDBDY45+cVA8LwDWZ6TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=au3lVmBq; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734456986; c=relaxed/simple;
+	bh=NWpaq/Cdy/q4UInACNFF0HgHeiwmT+i5v9jil1FxoyE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sllm3AloRhA8JsYfNT3q38u0bOjl8L1MB5hb7SDjJZiW7GD2WlrGMQndUuxBdHgr7CC7e7Jh1UChhKjTcraN5pUWrQxfPZJQDoKFwzvnM8MV0jrhGQvatp8TE6JydzYQw0SEdSz9ycPmUKNDZilJGr6lL6znn3wzEN09/wiH1Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RyhdRXmt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="au3lVmBq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734448178; x=1765984178;
-  h=date:from:to:cc:subject:message-id;
-  bh=/kmaFVq3davhGXLhZ7tqNxrLaucF7/nXy1FPcL/hWWs=;
-  b=au3lVmBqCWhgbTk9O5YvVq0P2aowT3okuZWULVpgMW1G/O3yP56GLmMD
-   R1Yho+eomiJQVq1QEGYVU51dXTPFdeWKGqSA71G0UWuLvBYzHElclTaQA
-   vArq77PMb36Dy8AKQ0fwMioNfHBZmnYZJ2GOmnOjI2huEPQIuUaJ38BkB
-   9DChCPQPoDYme8taPFUOMBIXVu7I3KhoGt8SP/8A1HAFM1j078ihGGA3I
-   DjMIE9NWaO3O9IAkBbLorHOql9d7moVaHlS1yNi58gUNkZyOOZ9PZXQUS
-   EDc/jhvQQYfiwHwaJ+3oXvo/40GsYPbKXDgrWgT8ZD4vcsP/t1nd9Oh1G
-   w==;
-X-CSE-ConnectionGUID: l9HYO12iRDaNLNksl8wZ0Q==
-X-CSE-MsgGUID: daNsrMtlSHmyV3wUxbUn4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="38656184"
-X-IronPort-AV: E=Sophos;i="6.12,242,1728975600"; 
-   d="scan'208";a="38656184"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 07:09:37 -0800
-X-CSE-ConnectionGUID: PYciS9m+S0+8Yx2hQMtvQw==
-X-CSE-MsgGUID: RvdVW0Z5TdSAr7cjCv+07w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="98007350"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Dec 2024 07:09:37 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tNZCY-000F5i-1k;
-	Tue, 17 Dec 2024 15:09:34 +0000
-Date: Tue, 17 Dec 2024 23:09:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:fixes] BUILD SUCCESS
- 0e8df6ef3b855b00e618413ce01cb68f71f91598
-Message-ID: <202412172304.cTUYIg3T-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RyhdRXmt"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHD0UoA028122;
+	Tue, 17 Dec 2024 17:35:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=3Cze64ZkJ4Cz2gsZweHybIIHWwAMYbRAejZdS1uXH
+	ZQ=; b=RyhdRXmtfU1PxDNu+dAtHsA4dikP/urhvZ1aDjrJ6M7CFpYB/RP/37Qqi
+	Uf9kf46bcPZ1EjYDGPVq8nx6BHqF51PF5RZl4hiQUKp4GO32W9zWn2fWppezczt1
+	A0rexEJSNsd7dSOZlrxIVfmrfXKKdmhSIPmus9MYFupa9UvFs4N7SFwqMH0ktLJf
+	jagbMLWsdZh6MTQa3/2t/3IAopKKCnRnkbyt4ESeQpbvF0Wd9cZVf4ljHF2CC2bE
+	jO27X7mj9hKO1WIIDKV8n+n4ZwkZIs5Hm4PB3Ebz8hPHCNWGCLk7sAg4w624DX/R
+	Uv3cho6gYF1TqkwaqjA/2vV28QQmA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43k9t6heeu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Dec 2024 17:35:44 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BHHQ0jN028818;
+	Tue, 17 Dec 2024 17:35:43 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43k9t6heeq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Dec 2024 17:35:43 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHEs3sY029321;
+	Tue, 17 Dec 2024 17:35:42 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43hmbsm34m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Dec 2024 17:35:42 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BHHZfSZ25887300
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Dec 2024 17:35:41 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1747A5805D;
+	Tue, 17 Dec 2024 17:35:41 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B09A45805C;
+	Tue, 17 Dec 2024 17:35:39 +0000 (GMT)
+Received: from gfwa153.aus.stglabs.ibm.com (unknown [9.3.84.127])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Dec 2024 17:35:39 +0000 (GMT)
+From: Ninad Palsule <ninad@linux.ibm.com>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        eajames@linux.ibm.com, jdelvare@suse.com, linux@roeck-us.net,
+        corbet@lwn.net, joel@jms.id.au, andrew@codeconstruct.com.au,
+        Delphine_CC_Chiu@Wiwynn.com, broonie@kernel.org,
+        peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
+        naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
+        patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
+        peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Cc: Ninad Palsule <ninad@linux.ibm.com>
+Subject: [PATCH v4 0/4] Add support for Intel CRPS PSU
+Date: Tue, 17 Dec 2024 11:35:31 -0600
+Message-ID: <20241217173537.192331-1-ninad@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QWx7H6vTap48emznpRAQAtERyGJSso6k
+X-Proofpoint-ORIG-GUID: AEW_zZyOLNc4vOhz9gVc1LmegMtQ296D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2412170134
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git fixes
-branch HEAD: 0e8df6ef3b855b00e618413ce01cb68f71f91598  staging: gpib: fix pcmcia dependencies
+Hello,
 
-elapsed time: 1449m
+Please review the version 3 of patchset.
 
-configs tested: 124
-configs skipped: 5
+V4:
+---
+  - Improved commit message.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+V3:
+---
+  - Improved documentation as per suggestion.
+  - Fixed issues in the probe function.
+  - Add ACKed string in the commit message
+V2:
+---
+  - Fixed documentation issues.
+  - Added pmbus revision debugfs file in the core
+  - Remove debugfs and read word from crps185
+  - Improved commit messages
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20241216    gcc-13.2.0
-arc                   randconfig-002-20241216    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20241216    clang-15
-arm                   randconfig-002-20241216    gcc-14.2.0
-arm                   randconfig-003-20241216    clang-20
-arm                   randconfig-004-20241216    clang-17
-arm                        spear6xx_defconfig    clang-19
-arm                           u8500_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20241216    gcc-14.2.0
-arm64                 randconfig-002-20241216    clang-20
-arm64                 randconfig-003-20241216    gcc-14.2.0
-arm64                 randconfig-004-20241216    clang-15
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20241217    gcc-14.2.0
-csky                  randconfig-002-20241217    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon               randconfig-001-20241217    clang-20
-hexagon               randconfig-002-20241217    clang-19
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20241217    clang-19
-i386        buildonly-randconfig-002-20241217    gcc-12
-i386        buildonly-randconfig-003-20241217    gcc-12
-i386        buildonly-randconfig-004-20241217    clang-19
-i386        buildonly-randconfig-005-20241217    clang-19
-i386        buildonly-randconfig-006-20241217    gcc-11
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20241217    gcc-14.2.0
-loongarch             randconfig-002-20241217    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          ath79_defconfig    gcc-14.2.0
-mips                       rbtx49xx_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20241217    gcc-14.2.0
-nios2                 randconfig-002-20241217    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20241217    gcc-14.2.0
-parisc                randconfig-002-20241217    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                    amigaone_defconfig    gcc-14.2.0
-powerpc                          g5_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20241217    clang-20
-powerpc               randconfig-002-20241217    gcc-14.2.0
-powerpc               randconfig-003-20241217    clang-16
-powerpc64             randconfig-001-20241217    gcc-14.2.0
-powerpc64             randconfig-002-20241217    gcc-14.2.0
-powerpc64             randconfig-003-20241217    gcc-14.2.0
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20241217    gcc-14.2.0
-riscv                 randconfig-002-20241217    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20241217    gcc-14.2.0
-s390                  randconfig-002-20241217    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                         ap325rxa_defconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                        edosk7705_defconfig    gcc-14.2.0
-sh                    randconfig-001-20241217    gcc-14.2.0
-sh                    randconfig-002-20241217    gcc-14.2.0
-sh                          urquell_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20241217    gcc-14.2.0
-sparc                 randconfig-002-20241217    gcc-14.2.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20241217    gcc-14.2.0
-sparc64               randconfig-002-20241217    gcc-14.2.0
-um                               alldefconfig    clang-19
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-20
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241217    clang-20
-um                    randconfig-002-20241217    gcc-12
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241217    clang-19
-x86_64      buildonly-randconfig-002-20241217    gcc-12
-x86_64      buildonly-randconfig-003-20241217    gcc-12
-x86_64      buildonly-randconfig-004-20241217    clang-19
-x86_64      buildonly-randconfig-005-20241217    gcc-12
-x86_64      buildonly-randconfig-006-20241217    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20241217    gcc-14.2.0
-xtensa                randconfig-002-20241217    gcc-14.2.0
+Ninad Palsule (4):
+  hwmon: (pmbus/core) Add PMBUS_REVISION in debugfs
+  hwmon: (pmbus/crps) Add Intel CRPS185 power supply
+  dt-bindings: hwmon: intel,crps185: Add to trivial
+  ARM: dts: aspeed: system1: Use crps PSU driver
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ .../devicetree/bindings/trivial-devices.yaml  |  2 +
+ Documentation/hwmon/crps.rst                  | 97 +++++++++++++++++++
+ Documentation/hwmon/index.rst                 |  1 +
+ MAINTAINERS                                   |  7 ++
+ .../dts/aspeed/aspeed-bmc-ibm-system1.dts     |  8 +-
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/crps.c                    | 74 ++++++++++++++
+ drivers/hwmon/pmbus/pmbus_core.c              | 13 ++-
+ 9 files changed, 206 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/hwmon/crps.rst
+ create mode 100644 drivers/hwmon/pmbus/crps.c
+
+-- 
+2.43.0
+
