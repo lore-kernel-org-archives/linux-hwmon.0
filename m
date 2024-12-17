@@ -1,96 +1,75 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D228418035
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 08:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67E61E8836
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 12:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734424868; cv=none; b=afi31cGoCIg7UFkcuv9o851qX9x8rIlX1OvoXVoiHxpUyS9jkSIqLiAoV379JnCurILWzJnFxZx8EVZV7NEokBuUCNsWJKwQ6VyqWFCfuDcdATC2/h6ElTCSdYtEilH6UH0h9Sc3ZnSSv3W+w5bxnhyQkHcRw3pZjFl5KUYRLTo=
+	t=1734436996; cv=none; b=g4bAFm29pg9KfeEUbn/PkRjqMFhHFaQX3eQiUkrw6QJkndTeUacbFXeoryjWOkZmdjndjIt/aiVQgm3uE+zsG3DQcnxllPijvdmeZpEzaC1WqnzNgypFOfuereIPLJU2Hxze3gtmwD+L2nAG+pKWc2zS4Swhyvgx9hKeRC0x5yU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734424868; c=relaxed/simple;
-	bh=UrR/l/IxrSGWrivOqJJaqgB0lQOL9KBgnigWIF5L9DY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rD/oZxIkQrZgugVz1YK1/yMc3rkqGsRgC4UOyKPeremdLxayBO0h2zKq9XbZDog49HZ2i/9Q3lCp3nndncqktz5Cm3BHizUR/oJ73gmxvoZvR5NGUDXbs2NlmphMucy8fHZA336Eg7MtdBud1qbl3GT8Yo4KtRh8jDY39Oydebg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=KHgViOQJ; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1734436996; c=relaxed/simple;
+	bh=N5cFFKSr/txK1TdI8TLl8Bd7Wl1ejCx9xqKSPAN/Tng=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hTSh6dfg+1rsiZpmg3PfSBVv6DM1du7EKfmehWEkY3nF+2WnGSUGQeEiVsHojrjFyBZprwbXHBC8F5Nhet+Y9cmQ8z/VCAviHh0neqOe7rVyKutxwy5YIAnNgBEBf570hR8wUdZrTLiyclssf2ceXf4cI6VqOPaTmQjIrOQDItk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Yoo99FzL; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="KHgViOQJ"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Yoo99FzL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=UrR/
-	l/IxrSGWrivOqJJaqgB0lQOL9KBgnigWIF5L9DY=; b=KHgViOQJQWi6jFplALXj
-	o4JjbChY0vYzO5430yYjcgOx9AG4TpjExoATSYlgZy8+IA8w5Vz3f7QlFyl1v/xt
-	koi+RWbGXbGHF9CJ39d9xSk6zRAWnLXL/ZU9joHzlTDNZHuY7i4OpCcVR5YcqRAk
-	Xf3sMqr0AQAeWRdAwC3iNN6GU5H7zhxCqTeX5DcMXoPtbetLmnnjNh54Fo2Bcmw7
-	K5RAAojkmnhxFTjDufQP/iXzoJrINd9kk0IzE/VTPwLAQQ+rWm9KIHrlskM9B3+w
-	mfpx7lbZhPJb8zRbGHI02iHb8l+FWs9CHzfElJfM5LrgqZsG8qANkrOHu4YRzBbo
-	zw==
-Received: (qmail 4002372 invoked from network); 17 Dec 2024 09:41:04 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 09:41:04 +0100
-X-UD-Smtp-Session: l3s3148p1@1HTkQXMppOkgAwDPXwAQAA/MfjDm1Sk8
-Date: Tue, 17 Dec 2024 09:41:03 +0100
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=yhfYE0+8K1mKqIuE4CrpXGvasbwUifyf63a/7MmfBfM=; b=Yoo99F
+	zLJQbHmpeD7aRjJ65NuD0K531VvD2HQopE4/FM+ycBDA+eM7hsyhfhjtPszH6yOW
+	m8PKk8JpCRITBUGggiH3SHuHw9v1dap8//vbZD7bH+UkaXtO0hZ1t8gvfEMNQWll
+	UTIdDoosfZPDfnglcFecFX81egRaj5+47fAEaAkiLBA+T5pt+jCulVLY7ZYrqZqg
+	K2SLmXJAJ83dpZQMiOgx20OoNUFGg8G7sbX6cZZeiWHShqvQA5H2NZUujPXhsobN
+	8wfP1hBbCy5k1ssbPXM+fgH+XnxfeNOhPFhlKKVloEQmpXlXfzxA0/kC26FLkx0+
+	aopl2xBybrlZKXkg==
+Received: (qmail 4062922 invoked from network); 17 Dec 2024 13:03:09 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 13:03:09 +0100
+X-UD-Smtp-Session: l3s3148p1@n9GlFHYpXuQgAwDPXwAQAA/MfjDm1Sk8
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Yury Norov <yury.norov@gmail.com>, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
-Message-ID: <Z2E5H3-vNIi2_6oT@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	linux-hwmon@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
- <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
- <Z2Dg6ydwN6CfxgTe@yury-ThinkPad>
- <Z2ESttIzF4kX7JA-@shikoro>
+	devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: hwmon: lm75: Add NXP P3T1755 sensor
+Date: Tue, 17 Dec 2024 13:03:05 +0100
+Message-ID: <20241217120304.32950-5-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
+References: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0kKQvGYxLpX4xztM"
-Content-Disposition: inline
-In-Reply-To: <Z2ESttIzF4kX7JA-@shikoro>
+Content-Transfer-Encoding: 8bit
 
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
---0kKQvGYxLpX4xztM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index 29bd7460cc26..c38255243f57 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -28,6 +28,7 @@ properties:
+       - maxim,max31725
+       - maxim,max31726
+       - maxim,mcp980x
++      - nxp,p3t1755
+       - nxp,pct2075
+       - st,stds75
+       - st,stlm75
+-- 
+2.45.2
 
-
-> I hope that both patches can be applied in one go to avoid a dependency.
-> I'd think the hwmon-tree is a tad more suitable, but I am also fine with
-> bitmap as long as both patches go in. What do you maintainers thing?
-
-Second thought, we can ask I3C to take it. Together with the cleanups
-for the I3C drivers I would add then.
-
-If this is not to your likings, then an immutable branch for I3C to pull
-in would be helpful, though.
-
-
---0kKQvGYxLpX4xztM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdhOR8ACgkQFA3kzBSg
-KbaEVg/+NcuHBoZdEsMUjVPjfUFpcSdDlT89Ucwt6kpb3ZWnHz4pBVWEoJE08VML
-yPWZKTXIbLf6Snx3OYjgSDHVYBtEjJDEcD3iAzXgvJgxZQ3YMjc8cjFRkRfYQokr
-F2Ep3T7Rdx0KZOlLJ/QitI/QHIYekLizCnEJHDddkYxt7BDQDXzUSBmbbdCvedb7
-1b/HwUrltxrN0e6L2CyacDig7KahUDjYTzgE2Img9ukZi8RoNXxLZb2f+FAg1fow
-jPkf8onH/6peC9hfuFlOV4CoSMy0le04Vsnpam1G/BpY0zWWGQpQ9QV7xnjl4XaU
-ua4M/tqYQBAEAr7fwFNX1YfqLFDg58XLD/ZIL6ZYu+gcw4r7TsHE4D1QZxaQIZah
-hM7mL4N1jDu8C8jXDnBBSJETZ+tbpV3Iecr2qa8jfOj3Lr2ktz/D3najpoZSrOYd
-hBiwLxQ3pLktPzV6kSs+Iz7q3uhLk49Ym1HziY0gtkTdeqbGXM7UZbzMgMK5Isqn
-4ISJHc9dPO2XJdCfXw5zPaauEyQenXZ6CkHfwSr3PASD2oftzyrOXrCEGr1AlCnh
-mq/Ex6iF8EGPDqIxDGNBSHewcFb9eMm69zPC2MgK36uqreGIOKhhnoeFdAA/vfZT
-TldDK2iejR+7F8DK/RdwBErxhqZlmQTdNeZyhUhJJULJEyKmaN8=
-=X4Fk
------END PGP SIGNATURE-----
-
---0kKQvGYxLpX4xztM--
