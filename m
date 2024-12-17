@@ -1,87 +1,91 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD1B158DD0;
-	Tue, 17 Dec 2024 08:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5769F1D5AD1
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 08:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734423377; cv=none; b=P81ATSA6o8mJFE4q+lg6Z84hdolg0Z6vhUGY6s9isxfIOgzwF06Lp8NbYeBbiZvB0dmXrJa2rmkIdmNOam9PR5UcdyJZpcdJgj+01rYbTOVogU7mmMKorxG+M5X7R9LraTsG076fV7A6ol08MKDqCaolPzVKylGvze5QATc9pWg=
+	t=1734424641; cv=none; b=i9oVnmxmsEetiWKd5WDtjVph7yvrLUNQb5o5rsUDNpZ8t/Xkgmm+4uMSmsmMLJtplLZ6vDoWZ00sFfCw4vqdb/thXw9RoG/3GwDu0h3wkQZC0yFLCsnETgALljwuVuitRveDQ0zDzkRtLapx9r9V5Mdf2nOIB5mgWHyA88/z5nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734423377; c=relaxed/simple;
-	bh=4nAnyarTu9E0TjT9t4KmqJYnnSjORvk/DwzIaVWQvKU=;
+	s=arc-20240116; t=1734424641; c=relaxed/simple;
+	bh=ESTrrh5kzt20pKZzHdS7o//3jddwFObxCrUCgu0xi0M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gnmDZ0pOWvio//ebKQvcYvFyXOMv2Tq75NyS0u1rEoa0Cqk+r+DjycHUvr0Qt9IoUPRTtNxFe4Daffk8TsmXeoRyNE0MIZvAYRfuuu1W/Ceug/0mM4IueQAY/Fkn29l0LhZuEbp2bBKrIuoE03GaD8kVCATqc7lVi7h2RM3jwXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+Go7ra8; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=f4Lh56NtgpmFqkE2+42YWNapO2oZf+UbOlD1H3eCCP2WfbEAeoYnp2fYpUx9Kxb2mBdBkkv91ZH799R3ucWSVMh+ke+dT+/lZfnXZ4jN3wzcgWvgosFvJpjl4eIFJEaurwnwcJyL6+UmK98H0bb7Qc/HpXVQy1ULjDXPMmyP/lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hT7LgFa0; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+Go7ra8"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ef8c012913so3567369a91.3;
-        Tue, 17 Dec 2024 00:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734423375; x=1735028175; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPaV8X9Gju5rBvwveUSEw9zum/ptBrQd5kSdpUjaHlA=;
-        b=I+Go7ra8+VatMVic9V2nAhLDpa/zxYXjcuAeuXL0hIAt1nidggUlv2IZgGaCpHNYIF
-         3YCg+UV1pU/Uy2aO63GjxRiPVkUhFxDAHzGMMDK/QggZz8uPwKB5BC5MsdbOmmWx8QVu
-         2NUgODyBRv3ROK4wuu/NpDQk5FAuBsTvm3KM/TANwfYOkqvRW1j8trjIlrXSygTwxjcu
-         6qY1N+U9a/Ro4vEbgdweVs35ODh9UUuKp3Vz6xqsjWl4p5kJfW2f8F0aTS0LASIgmmow
-         qgKih1Fn1yonEqj40N6NGlU48rUKB0xM4CzJR6MnhXsG0JaaMyGxWfh6SrkuNEjPVhDM
-         1FbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734423375; x=1735028175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WPaV8X9Gju5rBvwveUSEw9zum/ptBrQd5kSdpUjaHlA=;
-        b=pdwe4+lCg1bUM/6s6wAa3Pn3wIf6G5LAPNnC38nIVafk3VNUNGYKhNIrLsPtAW15Pb
-         bITx0rNazefDJ6wt2zR2tX+KjIwgAflMougXUOC/+PGL1Jm//2nz2XqqLNZwEhMNBTOP
-         8dVQ8DKyClQnTCxeP5pPa9KYIvSiOQVGpZdJuzuk2t4F+44/iENLnd68jnWo5qoFcG4R
-         3FQMWwjCg/j48WpzRSGGvmbbdGceQYWfpk/qhiawOzCVOCrbh0fD5UqWIdx+cE9JHDuQ
-         7vnym8c3xldg8hT66Oq7u9rrfSjXUq+NZyIQPTVAufPlucd3K+ns42IsFY10HyyOe3Pz
-         S8Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Mfpl8zY3LVAi5U5pnvN1Ue7INw4n+cwaDzw/jT3q96lV848QinXxJhtIrWou2s1BbIOEahlWPtE31g==@vger.kernel.org, AJvYcCXqAR2YH+5rPivcikItjidPPfYtw286gRtCHD20zsabIh0XAYeHm2kEOEitqWFjEgh0NZSyiV3haSyZEej+@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBtGR09uxD2YIqJG7CuqVWkvnBWdncwI0zaO+gKIWt87lTe6pX
-	WTk79PWexVUx2ji9grutImtX5r0UFug2x9mLTWrvZwQkKfef7ai7
-X-Gm-Gg: ASbGncsb3UaV0B46hjnZX1jtUo6gnSeLkcI4X+CxoYDuja4Jxgd1nzfu7HdwrSy45em
-	SDqB+HQZ1AbX9Hg4o2ITwz6dzpl2Rhzzv/MMINjN4DLtlpirv8zMFeYR9GGry+kzam3vNKjS/P7
-	9OycBD0pHW8v5C3DDyzJM2kATMKqzSSRinvRKdwH2Tfqa+1XQa/O9/QvCAr1Zu+tJUn+xS6WXJx
-	7cB9NorIoNyiIEm/mzvpiInFru5iuBJEsVYsDKfrFduskfzYQhJXXEv5V7QrVESIrsLNeg39kSQ
-	tWaGDakS
-X-Google-Smtp-Source: AGHT+IFE4JRI4njgQNDXFtsdrMEkLX9tzqbmv/jvaGmHgQy8vlu/pU7TTeqAFQQg9sHWVoiitWfWpA==
-X-Received: by 2002:a17:90b:3508:b0:2ea:61de:38f7 with SMTP id 98e67ed59e1d1-2f2900a9e73mr24269748a91.29.1734423374941;
-        Tue, 17 Dec 2024 00:16:14 -0800 (PST)
-Received: from visitorckw-System-Product-Name ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2a2434ae9sm6734326a91.33.2024.12.17.00.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 00:16:14 -0800 (PST)
-Date: Tue, 17 Dec 2024 16:16:11 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hT7LgFa0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=ESTr
+	rh5kzt20pKZzHdS7o//3jddwFObxCrUCgu0xi0M=; b=hT7LgFa0MT41ymp9iiH1
+	YDM6J+guaFB85z27R3ybw0GkbtYaG+UYEIdPMW4o1YfF++I+Ov1ymvRtbyVapeYy
+	P1vrje7s2Bl1EuWrtZodKkKRNqdbH3js2xNG/4so8GmVu5Jh3x/+fHlniSVb+/XT
+	GL9+fpk9xMFw+hc9JD/Y0Og9nVHYwIV9dQzcGYvo/H60JW16FeoLqyXe9rSFFgmw
+	AnRt/FvGx9szbb2iab5Ohu5TrqUgki2TZQXwskp59sa+V5D1R1XozT5LxB33EeGY
+	PTXUqy6EC4L8/5QrX9vc9sXdFCWUycye/kmNhxV6ZwT9Lw/yGjgUOjGwLsjUo1x0
+	0w==
+Received: (qmail 4001394 invoked from network); 17 Dec 2024 09:37:14 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 09:37:14 +0100
+X-UD-Smtp-Session: l3s3148p1@ZUw6NHMpvL4gAwDPXwAQAA/MfjDm1Sk8
+Date: Tue, 17 Dec 2024 09:37:14 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
 Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC PATCH 2/2] hwmon: (spd5118) Use generic parity calculation
-Message-ID: <Z2EzS8J+tZGb9Ggs@visitorckw-System-Product-Name>
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
+Message-ID: <Z2E4OuPA7m6yyXxt@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
 References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
- <20241214085833.8695-3-wsa+renesas@sang-engineering.com>
+ <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+ <Z2EzKErhR2MomNz+@visitorckw-System-Product-Name>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3KMw3RMYawymMT9d"
+Content-Disposition: inline
+In-Reply-To: <Z2EzKErhR2MomNz+@visitorckw-System-Product-Name>
+
+
+--3KMw3RMYawymMT9d
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241214085833.8695-3-wsa+renesas@sang-engineering.com>
 
-On Sat, Dec 14, 2024 at 09:58:32AM +0100, Wolfram Sang wrote:
-> Make use of the new generic helper for calculating the parity.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> Compare the results with hweight8(x) & 1 for correctness when x is in
+> the range [0, 255].
 
-Regards,
-Kuan-Wei
+Thank you!
+
+
+--3KMw3RMYawymMT9d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdhODYACgkQFA3kzBSg
+KbZ4tA/+N7R9phnBnR6QsFmN0MtUJSJEuv06hEdecSBh+6cFEtl4YAp4h4Qxd2Yv
+ZW5CQvE2UecSONsWYsne9YOaeThGBHq9bZbNhKzhJTQHVAwLqJO1WZGoUta7hEWA
+cIuliLpQQR+O3Nupf9OhTkXz4RT8ieusZLlIofXEr7k21awnmoaJFCMaffkFwBe3
+4piOQC6Ec5blWbbb/BQa3sBkpEuCnJQgbfRbMTO9N3Mo3LG+xi/Oo+BJoZvRdZqH
+aKdk8fJzULVpCPOFup4O82xwNBesAAWDBaLZ4ZM0QLtna1FBUlSBA9eZURs5+cZu
+39wcO53pgFcrvBsCnIbijIty1xbWK9Fu8xqBQ2Tz5rNjuKxtYl74jyoQIMlckIyN
+smuCkhPZbfI2QQak8NySB8rNjSYTp29mVB2UrEMSHSajCKFXgZX8AyCoqXk/783w
+Abf8Rg3bG983lKXHrXDiPxqCoWdKnW5MLUdJ+ZSv4BrFkspc0PCFb4BQyuh1rMNZ
+0c4LSbTBsUiBz299RI1hB9gBl6ZminybZpESiGw7vrAc9ST4uEzrCPryKzXRV2bS
+nLCaTceflhondB4IpmLQpp0YxPOO0Kudt2uV0NadVLMsMesR1DQOrrO8zIsLuqGn
+egz8ZKXjgHV5YIdrTnOoF0tcDSJxuuInQQXsx3o+LxNOyEGyO+k=
+=Phrr
+-----END PGP SIGNATURE-----
+
+--3KMw3RMYawymMT9d--
