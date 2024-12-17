@@ -1,48 +1,48 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909EB1E0490
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 12:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5F91EBFF8
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 12:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734436996; cv=none; b=Eop8VPwCXpXNXjXW7HCYgLSgl113rabuHf493Ts4DUuM0W4/bBB35BReNpWgEKtf6evxCPajSiEmAWqqvaiowhdIi1ZwvbYqfTsxAeJeSr6hoMQh09fLpvdwv3mAV6jGPucQEea1j1lLgP+nI8LprbdUa6PQw18x6SyUcCCH3GE=
+	t=1734436996; cv=none; b=u9n7wsArBg9DOxXlmocB6p0vKkYDbw9ZspCtE2FzO8XUFFEqkgucX+kIiv7uc/VywPhkJQq+lLYzHmXWA7Kry5pYXduqWsgOvnbt50xfDNwU5t0XViO6lJTK9zpUMB6Te5Kb5lrOJpq6x7FqcUyzGB3VNJ7/rfeAeGTftdHKMAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734436996; c=relaxed/simple;
-	bh=HkrSbm7kUlMNddDrvxBJPF0cvxt1KsH3xRO6bgQ6Jm0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CJYO3qAsqBsWE14uZgC4O2jcw1PhYsI48nonlKTbnGqaf9BoaK9Pa5Ei53ueeiWqL+sI10mr0XjNXtAoNWCNqJNgH39t/v+m0DUom8sT4z8Vt7vMft3Y/yMssfvFd9s3PZlFikBW/TzNN/ktQAyOTsWr60e/x3iS6RNLMwlAwqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=KyutQ2SJ; arc=none smtp.client-ip=194.117.254.33
+	bh=S14vnVnc/fHQHKXW5slUzsZdoihyLcHDMxn1DG/uwEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sDNFx/DJhv4U/Cig0228mCfrU5H3RbapUvJU7ERWxKKBskv7OrY66FWrcoU93frFlis9N1HZlxp7ktmrfPMPmY06tMv37Kwd3LlxNNzqrUR4OFxY+G5O/FiYj1T0wep8oU6vgHV5oyOjy/GoZu5D4Bp27YSzTMn3HZSI2L9KsVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YfqcEIwm; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="KyutQ2SJ"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YfqcEIwm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=Qr4wQmZxBRIjXd
-	0EQ5hYYFE+imRebWgseKj22z9Akdo=; b=KyutQ2SJvDuUhiXN/gqEKxnFob/wwg
-	xaueRaWuXioLj6vq+vTNwtTzP216idcXgVU67+hzS4PKmxnm5u9+2rl7VvnW1+DV
-	YYT27n52whJz+ctrBkbJCJyylWsBJunZ9OfMCy47wKb7XxOY6wNf7EbmUrsaD3av
-	gpziTEMq5Wnvt+OrN0gNrTxygkWQ1NNkw6nZuF7TRVLJj8UwU/t5qezx22Q84qvF
-	0dHfdeLnb8uj1dRogfQa9v7kuU+Gd/+wig1CXKwOOQwbFR1TUFcu5njuBlWGKvY5
-	HUbpaXW7M2pHt53PmDZP6oXDAXB13/h0pTeEzuYBernny4zrYp13D7yg==
-Received: (qmail 4062858 invoked from network); 17 Dec 2024 13:03:08 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 13:03:08 +0100
-X-UD-Smtp-Session: l3s3148p1@OGOYFHYpVuQgAwDPXwAQAA/MfjDm1Sk8
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=53FiL+fg5vipjUeGKedYSfF0y/LWWvOlhrUnYbkgse0=; b=YfqcEI
+	wmvMynPiGSoOM5VfoZ4zq7BfvD0ZM6Q55GH54UA0vWuqNsY4Toj9bWQFjbvO7rKy
+	1fdMqxyI4rFnCtcSGH5n9Z848InLKBZi5HL999Atfx/cH9Ff8LyQYdPpDAlcjFqq
+	PrhtZvch7wnToNR/pNcOWs+OXqlMlSHyVR0m5Rt0q7gfXlG2kdw89epZVWFUHODP
+	PNWK22p6i6DhaO12QBOzYxbGUD5TUIYiqaGLZA0TOwsdHEuYtZwgoDqcBJGeVHm5
+	P6y4jw8fjoKL81HjaFJGlPAdOMUtP7AqsEnap7Yx0uACjARB2xbFihnm9PpslVLl
+	tRXLy7n9KBin5HEg==
+Received: (qmail 4062975 invoked from network); 17 Dec 2024 13:03:10 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 13:03:10 +0100
+X-UD-Smtp-Session: l3s3148p1@BPq0FHYp5MEgAwDPXwAQAA/MfjDm1Sk8
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-doc@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH 0/2] hwmon: (lm75) Add NXP P3T1755 support
-Date: Tue, 17 Dec 2024 13:03:04 +0100
-Message-ID: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
+	linux-doc@vger.kernel.org
+Subject: [PATCH 2/2] hwmon: (lm75) Add NXP P3T1755 support
+Date: Tue, 17 Dec 2024 13:03:06 +0100
+Message-ID: <20241217120304.32950-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
+References: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,20 +51,85 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This small series adds support for the above temp sensor. Ultimately, I
-want to support it via I3C. But for now, start simple and add I2C
-support, so we have something to compare against.
+Tested with the P3T1755 soldered additionally to the P3T1085UK-ARD
+shield and connected to a Renesas RZ/G3S SMARC board.
 
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ Documentation/hwmon/lm75.rst |  6 ++++--
+ drivers/hwmon/lm75.c         | 13 +++++++++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-Wolfram Sang (2):
-  dt-bindings: hwmon: lm75: Add NXP P3T1755 sensor
-  hwmon: (lm75) Add NXP P3T1755 support
-
- Documentation/devicetree/bindings/hwmon/lm75.yaml |  1 +
- Documentation/hwmon/lm75.rst                      |  6 ++++--
- drivers/hwmon/lm75.c                              | 13 +++++++++++++
- 3 files changed, 18 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
+index 6adab608dd05..9877ddbbf7c8 100644
+--- a/Documentation/hwmon/lm75.rst
++++ b/Documentation/hwmon/lm75.rst
+@@ -121,9 +121,9 @@ Supported chips:
+ 
+          https://www.ti.com/product/TMP1075
+ 
+-  * NXP LM75B, PCT2075
++  * NXP LM75B, P3T1755, PCT2075
+ 
+-    Prefix: 'lm75b', 'pct2075'
++    Prefix: 'lm75b', 'p3t1755', 'pct2075'
+ 
+     Addresses scanned: none
+ 
+@@ -131,6 +131,8 @@ Supported chips:
+ 
+ 	       https://www.nxp.com/documents/data_sheet/LM75B.pdf
+ 
++               https://www.nxp.com/docs/en/data-sheet/P3T1755.pdf
++
+                https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf
+ 
+   * AMS OSRAM AS6200
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 2c2205aec7d4..a8f95bef68cb 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -38,6 +38,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
+ 	max6626,
+ 	max31725,
+ 	mcp980x,
++	p3t1755,
+ 	pct2075,
+ 	stds75,
+ 	stlm75,
+@@ -222,6 +223,13 @@ static const struct lm75_params device_params[] = {
+ 		.default_resolution = 9,
+ 		.default_sample_time = MSEC_PER_SEC / 18,
+ 	},
++	[p3t1755] = {
++		.clr_mask = 1 << 1 | 1 << 7,	/* disable SMBAlert and one-shot */
++		.default_resolution = 12,
++		.default_sample_time = 55,
++		.num_sample_times = 4,
++		.sample_times = (unsigned int []){ 28, 55, 110, 220 },
++	},
+ 	[pct2075] = {
+ 		.default_resolution = 11,
+ 		.default_sample_time = MSEC_PER_SEC / 10,
+@@ -734,6 +742,7 @@ static const struct i2c_device_id lm75_ids[] = {
+ 	{ "max31725", max31725, },
+ 	{ "max31726", max31725, },
+ 	{ "mcp980x", mcp980x, },
++	{ "p3t1755", p3t1755, },
+ 	{ "pct2075", pct2075, },
+ 	{ "stds75", stds75, },
+ 	{ "stlm75", stlm75, },
+@@ -813,6 +822,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+ 		.compatible = "maxim,mcp980x",
+ 		.data = (void *)mcp980x
+ 	},
++	{
++		.compatible = "nxp,p3t1755",
++		.data = (void *)p3t1755
++	},
+ 	{
+ 		.compatible = "nxp,pct2075",
+ 		.data = (void *)pct2075
 -- 
 2.45.2
 
