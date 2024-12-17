@@ -1,114 +1,103 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046A714F108
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Dec 2024 05:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CEC1CF2A2;
+	Tue, 17 Dec 2024 08:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734415045; cv=none; b=GCIpHacdlfcSsLeI081xPrZ+ISwhEv/X4+PpHnnyof90gWglr/H6Fp6YDCvUQQwYrttTm9kpy103Of5093t8wPlj7Jsnb8TexHDEPMRDU9cfa8nvHeYYHBjEGupIHfKq+m/G9DpAkOMcPtTrgDTsVfeyH5+BFl32RO6J7zs653s=
+	t=1734423343; cv=none; b=nF0FBBRNkMMtRdwbPqkEt02xY/ohgXJ9qMPKW+SvYjYSeVaB010GegLm3RCHFljKv3DoQ2mEFQUCcQsabuo7uLEFhaF8qkj5vZzR0Q7zb19VYjjyHx4xukgXpFWPQyBRUREMJrUXcQN7dPGCf6NhP0C01fuMd6oN3uJieotVjIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734415045; c=relaxed/simple;
-	bh=yWkvKPPV/ze/7mn7+IE+lAOxYJSRUtwgKXwbbYbg4Gc=;
+	s=arc-20240116; t=1734423343; c=relaxed/simple;
+	bh=v2EtpzylHCMVmeaJp2tMr+VfEj8kbz8WIuUYHP9gyx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NJbtn3MekXsYOtD1EWK4MHGfjVJH1LMtOpsA22g00HW9rN3kGx+cYJ5k5mVFleUEe1gjHetlyFhWpqd12PniKyG/r7rAOwg1IV0rTeVkVjYMePGtUO59p4RDvioiptyI1mc8V1JpvKAHZSZ0q8hPmA7Zz9fLDFPh6B44XR+3xnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=M32O1Ls2; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dI+ZuMmNV2gt2wzjm3GcOSTu1ikgQXnHDNDNfzefzNNtwHF+Py9MpUqE4hPG/0xcDG3j3qFeuB7n9eMSEkyjruda9h3Kqb4K41+Kfkhyx+DfG/Q2YZPmnzUh1hkDMQCTiPMU6/ojWKjkZJRQfwYE5HxPQg9hktIDrvaYgdNLXGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aa+YHXJQ; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="M32O1Ls2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=yWkv
-	KPPV/ze/7mn7+IE+lAOxYJSRUtwgKXwbbYbg4Gc=; b=M32O1Ls2cyomHp77l8EL
-	WDo8FG0UrBV6rkt4NPe+jj6HkSylkymnrB25HPA4gFMTVs9BVCknchpKUt2M/tNn
-	za85bkT6vjznTrttD/i82BTP690F/uu00p6GXetVOjRYsbuXg2PmdpvpNTK7VYLH
-	rPly4v1jCI1c9BMDkI/nmB/G8MXu2qh+Gzqy+JvWGxLLgg6cEW2HsCLGamWKgQ1o
-	kXE+r70odc3lRGYqL8SStUjR45ctFb+pCRsWW4ey/Gg+6ClP/DQr/VYIbJiXt20P
-	H816hdSBHVuNPjonsiNIIpBQTP02M80FXOynnb0X31D40BOtTnJPWXiC1LiHQNqM
-	Kw==
-Received: (qmail 3963030 invoked from network); 17 Dec 2024 06:57:11 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Dec 2024 06:57:11 +0100
-X-UD-Smtp-Session: l3s3148p1@/3LP93ApoqIgAQnoAGvhANJNcnpwwj5L
-Date: Tue, 17 Dec 2024 06:57:10 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Yury Norov <yury.norov@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aa+YHXJQ"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-725ea1e19f0so4290162b3a.3;
+        Tue, 17 Dec 2024 00:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734423341; x=1735028141; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6MRckoNlqZpLBpjip3AWCGgRxNR2zIWh8dpqKI+jRKw=;
+        b=Aa+YHXJQYEWmg2f81gMDfFGKGBXng4HwmopROz5SD1ygP1dQes6Dza+idwxboKjAXb
+         QgR85jfe9cXYDVI9M+Hz9OE7upmxaFdwamtvWqG1zEMOdWuHFRy7asgvbfJ1umNXUpAf
+         mx7V3m9bHxQp3tiVkqNiRot+YkeCgYDefVR+TFLAOx/161oA3TCFZhGqPuilmf+seI7i
+         cY8dlqKFRPzD6RQZQQORpD2FEkVoI2Eb9N5HILX+YwASSmHT7I6AA91cR9hL5yiA2dOg
+         8RShJJLOWeQubmiN7o/pT8YHjr6ApMgpDJ2uiBy+glb5mtKkV6BudlJMq77sZzz+YF76
+         k+jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734423341; x=1735028141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6MRckoNlqZpLBpjip3AWCGgRxNR2zIWh8dpqKI+jRKw=;
+        b=uQvj+710hF0uqHaBicCpowYup1LF+l0hdm0WqkK2V0qbE7fQHLIOI/1VDJnRxQjtDx
+         B+Dt07ajODh0jIPemuU9dczMrx7BIsHa7F9kTZacet8wOYYNiKdi7r1VN9soK+kLtZEt
+         DJC5sys/kxWNGCTxi1KPcwouXV5JDPzg8VeZjH53xg3zVA4pIhza/UpWC++s148mW/1F
+         lE7H3/562BRuRB9z76+Prwb9GImGCI+eFJcZ4/sADdERs97PAsNSLV04DbI/l36Q1UkS
+         quKb52nZmS0LU1/mZyQD+6ZP+7dh1oUkGHnsl3nfj9CQ6SeRWYccozYsHPU9QLyDfxu4
+         ogdA==
+X-Forwarded-Encrypted: i=1; AJvYcCWWevLVhO0w9lTzAqQc7CHZAHIGbcxXNsaLl0qtfA4UxnWn7JsGo3kIstsBPhQCOKUpYmEzjlCOrIN7kGBp@vger.kernel.org, AJvYcCXWGwE6p29z/Cg3oQEvG+ufvRCoe3pgCF3qg6AqvnPapbM50Oo1qP15+n4BUl8Ckj16ojNV0RgH+KSVGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YySxYGTtUEQQU9GKNv3LaYlNoJPWbqzTcNRDOBW7QnSuAWcqVk3
+	NYchKlqiMW/Diwre2P9GlOwrvHPaUVhmZd/8gGOboHbZRAhWqyRE
+X-Gm-Gg: ASbGncv43jRSmbeLhs8dpT+6Xsr4Ntypgitzk+qI8P/y5MRdYm8lt11XL1uU4eR78N0
+	T4BLt7ObecvKqwF3ItHCpZqrVllQCuAfP/U23kniv7dzaKWUExqBnZ/Rdh3O5dCKxP34stOeXiy
+	B/9m5U4jxNPqmhGVyKdqsZx5ecLTZbErAdoZJRwC76sszdqEYPtX8kkVDnFzi0IjdH+SJeprxPf
+	Td8oWLRHtCnxsafnUaAwbx7D1YiZOX9rDn5P1o+yVv5besddEr4MbHVucRYqKioBL0I5pEQUBlb
+	QqWtJvn1
+X-Google-Smtp-Source: AGHT+IEU9gKtSQDIjfmAL7ioyGt933QTWxeJUGd7RP6VzJhxSMuiT2RaglBNkVWVtrqnk3NJmbnd7Q==
+X-Received: by 2002:a05:6a20:c99a:b0:1db:e3a2:ea47 with SMTP id adf61e73a8af0-1e1dfd1fa49mr24027942637.14.1734423340737;
+        Tue, 17 Dec 2024 00:15:40 -0800 (PST)
+Received: from visitorckw-System-Product-Name ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918ad5687sm6069722b3a.72.2024.12.17.00.15.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 00:15:40 -0800 (PST)
+Date: Tue, 17 Dec 2024 16:15:36 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
-Message-ID: <Z2ESttIzF4kX7JA-@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <Z2EzKErhR2MomNz+@visitorckw-System-Product-Name>
 References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
  <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
- <Z2Dg6ydwN6CfxgTe@yury-ThinkPad>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yZvFp6W1xzXD/xL8"
-Content-Disposition: inline
-In-Reply-To: <Z2Dg6ydwN6CfxgTe@yury-ThinkPad>
-
-
---yZvFp6W1xzXD/xL8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
 
-On Mon, Dec 16, 2024 at 06:24:43PM -0800, Yury Norov wrote:
-> On Sat, Dec 14, 2024 at 09:58:31AM +0100, Wolfram Sang wrote:
-> > There are multiple open coded implementations for getting the parity of
-> > a byte in the kernel, even using different approaches. Take the pretty
-> > efficient version from SPD5118 driver and make it generally available by
-> > putting it into the bitops header. As long as there is just one parity
-> > calculation helper, the creation of a distinct 'parity.h' header was
-> > discarded. Also, the usage of hweight8() for architectures having a
-> > popcnt instruction is postponed until a use case within hot paths is
-> > desired. The motivation for this patch is the frequent use of odd parity
-> > in the I3C specification and to simplify drivers there.
-> >=20
-> > Changes compared to the original SPD5118 version are the addition of
-> > kernel documentation, switching the return type from bool to int, and
-> > renaming the argument of the function.
-> >=20
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Acked-by: Yury Norov <yury.norov@gmail.com>
+On Sat, Dec 14, 2024 at 09:58:31AM +0100, Wolfram Sang wrote:
+> There are multiple open coded implementations for getting the parity of
+> a byte in the kernel, even using different approaches. Take the pretty
+> efficient version from SPD5118 driver and make it generally available by
+> putting it into the bitops header. As long as there is just one parity
+> calculation helper, the creation of a distinct 'parity.h' header was
+> discarded. Also, the usage of hweight8() for architectures having a
+> popcnt instruction is postponed until a use case within hot paths is
+> desired. The motivation for this patch is the frequent use of odd parity
+> in the I3C specification and to simplify drivers there.
+> 
+> Changes compared to the original SPD5118 version are the addition of
+> kernel documentation, switching the return type from bool to int, and
+> renaming the argument of the function.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Cool, thank you!
+Compare the results with hweight8(x) & 1 for correctness when x is in
+the range [0, 255].
 
-> Would you like me to move this patch in bitmap-for-next?
+Reviewed-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+Tested-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-I hope that both patches can be applied in one go to avoid a dependency.
-I'd think the hwmon-tree is a tad more suitable, but I am also fine with
-bitmap as long as both patches go in. What do you maintainers thing?
-
-
---yZvFp6W1xzXD/xL8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdhErIACgkQFA3kzBSg
-KbYj9xAAkJ1bWQzXu33Jsvjilcx+g2gaXpmFCYiBw6wGM9uuEKeMgV6fW6WOdylA
-+N7nrxUf6iYieXakIgn/yzhQTS4CmwWd+XsTuPDLRPWRtC8CXGL6tj+ezp70Fthb
-aNM9yt3SzWuTVMoUxloAKDzRUTsuIOVmcx5offoXrWMdaN7XhfcEGPx1M8Q1G7Go
-k3NVT6rJfeEP/r7TpOxLtIXbkrfEWKVRsOcuUSG0KZI0n1u46qI/auSCfYTh7scZ
-2+u+82AiFArDZIpQiVzjAqF8UZ1mNNBQf7qJmSdz22XP/4jSn6MdJKPn+/aUQSHB
-OdsQ92qwFa33yFuoIXMtSH8p66CYt+PoNzmcmGMM0B9/q6j2kOn0FC/sJzNAZZ3b
-WsmDh9u2Z9/Wh3QQ/MuDhkKjHqiaK2i0a0joAU75/HR8Tg6FU6INSHjn9NUYudc/
-57HPHJ1vYf5XDxPMsBnSO6vXDv3xFHY32ZtI7+xXF3CjBd+l+2ftVu5bJBTlPvx1
-3WqRcvCxzWUpBl/511CYxY9RfbWcSg/heH0fJdPyO95xs1U0cwwFqY3NZZlQsN+X
-Dljnvxg2fptjH8fFHu27k4rnB9/Gnex1yHNknGdRIs7dSUepxlqorXifJBtvSsUu
-o3ZjvrpBbG6radSHEAic3FpkiafarN4o2U3HXh2fWH0TDtkLAz4=
-=3RK6
------END PGP SIGNATURE-----
-
---yZvFp6W1xzXD/xL8--
+Regards,
+Kuan-Wei
