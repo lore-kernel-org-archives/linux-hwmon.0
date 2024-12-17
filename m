@@ -1,147 +1,113 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B6B13B2BB;
-	Tue, 17 Dec 2024 02:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92A183CC7;
+	Tue, 17 Dec 2024 05:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734402289; cv=none; b=PQfdVFVYaeFxbn1mTi26tEAMHOK0zjTVYQNl05Z22dcUhcXUIIMd6g0u/dZWOELScD+qKhN8CQCvr3zNW7GuTlNyLJFgZQvZf19KPDQj4qMgQPJELj7Wc0EYrDSLVZaQVmn65heoSmtVdFtdGn7dMWe1YznMlWXYgt4eZElyw6w=
+	t=1734414596; cv=none; b=leFZxTIm3i/Feu8BkwHz9QrhnBVwk/w+PDNwC6dtQqozQniHPgSigAhgrsze1UHSI9nfHapD1QwFPjVhoVeCKF2j3XpjkUwq4/ZAd4dKgbBwy4HHqQkKilYZATeo7xHRkra59bjfC0UmgubN8WaLjlinMAMt04dz3FniD4VGeZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734402289; c=relaxed/simple;
-	bh=g78BIc0qeArMDi2X/YRDz2EPjSruhLg4hdT2w8W6HXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIEXq23RVj0IiqvyWvRzYRvni9ohQXRBGFn1WcIPAcdPiw9vPk8hpg72LErSfl8sEGQxJsP8cFV/55d18e9B5ZxSI1rQPMliQqKQ4pNy/5UBHzu5h7qP5nuYLiR6yQJA/nxq2pbye0qQw0KkxjmmYwTuq7Pj66Olrk5S8dvLRxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JkCmpGee; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734414596; c=relaxed/simple;
+	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ndd8C7lY55zT1iH+e4EPwNrD2Ee6mUHce3mOQe3tWJ5/eJ0NXcjsF9QlY8A0D/B88xWKR5T+Zg9e0eIGukgooYU5iPanese84mgW32L4kxBIw4GHH7JEUuBhZ/QSxCP6ldHCNLNg0AD0BEhERCAZRF8fYV4eW9dnT/DHfEOAZAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IkOaD+mQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JkCmpGee"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6efea3c9e6eso34571127b3.0;
-        Mon, 16 Dec 2024 18:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734402286; x=1735007086; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EP5ZynT312ZSNFnjiv1Wwj9DsR/r/HsJlceD3oHAYVs=;
-        b=JkCmpGeelBIJdhPNfxptUWGzqomLjHM04Qyc/WSkZgsw5L3+xJ1vmW2mCFrO96sL5J
-         fkKs6iE1bFMnLpLboIMQRI0q+GUQ6SMFqIje/k83G6aMj5tgcwv/Eo+6ek9xO+dbn2Gc
-         mxuJnrJo4ptYxH2pZxRJ8R8XDdYGFqKHqwlJEc8T60y74tSKYdzAPbwRBwn1BolPP+en
-         ofD+zmrOVGT630n6uS7/F3uGKFaRdkj7k1RBR0s9oX2kMjhW2OD+NL/QIrWJPkskkCTi
-         uWGL9ldjb9uv9q95YT7tnxJR1U/lOlD5BgJLKoJ46mgRGPxePs5TVX1tYiWCUFqLaBIN
-         tUDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734402286; x=1735007086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EP5ZynT312ZSNFnjiv1Wwj9DsR/r/HsJlceD3oHAYVs=;
-        b=oQ+9Jfjp7rgsPohPzqFX8pwdueqMjgU9XnoOnhoWWEYh1YZkhQohjF1ILXJRR26uJf
-         pJhjsesQOTUcTX7NiNJ23urRnbz1A8Dn2F/hCn4kdkKVsirIc38S1FDhyOiro2vxO9cN
-         e0akVRtQbj0OmA908hYe01k2NjxVehF6YGaASkUEFcg32y06Nr8/m/BjC1hCdrBKF1N4
-         ZZErowIix/+wrBeBP/vqFhHytEsMTzsEcw8NrAriE7JOKC6tqVCcDd0J2Gd9aPbiW5gb
-         N/1yyXzF6xE+d7C4Zwx5uNANMBUSdMKXrE2ABV/PBQuWTSD47Jtjn1g4l5jZ5QgTndzW
-         TR6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWe7RXoRTPeDl4xEmTXhW/Z7eZow+TNvbP+66r55PxgtlVprCViHm5WivDxr+O1RPucJBKvCmvbph6dG/v3@vger.kernel.org, AJvYcCXbb7+hwKokM7gqvTAtkPeJBwviRHZpjgumxRiRjuRcR8SSil8eAdBJqEQRYgNBsEH01hI37y4naGC6tA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze7uoIF6kR0dIDS3fVvQXPGzP5qYWHu1RCtfqMSyAl6qBbcQGl
-	gEmATvKzHUugA1xhy+InRcu/1wBFDpdtmfo969Q24ujMy/WPD9/N19Qt9g==
-X-Gm-Gg: ASbGncvZsLgd3Vs8mmqkRKf5KRpT3jwGXWizkAO1faPoKF6qbjzXFS8cUdMTHhsM9/P
-	3pPeSpNeXOR5Vo1ghlmTHExLp0HmkRdKWCn4HT5SlPA0ybIPp4baSqKuSABOmCl4SPAC00/Eck+
-	mqfeuyxJdVA+66OKqtwXEZY+nG4nDqlT1FBnbOR3EWsXHYdtRsL3Ju7qsBosnw7jYOuebM04EJd
-	bQ3Z649GXSBCIf8HoyYN9VpXATIERm4QGSN909zL8R8trcpJ7nyZvSP7W56uASbcmrorA8Q9Av2
-	QpjjDNH226OP7BwL
-X-Google-Smtp-Source: AGHT+IH8+H0qNEjMVGr3aGzEf3aDGSI1L0VYggMEu+ToZG6774zPVL9fENOA68MCpkfiOQd1uTvCqQ==
-X-Received: by 2002:a05:6902:2789:b0:e35:d93a:c9bb with SMTP id 3f1490d57ef6-e52f9632992mr1794156276.10.1734402285854;
-        Mon, 16 Dec 2024 18:24:45 -0800 (PST)
-Received: from localhost (c-24-129-28-254.hsd1.fl.comcast.net. [24.129.28.254])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e470e54d35esm1622919276.54.2024.12.16.18.24.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 18:24:44 -0800 (PST)
-Date: Mon, 16 Dec 2024 18:24:43 -0800
-From: Yury Norov <yury.norov@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 1/2] bitops: add generic parity calculation for u8
-Message-ID: <Z2Dg6ydwN6CfxgTe@yury-ThinkPad>
-References: <20241214085833.8695-1-wsa+renesas@sang-engineering.com>
- <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IkOaD+mQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B580C4CED3;
+	Tue, 17 Dec 2024 05:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734414595;
+	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IkOaD+mQZumFR6kVGx98rNnXoQRbhQpDBUcM0d1Ml9c9rv/dOwsJu+vM1JmmxUV/t
+	 ntunHvKGKd1aImhUM/iKqWN224vgYTZ2cbU275pZbyEG4ugUDis83N42mJybWRSF/7
+	 bkc46DKLKTHSuemlt5Exa76O7v5nKskPMGM/Go7ORYq7QXUr4aEqCNi6XeTrCtTMeG
+	 7ZX2++mKV4ddURHk6aVk+QNXQxBZyPG4ih6omQeEOrIcil938XuLN+4VEJbVnq9+vq
+	 uX5ueb0QOreybgNI0AcIXE/f2ebTolsS+kvPl2wChgonZNZF2BIXth6Ck7dzaHVoDQ
+	 kWW5ZArTDTz3w==
+Message-ID: <21008f97-d0bd-45bf-8e10-9ec2539ed858@kernel.org>
+Date: Tue, 17 Dec 2024 06:49:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241214085833.8695-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/4] dt-bindings: hwmon: intel,crps185: Add to trivial
+To: Ninad Palsule <ninad@linux.ibm.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, eajames@linux.ibm.com, jdelvare@suse.com,
+ linux@roeck-us.net, corbet@lwn.net, joel@jms.id.au,
+ andrew@codeconstruct.com.au, Delphine_CC_Chiu@Wiwynn.com,
+ broonie@kernel.org, peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
+ naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
+ patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
+ peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20241217022046.113830-1-ninad@linux.ibm.com>
+ <20241217022046.113830-4-ninad@linux.ibm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241217022046.113830-4-ninad@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Dec 14, 2024 at 09:58:31AM +0100, Wolfram Sang wrote:
-> There are multiple open coded implementations for getting the parity of
-> a byte in the kernel, even using different approaches. Take the pretty
-> efficient version from SPD5118 driver and make it generally available by
-> putting it into the bitops header. As long as there is just one parity
-> calculation helper, the creation of a distinct 'parity.h' header was
-> discarded. Also, the usage of hweight8() for architectures having a
-> popcnt instruction is postponed until a use case within hot paths is
-> desired. The motivation for this patch is the frequent use of odd parity
-> in the I3C specification and to simplify drivers there.
-> 
-> Changes compared to the original SPD5118 version are the addition of
-> kernel documentation, switching the return type from bool to int, and
-> renaming the argument of the function.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 17/12/2024 03:20, Ninad Palsule wrote:
+> Add INTEL Common Redundant Power Supply Versions crps185 bindings as
+> trivial. It is trivial because only compatibility string is required in
+> the device tree to load this driver.
 
-Acked-by: Yury Norov <yury.norov@gmail.com>
+That's incorrect reason. You should describe the hardware, e.g. the
+hardware does not have any resources, like clocks or supplies.
 
-Would you like me to move this patch in bitmap-for-next?
 
-> ---
->  include/linux/bitops.h | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index ba35bbf07798..4ed430934ffc 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -229,6 +229,37 @@ static inline int get_count_order_long(unsigned long l)
->  	return (int)fls_long(--l);
->  }
->  
-> +/**
-> + * get_parity8 - get the parity of an u8 value
-> + * @value: the value to be examined
-> + *
-> + * Determine the parity of the u8 argument.
-> + *
-> + * Returns:
-> + * 0 for even parity, 1 for odd parity
-> + *
-> + * Note: This function informs you about the current parity. Example to bail
-> + * out when parity is odd:
-> + *
-> + *	if (get_parity8(val) == 1)
-> + *		return -EBADMSG;
-> + *
-> + * If you need to calculate a parity bit, you need to draw the conclusion from
-> + * this result yourself. Example to enforce odd parity, parity bit is bit 7:
-> + *
-> + *	if (get_parity8(val) == 0)
-> + *		val |= BIT(7);
-> + */
-> +static inline int get_parity8(u8 val)
-> +{
-> +	/*
-> +	 * One explanation of this algorithm:
-> +	 * https://funloop.org/codex/problem/parity/README.html
-> +	 */
-> +	val ^= val >> 4;
-> +	return (0x6996 >> (val & 0xf)) & 1;
-> +}
-> +
->  /**
->   * __ffs64 - find first set bit in a 64 bit word
->   * @word: The 64 bit word
-> -- 
-> 2.45.2
+
+Best regards,
+Krzysztof
