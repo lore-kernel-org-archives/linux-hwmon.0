@@ -1,72 +1,80 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71188182C5;
-	Wed, 18 Dec 2024 15:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F451B042C;
+	Wed, 18 Dec 2024 15:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734534456; cv=none; b=NYIsFZ4iIa+LriVkW5o7tCFABlVyossE+BzBTrBenMjh4RlDC+2cxmvK7xmQ10ys9xFVIliPblHWL0xHyKFLb+dvL7c6i7Sun+60zZKPNxjOSNApiu1ZnMpRrzhmKQTBni8vi8kHvwcEpsqpbveLlG9XhITmPvU6ltotmLkXdig=
+	t=1734534574; cv=none; b=sjkAnwr/pRu6q2GV+DyeCG1bNRAf/lEUwj81IAkLv0i4j91e83qOoyTdhqeTCX3cUyI8bu22rTASGXIN4miB3/dNFND6kcsuzOlhyC+v6+XSFNNtkFufIW/g4XkLJgDQ77Goo6SlsvCugjoN5AMacqtSbTVfQf4sq/mwq235WZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734534456; c=relaxed/simple;
-	bh=vUUv4pHPzbU2Z7UBYHQT8WBZujH4OK47PXybzG23u1M=;
+	s=arc-20240116; t=1734534574; c=relaxed/simple;
+	bh=ydy5HU4CGoMJt1uvr2m9ZF+Vo35d2rFYwpjhIV68zvE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ChpSBNJgR+LxROy5M2oYI29ymO1WAu2VFJJs+2mJtb2u2FylurG+LVYjCXQBobhpU5kck7S2HH28JxVoJf2SR+LJGsOnPSKbTGfLDw2JyVhJAWCt/zZuPBtEacaFzJ3VcreKiysov6UmS3W6WucLoe+3ZGFzijTD89TuuNGpKbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=byknd3ay; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zm40qElt17b03OGQEWn0wyeYKadFODUvLvif3rq/BEbOUjUVx3yoJIekUT9lzcN7ZsK3UxOg8Qd1U1/Cs23f4rTWICby+E174zalRwVJ+lYr7psLG2kqip//BIqlfVt++XcEt/4CgW0s1w/mjBqaahWNLr8hmA3o5vkojVj4F4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=escR9EL3; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="byknd3ay"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21654fdd5daso56102675ad.1;
-        Wed, 18 Dec 2024 07:07:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="escR9EL3"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21675fd60feso69247515ad.2;
+        Wed, 18 Dec 2024 07:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734534454; x=1735139254; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734534572; x=1735139372; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=THk00mPCL3bmmt46Arb7cUVZHSSDIGbhq/stMjGiFyI=;
-        b=byknd3aywJUbnIO/YG2svw7Sjjp/UJELvxZS+mOjggfwz6eHoynBWhELagXu504ZZB
-         nPUadeZmB/6lSAu/xuwPSQ81MRohppEjKVtnJhrIfAKsRT2zjJgDtYD78FbMYUH51Iyr
-         HnLfUht4+YdWeCUM0SDnMhVtzo1AmWzn1+yt1K41Q7DVJQwSrNfza6kMywVc+LsKv8Pg
-         JA199MXjuPDtKYYtu6zaQDkxzESwlzv7j44FwIEX8gqaNOtQrdMjMjD2jurq4u0AuMQU
-         QCvtJg3vbDzgppRs/Uo0UAbXca9JVsh+2J84Ae7qRCZCfaHVIr/TCXign2mnbh6yA4km
-         cE3g==
+        bh=6mDeikeFSe+F1f6WRvocmJwWKAt2yrKKW2tQ+SDhd5c=;
+        b=escR9EL3IYyOmNxlPFl3xglOY1xA9nY43KXcus+WzBnSgnDzAZiUDpyGB65cScwyyA
+         UwRCUsucLNbtif6sP6Ebf+GN/OFuhW6XlAP7KX2q2R6AVa31f8H9gDrMlFSlYz1SqTUI
+         LExtniuePzyB331Eq5zWQc2rhIG96RR7FUOSJZdLhtKF9Ok5ctzdcis8mIVnXW2hrHev
+         V8XZoK1eABu6gsHkFhJPvsKC/SG0VRYWeXRHp9KrXfJUcjBZfM1+PQZdSdCanjyo/krB
+         hmZlfKyTmn1SYjphDkqEecy0/RskbDHkQVuYeN0HilcNZIFQdDZkI1aJOxZT2uEzv5p+
+         FWMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734534454; x=1735139254;
+        d=1e100.net; s=20230601; t=1734534572; x=1735139372;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=THk00mPCL3bmmt46Arb7cUVZHSSDIGbhq/stMjGiFyI=;
-        b=COahBXfhXs/pxQ/BA8m6CLWetWVCczwoK0CaUOxppRwQtWnnK6nEQqnxsP23erzRLX
-         P4c6v+6RAN1po2GyQWz+CJ01PWXe2ZOg7IMcp7k/f+4Xh2vbRJEQUOITLMdyUDrQq3lg
-         bnE/fCBeosABVZi6Nq3EdpJdT2M/UgPI2KljJMtHYTE7sJkSfOKkJryoIDgK9hr5E8hx
-         SatiFQ2iNIoRZKXbu/JMh4bQ46/uMlw2hEB5J7jOCI9zDnJTvryPevfSzSEg8E+zzgcD
-         erpRpZt1KHWFbu0Wi5gHHjsW735/VNn/WbPGJMPhkM32a4S7tZUmSHJbCNGCGtzNI8Rl
-         js9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUYcWWfLU9ES1uHbGLJJ6uQLlz7rQ85Zi+gWG9ZTZ38y4jZ8eFAGD/EhAByAycuL23Vju6+A6fFo7G8728=@vger.kernel.org, AJvYcCV9rfxJtYn4QuauDjIgCzuI0znsNxov5cR+brCr1GDg3Nzocd0uRvvjV0ulm2PwTCk178aV2vjTuq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxU5tU/QIHFN0QTewXlMoYYC4mz2t8SvXIo/pzTCWqOtNz2Kroq
-	ccrVbrtymL7BkVrLwn9Uh8t1G99pROcY8uzzCT0c33YSJTyZNp9qiAIgAg==
-X-Gm-Gg: ASbGncutGqsqCzO7ZXVkZImLezXLl66NZp5otF0Fy6jF/U7+yepvbUlR7Z6iPO9ysXS
-	PCvwpX+MbzFVMTO+ww3LLWWp5CKG6KpuSb5TNx9a4exovA48lY/eiz3RWyzF8pUh6HxOgjUirqT
-	M86UIUHXj9UyjlbwVfZ4N6gqFu/E5jYtOXaAYcp6AYqwPjZINOmkA1GUHoiyui6ABKw2Gzyf29k
-	mQXZJnHrNBIJnViprpmRmdyhaRj5Qpp3EA1t5adJzjs3sCzLbqMjXfs4DstB6zvtUgSTQ==
-X-Google-Smtp-Source: AGHT+IH/5vo/fUVb46dkRl0wElPs7u4QyYc5dAOhFZ4/+LiIf33p+klzewgqTvHJoGgOJN0ZFaRnHA==
-X-Received: by 2002:a17:902:e745:b0:216:51b0:6600 with SMTP id d9443c01a7336-218d722277emr48536105ad.24.1734534453538;
-        Wed, 18 Dec 2024 07:07:33 -0800 (PST)
+        bh=6mDeikeFSe+F1f6WRvocmJwWKAt2yrKKW2tQ+SDhd5c=;
+        b=P3ST2gnKOdc2iHHbat3R46E/ISeIbSmniyQbXOrRm/2EQ9GiwF8Cnl2Pv9Zuqxvdba
+         7Z97l5ztT+jtn390DDETkG/M6G2n3YQ87zL3WaWnfB8U4gZuZdwvTB95etAc/XDPeGlV
+         yOqPZXLRUmwRq/uw4bN8izcUQUxKZ6uIhIf+/HaespoTnHh+uyKV/ya9Rv456oBTGPRA
+         QxgDcXfON/GfijSkSTRms+PckLC8IXfyUP8utJoGEGgP+zjK+1aDDHInmYP/xII+jxxP
+         ArSXMLq21uo1zjo2cr3G/SG/Kg+oUgwOPOZmWxiyCFD9axSz1E2xHq+t/WnWYP7m/RNJ
+         qEOg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3lsJ6/IQ5kqQBI/in7d9BebTOGsn66pyZHBUOthqKWt0n6Y/FaROVropcAYvSlxIVrAWiCYceQTZU@vger.kernel.org, AJvYcCW5K5gJ/7vPsvyN6eloejm1AMPgo4BdA/Fuf7Qe8nliS0GhvbaGNDltKyztlkbv/qJeMqsbz91dgrVhTRqG@vger.kernel.org, AJvYcCW5hvJyPYIEvA0p2ZfNbY6t14MAqP7W3gG3QAWm3bUFFG4nLKKfg7O3UOJzWnkkveDBvXOTXpptNGDxSTY=@vger.kernel.org, AJvYcCXV7SPfIYQQzOnfAkyWuPyO0NWrcfp6Nv6FOKkTGiHr+D3pK6cowStA8RHlg73BL25MgHmUuJqQA0Nq@vger.kernel.org, AJvYcCXWmVthIi574gfte5QYPW/dDjN3T3qN2v/dBaMHOLOAOkNCi/uY0BZoEZ1gMoyOHbHmWX98O6CHEhs0@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxoh5RZu15EKM7biSqNHCXAztt015Hlv0YdXj/xIPnYqc3NMx5H
+	Um7/o6ug2dEIJvZEFYFuf3S1Aa7S4ZtNSAgqFA0yr/+4Ti3x1klw
+X-Gm-Gg: ASbGncsQLA5XT850OuiXwCVRq1hN6cIIe9Q1rjbyTND/tG/Jqp1KJXEzVhpdB4LSO2R
+	gZQEOzzuTRBXrysBRL6gBrNFZgN4ku1ebv+Skm51SQTc/TalEn6nP9KTKZwag3dT8Em3hXg0LAq
+	99WN4jErVgtBXpnusyRP8fcvSY48tA19zX9I3BwDKiLaKXi2RxFo4+40fiyZrqYE0FMCC0Tm/QW
+	ak0zJh39aZk4qgPZR2uZYGwRhfPlynH6AebcvSCYMF6zIXnLl+4MohphXNOCdKJnM8bXg==
+X-Google-Smtp-Source: AGHT+IEewReQwgk+5Ua6YOOIYy2d2/wQCgEBDZk3bKIj2d8jpP3GFkNNyFGtuZW0MM3ArXC6dPDOAw==
+X-Received: by 2002:a17:902:f68e:b0:216:4b5a:998b with SMTP id d9443c01a7336-218d7252a1cmr34156515ad.45.1734534572373;
+        Wed, 18 Dec 2024 07:09:32 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1db5e1bsm77471145ad.46.2024.12.18.07.07.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e728a8sm75452185ad.280.2024.12.18.07.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 07:07:32 -0800 (PST)
+        Wed, 18 Dec 2024 07:09:31 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 18 Dec 2024 07:07:31 -0800
+Date: Wed, 18 Dec 2024 07:09:30 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (lm75) Fix LM75B document link
-Message-ID: <9ffa3589-6173-451f-9e2f-bf34b43ae001@roeck-us.net>
-References: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
- <20241218074131.4351-8-wsa+renesas@sang-engineering.com>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	eajames@linux.ibm.com, jdelvare@suse.com, corbet@lwn.net,
+	joel@jms.id.au, andrew@codeconstruct.com.au,
+	Delphine_CC_Chiu@wiwynn.com, broonie@kernel.org,
+	peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
+	naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
+	patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
+	peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] hwmon: (pmbus/core) Add PMBUS_REVISION in debugfs
+Message-ID: <89ff7229-2e86-4d36-9349-50af109b0085@roeck-us.net>
+References: <20241217173537.192331-1-ninad@linux.ibm.com>
+ <20241217173537.192331-2-ninad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,14 +83,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241218074131.4351-8-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20241217173537.192331-2-ninad@linux.ibm.com>
 
-On Wed, Dec 18, 2024 at 08:41:34AM +0100, Wolfram Sang wrote:
-> NXP reorganized their website. Update the link for the LM75B datasheet.
+On Tue, Dec 17, 2024 at 11:35:32AM -0600, Ninad Palsule wrote:
+> Add debugfs file for the PMBUS_REVISION command. This command provides
+> information about PMBus protocol revision number.
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 
-Applied.
+I already applied this patch, so there is no need to re-send it.
+If it turns out to have a bug, please send an update on top of it.
 
 Thanks,
 Guenter
