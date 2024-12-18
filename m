@@ -1,79 +1,100 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478ED159596
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 07:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BC5198A0D
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 09:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734507714; cv=none; b=G2uQ0VMX6oKFNNb28hudHKfRgCnk5vRTvuu1jGRcT53grMWtyotCyzpWe3grRHFqYVgj9wTVQF8hLAv57xxROkae/6ZIcwkhaBkL+CpI4CE2WuqyK+ZW/2Mcb7fvXVZfx1xLBn1m7XzwK6aNRKGa0uT2JmjNckzGCq2AHttfbK8=
+	t=1734513324; cv=none; b=EKjBIAG5RY4xRagUhUkdmFCBMJfCHIzV7b0U0AuF1Kb4kl6e3Z/zEWyEYbRa3Wbbx8zca0dJy0Zxx2BtoctZNY8Lla5+8+G4m+7dTlYbO1Gs5Tm3js5lG3XFqPxBCBaoQo/LsLGca8De2hNrdiJqjCR4SJpBf0y4a3JMpY7SL08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734507714; c=relaxed/simple;
-	bh=rFk3OhYbTOdiWgha4HWjJodfVOhpNMHrJ85zonqt76I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ifauOS4sVwm1sGa0XKQA2nyqvweuX3Ql3zKdDkK+tuuyA3lDaByGfPC75lQWO556OjimdZXcRQwBO2GrPZ/UsnsjWAygbW7Bl98SP16I4TrgIiMJb0hnlx7qZVBJSmGdns6Rdgcw6L+kLbSQDWrhsfz1UkVqD2auvCGaCUKYPE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bTbL8ysj; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1734513324; c=relaxed/simple;
+	bh=pG/6aAVLITERfTXNXRN87BUm1lqW2spk0qlcFh3mP4w=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8poFjJUioGZY52O7CUPiAVkanRbLksHqR5q2tiACqvNU+T72lwd170D+FAY9FyXvvOc7C1bXymt7Gq8gN7q7RQv4w9oC5rnGO36rEi2t0mRfQMtDZh23PtzYDDGDRyxMvl3yLjzCaF0XFJRR017bujJdp9Skok5065HgqzYKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WC/7cv3X; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bTbL8ysj"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WC/7cv3X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=CA4QQLhX5JgwiU2FFQmxGsPl7AlRiNj9yNanvNh2mUM=; b=bTbL8y
-	sjaU1vRwYbvCww4wMMd0O9memEwCJyriAJS3/qAUZutn7drnKbcXK+S5BB4aKbYB
-	WYav1Tbdxrhgtu6YROcFKcR3IyyfMCnjZufzXQimwztCIaSzbm0DHOhf5ZUC4D9y
-	2iQ3W2xaS4caEuUGvI7ZMhvjk5caG02LG9u28giD1w1RRsNzyYXUE2xXhw7Ehgr6
-	gVd0jNdry7zPNbXqvG23jUxAZRR3qQvJAzenCfxf+cVljBE7XnH6acFMgT4HsClF
-	DynYW3M1z4wDJ+/nZR+LeqOC9S8Ol6yAB35xPo/adU+Vo3mv1KlMslbup7BcUA3f
-	WkN//Bqy5S28C6nA==
-Received: (qmail 204891 invoked from network); 18 Dec 2024 08:41:49 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Dec 2024 08:41:49 +0100
-X-UD-Smtp-Session: l3s3148p1@EYvYi4YpVpwujnsY
+	sang-engineering.com; h=date:from:to:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=801I
+	FhstDdYic2uUwSOvC210UCZ+2pIvOey5Rvy0avs=; b=WC/7cv3X+xDejQN1gIM4
+	z7XBqoa02oxej1I/QY4qcHhTWiQpRi7rMX3n5KLrvHxy0o58Vsi2pu4u3PkyqfCm
+	mFZ8mrT4uuzOtOEhwKt1PHcOLDbfT1lr0GXNKg4Npfb8ZJXyvN/XjkvcfHt5P1XW
+	lSit15h5Vr0XbO6M7oXtyiyTtHf46nXGJ90Lf4ValpW/tp2KiJVncEeRoFzKfpn8
+	mxgzcaogMQaqEwgoDNVzxSEKlCMmM7GeByYkLnEne7NVctmMT1n/vNZOsEj7WF7I
+	nlPvi1nbk2IYjtML5i9dEBo20vovBScHKwJ29mrxF4126OUZHQjC21ct4YWOsK0z
+	Sg==
+Received: (qmail 242350 invoked from network); 18 Dec 2024 10:15:16 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Dec 2024 10:15:16 +0100
+X-UD-Smtp-Session: l3s3148p1@7sIS2ocpCNAujnsY
+Date: Wed, 18 Dec 2024 10:15:16 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
+To: Guenter Roeck <linux@roeck-us.net>, linux-renesas-soc@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (lm75) Add NXP P3T1755 support
+Message-ID: <Z2KSpP6Atcu5hYa6@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v2 3/3] hwmon: (lm75) Fix LM75B document link
-Date: Wed, 18 Dec 2024 08:41:34 +0100
-Message-ID: <20241218074131.4351-8-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
-References: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
+References: <20241217120304.32950-4-wsa+renesas@sang-engineering.com>
+ <20241217120304.32950-6-wsa+renesas@sang-engineering.com>
+ <f624f683-d240-4384-87b9-2576bbc611a2@roeck-us.net>
+ <Z2J4Sa4xrTAbDS8F@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mWEw6+KduwCpWFwC"
+Content-Disposition: inline
+In-Reply-To: <Z2J4Sa4xrTAbDS8F@shikoro>
 
-NXP reorganized their website. Update the link for the LM75B datasheet.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+--mWEw6+KduwCpWFwC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Changes since v1: new patch
 
- Documentation/hwmon/lm75.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Sure thing. What format? Plain hex values in ASCII?
 
-diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-index 9877ddbbf7c8..c6a54bbca3c5 100644
---- a/Documentation/hwmon/lm75.rst
-+++ b/Documentation/hwmon/lm75.rst
-@@ -129,7 +129,7 @@ Supported chips:
- 
-     Datasheet: Publicly available at the NXP website
- 
--	       https://www.nxp.com/documents/data_sheet/LM75B.pdf
-+               https://www.nxp.com/docs/en/data-sheet/LM75B.pdf
- 
-                https://www.nxp.com/docs/en/data-sheet/P3T1755.pdf
- 
--- 
-2.45.2
+Reading registers from the bootloader matches the default values in the
+datasheet:
 
+=> i2c md 0x4c 0 2
+0000: 12 50    .P
+=> i2c md 0x4c 2 2
+0002: 4b 00    K.
+=> i2c md 0x4c 3 2
+0003: 50 00    P.
+=> i2c md 0x4c 1 1
+0001: 28    (
+
+
+--mWEw6+KduwCpWFwC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdikqAACgkQFA3kzBSg
+KbZXgg/8DIwH4P4j+TEyWNFWUfUaY9eFmuEB33PMHk3AUSAKsX49jTGlAx0QzUzh
+KXwqQ5QooeGM56d1OxRmoNB4WQhXPb/LBpvZ7AAyYBngVeB72vQX3KzWHr9m4WhW
+BW6lsmpvx+RG/AX3qZzktcjyxko5ITLVmcOQOzcC8x1J6DKDNGIYp4frReQTwoK/
+Nd0KVZmpdD1afOntcgrTNvugTJux9LJJoKRnjmP9qD5Akr7NMOvMtpXdynIhsbNW
+PmsSoS0GkDf2Tg+NR39R9af0c3CcmcIPLkovJEeTmGRiDHCX2BbtNBWUHzJyal12
+y/WJY+qSqGefMGIsHudn4ShBYyOvt4488tK9uGbD/c7x1Iwg+lnx1z/QpQ+UgyDO
+3bmhQaCr/ZcVcdXdpsixm6RYH/mVEvpedy4JDJdf5T2skACiycVxkYXze0oE5lqc
+0OczafIKNQ4m9FwKBNyms9LrnO9ChtQ9xYP/gzlwMvCdkstvhtkOZ+qHtm/OyImh
+XYDuzaZ7pHtnvPgUO2XBRJgvjmtbfzjZ/x1IWCemGIY6xAr0/oe+IzYM7sF4S8HU
+R8XdOpW9PD6C/gwc2iRmb2qwW3H/C9BCL6XPyyaSUopoNQIISAlecRxM8K14HrzR
+yHD8s2F+r18sGQk2Kr9qNifeI8XKJc1yInjycPxxl2Bbmprdcok=
+=yE6Q
+-----END PGP SIGNATURE-----
+
+--mWEw6+KduwCpWFwC--
