@@ -1,182 +1,345 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADB01C5CC4
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 14:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3A21B425F
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 15:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734533220; cv=none; b=E5kEReUw9apdjtGEbEfxR05IhtXiiaL9T86UexZ7g8VrbUpELoOAO91zr71PX7JDYrHmxcXE1uQIMytxGCF9UMFRBXDxWz3Tnaycytj9FL6t27vlDvamoyceSHqGb7lcijphtWMHmYj3I4SThsuQzUTdpUk5PUkr5rDT3Jg6mBw=
+	t=1734534251; cv=none; b=uGjWtgKxPF11yPYOiIWjy89b2DxOhaGn0iB5GnC6PqvCEdE7i0E7JXbllYulQVoX4RLmhyM0q2sw+3okhdBtg/faupWG9b9rFzv6L69pc9p3FnxWZS8E4omutrgd2jrzLo40Q2ERjBysHsEzvgADMLZOo1SL9NnnLYpMYfvVzUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734533220; c=relaxed/simple;
-	bh=tlkErINc3KYjWmKsGlBvvm8DkR77CNexGghjwvkzPUE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=m1a3x+9DLPrXpSBFvI/LNaZa7Gy03W+8mdnHPcE5B7MAnS3IarRE+D8hzoj6V3TZw8GVaDiKCNTWfy81QN9ByCGZnaQhqtmdkiubBdDZw/74utwI+s0LZi9i+zmBoURtsyOF1COD1L3fAPnEHYJ6R9WwArYROPRr6de1esLWGVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B6RV2ft6; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1734534251; c=relaxed/simple;
+	bh=8ZRWJXFIuNKnAe/Gim44QJC4wP4MylIjzaYCQKINcgg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iHH9dHZyqRFbTWo+g6fM1oRzFcYsh17N33jHfA1k889L87RqmbkuZPyDpC/xia6i/s1e9gxXdBfbeBb5yolpRqynD6PlW1cyvzOiS18cmARy10dbtLyuTmPNmQh+86sSrZl10NbG73Qy+P4AlcpUAo4iXry+Gm4VLr8ZHjzjLac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFeyhwz1; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B6RV2ft6"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-215770613dbso45379175ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 06:46:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFeyhwz1"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-728eccf836bso5878611b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 07:04:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734533218; x=1735138018; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=X2DQPTjAgR5Ztrq4xlnbDLIZBfJXq7ZHrsJZOnuFhLo=;
-        b=B6RV2ft6dHUU3eVkv+HlX2zdoE52NvlZ92Kjf4srfGYvA/7XeoI52c4cajrP/fNvt7
-         Y9U0eZOO0iTKQgiHVGSOzTBlg+woIIT+TuLaIJ3I/7yqcomM6WoUDyQo6yMto3y556M7
-         4B3tc/AhAp2/RQ3YCjpHu58HiM6+RqBx5u/sLHaSTqjDGv59mu4bZRG6/7vWaJwcTpg6
-         ILgLGvz3rWV+GzSPt/jyZqhUktiA2+CeHu2qjyjkWdmI/YK219O2guoFAIqh8hljD3Uv
-         LNp0i9ekz2HPtM8Lt8xbYV4Sjey4x4i7xzz/pcUQOSToY0wFF5/0lLGTMWEYzfgz+P9z
-         J9xg==
+        d=gmail.com; s=20230601; t=1734534248; x=1735139048; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DJ/oT8+N9IfAzRmBwmiNU/I+85a5NMdCJU6anwzGbwQ=;
+        b=eFeyhwz1LyvmKt59A8eiRmdjUh5ap2XnL8l7CTd8yf0KQDTFEijQLnbxY0Y/ajuhj0
+         c1HDhs0AYIFXLJO4JL1aKZqKloi1ac1oMgPddkxAK8AcMXaRyj03/rdyeqINSOcVK4/n
+         nfpxJ/UGM/nh06NV4/GF3/vGHhUB3uzVbFf7usSV9aFIuVcmSaHiDx2y0n9+HS97JjSz
+         M0BgEvn6lKFDETB3o1siFaqgWWqZx01Pt5bgsU/aBxu1jyYraAZbsXu91GupVokPvyWv
+         3BsHO6e33nn4yuvhyRNG0175Q8QFd2rWlitjvbVrid9vP6mc3HVZidh1aVfDxHG8H95l
+         Dcdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734533218; x=1735138018;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1734534248; x=1735139048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X2DQPTjAgR5Ztrq4xlnbDLIZBfJXq7ZHrsJZOnuFhLo=;
-        b=wMM+ya9c2P58vd23hyc2x4BfuQTrZS8llCQTrD5qqu7rWcPRKHonVygazBSczZsO4V
-         ds3M4J2f6nxDuHjlGa/GiPLPgQu3+Ey2Hq/m5MuwOfIQO4nnBF1ZKergoXg5uCOZTYo6
-         m4iGRiUpzHQGtfXvTvXdJMXVcfgswzIRbAl3PXx3ya0taRnSoAo947u0r3UowJ1IEH0B
-         krA1pPnOZeGBAjxOSNeuiLiVTpZyL3k5LZXcKT2xSCN8ZQWye032Bc8+SuGNwTLD54s7
-         jfojQZCs4fm98vJGjCmzl1r8H7R4Q0HkoxjEtldQY7tcl94J6AwxkrbYhY72T7/I9Rtl
-         u0Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCW19vE1Vg4hadYgLdSG/a0Tb/uRrk/5w5oiMqmP120v52Jkqp/vsWz6nMrtHktGtDeg7oq6Od98Svh6zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0R+wCCUPidQeg2i99i8ygTXBVJIYIZdUIC72NT+JecNqI5YQs
-	DU/GzsO/YoWBsuPksyy1Ko9whvpyA5XYFef477fXndzePe2qCd8NrZzY8g==
-X-Gm-Gg: ASbGncv5j2nLr7Ect5IWgTC9aFzBK3iX2QT5++OSR57GlO93Yk0CMnpzJHz81F8VmTQ
-	2DAnatLwsIA/7UDdcbpIVifvmJPp1VR3NfRpJHPgTNyMoJkdOLfYUAOgXg+rV8B8qmIlQeFYsVu
-	WcJrEIfvxAF4xtT1fUgKs61oLVxRkyYxh8+Hfm/nAW0815DoTCwjAG5/6xTdXDWRxjD5/XYYhrn
-	kvlOb9IOvBU6AhET9iwqif5H9xlU/nJ01/q0acDM5UddZKia0JvTG4G8pn/OnzsBeZNXT2S/KsE
-	ynnXHC+2cELl1DRMyf05s/4Si6uhag==
-X-Google-Smtp-Source: AGHT+IEZIuV3FIS52Vk9aHI/afzsG+ULiqhwbgstrQ9qVA+kRM6gAqq1u4Or30iKF7N82Gh0ZdC2ZQ==
-X-Received: by 2002:a17:902:ce92:b0:216:2b14:b625 with SMTP id d9443c01a7336-218d7223345mr47405615ad.31.1734533217762;
-        Wed, 18 Dec 2024 06:46:57 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e720fbsm77016545ad.269.2024.12.18.06.46.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Dec 2024 06:46:56 -0800 (PST)
+        bh=DJ/oT8+N9IfAzRmBwmiNU/I+85a5NMdCJU6anwzGbwQ=;
+        b=iREiFEL90wrnTn73dy+j3I1qgDLRECIRZdpo75754IfwDNxr+qRXBnKGaiFlTrdm/v
+         XZhkjU2ftdymPDBex5KtGSDxmlwghFHamCmyxTQlMBoiYaqv2K8SSuuZirpG4E5pPg4h
+         UsttTL+vNFh+UzT6fZUIEdvqRKLroZZ7bQ1weI5k2ZnV/mbm6qu4OKcN1LnVHsNR1HNr
+         o/8gx25cwqVt0apZoSUTB+Y6V1vB+X2SmluxPS9sVoJpspt0ERrPaZ7iJvpzlZLn72ww
+         B9+L73F01krrUzoLAPZgYSj781UaVjHFv5AGIWIBfGrDXfgn+Xrlrqn+tvUcjT9xhUHg
+         xO4w==
+X-Gm-Message-State: AOJu0Yzpjrtuafcf3FPR5IKvhY6YLW0H7Ogc49ceCG6iRiDu1oJ3pMaz
+	Qb2yEjJcZlmbh9Eyt4/70V5Am/C1roJlvtvec0Pc7N+b40P9haMFfUKDVw==
+X-Gm-Gg: ASbGncteuNlZApqGAoo/9VhAdo1hUycbYMD692bGVxo19Y+5qHRC+E6EKpbZDw66zxN
+	UUmQgLf/gTm6NH9OPooQdgqrqoRqXuepcmkl4Or/of4pLjpk8Oiqtt97E1X8jb97qXOzb38nOK1
+	upx3ht3xpFFPqAYJA3uRByJWUCj2ZNH8qCdOGvEtO654zhKigIGskSSm29qkojZ3EoHEu+nm+r8
+	OsqbKXbf1irh/8eJjC/sKnYVPYsDyn78km0bpolZuXHubhsIT4VDEEBcVpA7hWLi93LBw==
+X-Google-Smtp-Source: AGHT+IEcSxyLzhp7mVh7JTaClPUx1o78T9T1Wkb9szkYKnvgvF+fI6FFpTWi2c8Whdb0q+7cjk66rg==
+X-Received: by 2002:a05:6a00:4c0a:b0:725:4109:5b5f with SMTP id d2e1a72fcca58-72a8d2461b4mr5953594b3a.8.1734534247707;
+        Wed, 18 Dec 2024 07:04:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bce343sm8938988b3a.185.2024.12.18.07.04.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 07:04:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f195e1ba-b16a-4643-90e2-56328a23fc16@roeck-us.net>
-Date: Wed, 18 Dec 2024 06:46:55 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [RFC/RFT PATCH v2] hwmon: (lm75) Hide register size differences in regmap access functions
+Date: Wed, 18 Dec 2024 07:04:04 -0800
+Message-ID: <20241218150404.2713377-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC/RFT PATCH] hwmon: (lm75) Hide register size differences in
- regmap access functions
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Hardware Monitoring <linux-hwmon@vger.kernel.org>
-References: <20241217225210.3298091-1-linux@roeck-us.net>
- <Z2LEH8mvVf4Uai19@ninjato>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Z2LEH8mvVf4Uai19@ninjato>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/18/24 04:46, Wolfram Sang wrote:
-> On Tue, Dec 17, 2024 at 02:52:10PM -0800, Guenter Roeck wrote:
->> Hide register size differences in regmap access functions to simplify
->> runtime code and to simplify adding support for I3C devices. Also
->> use regmap API functions for bit operations where possible.
->>
->> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> This should help with adding I3C support.
->> Module tested only.
-> 
-> Does that mean 'build tested as a module only'?
-> 
+Hide register size differences in regmap access functions to simplify
+runtime code and to simplify adding support for I3C devices. Also
+use regmap API functions for bit operations where possible.
 
-No, it means tested by loading as module, simulating a LM75 using the SMBus
-stub driver, and running a script on it testing the various attributes.
-The scripts I use are at git@github.com:groeck/module-tests.git.
+For this to work, the 16-bit and 8-bit configuration register has to be
+mapped to a 16-bit value. Unlike other registers, this register is a
+low-byte-first register, presumably for compatibility with chips with
+8-bit wide configuration registers. Hide the differences in the regmap
+access code.
 
-> With the following small patch on top, it works \o/ I suggest that I
-> will include your patch in my series for adding I3C support. I have a
-> few patches on top already. I think this makes dependency handling a bit
-> easier?
-> 
+While at it, enable alarm attribute support for TMP112.
 
-Makes sense. It needs more changes for chips with 16-bit addresses, though.
-I'll send another version.
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Fix accesses to 16-bit configuration register.
+    Use regmap access functions for all operations on config register.
+    Declare regmap bus and use devm_regmap_init().
+    Drop local configuration register copy; let regmap handle bit updates.
 
-> 
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index f2550f623bee..1ef47ba6b458 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -653,6 +653,7 @@ static int lm75_probe(struct i2c_client *client)
->   	if (!data)
->   		return -ENOMEM;
->   
-> +	/* Set this early. Our custom regmap callbacks need it */
->   	dev_set_drvdata(dev, data);
->   
->   	data->client = client;
-> @@ -662,7 +663,7 @@ static int lm75_probe(struct i2c_client *client)
->   	if (IS_ERR(data->vs))
->   		return PTR_ERR(data->vs);
->   
-> -	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
-> +	data->regmap = devm_regmap_init(&client->dev, NULL, data, &lm75_regmap_config);
+    Note: The driver could use additional cleanup, such as using bit macros
+    and using devm_regulator_get_enable(). That is left for another day.
 
-If  devm_regmap_init_i2c() doesn't work, it would be better to define a
-regmap_bus and use it to access the registers. This way the actual regmap
-configuration would be the same for i2c and i3c, and only the regmap bus
-would be different (or at least I hope so). I'll do that in the next version
-of the patch.
+ drivers/hwmon/lm75.c | 131 ++++++++++++++++++++-----------------------
+ 1 file changed, 62 insertions(+), 69 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index 2c2205aec7d4..d3eb5c9c25b1 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -110,7 +110,6 @@ struct lm75_data {
+ 	struct regmap			*regmap;
+ 	struct regulator		*vs;
+ 	u16				orig_conf;
+-	u16				current_conf;
+ 	u8				resolution;	/* In bits, 9 to 16 */
+ 	unsigned int			sample_time;	/* In ms */
+ 	enum lm75_type			kind;
+@@ -276,6 +275,7 @@ static const struct lm75_params device_params[] = {
+ 		.default_sample_time = 125,
+ 		.num_sample_times = 4,
+ 		.sample_times = (unsigned int []){ 125, 250, 1000, 4000 },
++		.alarm = true,
+ 	},
+ 	[tmp175] = {
+ 		.set_mask = 3 << 5,	/* 12-bit mode */
+@@ -335,40 +335,16 @@ static inline long lm75_reg_to_mc(s16 temp, u8 resolution)
+ static int lm75_write_config(struct lm75_data *data, u16 set_mask,
+ 			     u16 clr_mask)
+ {
+-	unsigned int value;
++	int err;
+ 
+-	clr_mask |= LM75_SHUTDOWN << (8 * data->params->config_reg_16bits);
+-	value = data->current_conf & ~clr_mask;
+-	value |= set_mask;
++	err = regmap_update_bits(data->regmap, LM75_REG_CONF,
++				 clr_mask | LM75_SHUTDOWN, set_mask);
++	if (err)
++		return err;
+ 
+-	if (data->current_conf != value) {
+-		s32 err;
+-		if (data->params->config_reg_16bits)
+-			err = regmap_write(data->regmap, LM75_REG_CONF, value);
+-		else
+-			err = i2c_smbus_write_byte_data(data->client,
+-							LM75_REG_CONF,
+-							value);
+-		if (err)
+-			return err;
+-		data->current_conf = value;
+-	}
+ 	return 0;
+ }
+ 
+-static int lm75_read_config(struct lm75_data *data)
+-{
+-	int ret;
+-	unsigned int status;
+-
+-	if (data->params->config_reg_16bits) {
+-		ret = regmap_read(data->regmap, LM75_REG_CONF, &status);
+-		return ret ? ret : status;
+-	}
+-
+-	return i2c_smbus_read_byte_data(data->client, LM75_REG_CONF);
+-}
+-
+ static irqreturn_t lm75_alarm_handler(int irq, void *private)
+ {
+ 	struct device *hwmon_dev = private;
+@@ -418,7 +394,8 @@ static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
+ 		if (attr == hwmon_temp_alarm) {
+ 			switch (data->kind) {
+ 			case as6200:
+-				*val = (regval >> 5) & 0x1;
++			case tmp112:
++				*val = (regval >> 13) & 0x1;
+ 				break;
+ 			default:
+ 				return -EINVAL;
+@@ -469,7 +446,6 @@ static int lm75_write_temp(struct device *dev, u32 attr, long temp)
+ static int lm75_update_interval(struct device *dev, long val)
+ {
+ 	struct lm75_data *data = dev_get_drvdata(dev);
+-	unsigned int reg;
+ 	u8 index;
+ 	s32 err;
+ 
+@@ -489,19 +465,14 @@ static int lm75_update_interval(struct device *dev, long val)
+ 		break;
+ 	case tmp112:
+ 	case as6200:
+-		err = regmap_read(data->regmap, LM75_REG_CONF, &reg);
+-		if (err < 0)
+-			return err;
+-		reg &= ~0x00c0;
+-		reg |= (3 - index) << 6;
+-		err = regmap_write(data->regmap, LM75_REG_CONF, reg);
++		err = regmap_update_bits(data->regmap, LM75_REG_CONF,
++					 0xc000, (3 - index) << 14);
+ 		if (err < 0)
+ 			return err;
+ 		data->sample_time = data->params->sample_times[index];
+ 		break;
+ 	case pct2075:
+-		err = i2c_smbus_write_byte_data(data->client, PCT2075_REG_IDLE,
+-						index + 1);
++		err = regmap_write(data->regmap, PCT2075_REG_IDLE, index + 1);
+ 		if (err)
+ 			return err;
+ 		data->sample_time = data->params->sample_times[index];
+@@ -598,6 +569,39 @@ static bool lm75_is_volatile_reg(struct device *dev, unsigned int reg)
+ 	return reg == LM75_REG_TEMP || reg == LM75_REG_CONF;
+ }
+ 
++static int lm75_i2c_reg_read(void *context, unsigned int reg, unsigned int *val)
++{
++	struct lm75_data *data = context;
++	struct i2c_client *client = data->client;
++	int ret;
++
++	if (reg == LM75_REG_CONF) {
++		if (!data->params->config_reg_16bits)
++			ret = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
++		else
++			ret = i2c_smbus_read_word_data(client, LM75_REG_CONF);
++	} else {
++		ret = i2c_smbus_read_word_swapped(client, reg);
++	}
++	if (ret < 0)
++		return ret;
++	*val = ret;
++	return 0;
++}
++
++static int lm75_i2c_reg_write(void *context, unsigned int reg, unsigned int val)
++{
++	struct lm75_data *data = context;
++	struct i2c_client *client = data->client;
++
++	if (reg == PCT2075_REG_IDLE ||
++	    (reg == LM75_REG_CONF && !data->params->config_reg_16bits))
++		return i2c_smbus_write_byte_data(client, reg, val);
++	else if (reg == LM75_REG_CONF)
++		return i2c_smbus_write_word_data(client, reg, val);
++	return i2c_smbus_write_word_swapped(client, reg, val);
++}
++
+ static const struct regmap_config lm75_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 16,
+@@ -610,6 +614,11 @@ static const struct regmap_config lm75_regmap_config = {
+ 	.use_single_write = true,
+ };
+ 
++static const struct regmap_bus lm75_i2c_regmap_bus = {
++	.reg_read = lm75_i2c_reg_read,
++	.reg_write = lm75_i2c_reg_write,
++};
++
+ static void lm75_disable_regulator(void *data)
+ {
+ 	struct lm75_data *lm75 = data;
+@@ -620,9 +629,8 @@ static void lm75_disable_regulator(void *data)
+ static void lm75_remove(void *data)
+ {
+ 	struct lm75_data *lm75 = data;
+-	struct i2c_client *client = lm75->client;
+ 
+-	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
++	regmap_write(lm75->regmap, LM75_REG_CONF, lm75->orig_conf);
+ }
+ 
+ static int lm75_probe(struct i2c_client *client)
+@@ -640,6 +648,9 @@ static int lm75_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	/* needed by custom regmap callbacks */
++	dev_set_drvdata(dev, data);
++
+ 	data->client = client;
+ 	data->kind = (uintptr_t)i2c_get_match_data(client);
+ 
+@@ -647,7 +658,8 @@ static int lm75_probe(struct i2c_client *client)
+ 	if (IS_ERR(data->vs))
+ 		return PTR_ERR(data->vs);
+ 
+-	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
++	data->regmap = devm_regmap_init(dev, &lm75_i2c_regmap_bus, data,
++					&lm75_regmap_config);
+ 	if (IS_ERR(data->regmap))
+ 		return PTR_ERR(data->regmap);
+ 
+@@ -673,13 +685,10 @@ static int lm75_probe(struct i2c_client *client)
+ 		return err;
+ 
+ 	/* Cache original configuration */
+-	status = lm75_read_config(data);
+-	if (status < 0) {
+-		dev_dbg(dev, "Can't read config? %d\n", status);
+-		return status;
+-	}
++	err = regmap_read(data->regmap, LM75_REG_CONF, &status);
++	if (err)
++		return err;
+ 	data->orig_conf = status;
+-	data->current_conf = status;
+ 
+ 	err = lm75_write_config(data, data->params->set_mask,
+ 				data->params->clr_mask);
+@@ -972,32 +981,16 @@ static int lm75_detect(struct i2c_client *new_client,
+ #ifdef CONFIG_PM
+ static int lm75_suspend(struct device *dev)
+ {
+-	int status;
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct lm75_data *data = dev_get_drvdata(dev);
+ 
+-	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+-	if (status < 0) {
+-		dev_dbg(&client->dev, "Can't read config? %d\n", status);
+-		return status;
+-	}
+-	status = status | LM75_SHUTDOWN;
+-	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
+-	return 0;
++	return regmap_update_bits(data->regmap, LM75_REG_CONF, LM75_SHUTDOWN, LM75_SHUTDOWN);
+ }
+ 
+ static int lm75_resume(struct device *dev)
+ {
+-	int status;
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct lm75_data *data = dev_get_drvdata(dev);
+ 
+-	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+-	if (status < 0) {
+-		dev_dbg(&client->dev, "Can't read config? %d\n", status);
+-		return status;
+-	}
+-	status = status & ~LM75_SHUTDOWN;
+-	i2c_smbus_write_byte_data(client, LM75_REG_CONF, status);
+-	return 0;
++	return regmap_update_bits(data->regmap, LM75_REG_CONF, LM75_SHUTDOWN, 0);
+ }
+ 
+ static const struct dev_pm_ops lm75_dev_pm_ops = {
+-- 
+2.45.2
 
