@@ -1,50 +1,48 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF540158D96
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 07:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D49D1552EE
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Dec 2024 07:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734507710; cv=none; b=WCBKsirn45HOczIHrh3bYnFUskT9nBMaVsM2/e845oaUpRelH+bn5EE+N4LSE0EXzLq5IyhvQb5bbEmQwMhgzmDGp0PCVN6rPrmEzQk+U+EeVx/YqV3zcIW2IVh/I44jqqDxJG4C2DyTCra07CN2lw6cKDLSrwRSjVL/aCXTLMQ=
+	t=1734507711; cv=none; b=WsXqd0xaMrItefchaqtV7SpIFcXnpI5NDZE0Ugri3iJEbp2NT2aWYI5XnaOP3RvXe2rgCFlc3DceiP3wlf63KFa2C9XV/cQof7s1fE7bpTtzq+SIYdOH1RVpWUcPj3hPNQy4C+0Q0duKk/2TDCPhWg0jYaUnq/lp1vMvq7fOMYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734507710; c=relaxed/simple;
-	bh=FrZgWB2yWo4bERxGxTtSd9dtQyUEytmgA/wGVCi5Dqc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jDvF4hBH2JGXrPhR6DzkNcCuD13ycWCwzhANlras194Gtow++MzL+kYpaxEV5bH4dDBs94DkxZDmLcMqt9F3XZhmSq0k7MssDKM3vtwBkxLZk172yBrrpylB9rr1zoqbnoEYZrHJQHQcq3zQJGxCL6zGRNmxGG4wzWj/Sy+aaYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=If3LkKEs; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1734507711; c=relaxed/simple;
+	bh=bXhT9rpHUdO8PJgL+gmGGXnM0Cz5S8TN2lT0wa07lvY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=klc/3wXm2p4y3jFXZCMcipF9OMEP2xd8qhTGAtVSszSKFWc4NM155IwHkPjIc7UDLXoeF3WEtrQ22SaKGVd9pLrHcNKDy6bI7l8ktjsk8NoRqHTLIsGJc0Xlo7ew9HcyJuP4v4q/3eOrW/c/Emn6msP6WoR1K+b4J8jGQK5K+hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=DH0M5r7l; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="If3LkKEs"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="DH0M5r7l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=a98PHnlZySAGXXFpfVOSs4b90C2ExeIXDfLvrYzmPcM=; b=If3LkK
-	Es7MnoBnAgkVe1qEPfroyWCkdFAjg0GUbL/QdxUyQ2e5TaFhnZQjRm4lxnf7SE2I
-	bozSlwOvcAphsXroxS+CtfwESIJA0zrOJ8Z8ZrCnPqqt+gjsIrvMISZyEZpvF9FO
-	ZFeXnUnTR7cvu0SpvZg2nxMq8XeIUWf8GexrDREOhwb0O8gNpe/aHT2yk+rvIf8j
-	isv+8F0aMdHn6q82hWXsWDBkGZHiCi5y8AT3NPo4MKAqEdDF6Oyvj8MBZa2n8X0W
-	FsV6c1EuZS1SKeiCXB6guvOGz2lA5mCqlJCC9jL0fNc7N5K+DArAFBtt5RNe8aPM
-	3bC89HDKsBLvddLw==
-Received: (qmail 204808 invoked from network); 18 Dec 2024 08:41:46 +0100
+	:mime-version:content-transfer-encoding; s=k1; bh=EHPeC04wnRnRDJ
+	/g3YAhOvHpQP1I3YPM8zg5kKrpmvA=; b=DH0M5r7lTDwQvVwrzab+9O6PALd+uY
+	r2mJFIbontsEgL8aU0LE1u5dZ5IuxMhg2dat40BwPPC7mQIlFz7VJWPPQV6ewMAL
+	RSn7l4k5IKI8++EDWidh35UH49OSx6EFIuWFNVLbkKdPc2waMRi/0Ga9hYupvj2V
+	Gb+VGaLMCiqtjRKZf7GpMuPuhpLGicz1xxlo48fIAgM2SJeXLI70qS6gq4TmpCE5
+	nSmhTU6drggJ02UWW8EzJ6STW2FrEeYX7UA0HeANqDZ7brt9xcpAbp3SsfHWkmoT
+	QcI+OkICYTLLFuzHPaUtU24hU/uT97atEYHbS9XMZtvj/dHf3qU5Mlqg==
+Received: (qmail 204755 invoked from network); 18 Dec 2024 08:41:46 +0100
 Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Dec 2024 08:41:46 +0100
-X-UD-Smtp-Session: l3s3148p1@aS23i4YpSpwujnsY
+X-UD-Smtp-Session: l3s3148p1@G2mqi4YpPJwujnsY
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-doc@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: hwmon: lm75: Add NXP P3T1755
-Date: Wed, 18 Dec 2024 08:41:32 +0100
-Message-ID: <20241218074131.4351-6-wsa+renesas@sang-engineering.com>
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 0/3] Add NXP P3T1755 and fix LM75B docs
+Date: Wed, 18 Dec 2024 08:41:31 +0100
+Message-ID: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
-References: <20241218074131.4351-5-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,29 +51,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add this LM75 compatible sensor which needs a separate entry because of
-its default sampling time and SMBusAlert handling.
+This small series adds support for the P3T1755 temp sensor. Ultimately,
+I want to support it via I3C. But for now, start simple and add I2C
+support, so we have something to compare against. Fix the LM75B
+datasheet location while here.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Changes since v1 are described in the patches.
 
-Change since v1: added patch description
 
- Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Wolfram Sang (3):
+  dt-bindings: hwmon: lm75: Add NXP P3T1755
+  hwmon: (lm75) Add NXP P3T1755 support
+  hwmon: (lm75) Fix LM75B document link
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-index 29bd7460cc26..c38255243f57 100644
---- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-@@ -28,6 +28,7 @@ properties:
-       - maxim,max31725
-       - maxim,max31726
-       - maxim,mcp980x
-+      - nxp,p3t1755
-       - nxp,pct2075
-       - st,stds75
-       - st,stlm75
+ Documentation/devicetree/bindings/hwmon/lm75.yaml |  1 +
+ Documentation/hwmon/lm75.rst                      |  8 +++++---
+ drivers/hwmon/lm75.c                              | 13 +++++++++++++
+ 3 files changed, 19 insertions(+), 3 deletions(-)
+
 -- 
 2.45.2
 
