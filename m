@@ -1,243 +1,77 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD6D1D79B1
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Dec 2024 22:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907281EE7A7;
+	Thu, 19 Dec 2024 23:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734648956; cv=none; b=fFhRELTgFD94xCoyZShW991h/2X5wYMXcVlmY2SMHmMvmpBn+74h/T3G0ago3gC0FnO8B5SM0PW5f4yOnOFiC50vKHgtU1VIyI/5bEaBW6VEVpEO2N9HcFEg6IlrUCUsaN5GJSTMUuTBE1OKvDpPCCJA7+o3/QIw01Ojos9ZhvI=
+	t=1734649207; cv=none; b=n3pm9QnSQPMWY13cCac3UIbrtbhCgmCI48Y9AJ+I8qtCqgJs0OA3jjfvrLZa4Tf38EN79eeeL+qNZlxMd6Y/6OA+oZ+Q0IW3POCLv4B50hzHZjcf2jAsVuZjR7f89xFxzEt6l1NcmZZ2OXcGERvOQ2IZnRDzDdpTtfpGgvyh3wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734648956; c=relaxed/simple;
-	bh=IYutn8QVXUq1NW9w+oqTmRp9Vvw03U0/CgCCOfRgy4k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O1qrSYQd1eVOiS+RINyibsA8e26T8n0WgFsPb6MyXDWgO3uHVTHrt2z/Bb+UZ/h2Jdrdw8ixCVv+g36j0t3cZPOF8KT5zBXDTMcHSupSX13f884dLOYzhhIJ6Pq+ZlEvY2Wj704lnT9Qg6W+RMbOWY2tGa2u+At0Mw+5/3TRoXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hT2p9NjT; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1734649207; c=relaxed/simple;
+	bh=DjlXfah4HS0kWWVaSjLbf/32vxkVDn/szp7UNg9Rrh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=apt1UnPZgpt2YWIMd7U+dP8Q17Jf1SXZUheqTnpWVWBP6IaBXAxPaWoZXAYslHKqk1+x+Sdw9qWzBF/r0Q3jwVyUTnTrhLk8/TCKM1oJo8rGU00mmnCtkD11ZrCz9tlnaw6Hu8c7eEbV/+ics6nQw6zbfOC8l6dOEiay40sR/fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R4b0dy0u; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hT2p9NjT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=cCevjPCP/5BMXHpNkBn3G/0jFCQhE2W4vuag2CSBZ0Q=; b=hT2p9N
-	jT4jjeoZfhuLYDU+al4pNn4PY99Qk2R4/7tkrTt5eW5ZqcK4vHHburwF5eyk1AdK
-	KLkx/HCikMGoPL1v96JteC0FzVuCpkZLPwCSmGjs4mwtFVLjGyQePmuEtDDwtd9q
-	fZWh9ZPw+KSls3CJ0PCqg61OrWi53XYLXq7sfJUcU1wFO3robZgIvLPaUqzDu1/z
-	S/1cUTUG6piu9v6TfCrCWbBqgOJbTCJP1QvmznnCYRlonTSFzYKvKWUQIbmDZnZg
-	fym7/8uhpznYrh/hZTISJuCBcWrpj9thVkToAKeE2wA0JUkW8CUmmGZmKj6+HJ9N
-	94+za9fv+3bD7l1Q==
-Received: (qmail 826711 invoked from network); 19 Dec 2024 23:55:51 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Dec 2024 23:55:51 +0100
-X-UD-Smtp-Session: l3s3148p1@7fOSbqcpKKkujnsY
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [RFC PATCH 5/5] hwmon: (lm75) add I3C support for P3T1755
-Date: Thu, 19 Dec 2024 23:55:27 +0100
-Message-ID: <20241219225522.3490-12-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241219225522.3490-7-wsa+renesas@sang-engineering.com>
-References: <20241219225522.3490-7-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R4b0dy0u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734649206; x=1766185206;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DjlXfah4HS0kWWVaSjLbf/32vxkVDn/szp7UNg9Rrh8=;
+  b=R4b0dy0uSX1zmpOuztnXuaTtzWWdB6+XbLHnQBReSw40X+QhU024GqlA
+   LU0GSev3/niDLrr8Znrnrp0lClQ0Vjy3CJ41CjTon7ZeikCsI3msmnpu1
+   47XFR/08AaPEbE+zrK+6pMD6R84GWIM9lEo/ppvEas43TrfzgrIiU0Ytz
+   KxrnwxkSbNEPNnnl7BdTffwuJezoCCzxeUT+gHLHhDai9u6oWkaBlD7ku
+   i7dNLpNrOFRAdpJO4wBx1ZS/+wvkic3hnZUFsl7XZ2Rm+fRTB9oJRMVrs
+   iEO8szwxcctpAwmhLuGI+NTOiWCBUXV9gDLMZmmn/ESxaxxGrdGzBGyzk
+   Q==;
+X-CSE-ConnectionGUID: s4b5p7I5Q/+zJ4Pr5d/f1Q==
+X-CSE-MsgGUID: rw64eFPaQL2yFNx2Px4nTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="60572202"
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="60572202"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 15:00:05 -0800
+X-CSE-ConnectionGUID: vXHSdRxTSPigBGyBwHMj/A==
+X-CSE-MsgGUID: 5rQNjeneQqeYHef0oBbQJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="98166882"
+Received: from ldmartin-desk2.corp.intel.com (HELO ldmartin-desk2) ([10.125.108.87])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 15:00:04 -0800
+Date: Thu, 19 Dec 2024 16:59:57 -0600
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	Jean Delvare <jdelvare@suse.com>
+Subject: Suspend/resume failing due to SPD5118
+Message-ID: <dmx2x5sziux7ubk5fcas2nmj4lt3vpalr5gc7qmmwq2megmp24@24vmehdkle3x>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-Introduce I3C support by defining I3C accessors for regmap and
-implementing an I3C driver. Enable I3C for the NXP P3T1755.
+Hi,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+In our CI for xe and i915 drivers we are noticing some issues
+with suspend/resume with these error messages from spd5118:
 
-Two things I would like to discuss:
+<3> [120.648546] spd5118 3-0051: PM: dpm_run_callback(): spd5118_resume [spd5118] returns -110
+<3> [120.648598] spd5118 3-0051: PM: failed to resume async: error -110
+<3> [122.825989] spd5118 3-0053: PM: failed to resume async: error -110
 
-- Shall we reuse i2c_device_id's to get a proper name for the chip?
-  Looks strange, but adding all the info again for I3C looks strange as
-  well
+Example:
+https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/3885
 
-- are there some suitable kernel helpers for dealing with big/little
-  endianess in lm75_i3c_regmap_bus? Note: I also tried to use the
-  non-*_reg callbacks for the regmap bus. But the constified
-  void-pointers make it ugly as we need to change buffers because some
-  registers are big endian and some little endian.
+(there are a few other issues in which this error shows up, but this is
+the the cleanest one that doesn't mix with other bugs)
 
- drivers/hwmon/Kconfig |   2 +
- drivers/hwmon/lm75.c  | 114 +++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 115 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index dd376602f3f1..86897b4d105f 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1412,7 +1412,9 @@ config SENSORS_LM73
- config SENSORS_LM75
- 	tristate "National Semiconductor LM75 and compatibles"
- 	depends on I2C
-+	depends on I3C || !I3C
- 	select REGMAP_I2C
-+	select REGMAP_I3C if I3C
- 	help
- 	  If you say yes here you get support for one common type of
- 	  temperature sensor chip, with models including:
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 8b4f324524da..2979f1746585 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -11,6 +11,7 @@
- #include <linux/slab.h>
- #include <linux/jiffies.h>
- #include <linux/i2c.h>
-+#include <linux/i3c/device.h>
- #include <linux/hwmon.h>
- #include <linux/err.h>
- #include <linux/of.h>
-@@ -112,6 +113,8 @@ struct lm75_data {
- 	unsigned int			sample_time;	/* In ms */
- 	enum lm75_type			kind;
- 	const struct lm75_params	*params;
-+	u8				reg_buf[1];
-+	u8				val_buf[3];
- };
- 
- /*-----------------------------------------------------------------------*/
-@@ -606,6 +609,77 @@ static const struct regmap_bus lm75_i2c_regmap_bus = {
- 	.reg_write = lm75_i2c_reg_write,
- };
- 
-+static int lm75_i3c_reg_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct lm75_data *data = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_priv_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 1,
-+			.data.out = data->reg_buf,
-+		},
-+		{
-+			.rnw = true,
-+			.len = 2,
-+			.data.out = data->val_buf,
-+		},
-+	};
-+	int ret;
-+
-+	data->reg_buf[0] = reg;
-+
-+	if (reg == LM75_REG_CONF && !data->params->config_reg_16bits)
-+		xfers[1].len--;
-+
-+	ret = i3c_device_do_priv_xfers(i3cdev, xfers, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (reg == LM75_REG_CONF && !data->params->config_reg_16bits)
-+		*val = data->val_buf[0];
-+	else if (reg == LM75_REG_CONF)
-+		*val = data->val_buf[0] | (data->val_buf[1] << 8);
-+	else
-+		*val = data->val_buf[1] | (data->val_buf[0] << 8);
-+
-+	return 0;
-+}
-+
-+static int lm75_i3c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct lm75_data *data = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_priv_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 3,
-+			.data.out = data->val_buf,
-+		},
-+	};
-+
-+	data->val_buf[0] = reg;
-+
-+	if (reg == PCT2075_REG_IDLE ||
-+	    (reg == LM75_REG_CONF && !data->params->config_reg_16bits)) {
-+		xfers[0].len--;
-+		data->val_buf[1] = val & 0xff;
-+	} else if (reg == LM75_REG_CONF) {
-+		data->val_buf[1] = val & 0xff;
-+		data->val_buf[2] = (val >> 8) & 0xff;
-+	} else {
-+		data->val_buf[2] = val & 0xff;
-+		data->val_buf[1] = (val >> 8) & 0xff;
-+	}
-+
-+	return i3c_device_do_priv_xfers(i3cdev, xfers, 1);
-+}
-+
-+static const struct regmap_bus lm75_i3c_regmap_bus = {
-+	.reg_read = lm75_i3c_reg_read,
-+	.reg_write = lm75_i3c_reg_write,
-+};
-+
- static const struct regmap_config lm75_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
-@@ -750,6 +824,36 @@ static const struct i2c_device_id lm75_i2c_ids[] = {
- };
- MODULE_DEVICE_TABLE(i2c, lm75_i2c_ids);
- 
-+static const struct i3c_device_id lm75_i3c_ids[] = {
-+	I3C_DEVICE(0x011b, 0x152a, (void *)p3t1755),
-+	{ /* LIST END */ }
-+};
-+MODULE_DEVICE_TABLE(i3c, lm75_i3c_ids);
-+
-+static int lm75_i3c_probe(struct i3c_device *i3cdev)
-+{
-+	struct device *dev = i3cdev_to_dev(i3cdev);
-+	const struct i3c_device_id *id;
-+	struct regmap *regmap;
-+	const char *name;
-+	unsigned int i;
-+
-+	regmap = devm_regmap_init(dev, &lm75_i3c_regmap_bus, i3cdev, &lm75_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	id = i3c_device_match_id(i3cdev, lm75_i3c_ids);
-+
-+	/* Reuse i2c_device_ids is OK? Or do we want a third copy of this data in lm75_i3c_ids? */
-+	for (i = 0; lm75_i2c_ids[i].name[0]; i++)
-+		if ((kernel_ulong_t)id->data == lm75_i2c_ids[i].driver_data)
-+			break;
-+
-+	name = lm75_i2c_ids[i].name[0] ? lm75_i2c_ids[i].name : "lm75compatible";
-+
-+	return lm75_generic_probe(dev, name, id->data, 0, regmap);
-+}
-+
- static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 	{
- 		.compatible = "adi,adt75",
-@@ -1008,7 +1112,15 @@ static struct i2c_driver lm75_i2c_driver = {
- 	.address_list	= normal_i2c,
- };
- 
--module_i2c_driver(lm75_i2c_driver);
-+static struct i3c_driver lm75_i3c_driver = {
-+	.driver = {
-+		.name = "lm75_i3c",
-+	},
-+	.probe = lm75_i3c_probe,
-+	.id_table = lm75_i3c_ids,
-+};
-+
-+module_i3c_i2c_driver(lm75_i3c_driver, &lm75_i2c_driver)
- 
- MODULE_AUTHOR("Frodo Looijaard <frodol@dds.nl>");
- MODULE_DESCRIPTION("LM75 driver");
--- 
-2.45.2
-
+thanks
+Lucas De Marchi
