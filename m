@@ -1,288 +1,113 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5ED154C15;
-	Thu, 19 Dec 2024 04:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1E221479;
+	Thu, 19 Dec 2024 09:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734580845; cv=none; b=Di1xqm+9vzwSPrjtlUFon9mg563wCvL3S34FaWZx59ceomX5XU8dmeoF9hnHpNOCbpbp6WtAqzXM//ax9bzAsG5UL5x0Nwh+/oy4GfGkYLRqqVeyzh9uQj7OekZIor62J2vkGTRKtMh+GfmlM5ECh97nABhL4VA9qsDMnKxokhM=
+	t=1734601693; cv=none; b=jhZlrOR02hgIYwJSnpQEosQap8jQ7M8WRo7Y4XrBat8AQeyT2pxqfdJsSd8fARcXPs8LbP0LjfY3SFGZyNtyIpq+im5ATq9WQDI8KWGB4R6WBtdKGZOTZw7A0xwdoIbIITZolBndh3hhBcdvQnFfDJuI8XSXS6EhtwXbbvWSqaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734580845; c=relaxed/simple;
-	bh=aCHh2G7EWiKwxm9ib7+qdMCaZFuMf8zh3XvD9QEzuvM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=Xc0TV6NywnODu9RCjt4Wg2XA5Plx1orBGLhZ73gajPaJrxuaWwxU2tPUIYGEhPdSDoJ+fI2/WV9uZYnAnmDvby8HrDc2N7Bbss1LtNVKly66t0mEjrlTXmJhHGiB3og0kSsaipo2gpotMnEACfRObJJFzu2+0/uqOwOb7UGXVrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4YDGc94MVnzqTpv;
-	Thu, 19 Dec 2024 11:43:37 +0800 (CST)
-Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 563A4180087;
-	Thu, 19 Dec 2024 11:45:23 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 19 Dec 2024 11:45:23 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 19 Dec
- 2024 11:45:22 +0800
-Message-ID: <b2ea68c5-2bcb-3d3a-565a-94a35a48629e@huawei.com>
-Date: Thu, 19 Dec 2024 11:45:21 +0800
+	s=arc-20240116; t=1734601693; c=relaxed/simple;
+	bh=IY99j2Q20rM30ml7L3U7YJsEZRSn/kXFfUZdj1ziLuA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dnwRMAALE61ODgxh9DZf5AdnhnYPKwD22on1f2wZ8jc/7Vfk8RRUJ3n4fbc8e7nIPzlxsQjYASY23Aw1sKeZ8mwMX47zQF9DfkwFACosa5LUNfTMYEG/yOm4cmkZQcs3jXmW39zJxpCBrqi4zRo8HzKA+Jd8eRMoh11/RiF3odg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YWC+Cr3r; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWC+Cr3r"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54026562221so497001e87.1;
+        Thu, 19 Dec 2024 01:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734601689; x=1735206489; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8HGKDXnY4ZB5Jv2Zs9qpjyKQO/yNEa9cCq9vQzdr+yI=;
+        b=YWC+Cr3rT0ANLBbSH1QMp4xCckRXe0kHvYDen/nRAiHPclFxOjbdiLvP/OGrFbIbtZ
+         TRHrTCLUZFz64kI4Y3XXiO/ppdU59exbY2wJtvK6zD1jedC9jNCjEF9EZvGhc9q3x2op
+         hScXRM7Lnv64fsaEEGk16PXU6Fgi7qQvCy9QSRbZsqZIWw4fpw07MGsw25gx+y6DKdWU
+         J0QUxoPFDIffza/h5XLyXlhxKailcY802NfgqVfUo8yPDrwt0aTnApqritS7qm7IWRwd
+         dgYWs5yJob3ZccWe/TodolzR8Yfm9acmYUr96M1h6y7RXzZn8GF7FKsLGFLHb0Ilvg37
+         Y2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734601689; x=1735206489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8HGKDXnY4ZB5Jv2Zs9qpjyKQO/yNEa9cCq9vQzdr+yI=;
+        b=Crr1r1baW6PSS2BnZk7JJEVOnyX2HpUvjg4qFP34SIuE+8l2TZgur7S54lw1sK2mwA
+         Nmam2u/u2q8eynkl4i1DY/ibSZjrAaY8503mo5nsnGHSjZTYStAQvdITux0fQ0fG+q4S
+         4jgYF9uje9nwg7Vc8mib2VGAMUOCTaI03SY3JISyXlQo6fnQM2BaLurC9wt6wRa+88J9
+         28M7pn8qzyZ4LMLszaHUW1FkBadiLL1MDt2ado/fOF4840zW2wv5l2c5QIxl17YaXU9W
+         ETz93yxr/h4KN/qbdQw/uaiflLVuzw9TrVhojN/yDyZ2I1lrvmoxhQQQQW81wiIT1zd3
+         lYRg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5bK5Saak+G5nLSX5A4cq4CyumiC7dZoi0fJfaq/RBbYWyF8z8jig7JFVYTokztiIhOes+3KHFS+1GXV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykKJZz9C+NqmWHCtls7KndglgxV6XFAOEMbZHxEvI5nIV4VLhM
+	5SfM4RWwxcYhRSI0EGRFFpmf7Ryd3DC2z8eTk387QdbtLf7nhi0FHNJpufQ35GWvRA==
+X-Gm-Gg: ASbGncuGcfO0oWdSnhel4JPhIkQa+ZG2OyI7XsKb9IvpDxVX9aQvy09yhiBXrBRBb0F
+	mDddRIFpz8D8ZJyVzOMwfX5S1rjgoI0AkBabIlbobmYfcYVL7jOPeQX7jANmCJqDLO4Zq6lq0Sq
+	cLQnCnPOw2F+gmvp1iqu1HLAPVqe1Deg8pRmU5hn1EBEHK4L5PSmfjFUGmNQRmLzAN1AfsUe+ZW
+	c8omsRdN4cDIPc3dmAaA5Ug7a2YzNPMr/OBbCaKTXrk7bMqYaE8xGGhsezYXlbFyH+mHJULWQtZ
+X-Google-Smtp-Source: AGHT+IEXmFpprXMJrI+CzYtTYY/MwPDxBNQMSJUsGk3+8LFyM1N/k/B/ssgmI9R5kiUTa0/wuZjkqg==
+X-Received: by 2002:a05:6512:401b:b0:53f:167e:390f with SMTP id 2adb3069b0e04-54221030739mr721275e87.53.1734601689263;
+        Thu, 19 Dec 2024 01:48:09 -0800 (PST)
+Received: from kda-ThinkPad-X220-Tablet.. ([2a00:1fa0:487e:2931:7fa2:8578:ea53:de59])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54223813604sm123618e87.132.2024.12.19.01.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 01:48:08 -0800 (PST)
+From: Denis Kirjanov <kirjanov@gmail.com>
+To: robert.marko@sartura.hr,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Denis Kirjanov <kirjanov@gmail.com>
+Subject: [PATCH] hwmon: pmbus: dps920ab: Add ability to instantiate through i2c
+Date: Thu, 19 Dec 2024 12:47:55 +0300
+Message-ID: <20241219094755.14098-1-kirjanov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 1/4] hwmon: (acpi_power_meter) Fix using uninitialized
- variables
-From: "lihuisong (C)" <lihuisong@huawei.com>
-To: Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <jdelvare@suse.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>
-References: <20241125093415.21719-1-lihuisong@huawei.com>
- <20241125093415.21719-2-lihuisong@huawei.com>
- <aa6e1c02-b8bf-4d25-ad21-2018af72e16f@roeck-us.net>
- <b801388b-6bc7-5e96-dd29-e68ed8c970df@huawei.com>
- <f9fc4989-f416-4d88-bc3e-ab7b9fddb4d9@roeck-us.net>
- <c66d312a-098a-84d3-0895-02d78ae3ecc9@huawei.com>
- <77fce1aa-96eb-4c3c-ab0a-a33de46b333b@roeck-us.net>
- <87367d88-b10e-29d6-2712-f8f5c24e52a4@huawei.com>
- <1ce7718c-0bf8-4009-9240-fc6e2363ed54@roeck-us.net>
- <2068a450-7752-c47b-edfc-cb2a00ac4402@huawei.com>
-In-Reply-To: <2068a450-7752-c47b-edfc-cb2a00ac4402@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemn100009.china.huawei.com (7.202.194.112)
 
+Now we can bind the driver with a command like:
 
-在 2024/12/12 11:00, lihuisong (C) 写道:
->
-> 在 2024/12/12 9:51, Guenter Roeck 写道:
->> On 11/26/24 19:43, lihuisong (C) wrote:
->>> Hi Guenter，
->>>
->>> How about the modification as below? But driver doesn't know what 
->>> the time is to set resource->power_alarm to false.
->>>
->> It's a start, but incomplete because power_alarm must be reset.
->>
->> See below.
->>
->>> 在 2024/11/27 0:19, Guenter Roeck 写道:
->>>> On 11/25/24 23:03, lihuisong (C) wrote:
->>>>>
->>>>> 在 2024/11/26 12:04, Guenter Roeck 写道:
->>>>>> On 11/25/24 17:56, lihuisong (C) wrote:
->>>>>>> Hi Guente,
->>>>>>>
->>>>>>> Thanks for your timely review.
->>>>>>>
->>>>>>> 在 2024/11/26 0:03, Guenter Roeck 写道:
->>>>>>>> On 11/25/24 01:34, Huisong Li wrote:
->>>>>>>>> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
->>>>>>>>> acpi_power_meter_resource structure. However, these two fields 
->>>>>>>>> are just
->>>>>>>>> updated when user query 'power' and 'cap' attribute, or 
->>>>>>>>> hardware enforced
->>>>>>>>> limit. If user directly query the 'power1_alarm' attribute 
->>>>>>>>> without queryng
->>>>>>>>> above two attributes, driver will use the uninitialized 
->>>>>>>>> variables to judge.
->>>>>>>>> In addition, the 'power1_alarm' attribute needs to update 
->>>>>>>>> power and cap to
->>>>>>>>> show the real state.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->>>>>>>>> ---
->>>>>>>>>   drivers/hwmon/acpi_power_meter.c | 10 ++++++++++
->>>>>>>>>   1 file changed, 10 insertions(+)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/hwmon/acpi_power_meter.c 
->>>>>>>>> b/drivers/hwmon/acpi_power_meter.c
->>>>>>>>> index 2f1c9d97ad21..4c3314e35d30 100644
->>>>>>>>> --- a/drivers/hwmon/acpi_power_meter.c
->>>>>>>>> +++ b/drivers/hwmon/acpi_power_meter.c
->>>>>>>>> @@ -396,6 +396,9 @@ static ssize_t show_val(struct device *dev,
->>>>>>>>>       struct acpi_device *acpi_dev = to_acpi_device(dev);
->>>>>>>>>       struct acpi_power_meter_resource *resource = 
->>>>>>>>> acpi_dev->driver_data;
->>>>>>>>>       u64 val = 0;
->>>>>>>>> +    int ret;
->>>>>>>>> +
->>>>>>>>> +    guard(mutex)(&resource->lock);
->>>>>>>>>         switch (attr->index) {
->>>>>>>>>       case 0:
->>>>>>>>> @@ -423,6 +426,13 @@ static ssize_t show_val(struct device *dev,
->>>>>>>>>               val = 0;
->>>>>>>>>           break;
->>>>>>>>>       case 6:
->>>>>>>>> +        ret = update_meter(resource);
->>>>>>>>> +        if (ret)
->>>>>>>>> +            return ret;
->>>>>>>>> +        ret = update_cap(resource);
->>>>>>>>> +        if (ret)
->>>>>>>>> +            return ret;
->>>>>>>>> +
->>>>>>>>>           if (resource->power > resource->cap)
->>>>>>>>>               val = 1;
->>>>>>>>>           else
->>>>>>>>
->>>>>>>>
->>>>>>>> While technically correct, the implementation of this attribute 
->>>>>>>> defeats its
->>>>>>>> purpose. It is supposed to reflect the current status as 
->>>>>>>> reported by the
->>>>>>>> hardware. A real fix would be to use the associated 
->>>>>>>> notification to set or
->>>>>>>> reset a status flag, and to report the current value of that 
->>>>>>>> flag as reported
->>>>>>>> by the hardware.
->>>>>>> I know what you mean.
->>>>>>> The Notify(power_meter, 0x83) is supposed to meet your proposal 
->>>>>>> IIUC.
->>>>>>> It's good, but it depands on hardware support notification.
->>>>>>>>
->>>>>>>> If there is no notification support, the attribute should not 
->>>>>>>> even exist,
->>>>>>>> unless there is a means to retrieve its value from ACPI (the 
->>>>>>>> status itself,
->>>>>>>> not by comparing temperature values).
->>>>>>> Currently, the 'power1_alarm' attribute is created just when 
->>>>>>> platform support the power meter meassurement(bit0 of the 
->>>>>>> supported capabilities in _PMC).
->>>>>>> And it doesn't see if the platform support notifications.
->>>>>>>  From the current implementation of this driver, this sysfs can 
->>>>>>> also reflect the status by comparing power and cap,
->>>>>>> which is good to the platform that support hardware limit from 
->>>>>>> some out-of-band mechanism but doesn't support any notification.
->>>>>>>
->>>>>>
->>>>>> The point is that this can also be done from userspace. Hardware 
->>>>>> monitoring drivers
->>>>>> are supposed to provide hardware attributes, not software 
->>>>>> attributes derived from it.
->>>>>>
->>>>> So this 'power1_alarm' attribute can be exposed when platform 
->>>>> supports hardware enforced limit and notifcations when the 
->>>>> hardware limit is enforced, right?
->>>>> If so, we have to change the condition that driver creates this 
->>>>> sysfs interface.
->>>>
->>>> This isn't about enforcing anything, it is about reporting an alarm
->>>> if the power consumed exceeds the maximum configured.
->>>>
->>> -->
->>>
->>> index 2f1c9d97ad21..b436ebd863e6
->>> --- a/drivers/hwmon/acpi_power_meter.c
->>> +++ b/drivers/hwmon/acpi_power_meter.c
->>> @@ -84,6 +84,7 @@ struct acpi_power_meter_resource {
->>>          u64             power;
->>>          u64             cap;
->>>          u64             avg_interval;
->>> +       bool            power_alarm;
->>>          int                     sensors_valid;
->>>          unsigned long           sensors_last_updated;
->>>          struct sensor_device_attribute  sensors[NUM_SENSORS];
->>> @@ -396,6 +397,9 @@ static ssize_t show_val(struct device *dev,
->>>          struct acpi_device *acpi_dev = to_acpi_device(dev);
->>>          struct acpi_power_meter_resource *resource = 
->>> acpi_dev->driver_data;
->>>          u64 val = 0;
->>> +       int ret;
->>> +
->>> +       guard(mutex)(&resource->lock);
->>>
->>>          switch (attr->index) {
->>>          case 0:
->>> @@ -423,10 +427,21 @@ static ssize_t show_val(struct device *dev,
->>>                          val = 0;
->>>                  break;
->>>          case 6:
->>> -               if (resource->power > resource->cap)
->>> -                       val = 1;
->>> -               else
->>> -                       val = 0;
->>> +               /* report alarm status based on the notification if 
->>> support. */
->>> +               if (resource->caps.flags & POWER_METER_CAN_NOTIFY) {
->>> +                       val = resource->power_alarm;
->>> +               } else {
->>> +                       ret = update_meter(resource);
->>> +                       if (ret)
->>> +                               return ret;
->>> +                       ret = update_cap(resource);
->>> +                       if (ret)
->>> +                               return ret;
->>> +                       if (resource->power > resource->cap)
->>> +                               val = 1;
->>> +                       else
->>> +                               val = 0;
->>> +               }
->>
->> It would have to be something like
->>
->>         ret = update_meter(resource);
->>         if (ret)
->>             return ret;
->>
->>         val = resource->power_alarm || resource->power > resource->cap;
->>         /* clear alarm if no longer active */
->>         resource->power_alarm &= resource->power > resource->cap;
->>
->> This ensures that alarms are cached if supported, and that cached 
->> values are
->> reported at once. It is far from perfect but the best I can think of 
->> since
->> there is no notification that the alarm is cleared.
->>
-> Indeed, since there is no notification that the alarm is cleared, 
-> driver have to compare 'power' and 'cap' to clear it anyway.
-> If platform support notify to OSPM, driver also need to update 'power' 
-> to show this alarm status.
-> In this case, no need to update 'cap' which can be updated by nofity 
-> 0x82 event, right? But this also depands on the initialization of the 
-> "resource->cap" the probe phase needs to add.
-> For the platform doesn't support notify, driver have to update 'cap' 
-> and 'power' to show this status, right?
->
-> But considering above two cases, directly to update 'power' and 'cap' 
-> is simple to handle this without more switch case.
-> what do you think, Guenter?
+echo "dps920ab" 0x58 > /sys/bus/i2c/devices/i2c-0/new_device
+...
+[616189.076211] i2c i2c-0: new_device: Instantiated device dps920ab at 0x58
 
-Hi Guenter,
+Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
+---
+ drivers/hwmon/pmbus/dps920ab.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-What do you think? Looking forward to your reply.😁
+diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+index cc5aac9dfdb3..c002ed41f517 100644
+--- a/drivers/hwmon/pmbus/dps920ab.c
++++ b/drivers/hwmon/pmbus/dps920ab.c
+@@ -190,12 +190,19 @@ static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+ 
+ MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+ 
++static struct i2c_device_id dps920ab_i2c_match[] = {
++	{ "dps920ab" },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, dps920ab_i2c_match);
++
+ static struct i2c_driver dps920ab_driver = {
+ 	.driver = {
+ 		   .name = "dps920ab",
+ 		   .of_match_table = of_match_ptr(dps920ab_of_match),
+ 	},
+ 	.probe = dps920ab_probe,
++	.id_table = dps920ab_device_id,
+ };
+ 
+ module_i2c_driver(dps920ab_driver);
+-- 
+2.43.0
 
-/Huisong Li
-
->>
->>>                  break;
->>>          case 7:
->>>          case 8:
->>> @@ -853,6 +868,7 @@ static void acpi_power_meter_notify(struct 
->>> acpi_device *device, u32 event)
->>>                  sysfs_notify(&device->dev.kobj, NULL, 
->>> POWER_AVG_INTERVAL_NAME);
->>>                  break;
->>>          case METER_NOTIFY_CAPPING:
->>> +               resource->power_alarm = true;
->>>                  sysfs_notify(&device->dev.kobj, NULL, 
->>> POWER_ALARM_NAME);
->>>                  dev_info(&device->dev, "Capping in progress.\n");
->>>                  break;
->>>
->>>> .
->>>
->>
->>
->> .
->
-> .
