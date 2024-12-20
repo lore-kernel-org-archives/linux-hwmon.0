@@ -1,263 +1,103 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2A41BC066
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Dec 2024 09:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843CB143744;
+	Fri, 20 Dec 2024 09:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734687409; cv=none; b=eSt5Ue9guiFDn6ZxKYJN2YxvtkcuHS8K0029JKdW7BGOC54/QEZSoOms8JpimMoonNnsR/o5sAvlrmHCDZjDhC6Ow7Gymz/Tg2YNPFQISEBJowH6SWUAgJoZ7aZD4IduSNW7o3MrijANwbPPsmeqMaHtcsrk/661gZYc5dUlMqg=
+	t=1734688511; cv=none; b=Ycp5C/3O65kWg2J5ZGKNOWk3XxdM6Ca3FCVJhakAUlnLjOOR3cLYgfZenGy4k8HRvEA6rLViJ0zvWRp9UySaTMRZe/CBI8B0OMtbi6jfOQVmOWNbzlQjPqU3lKTGKwBbBDSQgGkKthjC/sTfAJ7CdRf9h7JTJ3yT3n7EpMTUhAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734687409; c=relaxed/simple;
-	bh=dWv/f9EpETM6+pvMWaSQENrIdrJUWlSaMx0ZEZywDZ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c1N7Ap779x2mkTNBo2YNUsg6C2IFhcmyYCusOBRqYp6HOyjzdBiAKAGUYRlooDbneE3fzcJ0phk86et+FEFOLo3ZBp4Nix2b1T+mH+XmijdA2T7Odpjs7lMHTZ1ewo6a82HOwU4hrFaKcpE4NEVYpCbJpeZIQvdSd9pm5pM8v1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TDC1c0IL; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TDC1c0IL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=Lp0Yvbxa9B0vQR
-	q+y2kLJx19vNtF2icxGpIwqknGa1s=; b=TDC1c0ILSa8u3aaXahdteDYh5mpchR
-	KM83+pun7aKreCW4kUnKfcBTfAwNLA8hTp5nyWjtfynlicyUAYWS5UtIVxdBN9/t
-	CdiPV8JyCqOVwt9YK51vpLl792ka/faPHlTfA3Y2XZR5N46uQJv6NfNAHXAFtAoB
-	Ogcc0Pm6Yn6Wa8qHPHNVPoMo/JED3NHS5/8d+AZPl5zI+1sCFG3PxoIzCnqpAcox
-	OOyplQBelrUAo/fvsEmZ/8R0K6lC7EyH4x02jgu4dk2aegBmf1sbbJXpEsVZd+5w
-	c05IEtgJSGVZgKGWjcYm8uI9tyAqsYM5VY8BjPsdBX3Kt4cOjfxWYP/g==
-Received: (qmail 956462 invoked from network); 20 Dec 2024 10:36:40 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 10:36:40 +0100
-X-UD-Smtp-Session: l3s3148p1@KvJMYrApLKUujnsY
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [RFC PATCH v2] hwmon: (lm75) add I3C support for P3T1755
-Date: Fri, 20 Dec 2024 10:36:34 +0100
-Message-Id: <20241220093635.11218-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1734688511; c=relaxed/simple;
+	bh=504ErLDR/YIPoJzJYEryLgRSYyP2ipZph9sWcX6V5w8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qecXa98LPCxC9ErkDXru+8RlTp2A/yfAQv4gp/qApMcMo+/NUia0y4Dey0rvyABacnNB9YMLqLCkLNWcD+kVNtINUVpx19i5+LWRmSqeiA0wPFaYBmRkRYrCaOxNZ7jQNU6Q/LDmc2xDf6CLBrS8S59EuPQr2+FKL82v0Xl6N34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-85bad7be09dso893696241.0;
+        Fri, 20 Dec 2024 01:55:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734688508; x=1735293308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WRFf8x09ddyunrMu+i2bEE42z9mG7cdTX58FKSuwlIM=;
+        b=v56BqVuKZcS4Ra2PlRXsisBYUBGQiuIXvU1+BmHJhoZOiVUtuQPbhcioncO9riuewQ
+         MQr9sJyRpU7rfPnX9AJxGa2BI2ZtLmnpnWOMzLI5b8JL+KBxtpDnHJhUi7w7J2Mw4Jsl
+         2nJDfwUza1Ksc3ofUJ4a8eWL9K2r2tqgvLxl/mRWcc7Ntcn8ZIh8WPVmkG5T3uDOG2wx
+         1Mx8LObPrTgkYV+BT6+sNFWu2iSYxVcEOmV6jvoKtPBExS8bCX3XBiPIFEIapoBNhaW7
+         nsIBNuNGYWcM1vwCYZqWN+KYWDhDoi9Z8NYlLqav/imSljE/U75hxHnl70fOPIZLVLay
+         IDsg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsXXM/bkQw59cXcn2CHQ1PeCxR5SMcjbjqB9PiQau+0JHgDdZ2sBLh0Fpgx5QdgIg0Gr+7JgV95DDYvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNvNus9AlalVzNcXkrjxNNVlmS97nhkBM7iG/SeJxj2tCY8fbJ
+	p55JoiE3tgtVlAfZuSfokox7qTOgp/vbf5tdKWNQoFhl5EP51QBl7V28bsHj
+X-Gm-Gg: ASbGncvpLxT1jg5kvhutgbGCRfHKbQ2ZFtEuQ03M+p18L50evdLNszILB4SQVZSuxtI
+	EhOPH6nwjz5yDFgge3o5GVHuoaNf4tn5JDYj+0xvBDLe3I1CvJlR96q2lImYE1A9fKu/H/glpjE
+	4HMpZ5vM/Jjs0evNrESGNRnAQfh5rp9bPBOPGl0nQO8pJPX20qBLsG94OSVh1WV/fiI4Pv1o0qj
+	42C1NJcod6PCGrFxL2qxVc6mSvsvpxsgPBzQSjoOt0Y4Bdq6yuGoYR+jE4MfG3flZR19sCIyxGT
+	vSWcDfE8v0G60eNI+/WB6Kk=
+X-Google-Smtp-Source: AGHT+IFbOrwMwJyA3qW9ffLIRLzJ3fpReqcSE760czIt7+ZSyb5ahRaoaukXes4+HNbARkN0b8hOEg==
+X-Received: by 2002:a05:6102:3713:b0:4b2:5d65:2c7d with SMTP id ada2fe7eead31-4b2cc35fa74mr2029526137.8.1734688508034;
+        Fri, 20 Dec 2024 01:55:08 -0800 (PST)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b2bf9a6eefsm527610137.8.2024.12.20.01.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Dec 2024 01:55:07 -0800 (PST)
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-51619b06a1cso939997e0c.3;
+        Fri, 20 Dec 2024 01:55:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUCCyAl8dGa7gYJJ+Va0x/Q1/VaeM4T7XxqycJzgXV8WLaBAjtzclelO0C73v8NkbLa4RItAOMSKdFOhQ==@vger.kernel.org
+X-Received: by 2002:a05:6102:508a:b0:4b0:a67c:5817 with SMTP id
+ ada2fe7eead31-4b2cc31fad8mr1865811137.5.1734688507598; Fri, 20 Dec 2024
+ 01:55:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241220093635.11218-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20241220093635.11218-1-wsa+renesas@sang-engineering.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 20 Dec 2024 10:54:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVTxLhhnD8zL6FjaMy+YV6NzZ_TCQtnM8PHzrfjejj5Dg@mail.gmail.com>
+Message-ID: <CAMuHMdVTxLhhnD8zL6FjaMy+YV6NzZ_TCQtnM8PHzrfjejj5Dg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] hwmon: (lm75) add I3C support for P3T1755
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce I3C support by defining I3C accessors for regmap and
-implementing an I3C driver. Enable I3C for the NXP P3T1755.
+Hi Wolfram,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+On Fri, Dec 20, 2024 at 10:37=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Introduce I3C support by defining I3C accessors for regmap and
+> implementing an I3C driver. Enable I3C for the NXP P3T1755.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Changes since v1:
+> * don't parse i2c_device_id for a suitable sensor name but copy this
+>   information to a specific struct for I3C devices
+>   (frankly, I liked the previous solution better)
+>
+> * not really a change. I decided against using cpu_to_be/le* helpers.
+>   It looks clumsy when operating on an array of u8 with them IMHO.
 
-Changes since v1:
-* don't parse i2c_device_id for a suitable sensor name but copy this
-  information to a specific struct for I3C devices
-  (frankly, I liked the previous solution better)
+That is why we have {ge,pu}t_unaligned_[bl]e*()...
 
-* not really a change. I decided against using cpu_to_be/le* helpers.
-  It looks clumsy when operating on an array of u8 with them IMHO.
+Gr{oetje,eeting}s,
 
- drivers/hwmon/Kconfig |   2 +
- drivers/hwmon/lm75.c  | 121 ++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 119 insertions(+), 4 deletions(-)
+                        Geert
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index dd376602f3f1..86897b4d105f 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1412,7 +1412,9 @@ config SENSORS_LM73
- config SENSORS_LM75
- 	tristate "National Semiconductor LM75 and compatibles"
- 	depends on I2C
-+	depends on I3C || !I3C
- 	select REGMAP_I2C
-+	select REGMAP_I3C if I3C
- 	help
- 	  If you say yes here you get support for one common type of
- 	  temperature sensor chip, with models including:
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 8b4f324524da..d95a3c6c245c 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -11,6 +11,7 @@
- #include <linux/slab.h>
- #include <linux/jiffies.h>
- #include <linux/i2c.h>
-+#include <linux/i3c/device.h>
- #include <linux/hwmon.h>
- #include <linux/err.h>
- #include <linux/of.h>
-@@ -112,6 +113,8 @@ struct lm75_data {
- 	unsigned int			sample_time;	/* In ms */
- 	enum lm75_type			kind;
- 	const struct lm75_params	*params;
-+	u8				reg_buf[1];
-+	u8				val_buf[3];
- };
- 
- /*-----------------------------------------------------------------------*/
-@@ -606,6 +609,77 @@ static const struct regmap_bus lm75_i2c_regmap_bus = {
- 	.reg_write = lm75_i2c_reg_write,
- };
- 
-+static int lm75_i3c_reg_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct lm75_data *data = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_priv_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 1,
-+			.data.out = data->reg_buf,
-+		},
-+		{
-+			.rnw = true,
-+			.len = 2,
-+			.data.out = data->val_buf,
-+		},
-+	};
-+	int ret;
-+
-+	data->reg_buf[0] = reg;
-+
-+	if (reg == LM75_REG_CONF && !data->params->config_reg_16bits)
-+		xfers[1].len--;
-+
-+	ret = i3c_device_do_priv_xfers(i3cdev, xfers, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (reg == LM75_REG_CONF && !data->params->config_reg_16bits)
-+		*val = data->val_buf[0];
-+	else if (reg == LM75_REG_CONF)
-+		*val = data->val_buf[0] | (data->val_buf[1] << 8);
-+	else
-+		*val = data->val_buf[1] | (data->val_buf[0] << 8);
-+
-+	return 0;
-+}
-+
-+static int lm75_i3c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct lm75_data *data = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_priv_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 3,
-+			.data.out = data->val_buf,
-+		},
-+	};
-+
-+	data->val_buf[0] = reg;
-+
-+	if (reg == PCT2075_REG_IDLE ||
-+	    (reg == LM75_REG_CONF && !data->params->config_reg_16bits)) {
-+		xfers[0].len--;
-+		data->val_buf[1] = val & 0xff;
-+	} else if (reg == LM75_REG_CONF) {
-+		data->val_buf[1] = val & 0xff;
-+		data->val_buf[2] = (val >> 8) & 0xff;
-+	} else {
-+		data->val_buf[1] = (val >> 8) & 0xff;
-+		data->val_buf[2] = val & 0xff;
-+	}
-+
-+	return i3c_device_do_priv_xfers(i3cdev, xfers, 1);
-+}
-+
-+static const struct regmap_bus lm75_i3c_regmap_bus = {
-+	.reg_read = lm75_i3c_reg_read,
-+	.reg_write = lm75_i3c_reg_write,
-+};
-+
- static const struct regmap_config lm75_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
-@@ -626,7 +700,7 @@ static void lm75_remove(void *data)
- }
- 
- static int lm75_generic_probe(struct device *dev, const char *name,
--			      const void *kind_ptr, int irq, struct regmap *regmap)
-+			      enum lm75_type kind, int irq, struct regmap *regmap)
- {
- 	struct device *hwmon_dev;
- 	struct lm75_data *data;
-@@ -639,7 +713,7 @@ static int lm75_generic_probe(struct device *dev, const char *name,
- 	/* needed by custom regmap callbacks */
- 	dev_set_drvdata(dev, data);
- 
--	data->kind = (uintptr_t)kind_ptr;
-+	data->kind = kind;
- 	data->regmap = regmap;
- 
- 	err = devm_regulator_get_enable(dev, "vs");
-@@ -711,7 +785,7 @@ static int lm75_i2c_probe(struct i2c_client *client)
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
- 
--	return lm75_generic_probe(dev, client->name, i2c_get_match_data(client),
-+	return lm75_generic_probe(dev, client->name, (uintptr_t)i2c_get_match_data(client),
- 				  client->irq, regmap);
- }
- 
-@@ -750,6 +824,37 @@ static const struct i2c_device_id lm75_i2c_ids[] = {
- };
- MODULE_DEVICE_TABLE(i2c, lm75_i2c_ids);
- 
-+struct lm75_i3c_device {
-+	enum lm75_type type;
-+	const char *name;
-+};
-+
-+static const struct lm75_i3c_device lm75_i3c_p3t1755 = {
-+	.name = "p3t1755",
-+	.type = p3t1755,
-+};
-+
-+static const struct i3c_device_id lm75_i3c_ids[] = {
-+	I3C_DEVICE(0x011b, 0x152a, &lm75_i3c_p3t1755),
-+	{ /* LIST END */ }
-+};
-+MODULE_DEVICE_TABLE(i3c, lm75_i3c_ids);
-+
-+static int lm75_i3c_probe(struct i3c_device *i3cdev)
-+{
-+	struct device *dev = i3cdev_to_dev(i3cdev);
-+	const struct lm75_i3c_device *id_data;
-+	struct regmap *regmap;
-+
-+	regmap = devm_regmap_init(dev, &lm75_i3c_regmap_bus, i3cdev, &lm75_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	id_data = i3c_device_match_id(i3cdev, lm75_i3c_ids)->data;
-+
-+	return lm75_generic_probe(dev, id_data->name, id_data->type, 0, regmap);
-+}
-+
- static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 	{
- 		.compatible = "adi,adt75",
-@@ -1008,7 +1113,15 @@ static struct i2c_driver lm75_i2c_driver = {
- 	.address_list	= normal_i2c,
- };
- 
--module_i2c_driver(lm75_i2c_driver);
-+static struct i3c_driver lm75_i3c_driver = {
-+	.driver = {
-+		.name = "lm75_i3c",
-+	},
-+	.probe = lm75_i3c_probe,
-+	.id_table = lm75_i3c_ids,
-+};
-+
-+module_i3c_i2c_driver(lm75_i3c_driver, &lm75_i2c_driver)
- 
- MODULE_AUTHOR("Frodo Looijaard <frodol@dds.nl>");
- MODULE_DESCRIPTION("LM75 driver");
--- 
-2.39.2
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
