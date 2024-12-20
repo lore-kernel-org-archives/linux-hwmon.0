@@ -1,45 +1,45 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534731C462D
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Dec 2024 11:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5235182B4
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Dec 2024 11:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734694233; cv=none; b=hz5QQfWIgMH/uhUo/L5fBBtWiAafiJONPW9SHEbxrbfKRkl3ulEfexdh+IDOaVRDU8NjN51FTZ4R8uChHqGIFvqE6yA0wmZE9+D5Jyq7SeZ2ez9Hi8+rP3owjEm3yMu9c98gR9tmVivijKUdlhISU6c4NqfnA2n3NNTEkBVdG30=
+	t=1734694420; cv=none; b=iYKizCi7crVmlUZNRXnszEp0R+hlte+/Tbx/wK73iBNmlf/rppzYB24/EBUorJFG/kX91f2AefCYaeCoUMHX3Qog7imXux52n55juCRtFG44/y45zRZxqFHf/h03qOjBzX/QUDwL+7T2DoczqALT0PhSsy+HxomZZJ82qZ4TbeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734694233; c=relaxed/simple;
-	bh=aDJUijj+npAEq/jYvHNfTGdquE1R8rihjhhAzvV3KOI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bzPf2XtHeKCSG6IFHdKVU5yZOEKE2hwTZc77ait2Pl8Px0JUvbL+nBj0kGrOS2rdeWJwreMUiWKFUjdSgRSn9ZBUg+dXcy8HtMnqu9AJEOhhXSwJmTCYCSqU7iEUbauGn1lbp5JHzZGWBqa3AzOSaEZVt6/RDM2yadUJBBjUats=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Zr1r0Bi5; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1734694420; c=relaxed/simple;
+	bh=L2qRB/4RsenLysWWpzzLQ3NvFXn5zVSGbccXuNtldJc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=l75D+Rel8AogKHPneUMuyUVgAPU8kbVc+17zt5N9Pzo46seOzH+atFZarM2k3sJDNuj4RKqhKMx6OLfhFenJuywNNJokD+lGFNpQAZoXrmMJi6ZvYi78AFNdCkUJb81awElPbzUaK/dA1qeMlu8CIr7/CDGpukGO1DpVlLKzkCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=I2vJXMSN; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Zr1r0Bi5"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="I2vJXMSN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=qQIh3wUDa4kRyy
-	tLvPuCivNA0Fsl6gM39oMEUiYc93g=; b=Zr1r0Bi5VfddcWJhKWorSFb/tN7xMx
-	Hwu+GECAaxRPk77bHYk/y1Vf1k6/nw9xMcOqU3zpB6HQW1w3tRjRZmFjSATxGWGI
-	ZbXtVMxdFBYEAJFsCO3U+NUPxRc6CiBD6Q+2+beVyjTrDkg9wae2TzIJeGyyWZOa
-	tU74jRLNgY9krfw+CgKYZ1SgpVfYCoQ6MjI41uabBm4Yf2ddaB7tTHh40fp34sNp
-	I7JWBb157G5RHSAsrETRKU5Z2WMrSXZIi0xdHZZe1AdfnnpR3jizSikOtqgivX/+
-	JDIhbvnNSFOmRm0VDzvlABFjmMftU9mNfFkHeXk2mPvrQU7zY3TKDRuw==
-Received: (qmail 989625 invoked from network); 20 Dec 2024 12:30:18 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 12:30:18 +0100
-X-UD-Smtp-Session: l3s3148p1@m52y+LEpTpAujnsY
+	:mime-version:content-transfer-encoding; s=k1; bh=iDrd0KAldwsOGF
+	ZG14RvkZSAD3d9IP9pPolACARu4Z8=; b=I2vJXMSNopplmpeP5gNHe6J63hrXKl
+	23aq7PLtGJymsHcrWeqxtlHgyTN2YDHz6PD+KyuAqscstZC42lsaW82Ej2hVL4Sk
+	tKzNbxSKAYdh0+I7dybJFcRD/peS0Wn64S998AXwSLpClNiLAp3Pdpl3EflP+3kT
+	iclejiGi4NVgDUYqHSj1jKTTJt3H9/xP+j1dwgL3D27K7vl5AfzWIus/B6J0JlzL
+	9EslcYOL07WKFlk+mMq643HAlqt2H6D7sw80Zyujvs2di54EAKWnAPAJwSSoalbn
+	sHf4+0MYC/GQGjPykTWbMUn4njJwKcg7LK31hR42sCQZJENodi6PmFQw==
+Received: (qmail 990839 invoked from network); 20 Dec 2024 12:33:35 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 12:33:35 +0100
+X-UD-Smtp-Session: l3s3148p1@sClvBLIpquIujnsY
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Yury Norov <yury.norov@gmail.com>,
+	linux-i3c@lists.infradead.org,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>,
 	linux-hwmon@vger.kernel.org,
-	linux-i3c@lists.infradead.org,
 	=?UTF-8?q?Przemys=C5=82aw=20Gaj?= <pgaj@cadence.com>
-Subject: [PATCH RFT 0/5] i3c: introduce and use generic parity helper
-Date: Fri, 20 Dec 2024 12:29:54 +0100
-Message-Id: <20241220113000.17537-1-wsa+renesas@sang-engineering.com>
+Subject: [PATCH RFT RESEND 0/5] i3c: introduce and use generic parity helper
+Date: Fri, 20 Dec 2024 12:33:28 +0100
+Message-Id: <20241220113335.17937-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -48,6 +48,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+[Resending because I3C list was not added on all patches. Sorry!]
 
 I am currently working on upstreaming another I3C controller driver. As
 many others, it needs to ensure odd parity for a dynamically assigned
