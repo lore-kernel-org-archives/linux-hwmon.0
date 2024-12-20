@@ -1,68 +1,82 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B2421C19B;
-	Fri, 20 Dec 2024 17:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0924C21B1AA;
+	Fri, 20 Dec 2024 21:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734715231; cv=none; b=gR4SuZln4NB3ARQ6rx8PVwcyVv7VHq4e0PpwRkgDZJDnaALfMqOJ0VXZtI+X//5hxGviD7Gv/qAVVyEmE4jpYAVs0SSbXxnMo6MJUrngSnWWP8F0WH1TZeA5kh0E3esOKSr3ZbQc7+6lM4ddqXDgSWQCLGZKSOpJaKLqfrl81wU=
+	t=1734730757; cv=none; b=ejRoIWFSRXQ3FxAoFXf0o/buc7sZVRkLT9Dc+kCKlsUo6POXC1+8R2p1lnrZjHDanafWBmSxbVcI/kUUs3+ozMzp05Xr1ulEVtGeIQSwPHNXXabJmUSKH5d2zjQHmuw7+9gAu10XR4z9CTmrKvBaT9oAUcw5wmY6Ocw5KrOTgpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734715231; c=relaxed/simple;
-	bh=hauOERCBb3hS8j77hIzIME0ydKd4U0Rm+2wONeGr2/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mq5NoqV5n/0zXsErysrbY6CNH/SJ83nWdmms/Om0CBXeW8++uLrx4v49TmOPSkGAlK6pnAgo4hmbtVIKEyAmZEmjOUxr6kJ+np5sZkihMVAyDC08TPzyz3acATxkb/3t4pNPxKilpzjyq0KeMfTy7HR/8DuRy0f+zkadsxCL1bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AcEWvyUD; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734730757; c=relaxed/simple;
+	bh=ljLmLUYUgAtyG8G99rXQ56EnVq57jHlL/48SlXuyQx8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L45coFB73dIVB9/ubllCuzdvMyN3z2oenLn4oHEEkyrzYWxPlfWZ+hTPngFTJ/GAKsnxmdhug/ZgnKKSsgcPFo5iR9kH/OM1R1kBFU3BJev9YpLK9bBAGXfuMaVzFvHVi6M68cN/361bAYib2kBI+N3GOllD0dZOB5ejrPOw7fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=etc0qJCb; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AcEWvyUD"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-725f4623df7so2184248b3a.2;
-        Fri, 20 Dec 2024 09:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734715229; x=1735320029; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UArkncCktxW90HT9xgryukAWn3o1O3X1rUo3lvdGP5s=;
-        b=AcEWvyUDoSPCQ+RW7ZEjNDoPOt9JGvvo8yq8oH2WeLVPaHBscCBPTcIZTx5ZSO5tcv
-         wfGHTxQCdr8URNiyL6SAq3DaYY8gOAPZZTUM8Gk6TkF4nZ2utR+82v1IukUW5UhuNzLm
-         0Jg+Su4Xkor+5pLMNjANrG1MoQSfIeyZqvAc1kIE2TAdEX5Zh+UUQ+FthIC/CLrmrVsV
-         LvacXpKatfkgvfEV/Lch9w8IHlhyVGTD01psKzXA6lehcROwJSDno7f+xtDksgij7F8q
-         nlTiswtCYTybWStqqRIpnnTPfeEpkitkcr68TujLrQ5ontQCYq1SjrYLoqbT0myuz0OB
-         WI6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734715229; x=1735320029;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UArkncCktxW90HT9xgryukAWn3o1O3X1rUo3lvdGP5s=;
-        b=QFTvcxSTl10S6gTb2ST/eMXJAisy7Vxqm7SuxK6X0OuUeZ8GbdiGJaL8XCYiipJW9J
-         8aJ2Sn6MRRE/Lk1oL84H9qXYuBYHQae6pxowg7xEkhwEFWZf+88y5oDWdUhAxzbYZH9w
-         kTp+SSKSwEYwhjWLIhy7gXG+Je5ZSncDmysb20kYid470PB/8xTuaHqsfqdY9rq2fbHw
-         OFECaKkbELrDhYrxlv3tMMfoaatnzAMaRbQLavosV5rvCu8PNtHKEqGTGqadSBCSos9h
-         +2DMzSmy9h3hjNKu8V4B54qw9uzYEWZFDrusjU+SX9OCVVgWhpiz+UFXTRyM7svEeXvM
-         r1og==
-X-Forwarded-Encrypted: i=1; AJvYcCVp+Lh31wg6VoPDeO+gSGxtG7tEO/8PO28GzZcXP3puWHKZ80jQ5s6pobcXUlT1f5gLU5DLo/BWSHZ3s20=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmwWKdimEUT5rUfMimFJRRAsb2HZCbcvRtbOnkMOGUih74feax
-	cKEyxVlFvyxbTbv6Cqk+Vyz/KEzsUeRSOkOMROuxzKw1Q3cvJZRUCv3sVw==
-X-Gm-Gg: ASbGncub/sLqNAWCdB4V/HvQDOwWotud/oDt9rJzPcYqvLdNpSrZKQ4hFUgRUUhHwAz
-	h0wzCwkjdBQTyKhZdluN0qtlqEcqvlBr+keDinwNWGmPVfEX6N6KifQWIOXJG91j9uXsX/LlMGk
-	bHplDd6Wd0YKDuHaROQSoxOd+2qzIJ25CnfN5rQ27i5aUQu+AqIZ4/oBnq/LL/BTeqs70gx5vvy
-	Ppz1atsHMlrK0wfo27FegGGtObQcnEU5xvq8DhDRxbBxHIxkYseSPlABJTTM2k2BTSzHA==
-X-Google-Smtp-Source: AGHT+IHQfm9+A2bql0IENWoqvTYnY8O8Ss9eeIdNOqqXi/eBBZGRFDFyEpwk2OqPXsu0vBlbGUdLgQ==
-X-Received: by 2002:a05:6a21:2d09:b0:1e1:6ec8:fc63 with SMTP id adf61e73a8af0-1e5e046520fmr6159747637.11.1734715229134;
-        Fri, 20 Dec 2024 09:20:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad836d22sm3357458b3a.77.2024.12.20.09.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 09:20:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.13-rc4
-Date: Fri, 20 Dec 2024 09:20:27 -0800
-Message-ID: <20241220172027.1001380-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="etc0qJCb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734730755; x=1766266755;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ljLmLUYUgAtyG8G99rXQ56EnVq57jHlL/48SlXuyQx8=;
+  b=etc0qJCbM07ulH1SckiQd3qdHh7yEzS3lZ56NJI3kh66Mb9YcFfrNSyV
+   UZ7USRJoUB+y//5BkkWetrYb9WyCV4mUMT5VJfnCImSc/3h64gogCrPRU
+   oQJejHGkozBMx8UJS/eYZ2NDlq1WWtEvaWDCjUpCE5mxlF9FLFB4i2ozO
+   fwYInB+LHUmv+/xNhnBnY8h2HnWDke7iQBLOzeXHX63jqHgtiny5WbIy5
+   7kFDUbjaJSDRyqD1eBSsx1RVwqUBdA1Al7x+DpyC4CdJpQAS9/F0Bt/Pq
+   eLuXvZd4D5jxJNJNgfXVkWSySWev/JmCzg0tcefzUr6WjECDWGDuZX3/m
+   g==;
+X-CSE-ConnectionGUID: dT1itH73TceykF5ctGYo4Q==
+X-CSE-MsgGUID: HbrG41DnS2CZd7Jvk2/AIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="39070605"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="39070605"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 13:39:15 -0800
+X-CSE-ConnectionGUID: zGmtfSqqRfet1r1cH5PXsA==
+X-CSE-MsgGUID: k6lZbLLKSDqRmHNbYha0jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="103223822"
+Received: from sohilmeh.sc.intel.com ([172.25.103.65])
+  by fmviesa005.fm.intel.com with ESMTP; 20 Dec 2024 13:39:13 -0800
+From: Sohil Mehta <sohil.mehta@intel.com>
+To: x86@kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [RFC PATCH 00/15]  Prepare for new Intel family models
+Date: Fri, 20 Dec 2024 21:36:55 +0000
+Message-ID: <20241220213711.1892696-1-sohil.mehta@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,39 +85,128 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+---Tl;Dr---
+Audit all the Intel family model checks to get ready for the upcoming family 18
+and 19 models.
+Patches 1-5: Fixes in arch/x86 and drivers
+Patches 6-15: Cleanups in arch/x86 to convert x86_model checks to VFM ones.
 
-Please pull hwmon fixes for Linux v6.13-rc4 from signed tag:
+This series does not include cleanups in drivers/
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.13-rc4
+---Background---
+Mainstream Intel processors have been using family number 6 for a couple of
+decades. The last deviation from this were the Netburst architecture based
+Pentium 4s that had a family number of 15. Intel has recently started to
+introduce extended family numbers greater than 15 [1]. Though newer CPUs can
+have any family number, the currently planned CPUs lie in families 18 and 19.
 
-Thanks,
-Guenter
-------
+Some kernel code assumes that the family number would always remain 6.  There
+are checks that apply to recent family 6 models such as Lunar Lake and
+Clearwater Forest but don't automatically extend to family 19 models such as
+Diamond Rapids. This series aims to fix and cleanup all of such Intel specific
+checks (mainly in arch/x86) to avoid such issues in the future. It also
+converts almost all of the x86_model checks in arch/x86 to the new VFM ones.
 
-The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8:
+OTOH, x86_model usage in drivers/ is a huge mess. Some drivers might need to be
+completely rewritten to make them future proof. I have attempted a couple of
+fixes in cpufreq and hwmon but I am uncertain of their efficacy.  A more
+thorough clean up of drivers is needed to replace all x86_model usage with
+the new VFM checks.
 
-  Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
+---Assumptions and Trade-offs---
+Newer CPUs will have model numbers only in family 6 or after family 15.  No new
+processors would be added between family 6 and 15. There are a couple of
+related quirks that have been described below.
 
-are available in the Git repository at:
+As a convention, Intel family numbers are referenced using decimals (family 15,
+19, etc.) even though the AMD specific code might prefer hexadecimals in
+similar situations.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.13-rc4
+It would be preferable to have simpler and more maintainable checks that might
+in a rare situation change the behavior on really old platforms. If someone
+pops up with an issue, the code would be fixed later.
+For example, the check,
+	c->x86_vfm >= INTEL_PENTIUM_PRO
+is preferred over,
+	c->x86 == 6 || c->x86 > 15
+if the likelihood of adversely affecting family 15 is low.
 
-for you to fetch changes up to dd471e25770e7e632f736b90db1e2080b2171668:
+Also, the CPU defines in intel-family.h have been added as and when needed to
+make reviewing and applying patches out of order easier. Please let me know if
+it would be preferable to add all the defines in a single patch at the
+beginning.
 
-  hwmon: (tmp513) Fix interpretation of values of Temperature Result and Limit Registers (2024-12-16 15:58:25 -0800)
+---Noteworthy quirks---
+Pentium II Overdrive - A unique family number:
+  Wikipedia says[2], In Intel's "Family/Model/Stepping" scheme, the Pentium II
+  OverDrive CPU identifies itself as family 6, model 3, though this is 
+  misleading, as it is not based on the family 6/model 3 Klamath core. As 
+  mentioned in the Pentium II Processor update documentation from Intel, 
+  "although this processor has a CPUID of 163xh, it uses a Pentium II processor 
+  CPUID 065xh processor core."
 
-----------------------------------------------------------------
-hwmon fixes for v6.13-rc4
+  A dump of the microcode file 06-03-02 shows:
+    001/001: sig 0x00001632, pf_mask 0x00, 1998-06-10, rev 0x0002, size 2048
+  An archived CPUID dump [3] also says:
+    CPUID 00000001: 00001632-00000000-00000000-0183FBFF
 
-* Fix reporting of negative temperature, current, and voltage values
-  in tmp513 driver
+  That would translate to a family number of 22 (0x16). This aberration is 
+  not explicitly handled anywhere in the kernel so the platform might already 
+  be broken. This series might make it worse for the platform if the latest 
+  kernel works on it by chance.
 
-----------------------------------------------------------------
-Murad Masimov (3):
-      hwmon: (tmp513) Fix interpretation of values of Shunt Voltage and Limit Registers
-      hwmon: (tmp513) Fix Current Register value interpretation
-      hwmon: (tmp513) Fix interpretation of values of Temperature Result and Limit Registers
+Xeon Phi coprocessors:
+  The first couple of Knights line of products (Knights Ferry and Knights
+  Corner) have a family number of 11. But they were released purely as
+  coprocessors and would not directly boot mainline Linux. The later
+  versions Knights Landing and Knights Mill could act as a host processor
+  but they used family number 6. So, the changes in this series should not
+  affect any of these platforms.
 
- drivers/hwmon/tmp513.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+---Links---
+[1]: commit d1fb034b75a8 ("x86/cpu: Add two Intel CPU model numbers")
+[2]: https://en.wikipedia.org/wiki/Pentium_II#Pentium_II_OverDrive
+[3]: https://github.com/InstLatx64/InstLatx64/blob/master/GenuineIntel/GenuineIntel0000632_P2OD_CPUID.txt
+
+The series has only been lightly tested on a couple of family 6 systems.
+Planning to test it on more systems in the future. Any testing on legacy
+platforms would be greatly helpful.
+
+Many thanks to Tony and Dave for guiding me through this historical maze.
+
+Sohil Mehta (15):
+  x86/apic: Fix 32-bit APIC initialization for extended Intel families
+  x86/apic: Fix smp init delay for extended Intel families
+  x86/cpu/intel: Fix init_intel() checks for extended family numbers
+  cpufreq: Fix the efficient idle check for Intel extended families
+  hwmon: Fix Intel family checks to include extended family numbers
+  x86/microcode: Update the Intel processor flag scan check
+  x86/mtrr: Modify a x86_model check to an Intel VFM check
+  x86/cpu/intel: Replace early family 6 checks with VFM ones
+  x86/cpu/intel: Replace family 15 checks with VFM ones
+  x86/cpu/intel: Replace family 5 model checks with VFM ones
+  x86/pat: Replace Intel model checks with VFM ones
+  x86/acpi/cstate: Improve Intel family model checks
+  x86/cpu/intel: Bound the non-architectural constant_tsc model checks
+  perf/x86: Simplify p6_pmu_init()
+  perf/x86/p4: Replace Pentium 4 model checks with VFM ones
+
+ arch/x86/events/intel/p4.c            |  7 ++--
+ arch/x86/events/intel/p6.c            | 28 ++++---------
+ arch/x86/include/asm/intel-family.h   | 16 ++++++++
+ arch/x86/kernel/acpi/cstate.c         |  8 ++--
+ arch/x86/kernel/apic/apic.c           |  4 +-
+ arch/x86/kernel/cpu/intel.c           | 58 ++++++++++++---------------
+ arch/x86/kernel/cpu/microcode/intel.c |  3 +-
+ arch/x86/kernel/cpu/mtrr/generic.c    |  4 +-
+ arch/x86/kernel/smpboot.c             |  8 ++--
+ arch/x86/mm/pat/memtype.c             |  7 ++--
+ drivers/cpufreq/cpufreq_ondemand.c    | 13 +++---
+ drivers/hwmon/coretemp.c              | 26 ++++++++----
+ 12 files changed, 96 insertions(+), 86 deletions(-)
+
+
+base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+-- 
+2.43.0
+
