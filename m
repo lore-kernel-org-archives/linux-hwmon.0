@@ -1,86 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E963918052;
-	Mon, 23 Dec 2024 07:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24C327735;
+	Mon, 23 Dec 2024 07:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734938867; cv=none; b=pZBsEVQ5OGLgQ9Ezh6h6Myc2+H0SDX3fKeoETSaqsJcdWVN0CQvoZoKYg1qnI+picUMugmGyEtKBWrgXuOu7DxdngqPVEyVpTX8FDRgtHl9ZHiFpXFpeUBBXGV9unGGa4Lmgj+3k2l3racz0p1HF6tyDUveiSLZfT1OdYYgZsNA=
+	t=1734939061; cv=none; b=Q+aVccCRnfyQwoF1jwyurHa17OdnZ9NjvXJDNOy9YQyV77h4DxEah9c8lmEhz/XqveXoTop3EepqvHB/0GlWwtlhtdLGD+INRygN9gafC1EslQPbiJ9e9FW96866ach+HZ+xbbGoJJt2rXwR4zL7oL+MpH0BnF3QGE/+i8BDzT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734938867; c=relaxed/simple;
-	bh=VZyd4V5fwAkkf6j2lzdZSBdLb/bZPRnsMDycIJWbfl4=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=nH8F/tKdD9JfwCVW9GKXk+rv2M45KoIqnLjWmcPW2AvrmYrpX3YL0rd6Ezk9aM+1UU8nxxYGwrQTsDO4VKLg2ibjJHAOv5g6ZdizQpePk5tNMeDmC1mp5nIm1nSEB6KH/j+Hfd+Hkxz4xq0faWhCmUl27x2tbLiM3SN+3uqMrqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPUPbqBW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734939061; c=relaxed/simple;
+	bh=Ygk6uUQxjvnjtMIv4tWwERicS++4MRefCsHhXVHUsRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VZOjLR8mFzjAThfHaAqh3fQIrKm7MFq92wGYLUcAkHb6NtzZkzl+1sLUF64jab/tGfrMrwdmxtFfv+idAPmOoYpG+r2V7+jYKHyHxLWwJo/aercL/2bci/cZJcbPqrSOdmj8gEft9rpfC37NNpP2M5T381lFVYwET0MjB34MviE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwUNEdpV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPUPbqBW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6E8C4CED4;
-	Mon, 23 Dec 2024 07:27:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UwUNEdpV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BFCC4CED4;
+	Mon, 23 Dec 2024 07:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734938866;
-	bh=VZyd4V5fwAkkf6j2lzdZSBdLb/bZPRnsMDycIJWbfl4=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=gPUPbqBW7Zz0bqr3n+Q0DP7j1MuOJkmRg+E2AlJCXgxlIQmbM3BCjoKCGGaGZE9C5
-	 WPdcBZv2DlM3zsGAMvCu4PYQ0sXFsWgzBhxud2++xpZrvTK2w53AGjoIfeBJETHp+5
-	 btqsVYmMoX4xwBo+VwFgRTwyvamY+h06FWP3yJaK+xLLpE43n+H8SvseUcuxKwl3JO
-	 uizKVyzVyT4QKdSlX2U3DB65Z6FkB4WugmYcFUTPQmcar+kOxuTW7ZivB2BReeE145
-	 z/dq0VPW6EX/6dyGpmWb2J8bIrYDSt98Bd3+GDzk9CRxa1vuEezMnxNa59VqtEnYFW
-	 i3Svv7mEn+cjg==
-Date: Mon, 23 Dec 2024 01:27:44 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1734939060;
+	bh=Ygk6uUQxjvnjtMIv4tWwERicS++4MRefCsHhXVHUsRo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UwUNEdpVksa3VeJ8fBbfU5ZM7cveMPPtJwrh5dBwK0gEoqVYDdF0NbABXvUPIJWBw
+	 xCqUqJSqJL6xtKZr6qQ7jAhuhWd71QCPd5TxS1HecY9J/hvR45WyJpacDQHEAg8Nxb
+	 2n3UaUf++ISc2NX01EI862mzeWJQXkc5aNu91d3n3AsdRCNSN+HKnHjEJRyLACr5nh
+	 BOO26q4g07K6IBNRx5aV7gSAqtRZNsSUNg+1F39wB4XcAaYzRqeyumIAvWSZFAj19D
+	 3ux6IHIQ91x+ZZx51WabplqJyaEEdtdtBHP6L6K1CKNx6HfC+4KG2P1qz8+vVZVY4x
+	 5cGLrZr9Tq1ag==
+Date: Mon, 23 Dec 2024 08:30:57 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Zijun Hu <zijun_hu@icloud.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
+	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, linux-sound@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-block@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, netdev@vger.kernel.org, 
+	Zijun Hu <quic_zijuhu@quicinc.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Subject: Re: [PATCH v4 04/11] driver core: Constify API device_find_child()
+ then adapt for various usages
+Message-ID: <mrix3q75mawxszrp25yzpsrvenlxx7bihfzyfdcnp7egubvxpf@lzp7fcaxwquc>
+References: <20241211-const_dfc_done-v4-0-583cc60329df@quicinc.com>
+ <20241211-const_dfc_done-v4-4-583cc60329df@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-rtc@vger.kernel.org, 
- Jean Delvare <jdelvare@suse.com>, 
- Antoniu Miclaus <antoniu.miclaus@analog.com>
-To: PavithraUdayakumar-adi <pavithra.u@analog.com>
-In-Reply-To: <20241223-max31331-driver-support-v1-1-f9499bd598f5@analog.com>
-References: <20241223-max31331-driver-support-v1-0-f9499bd598f5@analog.com>
- <20241223-max31331-driver-support-v1-1-f9499bd598f5@analog.com>
-Message-Id: <173493886450.3944320.9770471045980909625.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dtbindings:rtc:max31335:Add max31331 support
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2ziq55rb3fq2bwkl"
+Content-Disposition: inline
+In-Reply-To: <20241211-const_dfc_done-v4-4-583cc60329df@quicinc.com>
 
 
-On Mon, 23 Dec 2024 11:57:44 +0530, PavithraUdayakumar-adi wrote:
-> Add support to max31331 RTC chip in adi,max31335.yaml
-> 
-> Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
-> ---
->  .../devicetree/bindings/rtc/adi,max31335.yaml      | 32 ++++++++++++++++++----
->  1 file changed, 26 insertions(+), 6 deletions(-)
-> 
+--2ziq55rb3fq2bwkl
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 04/11] driver core: Constify API device_find_child()
+ then adapt for various usages
+MIME-Version: 1.0
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Hello,
 
-yamllint warnings/errors:
+On Wed, Dec 11, 2024 at 08:08:06AM +0800, Zijun Hu wrote:
+>  drivers/pwm/core.c                     |  2 +-
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/rtc/adi,max31335.example.dts:23.20-31.15: Warning (i2c_bus_reg): /example-0/i2c/rtc@68: I2C bus unit address format error, expected "69"
+Acked-by: Uwe Kleine-K=F6nig <ukleinek@kernel.org> # for drivers/pwm
 
-doc reference errors (make refcheckdocs):
+Best regards
+Uwe
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241223-max31331-driver-support-v1-1-f9499bd598f5@analog.com
+--2ziq55rb3fq2bwkl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdpEa8ACgkQj4D7WH0S
+/k4bUAgAh9LrZmd2eRZtQQDD7RKfHIeOmRCpwZcKO4VAM76QCcEzfVerUpZH2Emh
+tkSaCY38C9pM9hE0HsXsYV6zg/MBAVCwiVGbn+rgTAVtuiDiI8ygmP7cdzKnk7Ke
++l0xcXunQPwe3UHEzAvvPiu57dMcQ6h8732mqwqWrRh43gPAWdpAgktFqFLPCRQf
+1sOslGEFNX866KAUqB1jjxQSZjq0v0dXyd20GSu7yjzm7s1JzRG+msGCSSxv0vRT
+SWDRWVHepQ1AT5THBbY6xaXnaiwoTbnv6NCw4WFz8OHbBtIb6Fm7UUE1PNTnZM0t
+qDtxzk9rG0eZFX23d+rXwSg2JlM3VQ==
+=zwtk
+-----END PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--2ziq55rb3fq2bwkl--
