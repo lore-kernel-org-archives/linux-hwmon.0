@@ -1,53 +1,53 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+Received: from mail-vs1-f65.google.com (mail-vs1-f65.google.com [209.85.217.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF064A1C
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 09:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F174A1C
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 09:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735120467; cv=none; b=AS2jABKo6hv4nF5CNZcIRLFGbi0EsNMN2LXnqHxiBR9ZIYHzcm40Ermo1kYaWV5tNk5RPBNgZCPo6P3NyjjOXxvMO1zMr4IWRPMyepZgp96Vbfex1P7CN7dbKiE3paQLg3CIwJt6rZP9z6XK+jeODEIiC0qYJVsdA1WiFTH2ksY=
+	t=1735120556; cv=none; b=tWtV+8cK//X4Zi9we64GTTKe6JBSNW++36U1/DzpjA1iVwDqgxZ+CmaaOjESViUL1czA+TMAauVhCsh/Z9yCe8oP46pkTqakfsA6AgR4AEFQ7lFeIj77qpYJWCv3idL+9tbPMLOzPoPIZ4/0PriiEe5a1HLnSjpfhCsBhBCuyNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735120467; c=relaxed/simple;
-	bh=oJp+YlkRERUKZHsXNZk5hKV+Us2u8RM/tQcCd0Xa2xI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=aTm/t+vXvPbD/QGtN5OVLoG0f4CPcKdIjuizwwCHwmXsR4bvB8LOWhrWcXoaOYc+aLG5JGFKH6hiXWrv50nCaHgewKwKNx5OuldmvLiezsuj2/bEKp3VjVf2B08VQ8i1oaE8oVPtkCTcgTbQ8ZalzGFEotjBghbUxoVRRXQJcEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=N1o+OejS; arc=none smtp.client-ip=209.85.221.179
+	s=arc-20240116; t=1735120556; c=relaxed/simple;
+	bh=mjuSPSGwaf+2rAuk5P6boI3Gn9LlgsleV3/s5dFEc1Q=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=uKc8GV7DomPq7WGws8nvuA6REt2URbdplLvnXb9gueV3C0WXcc2P42avRiYLlAAENKh3fk9BZ1RYuSyx03+k1SbcwtdjZuXLp8XArCso2VJrQHxCmdl0roWRaS1ZsqkRsMmX2zCVaILe1F5fHdYfpHN+0/U87CugAMyOj6Oz01A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=MBmRERrB; arc=none smtp.client-ip=209.85.217.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="N1o+OejS"
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5161d5b8650so1659030e0c.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 01:54:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="MBmRERrB"
+Received: by mail-vs1-f65.google.com with SMTP id ada2fe7eead31-4aff5b3845eso1896557137.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 01:55:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1735120463; x=1735725263; darn=vger.kernel.org;
+        d=inventec.com; s=google; t=1735120553; x=1735725353; darn=vger.kernel.org;
         h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=gv05ecMgYX7jcP07dyceD2gzCJTmK4SOG0Cfbe+50cg=;
-        b=N1o+OejSyUJ7nCWaOkIbQyNSb8fLcvxqMllG66YGKWxhx7t9xfemWBCJOlX/iKjElN
-         P2tX+2iOGGmzezZGUGYYH84FBsY6LsaLed6tIhPwNFAPIcr1Ukypa8WEmQqTU8MEvH+L
-         ielQgHszTqVyS7vU14GuTOJXK+zvKLmsqGi5xeHFkw+JneacuuU+J4HPFQ/t55Dw0itq
-         xh7cpZpfcPpQaWMx9sDe8mJQSkKs/Bj9KNCfqPF4HwutV1MmCmom4+FeZjbQhJk7Zhby
-         xWT5y+y/9N5twwTAEXUnZYI0Y0j+ofYIy1BQc5fxKLOgeOOlvlPAg793uzoizr/FQFrl
-         5oJg==
+        bh=6nX7iOW+lGn9pA4ZxjLq+B4s1KTEVik50/IGa4uEw/c=;
+        b=MBmRERrBOxQMWUQGjwslnLTRrgfZeJi5WEChHDoiR+uyxNnEWOYYQv8kY0vKONyzMO
+         I9+/fZiymuI3IgXbDV4BstDICP1/hZ3MSm3l3Goisba4GRCiID3/nosCgiYIaEAOYkIL
+         kjCE8gkadEG+o6UVyJjPVMcwB61sMd5zQMB0hJSAe4ALoNlM0cn+YTHrCTIPBFZwbvPz
+         tA9XuniyO6sS3asJQFApdb0U1navOM/FGRuJWVwkcnNEhDEcGvlX9UYKbvTEyh9H6JLA
+         r9vscWrlJDKXTJckzvjLBhBIV8tGgms8Z+zlWP3FQFXiBXlCCxHLzWlQnRnvTrk9ugRJ
+         ssMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735120463; x=1735725263;
+        d=1e100.net; s=20230601; t=1735120553; x=1735725353;
         h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gv05ecMgYX7jcP07dyceD2gzCJTmK4SOG0Cfbe+50cg=;
-        b=dWdoiCKOIXWVtmzU29NdNLzFvwbicbg1S1Ufn14aoBxs+JOdWOQVL8dFJjIVvFeWei
-         Q0Qf+OQCGOh5MZegPLtP9OQp/1Ko1mwoL2GtHZ+0cFuYZPC05ZbTIsjDCLiKdAalvk1O
-         xvCXS5vn48nnsUQQ9xgmgViCjviU9Yo+IR8SZ7MdCOVXGMwTiuuZW6clyOqmIxIMo2N8
-         rGtNDM4cRmTOKyavQ9ICcgfRjytFOdetL7Eu2l+vgNZId1s9zjEXGdf6QYJ+XkjeUv9B
-         0mwZ/pGLMOi64ZP1VbBFuBuFbyjl0sryG0w6BWHtY2NMWXpwehah4cBXYECttqBPvEdD
-         TVCA==
-X-Gm-Message-State: AOJu0Yzf9BSUNfN2RJyxhK7Y8DGPGw7yclXP91iBXBcsbEcVQP+mAvDd
-	1Ws4f8xQuwOZ5ul7ubmnf8mx/eylO82AJPFHSBo63DSeMPrAVQZ+yFkLKslAt3j4yRH9UcB3aOZ
-	dqJSfQeBxYl8/1reFdEUPIj91T8eRzcy/yygtZ6l0V9rO6jhVY6Y=
-X-Gm-Gg: ASbGncuwcQ0oZddmbV27HetiWKjkeAlPmrbMEf4sd0+9NtFiX3enPGLBSqiwdEsSxIa
-	OjVWIyKpmYDJ7wJihi2KXBLY0zsNdpFNFb0nmcMY=
-X-Google-Smtp-Source: AGHT+IGYJtI6mU27oiuSyuww+BZNplw4oNK5HC4EoOKq8ympM9X2fgEX762rQHNGsXVco9n39bu620zykpT7D5CZYwg=
-X-Received: by 2002:a05:6102:5689:b0:4b1:1232:def with SMTP id
- ada2fe7eead31-4b2cc31a411mr16286774137.4.1735120463175; Wed, 25 Dec 2024
- 01:54:23 -0800 (PST)
+        bh=6nX7iOW+lGn9pA4ZxjLq+B4s1KTEVik50/IGa4uEw/c=;
+        b=xJ0J4bTcY+LTCNRFBHo1cBMQi0GSba01+Yoyn42U2XWDC/fSybCifDv3MGHyTX5Qsr
+         +Kn8HG1azYfbBZuSPqOEh+3e1vLY0DHWhpVRApPNqsnU0d+7i2iXVA+mjMJuLW4DpMj9
+         UsDlW3V1ZUYIVIMAzIG0EWoPQoro5Za0OKX/fG9CV4l8uEYdM/yp/2vhj02NwbNdnurY
+         z9UGU2SC85uqxC51OMSbZAAjce70cfdR/RfRH8OjQJ1gUdqIw+f4d0bkKdKz3VWHLGw1
+         A8ZrXm/+IlBHpJDNXFSjgIyn6Kr6UFFUHXEOMq/cg6JwuWQcB3N9trX8buP5wOGyLv2R
+         kfgQ==
+X-Gm-Message-State: AOJu0YzZA6Cu/sPmfeuvvHYCZXoLWFXtOLQ3Tgrm8HiXXMHGDHKMwsM+
+	HLBjb2xa2pqQ5pWvXTEvHlbie2h2+deigA5wRS4U5tG8tFbiJyx3qtGar7fboI0MnGEgBrfH47T
+	1jWYEHS+pAzGHKXj1Zp06UKTDMVhpJxFsPquGSusewyQCXBzI0ShOBA==
+X-Gm-Gg: ASbGncuW48vEjDfNhBVl2+sEKBgXZSZ2Al6DFBqglxrpkhjb6jZVfXDNM3bC/+4/rm7
+	JTGpkC9/QMeASHm8hlXWyvLYbSqGiReiLy/hxXo4=
+X-Google-Smtp-Source: AGHT+IH44TbOX7sTqtARqetRu1qL3qphJvVeU23v74FHcRJE2bgSC2TL8nywiJZmUuim9a7EM2PalPzLS8/Q1iQlkN0=
+X-Received: by 2002:a05:6102:dd1:b0:4af:fca2:1b7 with SMTP id
+ ada2fe7eead31-4b2cc37da95mr17182708137.14.1735120552636; Wed, 25 Dec 2024
+ 01:55:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,141 +55,61 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: =?UTF-8?B?Q2hpYW5nQnJpYW4g5rGf5rOz57e7IFRBTw==?= <chiang.brian@inventec.com>
-Date: Wed, 25 Dec 2024 17:54:12 +0800
-Message-ID: <CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com>
-Subject: [PATCH v1] Support the TI TPS53685 driver
+Date: Wed, 25 Dec 2024 17:55:42 +0800
+Message-ID: <CAJCfHmXm-fPD70uN-mNJdJkzf9B526y8p=Jh5E+W5cwJ0NVhEQ@mail.gmail.com>
+Subject: [PATCH v1] hwmon: Add RAA229621 for renesas spec
 To: linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 From: Brian Chiang<chiang.brian@inventec.com>
 
-As the driver is not supported, TPS53685 reading is added based on the
-datasheet.
+According to the RAA229621 datasheet, add support for reading.
 
 Signed-off-by: Brian Chiang<chiang.brian@inventec.com>
 ---
- drivers/hwmon/pmbus/tps53679.c | 58 ++++++++++++++++++++++++++++++++--
- 1 file changed, 56 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/isl68137.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index 81b9d813655a..89753f004edb 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -16,7 +16,7 @@
- #include "pmbus.h"
-
- enum chips {
--   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
-+   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688, tps53685
+diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+index 1a8caff1ac5f..c7a6b8d9c648 100644
+--- a/drivers/hwmon/pmbus/isl68137.c
++++ b/drivers/hwmon/pmbus/isl68137.c
+@@ -61,6 +61,7 @@ enum chips {
+    raa228228,
+    raa229001,
+    raa229004,
++   raa229621,
  };
 
- #define TPS53647_PAGE_NUM      1
-@@ -109,6 +109,31 @@ static int tps53679_identify_chip(struct
-i2c_client *client,
-    return 0;
- }
+ enum variants {
+@@ -70,6 +71,7 @@ enum variants {
+    raa_dmpvr2_2rail_nontc,
+    raa_dmpvr2_3rail,
+    raa_dmpvr2_hv,
++   raa_dmpvr2_hvt,
+ };
 
-+static int tps53685_identify_chip(struct i2c_client *client,
-+                 u8 revision)
-+{
-+   u8 buf[I2C_SMBUS_BLOCK_MAX];
-+   int ret;
-+
-+   ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
-+   if (ret < 0)
-+       return ret;
-+   if (ret != revision) {
-+       dev_err(&client->dev, "Unexpected PMBus revision 0x%x\n", ret);
-+       return -ENODEV;
-+   }
-+
-+   ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-+   if (ret < 0)
-+       return ret;
-+
-+   if (strncmp("\x54\x49\x53\x68\x50\x00", buf, 6)) {
-+       dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
-+       return -ENODEV;
-+   }
-+   return 0;
-+}
-+
- /*
-  * Common identification function for chips with multi-phase support.
-  * Since those chips have special configuration registers, we want to have
-@@ -132,12 +157,33 @@ static int tps53679_identify_multiphase(struct
-i2c_client *client,
-    return tps53679_identify_phases(client, info);
- }
-
-+static int tps53685_identify_multiphase(struct i2c_client *client,
-+                   struct pmbus_driver_info *info,
-+                   int pmbus_rev)
-+{
-+   int ret;
-+   ret = tps53685_identify_chip(client, pmbus_rev);
-+   if (ret < 0)
-+       return ret;
-+
-+   info->format[PSC_VOLTAGE_OUT] = linear;
-+
-+   return 0;
-+}
-+
- static int tps53679_identify(struct i2c_client *client,
-                 struct pmbus_driver_info *info)
- {
-    return tps53679_identify_mode(client, info);
- }
-
-+static int tps53685_identify(struct i2c_client *client,
-+                struct pmbus_driver_info *info)
-+{
-+   return tps53685_identify_multiphase(client, info,
-+                       TPS53681_PMBUS_REVISION);
-+}
-+
- static int tps53681_identify(struct i2c_client *client,
-                 struct pmbus_driver_info *info)
- {
-@@ -215,7 +261,9 @@ static struct pmbus_driver_info tps53679_info = {
-        PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-        PMBUS_HAVE_POUT,
--   .func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+   .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-+       PMBUS_HAVE_STATUS_INPUT |
-+       PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-        PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-        PMBUS_HAVE_POUT,
-@@ -263,6 +311,10 @@ static int tps53679_probe(struct i2c_client *client)
-        info->identify = tps53681_identify;
-        info->read_word_data = tps53681_read_word_data;
+ static const struct i2c_device_id raa_dmpvr_id[];
+@@ -264,6 +266,12 @@ static int isl68137_probe(struct i2c_client *client)
+        info->R[PSC_POWER] = -1;
+        info->read_word_data = raa_dmpvr2_read_word_data;
         break;
-+   case tps53685:
++   case raa_dmpvr2_hvt:
 +       info->pages = 2;
-+       info->identify = tps53685_identify;
++       info->func[0] &= ~PMBUS_HAVE_TEMP3;
++       info->func[1] &= ~PMBUS_HAVE_TEMP3;
++       info->read_word_data = raa_dmpvr2_read_word_data;
 +       break;
     default:
         return -ENODEV;
     }
-@@ -278,6 +330,7 @@ static const struct i2c_device_id tps53679_id[] = {
-    {"tps53679", tps53679},
-    {"tps53681", tps53681},
-    {"tps53688", tps53688},
-+   {"tps53685", tps53685},
+@@ -313,6 +321,7 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
+    {"raa228228", raa_dmpvr2_2rail_nontc},
+    {"raa229001", raa_dmpvr2_2rail},
+    {"raa229004", raa_dmpvr2_2rail},
++   {"raa229621", raa_dmpvr2_hvt},
     {}
  };
 
-@@ -290,6 +343,7 @@ static const struct of_device_id __maybe_unused
-tps53679_of_match[] = {
-    {.compatible = "ti,tps53679", .data = (void *)tps53679},
-    {.compatible = "ti,tps53681", .data = (void *)tps53681},
-    {.compatible = "ti,tps53688", .data = (void *)tps53688},
-+   {.compatible = "ti,tps53685", .data = (void *)tps53685},
-    {}
- };
- MODULE_DEVICE_TABLE(of, tps53679_of_match);
 -- 
 2.40.1
