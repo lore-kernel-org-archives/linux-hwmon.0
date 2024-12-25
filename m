@@ -1,70 +1,79 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9334B1FF1CC;
-	Tue, 24 Dec 2024 16:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742FA17591;
+	Wed, 25 Dec 2024 02:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735057540; cv=none; b=BweODugcFkmCUdTIeIGPPkl39Vi/+Z1UQbi2ZZ8Am0bIsB5VOeXa3btGbuVV7TgU3wonU45ymCEOpfzSqNa6s/9didq/OfgYQaIBsvfVQEk7KJyq3FCDSwB+Rlmrkv57OjAMYFErUcwz250llVI2AfYGpM/USpR1bFD7V1G18R8=
+	t=1735092231; cv=none; b=EYDrUKqayqcjE3k2kwg553fnFIJRSCUoj7btKuyiUhpBkExZs87PaP6sAGP7wz+yCGSM10Ed0Sd69NCsrd/jJQC+XUtt9f9MpZcBhLDSPjJJq5O0fdN24zGcaHIK0u+bKrQm8R/bFCcRcNougButXm2r2HszHQchw5rPCyoAo/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735057540; c=relaxed/simple;
-	bh=m5GRbh5lFzes3khbJ1WlrKqbj8nXi86NW1GKdESWHCY=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pVoRpv66bsd5CGAFZ1jllF9luVFd7dPIQF+tNkjldvM8U3wftLtjEfR5Az9xT49czs+pN5hIRKrShUQgvtEZ1Y75vuPmfRnVKFF8smgMi1sMwzUY9AWU5k83zb8X3aE1QZV/LcVZKeHatizjYecyaclpOrDO2iV0OvQE/YmOwPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YHgBb2yNYz6K5rR;
-	Wed, 25 Dec 2024 00:21:43 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id B7502140391;
-	Wed, 25 Dec 2024 00:25:36 +0800 (CST)
-Received: from localhost (10.48.156.150) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 24 Dec
- 2024 17:25:35 +0100
-Date: Tue, 24 Dec 2024 16:25:32 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Zijun Hu <zijun_hu@icloud.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij
-	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, James Bottomley
-	<James.Bottomley@HansenPartnership.com>, Thomas =?ISO-8859-1?Q?Wei=DFschu?=
- =?ISO-8859-1?Q?h?= <thomas@t-8ch.de>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-sound@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-block@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux1394-devel@lists.sourceforge.net>,
-	<arm-scmi@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-	<linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-	<linux-remoteproc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<netdev@vger.kernel.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: Re: [PATCH v5 11/12] cxl/pmem: Remove is_cxl_nvdimm_bridge()
-Message-ID: <20241224162532.0000103f@huawei.com>
-In-Reply-To: <20241224-const_dfc_done-v5-11-6623037414d4@quicinc.com>
-References: <20241224-const_dfc_done-v5-0-6623037414d4@quicinc.com>
-	<20241224-const_dfc_done-v5-11-6623037414d4@quicinc.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1735092231; c=relaxed/simple;
+	bh=TIcNcCJhoTVjPyh/lf6YMX4opzjlAdx8Dq92HYmVlKk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ca9TdU3yr5dfg3KhOfa6+Yx1IwnA/hc5yxFcp3t8GQcvTcwd0Kwb9fGWSbC/onCU6HFEFraihC4ygegpYFVesmMpmwDHQyLQKNlIFYJ3AGdKun5l6nfyljqP1ai2s8oqKfdY2TP0pBWdYznuqPp8/6JaZUI7Cg1Iij6zPt9xwFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=porp2Ffq; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="porp2Ffq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=f9oWu
+	9Cat8FuZZ8TF9tEadnv9ykTlIOQfpN2/NTylfs=; b=porp2FfqWdPM2UKoBF2se
+	etPQd29YEY6ou1qL/MY/l3ndGoAW5jHYbQzwUhljkT1vFeqfYjOUsCP57gCRjC+b
+	1eFAjrks7FmTkd3c9wIqdEv7B5JiPZKXTz1X5+MGQJFbPm2VTSOwEETRG+AGXI4L
+	nPMUtqI8AcfyzRmYJsniD8=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wBXVAvbZ2tn9MwIBg--.45990S4;
+	Wed, 25 Dec 2024 10:03:08 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Wenliang <wenliang202407@163.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 3/3] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+Date: Wed, 25 Dec 2024 10:03:05 +0800
+Message-ID: <20241225020305.440008-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXVAvbZ2tn9MwIBg--.45990S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFyUXF13XrWfZFy8ZrWkZwb_yoW3tFgEga
+	1xZr1UZFZ5JFyFgw4DAa97Jr13tw12kF4kCw1jyrs5Aw1DZrZ09a4kJ34DAw1xWFW7uFy5
+	uws5JFWqqrsrKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRROJ5UUUUUU==
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiNRHA02drYJKFBwAAsL
 
-On Tue, 24 Dec 2024 21:05:10 +0800
-Zijun Hu <zijun_hu@icloud.com> wrote:
+From: Wenliang <wenliang202407@163.com>
 
-> From: Zijun Hu <quic_zijuhu@quicinc.com>
-> 
-> Remove is_cxl_nvdimm_bridge() which has no caller now.
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Document the compatible string for the Silergy SQ52206, this device
+is a variant of the existing INA2xx devices and has the same device
+tree bindings.
+
+Signed-off-by: Wenliang <wenliang202407@163.com>
+---
+ Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+index 05a9cb36cd82..f0b7758ab29f 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+@@ -20,6 +20,7 @@ description: |
+ properties:
+   compatible:
+     enum:
++      - silergy,sq52206
+       - silergy,sy24655
+       - ti,ina209
+       - ti,ina219
+-- 
+2.43.0
+
