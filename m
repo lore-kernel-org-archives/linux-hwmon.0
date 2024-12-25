@@ -1,254 +1,112 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10DE917591;
-	Wed, 25 Dec 2024 02:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from mail-vs1-f67.google.com (mail-vs1-f67.google.com [209.85.217.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DC0A935
+	for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 09:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735092287; cv=none; b=qrXEUzrIxyraMmbI16Q2PfF4a3j8TeEUiV088/OZacIJs9/ZEKhyCUjOA0/JlObroy9wZRXRJMK95qFvXO71SSwgLgLpIwX6wTwkPviHzPah9Q0LIfBopgkRVy3Vii4JeMi+jImAgZpikWbg4HW+HA/3M2Lw3MHKKbiBZJHAnnU=
+	t=1735119203; cv=none; b=qKYydinr5C9A8dIk9MtfegROQg/1remeivnY9o2Z0ix8N22fdjIPdwaXozcmMf/u3bmT0gEh+dXLWdZLe6rNgKU7k8C/VBbtVA5NepjyKmj9iCEcrH4uEFrPG9SoxFe+DPbNX2U6LSLfNnKzSxYiuws0WhfAidP/soQdCCr95UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735092287; c=relaxed/simple;
-	bh=SQXuRWpVJ8ifcNKmZj4eDOZocOB6lprqwHwyWN5zgN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XIh/66CzmEtwT3NmYeLI+gKtrD6oOEpB+bUNtKq2V8iQZl51o5wz9w6LPHiD6cNMcmSh5+NZSt7wFSeZE6KGYEav608BeaiENdVIC9U9UA9J/ikxn2Ly8TmMOoII9JstED2W1ylk2zq+Vk9tzJphVS+zVXyAi2Pz0u7FeA1OCgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RJMnEaKF; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1735119203; c=relaxed/simple;
+	bh=btXwt2CLFrLTUfNrdjIrhzANjrwFpD/aQLQJkchjYGI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=H79rCd1MKFr2zrWpV1gpZc/SPaJoXdWobUPa9IcMmuCVwh4z7t4y6yQehwJJSgtJmdEzoa7cKtDoqJBCOUa7W5ON/vjgaedPR4/NX4aWnT4OMjrQkbPuI9yb8PB4W/a9AHXP+T0fsNrpqhnm21mQY+TobGIhWFgPb1Bt8tq8Fww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=EYkEiWZN; arc=none smtp.client-ip=209.85.217.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RJMnEaKF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=d4mCk
-	DUf8fRY2PUMOoENaonP/z19MKIrUugV++n/oAM=; b=RJMnEaKFbQimhV1qmyZjU
-	hxB96aAPUGL68zVTGkRjmP/jnmu/lad1U72mpqLYDMT9j17Y8iybKLQNUTc9zFR8
-	7hFObjDz8n7RcQd4IcLRJVWcXGF/FvSUVOuIQ/VlWPDT2nGbqvjaLxDaFg+m5Vhc
-	FQwM7SnPQeoLYtpwoZlTyY=
-Received: from silergy-System-Product-Name.silergy.inc (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wAnkVLVZ2tnHGv6BQ--.23482S4;
-	Wed, 25 Dec 2024 10:03:02 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH 2/3] hwmon:(ina238)Add new features for SQ52206
-Date: Wed, 25 Dec 2024 10:02:56 +0800
-Message-ID: <20241225020256.439990-1-wenliang202407@163.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="EYkEiWZN"
+Received: by mail-vs1-f67.google.com with SMTP id ada2fe7eead31-4afeb79b52fso1487436137.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Dec 2024 01:33:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=inventec.com; s=google; t=1735119199; x=1735723999; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EEBojO0CGxsTABS3Yht5J7ecr+X2bNwjUL7DN3qWefs=;
+        b=EYkEiWZNR/rENqsc0bcm/FOvsXRhmJX4ra/llJvZnNlmSNewpmL/4t1YjJjHS27HRK
+         jdqMzj05gfwoWXAsq5nSIVL+XEDfhyaecSE7dKr5uOMJoT0Z3WEpNlxbyWsP8p4K1Fxj
+         vsQddr/5hsJvxHpCGzPHMHokAEYpRTuy5H9Lo5HzYRzgA4hNEhzryX8P6yrX3GY3n/3B
+         PNtf9wJZySmPWgMQBNzccbtHHb7qqZJAjPPZDDe56qHT4EOZvHQbXT9bX7pJ+qG/gS4n
+         ryNsh8lJzWKSnCCiVouJCzkNQ5Iw/M0SM0JknT18Qfmw3jFtRUxy4NPd1fz2f4Rp9UxM
+         k3gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735119199; x=1735723999;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EEBojO0CGxsTABS3Yht5J7ecr+X2bNwjUL7DN3qWefs=;
+        b=xCDbiPab3c0qLk5wRnJuQ6blhbSi0vZh3QoXWXvN5iQDkdtmt5LVqoO4gtkFiBxvGP
+         Mz50/VrdhcBuZ9pq1tqr+bry1pw7XNFE7o3jphXbSrPWynoNarviiOffm1NTMbP6hpFD
+         C5ZyINPKeJOW5/oWOhsjN1eP0gyhjHiiqCPuqpQTRRF6j8AuC7Rw6xD1l30uMOn+6rFg
+         JO/xJ2mPU2vDblLflHP4hyLmqKTMXl1hfV1OOplfsSdRo+OMGMbuJqWQGXiwuwvzEI9s
+         dZ4uOaEpVhxFKzlZxzCKvr/gseIa9mkn69EV2KrI5V/aTVR2YTLoY7SENBG3Rf8cizit
+         Rjgg==
+X-Gm-Message-State: AOJu0Yxtz/GgrPboXlp5+tdhuhcQNoKnXYwQVV2MhQQS+Orbv9KfI0HU
+	PiwEWlPGkZgDsnM8q3y9qxHUWO0CzX717hvS0qVW2QnGLjrPn+T/DziTcuTGSBBirk3eJtx7SfW
+	UVqks7zx2B6P3/CCg7EEUTl9ukhxxxWF+nsNh6frB29X8l54mjBgwOw==
+X-Gm-Gg: ASbGncsJxok1D4ORnagnpg3BXvx/4j/ZElLGgTpnJRJU1ZrnsGdrqXrV4jNiMegKECI
+	zwmG6hgyr/SLvxESB9T+ntBfjjjCZfZbLETYHawE=
+X-Google-Smtp-Source: AGHT+IGZJsaE+ut6J2xmoQMgOxcD3AAGbu5PXq9eItsNqk7vjs02mHEFYLR6kMjOiizVU1f0n1aWdsZq8ngCYOVD5iA=
+X-Received: by 2002:a05:6102:5689:b0:4b1:1232:def with SMTP id
+ ada2fe7eead31-4b2cc31a411mr16277865137.4.1735119199131; Wed, 25 Dec 2024
+ 01:33:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnkVLVZ2tnHGv6BQ--.23482S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JryUXFy7uFW8JFWUZFyrZwb_yoWxWr4Dpa
-	s3Ja4fKrWUtrZrWrsrtr47uF1rWw1xG3W5ArZ7Kw1SvF1DXr929ryUtF10va13K34UZF4U
-	JF4Ut3y5Cw12yr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRAsqLUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiNRvA02drYJKEVgAAsR
+From: =?UTF-8?B?Q2hpYW5nQnJpYW4g5rGf5rOz57e7IFRBTw==?= <chiang.brian@inventec.com>
+Date: Wed, 25 Dec 2024 17:33:08 +0800
+Message-ID: <CAJCfHmXcrr_si4HLLCrXskuZ4aYmqAh0SFXNSkeL78d2qX2Qcg@mail.gmail.com>
+Subject: [PATCH v1] hwmon: Add RAA229621 for renesas spec
+To: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Wenliang <wenliang202407@163.com>
+From: Brian Chiang<chiang.brian@inventec.com>
 
-This patch depends on PATCH 1.
-Add peak power,energy and charge detection for SQ52206.
+According to the RAA229621 datasheet, add support for reading.
 
-Signed-off-by: Wenliang <wenliang202407@163.com>
----
+Signed-off-by: Brian Chiang<chiang.brian@inventec.com>
+--- This modification is added RAA229621 chip to isl68137 list ---
+drivers/hwmon/pmbus/isl68137.c        | 9 +
+1 file changed, 9 insertions(+)
 
-ina238.rst:Add information of SQ52206 in ina238.rst, Add additional sysfs
-entries for sq52206, include energy1_input, power1_input_highest
-and charge1_input.
-ina238.c: Add a 40 bit data reading function to prepare for energy and
-charge reading.
-Energy and charge attributes are 5bytes wide, so add call function for
-charge1_input and modified the function for energy1_input to use u64.
-Add HWMON_P_INPUT_HIGHEST for power.
-
- Documentation/hwmon/ina238.rst | 16 +++++++
- drivers/hwmon/ina238.c         | 85 +++++++++++++++++++++++++++++++++-
- 2 files changed, 99 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
-index d9f479984420..1502b8e71c16 100644
---- a/Documentation/hwmon/ina238.rst
-+++ b/Documentation/hwmon/ina238.rst
-@@ -14,6 +14,12 @@ Supported chips:
-     Datasheet:
- 	https://www.ti.com/lit/gpn/ina238
- 
-+  * Silergy SQ52206
-+
-+    Prefix: 'SQ52206'
-+
-+    Addresses: I2C 0x40 - 0x4f
-+
- Author: Nathan Rossi <nathan.rossi@digi.com>
- 
- Description
-@@ -54,3 +60,13 @@ temp1_input		Die temperature measurement (mC)
- temp1_max		Maximum die temperature threshold (mC)
- temp1_max_alarm		Maximum die temperature alarm
- ======================= =======================================================
-+
-+Additional sysfs entries for sq52206
-+------------------------------------
-+
-+======================= ====================================================
-+energy1_input		Energy measurement (mJ)
-+
-+power1_input_highest Peak Power (uW)
-+
-+charge1_input   Charge measurement (mC)
-\ No newline at end of file
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 131f5faefdb3..e41f98656958 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -96,6 +96,8 @@
-  *  Power (mW) = 0.2 * register value * 20000 / rshunt / 4 * gain
-  *  (Specific for SQ52206)
-  *  Power (mW) = 0.24 * register value * 20000 / rshunt / 4 * gain
-+ *  Energy (mJ) = 16 * 0.24 * register value * 20000 / rshunt / 4 * gain
-+ *  Charge (mC) = register value * 20000 / rshunt / 4 * gain
-  */
- #define INA238_CALIBRATION_VALUE	16384
- #define INA238_FIXED_SHUNT			20000
-@@ -167,7 +169,23 @@ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
- 
- 	return 0;
- }
-+static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
-+{
-+	u8 data[5];
-+	u32 low;
-+	int err;
- 
-+	/* 40-bit register read */
-+	err = i2c_smbus_read_i2c_block_data(client, reg, 5, data);
-+	if (err < 0)
-+		return err;
-+	if (err != 5)
-+		return -EIO;
-+	low = (data[1] << 24) | (data[2] << 16) | (data[3] << 8) | data[4];
-+	*val = ((long long)data[0] << 32) | low;
-+
-+	return 0;
-+}
- static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 			  long *val)
- {
-@@ -348,6 +366,16 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-+	case hwmon_power_input_highest:
-+		err = ina238_read_reg24(data->client, SQ52206_POWER_PEAK, &regval);
-+		if (err)
-+			return err;
-+		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
-+		power = div_u64(regval * 1200ULL * INA238_FIXED_SHUNT *
-+				data->gain, 20 * data->rshunt);
-+		/* Clamp value to maximum value of long */
-+		*val = clamp_val(power, 0, LONG_MAX);
-+		break;
- 	case hwmon_power_max:
- 		err = regmap_read(data->regmap, INA238_POWER_LIMIT, &regval);
- 		if (err)
-@@ -362,7 +390,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 					data->gain, 20 * data->rshunt);
- 		else
- 			power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *
--					data->gain, 20 * data->rshunt);
-+			       data->gain, 20 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -474,6 +502,46 @@ static int ina238_write_temp(struct device *dev, u32 attr, long val)
- 	return regmap_write(data->regmap, INA238_TEMP_LIMIT, regval);
- }
- 
-+static ssize_t energy1_input_show(struct device *dev,
-+				  struct device_attribute *da, char *buf)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int ret;
-+	u64 val = 0;
-+
-+	ret = ina238_read_reg40(data->client, SQ52206_ENERGY, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* result in microJoule */
-+	val = div_u64(val * 96 * INA238_FIXED_SHUNT * data->gain,
-+			       data->rshunt * 100);
-+	/* Clamp value to maximum value of long long */
-+	val = clamp_val(val, 0, LLONG_MAX);
-+
-+	return sprintf(buf, "%lld\n", val);
-+}
-+
-+static ssize_t charge1_input_show(struct device *dev,
-+				  struct device_attribute *da, char *buf)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int ret;
-+	u64 val = 0;
-+
-+	ret = ina238_read_reg40(data->client, SQ52206_CHARGE, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* result in microCoulombs */
-+	val = div_u64(val * INA238_FIXED_SHUNT * data->gain,
-+			       data->rshunt * 4);
-+	/* Clamp value to maximum value of long long */
-+	val = clamp_val(val, 0, LLONG_MAX);
-+
-+	return sprintf(buf, "%lld\n", val);
-+}
-+
- static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
- 		       u32 attr, int channel, long *val)
- {
-@@ -547,6 +615,7 @@ static umode_t ina238_is_visible(const void *drvdata,
- 		switch (attr) {
- 		case hwmon_power_input:
- 		case hwmon_power_max_alarm:
-+		case hwmon_power_input_highest:
- 			return 0444;
- 		case hwmon_power_max:
- 			return 0644;
-@@ -583,7 +652,8 @@ static const struct hwmon_channel_info * const ina238_info[] = {
- 			   HWMON_C_INPUT),
- 	HWMON_CHANNEL_INFO(power,
- 			   /* 0: power */
--			   HWMON_P_INPUT | HWMON_P_MAX | HWMON_P_MAX_ALARM),
-+			   HWMON_P_INPUT | HWMON_P_MAX |
-+			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
- 	HWMON_CHANNEL_INFO(temp,
- 			   /* 0: die temperature */
- 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
-@@ -601,6 +671,17 @@ static const struct hwmon_chip_info ina238_chip_info = {
- 	.info = ina238_info,
+diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+index 2af921039309..43e860d95280 100644
+--- a/drivers/hwmon/pmbus/isl68137.c
++++ b/drivers/hwmon/pmbus/isl68137.c
+@@ -63,6 +63,7 @@ enum chips {
+        raa228228,
+        raa229001,
+        raa229004,
++       raa229621,
  };
- 
-+/* energy attributes are 5bytes wide so we need u64 */
-+static DEVICE_ATTR_RO(energy1_input);
-+static DEVICE_ATTR_RO(charge1_input);
-+
-+static struct attribute *ina238_attrs[] = {
-+	&dev_attr_energy1_input.attr,
-+	&dev_attr_charge1_input.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(ina238);
-+
- /*
-  * Initialize the configuration and calibration registers.
-  */
--- 
-2.43.0
 
+ enum variants {
+@@ -72,6 +73,7 @@ enum variants {
+        raa_dmpvr2_2rail_nontc,
+        raa_dmpvr2_3rail,
+        raa_dmpvr2_hv,
++       raa_dmpvr2_hvt,
+ };
+
+ struct isl68137_channel {
+@@ -412,6 +414,12 @@ static int isl68137_probe(struct i2c_client *client)
+                info->read_word_data = raa_dmpvr2_read_word_data;
+                info->write_word_data = raa_dmpvr2_write_word_data;
+                break;
++       case raa_dmpvr2_hvt:
++               info->pages = 2;
++               info->func[0] &= ~PMBUS_HAVE_TEMP3;
++               info->func[1] &= ~PMBUS_HAVE_TEMP3;
++               info->read_word_data = raa_dmpvr2_read_word_data;
++               break;
+        default:
+                return -ENODEV;
+        }
+@@ -465,6 +473,7 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
+        {"raa228228", raa_dmpvr2_2rail_nontc},
+        {"raa229001", raa_dmpvr2_2rail},
+        {"raa229004", raa_dmpvr2_2rail},
++       {"raa229621", raa_dmpvr2_hvt},
+        {}
+ };
