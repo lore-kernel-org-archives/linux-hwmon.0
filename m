@@ -1,73 +1,78 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1089E2BCF5;
-	Thu, 26 Dec 2024 21:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957FE33E1;
+	Thu, 26 Dec 2024 21:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735247123; cv=none; b=ODvIeSKzGnE85BsXiDQn3MD0DisB+rPIIqmsDGY+GjiqennktpUaJGYPBHtqJW/yW/xqrc8W6Pkd680K8eorQvJAdii7gMGW6q6mrYiNdbBmJW564YZK2iOl1Khvyt89pFodrtH79qexCiFyBBwCSX9IDsebtRHOZyiquTbnQI0=
+	t=1735247286; cv=none; b=Nhfa523lxWqB1Kf5DvofRtBO1kjNoEFTLL0oRUHWNqBum0m7Z6VgQ27Rpi1z1sW7iFZW7brtiIxPNZE0p+Pbgkd7riMOQoNseqSgg1D/adfF+/x8Lj03UOO9AUqwsJqt7fob9MJAeAkAdI96u/9KOcdBoeJzmorCP3r9CCjM978=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735247123; c=relaxed/simple;
-	bh=24p/IFNBPXpitaN7fvpONTaFdAvLIIYfJEziCWKHaM8=;
+	s=arc-20240116; t=1735247286; c=relaxed/simple;
+	bh=IHssIBZCGymWp4/fHqi7UM2IPOHwQbJDFvO6SRZWaU8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBnTX/+mcQvjuGUO971jj5kkgWCXZYNWpkjXi5yXoY4RCOVR4UMqbd7TMIf5V0zjCwWWLvaIRODZzfglO2CmKcKB6ScceLh09IMfFzeN8yR7SqL9lDX7P4R6mLcw96S+Vc7rznqRrxF6m4OO6cYjOZd4hAWqRdFUPM30iE5WGKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YUrWgA1L; arc=none smtp.client-ip=209.85.214.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=odvKzeyxZCnIOUmmw5cwf6mXVEJPUiy0Ccx6MSL5vvL6vKnzZm4PCBkcI6P6joWagXsEpRXPdVMPaNmRbukZcpsHa2EUjv+t/WGtX/zlYKFvfafy/bwhS8lszP7idmdBM3SAQtsdmnryndZKM+y7Msm4nf5vV5V45XXzbsKHcXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I12BqFWB; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUrWgA1L"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2167141dfa1so77277845ad.1;
-        Thu, 26 Dec 2024 13:05:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I12BqFWB"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21634338cfdso113969155ad.2;
+        Thu, 26 Dec 2024 13:08:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735247120; x=1735851920; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735247284; x=1735852084; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AKS7b0yMpMXSyY647yNBALiAX0XwPDv68wynTZYjT3k=;
-        b=YUrWgA1Lu+70ZDasq5xfxfQd9MSelokO4RUjlb6DmSdsfGvCv/VtlJTZ1CDHA7N++f
-         elowhO7djZLq47emK8u31kzwO5rIJvz1MsSbqZquF5+/4ERVXNElr2u8msEXMGSL+dSI
-         dk+u7wZme7PfNCzdfMVDX/PAveXZ7IV7uTLT0/5SvUESUzvjwpRnFNa7mF9l4ZaKfgo6
-         zzaAVm0x0gK/+aJ7CUfQfE8nddoj58VXGLOl/PYKBb+3RkRnk94CvaYtiw3BhWZEc85n
-         9QVb/xhtGqEGXqIglb60jnLnvWmS9lJSuIsFC07fLn/+IQp22TweX35KayvRYK8ZyrJl
-         yE5Q==
+        bh=dCBlBnykuwvkbu8e5sqm5s/Qaw3aHtmkyh2cQ8G3Gzw=;
+        b=I12BqFWBMNjhJX/Bc1fLtkSbyVQGMWaTbHUSAv/vZhmqbOrx8jqs4S4WK/3bFcP9PW
+         xmX+4iHztb59Ne4KixhAbVke0fyXxqDDu8JTRj4EYYbrI/Fef/zM5NryD77CaZU62wjn
+         WvQqlBKdoKw68Ru198ocL5Ur8eUjLjyuPHLXuO0m0c1yRa8+l8vNQTJSKfSNAjIQj9mq
+         LbbalzA3vAl6CwK4amR6xJooeF+lliJffDzXaRD3yYnUwGnD0V6b7FmxCmXKtjQl2sz8
+         EG7GfykR2o8Wv9DXG4WtE+kBbGqd/whlBUjmOIdxJyJQ2UtnZHaR/3mZHxOp331MpO+g
+         LqVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735247120; x=1735851920;
+        d=1e100.net; s=20230601; t=1735247284; x=1735852084;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AKS7b0yMpMXSyY647yNBALiAX0XwPDv68wynTZYjT3k=;
-        b=E0BsyndxgJbOF+Kmu/91v+tLvKbTkDcQy+t7TYpB/S/EbafeZ22DbnqpffLsTMFelQ
-         kIc7hy8zL0csAnSjcgnaLAKgmv4mueY6HhBPXcQLRox/CY5GXgwZD7LbY4QHcxvdW9md
-         BJH7b7fn/V4uz6Oad2+z/AyX9DvLZ2Kj+rxJKFIXDexFPp8hzamjtsudyEWpYNN1m576
-         qA9UG1aw1ub7S7oCpmI4nCW3as/YH9VbiCGtXmkAc+AXhFH7NSEIwCspSfw2volF0Veq
-         Br22osSKfzeALOIE6yK6cLv1GT8ulpXIVvFs/d7iZXdT4cNBO0Tv/fzxZuBaG8n4/2Ll
-         vb9A==
-X-Forwarded-Encrypted: i=1; AJvYcCW86/kEFTRnzlDp1dRjyBJJuRGZB3IeVkyU1/ePem2TqbbWuFoig/DlSk5CoLVyrphzl2lWdmeh4GcnVdJJ@vger.kernel.org, AJvYcCWUxH0QQazBgdS80ZkzevXoZ5PEf2dP8BuGyA2QP5uUPptfg7LA2Xb2kknfU1EFPRvGCkQCzbxy1f2HcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhsGgfedyxRU7aFrT10+lT0a0i2UcdeZOr4E/YeMN/yK4BCJvP
-	XviIhVFs/IgrAK4JJ3VupLom0tIf80/QlDdFb30IpOeMu0fKXq5ojp1Teg==
-X-Gm-Gg: ASbGncvIeKGDBc632awZrVYX4QgwXCV/+n1KwAvkAmaYV4U/8YdC6kdAdG8soGSSz89
-	kWzr6e9r93mYlEenDHL8L9DT+OnAkCOJiHbuofJ4+flffo27rCj5a/8cpaEJ/x4h0veneedZgeQ
-	xfDk6P+n56VgJqGD7Z+zVzYNmARByTj1zz2GQplfb/1iCh8e0OyfVsHby9FbExB0HVg25TDwZ2m
-	Gb0KMs2k4ckLpIXIbZUFI5BPZIuZNY6ljRMw0ALybo8MCVtg8GWfK7+Sf8znKfqHWM8rQ==
-X-Google-Smtp-Source: AGHT+IGovdLVOL7AmFE2qB2MWuL+CsbkSMJL0bAiNlQjrw1DuQnOTQ6ykfPW6vB/k+yaXikYGsFZkA==
-X-Received: by 2002:a17:903:41c8:b0:215:8847:4377 with SMTP id d9443c01a7336-219e6cf8584mr387899465ad.15.1735247120336;
-        Thu, 26 Dec 2024 13:05:20 -0800 (PST)
+        bh=dCBlBnykuwvkbu8e5sqm5s/Qaw3aHtmkyh2cQ8G3Gzw=;
+        b=tRAgl4Ugzz+wLqgDZ1TDImG2Lo3ng/Uhx7JU7xpMSBzRHbx1wdZQup0hfc1tb/N+M0
+         7cs/RvTV/P+YdhAOZPdu6pApkpQcMJ19icf5uRMMd2+z8/ChAOlkuSCXO6ewtil+6i/7
+         WftOespwAH/suxjiWk+1NodxTvncTLA7Sg9q8w0RtmI+9eYe1KMWcqE3S6RD1Hc/uUAI
+         ic9AR8dmvOzRf9rwg415SapYZ9wX5+RAC9GraeGs7z1FLkk4ed6tQCTej5ljpuET6ocv
+         VqSyI3Iiibf6AXXLW6gDg/tRpe9ybjjDrBapJLHLnYSa6OPz+f6Z53y/cMtyE6aT7RAO
+         gLdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUY7BvT6YeCgLeXQVFJnxSp1bUejisDQx3AGxo7Lp/BZ6pQy8SUIPJpRn7SOTxsiyG8NFzdVm5gBpg=@vger.kernel.org, AJvYcCUdcziObQOAEjyOomMkW4P1D9j1i34mVnuSbkGxJyf1OZhbuPzMZAL8GJNqI7TZtzX6wzk1tg4mDtY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqdW4PyiAsRqnVy66+90Z43bg5RjjWn4U/kNWJmdtTB8QxAK7L
+	XEdiMVMYTryavKge85YuzAE900Zk6xX8ZpKPv9KcHM4Rhj6SObiC
+X-Gm-Gg: ASbGncvtkXVBecYguxLCwt1X9IDdj8fuqp5PyOJmF+gjqF6epsyhARI5yZ8PVIo9zER
+	TTn9JjdL9oiui/q2FlKkPIhy7s14j9+DOzsob9bJrhdh2hWUQJNOHASCoXYeyPoQ5ifacGtzuOP
+	h3QinOUeH3sR4SVTffjFqPE0qBIFFDPuUZR1x4z180vk/O30NVypNjkdVU143HqlOweLD0Tqclv
+	FHuX2yAUzVEAghEsFbfaGbtqklAxqMVFV4MhdxEFHNGyGl0e8Gr/Lxsw+wXdbjNFvKArA==
+X-Google-Smtp-Source: AGHT+IEyAE6qVNXJbdrnx5TgGAUjggHuN2JVN9bkmUCL9fqLabcTtwMFy/5C7tNOpyAfAjxt67rGuw==
+X-Received: by 2002:a17:902:d2c6:b0:216:3dc0:c8ab with SMTP id d9443c01a7336-219e6e8c641mr322325965ad.9.1735247283903;
+        Thu, 26 Dec 2024 13:08:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc96e85csm123817195ad.61.2024.12.26.13.05.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9cdf02sm123916295ad.151.2024.12.26.13.08.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2024 13:05:19 -0800 (PST)
+        Thu, 26 Dec 2024 13:08:03 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 26 Dec 2024 13:05:18 -0800
+Date: Thu, 26 Dec 2024 13:08:02 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: tjakobi@math.uni-bielefeld.de
-Cc: Derek John Clark <derekjohn.clark@gmail.com>,
-	=?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon: (oxp-sensors) Cache state of PWM enable mode
-Message-ID: <94e512e0-8105-4123-b9be-8a9805f7cfca@roeck-us.net>
-References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <80c85a5d219eba0c10d6927c3f90bbc3ad6043a1.1735232354.git.tjakobi@math.uni-bielefeld.de>
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>
+Subject: Re: [PATCH 00/10] hwmon: (oxpsensors) Add 2024 OneXPlayer line-up,
+ add charge limiting and turbo LED, fix ABI
+Message-ID: <a8e6d5d5-703c-47df-ab57-58234fdeefc1@roeck-us.net>
+References: <20241226112740.340804-1-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,20 +81,24 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <80c85a5d219eba0c10d6927c3f90bbc3ad6043a1.1735232354.git.tjakobi@math.uni-bielefeld.de>
+In-Reply-To: <20241226112740.340804-1-lkml@antheas.dev>
 
-On Thu, Dec 26, 2024 at 06:00:19PM +0100, tjakobi@math.uni-bielefeld.de wrote:
-> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+On Thu, Dec 26, 2024 at 12:27:30PM +0100, Antheas Kapenekakis wrote:
+> This three part series updates the oxpsensors module to bring it in line
+> with its Windows OneXPlayer counterpart. First, it adds support for all
+> 2024 OneXPlayer handhelds and their special variants.
 > 
-> The driver is in full control of the enable mode, so we
-> don't need to read it from HW every single time.
+> Then, it adds the new charge limiting and bypass features that were first
+> introduced in the X1 and retrofit to older OneXFly variants and for
+> controlling the turbo led found in the X1 models. For Bypass, it adds a new
+> bypass variant BypassS0 that is only active while the device is in the S0
+> state.
 > 
 
-That is not a reason for adding that much additional code.
-What is the problem that is being solved, and why is it worth that much
-additional code ?
-
-Plus, again, all those runtime feature checks in attribute handling
-code are completely wrong.
+This is a hardware monitoring driver. It is not a charge controller driver,
+and it is not a LED controller driver. If such control is wanted/needed for
+this system, it should be implemented either as mfd device with client drivers,
+or the entire driver should be moved to platform drivers if there is a desire
+to keep it as single driver.
 
 Guenter
