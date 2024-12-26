@@ -1,39 +1,39 @@
 Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D447A13D893;
-	Thu, 26 Dec 2024 22:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC74713D893;
+	Thu, 26 Dec 2024 22:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.70.45.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735253788; cv=none; b=FpHsJCjsZIsOHbtUUkJTGwM8bZGVMLu6DXN6FYagfsi/4JM50qp+i4Id9oy5MXGrJulxI4PBev/z1ZE99oHCat8RkL5BSQ335p7+8zfP/zoBCF8zdSEhBNvmV9cjYslErOEDSq0XmdIB60oWB/yDdz34KL0+R99HxVqa369CrNY=
+	t=1735253999; cv=none; b=UfW0q0Q7kerGnOqn6kQLqSVBBckPK3laFPeaFiLQYk6dJIL9bKqZ/mZVV9CTGu1n5IT1NgnPz+Rtn7IS8qXy07fR37kNAmclxsMLZPqwRcIKnV9VhUG+NCCtdEz3L/hIq1SZq2mzKomYzaGwG3CbxfxEdaltRZhWMmIr5mCyuF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735253788; c=relaxed/simple;
-	bh=545+1UtJp9yUeMDzSVfaq9IU+DQj9MTW0D52wto46Ow=;
+	s=arc-20240116; t=1735253999; c=relaxed/simple;
+	bh=fMTITeIo7FjkOkvVHCW/BcKPe5Bfr85KEnmK+O9mb4g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AutJAWts+nvqiVy3miOB89IsM6ohTFmYA9K2KqaTk+fEGDfsJFYXWtwMRPEFxlFQ/V0tHINtoUIfNAKfIzINfKjKLNEJfXavL0Ur+xbFFR+C7CeFh2iLob02sjXpcFw4byieImki0iajOryomvtvJYwmsdoCRzEFwU4NB4nSpSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=G0Bwh6qe; arc=none smtp.client-ip=129.70.45.13
+	 In-Reply-To:Content-Type; b=jtpbZx9AZEd4prjXarT2lIjxxfMBEeWy0E2myRIXTpUgWCpt9i8kE7Ry8dEFQusL86AKjCti8HKnKAKByWUuuHOudvJAWTf03jk/sZNOW8ufvBnSSpgTT/OB1SVRhojWTmm8bs501wAM2fd8lBb5fQXFK6YTy32euNb82H91g0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=skoHUG0K; arc=none smtp.client-ip=129.70.45.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="G0Bwh6qe"
+	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="skoHUG0K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=math.uni-bielefeld.de; s=default; t=1735253776;
-	bh=545+1UtJp9yUeMDzSVfaq9IU+DQj9MTW0D52wto46Ow=;
+	d=math.uni-bielefeld.de; s=default; t=1735253994;
+	bh=fMTITeIo7FjkOkvVHCW/BcKPe5Bfr85KEnmK+O9mb4g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G0Bwh6qed5YTMxvZAoUh4rAZ0+c84ZeYv4ZXOUf6vd3X8sRpeVkMP1ZG7/Ay5gfhq
-	 wm16Ne2U7XgbitxWSAjfuPh3GQtjZg2PQvA3Zwq4XlL9CSk1sAhHPFxK3txsGkMXfi
-	 t3+aqoQCXqTqoK3/JOYdPdll7S6kf58eLlg5ojzDHIX34GmSehWwoWelhG2RSWa0L7
-	 jakYwz5sCmiJ6ii53oPcNOzjFc1ovBI5hmbA8bc5gqAV5wFvc5S+szI2pAsyY0rxb1
-	 hNMV9YsAjtrGEOJ8zgYAZngytYDToXhA/TGSoV4M0iVH4e+sT5riN6dTUMjZ1sXU7j
-	 eX79x4op2KDsQ==
+	b=skoHUG0KK1CgLzXdV4LfkTdhNGm3CuYz2WtssjNcK1eqqQel5IrN0/fV7I8404MPH
+	 XYwMsRH3WjbhTP+jAyuMULd01di+tVZ7qvsH+ne+zq6aOBbdz5EsJx4On8vZrvCe2p
+	 2++SXI7+kC7QmLnx+f3nCE4ZyqSqFPk3aSC3Kp4/fztMkgRJ2tJDucXQZvAimqcftM
+	 pSL2KVmFe0xVO0M9B0VApUPX8plWtdnzjavIXxJYKoQXAvdlD7oAlloRRUH/GBKuSx
+	 qKQatULZiFy+lOpwZx39p5bLhO5wvqmv5TaIB6xfF3z0ISL7Zt9M51q+BYuaDBPEAW
+	 ylKr1dqNuVK2Q==
 Received: from [192.168.2.10] (58-32-133-N4.customer.vsm.sh [170.133.32.58])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 2D34920567;
-	Thu, 26 Dec 2024 23:56:16 +0100 (CET)
-Message-ID: <7284955a-fadf-497c-a7e4-6c261c84d32a@math.uni-bielefeld.de>
-Date: Thu, 26 Dec 2024 23:56:12 +0100
+	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 3D06920567;
+	Thu, 26 Dec 2024 23:59:54 +0100 (CET)
+Message-ID: <080bad40-6676-4369-9601-d2d200ae3ea2@math.uni-bielefeld.de>
+Date: Thu, 26 Dec 2024 23:59:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,15 +41,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] hwmon: (oxp-sensors) Fix wording in code comment
+Subject: Re: [PATCH 1/4] hwmon: (oxp-sensors) Separate logic from
+ device-specific data
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Derek John Clark <derekjohn.clark@gmail.com>,
  =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
  Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <858c2a5b712eebdf2fc7c9c6e3a2d2f832a68dfc.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <51006199-1de4-4bda-b579-181e19bd66e4@roeck-us.net>
+ <daa7571b0731e203b5a86e484da8083fd034601e.1735232354.git.tjakobi@math.uni-bielefeld.de>
+ <90a41ea2-9a83-4245-88c7-b8dd97f5aabf@roeck-us.net>
 Content-Language: en-US
 From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
@@ -96,65 +97,51 @@ Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
  pC4w+Ho/cC8OJpuwHWXqg9a3Hs6yH+hLjM/M0yk1vhMyYYXubgMv3DgbNuXAURjQ6DkY1o/8
  5jyYIbLNVBjZKDXq8pN13q6/M9q8MAD2qO3VvMjyEkzypg4qB76YLoiWtsanpUBrp9bYQXQ5
  JRHWPGCL3BhOxQ==
-In-Reply-To: <51006199-1de4-4bda-b579-181e19bd66e4@roeck-us.net>
+In-Reply-To: <90a41ea2-9a83-4245-88c7-b8dd97f5aabf@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-On 12/26/24 21:52, Guenter Roeck wrote:
-> On Thu, Dec 26, 2024 at 06:00:18PM +0100, tjakobi@math.uni-bielefeld.de wrote:
+On 12/26/24 21:54, Guenter Roeck wrote:
+> On Thu, Dec 26, 2024 at 06:00:16PM +0100, tjakobi@math.uni-bielefeld.de wrote:
 >> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 >>
->> Despite what the current comment says, the register is used
->> both for reading and writing the PWM value.
+>> We currently have large switch-statements in all functions that
+>> write to EC registers, even though the bulk of the supported
+>> devices functions more or less the same.
+>>
+>> Factor the device-specific data out into a struct oxp_config. This
+>> only leaves logic in the corresponding functions and should make
+>> adding future devices much easier and less error-prone.
+>>
+>> Also introduce struct oxp_data which is going to be used in a
+>> later commit to cache device state.
 >>
 >> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 >> ---
->>   drivers/hwmon/oxp-sensors.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>   drivers/hwmon/oxp-sensors.c | 517 +++++++++++++++---------------------
+>>   1 file changed, 215 insertions(+), 302 deletions(-)
 >>
->> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
->> index fbd1463d1494..8089349fa508 100644
->> --- a/drivers/hwmon/oxp-sensors.c
->> +++ b/drivers/hwmon/oxp-sensors.c
->> @@ -46,14 +46,14 @@ static bool unlock_global_acpi_lock(void)
->>   #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 registers long */
->>   #define OXP_2_SENSOR_FAN_REG           0x58 /* Fan reading is 2 registers long */
->>   #define OXP_SENSOR_PWM_ENABLE_REG      0x4A /* PWM enable is 1 register long */
->> -#define OXP_SENSOR_PWM_REG             0x4B /* PWM reading is 1 register long */
->> +#define OXP_SENSOR_PWM_REG             0x4B /* PWM control is 1 register long */
+> ...
+>> +
+>>   static const struct dmi_system_id dmi_table[] = {
+>>   	{
+>>   		.matches = {
+>>   			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
+>>   			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 AR07"),
+>>   		},
+>> -		.driver_data = (void *)aok_zoe_a1,
+>> +		.driver_data = (void *)&config_aok_zoe,
 > 
-> I think that, if anything, this is more confusing than before.
-> "control" is, for example, enabling or disabling pwm management,
-> setting automatic or manual mode, or setting the pwm polarity.
-> Together ith the next two defines, "control" would suggest that
-> PWM_MODE_AUTO and PWM_MODE_MANUAL are set through that register -
-> which is not the case. "value" maybe, but "control" is just wrong.
-Noted. What do you think about "target" then?
+> I have not looked at hte rest of the code, but the whole point of
+> void * is that a tyoe cast to or from it is not necessary.
+> 
+> Guenter
+I'm also not happy with the cast. But it's either the cast or a warning, 
+that the const qualifier is lost.
 
-My main point here was that reading implies that this register is 
-read-only. Which it clearly isn't. And the documentation (which could be 
-certainly be improved in general) should reflect that.
+I'm open to suggestions here. But I don't think that leaving warnings 
+around is a good idea.
 
 With best wishes,
 Tobias
-
-> 
-> Guenter
-> 
->>   #define PWM_MODE_AUTO                  0x00
->>   #define PWM_MODE_MANUAL                0x01
->>   
->>   /* OrangePi fan reading and PWM */
->>   #define ORANGEPI_SENSOR_FAN_REG        0x78 /* Fan reading is 2 registers long */
->>   #define ORANGEPI_SENSOR_PWM_ENABLE_REG 0x40 /* PWM enable is 1 register long */
->> -#define ORANGEPI_SENSOR_PWM_REG        0x38 /* PWM reading is 1 register long */
->> +#define ORANGEPI_SENSOR_PWM_REG        0x38 /* PWM control is 1 register long */
->>   
->>   /* Turbo button takeover function
->>    * Different boards have different values and EC registers
->> -- 
->> 2.45.2
->>
->>
 
