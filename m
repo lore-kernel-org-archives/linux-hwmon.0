@@ -1,63 +1,63 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBF585260;
-	Thu, 26 Dec 2024 20:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572DE2BCF5;
+	Thu, 26 Dec 2024 21:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735246472; cv=none; b=XJNbvKmFz85wDJ1+NCT2S79FAQ2zqDQrenaA1AvMbqysG9a8I5dGLNF+bHjkNlg6T4ll2qbZtLtoSdJd22Jl6JlhiPA9NDGACn+chy7Gl/VZWamPLZWZDdLoG1s/GRs8hAk4oW/a7re3dC4Af0G+J+lwodHm4sP8lRCSV6hXtXg=
+	t=1735247052; cv=none; b=INmWunx3iE078VE5SBokQBpVKuMNBhf8RHjGoxs78BWCgy5lnWNrX80rYc2ZJSOy+WqN9PSPToH/Ua8JtaNOvRZRCCoRREXERhRLWf1SRCE8cF7CQmSJQB8kbrRzHOYdWOtSxusPfkgUjd0HgiGPw0huKDN4QYtoM+ISVi8jZiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735246472; c=relaxed/simple;
-	bh=YPiD326lmXzsEMLEcYpmQ8FLbg2G0zF7ReYgzZwXSFY=;
+	s=arc-20240116; t=1735247052; c=relaxed/simple;
+	bh=fV4HpAu3+65Nq1fyyVvikH3QjtH12JjyMohd0Ems3uY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kx9VQVNk5AYyzZmWoD9/lgviKwlZfbbIvJOGD4PNptxkpJ1nqHaDvYD6mV+Nm4wbbllVzZivozx/jTQ/rTmFETW59w3pMLLMQf33B6VQnaCMuPwR3m3Os9VZdwcCydg3XyB2Z2TwsubGSREeMPGU2EvCZcFlfajjT3roUfrevs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSgy4ifT; arc=none smtp.client-ip=209.85.214.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=PDS2fmiAMgsibgvFlfUrtn0C5SKkCjmJJv132b4NFsz5qgN9mHhw5aT1zGWBlR6kDsD/N7i/Xo4oFZ+D0W0qE8VIDPmai+PNjThAKSniYwUMEIFBUumLbGM6rh45UUHHhWA7YBEzqfPmff9eAIB/mxgnVRUD3TxTpI6TZPUOkfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1C71jaX; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSgy4ifT"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21634338cfdso113766075ad.2;
-        Thu, 26 Dec 2024 12:54:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1C71jaX"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2f13acbe29bso7616386a91.1;
+        Thu, 26 Dec 2024 13:04:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735246469; x=1735851269; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735247049; x=1735851849; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vKHQOiXmHrUT3R7qAC97i9grcX8KfW086TyKBWaHvu4=;
-        b=WSgy4ifTu9c9xZtZmHk9B7me7PsZyYojPYo/UT2hn7xPA0WhlXhLwYfwGXlXKEdaGJ
-         R73rIVxhHEmR+91FAF/PwaHkm6f0b2j021aTGApNCXUW6fnJMrY1kcrQ4+2IZuipSZRl
-         HKX0F8lN7Z7Z5tB2/aV455ZInNNYVgPvfYAeh7ZtxzpGAzuRa+2tOigLZNVtqq0Y6OdO
-         cl1rfKzyX332V7+4No9wv0zOp1JHAJ6KDB7fJg7fua2m+eFTtO0dJe9Z9mdy7nNjVeWZ
-         ATSPUdS+purOSZrtRvJm+CbWBokoNfQtTSnt6vI81TeMCoyi3ZXaNv7R0I9KMGs/SJL9
-         f1mA==
+        bh=9Fv0dmw4a1MlZSN9IU7fNoeOhmvuFgDbPitU3E7VQj8=;
+        b=L1C71jaXrakrNFRjdbNxZcpOHLCzzHN/LSuD+GA0TLUlksCFRVaifWwpc+MULd65DD
+         1H0h0bS9nP15Ff5oU/yepiPsTOzgo0AMIqHknHIjZ4M5rE+8UPoSwq5cvLFlj1knxpj3
+         NsYskJTUDmV8XM4oh5XzPxzRw/CYmKrZ1gh23003dXw3Shjj3wgckK9VwVlmqFwpcyiT
+         My/aTCjogrn++4xfyNvbDrEhIk9+WBm5EGY55O9r6mS2fawWN44ElfklFYE2Wz75LYJc
+         AYb0KfErhTvmmT7ZQkoCJtRM4jAwNG2EOuYjnyt2EnbI/DuncYcaNZLD5J9NoNJqcSZl
+         MApw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735246469; x=1735851269;
+        d=1e100.net; s=20230601; t=1735247049; x=1735851849;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vKHQOiXmHrUT3R7qAC97i9grcX8KfW086TyKBWaHvu4=;
-        b=O7vcsrf0AL8X56k8wQanKa6Y8QdiQ5C7uau9Ii/Qh1DPLXk9xcCQRrygCzOMt0cphf
-         jrWUv12qNnDzG4Hd8cnIhs4FUPY45DOgbLpNpLZ35qSykHVTrkNG6pxbgZnm6ApqmeQW
-         WhtNUfrUNIHX1drxS+C5/ZL6+TwS0D0cVUko+han9Gh11NQFCZEhk5lKlg5auS407h1w
-         OOEeU8lCEFXidYlN6dbUOnlzM3Q2l8rEt1Ij/tdtj3XVnSGoIeqL4jP9ONNMRxpIRtMT
-         DGlr3E3pD3ssVfUmmtRAzRzfcTT7l52JAp5Vd2x5sxUwIBettJaixfwF5kM4+4HJUhm4
-         quBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUsN3uWmgKYYImAmCxPVF08mK96s+uZZiDcCHfrgDqiCOiVzDuwcujRaR+1Y9C6pBX6htRm44JVN2NR6w==@vger.kernel.org, AJvYcCVAz5zQ3f52DZEJvOFzSCAWPpwBmXz0agW1TbGaOrZgL1RpHXTQDwheSE6oJAhu5qDPbCOuFVWkoWmiNNln@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9P4tWgYXYTmReJ5cSe5bycz9f/ZDTq0hxkBVfjsNpXtr616w7
-	BWPSX1V1vrWrCLjyAEPS+kpwPeHpPBzrdumehGktSof031ihc+3w
-X-Gm-Gg: ASbGncslEMdrpQKA8yxwV53bKZ2r8+l7usM7BIMA6B9u1+EutEJ8CH+mYJoNVJvRFaE
-	nHMDPp/m3g2UV7SI2Rg9Ar2v4tt/6/ob4V0oRw5Ois0fOjv9efisGedtey2lfLypewjSOXXy11I
-	07XXMdm06OMJo5xhsiwLqR8HFZqmhnFZSGZfWe2kD4DXQe0xuShcFQFEu+hUDnOYYEk8Qz8k3k1
-	BX+oCqYMYaCweRodocsirXKcAfM6nSHNTf+J1JCZOcfPnKt7kT+/b5K4wLc3pR1m4+OeQ==
-X-Google-Smtp-Source: AGHT+IH0Qxn5umR+KTzlQjYde5sZrgYSQpinQuxEWNC75JPAjTopOQpTnF92+10+0K31fB+tergQmw==
-X-Received: by 2002:a05:6a00:410d:b0:727:3c37:d5fb with SMTP id d2e1a72fcca58-72abde8461bmr32672709b3a.16.1735246469324;
-        Thu, 26 Dec 2024 12:54:29 -0800 (PST)
+        bh=9Fv0dmw4a1MlZSN9IU7fNoeOhmvuFgDbPitU3E7VQj8=;
+        b=SQKoVrmE4f0xz8OvdV9e5ef2UKI6ecHPNiriBjVnyVKT3X2PHt5xoz9+zXVcWyc914
+         8xH5vud/MNGOR627i4C3rQEX2Qt3dcgHpYNiAm1IwJFeGpEl0NsjdxmVoNxff/E5yePG
+         lemVQiSiHapsLVA3o27m+Pjhqwfsx1PyxX3tSVbGcnnOd3hVLXIPHwlYAYrt1UlBN61M
+         JIp2cV2zZc59Rhc5Ri3+V7jV46w2pZUF019YzmQAEXZdypWFbciyWiLIsnyTgEWjCPrw
+         zSohsXlBcjDeKHam3Qm7rfDknMYK2ovO+0VOcIIlOQw47jTBterVhjGVvA7OSYNmV4eP
+         f4bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqb8YUYnM//8hivyj9Oh6lrNSCLENQAmrCCtsyJ0TiS6P+OS9z4h6+AL8DZkhMN8Tpez5iQYh940BlIeg1@vger.kernel.org, AJvYcCX+R9xc4SF3V886zd9Rs/PHjUHXbL26y9nnl2+zl9F2xCiLqn7xcxANVkpiJ4X2uO0qS0Clz8wUDQ0vHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmYsIqgzxOF0aM19IgS7dk3gM8W2J4nbIyWzSLbL4BYTbEBu0V
+	xLOVtEWofjEi5awlItspKCURSdj06lCsGICPUk09ZT1Aqfy+2JGS
+X-Gm-Gg: ASbGncsT1Qnalwn4+Ph2j+MrMG4MKnexH6sZYTlFjbGer2A3RykmX4kDsWyN3nQY2xj
+	ShTFDklGb9iHGWOxYDBr5uHIBK/LAt/3aJ63CqtefNRkzMU7aIEa6kpRTh3ZtWlIUDyxkNFdKKj
+	0jCIlmWDncXGUYI/celSEbVz0eiaoRhWj7HFNCF+aZ/2NXgB4W22DBLpg5S3Fm2XO9h4MDHzkSY
+	bjfgot24OUwtbSmPctoOPssdak7xCVFQK4jbM36pHmVilDOvfAUcGDAr0gJHCd4ZcPtLQ==
+X-Google-Smtp-Source: AGHT+IG4d7fkEBOkkhF5XV1d4feqkZinRx+EU8eZzFCNrZ/MjQbY0w5ruY9+o5LWFPMz382BttcoRA==
+X-Received: by 2002:a17:90b:3a43:b0:2ee:94a0:255c with SMTP id 98e67ed59e1d1-2f4536d25fcmr37163902a91.13.1735247049482;
+        Thu, 26 Dec 2024 13:04:09 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8db3a8sm13787100b3a.100.2024.12.26.12.54.28
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f447882af6sm15872560a91.36.2024.12.26.13.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2024 12:54:28 -0800 (PST)
+        Thu, 26 Dec 2024 13:04:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 26 Dec 2024 12:54:27 -0800
+Date: Thu, 26 Dec 2024 13:04:07 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: tjakobi@math.uni-bielefeld.de
 Cc: Derek John Clark <derekjohn.clark@gmail.com>,
@@ -66,7 +66,7 @@ Cc: Derek John Clark <derekjohn.clark@gmail.com>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/4] hwmon: (oxp-sensors) Separate logic from
  device-specific data
-Message-ID: <90a41ea2-9a83-4245-88c7-b8dd97f5aabf@roeck-us.net>
+Message-ID: <cf3ef6ff-632e-4fcf-9c13-1425e444a0e5@roeck-us.net>
 References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
  <daa7571b0731e203b5a86e484da8083fd034601e.1735232354.git.tjakobi@math.uni-bielefeld.de>
 Precedence: bulk
@@ -98,18 +98,45 @@ On Thu, Dec 26, 2024 at 06:00:16PM +0100, tjakobi@math.uni-bielefeld.de wrote:
 >  drivers/hwmon/oxp-sensors.c | 517 +++++++++++++++---------------------
 >  1 file changed, 215 insertions(+), 302 deletions(-)
 > 
+>  
 ...
+> -static int oxp_pwm_disable(void)
+> +static int oxp_pwm_disable(const struct oxp_config *config)
+>  {
+> -	switch (board) {
+> -	case orange_pi_neo:
+> -		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
+> -	case aok_zoe_a1:
+> -	case aya_neo_2:
+> -	case aya_neo_air:
+> -	case aya_neo_air_1s:
+> -	case aya_neo_air_plus_mendo:
+> -	case aya_neo_air_pro:
+> -	case aya_neo_flip:
+> -	case aya_neo_geek:
+> -	case aya_neo_kun:
+> -	case oxp_2:
+> -	case oxp_fly:
+> -	case oxp_mini_amd:
+> -	case oxp_mini_amd_a07:
+> -	case oxp_mini_amd_pro:
+> -	case oxp_x1:
+> -		return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
+> -	default:
+> -		return -EINVAL;
+> -	}
+> +	if (test_bit(OXP_FEATURE_PWM, &config->features))
+> +		return write_to_ec(config->sensor_pwm_enable_reg, PWM_MODE_AUTO);
 > +
->  static const struct dmi_system_id dmi_table[] = {
->  	{
->  		.matches = {
->  			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
->  			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 AR07"),
->  		},
-> -		.driver_data = (void *)aok_zoe_a1,
-> +		.driver_data = (void *)&config_aok_zoe,
 
-I have not looked at hte rest of the code, but the whole point of
-void * is that a tyoe cast to or from it is not necessary.
+This and all the other feature checks are completely wrong.
+Those checks whould happen once in the is_visible functions,
+and there should not be any such runtime checks. If a feature
+is not available, the associated attributes should not be created
+in the first place.
+
+If such checks happen in the current code, that should be fixed
+in the is_visible functions. Any existing runtime feature checks
+should be removed.
 
 Guenter
