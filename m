@@ -1,39 +1,39 @@
 Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC74713D893;
-	Thu, 26 Dec 2024 22:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C12D1865E1;
+	Thu, 26 Dec 2024 23:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.70.45.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735253999; cv=none; b=UfW0q0Q7kerGnOqn6kQLqSVBBckPK3laFPeaFiLQYk6dJIL9bKqZ/mZVV9CTGu1n5IT1NgnPz+Rtn7IS8qXy07fR37kNAmclxsMLZPqwRcIKnV9VhUG+NCCtdEz3L/hIq1SZq2mzKomYzaGwG3CbxfxEdaltRZhWMmIr5mCyuF4=
+	t=1735254332; cv=none; b=H/t+k3cUpOk9L70NBaJa1NsWQkSglkdQapX1+j0CZy5kiNsgItks0cQlcNT9dS7Yp9hExe6NJGLVUGLcx6CkheK6R9f8h1mKxmplvvDN/i3bBPlBeUQ0iHTjNttzk9P2LqEOluaAojupR6rPYtiHhTR9squTgJ46M1CRtWuWp/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735253999; c=relaxed/simple;
-	bh=fMTITeIo7FjkOkvVHCW/BcKPe5Bfr85KEnmK+O9mb4g=;
+	s=arc-20240116; t=1735254332; c=relaxed/simple;
+	bh=SQZez2CS8rjUMTtt4/oDKGKBK+PkD8H+HGK6kR7xBuU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jtpbZx9AZEd4prjXarT2lIjxxfMBEeWy0E2myRIXTpUgWCpt9i8kE7Ry8dEFQusL86AKjCti8HKnKAKByWUuuHOudvJAWTf03jk/sZNOW8ufvBnSSpgTT/OB1SVRhojWTmm8bs501wAM2fd8lBb5fQXFK6YTy32euNb82H91g0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=skoHUG0K; arc=none smtp.client-ip=129.70.45.13
+	 In-Reply-To:Content-Type; b=ZaJKbV0oWM9yw5tBQQm7ePl1Z9XAIgbgQ2PAam6Hbl0272Z57TIDx6c0YRJe9Wje+crX69VxjD07awQmMagpmRwgpx0qgOhIHojb7lfxs+sYaIa4/lYckJUR+fX2CksE5GVWZMDqhPPszyesQqzeV94KvCCOF1xZhl4VkuNnBhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=Pfpuglu4; arc=none smtp.client-ip=129.70.45.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="skoHUG0K"
+	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="Pfpuglu4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=math.uni-bielefeld.de; s=default; t=1735253994;
-	bh=fMTITeIo7FjkOkvVHCW/BcKPe5Bfr85KEnmK+O9mb4g=;
+	d=math.uni-bielefeld.de; s=default; t=1735254328;
+	bh=SQZez2CS8rjUMTtt4/oDKGKBK+PkD8H+HGK6kR7xBuU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=skoHUG0KK1CgLzXdV4LfkTdhNGm3CuYz2WtssjNcK1eqqQel5IrN0/fV7I8404MPH
-	 XYwMsRH3WjbhTP+jAyuMULd01di+tVZ7qvsH+ne+zq6aOBbdz5EsJx4On8vZrvCe2p
-	 2++SXI7+kC7QmLnx+f3nCE4ZyqSqFPk3aSC3Kp4/fztMkgRJ2tJDucXQZvAimqcftM
-	 pSL2KVmFe0xVO0M9B0VApUPX8plWtdnzjavIXxJYKoQXAvdlD7oAlloRRUH/GBKuSx
-	 qKQatULZiFy+lOpwZx39p5bLhO5wvqmv5TaIB6xfF3z0ISL7Zt9M51q+BYuaDBPEAW
-	 ylKr1dqNuVK2Q==
+	b=Pfpuglu4Xz3muYBasZxADJV3O43k2ErYwI96SAfZx0Pu4b8t2WTspqREcFT7NDLfa
+	 Yf9tKjECSSM001x2sAGPg7AxX/w3DdM+Gaih/McF8cpPmzhxSRp3DSctLKp4WGWTzS
+	 1uOD5eVdJxFmJ54rxINkFz7IiJCdT2NZC3O1tdcADDV2lraJO2VkBn7EgIleb4aqA4
+	 gHWuV5FUSLFJs9OoCOzGmIiZyMJRXCZ9CX3uwz8DhEsW9JeHNIlPAxkKINIr0VU3di
+	 LlaZHvG5FyH5od371TxSQRVuha7rh2HjiRTYnLRQxa1V2O1YVgW4LWZLSzlipHvEiv
+	 T+hc2Y97p6RWw==
 Received: from [192.168.2.10] (58-32-133-N4.customer.vsm.sh [170.133.32.58])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 3D06920567;
-	Thu, 26 Dec 2024 23:59:54 +0100 (CET)
-Message-ID: <080bad40-6676-4369-9601-d2d200ae3ea2@math.uni-bielefeld.de>
-Date: Thu, 26 Dec 2024 23:59:53 +0100
+	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id D49A620567;
+	Fri, 27 Dec 2024 00:05:27 +0100 (CET)
+Message-ID: <dc38e8f0-2262-487e-902d-6e13992f0f51@math.uni-bielefeld.de>
+Date: Fri, 27 Dec 2024 00:05:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,7 +50,7 @@ Cc: Derek John Clark <derekjohn.clark@gmail.com>,
  linux-kernel@vger.kernel.org
 References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
  <daa7571b0731e203b5a86e484da8083fd034601e.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <90a41ea2-9a83-4245-88c7-b8dd97f5aabf@roeck-us.net>
+ <cf3ef6ff-632e-4fcf-9c13-1425e444a0e5@roeck-us.net>
 Content-Language: en-US
 From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
@@ -97,11 +97,11 @@ Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
  pC4w+Ho/cC8OJpuwHWXqg9a3Hs6yH+hLjM/M0yk1vhMyYYXubgMv3DgbNuXAURjQ6DkY1o/8
  5jyYIbLNVBjZKDXq8pN13q6/M9q8MAD2qO3VvMjyEkzypg4qB76YLoiWtsanpUBrp9bYQXQ5
  JRHWPGCL3BhOxQ==
-In-Reply-To: <90a41ea2-9a83-4245-88c7-b8dd97f5aabf@roeck-us.net>
+In-Reply-To: <cf3ef6ff-632e-4fcf-9c13-1425e444a0e5@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/26/24 21:54, Guenter Roeck wrote:
+On 12/26/24 22:04, Guenter Roeck wrote:
 > On Thu, Dec 26, 2024 at 06:00:16PM +0100, tjakobi@math.uni-bielefeld.de wrote:
 >> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 >>
@@ -121,27 +121,60 @@ On 12/26/24 21:54, Guenter Roeck wrote:
 >>   drivers/hwmon/oxp-sensors.c | 517 +++++++++++++++---------------------
 >>   1 file changed, 215 insertions(+), 302 deletions(-)
 >>
+>>   
 > ...
+>> -static int oxp_pwm_disable(void)
+>> +static int oxp_pwm_disable(const struct oxp_config *config)
+>>   {
+>> -	switch (board) {
+>> -	case orange_pi_neo:
+>> -		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
+>> -	case aok_zoe_a1:
+>> -	case aya_neo_2:
+>> -	case aya_neo_air:
+>> -	case aya_neo_air_1s:
+>> -	case aya_neo_air_plus_mendo:
+>> -	case aya_neo_air_pro:
+>> -	case aya_neo_flip:
+>> -	case aya_neo_geek:
+>> -	case aya_neo_kun:
+>> -	case oxp_2:
+>> -	case oxp_fly:
+>> -	case oxp_mini_amd:
+>> -	case oxp_mini_amd_a07:
+>> -	case oxp_mini_amd_pro:
+>> -	case oxp_x1:
+>> -		return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
+>> -	default:
+>> -		return -EINVAL;
+>> -	}
+>> +	if (test_bit(OXP_FEATURE_PWM, &config->features))
+>> +		return write_to_ec(config->sensor_pwm_enable_reg, PWM_MODE_AUTO);
 >> +
->>   static const struct dmi_system_id dmi_table[] = {
->>   	{
->>   		.matches = {
->>   			DMI_MATCH(DMI_BOARD_VENDOR, "AOKZOE"),
->>   			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AOKZOE A1 AR07"),
->>   		},
->> -		.driver_data = (void *)aok_zoe_a1,
->> +		.driver_data = (void *)&config_aok_zoe,
 > 
-> I have not looked at hte rest of the code, but the whole point of
-> void * is that a tyoe cast to or from it is not necessary.
-> 
-> Guenter
-I'm also not happy with the cast. But it's either the cast or a warning, 
-that the const qualifier is lost.
+> This and all the other feature checks are completely wrong.
+> Those checks whould happen once in the is_visible functions,
+> and there should not be any such runtime checks. If a feature
+> is not available, the associated attributes should not be created
+> in the first place.
+Hmm, so if the feature checks are wrong _now_, then the board check was 
+also wrong to begin with. This is my first time working on hwmon code. 
+If we can just drop the checks here (and elsewhere) and just have them 
+in the is_visible function -- I'm all for it. Less code is better code.
 
-I'm open to suggestions here. But I don't think that leaving warnings 
-around is a good idea.
+
+> If such checks happen in the current code, that should be fixed
+> in the is_visible functions. Any existing runtime feature checks
+> should be removed.
+OK, so to reiterate: We don't want any feature checks during runtime. 
+Only during probe time. And during probe we just create the attributes 
+that make sense for the device. What we can't decide on the level of 
+attributes, we do in the is_visible functions. Is this correct?
 
 With best wishes,
 Tobias
+
+
+> 
+> Guenter
 
