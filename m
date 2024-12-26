@@ -1,39 +1,39 @@
 Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C12D1865E1;
-	Thu, 26 Dec 2024 23:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434DB189F42;
+	Thu, 26 Dec 2024 23:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.70.45.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735254332; cv=none; b=H/t+k3cUpOk9L70NBaJa1NsWQkSglkdQapX1+j0CZy5kiNsgItks0cQlcNT9dS7Yp9hExe6NJGLVUGLcx6CkheK6R9f8h1mKxmplvvDN/i3bBPlBeUQ0iHTjNttzk9P2LqEOluaAojupR6rPYtiHhTR9squTgJ46M1CRtWuWp/g=
+	t=1735254825; cv=none; b=BPwhvgHeZtPjEauDYHQnFOEeZuTaEvTky4lyzIBaNHLBa6pSGv6TN9ccMxcJX67XgcqnikZssXouOMH/spf9timdAOHS+b11gEVSsLOOgXWgRkPRnQlZ+iGZDVD/+vK+xkje+tPLLr+YuKUhJpKNaT+kcB9RpkH4x7NO1Dy0m7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735254332; c=relaxed/simple;
-	bh=SQZez2CS8rjUMTtt4/oDKGKBK+PkD8H+HGK6kR7xBuU=;
+	s=arc-20240116; t=1735254825; c=relaxed/simple;
+	bh=mNfO6lvYrvyj7ED7opOOlZ/TOukuEAulSXqMoo++8Wo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZaJKbV0oWM9yw5tBQQm7ePl1Z9XAIgbgQ2PAam6Hbl0272Z57TIDx6c0YRJe9Wje+crX69VxjD07awQmMagpmRwgpx0qgOhIHojb7lfxs+sYaIa4/lYckJUR+fX2CksE5GVWZMDqhPPszyesQqzeV94KvCCOF1xZhl4VkuNnBhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=Pfpuglu4; arc=none smtp.client-ip=129.70.45.13
+	 In-Reply-To:Content-Type; b=prft2hE5pePevJCKQIvnEeLsxyD2aPwyoP8VJero9yYVp0JxeDiqKXBNMr8pbnx++8KrJJMOnneta+DUj5i12jHo+C/4zxYB/n7GKHkSRp8YW+X8b3Co3bR82FrcSHWsbKTpgAaV1qsti4qfsPjE4vTh+lgEkmw63VYT9DcLweg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=CALYbnDc; arc=none smtp.client-ip=129.70.45.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="Pfpuglu4"
+	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="CALYbnDc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=math.uni-bielefeld.de; s=default; t=1735254328;
-	bh=SQZez2CS8rjUMTtt4/oDKGKBK+PkD8H+HGK6kR7xBuU=;
+	d=math.uni-bielefeld.de; s=default; t=1735254821;
+	bh=mNfO6lvYrvyj7ED7opOOlZ/TOukuEAulSXqMoo++8Wo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Pfpuglu4Xz3muYBasZxADJV3O43k2ErYwI96SAfZx0Pu4b8t2WTspqREcFT7NDLfa
-	 Yf9tKjECSSM001x2sAGPg7AxX/w3DdM+Gaih/McF8cpPmzhxSRp3DSctLKp4WGWTzS
-	 1uOD5eVdJxFmJ54rxINkFz7IiJCdT2NZC3O1tdcADDV2lraJO2VkBn7EgIleb4aqA4
-	 gHWuV5FUSLFJs9OoCOzGmIiZyMJRXCZ9CX3uwz8DhEsW9JeHNIlPAxkKINIr0VU3di
-	 LlaZHvG5FyH5od371TxSQRVuha7rh2HjiRTYnLRQxa1V2O1YVgW4LWZLSzlipHvEiv
-	 T+hc2Y97p6RWw==
+	b=CALYbnDc962WfqC1hJaJaNrdrqNNB9dMk/Rspus5pShitzIP6Azn3qRF30V/R7nZ7
+	 spQBK2A6N6sMAWaQ4tnqvlmsCHeyrTcGv1YwxLi/6GAEWbuCp9iTMLXfNLwUMcjne9
+	 9qO2BkXAEChHS6QaZH76QYNUXrvkJjXNQtJfxqicI734yPDGrn8xakTT6CckHzK6Ps
+	 0lCdx0lQFSFTdviO/xaY768OZMeHXPNraZehmMbxS+gIbYiG3V2bhpDrK4pjPY3+M3
+	 4pPQ3GEKk5DelYNcBNIriSwM6pond0wyhosfs7mJeYUp9jnHsZAy9CpMVxkFILqafR
+	 OaxVP1UJzksxA==
 Received: from [192.168.2.10] (58-32-133-N4.customer.vsm.sh [170.133.32.58])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id D49A620567;
-	Fri, 27 Dec 2024 00:05:27 +0100 (CET)
-Message-ID: <dc38e8f0-2262-487e-902d-6e13992f0f51@math.uni-bielefeld.de>
-Date: Fri, 27 Dec 2024 00:05:27 +0100
+	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id DE59120567;
+	Fri, 27 Dec 2024 00:13:40 +0100 (CET)
+Message-ID: <28b7a9b2-a2ea-473e-8a17-2b987169b669@math.uni-bielefeld.de>
+Date: Fri, 27 Dec 2024 00:13:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,16 +41,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] hwmon: (oxp-sensors) Separate logic from
- device-specific data
+Subject: Re: [PATCH 4/4] hwmon: (oxp-sensors) Cache state of PWM enable mode
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Derek John Clark <derekjohn.clark@gmail.com>,
  =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
  Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <daa7571b0731e203b5a86e484da8083fd034601e.1735232354.git.tjakobi@math.uni-bielefeld.de>
- <cf3ef6ff-632e-4fcf-9c13-1425e444a0e5@roeck-us.net>
+ <80c85a5d219eba0c10d6927c3f90bbc3ad6043a1.1735232354.git.tjakobi@math.uni-bielefeld.de>
+ <94e512e0-8105-4123-b9be-8a9805f7cfca@roeck-us.net>
 Content-Language: en-US
 From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
@@ -97,84 +96,34 @@ Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
  pC4w+Ho/cC8OJpuwHWXqg9a3Hs6yH+hLjM/M0yk1vhMyYYXubgMv3DgbNuXAURjQ6DkY1o/8
  5jyYIbLNVBjZKDXq8pN13q6/M9q8MAD2qO3VvMjyEkzypg4qB76YLoiWtsanpUBrp9bYQXQ5
  JRHWPGCL3BhOxQ==
-In-Reply-To: <cf3ef6ff-632e-4fcf-9c13-1425e444a0e5@roeck-us.net>
+In-Reply-To: <94e512e0-8105-4123-b9be-8a9805f7cfca@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/26/24 22:04, Guenter Roeck wrote:
-> On Thu, Dec 26, 2024 at 06:00:16PM +0100, tjakobi@math.uni-bielefeld.de wrote:
+On 12/26/24 22:05, Guenter Roeck wrote:
+> On Thu, Dec 26, 2024 at 06:00:19PM +0100, tjakobi@math.uni-bielefeld.de wrote:
 >> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
 >>
->> We currently have large switch-statements in all functions that
->> write to EC registers, even though the bulk of the supported
->> devices functions more or less the same.
+>> The driver is in full control of the enable mode, so we
+>> don't need to read it from HW every single time.
 >>
->> Factor the device-specific data out into a struct oxp_config. This
->> only leaves logic in the corresponding functions and should make
->> adding future devices much easier and less error-prone.
->>
->> Also introduce struct oxp_data which is going to be used in a
->> later commit to cache device state.
->>
->> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
->> ---
->>   drivers/hwmon/oxp-sensors.c | 517 +++++++++++++++---------------------
->>   1 file changed, 215 insertions(+), 302 deletions(-)
->>
->>   
-> ...
->> -static int oxp_pwm_disable(void)
->> +static int oxp_pwm_disable(const struct oxp_config *config)
->>   {
->> -	switch (board) {
->> -	case orange_pi_neo:
->> -		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
->> -	case aok_zoe_a1:
->> -	case aya_neo_2:
->> -	case aya_neo_air:
->> -	case aya_neo_air_1s:
->> -	case aya_neo_air_plus_mendo:
->> -	case aya_neo_air_pro:
->> -	case aya_neo_flip:
->> -	case aya_neo_geek:
->> -	case aya_neo_kun:
->> -	case oxp_2:
->> -	case oxp_fly:
->> -	case oxp_mini_amd:
->> -	case oxp_mini_amd_a07:
->> -	case oxp_mini_amd_pro:
->> -	case oxp_x1:
->> -		return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
->> -	default:
->> -		return -EINVAL;
->> -	}
->> +	if (test_bit(OXP_FEATURE_PWM, &config->features))
->> +		return write_to_ec(config->sensor_pwm_enable_reg, PWM_MODE_AUTO);
->> +
 > 
-> This and all the other feature checks are completely wrong.
-> Those checks whould happen once in the is_visible functions,
-> and there should not be any such runtime checks. If a feature
-> is not available, the associated attributes should not be created
-> in the first place.
-Hmm, so if the feature checks are wrong _now_, then the board check was 
-also wrong to begin with. This is my first time working on hwmon code. 
-If we can just drop the checks here (and elsewhere) and just have them 
-in the is_visible function -- I'm all for it. Less code is better code.
-
-
-> If such checks happen in the current code, that should be fixed
-> in the is_visible functions. Any existing runtime feature checks
-> should be removed.
-OK, so to reiterate: We don't want any feature checks during runtime. 
-Only during probe time. And during probe we just create the attributes 
-that make sense for the device. What we can't decide on the level of 
-attributes, we do in the is_visible functions. Is this correct?
+> That is not a reason for adding that much additional code.
+> What is the problem that is being solved, and why is it worth that much
+> additional code ?
+I don't think it's that much additional code, but anyway: Reading from 
+EC is not exactly fast, and I want this value cached for another reason. 
+It turns out that some devices use a different scaling for the PWM value 
+depending on whether the PWM is controlled automatically by the EC, or 
+manually through the driver. And I don't want to do an additional EC 
+read to figure this out, if I can avoid it.
 
 With best wishes,
 Tobias
 
-
+> 
+> Plus, again, all those runtime feature checks in attribute handling
+> code are completely wrong.
 > 
 > Guenter
 
