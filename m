@@ -1,144 +1,160 @@
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6039E196D8F;
-	Thu, 26 Dec 2024 21:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D447A13D893;
+	Thu, 26 Dec 2024 22:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.70.45.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735250363; cv=none; b=rPLCJLYXQTflG6D4fBq2DBSIA8xisuMcvNEMd9/b33+P0zeqXfOClHYqesFpuS0ZulkCpEtaFlZ5VbqAaP5D8uHslBlBENQgIWLh/O1IYsuJnaUQMRdhDTZSFas9N9VoSRSbhCWUvY6TPIYNAAG3P4xhfHqeiVxc1V05q2PZFgs=
+	t=1735253788; cv=none; b=FpHsJCjsZIsOHbtUUkJTGwM8bZGVMLu6DXN6FYagfsi/4JM50qp+i4Id9oy5MXGrJulxI4PBev/z1ZE99oHCat8RkL5BSQ335p7+8zfP/zoBCF8zdSEhBNvmV9cjYslErOEDSq0XmdIB60oWB/yDdz34KL0+R99HxVqa369CrNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735250363; c=relaxed/simple;
-	bh=BJSIBwA9CHxzU+rdENwwDBs9w+whydGHdjfnTkwrpV0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q78qcBHSOsLU/+IR7ClR0VweJRpABwVlKJzhqLoM+fjPj+PmZ5rK0poApHyw+TqPNitrPB1ImVsFU+/gydJSqUtXKgS0OisiJrSubkV2JtHfIc7B7lq7LoZipsecf6kJjFQPjTsBj2E8PXn/KNgjIqR75uP/ZkYIlkC/AkAiOE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=XyTSZwZF; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1735253788; c=relaxed/simple;
+	bh=545+1UtJp9yUeMDzSVfaq9IU+DQj9MTW0D52wto46Ow=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AutJAWts+nvqiVy3miOB89IsM6ohTFmYA9K2KqaTk+fEGDfsJFYXWtwMRPEFxlFQ/V0tHINtoUIfNAKfIzINfKjKLNEJfXavL0Ur+xbFFR+C7CeFh2iLob02sjXpcFw4byieImki0iajOryomvtvJYwmsdoCRzEFwU4NB4nSpSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de; spf=pass smtp.mailfrom=math.uni-bielefeld.de; dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b=G0Bwh6qe; arc=none smtp.client-ip=129.70.45.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=math.uni-bielefeld.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=math.uni-bielefeld.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="XyTSZwZF"
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0F7142E08C92;
-	Thu, 26 Dec 2024 23:59:14 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1735250354;
-	bh=BJSIBwA9CHxzU+rdENwwDBs9w+whydGHdjfnTkwrpV0=;
-	h=Received:From:Subject:To;
-	b=XyTSZwZFGxf3Izf/jDc2p4942aZGESaErCyOUH5dHwLdj3qHaIAwpVnjarz8oDe6u
-	 +vpWQqFH2/lz0NMwY9q2JxPVshLH1ae8TEmLwOE0+Y3B0acUBi9NLlLSjRAj2XHT5H
-	 BhFm9E+i/flkrWz4iqdv2fZx8X/RgSiFksVZjaH0=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.176) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f176.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f176.google.com with SMTP id
- 38308e7fff4ca-30167f4c1e3so77610991fa.3;
-        Thu, 26 Dec 2024 13:59:14 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVFLTYDUjOPcbsbUcsIyf8NAI5vFN7pTfTHHse8b/7ODSWaPVoe/vZraqze9pnNeALQcYe5E86GUjkmaZc=@vger.kernel.org,
- AJvYcCVJWBMzxN4OBif5M5s5+9lBfYNceORvNY8gQB1zDKMpDBaoP/VwevvXdOiW4nD/73lX+vlmSzJIeSA=@vger.kernel.org,
- AJvYcCWBFapNKUiuPgepm9KjEOxyMXpoihMSFOcfZV2U6m/glZKlvmZweIQUMRZhGqt/selTmcZVZrAiFyE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydQb25rjnJLyAXFrzeXbiR+Fz8yoVTSYd/dTdKK8fwTM/OwmYT
-	ZpuMpKWb0Pf9BQoKqRXRj4Dvnq2+Enj8BrqvGtYoCCgqOgRn/gaUd6w4ggX3hjDOEKaSEamxwB1
-	V86LdEPp54usssnZ3WhRFjT/KMD0=
-X-Google-Smtp-Source: 
- AGHT+IE0uosJXNHgBNsmOK5SCygq+q2Eyw+kM1E+jmemJgvkLig/bhaA2NkLmdldhG7GfGo5HN4isBAC/9N7YVIZZd0=
-X-Received: by 2002:a05:651c:212a:b0:302:264e:29ec with SMTP id
- 38308e7fff4ca-30468522114mr82659321fa.11.1735250353227; Thu, 26 Dec 2024
- 13:59:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=math.uni-bielefeld.de header.i=@math.uni-bielefeld.de header.b="G0Bwh6qe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=math.uni-bielefeld.de; s=default; t=1735253776;
+	bh=545+1UtJp9yUeMDzSVfaq9IU+DQj9MTW0D52wto46Ow=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=G0Bwh6qed5YTMxvZAoUh4rAZ0+c84ZeYv4ZXOUf6vd3X8sRpeVkMP1ZG7/Ay5gfhq
+	 wm16Ne2U7XgbitxWSAjfuPh3GQtjZg2PQvA3Zwq4XlL9CSk1sAhHPFxK3txsGkMXfi
+	 t3+aqoQCXqTqoK3/JOYdPdll7S6kf58eLlg5ojzDHIX34GmSehWwoWelhG2RSWa0L7
+	 jakYwz5sCmiJ6ii53oPcNOzjFc1ovBI5hmbA8bc5gqAV5wFvc5S+szI2pAsyY0rxb1
+	 hNMV9YsAjtrGEOJ8zgYAZngytYDToXhA/TGSoV4M0iVH4e+sT5riN6dTUMjZ1sXU7j
+	 eX79x4op2KDsQ==
+Received: from [192.168.2.10] (58-32-133-N4.customer.vsm.sh [170.133.32.58])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 2D34920567;
+	Thu, 26 Dec 2024 23:56:16 +0100 (CET)
+Message-ID: <7284955a-fadf-497c-a7e4-6c261c84d32a@math.uni-bielefeld.de>
+Date: Thu, 26 Dec 2024 23:56:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241226112740.340804-1-lkml@antheas.dev>
- <a8e6d5d5-703c-47df-ab57-58234fdeefc1@roeck-us.net>
- <E24291F9-731F-4C27-96C7-BD08FBCF7A76@gmail.com>
-In-Reply-To: <E24291F9-731F-4C27-96C7-BD08FBCF7A76@gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Thu, 26 Dec 2024 22:59:02 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwGdaqoiH5v9Sy5pibHYzrbYnpWKfQ-qUg0+vft_Ve4TUg@mail.gmail.com>
-Message-ID: 
- <CAGwozwGdaqoiH5v9Sy5pibHYzrbYnpWKfQ-qUg0+vft_Ve4TUg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] hwmon: (oxpsensors) Add 2024 OneXPlayer line-up,
- add charge limiting and turbo LED, fix ABI
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <173525035443.10068.13012689396980476255@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] hwmon: (oxp-sensors) Fix wording in code comment
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Derek John Clark <derekjohn.clark@gmail.com>,
+ =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <cover.1735232354.git.tjakobi@math.uni-bielefeld.de>
+ <858c2a5b712eebdf2fc7c9c6e3a2d2f832a68dfc.1735232354.git.tjakobi@math.uni-bielefeld.de>
+ <51006199-1de4-4bda-b579-181e19bd66e4@roeck-us.net>
+Content-Language: en-US
+From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+Autocrypt: addr=tjakobi@math.uni-bielefeld.de; keydata=
+ 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
+ JRHWPGCL3BhOxQ==
+In-Reply-To: <51006199-1de4-4bda-b579-181e19bd66e4@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Guenter,
-Right now, OneXPlayer features a singular EC with a handful of
-features. Where with this patch series we essentially have parity with
-windows, apart from a VRAM feature which I will have to ask but I
-suspect is WMI. It currently concerns a singular component (the EC)
-and the functionality such as turbo button affects the hwmon component
-(i.e., if the turbo button is not engaged, the fan control
-functionality does not work).
 
-As such it cannot be made into separate drivers. I think, and I
-suspect you will agree, that the scope of the driver is _correct_ but
-the place is not correct.
+On 12/26/24 21:52, Guenter Roeck wrote:
+> On Thu, Dec 26, 2024 at 06:00:18PM +0100, tjakobi@math.uni-bielefeld.de wrote:
+>> From: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+>>
+>> Despite what the current comment says, the register is used
+>> both for reading and writing the PWM value.
+>>
+>> Signed-off-by: Tobias Jakobi <tjakobi@math.uni-bielefeld.de>
+>> ---
+>>   drivers/hwmon/oxp-sensors.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+>> index fbd1463d1494..8089349fa508 100644
+>> --- a/drivers/hwmon/oxp-sensors.c
+>> +++ b/drivers/hwmon/oxp-sensors.c
+>> @@ -46,14 +46,14 @@ static bool unlock_global_acpi_lock(void)
+>>   #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 registers long */
+>>   #define OXP_2_SENSOR_FAN_REG           0x58 /* Fan reading is 2 registers long */
+>>   #define OXP_SENSOR_PWM_ENABLE_REG      0x4A /* PWM enable is 1 register long */
+>> -#define OXP_SENSOR_PWM_REG             0x4B /* PWM reading is 1 register long */
+>> +#define OXP_SENSOR_PWM_REG             0x4B /* PWM control is 1 register long */
+> 
+> I think that, if anything, this is more confusing than before.
+> "control" is, for example, enabling or disabling pwm management,
+> setting automatic or manual mode, or setting the pwm polarity.
+> Together ith the next two defines, "control" would suggest that
+> PWM_MODE_AUTO and PWM_MODE_MANUAL are set through that register -
+> which is not the case. "value" maybe, but "control" is just wrong.
+Noted. What do you think about "target" then?
 
-Therefore, can you suggest a reasonable path forward that is sparing
-to this patch series? Should I add an eleventh patch that grafts this
-driver to platform-x86? If appropriate, you can cc the x86 mailing
-list on your next email.
+My main point here was that reading implies that this register is 
+read-only. Which it clearly isn't. And the documentation (which could be 
+certainly be improved in general) should reflect that.
 
-Best,
-Antheas
+With best wishes,
+Tobias
 
-On Thu, 26 Dec 2024 at 22:16, Derek J. Clark <derekjohn.clark@gmail.com> wr=
-ote:
->
->
->
-> On December 26, 2024 1:08:02 PM PST, Guenter Roeck <linux@roeck-us.net> w=
-rote:
-> >On Thu, Dec 26, 2024 at 12:27:30PM +0100, Antheas Kapenekakis wrote:
-> >> This three part series updates the oxpsensors module to bring it in li=
-ne
-> >> with its Windows OneXPlayer counterpart. First, it adds support for al=
-l
-> >> 2024 OneXPlayer handhelds and their special variants.
-> >>
-> >> Then, it adds the new charge limiting and bypass features that were fi=
-rst
-> >> introduced in the X1 and retrofit to older OneXFly variants and for
-> >> controlling the turbo led found in the X1 models. For Bypass, it adds =
-a new
-> >> bypass variant BypassS0 that is only active while the device is in the=
- S0
-> >> state.
-> >>
-> >
-> >This is a hardware monitoring driver. It is not a charge controller driv=
-er,
-> >and it is not a LED controller driver. If such control is wanted/needed =
-for
-> >this system, it should be implemented either as mfd device with client d=
-rivers,
-> >or the entire driver should be moved to platform drivers if there is a d=
-esire
-> >to keep it as single driver.
-> >
-> >Guenter
->
-> I think moving this to x86 platform makes a lot of sense to ensure two se=
-parate drivers can't do async writes to the EC. We probably should have don=
-e that when adding the turbo button toggle anyway. I'll coordinate that eff=
-ort with Tobias and Antheas directly before moving forward.
->
-> Thanks Guenter,
-> - Derek
+> 
+> Guenter
+> 
+>>   #define PWM_MODE_AUTO                  0x00
+>>   #define PWM_MODE_MANUAL                0x01
+>>   
+>>   /* OrangePi fan reading and PWM */
+>>   #define ORANGEPI_SENSOR_FAN_REG        0x78 /* Fan reading is 2 registers long */
+>>   #define ORANGEPI_SENSOR_PWM_ENABLE_REG 0x40 /* PWM enable is 1 register long */
+>> -#define ORANGEPI_SENSOR_PWM_REG        0x38 /* PWM reading is 1 register long */
+>> +#define ORANGEPI_SENSOR_PWM_REG        0x38 /* PWM control is 1 register long */
+>>   
+>>   /* Turbo button takeover function
+>>    * Different boards have different values and EC registers
+>> -- 
+>> 2.45.2
+>>
+>>
+
