@@ -1,29 +1,33 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A67A1CCB26
-	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jan 2025 09:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6A1148832;
+	Fri,  3 Jan 2025 09:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735895814; cv=none; b=JYkwgoG3k1ccUc0Vb8B7SRB06XTQ//ur73O5RgSdNCTful8Afveh38kPKuxFwC1SgkGFbGnvb9cfBGnTmeztIpTPQV1tG2yNWFcK/hQypv1H1qa2MRVf3fBFv5JIzSb3hv2672qNULcm+k5CInMF6TG01559MqUC07TfOr25ybw=
+	t=1735896933; cv=none; b=SUnv2Ngpby8bkrxv0z6JXzP/H2Jq6RFhPTFZ920c9ZBVJmeEc8GO+Ah3m1ChRmLVWC/Lye8+Raee83zrgeIFfp7G3RewCtwJSxqkjw39jEEYkc1wwFkhdJBXaGEUqnByV5A+Wgrm8hXi28/ctJmTWDmZTanqBXvuoueuB/u3Pgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735895814; c=relaxed/simple;
-	bh=jll8r/u8sZ/0KgiwoGlKUd4V48/B4MTHO9pEurOPBRM=;
+	s=arc-20240116; t=1735896933; c=relaxed/simple;
+	bh=3rgvfW4UrPtlO2HZdaDGzQDgLmBAGWc2QCBGhLMl06g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kGkpNZvU/HfG/Tu8Dk1fw8VYL4GvMUfJjLKDII6+7eCqBVk4udFIFzzew4fh8we81mwyXZFE3caUoSHEx2/FfTubxvzLMqt7G3muxBhLCD9Xd6tLk2cUHaS9tWVv03Ol8jNAIXEjcd4a+ylkn4EOeEThSaUvy6OnrxqDA3+hNkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=otvM7b/F; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+	 In-Reply-To:Content-Type; b=Xde6cqVjIy4PCmPxVE/Wxbg1qb/fCu7M+50vA6QvO9+wc7EuEdn7a1j6BGi9hKYGm2tfBXIH1FBybqfbvVbO5ZAAYCWxp07vnGoWMMTQcMrpam2DCVHSvaGrFbLq74uIrQfmJtEs83YE6j8C7ffTd8cVkGYxuGhx1Iv5LwdS3cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gz/xcJBr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="otvM7b/F"
-DKIM-Signature: a=rsa-sha256; b=otvM7b/FO27Uw8b8YuK6SYC8HpswuhXYzM/QonTvKDeWRcyVUHHlI9tdOxCWwTftS+KOnMqkVDACF8HI0+9LQQCQ7qJ6BS/w0sDI3DgDs2M7IKA54penmdaypz9ru42HY4t1y5lzyzuWuRuK6kU2cYnjv8PKviJ+qRH9QHlwfd+OHJzEvefNK4Prw8gogmmogZH7bPmyC3zqrItEwWCzv2cEPmcJgPKFyHU47MNXvn71nOovM7dhAnY33vzxcp8tOKhNmfunIJdUweXx+ZJW9D6M2DTv39h8HW2k/f1sTz/EU4eesIRM2SFkurr6zsHW5bcO1azAAUsw9exc8OrFgg==; s=purelymail3; d=purelymail.com; v=1; bh=jll8r/u8sZ/0KgiwoGlKUd4V48/B4MTHO9pEurOPBRM=; h=Feedback-ID:Received:Date:Subject:To:From;
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: linux-hwmon@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2144673025;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Fri, 03 Jan 2025 09:16:26 +0000 (UTC)
-Message-ID: <c14e5b92-5952-4c7f-a64c-38e579278fa2@korsgaard.com>
-Date: Fri, 3 Jan 2025 10:16:23 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gz/xcJBr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7143AC4CED7;
+	Fri,  3 Jan 2025 09:35:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735896931;
+	bh=3rgvfW4UrPtlO2HZdaDGzQDgLmBAGWc2QCBGhLMl06g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Gz/xcJBrG3JJg1FW2ErCOw0JHq73YntEmIuHt3ni34sVZ0wUclSwdLUDDtt4oDDkx
+	 DwgkrX7DvoMltzvKkH0Tund11QWoa+pEtBzF/bmx/VklnfFseaLZ4Scb12GsOFJAvU
+	 qlxwFYTFC4nOrE9MUcE2kH3fINLXOkogZRXi+Iusek8FvavE3vt9ZNwDx09ST57atY
+	 E9J+jqeD7+MOGiLgbcDYCQUpn7UOJWdNJJfeqRh+d6rOgOu8eS1nn/owm95GC+poTJ
+	 jsqbog0BGc0VSqZv0SMlLN2rSjKW+2Dm4u+5yWlzGDBKIF6y84LKdLemPBCEtvGW7C
+	 SWL7KJb7HMwrQ==
+Message-ID: <3803fad5-0dab-491c-b2bf-47ab888bb1a2@kernel.org>
+Date: Fri, 3 Jan 2025 10:35:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -33,49 +37,84 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
  property
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
+To: Peter Korsgaard <peter@korsgaard.com>, Guenter Roeck
+ <linux@roeck-us.net>, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- linux-kernel@vger.kernel.org
+ <conor+dt@kernel.org>, open list <linux-kernel@vger.kernel.org>
 References: <20250102175041.822977-1-peter@korsgaard.com>
- <173584586623.427850.4042944653628496064.robh@kernel.org>
+ <b3b8aa28-24d3-4952-a8d3-7019ad4c63de@kernel.org>
+ <348cda09-cc54-4d29-975c-ab28241d8372@korsgaard.com>
+ <e31c51dc-4e35-49fe-9838-207e2fb273ce@kernel.org>
+ <25a1b5bd-437c-4136-84d4-e1eab264d062@korsgaard.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <173584586623.427850.4042944653628496064.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <25a1b5bd-437c-4136-84d4-e1eab264d062@korsgaard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 1/2/25 20:24, Rob Herring (Arm) wrote:
+On 03/01/2025 10:01, Peter Korsgaard wrote:
 > 
-> On Thu, 02 Jan 2025 18:50:40 +0100, Peter Korsgaard wrote:
->> The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
->> always be desirable because of noise or power consumption peaks, so add an
->> optional "default-pwm" property that can be used to specify a custom default
->> PWM duty cycle.
->>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->> ---
->>   Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
+> Looking at lore, v1 used target-pwm which Gunter suggested I changed to 
+> default-rpm while explaining that it cannot be a generic property:
 > 
-> My bot found errors running 'make dt_binding_check' on your patch:
+> https://lore.kernel.org/linux-devicetree/b717da30-1d4c-4e09-b98c-4aa41a235234@roeck-us.net/
 > 
-> yamllint warnings/errors:
+> Which I then did as a v2, that then didn't get any additional feedback:
 > 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml: default-pwm: missing type definition
-> Error: Documentation/devicetree/bindings/hwmon/pwm-fan.example.dts:75.25-27 syntax error
-> FATAL ERROR: Unable to parse input tree
-> make[2]: *** [scripts/Makefile.dtbs:131: Documentation/devicetree/bindings/hwmon/pwm-fan.example.dtb] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1506: dt_binding_check] Error 2
-> make: *** [Makefile:251: __sub-make] Error 2
+> https://lore.kernel.org/linux-devicetree/3aa21a01-c994-4b36-8893-181e55a60c5e@korsgaard.com/
+> 
+> So if we agree on default-pwm, then I can send an update (a v4!) with 
+> the typo in the example fixed, OK?
 
-Ups, I added the entry to the example AFTER running make 
-dt_binding_check and missed the <>, will fix.
+Yes and we go back to my first comment about commit msg:
 
--- 
-Bye, Peter Korsgaard
+"Also mention here shortly how Rob's comment is addressed."
+
+e.g. we cannot use default/target-rpm because of foo bar.
+
+Best regards,
+Krzysztof
