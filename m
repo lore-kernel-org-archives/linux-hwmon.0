@@ -1,100 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-10696.protonmail.ch (mail-10696.protonmail.ch [79.135.106.96])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01ECA189902;
-	Fri,  3 Jan 2025 19:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52ABE1BF7FC
+	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jan 2025 20:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.96
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735934293; cv=none; b=Nw3p+pTRRpH5AEABXau7l9RNlGSjEPMHIDJFd7PWep8khY59cKZWQAlGctC+HJAc1jDzS+WRMYiPUE8wHdKkKQgmywpHNdPYXf3MT8Ay7JKV0Bb2/ukGouJvREqj1ndm2ntdpQnsqTX45EERZZidKosz5kd+dPu9u2+kDcSDZxY=
+	t=1735936619; cv=none; b=DUfU8KjCyueiEGnxE5FQt396kC4Fw1XM4ujq0BQwqZAFRw9SOjEfuEvL24Gs0PtFkH8dDkysH6BwjT2tnIfZIMS6ZWjG2mEqS6/bbhW0cPpepaF8ywYcw9HCZg+16hYE/si6NQisxY/qJfJrvwq0RvDsMkXQM8sDFEb7lqsR2BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735934293; c=relaxed/simple;
-	bh=lGPnrXHxFhfBvnTyCxyAN/xgZ2X50cGOh+K5F3Vexs4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kfnq8Z6PDRaoBRTTvPjWUW2x9AiES5OucYa11RwemR8Z/HpkAMfBbh30tjguPnbT0K15R1l46ZMAneJUmIlZQA+6Q38Aux9AGvvTWzKnrYPcBJS/+qtbj3rED+reWvRP+PiL3jyulY3tT1ymKPn4qFGKU/kk3angE2+RifxjcDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTbzFPgh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735936619; c=relaxed/simple;
+	bh=NpMfUD3rbufTon0mpCjQXpP+tAC6YmCPba3xtU45yXA=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=COXWcsSMjeleE7izPJHZ2jhkZR5hbuqcy7DBKnQiPMmTqqbCxUSvTXKkigtSCEuKrigL0m1mTrqLg+8cq0Jxpj0nPBbvpoSsYLYVAgjCFOpq4TmKpg18WOLslm21XI1wHaJ3sTwFzUz1+UkqYI31Fu9/g5bZhDNnw3CkJ98wev8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=gIFFQNaC; arc=none smtp.client-ip=79.135.106.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTbzFPgh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F685C4CECE;
-	Fri,  3 Jan 2025 19:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735934292;
-	bh=lGPnrXHxFhfBvnTyCxyAN/xgZ2X50cGOh+K5F3Vexs4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NTbzFPghW/NCYs1toFb1P7vTfDQsTx3PxppPRd/CWO6ymqJyYF8u9w8i7dObH54GR
-	 iucUcfFEFS06Lrghdi+puU98PSJPQ6JmN/3dudFss5TRlUuXNwu1Bo6RlMc1ZrciMR
-	 juqvh89vZhVMh1QQEcQKH6PU1dbnZqRkC5O2lJ3wvx+rn3qVQ0KXtGGcehLBTF8X0e
-	 U+EB3pPEkvTS8UhuMbGfnAgOZLmXJtAYlZYxDNQluQoTdh1SGMfPh7g2hW+x7aHGis
-	 LuKhFYo6DF53uI6NHMA0kNVOQUiSY3WnoYNQ3Wh4jq/Ubft+cwrrLD8ALiQFoQqNad
-	 dHNtVzTTkz/3w==
-Date: Fri, 3 Jan 2025 13:58:10 -0600
-From: Rob Herring <robh@kernel.org>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
- property
-Message-ID: <20250103195810.GA2624225-robh@kernel.org>
-References: <20250103101448.890946-1-peter@korsgaard.com>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="gIFFQNaC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1735936609; x=1736195809;
+	bh=9Aw/7Gr2gKA0GqU7eBi8Lfy6pUXCYLnb0C8w8ngBWGQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=gIFFQNaCsDthykPdORp0SGhQLbaxS/aDFwbZIaylpwIWH3Jjru9r7zzvtk11LjQdD
+	 EqwxxV47nqTBkiGdmbGYko5N3zKON83tjbf8GgCt3ss4t0KHkHm24v5vCeDasUNGBL
+	 tGG2veEo8g13TtG8KsX1gQAgaTx6B1lQFYwMHqD4AE66r/e+QMo9vQ3gkYafMCOkw1
+	 5f19GnRhBCcueX7Ibjxn3TJt8LELTNzdAYXuo5hmV4QmYF6PPM069Erm4/Na0aIbcF
+	 d/eoZst0+sj/0MpM4sp7JXPocTrU2rGSxoZCpJbTJK3dywlS+1DoZ7Tc3hg8Hw0Fby
+	 YyDmEacAnYZVg==
+Date: Fri, 03 Jan 2025 20:36:42 +0000
+To: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+From: John <therealgraysky@proton.me>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for MSI
+Message-ID: <osBkHg4_PFiGtQwiWQ34uHfcA4ayicZKiIOzI3D61mX9EsCfG1Phg5ew3chSSxlpPKU1n1l-n6wrxwyECWYxmKz2m3PFs0hhdiPu_OJgOZ4=@proton.me>
+In-Reply-To: <J6wtEBUs2mxxQ-ukKB5Ql6WHZfim5gKZZ6wxrLXYirJd7vTPBdeNRslkl3EXf4ufG8SHdfrDz_gkuWkllDo3oRHZMG5ohbzCSHnzPlGyH-E=@proton.me>
+References: <J6wtEBUs2mxxQ-ukKB5Ql6WHZfim5gKZZ6wxrLXYirJd7vTPBdeNRslkl3EXf4ufG8SHdfrDz_gkuWkllDo3oRHZMG5ohbzCSHnzPlGyH-E=@proton.me>
+Feedback-ID: 47473199:user:proton
+X-Pm-Message-ID: 39ee5caa05bb868b811b9945e13ff90f69d93264
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250103101448.890946-1-peter@korsgaard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 03, 2025 at 11:14:47AM +0100, Peter Korsgaard wrote:
-> The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
-> always be desirable because of noise or power consumption peaks, so add an
-> optional "default-pwm" property that can be used to specify a custom default
-> PWM duty cycle (0..255).
-> 
-> This is somewhat similar to target-rpm from fan-common.yaml, but that cannot
-> be used here as target-rpm specifies the target fan speed, whereas this is
-> the default pwm to set when the device is instantiated - And the resulting
-> fan RPM resulting from a given PWM duty cycle is fan dependent.
+I see now why that sensor gives a values of -40.  The board came with T_SEN=
+1 which is an extra connector for use with a thermistor cable.  The driver =
+is behaving as expected with the patch I submitted.
 
-I still don't agree. Quoting Guenter:
+On Wednesday, January 1st, 2025 at 10:15 AM, John <therealgraysky@proton.me=
+> wrote:
 
-> The two values are also orthogonal. The fan rpm is fan dependent.
-> Each fan will require a different pwm value to reach the target speed.
-> Trying to use target-rpm to set a default pwm value would really
-> not make much if any sense.
-
-But RPM is ultimately what you care about and is the fan parameter 
-that's universal yet independent of the underlying control. RPM is what 
-determines noise and power consumption.
-
-There's 2 cases to consider: you have a tach signal and know the fan RPM 
-or you don't know the RPM. If you have a tach signal, we probably 
-wouldn't be discussing this because target-rpm would be enough. So I'm 
-assuming this is the case and you have no idea what RPM the fan runs at. 
-The fan-common.yaml binding is a bit incomplete for this. What you need 
-is some map of fan speed to PWM duty cycle as most likely it is not 
-linear response. I think there are 2 options here:
-
-Use the 'cooling-levels' property. Fan "speed" is the index of the 
-array. So you just need a 'default-cooling-level' property that's the 
-default index.
-
-The other option is define an array of (fan RPM, PWM duty cycle) tuples. 
-Then target-rpm can be used to select the entry. We already have 
-something like this with 'gpio-fan,speed-map'.
-
-There's also no definition of the minimum RPM or duty cycle in the 
-pwm-fan binding. We have min-rpm in fan-common, but that doesn't work 
-without a tach. A map would help here as well
-
-This problem to me is similar to LEDs. Ultimately it's brightness that 
-you care about, not the current or PWM duty cycle to get there.
-
-Finally, whatever we end up with, it should go in fan-common.yaml. That 
-supports PWMs too, so whatever we end up with is applicable to any PWM 
-controlled fan.
-
-Rob
+> This value was found on an MSI MPG X870E CARBON WIFI (MS-7E49) with an NC=
+T6687D chip.
+>=20
+> I do not know why one of the sensors it reads gets reported at -40.0 howe=
+ver. Calling sensors multiple times shows that -40.0 value seems to bounce =
+around from "Thermistor 0" and "Chipset B."
+>=20
+> Feedback is appreciated.
+>=20
+> For reference, I attached a sample output of sensors for the new chip wit=
+h this patch applied:
+>=20
+> nct6687-isa-0a20
+> Adapter: ISA adapter
+> VIN0: 1.01 V (min =3D +0.00 V, max =3D +0.00 V)
+> VIN1: 1.01 V (min =3D +0.00 V, max =3D +0.00 V)
+> VIN2: 1.30 V (min =3D +0.00 V, max =3D +0.00 V)
+> VIN3: 672.00 mV (min =3D +0.00 V, max =3D +0.00 V)
+> VIN4: 1.01 V (min =3D +0.00 V, max =3D +0.00 V)
+> VIN5: 2.03 V (min =3D +0.00 V, max =3D +0.00 V)
+> VIN6: 464.00 mV (min =3D +0.00 V, max =3D +0.00 V)
+> VIN7: 1.52 V (min =3D +0.00 V, max =3D +0.00 V)
+> VCC: 3.28 V (min =3D +0.00 V, max =3D +0.00 V)
+> VSB: 3.33 V (min =3D +0.00 V, max =3D +0.00 V)
+> AVSB: 3.33 V (min =3D +0.00 V, max =3D +0.00 V)
+> VTT: 2.03 V (min =3D +0.00 V, max =3D +0.00 V)
+> VBAT: 3.18 V (min =3D +0.00 V, max =3D +0.00 V)
+> VREF: 1.79 V (min =3D +0.00 V, max =3D +0.00 V)
+> fan1: 747 RPM (min =3D 0 RPM)
+> fan2: 745 RPM (min =3D 0 RPM)
+> fan3: 0 RPM (min =3D 0 RPM)
+> fan4: 0 RPM (min =3D 0 RPM)
+> fan12: 0 RPM (min =3D 0 RPM)
+> fan13: 0 RPM (min =3D 0 RPM)
+> fan14: 0 RPM (min =3D 0 RPM)
+> fan15: 0 RPM (min =3D 0 RPM)
+> fan16: 0 RPM (min =3D 0 RPM)
+> AMD TSI Addr 98h: +49.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +0.0=C2=B0C, hyst =3D +0.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C) sensor =3D AMD AMDSI
+> Diode 0 (curr): +56.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +0.0=C2=B0C, hyst =3D +0.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C) sensor =3D thermal diode
+> Thermistor 15: +52.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +124.0=C2=B0C, hyst =3D +34.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C) sensor =3D thermistor
+> SMBus 0: +56.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +0.0=C2=B0C, hyst =3D +0.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C)
+> SMBus 1: +56.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +0.0=C2=B0C, hyst =3D +0.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C)
+> Thermistor 0: -40.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +0.0=C2=B0C, hyst =3D +0.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C) sensor =3D thermistor
+> Thermistor 15: +52.0=C2=B0C (low =3D +0.0=C2=B0C)
+> (high =3D +124.0=C2=B0C, hyst =3D +34.0=C2=B0C)
+> (crit =3D +0.0=C2=B0C) sensor =3D thermistor
+> intrusion0: ALARM
+> beep_enable: disabled
+>=20
+> Signed-off-by: John Audia therealgraysky@proton.me
+>=20
+> ---
+> Documentation/hwmon/nct6683.rst | 1 +
+> drivers/hwmon/nct6683.c | 3 +++
+> 2 files changed, 4 insertions(+)
+>=20
+> diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct668=
+3.rst
+> index 2a7a78eb1b46..2302b1ac95b1 100644
+> --- a/Documentation/hwmon/nct6683.rst
+> +++ b/Documentation/hwmon/nct6683.rst
+> @@ -65,4 +65,5 @@ ASRock X570 NCT6683D EC firmware version 1.0 build 06/2=
+8/19
+> ASRock X670E NCT6686D EC firmware version 1.0 build 05/19/22
+> MSI B550 NCT6687D EC firmware version 1.0 build 05/07/20
+> MSI X670-P NCT6687D EC firmware version 0.0 build 09/27/22
+> +MSI X870E NCT6687D EC firmware version 0.0 build 11/13/24
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+> index f71615e06a8f..e1f2736ee3d2 100644
+> --- a/drivers/hwmon/nct6683.c
+> +++ b/drivers/hwmon/nct6683.c
+> @@ -175,6 +175,7 @@ superio_exit(int ioreg)
+> #define NCT6683_CUSTOMER_ID_MSI 0x201
+> #define NCT6683_CUSTOMER_ID_MSI2 0x200
+> #define NCT6683_CUSTOMER_ID_MSI3 0x207
+> +#define NCT6683_CUSTOMER_ID_MSI4 0x020d
+> #define NCT6683_CUSTOMER_ID_ASROCK 0xe2c
+> #define NCT6683_CUSTOMER_ID_ASROCK2 0xe1b
+> #define NCT6683_CUSTOMER_ID_ASROCK3 0x1631
+> @@ -1227,6 +1228,8 @@ static int nct6683_probe(struct platform_device *pd=
+ev)
+> break;
+> case NCT6683_CUSTOMER_ID_MSI3:
+> break;
+> + case NCT6683_CUSTOMER_ID_MSI4:
+> + break;
+> case NCT6683_CUSTOMER_ID_ASROCK:
+> break;
+> case NCT6683_CUSTOMER_ID_ASROCK2:
+> --
+> 2.47.1
