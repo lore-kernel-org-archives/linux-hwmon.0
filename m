@@ -1,266 +1,100 @@
-Received: from smtp.smtpout.orange.fr (smtp-66.smtpout.orange.fr [80.12.242.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E751FA158;
-	Fri,  3 Jan 2025 14:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01ECA189902;
+	Fri,  3 Jan 2025 19:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735914911; cv=none; b=r9PytzyXHyJW8qYA4WjtZyKa9q6Lx/Bx9PeMacZIG82Cznle6a4St6iGH7jEdDvBnOOpiWUgDjI55nfzN4Igi7ezvgu3bG0dkiBMPj4dlnf2cyu198t7XDsZJ1Im2yut029OobKDVfo0MPZGRY+LT9spd6xye/r/LW/39e89N1Y=
+	t=1735934293; cv=none; b=Nw3p+pTRRpH5AEABXau7l9RNlGSjEPMHIDJFd7PWep8khY59cKZWQAlGctC+HJAc1jDzS+WRMYiPUE8wHdKkKQgmywpHNdPYXf3MT8Ay7JKV0Bb2/ukGouJvREqj1ndm2ntdpQnsqTX45EERZZidKosz5kd+dPu9u2+kDcSDZxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735914911; c=relaxed/simple;
-	bh=NrPS5+FtamGuYn+uwcxvi9iSPS1POnP61oNR53NMXss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S4/rCLxx0WpW9GIuskv3Q57vOUTeHj2phk4gf1SUcDP9Ddt6bAY7OZFl0tmNJ+Mvuy9momLFys5NBKnKAQV1bW4uLY7AFteKzh0Zx7BgJcb+CkcxO0aTxG8JnD3oZloUT2/gPCmn6SkdxIxSjvbozXtRhzF1eqYDANEQS4hYmCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=hlgEMVwi; arc=none smtp.client-ip=80.12.242.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1735934293; c=relaxed/simple;
+	bh=lGPnrXHxFhfBvnTyCxyAN/xgZ2X50cGOh+K5F3Vexs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kfnq8Z6PDRaoBRTTvPjWUW2x9AiES5OucYa11RwemR8Z/HpkAMfBbh30tjguPnbT0K15R1l46ZMAneJUmIlZQA+6Q38Aux9AGvvTWzKnrYPcBJS/+qtbj3rED+reWvRP+PiL3jyulY3tT1ymKPn4qFGKU/kk3angE2+RifxjcDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTbzFPgh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="hlgEMVwi"
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id TicetCWUzPdSSTichtMCAh; Fri, 03 Jan 2025 15:26:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1735914361;
-	bh=tZtU8maB6BLfc0Bn8pHnrr8nYDshAGCv9k1LjGqaMHQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=hlgEMVwi2xgraaR7k16n3u8aCir2DY5XjzOuAyTysEnvGLfa7Jjidf/NoYST84HL8
-	 h3KNIGl7yM0u30LfZnHYbD2zv+vPKp5RC2QPTQS8tmFWoTtjypf3Ebp+82i+gJHRQK
-	 qsxMwNPaTtaknl0MVYOYG/VpX6l9WXlUHN201eXe+RoDI8LTQnnS7KC9WsnVrPI7Nq
-	 jhB1xSO8nzHllj5+hyKiKv8olLedn8eemMB3JCIO5mktPBcGdaVVZnZgdZSVfJ5J7l
-	 W1CjZiVJtmQG2xoSrDhp+VcgZpyUz1JYb4KjwD1mw+im01O4prlFA5lsbK81lWjd21
-	 itJeQZ3sCWNog==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Fri, 03 Jan 2025 15:26:01 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <c13ed6b7-fd44-45ce-9429-30ff1f1f15a2@wanadoo.fr>
-Date: Fri, 3 Jan 2025 15:25:56 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTbzFPgh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F685C4CECE;
+	Fri,  3 Jan 2025 19:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735934292;
+	bh=lGPnrXHxFhfBvnTyCxyAN/xgZ2X50cGOh+K5F3Vexs4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NTbzFPghW/NCYs1toFb1P7vTfDQsTx3PxppPRd/CWO6ymqJyYF8u9w8i7dObH54GR
+	 iucUcfFEFS06Lrghdi+puU98PSJPQ6JmN/3dudFss5TRlUuXNwu1Bo6RlMc1ZrciMR
+	 juqvh89vZhVMh1QQEcQKH6PU1dbnZqRkC5O2lJ3wvx+rn3qVQ0KXtGGcehLBTF8X0e
+	 U+EB3pPEkvTS8UhuMbGfnAgOZLmXJtAYlZYxDNQluQoTdh1SGMfPh7g2hW+x7aHGis
+	 LuKhFYo6DF53uI6NHMA0kNVOQUiSY3WnoYNQ3Wh4jq/Ubft+cwrrLD8ALiQFoQqNad
+	 dHNtVzTTkz/3w==
+Date: Fri, 3 Jan 2025 13:58:10 -0600
+From: Rob Herring <robh@kernel.org>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
+ property
+Message-ID: <20250103195810.GA2624225-robh@kernel.org>
+References: <20250103101448.890946-1-peter@korsgaard.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] rtc:max31335: Add driver support for max31331
-To: pavithra.u@analog.com, Antoniu Miclaus <antoniu.miclaus@analog.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20250103-add_support_max31331_fix-v1-0-8ff3c7a81734@analog.com>
- <20250103-add_support_max31331_fix-v1-2-8ff3c7a81734@analog.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250103-add_support_max31331_fix-v1-2-8ff3c7a81734@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250103101448.890946-1-peter@korsgaard.com>
 
-Le 03/01/2025 à 08:04, PavithraUdayakumar-adi via B4 Relay a écrit :
-> From: PavithraUdayakumar-adi <pavithra.u@analog.com>
+On Fri, Jan 03, 2025 at 11:14:47AM +0100, Peter Korsgaard wrote:
+> The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
+> always be desirable because of noise or power consumption peaks, so add an
+> optional "default-pwm" property that can be used to specify a custom default
+> PWM duty cycle (0..255).
 > 
-> Add driver support for max31331 RTC chip.
-> 
-> Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
-> ---
->   drivers/rtc/rtc-max31335.c | 182 ++++++++++++++++++++++++++++++++-------------
->   1 file changed, 131 insertions(+), 51 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-> index 3fbcf5f6b92ffd4581e9c4dbc87ec848867522dc..f2c094686b5a89aee8041f3f563bb2cf9fc6275b 100644
-> --- a/drivers/rtc/rtc-max31335.c
-> +++ b/drivers/rtc/rtc-max31335.c
-> @@ -34,7 +34,7 @@
->   #define MAX31335_RTC_CONFIG2			0x06
->   #define MAX31335_TIMESTAMP_CONFIG		0x07
->   #define MAX31335_TIMER_CONFIG			0x08
-> -#define MAX31335_SECONDS_1_128			0x09
-> +#define MAX31335_SECONDS_1_128		0x09
+> This is somewhat similar to target-rpm from fan-common.yaml, but that cannot
+> be used here as target-rpm specifies the target fan speed, whereas this is
+> the default pwm to set when the device is instantiated - And the resulting
+> fan RPM resulting from a given PWM duty cycle is fan dependent.
 
-No need to remove 1 tab here.
-Things now look un'aligned.
+I still don't agree. Quoting Guenter:
 
->   #define MAX31335_SECONDS			0x0A
->   #define MAX31335_MINUTES			0x0B
->   #define MAX31335_HOURS				0x0C
-> @@ -45,7 +45,7 @@
->   #define MAX31335_ALM1_SEC			0x11
->   #define MAX31335_ALM1_MIN			0x12
->   #define MAX31335_ALM1_HRS			0x13
-> -#define MAX31335_ALM1_DAY_DATE			0x14
-> +#define MAX31335_ALM1_DAY_DATE		0x14
+> The two values are also orthogonal. The fan rpm is fan dependent.
+> Each fan will require a different pwm value to reach the target speed.
+> Trying to use target-rpm to set a default pwm value would really
+> not make much if any sense.
 
-No need to remove 1 tab here.
-Things now look un'aligned.
+But RPM is ultimately what you care about and is the fan parameter 
+that's universal yet independent of the underlying control. RPM is what 
+determines noise and power consumption.
 
->   #define MAX31335_ALM1_MON			0x15
->   #define MAX31335_ALM1_YEAR			0x16
->   #define MAX31335_ALM2_MIN			0x17
+There's 2 cases to consider: you have a tach signal and know the fan RPM 
+or you don't know the RPM. If you have a tach signal, we probably 
+wouldn't be discussing this because target-rpm would be enough. So I'm 
+assuming this is the case and you have no idea what RPM the fan runs at. 
+The fan-common.yaml binding is a bit incomplete for this. What you need 
+is some map of fan speed to PWM duty cycle as most likely it is not 
+linear response. I think there are 2 options here:
 
-...
+Use the 'cooling-levels' property. Fan "speed" is the index of the 
+array. So you just need a 'default-cooling-level' property that's the 
+default index.
 
->   static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
->   {
-> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
-> +	const struct chip_desc *chip = max31335->chip;
-> +
->   	/* time keeping registers */
-> -	if (reg >= MAX31335_SECONDS &&
-> -	    reg < MAX31335_SECONDS + MAX31335_TIME_SIZE)
-> +	if (reg >= chip->sec_reg && reg < chip->sec_reg + MAX31335_TIME_SIZE)
->   		return true;
->   
->   	/* interrupt status register */
-> -	if (reg == MAX31335_STATUS1)
-> +	if (reg == chip->int_status_reg)
->   		return true;
->   
-> -	/* temperature registers */
-> -	if (reg == MAX31335_TEMP_DATA_MSB || reg == MAX31335_TEMP_DATA_LSB)
-> +	/* temperature registers if valid*/
+The other option is define an array of (fan RPM, PWM duty cycle) tuples. 
+Then target-rpm can be used to select the entry. We already have 
+something like this with 'gpio-fan,speed-map'.
 
-Missing space before */
+There's also no definition of the minimum RPM or duty cycle in the 
+pwm-fan binding. We have min-rpm in fan-common, but that doesn't work 
+without a tach. A map would help here as well
 
-> +	if (chip->temp_reg && (reg == chip->temp_reg || reg == chip->temp_reg + 1))
->   		return true;
->   
->   	return false;
+This problem to me is similar to LEDs. Ultimately it's brightness that 
+you care about, not the current or PWM duty cycle to get there.
 
-...
+Finally, whatever we end up with, it should go in fan-common.yaml. That 
+supports PWMs too, so whatever we end up with is applicable to any PWM 
+controlled fan.
 
-> @@ -444,28 +511,31 @@ static int max31335_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
->   	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
->   	unsigned int freq_mask;
->   	int index;
-> +	int ret;
->   
->   	index = find_closest(rate, max31335_clkout_freq,
->   			     ARRAY_SIZE(max31335_clkout_freq));
->   	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
->   
-> -	return regmap_update_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-> -				  freq_mask, index);
-> +	ret = regmap_update_bits(max31335->regmap, max31335->chip->clkout_reg,
-> +				 freq_mask, index);
-> +
-> +	return ret;
-
-You could keep a direct return here, instead of using a new 'ret'.
-
->   }
->   
->   static int max31335_clkout_enable(struct clk_hw *hw)
->   {
->   	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
->   
-> -	return regmap_set_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-> -			       MAX31335_RTC_CONFIG2_ENCLKO);
-> +	return regmap_set_bits(max31335->regmap, max31335->chip->clkout_reg,
-> +			      MAX31335_RTC_CONFIG2_ENCLKO);
-
-...
-
-> @@ -576,9 +646,10 @@ static int max31335_clkout_register(struct device *dev)
->   	struct max31335_data *max31335 = dev_get_drvdata(dev);
->   	int ret;
->   
-> -	if (!device_property_present(dev, "#clock-cells"))
-> -		return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-> -					 MAX31335_RTC_CONFIG2_ENCLKO);
-> +	if (!device_property_present(dev, "#clock-cells")) {
-> +		regmap_clear_bits(max31335->regmap, max31335->chip->clkout_reg,
-> +				  MAX31335_RTC_CONFIG2_ENCLKO);
-> +	}
-
-No need to add new { }.
-
-Is it safe to change the behavior here?
-
-If it is a fix, waybe it should be done in another patch before this one.
-
->   
->   	max31335->clkout.init = &max31335_clk_init;
->   
-> @@ -599,12 +670,14 @@ static int max31335_clkout_register(struct device *dev)
->   	return 0;
->   }
->   
-> +/* 6.1 probe() function still uses the second struct i2c_device_id argument */
-
-Is this comment really needed?
-Is this patch expected to be backported in 6.1?
-
->   static int max31335_probe(struct i2c_client *client)
->   {
->   	struct max31335_data *max31335;
->   #if IS_REACHABLE(HWMON)
->   	struct device *hwmon;
->   #endif
-
-...
-
-> @@ -648,19 +727,17 @@ static int max31335_probe(struct i2c_client *client)
->   	max31335_nvmem_cfg.priv = max31335;
->   	ret = devm_rtc_nvmem_register(max31335->rtc, &max31335_nvmem_cfg);
->   	if (ret)
-> -		return dev_err_probe(&client->dev, ret,
-> -				     "cannot register rtc nvmem\n");
-> +		return dev_err_probe(&client->dev, ret, "cannot register rtc nvmem\n");
-
-Unneeded clean-up.
-
->   
->   #if IS_REACHABLE(HWMON)
-> -	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
-> -						     max31335,
-> -						     &max31335_chip_info,
-> -						     NULL);
-> -	if (IS_ERR(hwmon))
-> -		return dev_err_probe(&client->dev, PTR_ERR(hwmon),
-> -				     "cannot register hwmon device\n");
-> +	if (max31335->chip->temp_reg) {
-> +		hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name, max31335,
-> +							     &max31335_chip_info, NULL);
-> +		if (IS_ERR(hwmon))
-> +			return dev_err_probe(&client->dev, PTR_ERR(hwmon),
-> +					     "cannot register hwmon device\n");
-> +	}
->   #endif
-> -
->   	ret = max31335_trickle_charger_setup(&client->dev, max31335);
->   	if (ret)
->   		return ret;
-> @@ -669,15 +746,17 @@ static int max31335_probe(struct i2c_client *client)
->   }
->   
->   static const struct i2c_device_id max31335_id[] = {
-> -	{ "max31335" },
-> -	{ }
-> +	{ "max31331", (kernel_ulong_t)&chip[ID_MAX31331] },
-> +	{ "max31335", (kernel_ulong_t)&chip[ID_MAX31335] },
-> +	{}
-
-No need to remove 1 space here.
-
->   };
->   
->   MODULE_DEVICE_TABLE(i2c, max31335_id);
->   
->   static const struct of_device_id max31335_of_match[] = {
-> -	{ .compatible = "adi,max31335" },
-> -	{ }
-> +	{ .compatible = "adi,max31331", .data = &chip[ID_MAX31331] },
-> +	{ .compatible = "adi,max31335", .data = &chip[ID_MAX31335] },
-> +	{}
-
-No need to remove 1 space here.
-
->   };
->   
->   MODULE_DEVICE_TABLE(of, max31335_of_match);
-
-...
-
-CJ
+Rob
