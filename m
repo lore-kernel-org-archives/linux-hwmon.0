@@ -1,103 +1,140 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA0D1C07D5
-	for <linux-hwmon@vger.kernel.org>; Fri,  3 Jan 2025 22:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B37136A;
+	Sat,  4 Jan 2025 15:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735942601; cv=none; b=X97hF91v07lMOPyY4eFQNBdDYIhyYkpUMzf3SDqO65JcYGk3ZjPtviuEgiaGEdkhMbLC6HBqEhJrn5cqVGM7b30FF2P53cJGPW4iCVQBKJM2q0oXLOEwLZ5OIpBrGTEUt/Z4JW/vIEEiVBArQE63RhZavUZL+ioIdSioS5hcRMw=
+	t=1736005057; cv=none; b=nT/73nDklpgxnnjxVYVf/qxZ00G7Fib76t+ARjRAgVmOngdyFDE7YwZZcb9wk2qjJAsoNHaKGGQNtXV1pHzRvnlkLDUM8VXS10uNqY8s4AIZtpOV+MLTZzzfnpl3yONy3/8Lm6AUuJVBwjf5ZnXmoc+ahUegkhCAALJbjdQh2kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735942601; c=relaxed/simple;
-	bh=fQ36u4RBvl7vsyvt0Jy3P02z22WoejyNRPTjgjmI4A4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ir+lFZYLgnBmpJHUvjXPf4Dx31ve/IWpU2wIjmwN5wHMMOREiPc+XeVoBZATVnBWjClWA3ZAKNQ8solsXP5Zq1GIIV6/0rtHFBGE+aHGl0hGA5Vne/y24U8Q9bhRJWhITXImh1biDFOqgLc71T9Yvv+JuIEeDrFdE6EeDix5KAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dYzPcXUM; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1736005057; c=relaxed/simple;
+	bh=oO6BTuR9MKO/Rp/vP/YeD7XEnx0FuPYuT7prs40/9b8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jtktkYfQ+o7SGRtxY7jFmGw6JVQRLwo+KSj9la/y4XwCJJRFRGMcoTavNzDZD3Djew3VZzvzsfQ84P6YiFngNuLB2N4rPpJe/apXWl3L8r0006tqVYcWIWbrhm0FJdpOMzAJGyhP24i9MQoDPCiF65FO6hJ52vPvvkL03zKn2oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=F4i8QVe1; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dYzPcXUM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=fQ36
-	u4RBvl7vsyvt0Jy3P02z22WoejyNRPTjgjmI4A4=; b=dYzPcXUMa3zAaEA+FS07
-	NduiAIrSefPkHSqfxN8ygpiAvmxCsnxRGRNlsJgANdk4dsaBd/800eEYI0yTGypS
-	jDypMdbiCOU1cvTSuya6s1kH4iJp5egSnKSzILEMJBop18q4jhBdzO7GrnJHM5uW
-	q2qrMbDVn4OqDbStWRlMgFBqgmDPOR222vI4taj5n76xt0wJWRnd8aeBlUqeD6eM
-	bazoeMaZtK0ggFyY1VgnqdiEZblrCcLTONzDS1Xj6z47/WbSxXXTrBGVAHLYZDLw
-	/FBtx95aW2Bu8xVnZrf8SUFWcERqyP1H0//Evta20NE/rI909DazUfLoX1xI3MVn
-	2w==
-Received: (qmail 1013832 invoked from network); 3 Jan 2025 23:16:36 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jan 2025 23:16:36 +0100
-X-UD-Smtp-Session: l3s3148p1@sSPGodQqRp8ujntM
-Date: Fri, 3 Jan 2025 23:16:35 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH RFT v2 0/5] i3c: introduce and use generic parity helper
-Message-ID: <Z3hhw_pwFAicsEDi@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>,
-	Yury Norov <yury.norov@gmail.com>
-References: <20241229101234.2896-1-wsa+renesas@sang-engineering.com>
- <20250103221117bb066057@mail.local>
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="F4i8QVe1"
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 407A82E08743;
+	Sat,  4 Jan 2025 17:37:22 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1736005043;
+	bh=oO6BTuR9MKO/Rp/vP/YeD7XEnx0FuPYuT7prs40/9b8=;
+	h=Received:From:Subject:To;
+	b=F4i8QVe1mBvli5oupsFSeSDfwaqOoPaku+szrTmpkJ1erKqMUlYrRzkBCSQY4XTIu
+	 NBtJFSXNJahstWy/0kKS07dQ1vuneyjdPi/NSDG/OiTK8ZV3Hmj8tZMuKCHUXHoffU
+	 0pl7pQkB89hflsj0oXNHq9BV2lR5FDgi5G7jGsdQ=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.171) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f171.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f171.google.com with SMTP id
+ 38308e7fff4ca-2ffd6af012eso180024161fa.2;
+        Sat, 04 Jan 2025 07:37:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW1566IxzoTYheLnU4q45PxrlrnfvkqlD+urcvcuq0lB/Hn0EkNcS4HUhlxEEEGRobX6/JHxOHo3uy697I=@vger.kernel.org,
+ AJvYcCWI/yTrCGUb6N79lqH80IyEaXvvekaRHtb8SScgo0T1GOk+MYt5q15qpJJVraZWUoPH3U7rAhhTUQk=@vger.kernel.org,
+ AJvYcCWJ/hixwMRZDjBFy9nXNlmEY4XsdNasexTS8IhmBZNSNAYGkMnu5gBHMoRis2pfAkQhhOr8jj+SHqo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEv5PBz2lbNc/lVPbJienin8D0zrRbZfs0bHBgo188Fxwvft6Y
+	ar7CSjC4tHbS0wrZuP9faBDrnnmNYC9Zx3K/y7JxNQK30rVf7zwQUxwYT3Z5tJf8adCDxXB7on8
+	wALRXc3DURiaWiH6vGGsq6+bfL2w=
+X-Google-Smtp-Source: 
+ AGHT+IGQuT3+RV479P8YTXLJj4Ou85qh2JdjQKRsZbm+qv09j7pzSTbsCqKn7zqUKMMqhzaC/WqWYEMGga9q6BN8xMc=
+X-Received: by 2002:a2e:a991:0:b0:300:33b1:f0e1 with SMTP id
+ 38308e7fff4ca-304684190bemr171519001fa.0.1736005041488; Sat, 04 Jan 2025
+ 07:37:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vWkKxqYQ0LzC93DX"
-Content-Disposition: inline
-In-Reply-To: <20250103221117bb066057@mail.local>
+References: <20241226112740.340804-1-lkml@antheas.dev>
+ <a8e6d5d5-703c-47df-ab57-58234fdeefc1@roeck-us.net>
+ <E24291F9-731F-4C27-96C7-BD08FBCF7A76@gmail.com>
+ <3b5b5486-9b11-484b-b5d9-6a830ad10130@roeck-us.net>
+In-Reply-To: <3b5b5486-9b11-484b-b5d9-6a830ad10130@roeck-us.net>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sat, 4 Jan 2025 16:37:10 +0100
+X-Gmail-Original-Message-ID: 
+ <CAGwozwHwQcwbpiggZ5L9p6Gu+oDfnehH3XGVSaTOmkA5Ty+yyA@mail.gmail.com>
+Message-ID: 
+ <CAGwozwHwQcwbpiggZ5L9p6Gu+oDfnehH3XGVSaTOmkA5Ty+yyA@mail.gmail.com>
+Subject: Re: [PATCH 00/10] hwmon: (oxpsensors) Add 2024 OneXPlayer line-up,
+ add charge limiting and turbo LED, fix ABI
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: "Derek J. Clark" <derekjohn.clark@gmail.com>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <173600504267.15624.12799910774026201393@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
+Hi Guenter,
+I've spoken with Derek, and we are in agreement this should be moved.
 
---vWkKxqYQ0LzC93DX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Which part of the patch series do you want me to put the move in? Or
+is it something you want to do yourself prior to/after the patch
+series. lmk and I will coordinate for V2
 
+As for @Joaquin, can you ack the move since you are the module author?
 
-> I'll apply the series once you get some agreement on the function name.
+Antheas
 
-Thanks!
-
-As said in that thread, the function name has already been changed in v2
-to the liking of the bitmap.h maintainer (Rasmus) [1]. He has not
-responded to this series yet, though.
-
-[1] https://lore.kernel.org/r/CAKwiHFiamZ7FgS3wbyLHo6n6R136LrLVCsih0w+spG55BPxy8g@mail.gmail.com
-
-
---vWkKxqYQ0LzC93DX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd4Yb8ACgkQFA3kzBSg
-KbZYjA//elZOLLgLgNAi1ekQ9sJ5IvZL47Vbkvlg8eOFGCNZ4q6JhUt/jZ0bW1Yr
-Oz8+UY8leDLTJPHteFiy84/VDqihax6tge4EoEt87bSHu8UI90BWCGhaVf4ndpsa
-pt6KdKGHIPbOjKdbeDfLKy7oP8UWe5jnFgmMGHr9iLcAYR+T6TW4NtI9jrD1kWCl
-/hr1iIHZFAY10IxLd1HbX3T1RMBH+fLjoYvvStj7mFZMSUcl9ya8uvgrgpyIa9SL
-SGDgCRR1CbQoY0zldNWTP9n5wFX7BMV/R+ITF1P5v3qHIdw0Q3i2L/CtAegNuaIp
-0GZE5wyNn4GjAZuRlGbrqxB5ykEkPUketdkHkjWmk4sRRxuHoPSSNH+z1vHHR+CE
-skyKlP+Z2DvwSosz8jVRnKU5YqymGyRaFPp3WijQlcMTa7D57gYyNXYpuEWAkPya
-x5vakd+6UxlbWFWxxo/0MAzkaSH5Q0tfRGMhx9Cu0CLcSNKt09gVNN60RVMq4udz
-Sbug0DEa53ubXFV+5X1VLI2+KljA/TlHsSDSL2HsyiZcaYhOaN9IbK9y4Ov4vMMZ
-fW8Y4jFMU9tN8r3vsc/l63236r6jY8aTwWJVurTNP8zPxE+jEtqnoVHJIo+nOYZm
-etaHLqqrP82WU/SfmPoOUxe4zV0zb3/238DEcyECUa0Hq1afSp8=
-=XizP
------END PGP SIGNATURE-----
-
---vWkKxqYQ0LzC93DX--
+On Fri, 27 Dec 2024 at 18:12, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Thu, Dec 26, 2024 at 01:16:15PM -0800, Derek J. Clark wrote:
+> >
+> >
+> > On December 26, 2024 1:08:02 PM PST, Guenter Roeck <linux@roeck-us.net>=
+ wrote:
+> > >On Thu, Dec 26, 2024 at 12:27:30PM +0100, Antheas Kapenekakis wrote:
+> > >> This three part series updates the oxpsensors module to bring it in =
+line
+> > >> with its Windows OneXPlayer counterpart. First, it adds support for =
+all
+> > >> 2024 OneXPlayer handhelds and their special variants.
+> > >>
+> > >> Then, it adds the new charge limiting and bypass features that were =
+first
+> > >> introduced in the X1 and retrofit to older OneXFly variants and for
+> > >> controlling the turbo led found in the X1 models. For Bypass, it add=
+s a new
+> > >> bypass variant BypassS0 that is only active while the device is in t=
+he S0
+> > >> state.
+> > >>
+> > >
+> > >This is a hardware monitoring driver. It is not a charge controller dr=
+iver,
+> > >and it is not a LED controller driver. If such control is wanted/neede=
+d for
+> > >this system, it should be implemented either as mfd device with client=
+ drivers,
+> > >or the entire driver should be moved to platform drivers if there is a=
+ desire
+> > >to keep it as single driver.
+> > >
+> > >Guenter
+> >
+> > I think moving this to x86 platform makes a lot of sense to ensure two =
+separate drivers can't do async writes to the EC. We probably should have d=
+one that when adding the turbo button toggle anyway. I'll coordinate that e=
+ffort with Tobias and Antheas directly before moving forward.
+> >
+>
+> Fine with me, but "ensure two drivers can't do asynchronous writes" is no=
+t
+> really an argument. mfd supports that as well for pretty much all mfd
+> drivers.
+>
+> Guenter
