@@ -1,116 +1,122 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228531F931
-	for <linux-hwmon@vger.kernel.org>; Sun,  5 Jan 2025 09:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8861292CE
+	for <linux-hwmon@vger.kernel.org>; Sun,  5 Jan 2025 16:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736069767; cv=none; b=AeVofbv6WaazEHqUT6I59o+cmSoYQ71V88GKbzMdPnSHubMo960OoHprostjDEVAZxPxaZhIVt+AqqdS3czxNRd62M5m1Gl8XboRYYOp18PorF2hokk30a+6JlNEq8OjQxT72D/yKoLpExS4hEFb+sDM2bxIvRwhPUs6mxqxEo8=
+	t=1736093484; cv=none; b=App3M05amMmry+9UIHO+JDjk4g0AcOC7VIOHm4TugFW9/unVDY3xIaccqtVGK7tAq13WBqVJ1p1+fZQRfaCZrOzggCRl0GfxYynmeWeRBxnzcqYa5MGwKgCF9xKdbSwAZmNSYFlOpClnoPYt+p1Twjvjpa3KUaeUZu5B4bo76oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736069767; c=relaxed/simple;
-	bh=pRYQfZbiBtsMuo97kw+ZT5IfMPZ93xcpojYLU+ouZzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r/t5MvF7moatWKxlJ8aSDFXcuTzqjwoXY8Oxoie6JWHL7npLcMj2YmcX4LTQk6Uj2JoXCqv2aPU29dgMP6s2sVd60gev2KNeUy8o3hnvpQQBRbyE8zADNbsz5hGfgEk9uECO+36OFrsf2t4YFByH2dAzcG4gHv/M/Iyf9DIoXgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Lku8/YFM; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1736093484; c=relaxed/simple;
+	bh=uuT0h2ot2kFkbKpeUUiai5f5E+OKMZVTq8EPMLhiVn0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cu6EpNfoYt/6ON8LU9WB+4aoc3JYZ+CI23lXI+i7U5fMsoJdRVP1JA88f7ZPj33NbEWPm9iMb+i8w6gRPZSha2nvXNRr3kbXfFgQWxA7JJ9mBAt+mMFHPGd8nFwxvkqRYWvubeQNLnYszJSOkaQ7YANNMIrUwnJStfdBsG3Soj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=Z31mJT4R; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Lku8/YFM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Lg+N
-	BRfh54fWFx52Hkh4gEJKYKU2srlPITGlMgvSBrM=; b=Lku8/YFMGHSESXSA66o4
-	duPWSjRPQU/D8Ye2uuVKnfbsLKcqu7jlryY+NTK5Y0sWXy7ffKWKqfl9oeAg/zXJ
-	QZ1TuCcpBzQBTORNEBPeW24vRO8jYzSekO0Jh3jPrhY/bi3lqKxXfBQmhmT76oRB
-	PJZRtR8BV01OV/MHYeW4S9ecNuk1Fvne5gDdYVs1HZbJss7fZPGdukzLy5FmsiZ/
-	7rrgwinRJeB0Ebm6MhA0GguKtvoKIyXZuaxTtPTPg3AJIYTkGJUb4K5Zh74RP8+c
-	K2udpZY3842iPeEW1jcCnGeEKJZXekGFsOg04FlMiH9GCzXweCBM6O+6bJ6Dc2Me
-	ww==
-Received: (qmail 1374028 invoked from network); 5 Jan 2025 10:36:00 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Jan 2025 10:36:00 +0100
-X-UD-Smtp-Session: l3s3148p1@ikRYPfIqupQujntM
-Date: Sun, 5 Jan 2025 10:35:57 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>, linus@ucla.edu
-Subject: Re: [PATCH RFT v2 0/5] i3c: introduce and use generic parity helper
-Message-ID: <Z3pSfU2fNd12csNP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>, linus@ucla.edu
-References: <20241229101234.2896-1-wsa+renesas@sang-engineering.com>
- <20250103221117bb066057@mail.local>
- <Z3hhw_pwFAicsEDi@shikoro>
- <Z3n-z5xA2ue8ojiF@yury-ThinkPad>
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="Z31mJT4R"
+DKIM-Signature: a=rsa-sha256; b=Z31mJT4ReeLaIii/8UrnFcxUKXLKkHyVMjgtBrVEni6RsAeJfGJ+1yd+ffZp6vNMJrNAGahepfE/3/seB+jwmu8pC8d0ObT0mxiCTIhLAnTeu1wxrfdl55rNDx3/8dhFEnK6C6YuVCT2JiZZ0O0VyTxmdmwFzUpaYNra8ufrNTuXSsypK1fvd+Qd6EHlayDOdMUuE+rNI35jmmJevOmQoHKNCMekLv+hSEIYf7RiMIYU4LdthEqnHyRt+Uyh0OMU4Sk44NpIQDFlf5CSp1OSXPq5GekYTWDS6cskbsb0FJKhTz8xDQJEuh0dWSRbp21dzHsRozIXIeWRe68RW8Szzw==; s=purelymail3; d=purelymail.com; v=1; bh=uuT0h2ot2kFkbKpeUUiai5f5E+OKMZVTq8EPMLhiVn0=; h=Feedback-ID:Received:Date:Subject:To:From;
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: linux-hwmon@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1502571710;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Sun, 05 Jan 2025 16:10:45 +0000 (UTC)
+Message-ID: <dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
+Date: Sun, 5 Jan 2025 17:10:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uDaZtfxN/yUvTHs2"
-Content-Disposition: inline
-In-Reply-To: <Z3n-z5xA2ue8ojiF@yury-ThinkPad>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
+ property
+To: Rob Herring <robh@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20250103101448.890946-1-peter@korsgaard.com>
+ <20250103195810.GA2624225-robh@kernel.org>
+Content-Language: en-US
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <20250103195810.GA2624225-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 1/3/25 20:58, Rob Herring wrote:
+
+> I still don't agree. Quoting Guenter:
+> 
+>> The two values are also orthogonal. The fan rpm is fan dependent.
+>> Each fan will require a different pwm value to reach the target speed.
+>> Trying to use target-rpm to set a default pwm value would really
+>> not make much if any sense.
+
+> But RPM is ultimately what you care about and is the fan parameter
+> that's universal yet independent of the underlying control. RPM is what
+> determines noise and power consumption.
+> 
+> There's 2 cases to consider: you have a tach signal and know the fan RPM
+> or you don't know the RPM. If you have a tach signal, we probably
+> wouldn't be discussing this because target-rpm would be enough. So I'm
+> assuming this is the case and you have no idea what RPM the fan runs at.
+
+Correct, no tacho.
 
 
---uDaZtfxN/yUvTHs2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The fan-common.yaml binding is a bit incomplete for this. What you need
+> is some map of fan speed to PWM duty cycle as most likely it is not
+> linear response. I think there are 2 options here:
+> 
+> Use the 'cooling-levels' property. Fan "speed" is the index of the
+> array. So you just need a 'default-cooling-level' property that's the
+> default index.
 
-Hi Yury,
-
-> Rasmus is reviewer. I'm - maintainer.
-
-Oh, sorry. I just saw your both entries in MAINTAINERS and missed that
-Rasmus has "R:" instead of "M:". No offence!
-
-> I'm a bit doubted about adding a web link in sources because it may
-> become invalid one day, but if Wolfram commits to maintain comments
-> up-to-date, I'm OK with that.
-
-I just added the page to the wayback machine. We could use this link
-now: http://web.archive.org/web/20250105093316/https://funloop.org/codex/problem/parity/README.html
-
-Better?
-
-> I already acked the patch, so no need to ack it again.
-
-Thanks!
-
-   Wolfram
+I am not sure I what you mean with the RPM reference here? The 
+cooling-levels support in the fan-pwm.c driver is a mapping between 
+cooling levels and PWM values, NOT RPM value.
 
 
---uDaZtfxN/yUvTHs2
-Content-Type: application/pgp-signature; name="signature.asc"
+> The other option is define an array of (fan RPM, PWM duty cycle) tuples.
+> Then target-rpm can be used to select the entry. We already have
+> something like this with 'gpio-fan,speed-map'.
 
------BEGIN PGP SIGNATURE-----
+Where should these "invented" RPM values come from when there is no 
+tacho signal? That sounds backwards / complicated for the very trivial 
+"what should the default PWM value be at driver probe time" use case.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd6UnoACgkQFA3kzBSg
-KbZJURAAnv6nzkWmoKQYH7H4SS+GZuo/ko0u5I1imRm8pogda6eEpXSm29qY6IUI
-YAnWotXTJr7xLPkcJszZ+Q9Al5akFGwyuH+nnwKtkBlNmhK1WZS5Mpw1QCPR4RN5
-GF2gr8cj0tR7I04rF8U65lbPAy99LWQNVwXX02smR8nZy18bi74MVA2gqy6KicoT
-kmF28gqONIptdwrGyS+chFEcOO+dtrAtKfL9IsB8evIOzzDYTRH/SNLJ+kEumvZT
-8lxyTdWaEtvsnAx9KRRltPsP2wRTGq/hXTUoCrOd+6RDiLJp4rip0oumqPXTg5f7
-iPmehB8OzB96akmVGYMJtxgBoF9DMy6A+CkHfj6yOY/zEq+TbNpRWsoVg0g3Fv9z
-O9MfC320Qz7E/3xfWqy17jFt7DcNLpGWkSZ/c/AuvZODYRTdR8xkX7r6BdJekiCg
-vDyDCvYHVMuuQrU+X8jpdBcUvR5mNfNS3kuotG8pk/wLw8f2yOaNhIz4GZkPPXxw
-JsKbMaANCOoQqcEQS8GcPiJ6zSQJYuZjOf63x6JM8PCrYnEnaLrGHqcl1Sn+Oem7
-UB2VM3ETAZ4z+QhQ7OMGZ2ii+p2Thm/frOhdvjzvqapKHddxIdBqMUMhaFYv/ELv
-Qq2c8jEpA9eZyFlOoorCoWJEL6v5CvFAfeMXIWNPUUST9JiGl2Q=
-=706U
------END PGP SIGNATURE-----
 
---uDaZtfxN/yUvTHs2--
+> There's also no definition of the minimum RPM or duty cycle in the
+> pwm-fan binding. We have min-rpm in fan-common, but that doesn't work
+> without a tach. A map would help here as well
+
+The minimum PWM is presumably 0, E.G. signal always low?
+
+
+> This problem to me is similar to LEDs. Ultimately it's brightness that
+> you care about, not the current or PWM duty cycle to get there.
+
+The use case (as described in the commit message) is to drive the fan 
+less hard to limit noise and/or power consumption. The input to the fan 
+drive control is a PWM setting, so it IMHO makes sense to specify that, 
+as that is the interface provided by the fan-pwm driver - E.G. you boot 
+up and tweak the pwm1 property in sysfs until you have a value that 
+suits the noise/power consumption requirements and stick that value in 
+the dts.
+
+
+> Finally, whatever we end up with, it should go in fan-common.yaml. That
+> supports PWMs too, so whatever we end up with is applicable to any PWM
+> controlled fan.
+
+What makes this "default-pwm" (or whatever it will be called) more 
+generic than E.G. the recently added "fan-stop-to-start-percent" / 
+"fan-stop-to-start-usec" properties added to pwm-fan.yaml by commit 
+80bc64201e78 ("dt-bindings: hwmon: pwm-fan: Document start from stopped 
+state properties")?
+
+-- 
+Bye, Peter Korsgaard
