@@ -1,69 +1,73 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1F214831D;
-	Sun,  5 Jan 2025 19:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CB914831D;
+	Sun,  5 Jan 2025 19:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736106944; cv=none; b=grrV3Jk0BByrZjscaZBMSNKvWTYZXxDgVZ4Yj8leoU7P928VY2q8Eo+Mb0dYI1aDFZnYACI0GtXtGBn/HshjlzQx6+yde0fCEmRYhKxEYWd9Nbl2wTfWQLjqX5v7UZsh5mohBakmGLPelGDtYgBZCEC7cSyvZ/T2Sp5YwzrA7GM=
+	t=1736106953; cv=none; b=VJWsc2CRdvwUEU5lcONn7OxJPqHTh7EBdHIt2emD5vYW/mefQDHpBzRsZ/n/c+l/liEBkJ5pPLTV7BXloCJFPAZiteDBUu+bkRlqaCHAx9HZiqKxYazAZfKDBWeiFKVEUz43y1g0UivKWO6FCeHzafxer1fnWyfv2iKWEu4I/ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736106944; c=relaxed/simple;
-	bh=R/rM4p21AwgLZmBF8Vwn641TqXCw5NU4zQLGi0E4ELY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sk2LwrtHxEX4LwHK2rnufEtzoznYuJ4kNp0QxDx6L0bEd8w6HeUaPwXzYo7PjSAdz7JKe149X28gE+02mkdJR02ardi6NotF+PNSwcvbXQNCu2So36Zle5uYKY3tKNE5jA/h8ICci51Z8Bx0xjrt9pEOo56ZQs/rOsFPSQpDRIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHzdnLSw; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1736106953; c=relaxed/simple;
+	bh=7Ol2pRNt9+3pQPpxaSX1Myjl7/Ti0PEgICf1yyULTSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=idhdJbDTpgDjCwCaX+9YS6iG2S38uKxN8Rq36Fof17T/61mFg8bpvxlN/kbmEc/BRUwE6zpepC2LbSy2wpr8oSRRfKc8vA8fgycacEhodS4KRu5PMtmPZsBg6CI06y1zWhXkLYo5EfcIWqA0CHEjEaaT1iHbEPgDlQhCnOkSCwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KQqTVAik; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHzdnLSw"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-436202dd7f6so156714145e9.0;
-        Sun, 05 Jan 2025 11:55:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQqTVAik"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso90857935e9.3;
+        Sun, 05 Jan 2025 11:55:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736106941; x=1736711741; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1snJbsHlMZpRuEGs+ODUJs3LY3gVzN4pk68xFHq51ZM=;
-        b=OHzdnLSwfH4SHYJsVIWQxjJjaBa6TLvqnoTLFwy2RghVVSP+r/csLu8eFE4DE3GikI
-         10+m0aPYAfki0bLuRvpOUGpFwbQ5LNHKZ1XlaQ3QYl/yyynx7nZDvPT7GOmE/OVn21xL
-         ajBPdBLR0bO2AncQDmvTq7HAdQdLXbV67zlIx7/os41HmTohkdK2YVtmPgYZgLBKk9dz
-         lVUD3Z2/4TL2znpdBh58AhwSzECIfJ0IkumyZ8nl4sJfFxTcGUN3YK13gwBG+lIQu5Ll
-         BEC40QlYd4OA0grCM09M3w0LH5fjw8TOBGsuFfND5sc3I9ac1tC6hR8hSc2bCaAbPDf3
-         qA2A==
+        d=gmail.com; s=20230601; t=1736106950; x=1736711750; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7gOWi7h9tUZPMFdNQ1GwytrlRFpP7O/AOIctsS3Vm04=;
+        b=KQqTVAikWeSivZdZUORQ5qPen82J9f17dZ+j2SbpL2gfFJtByD/Tl0j0q5tsffWlyT
+         WPascgmHYYPf7aXix9fsh2xZWHeniJuoTXg2+D19MFS7aRuifjghQUIJMzE5gQ+s3BJL
+         vsOwq9yO2mX24n9NimSTZPh+AD2R+exwARlhicCh56caiWbNMf1BJreNSB6V8/oAlenN
+         SJ+j2DGlAOPG8Hm+bKCrFnIPyF9GNvdYnRizYREZXoxDRIZySPRkk86EEy6QNIySFezG
+         o6p5upRSC5nYCdY8PZaKll/kazApOSzQp/suv6lDqQfME6EFaF7cE/e2Mav8Z4ukwtYb
+         2N9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736106941; x=1736711741;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1snJbsHlMZpRuEGs+ODUJs3LY3gVzN4pk68xFHq51ZM=;
-        b=WlFAO3NeH+TEBZ5I3XtSx6ySTTrT7c3ecTLA+Mdr38MtUO+J/KRsBbxt+dKQNs5Wpf
-         poXeOd0r06/W5VsTXlnWCcgaKdS94NXUZ4ykRHg/uIa8AI4iIS9obIbpHVvWbwsFF3MZ
-         P2n3b3Hwyoo+Fi6jMbDQYcRCuTayVi/KYJgsVrxQAcohVKfUfndhphu6tgacgepXDIIG
-         dhkw/T3x4ozVJuN8jT7VFyBrOh2XAx3QPg72mh2tmOg3nKdP77zdAR82Lvh9kDTUzSHt
-         cjWD/jL1o54eHp7YWiFxKMfUzSM3s1miDz2Ao/3WXEIRNOqJFR8/2zKVGOm5UG5dOHRM
-         e/kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUuCYzJm5vX0/I1XTXNUtzQAfqhjPp/I1x24on3gKixIMCAyWr7ri4wRJZPzpcXmSsmJETIQbU51iAarw==@vger.kernel.org, AJvYcCXwoEQQmtfcRDIRpodVfwepDpeYcevMUtGntpWwbHo7Uyxcw7kfnHJx0SXg/pvkqky1dbGoLQQV6vOUcH7u@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+PjH3U/3NiJ2Kc70qCat9TEbTuyihw0YMX419TEWpbIWCkq5l
-	M5Y8ry88s+FmMBHCioQdDP5M9mIpc/k4zUNnAITCz9KFtjuGPNYx
-X-Gm-Gg: ASbGncvxj8dw+c1ZwA/dOKXFQpaN+6oEHOPAauKLOqq/vkAl7tx13JQFVaQbqF/dTSu
-	bzx4L9xgN8VVhbhwkE2vUwxjvcr9hGUp5Z31y9DBAQbt4dYYzsVToeSlx3mG1YFUqQMdrzvye3f
-	DwsJ5d/o9B+y06uaunCQ5HOPjIPUdQZoJRnjpdfflQIi2QKsSGmnqeD2c/43dzBRKxdTyvFKn+w
-	VkWDYurfxSazzJrZKgtV+cUd8YYJ+Ulw+sfzOHOJOFAY/riUzeLYKEMsfqe
-X-Google-Smtp-Source: AGHT+IGF3zssa5YIBfQ42l/V+KG+0Tfi/LKeK2zzQFoJVcfRwQM4QlBtFnvMuQIShoRrOZu02RvxZg==
-X-Received: by 2002:a05:600c:310a:b0:434:fddf:5bfa with SMTP id 5b1f17b1804b1-4366854bfc0mr435421755e9.2.1736106940795;
-        Sun, 05 Jan 2025 11:55:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736106950; x=1736711750;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7gOWi7h9tUZPMFdNQ1GwytrlRFpP7O/AOIctsS3Vm04=;
+        b=o0Z2emc9EmgSxK7jydEtUNCRwMbBX5qsJIl97kYJp7/CB8XW4cHGe/wdunEKM61uXP
+         rkQZAEPrmpIRkw/s6NOpZSRe01pcHBKw241z8IG0qPPB6ODJmDKtI2AOm3kPj4dm9x7R
+         Nu3GeOZLQqRsZrbOWZZ37EJfQQ7vs8bxlpjWzfzfMrrn0Qs+310GIv/3SPmjWz6a1Xir
+         VLZEUhFGmEmGIWsb5mmqobeV3Xj22h7m/7IXIOGoVAcC7n+OoKbrMaTiLlxHxzBZSDfc
+         iIBQmjiCXG9dYYqftUGFrqOc2jdjuA0f4Dwzj2PdNdxJo+5IlbalfT1Sm2JD8QalmjBq
+         1TDg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+zgfEURV1Zw8MKLeccRvCyE0e+uPQYtA4mZERmX+GYgxrdPqPMJcIVs71JEr7ebAMWdshDWFtxhBSqpwv@vger.kernel.org, AJvYcCW4wNHiwL2s8L6nKYt2lpKpFuQIQgkd1GuJdyLe1tVSVYkBHHyPXX8iur3nVw8bWQ6FA+npvDVIU+5UcA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj6hYy53U8S6chh1YmlPWB7GffTqKp6l0z0BDzcUeh2fu/gsqW
+	My2I7bKXkquDityvknRJ81nM+j0GJ0tAEF7YX6/MJ+ADRjyxF6gy
+X-Gm-Gg: ASbGncsarPjRRaeN2oTlOb/rf8BBC2TFNWuoQ0hI5tuetaehhHe44iJJaR7rbGI8ZoH
+	f5QR0MckuMoB27/Y9THCqqrTzOEuILaUF7LVr5GIze5mn1tzv80iryLa/XxFcmyq3DcdcbmZzbm
+	KJIaXEZbyJFldMlmEIMFSKQuszVcsG4rWYSfDHFfFy+IWwN2cdsm2zOsdeAajTzj8EGNh2bSJWF
+	wYombx/LQkvu4vItoYFaHqGLy7TKAg7s+kw+shz/5r0rZ1HnUbGoA6f5yK5
+X-Google-Smtp-Source: AGHT+IHhDVUxLtA19a5w4wScWlUpW6iWRBcRLJCut64FMVj+d4hyhBxrXdtg8vaMxZekiKRB+bhDQw==
+X-Received: by 2002:a05:600c:3505:b0:434:fafe:edb with SMTP id 5b1f17b1804b1-43668b5f326mr431605275e9.24.1736106949524;
+        Sun, 05 Jan 2025 11:55:49 -0800 (PST)
 Received: from dell-f2yjyx3.. ([185.32.209.106])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b1143dsm577778975e9.18.2025.01.05.11.55.39
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b1143dsm577778975e9.18.2025.01.05.11.55.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 11:55:40 -0800 (PST)
+        Sun, 05 Jan 2025 11:55:49 -0800 (PST)
 From: Adrian DC <radian.dc@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Adrian DC <radian.dc@gmail.com>
-Subject: [PATCH 0/3] hwmon/adt7470: fix 'fan*_{min,max}', 'temp*_alarm' and add 'temp_fan_norm_alarm'
-Date: Sun,  5 Jan 2025 20:55:13 +0100
-Message-ID: <20250105195521.3263193-1-radian.dc@gmail.com>
+Subject: [PATCH 1/3] hwmon/adt7470: allow 'fan*_{min,max}' to be reset to '0'
+Date: Sun,  5 Jan 2025 20:55:14 +0100
+Message-ID: <20250105195521.3263193-2-radian.dc@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250105195521.3263193-1-radian.dc@gmail.com>
+References: <20250105195521.3263193-1-radian.dc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,16 +76,58 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adrian DC (3):
-  hwmon/adt7470: allow 'fan*_{min,max}' to be reset to '0'
-  hwmon/adt7470: resolve faulty 'temp*_alarm' values read output
-  hwmon/adt7470: create 'temp_fan_norm_alarm' attribute for 'NORM' alarm
+Tested with the following script and values
+---
 
- drivers/hwmon/adt7470.c | 77 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 72 insertions(+), 5 deletions(-)
+{
+  # Access hwmon
+  cd /sys/class/hwmon/hwmon1/
 
+  # Set to 1 => 82
+  echo -n ' [TEST] Set to 1 : '
+  echo '1' >./fan1_max
+  cat ./fan1_max
 
-base-commit: ab75170520d4964f3acf8bb1f91d34cbc650688e
+  # Set to 1234 => 1234
+  echo -n ' [TEST] Set to 1234 : '
+  echo '1234' >./fan1_max
+  cat ./fan1_max
+
+  # Reset to 0 => 0
+  echo -n ' [TEST] Set to 0 : '
+  echo '0' >./fan1_max
+  cat ./fan1_max
+}
+---
+
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+---
+ drivers/hwmon/adt7470.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
+index dbee6926fa05..712bc41b4a0d 100644
+--- a/drivers/hwmon/adt7470.c
++++ b/drivers/hwmon/adt7470.c
+@@ -662,11 +662,15 @@ static int adt7470_fan_write(struct device *dev, u32 attr, int channel, long val
+ 	struct adt7470_data *data = dev_get_drvdata(dev);
+ 	int err;
+ 
+-	if (val <= 0)
++	if (val < 0)
+ 		return -EINVAL;
+ 
+-	val = FAN_RPM_TO_PERIOD(val);
+-	val = clamp_val(val, 1, 65534);
++	if (val) {
++		val = FAN_RPM_TO_PERIOD(val);
++		val = clamp_val(val, 1, 65534);
++	} else {
++		val = FAN_PERIOD_INVALID;
++	}
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_min:
 -- 
 2.43.0
 
