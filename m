@@ -1,70 +1,70 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE782155C9E;
-	Sun,  5 Jan 2025 19:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13CB1D0F46;
+	Sun,  5 Jan 2025 19:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736106954; cv=none; b=q8NxWIP31/S34vBSX+wJju3iZl1mlaW1ooLnueJBpWS1/Pa8txroboX5YbZRIpa9YSEKrlf0TL/Qit0R8oc585cC8TT5ZhPmQk4fjYNCmRK2JSpcq3wgYAjXFlRpD8B/c2FLvuSZ106BBmUqWd7SS6vnk1zL0fENFr9VyyhsBIQ=
+	t=1736106956; cv=none; b=nircV1txA22UxN2cfo4hPNTc85YEH3OsvabHFgx+K/zaq71qby55S8BDfAcKKStaG5D1LZTZJ8VC/xKawBhBeX1Qw9dEYq/1ez3XxVDfmMplxV0yPeQDWekSSoDEtFho0M3bTHfo51Nvbfd0WxJiCAXcXPdUzK1+VKY5ur0C3Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736106954; c=relaxed/simple;
-	bh=VQ4AZoglesRDAKFtv1E3KHtLtl3qcLaDh3ig1cKWlc0=;
+	s=arc-20240116; t=1736106956; c=relaxed/simple;
+	bh=3Tgyuz/tOUj9/IZeVGBsvTmXFkZGwRb9e2alBxD8pUc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W71aPN6+o6iyeAL9jeULcN5gaTwJ1mQMXYT9W7xJGZ+GC5v7BNQKYQRYVrhEEi9FOtvPs7C9PjlSZ7drJ1OTtkp77iqCPaKynF6DxIGvHF42pxa+HxUGEUXy5ZIiA1A4MJKkXhgcHP3qI0nvCrjXXQQM3OuMt05Gvur6MAcanh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GBldADIH; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=imFKE3aWS2T13/Ui4CcImHYMQFfmu9M7YKsAcIqlxdf731Bzf8r4508434dm8/+SOn2yfYCX+vvBGFqItg/HLxXDFfvdb9AaOGRzZntyz57zWKijsCTfuoxbJnAsOQ7OEZOu/frMZ95qxE5VjA7j0H6hOYzUW4AtH+RrsY//Y18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HTI2mZCQ; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GBldADIH"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4361f796586so142125585e9.3;
-        Sun, 05 Jan 2025 11:55:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTI2mZCQ"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-436345cc17bso99281025e9.0;
+        Sun, 05 Jan 2025 11:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736106951; x=1736711751; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736106953; x=1736711753; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TpaTCNzT+T541hPCx0yKcSnmSLn4z8zUL5h3nPbVQLM=;
-        b=GBldADIHhlY2g2a2VG9WLn39lEjUl+IayFKnYz9rIA98JFf/eYNsb4ewWD66haTgU4
-         jb4N6oiTHr3Lj48KcxC4MHZk5A5oOikBVDD+gglI6wj45s9TOBGyXXfrtVGFbnM39RL9
-         nOXhxpbh5B2tdltxbujbtbtHFKHFBnBb05unYaPFmQdg2g8Lqn2tW31gNrr4j9pKrPQu
-         2reJXP4dP7OPJpyBQIHBrW91AKxMCAcky+/nS5r5ZbTlwbznCL9HpeO4ef2ooTkpL3r0
-         /Gdvsz6yzfyE/zRrCa7/P82+F4WeBq2g/gvie7gqbxIbOiNFrmW/8f8z0Pti/1d/y+hu
-         VqYQ==
+        bh=LT95wdO2rleIugbG3ndjNwQL1C6rhyysv7VaEGhI/y8=;
+        b=HTI2mZCQ0DL0nDJYKi3LGzX5ywlv1vJpo9ElYAxJlkP/stqcEr2kXsZ0+wizCha0CC
+         6HF46AdWONp34csT6zRclKSAYZL0FCVKPL5P3XKmrYGs3oM3Nnz+roTipW7J18AL9W6f
+         o+nYLx7a4qx4xw/zhFzSSuTr5wjrM7Oxtc8nBP/E4zOVvq4R5G3DPriqLUQiqwFlF5DS
+         lRtlLTuTkkLtv2fRWB9AoRkCvoAy0QhKVKQcBY86j+kHKAV4LWv8o3NBsZu9D4kwN6qC
+         gyhnNykDvh3NJ/OqbVB5Oda1Hzrv4Dua1H6h/Qw9U0xzlO3mqhlFFyc31My/I5vve2ZU
+         QC8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736106951; x=1736711751;
+        d=1e100.net; s=20230601; t=1736106953; x=1736711753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TpaTCNzT+T541hPCx0yKcSnmSLn4z8zUL5h3nPbVQLM=;
-        b=PKxzS2QzTeY10CJYrIqGPyj6gIV5g9h43mydTc4ynx2YLN1Yuxu0JQd9002EBLwRW3
-         abwfPiKfHdFNUFQiBRpG5fo2KYo4uEwcJ7QCiH0Urb+G4C2uwXSwapYu2zNEAlSZT2hQ
-         lRiDKq0R7EJHcRifgvrcKtDft5Ma9aRfSAyCGu/dZctg5Y/8ATjO/oFx681bQe0f/b6U
-         q7nJdkxu+x33jacyhzmlc/molpNgjWX03XKl57q8BPmxanMYIjru+uF8XC+Ce/PxKu0G
-         /WlsJ95iCjHusjACOFmHjPeTIVbN+8VBi0FZW18a3388KsQYtT4uBqDhy/mdywjyYnM+
-         T0YA==
-X-Forwarded-Encrypted: i=1; AJvYcCVO6eJnTPCCoFFRAV6DxpKlw3Xur+EUTW0Pq9g/3MUQvE5tOF994uSkSWetAzZu7ICHQhFW34cPqKPs/ejM@vger.kernel.org, AJvYcCWziQlZzQp+cbpPGDy5HmFCSD6Vjb5qlPp9MXB4OIBpkRcDuyVWwpkp8yvIBu3A3UfZTpDvqJLOoSoWkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR4I6YAVawXfn2R0RjRcE9vRNs2QUB+qJUSZ28nH4ln8H5ih2C
-	XZbcsQEhndYPR3ifvUWCmBJHEEQF6aH2N14d9igrTC8PgdMUDWwL
-X-Gm-Gg: ASbGncsx85nXhtWS8UNy369FgvXaOLCsSpahZzDDZMRJrzzjfbZWYtJUMZ7WbyLO9c2
-	k8dK6wxEFSSmvuhRay92y+QPE0K0QV+av7WStzNvdSx2+i2J4ApY0GhZL/RE9Z0zAGaNlalc27+
-	GQEZQG/bWRwoildO5iVL8gU54btxJ1SFHtxUUNnkSsmoHPCDZUkpIHr6hzw2G5HKRZcajaPQDO6
-	Q1HzlxOl/8J1mxVxvi+NRz2yh2+WteAsiD3+kr1DtU3BkbQnKpQqBi/RPUv
-X-Google-Smtp-Source: AGHT+IEU0Jvwx0vaJpT0ki4SCTYMMj05oWyCMF2PutAJUTORi3bjyZy0hpSCerbMjLGaCsJtFqyviw==
-X-Received: by 2002:a05:600c:1d10:b0:434:ff45:cbbe with SMTP id 5b1f17b1804b1-4366864414amr520384775e9.18.1736106950890;
-        Sun, 05 Jan 2025 11:55:50 -0800 (PST)
+        bh=LT95wdO2rleIugbG3ndjNwQL1C6rhyysv7VaEGhI/y8=;
+        b=DOvm+1imux4CEmvxldKF3/lWTtHqbe3qxoygYdZAZInE6P5vhP/jY2SHANeKtdl9Xf
+         aoMyINjiXDlg+USQMpx+AezvbVG+LQRKl2XBTjmEiYMnLtF08WD9fGGm3RAUEs4TakVA
+         fAO0YkHtwHpM7aV1sZJDB/i7b2fZrk1HNU4gW6/1bx3wiARG/tVasOxrrZq5D8+V409p
+         W/IKLXqlnSdwSn20D78lXg2w7Ww0n64RafluX9mUbj1y2P+SU3TQTgpl2bnlKF4WXWuw
+         EWi6vS2Me7dRsHWYtSPsAAsnOY7vVjPQI2mOFtW23VOz2UgVyPKmluzSZEQFD2Mzl3xA
+         hUVg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6kR5gZKDs/kg8P1rqhI9iSpKqMfLXNfnPoJToFIXjd8EUhNgWr7T4ZuvP+cYo/XUXpZwWZgf3jwg5Xi1T@vger.kernel.org, AJvYcCWaQ31+EY44L0DsNW08soWJSLSpf5qXnkIIMHuPjTCdSvDnARjazM2/eOda6pQpErwDtIu3WQnbNmWKtA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywiuaa/AIAKbcWt3yY2RXVEHDQIwtTG+wfGkODJeo2QvFLUdfkX
+	/qffuxHklxh8E/wq7lQ2l1rPTmt23xo/6g2HyVjxpFygUfP3AJLG
+X-Gm-Gg: ASbGncuQAzMawsrvi5tfGfPtPB+4rhQgf4fNM9FKgcVd6t29r3AqclEtM+C2T+FKrrl
+	nwH8bxAa6bOTNDRfdjYZ47Her/fdkxMEgSxtYhxdqMtzUNbf3glkrWuzsZ49k4dlvybqzHJSWXf
+	epVlqgMcDXeIr0BZRIwZiUCD490LsmJ+T9cbnsF4gls7sjueWnHY/KnI/uFfa5w8qlGKVbotlOZ
+	9MS9P2tGwUKcoCfu/bqaLamIk3uOArk9meEQ3ExBNP4P8veR5Cf7cHTYgCQ
+X-Google-Smtp-Source: AGHT+IGmc/RV42VpNyvv4pbyvtFHsCm4bdNWghp3GdceRsoHQG/an6vZR+1GwJas3Aazl1VBmV6mRg==
+X-Received: by 2002:a5d:5e09:0:b0:385:faf5:eb9f with SMTP id ffacd0b85a97d-38a2240484emr54353001f8f.48.1736106953356;
+        Sun, 05 Jan 2025 11:55:53 -0800 (PST)
 Received: from dell-f2yjyx3.. ([185.32.209.106])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b1143dsm577778975e9.18.2025.01.05.11.55.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b1143dsm577778975e9.18.2025.01.05.11.55.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 11:55:50 -0800 (PST)
+        Sun, 05 Jan 2025 11:55:52 -0800 (PST)
 From: Adrian DC <radian.dc@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Adrian DC <radian.dc@gmail.com>
-Subject: [PATCH 2/3] hwmon/adt7470: resolve faulty 'temp*_alarm' values read output
-Date: Sun,  5 Jan 2025 20:55:15 +0100
-Message-ID: <20250105195521.3263193-3-radian.dc@gmail.com>
+Subject: [PATCH 3/3] hwmon/adt7470: create 'temp_fan_norm_alarm' attribute for 'NORM' alarm
+Date: Sun,  5 Jan 2025 20:55:16 +0100
+Message-ID: <20250105195521.3263193-4-radian.dc@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250105195521.3263193-1-radian.dc@gmail.com>
 References: <20250105195521.3263193-1-radian.dc@gmail.com>
@@ -76,151 +76,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tested with the following script:
----
-
-{
-  # Access hwmon
-  cd /sys/class/hwmon/hwmon1/
-
-  # Check alarms
-  alarms() {
-    echo -n ' [READ]'
-    echo -n " fan[1234]_alarm = $(cat ./fan[1234]_alarm | tr '\n' ' ')"
-    echo -n " temp{[123456789],10}_alarm = $(cat ./temp{[123456789],10}_alarm | tr '\n' ' ')"
-    echo ''
-  }
-
-  # Configure hardware
-  echo '0' >./alarm_mask
-  echo '10' >./num_temp_sensors
-
-  # Test fans
-  for fan in $(seq 1 4); do
-    echo " [TEST] fan${fan}_min : Min FAN speed ${fan} under limit"
-    echo '65535' >"./fan${fan}_min"
-    sleep 4
-    alarms
-    echo '0' >"./fan${fan}_min"
-    sleep 5
-  done
-
-  # Test temperatures
-  for temp in $(seq 1 10); do
-    echo " [TEST] temp${temp}_max : Max temperature ${temp} over limit"
-    echo '-126000' >"./temp${temp}_max"
-    sleep 5
-    alarms
-    echo '127000' >"./temp${temp}_max"
-    sleep 5
-  done
-
-  # Test clean
-  echo ' [TEST] Final state'
-  alarms
-}
----
-
-Faulty values:
-  [TEST] temp1_max : Max temperature 1 over limit
-  [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 1 0 1 0 1 0 1 0 1
-  [TEST] temp2_max : Max temperature 2 over limit
-  [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
----
-
-Fixed values:
- [TEST] fan1_min : Min FAN speed 1 under limit
- [READ] fan[1234]_alarm = 1 0 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
- [TEST] fan2_min : Min FAN speed 2 under limit
- [READ] fan[1234]_alarm = 0 1 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
- [TEST] fan3_min : Min FAN speed 3 under limit
- [READ] fan[1234]_alarm = 0 0 1 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
- [TEST] fan4_min : Min FAN speed 4 under limit
- [READ] fan[1234]_alarm = 0 0 0 1  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
- [TEST] temp1_max : Max temperature 1 over limit
- [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 1 0 0 0 0 0 0 0 0 0
- [TEST] temp2_max : Max temperature 2 over limit
- [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 1 0 0 0 0 0 0 0 0
- [TEST] temp3_max : Max temperature 3 over limit
- [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 0 1 0 0 0 0 0 0 0
- ...
+Default: 0 in all normal use cases
+Test: Raises to 1 if all FANs are in automatic mode and below threshold
 ---
 
 Signed-off-by: Adrian DC <radian.dc@gmail.com>
 ---
- drivers/hwmon/adt7470.c | 52 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 50 insertions(+), 2 deletions(-)
+ drivers/hwmon/adt7470.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-index 712bc41b4a0d..afb881385dbb 100644
+index afb881385dbb..1ec4c0807053 100644
 --- a/drivers/hwmon/adt7470.c
 +++ b/drivers/hwmon/adt7470.c
-@@ -551,7 +551,40 @@ static int adt7470_temp_read(struct device *dev, u32 attr, int channel, long *va
- 		*val = 1000 * data->temp_max[channel];
- 		break;
- 	case hwmon_temp_alarm:
--		*val = !!(data->alarm & channel);
-+		switch (channel) {
-+		case 0:
-+			*val = !!(data->alarm & ADT7470_R1T_ALARM);
-+			break;
-+		case 1:
-+			*val = !!(data->alarm & ADT7470_R2T_ALARM);
-+			break;
-+		case 2:
-+			*val = !!(data->alarm & ADT7470_R3T_ALARM);
-+			break;
-+		case 3:
-+			*val = !!(data->alarm & ADT7470_R4T_ALARM);
-+			break;
-+		case 4:
-+			*val = !!(data->alarm & ADT7470_R5T_ALARM);
-+			break;
-+		case 5:
-+			*val = !!(data->alarm & ADT7470_R6T_ALARM);
-+			break;
-+		case 6:
-+			*val = !!(data->alarm & ADT7470_R7T_ALARM);
-+			break;
-+		case 7:
-+			*val = !!(data->alarm & (ADT7470_R8T_ALARM << 8));
-+			break;
-+		case 8:
-+			*val = !!(data->alarm & (ADT7470_R9T_ALARM << 8));
-+			break;
-+		case 9:
-+			*val = !!(data->alarm & (ADT7470_R10T_ALARM << 8));
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -648,7 +681,22 @@ static int adt7470_fan_read(struct device *dev, u32 attr, int channel, long *val
- 			*val = 0;
- 		break;
- 	case hwmon_fan_alarm:
--		*val = !!(data->alarm & (1 << (12 + channel)));
-+		switch (channel) {
-+		case 0:
-+			*val = !!(data->alarm & (ADT7470_FAN1_ALARM << 8));
-+			break;
-+		case 1:
-+			*val = !!(data->alarm & (ADT7470_FAN2_ALARM << 8));
-+			break;
-+		case 2:
-+			*val = !!(data->alarm & (ADT7470_FAN3_ALARM << 8));
-+			break;
-+		case 3:
-+			*val = !!(data->alarm & (ADT7470_FAN4_ALARM << 8));
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
+@@ -54,6 +54,7 @@ static const unsigned short normal_i2c[] = { 0x2C, 0x2E, 0x2F, I2C_CLIENT_END };
+ #define		ADT7470_R8T_ALARM		0x01
+ #define		ADT7470_R9T_ALARM		0x02
+ #define		ADT7470_R10T_ALARM		0x04
++#define		ADT7470_NORM_ALARM		0x08
+ #define		ADT7470_FAN1_ALARM		0x10
+ #define		ADT7470_FAN2_ALARM		0x20
+ #define		ADT7470_FAN3_ALARM		0x40
+@@ -533,6 +534,18 @@ static ssize_t num_temp_sensors_store(struct device *dev,
+ 	return count;
+ }
+ 
++static ssize_t temp_fan_norm_alarm_show(struct device *dev,
++				     struct device_attribute *devattr,
++				     char *buf)
++{
++	struct adt7470_data *data = adt7470_update_device(dev);
++
++	if (IS_ERR(data))
++		return PTR_ERR(data);
++
++	return sprintf(buf, "%d\n", !!(data->alarm & (ADT7470_NORM_ALARM << 8)));
++}
++
+ static int adt7470_temp_read(struct device *dev, u32 attr, int channel, long *val)
+ {
+ 	struct adt7470_data *data = adt7470_update_device(dev);
+@@ -1080,6 +1093,7 @@ static ssize_t pwm_auto_temp_store(struct device *dev,
+ static DEVICE_ATTR_RW(alarm_mask);
+ static DEVICE_ATTR_RW(num_temp_sensors);
+ static DEVICE_ATTR_RW(auto_update_interval);
++static DEVICE_ATTR_RO(temp_fan_norm_alarm);
+ 
+ static SENSOR_DEVICE_ATTR_RW(force_pwm_max, force_pwm_max, 0);
+ 
+@@ -1112,6 +1126,7 @@ static struct attribute *adt7470_attrs[] = {
+ 	&dev_attr_alarm_mask.attr,
+ 	&dev_attr_num_temp_sensors.attr,
+ 	&dev_attr_auto_update_interval.attr,
++	&dev_attr_temp_fan_norm_alarm.attr,
+ 	&sensor_dev_attr_force_pwm_max.dev_attr.attr,
+ 	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
+ 	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
 -- 
 2.43.0
 
