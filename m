@@ -1,66 +1,66 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124AD1DF97A;
-	Mon,  6 Jan 2025 19:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A64145A03;
+	Mon,  6 Jan 2025 19:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736190132; cv=none; b=rS52JDD8Ei4nBHtpbZlfsJZafh2tl8LLLKILKAuDS2XRP+ZLCPsuJHl2cZf0joAuw01yDlVMcyexSAsfjoCW1DFRYUWc2PrlO1mn+2qVB2VrHQvYV8TXk7IeOyqD4L5ydBxK5acynZtuv6rOerundsSwNyw3RqCmsp/Epu5wwQE=
+	t=1736190622; cv=none; b=BnyOhbhRtx0UlJoIJsIrknX4qaVUbOCMSfYZ3XuZrFdQRPmx9iMxrMIX24zOXQI8YIQ/EQi14kDURiX1Ne35jTyY3zd1vaxpQi3yKO+XNwq7ShlLJVHyFhd+r5Qc1QWmrJ6bHVTaSGhPa9xFZOcQvvBjDr41jqAukv0acd6ZJjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736190132; c=relaxed/simple;
-	bh=i8yNwb/HzvpkaTSwP6193OCu/9qJd5EM11BonVFsRLo=;
+	s=arc-20240116; t=1736190622; c=relaxed/simple;
+	bh=PxmeU/vCXQMmQTLMUR5Q09Xx+W3lHL1r3mS0oFe++1U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Y0sRKWsLU12uW5dkgSVLXvDJEfAk29szZe2L03o+FpIzWPj5qn1/UGqiD6qd0nG390L4Z6EjfPqOc4LyYgxuh+6iL+P0KYnPOtH2euU3N5YntwudwILRamdGCjESbKTWLUiWc40RcHe2ufLApn2RL0iT0k6A6YZTvusENb7fGXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZlAVQ139; arc=none smtp.client-ip=209.85.214.172
+	 In-Reply-To:Content-Type; b=HtLyNAlW8+/R0AlgfQdXP3+A7Gnm9YLy/3Z8f2Yb7EUz1iPnVC+sCaw9r3dAqwGjjYBL0uOi0+8MzNe3mEp22ZbigG427KV8iczob+sIL79BnXVIGhMJ512INae1peFQwRLfeLxeGW2MGyFhf35WNMLfECmcCsAOsdYlHSUQajw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GilKLkVP; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZlAVQ139"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21634338cfdso15540155ad.2;
-        Mon, 06 Jan 2025 11:02:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GilKLkVP"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2162c0f6a39so220548055ad.0;
+        Mon, 06 Jan 2025 11:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736190130; x=1736794930; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736190620; x=1736795420; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAhmYXsX2kla4nBkLvW4Hyi2aA2gDgjaSkEwaI3Nur4=;
-        b=ZlAVQ139aWz6j3JUrcfSEQ9yKYXAP5q0d6gVqZ4hI/6cPW7+C5UHg5eAOI4yzgJtql
-         hAPnBqNsbKF++0pol4X7nfKVOpl5mR939lPgvvIqw1/Lw5ZEbnoPtjZPYdbAUtlw9gQn
-         pSxEQM7fS+hiQI3THTZHYAgIshnNtVDqd5p9QAyyRKP9Qh+1RfcuuPwQFq0+R5+knpBe
-         HT/ET5r8eaPxNwuuEmtLCBw1m3mKcZ5LLxMMx6s+eATP1RDMWR+f7G0tqWlu+rdQVKP4
-         7c+PRUV6G8rTEKRkK6rMbMkXX4ARWV3u9v+l5Zbbtft9WAVYclRDFbRW1wtiPQMxTkqt
-         Bs+w==
+        bh=PxmeU/vCXQMmQTLMUR5Q09Xx+W3lHL1r3mS0oFe++1U=;
+        b=GilKLkVPkJdoBYW1brg2LFwX/lIhO4RWQeol5Rmyj4dRkoGLSz3ZgX3Rby0Byumdfz
+         AXXcmTULe5EdqFbFPDVbq6Dvf0gsLiFn89YDse6jB4mcJ6aVVROnPGJi89ZUbb/SmXuY
+         zSHN2uFPDwzxfrto7eFjjOqftRSqQdyxK0zJiQsoXUy5boOSC6gMDB3TcQ8A0jgNoqPI
+         kbizCEBiDP0CJoqLVTbSD2QDE0RwaFq+s0OAtZtPBaPl++YGHnSpeVGkFDZmtHYS2P/2
+         +zdoA1hZRoMck8/k48O36YtvoZS37Xhd3UfK+PUtWBVL9H86G6EhyGA/YZ8GRcbmowik
+         Qdqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736190130; x=1736794930;
+        d=1e100.net; s=20230601; t=1736190620; x=1736795420;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZAhmYXsX2kla4nBkLvW4Hyi2aA2gDgjaSkEwaI3Nur4=;
-        b=nerF79s/5+bPQn6mj74kF9iElkBZ96kGa/J13hWkYSkpX0zxsw79JQe5jOwv0mCboW
-         thurmin4ov1xT9Rs6saFwAjwIZBI9IKIUjBG9ljODV/ZqxQO/6uI8B/mVCyl2SSf9T06
-         xjERHxPSqtFstTQ2NoIDxRWQnzrWRG27z69yAaEintKrM1aNGwsoG2xntnMKATYuEwOS
-         XIFcRlhN1fQNdSE3CVGKiZ88dTBM/ps3UuxOlrmR+ifJTHkDBv5nsh6gza0l4Ztoxuwv
-         7XlNW6uX9dZ0eP8mt5k3YOfcU4wJZku48YzNwk3sFIna+Xsq92oWKPXvsgAIjG7bo0TB
-         bWaA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1+gpqFa9DDFZAdoZ7WuPeJGyUwVhq9WSHNWQCKKRIZNwrLDZLH/t09SS1Lbf1bOzw8gwIozAEsljzDw==@vger.kernel.org, AJvYcCXTyLdDSVeSmcpnTs8xPep9OV+cKROFklCsNRfgPHE4coDoGBaCP1w46iSLURU6aAy/pDJT0tqM2ZuQptdF@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgPuuvT1AY49j74+XK+ypbaXwGig5x8213iejMlA/AfxOMftlh
-	TXHA5lFMtwT65l51Sba5gQ8MN/tfH6JsKyInzZHCFguOKB5MliUn
-X-Gm-Gg: ASbGncv5mKpgrfxyf8bbNGWgCK3/nw3zmEO2av2xpymds9W8zAFenMMHyuSTX3F5MAF
-	fRKC9GHH/RxTn23Y1UjxpmWJ9JZbyx4x/d3RPw/z/uBPCgwvzNIOCbNGSkx83vFm3Vgwt7fCe7I
-	EfSYPWbMRIP5IrbyTBlQjpGlBkPKfRu/PC26l7OHrwnxrhQUeL05vB0cEfKfpqm+Omk3H7NV6yz
-	0pRRBD0oUV63+F6pjGbDZDbbkL/N2Q0oF76elPGuaWkxuoPfNOZCzhOtg/r8tt2LsPwfrjHriOw
-	GvNEP7k+iubhPskZjEs2wYPyG8zl4w==
-X-Google-Smtp-Source: AGHT+IFIHIIZiXXOAwBwAsJYyjD0kJFf6/fHA6cDZy1R57DskE/KzFbyua6Ud9S9MKxMURHUyR7a+Q==
-X-Received: by 2002:a05:6a00:a91:b0:726:c23f:4e5c with SMTP id d2e1a72fcca58-72abdd20f88mr84285090b3a.1.1736190130340;
-        Mon, 06 Jan 2025 11:02:10 -0800 (PST)
+        bh=PxmeU/vCXQMmQTLMUR5Q09Xx+W3lHL1r3mS0oFe++1U=;
+        b=WPBNB6HQGx91eOUI2ASyWP1YWxpiId3U6ecHbXbjMZP9PGZPEVOLJ94pRSEI14Bfht
+         D4E074Wt9AXem3/ww2VDieT/MB8K9+i7GCmJnrq89fRl0COijIErAYBh8dklCokp0y11
+         MZ9l3bjQZsOlVFCunk8Ij79j8uMhXzhmFBQeNYiNck+ij9vPTUwvXO8rrEpQmoMP9qCV
+         /lpvyJGzuHl2SdGwnJFr+hFSXtx9ljxwE1WABBh72cez7fY++hRVcdb3g/vg43KSq5Ue
+         APPk+Phmx/D9shffsLY2ZlQV2R8FXel/S4DgJjTZVt5Q0zowHWNjawfeXoq2u0shU8EM
+         wjBg==
+X-Forwarded-Encrypted: i=1; AJvYcCWei4GPrx7QfIUHlexMJTN7TXmhw6GFgNDn1x3pPKEi8MVqAQmIcAuZxIM3H9wfsSzk6KVu8lQwdV9Dost0@vger.kernel.org, AJvYcCWoOfy1TqiFnwjphwzrwGb9WyQJymjuBtaQVi5sSpnUqQrAyEn4kEEfUbzMATsXG72hceErNbj8sk2U6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwUbq880/s2/ZNP4HJ0WVrYCtfQ4yYggF1pmC5J9lrufDbhpIB
+	FfAvqjkSVsHvz4ScTdEoh+Ie31MZhGqaP3XtwrpNuqK12+fLQLAH
+X-Gm-Gg: ASbGnctTT/Mxx5pL08WIcuRW8bRX/yTbRmDcwQxUU2rpbTasUvymaBMKrMpxWFnVrHo
+	rrmxpMXC+fo/NKkA37i9HsgK2nxWfi3fhuux+8iDQlYDVtgPm4Riq8h9e/caHi5Co2nVhh7OJT5
+	rYIg005cnEyyetXVKCHkh5I9z5qjM5TF2mVrOl2hFg0b6OZ4uj4bJhOp2JlICIGt39nyWAo+ihK
+	7cHN2blSvvz+NeOvQeqQhOwx1uBLh7SpKIdqMDvZ/nTH4D3i9osKHgA2znXCDKSCrywHhXckE1Z
+	GcsRcZMQEXeEbJvWUAQfmL+WIkTlEw==
+X-Google-Smtp-Source: AGHT+IFMxHY1oNc1isjdrsO9chTVQvsLHVOmgld6tnqquipzgGd9FfrS9M1dMIy74uKHKw/qTcceAg==
+X-Received: by 2002:a05:6a21:3a8b:b0:1e0:d0b9:9a90 with SMTP id adf61e73a8af0-1e7374964f4mr646819637.13.1736190620258;
+        Mon, 06 Jan 2025 11:10:20 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad84eb34sm31879240b3a.87.2025.01.06.11.02.09
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b1ce01b8sm24845427a12.20.2025.01.06.11.10.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 11:02:09 -0800 (PST)
+        Mon, 06 Jan 2025 11:10:19 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c3be75de-c399-473e-a4ff-725159392f4f@roeck-us.net>
-Date: Mon, 6 Jan 2025 11:02:08 -0800
+Message-ID: <894c78d4-35e9-487a-92c3-9a7eb808f040@roeck-us.net>
+Date: Mon, 6 Jan 2025 11:10:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,12 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon/adt7470: allow 'fan*_{min,max}' to be reset to
- '0'
+Subject: Re: [PATCH 3/3] hwmon/adt7470: create 'temp_fan_norm_alarm' attribute
+ for 'NORM' alarm
 To: Adrian DC <radian.dc@gmail.com>, Jean Delvare <jdelvare@suse.com>,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250105195521.3263193-1-radian.dc@gmail.com>
- <20250105195521.3263193-2-radian.dc@gmail.com>
+ <20250105195521.3263193-4-radian.dc@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,67 +119,20 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250105195521.3263193-2-radian.dc@gmail.com>
+In-Reply-To: <20250105195521.3263193-4-radian.dc@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/5/25 11:55, Adrian DC wrote:
-> Tested with the following script and values
+> Default: 0 in all normal use cases
+> Test: Raises to 1 if all FANs are in automatic mode and below threshold
 
-The patch description is supposed to explain the reason for the changes,
-not test results. Test results are useful, but only appropriate after "---".
+As with the other patches, this is not an acceptable patch description.
+
+On top of that, it introduces a non-standard attribute without documenting
+it nor providing a rationale explaining the need for it. Also, this is not
+an alarm. The bit says "everything is normal". I fail to see the value of
+such an attribute, much less as an "alarm" attribute.
 
 Guenter
-
-> ---
-> 
-> {
->    # Access hwmon
->    cd /sys/class/hwmon/hwmon1/
-> 
->    # Set to 1 => 82
->    echo -n ' [TEST] Set to 1 : '
->    echo '1' >./fan1_max
->    cat ./fan1_max
-> 
->    # Set to 1234 => 1234
->    echo -n ' [TEST] Set to 1234 : '
->    echo '1234' >./fan1_max
->    cat ./fan1_max
-> 
->    # Reset to 0 => 0
->    echo -n ' [TEST] Set to 0 : '
->    echo '0' >./fan1_max
->    cat ./fan1_max
-> }
-> ---
-> 
-> Signed-off-by: Adrian DC <radian.dc@gmail.com>
-> ---
->   drivers/hwmon/adt7470.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index dbee6926fa05..712bc41b4a0d 100644
-> --- a/drivers/hwmon/adt7470.c
-> +++ b/drivers/hwmon/adt7470.c
-> @@ -662,11 +662,15 @@ static int adt7470_fan_write(struct device *dev, u32 attr, int channel, long val
->   	struct adt7470_data *data = dev_get_drvdata(dev);
->   	int err;
->   
-> -	if (val <= 0)
-> +	if (val < 0)
->   		return -EINVAL;
->   
-> -	val = FAN_RPM_TO_PERIOD(val);
-> -	val = clamp_val(val, 1, 65534);
-> +	if (val) {
-> +		val = FAN_RPM_TO_PERIOD(val);
-> +		val = clamp_val(val, 1, 65534);
-> +	} else {
-> +		val = FAN_PERIOD_INVALID;
-> +	}
->   
->   	switch (attr) {
->   	case hwmon_fan_min:
 
