@@ -1,108 +1,196 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A44C1D6193;
-	Mon,  6 Jan 2025 09:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589061DC05D;
+	Mon,  6 Jan 2025 10:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736156757; cv=none; b=VQii8JOvSeHREfsI0YnVwzhQMfgX98Muvq0jLa8AeWDOw4v1LgA0exli2iKjkujUawTxlOzjj1qdWhIG6rP/8K331Qj18TdaH59yyou4x3xAg/e8gUk6uJW/1/8kN1xHV7MTOFz1fYN6RUzojBbBPXNbBLhe6DR56KpP+8aSzEY=
+	t=1736160615; cv=none; b=bF2zGCNsOU3pGoQyPodtx7+LmRYzwlQ3AN82jETRmjJRCUDk++zi8TOikO9lHpoDOoIW+0/B/3jyUAAIn4UZF3qWr7cig/4GPHIslVCgixaEX2sErfdv06QqOdvTQU/A6195wPpwYwfNj4NEO1TKfNBRXw4lI9IPWr06/eeq928=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736156757; c=relaxed/simple;
-	bh=ZQU+ovsD55f64DF1zOadfrUNcIGee3cjAidEI96IOp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YKCZlsOTl0fiLjZqec7mOSOtGbPf2GOeI+qWVlIDVOIBncapbaRg9igak192T/amNGYauk1n91d9FsOo2fHOxGc5mLAo01KGhiz7i4Y0+czbS8jHss28ly/dujeW+IgryAy2xT+8gbXavJucGOuVGqtAhC9t2GkCTYVGihPmWgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEX/BOsG; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736160615; c=relaxed/simple;
+	bh=7Q3i8xJswYWcNOJxpGbRWAwokUg1oDkILbkbZFce7nk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VgaiikEOQyqGz/ShyaVNa1U6onoomT+foJzq00nx7tTnEFaG37NmtG0plvnXx5e0QEZ02+UsvwOSoKvEc4Whqvf/PAA/grRpiI1WaKCVbTz0SCxrmKsxhP1V6I0XaRsU6mVgJoP1b84vLy2xalb5Q5ZfqFNsyps36WDs1nN/uzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gaXX1mj6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEX/BOsG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736156754; x=1767692754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZQU+ovsD55f64DF1zOadfrUNcIGee3cjAidEI96IOp0=;
-  b=KEX/BOsGgVg0iKJ5HPqVq15YJDhWRAJnsa0c9U4vMs+ZGtxws/aO1qrp
-   H1XzXNNZzisG7gqKdyNS16Bkg4i4UUxQUBZJlv3DSGENtssKqW/MHpcfD
-   +FYOZmdKpjYVQx61tKatWUT/iKLE25QEaQAGrgKjxaXdjo8rL6+XGRcLL
-   YOC0CoEJVEZwpdAZEb+rJYsuyf3xur+ZsMsKNujdUj3aFqNFeh+zdFqSW
-   JKCmdp2KL7O3johaPpOwlESYuuX0YIHSqRD36af/xOfCKYYQNUYC0cRrL
-   DAD+OGG/WizlmRetq6h3qmazyOuUbFspkR4PN+6JdrwqcV33SffSFspJ2
-   g==;
-X-CSE-ConnectionGUID: v/dKm1aTSxGpWbSd11yLag==
-X-CSE-MsgGUID: sAvJkz/uTim49mCuL3qcQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11306"; a="35537144"
-X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
-   d="scan'208";a="35537144"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 01:45:53 -0800
-X-CSE-ConnectionGUID: 0fzl6LKNQaOw5xaSmu4jfA==
-X-CSE-MsgGUID: eEhcNsKlTfudbQR8gqUD3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
-   d="scan'208";a="102292716"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Jan 2025 01:45:50 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tUjgB-000CT1-2H;
-	Mon, 06 Jan 2025 09:45:47 +0000
-Date: Mon, 6 Jan 2025 17:45:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
-	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
-	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
- Monitor
-Message-ID: <202501061734.nPNdRKqO-lkp@intel.com>
-References: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gaXX1mj6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC75BC4CEDD;
+	Mon,  6 Jan 2025 10:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736160614;
+	bh=7Q3i8xJswYWcNOJxpGbRWAwokUg1oDkILbkbZFce7nk=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=gaXX1mj6Ul4iLs37rgiTGzxwmDdM1V1fN3T3je9d906IUqpHrXiump8LPgMa8EsMG
+	 Yh92zlozAnfTjUMw0GEDFwxjl3UJ9c1IBrbvuaUEm57Cy/2xjoKREMLvZAA3iEB8n7
+	 5+nzaSnXbN9+3WwnjmUvooTu/3ImU3LCIUQHqdCqhb18ySVQ5AsftTSmUN2lgKmd9h
+	 78grX0XTrfeasCksiFp1EzoeYD078ia+AjCs73Chk6qlZxo28hyuW754uD6pZ0ej/t
+	 7brrIrt6FTV7binif/V02sWaU11BOQpJMIgZ/VtZ8uNcqgAj17ZHKdAgG8ygQwwioz
+	 t1JQqPinG3Ofw==
+Message-ID: <abdd156e-0c9b-477f-877c-0309c84c9d5b@kernel.org>
+Date: Mon, 6 Jan 2025 11:50:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: Add INA233 device
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ Leo-Yang@quantatw.com, corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
+ <20250106071337.3017926-2-Leo-Yang@quantatw.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250106071337.3017926-2-Leo-Yang@quantatw.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Leo,
+On 06/01/2025 08:13, Leo Yang wrote:
+> Add TI INA233 Current and Power Monitor bindings.
 
-kernel test robot noticed the following build warnings:
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.13-rc6 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
+> ---
+>  .../bindings/hwmon/pmbus/ti,ina233.yaml       | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+> new file mode 100644
+> index 000000000000..2677c98dadd1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-Add-INA233-device/20250106-151934
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250106071337.3017926-3-Leo-Yang%40quantatw.com
-patch subject: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
-reproduce: (https://download.01.org/0day-ci/archive/20250106/202501061734.nPNdRKqO-lkp@intel.com/reproduce)
+Drop blank line
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501061734.nPNdRKqO-lkp@intel.com/
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,ina233.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments INA233 of power/voltage/current monitors
+> +
+> +maintainers:
+> +  - Leo Yang <Leo-Yang@quantatw.com>
+> +
+> +description: |
+> +  INA233 High-Side or Low-Side Measurement, Bidirectional Current
+> +  and Power Monitor With I2C-, SMBus-, and PMBus-Compatible Interface.
+> +
+> +  Datasheet: https://www.ti.com/lit/ds/symlink/ina233.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ina233
 
-All warnings (new ones prefixed by >>):
+This does not fit existing ti,ina bindings?
 
-   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
-   Warning: Documentation/translations/ja_JP/SubmittingPatches references a file that doesn't exist: linux-2.6.12-vanilla/Documentation/dontdiff
-   Warning: Documentation/userspace-api/netlink/index.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
-   Warning: Documentation/userspace-api/netlink/specs.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
->> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/ina233.txt
-   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
-   Warning: lib/Kconfig.debug references a file that doesn't exist: Documentation/dev-tools/fault-injection/fault-injection.rst
-   Using alabaster theme
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  shunt-resistor:
+> +    description:
+> +      Shunt resistor value in micro-Ohms, Please refer to the actual circuit
+> +      resistor used.
+> +    default: 2000
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Which schema brings the $ref for this property?
+
+> +
+> +  current-lsb:
+> +    description:
+> +	    Calculate the Maximum Expected Current(A) / 2^15 in micro ampere (uA/bit).
+> +	    e.g. 30A / 2^15 = 915 uA/bit
+> +    default: 1000
+
+Missing ref, missing vendor prefix and missing actual explanation what
+it is for. I don't understand the description at all.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        power-sensor@40 {
+> +            compatible = "ti,ina233";
+> +            reg = <0x40>;
+> +            shunt-resistor = /bits/ 32 <5000>;
+
+Drop unusual syntax. Please take a look how all other bindings and DTS
+is doing this.
+
+> +            current-lsb = /bits/ 16 <1000>;
+> +        };
+> +    };
+> \ No newline at end of file
+
+You have patch errors.
+
+Best regards,
+Krzysztof
