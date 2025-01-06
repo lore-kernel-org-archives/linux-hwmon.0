@@ -1,66 +1,66 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C471470812;
-	Mon,  6 Jan 2025 18:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124AD1DF97A;
+	Mon,  6 Jan 2025 19:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736189977; cv=none; b=LVnaiU5kD3mCTZSsSCrEobaU8vbarsM7uXp3wrq0AGgIcpGRu2fNaVGAQXXWM7x0+OPrrt7Mosv7FiMvwwEJecMOTw6qcBvx5SL6WijsNZlucumffuTHe7gHB3VBZwHphSSxxyg+kYVa+wIBG99W7yiBWtUS+t9o/+5UdND7Iis=
+	t=1736190132; cv=none; b=rS52JDD8Ei4nBHtpbZlfsJZafh2tl8LLLKILKAuDS2XRP+ZLCPsuJHl2cZf0joAuw01yDlVMcyexSAsfjoCW1DFRYUWc2PrlO1mn+2qVB2VrHQvYV8TXk7IeOyqD4L5ydBxK5acynZtuv6rOerundsSwNyw3RqCmsp/Epu5wwQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736189977; c=relaxed/simple;
-	bh=yhVjUp89GQXxqiTcKbCjZffJssDeVtri6t5u+S/Hhy4=;
+	s=arc-20240116; t=1736190132; c=relaxed/simple;
+	bh=i8yNwb/HzvpkaTSwP6193OCu/9qJd5EM11BonVFsRLo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=EV6yY3jHMwOYbYPow8K6EzDF7YkqZV0/wnhhsfS6d3q0oIF1BAhDD43/LnZa1+hbM6iqLKYrwOCsxD477bqgMMsx8fyAc9MJ2lvAtCRhsDSJyHQr/xabxasvV34Bqc7Xs88gyXsVc0X3kvzVCzT7e2N629xXBbeKAri1zBC6tFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aq4ANmDW; arc=none smtp.client-ip=209.85.214.176
+	 In-Reply-To:Content-Type; b=Y0sRKWsLU12uW5dkgSVLXvDJEfAk29szZe2L03o+FpIzWPj5qn1/UGqiD6qd0nG390L4Z6EjfPqOc4LyYgxuh+6iL+P0KYnPOtH2euU3N5YntwudwILRamdGCjESbKTWLUiWc40RcHe2ufLApn2RL0iT0k6A6YZTvusENb7fGXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZlAVQ139; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aq4ANmDW"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21628b3fe7dso206531745ad.3;
-        Mon, 06 Jan 2025 10:59:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZlAVQ139"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21634338cfdso15540155ad.2;
+        Mon, 06 Jan 2025 11:02:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736189975; x=1736794775; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736190130; x=1736794930; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OD1zF/aARdnkj4JC9PmL7Mk82mhE+Oh01wC5iewFMVA=;
-        b=aq4ANmDW5b63HFSdHLq63pqCxT0qcdss66YUPyy+nioVqKLCwoOvuEKvUnNzETxG8v
-         cUUhpEl5f7C9AaPAHS6AWoUO4i82Z+4ioRKqB2/YNXc3i2coLIO/JHkM3awM9tw/4MJx
-         LslshL5zeKD3TrP+QM7Cz674TEAtf3XJMINkppnHV0LMvuamFp96sna+yuPaKRofH0K5
-         aZKsQ/xoNxAVxk053U6DYGQz+PZiYynGWsVvRFmaMoQgTawTh10IJJ/cfEReYXVVBNpr
-         y/h5FsmV3UvlFLUnz7JRiTP8UsH4jAhS/cp5/roPpSUn0MAkFx97hs3flRwXoCqHCPBT
-         k0tQ==
+        bh=ZAhmYXsX2kla4nBkLvW4Hyi2aA2gDgjaSkEwaI3Nur4=;
+        b=ZlAVQ139aWz6j3JUrcfSEQ9yKYXAP5q0d6gVqZ4hI/6cPW7+C5UHg5eAOI4yzgJtql
+         hAPnBqNsbKF++0pol4X7nfKVOpl5mR939lPgvvIqw1/Lw5ZEbnoPtjZPYdbAUtlw9gQn
+         pSxEQM7fS+hiQI3THTZHYAgIshnNtVDqd5p9QAyyRKP9Qh+1RfcuuPwQFq0+R5+knpBe
+         HT/ET5r8eaPxNwuuEmtLCBw1m3mKcZ5LLxMMx6s+eATP1RDMWR+f7G0tqWlu+rdQVKP4
+         7c+PRUV6G8rTEKRkK6rMbMkXX4ARWV3u9v+l5Zbbtft9WAVYclRDFbRW1wtiPQMxTkqt
+         Bs+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736189975; x=1736794775;
+        d=1e100.net; s=20230601; t=1736190130; x=1736794930;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OD1zF/aARdnkj4JC9PmL7Mk82mhE+Oh01wC5iewFMVA=;
-        b=bD9+SR0uECpPQjZoYY2dfamDm/VI/C24c5vvxUJ98IYVuILhTV8/gGUTkzQWeEGKmE
-         LlEnwcPa41/d/EJdvsi9jZAXkwD9Yg0hjBFRdaDWZPp+B3xFNc1f1IVdHdcNFm2CSUKS
-         V4EB/IFeBE9f5fgjlvSfZGXGTGKyPZBtpwtfSaIJl7V++RbTdU+O5a6xWi2VllsN5pOE
-         g/D512a9Sn+Gew9tBvq99v9+USyyBN3FVrthkhmc/qvOsNFAMxeXv+zETwqWNCNZpR2l
-         7PP4mSxnEGI6rPn/d/gjg/L0v5mOAGEbqU/+gVeRMZO1gvfuFb/X+Gk947ppTkNODyuo
-         YMtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGX32+VeIaEuaegqVImh09NSjTK3QbCwO81Z7oLpzpAMpYp3yDRFcSWmEmVULPjxWZiMWjT5GjpZqPcw==@vger.kernel.org, AJvYcCVxff5jXP1LDPp5RhLKv+vADAgJF5TU9X/TdG5ye9algn6hv4P9bGFHO1sEk+URKyLxEENbfX63GCTInB5p@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmHWPBTyhzzbSDUdQhPQsH5K+s1TLY186V0SmGIkzqL1B1eT8u
-	bWfwGs9kBfgn00tzTrJBxJeYtVXUFlrsdMeDaHzC6iJJiGyk9lY2/21k8w==
-X-Gm-Gg: ASbGncvcY9knWvrOuTKvA/JcyuV+hdJ/R3srrzTDiVXnV6yi+LIzpAFmJ008yAMqV/X
-	50YqoT9orMXl/JjCL5zK+rxGzgSJeSVO0j5G2S3V/VfmqQlsabnZ+MQ+UXBpq6LKsoV8uYg25Hh
-	/hMs2LdulDBjb+PVqdrrT92P/lgFOgjgO7l2PWs0laEwBCSSObudawT7hwyYO/2AmuJZuGsuWYY
-	7N3wX5DfZWzKWn/6ForJL+aPpLj0ZdFH8hW2ZlZzg/gDOma4lBZHjTB9WCuDcEBDUuda78zLdxe
-	K+j2ODg5qgXbc/xmmI6OVMVfp6vIeA==
-X-Google-Smtp-Source: AGHT+IFNun+m2XucxxpEIinndN9qmYLISi5VjYzhB06sKakWbss3ZeMg0zUNASFCYwRLVhoZvT/D8w==
-X-Received: by 2002:a17:902:dacf:b0:215:b5c6:9ee8 with SMTP id d9443c01a7336-219e6e85b4dmr618585285ad.7.1736189974924;
-        Mon, 06 Jan 2025 10:59:34 -0800 (PST)
+        bh=ZAhmYXsX2kla4nBkLvW4Hyi2aA2gDgjaSkEwaI3Nur4=;
+        b=nerF79s/5+bPQn6mj74kF9iElkBZ96kGa/J13hWkYSkpX0zxsw79JQe5jOwv0mCboW
+         thurmin4ov1xT9Rs6saFwAjwIZBI9IKIUjBG9ljODV/ZqxQO/6uI8B/mVCyl2SSf9T06
+         xjERHxPSqtFstTQ2NoIDxRWQnzrWRG27z69yAaEintKrM1aNGwsoG2xntnMKATYuEwOS
+         XIFcRlhN1fQNdSE3CVGKiZ88dTBM/ps3UuxOlrmR+ifJTHkDBv5nsh6gza0l4Ztoxuwv
+         7XlNW6uX9dZ0eP8mt5k3YOfcU4wJZku48YzNwk3sFIna+Xsq92oWKPXvsgAIjG7bo0TB
+         bWaA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1+gpqFa9DDFZAdoZ7WuPeJGyUwVhq9WSHNWQCKKRIZNwrLDZLH/t09SS1Lbf1bOzw8gwIozAEsljzDw==@vger.kernel.org, AJvYcCXTyLdDSVeSmcpnTs8xPep9OV+cKROFklCsNRfgPHE4coDoGBaCP1w46iSLURU6aAy/pDJT0tqM2ZuQptdF@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgPuuvT1AY49j74+XK+ypbaXwGig5x8213iejMlA/AfxOMftlh
+	TXHA5lFMtwT65l51Sba5gQ8MN/tfH6JsKyInzZHCFguOKB5MliUn
+X-Gm-Gg: ASbGncv5mKpgrfxyf8bbNGWgCK3/nw3zmEO2av2xpymds9W8zAFenMMHyuSTX3F5MAF
+	fRKC9GHH/RxTn23Y1UjxpmWJ9JZbyx4x/d3RPw/z/uBPCgwvzNIOCbNGSkx83vFm3Vgwt7fCe7I
+	EfSYPWbMRIP5IrbyTBlQjpGlBkPKfRu/PC26l7OHrwnxrhQUeL05vB0cEfKfpqm+Omk3H7NV6yz
+	0pRRBD0oUV63+F6pjGbDZDbbkL/N2Q0oF76elPGuaWkxuoPfNOZCzhOtg/r8tt2LsPwfrjHriOw
+	GvNEP7k+iubhPskZjEs2wYPyG8zl4w==
+X-Google-Smtp-Source: AGHT+IFIHIIZiXXOAwBwAsJYyjD0kJFf6/fHA6cDZy1R57DskE/KzFbyua6Ud9S9MKxMURHUyR7a+Q==
+X-Received: by 2002:a05:6a00:a91:b0:726:c23f:4e5c with SMTP id d2e1a72fcca58-72abdd20f88mr84285090b3a.1.1736190130340;
+        Mon, 06 Jan 2025 11:02:10 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc96eadcsm297087365ad.73.2025.01.06.10.59.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad84eb34sm31879240b3a.87.2025.01.06.11.02.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 10:59:34 -0800 (PST)
+        Mon, 06 Jan 2025 11:02:09 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <76c4efa6-7765-42ee-a91b-dc8d5f9e9b3e@roeck-us.net>
-Date: Mon, 6 Jan 2025 10:59:33 -0800
+Message-ID: <c3be75de-c399-473e-a4ff-725159392f4f@roeck-us.net>
+Date: Mon, 6 Jan 2025 11:02:08 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,12 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon/adt7470: resolve faulty 'temp*_alarm' values
- read output
+Subject: Re: [PATCH 1/3] hwmon/adt7470: allow 'fan*_{min,max}' to be reset to
+ '0'
 To: Adrian DC <radian.dc@gmail.com>, Jean Delvare <jdelvare@suse.com>,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250105195521.3263193-1-radian.dc@gmail.com>
- <20250105195521.3263193-3-radian.dc@gmail.com>
+ <20250105195521.3263193-2-radian.dc@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,15 +119,17 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250105195521.3263193-3-radian.dc@gmail.com>
+In-Reply-To: <20250105195521.3263193-2-radian.dc@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/5/25 11:55, Adrian DC wrote:
-> Tested with the following script:
+> Tested with the following script and values
 
-The patch description is supposed to explain what is changed, and why.
-Test results are appropriate after "---", but not as patch description.
+The patch description is supposed to explain the reason for the changes,
+not test results. Test results are useful, but only appropriate after "---".
+
+Guenter
 
 > ---
 > 
@@ -135,153 +137,49 @@ Test results are appropriate after "---", but not as patch description.
 >    # Access hwmon
 >    cd /sys/class/hwmon/hwmon1/
 > 
->    # Check alarms
->    alarms() {
->      echo -n ' [READ]'
->      echo -n " fan[1234]_alarm = $(cat ./fan[1234]_alarm | tr '\n' ' ')"
->      echo -n " temp{[123456789],10}_alarm = $(cat ./temp{[123456789],10}_alarm | tr '\n' ' ')"
->      echo ''
->    }
+>    # Set to 1 => 82
+>    echo -n ' [TEST] Set to 1 : '
+>    echo '1' >./fan1_max
+>    cat ./fan1_max
 > 
->    # Configure hardware
->    echo '0' >./alarm_mask
->    echo '10' >./num_temp_sensors
+>    # Set to 1234 => 1234
+>    echo -n ' [TEST] Set to 1234 : '
+>    echo '1234' >./fan1_max
+>    cat ./fan1_max
 > 
->    # Test fans
->    for fan in $(seq 1 4); do
->      echo " [TEST] fan${fan}_min : Min FAN speed ${fan} under limit"
->      echo '65535' >"./fan${fan}_min"
->      sleep 4
->      alarms
->      echo '0' >"./fan${fan}_min"
->      sleep 5
->    done
-> 
->    # Test temperatures
->    for temp in $(seq 1 10); do
->      echo " [TEST] temp${temp}_max : Max temperature ${temp} over limit"
->      echo '-126000' >"./temp${temp}_max"
->      sleep 5
->      alarms
->      echo '127000' >"./temp${temp}_max"
->      sleep 5
->    done
-> 
->    # Test clean
->    echo ' [TEST] Final state'
->    alarms
+>    # Reset to 0 => 0
+>    echo -n ' [TEST] Set to 0 : '
+>    echo '0' >./fan1_max
+>    cat ./fan1_max
 > }
-> ---
-> 
-> Faulty values:
->    [TEST] temp1_max : Max temperature 1 over limit
->    [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 1 0 1 0 1 0 1 0 1
->    [TEST] temp2_max : Max temperature 2 over limit
->    [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
-> ---
-> 
-> Fixed values:
->   [TEST] fan1_min : Min FAN speed 1 under limit
->   [READ] fan[1234]_alarm = 1 0 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
->   [TEST] fan2_min : Min FAN speed 2 under limit
->   [READ] fan[1234]_alarm = 0 1 0 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
->   [TEST] fan3_min : Min FAN speed 3 under limit
->   [READ] fan[1234]_alarm = 0 0 1 0  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
->   [TEST] fan4_min : Min FAN speed 4 under limit
->   [READ] fan[1234]_alarm = 0 0 0 1  temp{[123456789],10}_alarm = 0 0 0 0 0 0 0 0 0 0
->   [TEST] temp1_max : Max temperature 1 over limit
->   [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 1 0 0 0 0 0 0 0 0 0
->   [TEST] temp2_max : Max temperature 2 over limit
->   [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 1 0 0 0 0 0 0 0 0
->   [TEST] temp3_max : Max temperature 3 over limit
->   [READ] fan[1234]_alarm = 0 0 0 0  temp{[123456789],10}_alarm = 0 0 1 0 0 0 0 0 0 0
->   ...
 > ---
 > 
 > Signed-off-by: Adrian DC <radian.dc@gmail.com>
 > ---
->   drivers/hwmon/adt7470.c | 52 +++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 50 insertions(+), 2 deletions(-)
+>   drivers/hwmon/adt7470.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/hwmon/adt7470.c b/drivers/hwmon/adt7470.c
-> index 712bc41b4a0d..afb881385dbb 100644
+> index dbee6926fa05..712bc41b4a0d 100644
 > --- a/drivers/hwmon/adt7470.c
 > +++ b/drivers/hwmon/adt7470.c
-> @@ -551,7 +551,40 @@ static int adt7470_temp_read(struct device *dev, u32 attr, int channel, long *va
->   		*val = 1000 * data->temp_max[channel];
->   		break;
->   	case hwmon_temp_alarm:
-> -		*val = !!(data->alarm & channel);
-> +		switch (channel) {
-> +		case 0:
-> +			*val = !!(data->alarm & ADT7470_R1T_ALARM);
-> +			break;
-> +		case 1:
-> +			*val = !!(data->alarm & ADT7470_R2T_ALARM);
-> +			break;
-> +		case 2:
-> +			*val = !!(data->alarm & ADT7470_R3T_ALARM);
-> +			break;
-> +		case 3:
-> +			*val = !!(data->alarm & ADT7470_R4T_ALARM);
-> +			break;
-> +		case 4:
-> +			*val = !!(data->alarm & ADT7470_R5T_ALARM);
-> +			break;
-> +		case 5:
-> +			*val = !!(data->alarm & ADT7470_R6T_ALARM);
-> +			break;
-> +		case 6:
-> +			*val = !!(data->alarm & ADT7470_R7T_ALARM);
-> +			break;
-> +		case 7:
-> +			*val = !!(data->alarm & (ADT7470_R8T_ALARM << 8));
-> +			break;
-> +		case 8:
-> +			*val = !!(data->alarm & (ADT7470_R9T_ALARM << 8));
-> +			break;
-> +		case 9:
-> +			*val = !!(data->alarm & (ADT7470_R10T_ALARM << 8));
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-
-This can be simplified as
-		if (channel < 7)
-			*val = !!(data->alarm & BIT(channel));
-		else
-			*val = !!(data->alarm & BIT(channel + 1);
-
->   		break;
->   	default:
->   		return -EOPNOTSUPP;
-> @@ -648,7 +681,22 @@ static int adt7470_fan_read(struct device *dev, u32 attr, int channel, long *val
->   			*val = 0;
->   		break;
->   	case hwmon_fan_alarm:
-> -		*val = !!(data->alarm & (1 << (12 + channel)));
-> +		switch (channel) {
-> +		case 0:
-> +			*val = !!(data->alarm & (ADT7470_FAN1_ALARM << 8));
-> +			break;
-> +		case 1:
-> +			*val = !!(data->alarm & (ADT7470_FAN2_ALARM << 8));
-> +			break;
-> +		case 2:
-> +			*val = !!(data->alarm & (ADT7470_FAN3_ALARM << 8));
-> +			break;
-> +		case 3:
-> +			*val = !!(data->alarm & (ADT7470_FAN4_ALARM << 8));
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-
-I don't immediately see the problem with the current code, nor do I see a functional
-difference. Please explain. Either case, the switch statement is unnecessary.
-
->   		break;
->   	default:
->   		return -EOPNOTSUPP;
+> @@ -662,11 +662,15 @@ static int adt7470_fan_write(struct device *dev, u32 attr, int channel, long val
+>   	struct adt7470_data *data = dev_get_drvdata(dev);
+>   	int err;
+>   
+> -	if (val <= 0)
+> +	if (val < 0)
+>   		return -EINVAL;
+>   
+> -	val = FAN_RPM_TO_PERIOD(val);
+> -	val = clamp_val(val, 1, 65534);
+> +	if (val) {
+> +		val = FAN_RPM_TO_PERIOD(val);
+> +		val = clamp_val(val, 1, 65534);
+> +	} else {
+> +		val = FAN_PERIOD_INVALID;
+> +	}
+>   
+>   	switch (attr) {
+>   	case hwmon_fan_min:
 
