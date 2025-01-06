@@ -1,128 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAAB1D6193;
-	Mon,  6 Jan 2025 07:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C7E1876;
+	Mon,  6 Jan 2025 07:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736147518; cv=none; b=PPRW77ElapkokDSroR2mrm8L1PN401loEiKr8sFqfcruITqelOL3GREbvBdc6ljo7ely9Nr4bOWAssqyq71q81AdyVWG28sO7GiTbCSt39Oiba7knrgBa98uKMfooIO2Fr/e5aFkPq/wxMT/p6BDn1WZ3AXSv+0IRGGX1bxdI0Q=
+	t=1736147846; cv=none; b=k5lHPVUNEezAVxAHOFW5TNj1Z0vW1+z2FLkhzhIbDf4h0mJYGO6H/j0Ew3wY08/HRsogvOlWJFwtyAzRWYb4Co8CVEzwYwYZ0Hd5QIRGFtIdCGQaYyadTkP7ljrnf/mchZu5TKpsGTAn+YfuBtCzfQvfgOGOqxgAOT/xDLrX7YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736147518; c=relaxed/simple;
-	bh=oLCXSmrVBBsLo0CzHgC7aJIZWv4lFAGFHcrnLUBjFTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ahlh04Dj2kqwgaZHxvLYkgF+w0IkPXzReeaD7d3S50YscvVFuRp9NXFFlQ44MbKiZGin+kZcXqVwvQ3pGfKKgQQbnt7x8Vt9bXfPDZD8fgOc//hrERdTEV75SqT5/fToOjeqaOw41TUuDYXTQlGU+52CydmP6WMvvVYGTSuT+l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBUmDX/Z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736147846; c=relaxed/simple;
+	bh=5IZ+3vLhnBcLf7jXN2760fNrXrh1yrdDI489Ssh9dOE=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=BTr9HeOxB6HLIM3/nnKyP76mU+c9clRQul/Iz5WEYmWRPnUBfYuA6Nu4s3t8LoRs6gISOex+Ef6UYHKM4e0F3YaeqtZItjfFxfYeB1Gxuk7mwflu43NaJVFyzJs9E0aOioqJlfFPZZlPukfOlJryPmhwfU2zweL6KbLNRZ0yRJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FnnZncZ2; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBUmDX/Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA48CC4CED6;
-	Mon,  6 Jan 2025 07:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736147517;
-	bh=oLCXSmrVBBsLo0CzHgC7aJIZWv4lFAGFHcrnLUBjFTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HBUmDX/ZNH3ng9jNNgpjkne5Azv0/mD0yUnO8Xtjsqh9sfUogukNwxkVHgYXTq99T
-	 AFabrXUxdUnIWDcKrqvdrtJvu6CMpycSYezrajtvbSiDDBv92MgYOLkuxWgy/KumcC
-	 DKldYh8Lcm+4DzxhmYTVbFKw3PS/sfl7eU5BLLpUzDPXAyhAzBOBzeCdV+1LdBF0Zv
-	 eR9LC9Bti5XV2xES3XdLDWPAz2J/neJ54usqCt9QSro1GFigHL7xOgmY8cjgSQVIuv
-	 C5J90lBwbvS5ud8bfQnbyScDK2lh1hxpVIWY3p9K3Cpv6XBEMkByz3k4exYxnl/nsL
-	 6zLbwcXRUXVnw==
-Date: Mon, 6 Jan 2025 08:11:54 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Sebastian Reichel <sre@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-Message-ID: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
- <20250105174159.227831-2-mitltlatltl@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FnnZncZ2"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2165cb60719so203136025ad.0;
+        Sun, 05 Jan 2025 23:17:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736147845; x=1736752645; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O1w9zSpxK0DLwBz3Sc1XeYMaG3xhsJeXmulEk0Svv/M=;
+        b=FnnZncZ2gavE5HzqZKC58QcF56WyO0QAgITPYz+1ptLnTvSkkiK4ZCqKrzznCDnefk
+         51EWuEB5Kuzn2Z7MRbrvTmp+XFhBg0aqU7OKCS+GURDGcfc6CsmCKE6UjBd8w8NwLZJi
+         +DgGFL69lv7UvgGpdmfeIUjcKUBmfeYJ/z7CgdWTJyxL9EQfdWWXmcNGwFwFiiIQvYhe
+         qisvTrb0Wu0GZeSdcZeFJGT3ZS4a8a5FZi6TRdHPHMY6+njn424fFCt0iVmEKTuO9+Hy
+         XRa7a0KMtvIhz9vIPcceMc8QI4oo2Suml9bfAjLkW194r/r4e5DW7oynBdfL9+YFmleB
+         ynWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736147845; x=1736752645;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O1w9zSpxK0DLwBz3Sc1XeYMaG3xhsJeXmulEk0Svv/M=;
+        b=QXgubDZRkfhvG/XQKHDGm/VcfiyWThxpEqxFJvMv/W0DY6KrvlDf4n65n40/L7ctHF
+         u7kFUa6ZktGtO7mrDyNHpgotcLe3S6j9lTjLh4NlSV4KhFjHWl0l16nMIr6owKo9SN4d
+         HWO/mJUjbQ13M5C4jB4N3IpfZECwOz7KaOLnaulWfolT6SKCFPXF7yIf2Qe/n7OiSyCk
+         IYooD+bWYwVQjQQ0D7710+UbDo+LdEzPHa2VpnnhotlWLeXFuyKncFztnOqliSgvdyGB
+         h7iFqn53idZjtPuRox8RXF3UgY2eI3XMSlsmpCazz/ZmvGHL9xRJDOxYJwihCkgLzGtd
+         djzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFcTiazJ9X9kg12IBZMBW2c8XVtHG4fg7gv9EkmjFFDeS8xrEHlpNh8ljK91pLzYcwi7kSzQSao/3ZP4GS@vger.kernel.org, AJvYcCVHEB42x/U5wArAmDJL3X8vZXOoIdr2h1TDs5goz9P+3FVQucbsYCBcAUts1gSfPAe17l42TyIfqOj9@vger.kernel.org, AJvYcCW8W5UreILynsbuEtqTG+s5u6KFw3Nh7LO4GWPIF+8twKyYF9Jysdrtm6gnVgEjDKkMVuvCmEcorR21@vger.kernel.org, AJvYcCWPyqTdsegUv1vgIi8LKUK/0h/3hheNliUpJekPr2ib1HAx9iYEk7pzLCUKaQorqIsWis2i09PHOMxFD3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvch8Z8OFxFN+VtbPYL0BJ7MDDqM/Nk4zNVIeKCEa/HEenSIHe
+	MqN/OrEB/QaRf+JyFpT3dYhMiXmIcdcnv8T+iA+oow9fiD2WLwEE
+X-Gm-Gg: ASbGncuoj52FhqrpfMaOGK4QF9InRDGmDYd+YCm0TSOx7wHWCDGQqTZV26LsNo58yq2
+	wog9BUD0chxnAomvKRDNI0V6rCf8OaZL9bMN0xIqeyoLbpQpI8mZEY+Cn4M+l/N3d65kAOWdUwo
+	Nk7idl/dSj+w6Pt4TAiQma7Hq0TMcQsTPz8w3sGfn2nSyIEPlcdJ8ev4q9FrWN1kEzNXxHuA2yw
+	dGj/enudfe7s3qUYnEtgLOcuZm5X1g1Lxjhj8ilAl9XUkIIoqW7LMgsfYOHdI+JCThAFqafvxfo
+	rCUa9lVeaqlfh7UW3m0yJd1XW3E8owoaV3dH
+X-Google-Smtp-Source: AGHT+IGTjqWfIv2DlhwgTL6jEnHVtYj8ucMwJjK3vPWagzHGiwqu4brm67ccXKhSUXmAcf46Q/jPHg==
+X-Received: by 2002:a05:6a00:4ac5:b0:725:b12e:604c with SMTP id d2e1a72fcca58-72abdd3c467mr78872261b3a.4.1736147844924;
+        Sun, 05 Jan 2025 23:17:24 -0800 (PST)
+Received: from leo-pc.tail3f5402.ts.net (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad816222sm30630566b3a.37.2025.01.05.23.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jan 2025 23:17:24 -0800 (PST)
+From: Leo Yang <leo.yang.sy0@gmail.com>
+X-Google-Original-From: Leo Yang <Leo-Yang@quantatw.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	Leo-Yang@quantatw.com,
+	corbet@lwn.net,
+	Delphine_CC_Chiu@Wiwynn.com,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: Add support for INA233
+Date: Mon,  6 Jan 2025 15:13:35 +0800
+Message-Id: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250105174159.227831-2-mitltlatltl@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 06, 2025 at 01:41:55AM +0800, Pengyu Luo wrote:
-> +maintainers:
-> +  - Pengyu Luo <mitltlatltl@gmail.com>
-> +
-> +description:
-> +  Different from other Qualcomm Snapdragon sc8180x and sc8280xp-based
-> +  machines, the Huawei Matebook E Go tablets use embedded controllers
-> +  while others use a system called PMIC GLink which handles battery,
-> +  UCSI, USB Type-C DP Alt Mode. In addition, Huawei's implementation
-> +  also handles additional features, such as charging thresholds, FN
-> +  lock, smart charging, tablet lid status, thermal sensors, and more.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - huawei,gaokun2
-> +          - huawei,gaokun3
+Support ina233 driver with binding documents.
 
-Missing "-ec", because gaokun2/3 is the name of the board, apparently. You cannot
-duplicate compatibles with different meanings and if you tested this you
-would see errors.
+Leo Yang (2):
+  dt-bindings: Add INA233 device
+  hwmon: Add driver for TI INA233 Current and Power Monitor
 
-I think I might mislead you during last talk, where I questioned what is
-"gen2" etc.
+ .../bindings/hwmon/pmbus/ti,ina233.yaml       |  57 +++++
+ Documentation/hwmon/ina233.rst                |  77 +++++++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   9 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/ina233.c                  | 200 ++++++++++++++++++
+ 7 files changed, 354 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+ create mode 100644 Documentation/hwmon/ina233.rst
+ create mode 100644 drivers/hwmon/pmbus/ina233.c
 
-> +      - const: huawei,gaokun-ec
-
-There is no support for gaokun2 here, so I assume you checked and you
-know these are compatible. What's more, you claim there is a generic
-piece of hardware called gaokun-ec and everything in this family will be
-compatible with it. Well, that's my standard disclaimer and disapproval
-of using generic compatibles.
-
-So in general what you want here is *only one* compatible called
-huawei,gaokun3-ec
-
-> +
-> +  reg:
-> +    const: 0x38
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  '^connector@[01]$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
-
-Drop +
-
-Best regards,
-Krzysztof
+-- 
+2.39.2
 
