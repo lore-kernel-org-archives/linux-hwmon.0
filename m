@@ -1,239 +1,152 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955AB18A6AC
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jan 2025 17:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF8113775E;
+	Mon,  6 Jan 2025 18:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736185096; cv=none; b=RXo2+/U/D6wTfjmvBzseowoTNRllnlt4AtJlPP73lh4fa78iFZCgKFKkYlUZZphWoLzdkFa0m8OWWgwi2BXkLsNQQIRxRsO25WlrsSRAc/AJayA1AUIotRwi5v3diH6wPBqBJHa01ykQlUeRtUXj59WWbS8ADTBDKnaS3dnP08s=
+	t=1736188353; cv=none; b=mIhpXTOSF3AumTEVr06GQLiYFpyXsIHbtcls0ZJ/1AMXY/HsNcUE0sM2lHKApupBby/DiRmxTheCCXZlFq7s/8pBzdrQHvwwbNXbscEeIKigF6hyMPr+L12gQ4ur5qpiNgL49lXYx+LRsudPJ6tbk1rqQ+3bXqnhiRg5gnJrzHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736185096; c=relaxed/simple;
-	bh=qvvbgw6OedOPV8/cAG//Rh2LmcfRPCf6mOrROss0Ces=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kuQDbfhoeXoQ1ZtD2PS9kIHBjQ5rgB2Cq2ID9mM2rZyAHQUNT+h1KE77ijKCVQl/pMA1YPhR6jez4cGFVfU/yIMCRpFAE6tEOTbVBU/th84hcz5ZFgfOJi8biRyUYuLJ8dW/Jnqb7cvu/hxhP2Dc2xOIWM40MLeXrdIP9nflYRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSiM1t4G; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1736188353; c=relaxed/simple;
+	bh=MPaEmQxlMbnsxGkNgsEDlM/VlhFoSQ56sTz3vhDcrIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CyDH0A44BFPklVJK8jYIa2g2Fmgr2AZsfar+8BHHFzHZD5YWiCEmEsUKhsaj4pTEjx0WsvyaOZo26XTHbyUoNWLtfhdTwwAvNmBbO/gyzU6Vj6p/xUgzw3Yfqb3Gvv+TMtHorWrw+ykYpNjpl0BRWDOGkCVpAz7sOFHU5BdP+/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=li+MYRPi; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSiM1t4G"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166651f752so12526325ad.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jan 2025 09:38:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="li+MYRPi"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ee8e8e29f6so17205622a91.0;
+        Mon, 06 Jan 2025 10:32:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736185094; x=1736789894; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w1WW5qX2j/44h79BIXM8VrLHYKa5eHZl6QPgd6J9fuU=;
-        b=SSiM1t4G+maJTDxXuRk3ghypegPChQH3v86A480KvIAD6fd0Zj8lBn8kcS2ACsAk84
-         rCFtS01sTVPMYpsLlKbx+vti8nC7XuoCAqpXl1F7S1lWTLquVax45UJOY11W5lh4omba
-         X4KjxU4PWfpm3qSPp5ffDBoTMExc0ByDCitvw22yiFiRaJXwM0qIUq9W8hrbHcTVtBqa
-         6aAeasR9Irnv7RcLwqzjrjG2/9NBbflDWntC9Ls9Vyr6FgNTj/DfeO7qX6rfdxju7/Dm
-         zQrrWgjKkC5+fha+OOjBwCSqf2Cc9Mqtk87CgYgQM4JDMbt85dVVTkrpZ7SezcHISVto
-         a8Fg==
+        d=gmail.com; s=20230601; t=1736188351; x=1736793151; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzJA7ByF1jLwJx9SkIhHdw4+pCFFSdU0XZrjk+Te0Ps=;
+        b=li+MYRPiCnpBYrxDd5+5Qt1rfgDDURsQIOQsYL4VV/KZsZHEvNIGMtcUDlCR6jZfd6
+         Cxc3Lj+1UyNqpV729Q5D7auL5OJ5K6uyU8YF1Qt+rNmFENeI4BVbZrNeM+g2dMiO9UOa
+         QNCnoRuBXg1AgohXseLr31KceAPuR9DIknyurGT/KszxbpEaZUMQimAqJpAffAUFHfob
+         xwj7vF0lNsGmPvKpMFyGlhabsq0rerjOMw3R/yCQNRundka2Cj+ckOOPozsLSDcpDPFw
+         r4zdttPRAkykE9x1ry4yZrBpk3Q/gMDaIHJKFDf2EUTe6KC2B/W7WAU2TSQBWtz9D7c1
+         kU1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736185094; x=1736789894;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1WW5qX2j/44h79BIXM8VrLHYKa5eHZl6QPgd6J9fuU=;
-        b=JFH9EsOoF3+/ZkZKES1IVHhKslnLXJERw+EyAEPqQuvT8He790Fma27txmJFXuQElL
-         Dw56clYlxoXF0ynmwqazAclW2i2QZ/olqv714velFz1VSbL7F4IrbC3A01BrUCS1mLYS
-         hroJfRiTOvGBDcCiFQFEQxXh57pAWazySrJOidLe3uTg2Dmj0iyRVt9jH6giK9klVwYk
-         iGM3zDdtQR/M3KMzupcIbOXnmHZya5Y1yCj8GJ8AFmCpqruMX9+b37xnczD2siDCAs21
-         2twAWWA4bzZJlg6iqy3IAAiHxQvBCqv3o0xtbztdSSk4N8aI2Wm0DmK0Efsgx+NV9s2o
-         EoQA==
-X-Gm-Message-State: AOJu0YwZycEOWnpE0iYYYqa2zLw1bvFBweAAyPdSM+8THZ/uDTOTRb03
-	91oZ+eCK6QJR3IhuQ7UfcB+dCCoSfNSaiSbzSActm6wBKZmKMDM55K6XYg==
-X-Gm-Gg: ASbGncuOjmfrrLFoyUAH9FoyHZzlmrDXZ/IPu9dmTOnZ4FOfAd+CjH5EjmccBx4xY1n
-	0v8eM6tKKHIlskyQo0m0wIPQ/nGQMLw4cWBXa/LblH1Wy1v4uR4geIbA6hWXUfWTBFXEwWfTYfP
-	stADF1c8nhBz1xc52euORsf0oMPQK//5SrzKtQMFgDo3B0WZWC8QIbRzVSHenXYkYEN1mfGSxBS
-	fsnn6AW/Mk/rp9CcMr4Zve+lmco5GbT/v2gkm3HBKZqrgO1pj04NaLw6nsdorh1bm0mIA==
-X-Google-Smtp-Source: AGHT+IGNeMNt9XBd3zZpbqOKbg1GIxSVd8W46WMYt/MCxlhOoEaQ9qKW88xjON+4ypbRgkfnilZgoQ==
-X-Received: by 2002:a17:90a:e18b:b0:2ee:9902:18b4 with SMTP id 98e67ed59e1d1-2f452ee838bmr85262705a91.27.1736185093795;
-        Mon, 06 Jan 2025 09:38:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4477c8583sm34054719a91.16.2025.01.06.09.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 09:38:13 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736188351; x=1736793151;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tzJA7ByF1jLwJx9SkIhHdw4+pCFFSdU0XZrjk+Te0Ps=;
+        b=NFqlSSGjhp4owSFJ7U67Jwylv6TYufpgx1no3u9zwu3+gZ211R48Fk3rfnUP/dqGvr
+         +lpJL3vQ/qsm/FkPmUGk5hthpPc8fv/cMQ6da3j7R6cXSr0TBgymHUhzEWLrqvOpHTjh
+         hongSbqlr5wfP10/gjNOZVMS+YZq9fQoZACesjq3sKcuYGcbShBh12JeRjC6w5g7ra71
+         ieAA1PH6NrcQrR/NdFXmLqbHEXEccn9SRW5WGyOCxy+eF0ZdhuU8B+Pd/hlqftS1R4bU
+         kOBGElPs/S/INBZVWigmqekwtGg2kRfv1ftYDxk+zSzhGJ0XhK8dzXPN0kikhmD77zVw
+         dQUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVlk6PmfrAxFs1bPOYAaJNuEZ1zpbnrNeZ99ovDBxHUrk1YUzawklBQSFDPo6MxtL6ZxJpgmxEOgslBjw==@vger.kernel.org, AJvYcCWjjlexh/lEczuAN3TZde/cEbG13xXfSbr1XZ+a681WiyvAgDNq6DVMrDIB8gvFx55Zrg0UZMmAlgOPyPFj@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzzdH7JMNnGqXMrkelXD0L/LrfV0F/dcNg7xqSAGcWdgjQFDLy
+	RhSdTlGVPHwmoI6FthLsiOfCIwpC9ma8ma1DGN8zaPSXFXRRWrrX
+X-Gm-Gg: ASbGncuaIVRzWYoe+01KLiY9XusbvL/BgNt4EMVpgg7yPyrcwTrnrHZZ4OiAba15blJ
+	KFWulIOiRUqD+je8PpObq/SXhGpVgwGPXnyDqNzJsAh1v2m/bBzP1bMfAL7Wb1x8UpARp9CzGxS
+	GIBieL5jdSt8fwmq9siRBpnPPo21Fs0o1qz5uysHSizbmO7xoXVlOLaroRO+M6Zvs+1SCu0IrZA
+	AS5HjZPm7gffU9DCYTYWxYXNZbwvsvFWKNLt4vb+oM/9CAkYAPGdxq2BdupsHlf4Rq2vjTB4WvY
+	nF0tUSqfXz28lubLYqpdVjhvJviiPw==
+X-Google-Smtp-Source: AGHT+IHqS92EBkZGkgGcJ4xEmbbVTikXQKtyVcvYpnLa3By+Oeh7d8Y2ax6LJm8/GTIAwYb7sQWuug==
+X-Received: by 2002:a17:90b:5443:b0:2ee:f80c:687c with SMTP id 98e67ed59e1d1-2f4e7cc07e9mr21152260a91.31.1736188350631;
+        Mon, 06 Jan 2025 10:32:30 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc962c80sm296414575ad.30.2025.01.06.10.32.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jan 2025 10:32:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 6 Jan 2025 09:38:12 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: ChiangBrian =?utf-8?B?5rGf5rOz57e7?= TAO <chiang.brian@inventec.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1] Support the TI TPS53685 driver
-Message-ID: <c9737e71-72c9-4357-a0d1-509362e2b051@roeck-us.net>
-References: <CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com>
+Message-ID: <6059a0f8-bd53-47da-8fe9-dab115c40b52@roeck-us.net>
+Date: Mon, 6 Jan 2025 10:32:28 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
+ property
+To: Rob Herring <robh@kernel.org>, Peter Korsgaard <peter@korsgaard.com>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20250103101448.890946-1-peter@korsgaard.com>
+ <20250103195810.GA2624225-robh@kernel.org>
+ <dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
+ <20250106173805.GA501301-robh@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250106173805.GA501301-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 25, 2024 at 05:54:12PM +0800, ChiangBrian 江泳緻 TAO wrote:
-> From: Brian Chiang<chiang.brian@inventec.com>
+On 1/6/25 09:38, Rob Herring wrote:
+
+>> The minimum PWM is presumably 0, E.G. signal always low?
 > 
-> As the driver is not supported, TPS53685 reading is added based on the
-> datasheet.
+> I'm talking about the duty cycle needed to start the fan spinning and to
+> keep it spinning. I'm sure that value is not 1 for any fan except one in
+> a physics textbook (the only place friction does not exist).
 > 
-Neither subject nor description are appropriate. This patch
-doesn't add support for a driver, it adds support for a chip
-to an existing driver.
-
-> Signed-off-by: Brian Chiang<chiang.brian@inventec.com>
-> ---
->  drivers/hwmon/pmbus/tps53679.c | 58 ++++++++++++++++++++++++++++++++--
->  1 file changed, 56 insertions(+), 2 deletions(-)
+> Maybe the minimum is index 0 of cooling-levels?
 > 
->   * Since those chips have special configuration registers, we want to have
-> @@ -132,12 +157,33 @@ static int tps53679_identify_multiphase(struct
-> i2c_client *client,
->     return tps53679_identify_phases(client, info);
->  }
-> 
-> +static int tps53685_identify_multiphase(struct i2c_client *client,
-> +                   struct pmbus_driver_info *info,
-> +                   int pmbus_rev)
-> +{
-> +   int ret;
-> +   ret = tps53685_identify_chip(client, pmbus_rev);
-> +   if (ret < 0)
-> +       return ret;
-> +
-> +   info->format[PSC_VOLTAGE_OUT] = linear;
-> +
-> +   return 0;
-> +}
-> +
->  static int tps53679_identify(struct i2c_client *client,
->                  struct pmbus_driver_info *info)
->  {
->     return tps53679_identify_mode(client, info);
->  }
-> 
-> +static int tps53685_identify(struct i2c_client *client,
-> +                struct pmbus_driver_info *info)
-> +{
-> +   return tps53685_identify_multiphase(client, info,
-> +                       TPS53681_PMBUS_REVISION);
-> +}
-> +
 
-The whole point of the existing identify functions was to use them for
-multiple chips. Please ajust the code to only use the existing functions.
-That should be possible by changing the 'id' parameter of
-tps53679_identify_chip() and tps53679_identify_multiphase() to be a char *
-instead of an u16, and by passing the expected return length.
+Fan controllers often have a separate value for the lowest cooling level
+and for the PWM necessary to start a fan. The pwm associated with the lowest
+cooling level may be lower than the pwm necessary to start a fan.
 
->  static int tps53681_identify(struct i2c_client *client,
->                  struct pmbus_driver_info *info)
->  {
-> @@ -215,7 +261,9 @@ static struct pmbus_driver_info tps53679_info = {
->         PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->         PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
->         PMBUS_HAVE_POUT,
-> -   .func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +   .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-> +       PMBUS_HAVE_STATUS_INPUT |
-> +       PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
->         PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->         PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
->         PMBUS_HAVE_POUT,
-> @@ -263,6 +311,10 @@ static int tps53679_probe(struct i2c_client *client)
->         info->identify = tps53681_identify;
->         info->read_word_data = tps53681_read_word_data;
->         break;
-> +   case tps53685:
-> +       info->pages = 2;
-> +       info->identify = tps53685_identify;
-> +       break;
->     default:
->         return -ENODEV;
->     }
-> @@ -278,6 +330,7 @@ static const struct i2c_device_id tps53679_id[] = {
->     {"tps53679", tps53679},
->     {"tps53681", tps53681},
->     {"tps53688", tps53688},
-> +   {"tps53685", tps53685},
+The fan controller would start a fan by applying the "start fan" pwm value
+for a period of time, then reduce the pwm to the desired pwm value for
+the running fan.
 
-Numeric order, please.
+I'll be happy to dig up datasheet references if needed.
 
->     {}
->  };
-> 
-> @@ -290,6 +343,7 @@ static const struct of_device_id __maybe_unused
-> tps53679_of_match[] = {
->     {.compatible = "ti,tps53679", .data = (void *)tps53679},
->     {.compatible = "ti,tps53681", .data = (void *)tps53681},
->     {.compatible = "ti,tps53688", .data = (void *)tps53688},
-> +   {.compatible = "ti,tps53685", .data = (void *)tps53685},
+Guenter
 
-Numeric order, please.
-
->     {}
->  };
->  MODULE_DEVICE_TABLE(of, tps53679_of_match);
-> 
-> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-> index 81b9d813655a..89753f004edb 100644
-> --- a/drivers/hwmon/pmbus/tps53679.c
-> +++ b/drivers/hwmon/pmbus/tps53679.c
-> @@ -16,7 +16,7 @@
->  #include "pmbus.h"
-> 
->  enum chips {
-> -   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
-> +   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688, tps53685
-
-Please retain numeric order.
-
->  };
-> 
->  #define TPS53647_PAGE_NUM      1
-> @@ -109,6 +109,31 @@ static int tps53679_identify_chip(struct
-> i2c_client *client,
->     return 0;
->  }
-> 
-> +static int tps53685_identify_chip(struct i2c_client *client,
-> +                 u8 revision)
-> +{
-> +   u8 buf[I2C_SMBUS_BLOCK_MAX];
-> +   int ret;
-> +
-> +   ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
-> +   if (ret < 0)
-> +       return ret;
-> +   if (ret != revision) {
-> +       dev_err(&client->dev, "Unexpected PMBus revision 0x%x\n", ret);
-> +       return -ENODEV;
-> +   }
-> +
-> +   ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-> +   if (ret < 0)
-> +       return ret;
-> +
-> +   if (strncmp("\x54\x49\x53\x68\x50\x00", buf, 6)) {
-
-That is "TIShP" with a trailing '\0'. Please provide as text.
-Also, the return length should be checked.
-
-> +       dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
-
-The length of 'buf' is 32 bytes, and 32 bytes may be returned by the chip,
-leaving the text unterminated. On top of that, there is no guarantee that
-the chip 0-terminates its returned data, or that it is in text form
-in the first place. This may result in unexpected output, meaning you can
-not use %s here. I would suggest to use "%*ph" or similar.
-
-> +       return -ENODEV;
-> +   }
-> +   return 0;
-> +}
-> +
->  /*
->   * Common identification function for chips with multi-phase support.
