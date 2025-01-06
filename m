@@ -1,171 +1,239 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D70818A6AC;
-	Mon,  6 Jan 2025 17:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955AB18A6AC
+	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jan 2025 17:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736185087; cv=none; b=DYE+6DbLEEgQceL7ufFhI0dn6dapffGz8H/agLWKXejuDLTopBgUZUpMAtsNQz4H58EBd3+bexr8absbyrSCHmRV8xmeJ0/w6aUyQvBpJ1ElmFNreosQNjUCch+wQEsIKw+ecI98CNoWq7Y7pEySkXQeJykDv1M1YyVOaUEVQhU=
+	t=1736185096; cv=none; b=RXo2+/U/D6wTfjmvBzseowoTNRllnlt4AtJlPP73lh4fa78iFZCgKFKkYlUZZphWoLzdkFa0m8OWWgwi2BXkLsNQQIRxRsO25WlrsSRAc/AJayA1AUIotRwi5v3diH6wPBqBJHa01ykQlUeRtUXj59WWbS8ADTBDKnaS3dnP08s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736185087; c=relaxed/simple;
-	bh=TUGWL4hZXBfpX3lvrQj+POWz/WUzBaiqXzE9YDjqdRs=;
+	s=arc-20240116; t=1736185096; c=relaxed/simple;
+	bh=qvvbgw6OedOPV8/cAG//Rh2LmcfRPCf6mOrROss0Ces=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=igW9qjB99X/L6QeAjkd4aInHiICx7jrSRRRkQNrWFIGLKrmcIskz9Z9TO15FhQb8EI3n42kOuaFgbNI1ksNtFAIdkUyf7I7e+GJrxqEkfFN8G2YZK78bKflTAjIwqnZuB44/WQWulZqJQS9VqVGCZ5e6jhb7td9JYmL4lJAOqg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOqF/SSH; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kuQDbfhoeXoQ1ZtD2PS9kIHBjQ5rgB2Cq2ID9mM2rZyAHQUNT+h1KE77ijKCVQl/pMA1YPhR6jez4cGFVfU/yIMCRpFAE6tEOTbVBU/th84hcz5ZFgfOJi8biRyUYuLJ8dW/Jnqb7cvu/hxhP2Dc2xOIWM40MLeXrdIP9nflYRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSiM1t4G; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOqF/SSH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527FBC4CED2;
-	Mon,  6 Jan 2025 17:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736185086;
-	bh=TUGWL4hZXBfpX3lvrQj+POWz/WUzBaiqXzE9YDjqdRs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KOqF/SSHC1x7M/oM4MyCjxMSo8NmvWOSebeiOdEIG3RVuz4XKuW6yF9EAx5niXlVY
-	 mtrq/5imQXEjt4ZkOANLA9KcmVbE6eFHNEsSfia6+N8D5c34CiWBvIq2Y9hk6Fr//N
-	 /qNfe5hBZEiobD3dLv4GXvp9x6DPCV+zjqXTAOjtN2fm1wbzfwfDlcirytzUK3QsrL
-	 p9y/QQM4HZUdvfh0z5jvuDRjQ6LLFc3PDgM/SvU+rjJcPp2aIc/ju+kzeGlhaY3wl2
-	 lTOMxxNKgv7SZh/rG/YMHeKIygfRco6kMrtmteU3OhyBiEOumdULOi4oVUmkt5AdVH
-	 hzCb59XNq5rhQ==
-Date: Mon, 6 Jan 2025 11:38:05 -0600
-From: Rob Herring <robh@kernel.org>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
- property
-Message-ID: <20250106173805.GA501301-robh@kernel.org>
-References: <20250103101448.890946-1-peter@korsgaard.com>
- <20250103195810.GA2624225-robh@kernel.org>
- <dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSiM1t4G"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166651f752so12526325ad.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jan 2025 09:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736185094; x=1736789894; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w1WW5qX2j/44h79BIXM8VrLHYKa5eHZl6QPgd6J9fuU=;
+        b=SSiM1t4G+maJTDxXuRk3ghypegPChQH3v86A480KvIAD6fd0Zj8lBn8kcS2ACsAk84
+         rCFtS01sTVPMYpsLlKbx+vti8nC7XuoCAqpXl1F7S1lWTLquVax45UJOY11W5lh4omba
+         X4KjxU4PWfpm3qSPp5ffDBoTMExc0ByDCitvw22yiFiRaJXwM0qIUq9W8hrbHcTVtBqa
+         6aAeasR9Irnv7RcLwqzjrjG2/9NBbflDWntC9Ls9Vyr6FgNTj/DfeO7qX6rfdxju7/Dm
+         zQrrWgjKkC5+fha+OOjBwCSqf2Cc9Mqtk87CgYgQM4JDMbt85dVVTkrpZ7SezcHISVto
+         a8Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736185094; x=1736789894;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1WW5qX2j/44h79BIXM8VrLHYKa5eHZl6QPgd6J9fuU=;
+        b=JFH9EsOoF3+/ZkZKES1IVHhKslnLXJERw+EyAEPqQuvT8He790Fma27txmJFXuQElL
+         Dw56clYlxoXF0ynmwqazAclW2i2QZ/olqv714velFz1VSbL7F4IrbC3A01BrUCS1mLYS
+         hroJfRiTOvGBDcCiFQFEQxXh57pAWazySrJOidLe3uTg2Dmj0iyRVt9jH6giK9klVwYk
+         iGM3zDdtQR/M3KMzupcIbOXnmHZya5Y1yCj8GJ8AFmCpqruMX9+b37xnczD2siDCAs21
+         2twAWWA4bzZJlg6iqy3IAAiHxQvBCqv3o0xtbztdSSk4N8aI2Wm0DmK0Efsgx+NV9s2o
+         EoQA==
+X-Gm-Message-State: AOJu0YwZycEOWnpE0iYYYqa2zLw1bvFBweAAyPdSM+8THZ/uDTOTRb03
+	91oZ+eCK6QJR3IhuQ7UfcB+dCCoSfNSaiSbzSActm6wBKZmKMDM55K6XYg==
+X-Gm-Gg: ASbGncuOjmfrrLFoyUAH9FoyHZzlmrDXZ/IPu9dmTOnZ4FOfAd+CjH5EjmccBx4xY1n
+	0v8eM6tKKHIlskyQo0m0wIPQ/nGQMLw4cWBXa/LblH1Wy1v4uR4geIbA6hWXUfWTBFXEwWfTYfP
+	stADF1c8nhBz1xc52euORsf0oMPQK//5SrzKtQMFgDo3B0WZWC8QIbRzVSHenXYkYEN1mfGSxBS
+	fsnn6AW/Mk/rp9CcMr4Zve+lmco5GbT/v2gkm3HBKZqrgO1pj04NaLw6nsdorh1bm0mIA==
+X-Google-Smtp-Source: AGHT+IGNeMNt9XBd3zZpbqOKbg1GIxSVd8W46WMYt/MCxlhOoEaQ9qKW88xjON+4ypbRgkfnilZgoQ==
+X-Received: by 2002:a17:90a:e18b:b0:2ee:9902:18b4 with SMTP id 98e67ed59e1d1-2f452ee838bmr85262705a91.27.1736185093795;
+        Mon, 06 Jan 2025 09:38:13 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4477c8583sm34054719a91.16.2025.01.06.09.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 09:38:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 6 Jan 2025 09:38:12 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: ChiangBrian =?utf-8?B?5rGf5rOz57e7?= TAO <chiang.brian@inventec.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v1] Support the TI TPS53685 driver
+Message-ID: <c9737e71-72c9-4357-a0d1-509362e2b051@roeck-us.net>
+References: <CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com>
 
-On Sun, Jan 05, 2025 at 05:10:42PM +0100, Peter Korsgaard wrote:
-> On 1/3/25 20:58, Rob Herring wrote:
+On Wed, Dec 25, 2024 at 05:54:12PM +0800, ChiangBrian 江泳緻 TAO wrote:
+> From: Brian Chiang<chiang.brian@inventec.com>
 > 
-> > I still don't agree. Quoting Guenter:
-> > 
-> > > The two values are also orthogonal. The fan rpm is fan dependent.
-> > > Each fan will require a different pwm value to reach the target speed.
-> > > Trying to use target-rpm to set a default pwm value would really
-> > > not make much if any sense.
+> As the driver is not supported, TPS53685 reading is added based on the
+> datasheet.
 > 
-> > But RPM is ultimately what you care about and is the fan parameter
-> > that's universal yet independent of the underlying control. RPM is what
-> > determines noise and power consumption.
-> > 
-> > There's 2 cases to consider: you have a tach signal and know the fan RPM
-> > or you don't know the RPM. If you have a tach signal, we probably
-> > wouldn't be discussing this because target-rpm would be enough. So I'm
-> > assuming this is the case and you have no idea what RPM the fan runs at.
+Neither subject nor description are appropriate. This patch
+doesn't add support for a driver, it adds support for a chip
+to an existing driver.
+
+> Signed-off-by: Brian Chiang<chiang.brian@inventec.com>
+> ---
+>  drivers/hwmon/pmbus/tps53679.c | 58 ++++++++++++++++++++++++++++++++--
+>  1 file changed, 56 insertions(+), 2 deletions(-)
 > 
-> Correct, no tacho.
+>   * Since those chips have special configuration registers, we want to have
+> @@ -132,12 +157,33 @@ static int tps53679_identify_multiphase(struct
+> i2c_client *client,
+>     return tps53679_identify_phases(client, info);
+>  }
 > 
+> +static int tps53685_identify_multiphase(struct i2c_client *client,
+> +                   struct pmbus_driver_info *info,
+> +                   int pmbus_rev)
+> +{
+> +   int ret;
+> +   ret = tps53685_identify_chip(client, pmbus_rev);
+> +   if (ret < 0)
+> +       return ret;
+> +
+> +   info->format[PSC_VOLTAGE_OUT] = linear;
+> +
+> +   return 0;
+> +}
+> +
+>  static int tps53679_identify(struct i2c_client *client,
+>                  struct pmbus_driver_info *info)
+>  {
+>     return tps53679_identify_mode(client, info);
+>  }
 > 
-> > The fan-common.yaml binding is a bit incomplete for this. What you need
-> > is some map of fan speed to PWM duty cycle as most likely it is not
-> > linear response. I think there are 2 options here:
-> > 
-> > Use the 'cooling-levels' property. Fan "speed" is the index of the
-> > array. So you just need a 'default-cooling-level' property that's the
-> > default index.
+> +static int tps53685_identify(struct i2c_client *client,
+> +                struct pmbus_driver_info *info)
+> +{
+> +   return tps53685_identify_multiphase(client, info,
+> +                       TPS53681_PMBUS_REVISION);
+> +}
+> +
+
+The whole point of the existing identify functions was to use them for
+multiple chips. Please ajust the code to only use the existing functions.
+That should be possible by changing the 'id' parameter of
+tps53679_identify_chip() and tps53679_identify_multiphase() to be a char *
+instead of an u16, and by passing the expected return length.
+
+>  static int tps53681_identify(struct i2c_client *client,
+>                  struct pmbus_driver_info *info)
+>  {
+> @@ -215,7 +261,9 @@ static struct pmbus_driver_info tps53679_info = {
+>         PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>         PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>         PMBUS_HAVE_POUT,
+> -   .func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +   .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +       PMBUS_HAVE_STATUS_INPUT |
+> +       PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+>         PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>         PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>         PMBUS_HAVE_POUT,
+> @@ -263,6 +311,10 @@ static int tps53679_probe(struct i2c_client *client)
+>         info->identify = tps53681_identify;
+>         info->read_word_data = tps53681_read_word_data;
+>         break;
+> +   case tps53685:
+> +       info->pages = 2;
+> +       info->identify = tps53685_identify;
+> +       break;
+>     default:
+>         return -ENODEV;
+>     }
+> @@ -278,6 +330,7 @@ static const struct i2c_device_id tps53679_id[] = {
+>     {"tps53679", tps53679},
+>     {"tps53681", tps53681},
+>     {"tps53688", tps53688},
+> +   {"tps53685", tps53685},
+
+Numeric order, please.
+
+>     {}
+>  };
 > 
-> I am not sure I what you mean with the RPM reference here? The
-> cooling-levels support in the fan-pwm.c driver is a mapping between cooling
-> levels and PWM values, NOT RPM value.
+> @@ -290,6 +343,7 @@ static const struct of_device_id __maybe_unused
+> tps53679_of_match[] = {
+>     {.compatible = "ti,tps53679", .data = (void *)tps53679},
+>     {.compatible = "ti,tps53681", .data = (void *)tps53681},
+>     {.compatible = "ti,tps53688", .data = (void *)tps53688},
+> +   {.compatible = "ti,tps53685", .data = (void *)tps53685},
 
-Did I say RPM anywhere for this option?
+Numeric order, please.
 
-It is the index of the array that is meaningful to anything outside of 
-the driver. The values are opaque. They are duty cycle in some cases 
-and RPMs in other cases. The thermal subsystem knows nothing about PWM 
-duty cycle nor RPMs. 
-
-Defining a default-cooling-level would be useful to anyone, not just 
-your usecase.
-
-IOW, you are proposing:
-
-default-pwm = <123>;
-
-I'm proposing doing this instead:
-
-cooling-levels = <0 123 255>;
-default-cooling-level = <1>;
-
-
-> > The other option is define an array of (fan RPM, PWM duty cycle) tuples.
-> > Then target-rpm can be used to select the entry. We already have
-> > something like this with 'gpio-fan,speed-map'.
+>     {}
+>  };
+>  MODULE_DEVICE_TABLE(of, tps53679_of_match);
 > 
-> Where should these "invented" RPM values come from when there is no tacho
-> signal? That sounds backwards / complicated for the very trivial "what
-> should the default PWM value be at driver probe time" use case.
-
-Every fan has at least a maximum RPM spec'ed. Probably a minium too. 
-For anything in between, you're correct that you don't know. I guess you 
-just assume a linear response. 
-
-> > There's also no definition of the minimum RPM or duty cycle in the
-> > pwm-fan binding. We have min-rpm in fan-common, but that doesn't work
-> > without a tach. A map would help here as well
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index 81b9d813655a..89753f004edb 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -16,7 +16,7 @@
+>  #include "pmbus.h"
 > 
-> The minimum PWM is presumably 0, E.G. signal always low?
+>  enum chips {
+> -   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
+> +   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688, tps53685
 
-I'm talking about the duty cycle needed to start the fan spinning and to 
-keep it spinning. I'm sure that value is not 1 for any fan except one in 
-a physics textbook (the only place friction does not exist).
+Please retain numeric order.
 
-Maybe the minimum is index 0 of cooling-levels? 
-
-
-> > This problem to me is similar to LEDs. Ultimately it's brightness that
-> > you care about, not the current or PWM duty cycle to get there.
+>  };
 > 
-> The use case (as described in the commit message) is to drive the fan less
-> hard to limit noise and/or power consumption. The input to the fan drive
-> control is a PWM setting, so it IMHO makes sense to specify that, as that is
-> the interface provided by the fan-pwm driver - E.G. you boot up and tweak
-> the pwm1 property in sysfs until you have a value that suits the noise/power
-> consumption requirements and stick that value in the dts.
-
-I understand what you want. I'm trying to think ahead about what's the 
-next thing someone will want to add to the binding. Just adding 1 
-property at a time does not result in the best binding design. There's 
-plenty of examples of that. Second, we have these fan bindings like 
-pwm-fan which predate coming up with a common binding. Any further 
-evolution of these bindings should not further diverge from the 
-common binding. 
-
-If your process do this once for a given platform, then having this in 
-DT is fine. If the process is every user of the platform does this, then 
-I don't think it should be in DT. Having users tweak the DT is not a 
-great experience compared to just putting the setting in a file on 
-the rootfs.
-
-> > Finally, whatever we end up with, it should go in fan-common.yaml. That
-> > supports PWMs too, so whatever we end up with is applicable to any PWM
-> > controlled fan.
+>  #define TPS53647_PAGE_NUM      1
+> @@ -109,6 +109,31 @@ static int tps53679_identify_chip(struct
+> i2c_client *client,
+>     return 0;
+>  }
 > 
-> What makes this "default-pwm" (or whatever it will be called) more generic
-> than E.G. the recently added "fan-stop-to-start-percent" /
-> "fan-stop-to-start-usec" properties added to pwm-fan.yaml by commit
-> 80bc64201e78 ("dt-bindings: hwmon: pwm-fan: Document start from stopped
-> state properties")?
+> +static int tps53685_identify_chip(struct i2c_client *client,
+> +                 u8 revision)
+> +{
+> +   u8 buf[I2C_SMBUS_BLOCK_MAX];
+> +   int ret;
+> +
+> +   ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
+> +   if (ret < 0)
+> +       return ret;
+> +   if (ret != revision) {
+> +       dev_err(&client->dev, "Unexpected PMBus revision 0x%x\n", ret);
+> +       return -ENODEV;
+> +   }
+> +
+> +   ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
+> +   if (ret < 0)
+> +       return ret;
+> +
+> +   if (strncmp("\x54\x49\x53\x68\x50\x00", buf, 6)) {
 
-Nothing. Those should probably be moved.
+That is "TIShP" with a trailing '\0'. Please provide as text.
+Also, the return length should be checked.
 
-Really, pwm-fan.yaml should reference fan-common.yaml and drop all the 
-duplicate properties.
+> +       dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
 
-Rob
+The length of 'buf' is 32 bytes, and 32 bytes may be returned by the chip,
+leaving the text unterminated. On top of that, there is no guarantee that
+the chip 0-terminates its returned data, or that it is in text form
+in the first place. This may result in unexpected output, meaning you can
+not use %s here. I would suggest to use "%*ph" or similar.
+
+> +       return -ENODEV;
+> +   }
+> +   return 0;
+> +}
+> +
+>  /*
+>   * Common identification function for chips with multi-phase support.
