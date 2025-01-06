@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589061DC05D;
-	Mon,  6 Jan 2025 10:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8081DC05D;
+	Mon,  6 Jan 2025 10:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736160615; cv=none; b=bF2zGCNsOU3pGoQyPodtx7+LmRYzwlQ3AN82jETRmjJRCUDk++zi8TOikO9lHpoDOoIW+0/B/3jyUAAIn4UZF3qWr7cig/4GPHIslVCgixaEX2sErfdv06QqOdvTQU/A6195wPpwYwfNj4NEO1TKfNBRXw4lI9IPWr06/eeq928=
+	t=1736160772; cv=none; b=fh3MqKG/iHW8Ixjyw4Dd9TDkzPcrYJF1ZZPJaQmbG/k27InLVGqgEClCbHpWwmZgl13viADPCTl/jAkLvGPe9TkqbYAQcQ1U+DJ8GW800ubMzPlFX2TtwBeVLVWerewzTOwJ3brcO3bXuXsGrw3MuHjN0mmgAXkZw6ZC1nDH7JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736160615; c=relaxed/simple;
-	bh=7Q3i8xJswYWcNOJxpGbRWAwokUg1oDkILbkbZFce7nk=;
+	s=arc-20240116; t=1736160772; c=relaxed/simple;
+	bh=Q8Z1waplB19mCn1cuTl3dkKfZTG3BnJJmWsNjQ4Qku8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VgaiikEOQyqGz/ShyaVNa1U6onoomT+foJzq00nx7tTnEFaG37NmtG0plvnXx5e0QEZ02+UsvwOSoKvEc4Whqvf/PAA/grRpiI1WaKCVbTz0SCxrmKsxhP1V6I0XaRsU6mVgJoP1b84vLy2xalb5Q5ZfqFNsyps36WDs1nN/uzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gaXX1mj6; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=kMxC5GCZiOJrfUTP///o/wNe0YJA+8mmSZjqXNcQ5txW/CYxoUrPwhbrozudphChphW7nGQjThO2LjiPwf/2xOAluAnaG+8VCSGg2+H+MJcKICcTFoXN5ys+tffURmQ6piy2Z0LNus/237QDuE0Rcba4DR7D+Ws9JbjN3RkydV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MvMpPbiE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gaXX1mj6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC75BC4CEDD;
-	Mon,  6 Jan 2025 10:50:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MvMpPbiE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A54DAC4CED2;
+	Mon,  6 Jan 2025 10:52:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736160614;
-	bh=7Q3i8xJswYWcNOJxpGbRWAwokUg1oDkILbkbZFce7nk=;
+	s=k20201202; t=1736160772;
+	bh=Q8Z1waplB19mCn1cuTl3dkKfZTG3BnJJmWsNjQ4Qku8=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=gaXX1mj6Ul4iLs37rgiTGzxwmDdM1V1fN3T3je9d906IUqpHrXiump8LPgMa8EsMG
-	 Yh92zlozAnfTjUMw0GEDFwxjl3UJ9c1IBrbvuaUEm57Cy/2xjoKREMLvZAA3iEB8n7
-	 5+nzaSnXbN9+3WwnjmUvooTu/3ImU3LCIUQHqdCqhb18ySVQ5AsftTSmUN2lgKmd9h
-	 78grX0XTrfeasCksiFp1EzoeYD078ia+AjCs73Chk6qlZxo28hyuW754uD6pZ0ej/t
-	 7brrIrt6FTV7binif/V02sWaU11BOQpJMIgZ/VtZ8uNcqgAj17ZHKdAgG8ygQwwioz
-	 t1JQqPinG3Ofw==
-Message-ID: <abdd156e-0c9b-477f-877c-0309c84c9d5b@kernel.org>
-Date: Mon, 6 Jan 2025 11:50:07 +0100
+	b=MvMpPbiEX1tOXJPOqR9fjx0yh2R3COKzsAXfkGiaQKxQ/Cz2f4ZIUz2mY/3HihlaO
+	 3ACKmGd2m8xFpMtQYOi5VOj7v24JEZfiutBIb8JNFRT8shN7cCcqDiw4lCSy1TWS7X
+	 zSyuf8XJqL2beOF4vvnCPmYWiRQo0VWXt1ypePmLNJMP4buYyxUfi5GGEwBICvQtq/
+	 wvrz33GsgMbLcmlOszHJlvOEY+a00M5Ub1/NETStEGDa10OeLG7BV06SjIF9XEU6i5
+	 pm4JGeKweag3RDEnfmwPE5kTcqckxKFoePZHFu4DKHGVgvMps+MDW6Pz8uzLGN2/mt
+	 BoZFUSQPhnGiQ==
+Message-ID: <428c034c-79a2-4753-9af8-4dc5af7d310f@kernel.org>
+Date: Mon, 6 Jan 2025 11:52:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,14 +35,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: Add INA233 device
+Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
 To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  Leo-Yang@quantatw.com, corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
- <20250106071337.3017926-2-Leo-Yang@quantatw.com>
+ <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -88,109 +89,91 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250106071337.3017926-2-Leo-Yang@quantatw.com>
+In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 06/01/2025 08:13, Leo Yang wrote:
-> Add TI INA233 Current and Power Monitor bindings.
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-
+> Support ina233 driver for Meta Yosemite V4.
 > 
-> Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
-> ---
->  .../bindings/hwmon/pmbus/ti,ina233.yaml       | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+> Driver for Texas Instruments INA233 Current and Power Monitor
+> With I2C-, SMBus-, and PMBus-Compatible Interface
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
-> new file mode 100644
-> index 000000000000..2677c98dadd1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
+> According to the mail
+> https://lore.kernel.org/all/
+> 20230920054739.1561080-1-Delphine_CC_Chiu@wiwynn.com
 
-Drop blank line
+Don't break the URLs. It makes them difficult to use.
 
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,ina233.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments INA233 of power/voltage/current monitors
-> +
-> +maintainers:
-> +  - Leo Yang <Leo-Yang@quantatw.com>
-> +
-> +description: |
-> +  INA233 High-Side or Low-Side Measurement, Bidirectional Current
-> +  and Power Monitor With I2C-, SMBus-, and PMBus-Compatible Interface.
-> +
-> +  Datasheet: https://www.ti.com/lit/ds/symlink/ina233.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ina233
 
-This does not fit existing ti,ina bindings?
+> maintainer's suggested rewrite driver
+> 
+
+
+
+> +INA233 HARDWARE MONITOR DRIVER
+> +M:	Leo Yang <Leo-Yang@quantatw.com>
+> +M:	Leo Yang <leo.yang.sy0@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Odd Fixes
+> +F:	Documentation/devicetree/bindings/hwmon/ina233.txt
+
+There is no such file.
+
+
+...
 
 > +
-> +  reg:
-> +    maxItems: 1
+> +struct pmbus_driver_info ina233_info = {
+
+Why this cannot be const and static?
+
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_INPUT
+> +		| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		| PMBUS_HAVE_POUT
+> +		| PMBUS_HAVE_VMON | PMBUS_HAVE_STATUS_VMON,
+> +	.m[PSC_VOLTAGE_IN] = 8,
+> +	.R[PSC_VOLTAGE_IN] = 2,
+> +	.m[PSC_VOLTAGE_OUT] = 8,
+> +	.R[PSC_VOLTAGE_OUT] = 2,
+> +	.read_word_data = ina233_read_word_data,
+> +};
 > +
-> +  shunt-resistor:
-> +    description:
-> +      Shunt resistor value in micro-Ohms, Please refer to the actual circuit
-> +      resistor used.
-> +    default: 2000
-
-Which schema brings the $ref for this property?
-
+> +static int ina233_probe(struct i2c_client *client)
+> +{
+> +	int ret, m, R;
+> +	u32 rshunt;
+> +	u16 current_lsb;
+> +	u16 calibration;
 > +
-> +  current-lsb:
-> +    description:
-> +	    Calculate the Maximum Expected Current(A) / 2^15 in micro ampere (uA/bit).
-> +	    e.g. 30A / 2^15 = 915 uA/bit
-> +    default: 1000
-
-Missing ref, missing vendor prefix and missing actual explanation what
-it is for. I don't understand the description at all.
-
+> +	/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +	/* read rshunt value (uOhm) */
+> +	ret = of_property_read_u32(client->dev.of_node, "shunt-resistor", &rshunt);
+> +	if (ret < 0 || !rshunt) {
+> +		dev_err(&client->dev, "Unable to read shunt-resistor or value is 0, default value %d uOhm is used.\n",
+> +			INA233_RSHUNT_DEFAULT);
+
+Your binding said this is optional, so how this can be an error?
+
+> +		rshunt = INA233_RSHUNT_DEFAULT;
+> +	}
 > +
-> +additionalProperties: false
+> +	/* read current_lsb value (uA/bit) */
+> +	ret = of_property_read_u16(client->dev.of_node, "current-lsb", &current_lsb);
+> +	if (ret < 0 || !current_lsb) {
+> +		dev_err(&client->dev, "Unable to read current_lsb or value is 0, default value %d uA/bit is used.\n",
+> +			INA233_CURRENT_LSB_DEFAULT);
+
+Same problem
+
+> +		current_lsb = INA233_CURRENT_LSB_DEFAULT;
+> +	}
 > +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        power-sensor@40 {
-> +            compatible = "ti,ina233";
-> +            reg = <0x40>;
-> +            shunt-resistor = /bits/ 32 <5000>;
-
-Drop unusual syntax. Please take a look how all other bindings and DTS
-is doing this.
-
-> +            current-lsb = /bits/ 16 <1000>;
-> +        };
-> +    };
-> \ No newline at end of file
-
-You have patch errors.
-
 Best regards,
 Krzysztof
