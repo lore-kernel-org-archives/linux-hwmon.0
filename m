@@ -1,59 +1,62 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C7E1876;
-	Mon,  6 Jan 2025 07:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB1F29CE6;
+	Mon,  6 Jan 2025 07:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736147846; cv=none; b=k5lHPVUNEezAVxAHOFW5TNj1Z0vW1+z2FLkhzhIbDf4h0mJYGO6H/j0Ew3wY08/HRsogvOlWJFwtyAzRWYb4Co8CVEzwYwYZ0Hd5QIRGFtIdCGQaYyadTkP7ljrnf/mchZu5TKpsGTAn+YfuBtCzfQvfgOGOqxgAOT/xDLrX7YE=
+	t=1736147859; cv=none; b=ZkrTVm756XRLk+HPwNOr6D8VPrnKeCPGEtXGGn38F1fKisptybR85IA0xtwWZDkqYLTQuBce1rbgoRobtp4H2d2eUe5SvqqmDKxFHyCIsClEdF8h/nR6yyYCNoInFuYF2YuPCFLM1gs8py52AXmPOctvjEOtRu54nb6/pd+5VDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736147846; c=relaxed/simple;
-	bh=5IZ+3vLhnBcLf7jXN2760fNrXrh1yrdDI489Ssh9dOE=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=BTr9HeOxB6HLIM3/nnKyP76mU+c9clRQul/Iz5WEYmWRPnUBfYuA6Nu4s3t8LoRs6gISOex+Ef6UYHKM4e0F3YaeqtZItjfFxfYeB1Gxuk7mwflu43NaJVFyzJs9E0aOioqJlfFPZZlPukfOlJryPmhwfU2zweL6KbLNRZ0yRJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FnnZncZ2; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1736147859; c=relaxed/simple;
+	bh=Yg/eoE1sqjEkz82wDEkJpfwlNryj3MOrJefOW7wdtqM=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=q75z92fcTcR3k7wrhMXt2DbvnES0Ff0yWbJxyrE4CwsX9DMZSsryKIIHcv/OwB3pe3bvsA1NgpRVE97PgYHoElcvNPAeG4QQWRzpgCg/NmW8T8Pn7hJPNkO22/Vpt1QbRBiMxEGs7/rQdeZ6zEPgQ3ZV1QwEfgRGzeZFEKN1inA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XO4HkY8q; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FnnZncZ2"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2165cb60719so203136025ad.0;
-        Sun, 05 Jan 2025 23:17:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XO4HkY8q"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21680814d42so169833865ad.2;
+        Sun, 05 Jan 2025 23:17:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736147845; x=1736752645; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1w9zSpxK0DLwBz3Sc1XeYMaG3xhsJeXmulEk0Svv/M=;
-        b=FnnZncZ2gavE5HzqZKC58QcF56WyO0QAgITPYz+1ptLnTvSkkiK4ZCqKrzznCDnefk
-         51EWuEB5Kuzn2Z7MRbrvTmp+XFhBg0aqU7OKCS+GURDGcfc6CsmCKE6UjBd8w8NwLZJi
-         +DgGFL69lv7UvgGpdmfeIUjcKUBmfeYJ/z7CgdWTJyxL9EQfdWWXmcNGwFwFiiIQvYhe
-         qisvTrb0Wu0GZeSdcZeFJGT3ZS4a8a5FZi6TRdHPHMY6+njn424fFCt0iVmEKTuO9+Hy
-         XRa7a0KMtvIhz9vIPcceMc8QI4oo2Suml9bfAjLkW194r/r4e5DW7oynBdfL9+YFmleB
-         ynWQ==
+        d=gmail.com; s=20230601; t=1736147857; x=1736752657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sCi3pwYXnEAki8Voc1v2CtwOV69mMTi46BzIP1BLPI8=;
+        b=XO4HkY8qAQM5NZbFRPeeUbw4X/jyHrQakqpZCjW6GrPeq/7ivUeOef4ca6NV1c7E1C
+         2+chudzFaX4eEgAuMyMCXJZ/Q6lL7LUy0Fh9mXuDu6JS/yR9FG8NVapa7AMigmgKJe6E
+         04YiSrmAFHeTX4oh4GUGZ3fe/n2TiKEap22RyrR8s1NXZ02jh4wEEkHwSXn162PCv9v1
+         CpMXh8Sjoq2msIXR7lrFsTs0hw0EW36EesGeQyiPXueZppbjHMMrKlsDxpNDuy9Vu238
+         F98hUNAf7mua/dIHMgY87ra/cB3Ulzv+S+FEvRmYL2rNYmyQJaZNfpr5k+kmHDz+XoeG
+         BW6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736147845; x=1736752645;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1w9zSpxK0DLwBz3Sc1XeYMaG3xhsJeXmulEk0Svv/M=;
-        b=QXgubDZRkfhvG/XQKHDGm/VcfiyWThxpEqxFJvMv/W0DY6KrvlDf4n65n40/L7ctHF
-         u7kFUa6ZktGtO7mrDyNHpgotcLe3S6j9lTjLh4NlSV4KhFjHWl0l16nMIr6owKo9SN4d
-         HWO/mJUjbQ13M5C4jB4N3IpfZECwOz7KaOLnaulWfolT6SKCFPXF7yIf2Qe/n7OiSyCk
-         IYooD+bWYwVQjQQ0D7710+UbDo+LdEzPHa2VpnnhotlWLeXFuyKncFztnOqliSgvdyGB
-         h7iFqn53idZjtPuRox8RXF3UgY2eI3XMSlsmpCazz/ZmvGHL9xRJDOxYJwihCkgLzGtd
-         djzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFcTiazJ9X9kg12IBZMBW2c8XVtHG4fg7gv9EkmjFFDeS8xrEHlpNh8ljK91pLzYcwi7kSzQSao/3ZP4GS@vger.kernel.org, AJvYcCVHEB42x/U5wArAmDJL3X8vZXOoIdr2h1TDs5goz9P+3FVQucbsYCBcAUts1gSfPAe17l42TyIfqOj9@vger.kernel.org, AJvYcCW8W5UreILynsbuEtqTG+s5u6KFw3Nh7LO4GWPIF+8twKyYF9Jysdrtm6gnVgEjDKkMVuvCmEcorR21@vger.kernel.org, AJvYcCWPyqTdsegUv1vgIi8LKUK/0h/3hheNliUpJekPr2ib1HAx9iYEk7pzLCUKaQorqIsWis2i09PHOMxFD3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzvch8Z8OFxFN+VtbPYL0BJ7MDDqM/Nk4zNVIeKCEa/HEenSIHe
-	MqN/OrEB/QaRf+JyFpT3dYhMiXmIcdcnv8T+iA+oow9fiD2WLwEE
-X-Gm-Gg: ASbGncuoj52FhqrpfMaOGK4QF9InRDGmDYd+YCm0TSOx7wHWCDGQqTZV26LsNo58yq2
-	wog9BUD0chxnAomvKRDNI0V6rCf8OaZL9bMN0xIqeyoLbpQpI8mZEY+Cn4M+l/N3d65kAOWdUwo
-	Nk7idl/dSj+w6Pt4TAiQma7Hq0TMcQsTPz8w3sGfn2nSyIEPlcdJ8ev4q9FrWN1kEzNXxHuA2yw
-	dGj/enudfe7s3qUYnEtgLOcuZm5X1g1Lxjhj8ilAl9XUkIIoqW7LMgsfYOHdI+JCThAFqafvxfo
-	rCUa9lVeaqlfh7UW3m0yJd1XW3E8owoaV3dH
-X-Google-Smtp-Source: AGHT+IGTjqWfIv2DlhwgTL6jEnHVtYj8ucMwJjK3vPWagzHGiwqu4brm67ccXKhSUXmAcf46Q/jPHg==
-X-Received: by 2002:a05:6a00:4ac5:b0:725:b12e:604c with SMTP id d2e1a72fcca58-72abdd3c467mr78872261b3a.4.1736147844924;
-        Sun, 05 Jan 2025 23:17:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736147857; x=1736752657;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sCi3pwYXnEAki8Voc1v2CtwOV69mMTi46BzIP1BLPI8=;
+        b=OImGvfB9oguUwb8AS0hyEY063idtdgC2b43AlrdK0fQuVrGRt3fhFYKKHNkm47Aeoa
+         CFranlLEjT4RkDqHcCigLyzJLMJID2ueRfPNAbH1q7/gIKCXkok+RRtCkwBkwBL5mKeT
+         KwY0gvo/lL9M8IptHtlHSf5C//Rq4Rd94kKr0GFCFyHXETxfWGi7pH8kGbrmCksDza/c
+         3owDHd47o6gqVRvAXepA1eCIP0/ZgcVFhiLifY2W08X0DBTRn5g7MsocBSI2t4LZyWiy
+         vmt78XWtpbgB+Q0+wR+29eKK5k0qOjKJbde28l64ZG0b5DXjIwq90pibYLI1fVizwLgH
+         2G+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUIgT3JOxJK4jokC2UVTIpdCmYMhJlyyrxfL39ELUG4GkhOUDbOtATYEHTHklVGE5z18bMQqX+2tQNP@vger.kernel.org, AJvYcCUr1WnCRHY8FfMYlB6UTgxNtRu9b0L/aGVG61rMTU8S3gRNFoDENDHgNB9V5I1s32zS2YePZr5SCzNSzu3M@vger.kernel.org, AJvYcCX8FhKqGi0nAz66Suy11bvjY5Lva6mG5wWdbAC993EKix6haaC6LdmyyZwQQU8fq3eLeZogf1X3TNBHH1Y=@vger.kernel.org, AJvYcCXOIzQFcbEb7U6IWXjXzV+GAs5VOmsQUvieJOV/WUyE8NkAtW+SzldYf9qVzGmiECEdDJd+aCZUBSfP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPzCCWgdPWdssecMMdri2ArUrC28GlMkGxvsgDfki1sChAmoLU
+	jpV2UfjFNthlb1U6HgD3GpqiDDBVOfroR4Dq5XANyS0fKElF39rAOuSGBQ==
+X-Gm-Gg: ASbGncsTnfjSneKcGWP/FLVZn2TukPdoXnvNQmj/94lBx4rIXBYQbQDYWP1p2R+lucj
+	36tK2ue87yi7ib9sIjHtiHxYz/8lboqiFtgjLDAHAKz5R6PL6oWvtW3WM/gM8cjjP2uZHt5mCXL
+	kwduDoidnEz1DaEKQG8KlhGaC9ByW65jWM9QTALzd7IwK5J2xeQf5zFOSuFHbQi8vx3e5HO2DL/
+	cfk/RuaMt5GLtqQs3WRfemNM5j6Gqa/cqlXgbAAMDCfVBKV27nddXHf6g9YRCRFtCell0gLcT2u
+	yn/D08KqlsFcPVSiTl6TKXXZ/VFzVjUCw8c6
+X-Google-Smtp-Source: AGHT+IFtLEiPFYCf2iAIpsScfOYbVZieURQdMijOJfVOd6S5y0AU2gbfcQpVUruIhgqcq1V/aO95ZQ==
+X-Received: by 2002:a05:6a00:8085:b0:725:ae5f:7f06 with SMTP id d2e1a72fcca58-72abe096383mr88046121b3a.23.1736147857228;
+        Sun, 05 Jan 2025 23:17:37 -0800 (PST)
 Received: from leo-pc.tail3f5402.ts.net (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad816222sm30630566b3a.37.2025.01.05.23.17.22
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad816222sm30630566b3a.37.2025.01.05.23.17.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 23:17:24 -0800 (PST)
+        Sun, 05 Jan 2025 23:17:36 -0800 (PST)
 From: Leo Yang <leo.yang.sy0@gmail.com>
 X-Google-Original-From: Leo Yang <Leo-Yang@quantatw.com>
 To: jdelvare@suse.com,
@@ -68,10 +71,12 @@ To: jdelvare@suse.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: Add support for INA233
-Date: Mon,  6 Jan 2025 15:13:35 +0800
-Message-Id: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
+Subject: [PATCH 1/2] dt-bindings: Add INA233 device
+Date: Mon,  6 Jan 2025 15:13:36 +0800
+Message-Id: <20250106071337.3017926-2-Leo-Yang@quantatw.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
+References: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,24 +85,78 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Support ina233 driver with binding documents.
+Add TI INA233 Current and Power Monitor bindings.
 
-Leo Yang (2):
-  dt-bindings: Add INA233 device
-  hwmon: Add driver for TI INA233 Current and Power Monitor
-
- .../bindings/hwmon/pmbus/ti,ina233.yaml       |  57 +++++
- Documentation/hwmon/ina233.rst                |  77 +++++++
- Documentation/hwmon/index.rst                 |   1 +
- MAINTAINERS                                   |   9 +
- drivers/hwmon/pmbus/Kconfig                   |   9 +
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/ina233.c                  | 200 ++++++++++++++++++
- 7 files changed, 354 insertions(+)
+Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
+---
+ .../bindings/hwmon/pmbus/ti,ina233.yaml       | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
- create mode 100644 Documentation/hwmon/ina233.rst
- create mode 100644 drivers/hwmon/pmbus/ina233.c
 
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+new file mode 100644
+index 000000000000..2677c98dadd1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,ina233.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/pmbus/ti,ina233.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments INA233 of power/voltage/current monitors
++
++maintainers:
++  - Leo Yang <Leo-Yang@quantatw.com>
++
++description: |
++  INA233 High-Side or Low-Side Measurement, Bidirectional Current
++  and Power Monitor With I2C-, SMBus-, and PMBus-Compatible Interface.
++
++  Datasheet: https://www.ti.com/lit/ds/symlink/ina233.pdf
++
++properties:
++  compatible:
++    enum:
++      - ti,ina233
++
++  reg:
++    maxItems: 1
++
++  shunt-resistor:
++    description:
++      Shunt resistor value in micro-Ohms, Please refer to the actual circuit
++      resistor used.
++    default: 2000
++
++  current-lsb:
++    description:
++	    Calculate the Maximum Expected Current(A) / 2^15 in micro ampere (uA/bit).
++	    e.g. 30A / 2^15 = 915 uA/bit
++    default: 1000
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        power-sensor@40 {
++            compatible = "ti,ina233";
++            reg = <0x40>;
++            shunt-resistor = /bits/ 32 <5000>;
++            current-lsb = /bits/ 16 <1000>;
++        };
++    };
+\ No newline at end of file
 -- 
 2.39.2
 
