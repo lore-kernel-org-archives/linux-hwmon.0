@@ -1,103 +1,108 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7161D8A0B
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Jan 2025 09:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A44C1D6193;
+	Mon,  6 Jan 2025 09:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736155659; cv=none; b=Tn6Fq7k+pAa8riIUFc1wkP176ZYHbmi6w98HFZzurwUs8fzVyHIWiutj0/USavJk6yOAVonOhOrbtY5NoLzkAwjNeaaDZ+CeAH6Xa01iPUpegGf8ZbD2vgKceZVdShVmHyrgA1OP07QfdKonbIHtIV1qDETOTT9RGX3n/EDmPd8=
+	t=1736156757; cv=none; b=VQii8JOvSeHREfsI0YnVwzhQMfgX98Muvq0jLa8AeWDOw4v1LgA0exli2iKjkujUawTxlOzjj1qdWhIG6rP/8K331Qj18TdaH59yyou4x3xAg/e8gUk6uJW/1/8kN1xHV7MTOFz1fYN6RUzojBbBPXNbBLhe6DR56KpP+8aSzEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736155659; c=relaxed/simple;
-	bh=fhqmTRr7u4BHKvHcV1kZc0UltFaqJQUCBzHU9D8MLSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qcqtQu6Qwhl1Be2RI4IFThVzmyziWxXw4x3/95YtAvBi2L3jffncBucm4Wh2uI8YO0YHhiq+uUmVdOgxu8SZ2unqrllFfsnfgFzdUAM3vMt77ni8qZM6iM+0ZKbQDNQf76DiCaidLQsAVr+LZ5bE6CO9v6wlrCC8yNBlnb8fjZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NPKmm3zp; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1736156757; c=relaxed/simple;
+	bh=ZQU+ovsD55f64DF1zOadfrUNcIGee3cjAidEI96IOp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YKCZlsOTl0fiLjZqec7mOSOtGbPf2GOeI+qWVlIDVOIBncapbaRg9igak192T/amNGYauk1n91d9FsOo2fHOxGc5mLAo01KGhiz7i4Y0+czbS8jHss28ly/dujeW+IgryAy2xT+8gbXavJucGOuVGqtAhC9t2GkCTYVGihPmWgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEX/BOsG; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NPKmm3zp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=aGWd2BQY7AIqRD
-	QgZzEn8Ps7vMIe6tCz1E86UjvA7+Y=; b=NPKmm3zpgiWmosqxEwjyz6ZjhJLOCy
-	Yc2ZZeW8CcITXry4Jf0vs0kPDgBRNX4Eyt4QWruJt6TPMoaMLP0i12R1AOs7BxIJ
-	n6YgxbZda3xnN1bo+5kp9CUOMmxdCPA2bb4oH+APlF4kSTzUInfubk8lNpz+7CH+
-	KOvXu4YFlx3wbHcjgatRexGESVqTmLoeo3L9tJsWfdIP+IHXnehlVJ6JNMxW0Xc+
-	rZTDjXtvEHUnXc/Ygml3nW/0+Y9tOTagfjtEROkdBmKi6x6de27txJMZtJca5+oR
-	fWdqhUpkieLMwVwspdzhPBEPOvuRwdsWORh+mR7nOTlMblzSvsffu2Iw==
-Received: (qmail 1727747 invoked from network); 6 Jan 2025 10:27:26 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jan 2025 10:27:26 +0100
-X-UD-Smtp-Session: l3s3148p1@Tn2LPAYr1psgAwDPXw20AOMQ2KO98fSH
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-i3c@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	=?UTF-8?q?Przemys=C5=82aw=20Gaj?= <pgaj@cadence.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH v3 0/5] i3c: introduce and use generic parity helper
-Date: Mon,  6 Jan 2025 10:27:18 +0100
-Message-ID: <20250106092725.22869-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEX/BOsG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736156754; x=1767692754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZQU+ovsD55f64DF1zOadfrUNcIGee3cjAidEI96IOp0=;
+  b=KEX/BOsGgVg0iKJ5HPqVq15YJDhWRAJnsa0c9U4vMs+ZGtxws/aO1qrp
+   H1XzXNNZzisG7gqKdyNS16Bkg4i4UUxQUBZJlv3DSGENtssKqW/MHpcfD
+   +FYOZmdKpjYVQx61tKatWUT/iKLE25QEaQAGrgKjxaXdjo8rL6+XGRcLL
+   YOC0CoEJVEZwpdAZEb+rJYsuyf3xur+ZsMsKNujdUj3aFqNFeh+zdFqSW
+   JKCmdp2KL7O3johaPpOwlESYuuX0YIHSqRD36af/xOfCKYYQNUYC0cRrL
+   DAD+OGG/WizlmRetq6h3qmazyOuUbFspkR4PN+6JdrwqcV33SffSFspJ2
+   g==;
+X-CSE-ConnectionGUID: v/dKm1aTSxGpWbSd11yLag==
+X-CSE-MsgGUID: sAvJkz/uTim49mCuL3qcQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11306"; a="35537144"
+X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
+   d="scan'208";a="35537144"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 01:45:53 -0800
+X-CSE-ConnectionGUID: 0fzl6LKNQaOw5xaSmu4jfA==
+X-CSE-MsgGUID: eEhcNsKlTfudbQR8gqUD3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
+   d="scan'208";a="102292716"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Jan 2025 01:45:50 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tUjgB-000CT1-2H;
+	Mon, 06 Jan 2025 09:45:47 +0000
+Date: Mon, 6 Jan 2025 17:45:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
+Message-ID: <202501061734.nPNdRKqO-lkp@intel.com>
+References: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 
-Changes since v2:
+Hi Leo,
 
-* fixed commit messages from 'get_parity8' to 'parity8'
-* added tag from Jarkko (thanks!)
-* rebased to 6.13-rc6
+kernel test robot noticed the following build warnings:
 
-All acks from bitmap.h and HWMON maintainers are already included.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.13-rc6 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Old coverletter follows:
+url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-Add-INA233-device/20250106-151934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250106071337.3017926-3-Leo-Yang%40quantatw.com
+patch subject: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+reproduce: (https://download.01.org/0day-ci/archive/20250106/202501061734.nPNdRKqO-lkp@intel.com/reproduce)
 
-I am currently working on upstreaming another I3C controller driver. As
-many others, it needs to ensure odd parity for a dynamically assigned
-address. The BSP version of the driver implemented a custom parity
-algorithm. Wondering why we don't have a generic helper for this in the
-kernel, I found that many I3C controller drivers all implement their
-version of handling parity.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501061734.nPNdRKqO-lkp@intel.com/
 
-So, I sent out an RFC[1] moving the efficient implementation of the
-SPD5118 driver to a generic location. The series was well received, but
-the path for upstream was not clear. Because I need the implementation
-for my I3C controller driver and I3C is a prominent user of this new
-function, I got the idea of converting the existing I3C drivers and
-resend the series, suggesting this all goes upstream via I3C.
+All warnings (new ones prefixed by >>):
 
-A build-tested branch is here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i3c/get_parity
-
-Looking forward to comments...
-
-[1] https://lore.kernel.org/all/20241214085833.8695-1-wsa+renesas@sang-engineering.com/
-
-
-Wolfram Sang (5):
-  bitops: add generic parity calculation for u8
-  hwmon: (spd5118) Use generic parity calculation
-  i3c: dw: use parity8 helper instead of open coding it
-  i3c: mipi-i3c-hci: use parity8 helper instead of open coding it
-  i3c: cdns: use parity8 helper instead of open coding it
-
- drivers/hwmon/spd5118.c                  |  8 +-----
- drivers/i3c/master/dw-i3c-master.c       | 14 +++--------
- drivers/i3c/master/i3c-master-cdns.c     |  3 +--
- drivers/i3c/master/mipi-i3c-hci/dat_v1.c | 11 +--------
- include/linux/bitops.h                   | 31 ++++++++++++++++++++++++
- 5 files changed, 37 insertions(+), 30 deletions(-)
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
+   Warning: Documentation/translations/ja_JP/SubmittingPatches references a file that doesn't exist: linux-2.6.12-vanilla/Documentation/dontdiff
+   Warning: Documentation/userspace-api/netlink/index.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+   Warning: Documentation/userspace-api/netlink/specs.rst references a file that doesn't exist: Documentation/networking/netlink_spec/index.rst
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/ina233.txt
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
+   Warning: lib/Kconfig.debug references a file that doesn't exist: Documentation/dev-tools/fault-injection/fault-injection.rst
+   Using alabaster theme
 
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
