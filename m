@@ -1,65 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D72419E806;
-	Tue,  7 Jan 2025 07:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172DB1E2858
+	for <linux-hwmon@vger.kernel.org>; Tue,  7 Jan 2025 09:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736233912; cv=none; b=mHXcAEN4QssauzEoMs7PTz+19tODst81eInvpIEztfhTqgi65qRfcyjYau4Qgwh41iPM5rygTBpi0UzcDNQgDxwzww7QBWJ9lR7DpZQPn193ROwbj4nRkEYzw3mkAbFf8nd9eee6AKvi+Q1XVy31J0Nkhj1S/L1iASSnT65JEjM=
+	t=1736240534; cv=none; b=eIRwiQIKppkMRgYVkaFMG2pxRW1HCYvIrvW34VSiybpab/do712RvBxZjSW4j4WYWUs8EqdMyrSMHP9pp+CiR36AhvTrplPKrFmWNJfODTUCIL6Wtn9DQ/KtbeIwxoCwbmmsSrdM0EX2IgtnUYa8RSxYACsNL4wHLR5m1bywlYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736233912; c=relaxed/simple;
-	bh=kz4dkqGY63si1DYaVHHi6BHE15iPw9g7NKwyNebekAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gmQ8F585CMTfuGgxRy6gbzliVJwpHmVLTxKRgmi44UXXEgvxCVrGRimab4Ch9+kSk/y/baACR8u+hy5qAsDSwyLQTQJDK1zGcEvr9wLPRXN7HZfSmIlJGwCeGSDSj+ClQoiscpSbgNY8MUsizgjAaIeO8nILfm8j1kVmkqQUYeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QcYa9JFm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736240534; c=relaxed/simple;
+	bh=m4dZUh60u/mP9K/YIW4a9JOlkH+HgpGeePQd9+q1fYE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=h01Cqh1kZbgccXCdk1DzBGocDy+dUjy+LvoXBIv7BW37NpFcNBsIIA90qZjayRQ1zKhazkp8OxJNTDkoQSP+4PMRlRWlYWCcljyCTxVm3EyfGKftbLxB3xpxbDkuqnKhEFcOe2DwMZ9bR6wXRVf61XF6hryhsHQqY0QkqvX0yME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Jl4M7yTT; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QcYa9JFm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F7E9C4CED6;
-	Tue,  7 Jan 2025 07:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736233911;
-	bh=kz4dkqGY63si1DYaVHHi6BHE15iPw9g7NKwyNebekAQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QcYa9JFmkH9J6YtIIyZoP8qmjyoPfv1xVKOC1FcX3xAI99vSrG++GpxetEtzc/6hY
-	 2bjrSl7CQnWszl9f1p1T6QuyInt7amACuxSeaIO77JF/b0Q/oSecJ0vlOR7zUuVVAb
-	 9etMUj2OuR3+o91OAkGqUAg2pKQr6cI/fBvDMZiAHhc1OqK13hBpQRKCOBdjQGw0Sp
-	 djdDUyAzJVrrzsc/b5GgtTMIa1RPW92OoaF7OtNyJcQVRKT1GbvmnIXmvO7i3ZbsqU
-	 gf2LWudNGF7PJh/GWewDDfBIzixTucb8z87Tnj22HS5u/VTuJHJ/CwuvdQyYJUSeU5
-	 1ys+3RR+lMOaA==
-Date: Tue, 7 Jan 2025 08:11:48 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: adm1275: add adm1273
-Message-ID: <sl3eoqolbui4ce55v63ht3sc4k5o5jmvdvxnvwsmqwibawjbdr@4zwkr34gtlpd>
-References: <20250106131740.305988-1-johnerasmusmari.geronimo@analog.com>
- <20250106131740.305988-2-johnerasmusmari.geronimo@analog.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Jl4M7yTT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=3esdoiFUb3AEevKBNMcpAJ6KfgvtuQ7LV32gNwqiGFg=; b=Jl4M7y
+	TTjNgAoBMM0fzgwlpdNwhWedqnlibkxCCVlKu0nJEY5R3AD80JO7w5+dUI115wKT
+	+OtzoIHK7KtHltOseIEQUj1URJweRklK+880BEyl5Jw2R2wzxL52SH4Un1+I+FIi
+	uKNung5c4LxuzIfRV9YeO+IqFxq04DFCnBkUB8jnHK31+WWg8QGZXMzIuLNYz+hZ
+	aVNaYZwqwI9QNXnesom7OQUZ08anvBX7ccToarXwhUvIClpPG1X0dsnRxsh/dOs1
+	pNVOHuDV/RRFP6oZ+6+jCK9I0W4ozZzZCvX+bkvDurNKZssqCwDQoofoa1XOMaze
+	2TQFceHsD+BR5QqQ==
+Received: (qmail 2125271 invoked from network); 7 Jan 2025 10:02:08 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Jan 2025 10:02:08 +0100
+X-UD-Smtp-Session: l3s3148p1@qa3t/xkrXJMgAwDPXw20AOMQ2KO98fSH
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i3c@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v4 2/5] hwmon: (spd5118) Use generic parity calculation
+Date: Tue,  7 Jan 2025 10:02:00 +0100
+Message-ID: <20250107090204.6593-3-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250107090204.6593-1-wsa+renesas@sang-engineering.com>
+References: <20250107090204.6593-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250106131740.305988-2-johnerasmusmari.geronimo@analog.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 06, 2025 at 09:17:39PM +0800, John Erasmus Mari Geronimo wrote:
-> Add support for the adm1273 Hot-Swap Controller and Digital Power
-> and Energy Monitor
-> 
-> Signed-off-by: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+Make use of the new generic helper for calculating the parity.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+---
+ drivers/hwmon/spd5118.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+index 6cee48a3e5c3..358152868d96 100644
+--- a/drivers/hwmon/spd5118.c
++++ b/drivers/hwmon/spd5118.c
+@@ -291,12 +291,6 @@ static umode_t spd5118_is_visible(const void *_data, enum hwmon_sensor_types typ
+ 	}
+ }
+ 
+-static inline bool spd5118_parity8(u8 w)
+-{
+-	w ^= w >> 4;
+-	return (0x6996 >> (w & 0xf)) & 1;
+-}
+-
+ /*
+  * Bank and vendor id are 8-bit fields with seven data bits and odd parity.
+  * Vendor IDs 0 and 0x7f are invalid.
+@@ -304,7 +298,7 @@ static inline bool spd5118_parity8(u8 w)
+  */
+ static bool spd5118_vendor_valid(u8 bank, u8 id)
+ {
+-	if (!spd5118_parity8(bank) || !spd5118_parity8(id))
++	if (parity8(bank) == 0 || parity8(id) == 0)
+ 		return false;
+ 
+ 	id &= 0x7f;
+-- 
+2.45.2
 
