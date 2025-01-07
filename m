@@ -1,77 +1,70 @@
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23F2647;
-	Tue,  7 Jan 2025 05:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B181817C9E8;
+	Tue,  7 Jan 2025 05:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736228220; cv=none; b=cNtYJfSUt4dcN+CNJulbvJCxMd5VTExQjxkbb2a3y7q44SkcIgWrJgOOEYaF1HGWARA3k44/geG3hIDl0lZM33hdywlTmSDHNaBcR3jfSFZ/tB5YBxQ4VUthyuuj/lFlHWa4nfMv41JM30Z1VdGo+jW82LC1V3smkr9PDJStd2E=
+	t=1736229218; cv=none; b=bPnNn9YgaNx46rvtE6oCYyXfUzhX9GcRvdPEb0gI14aYLQKo3/vG6bOgJeQLxXqP/WCaJekI6+PvMTap2UqL0l1q6z+6HxlP5V+RKUYwKVrCnvyVDFJz4vWpRuvpTb1eW6Yz25DzorN4UxzOZqW7JVEOpHtVZo19aziUSig6crg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736228220; c=relaxed/simple;
-	bh=LS6g789aLB8ApLS1q1d05BR3y23KGQ689leRV5Vb9so=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MHB4j2DGsrTP9JeiculLP+EeLY5PG7dbmn6qWn8VhmMbLc1NdjsOUrRE66f1aC2Cvyz+IbdEVm6qL64WopmsLk9KTwmrhV2kaY1iCe1ZVXFeswrJrOzk2LaBB7q1UQL4bp6IIfTzqsPbJ09CwCtoyHQQudixP/E5DBDCclYiFjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=PoNvvGRb; arc=none smtp.client-ip=203.29.241.158
+	s=arc-20240116; t=1736229218; c=relaxed/simple;
+	bh=LtjlwhG9B9G5MFbc8lneU17K4uoWCTM5laZrvJwRNyY=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=SFUvLygaZBdf2D3UrOAXstHetQB1e2ouyWozCER0SSAbv8VUOs9iyULooqK1NgICKOz3KTU81nssDY14mSjE6PRsSCLGAHf/CgalgKG+0KMaqdvbD1/KDI0uAjtEWNGwmx8gaLXZyfeeFs8Fc+AwH8cQLpImh15xHTQ2lUbZtsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=ZAd0MKTq; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="PoNvvGRb"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="ZAd0MKTq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1736228214;
-	bh=LS6g789aLB8ApLS1q1d05BR3y23KGQ689leRV5Vb9so=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PoNvvGRbsBte9//EfiRckwJTLJc5iTLakSR0TjCowl4xcFJx+B2MlUYLh8DgWVtA9
-	 +nWw/DQDe7EtDtE37FLAiPSeI4fa0SATvGfh1Ps5BsWQAyWsOJJU+S/mVz3V9hI60x
-	 TMmHI1HPeR9WKrjsvxg/82JHRUuDjhPeZG+HK/MF2CN/8NwPL4wqXsb9mkVTYcdcHl
-	 kjzRDP1rwSXXWy7NFuXmRh/drKGVuefB27i8I8UwFr6GByaa9NNbqWQYe+jk0wFVdG
-	 3lcu7WHBcxbgtzX5jnClTJRf6HRivENtNqB13pbkst5RcvHKTldRrOddKmrRIXUhFQ
-	 2JpeLCpYBQBFw==
-Received: from [10.200.97.88] (203-173-1-122.dyn.iinet.net.au [203.173.1.122])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id C87FE706BE;
-	Tue,  7 Jan 2025 13:36:47 +0800 (AWST)
-Message-ID: <0b592466305793dfa788daced6368dc4c9e3852c.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v4 4/4] ARM: dts: aspeed: system1: Use crps PSU driver
+	d=codeconstruct.com.au; s=2022a; t=1736229213;
+	bh=d7GzDGEIhCY1GK+byjPJdhkSL4A03CBJlx1sryt4hPo=;
+	h=From:To:In-Reply-To:References:Subject:Date;
+	b=ZAd0MKTqX//BY/sdq4QR1aa6bCpL2f+2d1H7bdthMjEiGRjDZKYXAAaxkbDYkjyIt
+	 t/7hbnDF1fryFVB0E0T0Oh3RYRoMdhhul9LVfkOfsuKJLJMqLWkSxGOXtjyPZX6Krs
+	 QhsxZ20PtOEB9K3bgkuyWdtOtWdkReA6alRnUwCL2RzQt0NiIxsPTOdVrNC81CZ7Gh
+	 cJibHg/zrrw3h+eOs+2mxqYaOe0mjzJQiLJLk4K5p7hTJONu5F6jri3yhJHag8OEPx
+	 hHq74gvuPRgJaXlRFSN38Rq6j5qEdvtSvPTpdQHjlbvucGFmFjaVcB9Ymw3FyQAHfR
+	 gmbsuyE3ozbMg==
+Received: from [127.0.1.1] (203-173-1-122.dyn.iinet.net.au [203.173.1.122])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 33B74706BE;
+	Tue,  7 Jan 2025 13:53:31 +0800 (AWST)
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Guenter Roeck <linux@roeck-us.net>, Ninad Palsule <ninad@linux.ibm.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- eajames@linux.ibm.com, jdelvare@suse.com, corbet@lwn.net, joel@jms.id.au, 
- Delphine_CC_Chiu@wiwynn.com, broonie@kernel.org,
- peteryin.openbmc@gmail.com,  noahwang.wang@outlook.com,
- naresh.solanki@9elements.com, lukas@wunner.de,  jbrunet@baylibre.com,
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ eajames@linux.ibm.com, jdelvare@suse.com, linux@roeck-us.net, 
+ corbet@lwn.net, joel@jms.id.au, Delphine_CC_Chiu@Wiwynn.com, 
+ broonie@kernel.org, peteryin.openbmc@gmail.com, noahwang.wang@outlook.com, 
+ naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com, 
  patrick.rudolph@9elements.com, gregkh@linuxfoundation.org, 
  peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
  linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
-Date: Tue, 07 Jan 2025 16:06:46 +1030
-In-Reply-To: <d3de9f99-1cc2-491e-8dac-1a5d243e17f0@roeck-us.net>
+ linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org, 
+ Ninad Palsule <ninad@linux.ibm.com>
+In-Reply-To: <20241217173537.192331-5-ninad@linux.ibm.com>
 References: <20241217173537.192331-1-ninad@linux.ibm.com>
-	 <20241217173537.192331-5-ninad@linux.ibm.com>
-	 <d3de9f99-1cc2-491e-8dac-1a5d243e17f0@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+ <20241217173537.192331-5-ninad@linux.ibm.com>
+Subject: Re: [PATCH v4 4/4] ARM: dts: aspeed: system1: Use crps PSU driver
+Message-Id: <173622921112.97504.9310903819331925081.b4-ty@codeconstruct.com.au>
+Date: Tue, 07 Jan 2025 16:23:31 +1030
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-On Wed, 2024-12-18 at 07:16 -0800, Guenter Roeck wrote:
-> On Tue, Dec 17, 2024 at 11:35:35AM -0600, Ninad Palsule wrote:
-> > The system1 uses Intel common redundant (crps185) power supplies so
-> > move
-> > to correct new crps driver.
-> >=20
-> > Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
->=20
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
->=20
-> This patch will need to be applied through an arm tree.
+On Tue, 17 Dec 2024 11:35:35 -0600, Ninad Palsule wrote:
+> The system1 uses Intel common redundant (crps185) power supplies so move
+> to correct new crps driver.
+> 
+> 
 
-I'll take it through the BMC tree.
+Thanks, I've applied this to be picked up through the BMC tree.
 
-Thanks,
+--
+Andrew Jeffery <andrew@codeconstruct.com.au>
 
-Andrew
