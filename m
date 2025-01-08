@@ -1,125 +1,144 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0CC1B4234;
-	Wed,  8 Jan 2025 08:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8482319995E;
+	Wed,  8 Jan 2025 09:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736326636; cv=none; b=e0hiXc62EAPr9W4DvmvLSMukaBfuRsUEpyPKAgmlTxoNTKIB3TehmiHIMnVN3Y4i+znURjaksAwsaBGRIRp7qLckc3OG5nge9EhgSjY5pNJipMd5HUcjJm/hJOd1L6CkiH35rdL0fmiF6UYeuQWy38gcHPkbdVxNjIeOzoG3ohs=
+	t=1736329377; cv=none; b=DNecJ9InZ2CH6WGur/6Pb30XTgCDihKqGovLAelquckc4ZFTHl0iJRa5FNcTu2t49ecHPkm6WaUeQaYS+xHQSAqC/ntChK0Bt0mimYQA9k09oFAK5advDfCY/0wGDpzfQnG0sE1shb3x5yGJIUr2wB4zdsTa55oumiuix8jVcek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736326636; c=relaxed/simple;
-	bh=lNXRDatOJu5AEUnpB47+yGQJKMHkwVb0q6YKIifgg78=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ay8fEgd56oBM8llJM5HYwHdqKpR+8wYuM/YRLPVLWIklGdnnudf/VqD8Hi/aKJScLRZ3ygjjh/brvVt8N9vS5u+wOGSqd9nyXQQeJ2GZgXlq95eLdLIwpnqgGQaAncxhWivaoq/C+S/xjyttHPx1wcOuBk3DyhX4Ojc9j2pemWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YBb8C4Ss; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1736329377; c=relaxed/simple;
+	bh=63viRNtU92cC3Sq4KYkQMj1dhelzfXETfgdJzzPPyKk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Qid8OLa567invEZi8Qm0njY4e1lI358WezoVgO40uWITc0JwhaxOxMNwTyNt8hSBwfw8BB8SUHPnJna8duR9XyLjeVYAGoY1N80XcnHR5KxfkhDkGRpeaUkryBxK8HxX2jAF56K3V47V5e/L/Ai65uDL5T7kEyUldJK5U8Uk/GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ha1F9tOS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YBb8C4Ss"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 206C540E0267;
-	Wed,  8 Jan 2025 08:57:12 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jCyKyuwpsEUd; Wed,  8 Jan 2025 08:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1736326627; bh=XU4yPGUMtN5AcrN8e10m2z+GGweQxfC2fsjHTizZiWw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YBb8C4SslBsBPhyz7BVPU3EReDkLapSqcKfLIgykVCbUdovh04HrMA2+X7j9Vj9PH
-	 nodMQwb7ouT9hGXdso8ymi5Ab4Fc72GcIhxcDQLPWqePK6yFYMbBtqpt2op3jXsAMR
-	 ejG2cZIcFBVGuKrZ6YrbIvKSDLVPMqA/ODivTsOWlPdrw9CAhoNMjih5k6cvotaI0T
-	 oexepdFVmd7RCz9pdhtmSDXS8WVQ7vIjMWNNZ+9xDak86x6gxOHFmPjEEAH/vQUfdU
-	 79kNa/XRULQvIv+EOQecTYDAOU6tUkNTsrCILbO7bhEGcRDPobXtJTbgaVrEFV+XwA
-	 n9tC2LC1aKQ3bHejMGW6XGCTtgM3hPyQyj+lImCCB8xqzDuFQaDNaR1Ucg0zS2hm2Q
-	 iqAXxPSm5s/eCqnqPcV8/zvvmLO6UUyVn1ixee71oeaE+bwfREHtAlZcA6PVniH3Bt
-	 u3DEXrEm23gYBDSkKJxFqgDuHrGWS1yz9VyCeRS0PfSC4UHo10leDFfa4AXJPnYB55
-	 5gwTyBhRM38RIlxSaIwDM1U3bQfbaF/eV4G0320dlvvouYqF5JbZJimNA+HeoqZPPY
-	 YjfjtMONk/Aa2w5Qm1+/9SAbNXrD1c6sqRUqn3SEPlSopaxjqCkZxr1fzrq2lxxzSs
-	 jQeaalM+lK0rLSHTA5C3aqVs=
-Received: from zn.tnic (p200300eA971F9314329C23fFfeA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:9314:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7E10440E0163;
-	Wed,  8 Jan 2025 08:56:50 +0000 (UTC)
-Date: Wed, 8 Jan 2025 09:56:44 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
-	Tony Luck <tony.luck@intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Suma Hegde <suma.hegde@amd.com>, linux-kernel@vger.kernel.org,
-	linux-edac@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 09/12] x86/amd_nb: Move SMN access code to a new
- amd_node driver
-Message-ID: <20250108085644.GDZ349zHY1Z1ePbygE@fat_crate.local>
-References: <20250107222847.3300430-1-yazen.ghannam@amd.com>
- <20250107222847.3300430-10-yazen.ghannam@amd.com>
- <6b1a0d73-5800-44ca-a28d-f2cd7e3ef1bb@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ha1F9tOS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1058DC4CEE0;
+	Wed,  8 Jan 2025 09:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736329377;
+	bh=63viRNtU92cC3Sq4KYkQMj1dhelzfXETfgdJzzPPyKk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ha1F9tOSh1dOLcyB58gE1vZQwzcy4VnjIT77LKqOSFnyn/SbuHtvsv9AWsfY7QT+h
+	 TeAQNrsIOyr9z11+R1PSyUyicvHgXxsSJrgY0zTRx07SDdK7UUBjESRLfSGWfYHBXn
+	 4ifLq947WKAjEcqRQhpLSnQoo42xD4nYD60rCjHuqpbnhp+AQq3AdlaRqTgl60JgM1
+	 f97zadQrXmezx0QI4hKj96wtfsNbz/UgOxwubyx/5RHkoFsd8GjFtbCmZcwfeRJwIX
+	 ag6pAGFbLWIIgB7UicZ8bd3cy5DwpThUXV0bm6jsqSLrZgTQOpISxRyZP6tgFrOI2t
+	 f6ETe9lxnNPmQ==
+Message-ID: <4a4f9773-186c-475c-bfac-72e696233501@kernel.org>
+Date: Wed, 8 Jan 2025 10:42:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6b1a0d73-5800-44ca-a28d-f2cd7e3ef1bb@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: adi,max31827: add MAX31875
+To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
+ devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+References: <20250108082531.15467-1-johnerasmusmari.geronimo@analog.com>
+ <20250108082531.15467-3-johnerasmusmari.geronimo@analog.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250108082531.15467-3-johnerasmusmari.geronimo@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 08, 2025 at 11:00:21AM +0530, Shyam Sundar S K wrote:
-> > diff --git a/drivers/platform/x86/amd/pmf/core.c b/drivers/platform/x86/amd/pmf/core.c
-> > index 06a97c533cb8..7f88f3121cf5 100644
-> > --- a/drivers/platform/x86/amd/pmf/core.c
-> > +++ b/drivers/platform/x86/amd/pmf/core.c
-> > @@ -8,13 +8,13 @@
-> >   * Author: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-> >   */
-> >  
-> > -#include <asm/amd_nb.h>
-> >  #include <linux/debugfs.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pci.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/power_supply.h>
-> > +#include <asm/amd_node.h>
+On 08/01/2025 09:25, John Erasmus Mari Geronimo wrote:
+> Add max31875 to dt-bindings of max31827
+> MAX31875 is low-power I2C temperature sensor similar to MAX31827
 > 
-> You can adjust the first header inclusion to maintain alphabetical order.
-
-It is the linux/ namespace first, then arch-specific asm/ namespace in case
-the second gets to override some generic implementations from the first. You
-can grep the tree for examples.
-
-> >  #include "pmf.h"
-> >  
-> >  /* PMF-SMU communication registers */
-> > diff --git a/drivers/ras/amd/atl/Kconfig b/drivers/ras/amd/atl/Kconfig
-> > index 551680073e43..6e03942cd7da 100644
-> > --- a/drivers/ras/amd/atl/Kconfig
-> > +++ b/drivers/ras/amd/atl/Kconfig
-> > @@ -10,6 +10,7 @@
-> >  config AMD_ATL
-> >  	tristate "AMD Address Translation Library"
-> >  	depends on AMD_NB && X86_64 && RAS
-> > +	depends on AMD_NODE
+> Signed-off-by: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31827.yaml           | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> the above "depends on" can be updated to:
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> index f60e06ab7..9363fa371 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> @@ -4,16 +4,19 @@
+>  $id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
+> +title: Analog Devices MAX31827, MAX31828, MAX31829, MAX31875 Low-Power Temperature Switch
+>  
+>  maintainers:
+> -  - Daniel Matyas <daniel.matyas@analog.com>
+> +  - John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
 
-the ATL uses AMD_NB facilities (node_to_amd_nb()) so I'd prefer to have
-explicit dependencies in Kconfig.
 
--- 
-Regards/Gruss,
-    Boris.
+This needs to be explained in commit msg.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: adi,max31875
+> +
+> +    then:
+> +      properties:
+> +        adi,fault-q:
+> +          enum: [1, 2, 4, 6]
+
+You need to update top-level property to allow 6. Then narrow the
+choices for rest of the variants.
+
+>  
+>  required:
+>    - compatible
+
+
+Best regards,
+Krzysztof
