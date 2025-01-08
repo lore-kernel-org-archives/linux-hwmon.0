@@ -1,96 +1,100 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4FA1AA1E0
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jan 2025 07:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AAE21B0406;
+	Wed,  8 Jan 2025 08:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736321038; cv=none; b=TMkO/ORi8bvdfI9V5haYMtc43u2U2We4YB7JiDsKMPH0zpeLhZ0B/8msLRqBK7Dyd9DQRuq43/jTerZlrrZNcSf5pO6DILSpHRkliKyevP03VCFjP6NnYUpvbX9635jEayPGVwc/hOWOUIcu/GJW9V6yjwmxTijkdUCRnoY2O3A=
+	t=1736324772; cv=none; b=scKQTBAWsnM5vEILHtjDZ7ABlEKIQ0mlsv3dodNY59MlW8Y9CRGJKPlylOh/hGPtCVv9rj8Q62JVunac+o2/llUcpzGGy0+pEJy6f6dNkjVlgPA9rJW2XlvOF/w41vMzR2eBk2NGajYyejNPi8vTlmwbdbfVyxX3GGJqEEdmRsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736321038; c=relaxed/simple;
-	bh=6jocAxatsJ0SrTGjfAKKJL3B2gDniLv9c+THC51JLak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B6eWBCUZxhg7GEEca06qUeXtMAR1KeIRcqStamKPfxsnvapJ/YyQ4ejlE4bYcGB+3GD6k+VyOtq9Ouyx0fzIR+BK/DyeSXbsztytmkXrlnzd/unFM+5GeXBLTQXlcXnmJSXfnuX9sm2ObQX11RhsCUr25FWvUxvFoUw2wwcdnsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iS03Qn1G; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1736324772; c=relaxed/simple;
+	bh=tiZPEPGuNmZU0W2u0gzV6gTwKOSmT+yCKWAAjRssC/E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Qsb4R9S8jNWMEjbMenb/RifsqahcFwn2UZJcThXhtUg7uadPOUocECrHhQuQfYlHGlrXwqe72Aw//nmeTtVbSLqvveNVFMGY9q2W+9g6PBvypC9F7Wv6wNCF/wkTVlLdx2BjefIoG3je0Wz4hdJWypSSuWSsuHBKGRki/1uyVB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=UDT+JlOF; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iS03Qn1G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=6joc
-	AxatsJ0SrTGjfAKKJL3B2gDniLv9c+THC51JLak=; b=iS03Qn1GSGDly5gUIrdP
-	RSmbq4k8G71yQH+2rqPHoP8Eqd16y3QMCN4dQNA2yxL/uNmO7XQza3/2plhCfoBV
-	wYKIf4y5iP5saMn7afwmsw02G19MIO7i0GxOq9qD0eWx1BNKuKArDdoCFJ0bJ7OC
-	RaPe6Yy5x6GigMg71DOG8nSTe8vTxa6SHzddeHC+Cm5rApT47xrr2CJFIS2Lmfsv
-	CNHP2SwF5dXrpQOH34txIr4XheEAhnkn0k4DtYLEFHHk1yAt4hX5GppDF6bxJV7n
-	dZvBBZmWG1KJPeS7ooY1VWsCTExoxAfK6dFd5rbHmSOT6J1Fr6wyf97h/vlCfXRr
-	4g==
-Received: (qmail 2471148 invoked from network); 8 Jan 2025 08:23:51 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Jan 2025 08:23:51 +0100
-X-UD-Smtp-Session: l3s3148p1@8NtFviwr6rAgAwDPXw20AOMQ2KO98fSH
-Date: Wed, 8 Jan 2025 08:23:50 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-i3c@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v4 0/5] i3c: introduce and use generic parity helper
-Message-ID: <Z34oBoS0KL4Uz2Jn@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	=?utf-8?Q?Przemys=C5=82aw?= Gaj <pgaj@cadence.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Yury Norov <yury.norov@gmail.com>
-References: <20250107090204.6593-1-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="UDT+JlOF"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5087tt5O005800;
+	Wed, 8 Jan 2025 03:25:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=FkxR0v9nas5hYvpZ7exutnfUXYu
+	1GGHoTi8qc5VJ0X4=; b=UDT+JlOFw7lHqEeLEph+Qjcma5HQKswCc9b07cP775n
+	wQbPouyb21Zynkc8z+T9K3FvZrsy1YUyy8gRkyyqVr/Y5hnQC4KlgZbXukv0qGY7
+	PywfGbf7ZwH2g5mRJ2qNi0GT6vYojzV2SQ2pHzK5AU3BUZZLkVyOuJg2SvJlHWXu
+	xI8z/FCPer3h5gQo6WHERToqrMchpQxAO5iTsSHoQCyB8ird1sPC1bTT16ZSvXoA
+	PjMtL4zGJ4pbZz1QQSeJ+KqD4TAhzpZAL6x0R7gPkXuCrzsHcXT4nhqBQiADQc03
+	B+nqyKHsmjR44L/UyLGgQPkr3gRws61Ti7X6VC6EepA==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 441ndj03u7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Jan 2025 03:25:54 -0500 (EST)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 5088PrVJ037157
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 8 Jan 2025 03:25:53 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 8 Jan 2025
+ 03:25:53 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 8 Jan 2025 03:25:53 -0500
+Received: from JGERONI2-L01.ad.analog.com (JGERONI2-L01.ad.analog.com [10.117.223.6])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 5088PfdN026945;
+	Wed, 8 Jan 2025 03:25:43 -0500
+From: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+To: <devicetree@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor
+ Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 0/3] Add max31875 support
+Date: Wed, 8 Jan 2025 16:25:28 +0800
+Message-ID: <20250108082531.15467-1-johnerasmusmari.geronimo@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gQCqiv636RgPLUc8"
-Content-Disposition: inline
-In-Reply-To: <20250107090204.6593-1-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: X-ps5ICipM6NQkfyYiCqpC-DeipUrxOO
+X-Proofpoint-ORIG-GUID: X-ps5ICipM6NQkfyYiCqpC-DeipUrxOO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=921 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501080067
+
+The MAX31875 is also a Low-Power Temperature Sensor similar to the
+MAX31827, with some differences of register addresses and bit fields.
+
+This patch series adds support for the max31875 to the max31827 driver.
+
+John Erasmus Mari Geronimo (3):
+  hwmon: (max31827) refactor enum chips to chip info
+  dt-bindings: hwmon: adi,max31827: add MAX31875
+  hwmon: (max31827) add max31875 support
+
+ .../bindings/hwmon/adi,max31827.yaml          |  18 +-
+ Documentation/hwmon/max31827.rst              |  40 +-
+ drivers/hwmon/max31827.c                      | 586 ++++++++++++++++--
+ 3 files changed, 572 insertions(+), 72 deletions(-)
 
 
---gQCqiv636RgPLUc8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+base-commit: adc52dd4078067fabf1431036ba180eafd8a7eee
+-- 
+2.34.1
 
-
-> A build-tested branch is here:
-
-That was locally built. Now, build bot said it is happy, too.
-
-
---gQCqiv636RgPLUc8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd+KAIACgkQFA3kzBSg
-KbZUwQ//cNA+Jq4G+tNxrRgij4GTKhU92VoCTEFy1Z3KZUj86bOqqdA8CkzyTSjh
-QYdPeTp4HKr7x8suKiD491rfzETb2V5yzVk7g8bqg85PEPb8Cm0KigGZXK0E4Ko/
-M6k9plqnxHDWr86GXB3c3n2Ko1KCpGzZ/g+igiPSBlEweUXsCNTJamv5slBT4FOr
-lhurV8N9dLRD++daOnaxedhHrubX0P74+Xwnk7jYmT/c8ljpGZT/W2l6YKBR3ixc
-fdJAN0HtXSdbaTFDezc68/eQUmWYbJJA3+7r6HbhfjmvnttCYOs1eCzD2kbt70zu
-t1fh6G8lmkC9bjI/4c6jYMxy9ZLy6MCgrrI3X0ebGspx3f8LfCVStTu9Vt6xy1sP
-g/pVHBi1WgebVgDeBZN9kijXXV1A5Qcw09T109nr6c8bIK2T+1ZX9dGCMm/hwbW1
-LfOyLKQ4UIEDBF4Qq7AhjblJJaKYOX0d4GVvhsEpaLP0heFYsVmVXf1GDjsBXhVO
-RHpoUx5QolDlRSHO4vNfRbjh17pJcEKCHtq1Q4zdxkw7BxIHPurMU4bJo0kwholJ
-UJUU6D+YmWF2DEAWiaeRRBllT3nbKKBXP3kP4C7xcGvAmjqJocMib563V5AZ+igB
-MbHFOErQS8KbjGZIS5P4D4rLFPnqNEvwck25ddQbfFBO9wdkgg4=
-=IhfP
------END PGP SIGNATURE-----
-
---gQCqiv636RgPLUc8--
