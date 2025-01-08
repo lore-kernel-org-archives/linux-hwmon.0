@@ -1,77 +1,44 @@
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2069.outbound.protection.outlook.com [40.107.102.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AAF1F941A;
-	Tue,  7 Jan 2025 22:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736288961; cv=fail; b=lJCjDhIV+Jppou+urPC5kMPHWVF7UlyDkXyZ+EdWv7LYOJX9CY3ui+7KvBG8XhyLlPijc7A4jSzlJTdyE3B7H3NycpOZnyt9ujKJ4X+BezZdwb13OMifuGNK5teK4OGHC8rO71I8SObRvmHc6VIs+OcpfaN8+Vb+NyY9qL3NTyo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736288961; c=relaxed/simple;
-	bh=xjfVvZ1tTJQcU/5pcZ54OFDXcA8JLmNodnRrfoI6Ufw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=azv/8ipL9SzcZof2eahxPljnqzpKb1tlR+b+wR5hSWA0poPVcKczBLr54+GhCFld/UCaJQsRNMvFYZaWZ49EBzo7eSEDXY2f/hwOy3g139AxCHcxMewjkymv+07Gnej+waP+Bh7wYxfKmF4qA+ts70Cy7Sf9iAdmvW1GcKLPVRg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=b0nVSMBq; arc=fail smtp.client-ip=40.107.102.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF68719CC29;
+	Wed,  8 Jan 2025 02:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736304841; cv=none; b=uVw156H+ipzHQXqbbrBE7B5RDbX8/IpMTpnlQ54Xf0cXu/UdcVMuvWpWiFhsZwrBYdcsTeD/ZE8o9YGAKzwpsbhF6PXZoORrueSIRQkxRQnRZh553uHrucfs2dQ9hhM2npyWB7kYJbcOiN1fv8T7krwlP878UoEPHviHs1XM/3U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736304841; c=relaxed/simple;
+	bh=+ozAqA/7zYhjKaAVy+rs5gLUFI8eWLeEdNdzwXhsr8I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QkMWAp0fbrYmweau61cR4QfrRCIOyQBpk8ApwtoRqoH4aqpMesJ+4hySoOiZsDXZBPmyzmP3yIS6IuU1+t/xduWKmBRLtqDtZ9LY2daGluWcSlbhj6Rf70QeWDwxVYeePzQtbdRFF56dd3CBRQ1NiMKPXzr1wQvCercjU3iRe70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aNIha6mh; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="b0nVSMBq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=keg2RUOtf2pCx66/7myTgUpz04hNsGdMdueirOxtBB7rjmlO/lNYUjKb2nmMs3vQn6hkRPn5p0eJmJCZLvbIsCUWxLVxx3ju0Rx4VPcuyd5wgeBiskUqXSyofZ8zNohNnRVOy63PpzzeJrEaqius/TYTAXNe0S4aduCVB+N6lcKNMKaLRYZnYPg0ysSfZipFY6PIcuOYMUUbhVXfbrw8I/YRqd+JCJHtbMR0NURY5CKqQZ3RyaPnaUXfJ55Cr62vDhjtBT+QGG1416wv8Og7YV/7Gb8lgQ3KlYp5MgW0GGzoMD/UBA3zA0ydz8ruJXT2IJlsQMewcU+whIwInsBQig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hz/ojI6o+sEDWZAMKn+EMapoICQf8/2vD3yUaxG5JV0=;
- b=RRA/KAv0ISK7sGlVcctA29y5Th2bbQtU4oB2Fh4lCOYjtkQNZO5s1kPLLNKqr7H+RZSX+G26vuDRpfNi8N/MJJsZgFTHy5J6T6T4wkGt2jQDh7LAVlK0K5lMMWAxYdRijao+ib5t9Qfq7K4qI9CE1ZlcnywyDfJVKBkG/K6e/6zpBzddgVTtBaNK6RLZYnU1zrG+wMlhn07RnmfSyXlDC0uyo1Z6LspMOYQL1lTmkbf/jC5rmGP9IqZLYyoJHZ/c/+tK39RyBlEb1KJZZWm4uSDm0k+00w2EgVZOx87wgZz3qwnLawHhv+BpDftTC800idoVU6PV14s0zi8tUVxw4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hz/ojI6o+sEDWZAMKn+EMapoICQf8/2vD3yUaxG5JV0=;
- b=b0nVSMBqT8zLtdp4clZJiWbQ8Gts7/J1W/pZd06OunwIQT26Vw0p0MVtV0gZtS0tDlLNkaui7KAxszPfqvTR2siQcN0VjCudzwC8gChcom8ZFVwlWKRW0kFYBn6BAINEo0s80nJ2/dSq/EqbG2VTalh7qRjCiaQiYQ2h6oS6mkE=
-Received: from SJ0PR13CA0237.namprd13.prod.outlook.com (2603:10b6:a03:2c1::32)
- by CYYPR12MB8939.namprd12.prod.outlook.com (2603:10b6:930:b8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Tue, 7 Jan
- 2025 22:29:12 +0000
-Received: from CO1PEPF000066E7.namprd05.prod.outlook.com
- (2603:10b6:a03:2c1:cafe::20) by SJ0PR13CA0237.outlook.office365.com
- (2603:10b6:a03:2c1::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8335.10 via Frontend Transport; Tue,
- 7 Jan 2025 22:29:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000066E7.mail.protection.outlook.com (10.167.249.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8335.7 via Frontend Transport; Tue, 7 Jan 2025 22:29:11 +0000
-Received: from purico-9eb2host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 7 Jan
- 2025 16:29:08 -0600
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: <yazen.ghannam@amd.com>, <x86@kernel.org>, Tony Luck
-	<tony.luck@intel.com>, Mario Limonciello <mario.limonciello@amd.com>, "Bjorn
- Helgaas" <bhelgaas@google.com>, Jean Delvare <jdelvare@suse.com>, "Guenter
- Roeck" <linux@roeck-us.net>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	"Hans de Goede" <hdegoede@redhat.com>, =?UTF-8?q?Ilpo=20J=C3=A4rvinen?=
-	<ilpo.jarvinen@linux.intel.com>, Naveen Krishna Chatradhi
-	<naveenkrishna.chatradhi@amd.com>, Suma Hegde <suma.hegde@amd.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-	<platform-driver-x86@vger.kernel.org>
-Subject: [PATCH v3 12/12] x86/amd_node: Use defines for SMN register offsets
-Date: Tue, 7 Jan 2025 22:28:47 +0000
-Message-ID: <20250107222847.3300430-13-yazen.ghannam@amd.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aNIha6mh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=nl6PW
+	Fqhd8rOBb/WgBb7pu3ksJbKMFOwsiIM8IFyoXo=; b=aNIha6mhYJ2xWQAPPu+Pr
+	LMoy1CKfxchRWgg+ZckUqg9r03mtTO+W/xmv2bgwXv2bMMKTPpKzoaE21REflCcH
+	pnELll0T1riSXrrQ8fwYvPVe8x5QXXxKZ2H1RkewTQaIFA7N/ZWbRq/llo74ae1q
+	It0ypYvHjAOwcHJ67398Eo=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3jxeY6H1npdBREg--.62358S4;
+	Wed, 08 Jan 2025 10:53:13 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: conor+dt@kernel.org,
+	corbet@lwn.net,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	wenliang202407@163.com
+Subject: Re: [PATCH 1/3] hwmon:(ina238)Add support for SQ52206
+Date: Wed,  8 Jan 2025 10:53:05 +0800
+Message-ID: <20250108025305.60705-1-wenliang202407@163.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250107222847.3300430-1-yazen.ghannam@amd.com>
-References: <20250107222847.3300430-1-yazen.ghannam@amd.com>
+In-Reply-To: <4f707f3f-8929-4453-8b18-285594b5f99d@roeck-us.net>
+References: <4f707f3f-8929-4453-8b18-285594b5f99d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,131 +46,108 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E7:EE_|CYYPR12MB8939:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99ef55e5-7978-4fcf-8ec5-08dd2f6ab59d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PrxOb2CZBgZg8ZPyhZJRNuDObvXfV/gyTKDnMgFQZ+XaJvhYgQJH5FBDma6L?=
- =?us-ascii?Q?F/rnvdv//4hiU85o77BJ0oqsSa+gJZ10vVHcV1+OuDZNhG3cYgFnvhkNiR5/?=
- =?us-ascii?Q?uRNJUDHIMl85E+utrSw/BA3jrVs0dN8TZu1viaRZMFCkJBSqxnctv9yFqytj?=
- =?us-ascii?Q?TgNoiuF9Tcjhpk8s2Ulv6OzRcwr21YGqQGPnk8AixgA9RIhdo5AJegZ7wgPC?=
- =?us-ascii?Q?1eLf6SfW643HQrw63WzCf8ybZJwxA/o2qf9hWOWQSdN9W/fJlGgW7QPvuZJd?=
- =?us-ascii?Q?DCCj41qjLtFiCVyesngyGkyZaK28uwCHEGO1O1mDLNgKTqiwTNxtTqheaB8l?=
- =?us-ascii?Q?iiEMVAazNS1AtA2gSn+1ZZOwhtvkWSwNIEk//HfgSsBoiITdp85G7IA7xjkG?=
- =?us-ascii?Q?GalDnNe5AMrJHOot6Y3zpnj6WSLlSH+krwxsjDVyZ+cnJMACm35DqAJKtKnB?=
- =?us-ascii?Q?wHw/hgu7DuE7A2pvDos2xnQkBG9fhx9JFkFk7wN5U6mSq1yk6lunR68eKBDq?=
- =?us-ascii?Q?iXq73XMQKrJoKvs+lj2gHQINtKgPBCkA8kOgjYTRppJwLQ6mGRblAOxRoJlK?=
- =?us-ascii?Q?eQWdQC6+tCbOGFiM+nxo7IL8gnA78Hg1mWfNm4NCoqRKGdCT0igLTMtRFlnu?=
- =?us-ascii?Q?bS3HxOT96w/PbkcBCIxL4d67x/NHOh3zjzBJWW4jaAqvRi9NEzbV5VT42vgi?=
- =?us-ascii?Q?UPO9XC1lSCdTpQ+b64nvRrcVWBgCgb2ckCbxUQRhTDc/mGcavFxt0ugeziFZ?=
- =?us-ascii?Q?n/6oPCEVlHsruJFtfKu7xrn/2rMZrlOrW3sMS8AVQUwnT+e/QhdDuU0PGh8C?=
- =?us-ascii?Q?0E6CdznBCx0MqSWnSg/mbYe+0ZZlF7BI9qbPsM3/BWullq4i9RMBd5pOk6up?=
- =?us-ascii?Q?P8/bIDh179YloRMP+eFqkedA72FAkOw/7xycPR3CbcfAAFHZGoxzmgKw7tXv?=
- =?us-ascii?Q?y1nwkC08Vi+O0kSTVRJVQDYyI3N/STyjbsvlbpNVRh2dulvR+klkmvSNdywc?=
- =?us-ascii?Q?EMibHrJMdk6O4H9LVNc5xwYJ6m3ztvRxdjqELxtHfnqJWAEBN5Y5Qb9YTFCv?=
- =?us-ascii?Q?oA4wkhzQrccrFlUZs7lHNMOxLY+VBkGDoqLiRAU2KaA6lxWRNhxg+WF2EIy+?=
- =?us-ascii?Q?WcAq0PsV09tjM0h7WNzfa8KPDCrmn51hXB9gRsjtANzftpVvEo4XAH4NgDJD?=
- =?us-ascii?Q?b8vT0qVjI9NSREJ7cLZF7UQ130bqo+Zl5bNJiM0xALfcVURF2iELlmq6FZK5?=
- =?us-ascii?Q?lZsw8flFwuRh4wM6+6jYAH8uxiucLl+MYSpljDs/rwMDdNjIOasICc28QLPY?=
- =?us-ascii?Q?g+Qmnw3fhQ2kHYWRvl2bgXleZOvJrRUW8kAWbMtlPNRIPgDovKrauLjcyTQs?=
- =?us-ascii?Q?aiK0nudfeoBZzbYJ6jsTB6DE6BWhdz83JPNdTYpn+dFa+K06qnLa2F/BiZzz?=
- =?us-ascii?Q?khD+T3wd2yp2w11srEjzBaYzBPrFQFO+flSApX3ICuLhGz4lNrz66Ep4Zem0?=
- =?us-ascii?Q?Gbwrqxf9o6XtUsCrq9fd48Qfrj+jqBCgBXup?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2025 22:29:11.4956
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99ef55e5-7978-4fcf-8ec5-08dd2f6ab59d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8939
+X-CM-TRANSID:_____wD3jxeY6H1npdBREg--.62358S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWr4fXF1DCr17Zry8uF1fXrb_yoW5WF18pF
+	y5JF4DKr4DXr17Crs2qr4SgF12yr17Kr97Xr95Kw15ZFn0vFykuF4Iqa1ruryxZw1xZF48
+	try7trW3A39FyFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUZIDwUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiowDO02d95OlgSwAAsC
 
-There are more than one SMN index/data pair available for software use.
-The register offsets are different, but the protocol is the same.
+At 2025-01-07 23:02:09, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>On 1/7/25 04:43, Wenliang Yan wrote:
+>...
+>>>> -#define INA238_REGISTERS		0x11
+>>>> +#define INA238_MAX_REGISTERS		0x20
+>>>
+>>> Why this change ?
+>>>
+>> 
+>> The maximum register address for SQ52206 is 0x20.
+>> 
+>
+>That isn't what I referred to. Th value change is ok.
+>The question was why change INA238_REGISTERS to INA238_MAX_REGISTERS.
+>That is a personal preference change. I strongly discourage such
+>changes because if I accept them someone else may come tomorrow
+>and change the name again to match their preference.
+>
 
-Use defines for the SMN offset values and allow the index/data offsets
-to be passed to the read/write helper function.
+I understand, I will modify.
 
-This eases code reuse with other SMN users in the kernel.
+>>>> -#define INA238_FIXED_SHUNT		20000
+>>>> +#define INA238_FIXED_SHUNT			20000
+>>>
+>>> Why this change ?
+>>>
+>> 
+>> Also refer to the chip manual provided in the website above.
+>> 
+>
+>The value didn't change. The indentation changed without reason.
+>
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20241206161210.163701-14-yazen.ghannam@amd.com
----
- arch/x86/kernel/amd_node.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+This is due to my format alignment, I will adjust it back.
 
-diff --git a/arch/x86/kernel/amd_node.c b/arch/x86/kernel/amd_node.c
-index 45077e2e6f2f..d2ec7fd555c5 100644
---- a/arch/x86/kernel/amd_node.c
-+++ b/arch/x86/kernel/amd_node.c
-@@ -94,6 +94,9 @@ static struct pci_dev **amd_roots;
- /* Protect the PCI config register pairs used for SMN. */
- static DEFINE_MUTEX(smn_mutex);
- 
-+#define SMN_INDEX_OFFSET	0x60
-+#define SMN_DATA_OFFSET		0x64
-+
- /*
-  * SMN accesses may fail in ways that are difficult to detect here in the called
-  * functions amd_smn_read() and amd_smn_write(). Therefore, callers must do
-@@ -131,7 +134,7 @@ static DEFINE_MUTEX(smn_mutex);
-  * the operation is considered a success, and the caller does their own
-  * checking.
-  */
--static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
-+static int __amd_smn_rw(u8 i_off, u8 d_off, u16 node, u32 address, u32 *value, bool write)
- {
- 	struct pci_dev *root;
- 	int err = -ENODEV;
-@@ -145,21 +148,21 @@ static int __amd_smn_rw(u16 node, u32 address, u32 *value, bool write)
- 
- 	guard(mutex)(&smn_mutex);
- 
--	err = pci_write_config_dword(root, 0x60, address);
-+	err = pci_write_config_dword(root, i_off, address);
- 	if (err) {
- 		pr_warn("Error programming SMN address 0x%x.\n", address);
- 		return pcibios_err_to_errno(err);
- 	}
- 
--	err = (write ? pci_write_config_dword(root, 0x64, *value)
--		     : pci_read_config_dword(root, 0x64, value));
-+	err = (write ? pci_write_config_dword(root, d_off, *value)
-+		     : pci_read_config_dword(root, d_off, value));
- 
- 	return pcibios_err_to_errno(err);
- }
- 
- int __must_check amd_smn_read(u16 node, u32 address, u32 *value)
- {
--	int err = __amd_smn_rw(node, address, value, false);
-+	int err = __amd_smn_rw(SMN_INDEX_OFFSET, SMN_DATA_OFFSET, node, address, value, false);
- 
- 	if (PCI_POSSIBLE_ERROR(*value)) {
- 		err = -ENODEV;
-@@ -172,7 +175,7 @@ EXPORT_SYMBOL_GPL(amd_smn_read);
- 
- int __must_check amd_smn_write(u16 node, u32 address, u32 value)
- {
--	return __amd_smn_rw(node, address, &value, true);
-+	return __amd_smn_rw(SMN_INDEX_OFFSET, SMN_DATA_OFFSET, node, address, &value, true);
- }
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
--- 
-2.43.0
+>>>>    
+>>>>    static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
+>>>> @@ -197,10 +239,10 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+>>>>    		regval = (s16)regval;
+>>>>    		if (channel == 0)
+>>>>    			/* gain of 1 -> LSB / 4 */
+>>>> -			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
+>>>> -			       (1000 * (4 - data->gain + 1));
+>>>> +			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
+>>>> +					data->gain / (1000 * 4);
+>>>
+>>> Why this change ?
+>>>
+>> 
+>> Because INA238 only has two gains of 1 and 4, the previous formula can
+>> be used, but SQ52206 has a gain of 2, so I changed the formula
+>> 
+>Ok.
+>
+>>>>    		else
+>>>> -			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
+>>>> +			*val = (regval * data->config->bus_voltage_lsb) / 1000;
+>>>>    		break;
+>>>>    	case hwmon_in_max_alarm:
+>>>>    	case hwmon_in_min_alarm:
+>>>> @@ -225,8 +267,8 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
+>>>>    	case 0:
+>>>>    		/* signed value, clamp to max range +/-163 mV */
+>>>>    		regval = clamp_val(val, -163, 163);
+>>>> -		regval = (regval * 1000 * (4 - data->gain + 1)) /
+>>>> -			 INA238_SHUNT_VOLTAGE_LSB;
+>>>> +		regval = (regval * 1000 * 4) /
+>>>> +			 INA238_SHUNT_VOLTAGE_LSB * data->gain;
+>>>
+>>> Why this change ?
+>>>
+>> 
+>> Consistent with the reason described in the previous article.
+>> 
+>Ok.
+>
+>>>>    	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+>>>> @@ -564,48 +673,15 @@ static int ina238_probe(struct i2c_client *client)
+>>>>    	/* load shunt gain value */
+>>>>    	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
+>>>>    		data->gain = 4; /* Default of ADCRANGE = 0 */
+>>>> -	if (data->gain != 1 && data->gain != 4) {
+>>>> +	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
+>>>
+>>> Chip independent changes should be in separate patch(es).
+>>>
+>> 
+>> SQ52206 has a gain of 2.
+>> 
+>Ok.
+>
+>
+>Thanks,
+>Guenter
+
+Thanks,
+Wenliang Yan
 
