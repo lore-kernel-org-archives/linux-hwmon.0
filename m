@@ -1,66 +1,66 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6638F6B;
-	Wed,  8 Jan 2025 14:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF00147C9B;
+	Wed,  8 Jan 2025 14:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736345925; cv=none; b=gIbZckrKiGIa8MyeEi8ZCR6I1COSDw0yyzLAEa9HJ5CORf5aYRqLTM7oBYGyu3FFtQ5AjvhxfSYaR42OjWx6NtA9vj0iwc1KnRAn5ypd4AEjV4owRqGyrbEDnEmyL2PeKlHWnGIHexlnhQukLG+01nv6MTDRe8XF5r6UFAztvOg=
+	t=1736346147; cv=none; b=bhDT0yqpL3Ry28qQhlAm8i5xgQzqsfvnQNhuMwljnJe9cldoaunbaXfZN/FHVdJ1Xp8ogj0URIbVxV6oi0kh/ZrB8MGxg0M8D7M1oGwEs5PR+FOZpWpa6cm4+kg3wly9zJw7UtIPJFT30u5ZFVoDonJlL53pLIg4FPTdC5wKF0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736345925; c=relaxed/simple;
-	bh=DUiEPnqYwY8o5oQC/29t+1Mb97yg+UbOxYzj8aOXktg=;
+	s=arc-20240116; t=1736346147; c=relaxed/simple;
+	bh=eF9Pym/tODFqKpb433Up9DYkiRYZOdm59NB1sCqYLr4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GjNhhLgBPsO2glGdM/JHJPh4bm4zLo+zvCD83/Ck1+TmBw1MNL3uX/TTCTMx0vs9ZqmGMxAtzau1X2JKYbVGZta9zs6eySnuOj/fxz1MtrIaSp4VSExvFSbg9PKXWA0zdO6I3G9Zz/25phPk53SoacuaFk+taAMq8XAUS2Dv9sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j66f+jvL; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=fPpO4MiuqKEwSi0WmQfpeFQA3uHLiS9Qke7sHvSzJwCxXAS/0pKMQD4W5ssNbkduP84GP1+nDZ6gZ/IBorL0t+uTYuaf6dpuHyd48z/uKASJKEE3im0xl40RUoixFablrpTYu+yNgyJA6+X7eq1ZHEO//HB8+t0C7PsEUHoI84Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ioRnJfNY; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j66f+jvL"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-216395e151bso12669675ad.0;
-        Wed, 08 Jan 2025 06:18:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioRnJfNY"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21675fd60feso61183285ad.2;
+        Wed, 08 Jan 2025 06:22:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736345923; x=1736950723; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736346144; x=1736950944; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jRXktoWTr4+FZafmsMTVxwJ5YiyGZJ6jh59oduqbzKM=;
-        b=j66f+jvLnnARhmGwVJduV/DpLQ4Y3V18PWVO1BJVMvG7ivKb9f2+6JCJIWdDQ73V7Q
-         0atonoyr1i473YobT3DAABDJpzoUgufMtZVZRSZqtI370JIm7LEljaRG/a8xkpUsSVsI
-         muZbkwLcV+tdwpamcD2pyxOAJSA/0DUdNd45FblZiHUWoPebYzS2ag9T68uAJDcD4KUK
-         7mcWAyJotqgO3GoFzsvcyT4Dpu4rooclH+HzNC/tCrJYV4sebG2Qmr73wBpNN0hsf1DY
-         0J2bh9bmMqADQ7e1dvDW6o+GATzywYfgzAbaB/tHlapTbuw6MkhudbGVpg9mfuMQl+e9
-         fOJQ==
+        bh=44SFIExHKGXbvtcMfiOlWy7utSb3tAmZxaK580avNWg=;
+        b=ioRnJfNYEE+eC9R8PtevYGameHFAWvhu6vmIdUDhDYyQmc7ETURlduKd7IUcKzVF0e
+         K/kEZAJiuGiE0rWpAVlbebTORsu06WaIs4grOvNHlbJSAF6xhdmK+5OypeV30hRN//aR
+         Oo+xZNAkuVOq7VaFwTqWmOBHnmgSVpvIDJjIrDeLjpos8sCB+kjnzxQYRM4hOiu1+VQU
+         GPlk0c09yChXxW/lP4FLraMmW5vVvuubYklm+5v+J32kuabXLVhqTkwCnCV82lP1sKyb
+         OsLoG6Ay7jR7Ui0mAYTvWSNnQsTRqv+VnZeEuTsbq0s0MzUCMnLJOKW8m95Y+fgVkLDG
+         7cYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736345923; x=1736950723;
+        d=1e100.net; s=20230601; t=1736346144; x=1736950944;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jRXktoWTr4+FZafmsMTVxwJ5YiyGZJ6jh59oduqbzKM=;
-        b=QPqVJ/W/kwk6tBUx5ywTLNknZXz+67UplWqcmsvo7Ks6/sRM70qs+DUYppE3/hnI8m
-         gBcJSk8wHeagdCO4Goh1VaRcYXC6MO7yS5E0PFwS1RuvM45XmQWhfhS3OE1xcczpjRVT
-         wdibBT3dAAZG7KsVyDT/fW6/ViRla5qP3PTqYpuxcp/AD/qYWpiObsxkpjS4srWm/hpY
-         C6vRyf7OrIz0LNEK0Z2reaYfVFFCq/TYezxj/O3aP9ouh0C+1xQCcL8m7nzZXcmv/mC7
-         F0hAMyIWNYu33QBK+6/Y5w4Ydhk2dMc6zDSdKxDXlO8HGtpdbLqW09pkTtSuSyFl1b/I
-         N12w==
-X-Forwarded-Encrypted: i=1; AJvYcCVSRyblJVaz2tNTjM45hVSqlCIAdIm50PuB3oB66o4aS4BgTnfJsl9+thzFl+AEl/OteJ0QkVulSoJKzWiY@vger.kernel.org, AJvYcCW9+dHfePV24+j13sbYEtzpPqrf1piGIA/Vfk73LiXdT3Gi7UcRPQ+sJEIqcZ5r97R4Fzec32Q6V0xL0l8=@vger.kernel.org, AJvYcCWvyVnc8JN62LW2kp5a7C0aP0NGOhv9wvNrAuEJAiETBNs535v2YTtd+EmD9bSkvUvhkp1KvX2iVvpN@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+zNEHRhoesltvmt0GtyX0KBDsQQunGf43vAZu1Fkm+/V8Wamx
-	v91KgXIKEHhBOKA3q1W29WFyapHDSXmGJU2c3/rtuCEQAg7x8kFF
-X-Gm-Gg: ASbGncsP2VEo/YwFPCk4ym4hynQjVjqAssdeGan4VOHPptu1P7RSRQHO8CYquK3I1nX
-	okJFOUEcn75l0VGByR0tWzrEZ7EuRonFlrUSg6FGFf8RcpEm5Y5IodALkblaX0jQLm6aH4vSed4
-	isqXNUf+Jx4NoQJsk9n/XiOD/mCo7xMQObWygeiatuEgEv0gVmyDBXcUsOwwMzEmbR2n0cinYeq
-	YKRDmG50tHlFeGCDBYWqqWbYrKmIMe3rid/1kjXcWwncsd7yafdf7JpU6eD04xG29v8urBHRFFr
-	HOQafVBMbfsUYIAuQmhAGoHRY9mclQ==
-X-Google-Smtp-Source: AGHT+IFEu1Mct2/rqIFwi7V7f3ZUcKiGm/OV2PjTMHla0zNtfrSez15MgIVMVB3MRyidOoH6iOJ/IA==
-X-Received: by 2002:a17:902:e948:b0:215:3998:189f with SMTP id d9443c01a7336-21a83bb9916mr48110195ad.6.1736345921651;
-        Wed, 08 Jan 2025 06:18:41 -0800 (PST)
+        bh=44SFIExHKGXbvtcMfiOlWy7utSb3tAmZxaK580avNWg=;
+        b=l3jf5IwfuHzacdYrfhAJlkZsqLDe7mv3LYDMXaMvqWZSk8a++8BYciXEOVXVWvv7NS
+         UKiFp2Ry/YJ0CP6pCxBLOsgYcPLa9X50nC6o4dhVe9pXMEgGZeB8NUN/+I/m30kUwtJA
+         YtLae4jmbimFK08z9sU2wpqNvj7VLJz866qzv76g0ov2OgoFQT2+zIzknX5sD+nc8ja1
+         96yj+Sx8iRDxy5+XyEyuY6Dx+LM87f6CTl/068sdi8Bp3lwC58dVzhD3E+n4TATmLQWb
+         lLm33KwN5cxqrPGvjCH+MlRYwKtMKmnlOVzwJ4oU0YINkv12u/yb9d0eW0Xo3X12nkLy
+         GdRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfkEtmn3eveZb/AUEK9TwrXdTlZgLPMu/mi578RIYXAemBPwt7l1RuATdg6qEPdHotMNjI2e6RVXcu399O@vger.kernel.org, AJvYcCW0sqInjPL9rRq2PWFySBdfhGrmUTj4SH1jjFqBx35C6BJLuyll/h17QUraMi+QxyBsA9fuPhmFJaMW@vger.kernel.org, AJvYcCWs3slDAPx9PR0BTKp9uvgj7h29lH3AH9+5nxkmoGd+1V6yMlyLMpheUxhGA+6jJVtrbAZF6IVG/4y7tiw=@vger.kernel.org, AJvYcCX1fGsn7snAr54UMuBuv4iFWWamSoeUwcjHJ973aOQo9eE5/3CpwMg8278CyiqdMLc4V3IM++yQW9Tq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+mbGCU8dhSukiw6adzZKoITSJKMUWc11ahm7ey8O6/dn9sIjA
+	+oJne3Jk8OboJBLO5hAL9aCCHRypA9LCEO42ZxhRc9ltmjqiQtHz
+X-Gm-Gg: ASbGnct1hBg9zsI5uwWCWbzQUGK1/m/NC3PNR2hiPqEhn3LGkPlSmja/whu59V671wx
+	geNG0BVw19ADPywvVvOfkXIdtO/kAPN2w0Q0ufa7/rhTxWH+uEKlmu9qQ0raMX8iCynfb5Yh7T4
+	14oQKvdZAedYg+p0wlz7k/G41HHKYu6EhSozj8HBZDfYtrBczbA1RIqQL9fEn9Lb8ickquwhghs
+	YUvkQ8OgMRhIU1codhcqXDcGwVTZbEHHjJf9JmyWx978iZEyM0c1ASahYBpIa5mgPdCtkYda9SY
+	iWKlMQexjHxRxi45jJ6XF4tXlm5ALA==
+X-Google-Smtp-Source: AGHT+IHRpmtSFmL1boqwXcWT0FYWZ4oSPRtGVrcepNNLNbf7kJ6pRP9nkan0Ymhg59pgE4+0+9nYIA==
+X-Received: by 2002:a17:902:ea08:b0:216:6ef9:621 with SMTP id d9443c01a7336-21a83f765famr43723745ad.31.1736346144565;
+        Wed, 08 Jan 2025 06:22:24 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f72d1sm328051925ad.189.2025.01.08.06.18.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9cde50sm326105865ad.154.2025.01.08.06.22.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jan 2025 06:18:40 -0800 (PST)
+        Wed, 08 Jan 2025 06:22:23 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f96bdc15-1308-4b9e-9fe4-e92505eb9d8b@roeck-us.net>
-Date: Wed, 8 Jan 2025 06:18:38 -0800
+Message-ID: <71bc00d1-217a-485a-a238-f057d2aa112b@roeck-us.net>
+Date: Wed, 8 Jan 2025 06:22:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,15 +68,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Wenliang Yan <wenliang202407@163.com>
-Cc: conor+dt@kernel.org, corbet@lwn.net, devicetree@vger.kernel.org,
- jdelvare@suse.com, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org
-References: <srkay6cpegcxwx6q4jexs7iajydqqossfjctwoq3tctsanruxk@t44w4tbq3t5x>
- <20250107130110.25525-1-wenliang202407@163.com>
- <450da9ec-d754-4dea-99c7-d5730e35a284@kernel.org>
+Subject: Re: [PATCH 1/3] hwmon: (max31827) refactor enum chips to chip info
+To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
+ devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+References: <20250108082531.15467-1-johnerasmusmari.geronimo@analog.com>
+ <20250108082531.15467-2-johnerasmusmari.geronimo@analog.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,37 +122,53 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <450da9ec-d754-4dea-99c7-d5730e35a284@kernel.org>
+In-Reply-To: <20250108082531.15467-2-johnerasmusmari.geronimo@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/7/25 23:06, Krzysztof Kozlowski wrote:
-> On 07/01/2025 14:01, Wenliang Yan wrote:
->>>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
->>>>   1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>>> index 05a9cb36cd82..f0b7758ab29f 100644
->>>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
->>>> @@ -20,6 +20,7 @@ description: |
->>>>   properties:
->>>>     compatible:
->>>>       enum:
->>>> +      - silergy,sq52206
->>>
->>> So it is compatible or not? You said same bindings, but not compatible?
->>>
->>
->> What I mean is that SQ52206 is compatible.the datasheet depends on
+On 1/8/25 00:25, John Erasmus Mari Geronimo wrote:
+> Utilized chip info to replace enum chips to cater similar devices with
+> different configurations.
 > 
+> Signed-off-by: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+> ---
+>   drivers/hwmon/max31827.c | 86 ++++++++++++++++++++--------------------
+>   1 file changed, 43 insertions(+), 43 deletions(-)
 > 
-> Then compatibility should be expressed in fallback, but OTOH, your
-> linked changes suggest these are not compatible. Confusing commit msg.
-> 
+> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+> index 48e8f8ba4..5d319d401 100644
+> --- a/drivers/hwmon/max31827.c
+> +++ b/drivers/hwmon/max31827.c
+> @@ -47,12 +47,6 @@
+>   #define MAX31827_M_DGR_TO_16_BIT(x)	(((x) << 4) / 1000)
+>   #define MAX31827_DEVICE_ENABLE(x)	((x) ? 0xA : 0x0)
+>   
+> -/*
+> - * The enum passed in the .data pointer of struct of_device_id must
+> - * start with a value != 0 since that is a requirement for using
+> - * device_get_match_data().
+> - */
+> -enum chips { max31827 = 1, max31828, max31829 };
+>   
+>   enum max31827_cnv {
+>   	MAX31827_CNV_1_DIV_64_HZ = 1,
+> @@ -95,6 +89,17 @@ static const u16 max31827_conv_times[] = {
+>   	[MAX31827_RES_12_BIT] = MAX31827_12_BIT_CNV_TIME,
+>   };
+>   
+> +struct max31827_state;
+> +static const struct max31827_chip_info max31827;
+> +static const struct max31827_chip_info max31828;
+> +static const struct max31827_chip_info max31829;
+> +static const struct max31827_chip_info max31875;
+> +
 
-It is 'backward compatible' with additional features. That means it is not
-'compatible' in devicetree terminology.
+ From Documentation/hwmon/submitting-patches.rst:
 
+* Avoid forward declarations if you can. Rearrange the code if necessary.
+
+Please follow that guidance.
+
+Thanks,
 Guenter
 
