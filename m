@@ -1,153 +1,157 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148ED14F98
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 14:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E84021B1BF;
+	Thu,  9 Jan 2025 14:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736433445; cv=none; b=NiWRgjvh411a1jx7M+T16OQJxARy3iA7MdwP8YXnwUk+7ry+psKjC8WIeRVhOEKFouqernxoxAwoB/9WF6P/MUDNhwB3wpxtFmS+WUmCVPAh1RVF7PTprtzyx50YgpBSeTMO1qGJxpE/jWCnnr1LrXcApNry8msNLrfZd7wttAQ=
+	t=1736434755; cv=none; b=bnmcedMDhyvciu2lZ89/HrDBllbrmij4E+Sz8qrlLkzWoqttb2u6kt+gGa8hUefDvDgVqGsWQZiBEGlj6YSVU8y3mHa9yNam9utrV/YhBUkDitLg7/9gq8mU8D/ymV0kvbgRwtV9wP1LfSFee4GeBRG5HYi3aBLB2HiHzATOs9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736433445; c=relaxed/simple;
-	bh=O0WMCuKaeCo18+EWld3efByDAsM1DMJMAJMmSP+RRC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r/xrEMDiRwh7LR6bxU5JSPW2jvdTfHH2wqJbkAfA/9hIyhdDpn7H08u/sDjAEOEX82Zrs/gNIiUs2IT9w6UHNQmhfZG7v+tYHi/QcHkFPZ9TZrLingl7p/wn/H6Xfef2rBQhEIiV0CwuvIse+9wzgCFazbogtau/llYInZZAbhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CSnoYSZD; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1736434755; c=relaxed/simple;
+	bh=QCz/F6D39yrq5YHjo8W2G2CPuj8D7Rf/NYf0VnAbVMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q8GES7q5tTYMlAkklXm9rbM65Agys8mcNeDbCsBXW9C09ROuh98uvG7Ba6OXZ9BWgogrSYdYC6zgcFjtiE9fFcisl4yd/QoLbYppVT1OUzzg24U4TfYDhcgGaCzXg6UuXbm+9p5qhAO4fPP0VsiF+bTJ1f4L0QXlvoWUfYDXqbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YoAYw1Uq; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CSnoYSZD"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 509EEYUh007584
-	for <linux-hwmon@vger.kernel.org>; Thu, 9 Jan 2025 14:37:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	OXTAvWWJZJ1SEqZQJIZWExX9jqYfwbakZA0U9QC2/mw=; b=CSnoYSZDSEOZCWd5
-	II3gvxjbwNvbwYGvByxrZUhbA6eBuHETBhl/vB6Ft60IdcFsNZYHe19FSjJed1/D
-	3ma1vfohE/eQ5leh49dFVIKvhwoMswTqrwvS12o2RLd1RGqFzSQW6YPJATVzaHgp
-	WV/F3W5S5YNWgja51JAiUFsr3LNLwY1bKfLFUN5CK1VIPPoe9hyTHOyn+tHNFgo4
-	vAoCCU3ubNvQCB684udiUmJ+Oh+4sotX6Kt9mNs9zuTtpe/mjU5GtD5dst1owZU6
-	CUtDX0ga6M6kTysLP8pXUqGN1ZX21RIVy+xBB+jQUYJYtsStyOI+mP8l8c+S1fn+
-	QWIAOw==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 442g2081kb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Thu, 09 Jan 2025 14:37:23 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-469059f07e2so747051cf.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jan 2025 06:37:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736433442; x=1737038242;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OXTAvWWJZJ1SEqZQJIZWExX9jqYfwbakZA0U9QC2/mw=;
-        b=ePUekFA5aprqFFRKZbOXm7kJLTYDU1sfBWkiOpUWcaw9kNOgaeTpxMWkPFxt9+vwZb
-         wZbaGegfk+as2/JCppixTD7+TPfhIle8HLIC+tRD/G6MYepVcE20mBeLNH7n7lHewZ5b
-         re5uJWPNkXgkOFacKc2vw65zQE09xDrGFk0TSvx/H9csOixvmDxZXslDr+m/VKGepEgY
-         mwPRe+2zq1F2kc/bh78NJyLOH9p0GBHoP6UJYCfcG9vsWR6+1J7nkSkqYuEN5Dz5rBqq
-         KZw8zC1w9mGQ53Vc4pyz0x/LaoTETRVcn7wxqwuJ2XWi5+Qb5//bXxLvHlaV55MDAMJt
-         U6cw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEeHJWFvKWSJsyu2Xt4vNPGD6Jl4B5+p26K0d4xw7KApsELsoh8Ok3TAepZ7cn0/v9BliswZ2lNjaONA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxtiCJkod3UyRWawbq0HrRv50X6HGQekh/YTp4CGEt35G1VO0F
-	Fut2Jrtv5Xvc8x//8D/7oVdJ8IAQ8aoB3YoAcBPfrMihNJD+kHjOZjm6Jiyneb6bwPYWKG8t1YJ
-	rfa3JYpmWEVO8AZcegqqdicPXLFw2FPfdPDjbNF1RdIVW//KrHOSoAWCMbp9zWg==
-X-Gm-Gg: ASbGncs1gJEjXNH49rOODnwVeYgWYrqAkdEBRzxbGPRUIcqaeQiHvcHp31gk9f/AfrW
-	hVT92X+0oF9A0ynjYeMw+IkHLcRzjJigixYkCUydAda8jlJNAfdVaSq+RQHtBmoFUUQAT+a/JLL
-	FYT2ZrLonBmPyp5Eu4yrRM58FVyr6HnEIvb7X2G1VqOchiWvIs+EgmK8TFrlxDPaD3tY7MLikTP
-	tsj2pAEE3y1BnMGuMLnIBugxau+rtk5hEdb/TyLSbpNC3HKob53CyGH1nqemwxFrewX16oMBns3
-	VFIxgeH2H/Qdi2tezIs/PRhf2DwD9fO/XK4=
-X-Received: by 2002:a05:622a:1210:b0:467:5eaf:7d22 with SMTP id d75a77b69052e-46c7107d773mr40847531cf.10.1736433441587;
-        Thu, 09 Jan 2025 06:37:21 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGUZYQUve7zJIeK0jKX/0nSErkVBt1y7Exysoxyuwprb0L/l48rtjRcFnYYdZ7KVHC5YjlsVg==
-X-Received: by 2002:a05:622a:1210:b0:467:5eaf:7d22 with SMTP id d75a77b69052e-46c7107d773mr40847221cf.10.1736433441218;
-        Thu, 09 Jan 2025 06:37:21 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d9903c3333sm688478a12.47.2025.01.09.06.37.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2025 06:37:20 -0800 (PST)
-Message-ID: <e003376b-0560-4d9b-8909-937d70ca9f22@oss.qualcomm.com>
-Date: Thu, 9 Jan 2025 15:37:17 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YoAYw1Uq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736434753; x=1767970753;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QCz/F6D39yrq5YHjo8W2G2CPuj8D7Rf/NYf0VnAbVMk=;
+  b=YoAYw1Uq0z0oXfV6MJSdketpvbObca+iah4U1C9m9sLV4HERvxHCmRRf
+   /CVn1DCl3N2OpTr9xbOjmFMyrZDk1sLMc4RwE7ssTUa+yU7Fn81ptKcFP
+   9wXDm8zGKBkTrLTl/NzweF/GG3hkS9gOnGS31w0riczfV3vc5Vw1+Z4fY
+   EUA3+rc006LlZyGhz8k0W1koyNRBdFJ0bl72fCoSrCJzfeZp3gQNMEHA6
+   wXM2L4kWjO1UiYh8qca2JbdYi0W5ysKz9wqO31oAc65N5Amr+dJ/aVC/A
+   UV0RkThgf+uaX9aYl+rZTi5ZIcWepOyeMhPj9PaCfN06YICZVmGejsjVt
+   Q==;
+X-CSE-ConnectionGUID: hsmGbBJCRBaSNIuMAXw+tA==
+X-CSE-MsgGUID: kDEh+enqQw68krG9HezC9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="40642630"
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="40642630"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 06:59:10 -0800
+X-CSE-ConnectionGUID: NgsS1z6RSWytKefcAdP0NQ==
+X-CSE-MsgGUID: JLgDTiHwRtuWSBtyVqWD2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="103950378"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 09 Jan 2025 06:59:07 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tVu01-000HhL-0W;
+	Thu, 09 Jan 2025 14:59:05 +0000
+Date: Thu, 9 Jan 2025 22:59:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
+Message-ID: <202501092213.X9mbPW5Q-lkp@intel.com>
+References: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: gaokun3: Add Embedded Controller
- node
-To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
- <20250105174159.227831-6-mitltlatltl@gmail.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250105174159.227831-6-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: tMPNKRB0j8ZZwyNsO5LYaBKfV19Ek5m8
-X-Proofpoint-GUID: tMPNKRB0j8ZZwyNsO5LYaBKfV19Ek5m8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0 adultscore=0
- impostorscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501090117
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 
-On 5.01.2025 6:41 PM, Pengyu Luo wrote:
-> The Embedded Controller in the Huawei Matebook E Go is accessible on &i2c15
-> and provides battery and adapter status, port orientation status, as well
-> as HPD event notifications for two USB Type-C port, etc.
-> 
-> Add the EC to the device tree and describe the relationship among
-> the type-c ports, orientation switches and the QMP combo PHY.
-> 
-> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> ---
->  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 139 ++++++++++++++++++
->  1 file changed, 139 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> index 09b95f89e..ff5db8f63 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> @@ -28,6 +28,7 @@ / {
->  
->  	aliases {
->  		i2c4 = &i2c4;
-> +		i2c15 = &i2c15;
->  		serial1 = &uart2;
->  	};
->  
-> @@ -216,6 +217,40 @@ map1 {
->  		};
->  	};
->  
-> +	usb0-sbu-mux {
-> +			compatible = "pericom,pi3usb102", "gpio-sbu-mux";
+Hi Leo,
 
-Sorry, there's still one too many tabs here and under /usb1-sbu-mux
+kernel test robot noticed the following build errors:
 
-The rest looks okay though!
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.13-rc6 next-20250109]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Konrad
+url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-Add-INA233-device/20250106-151934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250106071337.3017926-3-Leo-Yang%40quantatw.com
+patch subject: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+config: i386-randconfig-r072-20250109 (https://download.01.org/0day-ci/archive/20250109/202501092213.X9mbPW5Q-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501092213.X9mbPW5Q-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501092213.X9mbPW5Q-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/hwmon/pmbus/ina233.o: in function `calculate_coef':
+>> drivers/hwmon/pmbus/ina233.c:59: undefined reference to `__divdi3'
 
 
+vim +59 drivers/hwmon/pmbus/ina233.c
+
+    23	
+    24	static int calculate_coef(int *m, int *R, bool power)
+    25	{
+    26		s64 scaled_m;
+    27		int scale_factor = 0;
+    28		int scale_coef = 1;
+    29		int power_coef = 1;
+    30		bool is_integer = false;
+    31	
+    32		if (*m == 0) {
+    33			*R = 0;
+    34			return -1;
+    35		}
+    36	
+    37		if (power)
+    38			power_coef = 25;
+    39	
+    40		if (1000000 % *m) {
+    41			/* Default value, Scaling to keep integer precision,
+    42			 * Change it if you need
+    43			 */
+    44			scale_factor = -3;
+    45			scale_coef = 1000;
+    46		} else {
+    47			is_integer = true;
+    48		}
+    49	
+    50		/*
+    51		 * Unit Conversion (Current_LSB A->uA) and use scaling(scale_factor)
+    52		 * to keep integer precision.
+    53		 * Formulae referenced from spec.
+    54		 */
+    55		scaled_m = div_s64(1000000 * scale_coef, *m * power_coef);
+    56	
+    57		/* Maximize while keeping it bounded.*/
+    58		while (scaled_m > MAX_M_VAL || scaled_m < MIN_M_VAL) {
+  > 59			scaled_m /= 10;
+    60			scale_factor++;
+    61		}
+    62		/* Scale up only if fractional part exists. */
+    63		while (scaled_m * 10 < MAX_M_VAL && scaled_m * 10 > MIN_M_VAL && !is_integer) {
+    64			scaled_m *= 10;
+    65			scale_factor--;
+    66		}
+    67	
+    68		*m = scaled_m;
+    69		*R = scale_factor;
+    70		return 0;
+    71	}
+    72	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
