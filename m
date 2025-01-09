@@ -1,102 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A74521578B;
-	Thu,  9 Jan 2025 10:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628D3215798;
+	Thu,  9 Jan 2025 10:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736417818; cv=none; b=NHvz9pHy4qo3I2Mmja0ED5v9svcCxn6egNEHSl9WZ784aqeYudM360IItP3CZ7yDc/RDBezrb2hOFYCPhqTJ4UXIAgBvAcGerobmnTHCDXxqnxm1IuII7pfOgqKsNDW3tAuRAdTj5qJasEuww2yREU78tgCd0vkYJvr4+CLG524=
+	t=1736418229; cv=none; b=CkiB5dvMrh0rpsrdNqbth19xYTQtA01Z+nO7lk5eCumwgOuoq/XrQAcA5AqOC36D7Ji+vNwLbV+i9Mu7rpHA92W3WHIvBf1/u/V2TrSPAWsn1bt0dNO0eabRTfz2n3k23b74tVQv8NwytI8pRUuRXhQYR5xrrMok7XgIM1ekDGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736417818; c=relaxed/simple;
-	bh=o2gV8+qd+OstVBKFXAlKb6b8WAzoR3uhP+40NL99g4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJq7xjFzM1rPePuX+Y8K6uUYcOnF9lLGrIQ+sV1utp9ZA2BZ0Gdy7YI0KVC6VGR9MUaFayPo4yejpkmfQPKmlOxdajSNhMXG2zE5O9gsLYU0fwDirG3+jerW4UhzPq9ONteBtXpo055ZknaAQKaEIL/zrefxXCOYz34ejY9cMEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mv6bo9gr; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736418229; c=relaxed/simple;
+	bh=DelX21QKMIdxP+O/jvc4on2/htJfBru+mqcycYq84go=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=vCICcK3BS1sIPkhc3qdedqHapKsuqk/iPdHzUrkcNwud+UYTEctlq9hybhjfogWtzNwpXmXrWhM6OMcmcd/ouMi3H01DgNX3pEmn64/s+Cc/c+ITKKfdv0CWqU9/TO69DTFIqb44J8tF3wyMWrV1nZMPe2ebv7NesQ1UgAJaJ2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEQ55gq/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mv6bo9gr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736417817; x=1767953817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o2gV8+qd+OstVBKFXAlKb6b8WAzoR3uhP+40NL99g4c=;
-  b=Mv6bo9grXkpaJ6XkqcOrEk7xmpyD/Y39hUejyI73LHGjUUyxWWVPiRB3
-   gN0i/H8/Sz04rW8MA5Jew7zZPRs5LJdHtfmD4oHzLm8VgOhfhrrZeboa3
-   /08mVDFCz3IHDeKim8azrQiZWSI5omDbbGObVz/7GRFdFjSaZjJX4aqJ1
-   Uc5WlF2+5X48T2W3TnuthmcWbLptXigWSoP9pc2NXvpSg4K0CoSDl+dy8
-   zO35nir2zV/8XafyxgZKytKAvDZPY7phbXctRM+PUfuBcO4SCXFOgZqDP
-   8NGYXL9lZ6jzlOiYwRTaGK2lVgtggh85D837gJBs3SjhYAMxhKciajA4A
-   Q==;
-X-CSE-ConnectionGUID: O/DLvZC6Q5CSOnWRFSpXqg==
-X-CSE-MsgGUID: E4YutE46RmKB5UVfbg1X6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36830884"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="36830884"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 02:16:56 -0800
-X-CSE-ConnectionGUID: 6hdmEu8SSXO2+Mp4RQEcaQ==
-X-CSE-MsgGUID: T0zJ1WQTRYmQeydN1S1tag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="103329234"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 09 Jan 2025 02:16:52 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVpas-000HMR-1U;
-	Thu, 09 Jan 2025 10:16:50 +0000
-Date: Thu, 9 Jan 2025 18:15:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
-	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
-	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
- Monitor
-Message-ID: <202501091702.8ZdJcvFC-lkp@intel.com>
-References: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEQ55gq/"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11DB7C4CEE2;
+	Thu,  9 Jan 2025 10:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736418229;
+	bh=DelX21QKMIdxP+O/jvc4on2/htJfBru+mqcycYq84go=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=IEQ55gq/SE1fFkrpSyVWOHPkYHBI50f9lyBSdYhpeSrjwfYnFTVanGbYFGdhnKbWf
+	 zUYMQ4tVSELxSG0s4Msmi0rD2VEvngSArmMOFuOt02NebwXn9IZDsW7bjBp0jpvNZX
+	 31jlraSvgaRa5MQzfz0X50X75z3byMzUzSxXuc+ObPrQ4LydrDZ3Bsu7X8UrOt1TeX
+	 fQpApJ+mldl8xZzDM7jVVaBbiS67LuEZvX8m5l/ND7H1WCxSvzgLJ/ujlscAfg7xyB
+	 yJa8hKcTHPJyPn2zEECU6FsvzYZWWg74d7GobLvrZTFw2/U7Ix2sew+XH5+AfONLZ4
+	 nd33eRQwgeKrw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 086C7E7719A;
+	Thu,  9 Jan 2025 10:23:49 +0000 (UTC)
+From: PavithraUdayakumar-adi via B4 Relay <devnull+pavithra.u.analog.com@kernel.org>
+Date: Thu, 09 Jan 2025 15:59:57 +0530
+Subject: [PATCH v3 1/2] dt-bindings: rtc: max31335: Add max31331 support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250109-add_support_max31331_fix_3-v1-1-a74fac29bf49@analog.com>
+References: <20250109-add_support_max31331_fix_3-v1-0-a74fac29bf49@analog.com>
+In-Reply-To: <20250109-add_support_max31331_fix_3-v1-0-a74fac29bf49@analog.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ PavithraUdayakumar-adi <pavithra.u@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736418610; l=1896;
+ i=pavithra.u@analog.com; s=20241220; h=from:subject:message-id;
+ bh=CSTscMKCGJQV0sJTo05LWTvBCwbI5QwOv/6bQjL/k98=;
+ b=MVUREwDDBzAEkOP2qrqKCJPk/uE6DnHkF4z6YLsKaq6Z+Jgqphj2k94/7x4dqdB5PEK2kYBk6
+ ZhfmV5059f4BbPHp4rZH9u3clqzeSOtNkOz5b7N0aQDwB+4Mu9NRLmY
+X-Developer-Key: i=pavithra.u@analog.com; a=ed25519;
+ pk=RIhZrdpg71GEnmwm1eNn95TYUMDJOKVsFd37Fv8xf1U=
+X-Endpoint-Received: by B4 Relay for pavithra.u@analog.com/20241220 with
+ auth_id=303
+X-Original-From: PavithraUdayakumar-adi <pavithra.u@analog.com>
+Reply-To: pavithra.u@analog.com
 
-Hi Leo,
+From: PavithraUdayakumar-adi <pavithra.u@analog.com>
 
-kernel test robot noticed the following build errors:
+MAX31331 is an ultra-low-power, I2C Real-Time Clock RTC with flexible
+crystal support. While, MAX31335 offers higher precision, MEMS resonator,
+and integrated temperature sensor. MAX31331 uses I2C address as 0x68
+where as max31335 uses 0x69.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.13-rc6 next-20250108]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Changes: Added example for max31331 and modified the register address
+for max31335.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-Add-INA233-device/20250106-151934
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250106071337.3017926-3-Leo-Yang%40quantatw.com
-patch subject: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
-config: i386-randconfig-001-20250108 (https://download.01.org/0day-ci/archive/20250109/202501091702.8ZdJcvFC-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501091702.8ZdJcvFC-lkp@intel.com/reproduce)
+Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
+---
+ .../devicetree/bindings/rtc/adi,max31335.yaml      | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501091702.8ZdJcvFC-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__divdi3" [drivers/hwmon/pmbus/ina233.ko] undefined!
+diff --git a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+index 0125cf6727cc3d9eb3e0253299904ee363ec40ca..f249313bc485d7a6154ce684726d6a950405ef0e 100644
+--- a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
++++ b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+@@ -18,10 +18,13 @@ allOf:
+ 
+ properties:
+   compatible:
+-    const: adi,max31335
++    enum:
++      - adi,max31331
++      - adi,max31335
+ 
+   reg:
+-    maxItems: 1
++    items:
++      - enum: [0x68, 0x69]
+ 
+   interrupts:
+     maxItems: 1
+@@ -57,9 +60,9 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-        rtc@68 {
++        rtc@69 {
+             compatible = "adi,max31335";
+-            reg = <0x68>;
++            reg = <0x69>;
+             pinctrl-0 = <&rtc_nint_pins>;
+             interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
+             aux-voltage-chargeable = <1>;
+@@ -67,4 +70,15 @@ examples:
+             adi,tc-diode = "schottky";
+         };
+     };
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@68 {
++            reg = <0x68>;
++            compatible = "adi,max31331";
++        };
++    };
+ ...
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
+
