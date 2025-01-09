@@ -1,189 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ADD1FFC77
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Jan 2025 17:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6BA1853;
+	Thu,  9 Jan 2025 00:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736357641; cv=none; b=ISArZ+xd3kMXoxlFLyohycCQBPI+HWVyhI0ASaaqegkwUvo9cGrypCyAtNBbvzrRdU7GOt3HJyir6VJ5JPWn5MhlxLHJnnk0nDKupVF6PKJaOdMU+eVd9JXg6WBcC02m6j2/S3An/ZxbZP+8QglcOjp6sBiXnqFLlCSw+86uUYU=
+	t=1736383872; cv=none; b=r4FMchSH79GgTFNboR9Azr0FcMiWp+DO3veTGTrDd6KNyQZxqh/SUlN2LOTtXZNlIb6ZZ0JgrzCCR2nbECDg0OWZ+LwyC49tVQK0t7DL8UoRKiPi++XIdWgahOrk++a8CwdZePV2EaS6KVm2lH5LqE/1k3p4jWaq20nbm9N/31A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736357641; c=relaxed/simple;
-	bh=EY2dmME9k4SvE/CzJc4QZ4/KtzP9FXeP6lJY/ZZTQQg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GuR8Tn4Lb16TWw4+r9kU35EOnV0ybWjg/hrcRmzcjtQhyW/bjaHsSkYPTN1SRcyOksMfVKXjd7zIa0qYO26gNK3axvIh9UpqnjhBmccmprVE4Dcgqx9L1HHOqqjmgeNfVGhmg1cxW1yh0KeuwcYS+k3DC6dpOyzCSbhRult/gOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ks9X8kgR; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736383872; c=relaxed/simple;
+	bh=WF6PXhCuFVDkJxCjbmfIHrcpq+9we7XTVrtKCaAt5DE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NldImsvqwpv1L57WfzRMWHatdGoZebqbKSWr5zg5xRZHQ5opFVT79RkcKh81CcjP1U8wJNkMwPmVErkx0Snc3wBaYVl+W7uvvqsOwR3MdgdBTNzyKiRO7WMcuQIcenhon/uiMQ3jFJDWf3eakzUtWyn7/rYIAO9jdVuklYIqmic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnBJOaUZ; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ks9X8kgR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736357640; x=1767893640;
-  h=date:from:to:cc:subject:message-id;
-  bh=EY2dmME9k4SvE/CzJc4QZ4/KtzP9FXeP6lJY/ZZTQQg=;
-  b=ks9X8kgRAhb6r/U1nkRw9skdkz0f7uVq/RZmbkkGYsDpUjUrP/0Bo+DO
-   wA7ayfg2G2dIIOkHBhFBGoERkb83kdcG2WHoxsVri8UudB7jplb+RNYe4
-   FQMkCQMJT7J+d/9GFB+RqS5pCqcFWxa1PgEUSrLqx+Kdi1pwO2t0EA+uk
-   eJl7aIi0DuBXSfqHPQFThSKtB98MCJIiDeUdcIWC8qIE6DF5+gF0dcqCQ
-   zUWmnOhFTM8I5rBTmo7K7YG/DKyN3sg0I1uZl7cjZIDO98DbBzJn/46T6
-   NL97oWWkBV+sEeWTpZmPYrInc03EfWW3JAhYl1hrMr44J2ZkqeXa6FJ/v
-   Q==;
-X-CSE-ConnectionGUID: seErU+88Tq+91KZN1kA3CQ==
-X-CSE-MsgGUID: qv3+giovRqqTLZEG/d7cAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47264439"
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="47264439"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 09:33:58 -0800
-X-CSE-ConnectionGUID: kLA8RqczT8m25/N8pMcHlg==
-X-CSE-MsgGUID: rmPZYcy0R+mMJhrkdgZowA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="103101415"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 08 Jan 2025 09:33:53 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVZwF-000GSJ-0F;
-	Wed, 08 Jan 2025 17:33:51 +0000
-Date: Thu, 09 Jan 2025 01:32:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- adc52dd4078067fabf1431036ba180eafd8a7eee
-Message-ID: <202501090147.EE4o4d5a-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnBJOaUZ"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-29e2a50586dso222188fac.0;
+        Wed, 08 Jan 2025 16:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736383870; x=1736988670; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4fWK8fRu3RMh7WwL5FXvWKO33j9VYYVjRQD32mqDumo=;
+        b=VnBJOaUZPRbFm/6p7B7VK+6t8MaV0ilH7H9UW8n4i1yOgTK08wqe4nJ7z0e91eapq4
+         WobTzh7ma8ZfQmNN4CsptZQPLb9hmwzy/2Xl+hJwyr1j4bQol8y7TUK94IPJQMORkQ5e
+         myvTXQNkRXPUZlGbBxZvO0ysQCiGDwWnDbYYkuWJQ/5O9tL3B9vzGt9dhwboQEODdlZ5
+         CTq3lZOU3VQJNwlGMBUORePIupnf4QrOBBeCSws2ECOxWeV6jghZ/fWyXDyfsyyDudxY
+         6EBKEAeTUTXTurytp0nEnQ0g7qNYtddl1+0IDnba/2IyLvmgIfb0hzzBfVF7ElUI6Xja
+         j3Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736383870; x=1736988670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4fWK8fRu3RMh7WwL5FXvWKO33j9VYYVjRQD32mqDumo=;
+        b=F0dWIZps4fhF7qpblXwiEIEmfheFafm3PXfwyIO5Se9gcsgKkf2OuSIWpILQ++c8qt
+         GW69Ws0L8HtoisyJV3Exi/em3oT4hmxiQLUNJpS6RrzpMVGu6gL3hCzpVSFjhhmaL1U8
+         D/CY7A+NhgxMoUXdJ/fyj2g+Uwt26iA+XuIguMpSGJkeTafBVb+V8ImtU0GGkl69lvmS
+         ZPfZHZo7r1NfYo5JbK8oHQt/w0rbPL5rH1w3rAGLMxm0zD9Ovy4HnLm9JDzPtgEC1fo4
+         u8YTrJME9rv3V06gy8EqkMDpwNBUXY7sg6XmfOxfJ7x/KS65Ul+L5LcNl861hGsXhRIl
+         0Yew==
+X-Forwarded-Encrypted: i=1; AJvYcCVomc8Hxdz09CaZSd+shfXJDmD+dHtdS5PKnqrI/XIISWQEhwGSPtl3VoXgfwp3gAH5+zJbRyYL0lP1@vger.kernel.org, AJvYcCVtHu8uWMICgXYQrVYDwUV1VY8011YomHPmi0DyQl2lGZzjvJ/Cjuf1+oodJtuA8JTcNhAXw8IEu4f8@vger.kernel.org, AJvYcCWCXfIFSd7WOo6sQXoXwDeKX654eE6Hx5msxnUjJMavAApkpGCsXsms+a3bh7VC8IGhpTLY8TRolbjyF30=@vger.kernel.org, AJvYcCWRR59hvQ5FJKULYHWubodiUNk1yzhMyT8m7DEozmUxy6V5xZNW1kDkY9fATBUkNndWidISdvlcb4f+RK6I@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1h3J4+T/utwT/DblM9wfkPThitHvH082iYbjWldSBO51BqhXS
+	dHrbclTEOpaodTpmSiBJAymMIi5vduBJH6QKqHqVzCGpxBrLNg3JuOianxwtY1idO28v4SRgh7v
+	bOpvfvaxmw0UdQklRexpzOvtez4qPLA==
+X-Gm-Gg: ASbGncuR6UgOB8rmqoDmFVfFln3xadH0QilQCP0f5xusxxgi2wDTLjKIG2JpH+TA29J
+	SxSOKcpk7ubwUdqf3BSY2xchOrQZqZCafyLIc7No=
+X-Google-Smtp-Source: AGHT+IEeSNtcgAJlHfEykhhMAk5h1lzhfCmyoyAjtiALw616MK9IddiTwG1sOTTjAfW2W2QxEFcSLKMYKytLFPwMpOI=
+X-Received: by 2002:a05:6871:8083:b0:29e:5a89:8ed8 with SMTP id
+ 586e51a60fabf-2aa06687b11mr2647289fac.11.1736383870354; Wed, 08 Jan 2025
+ 16:51:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250106071337.3017926-1-Leo-Yang@quantatw.com>
+ <20250106071337.3017926-3-Leo-Yang@quantatw.com> <b2a336dc-c029-4a95-9807-8e8b82f75ec9@roeck-us.net>
+In-Reply-To: <b2a336dc-c029-4a95-9807-8e8b82f75ec9@roeck-us.net>
+From: Leo Yang <leo.yang.sy0@gmail.com>
+Date: Thu, 9 Jan 2025 08:50:59 +0800
+X-Gm-Features: AbW1kvZ6rvrMeK2ArX4UrvAMISLLpyhQLIATUxtoPWwOefncaT3aGzhpR6TwQjA
+Message-ID: <CAAfUjZE2x_Fafogna2yhnnohZrGmtW5G3Q64AVhYwVEXuGoaBw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net, 
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: adc52dd4078067fabf1431036ba180eafd8a7eee  hwmon: (pmbus/adm1275) add adm1273 support
+Hi Guenter,
 
-elapsed time: 1416m
+On Mon, Jan 6, 2025 at 11:31=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> Besides, while I did point out a number of problems, but I did not sugges=
+t
+> to "rewrite the driver".
+>
+> Since this is v2 of this driver, the submission should have been versione=
+d,
+> and a change log should have been provided.
+>
 
-configs tested: 112
-configs skipped: 3
+Sorry this is my first v2 patch,
+I should have been more aware of this problem, thank you.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>
+> Why not just pass the power coefficient directly as parameter ?
+>
+> > +     if (1000000 % *m) {
+>
+> I fail to understand the logic here. Why scale if and only if m is a clea=
+n
+> multiple of 1000000 ? Scale if m =3D=3D 1000001 but not if m =3D=3D 10000=
+00 ?
+> Please explain.
+>
+> > +             /* Default value, Scaling to keep integer precision,
+> > +              * Change it if you need
+>
+> This comment does not provide any actual information and thus does not
+> add any value. Change to what ? Why ? And, again, why not scale if
+> m is a multiple of 1000000, no matter how large or small it is ?
+>
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              alldefconfig    gcc-13.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250108    gcc-13.2.0
-arc                   randconfig-002-20250108    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                       aspeed_g5_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250108    gcc-14.2.0
-arm                   randconfig-002-20250108    gcc-14.2.0
-arm                   randconfig-003-20250108    clang-20
-arm                   randconfig-004-20250108    clang-18
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250108    gcc-14.2.0
-arm64                 randconfig-002-20250108    clang-20
-arm64                 randconfig-003-20250108    gcc-14.2.0
-arm64                 randconfig-004-20250108    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250108    gcc-14.2.0
-csky                  randconfig-002-20250108    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon               randconfig-001-20250108    clang-20
-hexagon               randconfig-002-20250108    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250108    clang-19
-i386        buildonly-randconfig-002-20250108    gcc-12
-i386        buildonly-randconfig-003-20250108    gcc-12
-i386        buildonly-randconfig-004-20250108    gcc-12
-i386        buildonly-randconfig-005-20250108    gcc-12
-i386        buildonly-randconfig-006-20250108    clang-19
-i386                                defconfig    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250108    gcc-14.2.0
-loongarch             randconfig-002-20250108    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250108    gcc-14.2.0
-nios2                 randconfig-002-20250108    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250108    gcc-14.2.0
-parisc                randconfig-002-20250108    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                 canyonlands_defconfig    clang-19
-powerpc                     ep8248e_defconfig    gcc-14.2.0
-powerpc                 mpc8315_rdb_defconfig    clang-20
-powerpc               randconfig-001-20250108    clang-16
-powerpc               randconfig-002-20250108    gcc-14.2.0
-powerpc               randconfig-003-20250108    gcc-14.2.0
-powerpc                     skiroot_defconfig    clang-20
-powerpc                     tqm8540_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250108    clang-18
-powerpc64             randconfig-002-20250108    clang-16
-powerpc64             randconfig-003-20250108    clang-20
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                 randconfig-001-20250108    gcc-14.2.0
-riscv                 randconfig-002-20250108    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250108    gcc-14.2.0
-s390                  randconfig-002-20250108    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250108    gcc-14.2.0
-sh                    randconfig-002-20250108    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250108    gcc-14.2.0
-sparc                 randconfig-002-20250108    gcc-14.2.0
-sparc64               randconfig-001-20250108    gcc-14.2.0
-sparc64               randconfig-002-20250108    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250108    gcc-12
-um                    randconfig-002-20250108    clang-16
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250108    clang-19
-x86_64      buildonly-randconfig-002-20250108    gcc-11
-x86_64      buildonly-randconfig-003-20250108    clang-19
-x86_64      buildonly-randconfig-004-20250108    gcc-12
-x86_64      buildonly-randconfig-005-20250108    gcc-12
-x86_64      buildonly-randconfig-006-20250108    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250108    gcc-14.2.0
-xtensa                randconfig-002-20250108    gcc-14.2.0
-xtensa                    xip_kc705_defconfig    gcc-14.2.0
+When we calculate the Telemetry and Warning Conversion Coefficients,
+the m-value of the current needs to be calculated via Equation:
+1(A)/Current_LSB(A).
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The number 1000000 comes from A->uA to match the unit uA of Current_LSB.
+Try to prevent the loss of fractional precision in integer.
+
+But this is not enough,
+according to spec 7.5.4 Reading Telemetry Data and Warning Thresholds
+If there is decimal information in m, we should try to move the decimal poi=
+nt
+so that the value of m is between -32768 and 32767 and maximize it as much
+as possible to minimize rounding errors.
+
+Therefore, if m does not have decimal information, even if the value of m i=
+s
+scaled up, it is not possible to minimize rounding errors.
+
+But my comments are not clear enough, I'll fix it.
+
+> > +
+> > +     /* Maximize while keeping it bounded.*/
+> > +     while (scaled_m > MAX_M_VAL || scaled_m < MIN_M_VAL) {
+> > +             scaled_m /=3D 10;
+>
+> This looks wrong. If scaled_m < MIN_M_VAL it doesn't make sense
+> to decrease it even more.
+>
+
+In this part, I try to move the decimal point so that the value of m is bet=
+ween
+-32768 and 32767.
+Assuming scaled_m =3D -40001, I can scale it to m =3D -4000 and adjust it b=
+y R++
+
+> > +             scale_factor++;
+> > +     }
+> > +     /* Scale up only if fractional part exists. */
+> > +     while (scaled_m * 10 < MAX_M_VAL && scaled_m * 10 > MIN_M_VAL && =
+!is_integer) {
+>
+> This looks just as wrong. If scaled_m > 10 * MIN_M_VAL, why increase it e=
+ven more ?
+>
+
+I think the purpose of spec is to keep as many integers as possible in m, a=
+nd
+then save the information in decimals via R to minimize rounding errors.
+So here I keep the positive numbers as close to 32767 as possible, and the
+negative numbers as close to -32768 as possible.
+
+And thank you for the suggestions, they are very helpful and I will
+try to fix them.
+
+
+Best Regards,
+
+Leo Yang
