@@ -1,90 +1,154 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C49249E5;
-	Thu,  9 Jan 2025 15:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E632188CA9
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 17:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736436648; cv=none; b=bUCRLajdUKNf+L51MOd1BzN3NMHPNi5YWDMpUvLd9pl/POakdZzWtjB/xIlhOMXM3jlI4TBtV0/XkgBrmC+QkgOmWjHQqjd45tBgxYulotjdjZMZ0a+N4lqXLkDkVDwxiPXUySzXNilsAw1Q7Ya5VchkWOeTRTlmI4A9IyHGNvA=
+	t=1736442203; cv=none; b=DHm6Vsjj/Bnh8EOgFI1kn2mbkQ7AvddugskVybcfvwEhac0wO7hxLz72lx5NnvuidPOnAjXFLEDhJmTT2UW4LMs1b3Kv0K1pvqCnUdm1WwzFQhQ24SmSxCz36fqKRJc2SqcS0UmeH9+wQyUcncN7Jq3OEhsgM+OeApfAp06YwCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736436648; c=relaxed/simple;
-	bh=d93zm+uZ8uB8nlYkuwox2uBGep83ZnnW8gM2JtmbYMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ilgEbEXEv2XIrISPvSSYjKRf0GxctVHWR3azCuFVJt0oAdFPaP97Cio9ifYKFcAG4YhEk6s7XQEHddmO9lcK0lbh0UUJCSGZMv6qvtG8QH5Jsa338QPZithyvrmZOC0VP8gxT6t34ySkMEhMPwZG5zMtNf/PdudfeVu2/bIoCkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eIxB82DP; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1736442203; c=relaxed/simple;
+	bh=Fi4C/wrdv4cN/BGKHgLWSQNNun1ZoOAnt8XL1vZdaic=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=O+dd0ZnA2MnIX/6NJ2va8wyBLZ5xy/kgsyJh9qid+9tS7K1ni/yjvU4hecAM1UoRbnNQVh4WbJ6Loi2t5THhj6AiEy1PuOxs0oPZ0IEn6cvBafmWawsj1q1eq1UiBDtvpvqNbxyjpFUIPOSziBwy3e2//QaD08eAShcWyRoVy2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIBoUTjx; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eIxB82DP"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso1582524a91.1;
-        Thu, 09 Jan 2025 07:30:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIBoUTjx"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d3f28a4fccso1457893a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jan 2025 09:03:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736436646; x=1737041446; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wFBCcAEAPnuiBydTRMRNsfW9I4QP+EaJ0ZWxsgd7ST4=;
-        b=eIxB82DPm278HfYgWq6seZXIeysDK6RRebDOLTZ7/CN3RFcf1/0x5x61ostHgh0HwE
-         pP86/BKB3360C96w5elh1y4KXpATJahCBPbgoRFjkwwlzf2WNmn3bCq4oXKX3OXwXfC/
-         WHpVb3A+WjCJg9QsMVb6En5BbtGdBWlrq3KT63cAy4z/AU335agRgvkAkzgXeY4uYiUT
-         SvC8ypOXShclnuqRCZxE6izWxCmMZrDPyNcRyXaB7MIcFbAQhyWt3ALrrw7AYl3VVwMI
-         JmCPxAlsZD5Nln2QfVWjTafsbuJJocO29KFf4dOCAF4asH7dPCSBW240mwki8eGjoMDq
-         oKvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736436646; x=1737041446;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20230601; t=1736442200; x=1737047000; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wFBCcAEAPnuiBydTRMRNsfW9I4QP+EaJ0ZWxsgd7ST4=;
-        b=u5Zmg/3Oe+Y8IcbzeUtto3CBzUlAzmv7Ru5+WaV8vRUk3NFgpZbil2t0sbz25dy+21
-         5Zxyf1dabrwxZe5jing1bp1wPrbktKCynUTV55tnx3lwjPK3VLI2xPokvGrv0I+umuFo
-         jd8tjuz4BTjiYMaUjBkSvoQARLIRbgjiC63Xm5ksrIoxnyqWBt7vc82puCYEteykOsSV
-         pXVb4N4YrhH0YYMxfL6v9qTf+nsZdGqVZpzPFPt0xQSf3ArmwDSlAs+m5soS7dYiD2z1
-         ftd542rNf68MFt1g+TLtZn5gGJYIRlNTcD7WtXIiqamO95sObV2qgwnN5M64DaSJOy0W
-         l6ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1AKsW+CXiLiw6KVXWTGzVLaH8dpMrnWCMFVAx5G6UyCBXoxS7CruZdulBDj7bpg4FvFRjeF9a2so5Kw==@vger.kernel.org, AJvYcCW25yv3ISLagtG9UgHmpM3+GbRVbphTBdLDFuKp5yBgNxvZoj7OsKkxGsOxeXgrw4sk8r4AOdwhExWHypHB@vger.kernel.org
-X-Gm-Message-State: AOJu0YydtllKXP+lbRnkH8qIutDJ2+XoEOZxFHFfWkLv7NNFCi9e0I/N
-	6XFszpu7sCqFFsfuwYTf2vigsIWdDXJKq6mym+voftxOQMCHOaFBLLUNLg==
-X-Gm-Gg: ASbGncvgE3j24SwicK01l9XtZq8Hmc4uUzn5jWPwlGL/JexcNXjY2k2XedwXg+I+zPJ
-	KC0cmabyHaXogmor103hHm2Ha7mIr1K6cRXtRtQC6Z6Pj/tNZot2ftMPkt3aC6GJxXiEMkEmeWc
-	L3KACGzVhJmoNJpguzK9VJMic5/yPOnTxhX4mBKBa62/nds3DjYYlKkAvFoV0yWm4Dkr8CVpTJe
-	BnQ7HjiGSo5+JWWjHIvkyCERJtAWkhTP0WUJc6hNXz+i98rqgRe6DomrDKeZVxUE3zr8g==
-X-Google-Smtp-Source: AGHT+IEsIIn5cA8LgfbL+CgYOhVHfmgA+RMMrkTVywhdf9RU9NhPrhKFCmBeM+N0HhQDRHuJ3L9caw==
-X-Received: by 2002:a17:90b:538b:b0:2ee:f19b:86e5 with SMTP id 98e67ed59e1d1-2f548eae0eamr11232722a91.14.1736436646214;
-        Thu, 09 Jan 2025 07:30:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9de3088esm92805ad.173.2025.01.09.07.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 07:30:45 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 Jan 2025 07:30:44 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (isl28022) Use per-client debugfs entry
-Message-ID: <39481465-88f5-4cb7-b12e-695e2bf07010@roeck-us.net>
-References: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
- <20250109122112.45810-3-wsa+renesas@sang-engineering.com>
+        bh=Gm5Rcwm9oSqYnU/XQ+Dypf0isX0bp1lDOcfitzD7/Nk=;
+        b=ZIBoUTjx7Zjtcd/tiRqt2NJZ4OszGQkocwr6j4CGOVxdPxxbuqxChwh9Rl8+4ynB/9
+         LhYW634/kpGK6I1uSfWIJS2d1Eg1b/gKWvAOJR3yRddycfEU7gtIqO8l7c/4zC/FlGjt
+         kf9f14DYl0moGvdIYP7e/66mSBI9oDpDFGuGu++No2AhEAEK0nuS4xaLyXZurW08/wZb
+         /YppGOlCVYnJfXdIZAW7YcKke+sMwvJCCAlUE73iKfjshTbqX9Z6Sk94oLh/fd1jI4Pv
+         EEoMWvPJ+DuSavkionQoOd4ulKDl2g9nBKBgZVZQa8EBBwto0zhbOB9M9idIV2wmulFk
+         mU1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736442200; x=1737047000;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gm5Rcwm9oSqYnU/XQ+Dypf0isX0bp1lDOcfitzD7/Nk=;
+        b=YIeqXdgePgmtfKz8abvs5TRGYWt3RX7qJNy13DmCbfXu3jnS2Gaf9RTts9c8D4A7MG
+         EpNPBDDWaiWCuZ+uDJ6ufOQqUBL8TKBqV5oGjWYxTKDdHu0y2YkBCVPY4AmoN5NG27ZD
+         uXv8OG54E+zUzaUq+GsntFVK1+LzP/i311eCNGecl3CPUn9esvPfd6RIC9FwVzUyk/l1
+         f75xqZifNapJIYvK34Hbat0mUbDkcb1kw/HLZ7FZhZN3aAGIjCbHPQySz/jSs3rFY3me
+         VZsbnsN/LAiAi9lZ9T8j2N1qb2tAaGDn6XanEaCZNLRubzOTCgsMQVNK8lDxGvplL7l8
+         WlyQ==
+X-Gm-Message-State: AOJu0YxBTKWkHQVHUUw5p7t/zXhpMp1AL4DIvvse6NN8WSGbDOSVOLHu
+	ohrxU0+tLei/m2vBNb6dshs9K0qBTQh8aGMR7V6g/ja7NGB3mHvb6gtq4A==
+X-Gm-Gg: ASbGncsdttimNnUnp89f0hdQigIIQAW4qkge/eLUbR/waP1/TVcUMX7Qp4mlc3eazNg
+	+e6thB8debTFGWvrVcdJLrZ7FksfY8p7fThIeA/zRNq4lSPvHmh9Kegt2J8ZhhmkY/Qkxbxign7
+	VtAm9OBsfLV2XurkZ73A81IjqGwG+yzVNofRGI2KYoP8Q5RlYcBHFHfslnYBEhQ3W0maR++ed1I
+	4KpC5ubcm8k8LqGcHW8pvPDryRwbCs/Xot5oKd/5wiPRluLWBl+L1+qzpu3jof2dtUn01k1DGGP
+	FMfv70Oww1+LceCFtZNFm/Ja7NEDLtAgH6C6UaTzBH5A7uOpalU8+wrfAYBC68GKbWyAPgCvnbJ
+	+HnDjV0oxhu0RtsrekeOWHzg4jeVfTOmBv6MxQdLXAnxIlpCL
+X-Google-Smtp-Source: AGHT+IGI2DRsNqCKVepmX9wCz1oAF2xgF09xK9WZCSYWa4Nadf8OJe8l0CbG7bDhYx/1anCwySJ4fw==
+X-Received: by 2002:a17:907:72cf:b0:aa6:a33c:70a7 with SMTP id a640c23a62f3a-ab2abc8ecb0mr658972166b.49.1736442199084;
+        Thu, 09 Jan 2025 09:03:19 -0800 (PST)
+Received: from ?IPV6:2a02:3100:ac5c:5700:44f4:3326:ed45:6e1e? (dynamic-2a02-3100-ac5c-5700-44f4-3326-ed45-6e1e.310.pool.telefonica.de. [2a02:3100:ac5c:5700:44f4:3326:ed45:6e1e])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ab2c913605csm88533066b.82.2025.01.09.09.03.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 09:03:18 -0800 (PST)
+Message-ID: <1cb1c77b-177f-4b03-9fcc-9c892391e654@gmail.com>
+Date: Thu, 9 Jan 2025 18:03:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250109122112.45810-3-wsa+renesas@sang-engineering.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] hwmon: (core) Use device name as a fallback in
+ devm_hwmon_device_register_with_info
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 09, 2025 at 01:21:11PM +0100, Wolfram Sang wrote:
-> The I2C core now offers a debugfs-directory per client. Use it and
-> remove the custom handling.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+A number of network PHY drivers use the following code:
 
-For my reference:
+name = devm_hwmon_sanitize_name(dev, dev_name(dev));
+if (IS_ERR(name))
+	return PTR_ERR(name);
+devm_hwmon_device_register_with_info(dev, name, ..);
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Make this a generic fallback option and use the device name if no name
+is provided to devm_hwmon_device_register_with_info(). This would allow
+to simplify the affected drivers.
 
-Guenter
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/hwmon/hwmon.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 685d4ce8d..1fd3d94e1 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -1170,6 +1170,11 @@ devm_hwmon_device_register_with_info(struct device *dev, const char *name,
+ 	if (!dev)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (!name)
++		name = devm_hwmon_sanitize_name(dev, dev_name(dev));
++	if (IS_ERR(name))
++		return ERR_CAST(name);
++
+ 	ptr = devres_alloc(devm_hwmon_release, sizeof(*ptr), GFP_KERNEL);
+ 	if (!ptr)
+ 		return ERR_PTR(-ENOMEM);
+-- 
+2.47.1
+
