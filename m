@@ -1,110 +1,102 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E04215045;
-	Thu,  9 Jan 2025 10:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A74521578B;
+	Thu,  9 Jan 2025 10:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736417384; cv=none; b=ZY01QTvyJP1VCkIYgeS8o0a5eqSHKARFRrcAYaYUehiLmUOsRACABzPnm6lEaIgxBn+e85ZVSP3CXycWnuAIOpsJPhv4TX1lBSLRm2ESZMBM7ToWsuh5QUsniqQRWNOeM3y4RC53wBT4aOnxsOfYwilF33ujF24VbNKNpZd6c80=
+	t=1736417818; cv=none; b=NHvz9pHy4qo3I2Mmja0ED5v9svcCxn6egNEHSl9WZ784aqeYudM360IItP3CZ7yDc/RDBezrb2hOFYCPhqTJ4UXIAgBvAcGerobmnTHCDXxqnxm1IuII7pfOgqKsNDW3tAuRAdTj5qJasEuww2yREU78tgCd0vkYJvr4+CLG524=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736417384; c=relaxed/simple;
-	bh=N9MXNPcX7FjxZRfHUoOy1f5tYAXEp4CEneGSpWoWF9Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S/QWnjcM6ZWRS+FpMRVlbebz4QTpeH6fjjCE7CDgWM2d9SqFFoKwEIYfNDODeG4+AMPvlK1PX9XGN7mmZ58x8MeaiWE/g+7T4kvD+VODdj1diPdhbcPT/bemmjwjk9e9WC/Z0kJ6NuZLJFo1gKrJFltnT+Y+15TsGDxGfWPVMPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ilUZwGF4; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736417818; c=relaxed/simple;
+	bh=o2gV8+qd+OstVBKFXAlKb6b8WAzoR3uhP+40NL99g4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fJq7xjFzM1rPePuX+Y8K6uUYcOnF9lLGrIQ+sV1utp9ZA2BZ0Gdy7YI0KVC6VGR9MUaFayPo4yejpkmfQPKmlOxdajSNhMXG2zE5O9gsLYU0fwDirG3+jerW4UhzPq9ONteBtXpo055ZknaAQKaEIL/zrefxXCOYz34ejY9cMEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mv6bo9gr; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ilUZwGF4"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54026562221so726961e87.1;
-        Thu, 09 Jan 2025 02:09:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736417380; x=1737022180; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=buIEu8F+tmWQN/Iduxju9T5NcyO8HpZkuguISTyUdb0=;
-        b=ilUZwGF4oI4G/Qu36O5SckafNUtxpjHEDmOwyFXGY+9FIAd6CYrFt8dTciDV1PWzrt
-         0uGrUYJDi7fPfqSBJt3G41bolOdShl8k46A46DV2xiNTOFJM2YNCvjbRApSgLpHulEai
-         qiaYe8mtC+7qYzv/arDeIlbxB6ItngAZGwNIJJ05w+3GSpyMkL3YTcXlxsWR65biWl36
-         OsJSsxEHth0l+LXVqPPDI8b0gqsBJvxfZoUfTOML0wZ1YWbiWvWUkAG81eGhLGuM+Cpe
-         sLNXMMbwrA+FUYqKAqG+QKYjo4KKDBpXL+laGdVWi087HGsVkztxFUtbrIWMQ+D81oeA
-         i3ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736417380; x=1737022180;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=buIEu8F+tmWQN/Iduxju9T5NcyO8HpZkuguISTyUdb0=;
-        b=pYCxMKpcY2iuNpcwwyYVzT/FYf+RNe+r2qEjWND32PTZyZTtsP65FaUqK+oGmTrYm7
-         mZMeiOzuQuY3QF/FDqKyjOrOp6rDqLAyz/QOLvGniKwyjvTMeAqq1NY+MYP2S5q/FwAb
-         AAYWFzc2ANF3YLhTZAy+IUlcEPKkocGOWRtXIV9pZEZgIBCKb2NeTJOZGLzAhoquGgWj
-         9SFwAFzbL0IfLOvUHepaeprBzMUAFLIsIJFz7M8fOi8GciKKwMWLP/8ol+Yt0EDwRBrR
-         Z6oR4wBWEEPfn52glsgu9+3DyZ9DWmLlSNSlchtTBGDZ6dZCLvahbfP8mRNIvdozIty+
-         1Y6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWDuf6Npem854s/uZak2H3V8L8LFX4ZfLyVJDXf5Ladrz7dE/IzF07UomzySvaodl5gtTJCh0zb6U+Xp+U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtOiDsXODcjKOWNAIwaHv1EkOlC3zyTTWVBxguKhNlgZL3+ORP
-	RKE5vHWInxLOtl5IjCiFllX+cA4h8KhoYLzIWvz1klegv/5VRzYs
-X-Gm-Gg: ASbGncumAL3Tz0teVOjX5ddep2lamn7hK4n8bZhY2xmiEuFn/0DajAY1tibjyypV3Rc
-	kG5yIlS7OlFZEL8RhiQJcix4GpJ/cqk0C4bm1YhRsgE5GuAN727bGXfh6XqhKh7gdk+I6fQ2x85
-	2VMJm2jW7KNorxIgw+c3qiUxnOdnkG8DcK4vTK/vRAsVtepLzKC1QnzTzmRWK/+WI1XV6RasXIl
-	RWUBxdepBS+bWwvYcVsTed1JUcBlyChEgw4T5QzkXBiGObUsQIQ7kzo
-X-Google-Smtp-Source: AGHT+IHre0GQP1JxRtOToB5Q5Myp+uzjpc272IkgZm//dcA1gL3Z2EHA5bGB0Zs8cCqcJeIjZrp0LQ==
-X-Received: by 2002:a05:6512:3049:b0:542:297f:4f65 with SMTP id 2adb3069b0e04-54284450352mr1859921e87.0.1736417380236;
-        Thu, 09 Jan 2025 02:09:40 -0800 (PST)
-Received: from X220-Tablet.. ([83.217.203.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5428be54092sm152073e87.83.2025.01.09.02.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 02:09:38 -0800 (PST)
-From: Denis Kirjanov <kirjanov@gmail.com>
-To: robert.marko@sartura.hr,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Denis Kirjanov <kirjanov@gmail.com>
-Subject: [PATCH v3] hwmon: pmbus: dps920ab: Add ability to instantiate through i2c
-Date: Thu,  9 Jan 2025 13:09:12 +0300
-Message-ID: <20250109100912.10054-1-kirjanov@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mv6bo9gr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736417817; x=1767953817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o2gV8+qd+OstVBKFXAlKb6b8WAzoR3uhP+40NL99g4c=;
+  b=Mv6bo9grXkpaJ6XkqcOrEk7xmpyD/Y39hUejyI73LHGjUUyxWWVPiRB3
+   gN0i/H8/Sz04rW8MA5Jew7zZPRs5LJdHtfmD4oHzLm8VgOhfhrrZeboa3
+   /08mVDFCz3IHDeKim8azrQiZWSI5omDbbGObVz/7GRFdFjSaZjJX4aqJ1
+   Uc5WlF2+5X48T2W3TnuthmcWbLptXigWSoP9pc2NXvpSg4K0CoSDl+dy8
+   zO35nir2zV/8XafyxgZKytKAvDZPY7phbXctRM+PUfuBcO4SCXFOgZqDP
+   8NGYXL9lZ6jzlOiYwRTaGK2lVgtggh85D837gJBs3SjhYAMxhKciajA4A
+   Q==;
+X-CSE-ConnectionGUID: O/DLvZC6Q5CSOnWRFSpXqg==
+X-CSE-MsgGUID: E4YutE46RmKB5UVfbg1X6Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36830884"
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="36830884"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 02:16:56 -0800
+X-CSE-ConnectionGUID: 6hdmEu8SSXO2+Mp4RQEcaQ==
+X-CSE-MsgGUID: T0zJ1WQTRYmQeydN1S1tag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="103329234"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 09 Jan 2025 02:16:52 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tVpas-000HMR-1U;
+	Thu, 09 Jan 2025 10:16:50 +0000
+Date: Thu, 9 Jan 2025 18:15:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
+Message-ID: <202501091702.8ZdJcvFC-lkp@intel.com>
+References: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250106071337.3017926-3-Leo-Yang@quantatw.com>
 
-Add support for instantiating the Delta DPS920AB PSU
-through I2C on systems without devicetree support.
+Hi Leo,
 
-Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
----
- drivers/hwmon/pmbus/dps920ab.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
-index cc5aac9dfdb3..c002ed41f517 100644
---- a/drivers/hwmon/pmbus/dps920ab.c
-+++ b/drivers/hwmon/pmbus/dps920ab.c
-@@ -190,12 +190,19 @@ static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
- 
- MODULE_DEVICE_TABLE(of, dps920ab_of_match);
- 
-+static struct i2c_device_id dps920ab_i2c_match[] = {
-+	{ "dps920ab" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, dps920ab_i2c_match);
-+
- static struct i2c_driver dps920ab_driver = {
- 	.driver = {
- 		   .name = "dps920ab",
- 		   .of_match_table = of_match_ptr(dps920ab_of_match),
- 	},
- 	.probe = dps920ab_probe,
-+	.id_table = dps920ab_device_id,
- };
- 
- module_i2c_driver(dps920ab_driver);
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.13-rc6 next-20250108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-Add-INA233-device/20250106-151934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250106071337.3017926-3-Leo-Yang%40quantatw.com
+patch subject: [PATCH 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+config: i386-randconfig-001-20250108 (https://download.01.org/0day-ci/archive/20250109/202501091702.8ZdJcvFC-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501091702.8ZdJcvFC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501091702.8ZdJcvFC-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__divdi3" [drivers/hwmon/pmbus/ina233.ko] undefined!
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
