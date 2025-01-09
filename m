@@ -1,84 +1,162 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CFA216E39
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 12:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58176219A93;
+	Thu,  9 Jan 2025 14:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736425286; cv=none; b=IS4KYN+b/6lcbPDY5FBrmHmLod2kVG8yc5pkw2gDbFGLfjtgg1+n7WnBeLLRNGLM5Mh2sB+Fn8mFEtZetLmQJ9SzH6UXzrcGlqs5ynIzj5HkBprF5wk8ITmORTlOw5N3WaR27wtkcye6v/kKbEwbKtLV29EJ8/yZQE5ROex3kWQ=
+	t=1736431714; cv=none; b=p1OZblqToBgeye4cKAs1Js92egWf2fveBl5cYwnD58TwOb6D8Fu+QvAwU6cOR7mvPOS4K6NhlER1868GQtYti0ZeWgHZI1KcAIoMb0+JGPjgZOQeGeiVtneroaM19mkQ85Atzd499IWEp2bbzXtAZT2b6G3dq0sOlqaUrDIilGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736425286; c=relaxed/simple;
-	bh=delCU7oh1qhJIgT1/70Byggnb7MSS5YA/BXcbHP9rXg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HtMV+b2iPQJ6xBdCG85T4WM7LNuPNN7IHuOHEltOFYI8Kq+/qyI0WUFE1/nyz29zqVEMwIMYM06LRtWQweBPr0xZ8b2y91UmZdRfFHpnhZaySw/iLDwaVIllcmk9H24fyy4qTTyHHF/1fQrp5k1Vy2WdhXULBAjY8+0jHfAZg/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fbv9SeU4; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1736431714; c=relaxed/simple;
+	bh=npe+/FHP0F+2rX6XbsOumEF4Ihr7wMvChx1co/E64YQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eJoWLuPvG3n8biNG1wnO0EazafZYOGFOo57PHxbNXDhhhSEc8yuPK7HZD0qo5iIF12gVzC9/PqbF6cWlu/4N4Xz9MbmBn3UnFcUBsirQ9Fp8Q5VuyxOnTHgSwbVUmuyJH0m9SeBsOsFpwNinjd/SM8jMMnpSJ6hN9J/y75OL8bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XN0k4pS/; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fbv9SeU4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=a475Tm0d0fHuro
-	bpbhwqIh8X4nP5e9UltpcMinzNvH0=; b=fbv9SeU4wc37p6fDLY479lVubIS7Av
-	0Lq8UuYDtjh2YHQMAet8ZvbbxGEtbqkDGdZg1cIBSwX9walrDa84JquDXY2ET6w6
-	7UV/j/7hmz7KcRV9swP8PdNz1p82r0sEGAFG8QuLP7iMceXoCDcC3gbbmhLMptle
-	+EPvEmf8SJnEwcWCE0sqyquoFYHch7j/TbPuC+nMzwPIKU1sVQYvEM27F/Ia/9wn
-	CdnRzsCOxs3wxDiek/sQGjz0GKaszVK5hMvzQqohMM43vSATx52Z9PZFihq0g/HI
-	ztZ+wCOY45UAncU0otHaSNP/H6vVk2FgdLk2IXI6xvrkO7vc10fzwBkQ==
-Received: (qmail 2902207 invoked from network); 9 Jan 2025 13:21:17 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jan 2025 13:21:17 +0100
-X-UD-Smtp-Session: l3s3148p1@ATLQA0UrYr0gAwDPXw20AOMQ2KO98fSH
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH 0/2] i2c: core-managed per-client directory in debugfs with example
-Date: Thu,  9 Jan 2025 13:21:09 +0100
-Message-ID: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XN0k4pS/"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2156e078563so13543935ad.2;
+        Thu, 09 Jan 2025 06:08:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736431713; x=1737036513; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=fa+0MfrjdKY5FvOChqcYyOo88eA2m6FeMZQVXasM0zs=;
+        b=XN0k4pS/u3xF9RnB1xn1pFLl2m3FSRpz6nZoEjoAwWNt04bjL1/gIaSfixqXdA4qpC
+         KfMgRK6Pi+NBqR6v1pYhfwzus5Gs/oA51HAdIB0tsTmSEIN0H60WqLmYQDnJIO0m9XjC
+         ee+qqPZj7TBHEHG3Bh4+P1IF0c9hoLXaZsYI++GAGMdzp+iBizq5uTCLNXG+xFRf0Qpg
+         UsOPghdYbwebnJpF7LUoYGXizLpmbhjtY3GtBpOOD82PkzuHNShTxAUtIpuiBy0ysYKm
+         ieeGrCVmrHMAJinLv+eti6TimFoosFidoxPtFZtQjyuETLUGN2kVYglx1ra4rV2e2kxr
+         LQLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736431713; x=1737036513;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fa+0MfrjdKY5FvOChqcYyOo88eA2m6FeMZQVXasM0zs=;
+        b=etcXdLLpG/OVxlL+TyLDckMxxUg/wMewp7LbPY93h2RUzubiA9e5FU/YIdx7ZDMkzy
+         dGt7nQQPv1ZXLYpn90ZlR6O53fphaVm0k5C+cTHLICDPBmsjGSM1vxKAtEj4evWtS1PT
+         OSZS99zmxUDyYIzC83y0T74Z5QbjIPrA0vfqJwO1xw9eXS4VEcH3J7D66BOzq+mIlqah
+         nVadEYPKekvsZ6CVN1pMDT8hLaMUfgGsanTpq7Vl6OY+QKkErFvVawO3FZ93vUTkEhX3
+         AEUMyS0+7998bnUQtPgO7/dn7yDfi/rP3YcL00QLJaGgBO++hOKC/Py3OkO5QDZ5KtbS
+         MWpA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+Sq9ugNsTdBEW/N3H0VfAqwXDlqxrWzHqsIRxs78eThRPQcr8HeD9WaUvP0OpmCJbwTsiRZsZGchbLHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJzGr9lw9TIIG9M+tbk/2bgZ5FbKf+EhGmRSIk67ESxiFdzpEn
+	aRxpqZgDwVZFgrwjT+RSYdhCPVaUFifSp6t316qPGE4IFnJYgihX
+X-Gm-Gg: ASbGncuzjeCYXoZGtxfRzRIdHEFRSvfoxDV35wF8yEhOV/Ns/DIZHgh9rP2wbQHcd3w
+	5ffdoFoFsUTlfkCsgjnGPMMW/e80BczBl3z3QeeC5uzAim4Ldi1Pow2Lmfm+gK+UJSWrC8sMOV6
+	qkI2PRkNnImN2I7l/GdolhMEYzscwDknkavlmOCi5981Cs9HMX9ntlfUZdjF2Xy7151DEmjM83X
+	UC2ZoTDC9RNlwy7FpiAqkugwAUa2gHIKi7HJ2ZSfivDThJkozGSfS2zmIVqoLxjzR6VNzgfsRgw
+	l9nh5trx1v5IAdxWH4GoJJtZYtvDyw==
+X-Google-Smtp-Source: AGHT+IHjwp5c6AzdGlXUXXHGKucDdSRLGtnjJA8ySFBHD/fykNIE4McGQT3aRhUphzMTKyT0TRbdWg==
+X-Received: by 2002:a05:6a20:1582:b0:1e1:b19a:fb58 with SMTP id adf61e73a8af0-1e88d0edb48mr11316446637.13.1736431712605;
+        Thu, 09 Jan 2025 06:08:32 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8fb9a8sm37370874b3a.157.2025.01.09.06.08.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 06:08:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4a62570b-00bd-4740-a416-1f13da3469ce@roeck-us.net>
+Date: Thu, 9 Jan 2025 06:08:30 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] hwmon: pmbus: dps920ab: Add ability to instantiate
+ through i2c
+To: Denis Kirjanov <kirjanov@gmail.com>, robert.marko@sartura.hr,
+ jdelvare@suse.com
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250109100912.10054-1-kirjanov@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250109100912.10054-1-kirjanov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I think there are enough i2c_drivers now using debugfs that it justifies
-a central handling of an debugfs entry per i2c client.
+On 1/9/25 02:09, Denis Kirjanov wrote:
+> Add support for instantiating the Delta DPS920AB PSU
+> through I2C on systems without devicetree support.
+> 
+> Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
+> ---
 
-Here is the I2C core code with an example conversion of the isl28022
-driver. Quite convincing diffstat, I'd say.
+Change log goes here.
 
-Tested on a Renesas RZ/G3S SMARC board. The branch is based on 6.13-rc6
-plus 'i2c/for-mergewindow' plus 'hwmon/next' and can be found here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/g3s/isl28022
-
-@Guenter: because both patches have dependencies in their respective
-for-next branches, I suggest that I'll apply the I2C core patch soon and
-resend the ISL patch during next merge window once my pull request is
-included. Does that sound okay to you? And once both are in, I will send
-further conversions as RFT patches aiming for 6.15?
-
-Looking forward to further comments as well!
-
-Happy hacking!
-
-
-Wolfram Sang (2):
-  i2c: add core-managed per-client directory in debugfs
-  hwmon: (isl28022) Use per-client debugfs entry
-
- drivers/hwmon/isl28022.c    | 44 ++-----------------------------------
- drivers/i2c/i2c-core-base.c |  4 ++++
- include/linux/i2c.h         |  1 +
- 3 files changed, 7 insertions(+), 42 deletions(-)
-
--- 
-2.45.2
+>   drivers/hwmon/pmbus/dps920ab.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+> index cc5aac9dfdb3..c002ed41f517 100644
+> --- a/drivers/hwmon/pmbus/dps920ab.c
+> +++ b/drivers/hwmon/pmbus/dps920ab.c
+> @@ -190,12 +190,19 @@ static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+>   
+>   MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+>   
+> +static struct i2c_device_id dps920ab_i2c_match[] = {
+> +	{ "dps920ab" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, dps920ab_i2c_match);
+> +
+>   static struct i2c_driver dps920ab_driver = {
+>   	.driver = {
+>   		   .name = "dps920ab",
+>   		   .of_match_table = of_match_ptr(dps920ab_of_match),
+>   	},
+>   	.probe = dps920ab_probe,
+> +	.id_table = dps920ab_device_id,
+>   };
+>   
+>   module_i2c_driver(dps920ab_driver);
 
