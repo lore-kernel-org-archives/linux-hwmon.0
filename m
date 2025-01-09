@@ -1,34 +1,32 @@
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF3D217713
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 12:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CFA216E39
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 12:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736425285; cv=none; b=HxgtXvuk6RDZ0N/bUt9H0QquCbjBzTcy9k9SnA0izm/WfZLrtwwpCioHyPxHT1m9VvKX+RXEttAINCf34fSR8oEJfwix0TtCgrGI90DgpnAj8FsXDSjdKh2y3VvpoSzgGGOfi4whkwkn1AYXaDis74QN9RG5RrePsE0gY1nLI3E=
+	t=1736425286; cv=none; b=IS4KYN+b/6lcbPDY5FBrmHmLod2kVG8yc5pkw2gDbFGLfjtgg1+n7WnBeLLRNGLM5Mh2sB+Fn8mFEtZetLmQJ9SzH6UXzrcGlqs5ynIzj5HkBprF5wk8ITmORTlOw5N3WaR27wtkcye6v/kKbEwbKtLV29EJ8/yZQE5ROex3kWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736425285; c=relaxed/simple;
-	bh=s6iLSMvwvB1hhEvSbVmgChnOY8FBYiVDdEUfiaRKLus=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZBdPP+Ye2oOEApxMJy7HUOFCmWzu09Im/tWfCvUCyyxLs3xiLazLy3TJqNWEuPq2t0s8fPuw7PGVs4z4YyZGftYoadaX7EO2Y7lLfXtmY/bqcZ4C4KTFJLkArAkj/vMSYIEXHiQbFuVUsjs54x6rScwdEOQhQ3l09IZniATqET4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fQJ+UXAk; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1736425286; c=relaxed/simple;
+	bh=delCU7oh1qhJIgT1/70Byggnb7MSS5YA/BXcbHP9rXg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HtMV+b2iPQJ6xBdCG85T4WM7LNuPNN7IHuOHEltOFYI8Kq+/qyI0WUFE1/nyz29zqVEMwIMYM06LRtWQweBPr0xZ8b2y91UmZdRfFHpnhZaySw/iLDwaVIllcmk9H24fyy4qTTyHHF/1fQrp5k1Vy2WdhXULBAjY8+0jHfAZg/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fbv9SeU4; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fQJ+UXAk"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fbv9SeU4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-type
-	:content-transfer-encoding; s=k1; bh=Wvj0OmgUBbiythAxDaHZcyRy7Ax
-	S3rfnwX3CjJNEV/c=; b=fQJ+UXAkul0JhNsbZfeiSYTu2E3mPjb4X8LGkNLfC53
-	QImYkAZoHXjeL4dYRg1TpMEYhS+rHnd4bBFqBhfImp/H2HvJsm1KB8FZYbmqiE/c
-	p36oK62jv9nBnYarowVnITjPkFi+3tJXmV9I3yrKAOZQTaX2ubOl6Ar4rLVVQ2OA
-	nNuprrEZ/VSDyUvqAURfI9ITD21uiw4xu0reMeQjZZjArbhcU4jKXWS8jN6LDvIt
-	3HkH0ZykU6KSFBhAGmkIZl4HxTeCC1NDpHzvmKVHBd4E3w5RYBcfCytGmWrDe7lG
-	D8KY8wXTDzEpo2wGYxtbkzZebi6/1W5PTy1Ln5LgTwA==
-Received: (qmail 2902280 invoked from network); 9 Jan 2025 13:21:18 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jan 2025 13:21:18 +0100
-X-UD-Smtp-Session: l3s3148p1@ePvpA0UraL0gAwDPXw20AOMQ2KO98fSH
+	:mime-version:content-transfer-encoding; s=k1; bh=a475Tm0d0fHuro
+	bpbhwqIh8X4nP5e9UltpcMinzNvH0=; b=fbv9SeU4wc37p6fDLY479lVubIS7Av
+	0Lq8UuYDtjh2YHQMAet8ZvbbxGEtbqkDGdZg1cIBSwX9walrDa84JquDXY2ET6w6
+	7UV/j/7hmz7KcRV9swP8PdNz1p82r0sEGAFG8QuLP7iMceXoCDcC3gbbmhLMptle
+	+EPvEmf8SJnEwcWCE0sqyquoFYHch7j/TbPuC+nMzwPIKU1sVQYvEM27F/Ia/9wn
+	CdnRzsCOxs3wxDiek/sQGjz0GKaszVK5hMvzQqohMM43vSATx52Z9PZFihq0g/HI
+	ztZ+wCOY45UAncU0otHaSNP/H6vVk2FgdLk2IXI6xvrkO7vc10fzwBkQ==
+Received: (qmail 2902207 invoked from network); 9 Jan 2025 13:21:17 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jan 2025 13:21:17 +0100
+X-UD-Smtp-Session: l3s3148p1@ATLQA0UrYr0gAwDPXw20AOMQ2KO98fSH
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Guenter Roeck <linux@roeck-us.net>,
@@ -36,99 +34,51 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
 	Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (isl28022) Use per-client debugfs entry
-Date: Thu,  9 Jan 2025 13:21:11 +0100
-Message-ID: <20250109122112.45810-3-wsa+renesas@sang-engineering.com>
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH 0/2] i2c: core-managed per-client directory in debugfs with example
+Date: Thu,  9 Jan 2025 13:21:09 +0100
+Message-ID: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
-References: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The I2C core now offers a debugfs-directory per client. Use it and
-remove the custom handling.
+I think there are enough i2c_drivers now using debugfs that it justifies
+a central handling of an debugfs entry per i2c client.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/hwmon/isl28022.c | 44 ++--------------------------------------
- 1 file changed, 2 insertions(+), 42 deletions(-)
+Here is the I2C core code with an example conversion of the isl28022
+driver. Quite convincing diffstat, I'd say.
 
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index 3f9b4520b53e..1fb9864635db 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -324,26 +324,6 @@ static int shunt_voltage_show(struct seq_file *seqf, void *unused)
- }
- DEFINE_SHOW_ATTRIBUTE(shunt_voltage);
- 
--static struct dentry *isl28022_debugfs_root;
--
--static void isl28022_debugfs_remove(void *res)
--{
--	debugfs_remove_recursive(res);
--}
--
--static void isl28022_debugfs_init(struct i2c_client *client, struct isl28022_data *data)
--{
--	char name[16];
--	struct dentry *debugfs;
--
--	scnprintf(name, sizeof(name), "%d-%04hx", client->adapter->nr, client->addr);
--
--	debugfs = debugfs_create_dir(name, isl28022_debugfs_root);
--	debugfs_create_file("shunt_voltage", 0444, debugfs, data, &shunt_voltage_fops);
--
--	devm_add_action_or_reset(&client->dev, isl28022_debugfs_remove, debugfs);
--}
--
- /*
-  * read property values and make consistency checks.
-  *
-@@ -475,7 +455,7 @@ static int isl28022_probe(struct i2c_client *client)
- 	if (err)
- 		return err;
- 
--	isl28022_debugfs_init(client, data);
-+	debugfs_create_file("shunt_voltage", 0444, client->debugfs, data, &shunt_voltage_fops);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
- 							 data, &isl28022_chip_info, NULL);
-@@ -505,27 +485,7 @@ static struct i2c_driver isl28022_driver = {
- 	.probe	= isl28022_probe,
- 	.id_table	= isl28022_ids,
- };
--
--static int __init isl28022_init(void)
--{
--	int err;
--
--	isl28022_debugfs_root = debugfs_create_dir("isl28022", NULL);
--	err = i2c_add_driver(&isl28022_driver);
--	if (!err)
--		return 0;
--
--	debugfs_remove_recursive(isl28022_debugfs_root);
--	return err;
--}
--module_init(isl28022_init);
--
--static void __exit isl28022_exit(void)
--{
--	i2c_del_driver(&isl28022_driver);
--	debugfs_remove_recursive(isl28022_debugfs_root);
--}
--module_exit(isl28022_exit);
-+module_i2c_driver(isl28022_driver);
- 
- MODULE_AUTHOR("Carsten Spieß <mail@carsten-spiess.de>");
- MODULE_DESCRIPTION("ISL28022 driver");
+Tested on a Renesas RZ/G3S SMARC board. The branch is based on 6.13-rc6
+plus 'i2c/for-mergewindow' plus 'hwmon/next' and can be found here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/g3s/isl28022
+
+@Guenter: because both patches have dependencies in their respective
+for-next branches, I suggest that I'll apply the I2C core patch soon and
+resend the ISL patch during next merge window once my pull request is
+included. Does that sound okay to you? And once both are in, I will send
+further conversions as RFT patches aiming for 6.15?
+
+Looking forward to further comments as well!
+
+Happy hacking!
+
+
+Wolfram Sang (2):
+  i2c: add core-managed per-client directory in debugfs
+  hwmon: (isl28022) Use per-client debugfs entry
+
+ drivers/hwmon/isl28022.c    | 44 ++-----------------------------------
+ drivers/i2c/i2c-core-base.c |  4 ++++
+ include/linux/i2c.h         |  1 +
+ 3 files changed, 7 insertions(+), 42 deletions(-)
+
 -- 
 2.45.2
 
