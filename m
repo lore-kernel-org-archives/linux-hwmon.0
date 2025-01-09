@@ -1,41 +1,46 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EFA215048;
-	Thu,  9 Jan 2025 08:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D551474A9;
+	Thu,  9 Jan 2025 08:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736411345; cv=none; b=bhnr4Okrrxk35hj+skGrBb6DvM4lqqHJGaoQs3r5db2RN9W1/c5UpCeQUISIHoDCEWyOT5cdkuyw8VTEGHajNjZX6KXqD+KFPHNX2WqlILZYZ8deyw0vrOimfCOhYgaZQOq0DEp1bU1ZPyRi53dnJXRnIrSFd3MrmKiQFQQ/Kw8=
+	t=1736411376; cv=none; b=hf9Fa22kpBpHlCPmS7F568ul7LC8/T5Rjhudr13bh/4Ofb4zllQ4SOqdk8UWq6t6RMD92BCiYYv/1PROjspt9YxSs9Nodk185QR5ckW6eoAjvNzj6r+Cdo0ttRHDC5qnBdU2ew7B7wKNNQsH5IuMZ21spU+6bzOkXR6XZmGuuA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736411345; c=relaxed/simple;
-	bh=wizWSHy/iVjQwQVE4Sfp4eBT5JHepS+hyCX5AvCpKSQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tmF+Da4OtR7JAFz21rMZoT1xIWjoY6CuOHWySmlmmcHnQ2w05M7Sb2BhDqi6fhmUcWlnBWOloQ61sEhaxu5ROBw1jayCkRZIAn2pebZ6jWEmm67eOyRXv2vTPelpE9ZudhWCEcm2H/Pi/Jr+tigDpWVBp5EFAi+wcn/d94NDKDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YTHtM34Mrz11Rvg;
-	Thu,  9 Jan 2025 16:26:03 +0800 (CST)
-Received: from dggemv703-chm.china.huawei.com (unknown [10.3.19.46])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3DC2A1800D1;
-	Thu,  9 Jan 2025 16:28:59 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 9 Jan 2025 16:28:59 +0800
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 9 Jan 2025 16:28:58 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <linux-hwmon@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux@roeck-us.net>, <jdelvare@suse.com>,
-	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH v3 0/2] two bugfixes for acpi power meter
-Date: Thu, 9 Jan 2025 16:17:06 +0800
-Message-ID: <20250109081708.27366-1-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
+	s=arc-20240116; t=1736411376; c=relaxed/simple;
+	bh=UpbSePfstfrp/6wEgb8RztdKWfui9cMd3AagZlmCnFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AbAthUjRzfwA4RD4uufYgnDzRSAmsF0mCw698VMi/fHDwYI/X44AYrT3+zCoIVEK+mfysfPjWJhhJZz8/UnfP91xxJ4YRmyaVUSVt7TCp76J88zlyo2uY/EpSd2BMidaXY1KT59ig+7dXLz5cOHqQKmjlke1TieYOwgTMR1NmPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AXLsHX3h; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AXLsHX3h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=BDqOP
+	gSUP3+b245ejO/DQwuuKV0SZcIhL5zU/cTxllE=; b=AXLsHX3hfKJV7gn7RdF7h
+	8Ea4NHOoyMlAKUnKC0DuvB84673sQtBx4gLOsX9kaN2ns/pjKgHStJZfS9Yu7WrR
+	iBzld/xqBBcnshtWpFN+wwy7JENBaRC0hjkdbBNhVmWTV5Y36md7toJ0VPRfZG8G
+	VCxMK3gEcDVBL321x9Nl5w=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wAnoCuriH9nIhp3Ew--.21794S4;
+	Thu, 09 Jan 2025 16:28:28 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	krzk@kernel.org
+Cc: conor+dt@kernel.org,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	wenliang202407@163.com
+Subject: Re: [PATCH 3/3] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+Date: Thu,  9 Jan 2025 16:28:12 +0800
+Message-ID: <20250109082812.136268-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <f96bdc15-1308-4b9e-9fe4-e92505eb9d8b@roeck-us.net>
+References: <f96bdc15-1308-4b9e-9fe4-e92505eb9d8b@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,23 +48,54 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+X-CM-TRANSID:_____wAnoCuriH9nIhp3Ew--.21794S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJrWkCF47CF1fKFyUKr4rKrg_yoW8Xw1rp3
+	yxAFWDtF4Fqr12q3yqq3W8Ga1jqw4kCayUWF1DtF1j9w1vgFySqFWfKFn5uFn5Xr1fZFW7
+	WF1vg34ftrWIvaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUfl1kUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiNQrP02d-h1ccvQAAsK
 
-Two bugfixes for acpi power meter.
 
----
- - v3: drop the last patch and use dev_err_once to print as Guenter suggested. 
- - v2: get power alarm state and 'cap' value from notification.
 
-Huisong Li (2):
-  hwmon: (acpi_power_meter) Fix uninitialized variables
-  hwmon: (acpi_power_meter) Fix update the power trip points on failure
+At 2025-01-08 22:18:38, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>On 1/7/25 23:06, Krzysztof Kozlowski wrote:
+>> On 07/01/2025 14:01, Wenliang Yan wrote:
+>>>>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
+>>>>>   1 file changed, 1 insertion(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>>> index 05a9cb36cd82..f0b7758ab29f 100644
+>>>>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>>>>> @@ -20,6 +20,7 @@ description: |
+>>>>>   properties:
+>>>>>     compatible:
+>>>>>       enum:
+>>>>> +      - silergy,sq52206
+>>>>
+>>>> So it is compatible or not? You said same bindings, but not compatible?
+>>>>
+>>>
+>>> What I mean is that SQ52206 is compatible.the datasheet depends on
+>> 
+>> 
+>> Then compatibility should be expressed in fallback, but OTOH, your
+>> linked changes suggest these are not compatible. Confusing commit msg.
+>> 
+>
+>It is 'backward compatible' with additional features. That means it is not
+>'compatible' in devicetree terminology.
+>
 
- drivers/hwmon/acpi_power_meter.c | 39 ++++++++++++++++++++++++--------
- 1 file changed, 30 insertions(+), 9 deletions(-)
+Thank you for your explanation.
+Although SQ52206 has added some new features, it has not affected the
+hardware properties.The properties described in the ina2xx.yaml are
+applicable to the sq52206 hardware.
+So I will just add the sq52206 compatible to the ina2xx.yaml.yaml
+from that series. Would that be fine from your side?
 
--- 
-2.22.0
+Thanks,
+Wenliang Yan
+
+
 
