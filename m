@@ -1,71 +1,73 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE3E2F43
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 20:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EBD189BBB;
+	Thu,  9 Jan 2025 20:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736455416; cv=none; b=J91NTbsEtGJGrUsVFmoaNDHLKgrBMaNuJNHHOWsHEk5FYKTyGo3xHx5/7ehX9h7b27LCPuIAT4y4v/bi0PHdeSgeoblMlNGLm7Axqd6yh1aH4EPii5RbhjaGviBbQCJdDD5bG4sQbSunpKoJr3QM5NIWaCaSq7s3tZVzVsgS068=
+	t=1736455480; cv=none; b=H1+B/7ntUo4QZ86H1F1zk5ecWfIxll5EcvHsggkMc9Z46f6QYYMzpHWmfTFHgUrd1sVf5BtMC9EJqzYvMsndD2UEQVn9EGURW+/nZhOIaOlCjtqHcjt59QIFkZrw9g0XIiENZQyG5aJSpEVmuKA44XynH54b0VmFUrqA6egyd7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736455416; c=relaxed/simple;
-	bh=AYLDd52b5+c031bV40QXoN0raEtpW8SILxKw27/UggM=;
+	s=arc-20240116; t=1736455480; c=relaxed/simple;
+	bh=rj0eHvUnDHI7KsFXjEirRARkIR326mthBlYTYe/8BmQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FWlfSW6hcLlfMZaJunNnqwSq4Z8f0beB0ufH98tZ0dqFqTfjmF6vz705NUxz+EGLMAsqfG0ySUFL/D03J+l0o1WvX9z2nhUULnrHCpq6WtiolQ9aG7GzdnSH/ZhVii+eySjzRmFNn7tyANu5/7gsJyX1quThphYEryP0Sdy22es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C7SlAko0; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kp0pl+LXCRnGG9Gx6wvGeho1sqs9hLlRfAoWh5NpUlBE6CcaImPc2UHh9ep0DqFc27Cio/2QpAZXgu34dPaWe/1Y2+0v1WW+FCCZ+RQOcj5KcxEYB2SZhxSTbVRp8dkPy2rZN5BTWGdwdkRrWS4TTqliklcdy3C5zJO0P7+pjiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZoOwjQk4; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7SlAko0"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2156e078563so19435995ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jan 2025 12:43:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZoOwjQk4"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-216395e151bso16637925ad.0;
+        Thu, 09 Jan 2025 12:44:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736455414; x=1737060214; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736455478; x=1737060278; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fqEjJREtjziB0EVMwCCGfPAym0CEeF7LYRs4eYz1ZgU=;
-        b=C7SlAko0d6bXYu/YQmcWwghM+xWLVoIwwkb18Me3lrncGEre7H4I0uq0pVnX3irZK2
-         E+eOvK1zXqts1Kf5uPwhV1JEQoQpVHgO74UIIZq/OcUEOBpet4HTGlGoPpfpFxcCRPy0
-         X5RvbYI8kpRC2TfSrz9/pbUSIUZNXlL9O2kJmWSN80j0CgkmzzvCJ14ZKriBh7MHqtXW
-         apLL7cZj0nVpVTffak1Rw1S/kwyPzPkpAB/BoDxgpB/+dPazgQbWnq95NaQfbYGDFtBF
-         cCecY9HnY1H44v7YFr2nnOucQaTwk4JIfpdHVQ9j4vNcxRAp9Xnkv8bvzpngEKjQyMqB
-         K8+g==
+        bh=NaUtMyNlc3yQOEbfHg6hn7AN/xpmvI0Le4tqzy2d5jM=;
+        b=ZoOwjQk4wr6IBARQwgrnDhSBylBBd5LhO2uwGccEzlaWK/dBpkgccNFHzeCymH4LUb
+         C4k70coLMAAje5x0HTn2KZEA3RNtDUyN7Zvx5NmX8SegreKvRa/h09dyAxWyryKXgkxb
+         VhQA6f8keyOApM9BCtwLkcNErXg9Qrm7GP1eLXMo1Z3ZmE7nlVdPs9yl2SkeOkIaILmw
+         rrtfo6ZcWN0Ti1ldLgl0PS6ZkINNWCisfOmiOtDLBrYmXWsfLek4coNphNkiLYFBDvLW
+         q5PhtFRvp1u/GujQCGJ1T0YQiSSQLh6+DhjB1OUWIycjzXwarIPDRUbzFf6F9JiB1eum
+         5+Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736455414; x=1737060214;
+        d=1e100.net; s=20230601; t=1736455478; x=1737060278;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fqEjJREtjziB0EVMwCCGfPAym0CEeF7LYRs4eYz1ZgU=;
-        b=HYQUtywX3T8+XJwVmXZSktLgS9UVFW/FnjYSvNUwfxm8svYKopkkr7MTT/Lia2nHMn
-         kW/BPNWNzOy8+4RMMQ8eo2mu6bkLObhJvzwvxZ+4WMQzTbrbRBwEaqQRK2c6TTtTKak8
-         t9uFiIAn0pP6BoZUWCZc0dFQ1ESTA/2u0bAI0uPcUgSZSWePloOdGCnj7RkbS4USAW7L
-         p5XSmJyTPXWtLdnPK1hVR2ganle5zJwkq700bMhLnDWALkGvGkFY9jXUJ2VDdljE8oHS
-         2J4kg9dHpG5axhxqDAw8o9pA+Q+7pQbwu0hSCAX6i6GhKPMmS1ZMwJcplLADKZLM08mw
-         TQ/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVt9ufEkEVvZTFolLCKZtEmt3KF5OyzQngiWursSAfTeTl/WQ2Sj3N9YyAdjQTyDdSgcUIUkb8GvA+AlA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOOekn4ZRi9NFHIwFTwPkwKCBmCom0eLt9MRyPwT5NhGV9kkZZ
-	UYZny61PZMB1eq+bymEblDxybJAR4mvVcdAq9e1JlNVbOIDfyhgm
-X-Gm-Gg: ASbGncuV+FB2ep1V0x0xGnVHHsJ5zqcxqSwydzaehg9Xza8ltIAWG/1tru4J2GxFnW0
-	WSJbZGFXd03FM735T++jdDY3N+BA725NEXED5nEp95SFZexcwMZRmOn0tzf1KlISjSDV8dS7vdS
-	WXqybNLbucmFQwHsyEC0he7WSR7poGz6dlFdgtrQ5Ow3SRSHeOvEB3jI1+C17sS+A93qt9pfw4E
-	uM28TP6HywP1CkHWv+rtqFJE/DBD15hzbo1WneLQ9w9ZXydR+mQsv0u3JA6g94rP5mCAw==
-X-Google-Smtp-Source: AGHT+IGLReXeCbo0nM+LQwyGfc85gnq/d0jhOL3fKePI0DzBUkgO7QBd/+mC0nPJ/nkvMAicLnYVSQ==
-X-Received: by 2002:a05:6a00:858b:b0:728:8c17:127d with SMTP id d2e1a72fcca58-72d21f2da93mr13007617b3a.8.1736455413923;
-        Thu, 09 Jan 2025 12:43:33 -0800 (PST)
+        bh=NaUtMyNlc3yQOEbfHg6hn7AN/xpmvI0Le4tqzy2d5jM=;
+        b=lbwNvmCSElX+FgAjftCUt2Fado/UALcSWdNssBmyfa8U2Y/3S+0M4rBzqPlD6muFSK
+         R4MiBN5UVRgxIBTFGqTNnNPt2QMUPZjP7tXN7VjSaVmmR4K0c6os9yGwDbn1Xe8RDigD
+         XZRXRXNKZJAf+wHIPNuVR+NT5q2+k4M2KL+le8/4CHT2OOltdcIyQYQQiYBVh2W0Kjcq
+         +3USygDuTw6OxkKY20WsD9WwEGSyEey3xA2oArYSzmba+0II7NgbVsjc84MP9H5+SHzG
+         +xSzqUaYeMXdJqld7CHZxjdSU7FhIKBYJhAZBE14SLAYCHM7ZOfuGyFYGetlB2792sOr
+         xuNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKmIqDM698AwQytWUsUBUCmxofMpyTKYWDm9UMEOR5RBxDaIRad21kMzkbagJ4f1wOaO15ktk0ZobSYrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1X75d8NW35CmrEOQHeqHwZbegoEM7Vm81OI9L0OZ1pUpvl5GH
+	ZjYbMNH6edmuMY6Un5zBUeJE2ianMmHJRXUXckGOUUr78eSbCFYYQMPHsw==
+X-Gm-Gg: ASbGncufxiJH86ZNv1VDACMo8KaipueVmUC3e6p3iIzNsJvIzCcq0UYOpcEnwVxTmh0
+	nhWP5WgXh0CyF8LVnBPcyLtirRpfnukx2zWmeHzPrqOzZzxturpKOImAy3KNimkFZ75YDMx3mMy
+	pLOlw1W3JR11sqOqUj8gj1q5Gib/AjggUHktVDmZsYspn2tVPLuXJhNs+8QNyb+B0GX+oyFb/aG
+	zEnkrGWPkQ5k04POHhQHYv+5peXJSem1uPsmQ6duL59vvUh+p1sledq4FmcV0+7uQYmFw==
+X-Google-Smtp-Source: AGHT+IG2Ht0Io/HlWOq251fM+QqLV49oMUCNJAmch5kkWexwnaWoadf4KK3pBp+ImuycSxBRE1qPAQ==
+X-Received: by 2002:a17:902:f544:b0:216:3e87:ca00 with SMTP id d9443c01a7336-21a8d709174mr60721465ad.28.1736455478411;
+        Thu, 09 Jan 2025 12:44:38 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40658b64sm213678b3a.109.2025.01.09.12.43.32
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a31840e93absm1706534a12.20.2025.01.09.12.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 12:43:33 -0800 (PST)
+        Thu, 09 Jan 2025 12:44:36 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 Jan 2025 12:43:31 -0800
+Date: Thu, 9 Jan 2025 12:44:35 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: (core) Use device name as a fallback in
- devm_hwmon_device_register_with_info
-Message-ID: <58b6b519-05ee-4229-85b9-a5dba574e314@roeck-us.net>
-References: <1ebe6961-6445-4408-bfb4-b56173af9db5@gmail.com>
+To: Huisong Li <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
+	zhenglifeng1@huawei.com
+Subject: Re: [PATCH v3 1/2] hwmon: (acpi_power_meter) Fix uninitialized
+ variables
+Message-ID: <bb0531b0-ca1c-47db-be84-9009604c51a4@roeck-us.net>
+References: <20250109081708.27366-1-lihuisong@huawei.com>
+ <20250109081708.27366-2-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,23 +76,22 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ebe6961-6445-4408-bfb4-b56173af9db5@gmail.com>
+In-Reply-To: <20250109081708.27366-2-lihuisong@huawei.com>
 
-On Thu, Jan 09, 2025 at 08:53:55PM +0100, Heiner Kallweit wrote:
-> A number of network PHY drivers use the following code:
+On Thu, Jan 09, 2025 at 04:17:07PM +0800, Huisong Li wrote:
+> The 'power1_alarm' attribute uses the 'power' and 'cap' in the
+> acpi_power_meter_resource structure. Currently, these two fields are just
+> updated when user query 'power' and 'cap' attribute. If user directly query
+> the 'power1_alarm' attribute without queryng above two attributes, driver
+> will use uninitialized variables to judge.
 > 
-> name = devm_hwmon_sanitize_name(dev, dev_name(dev));
-> if (IS_ERR(name))
-> 	return PTR_ERR(name);
-> devm_hwmon_device_register_with_info(dev, name, ..);
+> So this patch adds the setting of alarm state and update 'cap' in the
+> notification callback and update 'power' and 'cap' if needed to show the
+> real alarm state.
 > 
-> Make this a generic fallback option and use the device name if no name
-> is provided to devm_hwmon_device_register_with_info(). This would allow
-> to simplify the affected drivers.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
 
-Applied, after updating the API document to reflect that NULL may be passed
-as hwmon device name.
+Applied.
 
+Thanks,
 Guenter
