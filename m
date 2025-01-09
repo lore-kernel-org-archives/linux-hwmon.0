@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62F32B9BF
-	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 18:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C046D2B9BF
+	for <linux-hwmon@vger.kernel.org>; Thu,  9 Jan 2025 18:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736446270; cv=none; b=cMb/ZLWsN7SJetw6eNZvisU2TuuIktLSjoOyKo61FEZmewIxnGQdwMaEXcMl8KvjhCbzLzWi5r2jyjf2nGxKK4p0hTdm+q/phdYq62loFA7HmMax4NH3WO4tfwTc4zlaDlEirbLRfOj720fuA06s5+ywap6dJzgoZr9mr0ilVaI=
+	t=1736446735; cv=none; b=Zh34TOWXhjeJkFl1/SygElv2TE9XQhYElsh//zyQdtg7w3kkcbLXdkf2rX5+K3mOlrgRj2YaxOymOU97U3WGx0XmfSPeWkykHVSwhUIuFn2U2SGfzBEJGe2jqfWZHp0nw0RzlN9R2/OU3FlfNo0eciU8i/zmpj3/XHgaVryTN0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736446270; c=relaxed/simple;
-	bh=qRydLtWE3nPU98n7ZgbrI1FcflPhSJ0ud/+xIeS+bV0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ReBUBKnnKWGrvKj6Rzaidq/lntEdrxffKMH5LOXDUvl8pVm/ma4aVkI9wYrKa030qujFWt3SW9SUcGQYHkxkag8JWiDwg+FZyn0COkeI+Gb1pKkyi5GyvpHEBV1gukwALfg+jNoT8J18I0DbgVYacAbA3+wnQIm2+YkBKiTKE/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e29KVlLB; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1736446735; c=relaxed/simple;
+	bh=vp8EI5Q1uwQCAFK+OmvBu/nKBVnSwFoWlvSK5iz4ZiY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NC3qxMVn6zvVZfN7r9AuCAdHHYb+Dkfw6GdMOc8VOO2TAjdmuUOBOxVUyewVf7bQXLu1InuO1ySuImWhBwqFYJRwvN8mnZBfoUfckoNy9HnXxffXdNDUOuLQBXyyYZ7QiT4O+2y+HoeJ9kyrUWSLFHn6aCF0DYGPNMgi8iSsVys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VU7stkDs; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e29KVlLB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VU7stkDs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736446267; x=1767982267;
+  t=1736446733; x=1767982733;
   h=date:from:to:cc:subject:message-id;
-  bh=qRydLtWE3nPU98n7ZgbrI1FcflPhSJ0ud/+xIeS+bV0=;
-  b=e29KVlLBRSbwbUPDj3xaEmaVFgUZUmIeYY3tPYdqj+YHSQ/oy0ELb8sO
-   fB9ZrDG4Nkj/Jd+XrtI6G7mG6hQ0LJvlgfhlD4vKjW9rnDNJhDjvzNAyi
-   VCzcaf/Pf3WcQkTbBfsYn4zNZZdUGg4E3L7P88leF5ga7QoeHAQSghyNm
-   WizU2C29nY6ODwYmxqCjsZq2c2JStsOe2baN3KIpAy77jFvEzKv8YYDyR
-   HOMAvyMRhyBGK4v+TJCKo4opmPr0tK+FPRgCAUcuzRLRNM+VeH4pKOOy0
-   tZ1qqtNw22Y1eCU1lmsgsuCODgUkF6XJZB8FD+gNWdwTN3z9kL6ox3VYS
+  bh=vp8EI5Q1uwQCAFK+OmvBu/nKBVnSwFoWlvSK5iz4ZiY=;
+  b=VU7stkDs/18x7QtNbGl/qNZU0hwO7oYMywl46Y+aV7hY17kstKPMgphP
+   c2uaptv7mt72O+o5Hd57guxC69gRFQqG7xwIg+Ozq+azEvSaT99nsFMWb
+   o2Y9yW1gLMVqM1Jn/dx+mDzbplpDnoSzUxG2dUHBu9G0H8RPjExgh1OjW
+   k3V+kojPOpS0EZClzA2af4Qv4Q7EvKlIwxcxsZ6zqsK7wYzdRRVP7utOG
+   xx/i6DP+yplHXpE7vL1W+Fsrt9wJkjPL520WBNYBSk9DjkZfieOv8/QJ9
+   jgP3yW2mfGgoQidV7cjzEFIa1WXN5GUWhzOu3AqJDNov9DYV89EZiYdHn
    g==;
-X-CSE-ConnectionGUID: gLWUeRTFRUKQFxWbO7IPnA==
-X-CSE-MsgGUID: yLivFdb/QnaNZ0c+rWpbeg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="36744682"
+X-CSE-ConnectionGUID: r2bIk+PrSe+6lre8A0lYBg==
+X-CSE-MsgGUID: 2p0Nh7twT66jYBbNZ45frA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="47302701"
 X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
-   d="scan'208";a="36744682"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 10:10:50 -0800
-X-CSE-ConnectionGUID: 9YmXOiuDQyuFuC8HFXkF4Q==
-X-CSE-MsgGUID: DJjYjmr6TGC3UiUTp5lTDg==
+   d="scan'208";a="47302701"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 10:18:53 -0800
+X-CSE-ConnectionGUID: Z5EgpKl+SPCUVXhKH5O9Pw==
+X-CSE-MsgGUID: koiY5P1RQ7GQS8BiDMv5mg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
-   d="scan'208";a="108479500"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="140798063"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 09 Jan 2025 10:10:48 -0800
+  by orviesa001.jf.intel.com with ESMTP; 09 Jan 2025 10:18:52 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tVwzV-000Hyh-27;
-	Thu, 09 Jan 2025 18:10:45 +0000
-Date: Fri, 10 Jan 2025 02:10:34 +0800
+	id 1tVx7J-000Hz5-2H;
+	Thu, 09 Jan 2025 18:18:49 +0000
+Date: Fri, 10 Jan 2025 02:18:43 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 82163d63ae7a4c36142cd252388737205bb7e4b9
-Message-ID: <202501100228.hLPurtOK-lkp@intel.com>
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 788bd792c74a3d1ddd0e49f5ddd68102dbbbe351
+Message-ID: <202501100237.In7P32xS-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,10 +59,10 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 82163d63ae7a4c36142cd252388737205bb7e4b9  hwmon: (drivetemp) Fix driver producing garbage data when SCSI errors occur
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 788bd792c74a3d1ddd0e49f5ddd68102dbbbe351  hwmon: (pmbus/max15301) Add support for MAX15303
 
-elapsed time: 1445m
+elapsed time: 1453m
 
 configs tested: 72
 configs skipped: 1
@@ -115,7 +115,6 @@ powerpc              randconfig-003-20250109    gcc-14.2.0
 powerpc64            randconfig-001-20250109    gcc-14.2.0
 powerpc64            randconfig-002-20250109    clang-20
 powerpc64            randconfig-003-20250109    clang-17
-riscv                           allmodconfig    clang-20
 riscv                           allyesconfig    clang-20
 riscv                randconfig-001-20250109    gcc-14.2.0
 riscv                randconfig-002-20250109    clang-15
@@ -141,6 +140,7 @@ x86_64     buildonly-randconfig-003-20250109    clang-19
 x86_64     buildonly-randconfig-004-20250109    clang-19
 x86_64     buildonly-randconfig-005-20250109    clang-19
 x86_64     buildonly-randconfig-006-20250109    gcc-12
+x86_64                             defconfig    gcc-11
 xtensa               randconfig-001-20250109    gcc-14.2.0
 xtensa               randconfig-002-20250109    gcc-14.2.0
 
