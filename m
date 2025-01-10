@@ -1,66 +1,66 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EA9211A0E;
-	Fri, 10 Jan 2025 15:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3084211A19;
+	Fri, 10 Jan 2025 16:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736524576; cv=none; b=cd+hk3bqGIbVh+jBRVEXezzyaIIbPiTjysA0FerZq4mYikzPjfUZsFaPaS2t1NiHq6Qdme0AHEY2akh2a0Siasv+dYcS5lU7TP/KOTY1tCsa9Ru1oFI41JbQkXzM6N6vXJKbBmkcu06QLYW9yiMVturY0UF1fZf9Z3wBLFZphso=
+	t=1736526125; cv=none; b=jdJdloCGB23bwnbK7YuvSHrcxOm5XDPQgdwrCBjS8c586W0vVnPE4U+6LK3NAbPVUQLVECzoOXvncgx1r0s9orThFWL+Q4+wb/6kkaTl6YTQbX+ppvnnmOYa/BOROcbSXsncqf51CyjwnbARaBBHlsXcNniesa6Ht9H9IsbTLF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736524576; c=relaxed/simple;
-	bh=ToQsmdXKWvCSr0BzBHqM+gitrOvjxQz7G5WKePtfSrM=;
+	s=arc-20240116; t=1736526125; c=relaxed/simple;
+	bh=oCdGx+as79PI6hM9FNReFDF49yt6pyfqnCFLeZ5BK70=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=agme8UJCE65hzQDjeo9D080Yhb+9kMQX4Sw9gBJEzQDimm3txauJhL54L/aMwyTeVDQlHIlINZrrH0rWZ57SLBLiw8nhG7odjipoQyehYlqfu289ZJZqnW35tJFkJL3CeR8i2M3orv5kwORfO5ZVPrsmRWSQqAd/r8vLyW0lm3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZxOX1LQ; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=V6ZToMZsBnqF4u8ThQy70+ke2Rbhvvuz4ajL3xUz77RBrwy+5eRkJSHqS5HgtFuLlOZ6tz1uXJh8kvPk6ivrFNgOy4ZvvF94rTVYRqTkJcUgNgiuBQ8CpEsTilUGCAN+v3J2BpVNq7jbQ9fzEVcOPgMu11zA9pCEwhk7RQ9qaMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QQRnEc13; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZxOX1LQ"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21654fdd5daso36633505ad.1;
-        Fri, 10 Jan 2025 07:56:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QQRnEc13"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2163dc5155fso40886205ad.0;
+        Fri, 10 Jan 2025 08:22:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736524574; x=1737129374; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736526123; x=1737130923; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXdERwEI8Ur+tD6AM4wNZnNq7gIDWzgVayKNEYmnTHs=;
-        b=lZxOX1LQFFtw59TvOy8ei79313zve1hEJXSxHuzx4TewlEvOP/fX+D6PWgpoSBgu0T
-         d38fdyYZu8dPFEjuFcrAnXV0RFKf0+EzqS9CW/o0CxaZ5omCplgKY7LkIn/fRiuX7NWl
-         YxPl3qSKr7sLVq9B07QCT9z2OWDlIld5sPF6+W1XutVG5DQWQKeyrHE67TahMKSeZvAF
-         z2RUIM3rqEvoCbxmZl+z2bccHazw4owDzSA60QPegKD5D119DDEZ6/7zLQMEFHzUcdcz
-         rVO3//qsGrU8AOmni7ECgewbd35e/PiYr5n8eA8d/2xfKiGRMwExigH5ekFL/ey712mW
-         Z7RA==
+        bh=K51RVU9Ux4R08hHe+nuiTfYB9EXYAccFcEfd5h37HQY=;
+        b=QQRnEc13x3MuFc2zgsGRKFFOYj+sY2VtlCMBMckI56DtvXtn83WtNF9niwx5zQHhYF
+         1plNO/FxYCaZDIESey0TJE5C2pfD4LPpRGjI+Ky9CEx0Ub0CslHPAeE+fW+gcA6Pzhxv
+         bdS5u8/2JRmSOi0G7ma0qDrDBHe5bHyQQjV8AZOTJ7VFFyi4OLR42H+IcMcix5AQOA/A
+         4+ZjYWJF1xdaGQfH8Zs8pjDL8W2XYoGj1SnB99mW8WaIfAhfXM57u+eImaI2tsjQeqeD
+         /sTdomNM9jNKnQX1kdz7bruPxfTGMUrjyhHswQtwphfM2c0YqRL1tg8A9FNBpsaSVfpp
+         bl5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736524574; x=1737129374;
+        d=1e100.net; s=20230601; t=1736526123; x=1737130923;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LXdERwEI8Ur+tD6AM4wNZnNq7gIDWzgVayKNEYmnTHs=;
-        b=KT01ljD0RFH1CjuokeWQCCPcg0bN4KNGN1iG8Qf07cPsftzoH/Fe99SxlXhXgKFga8
-         kd0rMGIYNeOZk4e3mq3/ip1UbHytZQHBoxxsWkPDKiUTYd+o8PxN0vxin95YQtoQH010
-         mMDF/DU0wmV9olh4nhoEX3QEsDR5TblKJwWpmNGvqruMYpoXzWE3Gi6/ugUktvcOGnE8
-         Nokh08AccdCxF3M6b/CNouSbiov/lpJoojMPqvpnkWVXmHGibxORMR9LFyyAnW8DIYih
-         OjdjhExjRAdKG+I6a8GbpgD6l4iIqhSvuCW/Bu/v7zNGZ/0WvgQobOi9waUpcLGfkMBh
-         JWfg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQhjPTICIQCFtG5et989ov95+qD3MCSjpvY+EV//UUsRrU9NA6LeWvA5W/S4BVhnp/1Qk/+ZjZzQKC@vger.kernel.org, AJvYcCWguGeiqOqZMWW4phfLb6jtcesGshqOlGVE2k6jZ8m5S9wru2NaqSnSOWmuhemFnTDup/vI58wCceHwWHMw@vger.kernel.org, AJvYcCWlllIqO1I5+StCp4bth9zqZb2lZ0LtOOAYlAmqFR8TCrsSUcqNkXkUC0fW0QK3DThrIE/ihu/fY42N@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNYwKoGjF9EfM5pJFdm0PIjbdlB7XchhmNyxABUawBagfm9MCd
-	aWFiaw2lH5dg3EzXsStHeNn+ENy69GMjAafRzjMYZ8OkVCI5SZhIdilgeA==
-X-Gm-Gg: ASbGncslzwSbgaUgPFJTQmfvjDXyYuKNrqYVgt5Gtom5i8YeMMvlHsFUAI2teIgGtyq
-	smyCjatNUgv+mXxWnMOELvXmX6WFu+MNhrnpQRTRv7xCo1YMLIRp+QY/hcVwz9Myd1oIDxTHTc3
-	yADy0l0n2Lcn6HSSmPng7wekHSbuVI9w1c1FdNgiN2Ll+oXwbmRjezHGfWhmw1C+D1bCw5kzCGX
-	16g7p9wqPlD8p+rT2vwwxl3n20BqA6vVW8YoRGzsREX5XxsBbm1jd6uyyKqd2HjLsby6q1WkK99
-	dazghpm5T+9p5egwF39Qw7oiwTzGWw==
-X-Google-Smtp-Source: AGHT+IFbGN0UTfy48hBPWj2ftdGuYJ/F3oFaeWpbL2uK16+Id0qeNQwDjaX3vevSq0MczbEmX58BSQ==
-X-Received: by 2002:a05:6a00:2388:b0:728:e906:e466 with SMTP id d2e1a72fcca58-72d21ff5241mr16996813b3a.21.1736524574023;
-        Fri, 10 Jan 2025 07:56:14 -0800 (PST)
+        bh=K51RVU9Ux4R08hHe+nuiTfYB9EXYAccFcEfd5h37HQY=;
+        b=bYkgZ2+8HW4wVfY388qQGzIV0feEN9T/qCiTpp8kdXPuIS7X1lPwdCIum4hQo2s8MY
+         miT5LnGaIHAMWAdGSE8THCJR+msp/9XkS38C2NzB1uXXfJdanhHarVq3/l9c5lDHKKOZ
+         b+Q5vopXNSfiFF3gWXhdSBSN6LZYAwzeaMh1ljzhPdMJXo8b93fq/bmf/bQKFtp6z4zW
+         AQkCZ3Vi+Cg4rG8ViFyflc4duB65bl5TFs64K5xIyILAILMN7lR8CRiZn7q0KIsN/P2+
+         EMbIlcwH0No/2AksatTATtx1lqiRPhV15y4Y69eYjhOp0kPcAcHfwHT1W3DdDs06cn9c
+         8x5g==
+X-Forwarded-Encrypted: i=1; AJvYcCUxbzji7Vh5/Vts0RKSuhSVRjZO3Ott1LYdhDO9XcVXratf8KIvr+4QnO1cb8k6tuRp1QWZzWQcnDUu@vger.kernel.org, AJvYcCVnqGWIeCSEk0iQpr6HAoNAE/8MCZlJ1FtassliT2vuF6pOIPF0aF6FD4hXDdezbh01RREzw1420e4I@vger.kernel.org, AJvYcCVoCP/yk0lYideSQD3Q4s8mYTXcDic6wM75a/bDdBpLY73wcmhOvCfKheTERtWXgH8onSPI4Fn37pj3uoYP@vger.kernel.org, AJvYcCVxLe5OlMhr9DV/HmouvTYGfRCqPhjhHB3Yso43fKrEIm7lKEad3O8FH4freGX50AZ0t7imFuZzeBQIbt8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxvh65dibPkUnLkILykDPqnmk/1E9DidWxVQV5EIw7kPUprWr7H
+	Q1UueJWsBiBhEhFIpkaTTtizowoZnP0krfw0YENbwIs76raXXp5s
+X-Gm-Gg: ASbGnctT/v5fK1HYHgoWI4XeIXNQIPCUcMGVHtHudbakRuV2FJ5xr3lJSdvXwVi7T42
+	Ng7XU4k3ikjfYyvwt/Sw3Qq8PDWPRh6B7tPGZ/dxeTPEOMRpeQd0fFsgLcxXOTconrdVwZqWRaz
+	YQVBsDiqdU+qhmMtVIxPdHGoN0Ce+wHQY5ar9j+jduSb+f2shY+hkQLin2f+F1iBYe1plRT5Ekh
+	m02cTiVzz8JE/rR0k0GTD/poEYhd7xEbUKLzOTMIVEDPi/29AV9eHKJcBZpGf/ZHMwQYEUH20li
+	pcXmqsqI6bGv3oDluMAl7CDdJVhv+g==
+X-Google-Smtp-Source: AGHT+IH9rcLIPOvjnADnrxvd5q2UGsOWnaIzKt6R4/LgYKLI1vC/A0RjS+tywApNzHtGpPVM4pA/jQ==
+X-Received: by 2002:a17:902:f644:b0:216:59ed:1aa3 with SMTP id d9443c01a7336-21a83f70f0fmr153965065ad.27.1736526123031;
+        Fri, 10 Jan 2025 08:22:03 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40548916sm1700480b3a.36.2025.01.10.07.56.12
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f12f8dcsm15635605ad.66.2025.01.10.08.22.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 07:56:13 -0800 (PST)
+        Fri, 10 Jan 2025 08:22:02 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ba0e0e2b-01ba-4261-ace9-82485e1c253e@roeck-us.net>
-Date: Fri, 10 Jan 2025 07:56:11 -0800
+Message-ID: <190bb6f2-7bbe-4145-b45f-4ad6672884b8@roeck-us.net>
+Date: Fri, 10 Jan 2025 08:22:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] hwmon: (lm90): Add support for NCT7716, NCT7717
- and NCT7718
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, jdelvare@suse.com,
- corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250110082612.4107571-1-a0282524688@gmail.com>
- <20250110082612.4107571-2-a0282524688@gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon: Add driver for TI INA232 Current and Power
+ Monitor
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com, robh@kernel.org,
+ davem@davemloft.net, krzk+dt@kernel.org, conor+dt@kernel.org,
+ Leo-Yang@quantatw.com, corbet@lwn.net, Delphine_CC_Chiu@Wiwynn.com,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>
+References: <20250110081546.61667-1-Leo-Yang@quantatw.com>
+ <20250110081546.61667-3-Leo-Yang@quantatw.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,90 +123,387 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250110082612.4107571-2-a0282524688@gmail.com>
+In-Reply-To: <20250110081546.61667-3-Leo-Yang@quantatw.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/10/25 00:26, Ming Yu wrote:
-...
-> @@ -2288,7 +2329,19 @@ static const char *lm90_detect_nuvoton(struct i2c_client *client, int chip_id,
->   	if (config2 < 0)
->   		return NULL;
->   
-> -	if (address == 0x4c && !(config1 & 0x2a) && !(config2 & 0xf8)) {
-> +	if (address == 0x48 && !(config1 & 0x30) && !(config2 & 0xfe) &&
+On 1/10/25 00:15, Leo Yang wrote:
+> Support ina233 driver for Meta Yosemite V4.
+> 
 
-Why config1 & 0x30 (instead of 0x3e) ?
+Irrelevant. Please drop.
 
-> +	    convrate <= 0x08) {
-> +		if (chip_id == 0x90)
-> +			name = "nct7717";
-> +		else if (chip_id == 0x91)
-> +			name = "nct7716";
-> +	} else if (address == 0x49 && !(config1 & 0x30) && !(config2 & 0xfe) &&
-> +		   convrate <= 0x08) {
-> +		name = "nct7716";
+The subject wrongly refers to INA232.
 
-Please also check the chip ID, and the other unused configuration register bits.
+> Driver for Texas Instruments INA233 Current and Power Monitor
+> With I2C-, SMBus-, and PMBus-Compatible Interface
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501092213.X9mbPW5Q-lkp@intel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501061734.nPNdRKqO-lkp@intel.com/
+> Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
 
-> +	} else if (address == 0x4c && !(config1 & 0x18) && !(config2 & 0xf8) &&
-> +		   convrate <= 0x08) {
-> +		name = "nct7718";
+Other feedback is on top of feedback from Krzysztof.
 
-Please also check the chip ID (0x90 according to the datasheet). Why not check bit 5
-of config1 ?
-
-If there is a reason for not checking the reserved configuration register bits,
-please add a comment to the code explaining the reason.
-
-> +	} else if (address == 0x4c && !(config1 & 0x2a) && !(config2 & 0xf8)) {
->   		if (chip_id == 0x01 && convrate <= 0x09) {
->   			/* W83L771W/G */
->   			name = "w83l771";
-> @@ -2297,6 +2350,7 @@ static const char *lm90_detect_nuvoton(struct i2c_client *client, int chip_id,
->   			name = "w83l771";
->   		}
->   	}
+> ---
+>   Documentation/hwmon/ina233.rst |  77 ++++++++++++++
+>   MAINTAINERS                    |   8 ++
+>   drivers/hwmon/pmbus/Kconfig    |   9 ++
+>   drivers/hwmon/pmbus/Makefile   |   1 +
+>   drivers/hwmon/pmbus/ina233.c   | 184 +++++++++++++++++++++++++++++++++
+>   5 files changed, 279 insertions(+)
+>   create mode 100644 Documentation/hwmon/ina233.rst
+>   create mode 100644 drivers/hwmon/pmbus/ina233.c
+> 
+> diff --git a/Documentation/hwmon/ina233.rst b/Documentation/hwmon/ina233.rst
+> new file mode 100644
+> index 000000000000..41537f89bed5
+> --- /dev/null
+> +++ b/Documentation/hwmon/ina233.rst
+> @@ -0,0 +1,77 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
->   	return name;
->   }
+> +Kernel driver ina233
+> +====================
+> +
+> +Supported chips:
+> +
+> +  * TI INA233
+> +
+> +    Prefix: 'ina233'
+> +
+> +  * Datasheet
+> +
+> +    Publicly available at the TI website : https://www.ti.com/lit/ds/symlink/ina233.pdf
+> +
+> +Author:
+> +
+> +	Leo Yang <Leo-Yang@quantatw.com>
+> +
+> +Usage Notes
+> +-----------
+> +
+> +The shunt resistor value can be configured by a device tree property;
+> +see Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml for details.
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver supports hardware monitoring for TI INA233.
+> +
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> +
+> +The driver provides the following attributes for input voltage:
+> +
+> +**in1_input**
+> +
+> +**in1_label**
+> +
+> +**in1_max**
+> +
+> +**in1_max_alarm**
+> +
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for shunt voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in3_input**
+> +
+> +**in3_label**
+> +
+> +**in3_alarm**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +**curr1_max**
+> +
+> +**curr1_max_alarm**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> \ No newline at end of file
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c575de4903db..fde1713dff9d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11226,6 +11226,14 @@ L:	linux-fbdev@vger.kernel.org
+>   S:	Orphan
+>   F:	drivers/video/fbdev/imsttfb.c
 >   
-> @@ -2484,6 +2538,10 @@ static int lm90_detect(struct i2c_client *client, struct i2c_board_info *info)
->   		name = lm90_detect_maxim(client, common_address, chip_id,
->   					 config1, convrate);
->   		break;
-> +	case 0x50:	/* Nuvoton */
-> +	case 0x5c:	/* Winbond/Nuvoton */
+> +INA233 HARDWARE MONITOR DRIVER
+> +M:	Leo Yang <Leo-Yang@quantatw.com>
+> +M:	Leo Yang <leo.yang.sy0@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Odd Fixes
+> +F:	Documentation/hwmon/ina233.rst
+> +F:	drivers/hwmon/pmbus/ina233.c
+> +
 
-The new detection code should be implemented as separate function to avoid
-weakening the detection mechanism. I would suggest to rename the current
-lm90_detect_nuvoton() to lm90_detect_winbond() and introduce a new
-lm90_detect_nuvoton(). Alternatively, add something like lm90_detect_nuvoton_50().
+In addition to other comments: No "Odd Fixes" for hwmon drivers, please.
+Just drop this entry.
 
-Given that all new chips have a chip ID register (called device ID), I would suggest
-to arrange the new code around the chip IDs. Since all chips have another chip ID
-register at address 0xfd, it would make sense to check that register as well.
-That would only require a single check since it looks like the value is the same
-for all chips. Something like
+>   INDEX OF FURTHER KERNEL DOCUMENTATION
+>   M:	Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
+>   S:	Maintained
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index f6d352841953..55db0ddc94ed 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -124,6 +124,15 @@ config SENSORS_DPS920AB
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called dps920ab.
+>   
+> +config SENSORS_INA233
+> +	tristate "Texas Instruments INA233 and compatibles"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Texas
+> +	  Instruments INA233.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called ina233.
+> +
+>   config SENSORS_INSPUR_IPSPS
+>   	tristate "INSPUR Power System Power Supply"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index d00bcc758b97..3c4b06fb939e 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
+>   obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+>   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+>   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+> +obj-$(CONFIG_SENSORS_INA233)	+= ina233.o
+>   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+>   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+>   obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
+> diff --git a/drivers/hwmon/pmbus/ina233.c b/drivers/hwmon/pmbus/ina233.c
+> new file mode 100644
+> index 000000000000..7899c3e99eeb
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/ina233.c
+> @@ -0,0 +1,184 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Hardware monitoring driver for ina233
+> + *
+> + * Copyright (c) 2025 Leo Yang
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +#define MFR_READ_VSHUNT 0xd1
+> +#define MFR_CALIBRATION 0xd4
+> +
+> +#define INA233_CURRENT_LSB_DEFAULT	1000 /* uA */
+> +#define INA233_RSHUNT_DEFAULT		2000 /* uOhm */
+> +
+> +#define MAX_M_VAL 32767
+> +#define MIN_M_VAL -32768
+> +
+> +static void calculate_coef(int *m, int *R, int power_coef)
+> +{
+> +	s64 scaled_m;
+> +	int scale_factor = 0;
+> +	int scale_coef = 1;
+> +	bool is_integer = false;
+> +
+> +	/*
+> +	 * 1000000 from Current_LSB A->uA .
+> +	 * scale_coef is for scaling up to minimize rounding errors,
+> +	 * If there is no decimal information, No need to scale.
 
-	int chid = i2c_smbus_read_byte_data(client, 0xfd);
-	...
+s/No/no/
 
-	if (chid < 0 || config2 < 0)
-		return NULL;
+> +	 */
+> +	if (1000000 % *m) {
+> +		/* Scaling to keep integer precision */
+> +		scale_factor = -3;
+> +		scale_coef = 1000;
+> +	} else {
+> +		is_integer = true;
+> +	}
+> +
+> +	/*
+> +	 * Unit Conversion (Current_LSB A->uA) and use scaling(scale_factor)
+> +	 * to keep integer precision.
+> +	 * Formulae referenced from spec.
+> +	 */
+> +	scaled_m = div_s64(1000000 * scale_coef, *m * power_coef);
+> +
+> +	/* Maximize while keeping it bounded.*/
+> +	while (scaled_m > MAX_M_VAL || scaled_m < MIN_M_VAL) {
+> +		scaled_m = div_s64(scaled_m, 10);
+> +		scale_factor++;
+> +	}
+> +	/* Scale up only if fractional part exists. */
+> +	while (scaled_m * 10 < MAX_M_VAL && scaled_m * 10 > MIN_M_VAL && !is_integer) {
+> +		scaled_m *= 10;
+> +		scale_factor--;
+> +	}
+> +
+> +	*m = scaled_m;
+> +	*R = scale_factor;
+> +}
+> +
+> +static int ina233_read_word_data(struct i2c_client *client, int page,
+> +				 int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIRT_READ_VMON:
+> +		ret = pmbus_read_word_data(client, 0, 0xff, MFR_READ_VSHUNT);
+> +
+> +		/* Adjust returned value to match VIN coefficients */
+> +		/* VIN: 1.25 mV VSHUNT: 2.5 uV LSB */
+> +		ret = DIV_ROUND_CLOSEST(ret * 25, 12500);
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int ina233_probe(struct i2c_client *client)
+> +{
+> +	int ret, m, R;
+> +	u32 rshunt;
+> +	u16 current_lsb;
+> +	u16 calibration;
+> +	struct pmbus_driver_info *info;
+> +
+> +	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+> +			    GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	info->pages = 1;
+> +	info->format[PSC_VOLTAGE_IN] = direct;
+> +	info->format[PSC_VOLTAGE_OUT] = direct;
+> +	info->format[PSC_CURRENT_OUT] = direct;
+> +	info->format[PSC_POWER] = direct;
+> +	info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_INPUT
+> +		| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		| PMBUS_HAVE_POUT
+> +		| PMBUS_HAVE_VMON | PMBUS_HAVE_STATUS_VMON;
+> +	info->m[PSC_VOLTAGE_IN] = 8;
+> +	info->R[PSC_VOLTAGE_IN] = 2;
+> +	info->m[PSC_VOLTAGE_OUT] = 8;
+> +	info->R[PSC_VOLTAGE_OUT] = 2;
+> +	info->read_word_data = ina233_read_word_data;
+> +
+> +	/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
+> +	/* read rshunt value (uOhm) */
+> +	if (of_property_read_u32(client->dev.of_node, "shunt-resistor", &rshunt) < 0)
+> +		rshunt = INA233_RSHUNT_DEFAULT;
+> +
+> +	/* read current_lsb value (uA) */
+> +	if (of_property_read_u16(client->dev.of_node, "ti,current-lsb", &current_lsb) < 0)
+> +		current_lsb = INA233_CURRENT_LSB_DEFAULT;
+> +
+of_property_read_u16() returns -EOVERFLOW if the value provided was too large.
+This should be checked to avoid situations where the value provided in devicetree
+is too large.
 
-	if (chid != 0x50 || convrate > 0x08)
-		return NULL;
+A more higher level question: why not use device_property functions ?
 
-	switch (chip_id) {
-	case 0x90:
-		...
-	case 0x91:
-		...
-	default:
-		...
-	}
+> +	if (!rshunt || !current_lsb) {
+> +		dev_err(&client->dev, "shunt-resistor and current-lsb cannot be zero.\n");
+> +		return -EINVAL;
 
-Thanks,
-Guenter
+		return dev_err_probe(...);
+
+Please use a consistent term for current LSB in error messages.
+
+> +	}
+> +
+> +	/* calculate current coefficient */
+> +	m = current_lsb;
+> +	calculate_coef(&m, &R, 1);
+> +	info->m[PSC_CURRENT_OUT] = m;
+> +	info->R[PSC_CURRENT_OUT] = R;
+> +
+> +	/* calculate power coefficient */
+> +	m = current_lsb;
+> +	calculate_coef(&m, &R, 25);
+> +	info->m[PSC_POWER] = m;
+> +	info->R[PSC_POWER] = R;
+> +
+> +	/* write MFR_CALIBRATION register, Apply formula from spec with unit scaling. */
+> +	calibration = div64_u64(5120000000ULL, (u64)rshunt * current_lsb);
+> +	if (calibration > 0x7FFF) {
+> +		dev_err(&client->dev, "Exceeds MFR_CALIBRATION limit, Use a reasonable Current_LSB with Shunt resistor value.\n");
+
+Use dev_err_probe(). The error message is not actionable. Provide the values.
+Something like "Current_LSB %u too small for shunt resistor value %u" or similar
+would be more helpful.
+
+> +		return -EINVAL;
+> +	}
+> +	ret = i2c_smbus_write_word_data(client, MFR_CALIBRATION, calibration);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "Unable to write calibration\n");
+> +		return ret;
+
+		return dev_err_probe(...);
+
+> +	}
+> +
+> +	dev_dbg(&client->dev, "power monitor %s (Rshunt = %u uOhm, Current_LSB = %u uA/bit)\n",
+> +		client->name, rshunt, current_lsb);
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct i2c_device_id ina233_id[] = {
+> +	{"ina233", 0},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ina233_id);
+> +
+> +static const struct of_device_id __maybe_unused ina233_of_match[] = {
+> +	{ .compatible = "ti,ina233" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ina233_of_match);
+> +
+> +static struct i2c_driver ina233_driver = {
+> +	.driver = {
+> +		   .name = "ina233",
+> +		   .of_match_table = of_match_ptr(ina233_of_match),
+> +	},
+> +	.probe = ina233_probe,
+> +	.id_table = ina233_id,
+> +};
+> +
+> +module_i2c_driver(ina233_driver);
+> +
+> +MODULE_AUTHOR("Leo Yang <Leo-Yang@quantatw.com>");
+> +MODULE_DESCRIPTION("PMBus driver for INA233 and compatible chips");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
 
