@@ -1,261 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A1B205E01;
-	Fri, 10 Jan 2025 08:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4121F9428;
+	Fri, 10 Jan 2025 08:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736497521; cv=none; b=W4L7tkzurSQ5GPadHUqHKF9QMBm8kXr6bwJS4qqlhDCCE9e0zdDfRgWRqQ1X+NNtwha7prrsLSrP3wts22cvOKcacEZxYIH4q5gfi46NtGs6aT3vAS2uLM3R0C9BCSFWGX9hVuiMpcan7sOIKbaCUWTCK/KKZ6MdyWFXgcFDNCI=
+	t=1736497595; cv=none; b=BR0x7xd2A3tm5srq7Jf9mTrf/ctFsXc5mkJQMXQaG4ck3ebLw9cdub8UYKBEyXl0y2NZDLdDhUOE/QyWITL2TDwypWwJqqF9LddZXlwvtbk5cyBD98mvBrxtWpHI7KOnrzbLt3QDSRnw5UgHpi2gmIh9281Qd2/9p7IvJjyojEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736497521; c=relaxed/simple;
-	bh=C4j/PE+SkzjyWIkFfeBW5drHUDYWlyceAsEgQaNU7Jc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N7JmT+96hNK4ndwcTFCZC4nEMJzwBowFVSMymSxL4/YdNKloPHhKQutc3o2avpR51bmgNEM32VyUr7jfGS0tK52QuKVaTIrazFRQgvHb9deJNODnhpqANaCldDCDa+uvU1NJtio2dCqMgjLy28rrZURLi+KAo//P07yfERNNpjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lhJFDFn8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736497595; c=relaxed/simple;
+	bh=FmV9PabaVdfSsH+M6j5Swg14dURON+awRma4UTvNxF8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NNmarLQlgjzpZ8pea71hRRgzNQ8TGKCCfBQ2V0ylKIjnMXYBAK+Fba2nEcvSx37/oGDLwzNeQByokaUOn1Zs8eb/IgvttrlWQZ/1aKHoqE1pTYQd8i1hDwz62n3R5C6EyYmshiKtSp3GCpmni4fVGnVPScel9l/9u7fRCgy1vRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yc0UTDes; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lhJFDFn8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188E6C4CED6;
-	Fri, 10 Jan 2025 08:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736497520;
-	bh=C4j/PE+SkzjyWIkFfeBW5drHUDYWlyceAsEgQaNU7Jc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lhJFDFn8//ZIeuv+RJ53Lq3C5jvgXzp6JqBCjbgGqTEFkV88fWniJAp/IIxS/mTKm
-	 oiBmvTCYh4HuDi/JaLLcLJbBmAh3Z1pqZQ8Cqvyuhf8TxWGn2xQCBBD8gMeglLYfTt
-	 gYl+Hgg6J7QxTO6OVrSxcANeXJEQcAll5bwHDFDxlE3FYO5J30/FrlCF/xt2fvb+xl
-	 ZKwZk81unKLSosMILtOPIxUKU+t4kwoDulDXCL7g9BAxcp0KnGmYwTSVaSX3rFyJCk
-	 NGQsGmnTra0r50TwkFE9mtkTR84JEDgf8ZJsgj/Pgz9SG2BhobDUsKF8u/HC06Wpyx
-	 NgWEcOS1DogHQ==
-Message-ID: <8a2f67d3-97e5-49eb-823f-480d59178e18@kernel.org>
-Date: Fri, 10 Jan 2025 09:25:12 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yc0UTDes"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21669fd5c7cso29269005ad.3;
+        Fri, 10 Jan 2025 00:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736497593; x=1737102393; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkxY4439ZVn0G9Yn4qlDjFjlAf32ewAQTaEyOEf0y9o=;
+        b=Yc0UTDesIY+xQw7T00lh7XIunAbkbaM9iuxJj25VIBWUNHNR7ut8WeIHpelH/WvaSK
+         n89VmGledZ+k6zFE/9ybJw0Yfmr17BnxvtIx5TSwKWPS40cbGmFPev+rjOtjfz02iKvM
+         U5q0iBFSQnelmFsgzpIlOH0+6ADv0GfvMelY+8rmR0UZG84d+/5ZJgzjL2VRbxLlAd2C
+         QA6+wN+UT/bUsk01KlAG3lPve9cUsDf8QaFyTx8KoTUGeM0uWJJjHA0+1uG7wGqzJjkM
+         Tixqijy7UqyObC1sa7s8zXc1HoG9x/e+koBuipe33vciMimM7+UZISKpPsPQDojYn7ol
+         XPRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736497593; x=1737102393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MkxY4439ZVn0G9Yn4qlDjFjlAf32ewAQTaEyOEf0y9o=;
+        b=CJmOGuZxFcH/CNu48Q2fPwrxdDbQOdfnZLJ7bjxhpmMQSmqMZDwOlkdZTYZjRSt2bV
+         7zDARcFT1AK63kxskT0ql7Lq48pS6SalLGd9anWsOxYhhs8ycLz1koRTodQO/BqEyDl6
+         s6p7XdhaHirsvjCwtywp5vdgx5V1mn9Q38KjbQzuwx0saGp7eAbrGrEbUlL6di2eo53T
+         xxOvjh6Qre1tDevtsBf06u9EPCVVu1zzfpUJW1WKVNOt/8jIqgRus/SK11dkm88Sd//V
+         7m73oKZR85Tgm3bGjA9r7DEt4s7VQx6617aNvmHJWzv5xSX1hwva/6S4aLxZEROVg7K6
+         dxbA==
+X-Forwarded-Encrypted: i=1; AJvYcCU53e8VoZybOhQC/agBWEKrrx+1SBxJMiY6nXChJl/ht6cgfpPwcyVG9DFiAh3hMm8RTEjYt9i8PDRI@vger.kernel.org, AJvYcCWN4WBZT1Y1SZQuYtBujNBA+Yo1vH81Ude41U7+16F2jAABEcB/UyQTClmKcQ6lKEGYA8PuahhRjlg6bGEH@vger.kernel.org, AJvYcCXtq5Tr6zo7GtzagJ1w0KgMRTcKwZccLuedctBNi2sqhSMtI/1VwQSdbWSxY2WlWLXf1y/GTVs1PN+a@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8anbuj3dj6e0kvESlCPN1hHFZTovsAdKokHkHSCLipctgWqk1
+	sGufMS4UuP3Bbmwsh35HISt2rdZpBtYnYtVy13xNWPsY59Y8o/nL
+X-Gm-Gg: ASbGnct5EWrHLeoxEHhsd6bZDGkNA58AO5VjpFwU1Tr+cpJA+Oc3dV7m+oZmf35ONzN
+	rcWaJiSFTOjVJhGN+IQQKGGwRpNdbgYBytjZ4QABW5kXkB70eAmGDoPe1YXEbVXNKJIPEvaAcLo
+	VL6j22Vk1EMzvnCJrVxXSSLFVeIZb+B6uRk8Nx5RDVs8JBWW/ifQf3W4fa7SpsPt5A6k1ha6rlJ
+	RnQIf1lq8fhwiLlVErID6xhqX4Z6xnGTPgPdzqYOV1hZascy9CpscNv1jvX6FX/x723BicU7VGA
+	wjLZkUDNRCao66wcNFDHxxrR
+X-Google-Smtp-Source: AGHT+IEQhgfYJ3B3PLmzgDygm2i1+Q1/7IW0OqFNOPuKlBzDqfkHM5ll23rN/kKR19g0YdsSmE3nlA==
+X-Received: by 2002:a17:903:230d:b0:216:3dc5:1240 with SMTP id d9443c01a7336-21a83fde389mr144685255ad.45.1736497592497;
+        Fri, 10 Jan 2025 00:26:32 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22d0eesm9346815ad.169.2025.01.10.00.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 00:26:32 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v1 0/2] hwmon: lm90: Add support for NCT7716, NCT7717 and NCT7718
+Date: Fri, 10 Jan 2025 16:26:10 +0800
+Message-Id: <20250110082612.4107571-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: Add driver for TI INA232 Current and Power
- Monitor
-To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
- robh@kernel.org, davem@davemloft.net, krzk+dt@kernel.org,
- conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
- Delphine_CC_Chiu@Wiwynn.com, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: kernel test robot <lkp@intel.com>
-References: <20250110081546.61667-1-Leo-Yang@quantatw.com>
- <20250110081546.61667-3-Leo-Yang@quantatw.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250110081546.61667-3-Leo-Yang@quantatw.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/01/2025 09:15, Leo Yang wrote:
-> Support ina233 driver for Meta Yosemite V4.
-> 
-> Driver for Texas Instruments INA233 Current and Power Monitor
-> With I2C-, SMBus-, and PMBus-Compatible Interface
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
+The patch series add support for NCT7716, NCT7717 and NCT7718 from
+Nuvoton in lm90.
 
-No, what did the robot report? Drop.
+NCT7716 and NCT7717 only have 8 bit resolution local thermal sensor.
+NCT7718 has local sensor and 11 bit resoulution remote thermal sensor.
 
-> Closes: https://lore.kernel.org/oe-kbuild-all/202501092213.X9mbPW5Q-lkp@intel.com/
+Ming Yu (2):
+  hwmon: (lm90): Add support for NCT7716, NCT7717 and NCT7718
+  dt-bindings: hwmon: Add support for NCT7716, NCT7717 and NCT7718 in
+    lm90
 
-Drop
+ .../bindings/hwmon/national,lm90.yaml         |  6 ++
+ Documentation/hwmon/lm90.rst                  | 43 ++++++++++++
+ drivers/hwmon/Kconfig                         |  2 +-
+ drivers/hwmon/lm90.c                          | 67 +++++++++++++++++--
+ 4 files changed, 111 insertions(+), 7 deletions(-)
 
-> Closes: https://lore.kernel.org/oe-kbuild-all/202501061734.nPNdRKqO-lkp@intel.com/
+-- 
+2.34.1
 
-Drop
-
-> Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
-> ---
->  Documentation/hwmon/ina233.rst |  77 ++++++++++++++
->  MAINTAINERS                    |   8 ++
->  drivers/hwmon/pmbus/Kconfig    |   9 ++
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/ina233.c   | 184 +++++++++++++++++++++++++++++++++
->  5 files changed, 279 insertions(+)
->  create mode 100644 Documentation/hwmon/ina233.rst
->  create mode 100644 drivers/hwmon/pmbus/ina233.c
-> 
-> diff --git a/Documentation/hwmon/ina233.rst b/Documentation/hwmon/ina233.rst
-> new file mode 100644
-> index 000000000000..41537f89bed5
-> --- /dev/null
-> +++ b/Documentation/hwmon/ina233.rst
-> @@ -0,0 +1,77 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver ina233
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * TI INA233
-> +
-> +    Prefix: 'ina233'
-> +
-> +  * Datasheet
-> +
-> +    Publicly available at the TI website : https://www.ti.com/lit/ds/symlink/ina233.pdf
-> +
-> +Author:
-> +
-> +	Leo Yang <Leo-Yang@quantatw.com>
-> +
-> +Usage Notes
-> +-----------
-> +
-> +The shunt resistor value can be configured by a device tree property;
-> +see Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml for details.
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports hardware monitoring for TI INA233.
-> +
-> +The driver is a client driver to the core PMBus driver. Please see
-> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +The driver provides the following attributes for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_max**
-> +
-> +**in1_max_alarm**
-> +
-> +**in1_min**
-> +
-> +**in1_min_alarm**
-> +
-> +The driver provides the following attributes for shunt voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in3_input**
-> +
-> +**in3_label**
-> +
-> +**in3_alarm**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr1_max**
-> +
-> +**curr1_max_alarm**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> \ No newline at end of file
-
-You still have patch warnings. I already commented on this, so you have
-to fix it everywhere.
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c575de4903db..fde1713dff9d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11226,6 +11226,14 @@ L:	linux-fbdev@vger.kernel.org
->  S:	Orphan
->  F:	drivers/video/fbdev/imsttfb.c
->  
-> +INA233 HARDWARE MONITOR DRIVER
-> +M:	Leo Yang <Leo-Yang@quantatw.com>
-> +M:	Leo Yang <leo.yang.sy0@gmail.com>
-
-One email.
-
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Odd Fixes
-
-Why would we like to have unmaintained driver? Odd fixes is candidate to
-removal, so shall we accept it and remove immediately?
-
-
-> +F:	Documentation/hwmon/ina233.rst
-> +F:	drivers/hwmon/pmbus/ina233.c
-> +
-
-...
-
-> +
-> +	/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
-> +	/* read rshunt value (uOhm) */
-> +	if (of_property_read_u32(client->dev.of_node, "shunt-resistor", &rshunt) < 0)
-> +		rshunt = INA233_RSHUNT_DEFAULT;
-> +
-> +	/* read current_lsb value (uA) */
-> +	if (of_property_read_u16(client->dev.of_node, "ti,current-lsb", &current_lsb) < 0)
-> +		current_lsb = INA233_CURRENT_LSB_DEFAULT;
-> +
-> +	if (!rshunt || !current_lsb) {
-> +		dev_err(&client->dev, "shunt-resistor and current-lsb cannot be zero.\n");
-
-Then properties must have constraints in your schema.
-
-> +		return -EINVAL;
-
-
-Best regards,
-Krzysztof
