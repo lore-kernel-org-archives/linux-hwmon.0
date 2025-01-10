@@ -1,133 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BD0204F61;
-	Fri, 10 Jan 2025 10:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251FF20ADFF;
+	Fri, 10 Jan 2025 11:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736504228; cv=none; b=CmFmBLLP82gkJRhMqQptnxScpcf9O7RmykWdtTSSV9uDQoAtKE9GQznToe3ytuso4SFhElVSHdJoO04JFIDL7DtfNYv0tYe4i7yHkylcw/NnzQRMZ0hzO7vJuYb3C8Fq2hqewPaPwOtCiooIGQF8teolswavTLO8s7TagZByWbc=
+	t=1736509686; cv=none; b=dQgM84AnEhgnSWsj22dv6pLeE55+Y8J4cTGLUCI0tU5v/WewJNDjuomSimafkoU6hpYIlIbLxqfgU6JigQFdPSWtydJ+MmAOt8846Q/ChR3TGl+2NnKS5j/PIlLT37GuL8XrfJOcI4zQjWcOjAcCC5XqJit4nbXLSAmSBilfI2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736504228; c=relaxed/simple;
-	bh=MUFaxaznto5kRfQFQH+aYzQT8JMNYVK4+BvHtJ5UUos=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cvETzlaXGy8zRxJyg1eV6jPHK60GitWjM613FsV+1KTjhEV6Tqpn4l67n9rj5mSrBnbKnGDhv113j5ieQ8UJcGZQ5nx2VDSmJAyHFWAd6OqAhcXwZpvjy+/hTMfqzY4FbXfPptWbq5uuwOzoOC7gcUrJT6vQvcGNPCs5gjwaS0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mb0AldzV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736509686; c=relaxed/simple;
+	bh=ccxm1N+dLVpzpg8p9w9I2klW2Uft+HlRqiwPjWXd1aE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s/gizWNNs8cqRyMcPPNWoN5FdHGL9Maye1jzGDpDJSlxc77aLfO+qNl4/pDJdSrHDxZq8EwuOni8flnWMMZ3gr3+9jx2VGnGkJGYv4Xf2P/0525r+cja4nV+gDNvyuitejxHkLid96HJNa+hV146PGmOP7xyI+C7HtjSRfPFCPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y7zUYib4; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mb0AldzV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CE8C4CED6;
-	Fri, 10 Jan 2025 10:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736504227;
-	bh=MUFaxaznto5kRfQFQH+aYzQT8JMNYVK4+BvHtJ5UUos=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mb0AldzVEfBWq2aLqVXUWw/fXwd31CEoReoS/H0vfs+63xq/RRcf6xuWjECk9S2I6
-	 2Bt9RcQ9m3gOYyT2ugDvlX7OTYgQNUuGb7q8whef29b23CVRuZgLyItLgr4iAhAqZW
-	 rx7nze6hFxHRIGD6FCW2wIbJi42Ao6Q606Vd5Z5EX2vYLMCRVUhss9K4MbyzAuNHr1
-	 SAg0pN1rzhKJ/X6KdZVUx7Dod3YZcY5Xdv3tXiDONixUaC0gsRGg2vV9F2GHvoB7r8
-	 84bMNALMA/YnDU5iGDZFHiYPcjQsUCUrknCofKRI07ogZ8AM7phva5/lS1LzOKjFGd
-	 LCXb+eUkUsVCQ==
-Date: Fri, 10 Jan 2025 10:17:03 +0000
-From: Simon Horman <horms@kernel.org>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Realtek linux nic maintainers <nic_swsd@realtek.com>,
-	David Miller <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux@roeck-us.net
-Subject: Re: [PATCH net] r8169: remove redundant hwmon support
-Message-ID: <20250110101703.GV7706@kernel.org>
-References: <357e6526-ee3e-4e66-b556-7364fdcb2bfc@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y7zUYib4"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-216426b0865so31902425ad.0;
+        Fri, 10 Jan 2025 03:48:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736509683; x=1737114483; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tFRw/+58ITVuLNvlLKTfpJf5G1Rh4TJJMDSpDyZ7jpE=;
+        b=Y7zUYib4jrRCeUrAQo5refuGjNRZqyfGbEwzfGP7J57D6J5R/C61qYDodGr+vJoCW8
+         hXvFPFKxEse+xr9hTjk+inANSoluMdVnIT8d+0MwjsE+xituT4jOOcN5qPH8LiLAHC82
+         aWMeT48PLGMueoijwFg0Xl/Zwk58rUw1qNO6o4tK5Ah5oMU+Y18hR9Cs+wMbgDAKXPPP
+         /jo8z2qeNxpk1pE9Icq3N2rPQnTcKUxCiLI/6QbRb87QBcxXDkvOhCzbhszFNJh0Miyc
+         9yshAUJObG5V0w/cvSlD3l0ugZi9qeDXra3PydkKIcdsQuJniy1H5XfaryIsfG40WKv4
+         aHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736509683; x=1737114483;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tFRw/+58ITVuLNvlLKTfpJf5G1Rh4TJJMDSpDyZ7jpE=;
+        b=CEndHRZJgoXqc16zzZwbR/fnsAqC5ZaJorRvwATpUOyBFEvZXL88u6s69/iSvO4+Gn
+         MVVv+Jtjl6ieE30k5GPmMhVt3xebTw6AJ/o2jCzFGWygzbUNGruR6vuHpDwu6PQmWs64
+         3wTUXSuqeSA9nzPJ2GQI4WzQZ67RWI6ks/wnfggOeoXZYzVeIkQVETijqv270HE0sX2K
+         /CKz4K2FsyZlHoJ4tTLvW6Vak1sByyBSix31ExwNHsD493Arxc7sSxC7al1Ig9HSwudM
+         VG3i0jx8azTFYA1U9L60CWjLuzwnpZp/6fGks8IX/n9/SFEcxZsyNTYuhxhSBk2sszhc
+         H/bA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcQ5yXcEQDDrnae0+Tk4SJbGLNqqAj/MU3yOi/0PiYAR9LJUpRtDZJ9MeHBGaUxTotwshK7UtDpnhPJzvt@vger.kernel.org, AJvYcCX5mcjCw4oGNJ7pYkYxrT9GK/2CnfsT9iZ5hyTc0ACNHfKYBiYLXvHi/O/ztFnChGmYFWekSMFfmW6U+A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsqd7QarY9trvyvIzejkmPe+GgUPnAKmwP3dHGWWM7Yf/ZbsKd
+	aOKl26cZ4VKH6xtAQf6LAhg+wh6n3dSnjNK5UFBoc4niYMgZUyNaGGc9jw==
+X-Gm-Gg: ASbGncsIf5h7UwhlnnFDjKD0q6ya1LLQNwb5v/MpaHsGm0rKMfcz0kQZiBI8cFPXnA8
+	iGrdqlQ2f0OrrUFYsSXqb2hEMkiU3nQMc33XqOyCbb6JDrMwIgsQeJxHA5UkYzTifFAmj8UeJbr
+	zTNGz1OAhSCOSsoQvck3scGWsH2O2xgx2epGXTj9zY5aIk8G/HdjJpOgicAvKDnyojTgwAr1hfa
+	YCwGKP1FRpMi2VJjmRfKX2n5Hlh6sDf38yBLZUA8++d/T8UxyJq
+X-Google-Smtp-Source: AGHT+IEoGoXXspj4Ewi9299VG6sDT8BkazCSMsMCMlPvlD0nOLBSE1QJDy/r2MIF9gM2MkgFwMybmA==
+X-Received: by 2002:a17:902:da87:b0:215:a96d:ec17 with SMTP id d9443c01a7336-21a83f4d80dmr162248825ad.14.1736509683327;
+        Fri, 10 Jan 2025 03:48:03 -0800 (PST)
+Received: from prometheus.lan ([45.124.203.18])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219324sm12560905ad.127.2025.01.10.03.47.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 03:48:02 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Billy Tsai <billy_tsai@aspeedtech.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] hwmon: Fix help text for aspeed-g6-pwm-tach
+Date: Fri, 10 Jan 2025 22:17:36 +1030
+Message-ID: <20250110114737.64035-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <357e6526-ee3e-4e66-b556-7364fdcb2bfc@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-+ Jean Delvare, linux-hwmon, linux@roeck-us.net
+The help text has the wrong module name mentioned, and the capitalisation
+of the title is inconsistent.
 
-On Thu, Jan 09, 2025 at 11:29:09PM +0100, Heiner Kallweit wrote:
-> The temperature sensor is actually part of the integrated PHY and available
-> also on the standalone versions of the PHY. Therefore hwmon support will
-> be added to the Realtek PHY driver and can be removed here.
-> 
-> Fixes: 1ffcc8d41306 ("r8169: add support for the temperature sensor being available from RTL8125B")
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Fixes: 7e1449cd15d1 ("hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+The naming for this driver unusual; other aspeed devices are named for
+the soc name (ast2400, ast2500, etc) that introduced them, not the
+generation.
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Additionally this driver uses the abbreviation "tach", while the other
+uses "tacho".
 
-> ---
->  drivers/net/ethernet/realtek/r8169_main.c | 37 -----------------------
->  1 file changed, 37 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-> index 5724f650f..7b9ba91c3 100644
-> --- a/drivers/net/ethernet/realtek/r8169_main.c
-> +++ b/drivers/net/ethernet/realtek/r8169_main.c
-> @@ -16,7 +16,6 @@
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/ethtool.h>
-> -#include <linux/hwmon.h>
->  #include <linux/phy.h>
->  #include <linux/if_vlan.h>
->  #include <linux/in.h>
-> @@ -5338,36 +5337,6 @@ static bool rtl_aspm_is_safe(struct rtl8169_private *tp)
->  	return false;
->  }
->  
-> -static int r8169_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> -			    u32 attr, int channel, long *val)
-> -{
-> -	struct rtl8169_private *tp = dev_get_drvdata(dev);
-> -	int val_raw;
-> -
-> -	val_raw = phy_read_paged(tp->phydev, 0xbd8, 0x12) & 0x3ff;
-> -	if (val_raw >= 512)
-> -		val_raw -= 1024;
-> -
-> -	*val = 1000 * val_raw / 2;
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct hwmon_ops r8169_hwmon_ops = {
-> -	.visible = 0444,
-> -	.read = r8169_hwmon_read,
-> -};
-> -
-> -static const struct hwmon_channel_info * const r8169_hwmon_info[] = {
-> -	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> -	NULL
-> -};
-> -
-> -static const struct hwmon_chip_info r8169_hwmon_chip_info = {
-> -	.ops = &r8169_hwmon_ops,
-> -	.info = r8169_hwmon_info,
-> -};
-> -
->  static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  {
->  	struct rtl8169_private *tp;
-> @@ -5547,12 +5516,6 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	if (rc)
->  		return rc;
->  
-> -	/* The temperature sensor is available from RTl8125B */
-> -	if (IS_REACHABLE(CONFIG_HWMON) && tp->mac_version >= RTL_GIGA_MAC_VER_63)
-> -		/* ignore errors */
-> -		devm_hwmon_device_register_with_info(&pdev->dev, "nic_temp", tp,
-> -						     &r8169_hwmon_chip_info,
-> -						     NULL);
->  	rc = register_netdev(dev);
->  	if (rc)
->  		return rc;
-> -- 
-> 2.47.1
-> 
+ drivers/hwmon/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index dd376602f3f1..9afa70f877cc 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -413,7 +413,7 @@ config SENSORS_ASPEED
+ 	  will be called aspeed_pwm_tacho.
+ 
+ config SENSORS_ASPEED_G6
+-	tristate "ASPEED g6 PWM and Fan tach driver"
++	tristate "ASPEED G6 PWM and Fan tach driver"
+ 	depends on ARCH_ASPEED || COMPILE_TEST
+ 	depends on PWM
+ 	help
+@@ -421,7 +421,7 @@ config SENSORS_ASPEED_G6
+ 	  controllers.
+ 
+ 	  This driver can also be built as a module. If so, the module
+-	  will be called aspeed_pwm_tacho.
++	  will be called aspeed_g6_pwm_tach.
+ 
+ config SENSORS_ATXP1
+ 	tristate "Attansic ATXP1 VID controller"
+-- 
+2.45.2
+
