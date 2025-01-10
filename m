@@ -1,88 +1,118 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B825F2F2F;
-	Fri, 10 Jan 2025 01:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB1C1F12FD;
+	Fri, 10 Jan 2025 08:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736472286; cv=none; b=kTV5fzbapfmhJp94dH4msrunaQw5Ym5APYrjSMNe7//1yD01Hdmq65eQciMiH3TFU/gWtRpmNIyJEnW0vnMGSQPtrjHtv6aSC5Z2qof8GUiG0vqsES08nGL6t11nIRxIKqRfo4T7XaYhDeAHts3+4smEynsqrvg2NHQQPotrKao=
+	t=1736496962; cv=none; b=sj8dN/Gh9s5lxoO2H6GA5LOcUwwft6lZ3wkAYGKzIK5Zx0aegUb/IOJPO4uznpXrKNPOJj9NdZgp6bhKckW5bNeROtEm5RhU2TOA6b0ccoGu6xXLruv3aZlF6Jtodgcuy8rKAlQGOgVJnvpkXNgpGpVpc+p4RLOy5rhARzS6bEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736472286; c=relaxed/simple;
-	bh=wZ5D9PiDL4l1ScqcLNoXhkgWVEHvXrFKh7UyL70UMT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMwtNR3gjeRQ+I+TNYrUMwbdEV/JXH990oN3q1a0arQMzkomuSdy5KbKHtf7Vp5+mCJimDIUUmmxIn3PWvW7WEb9bXOGnh6XkYS+Okhlqch4R5hD9Xwg9gR9T06MY/5J8xJ/WhVYXF/+y8WZepk4gDdFO3SYyT2RAVz/IaVw22w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DN/zec3c; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1736496962; c=relaxed/simple;
+	bh=LiGgblo3umRJF8TlDZD0wLYlW/FE/mYXjvtrFKkWIZI=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Mk24cAbhtM5bKBFSoM6JP99fGQfykqg49gW2FhBdu9YItaeC9QsfQWQV7KlLToLKOC7bjBV7fWDUeFayegnZ3awkHQRnW9oSpyXvz4NKxBTTl68wuqw3I1MvM7CStOcJLMTqeVhns8r9RKG/HrQZ4tLNWf6vBkDM8NPbG6sjAdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EDt+urWA; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DN/zec3c"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2161eb94cceso18616415ad.2;
-        Thu, 09 Jan 2025 17:24:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDt+urWA"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2166360285dso29812545ad.1;
+        Fri, 10 Jan 2025 00:16:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736472284; x=1737077084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tvQt950RFyp/qo58nej0dfiGIB9r55J5KlMxBP+gTkE=;
-        b=DN/zec3cK0QkVFbfZ4Q8toj/x8ofgPFHlop70yMvRfBlPK/zzf7LALPv5GjNxPaerZ
-         FGaHfCOmG3w2OHkhq+M/s4sxGqlXy7C2O7yuhLSqo+TFc/jscJHdfcMDKPdYK3l4Rc9Q
-         PzTGVSpy4rnXH0P3P3O8pON2EiFRLCvNWEmyRl2KtKM+VV/ksjOEdo8EofWI+q3qPEkT
-         Vvu8Y19+1is4PN1s03kMPlUCQHbp65PuBfsW1az4cVhOkHsqCA0op/id1Eoy8S/2b0f0
-         t4Aar3O08bWcpZlGEncl7ae6mNnwm6NZPRugCsVCnr0V6Qt39amoUxJbJ+PIubIp+O8S
-         nruQ==
+        d=gmail.com; s=20230601; t=1736496961; x=1737101761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GE7toJHqZ/lOJiKN1P4097tohp+GcRxpdh5cgt9S0R8=;
+        b=EDt+urWAxgcNrLIBa4V//4qVdqozNsgKRRC7tSeds+p/eqykfpYyghji2XOsV3bMUJ
+         K++5vxTXLGefK+vyY3/zau0r71BW1QnDD9PPdt0ZPNy8aJaCNHKhzyrx840ZZrX8hQ8I
+         JINBGy1SamHK5Q6tYNeCKfVzeOhcF0b0ZYbSh3Eivuu7zpw2TllrHd4fzCDi4hNOYtUj
+         gbHAtqMiXJzpCPZuR/pESgldwaD9oE4jvUW1IpVEw1wPT3fAwVa4Rl70lmtF/jus7E63
+         tHhN4Nrh7hxPgi5IN+RACyF23iteAQ7O7hZvVvoWCOA9GqVyEi4sgRBRZRcEJvsZSGsU
+         X8IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736472284; x=1737077084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tvQt950RFyp/qo58nej0dfiGIB9r55J5KlMxBP+gTkE=;
-        b=ABlqfKcKlS0meH4TZKxmQlk5znLqRrtEWKXklj+PaAB/Rx2f8FV5kYjuh3is49W9cN
-         FsWT7xomSImZ++QZUr8j3z+wq89Ce9DAjZsad1AJ18Hq3eWqrhw3uPe1UkN3/HzUp9PG
-         fL81OQYpzVw9gLPMhZ+wpgsaJQVGnl4nIiGKTJE0wB45lkqau8w8BpTL6s6H3DxwWgr5
-         zqGwHyrybcAsyEhxY1DXVU6OMuMQmIPBrJNLpE4pDSZ3smkTG8SrVhq2VuGwvejZewl8
-         nAUITES2ru4L+o3c07hLS5/zHDK0DDPyw6O82gKC00CmvPI7ehqPI55LFFziJ0coW/Gn
-         XSVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULzOFFnBu0o4iEoUcb9hNL/vNwf0O3oy1p9pA3hHJo07FK4g6nNFTvcCfx67qi7N0ok85dO70sNSV5Ww==@vger.kernel.org, AJvYcCXrHKTRIDzwZUlkchLjr2EvSMdrZ6bXWqA1oP/zT4IEFA7xE9XhpRRCHLY1Y1rvN0yYZ6YecW6ub0jJApQY@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx47Dt/xAmHQeTn0QJ6XrsxtVMIciVgwb6RXlZzJBPccxfqX9hZ
-	L6C3IFTqXrhATL8jimYdDRfubDJxanFUP5eBGUxfbaI5aJnLMt0d
-X-Gm-Gg: ASbGncuc3yIKLieVvAhZDT4Gwzt/cEx/yoCQQ5LtEN95PSKSsYG7jtp086NwhIe3o2i
-	9o6C7LY+FuQsUsfiWeVkXcKaNE7jHTkVhn7d+4VIe9K+OoCo8KJbADwHrolAVyhRrPthxtBBTZ3
-	RoNqBNOlbqdIxPHQdEZPmMsD65nVk/2ViehR7EYDAsffzAZUpraWe6i3xbo42fYNAev+wW9WwFS
-	74i9QpoKxrC1RafhaFeFuSkyVIZuA5CG75YV8MAXDz/D3Lraeyee3zFsZlvHNTDujyeaw==
-X-Google-Smtp-Source: AGHT+IFbcI3Lkyivt/tdeBsXk2Mr9xuK6fZDlesjSTmNbWISnggw9p+wDnk4qrT7oLswbyAmR8pmMQ==
-X-Received: by 2002:a17:903:1112:b0:216:138a:5956 with SMTP id d9443c01a7336-21a83f59822mr142993985ad.19.1736472283897;
-        Thu, 09 Jan 2025 17:24:43 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f10f04dsm4061325ad.42.2025.01.09.17.24.42
+        d=1e100.net; s=20230601; t=1736496961; x=1737101761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GE7toJHqZ/lOJiKN1P4097tohp+GcRxpdh5cgt9S0R8=;
+        b=GThmlflV1F53JZP1j5usNapKgwD07ImOuWXiKJ2CCwvCSHDbt9iGs75uBSyMMNRbfa
+         rNDpoptuTid57D0bO2vBusXDM1+LFcwteloJU70g/bybn99Y+Kjnz92wX9uSh5vG8s0W
+         tDGkgI+iPPUJBPZuWIFOBISG8vvL02mbQffojUybsuTF13dHuEn4rzmKyZLumUUUi2fy
+         CVcm98zf7it4c+kzX5DXxW6W7J5pYewq1NLxDsuqFyRSuka3ETDFetAPpNkX+u1tnMJT
+         cMTF/nj7FQ4HNi6DAF9maF3JOIjYErfaNoNVXcCtCGXTMYXQ0M+sT/P7Jo2HLamK3wjc
+         xJTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVKDVsQKagv/+rgiFAexiWD7/216ZcPziSbswiKB46m4tjR9FkUZWijkxVLaRvftXx8uA5X57Roeq68qc=@vger.kernel.org, AJvYcCX/nAlB02QUDXkmgXFNusDnjOtzDx+ctVm7+BAWiXMwovi5TGEDa2mJPyehu123ISZqwuHydj+eEi6Z@vger.kernel.org, AJvYcCX9jnPAllqPl/5uZoOeJyx4MmSpEyW+VSSgN5ubJWAMUjFJWTZGZbWNQXlQ9UEpcrJ2FDbQ+PvBzHIN@vger.kernel.org, AJvYcCXPS8ufOme9a0lrxXWw2jiLxqeyLoAOKiAf/+a7EoaDQQBzNArd2R/NCbwhJFbiOOMsFtSsWgjobw3ut0YV@vger.kernel.org
+X-Gm-Message-State: AOJu0YylY1YN7TTp5IXakjmhoEXjv1mGfs/wk0Ol4FinAPiUjOrOq4h6
+	KBZxNhQZu/ht1m0Phg2k/LDayl4KqYpIVkN71dnIow2M0CIgm6Hp
+X-Gm-Gg: ASbGncs9HbtB07xxtjyEjZIot8wfHqS27xRRPoabvDk9k2pfSO9jJYCY3ml0W+heSVg
+	J6LWzBiIicO6MnJgSv2lwVbG7xbl6BtmhkpNXALkxtf5c4dUMqJ3LFUazIZCKUx/qdLddwcypVp
+	TkIAw3ZZNt8MEueqZ1jp8t4x6d2MDWyeprb9E7bGk1f07Jea5KCJ22t6X0/gkIgEBWXKwbBtYsJ
+	vODqyeEKyj2c6d7tAEVmLcieQJUe6XO/AICF9vJM4zuyvLDkXOROmo3gHrkw+wlvLWohY0Xbf4o
+	0ozDTCyHJJ1XWoSEYtIcz0XZkLK79gEZOaKb
+X-Google-Smtp-Source: AGHT+IHHpkpMA3xc9bN3IOIVKgSEjBL7aumxbhH6ZR4yf9yi6y05xsBLqGWoNi9xt/b4j7U7uM+Lcg==
+X-Received: by 2002:a17:902:f706:b0:216:6c88:efd9 with SMTP id d9443c01a7336-21a83f4bbf8mr159668545ad.15.1736496960764;
+        Fri, 10 Jan 2025 00:16:00 -0800 (PST)
+Received: from leo-pc.tail3f5402.ts.net (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a31de806694sm2431837a12.69.2025.01.10.00.15.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 17:24:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 9 Jan 2025 17:24:41 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Denis Kirjanov <kirjanov@gmail.com>
-Cc: robert.marko@sartura.hr, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: pmbus: dps920ab: Add ability to instantiate
- through i2c
-Message-ID: <7048e012-d615-4753-9478-f71910138739@roeck-us.net>
-References: <20250109100912.10054-1-kirjanov@gmail.com>
+        Fri, 10 Jan 2025 00:16:00 -0800 (PST)
+From: Leo Yang <leo.yang.sy0@gmail.com>
+X-Google-Original-From: Leo Yang <Leo-Yang@quantatw.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	davem@davemloft.net,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	Leo-Yang@quantatw.com,
+	corbet@lwn.net,
+	Delphine_CC_Chiu@Wiwynn.com,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: Add support for INA233
+Date: Fri, 10 Jan 2025 16:15:44 +0800
+Message-Id: <20250110081546.61667-1-Leo-Yang@quantatw.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250109100912.10054-1-kirjanov@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 09, 2025 at 01:09:12PM +0300, Denis Kirjanov wrote:
-> Add support for instantiating the Delta DPS920AB PSU
-> through I2C on systems without devicetree support.
-> 
-> Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
+Support ina233 driver with binding documents.
 
-Oh, never mind the change log. I looked up the older versions.
-Applied.
+---
+Change in v2:    
+  1. Merge the binding files into ti,ina2xx.yaml.  
+  2. Fix typo and non-sense dev_err.
+  3. Improve program logic.
+  4. pmbus_driver_info changed to be allocated in probe.
+  - Link to v1: https://lore.kernel.org/linux-hwmon/20250106071337.3017926-1-Leo-Yang@quantatw.com/
+---
+Change in v1:     
+  1. Change to pmbus standard practice of getting MFR_READ_VSHUNT
+     through vmon.
+  2. Change the way MFR_CALIBRATION is hard-coded to be obtained by
+     calculation.
+  - Link to origin: https://lore.kernel.org/linux-hwmon/20230920054739.1561080-1-Delphine_CC_Chiu@wiwynn.com/
+---
 
-Guenter
+Leo Yang (2):
+  dt-bindings: hwmon: ti,ina2xx: Add INA233 device
+  hwmon: Add driver for TI INA232 Current and Power Monitor
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |  17 ++
+ Documentation/hwmon/ina233.rst                |  77 ++++++++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/ina233.c                  | 184 ++++++++++++++++++
+ 6 files changed, 296 insertions(+)
+ create mode 100644 Documentation/hwmon/ina233.rst
+ create mode 100644 drivers/hwmon/pmbus/ina233.c
+
+-- 
+2.39.2
+
