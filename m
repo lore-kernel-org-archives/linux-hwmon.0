@@ -1,147 +1,88 @@
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C18BA50;
-	Fri, 10 Jan 2025 20:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA74206F33;
+	Fri, 10 Jan 2025 21:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736539627; cv=none; b=U77gjd5zaCeTBsMSQeQgfQkiQL2ZqVCA3o8lZYCBe9/NrxYQzuwDCnbWG0rD+IkPgc2tX5e4N5Fnr4O0qMZyyAgAHvPbR4xtvjzLdxLvnDXNIvCB6FpVbGKncl4Bapqa0Ptds1pzfC3glQcv1ultzIgWgqIaorfmJL2q88lKXdI=
+	t=1736543470; cv=none; b=mapiN7RG481m8qr7PzAxkqLlz044k1rO50pb/1qDB1Z+iQ8dR2w304IoE89aB1N2UacKy+MQYA9smOfeQuiac2TeUoXUWQ1/zPUIOsgZuInU8C2ZpAjqsBegmbIqZvSrXsXiPzXmyyLnWwRBjhdVZJq6I0Lo9fDWu6AL6k8oJww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736539627; c=relaxed/simple;
-	bh=LF9XYXci0MeCLYuEFF59z8ZcKzUi287BWnweDLP6qrU=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=CVdEamhEfzrPOFAXgDu2pDpV9aMtEweVW8HM7kWjfETmvW+BhzExj5Hz1KJ08e44xHC+eSPYbiULsOEym3tewc1BWmjbdauSzqs59a/whmGa5fz6IPkCjUqQJJIBdsp5nQu9HNWqNcGW/4ULC3UGbAus2IK7KpfTq1qm2X2FwmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CDA9C0003;
-	Fri, 10 Jan 2025 20:07:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
-	(envelope-from <peter@korsgaard.com>)
-	id 1tWLHX-009inj-1p;
-	Fri, 10 Jan 2025 21:06:59 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Guenter Roeck <linux@roeck-us.net>,  Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org,  linux-hwmon@vger.kernel.org,  Jean Delvare
- <jdelvare@suse.com>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
- Dooley <conor+dt@kernel.org>,  open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document
- default-pwm property
-References: <20250103101448.890946-1-peter@korsgaard.com>
-	<20250103195810.GA2624225-robh@kernel.org>
-	<dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
-	<20250106173805.GA501301-robh@kernel.org>
-Date: Fri, 10 Jan 2025 21:06:59 +0100
-In-Reply-To: <20250106173805.GA501301-robh@kernel.org> (Rob Herring's message
-	of "Mon, 6 Jan 2025 11:38:05 -0600")
-Message-ID: <87sepq8mcc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1736543470; c=relaxed/simple;
+	bh=nhyefq/M1I5R1C/jhXDtDdnGJ1jbIukA1QzXV8qJRiM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iFYslEsPR3tTfgGkG4QbuI38nmZaLGK1A/z6f+wI6qDeIs0yoZeNUEfFvqU6BDSMDpVZsA3E8wqtGGqGPF4Ek2F06SDXxdpqJVWp7bF4qnaA+8GkfvWun7XWv2BmMX8SzRfhuZXdaxt76lP52nEAEnfUNtbm5fOV2oMdt03+dts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ywgPJBKk; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ywgPJBKk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=A6gCHdvtOPxKY5f3gOlIBM7+RIbHqchd5puNoKZYZRM=; b=ywgPJBKkc5zJIk5ofNkxqcZkH4
+	sBqqdj6xASmrbwNB7aNgGYxpqrlGf6ewpM3IKdK5mMbwpCjFOEOiIerlwSO8Cz7jm2+7lZ9vVlY0o
+	yalMj14CMagdpD45XIwxeDikjskz04wG6AdJsYT5BFVHHl5JDUJsXCLGh+flaC0EbooY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tWMHR-003Lnm-4b; Fri, 10 Jan 2025 22:10:57 +0100
+Date: Fri, 10 Jan 2025 22:10:57 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
+	Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	David Miller <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
+ temp sensor on RTL822x
+Message-ID: <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
+References: <3e2784e3-4670-4d54-932f-b25440747b65@gmail.com>
+ <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: peter@korsgaard.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
 
->>>>> "Rob" == Rob Herring <robh@kernel.org> writes:
-On 1/6/25 18:38, Rob Herring wrote:
+> - over-temp alarm remains set, even if temperature drops below threshold
 
->> I am not sure I what you mean with the RPM reference here? The
->> cooling-levels support in the fan-pwm.c driver is a mapping between cooling
->> levels and PWM values, NOT RPM value.
-> 
-> Did I say RPM anywhere for this option?
-> 
-> It is the index of the array that is meaningful to anything outside of
-> the driver. The values are opaque. They are duty cycle in some cases
-> and RPMs in other cases. The thermal subsystem knows nothing about PWM
-> duty cycle nor RPMs.
-> 
-> Defining a default-cooling-level would be useful to anyone, not just
-> your usecase.
-> 
-> IOW, you are proposing:
-> 
-> default-pwm = <123>;
-> 
-> I'm proposing doing this instead:
-> 
-> cooling-levels = <0 123 255>;
-> default-cooling-level = <1>;
+> +int rtl822x_hwmon_init(struct phy_device *phydev)
+> +{
+> +	struct device *hwdev, *dev = &phydev->mdio.dev;
+> +	const char *name;
+> +
+> +	/* Ensure over-temp alarm is reset. */
+> +	phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2, RTL822X_VND2_TSALRM, 3);
 
-I don't have CONFIG_THERMAL enabled in my builds (and don't know the
-subsystem), but I see the pwm-fan driver has some logic to default to
-the highest cooling level, it just forgets to actually set the PWM to
-match it, so perhaps we can just fix that?
+So it is possible to clear the alarm.
 
-E.G. something like:
+I know you wanted to experiment with this some more....
 
-commit 02c8ba74eb7dddf210ceefa253385bc8e40f49ae
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Thu Jan 2 18:26:45 2025 +0100
+If the alarm is still set, does that prevent the PHY renegotiating the
+higher link speed? If you clear the alarm, does that allow it to
+renegotiate the higher link speed? Or is a down/up still required?
+Does an down/up clear the alarm if the temperature is below the
+threshold?
 
-    hwmon: (pwm-fan): Default to the Maximum cooling level if provided
-    
-    The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
-    always be desirable because of noise or power consumption peaks.
-    
-    The driver optionally accept a list of "cooling-levels" for the thermal
-    subsystem.  If provided, use the PWM value corresponding to the maximum
-    cooling level rather than the full level.
-    
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Also, does HWMON support clearing alarms? Writing a 0 to the file? Or
+are they supported to self clear on read?
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 53a1a968d00d..33525096f1e7 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -499,6 +499,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	const struct hwmon_channel_info **channels;
- 	u32 pwm_min_from_stopped = 0;
- 	u32 *fan_channel_config;
-+	u32 default_pwm = MAX_PWM;
- 	int channel_count = 1;	/* We always have a PWM channel. */
- 	int i;
- 
-@@ -545,11 +546,18 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	ctx->enable_mode = pwm_disable_reg_enable;
- 
-+	ret = pwm_fan_get_cooling_data(dev, ctx);
-+	if (ret)
-+		return ret;
-+
-+	if (ctx->pwm_fan_cooling_levels)
-+		default_pwm = ctx->pwm_fan_cooling_levels[ctx->pwm_fan_max_state];
-+
- 	/*
--	 * Set duty cycle to maximum allowed and enable PWM output as well as
-+	 * Set duty cycle to default and enable PWM output as well as
- 	 * the regulator. In case of error nothing is changed
- 	 */
--	ret = set_pwm(ctx, MAX_PWM);
-+	ret = set_pwm(ctx, default_pwm);
- 	if (ret) {
- 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
- 		return ret;
-@@ -661,10 +669,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		return PTR_ERR(hwmon);
- 	}
- 
--	ret = pwm_fan_get_cooling_data(dev, ctx);
--	if (ret)
--		return ret;
--
- 	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
- 	if (IS_ENABLED(CONFIG_THERMAL)) {
- 		cdev = devm_thermal_of_cooling_device_register(dev,
+I'm wondering if we are heading towards ABI issues? You have defined:
 
+- over-temp alarm remains set, even if temperature drops below threshold
 
-Guenter, what do you say? This way we don't need any new device tree
-properties. I personally find it less clear than a default-pwm property,
-but oh well.
+so that kind of eliminates the possibility of implementing self
+clearing any time in the future. Explicit clearing via a write is
+probably O.K, because the user needs to take an explicit action.  Are
+there other ABI issues i have not thought about.
 
--- 
-Bye, Peter Korsgaard
+	Andrew
