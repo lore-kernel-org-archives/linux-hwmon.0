@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC77205E01;
-	Fri, 10 Jan 2025 08:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A1B205E01;
+	Fri, 10 Jan 2025 08:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736497335; cv=none; b=JUQKWPyBdISWaIG+G6Mpk2u0cajLGjWCzHUdqbTgPnE1GmnrR2499zs6CdIMBBDmjdgMpL4IWwxgPXM996+tRid0/p8xh2EhSxjsrTWUzkDAzKn15RPHX1fVnyrN2ZmSiEEP6m0wgkWPCUuruNwgLGrXFpr1E3jX/ScD5cu9WoQ=
+	t=1736497521; cv=none; b=W4L7tkzurSQ5GPadHUqHKF9QMBm8kXr6bwJS4qqlhDCCE9e0zdDfRgWRqQ1X+NNtwha7prrsLSrP3wts22cvOKcacEZxYIH4q5gfi46NtGs6aT3vAS2uLM3R0C9BCSFWGX9hVuiMpcan7sOIKbaCUWTCK/KKZ6MdyWFXgcFDNCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736497335; c=relaxed/simple;
-	bh=HkGuJkZLwFHDEgpri3gyK9Qj1CWRkDWg/K9cR8R/wko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oMDezIL+GnpD7qZPph0MAI7MS3zuhxQ4NtiGs1Q2jK0dop48Jo02osDL4Ndf+bJ3SICh0pfveyeM4HwLKfZpcGYRrm/JQgDJalSToH/BqWNQNii32/JQN0UtFa8BmA6MqXR23vdL3hswbmFdBbd3RRPL9OUN9i331SBM2xJMn1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMeQml0J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736497521; c=relaxed/simple;
+	bh=C4j/PE+SkzjyWIkFfeBW5drHUDYWlyceAsEgQaNU7Jc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N7JmT+96hNK4ndwcTFCZC4nEMJzwBowFVSMymSxL4/YdNKloPHhKQutc3o2avpR51bmgNEM32VyUr7jfGS0tK52QuKVaTIrazFRQgvHb9deJNODnhpqANaCldDCDa+uvU1NJtio2dCqMgjLy28rrZURLi+KAo//P07yfERNNpjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lhJFDFn8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMeQml0J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B9BC4CED6;
-	Fri, 10 Jan 2025 08:22:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lhJFDFn8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188E6C4CED6;
+	Fri, 10 Jan 2025 08:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736497334;
-	bh=HkGuJkZLwFHDEgpri3gyK9Qj1CWRkDWg/K9cR8R/wko=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=bMeQml0JGN/pa3DUJ1IOhUOjPjDZSVVORFuOkVtYCFvMATQxcPJ5NwmWLVNtcZDwv
-	 jhaqBbzbrkqWWSwGyxoK+3vfn6CFSsjIWW3mbixAuWm5gLQliVXW3nNt3K5ZJ87ZIC
-	 W9+ckOaNE2VH5dW9y3PMQkddN8D2+BDs8ZNMTszMb8mNTfA9TvlYoHd4xOFaBXc/Ia
-	 lWM8TRb3SWZnco02YupH5ShVcUMYjqHD+NCjOocDmV3VeQlw7sWM61gkcuY+IwSIJk
-	 XZkX5ttUBsxyvP0CGKDzkGc/8mZpYcoPo6wtVrCLKT+E7/jZENi4CTTPpW+32krDOE
-	 x3U8dps/acnMw==
-Message-ID: <f731790e-787a-43e2-acaa-5954711229b8@kernel.org>
-Date: Fri, 10 Jan 2025 09:22:06 +0100
+	s=k20201202; t=1736497520;
+	bh=C4j/PE+SkzjyWIkFfeBW5drHUDYWlyceAsEgQaNU7Jc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lhJFDFn8//ZIeuv+RJ53Lq3C5jvgXzp6JqBCjbgGqTEFkV88fWniJAp/IIxS/mTKm
+	 oiBmvTCYh4HuDi/JaLLcLJbBmAh3Z1pqZQ8Cqvyuhf8TxWGn2xQCBBD8gMeglLYfTt
+	 gYl+Hgg6J7QxTO6OVrSxcANeXJEQcAll5bwHDFDxlE3FYO5J30/FrlCF/xt2fvb+xl
+	 ZKwZk81unKLSosMILtOPIxUKU+t4kwoDulDXCL7g9BAxcp0KnGmYwTSVaSX3rFyJCk
+	 NGQsGmnTra0r50TwkFE9mtkTR84JEDgf8ZJsgj/Pgz9SG2BhobDUsKF8u/HC06Wpyx
+	 NgWEcOS1DogHQ==
+Message-ID: <8a2f67d3-97e5-49eb-823f-480d59178e18@kernel.org>
+Date: Fri, 10 Jan 2025 09:25:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,15 +35,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA233 device
+Subject: Re: [PATCH v2 2/2] hwmon: Add driver for TI INA232 Current and Power
+ Monitor
 To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
  robh@kernel.org, davem@davemloft.net, krzk+dt@kernel.org,
  conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
  Delphine_CC_Chiu@Wiwynn.com, linux-hwmon@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>
 References: <20250110081546.61667-1-Leo-Yang@quantatw.com>
- <20250110081546.61667-2-Leo-Yang@quantatw.com>
+ <20250110081546.61667-3-Leo-Yang@quantatw.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -89,51 +91,171 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250110081546.61667-2-Leo-Yang@quantatw.com>
+In-Reply-To: <20250110081546.61667-3-Leo-Yang@quantatw.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/01/2025 09:15, Leo Yang wrote:
-> Add TI INA233 Current and Power Monitor bindings.
+> Support ina233 driver for Meta Yosemite V4.
 > 
+> Driver for Texas Instruments INA233 Current and Power Monitor
+> With I2C-, SMBus-, and PMBus-Compatible Interface
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+
+No, what did the robot report? Drop.
+
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501092213.X9mbPW5Q-lkp@intel.com/
+
+Drop
+
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501061734.nPNdRKqO-lkp@intel.com/
+
+Drop
+
 > Signed-off-by: Leo Yang <Leo-Yang@quantatw.com>
 > ---
->  .../devicetree/bindings/hwmon/ti,ina2xx.yaml    | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  Documentation/hwmon/ina233.rst |  77 ++++++++++++++
+>  MAINTAINERS                    |   8 ++
+>  drivers/hwmon/pmbus/Kconfig    |   9 ++
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/ina233.c   | 184 +++++++++++++++++++++++++++++++++
+>  5 files changed, 279 insertions(+)
+>  create mode 100644 Documentation/hwmon/ina233.rst
+>  create mode 100644 drivers/hwmon/pmbus/ina233.c
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> index 05a9cb36cd82..9759c69b904b 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> @@ -27,6 +27,7 @@ properties:
->        - ti,ina226
->        - ti,ina230
->        - ti,ina231
-> +      - ti,ina233
->        - ti,ina237
->        - ti,ina238
->        - ti,ina260
-> @@ -75,6 +76,22 @@ properties:
->        the alert polarity to active-high.
->      $ref: /schemas/types.yaml#/definitions/flag
+> diff --git a/Documentation/hwmon/ina233.rst b/Documentation/hwmon/ina233.rst
+> new file mode 100644
+> index 000000000000..41537f89bed5
+> --- /dev/null
+> +++ b/Documentation/hwmon/ina233.rst
+> @@ -0,0 +1,77 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver ina233
+> +====================
+> +
+> +Supported chips:
+> +
+> +  * TI INA233
+> +
+> +    Prefix: 'ina233'
+> +
+> +  * Datasheet
+> +
+> +    Publicly available at the TI website : https://www.ti.com/lit/ds/symlink/ina233.pdf
+> +
+> +Author:
+> +
+> +	Leo Yang <Leo-Yang@quantatw.com>
+> +
+> +Usage Notes
+> +-----------
+> +
+> +The shunt resistor value can be configured by a device tree property;
+> +see Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml for details.
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver supports hardware monitoring for TI INA233.
+> +
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> +
+> +The driver provides the following attributes for input voltage:
+> +
+> +**in1_input**
+> +
+> +**in1_label**
+> +
+> +**in1_max**
+> +
+> +**in1_max_alarm**
+> +
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for shunt voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in3_input**
+> +
+> +**in3_label**
+> +
+> +**in3_alarm**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +**curr1_max**
+> +
+> +**curr1_max_alarm**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> \ No newline at end of file
+
+You still have patch warnings. I already commented on this, so you have
+to fix it everywhere.
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c575de4903db..fde1713dff9d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11226,6 +11226,14 @@ L:	linux-fbdev@vger.kernel.org
+>  S:	Orphan
+>  F:	drivers/video/fbdev/imsttfb.c
 >  
-> +  ti,current-lsb:
-> +    description:
-> +      This value depends on the maximum current that can be expected to be
+> +INA233 HARDWARE MONITOR DRIVER
+> +M:	Leo Yang <Leo-Yang@quantatw.com>
+> +M:	Leo Yang <leo.yang.sy0@gmail.com>
 
-Then use microamp unit suffix and drop the ref and all these calculations.
+One email.
 
-> +      measured by ina233 in your circuit, divide Maximum Expected Current
-> +      by 2^15 and express it in microamps.
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Odd Fixes
+
+Why would we like to have unmaintained driver? Odd fixes is candidate to
+removal, so shall we accept it and remove immediately?
+
+
+> +F:	Documentation/hwmon/ina233.rst
+> +F:	drivers/hwmon/pmbus/ina233.c
 > +
-> +      This value will be used to calculate the current/power coefficient for
-> +      the pmbus and to calibrate the IC.
-> +
-> +      For device INA233.
 
-And not valid for other devices? Then in allOf:if:then: you should
-disallow it for others and drop redundant descriptions (don't repeat the
-schema).
+...
+
+> +
+> +	/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
+> +	/* read rshunt value (uOhm) */
+> +	if (of_property_read_u32(client->dev.of_node, "shunt-resistor", &rshunt) < 0)
+> +		rshunt = INA233_RSHUNT_DEFAULT;
+> +
+> +	/* read current_lsb value (uA) */
+> +	if (of_property_read_u16(client->dev.of_node, "ti,current-lsb", &current_lsb) < 0)
+> +		current_lsb = INA233_CURRENT_LSB_DEFAULT;
+> +
+> +	if (!rshunt || !current_lsb) {
+> +		dev_err(&client->dev, "shunt-resistor and current-lsb cannot be zero.\n");
+
+Then properties must have constraints in your schema.
+
+> +		return -EINVAL;
+
 
 Best regards,
 Krzysztof
