@@ -1,111 +1,237 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EE6EBE;
-	Sat, 11 Jan 2025 17:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CFD1B4156;
+	Sat, 11 Jan 2025 17:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736614842; cv=none; b=M1AiOpRXCXgELnGQTyQ4Z3Uh70Ps+W1K/QaTRgwJ978zyL0k3n4xot5lWalqHRJl419/WJ1of+H0aoy/WAO6AavExda6pCcJ3jee7FQ7aAJMy3RqchPaSIuGs2UYdoHXk4AdI2x1K9TxfO28bh81JT57vJSx6p6g/X4Lyv1KH/o=
+	t=1736615710; cv=none; b=I4dLa748zjLf2e1xJcge4Xc+FYFLP53iSHjbYSRE0zj/0CkiK+d65X/E742KZ84SegRvyXL3ljbyxfgjnGSQU2kHQJ3XYLXh9BBf+GGJdPIwGPy5hPPKaRIstEQNHjDAR0q4eFIRsrSpck4kk67h8w0FpUfwXYbOjjjzwNyY6LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736614842; c=relaxed/simple;
-	bh=49VSL4D/KPkxJ+eFCXZctSCoxcKqPZ3ZGyi4HsT/uic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P7wG5rZnYQIqw2ZxceOrWGXAmqFHTIN1zcUEx4d5ND3RvT6yLSaP/ovjv/eezDFYb3vR7W2tb44S7hs/9fEKOO8w4wAQ9lKY2bPynAy2VUo6LeLy36s3afbFxMIzC8D4D8oJTBcr13MALHg6iwaiXtE8Kn3CzTwrF6yw5SV1iwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=n/oxGbpi; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1736615710; c=relaxed/simple;
+	bh=vXx+XHp6NBot7yoeYCeI2py7axlr6mmQo5hYV22il5Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mSUA+zSMvv3dBNpcDlEz9zoNvytvPqv4WB5HL1CdQO+pLD02Pwg8a6QQvJRoiQFr+E9oRAgx5Ta0ZJdAe/C+eW0OX6uLEai+kkFi0Ebw/B9zVBEdc5QmRAfQmYTM+ZANDuBqf7AYoTOSPgduYanm8QphN9A8+gdAfA98+CPNLN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=llSCPBrp; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="n/oxGbpi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=vrAAgUcE8bhk3sZUvhP9sUL9+WDsX+SNiNHu7t+28GA=; b=n/oxGbpi0pgxALvqxRg1NyXt8O
-	7dNoLxgBnG2XN0jjqnAVYGtgsXfogSmpKWQJnI74hZ1XUxb8naXbm7xu73WR32X/PfA8nTOIEW/ey
-	VYSiFtDxxjRbBfaVEWfxmYNsXYuTFhl/kARtKhUI68uitz4WveeEGVME6JJX3ALLWla0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tWeqM-003Zxs-NO; Sat, 11 Jan 2025 18:00:14 +0100
-Date: Sat, 11 Jan 2025 18:00:14 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Russell King - ARM Linux <linux@armlinux.org.uk>,
-	Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	David Miller <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
- temp sensor on RTL822x
-Message-ID: <0adfb0e4-72b2-48c1-bf65-da75213a5f18@lunn.ch>
-References: <3e2784e3-4670-4d54-932f-b25440747b65@gmail.com>
- <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
- <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
- <a0ddf522-e4d0-47c9-b4c0-9fc127c74f11@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="llSCPBrp"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21636268e43so67670685ad.2;
+        Sat, 11 Jan 2025 09:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736615708; x=1737220508; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wH+hX4+lfDobaMlIAuh/B70W4752LjE2E15kTIXP5p4=;
+        b=llSCPBrpwKEbob2Ct24fnuHZDcUnGV4vTqEkB72exzcBjxAJq8wG5qMlCDkmRVbVMQ
+         bL0UFbGJvMcY7XoqpruE4f5CuNmtqIv0wRWghdXQC25+BGCrzTNhOE5JEXqO4nIvu6kb
+         DS3GDIfeNxvE+ieXXqp3xqXulIE9aY/QhfGiZEH0phso/yfVnJR7YA/DINF8CcBnn63B
+         mVqOCAwgMUNQWV2AyNIECqAZc+RkmXBVHodRdm5qABK78wsqu+q5OAEuV2V+rjlk00OJ
+         LCUXarca/vu8BvHwx/pC77TZkUisKyieOVQQZU8msUT5XUt6haXYAqdsJdEn8AroMc7Z
+         vGAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736615708; x=1737220508;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wH+hX4+lfDobaMlIAuh/B70W4752LjE2E15kTIXP5p4=;
+        b=hKHDJGbfoyMMZVxtgMAn6Qh0levM4wXIMEpTwuov+sadpb9NYUqhnHyGQ87m4GMF6D
+         d58dXiINYpFHyOYrZGaRZiug10aXYdaK0zmSL+BfgSFC/UFpAdljhkvEGK2vIz12tb5i
+         mej1vEAN1annYsn1Cj18tMrH9pnO55QOvMe7xXa/fwBZQJX8LOTeC9nfifQ9TWlNt2p3
+         yprkJ+R/iOjJQYmMAnT6cuAwrSevc8f3hJaztiFN+BkDUSDGwBZ8Yu0nKwTxXM8hY/W5
+         p2yvIkG///FiVGTNGneWHZAF1ANslzDps3nj4QaUuRNch1T5grs/i95l2mNw55DrVWv8
+         DpwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1kuyLYCTTP1+fSk6Bq8Q5z6s2ToEWmzt4fqUJ6k6HLNdKD+gcNQKbt09cUIHMcHR30dSZBVDH+IQE2w==@vger.kernel.org, AJvYcCUR6ZsBFdmYmGVwH2cuvUSP4nR3BZGgc2zvVljidqxsNAyKnMXf0NT582IrCVrzdI2iRF+F4YvvNOzYTowr@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCrQ/hbHAa0wVV5AzZMHkMuMU+AXmGoOhv91GCej9pKf5bIiOf
+	7EiN4dl2HsKMAqeglPHyZY8oExZQbF2fJqd/TB96CiO1y/4sa9Nn
+X-Gm-Gg: ASbGncvKvUPU/qVIrlUw/Httuz703xMwFJpzzXTx/mjBDhhXLjT6OeJAKqt3BTxfHGH
+	dNRKSmECxNzpyvHpWRcnjI73dgmJ31CBcLE0OAYmFYhVhz9OBtYbqVS82oeBw5LCOwEv8/qAuib
+	QcT/MFFnqfc6yWOmS/mYC0Q6PCY2KFVb9itg9EtsGWQZPfxe8wlaFUOSzvtSgIbTFUFxHDmE9po
+	9Tz1OzpAc6TFlfcOm4E0unzeihyAkTbOR3P5HLQd7lX71kS7CYvjbL562rhsiTAsjFuYi9ZLzct
+	nWiUzRSVyiCmqu2LQRZPVrxfkPiANQ==
+X-Google-Smtp-Source: AGHT+IHrg1QniTccrI6m7UimadAlI5zJ2i0YpAUriM2WJlqVz/Dh7jrWbEQIDVskBeZBLGdAhXrzGQ==
+X-Received: by 2002:a17:902:c941:b0:215:7fad:49ab with SMTP id d9443c01a7336-21a83f46a12mr247657425ad.10.1736615707706;
+        Sat, 11 Jan 2025 09:15:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f21a409sm29670715ad.114.2025.01.11.09.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jan 2025 09:15:07 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f6ee420b-7c3f-4a21-831b-619fe38408b5@roeck-us.net>
+Date: Sat, 11 Jan 2025 09:15:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a0ddf522-e4d0-47c9-b4c0-9fc127c74f11@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: pwm-fan: Document default-pwm
+ property
+To: Peter Korsgaard <peter@korsgaard.com>, Rob Herring <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20250103101448.890946-1-peter@korsgaard.com>
+ <20250103195810.GA2624225-robh@kernel.org>
+ <dbf7cdd3-c5ab-4801-be85-163124b8a898@korsgaard.com>
+ <20250106173805.GA501301-robh@kernel.org> <87sepq8mcc.fsf@dell.be.48ers.dk>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <87sepq8mcc.fsf@dell.be.48ers.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> According to Guenters feedback the alarm attribute must not be written
-> and is expected to be self-clearing on read.
-> If we would clear the alarm in the chip on alarm attribute read, then
-> we can have the following ugly scenario:
+On 1/10/25 12:06, Peter Korsgaard wrote:
+>>>>>> "Rob" == Rob Herring <robh@kernel.org> writes:
+> On 1/6/25 18:38, Rob Herring wrote:
 > 
-> 1. Temperature threshold is exceeded and chip reduces speed to 1Gbps
-> 2. Temperature is falling below alarm threshold
-> 3. User uses "sensors" to check the current temperature
-> 4. The implicit alarm attribute read causes the chip to clear the
->    alarm and re-enable 2.5Gbps speed, resulting in the temperature
->    alarm threshold being exceeded very soon again.
+>>> I am not sure I what you mean with the RPM reference here? The
+>>> cooling-levels support in the fan-pwm.c driver is a mapping between cooling
+>>> levels and PWM values, NOT RPM value.
+>>
+>> Did I say RPM anywhere for this option?
+>>
+>> It is the index of the array that is meaningful to anything outside of
+>> the driver. The values are opaque. They are duty cycle in some cases
+>> and RPMs in other cases. The thermal subsystem knows nothing about PWM
+>> duty cycle nor RPMs.
+>>
+>> Defining a default-cooling-level would be useful to anyone, not just
+>> your usecase.
+>>
+>> IOW, you are proposing:
+>>
+>> default-pwm = <123>;
+>>
+>> I'm proposing doing this instead:
+>>
+>> cooling-levels = <0 123 255>;
+>> default-cooling-level = <1>;
 > 
-> What isn't nice here is that it's not transparent to the user that
-> a read-only command from his perspective causes the protective measure
-> of the chip to be cancelled.
+> I don't have CONFIG_THERMAL enabled in my builds (and don't know the
+> subsystem), but I see the pwm-fan driver has some logic to default to
+> the highest cooling level, it just forgets to actually set the PWM to
+> match it, so perhaps we can just fix that?
 > 
-> There's no existing hwmon attribute meant to be used by the user
-> to clear a hw alarm once he took measures to protect the chip
-> from overheating.
+> E.G. something like:
+> 
+> commit 02c8ba74eb7dddf210ceefa253385bc8e40f49ae
+> Author: Peter Korsgaard <peter@korsgaard.com>
+> Date:   Thu Jan 2 18:26:45 2025 +0100
+> 
+>      hwmon: (pwm-fan): Default to the Maximum cooling level if provided
+>      
+>      The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
+>      always be desirable because of noise or power consumption peaks.
+>      
+>      The driver optionally accept a list of "cooling-levels" for the thermal
+>      subsystem.  If provided, use the PWM value corresponding to the maximum
+>      cooling level rather than the full level.
+>      
+>      Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 53a1a968d00d..33525096f1e7 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -499,6 +499,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   	const struct hwmon_channel_info **channels;
+>   	u32 pwm_min_from_stopped = 0;
+>   	u32 *fan_channel_config;
+> +	u32 default_pwm = MAX_PWM;
+>   	int channel_count = 1;	/* We always have a PWM channel. */
+>   	int i;
+>   
+> @@ -545,11 +546,18 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   
+>   	ctx->enable_mode = pwm_disable_reg_enable;
+>   
+> +	ret = pwm_fan_get_cooling_data(dev, ctx);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (ctx->pwm_fan_cooling_levels)
+> +		default_pwm = ctx->pwm_fan_cooling_levels[ctx->pwm_fan_max_state];
+> +
+>   	/*
+> -	 * Set duty cycle to maximum allowed and enable PWM output as well as
+> +	 * Set duty cycle to default and enable PWM output as well as
+>   	 * the regulator. In case of error nothing is changed
+>   	 */
+> -	ret = set_pwm(ctx, MAX_PWM);
+> +	ret = set_pwm(ctx, default_pwm);
+>   	if (ret) {
+>   		dev_err(dev, "Failed to configure PWM: %d\n", ret);
+>   		return ret;
+> @@ -661,10 +669,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>   		return PTR_ERR(hwmon);
+>   	}
+>   
+> -	ret = pwm_fan_get_cooling_data(dev, ctx);
+> -	if (ret)
+> -		return ret;
+> -
+>   	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+>   	if (IS_ENABLED(CONFIG_THERMAL)) {
+>   		cdev = devm_thermal_of_cooling_device_register(dev,
+> 
+> 
+> Guenter, what do you say? This way we don't need any new device tree
+> properties. I personally find it less clear than a default-pwm property,
+> but oh well.
+> 
 
-It is generally not the kernels job to implement policy. User space
-should be doing that.
+I would not call that "default". It is more along the line of
+"If available, use highest cooling level as maximum allowed".
 
-I see two different possible policies, and there are maybe others:
+Other than that, I don't like it, but since it looks like we
+won't get approval for the devicetree property, I'd say go for it.
 
-1) The user is happy with one second outages every so often as the
-chip cycles between too hot and down shifting, and cool enough to
-upshift back to the higher speeds.
+Guenter
 
-2) The user prefers to have reliable, slower connectivity and needs to
-explicitly do something like down/up the interface to get it back to
-the higher speed.
-
-I personally would say, from a user support view, 2) is better. A one
-time 1 second break in connectivity and a kernel message is going to
-cause less issues.
-
-Maybe the solution is that the hwmon alarm attribute is not directly
-the hardware bit, but a software interpretation of the system state.
-When the alarm fires, copy it into a software alarm state, but leave
-the hardware alarm alone. A hwmon read clears the software state, but
-leaves the hardware alone. A down/up of the interface will then clear
-both the software and hardware alarm state.
-
-Anybody wanting policy 1) would then need a daemon polling the state
-and taking action. 2) would be the default.
-
-How easy is it for you to get into the alarm state? Did you need an
-environment chamber/oven, or is it happening for you with just lots of
-continuous traffic at typical room temperature? Are we talking about
-cheap USB dangles in a sealed plastic case with poor thermal design
-are going to be doing this all the time?
-
-	Andrew
