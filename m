@@ -1,71 +1,50 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B4382899;
-	Sat, 11 Jan 2025 15:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3EE6EBE;
+	Sat, 11 Jan 2025 17:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736610758; cv=none; b=SssYNYVdSi8Ma52f90TWBuxCJdJUBnNhEHVUeko0/cZbOzYXcsn0ecjP0QXl/GeVA3jmYcaMemM2e9uA0hg7r12An1WhqVWIS4+hkUFHBLWHtUuJ3T0Q/LckOdkTdLnfxHqeqSteUalV4YFzGZXoI3dJqb+U3rob4v0YfuTSjXM=
+	t=1736614842; cv=none; b=M1AiOpRXCXgELnGQTyQ4Z3Uh70Ps+W1K/QaTRgwJ978zyL0k3n4xot5lWalqHRJl419/WJ1of+H0aoy/WAO6AavExda6pCcJ3jee7FQ7aAJMy3RqchPaSIuGs2UYdoHXk4AdI2x1K9TxfO28bh81JT57vJSx6p6g/X4Lyv1KH/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736610758; c=relaxed/simple;
-	bh=qmg0opw5XsODvX+u70D5g1sqZm6tgKKCd7C3Zoek87s=;
+	s=arc-20240116; t=1736614842; c=relaxed/simple;
+	bh=49VSL4D/KPkxJ+eFCXZctSCoxcKqPZ3ZGyi4HsT/uic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a0lGfutN8aa/NB5lKuVlp4b+tI8zcW9fjvASsRFBHlybu+zX+9l8+IesWMe+3D7VDaye8DldjQPR1QIXmItgzmSZCTUcqZvEpskN+l1V2fkzfz0Ap5Y4Of0EcjztDdBA3HVyyGH9o2k4OOi2ql/jyfftvBkKs0L1VFjJ3DpynA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMjHJ/qt; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7wG5rZnYQIqw2ZxceOrWGXAmqFHTIN1zcUEx4d5ND3RvT6yLSaP/ovjv/eezDFYb3vR7W2tb44S7hs/9fEKOO8w4wAQ9lKY2bPynAy2VUo6LeLy36s3afbFxMIzC8D4D8oJTBcr13MALHg6iwaiXtE8Kn3CzTwrF6yw5SV1iwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=n/oxGbpi; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMjHJ/qt"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21669fd5c7cso51662665ad.3;
-        Sat, 11 Jan 2025 07:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736610755; x=1737215555; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MoJfdlGOlAHr+H5NA/vW7cVTxQr7rVCeLq6oN2mkwlc=;
-        b=XMjHJ/qt+1J6UODTXgjMDph6ll7+s59wTFSM90rSoGupLqdrwb4BOEqIj96QTg3JOp
-         Kea9IumOCc4gBIgHeikfAdlgYZ8zBriT988/Pc0HMr/+8fqdHHd3uUCMf4R5ez+1/F50
-         FVuziksoyf2HyP51VCg3+sCElQA85d6dLwSFSO8WZlYCRYDkPFppzv0A4vh+drn5nvNK
-         FTZI0iXf70duUENTd1txW5OLeFpHDPE+1XspT+Wk0CAWv/ez+OqphRlAuDi7qMBmUVVQ
-         SBNosGIs4dJQJDgfaF/q9TmP233qtfDwcjORIGtnlvrYYHD0OUH2Y11ppzQqzP++Gxxj
-         4Kzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736610755; x=1737215555;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MoJfdlGOlAHr+H5NA/vW7cVTxQr7rVCeLq6oN2mkwlc=;
-        b=roZaXBZ2dwPiuuHgJT52KoTdBRFEyKA6Ilm/HemGT+eJxtZCDRSLeRl2cCbVnEnapu
-         PHffZQB1FuxwGETl0fSpebpeKBkPGxh3ur6iLM9vEvUrIj4/2PQSL8tOJt3oRkV8h0M1
-         ip3pUcrjXDTngv5fy5Swr3F3pfbwR1G8TTgZdCBaLgXdw9wpmKvtYYSoTYjF3RvPYrjt
-         ATY/ZfgBNgEE1BvdL6APQiWkEKL3tXMacXZ3zVKUS+KdNS3wqmsM6w4RiFOJvdjvX/ug
-         rqk8IhOosPOdeuIygbPBje0GUAeVq30arMMeRzRUF3YkY+LMHEcN/yA6wa6GVUKDh0wU
-         XKWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIs79JamzKadRYyHsBHV2EXToL7nKvGDjkgDT2NE9MpmW1kZl+U0ncuiOelAtg/Mx38nn/QT2kjo+ApQ==@vger.kernel.org, AJvYcCVUSjNZ1EMflFapvl7wbZxAancUAL3F1Za0oxUFFUscfba8Ga0hQbIq6dgs4b00EDPJbGCneDel5HwyM4Hy@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKWqT/OUIqLDNaC0q/GS1jZ2frSEq3Loib+cJ4WVRgOepD+P5l
-	vBOYknCm4ZIlK2Qr8xDZt+vvmUdQYy4JL0xsth9CR/ddeLk2JA+F
-X-Gm-Gg: ASbGncsjt1L3d9FwlixF5EzF0LYaC2HEhd98bwdSwicRwLWZ/lm9J7MshCVgqAVuJL/
-	FVaHtcJBAlGD4Y1XzSAoiKQBRHyvzSdXznnFk/QzUD2HoNTTT09bAgYSGjXUj4t5eB3hx+OND5E
-	meXMAzPRiDWyX9iOeR1we7BromOEfzYzoWoqaqNCnqkSYYcXLGYBGwynBAzugCOgTqvlIernlVY
-	mQBlP86ApfJXQ8VVs4ZmHTxfhXqSshmZKKHIwfhZ6J5JyTaP+hUw7wZgv3/x1CieUuDKw==
-X-Google-Smtp-Source: AGHT+IGOysrYTdg1RmL1T+f1Rt3qzH+hhV2d5ecLPOlPKmS77OkqFVsRm67cMKPz8M04UAAYfxgTeg==
-X-Received: by 2002:a05:6a21:4a4b:b0:1e0:cbd1:8046 with SMTP id adf61e73a8af0-1e88cd28733mr22686981637.0.1736610755348;
-        Sat, 11 Jan 2025 07:52:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a3c259314b1sm3912790a12.9.2025.01.11.07.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jan 2025 07:52:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 11 Jan 2025 07:52:33 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Billy Tsai <billy_tsai@aspeedtech.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Subject: Re: [PATCH] hwmon: Fix help text for aspeed-g6-pwm-tach
-Message-ID: <7642492f-85d2-48d4-b988-d1ce9010c1d1@roeck-us.net>
-References: <20250110114737.64035-1-joel@jms.id.au>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="n/oxGbpi"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=vrAAgUcE8bhk3sZUvhP9sUL9+WDsX+SNiNHu7t+28GA=; b=n/oxGbpi0pgxALvqxRg1NyXt8O
+	7dNoLxgBnG2XN0jjqnAVYGtgsXfogSmpKWQJnI74hZ1XUxb8naXbm7xu73WR32X/PfA8nTOIEW/ey
+	VYSiFtDxxjRbBfaVEWfxmYNsXYuTFhl/kARtKhUI68uitz4WveeEGVME6JJX3ALLWla0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tWeqM-003Zxs-NO; Sat, 11 Jan 2025 18:00:14 +0100
+Date: Sat, 11 Jan 2025 18:00:14 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Russell King - ARM Linux <linux@armlinux.org.uk>,
+	Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	David Miller <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
+ temp sensor on RTL822x
+Message-ID: <0adfb0e4-72b2-48c1-bf65-da75213a5f18@lunn.ch>
+References: <3e2784e3-4670-4d54-932f-b25440747b65@gmail.com>
+ <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
+ <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
+ <a0ddf522-e4d0-47c9-b4c0-9fc127c74f11@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,49 +53,59 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110114737.64035-1-joel@jms.id.au>
+In-Reply-To: <a0ddf522-e4d0-47c9-b4c0-9fc127c74f11@gmail.com>
 
-On Fri, Jan 10, 2025 at 10:17:36PM +1030, Joel Stanley wrote:
-> The help text has the wrong module name mentioned, and the capitalisation
-> of the title is inconsistent.
+> According to Guenters feedback the alarm attribute must not be written
+> and is expected to be self-clearing on read.
+> If we would clear the alarm in the chip on alarm attribute read, then
+> we can have the following ugly scenario:
 > 
-> Fixes: 7e1449cd15d1 ("hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach")
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> 1. Temperature threshold is exceeded and chip reduces speed to 1Gbps
+> 2. Temperature is falling below alarm threshold
+> 3. User uses "sensors" to check the current temperature
+> 4. The implicit alarm attribute read causes the chip to clear the
+>    alarm and re-enable 2.5Gbps speed, resulting in the temperature
+>    alarm threshold being exceeded very soon again.
+> 
+> What isn't nice here is that it's not transparent to the user that
+> a read-only command from his perspective causes the protective measure
+> of the chip to be cancelled.
+> 
+> There's no existing hwmon attribute meant to be used by the user
+> to clear a hw alarm once he took measures to protect the chip
+> from overheating.
 
-Applied.
+It is generally not the kernels job to implement policy. User space
+should be doing that.
 
-Guenter
+I see two different possible policies, and there are maybe others:
 
-> ---
-> The naming for this driver unusual; other aspeed devices are named for
-> the soc name (ast2400, ast2500, etc) that introduced them, not the
-> generation.
-> 
-> Additionally this driver uses the abbreviation "tach", while the other
-> uses "tacho".
-> 
->  drivers/hwmon/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index dd376602f3f1..9afa70f877cc 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -413,7 +413,7 @@ config SENSORS_ASPEED
->  	  will be called aspeed_pwm_tacho.
->  
->  config SENSORS_ASPEED_G6
-> -	tristate "ASPEED g6 PWM and Fan tach driver"
-> +	tristate "ASPEED G6 PWM and Fan tach driver"
->  	depends on ARCH_ASPEED || COMPILE_TEST
->  	depends on PWM
->  	help
-> @@ -421,7 +421,7 @@ config SENSORS_ASPEED_G6
->  	  controllers.
->  
->  	  This driver can also be built as a module. If so, the module
-> -	  will be called aspeed_pwm_tacho.
-> +	  will be called aspeed_g6_pwm_tach.
->  
->  config SENSORS_ATXP1
->  	tristate "Attansic ATXP1 VID controller"
+1) The user is happy with one second outages every so often as the
+chip cycles between too hot and down shifting, and cool enough to
+upshift back to the higher speeds.
+
+2) The user prefers to have reliable, slower connectivity and needs to
+explicitly do something like down/up the interface to get it back to
+the higher speed.
+
+I personally would say, from a user support view, 2) is better. A one
+time 1 second break in connectivity and a kernel message is going to
+cause less issues.
+
+Maybe the solution is that the hwmon alarm attribute is not directly
+the hardware bit, but a software interpretation of the system state.
+When the alarm fires, copy it into a software alarm state, but leave
+the hardware alarm alone. A hwmon read clears the software state, but
+leaves the hardware alone. A down/up of the interface will then clear
+both the software and hardware alarm state.
+
+Anybody wanting policy 1) would then need a daemon polling the state
+and taking action. 2) would be the default.
+
+How easy is it for you to get into the alarm state? Did you need an
+environment chamber/oven, or is it happening for you with just lots of
+continuous traffic at typical room temperature? Are we talking about
+cheap USB dangles in a sealed plastic case with poor thermal design
+are going to be doing this all the time?
+
+	Andrew
