@@ -1,66 +1,66 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD5653A7;
-	Sat, 11 Jan 2025 00:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2132114;
+	Sat, 11 Jan 2025 00:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736554093; cv=none; b=kLCNtXsAuuRE3lOkVITwN/dXks1/J9MC6QodVlFdGADl4ysDtSQnKCnNl428kIZrvwtjlkjO/uhn23L5C1/AjEGRCGyUvzLx5YparPPSGkICq32p+DkqpjkbNh1Wp7LcI3AGBpCT7lyP009G496bTLrUVC92DF9qRpaW+YUxc/o=
+	t=1736554828; cv=none; b=mT6OpqWuuMAk9+19AE+H9UqZFyuBckvpyQibW+J8f/89FZTPH64Mgt+8CN26/bywcSvviGE8lJTrbYPTiNntbUQV+TPOVWG2NmWrLt9hDQ0tNyVCiQqUa3G22dF8mOJhWucP1m3jbuH4uzYCb3h+r6GMkFf704xqmL6RUL61Bj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736554093; c=relaxed/simple;
-	bh=/wpudZIiSYVNH4rKj3PRFcOtKnxlfV3UnEbeP8QZ2K8=;
+	s=arc-20240116; t=1736554828; c=relaxed/simple;
+	bh=U7YBK2iUeYaBZ96ScNRrhv/FwRwEW1DaSZsVNkGIkoc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ti0OJkcs/cv+ckJiZqHjxs0TygxYEP4XAbc5V0qGETE1axxtDm1SmVeekIDzlVP0O9VZMG/I4+qoIvg6QdTA7wAfaRlBq3kqFYI0Kcl1cD8sPr2N+x7Z9Zy+CylS5oHpUAg/lgSDsYLljk7Q1OAbPNXyrwUqiCCASPws7sVXuyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GGgNwZnI; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=g0qAZ4V0XhgH/60MJ7ab097LFhgOZRMlyJK95jb+Q+G/HXuPn+99jD57vmuLGOuOLQhwRgN7FjXeBvnfxchziQ64SdJs4LsnU5KB06cGm9hrqxq8fEuiBsxARD+AftRkAAlJMxQ5KQn+avN3Gfmi5IyXvuxHA4KElLGpXF2H8LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jB94odCA; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGgNwZnI"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21649a7bcdcso43054155ad.1;
-        Fri, 10 Jan 2025 16:08:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jB94odCA"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21619108a6bso44792755ad.3;
+        Fri, 10 Jan 2025 16:20:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736554091; x=1737158891; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736554826; x=1737159626; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PLxQ2bePhVaVTW2DdEGOaGquer6lWt0Bmgv8Nn2tYPg=;
-        b=GGgNwZnIQJQRDr35iiVPYC2uskHHJ6EoFYQNGpx3ZCGEo4mvW6rioe6041xANsGJ8V
-         EG1YhOTZsTF+b1Q8usJopEEbtIjV2Rg9PAGcCtehxPWbb9wFmvUljvnvhSCE8S99pnuO
-         MzJ/NoWIBisRvC5rWq05zoL7CKUEcJzBo5s/au4gtZ+zXlrVqaMFHUAML11YPGGgndnS
-         Jw+xvaSw1F9e6r6xZyRa6NXJEHNF+vNIdAj++sbE15mULnedov1ihMeWnxkcglAu5iEW
-         /gJzdUS5rtr2XSyX7oSuYcocoCL/B/0+IlPpAMrxL0w3RrnorPmE3vUvCZeFp4Ys61o0
-         JIoQ==
+        bh=dGgbQCdCUZzJPxvcxOcN4Yhv4gHsi+XWn6suzUM0YEc=;
+        b=jB94odCAjwj82ObaiU0ujx0Jg354AooOooIJi6vcArd3Au2XCpcvdwvNNLVycYsv2J
+         KVT2PdNUn9IqrY9cGBlkn1JNrVfbNlewb54iT52x71Tm8zoo6XWZRkmNwZU5zUztb3Vr
+         Au1Frbo6Sh2pxgZM0oPvD3DFXF0mjxxOdEOyIuAJPuoUwARHFMMK9E+YI+Lfb81VSbod
+         LPCU7Zfbl17nl0a0XbtL8poFei2CFkQmQ6VrWnxUmQUqijN/SstVPFdlispAfteddeAz
+         Aq3OE88J3Bl00yBzSCm/7y6g1V8gIPtPuZ2wJ6fHAM3UKBcu7DmNY1u4K0ZE2oeBI2Q5
+         cRrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736554091; x=1737158891;
+        d=1e100.net; s=20230601; t=1736554826; x=1737159626;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PLxQ2bePhVaVTW2DdEGOaGquer6lWt0Bmgv8Nn2tYPg=;
-        b=iX4ryWrTdbSgNLF5I0PPDzCY4CCAkrxZNkVkwb+KfkU9ziWHvxWtQgSCIT+RUn+M7T
-         wSP86+lX9fQo9ohVbp5a+CF0jEqKUgZsUSxS9FVeh1XIFOI9ZxLOwo8XXVPxoo3Q79/e
-         0Z4NqzdTFCCRK2/897r3IRDdKB/h/OfbBnxFscMg4sFw/RL1gJKMg2eUR1PbeFfN6hen
-         zbrwarkRUkiwgFF80Quv51VNUZSotsuZL5hVlVLxD8gwKSVUEhjeNcu/ZNDbCbDpA+fY
-         47GTsQwxrk+IR/a+jqtghKzeevn0Voiy63w0CzZvxnQcmzilmPPBMBhATLfCgIO5aRoK
-         6upg==
-X-Forwarded-Encrypted: i=1; AJvYcCVG7tTeZQnHJ0FTUuWzzkCG/InfpLM3pEqIUSO9z0C7tQA9ul1prSCXFs7wAaSsDFUYKGR6eyDY@vger.kernel.org, AJvYcCVVkHDGAB6hwzSayznM18hrOWO8oQ7+rApJvoFxpUnKHm4LGEv5/MS1QesGxjczan2/XTL3fD0vwjybpg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO5XuanU33I4A6qlNc/fUdNOXeYJuOk4rBd1Q53KJOGe8kD8Gm
-	QtN5jHuDV4IhyZ07o7pEvelLtdybZMtEOKe0xF2mNUztsqLQGjcR
-X-Gm-Gg: ASbGncvFfCEbTbQxPrgn4zjGb5pgKAdvey64rMUGMOqANR5zZndNtVNTx+L03vqd0q+
-	rL/jV3ocnES3DB7hqEufoZvNed40WKqbhix7aKVETbehj462spQaXq3mBvbbbirC/LVbqdQzYJL
-	pKFlYC4b8j+rMEqwYe07jKGALewcNU/JCmYw14982ZZVd8EOzVstAW8V3fsHRjRfifZSFwzj6LM
-	OvBylGDO0D2JMjqdNrXZSzCmfI/BSOKrjhv5IihB2SqSHW5ICVWT+t6urk/f/LqXDwRURqbv9Yq
-	33S+gricqhTS5UiTzHpTCtZcJ2d10A==
-X-Google-Smtp-Source: AGHT+IGxDp01Ajv2UFgUMzDo0bOmhWvoM24WNdV0a+IKbZ8T0t2j23lmfLA8lfGSZy0YR5RN51BixQ==
-X-Received: by 2002:a17:903:4408:b0:216:4e8d:4803 with SMTP id d9443c01a7336-21a83fc02edmr195897455ad.42.1736554091224;
-        Fri, 10 Jan 2025 16:08:11 -0800 (PST)
+        bh=dGgbQCdCUZzJPxvcxOcN4Yhv4gHsi+XWn6suzUM0YEc=;
+        b=qrAn8SFor3rzb9+ip8IndLXLNwqfF9Da+nhvAim1Uo1bXV2hmVce00eoSh3Msb17C7
+         8rKgWX/or3a8otCXYZT98o5NOzjdV3P+poGzqidtrGfR8+jZH8zKuosIDaaBVQo8aha/
+         9Y34fOul0S6YnmBSiDY1Lh25sQ5Z64D7c7RqpvIU1G6bvL/ErYY3R/sk2K+6o6X+qnqm
+         at0ZDFmFC6hPsEMPJWZ6cJowNVoBntD0ioCdLd3cMfQ0NncEjIm2yJcnrIiXRkSlYVn2
+         owEV4znitK+GCtD3QHRR2WnMNpMRN6yO+9EwiAJVLaGkTh/0GgiysSFptf4vZJ9cIqqm
+         fx8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWmOs5oom12aKk5abVqmalBWZ+huuosGE91Ghy7Vrl/Ryt3sOvYkALtIn/kxwa8rrLjDahVuYHQ@vger.kernel.org, AJvYcCXFLIJYAjuWZF6IvRJ4r51eOpBPNO7uw8eDWBHPf69rd4OY/mF5ILsIl4Jv4fGbpnylvBEv99ZaOYvTsQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZBDLnSQbWGDQZqi6Kqz6MpvtruRYoJw5WtD00nWxe/Tuxmwn0
+	mPm84bAVJxNBFGl9MChqGjsXBdmsvaWw/nMiil8VjwC2svSArerU
+X-Gm-Gg: ASbGncun6rjp7uMgQv9g8YDg2hX8fPvhBslYLW1Vyyn4S8TaddSxfMvd+xrgulPhdLt
+	MdSzpSwB1vv532EXb3SqK2Kny2UvJR7gAM5KXdpOHZ1pov6i0ns71CGWtif+TJHVHtGNd9pwFuA
+	MLXogcr7RwpPVbYobTtOZ7Tqb0kDUkhKWmoywNxWSrK+f4i6fD46vXA69ZAG+AILg+p1dN3HRtJ
+	9JiiV2/xs/aW85snaURgxjtObIhxC7ZH0jUfRzENRoAdDScctrpVeLUfSj2q3tEoHp6SaMjTe8e
+	XFOC2FIVW7qMeB6JEga4iZ7u7KMMOw==
+X-Google-Smtp-Source: AGHT+IFM1JbZkAFhBMc7eh4B4KAbkNtYxTL8m8MoD31Tqf64+y/hrkHXeFs0K+ONcAMMTXF58qQz9Q==
+X-Received: by 2002:a17:902:ec90:b0:215:e98c:c5bb with SMTP id d9443c01a7336-21a83f6464emr188208805ad.28.1736554826182;
+        Fri, 10 Jan 2025 16:20:26 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219e65sm18182895ad.140.2025.01.10.16.08.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f12f8dcsm18492775ad.66.2025.01.10.16.20.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 16:08:10 -0800 (PST)
+        Fri, 10 Jan 2025 16:20:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6996e709-ef77-4fc6-ba78-1ccac40c3fb0@roeck-us.net>
-Date: Fri, 10 Jan 2025 16:08:08 -0800
+Message-ID: <5deec54e-b88e-4579-b110-6b897f7cebd0@roeck-us.net>
+Date: Fri, 10 Jan 2025 16:20:23 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
  temp sensor on RTL822x
-To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>, Andrew Lunn <andrew@lunn.ch>
 Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
  Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
  David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -81,6 +81,7 @@ Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
 References: <3e2784e3-4670-4d54-932f-b25440747b65@gmail.com>
  <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
  <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
+ <dca1302a-82d2-482c-acf7-d6af76241a6b@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,49 +127,112 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
+In-Reply-To: <dca1302a-82d2-482c-acf7-d6af76241a6b@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/10/25 13:10, Andrew Lunn wrote:
->> - over-temp alarm remains set, even if temperature drops below threshold
+On 1/10/25 13:41, Heiner Kallweit wrote:
+> On 10.01.2025 22:10, Andrew Lunn wrote:
+>>> - over-temp alarm remains set, even if temperature drops below threshold
+>>
+>>> +int rtl822x_hwmon_init(struct phy_device *phydev)
+>>> +{
+>>> +	struct device *hwdev, *dev = &phydev->mdio.dev;
+>>> +	const char *name;
+>>> +
+>>> +	/* Ensure over-temp alarm is reset. */
+>>> +	phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2, RTL822X_VND2_TSALRM, 3);
+>>
+>> So it is possible to clear the alarm.
+>>
+>> I know you wanted to experiment with this some more....
+>>
+>> If the alarm is still set, does that prevent the PHY renegotiating the
+>> higher link speed? If you clear the alarm, does that allow it to
+>> renegotiate the higher link speed? Or is a down/up still required?
+>> Does an down/up clear the alarm if the temperature is below the
+>> threshold?
+>>
+> I tested wrt one of your previous questions, when exceeding the
+> temperature threshold the chip actually removes 2.5Gbps from the
+> advertisement register.
 > 
->> +int rtl822x_hwmon_init(struct phy_device *phydev)
->> +{
->> +	struct device *hwdev, *dev = &phydev->mdio.dev;
->> +	const char *name;
->> +
->> +	/* Ensure over-temp alarm is reset. */
->> +	phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2, RTL822X_VND2_TSALRM, 3);
+> If the alarm is set, the chip won't switch back automatically to
+> 2.5Gbps even if the temperature drops below the alarm threshold.
 > 
-> So it is possible to clear the alarm.
+> When clearing the alarm the chip adds 2.5Gbps back to the advertisement
+> register. Worth to be mentioned:
+> The temperature is checked only if the link speed is 2.5Gbps.
+> Therefore the chip thinks it's safe to add back the 2.5Gbps mode
+> when the alarm is cleared.
 > 
-> I know you wanted to experiment with this some more....
+> What I didn't test is whether it's possible to manually add 2.5Gbps
+> to the advertisement register whilst the alarm is set.
+> But I assume that's the case.
 > 
-> If the alarm is still set, does that prevent the PHY renegotiating the
-> higher link speed? If you clear the alarm, does that allow it to
-> renegotiate the higher link speed? Or is a down/up still required?
-> Does an down/up clear the alarm if the temperature is below the
-> threshold?
+>> Also, does HWMON support clearing alarms? Writing a 0 to the file? Or
+>> are they supported to self clear on read?
+>>
+> Documentation/hwmon/sysfs-interface.rst states that the alarm
+> is a read-only attribute:
 > 
-> Also, does HWMON support clearing alarms? Writing a 0 to the file? Or
-> are they supported to self clear on read?
+> +-------------------------------+-----------------------+
+> | **`in[0-*]_alarm`,		| Channel alarm		|
+> | `curr[1-*]_alarm`,		|			|
+> | `power[1-*]_alarm`,		|   - 0: no alarm	|
+> | `fan[1-*]_alarm`,		|   - 1: alarm		|
+> | `temp[1-*]_alarm`**		|			|
+> |				|   RO			|
+> +-------------------------------+-----------------------+
+> 
+> Self-clearing is neither mentioned in the documentation nor
+> implemented in hwmon core.
+
+I would argue that self clearing is implied in "RO". This isn't a hwmon
+core problem, it needs to be implemented in drivers. Many chips auto-clear
+alarm attributes on read. For those this is automatic. Others need
+to explicitly implement clearing alarms.
+
+> 
+> @Guenter:
+> If alarm would just mean "current value > alarm threshold", then we
+> wouldn't need an extra alarm attribute, as this is something which
+> can be checked in user space.
+
+Alarm attributes, if implemented properly and if a chip supports interrupts,
+should generate sysfs and udev events to inform userspace. An alarm
+doesn't just mean "current value > alarm threshold", it can also mean that
+the current value was above the threshold at some point since the attribute
+was read the last time. For that to work, the attribute must be sticky
+until read.
+
+FWIW, I am sure you'll find lots of drivers not implementing this properly,
+so there is no need to search for those and use them as precedent.
+
+If you want to support alarm attributes or not is obviously your call,
+but they should be self clearing if implemented. I don't want to get complaints
+along the line of "the alarm attribute is set but doesn't clear even though
+the temperature (or voltage, or whatever) is below the threshold".
+
+> Has it ever been considered that a user may have to explicitly ack
+> an alarm to clear it? Would you consider it an ABI violation if
+> alarm is configured as R/W for being able to clear the alarm?
 > 
 
-Alarm attributes are supposed to self clear on read unless the condition
-persists.
-
-> I'm wondering if we are heading towards ABI issues? You have defined:
-> 
-> - over-temp alarm remains set, even if temperature drops below threshold
-> 
-> so that kind of eliminates the possibility of implementing self
-> clearing any time in the future. Explicit clearing via a write is
-> probably O.K, because the user needs to take an explicit action.  Are
-> there other ABI issues i have not thought about.
-> 
-
-Alarm attributes are supposed to be read-only.
+Yes.
 
 Guenter
+
+>> I'm wondering if we are heading towards ABI issues? You have defined:
+>>
+>> - over-temp alarm remains set, even if temperature drops below threshold
+>>
+>> so that kind of eliminates the possibility of implementing self
+>> clearing any time in the future. Explicit clearing via a write is
+>> probably O.K, because the user needs to take an explicit action.  Are
+>> there other ABI issues i have not thought about.
+>>
+>> 	Andrew
+> 
+> Heiner
 
