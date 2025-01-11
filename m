@@ -1,66 +1,66 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB022144CF;
-	Fri, 10 Jan 2025 21:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD5653A7;
+	Sat, 11 Jan 2025 00:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736545278; cv=none; b=orCRoN8IONDCtHi7XYMHRxHeabk2OeydKtBExUHWFyw+/UAWW5Kn/tbuJ4SnbA2HCzt5un7DcxODPO7IASqz/65TXXtvSGvV/hqoxKHxXFyJMVo+MEGgetsZ+SQ/lDZ2DL06Vtj0k0b0Yg/4pgEG9uEQfPpHafldHSWkPng2vfQ=
+	t=1736554093; cv=none; b=kLCNtXsAuuRE3lOkVITwN/dXks1/J9MC6QodVlFdGADl4ysDtSQnKCnNl428kIZrvwtjlkjO/uhn23L5C1/AjEGRCGyUvzLx5YparPPSGkICq32p+DkqpjkbNh1Wp7LcI3AGBpCT7lyP009G496bTLrUVC92DF9qRpaW+YUxc/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736545278; c=relaxed/simple;
-	bh=Op9MnXeObhSGWH2mINMz0HIZtS1/3S+R8/tNvF2nIG0=;
+	s=arc-20240116; t=1736554093; c=relaxed/simple;
+	bh=/wpudZIiSYVNH4rKj3PRFcOtKnxlfV3UnEbeP8QZ2K8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p2S3lSVK4bHAcfqaAKvbYb3s5gOvm+X3aFcFrAw3kqftc2cii4p86puAumyMCUZP5+S0m7aKhcVp43iMfcOn9S1w2EA04i4zuTXp2/Oc+bmaZhrd5S1xWwx+hPhmmNC0h3vvtYwBIbrAyRLW6dkrEgoS78o2mgCe4DkP/HuQD2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kvFU2Tvo; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 In-Reply-To:Content-Type; b=Ti0OJkcs/cv+ckJiZqHjxs0TygxYEP4XAbc5V0qGETE1axxtDm1SmVeekIDzlVP0O9VZMG/I4+qoIvg6QdTA7wAfaRlBq3kqFYI0Kcl1cD8sPr2N+x7Z9Zy+CylS5oHpUAg/lgSDsYLljk7Q1OAbPNXyrwUqiCCASPws7sVXuyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GGgNwZnI; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kvFU2Tvo"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4361b6f9faeso16157245e9.1;
-        Fri, 10 Jan 2025 13:41:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGgNwZnI"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21649a7bcdcso43054155ad.1;
+        Fri, 10 Jan 2025 16:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736545275; x=1737150075; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736554091; x=1737158891; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wJSwmMRtD+kJc8b0jhmm6OVNdsYEx4ZQUONBcIn5tmA=;
-        b=kvFU2TvoLXk4+pFcA0UMfDHe3lU/tIw6J8Jebk+fHEIJoZJJyORIzld0KIxlqOQi7F
-         O/ez4Ls0/cL3/ifDA59jSHT7FZbqHEwgY0ms0adNBUoz03hUq3VX0AfYtHtiVVpP3x6g
-         krzj5OSNx+sebDi/HXyC8DCxn+K4GcSg7eSiE82N0XBLbdh0GU+1klXoALlvN0QSJe+B
-         mctQ/K07+hkemTwV4OLWPg6Qs4fa6zIfVip4XpNYzVAV+YXlS/kP4uLdXOL05d9AZImN
-         Wh/gtzr0YJaqeg4DncpMoOj97/AqD5i42IwGzPbtxMbRs4Wzbm+oHq4SraOv3lVdgYZG
-         k1yw==
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PLxQ2bePhVaVTW2DdEGOaGquer6lWt0Bmgv8Nn2tYPg=;
+        b=GGgNwZnIQJQRDr35iiVPYC2uskHHJ6EoFYQNGpx3ZCGEo4mvW6rioe6041xANsGJ8V
+         EG1YhOTZsTF+b1Q8usJopEEbtIjV2Rg9PAGcCtehxPWbb9wFmvUljvnvhSCE8S99pnuO
+         MzJ/NoWIBisRvC5rWq05zoL7CKUEcJzBo5s/au4gtZ+zXlrVqaMFHUAML11YPGGgndnS
+         Jw+xvaSw1F9e6r6xZyRa6NXJEHNF+vNIdAj++sbE15mULnedov1ihMeWnxkcglAu5iEW
+         /gJzdUS5rtr2XSyX7oSuYcocoCL/B/0+IlPpAMrxL0w3RrnorPmE3vUvCZeFp4Ys61o0
+         JIoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736545275; x=1737150075;
+        d=1e100.net; s=20230601; t=1736554091; x=1737158891;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wJSwmMRtD+kJc8b0jhmm6OVNdsYEx4ZQUONBcIn5tmA=;
-        b=V7UFc1fgBsh+ZarziYvDnt9TvCmmL2VOKu9hdppRlUq0SqUvGCO6RMiWB1e3xKpP0R
-         fr+JaXAISzvY7XLAAcjACdl1e9Gf3lWqSj2Z6Z/fxdwOJnbX7sU0Y4IaHl64waYYH1yY
-         WgSxm0w6wVQ2BZD6KG68LbODj5FzIDDXk5L9hC00qNM7HjrQYOTTJLXkELVbkN0xgSux
-         8h7ZkcEwT+hLYBrvJMW6nshhf6sDrFu6ScH+DVapiO5mhHLsZu1eAxFzeceh5VKbL008
-         JVPvwnSn8JEN4v9HzjmPWGEQMqnmQYI80HIjThI3Kn9EVUEYg+vVSSQPbzHSDlYgJDF+
-         KEQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYMrm+6f3p9UeqKjSH7AGIp/oRzkVUq8mTOX6W9yHve3HPD5ok7frWmMvuH4yqFuO/w2TgryiPnwFKeg==@vger.kernel.org, AJvYcCXKvv7u+gA8RlepZcoGoM3l/wSwQD2Vlnyx5q1aUV3pFhaSOcGG9FGQBunWypt45ZhRGoG2ojgZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLqaIGJC7IBr5YSUnBzmGHGo1TKS01+v1zIa7Wprr4BCNKrPBD
-	mglgRsAueiNb54n3iq35RpHZK0wm/lrnxzan+ZFqhbuysASvlM+1
-X-Gm-Gg: ASbGncsA48fHJlnZ29fGHF60GY2dQgWSlotWyQ287SZVmOkFxhpFMMhaHF/Yvo+g5Y/
-	fbFeoTwdknVSVF1AOlhSQfUur+ROS1LkK/sM84HQaanUbcmASjx6j+dFGdoKneqi3OOkJrqRQP0
-	c+wfdDfmKLOpnd9yM8onWAaz1sUQwwKeGJlhnFsw2uUUaZDgYnXD3kp4dux3m2RtDYbt+TQ5pgI
-	IiXhCrza6yWI9nnITW2hzjDAzEGiJs5Nr4mZzS/d5gbG5lLoaQTAmNX5olejhrTl2pcu+DhEgT5
-	LK77UtjrwefoUcoOZtU8wDOJJ2oOnVJXzPEc6s3X+G6V4PKlxt2TaLgeCWkouYryd1NtUs2CeKR
-	+Un4zy7c1qp0daNIhbq+inO24SNXW79OVwBhJF+BMdJmt6A==
-X-Google-Smtp-Source: AGHT+IHJ20F82b0823PoFNf7PIanzGSKTDvHFeUpetpcYHB5TwnR39DZsfQ+Wj3ptaR369kXx86EqQ==
-X-Received: by 2002:a05:600c:3143:b0:436:1b0b:2633 with SMTP id 5b1f17b1804b1-436e9d74908mr72263955e9.9.1736545274829;
-        Fri, 10 Jan 2025 13:41:14 -0800 (PST)
-Received: from ?IPV6:2a02:3100:a08a:a100:1e8:1877:1b89:d707? (dynamic-2a02-3100-a08a-a100-01e8-1877-1b89-d707.310.pool.telefonica.de. [2a02:3100:a08a:a100:1e8:1877:1b89:d707])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-436e9dd1957sm63337085e9.16.2025.01.10.13.41.12
+        bh=PLxQ2bePhVaVTW2DdEGOaGquer6lWt0Bmgv8Nn2tYPg=;
+        b=iX4ryWrTdbSgNLF5I0PPDzCY4CCAkrxZNkVkwb+KfkU9ziWHvxWtQgSCIT+RUn+M7T
+         wSP86+lX9fQo9ohVbp5a+CF0jEqKUgZsUSxS9FVeh1XIFOI9ZxLOwo8XXVPxoo3Q79/e
+         0Z4NqzdTFCCRK2/897r3IRDdKB/h/OfbBnxFscMg4sFw/RL1gJKMg2eUR1PbeFfN6hen
+         zbrwarkRUkiwgFF80Quv51VNUZSotsuZL5hVlVLxD8gwKSVUEhjeNcu/ZNDbCbDpA+fY
+         47GTsQwxrk+IR/a+jqtghKzeevn0Voiy63w0CzZvxnQcmzilmPPBMBhATLfCgIO5aRoK
+         6upg==
+X-Forwarded-Encrypted: i=1; AJvYcCVG7tTeZQnHJ0FTUuWzzkCG/InfpLM3pEqIUSO9z0C7tQA9ul1prSCXFs7wAaSsDFUYKGR6eyDY@vger.kernel.org, AJvYcCVVkHDGAB6hwzSayznM18hrOWO8oQ7+rApJvoFxpUnKHm4LGEv5/MS1QesGxjczan2/XTL3fD0vwjybpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO5XuanU33I4A6qlNc/fUdNOXeYJuOk4rBd1Q53KJOGe8kD8Gm
+	QtN5jHuDV4IhyZ07o7pEvelLtdybZMtEOKe0xF2mNUztsqLQGjcR
+X-Gm-Gg: ASbGncvFfCEbTbQxPrgn4zjGb5pgKAdvey64rMUGMOqANR5zZndNtVNTx+L03vqd0q+
+	rL/jV3ocnES3DB7hqEufoZvNed40WKqbhix7aKVETbehj462spQaXq3mBvbbbirC/LVbqdQzYJL
+	pKFlYC4b8j+rMEqwYe07jKGALewcNU/JCmYw14982ZZVd8EOzVstAW8V3fsHRjRfifZSFwzj6LM
+	OvBylGDO0D2JMjqdNrXZSzCmfI/BSOKrjhv5IihB2SqSHW5ICVWT+t6urk/f/LqXDwRURqbv9Yq
+	33S+gricqhTS5UiTzHpTCtZcJ2d10A==
+X-Google-Smtp-Source: AGHT+IGxDp01Ajv2UFgUMzDo0bOmhWvoM24WNdV0a+IKbZ8T0t2j23lmfLA8lfGSZy0YR5RN51BixQ==
+X-Received: by 2002:a17:903:4408:b0:216:4e8d:4803 with SMTP id d9443c01a7336-21a83fc02edmr195897455ad.42.1736554091224;
+        Fri, 10 Jan 2025 16:08:11 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219e65sm18182895ad.140.2025.01.10.16.08.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 13:41:13 -0800 (PST)
-Message-ID: <dca1302a-82d2-482c-acf7-d6af76241a6b@gmail.com>
-Date: Fri, 10 Jan 2025 22:41:12 +0100
+        Fri, 10 Jan 2025 16:08:10 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6996e709-ef77-4fc6-ba78-1ccac40c3fb0@roeck-us.net>
+Date: Fri, 10 Jan 2025 16:08:08 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
  temp sensor on RTL822x
-To: Andrew Lunn <andrew@lunn.ch>, Guenter Roeck <linux@roeck-us.net>
+To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>
 Cc: Russell King - ARM Linux <linux@armlinux.org.uk>,
  Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
  David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -82,55 +82,55 @@ References: <3e2784e3-4670-4d54-932f-b25440747b65@gmail.com>
  <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
  <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
 Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
 In-Reply-To: <8d052f8f-d539-45ba-ba21-0a459057f313@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10.01.2025 22:10, Andrew Lunn wrote:
+On 1/10/25 13:10, Andrew Lunn wrote:
 >> - over-temp alarm remains set, even if temperature drops below threshold
 > 
 >> +int rtl822x_hwmon_init(struct phy_device *phydev)
@@ -151,48 +151,12 @@ On 10.01.2025 22:10, Andrew Lunn wrote:
 > Does an down/up clear the alarm if the temperature is below the
 > threshold?
 > 
-I tested wrt one of your previous questions, when exceeding the
-temperature threshold the chip actually removes 2.5Gbps from the
-advertisement register.
-
-If the alarm is set, the chip won't switch back automatically to
-2.5Gbps even if the temperature drops below the alarm threshold.
-
-When clearing the alarm the chip adds 2.5Gbps back to the advertisement
-register. Worth to be mentioned:
-The temperature is checked only if the link speed is 2.5Gbps.
-Therefore the chip thinks it's safe to add back the 2.5Gbps mode
-when the alarm is cleared.
-
-What I didn't test is whether it's possible to manually add 2.5Gbps
-to the advertisement register whilst the alarm is set.
-But I assume that's the case.
-
 > Also, does HWMON support clearing alarms? Writing a 0 to the file? Or
 > are they supported to self clear on read?
 > 
-Documentation/hwmon/sysfs-interface.rst states that the alarm
-is a read-only attribute:
 
-+-------------------------------+-----------------------+
-| **`in[0-*]_alarm`,		| Channel alarm		|
-| `curr[1-*]_alarm`,		|			|
-| `power[1-*]_alarm`,		|   - 0: no alarm	|
-| `fan[1-*]_alarm`,		|   - 1: alarm		|
-| `temp[1-*]_alarm`**		|			|
-|				|   RO			|
-+-------------------------------+-----------------------+
-
-Self-clearing is neither mentioned in the documentation nor
-implemented in hwmon core.
-
-@Guenter:
-If alarm would just mean "current value > alarm threshold", then we
-wouldn't need an extra alarm attribute, as this is something which
-can be checked in user space.
-Has it ever been considered that a user may have to explicitly ack
-an alarm to clear it? Would you consider it an ABI violation if
-alarm is configured as R/W for being able to clear the alarm?
+Alarm attributes are supposed to self clear on read unless the condition
+persists.
 
 > I'm wondering if we are heading towards ABI issues? You have defined:
 > 
@@ -203,6 +167,8 @@ alarm is configured as R/W for being able to clear the alarm?
 > probably O.K, because the user needs to take an explicit action.  Are
 > there other ABI issues i have not thought about.
 > 
-> 	Andrew
 
-Heiner
+Alarm attributes are supposed to be read-only.
+
+Guenter
+
