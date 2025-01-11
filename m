@@ -1,66 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B751865EE;
-	Sat, 11 Jan 2025 08:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3581F18A931;
+	Sat, 11 Jan 2025 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736585550; cv=none; b=KpREMJlC8Q3+lPu78KuDLayzagtclOgjEeAFrK1WkGtCNYw0T/wQNQ6nTWFGM4Od9VJgJOd5IwNH7bomc/n1Q8cFMKM5kTSeuYh3xlTYxCM/bqCy2V4ZqLGEO46NvErdfB13kSZSnOM2QOCNnaUm+mnEHx/sDzXW3R3a2W6JgpY=
+	t=1736588973; cv=none; b=YNwH+0adhr8zAqIDzXRTenANr3o8mHc9RfCNG8RP1LMTaeB/S7dv+ImgMJL7AXBvbxlW3KcDMX3XCmkajrbOqjv88qPoQn7xoih0HheVx3khFVjptKXpKwqRNjhxDRB9y7KihCPYxtcOH2Iq4nG1YUnheIOQVS5YMiOXAetfQLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736585550; c=relaxed/simple;
-	bh=8N10EQFfGGTCVQQ3mco6DwzMcT9d+LY69SR7ujkHPro=;
+	s=arc-20240116; t=1736588973; c=relaxed/simple;
+	bh=fJneAG2e2IjqcWED90SuaOpGkKAmPjMZPoMSb92OI7I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WHrSJuf2khjK2KfUGe/ClOAjrvAiL7nrxrwNjqM07HY7QpQd1fqWhgYYaqucYkjJaV52NcfJJM1o3odKHP2wyPqCQatJeG1BKYgYOrGTdb/4nuIsq50y22RRjd81U/G095coBdABrEh6888Cgm8r3o+/q7cDwnLirvHsKUlEo2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fiAJceEb; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=RYrzlcjxMWJhNEYJVQoyDVAV5mWoPYdcI5uFtAWS/fBf0D3BjpdinkWt9nKGNx1XnLpnrWJUPvM+g7/XLlZdbDeNUGYCdvi315+4KK9SGO2I7cRrUz1qZWIaU/iP10yF3ZnGuc9UytWC6WRdE5EHggghv5m+TBlSB03LC5OHmCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FV+LnLt6; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fiAJceEb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FV+LnLt6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736585549; x=1768121549;
+  t=1736588973; x=1768124973;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8N10EQFfGGTCVQQ3mco6DwzMcT9d+LY69SR7ujkHPro=;
-  b=fiAJceEblbd3FivB01PuyTxoDxpkjjejF/qtd+aEADXWXoFJUhSn+ITK
-   r9D0FpVPf2+oV0yExiblXJYi4xdBG4HFF4VuO3elYnAch+j63sj1SOQ9A
-   88QTn+YbWorne+uXFPMK5WZHDHnzyIXy7h/AWCDKfs4hRzGg042Dvhh4e
-   Ch25dAk9L8VfyL59r211wCHCxSr2dUoIhroW0T+f2sWJYGbpH6NNlWnv/
-   ydIBKlT1xZS3K9uAbqpB3MX9QsM+nSxjzv+XciWKNhtTxTn8rVFCCIIaY
-   u5SaYpickARZF5VXXwbSVo4+Abu5RB1PoOAkiAubHZJ13IzgxqoTB10Un
-   A==;
-X-CSE-ConnectionGUID: juAVFXE3QXSQEaZfQ7Fo8A==
-X-CSE-MsgGUID: KX5y2VM/S1iFXSMwPiOBFw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="48297146"
+  bh=fJneAG2e2IjqcWED90SuaOpGkKAmPjMZPoMSb92OI7I=;
+  b=FV+LnLt698HZdvL0awOde+jXItmWtqj+bX8tVlhvzjWbY2uxIMFelbic
+   AefFjUUYdB28lWmkZVbcCH0jGxzsbda0crFiCY6e9czCUs7UgtoQ1Fuuu
+   p/FvdwSuQOXGs5QwX+LTyaGvOsJD7n3IU0n1jncoNjxw54bDQz7z6mQZh
+   RV/fh6A9Kbt8DH3JAfj4O2ftmdTltjuUcItAwtsx+TIxTRxNTHw71lupJ
+   K+GwQTC+hd7+Co1LcG/mDt597inoBST8nVTl5v6WAhRIfKaqz0PHRbx12
+   HaHo9J6CO5HMXAyHfsG4NU6PI4relTyoCrBLjgwoR9StSBCq0BGgK9NuI
+   w==;
+X-CSE-ConnectionGUID: sbYoViubT3ysNSFH6mtfxA==
+X-CSE-MsgGUID: Hr+Tn9SvRla5e9dO5KCMEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="40646920"
 X-IronPort-AV: E=Sophos;i="6.12,306,1728975600"; 
-   d="scan'208";a="48297146"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 00:52:29 -0800
-X-CSE-ConnectionGUID: dQkcDV2BSEe3QdFM38A2CA==
-X-CSE-MsgGUID: gzgOw4fmSA2IEm+R+0aFwQ==
+   d="scan'208";a="40646920"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 01:49:30 -0800
+X-CSE-ConnectionGUID: 8yBD54+gSJ2eZrN1HyEkig==
+X-CSE-MsgGUID: 14ORSzlgSyahUj2kOy/9Tg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104469505"
+X-IronPort-AV: E=Sophos;i="6.12,306,1728975600"; 
+   d="scan'208";a="103766866"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Jan 2025 00:52:25 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 01:49:26 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWXEA-000KPL-09;
-	Sat, 11 Jan 2025 08:52:18 +0000
-Date: Sat, 11 Jan 2025 16:52:14 +0800
+	id 1tWY7Q-000KSP-0u;
+	Sat, 11 Jan 2025 09:49:24 +0000
+Date: Sat, 11 Jan 2025 17:48:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: Heiner Kallweit <hkallweit1@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
 	Russell King - ARM Linux <linux@armlinux.org.uk>,
 	Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
 	David Miller <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org,
 	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>
 Subject: Re: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for
  temp sensor on RTL822x
-Message-ID: <202501111618.Lro85HiT-lkp@intel.com>
+Message-ID: <202501111711.i1W0TGwl-lkp@intel.com>
 References: <dbfeb139-808f-4345-afe8-830b7f4da26a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -82,203 +83,130 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/net-phy-r
 base:   net-next/main
 patch link:    https://lore.kernel.org/r/dbfeb139-808f-4345-afe8-830b7f4da26a%40gmail.com
 patch subject: [PATCH net-next 3/3] net: phy: realtek: add hwmon support for temp sensor on RTL822x
-config: parisc-randconfig-r072-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111618.Lro85HiT-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111618.Lro85HiT-lkp@intel.com/reproduce)
+config: i386-randconfig-013-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111711.i1W0TGwl-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111711.i1W0TGwl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111618.Lro85HiT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501111711.i1W0TGwl-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/phy/realtek_hwmon.c:3:10: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'support'
+>> drivers/net/phy/realtek_hwmon.c:3:4: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+       2 |  *
+         |  int
        3 |  * HWMON support for Realtek PHY's
-         |          ^~~~~~~
->> drivers/net/phy/realtek_hwmon.c:3:33: warning: missing terminating ' character
+         |    ^
+>> drivers/net/phy/realtek_hwmon.c:3:9: error: expected ';' after top level declarator
+       3 |  * HWMON support for Realtek PHY's
+         |         ^
+         |         ;
+   drivers/net/phy/realtek_hwmon.c:3:33: warning: missing terminating ' character [-Winvalid-pp-token]
        3 |  * HWMON support for Realtek PHY's
          |                                 ^
->> drivers/net/phy/realtek_hwmon.c:3:33: error: missing terminating ' character
-       3 |  * HWMON support for Realtek PHY's
-         |                                 ^~
->> drivers/net/phy/realtek_hwmon.c:5:39: error: stray '@' in program
-       5 |  * Author: Heiner Kallweit <hkallweit1@gmail.com>
-         |                                       ^
-   In file included from include/uapi/asm-generic/types.h:7,
-                    from ./arch/parisc/include/generated/uapi/asm/types.h:1,
-                    from include/linux/bitops.h:5,
-                    from include/linux/hwmon.h:15,
-                    from drivers/net/phy/realtek_hwmon.c:8:
->> include/asm-generic/int-ll64.h:16:9: error: unknown type name '__s8'; did you mean '__u8'?
+   In file included from drivers/net/phy/realtek_hwmon.c:8:
+   In file included from include/linux/hwmon.h:15:
+   In file included from include/linux/bitops.h:5:
+   In file included from ./arch/x86/include/generated/uapi/asm/types.h:1:
+   In file included from include/uapi/asm-generic/types.h:7:
+   include/asm-generic/int-ll64.h:16:9: error: unknown type name '__s8'; did you mean '__u8'?
       16 | typedef __s8  s8;
          |         ^~~~
          |         __u8
-   In file included from include/linux/kernel.h:27,
-                    from arch/parisc/include/asm/bug.h:5,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/parisc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/phy.h:15,
-                    from drivers/net/phy/realtek_hwmon.c:9:
->> include/linux/math.h:112:9: error: unknown type name '__s8'; did you mean '__u8'?
+   include/uapi/asm-generic/int-ll64.h:21:23: note: '__u8' declared here
+      21 | typedef unsigned char __u8;
+         |                       ^
+   In file included from drivers/net/phy/realtek_hwmon.c:9:
+   In file included from include/linux/phy.h:15:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:35:
+   In file included from include/linux/math64.h:6:
+   include/linux/math.h:115:1: error: unknown type name '__s8'; did you mean '__u8'?
+     115 | __STRUCT_FRACT(s8)
+         | ^
+   include/linux/math.h:112:2: note: expanded from macro '__STRUCT_FRACT'
      112 |         __##type numerator;                             \
-         |         ^~
-   include/linux/math.h:115:1: note: in expansion of macro '__STRUCT_FRACT'
+         |         ^
+   <scratch space>:221:1: note: expanded from here
+     221 | __s8
+         | ^
+   include/uapi/asm-generic/int-ll64.h:21:23: note: '__u8' declared here
+      21 | typedef unsigned char __u8;
+         |                       ^
+   In file included from drivers/net/phy/realtek_hwmon.c:9:
+   In file included from include/linux/phy.h:15:
+   In file included from include/linux/spinlock.h:60:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/x86/include/asm/thread_info.h:59:
+   In file included from arch/x86/include/asm/cpufeature.h:5:
+   In file included from arch/x86/include/asm/processor.h:35:
+   In file included from include/linux/math64.h:6:
+   include/linux/math.h:115:1: error: unknown type name '__s8'; did you mean '__u8'?
      115 | __STRUCT_FRACT(s8)
-         | ^~~~~~~~~~~~~~
-   include/linux/math.h:113:9: error: unknown type name '__s8'; did you mean '__u8'?
+         | ^
+   include/linux/math.h:113:2: note: expanded from macro '__STRUCT_FRACT'
      113 |         __##type denominator;                           \
-         |         ^~
-   include/linux/math.h:115:1: note: in expansion of macro '__STRUCT_FRACT'
-     115 | __STRUCT_FRACT(s8)
-         | ^~~~~~~~~~~~~~
-   In file included from include/linux/quota.h:42,
-                    from include/linux/fs.h:271,
-                    from include/linux/compat.h:17,
-                    from include/linux/ethtool.h:17,
-                    from include/linux/phy.h:16:
->> include/uapi/linux/dqblk_xfs.h:54:9: error: unknown type name '__s8'; did you mean '__u8'?
-      54 |         __s8            d_version;      /* version of this structure */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:55:9: error: unknown type name '__s8'; did you mean '__u8'?
-      55 |         __s8            d_flags;        /* FS_{USER,PROJ,GROUP}_QUOTA */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:70:9: error: unknown type name '__s8'; did you mean '__u8'?
-      70 |         __s8            d_itimer_hi;    /* upper 8 bits of timer values */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:71:9: error: unknown type name '__s8'; did you mean '__u8'?
-      71 |         __s8            d_btimer_hi;
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:72:9: error: unknown type name '__s8'; did you mean '__u8'?
-      72 |         __s8            d_rtbtimer_hi;
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:73:9: error: unknown type name '__s8'; did you mean '__u8'?
-      73 |         __s8            d_padding2;     /* padding2 - for future use */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:166:9: error: unknown type name '__s8'; did you mean '__u8'?
-     166 |         __s8            qs_version;     /* version number for future changes */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:168:9: error: unknown type name '__s8'; did you mean '__u8'?
-     168 |         __s8            qs_pad;         /* unused */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:210:9: error: unknown type name '__s8'; did you mean '__u8'?
-     210 |         __s8                    qs_version;     /* version for future changes */
-         |         ^~~~
-         |         __u8
-   In file included from include/linux/ethtool.h:20:
->> include/uapi/linux/ethtool.h:2523:9: error: unknown type name '__s8'; did you mean '__u8'?
-    2523 |         __s8    link_mode_masks_nwords;
-         |         ^~~~
-         |         __u8
---
-   realtek_hwmon.c:3:10: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'support'
-       3 |  * HWMON support for Realtek PHY's
-         |          ^~~~~~~
-   realtek_hwmon.c:3:33: warning: missing terminating ' character
-       3 |  * HWMON support for Realtek PHY's
-         |                                 ^
-   realtek_hwmon.c:3:33: error: missing terminating ' character
-       3 |  * HWMON support for Realtek PHY's
-         |                                 ^~
-   realtek_hwmon.c:5:39: error: stray '@' in program
-       5 |  * Author: Heiner Kallweit <hkallweit1@gmail.com>
-         |                                       ^
-   In file included from include/uapi/asm-generic/types.h:7,
-                    from arch/parisc/include/generated/uapi/asm/types.h:1,
-                    from include/linux/bitops.h:5,
-                    from include/linux/hwmon.h:15,
-                    from realtek_hwmon.c:8:
->> include/asm-generic/int-ll64.h:16:9: error: unknown type name '__s8'; did you mean '__u8'?
-      16 | typedef __s8  s8;
-         |         ^~~~
-         |         __u8
-   In file included from include/linux/kernel.h:27,
-                    from arch/parisc/include/asm/bug.h:5,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from arch/parisc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/phy.h:15,
-                    from realtek_hwmon.c:9:
->> include/linux/math.h:112:9: error: unknown type name '__s8'; did you mean '__u8'?
-     112 |         __##type numerator;                             \
-         |         ^~
-   include/linux/math.h:115:1: note: in expansion of macro '__STRUCT_FRACT'
-     115 | __STRUCT_FRACT(s8)
-         | ^~~~~~~~~~~~~~
-   include/linux/math.h:113:9: error: unknown type name '__s8'; did you mean '__u8'?
-     113 |         __##type denominator;                           \
-         |         ^~
-   include/linux/math.h:115:1: note: in expansion of macro '__STRUCT_FRACT'
-     115 | __STRUCT_FRACT(s8)
-         | ^~~~~~~~~~~~~~
-   In file included from include/linux/quota.h:42,
-                    from include/linux/fs.h:271,
-                    from include/linux/compat.h:17,
-                    from include/linux/ethtool.h:17,
-                    from include/linux/phy.h:16:
->> include/uapi/linux/dqblk_xfs.h:54:9: error: unknown type name '__s8'; did you mean '__u8'?
-      54 |         __s8            d_version;      /* version of this structure */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:55:9: error: unknown type name '__s8'; did you mean '__u8'?
-      55 |         __s8            d_flags;        /* FS_{USER,PROJ,GROUP}_QUOTA */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:70:9: error: unknown type name '__s8'; did you mean '__u8'?
-      70 |         __s8            d_itimer_hi;    /* upper 8 bits of timer values */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:71:9: error: unknown type name '__s8'; did you mean '__u8'?
-      71 |         __s8            d_btimer_hi;
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:72:9: error: unknown type name '__s8'; did you mean '__u8'?
-      72 |         __s8            d_rtbtimer_hi;
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:73:9: error: unknown type name '__s8'; did you mean '__u8'?
-      73 |         __s8            d_padding2;     /* padding2 - for future use */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:166:9: error: unknown type name '__s8'; did you mean '__u8'?
-     166 |         __s8            qs_version;     /* version number for future changes */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:168:9: error: unknown type name '__s8'; did you mean '__u8'?
-     168 |         __s8            qs_pad;         /* unused */
-         |         ^~~~
-         |         __u8
-   include/uapi/linux/dqblk_xfs.h:210:9: error: unknown type name '__s8'; did you mean '__u8'?
-     210 |         __s8                    qs_version;     /* version for future changes */
-         |         ^~~~
-         |         __u8
-   In file included from include/linux/ethtool.h:20:
->> include/uapi/linux/ethtool.h:2523:9: error: unknown type name '__s8'; did you mean '__u8'?
-    2523 |         __s8    link_mode_masks_nwords;
-         |         ^~~~
-         |         __u8
+         |         ^
+   <scratch space>:222:1: note: expanded from here
+     222 | __s8
+         | ^
+   include/uapi/asm-generic/int-ll64.h:21:23: note: '__u8' declared here
+      21 | typedef unsigned char __u8;
+         |                       ^
+   In file included from drivers/net/phy/realtek_hwmon.c:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:17:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/net/phy/realtek_hwmon.c:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:17:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/net/phy/realtek_hwmon.c:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:17:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
 
 
-vim +3 drivers/net/phy/realtek_hwmon.c
+vim +/int +3 drivers/net/phy/realtek_hwmon.c
 
    > 3	 * HWMON support for Realtek PHY's
      4	 *
-   > 5	 * Author: Heiner Kallweit <hkallweit1@gmail.com>
+     5	 * Author: Heiner Kallweit <hkallweit1@gmail.com>
      6	 */
      7	
 
