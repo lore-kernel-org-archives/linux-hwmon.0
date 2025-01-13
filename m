@@ -1,549 +1,328 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D0E14A09C;
-	Mon, 13 Jan 2025 03:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1671BEF98;
+	Mon, 13 Jan 2025 06:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736740347; cv=none; b=UAFsRN6QjjIyMtsTg/dyL9vlXysWEH8mjObuk75s0UzUqvMlup0YCPH3buXC5WaNT+MTf5vHu0uOqLq256VYsDQvLpTtVjRcQ9S9f7hNJHH6tnULy9r9YVUnLm2XRFc6OGh723Kc4ZBorB7LieJ3jXTcGGMnmFNgMRnOZpMbYUE=
+	t=1736751202; cv=none; b=lL07IOevKHAKS68RFqQP/aglxjxggehqy+hikG215UCzXpCcWG/Zy2h2sJgVWy1WvVlxtkMAUpFXZ82EQWabdXMUoB7C3AxCGlViqtRSIYkzerlBFnR6aLILkzy+xsVMtkzUufT02MwFs6NXjTPIuBaC+6oARzxaN7HpeGtVpnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736740347; c=relaxed/simple;
-	bh=41pVECwXexWrRn4JhbF2x1gtU4k9xcJCUPxQ4xsD+XM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mYIgrRhMk+zQnHFWmgW4YzXPmZUHInQ7toh8ZF+x7mbYOBF+k2vVbwSB2PkWspN3gLDSzGumTfXk/0B9uic3yg7buoSwj9DpNGz2W/XFTDRaSNuJxmDWLLLcU5rJjf1/jt0R3arf3DKn4AQeEEEOzncnvAwRWL2OSpgFrUVjEDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kichSEGW; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1736751202; c=relaxed/simple;
+	bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mETzEq1wboEaIWuJndfA/ixHeKBzzIOzLkvpRjSlG65ghDI6p0wZHEpqfwXrO5jhUw0RnAQQe5BlfjXUqPjp/RyKwn3Bbxmo43/NAt2Y3Y1tu7eW1k+9Axo1Jz5LS5PxhS0eFIiwenqhP5NUqo3Ewx8K5cpS28YTkE96R+hf4j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRKVWuN/; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kichSEGW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=dWaXE
-	AS//Lwj1K1U4oLpRFhGORLZU1Bgcxvq8BLP1aI=; b=kichSEGW8bfE7wlSO6Aw+
-	soPW0oJP+C31lpSV3KFAszOZWtAaSymF08Q4T5PbBf+Ii3oYpyQAsF2sLYryAPfb
-	yg3a6GEdCxCsCMPMX62ZY4DoadT5lXjLYceX7givW+11YUJxA96Xe3WGd6i+0hoK
-	ym8rSjELux4ho6Pu7wxbHg=
-Received: from silergy-System-Product-Name.silergy.inc (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3n1u4jYRnlJg_Fw--.9826S6;
-	Mon, 13 Jan 2025 11:51:37 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRKVWuN/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736751200; x=1768287200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
+  b=jRKVWuN/6byds76xJIWSeow4Oi9hQBaOVjWCw6LTSbWtU0d7MPQe/I+m
+   8Ri+7LOdQJbtIyFvt2tsLK960hAdeFw2ZD9C2obNYPAR+lIh1UBdBQJyc
+   t/0MYym1lPa1hLbWEgWqRwmniqaqcNlxIHvCs/3uNtn4yhM4S637WcSOo
+   O1YxH5T4Y9bawZCIhL7QuIShwhV2WlCO0F3RmdrFtUjSaZoDZeruRo6QC
+   k8H1SChgl+Xqv5PU85TbXf3Uz7I+76fZPzl6+Z/ybPoN1pNTc5lGzf0pE
+   8vSz5EC6f2uLPR3+BaJTcU8FQSmjr7BZcrypP68F8NL/YRak3jJFt5YgJ
+   g==;
+X-CSE-ConnectionGUID: 1k2NXAgzSCaCHumnZ+sO4g==
+X-CSE-MsgGUID: 3wHFZhT0SmmmH/Nk/04TZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="36278961"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="36278961"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 22:53:19 -0800
+X-CSE-ConnectionGUID: S09VXZZlQym3XWivhV2RiQ==
+X-CSE-MsgGUID: sW9YO4M8Q0mRFxY5PIpqSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="109364775"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 12 Jan 2025 22:53:16 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tXEK2-000MpH-04;
+	Mon, 13 Jan 2025 06:53:14 +0000
+Date: Mon, 13 Jan 2025 14:52:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Wenliang Yan <wenliang202407@163.com>,
 	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
-Date: Mon, 13 Jan 2025 11:50:23 +0800
-Message-ID: <20250113035023.365697-3-wenliang202407@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250113035023.365697-1-wenliang202407@163.com>
-References: <20250113035023.365697-1-wenliang202407@163.com>
+Subject: Re: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
+Message-ID: <202501131420.UQWnurXD-lkp@intel.com>
+References: <20250113035023.365697-3-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3n1u4jYRnlJg_Fw--.9826S6
-X-Coremail-Antispam: 1Uf129KBjvAXoW3uFyfWr4fCFW7uFW3Kr1rZwb_yoW8WF1kto
-	Wavrs3uw4UGw1fArWFkw18CFW7Xr4jkr48ZF1UKrWDuFyIqrn8Ka4fZ34xWFyrZws0gFyx
-	Wr1UGw1rXa1qy3Wkn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRiL05UUUUU
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiRwzT02eEie9kEQAAs7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250113035023.365697-3-wenliang202407@163.com>
 
-Add support for SQ52206 to the Ina238 driver. Add registers,
-add calculation formulas, increase compatibility, add
-compatibility programs for multiple chips.
+Hi Wenliang,
 
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
----
+kernel test robot noticed the following build warnings:
 
-Incorporate four additional registers to the original register
-set of SQ52206 beyond INA238.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.13-rc7 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The ADC measurement range of SQ52206 is divided into 1/2/4, so
-change the configuration of INA238_ADC_CONFIG.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang-Yan/dt-bindings-Add-SQ52206-to-ina2xx-devicetree-bindings/20250113-115457
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250113035023.365697-3-wenliang202407%40163.com
+patch subject: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
+config: i386-buildonly-randconfig-004-20250113 (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/reproduce)
 
-SQ52206's calculation of power read values is different from
-INA238.Add new value of BUS_VOLTAGE_LSB and DIE-TEMP_LSB for
-SQ52206. As a result of these changes, modify both the power
-and temperature read and write operations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501131420.UQWnurXD-lkp@intel.com/
 
-Add new parameters in struct ina238_data to save the chip type
-and different configurations for each chip type, promoting
-program reusability.
+All warnings (new ones prefixed by >>):
 
-Due to the temperature reading of SQ52206 being a signed 16 bit
-value, while INA238 is a 12 bit value. So we changed the
-temperature reading function.
+   In file included from drivers/hwmon/ina238.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/ina238.c:594:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     594 |         case hwmon_temp:
+         |         ^
+   drivers/hwmon/ina238.c:594:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     594 |         case hwmon_temp:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/hwmon/ina238.c:594:2: note: insert 'break;' to avoid fall-through
+     594 |         case hwmon_temp:
+         |         ^
+         |         break; 
+>> drivers/hwmon/ina238.c:702:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+     702 |                 else if (data->gain == 2)
+         |                 ^
+   3 warnings generated.
 
-Extract the chip initialization process into a separate function
-named ina238_init to facilitate adjustments for various chips.
 
-Add a corresponding compatible to the driver.
+vim +594 drivers/hwmon/ina238.c
 
-Add a 40 bit data reading function to prepare for energy reading.
+eacb52f010a807 Nathan Rossi        2021-11-02  552  
+eacb52f010a807 Nathan Rossi        2021-11-02  553  static umode_t ina238_is_visible(const void *drvdata,
+eacb52f010a807 Nathan Rossi        2021-11-02  554  				 enum hwmon_sensor_types type,
+eacb52f010a807 Nathan Rossi        2021-11-02  555  				 u32 attr, int channel)
+eacb52f010a807 Nathan Rossi        2021-11-02  556  {
+f08436905922ae Wenliang Yan        2025-01-13  557  	const struct ina238_data *data = drvdata;
+f08436905922ae Wenliang Yan        2025-01-13  558  	bool has_power_highest = data->config->has_power_highest;
+f08436905922ae Wenliang Yan        2025-01-13  559  
+eacb52f010a807 Nathan Rossi        2021-11-02  560  	switch (type) {
+eacb52f010a807 Nathan Rossi        2021-11-02  561  	case hwmon_in:
+eacb52f010a807 Nathan Rossi        2021-11-02  562  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  563  		case hwmon_in_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  564  		case hwmon_in_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  565  		case hwmon_in_min_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  566  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  567  		case hwmon_in_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  568  		case hwmon_in_min:
+eacb52f010a807 Nathan Rossi        2021-11-02  569  			return 0644;
+eacb52f010a807 Nathan Rossi        2021-11-02  570  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  571  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  572  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  573  	case hwmon_curr:
+eacb52f010a807 Nathan Rossi        2021-11-02  574  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  575  		case hwmon_curr_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  576  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  577  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  578  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  579  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  580  	case hwmon_power:
+eacb52f010a807 Nathan Rossi        2021-11-02  581  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  582  		case hwmon_power_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  583  		case hwmon_power_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  584  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  585  		case hwmon_power_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  586  			return 0644;
+f08436905922ae Wenliang Yan        2025-01-13  587  		case hwmon_power_input_highest:
+f08436905922ae Wenliang Yan        2025-01-13  588  			if (has_power_highest)
+f08436905922ae Wenliang Yan        2025-01-13  589  				return 0444;
+f08436905922ae Wenliang Yan        2025-01-13  590  			break;
+eacb52f010a807 Nathan Rossi        2021-11-02  591  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  592  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  593  		}
+eacb52f010a807 Nathan Rossi        2021-11-02 @594  	case hwmon_temp:
+eacb52f010a807 Nathan Rossi        2021-11-02  595  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  596  		case hwmon_temp_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  597  		case hwmon_temp_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  598  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  599  		case hwmon_temp_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  600  			return 0644;
+eacb52f010a807 Nathan Rossi        2021-11-02  601  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  602  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  603  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  604  	default:
+eacb52f010a807 Nathan Rossi        2021-11-02  605  		return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  606  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  607  }
+eacb52f010a807 Nathan Rossi        2021-11-02  608  
+eacb52f010a807 Nathan Rossi        2021-11-02  609  #define INA238_HWMON_IN_CONFIG (HWMON_I_INPUT | \
+eacb52f010a807 Nathan Rossi        2021-11-02  610  				HWMON_I_MAX | HWMON_I_MAX_ALARM | \
+eacb52f010a807 Nathan Rossi        2021-11-02  611  				HWMON_I_MIN | HWMON_I_MIN_ALARM)
+eacb52f010a807 Nathan Rossi        2021-11-02  612  
+bf9b7f92df7376 Krzysztof Kozlowski 2023-04-06  613  static const struct hwmon_channel_info * const ina238_info[] = {
+eacb52f010a807 Nathan Rossi        2021-11-02  614  	HWMON_CHANNEL_INFO(in,
+eacb52f010a807 Nathan Rossi        2021-11-02  615  			   /* 0: shunt voltage */
+eacb52f010a807 Nathan Rossi        2021-11-02  616  			   INA238_HWMON_IN_CONFIG,
+eacb52f010a807 Nathan Rossi        2021-11-02  617  			   /* 1: bus voltage */
+eacb52f010a807 Nathan Rossi        2021-11-02  618  			   INA238_HWMON_IN_CONFIG),
+eacb52f010a807 Nathan Rossi        2021-11-02  619  	HWMON_CHANNEL_INFO(curr,
+eacb52f010a807 Nathan Rossi        2021-11-02  620  			   /* 0: current through shunt */
+eacb52f010a807 Nathan Rossi        2021-11-02  621  			   HWMON_C_INPUT),
+eacb52f010a807 Nathan Rossi        2021-11-02  622  	HWMON_CHANNEL_INFO(power,
+eacb52f010a807 Nathan Rossi        2021-11-02  623  			   /* 0: power */
+f08436905922ae Wenliang Yan        2025-01-13  624  			   HWMON_P_INPUT | HWMON_P_MAX |
+f08436905922ae Wenliang Yan        2025-01-13  625  			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
+eacb52f010a807 Nathan Rossi        2021-11-02  626  	HWMON_CHANNEL_INFO(temp,
+eacb52f010a807 Nathan Rossi        2021-11-02  627  			   /* 0: die temperature */
+eacb52f010a807 Nathan Rossi        2021-11-02  628  			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
+eacb52f010a807 Nathan Rossi        2021-11-02  629  	NULL
+eacb52f010a807 Nathan Rossi        2021-11-02  630  };
+eacb52f010a807 Nathan Rossi        2021-11-02  631  
+eacb52f010a807 Nathan Rossi        2021-11-02  632  static const struct hwmon_ops ina238_hwmon_ops = {
+eacb52f010a807 Nathan Rossi        2021-11-02  633  	.is_visible = ina238_is_visible,
+eacb52f010a807 Nathan Rossi        2021-11-02  634  	.read = ina238_read,
+eacb52f010a807 Nathan Rossi        2021-11-02  635  	.write = ina238_write,
+eacb52f010a807 Nathan Rossi        2021-11-02  636  };
+eacb52f010a807 Nathan Rossi        2021-11-02  637  
+eacb52f010a807 Nathan Rossi        2021-11-02  638  static const struct hwmon_chip_info ina238_chip_info = {
+eacb52f010a807 Nathan Rossi        2021-11-02  639  	.ops = &ina238_hwmon_ops,
+eacb52f010a807 Nathan Rossi        2021-11-02  640  	.info = ina238_info,
+eacb52f010a807 Nathan Rossi        2021-11-02  641  };
+eacb52f010a807 Nathan Rossi        2021-11-02  642  
+f08436905922ae Wenliang Yan        2025-01-13  643  /* energy attributes are 5bytes wide so we need u64 */
+f08436905922ae Wenliang Yan        2025-01-13  644  static DEVICE_ATTR_RO(energy1_input);
+f08436905922ae Wenliang Yan        2025-01-13  645  
+f08436905922ae Wenliang Yan        2025-01-13  646  static struct attribute *ina238_attrs[] = {
+f08436905922ae Wenliang Yan        2025-01-13  647  	&dev_attr_energy1_input.attr,
+f08436905922ae Wenliang Yan        2025-01-13  648  	NULL,
+f08436905922ae Wenliang Yan        2025-01-13  649  };
+f08436905922ae Wenliang Yan        2025-01-13  650  ATTRIBUTE_GROUPS(ina238);
+f08436905922ae Wenliang Yan        2025-01-13  651  
+eacb52f010a807 Nathan Rossi        2021-11-02  652  static int ina238_probe(struct i2c_client *client)
+eacb52f010a807 Nathan Rossi        2021-11-02  653  {
+eacb52f010a807 Nathan Rossi        2021-11-02  654  	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
+eacb52f010a807 Nathan Rossi        2021-11-02  655  	struct device *dev = &client->dev;
+eacb52f010a807 Nathan Rossi        2021-11-02  656  	struct device *hwmon_dev;
+eacb52f010a807 Nathan Rossi        2021-11-02  657  	struct ina238_data *data;
+eacb52f010a807 Nathan Rossi        2021-11-02  658  	int config;
+f08436905922ae Wenliang Yan        2025-01-13  659  	enum ina238_ids chip;
+eacb52f010a807 Nathan Rossi        2021-11-02  660  	int ret;
+eacb52f010a807 Nathan Rossi        2021-11-02  661  
+f08436905922ae Wenliang Yan        2025-01-13  662  	chip = (uintptr_t)i2c_get_match_data(client);
+f08436905922ae Wenliang Yan        2025-01-13  663  
+eacb52f010a807 Nathan Rossi        2021-11-02  664  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+eacb52f010a807 Nathan Rossi        2021-11-02  665  	if (!data)
+eacb52f010a807 Nathan Rossi        2021-11-02  666  		return -ENOMEM;
+eacb52f010a807 Nathan Rossi        2021-11-02  667  
+eacb52f010a807 Nathan Rossi        2021-11-02  668  	data->client = client;
+f08436905922ae Wenliang Yan        2025-01-13  669  	/* set the device type */
+f08436905922ae Wenliang Yan        2025-01-13  670  	data->config = &ina238_config[chip];
+f08436905922ae Wenliang Yan        2025-01-13  671  
+eacb52f010a807 Nathan Rossi        2021-11-02  672  	mutex_init(&data->config_lock);
+eacb52f010a807 Nathan Rossi        2021-11-02  673  
+eacb52f010a807 Nathan Rossi        2021-11-02  674  	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+eacb52f010a807 Nathan Rossi        2021-11-02  675  	if (IS_ERR(data->regmap)) {
+eacb52f010a807 Nathan Rossi        2021-11-02  676  		dev_err(dev, "failed to allocate register map\n");
+eacb52f010a807 Nathan Rossi        2021-11-02  677  		return PTR_ERR(data->regmap);
+eacb52f010a807 Nathan Rossi        2021-11-02  678  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  679  
+eacb52f010a807 Nathan Rossi        2021-11-02  680  	/* load shunt value */
+eacb52f010a807 Nathan Rossi        2021-11-02  681  	data->rshunt = INA238_RSHUNT_DEFAULT;
+eacb52f010a807 Nathan Rossi        2021-11-02  682  	if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0 && pdata)
+eacb52f010a807 Nathan Rossi        2021-11-02  683  		data->rshunt = pdata->shunt_uohms;
+eacb52f010a807 Nathan Rossi        2021-11-02  684  	if (data->rshunt == 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  685  		dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
+eacb52f010a807 Nathan Rossi        2021-11-02  686  		return -EINVAL;
+eacb52f010a807 Nathan Rossi        2021-11-02  687  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  688  
+eacb52f010a807 Nathan Rossi        2021-11-02  689  	/* load shunt gain value */
+eacb52f010a807 Nathan Rossi        2021-11-02  690  	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
+eacb52f010a807 Nathan Rossi        2021-11-02  691  		data->gain = 4; /* Default of ADCRANGE = 0 */
+f08436905922ae Wenliang Yan        2025-01-13  692  	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
+eacb52f010a807 Nathan Rossi        2021-11-02  693  		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
+eacb52f010a807 Nathan Rossi        2021-11-02  694  		return -EINVAL;
+eacb52f010a807 Nathan Rossi        2021-11-02  695  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  696  
+eacb52f010a807 Nathan Rossi        2021-11-02  697  	/* Setup CONFIG register */
+f08436905922ae Wenliang Yan        2025-01-13  698  	config = data->config->config_default;
+f08436905922ae Wenliang Yan        2025-01-13  699  	if (chip == sq52206)
+eacb52f010a807 Nathan Rossi        2021-11-02  700  		if (data->gain == 1)
+f08436905922ae Wenliang Yan        2025-01-13  701  			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
+f08436905922ae Wenliang Yan        2025-01-13 @702  		else if (data->gain == 2)
+f08436905922ae Wenliang Yan        2025-01-13  703  			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
+f08436905922ae Wenliang Yan        2025-01-13  704  	else if (data->gain == 1)
+eacb52f010a807 Nathan Rossi        2021-11-02  705  		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
+eacb52f010a807 Nathan Rossi        2021-11-02  706  	ret = regmap_write(data->regmap, INA238_CONFIG, config);
+eacb52f010a807 Nathan Rossi        2021-11-02  707  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  708  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  709  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  710  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  711  
+eacb52f010a807 Nathan Rossi        2021-11-02  712  	/* Setup ADC_CONFIG register */
+eacb52f010a807 Nathan Rossi        2021-11-02  713  	ret = regmap_write(data->regmap, INA238_ADC_CONFIG,
+eacb52f010a807 Nathan Rossi        2021-11-02  714  			   INA238_ADC_CONFIG_DEFAULT);
+eacb52f010a807 Nathan Rossi        2021-11-02  715  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  716  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  717  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  718  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  719  
+eacb52f010a807 Nathan Rossi        2021-11-02  720  	/* Setup SHUNT_CALIBRATION register with fixed value */
+eacb52f010a807 Nathan Rossi        2021-11-02  721  	ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
+eacb52f010a807 Nathan Rossi        2021-11-02  722  			   INA238_CALIBRATION_VALUE);
+eacb52f010a807 Nathan Rossi        2021-11-02  723  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  724  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  725  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  726  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  727  
+eacb52f010a807 Nathan Rossi        2021-11-02  728  	/* Setup alert/alarm configuration */
+eacb52f010a807 Nathan Rossi        2021-11-02  729  	ret = regmap_write(data->regmap, INA238_DIAG_ALERT,
+eacb52f010a807 Nathan Rossi        2021-11-02  730  			   INA238_DIAG_ALERT_DEFAULT);
+eacb52f010a807 Nathan Rossi        2021-11-02  731  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  732  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  733  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  734  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  735  
+eacb52f010a807 Nathan Rossi        2021-11-02  736  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+eacb52f010a807 Nathan Rossi        2021-11-02  737  							 &ina238_chip_info,
+f08436905922ae Wenliang Yan        2025-01-13  738  							 data->config->has_energy ?
+f08436905922ae Wenliang Yan        2025-01-13  739  								NULL : ina238_groups);
+eacb52f010a807 Nathan Rossi        2021-11-02  740  	if (IS_ERR(hwmon_dev))
+eacb52f010a807 Nathan Rossi        2021-11-02  741  		return PTR_ERR(hwmon_dev);
+eacb52f010a807 Nathan Rossi        2021-11-02  742  
+eacb52f010a807 Nathan Rossi        2021-11-02  743  	dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
+eacb52f010a807 Nathan Rossi        2021-11-02  744  		 client->name, data->rshunt, data->gain);
+eacb52f010a807 Nathan Rossi        2021-11-02  745  
+eacb52f010a807 Nathan Rossi        2021-11-02  746  	return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  747  }
+eacb52f010a807 Nathan Rossi        2021-11-02  748  
 
-Energy attributes are 5bytes wide, so modified the function for
-energy1_input to use u64.
-
-Add HWMON_P_INPUT_HIGHEST for power.
-
- Documentation/hwmon/ina238.rst |  15 +++
- drivers/hwmon/ina238.c         | 207 ++++++++++++++++++++++++++++-----
- 2 files changed, 190 insertions(+), 32 deletions(-)
-
-diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
-index d9f479984420..d1b93cf8627f 100644
---- a/Documentation/hwmon/ina238.rst
-+++ b/Documentation/hwmon/ina238.rst
-@@ -14,6 +14,12 @@ Supported chips:
-     Datasheet:
- 	https://www.ti.com/lit/gpn/ina238
- 
-+  * Silergy SQ52206
-+
-+    Prefix: 'SQ52206'
-+
-+    Addresses: I2C 0x40 - 0x4f
-+
- Author: Nathan Rossi <nathan.rossi@digi.com>
- 
- Description
-@@ -54,3 +60,12 @@ temp1_input		Die temperature measurement (mC)
- temp1_max		Maximum die temperature threshold (mC)
- temp1_max_alarm		Maximum die temperature alarm
- ======================= =======================================================
-+
-+Additional sysfs entries for sq52206
-+------------------------------------
-+
-+======================= =======================================================
-+energy1_input		Energy measurement (mJ)
-+
-+power1_input_highest	Peak Power (uW)
-+======================= =======================================================
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 2d9f12f68d50..6c5bc10c3a1f 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -21,11 +21,14 @@
- #define INA238_CONFIG			0x0
- #define INA238_ADC_CONFIG		0x1
- #define INA238_SHUNT_CALIBRATION	0x2
-+#define SQ52206_SHUNT_TEMPCO		0x3
- #define INA238_SHUNT_VOLTAGE		0x4
- #define INA238_BUS_VOLTAGE		0x5
- #define INA238_DIE_TEMP			0x6
- #define INA238_CURRENT			0x7
- #define INA238_POWER			0x8
-+#define SQ52206_ENERGY			0x9
-+#define SQ52206_CHARGE			0xa
- #define INA238_DIAG_ALERT		0xb
- #define INA238_SHUNT_OVER_VOLTAGE	0xc
- #define INA238_SHUNT_UNDER_VOLTAGE	0xd
-@@ -33,9 +36,12 @@
- #define INA238_BUS_UNDER_VOLTAGE	0xf
- #define INA238_TEMP_LIMIT		0x10
- #define INA238_POWER_LIMIT		0x11
-+#define SQ52206_POWER_PEAK		0x20
- #define INA238_DEVICE_ID		0x3f /* not available on INA237 */
- 
- #define INA238_CONFIG_ADCRANGE		BIT(4)
-+#define SQ52206_CONFIG_ADCRANGE_HIGH	BIT(4)
-+#define SQ52206_CONFIG_ADCRANGE_LOW		BIT(3)
- 
- #define INA238_DIAG_ALERT_TMPOL		BIT(7)
- #define INA238_DIAG_ALERT_SHNTOL	BIT(6)
-@@ -44,12 +50,13 @@
- #define INA238_DIAG_ALERT_BUSUL		BIT(3)
- #define INA238_DIAG_ALERT_POL		BIT(2)
- 
--#define INA238_REGISTERS		0x11
-+#define INA238_REGISTERS		0x20
- 
- #define INA238_RSHUNT_DEFAULT		10000 /* uOhm */
- 
- /* Default configuration of device on reset. */
- #define INA238_CONFIG_DEFAULT		0
-+#define SQ52206_CONFIG_DEFAULT		0x0005
- /* 16 sample averaging, 1052us conversion time, continuous mode */
- #define INA238_ADC_CONFIG_DEFAULT	0xfb6a
- /* Configure alerts to be based on averaged value (SLOWALERT) */
-@@ -87,14 +94,19 @@
-  *  shunt = 0x4000 / (819.2 * 10^6) / 0.001 = 20000 uOhms (with 1mA/lsb)
-  *
-  *  Current (mA) = register value * 20000 / rshunt / 4 * gain
-- *  Power (W) = 0.2 * register value * 20000 / rshunt / 4 * gain
-+ *  Power (mW) = 0.2 * register value * 20000 / rshunt / 4 * gain
-+ *  (Specific for SQ52206)
-+ *  Power (mW) = 0.24 * register value * 20000 / rshunt / 4 * gain
-+ *  Energy (mJ) = 16 * 0.24 * register value * 20000 / rshunt / 4 * gain
-  */
- #define INA238_CALIBRATION_VALUE	16384
- #define INA238_FIXED_SHUNT		20000
- 
- #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
- #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
--#define INA238_DIE_TEMP_LSB		125 /* 125 mC/lsb */
-+#define INA238_DIE_TEMP_LSB			1250000 /* 125 mC/lsb */
-+#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
-+#define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
- 
- static const struct regmap_config ina238_regmap_config = {
- 	.max_register = INA238_REGISTERS,
-@@ -102,7 +114,20 @@ static const struct regmap_config ina238_regmap_config = {
- 	.val_bits = 16,
- };
- 
-+enum ina238_ids { ina238, ina237, sq52206 };
-+
-+struct ina238_config {
-+	bool has_power_highest;		/* chip detection power peak */
-+	bool has_energy;		/* chip detection energy */
-+	u8 temp_shift;
-+	u32 power_calculate_factor;		/*fixed parameters for power calculate*/
-+	u16 config_default;
-+	int bus_voltage_lsb;    /* uV */
-+	int temp_lsb;   /* mC */
-+};
-+
- struct ina238_data {
-+	const struct ina238_config *config;
- 	struct i2c_client *client;
- 	struct mutex config_lock;
- 	struct regmap *regmap;
-@@ -110,6 +135,36 @@ struct ina238_data {
- 	int gain;
- };
- 
-+static const struct ina238_config ina238_config[] = {
-+	[ina238] = {
-+		.has_energy = false,
-+		.has_power_highest = false,
-+		.temp_shift = 4,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA238_DIE_TEMP_LSB,
-+	},
-+	[ina237] = {
-+		.has_energy = false,
-+		.has_power_highest = false,
-+		.temp_shift = 4,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA238_DIE_TEMP_LSB,
-+	},
-+	[sq52206] = {
-+		.has_energy = true,
-+		.has_power_highest = true,
-+		.temp_shift = 0,
-+		.power_calculate_factor = 24,
-+		.config_default = SQ52206_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
-+		.temp_lsb = SQ52206_DIE_TEMP_LSB,
-+	},
-+};
-+
- static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
- {
- 	u8 data[3];
-@@ -126,6 +181,24 @@ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
- 	return 0;
- }
- 
-+static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
-+{
-+	u8 data[5];
-+	u32 low;
-+	int err;
-+
-+	/* 40-bit register read */
-+	err = i2c_smbus_read_i2c_block_data(client, reg, 5, data);
-+	if (err < 0)
-+		return err;
-+	if (err != 5)
-+		return -EIO;
-+	low = (data[1] << 24) | (data[2] << 16) | (data[3] << 8) | data[4];
-+	*val = ((long long)data[0] << 32) | low;
-+
-+	return 0;
-+}
-+
- static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 			  long *val)
- {
-@@ -197,10 +270,10 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 		regval = (s16)regval;
- 		if (channel == 0)
- 			/* gain of 1 -> LSB / 4 */
--			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
--			       (1000 * (4 - data->gain + 1));
-+			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
-+					data->gain / (1000 * 4);
- 		else
--			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
-+			*val = (regval * data->config->bus_voltage_lsb) / 1000;
- 		break;
- 	case hwmon_in_max_alarm:
- 	case hwmon_in_min_alarm:
-@@ -225,8 +298,8 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 0:
- 		/* signed value, clamp to max range +/-163 mV */
- 		regval = clamp_val(val, -163, 163);
--		regval = (regval * 1000 * (4 - data->gain + 1)) /
--			 INA238_SHUNT_VOLTAGE_LSB;
-+		regval = (regval * 1000 * 4) /
-+			 INA238_SHUNT_VOLTAGE_LSB * data->gain;
- 		regval = clamp_val(regval, S16_MIN, S16_MAX);
- 
- 		switch (attr) {
-@@ -242,7 +315,7 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 1:
- 		/* signed value, positive values only. Clamp to max 102.396 V */
- 		regval = clamp_val(val, 0, 102396);
--		regval = (regval * 1000) / INA238_BUS_VOLTAGE_LSB;
-+		regval = (regval * 1000) / data->config->bus_voltage_lsb;
- 		regval = clamp_val(regval, 0, S16_MAX);
- 
- 		switch (attr) {
-@@ -297,8 +370,19 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
- 
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *
--				data->gain, 20 * data->rshunt);
-+		power = div_u64(regval * data->config->power_calculate_factor * 50ULL *
-+				INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
-+		/* Clamp value to maximum value of long */
-+		*val = clamp_val(power, 0, LONG_MAX);
-+		break;
-+	case hwmon_power_input_highest:
-+		err = ina238_read_reg24(data->client, SQ52206_POWER_PEAK, &regval);
-+		if (err)
-+			return err;
-+
-+		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
-+		power = div_u64(regval * data->config->power_calculate_factor * 50ULL *
-+				INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -311,8 +395,8 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		 * Truncated 24-bit compare register, lower 8-bits are
- 		 * truncated. Same conversion to/from uW as POWER register.
- 		 */
--		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *
--			       data->gain, 20 * data->rshunt);
-+		power = div_u64((regval << 8) * data->config->power_calculate_factor *
-+		50ULL * INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -344,8 +428,8 @@ static int ina238_write_power(struct device *dev, u32 attr, long val)
- 	 * register.
- 	 */
- 	regval = clamp_val(val, 0, LONG_MAX);
--	regval = div_u64(val * 20ULL * data->rshunt,
--			 1000ULL * INA238_FIXED_SHUNT * data->gain);
-+	regval = div_u64(val * data->config->power_calculate_factor * data->rshunt,
-+			1000ULL * INA238_FIXED_SHUNT * data->gain);
- 	regval = clamp_val(regval >> 8, 0, U16_MAX);
- 
- 	return regmap_write(data->regmap, INA238_POWER_LIMIT, regval);
-@@ -362,17 +446,17 @@ static int ina238_read_temp(struct device *dev, u32 attr, long *val)
- 		err = regmap_read(data->regmap, INA238_DIE_TEMP, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s16)regval >> data->config->temp_shift) *
-+						data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max:
- 		err = regmap_read(data->regmap, INA238_TEMP_LIMIT, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s16)regval >> data->config->temp_shift) *
-+						data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max_alarm:
- 		err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
-@@ -396,13 +480,31 @@ static int ina238_write_temp(struct device *dev, u32 attr, long val)
- 	if (attr != hwmon_temp_max)
- 		return -EOPNOTSUPP;
- 
--	/* Signed, bits 15-4 of register */
--	regval = (val / INA238_DIE_TEMP_LSB) << 4;
--	regval = clamp_val(regval, S16_MIN, S16_MAX) & 0xfff0;
-+	/* Signed */
-+	regval = div_u64(val*10000, data->config->temp_lsb) << data->config->temp_shift;
-+	regval = clamp_val(regval, S16_MIN, S16_MAX) & (0xffff << data->config->temp_shift);
- 
- 	return regmap_write(data->regmap, INA238_TEMP_LIMIT, regval);
- }
- 
-+static ssize_t energy1_input_show(struct device *dev,
-+				  struct device_attribute *da, char *buf)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int ret;
-+	u64 val;
-+
-+	ret = ina238_read_reg40(data->client, SQ52206_ENERGY, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* result in microJoule */
-+	val = div_u64(val * 96 * INA238_FIXED_SHUNT * data->gain,
-+			       data->rshunt * 100);
-+
-+	return sprintf(buf, "%llu\n", val);
-+}
-+
- static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
- 		       u32 attr, int channel, long *val)
- {
-@@ -452,6 +554,9 @@ static umode_t ina238_is_visible(const void *drvdata,
- 				 enum hwmon_sensor_types type,
- 				 u32 attr, int channel)
- {
-+	const struct ina238_data *data = drvdata;
-+	bool has_power_highest = data->config->has_power_highest;
-+
- 	switch (type) {
- 	case hwmon_in:
- 		switch (attr) {
-@@ -479,6 +584,10 @@ static umode_t ina238_is_visible(const void *drvdata,
- 			return 0444;
- 		case hwmon_power_max:
- 			return 0644;
-+		case hwmon_power_input_highest:
-+			if (has_power_highest)
-+				return 0444;
-+			break;
- 		default:
- 			return 0;
- 		}
-@@ -512,7 +621,8 @@ static const struct hwmon_channel_info * const ina238_info[] = {
- 			   HWMON_C_INPUT),
- 	HWMON_CHANNEL_INFO(power,
- 			   /* 0: power */
--			   HWMON_P_INPUT | HWMON_P_MAX | HWMON_P_MAX_ALARM),
-+			   HWMON_P_INPUT | HWMON_P_MAX |
-+			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
- 	HWMON_CHANNEL_INFO(temp,
- 			   /* 0: die temperature */
- 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
-@@ -530,6 +640,15 @@ static const struct hwmon_chip_info ina238_chip_info = {
- 	.info = ina238_info,
- };
- 
-+/* energy attributes are 5bytes wide so we need u64 */
-+static DEVICE_ATTR_RO(energy1_input);
-+
-+static struct attribute *ina238_attrs[] = {
-+	&dev_attr_energy1_input.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(ina238);
-+
- static int ina238_probe(struct i2c_client *client)
- {
- 	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
-@@ -537,13 +656,19 @@ static int ina238_probe(struct i2c_client *client)
- 	struct device *hwmon_dev;
- 	struct ina238_data *data;
- 	int config;
-+	enum ina238_ids chip;
- 	int ret;
- 
-+	chip = (uintptr_t)i2c_get_match_data(client);
-+
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
- 	data->client = client;
-+	/* set the device type */
-+	data->config = &ina238_config[chip];
-+
- 	mutex_init(&data->config_lock);
- 
- 	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
-@@ -564,14 +689,19 @@ static int ina238_probe(struct i2c_client *client)
- 	/* load shunt gain value */
- 	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
- 		data->gain = 4; /* Default of ADCRANGE = 0 */
--	if (data->gain != 1 && data->gain != 4) {
-+	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
- 		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
- 		return -EINVAL;
- 	}
- 
- 	/* Setup CONFIG register */
--	config = INA238_CONFIG_DEFAULT;
--	if (data->gain == 1)
-+	config = data->config->config_default;
-+	if (chip == sq52206)
-+		if (data->gain == 1)
-+			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
-+		else if (data->gain == 2)
-+			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
-+	else if (data->gain == 1)
- 		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
- 	ret = regmap_write(data->regmap, INA238_CONFIG, config);
- 	if (ret < 0) {
-@@ -605,7 +735,8 @@ static int ina238_probe(struct i2c_client *client)
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
- 							 &ina238_chip_info,
--							 NULL);
-+							 data->config->has_energy ?
-+								NULL : ina238_groups);
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
-@@ -616,14 +747,26 @@ static int ina238_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id ina238_id[] = {
--	{ "ina238" },
-+	{ "ina237", ina237 },
-+	{ "ina238", ina238 },
-+	{ "sq52206", sq52206 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ina238_id);
- 
- static const struct of_device_id __maybe_unused ina238_of_match[] = {
--	{ .compatible = "ti,ina237" },
--	{ .compatible = "ti,ina238" },
-+	{
-+		.compatible = "silergy,sq52206",
-+		.data = (void *)sq52206
-+	},
-+	{
-+		.compatible = "ti,ina237",
-+		.data = (void *)ina237
-+	},
-+	{
-+		.compatible = "ti,ina238",
-+		.data = (void *)ina238
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, ina238_of_match);
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
