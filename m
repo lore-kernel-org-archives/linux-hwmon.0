@@ -1,195 +1,83 @@
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52C279E1;
-	Mon, 13 Jan 2025 03:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2B73C3C;
+	Mon, 13 Jan 2025 03:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736737222; cv=none; b=rWGLD+Ik/ca036BVBdCx88tt91VWpGZS7Y+8s8b4RMTsFTiQ4jyxNzcL2lC0g3Ancgu4qVFuIwOHZiGkRUHcaZHBJgARK5q8RfU4nwcHM3do0AfX0zBWu9zJaWIgTxbAHuBIwcAF1IFn3MudHDb52M3yPGzWZMDDLS9hPBq3k8w=
+	t=1736740343; cv=none; b=XbZI6ABBGsQuLc8Q1XLWbbMrh+AOx7nvr8qqB+/FoZVW5RQBZxC35WeO+9RBtzejHUxzcbzC6iqKjRj6HHnYL04qmN4MqT9+bFCIUOdmtyxxx08DJn2LcT2rvjNrapC0H4o7Y2XE4M8pe96dPKlazWhQKLzA80TMhrCqv203kWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736737222; c=relaxed/simple;
-	bh=vWDv9c+Hb5NFBDqnLC3anS0jUC4B07QypVbhZL/BxTk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pmf+eAJtbIH/LRS8V24RLS3He/IwgfqZL506ztWHylZCrB4fqg/SgCTwMuMrCtb8UqXLm2a2njhg0oVVqYt+7B0Lp0S+QIq73hrZKFXldmyZSsqrhgUQA2V0rRRo9bY5GkvZNtpDiUlUJnWcBwy2FtlLvLbYMqhX8qTPJPBOCJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msrmVdeE; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736740343; c=relaxed/simple;
+	bh=Lb62dUHuMqDvDY93BKOGGmjATYVYUR2Hg3Rb0MXu9yA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LAyedkTuBK+BzhIRkp/G+ZX6YicHnCk4enLMLe2+7lMvD8ET819VFzdNKAztiHdgJO63SNLb0yrDAD3xaPe2NFIv5xd4CUAgF2MvQLhmxs/DIKny+/l+sC1YTeDdei4maDqAsFfiW8BfdDJ19XVnYzx9eIJiqIn6qLh/4wbpXmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WWsqITyb; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msrmVdeE"
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e3983426f80so5878731276.1;
-        Sun, 12 Jan 2025 19:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736737219; x=1737342019; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=msrmVdeEXhgI6OED5WasaszCm5FJkvfwO3V8oini06lN/Mojp3sV8ykJybQRGFQWuS
-         Ew4rAU1R1AUK5pgbno5Nb9RR+bIkn0OW4uJHmQ7s4+rWo6lPX85smR7wyx5j77HZ9aMq
-         twY7tS0SH6tJqpETq5PeX0L7Kg+L3Gvn6n6nY3cNWnkgziJiZ/GHE427Oj8YzvkBuyz/
-         GVJY80AGg0t+ybgFyfDcoiM6yi5Tt089NLddd9HtHC2v4QDZ3BKyQjQZiPwTRSDOxO0H
-         pn6tFJ8vrNY7+q0LNx/aAirs4YN6unnNSLhHvcsZXTepPJAN2MAPfpXycAhj4NpfjnXN
-         Pvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736737219; x=1737342019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=qTHphbfIIT1Iq8UwDKRHQ574R1okZ5Z2hcmXyK/XKLbBxk293ek3NIvwHiYEZkdrkV
-         mDKlYRl7iwi15/lr4/bfr2t2f3OAh1SjXJMMIU7lfylitsgKmYZZcdTX0KiRrUojYn+m
-         ZsLR8sAgP8VXyitGejHPZrPve5gDE7o4aS4g7nbqR1ubSAoa3dNUa9Y9ZZ4B4oQuxRDV
-         KUbzrdwi8ugQyHhO/lOrR3cJ/r9KUr3kAM5h4o5HAJW1l2rE53rs0OfjaFl17Whtubse
-         jqrTWs+YEPqegIF3irgAaWl3c1h1xH368c9mc0SGfFBxO8MKyCQVuoxpE3Qj4PsGmoAx
-         UYhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUK0CiXomYykw0fdYj25dDmuoz/DZ4uJO3K2AxyvWTU8flJhvikoOuw9IBPC0ybs/6dyjgORcr/@vger.kernel.org, AJvYcCW0ApG1ciJhKM3IKFIVaRBORJuiwNEbF8++CiaFhPEizgTZcR3fwFxpmu/v0dYxgiQYQ08bJBfXlXlZ+H83@vger.kernel.org, AJvYcCW6EaLrO+tG32JQ0cue501tXWsg4XFhspq3VfT/Kba979fUmpClYRfKlTIk4gl7RifjG5EGhYqreHj+@vger.kernel.org, AJvYcCWMmIrFgET8eIEZlM1xmwg7b73IWmYEzR5ajuUQLOtuqeKNwdaFddDaEDpuhyJEFDRo1SpLo1rufE7Dk536ZAg=@vger.kernel.org, AJvYcCWO+oeLv2sCLPYF6YY2NyFoJfy9kMEMoJ3RejC7We6Ihj74u8nqlX9Slin68afjb0DV87ogDvkEZVwW@vger.kernel.org, AJvYcCWTdxm8p1omKnHHmheTqjL4KsjoQFY/8u3ZWOhgQh24MxzIABD6NgS2ZYgHIV9On3utXfGl9F5cK99sreA=@vger.kernel.org, AJvYcCX20F3YL8xNuL17QBGXdtMQBbKB0AYtjkbbvA+2M78HpK1rqJ5godFBk/fGSYflfzYWfL9oa7XPc3YftA==@vger.kernel.org, AJvYcCXcKAb20c0Lj9IQ0urOd6JsQ3dDTXJbz/FVxlUt5o4TuGW2GWcY3PkPA4U5GJ+ptk9WTukgx65oTCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxobPcfGrskszvDhj9vf0VjY4IUM9aypLXs2avVgcBTYruQ9wj
-	LxtFSMwhhUXvo4qZIPdlv1kWHt3wMZ3vUbgBuyRqYYJDJxzSIUOrOFe2ZGEwUh3hZL4Zd1BEVPd
-	haJYYAgbSONTloICF8jkoCr0T/qo=
-X-Gm-Gg: ASbGncubp5jZFm15NToKBfk87nrjcXQn9k0H3umDmqmj2WsUvn7eB3GNyJggPD3RGxW
-	cPsN4i9M5JtDr0qFhlTPPD8k4sXoiJDcUX2XkNd85rJHDD4/0ni8b+HDHxdYf3w/5Dkr+M08=
-X-Google-Smtp-Source: AGHT+IGsfoH84Emy/3VAy+2ciT/LDM53GHF7kLpSuNtlkY+mcbIYtSqMBLpJAo2tp5wPRRi4KWOuDrwlzY99kXjwbZU=
-X-Received: by 2002:a25:2104:0:b0:e47:f4e3:87e3 with SMTP id
- 3f1490d57ef6-e54edf25ca4mr10429337276.11.1736737218579; Sun, 12 Jan 2025
- 19:00:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WWsqITyb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=tOeY1
+	twPE3v7SVoPmp51PxqMY/dLNQkcRBLT92i53Eo=; b=WWsqITybPdOhGDl6ebDXH
+	F9TGnP922orWcmvv5zVKCJVB6VvdNGxPPsg4ZvusOaOwQXh12DHZUmrAj1BuXMhH
+	2hQo70pUNGMoIy9Xzn7KH2p07Fv908eVW3KCHYZC/VYh+FI8KhyHAJhnrwBXss0H
+	sV81ZUbErGqwInpGvMgGQU=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3n1u4jYRnlJg_Fw--.9826S5;
+	Mon, 13 Jan 2025 11:51:33 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+Date: Mon, 13 Jan 2025 11:50:22 +0800
+Message-ID: <20250113035023.365697-2-wenliang202407@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250113035023.365697-1-wenliang202407@163.com>
+References: <20250113035023.365697-1-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-7-a0282524688@gmail.com> <20250106135135.GN4068@kernel.org>
-In-Reply-To: <20250106135135.GN4068@kernel.org>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 13 Jan 2025 11:00:07 +0800
-X-Gm-Features: AbW1kvZmveBm_1ZsSzbrQ6SCqOa0J-Y9vxXUkcqQ9J4x_X6pa8sZdwCwcoEMWQw
-Message-ID: <CAOoeyxWvRzHRVLW-U=nemfUpoF5pcO_bDmvg4U-wVqkFp=V=Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Simon Horman <horms@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3n1u4jYRnlJg_Fw--.9826S5
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XF1fAw18Ar43Kw1rCw1UGFg_yoWfGwcEgF
+	W7Aw1UZrZ8JFyFgr1DA3y8tr1ayw12kF4kAwnrArZ3A3yYvr909a4kJ398A3WUXay3uF1r
+	Zws5JrWqqr42kjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRNF4iUUUUUU==
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiMBnT02eEhXDUogAAsJ
 
-Dear Simon,
+Add the sq52206 compatible to the ina2xx.yaml
 
-Thank you for your comments,
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
 
-Simon Horman <horms@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=886=E6=97=A5=
- =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:51=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-> > +                         long *val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     unsigned char pwm_en;
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_pwm_enable:
-> > +             pwm_en =3D data->hwmon_en.pwm_en[channel / 8];
-> > +             *val =3D !!(pwm_en & BIT(channel % 8));
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_input:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-> > +                                    NCT6694_PWM_IDX(channel),
-> > +                                    sizeof(data->rpt->fin),
-> > +                                    &data->rpt->fin);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             *val =3D data->rpt->fin;
->
-> Hi Ming Yu,
->
-> *val is host byte order, but fin is big endian.
-> Elsewhere in this patch this seems to be handled using,
-> which looks correct to me:
->
->                 *val =3D be16_to_cpu(data->rpt->fin);
->
-> Flagged by Sparse.
->
+The new features added to sq52206 compared to ina238 do not
+affect the differences in hardware properties.The properties
+described in the ina2xx.yaml are applicable to the sq52206.
 
-Yes, it needs to be fixed to be16_to_cpu(). I'll make the modification
-in the next patch.
+ Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_freq:
-> > +             *val =3D NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[ch=
-annel]);
-> > +
-> > +             return 0;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +}
->
-> ...
->
-> > +static int nct6694_fan_write(struct device *dev, u32 attr, int channel=
-,
-> > +                          long val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_fan_enable:
-> > +             if (val =3D=3D 0)
-> > +                     data->hwmon_en.fin_en[channel / 8] &=3D ~BIT(chan=
-nel % 8);
-> > +             else if (val =3D=3D 1)
-> > +                     data->hwmon_en.fin_en[channel / 8] |=3D BIT(chann=
-el % 8);
-> > +             else
-> > +                     return -EINVAL;
-> > +
-> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                      NCT6694_HWMON_CONTROL,
-> > +                                      sizeof(data->msg->hwmon_ctrl),
-> > +                                      &data->hwmon_en);
-> > +     case hwmon_fan_min:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                    NCT6694_HWMON_ALARM,
-> > +                                    sizeof(data->msg->hwmon_alarm),
-> > +                                    &data->msg->hwmon_alarm);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val =3D clamp_val(val, 1, 65535);
-> > +             data->msg->hwmon_alarm.fin_ll[channel] =3D (u16)cpu_to_be=
-16(val);
->
-> cpu_to_be16() returns a 16bit big endian value.
-> And, AFAIKT, the type of data->msg->hwmon_alarm.fin_ll[channel] is __be16=
-.
->
-> So the cast above seems both unnecessary and misleading.
->
-> Also flagged by Sparse,
->
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+index 05a9cb36cd82..f0b7758ab29f 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+@@ -20,6 +20,7 @@ description: |
+ properties:
+   compatible:
+     enum:
++      - silergy,sq52206
+       - silergy,sy24655
+       - ti,ina209
+       - ti,ina219
+-- 
+2.43.0
 
-Understood. Fix it in v5.
-
-> ...
-
-Best regards,
-Ming
