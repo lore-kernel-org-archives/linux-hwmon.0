@@ -1,107 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B796D20F077;
-	Mon, 13 Jan 2025 17:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953B81991A9;
+	Mon, 13 Jan 2025 17:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736788356; cv=none; b=n0FVTr0zP4xH3u1yZV/s4bnOoHiqM+cvLOsjr8LoF/xj8A0tnKNoqFzRVenqXpSFyGD81RBPWnH25YmxFe5vMBNA3w0hZ1nH7IaD6msUmJ8Dn/cAkCbU21CAeoumIkIzFwrZQnwA7hRvMnUW+ZzmZTd+vQQ3lMSAHdrNn65OL4E=
+	t=1736790353; cv=none; b=ozUt82Bz2it2y8RfoIN78FcK6qhuGvbPmQ6GmLXK8MpqD/i6FgG78abuWksnzFxoXuco4RYVspekTT+BDvCjVdDDBROQlz/hqte2oR/aLN9tDynO9gPgP9ZOcp6cwoF9PgsaPFg75ZkU9MwCYZhRzED6zW5G7pPOwOFRHXJG1Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736788356; c=relaxed/simple;
-	bh=p7KTq7ocGVxzf3s383nFbxujoDj1GKtU7clsCOG54u0=;
+	s=arc-20240116; t=1736790353; c=relaxed/simple;
+	bh=g/b/92ce+VwSlC12aNrR7nql92J5ICNUWXroqLn/MG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AfE6O+oACj2X/F9I7ZiBzUdKFEWjdseWgXw2HlzdqiOuDNg22Uo175wWclxUpKzKCYr/ClA/pE/jFxmW/1qIMg+2gMPB8h66K0vq9cET+E23X8uHwFEQ2pdhPtBe+JBxrxmPOGuINKlKN67chAyhCC6Cra6Hb2D8fO9eU0gK3wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sL/TBU25; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gYyf1vuHn8MZWY6DVrcMKVabz5FGQrCWJP9Vkox5Qhri4HCQWzUL18gyxcpZLPRW9jFzO9pPtsJMKadwdYUFfK/t8DwlzXjLF9qTV5KZdSJ0RqKV4/O9FTU9+v1NKjCuy3dnJSbeQqS+3fdDP8xoY9jW4+mEnmiCfHmrCpX1G3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+i2Fr2R; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sL/TBU25"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B946C4CED6;
-	Mon, 13 Jan 2025 17:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736788356;
-	bh=p7KTq7ocGVxzf3s383nFbxujoDj1GKtU7clsCOG54u0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sL/TBU252fL3QsrYN9X3y7uxE9NGxJf7rzeb9OZVYXsdXDn5f2zfI1lLAIhdBQPsF
-	 PRxdBC/wp6uw5do3cPFstt37seqzkdbj0a0odDs99vE2p/ukfOCpYSveKGQFE3AgUv
-	 jAp6FMADZSBTW4k71Oacljkz/3V0XehbpbX8zsA0BOJARixUX2D1eHENxWK7H2dl1A
-	 WJOmlFn2Wwt4VRMp7IHKk63q5QuU3A8BwC2x0I65TLxFYQWojKOmdcwat3Yrm17bzY
-	 hj6mqX0Tunqi/C1oDiQUQHVLxkzY+IIBAFtsSPgtzxv+Vj6jn2UuQvesEmAAqI8758
-	 wo8wAxpKKeCbQ==
-Date: Mon, 13 Jan 2025 17:12:32 +0000
-From: Conor Dooley <conor@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+i2Fr2R"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21670dce0a7so97772525ad.1;
+        Mon, 13 Jan 2025 09:45:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736790351; x=1737395151; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iEJtCFib//xiDKyOU/G6okNKZgPT/5m5J/9UYLi1Ys0=;
+        b=S+i2Fr2RJAQboLJt8o2YBvoWQNQIcWYPygYs6EBJ/jRLW6KK2UeYo1ZUanQi9zN7R0
+         NTIy74VbicyKC45BIPfCKe8Lc3FIcAGRJvQypdzjDaIbPaqTyPVy8C+R8hTBppBo+/fj
+         YN1tp95XGN+pJLa2Ql5z/ORs+qT89vcJ3KMS1yvdt+06HSHiWEbWDSqkgcxKcrovB7BF
+         JJA8dAa4ENuHtTlNqKkH6zv410LHB++XB0DzEpHVHqGy/mMNxyVuwYhZkVBd+J2S0eiV
+         XlmUWExch7Z3aeFAoRsuLR8yqq2+/Y4bXYx2iyoau8/7jzWtL3wvW9yTRsHSyZRotYYO
+         j3AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736790351; x=1737395151;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iEJtCFib//xiDKyOU/G6okNKZgPT/5m5J/9UYLi1Ys0=;
+        b=TtoHwlKyrCUK4oozgex9eiGvNCrUnpBoX1E3htwTo6BFPt5FQNYQB4aerOzHwwIhs1
+         mRFeQeR53qPL5v6ZW5z7+ICuA/VNgPz+yVNKAjlHUiavx4Lh/psCdarMCxTzUFWmU3mw
+         Zn3xTrn2SKDP9AITLtYaqUz4PzzvOaYMfDka9GF40+jHMesBox6uNkPWC6Nw1XwYPegj
+         jG+mjFLklWOPwAh69pmpiaCOEGmPJgwB+i5ZFOg53rq6rhNZy7LsaJPoIgFmthZv9mr4
+         eEMUxPMhbefRKA9Ik8Om3y5I1+6llJiTm7N1qg2j+YUjDo3avbonTr+2VRF3AXJKqjDr
+         bOCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVO2aUUCAsusnnEEszmKDqQcRRBuWX2w4rMvcXqid4M6eyOd4SKCBoyLMAOv72AQjBp++O1tAj2JoMWfA==@vger.kernel.org, AJvYcCVxEn1W+GaYgXbLCytyRZEzkUei4VRp031+EkKZxvSuunDemTfAakSWETqlMegv0MZ6U87FG0ZHbDUkQ51X@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnTnCBOB+JSMFE4n9Oz8D8tT2bF2fqqTQ5fuae9nNWVhCMnS7V
+	NEzXiLkqHxZnAWFFKghwiapYl0/QbapAt7qOOJXYIQ9pN+ppycAH
+X-Gm-Gg: ASbGnctIl+YTySafV2Xx9fibAp+FYVhBc4+VzB2uwqmPVNtVR9c5KIdPz8ywwWEeHg4
+	5xv5YtM7mutHE6s27ahWcoNhYZEy+47HZ5Mbthc0iqJuBrrWgrsb1hiPP8kKTI46BVjFNB3Xddu
+	khT8FxWDF0Lo5CsqxQZd7inTNU1bX9OHZRVPWFvT6Wsxb8eu0ormO3FouQO2YKEh8d+uUv1dGy7
+	hr8Q19uLfFxOBL8AHEjb/IBF+szYrjHJOk1/+AJR2r1GKJeobMs2oLJQRrrXFJ5jwSk1g==
+X-Google-Smtp-Source: AGHT+IFV6xW8X5HEasuLVnky+if3kg6fQ0nZHsTrUNZzD5tpMi76lf5vRWhfzXovMMu4XQ5967C3Hw==
+X-Received: by 2002:a17:903:1248:b0:216:5e6e:68cb with SMTP id d9443c01a7336-21a83f56bd2mr319090465ad.16.1736790350745;
+        Mon, 13 Jan 2025 09:45:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22c97asm55374005ad.165.2025.01.13.09.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 09:45:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 13 Jan 2025 09:45:48 -0800
+From: Guenter Roeck <linux@roeck-us.net>
 To: Wenliang Yan <wenliang202407@163.com>
-Cc: linux@roeck-us.net, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings:Add SQ52206 to ina2xx devicetree
- bindings
-Message-ID: <20250113-unmoving-drinking-eced6d36979e@spud>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
+Message-ID: <c7c3503f-526e-41f3-8b82-ba7c7c68e89e@roeck-us.net>
 References: <20250113035023.365697-1-wenliang202407@163.com>
- <20250113035023.365697-2-wenliang202407@163.com>
+ <20250113035023.365697-3-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="c3POeVvxXWnGjl+N"
-Content-Disposition: inline
-In-Reply-To: <20250113035023.365697-2-wenliang202407@163.com>
-
-
---c3POeVvxXWnGjl+N
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250113035023.365697-3-wenliang202407@163.com>
 
-On Mon, Jan 13, 2025 at 11:50:22AM +0800, Wenliang Yan wrote:
-> Add the sq52206 compatible to the ina2xx.yaml
->=20
+On Mon, Jan 13, 2025 at 11:50:23AM +0800, Wenliang Yan wrote:
+> Add support for SQ52206 to the Ina238 driver. Add registers,
+> add calculation formulas, increase compatibility, add
+> compatibility programs for multiple chips.
+> 
 > Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 > ---
->=20
-> The new features added to sq52206 compared to ina238 do not
-> affect the differences in hardware properties.The properties
-> described in the ina2xx.yaml are applicable to the sq52206.
+...
+> @@ -452,6 +554,9 @@ static umode_t ina238_is_visible(const void *drvdata,
+>  				 enum hwmon_sensor_types type,
+>  				 u32 attr, int channel)
+>  {
+> +	const struct ina238_data *data = drvdata;
+> +	bool has_power_highest = data->config->has_power_highest;
+> +
+>  	switch (type) {
+>  	case hwmon_in:
+>  		switch (attr) {
+> @@ -479,6 +584,10 @@ static umode_t ina238_is_visible(const void *drvdata,
+>  			return 0444;
+>  		case hwmon_power_max:
+>  			return 0644;
+> +		case hwmon_power_input_highest:
+> +			if (has_power_highest)
+> +				return 0444;
+> +			break;
 
-This blurb is a bit confusing, as it makes it seem like the devices are
-compatible. The driver patch, however, suggests otherwise. Please
-mention in your commit message what differs between the new device
-you're adding and existing ones.
+This doesn't work as intended. The break; results in the code
+entering the hwmon_temp: case. It has to be "return 0;" or
+the entire function needs to be rewritten to use "break;"
+to exit the switch statements, and "return 0;" at the end
+of the function.
 
->=20
->  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> index 05a9cb36cd82..f0b7758ab29f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-> @@ -20,6 +20,7 @@ description: |
->  properties:
->    compatible:
->      enum:
-> +      - silergy,sq52206
->        - silergy,sy24655
->        - ti,ina209
->        - ti,ina219
-> --=20
-> 2.43.0
->=20
+>  static int ina238_probe(struct i2c_client *client)
+>  {
+...
+> -	if (data->gain == 1)
+> +	config = data->config->config_default;
+> +	if (chip == sq52206)
+> +		if (data->gain == 1)
+> +			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
+> +		else if (data->gain == 2)
+> +			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
+> +	else if (data->gain == 1)
 
---c3POeVvxXWnGjl+N
-Content-Type: application/pgp-signature; name="signature.asc"
+The "else" here is the else from "if (data->gain == 2)" which is wrong.
+The entire if/else block from "if (chip == sq52206)" needs to be in {}
+to avoid that.
 
------BEGIN PGP SIGNATURE-----
+>  		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
+>  	ret = regmap_write(data->regmap, INA238_CONFIG, config);
+>  	if (ret < 0) {
+> @@ -605,7 +735,8 @@ static int ina238_probe(struct i2c_client *client)
+>  
+>  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+>  							 &ina238_chip_info,
+> -							 NULL);
+> +							 data->config->has_energy ?
+> +								NULL : ina238_groups);
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ4VJfwAKCRB4tDGHoIJi
-0oaHAQCoWfl0mlNHCGFkaAdZCQu7IHIHt608QqlbkAxErUkqVwEAkxyeq51nQsP5
-1K/qssUOYXHNQXidC3nxwYYljDE1TQw=
-=m461
------END PGP SIGNATURE-----
+This seems to be wrong check. I would assume that ina238_groups is passed
+if data->config->has_energy is true, not if it is false.
 
---c3POeVvxXWnGjl+N--
+Guenter
