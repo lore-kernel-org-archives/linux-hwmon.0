@@ -1,71 +1,71 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A18620AF6F;
-	Mon, 13 Jan 2025 16:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918962297E1;
+	Mon, 13 Jan 2025 16:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736787400; cv=none; b=AevTVINDwdGfS6PAYQLxxm5eu0tlN7BWyiYYCt6+4XGRLiZ36wQwePpa/Aszolxbus7+5/+D8y/3rWJnVhh1olX+2GB2iVTGuILiPNg4/VAVFY8j1vQ8w1u2qzKQLIwsxUy8J1y5w8ox4JpZyafkTnTx4CQUwa3kRBtOmhYcBFM=
+	t=1736787524; cv=none; b=BLTGmDx3p1AoGybTx56zSJVKkr4H+zJXdjFxuIm+fim9aqe8C1f9yIheR1LHGoCK/eRGcbUDmnD5dM1yPhRN2+iK602A8F1RgslImAb6M1oRRt9SLiPcPNcbWKlD3McHsiyTRL5y107xL4MXrrR6OMttwOqMAluySgbiWo9CnDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736787400; c=relaxed/simple;
-	bh=+4ugZh4mTgnA1hmRAHiaerVfmzDwsttFHy5mbI8bYIo=;
+	s=arc-20240116; t=1736787524; c=relaxed/simple;
+	bh=2NHEBuBW4BQ62Wpx9z5cBu5QF5aTYKc9Jnb8/mtTFfQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l+6VvXgbwycoJ3KoewjmJiX8TTI++Qx7yVu+JN2pQbHi/MflK1arWehBtWlgYCtYT2L0bQIkqquqEOiHTLOfr+rC3TAKB/x0OGD/GEH3+ggmrnzKZItn2FJG4F8rBUuSDKJm2KKJy7q3lc+4HvOyhaMl12DaWDW6OuXyfV6f4fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EEpl2n82; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=X5E9wZsOi2WIbssLoBPafLDeWNPF93FmRVDPUOeIIb7CXpC+4JMNLwQ9opGE+O4H0FixYgnErVw9fbQfn0UpfHnF9Ki4gFrBIpgvnPHDa9FnXhpEmSoiOJziHVLmhcXpajLTslfs5G6/ds5WOHpJQHsvYtuFhmn2lTIEEBniZdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M20l+NbU; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEpl2n82"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21661be2c2dso76796925ad.1;
-        Mon, 13 Jan 2025 08:56:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M20l+NbU"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21619108a6bso78464355ad.3;
+        Mon, 13 Jan 2025 08:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736787398; x=1737392198; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736787522; x=1737392322; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m6bQwzLo5Y7a/1/TWGYdRTtfr4KCDsl/yTMNAV3ttII=;
-        b=EEpl2n82ec1K1DBsDnquqr8iHt86nJ/dCWDCj7Lft68FBnhyGtEosm8pEC9SJeAjjn
-         BZ2cHPl+rWYqf08r/6eqgmeLESTcHgfPu2kC7X2N1xNU/umxZ4o0Dk96s5fhcJ/7aguw
-         3Z5g4BX0nzuFSXVkF4l3G4o1TMgWyLgoJiNhUTpl+mRGrPX+7bpAGvxkXWLzLnw1yhQG
-         ZwZBjIeQySzaOgs1o1Zkbuq4F1NHeepgKPstTaW15pm/qB3W8tD2fXy0bSri2lrviEMG
-         RcKV21C/VIq1s0VE1b5EK3wKnkVnqrZas/dw9cq854d1ZGE2rw+PF5DmJjHcXiPtt8zT
-         OjnA==
+        bh=wjRuKtNuNdUdZzdut7QyOQJyckleaTOnPl0mAN4klDU=;
+        b=M20l+NbUMeOkWu769IImA4J/c9KppEQF2/xM61HSv5YgJHHLZ7WhZbSHwPzq8c8/mj
+         NnII7vWrZybr3GTRJKEg0BpR5VUvtEUyzvvn/Uid1bxDCDrGVxXuYXi7u0QwQp5Vl+HA
+         +NG/lxSBdsrpu46okau2gF7as4Fmqx1WggWcUeFcJsGQ+cftR9F2OQnz0V8bBg7LR4Db
+         3iQ/Lyzi1GgUQDa9D4Kd6D19Vx/YMML2IRpPR5cQiwRc1HaP3pUQrXJhjxo43N+k9NNE
+         X/40bDRQSLzOqLwWyh+oaW51i50XyA57M64dY19cOWNh5DZO6T5qcLcuMkJCee6UjuZu
+         Z9dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736787398; x=1737392198;
+        d=1e100.net; s=20230601; t=1736787522; x=1737392322;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m6bQwzLo5Y7a/1/TWGYdRTtfr4KCDsl/yTMNAV3ttII=;
-        b=reoAGvDN1aL+g2rMWO8+h98qKdUmhBZZJGoiyphjTPGy70sNu5Y5IJ7GUjMFXLAxIu
-         bD/cD0Z9GIqdZKgJoTBf96j7PDP+vka2mel30nqRhSqmvTmgkvI1VtKByVQnyR9Qo/fO
-         FV+sLTbLvYLH/bnoFX2GjN9hLhM1vyE5cK+J7fdzKEL7CiJbXAcftSq829bZu/TGeRrD
-         4wYxbOSGIC6SDLQIvGc+RgD+3geqGscYCpI5sBnif3tXx72Fw1Wvqhq4zfcMRiLhmDTm
-         X9ghEORQR576W5avzYEBBhRx17udmDcmxEpD4gKTvuqGXEWrlMp0R7Kz1XXs4WCtAXWg
-         TtYw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6mJKWgNc6MHPChuiBX6oz87QKEGEwd4HMkFXOnUr+VKnq9iQZwEnLscXC3T676dzDrqIddc0I5Kt8QGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPH+uw6FJQ7qFAxrccu96aOjF8mi5wu5Qhc0c49wBCnaU4QNcU
-	q+9GLn2dfGt40DpFTqeoWic8V8vGZBe1OAjjjLy5/KVLTxMWM64dg6fFLw==
-X-Gm-Gg: ASbGncv5zbWHZmP2zl7mWOs8BboBycxJKEt07O6Xp2tKKoOdAlTJzgboVxscc0hfF+p
-	YH3A8++ACJVhJ9GldWGAxqC+8whHZHQTNA+BDFv2nOhK8wtsq4FdyF9M7B/C9bPgWkcC5HkZMPU
-	IJqdobtEesAVDOKnMtquQBCpbCdxB5M6tOa5jIDjTbfgLvOvw2qBGqyNvbs6bn2T+fAAYEfXL5+
-	c/VTC5P2MqpLsf2ACD7jiSnBu/XgA9mAQMDNc923ZHJFCkZnCdXjyI0P1vraQQzNUvOCg==
-X-Google-Smtp-Source: AGHT+IF2HJVV4O5c10Kgg3IkWszR0w8LMsiMhsh4ncpplcbA1xvwWHM4Cw0hrlJvkv1G3ncIRfM3PA==
-X-Received: by 2002:a17:902:d4d2:b0:215:b9a7:5282 with SMTP id d9443c01a7336-21a83f6458amr313871535ad.26.1736787397973;
-        Mon, 13 Jan 2025 08:56:37 -0800 (PST)
+        bh=wjRuKtNuNdUdZzdut7QyOQJyckleaTOnPl0mAN4klDU=;
+        b=N4NMUosZIUqmYZEomlHRwKEgiFB9h326OsL1EiW0Hv34aNVPnZ5VbIcju7IvYcmPJy
+         BlGAa22ufXt7AlG0vMMe5qr8/GVPeDWyphHsgXWm0qH1oZ2V4DnR+Ch9O9A3lAJt4uor
+         6rW+8sCe/WK0p9SskWTBG/SxL7b97HEuObL1CSXhONXqmbb3Z9Sk5RluiEkb0AWrh8Po
+         CW6m9l7elE1Zr0Am01YL5qnSIAzQDw81CaWcHx7Vx9l1GT3bUqGqsZnsVcaOqX+36Y3D
+         rbqZp8ZMfiUs4PL7nEKWLOK42/IgFNsStk7tcmk93IQA3PUuGd1Ii6m7ei/0jdVIfuzR
+         4cHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWH/Q9TXtCCu20ZE4zZP4LVXZ5GzF6CZP8GAh4lAAS2nF0uccg0WFa/5jPWeswRc4Ms8PAy7OCGxOXAag==@vger.kernel.org, AJvYcCXVegXQOlv9podw5MA9uBUYaxIMXAdqmIx1/cD0TLKTxcEN26pAeJ9izK3L7tkDAjS93M9dSl8Mfm3oHJqN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSd3Tk8fDLRYzGETLXqzrW7jbt5IZHsohBxbKkP6bFIx0vt25L
+	1+tH0AJrtumaOARDiFFM6oHjX9nuzzUVx9tnohT1II8oRqc9b6RV
+X-Gm-Gg: ASbGncvrrStxGQ/fn+Pt7TWvL7twkf2CWk0eo8HFoQbYhMAA2n6Tu7ankXTHWa4/eYi
+	0uPsHtUR5oqieKleuqjBq+atZ7XWHauRuAvXwVQ7AIbXHKabdsTj69zuOZmTxP5KiU1tGFq7oLq
+	VuBJy0tPaYvX/q3SjkfVK6Af1IIT/+nERfUA9ec+HeI6zmSLgAGNH1NBbCfTdfOKoFRPs6LQFn/
+	hTJOL3ab7jIB9UUodpizIjHmwjJe8GQ3SDoI+olx2n/LwV0+1n3TqK2s9+FwDmYmyEVhg==
+X-Google-Smtp-Source: AGHT+IHCJUXEDb841TAQStTLzoySZuRvg2Gn5OrZUbfGQXpiB2lbXUs2ySpOoQn0SnUllSFx5Ayqcg==
+X-Received: by 2002:a05:6a00:114e:b0:728:f337:a721 with SMTP id d2e1a72fcca58-72d21f29214mr29088406b3a.7.1736787521732;
+        Mon, 13 Jan 2025 08:58:41 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219aefsm55361645ad.107.2025.01.13.08.56.37
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d4059485bsm5991816b3a.83.2025.01.13.08.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 08:56:37 -0800 (PST)
+        Mon, 13 Jan 2025 08:58:41 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 13 Jan 2025 08:56:36 -0800
+Date: Mon, 13 Jan 2025 08:58:40 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] hwmon: (pwm-fan): Default to the Maximum cooling
- level if provided
-Message-ID: <7bad4087-5ad1-448e-ac9f-c298a66052d8@roeck-us.net>
-References: <20250113135118.3994998-1-peter@korsgaard.com>
+To: Denis Kirjanov <kirjanov@gmail.com>
+Cc: robert.marko@sartura.hr, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: pmbus: dps920ab: Add ability to instantiate
+ through i2c
+Message-ID: <d7a2f3c9-9e91-48f9-8004-a8c774924eb7@roeck-us.net>
+References: <20250113092846.10786-1-kirjanov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,26 +74,22 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113135118.3994998-1-peter@korsgaard.com>
+In-Reply-To: <20250113092846.10786-1-kirjanov@gmail.com>
 
-On Mon, Jan 13, 2025 at 02:51:18PM +0100, Peter Korsgaard wrote:
-> The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
-> always be desirable because of noise or power consumption peaks.
+On Mon, Jan 13, 2025 at 12:28:46PM +0300, Denis Kirjanov wrote:
+> Add support for instantiating the Delta DPS920AB PSU
+> through I2C on systems without devicetree support.
 > 
-> The driver optionally accept a list of "cooling-levels" for the thermal
-> subsystem.  If provided, use the PWM value corresponding to the maximum
-> cooling level rather than the full level as the initial PWM setting.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
 
-Applied, after
+Applied, after build testing.
 
-> +	ret = pwm_fan_get_cooling_data(dev, ctx);
-> +	if (ret)
-> +		return ret;
-> +
-> +
+> ---
+> changelog:
+> v2: add verbose description
+> v3: conform to the canonical patch format
+> v4: send the proper patch version
 
-dropping this double empty line.
+FWIW, this is not a useful change log.
 
 Guenter
