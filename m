@@ -1,178 +1,176 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D650D1865E5;
-	Mon, 13 Jan 2025 18:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5C71C5485;
+	Mon, 13 Jan 2025 18:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736793073; cv=none; b=nZ6eklgwi4nmlfByC25htxcTN24OjyCoStJIEPsVuj2KHNFd3N525yS73kkxg47Nx6xNtZCnOQj0FtD/qnNI7jJPgThrqM2rX6QiMUZpDmHkn9ovr/kNw5phEkHD2d+pBuxzvKyywWol2SIn2QrnRdHN8xyYeG3Ts+uSnLjPGus=
+	t=1736793262; cv=none; b=nBj8gTElLnsah0nzCtIKyO2QZB/Y8lMTdcYHQwbXFnAKbzHvo6jzh726MPLaLaWr4ZHRsIuvZ+ZGkRzVvdcnoXOZwSg9hAZd4UvPANssv991EyRYI6UPKspj3QPkSZt4ce07huNpN/1q5XjuAs2uerRX9AjwnnK8pgg/mMSRZ8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736793073; c=relaxed/simple;
-	bh=lt0vIoFTnMCQOVSvLsv+sck7u8dfFDzlpFeDubHafro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4vHIx0MMJkuzRJWO/M2+MPyxktTR2FsrVdNzGhRW0Ckely1M/GyhvVSL0TLwM5/mrstInGyDPcopEPlJw0by/RO2xYZI1FGUgAqaYcWQJxnG4Lj27w/XTi9SPg3SsiAqDwSXjN4nyq/SQ0dNt3oWTwiuOsG+m7EbDynhsA+k24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jk5hD2RU; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736793262; c=relaxed/simple;
+	bh=JW66LzXvkSldtcjOIAoWhfUsMT1RsmmpXnMrCnnL98M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SOcvV7f0KGnyvyR5wWQBZyj9bP5z6fRT5Fh/QcXKlBjuzxqhngZYJgiSEwUxmokGn5n6ejWGccyvxO9M1KPHa84eAh5MTt9znB5tGe/ZC+NsDWxYXP+bwWYhyKrnFAWd9Sj5VQYRPnTfJ9Q+Z+sVpi7tby6Cx/pSkQ+GtvtM33I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ig3xdhV4; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jk5hD2RU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736793072; x=1768329072;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lt0vIoFTnMCQOVSvLsv+sck7u8dfFDzlpFeDubHafro=;
-  b=jk5hD2RUnvvVqFScwOEGH8sOrBEpdf9BuE/n+3YFPQcNLjU9NN1EKxYo
-   si3+nYrUyg/klpX3kxFBdHCo8fgLsIMbTCaZBQ2pb4ePE7DdMbWLUnTqs
-   hsAvk07X1/2J0iS5pgKggYgcQHlgeLZMNxgEAp290j4G3BCYfi35N1vlg
-   12fyKvCDhDi1jKlx2JAAycsVZ4X8vHvdp0O2NsA2RMdiJJvZUFLJb8lyF
-   k67N8AqE15mQeYSNfjxxyu1DnHu3CyUAgPrh42wFwbGwepqivjgziYofE
-   k4MPvCmdgYZGvdMxD7bUK4RR/CA1gLUMsaUZDEc8IcJQDsQVMBKAJzdyL
-   A==;
-X-CSE-ConnectionGUID: gR2IwBSjScWst0OONETQrw==
-X-CSE-MsgGUID: FgCly3p5TGaGx5Ez9//kAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="48452658"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="48452658"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 10:31:12 -0800
-X-CSE-ConnectionGUID: SRoEQ8AkQf2I0iJBEHFx9Q==
-X-CSE-MsgGUID: 5Z6nm63bSKKR7VAE9srxAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="141838421"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Jan 2025 10:31:08 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tXPDN-000NX4-2G;
-	Mon, 13 Jan 2025 18:31:05 +0000
-Date: Tue, 14 Jan 2025 02:30:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: oe-kbuild-all@lists.linux.dev, Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
-Message-ID: <202501140230.5s2Uytod-lkp@intel.com>
-References: <20250113035023.365697-3-wenliang202407@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ig3xdhV4"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ef748105deso5849458a91.1;
+        Mon, 13 Jan 2025 10:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736793260; x=1737398060; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dUk9K/3v1fmRTIGpSlzyJ4xMMqx5o/nZbSm/00tBSUQ=;
+        b=Ig3xdhV4VrOpQO4CQ7srMkUZesZOs+vJlKusoVcUqA2uXwYZFYYBJjjYBO9yTUKTR0
+         ufF0zZZSYOqp+ad4NE36e7HVdrpNv8HFzF7dTvan6IGAAFKBPX/oodVq00XP7qZJl8yX
+         51T0+j5mgvPJcOtyL54IybCkbWgc+l7htUEeoCD4wi+GaN2y6JDCW0Av0ew6r1D6QLK1
+         rPSCU9Pbgd+iSj3mKdhGPre43o2Yo8Tx/Zxb2g3d2elYOKOhgYXYD0m1EZQvCq6nud9R
+         L16lYs0BXUAGdvEdPxCqSmdNjgZwfmXmY3aHAbX0zvEBSFodjyuSqIj24VqavBP2aFav
+         8aMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736793260; x=1737398060;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dUk9K/3v1fmRTIGpSlzyJ4xMMqx5o/nZbSm/00tBSUQ=;
+        b=WVTQX2oj6N9uatgjDwLIgjvDT7Dd+6pql4S+fo03uraZLkqO+PEN3IeHZSQ8iXR0Pt
+         aP9fRNT1qHqntxBaYTyChkZGCdqLhpEZsW19BNLuhVPbwQsrSpD+qYynuZXFQyiQ2kd5
+         ewAJVNUua6epOh95FcwY7NOuMyI/arzueuJ/kKTXILAPf5Hl36rwQa6t/oCMwyVZBqJZ
+         gwjZyZsKn8A21lnEovmbABASL/ZuZIBkc+sVzpi1NBq/dOFjA73jTBb8buEd74l9jxNY
+         aNdxrBuJ9q13Esf/uhOu2hkXkusHMKhbrgA+c4e+gyR8kuhszk0B+K6Kj4x3MdNz62vz
+         DZLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkphzOSwL44VhK/PxzI2vKqBEtInHln7ogQGlUwTmY/9rdJGcB7VkSOPPhBQMWi47OZAWjVBxSKFKcMPQ=@vger.kernel.org, AJvYcCVSeNyo+xe81SY4jDj7Ot0Qkc7e6/iPF/Vw1r3ELmbT+qZcUsDFMBcvYr2zrCkK0/hvsKlFpqdeZkLqvxqhyIo/bLxNBw==@vger.kernel.org, AJvYcCVSo1rbbU4bllLGTNIZVf8VW031vqe3MbTsLrTPPLvJyLB80OGqCScnXLwZ/YgxJ0K66tGDZrO9Kck=@vger.kernel.org, AJvYcCVmGVxAlCcJVd+FF/UFZIgkHA0Ckpn9iv1dN9AvIKHQvQGrX5NsmvWiznz7xHxYhnL3EDSagepUU0zIGMiP@vger.kernel.org, AJvYcCVvwf5a9tBRX+AuKWgfW2PbZR+PMqPY6uHb5uSE76So7AbFbutcM4Pl1fmPmnGpCzHWMbwqoPfgkMWgo1bJ@vger.kernel.org, AJvYcCXVm8lbZbcUEGZLKZ84ifdI3AhkGzTsTDo629yWhxYCY4N5LTIklje9/em/ZlsvZPVKCYcdNR3hwxZd@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMhSPxb6hfS9VLNT21MdoNLFID0cJSpZQMSAY37MZCcHKAM+HZ
+	83aceD64+ZyxMf8SQWzZ/HCqn+6ry7694YmHI3Bb8RVnObgdyb55
+X-Gm-Gg: ASbGncsWyb1qN9NDCGXSgIO5RpG9vofVq/AZFDHTUblXo5x//WAKG4LnJTtVM9BtHzu
+	FOQtoHkEiLOPZErWJVF8bWeHwIvZH5hWU1BreR+zcb+dZA/8qgi2AjzCU8U6QBVTUtk2iGafgbn
+	txJbWZnU6keDExEgmYw3kOufRRqaokMppfr4/9180cNEr/25ARGB8gJXKSniswqqYkCoE/c4P09
+	gYVPnhy2V+ldUdUzxHLbPL0XU0Tarhc2gmox67c0hOIzZhNnqhSEK2k4kNgm6iUj5BCZEkJeKKz
+	fjrKBX82dZGhUji/DqVKfkEaXY5ASg==
+X-Google-Smtp-Source: AGHT+IGffTqtldE+fbRRcZSQfUCPNUY9FZEm8W/f9587s75zCFU9ByP7Dahck4ocBkuv8JrlehJN8w==
+X-Received: by 2002:a17:90b:4a44:b0:2ea:61de:38f7 with SMTP id 98e67ed59e1d1-2f548f1d420mr31860946a91.29.1736793260365;
+        Mon, 13 Jan 2025 10:34:20 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f5593d07cbsm9069751a91.3.2025.01.13.10.34.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2025 10:34:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dae486c3-8c3d-4b56-8022-4620fa638f82@roeck-us.net>
+Date: Mon, 13 Jan 2025 10:34:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113035023.365697-3-wenliang202407@163.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/6] platform: arm64: add Huawei Matebook E Go EC
+ driver
+To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250113175049.590511-1-mitltlatltl@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250113175049.590511-1-mitltlatltl@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Wenliang,
+On 1/13/25 09:50, Pengyu Luo wrote:
+> There are three variants of which Huawei released the first two
+> simultaneously.
+> 
+> Huawei Matebook E Go LTE(sc8180x), codename seems to be gaokun2.
+> Huawei Matebook E Go(sc8280xp@3.0GHz), codename must be gaokun3. (see [1])
+> Huawei Matebook E Go 2023(sc8280xp@2.69GHz), codename should be also gaokun3.
+> 
+> Adding support for the latter two variants for now, this driver should
+> also work for the sc8180x variant according to acpi table files, but I
+> don't have the device to test yet.
+> 
+> Different from other Qualcomm Snapdragon sc8280xp based machines, the
+> Huawei Matebook E Go uses an embedded controller while others use
+> a system called PMIC GLink. This embedded controller can be used to
+> perform a set of various functions, including, but not limited to:
+> 
+> - Battery and charger monitoring;
+> - Charge control and smart charge;
+> - Fn_lock settings;
+> - Tablet lid status;
+> - Temperature sensors;
+> - USB Type-C notifications (ports orientation,  DP alt mode HPD);
+> - USB Type-C PD (according to observation, up to 48w).
+> 
+> Add a driver for the EC which creates devices for UCSI and power supply
+> devices.
+> 
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=219645
+> 
+> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+> ---
+...
+> +	ec->hwmon_dev = hwmon_device_register_with_groups(dev, "gaokun_ec_hwmon",
+> +							  ec, gaokun_ec_hwmon_groups);
 
-kernel test robot noticed the following build warnings:
+This API function is deprecated.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.13-rc7 next-20250113]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Guenter
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang-Yan/dt-bindings-Add-SQ52206-to-ina2xx-devicetree-bindings/20250113-115457
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250113035023.365697-3-wenliang202407%40163.com
-patch subject: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
-config: csky-randconfig-002-20250114 (https://download.01.org/0day-ci/archive/20250114/202501140230.5s2Uytod-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250114/202501140230.5s2Uytod-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501140230.5s2Uytod-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/err.h:5,
-                    from drivers/hwmon/ina238.c:9:
-   drivers/hwmon/ina238.c: In function 'ina238_probe':
->> include/linux/compiler.h:55:26: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                          ^
-   drivers/hwmon/ina238.c:699:9: note: in expansion of macro 'if'
-     699 |         if (chip == sq52206)
-         |         ^~
-   drivers/hwmon/ina238.c: In function 'ina238_is_visible':
->> drivers/hwmon/ina238.c:581:17: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     581 |                 switch (attr) {
-         |                 ^~~~~~
-   drivers/hwmon/ina238.c:594:9: note: here
-     594 |         case hwmon_temp:
-         |         ^~~~
-
-
-vim +581 drivers/hwmon/ina238.c
-
-eacb52f010a807 Nathan Rossi 2021-11-02  552  
-eacb52f010a807 Nathan Rossi 2021-11-02  553  static umode_t ina238_is_visible(const void *drvdata,
-eacb52f010a807 Nathan Rossi 2021-11-02  554  				 enum hwmon_sensor_types type,
-eacb52f010a807 Nathan Rossi 2021-11-02  555  				 u32 attr, int channel)
-eacb52f010a807 Nathan Rossi 2021-11-02  556  {
-f08436905922ae Wenliang Yan 2025-01-13  557  	const struct ina238_data *data = drvdata;
-f08436905922ae Wenliang Yan 2025-01-13  558  	bool has_power_highest = data->config->has_power_highest;
-f08436905922ae Wenliang Yan 2025-01-13  559  
-eacb52f010a807 Nathan Rossi 2021-11-02  560  	switch (type) {
-eacb52f010a807 Nathan Rossi 2021-11-02  561  	case hwmon_in:
-eacb52f010a807 Nathan Rossi 2021-11-02  562  		switch (attr) {
-eacb52f010a807 Nathan Rossi 2021-11-02  563  		case hwmon_in_input:
-eacb52f010a807 Nathan Rossi 2021-11-02  564  		case hwmon_in_max_alarm:
-eacb52f010a807 Nathan Rossi 2021-11-02  565  		case hwmon_in_min_alarm:
-eacb52f010a807 Nathan Rossi 2021-11-02  566  			return 0444;
-eacb52f010a807 Nathan Rossi 2021-11-02  567  		case hwmon_in_max:
-eacb52f010a807 Nathan Rossi 2021-11-02  568  		case hwmon_in_min:
-eacb52f010a807 Nathan Rossi 2021-11-02  569  			return 0644;
-eacb52f010a807 Nathan Rossi 2021-11-02  570  		default:
-eacb52f010a807 Nathan Rossi 2021-11-02  571  			return 0;
-eacb52f010a807 Nathan Rossi 2021-11-02  572  		}
-eacb52f010a807 Nathan Rossi 2021-11-02  573  	case hwmon_curr:
-eacb52f010a807 Nathan Rossi 2021-11-02  574  		switch (attr) {
-eacb52f010a807 Nathan Rossi 2021-11-02  575  		case hwmon_curr_input:
-eacb52f010a807 Nathan Rossi 2021-11-02  576  			return 0444;
-eacb52f010a807 Nathan Rossi 2021-11-02  577  		default:
-eacb52f010a807 Nathan Rossi 2021-11-02  578  			return 0;
-eacb52f010a807 Nathan Rossi 2021-11-02  579  		}
-eacb52f010a807 Nathan Rossi 2021-11-02  580  	case hwmon_power:
-eacb52f010a807 Nathan Rossi 2021-11-02 @581  		switch (attr) {
-eacb52f010a807 Nathan Rossi 2021-11-02  582  		case hwmon_power_input:
-eacb52f010a807 Nathan Rossi 2021-11-02  583  		case hwmon_power_max_alarm:
-eacb52f010a807 Nathan Rossi 2021-11-02  584  			return 0444;
-eacb52f010a807 Nathan Rossi 2021-11-02  585  		case hwmon_power_max:
-eacb52f010a807 Nathan Rossi 2021-11-02  586  			return 0644;
-f08436905922ae Wenliang Yan 2025-01-13  587  		case hwmon_power_input_highest:
-f08436905922ae Wenliang Yan 2025-01-13  588  			if (has_power_highest)
-f08436905922ae Wenliang Yan 2025-01-13  589  				return 0444;
-f08436905922ae Wenliang Yan 2025-01-13  590  			break;
-eacb52f010a807 Nathan Rossi 2021-11-02  591  		default:
-eacb52f010a807 Nathan Rossi 2021-11-02  592  			return 0;
-eacb52f010a807 Nathan Rossi 2021-11-02  593  		}
-eacb52f010a807 Nathan Rossi 2021-11-02  594  	case hwmon_temp:
-eacb52f010a807 Nathan Rossi 2021-11-02  595  		switch (attr) {
-eacb52f010a807 Nathan Rossi 2021-11-02  596  		case hwmon_temp_input:
-eacb52f010a807 Nathan Rossi 2021-11-02  597  		case hwmon_temp_max_alarm:
-eacb52f010a807 Nathan Rossi 2021-11-02  598  			return 0444;
-eacb52f010a807 Nathan Rossi 2021-11-02  599  		case hwmon_temp_max:
-eacb52f010a807 Nathan Rossi 2021-11-02  600  			return 0644;
-eacb52f010a807 Nathan Rossi 2021-11-02  601  		default:
-eacb52f010a807 Nathan Rossi 2021-11-02  602  			return 0;
-eacb52f010a807 Nathan Rossi 2021-11-02  603  		}
-eacb52f010a807 Nathan Rossi 2021-11-02  604  	default:
-eacb52f010a807 Nathan Rossi 2021-11-02  605  		return 0;
-eacb52f010a807 Nathan Rossi 2021-11-02  606  	}
-eacb52f010a807 Nathan Rossi 2021-11-02  607  }
-eacb52f010a807 Nathan Rossi 2021-11-02  608  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
