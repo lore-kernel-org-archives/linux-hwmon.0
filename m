@@ -1,74 +1,70 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2054.outbound.protection.outlook.com [40.107.96.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8476233D8F
-	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jan 2025 08:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736758188; cv=fail; b=Sr4FKZReHJO4RYzsFFushej7FdQZb9IaGt2lDnatshSPd4ab7Cb9o2SGuwPUAjwFrd+yii/hz34WLX+ZxlT0A4CrAj5sV3T4AJ0iEj7j6T6BGSjB1V/uCzBOhNu3wTVGZKuEDVE1sDqXA13gBJOsaadlhGFOOJnwIbqiC+gs3h8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736758188; c=relaxed/simple;
-	bh=qTkzxxhuB5escHo6yyfnkRtU8Lg4SopvhfhG0wVjCMs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hx0ePvzWw7Sq57T3DQspoDbXjru0M5eeXHMAdf88E9rdl3jDUSO+ATC6bKAplZa/MzNOkkJtuthr2+Q13hV58kndSCHC2L00qzUR2BecVKRSbU8UPaa4ELrjg2oKiCiqwOVxHxJAlQsl9blak/GYznHNmy2EUNK43uG8towqc5M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N5rl2Snv; arc=fail smtp.client-ip=40.107.96.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995F414A09C;
+	Mon, 13 Jan 2025 09:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736760543; cv=none; b=n00UEi236fjgAbtouNl0D+mOJDfww+IaMI2mjx3ght+LJiIiqn24pjRubQkP80LjKN4rUslGMKLFQE8N4u5tfwC5vUX9EsD4KRkVf/oisy62lMlDo/Ook0ZC0xrvGOe0KqEY8LO2IpDYRbFsixu3JtBRntMleXRo4x+ReBtWHew=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736760543; c=relaxed/simple;
+	bh=HdCdXCWCYKKqxlcgrFa3adax7aRLganB+vQaDKko+Ro=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rsYGGnsYvvEPjBZiiAbh3wrqxsCgNTzehJX9iF0FJ1XAT7JKWffo/WbRBpw09cMlfdvE0xUyvJjlPdEo8sWZWCcG+pM2M2mxu1yzC2eOqLJ38aMbUnuG/EPHdC+6sx9a2ouKJJRAZ2af24+pf1xOss5LbDKhAleGBRkIyRrGqgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lT6AfIu/; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N5rl2Snv"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Eep4uO6IdxIoFh9wlEbBKbozSZYP6Z3w0Jrhaxl6EhGOa9c2Undzd/M8hdiqv7SQUdeBCsNnMCFaPHMH+srlpNIe9qnGuPIIWWu/++SHehWPFCeA65awdGZE3gUavr/cH9JlN48o9jOjorB7nOHPT8URExrDMPdBRyOydeEpz1oM80gk1TH5qoUIp7sBP6BVcUfvAc3kmFcLn03PxIBQdh8LUDiB+LgccGO4Yg6Uzf2yz17PFZ8B/UwDJxVtmVQZJuCYDPa0KvBQNSsI97z4Z/1ut6Z+pR1CltsHyCNDobLisgY9Hx+DgktoIWHnYXeQybQJYSW5C6alr1/LnGmQfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bYMTSDTqs/gCV+J/1ppeAETg3ADdwBX2Ep5fbLzD8z8=;
- b=Cb4gB99sYT9RRkYh6vCC7rWMI1Zm/pKSC9Sq9OEwUAGbn9mEi4xNDoDrlKuOsOehgYYhvtv5pjHj2SDbSr3BSbYkae4xu+o1irAMvN4fj3HPnrBc5zg7/VNhdD6Z04MV9EXlBjuE2ddG99096yiTqGuCgJ3yEi/Rf+KZP1HkzzSzT0RMF1IxUH7+LNtmDvaGvXpPvWaJQxxXMDWBgMYf7RMqpRc2CBlaET3xMIW0XZcfv6OTdMT1wEKjnwQsTsP77dk0U7MeGVyqYMXKZf1ADK2RmNtXa57iOqmtHqp2LrX+TEXeHxYE2q8VKD+7HEpBBqFLkzgkc8dfTlppR4WtMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bYMTSDTqs/gCV+J/1ppeAETg3ADdwBX2Ep5fbLzD8z8=;
- b=N5rl2SnvDAHLmfiVT+O1hpv3wxEz5LU0fBhhv8xeNFsfhAVjEG2udX9XlE99f8jyUsQ2zLq6klUaPFXyQ+/j7jvQcFqcFhItU9Nu6pOK9lYqTSLkUbG5ZG7urum3Jv7WHJoCj2XnnmFjmoQnqSD2qUIVdsKXksXQ86/uolFlNwDIRc1YBl/e3ydVM+wX4gD98NH7ZjP0/9+Ys67xKihA0ngiU4o0t5g6VtN1y3Ohv1ZT2+mkv8MJW3jxwEikA14Rj8xaMBImTKKjpJ6MWCKutES+gpXrHSsvE7kGLk8oFhNszy8lrDJQ6Gqwv6lO/ubvRbu4bHkEfNahtzXNWROuAA==
-Received: from MN2PR20CA0028.namprd20.prod.outlook.com (2603:10b6:208:e8::41)
- by DS0PR12MB7606.namprd12.prod.outlook.com (2603:10b6:8:13c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.17; Mon, 13 Jan
- 2025 08:49:43 +0000
-Received: from BL6PEPF0001AB57.namprd02.prod.outlook.com
- (2603:10b6:208:e8:cafe::fe) by MN2PR20CA0028.outlook.office365.com
- (2603:10b6:208:e8::41) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8293.19 via Frontend Transport; Mon,
- 13 Jan 2025 08:49:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF0001AB57.mail.protection.outlook.com (10.167.241.9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8356.11 via Frontend Transport; Mon, 13 Jan 2025 08:49:42 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 13 Jan
- 2025 00:49:30 -0800
-Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 13 Jan 2025 00:49:29 -0800
-From: Vadim Pasternak <vadimp@nvidia.com>
-To: <linux@roeck-us.net>
-CC: <linux-hwmon@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH hwmon 2/2] hwmon: (mlxreg-fan) Add support for new flavour of capability register
-Date: Mon, 13 Jan 2025 10:48:59 +0200
-Message-ID: <20250113084859.27064-3-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20250113084859.27064-1-vadimp@nvidia.com>
-References: <20250113084859.27064-1-vadimp@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lT6AfIu/"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53ffaaeeb76so4052227e87.0;
+        Mon, 13 Jan 2025 01:29:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736760540; x=1737365340; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QpQ9AlCQLP6BQns+FgEwKwSOol1thjAJL13Qb3EeQnA=;
+        b=lT6AfIu/IA/QDKtivymLjFkVirDaC19egd6kEq3/XH7tDdgZHOH3KiNX9YOEnvqnZ7
+         O8vYV1qFTQS01zB3bjq9KX8Vs0O/DzOx4FT4SG8nwKxLaAFijYqv9t8/PjC4L15r4Hoi
+         jz5hoz0mogbcxRGVEoqE9NwAVQIMhCYxmdlNmWfze5CrZDVxUgWfSm6Fkf3PBNuma+co
+         Zr9yl01mmfgZt+Hbv7Zw3rphxaE9x6q5zUfPagrcG/JYzU849EGdYfqNJuf+coCjaPUo
+         SKF7/JHXAgK/9cEOH/MeQOltI3UIhkP3I7x5V6DaXguy8p53WB1NGluQ2NIW7moty3+9
+         33VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736760540; x=1737365340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QpQ9AlCQLP6BQns+FgEwKwSOol1thjAJL13Qb3EeQnA=;
+        b=otFZeXQIMPm4sjjbTYl6ePXv/eovo14yZByVaXVG5V1ZW8WepLYCmSAKSmw9QeC1F0
+         zMjksqyjAZSJUXVvNu7HX/L/aF0YnfXWT0DJMkp3Kln4gJDUlyTfjxV0J8m1Z5Gn8tBT
+         uYFxiRrGJbXaQvrPFf/04+uMW7c08aFUuEEWvKsmCg5zoj4/RiBT8Tya8d8CwmhCSdeH
+         LvcxyoOZIrs9wPuFovwCh7F5686+jcCfLcV3q+CADWzDZCO1+zJRHYaJXWKDtU/8WMnq
+         m3/3e9ULAekRbNsdnEusBVYAkrLzj3vr1tLdJr4X7/cV/JVCeJFkljUq7dtecpwTGtDj
+         yaEw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0i+T7ECHdXcrhx2K1zsOlnEj50eN0bRZoN7BBreNPkhVj8f4/pItPyF0WVucoBsLZX0hoT4I9uU5eOos=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzptnd4onzEPXiUtJpvhIa7PBz0t77FAiTEOUGdVURsHKrkr2e9
+	m24YrYMPttUsd46AbV8WuoMUfOEN7dpf4+uR/VPiG9714gnk9+nf
+X-Gm-Gg: ASbGncvwMXBPFQgY5nvuKHugSuNgYJNIwYkaqenuOa7AHu4DlXS0OTxb11o2ep5zFz+
+	v6QJRB/KUt8Uw9zqAicp5JdLhOU10z+k8ysX0GZqMmEXADN5NHwwWYHwGPdyx3gpZm0pTApoEuF
+	KEMIRcCpZ9RSMC8avikLIPsVbQbcsJODzYyUBJlFlc+UQmxCGXbOPUueGQWcHEhVm4VjrBYfaHG
+	A5Ase56f9eSsIASNLMXd9qqNI98ro0xK44GrB2VWZh1huXtQY5rDuVR
+X-Google-Smtp-Source: AGHT+IFz3zzrCVLnXIXywVkKY8nvnD6k+VQjkizijZ9WdYWTp3JFUYUgsVJnclo93rrfkXC7m7gU9Q==
+X-Received: by 2002:a05:6512:3c95:b0:540:353a:df8e with SMTP id 2adb3069b0e04-54284801c52mr6400828e87.39.1736760539327;
+        Mon, 13 Jan 2025 01:28:59 -0800 (PST)
+Received: from X220-Tablet.. ([83.217.202.104])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5428bec073esm1295414e87.194.2025.01.13.01.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 01:28:58 -0800 (PST)
+From: Denis Kirjanov <kirjanov@gmail.com>
+To: robert.marko@sartura.hr,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Denis Kirjanov <kirjanov@gmail.com>
+Subject: [PATCH v4] hwmon: pmbus: dps920ab: Add ability to instantiate through i2c
+Date: Mon, 13 Jan 2025 12:28:46 +0300
+Message-ID: <20250113092846.10786-1-kirjanov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,141 +72,44 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB57:EE_|DS0PR12MB7606:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54dab9a2-a9b6-4375-938a-08dd33af393b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?SfFfGwMJ2FzOWpIZGSMLd/q+9r1V0mX3on/vnscR3FjiFUbPyxBue2bMycuW?=
- =?us-ascii?Q?0TTainKtDCF79jTHbSv+ajTh9kqlqCuKMu5qj3Yiu1TybroaZo/ulHJh9Bl9?=
- =?us-ascii?Q?9rP0JvRfeEwMW3Jgt4p2qJ20uobDKkbCSCccoNhCoEw9MwiudRHQBLxP3Ks1?=
- =?us-ascii?Q?u51BgsHu+eEIhpNuHJxHAI8yng62htbA9FAJT9dl08QYjNjyR8Libki+NT3J?=
- =?us-ascii?Q?dG93RXkrKVW7whxxrU9aPJGHxiVaTfsJvZhH9Ic5LWIu4eV6zBRi2AFXzdUM?=
- =?us-ascii?Q?Awv8TT44WR6SRk+zF90fJ7T0mShlXRCZ2XXvW3eIrUX1eoVcdIH2OQ+O/n3E?=
- =?us-ascii?Q?aC2B3jsMH1CWOHEq2mQm6qSGUP4sNTnyKiRqh8lElllAvzTky3oZR69wDK4i?=
- =?us-ascii?Q?hEhNf2RNx/ZBSnKKzM/uabwJOfJ/uUFeUNtt7F9+lXRYBZWupDVQPRmiUHHP?=
- =?us-ascii?Q?v+/fmd7wRtmrkfVpikK5iK6Gz6m5aOPY3IkPUKBGAPtUXnEAptuMGIDFX6Oj?=
- =?us-ascii?Q?IqDyr67bN3Ni9IPsUfdlYY4B26zDiJYGNJ9eRGGojywRbxXG0yf9fy5KZ7x8?=
- =?us-ascii?Q?RiG6XElWWuM/MbqZqyXxjcjzLefgDtmr3yt2GxSSbDIJaqc66RBSKEnwfryi?=
- =?us-ascii?Q?MdwkcAEkt1j9x4HRmlurnFp/bWoX9/bhZqI81qhmBYxZYgOKzvQFuxJQzEdo?=
- =?us-ascii?Q?MNYMULzSch6fnNonv9ylhaMLL0FY6ZxiGzdJIDyrRCwG1i/I4pgs+ml6syCS?=
- =?us-ascii?Q?HoKoOqoBAQ2aeAEJ8lE2uXso+4V93ldWt7TqblR+gNOJFt0qKDf5EvAAnNGK?=
- =?us-ascii?Q?I7RZ2g7qB+NcM3tCEDmgRo81FY7lbX9PrJavEQ5gYQjO/wiSnPeVou13Eccs?=
- =?us-ascii?Q?zviO2Y5uz7l0hAPMeq4yuN2S3kibkJE+y18flnXnzPhFRpt43vv29nWvO3lM?=
- =?us-ascii?Q?0RHtbMrdlIhFuZj8xc5thJsKWOv/q/soco2q4mPYpPLHjrsLgZhAqrLn5sOg?=
- =?us-ascii?Q?jEk+KXNs78vFB6vdf+GMnRNBLrZ/vCKLWoLcKpG24DKp19E3VHlIDHCNFBk0?=
- =?us-ascii?Q?wj8RUYjE6V0HbAKDNdeIjzcGMrJaL3WLfE+Igks37K2kFVEJ5gxiRJG/wJy2?=
- =?us-ascii?Q?g1hkFu1tnpxXjVd1O1bAM1RM8dBaO6DroOkTVRXs7XUuueojlhlJSAEbwSVp?=
- =?us-ascii?Q?nZ1Tu8PDckjz4yPBip1fmaCFysV2m3KIQQdy6OUj3HgDqLrgHxbxB7V88OVF?=
- =?us-ascii?Q?d9YDpGThvRR+U5DM9Lo2KzNkIbkad/e8hTnbOBQb1WizNlRLibnWNKHHuvFV?=
- =?us-ascii?Q?epfKuFOSOX5koBiOtKklK7gIZzCGwAsXj2HJOhza+m+2g71xs9lBtsOXmVy8?=
- =?us-ascii?Q?dt+PawQsfACM6plArg1MRXvUBk6FW1Vgb9lVcYDriifIpGorlL7XTEGbpVp8?=
- =?us-ascii?Q?SUBM3DKaGWrsGjn4swik8+/Z3NCCFA/ihI38t+FPmWJY7U+qEeLUiQF4bb0K?=
- =?us-ascii?Q?gsigoDk5l6oTePQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2025 08:49:42.6790
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54dab9a2-a9b6-4375-938a-08dd33af393b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB57.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7606
 
-FAN platform data is common across the various systems, while fan
-driver should be able to apply only the fan instances relevant
-to specific system.
+Add support for instantiating the Delta DPS920AB PSU
+through I2C on systems without devicetree support.
 
-For example, platform data might contain descriptions for fan1,
-fan2, ..., fan{n}, while some systems equipped with all 'n' fans,
-others with less.
-Also, on some systems fan drawer can be equipped with several
-tachometers and on others only with one.
-
-For detection of the real number of equipped drawers and tachometers
-special capability registers are used.
-These registers used to indicate presence of drawers and tachometers
-through the bitmap.
-
-For some new big modular systems this register will provide presence
-data by counter.
-
-Use slot parameter to distinct whether capability register contains
-bitmask or counter.
-
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
 ---
- drivers/hwmon/mlxreg-fan.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+changelog:
+v2: add verbose description
+v3: conform to the canonical patch format
+v4: send the proper patch version
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index f848232c2c00..01faf1a8f55a 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -63,12 +63,14 @@ struct mlxreg_fan;
-  * @reg: register offset;
-  * @mask: fault mask;
-  * @prsnt: present register offset;
-+ * @shift: tacho presence bit shift;
-  */
- struct mlxreg_fan_tacho {
- 	bool connected;
- 	u32 reg;
- 	u32 mask;
- 	u32 prsnt;
-+	u32 shift;
+ drivers/hwmon/pmbus/dps920ab.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+index cc5aac9dfdb3..325111a955e6 100644
+--- a/drivers/hwmon/pmbus/dps920ab.c
++++ b/drivers/hwmon/pmbus/dps920ab.c
+@@ -190,12 +190,19 @@ static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+ 
+ MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+ 
++static const struct i2c_device_id dps920ab_device_id[] = {
++	{ "dps920ab" },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, dps920ab_device_id);
++
+ static struct i2c_driver dps920ab_driver = {
+ 	.driver = {
+ 		   .name = "dps920ab",
+ 		   .of_match_table = of_match_ptr(dps920ab_of_match),
+ 	},
+ 	.probe = dps920ab_probe,
++	.id_table = dps920ab_device_id,
  };
  
- /*
-@@ -143,8 +145,10 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 				/*
- 				 * Map channel to presence bit - drawer can be equipped with
- 				 * one or few FANs, while presence is indicated per drawer.
-+				 * Shift channel value if necessary to align with register value.
- 				 */
--				if (BIT(channel / fan->tachos_per_drwr) & regval) {
-+				if (BIT(rol32(channel, tacho->shift) / fan->tachos_per_drwr) &
-+					regval) {
- 					/* FAN is not connected - return zero for FAN speed. */
- 					*val = 0;
- 					return 0;
-@@ -408,7 +412,7 @@ static int mlxreg_fan_connect_verify(struct mlxreg_fan *fan,
- 		return err;
- 	}
- 
--	return !!(regval & data->bit);
-+	return data->slot ? (data->slot <= regval ? 1 : 0) : !!(regval & data->bit);
- }
- 
- static int mlxreg_pwm_connect_verify(struct mlxreg_fan *fan,
-@@ -545,7 +549,15 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
- 			return err;
- 		}
- 
--		drwr_avail = hweight32(regval);
-+		/*
-+		 * The number of drawers could be specified in registers by counters for newer
-+		 * systems, or by bitmasks for older systems. In case the data is provided by
-+		 * counter, it is indicated through 'version' field.
-+		 */
-+		if (pdata->version)
-+			drwr_avail = regval;
-+		else
-+			drwr_avail = hweight32(regval);
- 		if (!tacho_avail || !drwr_avail || tacho_avail < drwr_avail) {
- 			dev_err(fan->dev, "Configuration is invalid: drawers num %d tachos num %d\n",
- 				drwr_avail, tacho_avail);
+ module_i2c_driver(dps920ab_driver);
 -- 
-2.44.0
+2.43.0
 
