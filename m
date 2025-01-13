@@ -1,70 +1,34 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995F414A09C;
-	Mon, 13 Jan 2025 09:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADF922CF05;
+	Mon, 13 Jan 2025 13:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736760543; cv=none; b=n00UEi236fjgAbtouNl0D+mOJDfww+IaMI2mjx3ght+LJiIiqn24pjRubQkP80LjKN4rUslGMKLFQE8N4u5tfwC5vUX9EsD4KRkVf/oisy62lMlDo/Ook0ZC0xrvGOe0KqEY8LO2IpDYRbFsixu3JtBRntMleXRo4x+ReBtWHew=
+	t=1736776298; cv=none; b=NvPc7hBcG8+8jQ1K92wfZ1NSunck/6qXHX7oE5v/gAWrUo+zYAXQOdu7FQSFa8+IaLHO7B0WMYKkYp4a4qMdLQ5Q512DcfpZvO1O0UM43QHyWMJRPXtU09CN26CFujZPY6oCOAkdTh+1zSbMqRJgVTO6aHXa2NpVnpOSP5SpsJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736760543; c=relaxed/simple;
-	bh=HdCdXCWCYKKqxlcgrFa3adax7aRLganB+vQaDKko+Ro=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rsYGGnsYvvEPjBZiiAbh3wrqxsCgNTzehJX9iF0FJ1XAT7JKWffo/WbRBpw09cMlfdvE0xUyvJjlPdEo8sWZWCcG+pM2M2mxu1yzC2eOqLJ38aMbUnuG/EPHdC+6sx9a2ouKJJRAZ2af24+pf1xOss5LbDKhAleGBRkIyRrGqgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lT6AfIu/; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lT6AfIu/"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53ffaaeeb76so4052227e87.0;
-        Mon, 13 Jan 2025 01:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736760540; x=1737365340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QpQ9AlCQLP6BQns+FgEwKwSOol1thjAJL13Qb3EeQnA=;
-        b=lT6AfIu/IA/QDKtivymLjFkVirDaC19egd6kEq3/XH7tDdgZHOH3KiNX9YOEnvqnZ7
-         O8vYV1qFTQS01zB3bjq9KX8Vs0O/DzOx4FT4SG8nwKxLaAFijYqv9t8/PjC4L15r4Hoi
-         jz5hoz0mogbcxRGVEoqE9NwAVQIMhCYxmdlNmWfze5CrZDVxUgWfSm6Fkf3PBNuma+co
-         Zr9yl01mmfgZt+Hbv7Zw3rphxaE9x6q5zUfPagrcG/JYzU849EGdYfqNJuf+coCjaPUo
-         SKF7/JHXAgK/9cEOH/MeQOltI3UIhkP3I7x5V6DaXguy8p53WB1NGluQ2NIW7moty3+9
-         33VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736760540; x=1737365340;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QpQ9AlCQLP6BQns+FgEwKwSOol1thjAJL13Qb3EeQnA=;
-        b=otFZeXQIMPm4sjjbTYl6ePXv/eovo14yZByVaXVG5V1ZW8WepLYCmSAKSmw9QeC1F0
-         zMjksqyjAZSJUXVvNu7HX/L/aF0YnfXWT0DJMkp3Kln4gJDUlyTfjxV0J8m1Z5Gn8tBT
-         uYFxiRrGJbXaQvrPFf/04+uMW7c08aFUuEEWvKsmCg5zoj4/RiBT8Tya8d8CwmhCSdeH
-         LvcxyoOZIrs9wPuFovwCh7F5686+jcCfLcV3q+CADWzDZCO1+zJRHYaJXWKDtU/8WMnq
-         m3/3e9ULAekRbNsdnEusBVYAkrLzj3vr1tLdJr4X7/cV/JVCeJFkljUq7dtecpwTGtDj
-         yaEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0i+T7ECHdXcrhx2K1zsOlnEj50eN0bRZoN7BBreNPkhVj8f4/pItPyF0WVucoBsLZX0hoT4I9uU5eOos=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzptnd4onzEPXiUtJpvhIa7PBz0t77FAiTEOUGdVURsHKrkr2e9
-	m24YrYMPttUsd46AbV8WuoMUfOEN7dpf4+uR/VPiG9714gnk9+nf
-X-Gm-Gg: ASbGncvwMXBPFQgY5nvuKHugSuNgYJNIwYkaqenuOa7AHu4DlXS0OTxb11o2ep5zFz+
-	v6QJRB/KUt8Uw9zqAicp5JdLhOU10z+k8ysX0GZqMmEXADN5NHwwWYHwGPdyx3gpZm0pTApoEuF
-	KEMIRcCpZ9RSMC8avikLIPsVbQbcsJODzYyUBJlFlc+UQmxCGXbOPUueGQWcHEhVm4VjrBYfaHG
-	A5Ase56f9eSsIASNLMXd9qqNI98ro0xK44GrB2VWZh1huXtQY5rDuVR
-X-Google-Smtp-Source: AGHT+IFz3zzrCVLnXIXywVkKY8nvnD6k+VQjkizijZ9WdYWTp3JFUYUgsVJnclo93rrfkXC7m7gU9Q==
-X-Received: by 2002:a05:6512:3c95:b0:540:353a:df8e with SMTP id 2adb3069b0e04-54284801c52mr6400828e87.39.1736760539327;
-        Mon, 13 Jan 2025 01:28:59 -0800 (PST)
-Received: from X220-Tablet.. ([83.217.202.104])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5428bec073esm1295414e87.194.2025.01.13.01.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 01:28:58 -0800 (PST)
-From: Denis Kirjanov <kirjanov@gmail.com>
-To: robert.marko@sartura.hr,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Denis Kirjanov <kirjanov@gmail.com>
-Subject: [PATCH v4] hwmon: pmbus: dps920ab: Add ability to instantiate through i2c
-Date: Mon, 13 Jan 2025 12:28:46 +0300
-Message-ID: <20250113092846.10786-1-kirjanov@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736776298; c=relaxed/simple;
+	bh=MV3w776H71efip+uUkDnxafFSdskYJW9IH/OyHjnADg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UFHqN8QQBuStmC0Lww/aBuymJfd12mI5gS445ASqVWVxJQJJcg4j8kexjLPK8kha/Jg7HabeEt9IY9MViO9e4BDCZNMosU6pDJb/4NYQYels/LAk6yXyVq86SDPMLqr9nLVntaX9VCGW/lzelBDICMR/1D+gIJIqFY1DTOhhCls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 694E660004;
+	Mon, 13 Jan 2025 13:51:32 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+	(envelope-from <peko@dell.be.48ers.dk>)
+	id 1tXKqp-00GlIC-23;
+	Mon, 13 Jan 2025 14:51:31 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Cc: Peter Korsgaard <peter@korsgaard.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v5] hwmon: (pwm-fan): Default to the Maximum cooling level if provided
+Date: Mon, 13 Jan 2025 14:51:18 +0100
+Message-Id: <20250113135118.3994998-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,44 +36,81 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-GND-Sasl: peter@korsgaard.com
 
-Add support for instantiating the Delta DPS920AB PSU
-through I2C on systems without devicetree support.
+The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
+always be desirable because of noise or power consumption peaks.
 
-Signed-off-by: Denis Kirjanov <kirjanov@gmail.com>
+The driver optionally accept a list of "cooling-levels" for the thermal
+subsystem.  If provided, use the PWM value corresponding to the maximum
+cooling level rather than the full level as the initial PWM setting.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-changelog:
-v2: add verbose description
-v3: conform to the canonical patch format
-v4: send the proper patch version
+Changes since v4:
+- Dropped custom property, use highest cooling level
 
- drivers/hwmon/pmbus/dps920ab.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes since v3:
+- Readded validation code from v2, reworded commit message
 
-diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
-index cc5aac9dfdb3..325111a955e6 100644
---- a/drivers/hwmon/pmbus/dps920ab.c
-+++ b/drivers/hwmon/pmbus/dps920ab.c
-@@ -190,12 +190,19 @@ static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+Changes since v2:
+- Recreated/resent
+
+Changes since v1:
+- Rename property to default-pwm
+- Drop u32 cast
+
+ drivers/hwmon/pwm-fan.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 53a1a968d00d..f8282050a4dd 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -497,7 +497,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	struct device *hwmon;
+ 	int ret;
+ 	const struct hwmon_channel_info **channels;
+-	u32 pwm_min_from_stopped = 0;
++	u32 initial_pwm, pwm_min_from_stopped = 0;
+ 	u32 *fan_channel_config;
+ 	int channel_count = 1;	/* We always have a PWM channel. */
+ 	int i;
+@@ -545,11 +545,22 @@ static int pwm_fan_probe(struct platform_device *pdev)
  
- MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+ 	ctx->enable_mode = pwm_disable_reg_enable;
  
-+static const struct i2c_device_id dps920ab_device_id[] = {
-+	{ "dps920ab" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, dps920ab_device_id);
++	ret = pwm_fan_get_cooling_data(dev, ctx);
++	if (ret)
++		return ret;
 +
- static struct i2c_driver dps920ab_driver = {
- 	.driver = {
- 		   .name = "dps920ab",
- 		   .of_match_table = of_match_ptr(dps920ab_of_match),
- 	},
- 	.probe = dps920ab_probe,
-+	.id_table = dps920ab_device_id,
- };
++
++	/* use maximum cooling level if provided */
++	if (ctx->pwm_fan_cooling_levels)
++		initial_pwm = ctx->pwm_fan_cooling_levels[ctx->pwm_fan_max_state];
++	else
++		initial_pwm = MAX_PWM;
++
+ 	/*
+ 	 * Set duty cycle to maximum allowed and enable PWM output as well as
+ 	 * the regulator. In case of error nothing is changed
+ 	 */
+-	ret = set_pwm(ctx, MAX_PWM);
++	ret = set_pwm(ctx, initial_pwm);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
+ 		return ret;
+@@ -661,10 +672,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		return PTR_ERR(hwmon);
+ 	}
  
- module_i2c_driver(dps920ab_driver);
+-	ret = pwm_fan_get_cooling_data(dev, ctx);
+-	if (ret)
+-		return ret;
+-
+ 	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+ 	if (IS_ENABLED(CONFIG_THERMAL)) {
+ 		cdev = devm_thermal_of_cooling_device_register(dev,
 -- 
-2.43.0
+2.39.5
 
