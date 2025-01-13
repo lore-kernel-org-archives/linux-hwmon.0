@@ -1,116 +1,93 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADF922CF05;
-	Mon, 13 Jan 2025 13:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2636923ED66
+	for <linux-hwmon@vger.kernel.org>; Mon, 13 Jan 2025 14:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736776298; cv=none; b=NvPc7hBcG8+8jQ1K92wfZ1NSunck/6qXHX7oE5v/gAWrUo+zYAXQOdu7FQSFa8+IaLHO7B0WMYKkYp4a4qMdLQ5Q512DcfpZvO1O0UM43QHyWMJRPXtU09CN26CFujZPY6oCOAkdTh+1zSbMqRJgVTO6aHXa2NpVnpOSP5SpsJ4=
+	t=1736778459; cv=none; b=h9gvyICGEMl9FKi2znLu+7tu+QvJbysq8q7wVDtKRNEyk18v8p9W73tg+Ms3raqgOzIcgs7Jw/XR+EAcHpUTjH33ybt82xH8ZdhmNUg6Ud0qA17whc/Cz9FZIPhfGmC/gOLnB+dtZx5GwQmzoBf1n/EmzDfTpyp5XGmq1d+78kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736776298; c=relaxed/simple;
-	bh=MV3w776H71efip+uUkDnxafFSdskYJW9IH/OyHjnADg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UFHqN8QQBuStmC0Lww/aBuymJfd12mI5gS445ASqVWVxJQJJcg4j8kexjLPK8kha/Jg7HabeEt9IY9MViO9e4BDCZNMosU6pDJb/4NYQYels/LAk6yXyVq86SDPMLqr9nLVntaX9VCGW/lzelBDICMR/1D+gIJIqFY1DTOhhCls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 694E660004;
-	Mon, 13 Jan 2025 13:51:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
-	(envelope-from <peko@dell.be.48ers.dk>)
-	id 1tXKqp-00GlIC-23;
-	Mon, 13 Jan 2025 14:51:31 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Cc: Peter Korsgaard <peter@korsgaard.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5] hwmon: (pwm-fan): Default to the Maximum cooling level if provided
-Date: Mon, 13 Jan 2025 14:51:18 +0100
-Message-Id: <20250113135118.3994998-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1736778459; c=relaxed/simple;
+	bh=9COjNnYSCnP8zzlKxYLZwJwxNyQ7tz6+0SRpVTiaoKA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I4mRSqodzpOZjo31GmRR8sCbQLUSSoXBbY5BkfWFWZlFBw4KyFI/yM+MjR/KRcXdGCthrpzkdLD/VOUmaLJ99ivi3DWYiXFdyIqq/UKH8jpk8tJL93RHQ8+cSTfno//BHA3N3lCR653/ORkJwKIp0xDwnQ0b9yMkCIbOeVEF9LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RTFFo/Nc; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RTFFo/Nc"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54021daa6cbso3767973e87.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jan 2025 06:27:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736778454; x=1737383254; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9COjNnYSCnP8zzlKxYLZwJwxNyQ7tz6+0SRpVTiaoKA=;
+        b=RTFFo/Nc0I67EKGVoQ2fVY+cBYZ1TOo4yfCkuQsrfXiUN/mMDNf6gKE+5xAGtzcZr4
+         S4LQ/2JOuspC6iCEE6RPYMePSsDMdxS96zqIoZ6zkeHgAX5KEv6Zqj0banLzNt1rcx/D
+         wtF/RTZoReuro9wI7XOMvVU/Ne7O/mmmPbcbo98ltio+r0vjyTtOeE24eW51Cy73M2pT
+         GuDi+9Cv5csdLtMI+/KXAHpuBCDNKIMW6MSrFFVP1CBPpYZW2WFpNl5h41yd6IMDr15r
+         OuY4IANWYquM0Ap6hYB2mGitr/D9Z8IcxjFNNLymHhIi4pgkp3NYGW/YJ/UoVlo7FMxq
+         xnmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736778454; x=1737383254;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9COjNnYSCnP8zzlKxYLZwJwxNyQ7tz6+0SRpVTiaoKA=;
+        b=iOeu9ZqflXp+NKUGhbuwc9p5bA9YctLlb6G75tMu/NZ9RVv1ALtkZeb90Hn8lNWLkC
+         Mw7wRqlpXeVp/bbvxPtjRYJnT8VHxLTdbbT054nRGAoUdPcdkMQFg8W4Bmughop9WuuR
+         ++QU3qD/I09hBTS25OavMz4UsJuwAPlyKlbRoEqbpXMtd+q/WDQPSJveN/On63leYY6+
+         5sZhgAUvlGVcWqhdP7bgMJZGi+pRSKmfiCmS+Bwkul1nyXIAduL9LBG74T5pPt4fU9Nc
+         3KcL/QBcKjV3mxNlRSPuSTu3m59eXCc+BKCYhsBpXjO+GOCUXbLcEfcb4Bd+HpDmez1w
+         uoXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFVgQVMfizYJO1nW6G+48wdgmgKFfw8TBBuuOisRmQS0g8SRgwHNLqDqqhwhhvViRXfEizDbuzHyRqww==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+VeZVi8x7pvna3KZXbmFihXP8POLGiJLT1CEfgRH3iVVFNFRM
+	VQiM5hP6xNqH31Kv3npH1YyOwVMK3K73BU+BfBxKWwN3JRXVjualTJFj2wY6Eb59LqWqbZHLri7
+	ihKBP3wvqk2WOD0AISZ9GSe0bYB4D4orhLZDuqQ==
+X-Gm-Gg: ASbGncv81C+IBi2gk5sR2AW/X3GXiKqeMsf9w6VqqPNGHffLoWR+5yVJZE8Vs3C52oj
+	x6V89aXM22bteppHuKEnCyQ2KU5LchivnMzI3
+X-Google-Smtp-Source: AGHT+IFMYdQtB6thju+Ujdvh+g52bV07bNIc66J4gueu0snzInT0RR6j0JQTqPJk7Ksj973O3ybZVrtFDEZoewU6/5c=
+X-Received: by 2002:a05:6512:3a84:b0:540:357b:2137 with SMTP id
+ 2adb3069b0e04-542845d1b19mr6514038e87.26.1736778454280; Mon, 13 Jan 2025
+ 06:27:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: peter@korsgaard.com
+References: <20241227095727.2401257-1-a0282524688@gmail.com> <20241227095727.2401257-3-a0282524688@gmail.com>
+In-Reply-To: <20241227095727.2401257-3-a0282524688@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 13 Jan 2025 15:27:23 +0100
+X-Gm-Features: AbW1kvZkOrvrzVjSbv0zK88kVQwaAoATB6fakJzdiYtYFp9GmQSO92IIKLuVefo
+Message-ID: <CACRpkdYxtfrgs=Y=OVDjdRu-a1q9qPBdm=yeHojOaCyN5ou0Lg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The pwm-fan driver uses full PWM (255) duty cycle at startup, which may not
-always be desirable because of noise or power consumption peaks.
+On Fri, Dec 27, 2024 at 10:57=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wr=
+ote:
 
-The driver optionally accept a list of "cooling-levels" for the thermal
-subsystem.  If provided, use the PWM value corresponding to the maximum
-cooling level rather than the full level as the initial PWM setting.
+> This driver supports GPIO and IRQ functionality for NCT6694 MFD
+> device based on USB interface.
+>
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-Changes since v4:
-- Dropped custom property, use highest cooling level
+This driver looks completely reasonable to me.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Changes since v3:
-- Readded validation code from v2, reworded commit message
-
-Changes since v2:
-- Recreated/resent
-
-Changes since v1:
-- Rename property to default-pwm
-- Drop u32 cast
-
- drivers/hwmon/pwm-fan.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 53a1a968d00d..f8282050a4dd 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -497,7 +497,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	struct device *hwmon;
- 	int ret;
- 	const struct hwmon_channel_info **channels;
--	u32 pwm_min_from_stopped = 0;
-+	u32 initial_pwm, pwm_min_from_stopped = 0;
- 	u32 *fan_channel_config;
- 	int channel_count = 1;	/* We always have a PWM channel. */
- 	int i;
-@@ -545,11 +545,22 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 
- 	ctx->enable_mode = pwm_disable_reg_enable;
- 
-+	ret = pwm_fan_get_cooling_data(dev, ctx);
-+	if (ret)
-+		return ret;
-+
-+
-+	/* use maximum cooling level if provided */
-+	if (ctx->pwm_fan_cooling_levels)
-+		initial_pwm = ctx->pwm_fan_cooling_levels[ctx->pwm_fan_max_state];
-+	else
-+		initial_pwm = MAX_PWM;
-+
- 	/*
- 	 * Set duty cycle to maximum allowed and enable PWM output as well as
- 	 * the regulator. In case of error nothing is changed
- 	 */
--	ret = set_pwm(ctx, MAX_PWM);
-+	ret = set_pwm(ctx, initial_pwm);
- 	if (ret) {
- 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
- 		return ret;
-@@ -661,10 +672,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		return PTR_ERR(hwmon);
- 	}
- 
--	ret = pwm_fan_get_cooling_data(dev, ctx);
--	if (ret)
--		return ret;
--
- 	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
- 	if (IS_ENABLED(CONFIG_THERMAL)) {
- 		cdev = devm_thermal_of_cooling_device_register(dev,
--- 
-2.39.5
-
+Yours,
+Linus Walleij
