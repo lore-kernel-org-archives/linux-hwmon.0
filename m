@@ -1,49 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C902500B4;
-	Tue, 14 Jan 2025 08:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE291CDA19;
+	Tue, 14 Jan 2025 08:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736843707; cv=none; b=lUzuCvQvqsS08+9k6+YzZMcDIVjFxx1YDYzpIGLGZKOH3eyCrOtkaA/GFnlUkWvZh/wqRb3GiLHBtjrei1Whc59XJJCB4qU5xXjgQEl1edkIFtw0C7aP4rqNvHzNydHcHfHS7TgTU8782dwjUkYUb9OxeZE0sNhzOjWSSWQ7zNE=
+	t=1736843941; cv=none; b=fyJNvqMiTzA6UcQfJeDCN66hNuNfd7IFwQxHEMXb/tP5nJ3nKVQ3rF5awploYeP9oJtVxnMzL9Da9vXPkU7dHiS1JrVAHSxlrR+VUD36HE9dvR6YBEHqEYQ8xsCUbQqr6TV2fkvtqOqBP2xd3nzHbHJh0BXg58pNO9WYR7ycYDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736843707; c=relaxed/simple;
-	bh=5Az6JReYG84QRZTtJ9fIk51QZVN4wnnJD/GoPG7m00s=;
+	s=arc-20240116; t=1736843941; c=relaxed/simple;
+	bh=yjGa/XOca+kr7ntzRGUA8aW3yZEFIEKkisZvNDZ1fYE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K8IhZWlP3ymWVuK8Yg9MoyqMKEyG9rDxMB2WyYelA2nglrZk6QK0dRxezAta/k8QLjZtGa8bIhPb+opyVDEOUQh2B3W1fxHdHiPLk+X2OE48ChZf4SOBnYQDN3J4WW+YOwsnZf3zkZpsDhedFRsSjMkozIM2/hOO3ENktAhFZt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G4oD8puY; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=f3JJ+HvZcWcD6CpBLsMKhYRYkcibjfrT8UTC6pzVc+pALGH5zNq8h1ZYoQLR8Ph5jeiI9malvQK8w/KHv3Z3lYFu7/4CgqSfjSWaIfq0CP9ZLV9nPPvkdowHI7fKhkRenXCZK2I6iklT8RAh0AebzHwH5/8QjxeYkD274KU4n3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jzu0WGFI; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4oD8puY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jzu0WGFI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736843707; x=1768379707;
+  t=1736843939; x=1768379939;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5Az6JReYG84QRZTtJ9fIk51QZVN4wnnJD/GoPG7m00s=;
-  b=G4oD8puYIdElMsZhSYQXRSFtrNaAxMUMYgkCl/g18BnzOR53sxFWekzH
-   WulVovV1iKpO8bMRaMDfitQhnldzrKQPgW/f5hzitZmlu5bbbAgNMuNEW
-   2qkEsB7YteKTSj0YSlwyqgM8tQAT9eah3ieCNscMsA5hcsxDwpFJeG0vl
-   wWVLqgT32wBY5gGLXZyoPL2oQmhLXtWgRupIJ1vSYuXFB+YT91lEPncRc
-   YRTPIfzOjhfUbWXse96BZpsz9QvQcoIEniVvQD88/WWV08Vgo9rvi8Ng4
-   o3dLrXBOS58axJXkB5Hh7BhYW8BY7ELUj32Q6aUESvS7soVkwAFREiBg2
-   Q==;
-X-CSE-ConnectionGUID: +sLLUek6TA6zePDJt5wnrQ==
-X-CSE-MsgGUID: htjbxNg0SPO30Ie7GIw15A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40809353"
+  bh=yjGa/XOca+kr7ntzRGUA8aW3yZEFIEKkisZvNDZ1fYE=;
+  b=jzu0WGFIDBUwtWSo6boo8aF9xsfO/rjP+OCbuQAKG6HB/MZA60kottPE
+   lJThLM1Krjhapek9lwis0bquEHkzmTzdQqxawrQ4kmx17xGWIITtfUDfC
+   DfsIbl0D3MNPexQFGZyd2VOEHfni+2G8goLc0NfT2Llx5d7bZOArq+QL0
+   e316pfZQq/G8iObRrYyIOf9yIPI4sLHCVHcM3f1Hl27MyAhlxefCKBUx9
+   phxNd/evWoV9MFAKnUlGS20gKSvEwC1b8hUy3p5X+0Z3qhn1qdQE+G4S1
+   G+SY3YXexllxhcgOc7Y7T1VOt++YmqPMBQtTQ9zD7SJi4b3AWLOSPS1E6
+   A==;
+X-CSE-ConnectionGUID: 5NJUdpxKTOWIazBsJygw6w==
+X-CSE-MsgGUID: Tt4QNg7+QgeC2AFAVynOOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="37359031"
 X-IronPort-AV: E=Sophos;i="6.12,313,1728975600"; 
-   d="scan'208";a="40809353"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 00:35:06 -0800
-X-CSE-ConnectionGUID: VmRVBZe7SjioxGa7fnhNTA==
-X-CSE-MsgGUID: jhB7wHLxRnmGsw0aM6JVlg==
+   d="scan'208";a="37359031"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 00:38:58 -0800
+X-CSE-ConnectionGUID: GOn1L+FSSJ602cTCsmYN7g==
+X-CSE-MsgGUID: dErzu0uiSk+QpPDsPklT8Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,313,1728975600"; 
-   d="scan'208";a="104909576"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="135617278"
 Received: from mev-dev.igk.intel.com ([10.237.112.144])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 00:35:02 -0800
-Date: Tue, 14 Jan 2025 09:31:43 +0100
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 00:38:55 -0800
+Date: Tue, 14 Jan 2025 09:35:36 +0100
 From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 To: Sanman Pradhan <sanman.p211993@gmail.com>
 Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
@@ -54,11 +54,11 @@ Cc: netdev@vger.kernel.org, alexanderduyck@fb.com, kuba@kernel.org,
 	suhui@nfschina.com, linux-kernel@vger.kernel.org,
 	vadim.fedorenko@linux.dev, linux-hwmon@vger.kernel.org,
 	sanmanpradhan@meta.com
-Subject: Re: [PATCH net-next 2/3] eth: fbnic: hwmon: Add support for reading
- temperature and voltage sensors
-Message-ID: <Z4Yg79d4KoBrNGFG@mev-dev.igk.intel.com>
+Subject: Re: [PATCH net-next 3/3] eth: fbnic: Add hardware monitoring support
+ via HWMON interface
+Message-ID: <Z4Yh2EgkymBLE+hy@mev-dev.igk.intel.com>
 References: <20250114000705.2081288-1-sanman.p211993@gmail.com>
- <20250114000705.2081288-3-sanman.p211993@gmail.com>
+ <20250114000705.2081288-4-sanman.p211993@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,34 +67,29 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250114000705.2081288-3-sanman.p211993@gmail.com>
+In-Reply-To: <20250114000705.2081288-4-sanman.p211993@gmail.com>
 
-On Mon, Jan 13, 2025 at 04:07:04PM -0800, Sanman Pradhan wrote:
-> Add support for reading temperature and voltage sensor data from firmware
-> by implementing a new TSENE message type and response parsing. This adds
-> message handler infrastructure to transmit sensor read requests and parse
-> responses. The sensor data will be exposed through the driver's hwmon interface.
+On Mon, Jan 13, 2025 at 04:07:05PM -0800, Sanman Pradhan wrote:
+> This patch adds support for hardware monitoring to the fbnic driver,
+> allowing for temperature and voltage sensor data to be exposed to
+> userspace via the HWMON interface. The driver registers a HWMON device
+> and provides callbacks for reading sensor data, enabling system
+> admins to monitor the health and operating conditions of fbnic.
 > 
 > Signed-off-by: Sanman Pradhan <sanman.p211993@gmail.com>
 > ---
->  drivers/net/ethernet/meta/fbnic/fbnic_fw.c  | 89 ++++++++++++++++++++-
->  drivers/net/ethernet/meta/fbnic/fbnic_fw.h  | 15 ++++
->  drivers/net/ethernet/meta/fbnic/fbnic_mac.c | 72 +++++++++++++++++
->  drivers/net/ethernet/meta/fbnic/fbnic_mac.h |  7 ++
->  4 files changed, 179 insertions(+), 4 deletions(-)
+>  drivers/net/ethernet/meta/fbnic/Makefile      |  1 +
+>  drivers/net/ethernet/meta/fbnic/fbnic.h       |  4 +
+>  drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c | 81 +++++++++++++++++++
+>  drivers/net/ethernet/meta/fbnic/fbnic_pci.c   |  3 +
+>  4 files changed, 89 insertions(+)
+>  create mode 100644 drivers/net/ethernet/meta/fbnic/fbnic_hwmon.c
 > 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-> index 320615a122e4..bbc7c1c0c37e 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_fw.c
-> @@ -228,9 +228,9 @@ static void fbnic_mbx_process_tx_msgs(struct fbnic_dev *fbd)
->  	tx_mbx->head = head;
->  }
-> 
+> diff --git a/drivers/net/ethernet/meta/fbnic/Makefile b/drivers/net/ethernet/meta/fbnic/Makefile
+> index ea6214ca48e7..239b2258ec65 100644
 
 [...]
 
 Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 
-> --
 > 2.43.5
