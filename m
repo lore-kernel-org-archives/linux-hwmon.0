@@ -1,148 +1,134 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC3E214A91
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 21:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8D521423A
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 23:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736891160; cv=none; b=I/PTOlDTDqbWWo5OH5HMAjIWKL4TXF+k7fVUHw2/SZVahaEKdrdaQB2v3s9jJgDTzJZ21tRpMKlJ7CPT6gXvdlpOAl0f+DQemUBQXdZBMzQddK5VvjUXz61k9qzWslYUbdV3TF3oi9LGcIypk8DTyJdzWqo+z13/l0JZpLeFd/U=
+	t=1736898023; cv=none; b=B7WGu+5mYB4wDT6NjGU2N4w+NamAVh7rS3jLPa0vTKoFazX2CWzB1FEpJikmwbnAdP3LwU6BsKOEzBrFzW85mlzuqGSrUGpePUIw1n/qo2BgeXCVdhwxcNfsso6MOhC5LXY5S6F0SYC7o+iyooKthOFivzhC2ADjDnHmnl2NyHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736891160; c=relaxed/simple;
-	bh=iFlwqURjDNXcEUtZcb4rdb8ETC9wJm5HQF39td2WpWo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Vdyteffp7+ffbtHFdpbJYm3CuBOcgQRJJmMQjtE6qSTz5P59TcZxUiLlxfWNcpuVwRos9AQ1LqnJ6NgKDScQBDjoczxdmPf/oOld0BhMaoy6nqWF/2J9ByTQNTaQO9xpM2fXjvlWXMDDdUb5lVXtVSONB3ij/AT5v5s2qolRQwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=g4LS0txB; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1736898023; c=relaxed/simple;
+	bh=OyMcGK4u37TrTgoX/84vQ1l81PuQNMAAgdk+aMXy3rI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NIxVwS5xJ83g/4/R5FbMQwtnxYOe6Hcap5uWXweWwXP4BOKAqM9J54okPUh7G0ICFOFNOJiIsatWUMEleJ1oC1848YbR7ZLXZq/MM7LbwBABe67S8UmyMznqX5oNFigga/e47Cmcq+3wFxdokR//G+FW1M4HlVO4OW0B+cxerLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GvjF+mqT; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="g4LS0txB"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-71e2bb84fe3so3231852a34.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 13:45:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GvjF+mqT"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21644aca3a0so134276625ad.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 15:40:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1736891155; x=1737495955; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLz/63hPMJ48akca1hvz/KCNQ8/u4nLZQzJDt50NRIg=;
-        b=g4LS0txB2JacxIrFeFGg54+WeeGF3mWkDh80OEdLeIMlD0AYQvPUbyW25AJ/RA7dvR
-         L7kdejJlhxviVt5Ob0210MA7FP4Tc66WEjs7aV98SGV5EPq0BNFPDgHnNd3qC5l7jp0+
-         CHMM71jiiFfJaJURhUkz59+aH9CtK3lwoSIB60A9inA7Tui+48wP7bV1ayVmijbH+lOW
-         2RjbxGXg6jrWq2uauclCRqmq3YRo6VBtlXJzhPBUApgq//GJ5f4zrKd7JfQeaapSEI6V
-         k8fmgGVKRLWSD9HMqnt4Way3iNwPShc/8k0pyY25S48QyEANOAqQFPZK+cKSTkxKJi2/
-         PCIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736891155; x=1737495955;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1736898020; x=1737502820; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DLz/63hPMJ48akca1hvz/KCNQ8/u4nLZQzJDt50NRIg=;
-        b=H1c/yVMjMo2bbpKMxIoQNX9O8/SdTkVM0B+dhUM7mp9txa4iS/CW+CReQr+aV08Jdi
-         VIP5jc12Rsx5Fx3NhoxyEtxz/yXD0EB9BRKrX5+VLhRzX2amTAa3YcF8R7Bd1OpDxawg
-         1bXf2BwaynJ9268ClFz5iJUSVPU5gkTtzwvtkEDu8aYCWwLLAHbGWVIXxgOFgchgF+kI
-         3v1iV0dcvm4DSOGQ9Cd9vTQNnTRS3+aPCjMbFHaVGTK33wuSPXnMBPo7+FZ0+UiqmryS
-         DdFvkipV1362IXKV27xbLlU5y/+IjKTigngqJMoJO/HxNNTPyE1MICaUUocWY7yUghOD
-         n76g==
-X-Gm-Message-State: AOJu0YyeKg0kKz+Gcz/JR7nYvPN1hCl4POnUIRm5V5jNyzAje5sr5/Zd
-	b+R00oBUPqGIExUfyIhqxfAlhl2DVheyJTzrGgtIcVZays8hQn0GD3IY6QbsbgE=
-X-Gm-Gg: ASbGnctlU2aDRJE5FvFzDgwtkqMoTNB3QoofDBsJ97TQqqhu6XWbOe8Fgv1a8kRu1LR
-	Uqx7oDRXaU4dEY/JpjC8vPFLIaV27Y4RMALuag5Z65iQ0suL18UC7rwzduEEA2aBj3NdOC/3Z8/
-	40fnPwzezAVHLk2jqROL26Asd225uZuqsKsWJhXvzZsE3DnndaHRehG7Xirv5wyYD9oEwPV+ZmZ
-	MUJzVki79PbAyG/9a8TfSn7qmeuUIheMyPng4Z7JDDm/SdyO0AADGSgdHS7XibP5Jj4daswb9qL
-	JHca7+hpuYl6
-X-Google-Smtp-Source: AGHT+IFjTHupVA1AJrLWZs7eEecAGwy9TIDhOySdNUqsVMyQ//EsyfIum87eJDCsKhHpplV9AUiTAQ==
-X-Received: by 2002:a05:6830:3910:b0:71d:62ad:5262 with SMTP id 46e09a7af769-721e2e3a52dmr18719933a34.10.1736891154747;
-        Tue, 14 Jan 2025 13:45:54 -0800 (PST)
-Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7232698f926sm4392137a34.40.2025.01.14.13.45.53
+        bh=qVzHLP1jCYhc2qt8hpY8BF3VPEGZ1fvoAqwRtOUySy8=;
+        b=GvjF+mqT3pgd5kwYJPNyGKIkCeECP4v+k/UdwziXCAC+Ztu+kIzmWWn23yTrsWlFMS
+         Mri+uGkXemJXAVcuRKnEk4hgUxBL2Q08GmmQFXY1OvDgQrJqb7lS92KhLOHBiOFSJL/C
+         pk9y5ClSRyD52X7fVHBIw+BsKpxF0k/5lCEaV90zef7XrDUWZWKLRcYiQSg05j3bMmrS
+         bnXNbwIoUt+Uarl5nK1FMv2nLvECcnRnIP2nYUq8QoeVJWkl/33GZj4zvk6pbzsRjg2m
+         +I3/cDVRIp+QLEhAaKMeP2ruIfReDVLTWCPWS8Cop9tCsVLsrWPWvjshiJLzdEsMwplS
+         O17Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736898020; x=1737502820;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qVzHLP1jCYhc2qt8hpY8BF3VPEGZ1fvoAqwRtOUySy8=;
+        b=hk1yKIGE7FZKZ541SOmlaVKa/B/cLsPZgxJp7RuWEwrEhBOSLspgm4HwWq8dvjN2Ut
+         08LWGPFPa57B5/+JP7OeBVUwVMYC73iwJfXKaIb4kvmw1uBRonPxQig6L3QpiKldimPt
+         /muJtEO3LQ7sH6lI4XhOYbjgMGXeuLWAQn0ota6OSaRMbQsrrTEgHWAiuFqDTFeig0Nh
+         orMsymeNITsv46stVWzA516Ods80eh/UsLknAkd7HFwVCZyl2+rM3RNWo5OXYdbPe0Ic
+         AizWvW1Mxrv8zTJXzvP21U7Zvcilw8g8uujqADoxmPljgcWad53vFOc7mnD/uB1VHlfA
+         oybQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9At8+c9mEFhBIr9dnjVhUvwASVmYhhO0JCQGlf7Nci/yRQN9b3CCMxERxPrXt27UC1VXF7acFKHBSoA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6v89DzFhNGs6gryTm7AX4NSOXr6L0Ajws60YhlS1RiVv1jFrb
+	ppptCsnljlGYw/ajgGN/XkkDgOywplryzG6ElN8HT6CDucz83NCAp3VJsQ==
+X-Gm-Gg: ASbGnct/Zwoh2Eog6USlvXPBmXVceNI9J+J+S2rDYQNskXJ0YXpG+j0y0+r5XTb7EPU
+	5N6P/mXivhqP6BTmGbqDqvllMJk40vKX5a6P8q4OnROj5TmDCresGmL+xsAtq98F0gGZzGDW7Hc
+	W8pKHPH/gM2IWT5Y2ADWGwysrMAKuBU/j1lSaBB5Nzavka90XCfmvK1f+tKJMAtDKyFBzbouCLY
+	UgzXB/xVi6YWRGyUVAriYShLU2/VEbwnjf17o0SEK/Tc9YoYmQVLWZ8Fb0XqSZ66Th3GQ==
+X-Google-Smtp-Source: AGHT+IHhGszZbJTTXi4jnWtp3zQw9+t2zahptlBfciiY7Tq5RzKACbgKkJ5JI5iYPZ1+Q0Qspmqtgg==
+X-Received: by 2002:a05:6a21:2d07:b0:1e1:bdae:e054 with SMTP id adf61e73a8af0-1e88cfec9d2mr38769813637.25.1736898020120;
+        Tue, 14 Jan 2025 15:40:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40681c05sm8140998b3a.141.2025.01.14.15.40.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 13:45:54 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-Date: Tue, 14 Jan 2025 15:45:52 -0600
-Subject: [PATCH] hwmon: (tmp513) Fix division of negative numbers
+        Tue, 14 Jan 2025 15:40:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 14 Jan 2025 15:40:17 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Russell Harmon <russ@har.mn>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] Increase drivetemp scsi command timeout to 10s.
+Message-ID: <3205dece-2982-4602-bc72-a63d933f972e@roeck-us.net>
+References: <20250114070704.2169064-1-russ@har.mn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250114-fix-si-prefix-macro-sign-bugs-v1-1-696fd8d10f00@baylibre.com>
-X-B4-Tracking: v=1; b=H4sIAA/bhmcC/yXMQQ5AMBCF4avIrE3SopW4ilgUo2ahpBMiEXdX7
- N6XvPwXCEUmgSa7INLBwmtI0HkGw+yCJ+QxGQpVGKV1hROfKIxbpHctbohrsg/Y716wVLWtS7L
- kKgOp8d++ftvd9wOOfGxFbwAAAA==
-X-Change-ID: 20250114-fix-si-prefix-macro-sign-bugs-307673e6ea45
-To: Eric Tremblay <etremblay@distech-controls.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- David Lechner <dlechner@baylibre.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114070704.2169064-1-russ@har.mn>
 
-Fix several issues with division of negative numbers in the tmp513
-driver.
+On Mon, Jan 13, 2025 at 11:07:04PM -0800, Russell Harmon wrote:
+> There's at least one drive (MaxDigitalData OOS14000G) such that if it
+> receives a large amount of I/O while entering an idle power state will
+> first exit idle before responding, including causing SMART temperature
+> requests to be delayed.
+> 
+> This causes the drivetemp request to exceed its timeout of 1 second.
+> 
+> Example:
+> 
+> Normal operation
+> 
+> $ time cat /sys/class/hwmon/hwmon9/temp1_input
+> 28000
+> cat temp1_input  0.00s user 0.00s system 7% cpu 0.023 total
+> $ dd if=/dev/sdep of=/dev/null bs=1M iflag=direct  # Generate background load
+> $ ./openSeaChest_PowerControl -d /dev/sdep --transitionPower idle_a
+> $ time cat /sys/class/hwmon/hwmon9/temp1_input
+> 0
+> cat temp1_input  0.00s user 0.00s system 0% cpu 3.154 total
+> $ dmesg -t
+> sd 11:0:1:0: attempting task abort!scmd(0x00000000ef8da38c), outstanding for 2098 ms & timeout 1000 ms
+> sd 11:0:1:0: [sdep] tag#4639 CDB: ATA command pass through(16) 85 08 0e 00 d5 00 01 00 e0 00 4f 00 c2 00 b0 00
+> scsi target11:0:1: handle(0x0009), sas_address(0x4433221105000000), phy(5)
+> scsi target11:0:1: enclosure logical id(0x500062b202d7ea80), slot(6)
+> scsi target11:0:1: enclosure level(0x0000), connector name(     )
+> sd 11:0:1:0: task abort: SUCCESS scmd(0x00000000ef8da38c)
+> sd 11:0:1:0: Power-on or device reset occurred
+> $ time cat /sys/class/hwmon/hwmon9/temp1_input
+> 28000
+> cat /sys/class/hwmon/hwmon9/temp1_input  0.00s user 0.00s system 48% cpu 0.005 total
+> 
 
-The docs on the DIV_ROUND_CLOSEST macro explain that dividing a negative
-value by an unsigned type is undefined behavior. The driver was doing
-this in several places, i.e. data->shunt_uohms has type of u32. The
-actual "undefined" behavior is that it converts both values to unsigned
-before doing the division, for example:
+Please rebase on top of v6.13-rc7 and resend.
+When doing so, please drop test results (or send after "---".
+Also, he subject should start with "hwmon: (drivetemp) ..."
 
-    int ret = DIV_ROUND_CLOSEST(-100, 3U);
+Thanks,
+Guenter
 
-results in ret == 1431655732 instead of -33.
-
-Furthermore the MILLI macro has a type of unsigned long. Multiplying a
-signed long by an unsigned long results in an unsigned long.
-
-So, we need to cast both MILLI and data data->shunt_uohms to long when
-using the DIV_ROUND_CLOSEST macro.
-
-Fixes: f07f9d2467f4 ("hwmon: (tmp513) Use SI constants from units.h")
-Fixes: 59dfa75e5d82 ("hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.")
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/hwmon/tmp513.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-index 1c2cb12071b80866b751b71bf39292580cd47929..1c7601de47d0720352d729e35a5b7eeaf109355f 100644
---- a/drivers/hwmon/tmp513.c
-+++ b/drivers/hwmon/tmp513.c
-@@ -207,7 +207,9 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
- 		*val = sign_extend32(regval,
- 				     reg == TMP51X_SHUNT_CURRENT_RESULT ?
- 				     16 - tmp51x_get_pga_shift(data) : 15);
--		*val = DIV_ROUND_CLOSEST(*val * 10 * MILLI, data->shunt_uohms);
-+		*val = DIV_ROUND_CLOSEST(*val * 10 * (long)MILLI,
-+					 (long)data->shunt_uohms);
-+
- 		break;
- 	case TMP51X_BUS_VOLTAGE_RESULT:
- 	case TMP51X_BUS_VOLTAGE_H_LIMIT:
-@@ -223,7 +225,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
- 	case TMP51X_BUS_CURRENT_RESULT:
- 		// Current = (ShuntVoltage * CalibrationRegister) / 4096
- 		*val = sign_extend32(regval, 15) * (long)data->curr_lsb_ua;
--		*val = DIV_ROUND_CLOSEST(*val, MILLI);
-+		*val = DIV_ROUND_CLOSEST(*val, (long)MILLI);
- 		break;
- 	case TMP51X_LOCAL_TEMP_RESULT:
- 	case TMP51X_REMOTE_TEMP_RESULT_1:
-@@ -263,7 +265,8 @@ static int tmp51x_set_value(struct tmp51x_data *data, u8 reg, long val)
- 		 * The user enter current value and we convert it to
- 		 * voltage. 1lsb = 10uV
- 		 */
--		val = DIV_ROUND_CLOSEST(val * data->shunt_uohms, 10 * MILLI);
-+		val = DIV_ROUND_CLOSEST(val * (long)data->shunt_uohms,
-+					10 * (long)MILLI);
- 		max_val = U16_MAX >> tmp51x_get_pga_shift(data);
- 		regval = clamp_val(val, -max_val, max_val);
- 		break;
-
----
-base-commit: dab2734f8e9ecba609d66d1dd087a392a7774c04
-change-id: 20250114-fix-si-prefix-macro-sign-bugs-307673e6ea45
-
-Best regards,
--- 
-David Lechner <dlechner@baylibre.com>
-
+> Signed-off-by: Russell Harmon <russ@har.mn>
+> ---
+>  drivers/hwmon/drivetemp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+> index 6bdd21aa005a..9e465636f591 100644
+> --- a/drivers/hwmon/drivetemp.c
+> +++ b/drivers/hwmon/drivetemp.c
+> @@ -193,7 +193,7 @@ static int drivetemp_scsi_command(struct drivetemp_data *st,
+>  	scsi_cmd[14] = ata_command;
+>  
+>  	return scsi_execute_cmd(st->sdev, scsi_cmd, op, st->smartdata,
+> -				ATA_SECT_SIZE, HZ, 5, NULL);
+> +				ATA_SECT_SIZE, 10 * HZ, 5, NULL);
+>  }
+>  
+>  static int drivetemp_ata_command(struct drivetemp_data *st, u8 feature,
