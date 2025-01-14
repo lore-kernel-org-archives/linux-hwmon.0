@@ -1,179 +1,148 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938511E495;
-	Tue, 14 Jan 2025 19:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC3E214A91
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 21:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736882604; cv=none; b=R3o1PzU4JZv1EE+W40Ai+b0fZZh2uHNy9z+lfrofLGISpt0j/HVu+gCubwNOU49/qxK2BoSCSAkEs0ytXqcBdRVyYSkVEZrpn+tJSeFPSG30F9B/FKcxjRvGt/CaWJF2rrlzAqW3vEyYIP4bXVJcXPEHLlGpJ1vWzfEppXF/E5M=
+	t=1736891160; cv=none; b=I/PTOlDTDqbWWo5OH5HMAjIWKL4TXF+k7fVUHw2/SZVahaEKdrdaQB2v3s9jJgDTzJZ21tRpMKlJ7CPT6gXvdlpOAl0f+DQemUBQXdZBMzQddK5VvjUXz61k9qzWslYUbdV3TF3oi9LGcIypk8DTyJdzWqo+z13/l0JZpLeFd/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736882604; c=relaxed/simple;
-	bh=t0VQ1eoai5qNy82QOQOAGevXVDWMM9LWbTC/bS5u0MY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dOgFGCNGeJ3AGuXXSeEOcvlhB0NMCPdaRbXF2gEgc1pQeNOMdG5XTXpHKJy5gJc4oyOdpk3rnfsQQOK5HSP23YH8nEJXqUWjG5an9YdV5WnpzFT9MPONu1X95oj1dV8MRvdMSsKtzz4fO+j1a4VQlu0gGIx1msp4ehmjh1CxWJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lltSmTpr; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736891160; c=relaxed/simple;
+	bh=iFlwqURjDNXcEUtZcb4rdb8ETC9wJm5HQF39td2WpWo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Vdyteffp7+ffbtHFdpbJYm3CuBOcgQRJJmMQjtE6qSTz5P59TcZxUiLlxfWNcpuVwRos9AQ1LqnJ6NgKDScQBDjoczxdmPf/oOld0BhMaoy6nqWF/2J9ByTQNTaQO9xpM2fXjvlWXMDDdUb5lVXtVSONB3ij/AT5v5s2qolRQwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=g4LS0txB; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lltSmTpr"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2164b1f05caso105041095ad.3;
-        Tue, 14 Jan 2025 11:23:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="g4LS0txB"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-71e2bb84fe3so3231852a34.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jan 2025 13:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736882602; x=1737487402; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lcM2DfNt6fj4YEk1trckR0yxNSL9PGafmEXu+/w45go=;
-        b=lltSmTprxpASMV59ukUt/DtevxHod1uMZ9ObjZVLig/Q8fPWWlty3B0y4gd16vbm59
-         0rXBL67ELAWkTGre/Ovh6bqK6jLZj0O+3VHoGLNxMQXpgap5+PYqZpjFUX8r036ZYVah
-         VV6RpUf2Ixn11Bj1z6RGIlSlvdKR2s36gmh6ask40pUwyY77ZGjXm7OzSuQ24Mi6eXUA
-         1/nkITvWqB7VeEKHiB4YOaueuLV0V6SVsNf0ieVdWU2C9o+gpLenYksKWn2tfECNSVKV
-         QqeXAfbS2HbWqSSV1C97YD0Bw4bxM+Pc3BCdhWYz+oWMGC8LNTSfHsBgjuSeiezDZKZ+
-         6twA==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1736891155; x=1737495955; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLz/63hPMJ48akca1hvz/KCNQ8/u4nLZQzJDt50NRIg=;
+        b=g4LS0txB2JacxIrFeFGg54+WeeGF3mWkDh80OEdLeIMlD0AYQvPUbyW25AJ/RA7dvR
+         L7kdejJlhxviVt5Ob0210MA7FP4Tc66WEjs7aV98SGV5EPq0BNFPDgHnNd3qC5l7jp0+
+         CHMM71jiiFfJaJURhUkz59+aH9CtK3lwoSIB60A9inA7Tui+48wP7bV1ayVmijbH+lOW
+         2RjbxGXg6jrWq2uauclCRqmq3YRo6VBtlXJzhPBUApgq//GJ5f4zrKd7JfQeaapSEI6V
+         k8fmgGVKRLWSD9HMqnt4Way3iNwPShc/8k0pyY25S48QyEANOAqQFPZK+cKSTkxKJi2/
+         PCIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736882602; x=1737487402;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lcM2DfNt6fj4YEk1trckR0yxNSL9PGafmEXu+/w45go=;
-        b=UFv+LCB6GdjjjPxdrGSj5GLav8J/YkS3EICNmdLM0ICcYVE6mT1zIqhifWgGpLbduB
-         IRH3UkxPp6C7MvJuI5izIvEEE6Nzy9A/e3nxXcpMkSSmvANE7QhqWLakewn1vVaj/QqX
-         Hpwq56SHX6lo+G18SonbWoulG/H7ptz3FXKkupxf6r2LdiEJYOffCb7qqQSK1Z1JH5EC
-         Bw3nADLiNu7cJR5lCzNAMiuab6xjQLDirI4qvsW6MFE0ncX3JpGa4XzqS4LsSoOgm4Hs
-         GDO4vd9aCggp5ON8ad4AjZIH+tXKrwLH3s4tHWutuXzGU9R377mIsJsD8ROXHHJs1ZIC
-         PUMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEBAw6TFnQuCwIgUhZR9jZvFqNcHLuNesENC+w1fhIAoDE6vM0ebo5ArPweIGcDnWkxdj/SxHhwLk9@vger.kernel.org, AJvYcCVjnflCwKlPOEI+uMWYjmv7APHf8OJ2B5vzlc/Z0by2tjJGSeb7KtgeTrFOAQziRb0V9qczWK1QVEYxv+A=@vger.kernel.org, AJvYcCW3Let2VcuOSa6YP0yOMCD3oTLBrGZCLqo50OnwvZxZxtMJEahuU3k/H+Xk33FkZPeP/mg+xrGs8XFW@vger.kernel.org, AJvYcCX5MYMK4ifV76Z4ygu3rq5cXn8sGcwXear/DAdSaVE/ubn+o5XkAmCig7Y/jC9UysdoNqJopATeq4e/Lvi0@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/uZ4pE7m5r7xCvwiKEGxWPPbD1+fwr6s2m4nYMitK7QpyMW2E
-	WswzfuQ6Qmq74uPHXrnFA2kpw5Cvk7RLkQvORytyI9P9VfyswePi
-X-Gm-Gg: ASbGncsDG9ts7GuDuJDQQHBh6y1Ix2RZG3YdlqxwGxBPlvmgaAkpzFwyajhzjfvABTC
-	GWG/p+bXks4kGo3txaWNzJFx2I6w9Y2j24K59ZYd+eDjdwfCJWDPR10rTyt3r/CaL30QaipLLjr
-	SgNVjtVB5IIIyP7CmULmzPqgPCF29Mc7dct2tD5s7ZdBpvuA5py3/IhzTM1jZioqSz2fIn3xgP0
-	djpjyHAryHgZLfscAS2V+RmQjRvbplAzVVKEguixt+X9fKarvZ/EYD7XzNHyEMGhvWyBgrf2hVt
-	SI5bePEoSFZrFQYgjY3ncygji5rRRA==
-X-Google-Smtp-Source: AGHT+IGmVTsqntCrUPy37LYagCValfswWYy49esFXnGkoEEirssEhvy87/YDJQso4ywVgxgXdjwx5g==
-X-Received: by 2002:a17:903:1112:b0:216:138a:5956 with SMTP id d9443c01a7336-21a83f59822mr413267375ad.19.1736882601976;
-        Tue, 14 Jan 2025 11:23:21 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a31d5047e01sm8589088a12.54.2025.01.14.11.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 11:23:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dc5380a7-e257-441f-a264-7bcfe193de2c@roeck-us.net>
-Date: Tue, 14 Jan 2025 11:23:19 -0800
+        d=1e100.net; s=20230601; t=1736891155; x=1737495955;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DLz/63hPMJ48akca1hvz/KCNQ8/u4nLZQzJDt50NRIg=;
+        b=H1c/yVMjMo2bbpKMxIoQNX9O8/SdTkVM0B+dhUM7mp9txa4iS/CW+CReQr+aV08Jdi
+         VIP5jc12Rsx5Fx3NhoxyEtxz/yXD0EB9BRKrX5+VLhRzX2amTAa3YcF8R7Bd1OpDxawg
+         1bXf2BwaynJ9268ClFz5iJUSVPU5gkTtzwvtkEDu8aYCWwLLAHbGWVIXxgOFgchgF+kI
+         3v1iV0dcvm4DSOGQ9Cd9vTQNnTRS3+aPCjMbFHaVGTK33wuSPXnMBPo7+FZ0+UiqmryS
+         DdFvkipV1362IXKV27xbLlU5y/+IjKTigngqJMoJO/HxNNTPyE1MICaUUocWY7yUghOD
+         n76g==
+X-Gm-Message-State: AOJu0YyeKg0kKz+Gcz/JR7nYvPN1hCl4POnUIRm5V5jNyzAje5sr5/Zd
+	b+R00oBUPqGIExUfyIhqxfAlhl2DVheyJTzrGgtIcVZays8hQn0GD3IY6QbsbgE=
+X-Gm-Gg: ASbGnctlU2aDRJE5FvFzDgwtkqMoTNB3QoofDBsJ97TQqqhu6XWbOe8Fgv1a8kRu1LR
+	Uqx7oDRXaU4dEY/JpjC8vPFLIaV27Y4RMALuag5Z65iQ0suL18UC7rwzduEEA2aBj3NdOC/3Z8/
+	40fnPwzezAVHLk2jqROL26Asd225uZuqsKsWJhXvzZsE3DnndaHRehG7Xirv5wyYD9oEwPV+ZmZ
+	MUJzVki79PbAyG/9a8TfSn7qmeuUIheMyPng4Z7JDDm/SdyO0AADGSgdHS7XibP5Jj4daswb9qL
+	JHca7+hpuYl6
+X-Google-Smtp-Source: AGHT+IFjTHupVA1AJrLWZs7eEecAGwy9TIDhOySdNUqsVMyQ//EsyfIum87eJDCsKhHpplV9AUiTAQ==
+X-Received: by 2002:a05:6830:3910:b0:71d:62ad:5262 with SMTP id 46e09a7af769-721e2e3a52dmr18719933a34.10.1736891154747;
+        Tue, 14 Jan 2025 13:45:54 -0800 (PST)
+Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7232698f926sm4392137a34.40.2025.01.14.13.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 13:45:54 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+Date: Tue, 14 Jan 2025 15:45:52 -0600
+Subject: [PATCH] hwmon: (tmp513) Fix division of negative numbers
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: Add driver for TI INA232 Current and Power
- Monitor
-To: Leo Yang <leo.yang.sy0@gmail.com>
-Cc: jdelvare@suse.com, robh@kernel.org, davem@davemloft.net,
- krzk+dt@kernel.org, conor+dt@kernel.org, Leo-Yang@quantatw.com,
- corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20250110081546.61667-1-Leo-Yang@quantatw.com>
- <20250110081546.61667-3-Leo-Yang@quantatw.com>
- <190bb6f2-7bbe-4145-b45f-4ad6672884b8@roeck-us.net>
- <CAAfUjZF7jOoZz5h6XkxqOyt=x8xnv+SUbMWJ1bVdxUzFRTO8cA@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAAfUjZF7jOoZz5h6XkxqOyt=x8xnv+SUbMWJ1bVdxUzFRTO8cA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250114-fix-si-prefix-macro-sign-bugs-v1-1-696fd8d10f00@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIAA/bhmcC/yXMQQ5AMBCF4avIrE3SopW4ilgUo2ahpBMiEXdX7
+ N6XvPwXCEUmgSa7INLBwmtI0HkGw+yCJ+QxGQpVGKV1hROfKIxbpHctbohrsg/Y716wVLWtS7L
+ kKgOp8d++ftvd9wOOfGxFbwAAAA==
+X-Change-ID: 20250114-fix-si-prefix-macro-sign-bugs-307673e6ea45
+To: Eric Tremblay <etremblay@distech-controls.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ David Lechner <dlechner@baylibre.com>
+X-Mailer: b4 0.14.2
 
-On 1/14/25 00:02, Leo Yang wrote:
-> Hi Guenter,
-> 
-> On Sat, Jan 11, 2025 at 12:22 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->>> +
->>> +     /* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed. */
->>> +     /* read rshunt value (uOhm) */
->>> +     if (of_property_read_u32(client->dev.of_node, "shunt-resistor", &rshunt) < 0)
->>> +             rshunt = INA233_RSHUNT_DEFAULT;
->>> +
->>> +     /* read current_lsb value (uA) */
->>> +     if (of_property_read_u16(client->dev.of_node, "ti,current-lsb", &current_lsb) < 0)
->>> +             current_lsb = INA233_CURRENT_LSB_DEFAULT;
->>> +
->> of_property_read_u16() returns -EOVERFLOW if the value provided was too large.
->> This should be checked to avoid situations where the value provided in devicetree
->> is too large.
->>
-> Sorry I have a question, I can't get it to return -EOVERFLOW when I test it
-> I am using the following properties:
-> test16 = /bits/ 16 <0xfffd>;
-> of_property_read_u16 reads 0xfffd
-> 
-> test16o = /bits/ 16 <0xfffdd>;
-> of_property_read_u16 reads 0xffdd
-> 
-> test16o = <0xfffdd>;
-> of_property_read_u16 reads 0xf
-> 
-> test16array = /bits/ 16 <0xfffd 0xfffe>;
-> of_property_read_u16 reads 0xfffd
-> 
-> The same result for device_property_read_u16, it seems that a data
-> truncation occurs and none of them return -EOVERFLOW.
-> 
-> So maybe there is no need to check EOVERFLOW?
-> Or maybe we could use the minimum and maximum of the binding to
-> indicate the range.
-> 
+Fix several issues with division of negative numbers in the tmp513
+driver.
 
-of_property_read_u16() calls of_property_read_u16_array(). The API documentation
-of of_property_read_u16_array() lists -ENODATA and -EOVERFLOW as possible error
-return values, in addition to -EINVAL. Ignoring those errors is not a good idea,
-even if it is not immediately obvious how to reproduce them.
+The docs on the DIV_ROUND_CLOSEST macro explain that dividing a negative
+value by an unsigned type is undefined behavior. The driver was doing
+this in several places, i.e. data->shunt_uohms has type of u32. The
+actual "undefined" behavior is that it converts both values to unsigned
+before doing the division, for example:
 
-Guenter
+    int ret = DIV_ROUND_CLOSEST(-100, 3U);
+
+results in ret == 1431655732 instead of -33.
+
+Furthermore the MILLI macro has a type of unsigned long. Multiplying a
+signed long by an unsigned long results in an unsigned long.
+
+So, we need to cast both MILLI and data data->shunt_uohms to long when
+using the DIV_ROUND_CLOSEST macro.
+
+Fixes: f07f9d2467f4 ("hwmon: (tmp513) Use SI constants from units.h")
+Fixes: 59dfa75e5d82 ("hwmon: Add driver for Texas Instruments TMP512/513 sensor chips.")
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+ drivers/hwmon/tmp513.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index 1c2cb12071b80866b751b71bf39292580cd47929..1c7601de47d0720352d729e35a5b7eeaf109355f 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -207,7 +207,9 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
+ 		*val = sign_extend32(regval,
+ 				     reg == TMP51X_SHUNT_CURRENT_RESULT ?
+ 				     16 - tmp51x_get_pga_shift(data) : 15);
+-		*val = DIV_ROUND_CLOSEST(*val * 10 * MILLI, data->shunt_uohms);
++		*val = DIV_ROUND_CLOSEST(*val * 10 * (long)MILLI,
++					 (long)data->shunt_uohms);
++
+ 		break;
+ 	case TMP51X_BUS_VOLTAGE_RESULT:
+ 	case TMP51X_BUS_VOLTAGE_H_LIMIT:
+@@ -223,7 +225,7 @@ static int tmp51x_get_value(struct tmp51x_data *data, u8 reg, u8 pos,
+ 	case TMP51X_BUS_CURRENT_RESULT:
+ 		// Current = (ShuntVoltage * CalibrationRegister) / 4096
+ 		*val = sign_extend32(regval, 15) * (long)data->curr_lsb_ua;
+-		*val = DIV_ROUND_CLOSEST(*val, MILLI);
++		*val = DIV_ROUND_CLOSEST(*val, (long)MILLI);
+ 		break;
+ 	case TMP51X_LOCAL_TEMP_RESULT:
+ 	case TMP51X_REMOTE_TEMP_RESULT_1:
+@@ -263,7 +265,8 @@ static int tmp51x_set_value(struct tmp51x_data *data, u8 reg, long val)
+ 		 * The user enter current value and we convert it to
+ 		 * voltage. 1lsb = 10uV
+ 		 */
+-		val = DIV_ROUND_CLOSEST(val * data->shunt_uohms, 10 * MILLI);
++		val = DIV_ROUND_CLOSEST(val * (long)data->shunt_uohms,
++					10 * (long)MILLI);
+ 		max_val = U16_MAX >> tmp51x_get_pga_shift(data);
+ 		regval = clamp_val(val, -max_val, max_val);
+ 		break;
+
+---
+base-commit: dab2734f8e9ecba609d66d1dd087a392a7774c04
+change-id: 20250114-fix-si-prefix-macro-sign-bugs-307673e6ea45
+
+Best regards,
+-- 
+David Lechner <dlechner@baylibre.com>
 
