@@ -1,132 +1,117 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60852459CF
-	for <linux-hwmon@vger.kernel.org>; Wed, 15 Jan 2025 13:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E2324A7D0;
+	Wed, 15 Jan 2025 14:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736946939; cv=none; b=MLhjq4rNnhfwxv9H+yc7fHvCCR/hER4jaNUWrqoGRDsi7DLL9NheqzJ590oNGRnKmcH20EGYVrRSLJ7FOEa2wXXnRJ2pJS2+4+AgcFNH9R3NPr8LLPoWxCbdF18nvklorV7yao5CdZwe5W/KlfFenBhvA3/um1bZXkE8T9rwI2k=
+	t=1736950809; cv=none; b=AdDpscf1fKvDgWRZUWhZEpm7+iag8XtoAeAQ77e+UoVVRULZC+5ODOKV8EDvX47NbO0QBmK/hf5uAB6OYyuJuMH/7/JExBpR8U9kD5X/1pJUHEwY8IVkNH1qfm0XkFxuHRgZ1s1VYug0G6mq+RWcKjenBAymq+TAtgqDStwuxmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736946939; c=relaxed/simple;
-	bh=BOXuS5EsiAx2w3q3Tmiu3AtfIWO3kJJSgwXsqAUM9So=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VH2TlnIfajTGfjBjiBpuWuDKqECtp35X3v1DDCTFGA9zF/LPi1kFiVXYyodCFopWR5+vCQTR08sfdip0tWjLgqqltnDBDHwb6WjyyCt7L+9n+FnwenqImSvoWXyo6myWvZkOzTd1TrJalns1NiwbL8+gQ8KutoVgfCHbUp5V2O0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=har.mn; spf=pass smtp.mailfrom=har.mn; dkim=pass (2048-bit key) header.d=har.mn header.i=@har.mn header.b=KF6ZMQ4p; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=har.mn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=har.mn
+	s=arc-20240116; t=1736950809; c=relaxed/simple;
+	bh=J9j0q9u2CmrBrASi7lSJAJRxcoA2U5BTIH7mTOeL+3E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i5rhdp/r/ilNDo1oevE9c32zmWLUq1OGYhoGB2/B6gFSslHe7f1GPkqhXCLov4/RhixF/Ku0EX3cXxfo1l5ll6MMNmQA9ggSKZt+37gSd2bciZPnZMNCF4RYJLA/I3SYdViey/JzyXMTdSiFkUA2DNU1VSBV0RfbHBawmHIc/Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=exCEnc6P; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=har.mn header.i=@har.mn header.b="KF6ZMQ4p"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-53f757134cdso6605746e87.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jan 2025 05:15:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="exCEnc6P"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21634338cfdso120540615ad.2;
+        Wed, 15 Jan 2025 06:20:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=har.mn; s=google; t=1736946935; x=1737551735; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LmyNJiePAreMHKNWfQczKQWPAA7N6RNkuZbx/Ny6id4=;
-        b=KF6ZMQ4pMHFzxFd+O9Nqi+kbmLqDbwRpJAuvhrDVOmnndS2HjxY5UDAs54jYFGNzcV
-         reIGBtrSbqbAqQ6EfCRfyfXL4yDmqFU+J9r7a7vxy4fEvIha0QD+o3bfmXWBBIvSENk2
-         R4QxN6Rl2bVBrlx3qTHD/mR/0+4oMv3GfsJaEXkbVzoMtfBH1cHN987j1jYkxMAqkiNW
-         I+SjbbnwLsPMgc8qr/hcbmYChWagm1cWudSLOtcy5bM4pxHJcC/egiJP7iDZZbuYf/Jd
-         H3sLIGM6j7Qz6oT1juTOegGq+lRWDPbFnaVcFQ+qBGkUj68Gk8cFhQfy92lDEjXUei7B
-         jHag==
+        d=gmail.com; s=20230601; t=1736950807; x=1737555607; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRauP/mJ2p43uSUO3cmOAl0UguEAsHeFhhgJqgdpyqk=;
+        b=exCEnc6P3Dt4U20M9eGRULxc+bAr4wFN3Bkc7oHLphPywiylToy73FenqkE9igc63L
+         NQvyGG6D9U+DOq1dM1abgUlzM2JAmIg00b/7p/YSm/dw5XSEmYPiSUjdm6Pn3jxIGKLU
+         ZBwrjtfFRdS6p0Oxf3BYSmHaim7c1vuIV2RSpnG91doPt9bCJAkQM5XEObWXfWYwgGCG
+         Rougf9B0HIdPy8CszxGu1mRA3uF2OdLOJkpbS0vuUI0xuHxSGxY+iqRe2FbOgXaNrBQ4
+         PaWHU8dayRUJFi0fhyHVrQcKGXqqUkbVVr0aP7W+zuSsPCS97MR98gYad2E/tGkpf0XW
+         Gbwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736946935; x=1737551735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1736950807; x=1737555607;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LmyNJiePAreMHKNWfQczKQWPAA7N6RNkuZbx/Ny6id4=;
-        b=REAIv30P9SnvvuXaFhZhFUBark8IBh6Yec6UMNEw8s0gl/XNutn5hyh+ASy7J4EBx/
-         IHU3PSbz8JQ86UdraE417/t01iZTq7vTyA//IeMdTrPJPybvyqqB77PosGM+BGFuehAC
-         a5wmHsu5937zm4UjBRAeLFHGE4hPmK52lyxOWi4TobB20higjqyUm5KSbYZmc8TryrQA
-         KaBOtDXNQDazoLGBw6gOqTAuCZ8sucdBCxc/4eqomPUpzZzyJ1r3oW9D0hDIrpxq234M
-         hSdUdCj8ZRYDr4zOuAdWzqjk5s2VpKj3uBcmv7kzkrVjjGTYGVI+/FRJlL0zzHQtfrcF
-         +4sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXVPn8u3O516yeEIxSF+6twz6EZVv5mI1yKNpwaDl41H2DY2ZjZ1/lo/YgYUW6V2/SX7HscadGtIBRhXA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx83thnFvPTyIIQVy2B0QGAlc2LRlOnO3Ji6W2dbQsJAWR1609
-	qZaUDJ92hWxwAC1ryDGlLZl4PVbbvjQ9CLW1RLudlziCBR/3XuK7np+Kdb01Jo0Svhmoz9Kx+wY
-	=
-X-Gm-Gg: ASbGncs85zojDErGrHwz/wRjialpXc3+/Knd+Oqn0TnBc3S1PAvcWZCs91DJ4yE+Gim
-	vTYFt1XZZMwSFZtRRADUK5tb90XMufjgNo6vseLZAnzDnF8YlA+eQqEx6yXN7it1B13JJ8KIiuU
-	UFjs1ufFU0M/9N8geqnQxfSUNYykSa6fcPSlArNDkpK/ocYYfaWcmUMxfIMBPR9Ean3nd0HXryF
-	B9IFymawVw6VGbeb+yZAQ+G//RjHXXigTBVouG17nwbpNh3HsNXbJjyUs6x3QxJmt0x2N1yprIi
-	JugxcKE=
-X-Google-Smtp-Source: AGHT+IG/Cim/7msFqgqDUMI5MItEMwXNVhS+QLHbnXecr0T2cVOoAZKvE7D6PgLUdguSeX92SiuKUQ==
-X-Received: by 2002:a05:6512:4024:b0:540:3566:5760 with SMTP id 2adb3069b0e04-542847f9ea2mr9062174e87.35.1736946935136;
-        Wed, 15 Jan 2025 05:15:35 -0800 (PST)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5428be5481asm2043322e87.79.2025.01.15.05.15.34
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2025 05:15:34 -0800 (PST)
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53e3a37ae07so6764201e87.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jan 2025 05:15:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXLYtSVwuLxMKqIH5ST4RFQLUf4jxfhLO90vQBqy1kkzVR46Tb8r5BiCJvvzmVKfG1PomfRU2gFGy7IhQ==@vger.kernel.org
-X-Received: by 2002:a05:6512:1388:b0:540:1e17:10eb with SMTP id
- 2adb3069b0e04-54284811017mr9863336e87.48.1736946933754; Wed, 15 Jan 2025
- 05:15:33 -0800 (PST)
+        bh=eRauP/mJ2p43uSUO3cmOAl0UguEAsHeFhhgJqgdpyqk=;
+        b=BGt2mA7iWqq9nh6eZDZn+DUWNoXKiDtrVmR+eUZdCvQDiHfXI/WXz2JipZNI0LDrGQ
+         /fWay64q3DChkR7jLg7xZHUhQNIqAmYt4nO1YU9PEI11HHDuIEYhCzFpnKeIWrw8bBHq
+         8fyb9yTSI+ihxQCRcnfpuYdjcHkqsj1eel3agc4uRZFCf50UZBFkPPEFjQUHcB+lVK+w
+         PGoPpLDKvSYtvuTYUV850KN626ro7/X4C6QPAZpQaT9EbUEINw+QOS6Wx1nbtRKIDSv8
+         SgniDDvUut/dghllfRJDe3wlWrqWSnGh13IgAqdukAKfFb6n3ZBslPactPeJwqgCaQKa
+         rzhg==
+X-Forwarded-Encrypted: i=1; AJvYcCU4uxWjGtCRTbvv5bKB422kLcEobJ1ULUIZQR4y6SsYACWniMzhOHbtk2V/Gx2WOFbVJXxE5NgJv2vutA==@vger.kernel.org, AJvYcCV5VO86I7FkoXT/xKlmnbW4588dvNKCq3N9x9PY+BE0sXuXQ6r6L29BbsXMw81Ei6uvrGinC3Bn7BnWeVfF@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHyCuWUSWIgSVsDl5fuLf4znlEK7L4bn8s2DlHfGQAte+vFOI2
+	0KkyjKWeRtCU1DSxR1uayOwZuHtNOe2CuGylAQF56wX1VZm4lnYX
+X-Gm-Gg: ASbGncto99P/K/tet0BArUITnUimEr33zNAGUTki5TOHCIyDXx7CKjjoenNMbbxAKqF
+	zzODC3gpH4AyPSgchNhgl+G1qIzGbP73WJGP19LtWfr+wE3DsmcC6XsMQF0DxHT2aKFdgKu0S7b
+	awyUczV0CDgC9SN7ld5dwJ3l0rBxrsNdMvchXMC8Fj/uqzbvCC+eHHELj5O80/I5hE5EhZ/8T7u
+	GUbTK8ki08+gbLIDN50sFdONiB5D2tYfSITyg1z/+N/lJBHPIRcG6szxCjh5KZAo3HKxA==
+X-Google-Smtp-Source: AGHT+IGax2K2Fbh+Y4swhJyiTNSIGWit8Vovc4+AZaxbkboL+I1nhCQq7UL6jShpXjnglaGcd/nr2w==
+X-Received: by 2002:a17:903:185:b0:215:b190:de6 with SMTP id d9443c01a7336-21a83f3f59amr368611505ad.3.1736950806885;
+        Wed, 15 Jan 2025 06:20:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f132138sm83862815ad.86.2025.01.15.06.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 06:20:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 15 Jan 2025 06:20:05 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kazuhiro Abe <fj1078ii@aa.jp.fujitsu.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Huisong Li <lihuisong@huawei.com>
+Subject: Re: [PATCH] hwmon: (acpi_power_meter) Fix a check for the return
+ value of read_domain_devices().
+Message-ID: <ec1cb50c-0cb9-4d7a-af2e-2cb1a7b47129@roeck-us.net>
+References: <20250115073532.3211000-1-fj1078ii@aa.jp.fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114070704.2169064-1-russ@har.mn> <3205dece-2982-4602-bc72-a63d933f972e@roeck-us.net>
-In-Reply-To: <3205dece-2982-4602-bc72-a63d933f972e@roeck-us.net>
-From: Russell Harmon <russ@har.mn>
-Date: Wed, 15 Jan 2025 05:15:07 -0800
-X-Gmail-Original-Message-ID: <CA+zrezQ7nmCWOgeRTO026B0Mgq9QcbC0Nm8-isYHBMQiPcMCVQ@mail.gmail.com>
-X-Gm-Features: AbW1kvZjHhsclMSG5IFY0mkcAXgxFCVp8BKnQ6BXtasYKRAYorRL9UvIsJATTy8
-Message-ID: <CA+zrezQ7nmCWOgeRTO026B0Mgq9QcbC0Nm8-isYHBMQiPcMCVQ@mail.gmail.com>
-Subject: Re: [PATCH] Increase drivetemp scsi command timeout to 10s.
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115073532.3211000-1-fj1078ii@aa.jp.fujitsu.com>
 
-On Tue, Jan 14, 2025 at 3:40=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On Mon, Jan 13, 2025 at 11:07:04PM -0800, Russell Harmon wrote:
-> > There's at least one drive (MaxDigitalData OOS14000G) such that if it
-> > receives a large amount of I/O while entering an idle power state will
-> > first exit idle before responding, including causing SMART temperature
-> > requests to be delayed.
-> >
-> > This causes the drivetemp request to exceed its timeout of 1 second.
-> >
-> > Example:
-> >
-> > Normal operation
-> >
-> > $ time cat /sys/class/hwmon/hwmon9/temp1_input
-> > 28000
-> > cat temp1_input  0.00s user 0.00s system 7% cpu 0.023 total
-> > $ dd if=3D/dev/sdep of=3D/dev/null bs=3D1M iflag=3Ddirect  # Generate b=
-ackground load
-> > $ ./openSeaChest_PowerControl -d /dev/sdep --transitionPower idle_a
-> > $ time cat /sys/class/hwmon/hwmon9/temp1_input
-> > 0
-> > cat temp1_input  0.00s user 0.00s system 0% cpu 3.154 total
-> > $ dmesg -t
-> > sd 11:0:1:0: attempting task abort!scmd(0x00000000ef8da38c), outstandin=
-g for 2098 ms & timeout 1000 ms
-> > sd 11:0:1:0: [sdep] tag#4639 CDB: ATA command pass through(16) 85 08 0e=
- 00 d5 00 01 00 e0 00 4f 00 c2 00 b0 00
-> > scsi target11:0:1: handle(0x0009), sas_address(0x4433221105000000), phy=
-(5)
-> > scsi target11:0:1: enclosure logical id(0x500062b202d7ea80), slot(6)
-> > scsi target11:0:1: enclosure level(0x0000), connector name(     )
-> > sd 11:0:1:0: task abort: SUCCESS scmd(0x00000000ef8da38c)
-> > sd 11:0:1:0: Power-on or device reset occurred
-> > $ time cat /sys/class/hwmon/hwmon9/temp1_input
-> > 28000
-> > cat /sys/class/hwmon/hwmon9/temp1_input  0.00s user 0.00s system 48% cp=
-u 0.005 total
-> >
->
-> Please rebase on top of v6.13-rc7 and resend.
-> When doing so, please drop test results (or send after "---".
-> Also, the subject should start with "hwmon: (drivetemp) ..."
+On Wed, Jan 15, 2025 at 07:35:32AM +0000, Kazuhiro Abe wrote:
+> After commit fabb1f813ec0 ("hwmon: (acpi_power_meter) Fix fail to load
+> module on platform without _PMD method"),
+> the acpi_power_meter driver fails to load if the platform has _PMD method.
+> 
+> To address this, add a check for successful read_domain_devices().
+> Tested on Nvidia Grace machine.
+> 
+> Fixes: fabb1f813ec0 ("hwmon: (acpi_power_meter) Fix fail to load module on platform without _PMD method")
+> Signed-off-by: Kazuhiro Abe <fj1078ii@aa.jp.fujitsu.com>
 
-Sent. Thanks!
+Checkpatch says:
+
+CHECK: Unnecessary parentheses around 'res != 0'
+#108: FILE: drivers/hwmon/acpi_power_meter.c:685:
++	if ((res != 0) && (res != -ENODEV))
+
+No need to resend, I'll fix that up while applying, but please keep it in mind
+for the future.
+
+Guenter
+
+> ---
+>  drivers/hwmon/acpi_power_meter.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index 2f1c9d97ad21..dbf2c606fe15 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+> @@ -682,7 +682,7 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
+>  
+>  	/* _PMD method is optional. */
+>  	res = read_domain_devices(resource);
+> -	if (res != -ENODEV)
+> +	if ((res != 0) && (res != -ENODEV))
+>  		return res;
+>  
+>  	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
