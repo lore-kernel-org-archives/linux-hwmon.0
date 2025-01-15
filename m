@@ -1,52 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECA1211278;
-	Wed, 15 Jan 2025 11:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE7F241695
+	for <linux-hwmon@vger.kernel.org>; Wed, 15 Jan 2025 13:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736938917; cv=none; b=I9lMhXABR9hbv6D4cI10h07t15qjvLrTDJE2NF7DQJQG8BT2zHrffdAmBqutVrBEfMMFoy8FZRLmnOUji08NIaptyz+LkL+y1Zgfah8a2fMNuU2SYvFzfO1/hcQtfhxJbbY6qLWYh4ueBb43KI4jj1czTDfzs88gcbm5cZnHsF4=
+	t=1736946873; cv=none; b=Zgo1iJ3bgw1ui6wasz4QT0lvuoe1EQ8C5AKCrMvweqJTuRg7XxJzm4PRMsHdAGcqx34M39y5agDMgML53TeETsS/COznrzqnIX2FTA2ODOZ5xLPNKyE0OYl21iRW6jUHcj8yLqhjzQiKAWigqjYGVg4afDvtSrmOA4HIov/WsN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736938917; c=relaxed/simple;
-	bh=974TDXUHOBVFKY2F5tfLtJ0FCo3GXEgTurSFpXhqq6I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lB1mu0B3VJCyLq8lT9QK7ezMjcIKm12J3HtCyOgCm9dQokKH72umpXiwxyZSHrtqjFl6Nug2XWKiqYfkHkm+Cg98/5B0JoJGb7NFnVHMTT2L0oq1s5PyMC17rhTwsxnWcetk9tW4whVgBF+YK7YhA7RmSPYivrxKa2tU1ODT6E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vA25lrqd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736946873; c=relaxed/simple;
+	bh=8/M2k5kt5xn7mMjP1QIkM8evk5wLyA83yTB8+llP/e4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KDFqgXqh1zzBlkJIUdQYoX+23beMqAwrraZLOhkxz680eUUzBHTeEaqC1bJpMs/WQz5s+T3YouAY0O2pQBS/qzesT58020/a6apH7Kfe8tYrPGDHtp0SqWW9Ph9hjiT/HqRx6/z18WGBpzLezMSzLCcE1BRp4aiwEk3Ji6dUu6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=har.mn; spf=pass smtp.mailfrom=har.mn; dkim=pass (2048-bit key) header.d=har.mn header.i=@har.mn header.b=tmcaajDL; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=har.mn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=har.mn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vA25lrqd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC8DC4CEE4;
-	Wed, 15 Jan 2025 11:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1736938917;
-	bh=974TDXUHOBVFKY2F5tfLtJ0FCo3GXEgTurSFpXhqq6I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vA25lrqd8tooHjD4e9PXQYKeKHL+cKizhZMJal7HXlq7BYJmWsb+TuVh7JgexjVZ0
-	 jdhTdDgQl/P41a8VWi7Un5oBPdhF04S/kv+EBHZMXh+VT+skiH1tj5dgWZbHERZD0/
-	 cUgqVtTX1ctQXLD+udC3udy26RUMguhtZFZWjcaw=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Daniil Stas <daniil.stas@posteo.net>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Chris Healy <cphealy@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 116/129] hwmon: (drivetemp) Fix driver producing garbage data when SCSI errors occur
-Date: Wed, 15 Jan 2025 11:38:11 +0100
-Message-ID: <20250115103558.972203687@linuxfoundation.org>
-X-Mailer: git-send-email 2.48.0
-In-Reply-To: <20250115103554.357917208@linuxfoundation.org>
-References: <20250115103554.357917208@linuxfoundation.org>
-User-Agent: quilt/0.68
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=har.mn header.i=@har.mn header.b="tmcaajDL"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21628b3fe7dso114826875ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Jan 2025 05:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=har.mn; s=google; t=1736946870; x=1737551670; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uFxqwdxvbmzFeNjYgIwyItyb97yd+3Liidm6Njhh/YM=;
+        b=tmcaajDLpZ2+oMe+wMNH+TJbtUCEK3V84lV5pg+tACOZ2+CvWUGAO3c4MlyVwQ4TON
+         vNGXS62EOD1sNu7T6xSntxhZLtgORj2QDbQfRiId3Sre9EGboDiP1KsIP1tHWMHQTOdJ
+         xuGwkN0kfEH1WVwdbS3nsbgsmS5OJbvW40UsNAsUSHfZi17dr4hpQ5Fey/ru5FcIP/Id
+         D6tJr5QcAlrM1Rwy7rLuzdQGle0CKRVBUoYEPs1le95/yEQOqX8Ns1AGsMe4BkKgJizj
+         x69qjj6CT0eIK9rAydJItYDem65tusJUBKvAJiSNrAGT7JVoofOtOAn/NE+gVwRpV3ZC
+         Mkvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736946870; x=1737551670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uFxqwdxvbmzFeNjYgIwyItyb97yd+3Liidm6Njhh/YM=;
+        b=Ztw6nG73fORqYcOM5Em+zhb46fwFbH6BNvRlYR9KV9hWMhaMLClZ7PI9XQpQ74qTsv
+         3vkWvwPJfi/9fCR5zZWcA8nM1MWC0sVZXLcZw9cD0xUdbgdjiZhzG3pJP1xkMM3dmFTF
+         lAqOJB+wGJHkRl/OqFiYPhJ+FjeIOxdxwLSOHPDqehOrNCHBFyIPgFRiM05bi/e1xc5b
+         xioBWyK4OIWwjSLPwmrqED7e2yZ9YWG/WBr+QUbwc68DnnwuDI8fCWW0znnI4SKfcUrm
+         wFabgMo6XRVajdBA+vymhKNxkYoAFLhLxpGpM3cSWnvqtGW8aJS67IkL/L46CdvuLc0R
+         1Y8w==
+X-Gm-Message-State: AOJu0YweLvUW+vpM1lGAs2VFft52M+R+l2edK28GRRU7NshCga5lkgLn
+	pZtZi/lf2zdP25E1/530rYHqRbdRdvLbd6UC3si/CKsf+UoNXt2pI8nxymIVbE5+DFx2btmuq6U
+	=
+X-Gm-Gg: ASbGncvE5xPQwQtWRwhF9D/qyRoTEL+CblHJNP/h7FrCspvTbhuM/sEZYnAB7a3IHbu
+	8TkqvQQu/PRZyWKkxwTmR3ArU98o1VjtC70kGk/P/l00ZznmKiQCYvh2kSYrdTNSxIaxoqR7G3Y
+	yacK5laop3GrO/kmGhIFnZ0/eoCu1F1X3CtMEZoFl5K1lSAHawlwZUa+bKrIzTCt9TI8ZWh+9YA
+	pgIER7/KSAKtSaLpKdw4rcCCBUHC3GB0S0J+v7lio76UGSZ2/SjE7AHNRheuYh4bg1O7VTFNmPU
+	S5mr9JGV
+X-Google-Smtp-Source: AGHT+IEtBhNT9M0Hr4NWxVpHDetPRmPrjZ6SCxOKJjxzUc0xpGGGFMAJwMJDQZQJyYcH+/p+f4mIhw==
+X-Received: by 2002:a17:902:ecc5:b0:215:75ca:6a0 with SMTP id d9443c01a7336-21a83f5e51dmr512671415ad.29.1736946870516;
+        Wed, 15 Jan 2025 05:14:30 -0800 (PST)
+Received: from totoro.local (c-76-132-108-20.hsd1.ca.comcast.net. [76.132.108.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f12a741sm82889075ad.56.2025.01.15.05.14.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 05:14:29 -0800 (PST)
+From: Russell Harmon <russ@har.mn>
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	Russell Harmon <russ@har.mn>
+Subject: [PATCH] hwmon: (drivetemp) Set scsi command timeout to 10s
+Date: Wed, 15 Jan 2025 05:13:41 -0800
+Message-Id: <20250115131340.3178988-1-russ@har.mn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,73 +72,57 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+There's at least one drive (MaxDigitalData OOS14000G) such that if it
+receives a large amount of I/O while entering an idle power state will
+first exit idle before responding, including causing SMART temperature
+requests to be delayed.
 
-------------------
+This causes the drivetemp request to exceed its timeout of 1 second.
 
-From: Daniil Stas <daniil.stas@posteo.net>
-
-[ Upstream commit 82163d63ae7a4c36142cd252388737205bb7e4b9 ]
-
-scsi_execute_cmd() function can return both negative (linux codes) and
-positive (scsi_cmnd result field) error codes.
-
-Currently the driver just passes error codes of scsi_execute_cmd() to
-hwmon core, which is incorrect because hwmon only checks for negative
-error codes. This leads to hwmon reporting uninitialized data to
-userspace in case of SCSI errors (for example if the disk drive was
-disconnected).
-
-This patch checks scsi_execute_cmd() output and returns -EIO if it's
-error code is positive.
-
-Fixes: 5b46903d8bf37 ("hwmon: Driver for disk and solid state drives with temperature sensors")
-Signed-off-by: Daniil Stas <daniil.stas@posteo.net>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-ide@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Link: https://lore.kernel.org/r/20250105213618.531691-1-daniil.stas@posteo.net
-[groeck: Avoid inline variable declaration for portability]
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Russell Harmon <russ@har.mn>
 ---
- drivers/hwmon/drivetemp.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Here's a test case reproducing the issue:
+
+$ time cat /sys/class/hwmon/hwmon9/temp1_input
+28000
+cat /sys/class/hwmon/hwmon9/temp1_input  0.00s user 0.00s system 7% cpu 0.023 total
+$ dd if=/dev/sdep of=/dev/null bs=1M iflag=direct &  # Generate background load
+$ ./openSeaChest_PowerControl -d /dev/sdep --transitionPower idle_a
+$ time cat /sys/class/hwmon/hwmon9/temp1_input
+0
+cat /sys/class/hwmon/hwmon9/temp1_input  0.00s user 0.00s system 0% cpu 3.154 total
+$ dmesg -t
+sd 11:0:1:0: attempting task abort!scmd(0x00000000ef8da38c), outstanding
+for 2098 ms & timeout 1000 ms
+sd 11:0:1:0: [sdep] tag#4639 CDB: ATA command pass through(16) 85 08 0e
+00 d5 00 01 00 e0 00 4f 00 c2 00 b0 00
+scsi target11:0:1: handle(0x0009), sas_address(0x4433221105000000),
+phy(5)
+scsi target11:0:1: enclosure logical id(0x500062b202d7ea80), slot(6)
+scsi target11:0:1: enclosure level(0x0000), connector name(     )
+sd 11:0:1:0: task abort: SUCCESS scmd(0x00000000ef8da38c)
+sd 11:0:1:0: Power-on or device reset occurred
+$ time cat /sys/class/hwmon/hwmon9/temp1_input
+28000
+cat /sys/class/hwmon/hwmon9/temp1_input  0.00s user 0.00s system 48% cpu
+0.005 total
+
+ drivers/hwmon/drivetemp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-index 6bdd21aa005a..2a4ec55ddb47 100644
+index 2a4ec55ddb47..291d91f68646 100644
 --- a/drivers/hwmon/drivetemp.c
 +++ b/drivers/hwmon/drivetemp.c
-@@ -165,6 +165,7 @@ static int drivetemp_scsi_command(struct drivetemp_data *st,
- {
- 	u8 scsi_cmd[MAX_COMMAND_SIZE];
- 	enum req_op op;
-+	int err;
- 
- 	memset(scsi_cmd, 0, sizeof(scsi_cmd));
- 	scsi_cmd[0] = ATA_16;
-@@ -192,8 +193,11 @@ static int drivetemp_scsi_command(struct drivetemp_data *st,
- 	scsi_cmd[12] = lba_high;
+@@ -194,7 +194,7 @@ static int drivetemp_scsi_command(struct drivetemp_data *st,
  	scsi_cmd[14] = ata_command;
  
--	return scsi_execute_cmd(st->sdev, scsi_cmd, op, st->smartdata,
--				ATA_SECT_SIZE, HZ, 5, NULL);
-+	err = scsi_execute_cmd(st->sdev, scsi_cmd, op, st->smartdata,
-+			       ATA_SECT_SIZE, HZ, 5, NULL);
-+	if (err > 0)
-+		err = -EIO;
-+	return err;
- }
- 
- static int drivetemp_ata_command(struct drivetemp_data *st, u8 feature,
+ 	err = scsi_execute_cmd(st->sdev, scsi_cmd, op, st->smartdata,
+-			       ATA_SECT_SIZE, HZ, 5, NULL);
++			       ATA_SECT_SIZE, 10 * HZ, 5, NULL);
+ 	if (err > 0)
+ 		err = -EIO;
+ 	return err;
 -- 
-2.39.5
-
-
+2.34.1
 
