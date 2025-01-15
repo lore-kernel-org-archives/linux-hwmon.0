@@ -1,57 +1,57 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B441DB120;
-	Wed, 15 Jan 2025 07:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F6435944;
+	Wed, 15 Jan 2025 07:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736926742; cv=none; b=Cmuhz3q4P4ld508wA4YJkgQwTUOC5kiDkEaT+9B8++w0FgsbIUWB9TPne2DI+UTzWuDFXjL3WrCfvpqbfjsqz7VnZ/ysB3w/kAqBCenE3VYdfBQgE0M51IaPLJ7KvSbtdAsI8Yf2n0K0ruBANiVTKpEkGpwFsP90KKDUEmtx1ug=
+	t=1736926965; cv=none; b=AfW+LunlDyeeorVKSkBfKu5M1B7yMobcOzoCDNeocEHEIv2xxdpimWlcNsObP0iuHwazEwwomld5NbEllgdtNUmxnughl+6l2rr/CEk72QjIaWCOVn8o7869FrWzh+JMllX7EjEbTHDOr6zDjrbFLJmyuIGQeFmuW8meXVHmbpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736926742; c=relaxed/simple;
-	bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
+	s=arc-20240116; t=1736926965; c=relaxed/simple;
+	bh=Q3PJp5HE0YO0r8URPsO6J7HCltKNBku/OqDt7CVgapo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VtnMLWuf3HM8YT9lmUH+MCiD1ZKf+d1j+tZzaIAw0cfTLgDcXfZnakzu0pyDXqEf/9G0OHv50aNF2L99OhcBpWFzbqDeQAliN3fAfNxQo2tz/vDab6q8ke8AIA2l6NBirYUtxbwf3P0jQ2kaooz652PGDdBkNQUyREl7QlKHRjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUjBN5HP; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=Fe735tAXT50qiuY0Ts6Bhwyl8EQeQ9N0tEZUw19EHaA0P9SpIXxh8+GOhzlpDYHgmOsSaGkZS1O2i/9AoEJ0qnXKwtlqu0w4HUN9vk7YhSe1UPPK648qcVOHOMe5dr1Ef4TXndpbTQKFHCO8tktuRLyU6WgX/ALdFj3+pgWEusQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DnAG9QEs; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUjBN5HP"
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e53ef7462b6so10871323276.3;
-        Tue, 14 Jan 2025 23:39:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DnAG9QEs"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e39779a268bso970230276.1;
+        Tue, 14 Jan 2025 23:42:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736926740; x=1737531540; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736926963; x=1737531763; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
-        b=ZUjBN5HP5krqJvb4J14OMboDdykSLZNcdej4s0IIyFf2hfFZY9uaHaPTH7N4srBi/m
-         1EG/yCT6TuV/dJlfPRgXYFDAvxRqJUnducrpf6m9lOc9e3VS7qvAN3dsyDw91ln4r0OH
-         sv87rxO5/Z9dcwi265lZUBGq9bkKOujVXRcb+ZZJrQlZYvvuezGsA4GQ38tba1HYW8MQ
-         OAJ7+jg1K4N/H7lxZLzwFKojBIOgxW7ZvWw+8MTAXgdtDr1sH8RMiPuaGjK7TXOMi48g
-         SueNyg7tycUmLjtb7e3jJKD1y0qyJDrTFYVGhdDMHAtEVo+g6dJ3yM56a6XlIE9VX1TX
-         xp8g==
+        bh=6Sslg/zYwiRkuelfoGvfyVJqoc2ZTiVmVRtL13lnc3M=;
+        b=DnAG9QEsMx3VFNqDcuEJqGNsNwP3sAL6poqCxSqP3ADaRxmt2jp+l09t+iM6z+oNbs
+         CJ0Pa+XOM8W1I7R0ExqPJoAlDzu1HGW+9eUHIedmR3h8x7mszUpVp/9Uz1UASCExvEfI
+         bshlUX9AK+AVhv4i92JH+WgaDTNFda7+xhwNCHVruhVs45UnntStkwO9HtohJ6wF9KgG
+         rNCEsGoDIcmTrB+9gcltskVUnSGDA3XApAl1btQ5lb0b0DsSTwNwYhEy7a/7J2s0Vd8o
+         hRF697kJXqaGhdS1PfOdHeFZYqmHkmWXDH8BPvPQsCdwe8KPhh8s2FSaUEMIZrZDvmyk
+         zxZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736926740; x=1737531540;
+        d=1e100.net; s=20230601; t=1736926963; x=1737531763;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
-        b=nafvCmTfEB4G/BdkjxizSaca4BPB9yxLF9NQmKtBKdajKsOUAXRcJWbWmUs48sPKiB
-         wItx5974uh8IOYpEe+fdXaUHC7nlD5HfuL5lyB/QT5mkPr8zClBXyFcpZTu2C0VW21pP
-         M2iUHNfpZduxTdc+0ApfJXSIuQXDmdzdIV4sxctZp9Ct/n3NYZKouGI+K18NJ5YqED6f
-         vjEDeGcwFPEdjyTjY+O6ghlVhc6u5mUckyyS6lRTOtb/yQXWiwuetED8AQJJ2Yhnv0NR
-         DEW2SuTLgh444ZHUQfOHccQwvKlEYTXcXfzgZ5ad+ei/svxxhxWqC5l2lc8eY/l9ddeY
-         BUDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4CamBL4E5msicbciLb5JzJk1RLdVUFWJFTtDzExWeciNS8fC5cI3QPN+2uvP9Vr6c0LuGgnGUao6g0/o=@vger.kernel.org, AJvYcCUcxlaJKjbrRhvGzKMvz27aVfRyc7BrQ952zOct8osqPn3sUW2ZV6CJbr0qvtxSrluTCSClJlpYaH4n@vger.kernel.org, AJvYcCXRB0QKT5Zkp+X+nilzPcnnNeogPcBtim87QjhQn1/YaPdHSbEwrZ56Rwq1+GDDSJzd4JN60TfXXzNs@vger.kernel.org, AJvYcCXlHVurpnVwEaYu22OMGHE1kV21yOZZldyUzsCiUm6EbWRdhRQbRcu3lTv8gZ0BO5GM6jSNorN+q2oJjK0C@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsHyD2GlqExH0sU63qJbsE22pjvyZ3TeTOBQHy3YNdBtVmU/Ve
-	jhrFG0KcVZs2EXwEAYOOhYhugzhLjx8uM3D2A2xrY/AgkXgkkx/2LxSbVZsyfj9/UWCws6Lpuy6
-	e7oj6K7rZ2N24G9H6ezdPgg//8m4=
-X-Gm-Gg: ASbGnctyOB3HD98Em9Qe7XqFfKwNei8eXdIQOmt2KmyPCTirO0QGq7EFAH+WyAJ8mvi
-	bKSCfgXTjXLBQAvmsPh7cxfaLYL7fh65JZ8gSNdzwECIR/O7Za5AsX1wq6R+4NNw7kIdtYv8=
-X-Google-Smtp-Source: AGHT+IE9BcvKGqyedFkR4CvXfQ8QyqJE80ahBeEVo5Fo2mopSBp+1+ajEOlnGbRhFY5NfXDR68DQSMb6dA5whY4U+TI=
-X-Received: by 2002:a05:6902:1245:b0:e57:3641:7d55 with SMTP id
- 3f1490d57ef6-e5736418007mr12996408276.12.1736926739927; Tue, 14 Jan 2025
- 23:38:59 -0800 (PST)
+        bh=6Sslg/zYwiRkuelfoGvfyVJqoc2ZTiVmVRtL13lnc3M=;
+        b=HbmsSfhm4sLxt6sHefgtAxPK2ukcJquS4AhohlkAKjraPcoFwEAO4nCIsfvtVNGqHM
+         6e+iheQqJ4dEDe7IrxB5AOf7bl0/AKwKvyNm7OxFafPcHGLsTxUcvFV9MMDSB1+ClVVb
+         s9/4L2cWSML6k43w9jUhM2sTAA3bhLp9gmB0Md2rZ036Lk3JHm0paj0weDNzPqZ2LmC7
+         nE4vsIfCApXyXSlwFhmkfF/ed9MEjC3DZwt5OaGWcNvsWPetA2n2S0ylzvkqXefL0l+l
+         RYy8zrt2X7OduFPWDfqpDMaOlFpomCu/LKtSQW4HcPsXl/IjtmJgqVma52IT0tehQCaQ
+         DZSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVAC48qckL0x2Ca9veqm/pvdgGvobbSQIjbg5H/OgLw76OeLRcrRRXtMaPoyafmQTrdYild4LWV1pM@vger.kernel.org, AJvYcCUvo+3MQ+buSM1Ba07G7T7/RrfPMnVPGgvSpt2tTI9tdftU1x2aasiBt4bXM24/Pkn5+m5RTm4xFmaQ@vger.kernel.org, AJvYcCVcK9OmLSx7R0TS3gYhQLZhtav6snrt3NuL9pCw+vjlZ0mu7WvUWZYzgtduMVVPLbFsGt7S6giNp0w2FnHi@vger.kernel.org, AJvYcCXsoyYV3j4/+ou53s3aspsoIIMpRKQihXVIbZ+k7t8UKCqo/iZUuo5ueg0FWw9j9srCBC16x41yHimP1X4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh8NtP+GOQUTIYfP/dP8jdTJjMoQxiOSDm5zxbKkyu3+U8q7hm
+	FxeLtf679f2CO9JMgr8nC1N8xHgWQA6H4dzYBNqeJwby6u0x4lEyuy5uX6vVdd+5c6CnbpfxUU2
+	9dL+geSTyPl2nMIpCaxyLZOMuyYI=
+X-Gm-Gg: ASbGnctnLH96Kgz2zw/Bid05youf9lQkQVbHP1Z+zsKz8HzYKIDWFZd9vTHWTKdimp1
+	TLR0vGoF0VHqJWVoQjOBe06550wq05APiG+8Piy6QyQZH6pt00/G89dCwUC0ObCTRc4ADtHY=
+X-Google-Smtp-Source: AGHT+IH17XhqxAmd73MvcgPT4rEqzzyk65JKjfzd1/K9q35+ZMaWoV/BtCI1zmz6DXH06SQ6o7zDbFM4qU+9+YpcFVo=
+X-Received: by 2002:a05:6902:1003:b0:e49:ef7f:de1b with SMTP id
+ 3f1490d57ef6-e578a1219b7mr1550169276.4.1736926963023; Tue, 14 Jan 2025
+ 23:42:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -59,45 +59,139 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250110082612.4107571-1-a0282524688@gmail.com>
- <20250110082612.4107571-3-a0282524688@gmail.com> <d83078ac-69b6-400c-b037-cfe00be6251f@kernel.org>
-In-Reply-To: <d83078ac-69b6-400c-b037-cfe00be6251f@kernel.org>
+ <20250110082612.4107571-2-a0282524688@gmail.com> <ba0e0e2b-01ba-4261-ace9-82485e1c253e@roeck-us.net>
+In-Reply-To: <ba0e0e2b-01ba-4261-ace9-82485e1c253e@roeck-us.net>
 From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 15 Jan 2025 15:38:48 +0800
-X-Gm-Features: AbW1kvYlhRS_VNzoHXzQLpg5Pge6OdVxv7WSXP09DLW6q9owLFMP9YxG6W5-OKw
-Message-ID: <CAOoeyxXQJ1U3Uh=G=T+e2dZRk20WeNvkf8Df30R9rGeEV+zEag@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] dt-bindings: hwmon: Add support for NCT7716,
- NCT7717 and NCT7718 in lm90
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: tmyu0@nuvoton.com, jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Date: Wed, 15 Jan 2025 15:42:32 +0800
+X-Gm-Features: AbW1kvZgpC9Ts8_B_gBYp0vBqc0FXESjdD6C-CuJSHI1j6axLypLJeVDLnPCjBw
+Message-ID: <CAOoeyxXMrBvB=GTQUhTMETx-BLATTCwFR0wxmHxtsNm_qbgMuQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] hwmon: (lm90): Add support for NCT7716, NCT7717
+ and NCT7718
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: tmyu0@nuvoton.com, jdelvare@suse.com, corbet@lwn.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Krzysztof,
+Dear Guenter,
 
-Thank you for reviewing.
-I will include hardware description to commit message in the next patch.
+Thank you for your comments,
+
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2025=E5=B9=B41=E6=9C=8810=E6=
+=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8811:56=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 1/10/25 00:26, Ming Yu wrote:
+> ...
+> > @@ -2288,7 +2329,19 @@ static const char *lm90_detect_nuvoton(struct i2=
+c_client *client, int chip_id,
+> >       if (config2 < 0)
+> >               return NULL;
+> >
+> > -     if (address =3D=3D 0x4c && !(config1 & 0x2a) && !(config2 & 0xf8)=
+) {
+> > +     if (address =3D=3D 0x48 && !(config1 & 0x30) && !(config2 & 0xfe)=
+ &&
+>
+> Why config1 & 0x30 (instead of 0x3e) ?
+>
+
+Fix it in the next patch.
+
+> > +         convrate <=3D 0x08) {
+> > +             if (chip_id =3D=3D 0x90)
+> > +                     name =3D "nct7717";
+> > +             else if (chip_id =3D=3D 0x91)
+> > +                     name =3D "nct7716";
+> > +     } else if (address =3D=3D 0x49 && !(config1 & 0x30) && !(config2 =
+& 0xfe) &&
+> > +                convrate <=3D 0x08) {
+> > +             name =3D "nct7716";
+>
+> Please also check the chip ID, and the other unused configuration registe=
+r bits.
+>
+
+Fix it in the next patch.
+
+> > +     } else if (address =3D=3D 0x4c && !(config1 & 0x18) && !(config2 =
+& 0xf8) &&
+> > +                convrate <=3D 0x08) {
+> > +             name =3D "nct7718";
+>
+> Please also check the chip ID (0x90 according to the datasheet). Why not =
+check bit 5
+> of config1 ?
+>
+> If there is a reason for not checking the reserved configuration register=
+ bits,
+> please add a comment to the code explaining the reason.
+>
+
+Fix it in the next patch.
+
+> > +     } else if (address =3D=3D 0x4c && !(config1 & 0x2a) && !(config2 =
+& 0xf8)) {
+> >               if (chip_id =3D=3D 0x01 && convrate <=3D 0x09) {
+> >                       /* W83L771W/G */
+> >                       name =3D "w83l771";
+> > @@ -2297,6 +2350,7 @@ static const char *lm90_detect_nuvoton(struct i2c=
+_client *client, int chip_id,
+> >                       name =3D "w83l771";
+> >               }
+> >       }
+> > +
+> >       return name;
+> >   }
+> >
+> > @@ -2484,6 +2538,10 @@ static int lm90_detect(struct i2c_client *client=
+, struct i2c_board_info *info)
+> >               name =3D lm90_detect_maxim(client, common_address, chip_i=
+d,
+> >                                        config1, convrate);
+> >               break;
+> > +     case 0x50:      /* Nuvoton */
+> > +     case 0x5c:      /* Winbond/Nuvoton */
+>
+> The new detection code should be implemented as separate function to avoi=
+d
+> weakening the detection mechanism. I would suggest to rename the current
+> lm90_detect_nuvoton() to lm90_detect_winbond() and introduce a new
+> lm90_detect_nuvoton(). Alternatively, add something like lm90_detect_nuvo=
+ton_50().
+>
+> Given that all new chips have a chip ID register (called device ID), I wo=
+uld suggest
+> to arrange the new code around the chip IDs. Since all chips have another=
+ chip ID
+> register at address 0xfd, it would make sense to check that register as w=
+ell.
+> That would only require a single check since it looks like the value is t=
+he same
+> for all chips. Something like
+>
+>         int chid =3D i2c_smbus_read_byte_data(client, 0xfd);
+>         ...
+>
+>         if (chid < 0 || config2 < 0)
+>                 return NULL;
+>
+>         if (chid !=3D 0x50 || convrate > 0x08)
+>                 return NULL;
+>
+>         switch (chip_id) {
+>         case 0x90:
+>                 ...
+>         case 0x91:
+>                 ...
+>         default:
+>                 ...
+>         }
+>
+Okay, I will make these modifications in the next patch.
 
 
 Best regards,
-Ming.
-
-Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=8810=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:29=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On 10/01/2025 09:26, Ming Yu wrote:
-> > This will allow binding the driver with the device from the device tree=
-.
->
-> Rather explain the hardware, because above is not really correct - this
-> patch does not allow that.
->
-> Anyway:
->
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Best regards,
-> Krzysztof
+Ming
