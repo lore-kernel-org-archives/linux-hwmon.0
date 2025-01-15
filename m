@@ -1,94 +1,103 @@
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584C1DB120;
-	Wed, 15 Jan 2025 07:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B441DB120;
+	Wed, 15 Jan 2025 07:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736926564; cv=none; b=UtiGwE5c9B9u9F+seIFF0MjP2fsPln+ueX8xZQNPz+5BYn4HNsntmv//4bNFO0qz3jPRaperCokPa4KJSPdnTavt8PsuAId7N1GxfzowR/Xv0iperiOG9nnK0xowJotHcVyTTRo78QNpbp3iTTXnKaJko1TfhswX+m0gdZZs93Q=
+	t=1736926742; cv=none; b=Cmuhz3q4P4ld508wA4YJkgQwTUOC5kiDkEaT+9B8++w0FgsbIUWB9TPne2DI+UTzWuDFXjL3WrCfvpqbfjsqz7VnZ/ysB3w/kAqBCenE3VYdfBQgE0M51IaPLJ7KvSbtdAsI8Yf2n0K0ruBANiVTKpEkGpwFsP90KKDUEmtx1ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736926564; c=relaxed/simple;
-	bh=75fdSYiwfdXQPnh/iEZR/5rzB+mRS2cJ3tcX3OV3VEo=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=QF2jhAp+YDj3vAnFn3aynT31PysAWiNyZnTsNv/U2jzGDQldCKx1Axq2fyhhJVoNqHZhU3o5uSHg6FyN/ikQUhu8yGTQaO3mhC55hauugCMbHGcDWvjFQhlZE0tAhVN5kGlFUtwt/iHOuwStL4JVwZDRn1CnhIOl0yqRdok6LdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aa.jp.fujitsu.com; spf=pass smtp.mailfrom=aa.jp.fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=RHmDW9cn; arc=none smtp.client-ip=68.232.139.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aa.jp.fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aa.jp.fujitsu.com
+	s=arc-20240116; t=1736926742; c=relaxed/simple;
+	bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VtnMLWuf3HM8YT9lmUH+MCiD1ZKf+d1j+tZzaIAw0cfTLgDcXfZnakzu0pyDXqEf/9G0OHv50aNF2L99OhcBpWFzbqDeQAliN3fAfNxQo2tz/vDab6q8ke8AIA2l6NBirYUtxbwf3P0jQ2kaooz652PGDdBkNQUyREl7QlKHRjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUjBN5HP; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="RHmDW9cn"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1736926562; x=1768462562;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=75fdSYiwfdXQPnh/iEZR/5rzB+mRS2cJ3tcX3OV3VEo=;
-  b=RHmDW9cnfB5FLVelfVie9XL/Qn7oXOmLA/SKVj1dirsUiluUSAjrBSKW
-   mGq7GIwmddajsUsnkEWhqB5mAEaDzPizMnKlGkNa24ToNcEz1giIK/KKu
-   rP/1eUpGK/tb7R8iv5J4vte7mw+IY9cNjrO/nI+OB6NeNwhQVBfGnRTeW
-   PLK1E+tbVg/bd7InX2qCmE765vg1p95EgnQL8Ld7fPZnUtTp/C3IPGt+B
-   2NfVpZ0uIjcPJIL7sdcl6hGNqBNkYDDT8k+XNdAPZf9EUNuE/B31wdbmm
-   r5ncdYNqpb1MQnqNoAfmXM9MLqQ3v5mHcKR6IocpKzWoofOVkEDujA4Mj
-   g==;
-X-CSE-ConnectionGUID: nhuUKhy5S+uDwTbhOWhz+g==
-X-CSE-MsgGUID: z6NE+IuJShu2fUmF/0In0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="186839168"
-X-IronPort-AV: E=Sophos;i="6.12,316,1728918000"; 
-   d="scan'208";a="186839168"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 16:35:53 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id C9D2796742;
-	Wed, 15 Jan 2025 16:35:50 +0900 (JST)
-Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 99F6DD50AC;
-	Wed, 15 Jan 2025 16:35:50 +0900 (JST)
-Received: from sm-x86-mem01.ssoft.mng.com (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
-	by oym-om4.fujitsu.com (Postfix) with ESMTP id 3C6654005AE75;
-	Wed, 15 Jan 2025 16:35:50 +0900 (JST)
-From: Kazuhiro Abe <fj1078ii@aa.jp.fujitsu.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Huisong Li <lihuisong@huawei.com>,
-	Kazuhiro Abe <fj1078ii@aa.jp.fujitsu.com>
-Subject: [PATCH] hwmon: (acpi_power_meter) Fix a check for the return value of read_domain_devices().
-Date: Wed, 15 Jan 2025 07:35:32 +0000
-Message-Id: <20250115073532.3211000-1-fj1078ii@aa.jp.fujitsu.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUjBN5HP"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e53ef7462b6so10871323276.3;
+        Tue, 14 Jan 2025 23:39:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736926740; x=1737531540; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
+        b=ZUjBN5HP5krqJvb4J14OMboDdykSLZNcdej4s0IIyFf2hfFZY9uaHaPTH7N4srBi/m
+         1EG/yCT6TuV/dJlfPRgXYFDAvxRqJUnducrpf6m9lOc9e3VS7qvAN3dsyDw91ln4r0OH
+         sv87rxO5/Z9dcwi265lZUBGq9bkKOujVXRcb+ZZJrQlZYvvuezGsA4GQ38tba1HYW8MQ
+         OAJ7+jg1K4N/H7lxZLzwFKojBIOgxW7ZvWw+8MTAXgdtDr1sH8RMiPuaGjK7TXOMi48g
+         SueNyg7tycUmLjtb7e3jJKD1y0qyJDrTFYVGhdDMHAtEVo+g6dJ3yM56a6XlIE9VX1TX
+         xp8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736926740; x=1737531540;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vlIn/J2O84J+JT+1i+wxBYZilBVlfXH9SzN2oCdnoYQ=;
+        b=nafvCmTfEB4G/BdkjxizSaca4BPB9yxLF9NQmKtBKdajKsOUAXRcJWbWmUs48sPKiB
+         wItx5974uh8IOYpEe+fdXaUHC7nlD5HfuL5lyB/QT5mkPr8zClBXyFcpZTu2C0VW21pP
+         M2iUHNfpZduxTdc+0ApfJXSIuQXDmdzdIV4sxctZp9Ct/n3NYZKouGI+K18NJ5YqED6f
+         vjEDeGcwFPEdjyTjY+O6ghlVhc6u5mUckyyS6lRTOtb/yQXWiwuetED8AQJJ2Yhnv0NR
+         DEW2SuTLgh444ZHUQfOHccQwvKlEYTXcXfzgZ5ad+ei/svxxhxWqC5l2lc8eY/l9ddeY
+         BUDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4CamBL4E5msicbciLb5JzJk1RLdVUFWJFTtDzExWeciNS8fC5cI3QPN+2uvP9Vr6c0LuGgnGUao6g0/o=@vger.kernel.org, AJvYcCUcxlaJKjbrRhvGzKMvz27aVfRyc7BrQ952zOct8osqPn3sUW2ZV6CJbr0qvtxSrluTCSClJlpYaH4n@vger.kernel.org, AJvYcCXRB0QKT5Zkp+X+nilzPcnnNeogPcBtim87QjhQn1/YaPdHSbEwrZ56Rwq1+GDDSJzd4JN60TfXXzNs@vger.kernel.org, AJvYcCXlHVurpnVwEaYu22OMGHE1kV21yOZZldyUzsCiUm6EbWRdhRQbRcu3lTv8gZ0BO5GM6jSNorN+q2oJjK0C@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsHyD2GlqExH0sU63qJbsE22pjvyZ3TeTOBQHy3YNdBtVmU/Ve
+	jhrFG0KcVZs2EXwEAYOOhYhugzhLjx8uM3D2A2xrY/AgkXgkkx/2LxSbVZsyfj9/UWCws6Lpuy6
+	e7oj6K7rZ2N24G9H6ezdPgg//8m4=
+X-Gm-Gg: ASbGnctyOB3HD98Em9Qe7XqFfKwNei8eXdIQOmt2KmyPCTirO0QGq7EFAH+WyAJ8mvi
+	bKSCfgXTjXLBQAvmsPh7cxfaLYL7fh65JZ8gSNdzwECIR/O7Za5AsX1wq6R+4NNw7kIdtYv8=
+X-Google-Smtp-Source: AGHT+IE9BcvKGqyedFkR4CvXfQ8QyqJE80ahBeEVo5Fo2mopSBp+1+ajEOlnGbRhFY5NfXDR68DQSMb6dA5whY4U+TI=
+X-Received: by 2002:a05:6902:1245:b0:e57:3641:7d55 with SMTP id
+ 3f1490d57ef6-e5736418007mr12996408276.12.1736926739927; Tue, 14 Jan 2025
+ 23:38:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250110082612.4107571-1-a0282524688@gmail.com>
+ <20250110082612.4107571-3-a0282524688@gmail.com> <d83078ac-69b6-400c-b037-cfe00be6251f@kernel.org>
+In-Reply-To: <d83078ac-69b6-400c-b037-cfe00be6251f@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 15 Jan 2025 15:38:48 +0800
+X-Gm-Features: AbW1kvYlhRS_VNzoHXzQLpg5Pge6OdVxv7WSXP09DLW6q9owLFMP9YxG6W5-OKw
+Message-ID: <CAOoeyxXQJ1U3Uh=G=T+e2dZRk20WeNvkf8Df30R9rGeEV+zEag@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] dt-bindings: hwmon: Add support for NCT7716,
+ NCT7717 and NCT7718 in lm90
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: tmyu0@nuvoton.com, jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After commit fabb1f813ec0 ("hwmon: (acpi_power_meter) Fix fail to load
-module on platform without _PMD method"),
-the acpi_power_meter driver fails to load if the platform has _PMD method.
+Dear Krzysztof,
 
-To address this, add a check for successful read_domain_devices().
-Tested on Nvidia Grace machine.
+Thank you for reviewing.
+I will include hardware description to commit message in the next patch.
 
-Fixes: fabb1f813ec0 ("hwmon: (acpi_power_meter) Fix fail to load module on platform without _PMD method")
-Signed-off-by: Kazuhiro Abe <fj1078ii@aa.jp.fujitsu.com>
----
- drivers/hwmon/acpi_power_meter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 2f1c9d97ad21..dbf2c606fe15 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -682,7 +682,7 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
- 
- 	/* _PMD method is optional. */
- 	res = read_domain_devices(resource);
--	if (res != -ENODEV)
-+	if ((res != 0) && (res != -ENODEV))
- 		return res;
- 
- 	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
--- 
-2.34.1
+Best regards,
+Ming.
 
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=8810=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:29=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 10/01/2025 09:26, Ming Yu wrote:
+> > This will allow binding the driver with the device from the device tree=
+.
+>
+> Rather explain the hardware, because above is not really correct - this
+> patch does not allow that.
+>
+> Anyway:
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
