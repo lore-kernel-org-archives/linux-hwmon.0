@@ -1,33 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8470137930;
-	Wed, 15 Jan 2025 16:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5951BBBC5;
+	Wed, 15 Jan 2025 16:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736957239; cv=none; b=HynAoUbIPMd2QDfjRqAbOue6I6hOaUFAAVuSwZ0ETyQ7ynUQaA1AFWEfFP28wH6U53RKmE3VezpLZPugnzfcHXv8qSFpOXyNDGelQ8CbCnlltZkCr+4YxN6fkxBD1fY0+j88dB9oFUa4fEa/hrw0hUIwO3LCZFWX0KwFuEArnuo=
+	t=1736959533; cv=none; b=NLAPtHuImYotzoXfyDKinmI/DtNpj0XOgEJexBwZcTOJtD4ffd6hmgdZYmSNuloKsfZGCsdR/5p9bkBs0Cz1U8d/xkTu+CdFBlZodVKCKIjwxpuFj1tBBh4t1wyJKoJvCsBSBYDjR8i5grcIvUjVimHKLN4IEMf/8+yLNxiOaQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736957239; c=relaxed/simple;
-	bh=4Bqir9W3xriz+Cjy1sELP/HVrUDsfaOVdNi1ifNjn/s=;
+	s=arc-20240116; t=1736959533; c=relaxed/simple;
+	bh=FvS7/9I2GnMN906sdtqPLHpRpFYIqgyNF/PPN97ma84=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tO10LV+7QMKEGTbcc/EYnjkcx6CAldZu/y1t0QH2TcxnrbD3Xlkd8aaUdyJiEu3XBYgZqjrKJMTee24BLugjp4KpWG9DWs7v4tIJOeCS6ZUv0UNnl0XYk5cYYLbY3TQIDPddV/FAq9ZO3nciYiJQcndDyxaNNM7nX+2p1zNwh20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvAH2yKx; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=iQ4T6gRtgylSE2ZX1c8D5tN5cD81LNQxOHhiyFmjtXu0MFaYIGT7Jf+AWMXX7Xzv6TB0rCSdBfK/EUEVm7c13nP18o14YH3gC0Sj7av96Wn6HLuMNm9jE6b9+Jnty3io4/jwyGiCJcuQRchGKg2BOjVCHGGGBnMl+toJhuuxm3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VVjKTBR3; arc=none smtp.client-ip=193.252.22.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvAH2yKx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51595C4CED1;
-	Wed, 15 Jan 2025 16:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736957238;
-	bh=4Bqir9W3xriz+Cjy1sELP/HVrUDsfaOVdNi1ifNjn/s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RvAH2yKxnR33VqZv4Tq5sh81Vq/sdjrXgQSBOKVjZ7XVD+vVNe4kOQHIoBD9PepTd
-	 DnVpHvWZl6Tl5E325/bgF9ABctbPW2QN8GfOMyiFSS/lVzT5kvFPXK7CBaGlDRak/L
-	 PCkYRLXE4rUiPOi1ouMWtCUMBDHkOf9ZPhcQQhdImb2DY65XTDX8IlMOXvg+1SQXby
-	 O+apXhaHbcP9MpiBAAZ/40RHCvOBXogcHx0mAGCxLDfEK80J6k2T9SyE902ieRMYYZ
-	 lD1a3fJLAsAMIaVjkq9HxBVomHl1gY6cnog+6EUXYItlcddCgCGBD+TMxLyjB6+Ozs
-	 OlqkEmB7VJSMw==
-Message-ID: <c8d6117a-d48f-440e-a6b1-9770bf5fbc9f@kernel.org>
-Date: Wed, 15 Jan 2025 17:07:11 +0100
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VVjKTBR3"
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id Y6VrtDFe4QUNRY6VwtCvLc; Wed, 15 Jan 2025 17:45:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736959520;
+	bh=p50mlgWffUEX45aXIchC5f+eGOCl4aumziWGcWmIY94=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=VVjKTBR3UYceUdiNxKUVv5cm9EplKoT4EwGxOwTg/k8XmfEebeb4pjAIrHvSnLXVr
+	 gyjG3tM8eGKe4g7wECKnaackaaCzSxrXvd6ag3f2EtHFA9SCZ5tiYxtFNXwd1cmf27
+	 Gmb3A6pLlnsNRU2NznSAWQzXI86ZM7hruXaPn7NR4b4uNsuS1TgZxWhuZSsQ9MGBah
+	 h5+wpyLhmQ2+wn4vJ0KRa0NO15jjfayygMaHOl1DnxgSQJsQabAAqijlfvoJ54x0G8
+	 jfdJSteMXvFyrYB8y4Zqv6IqrKM6w8oZu/eoNUigDz1Wq7hBjcZ6Rz2+2TQL1VLoWB
+	 rvljtw20fSjew==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 15 Jan 2025 17:45:20 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
+Date: Thu, 16 Jan 2025 01:45:02 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,92 +42,112 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: rtc: max31335: Add max31331 support
-To: "U, Pavithra" <Pavithra.U@analog.com>
-Cc: "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20250109-add_support_max31331_fix_3-v1-0-a74fac29bf49@analog.com>
- <20250109-add_support_max31331_fix_3-v1-1-a74fac29bf49@analog.com>
- <5a5fttl5su6nqfnq7rs275tp3gpxauqacebacehxm7jj32dga4@tucnr4wkqnd5>
- <LV8PR03MB73752CF2725AF0CB79A5A8EBE5192@LV8PR03MB7375.namprd03.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
+ linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+ mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
+ alexandre.belloni@bootlin.com
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-5-a0282524688@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <LV8PR03MB73752CF2725AF0CB79A5A8EBE5192@LV8PR03MB7375.namprd03.prod.outlook.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250114033010.2445925-5-a0282524688@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/01/2025 11:21, U, Pavithra wrote:
->>>
->>>    interrupts:
->>>      maxItems: 1
->>> @@ -57,9 +60,9 @@ examples:
->>>          #address-cells = <1>;
->>>          #size-cells = <0>;
->>>
->>> -        rtc@68 {
->>> +        rtc@69 {
->>>              compatible = "adi,max31335";
->>> -            reg = <0x68>;
->>> +            reg = <0x69>;
->>
->> Why? I already asked about this - the same question "Why"
-> 
-> While testing, it was identified that the i2c address for max31335 is 0x69. Sorry, I will revert and send the fix in a separate patch.
+On 14/01/2025 at 12:30, Ming Yu wrote:
 
-Yes, please.
+(...)
+
+> +static void nct6694_can_clean(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
+> +
+> +	if (priv->tx_skb || netif_queue_stopped(ndev))
+> +		ndev->stats.tx_errors++;
+> +	dev_kfree_skb(priv->tx_skb);
+
+Use:
+
+  	can_flush_echo_skb(ndev);
+
+(related to the following comments).
+
+> +	priv->tx_skb = NULL;
+> +}
+
+(...)
+
+> +static void nct6694_can_tx_work(struct work_struct *work)
+> +{
+> +	struct nct6694_can_priv *priv = container_of(work,
+> +						     struct nct6694_can_priv,
+> +						     tx_work);
+> +	struct net_device *ndev = priv->ndev;
+> +
+> +	guard(mutex)(&priv->lock);
+> +
+> +	if (priv->tx_skb) {
+> +		if (priv->can.state == CAN_STATE_BUS_OFF) {
+
+Just stop the queue when the can bus is off so that you do not have do
+check the bus status each time a frame is sent.
+
+> +			nct6694_can_clean(ndev);
+> +		} else {
+> +			nct6694_can_tx(ndev);
+> +			can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
+> +			priv->tx_skb = NULL;
+> +		}
+> +	}
+> +}
+> +
+> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+> +					  struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
+> +
+> +	if (can_dev_dropped_skb(ndev, skb))
+> +		return NETDEV_TX_OK;
+> +
+> +	if (priv->tx_skb) {
+> +		netdev_err(ndev, "hard_xmit called while tx busy\n");
+> +		return NETDEV_TX_BUSY;
+> +	}
+> +
+> +	netif_stop_queue(ndev);
+> +	priv->tx_skb = skb;
+
+Here, you can directly do:
+
+  	can_put_echo_skb(skb, ndev, 0, 0);
+
+The skb remains accessible under priv->can.echo_skb[0]. With this, you
+can remove the priv->tx_skb field.
+
+> +	queue_work(priv->wq, &priv->tx_work);
+> +
+> +	return NETDEV_TX_OK;
+> +}
 
 
+Yours sincerely,
+Vincent Mailhol
 
-Best regards,
-Krzysztof
