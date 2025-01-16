@@ -1,308 +1,178 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751A924A7C9;
-	Thu, 16 Jan 2025 14:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFBD22CBEF
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jan 2025 16:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737038384; cv=none; b=IwBBacOvOn6zAwHxv+uHZWLOX/+BqpxsVgWB8oaoXNQx4Uia7SnM4BzxSgdu7m6XN3JSBgPSZaorots+IOWuAWwFM52dpPcRD29MWWtOW01p7k6WZQQS7XYUeiw5KyAgloHQ7HH9cRD58p6wbQLh6mMwtr1YExRE+6mHzaWPN1M=
+	t=1737043226; cv=none; b=cqcifdZWU2UBIFMsxGzdNyJ7ExVT1GUNWY7D66r9D7oLtH4qQnKBzZacavm1afjsZm6koVHa2ag3LmRg0CS8Z89c7HNJT5enetTVWJ57K7wHxt/uGkBjz4f0sLxdm8S8zRocJTxMkis/nZyRhefPRlYj5+m6CN5TtR1SvpDS9z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737038384; c=relaxed/simple;
-	bh=A7PN/W/9XIAKQaAYgBJLaQkF/qLNPDB+iP5j7M2bcqw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mU/6M8mZeW7mEQOzzY65RMjvVvT455M3mnvM0J7fTrxFxI628MwZEPdekTtJoyGxpxnD1iMu+kygkpWXarOoDDpYcYPHgv1mgdJB4uKP5vY5VYPyMwuUdAGhKYvDe7E6/grJsT25Em9vPyDNYZJ4ZBFZC7oO81LaVCG1l5WMLos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJipq0m4; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737043226; c=relaxed/simple;
+	bh=XeSV/j1BKhdlzqiM3VL2pfqIeyohds5ZDL8W7avUZN0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=B+p5gI+qNPJywd+SGai0WYBlZr8ebmOmgolaA89ssd+XUBU0PP7fGTXLcQhLs7XKryHim54X1Hu7wzTojkWdkcQEossyo3v+UHcWXOxE0JNfOgdHWP3kLYp1TnYYKFIxUn0k2RgtSYNHNRpa0iXjDBVuwsEoWeJbuTvMr2Zas9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XRMTeQy+; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJipq0m4"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2161eb95317so19125525ad.1;
-        Thu, 16 Jan 2025 06:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737038382; x=1737643182; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TNHzUmAwmIyvzmP+BqHnUhuRQQDuum4pzxibi4JWAww=;
-        b=QJipq0m4GJFTInY9K39HNBN2KdgJ+tK1mmAaBkkD9oWbHavdl23FY3T0mMt1zw3nGI
-         J+603IJHjH0ZwD5eF+rgF7LImwr8Ngla+lSxfHW2wR6CWZqGZ+mqUpkglmV+cHNykZ+r
-         dCRklBVm55t46NNDM84sVINzwhCmloGUixqn2iDxAWD2u6sJhiTMvx1OSxjIdRTNESJN
-         arm9hwpiNpEWfR7wr+zO8V+VMJITNIubtIbO5Ahppk1HEYQwz2JXx5HTjZo8ieR5xsLM
-         MmXD0p4jpeu8AHk4aj0wBnnzF3XrTSiaQb4nl78glaEQHvKjVZKf0FQ/i5sHq0DkmUJ8
-         H+Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737038382; x=1737643182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TNHzUmAwmIyvzmP+BqHnUhuRQQDuum4pzxibi4JWAww=;
-        b=liDt2YNa6FHxZC1n0tuoEh1MN/0a4+3BJJJrx52r9EgeB4OVBmvKIu+Po+mB3jqks9
-         vZRmQoHpzMe8NjQC6XDqgfxmmGl37+zZU7kg7NRgG9CBlcnCUjxrlaIHdXZE2ThBA2e7
-         8iATQLN38bNtk7U+dsXhhR6cIERXkrd+rSpxgbQBy8ocWWwS/x6PTw0bK/CdzVskKKQP
-         XTkRtsL3ux2oXuBrOuOd8/kX49wCDr4VuUgBdi92NijbCBz4QwEEweXLqZGZQlWoZzlh
-         utlxd4g+1tPz9C9RtjJaUkqj6BFF3OYpxna/SoKCDf32NXU9ubxm1tnnprRC4D8arGP1
-         2uHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6xtpYnsg9sbSED0tjtP0xjYfzQfeA6lgUTyOqTsqXKwblOBRGvQ5YUECEBW7p5jO4v3UAzW5m+n+wMijb@vger.kernel.org, AJvYcCXU1HrllDNWHGj6SZQIIXTnDlkBUTeyJ+ZabkxkTyCZH6Gf+ADSfazgecRa7avN6PskYk3aSJXMfXfB/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoeMGzE/VJK0O3x9kxXkntM2oufcYsdpGriKcshF40SKL/HjSw
-	P+U+2uXRnaRXOhVdE9eUOkNyyPBIOuAgtgrvUwyoMaUMR2hQqn6r
-X-Gm-Gg: ASbGnctBeU1skehkMq6hPdfqtfn1kDtFYUyzT30i3DoHeNPSeg0koT8GLcz99QCzyhY
-	RxoxkncXTyGhAUVzPh/8G2CE6X3zsm4pJrktBHbaB2bV+YReKEfXE55FRI7r86r50h4+/kNU0X7
-	9yop5qw/NxcQRY4F5udYQihsFjia5muepswjpTLCmGx00cdVbMkZrgcRLHTHZv1QsMczSaXiihW
-	DY5JceMe/bYkBXpHv0SXdvCk9BvTleixubBjRZRHX4fYq8vXsbd6z3h8xIiErdt7ACx8ethEcU=
-X-Google-Smtp-Source: AGHT+IFlPOlopm2aNcjlCQVALc8W5r606mzcihHbgj7Vt1pJiZ25qpoKVreb8xapdHf01+bifZh9bw==
-X-Received: by 2002:a05:6a00:1c92:b0:725:e73c:c415 with SMTP id d2e1a72fcca58-72d21fd8afcmr48857027b3a.18.1737038381563;
-        Thu, 16 Jan 2025 06:39:41 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:8898:ddd1:da20:3254:f45:fbfc])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab7f041csm94995b3a.6.2025.01.16.06.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 06:39:41 -0800 (PST)
-From: Atharva Tiwari <evepolonium@gmail.com>
-To: 
-Cc: evepolonium@gmail.com,
-	Aun-Ali Zaidi <admin@kodeit.net>,
-	Henrik Rydberg <rydberg@bitmath.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v4] hwmon: Add T2 Mac fan control support in applesmc driver
-Date: Thu, 16 Jan 2025 20:09:19 +0530
-Message-Id: <20250116143924.3276-1-evepolonium@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XRMTeQy+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737043225; x=1768579225;
+  h=date:from:to:cc:subject:message-id;
+  bh=XeSV/j1BKhdlzqiM3VL2pfqIeyohds5ZDL8W7avUZN0=;
+  b=XRMTeQy+X81ia/iz7zvMj1oIFWysf+Vmv6kt1zVIKtgKARTbLpAW6jlI
+   UWmw2ENIacOFxkIATTaQzUkD49yTTHNkL/FrL+9xLzedGSUSmry2UU99X
+   9i4HGPNV7UQmPAhjDRK7Sgp4KgVCB5JoD7KdPouWgUQpQh2x7bqGmlTM1
+   jc74LKxE5i2tV3/LdLGplmkU7hnvFh8rQ0BYdLk3EPMMf0LDNCwNKzI/k
+   awET5cRTmJJ3jxAVWfqpSTpAMdIRc/wG5BnIvHIk4jJg1OGNSNRyBg2p/
+   pR9WVzPnaKCk2T72QlK0eoRIyeNo+h0xnoadZnBISIz8j+ACwL8Z987fv
+   A==;
+X-CSE-ConnectionGUID: EqbCwMV9RueUoSRuVUt1sQ==
+X-CSE-MsgGUID: EMJGHCEoS8CQa3Rn9ADXfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="48100610"
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="48100610"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:00:24 -0800
+X-CSE-ConnectionGUID: 2dUekd6PRvOYlmm2YmKIRA==
+X-CSE-MsgGUID: mef3re7uTR2aUSphUR7LBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="105583426"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 16 Jan 2025 08:00:23 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYSI8-000S6n-31;
+	Thu, 16 Jan 2025 16:00:20 +0000
+Date: Fri, 17 Jan 2025 00:00:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ f468d63823fee061cf44ae1c504a02dc0aff0da0
+Message-ID: <202501170010.naGNkdfM-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-THIS PATCH IS A RESEND OF THIS PATCH:
-https://lore.kernel.org/all/20250114045256.3211-1-evepolonium@gmail.com/
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: f468d63823fee061cf44ae1c504a02dc0aff0da0  Merge branch 'fixes-v6.13' into testing
 
-This patch adds support for fan control on T2 Macs in the applesmc driver.
-It introduces functions to handle floating-point fan speed values 
-(which are required by t2 chips).
-The fan speed reading and writing are updated
-to support both integer and floating-point values.
-The fan manual control is also updated to handle T2 Mac-specific keys.
+elapsed time: 1451m
 
-Guenter Roeck asked "Does this limit still apply?"
-so yes the limit still applies.
+configs tested: 101
+configs skipped: 1
 
-Changes since v3:
---- fixed error by kernel test robot about FIELD_GET and FIELD_PREP by
-	by adding linux/bitfield.h
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Co-developed-by: Aun-Ali Zaidi <admin@kodeit.net>
-Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250116    gcc-13.2.0
+arc                   randconfig-002-20250116    gcc-13.2.0
+arc                        vdk_hs38_defconfig    gcc-13.2.0
+arm                               allnoconfig    clang-17
+arm                            mmp2_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250116    gcc-14.2.0
+arm                   randconfig-002-20250116    clang-15
+arm                   randconfig-003-20250116    gcc-14.2.0
+arm                   randconfig-004-20250116    gcc-14.2.0
+arm                         s3c6400_defconfig    gcc-14.2.0
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250116    gcc-14.2.0
+arm64                 randconfig-002-20250116    gcc-14.2.0
+arm64                 randconfig-003-20250116    clang-15
+arm64                 randconfig-004-20250116    clang-20
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250116    gcc-14.2.0
+csky                  randconfig-002-20250116    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250116    clang-20
+hexagon               randconfig-002-20250116    clang-20
+i386                              allnoconfig    gcc-12
+i386        buildonly-randconfig-001-20250116    clang-19
+i386        buildonly-randconfig-002-20250116    clang-19
+i386        buildonly-randconfig-003-20250116    clang-19
+i386        buildonly-randconfig-004-20250116    clang-19
+i386        buildonly-randconfig-005-20250116    clang-19
+i386        buildonly-randconfig-006-20250116    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250116    gcc-14.2.0
+loongarch             randconfig-002-20250116    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                      mmu_defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250116    gcc-14.2.0
+nios2                 randconfig-002-20250116    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250116    gcc-14.2.0
+parisc                randconfig-002-20250116    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc               randconfig-001-20250116    clang-20
+powerpc               randconfig-002-20250116    gcc-14.2.0
+powerpc               randconfig-003-20250116    clang-20
+powerpc64             randconfig-001-20250116    clang-19
+powerpc64             randconfig-002-20250116    clang-20
+powerpc64             randconfig-003-20250116    clang-15
+riscv                             allnoconfig    gcc-14.2.0
+riscv                 randconfig-001-20250116    gcc-14.2.0
+riscv                 randconfig-002-20250116    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250116    gcc-14.2.0
+s390                  randconfig-002-20250116    clang-18
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250116    gcc-14.2.0
+sh                    randconfig-002-20250116    gcc-14.2.0
+sh                           se7750_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250116    gcc-14.2.0
+sparc                 randconfig-002-20250116    gcc-14.2.0
+sparc64               randconfig-001-20250116    gcc-14.2.0
+sparc64               randconfig-002-20250116    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250116    clang-19
+um                    randconfig-002-20250116    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64      buildonly-randconfig-001-20250116    gcc-12
+x86_64      buildonly-randconfig-002-20250116    gcc-12
+x86_64      buildonly-randconfig-003-20250116    gcc-12
+x86_64      buildonly-randconfig-004-20250116    clang-19
+x86_64      buildonly-randconfig-005-20250116    clang-19
+x86_64      buildonly-randconfig-006-20250116    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                           alldefconfig    gcc-14.2.0
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                generic_kc705_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250116    gcc-14.2.0
+xtensa                randconfig-002-20250116    gcc-14.2.0
 
-Signed-off-by: Atharva Tiwari <evepolonium@gmail.com>
----
- drivers/hwmon/applesmc.c | 123 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 101 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index fc6d6a9053ce..f899b17dcc1e 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -33,6 +33,7 @@
- #include <linux/workqueue.h>
- #include <linux/err.h>
- #include <linux/bits.h>
-+#include <linux/bitfield.h>
- 
- /* data port used by Apple SMC */
- #define APPLESMC_DATA_PORT	0x300
-@@ -74,6 +75,7 @@
- #define FAN_ID_FMT		"F%dID" /* r-o char[16] */
- 
- #define TEMP_SENSOR_TYPE	"sp78"
-+#define FAN_MANUAL_FMT		"F%dMd"
- 
- /* List of keys used to read/write fan speeds */
- static const char *const fan_speed_fmt[] = {
-@@ -511,6 +513,32 @@ static int applesmc_read_s16(const char *key, s16 *value)
- 	return 0;
- }
- 
-+static inline u32 applesmc_float_to_u32(u32 d)
-+{
-+	u8 sign = FIELD_GET(BIT(31), d);
-+	s32 exp = FIELD_GET(BIT_MASK(8) << 23, d) - 0x7F;
-+	u32 fr = d & ((1u << 23) - 1);
-+
-+	if (sign || exp < 0)
-+		return 0;
-+
-+	return BIT(exp) + (fr >> (23 - exp));
-+}
-+
-+static inline u32 applesmc_u32_to_float(u32 d)
-+{
-+	u32 dc = d, bc = 0, exp;
-+
-+	if (!d)
-+		return 0;
-+	while (dc >>= 1)
-+		++bc;
-+	exp = 0x7F + bc;
-+	return FIELD_PREP(BIT_MASK(8) << 23, exp) |
-+			(d << (23 - (exp - 0x7F)) & BIT_MASK(23));
-+
-+}
-+
- /*
-  * applesmc_device_init - initialize the accelerometer.  Can sleep.
-  */
-@@ -841,16 +869,33 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
- 	int ret;
- 	unsigned int speed = 0;
- 	char newkey[5];
--	u8 buffer[2];
-+	u8 buffer[4] = {0};
-+	const struct applesmc_entry *entry;
-+	bool is_float = false;
- 
- 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
- 		  to_index(attr));
- 
--	ret = applesmc_read_key(newkey, buffer, 2);
-+	entry = applesmc_get_entry_by_key(newkey);
-+	if (IS_ERR(entry))
-+		return PTR_ERR(entry);
-+
-+	if (!strcmp(entry->type, "flt"))
-+		is_float = true;
-+
-+	if (is_float) {
-+		ret = applesmc_read_entry(entry, buffer, 4);
-+		if (ret)
-+			return ret;
-+		speed = applesmc_float_to_u32(*(u32 *)buffer);
-+	} else {
-+		ret = applesmc_read_entry(entry, buffer, 2);
-+		if (ret)
-+			return ret;
-+		speed = ((buffer[0] << 8 | buffer[1]) >> 2);
-+	}
- 	if (ret)
- 		return ret;
--
--	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
- 	return sysfs_emit(sysfsbuf, "%u\n", speed);
- }
- 
-@@ -861,7 +906,9 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
- 	int ret;
- 	unsigned long speed;
- 	char newkey[5];
--	u8 buffer[2];
-+	u8 buffer[4];
-+	const struct applesmc_entry *entry;
-+	bool is_float = false;
- 
- 	if (kstrtoul(sysfsbuf, 10, &speed) < 0 || speed >= 0x4000)
- 		return -EINVAL;		/* Bigger than a 14-bit value */
-@@ -869,9 +916,20 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
- 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
- 		  to_index(attr));
- 
--	buffer[0] = (speed >> 6) & 0xff;
--	buffer[1] = (speed << 2) & 0xff;
--	ret = applesmc_write_key(newkey, buffer, 2);
-+	entry = applesmc_get_entry_by_key(newkey);
-+	if (IS_ERR(entry))
-+		return PTR_ERR(entry);
-+	if (!strcmp(entry->type, "flt"))
-+		is_float = true;
-+
-+	if (is_float) {
-+		*(u32 *)buffer = applesmc_u32_to_float(speed);
-+		ret = applesmc_write_entry(entry, buffer, 4);
-+	} else {
-+		buffer[0] = (speed >> 6) & 0xff;
-+		buffer[1] = (speed << 2) & 0xff;
-+		ret = applesmc_write_entry((const struct applesmc_entry *)newkey, buffer, 2);
-+	}
- 
- 	if (ret)
- 		return ret;
-@@ -885,12 +943,23 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
- 	int ret;
- 	u16 manual = 0;
- 	u8 buffer[2];
-+	char newkey[5];
-+	bool has_newkey = false;
-+
-+	scnprintf(newkey, sizeof(newkey), FAN_MANUAL_FMT, to_index(attr));
-+
-+	ret = applesmc_has_key(newkey, &has_newkey);
-+	if (has_newkey) {
-+		ret = applesmc_read_key(newkey, buffer, 1);
-+		manual = buffer[0] & 0x01;
-+	} else {
-+		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-+		manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-+	}
- 
--	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
- 	if (ret)
- 		return ret;
- 
--	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
- 	return sysfs_emit(sysfsbuf, "%d\n", manual);
- }
- 
-@@ -900,28 +969,38 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
- {
- 	int ret;
- 	u8 buffer[2];
-+	char newkey[5];
-+	bool has_newkey = false;
- 	unsigned long input;
- 	u16 val;
- 
- 	if (kstrtoul(sysfsbuf, 10, &input) < 0)
- 		return -EINVAL;
- 
--	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
--	if (ret)
--		goto out;
--
--	val = (buffer[0] << 8 | buffer[1]);
-+	scnprintf(newkey, sizeof(newkey), FAN_MANUAL_FMT, to_index(attr));
- 
--	if (input)
--		val = val | (0x01 << to_index(attr));
--	else
--		val = val & ~(0x01 << to_index(attr));
-+	ret = applesmc_has_key(newkey, &has_newkey);
-+	if (ret)
-+		return ret;
-+	if (has_newkey) {
-+		buffer[0] = (input != 0x00);
-+		ret = applesmc_write_key(newkey, buffer, 1);
-+	} else {
-+		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-+		val = (buffer[0] << 8 | buffer[1]);
-+		if (ret)
-+			goto out;
- 
--	buffer[0] = (val >> 8) & 0xFF;
--	buffer[1] = val & 0xFF;
-+		if (input)
-+			val = val | (0x01 << to_index(attr));
-+		else
-+			val = val & ~(0x01 << to_index(attr));
- 
--	ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
-+		buffer[0] = (val >> 8) & 0xFF;
-+		buffer[1] = val & 0xFF;
- 
-+		ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
-+	}
- out:
- 	if (ret)
- 		return ret;
--- 
-2.39.5
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
