@@ -1,214 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA8D1D90DB;
-	Thu, 16 Jan 2025 12:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7123C1DED53;
+	Thu, 16 Jan 2025 13:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737028969; cv=none; b=uGfocAeq8OtJBo/iVoaKUyh8sAzu+As8UZblXHCgmjtdiDlUJNPH239LIONfY8UfmRTDgLzkDSCiJ34FRiFaKi+jAAuBmvnaNcXun3w/YQgftQJGTCPW8RrTuyx6qlyeCAGIMwGmXneKUHhhLKHFPfR+M1HNqWZgc7dpMQId+dc=
+	t=1737035542; cv=none; b=OjBKiCfFQoRNySVPLqv8Ys3qyz1RylKC3JTV4JwdeeX2qpsx4O9F1BIGdfSqNsortD28TNRo70vDhkDIfxxoTuGKzO7xKiEExVE9JqL2r9mo3Xsl+y6gRG6+EAdw4Jh2f9LQkGKhkdikrD4cg9WEiPZNKUBpEOzkorPTtioN7ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737028969; c=relaxed/simple;
-	bh=NgMks3iOQKzMIwQHOtA+dP88k7Mk7eu8pT4IExXYSo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THJwlkuX+7d5s/IST1uBkAnctFpR2cj0PuaVt3iGd7cRdbbDmq05kuYh8SOui8L++yrXjItchj8PeyuyHgd3PQQNoHje9bQP4CvS9GdJp4x4YmFDUTlyI/TPKHV18SUQ6OufkgT7YfhThFDJn5MUHBEEfVvsLOCWZB3m41RkPjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kvb2l+YM; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1737035542; c=relaxed/simple;
+	bh=oFsxddu5kZO0xWK2yWmbMbJVxyC9VH5e8OAEgQt8uxo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T2zWYocUhMJu6/yOK9bnPe0CK2/cxdnbAaqUR92GaZ5ea0/sNxJ/P6z1EJjnB6YOKvELwgTGuKaut1dWVUW7Y3T/uZNIj5tw78s+OiNNgYDD23Y7GaaJRFsMPF73tyfXsCoJo5pNkp8DTaS1/c3+LJ5c/ixCr116HNgTyMaSUlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nj0mcexA; arc=none smtp.client-ip=209.85.160.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kvb2l+YM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737028968; x=1768564968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NgMks3iOQKzMIwQHOtA+dP88k7Mk7eu8pT4IExXYSo4=;
-  b=Kvb2l+YM6Bugdk95Dpd4an3MvnFbfS6A+4wNGv6W/NZhE+ycVTdJKQqE
-   6FeKKy1UAi7mishAGwjZkmbYcNPOI/kG8pUjA50XNCO2Xb7mUncLxs63Z
-   siwrYsbJX34eJgcylU8a995MMw3AxnfRTksiiOHULi1cIBUWR8QRBFVi7
-   iRvB/2ZzZcoqZOqyu5qpbKpNKHN7nQh6rDbM7FDCZZZjidbKmRrSXQc/0
-   RbER4Ni3SrgV8EgoC3HQu/NFUNLA4U22RWjSnMV4ThAhSzlCnUqFBKWWw
-   Ryaojg8b0DHAfkKAmqaEHXFozPdxFORy27XD+8hJk3wqV/NTwgVlYfED/
-   Q==;
-X-CSE-ConnectionGUID: D4jw5TItQkKQGr19JfWq6A==
-X-CSE-MsgGUID: QPrnRmHISyqn/OlijW6mIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="48806107"
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="48806107"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 04:02:47 -0800
-X-CSE-ConnectionGUID: 7XN/y71JSHqEoD3bBWgY0g==
-X-CSE-MsgGUID: vz555kR/Q5mWewTlcUEJsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="105293015"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa006.fm.intel.com with SMTP; 16 Jan 2025 04:02:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jan 2025 14:02:18 +0200
-Date: Thu, 16 Jan 2025 14:02:18 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] platform: arm64: add Huawei Matebook E Go EC
- driver
-Message-ID: <Z4j1SicBtMZq4P9B@kuha.fi.intel.com>
-References: <20250113174945.590344-1-mitltlatltl@gmail.com>
- <20250113175049.590511-1-mitltlatltl@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nj0mcexA"
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-29e5c0c46c3so593699fac.3;
+        Thu, 16 Jan 2025 05:52:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737035538; x=1737640338; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JuO96IWempVkNU1KLyvro2vFbhpa/9E+R+coBfMKMxU=;
+        b=Nj0mcexAXKPE5nlIpfy1Ke4a1IBaqmH1QH9ikfRsIMfe0XLtacIk4ASR1cnbfnii3O
+         Ae73qsToFq6wKlDphX5eVdFk5QE5Tpx4tREhV4GLCNHQmijPDHgAWe6CnXP+NQksf6cR
+         Iat/+ruSPQejP3P+BoXNfiYvkHM7BHUvII+eLzv0pdqVMOwr1cMTJSfFLDBg6gsOVE6A
+         i2ckhxsv3ZeClcUvdfasz+Up1Bdve/SqwXRo8ca8dR5fJQ/33PiUxJKQMs6Jfo8YcPtJ
+         G/htRrYerto/YR65PNazgzlGGFXWAJMxEmWY8I3ch9cKGf4GFKZUgn6uzBtwyshYCkfw
+         cjkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737035538; x=1737640338;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JuO96IWempVkNU1KLyvro2vFbhpa/9E+R+coBfMKMxU=;
+        b=kGPyqDeWLBBMgPou//Dc5MAzmsVALtnb2RC9oxB5TVAkWjWHGgprLfXIl0juRbB5iY
+         USv+EvjuggqC2VWdzdiL54NG80uVBIcM73MWm9vzqTpYo7Qco8B0LVZ1DbRtA7gg9Lk+
+         5kaEEfzlznqMhatPIuG3ex7XcBNi11xjmC+k8e8oXTKFdD78bov5Qt8D0PEuc8diMK7J
+         zCtdfxnQCoVY/TanHvIYXPQHMpriNDEgcpY220cjup8XVgsH60dehBewhEM+Cfm8Jwds
+         KJyK9+7SNH882y2cK1XllyKP270cOgMkE/z5DZWMe+6ubIsqyElufZkBn3GeIG1itNBn
+         9d9w==
+X-Forwarded-Encrypted: i=1; AJvYcCU+/RTgrAEA8ws1y4MbcfPE1U702GfoHYzaaZnbvKbe1Ng3kgRe+H10anPgjnLmG1UA1VKnaDIt17Ef@vger.kernel.org, AJvYcCU/DYTYi1webJKKUYDLTHEqIDayO0Yk8ts756I2Xadtj5OPXWfMkeqvyFZpEWiqi+Oh7tnXWA/2y9xX1HSG@vger.kernel.org, AJvYcCWN+ym36Xawx1DCeCyKhLE9YagR0eEhIhG85hl4iOjknifudxpARxZ71hBufb+jEL6zB50wkPmVg5W1@vger.kernel.org, AJvYcCXjFipQpU8SmVJmq3OpXpLZpV03K0zf1L47/A2yLNmUWyMsGNVYIw7+KRQflynoUSd/e4m0TKu0UqA5iN0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuVB0/tqXQhyE7sQh4V4paGbvRigNnU+ZV335JadS4ulOn+VCZ
+	oqIf52ryc1iMtfSOnqMb1jybUqAGHwo3VheuyLsyDPSe6nBigURPVDVpwgUqVgei8xYxG8Fzzid
+	T68Us+eDADiQ7M6k9Th/SD+72+vM=
+X-Gm-Gg: ASbGncu+Uc3EEChmwi7VpbHpAca5pfXvMZ5UuflUyCp0Fk36dtKKb4FD4vBKxgp6lu0
+	s/zRwUxdVMQhztJb18o7O32Z0KNgkpMF9Yfa2/gY=
+X-Google-Smtp-Source: AGHT+IE5l0Ts1eqkJ/aNEag10ptSbJFKWLRlqm0WMeaZdvqjpd3aVLCDtoKkCuHKAniNC7LyGAPudsEo0Km9VO/GfpA=
+X-Received: by 2002:a05:6870:fe92:b0:29e:6814:19d with SMTP id
+ 586e51a60fabf-2aa065226a5mr20148132fac.9.1737035538404; Thu, 16 Jan 2025
+ 05:52:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113175049.590511-1-mitltlatltl@gmail.com>
+References: <20250116085939.1235598-1-leo.yang.sy0@gmail.com>
+ <20250116085939.1235598-2-leo.yang.sy0@gmail.com> <20250116-athletic-prehistoric-worm-36ffcb@krzk-bin>
+In-Reply-To: <20250116-athletic-prehistoric-worm-36ffcb@krzk-bin>
+From: Leo Yang <leo.yang.sy0@gmail.com>
+Date: Thu, 16 Jan 2025 21:52:08 +0800
+X-Gm-Features: AbW1kvYLa7FVsJI-15KZaQE92R4PJe7iEmWZjwDAeLiN4TVHLU8-1qiulGKEdwE
+Message-ID: <CAAfUjZGSgdQYwC24S__EO13-q1HQWVkUP7oDgJm-=AeeXgr1DQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA233 device
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net, 
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Krzysztof,
 
-> +static void gaokun_ec_remove(struct i2c_client *client)
-> +{
-> +	struct gaokun_ec *ec = i2c_get_clientdata(client);
-> +	hwmon_device_unregister(ec->hwmon_dev);
-> +}
+On Thu, Jan 16, 2025 at 6:47=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> > +      This value will be used to calculate the Current_LSB and current=
+/power
+> > +      coefficient for the pmbus and to calibrate the IC.
+> > +    minimum: 32768
+> > +    maximum: 4294967295
+>
+> Uh, are these real values measurable by the device? The last one looks
+> like UINT_MAX.
 
-You are missing black line after the declaration.
+According to the spec I don't see a definition of the upper limit of the
+current measurement, it all depends on how low the shunt resistance can
+be, so I'll use the upper limit of the u32 as the maximum for now, even
+though it's unlikely that this number will be present in the actual circuit=
+.
 
-> +static const struct i2c_device_id gaokun_ec_id[] = {
-> +	{ "gaokun-ec", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, gaokun_ec_id);
-> +
-> +static const struct of_device_id gaokun_ec_of_match[] = {
-> +	{ .compatible = "huawei,gaokun3-ec", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, gaokun_ec_of_match);
-> +
-> +static const struct dev_pm_ops gaokun_ec_pm_ops = {
-> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(gaokun_ec_suspend, gaokun_ec_resume)
-> +};
-> +
-> +static struct i2c_driver gaokun_ec_driver = {
-> +	.driver = {
-> +		.name = "gaokun-ec",
-> +		.of_match_table = gaokun_ec_of_match,
-> +		.pm = &gaokun_ec_pm_ops,
-> +		.dev_groups = gaokun_ec_groups,
-> +	},
-> +	.probe = gaokun_ec_probe,
-> +	.remove = gaokun_ec_remove,
-> +	.id_table = gaokun_ec_id,
-> +};
-> +module_i2c_driver(gaokun_ec_driver);
-> +
-> +MODULE_DESCRIPTION("HUAWEI Matebook E Go EC driver");
-> +MODULE_AUTHOR("Pengyu Luo <mitltlatltl@gmail.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
-> new file mode 100644
-> index 000000000..dfd177bd9
-> --- /dev/null
-> +++ b/include/linux/platform_data/huawei-gaokun-ec.h
-> @@ -0,0 +1,80 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Huawei Matebook E Go Embedded Controller
-> + *
-> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-> + */
-> +
-> +#ifndef __HUAWEI_GAOKUN_EC_H__
-> +#define __HUAWEI_GAOKUN_EC_H__
-> +
-> +#define GAOKUN_UCSI_CCI_SIZE	4
-> +#define GAOKUN_UCSI_DATA_SIZE	16
-> +#define GAOKUN_UCSI_READ_SIZE	(GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
-> +#define GAOKUN_UCSI_WRITE_SIZE	0x18
-> +
-> +#define GAOKUN_UCSI_NO_PORT_UPDATE	(-1)
-> +
-> +#define GAOKUN_SMART_CHARGE_DATA_SIZE	4 /* mode, delay, start, end */
-> +
-> +/* -------------------------------------------------------------------------- */
-> +
-> +struct gaokun_ec;
-> +struct gaokun_ucsi_reg;
-> +struct notifier_block;
-> +
-> +#define GAOKUN_MOD_NAME			"huawei_gaokun_ec"
-> +#define GAOKUN_DEV_PSY			"psy"
-> +#define GAOKUN_DEV_UCSI			"ucsi"
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* Common API */
-> +
-> +int gaokun_ec_register_notify(struct gaokun_ec *ec,
-> +			      struct notifier_block *nb);
-> +void gaokun_ec_unregister_notify(struct gaokun_ec *ec,
-> +				 struct notifier_block *nb);
-> +
-> +int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
-> +		   size_t resp_len, u8 *resp);
-> +int gaokun_ec_write(struct gaokun_ec *ec, u8 *req);
-> +int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte);
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* API For PSY */
-> +
-> +int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
-> +			     size_t resp_len, u8 *resp);
-> +
-> +static inline int gaokun_ec_psy_read_byte(struct gaokun_ec *ec,
-> +					  u8 reg, u8 *byte)
-> +{
-> +	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*byte), byte);
-> +}
-> +
-> +static inline int gaokun_ec_psy_read_word(struct gaokun_ec *ec,
-> +					  u8 reg, u16 *word)
-> +{
-> +	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*word), (u8 *)word);
-> +}
-> +
-> +int gaokun_ec_psy_get_smart_charge(struct gaokun_ec *ec,
-> +				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-> +int gaokun_ec_psy_set_smart_charge(struct gaokun_ec *ec,
-> +				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-> +
-> +int gaokun_ec_psy_get_smart_charge_enable(struct gaokun_ec *ec, bool *on);
-> +int gaokun_ec_psy_set_smart_charge_enable(struct gaokun_ec *ec, bool on);
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* API For UCSI */
-> +
-> +int gaokun_ec_ucsi_read(struct gaokun_ec *ec, u8 resp[GAOKUN_UCSI_READ_SIZE]);
-> +int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
-> +			 const u8 req[GAOKUN_UCSI_WRITE_SIZE]);
-> +
-> +int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, struct gaokun_ucsi_reg *ureg);
-> +int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id);
-> +
-> +
+>
+> > +    default: 32768000
+>
+> Default is 32 A? For what applications is this sensor used?
+>
 
-Here you have extra line.
+According to spec 8.2.2.1 Programming the Calibration Register example,
+a Current_LSB with a maximum expected current of 15A is approximately
+457.7uA.
+The example shows that a Current_LSB of 500 or 1000uA/bit can be used.
+So I choose 1000uA as the default value here, this value corresponds to
+the expected maximum current which is 32A (with some loss of accuracy to
+ have a larger measurement range), and yes maybe the user doesn't
+need such a large current, so the accuracy-sensitive use of the scene
+can be adjusted according to the actual measurement range of the
+expected maximum current, I'm trying to retain some flexibility for the
+user.
 
-scripts/checkpatch.pl should find this kind issues for you.
 
-Br,
+Thank you for all your suggestions, they are very useful and
+I have gained a lot from them.
 
--- 
-heikki
+
+Best Regards,
+
+Leo Yang
