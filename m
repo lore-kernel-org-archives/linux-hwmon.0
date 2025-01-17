@@ -1,120 +1,267 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CC819CC3A;
-	Fri, 17 Jan 2025 16:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51201D8DFE;
+	Fri, 17 Jan 2025 23:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737132202; cv=none; b=mbAW4SikER4JfZigd2k1TbZuP9h/xYjDguijGmj9OBF5aWWxEGrcMwOatTMjeCOHs4FhAydVzTVeRIeOzrvjI/DyKImetKSOq4cbTnusocdariSxap1K1UJKtBoUFk0E12iWROuEovG+8WHGnTnkUi+Tz18nfHj7coWJfA9dIq4=
+	t=1737155273; cv=none; b=Jqp9vIaCeF7zcLLYOoGHqSA5/4m8V1vA0/dYcx9+iWLagp+9G6M6Qj+oClNJ4KUfOg/Rb5DboBvKyNel3GRxdingYyyAHK0DsApZd8R8idPaNMdCYKlWCqfniRBRxKpEzF8irOj0hrC8R31MhJY8b24/pA5mMBYKmj6y+wTDh2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737132202; c=relaxed/simple;
-	bh=bgC9gjs9GLuadOL0PyqC43HwUfAwCWF+UO1CA4QN01M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ROY3Oy0HdaHnY1ElGUhPyNERLXnVnFWF+NyPUQQnvqTmrRWtC9Eu1gKnDtw0IcP+uWxsQOhxa/6CLK+bwG4RJ49hJPGOzP1N1zuEd2yP48AvZnsJEe+poH1LgRUrd4rTILjMEuGhqd4wXOu9XN9BkhkvFMPTIql7sOz3GlIIfJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dhmSlDV6; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737155273; c=relaxed/simple;
+	bh=ZSC1mkGXnt6s6z6IiVGuAN4/We6rPMRT7Oe1ciDb+hk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z5pabpIZZq+++iiOrXMJq7gJQjVzDsB0Gxla2+BmBenX9tdy0Fp/EGjmVrBDc5o3SZdqSvkpNdNjFrM2m36aDtsWdPoQ7fx7r7vuXgGV+6SFAYeqvnAXot1AqrXRdkTiy9to53JA0YcB/7F2i4VeMqPBRt1RlWWYRiK2wGWi0Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vi/eBf+z; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dhmSlDV6"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2163dc5155fso45419705ad.0;
-        Fri, 17 Jan 2025 08:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737132199; x=1737736999; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aiACHsGpnFhoRTB2y8Bcbs1KRFqeVENc5dk46cWXv6A=;
-        b=dhmSlDV6JchJ0Gba2DFm5qDSXyaJ+tO+F+avM2z2RUT7Tj1BBz0mAItb1lHazJHTVD
-         AYT6Q+kHof6wfFW3LJiexog2BYnyFLtynw/u8bE7325w5qn49MVB/6lAThh81ORhEqPb
-         YjVYek8KPQ7x7B+wsfzJLeYunXbCC0gTleXaMBIFYtrfOYPfxF7cwtUFmDcz8rMCtppf
-         IZg4WKmDw/0NhRj+LTYOlBeIHtaoatEgUvAu2z3RgbKED/8W0SrIRkAKOaosq3t/V0s0
-         xyyfuXmUUhDE29MS0vXanU73Icv8/SHHQUlL8oDgVOjGioIGCwqX4BgBmutU4bFoPsm2
-         XoIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737132199; x=1737736999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aiACHsGpnFhoRTB2y8Bcbs1KRFqeVENc5dk46cWXv6A=;
-        b=dTW/bM3/hbe+5d5/Zayawn7d8KoMl/2Bax9vGKO7C7TIE4zugd3lMnXoBrAOZSXSN4
-         JdM3h5O4z8f9i9TJ/fe0ZRh5NIVyJNTm9LWFdPc95vH0xhj+bu4+vEqx4A6kTyvvdTJo
-         b8KXqnCW8yoze1L5F7z8I+MdzTkZjzo61tNOE7iyrKqjhVJJSH8Zf09UuvYGx1Qb1Jlp
-         8HokJ4T5si5Nd+1TRPqLhigh3bJJCwkwNpYDJ/WTa2Cu5QmcoHudNKQRl+poA4VZ/iPq
-         NVX6QK1bK0owzkBS4SI/w0ihQ2S2zeJkNFPosEWbpKUC2DYUfooW+i3j0VRtde8z4p4n
-         mOHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWNyrGUXyxkD8KMBVJKPEnlhtKMStyg+bM83D4mCcgEO+3oiBlK9rLl0ftrHUc7iEuky0YoQYzZKJF6gVo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFWXnpO2aDLFWBukery67vtKXXM86NXppELI8Tqv0P4EqPeBj8
-	mTeNjTlDwX3OndY/I8OW9vIOjZ4XUXY/0nzACZjV3Jg6nH4jujWda+9kNw==
-X-Gm-Gg: ASbGncudPlFCOaq4aTdxS5TkgTwVPoG46/h7AZnGNlLZkgb1NUCPiLXAnqDw/YOsesn
-	0dKuZMd/SIV0MdnjGvit7PPAwfPYsx4UdvepmmuXA25O1w13yEY9x8afTj9/7rSuW2Tl2J7RQRW
-	oamu1w6g3iiUbZm6fD7TOAp6cobO2nzVNSDl49fSBDVVh48FdjQXE3CwHKxy6namX1OcZKJzFfq
-	W7MDaRyUvnfOwb/AddIR7Px9HW0dgM2DE5ewHjbaztJJrCyH0iDIeOuNe02U8V2I1XjfA==
-X-Google-Smtp-Source: AGHT+IFXfVbFudoqoL2GfiVIVczZIFYFOIhDNGuwJ8RP65QDO56fO0m500nL995ExlSHBJmvDOiMeA==
-X-Received: by 2002:a17:903:32cb:b0:215:a028:4ed with SMTP id d9443c01a7336-21c3550ecbdmr45159865ad.20.1737132199349;
-        Fri, 17 Jan 2025 08:43:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2d3d8537sm18196735ad.160.2025.01.17.08.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 08:43:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.13
-Date: Fri, 17 Jan 2025 08:43:17 -0800
-Message-ID: <20250117164317.2710233-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vi/eBf+z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737155271; x=1768691271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZSC1mkGXnt6s6z6IiVGuAN4/We6rPMRT7Oe1ciDb+hk=;
+  b=Vi/eBf+z+N675Y2r8yxroohF8TJlrSIKULi3+le+0Nk7bk03lPNy8MH2
+   hJcbEZ0dsb4vwOiX+FaCdzvZbpL+UyDnK2R2SBq3dB8olzPgtM7V0Jwq0
+   weyPucA2Xgfb9ObKK4G2B/9UAGG6UPmclIwY/8Qgai11ng1CJQBYQG2lQ
+   Tj1b2J5txQqfPIZJf/gnUg4E8X1VuWh3OMoyfX8vYXIdtXYx98qIReLhS
+   G6AyVzWp9Fr+75JN0GVAOuHvbTs1HhHVhlcAOZGmO7AghX/wsPyLTjpYX
+   Nrviw9RMowbqz/3Q9m8r/27VXPC8PaSPxqSQeFNLSklmp2Xa46JTtkYqY
+   Q==;
+X-CSE-ConnectionGUID: qDlw+XlmR1+J6Cqwgol7vQ==
+X-CSE-MsgGUID: 2aHiGTRWT6+fMJjxMEKPUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37296339"
+X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
+   d="scan'208";a="37296339"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 15:07:51 -0800
+X-CSE-ConnectionGUID: PkYA1xqxRfOWyuB+92QB6g==
+X-CSE-MsgGUID: 3Xr87cIPRbuQ+GtNfl7iTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
+   d="scan'208";a="105966793"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 17 Jan 2025 15:07:47 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYvRI-000ToF-1Q;
+	Fri, 17 Jan 2025 23:07:44 +0000
+Date: Sat, 18 Jan 2025 07:07:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leo Yang <leo.yang.sy0@gmail.com>
+Subject: Re: [PATCH v3 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
+Message-ID: <202501180656.96daAp3W-lkp@intel.com>
+References: <20250115015519.950795-3-leo.yang.sy0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115015519.950795-3-leo.yang.sy0@gmail.com>
 
-Hi Linus,
+Hi Leo,
 
-Please pull hwmon fixes for Linux v6.13 from signed tag:
+kernel test robot noticed the following build warnings:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.13-rc8
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.13-rc7 next-20250117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Guenter
-------
+url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-hwmon-ti-ina2xx-Add-INA233-device/20250115-095801
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250115015519.950795-3-leo.yang.sy0%40gmail.com
+patch subject: [PATCH v3 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180656.96daAp3W-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180656.96daAp3W-lkp@intel.com/reproduce)
 
-The following changes since commit 5bc55a333a2f7316b58edc7573e8e893f7acb532:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180656.96daAp3W-lkp@intel.com/
 
-  Linux 6.13-rc7 (2025-01-12 14:37:56 -0800)
+All warnings (new ones prefixed by >>):
 
-are available in the Git repository at:
+   In file included from drivers/hwmon/pmbus/ina233.c:9:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/pmbus/ina233.c:147:10: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     146 |                                      "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+         |                                                                  ~~~
+         |                                                                  %u
+     147 |                                      current_lsb, rshunt);
+         |                                      ^~~~~~~~~~~
+   drivers/hwmon/pmbus/ina233.c:147:23: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     146 |                                      "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+         |                                                                                         ~~~
+         |                                                                                         %u
+     147 |                                      current_lsb, rshunt);
+         |                                                   ^~~~~~
+   drivers/hwmon/pmbus/ina233.c:153:17: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     152 |         dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+         |                                                  ~~~
+         |                                                  %u
+     153 |                 client->name, rshunt, current_lsb);
+         |                               ^~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/hwmon/pmbus/ina233.c:153:25: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     152 |         dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+         |                                                                          ~~~
+         |                                                                          %u
+     153 |                 client->name, rshunt, current_lsb);
+         |                                       ^~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   8 warnings generated.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.13-rc8
 
-for you to fetch changes up to e9b24deb84863c5a77dda5be57b6cb5bf4127b85:
+vim +147 drivers/hwmon/pmbus/ina233.c
 
-  hwmon: (ltc2991) Fix mixed signed/unsigned in DIV_ROUND_CLOSEST (2025-01-15 13:52:43 -0800)
+    81	
+    82	static int ina233_probe(struct i2c_client *client)
+    83	{
+    84		struct device *dev = &client->dev;
+    85		int ret, m, R;
+    86		u32 rshunt;
+    87		u32 current_lsb;
+    88		u16 calibration;
+    89		struct pmbus_driver_info *info;
+    90	
+    91		info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info),
+    92				    GFP_KERNEL);
+    93		if (!info)
+    94			return -ENOMEM;
+    95	
+    96		info->pages = 1;
+    97		info->format[PSC_VOLTAGE_IN] = direct;
+    98		info->format[PSC_VOLTAGE_OUT] = direct;
+    99		info->format[PSC_CURRENT_OUT] = direct;
+   100		info->format[PSC_POWER] = direct;
+   101		info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_INPUT
+   102			| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+   103			| PMBUS_HAVE_POUT
+   104			| PMBUS_HAVE_VMON | PMBUS_HAVE_STATUS_VMON;
+   105		info->m[PSC_VOLTAGE_IN] = 8;
+   106		info->R[PSC_VOLTAGE_IN] = 2;
+   107		info->m[PSC_VOLTAGE_OUT] = 8;
+   108		info->R[PSC_VOLTAGE_OUT] = 2;
+   109		info->read_word_data = ina233_read_word_data;
+   110	
+   111		/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
+   112		/* read rshunt value (uOhm) */
+   113		ret = device_property_read_u32(dev, "shunt-resistor", &rshunt);
+   114		if (ret) {
+   115			if (ret != -EINVAL)
+   116				return dev_err_probe(dev, ret, "Shunt resistor property read fail.\n");
+   117			rshunt = INA233_RSHUNT_DEFAULT;
+   118		}
+   119	
+   120		/* read current_lsb value (uA) */
+   121		ret = device_property_read_u32(dev, "ti,current-lsb-microamp", &current_lsb);
+   122		if (ret) {
+   123			if (ret != -EINVAL)
+   124				return dev_err_probe(dev, ret, "Current_LSB property read fail.\n");
+   125			current_lsb = INA233_CURRENT_LSB_DEFAULT;
+   126		}
+   127	
+   128		if (!rshunt || !current_lsb)
+   129			return dev_err_probe(dev, -EINVAL,
+   130					     "Shunt resistor and Current_LSB cannot be zero.\n");
+   131	
+   132		/* calculate current coefficient */
+   133		calculate_coef(&m, &R, current_lsb, 1);
+   134		info->m[PSC_CURRENT_OUT] = m;
+   135		info->R[PSC_CURRENT_OUT] = R;
+   136	
+   137		/* calculate power coefficient */
+   138		calculate_coef(&m, &R, current_lsb, 25);
+   139		info->m[PSC_POWER] = m;
+   140		info->R[PSC_POWER] = R;
+   141	
+   142		/* write MFR_CALIBRATION register, Apply formula from spec with unit scaling. */
+   143		calibration = div64_u64(5120000000ULL, (u64)rshunt * current_lsb);
+   144		if (calibration > 0x7FFF)
+   145			return dev_err_probe(dev, -EINVAL,
+   146					     "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+ > 147					     current_lsb, rshunt);
+   148		ret = i2c_smbus_write_word_data(client, MFR_CALIBRATION, calibration);
+   149		if (ret < 0)
+   150			return dev_err_probe(dev, ret, "Unable to write calibration.\n");
+   151	
+   152		dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+   153			client->name, rshunt, current_lsb);
+   154	
+   155		return pmbus_do_probe(client, info);
+   156	}
+   157	
 
-----------------------------------------------------------------
-hwmon fixes for v6.13-rc8/v6.13
-
-- ltc2991, tmp513: Fix problems seen when dividing negative numbers
-
-- drivetemp: Handle large timeouts observed on some drives
-
-- acpi_power_meter: Fix loading the driver on platforms without _PMD method
-
-----------------------------------------------------------------
-David Lechner (2):
-      hwmon: (tmp513) Fix division of negative numbers
-      hwmon: (ltc2991) Fix mixed signed/unsigned in DIV_ROUND_CLOSEST
-
-Kazuhiro Abe (1):
-      hwmon: (acpi_power_meter) Fix a check for the return value of read_domain_devices().
-
-Russell Harmon (1):
-      hwmon: (drivetemp) Set scsi command timeout to 10s
-
- drivers/hwmon/acpi_power_meter.c | 2 +-
- drivers/hwmon/drivetemp.c        | 2 +-
- drivers/hwmon/ltc2991.c          | 2 +-
- drivers/hwmon/tmp513.c           | 7 ++++---
- 4 files changed, 7 insertions(+), 6 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
