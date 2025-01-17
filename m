@@ -1,140 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D3318FC8F
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Jan 2025 22:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D6B1F8692;
+	Fri, 17 Jan 2025 08:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737064868; cv=none; b=WJqOFmVS1cBHBXq5vtzTUTZaQ9twIOekAnL0V0YKtr/4cWSYc9tfGNGQ7T+p6XLLwFwr34KfLyVifcSBhr1YDEhBT4avNiSQgTzgk7APb4J+3VKCYkWTYw0uCrHqX0U8nUeTrRAVR6DQ5dCXD89WtzdJ9MbLcoj4ZW9IIDMv1AA=
+	t=1737102147; cv=none; b=UTeSyNMaq8c3FYIhLzt3D6IFcPh4f7KZ1IHjne61PPE/5JaT1xraGZLhZHLI9+UEv+nyD4KKoXveXQcTGFUeSK8LIZ6POPTBGDzfwyfzYtdysD6QMKf7IXEmP4nqc9LtoyiLCl9ULilm1fFIsfOjc7+O6rMwaZhqS915UsPJOac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737064868; c=relaxed/simple;
-	bh=07vKCz6cxzgkbnHmA8Hj6p65hsYI4brg6oPy2cv3WWo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UyKd0huUVGnkYCDpLpidyYqyCKTO5qHxqErygKxDJ4Q2EvyDomXu+jvq1PCdim2fGwscRr/6HuHx9rO8R85QHRjlKh8U4cQ64OyVNzoiPOQESEmDsMu5eC0wc92GWkx07XafM+gH2Chlce7F2oNfHtwPcSFsI69/BhfwNgcztWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgJIBLGp; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737102147; c=relaxed/simple;
+	bh=VEP+JpTaAloP8tk16XbGzGqoy6Qk2di7vJCNqaGTa/g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jEpySG64YmxIevlYLXsGMRDkEmnwSn1yzY8Q+Q1mcOF3Zl15jCC9/zGfTl81YJO+ykEXyEHm1whf0dGb4JS5lZaTwZrzqHZzdA+NQ2DwFX/Ek+PCSvVuM2Pm2EFp59vcz804hGaksbHEoBp/PL3JfBVFoUPqfwPSIr93Zleznd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RrP4zi91; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgJIBLGp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737064867; x=1768600867;
-  h=date:from:to:cc:subject:message-id;
-  bh=07vKCz6cxzgkbnHmA8Hj6p65hsYI4brg6oPy2cv3WWo=;
-  b=lgJIBLGpVB23stiIkc4jdK2F6gF+nMGpBTN7jr4j2/Vlmi2Mpx153Jnm
-   U5no9gSreojwgK4rR7e4LHCYlxqfkNO+fkcDkYqOoO4hVA4iElCZ+WkQ1
-   7aJ/q9Fxmahnf7gufrE4eyibS4IPkEFZWbTSFK+vKiQHyp4+/+kU8VPnZ
-   rAYys5IJT9pLWBLV1XN30TH/ec+ulPp4zaLcw2+MOOwmkeqP5urvIyEXV
-   OIqGUGJ77jKNhByk0zQ4hbjBDtyGd+Ms7aF6nGpWFuF3HWNjn1zvqTHzP
-   8h8Tb8HoknySF7PITGDthdfGgr3UYG3GfsKYeDDgsC+m7wT5NRfsGbnhO
-   w==;
-X-CSE-ConnectionGUID: gejw5S7FR6a/u+6PPGv0EA==
-X-CSE-MsgGUID: R8+AdweES1mgc34RNYdmtw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="37392859"
-X-IronPort-AV: E=Sophos;i="6.13,210,1732608000"; 
-   d="scan'208";a="37392859"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 14:01:04 -0800
-X-CSE-ConnectionGUID: Z2rXgBk9Q9CGjjtmKvi3bw==
-X-CSE-MsgGUID: ScVGtkacTHibLG9EbHDttg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="105465427"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 16 Jan 2025 14:01:03 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tYXvB-000SQv-00;
-	Thu, 16 Jan 2025 22:01:01 +0000
-Date: Fri, 17 Jan 2025 06:00:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- e9b24deb84863c5a77dda5be57b6cb5bf4127b85
-Message-ID: <202501170643.LA1wWrW4-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RrP4zi91"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=cW6Sf
+	7Q2dBYvtK2fPKtQodlHqxrGjrVTULzGiv4brX4=; b=RrP4zi91wrpjROquiRnf6
+	xpWpZumPB/VCtL0cerhHxpieUKzMbq36k6sWHpl/LPhxTTXlyRGpL5+h07W2qC2r
+	nNz2JKgY4wLTGxgqUTdky3AtTx80Z2ymP58GtKV5E1XRlgrXRpE+eDiy1CWYPx9y
+	V0TYc/4OLwOEskrgIA7bUs=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wAn2B4CE4pnaxwRGw--.23797S4;
+	Fri, 17 Jan 2025 16:21:24 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	jdelvare@suse.com
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] hwmon:(ina238)Add support for SQ52206
+Date: Fri, 17 Jan 2025 16:20:15 +0800
+Message-ID: <20250117082017.688212-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAn2B4CE4pnaxwRGw--.23797S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKw1DXFWxKr4ftFyUXw4DXFb_yoWDCrXE9a
+	y8CrZ5Zr4kJF13Was7GFyfXryFy3y7Ars3t3WUtrW3AryayrsIgFn7tryqkw1DWFy3u3sr
+	Aan8Aa1vywsrGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUjYL3UUUUU==
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiNQHX02eKDDN-AQAAsc
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: e9b24deb84863c5a77dda5be57b6cb5bf4127b85  hwmon: (ltc2991) Fix mixed signed/unsigned in DIV_ROUND_CLOSEST
+Add support for Silergy i2c power monitor SQ52206 to the ina238
+driver as those two are similar.
 
-elapsed time: 1445m
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
 
-configs tested: 63
-configs skipped: 0
+Add new chip SQ52206, the datasheet depends on 
+https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
+The password is fx6NEe.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changes in v3:
+- addressed various review comments.
+- Link to v1: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
 
-tested configs:
-alpha                            allnoconfig    gcc-14.2.0
-arc                              allnoconfig    gcc-13.2.0
-arc                  randconfig-001-20250116    gcc-13.2.0
-arc                  randconfig-002-20250116    gcc-13.2.0
-arm                              allnoconfig    clang-17
-arm                  randconfig-001-20250116    gcc-14.2.0
-arm                  randconfig-002-20250116    clang-15
-arm                  randconfig-003-20250116    gcc-14.2.0
-arm                  randconfig-004-20250116    gcc-14.2.0
-arm64                randconfig-001-20250116    gcc-14.2.0
-arm64                randconfig-002-20250116    gcc-14.2.0
-arm64                randconfig-003-20250116    clang-15
-arm64                randconfig-004-20250116    clang-20
-csky                 randconfig-001-20250116    gcc-14.2.0
-csky                 randconfig-002-20250116    gcc-14.2.0
-hexagon              randconfig-001-20250116    clang-20
-hexagon              randconfig-002-20250116    clang-20
-i386       buildonly-randconfig-001-20250116    clang-19
-i386       buildonly-randconfig-002-20250116    clang-19
-i386       buildonly-randconfig-003-20250116    clang-19
-i386       buildonly-randconfig-004-20250116    clang-19
-i386       buildonly-randconfig-005-20250116    clang-19
-i386       buildonly-randconfig-006-20250116    clang-19
-loongarch            randconfig-001-20250116    gcc-14.2.0
-loongarch            randconfig-002-20250116    gcc-14.2.0
-nios2                randconfig-001-20250116    gcc-14.2.0
-nios2                randconfig-002-20250116    gcc-14.2.0
-openrisc                         allnoconfig    gcc-14.2.0
-parisc                           allnoconfig    gcc-14.2.0
-parisc               randconfig-001-20250116    gcc-14.2.0
-parisc               randconfig-002-20250116    gcc-14.2.0
-powerpc                          allnoconfig    gcc-14.2.0
-powerpc              randconfig-001-20250116    clang-20
-powerpc              randconfig-002-20250116    gcc-14.2.0
-powerpc              randconfig-003-20250116    clang-20
-powerpc64            randconfig-001-20250116    clang-19
-powerpc64            randconfig-002-20250116    clang-20
-powerpc64            randconfig-003-20250116    clang-15
-riscv                randconfig-001-20250116    gcc-14.2.0
-riscv                randconfig-002-20250116    gcc-14.2.0
-s390                            allmodconfig    clang-19
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250116    gcc-14.2.0
-s390                 randconfig-002-20250116    clang-18
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250116    gcc-14.2.0
-sh                   randconfig-002-20250116    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250116    gcc-14.2.0
-sparc                randconfig-002-20250116    gcc-14.2.0
-sparc64              randconfig-001-20250116    gcc-14.2.0
-sparc64              randconfig-002-20250116    gcc-14.2.0
-um                   randconfig-001-20250116    clang-19
-um                   randconfig-002-20250116    gcc-12
-x86_64     buildonly-randconfig-001-20250116    gcc-12
-x86_64     buildonly-randconfig-002-20250116    gcc-12
-x86_64     buildonly-randconfig-003-20250116    gcc-12
-x86_64     buildonly-randconfig-004-20250116    clang-19
-x86_64     buildonly-randconfig-005-20250116    clang-19
-x86_64     buildonly-randconfig-006-20250116    clang-19
-xtensa               randconfig-001-20250116    gcc-14.2.0
-xtensa               randconfig-002-20250116    gcc-14.2.0
+Changes in v2:
+- Explain why sq52206 compatibility has been added to ina2xx.yaml.
+- addressed various review comments
+- Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Wenliang Yan (2):
+  dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+  hwmon:(ina238)Add support for SQ52206
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   4 +
+ Documentation/hwmon/ina238.rst                |  15 ++
+ drivers/hwmon/ina238.c                        | 208 +++++++++++++++---
+ 3 files changed, 195 insertions(+), 32 deletions(-)
+
+-- 
+2.43.0
+
