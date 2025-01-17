@@ -1,304 +1,156 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B431FA8EB
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Jan 2025 10:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264DB1F8905;
+	Fri, 17 Jan 2025 11:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737108956; cv=none; b=LAZT0pecRtjrFFuwHJKNWgaLMkekCtt7xJQkvhE2ggX/DdY0PXAtGwPBhq/ZGsh/TZvDY68pi3Uv4I7BGbXKKF1l5WpVltWMxKKeH7usSg372Q18unqP8xGf91ESPzhOew/Z+bn4yr4w4OWyxsWQTVjTiYKDKreh1D6esFc5eSM=
+	t=1737111873; cv=none; b=dPCCDbNV2kIYridVvrBdJIv2DdVs5K0XvKVL7j2F6HXpkfyI602Khgzp6oC9CXdmvJTy1E4MXDuMnuHOloOjED6vaoMYA0AwL3LxtZuIuZ9tkG+ZN/hgAyIj14OFiY4IyBhf586oXAd1Ul52oqmVshgptQF2u2wM6Pp+8Ro9+tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737108956; c=relaxed/simple;
-	bh=z17GZLIUwhzQeO9wUYNevMqU27jp9roZDzlvI9yzbGE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lFmIe+PNex0Glb4S8MCw8qy8Ki/qodqRpRzJNAut/ADgBq15Qt3qCEwEEry9BmU/6b5VKvuL91sRgG1oQWH342UVlkE9U/uHW7p+7AIFTgK0SHcxuDidnRMlTfATJFlp25sMfKCudSQUQ0siZ+AZoqvm/CdcOJiOMJ8b1uoIq7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Sm5peN9B; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1737111873; c=relaxed/simple;
+	bh=T71mNzLWCbqBco7l4n+cqt+WC9phoTK4z4rSCBRuXq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mVDmSCINJ3LJ/uN0MrHyaf+WOUov9/8hOjnGUcqhncE+VY0w3SN6A5ElODW0oYwfJbb4qUeiJ+ijpkr+EC5SZ6qPmreJ/fNSFGZa5O3kNE+FbGGe+gs1UNhd6kJKb0hSh/X4AeUin3HhdeRnCVj8FSx7Fn0ZA+xdYRJ5YS30PiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IsJj8vAT; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sm5peN9B"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385d7f19f20so956657f8f.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Jan 2025 02:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737108952; x=1737713752; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NSGeOswWqTUep3DX2Dkchbn4WoRD6ZXOIbfl/0X97bs=;
-        b=Sm5peN9BdoWDBrUaRAX9Ug/85nxiRxTqnTdAvfExZ4+kRvU2+eVjXOhASg0kvaI/sE
-         3NFSoyvMyRsZHYXtyD+ztLSYr49zZf2MkU7hWcK+Iy/cKF+blVqV/Nbwwij9zZNtTq8w
-         +S5skKuwtFhcG+mvgSsBSu8LBsPkrYYfpoPAGAtwmK7EvBKo8n0DAyNC6Z23sUOTUm6T
-         oYyNy6luIWsUjf+TDBlPFeJd3khkDMhaUnSjkCeJpYLBww3lluflnWlGVVNcVQC0MTuK
-         f+2dVSEszIqtMqTlOz5yGKJOnfN1UB3WaToKmitlU63RE5lsKbvd/A8E0eHCutnVVWl0
-         kdgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737108952; x=1737713752;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NSGeOswWqTUep3DX2Dkchbn4WoRD6ZXOIbfl/0X97bs=;
-        b=bUopuA1TVwaBrl4SkJ+H3ezuq3gI0dz9astgUYBVNXhOIb6MSEbNZ0o4ID09VqpaqP
-         kFZnu6/qea5J0oN5u2wMTYNR8Ax0KtzgGrtEgvN0Ev1Qck8EwwSD2upEnK5iajrkDIui
-         GQREGhhGz1zVsVPbXsGbhnaSeujjmPhL0pPyMySzkPVa7ocZIvNbj1R3u4IvSJf/N0DL
-         9n/9UIYvTBCLc0DXWvPpDSLV2IgQdx9ONhtZ2Awq+jtmNR7T3uhK1lcHbqbI09FHqeSO
-         UMaZDMorhpR4BbFH81zUOJenmxOfeHMr0C2ef9Bx6tuZqZkG7aHmDd0iNJA5S2i1bA90
-         9uYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXdzv5vsUsismXfNuVMUvMdZx9mPnWJDug4SdPy6EwCCahHv9GS+DRjsjqMExaCrew8nAMLJzKQOvramA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YybES2IdQqQAlHy0wIDYea9XujRclRM0lf4t3premd0+D2lello
-	lVUolpfHRIwMo9uXDUhIwjcR5dIa/8+OJyd1cSY4tu8JqDsHHnaIP10WzLArfSk=
-X-Gm-Gg: ASbGncsHfOKTPPm0o5lm7XoPpJ7+xEXRLiQyQqQCCxg7hhm0+EWWim8YQn9qEuAS5Fe
-	5snKfCtkebKUs/VvDi2LsBdnki+tbNUycK/wQjzT9JevnKgWVluIheN+ykIV4ItPK9ghrplGw64
-	+IRw67WNDtQ/BfidHs2YefZq0s81MEiFWxjDUiaKG43iaO7vhpa72tlDB/kBiem2Qpu8ggEJYN+
-	5slPOtC6dFAhlXYUDQc3UIBtrWgwX+wlZHjfA2gchOkDnMN9+YACl/aoyStXf8zuwotjA==
-X-Google-Smtp-Source: AGHT+IG/l/zai1zyszaJHPWLtmLgsmMVK0tKqPhRQpbDko4Lin2PTxTY0mByVoFmCxwmZrma9jp6QQ==
-X-Received: by 2002:a5d:4243:0:b0:386:2a3b:8aa with SMTP id ffacd0b85a97d-38bf57b3f56mr1433700f8f.37.1737108952542;
-        Fri, 17 Jan 2025 02:15:52 -0800 (PST)
-Received: from [192.168.0.35] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438904621cdsm28622085e9.27.2025.01.17.02.15.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jan 2025 02:15:52 -0800 (PST)
-Message-ID: <0a6c6586-3dd9-4af9-85f3-376f2788b21a@linaro.org>
-Date: Fri, 17 Jan 2025 10:15:51 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IsJj8vAT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737111872; x=1768647872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T71mNzLWCbqBco7l4n+cqt+WC9phoTK4z4rSCBRuXq0=;
+  b=IsJj8vATWnjAzCQ3G+cWdcnkGcCbJqXxsX14TEaxQwPcTSqTT3E3xmE+
+   QlEHoXlIL+YdMDz1H9dgvUs3HjIEPva3we6lH6MGPThUWOtjdJLVKBs9U
+   EJH5OO2tLYtjguCefL0+9IkJTGXBtSWZqBQTjaJk/LOghjRgG4wtMWMrn
+   MvsiQZqCQ0NOzCM/gA6Z4BKstE5Dh9hIvuDjjfJi9s3zV1ucTQqHnm1cm
+   FJWgYGvC+1/l8YAeiE16gRU2oeaEzEk/o2ZpZYdG++XOh38mN4We3DQKU
+   Ez0p2YXk5SDdYXbCDEF+bYoq191ujzaszLjJDt45mzbj6mHCA0II8lq1W
+   Q==;
+X-CSE-ConnectionGUID: LOdfaLAFTU6gUf6AN4iVVQ==
+X-CSE-MsgGUID: 9lMq5+Y5SyKIAcxUB0K3Lg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="37778477"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="37778477"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 03:04:31 -0800
+X-CSE-ConnectionGUID: ExlJaJBFRG6Ud7aN/hExzw==
+X-CSE-MsgGUID: caxrbGchQde3DQDs9c8hdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="110777656"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 17 Jan 2025 03:04:27 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYk9I-000T6J-1L;
+	Fri, 17 Jan 2025 11:04:24 +0000
+Date: Fri, 17 Jan 2025 19:03:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Pengyu Luo <mitltlatltl@gmail.com>
+Subject: Re: [PATCH v4 2/3] platform: arm64: add Huawei Matebook E Go EC
+ driver
+Message-ID: <202501171826.NGZwFrgW-lkp@intel.com>
+References: <20250116111559.83641-3-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] platform: arm64: add Huawei Matebook E Go EC
- driver
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: andersson@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
- hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
- konradybcio@kernel.org, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, platform-driver-x86@vger.kernel.org, robh@kernel.org
-References: <65dc7d7f-cee5-4eff-9ab7-153b12be4f26@linaro.org>
- <20250116181532.134250-1-mitltlatltl@gmail.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20250116181532.134250-1-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250116111559.83641-3-mitltlatltl@gmail.com>
 
-On 16/01/2025 18:15, Pengyu Luo wrote:
-> On Fri, Jan 17, 2025 at 1:31 AM Bryan O'Donoghue <bryan.odonoghue@linaro.org> wrote:
->> On 16/01/2025 11:15, Pengyu Luo wrote:
->>> +
->>> +     guard(mutex)(&ec->lock);
->>> +     i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
->>
->> You should trap the result code of i2c_transfer() and push it up the
->> call stack.
->>
-> 
-> This EC uses SMBus Protocol, I guess. Qualcomm I2C driver doesn't support
-> this though. The response structure define by SMBus I mentioned them above
-> (Please also check ACPI specification 13.2.5)
+Hi Pengyu,
 
-What difference does that make ? The i2c controller itself can return 
-error codes via i2c_transfer().
+kernel test robot noticed the following build warnings:
 
-You should trap those error codes and take action if they happen.
+[auto build test WARNING on b323d8e7bc03d27dec646bfdccb7d1a92411f189]
 
-> 
-> +/*
-> + * For rx, data sequences are arranged as
-> + * {status, data_len(unreliable), data_seq}
-> + */
-> 
-> So the first byte is status code.
-> 
->>> +     usleep_range(2000, 2500); /* have a break, ACPI did this */
->>> +
->>> +     return *resp ? -EIO : 0;
->>
->> If the value @ *resp is non-zero return -EIO ?
->>
->> Why ?
->>
-> 
-> Mentioned above.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengyu-Luo/dt-bindings-platform-Add-Huawei-Matebook-E-Go-EC/20250116-192206
+base:   b323d8e7bc03d27dec646bfdccb7d1a92411f189
+patch link:    https://lore.kernel.org/r/20250116111559.83641-3-mitltlatltl%40gmail.com
+patch subject: [PATCH v4 2/3] platform: arm64: add Huawei Matebook E Go EC driver
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501171826.NGZwFrgW-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171826.NGZwFrgW-lkp@intel.com/reproduce)
 
-Right, please try to take the result code of i2c_transfer() and if it 
-indicates error, transmit that error up the call stack.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501171826.NGZwFrgW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/platform/arm64/huawei-gaokun-ec.c: In function 'extr_resp_shallow':
+>> drivers/platform/arm64/huawei-gaokun-ec.c:91:20: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      91 |         return src + RESP_HDR_SIZE;
+         |                    ^
+   drivers/platform/arm64/huawei-gaokun-ec.c: In function 'gaokun_ec_request':
+>> drivers/platform/arm64/huawei-gaokun-ec.c:112:32: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     112 |                         .buf = req,
+         |                                ^~~
 
 
-> 
->>> +}
->>> +
->>> +/* -------------------------------------------------------------------------- */
->>> +/* Common API */
->>> +
->>> +/**
->>> + * gaokun_ec_read - Read from EC
->>> + * @ec: The gaokun_ec structure
->>> + * @req: The sequence to request
->>> + * @resp_len: The size to read
->>> + * @resp: The buffer to store response sequence
->>> + *
->>> + * This function is used to read data after writing a magic sequence to EC.
->>> + * All EC operations depend on this function.
->>> + *
->>> + * Huawei uses magic sequences everywhere to complete various functions, all
->>> + * these sequences are passed to ECCD(a ACPI method which is quiet similar
->>> + * to gaokun_ec_request), there is no good abstraction to generalize these
->>> + * sequences, so just wrap it for now. Almost all magic sequences are kept
->>> + * in this file.
->>> + *
->>> + * Return: 0 on success or negative error code.
->>> + */
->>> +int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
->>> +                size_t resp_len, u8 *resp)
->>> +{
->>> +     return gaokun_ec_request(ec, req, resp_len, resp);
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_read);
->>> +
->>> +/**
->>> + * gaokun_ec_write - Write to EC
->>> + * @ec: The gaokun_ec structure
->>> + * @req: The sequence to request
->>> + *
->>> + * This function has no big difference from gaokun_ec_read. When caller care
->>> + * only write status and no actual data are returned, then use it.
->>> + *
->>> + * Return: 0 on success or negative error code.
->>> + */
->>> +int gaokun_ec_write(struct gaokun_ec *ec, const u8 *req)
->>> +{
->>> +     u8 ec_resp[] = MKRESP(0);
->>> +
->>> +     return gaokun_ec_request(ec, req, sizeof(ec_resp), ec_resp);
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_write);
->>> +
->>> +int gaokun_ec_read_byte(struct gaokun_ec *ec, const u8 *req, u8 *byte)
->>> +{
->>> +     int ret;
->>> +     u8 ec_resp[] = MKRESP(sizeof(*byte));
->>> +
->>> +     ret = gaokun_ec_read(ec, req, sizeof(ec_resp), ec_resp);
->>> +     extr_resp_byte(byte, ec_resp);
->>> +
->>> +     return ret;
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_read_byte);
->>> +
->>> +/**
->>> + * gaokun_ec_register_notify - Register a notifier callback for EC events.
->>> + * @ec: The gaokun_ec structure
->>> + * @nb: Notifier block pointer to register
->>> + *
->>> + * Return: 0 on success or negative error code.
->>> + */
->>> +int gaokun_ec_register_notify(struct gaokun_ec *ec, struct notifier_block *nb)
->>> +{
->>> +     return blocking_notifier_chain_register(&ec->notifier_list, nb);
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_register_notify);
->>> +
->>> +/**
->>> + * gaokun_ec_unregister_notify - Unregister notifier callback for EC events.
->>> + * @ec: The gaokun_ec structure
->>> + * @nb: Notifier block pointer to unregister
->>> + *
->>> + * Unregister a notifier callback that was previously registered with
->>> + * gaokun_ec_register_notify().
->>> + */
->>> +void gaokun_ec_unregister_notify(struct gaokun_ec *ec, struct notifier_block *nb)
->>> +{
->>> +     blocking_notifier_chain_unregister(&ec->notifier_list, nb);
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_unregister_notify);
->>> +
->>> +/* -------------------------------------------------------------------------- */
->>> +/* API for PSY */
->>> +
->>> +/**
->>> + * gaokun_ec_psy_multi_read - Read contiguous registers
->>> + * @ec: The gaokun_ec structure
->>> + * @reg: The start register
->>> + * @resp_len: The number of registers to be read
->>> + * @resp: The buffer to store response sequence
->>> + *
->>> + * Return: 0 on success or negative error code.
->>> + */
->>> +int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
->>> +                          size_t resp_len, u8 *resp)
->>> +{
->>> +     u8 ec_req[] = MKREQ(0x02, EC_READ, 1, 0);
->>> +     u8 ec_resp[] = MKRESP(1);
->>> +     int i, ret;
->>> +
->>> +     for (i = 0; i < resp_len; ++i, reg++) {
->>> +             refill_req_byte(ec_req, &reg);
->>> +             ret = gaokun_ec_read(ec, ec_req, sizeof(ec_resp), ec_resp);
->>> +             if (ret)
->>> +                     return ret;
->>> +             extr_resp_byte(&resp[i], ec_resp);
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_psy_multi_read);
->>> +
->>> +/* Smart charge */
->>> +
->>> +/**
->>> + * gaokun_ec_psy_get_smart_charge - Get smart charge data from EC
->>> + * @ec: The gaokun_ec structure
->>> + * @resp: The buffer to store response sequence (mode, delay, start, end)
->>> + *
->>> + * Return: 0 on success or negative error code.
->>> + */
->>> +int gaokun_ec_psy_get_smart_charge(struct gaokun_ec *ec,
->>> +                                u8 resp[GAOKUN_SMART_CHARGE_DATA_SIZE])
->>> +{
->>> +     /* GBCM */
->>> +     u8 ec_req[] = MKREQ(0x02, 0xE4, 0);
->>> +     u8 ec_resp[] = MKRESP(GAOKUN_SMART_CHARGE_DATA_SIZE);
->>> +     int ret;
->>> +
->>> +     ret = gaokun_ec_read(ec, ec_req, sizeof(ec_resp), ec_resp);
->>> +     if (ret)
->>> +             return ret;
->>> +
->>> +     extr_resp(resp, ec_resp, GAOKUN_SMART_CHARGE_DATA_SIZE);
->>> +
->>> +     return 0;
->>> +}
->>> +EXPORT_SYMBOL_GPL(gaokun_ec_psy_get_smart_charge);
->>> +
->>> +static inline bool are_thresholds_valid(u8 start, u8 end)
->>> +{
->>> +     return end != 0 && start <= end && end <= 100;
->>
->> Why 100 ? Still feels like an arbitrary number.
->>
->> Could you add a comment to explain where 100 comes from ?
->>
-> 
-> You may don't get it. It is just a battery percentage, greater than 100 is
-> invalid.
+vim +/const +91 drivers/platform/arm64/huawei-gaokun-ec.c
 
-100 meaning maximum capacity, good stuff.
+    88	
+    89	static inline void *extr_resp_shallow(const u8 *src)
+    90	{
+  > 91		return src + RESP_HDR_SIZE;
+    92	}
+    93	
+    94	struct gaokun_ec {
+    95		struct i2c_client *client;
+    96		struct mutex lock; /* EC transaction lock */
+    97		struct blocking_notifier_head notifier_list;
+    98		struct device *hwmon_dev;
+    99		struct input_dev *idev;
+   100		bool suspended;
+   101	};
+   102	
+   103	static int gaokun_ec_request(struct gaokun_ec *ec, const u8 *req,
+   104				     size_t resp_len, u8 *resp)
+   105	{
+   106		struct i2c_client *client = ec->client;
+   107		struct i2c_msg msgs[2] = {
+   108			{
+   109				.addr = client->addr,
+   110				.flags = client->flags,
+   111				.len = REQ_LEN(req),
+ > 112				.buf = req,
+   113			}, {
+   114				.addr = client->addr,
+   115				.flags = client->flags | I2C_M_RD,
+   116				.len = resp_len,
+   117				.buf = resp,
+   118			},
+   119		};
+   120	
+   121		guard(mutex)(&ec->lock);
+   122		i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+   123		usleep_range(2000, 2500); /* have a break, ACPI did this */
+   124	
+   125		return *resp ? -EIO : 0;
+   126	}
+   127	
 
-Please use a define with a descriptive name. That way the meaning is 
-obvious.
-
-In fact if the name of the function related to battery capacity then the 
-meaning of the numbers would be more obvious.
-
-static inline bool validate_battery_threshold_range(u8 start, u8 end) {
-	return end != 0 && start <= end && end <= 100;
-}
-
-> 
-> start: The battery percentage at which charging starts (0-100).
-> stop: The battery percentage at which charging stops (1-100).
-
-Or just add this comment directly above the function.
-
----
-bod
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
