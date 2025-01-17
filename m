@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264DB1F8905;
-	Fri, 17 Jan 2025 11:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0121F9F55;
+	Fri, 17 Jan 2025 13:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737111873; cv=none; b=dPCCDbNV2kIYridVvrBdJIv2DdVs5K0XvKVL7j2F6HXpkfyI602Khgzp6oC9CXdmvJTy1E4MXDuMnuHOloOjED6vaoMYA0AwL3LxtZuIuZ9tkG+ZN/hgAyIj14OFiY4IyBhf586oXAd1Ul52oqmVshgptQF2u2wM6Pp+8Ro9+tw=
+	t=1737120427; cv=none; b=CW3Vl29vnPDp4XYZ9HN59ovB+zdlj/istwDWMj7WnC1KJQMqEOaxP3QA3I20zogj7NbVAHdxF/Lp28YyG1os/An+KBf0S8+Wf5jplmkU/SSaRhaeb6CIbhepGT1vpwYRQOT3rw6ua3UbIt2I93iMV3lrn4YrSmq8hanwdNmywIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737111873; c=relaxed/simple;
-	bh=T71mNzLWCbqBco7l4n+cqt+WC9phoTK4z4rSCBRuXq0=;
+	s=arc-20240116; t=1737120427; c=relaxed/simple;
+	bh=pZ8GrfB//8axkZeEjA8SPuZSPROwvtJF41KknQSFIYU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mVDmSCINJ3LJ/uN0MrHyaf+WOUov9/8hOjnGUcqhncE+VY0w3SN6A5ElODW0oYwfJbb4qUeiJ+ijpkr+EC5SZ6qPmreJ/fNSFGZa5O3kNE+FbGGe+gs1UNhd6kJKb0hSh/X4AeUin3HhdeRnCVj8FSx7Fn0ZA+xdYRJ5YS30PiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IsJj8vAT; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=mfrYhGsDrQNEnFDJf9LH+SyjcrHRM11LIShGxQveXxDfd7Y1Q+Fr6mE+EwKitj7U7pv/zEPGKnOU+mk//KfNF7Zi2IJt720tJcNbUjSL6TuhHAL1B59jxspGU/KpGsoejCYqj0Bo7ZtJKwiAGOmC2L6fOcg/4syYkMKqfnlyfjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iofmf2oL; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IsJj8vAT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iofmf2oL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737111872; x=1768647872;
+  t=1737120425; x=1768656425;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=T71mNzLWCbqBco7l4n+cqt+WC9phoTK4z4rSCBRuXq0=;
-  b=IsJj8vATWnjAzCQ3G+cWdcnkGcCbJqXxsX14TEaxQwPcTSqTT3E3xmE+
-   QlEHoXlIL+YdMDz1H9dgvUs3HjIEPva3we6lH6MGPThUWOtjdJLVKBs9U
-   EJH5OO2tLYtjguCefL0+9IkJTGXBtSWZqBQTjaJk/LOghjRgG4wtMWMrn
-   MvsiQZqCQ0NOzCM/gA6Z4BKstE5Dh9hIvuDjjfJi9s3zV1ucTQqHnm1cm
-   FJWgYGvC+1/l8YAeiE16gRU2oeaEzEk/o2ZpZYdG++XOh38mN4We3DQKU
-   Ez0p2YXk5SDdYXbCDEF+bYoq191ujzaszLjJDt45mzbj6mHCA0II8lq1W
-   Q==;
-X-CSE-ConnectionGUID: LOdfaLAFTU6gUf6AN4iVVQ==
-X-CSE-MsgGUID: 9lMq5+Y5SyKIAcxUB0K3Lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="37778477"
+  bh=pZ8GrfB//8axkZeEjA8SPuZSPROwvtJF41KknQSFIYU=;
+  b=Iofmf2oL0jKYxss/Mno3HdASo99QErehEVBgbaSIknR5i1INm4JPdDtG
+   YC5FLViPkDdsGBeNRJUfgIqyo8q63vdTA+P/CWa5+waOdnNIM5ZOS1uK8
+   RNRzPjjn3DZBE1j8RTNwmj0PwmWlMhZrzR5Y81OShow1VCJau1W13TA1r
+   NtQ43rW7N01qcSzeXajs6QaG72XEhB4ce4n4Q3GKCllk33tkKJbkKWWFd
+   YW0gn5ZdyoRysNPHgdS0MC7lCcFgtBYfMPzqUdcAm+bmW6gZL1BsjnHJx
+   rn94NxaXOzKCNv/6ibZSFLYKWuAmQwJjdUzx1DrpOSzEdk2Ewis+S1R3o
+   g==;
+X-CSE-ConnectionGUID: yi+RWNfuQDWkKHh4LknWOQ==
+X-CSE-MsgGUID: xwWI5T+BQuiGQbjb1AiYmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="36829830"
 X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="37778477"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 03:04:31 -0800
-X-CSE-ConnectionGUID: ExlJaJBFRG6Ud7aN/hExzw==
-X-CSE-MsgGUID: caxrbGchQde3DQDs9c8hdQ==
+   d="scan'208";a="36829830"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 05:22:47 -0800
+X-CSE-ConnectionGUID: s6Wb8N8YR9ay6O3dr+luVA==
+X-CSE-MsgGUID: 0CgC1ijGTBaL4h4uG3coeA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="110777656"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="129063946"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Jan 2025 03:04:27 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 17 Jan 2025 05:22:42 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYk9I-000T6J-1L;
-	Fri, 17 Jan 2025 11:04:24 +0000
-Date: Fri, 17 Jan 2025 19:03:53 +0800
+	id 1tYmJ6-000TFX-1k;
+	Fri, 17 Jan 2025 13:22:40 +0000
+Date: Fri, 17 Jan 2025 21:22:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -59,13 +59,13 @@ To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
 	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
 	Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Pengyu Luo <mitltlatltl@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Pengyu Luo <mitltlatltl@gmail.com>
 Subject: Re: [PATCH v4 2/3] platform: arm64: add Huawei Matebook E Go EC
  driver
-Message-ID: <202501171826.NGZwFrgW-lkp@intel.com>
+Message-ID: <202501172102.HQ2qqllb-lkp@intel.com>
 References: <20250116111559.83641-3-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -79,36 +79,60 @@ In-Reply-To: <20250116111559.83641-3-mitltlatltl@gmail.com>
 
 Hi Pengyu,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on b323d8e7bc03d27dec646bfdccb7d1a92411f189]
+[auto build test ERROR on b323d8e7bc03d27dec646bfdccb7d1a92411f189]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Pengyu-Luo/dt-bindings-platform-Add-Huawei-Matebook-E-Go-EC/20250116-192206
 base:   b323d8e7bc03d27dec646bfdccb7d1a92411f189
 patch link:    https://lore.kernel.org/r/20250116111559.83641-3-mitltlatltl%40gmail.com
 patch subject: [PATCH v4 2/3] platform: arm64: add Huawei Matebook E Go EC driver
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501171826.NGZwFrgW-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171826.NGZwFrgW-lkp@intel.com/reproduce)
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501172102.HQ2qqllb-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501172102.HQ2qqllb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501171826.NGZwFrgW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501172102.HQ2qqllb-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/platform/arm64/huawei-gaokun-ec.c: In function 'extr_resp_shallow':
->> drivers/platform/arm64/huawei-gaokun-ec.c:91:20: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+   In file included from drivers/platform/arm64/huawei-gaokun-ec.c:8:
+   In file included from include/linux/auxiliary_bus.h:11:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/arm64/huawei-gaokun-ec.c:91:9: error: returning 'const u8 *' (aka 'const unsigned char *') from a function with result type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
       91 |         return src + RESP_HDR_SIZE;
-         |                    ^
-   drivers/platform/arm64/huawei-gaokun-ec.c: In function 'gaokun_ec_request':
->> drivers/platform/arm64/huawei-gaokun-ec.c:112:32: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+         |                ^~~~~~~~~~~~~~~~~~~
+>> drivers/platform/arm64/huawei-gaokun-ec.c:112:11: error: initializing '__u8 *' (aka 'unsigned char *') with an expression of type 'const u8 *' (aka 'const unsigned char *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
      112 |                         .buf = req,
          |                                ^~~
+   3 warnings and 2 errors generated.
 
 
-vim +/const +91 drivers/platform/arm64/huawei-gaokun-ec.c
+vim +91 drivers/platform/arm64/huawei-gaokun-ec.c
 
     88	
     89	static inline void *extr_resp_shallow(const u8 *src)
