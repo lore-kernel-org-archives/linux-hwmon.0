@@ -1,100 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AFA82890;
-	Fri, 17 Jan 2025 08:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CD21FC7D5;
+	Fri, 17 Jan 2025 10:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737102657; cv=none; b=I2DfeSNCkvMbaYICZXmuOeKchK1P+p1iwuY6sFSh2K0uenCiQUtIxcYX19YHUdkCHVzxzA56gBf6FYp9e299wg4UHZJG948K6t0gHioBvIs7f9jCF3O67Csf2oaCutqVubhOafWgNDtIcyt9T46pY/HbkMtx3au6NatFe1PrHeM=
+	t=1737108557; cv=none; b=U5GQ6cFuUb/+jXhEHCcVDfzNid19cgpZWih5srGWV1yMusxNcyRwd/Pe8M/TV60W2ZZPHKW4VGs+zZ49ffGTuaIJCXtOdN7/SbH6PhwkSdYvxyBqKU6S1LotUz5RUhdUl/il7wzJAaQccqY5SN/xEJ5VAbKAJLEZxa8y2zH+A6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737102657; c=relaxed/simple;
-	bh=2UtljXZTNljFm0IjmFEyVoIjU7dljBpQ5XDHRVlupyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIyKAFWPaCzt3CjJ9bVKFVz4fquGAXDQ4Jy4PrFSi1IE0gaGB1G+Yhg6P456/xJef5iOXU4DjHXpgyhas9YoatYtOCOAvV8ufxkCIDkZ8zBNy7ITg2vxSEb/E2wq7067lUlo6ABlNztXkHlZ+U+8U3KPtxQXRnncoRDKHbDnQrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5Hz2aT8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737108557; c=relaxed/simple;
+	bh=52x2K4XaEolIsGejS76c+NPI1JdyzRbN2cuY7bk06SE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NsfaPC1UR/vdFjX7DrzPLRwOdU2loZCbmffbru2i5bAmvOlR2LBKavOCf5G4uOhXxRWb5CpTK4BAtqfzazvRtiaU/1N+ldp6OeXQmxX3OAk9Dei5M5aNmKoE54yojQqWwp/gjxqj0c5LJjlVS3PvgpxGmzthyRpM9CLP5V9bi6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OcMI4wBf; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5Hz2aT8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D69C4CEDD;
-	Fri, 17 Jan 2025 08:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737102656;
-	bh=2UtljXZTNljFm0IjmFEyVoIjU7dljBpQ5XDHRVlupyg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q5Hz2aT8+iVMXytCA7YlB3wighnXP4RVRo35Ap9zoRsbQ84C4EoAslSG8/KBvznba
-	 LVmlOaN6d66wXJ6Dr2xgSub15vyzXGMMaWPr0Ncj73HOAOqkyrWPKwuM7a0bITl5W6
-	 gyCg8O1JK6+1cjszgYrHR2MooddtG5htNXmJpi4xePWg06oO4GxymQOV56mOcvzvbq
-	 WDaghAMl+4LQiQbtG/htARK0MG6Sg1TQSfXl1RBgP1CpDGQWWS+t0jFDm3sgfHaaId
-	 qsmLc+vuoqoUwH/L2Mr5QXTx8zqRkxKfCjqrEEWE4rn0qYGBd0oU3asgyjllgMpDY7
-	 51WlK3s4U5gnA==
-Date: Fri, 17 Jan 2025 09:30:53 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Leo Yang <leo.yang.sy0@gmail.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net, 
-	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA233 device
-Message-ID: <20250117-kind-poodle-of-economy-c0e7c8@krzk-bin>
-References: <20250116085939.1235598-1-leo.yang.sy0@gmail.com>
- <20250116085939.1235598-2-leo.yang.sy0@gmail.com>
- <20250116-athletic-prehistoric-worm-36ffcb@krzk-bin>
- <CAAfUjZGSgdQYwC24S__EO13-q1HQWVkUP7oDgJm-=AeeXgr1DQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OcMI4wBf"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21661be2c2dso35637305ad.1;
+        Fri, 17 Jan 2025 02:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737108556; x=1737713356; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qAUQuTC+OVIezZr8CjWLKujkPPq9tg8Q3f8vQT27JwA=;
+        b=OcMI4wBf6QQaP++aMKgfgn8taey0Amw1HdPa4yVE5KL9j2Vm/QeRokwwfPp5FX7DGM
+         2z3lyg5emmtYkvss1jjjP23VTOF6H7/egdbOpLX5TRN85C8AzHSAlpmz4jjVp94cKR5d
+         +iEByKlylp10FtppqhlOvKFyOawRuxBGP2owycTvKz/RDUL8VHOOJdS3NGY5zVJW0Juk
+         ac8wreOSxGgo6zamgn2S5WevLjhokyCajaiRquYSkKg8HM8QJ59iPQlnqd+nLaNZlGXZ
+         W9QZ/8WMKFpl4PAFU9tpgbeI96Zo4Txv0Ir1qvX9FceRKXuTBZY8+9F1R2sWr9Pt0KfQ
+         qDMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737108556; x=1737713356;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qAUQuTC+OVIezZr8CjWLKujkPPq9tg8Q3f8vQT27JwA=;
+        b=jVrhEDMRWrPKD19JsIWj558A92QxWabP0BZNV5eJasUcZ2oO+IWLaVsSvpyWkhlfHe
+         WACTpoGduhjMrU6bcX4YSlASvp3JfX1FvLYJv9yOKAu0F1Zp4nBQwpYqYmDTHgEG87xn
+         z0X0VeuctfXhXyZ26TXJNR/PcOANOzZPLObPW/nC0+W1Z3CAkCRRr4TPQt7PvmmBnvi2
+         h94uD1K6M2jD+hHyM1I9sLIXwBmyYqcNJKKTq3+7/z3ainWnHwxORc6BD31sJwgqXDiX
+         HXZQmQkXsUCDpvrTugpYJhkMQ/CGxP3OybAWuYar/xwT31QeVrxbdrTapF8shOQQPPjS
+         JSmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUr7SDOuBCQpTD7sFMjM4ViC7+9G3pbnYigvzR7FjtDhSZtilGl1wUmwhTcgUmNUDR06uKPiYTpGHmh@vger.kernel.org, AJvYcCVnkmOCZ9sxzvIl+FMk8qtdhj8zg83+YB8NPrN+wLXl4uKnZFda/RZZnVmyWLl4B14njb4iUWA4myY+@vger.kernel.org, AJvYcCWyooJ7V0Gx8hM5WzrGPoV6Efmo6rJzejnTHsHkh6LoG3/88bOnqZBqr6CtxJbEK2YXe50cNzfmD/Lv5pB4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZpfKH71ro9M2G8fOQY54o/o8gntKKj+l8u2ItivqgL0f0Jjq9
+	qC0bzGlWRvzi1NNkG88Sdhpa9gpdTOZFey72M26dNMZX05/xDTAo8+bRWQ==
+X-Gm-Gg: ASbGncuoL8lmTIEykNmq9UEa3A4xvcyLsMWrtn4pJueO06/lcucBvh4ISweYZdC0qXA
+	DT0T9bP230wAWC7BOBGpc9VxtwuhNzFgVgBWIJoLMcHMaSMfX7Lxw1Mm/yQsKnQJQTRW/4R5mAU
+	azbpn1Vnu3xG8kHLmaTe+kJ0ZM6ga/I2/uYxzXKTDKT8QuRRLSFYeDN5hJwbcyIZKukIzy03Xq+
+	ntcH0RIuPZAiDahPDZgK5a/CxuFt4FBgE9sVWsFFB6LwqCP6KY6KfB+WNEi+zrWIZAufqluxK7U
+	K/LCAii+dTHyO5HFY5777fdX
+X-Google-Smtp-Source: AGHT+IGqMS3Skg3KdLLKq4pUhJXnKdaJ3p1DlWN7OCdlJsyQWOffVAh63LgUc0DugcirCw1PSAHDGQ==
+X-Received: by 2002:a17:903:1108:b0:212:68e2:6c81 with SMTP id d9443c01a7336-21c355405edmr38660565ad.24.1737108555734;
+        Fri, 17 Jan 2025 02:09:15 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb9af5sm12756925ad.82.2025.01.17.02.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 02:09:15 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v2 0/2] hwmon: lm90: Add support for NCT7716, NCT7717 and NCT7718
+Date: Fri, 17 Jan 2025 18:07:42 +0800
+Message-Id: <20250117100744.1571385-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAAfUjZGSgdQYwC24S__EO13-q1HQWVkUP7oDgJm-=AeeXgr1DQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 16, 2025 at 09:52:08PM +0800, Leo Yang wrote:
-> Hi Krzysztof,
->=20
-> On Thu, Jan 16, 2025 at 6:47=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
-org> wrote:
-> >
-> > > +      This value will be used to calculate the Current_LSB and curre=
-nt/power
-> > > +      coefficient for the pmbus and to calibrate the IC.
-> > > +    minimum: 32768
-> > > +    maximum: 4294967295
-> >
-> > Uh, are these real values measurable by the device? The last one looks
-> > like UINT_MAX.
->=20
-> According to the spec I don't see a definition of the upper limit of the
-> current measurement, it all depends on how low the shunt resistance can
-> be, so I'll use the upper limit of the u32 as the maximum for now, even
-> though it's unlikely that this number will be present in the actual circu=
-it.
->=20
-> >
-> > > +    default: 32768000
-> >
-> > Default is 32 A? For what applications is this sensor used?
-> >
->=20
-> According to spec 8.2.2.1 Programming the Calibration Register example,
-> a Current_LSB with a maximum expected current of 15A is approximately
-> 457.7uA.
-> The example shows that a Current_LSB of 500 or 1000uA/bit can be used.
-> So I choose 1000uA as the default value here, this value corresponds to
-> the expected maximum current which is 32A (with some loss of accuracy to
->  have a larger measurement range), and yes maybe the user doesn't
-> need such a large current, so the accuracy-sensitive use of the scene
-> can be adjusted according to the actual measurement range of the
-> expected maximum current, I'm trying to retain some flexibility for the
-> user.
->
+The patch series add support for NCT7716, NCT7717 and NCT7718 from
+Nuvoton in lm90.
 
-Datasheet indeed does not describe actual limits, expect 5 mA on the
-pin, but that depends on shunt resistor, so fine with me:
+NCT7716 and NCT7717 only have 8 bit resolution local thermal sensor.
+NCT7718 has local sensor and 11 bit resoulution remote thermal sensor.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes since version 1:
+- Add new detection function lm90_detect_nuvoton_50()
+- Fix the check for register values.
 
-Best regards,
-Krzysztof
+Ming Yu (2):
+  hwmon: (lm90): Add support for NCT7716, NCT7717 and NCT7718
+  dt-bindings: hwmon: lm90: Add support for NCT7716, NCT7717 and NCT7718
+
+ .../bindings/hwmon/national,lm90.yaml         |  6 ++
+ Documentation/hwmon/lm90.rst                  | 43 ++++++++++
+ drivers/hwmon/Kconfig                         |  2 +-
+ drivers/hwmon/lm90.c                          | 82 ++++++++++++++++++-
+ 4 files changed, 130 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
 
