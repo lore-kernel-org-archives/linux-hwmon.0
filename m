@@ -1,85 +1,73 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F41D1EE00E;
-	Mon, 20 Jan 2025 16:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD57166307;
+	Mon, 20 Jan 2025 18:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737391672; cv=none; b=Sijitz0KiXpE1qpzyhz2o7x0O+7ggtCqgSs16N07sAm5qT2HoLHPD+Rc24iqIiw37dgpCN9GBpFTHbMFX1rAOId0PwXZU5tmgl+wB8Ztp+m0x2UF3N5HmCOmQ8ZJmDXi7fRrqhGtfb7gyYrm0Qo3Z024zhH7qUSEdHkceeMvWJo=
+	t=1737398037; cv=none; b=NiUlL2hhc5ueUQuC+I8S2t7vDdBUXzunIFLCN9juD2VDMmRbtfMuD6/m5ZdTuKozxlzNu1r+newjK2etxKBWkBN36d0K3VFl0HcbMQnEtV4IBkzJkbiDuAQ02Guo6xOSk0eYydNGDp76Q+nhEeOsBDlImzxgebTMkYzkmxDUKsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737391672; c=relaxed/simple;
-	bh=YuN2c9W6EQRPv4NlEuuYJwYVAzo6uRjqKAVJpKO3+t4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F6HupMTYfy3bymrRO+GFjhLsNC0d/Vy18jgzc43p/cfgwBPV2KDFmZ7pWRdpXc5QXYQCyRt2qv66M8/9rsa/CgyJHs1QyzOa+8adggy9zfG5PSEUy6/9b1uSJsBKXDgqj0J8L1DNbXgccwHsgfyXskVjndAYB/rhQEFYbv/D8gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jMY66EV9; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1737398037; c=relaxed/simple;
+	bh=Bl6FyCL6blBqJtug5oDomT6kVPUCLCevvz6Udo+kIgM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qZR8IHgHJKuk30arH38sIof1FjsApQGDGvh0SwWmavX1RAvk3Z+sHWcjiZ+OMoztnd8DmlyV490JKVrciiuTLSlAkXrLjN9FNWyIPRawNrlpdUIGaLuHgWZ7AB75qcpycNtE8Lmj/xPFuZYqvfCpCheSuxh4S4gBNX5Lx3HP2bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVDT+/v9; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jMY66EV9"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-215770613dbso58984575ad.2;
-        Mon, 20 Jan 2025 08:47:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVDT+/v9"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2167141dfa1so82522985ad.1;
+        Mon, 20 Jan 2025 10:33:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737391669; x=1737996469; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/Hqjkk9J1a1URYUHxfhR6WnpNhcryXM5Zhz30rZ4Pg=;
-        b=jMY66EV9pMogjYTr9ugt93HqvydM1cVN6oio5fh+8Zvk0TkdiyE0KJbg73HW54MEZr
-         arVVEkErikS9yYVONdhwrQjhMpZTo4OGm2bRhyNPQjmuL2YMFCcqC+YRgKb9Y5DiBokJ
-         H34GVt5bc219FLeccExgtNKx5/5nQ+Qv9W0zYBJj6FC9Gc9iSZpcl6p9NpJveliKv9cp
-         SYWqi7gPukGcmoj1+zCgbaZrcBhfN3c9r7e5xEm6bFdFeK0abPH9AXoX+lUk+VY91vPD
-         YkCEWI7LtyF0ZXmKDMeMbwzNXhQDO9Of7V6lRT/ce5irJnOlgyguIo3TjSYh8CU4s8l0
-         HbnQ==
+        d=gmail.com; s=20230601; t=1737398034; x=1738002834; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9cGBoIaX7MiT/8F0FbJyvQ/d6j6a+R8dq2XGOYAV2p8=;
+        b=QVDT+/v96JtxDbuw/wsPsKcd3kAASbse16h9uEh9bl86u5E7igq7GR/sZIFnpGhSmf
+         PQwbPzGLh1JWb9lTu4gmOYy/19jRhtjmu3SIpF0GjeUts08QHv9bH2S0sWt6NQcM6oQa
+         XFs+NSvxpX4R0V0i+BwOgzp1H33w118qzAxSDboEirs7t5CXED2cnXOyjBkDLjoJc1ip
+         DcXoiag+49T9IVqH3Y6tU7ktYIFi7l/otqa0sNyiFUZoSxdUsRD6v4L/yvDvofJfBYO5
+         R+Ap11KXxYw9pxcInw18YuOVTFTudnsTNXIXSa9peaULpjjBNupsLN3qIXwM2EpAKmlX
+         UK8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737391669; x=1737996469;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k/Hqjkk9J1a1URYUHxfhR6WnpNhcryXM5Zhz30rZ4Pg=;
-        b=JROQ39Q3Wrzitsdv5oHCQ6Ra9X6VFlo1qMipiM1XBjoPPVXmWiUH3dk6/ymNurvti3
-         BfzI82rG166Uc8MJVkbZo9k4UFeh5wJeO6bXFdlrthMWHreEupRkQELO2dhHh0q/hByy
-         EUkH0HkQtm/67gJOW1C0L6ZkXD341WlPfxsoyAqqi80QL2Pa+O5mjGqFBpvitAaLhCr4
-         Y3tdcNITJiv+N6xiOn9b0+LmHTFnxvxXnWY36GEgPit0lIXET6yj3pld3ioISwBjEqhk
-         j+XvS0JlgOr62o7ywXnlNN8+aoLlCJXSHaG6yxI0n8OHvT+TbpngyWcZs0fysG2/A794
-         47CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZUJhoKX2lxxo1zFVtoHyX+1Kvw6/9MwtQuPsagpGgFQjIl+/BWal2f/fREjsXzq3E/qz9dF01jk3cA1dd@vger.kernel.org, AJvYcCW2+VcmL/THUIIEVV3B3KXLtsRvkABeirpIhmiU8tT0YAB6z9V2XlxxQe5mcqyU+2Lzgw6aI3c4mH4wSqo=@vger.kernel.org, AJvYcCXKx+XruQFmnVsHNukSSURVv2UHgBZMtPtTjBXlLk/9+onZlgYYRSeb3qdjwervm2I0Wn2/7pO+E+FlVFrnqAc4i9PZQw==@vger.kernel.org, AJvYcCXcuWeo5FYAtgYkN6gqaMuthcBGLACLDdv4BPdafgzPI7ae0HaHVLUH8nQN1sbMz3r9Kgtm4QRp0LHSeRL0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOrLhaeRvgP14OSPz9wOsQNrWkScss2UZtEZeE2mOYB652rEHl
-	RlTxQ/C8lSk6dsOd1Y0E8LQlNnPTa7vJoJHMKxGVdvo9XoEzTN7h
-X-Gm-Gg: ASbGnctqWXu62F+DaIXsx03OjMeK7qCSF+zv0JxlPLnuvSA2VQwv/r0dd67vo6v3XWe
-	qC437wqdpS5mcH66iuw5T8ox7/iLUsuszgExjRcX5eL594fEH92Er3uirqtLqet9EDp94ZkFiOC
-	BzWhkiJBI6Vg6fFYzcUrz9xzW/WVG0odxWqtLC0h2H6NgZf2aspBhs2aucF19qWc5fxCWZ3eJtP
-	HuYh5cfttT+298dB3dAGofDi1Pa15S19jL+hIxBT439k8FlcjjeWQUT3IBnOWap2XuOy28=
-X-Google-Smtp-Source: AGHT+IEf5YqJiFLTBJSP0kqleTRhyB4HPnKQFCC29x7vHSFoeqiKrN/hmc6lbBGjMEFwBtllYGRZbA==
-X-Received: by 2002:a05:6a20:7492:b0:1e1:ae4a:1d42 with SMTP id adf61e73a8af0-1eb2159cc48mr24429739637.31.1737391669594;
-        Mon, 20 Jan 2025 08:47:49 -0800 (PST)
-Received: from SC8280XP.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bcaa3a97dsm6017266a12.9.2025.01.20.08.47.41
+        d=1e100.net; s=20230601; t=1737398034; x=1738002834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9cGBoIaX7MiT/8F0FbJyvQ/d6j6a+R8dq2XGOYAV2p8=;
+        b=KI7WwN9Jub81mPykcGm8zDLx25inGw6u3zPuQHRQFMpi0GtZDlVI6muHMGklV/aA/2
+         4vO308BW6YrlzNf61MmdShAUR/GTuglveEp7gCNtBPucuGhw+q6fvb+PjRA0APfY0yc3
+         YGT5Xslbd2uKwulRELTo6X2Zj1Bfm9i04+HbwL21wtYjU+n49biaxv+jTfYVi1Df9rkP
+         5hZyChqHVDgZoVLDqROmNmy7yA1DCRfB6BoGqakeRsN5w6S18xstjSHQe8OCUhc4Q1zJ
+         glF0k34exnW3cl4nfJKmap+V3MocoP1tdhvUik6DA2YwsHGW9rUVQdPckf6W8ZhocylG
+         oUBg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1FOGEOP9DnaP8qnTue+BsVLv+wjoWPOAxP77Sll2/al/ul8cJOpZ6y1AvPKXNI4Tt24AG4//qUtmQ1w==@vger.kernel.org, AJvYcCVZVwnLv/3W7yWUaMGuuOValmPnDErFyD43IXz1fW2Cao9JI3+uSHNlDufa+ou2P/MXGgMfIphhFPdWnVfK@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmiOmOqJlZyaIuxsqDvpnqMrB558sGwmwtlRGrk6BuGzbAB35r
+	Px6bh+awrtUzZqMUG6/ITUZMHQtBA6j674iDMPXef47YJeq+Ablh9eAk9w==
+X-Gm-Gg: ASbGnctu/pjd3wNPaOWZhSIDZbhLefvXtMlAHbtZQMGbhFQf2ALjfYn27nf9uhK4Vqm
+	JajK02Qku/fa0i/9zQBzIV1YoEuEzRt/WB5sjdsqnaRqBFhtEZ7mem5ZE2fg6Dhg7DxswPFgdJN
+	404vE9TtgGeSTShqbIGzZA3SkX0zAz4f6B2cv3FtbHw7APRUgtvPn9tQuhhRu/+hM5zjBfR+0mm
+	hMuXlkwM9gaa8nh3QBcDX3ECRW7ssT5dSvOrTAgHieYBf3jyfrNiv1NFVIWuMWh79ZMuN/z5QnO
+	FhLZi2t5yo1XVg==
+X-Google-Smtp-Source: AGHT+IHXuzMxEuA485NfLrsJeyjNLB6A2pFeN6p0vT73Gazzn4B2HE/jetpD8h3Hj2XzAjdjnS1lbg==
+X-Received: by 2002:a17:902:d4ca:b0:216:6ef9:60d with SMTP id d9443c01a7336-21bf0d07c06mr356368455ad.23.1737398034433;
+        Mon, 20 Jan 2025 10:33:54 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:8899:7ee7:3586:3cca:c372:5371])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb790esm64490215ad.85.2025.01.20.10.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 08:47:49 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=83=C2=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mon, 20 Jan 2025 10:33:53 -0800 (PST)
+From: Atharva Tiwari <evepolonium@gmail.com>
+To: 
+Cc: evepolonium@gmail.com,
+	Aun-Ali Zaidi <admin@kodeit.net>,
+	Henrik Rydberg <rydberg@bitmath.org>,
 	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
 	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH RESEND v5 3/3] arm64: dts: qcom: gaokun3: Add Embedded Controller node
-Date: Tue, 21 Jan 2025 00:47:01 +0800
-Message-ID: <20250120164701.7918-4-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250120164701.7918-1-mitltlatltl@gmail.com>
-References: <20250120164701.7918-1-mitltlatltl@gmail.com>
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v5] hwmon: Add T2 Mac fan control support in applesmc driver
+Date: Tue, 21 Jan 2025 00:03:37 +0530
+Message-Id: <20250120183343.3494-1-evepolonium@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -88,250 +76,256 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Embedded Controller in the Huawei Matebook E Go is accessible on &i2c15
-and provides battery and adapter status, port orientation status, as well
-as HPD event notifications for two USB Type-C port, etc.
+This patch adds support for fan control on T2 Macs in the applesmc driver.
+It introduces functions to handle floating-point fan speed values
+(which are required by t2 chips).
+The fan speed reading and writing are updated to
+support both integer and floating-point values.
+The fan manual control is also updated to handle T2 Mac-specific keys.
 
-Add the EC to the device tree and describe the relationship among
-the type-c connectors, role switches, orientation switches and the QMP
-combo PHY.
+Guenter Roeck asked "Does this limit still apply?"
+so yes the limit still applies.
 
-Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Changes since v4:
+--- remove the out goto in applesmc_store_fan_manual as
+	Guenter Roeck asked me
+Changes since v3:
+--- fixed error by kernel test robot about FIELD_GET and FIELD_PREP by
+	by adding linux/bitfield.h
+
+Changes since v2:
+--- fixed checkpatch issues
+--- used function such as BIT(), FIELD_GET(), BIT_MASK()
+	in function "applesmc_float_to_u32"
+	and "applesmc_u32_to_float" for readability
+
+--- added error handling in function applesmc_show_fan_speed
+--- used applesmc_write_entry instead of applesmc_write_key
+	in function applesmc_store_fan_speed
+
+--- defined "F%dMd" as FAN_MANUAL_FMT
+
+Changes since v1:
+--- added spaces as Guenter Roeck asked me
+--- also removed the type casting for buffer
+
+Co-developed-by: Aun-Ali Zaidi <admin@kodeit.net>
+Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+
+Signed-off-by: Atharva Tiwari <evepolonium@gmail.com>
 ---
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 163 ++++++++++++++++++
- 1 file changed, 163 insertions(+)
+ drivers/hwmon/applesmc.c | 130 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 102 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-index 09b95f89e..1667c7157 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-@@ -28,6 +28,7 @@ / {
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index fc6d6a9053ce..7964b0e0c5e8 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -33,6 +33,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/err.h>
+ #include <linux/bits.h>
++#include <linux/bitfield.h>
  
- 	aliases {
- 		i2c4 = &i2c4;
-+		i2c15 = &i2c15;
- 		serial1 = &uart2;
- 	};
+ /* data port used by Apple SMC */
+ #define APPLESMC_DATA_PORT	0x300
+@@ -74,6 +75,7 @@
+ #define FAN_ID_FMT		"F%dID" /* r-o char[16] */
  
-@@ -216,6 +217,40 @@ map1 {
- 		};
- 	};
+ #define TEMP_SENSOR_TYPE	"sp78"
++#define FAN_MANUAL_FMT		"F%dMd"
  
-+	usb0-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb0_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb0_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi0_sbu>;
-+			};
-+		};
-+	};
-+
-+	usb1-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb1_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb1_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi1_sbu>;
-+			};
-+		};
-+	};
-+
- 	wcn6855-pmu {
- 		compatible = "qcom,wcn6855-pmu";
+ /* List of keys used to read/write fan speeds */
+ static const char *const fan_speed_fmt[] = {
+@@ -511,6 +513,32 @@ static int applesmc_read_s16(const char *key, s16 *value)
+ 	return 0;
+ }
  
-@@ -584,6 +619,97 @@ touchscreen@4f {
++static inline u32 applesmc_float_to_u32(u32 d)
++{
++	u8 sign = FIELD_GET(BIT(31), d);
++	s32 exp = FIELD_GET(BIT_MASK(8) << 23, d) - 0x7F;
++	u32 fr = d & ((1u << 23) - 1);
++
++	if (sign || exp < 0)
++		return 0;
++
++	return BIT(exp) + (fr >> (23 - exp));
++}
++
++static inline u32 applesmc_u32_to_float(u32 d)
++{
++	u32 dc = d, bc = 0, exp;
++
++	if (!d)
++		return 0;
++	while (dc >>= 1)
++		++bc;
++	exp = 0x7F + bc;
++	return FIELD_PREP(BIT_MASK(8) << 23, exp) |
++			(d << (23 - (exp - 0x7F)) & BIT_MASK(23));
++
++}
++
+ /*
+  * applesmc_device_init - initialize the accelerometer.  Can sleep.
+  */
+@@ -841,16 +869,33 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
+ 	int ret;
+ 	unsigned int speed = 0;
+ 	char newkey[5];
+-	u8 buffer[2];
++	u8 buffer[4] = {0};
++	const struct applesmc_entry *entry;
++	bool is_float = false;
  
- };
+ 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
+ 		  to_index(attr));
  
-+&i2c15 {
-+	clock-frequency = <400000>;
+-	ret = applesmc_read_key(newkey, buffer, 2);
++	entry = applesmc_get_entry_by_key(newkey);
++	if (IS_ERR(entry))
++		return PTR_ERR(entry);
 +
-+	pinctrl-0 = <&i2c15_default>;
-+	pinctrl-names = "default";
++	if (!strcmp(entry->type, "flt"))
++		is_float = true;
 +
-+	status = "okay";
-+
-+	embedded-controller@38 {
-+		compatible = "huawei,gaokun3-ec";
-+		reg = <0x38>;
-+
-+		interrupts-extended = <&tlmm 107 IRQ_TYPE_LEVEL_LOW>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi0_hs_in: endpoint {
-+						remote-endpoint = <&usb_0_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi0_ss_in: endpoint {
-+						remote-endpoint = <&usb_0_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi0_sbu: endpoint {
-+						remote-endpoint = <&usb0_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi1_hs_in: endpoint {
-+						remote-endpoint = <&usb_1_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi1_ss_in: endpoint {
-+						remote-endpoint = <&usb_1_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi1_sbu: endpoint {
-+						remote-endpoint = <&usb1_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
-@@ -1004,6 +1130,10 @@ &usb_0_dwc3 {
- 	dr_mode = "host";
- };
++	if (is_float) {
++		ret = applesmc_read_entry(entry, buffer, 4);
++		if (ret)
++			return ret;
++		speed = applesmc_float_to_u32(*(u32 *)buffer);
++	} else {
++		ret = applesmc_read_entry(entry, buffer, 2);
++		if (ret)
++			return ret;
++		speed = ((buffer[0] << 8 | buffer[1]) >> 2);
++	}
+ 	if (ret)
+ 		return ret;
+-
+-	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
+ 	return sysfs_emit(sysfsbuf, "%u\n", speed);
+ }
  
-+&usb_0_dwc3_hs {
-+	remote-endpoint = <&ucsi0_hs_in>;
-+};
-+
- &usb_0_hsphy {
- 	vdda-pll-supply = <&vreg_l9d>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1025,6 +1155,10 @@ &usb_0_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp0_out>;
- };
+@@ -861,7 +906,9 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
+ 	int ret;
+ 	unsigned long speed;
+ 	char newkey[5];
+-	u8 buffer[2];
++	u8 buffer[4];
++	const struct applesmc_entry *entry;
++	bool is_float = false;
  
-+&usb_0_qmpphy_out {
-+	remote-endpoint = <&ucsi0_ss_in>;
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
-@@ -1033,6 +1167,10 @@ &usb_1_dwc3 {
- 	dr_mode = "host";
- };
+ 	if (kstrtoul(sysfsbuf, 10, &speed) < 0 || speed >= 0x4000)
+ 		return -EINVAL;		/* Bigger than a 14-bit value */
+@@ -869,9 +916,20 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
+ 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
+ 		  to_index(attr));
  
-+&usb_1_dwc3_hs {
-+	remote-endpoint = <&ucsi1_hs_in>;
-+};
+-	buffer[0] = (speed >> 6) & 0xff;
+-	buffer[1] = (speed << 2) & 0xff;
+-	ret = applesmc_write_key(newkey, buffer, 2);
++	entry = applesmc_get_entry_by_key(newkey);
++	if (IS_ERR(entry))
++		return PTR_ERR(entry);
++	if (!strcmp(entry->type, "flt"))
++		is_float = true;
 +
- &usb_1_hsphy {
- 	vdda-pll-supply = <&vreg_l4b>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1054,6 +1192,10 @@ &usb_1_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp1_out>;
- };
++	if (is_float) {
++		*(u32 *)buffer = applesmc_u32_to_float(speed);
++		ret = applesmc_write_entry(entry, buffer, 4);
++	} else {
++		buffer[0] = (speed >> 6) & 0xff;
++		buffer[1] = (speed << 2) & 0xff;
++		ret = applesmc_write_entry((const struct applesmc_entry *)newkey, buffer, 2);
++	}
  
-+&usb_1_qmpphy_out {
-+	remote-endpoint = <&ucsi1_ss_in>;
-+};
+ 	if (ret)
+ 		return ret;
+@@ -885,12 +943,23 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
+ 	int ret;
+ 	u16 manual = 0;
+ 	u8 buffer[2];
++	char newkey[5];
++	bool has_newkey = false;
 +
- &usb_2 {
- 	status = "okay";
- };
-@@ -1177,6 +1319,13 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
++	scnprintf(newkey, sizeof(newkey), FAN_MANUAL_FMT, to_index(attr));
++
++	ret = applesmc_has_key(newkey, &has_newkey);
++	if (has_newkey) {
++		ret = applesmc_read_key(newkey, buffer, 1);
++		manual = buffer[0] & 0x01;
++	} else {
++		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
++		manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
++	}
  
-+	i2c15_default: i2c15-default-state {
-+		pins = "gpio36", "gpio37";
-+		function = "qup15";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	mode_pin_active: mode-pin-state {
- 		pins = "gpio26";
- 		function = "gpio";
-@@ -1301,6 +1450,20 @@ tx-pins {
- 		};
- 	};
+-	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+ 	if (ret)
+ 		return ret;
  
-+	usb0_sbu_default: usb0-sbu-state {
-+		pins = "gpio164";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
+-	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
+ 	return sysfs_emit(sysfsbuf, "%d\n", manual);
+ }
+ 
+@@ -900,33 +969,38 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
+ {
+ 	int ret;
+ 	u8 buffer[2];
++	char newkey[5];
++	bool has_newkey = false;
+ 	unsigned long input;
+ 	u16 val;
+ 
+ 	if (kstrtoul(sysfsbuf, 10, &input) < 0)
+ 		return -EINVAL;
+ 
+-	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+-	if (ret)
+-		goto out;
+-
+-	val = (buffer[0] << 8 | buffer[1]);
++	scnprintf(newkey, sizeof(newkey), FAN_MANUAL_FMT, to_index(attr));
+ 
+-	if (input)
+-		val = val | (0x01 << to_index(attr));
+-	else
+-		val = val & ~(0x01 << to_index(attr));
+-
+-	buffer[0] = (val >> 8) & 0xFF;
+-	buffer[1] = val & 0xFF;
+-
+-	ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
+-
+-out:
++	ret = applesmc_has_key(newkey, &has_newkey);
+ 	if (ret)
+ 		return ret;
+-	else
+-		return count;
++	if (has_newkey) {
++		buffer[0] = (input != 0x00);
++		ret = applesmc_write_key(newkey, buffer, 1);
++	} else {
++		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
++		val = (buffer[0] << 8 | buffer[1]);
++		if (ret)
++			return ret;
 +
-+	usb1_sbu_default: usb1-sbu-state {
-+		pins = "gpio47";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
++		if (input)
++			val = val | (0x01 << to_index(attr));
++		else
++			val = val & ~(0x01 << to_index(attr));
 +
- 	wcd_default: wcd-default-state {
- 		reset-pins {
- 			pins = "gpio106";
++		buffer[0] = (val >> 8) & 0xFF;
++		buffer[1] = val & 0xFF;
++
++		ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
++	}
+ }
+ 
+ static ssize_t applesmc_show_fan_position(struct device *dev,
 -- 
-2.47.1
+2.39.5
 
