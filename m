@@ -1,275 +1,191 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F2D1E1C32;
-	Mon, 20 Jan 2025 14:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8566619BA6;
+	Mon, 20 Jan 2025 16:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737384011; cv=none; b=Yhr0faSDCBs86kpeOM13m+4ilEQCAgo4AfDYwNPLW3r/M/EjFrUSPwKza33yJVeTJSbRnI7DnLHDgqMtHmVbVhmxT6gIrJ2AEiWaiC2XsVCOxqjLsKXV/PYM9YORbDOBbVkXQugEs6/OtBbxuSTuB4/n3jUSQD8wogJAEyet4lU=
+	t=1737390349; cv=none; b=RO6RuCK5Xojs5Vpa62lyAi3NmNAu78IB54ly4cjyw1snqext5g0vKsF4nC31h9aYF32ofI+4/1nsK7tnDGOpTy+UI9sgcanEdQv35FZKrlRZLPkgU4xM96yCICFEPLX97+hKKTymIyzh3cXSMd4i744IrNHMJI5JHoBIFOj9VbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737384011; c=relaxed/simple;
-	bh=rHTRv6nHlmeU6X9KWo/WcH8zTqrD7PpXhzmlDHzL178=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rcO0OZ7J9AI710aRvdmTMFEWO6zu6rl1Y5uHuKyC4DMYhaYN1rv7doBaT+3K7aClcHKxn//z2dewS0ZZ7+BoF4pyl/nztVUKTePAKS4VzcNPkJtsoHPD0JwFbV2eL8b9yfZnThea5Aa3ZC79VPBUESya2Rnkn1CcSOg+NS95RVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TrWuSn+6; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1737390349; c=relaxed/simple;
+	bh=aeN28AYVvGJfT3SDJFpY5CFpl9UwKe2s1HqNf6NCsic=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tzj1ifme7r4RtcJoB1eZ6hi0pIPDVXj5MtFB+7858lT3dkptbv221b8ZAnr2Mtm1kKTWVCO2+VR/ezeNWF7RFqppPWXH9B2g2YC+7CH1xniN+Vn/ULMYykSzLK2ZuP5+qpF8KPTUcSDhT8tbLLGbZL9YLaAPGhUON+KALgMIdjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0AdYzjQ; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrWuSn+6"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ef72924e53so7774943a91.3;
-        Mon, 20 Jan 2025 06:40:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0AdYzjQ"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21649a7bcdcso78620075ad.1;
+        Mon, 20 Jan 2025 08:25:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737384009; x=1737988809; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZV6E/rMXEhiC5UlzfHiD9+49W0UMt85k9M5s8o18lM=;
-        b=TrWuSn+67DQSRoDC037ChyyE74Pb4q8e7+tQUI9s2bNpG41z5msINMF+enL6J03noq
-         guoZzcea+x4TfOELvmrX6q9ryz3s6FPKAwk+SNMqT1eX2Lz+q5q2DLgqLWkcMIF57FlM
-         /+SwHm2yEOXLmhr2B4gRB9YuZ1B1IHCJfZjAERlu+aG24bpQmcxY9ZZ7MrhpYNcz+IqP
-         euHs6eR0RfNkpXKgTzcXG0dgDXW5MuZyd+OJKPTcrAhkuUnX8FMoUo5ztwG2No/7yg6J
-         WLDk7cK4LBJlYpbqjM5UpvEaREdVLPe1sk/3/h0vv2FX/fnMudX0SrMRkkR/+GVROaEe
-         ixQQ==
+        d=gmail.com; s=20230601; t=1737390347; x=1737995147; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0jgmE9LRjptehlEX3Cg21VFrq0vt9UDGxmv6nHqI0s=;
+        b=I0AdYzjQTqsaymve8QOhT6OnMi5Rnh4xr6JOjtHVvhxeDgHUD7EOFpSOqpj+t80nhM
+         Lz8Ptx6MWLu00O/ZUWn5arsbv7cjtoMRwk8+OY/EDYSed18UefWw1UronWTAuTXfUgto
+         9UqrMM+1uQPtqULXQvi3Te2L0bDuwZED1pZ7ysFW//hEr6IXIwZjEmDZ5eKKGC13mbjv
+         zW3ToXMtCONWfMQQ6kJ/ptrGNVkMtUZ5aqiwpldWOyLm5un6El3o1P7sIe4H2Yah+wGM
+         QGFl/aq5Z6YbAyV2hpoze0NQE133oQf+VCJoBWAS031x1w6SB4rM3GUSnYl1v2vQvYQG
+         PH0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737384009; x=1737988809;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GZV6E/rMXEhiC5UlzfHiD9+49W0UMt85k9M5s8o18lM=;
-        b=X21ZF82icnA+a+agDoo0WKolKcb0FgUjnEBUEEy7qZiHwy29OJ944f67I0N2bvP2OD
-         UloKUZ/bgTtQu2KlrJn+TpaXwLIWabi1KBlBkcX/HQPeQifV9C5HDZpBoS+wDLtsxV6m
-         8zrqjP1s4OmHxQGg4tnJtNYwxFKnW7N8fwJbhjyuVgGeq42/DLYNR+HLHbu+LGwJcn6u
-         TPM3i5CsKCaAjFvedcYIiRQFEp1R4PTXYZI7JDHxzM1Q1WuUxoWBPVmhmcKblAudcKfE
-         vjP7VWctOQ5DMU2UxBAyNmeGV91czKrRbK2sUVZWACJATBcFh23orMouyKWdR5gOi7iY
-         cQyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVKExnDr2+30txqiUa6Lm3qziYxAyyGoDzR5C0dDszYcviFXfvKQwTJceFFTxVuZwnecTUGsiKBaDPpx9g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPwoEu45XqHYY/NFOwTRM4UKixom/xXa7z7E0eB6tIz6EvmNeM
-	yL9MBDrRMYs9fpbfkRiVtTmU/W++/5/o8n+CwEWpUhoTbWPU7u0UIuYj5Q==
-X-Gm-Gg: ASbGncusS6SVzRzgNFCI3McT8xmF/D3nmx4S3n7g+UTM9BPJsJiZfpd5V6B7XQHhnC+
-	s2FnSI2oTdNJfAzolbUmEQMYr7aQFf9xDaSyPwRcbg/sdW/KkJ9OWlgi/fgZfJZikmzq1dnR0uF
-	cWHhoEqMKEMvBkQBUgSFziNRtZi+hB3PK/kBuHe9e8a7huwXD5uIvN8JgfTh4Fq83uaCMMTpVSr
-	xP4phyDrpBJF2oLO/rSkopc/APbK520avdV8s/M1GuD6m4Dh0pcjKB0lc29p3Gsc+OaZZmtrlay
-	iK6Gr5Q=
-X-Google-Smtp-Source: AGHT+IGQDLy55Xs8LUgQLmOAdICAdMbK6ZWf9pw5xCoi31IzNrSVnwfYLwLiYtQhIc7LHrqXD/r7iw==
-X-Received: by 2002:a17:90b:2c84:b0:2ee:6736:8512 with SMTP id 98e67ed59e1d1-2f782c92705mr23164632a91.12.1737384009004;
-        Mon, 20 Jan 2025 06:40:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f70bd40b8csm4663865a91.1.2025.01.20.06.40.07
+        d=1e100.net; s=20230601; t=1737390347; x=1737995147;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P0jgmE9LRjptehlEX3Cg21VFrq0vt9UDGxmv6nHqI0s=;
+        b=ddcv8YCE54jd4ylQzfueCxOVQkenjliRU4FRuTRUPfpbAnwFGcdn3C8OiAVLIqyrOS
+         GYVCJxS9fGj5+tc1hzpooJQDkROVozpiFB+k5i00JvR0+hWdSX7aZl+XW2MftWDB1597
+         Y/gWuWyaKcQWA8/auC9fURtDIFqp9CNmwnaIFh/wic+NZh2N8jr456u2yntXTevZy3dU
+         llQrOd6Jc++skEJLtRxkL8cvpUL1Ri2flgrq+j2ci07VSIqzMYueMNbdPtzFmmHvr8GC
+         /umHNjuNK/Wg0UeyTESR4r5RZovvNR0Sz7hOOpF/BH56CChnAqUa4R/3+hspHaAHOv/w
+         4IdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn0gH8+KZgEfRrFgJK9xr+b5QrN7LbLyd00CCOCZ6rw0kYa2hpoG97zIkRjNX2RJSBALfy/8TLQFd1bjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4tDkNEBCzzGaTXLvqPiriuMrrj0ld0rgPamcsxTHwjpBGrDA4
+	pREdLnoO2WJOmbIZUBNpOhqV3bUiKsOGWaCAmmpP10LF5dsBNQHI
+X-Gm-Gg: ASbGnctvhG5Fr9lFhMrpOghel8XPAD7GfaI7Kx89i4bU3Nft4k8bDJsEM1Vyqz3HWnf
+	y1P5RJ1hqtrihAf3pfJhmbs0fAvY1ZhogqPwipVhFpsszapDWfT/C7c6TafTNl1sKwn7tZwQZHb
+	2PCbuaEhzDZ4zGC4vZyV/qiCVjCxRdwPiOpAqeLx2BMaekhXjXqG3BpuUhgI+WC9qkEstqPw5a5
+	eioENqNjtSW5BtpVuEarVTvzRaQccMBP9mEIHVCTV7paKepMv6eQkKqcYV6NqXADeGyVC+FSqZA
+	76KqnfHaPhAR4FLyG6VKrDaAfwyGrd84GHKu3lxvA01Dwtg=
+X-Google-Smtp-Source: AGHT+IEUAB/JtOqufEX4xMpy0u5fcS9TGCgU5WnMfvk5M8lGvbIYJ7C7bFCCuTJd30meh+bfTKATqw==
+X-Received: by 2002:a05:6a20:12c8:b0:1e1:e2d9:307 with SMTP id adf61e73a8af0-1eb215ad783mr21732953637.33.1737390346565;
+        Mon, 20 Jan 2025 08:25:46 -0800 (PST)
+Received: from localhost.localdomain (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab9c8e71sm7182418b3a.112.2025.01.20.08.25.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 06:40:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v6.14-rc1
-Date: Mon, 20 Jan 2025 06:40:05 -0800
-Message-ID: <20250120144007.2576007-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+        Mon, 20 Jan 2025 08:25:46 -0800 (PST)
+From: Potin Lai <potin.lai.pt@gmail.com>
+Date: Tue, 21 Jan 2025 00:23:25 +0800
+Subject: [PATCH] hwmon: ina238: Add support for shunt voltage scaling
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20250121-potin-ina238-shunt-voltage-scaling-v1-1-36d5dfe027f5@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAHx4jmcC/x2N0QqDMAwAf0XyvIBNGXT7lbGHro0akFSaTgTx3
+ 1f2eHDcnWBchQ2ewwmVdzEp2sHdBkhL1JlRcmegke6jI4dbaaIoGskHtOWrDfeytthNS3EVnTF
+ EPz1y8pk+AXpoqzzJ8Z+83tf1A5zdMzN0AAAA
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Patrick Williams <patrick@stwcx.xyz>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Cosmo Chou <cosmo.chou@quantatw.com>, Potin Lai <potin.lai@quantatw.com>, 
+ Potin Lai <potin.lai.pt@gmail.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737390344; l=3083;
+ i=potin.lai.pt@gmail.com; s=20240724; h=from:subject:message-id;
+ bh=aeN28AYVvGJfT3SDJFpY5CFpl9UwKe2s1HqNf6NCsic=;
+ b=jQa3Tvzwtek0zYRG3r/nIxhzKflWA+IyKGV0QHwXPxzobtUD8KTPOFXszABvXkO6hFQDJC5eu
+ wvVPNgje9FTDo+y0Bw1PkA/Y09y1jtVnhjQ3WNbl/iZOwleqqOUnGwE
+X-Developer-Key: i=potin.lai.pt@gmail.com; a=ed25519;
+ pk=6Z4H4V4fJwLteH/WzIXSsx6TkuY5FOcBBP+4OflJ5gM=
 
-Hi Linus,
+The INA238 sensor reports shunt voltage with microvolt precision.
+However, the hwmon driver currently exposes this value only in
+millivolts via `in0_input`, which results in a loss of precision for
+readings within the range of ±1 mV.
 
-Please pull hwmon updates for Linux v6.14-rc1 from signed tag:
+This patch introduces an `in0_scale` attribute to provide the scaling
+factor applied to the shunt voltage reading. By exposing this attribute,
+users can accurately interpret the in0_input values in microvolts,
+preserving the sensor's full precision.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.14-rc1
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+---
+ drivers/hwmon/ina238.c | 45 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 42 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
-------
+diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
+index 2d9f12f68d50..58737a0703dc 100644
+--- a/drivers/hwmon/ina238.c
++++ b/drivers/hwmon/ina238.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+@@ -108,8 +109,42 @@ struct ina238_data {
+ 	struct regmap *regmap;
+ 	u32 rshunt;
+ 	int gain;
++	long shunt_volt_scale;
+ };
+ 
++static ssize_t shunt_volt_scale_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct ina238_data *data = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%d\n", data->shunt_volt_scale);
++}
++
++static ssize_t shunt_volt_scale_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t count)
++{
++	struct ina238_data *data = dev_get_drvdata(dev);
++	long val;
++	int err;
++
++	err = kstrtol(buf, 10, &val);
++	if (err)
++		return err;
++
++	data->shunt_volt_scale = val;
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR_RW(in0_scale, shunt_volt_scale, 0);
++
++static struct attribute *ina238_attrs[] = {
++	&sensor_dev_attr_in0_scale.dev_attr.attr,
++	NULL,
++};
++
++ATTRIBUTE_GROUPS(ina238);
++
+ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
+ {
+ 	u8 data[3];
+@@ -197,8 +232,9 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 		regval = (s16)regval;
+ 		if (channel == 0)
+ 			/* gain of 1 -> LSB / 4 */
+-			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
+-			       (1000 * (4 - data->gain + 1));
++			*val = (regval * INA238_SHUNT_VOLTAGE_LSB *
++				data->shunt_volt_scale) /
++				(1000 * (4 - data->gain + 1));
+ 		else
+ 			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
+ 		break;
+@@ -603,9 +639,12 @@ static int ina238_probe(struct i2c_client *client)
+ 		return -ENODEV;
+ 	}
+ 
++	/* Setup default shunt voltage scale */
++	data->shunt_volt_scale = 1;
++
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+ 							 &ina238_chip_info,
+-							 NULL);
++							 ina238_groups);
+ 	if (IS_ERR(hwmon_dev))
+ 		return PTR_ERR(hwmon_dev);
+ 
 
-The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
+---
+base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
+change-id: 20250121-potin-ina238-shunt-voltage-scaling-8a3f9dc3d2b8
 
-  Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
+Best regards,
+-- 
+Potin Lai <potin.lai.pt@gmail.com>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.14-rc1
-
-for you to fetch changes up to a76539b293677c5c163b9285b0cd8dd420d33989:
-
-  hwmon: pmbus: dps920ab: Add ability to instantiate through i2c (2025-01-13 08:57:06 -0800)
-
-----------------------------------------------------------------
-hwmon updates for v6.14-rc1
-
-* New drivers
-
-  - PMBus client driver for Intel CRPS185 power supply
-
-  - PMBus client driver for Texas Instruments TPS25990
-
-* Chip support added to existing drivers
-
-  - pmbus/max15301: Add support for MAX15303
-
-  - pmbus/adm1275: Add adm1273 support
-
-  - lm75: Add NXP P3T1755 support; with it, add I3C support to the driver
-
-  - asus-ec-sensors: Add TUF GAMING X670E PLUS
-
-* Other notable changes
-
-   - nct6683: Add customer IDs for several MSI and ASRock boards
-
-   - tmp108: Add regulator support
-
-   - Improve write protect support in PMBus core
-
-   - pmbus/dps920ab: Add ability to instantiate through i2c
-
-   - The hwmon core now accepts NULL as device name parameter to
-     [devm_]hwmon_device_register_with_info ans uses the parent device
-     name as fallback in that case
-
-   - The PMBus core now provides the PMBUs revision in a debugfs file
-
-   - asus-ec-sensors: Support for optional CPU fan on AMD 600 motherboards
-
-   - raspberrypi: Add PM suspend/resume support
-
-   - dell-smm: Enable manual fan control support on Dell XPS 9370
-
-   - pwm-fan: Default to maximum cooling level if provided
-
-* Various other minor fixes and improvements
-
-----------------------------------------------------------------
-Denis Kirjanov (1):
-      hwmon: pmbus: dps920ab: Add ability to instantiate through i2c
-
-Guenter Roeck (2):
-      hwmon: (tmp108) Drop of_match_ptr() protection
-      hwmon: (lm75) Hide register size differences in regmap access functions
-
-Heiner Kallweit (1):
-      hwmon: (core) Use device name as a fallback in devm_hwmon_device_register_with_info
-
-Huisong Li (2):
-      hwmon: (acpi_power_meter) Fix uninitialized variables
-      hwmon: (acpi_power_meter) Fix update the power trip points on failure
-
-Javier Carrasco (2):
-      MAINTAINERS: Drop IIO from the title of the Chipcap 2 hwmon driver
-      hwmon: (chipcap2) Switch to guard() for mutext handling
-
-Jerome Brunet (3):
-      hwmon: (pmbus/core) improve handling of write protected regulators
-      hwmon: (pmbus/core) add wp module param
-      hwmon: (pmbus/tps25990) Add initial support
-
-Joel Stanley (1):
-      hwmon: Fix help text for aspeed-g6-pwm-tach
-
-John Audia (1):
-      hwmon: (nct6683) Add another customer ID for MSI
-
-John Erasmus Mari Geronimo (2):
-      dt-bindings: hwmon: adm1275: add adm1273
-      hwmon: (pmbus/adm1275) add adm1273 support
-
-Li XingYang (2):
-      hwmon: (asus-ec-sensors) Add support for fan cpu opt on AMD 600 motherboards
-      hwmon: (asus-ec-sensors) Add TUF GAMING X670E PLUS
-
-Max Ammann (1):
-      hwmon: (nct6683) Add customer ID for ASRock B650 Steel Legend WiFi
-
-Ninad Palsule (3):
-      hwmon: (pmbus/core) Add PMBUS_REVISION in debugfs
-      dt-bindings: hwmon: intel,crps185: Add to trivial
-      hwmon: (pmbus/crps) Add Intel CRPS185 power supply
-
-Nuno Sa (1):
-      hwmon: (pmbus/max15301) Add support for MAX15303
-
-Peter Korsgaard (2):
-      hwmon: (pwm-fan): Make use of device properties everywhere
-      hwmon: (pwm-fan) Default to the Maximum cooling level if provided
-
-Povilas Kanapickas (1):
-      hwmon: (dell-smm) Add Dell XPS 9370 to fan control whitelist
-
-Stanislav Jakubek (1):
-      hwmon: (tmp108) Add basic regulator support
-
-Stefan Wahren (1):
-      hwmon: (raspberrypi) Add PM suspend/resume support
-
-Thomas Weißschuh (3):
-      thermal: core: Add stub for thermal_zone_device_update()
-      hwmon: (core) Avoid ifdef CONFIG_THERMAL in C source file
-      hwmon: (occ/p9_sbe) Constify 'struct bin_attribute'
-
-Thorsten Blum (1):
-      hwmon: (asus_atk0110) Use str_enabled_disabled() and str_enable_disable() helpers
-
-Uwe Kleine-König (2):
-      hwmon: (nct6775): Actually make use of the HWMON_NCT6775 symbol namespace
-      hwmon: (isl28022) Drop explicit initialization of struct i2c_device_id::driver_data to 0
-
-Wolfram Sang (11):
-      hwmon: (isl28022) use proper path for DT bindings
-      hwmon: (isl28022) document shunt voltage channel
-      hwmon: (isl28022) apply coding style to module init/exit
-      dt-bindings: hwmon: lm75: Add NXP P3T1755
-      hwmon: (lm75) Add NXP P3T1755 support
-      hwmon: (lm75) Fix LM75B document link
-      hwmon: (lm75) simplify lm75_write_config()
-      hwmon: (lm75) simplify regulator handling
-      hwmon: (lm75) Remove superfluous 'client' member from private struct
-      hwmon: (lm75) separate probe into common and I2C parts
-      hwmon: (lm75) add I3C support for P3T1755
-
- .../devicetree/bindings/hwmon/adi,adm1275.yaml     |   2 +
- Documentation/devicetree/bindings/hwmon/lm75.yaml  |   1 +
- .../devicetree/bindings/trivial-devices.yaml       |   2 +
- Documentation/hwmon/adm1275.rst                    |  28 +-
- Documentation/hwmon/asus_ec_sensors.rst            |   1 +
- Documentation/hwmon/crps.rst                       |  97 +++++
- Documentation/hwmon/hwmon-kernel-api.rst           |   3 +-
- Documentation/hwmon/index.rst                      |   2 +
- Documentation/hwmon/isl28022.rst                   |   3 +-
- Documentation/hwmon/lm75.rst                       |   8 +-
- Documentation/hwmon/max15301.rst                   |   8 +
- Documentation/hwmon/nct6683.rst                    |  24 +-
- Documentation/hwmon/pmbus-core.rst                 |  35 ++
- Documentation/hwmon/tps25990.rst                   | 147 +++++++
- MAINTAINERS                                        |  11 +-
- drivers/hwmon/Kconfig                              |   6 +-
- drivers/hwmon/acpi_power_meter.c                   |  39 +-
- drivers/hwmon/asus-ec-sensors.c                    |  13 +
- drivers/hwmon/asus_atk0110.c                       |  15 +-
- drivers/hwmon/chipcap2.c                           |  63 +--
- drivers/hwmon/dell-smm-hwmon.c                     |   8 +
- drivers/hwmon/hwmon.c                              |  27 +-
- drivers/hwmon/isl28022.c                           |  11 +-
- drivers/hwmon/lm75.c                               | 339 ++++++++++------
- drivers/hwmon/nct6683.c                            |   6 +
- drivers/hwmon/nct6775-core.c                       |   6 +-
- drivers/hwmon/occ/p9_sbe.c                         |   4 +-
- drivers/hwmon/pmbus/Kconfig                        |  30 +-
- drivers/hwmon/pmbus/Makefile                       |   2 +
- drivers/hwmon/pmbus/adm1275.c                      |  10 +-
- drivers/hwmon/pmbus/crps.c                         |  74 ++++
- drivers/hwmon/pmbus/dps920ab.c                     |   7 +
- drivers/hwmon/pmbus/max15301.c                     |   1 +
- drivers/hwmon/pmbus/pmbus.h                        |   4 +
- drivers/hwmon/pmbus/pmbus_core.c                   |  94 ++++-
- drivers/hwmon/pmbus/tps25990.c                     | 436 +++++++++++++++++++++
- drivers/hwmon/pwm-fan.c                            |  26 +-
- drivers/hwmon/raspberrypi-hwmon.c                  |  22 ++
- drivers/hwmon/tmp108.c                             |  13 +-
- include/linux/pmbus.h                              |  14 +
- include/linux/thermal.h                            |   4 +
- 41 files changed, 1378 insertions(+), 268 deletions(-)
- create mode 100644 Documentation/hwmon/crps.rst
- create mode 100644 Documentation/hwmon/tps25990.rst
- create mode 100644 drivers/hwmon/pmbus/crps.c
- create mode 100644 drivers/hwmon/pmbus/tps25990.c
