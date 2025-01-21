@@ -1,97 +1,135 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA242145A18;
-	Tue, 21 Jan 2025 08:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509481D554;
+	Tue, 21 Jan 2025 12:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737447304; cv=none; b=pTR3V+Gl5NmcrRermjahoFYqEKyn2LWSdk2GsTXbcuuZ37mQ3qllxe9E8a6YJvHaowsPyo+VkgTo83QWhuYtf0Hu4NySjQFe3+bcUJCpjp7aALdbxNbDVCgXs9BSbplvzYfofBUb1zhVqFzxBJ8hEBiD8xnD4fRNJtOXbPHbsQI=
+	t=1737461956; cv=none; b=pD9/Bz4aysIW6XPHWwPDLywyoGJV3eq5N+T1okE+SwAF8wih78lS5bLWwhw4wTATcl5i3iFJPFmvL9aDQi4rKp/0/UUdNM2fwCI1xTrkMKtHpngj5cXX/50dPdE/tFqHwKjZRosVIxAh9MIOJX8sW2iZ0Lf65JJuowl6GAlrp/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737447304; c=relaxed/simple;
-	bh=ahKx+Enfn4BHZ/bI33qcRisaH6MuqL4Vm495WshmSRY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=haW+9med9PpxyyyIJSLgdUwIgfj+BQqbe0AM3ixxMsFZENM9E65hZJLdjmhuruT16eQ9KeRG9AMtlzZ8vXRS1xz6lO2pcZWKGEguI1AR9iTyFns6efNV5vTYgcDRBHGOOs9RS8pt5l/qLAF+UAU3ziYkFfCkR0lHU6gSTqlNbC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ycg0F3dPczgc2x;
-	Tue, 21 Jan 2025 16:11:41 +0800 (CST)
-Received: from dggemv704-chm.china.huawei.com (unknown [10.3.19.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 65860140203;
-	Tue, 21 Jan 2025 16:14:52 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 21 Jan 2025 16:14:52 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 21 Jan
- 2025 16:14:50 +0800
-Message-ID: <d42bf49b-e71b-d31e-2784-379076ebf370@huawei.com>
-Date: Tue, 21 Jan 2025 16:14:49 +0800
+	s=arc-20240116; t=1737461956; c=relaxed/simple;
+	bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=BIIoOnl1eOC7ze4x3NvELKOI0fgC8Rfysu5NS59XiOXKMNNhQ5x2SMP7J6H4XcPeeTBXKQBbMcXSJqXbWNnFRX82Pm0FezWVeTVNW8uUhe0mskhev+TdOhG4oaVUKoS5d0okybGAkBkeWcQIYGLb50txEHCarEuPQg34GaWGfWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGxs+pk9; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGxs+pk9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737461955; x=1768997955;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
+  b=jGxs+pk9Czd0TRSNFjT4SUeyymLccvvh0CKFcZHTdxZu97ZOO1kuWSOt
+   AmMxmV1CkWT3bNQPwNK1urxn53nI2FgN1zRwLJzi6NvzQDTXhpHl5aCZe
+   NUgo70btqPNZRNXjm5pqN09cHG2dFWZNyD5dBzXDlJx9eljNM2DozFwoe
+   CGYYqfkGuVXIoV3I2oPcY02w3X19LVhuAc5tw5TaxsOxFLKK/w0CBOjZP
+   nepX2xsI3RgPQtOTPd7mf7L/mmD4YTpWjslB3NWtts/Fh8cLTeSUImhKR
+   G/xP9bJvkr1/ZieQ5dOOrJurQE0NARn9nbcbL4PThwy/o07sohsC4Feba
+   Q==;
+X-CSE-ConnectionGUID: Ndw0UAZJQg+MRYZ3bRbGDQ==
+X-CSE-MsgGUID: kNelo3TwQaCvORPfdvV2+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="38115461"
+X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
+   d="scan'208";a="38115461"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:14 -0800
+X-CSE-ConnectionGUID: gH3zVvHuQEysE1CEtIUNmw==
+X-CSE-MsgGUID: XYxDmMaMQhuYGVua7yV6Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
+   d="scan'208";a="111790831"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:00 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 21 Jan 2025 14:18:56 +0200 (EET)
+To: Huisong Li <lihuisong@huawei.com>
+cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    arm-scmi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
+    linux-rtc@vger.kernel.org, oss-drivers@corigine.com, 
+    linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+    linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com, 
+    kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech, 
+    sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg, 
+    mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch, 
+    davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+    pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, 
+    louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk, 
+    kabel@kernel.org, W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
+    alexandre.belloni@bootlin.com, krzk@kernel.org, 
+    jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, 
+    zhenglifeng1@huawei.com, liuyonglong@huawei.com
+Subject: Re: [PATCH v1 19/21] platform/x86: dell-ddv: Fix the type of 'config'
+ in struct hwmon_channel_info to u64
+In-Reply-To: <20250121064519.18974-20-lihuisong@huawei.com>
+Message-ID: <844c5097-eeb7-7275-7558-83ca4e5ee4b2@linux.intel.com>
+References: <20250121064519.18974-1-lihuisong@huawei.com> <20250121064519.18974-20-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 00/21] hwmon: Fix the type of 'config' in struct
- hwmon_channel_info to u64
-To: Krzysztof Kozlowski <krzk@kernel.org>, <linux-hwmon@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <arm-scmi@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-	<oss-drivers@corigine.com>, <linux-rdma@vger.kernel.org>,
-	<platform-driver-x86@vger.kernel.org>, <linuxarm@huawei.com>,
-	<linux@roeck-us.net>, <jdelvare@suse.com>, <kernel@maidavale.org>,
-	<pauk.denis@gmail.com>, <james@equiv.tech>, <sudeep.holla@arm.com>,
-	<cristian.marussi@arm.com>, <matt@ranostay.sg>, <mchehab@kernel.org>,
-	<irusskikh@marvell.com>, <andrew+netdev@lunn.ch>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<saeedm@nvidia.com>, <leon@kernel.org>, <tariqt@nvidia.com>,
-	<louis.peens@corigine.com>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-	<kabel@kernel.org>, <W_Armin@gmx.de>, <hdegoede@redhat.com>,
-	<ilpo.jarvinen@linux.intel.com>, <alexandre.belloni@bootlin.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>, <liuyonglong@huawei.com>
-References: <20250121064519.18974-1-lihuisong@huawei.com>
- <870c6b3e-d4f9-4722-934e-00e9ddb84e2e@kernel.org>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <870c6b3e-d4f9-4722-934e-00e9ddb84e2e@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+Content-Type: text/plain; charset=US-ASCII
 
+On Tue, 21 Jan 2025, Huisong Li wrote:
 
-在 2025/1/21 15:47, Krzysztof Kozlowski 写道:
-> On 21/01/2025 07:44, Huisong Li wrote:
->> The hwmon_device_register() is deprecated. When I try to repace it with
->> hwmon_device_register_with_info() for acpi_power_meter driver, I found that
->> the power channel attribute in linux/hwmon.h have to extend and is more
->> than 32 after this replacement.
->>
->> However, the maximum number of hwmon channel attributes is 32 which is
->> limited by current hwmon codes. This is not good to add new channel
->> attribute for some hwmon sensor type and support more channel attribute.
->>
->> This series are aimed to do this. And also make sure that acpi_power_meter
->> driver can successfully replace the deprecated hwmon_device_register()
->> later.
-> Avoid combining independent patches into one patch bomb. Or explain the
-> dependencies and how is it supposed to be merged - that's why you have
-> cover letter here.
-These patches having a title ('Use HWMON_CHANNEL_INFO macro to simplify 
-code') are also for this series.
-Or we need to modify the type of the 'xxx_config' array in these patches.
-If we directly use the macro HWMON_CHANNEL_INFO, the type of 'config' 
-has been modifyed in patch 1/21 and these driver don't need to care this 
-change.
+> The type of 'config' in struct hwmon_channel_info has been fixed to u64.
+> Modify the related code in driver to avoid compiling failure.
 
-/Huisong
->
->
-> .
+Does this mean that after applying part of your series but not yet this 
+patch, compile would fail? If so, it's unacceptable. At no point in a 
+patch series are you allowed to cause a compile failure because it hinders 
+'git bisect' that is an important troubleshooting tool.
+
+So you might have to combine changes to drivers and API if you make an 
+API change that breaks driver build until driver too is changed. Note that 
+it will impact a lot how quickly your patches can be accepted as much 
+higher level of coordination is usually required if your patch is touching 
+things all over the place, but it cannot be avoided at times. And 
+requirement of doing minimal change only will be much much higher in such 
+a large scale change.
+
+--
+ i.
+
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index e75cd6e1efe6..efb2278aabb9 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -86,7 +86,7 @@ struct thermal_sensor_entry {
+>  
+>  struct combined_channel_info {
+>  	struct hwmon_channel_info info;
+> -	u32 config[];
+> +	u64 config[];
+>  };
+>  
+>  struct combined_chip_info {
+> @@ -500,7 +500,7 @@ static const struct hwmon_ops dell_wmi_ddv_ops = {
+>  
+>  static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
+>  							      enum hwmon_sensor_types type,
+> -							      u32 config)
+> +							      u64 config)
+>  {
+>  	struct combined_channel_info *cinfo;
+>  	int i;
+> @@ -543,7 +543,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>  							    struct dell_wmi_ddv_sensors *sensors,
+>  							    size_t entry_size,
+>  							    enum hwmon_sensor_types type,
+> -							    u32 config)
+> +							    u64 config)
+>  {
+>  	struct hwmon_channel_info *info;
+>  	int ret;
+> 
