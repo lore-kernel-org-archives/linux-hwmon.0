@@ -1,135 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509481D554;
-	Tue, 21 Jan 2025 12:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2B64C62;
+	Tue, 21 Jan 2025 12:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737461956; cv=none; b=pD9/Bz4aysIW6XPHWwPDLywyoGJV3eq5N+T1okE+SwAF8wih78lS5bLWwhw4wTATcl5i3iFJPFmvL9aDQi4rKp/0/UUdNM2fwCI1xTrkMKtHpngj5cXX/50dPdE/tFqHwKjZRosVIxAh9MIOJX8sW2iZ0Lf65JJuowl6GAlrp/8=
+	t=1737462683; cv=none; b=QcQRkBqFhjrKnPnoZi3mbrYvLtQUyY7FJDlkmaaklqx1JIudmIc81COZqz8EHmaEDiYtmzn0NmQnClDYSfsIg+s+65/L8IRAS2u8gAG6lP5mlf82GgSU1p0zAv/3xdLgg/t8kHplZ4zDyraAh6hiFds2csDD8h+fJ9ntJMeyFLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737461956; c=relaxed/simple;
-	bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=BIIoOnl1eOC7ze4x3NvELKOI0fgC8Rfysu5NS59XiOXKMNNhQ5x2SMP7J6H4XcPeeTBXKQBbMcXSJqXbWNnFRX82Pm0FezWVeTVNW8uUhe0mskhev+TdOhG4oaVUKoS5d0okybGAkBkeWcQIYGLb50txEHCarEuPQg34GaWGfWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGxs+pk9; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1737462683; c=relaxed/simple;
+	bh=3B/DbqUcWpKvaZVGEpOCKlqsCxc8FfJz90HoMEIqp+4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kByQRHoJQw3G1n4PMPqgACNa+xMrKWSac6+6yGIsWLP/nyFrqvrxoMB65rbpKK6O6V2lcAZBj5UkFSDRzaO5Rz3MJCIdSTofz056Qg77RricsaXvhhLp3R5fr6D/j04QNcOizN41RmMcMU8ewNBlDu3kaEww9T1ShPdzhdtOHQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eqtwi/9R; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGxs+pk9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737461955; x=1768997955;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
-  b=jGxs+pk9Czd0TRSNFjT4SUeyymLccvvh0CKFcZHTdxZu97ZOO1kuWSOt
-   AmMxmV1CkWT3bNQPwNK1urxn53nI2FgN1zRwLJzi6NvzQDTXhpHl5aCZe
-   NUgo70btqPNZRNXjm5pqN09cHG2dFWZNyD5dBzXDlJx9eljNM2DozFwoe
-   CGYYqfkGuVXIoV3I2oPcY02w3X19LVhuAc5tw5TaxsOxFLKK/w0CBOjZP
-   nepX2xsI3RgPQtOTPd7mf7L/mmD4YTpWjslB3NWtts/Fh8cLTeSUImhKR
-   G/xP9bJvkr1/ZieQ5dOOrJurQE0NARn9nbcbL4PThwy/o07sohsC4Feba
-   Q==;
-X-CSE-ConnectionGUID: Ndw0UAZJQg+MRYZ3bRbGDQ==
-X-CSE-MsgGUID: kNelo3TwQaCvORPfdvV2+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="38115461"
-X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
-   d="scan'208";a="38115461"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:14 -0800
-X-CSE-ConnectionGUID: gH3zVvHuQEysE1CEtIUNmw==
-X-CSE-MsgGUID: XYxDmMaMQhuYGVua7yV6Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
-   d="scan'208";a="111790831"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:00 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 21 Jan 2025 14:18:56 +0200 (EET)
-To: Huisong Li <lihuisong@huawei.com>
-cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    arm-scmi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
-    linux-rtc@vger.kernel.org, oss-drivers@corigine.com, 
-    linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-    linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com, 
-    kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech, 
-    sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg, 
-    mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch, 
-    davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-    pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, 
-    louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk, 
-    kabel@kernel.org, W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
-    alexandre.belloni@bootlin.com, krzk@kernel.org, 
-    jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, 
-    zhenglifeng1@huawei.com, liuyonglong@huawei.com
-Subject: Re: [PATCH v1 19/21] platform/x86: dell-ddv: Fix the type of 'config'
- in struct hwmon_channel_info to u64
-In-Reply-To: <20250121064519.18974-20-lihuisong@huawei.com>
-Message-ID: <844c5097-eeb7-7275-7558-83ca4e5ee4b2@linux.intel.com>
-References: <20250121064519.18974-1-lihuisong@huawei.com> <20250121064519.18974-20-lihuisong@huawei.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eqtwi/9R"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2161eb94cceso68318555ad.2;
+        Tue, 21 Jan 2025 04:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737462681; x=1738067481; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XmZQPcaSfcIgB4B/0o/F3eWuXQcbMdlZK2A7IUyTUQY=;
+        b=eqtwi/9RJG0j0H6C9iJpzSXmAEeWd/f5tsjoqDo/rYb/eXbz37fk5UkBrc6uwsqZee
+         ksD5QTqa4M119KDhThdYjKQfpzSv81P8Um3HG5ObSm+FGYKY1ofpKZOAuk/8lmUqq1y1
+         6vwkETpaXuFkxIItTSPPnfHZR23nSZL7gUUTVIRmnqkkkpEpNbXGnR59eJGofqXRxImb
+         SiLWAzw039tyvnJJFmV4vqsPThClhXSQdJDEZxNo0s97K84qpCE3jluJ/YOLnapd2p5y
+         YNZdVUg8MdAU81hoqJhY4LbcmmWADOV0XdSz9KELGS+4oog5OXKuxBp3UpWOcOqneDJr
+         sd0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737462681; x=1738067481;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XmZQPcaSfcIgB4B/0o/F3eWuXQcbMdlZK2A7IUyTUQY=;
+        b=JAGqAbKzq3sHySqK5y7Qdl+4ksrypzMYcCjEDwUq43FBRHjbANcVHuV7E4JXj/95MR
+         fz2dttw5y02/2Z7SVeV3HzukoP1f/kqCM1/itsdwtLL3p+XZoVBZTQ83I69cbX2i4+N9
+         ABob64DNrbNdYo7XrUtIr1h/9byTuiSkeGBTlTw2ub0LRAJ6MlQyfUHui1x8tsUZMDWT
+         5EfiUh+ppA+mrMfOVrHs5wgSjekXaOI9EjSUzql+Nl+hfd3o6RIjKQVLxxLi7PQNyZvT
+         ap2EMRCWHT+iSHjkzohKE/UdQ8fptlLQT/nCDL42MxKXRxEFyCYNIr+mLF0u8hQkWP9S
+         st7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUKACFmukc+ElUpT0yEQLnE/19GLEfZTsebZg2irP/9WEQEFCcik2iynHHhVDohyYDtkL7HCXUyO/GMpidc@vger.kernel.org, AJvYcCUuJmkC0Git2G+booXHhgJLgUNbhkfGb6BJkhPsAnsbpwweJo6j6BTLtvumOMRo46O3dVvwFTp5Dahqlw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz2UgHu94xN7ygw8CUu1lT6BjYQYqEUyBHDVdDs9unn8ay/nCM
+	ZKT9fWoPBXBzyiSceo4+Q/KyBxXrWNwz88TkQNI+4FdeQAaUif5o7LQW5w==
+X-Gm-Gg: ASbGnctWYm2fya5EQ3rbbeKudsZFbkTecSC9bv3wZ4OJ1qjsFqDSuusGifQ215eqpET
+	e758iBpYbPanHOTDoHQOW8O+JbjdYvxNRn6HMaSt1Wj+B49dSXWxdDCn6ClQDklUbpA7mDOGvO0
+	CY+xBpfCJ1hucmx0x53mPqhIiKU2dA3KhH3rOLH2pqKpVaFTuV6xt8vFBUQD3DXtOVrOwOYihuj
+	aG1mIYu7G5yULMVZHeZc37PxIiMCrtg0UcHBaBM78X+E4h7BOGQJ5v0wt7DMIoZ6wCUiyDZEyQq
+	Ag3vitfNZjEqaA==
+X-Google-Smtp-Source: AGHT+IFLpGR7vqMiJ+8R1BHhJ9AefTAeM9ZNXnCeJ8Y6SKn07uRPA2rkNs3bLz/X9/hF4ivW7ENE9A==
+X-Received: by 2002:a05:6a21:6d87:b0:1e6:5323:58cb with SMTP id adf61e73a8af0-1eb214afd38mr25371578637.23.1737462680962;
+        Tue, 21 Jan 2025 04:31:20 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:8899:7ee7:e6fd:4c4f:524d:ebac])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab849e1bsm8877402b3a.80.2025.01.21.04.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2025 04:31:20 -0800 (PST)
+From: Atharva Tiwari <evepolonium@gmail.com>
+To: 
+Cc: evepolonium@gmail.com,
+	Henrik Rydberg <rydberg@bitmath.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmom/applesmc: add imacpro
+Date: Tue, 21 Jan 2025 18:01:14 +0530
+Message-Id: <20250121123114.3393-1-evepolonium@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-On Tue, 21 Jan 2025, Huisong Li wrote:
+this patch adds the iMacPro to the whitelist
+as one iMacPro has been released (iMacPro 1,1)
 
-> The type of 'config' in struct hwmon_channel_info has been fixed to u64.
-> Modify the related code in driver to avoid compiling failure.
+thanks
 
-Does this mean that after applying part of your series but not yet this 
-patch, compile would fail? If so, it's unacceptable. At no point in a 
-patch series are you allowed to cause a compile failure because it hinders 
-'git bisect' that is an important troubleshooting tool.
+Signed-off-by: Atharva Tiwari <evepolonium@gmail.com>
+---
+ drivers/hwmon/applesmc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-So you might have to combine changes to drivers and API if you make an 
-API change that breaks driver build until driver too is changed. Note that 
-it will impact a lot how quickly your patches can be accepted as much 
-higher level of coordination is usually required if your patch is touching 
-things all over the place, but it cannot be avoided at times. And 
-requirement of doing minimal change only will be much much higher in such 
-a large scale change.
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 7964b0e0c5e8..20e390d595e0 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -1373,6 +1373,10 @@ static const struct dmi_system_id applesmc_whitelist[] __initconst = {
+ 	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME, "iMac") },
+ 	},
++	{ applesmc_dmi_match, "Apple iMacPro", {
++	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
++	  DMI_MATCH(DMI_PRODUCT_NAME, "iMacPro") },
++	},
+ 	{ applesmc_dmi_match, "Apple Xserve", {
+ 	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME, "Xserve") },
+-- 
+2.39.5
 
---
- i.
-
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index e75cd6e1efe6..efb2278aabb9 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -86,7 +86,7 @@ struct thermal_sensor_entry {
->  
->  struct combined_channel_info {
->  	struct hwmon_channel_info info;
-> -	u32 config[];
-> +	u64 config[];
->  };
->  
->  struct combined_chip_info {
-> @@ -500,7 +500,7 @@ static const struct hwmon_ops dell_wmi_ddv_ops = {
->  
->  static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
->  							      enum hwmon_sensor_types type,
-> -							      u32 config)
-> +							      u64 config)
->  {
->  	struct combined_channel_info *cinfo;
->  	int i;
-> @@ -543,7 +543,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
->  							    struct dell_wmi_ddv_sensors *sensors,
->  							    size_t entry_size,
->  							    enum hwmon_sensor_types type,
-> -							    u32 config)
-> +							    u64 config)
->  {
->  	struct hwmon_channel_info *info;
->  	int ret;
-> 
