@@ -1,554 +1,184 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5188523DE;
-	Wed, 22 Jan 2025 01:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A73354764;
+	Wed, 22 Jan 2025 02:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737509432; cv=none; b=gW3VCJkysmWXTCoGiBtzV9w8xvR6TJeT7VljhkDmo0Ri8BzH7wg8PQbzXlm3Z0QdiAe4Jd5la1nzfBhf1n6z5c2fdMRfdsp/x43EXyYoFG9yMddhmGHwrtdHPsutTv8kgqm0EmQdXY1NAshbRQwwpu4Pryer/bcriJHA2OECCYs=
+	t=1737513258; cv=none; b=aLBQh6w/ulWuP2PIlyFuiy6KEAPi4qNoY6OB6ddNbglelZvlGKFoFIRngjUeuMcGWJ14d2N4UHEO3+NgTmqKcG4YsMCtgxlm+DJQASyNjY5uVsVkQiwnBV+cD7Hvrh0q0PL9dtNRAe/AS8K1vLD5BZNRvz2jXeuwY/p6kLOFXW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737509432; c=relaxed/simple;
-	bh=NP9M2Jxxc7KeLfIfMo1rn5aDpzRUi+W1ynMIWZ2sDyE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NPk6YAIMdkiQ1PgXb5BYAnVysFNUvbz7dnXfP5JiSuPEo6L6RVVxIb76pgo64z9Yamu7FWICNqZ/+wChMsnf8zWU+EPyr0UBDTcs6JQ3IS0md39qRql6APFXeo9ciOLmsJXbiBVCT3vCjZG0/+KUgpxjqLvHG/WtTgfIyCvWnwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YWOyZhc1; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YWOyZhc1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=C2Fay
-	HVx5TpbBfBvQxzTghRbtHOOt329IJ+Rhd4UxNI=; b=YWOyZhc1wCIehhlquTxHM
-	DnED94pUVAvAjZ7DCyAHwNzQX3c7OdycYolfdNwvFmGWwzWDNEmro91L663S07Qt
-	cV5upgf8tpmc74KBcqYscbpjXs/sPzZwhBQh4jVYpZl/8WkoY2CBD0HW+atdcoS1
-	TOjlGL/j4/5peWyBnLnpfY=
-Received: from silergy-System-Product-Name.silergy.inc (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDnl7MGSpBnDxF+HQ--.57201S6;
-	Wed, 22 Jan 2025 09:29:47 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] hwmon:(ina238)Add support for SQ52206
-Date: Wed, 22 Jan 2025 09:29:40 +0800
-Message-ID: <20250122012940.1005571-3-wenliang202407@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250122012940.1005571-1-wenliang202407@163.com>
-References: <20250122012940.1005571-1-wenliang202407@163.com>
+	s=arc-20240116; t=1737513258; c=relaxed/simple;
+	bh=ahL/0Ai3hbmd4fgtPdz9MFVO3eMVv9sVRtU0Vxotbj0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ku3gTH4DA7GtVTZ38PtKPQWLK5O3nXAGHk29a2rGOtwxlHwXzQ/7TOphRQoLcyJlqB4Pc8Y7Gy43BXmizTzyZ0OjSYxA7N/4RkzRrGap3bak3Bnrkw/+z7Pl3JrfbDozUIP8aUtZSeIKho/fQeg6G1iSZhhHFfxQAQQa5AYX9JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Yd7PV04n7zRln3;
+	Wed, 22 Jan 2025 10:31:42 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0615818006C;
+	Wed, 22 Jan 2025 10:34:12 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 22 Jan 2025 10:34:11 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 22 Jan
+ 2025 10:34:09 +0800
+Message-ID: <9575c823-4f77-8037-a4be-075b2e35d6f1@huawei.com>
+Date: Wed, 22 Jan 2025 10:34:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 00/21] hwmon: Fix the type of 'config' in struct
+ hwmon_channel_info to u64
+To: Armin Wolf <W_Armin@gmx.de>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<arm-scmi@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <oss-drivers@corigine.com>,
+	<linux-rdma@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+	<linuxarm@huawei.com>, <linux@roeck-us.net>, <jdelvare@suse.com>,
+	<kernel@maidavale.org>, <pauk.denis@gmail.com>, <james@equiv.tech>,
+	<sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <matt@ranostay.sg>,
+	<mchehab@kernel.org>, <irusskikh@marvell.com>, <andrew+netdev@lunn.ch>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <saeedm@nvidia.com>, <leon@kernel.org>,
+	<tariqt@nvidia.com>, <louis.peens@corigine.com>, <hkallweit1@gmail.com>,
+	<linux@armlinux.org.uk>, <kabel@kernel.org>, <hdegoede@redhat.com>,
+	<ilpo.jarvinen@linux.intel.com>, <alexandre.belloni@bootlin.com>,
+	<krzk@kernel.org>, <jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>, <liuyonglong@huawei.com>
+References: <20250121064519.18974-1-lihuisong@huawei.com>
+ <03b138e9-688f-4ebc-bd01-3d54fd20e525@gmx.de>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <03b138e9-688f-4ebc-bd01-3d54fd20e525@gmx.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnl7MGSpBnDxF+HQ--.57201S6
-X-Coremail-Antispam: 1Uf129KBjvAXoW3uFyfWr4fCFW7uFW3Kr1rZwb_yoW8WFy3Go
-	Wavrs3uw48Gw1fArWFkw1rCFW7Xr4jkr48ZF1UKrWDua4Iqrn8Ka4fZ34xWFyrZws0gFyx
-	Wr1UGw1rXa1qy3W8n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjTRt8noUUUUU
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiJRLc02eQPVTQqAAAse
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-Add support for SQ52206 to the Ina238 driver. Add registers,
-add calculation formulas, increase compatibility, add
-compatibility programs for multiple chips.
 
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
----
-
-Incorporate four additional registers to the original register
-set of SQ52206 beyond INA238.
-
-The ADC measurement range of SQ52206 is divided into 1/2/4, so
-change the configuration of INA238_ADC_CONFIG.
-
-SQ52206's calculation of power read values is different from
-INA238.Add new value of BUS_VOLTAGE_LSB and DIE-TEMP_LSB for
-SQ52206. As a result of these changes, modify both the power
-and temperature read and write operations.
-
-Add new parameters in struct ina238_data to save the chip type
-and different configurations for each chip type, promoting
-program reusability.
-
-Due to the temperature reading of SQ52206 being a signed 16 bit
-value, while INA238 is a 12 bit value. So we changed the
-temperature reading function.
-
-Extract the chip initialization process into a separate function
-named ina238_init to facilitate adjustments for various chips.
-
-Add a corresponding compatible to the driver.
-
-Add a 40 bit data reading function to prepare for energy reading.
-
-Energy attributes are 5bytes wide, so modified the function for
-energy1_input to use u64.
-
-Add HWMON_P_INPUT_HIGHEST for power.
-
- Documentation/hwmon/ina238.rst |  15 +++
- drivers/hwmon/ina238.c         | 208 ++++++++++++++++++++++++++++-----
- 2 files changed, 191 insertions(+), 32 deletions(-)
-
-diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
-index d9f479984420..d1b93cf8627f 100644
---- a/Documentation/hwmon/ina238.rst
-+++ b/Documentation/hwmon/ina238.rst
-@@ -14,6 +14,12 @@ Supported chips:
-     Datasheet:
- 	https://www.ti.com/lit/gpn/ina238
- 
-+  * Silergy SQ52206
-+
-+    Prefix: 'SQ52206'
-+
-+    Addresses: I2C 0x40 - 0x4f
-+
- Author: Nathan Rossi <nathan.rossi@digi.com>
- 
- Description
-@@ -54,3 +60,12 @@ temp1_input		Die temperature measurement (mC)
- temp1_max		Maximum die temperature threshold (mC)
- temp1_max_alarm		Maximum die temperature alarm
- ======================= =======================================================
-+
-+Additional sysfs entries for sq52206
-+------------------------------------
-+
-+======================= =======================================================
-+energy1_input		Energy measurement (mJ)
-+
-+power1_input_highest	Peak Power (uW)
-+======================= =======================================================
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 2d9f12f68d50..74fdad2f92b9 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -21,11 +21,14 @@
- #define INA238_CONFIG			0x0
- #define INA238_ADC_CONFIG		0x1
- #define INA238_SHUNT_CALIBRATION	0x2
-+#define SQ52206_SHUNT_TEMPCO		0x3
- #define INA238_SHUNT_VOLTAGE		0x4
- #define INA238_BUS_VOLTAGE		0x5
- #define INA238_DIE_TEMP			0x6
- #define INA238_CURRENT			0x7
- #define INA238_POWER			0x8
-+#define SQ52206_ENERGY			0x9
-+#define SQ52206_CHARGE			0xa
- #define INA238_DIAG_ALERT		0xb
- #define INA238_SHUNT_OVER_VOLTAGE	0xc
- #define INA238_SHUNT_UNDER_VOLTAGE	0xd
-@@ -33,9 +36,12 @@
- #define INA238_BUS_UNDER_VOLTAGE	0xf
- #define INA238_TEMP_LIMIT		0x10
- #define INA238_POWER_LIMIT		0x11
-+#define SQ52206_POWER_PEAK		0x20
- #define INA238_DEVICE_ID		0x3f /* not available on INA237 */
- 
- #define INA238_CONFIG_ADCRANGE		BIT(4)
-+#define SQ52206_CONFIG_ADCRANGE_HIGH	BIT(4)
-+#define SQ52206_CONFIG_ADCRANGE_LOW		BIT(3)
- 
- #define INA238_DIAG_ALERT_TMPOL		BIT(7)
- #define INA238_DIAG_ALERT_SHNTOL	BIT(6)
-@@ -44,12 +50,13 @@
- #define INA238_DIAG_ALERT_BUSUL		BIT(3)
- #define INA238_DIAG_ALERT_POL		BIT(2)
- 
--#define INA238_REGISTERS		0x11
-+#define INA238_REGISTERS		0x20
- 
- #define INA238_RSHUNT_DEFAULT		10000 /* uOhm */
- 
- /* Default configuration of device on reset. */
- #define INA238_CONFIG_DEFAULT		0
-+#define SQ52206_CONFIG_DEFAULT		0x0005
- /* 16 sample averaging, 1052us conversion time, continuous mode */
- #define INA238_ADC_CONFIG_DEFAULT	0xfb6a
- /* Configure alerts to be based on averaged value (SLOWALERT) */
-@@ -87,14 +94,19 @@
-  *  shunt = 0x4000 / (819.2 * 10^6) / 0.001 = 20000 uOhms (with 1mA/lsb)
-  *
-  *  Current (mA) = register value * 20000 / rshunt / 4 * gain
-- *  Power (W) = 0.2 * register value * 20000 / rshunt / 4 * gain
-+ *  Power (mW) = 0.2 * register value * 20000 / rshunt / 4 * gain
-+ *  (Specific for SQ52206)
-+ *  Power (mW) = 0.24 * register value * 20000 / rshunt / 4 * gain
-+ *  Energy (mJ) = 16 * 0.24 * register value * 20000 / rshunt / 4 * gain
-  */
- #define INA238_CALIBRATION_VALUE	16384
- #define INA238_FIXED_SHUNT		20000
- 
- #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
- #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
--#define INA238_DIE_TEMP_LSB		125 /* 125 mC/lsb */
-+#define INA238_DIE_TEMP_LSB			1250000 /* 125 mC/lsb */
-+#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
-+#define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
- 
- static const struct regmap_config ina238_regmap_config = {
- 	.max_register = INA238_REGISTERS,
-@@ -102,7 +114,20 @@ static const struct regmap_config ina238_regmap_config = {
- 	.val_bits = 16,
- };
- 
-+enum ina238_ids { ina238, ina237, sq52206 };
-+
-+struct ina238_config {
-+	bool has_power_highest;		/* chip detection power peak */
-+	bool has_energy;		/* chip detection energy */
-+	u8 temp_shift;
-+	u32 power_calculate_factor;		/*fixed parameters for power calculate*/
-+	u16 config_default;
-+	int bus_voltage_lsb;    /* uV */
-+	int temp_lsb;   /* mC */
-+};
-+
- struct ina238_data {
-+	const struct ina238_config *config;
- 	struct i2c_client *client;
- 	struct mutex config_lock;
- 	struct regmap *regmap;
-@@ -110,6 +135,36 @@ struct ina238_data {
- 	int gain;
- };
- 
-+static const struct ina238_config ina238_config[] = {
-+	[ina238] = {
-+		.has_energy = false,
-+		.has_power_highest = false,
-+		.temp_shift = 4,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA238_DIE_TEMP_LSB,
-+	},
-+	[ina237] = {
-+		.has_energy = false,
-+		.has_power_highest = false,
-+		.temp_shift = 4,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA238_DIE_TEMP_LSB,
-+	},
-+	[sq52206] = {
-+		.has_energy = true,
-+		.has_power_highest = true,
-+		.temp_shift = 0,
-+		.power_calculate_factor = 24,
-+		.config_default = SQ52206_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
-+		.temp_lsb = SQ52206_DIE_TEMP_LSB,
-+	},
-+};
-+
- static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
- {
- 	u8 data[3];
-@@ -126,6 +181,24 @@ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
- 	return 0;
- }
- 
-+static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
-+{
-+	u8 data[5];
-+	u32 low;
-+	int err;
-+
-+	/* 40-bit register read */
-+	err = i2c_smbus_read_i2c_block_data(client, reg, 5, data);
-+	if (err < 0)
-+		return err;
-+	if (err != 5)
-+		return -EIO;
-+	low = (data[1] << 24) | (data[2] << 16) | (data[3] << 8) | data[4];
-+	*val = ((long long)data[0] << 32) | low;
-+
-+	return 0;
-+}
-+
- static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 			  long *val)
- {
-@@ -197,10 +270,10 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 		regval = (s16)regval;
- 		if (channel == 0)
- 			/* gain of 1 -> LSB / 4 */
--			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
--			       (1000 * (4 - data->gain + 1));
-+			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
-+					data->gain / (1000 * 4);
- 		else
--			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
-+			*val = (regval * data->config->bus_voltage_lsb) / 1000;
- 		break;
- 	case hwmon_in_max_alarm:
- 	case hwmon_in_min_alarm:
-@@ -225,8 +298,8 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 0:
- 		/* signed value, clamp to max range +/-163 mV */
- 		regval = clamp_val(val, -163, 163);
--		regval = (regval * 1000 * (4 - data->gain + 1)) /
--			 INA238_SHUNT_VOLTAGE_LSB;
-+		regval = (regval * 1000 * 4) /
-+			 INA238_SHUNT_VOLTAGE_LSB * data->gain;
- 		regval = clamp_val(regval, S16_MIN, S16_MAX);
- 
- 		switch (attr) {
-@@ -242,7 +315,7 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 1:
- 		/* signed value, positive values only. Clamp to max 102.396 V */
- 		regval = clamp_val(val, 0, 102396);
--		regval = (regval * 1000) / INA238_BUS_VOLTAGE_LSB;
-+		regval = (regval * 1000) / data->config->bus_voltage_lsb;
- 		regval = clamp_val(regval, 0, S16_MAX);
- 
- 		switch (attr) {
-@@ -297,8 +370,19 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
- 
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *
--				data->gain, 20 * data->rshunt);
-+		power = div_u64(regval * data->config->power_calculate_factor * 50ULL *
-+				INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
-+		/* Clamp value to maximum value of long */
-+		*val = clamp_val(power, 0, LONG_MAX);
-+		break;
-+	case hwmon_power_input_highest:
-+		err = ina238_read_reg24(data->client, SQ52206_POWER_PEAK, &regval);
-+		if (err)
-+			return err;
-+
-+		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
-+		power = div_u64(regval * data->config->power_calculate_factor * 50ULL *
-+				INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -311,8 +395,8 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		 * Truncated 24-bit compare register, lower 8-bits are
- 		 * truncated. Same conversion to/from uW as POWER register.
- 		 */
--		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *
--			       data->gain, 20 * data->rshunt);
-+		power = div_u64((regval << 8) * data->config->power_calculate_factor *
-+		50ULL * INA238_FIXED_SHUNT * data->gain, 20 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -344,8 +428,8 @@ static int ina238_write_power(struct device *dev, u32 attr, long val)
- 	 * register.
- 	 */
- 	regval = clamp_val(val, 0, LONG_MAX);
--	regval = div_u64(val * 20ULL * data->rshunt,
--			 1000ULL * INA238_FIXED_SHUNT * data->gain);
-+	regval = div_u64(val * data->config->power_calculate_factor * data->rshunt,
-+			1000ULL * INA238_FIXED_SHUNT * data->gain);
- 	regval = clamp_val(regval >> 8, 0, U16_MAX);
- 
- 	return regmap_write(data->regmap, INA238_POWER_LIMIT, regval);
-@@ -362,17 +446,17 @@ static int ina238_read_temp(struct device *dev, u32 attr, long *val)
- 		err = regmap_read(data->regmap, INA238_DIE_TEMP, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s16)regval >> data->config->temp_shift) *
-+						data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max:
- 		err = regmap_read(data->regmap, INA238_TEMP_LIMIT, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s16)regval >> data->config->temp_shift) *
-+						data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max_alarm:
- 		err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
-@@ -396,13 +480,31 @@ static int ina238_write_temp(struct device *dev, u32 attr, long val)
- 	if (attr != hwmon_temp_max)
- 		return -EOPNOTSUPP;
- 
--	/* Signed, bits 15-4 of register */
--	regval = (val / INA238_DIE_TEMP_LSB) << 4;
--	regval = clamp_val(regval, S16_MIN, S16_MAX) & 0xfff0;
-+	/* Signed */
-+	regval = div_u64(val*10000, data->config->temp_lsb) << data->config->temp_shift;
-+	regval = clamp_val(regval, S16_MIN, S16_MAX) & (0xffff << data->config->temp_shift);
- 
- 	return regmap_write(data->regmap, INA238_TEMP_LIMIT, regval);
- }
- 
-+static ssize_t energy1_input_show(struct device *dev,
-+				  struct device_attribute *da, char *buf)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int ret;
-+	u64 val;
-+
-+	ret = ina238_read_reg40(data->client, SQ52206_ENERGY, &val);
-+	if (ret)
-+		return ret;
-+
-+	/* result in microJoule */
-+	val = div_u64(val * 96 * INA238_FIXED_SHUNT * data->gain,
-+			       data->rshunt * 100);
-+
-+	return sprintf(buf, "%llu\n", val);
-+}
-+
- static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
- 		       u32 attr, int channel, long *val)
- {
-@@ -452,6 +554,9 @@ static umode_t ina238_is_visible(const void *drvdata,
- 				 enum hwmon_sensor_types type,
- 				 u32 attr, int channel)
- {
-+	const struct ina238_data *data = drvdata;
-+	bool has_power_highest = data->config->has_power_highest;
-+
- 	switch (type) {
- 	case hwmon_in:
- 		switch (attr) {
-@@ -479,6 +584,10 @@ static umode_t ina238_is_visible(const void *drvdata,
- 			return 0444;
- 		case hwmon_power_max:
- 			return 0644;
-+		case hwmon_power_input_highest:
-+			if (has_power_highest)
-+				return 0444;
-+			return 0;
- 		default:
- 			return 0;
- 		}
-@@ -512,7 +621,8 @@ static const struct hwmon_channel_info * const ina238_info[] = {
- 			   HWMON_C_INPUT),
- 	HWMON_CHANNEL_INFO(power,
- 			   /* 0: power */
--			   HWMON_P_INPUT | HWMON_P_MAX | HWMON_P_MAX_ALARM),
-+			   HWMON_P_INPUT | HWMON_P_MAX |
-+			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
- 	HWMON_CHANNEL_INFO(temp,
- 			   /* 0: die temperature */
- 			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
-@@ -530,6 +640,15 @@ static const struct hwmon_chip_info ina238_chip_info = {
- 	.info = ina238_info,
- };
- 
-+/* energy attributes are 5bytes wide so we need u64 */
-+static DEVICE_ATTR_RO(energy1_input);
-+
-+static struct attribute *ina238_attrs[] = {
-+	&dev_attr_energy1_input.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(ina238);
-+
- static int ina238_probe(struct i2c_client *client)
- {
- 	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
-@@ -537,13 +656,19 @@ static int ina238_probe(struct i2c_client *client)
- 	struct device *hwmon_dev;
- 	struct ina238_data *data;
- 	int config;
-+	enum ina238_ids chip;
- 	int ret;
- 
-+	chip = (uintptr_t)i2c_get_match_data(client);
-+
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
- 	data->client = client;
-+	/* set the device type */
-+	data->config = &ina238_config[chip];
-+
- 	mutex_init(&data->config_lock);
- 
- 	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
-@@ -564,14 +689,19 @@ static int ina238_probe(struct i2c_client *client)
- 	/* load shunt gain value */
- 	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
- 		data->gain = 4; /* Default of ADCRANGE = 0 */
--	if (data->gain != 1 && data->gain != 4) {
-+	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
- 		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
- 		return -EINVAL;
- 	}
- 
- 	/* Setup CONFIG register */
--	config = INA238_CONFIG_DEFAULT;
--	if (data->gain == 1)
-+	config = data->config->config_default;
-+	if (chip == sq52206) {
-+		if (data->gain == 1)
-+			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
-+		else if (data->gain == 2)
-+			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
-+	} else if (data->gain == 1)
- 		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
- 	ret = regmap_write(data->regmap, INA238_CONFIG, config);
- 	if (ret < 0) {
-@@ -605,7 +735,8 @@ static int ina238_probe(struct i2c_client *client)
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
- 							 &ina238_chip_info,
--							 NULL);
-+							 data->config->has_energy ?
-+								ina238_groups : NULL);
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
-@@ -616,14 +747,26 @@ static int ina238_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id ina238_id[] = {
--	{ "ina238" },
-+	{ "ina237", ina237 },
-+	{ "ina238", ina238 },
-+	{ "sq52206", sq52206 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ina238_id);
- 
- static const struct of_device_id __maybe_unused ina238_of_match[] = {
--	{ .compatible = "ti,ina237" },
--	{ .compatible = "ti,ina238" },
-+	{
-+		.compatible = "silergy,sq52206",
-+		.data = (void *)sq52206
-+	},
-+	{
-+		.compatible = "ti,ina237",
-+		.data = (void *)ina237
-+	},
-+	{
-+		.compatible = "ti,ina238",
-+		.data = (void *)ina238
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, ina238_of_match);
-@@ -642,3 +785,4 @@ module_i2c_driver(ina238_driver);
- MODULE_AUTHOR("Nathan Rossi <nathan.rossi@digi.com>");
- MODULE_DESCRIPTION("ina238 driver");
- MODULE_LICENSE("GPL");
-+
--- 
-2.43.0
-
+在 2025/1/21 22:12, Armin Wolf 写道:
+> Am 21.01.25 um 07:44 schrieb Huisong Li:
+>
+>> The hwmon_device_register() is deprecated. When I try to repace it with
+>> hwmon_device_register_with_info() for acpi_power_meter driver, I 
+>> found that
+>> the power channel attribute in linux/hwmon.h have to extend and is more
+>> than 32 after this replacement.
+>>
+>> However, the maximum number of hwmon channel attributes is 32 which is
+>> limited by current hwmon codes. This is not good to add new channel
+>> attribute for some hwmon sensor type and support more channel attribute.
+>>
+>> This series are aimed to do this. And also make sure that 
+>> acpi_power_meter
+>> driver can successfully replace the deprecated hwmon_device_register()
+>> later.
+>
+> Hi,
+>
+> what kind of new power attributes do you want to add to the hwmon API?
+The attributes you list is right.
+>
+> AFAIK the acpi-power-meter driver supports the following attributes:
+>
+>     power1_accuracy            -> HWMON_P_ACCURACY
+>     power1_cap_min            -> HWMON_P_CAP_MIN
+>     power1_cap_max            -> HWMON_P_CAP_MAX
+>     power1_cap_hyst            -> HWMON_P_CAP_HYST
+>     power1_cap            -> HWMON_P_CAP
+>     power1_average            -> HWMON_P_AVERAGE
+>     power1_average_min        -> HWMON_P_AVERAGE_MIN
+>     power1_average_max        -> HWMON_P_AVERAGE_MAX
+>     power1_average_interval        -> HWMON_P_AVERAGE_INTERVAL
+>     power1_average_interval_min    -> HWMON_P_AVERAGE_INTERVAL_MIN
+>     power1_average_interval_max    -> HWMON_P_AVERAGE_INTERVAL_MAX
+>     power1_alarm            -> HWMON_P_ALARM
+>     power1_model_number
+>     power1_oem_info
+>     power1_serial_number
+>     power1_is_battery
+>     name                -> handled by hwmon core
+>
+> The remaining attributes are in my opinion not generic enough to add 
+> them to the generic
+> hwmon power attributes. I think you should implement them as a 
+> attribute_group which can
+> be passed to hwmon_device_register_with_info() using the 
+> "extra_groups" parameter.
+>
+This is a good idea. Thanks.
+>
+>>
+>> Huisong Li (21):
+>>    hwmon: Fix the type of 'config' in struct hwmon_channel_info to u64
+>>    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    hwmon: (asus_wmi_sensors) Fix type of 'config' in struct
+>>      hwmon_channel_info to u64
+>>    hwmon: (hp-wmi-sensors) Fix type of 'config' in struct
+>>      hwmon_channel_info to u64
+>>    hwmon: (mr75203) Fix the type of 'config' in struct 
+>> hwmon_channel_info
+>>      to u64
+>>    hwmon: (pwm-fan) Fix the type of 'config' in struct 
+>> hwmon_channel_info
+>>      to u64
+>>    hwmon: (scmi-hwmon) Fix the type of 'config' in struct
+>>      hwmon_channel_info to u64
+>>    hwmon: (tmp401) Fix the type of 'config' in struct hwmon_channel_info
+>>      to u64
+>>    hwmon: (tmp421) Fix the type of 'config' in struct hwmon_channel_info
+>>      to u64
+>>    net/mlx5: Fix the type of 'config' in struct hwmon_channel_info to 
+>> u64
+>>    platform/x86: dell-ddv: Fix the type of 'config' in struct
+>>      hwmon_channel_info to u64
+>>    hwmon: (asus-ec-sensors) Fix the type of 'config' in struct
+>>      hwmon_channel_info to u64
+>>    hwmon: (lm90) Fix the type of 'config' in struct 
+>> hwmon_channel_info to
+>>      u64
+>>
+>>   drivers/hwmon/asus-ec-sensors.c               |   6 +-
+>>   drivers/hwmon/asus_wmi_sensors.c              |   8 +-
+>>   drivers/hwmon/hp-wmi-sensors.c                |   6 +-
+>>   drivers/hwmon/hwmon.c                         |   4 +-
+>>   drivers/hwmon/lm90.c                          |   4 +-
+>>   drivers/hwmon/mr75203.c                       |   6 +-
+>>   drivers/hwmon/pwm-fan.c                       |   4 +-
+>>   drivers/hwmon/scmi-hwmon.c                    |   6 +-
+>>   drivers/hwmon/tmp401.c                        |   4 +-
+>>   drivers/hwmon/tmp421.c                        |   2 +-
+>>   drivers/media/i2c/video-i2c.c                 |  12 +-
+>>   .../ethernet/aquantia/atlantic/aq_drvinfo.c   |  14 +-
+>>   .../net/ethernet/mellanox/mlx5/core/hwmon.c   |   8 +-
+>>   .../net/ethernet/netronome/nfp/nfp_hwmon.c    |  40 +--
+>>   drivers/net/phy/aquantia/aquantia_hwmon.c     |  32 +-
+>>   drivers/net/phy/marvell.c                     |  24 +-
+>>   drivers/net/phy/marvell10g.c                  |  24 +-
+>>   drivers/platform/x86/dell/dell-wmi-ddv.c      |   6 +-
+>>   drivers/rtc/rtc-ab-eoz9.c                     |  24 +-
+>>   drivers/rtc/rtc-ds3232.c                      |  24 +-
+>>   drivers/w1/slaves/w1_therm.c                  |  12 +-
+>>   include/linux/hwmon.h                         | 300 +++++++++---------
+>>   22 files changed, 205 insertions(+), 365 deletions(-)
+>>
+> .
