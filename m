@@ -1,340 +1,134 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83EE21322B;
-	Thu, 23 Jan 2025 15:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753481EF01
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Jan 2025 16:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737646025; cv=none; b=HWEFM0CJ3iBr2eJfTHkrPCm9o/O5fCEEZxv0UwE0LFcHP5+2XaaiAYlx4zrYMY4SvqEiaNoNdiofn4Yyer2IbKeGkf5N56F5YaoAhL/fucNwBNVr0vEnYWCX5c0piqE5Gzl/ZCmonAegxWUICWycmWKc24lCX3KgoeBwtBfsc58=
+	t=1737648252; cv=none; b=uMkmFGdmJYQ60rUc3oo6fE50zmQmsHOqpceTvyn61zkRAwCL9fNqIAFJhhYrIzRa6QYFQOobBtriByoiodQw2d/IjnAcY2pNyJSAV1/aa7bb7eUwYQkziNboeBjMeQnVvqknU00TCZbDziTuvrX2TqeXE/z+Fy9HeoTGasNhKMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737646025; c=relaxed/simple;
-	bh=MTePTFZO0fJY5+8Rwq04Zyp4iZ/qTd/L+xe/WvK/kzw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CkDtO8cyvjsI/b1cSHmyXTDYtb80Bk8dp3yQkKsYp+5mmjTjRgRl1DTr5omPETTniDrNh5az15xq/cO4mRuEbzSOC36TK48c1/MlBhWccXNi2Tb6AGuwEqhNuKhZBQSVOO0yJe9dTUGkUS6ZZmSacehfSFDddZguw9Mp/VN2y4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nkci6zzo; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737648252; c=relaxed/simple;
+	bh=m9eI4UMuC/HQYC7p3/UUbDdxzSDth92to4hHTEEhh6o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Ek2CDtpf8WUBhbF+ozkttXk+NzfghxZlDRkr0vxBeI2XyQFrkknIAwajht9F26QO86G8qyKMRuZ6093zcJBHbP9HnNwWIsoWmgpNs1KI118Zgua659O61aDDTXECh3OWKoKYbPGgNIDejFcAoJ7Cz91wHTkRR9ZcmEo2+uveb4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Bgl4UM7a; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkci6zzo"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21631789fcdso30429005ad.1;
-        Thu, 23 Jan 2025 07:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737646023; x=1738250823; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U6kosElOaSMZSNtX69a/Hsyj1tzL+5G6ZJzdXAObE/E=;
-        b=nkci6zzo21Lkz+kGzYwoAPi8Fm/sictfW8Zit06qRcfKvPJ71KmLgw3khkKGLg+7ib
-         FbxK6Aw8okO6eCUlkvArbXfpRm0FaK/qcBhb+6oShoJLKGz09PXj0ffeHwirmu3GEFJy
-         L5k/9W7QPzJ3eD/eJVsxETx0YyFnau0bDXOvgOBWrzJojcfmdGd/VlCzgOcWM0CUy8kE
-         t+o+I1wZAihf5X1fR5rkRCV3QdzMpcWHEQY3CKntV3alQENgORZcSQnbpnYxW6ukqa6Q
-         vy4jnITe9C225fiV5r+iLGXlcyrAfTIkn3ZWOMmAWNCIjHNXido0w9hgPAAUpciMbyBB
-         mlHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737646023; x=1738250823;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U6kosElOaSMZSNtX69a/Hsyj1tzL+5G6ZJzdXAObE/E=;
-        b=SZtbLPs08w/MUHNrF6dRIv3t3ZHwXnHrVLpJxFlDPce1vkD7WTXbIuaUAT9CuEf5bg
-         /wN/Mv2NCvQR3pw2qj4n2RNJ7EsAMeMFhfWCyDfTum/1opXmLJvQdJFQQHCZd63Yji9+
-         5PTCd6Peo/ivX1IOXa4+6OhtWw91/UVjiYV9dhfx1kL2WnYJwWOkuzCPsx/aFgyWzORG
-         Ub++WP71Mj+xArs/wf5cQ5YwQTOZs8Kg9l9rKj78yFdubKcLgTDgN2+c9+DPsvJBnhqJ
-         Nl4lacy9zUd8QLWo5MwPAly6YdoSiMIdm0ZAFxqij2D1CwcNm+Mas1VWMajFQ0iPJrUB
-         10AA==
-X-Forwarded-Encrypted: i=1; AJvYcCUiqK3x9JH1aDN8U1BOfVJPYAN1RPndrYmZufsUmO8Lr6YwsUqqXlcXhmrOhQ1W2j/NxoeUEbdURtKKvC4r@vger.kernel.org, AJvYcCUyST4BVrvhM7h7SxkfmqIIH+MPctNzkaxNzo3U9fE0wdkCpvcyj7CPyzTN2B4ZQq5/j7s4iO+DiYX6etA=@vger.kernel.org, AJvYcCWKsHOne/Ixue5xegryUCt2sKkTYfBvs8clk5UbvdPtAkBfc7CG2XPaUqoRsZrZm3rx6s1xZHXloQsJjIGL@vger.kernel.org, AJvYcCWsFTqpS5/HXTqilkl7oqV8A/Yq5uXA/vng2dkzaPzbwulMpwn6GMhYRDpJEImxtaCSnJPnfcUciSaplnM4U2FK+H6k6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+qcgUCtQGYL5FjvHB6SvJcI8wl43BSzIc7MzTtXaXREuM1+e2
-	bnCCa0hXBbqD4aeePn4+MtDL6jH2rqsEXtYQv/nf0vJqYfzD3vNS
-X-Gm-Gg: ASbGncvpwNbtTMfaDF5ML8GVuHt2b4T9wBlKeOuxpHKu35ok8EV9p7n4D5/pUUd5JZs
-	MGo3FazQ5CGi63c9USCwP5+zgImMXE/PQf0O1xf0XUqYnwGXQRjqMdAGm9MSqqznOIycDcryIaw
-	jtID4PseXe1LSWrIzEQ9MVEGO0zxX1GHVzoSET+LcTm0kPqspkj7mWEqt2pNlPQ1uTKkDwFplHt
-	J8FqvxPhXhTp1h68yeNNu0+onKQD3mbyxOXhDJvEwtmUw7q/NZmCoqRtd91Zl7sxt7hvyJMrxBI
-	pkVA9/jcoff9Wv2r
-X-Google-Smtp-Source: AGHT+IHFlluqRzeoleihkx/bcTrNne6uQb8YuY7g6wHNtvViX8qKUhx6520LrDuU/chdPPdA2LdZDw==
-X-Received: by 2002:a05:6a20:9c8b:b0:1e1:b878:de64 with SMTP id adf61e73a8af0-1eb696aeb45mr6435398637.6.1737646022746;
-        Thu, 23 Jan 2025 07:27:02 -0800 (PST)
-Received: from SC8280XP.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bcdcf707dsm11247915a12.32.2025.01.23.07.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 07:27:02 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=83=C2=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Bgl4UM7a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-type:content-transfer-encoding; s=k1; bh=7
+	nO+YclNtqmHt6FMutq65BGE0NzccpN94JCI7/4bKpY=; b=Bgl4UM7afEkU54iZL
+	IgWoeEA54knjhdgCc8mMCuRLUV1dvqB6G3XE1pDQDioZDCLE38xSJe+Dw9cb5Xw9
+	gPfsdhMyqxbmUslQrQI1u31QEJAPyUaQq6K1j1Zlen0GLHK/k2hdX3qPsa4x0LBX
+	b4Q3auJKK5fuzW+Q8rRCWNxYsZArBYgZ0/ikBkxhAjsXHNVdGB8PPzc9E1Vqa7kr
+	AdLl5sNYba/ZpczeMojKSS8Nf2AiPYizueEFcbphb6DkxafvLgr68HEp6dpyDXYB
+	sS57BlIaowW0QXnYzpIZtQoQIbE1YNDPgnIhvS5cfoLxNgcwHE843s1JP5NA8/iW
+	YERbw==
+Received: (qmail 3322830 invoked from network); 23 Jan 2025 17:03:58 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jan 2025 17:03:58 +0100
+X-UD-Smtp-Session: l3s3148p1@cAT2wWEsouQujnvm
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
 	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: [PATCH v6 3/3] arm64: dts: qcom: gaokun3: Add Embedded Controller node
-Date: Thu, 23 Jan 2025 23:25:59 +0800
-Message-ID: <20250123152559.52449-4-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250123152559.52449-1-mitltlatltl@gmail.com>
-References: <20250123152559.52449-1-mitltlatltl@gmail.com>
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH RESEND] hwmon: (isl28022) Use per-client debugfs entry
+Date: Thu, 23 Jan 2025 17:03:47 +0100
+Message-Id: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Embedded Controller in the Huawei Matebook E Go is accessible on &i2c15
-and provides battery and adapter status, port orientation status, as well
-as HPD event notifications for two USB Type-C port, etc.
+The I2C core now offers a debugfs-directory per client. Use it and
+remove the custom handling.
 
-Add the EC to the device tree and describe the relationship among
-the type-c connectors, role switches, orientation switches and the QMP
-combo PHY.
-
-Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 163 ++++++++++++++++++
- 1 file changed, 163 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-index 09b95f89e..1667c7157 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-@@ -28,6 +28,7 @@ / {
+All dependencies are now in Linus' tree. Thisapatch can be applied now.
+
+ drivers/hwmon/isl28022.c | 44 ++--------------------------------------
+ 1 file changed, 2 insertions(+), 42 deletions(-)
+
+diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
+index 3f9b4520b53e..1fb9864635db 100644
+--- a/drivers/hwmon/isl28022.c
++++ b/drivers/hwmon/isl28022.c
+@@ -324,26 +324,6 @@ static int shunt_voltage_show(struct seq_file *seqf, void *unused)
+ }
+ DEFINE_SHOW_ATTRIBUTE(shunt_voltage);
  
- 	aliases {
- 		i2c4 = &i2c4;
-+		i2c15 = &i2c15;
- 		serial1 = &uart2;
- 	};
+-static struct dentry *isl28022_debugfs_root;
+-
+-static void isl28022_debugfs_remove(void *res)
+-{
+-	debugfs_remove_recursive(res);
+-}
+-
+-static void isl28022_debugfs_init(struct i2c_client *client, struct isl28022_data *data)
+-{
+-	char name[16];
+-	struct dentry *debugfs;
+-
+-	scnprintf(name, sizeof(name), "%d-%04hx", client->adapter->nr, client->addr);
+-
+-	debugfs = debugfs_create_dir(name, isl28022_debugfs_root);
+-	debugfs_create_file("shunt_voltage", 0444, debugfs, data, &shunt_voltage_fops);
+-
+-	devm_add_action_or_reset(&client->dev, isl28022_debugfs_remove, debugfs);
+-}
+-
+ /*
+  * read property values and make consistency checks.
+  *
+@@ -475,7 +455,7 @@ static int isl28022_probe(struct i2c_client *client)
+ 	if (err)
+ 		return err;
  
-@@ -216,6 +217,40 @@ map1 {
- 		};
- 	};
+-	isl28022_debugfs_init(client, data);
++	debugfs_create_file("shunt_voltage", 0444, client->debugfs, data, &shunt_voltage_fops);
  
-+	usb0-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb0_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb0_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi0_sbu>;
-+			};
-+		};
-+	};
-+
-+	usb1-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb1_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb1_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi1_sbu>;
-+			};
-+		};
-+	};
-+
- 	wcn6855-pmu {
- 		compatible = "qcom,wcn6855-pmu";
- 
-@@ -584,6 +619,97 @@ touchscreen@4f {
- 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data, &isl28022_chip_info, NULL);
+@@ -505,27 +485,7 @@ static struct i2c_driver isl28022_driver = {
+ 	.probe	= isl28022_probe,
+ 	.id_table	= isl28022_ids,
  };
+-
+-static int __init isl28022_init(void)
+-{
+-	int err;
+-
+-	isl28022_debugfs_root = debugfs_create_dir("isl28022", NULL);
+-	err = i2c_add_driver(&isl28022_driver);
+-	if (!err)
+-		return 0;
+-
+-	debugfs_remove_recursive(isl28022_debugfs_root);
+-	return err;
+-}
+-module_init(isl28022_init);
+-
+-static void __exit isl28022_exit(void)
+-{
+-	i2c_del_driver(&isl28022_driver);
+-	debugfs_remove_recursive(isl28022_debugfs_root);
+-}
+-module_exit(isl28022_exit);
++module_i2c_driver(isl28022_driver);
  
-+&i2c15 {
-+	clock-frequency = <400000>;
-+
-+	pinctrl-0 = <&i2c15_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	embedded-controller@38 {
-+		compatible = "huawei,gaokun3-ec";
-+		reg = <0x38>;
-+
-+		interrupts-extended = <&tlmm 107 IRQ_TYPE_LEVEL_LOW>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi0_hs_in: endpoint {
-+						remote-endpoint = <&usb_0_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi0_ss_in: endpoint {
-+						remote-endpoint = <&usb_0_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi0_sbu: endpoint {
-+						remote-endpoint = <&usb0_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi1_hs_in: endpoint {
-+						remote-endpoint = <&usb_1_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi1_ss_in: endpoint {
-+						remote-endpoint = <&usb_1_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi1_sbu: endpoint {
-+						remote-endpoint = <&usb1_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
-@@ -1004,6 +1130,10 @@ &usb_0_dwc3 {
- 	dr_mode = "host";
- };
- 
-+&usb_0_dwc3_hs {
-+	remote-endpoint = <&ucsi0_hs_in>;
-+};
-+
- &usb_0_hsphy {
- 	vdda-pll-supply = <&vreg_l9d>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1025,6 +1155,10 @@ &usb_0_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp0_out>;
- };
- 
-+&usb_0_qmpphy_out {
-+	remote-endpoint = <&ucsi0_ss_in>;
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
-@@ -1033,6 +1167,10 @@ &usb_1_dwc3 {
- 	dr_mode = "host";
- };
- 
-+&usb_1_dwc3_hs {
-+	remote-endpoint = <&ucsi1_hs_in>;
-+};
-+
- &usb_1_hsphy {
- 	vdda-pll-supply = <&vreg_l4b>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1054,6 +1192,10 @@ &usb_1_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp1_out>;
- };
- 
-+&usb_1_qmpphy_out {
-+	remote-endpoint = <&ucsi1_ss_in>;
-+};
-+
- &usb_2 {
- 	status = "okay";
- };
-@@ -1177,6 +1319,13 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	i2c15_default: i2c15-default-state {
-+		pins = "gpio36", "gpio37";
-+		function = "qup15";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	mode_pin_active: mode-pin-state {
- 		pins = "gpio26";
- 		function = "gpio";
-@@ -1301,6 +1450,20 @@ tx-pins {
- 		};
- 	};
- 
-+	usb0_sbu_default: usb0-sbu-state {
-+		pins = "gpio164";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
-+	usb1_sbu_default: usb1-sbu-state {
-+		pins = "gpio47";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
- 	wcd_default: wcd-default-state {
- 		reset-pins {
- 			pins = "gpio106";
+ MODULE_AUTHOR("Carsten Spieß <mail@carsten-spiess.de>");
+ MODULE_DESCRIPTION("ISL28022 driver");
 -- 
-2.47.1
+2.39.2
 
