@@ -1,66 +1,66 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A685FEE6;
-	Thu, 23 Jan 2025 03:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D9D13A3F7;
+	Thu, 23 Jan 2025 04:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737603064; cv=none; b=SY8IcX/zA0NKbvw0t4dIvNGuWSUdSXEZ6X+Z1x672GhayA3+hEeU87nUEtHBHMGKiOZ1pDkZ5JaVa2h+GBGwTnf5jHVdJsdTeYWmGWJCLHSrN1HtZ4osLqiQ+DRELeF7c62GYtT4Ea4wWYB6eAwckKddC3leyWjhDxHnI4Rrpmk=
+	t=1737605669; cv=none; b=AllVzjDy/YN4W63bU/qLpM8hceI0+E43GphZXsqUnCcqKIPwRu8qOgeZtpdEeUuS7SoGciqX6OwOH7LyfPY8/TF3mn68TuiIP+DUZZILQNod+WLtbgEuHSpV0eBIX6j8ZqGYi6CcvdsUh3i7Qtuh1ChGRW4wYYHUfaRQu0VHHvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737603064; c=relaxed/simple;
-	bh=xrl5z8Ll2TqDuAd39ZGKT2p6sIGrMhLVtKtDEmreQjY=;
+	s=arc-20240116; t=1737605669; c=relaxed/simple;
+	bh=qtrU6sAP9FlSzkkMqvxUmpp6wbofX5GmuU7joEJT4Rw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f3+WcJRDp/t/+NdjPCxXKY53+zveqHPmrOyU18lgWvR4BKvqQWgxhutreXOb3m3HJ5b0hXlav4LLgbvZY4X47PKIkTxGNv4NKIgeJXm1MjHpnJozr4BYI82whuULMLag/aJ/AkAqTj8iSQLyZ+Lob2jpVjlnlGniBhQ2a7iIKYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=blL29bMI; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=QjPVyPr51Q9AiFRUJjikC5skrQzb1ilqXoJHhSRurrS0FMO4Y6HLJdlxZwXU4lu3OstvXJWeb7YsRQMnWPCXNjTtukFs0zHfTMlohE1rbnmCU1CbOy4VSe0vb2ymusQ5eZeuk2Iw8J4sNHONcRRSwOJIOvknajuHvuQFO0b3rv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VcjOcb8l; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="blL29bMI"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2156e078563so5192205ad.2;
-        Wed, 22 Jan 2025 19:31:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VcjOcb8l"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21654fdd5daso6508985ad.1;
+        Wed, 22 Jan 2025 20:14:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737603062; x=1738207862; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737605667; x=1738210467; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TctogefYusXIIGZ4bwwlA4HUSpBuD5+2I0brlCcpsQ=;
-        b=blL29bMIo2NFwHp+dXukzBs0bL2Ul+20XTelpbF06TWt0saYddQavodIfbcf3u1QE8
-         MCdghpeRSAFzufSxSUrv++onap3+SNK4OFWKp8PACaKp/80+vyTgDnFnoZhN8qpG3AJo
-         0r3wXpHbaW0CQdZIHc+pXh3V1s/JQp5JfGr6fT9UN4oVe3aF/zkH1g6x9JsFkJlYzsb/
-         yH3Fr7aMgTwXqGb8mK58VdkYUNYh/RCWilzhVnDr7Eu++kSVEuTea3E0ti4D7nCzAcSU
-         7Pvd7Manz6DzOPm0iSovP4Ub4XCi0NoDnc95LxI6fIk9ILXCCYYRkka/AVqPaR7b+4GU
-         c1LQ==
+        bh=rfNNFVvQHfZl2o3ezZHcz2HE58fuESFVNAsh4id7Vgk=;
+        b=VcjOcb8lLxURMRuKe6uUS4v8flHC5mxXtwAoZE071KnSpg7I1GELI2yGl9SrGEgs4N
+         QEk8d1ckObr/FAOcsApIaEDc9I1L2JBdrv7tUfo+N9C5AoTh9OCbithzMKZfwFAGlITU
+         Ka67i/2BP7yvP1m/hPlKWiUcDKLNzInw7C6SWUKTD56FgLdd7nj6dY1XedJKRnBuEndW
+         eLeZjIUhkkSCQ5M/B3hEJ/w+i/681ALOslOZj5Hxm4nQ8sdruuKaI5GOk8sxUjS+DTNd
+         A+ibHfkLJy8ihFe450urtF+L+8ugabZO0vesraGAnj9CLSiUMv+SWEma3FJB5eMhUHRW
+         bjeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737603062; x=1738207862;
+        d=1e100.net; s=20230601; t=1737605667; x=1738210467;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9TctogefYusXIIGZ4bwwlA4HUSpBuD5+2I0brlCcpsQ=;
-        b=ipDYv914r2xdHrVgpXEilgwST8A3ePYOQpdv+SpFkD7aC1hLyh8RDD7w7mfVfmhRYE
-         fsCODCADOm4rgWB8fHJYVZUBshuTxphvR/TvH+QElUiBDsdrTo8JKJ1N4aBmsnSaYmhK
-         +7XzBoxseah29RpT2GxnqTgKZ+8y7NrG022Z+ktEpKT5qM6W5OlAhv4oZO3WsNI2fco7
-         YHWJF28K+dOHjuDlcMnIaa445J3Bqls7HRbUojksvnX8K0bNTGH0edXUI8BWPyltIO4+
-         q34+Iq/gprJNJYGoWlyDh9D+CbHo7MjUXq5xcNRm4SEM0Xvivhd33C1DxmuwtP7HxBlu
-         4w0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUK7boU+96OWYb6Wh7D9Ra9ZSpfJESzERyVb/Ofx36FrMUsptmPdMdKATBVUNV7G2gQMTEyBlJDUD3Lr8w=@vger.kernel.org, AJvYcCWAOnHWIcaJU5RTi9+xMUHeO4SVDjGF423tfXzWTdVPSnYfDaXWiaUsjLopJBsDrUDKA5k8un/C9PNF@vger.kernel.org, AJvYcCXmG3sW/Pr09+6fzmoqJ+rWMHlZ3Sf8Sn8sQECOAeUXiAt8NVvMNpVRyoBJjPVbVTfKjg3PnPKNKuyZayfy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye016XpzGiJ+CoZa+ZXYwFDslvg8b9YF268unX6IMxYzAZV3Eb
-	XBSHnVuLYJl/IjNISGJ4+sWQZzvQTTnA8ur88Oa+k8PEGBgKqK71
-X-Gm-Gg: ASbGncsj7YwAqpaOSo0y9P+mAzeIy+4e42xQt6gpvsYf6iNDIPwf1W12Iat0Vr7YFtO
-	yUFxfcPwk7yXjA9srz0Bxrb6/gQbth2YcdQItDY+BsO0oySk3I7xAeimZyvo6w6UtbU1iov8tk+
-	/HdnurQSWC3XHvIPDqTR2XLXD9NqMgDUPgCqLd5xdB5r8ld9NNU6nDCDdUm/xJncu7WTfU6n1Lf
-	3R19OrYn0geR+obj2EFiiUktKKHp/m8O9KLSVZcoalMHoD0fuAF7lxeRl8FZLWJpPI7m8Jvuzjm
-	n3Dn/IfzsKGBe5fjLL8HsqV6sKv/KN+LLpch8os9P5juBdYB7M4OLg==
-X-Google-Smtp-Source: AGHT+IFbBzLf6BPJZJvPUAmUWhra8zja4yvhl2s7pKKVwzoOvyATIV2J/hG4x+KItPeWB7iM89uD+g==
-X-Received: by 2002:a05:6a21:6d98:b0:1e1:72ce:fefc with SMTP id adf61e73a8af0-1eb214e5175mr41370085637.22.1737603062344;
-        Wed, 22 Jan 2025 19:31:02 -0800 (PST)
+        bh=rfNNFVvQHfZl2o3ezZHcz2HE58fuESFVNAsh4id7Vgk=;
+        b=dH+0wF3BZfjAFvrxARBravau6+sZsbx53shzQUAjQgqbyr82IzsCTw9BkUOe0pNdH4
+         zQP3lCBVTt+jdJiV3WVjKp7kxa4m3Lr74lfJkAFy+P/CKZJ/MoqryOdRU1kNQmgk7iAc
+         7fwgPzO5jDPitRHZ0zVkxJbh9uGJyDP0c53+a+jzHtdy9Pu6TFsjtWo/7x+WFrbncmG7
+         GkI2nZsX2TPvnUw3+euVw3iGam+T4p1Wg+PjBMYRianQQBFBHQ/z3dShFFe85rtwjAxE
+         hqUcU0/F+yqQDfNtB2iyhN0F6FuMW3xL5fpjE9c4GJkuP0Z0aKfwHwKNBzKQA5PhMYVB
+         5e8g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7v5EzVIrLc6mqsxjIyqylJUKw2dppMcCjgFfW3kMeS3U21hq6TokRf9BlgTuGZyMRnkFQEECZklhIoq/a@vger.kernel.org, AJvYcCVp5lSSI8dxixpGGhMgtyEPfFq+DGgGNZ8eJ/Zi/E6fzx2GY67rmo94gLsfBVXwA+cFLd2Z/B5dTz7wYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI2NvgeKeZkjAXd0TGlOtwHWuGH5kKqJgdQcuHBQ0syTrlZ4Bz
+	avMY76BIPETlV9UcB9OLZraTPPTiiLtQCzPCgz35G7AJrQ8yyxM8Rlrv3g==
+X-Gm-Gg: ASbGncsvoxmbcrNpOPi3M8T4R7kEprXrFt05/y2roUfMVom6WxG/+AyYGGuzSQvMMpb
+	HnFC54wZWl7mX64L9IPIEa5x+GZYdyxA2LRxChuirOtZ9L5OrLRGOEM9Ix+nD1dSxD9xLZ4TUc6
+	KIO8DF2wh8gTyGYfAMwl0r4X/s8mvAwo3FzqxgSoklJddQc1UUj8pMaVnIx3dIwRND6iHwtEX8B
+	A3NG634QIbV9z8Qfy6a3AdmxfgJzwmH1UVv2+k5qXfJ8f13ZLCqe/8XzZbKHsxGX3q7YpFq9GLR
+	Xa1YXxVfuSZvUZGxhxEn69Fo53iDeFBMOHjfI5D9GcLc+oqkFq0iKQ==
+X-Google-Smtp-Source: AGHT+IEQOFeZKeE0yHsIXzVFjspxZYFEAtq4ZuVfDCRkrP3p2CAD1SPzcxYQo8R0V+GLyOZOxLI4tw==
+X-Received: by 2002:a17:902:ef11:b0:216:3dc5:1240 with SMTP id d9443c01a7336-21c355ef44bmr339855005ad.45.1737605666881;
+        Wed, 22 Jan 2025 20:14:26 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bcc323847sm9704724a12.23.2025.01.22.19.31.00
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb790esm104342725ad.85.2025.01.22.20.14.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jan 2025 19:31:01 -0800 (PST)
+        Wed, 22 Jan 2025 20:14:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0eda52b5-59c2-4ad2-bb2c-5846dbfbf3e9@roeck-us.net>
-Date: Wed, 22 Jan 2025 19:30:59 -0800
+Message-ID: <fe34a39f-66aa-4dc1-bf8a-860f57592087@roeck-us.net>
+Date: Wed, 22 Jan 2025 20:14:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings:Add SQ52206 to ina2xx devicetree
- bindings
-To: Wenliang Yan <wenliang202407@163.com>, krzk@kernel.org
-Cc: conor+dt@kernel.org, corbet@lwn.net, devicetree@vger.kernel.org,
- jdelvare@suse.com, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org
-References: <20250122-funky-beryl-whale-a8bcbb@krzk-bin>
- <20250123013626.1085859-1-wenliang202407@163.com>
+Subject: Re: [PATCH] hwmom/applesmc: add imacpro
+To: Atharva Tiwari <evepolonium@gmail.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250121123114.3393-1-evepolonium@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,45 +118,49 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250123013626.1085859-1-wenliang202407@163.com>
+In-Reply-To: <20250121123114.3393-1-evepolonium@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/22/25 17:36, Wenliang Yan wrote:
-> At 2025-01-22 15:59:02, "Krzysztof Kozlowski" <krzk@kernel.org> wrote:
->> On Wed, Jan 22, 2025 at 09:29:39AM +0800, Wenliang Yan wrote:
->>> Add the sq52206 compatible to the ina2xx.yaml
->>>
->>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
->>> ---
->>>
->>> Add the meaning of 'shunt-gain' in SQ52206.
->>
->> You already sent v3... and you got comment from me. You ignored both
->> Conor and me, so me doing third time the same and expecting different
->> results would be definition of insanity.
->>
->> Please read carefully submitting patches before posting new version.
->>
->> Best regards,
->> Krzysztof
+On 1/21/25 04:31, Atharva Tiwari wrote:
+> this patch adds the iMacPro to the whitelist
+> as one iMacPro has been released (iMacPro 1,1)
 > 
-> Sorry, I have received your comment and 'acked'. I was originally
-> planning to resend [PATCH v3 2/2], because I have not received a
-> response from Guenter Roeck<linux@roeck-us.net>. However, I forgot to
-> add 'RESEND' in the title. Thank you for your patient reply.
-> I apologize again.
+> thanks
 > 
 
-A resend after just four days, plus dropping all Acks ? Are you serious ?
+ From Documentation/process/submitting-patches.rst:
 
-Please keep in mind that not all of us are getting paid for doing this.
-If I am otherwise busy, it will take longer. Sometimes it will take
-much longer. If you resend a patches, they will end up at the tail
-of my review queue. If you drop Acks, expect me to dig it all up,
-and figure out on my own what if anything changed, the patches will
-end up even further down, as in "I'll look into this series if I have
-nothing else left to review".
+"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+  to do frotz", as if you are giving orders to the codebase to change
+  its behaviour.
+"
+
+Also, "thanks" is not part of a patch description. For details on how
+to write a patch description please see "Describe your changes" in above
+referenced document.
 
 Guenter
+
+> Signed-off-by: Atharva Tiwari <evepolonium@gmail.com>
+> ---
+>   drivers/hwmon/applesmc.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+> index 7964b0e0c5e8..20e390d595e0 100644
+> --- a/drivers/hwmon/applesmc.c
+> +++ b/drivers/hwmon/applesmc.c
+> @@ -1373,6 +1373,10 @@ static const struct dmi_system_id applesmc_whitelist[] __initconst = {
+>   	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+>   	  DMI_MATCH(DMI_PRODUCT_NAME, "iMac") },
+>   	},
+> +	{ applesmc_dmi_match, "Apple iMacPro", {
+> +	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+> +	  DMI_MATCH(DMI_PRODUCT_NAME, "iMacPro") },
+> +	},
+>   	{ applesmc_dmi_match, "Apple Xserve", {
+>   	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+>   	  DMI_MATCH(DMI_PRODUCT_NAME, "Xserve") },
 
