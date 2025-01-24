@@ -1,135 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DC0770E2;
-	Fri, 24 Jan 2025 16:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA6CFBF6;
+	Fri, 24 Jan 2025 16:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737736418; cv=none; b=ukSjlBi0/7wGk+VhWtERVRv4F1NdixywbCVeBSKdHTMwdqLrFYfA5dNabc8eEBnRen66hdhspo8mJPWZ9VQSoDpJgheKFcXlMWEbNm10UNRRMpsqJk7BtA7aq1TkcRxCrH5ztdGF8qBg0ikwd7dOvAzbkkhRhk46iqqlqfxKwqg=
+	t=1737737903; cv=none; b=cPyKijQIdC2lrttDOTXpyjdr3yjhO/Qo+hHODx5orNi9p64r62PyWAloNhB4iffi6F15CsYJKkLETzljSCUeSxWrnp0j+X+ECF1w4hsRNp0JVH7ajwGhdeXJ6hWaIZzoGnAAj3ou/5SE1gZnuDi7PG/ALUduL80Zl6H3frf3WXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737736418; c=relaxed/simple;
-	bh=YNgbPfAlhce9LhRpIKdOJ9rI3Ylx5Xrd/4UQleJyQ9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P7Rqff9DyNxnaJMKoS7J6hn9eWOR81iYB+lzEvj8Zgyjvf2yuZj8+WgVODP6oxdevMMsPOOX1OdRwwV7pbBpwqybL5BZ5jYlCumJSs+2am9Fhs9bhJ/Hfn00Ch95p/Iq54r0sl43mXfKsjCHkzF6PuHP7z/dJ9RL4yxs/y89Esw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Np1zaFee; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737737903; c=relaxed/simple;
+	bh=ymJW+rtAPVx/7REXk9y2aKHMTY3RTmJlmCBWfsMGnHo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SKfNohn8PqBVsW3tFYkuhc/QYXGEdQAraz2pY3EjwZ2JNEXofsAOpkoD/ThLb93PNjpbdP99kRl4k8j0bHJBHf8A0+Gi6KDklvqj3DaKoNRdDAs5Oh3rnGA5P4bMxU8Q4RVEHSf1bnDje2HrsLSwjLQA8ySRmXb2bhavq7cyTqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pu+ES174; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Np1zaFee"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3342C4CED2;
-	Fri, 24 Jan 2025 16:33:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pu+ES174"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D426C4CED2;
+	Fri, 24 Jan 2025 16:58:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737736418;
-	bh=YNgbPfAlhce9LhRpIKdOJ9rI3Ylx5Xrd/4UQleJyQ9M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Np1zaFeerLedDkUngOj+FpJ0MZhVDJFvpqAt72CNX7Xkvqr18v/RHWWmSEfHz9oXZ
-	 dBQ/YsNIPWtkTJ8Sipc5SK/ZGm/XPig94QChgxf6LU964fGCU/tsq2sLsU6Ekm9KTw
-	 nW6cHEC0DR6V6B8kwWPQFQYrCWfV3+8hfB7lflZ5VS9VITpMxiMyerAa1sUrnog/Fb
-	 cTM7/JDOQU4cC/FLKy9RSUYTwyRXitAlyrunF63zHTY/jU0Bjqa7B/9qFttgHUd715
-	 j3+YLySG8eWeXf93pZCwnC81STAUl6IsX7Fl5U7lksDIU56qkg4JfXDi81jzBxGSlo
-	 JP18HLpfSIvGA==
-Date: Fri, 24 Jan 2025 16:33:32 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: (pmbus/adp1050): Add adp1051,
- adp1055 and ltp8800
-Message-ID: <20250124-dominion-hummus-7bb90d5fd7cd@spud>
-References: <20250124151746.1130-1-cedricjustine.encarnacion@analog.com>
- <20250124151746.1130-2-cedricjustine.encarnacion@analog.com>
+	s=k20201202; t=1737737902;
+	bh=ymJW+rtAPVx/7REXk9y2aKHMTY3RTmJlmCBWfsMGnHo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Pu+ES174yrFgZLIhkQCdNMBAiPpOPgNkKP2A4gg/hKG9eU4+7cb1+MFlPnPk+PT8H
+	 mppaiOLnq2FKb4s3PyvLAyC+R/5hlc3rJmgKeTVyR7WJNdskWqkmuregUNKfvWumyV
+	 Qw7jmeypgNYnsXE6/5rMrid7jzxf5IK6Eydcud/MHbjCARUGJZvyyx5wRhFcUDuftp
+	 n1+F4+1+mgj3Vs4U/+9FIgIvrPCW0VDzW2vj3IJVq8J8p2QESUgQUOJK0KxYS+G1Pv
+	 wgtkilSEiYPfHnpaBZ50bWVlefjrJlC48OtqMwzygZUvXzU/e0ZQlHj+IhcKWFlOJs
+	 7VyXPmf294zOA==
+Message-ID: <1848ad5e-87cb-4f6b-a16d-c1b644add34f@kernel.org>
+Date: Fri, 24 Jan 2025 17:58:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wZqn+XQqP0G7hyBv"
-Content-Disposition: inline
-In-Reply-To: <20250124151746.1130-2-cedricjustine.encarnacion@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/9] Use HWMON_CHANNEL_INFO macro to simplify code
+To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ netdev@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc: oss-drivers@corigine.com, matt@ranostay.sg, mchehab@kernel.org,
+ irusskikh@marvell.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk,
+ kabel@kernel.org, alexandre.belloni@bootlin.com, zhanjie9@hisilicon.com,
+ zhenglifeng1@huawei.com, liuyonglong@huawei.com
+References: <20250124022635.16647-1-lihuisong@huawei.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250124022635.16647-1-lihuisong@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 24/01/2025 03:26, Huisong Li wrote:
+> The HWMON_CHANNEL_INFO macro is provided by hwmon.h and used widely by many
+> other drivers. This series use HWMON_CHANNEL_INFO macro to simplify code.
+> 
 
---wZqn+XQqP0G7hyBv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Read the feedback given to you last time. I do not see how you addressed
+this:
 
-On Fri, Jan 24, 2025 at 11:17:44PM +0800, Cedric Encarnacion wrote:
-> Add support for adp1051, adp1055, and ltp8800.
->     ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->     ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->     LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC =B5Module Regulator
->=20
-> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+"Avoid combining independent patches into one patch bomb. Or explain the
+dependencies and how is it supposed to be merged - that's why you have
+cover letter here."
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-> ---
->  .../bindings/hwmon/pmbus/adi,adp1050.yaml         | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.ya=
-ml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-> index 10c2204bc3df..af7530093942 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-> @@ -10,16 +10,27 @@ maintainers:
->    - Radu Sabau <radu.sabau@analog.com>
-> =20
->  description: |
-> -   The ADP1050 is used to monitor system voltages, currents and temperat=
-ures.
-> +   The ADP1050 and similar devices are used to monitor system voltages,
-> +   currents, power, and temperatures.
-> +
->     Through the PMBus interface, the ADP1050 targets isolated power suppl=
-ies
->     and has four individual monitors for input/output voltage, input curr=
-ent
->     and temperature.
->     Datasheet:
->       https://www.analog.com/en/products/adp1050.html
-> +     https://www.analog.com/en/products/adp1051.html
-> +     https://www.analog.com/en/products/adp1055.html
-> +     https://www.analog.com/en/products/ltp8800-1a.html
-> +     https://www.analog.com/en/products/ltp8800-2.html
-> +     https://www.analog.com/en/products/ltp8800-4a.html
-> =20
->  properties:
->    compatible:
-> -    const: adi,adp1050
-> +    enum:
-> +      - adi,adp1050
-> +      - adi,adp1051
-> +      - adi,adp1055
-> +      - adi,ltp8800
-> =20
->    reg:
->      maxItems: 1
-> --=20
-> 2.39.5
->=20
-
---wZqn+XQqP0G7hyBv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ5PA3AAKCRB4tDGHoIJi
-0iOUAP90fO7JGnB0lfu6s8hAxWWlLlS2gAaktpvbUdJBJCVpWAD/XelKtqp/RHr4
-hzhr+ws+8sgi7cwDO9UaDbSls8odPgQ=
-=fari
------END PGP SIGNATURE-----
-
---wZqn+XQqP0G7hyBv--
+Best regards,
+Krzysztof
