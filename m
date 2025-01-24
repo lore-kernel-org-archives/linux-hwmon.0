@@ -1,373 +1,166 @@
-Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986B817108A;
-	Fri, 24 Jan 2025 15:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C80513AF2;
+	Fri, 24 Jan 2025 15:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737733203; cv=none; b=P8M31CsOrNqMU5c9vcL3YOdwlh0iWwf1ed4CLTc1xAnyjYbPMLWT/wk8nfdy2pGWd1uA874euOHI+CLJ4XNtvvE4IPWOzbs3Es8FYNodIeaHcorI4u5MGKo8RmLkz35bJmAGtyTXXfKdoavhF4nMYeKdQzHuysXjGijnJxnZInc=
+	t=1737733284; cv=none; b=BoVCr53UVdP6xhXBFaWP5AnQOkjPWoct2kq/jeo522AKnaBiyCaOVWWAm6t649l25grZpS/3OoXAmrqz5iOpGOjc6p2Gx8/NILjjlm+RSlMBH7k87BZ1IdZ3sDX60GMF31IptpKNOAJxZFXPsxBtty6G9GlJGyVkasGITEWNA2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737733203; c=relaxed/simple;
-	bh=f/P749+UDDApRyM1x+XcilYWBzKdzOfQfr6qHqDzJSA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=s8/CrjtakMCeY9iNrHcsEMgqvAlakQ6EH3qg5BnSBqwqD9mXrp/lVNoWRpBMWECWEB7OWkG86J7STvPWFOQGC1th9u1XQpZh8xTFM1lAIczMQiHucivWSasBRzANpbMd6wXG5O03MoVLa5Z7hgW7+hSXZzE3ZE16pHObVxmXkMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=NlS64fkx; arc=none smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	s=arc-20240116; t=1737733284; c=relaxed/simple;
+	bh=ZyErGrWqBjIUomKxxTQ5ze426h2sH1hN040IREuZJlw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=amwg5ytuQHo93nM2GLRZLrz2MdeGa/d8T24FhkMQsxMJ9Vi4NWzlT/OONrwfgFlhgu77KRZqs/Fb/+e7LkrKYd1GgteMT1G+55Y1zYkkElPDodKGK5Fppjdfc1XohVRXscmwf6w5dnSv4FSt1mQLDoVKd2aoFUXgIsL4a1i5+0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cxhMypph; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="NlS64fkx"
-Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OEn2HN007140;
-	Fri, 24 Jan 2025 10:39:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=ZN3jx
-	oSze07lwtFGxknwI8VdNscu3oFFasPRFs8Iuos=; b=NlS64fkxaNyLwIOLIzfJj
-	ywRKWMa2dTxcPJvbmYPrCNxOY0XBaXnuriU03GyffS9NybynR3mG2l3K5G1Qus33
-	Sq3PqM1nL7xPudTDfNHWZj0btN7mJOG75BnDhlBGequbIBc31YQaG0zkZnmtYr2G
-	GUIWbqJH+lonx1L4kHTEkW5ZNhP4/XbaHuAtzpj/58WOcy2lLQpDz3ef8MR+EMSq
-	uLvfTGMlE2QiDHVRScwnye4FAraC29kMqHeAQmn/bC344awNI5MUUVN8+GkcIoo1
-	W4mZ6kiUtduPo2GVC6X0gwr/JvSopi//J08FGt+e3Tui3kA1BBxq+xYFDwA9MlgH
-	A==
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 44ccxx0771-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jan 2025 10:39:46 -0500 (EST)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 50OFdik0035849
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 24 Jan 2025 10:39:45 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 24 Jan 2025 10:39:44 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 24 Jan 2025 10:39:44 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 24 Jan 2025 10:39:44 -0500
-Received: from CENCARNA-L02.ad.analog.com (CENCARNA-L02.ad.analog.com [10.117.116.131])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 50OFdFBC032412;
-	Fri, 24 Jan 2025 10:39:36 -0500
-From: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Date: Fri, 24 Jan 2025 23:39:07 +0800
-Subject: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxhMypph"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2f43d17b0e3so4259438a91.0;
+        Fri, 24 Jan 2025 07:41:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737733282; x=1738338082; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=YCnBRMdd1g4JPsRjV+XUECjaKjlK+AZkZriiPXAYBCY=;
+        b=cxhMypph7bfRAtKvTm8ly5+JJwYyKNP/IfzAdwB/dKRgAzvIPe3s+bfkB0vVGShtWv
+         SsM/i6wIQdIQfCYEERnMBVHRcTL/6buS9gpF/gxTyMFtHa76zmpoJiktu85aRs0X7WvC
+         oPlKQTR9SMTompr3eHh6Kwdm2XVVp5DqTZdNxzivC8kQkwOP8ICHUONvudOD2qfLIkPe
+         UeREAXeKHn6xTY/ysCnDYIgoNf+9kU+k1o5za3eSVLFgGPGYEQsLMkDxnn1kh2O+Q7Ik
+         Lu58+Vn1N+v7vP8IUizKCJhEqCbeh4Kbzy0shFxn5iPZ8/POE6j3Q3K0ci8ng8FlJH+M
+         UWUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737733282; x=1738338082;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YCnBRMdd1g4JPsRjV+XUECjaKjlK+AZkZriiPXAYBCY=;
+        b=rzMsPUHE7eoltnPiI18hdunsG/tViFmnk9Q6Z2ff/Ua3OIohvpHkkETPxSaDrDfutE
+         8I0XH4WnQG7CHgJGMOTAGNirGJ2wM3x1B+0k8A5IJPY7eCGH2kjVkQWeMmeIgeFkrqjF
+         o4Qy8XNfR6xTffnzp5YKdgJetLlIOpFNJeAzEF3weMb4UR7fLD4DxkMRBnBxbiGD8VYj
+         OXE3G/go8TicIO8ZQDaGAN9eadV2qMaaBIYnsGX95+6OctLi20JGtD3XB2a5LsjR+Y8S
+         psmEixnu1D3xglsxtOFf4NDx1XytpqyBXx29TdeTci9bybIbgms7WhkesypQtcNtqT8i
+         9+qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgO1YuYRUAfMDYsPlD3gTNqQJUT5HRiLOal7Umtb4HkRnuL39BKLCK6uy3HcJC53XnZqCpzkG10Zpp1RQ=@vger.kernel.org, AJvYcCVbjGbT4lUN9ohLai5kF9OAVA6ovFDKT+mHeNOOmwuq++GkALbW1oHm1JB+e5uEG9ffus1HGgZI@vger.kernel.org, AJvYcCVyyrCT/nRh60qDNghdsDNdvsvV9NF/IcG+1Dd0Bk8AL3ySarbxH9vYheIkd4IkbOHk4O3o3kOqVjBIWi8=@vger.kernel.org, AJvYcCX+PfjahlbBNmPqhZu9ugdJA5/HVQ/XCfm2dn6Wb4ss2m5y2SyqJY7M1BHc32PUmWFWy/lWT5JxRjGY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzafUHs3jspuDP8yIv9GWzE3RnJtW5qI5EUm0eSYsDS0hBd8SMs
+	mqGIZ/XOzGSfjst1RJJn6PD0HJVFSfpj9AvyP2UKI5Gh0DemkeD9
+X-Gm-Gg: ASbGncvE5qYy7ecw0oNAs0chAkc2Ls63HhDY0uIjDBoiW/aKevS16y7U0E51ye3GvwH
+	tkkpwvjR7cUQHMdW3RWEMrOYP0r4YsdkkTdKObCnjCY7wmDokf1HxEMZdkE4zcNegMVlJxuEwHz
+	07o/mnJMp0O4WX/LgotdIlI8unOimr2JD1ZKtSYR0pQpa6frMAUPeqBoZjqXlLCas/KUCCDr1kD
+	iiov8xPicsJGmHC0B55HV2aDg54LdO1w/pg5q1wL+Pso6vFDj/r5DzcBhzFSqsT2hrr3YYnjiea
+	QHqPECQEp8VetNLCJ3e593sxNWw6oRUPPb1aSYrGjOyJ3n85KxTuOQ==
+X-Google-Smtp-Source: AGHT+IE7ltkbcL/QJgvacTii0ri9Nic5YhUNqbSR7uZsa41gdHi9zXTMlQHOYcCmYc7eC5aPxaLV2g==
+X-Received: by 2002:a17:90b:2b8e:b0:2f5:88bb:12f with SMTP id 98e67ed59e1d1-2f782cca5ccmr42067583a91.21.1737733282058;
+        Fri, 24 Jan 2025 07:41:22 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa83f8fsm1844384a91.49.2025.01.24.07.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jan 2025 07:41:21 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ca9e3821-b793-499c-8ae8-abc677adf375@roeck-us.net>
+Date: Fri, 24 Jan 2025 07:41:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/9] Use HWMON_CHANNEL_INFO macro to simplify code
+To: Andrew Lunn <andrew@lunn.ch>, Huisong Li <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, netdev@vger.kernel.org,
+ linux-rtc@vger.kernel.org, oss-drivers@corigine.com, matt@ranostay.sg,
+ mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, louis.peens@corigine.com, hkallweit1@gmail.com,
+ linux@armlinux.org.uk, kabel@kernel.org, alexandre.belloni@bootlin.com,
+ krzk@kernel.org, zhanjie9@hisilicon.com, zhenglifeng1@huawei.com,
+ liuyonglong@huawei.com
+References: <20250124022635.16647-1-lihuisong@huawei.com>
+ <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
-References: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
-In-Reply-To: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
-        "Delphine CC Chiu" <Delphine_CC_Chiu@Wiwynn.com>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Cedric Encarnacion
-	<cedricjustine.encarnacion@analog.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737733156; l=8893;
- i=cedricjustine.encarnacion@analog.com; s=20250124;
- h=from:subject:message-id; bh=f/P749+UDDApRyM1x+XcilYWBzKdzOfQfr6qHqDzJSA=;
- b=ZwyiEiGhAgNr9ZrzA946EFi5pAYUKdPcIwvkyG7TUFkWAtNeHFDiRBnFru69urOL9TqQTUhvY
- fMnuroHKvvvCaB2JDbdXQ1fTF4P4BDYs9n/ZawIIdN8dDMSG9J/tQXz
-X-Developer-Key: i=cedricjustine.encarnacion@analog.com; a=ed25519;
- pk=ZsngY3B4sfltPVR5j8+IO2Sr8Db8Ck+fVCs+Qta+Wlc=
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: UeMCOAQaiwfGlh_rgpVn-JLF8IZPFr5P
-X-Proofpoint-ORIG-GUID: UeMCOAQaiwfGlh_rgpVn-JLF8IZPFr5P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-24_06,2025-01-23_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 adultscore=0
- clxscore=1015 mlxlogscore=999 bulkscore=0 impostorscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501240110
 
-Add hardware monitoring and regulator support for LT3074. The LT3074 is an
-ultrafast, ultralow noise 3A, 5.5V dropout linear regulator. The PMBus
-serial interface allows telemetry for input/output voltage, bias voltage,
-output current, and die temperature.
+On 1/24/25 07:08, Andrew Lunn wrote:
+> On Fri, Jan 24, 2025 at 10:26:26AM +0800, Huisong Li wrote:
+>> The HWMON_CHANNEL_INFO macro is provided by hwmon.h and used widely by many
+>> other drivers. This series use HWMON_CHANNEL_INFO macro to simplify code.
+>>
+>> Huisong Li (9):
+>>    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+> 
+> Please split these patches per subsystem. Maintainers generally have
+> scripts to accept patches, and those scripts don't work when there are
+> patches for other Maintainers mixed in. So you need 4 patchsets,
+> media, net, rtc and w1.
+> 
+> I would also like to see the HWMON Maintainers opinion on these. A
+> patchset containing these have already been NACKed once. These patches
+> do however look like valid cleanups. But are they just so you can do
+> something bad in your vendor tree, which will never make it to
+> mainline?
+> 
 
-Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
----
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/lt3074.rst |  72 ++++++++++++++++++++++++
- drivers/hwmon/pmbus/Kconfig    |  18 ++++++
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/lt3074.c   | 122 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 214 insertions(+)
+I no longer comment on hwmon related changes outside drivers/hwmon/
+unless there are blatant problems such as someone trying to use an obsolete
+API or abusing the current API.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b1ea445479b0..5be511506d50 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -122,6 +122,7 @@ Hardware Monitoring Kernel Drivers
-    lm95234
-    lm95245
-    lochnagar
-+   lt3074
-    lt7182s
-    ltc2992
-    ltc2945
-diff --git a/Documentation/hwmon/lt3074.rst b/Documentation/hwmon/lt3074.rst
-new file mode 100644
-index 000000000000..234f369153cf
---- /dev/null
-+++ b/Documentation/hwmon/lt3074.rst
-@@ -0,0 +1,72 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver lt3074
-+====================
-+
-+Supported chips:
-+
-+  * Analog Devices LT3074
-+
-+    Prefix: 'lt3074'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.analog.com/en/products/lt3074.html
-+
-+Authors: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Analog Devices LT3074 Linear
-+Regulator with PMBus interface.
-+
-+The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
-+response linear regulator with PMBus serial interface. PMBus telemetry
-+feature provides information regarding the output voltage and current,
-+input voltage, bias voltage and die temperature.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate
-+the devices explicitly. Please see Documentation/i2c/instantiating-devices.rst
-+for details.
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+Sysfs entries
-+-------------
-+
-+======================= =======================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage
-+in1_max			Input overvoltage warning limit
-+in1_max_alarm		Input overvoltage warning status
-+in1_min			Input undervoltage warning limit
-+in1_min_alarm		Input undervoltage warning status
-+in2_label		"vmon"
-+in2_input		Measured bias voltage
-+in2_max			Bias overvoltage warning limit
-+in2_min			Bias undervoltage warning limit
-+in3_label		"vout1"
-+in3_input		Measured output voltage
-+in3_max			Output overvoltage warning limit
-+in3_max_alarm		Output overvoltage warning status
-+in3_min			Output undervoltage warning limit
-+in3_min_alarm		Output undervoltage warning status
-+curr1_label		"iout1"
-+curr1_input		Measured output current.
-+curr1_crit		Output overcurrent fault limit
-+curr1_crit_alarm	Output overcurrent fault status
-+temp1_input		Measured temperature
-+temp1_max		Maximum temperature limit
-+temp1_max_alarm		Overtemperature warning status
-+======================= =======================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 419469f40ba0..32564a64e225 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -209,6 +209,24 @@ config SENSORS_LM25066_REGULATOR
- 	  If you say yes here you get regulator support for National
- 	  Semiconductor LM25066, LM5064, and LM5066.
- 
-+config SENSORS_LT3074
-+	tristate "Analog Devices LT3074"
-+	help
-+	  If you say yes here you get hardware monitoring support for Analog
-+	  Devices LT3074.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called lt3074.
-+
-+config SENSORS_LT3074_REGULATOR
-+	tristate "Regulator support for LT3074"
-+	depends on SENSORS_LT3074 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for Analog Devices
-+	  LT3074. The LT3074 is a low voltage, ultralow noise, high PSRR,
-+	  dropout linear regulator. The device supplies up to 3A with a
-+	  typical dropout voltage of 45mV.
-+
- config SENSORS_LT7182S
- 	tristate "Analog Devices LT7182S"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index c7eb7739b7f8..5ef388c10581 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
- obj-$(CONFIG_SENSORS_IRPS5401)	+= irps5401.o
- obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
-+obj-$(CONFIG_SENSORS_LT3074)	+= lt3074.o
- obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-diff --git a/drivers/hwmon/pmbus/lt3074.c b/drivers/hwmon/pmbus/lt3074.c
-new file mode 100644
-index 000000000000..430e3a0c0a5f
---- /dev/null
-+++ b/drivers/hwmon/pmbus/lt3074.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hardware monitoring driver for Analog Devices LT3074
-+ *
-+ * Copyright (C) 2025 Analog Devices, Inc.
-+ */
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+
-+#include "pmbus.h"
-+
-+#define LT3074_MFR_READ_VBIAS			0xc6
-+#define LT3074_MFR_BIAS_OV_WARN_LIMIT		0xc7
-+#define LT3074_MFR_BIAS_UV_WARN_LIMIT		0xc8
-+#define LT3074_MFR_SPECIAL_ID			0xe7
-+
-+#define LT3074_SPECIAL_ID_VALUE			0x1c1d
-+
-+static const struct regulator_desc __maybe_unused lt3074_reg_desc[] = {
-+	PMBUS_REGULATOR_ONE("vout"),
-+};
-+
-+static int lt3074_read_word_data(struct i2c_client *client, int page,
-+				 int phase, int reg)
-+{
-+	switch (reg) {
-+	case PMBUS_VIRT_READ_VMON:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_READ_VBIAS);
-+	case PMBUS_VIRT_VMON_UV_WARN_LIMIT:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_BIAS_UV_WARN_LIMIT);
-+	case PMBUS_VIRT_VMON_OV_WARN_LIMIT:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_BIAS_OV_WARN_LIMIT);
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static int lt3074_write_word_data(struct i2c_client *client, int page,
-+				  int reg, u16 word)
-+{
-+	switch (reg) {
-+	case PMBUS_VIRT_VMON_UV_WARN_LIMIT:
-+		return pmbus_write_word_data(client, 0,
-+					    LT3074_MFR_BIAS_UV_WARN_LIMIT,
-+					    word);
-+	case PMBUS_VIRT_VMON_OV_WARN_LIMIT:
-+		return pmbus_write_word_data(client, 0,
-+					    LT3074_MFR_BIAS_OV_WARN_LIMIT,
-+					    word);
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static struct pmbus_driver_info lt3074_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		   PMBUS_HAVE_TEMP | PMBUS_HAVE_VMON |
-+		   PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
-+		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-+	.read_word_data = lt3074_read_word_data,
-+	.write_word_data = lt3074_write_word_data,
-+#if IS_ENABLED(CONFIG_SENSORS_LT3074_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = lt3074_reg_desc,
-+#endif
-+};
-+
-+static int lt3074_probe(struct i2c_client *client)
-+{
-+	int ret;
-+	struct device *dev = &client->dev;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_READ_WORD_DATA))
-+		return -ENODEV;
-+
-+	ret = i2c_smbus_read_word_data(client, LT3074_MFR_SPECIAL_ID);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to read ID\n");
-+
-+	if (ret != LT3074_SPECIAL_ID_VALUE)
-+		return dev_err_probe(dev, -ENODEV, "ID mismatch\n");
-+
-+	return pmbus_do_probe(client, &lt3074_info);
-+}
-+
-+static const struct i2c_device_id lt3074_id[] = {
-+	{ "lt3074", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, lt3074_id);
-+
-+static const struct of_device_id lt3074_of_match[] = {
-+	{ .compatible = "adi,lt3074" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, lt3074_of_match);
-+
-+static struct i2c_driver lt3074_driver = {
-+	.driver = {
-+		.name = "lt3074",
-+		.of_match_table = of_match_ptr(lt3074_of_match),
-+	},
-+	.probe = lt3074_probe,
-+	.id_table = lt3074_id,
-+};
-+module_i2c_driver(lt3074_driver);
-+
-+MODULE_AUTHOR("Cedric Encarnacion <cedricjustine.encarnacion@analog.com>");
-+MODULE_DESCRIPTION("PMBus driver for Analog Devices LT3074");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
-
--- 
-2.39.5
+Guenter
 
