@@ -1,125 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED871ADC6D;
-	Sat, 25 Jan 2025 05:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8DF209696;
+	Sat, 25 Jan 2025 06:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737784587; cv=none; b=qPBe7UdeG1z3Nz4x0YUlnnrOAXkkfcoqBXM75D5r+OLgLIKVqoXgTrtG52UAEvlews7SutUqLZXmT6icvMMG8599YlNMvquY1okec9Dm3gJLx1iQeurgnYfYfIgzIvgZfNRkVPiPtTWgAeBLHKpuHo+pdJ9T53JWHVpY1B3eCfc=
+	t=1737787613; cv=none; b=nemBMwHMSw9uUfi20GMcR+iPsP6nxVV0TGc7hiJ+e0vBBTpvDsyMarHrwKHLVbMATaOJFKX2ltjJ0Y8i+W9gWT8DV7q2br/1wsedlVVsZ9nUAM21Xm2h7yI3/AfnSkLsgzLBnM7aXvJIG2JD85Pac4CSjni0RN6QhcVvZavCAVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737784587; c=relaxed/simple;
-	bh=lEJ50kyvw+UPAGSNydeBfg2PeLtKnNJ9iu5la5ixBTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jjU8sVnCwkddsbtXvNVMcNK1WFa8PEZN7WynWA7eyvzj7kkO6BF5RIwZaM7RQngxbeVGz5goaJ/lk1Aj0Z7jPiMKUCqI6M+bUEIH9QjJO5ZQwnIdBk72LBntyf768LRjcItJwp8GWKtUpYFtViasKzcleyKOP/C0gHDlfS2wG6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cIcXHEOo; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737787613; c=relaxed/simple;
+	bh=TlYBvxSEmeZxxXLvq/FH5xBfExh/1Il55iDpuFK0taA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UhXW3MGm0fTpdxrhPyVwQeUNNSGXBJOy8AanXCBLbIiHeQOyp6TGZ0g0OJ6gKWQKGVRs8UcSGJY2MuaZPYp/zaG+v1HOOObmebxCmf2cyuVhonc7xQGoHBkNq7rHDQUh2xISV3lWeBIoX7RYQ9yFrSkGdjY9QewlZc8m4+wPb98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bU+mSz77; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cIcXHEOo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737784586; x=1769320586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lEJ50kyvw+UPAGSNydeBfg2PeLtKnNJ9iu5la5ixBTI=;
-  b=cIcXHEOo9GnjaZCYmhRWcOgQkRtAQqBxAF35M82+uJ+83hCIDCheK464
-   rqblIyuXHScdsP+JrGyL7L7moEZOLgb/ri1VyfA+CU8KT1xPRKouqLq5M
-   pxIpa88ypesWI2IuspGWsp8rS4UgiArNrIX+PrUM+wzhrElHYs3L3uhpZ
-   ALpi6MV36L2Rim9S9A/UbuEvsKS0SB7gJFufP+Z2WysHyDJqjj6jggpzc
-   7zW/65RMcnxl5Ht8Hqr64qhKAxtj2g6itIHuoiIdWZOpuV/5ObSxy24M5
-   TBV6pPea8X/7pKpgze5e6YKw359UXoBw7EXu8RwuU+YlkO5GHkw35p1TL
-   A==;
-X-CSE-ConnectionGUID: mDnwl3QFSeeGmCYcqBwl1A==
-X-CSE-MsgGUID: DTO7QxJCQ/KYS8N3Am7RCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="41162111"
-X-IronPort-AV: E=Sophos;i="6.13,233,1732608000"; 
-   d="scan'208";a="41162111"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 21:56:25 -0800
-X-CSE-ConnectionGUID: dSsiPcqBT4yd2Tgy4Mrrtw==
-X-CSE-MsgGUID: FDLKkIFdQkC9C5x0z9G4bA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,233,1732608000"; 
-   d="scan'208";a="107845866"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 24 Jan 2025 21:56:20 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tbZ9W-000dY7-2p;
-	Sat, 25 Jan 2025 05:56:18 +0000
-Date: Sat, 25 Jan 2025 13:56:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <202501251333.fnJxNGFC-lkp@intel.com>
-References: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bU+mSz77"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=2+Gez
+	wAuC0TIWv5b3TpjjkNBdQsYgqc/av58BWSgrT4=; b=bU+mSz77V28YRj5zHUJ8H
+	yu5NwBQIuGLnd8KfYU4T1otuAyIFCAReeGs6yvjzYOSKshTav7kWPcXiPJR7f+nE
+	+o2zJr+cR/Qh8cqzhfF0ymW8R/gMzahDwobQ2pc8Ra6BYrKtw8Jfa3Yj4RowVx68
+	WaYFxVoXOweOG3RgFH8kGA=
+Received: from silergy-System-Product-Name.silergy.inc (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wBHtPqxiJRnLj1HIA--.30509S4;
+	Sat, 25 Jan 2025 14:46:10 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: christophe.jaillet@wanadoo.fr,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	wenliang202407@163.com
+Subject: Re: [PATCH v4 0/2] hwmon:(ina238)Add support for SQ52206
+Date: Sat, 25 Jan 2025 14:44:32 +0800
+Message-ID: <20250125064432.1242713-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <c7c3d35a-e8a5-40ee-9b47-c22d87fa7f71@roeck-us.net>
+References: <c7c3d35a-e8a5-40ee-9b47-c22d87fa7f71@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBHtPqxiJRnLj1HIA--.30509S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1UXw1fZw18urWUuF47CFg_yoW8uF4rpr
+	Z3GF4FkFyUGr17XrZa9a1avryjkan5JF1xWFn8Jw1ruF1Uu3WIq3y2kw1Y9F4DXr93uFZY
+	vF1IqFn3GF4rArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUAxhdUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbioxbf02eUTE5pQQAEsk
 
-Hi Cedric,
+At 2025-01-25 13:01:36, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>On 1/24/25 19:02, Wenliang Yan wrote:
+>> Add support for Silergy i2c power monitor SQ52206 to the ina238
+>> driver as those two are similar.
+>> 
+>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+>> ---
+>> 
+>> Add new chip SQ52206, the datasheet depends on
+>> https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
+>> The password is fx6NEe.
+>> 
+>> Changes in v4:
+>> - addressed various review comments.
+>> - Link to v3: https://lore.kernel.org/linux-hwmon/20250117082017.688212-1-wenliang202407@163.com/
+>> 
+>
+>Your "change logs" are equivalent to "made changes" and completely pointless.
+>As consequence, I'll only handle your patches if and when I have nothing else
+>to review since I'll have to figure out myself what you changed and if you
+>implemented the feedback. I don't really hve time for that, so please do not
+>expect that I'll apply this series anytime soon.
+>
+>Guenter
 
-kernel test robot noticed the following build warnings:
+Thank you for your reply.
 
-[auto build test WARNING on a76539b293677c5c163b9285b0cd8dd420d33989]
+Okay, I understand. I will pay attention to adding detailed modifications for
+your review in the future. There are two main changes in the V4 version:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-adp1051-adp1055-and-ltp8800/20250124-233047
-base:   a76539b293677c5c163b9285b0cd8dd420d33989
-patch link:    https://lore.kernel.org/r/20250124151746.1130-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051, adp1055 and ltp8800
-config: arm-randconfig-001-20250125 (https://download.01.org/0day-ci/archive/20250125/202501251333.fnJxNGFC-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250125/202501251333.fnJxNGFC-lkp@intel.com/reproduce)
+1) add 'Acked-by: Krzysztof Kozlowski' information to PATCH 1.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501251333.fnJxNGFC-lkp@intel.com/
+2) formatting adjustments have been made to ina2xx.c in PATCH2 with
+Christophe JAILLET's comments.
 
-All warnings (new ones prefixed by >>):
+>> Changes in v3:
+>> - addressed various review comments.
+>> - Link to v2: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
+>> 
+>> Changes in v2:
+>> - Explain why sq52206 compatibility has been added to ina2xx.yaml.
+>> - addressed various review comments
+>> - Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
+>> 
+>> Wenliang Yan (2):
+>>    dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+>>    hwmon:(ina238)Add support for SQ52206
+>> 
+>>   .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   4 +
+>>   Documentation/hwmon/ina238.rst                |  15 ++
+>>   drivers/hwmon/ina238.c                        | 209 +++++++++++++++---
+>>   3 files changed, 195 insertions(+), 33 deletions(-)
+>> 
 
-   drivers/hwmon/pmbus/adp1050.c: In function 'adp1050_probe':
->> drivers/hwmon/pmbus/adp1050.c:74:14: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      74 |         info = i2c_get_match_data(client);
-         |              ^
+Thanks,
+Wenliang Yan
 
-
-vim +/const +74 drivers/hwmon/pmbus/adp1050.c
-
-    69	
-    70	static int adp1050_probe(struct i2c_client *client)
-    71	{
-    72		struct pmbus_driver_info *info;
-    73	
-  > 74		info = i2c_get_match_data(client);
-    75		if (!info)
-    76			return -ENODEV;
-    77	
-    78		return pmbus_do_probe(client, info);
-    79	}
-    80	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
