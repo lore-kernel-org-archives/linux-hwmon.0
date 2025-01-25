@@ -1,45 +1,47 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8DF209696;
-	Sat, 25 Jan 2025 06:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2722080D5
+	for <linux-hwmon@vger.kernel.org>; Sat, 25 Jan 2025 12:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737787613; cv=none; b=nemBMwHMSw9uUfi20GMcR+iPsP6nxVV0TGc7hiJ+e0vBBTpvDsyMarHrwKHLVbMATaOJFKX2ltjJ0Y8i+W9gWT8DV7q2br/1wsedlVVsZ9nUAM21Xm2h7yI3/AfnSkLsgzLBnM7aXvJIG2JD85Pac4CSjni0RN6QhcVvZavCAVc=
+	t=1737808820; cv=none; b=i9rXzQqm0QmTaOlrYxQpbyHw0BUhYIpfYfFFgKoPFyWWMJZI/pdxkXTo9WvmBFan1E2Jq94MdIqsz+yfDG/FZMNfpoVtDHjXtfWll14fqjWvWZxAp7d+9XGRMfa5riN8yjPsZnGYJj6jNd8AmDMLPUmolhzVJTvqcvEdqzc0qME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737787613; c=relaxed/simple;
-	bh=TlYBvxSEmeZxxXLvq/FH5xBfExh/1Il55iDpuFK0taA=;
+	s=arc-20240116; t=1737808820; c=relaxed/simple;
+	bh=CoZtDHj2DzknZn7Aq9mOsSbhKnPVORJxAW0j5rrCV7Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UhXW3MGm0fTpdxrhPyVwQeUNNSGXBJOy8AanXCBLbIiHeQOyp6TGZ0g0OJ6gKWQKGVRs8UcSGJY2MuaZPYp/zaG+v1HOOObmebxCmf2cyuVhonc7xQGoHBkNq7rHDQUh2xISV3lWeBIoX7RYQ9yFrSkGdjY9QewlZc8m4+wPb98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bU+mSz77; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	 MIME-Version; b=nufXWp7ToYD59hRqIzwUhoNaImxlzeuNIdEAueA6rgs8fpIRjsRV+hcYJtgyN0UWcQS5ScQigtDgj49QlFrDEmAlcIvM8dYauRfAQma2N7jkwrIvwCSt/MqssmhTSRN+ZtEmucUHOkw2LduO1JeroaLBXjrBB8FN2oobL6QTEcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Ph1BKOib; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bU+mSz77"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=2+Gez
-	wAuC0TIWv5b3TpjjkNBdQsYgqc/av58BWSgrT4=; b=bU+mSz77V28YRj5zHUJ8H
-	yu5NwBQIuGLnd8KfYU4T1otuAyIFCAReeGs6yvjzYOSKshTav7kWPcXiPJR7f+nE
-	+o2zJr+cR/Qh8cqzhfF0ymW8R/gMzahDwobQ2pc8Ra6BYrKtw8Jfa3Yj4RowVx68
-	WaYFxVoXOweOG3RgFH8kGA=
-Received: from silergy-System-Product-Name.silergy.inc (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wBHtPqxiJRnLj1HIA--.30509S4;
-	Sat, 25 Jan 2025 14:46:10 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net
-Cc: christophe.jaillet@wanadoo.fr,
-	conor+dt@kernel.org,
-	corbet@lwn.net,
-	jdelvare@suse.com,
-	krzk+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	robh@kernel.org,
-	wenliang202407@163.com
-Subject: Re: [PATCH v4 0/2] hwmon:(ina238)Add support for SQ52206
-Date: Sat, 25 Jan 2025 14:44:32 +0800
-Message-ID: <20250125064432.1242713-1-wenliang202407@163.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <c7c3d35a-e8a5-40ee-9b47-c22d87fa7f71@roeck-us.net>
-References: <c7c3d35a-e8a5-40ee-9b47-c22d87fa7f71@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Ph1BKOib"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=BmIgzuvtTXIRzbyuMaBqbNheEksULVal5rJMWSPrzD4=; b=Ph1BKO
+	ib5DbWRYGCwbc9yPjTTQD54QdQ8gc3HxmbOD7sbLSs/puZdqYpYPs3aQywTyZrgH
+	7w3wxmN+NTZgX9rZzlkT2vPpAk29nxnJ76fipOrrdu9tBlSny09sA1ua5ZtJ5wX2
+	bzZyLgVn8vU7FvOPQD1mKLz9Z/HezWRqTUyDyxPa3gkvjJqRY3oFKGmc2QQ3v5bC
+	26dgKZHjxH33qTd/psP63NESZ1lqT3b5h6EtOd49pHnfUQEcxw3fDLsH7EbvFaDv
+	ACraoXpa1US3CHnMzSrnHQ8xd353xp1EAbOTsbPxN3Tvn6EGGZMGU8jvIxuh2xpk
+	HaLmFgWNmvVFtBWw==
+Received: (qmail 3871161 invoked from network); 25 Jan 2025 13:40:09 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Jan 2025 13:40:09 +0100
+X-UD-Smtp-Session: l3s3148p1@RIfAJIcs3K8ujnvm
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Nuno Sa <nuno.sa@analog.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH RFT 2/6] hwmon: (ltc4282) Use per-client debugfs entry
+Date: Sat, 25 Jan 2025 13:39:42 +0100
+Message-ID: <20250125123941.36729-10-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250125123941.36729-8-wsa+renesas@sang-engineering.com>
+References: <20250125123941.36729-8-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,67 +49,83 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHtPqxiJRnLj1HIA--.30509S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1UXw1fZw18urWUuF47CFg_yoW8uF4rpr
-	Z3GF4FkFyUGr17XrZa9a1avryjkan5JF1xWFn8Jw1ruF1Uu3WIq3y2kw1Y9F4DXr93uFZY
-	vF1IqFn3GF4rArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUAxhdUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbioxbf02eUTE5pQQAEsk
 
-At 2025-01-25 13:01:36, "Guenter Roeck" <linux@roeck-us.net> wrote:
->On 1/24/25 19:02, Wenliang Yan wrote:
->> Add support for Silergy i2c power monitor SQ52206 to the ina238
->> driver as those two are similar.
->> 
->> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
->> ---
->> 
->> Add new chip SQ52206, the datasheet depends on
->> https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
->> The password is fx6NEe.
->> 
->> Changes in v4:
->> - addressed various review comments.
->> - Link to v3: https://lore.kernel.org/linux-hwmon/20250117082017.688212-1-wenliang202407@163.com/
->> 
->
->Your "change logs" are equivalent to "made changes" and completely pointless.
->As consequence, I'll only handle your patches if and when I have nothing else
->to review since I'll have to figure out myself what you changed and if you
->implemented the feedback. I don't really hve time for that, so please do not
->expect that I'll apply this series anytime soon.
->
->Guenter
+The I2C core now offers a debugfs-directory per client. Use it and
+remove the custom handling.
 
-Thank you for your reply.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/hwmon/ltc4282.c | 44 ++++++++---------------------------------
+ 1 file changed, 8 insertions(+), 36 deletions(-)
 
-Okay, I understand. I will pay attention to adding detailed modifications for
-your review in the future. There are two main changes in the V4 version:
-
-1) add 'Acked-by: Krzysztof Kozlowski' information to PATCH 1.
-
-2) formatting adjustments have been made to ina2xx.c in PATCH2 with
-Christophe JAILLET's comments.
-
->> Changes in v3:
->> - addressed various review comments.
->> - Link to v2: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
->> 
->> Changes in v2:
->> - Explain why sq52206 compatibility has been added to ina2xx.yaml.
->> - addressed various review comments
->> - Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
->> 
->> Wenliang Yan (2):
->>    dt-bindings:Add SQ52206 to ina2xx devicetree bindings
->>    hwmon:(ina238)Add support for SQ52206
->> 
->>   .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   4 +
->>   Documentation/hwmon/ina238.rst                |  15 ++
->>   drivers/hwmon/ina238.c                        | 209 +++++++++++++++---
->>   3 files changed, 195 insertions(+), 33 deletions(-)
->> 
-
-Thanks,
-Wenliang Yan
+diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
+index 4f608a3790fb..7f38d2696239 100644
+--- a/drivers/hwmon/ltc4282.c
++++ b/drivers/hwmon/ltc4282.c
+@@ -1674,47 +1674,19 @@ static int ltc4282_show_power1_bad_fault_log(void *arg, u64 *val)
+ DEFINE_DEBUGFS_ATTRIBUTE(ltc4282_power1_bad_fault_log,
+ 			 ltc4282_show_power1_bad_fault_log, NULL, "%llu\n");
+ 
+-static void ltc4282_debugfs_remove(void *dir)
++static void ltc4282_debugfs_init(struct ltc4282_state *st, struct i2c_client *i2c)
+ {
+-	debugfs_remove_recursive(dir);
+-}
+-
+-static void ltc4282_debugfs_init(struct ltc4282_state *st,
+-				 struct i2c_client *i2c,
+-				 const struct device *hwmon)
+-{
+-	const char *debugfs_name;
+-	struct dentry *dentry;
+-	int ret;
+-
+-	if (!IS_ENABLED(CONFIG_DEBUG_FS))
+-		return;
+-
+-	debugfs_name = devm_kasprintf(&i2c->dev, GFP_KERNEL, "ltc4282-%s",
+-				      dev_name(hwmon));
+-	if (!debugfs_name)
+-		return;
+-
+-	dentry = debugfs_create_dir(debugfs_name, NULL);
+-	if (IS_ERR(dentry))
+-		return;
+-
+-	ret = devm_add_action_or_reset(&i2c->dev, ltc4282_debugfs_remove,
+-				       dentry);
+-	if (ret)
+-		return;
+-
+-	debugfs_create_file_unsafe("power1_bad_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("power1_bad_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_power1_bad_fault_log);
+-	debugfs_create_file_unsafe("in0_fet_short_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("in0_fet_short_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_fet_short_fault_log);
+-	debugfs_create_file_unsafe("in0_fet_bad_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("in0_fet_bad_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_fet_bad_fault_log);
+-	debugfs_create_file_unsafe("in1_crit_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("in1_crit_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_in1_crit_fault_log);
+-	debugfs_create_file_unsafe("in1_lcrit_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("in1_lcrit_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_in1_lcrit_fault_log);
+-	debugfs_create_file_unsafe("curr1_crit_fault_log", 0400, dentry, st,
++	debugfs_create_file_unsafe("curr1_crit_fault_log", 0400, i2c->debugfs, st,
+ 				   &ltc4282_curr1_crit_fault_log);
+ }
+ 
+@@ -1757,7 +1729,7 @@ static int ltc4282_probe(struct i2c_client *i2c)
+ 	if (IS_ERR(hwmon))
+ 		return PTR_ERR(hwmon);
+ 
+-	ltc4282_debugfs_init(st, i2c, hwmon);
++	ltc4282_debugfs_init(st, i2c);
+ 
+ 	return 0;
+ }
+-- 
+2.45.2
 
