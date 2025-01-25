@@ -1,66 +1,66 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0786E43AA9;
-	Sat, 25 Jan 2025 17:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B068494;
+	Sat, 25 Jan 2025 18:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737826955; cv=none; b=KuAg4jpfrMJE6rhCY2WLypoj3fx7T81mMZtBSTRIGZrx5eQ3LoDwRb84SIebdHdtkael5txy9fpJ9W5Bn4WwJtCCNxJFQEVZ+9hx4o/cOvK5z6zeAS3B3tHgrzZDUmsw5YZzIh6VHFz2kFQIaPG7AdRqbjujCCr/dGYtPoFWeLk=
+	t=1737829468; cv=none; b=spbP9d0zLc4IGYSDqUmoW2BRuBhZorvz9ZPSa3qKyDr8+j20DcnPwzZzU9K2jXk9ZxVZgbsgJs7L9cCOJrh3uzYuG+154mFLJfmbUgZ/EEaLDlbhDHK6UDDFReqHdeN/sf1T8hZsTWLFj5sGh9I6bLTdneTMLk48Ejc44m5GsdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737826955; c=relaxed/simple;
-	bh=qdJptF6DYpb9/kDa+ObM6v+RLGwy0e5oCttnzauADzU=;
+	s=arc-20240116; t=1737829468; c=relaxed/simple;
+	bh=wPBa9XSwu8kEEJLVpgu5u1dTqm8OsIYyhmMMlfIRpvo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=butpDm+WJmK6WUULwd8+ifJzmtsCHtOJqpKOqkcFrsZroqE1ylWgP5IJboYhInQmwgX1GcxEjWtPsjmhJplh6KD75HosHyQuGOUOQsmuRBO7NQB4G2FnmvAQMfdBc/gpzxG2zpuc44/S930Io32mU1XsJcp8Iljol0+Mw1NQdTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1m7gNn2; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=sp+wjLGPDsmRCWxhL2KYjXYBbK/CVg6KD2DyUxPoaMUF/+eKxyVRIA7WAWnjmTgjl/8lfrJPMt2C3HPOvKfb8DruSKLz921X3rzq4se6b/5KJyR79RAbTxkpGq+gXeJ15Rq6aKUO3gRs5aaz7p02rjjRKxFvRm/E7gNMrPtkXXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MiC4g7Za; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1m7gNn2"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-215770613dbso39397705ad.2;
-        Sat, 25 Jan 2025 09:42:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MiC4g7Za"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21654fdd5daso53561665ad.1;
+        Sat, 25 Jan 2025 10:24:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737826952; x=1738431752; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737829465; x=1738434265; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7H/WULdiib1xR4WJ8Z8VTZBxloFoD7QfaoT5kBFHCc=;
-        b=i1m7gNn21Prt+L/VtWOFUCRxZ7LAnDzLgwQjZl3jjb0J31zg4p6gYkY0y6l+1HQlqI
-         GFnlarNi7sjxKd3S/lVjtOhLaUsJT3cS+ilEZM69EFRwQOPI6o4rbCzzLjDQsvyb76x/
-         Lw/aIAx5OK5aN89UxsUGNKGung5pkHyEApGiS8EaG3YxcTshQh26/5M/nQHKWbTf5hPu
-         Ru6hJrSQd5onpZcWNk8XkzhsXeOUjUpeCXOYH5rGAxlyocBnxaTKzDrlbLJnP1hu039O
-         k3QtNWrDJhoSLinNZR+mYX+sVrjUv1q/vkFs/uyJv3UW1LnWBJ1pLvUuUEPJRS6er9dk
-         MUaw==
+        bh=UgnaR4DQbu2Rc54l9FtTJH3B7EqE1mHfRy1C5GnskeA=;
+        b=MiC4g7ZavyCA4HxefbEwwtvVZYr4wupCDg09KNN0Wfsho52ZYKQcocpgafI9uAPDNC
+         SvdCY/RPjCZz+lP9yAWO1W9GkqsGwKNVQVXv1/NVxLyjWg46KMvLfEp9j4iWTbKqyyF/
+         lSaeg8rBQ4EtDyAARAzMWd0u/fj1y00mIhi4waQaN9QTPfmscrdVp+iGAKgL27ZYbGOR
+         c2nM13f2hpGOktXUBiXvaTjTRZQWmscssHUOgArArJtWQg7oD5TAjJK8dvtNIXQg1SH2
+         nYyyFxrqU4neKcK8nPxlr351Pt8KuJmOpFIPnPSsdGZt6icFRkYuZHIXBT0NxcLzCyUu
+         WxhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737826952; x=1738431752;
+        d=1e100.net; s=20230601; t=1737829465; x=1738434265;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z7H/WULdiib1xR4WJ8Z8VTZBxloFoD7QfaoT5kBFHCc=;
-        b=qndMIzG8RNqvykWdSLcm03LO7UWbh3abc9PMuCRujF6vt+1COOpXmkF1yZ/0bW+WTs
-         8w++NzkGkyaGkkpO5jjROTyoeX0aNqrxpdsUwlUJMk8aeZcD1Y3s1pJn1MzcsDiOdOiC
-         P4zvk2nAUqdXYQky0FGu19B4EYE7YZDeAv7lkkvF02ZD4bhVDJVXSUpSjlu+b8ofbhsy
-         40KEZaMygQZgLtN8mk/Rb3j5pRVL+d1sup41u+SCrDxdMSpPVAvt3R0OjN8Ol69zw+nu
-         tglLjX58VDcPAJbFiZKqqvNZStLkqKSuQFOS1rm/0+jq8N17Zm7hNzuzOOjgO2SWFMee
-         f4xA==
-X-Forwarded-Encrypted: i=1; AJvYcCV3tfTQfYTW/cmio0GqqP4jHuNN0/buz2lM0jX0U7eWyMHRNTw2esNCFxeYmNgd8tiUim+eREVZMdPydu9xG6+AGe8=@vger.kernel.org, AJvYcCVDnQkghwOZHQBLF7YmVHkKejcmI/WVM9FgJID8/JlSD0YHu5QoJrJgN7HtCrgZy2721f4P2adpA0puuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3bbz8dFzBx3skVgHw6PWHfEParMzhC8bKUWBgzLe80tygfcSN
-	WURJUthQ4CPFXDwIu7Fk0mMHDtTZOck0omep4xFRtEs7X8us4OaYbQ6jyw==
-X-Gm-Gg: ASbGnctE6dh9mwdjYnyNMgkFLGJS9u+kDRm1ZgbBoKTNSWXaol9O+yQWRdKEX6j7k/B
-	yK0vx3PzdRXtYAkKPL9xSXstfMvUUv5zTKL7R+buEvBBCH2lqAmAkUg8S6MPj9G5oQpZkdbEch9
-	8yJBO/p2SW12SUR0nFjCcCQW/1yenzlcgGtOKA4rYg3nyZgdI5H6BYe2fwAsuNCmqwyLnBUR/MY
-	VFCuKfLIJT1wpT9/8K50rV1/xft8uqnK+TZ9yLm3ZjOUCSJyuD7G0i3QXJtczKJotRa9S6Ev6vj
-	6KDuGsAIINC6b73nMx9pKfTVwaJiaX9DD9o557V/VpdxfHiykRq+2Q==
-X-Google-Smtp-Source: AGHT+IGdu1rlzQSXzCQQkMRohOo0o7WE/85u3b9JapmsqS8GfDmPAbivwuPvWAxyHauoJtKOWSF2wQ==
-X-Received: by 2002:a17:902:e548:b0:215:e98c:c5bb with SMTP id d9443c01a7336-21c3555353dmr536918585ad.28.1737826952124;
-        Sat, 25 Jan 2025 09:42:32 -0800 (PST)
+        bh=UgnaR4DQbu2Rc54l9FtTJH3B7EqE1mHfRy1C5GnskeA=;
+        b=Cy8X5YQoUmHsxNtM+V/ppM6CZdP/XizJySF1ycsTPm3HwoZoTx7wme+bgTrFuDW7L6
+         Lxw6Heaiz2PIBPrd9OWp4WeqmMl7Yb46PSctnYoJv8yGANL48wInEzcYYWH9Cgbe5WKD
+         8iav6KMjPJWBOROb4OkKcUji1uoIlxgbykrT+4sHAeDHEBt4hdHxKShY7YZ1qUdkPld8
+         ZPRvIPl4bwDLs2RcGuC4IhZBRijuwLIr5pqWl485u+J47J0iJh7ZPMoAy0m2KFxNPnCt
+         Cbnsh5u9EQK00tYo/L8s6xe+ZMJYEHy6B2IBpOKdQvCIzhH2eBiUGBjj+q3a1Fhst6CH
+         DHPA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0Nm7zMd/AXgAQ/aLmr0TfHnfmZmFjV/owc5GRzLhGzkuNBhQqekgONGDxM/ZT8y0CPuLY3Ps42MdjgA==@vger.kernel.org, AJvYcCVcYf0KcgPTjm7+TnLrh3NkzysAmx/RlvICFOJyO+OjPM2MW5/iNky089hfKhPozT1HF1y+JNK4cUOTFjB2234Nrng=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzArf8UvafkzSx1hN7I/HEJTxTVglCoU7HpoLGhbt1yzfoE2ZDv
+	P0/tuW4NKOqjQQE2/M+rNgQEXNJgJgCf5TI9LLsPAgz6nlkLbnpV
+X-Gm-Gg: ASbGncv6VwMp0PJNQRoJVUg6d3YcnGz9uNepfqvJ80UJvYBvF2JROD6g4nCGDFdGf6C
+	9hyBVux3DjBWQ2pde316SK7pQH6UzlO8L1wwMO8JGORjsbHiL+bZTz4PycZUtl6+976LtHyFUHQ
+	LWQh+YLrH8R9A7Fumr9e712FHs65PG9HYEMbd8MGrvWWqyvX1tQiilG7uLVo9J2R0M4XfWAij43
+	ycgBm2zpHU0mA0iPfgATqSOr4Qt38E03wmairKbdh0anf2jjmEfazlC/H68fG0Y66pHrlfOKDo2
+	WlFDunKdgbFqhphpevwleMME5p2D559zmsK1HdGML51HDciLUEcVBw==
+X-Google-Smtp-Source: AGHT+IFMLTe+nmbnBJgomA91A9aW/tLcQ6bxonRqUod5pKLjOtbKu8IrfpD2QI1kKTjFfBggXooQZQ==
+X-Received: by 2002:a05:6a21:7896:b0:1cf:27bf:8e03 with SMTP id adf61e73a8af0-1eb21585e4cmr54095589637.26.1737829464968;
+        Sat, 25 Jan 2025 10:24:24 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da424eca8sm34910525ad.241.2025.01.25.09.42.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a69fd40sm3968966b3a.3.2025.01.25.10.24.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jan 2025 09:42:31 -0800 (PST)
+        Sat, 25 Jan 2025 10:24:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3c265d34-9442-495c-a715-be2eab3b37d7@roeck-us.net>
-Date: Sat, 25 Jan 2025 09:42:29 -0800
+Message-ID: <b59c8757-97d5-4d87-8648-adf27d7866f5@roeck-us.net>
+Date: Sat, 25 Jan 2025 10:24:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,12 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] hwmon: (isl28022) Use per-client debugfs entry
+Subject: Re: [PATCH RFC] hwmon: (pmbus/core) use the new i2c_client debugfs
+ dir
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
  linux-renesas-soc@vger.kernel.org
-Cc: =?UTF-8?Q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>,
- Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20250123163304.46034-1-wsa+renesas@sang-engineering.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,111 +119,79 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250123163304.46034-1-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Wolfram,
-
-when playing with this, I noticed that the i2c debugfs directory and with it
-the files located within are only removed when i2c_unregister_device() is called.
-Unfortunately, that function is not [necessarily] called when a driver is unloaded
-(for example by executing "modprobe -r"), leaving the debugfs files in place.
-If the driver is then loaded again, the old debugfs files still exist, referencing
-the previous instance of the driver.
-
-I don't know if this happens all the time, but it does happen if a driver
-which was instantiated using the new_device method is unloaded with modprobe -r.
-
-Right now that means that the driver has to delete each individual debugfs file
-it created when exiting, but I think that defeats the purpose of the entire exercise
-since it would make drivers more complicated.
-
-Do you have an idea how to handle this ?
-
-Thanks,
-Guenter
-
-On 1/23/25 08:03, Wolfram Sang wrote:
-> The I2C core now offers a debugfs-directory per client. Use it and
-> remove the custom handling.
+On 1/23/25 08:33, Wolfram Sang wrote:
+> The I2C core now manages a debugfs dir per i2c_client. PMBus has its own
+> debugfs hierarchy. Link the two, so a user will be pointed to the pmbus
+> domain from the i2c domain.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > ---
 > 
-> All dependencies are now in Linus' tree. Thisapatch can be applied now.
+> @Guenter: I don't have any PMBus device here. Would you be interested to
+> test this patch? It build tests fine at least.
 > 
->   drivers/hwmon/isl28022.c | 44 ++--------------------------------------
->   1 file changed, 2 insertions(+), 42 deletions(-)
+>   drivers/hwmon/pmbus/pmbus_core.c | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-> index 3f9b4520b53e..1fb9864635db 100644
-> --- a/drivers/hwmon/isl28022.c
-> +++ b/drivers/hwmon/isl28022.c
-> @@ -324,26 +324,6 @@ static int shunt_voltage_show(struct seq_file *seqf, void *unused)
->   }
->   DEFINE_SHOW_ATTRIBUTE(shunt_voltage);
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 787683e83db6..510b88aed326 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -3517,6 +3517,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+>   	int i, idx = 0;
+>   	char name[PMBUS_NAME_SIZE];
+>   	struct pmbus_debugfs_entry *entries;
+> +	const char *symlink, *hwmon_name = dev_name(data->hwmon_dev);
 >   
-> -static struct dentry *isl28022_debugfs_root;
-> -
-> -static void isl28022_debugfs_remove(void *res)
-> -{
-> -	debugfs_remove_recursive(res);
-> -}
-> -
-> -static void isl28022_debugfs_init(struct i2c_client *client, struct isl28022_data *data)
-> -{
-> -	char name[16];
-> -	struct dentry *debugfs;
-> -
-> -	scnprintf(name, sizeof(name), "%d-%04hx", client->adapter->nr, client->addr);
-> -
-> -	debugfs = debugfs_create_dir(name, isl28022_debugfs_root);
-> -	debugfs_create_file("shunt_voltage", 0444, debugfs, data, &shunt_voltage_fops);
-> -
-> -	devm_add_action_or_reset(&client->dev, isl28022_debugfs_remove, debugfs);
-> -}
-> -
->   /*
->    * read property values and make consistency checks.
->    *
-> @@ -475,7 +455,7 @@ static int isl28022_probe(struct i2c_client *client)
->   	if (err)
->   		return err;
+>   	if (!pmbus_debugfs_dir)
+>   		return -ENODEV;
+> @@ -3525,13 +3526,19 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+>   	 * Create the debugfs directory for this device. Use the hwmon device
+>   	 * name to avoid conflicts (hwmon numbers are globally unique).
+>   	 */
+> -	data->debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
+> -					   pmbus_debugfs_dir);
+> +	data->debugfs = debugfs_create_dir(hwmon_name, pmbus_debugfs_dir);
+>   	if (IS_ERR_OR_NULL(data->debugfs)) {
+>   		data->debugfs = NULL;
+>   		return -ENODEV;
+>   	}
 >   
-> -	isl28022_debugfs_init(client, data);
-> +	debugfs_create_file("shunt_voltage", 0444, client->debugfs, data, &shunt_voltage_fops);
->   
->   	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
->   							 data, &isl28022_chip_info, NULL);
-> @@ -505,27 +485,7 @@ static struct i2c_driver isl28022_driver = {
->   	.probe	= isl28022_probe,
->   	.id_table	= isl28022_ids,
->   };
-> -
-> -static int __init isl28022_init(void)
-> -{
-> -	int err;
-> -
-> -	isl28022_debugfs_root = debugfs_create_dir("isl28022", NULL);
-> -	err = i2c_add_driver(&isl28022_driver);
-> -	if (!err)
-> -		return 0;
-> -
-> -	debugfs_remove_recursive(isl28022_debugfs_root);
-> -	return err;
-> -}
-> -module_init(isl28022_init);
-> -
-> -static void __exit isl28022_exit(void)
-> -{
-> -	i2c_del_driver(&isl28022_driver);
-> -	debugfs_remove_recursive(isl28022_debugfs_root);
-> -}
-> -module_exit(isl28022_exit);
-> +module_i2c_driver(isl28022_driver);
->   
->   MODULE_AUTHOR("Carsten Spieß <mail@carsten-spiess.de>");
->   MODULE_DESCRIPTION("ISL28022 driver");
+> +	/* The default i2c_client debugfs dir should link to where the data is */
+> +	symlink = kasprintf(GFP_KERNEL, "../../pmbus/%s", hwmon_name);
+
+This would have to be "../../../pmbus/".
+
+> +	if (!symlink)
+> +		return -ENOMEM;
+> +	debugfs_create_symlink(hwmon_name, client->debugfs, symlink);
+
+As mentioned separately, the symlink is not removed if a driver is unloaded.
+When it is loaded again, dmesg says something like
+
+	debugfs: File 'hwmon9' in directory '3-0020' already present!
+
+Also, the symlink ends up in, for example,
+	/sys/kernel/debug/i2c/i2c-3/3-0020
+and looks like
+	hwmon9 -> ../../../pmbus/hwmon9
+
+meaning there is an unnecessary "hwmon9" subdirectory in
+/sys/kernel/debug/i2c/i2c-3/3-0020
+
+I would prefer to have the actual debugfs files in the i2c debugfs directory
+(here /sys/kernel/debug/i2c/i2c-3/3-0020) and create a symlink from
+/sys/kernel/debug/pmbus/, such as
+
+	/sys/kernel/debug/pmbus/hwmon9 -> ../i2c/i2c-3/3-0020
+
+I tried to implement it, but right now that doesn't work because the
+actual debugfs files are not removed from i2c/i2c-3/3-0020 if a driver
+is unloaded and I don't immediately see how to fix that.
+
+Guenter
 
