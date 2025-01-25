@@ -1,66 +1,66 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424D71DE4EA;
-	Sat, 25 Jan 2025 22:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7CD204C07;
+	Sat, 25 Jan 2025 23:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737845639; cv=none; b=RcvTjyV2EGOnXKPeCV/N0xF8Z+LuI8wO+aieohzn6qhPIEzBPaxSLlRirxgv42vQVO0CQADHqCEuxOyZafmPBajneEPKNyEs3LR5lIojKrGRUpdUadUPj74NZ8c3tT5cI++PbS6SfRTlxC09X8oBr6FHhcfHHLBeoKEHTtCYcr4=
+	t=1737849581; cv=none; b=H6wmI5H9MWa5u10z84nc9EpZEMDFctxpWoR7lmALC7afyV572Zrkl58UEVYjeDbwBO+1GKcjGLcRGYKaf15giDcFl90ZMi2OrCiJLi1WQlhUfvPXycCS8GJ+AAnWN1a3+++y2AroPzcYH6J2C7Oleo7vfGTN8lG40VVd2pZbaw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737845639; c=relaxed/simple;
-	bh=079ZkkPojA/4nCt6/G+6Q1ME2ZYxJYJImXh5BjoLiVY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mNjeyFN4hybdG7zjncTTwUETVWj+cTJRDhEayPKcdB+0ryVA270WOzHkWzN/zZEP5DYKzHPCXZT4Kf1VRfD6bVMkZ5kccJMMmj3BL8TeSYB8hIsTdn2NnerGeYrCsWgVVHe30k4BM6kH91UFKflwVIw+Vth76MnW/ey6saYEu6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJp8/ZHQ; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1737849581; c=relaxed/simple;
+	bh=NC/+t2EQ4/Gno3l/NUpUzqeqFHfgAzKTjC7OZFu7Q9E=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FLpa9IrtaOIPXHOZGyI7rzu+KaMtgHoT1tQ+HZ18hCfLzsB4A0y5GfWjRQcQbxreUWdrImPOcd+Jq8bX1sObYRp24EhaKLUzyHd6v70trRYyoHyME/pXxs5lphQToSTaxqHgG7OP+2YTxMC6n+xHMN6zRSBosKWHng1+h9P+7PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tfrkebqw; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJp8/ZHQ"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21636268e43so70941485ad.2;
-        Sat, 25 Jan 2025 14:53:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tfrkebqw"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso4700870a91.1;
+        Sat, 25 Jan 2025 15:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737845637; x=1738450437; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NAUWUwSSlL0PN1bO3H9JMFaSpWTaiLHHIsvs2Nm37nA=;
-        b=hJp8/ZHQMSu9jXhjkza0Tqsf+8n72ujQOH4qDZwZkyR/7roo97SXhFQ5jAJ5wdKEFw
-         JVA00M5irn0nS5dur3V19ZzBPlPy7+qvhvsu1dr3Ffx9ydbp2UZs3iVgDgQjeqpuPtiH
-         UtkM0g1xIibeHNOiU98OFvqUTsFgwUr7Djht0lfB4UH1f+o8FRknDax0x5e9KS4j+jk8
-         TdkYUaDOGAmjvnVRduxSk2/TNoJWNXYC6o1pmeNtB5QdP8u19nKSPU+AIqmt56nwgacY
-         iIVuXkOGqhaLIrlhXGATVKrHOeR3+rm4eLUEevyzpnfUqSq0sq+joOn6VunKVO1oELiG
-         dXfA==
+        d=gmail.com; s=20230601; t=1737849578; x=1738454378; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3KRc2wzSvVwQowYjGidFePVU8XwZgBggdmoTc/eVljU=;
+        b=Tfrkebqwsz6W7HJZFMby2+b2T+WMjKEIxXeBKkWkth5IgE8ANnI+kLUR7nJyXnrva2
+         yxEKOuLou8KaTkiXp9/uRnaXYQjMKHO796KV/s6ZuAA7/ueNXr2dZiZk5DfDiDJDkhQC
+         8C85DEwVXm1lNMAwgM3iLZJos8QHN1ERxt6mZBUdXN/0Z/pDHmoYAj1PDGsRC9feh8rV
+         u7SQPj/0AKbOzcUt2z1DsnFXqlfhhuONr9kkQocj512+kIe3DJKqr4BU417saIzy+MlP
+         /977/9RlP9hDcFZprpYXyAQm2KCmoqWw/hZLMI5MtiWzFfZtnX6j7E8uXf3atk4kHKUA
+         BPCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737845637; x=1738450437;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1737849578; x=1738454378;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NAUWUwSSlL0PN1bO3H9JMFaSpWTaiLHHIsvs2Nm37nA=;
-        b=qOUZ805r6gkkcrdiucsvRzCvY84V2s9yFMel9ek6MW+0gj0VFBbjsbkVV5mgRzyPcq
-         QXhcs128cZXRoHH+CFGhv+GkLFA+FUrSCBAzWWBWlfhMegG8HSfXf0T6VIEsAj+JmHJo
-         F9b1Kaaw6VqCheaNyOwNTuZvwrE8cw7oel85Ax9KcVQYkpL2THShKpJs9wFw/TIGKpde
-         yLQfNxo6qyuO1xriAXn+YCz8M82uBsryVtrKcadeXx6SzTfWWbdpXyBl7ZDyaOP94/+U
-         bu/zoHd5m3tPna8M2jP2jE/SWPkEGsvmlj3XMzbHDkD7pmdIsOD2ZXNmR8s9WUXLZCcV
-         qAIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1kBSA9h1f6jKMocknnrVnE/mKLjG+VYXdUvsZb4wmgu+UyuVdcgc1KtuA9zSK0sOyKoNyhaBid3u/94s=@vger.kernel.org, AJvYcCUw/PbcdpWccYQa9gx3z288pYXtaSkbTFOktYclhyQdcCQ/sfC+wNDDwVsszEsvfjWqNxH251EPQ488mOWK@vger.kernel.org, AJvYcCVo0UFlNYuUNqmPo+mG+dlPfdInCHTuMhUHmtIATdCq7hKTGbEqBcJol2PhDmJ79IO7Q+cRk38i7B8M@vger.kernel.org, AJvYcCX7LAzyi2dQmRG2yxdU5P/15/LMttaQqBckDUh92srP5KArmRSh4wB8hsaTVELPgnciz7u0Blb3uZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzybIM87ogIxfQIEuX8pOCBWmVDPD/MV1X38FVle5pBw0Ns70gr
-	mP62RF6gQkIvUN1BSO6sf0icxNfDlEgM9m+tU44CNPvMApRUUZjO+RTVQw==
-X-Gm-Gg: ASbGncue1vGLXvIXxOwP0pFzhlEY6TQ6uqYnLcGgZHnfQJeIQ2XgSWHabgzQBOxiE2G
-	0QOBNj11chwG91S0eZ3wXB76X2+guX3nxjjbqknGC1EUj90r+TBG6CjesJSCAUrWXM0y6cPjaLb
-	DP2Ne8rwW5eVSkSYNKzCrkqkfa2Z7wlDeiaGo+KSmCaxFob/933sMaI3yAySAP3XYSIwmYlxWkW
-	E7CMiull8nJLkfbeDlUu0ItlSTci/1s/4aPytWeLzLoXbO8m9cADMo1rPcx/vW2dctOry2/sP/v
-	78dAM51bXq0+zXcNrHXwu2nKCNfc1VRtXYTact5ouk5+lhlpXVnZkA==
-X-Google-Smtp-Source: AGHT+IE1RAhrVx08LphMCZwIXlRim4s56J9Z0B/pks4iV0AAuMP309QU+TpjPZXQrH2iKsW5n1saiQ==
-X-Received: by 2002:a05:6a20:4303:b0:1e1:b105:87b with SMTP id adf61e73a8af0-1eb214f0f6cmr52708097637.23.1737845637399;
-        Sat, 25 Jan 2025 14:53:57 -0800 (PST)
+        bh=3KRc2wzSvVwQowYjGidFePVU8XwZgBggdmoTc/eVljU=;
+        b=UpRIyNrXgyPcOeWJgjt0RWLWagWmoBmM2ps+kBerWbA5Zwt8rZxQI8+QDMRdybTyyg
+         /cxVVmeWip6D5JQNglEnEkPrf4aPHPInYyieSi7goXI5Y2UnpKP54MB1+ALhKxisaX3O
+         aLHqE8dUhKfLLCTUViR43aTtQAMyphhyeA6HtsD6iO80juVZnUYQsxqAKHxcEON4Ywst
+         ukaUBILpQ+Fq22zcZ4qNVqsdyqgpeG0RMPcJkO+oJRhY4fgGqrFPgNuG3h6TgWsDV2+C
+         STVklBeNdkUpxWSfnXirbSwxdjnBlheGdplyFqGtjVQ+cwPBoXi2DVUNRTa7Q7krKKaZ
+         QjpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMNe7pujx9XYp96uklA35SGIN4d118ioyZutmxl98/ty4xnMDFN/98S5eUbX2AKKkO0maVXnGFoZaXICHt96tT720=@vger.kernel.org, AJvYcCX+QDtn5jmApMLw9MHtTdNqMfdSFL9sBH4IKCKx+qw0iHff4p/qUI+lscY6BC6CW2r838QUw5630Zf1iA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRd6SDGjCUb2rogI9W90nv6nSFrWbqhYNnJE/XxJBcDL2+0Fk4
+	qPZmt7Whc0U2ix5FbQloq6K5w5D4n8XhjGynkFIp8TgyE5WzZ6hJEudWxg==
+X-Gm-Gg: ASbGnctsEAIdRaYla1x06To70KLctK+QikZES6BfAB9mxJ3SR9MTrI0NHIWAiR0lW9Z
+	X2wYG6XviObj4QBW5AZgiqcoySVYyLaGepyK7IFMqeAF6QmDX+bc4vt5XaZGNELEvQvV/zaq8EC
+	eS2yz1OWOq1e/uTD6JSHVRTtAzZU6RyrU0kZa8dyxDiE4s/3Ej31LjmgCiMJ+ffLBpqPm/bcRvd
+	1XNaPCqFTBSvHw/8tJnqsnA99mBnI9X/rjrjDFWuaJ7omoqOEWL6AhU7BQ/P5/K17dKw6US/WT5
+	OCDIUuMg+ldDE7xOeAJlAgaQewhznyS5L86RTXTZDYGPvM4vwncT8A==
+X-Google-Smtp-Source: AGHT+IFKWV0GuQjKGvO+ImkifE7Bw9sW6JgwpSOQUE0baypxd68e0Pn+tbkSFQN53n9QlzfcvgfEPg==
+X-Received: by 2002:a05:6a20:729e:b0:1e1:cd09:e08d with SMTP id adf61e73a8af0-1eb21485321mr52672959637.11.1737849578368;
+        Sat, 25 Jan 2025 15:59:38 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a78f18asm4306188b3a.177.2025.01.25.14.53.55
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac496bbcdb2sm3799569a12.69.2025.01.25.15.59.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jan 2025 14:53:56 -0800 (PST)
+        Sat, 25 Jan 2025 15:59:37 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <710736df-98fd-44d7-a51f-07923d72482f@roeck-us.net>
-Date: Sat, 25 Jan 2025 14:53:54 -0800
+Message-ID: <5c87e9fe-06dc-44e2-83d5-96bd6e799a78@roeck-us.net>
+Date: Sat, 25 Jan 2025 15:59:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,19 +68,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
- <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
-Content-Language: en-US
+Subject: Re: [PATCH RFC] hwmon: (pmbus/core) use the new i2c_client debugfs
+ dir
 From: Guenter Roeck <linux@roeck-us.net>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-renesas-soc@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20250123163304.46034-1-wsa+renesas@sang-engineering.com>
+ <b59c8757-97d5-4d87-8648-adf27d7866f5@roeck-us.net>
+Content-Language: en-US
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -124,29 +120,91 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
+In-Reply-To: <b59c8757-97d5-4d87-8648-adf27d7866f5@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/24/25 07:39, Cedric Encarnacion wrote:
-> Add hardware monitoring and regulator support for LT3074. The LT3074 is an
-> ultrafast, ultralow noise 3A, 5.5V dropout linear regulator. The PMBus
-> serial interface allows telemetry for input/output voltage, bias voltage,
-> output current, and die temperature.
+On 1/25/25 10:24, Guenter Roeck wrote:
+> On 1/23/25 08:33, Wolfram Sang wrote:
+>> The I2C core now manages a debugfs dir per i2c_client. PMBus has its own
+>> debugfs hierarchy. Link the two, so a user will be pointed to the pmbus
+>> domain from the i2c domain.
+>>
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> ---
+>>
+>> @Guenter: I don't have any PMBus device here. Would you be interested to
+>> test this patch? It build tests fine at least.
+>>
+>>   drivers/hwmon/pmbus/pmbus_core.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 787683e83db6..510b88aed326 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -3517,6 +3517,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+>>       int i, idx = 0;
+>>       char name[PMBUS_NAME_SIZE];
+>>       struct pmbus_debugfs_entry *entries;
+>> +    const char *symlink, *hwmon_name = dev_name(data->hwmon_dev);
+>>       if (!pmbus_debugfs_dir)
+>>           return -ENODEV;
+>> @@ -3525,13 +3526,19 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+>>        * Create the debugfs directory for this device. Use the hwmon device
+>>        * name to avoid conflicts (hwmon numbers are globally unique).
+>>        */
+>> -    data->debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
+>> -                       pmbus_debugfs_dir);
+>> +    data->debugfs = debugfs_create_dir(hwmon_name, pmbus_debugfs_dir);
+>>       if (IS_ERR_OR_NULL(data->debugfs)) {
+>>           data->debugfs = NULL;
+>>           return -ENODEV;
+>>       }
+>> +    /* The default i2c_client debugfs dir should link to where the data is */
+>> +    symlink = kasprintf(GFP_KERNEL, "../../pmbus/%s", hwmon_name);
 > 
-> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> ---
-....
-> +
-> +static const struct i2c_device_id lt3074_id[] = {
-> +	{ "lt3074", 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, lt3074_id);
-> +
-> +static const struct of_device_id lt3074_of_match[] = {
+> This would have to be "../../../pmbus/".
+> 
+>> +    if (!symlink)
+>> +        return -ENOMEM;
+>> +    debugfs_create_symlink(hwmon_name, client->debugfs, symlink);
+> 
+> As mentioned separately, the symlink is not removed if a driver is unloaded.
+> When it is loaded again, dmesg says something like
+> 
+>      debugfs: File 'hwmon9' in directory '3-0020' already present!
+> 
+> Also, the symlink ends up in, for example,
+>      /sys/kernel/debug/i2c/i2c-3/3-0020
+> and looks like
+>      hwmon9 -> ../../../pmbus/hwmon9
+> 
+> meaning there is an unnecessary "hwmon9" subdirectory in
+> /sys/kernel/debug/i2c/i2c-3/3-0020
+> 
+> I would prefer to have the actual debugfs files in the i2c debugfs directory
+> (here /sys/kernel/debug/i2c/i2c-3/3-0020) and create a symlink from
+> /sys/kernel/debug/pmbus/, such as
+> 
+>      /sys/kernel/debug/pmbus/hwmon9 -> ../i2c/i2c-3/3-0020
+> 
+> I tried to implement it, but right now that doesn't work because the
+> actual debugfs files are not removed from i2c/i2c-3/3-0020 if a driver
+> is unloaded and I don't immediately see how to fix that.
+> 
 
-Needs __maybe_unused
+I was able to implement this after fixing the problem in the i2c code.
+It works quite nicely.
+
+root@server:/sys/kernel/debug/pmbus# ls -l
+total 0
+lrwxrwxrwx 1 root root 0 Jan 25 12:07 hwmon9 -> ../i2c/i2c-5/5-0020
+root@server:/sys/kernel/debug/pmbus# cd ../i2c/i2c-5/5-0020
+root@server:/sys/kernel/debug/i2c/i2c-5/5-0020# ls
+mfr_id  mfr_model  mfr_revision  status0  status0_input  status0_iout  status0_mfr
 
 Guenter
+
+
 
