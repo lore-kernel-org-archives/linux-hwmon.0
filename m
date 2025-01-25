@@ -1,192 +1,88 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852E31FA26C;
-	Sat, 25 Jan 2025 02:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F201DFF7;
+	Sat, 25 Jan 2025 03:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737771738; cv=none; b=I17ZIBTzFBpRf39vZ1lLXqs3M3lxaPfsQsPEA+06yYxzHuJDxDsvlQ/TdNF6GikcAB7jPMl1kSupMwZ6K7U+XPwqXEMF84M+GdfmYuRwLMDOxeM7nD5pxiARDL+hO2/VuV3KYe7qmuPl5q4qNJui0+r69cTTaviywlLpXUJmevA=
+	t=1737774228; cv=none; b=p4kcInhE7amk3XupLm4zP4p8rBHz+ratF6QfVSMboitlzPE2ALxARIWYLE0r0C8JXJlD9S8XznoWJcRbHQ+BgDKVejkEw7KctMrG0Ipmden8WaeA3sFYaqPSOTBEnpRqUbCsRavG4VlEnJnowpwnxNnO/BfdD7Jw7YQuo3DUaec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737771738; c=relaxed/simple;
-	bh=Bh7KFi0vVbMKUEbgccerJ7ApmnA7Yw6IeTtCm/S+5iE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NWoLHqeCA1cj0UdWahLnKQ97Cm6YrkSkpljhn6ED4xeJv2+UIom8tdQuqUDrcF5Ad6NjDbKMyLZZlsg2/wM171Obqu8UqORcilEVOQiJ9Yh6M5cEM8hNuVH77j6kSgs4y7mA/vUwVchHWkQLLu5ZxIY6tLs40ytdbgVOqPC6ODg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=j4wKtev7; arc=none smtp.client-ip=117.135.210.5
+	s=arc-20240116; t=1737774228; c=relaxed/simple;
+	bh=XiF/jY/Qm1UIxeSqvs6E2QTnjOhfIO1tKy0oVj5QStE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I/4daZnfkK1mgpKFMpC3BkdKwtUOAzuW+WB8mxuTLkChMUHjc/Ql9lclpd6epV7NuP/w6RTx6L/t5CQPB3ZKsMzXJpS3jFMwVdBu2GTl7ZpB+VvMOBAVjhpgo7sYZcfAMEwSq06YwqdxXFIta8A8uyRhv+HXdZ4U/2ul94utC6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=m/yPtBYY; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="j4wKtev7"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="m/yPtBYY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=UibvdDSXR29ETUi7iAgxR/zcMfCGMElss8ogFDbpquY=;
-	b=j4wKtev7EKjYmOsOuVp4B1qL4aEMVRE42eeDNJCv6/EUvbtCfA09boF8o7+AKX
-	yL95Qm8D0QV9+Dmymyp0j07a4FwwOchFJxjDkwI4GiQHYGT6qNVzzTvDjd3hjSX3
-	6GxWFjFmDlaU1rrrYI1XV6blCVPs6VNcV1rJLJT6anKGI=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=f2ifr
+	sk0Ocb/Ft8CkL8Ocv2BBkDvRdM+5cCYbWG2GBY=; b=m/yPtBYYpjT7hmsQtlYM2
+	d+vFozxL1pepeizsqriPBlBhkTJ9Xb14WDZrJc0T2Vo6Fq+N1SaDrzaejxIxRoWj
+	czoi6SNrzZKeZW0sIMKrS4prPwBBB0f22w6YZqmOJ0MVTPrEAjoLlzVLQehliY+8
+	9PJFMv2zerM2Egx76ygGRM=
 Received: from silergy-System-Product-Name.silergy.inc (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDn7+uZSpRnid3HIQ--.41899S4;
-	Sat, 25 Jan 2025 10:21:14 +0800 (CST)
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wDXjXdnVJRn4+zBHw--.4932S4;
+	Sat, 25 Jan 2025 11:03:04 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
-To: christophe.jaillet@wanadoo.fr
-Cc: conor+dt@kernel.org,
-	corbet@lwn.net,
-	jdelvare@suse.com,
-	krzk+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+To: christophe.jaillet@wanadoo.fr,
 	linux@roeck-us.net,
+	jdelvare@suse.com
+Cc: Wenliang Yan <wenliang202407@163.com>,
 	robh@kernel.org,
-	wenliang202407@163.com
-Subject: Re: [PATCH v3 2/2] hwmon:(ina238)Add support for SQ52206
-Date: Sat, 25 Jan 2025 10:20:48 +0800
-Message-ID: <20250125022049.1226664-1-wenliang202407@163.com>
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] hwmon:(ina238)Add support for SQ52206
+Date: Sat, 25 Jan 2025 11:02:58 +0800
+Message-ID: <20250125030300.1230967-1-wenliang202407@163.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <5f4095b0-8105-4001-81ac-e4f7053e45ae@wanadoo.fr>
-References: <5f4095b0-8105-4001-81ac-e4f7053e45ae@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDn7+uZSpRnid3HIQ--.41899S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCFW7Kr45Kw4UJF4furyxAFb_yoW5uF4UpF
-	Z7GayUKFW5XF17WrW7Xa9rZFyfKrn7Gry2yr4xG3WI9F1vyr97GFyIkrWqk3Z3ury8WF42
-	vw1UtFyfuws7ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUeBTnUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiow7f02eUN8HpIQAAss
+X-CM-TRANSID:_____wDXjXdnVJRn4+zBHw--.4932S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKw1DXFWfZrWxKw4rAF47Jwb_yoWkKrbE9a
+	yxCrZ5XF4kJF13Ga4xCFy3XryFy3y7Arsay3WUtrWfAr1ayrsIgFn7tryqkw1DWFyfu3sr
+	Zan8Aa1vyrsrGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRRsjjUUUUUU==
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiowvf02eUN8HpIgABsr
 
-At 2025-01-24 16:09:14, "Christophe JAILLET" <christophe.jaillet@wanadoo.fr> wrote:
->Le 17/01/2025 à 09:20, Wenliang Yan a écrit :
->> Add support for SQ52206 to the Ina238 driver. Add registers,
->> add calculation formulas, increase compatibility, add
->> compatibility programs for multiple chips.
->> 
->> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
->> ---
->
->Hi,
->
->a few nitpick below, should a v4 be needed.
+Add support for Silergy i2c power monitor SQ52206 to the ina238
+driver as those two are similar.
 
-Hello,
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
 
-Thank you for your review, I will update and submit V4.
+Add new chip SQ52206, the datasheet depends on 
+https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
+The password is fx6NEe.
 
->...
->
->> +static ssize_t energy1_input_show(struct device *dev,
->> +				  struct device_attribute *da, char *buf)
->> +{
->> +	struct ina238_data *data = dev_get_drvdata(dev);
->> +	int ret;
->> +	u64 val;
->> +
->> +	ret = ina238_read_reg40(data->client, SQ52206_ENERGY, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* result in microJoule */
->> +	val = div_u64(val * 96 * INA238_FIXED_SHUNT * data->gain,
->> +			       data->rshunt * 100);
->> +
->> +	return sprintf(buf, "%llu\n", val);
->
->Maybe sysfs_emit()?
+Changes in v4:
+- addressed various review comments.
+- Link to v3: https://lore.kernel.org/linux-hwmon/20250117082017.688212-1-wenliang202407@163.com/
 
-Agree, I will make modifications.
+Changes in v3:
+- addressed various review comments.
+- Link to v2: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
 
->> +}
->> +
->>   static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
->>   		       u32 attr, int channel, long *val)
->>   {
->
->...
->
->> @@ -530,6 +640,15 @@ static const struct hwmon_chip_info ina238_chip_info = {
->>   	.info = ina238_info,
->>   };
->>   
->> +/* energy attributes are 5bytes wide so we need u64 */
->
->Missing space or done intentionally? (5 bytes)
+Changes in v2:
+- Explain why sq52206 compatibility has been added to ina2xx.yaml.
+- addressed various review comments
+- Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
 
-Agree, I will make modifications. (5 bytes)
+Wenliang Yan (2):
+  dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+  hwmon:(ina238)Add support for SQ52206
 
->> +static DEVICE_ATTR_RO(energy1_input);
->> +
->> +static struct attribute *ina238_attrs[] = {
->> +	&dev_attr_energy1_input.attr,
->> +	NULL,
->> +};
->> +ATTRIBUTE_GROUPS(ina238);
->> +
->>   static int ina238_probe(struct i2c_client *client)
->>   {
->>   	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
->> @@ -537,13 +656,19 @@ static int ina238_probe(struct i2c_client *client)
->>   	struct device *hwmon_dev;
->>   	struct ina238_data *data;
->>   	int config;
->> +	enum ina238_ids chip;
->
->Maybe move 1 line up, to keep RCT style?
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   4 +
+ Documentation/hwmon/ina238.rst                |  15 ++
+ drivers/hwmon/ina238.c                        | 209 +++++++++++++++---
+ 3 files changed, 195 insertions(+), 33 deletions(-)
 
-Agree, I will make modifications.
-
->>   	int ret;
->>   
->> +	chip = (uintptr_t)i2c_get_match_data(client);
->> +
->>   	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->>   	if (!data)
->>   		return -ENOMEM;
->
->...
->
->> @@ -616,14 +747,26 @@ static int ina238_probe(struct i2c_client *client)
->>   }
->>   
->>   static const struct i2c_device_id ina238_id[] = {
->> -	{ "ina238" },
->> +	{ "ina237", ina237 },
->> +	{ "ina238", ina238 },
->> +	{ "sq52206", sq52206 },
->>   	{ }
->>   };
->>   MODULE_DEVICE_TABLE(i2c, ina238_id);
->>   
->>   static const struct of_device_id __maybe_unused ina238_of_match[] = {
->> -	{ .compatible = "ti,ina237" },
->> -	{ .compatible = "ti,ina238" },
->> +	{
->> +		.compatible = "silergy,sq52206",
->> +		.data = (void *)sq52206
->> +	},
->> +	{
->> +		.compatible = "ti,ina237",
->> +		.data = (void *)ina237
->> +	},
->> +	{
->> +		.compatible = "ti,ina238",
->> +		.data = (void *)ina238
->> +	},
->>   	{ },
->
->While touching things here, this ending comma could be removed ro be 
->consistent with the other struct just above.
-
-Okay, I will follow the same structure as above. (remove comma)
-
->>   };
->>   MODULE_DEVICE_TABLE(of, ina238_of_match);
->> @@ -642,3 +785,4 @@ module_i2c_driver(ina238_driver);
->>   MODULE_AUTHOR("Nathan Rossi <nathan.rossi@digi.com>");
->>   MODULE_DESCRIPTION("ina238 driver");
->>   MODULE_LICENSE("GPL");
->> +
-
-
-Thanks,
-Wenliang Yan
+-- 
+2.43.0
 
