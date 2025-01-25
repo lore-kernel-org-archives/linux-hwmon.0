@@ -1,155 +1,122 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1FB2080F6
-	for <linux-hwmon@vger.kernel.org>; Sat, 25 Jan 2025 12:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78EC207E18;
+	Sat, 25 Jan 2025 12:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737808823; cv=none; b=X/7Cc3c4uJgzfQfx4tk4Oya1G1pif5P9eKwLw3NVEZUsjkWBOEMCrMr5dcCmWyt6Pt/CZrK5gCqYCsP8H5OP7d+2PYAWorfbzG/yaPVg3+kwMESlwty8gBnWWpnV56Up0nFVoG8j+tKW6a9+BLTe1qCFFPdTeksu2Lpfln+qO0Q=
+	t=1737809043; cv=none; b=O9B0fo1e1f+uDRu1dAfxVqzPlzWw3zIowTsB6pDGEkJguoI3VT6C2/6/cqSEwFlmlM6bUoaQr7su2RreoLW5mVYnP1OG5PfgLJZGhxwVAjswcqkh9O+lMnAEe1t9V00yLV2mjb7Dcezu191o3/CCkDZrUniHco8aZu8DwJguanY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737808823; c=relaxed/simple;
-	bh=CJvzYJf5g5rEeWvK7/SUMIlM75WusBOssVylLiKRSpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ggbEk9lemuU39FWnFAfBPfCpVUwKVHM603fnyjOmPuAnSKjrIwfXfz2uwqZ+GJzAuOh3OU9dnv18H2FGDSGmAQsBtRWd8qEXuvd0KDBYXnZczu1hdqZhEFgcZVxn1pSKDEVPU2QkUUmAK+pkH/iHW8uKQ7HfRJKrGnz4IB1nxJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ceRTgX5X; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1737809043; c=relaxed/simple;
+	bh=NlaAKhY+IZwJhCTyPYWy+HGapQ1kdZ3i1g6TA8GP9Qc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mhqwsyZKRBbSG3oN3HMZiHUk6Hhd7mnzfoa9uH+vEtiM/5Yr0WkCc/hRi0RdqgcYqIY+PtASV1WulK7MiISTwkN3DEfj7IMbgeN7jhKhtudLsMEkIx0ruXMguzK8KcGurbdYLoYiCkP01uHfK0ESG06wrv+X1h6cJYfedpJCDFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PxK0sMKU; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ceRTgX5X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=vlIQU4MZ6pSduTmrPoJe8oP+MM8crSkqeS4MWFCRdJg=; b=ceRTgX
-	5XCGOtdFrgDWHe32kAhg8aF/spj9O/MvBnpWrq9IPl/aO3sKhV3LLS81147K7cFD
-	wpRRDD7xSHGeyoeg4XrnQ01FDGqa63rDcFL6sqAc0ZEKC94af15bAKV5umwPV5+5
-	gk4DY/sirpyeONciO7UE4ex1iTlHa2SvKNB0izw41tbIUtOFou5iFKY5sFoOp9G4
-	TmRjLtvUgutPBQJKS3uZYGWDh8rceNcM1RtBKnDa9lCigO1qEXkPJsXpNfYMjMy4
-	e8DIo6g4A9YdKAUNguaKFGiGI0o3qMTriO0MkkmVRmqv3t6sL6cApuED2H6/yvwh
-	zsRjX6pxsG2QIHiw==
-Received: (qmail 3871258 invoked from network); 25 Jan 2025 13:40:11 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Jan 2025 13:40:11 +0100
-X-UD-Smtp-Session: l3s3148p1@qDvnJIcs+q8ujnvm
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PxK0sMKU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737809042; x=1769345042;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NlaAKhY+IZwJhCTyPYWy+HGapQ1kdZ3i1g6TA8GP9Qc=;
+  b=PxK0sMKUkHnBZSgN0X58EW67Cr0Msygtba7zGeO4SBuOderSJP6dcCCF
+   QMGIJb2qzaMK8eVPUU0yk2tkb64zcWciIINmt1UWsY6ISOPCjE2/O6CGp
+   6h1dM/toBTqoWMGmaNWnu9kB7RShnU5MIx7p0Oyk0os4fDCD1KAEnc5xA
+   86T8DZ+fHPurTL+YKPXigmMTvH+fLHfkRot/qqgHvTfPevwxFsE+9Zgtk
+   qdVX7nXkv7dSj9bVXHjwychtlEHa31zw9Lll5YNvqm7HCptWPwOoaQTrn
+   EuZY0JhP23vXPmU+WTqGPjtnGa8cNzcbImWVTTdra1HFu9LZ9Pv2odUTi
+   g==;
+X-CSE-ConnectionGUID: K74TjVHtT7ezNlG1E0aBMg==
+X-CSE-MsgGUID: 16e0MM14RoWe+ZqzvxW8LQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11326"; a="37590023"
+X-IronPort-AV: E=Sophos;i="6.13,234,1732608000"; 
+   d="scan'208";a="37590023"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2025 04:44:01 -0800
+X-CSE-ConnectionGUID: aZKkiA7rSxWOWJZF61T1sw==
+X-CSE-MsgGUID: Qskw6ZrORVSq3BsHg4s8JQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="131311353"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 25 Jan 2025 04:43:57 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tbfVz-000doF-1O;
+	Sat, 25 Jan 2025 12:43:55 +0000
+Date: Sat, 25 Jan 2025 20:43:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH RFT 5/6] hwmon: (sht3x) Use per-client debugfs entry
-Date: Sat, 25 Jan 2025 13:39:45 +0100
-Message-ID: <20250125123941.36729-13-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250125123941.36729-8-wsa+renesas@sang-engineering.com>
-References: <20250125123941.36729-8-wsa+renesas@sang-engineering.com>
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202501252028.3VEwAFiG-lkp@intel.com>
+References: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
 
-The I2C core now offers a debugfs-directory per client. Use it and
-remove the custom handling.
+Hi Cedric,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/hwmon/sht3x.c | 57 ++++++-------------------------------------
- 1 file changed, 8 insertions(+), 49 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 650b0bcc2359..a6e7449de396 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -44,8 +44,6 @@ static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
- static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
- static const unsigned char sht3x_cmd_read_serial_number[]      = { 0x37, 0x80 };
- 
--static struct dentry *debugfs;
--
- /* delays for single-shot mode i2c commands, both in us */
- #define SHT3X_SINGLE_WAIT_TIME_HPM  15000
- #define SHT3X_SINGLE_WAIT_TIME_MPM   6000
-@@ -837,22 +835,6 @@ static int sht3x_write(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
--static void sht3x_debugfs_init(struct sht3x_data *data)
--{
--	char name[32];
--
--	snprintf(name, sizeof(name), "i2c%u-%02x",
--		 data->client->adapter->nr, data->client->addr);
--	data->sensor_dir = debugfs_create_dir(name, debugfs);
--	debugfs_create_u32("serial_number", 0444,
--			   data->sensor_dir, &data->serial_number);
--}
--
--static void sht3x_debugfs_remove(void *sensor_dir)
--{
--	debugfs_remove_recursive(sensor_dir);
--}
--
- static int sht3x_serial_number_read(struct sht3x_data *data)
- {
- 	int ret;
-@@ -931,27 +913,17 @@ static int sht3x_probe(struct i2c_client *client)
- 		return ret;
- 
- 	ret = sht3x_serial_number_read(data);
--	if (ret) {
-+	if (ret)
- 		dev_dbg(dev, "unable to read serial number\n");
--	} else {
--		sht3x_debugfs_init(data);
--		ret = devm_add_action_or_reset(dev,
--					       sht3x_debugfs_remove,
--					       data->sensor_dir);
--		if (ret)
--			return ret;
--	}
--
--	hwmon_dev = devm_hwmon_device_register_with_info(dev,
--							 client->name,
--							 data,
--							 &sht3x_chip_info,
--							 sht3x_groups);
- 
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
-+							 &sht3x_chip_info, sht3x_groups);
- 	if (IS_ERR(hwmon_dev))
--		dev_dbg(dev, "unable to register hwmon device\n");
-+		return PTR_ERR(hwmon_dev);
- 
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	debugfs_create_u32("serial_number", 0444, client->debugfs, &data->serial_number);
-+
-+	return 0;
- }
- 
- /* device ID table */
-@@ -968,20 +940,7 @@ static struct i2c_driver sht3x_i2c_driver = {
- 	.probe       = sht3x_probe,
- 	.id_table    = sht3x_ids,
- };
--
--static int __init sht3x_init(void)
--{
--	debugfs = debugfs_create_dir("sht3x", NULL);
--	return i2c_add_driver(&sht3x_i2c_driver);
--}
--module_init(sht3x_init);
--
--static void __exit sht3x_cleanup(void)
--{
--	debugfs_remove_recursive(debugfs);
--	i2c_del_driver(&sht3x_i2c_driver);
--}
--module_exit(sht3x_cleanup);
-+module_i2c_driver(sht3x_i2c_driver);
- 
- MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
- MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
+[auto build test WARNING on a76539b293677c5c163b9285b0cd8dd420d33989]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-adp1051-adp1055-and-ltp8800/20250124-233047
+base:   a76539b293677c5c163b9285b0cd8dd420d33989
+patch link:    https://lore.kernel.org/r/20250124151746.1130-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051, adp1055 and ltp8800
+config: arm-randconfig-r133-20250125 (https://download.01.org/0day-ci/archive/20250125/202501252028.3VEwAFiG-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20250125/202501252028.3VEwAFiG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501252028.3VEwAFiG-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hwmon/pmbus/adp1050.c:74:14: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct pmbus_driver_info *info @@     got void const * @@
+   drivers/hwmon/pmbus/adp1050.c:74:14: sparse:     expected struct pmbus_driver_info *info
+   drivers/hwmon/pmbus/adp1050.c:74:14: sparse:     got void const *
+
+vim +74 drivers/hwmon/pmbus/adp1050.c
+
+    69	
+    70	static int adp1050_probe(struct i2c_client *client)
+    71	{
+    72		struct pmbus_driver_info *info;
+    73	
+  > 74		info = i2c_get_match_data(client);
+    75		if (!info)
+    76			return -ENODEV;
+    77	
+    78		return pmbus_do_probe(client, info);
+    79	}
+    80	
+
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
