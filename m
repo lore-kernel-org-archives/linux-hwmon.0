@@ -1,66 +1,66 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6E025A642;
-	Sun, 26 Jan 2025 13:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DB025A65D;
+	Sun, 26 Jan 2025 13:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737897248; cv=none; b=Of67c6emRYCfHAnBnL/nxduvVR3ogRC2gmRX1PPBtNYU90Xjl8CYeHc1BXYFnLbvAZcqPMJO0jqVo+WyKG5Srjkq/AwNMgilRH0Kb1ajWcRDOq8JGRe7BUQXw4ABktgCN8/EgXrtLYjeVNycXW6bN5pFIGT+BcNQ5IJIZKGK0c4=
+	t=1737897499; cv=none; b=BhkhD/YbLTpKmTkXnHu2svSp0uEyt/ZzUOGqmMNba9IsK1QiJOI94pJsfsHW/OGCwX/e60uDJU0FMfzu9VN7Wng/zlKpW1G+WluqE2rxU+mVUUD0LcHpT91nsdkxRnX2X3NgnjlUq+SU7t5t3FPgdgAl5MNcvLXWg3JMof6v2wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737897248; c=relaxed/simple;
-	bh=RO66gov6nya+5jLxxjtlnbewF/WrhoQWdeMhfxD4I7U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BIJf+yjeJQ0EzbYJi1Cq+Y/z7qvH8xDafPBl1alw23BsHoEDQPdYamOwQ1OsRBVydIqpSASVu+45uO/NjFEvYFjhPdN8mpVuKFDm7/by1WrKghUHL4eRCsaHaSh8F/wBRWU1YDQuJO865bB9Rf/3WkpcK71VUAHKaMGhjrK3fXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sga8YK/q; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1737897499; c=relaxed/simple;
+	bh=mG3KC8E87HrVYVrx+3h1eyt0R0jzL5dqBps/ZIaD4TU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HS9/LVew1bGAUQAr/p2DziItvQKcqLPr/oJvPjTMLDxFPctmWT8U2ORzH/AvQTx7uOCH93ELnjwEGOONJBmbXgDbFxr6lTnxLCH0B//upr6QqFACaeecqoLotbZUWPRmspU8SO0YJ9VQvLjQpVtrmsld5WqhF3Utdhx3Bl2V5K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dyp/O8o3; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sga8YK/q"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2164b1f05caso60382065ad.3;
-        Sun, 26 Jan 2025 05:14:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dyp/O8o3"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2161eb94cceso42551045ad.2;
+        Sun, 26 Jan 2025 05:18:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737897246; x=1738502046; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737897496; x=1738502296; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5TACNV8jHE9GFf+sHJchBx4g3muny07jODzR7Nmr7c=;
-        b=Sga8YK/qtjlCbdN1XZ9ejRjeteBTtvXw/UQ0H0ISIWJMH+M/zXdvoM/FVQDteNtU7A
-         ns8vDEjKdWCSrjD3QMN4aSNnCWJwH/E4ZfG0cXfRx6ULquBltllkj3yx7i1SMsMKCfcA
-         1onUv4RGRBKg6/aKrs6gaQZBj8h1FbZD1yfp9qP3BwTme04pauijrEDYqn1MH1Yd5DP1
-         AwCfhQH/5LfYH7eF2zyOAy/vk9kmCf+4bWytGcu/z2P1t8hk2hyHFjrsYOPaOgjrsjqE
-         +TpUbuSxKWtDN+fYeOJJmD2MPgjiGwolGlMoZfEOOTqW/Lquf5jcz5ScNe0HwA50MSBz
-         4URg==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLoVlx6oEIPZAT8q+IhaVOvydmmsMymu4vL1n+j7EdA=;
+        b=dyp/O8o3pDnRI5O+GH8p/2mJ+g2C9G03YHQVh11jsDgF5TmL2uQtHnSQIari/PpPCX
+         Qw0eL6B4OHvypQZdMiGzk+aB3007wq+FKqXvjSVA9UTFLJHJeL7BABOM5XMerE/z8xng
+         fZHIoIJXptR3dsd1dQfAgyEZLG7ITfSRWtlPMn4WYtBjMzZX5XC8zochAUjr3zSLQ9hO
+         VYWXs7XSeOX4RPCYykgmhyzKrD/YzEia5Sjp3yIShrQf6qzPT/fSmCU81QDxE9LOQwQG
+         0IC2Kk7uHSny4yvoJUITJkkAE/ZrhyICqfYr8htrT20PLFRLEjp/a1bEeiNm8q4Eg7R1
+         MqCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737897246; x=1738502046;
+        d=1e100.net; s=20230601; t=1737897496; x=1738502296;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L5TACNV8jHE9GFf+sHJchBx4g3muny07jODzR7Nmr7c=;
-        b=mwRYI04w+u+WblbrWZGzgZefcOQTRyIhL+s95yRD+1z3qjoMpQZkHxo5F0EhWY2tTg
-         7OsqSSHYY+NaDZVuXt0WtV2/xZixVB7gB0LRlPAqEDBZQQ4AZwCTv906R3DOmgfN9TXD
-         I7UlmpBZ/nEYXblJUetq3uweXWMK0+qdHc8MvdEAL++c9fAvP1Bg776q9Wd0JM4YoLdd
-         SW2iLXOtFjhJwczs3e6Czdlarm3X+it9XHysxRx5l2yHq1Efrc1IOQLQJfSxC5/xep5v
-         JRcRmKonJXrEbPSqxQCSJWtz/EghkwwSLlhkxJZO0fwHAAcC9QRwB3nG0bPrUDJAhziT
-         Fwgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVQ/StQhbV/rvIE1QU0VR3gAP4CZqd6ufekFlM0IOD8gLEHjM/Qq0vDMBUr7V5ftZ4XiuzABi9mb89HcZfVGdmsNo=@vger.kernel.org, AJvYcCVsuCaodgZlUpyUVNX9PIIkKFKVsz98PjN+2CnBqM7SYdRwWFxcwfYsMGXoFe1U2Er9UFweL3NSvwgyjg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxle6PqNFSxkUMoR/MOhlXM95gBWdgwYIuAqlG+bWum6hvsvA2O
-	M6N8EBLN+bFT2ISabpyACCtpILn5F4BimpSjbDFhcIO8Dq1MjSxqeuQRZQ==
-X-Gm-Gg: ASbGncsyTik5AD1pDd3YvP3HDr6F+sViVGlzgM4depfOCqlviwFv9+hMqkkLWl9Qvs/
-	Mj57di/OcItIFJuT5toi+iv/TV502KGEaqnxZ+GRQtLbjWv6Jg3MWz0fh3c61FAlbVZr/Ky0bW8
-	PQpCD2HwgifYXQa4Fc9/dKK8gz00H1Kh+KHdozQ1+BKDAoJIsRWIMvCneloJI1RhWOJ1Jf22TjD
-	LKSosCd2/YcC1Lm/k5yi/aJfCjTYU1+4D5SrBH9JUzRYmBVaDjK92if5B7iHOGAu5UdfgNabyPO
-	OL/BWs0g/SDy0efmqyq9bT5yuTiFP9ujNHYlUlWmYZJ7Su0ep44J7Q==
-X-Google-Smtp-Source: AGHT+IHFBXAIP2qMI4za84brGN5AoTHmLfscUOZqjQPw0xOwR1mO4yhsDRlLpuAc72v8fHTq59inzA==
-X-Received: by 2002:a05:6a00:2e15:b0:728:e906:e45a with SMTP id d2e1a72fcca58-72dafbfd7e4mr57912507b3a.24.1737897246481;
-        Sun, 26 Jan 2025 05:14:06 -0800 (PST)
+        bh=QLoVlx6oEIPZAT8q+IhaVOvydmmsMymu4vL1n+j7EdA=;
+        b=Clvxm2EVyXNSgyKm1mKGj5duEw2FbzVBgy4SOIzF9fFIbIQsGKn/XxRDdN7FYBLgMG
+         y3rpQ2831FOEgocSTWQuj2q89rQfNzA8XY2ULIKaq+PxTpoYCs19AcOEOFnzUfv3AVzv
+         U3MSTprhl0XXg7CrBYWVL62GG18y8HWzJq/B7GMtfp+94YLdxkleCeb7Z5FNnxQjrcGO
+         HGB4k8Hp2vUaIorWHLdpsJE2lH31qZR0k2YlIceYNMO06N6g5Cc+OYHLQH3QHug0dpzp
+         pzek/BePWyIEhVae7/qqIO5RHl2lzJCSyn1ZE7hrzuuswCBcQSyVJysGrkcfozDUl6gU
+         9y9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUnrSE47wC0I2GOWT74iIQeksnIuowu/kEP+wd5EtBBKkdBF6DMRoA5QKF8EcMbnDEcvMDc5tiqVsjl@vger.kernel.org, AJvYcCUohuv9FjyfNtfGh5vl87Am3Su5KFFuGtMK9Wsq0QZy4LjyrntT/gM6V9Nisd/Pkg0/brkRpbmWQ78=@vger.kernel.org, AJvYcCVU89/JNr5FwmcIBqVS4EaM52uO+sYSM/vI3Uk/dMgl8wQnUZPrc02p5I9mjfQlzrkaameBvqIVocB4Pw==@vger.kernel.org, AJvYcCVZf4XMOVZl2JqG9ndzf0PUKRZFtPHypnTulA0sfpzf4gIYYYlXDflibR7w13Wfm+99tYcBUthM11SBtJ/YwkI=@vger.kernel.org, AJvYcCVd9+2V4ayJApNhjUBIPoCd1sh0y7TkDlOfl/Mcdvfjn9CL99qzMxTOYSjHkuOT3ATn/T24EHazKV7kLEA=@vger.kernel.org, AJvYcCVoAJ04ixrrQEgFxbRhWIPLkbiWkGe2td9q6Of68R1nWotkkb5Qq7kw+UOy1AGQbELZFMR1mlXhoJ7d@vger.kernel.org, AJvYcCWZUw9QKDBZl2pQ53fALbHZPY/JSoU/S1n+SDl13ei9ovuH7XtXeaCoSVpwdw11HJce9nIOxhwgbJfC@vger.kernel.org, AJvYcCWqgNyTRwW8/ns2aJQIeyh0GcDTpOEDE7PLY7IXKmy0kbKn0ak1drt10Cc9P01ljx+QAlgBJ7tAPeC8Dnk5@vger.kernel.org, AJvYcCXXMEQvKyE9vLOpjCFEyg/L8L5LrT7N2jRCVbkLP/uBst+aUs401DIlPw7LnYIOvLRBcUoaTx90@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyllj4XKv3igB8b1p/Bj5qy3W0SvOZpC/2b2iaccl9Q5lL4m0Xi
+	3qracw2AcqvzKUn7ZjLVW2abgA9dcpG9QFjMxBGHZ0YIi+QeBdZB
+X-Gm-Gg: ASbGnctBQevylELUaZp59dhYr5FFSeR8FBfDQdekZ1nZHA7xxeKijw4dgb7kw4pyiWj
+	xr6bp/bB2Fw30TuHE9K3+XONXnzPVhfrILwOWcRWnBXrXEHJ2MtMHrLCz/Vq/wYevNI5xJ3Oizf
+	fwu0n1PZq7txJH89vN3pHe2VQOqgqEOQ7SC1qjxans6hEIpWLqgHZDPZVXYPs4U9LvtOv1QGQ9a
+	pF3pnFrcVRX2v/v9NiCqY96x4Rjle9+qxjjhhQvON9JCA7WD7pNQKxfNpzloFvWUI0XIBMMY4f+
+	0peCQw3VWysOOZ8msP1ltcQuxbadPspFhvXOjY6OVleV3LwcXgYTBA==
+X-Google-Smtp-Source: AGHT+IGMFiG105rSZ+Ev6CZzF2/4EhkVYSQdfdofXpKjATJ+ONYcld8Z1l0e0aViptb8FeBRJuyqvA==
+X-Received: by 2002:a17:90b:1f8f:b0:2ee:aa95:6de9 with SMTP id 98e67ed59e1d1-2f782d8c0c4mr58878158a91.33.1737897495787;
+        Sun, 26 Jan 2025 05:18:15 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a69eb69sm5336665b3a.13.2025.01.26.05.14.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa44cadsm5138806a91.4.2025.01.26.05.18.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jan 2025 05:14:05 -0800 (PST)
+        Sun, 26 Jan 2025 05:18:15 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <abe834aa-4989-4480-9f68-3187e0d113ec@roeck-us.net>
-Date: Sun, 26 Jan 2025 05:14:04 -0800
+Message-ID: <685ce5ff-127a-4f8b-b058-d36d3adb1c0d@roeck-us.net>
+Date: Sun, 26 Jan 2025 05:18:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,15 +68,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND] hwmon: (isl28022) Use per-client debugfs entry
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-renesas-soc@vger.kernel.org, =?UTF-8?Q?Carsten_Spie=C3=9F?=
- <mail@carsten-spiess.de>, Jean Delvare <jdelvare@suse.com>,
- linux-hwmon@vger.kernel.org
-References: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
- <3c265d34-9442-495c-a715-be2eab3b37d7@roeck-us.net>
- <6da29214-9ea3-42af-9ec1-7ed5a2da7bfa@roeck-us.net>
- <Z5YgfT1JhhzlLdeD@shikoro>
+Subject: Re: [PATCH v6 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250123091115.2079802-1-a0282524688@gmail.com>
+ <20250123091115.2079802-7-a0282524688@gmail.com>
+ <c1cbb337-9ca5-4071-b05a-a97ab451f358@wanadoo.fr>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,32 +129,87 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Z5YgfT1JhhzlLdeD@shikoro>
+In-Reply-To: <c1cbb337-9ca5-4071-b05a-a97ab451f358@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/26/25 03:46, Wolfram Sang wrote:
-> Hi Guenter,
+On 1/25/25 23:42, Vincent Mailhol wrote:
+> On 23/01/2025 at 18:11, Ming Yu wrote:
+>> This driver supports Hardware monitor functionality for NCT6694 MFD
+>> device based on USB interface.
+>>
+>> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+>> ---
 > 
->> I don't know if my rationale is correct, but the attached patch fixes
->> the problem for me.
+> (...)
 > 
-> Ah, yes. I didn't think twice when seeing that the debugfs entry for
-> adapters is created in i2c_register_adapter(). But, of course, this
-> function is called from the probe() function of the parent device.
+>> +static int nct6694_temp_write(struct device *dev, u32 attr, int channel,
+>> +			      long val)
+>> +{
+>> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+>> +	struct nct6694_cmd_header cmd_hd;
+>> +	unsigned char temp_hyst;
+>> +	signed char temp_max;
+>> +	int ret;
+>> +
+>> +	guard(mutex)(&data->lock);
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_temp_enable:
+>> +		if (val == 0)
+>> +			data->hwmon_en.tin_en[channel / 8] &= ~BIT(channel % 8);
+>> +		else if (val == 1)
+>> +			data->hwmon_en.tin_en[channel / 8] |= BIT(channel % 8);
+>> +		else
+>> +			return -EINVAL;
+>> +
+>> +		cmd_hd = (struct nct6694_cmd_header) {
+>> +			.mod = NCT6694_HWMON_MOD,
+>> +			.cmd = NCT6694_HWMON_CONTROL,
+>> +			.sel = NCT6694_HWMON_CONTROL_SEL,
+>> +			.len = cpu_to_le16(sizeof(data->hwmon_en))
+>> +		};
+>> +
+>> +		return nct6694_write_msg(data->nct6694, &cmd_hd,
+>> +					 &data->hwmon_en);
+>> +	case hwmon_temp_max:
+>> +		cmd_hd = (struct nct6694_cmd_header) {
+>> +			.mod = NCT6694_HWMON_MOD,
+>> +			.cmd = NCT6694_HWMON_ALARM,
+>> +			.sel = NCT6694_HWMON_ALARM_SEL,
+>> +			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
+>> +		};
+>> +		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
+>> +				       &data->msg->hwmon_alarm);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		val = clamp_val(val, -127000, 127000);
+>> +		data->msg->hwmon_alarm.tin_cfg[channel].hl = temp_to_reg(val);
+>> +
+>> +		return nct6694_write_msg(data->nct6694, &cmd_hd,
+>> +					 &data->msg->hwmon_alarm);
+>> +	case hwmon_temp_max_hyst:
+>> +		cmd_hd = (struct nct6694_cmd_header) {
+>> +			.mod = NCT6694_HWMON_MOD,
+>> +			.cmd = NCT6694_HWMON_ALARM,
+>> +			.sel = NCT6694_HWMON_ALARM_SEL,
+>> +			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
+>> +		};
+>> +		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
+>> +				       &data->msg->hwmon_alarm);
+>> +
+>> +		val = clamp_val(val, -127000, 127000);
+>> +		temp_max = data->msg->hwmon_alarm.tin_cfg[channel].hl;
+>> +		temp_hyst = temp_max - temp_to_reg(val);
+>> +		temp_hyst = clamp_val(temp_hyst, 0, 7);
 > 
-> Your patch is definitely one solution, but give me a day to think more
-> about it...
+> temp_hyst is unsigned. It can not be smaller than zero. No need for
+> clamp(), using min here is sufficient.
 > 
 
-Sure.
+Wrong conclusion. It needs to be declared as signed variable because
+"temp_max - temp_to_reg(val)" could be negative.
 
-In this context, it would be great if client->debugfs was cleared if creating
-the debugfs directory failed. While debugfs functions check if the dentry
-pointer is valid, that is not the case for other kernel functions. Knowing
-that the pointer is either NULL or valid would simplify drivers (such as the
-PMBus code) which need to make that check.
-
-Thanks,
 Guenter
 
