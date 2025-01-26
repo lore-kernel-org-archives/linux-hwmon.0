@@ -1,141 +1,97 @@
-Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950EB2D613;
-	Sun, 26 Jan 2025 10:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB63A59
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Jan 2025 11:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737886433; cv=none; b=P1kJQyDkNOXR2iuZHBtTRQcY1pPGDKAe5hOPFxhgVg/SWTglrx3mzlUiBkN+XXWgOxaDu7iEp5OGDtjwlGWDgqlUWs2V+g/ylsVgI5+HJsLIu6QoT4Hj3SY/Pp/kKGPFBCHulFdR+a0zNyGpOm8j0PgJALEklNkrFKsOXRql760=
+	t=1737891970; cv=none; b=C+KM/akR+JNjZ1a4c3rFlgyWDb0xD74HX/hLO+khkps7mJZZbL2qRY0V5L1TuyIaoYsjVfC9yx391X/xfrgWpVXDQISQJdDvMRLogfmNrRr1C6tOId+LYAfJUuZo+LOvn2Ui6EEXxDCDYIdGoz7q3jfL/UDUXejtMqjvXRyZpvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737886433; c=relaxed/simple;
-	bh=uD5OVzo0nbIKLlTxZkXR0NJMvGjiwqmqvlf9vxpCAZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QMzpRRZBj4O2zLYjHq6IKfVuemb3Mffx9rZlq3GOem1f4HHiVGkFD3HbL7FAhOnURinbGrS0xqN2XlEUYvldTm62WFBpYpYg2O/mk+2Peq2eRhicpp35MUm9enlPeRnDHLV/XY/b9Q7hvjV4VYqDBDhq7l9x2YP9S9s33UNy12w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ap9LKuh7; arc=none smtp.client-ip=193.252.22.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1737891970; c=relaxed/simple;
+	bh=QPKGoLMUSl8mVVX9P3WsnR/Q98/KaA3tmLHc37JnLvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQDegtQ5as4Sz4jq2h627DwgsmFCkLxDH+ja1+h+RZKeVSEk7Eu7iOMZoXFcEU0AUkMNM4wPQp9E0M3/lBU95rdXs469bePHDSA5MMciP1TMp1UCQz6M0eqEr0lprewnih/Nt6H5rp5gv9Oy7hdwXUMPZ2BJ6Eh5g2Nq2VJoAGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iPz5Pata; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ap9LKuh7"
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id bzdzt3S1NOC04bze3tixCZ; Sun, 26 Jan 2025 11:13:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1737886428;
-	bh=hEq9dZjYaIApUyBFIuiJTtheymkaJ0ZQsN2y0VgOHEc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=ap9LKuh7HboHc9BOQ0Gu7MDOMwvDLJSYYFNcODObX9mc+1Ud4UljfpGtf6XLoHVIx
-	 4K9Yj4sNYbGH4sdUP7VRtTLFGAGBzbhG8gJoMXCScORLJ2rkQ/tkWyR8/FZGmyKtR1
-	 t3GEc/zXA6lVNwrbBCAnA7JfWu7xMTYXu3mIZiJqZQAICduUcb+NJOVnOnpbyaeGgF
-	 HNEPu8ZfvNzXgVnLjfTv4BniEyqcortK3IdNkowld2LeQMm0T90IeiUjgxh18JPZ21
-	 2GITZ0iK1Mi+FzPFNrCbDFJs51i0ZLnCeKtdMNWOI+eVe5X8OEAXZAQrNjE5lmEcaY
-	 YwoTlcR6vZhIg==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 26 Jan 2025 11:13:48 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <825dad63-4241-4dd2-92fb-c9f95bd2220b@wanadoo.fr>
-Date: Sun, 26 Jan 2025 19:13:30 +0900
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iPz5Pata"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=QPKG
+	oLMUSl8mVVX9P3WsnR/Q98/KaA3tmLHc37JnLvA=; b=iPz5PatazySgnqKewjQE
+	B3wenRUV6SUoKYOEpBsCv7mg/SFyLd2X7rID7LjyrGXmHzQ5LbHbfwBgTu2orUq/
+	/X0faxnJX/WZ23eqBlhmmHPePhUDwWC/u5HrHlMzULXV9yQRRnmDDwTiz+cy3JVB
+	actj7LjDnewLvgQZNr40hxWL0mzozWuoJkZ8Dy0QsIR8WGp36YSRhITUD9ry5Ued
+	wIHzC4pkN6OISisHhGWYxCPY35ZWXVZ+BBe7gdtrCtM9jrS9mkSvS8AlXHf+t6nb
+	vObD98/MVQ2XjKIAo5peLUzoT8TjbMM7azQ/b9Hag5SIOoIKEF6F0UEyK/IVqckf
+	Mg==
+Received: (qmail 4112580 invoked from network); 26 Jan 2025 12:46:06 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jan 2025 12:46:06 +0100
+X-UD-Smtp-Session: l3s3148p1@5JtGgZosHLIujnvm
+Date: Sun, 26 Jan 2025 12:46:05 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH RESEND] hwmon: (isl28022) Use per-client debugfs entry
+Message-ID: <Z5YgfT1JhhzlLdeD@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-renesas-soc@vger.kernel.org,
+	Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
+ <3c265d34-9442-495c-a715-be2eab3b37d7@roeck-us.net>
+ <6da29214-9ea3-42af-9ec1-7ed5a2da7bfa@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/7] watchdog: Add Nuvoton NCT6694 WDT support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250123091115.2079802-1-a0282524688@gmail.com>
- <20250123091115.2079802-6-a0282524688@gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250123091115.2079802-6-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 23/01/2025 at 18:11, Ming Yu wrote:
-> This driver supports Watchdog timer functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> ---
-
-(...)
-
-> +static int nct6694_wdt_set_timeout(struct watchdog_device *wdev,
-> +				   unsigned int timeout)
-> +{
-> +	int ret;
-> +
-> +	ret = nct6694_wdt_setting(wdev, timeout, NCT6694_ACTION_GPO,
-> +				  wdev->pretimeout, NCT6694_ACTION_GPO);
-> +	if (ret)
-> +		return ret;
-> +
-> +	wdev->timeout = timeout;
-> +
-> +	return 0;
-> +}
-
-Not critical but I would rather like you to fix this shadow warning:
-
-  drivers/watchdog/nct6694_wdt.c: In function 'nct6694_wdt_set_timeout':
-  drivers/watchdog/nct6694_wdt.c:168:49: warning: declaration of
-'timeout' shadows a global declaration [-Wshadow]
-    168 |                                    unsigned int timeout)
-        |                                    ~~~~~~~~~~~~~^~~~~~~
-  drivers/watchdog/nct6694_wdt.c:36:21: note: shadowed declaration is here
-     36 | static unsigned int timeout = NCT6694_DEFAULT_TIMEOUT;
-        |                     ^~~~~~~
-
-> +static int nct6694_wdt_set_pretimeout(struct watchdog_device *wdev,
-> +				      unsigned int pretimeout)
-> +{
-> +	int ret;
-> +
-> +	ret = nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_GPO,
-> +				  pretimeout, NCT6694_ACTION_GPO);
-> +	if (ret)
-> +		return ret;
-> +
-> +	wdev->pretimeout = pretimeout;
-> +
-> +	return 0;
-> +}
-
-Idem:
-
-  drivers/watchdog/nct6694_wdt.c: In function 'nct6694_wdt_set_pretimeout':
-  drivers/watchdog/nct6694_wdt.c:183:52: warning: declaration of
-'pretimeout' shadows a global declaration [-Wshadow]
-    183 |                                       unsigned int pretimeout)
-        |                                       ~~~~~~~~~~~~~^~~~~~~~~~
-  drivers/watchdog/nct6694_wdt.c:40:21: note: shadowed declaration is here
-     40 | static unsigned int pretimeout = NCT6694_DEFAULT_PRETIMEOUT;
-        |                     ^~~~~~~~~~
-
-(...)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="d4jbkN6BPBEPGVnj"
+Content-Disposition: inline
+In-Reply-To: <6da29214-9ea3-42af-9ec1-7ed5a2da7bfa@roeck-us.net>
 
 
-Yours sincerely,
-Vincent Mailhol
+--d4jbkN6BPBEPGVnj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Guenter,
+
+> I don't know if my rationale is correct, but the attached patch fixes
+> the problem for me.
+
+Ah, yes. I didn't think twice when seeing that the debugfs entry for
+adapters is created in i2c_register_adapter(). But, of course, this
+function is called from the probe() function of the parent device.
+
+Your patch is definitely one solution, but give me a day to think more
+about it...
+
+
+--d4jbkN6BPBEPGVnj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeWIHkACgkQFA3kzBSg
+KbbFyQ/+LCAkhmAwJQMMOGcnb05ZKM4wswmrcBhMfj/wIMRx7JvTiy4UD7zYQT62
+N5L1YrbumkgNJXKX4XT46gi1uEKptrNhx8766gP8HHhnWnhD4XNaVEOHYB/MND/v
+AvMBIpOVuP94EIU8WaDHNQmvgN0DR64sSEpOD9ClaZxVngw7oYWzcBngaqwOkkKq
+b96Py+1+8/1a/NH2XqUYa6INa5FTn2ttOYJMOPxlknyRZ1WpURp2wz/Mep3iGUJ0
+7RQ8OhHNVe9n6FWlwGm0Hx+saHSlTTv/vdr4lYfSwFMZFMsn0wWWuRHAuivyow3E
+dinc/0PiaT9Gxazj5kykEAiVQTsm+Htbdj/httUuGyFEciyt0jO9+vqtG7wSf2aP
+nt5rVZL72Xug9T6+mEgeeNVlTDBqByfd79J7aWoBX0llxh5mwlSthTRiibgUdiNu
+jLKjIp+ALbp55QvoWO9C4Aa9KFJfdOqhVEIyFytfj4ySL9m2M6xZnnHCBL6oefxj
+vFnFbdA5PgGMsd7WOmY+waBpwqmOCoLEsAszPP8bTc+p6TFR+XaU/AED1HyxVwZM
+3hz6Dk/wCSrSV/bQ53vk9bg9Vbix5q5qsbGRrzzgUe2twkWrMysiRJvz4IcbIuTA
+BVOqaeSAHbI+kgatYxcIYQWpV6l527BLPSqwyTYPG/R2LQ1CxYI=
+=pcpS
+-----END PGP SIGNATURE-----
+
+--d4jbkN6BPBEPGVnj--
