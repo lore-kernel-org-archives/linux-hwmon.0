@@ -1,161 +1,115 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E8818BBBB;
-	Mon, 27 Jan 2025 20:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD9E18FDA5;
+	Mon, 27 Jan 2025 20:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738008859; cv=none; b=DZPSIGzC+Tku0Jht2svEFWcT0TxP1on31LeQzgFW5VomO23jY8vv69ocPvuSwoX1XtK4ZdjvxB7bEkvZVIekx2H+aYVQegu9O6jZfiV7zLfdfXIIAdfBtbwNlEVwJQmGWl5XyFysnLiaBtPlAuihVBNXQv04ym9A7/k7DY7LPn0=
+	t=1738010152; cv=none; b=HCcVJV0vXZscl+IySJSscIsocFJJK/77VmRgIVPq8K2kMWdggHkY2fGw40GNxi42bcXYr2lLSDbMn8LKQd6tkTPdJds3A4a66LVMgYomoXuByV659b53bvJFGKmbJ/CkzS2pg9fTS0x2EQ/M94Xv7BAT7LqxJbVwFWdvuP6H3js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738008859; c=relaxed/simple;
-	bh=XdLtn4quuaBxuUISSB8yQNL/1UvPIGGzwtHJINKG8/Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eIvN3b2rFXv4RKrrXUf4VhLE3CHBBGkRb+jwd/Z/O7YWIg3m2k+91q1d+wAiC+/E5V+hhFwMokikrRwDc5M9R0t8t4GN+IjKTARCLzk+ERiPrtOSx7F91t8MJoUs0dYsngQid166JtFrA3aMXN3ulXwbShfPN4S0LpemlkYwhIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+fqAJ+/; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738010152; c=relaxed/simple;
+	bh=5eMJRLtuqqyveoagaSTgOeIYAFsliPhaMbkd6gMZSaU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kEu3rInXD/qGKvYn0giBkSP7RrNEpTUt7Yduj4gRMXwJkPaa6AcIiYfXcKeGHNvaVE2CpI8Le4ttj72dGqEkQeVQdQc11iPKbb4RdDu6VM4aWXmEGlp6Linga2pdkFi5qve4eKWVDtORTEavpiGIdidXnkxvXH8Q1Ha/crACd+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lmFsocao; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+fqAJ+/"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21669fd5c7cso86491075ad.3;
-        Mon, 27 Jan 2025 12:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738008856; x=1738613656; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=suJf/HEqHsMHaCSANSOZbLLa+EWjVVVMsD4BM3M4r4g=;
-        b=M+fqAJ+/DI38DK5t6lxhLkGYZrjSZaYcQdXzXcAVwnL3gs+mG4tPkXQ+MFefDCjqji
-         MBF2GsOlj6I7XL50u/FsdnSPBi+a0iZ3HWzUMWTYrDs2tIu8Tsdkt+2FQTMbP+NXMGm5
-         OHa5CCq3MmhJCG5LTlMwaeiKCmQMPACnIRl+PBgT46g0lDy/OTUFpmZp4t+Xef37S7ry
-         5K40ES46w2a2RIvQ+IRz9tRd1i9S98rpWqgoJRBsnHdwhQm9JPtegIkU7kkLqT/CmSfM
-         EI9IVu8NAaFAQIJDy79qXeDhm0CdV3fpo1XsnVsCOeaxeOgpoKsYdIKxQxVBP0vb5H95
-         eYOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738008856; x=1738613656;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=suJf/HEqHsMHaCSANSOZbLLa+EWjVVVMsD4BM3M4r4g=;
-        b=spfh+DVWi/dv7LOBXCHqZQBSwsHxQjOB6PUIq/qURZFC8LIyyuAXkpV6rr9IhrUzpF
-         2p+cgpIXGgZ9jIKa1/XXmGBPce2Jb6DGlDA6lPqvpgFaG2y52Y9hAjX/CNL/Tvbb6ZIp
-         kgD3gC/EYgWEwEFERbpYg2+x4SHDX+h4m/YHFAd2YGnvjHyDMSBvRNQxO8xq4cyqx6W4
-         FEbXyd5Nbn9szoIXxF7qKFQe5KGtn4jD45paC2TqgMgn2awGW4bgKl5fUDAQl+Yw8M17
-         Otf7LcCRIImEFkfLmcFDNMIwmGMh6knWeX52L1M9cmY+dM+Ew1iEjVC8aJPZ+O22Mqxn
-         tyuA==
-X-Forwarded-Encrypted: i=1; AJvYcCUu1SUMsaWKteeMZ1eBq8daTmbC7UxAZJq5OP0tJJNnncaiuBgJXFrJF+4uE7OwDPXPMP2P+WiTQFzu@vger.kernel.org, AJvYcCXZyERenUHFOUT+4anqgD+zuw6R+kNW5t0eK4suvYGTnw8qo8b0i7TrCZbR3qxg8y9hZQFrN0DCGxiLG/U=@vger.kernel.org, AJvYcCXdIl24XfVj2O26Pd9rKxE/TprP4CT2nngocqdLPuTwyNE462b35eqtkRt0OoqYErXShpKrYSaUBT+S25LD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7JczOB/T2RmdlcbRAaxpgTrgM5Kdc3DMgjAoQZix9nmal9POX
-	i5gsrbE1+PZVA2JaYiLYInqCmboDbBOVddpC+GqVHwe/5JagHHtY
-X-Gm-Gg: ASbGncsyyVZOr4wtD7kf1JQqmcpM+6T0d3QteXcyDjmuMlbvrbMTrl6OPWAQ7Y3p7ek
-	wOSCCHYNftFGz87L3TJEd7BGgBrfGZZBZQDvPbCEWu9rrTSZoinUYif5xulTtP+fUZElPkJ5gCN
-	6eIipFRwGtubpIg2iuG0h/k5/vSphH8vNlRUd9iEmq+opr7Ll5YXbJ5F/F8zLJXW5NQRhgGyE8X
-	bpZ6pSLInUfSTuwbje1O/dt5hHDcZlQRqffmV1sQoC2wn0AykMnbxbPR4yVSq5wapwTo59yvxnn
-	ondJ1z/yZwsjLl1CBi/Y5x8Z4NSvSYd3fjW2uFAoA64KwNPttydRkw==
-X-Google-Smtp-Source: AGHT+IEE6kMcw+ib+xPXtqwUJT4WXgGuhp268d1lgJueu9itxPBMzr4XdEtwnwF9NR2WMqv6S0ZwfA==
-X-Received: by 2002:a17:902:e881:b0:215:7b7b:5cc9 with SMTP id d9443c01a7336-21c3552fe17mr716591855ad.22.1738008856446;
-        Mon, 27 Jan 2025 12:14:16 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da4141bd0sm67929875ad.114.2025.01.27.12.14.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2025 12:14:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d0ad8ed6-b0d8-4bf2-acfb-1d9b098d6550@roeck-us.net>
-Date: Mon, 27 Jan 2025 12:14:14 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lmFsocao"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738010151; x=1769546151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5eMJRLtuqqyveoagaSTgOeIYAFsliPhaMbkd6gMZSaU=;
+  b=lmFsocaowAq5bsYdK4kIFzDgLldL7+9k6Z75UoOPuHBIu5V2VzCtyMdX
+   VrAJDA1PxWdfyy5ytwvPMr1pOkGTBzJDeexhHG9JmxbOZR8898ZqsRypj
+   p+aYqYsDXcWgCM2US3XzJuW72eQMYAKqmryo4BfEPQrLLufdxq4AiVdOG
+   GUXxqYc5yMIaRivQmZinCtW/hJ/A1qYo5gonzF8aCOxlg5dpiaOEdk0Z0
+   4CeoqnFyw1Dl0FBa9EKqcYlNDyfOyFcQCZ3mghnYUYAMrHq6rmdp0LWb/
+   MD5wQpvOvG5wFevq3kBZuhN65u9iMQ8frcNGs+QuQPNJ1GLttQJdQHwlf
+   Q==;
+X-CSE-ConnectionGUID: /fsOZOB6QnKUhq5woy8ywg==
+X-CSE-MsgGUID: ahXy+uORQL+lFQGzBMszaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="63845729"
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="63845729"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 12:35:48 -0800
+X-CSE-ConnectionGUID: 5guNiBOYQBmsRAtUYuMsUA==
+X-CSE-MsgGUID: nc+loxkyS++liyYqNhESqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113171423"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Jan 2025 12:35:45 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tcVpf-000h8Z-0t;
+	Mon, 27 Jan 2025 20:35:43 +0000
+Date: Tue, 28 Jan 2025 04:35:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+Message-ID: <202501280459.uH0yw7av-lkp@intel.com>
+References: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add description for sensor HTU31
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Andrei Lalaev <andrey.lalaev@gmail.com>
-Cc: jdelvare@suse.com, conor+dt@kernel.org, robh@kernel.org,
- christophe.jaillet@wanadoo.fr, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250126144155.430263-1-andrey.lalaev@gmail.com>
- <20250126144155.430263-3-andrey.lalaev@gmail.com>
- <20250127-agate-mouflon-of-promotion-6df8ee@krzk-bin>
- <57e08fc1-a319-4778-ba4a-28655f413511@gmail.com>
- <7d598b2c-dbef-4574-b154-cfef9b4c2099@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <7d598b2c-dbef-4574-b154-cfef9b4c2099@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
 
-On 1/27/25 11:39, Krzysztof Kozlowski wrote:
-> On 27/01/2025 20:21, Andrei Lalaev wrote:
->> On 27.01.2025 08:07, Krzysztof Kozlowski wrote:
->>> On Sun, Jan 26, 2025 at 03:40:56PM +0100, Andrei Lalaev wrote:
->>>> Add trivial binding for HTU31 Temperature and Humidity sensor.
->>>>
->>>> Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
->>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>
->>> Please version your patchsets correctly. `git format-patch -v2` or b4.
->>>
->>> This is not v1 and you could not get my ack on v1.
->>>
->>
->> Oh, my bad, sorry, I manually edited the cover letter and forgot about patches' subjects :/
->>
->> Should I resend v2 with normal versioning, or would you prefer me to go straight to v3?
-> 
-> Tools might work fine with it, so no need to resend, unless Guenter
-> asks. But if you send v3 for any reason, be sure to mark all of the patches.
-> 
+Hi Cedric,
 
-Please no resend just to add version numbers to the patches.
+kernel test robot noticed the following build warnings:
 
-Guenter
+[auto build test WARNING on a76539b293677c5c163b9285b0cd8dd420d33989]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-trivial-devices-add-lt3074/20250124-234209
+base:   a76539b293677c5c163b9285b0cd8dd420d33989
+patch link:    https://lore.kernel.org/r/20250124-upstream-lt3074-v1-2-7603f346433e%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+config: x86_64-randconfig-r071-20250126 (https://download.01.org/0day-ci/archive/20250128/202501280459.uH0yw7av-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501280459.uH0yw7av-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501280459.uH0yw7av-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/lt3074.c:103:34: warning: 'lt3074_of_match' defined but not used [-Wunused-const-variable=]
+     103 | static const struct of_device_id lt3074_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
 
 
+vim +/lt3074_of_match +103 drivers/hwmon/pmbus/lt3074.c
+
+   102	
+ > 103	static const struct of_device_id lt3074_of_match[] = {
+   104		{ .compatible = "adi,lt3074" },
+   105		{}
+   106	};
+   107	MODULE_DEVICE_TABLE(of, lt3074_of_match);
+   108	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
