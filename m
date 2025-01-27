@@ -1,97 +1,65 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701C615A86B
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Jan 2025 07:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A78158D8B;
+	Mon, 27 Jan 2025 07:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737961510; cv=none; b=AtdJhY6OnZU5bmf6CTXcOUR7WfPCSDfgB2i6+qoh1UTN+7AWe9g4Q4yClC09MJuLqt4R03rWMc922+ez/swXkgKL4QabFwMPYBgoeb9Yh4/Vhp5+L9Vw4aEAhXBMo5+TBqJw8k/8OO8iM/fLpao+wVgNvW3qvKoATuZjHLSe+eg=
+	t=1737961624; cv=none; b=VoBXXLkHypCmNIMuQxhf9In/1u84wSr64q09y5W+dOjuP5EcJXUwT7XC9gmcktCVAjJjSVfXAf34uSaPBpJOHVz3Hum9xudzVHDHrcVq5glVC+2ASD+v2LRKkx5U9JdYFNAUTSVDr/9Tgbh6Vkx9RrLapwU+oXZRRr9NjYpFYXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737961510; c=relaxed/simple;
-	bh=n1hQVa7OMj9DeCQltzmLdaXPvo+rMa5CKu60ABJ85rs=;
+	s=arc-20240116; t=1737961624; c=relaxed/simple;
+	bh=SXLE3cmMuWINy43LKTXWstgV4xMtgKx6sfC4zQfb4ns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nQ/OKzfgExLv5ncSi3OGuz47IsjVDWPUCoFGIWgiC9nbasTlJH/Nj8OWN9L5oAi2nL1sZ32BmpbMiU6RsklpCoiWY7WWiFUfegMQW+NteGJSDc38OXjKQtq3kQABfUkJbcUbVcGoCftZ8zYqPYLMZVhjNyrfXFV4zHHrTOM6/IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Uga4tXQ9; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=A0G9piK4YVYqNdlpEailGELQUARS4ecGcWbj9emF3RbU/5Urm/zxjhCefWPoI3L2o6BUsRBGaicgWvSCZcXc5s3urIF4BNUAI3MHTmWhs4eoHQ/gBO3+mEUxvk2kypFDNuyU4P39UAam/6sDvnUe46lvyy+SH7II97UcwhY8gC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+3BmUfI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Uga4tXQ9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=n1hQ
-	Va7OMj9DeCQltzmLdaXPvo+rMa5CKu60ABJ85rs=; b=Uga4tXQ9IZYCPmYrEwHi
-	gCcacANqub7fE06Y45E9cLUFs+41mMlDJXnxsLQji7woWnG6AqgBI4CZ4SKyk3jt
-	JdS+Dgt5kpQqYYkYgJ0wPQXvum9USBkuARibDYrbzgHrymYw1abfalyLJIVd+szx
-	BTYMRlD0j07uKUZLw+k3j2yEMPI5SwIZkmXNeOGooca5w4+FsFxTGVzjnPpJ8EYb
-	yYimP1GIXS2GLmOGd1HbNsDpjwjW8gsPKUTr+nDCucfwiIigHh7CHSUlyc/whJlg
-	sUoN3w4JRaZZujXp5HXmox2J5svJq4W9CU5e3SjZOzuQY7E8NlQBcDclc6rlioAI
-	4w==
-Received: (qmail 138116 invoked from network); 27 Jan 2025 08:05:06 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Jan 2025 08:05:06 +0100
-X-UD-Smtp-Session: l3s3148p1@2O03sqos7tIujnvm
-Date: Mon, 27 Jan 2025 08:05:06 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH RFC] hwmon: (pmbus/core) use the new i2c_client debugfs
- dir
-Message-ID: <Z5cwIimymydU-xvT@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-renesas-soc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org
-References: <20250123163304.46034-1-wsa+renesas@sang-engineering.com>
- <b59c8757-97d5-4d87-8648-adf27d7866f5@roeck-us.net>
- <5c87e9fe-06dc-44e2-83d5-96bd6e799a78@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+3BmUfI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33637C4CED2;
+	Mon, 27 Jan 2025 07:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737961623;
+	bh=SXLE3cmMuWINy43LKTXWstgV4xMtgKx6sfC4zQfb4ns=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r+3BmUfId+5EzWYPMSv+Abd3atUyloU65bg/KimTcv3tYLr6q7deNaM9zpsBfRKVz
+	 9BO6PAbXuR6CrWVDdhbW6biROn0RNHKecMFXbeKXABSXJmYyeUKCPyLhCqGjAZDrv8
+	 XWHbvxkq8BnR81QmkbVnM4B82IufmSM60GW57fGZATJMSenwIe3KH5AVvW5SMZ4dmc
+	 gsboJzRTrBMZ9zm5mXkU/cqsnk+SxDhyTlzwGJnStTWbIsMXjEgjwL+wQeVgDqHyP5
+	 KTlSJqnUt6tTic7M3am1wMtrt2qUpqYzBYgCZ9+JcGA9i4zWajrXjGCL71DJzLWfGP
+	 Tvf/Xpu+ZBvRw==
+Date: Mon, 27 Jan 2025 08:07:00 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Andrei Lalaev <andrey.lalaev@gmail.com>
+Cc: jdelvare@suse.com, linux@roeck-us.net, conor+dt@kernel.org, 
+	robh@kernel.org, christophe.jaillet@wanadoo.fr, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add description for sensor HTU31
+Message-ID: <20250127-agate-mouflon-of-promotion-6df8ee@krzk-bin>
+References: <20250126144155.430263-1-andrey.lalaev@gmail.com>
+ <20250126144155.430263-3-andrey.lalaev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rNYgNqu3xEKVMcid"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5c87e9fe-06dc-44e2-83d5-96bd6e799a78@roeck-us.net>
+In-Reply-To: <20250126144155.430263-3-andrey.lalaev@gmail.com>
 
+On Sun, Jan 26, 2025 at 03:40:56PM +0100, Andrei Lalaev wrote:
+> Add trivial binding for HTU31 Temperature and Humidity sensor.
+> 
+> Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
---rNYgNqu3xEKVMcid
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please version your patchsets correctly. `git format-patch -v2` or b4.
 
+This is not v1 and you could not get my ack on v1.
 
-> > I tried to implement it, but right now that doesn't work because the
-> > actual debugfs files are not removed from i2c/i2c-3/3-0020 if a driver
-> > is unloaded and I don't immediately see how to fix that.
-> >=20
->=20
-> I was able to implement this after fixing the problem in the i2c code.
-> It works quite nicely.
+Best regards,
+Krzysztof
 
-Ok, that means once your I2C fixup patch is applied you will send out
-your working version and this one can be discarded, right?
-
-
---rNYgNqu3xEKVMcid
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeXMCIACgkQFA3kzBSg
-KbbtmhAAhLI3F8NIyAD1HLObk6A2Lbd9PloNTsVBD7U52XyE7KuO2m2ARvEObGVr
-Ztp3aI6qiNi5IRhjzslDghgVhw7J6dNHb5dmIzB1Quk0rAC2zwyFwIubSuw9vkGo
-6YkJTGGn4FX7y2/46wBIkygI1elCu/zK4gnm4FiZ6eAzowim5CTpH6n6t8jJp5CH
-UuR4IBqKDoQVKBZY4AJBCu3j5J8sQzOnFc9Y5JQAhkTPYpIe5h/bqkBd1iAcDk8G
-RYXnX5xeXT8W7ajcKSI2rJYMN5DobdcCEPSF2ykuykONfdYVNpWXraoABmL2sJ1L
-amvLTa81mdXnFrcC4OnYQAQnYmEb2MUGC6xypNaYllJZsvLoUKTD3BLjxkniXo/0
-4Lk9rjeoxOayUKUIkwpppcW9NCUdBfzrPtolGqU9UDGrxsr9PbOkGA4PjG1SLh4S
-rDB+RRubsC20Q/2b/XCrMhtbIEvAkpC3vbcmA5/fOO7GwoBWFpLr1uB3bg7CNina
-oHeHgziToK9gBYhv4YnmG1YAoVFSdXS5hQRzECxkOBCxbvOkUqCfkr+7xyguB9x7
-0N/37gtdzQ9EJinfBoVJIfQ54s/VOsL8rC6ehKLCKIa0W55j3qLFeTam1X6RYind
-FdHFw2/VcfIeJbfC3TIftEoja2vWvogPYIbnwrJSWr/9UCxAros=
-=mLbJ
------END PGP SIGNATURE-----
-
---rNYgNqu3xEKVMcid--
