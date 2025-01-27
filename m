@@ -1,41 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A78158D8B;
-	Mon, 27 Jan 2025 07:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEFA172BD5;
+	Mon, 27 Jan 2025 07:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737961624; cv=none; b=VoBXXLkHypCmNIMuQxhf9In/1u84wSr64q09y5W+dOjuP5EcJXUwT7XC9gmcktCVAjJjSVfXAf34uSaPBpJOHVz3Hum9xudzVHDHrcVq5glVC+2ASD+v2LRKkx5U9JdYFNAUTSVDr/9Tgbh6Vkx9RrLapwU+oXZRRr9NjYpFYXI=
+	t=1737964293; cv=none; b=hdBUbeykKTxbb+3/R2F+Gxj45TjuHzgV/slArkCBEN2TiJnsU0WsXJwX5YqENjebDuL0NCTfSrx7e4q2A1LjldyyxOlbOxf6Asf1E5/PrOXO/zWW9RN0JNa75vfearHOzbc2BIacJkjpT4KT/uthK9RyI1uvSMBOPxVruMAtiZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737961624; c=relaxed/simple;
-	bh=SXLE3cmMuWINy43LKTXWstgV4xMtgKx6sfC4zQfb4ns=;
+	s=arc-20240116; t=1737964293; c=relaxed/simple;
+	bh=TTMl1Oj/RAcVPOSHA1vncS+HEaFPeXDpEO1sP2e94ls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A0G9piK4YVYqNdlpEailGELQUARS4ecGcWbj9emF3RbU/5Urm/zxjhCefWPoI3L2o6BUsRBGaicgWvSCZcXc5s3urIF4BNUAI3MHTmWhs4eoHQ/gBO3+mEUxvk2kypFDNuyU4P39UAam/6sDvnUe46lvyy+SH7II97UcwhY8gC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+3BmUfI; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AoAfSFvA1s330QPTYtl00uJSfNQAjEgmWqT/VPRbo01MIc2RrxHBaZ6NMuvPOofN48oxBZ8omteRPSG+Lkp48by8OoBgK/eQQn8Fv7KLRx/8QhLrzkNkd7tSCO1jxqPqdlHvufbn7rwYYCJBN5WYqp/ioHaVteTNaYmUh4nDqDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nJNiZMNU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+3BmUfI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33637C4CED2;
-	Mon, 27 Jan 2025 07:07:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJNiZMNU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F19DC4CED2;
+	Mon, 27 Jan 2025 07:51:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737961623;
-	bh=SXLE3cmMuWINy43LKTXWstgV4xMtgKx6sfC4zQfb4ns=;
+	s=k20201202; t=1737964293;
+	bh=TTMl1Oj/RAcVPOSHA1vncS+HEaFPeXDpEO1sP2e94ls=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r+3BmUfId+5EzWYPMSv+Abd3atUyloU65bg/KimTcv3tYLr6q7deNaM9zpsBfRKVz
-	 9BO6PAbXuR6CrWVDdhbW6biROn0RNHKecMFXbeKXABSXJmYyeUKCPyLhCqGjAZDrv8
-	 XWHbvxkq8BnR81QmkbVnM4B82IufmSM60GW57fGZATJMSenwIe3KH5AVvW5SMZ4dmc
-	 gsboJzRTrBMZ9zm5mXkU/cqsnk+SxDhyTlzwGJnStTWbIsMXjEgjwL+wQeVgDqHyP5
-	 KTlSJqnUt6tTic7M3am1wMtrt2qUpqYzBYgCZ9+JcGA9i4zWajrXjGCL71DJzLWfGP
-	 Tvf/Xpu+ZBvRw==
-Date: Mon, 27 Jan 2025 08:07:00 +0100
+	b=nJNiZMNU1sM/bL2YpfGzauv+yG22dhdxvb9/Ve+RKvpb6V17PRQ5dP+Ve7fTZUKtI
+	 ix1Rl1D4sM7GjlknFgh3lobyZMiuhgYat1c6OfKh42IZjdIXS9mx+hcWiiV+F5774p
+	 PkeJ4myn4JeHMDE64uNeKzUPE6lmHnanz0S8lIruKfsZ3W7+XhAbTlHTHCh7zPlxGc
+	 vHDWBXaxK/EXRv5ZvVNIvoR82YDc5tdHvfhotAnFCGayRifmoG9vFW7MEnGyl6bE3a
+	 gMV2yQTdV+a5v2btI+w1+1Mgn8YmS3J+eUEpGHrUs/jE6p2ig8+1W+82SsMrXOqO2g
+	 R2943gpa5yUhQ==
+Date: Mon, 27 Jan 2025 08:51:29 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Andrei Lalaev <andrey.lalaev@gmail.com>
-Cc: jdelvare@suse.com, linux@roeck-us.net, conor+dt@kernel.org, 
-	robh@kernel.org, christophe.jaillet@wanadoo.fr, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add description for sensor HTU31
-Message-ID: <20250127-agate-mouflon-of-promotion-6df8ee@krzk-bin>
-References: <20250126144155.430263-1-andrey.lalaev@gmail.com>
- <20250126144155.430263-3-andrey.lalaev@gmail.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ltc2978: add support for ltm4673
+Message-ID: <20250127-uppish-pastel-cricket-a86d00@krzk-bin>
+References: <20250124-ltm4673-v1-0-a2c6aa37c903@analog.com>
+ <20250124-ltm4673-v1-1-a2c6aa37c903@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -44,21 +46,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250126144155.430263-3-andrey.lalaev@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250124-ltm4673-v1-1-a2c6aa37c903@analog.com>
 
-On Sun, Jan 26, 2025 at 03:40:56PM +0100, Andrei Lalaev wrote:
-> Add trivial binding for HTU31 Temperature and Humidity sensor.
-> 
-> Signed-off-by: Andrei Lalaev <andrey.lalaev@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, Jan 24, 2025 at 11:23:05PM +0800, Cedric Encarnacion wrote:
+> Add LTM4673 to supported devices of LTC2978. Unlike other LTM46xx
+> devices, LTM4673 is a =CE=BCModule regulator that outputs four channels.
+>=20
+> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml | 2 ++
 >  1 file changed, 2 insertions(+)
-> 
 
-Please version your patchsets correctly. `git format-patch -v2` or b4.
-
-This is not v1 and you could not get my ack on v1.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
