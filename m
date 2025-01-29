@@ -1,91 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7D915B102;
-	Wed, 29 Jan 2025 15:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A753F28EB;
+	Wed, 29 Jan 2025 16:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738164043; cv=none; b=db/y2eCQSgW4m8Kq4RWeb6ZHa6Mf4Gl4ynyotjO2q1nQJCvTCESr4Fj5YC+I6yOp0NSJQ4YMuLMKc7PLc9ldEnAgukqmwBwfIPxKHLAEWXw9cmbI/PtVBj7b4k+Lt75eEkjjqSAMdhTJKHkZzOxYzjmp71ejAhzWC97d13ZntII=
+	t=1738166672; cv=none; b=TQIw2tpFb9txiF1pSGAglofe/AC+wHXgtz5hCZJxe99dcmLatA6kGHTs5Kvr486MRMcNRHLnZ2E74UrcIF40xmb+0ubzTjtGgXg+I8H9/OY7R6VI01+FvFvJfd6IOyuDqA9AA/ynIDcjmS/HCuXU7+Akl6kNj0RJbXKjQmCwJoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738164043; c=relaxed/simple;
-	bh=zbcMbQ9t/cyVVXS+L5s1JmeFHntC1ivSHMYA0kAZako=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dWPPFcmoKbuLUCGAA6tgUr4Y/VCeiNljt/B2rpbjlu6iAs1DONj8/tNHnIIWhXsGwptzWmK5aI0GXBIhLuysmveheFzvZGCmVpp8OSJ2/7plICrXeehxlHg83TGoGVYHPdj1esWGi8YSEE2/o32PbNAOkjDiEFPxqXJEhEy/bk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=klJZPxl0; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1738166672; c=relaxed/simple;
+	bh=yOaEsussPoFBUXTkYnFhiCzEDO+UdfBFLNm+VUfVfs8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rn1gVQNRCzNSWbX3AOiR2buyw+fvWzvYDBjl7DYTPoNS+bqBf4P+Vo6qLkal0DPCgJ+VsLZGxeanPiavXZNI3iIM6MkYYxtaargT2awFiVxJnSIgqEqwSf2VFKsvw141a4XIlj0Yvcwyr9q0m7TF8cyI8LQJHYD016UqRW9LQUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oa3w/sw8; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="klJZPxl0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738164042; x=1769700042;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zbcMbQ9t/cyVVXS+L5s1JmeFHntC1ivSHMYA0kAZako=;
-  b=klJZPxl0yClz4jGfJUFgXU0+NILogfQe+3m2OaoTS2DgOiNTP9D2ddyF
-   NT0FrvZG17g1lx+sQ5csabCs02daWEjzyDVBMEUABJEOQNWSA0Xmmd738
-   w1Unwpn5VumuwVvSQL4etd/r0R7gIpFL2esuh86sLB38jywh/p+RsnQwC
-   44udJOYmvoM8GGhD76oCQg4VfaRYAfJ3acqJKwSVcJxTmj4g7q2jCDSbf
-   20rwPscA+L4JJzDhfq/QsCLx/GcfuAPg1HiezawPLZh3h8K0Eao0zBmQr
-   TN1C8/ReVvX5PznyJZcS8TdRLRsKYRPxTkgt5gu/Dl9f5m3wyccmFbGYU
-   A==;
-X-CSE-ConnectionGUID: /4NBxs1KR+G0pfdvp0MU3Q==
-X-CSE-MsgGUID: IlDKq1b6RAKo0IwknumGPw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="37878898"
-X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
-   d="scan'208";a="37878898"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 07:20:41 -0800
-X-CSE-ConnectionGUID: +x1/4nCHSsOBO5kSWxlkkQ==
-X-CSE-MsgGUID: wsWu4Z1NRT2CIUWshFfibg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="146258295"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jan 2025 07:20:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B8A44303; Wed, 29 Jan 2025 17:20:37 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Tim Harvey <tharvey@gateworks.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] hwmon: (gsc) drop unneeded assignment for cache_type
-Date: Wed, 29 Jan 2025 17:20:36 +0200
-Message-ID: <20250129152036.1797725-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oa3w/sw8"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21c2f1b610dso9152725ad.0;
+        Wed, 29 Jan 2025 08:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738166670; x=1738771470; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q8QbVNZRMcVv2ZyVBP5Op4S9+xpgHdRPrK8dOKSdrcc=;
+        b=Oa3w/sw8+psmmprpxTGB7tDuI1j3RKkiDrEUD/3MeuEO+Qu8HfH1SDv64XaGeGrBHQ
+         UYy94td84azZcVmCVBrS5TpJhaT9mpXLNVA6gepJ5B+Cv8TBHKv27OkLYn9sin+mkfMX
+         4qIA3YjiOsGQb1/I/CZpMHv6Mniip+eNbSEEOUMnGWtMqk+shnzemo9tbru+drRbOF31
+         6pST5IUzF8531NR/7e/KWucB+LMYMcvYCjkyvCHmUDjWNfbxnKqBORpyuMYF+0Cbnf+W
+         jk7yGbhwoqfp6TnMEhiQcwohXyf9EkjS8zfzcB87NLga1Gjxh8d4mf2k59OWXC3yKDvW
+         aDiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738166670; x=1738771470;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q8QbVNZRMcVv2ZyVBP5Op4S9+xpgHdRPrK8dOKSdrcc=;
+        b=c04u4Cy6yB+BjKeXI/DSg8TrzGq0LkPk6ebALLvQhc2koCCJUdu7LoaJU/qbRFXSaJ
+         x31wkCaFHkouMluNZl9+mx6LNCX0D1leLJFtkC2mvZUQ5fxxzmpx/4G5X2he03CmoUn3
+         oZ7VlZMk1iWLd7DJVSPRYPidHiuUVvvFr1ZstTquT/EGWIMHcV1EB9LcqDUZLUGllfNV
+         9CRK75H0g5G6XrQo812/pOYgUbjCFO3SVbuIPcYZIZDvAfH9whpJXpHggkLd3qOY/Dul
+         3eGN7OzPKAYUL4SpJril9DDL5hT3R4xk74v661wYoezC98nDanJEWjc4BtyWScjP24Kk
+         VDVw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/bIjcNvejeaubMoaYXWK3Yh5nvcDBsXAJDQNID1SIyxE2kckpgKNGjtN7dgX8NiNqZLtCofbhu1OtmJA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyyyo59vvQcvVocBro5nPDQXkOF4POgccf59UyInNBgLUzdLowV
+	9mJOoh9WDwGFBQc8Wz6F/uFwOcJlER5mszi1irVy0DTotbg83VJKhukeJQ==
+X-Gm-Gg: ASbGncu90pQ0fV5OYuR2zb3CxvFdbpP8lIXV2PIOcWgiMveaWMGNVleKMFJ6hVNoJXM
+	osw0jEhexFv9oosq1wRjrYpgj+6kt7s5sbANbixMtd7K/KJN+EJ4VmtAU1c9cD+xfzYV+g0q9WR
+	PNGODJv4NRpKBjFbBYxL9C100w5HvEtBBPwTJFIeUP0D//+ja0oYUPbrwF5TEMTE1LKbhqHx3Kb
+	8nXI2xZbZmkg+XqJeCMCY/WwzBLQyaor/aegAspZ/0PFwRVeJtRKfJcFod7DKD6p7fQapB/AGX0
+	XaFFriYLpqFedTxP1tEyjiOmpQwq
+X-Google-Smtp-Source: AGHT+IHp1ND/1vgrv4toJ9izZ9XKn7Uos2tcfXdefLzzzRQgPCuWDDcZfO6grF0ulskKy7YsWlJkyw==
+X-Received: by 2002:a17:902:dacb:b0:216:1357:8df8 with SMTP id d9443c01a7336-21dd7de15famr56361035ad.43.1738166669782;
+        Wed, 29 Jan 2025 08:04:29 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac48fa81bf3sm10464314a12.24.2025.01.29.08.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 08:04:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 29 Jan 2025 08:04:27 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Tim Harvey <tharvey@gateworks.com>,
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 1/1] hwmon: (gsc) drop unneeded assignment for
+ cache_type
+Message-ID: <16d2ce40-325d-4722-94b6-82fbc5999b83@roeck-us.net>
+References: <20250129152036.1797725-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250129152036.1797725-1-andriy.shevchenko@linux.intel.com>
 
-REGCACHE_NONE is the default type of the cache when not provided.
-Drop unneeded explicit assignment to it.
+On Wed, Jan 29, 2025 at 05:20:36PM +0200, Andy Shevchenko wrote:
+> REGCACHE_NONE is the default type of the cache when not provided.
+> Drop unneeded explicit assignment to it.
+> 
+> Note, it's defined to 0, and if ever be redefined, it will break
+> literally a lot of the drivers, so it very unlikely to happen.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Note, it's defined to 0, and if ever be redefined, it will break
-literally a lot of the drivers, so it very unlikely to happen.
+Applied to hwmon-next.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/hwmon/gsc-hwmon.c | 1 -
- 1 file changed, 1 deletion(-)
+Note that the branch will only be pushed to linux-next after the commit
+window closed.
 
-diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-index 14a6385cd7cc..0f9af82cebec 100644
---- a/drivers/hwmon/gsc-hwmon.c
-+++ b/drivers/hwmon/gsc-hwmon.c
-@@ -47,7 +47,6 @@ static const struct regmap_bus gsc_hwmon_regmap_bus = {
- static const struct regmap_config gsc_hwmon_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
--	.cache_type = REGCACHE_NONE,
- };
- 
- static ssize_t pwm_auto_point_temp_show(struct device *dev,
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+Thanks,
+Guenter
