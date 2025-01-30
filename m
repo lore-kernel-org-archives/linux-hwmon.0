@@ -1,30 +1,30 @@
-Received: from mail.crpt.ru (mail.crpt.ru [91.236.205.1])
+Received: from mail.crpt.ru (mail1.crpt.ru [91.236.205.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15523E499;
-	Thu, 30 Jan 2025 07:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B98C2FB;
+	Thu, 30 Jan 2025 07:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.236.205.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738220637; cv=none; b=NKVDLB0a1MAahIJ0a4si0ZHuSj6g455dLa6RdsLpizR7jxM/4zD1Evq3O2z78KQypPQbtIrr2qu4iHHHpbqN+qPYBWshM8hx6EjzdKYtw69BB4i4GNmNvv5xolQy/A6xwq2+IOnZgejvmzil5CgSGXlAjowoaSPx2qB1Z16kjw0=
+	t=1738222852; cv=none; b=piafleps+XJvmCo9/ZzL2xzEcJQVbo9OX0prkc7avvyzfULCLbOKTZWIOk+Tb11qnD/Vd4rO0i0nLTo7ZhfrQKcBh5ziCw4846/uTHv6SsZUbSjEVL4c3jX9//CEMHTmV/+Glr2uYv0JfXfKi9IzeylDnuk1pWc/diosEjAqs4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738220637; c=relaxed/simple;
-	bh=S032GrX1Rk0WozHVNrJoPwdgahdXbXlWdo4zYMKndVk=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=s0M4rd3AfVYl4QEvsZ8vX1BJKBVblEl2HCcXNr5tWzjOnKG3ituseKZgdPvLFJeVUNn7ZcnK23NT7gPAvpnbzpXqazAwPiN4DE3q3unZyXyReC3PV43P/SO1dybkH1TTp5CkcIwU4ms7JLe2d7wOET1PuoiKhKVYf0xO1FOpIGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru; spf=pass smtp.mailfrom=crpt.ru; dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b=A+SVl32Q; arc=none smtp.client-ip=91.236.205.1
+	s=arc-20240116; t=1738222852; c=relaxed/simple;
+	bh=h2r953js5KMe/res5ngDhGH2T4wfjVJi31+pTjx2Bs8=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=gsxXEOJC3tda6s833GF0mhxWUfailZm9KAdcoqI7ziATIYTwZbT8vy8BWFz1GPDfUpmoE7r4EPRgY5vDHMz3ON1lUaFvvBiI6X0z7GHxYZTgaqU1E6iDOCWxeBirCmLulFQtH2dTP51couuoR0lIuvooJkQqmxn8UMuEgYTpM5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru; spf=pass smtp.mailfrom=crpt.ru; dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b=CQivQhkL; arc=none smtp.client-ip=91.236.205.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crpt.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b="A+SVl32Q"
+	dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b="CQivQhkL"
 Received: from mail.crpt.ru ([192.168.60.4])
-	by mail.crpt.ru  with ESMTP id 50U73WHY012286-50U73WHa012286
+	by mail.crpt.ru  with ESMTP id 50U7eM0L018830-50U7eM0N018830
 	(version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=OK);
-	Thu, 30 Jan 2025 10:03:32 +0300
+	Thu, 30 Jan 2025 10:40:22 +0300
 Received: from EX2.crpt.local (192.168.60.4) by ex2.crpt.local (192.168.60.4)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Thu, 30 Jan
- 2025 10:03:32 +0300
+ 2025 10:40:22 +0300
 Received: from EX2.crpt.local ([192.168.60.4]) by EX2.crpt.local
- ([192.168.60.4]) with mapi id 15.01.2507.044; Thu, 30 Jan 2025 10:03:32 +0300
+ ([192.168.60.4]) with mapi id 15.01.2507.044; Thu, 30 Jan 2025 10:40:22 +0300
 From: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>
 To: Jean Delvare <jdelvare@suse.com>
 CC: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>, Guenter Roeck
@@ -34,9 +34,9 @@ CC: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>, Guenter Roeck
 	<lvc-project@linuxtesting.org>
 Subject: [PATCH] hwmon: Use 64-bit arithmetic instead of 32-bit
 Thread-Topic: [PATCH] hwmon: Use 64-bit arithmetic instead of 32-bit
-Thread-Index: AQHbcuUSAUo2EvqAckGM6pWd+pAfUA==
-Date: Thu, 30 Jan 2025 07:03:32 +0000
-Message-ID: <20250130070324.20403-1-a.vatoropin@crpt.ru>
+Thread-Index: AQHbcuo3gZrlGSxZTk2kVGyH8yJOOA==
+Date: Thu, 30 Jan 2025 07:40:22 +0000
+Message-ID: <20250130073949.32154-1-a.vatoropin@crpt.ru>
 Accept-Language: ru-RU, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -59,12 +59,12 @@ X-FEAS-Client-IP: 192.168.60.4
 X-FE-Policy-ID: 2:4:0:SYSTEM
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=crpt.ru; s=crpt.ru; c=relaxed/relaxed;
  h=from:to:cc:subject:date:message-id:content-type:mime-version;
- bh=/u8Z2B1i1G2MsGUxKsxzUUF8hmyhVxNkNeP0nG+kJsU=;
- b=A+SVl32QbaodUI0Vi8bdyo6I1AvrUZnbAbPJDA503chYP6I5EA8ARzaIhnUfStFhgbsRrmsagXCV
-	Za1elIAYC+opj+9arSTRX0RA1L98X/MOZrthEps40ApU2XQbJVeAFdyFgJXiWuRH/9paofhI/6Wy
-	4aN4ADuhmLQCumhJjY/5kFK7VDaElSOfCU3yIUkWg+NFNSsPP7ZlP5Aq6e7JjvwSJchf9VQ44N4J
-	bRmXJGsrP1J3FWB9Rq3Clys5oyI/eC/0DBI/tBkUHqIQ0FjRZMt8aLVRrp8j6AgZs8VsbgDCmMmV
-	PPtIbw+wOmjiZxOxhpZeqPM9V3q6FTE51o2ApQ==
+ bh=nH+fCocC71NvxcKmnj5F8xJxc2NZj7A/PmZ+0JCxCps=;
+ b=CQivQhkLcG0A1SLRvkWBEuSwGkhTVQ+kHk7gbPpO3Zy82+cC2O4o6UGspJa+AdxIqdLBh+J/lBDv
+	Wecb9bZVWxWD2YY6TKi/3JNbBCBeN+uNsKEfpptiSqpQYyPRhIG3UV2z1xPkY291qgQB1AXYfRYs
+	mj3rSTIOh5l5l1difHKpTsks6PJB0tvjPdjtuAASXUChSx+xL+B0jZy+q8eIfGxgpJg4Px5WaOAV
+	RP3zgwQ0Ec4OPAsYV99xHOTdZjAYa209Iglq+A0yd1Ljty6FON6NC4NNj62JT9miVlgvWsiirdvz
+	bF2jXAtVyyvjVVp2uIfDOYNCIKsENxJm4AbMPg==
 
 From: Andrey Vatoropin <a.vatoropin@crpt.ru>
 
@@ -73,12 +73,12 @@ information about the proper arithmetic to use. Notice that this
 constant is used in a context that expects an expression of type
 u64 (64 bits, unsigned).
 
-The expression PCC_NUM_RETRIES * cppc_ss->latency, which at
-preprocessing time translates to cppc_ss->latency; is currently
+The expression PCC_NUM_RETRIES * pcc_chan->latency, which at
+preprocessing time translates to pcc_chan->latency; is currently
 being evaluated using 32-bit arithmetic.
 
-This is similar to commit b52f45110502 ("ACPI / CPPC: Use 64-bit
-arithmetic instead of 32-bit")
+This is similar to commit b52f45110502=20
+("ACPI / CPPC: Use 64-bit arithmetic instead of 32-bit")
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
