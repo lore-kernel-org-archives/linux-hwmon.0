@@ -1,104 +1,92 @@
-Received: from mail.crpt.ru (mail1.crpt.ru [91.236.205.1])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B98C2FB;
-	Thu, 30 Jan 2025 07:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.236.205.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144071B21B8
+	for <linux-hwmon@vger.kernel.org>; Thu, 30 Jan 2025 08:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738222852; cv=none; b=piafleps+XJvmCo9/ZzL2xzEcJQVbo9OX0prkc7avvyzfULCLbOKTZWIOk+Tb11qnD/Vd4rO0i0nLTo7ZhfrQKcBh5ziCw4846/uTHv6SsZUbSjEVL4c3jX9//CEMHTmV/+Glr2uYv0JfXfKi9IzeylDnuk1pWc/diosEjAqs4I=
+	t=1738227334; cv=none; b=pDFssoTg3OdIL54luXT/dJxl6HujvGBXhlNK9DavPeZ2Fc/xmmBkGyPrD0E+29rm0udsFlDl5uLg119C72kVrgh+XGbyylpudsede3fn16Z2knaJaeSTJuLimHPnw8ZE+7LmxDYCEFom6Rki+l3NffUpSBZB2zwBLL6Hj3x5js8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738222852; c=relaxed/simple;
-	bh=h2r953js5KMe/res5ngDhGH2T4wfjVJi31+pTjx2Bs8=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=gsxXEOJC3tda6s833GF0mhxWUfailZm9KAdcoqI7ziATIYTwZbT8vy8BWFz1GPDfUpmoE7r4EPRgY5vDHMz3ON1lUaFvvBiI6X0z7GHxYZTgaqU1E6iDOCWxeBirCmLulFQtH2dTP51couuoR0lIuvooJkQqmxn8UMuEgYTpM5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru; spf=pass smtp.mailfrom=crpt.ru; dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b=CQivQhkL; arc=none smtp.client-ip=91.236.205.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crpt.ru
+	s=arc-20240116; t=1738227334; c=relaxed/simple;
+	bh=jr1YXPpuQn45WWMtqArMdX7mIGv0AG3t2/kPaXHqraU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k/hluMwVqvlnpKCIvVNgGgbHwkxr1/GK4zDcSIdzgVCW4IyLubm0gzsMdp+oBoJp0RGsLjq0FkGo3KnBE89nVmzKieUoUs89HfcnOPHjf+zaLtKvSUXn6Qyi5uI9Jvf0hfmXWDuY3y+WZB0dp0nafUFUF5F1cumNxJ6NxqJ+Iug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=cjVXisjA; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b="CQivQhkL"
-Received: from mail.crpt.ru ([192.168.60.4])
-	by mail.crpt.ru  with ESMTP id 50U7eM0L018830-50U7eM0N018830
-	(version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=OK);
-	Thu, 30 Jan 2025 10:40:22 +0300
-Received: from EX2.crpt.local (192.168.60.4) by ex2.crpt.local (192.168.60.4)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Thu, 30 Jan
- 2025 10:40:22 +0300
-Received: from EX2.crpt.local ([192.168.60.4]) by EX2.crpt.local
- ([192.168.60.4]) with mapi id 15.01.2507.044; Thu, 30 Jan 2025 10:40:22 +0300
-From: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>
-To: Jean Delvare <jdelvare@suse.com>
-CC: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>, Guenter Roeck
-	<linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "lvc-project@linuxtesting.org"
-	<lvc-project@linuxtesting.org>
-Subject: [PATCH] hwmon: Use 64-bit arithmetic instead of 32-bit
-Thread-Topic: [PATCH] hwmon: Use 64-bit arithmetic instead of 32-bit
-Thread-Index: AQHbcuo3gZrlGSxZTk2kVGyH8yJOOA==
-Date: Thu, 30 Jan 2025 07:40:22 +0000
-Message-ID: <20250130073949.32154-1-a.vatoropin@crpt.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-kse-serverinfo: EX2.crpt.local, 9
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: Clean, bases: 1/29/2025 10:00:00 PM
-x-kse-attachment-filter-triggered-rules: Clean
-x-kse-attachment-filter-triggered-filters: Clean
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="koi8-r"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="cjVXisjA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=jr1Y
+	XPpuQn45WWMtqArMdX7mIGv0AG3t2/kPaXHqraU=; b=cjVXisjAqk1ws9w2mpk7
+	Buy7DNRu2DKVqkQoh4oOMu3m9CtmwPHYKPh2MC77Npt8qK/w5vEvqSYyd8L3s4//
+	R3+g7HKBeActGSyrr7hFmvdexoIwcQH1qqd49lZW1ifez0dXoCMkn3dGBetyF6+3
+	E9xYo1fGIYz7EkhdPFmLSDTqnQClCPuNRz2TQlLfWmLe9zGULCiPuIF11C8cvQ01
+	NVKIimuH8X1VRN4Pbkvu+2ubl5v2HGq1tATxgGK80ifhOy0B76idgsyeBTQIvqYH
+	wqlvFnvGqncygSvXmCK9c9ckwG7GOFcZ98nxp/jxnYmYRUzkMJ7IhGhJbjBIOk93
+	mQ==
+Received: (qmail 1209702 invoked from network); 30 Jan 2025 09:55:24 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Jan 2025 09:55:24 +0100
+X-UD-Smtp-Session: l3s3148p1@+ewtlugskqtZz6wz
+Date: Thu, 30 Jan 2025 09:55:23 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH RESEND] hwmon: (isl28022) Use per-client debugfs entry
+Message-ID: <Z5s-e0JwnO7o5hj0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-renesas-soc@vger.kernel.org,
+	Carsten =?utf-8?B?U3BpZcOf?= <mail@carsten-spiess.de>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20250123160347.44635-1-wsa+renesas@sang-engineering.com>
+ <50e84380-f054-4c2f-9961-6b8a1784ea10@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 192.168.60.4
-X-FE-Policy-ID: 2:4:0:SYSTEM
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=crpt.ru; s=crpt.ru; c=relaxed/relaxed;
- h=from:to:cc:subject:date:message-id:content-type:mime-version;
- bh=nH+fCocC71NvxcKmnj5F8xJxc2NZj7A/PmZ+0JCxCps=;
- b=CQivQhkLcG0A1SLRvkWBEuSwGkhTVQ+kHk7gbPpO3Zy82+cC2O4o6UGspJa+AdxIqdLBh+J/lBDv
-	Wecb9bZVWxWD2YY6TKi/3JNbBCBeN+uNsKEfpptiSqpQYyPRhIG3UV2z1xPkY291qgQB1AXYfRYs
-	mj3rSTIOh5l5l1difHKpTsks6PJB0tvjPdjtuAASXUChSx+xL+B0jZy+q8eIfGxgpJg4Px5WaOAV
-	RP3zgwQ0Ec4OPAsYV99xHOTdZjAYa209Iglq+A0yd1Ljty6FON6NC4NNj62JT9miVlgvWsiirdvz
-	bF2jXAtVyyvjVVp2uIfDOYNCIKsENxJm4AbMPg==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="i1kclPcaOoaYfPWT"
+Content-Disposition: inline
+In-Reply-To: <50e84380-f054-4c2f-9961-6b8a1784ea10@roeck-us.net>
 
-From: Andrey Vatoropin <a.vatoropin@crpt.ru>
 
-Add suffix ULL to constant 500 in order to give the compiler complete
-information about the proper arithmetic to use. Notice that this
-constant is used in a context that expects an expression of type
-u64 (64 bits, unsigned).
+--i1kclPcaOoaYfPWT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The expression PCC_NUM_RETRIES * pcc_chan->latency, which at
-preprocessing time translates to pcc_chan->latency; is currently
-being evaluated using 32-bit arithmetic.
 
-This is similar to commit b52f45110502=20
-("ACPI / CPPC: Use 64-bit arithmetic instead of 32-bit")
+> I expect that 'i2c: Fix core-managed per-client debugfs handling' will
+> be applied in the mainline kernel by the end of the commit window. If
+> not, I'll drop this patch and re-apply it after the problem in the
+> upstream kernel has been fixed.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Rightfully so. Just waiting for buildbot success report.
 
-Signed-off-by: Andrey Vatoropin <a.vatoropin@crpt.ru>
----
- drivers/hwmon/xgene-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 1e3bd129a922..43a08ddb964b 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -61,7 +61,7 @@
-  * Arbitrary retries in case the remote processor is slow to respond
-  * to PCC commands
-  */
--#define PCC_NUM_RETRIES			500
-+#define PCC_NUM_RETRIES			500ULL
-=20
- #define ASYNC_MSG_FIFO_SIZE		16
- #define MBOX_OP_TIMEOUTMS		1000
---=20
-2.43.0
+--i1kclPcaOoaYfPWT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmebPnsACgkQFA3kzBSg
+KbZwCQ/8DYYtAqtaKJYUgSFYRfA5EfQ/RpQdFlFFQfn87awwiRy6HpbsQUgj20QK
+8q+1R+/OzHysJzIi+F6Vmy4+p3+2gtgjfRHsobziiwflAWf8nSxCmXe8A9bGVjGq
+YRIyuydILRSDAZnqlUhSFgKvEGJSLPIk3OB9zM1PJN2I1P6xgJyC9YcLUaVkqy32
+KXcd5uPKt+t58Fzq2Tk95i2FXlHJX6bOWJ6oneUSzWENPtRKiEiUzQD2/My9r8Bo
+fXIunApeEY8X2M13y+HF/aopkchOLOnoUsAWHqTgxj704Sr6KvSAb6eBLymTBZpi
+TI+EB4wGsGD1CNL80Fsfx3QtKbEvsFNNiDCHKw/h4c1TRlTKkES+3P8jCRT3RuR2
+j4Qsqw8xf4DUBuaFk7GvpYDqvM5PVzRMhaqDlSJsfyNaQsPZvUvEFQYsoWowWe/7
+1Nay0sLxDOpzTTxVAWGeSbm6o+KFyXxWAOle32FucAHEN4tS2SQ7kfJ18sTM5QTl
+JN7fccOomESborZnDxKKAC8fqDGrZFRafesqvB+5XCy+79k4Ac3w/a4yrRg7zRdO
+SPFfLUfYhpIifkdbqUSlpko39y9r53xxmkJaezpBS9hF7JuT+b4cjDX9poNCzTrZ
+6UJoGtp7J4glEeXU8FaYRAUUb9bM49+0Es8uGf9vmjhac73q848=
+=F/Q7
+-----END PGP SIGNATURE-----
+
+--i1kclPcaOoaYfPWT--
