@@ -1,185 +1,276 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0CA158875
-	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jan 2025 09:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2932169397
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jan 2025 10:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738317126; cv=none; b=K5lqpseD8+Ub03GNLUZm9LLNYl3POwnkBC8n5ixvB9sQAq+6KcFyO28EPQznUvFb+Yle/M5nVZn7Gqp+5CkwNCxPK362oFbHnSz4oU51Vvo/WUbxUsvFcDri7rH6v9LGSte2AhcVDehLYnN0N7BOlBssmMloTfjV/5U5svwBGt4=
+	t=1738319815; cv=none; b=gZZu2SwkxJiqX9zpSy8aTVcCt/jx2rBPuL+grb6sYWv+L7mJlkYb2SWYT0bPPJzNz2pWOYSpBE+ee5bkhtlF9Yjm6kt0NVukmaDrCvULgs5jB/APvpvBucUcD87tw0v3bESp4gKe10OyMMRega7e947RyV3Hfru7kd2xEvm9SVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738317126; c=relaxed/simple;
-	bh=K1TXyVW5bPul3rv1mntw5KppCFA4J3Nw0P1vJbZMmxQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N9b9AqU3N58R3osgq8S9qRl1E9lpVeoU8AWrZ+Ppj2L5MaHiw/y49+w6dcBELmZDZfiZw7lR3mX1r/1iKZ4sSKHru9p/ReSQn3QJ07b8o9n3Ync+hMP6Qrf/hmBK81au2kPu/hCLgIiIno4bL7yyA3MupusrpXrl0FK6EClJ/DI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WDD6JEBf; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1738319815; c=relaxed/simple;
+	bh=thV84Efb19HxPOzrJmPMQTbU95z3kl5+ypofIzGI9jw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PjA8wLfDaji3aZl0cVbADhu6+RnfBfJtxz4G1+kVFV4Wme2OjKuEYXWbAgWGGQiJGHnuNw9svu3VIPnn+i71Px/oAVLY+e4FsaH1RDFSLGj4MwtAAf+f+EM8NN8no/BTV6IppQ+kV2ySP+WP/Qa6tWqGqqNyKgJ8SSfUI/1nlFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUu25pcD; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WDD6JEBf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=k8WpRTQc3VzRF1
-	yWfB/ww6H8EJvhuH9q1nfV8TJ5lNE=; b=WDD6JEBfHsraz0az4DLwwJGbGKjQtN
-	7AxSRVIOCgKh+gSu4BzjVuSS57aEiNB/UM58qDrrZumhLpXkTgim/AneY1vzKb6M
-	0jxEcEPrqjM/d929Oh61AzDKHmD0qkjF6BtkRQuvp7iHWoGX5lT7H2fqFtrTPHzA
-	9vml+g99nj9Oj0N5Cgebe+AiOuLpa0BiyxXlXIklPCqmLiOBfxakT9nJqObPKIch
-	TCt0TX6mluzSujRjkgvTVw6q7JNXuBBQqwqgJWFzLHDsiOB0xieijgNu+qgguniK
-	cfwqG8+07rDuBQB7TVrOjTp23P+3hzE8Y8KQZmfHhbWyTcN21hN6Ud6w==
-Received: (qmail 1620055 invoked from network); 31 Jan 2025 10:51:52 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Jan 2025 10:51:52 +0100
-X-UD-Smtp-Session: l3s3148p1@al36ff0srPjUph5e
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: (sht3x) Use per-client debugfs entry
-Date: Fri, 31 Jan 2025 10:38:33 +0100
-Message-ID: <20250131095148.11973-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUu25pcD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738319812; x=1769855812;
+  h=date:from:to:cc:subject:message-id;
+  bh=thV84Efb19HxPOzrJmPMQTbU95z3kl5+ypofIzGI9jw=;
+  b=NUu25pcD4KH/x1v9dYwS3PCd67lg4ennjYo+NVSqbQGV7c1FAq2hsMIV
+   YHdNQUNHq9GlXiwhBXeSrOAM5LMMiCZpqK7yRxVSRXjT8Psu/Csrcu1sz
+   fLPXEHm6EgQA0Rl3WbzA9o9ioByaX9BSsgr3JLlczQc8LORIgOTA8oUUk
+   7iK0aMybqbsEtZ7lbKtRvB5c3kz2FNKARmqdXBNlC26djhxa/5vZXsMJN
+   En7dtfqjpqBzP30zzVLkll2qR4i1nYPYaBPIBa9sw9wheeodmtI2+4no6
+   SwVGd8XH6LtOhNwOnOS+Hcd/POzVCF5RObKmuuzgxxdIU7Ix3MTaWkjJx
+   g==;
+X-CSE-ConnectionGUID: RjOn5ZnGRgOD0sAQJ88mrg==
+X-CSE-MsgGUID: ZFMvyTO4R6Cgz3XCt3Vurg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="41719915"
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="41719915"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 02:36:52 -0800
+X-CSE-ConnectionGUID: quPcL1fPQVuIueRoYqm/DQ==
+X-CSE-MsgGUID: H1V8CCNuQqSHokRzPr/Cag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="109432716"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 31 Jan 2025 02:36:51 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdoOG-000mGl-31;
+	Fri, 31 Jan 2025 10:36:48 +0000
+Date: Fri, 31 Jan 2025 18:36:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 223ef3538c79fd692a3b0204d5f00f09c8865462
+Message-ID: <202501311856.BfCgESG6-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The I2C core now offers a debugfs-directory per client. Use it and
-remove the custom handling.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 223ef3538c79fd692a3b0204d5f00f09c8865462  Merge branch 'fixes-v6.14' into testing
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+elapsed time: 882m
 
-Changes since v1:
+configs tested: 199
+configs skipped: 5
 
-* like previously, only create the file if the serial number could
-  be read.
-* remove the now superfluous sensor_dir member
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Locally build tested only.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    clang-18
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-18
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-14.2.0
+arc                   randconfig-001-20250131    gcc-13.2.0
+arc                   randconfig-002-20250131    gcc-13.2.0
+arm                              allmodconfig    clang-18
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-18
+arm                              allyesconfig    gcc-14.2.0
+arm                                 defconfig    gcc-14.2.0
+arm                          gemini_defconfig    gcc-14.2.0
+arm                          ixp4xx_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250131    clang-17
+arm                   randconfig-002-20250131    clang-15
+arm                   randconfig-003-20250131    gcc-14.2.0
+arm                   randconfig-004-20250131    gcc-14.2.0
+arm                           tegra_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20250131    clang-15
+arm64                 randconfig-002-20250131    gcc-14.2.0
+arm64                 randconfig-003-20250131    clang-21
+arm64                 randconfig-004-20250131    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250131    clang-21
+csky                  randconfig-001-20250131    gcc-14.2.0
+csky                  randconfig-002-20250131    clang-21
+csky                  randconfig-002-20250131    gcc-14.2.0
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon                             defconfig    gcc-14.2.0
+hexagon               randconfig-001-20250131    clang-21
+hexagon               randconfig-002-20250131    clang-21
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250131    clang-19
+i386        buildonly-randconfig-002-20250131    clang-19
+i386        buildonly-randconfig-003-20250131    gcc-12
+i386        buildonly-randconfig-004-20250131    gcc-12
+i386        buildonly-randconfig-005-20250131    clang-19
+i386        buildonly-randconfig-006-20250131    gcc-12
+i386                                defconfig    clang-19
+i386                  randconfig-001-20250131    clang-19
+i386                  randconfig-002-20250131    clang-19
+i386                  randconfig-003-20250131    clang-19
+i386                  randconfig-004-20250131    clang-19
+i386                  randconfig-005-20250131    clang-19
+i386                  randconfig-006-20250131    clang-19
+i386                  randconfig-007-20250131    clang-19
+i386                  randconfig-011-20250131    gcc-12
+i386                  randconfig-012-20250131    gcc-12
+i386                  randconfig-013-20250131    gcc-12
+i386                  randconfig-014-20250131    gcc-12
+i386                  randconfig-015-20250131    gcc-12
+i386                  randconfig-016-20250131    gcc-12
+i386                  randconfig-017-20250131    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250131    clang-21
+loongarch             randconfig-001-20250131    gcc-14.2.0
+loongarch             randconfig-002-20250131    clang-21
+loongarch             randconfig-002-20250131    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                         amcore_defconfig    gcc-14.2.0
+m68k                                defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                          defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                        bcm63xx_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250131    clang-21
+nios2                 randconfig-001-20250131    gcc-14.2.0
+nios2                 randconfig-002-20250131    clang-21
+nios2                 randconfig-002-20250131    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20250131    clang-21
+parisc                randconfig-001-20250131    gcc-14.2.0
+parisc                randconfig-002-20250131    clang-21
+parisc                randconfig-002-20250131    gcc-14.2.0
+parisc64                            defconfig    gcc-14.2.0
+powerpc                    adder875_defconfig    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                          allyesconfig    gcc-14.2.0
+powerpc                        icon_defconfig    gcc-14.2.0
+powerpc                      mgcoge_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250131    clang-21
+powerpc               randconfig-001-20250131    gcc-14.2.0
+powerpc               randconfig-002-20250131    clang-15
+powerpc               randconfig-002-20250131    clang-21
+powerpc               randconfig-003-20250131    clang-21
+powerpc                    socrates_defconfig    gcc-14.2.0
+powerpc                        warp_defconfig    gcc-14.2.0
+powerpc                 xes_mpc85xx_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250131    clang-15
+powerpc64             randconfig-001-20250131    clang-21
+powerpc64             randconfig-002-20250131    clang-17
+powerpc64             randconfig-002-20250131    clang-21
+powerpc64             randconfig-003-20250131    clang-15
+powerpc64             randconfig-003-20250131    clang-21
+riscv                            alldefconfig    gcc-14.2.0
+riscv                            allmodconfig    clang-21
+riscv                            allmodconfig    gcc-14.2.0
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-21
+riscv                            allyesconfig    gcc-14.2.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250131    gcc-14.2.0
+riscv                 randconfig-002-20250131    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250131    gcc-14.2.0
+s390                  randconfig-002-20250131    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-12
+sh                    randconfig-001-20250131    gcc-14.2.0
+sh                    randconfig-002-20250131    gcc-14.2.0
+sh                           se7619_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250131    gcc-14.2.0
+sparc                 randconfig-002-20250131    gcc-14.2.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250131    gcc-14.2.0
+sparc64               randconfig-002-20250131    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250131    gcc-14.2.0
+um                    randconfig-002-20250131    gcc-14.2.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250131    gcc-11
+x86_64      buildonly-randconfig-002-20250131    clang-19
+x86_64      buildonly-randconfig-003-20250131    gcc-12
+x86_64      buildonly-randconfig-004-20250131    gcc-12
+x86_64      buildonly-randconfig-005-20250131    clang-19
+x86_64      buildonly-randconfig-006-20250131    clang-19
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20250131    clang-19
+x86_64                randconfig-002-20250131    clang-19
+x86_64                randconfig-003-20250131    clang-19
+x86_64                randconfig-004-20250131    clang-19
+x86_64                randconfig-005-20250131    clang-19
+x86_64                randconfig-006-20250131    clang-19
+x86_64                randconfig-007-20250131    clang-19
+x86_64                randconfig-008-20250131    clang-19
+x86_64                randconfig-071-20250131    clang-19
+x86_64                randconfig-072-20250131    clang-19
+x86_64                randconfig-073-20250131    clang-19
+x86_64                randconfig-074-20250131    clang-19
+x86_64                randconfig-075-20250131    clang-19
+x86_64                randconfig-076-20250131    clang-19
+x86_64                randconfig-077-20250131    clang-19
+x86_64                randconfig-078-20250131    clang-19
+x86_64                               rhel-9.4    clang-19
+x86_64                           rhel-9.4-bpf    clang-19
+x86_64                         rhel-9.4-kunit    clang-19
+x86_64                           rhel-9.4-ltp    clang-19
+x86_64                          rhel-9.4-rust    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250131    gcc-14.2.0
+xtensa                randconfig-002-20250131    gcc-14.2.0
+xtensa                         virt_defconfig    gcc-14.2.0
 
- drivers/hwmon/sht3x.c | 67 +++++++------------------------------------
- 1 file changed, 11 insertions(+), 56 deletions(-)
-
-diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 650b0bcc2359..557ad3e7752a 100644
---- a/drivers/hwmon/sht3x.c
-+++ b/drivers/hwmon/sht3x.c
-@@ -44,8 +44,6 @@ static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
- static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
- static const unsigned char sht3x_cmd_read_serial_number[]      = { 0x37, 0x80 };
- 
--static struct dentry *debugfs;
--
- /* delays for single-shot mode i2c commands, both in us */
- #define SHT3X_SINGLE_WAIT_TIME_HPM  15000
- #define SHT3X_SINGLE_WAIT_TIME_MPM   6000
-@@ -167,7 +165,6 @@ struct sht3x_data {
- 	enum sht3x_chips chip_id;
- 	struct mutex i2c_lock; /* lock for sending i2c commands */
- 	struct mutex data_lock; /* lock for updating driver data */
--	struct dentry *sensor_dir;
- 
- 	u8 mode;
- 	const unsigned char *command;
-@@ -837,23 +834,7 @@ static int sht3x_write(struct device *dev, enum hwmon_sensor_types type,
- 	}
- }
- 
--static void sht3x_debugfs_init(struct sht3x_data *data)
--{
--	char name[32];
--
--	snprintf(name, sizeof(name), "i2c%u-%02x",
--		 data->client->adapter->nr, data->client->addr);
--	data->sensor_dir = debugfs_create_dir(name, debugfs);
--	debugfs_create_u32("serial_number", 0444,
--			   data->sensor_dir, &data->serial_number);
--}
--
--static void sht3x_debugfs_remove(void *sensor_dir)
--{
--	debugfs_remove_recursive(sensor_dir);
--}
--
--static int sht3x_serial_number_read(struct sht3x_data *data)
-+static void sht3x_serial_number_read(struct sht3x_data *data)
- {
- 	int ret;
- 	char buffer[SHT3X_RESPONSE_LENGTH];
-@@ -864,11 +845,12 @@ static int sht3x_serial_number_read(struct sht3x_data *data)
- 				      buffer,
- 				      SHT3X_RESPONSE_LENGTH, 0);
- 	if (ret)
--		return ret;
-+		return;
- 
- 	data->serial_number = (buffer[0] << 24) | (buffer[1] << 16) |
- 			      (buffer[3] << 8) | buffer[4];
--	return ret;
-+
-+	debugfs_create_u32("serial_number", 0444, client->debugfs, &data->serial_number);
- }
- 
- static const struct hwmon_ops sht3x_ops = {
-@@ -930,28 +912,14 @@ static int sht3x_probe(struct i2c_client *client)
- 	if (ret)
- 		return ret;
- 
--	ret = sht3x_serial_number_read(data);
--	if (ret) {
--		dev_dbg(dev, "unable to read serial number\n");
--	} else {
--		sht3x_debugfs_init(data);
--		ret = devm_add_action_or_reset(dev,
--					       sht3x_debugfs_remove,
--					       data->sensor_dir);
--		if (ret)
--			return ret;
--	}
--
--	hwmon_dev = devm_hwmon_device_register_with_info(dev,
--							 client->name,
--							 data,
--							 &sht3x_chip_info,
--							 sht3x_groups);
--
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
-+							 &sht3x_chip_info, sht3x_groups);
- 	if (IS_ERR(hwmon_dev))
--		dev_dbg(dev, "unable to register hwmon device\n");
-+		return PTR_ERR(hwmon_dev);
-+
-+	sht3x_serial_number_read(data);
- 
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	return 0;
- }
- 
- /* device ID table */
-@@ -968,20 +936,7 @@ static struct i2c_driver sht3x_i2c_driver = {
- 	.probe       = sht3x_probe,
- 	.id_table    = sht3x_ids,
- };
--
--static int __init sht3x_init(void)
--{
--	debugfs = debugfs_create_dir("sht3x", NULL);
--	return i2c_add_driver(&sht3x_i2c_driver);
--}
--module_init(sht3x_init);
--
--static void __exit sht3x_cleanup(void)
--{
--	debugfs_remove_recursive(debugfs);
--	i2c_del_driver(&sht3x_i2c_driver);
--}
--module_exit(sht3x_cleanup);
-+module_i2c_driver(sht3x_i2c_driver);
- 
- MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
- MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
--- 
-2.45.2
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
