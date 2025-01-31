@@ -1,276 +1,456 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2932169397
-	for <linux-hwmon@vger.kernel.org>; Fri, 31 Jan 2025 10:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1D22AD11;
+	Fri, 31 Jan 2025 11:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738319815; cv=none; b=gZZu2SwkxJiqX9zpSy8aTVcCt/jx2rBPuL+grb6sYWv+L7mJlkYb2SWYT0bPPJzNz2pWOYSpBE+ee5bkhtlF9Yjm6kt0NVukmaDrCvULgs5jB/APvpvBucUcD87tw0v3bESp4gKe10OyMMRega7e947RyV3Hfru7kd2xEvm9SVg=
+	t=1738323979; cv=none; b=ST9dH7h6YTXY8XIoTJycAGakblPpWrCYJek/YYh8M8j5Gmp6CZPdbrHUt3cRwHA6zNj4jnxoRIlT+lCqtkNUPi16UGxlBtZ48lVlUV5SF2/pxbN14gl3WI3RfzGz2+PpN3aHHmLIZUf0eqfZO1R0zT6Dl58l5+hZbag6GafVsNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738319815; c=relaxed/simple;
-	bh=thV84Efb19HxPOzrJmPMQTbU95z3kl5+ypofIzGI9jw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PjA8wLfDaji3aZl0cVbADhu6+RnfBfJtxz4G1+kVFV4Wme2OjKuEYXWbAgWGGQiJGHnuNw9svu3VIPnn+i71Px/oAVLY+e4FsaH1RDFSLGj4MwtAAf+f+EM8NN8no/BTV6IppQ+kV2ySP+WP/Qa6tWqGqqNyKgJ8SSfUI/1nlFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUu25pcD; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738323979; c=relaxed/simple;
+	bh=HKotTF9Hfu06Aq3zzigEqgO5A23ICuHhxxdELQosKn4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=pivD98diugBaKD0IpO4ZA8QQ9oXjd3ncqncL0B0dXqCnsxxpN3fNFG9XWCURcF4xVtglitwQuuv/ipfIXrboGij0LLPTkzKhbXJ/Ztt/wuglzzs7GgMX+pkP953/r8zeXaNhnAh7O6LnrWuAIc6PpiiSC0JyaF1b+C4EiGf+Z48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYcEqviC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUu25pcD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738319812; x=1769855812;
-  h=date:from:to:cc:subject:message-id;
-  bh=thV84Efb19HxPOzrJmPMQTbU95z3kl5+ypofIzGI9jw=;
-  b=NUu25pcD4KH/x1v9dYwS3PCd67lg4ennjYo+NVSqbQGV7c1FAq2hsMIV
-   YHdNQUNHq9GlXiwhBXeSrOAM5LMMiCZpqK7yRxVSRXjT8Psu/Csrcu1sz
-   fLPXEHm6EgQA0Rl3WbzA9o9ioByaX9BSsgr3JLlczQc8LORIgOTA8oUUk
-   7iK0aMybqbsEtZ7lbKtRvB5c3kz2FNKARmqdXBNlC26djhxa/5vZXsMJN
-   En7dtfqjpqBzP30zzVLkll2qR4i1nYPYaBPIBa9sw9wheeodmtI2+4no6
-   SwVGd8XH6LtOhNwOnOS+Hcd/POzVCF5RObKmuuzgxxdIU7Ix3MTaWkjJx
-   g==;
-X-CSE-ConnectionGUID: RjOn5ZnGRgOD0sAQJ88mrg==
-X-CSE-MsgGUID: ZFMvyTO4R6Cgz3XCt3Vurg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="41719915"
-X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
-   d="scan'208";a="41719915"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 02:36:52 -0800
-X-CSE-ConnectionGUID: quPcL1fPQVuIueRoYqm/DQ==
-X-CSE-MsgGUID: H1V8CCNuQqSHokRzPr/Cag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
-   d="scan'208";a="109432716"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 31 Jan 2025 02:36:51 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdoOG-000mGl-31;
-	Fri, 31 Jan 2025 10:36:48 +0000
-Date: Fri, 31 Jan 2025 18:36:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 223ef3538c79fd692a3b0204d5f00f09c8865462
-Message-ID: <202501311856.BfCgESG6-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYcEqviC"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC510C4CEE1;
+	Fri, 31 Jan 2025 11:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738323979;
+	bh=HKotTF9Hfu06Aq3zzigEqgO5A23ICuHhxxdELQosKn4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=uYcEqviC2MOimI9WzefGevfu6JE4FY1txHXrkhmpaATMUhVy3QN0b0ytzk461+/31
+	 m0KmXOJkQgHP4Yln/IVnoRuIqb5ezf6r/esOakEEUbn23ZG7rQBx/YkZOASOLzgOW7
+	 gQ8HB+VCHiQA53soanxDWPaU+whJ+v43mMmMCWZyHs2PQOmZ0HHN9lhwgVyAXZKBYZ
+	 u/CcqXVl7N8V94NlRY++4lIYPa7o2vcDqzRtmeRY7j5PdyIg7Z2BBCljXe9qjnFL7A
+	 hXiCt+fYx27NFDW1Jy6Ldt7AFfcNZCsaGhkrn3/C1g0o0MFeNlK/34t2z1MIqkREC5
+	 m+BQ30/xZxqzQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCCC1C02193;
+	Fri, 31 Jan 2025 11:46:18 +0000 (UTC)
+From: PavithraUdayakumar-adi via B4 Relay <devnull+pavithra.u.analog.com@kernel.org>
+Date: Fri, 31 Jan 2025 17:22:15 +0530
+Subject: [PATCH v5 2/2] rtc: max31335: Add driver support for max31331
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250131-add_support_max31331_fix_7-v1-2-d29d5de3d562@analog.com>
+References: <20250131-add_support_max31331_fix_7-v1-0-d29d5de3d562@analog.com>
+In-Reply-To: <20250131-add_support_max31331_fix_7-v1-0-d29d5de3d562@analog.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ PavithraUdayakumar-adi <pavithra.u@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1738324342; l=12419;
+ i=pavithra.u@analog.com; s=20241220; h=from:subject:message-id;
+ bh=1stnG/N6HE8QaQ6joNd5xgD+z3/Jmq/go1M+BD9Kck8=;
+ b=xvz3jnrVPnyPmXLGHXqSMmp0q7xttlc/+eVRkM0i4G/82M6Ei9h5O6JGrolC9gSn4ZJMm14fS
+ S3V/bh61cvRDB5HpKIX0kr+TBuKmOOk/2avz3NT+8kWrzOlcRohoQb0
+X-Developer-Key: i=pavithra.u@analog.com; a=ed25519;
+ pk=RIhZrdpg71GEnmwm1eNn95TYUMDJOKVsFd37Fv8xf1U=
+X-Endpoint-Received: by B4 Relay for pavithra.u@analog.com/20241220 with
+ auth_id=303
+X-Original-From: PavithraUdayakumar-adi <pavithra.u@analog.com>
+Reply-To: pavithra.u@analog.com
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 223ef3538c79fd692a3b0204d5f00f09c8865462  Merge branch 'fixes-v6.14' into testing
+From: PavithraUdayakumar-adi <pavithra.u@analog.com>
 
-elapsed time: 882m
+MAX31331 is an ultra-low-power, I2C Real-Time Clock RTC.
 
-configs tested: 199
-configs skipped: 5
+Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
+---
+ drivers/rtc/rtc-max31335.c | 165 +++++++++++++++++++++++++++++++++------------
+ 1 file changed, 122 insertions(+), 43 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+index 3fbcf5f6b92ffd4581e9c4dbc87ec848867522dc..a7bb37aaab9e6e315db70bc6bc0dbaa553fdecfa 100644
+--- a/drivers/rtc/rtc-max31335.c
++++ b/drivers/rtc/rtc-max31335.c
+@@ -184,31 +184,91 @@
+ #define MAX31335_RAM_SIZE			32
+ #define MAX31335_TIME_SIZE			0x07
+ 
++/* MAX31331 Register Map */
++#define MAX31331_RTC_CONFIG2			0x04
++
+ #define clk_hw_to_max31335(_hw) container_of(_hw, struct max31335_data, clkout)
+ 
++/* Supported Maxim RTC */
++enum max_rtc_ids {
++	ID_MAX31331,
++	ID_MAX31335,
++	MAX_RTC_ID_NR
++};
++
++struct chip_desc {
++	u8 sec_reg;
++	u8 alarm1_sec_reg;
++
++	u8 int_en_reg;
++	u8 int_status_reg;
++
++	u8 ram_reg;
++	u8 ram_size;
++
++	u8 temp_reg;
++
++	u8 trickle_reg;
++
++	u8 clkout_reg;
++
++	enum max_rtc_ids id;
++};
++
+ struct max31335_data {
+ 	struct regmap *regmap;
+ 	struct rtc_device *rtc;
+ 	struct clk_hw clkout;
++	struct clk *clkin;
++	const struct chip_desc *chip;
++	int irq;
+ };
+ 
+ static const int max31335_clkout_freq[] = { 1, 64, 1024, 32768 };
+ 
++static const struct chip_desc chip[MAX_RTC_ID_NR] = {
++	[ID_MAX31331] = {
++		.id = ID_MAX31331,
++		.int_en_reg = 0x01,
++		.int_status_reg = 0x00,
++		.sec_reg = 0x08,
++		.alarm1_sec_reg = 0x0F,
++		.ram_reg = 0x20,
++		.ram_size = 32,
++		.trickle_reg = 0x1B,
++		.clkout_reg = 0x04,
++	},
++	[ID_MAX31335] = {
++		.id = ID_MAX31335,
++		.int_en_reg = 0x01,
++		.int_status_reg = 0x00,
++		.sec_reg = 0x0A,
++		.alarm1_sec_reg = 0x11,
++		.ram_reg = 0x40,
++		.ram_size = 32,
++		.temp_reg = 0x35,
++		.trickle_reg = 0x1D,
++		.clkout_reg = 0x06,
++	},
++};
++
+ static const u16 max31335_trickle_resistors[] = {3000, 6000, 11000};
+ 
+ static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
+ {
++	struct max31335_data *max31335 = dev_get_drvdata(dev);
++	const struct chip_desc *chip = max31335->chip;
++
+ 	/* time keeping registers */
+-	if (reg >= MAX31335_SECONDS &&
+-	    reg < MAX31335_SECONDS + MAX31335_TIME_SIZE)
++	if (reg >= chip->sec_reg && reg < chip->sec_reg + MAX31335_TIME_SIZE)
+ 		return true;
+ 
+ 	/* interrupt status register */
+-	if (reg == MAX31335_STATUS1)
++	if (reg == chip->int_status_reg)
+ 		return true;
+ 
+-	/* temperature registers */
+-	if (reg == MAX31335_TEMP_DATA_MSB || reg == MAX31335_TEMP_DATA_LSB)
++	/* temperature registers if valid */
++	if (chip->temp_reg && (reg == chip->temp_reg || reg == chip->temp_reg + 1))
+ 		return true;
+ 
+ 	return false;
+@@ -227,7 +287,7 @@ static int max31335_read_time(struct device *dev, struct rtc_time *tm)
+ 	u8 date[7];
+ 	int ret;
+ 
+-	ret = regmap_bulk_read(max31335->regmap, MAX31335_SECONDS, date,
++	ret = regmap_bulk_read(max31335->regmap, max31335->chip->sec_reg, date,
+ 			       sizeof(date));
+ 	if (ret)
+ 		return ret;
+@@ -262,7 +322,7 @@ static int max31335_set_time(struct device *dev, struct rtc_time *tm)
+ 	if (tm->tm_year >= 200)
+ 		date[5] |= FIELD_PREP(MAX31335_MONTH_CENTURY, 1);
+ 
+-	return regmap_bulk_write(max31335->regmap, MAX31335_SECONDS, date,
++	return regmap_bulk_write(max31335->regmap, max31335->chip->sec_reg, date,
+ 				 sizeof(date));
+ }
+ 
+@@ -273,7 +333,7 @@ static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	struct rtc_time time;
+ 	u8 regs[6];
+ 
+-	ret = regmap_bulk_read(max31335->regmap, MAX31335_ALM1_SEC, regs,
++	ret = regmap_bulk_read(max31335->regmap, max31335->chip->alarm1_sec_reg, regs,
+ 			       sizeof(regs));
+ 	if (ret)
+ 		return ret;
+@@ -292,11 +352,11 @@ static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	if (time.tm_year >= 200)
+ 		alrm->time.tm_year += 100;
+ 
+-	ret = regmap_read(max31335->regmap, MAX31335_INT_EN1, &ctrl);
++	ret = regmap_read(max31335->regmap, max31335->chip->int_en_reg, &ctrl);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
++	ret = regmap_read(max31335->regmap, max31335->chip->int_status_reg, &status);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -320,18 +380,18 @@ static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	regs[4] = bin2bcd(alrm->time.tm_mon + 1);
+ 	regs[5] = bin2bcd(alrm->time.tm_year % 100);
+ 
+-	ret = regmap_bulk_write(max31335->regmap, MAX31335_ALM1_SEC,
++	ret = regmap_bulk_write(max31335->regmap, max31335->chip->alarm1_sec_reg,
+ 				regs, sizeof(regs));
+ 	if (ret)
+ 		return ret;
+ 
+ 	reg = FIELD_PREP(MAX31335_INT_EN1_A1IE, alrm->enabled);
+-	ret = regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
++	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_en_reg,
+ 				 MAX31335_INT_EN1_A1IE, reg);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
++	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
+ 				 MAX31335_STATUS1_A1F, 0);
+ 
+ 	return 0;
+@@ -341,23 +401,33 @@ static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
+ {
+ 	struct max31335_data *max31335 = dev_get_drvdata(dev);
+ 
+-	return regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
++	return regmap_update_bits(max31335->regmap, max31335->chip->int_en_reg,
+ 				  MAX31335_INT_EN1_A1IE, enabled);
+ }
+ 
+ static irqreturn_t max31335_handle_irq(int irq, void *dev_id)
+ {
+ 	struct max31335_data *max31335 = dev_id;
+-	bool status;
+-	int ret;
++	struct mutex *lock = &max31335->rtc->ops_lock;
++	int ret, status;
+ 
+-	ret = regmap_update_bits_check(max31335->regmap, MAX31335_STATUS1,
+-				       MAX31335_STATUS1_A1F, 0, &status);
++	mutex_lock(lock);
++
++	ret = regmap_read(max31335->regmap, max31335->chip->int_status_reg, &status);
+ 	if (ret)
+-		return IRQ_HANDLED;
++		goto exit;
++
++	if (FIELD_GET(MAX31335_STATUS1_A1F, status)) {
++		ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
++					 MAX31335_STATUS1_A1F, 0);
++		if (ret)
++			goto exit;
+ 
+-	if (status)
+ 		rtc_update_irq(max31335->rtc, 1, RTC_AF | RTC_IRQF);
++	}
++
++exit:
++	mutex_unlock(lock);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -404,7 +474,7 @@ static int max31335_trickle_charger_setup(struct device *dev,
+ 
+ 	i = i + trickle_cfg;
+ 
+-	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
++	return regmap_write(max31335->regmap, max31335->chip->trickle_reg,
+ 			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
+ 			    FIELD_PREP(MAX31335_TRICKLE_REG_EN_TRICKLE,
+ 				       chargeable));
+@@ -418,7 +488,7 @@ static unsigned long max31335_clkout_recalc_rate(struct clk_hw *hw,
+ 	unsigned int reg;
+ 	int ret;
+ 
+-	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
++	ret = regmap_read(max31335->regmap, max31335->chip->clkout_reg, &reg);
+ 	if (ret)
+ 		return 0;
+ 
+@@ -449,23 +519,23 @@ static int max31335_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
+ 			     ARRAY_SIZE(max31335_clkout_freq));
+ 	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
+ 
+-	return regmap_update_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
+-				  freq_mask, index);
++	return regmap_update_bits(max31335->regmap, max31335->chip->clkout_reg,
++				 freq_mask, index);
+ }
+ 
+ static int max31335_clkout_enable(struct clk_hw *hw)
+ {
+ 	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
+ 
+-	return regmap_set_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
+-			       MAX31335_RTC_CONFIG2_ENCLKO);
++	return regmap_set_bits(max31335->regmap, max31335->chip->clkout_reg,
++			      MAX31335_RTC_CONFIG2_ENCLKO);
+ }
+ 
+ static void max31335_clkout_disable(struct clk_hw *hw)
+ {
+ 	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
+ 
+-	regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
++	regmap_clear_bits(max31335->regmap, max31335->chip->clkout_reg,
+ 			  MAX31335_RTC_CONFIG2_ENCLKO);
+ }
+ 
+@@ -475,7 +545,7 @@ static int max31335_clkout_is_enabled(struct clk_hw *hw)
+ 	unsigned int reg;
+ 	int ret;
+ 
+-	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
++	ret = regmap_read(max31335->regmap, max31335->chip->clkout_reg, &reg);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -500,7 +570,7 @@ static int max31335_nvmem_reg_read(void *priv, unsigned int offset,
+ 				   void *val, size_t bytes)
+ {
+ 	struct max31335_data *max31335 = priv;
+-	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
++	unsigned int reg = max31335->chip->ram_reg + offset;
+ 
+ 	return regmap_bulk_read(max31335->regmap, reg, val, bytes);
+ }
+@@ -509,7 +579,7 @@ static int max31335_nvmem_reg_write(void *priv, unsigned int offset,
+ 				    void *val, size_t bytes)
+ {
+ 	struct max31335_data *max31335 = priv;
+-	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
++	unsigned int reg = max31335->chip->ram_reg + offset;
+ 
+ 	return regmap_bulk_write(max31335->regmap, reg, val, bytes);
+ }
+@@ -533,7 +603,7 @@ static int max31335_read_temp(struct device *dev, enum hwmon_sensor_types type,
+ 	if (type != hwmon_temp || attr != hwmon_temp_input)
+ 		return -EOPNOTSUPP;
+ 
+-	ret = regmap_bulk_read(max31335->regmap, MAX31335_TEMP_DATA_MSB,
++	ret = regmap_bulk_read(max31335->regmap, max31335->chip->temp_reg,
+ 			       reg, 2);
+ 	if (ret)
+ 		return ret;
+@@ -577,8 +647,8 @@ static int max31335_clkout_register(struct device *dev)
+ 	int ret;
+ 
+ 	if (!device_property_present(dev, "#clock-cells"))
+-		return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
+-					 MAX31335_RTC_CONFIG2_ENCLKO);
++		return regmap_clear_bits(max31335->regmap, max31335->chip->clkout_reg,
++				  MAX31335_RTC_CONFIG2_ENCLKO);
+ 
+ 	max31335->clkout.init = &max31335_clk_init;
+ 
+@@ -605,6 +675,7 @@ static int max31335_probe(struct i2c_client *client)
+ #if IS_REACHABLE(HWMON)
+ 	struct device *hwmon;
+ #endif
++	const struct chip_desc *match;
+ 	int ret;
+ 
+ 	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335), GFP_KERNEL);
+@@ -616,7 +687,10 @@ static int max31335_probe(struct i2c_client *client)
+ 		return PTR_ERR(max31335->regmap);
+ 
+ 	i2c_set_clientdata(client, max31335);
+-
++	match = i2c_get_match_data(client);
++	if (!match)
++		return -ENODEV;
++	max31335->chip = match;
+ 	max31335->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(max31335->rtc))
+ 		return PTR_ERR(max31335->rtc);
+@@ -639,6 +713,8 @@ static int max31335_probe(struct i2c_client *client)
+ 			dev_warn(&client->dev,
+ 				 "unable to request IRQ, alarm max31335 disabled\n");
+ 			client->irq = 0;
++		} else {
++			max31335->irq = client->irq;
+ 		}
+ 	}
+ 
+@@ -652,13 +728,13 @@ static int max31335_probe(struct i2c_client *client)
+ 				     "cannot register rtc nvmem\n");
+ 
+ #if IS_REACHABLE(HWMON)
+-	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
+-						     max31335,
+-						     &max31335_chip_info,
+-						     NULL);
+-	if (IS_ERR(hwmon))
+-		return dev_err_probe(&client->dev, PTR_ERR(hwmon),
+-				     "cannot register hwmon device\n");
++	if (max31335->chip->temp_reg) {
++		hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name, max31335,
++							     &max31335_chip_info, NULL);
++		if (IS_ERR(hwmon))
++			return dev_err_probe(&client->dev, PTR_ERR(hwmon),
++					     "cannot register hwmon device\n");
++	}
+ #endif
+ 
+ 	ret = max31335_trickle_charger_setup(&client->dev, max31335);
+@@ -669,14 +745,16 @@ static int max31335_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id max31335_id[] = {
+-	{ "max31335" },
++	{ "max31331", (kernel_ulong_t)&chip[ID_MAX31331] },
++	{ "max31335", (kernel_ulong_t)&chip[ID_MAX31335] },
+ 	{ }
+ };
+ 
+ MODULE_DEVICE_TABLE(i2c, max31335_id);
+ 
+ static const struct of_device_id max31335_of_match[] = {
+-	{ .compatible = "adi,max31335" },
++	{ .compatible = "adi,max31331", .data = &chip[ID_MAX31331] },
++	{ .compatible = "adi,max31335", .data = &chip[ID_MAX31335] },
+ 	{ }
+ };
+ 
+@@ -693,5 +771,6 @@ static struct i2c_driver max31335_driver = {
+ module_i2c_driver(max31335_driver);
+ 
+ MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
++MODULE_AUTHOR("Saket Kumar Purwar <Saket.Kumarpurwar@analog.com>");
+ MODULE_DESCRIPTION("MAX31335 RTC driver");
+ MODULE_LICENSE("GPL");
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    clang-18
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-18
-arc                              allyesconfig    gcc-13.2.0
-arc                                 defconfig    gcc-14.2.0
-arc                   randconfig-001-20250131    gcc-13.2.0
-arc                   randconfig-002-20250131    gcc-13.2.0
-arm                              allmodconfig    clang-18
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-18
-arm                              allyesconfig    gcc-14.2.0
-arm                                 defconfig    gcc-14.2.0
-arm                          gemini_defconfig    gcc-14.2.0
-arm                          ixp4xx_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250131    clang-17
-arm                   randconfig-002-20250131    clang-15
-arm                   randconfig-003-20250131    gcc-14.2.0
-arm                   randconfig-004-20250131    gcc-14.2.0
-arm                           tegra_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20250131    clang-15
-arm64                 randconfig-002-20250131    gcc-14.2.0
-arm64                 randconfig-003-20250131    clang-21
-arm64                 randconfig-004-20250131    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20250131    clang-21
-csky                  randconfig-001-20250131    gcc-14.2.0
-csky                  randconfig-002-20250131    clang-21
-csky                  randconfig-002-20250131    gcc-14.2.0
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-18
-hexagon                             defconfig    gcc-14.2.0
-hexagon               randconfig-001-20250131    clang-21
-hexagon               randconfig-002-20250131    clang-21
-i386                             allmodconfig    clang-19
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    clang-19
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-19
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250131    clang-19
-i386        buildonly-randconfig-002-20250131    clang-19
-i386        buildonly-randconfig-003-20250131    gcc-12
-i386        buildonly-randconfig-004-20250131    gcc-12
-i386        buildonly-randconfig-005-20250131    clang-19
-i386        buildonly-randconfig-006-20250131    gcc-12
-i386                                defconfig    clang-19
-i386                  randconfig-001-20250131    clang-19
-i386                  randconfig-002-20250131    clang-19
-i386                  randconfig-003-20250131    clang-19
-i386                  randconfig-004-20250131    clang-19
-i386                  randconfig-005-20250131    clang-19
-i386                  randconfig-006-20250131    clang-19
-i386                  randconfig-007-20250131    clang-19
-i386                  randconfig-011-20250131    gcc-12
-i386                  randconfig-012-20250131    gcc-12
-i386                  randconfig-013-20250131    gcc-12
-i386                  randconfig-014-20250131    gcc-12
-i386                  randconfig-015-20250131    gcc-12
-i386                  randconfig-016-20250131    gcc-12
-i386                  randconfig-017-20250131    gcc-12
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20250131    clang-21
-loongarch             randconfig-001-20250131    gcc-14.2.0
-loongarch             randconfig-002-20250131    clang-21
-loongarch             randconfig-002-20250131    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                         amcore_defconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                        bcm63xx_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250131    clang-21
-nios2                 randconfig-001-20250131    gcc-14.2.0
-nios2                 randconfig-002-20250131    clang-21
-nios2                 randconfig-002-20250131    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20250131    clang-21
-parisc                randconfig-001-20250131    gcc-14.2.0
-parisc                randconfig-002-20250131    clang-21
-parisc                randconfig-002-20250131    gcc-14.2.0
-parisc64                            defconfig    gcc-14.2.0
-powerpc                    adder875_defconfig    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                        icon_defconfig    gcc-14.2.0
-powerpc                      mgcoge_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250131    clang-21
-powerpc               randconfig-001-20250131    gcc-14.2.0
-powerpc               randconfig-002-20250131    clang-15
-powerpc               randconfig-002-20250131    clang-21
-powerpc               randconfig-003-20250131    clang-21
-powerpc                    socrates_defconfig    gcc-14.2.0
-powerpc                        warp_defconfig    gcc-14.2.0
-powerpc                 xes_mpc85xx_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250131    clang-15
-powerpc64             randconfig-001-20250131    clang-21
-powerpc64             randconfig-002-20250131    clang-17
-powerpc64             randconfig-002-20250131    clang-21
-powerpc64             randconfig-003-20250131    clang-15
-powerpc64             randconfig-003-20250131    clang-21
-riscv                            alldefconfig    gcc-14.2.0
-riscv                            allmodconfig    clang-21
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-21
-riscv                            allyesconfig    gcc-14.2.0
-riscv                               defconfig    gcc-12
-riscv                 randconfig-001-20250131    gcc-14.2.0
-riscv                 randconfig-002-20250131    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20250131    gcc-14.2.0
-s390                  randconfig-002-20250131    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-12
-sh                    randconfig-001-20250131    gcc-14.2.0
-sh                    randconfig-002-20250131    gcc-14.2.0
-sh                           se7619_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250131    gcc-14.2.0
-sparc                 randconfig-002-20250131    gcc-14.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20250131    gcc-14.2.0
-sparc64               randconfig-002-20250131    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250131    gcc-14.2.0
-um                    randconfig-002-20250131    gcc-14.2.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250131    gcc-11
-x86_64      buildonly-randconfig-002-20250131    clang-19
-x86_64      buildonly-randconfig-003-20250131    gcc-12
-x86_64      buildonly-randconfig-004-20250131    gcc-12
-x86_64      buildonly-randconfig-005-20250131    clang-19
-x86_64      buildonly-randconfig-006-20250131    clang-19
-x86_64                              defconfig    clang-19
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-19
-x86_64                randconfig-001-20250131    clang-19
-x86_64                randconfig-002-20250131    clang-19
-x86_64                randconfig-003-20250131    clang-19
-x86_64                randconfig-004-20250131    clang-19
-x86_64                randconfig-005-20250131    clang-19
-x86_64                randconfig-006-20250131    clang-19
-x86_64                randconfig-007-20250131    clang-19
-x86_64                randconfig-008-20250131    clang-19
-x86_64                randconfig-071-20250131    clang-19
-x86_64                randconfig-072-20250131    clang-19
-x86_64                randconfig-073-20250131    clang-19
-x86_64                randconfig-074-20250131    clang-19
-x86_64                randconfig-075-20250131    clang-19
-x86_64                randconfig-076-20250131    clang-19
-x86_64                randconfig-077-20250131    clang-19
-x86_64                randconfig-078-20250131    clang-19
-x86_64                               rhel-9.4    clang-19
-x86_64                           rhel-9.4-bpf    clang-19
-x86_64                         rhel-9.4-kunit    clang-19
-x86_64                           rhel-9.4-ltp    clang-19
-x86_64                          rhel-9.4-rust    clang-19
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250131    gcc-14.2.0
-xtensa                randconfig-002-20250131    gcc-14.2.0
-xtensa                         virt_defconfig    gcc-14.2.0
+-- 
+2.25.1
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
