@@ -1,138 +1,135 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF7A1BBBD4;
-	Sat,  1 Feb 2025 16:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2301F8AC6;
+	Sun,  2 Feb 2025 14:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738427670; cv=none; b=BQFeYUPJw1xxbQ8q0E1J46tDeWICMaj9U7W1Pf2UeSucFCWSmthZ38xAL5eoZiXF34xJzyg4RoZVgQRUWDW/eFslCJpkTqNB4qM6TIe/kjQYBPm/gfNZjF5I7HwB0m2ikXkvr7O75yx2lRjr3wl2x4VouG+9d9PMrJeuDTpOhLk=
+	t=1738505966; cv=none; b=kWxB+SPg/t5qu74r2s8sJfOnrWI1BOv5fRNf0j0A2lmPO9rtEywdshnEyIYPF04crAGd5aATKrSyKGdGJvYSnVG6EzUPYOiWEhxHTYRPUTsQ4/18m4F3rHoUVpUwQJI2KYlEVwbv88tp6s5ZIzQOCwxYEknWb+83nPyAP9Rm050=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738427670; c=relaxed/simple;
-	bh=tDyhorXyf61KzIVLARtJ1pBbB+25Ayo/ggH84SDJlfc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ASEYBex3vmPjiXWmm6sR4sqDO+htZdyEVCRQpSnAeXxCRTUpN/vocr8NjRJUtDw8sl8XzG7Q8QElEbW7WgcD46rAcfGhHQ29BIFe2hCXB9w16ZbfLE/Un6s/OogTfR3Jtzu8eWX2eMeGLioUFhsvqTM8TZmJE44IyfvcbzxPwrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVCfhuZV; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738505966; c=relaxed/simple;
+	bh=uK0X5J5lyezZDHKxlxotvwtoEJskgRWw9NWZ4i78AU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n8OQATGLmhQMopfGLxACUyuwY5w0r6rT3TSH8skRCq1sru76/idY+cyi/IrzMvSbex8thPo+WomqrHFNiT6/NjGm8WlUc243hTCL3FGCuFBgxsw7JLEvzP+lb/b/L/bI+nGm9fiTp0rYRKhrJ4cb9QOwx3w/iCGp6fWR3ss9F1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EO+9BlT2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVCfhuZV"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-219f8263ae0so55794965ad.0;
-        Sat, 01 Feb 2025 08:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738427668; x=1739032468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/rw5CDGeNAXHcIv9I05e+KmdzvvrpagDx33eTW7QaPk=;
-        b=bVCfhuZVUAJhdmZE9eXcUN+YERXj8rGHskv1MZtFl+OchoWPWKlLMGJZmqRip27Dq1
-         RAZeoJfGrT5ul4ikZP4xihpzqWC3/q75BLdsZlWenrXBQG9xbiNiDiTtUfAOqMkW77aA
-         gwQNlt7T5Ey260AjFQ2L0X+6U5sLzEFfYbFJ7QROEEK8UUzs1dHCXGAC/o64MXo204aP
-         Lxi8GI4bsBUq1z6nc+doY7qzSvfildaTxgKMZCorf1o5TrIaGYWkMrYdYus+i8kLvU3F
-         PeiOVAeXGxuA2Tk/h4Gq0QembYIb45sTGluIC8J0F4ZaasBIObwHtjKd6BHkMCunOjAp
-         5Pqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738427668; x=1739032468;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rw5CDGeNAXHcIv9I05e+KmdzvvrpagDx33eTW7QaPk=;
-        b=cu89l0Laf/MQfAdwyOebUK0NiUOMERNTA+cEtOO2mB72c3ckLdRfNBcafJGTSsEvzi
-         i0jHbpPECL9OYmez8kU81gE+mFPCIMtPq8sRsqlVfYjscA6u5WLloqwSb7Zukh0RQC3Y
-         HOjow8RHFXW4KD00yFNV8T6aM/ureRjjLVRKxeEH0s/Doqn7mdqYH17OVWNL10Jr8A3B
-         1QNgu2Uvqg5KFSvrvxuK2LOcbxewu3Kr/2vnrJAALa9kDJ9TQ9+Ba9Xr05L2rV67UYfa
-         oBKD3iwvmKkbYMpvlwPJugFDvGzczJUxXbt7EEniyADZkacgSx/O2TLcP4T7yPt8Y9Vo
-         zZNg==
-X-Forwarded-Encrypted: i=1; AJvYcCUByWVSzgtoMzz9dyLS30Sx+/3KsJW2D8XZiWme0UjrQA2lyjecFvpRTFOojbD5+7CRDYvTAk3+WREuHjc=@vger.kernel.org, AJvYcCVGwK3kW+y1tOcgATv0abAtHqYSeEyVBlic1vedtKE5xs7DCM7/NebiizRIyS7C3192Wa3j1vrgT2uutP1uUA==@vger.kernel.org, AJvYcCVtyvCPj+n15+XmzYP+y8rNQ0VHCqRWmQ/49seFbZ3Om/OKfww00p2Ke1vUgpLI/7lh+sSb36r9yQZaRpj/F2jMHnaUmQ==@vger.kernel.org, AJvYcCWVXJOvN5kH8jMl+Y3RVBDmT5Iz+gHioLd/xkTQXfnVFCTiTio7RAQDsoKfxE5pHX9c6an1eiONIIrS@vger.kernel.org, AJvYcCXICwEnIzPIaMFaNYsKe46JujbOhokeTH+vhc89PdJ9Q3134/kZ2gt5qY6oKr4pXmdSnjgyid09UwLzN9uK@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZx6mvtzhkyED0IJmxZJG5MransRVQsmbvbsfP+7gTLNPapO8V
-	6AdOzLCeIyx/B4bFE2punkK31GIzh0LJKj4lqrwKpqSJsjLZeXTN
-X-Gm-Gg: ASbGncvoNK/2EGwUZ1ie7Lfy9pz9Q2JIxYL2biHJp0FWDTBqXmkngSGar1Y/KLD59zs
-	YrBiFo3kqXd7vFyUfYwBXlQYD9qv9OZDUSRgc7skno3NOpay0P/X3qll4vmW8Qod3WmMMcFT3TX
-	qi+IEvWjoXARGXuRt38R8ttYmxjg8cV6tQWmPuyfYVYi+eWQ4idQooOrFNkrXgFC1jcQHIAZjw7
-	d/+cv6kRGWxUYLGkwtyk3mXjxyGheU3SOJLmiTfHPPJ833wvvTTRKb1Qy/du70HxXQZ5vp/YWR0
-	F8ev8YE9mY09+Rvj
-X-Google-Smtp-Source: AGHT+IHYIyyhQyCr4zJPxBlGg+rtfSQqSyIltCCmOB3F05c1HfP75Mvwy2uLT513Sf7dOCP4Tekigg==
-X-Received: by 2002:a17:902:ce91:b0:216:2259:a4bd with SMTP id d9443c01a7336-21dd7e08915mr223414495ad.52.1738427667889;
-        Sat, 01 Feb 2025 08:34:27 -0800 (PST)
-Received: from SC8280XP.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de331efafsm47660075ad.217.2025.02.01.08.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Feb 2025 08:34:27 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: konrad.dybcio@oss.qualcomm.com
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	jdelvare@suse.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	krzk@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	mitltlatltl@gmail.com,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org
-Subject: Re: [PATCH RESEND v6 0/3] platform: arm64: Huawei Matebook E Go embedded controller
-Date: Sun,  2 Feb 2025 00:34:13 +0800
-Message-ID: <20250201163416.2774-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <018281e0-001a-4587-b775-a9df6e54f75e@oss.qualcomm.com>
-References: <018281e0-001a-4587-b775-a9df6e54f75e@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EO+9BlT2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6B5C4CED1;
+	Sun,  2 Feb 2025 14:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738505966;
+	bh=uK0X5J5lyezZDHKxlxotvwtoEJskgRWw9NWZ4i78AU8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EO+9BlT2QlyaUUnFR9NfMrNxp4qUPkL4kRK9+fI8AzO7cyISSmdx1udl7aG6aS5Qm
+	 YB/s7CYIAcNnvlCp4AOo4raAHOjmDigW+Dc2weV1+Egmfi8OQgfECQhmUsN0vC4z/V
+	 9hB7JLUGSBnAyjCpZ8v+HAcLKtlOdMtlD6Tnz07T+9bMrGJu3GK/nJLdPOIZvatPQN
+	 fA51mjoc9gZ3TemIc2nng4MmdwfxK86iooSrPBjsbDEt4WfzexbMNSGXdqjxIX45kh
+	 Dtw4sjHX3rsLWD9QY67CfmwJ43ewpYYos8PQWCpKAcqo9qHS+1UPPLAzYPqunMw7Pn
+	 xGftPJF+4kscw==
+Message-ID: <5d1154f8-785d-4249-9781-938e9cc99167@kernel.org>
+Date: Sun, 2 Feb 2025 15:19:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v6 0/3] platform: arm64: Huawei Matebook E Go
+ embedded controller
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com, jdelvare@suse.com, konradybcio@kernel.org,
+ krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux@roeck-us.net, platform-driver-x86@vger.kernel.org, robh@kernel.org
+References: <33f8a68f-46d8-472f-8061-52800e5bd014@kernel.org>
+ <20250201073838.3278-1-mitltlatltl@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250201073838.3278-1-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 1, 2025 at 11:35 PM Konrad Dybcio <konrad.dybcio@oss.qualcomm.com> wrote:
-> On 1.02.2025 8:38 AM, Pengyu Luo wrote:
-> > On Sat, Feb 1, 2025 at 5:20 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >> On 31/01/2025 10:21, Pengyu Luo wrote:
-> >>> This adds binding, drivers and the DT support for the Huawei Matebook E Go
-> >>> (sc8280xp-based) Embedded Controller which is also found in Huawei Matebook
-> >>> E Go LTE (sc8180x-based), but I don't have the sc8180x one to perform
-> >>> tests, so this series enable support for sc8280xp variant only, this series
-> >>> provides the following features:
-> >>>
-> >>> - battery and charger information report
-> >>> - charging thresholds control
-> >>> - FN lock (An alternative method)
-> >>> - LID switch detection
-> >>> - Temperature sensors
-> >>> - USB Type-C altmode
-> >>> - USB Type-C PD(high power)
-> >>>
-> >>
-> >> Why are you resending?
-> >>
-> >> Previous version was only week ago and minimal time is two weeks. Plus
-> >> its merge window, so this resend is unjustified.
-> >
-> > Sorry, I am still new to the process, I may have misunderstood something.
-> > I sent it because I had got at leaset one reviewed tag for every patch
-> > from the corresponding subsystem maintainer. Can I expect that there would
-> > be no reviewing? All I need to do is wait for it to be applied.
+On 01/02/2025 08:38, Pengyu Luo wrote:
+> On Sat, Feb 1, 2025 at 5:20 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> On 31/01/2025 10:21, Pengyu Luo wrote:
+>>> This adds binding, drivers and the DT support for the Huawei Matebook E Go
+>>> (sc8280xp-based) Embedded Controller which is also found in Huawei Matebook
+>>> E Go LTE (sc8180x-based), but I don't have the sc8180x one to perform
+>>> tests, so this series enable support for sc8280xp variant only, this series
+>>> provides the following features:
+>>>
+>>> - battery and charger information report
+>>> - charging thresholds control
+>>> - FN lock (An alternative method)
+>>> - LID switch detection
+>>> - Temperature sensors
+>>> - USB Type-C altmode
+>>> - USB Type-C PD(high power)
+>>>
+>>
+>> Why are you resending?
+>>
+>> Previous version was only week ago and minimal time is two weeks. Plus
+>> its merge window, so this resend is unjustified.
 > 
-> Generally if people have a concern, they'll share it with you.
-> It may be that one review is not enough, this is up to the maintainer.
-> 
-> You don't need to resend after you get new tags, the maintainer tools will
-> pick those up when the patches are being applied.
-> 
-> Patches are generally not picked up by maintainers in the timeframe between
-> stable vX.Y release and vX.(Y+1)-rc1, this is the time when Linus accepts
-> code that has been sitting in the maintainers' branches for some time and
-> getting build/functionality tested in linux-next over the previous cycle
-> 
+> Sorry, I am still new to the process, I may have misunderstood something.
+> I sent it because I had got at leaset one reviewed tag for every patch
+> from the corresponding subsystem maintainer. Can I expect that there would
+> be no reviewing? All I need to do is wait for it to be applied.
 
-It is helpful, thanks for explanation.
 
-Best wishes,
-Pengyu
+and when I gave you the review, what did I write? Long instruction what
+to do:
+
+"However, there's no
+need to repost patches *only* to add the tags."
+
+
+Best regards,
+Krzysztof
