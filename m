@@ -1,135 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2301F8AC6;
-	Sun,  2 Feb 2025 14:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA51C202C55;
+	Mon,  3 Feb 2025 11:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738505966; cv=none; b=kWxB+SPg/t5qu74r2s8sJfOnrWI1BOv5fRNf0j0A2lmPO9rtEywdshnEyIYPF04crAGd5aATKrSyKGdGJvYSnVG6EzUPYOiWEhxHTYRPUTsQ4/18m4F3rHoUVpUwQJI2KYlEVwbv88tp6s5ZIzQOCwxYEknWb+83nPyAP9Rm050=
+	t=1738580507; cv=none; b=Kjk1lQWYgKUaO04W+OhcLiir3ObTpnldDmrl6KaQRDIp+lZbxAkPf/I3igUGihoWK0LF3Q/w0yN+S3DXy4fHp9tTFbTHULizqhM4ALPm0ommvkvBx4g6MX8eX3Q8MSAT/QnFdCcKZBH6nrEt5EYtqi7bZGmpVRS5XWI0nglZDWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738505966; c=relaxed/simple;
-	bh=uK0X5J5lyezZDHKxlxotvwtoEJskgRWw9NWZ4i78AU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n8OQATGLmhQMopfGLxACUyuwY5w0r6rT3TSH8skRCq1sru76/idY+cyi/IrzMvSbex8thPo+WomqrHFNiT6/NjGm8WlUc243hTCL3FGCuFBgxsw7JLEvzP+lb/b/L/bI+nGm9fiTp0rYRKhrJ4cb9QOwx3w/iCGp6fWR3ss9F1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EO+9BlT2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738580507; c=relaxed/simple;
+	bh=/yMVkhOVLx00butLsrD/fGyXoeNUr23Wx8NgtZbk7hQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kNRVIZJDDzyyIIZ1X4vtdLoVl/ZP+Qf555aM+467Lv/058G/9GF9kWaLsgjiBICkRXH7sMcFX4ARiMbWTHjGKSHGjxTcSUupH3v4hPKHZiOBLHSYQD8VWafPvJHxHpT6Dw8H2Elj1c3juDu8li4igb0Iwss4MigTJidOGolgLSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ff0+01DY; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EO+9BlT2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6B5C4CED1;
-	Sun,  2 Feb 2025 14:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738505966;
-	bh=uK0X5J5lyezZDHKxlxotvwtoEJskgRWw9NWZ4i78AU8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EO+9BlT2QlyaUUnFR9NfMrNxp4qUPkL4kRK9+fI8AzO7cyISSmdx1udl7aG6aS5Qm
-	 YB/s7CYIAcNnvlCp4AOo4raAHOjmDigW+Dc2weV1+Egmfi8OQgfECQhmUsN0vC4z/V
-	 9hB7JLUGSBnAyjCpZ8v+HAcLKtlOdMtlD6Tnz07T+9bMrGJu3GK/nJLdPOIZvatPQN
-	 fA51mjoc9gZ3TemIc2nng4MmdwfxK86iooSrPBjsbDEt4WfzexbMNSGXdqjxIX45kh
-	 Dtw4sjHX3rsLWD9QY67CfmwJ43ewpYYos8PQWCpKAcqo9qHS+1UPPLAzYPqunMw7Pn
-	 xGftPJF+4kscw==
-Message-ID: <5d1154f8-785d-4249-9781-938e9cc99167@kernel.org>
-Date: Sun, 2 Feb 2025 15:19:19 +0100
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ff0+01DY"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 77AFB44311;
+	Mon,  3 Feb 2025 11:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738580503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=I81caOaJIOC8WXu1z91vKs/zochmvwTppB2hNy4SkNI=;
+	b=Ff0+01DYiXrl9BTpidz0rwXhObO9HOzDPAu2eIIchGN97HgE9EwVU7gbQwit8taGgskco1
+	J8laBmTQHLax9yR9m6NcbdP7NwvFepoO67XKm2IEwg+8zwbEArRfMaXClzW43WXwzLV+5J
+	Ai/d+bpBx/BgzOu+MPbE7E1MsvExLGsb5MbsYeCacAranrIeE3NO/64CWd5IoY+xjT7J07
+	arb3mHogmcEtisehngC7ghmFFohMJ0MCap/NRAawfQe08hfP9gQFCZQ8W0xDRT1oKdS803
+	ZFzPLoIa/jmVvcO0oAV/yccEW9nYP2LeettIraYhVUbEfkqGdumX1rjTuW421A==
+From: Thomas Richard <thomas.richard@bootlin.com>
+Subject: [PATCH v4 0/2] Enable sensors support for the Congatec Board
+ Controller
+Date: Mon, 03 Feb 2025 12:01:04 +0100
+Message-Id: <20250203-congatec-board-controller-hwmon-v4-0-ff6c76a4662c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v6 0/3] platform: arm64: Huawei Matebook E Go
- embedded controller
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, hdegoede@redhat.com,
- ilpo.jarvinen@linux.intel.com, jdelvare@suse.com, konradybcio@kernel.org,
- krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, platform-driver-x86@vger.kernel.org, robh@kernel.org
-References: <33f8a68f-46d8-472f-8061-52800e5bd014@kernel.org>
- <20250201073838.3278-1-mitltlatltl@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250201073838.3278-1-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPChoGcC/4XOO27DMBAE0KsIrEOD/4+r3CNwIZEbi4AkJiTNJ
+ DB091By4yCFylks3swdZUgBMjp3d5Sghhzi0oJ46ZAb++UKOPiWESNMEEMsdnG59gUcHmKf/BZ
+ LitMECY9fc1wwWFDcW6k956gpHwnew/fe8HZ55ASft1ZUHkc09BmaM8+hnLuqTlTg5CjanseQS
+ 0w/+7pK9+9tCKVEHA6pFBNsNAXhvLTewOsQY5nCcmpdu17Zs2iORdZEqoBzza2RTP8X+ZNI5bH
+ IN9EJqbh2hin1V1zX9ReDRKIVoQEAAA==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Lee Jones <lee@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
+ linux-doc@vger.kernel.org, Thomas Richard <thomas.richard@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpefvhhhomhgrshcutfhitghhrghrugcuoehthhhomhgrshdrrhhitghhrghrugessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetieejudffledvveeuvdeiuedvuefgkeegheejudefgfektdeuuddvfffhgffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegutgekudemrggrugdtmehfuggtrgemtggtudgrnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegutgekudemrggrugdtmehfuggtrgemtggtudgrpdhhvghloheplgduvdejrddtrddurddungdpmhgrihhlfhhrohhmpehthhhomhgrshdrrhhitghhrghrugessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhli
+ hhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhrihgthhgrrhgusegsohhothhlihhnrdgtohhmpdhrtghpthhtohepjhguvghlvhgrrhgvsehsuhhsvgdrtghomh
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On 01/02/2025 08:38, Pengyu Luo wrote:
-> On Sat, Feb 1, 2025 at 5:20 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> On 31/01/2025 10:21, Pengyu Luo wrote:
->>> This adds binding, drivers and the DT support for the Huawei Matebook E Go
->>> (sc8280xp-based) Embedded Controller which is also found in Huawei Matebook
->>> E Go LTE (sc8180x-based), but I don't have the sc8180x one to perform
->>> tests, so this series enable support for sc8280xp variant only, this series
->>> provides the following features:
->>>
->>> - battery and charger information report
->>> - charging thresholds control
->>> - FN lock (An alternative method)
->>> - LID switch detection
->>> - Temperature sensors
->>> - USB Type-C altmode
->>> - USB Type-C PD(high power)
->>>
->>
->> Why are you resending?
->>
->> Previous version was only week ago and minimal time is two weeks. Plus
->> its merge window, so this resend is unjustified.
-> 
-> Sorry, I am still new to the process, I may have misunderstood something.
-> I sent it because I had got at leaset one reviewed tag for every patch
-> from the corresponding subsystem maintainer. Can I expect that there would
-> be no reviewing? All I need to do is wait for it to be applied.
+This is the fourth iteration of this series which enables sensors support
+for the Congatec Board Controller.
 
+The series was rebased on v6.14-rc1.
+A typo was fixed in the Kconfig, and the description improved.
+The documentation file Documentation/hwmon/cgbc-hwmon.rst was added.
 
-and when I gave you the review, what did I write? Long instruction what
-to do:
+Regards,
 
-"However, there's no
-need to repost patches *only* to add the tags."
+Thomas
 
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+Changes in v4:
+- Rebased on v6.14-rc1.
+- Add the documentation for this driver.
+- In Kconfig, fix a typo and improve the description
+- Link to v3: https://lore.kernel.org/r/20241115-congatec-board-controller-hwmon-v3-0-1c45637c8266@bootlin.com
+
+Changes in v3:
+- remove the cgbc_hwmon_compute_curr_channel() macro.
+- Link to v2: https://lore.kernel.org/r/20241108-congatec-board-controller-hwmon-v2-0-16e337398527@bootlin.com
+
+Changes in v2:
+- hwmon: use unsigned int type instead of u8 in struct cgbc_hwmon_sensor
+  and struct cgbc_hwmon_data.
+- hwmon: in cgbc_hwmon_probe_sensors() no need to request data for the
+  first sensor as the Board Controller returns data of the first sensors
+  with the number of sensors.
+- hwmon: fix typos in comments and improve them.
+- hwmon: remove dead code in cgbc_hwmon_read() and in
+  cgbc_hwmon_read_string() (deadcode was the 'return -ENODEV').
+- hwmon: remove useless platform_set_drvdata().
+- hwmon: channel id always refers to the same sensor.
+- hwmon: add a enum cgbc_sensor_types.
+- Link to v1: https://lore.kernel.org/r/20241104-congatec-board-controller-hwmon-v1-0-871e4cd59d8e@bootlin.com
+
+---
+Thomas Richard (2):
+      hwmon: Add Congatec Board Controller monitoring driver
+      mfd: cgbc: add a hwmon cell
+
+ Documentation/hwmon/cgbc-hwmon.rst |  63 ++++++++
+ Documentation/hwmon/index.rst      |   1 +
+ MAINTAINERS                        |   1 +
+ drivers/hwmon/Kconfig              |  10 ++
+ drivers/hwmon/Makefile             |   1 +
+ drivers/hwmon/cgbc-hwmon.c         | 304 +++++++++++++++++++++++++++++++++++++
+ drivers/mfd/cgbc-core.c            |   1 +
+ 7 files changed, 381 insertions(+)
+---
+base-commit: 379487e17ca406b47392e7ab6cf35d1c3bacb371
+change-id: 20240809-congatec-board-controller-hwmon-e9e63d957d33
 
 Best regards,
-Krzysztof
+-- 
+Thomas Richard <thomas.richard@bootlin.com>
+
