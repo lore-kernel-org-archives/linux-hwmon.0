@@ -1,92 +1,214 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B8433DE;
-	Tue,  4 Feb 2025 15:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510641D516A
+	for <linux-hwmon@vger.kernel.org>; Tue,  4 Feb 2025 18:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738682284; cv=none; b=B1nU/GXQjdFPgGMEKBIXWBZVYTPs/1a5o4HDUV5eemPsnE4uc9XrHfZFGsUDYH+CoM05YgifE/hmuonSNs8sYh+AXb0Ps4SHhdXWh+0wKKKeqZherOLuSd41AMFJXPzyCXEZ0jywCoR/OW4PfMaowyTy9V4gs5GwqP6w7UHIsDg=
+	t=1738692204; cv=none; b=DWVuXjBjkDnulKe8ToV/WntVJDBcvSqf5WyNvG/AEkJG3P3iD2Ty3Nk/5Sgwn/fy7Yw09n24abavDImjcTW860JLpgPpPIFQgQWc1dY/ArkQ7f1GWjC6kF9KouFWvWKYhzXduqKhVWpsZjfMfuRjRP2uSy0l5CbjOq/QRXmyrr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738682284; c=relaxed/simple;
-	bh=F19h605MFAvaGFZKRxZNpLpKV3oES6t/2bBqSUwaF60=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eBlb+0MzXfVs7UrN26hvBlDbbP9ODSMNHP1iRKs8SSixpVBBW8NbNurmwjXHFXgG4YtFFVmriQrUAp4v5HNQ1nsX5RTcBvf7WMlahMOBijSVypkXM1fU+9JhiBF0fKz51pgVCL/vKSjzFfGeS4uBKluGXQYkiu0Vy3oYwO/CjRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=M0xwYc4A; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1738692204; c=relaxed/simple;
+	bh=xfFeaA3aQ/gpQCUTZPba7AJ+HX38O5FL0YsuMNgMClk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tH811TQ5+8Qhruxl4qkU3kEJidA80ik2yjawWFKOapzFl+dzzDHF73WoRNZa3t6U8oHQfUYrkO9iqNAM/R2+LCs4Dbex3hunhpcBhhMZ1PixXJYBAxgth4aezJNiBNG2A54ly7YymIY+c6JMuxecHYmSztIaup1Y55F3NSxbGN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=ci4wS7Br; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="M0xwYc4A"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 96381404FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1738682270; bh=wVW8lBMIEEpdr0xbjPu2zI/effX4O8LeVMC5veSkfi8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=M0xwYc4AzH2N7+A+jv59tJS/lYaX4CncIBjdLa0vTEMgmmcSo40Pq4yzemaZ6IkUg
-	 GHfAkMgC0ExjTkFHjHwgh1S17aJ14V/MAdze0q4JhzzQ2TlgWvbsEaa47bVQ9l20lz
-	 PVy0jxTMuLb87dfi6GGc+ONahkP2zTuigCfx88XY6KQ5H4iUfC2AezbhrDZoTz7vys
-	 gfRTMuK4EBgeBlfoKgGDbtz67ypWm+0yKaddHwnQSr5WrrEY4tjWt/hlTJuG4BbI7Z
-	 T5D8g354eJdRwasTzRt0U0J9TQ/WAUjwhZi7ZM2tvCF54/BmegYCYILobXmNkyIVGh
-	 40VhpYcuHrLvg==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 96381404FA;
-	Tue,  4 Feb 2025 15:17:50 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Guenter Roeck <linux@roeck-us.net>, Purva Yeshi
- <purvayeshi550@gmail.com>, jikos@kernel.org, bentiss@kernel.org,
- jdelvare@suse.com
-Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] docs: Fix spelling and grammatical issues
-In-Reply-To: <1b32dfcb-5966-495a-ad48-903650888ee9@roeck-us.net>
-References: <20250204134806.28218-1-purvayeshi550@gmail.com>
- <1b32dfcb-5966-495a-ad48-903650888ee9@roeck-us.net>
-Date: Tue, 04 Feb 2025 08:17:49 -0700
-Message-ID: <87jza5hh7m.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="ci4wS7Br"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4361b0ec57aso60549895e9.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Feb 2025 10:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1738692200; x=1739297000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyTJpLynAZ3x16CbnY5MWeiGrmP7Yk69R+UM5RrX7wA=;
+        b=ci4wS7Br0lAx0ETJ0CjWFeEfRb/XsMLYek+Lz2QVvilttY15tX2cYZdELiWgg/DAms
+         0dXb9ustUvPMtXTFcOWO/F+PJWETrPs3xwhwhUqUk0wnajUuC1cpu9kWO0GKg6MZk21N
+         9SXCWUt8xKYzleZgb+45C817t//N4NRnJg/6GV2Eda9zb8XOjPkDZwFYnflh7dN1GknM
+         Qr4pZXcZWCfgfIu1nQfgRvjFT81dDWr5/Eyf2DFR9IeFYA9freQO6ONTm2/WfiOxsdz3
+         CkpZ5S6pmhDWyf/DbtCtNxrnKbAWBsNHcDnO6x1UgXfCWbvrC8fdVRV3zR+PD94nd6ML
+         ki1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738692200; x=1739297000;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kyTJpLynAZ3x16CbnY5MWeiGrmP7Yk69R+UM5RrX7wA=;
+        b=SCKv3sYjbjWxYPDBqn4DwxfsczW9loOR4tIapzmQ7642/HBdTD9tCn2UBKpPexgM8t
+         E1Og2s1U9wtu/jiG1nr23OtKBZGwxMpkZNMGpivc4HOnMvJMS8yAWhVGNXQlgkAdW6GL
+         x9E5X1ud6uLkGaQpMG+b4BaCi1p5ifyfcATIr8+4F0B99cWZBIwoBDsKDZY7yay0pgJu
+         GJHYzy0VaaKuaF+Yk2sY1Ec9k7x7nHZX9c/AlFCStBr1uomsB+lZQMF2o+p6Ab6OawAg
+         xTmQeHCidkvwAU9Uab5Gvem11TF9UymDEWGEi8OdVt6UnF/E9U0tcEM7+G8FTlHNdGDH
+         cZsg==
+X-Gm-Message-State: AOJu0Yw8hENt+RjlUTP5TCEZiOva1mcZiS/1NYQNgsOThb8GhCKWHBdL
+	tPuP8uUctm6vLytbhFewGBgj69IOXTbhT8CUvAhEIRHIv+HoGDfY1ySI17BOm1I=
+X-Gm-Gg: ASbGncvigpVgs7p5j3bO8rgJTxd7rG0OjYD6rCrAwg/L/H0+ITLvH0O86U+4JrTZlp6
+	hKWSMTvwG4nCfkV6REz86lH1KQx1kZ4wCDHk2sikUdPs88QYPktJuTVgqYOP98Ag79NRKlJGN9n
+	lUf4yH5fWA9seZ6WzFfCIJXzwobc6bN6X4XHvryduXzsw85BPj5DaqTC5uSyKRGi+5/N9WfoV0w
+	abw+oAp1QZFYgSb5J7NJ/nqrChB3cv/hSvvuu7zveqg9XFS503CWxRG40NdSvSKYMeEeHi9hS3z
+	7GU/xMDTqVrAl1oYrqY40l6uKuDm0LvO3HAuBb2Mtb2ydk6bwDPgyrHs7eCrA5/vzNPK3wC00b3
+	kvNFRpj9qCh0=
+X-Google-Smtp-Source: AGHT+IEF5gLfCU74QaWjKlf6C+ew0dh1VudWuQXDuNCEip2RjcGq0sjA/qgAiNB9pJOUTiqQbpkMHg==
+X-Received: by 2002:a05:6000:1869:b0:38d:b051:5a0e with SMTP id ffacd0b85a97d-38db0515fe4mr1728729f8f.49.1738692200108;
+        Tue, 04 Feb 2025 10:03:20 -0800 (PST)
+Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e244ecd6sm202687235e9.28.2025.02.04.10.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 10:03:18 -0800 (PST)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	broonie@kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt binding
+Date: Tue,  4 Feb 2025 23:33:03 +0530
+Message-ID: <20250204180306.2755444-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Guenter Roeck <linux@roeck-us.net> writes:
+Move dt binding under hwmon/pmbus & align accordingly.
 
-> On 2/4/25 05:48, Purva Yeshi wrote:
->> Fix several spelling and grammatical errors across multiple
->> documentation files.
->> 
->> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
->> ---
->>   Documentation/hid/hiddev.rst                | 4 ++--
->>   Documentation/hid/intel-ish-hid.rst         | 2 +-
->>   Documentation/hid/uhid.rst                  | 2 +-
->>   Documentation/hwmon/abituguru-datasheet.rst | 8 ++++----
->>   Documentation/hwmon/abituguru.rst           | 2 +-
->>   5 files changed, 9 insertions(+), 9 deletions(-)
->> 
->> diff --git a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
->> index 9b82c7f896aa..073485f84793 100644
->> --- a/Documentation/hid/hiddev.rst
->> +++ b/Documentation/hid/hiddev.rst
->> @@ -15,10 +15,10 @@ To support these disparate requirements, the Linux USB system provides
->>   HID events to two separate interfaces:
->>   * the input subsystem, which converts HID events into normal input
->>   device interfaces (such as keyboard, mouse and joystick) and a
->> -normalised event interface - see Documentation/input/input.rst
->> +normalized event interface - see Documentation/input/input.rst
->
-> Is US spelling now mandated in the Linux kernel ?
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+ .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
+ .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
+ 2 files changed, 61 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
 
-No, from Documentation/doc-guide/contributing.rst:
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+new file mode 100644
+index 000000000000..e1f683846a54
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,ir38060.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Infineon Buck Regulators with PMBUS interfaces
++
++maintainers:
++  - Not Me.
++
++properties:
++  compatible:
++    enum:
++      - infineon,ir38060
++      - infineon,ir38064
++      - infineon,ir38164
++      - infineon,ir38263
++
++  reg:
++    maxItems: 1
++
++  regulators:
++    type: object
++    description:
++      list of regulators provided by this controller.
++
++    properties:
++      vout:
++        $ref: /schemas/regulator/regulator.yaml#
++        type: object
++
++        unevaluatedProperties: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        regulator@34 {
++            compatible = "infineon,ir38060";
++            reg = <0x34>;
++
++            regulators {
++                vout {
++                    regulator-name = "p5v_aux";
++                    regulator-min-microvolt = <437500>;
++                    regulator-max-microvolt = <1387500>;
++                };
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml b/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+deleted file mode 100644
+index e6ffbc2a2298..000000000000
+--- a/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
++++ /dev/null
+@@ -1,45 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/regulator/infineon,ir38060.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Infineon Buck Regulators with PMBUS interfaces
+-
+-maintainers:
+-  - Not Me.
+-
+-allOf:
+-  - $ref: regulator.yaml#
+-
+-properties:
+-  compatible:
+-    enum:
+-      - infineon,ir38060
+-      - infineon,ir38064
+-      - infineon,ir38164
+-      - infineon,ir38263
+-
+-  reg:
+-    maxItems: 1
+-
+-required:
+-  - compatible
+-  - reg
+-
+-unevaluatedProperties: false
+-
+-examples:
+-  - |
+-    i2c {
+-      #address-cells = <1>;
+-      #size-cells = <0>;
+-
+-      regulator@34 {
+-        compatible = "infineon,ir38060";
+-        reg = <0x34>;
+-
+-        regulator-min-microvolt = <437500>;
+-        regulator-max-microvolt = <1387500>;
+-      };
+-    };
 
-> Both American and British English spellings are allowed within the
-> kernel documentation.  There is no need to fix one by replacing it with
-> the other.
+base-commit: bfbb730c4255e1965d202f48e7aa71baa9a7c65b
+-- 
+2.42.0
 
-Thanks,
-
-jon
