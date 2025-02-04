@@ -1,175 +1,219 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EE4216E2C;
-	Tue,  4 Feb 2025 18:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BBD204F85;
+	Tue,  4 Feb 2025 19:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738692711; cv=none; b=S49nd/GvwakZ+A14LS9124QKo1sf/7U9ovlKlp2uFR0maDvoXyFY6++NMqNilRAVj0QCRiOmsM3tkidutgVgAqJ2Ex3NiWhif+/sLT1PE2sHAq2JLPjKFtVWMNEbSK9S+t2ZocXsvdnTTgjQFvAgU3ERUZFzCLZTGIYVNZFGwNE=
+	t=1738696964; cv=none; b=DUDgupFrBdiBf5nI6QyjhEDcZq7CZxAgS7MMv0KBB8zVP8xxsgwOu/5+3EbhNa7KVG0gJefbYRYCUFtXcx0fe8U9F7HeX8cvJgyYXrw0tuEedPDB4XN7gKWnLc2AvBJAP2g/sLiZL/Ba+uM9+6GP7Dk3kOlk/mOfwbBCtIFuASM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738692711; c=relaxed/simple;
-	bh=lZohJvru0wEAeyjk9++6ixRpPfyvCVVloXV+qroa98o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KWmoSoodnm1KBNaDg0zxo9CDqDOWkaJ80HqpduOT/v0nYvbq/ScCw2yQpsySeZMP7Xu/hGVj54moVfSa/HmSPkiQGVPHiSO9pIzujpjoUcZ5fq4ZdIvdCsRPRBNe5lkjq1nAQMhOobA1mqbjypbc1vxvGKyzDfMq8cx4nQZbf74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oEz92f3f; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1738696964; c=relaxed/simple;
+	bh=JIIYJevLdmFj/UppSjoqdwt4o9oRsJRr08DNrl9bKjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eSvBSgkQHmz9Syl9ORhlz+2nmHIayt5s6JNaxOQHzeYJTXm1rlQwkMKxBLz7upkyNzLjdHNmPxhwAveRtNyPYaFsmgs2Pr4gcbfYRnGQDuB2nc/RKTq/bnU4/MvqOQQiYf2eP4uIJsn8Hv+CX4s6X4upuzPyWIaHgTwLFt+z624=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oiTKmsma; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oEz92f3f"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=I1Z6vtjWwNt9llagECDSFKTWccFi8I5yGC2RHidsKD4=; b=oEz92f3fyA0Ss/NdcE97bUjLj7
-	OAkmAJz6Lm0uLTBPZ6NxPswyu24HgtJT3+lIvNB1KDfju9+OckM+zZ0bvj48Di2E9Qs26rkxXs+P0
-	D1ixidxJdxeV3lz+IEYoxAx246oSyeP7DBLmBywGESvSw2BL2ie+W0nUAqzkojYTVSJAk1Kr8ztjZ
-	nJGbJHJPFDyLijvKrNvcYxuBYz6PwgWMMGKzyK4mCyNotBk+elhrjdmPiXkvl2fb/QU439pBevdGi
-	n/eGJbtd5v6HkYkk/+RYUtcrevhJjHHwJwdjCzFwe9y+k6ICPVCcqAuCpzLCR64y/Dkrg9bxu0MMI
-	ARAa7TXg==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tfNOj-0000000GNKa-0CSH;
-	Tue, 04 Feb 2025 18:11:45 +0000
-Message-ID: <460e7278-440d-47a1-bbf3-7b7fbbe2f20d@infradead.org>
-Date: Tue, 4 Feb 2025 10:11:40 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oiTKmsma"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32D1C4CEDF;
+	Tue,  4 Feb 2025 19:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738696964;
+	bh=JIIYJevLdmFj/UppSjoqdwt4o9oRsJRr08DNrl9bKjM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oiTKmsmaawtyzK3gFz6SoL3CCBbX2odSetSm8/RtFli99hdpbpEMGz5b45YIz2Lg+
+	 3Y79cu+JjhlDD+sXz341Q6Lhk7gp/U2662fsol5SY/SexMRIK1S3JaEc4tMOWgkJqu
+	 85SkbHnqeZ/jHVL3UtoHdl14znHvI9LacUUVRRXHzPsajkngZ+8TiFgsnYkDwzcz28
+	 gbqZFk3x2CzQE/e5/23LZDZwUPEyu09jG4qDAic5Bq9cg8RRO1oiTMvqt2PW91NgA+
+	 BWfs4iLOJQPUHOgTFbtrwsZRUsje5DMFW/84+OI4Ab3yhhMaTjBRq85LF1j7cAnRbZ
+	 mqHsCzf2E7c0Q==
+Date: Tue, 4 Feb 2025 19:22:39 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, broonie@kernel.org,
+	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt binding
+Message-ID: <20250204-mulled-evaluate-8a690cdfbd4d@spud>
+References: <20250204180306.2755444-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: Fix spelling and grammatical issues
-To: Purva Yeshi <purvayeshi550@gmail.com>, jikos@kernel.org,
- bentiss@kernel.org, corbet@lwn.net, jdelvare@suse.com, linux@roeck-us.net
-Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20250204134806.28218-1-purvayeshi550@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250204134806.28218-1-purvayeshi550@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="HYb3Nichi2MrG9QF"
+Content-Disposition: inline
+In-Reply-To: <20250204180306.2755444-1-naresh.solanki@9elements.com>
 
 
+--HYb3Nichi2MrG9QF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/4/25 5:48 AM, Purva Yeshi wrote:
-> Fix several spelling and grammatical errors across multiple
-> documentation files.
-> 
-> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+On Tue, Feb 04, 2025 at 11:33:03PM +0530, Naresh Solanki wrote:
+> Move dt binding under hwmon/pmbus & align accordingly.
+>=20
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 > ---
->  Documentation/hid/hiddev.rst                | 4 ++--
->  Documentation/hid/intel-ish-hid.rst         | 2 +-
->  Documentation/hid/uhid.rst                  | 2 +-
->  Documentation/hwmon/abituguru-datasheet.rst | 8 ++++----
->  Documentation/hwmon/abituguru.rst           | 2 +-
->  5 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
-> index 9b82c7f896aa..073485f84793 100644
-> --- a/Documentation/hid/hiddev.rst
-> +++ b/Documentation/hid/hiddev.rst
-> @@ -15,10 +15,10 @@ To support these disparate requirements, the Linux USB system provides
->  HID events to two separate interfaces:
->  * the input subsystem, which converts HID events into normal input
->  device interfaces (such as keyboard, mouse and joystick) and a
-> -normalised event interface - see Documentation/input/input.rst
-> +normalized event interface - see Documentation/input/input.rst
->  * the hiddev interface, which provides fairly raw HID events
->  
-> -The data flow for a HID event produced by a device is something like
-> +The data flow for an HID event produced by a device is something like
+>  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
+>  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
+>  2 files changed, 61 insertions(+), 45 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineo=
+n,ir38060.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,=
+ir38060.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir380=
+60.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.ya=
+ml
+> new file mode 100644
+> index 000000000000..e1f683846a54
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,ir38060.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon Buck Regulators with PMBUS interfaces
+> +
+> +maintainers:
+> +  - Not Me.
 
-Not needed IMO, since I think ("say") the word "hid" when I see HID.
+How the hell did this get merged!
 
->  the following::
->  
->   usb.c ---> hid-core.c  ----> hid-input.c ----> [keyboard/mouse/joystick/event]
-> diff --git a/Documentation/hid/intel-ish-hid.rst b/Documentation/hid/intel-ish-hid.rst
-> index 2adc174fb576..fdabf6ec60db 100644
-> --- a/Documentation/hid/intel-ish-hid.rst
-> +++ b/Documentation/hid/intel-ish-hid.rst
-> @@ -21,7 +21,7 @@ mainly use HID over I2C or USB. But ISH doesn't use either I2C or USB.
->  Overview
->  ========
->  
-> -Using a analogy with a usbhid implementation, the ISH follows a similar model
-> +Using an analogy with a usbhid implementation, the ISH follows a similar model
->  for a very high speed communication::
->  
->  	-----------------		----------------------
-> diff --git a/Documentation/hid/uhid.rst b/Documentation/hid/uhid.rst
-> index 2243a6b75914..2681038cd526 100644
-> --- a/Documentation/hid/uhid.rst
-> +++ b/Documentation/hid/uhid.rst
-> @@ -106,7 +106,7 @@ UHID_INPUT2:
->  
->  UHID_GET_REPORT_REPLY:
->    If you receive a UHID_GET_REPORT request you must answer with this request.
-> -  You  must copy the "id" field from the request into the answer. Set the "err"
-> +  You must copy the "id" field from the request into the answer. Set the "err"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - infineon,ir38060
+> +      - infineon,ir38064
+> +      - infineon,ir38164
+> +      - infineon,ir38263
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    type: object
+> +    description:
+> +      list of regulators provided by this controller.
 
-That part of the patch is OK but just not worth the effort IMHO.
+Can you explain why this change is justified? Your commit message is
+explaining what you're doing but not why it's okay to do.
 
->    field to 0 if no error occurred or to EIO if an I/O error occurred.
->    If "err" is 0 then you should fill the buffer of the answer with the results
->    of the GET_REPORT request and set "size" correspondingly.
-> diff --git a/Documentation/hwmon/abituguru-datasheet.rst b/Documentation/hwmon/abituguru-datasheet.rst
-> index 0cd61471d2a2..8c55874061d4 100644
-> --- a/Documentation/hwmon/abituguru-datasheet.rst
-> +++ b/Documentation/hwmon/abituguru-datasheet.rst
-> @@ -6,9 +6,9 @@ First of all, what I know about uGuru is no fact based on any help, hints or
->  datasheet from Abit. The data I have got on uGuru have I assembled through
->  my weak knowledge in "backwards engineering".
->  And just for the record, you may have noticed uGuru isn't a chip developed by
-> -Abit, as they claim it to be. It's really just an microprocessor (uC) created by
-> +Abit, as they claim it to be. It's really just a microprocessor (uC) created by
->  Winbond (W83L950D). And no, reading the manual for this specific uC or
-> -mailing  Windbond for help won't give any useful data about uGuru, as it is
-> +mailing  Winbond for help won't give any useful data about uGuru, as it is
+Cheers,
+Conor.
 
-          ^^ 2 spaces there also.
+> +
+> +    properties:
+> +      vout:
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        type: object
+> +
+> +        unevaluatedProperties: false
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        regulator@34 {
+> +            compatible =3D "infineon,ir38060";
+> +            reg =3D <0x34>;
+> +
+> +            regulators {
+> +                vout {
+> +                    regulator-name =3D "p5v_aux";
+> +                    regulator-min-microvolt =3D <437500>;
+> +                    regulator-max-microvolt =3D <1387500>;
+> +                };
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/regulator/infineon,ir38060=
+=2Eyaml b/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> deleted file mode 100644
+> index e6ffbc2a2298..000000000000
+> --- a/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> -%YAML 1.2
+> ----
+> -$id: http://devicetree.org/schemas/regulator/infineon,ir38060.yaml#
+> -$schema: http://devicetree.org/meta-schemas/core.yaml#
+> -
+> -title: Infineon Buck Regulators with PMBUS interfaces
+> -
+> -maintainers:
+> -  - Not Me.
+> -
+> -allOf:
+> -  - $ref: regulator.yaml#
+> -
+> -properties:
+> -  compatible:
+> -    enum:
+> -      - infineon,ir38060
+> -      - infineon,ir38064
+> -      - infineon,ir38164
+> -      - infineon,ir38263
+> -
+> -  reg:
+> -    maxItems: 1
+> -
+> -required:
+> -  - compatible
+> -  - reg
+> -
+> -unevaluatedProperties: false
+> -
+> -examples:
+> -  - |
+> -    i2c {
+> -      #address-cells =3D <1>;
+> -      #size-cells =3D <0>;
+> -
+> -      regulator@34 {
+> -        compatible =3D "infineon,ir38060";
+> -        reg =3D <0x34>;
+> -
+> -        regulator-min-microvolt =3D <437500>;
+> -        regulator-max-microvolt =3D <1387500>;
+> -      };
+> -    };
+>=20
+> base-commit: bfbb730c4255e1965d202f48e7aa71baa9a7c65b
+> --=20
+> 2.42.0
+>=20
 
->  the program inside the uC that is responding to calls.
->  
->  Olle Sandberg <ollebull@gmail.com>, 2005-05-25
-> @@ -35,7 +35,7 @@ As far as known the uGuru is always placed at and using the (ISA) I/O-ports
->  ports are holding for detection. We will refer to 0xE0 as CMD (command-port)
->  and 0xE4 as DATA because Abit refers to them with these names.
->  
-> -If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC an uGuru could be
-> +If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC a uGuru could be
->  present. We have to check for two different values at data-port, because
->  after a reboot uGuru will hold 0x00 here, but if the driver is removed and
->  later on attached again data-port will hold 0x08, more about this later.
-> @@ -46,7 +46,7 @@ have to test CMD for two different values. On these uGuru's DATA will initially
->  hold 0x09 and will only hold 0x08 after reading CMD first, so CMD must be read
->  first!
->  
-> -To be really sure an uGuru is present a test read of one or more register
-> +To be really sure a uGuru is present a test read of one or more register
->  sets should be done.
->  
->  
-> diff --git a/Documentation/hwmon/abituguru.rst b/Documentation/hwmon/abituguru.rst
-> index cfda60b757ce..4a5ee16b1048 100644
-> --- a/Documentation/hwmon/abituguru.rst
-> +++ b/Documentation/hwmon/abituguru.rst
-> @@ -40,7 +40,7 @@ Supported chips:
->  
->  .. [2]  There is a separate abituguru3 driver for these motherboards,
->  	the abituguru (without the 3 !) driver will not work on these
-> -	motherboards (and visa versa)!
-> +	motherboards (and vice versa)!
+--HYb3Nichi2MrG9QF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Ack.
+-----BEGIN PGP SIGNATURE-----
 
->  
->  Authors:
->  	- Hans de Goede <j.w.r.degoede@hhs.nl>,
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6Jo/wAKCRB4tDGHoIJi
+0n1LAQCvwcmBoxgsSDIQxYp6veyw89f+ngZJgwza+NLCdV/5GAEAqLOh4I/JlmHW
+myWJFQTOAi+LyrfwSTy4LXwa7z9UVQk=
+=+Bh3
+-----END PGP SIGNATURE-----
 
--- 
-~Randy
-
+--HYb3Nichi2MrG9QF--
