@@ -1,82 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CC520DD60;
-	Tue,  4 Feb 2025 14:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C31720FA81;
+	Tue,  4 Feb 2025 14:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738678054; cv=none; b=N74Kgyk5VoV9hMykMEb+3VrXpjso6JKNU7o9mZO8ERSfGGAniG73rTCzaOZQ8SlI7f2x6K3z5Sqoud90/CCQmISOJcAdzEegksJd+S2Bnom7IYjHoT2VlFYpKvqo7uDjUOHpv1XTtNZxJULjdOPW2B+LSJ6ylJ3durqs6Dzcb5Q=
+	t=1738679283; cv=none; b=DtnftwcDRO56C1h/NsfLeoXuPodeMzTzj/K9WS+Je967tNNtt3faxKa3SIHXn5yk5LVfv6DhzRjcb/dk0eVLwNa16SYjurKW4iDqtVEP7RuGnfcGn+FzTT1Emapo9nFsUMYMdeHHpaSVnvJTgjFST2pC/oryHfkmVyGQDYwVkGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738678054; c=relaxed/simple;
-	bh=DXy3zcOIszbtR+6ZTz9kj/erD3peAa/YBoPDnuXm3Tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u2k+5Tv6wpLyzoaVGHewJ+iNYAzGtPJb2MQIOVDbGhM1spEUlGszj3FcKiFq915Pqx5r90wF6jhN9vt2ZRnk4Iq06UOKtBqSfC799zWyUyQMfLcyPiFROa5yygg1pr95WaR7cttVUR+4TTUGfYxDOGxHAIx4+sL5Qv43weA4QOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dSY8PCBs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738679283; c=relaxed/simple;
+	bh=W7l5hHgZSVuFn3MlA6YyHRtoNwMSFk/yKhVrN3b1Vqo=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=j7wAK1PGapwakVOwRb80VIQ5bHzKq5GfXkUu28nfJXLHbpaw78DhcCuCSYWJkZV+fjQXkJVCZDMXZk1nFsfGRj5g0VrGTXJ5bgzLdlSNNJ9vG3va3+GOyYsuZ/PMbwfZWvbrbZr60HfGjU5EcW6HB00n93glhVOB9CtK81KTiVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RLincpun; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dSY8PCBs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67633C4CEDF;
-	Tue,  4 Feb 2025 14:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738678053;
-	bh=DXy3zcOIszbtR+6ZTz9kj/erD3peAa/YBoPDnuXm3Tk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dSY8PCBsHk2S42+/2ww9mGPVbyWmYXO4P3Y4GjUV3iYbHHVlmypzBKHNsCen0X4/x
-	 CZF59DOTpGF9GBXJn8/THXhTIljKgjHdIjYIs8mqb5wf7BhpqVF77oBsRJoDjgP0eH
-	 /vzLlihuUbtVcYLmu2z3p9VchfADUIvzCd/Rdse8=
-Date: Tue, 4 Feb 2025 15:07:30 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Purva Yeshi <purvayeshi550@gmail.com>
-Cc: jikos@kernel.org, bentiss@kernel.org, corbet@lwn.net, jdelvare@suse.com,
-	linux@roeck-us.net, skhan@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] docs: Fix spelling and grammatical issues
-Message-ID: <2025020411-ravine-stand-530a@gregkh>
-References: <20250204134806.28218-1-purvayeshi550@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RLincpun"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738679282; x=1770215282;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=W7l5hHgZSVuFn3MlA6YyHRtoNwMSFk/yKhVrN3b1Vqo=;
+  b=RLincpunJWQlXmzBlUpeRbhKUBVDF+R+UWTpzNnjNDV4wZCzsQ369aFJ
+   MHO3nD1ll37rtgFOPBwUX+TgtwWPDbPZBfXBp5SZH9IC6FCy85XPX4BUd
+   fHBGjOp1swJZkNdt7xalCOfWLQqmIwp1VU5c0QxdM0OOUnF7dL3FLQqTO
+   v6kAgx+35psK6jO8eWkW9N+9eNVJNuO7ju5vswnK28M8T3BtGPbEccJdn
+   VP6mmCUp/E8jlNyoXd2LhziPqVMS8SoS0Kq+w4FoexL+I39GyR4DTtHeU
+   nTiH9C8oAPafj4Y2qpuSMBWwoF8TXqK2QPbYqxUuxEwIXPGiXHrky/giE
+   w==;
+X-CSE-ConnectionGUID: scGOjmL8RMqZ61FxHfPVbg==
+X-CSE-MsgGUID: nRHLXb1UTDGWVLvajGdurQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50598511"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="50598511"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 06:28:01 -0800
+X-CSE-ConnectionGUID: E2cYbvGPReufX8+HBWjUMw==
+X-CSE-MsgGUID: WAfN/7eEROWL4s2DeYGpDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="115642506"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.75])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 06:27:58 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 4 Feb 2025 16:27:54 +0200 (EET)
+To: Armin Wolf <W_Armin@gmx.de>
+cc: james@equiv.tech, markpearson@lenovo.com, jorge.lopez2@hp.com, 
+    jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+    platform-driver-x86@vger.kernel.org, corbet@lwn.net, 
+    linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/7] platform/x86: hp-bioscfg: Use wmi_instance_count()
+In-Reply-To: <cbea0f2a-a66f-4ed8-9b19-6010b188f69f@gmx.de>
+Message-ID: <b7375996-cf85-d1c3-fd29-585bb22a99c1@linux.intel.com>
+References: <20250203182322.384883-1-W_Armin@gmx.de> <20250203182322.384883-5-W_Armin@gmx.de> <a02aa367-2ce8-ba6d-adc7-b91552566142@linux.intel.com> <cbea0f2a-a66f-4ed8-9b19-6010b188f69f@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250204134806.28218-1-purvayeshi550@gmail.com>
+Content-Type: multipart/mixed; boundary="8323328-937537166-1738679274=:1609"
 
-On Tue, Feb 04, 2025 at 07:18:06PM +0530, Purva Yeshi wrote:
-> Fix several spelling and grammatical errors across multiple
-> documentation files.
-> 
-> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Hi,
+--8323328-937537166-1738679274=:1609
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Tue, 4 Feb 2025, Armin Wolf wrote:
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+> Am 04.02.25 um 11:37 schrieb Ilpo J=C3=A4rvinen:
+>=20
+> > On Mon, 3 Feb 2025, Armin Wolf wrote:
+> >=20
+> > > The WMI core already knows the instance count of a WMI guid.
+> > > Use this information instead of querying all possible instances
+> > > which is slow and might be unreliable.
+> > >=20
+> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > > ---
+> > >   drivers/platform/x86/hp/hp-bioscfg/bioscfg.c | 13 +++++--------
+> > >   1 file changed, 5 insertions(+), 8 deletions(-)
+> > >=20
+> > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
+> > > b/drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
+> > > index 0b277b7e37dd..63c78b4d8258 100644
+> > > --- a/drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
+> > > +++ b/drivers/platform/x86/hp/hp-bioscfg/bioscfg.c
+> > > @@ -388,16 +388,13 @@ union acpi_object *hp_get_wmiobj_pointer(int
+> > > instance_id, const char *guid_strin
+> > >    */
+> > >   int hp_get_instance_count(const char *guid_string)
+> > >   {
+> > > -=09union acpi_object *wmi_obj =3D NULL;
+> > > -=09int i =3D 0;
+> > > +=09int ret;
+> > >=20
+> > > -=09do {
+> > > -=09=09kfree(wmi_obj);
+> > > -=09=09wmi_obj =3D hp_get_wmiobj_pointer(i, guid_string);
+> > > -=09=09i++;
+> > > -=09} while (wmi_obj);
+> > > +=09ret =3D wmi_instance_count(guid_string);
+> > > +=09if (ret < 0)
+> > > +=09=09return 0;
+> > >=20
+> > > -=09return i - 1;
+> > > +=09return ret;
+> > >   }
+> > Hi Armin,
+> >=20
+> > While it is the existing way of doing things, I don't like how the erro=
+r
+> > is not properly passed on here. And if the error handling is pushed
+> > upwards to the calling sites, then this entire function becomes useless
+> > and wmi_instance_count() could be used directly in the callers.
+>
+> The thing is that for the hp-bioscfg driver, a missing WMI GUID is not an
+> error.
+> In this case 0 instances are available.
+>=20
+> I would keep this function for now.
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+Okay, fine.
 
+--=20
+ i.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+--8323328-937537166-1738679274=:1609--
