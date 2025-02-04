@@ -1,109 +1,106 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mail.crpt.ru (mail.crpt.ru [91.236.205.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330D119C54B;
-	Tue,  4 Feb 2025 09:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E0D13A258;
+	Tue,  4 Feb 2025 09:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.236.205.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738662107; cv=none; b=dtl99/B87/XNCwpGCdG5YnJdHyrq/C6dNkNoPW9Ur8uLWsMti6zXxKePXpJ+3oURwRCsnGWQv6RZP7VI3qEubStGIxbU3WX85T9+HsMcWZMmNQ5kr9uYLdUiFRfPh0mSocy/XLb5smRUTWbygHGmmOxVdX6kiELSWyAbIKhrn7o=
+	t=1738662879; cv=none; b=CaXLfu9rOjax5GBwjIcB4UEKToBJVBy6z0bdxHPcfBQkWBC0Opiy9HorZkoMSlc1DIQx9ULnycfuOuLLJjX3JYzW48pdQO9S7xERaTWjMfpZ/Cdz+F8idfhzGxYv+PEZwHOo2/9Fni5Mo/it4zR5MfkroECQvOmwW6igWhQZ2Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738662107; c=relaxed/simple;
-	bh=hmDF/89UGFdHZOQdLxKg7A6Ve4yC4JgSL47ZunD8KSY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cDfsR2qR4ad5p6+JXo7kaaFhczCvaRyPbcYSs7iB9hY0WdmFy/PJLOI3vMiwDsuVmxFqAbxwyljclD1jyf6tcfGUIRvm3mvW3U7HsMTRpF4OLkeD47dyespg9gh1o+cKr/ikN6hTuu5jA7MhHfTG9Xj96Tm7OZzPD1kXJeMTW4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Af7vOTZB; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1738662879; c=relaxed/simple;
+	bh=2Yo0f8FwCYleUENX3Qi2dldmdHuWItSh7PgfZpXIbhI=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=mlVbAHKx7gdZ6upz0HJ6ZNmoitsw3upJmMb0OGu6Q70FsKiUGHaFhIjkw2HH2+NZA+GvC2ZUQBaSBWIaPPndiVIVZZkRBgXK3UzFcj4u1ny/TyDV3nzj16+tziSJ3kS331yh/0NVqsp3ux1yshopY4a9phDVn6q1KfLc79rJ7rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru; spf=pass smtp.mailfrom=crpt.ru; dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b=DXvtOGFc; arc=none smtp.client-ip=91.236.205.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crpt.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crpt.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Af7vOTZB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1738662086; x=1739266886; i=w_armin@gmx.de;
-	bh=hmDF/89UGFdHZOQdLxKg7A6Ve4yC4JgSL47ZunD8KSY=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Af7vOTZB3lttaz7BnG+m/qhQlgy+6XhWQJdSIuXW2kknv6jQBpOFyasU8FqJxPj+
-	 eHD3DXP2R4pqgpHOOe9869geKIZHJrRRuriTWtHsSeuAVc+ykX+J8SKNjcEmIc7dl
-	 1qmy09O919IZHxhCB+Me0pWI8dPzzZjKdtae541CZe4iCX3PiPzLao99FJCQUxw3C
-	 tr78v2TlJ71VhWxUJttg2FyUaUfsm8AswVVDd6yKzQWW41LtYXNbNQDfjWRvtftO3
-	 udv7kBxGEOGcdlsh4zC45HTeunT6E9OOgnDEIvaE83PNnJbO0N2ugHvYEVrOU+zm1
-	 WdmdcJN70XVX9c221Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([91.14.238.232]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MFKGP-1tclXb22cD-00Gd8h; Tue, 04
- Feb 2025 10:41:26 +0100
-Message-ID: <e14ca038-e9fa-445d-a26c-de91d99fbd24@gmx.de>
-Date: Tue, 4 Feb 2025 10:41:23 +0100
+	dkim=pass (2048-bit key) header.d=crpt.ru header.i=@crpt.ru header.b="DXvtOGFc"
+Received: from mail.crpt.ru ([192.168.60.3])
+	by mail.crpt.ru  with ESMTP id 5149s9bs019526-5149s9bu019526
+	(version=TLSv1.2 cipher=AES256-SHA256 bits=256 verify=OK);
+	Tue, 4 Feb 2025 12:54:09 +0300
+Received: from EX2.crpt.local (192.168.60.4) by ex1.crpt.local (192.168.60.3)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.44; Tue, 4 Feb
+ 2025 12:54:09 +0300
+Received: from EX2.crpt.local ([192.168.60.4]) by EX2.crpt.local
+ ([192.168.60.4]) with mapi id 15.01.2507.044; Tue, 4 Feb 2025 12:54:09 +0300
+From: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>
+To: Jean Delvare <jdelvare@suse.com>
+CC: =?koi8-r?B?98HUz9LP0MnOIOHOxNLFyg==?= <a.vatoropin@crpt.ru>, Guenter Roeck
+	<linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "lvc-project@linuxtesting.org"
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH v2] hwmon: (xgene-hwmon) use appropriate type for the latency
+ value
+Thread-Topic: [PATCH v2] hwmon: (xgene-hwmon) use appropriate type for the
+ latency value
+Thread-Index: AQHbduq8jpf+a24QrUGeePF9PvB51A==
+Date: Tue, 4 Feb 2025 09:54:08 +0000
+Message-ID: <20250204095400.95013-1-a.vatoropin@crpt.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-kse-serverinfo: EX1.crpt.local, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: Clean, bases: 2/3/2025 11:17:00 PM
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] hwmon: (hp-wmi-sensors) Use the WMI bus API when
- accessing sensors
-To: Guenter Roeck <linux@roeck-us.net>, james@equiv.tech,
- markpearson@lenovo.com, jorge.lopez2@hp.com
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, hdegoede@redhat.com,
- ilpo.jarvinen@linux.intel.com, platform-driver-x86@vger.kernel.org,
- corbet@lwn.net, linux-doc@vger.kernel.org
-References: <20250203182322.384883-1-W_Armin@gmx.de>
- <20250203182322.384883-2-W_Armin@gmx.de>
- <0266e0b1-43fb-473b-995d-bb92662505c0@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <0266e0b1-43fb-473b-995d-bb92662505c0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:BK3HowZ6nOqAceZkqq/8+FkRoAINgf+3zJLWGY7e8AvVCxWWuZi
- KTg77SgZzNuvj6g1FD2B4WK0gRcbvL7Ty7ZWH0R41ixUpmdLmFFQBwRU68N+7sa/mtcwbjX
- SgziYqUtEeLt2AGUxXLEEZ9pivfZxy8aZSE/fS6xxgwzoIzURCY13nW0UhJYl8w/8Wc92f2
- QenH9EXpjd6hm0JW/1UxQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HBVKY/kMOA0=;kIV38TsmmZZUPu1R6id+wR1nCNY
- 1/q4Yr6jPM3qT+XoNa1KNNfsF3MGyrOPzJXrHX7J1bPXjEv8vICUcEG7q+Q7inhgjuzZ8LdXk
- MjA44z29HNS6RhTN9HitpvnY7PLaFa/bUdMheg6xQtMacO3vTrVlgRwUZkKug8bX6cjR4zfNT
- v9PR9imdIOFVH5OcxzcWDSGlkYdWSlt/FEKlJczWox4zTHxrXpwf/9FmV9OOW88m05qAlYcMh
- GRQx0HLm0lEktt6ArlElg/Du3DdsjTEyWTqpA2dbhXBLwhHVBRRKejR4rBr7vfnZHrfyPM4Ej
- rslSj3SowX8N54eSJXpGYNxt76DnhXjhDi5OESieXV3ppwGCu4f2fAv/H6QUXjLpTHW1UL5IM
- Qul41eMMDlpEPx1EA4ENmJyom0Hy1tIGgtFlcVqr7NKLKvwcy1tFOrLOnv9CRAnF3B175I44K
- lIM254w89suEsCYKHF0htAaiBweLVdEKF4DHcF+HAuwe0+s7Fwzy3UIawBFNzBJXoJJioLRVo
- MQt2XDCNJOaXtci9h+tsnHZrLq/p5VC6TjGwdboM1nAm1NZaB49P9zdY0y2uOjSG6QOekjB7A
- 7MyVC17bOMmtyBLvyzMH44RUeBTMgfNKl6avI6qBI7InMJWynsRjjUtsI2USiEy42TSCx+xKX
- wzJdAJsVx69f75Z3+76lgNeAmXRdRxEcisgOU0pRNw7lDhItIqRhbj+i2w51qHjvG/eryhQFE
- D6li4TOASHxESZEB59auK1/Ip/l0/h8U1E4UQWKOq5QsCVHKvyXOjhsMi2v4KBjPCFTFdGZa4
- GYLT+0tlUXbNGnrGq5Vl6ozTwvN0t5G9/IX/wkl/Df30HY69T26WeBPUdWgBieBeXRXCDPohC
- NOzGboepy1v/QcwKyi61TUv2zHnp5msC8kvWti8ne1AB4mQXQa9+WzORzcbsWSbmyWl/RgMFF
- ho0K4pnTfvj4epOt5cYKjmfGaZV5WBrxczfDBkEMC+piTX+2mPMORK6J7YWsk2L+V/X3MAWpv
- mcITkE0nBrgEPoiAW4kjZUEQIfYm6j8sVSZzmBH4SKbnmt/dGE6lN0ab8Aiam8SPQnUZQ5cuY
- FmD/N6rYYZ88lO0CWkMK52aLolmwN03a5nlh0goLOMNS3kdVFG0K0xOTvV13FvAX4X/SXTCag
- UfpXLJGb2gDC/FsQNyFMotjjyE1bXKk4MGAcxhVNyveBCG2Y8xAsngbUQKKmg2UQFNqiYvfJC
- nUCIAe4RVt48rSkrchRNUzuJrwLRIteoa7AR+EAjOS5t1Iv45gwFf+T//BgUn8VaKmv4+PC/V
- sT4gRZKjydcjVy3yAJNuaHZpJglcu6KHVZD2btacJLw8KY=
+X-FEAS-Client-IP: 192.168.60.3
+X-FE-Policy-ID: 2:4:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=crpt.ru; s=crpt.ru; c=relaxed/relaxed;
+ h=from:to:cc:subject:date:message-id:content-type:mime-version;
+ bh=Ns/S9zdLekX4uFaTfuRRtehKlOR68bAUTwpbDYs0F9Q=;
+ b=DXvtOGFcI/iCiCiJjN71h2tp3LTF9RStzbc98nIvg2SjeTDBPgQz7E60laFSMn9JDaPIC9SZCDsz
+	kv3w6VOCZJWLRZFvwwnnlvYBLvktAnT2fUByZ5u6aZ08bo3itK8h48/FE4LzWnhvZJTYX5+y3LqC
+	mVWc3f5QMWYf230FVHCi94Nxb/A5xYZF2xDUHGSgQdOQMGzK4IO4+y5fKvaxlzXExj7QmQEcVDA1
+	GWiqRxCk6KaFY7xEUzdqrJM1ompke1ygok8nnIWy+ogTV8dvR0a7UeJeddNIoGSxmmGaiey5X8EM
+	1sNBmNMbuPB0Hl65K0o7mjb9TBak0G0Qc29kow==
 
-Am 04.02.25 um 02:18 schrieb Guenter Roeck:
+From: Andrey Vatoropin <a.vatoropin@crpt.ru>
 
-> On 2/3/25 10:23, Armin Wolf wrote:
->> Since the driver already binds to HP_WMI_NUMERIC_SENSOR_GUID, using
->> wmidev_block_query() allows for faster sensor access.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
->
-> ... assuming the series will be applied together. Please let me know
-> if this patch should be applied through hwmon.
->
-> Guenter
+The expression PCC_NUM_RETRIES * pcc_chan->latency is currently being
+evaluated using 32-bit arithmetic.
 
-Hi,
+Since a value of type 'u64' is used to store the eventual result,
+and this result is later sent to the function usecs_to_jiffies with=20
+input parameter unsigned int, the current data type is too wide to=20
+store the value of ctx->usecs_lat.
 
-i would like to have this patch merged through the pdx86 tree.
+Change the data type of "usecs_lat" to a more suitable (narrower) type.
 
-Thanks,
-Armin Wolf
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
+Signed-off-by: Andrey Vatoropin <a.vatoropin@crpt.ru>
+---
+v1->v2: rework the patch by utilizing more appropriate data types for
+the variables in question as Guenter Roeck noticed.
+ drivers/hwmon/xgene-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 1e3bd129a922..72ba569dde1c 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -105,7 +105,7 @@ struct xgene_hwmon_dev {
+=20
+ 	phys_addr_t		comm_base_addr;
+ 	void			*pcc_comm_addr;
+-	u64			usecs_lat;
++	unsigned int		usecs_lat;
+ };
+=20
+ /*
+--=20
+2.43.0=
