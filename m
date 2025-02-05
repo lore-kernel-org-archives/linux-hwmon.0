@@ -1,87 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184774A00;
-	Tue,  4 Feb 2025 23:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938DF13B280;
+	Wed,  5 Feb 2025 02:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738712065; cv=none; b=g+SGmO8IduCCCblZpfLaRNHtq3oBtK3T6SRzl5Z0SSgnPthhJbq2figSUPzXNs6muWuBrkl/uhw9CE5qAOw9zpvAA1Ut8u1x2FlVSSKOo0SKDGSeEQsXOgjnXZxepa2Jjs+Xw/bbzGa7yJJ7PQzQmVzcTd+S77W7imbaknWWp9c=
+	t=1738721151; cv=none; b=usozRnVYIKTfYBlbYiGFsUjyuOThz+CFApvoeVG54xiBzKdzktVG6xu83Vj3sCcuFpIieTuTDJaj5fG0md3+LwRNNHy2ye5C1EUAag5/HaiomVhtpkZ1mVlISaL/vDM+BfYqLT4o9/c++y8cW7lpWWgBqA0ApY0unjfS+00RZFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738712065; c=relaxed/simple;
-	bh=qNaI7mNVAo+bdKqZapwX6kc95OmNBA7rEBpHbdHOK7g=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=mdHO71tcWZ6vaZ228G7FD6oziuk2fEpbmWg8wm0JzIZkcSGjq2CsJfUCvueyxaeqyaW8IGeGpEtKOcgb70v+RRPc5yuE8CV6OV2Eo/nC9EMaM6ZqLpsELBd15NfoIZ0eeo2Zza78CpWnzqS40QRuc+Usu6OA2gc7qRVDDBFE6oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Modprg3I; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Modprg3I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AA6C4CEDF;
-	Tue,  4 Feb 2025 23:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738712064;
-	bh=qNaI7mNVAo+bdKqZapwX6kc95OmNBA7rEBpHbdHOK7g=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Modprg3I1Pt9JxZwG9n+ZL6HnMhQjCmgAf/ZQ1Sz/6Qdl5vxSrc+trOzbXxQXRbI7
-	 igjNpulSW6a87KMhsCsnTPq1gz+7S9FLj558NH2P3sZF+A1ob3gZrx7HjoVVQgQgWc
-	 UXfRV7VKdfVLa2NFeprP4JviIKHmGHwoo5Gu9ocDiMgA/rdG0Mb79EUMBb6R4EDUxk
-	 l4il7djUEVYE8o52djqbpJhkwo7yWmG3agRSjBnjT5BPAiAqSXNzXk82gcTOcDmPEo
-	 +S+QMHz2KW71aDkCL7P6Vk4kG5Y0bPCLfPUh9tg1L37vQ7+d0ag6ltMnM0pJ3QZEZM
-	 PozE63dz4OqCQ==
-Date: Tue, 04 Feb 2025 17:34:23 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1738721151; c=relaxed/simple;
+	bh=IlZQBea16DaPKe4dix0OXj6Acx1xWi+omT+MmAlB39w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=l35aiWkG/leKXGa4zNzPvAPWDukFjHPiMYJckWzWflnVc7gckU04QH8IqisYrps2tBByoJgcsl6o/slKhY6lmH4PpAokhe9cUX8Er0S2kVPzX3iN+AiO6mDfp4qCde0RDoiHAA21XQSV3I2Y8BlVzzqMwXbJJgswN2aoF8cpJt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ynk5w5fftz22mKF;
+	Wed,  5 Feb 2025 10:03:00 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id AC45E1A016C;
+	Wed,  5 Feb 2025 10:05:45 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 5 Feb 2025 10:05:45 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 5 Feb
+ 2025 10:05:44 +0800
+Message-ID: <0af59f13-7b88-3ede-ef90-00457d105c3c@huawei.com>
+Date: Wed, 5 Feb 2025 10:05:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Liam Girdwood <lgirdwood@gmail.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
- broonie@kernel.org, linux-hwmon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Jean Delvare <jdelvare@suse.com>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20250204180306.2755444-1-naresh.solanki@9elements.com>
-References: <20250204180306.2755444-1-naresh.solanki@9elements.com>
-Message-Id: <173871195460.3830123.16015645611283640170.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt
- binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 0/9] Use HWMON_CHANNEL_INFO macro to simplify code
+To: Andrew Lunn <andrew@lunn.ch>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <oss-drivers@corigine.com>, <matt@ranostay.sg>,
+	<mchehab@kernel.org>, <irusskikh@marvell.com>, <andrew+netdev@lunn.ch>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <louis.peens@corigine.com>, <hkallweit1@gmail.com>,
+	<linux@armlinux.org.uk>, <kabel@kernel.org>, <alexandre.belloni@bootlin.com>,
+	<krzk@kernel.org>, <zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>,
+	<liuyonglong@huawei.com>
+References: <20250124022635.16647-1-lihuisong@huawei.com>
+ <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
+Hi Andrew,
 
-On Tue, 04 Feb 2025 23:33:03 +0530, Naresh Solanki wrote:
-> Move dt binding under hwmon/pmbus & align accordingly.
-> 
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> ---
->  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
->  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
->  2 files changed, 61 insertions(+), 45 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
->  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/aspeed/' for 20250204180306.2755444-1-naresh.solanki@9elements.com:
-
-arch/arm/boot/dts/aspeed/aspeed-bmc-vegman-n110.dtb: /ahb/apb/display@1e6e6000: failed to match any schema with compatible: ['aspeed,ast2500-gfx', 'syscon']
-arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier-1s4u.dtb: /ahb/apb/fsi@1e79b000/cfam@0,0/hub@3400/cfam@2,0/i2c@1800: failed to match any schema with compatible: ['ibm,fsi-i2c-master']
-
-
-
-
-
+在 2025/1/24 23:08, Andrew Lunn 写道:
+> On Fri, Jan 24, 2025 at 10:26:26AM +0800, Huisong Li wrote:
+>> The HWMON_CHANNEL_INFO macro is provided by hwmon.h and used widely by many
+>> other drivers. This series use HWMON_CHANNEL_INFO macro to simplify code.
+>>
+>> Huisong Li (9):
+>>    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>>    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+> Please split these patches per subsystem. Maintainers generally have
+> scripts to accept patches, and those scripts don't work when there are
+> patches for other Maintainers mixed in. So you need 4 patchsets,
+> media, net, rtc and w1.
+Many thanks for your reply and good suggestion.
+I will split them.
+>
+> I would also like to see the HWMON Maintainers opinion on these. A
+> patchset containing these have already been NACKed once. These patches
+> do however look like valid cleanups. But are they just so you can do
+> something bad in your vendor tree, which will never make it to
+> mainline?
+>
+> 	Andrew
+>
+> .
