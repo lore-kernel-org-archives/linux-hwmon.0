@@ -1,111 +1,106 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA36E151987;
-	Wed,  5 Feb 2025 12:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074CE1A83ED;
+	Wed,  5 Feb 2025 16:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738759287; cv=none; b=B+2PanJG6kV0X3UGzBtuk9bnHkpqWrmCNQIBP/H+NN7tXiARzT7UnbU3Y3Y8fZD456wT3LQFpuO6wvZB3qGvEzOEHNGF+Qbe4aYzushS83oqm+UZNN23ruvz6rGJ7eELwfTW33EMdCwb2dZwgmwCGpNpDWTpjDa5EcSkYY06Ilg=
+	t=1738772488; cv=none; b=KvZuq+vpkkJHrahvx3HWJ+4mjsN/1EgxLYgU1E6F53QwZHFNWwaW9ZyHCoJZQH4mNaPAFFF8GlFUacC21Qlzf/8brPIXDBQgq0fyJy2q0cLMRXTMPtsgBTYCHlj2wmjI7JWHhqlaadPROW0Y0jYGak10xOlWbTRIq/YMjpkC4Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738759287; c=relaxed/simple;
-	bh=1Po9+REJ1tb5LWRezi2q/mNHQhS/dtpqdj45aFMP51I=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X9nOokywTc061QXwxG2RJjawBbTzmpJsAnTGYJcX7NtSBh/Kt/U7vSbSulaKKfJjdGMRWDa/afd76DE/9zvtzJ6WnNXygvBV+uombWJqBvQox1QZuK+MBS6cHvQCbLbSilsYyiD8pZe47rPdLg1C3ouHSf+SJ3PeA1//tSSNOU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AzfRz+Ov; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738772488; c=relaxed/simple;
+	bh=2DNQADN7pp+le24xGXf6k5UgfsW76QzM6fsRSbiQY/w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TH1qDYASRQWxiDIfZpJ7LCJa2HB37RH38Mnz05YB8NM+u/BECoJXv2U9GAWxVlNAJkyGYQruVxYw2knnYfxT0m1IirIDerCgTPW5ennt8b0SfprM7VKSZ0NW17yxw/5XAvjMXAaWDVZD8VWCoH92Y1gvOCM+ipdIyzzRWTxbnRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=W25dn78h; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AzfRz+Ov"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6edb82f85so959947385a.3;
-        Wed, 05 Feb 2025 04:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738759284; x=1739364084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zCPDM9ShX005wNG/ECrZxATKnuS3BwRmoFAnrdpehQ4=;
-        b=AzfRz+OvOb+svhBJn8lJZuenJGf+2alypk4uIlOOhEj+e+iVlqtLhXUrbHScgSQAEh
-         4g6lpq/DEHnDKeuSOwhYGxuVDVMGMmi2U+4Irr+5ElZzDF5iJQ0/yTKtjLnldMMxZPRN
-         GosfD/5aI3gqw84/OGqr8UCc8QzogL+CKCivpyDaTIVxMPNYwdKAQLB7n5+zZ0mP6FoF
-         reR8qo/hPQUt6CZO0uQDqu5d7NIaBFCK6VJxhrVMWneco3nFUNhkozFr23+n5U3a7NX+
-         jVWkCG/orzkm6iM5nX7G6JHfje7Lzr0d/2N9AWVA+EEHYrPhfpf/BnjyhhkcYAxeWOLF
-         +dRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738759284; x=1739364084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zCPDM9ShX005wNG/ECrZxATKnuS3BwRmoFAnrdpehQ4=;
-        b=c6eedrGu56YJ/VRVtOlgQO2gFa75jQsEiIV0NLhV0DEHB10tr7clfOrvy465CHp4N5
-         OSpZ3wXVhUSJ+RDhEifW9MXBK3d2QDcGjlcM3GhlFd1fPC2wVUInflpOKXdLIBjcAQ0G
-         /LbHph/c8u33eudHwfRcAFO42oztoXho+1LgF7OMmgxXGJgZ65oSmhEq4hwozknEFQzK
-         VjnrJcprT1uxOp5wsy0jq/ROd2AidL/QP1UfGsh5st8e7nmIDQDFi8CBpume2O8TELwN
-         8s2V+zY/VMOPHWC/KJfIcsDooxSxAe3sedXm+UYmDq0JIz9jSp+mrLPCzYg6+nKN/hVX
-         u66A==
-X-Forwarded-Encrypted: i=1; AJvYcCUzEiXUBc7XGU494ps3DXRRur890I+mrh6ID+Tbme5rNIxuLO7QB+n3ckiZyobyJH+R9eqouu1+RQtKBw==@vger.kernel.org, AJvYcCVsNzRD+J8kOaMn4EP2dhSoEkTJ3/63NVUZKJmpHNNNOMmNc4A7tMCOkEdUYbouMvDKWyEJ1oDJ7GzpfKM6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4YFlZCUV7Neuoo3Gt7zy74UY1nQfkBHQvw9ib+Mt/uEnNvYR7
-	14IbqDN3jrfxy0wBe9Ae/5Y6RnJ17FP6eNp0tCBKut4OPfBHkfbj
-X-Gm-Gg: ASbGncuknkj6sC5Qrbu3HVCXhbTjLxLQIfrj3MCNvSUVYZIE8b6oy5id0YcPS8kNfAu
-	U/Kyar0+UjVJ/ohaq4ko9Wp9Zp25gb3XPf74WXgpfdjZYmSKQGHZs9tFlJID+mGaese/uFORzVm
-	B8fuQwm9q5Uk6PeTW/TtCIH5JDCq5+XOY4T4x7d/qicpPDmUokE+gQF1vP7ffzPchF+Bx0S4DHW
-	ru/72U/UzeBKriM3q+jizNKj4Unm1biI7SiA2Wilf7ZJFx2gDGFUSak36FmYFB8IP0=
-X-Google-Smtp-Source: AGHT+IETZ1/lxhOVPVfbGFXsPqTJENh81WZeiw40CoVC8WQQyk9S8fW0588/iG3jVk2LDuHOymbRFg==
-X-Received: by 2002:a05:620a:63c9:b0:7be:3965:7452 with SMTP id af79cd13be357-7c039fbb9camr472006985a.32.1738759284368;
-        Wed, 05 Feb 2025 04:41:24 -0800 (PST)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c00a90cc5asm744214185a.94.2025.02.05.04.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 04:41:24 -0800 (PST)
-Date: Wed, 5 Feb 2025 20:39:58 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, Arnd Bergmann <arnd@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Arnd Bergmann <arnd@arndb.de>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Inochi Amaoto <inochiama@outlook.com>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: sg2042: add back module description/author tags
-Message-ID: <4a3w46oi56bjps2ybhrzlcszccfojfesvsehgqn5s6fx6xo2hi@bf4dafabno27>
-References: <20250205121419.373464-1-arnd@kernel.org>
- <kdvu3xjreyycftkbsomqzc3e3y6mkom5u25co5rqwqem4n7p47@xnmhg7mkxsmw>
- <Z6Na8fcitFSFGOVT@shikoro>
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="W25dn78h"
+Received: from wse-pc.fritz.box (pd9e59260.dip0.t-ipconnect.de [217.229.146.96])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPA id 706062FC0079;
+	Wed,  5 Feb 2025 17:21:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1738772476;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jfgNw/sFpnsNIWvl27HWsqu0tv0PJPndFa2C+AYRXaA=;
+	b=W25dn78h6+f8rUN+JITzeNYy+vEC5SbOlwXE8WA1DD88FqqjMLZ9QdD3XoWgbEbo5lN/b+
+	YYwkWg11b0pG9gjIdNHzZ/LDKr5UOwk2/yPa1SubTss6jWvskkE7DtS3nXhkwj8EQC8DKu
+	5LndYp55+VjyfcmZLqZfA4pNBsxU5ZA=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+From: Werner Sembach <wse@tuxedocomputers.com>
+To: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	wse@tuxedocomputers.com,
+	ukleinek@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [RFC PATCH 0/1] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI TFAN via hwmon
+Date: Wed,  5 Feb 2025 17:19:19 +0100
+Message-ID: <20250205162109.222619-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z6Na8fcitFSFGOVT@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 05, 2025 at 01:34:57PM +0100, Wolfram Sang wrote:
-> On Wed, Feb 05, 2025 at 08:28:56PM +0800, Inochi Amaoto wrote:
-> > On Wed, Feb 05, 2025 at 01:14:08PM +0100, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > A previous code reorganization inadvertently dropped the two tags,
-> > > which leads to a "make W=1" warning:
-> 
-> :( Very sloppy, I am sorry!
-> 
-> > > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/sg2042-mcu.o
-> > > 
-> > > Add these back.
-> > > 
-> > > Fixes: cd4db38c4368 ("hwmon: (sg2042) Use per-client debugfs entry")
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > Reviewed-by: Inochi Amaoto <inochiama@gmail.com>
-> 
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> 
-> Just wondering: Inochi Amaoto's email above is using gmail, below is
-> using outlook. Is the old one still valid?
-> 
+This Implements fan controls for userspace for the TUXEDO Sirius 16 Gen 1 & 2.
 
-Since the MS requires 2FA for email client, I uses gmail as an
-alternative to send patches and reply. I may use outlook to send
-in the furture if I find a way to login, or just update the
-maintainance information if no way.
+It also adds safeguards that userspace cannot go below certain fanspeeds at
+certain temperatures. My suspicion that this is necessary was proven correct
+during testing of this patch: The former version had the highest safeguard level
+as 40% fanspeed at temperatures above 90°C. But after letting the device run
+like that with a CPU + GPU load for a short period of time, it turned off.
 
-Regards,
-Inochi.
+It was hot to the touch above the keyboard and it doesn't turn on anymore since
+then. Even after letting it cool down overnight. So I probably fried the
+mainboard.
+
+This cut my testing short for the time being and is the reason why this is send
+as an RFC. It should however work and now has two additional min fanspeeds: 60%
+at 95°C and 100% at 100°C.
+
+Enforcing these minimum fanspeeds at the EC-firmware level is not possible as we
+only have access to the EC-firmware as a binary blob.
+
+Werner Sembach (1):
+  platform/x86/tuxedo: Implement TUXEDO TUXI ACPI TFAN via hwmon
+
+ MAINTAINERS                                   |   6 +
+ drivers/platform/x86/Kconfig                  |   2 +
+ drivers/platform/x86/Makefile                 |   3 +
+ drivers/platform/x86/tuxedo/Kbuild            |   6 +
+ drivers/platform/x86/tuxedo/Kconfig           |   6 +
+ drivers/platform/x86/tuxedo/nbxx/Kbuild       |   9 +
+ drivers/platform/x86/tuxedo/nbxx/Kconfig      |  13 +
+ .../x86/tuxedo/nbxx/acpi_tuxi_hwmon.c         | 421 ++++++++++++++++++
+ .../x86/tuxedo/nbxx/acpi_tuxi_hwmon.h         |  14 +
+ .../platform/x86/tuxedo/nbxx/acpi_tuxi_init.c |  60 +++
+ .../platform/x86/tuxedo/nbxx/acpi_tuxi_init.h |  16 +
+ .../platform/x86/tuxedo/nbxx/acpi_tuxi_util.c |  58 +++
+ .../platform/x86/tuxedo/nbxx/acpi_tuxi_util.h |  84 ++++
+ 13 files changed, 698 insertions(+)
+ create mode 100644 drivers/platform/x86/tuxedo/Kbuild
+ create mode 100644 drivers/platform/x86/tuxedo/Kconfig
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kbuild
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kconfig
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_hwmon.c
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_hwmon.h
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_init.c
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_init.h
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_util.c
+ create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_util.h
+
+-- 
+2.43.0
+
