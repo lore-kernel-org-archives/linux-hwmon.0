@@ -1,190 +1,171 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0B11A23AA
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Feb 2025 19:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842841D61B1;
+	Thu,  6 Feb 2025 20:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738869052; cv=none; b=EfHOhignvfMc2G3kaSFAYsrohbM4mLSEdDLCt6NXORnlKGpTk9aj9+VX1AcD1DuYbefkGRlmsfzBO4x6xOMxKyXaVqihBZWlvsH41Q882K5NGrq3MgeMNwRK9/HZ7uXrL5YPP26GrmjwD4KATysx9tGyM9zSKYPRr4dvtr1Gnbg=
+	t=1738875419; cv=none; b=WQkK6RzVC9R1EasaENkDF4R2uunktKClBcq5PMI4SJTpB/SzIDGjgz0laxS8RSI6cicclg2ztJffVVe0XedrqUnFARYxwzwr0WY4WOFCy37fFQt7PX0rQhhUggnCNFHRhMTL0jm2IYBl5k9Q9KcdPpdOTrejIOudqyKPvyxIYmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738869052; c=relaxed/simple;
-	bh=Rw38SpIt5uaeLx57DCBwOaHp6ovZGG6NkUErrYKysTI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TKs6V66ry+4rB0vVB8ChI+1E90O6OITZHoVC4cXnPMKt8rNFjWwZGAvIUaUPTn2uYjMQjhBEvZYACjkmihXLrMkLY0OdzMQTLzzMUT6UyzzEAHuS3dWZ/ev31mcWyX0AYs7tnGZa+Eb8+xp3ymkSS7dMQAWYexcsrPnEGKijg8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=EhUia/Qy; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1738875419; c=relaxed/simple;
+	bh=eQA952u9kkaqAXMAY6HcEfCClqJW3Q7InchGllPb6Ig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c1ABCnpE5UTZE2FGskq41DbX4Dba+HRKvDybezSPUZqtCAI9CzDQkFbxKWELccpmJ5DTEtCSPfS2MqDP5lmIcOY/GXwvt3mkpxfCVz4QJJ3QmFU3ol+MqxPzgVwgV3yqDI2x9EegrOvZBuils6mPQNMXmC3lVhnX0XvFKDYu8Eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NnScLVMu; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="EhUia/Qy"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2166f1e589cso32667965ad.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 06 Feb 2025 11:10:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NnScLVMu"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21661be2c2dso26771025ad.1;
+        Thu, 06 Feb 2025 12:56:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1738869049; x=1739473849; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bNn7LdmJboFjQmS9MjWVlCya0ZGknTKf2rksBbu/dXw=;
-        b=EhUia/Qyfgkt4DJDmi+rK5mba4Eo68jXozAkS0mGjhG98F37Ejjv8UTQSfXNdzBG2V
-         XgWK+DmQiyr2oVyHaugKS6GiW5sXHYmgA6AT/toNefswg2nyGPkAW5ihSYMBTpWm+HNe
-         42N3Z9IlNMpxOxJkOxLU3bzdgsJYrBDy5Z2P5ZdTxQcY7CjsMPZWufU5XZGdEXkUvv8O
-         nT8nZS8QKVVjuHHoTj+Cq1lOl011AJQecom/NVfbD2uaeuVUxH1xI2I54LxsWyl6AqAn
-         1UDqeAwlWEBiRFV/mosIWDeJHNnkWaeG19Esv7dIjhqr8lBjCdXIAE16J+PcNuaLBL1x
-         OPKw==
+        d=gmail.com; s=20230601; t=1738875417; x=1739480217; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=t9X7DiuBxbqVPGkKZzespQrlxwkrd/xKDxew7+nhW+A=;
+        b=NnScLVMu9X3DcD861GaLIar3irSSnPl+4xJQbmYlPi8dKz1Jz+wbOBNSqflwPdFRKK
+         aQmGDMBGdZg3rvIzj3DSEAw7JI3Te+e8p8lbdcF4A493s9TX+KQTQ2QCjh2c2TyV/Yps
+         LZpyvn90iKZjQRF7BDwXvK8G8tOY7k8Env/wGxHYVMg2UrH6hweMcC/J7cYCXBBM6jvi
+         n82VyymSa/9Di57vxg+Wj3QcvH4CRGhJ0pcGUga72wBjb+iAyhmjVrd4jZonO4zpyCBE
+         z/m8RGRHdfOew2sXfa8+g9X6tqgpEJCs27M/W6gggVLDKv6sBiaaQGhvA98pxQWp+IS9
+         4lpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738869049; x=1739473849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bNn7LdmJboFjQmS9MjWVlCya0ZGknTKf2rksBbu/dXw=;
-        b=KM8j7azbnCtqu7e5tsj3EdqQtsjKf9YV29Kqz4YIFnDlK29AYCIBo/RA0Exq2bIIml
-         fUjQyFMVAO/j+o93r3S67aVSA3N7uUppp6jSqp88SxYqPaYXNDmIdaTiqelMP3PNVDxg
-         PZDWZ7TZ6urK2y87vfNFdxb5CGT/0ANW6J2niNHYdPFIvYDpvZJplQLjiZHkkLOfLdJJ
-         vsW0HvDALbuxAmug/EazTKqlxI43OeJcdgfnsWmWu+43WhrgyVN9tvyP/eZmxXpqNdxM
-         AcNEmHIN6uZkALYGtqjP3/QPUEhKA7pxxJk47CE2+0JyAQZgPW2bMfYQ8dLnr1ptEpEh
-         NVCA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6vkts06d2lTuyxQl8Wn2tbVy+e21HRTsGGMYeke4KHZqVuxfjfifp7ku98qWcAgtFGN3tFkNFFLxnFQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+e2K/34FxndNZot1PPnEA4gXouOX16D36uRkuKpovYchwqHOm
-	7u3udTenL6vr/uG63cqXxhU3wSrygQG3+4cUPuLSYCmnkoR+FI+MCtlLQM8+jRqhoo5rf9mcAmq
-	2MQFRlqOV3o+OeQGvwoBfUxzYKB5HarRcEoLeZg==
-X-Gm-Gg: ASbGncsTDM526VKUpJ77vXTGUz7ie+haCg8yvPU05TLEgN5vmLBRr9q6hjMG2aAIBjI
-	ia2Uv5MNNWoMJTAawfyelvDzYp7y6L+QBtyJtCuwfsO2JFmAt7YFua0pdSKN1jy+YfpXcZ+k4
-X-Google-Smtp-Source: AGHT+IHP+CHPnFHvmgqlXfNQqJhyMOHR72ISXkpTk5Ua7uO05H5Z2+wc+Rr40xnBTgiwHLxEycHnPKu+z+SExZwq2iA=
-X-Received: by 2002:a05:6a21:100e:b0:1e1:bdae:e045 with SMTP id
- adf61e73a8af0-1ee03a9b2d5mr962803637.23.1738869049673; Thu, 06 Feb 2025
- 11:10:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738875417; x=1739480217;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t9X7DiuBxbqVPGkKZzespQrlxwkrd/xKDxew7+nhW+A=;
+        b=oS2ZumEoDF9fcwt6JkdhglO5vCTGTdf5X4y5HkpdM8fjSZaYKtEF7qvbzmZeX8hryJ
+         csVwXUZl9taa6/xj18J+wgos10lTBt/sGk+FVVtlLYbuHvFgkxPtrv39lW/irEFnhj6l
+         yd9O4TheCmLPtF86AtpU1Pbw+BHcQCXQucrWhFOoni5dtD6kKlWK9vreVp6eFgQumlmL
+         OVcy4Maad8+YhHPoDQT/1vS+JaIwhR7theZh/YlWqbAr15OgLxNOJ21WnpeaM6j6kTYW
+         eI53AXRI77zuh95cnFysw7a8Pomfxo/dlKIUeP+hownScOvPPW5U07R1+q+BYuOzR6Ch
+         xYXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGAGtvcjEAdEYyeTKWnSjnAd05xOdUF0Nw7ofrumQC2DoIzt5neYQeNiEIiYfJd5fIVGO6lzE9PNVbT3w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnSJbjE3VIIrrNJz509R7vosfcEaPaulHhLQ93WQe2PkkpT59Y
+	LInw+ariLS3466B7owYoWqRaPDkYD0BrPNvm6AIn6rs7LXsNnJwM
+X-Gm-Gg: ASbGncuITJR/aJU9Z9MRhx0ciIOF+Juze7ggMtJAxagNkWooi7fsl2JkkoyJ5FRAYLt
+	eLfGP+Cev/oIn1WvYo9eRi1UlCTx5MCPD+Sjb+ilpYEHNvUMXbA4Jg2PhVC6zXTALE/9URpxI+G
+	3/E9Xckmef5KCmAZv6/GF3x4tnbcDMYvq3Y/wxRhxGaeqgQZttLXp3vcDKSlWwJNfQQnTlqc7Ep
+	7H5I824ndzdI+KNF/kOzwhnIaLyjq3GyDz3R4wgy92kzbIEfdm12nZbwFVZ3VLgXWtu8EUgWOJG
+	GAhodqe8aOf11WaXM0HnXO8vMY2/fDECyw0NLQzP7ePmyqym61AzyCRE+eLT4SSl
+X-Google-Smtp-Source: AGHT+IFHKQzDDwJDvoEHHbrGLWZSJmyOofHRIjNbezcZZwLH6ufZCHjcbjaD+F0zAin9G7ojQ7kBng==
+X-Received: by 2002:a05:6a20:438c:b0:1dc:7907:6d67 with SMTP id adf61e73a8af0-1ee03b66183mr1855658637.40.1738875416655;
+        Thu, 06 Feb 2025 12:56:56 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73048bf1413sm1773128b3a.98.2025.02.06.12.56.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2025 12:56:55 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <92a7ac6d-3600-4bc4-8dad-b679a8e18251@roeck-us.net>
+Date: Thu, 6 Feb 2025 12:56:54 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204180306.2755444-1-naresh.solanki@9elements.com>
- <20250204-mulled-evaluate-8a690cdfbd4d@spud> <CABqG17jHKfwJEfZxto_YA4opS8=QwqTqfNdkku8kcEv2_iW+XA@mail.gmail.com>
- <20250205-purge-debating-21273d3b0f40@spud> <CABqG17j4tKXnMZ5=vcjBvfe6JwCLQ6NbkQmJC9ySK_bmGEv=iQ@mail.gmail.com>
- <20250206-camera-mashed-48cf0cf1715f@spud>
-In-Reply-To: <20250206-camera-mashed-48cf0cf1715f@spud>
-From: Naresh Solanki <naresh.solanki@9elements.com>
-Date: Fri, 7 Feb 2025 00:40:38 +0530
-X-Gm-Features: AWEUYZldmdFaTS15rPgQinK4lS3TTxIDBTf4Zx-zGv_Kv2dykSc9igq6QKOYQNk
-Message-ID: <CABqG17iyRXW2_jvTVkFAEhW+TZZ-SAABm+6efqt0ZWHgYbiUMw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt binding
-To: Conor Dooley <conor@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, broonie@kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] hwmon: (adc128d818): filter out 0x1ff reading
+To: Jerry C Chen <Jerry_C_Chen@wiwynn.com>, patrick@stwcx.xyz,
+ Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250206063600.321650-1-Jerry_C_Chen@wiwynn.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250206063600.321650-1-Jerry_C_Chen@wiwynn.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Conor,
+On 2/5/25 22:35, Jerry C Chen wrote:
+> ASPEED i2c driver doesn't support SMBUS timeout thus we will get dirty
+> data while SCL hold time over 35ms, filter out default register value
+> 0x1ff to avoid abnormal data reading.
 
-On Thu, 6 Feb 2025 at 23:39, Conor Dooley <conor@kernel.org> wrote:
->
-> On Thu, Feb 06, 2025 at 09:23:03PM +0530, Naresh Solanki wrote:
-> > On Thu, 6 Feb 2025 at 01:43, Conor Dooley <conor@kernel.org> wrote:
-> > > On Wed, Feb 05, 2025 at 03:51:25PM +0530, Naresh Solanki wrote:
-> > > > On Wed, 5 Feb 2025 at 00:52, Conor Dooley <conor@kernel.org> wrote:
-> > > > > On Tue, Feb 04, 2025 at 11:33:03PM +0530, Naresh Solanki wrote:
-> > > > > > Move dt binding under hwmon/pmbus & align accordingly.
-> > > > > >
-> > > > > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> > > > > > ---
-> > > > > >  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
-> > > > > >  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
-> > > > > >  2 files changed, 61 insertions(+), 45 deletions(-)
-> > > > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
-> > > > > >  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
-> > > > > >
-> > > > > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..e1f683846a54
-> > > > > > --- /dev/null
-> > > > > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
-> > > > > > @@ -0,0 +1,61 @@
-> > > > > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > > > > +%YAML 1.2
-> > > > > > +---
-> > > > > > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,ir38060.yaml#
-> > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > > +
-> > > > > > +title: Infineon Buck Regulators with PMBUS interfaces
-> > > > > > +
-> > > > > > +maintainers:
-> > > > > > +  - Not Me.
-> > > > >
-> > > > > How the hell did this get merged!
-> > > > >
-> > > > > > +
-> > > > > > +properties:
-> > > > > > +  compatible:
-> > > > > > +    enum:
-> > > > > > +      - infineon,ir38060
-> > > > > > +      - infineon,ir38064
-> > > > > > +      - infineon,ir38164
-> > > > > > +      - infineon,ir38263
-> > > > > > +
-> > > > > > +  reg:
-> > > > > > +    maxItems: 1
-> > > > > > +
-> > > > > > +  regulators:
-> > > > > > +    type: object
-> > > > > > +    description:
-> > > > > > +      list of regulators provided by this controller.
-> > > > >
-> > > > > Can you explain why this change is justified? Your commit message is
-> > > > > explaining what you're doing but not why it's okay to do.
-> > >
-> > > > This is based on other similar dt-bindings under hwmon/pmbus.
-> > >
-> > > Okay, but what I am looking for is an explanation of why it is okay to
-> > > change the node from
-> > >
-> > > | regulator@34 {
-> > > |   compatible = "infineon,ir38060";
-> > > |   reg = <0x34>;
-> > > |
-> > > |   regulator-min-microvolt = <437500>;
-> > > |   regulator-max-microvolt = <1387500>;
-> > > | };
-> > As I have understood the driver, this isn't supported.
-> > >
-> > > to
-> > >
-> > > | regulator@34 {
-> > > |     compatible = "infineon,ir38060";
-> > > |     reg = <0x34>;
-> > > |
-> > > |     regulators {
-> > > |         vout {
-> > > |             regulator-name = "p5v_aux";
-> > > |             regulator-min-microvolt = <437500>;
-> > > |             regulator-max-microvolt = <1387500>;
-> > > |         };
-> > > |     };
-> > Above is the typical approach in other pmbus dt bindings.
-> > Even pmbus driver expects this approach.
-> > >
-> > > ?
-> > >
-> > > Will the driver handle both of these identically? Is backwards
-> > > compatibility with the old format maintained? Was the original format
-> > > wrong and does not work? Why is a list of regulators needed when the
-> > > device only provides one?
-> > Driver doesn't support both.
-> > Based on the pmbus driver original format was wrong.
-> > pmbus driver looks for a regulator node to start with.
-> >
-> > Reference:
-> > https://github.com/torvalds/linux/blob/master/drivers/hwmon/pmbus/pmbus.h#L515
->
-> Then all of the in-tree users are all just broken? They're in aspeed
-> bmcs, so I would not be surprised at all if that were the case.
-> Can you send a new version with a fixes tag and an explanation that what
-> was there was wrong?
-Sure. I will add an explanation in the commit message.
-I'm not sure what you meant by 'fixes tag'
+If the Aspeed i2c driver has a problem, it should be fixed there,
+not in drivers utilizing it.
 
-Regards,
-Naresh
->
-> Cheers,
-> Conor.
+> 
+> Signed-off-by: Jerry C Chen <Jerry_C_Chen@wiwynn.com>
+> ---
+>   drivers/hwmon/adc128d818.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+> index 5e805d4ee76a..8197d3f14ea7 100644
+> --- a/drivers/hwmon/adc128d818.c
+> +++ b/drivers/hwmon/adc128d818.c
+> @@ -88,7 +88,7 @@ static struct adc128_data *adc128_update_device(struct device *dev)
+>                  for (i = 0; i < num_inputs[data->mode]; i++) {
+>                          rv = i2c_smbus_read_word_swapped(client,
+>                                                           ADC128_REG_IN(i));
+> -                       if (rv < 0)
+> +                       if (rv < 0 || rv == 511)
+
+That would return a pointer to 511 to the caller, which is most definitely
+not useful and would very likely result in a crash. That makes me wonder
+you have actually tested this patch.
+
+On top of that, 511 or 0x1ff is a perfectly valid return value. I find
+zero evidence in the datasheet suggesting that a returned value of 0x1ff
+would suggest an invalid value. More specifically, the datasheet does
+not say if bit 0..3 are returned as 0 or as 1.
+
+>                                  goto abort;
+>                          data->in[0][i] = rv >> 4;
+> 
+> --
+> 2.25.1
+> 
+> WIWYNN PROPRIETARY
+> This email (and any attachments) contains proprietary or confidential information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited. If you are not the intended recipient, please notify the sender and delete this email immediately.
+
+That means that I would not be able to apply the patch anyway, even if it was perfect.
+
+Guenter
+
