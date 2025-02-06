@@ -1,172 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF2622FF59
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Feb 2025 22:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38242417C2;
+	Thu,  6 Feb 2025 22:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738882169; cv=none; b=OecZwVUg5h4OcHf4E8QbbQMmsVEGB48WHDiwqLSVl8tMW+ryWiymK+l2SAEhxO4BxNCUKQaGuwBFQlPkJIpHNMJERa8rrt49QPAtV4FGHAijEc4xEGBcZWqxe1C07NuTbzQxsT88u2IRzc1DR9vC1bGTJwnVzEIHA1/OmiQoqnE=
+	t=1738882513; cv=none; b=lq3cfNg/X3ZDI/W2jipPHRn0J3pEAPHZ8a7ICARFOqLL+yy9KH2SQRISzBIKcFLtMx/TXugAMdvPuOAJW3K8N5BLU1JeRLuUK4eHKHIjMHUJhPUaZKXzy3N5z6G24L3KAUZFNVa2wqJGkZNsgsSKYdRxfWNXgS22s7LLMNvLaFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738882169; c=relaxed/simple;
-	bh=cuNaw3oEr1MvV8IhtVY3ta0zHeunYi8737QghSINQNc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=A7TpnQzfPssyblNNOc5nY2UmnyhMDlpOdistsQa0x5P9FuKoHSJI5PoBpg0HHPi2oK7n85B2tKb95/RtTXDS3u0/0d7vnMYeO5KMX2j44lOTz6NFzP9y9smxx8GEQ2tpy8sB5YULRo6jifEchUqYuOVV6JcSRHHwXu+ADS2On7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PGQamVwy; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738882513; c=relaxed/simple;
+	bh=YYdN1Kt1DwBE5SingtFdRP/lncfdN0zEaD8UX3Cqml0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mVazMv1szAu1SAAAReJGpMm3LC5/xDlnZDqTmQkW3Pf4aPaDdeI8xiQ7qkMuA0rh4rkzL9YewTcz75/FbX7U2Z9uQOkB3tOkDprhnj0BJlQ+yXkRqbDL6Z8Xk7TAdLyo2blUYswwYALAM5qHV+0NwWJDQYHIHBUYdQv3nGQ4dfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=KjwVdq0g; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PGQamVwy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738882167; x=1770418167;
-  h=date:from:to:cc:subject:message-id;
-  bh=cuNaw3oEr1MvV8IhtVY3ta0zHeunYi8737QghSINQNc=;
-  b=PGQamVwy/WMZK551CWpoVden8oZg0D0M0GdAkJZpxIeHFfP8903478fp
-   jgpJCNJYcLxp0VnLNAEUypTB5YsXNiTYdTfHMEObuQzW7xpG0oad3Rqr2
-   4fUg5Bl30fn35SgQi4pKMw8sm1LsJPoAhdaqv0sQ5KLsVW6C2f0ohywRB
-   c44Xp4e71ewkDa0Ql/9O78UgyLgt7UE4nm+obk6yszWNL7MhHgdwaIGl2
-   M0f+Mv4zVzoVa/i585cKm6W3ZBL+bvRTW/Z2BkQB/7DQuKirDse9ktmA+
-   zx9XTShAfce/GwCt/bH4h5tfcUmLFnsFKJTKrRtm9y+YOZAdjRvtYBKk8
-   w==;
-X-CSE-ConnectionGUID: U4B8rPSuSZmSMuEscGrg0w==
-X-CSE-MsgGUID: 1cbXR3HsTN63D4E+N7p7Yw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39207989"
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="39207989"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 14:49:27 -0800
-X-CSE-ConnectionGUID: OSxgroauQqWgP7AqkAG4pQ==
-X-CSE-MsgGUID: G3fGOTn5RP6XBWMcSNkKAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="115972115"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 06 Feb 2025 14:49:25 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgAgU-000xTz-3C;
-	Thu, 06 Feb 2025 22:49:22 +0000
-Date: Fri, 07 Feb 2025 06:49:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 2918b78cd4e6b909bd7e81a5e292ff820adc8f65
-Message-ID: <202502070659.AfPvSKuj-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="KjwVdq0g"
+Received: from [192.168.42.27] (pd9e59260.dip0.t-ipconnect.de [217.229.146.96])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 6917C2FC0175;
+	Thu,  6 Feb 2025 23:55:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1738882501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=othQGzWmL0Q7Z0rMwroilwPIHL1b9SoaEjv46hzMfMc=;
+	b=KjwVdq0goTA1ITUjxDm6ydkwvUQTnEnJtsdg33IId/TeIjzcJTKYCpPq2Dde216qwyaF8C
+	/gCvh6S6sQodeaiVSFREvvjoES2lg20BdIH0Ldwm3aBUkV8/kFGJAry77K2BKlLJ+MnEYS
+	dT1hV3gODuphevqAebTsQOUWdAiCAlQ=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+Message-ID: <b32284b7-ddc8-4fb5-82f8-20199b0dec5a@tuxedocomputers.com>
+Date: Thu, 6 Feb 2025 23:55:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/1] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI
+ TFAN via hwmon
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, ukleinek@kernel.org,
+ jdelvare@suse.com, linux-kernel@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250205162109.222619-1-wse@tuxedocomputers.com>
+ <20250205162109.222619-2-wse@tuxedocomputers.com>
+ <767538f2-d79e-44e4-a671-4be56a3cfe44@roeck-us.net>
+ <fce7929b-87e7-4c9a-8a54-ab678c5dc6b4@tuxedocomputers.com>
+ <8f0a9bd6-52dd-442f-b0fd-73cf7028d9f0@roeck-us.net>
+Content-Language: en-US
+From: Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <8f0a9bd6-52dd-442f-b0fd-73cf7028d9f0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 2918b78cd4e6b909bd7e81a5e292ff820adc8f65  Merge branch 'fixes-v6.14' into testing
 
-elapsed time: 1447m
+Am 06.02.25 um 19:57 schrieb Guenter Roeck:
+> On Thu, Feb 06, 2025 at 10:28:01AM +0100, Werner Sembach wrote:
+>
+> [ ... ]
+>
+>>>> +        temp = retval * 100 - 272000;
+>>>> +
+>>>> +        for (j = 0; temp_levels[j].temp; ++j) {
+>>>> +            temp_low = j == 0 ? -272000 : temp_levels[j-1].temp;
+>>>> +            temp_high = temp_levels[j].temp;
+>>>> +            if (driver_data->temp_level[i] > j)
+>>>> +                temp_high -= 2000; // hysteresis
+>>>> +
+>>>> +            if (temp >= temp_low && temp < temp_high)
+>>>> +                driver_data->temp_level[i] = j;
+>>>> +        }
+>>>> +        if (temp >= temp_high)
+>>>> +            driver_data->temp_level[i] = j;
+>>>> +
+>>>> +        temp_level = driver_data->temp_level[i];
+>>>> +        min_speed = temp_level == 0 ?
+>>>> +            0 : temp_levels[temp_level-1].min_speed;
+>>>> +        curr_speed = driver_data->curr_speed[i];
+>>>> +        want_speed = driver_data->want_speed[i];
+>>>> +
+>>>> +        if (want_speed < min_speed) {
+>>>> +            if (curr_speed < min_speed)
+>>>> +                write_speed(dev, i, min_speed);
+>>>> +        } else if (curr_speed != want_speed)
+>>>> +            write_speed(dev, i, want_speed);
+>>>> +    }
+>>>> +
+>>>> +    schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
+>>>> +}
+>>> This is not expected functionality of a hardware monitoring driver.
+>>> Hardware monmitoring drivers should not replicate userspace or
+>>> thermal subsystem functionality.
+>>>
+>>> This would be unacceptable in drivers/hwmon/.
+>> Problem is: The thermal subsystem doesn't do this either as far as I can tell.
+>>
+>> See this: https://lore.kernel.org/all/453e0df5-416b-476e-9629-c40534ecfb72@tuxedocomputers.com/
+>> and this: https://lore.kernel.org/all/41483e2b-361b-4b84-88a7-24fc1eaae745@tuxedocomputers.com/
+>> thread.
+>>
+>> The short version is: The Thermal subsystem always allows userspace to
+>> select the "userspace" governor which has no way for the kernel to enforce a
+>> minimum speed.
+>>
+> You can specify thermal parameters / limits using devicetree. Also, drivers
+> can always enforce value ranges.
 
-configs tested: 95
-configs skipped: 1
+Sorry for my noob question: What do you mean with devicetree in x86 context?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I only want to enforce a value range at a certain temperature, if the 
+device is cool, the fan can be turned off for example.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250206    gcc-13.2.0
-arc                   randconfig-002-20250206    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250206    clang-21
-arm                   randconfig-002-20250206    clang-19
-arm                   randconfig-003-20250206    clang-21
-arm                   randconfig-004-20250206    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250206    clang-21
-arm64                 randconfig-002-20250206    clang-21
-arm64                 randconfig-003-20250206    clang-15
-arm64                 randconfig-004-20250206    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250206    gcc-14.2.0
-csky                  randconfig-002-20250206    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250206    clang-21
-hexagon               randconfig-002-20250206    clang-18
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250206    clang-19
-i386        buildonly-randconfig-002-20250206    gcc-12
-i386        buildonly-randconfig-003-20250206    clang-19
-i386        buildonly-randconfig-004-20250206    clang-19
-i386        buildonly-randconfig-005-20250206    clang-19
-i386        buildonly-randconfig-006-20250206    gcc-12
-i386                                defconfig    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250206    gcc-14.2.0
-loongarch             randconfig-002-20250206    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250206    gcc-14.2.0
-nios2                 randconfig-002-20250206    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250206    gcc-14.2.0
-parisc                randconfig-002-20250206    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc               randconfig-001-20250206    clang-21
-powerpc               randconfig-002-20250206    clang-19
-powerpc               randconfig-003-20250206    clang-21
-powerpc64             randconfig-001-20250206    clang-15
-powerpc64             randconfig-002-20250206    clang-17
-powerpc64             randconfig-003-20250206    clang-19
-riscv                            allmodconfig    clang-21
-riscv                            allyesconfig    clang-21
-riscv                 randconfig-001-20250206    clang-19
-riscv                 randconfig-002-20250206    clang-17
-s390                             allmodconfig    clang-19
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250206    clang-21
-s390                  randconfig-002-20250206    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250206    gcc-14.2.0
-sh                    randconfig-002-20250206    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250206    gcc-14.2.0
-sparc                 randconfig-002-20250206    gcc-14.2.0
-sparc64               randconfig-001-20250206    gcc-14.2.0
-sparc64               randconfig-002-20250206    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250206    clang-15
-um                    randconfig-002-20250206    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250206    clang-19
-x86_64      buildonly-randconfig-002-20250206    clang-19
-x86_64      buildonly-randconfig-003-20250206    clang-19
-x86_64      buildonly-randconfig-004-20250206    clang-19
-x86_64      buildonly-randconfig-005-20250206    clang-19
-x86_64      buildonly-randconfig-006-20250206    gcc-12
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250206    gcc-14.2.0
-xtensa                randconfig-002-20250206    gcc-14.2.0
+>
+>> As far as I can tell the Thermal subsystem would require a new governor for
+>> the behavior i want to archive and more importantly, a way to restrict which
+>> governors userspace can select.
+>>
+>> As to why I don't want grant userspace full control: The firmware is
+>> perfectly fine with accepting potentially mainboard frying settings (as
+>> mentioned in the cover letter) and the lowest level I can write code for is
+>> the kernel driver. So that's the location I need to prevent this.
+>>
+> It is ok for the kernel to accept and enforce _limits_ (such as lower and upper
+> ranges for temperatures) when they are written. That is not what the code here
+> does.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It conditionally enforces a minimum fanspeed.
+
+So is the problem that hwmon drivers are only allowed to enforce 
+unconditional limits?
+
+>
+>> Also hwmon is not purely a hardware monitoring, it also allows writing
+>> fanspeeds. Or did I miss something and this shouldn't actually be used?
+>>
+> If doesn't actively control fan speeds, though. It just tells the firmware what
+> the limits or target values are.
+What is the difference if it tells the firmware a target fanspeed, which 
+can be ignored by it, or a driver a target fanspeed, which can be 
+ignored by it?
+>
+>>> Personally I think this is way too complicated. It would make much more sense
+>>> to assume a reasonable maximum (say, 16) and use fixed size arrays to access
+>>> the data. The is_visible function can then simply return 0 for larger channel
+>>> values if the total number of fans is less than the ones configured in the
+>>> channel information.
+>> Didn't know it was possible to filter extra entries out completely with the
+>> is_visible function, thanks for the tip.
+>>> Also, as already mentioned, there is no range check of fan_count. This will
+>>> cause some oddities if the system ever claims to have 256+ fans.
+>> Will not happen, but i guess a singular additional if in the init doesn't
+>> hurt, i can add it.
+> You are making the assumption that the firmware always provides correct
+> values.
+>
+> I fully agree that repeated range checks for in-kernel API functions are
+> useless. However, values should still be checked when a value enters
+> the kernel, either via userspace or via hardware, even more so if that value
+> is used to determine, like here, the amount of memory allocated. Or, worse,
+> if the value is reported as 32-bit value and written into an 8-byte variable.
+ok
+>
+>>>> +    *hwmdev = devm_hwmon_device_register_with_info(&pdev->dev,
+>>>> +                               "tuxedo_nbxx_acpi_tuxi",
+>>>> +                               driver_data, &hwminfo,
+>>>> +                               NULL);
+>>>> +    if (PTR_ERR_OR_ZERO(*hwmdev))
+>>>> +        return PTR_ERR_OR_ZERO(*hwmdev);
+>>>> +
+>>> Why not just return hwmdev ?
+>> because if hwmon is NULL it is still an error, i have to look again at what
+>> actually is returned by PTR_ERR_OR_ZERO on zero.
+> That seems a bit philosophical. The caller would have to check for
+> PTR_ERR_OR_ZERO() instead of checking for < 0.
+>
+> On a side note, the code now returns 0 if devm_hwmon_device_register_with_info()
+> returned NULL.  devm_hwmon_device_register_with_info() never returns NULL,
+> so that doesn't make a difference in practice, but, still, this should
+> at least use PTR_ERR().
+ok
+>
+> Guenter
