@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F6023E22D
-	for <linux-hwmon@vger.kernel.org>; Thu,  6 Feb 2025 22:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF2622FF59
+	for <linux-hwmon@vger.kernel.org>; Thu,  6 Feb 2025 22:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738882121; cv=none; b=eo6mOUI9RCzScyQ9t+3ldfGuy+otuB8vNDu+jipVeORpxAdqSgxb8iITcLJQBe3BONRaGprSNp48xevr81XgYOdCt4JMhdYMfi5ZzhZmQi1eHb4f8qGXvR4pFuR+vAXpB1K9yzxQRRdlivcGm074ek4P2diaKoSaX2SJwwhdr4g=
+	t=1738882169; cv=none; b=OecZwVUg5h4OcHf4E8QbbQMmsVEGB48WHDiwqLSVl8tMW+ryWiymK+l2SAEhxO4BxNCUKQaGuwBFQlPkJIpHNMJERa8rrt49QPAtV4FGHAijEc4xEGBcZWqxe1C07NuTbzQxsT88u2IRzc1DR9vC1bGTJwnVzEIHA1/OmiQoqnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738882121; c=relaxed/simple;
-	bh=Esnff1PwZ9muA3U2nadET+dngVoRkv6l11qvs91s2kc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NoBRatB63Dh8c98WJIq92Q5eXn61PJh8yypMhXnWtNdbR3c6QgoKiW5P768td1WzMNycCXSxQSCaRT4UcQZZoF7/jABD+H871Pr8xTy6fywVbhFDgMOLBE4O6rLLvVac662TsCjt3LlJ7ZPZvOSneunIFwEqZ+tH6cpbzBdLJ7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RYDOzlsC; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1738882169; c=relaxed/simple;
+	bh=cuNaw3oEr1MvV8IhtVY3ta0zHeunYi8737QghSINQNc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=A7TpnQzfPssyblNNOc5nY2UmnyhMDlpOdistsQa0x5P9FuKoHSJI5PoBpg0HHPi2oK7n85B2tKb95/RtTXDS3u0/0d7vnMYeO5KMX2j44lOTz6NFzP9y9smxx8GEQ2tpy8sB5YULRo6jifEchUqYuOVV6JcSRHHwXu+ADS2On7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PGQamVwy; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RYDOzlsC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PGQamVwy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738882119; x=1770418119;
+  t=1738882167; x=1770418167;
   h=date:from:to:cc:subject:message-id;
-  bh=Esnff1PwZ9muA3U2nadET+dngVoRkv6l11qvs91s2kc=;
-  b=RYDOzlsC75Me1YDcG3PoLNGIEUB85vWv9MzdxyPpAsgHCNWQs1jEikFI
-   w//7sEo7hDjrPvIqppmG5HUdo6Q7uHoqSiJqb6+diXnh+ll0/3GBYDG5Q
-   XkkrEPOrX6FCbZrjCIr0N0UI6mVKl6JzQ7gPg8MJ8W9MR+ws5sB137mtn
-   sTsHMuUja1sUX/uaYzgMyKx3lW1xSQbmHCuF8I6Jpu3vMECXMexfZTRlK
-   DCDYZCTdxnkJEFiCPLlm9i9DseSLfD0VN19xCOZIw/usGM5j2ou4sjN9O
-   SkXigJ381TgzG1Okyh7z/okQ90Qz3ewybcHmtTPvb5qyHStgIkUe6ljOU
-   g==;
-X-CSE-ConnectionGUID: sn866gEeR6mIqtSJX+LrkQ==
-X-CSE-MsgGUID: rXZzRwM/Rf6axkt5Q2ul6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="43173648"
+  bh=cuNaw3oEr1MvV8IhtVY3ta0zHeunYi8737QghSINQNc=;
+  b=PGQamVwy/WMZK551CWpoVden8oZg0D0M0GdAkJZpxIeHFfP8903478fp
+   jgpJCNJYcLxp0VnLNAEUypTB5YsXNiTYdTfHMEObuQzW7xpG0oad3Rqr2
+   4fUg5Bl30fn35SgQi4pKMw8sm1LsJPoAhdaqv0sQ5KLsVW6C2f0ohywRB
+   c44Xp4e71ewkDa0Ql/9O78UgyLgt7UE4nm+obk6yszWNL7MhHgdwaIGl2
+   M0f+Mv4zVzoVa/i585cKm6W3ZBL+bvRTW/Z2BkQB/7DQuKirDse9ktmA+
+   zx9XTShAfce/GwCt/bH4h5tfcUmLFnsFKJTKrRtm9y+YOZAdjRvtYBKk8
+   w==;
+X-CSE-ConnectionGUID: U4B8rPSuSZmSMuEscGrg0w==
+X-CSE-MsgGUID: 1cbXR3HsTN63D4E+N7p7Yw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39207989"
 X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="43173648"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 14:48:27 -0800
-X-CSE-ConnectionGUID: adQCwXg2QLOkBIdjfjKeTQ==
-X-CSE-MsgGUID: iA1nmri5R22S3J/AO6zaWQ==
+   d="scan'208";a="39207989"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 14:49:27 -0800
+X-CSE-ConnectionGUID: OSxgroauQqWgP7AqkAG4pQ==
+X-CSE-MsgGUID: G3fGOTn5RP6XBWMcSNkKAw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="142228374"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="115972115"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 06 Feb 2025 14:48:25 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 06 Feb 2025 14:49:25 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgAfW-000xTr-2p;
-	Thu, 06 Feb 2025 22:48:22 +0000
-Date: Fri, 07 Feb 2025 06:48:07 +0800
+	id 1tgAgU-000xTz-3C;
+	Thu, 06 Feb 2025 22:49:22 +0000
+Date: Fri, 07 Feb 2025 06:49:05 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
- 08c50e33b1a5059eee60c4d0ec475c252e2a6e75
-Message-ID: <202502070601.SgqtXR13-lkp@intel.com>
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 2918b78cd4e6b909bd7e81a5e292ff820adc8f65
+Message-ID: <202502070659.AfPvSKuj-lkp@intel.com>
 User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,13 +59,13 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
-branch HEAD: 08c50e33b1a5059eee60c4d0ec475c252e2a6e75  Merge branch 'hwmon-fixes' into hwmon-staging
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 2918b78cd4e6b909bd7e81a5e292ff820adc8f65  Merge branch 'fixes-v6.14' into testing
 
 elapsed time: 1447m
 
-configs tested: 87
-configs skipped: 6
+configs tested: 95
+configs skipped: 1
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -124,12 +124,15 @@ parisc                           allyesconfig    gcc-14.2.0
 parisc                randconfig-001-20250206    gcc-14.2.0
 parisc                randconfig-002-20250206    gcc-14.2.0
 powerpc                          allmodconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
 powerpc               randconfig-001-20250206    clang-21
 powerpc               randconfig-002-20250206    clang-19
 powerpc               randconfig-003-20250206    clang-21
 powerpc64             randconfig-001-20250206    clang-15
 powerpc64             randconfig-002-20250206    clang-17
 powerpc64             randconfig-003-20250206    clang-19
+riscv                            allmodconfig    clang-21
+riscv                            allyesconfig    clang-21
 riscv                 randconfig-001-20250206    clang-19
 riscv                 randconfig-002-20250206    clang-17
 s390                             allmodconfig    clang-19
@@ -153,6 +156,11 @@ um                    randconfig-001-20250206    clang-15
 um                    randconfig-002-20250206    gcc-12
 x86_64                            allnoconfig    clang-19
 x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250206    clang-19
+x86_64      buildonly-randconfig-002-20250206    clang-19
+x86_64      buildonly-randconfig-003-20250206    clang-19
+x86_64      buildonly-randconfig-004-20250206    clang-19
+x86_64      buildonly-randconfig-005-20250206    clang-19
 x86_64      buildonly-randconfig-006-20250206    gcc-12
 x86_64                              defconfig    gcc-11
 xtensa                            allnoconfig    gcc-14.2.0
