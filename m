@@ -1,107 +1,98 @@
-Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15356238D52;
-	Fri,  7 Feb 2025 15:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7787F2405EA;
+	Fri,  7 Feb 2025 15:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738940471; cv=none; b=PohG2zyZKZrzCfNcR1k99ffARgQJ7VD2Ne6nn7TsxkQMLScdRSVZn2E6ITATZxO9rsL7p5ju1w/ixah7r/qz59ktPmP/DgYB7tr5Jk/O6rPSL7MqqNROLIf8P08uvwUE5gu3I2xZWItPDg9iQ7vGGLMnPCVjrrERMZw1fCPOafE=
+	t=1738941700; cv=none; b=sVNubkTXeIeMU5uE3mdhDl8E1xQAXHKSKJrNmFKjh93PoW5GkVGtwUpXyiHSNNDseUBjsWFriD+MEDgr6Lp6Dm8yyIP3apo/p6Vn1CIlggfS5h0kC4ejLcICWo+MZbYsEpdP2EFmSa12A2RfQajhP/kB7ZBgPrFvXS22pq0dm/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738940471; c=relaxed/simple;
-	bh=Ismxwm1c+xEaqBjLFJVdqK9TSoif2Fk0K+yMxRkINVg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JYR9ybp/2M5pr5QzBHTMbiKESRtx582ocPyncHDLb1HU4p8DYS/hzclOcoTOkIXl22gDVKtV5f4iFuWAd/fjIp/j9K/sa2sIYdTeMpKQNZZSnk5xXZKIUHT/Ex5Ol+ORlgC57GoD4Z7DkOp/8TQAg47quKT8v2Uqd4h/ghW6dAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ltR/Bra9; arc=none smtp.client-ip=193.252.22.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1738941700; c=relaxed/simple;
+	bh=xsDB1Z4itK0LFAhRduY8snfsKbsHRyDF/OxtzpTJ1BY=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=rUzUiEnk6cjIwGQQx30lKXNsL/WRCLBUuDYw7XxSC1Xi4ePs84OBjpPgzJ/zcVYZWM65hYSh7MQYOSSIL7qmkxeWnKEvZwGIf8bZu2Z+BpakohKbzRMcHJcx+gn4R7jb/5qAC421M8A2fU1bAWLl1IyB3clCTZS2SI4XsWCpO8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwexZnac; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ltR/Bra9"
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id gPqWtL8WXFt3IgPqatESry; Fri, 07 Feb 2025 16:01:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738940461;
-	bh=Pyha5odVGsX/CKqH1ZkXIQ53HwwjGzZ3ipFrj9lnhz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=ltR/Bra9iY/vwRcNq/YBqz4kt3s9oCNpzfGigntH9sfQiTTrkWuSMYZeRdTVHAm9q
-	 ELN6QjvKXUDDagncZdtHNzfc4Dph6J9ZbNAMnJ2T8uTjBMkcQOy0w1CmQsZPJ0LpWT
-	 dOCxl+huYkYk1+Wj2h6oeNsysoenQmB6u8IMRd2y9Xmr3zkUCeN66z+Hha7pFLRs/W
-	 89ZI+zgAKMoUKsVRYls4qKSqE9WdR4rHvgwufNzfv2EPxKESy+aJXcg95jlM25oO+E
-	 8PurBrxhE+/r4TKOfBZKrvfxeXyUB4hsDku2l6X/asT6VfDK7fDLpwcmkDwpo0QgCf
-	 a+3PA3c1yBBLw==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 07 Feb 2025 16:01:01 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
-Date: Sat, 8 Feb 2025 00:00:43 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwexZnac"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DF0C4CEDF;
+	Fri,  7 Feb 2025 15:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738941700;
+	bh=xsDB1Z4itK0LFAhRduY8snfsKbsHRyDF/OxtzpTJ1BY=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=IwexZnacYHMUj5iRV6m8qHHtmBxBuefVLeEAXhdM5gdv7Obg1TBGo2wE1UnOAvFXm
+	 UV7/2q5XOW3cMgLFOZBbrMY5KBa4YIUaiM+YMLBvUSbX0SKWZCdE0GxiPmkLMLkdvW
+	 uS9FhYjmhQ4mAhABePNn2UQFouk1PnQXJOIkiH+5nc1dxyVFa876NYwh2IEReFjakF
+	 I4xYIl9H9C/4qZOIZKjKy7GgcNvOui6y9aw0Axx1//VtXxadEoVT0MlydyLnyhkSCo
+	 kKr8AqXkAju6vozcbXfPnYPwXx8YYoOjqJawV+p9/zR/jq5O3lMs4PP/sftN24DwCh
+	 v0JS0ixJ0Sl7g==
+Date: Fri, 07 Feb 2025 09:21:38 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>, Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com>
- <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, 
+ Andrew Jeffery <andrew@codeconstruct.com.au>, devicetree@vger.kernel.org, 
+ Patrick Rudolph <patrick.rudolph@9elements.com>, 
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, conor@kernel.org, 
+ broonie@kernel.org, Liam Girdwood <lgirdwood@gmail.com>, 
+ Naresh Solanki <Naresh.Solanki@9elements.com>, 
+ Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20250207132806.3113268-1-naresh.solanki@9elements.com>
+References: <20250207132806.3113268-1-naresh.solanki@9elements.com>
+Message-Id: <173894151141.331439.9793996837825195841.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt
+ binding
 
-On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
-> On 07.02.2025 15:44:59, Ming Yu wrote:
 
-(...)
+On Fri, 07 Feb 2025 18:58:03 +0530, Naresh Solanki wrote:
+> Move dt binding under hwmon/pmbus & align accordingly.
+> 
+> Previously the DT binding was invalid & wouldn't work with pmbus driver.
+> Pmbus driver expects a regulator node & hence added the same.
+> 
+> Fixes: 1d333cd641fb ("ARM: dts: aspeed: sbp1: IBM sbp1 BMC board")
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> ---
+> Changes in V2:
+> 1. Update commit message
+> 2. Add Fixes tags
+> ---
+>  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
+>  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
+>  2 files changed, 61 insertions(+), 45 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> 
 
->> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
->> +					  struct net_device *ndev)
->> +{
->> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
->> +
->> +	if (can_dev_dropped_skb(ndev, skb))
->> +		return NETDEV_TX_OK;
->> +
->> +	netif_stop_queue(ndev);
->> +	can_put_echo_skb(skb, ndev, 0, 0);
->> +	queue_work(priv->wq, &priv->tx_work);
 
-What is the reason to use a work queue here? xmit() is not a hard IRQ.
-Also, the other USB CAN devices just directly send the USB message in
-their xmit() without the need to rely on such worker.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Sorry if this was discussed in the past, I can not remember if this
-question has already been raised.
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
->> +	return NETDEV_TX_OK;
->> +}
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-(...)
+  pip3 install dtschema --upgrade
 
-Yours sincerely,
-Vincent Mailhol
+
+New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/aspeed/' for 20250207132806.3113268-1-naresh.solanki@9elements.com:
+
+arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dtb: ethernet-phy@0: 'reg' is a required property
+	from schema $id: http://devicetree.org/schemas/net/ethernet-phy.yaml#
+
+
+
+
 
