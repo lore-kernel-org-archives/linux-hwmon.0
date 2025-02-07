@@ -1,224 +1,228 @@
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013065.outbound.protection.outlook.com [40.107.44.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195CAD26D;
-	Fri,  7 Feb 2025 06:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738908177; cv=fail; b=G8L6IqUJLkL+9XaR11fR7GT6o3xeovXT6Q24e8EMKncjDsQluIFj/AitJECPiq2Da1YkrTicq7A2kMWJGg+TBR5SNVtLhRcuszNcgljV2c/W15k3E4NHuWgdcFON0gQRNGZou8opaVX5UoFdrSkO9hvcAn1DOE3ivBrTsCoA5c4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738908177; c=relaxed/simple;
-	bh=D1PrQ7yLFvw2HqJPo21pkgrlY+cmYg3Gcd+pkCFRPMc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NwE1EZ3HLY4n477FX2cv57U/O+6mPVyvveX47uKTuYe7IQc3HgbTP/V2Iyx7Du5Po1+lAvq5fwqL6TWwIU5+0I2Srl7A9gKmMjTZTt2KrDkSnlUJACauynzqyRwgVcGaNGUhRcmeApd6M6NodR/5R2xGnHqo3rZAD9nhxe2KZVc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com; spf=pass smtp.mailfrom=wiwynn.com; dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b=tiXbmEZd; arc=fail smtp.client-ip=40.107.44.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F82A187325;
+	Fri,  7 Feb 2025 07:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738914319; cv=none; b=icy95fscP+oJrBCrv/oBuJNajiRgUzh0Gy2PT0CrEgBRXYP8SOHjeg8PFwGrswtxZvbv9jDYpxrYbYfYwy3Yz0KBblxCOOISkt/Qynx+VQ95LUmE7cSS7pnxikw7uQnIlji2J3GKOz9aiZDUguEIRTWaUD5bs88FF3roCQdi2ZA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738914319; c=relaxed/simple;
+	bh=7yewH+Ph/fKik20DIhNiMQildp/ywL3DXzfmCb0HCh8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AQTLvIxo43T1/LZLsK6nATSVbTQQB39tClAJwzzg/hGthZRYfG+p2UImNltC+hOAVl9CYe2EWrQoMHyr3EUhk1of7bgpk3toTzLg1EKalBAAoBjw1zRHaJm3g3PHAuVE4Xak25dLafUJVNkOP0sG9qAgfy1r3eHOx/d2nunZubU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aArF3xsj; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wiwynn.com header.i=@wiwynn.com header.b="tiXbmEZd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=j6QRoP1C7/I5TkyGztW79vQGYWpU9FcP/vGmQa5iGjaIgfv+qJmYtPBXfwhRZFB5TW3ms38uCxyR3I4hV0OnnjXacsAY/q4Olr3vTBCanCjYSaScvQi/+NUrjdqJyA0yuUZ9P+p/OZZ19vV1Rm6Ow4TZpYa/ss5djfeHw21T3mjXLXK94EzuhhFjQLz6Vwpo/HAmTDAIhpJXB6pIrpF+ih/lHo/R+NlPoh3UriDygCXaW+r7nhikXd4rmq+8sYVuFqIBuTl5fbYFWQWuv72ZF/ubsDzwHo8OSvYZIO+XiEYO8eclOXDQDprCeHX3ZkUao+5dWtjdkTnPmonH8ukPag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D1PrQ7yLFvw2HqJPo21pkgrlY+cmYg3Gcd+pkCFRPMc=;
- b=b73tpuL3e7eziT+7Wh/o4QCW/K28ygAHnBfRTJDaoRQT5SFJ0up25cIycbhLZveOc7sKFrMS2n9PpTK9UzDYd0cGLhRKlrDxZK0eRlB4NLoBYFgYLzi2uyqrpi0zjxF6YLIMQJcwV4ZnzGHov9/U/S8+F230SueLZBMVO5hEfNKjHIFVODe7AYBB6OfTKM5VPbsYIk998YVVCUrgc69pnXt2rIADzxfOcxn62g6mbfGrTXrTrhoyDOftfv3ZNnkwypurEHegcwwXI2CyYUrvuDO8SGUEZH3LG4dG+HYunXGa/328jwxDeQO/BrTaCGqNKQ7olpxaCquu8ZDxjv0sQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
- dkim=pass header.d=wiwynn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D1PrQ7yLFvw2HqJPo21pkgrlY+cmYg3Gcd+pkCFRPMc=;
- b=tiXbmEZdidfXBWqfalMcIO6OLrrCvZDWjSS+PAaMujOEDe73IxE31bcG0fk9zwb2t7J/i4nBDuXs7qtMq46Z/+NCS0zmYPTIgYnzv2nhVbjLSVeihGfpDzxGqI/ZT0FkXYlHp3MGM/+umk4L7NLphJEb1LS7s17dVlRfv30b9s+CzMtQLLKtN+YnouAiyqw6lWhtxOPxQPPOL5BiwfYdYtEZ77VoSO0iTanvKJIZokLmhPDtX5/dFIS32nBUTcTIirwLf1V9xpqRJ8tEaMRSKFuStlLXubAAmrajageY0jP0bSnviwKCEzdR5gvH5jGQYZT+35ZIz8q39tv/3mixEg==
-Received: from KL1PR0401MB5438.apcprd04.prod.outlook.com
- (2603:1096:820:a1::13) by PUZPR04MB6247.apcprd04.prod.outlook.com
- (2603:1096:301:eb::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.12; Fri, 7 Feb
- 2025 06:02:48 +0000
-Received: from KL1PR0401MB5438.apcprd04.prod.outlook.com
- ([fe80::83d8:cdd3:3cf1:1894]) by KL1PR0401MB5438.apcprd04.prod.outlook.com
- ([fe80::83d8:cdd3:3cf1:1894%6]) with mapi id 15.20.8422.010; Fri, 7 Feb 2025
- 06:02:48 +0000
-From: Rush Chen/WYHQ/Wiwynn <Rush_Chen@wiwynn.com>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>, "openbmc@lists.ozlabs.org"
-	<openbmc@lists.ozlabs.org>, "andrew@aj.id.au" <andrew@aj.id.au>, Guenter
- Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, Jonathan Corbet
-	<corbet@lwn.net>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH linux dev-6.6] A backport request for SY24655 driver in
- INA2XX driver for Linux kernel 6.6.
-Thread-Topic: [PATCH linux dev-6.6] A backport request for SY24655 driver in
- INA2XX driver for Linux kernel 6.6.
-Thread-Index: AQHbeERPFBil6W2lEUy1d8cW+RQFHLM68rWAgABgWCA=
-Date: Fri, 7 Feb 2025 06:02:47 +0000
-Message-ID:
- <KL1PR0401MB5438C48629014167A5BE3957E6F12@KL1PR0401MB5438.apcprd04.prod.outlook.com>
-References: <20250206030747.268165-1-rush_chen@wiwynn.com>
- <9f0447151e6574d74e7fa9cbbb50d8e970059273.camel@codeconstruct.com.au>
-In-Reply-To:
- <9f0447151e6574d74e7fa9cbbb50d8e970059273.camel@codeconstruct.com.au>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wiwynn.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR0401MB5438:EE_|PUZPR04MB6247:EE_
-x-ms-office365-filtering-correlation-id: faa6f4b5-e886-43d3-089e-08dd473d0c39
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|366016|1800799024|38070700018|7053199007;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?yI78m/8WAyWW4031FFkuLGSKSTY3cxpE+yQkpOBZCY6Adnrd+PK4yaXVh6lo?=
- =?us-ascii?Q?DVfemGKQNVTHmSb0ktO8W544FbUa77DQrqhamJVKVgq2SRTD69iDdxtkx/n0?=
- =?us-ascii?Q?a3qESWAkyMmPxxNroUQuHI0QZ32lOBciJQLm6m1WkQ5bkb/VMiwJbtInKNzg?=
- =?us-ascii?Q?QJGPOOy+Nw6pnVWFIRRIphXbS6EFsPFpcaYSDUeldCPUIjvD6sFRGAsk+Ksk?=
- =?us-ascii?Q?PwyrCfxzteHTEECwSIX0IrodUgPPen6J1Iu41ThBtETOQGS+v6vqeZ81fl5B?=
- =?us-ascii?Q?Gh8BuDEalnjujX6PV+KpGpKn1uN2jFiMkfcFtLB6m340yDshSJzAVjJAokwl?=
- =?us-ascii?Q?U7qh2n1b+4teuoFqYPL41fxI1EvDuCYg1xVKb7RKDLyx+s/b+hyEv8HnwMya?=
- =?us-ascii?Q?H/jB0a8fpGsHiZRiKJuYuurtJQpXtmhEx0VfuGuuCz54TF0pmrlf7+YpCP1X?=
- =?us-ascii?Q?pVBs1ToFT9hv/BplZErVWNpsAs9ZvF6WW96Qv+bV0YLMq6GKaCdD5Pab2hU2?=
- =?us-ascii?Q?fMDKKy7d+h2gi2X8RPWl2MBHA7pNrYOfYsbVEqcVbXc52LmDQY5flrrIizs8?=
- =?us-ascii?Q?cEamq5/dGW+3uZcyjVTiggitxtmaSST08bWj9KAtOJjAc+pwRg/ZPtATN285?=
- =?us-ascii?Q?Ev3sefZJdG7vOBavKOY9+yxELzvhplE7XzaGQDyanPnj1cK4eHYCG9CQiNfl?=
- =?us-ascii?Q?Vhs8E3TKxSR3uhzpWI+9VPkhL2Qaptc7gZ7PL4Ltw+C5lG9Ng0CKgXFkqU/H?=
- =?us-ascii?Q?Z+BdFkv+9XA0OxNeV1gVz+RmOAC1AYr2pyW5xlC2pMyEMD2DqJJKlymDlrfs?=
- =?us-ascii?Q?O11z2qZRtEdksg70bFQ3n7qDS/VgDEdb/ikDZ5mcyFsMJTwMbZuKDjJJ6TbW?=
- =?us-ascii?Q?UU+70LtifE8vlRsJpocupqnIrTPLSglQdW7vR7ZURfGf34dIfdp8659oOq0y?=
- =?us-ascii?Q?pkHuuG3D2oC/zONxK4CDf2HUlSp5zKcXXSeab4AupMTV1oeAedLA+J99tsNl?=
- =?us-ascii?Q?cqyz/ZVToSW52pAcOSiU1GuT00ljnPtk79ZGLccnK7scwvKCo91+4y/TV5aG?=
- =?us-ascii?Q?E6OMcAbbpCBSfjRCz2MS20yWHr1iyc01r6ecHfkU+v6L+49xOaLAAhkzc/lt?=
- =?us-ascii?Q?hcatTz2Ryev5PD+BdHjCw0S/o1CSk6/lqOuT2ABKprhWXS70WZxxiLmYSV+n?=
- =?us-ascii?Q?RkX/+H29UaQWchxAuRuMZCH+h/liziWAJXO9ixl4GrpAo5HhjuwNltGtIwXd?=
- =?us-ascii?Q?GJOda/7J/+NU1ZNqbaGLYxNw189qZJIle7ndLoBpu+n6b7u0wOeGXmJh9616?=
- =?us-ascii?Q?r0ORD1QwvfrOMreJQ/+WxpG6av1vXKddnQSX/4B7U6BRQavHVanCA8py8ocO?=
- =?us-ascii?Q?apfnbrVjjO19Q7z6nnUBtxp88BD+cb8ah0N81AOmvh9t1K+6aQ=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0401MB5438.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(7053199007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?/jAfS5h/TXv9EXr3ceFMPLLisHRFaQFFNy9CT8tajfZQ8kzZir2/oe9kzrMM?=
- =?us-ascii?Q?GZN8+Nwqol6t6MMPrkhqfhrds/igpwW+DX4z7gukpdk06qlKKgzbSJt4zBA1?=
- =?us-ascii?Q?CP3sYrXdiOKW9RakEskW0AvFwAvRQqpMHBSYB9xqk4IHR9lv5gEB4aziPKEg?=
- =?us-ascii?Q?CVC76jm85DzG2xPOiMBzDp+ENY1vLKyvHNBu3gFmOWgvfXbXiy7XPxenqOMX?=
- =?us-ascii?Q?aOAh1WfRTeOfD/Kf6fiSsRpnMHClhUuXrZx9wRyQUB0YhcwLEcEqiIoDqn7J?=
- =?us-ascii?Q?cKjePMapTExAVrowrRsPQTYYo2A6E/8mBrqmpPsXIkrkM4aT9PxoOFOFTpUy?=
- =?us-ascii?Q?FQgvLSSvUKvE97J74ue25sDLUz5D2JM2wR1cJwCUKgGkaL5iTTTqUZe6bpLJ?=
- =?us-ascii?Q?S+QU9zKjZNl8X9ME4k6n2uv2hz/wELo7TBDm36e/acgxxkgS2P/wgw8l+YPG?=
- =?us-ascii?Q?Vj/XJWogputrQzgBufHFfzw51x5Ws+aSrw4/UXJY3e15DgoS0xbIADXKMVX0?=
- =?us-ascii?Q?iKEjJfuFB6/KcpzuayfK08muGqMR6QBqzBjtoFVaFr6awOHY7YY7ecSjumx0?=
- =?us-ascii?Q?51Qahov052idR/VmqE/NLRLaO6z2y8fpoWISEIyLQ7HGiiKrT1Y9j6X+rw5t?=
- =?us-ascii?Q?1C46N2ji5uEVLSRubcGLB1tVQRvEQyPtF1qqQZvCeY9vVbsKyIveAELVd2R3?=
- =?us-ascii?Q?ml/ax5sdZTfOKdpauOOsvLevnpA0i+PGOrh7NdDGL3USmvlysKOrS3ZJk5yM?=
- =?us-ascii?Q?/0Kiv3BxeFiZj+bdYHdphQiBE65Rd3KYR10n9bARVpFLm1+OyC/dAlhSJWcy?=
- =?us-ascii?Q?QzZFlKDHMVJAeU2K0n2ZdIKGbu6dxkMiOu07nmpzJFJBjkW7oLK3CO8Jiypu?=
- =?us-ascii?Q?aJqC78luscEEN+szxS6pmOPOh+bcKFYxB7XRV+S0GzQS+9sOY0Cv7nbeeyY7?=
- =?us-ascii?Q?K3NV3byNio0Qixx8hAYpl/jZMorHpj/8WenesDfgMGt5J0AZILOzAE7HqY0M?=
- =?us-ascii?Q?nkVmdlmQt1P3Y63ZP/pMWeuU2FXZjVnlfuWmjf94Yd7Zu6DNGctN5mfFDWRW?=
- =?us-ascii?Q?wlVPFyWhsYMH6oXpc9lEz9Kcla+e0Iq6Zm9fKjhGEoJCNuKf7JlDyFNkCMez?=
- =?us-ascii?Q?KKlY7FaZr5CYFHNQF1T9tPQYPv9lwTZFqxTtWNsGLVE2GX80ptRo2bC1idTX?=
- =?us-ascii?Q?Y40zREO4qlq6T21XPFvYa9EJTvITzuLXWEQPgFn3xHYfYdwIHnMEd2hXjyxJ?=
- =?us-ascii?Q?wF22IjKuHtX5rcaTXviMW7B/Gy/buh4HSjr4tz7r65ZCpIl712ODa2JZZf2N?=
- =?us-ascii?Q?YpxTgpB+fr52uP3CQHgl91O1F00GTZ1ImRs1Vz+S/0b+P/z62hrUTlN+W6LO?=
- =?us-ascii?Q?vh3Vkdrl3mT8RDsZVLsjW3YxL9T4Bz9ZNUKEj/Xmj6kqOJdiP6CiAMfjSxfo?=
- =?us-ascii?Q?9dSIDlP4DFMMfnTtz4gHqXvMkJH9fqxoFRDfYoNifcyml831RGF0GDUjV6m0?=
- =?us-ascii?Q?KrfGgHoOvhJGp/9/xg40uMnW65Xh4fM4ZdZSwd6aKgF9GuigXExnpWNJJ528?=
- =?us-ascii?Q?jjMhMFM7rTubWk9cq+fO1YVnSEUaCPvjF1xO4Sio?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aArF3xsj"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2f42992f608so2727660a91.0;
+        Thu, 06 Feb 2025 23:45:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738914317; x=1739519117; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IXq7bA9nrEM8sFBBA4j2i1q1vyFikCSKnfdeGxzVAnQ=;
+        b=aArF3xsjtfEJBXPcfmgW7AVJIwdnpHYJh76am0+Y3NY7XHUBcHSJbqxT6FjncCNmLG
+         FMYOU0bKFkSueFtpLdIxSHlfC3LRm5iottD4QwM7nlHLfX69UpQb7To2H8DfowW7h7Y1
+         IL87eAyXQmkXkxGmCzdpnsAHDMgkERKuNYN3ZQpAS88VbV6ZDyAqMlOqRJmnqlosNttD
+         vQjG5q3g8R4rMZ18nL5NJFndN/Sc7p1lIbPTZzDfERjkEViUqe7sFXUQCoqq2sxFIlVI
+         MIcABjtRdzsZ4DczpHPx9Y8NZ63grhBm5ZXmQlpNEh+/4F6rEgBLnmiJVfZuqinvqERg
+         11Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738914317; x=1739519117;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IXq7bA9nrEM8sFBBA4j2i1q1vyFikCSKnfdeGxzVAnQ=;
+        b=r5xbIdc33y0dqvW9eErDAQ8kddrIlZwZ7lWX2rtvdv/FgwvmCXLUO2EHKH2/G3N/n1
+         1MPBkxhe15C2uUw2Wdlwedz8kMKiLescwYgRl4ODkIit6GnqsrlVJzlfLu22sr4Nw3vq
+         ssZU6hZ59Jgf0QjDMv57acg0tThp7Awq7l7REOFb+qyHuy4TUUm2MmioMnjWewzSjcZP
+         uoudQWhMQElgTYOhauQV9vagL+z6OI6xYZmtNujKsrBLU4uRyODQHfDbh0KzdeZV1dRB
+         GMK4SEDtpyjLR0/D7NnInilujtIVqZMESefXj+bFt5V6aRkKJxRvb3IFedFM5HJOot07
+         6k5A==
+X-Forwarded-Encrypted: i=1; AJvYcCUHdQ25BYo6hMIOAEyLmRqNaxZheHMOo991GeuxEoJfnAEwDD1W41E3MMDLJTZGbqaI1HqKUuuxgYglzw==@vger.kernel.org, AJvYcCUQF6RBJZJOIVbr0ezPBPtxZcWEsBybkr8Y/4528BmDlLJI0n3q5LubLozPXiPIwSq/eUdu23UqYbmN@vger.kernel.org, AJvYcCWD6Bgh6xCCZ1reoJjW87GqLfZ90c8lapE/mm2zvnjjCqADfFTvScbGI43PMTd8pmeBHUYhTXi9l0j3KiJOzXo=@vger.kernel.org, AJvYcCWe/q7Y8sQsM4tqT6XnCu8mLXRqYfW471Uv9xzFEHI6UthOs70nv2TplD7OLMntutUoe+2hJutQTj7+@vger.kernel.org, AJvYcCWfQSwYdyaL3E/j9K7lEdTVBwtbDQhSdvbqHzPhbaMs+iD/5uomUh61CS5ZHq+sbM7oc2j4v1jV@vger.kernel.org, AJvYcCX5sByiPD0pcmDF2rT8Tiv2ijcwhveBMpQDaD9DjjwwzjkbKoxzZEJclfgES0ibYPFl/1rlFUyu83w=@vger.kernel.org, AJvYcCXb+38whYyy8i0RiRDwGNMpidWszM+8gwAIWOxdpqueVQ4gX0xCm1q7JODvCO/w7g+O+Utl02w4pA+7@vger.kernel.org, AJvYcCXbJejI83axt7Pp/SNUqA8tHXkFYbOahGzWoKpci5MMSqMJZFWAXUMPEXXYizOit5RO+w2CwlNPx9/UHWI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOqrXbCw6ByJcKE+ctRjbxbtFxFgRMfCdBxpSmWO5HO/DJxWUY
+	99qCiPwhQLJ72NAdad2Focxuuhc5N/V89zm3hCAfq71lo/P8gg2/
+X-Gm-Gg: ASbGncsKSWJn06cnDHHApgNe+yfrHVjL91lRW/VwP01w+moW7c4aQcEHU7UYF6J3UKT
+	8Epn+A7hinwKUTADCI/poJAKK3uv3nHd6ay96lJTVStSX2fJY8z53WZt+bZgpFXKGImR+nphMkX
+	W3EHynLOFzej8gsxx4h8rqnLR7bs4DQW4GOQHu3GT5YWO7NiBVdBDlclqznHjv2mZ6xBqtLqw/X
+	nkpkzObrFqRI2QXsCwjudKnUKbQRcyePlTDuun4nq0whcnDq5f9kqCuoEAXBA72ftwmeicVePqF
+	038RgNpTP+CZxgNcmHILpLll7dFG8FQICSjJjnj3brU3bGiWMIKiYjx/0LI=
+X-Google-Smtp-Source: AGHT+IFK0+kXoUFknP6ajJTI4xAI0At7EZc7EQLGoWqqZdyS9jCQs1X2/UIvyGGwu8rSGyAdsci4GA==
+X-Received: by 2002:a17:90b:4cd1:b0:2f9:d9fe:e72e with SMTP id 98e67ed59e1d1-2fa24166e90mr3900570a91.16.1738914316585;
+        Thu, 06 Feb 2025 23:45:16 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f9e1d5f8d6sm4967367a91.7.2025.02.06.23.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 23:45:16 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v7 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Fri,  7 Feb 2025 15:44:55 +0800
+Message-Id: <20250207074502.1055111-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR0401MB5438.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: faa6f4b5-e886-43d3-089e-08dd473d0c39
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2025 06:02:47.9891
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G3nvLMkLu+aRDUe4yZiYoRlK2mKZ4To6vXM9AbV2ZV51V8DoQntOzxGWF+kfL1e3Hp2pX7akZYNeCo7I0BEfmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR04MB6247
+Content-Transfer-Encoding: 8bit
 
-Hi Andrew,
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Thanks for your reply.
-I will resend an email to the relevant.
-If there is still any problem, please let me know.
-Thank you.
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-Rush
+The following introduces the custom-define USB transactions:
+        nct6694_read_msg - Send bulk-out pipe to write request packet
+                           Receive bulk-in pipe to read response packet
+                           Receive bulk-in pipe to read data packet
 
------Original Message-----
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-Sent: Friday, February 7, 2025 7:48 AM
-To: Rush Chen/WYHQ/Wiwynn <Rush_Chen@wiwynn.com>; openbmc@lists.ozlabs.org;=
- andrew@aj.id.au; Guenter Roeck <linux@roeck-us.net>; Jean Delvare <jdelvar=
-e@suse.com>; Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org; linux-doc@vg=
-er.kernel.org
-Subject: Re: [PATCH linux dev-6.6] A backport request for SY24655 driver in=
- INA2XX driver for Linux kernel 6.6.
+        nct6694_write_msg - Send bulk-out pipe to write request packet
+                            Send bulk-out pipe to write data packet
+                            Receive bulk-in pipe to read response packet
+                            Receive bulk-in pipe to read data packet
 
-[You don't often get email from andrew@codeconstruct.com.au. Learn why this=
- is important at https://aka.ms/LearnAboutSenderIdentification ]
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
 
- [External Sender]
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
 
-Hi Rush,
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
 
-On Thu, 2025-02-06 at 11:07 +0800, Rush Chen wrote:
-> From: Rush Chen <Rush_Chen@wiwynn.com>
->
-> Summary:
-> The driver SY24655 has been supported by INA2XX driver, since Linux
-> kernel version 6.13.
->
-> Issue a backport request to Linux kernel 6.6.
->
-> Signed-off-by: Rush Chen <Rush_Chen@wiwynn.com>
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
 
-From the way you've structured the subject prefix I expect you are asking f=
-or this to be applied to OpenBMC's kernel fork (openbmc/linux).
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
 
-If that's the case, this patch has no business bothering upstream maintaine=
-rs (Guenter, Jean, Jonathan) or the upstream mailing lists (linux-hwmon@, l=
-inux-kernel@, linux-doc@). The only people this should be sent to are mysel=
-f and Joel, and the only list it should be sent to is openbmc@.
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
 
-If you send a backport patch for openbmc/linux and are using `git send- ema=
-il` to do so, then in nearly all cases you should use the `-- suppress-cc=
-=3Dall` option to make sure upstream maintainers and lists are _not_ automa=
-tically copied on the mail.
 
-However, if you wish this change to be back-ported to an _upstream_ stable =
-tree (e.g. the v6.6 series), please _first_ familiarise yourself with the s=
-table tree rules, satisfy yourself that the change meets all the requiremen=
-ts and constraints, and only then follow one of the documented processes:
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
 
-https://docs.kernel.org/process/stable-kernel-rules.html#stable-kernel-rule=
-s
+ MAINTAINERS                         |  13 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 458 ++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 947 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 152 +++++
+ drivers/mfd/Kconfig                 |  18 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 373 +++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 809 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 286 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 295 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3525 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
 
-If you have any questions do follow up with myself, Joel and the OpenBMC ma=
-iling list, but make sure to exclude the upstream maintainers and lists for=
- now.
+-- 
+2.34.1
 
-Thanks,
-
-Andrew
-WIWYNN PROPRIETARY
-This email (and any attachments) contains proprietary or confidential infor=
-mation and is for the sole use of its intended recipient. Any unauthorized =
-review, use, copying or distribution of this email or the content of this e=
-mail is strictly prohibited. If you are not the intended recipient, please =
-notify the sender and delete this email immediately.
