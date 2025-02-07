@@ -1,325 +1,1074 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000F11DE2C5;
-	Fri,  7 Feb 2025 11:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8784F1DC9B4
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Feb 2025 12:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738929205; cv=none; b=RD7yAN4HOnWZMfEBLTT3PV67ZxtR4LN0LxkceONC5O4NiENStdrK/0zfVZr3j/MuOzU7D+VD1SE1K+RNIL74dvw3vITLvDqyjIjlaS5lZ6KwT04mt1TY69o1c9s2Jp2GFQreGQlhQlQi3aWgFYvFRh86rWsP9QYX/uqGhRUWW8M=
+	t=1738930561; cv=none; b=YgsMMlQaqdVcaV+NkYHb480foRBhpE9ImEsNJ75+Xkh8/MdjwMgGMgR1uwHnbcWlHH/jDBLuR6f1fy7Z+5Rr0kfjccRrcH3kPcSNyg5N/5lf9vW1GO49HzM8A4exXqS2kcqFpJaNl1ROA6sfMNlqHTqF2HB73GaNa1/by9aO2Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738929205; c=relaxed/simple;
-	bh=IuMV62I00q/ewVta9Tr3R2fDYIVWuaOUCNt/jxDCXG0=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GED9AcS5IwoYKd/XjPXPxw0ujxMwLprc3+wFDptT37+08+aKpW+9okPQtPh4dZZD01xPV+XLap0v0xghBnvIK/qRO0K7JzzSIhG9cmAiWswDMd0iMQ+lU8OBF5vpsAcz8XJL+41jP6wrsbQQBAZbMQ3zGNmc5AfBx9mzrD4OKRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nK0JlBry; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nK0JlBry"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738929204; x=1770465204;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=IuMV62I00q/ewVta9Tr3R2fDYIVWuaOUCNt/jxDCXG0=;
-  b=nK0JlBryukN+BmGkkbmJNgdzBbYJOTkze2eWFV8QCl0a/uJqyG0/ji3e
-   ggw83YUzPa1iKDOFuaxVk3531Pp5+37QQw94NBWh5ZriYZMc3ZTn1Hy1g
-   bonupKYkCT3HUwnohyA1gnsuyYNKgPCNqRiKIeMmWJD/VsY3np9yJ2SqW
-   pu9uazgW9dkcpL8R3Zl4tsD8NY4gIs4s2I9yygnXJfEcMhmrGm2k+1FtI
-   9AdfKOQGALRrVXY9TPHrvI2uSQ5uyR1sFCA9tN+bBKRk5vBoiDAMRg4We
-   L9z4VF6dWQ7+u0HfdSWoI9iDi6gyuPh4wTtYmt1l3pS/Ah8ITE/bpHK47
-   Q==;
-X-CSE-ConnectionGUID: r55/OU8XRNeV5b0ldCaAeg==
-X-CSE-MsgGUID: GDBL6ihEQCW6h+c05lwIHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39260638"
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="39260638"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 03:53:23 -0800
-X-CSE-ConnectionGUID: ola92a+JTlmI4zNzwLshaw==
-X-CSE-MsgGUID: xTo9sHQPTbiL8aqOzyp6Ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148722349"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 03:53:20 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 7 Feb 2025 13:53:16 +0200 (EET)
-To: Werner Sembach <wse@tuxedocomputers.com>
-cc: Hans de Goede <hdegoede@redhat.com>, ukleinek@kernel.org, 
-    jdelvare@suse.com, linux@roeck-us.net, LKML <linux-kernel@vger.kernel.org>, 
-    platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org, 
-    linux-hwmon@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI
- TFAN via hwmon
-In-Reply-To: <358c235f-14e4-43ef-bc82-9ad5d54f0976@tuxedocomputers.com>
-Message-ID: <d99bb466-f9e6-9e86-8a0c-55f51655fb6f@linux.intel.com>
-References: <20250205162109.222619-1-wse@tuxedocomputers.com> <20250205162109.222619-2-wse@tuxedocomputers.com> <dde736d4-6343-30e3-2bab-6eebbf4515e9@linux.intel.com> <358c235f-14e4-43ef-bc82-9ad5d54f0976@tuxedocomputers.com>
+	s=arc-20240116; t=1738930561; c=relaxed/simple;
+	bh=39WsFI51lZJBbrvV6T1tprAD5kEvF0k54q0BXneTDrM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iaUYkrFy5kZEerQtQF0M+QtYiu7UZEsDFps7+toow4NKB37u75pZ0iC4Jp6krA6fw1a6FcaxurnTKBs8PuPWSCcvQuzOJGZGaTJrl9Q0Ijvx/kIzgWjkkQxod9gVrTmLRYNs78CaMJM8DbieRDkMFsVZCvsAiWUkfRFmfXdmT1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgNGb-00062J-47; Fri, 07 Feb 2025 13:15:29 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgNGW-003yQ3-2H;
+	Fri, 07 Feb 2025 13:15:24 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 326FF3BC298;
+	Fri, 07 Feb 2025 12:15:24 +0000 (UTC)
+Date: Fri, 7 Feb 2025 13:15:23 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1481543863-1738929196=:938"
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-1481543863-1738929196=:938
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Thu, 6 Feb 2025, Werner Sembach wrote:
-> Am 06.02.25 um 10:51 schrieb Ilpo J=C3=A4rvinen:
-> > On Wed, 5 Feb 2025, Werner Sembach wrote:
-> >=20
-> > > The TUXEDO Sirius 16 Gen1 & Gen2 have the custom TUXEDO Interface (TU=
-XI)
-> > > ACPI interface which currently consists of the TFAN device. This has =
-ACPI
-> > > functions to control the built in fans and monitor fan speeds and CPU=
- and
-> > > GPU temprature.
-> > >=20
-> > > This driver implements this TFAN device via the hwmon subsystem with =
-an
-> > > added temprature check that ensure a minimum fanspeed at certain
-> > > tempratures. This allows userspace controlled, but hardware safe, cus=
-tom
-> > temperatures
-> thx for spotting
-> >=20
-> > > fan curves.
-> > >=20
-> > > Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jwbz2hu4fil3rzed"
+Content-Disposition: inline
+In-Reply-To: <20250207074502.1055111-5-a0282524688@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
 
-> > > +=09for (i =3D 0; i < driver_data->fan_count; ++i) {
-> > > +=09=09params[0] =3D i;
-> > > +=09=09tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
-> > > +=09=09=09=09 params, 1, &retval);
-> > > +=09=09temp =3D retval * 100 - 272000;
-> > > +
-> > > +=09=09for (j =3D 0; temp_levels[j].temp; ++j) {
-> > > +=09=09=09temp_low =3D j =3D=3D 0 ? -272000 : temp_levels[j-1].temp;
-> > Please add a define for 272000 magic, or do you actually want to use on=
-e
-> > of the _kelvin conversion functions in linux/units.h ?
+--jwbz2hu4fil3rzed
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
+
+On 07.02.2025 15:44:59, Ming Yu wrote:
+> This driver supports Socket CANFD functionality for NCT6694 MFD
+> device based on USB interface.
 >=20
-> I just realized that it should be 273000.
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> ---
+>  MAINTAINERS                         |   1 +
+>  drivers/net/can/usb/Kconfig         |  11 +
+>  drivers/net/can/usb/Makefile        |   1 +
+>  drivers/net/can/usb/nct6694_canfd.c | 809 ++++++++++++++++++++++++++++
+>  4 files changed, 822 insertions(+)
+>  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
 >=20
-> Using the conversion functions would make it more complicated because the=
- ec
-> pretends to return to a 10th degree precision but actually only return to=
- a
-> full degree precission.
->=20
-> So i would need to cut of the last digit, convert and then readd it. When=
- i do
-> it directly in the code i can just use 273000 instead of 273150 and just
-> ignore the last digits.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1327e7a6e507..8aa611504172 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16925,6 +16925,7 @@ S:	Supported
+>  F:	drivers/gpio/gpio-nct6694.c
+>  F:	drivers/i2c/busses/i2c-nct6694.c
+>  F:	drivers/mfd/nct6694.c
+> +F:	drivers/net/can/usb/nct6694_canfd.c
+>  F:	include/linux/mfd/nct6694.h
+> =20
+>  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+> diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+> index 9dae0c71a2e1..759e724a67cf 100644
+> --- a/drivers/net/can/usb/Kconfig
+> +++ b/drivers/net/can/usb/Kconfig
+> @@ -133,6 +133,17 @@ config CAN_MCBA_USB
+>  	  This driver supports the CAN BUS Analyzer interface
+>  	  from Microchip (http://www.microchip.com/development-tools/).
+> =20
+> +config CAN_NCT6694
+> +	tristate "Nuvoton NCT6694 Socket CANfd support"
+> +	depends on MFD_NCT6694
+> +	select CAN_RX_OFFLOAD
+> +	help
+> +	  If you say yes to this option, support will be included for Nuvoton
+> +	  NCT6694, a USB device to socket CANfd controller.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called nct6694_canfd.
+> +
+>  config CAN_PEAK_USB
+>  	tristate "PEAK PCAN-USB/USB Pro interfaces for CAN 2.0b/CAN-FD"
+>  	help
+> diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefile
+> index 8b11088e9a59..fcafb1ac262e 100644
+> --- a/drivers/net/can/usb/Makefile
+> +++ b/drivers/net/can/usb/Makefile
+> @@ -11,5 +11,6 @@ obj-$(CONFIG_CAN_F81604) +=3D f81604.o
+>  obj-$(CONFIG_CAN_GS_USB) +=3D gs_usb.o
+>  obj-$(CONFIG_CAN_KVASER_USB) +=3D kvaser_usb/
+>  obj-$(CONFIG_CAN_MCBA_USB) +=3D mcba_usb.o
+> +obj-$(CONFIG_CAN_NCT6694) +=3D nct6694_canfd.o
+>  obj-$(CONFIG_CAN_PEAK_USB) +=3D peak_usb/
+>  obj-$(CONFIG_CAN_UCAN) +=3D ucan.o
+> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nc=
+t6694_canfd.c
+> new file mode 100644
+> index 000000000000..a7527020ff71
+> --- /dev/null
+> +++ b/drivers/net/can/usb/nct6694_canfd.c
+> @@ -0,0 +1,809 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 Socket CANfd driver based on USB interface.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+> + */
 
-Fine, but add a local define for it then with a comment about the=20
-precision compared with the generic define/conversion functions.
+/* net-dev style multiline
+ * comments look like this
+ */
 
-> > Missing spaces around - operator.
-> >=20
-> > > +=09=09=09temp_high =3D temp_levels[j].temp;
-> > > +=09=09=09if (driver_data->temp_level[i] > j)
-> > > +=09=09=09=09temp_high -=3D 2000; // hysteresis
-> > 2 * MILLIDEGREE_PER_DEGREE ?
-> >=20
-> > Use define for it so you can place HYSTERESIS into its name and forgo t=
-he
-> > comment.
-> kk
-> >=20
-> > > +
-> > > +=09=09=09if (temp >=3D temp_low && temp < temp_high)
-> > > +=09=09=09=09driver_data->temp_level[i] =3D j;
-> > > +=09=09}
-> > > +=09=09if (temp >=3D temp_high)
-> > > +=09=09=09driver_data->temp_level[i] =3D j;
-> > This loop should be in a helper I think. Naming it reasonably would als=
-o
-> > make it easier to understand what the loop does.
-> only place i use it, i could just add a comment, but i can also do it in =
-a
-> separate function.
+> +
+> +#include <linux/can/dev.h>
+> +#include <linux/can/rx-offload.h>
+> +#include <linux/ethtool.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define DRVNAME "nct6694_canfd"
+> +
+> +/*
+> + * USB command module type for NCT6694 CANfd controller.
+> + * This defines the module type used for communication with the NCT6694
+> + * CANfd controller over the USB interface.
+> + */
 
-I know it's the only user but what the loop does is relatively complex,=20
-and requires a few variables, etc. Is relatively self-contained=20
-algorithmically.
+/* net-dev style multiline
+ * comments look like this
+ */
 
-Splitting into two functions, both functions could be more focused and=20
-clear on their intent. Cleverly naming the helper function such that it=20
-explain what happens in it, can often help to avoid the need to add any=20
-comments (comments may be needed at times, but when we can avoid one=20
-there's one place less to get out-of-sync with the code, which tends to=20
-happen with comments :-)).
+or remove the comment altogether as it's stating the obvious :)
 
-But I see Guenther was against some parts of this so please don't take my=
-=20
-style related comments as overruling his objections.
+> +#define NCT6694_CAN_MOD			0x05
+> +
+> +/* Command 00h - CAN Setting and Initialization */
+> +#define NCT6694_CAN_SETTING		0x00
+> +#define NCT6694_CAN_SETTING_CTRL1_MON	BIT(0)
+> +#define NCT6694_CAN_SETTING_CTRL1_NISO	BIT(1)
+> +#define NCT6694_CAN_SETTING_CTRL1_LBCK	BIT(2)
+> +
+> +/* Command 01h - CAN Information */
+> +#define NCT6694_CAN_INFORMATION		0x01
+> +#define NCT6694_CAN_INFORMATION_SEL	0x00
+> +
+> +/* Command 02h - CAN Event */
+> +#define NCT6694_CAN_EVENT		0x02
+> +#define NCT6694_CAN_EVENT_SEL(idx, mask)	\
+> +	((idx ? 0x80 : 0x00) | ((mask) & 0x7F))
+> +
+> +#define NCT6694_CAN_EVENT_MASK		GENMASK(5, 0)
+> +#define NCT6694_CAN_EVT_TX_FIFO_EMPTY	BIT(7)	/* Read-clear */
+> +#define NCT6694_CAN_EVT_RX_DATA_LOST	BIT(5)	/* Read-clear */
+> +#define NCT6694_CAN_EVT_RX_DATA_IN	BIT(7)	/* Read-clear*/
+> +
+> +/* Command 10h - CAN Deliver */
+> +#define NCT6694_CAN_DELIVER		0x10
+> +#define NCT6694_CAN_DELIVER_SEL(buf_cnt)	\
+> +	((buf_cnt) & 0xFF)
+> +
+> +/* Command 11h - CAN Receive */
+> +#define NCT6694_CAN_RECEIVE		0x11
+> +#define NCT6694_CAN_RECEIVE_SEL(idx, buf_cnt)	\
+> +	((idx ? 0x80 : 0x00) | ((buf_cnt) & 0x7F))
+> +
+> +#define NCT6694_CAN_FRAME_TAG_CAN0	0xC0
+> +#define NCT6694_CAN_FRAME_TAG_CAN1	0xC1
 
+in "include/linux/mfd/nct6694.h" it's CAN1 and CAN2, can you make it "0"
+based everywhere?
 
-> > > diff --git a/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_util.c
-> > > b/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_util.c
-> > > new file mode 100644
-> > > index 0000000000000..292b739a161e7
-> > > --- /dev/null
-> > > +++ b/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi_util.c
-> > > @@ -0,0 +1,58 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > +/*
-> > > + * Copyright (C) 2024-2025 Werner Sembach wse@tuxedocomputers.com
-> > > + */
-> > > +
-> > > +#include <linux/acpi.h>
+what about making it:
 
-Btw just noticed, #include at least for kcalloc/kfree is missing.
+#define NCT6694_CAN_FRAME_TAG_CAN(idx)  (0xC0 | (idx))
 
-> > > +
-> > > +#include "acpi_tuxi_init.h"
-> > > +
-> > Remove empty line but see first what I note below.
-> kk
-> >=20
-> > > +#include "acpi_tuxi_util.h"
-> > > +
-> > > +static int __acpi_eval_intarray_in_int_out(acpi_handle handle,
-> > > +=09=09=09=09=09   acpi_string pathname,
-> > > +=09=09=09=09=09   unsigned long long *params,
-> > > +=09=09=09=09=09   u32 pcount,
-> > > +=09=09=09=09=09   unsigned long long *retval)
-> > There's only single caller of this function, so I question the need for
-> > using an utility function.
->=20
-> It's in preparation for if the TUXI device get another subdevice besides =
-TFAN.
->=20
-> Currently nothing is planed but i though this doesn't hurt.
->=20
-> >=20
-> > > +{
-> > > +=09struct acpi_object_list arguments;
-> > > +=09unsigned long long data;
-> > > +=09acpi_status status;
-> > > +
-> > > +=09if (pcount > 0) {
-> > > +=09=09pr_debug("Params:\n");
-> > > +
-> > > +=09=09arguments.count =3D pcount;
-> > > +=09=09arguments.pointer =3D kcalloc(pcount,
-> > > sizeof(*arguments.pointer),
-> > > +=09=09=09=09=09    GFP_KERNEL);
-> > > +=09=09for (int i =3D 0; i < pcount; ++i) {
-> > unsigned int
-> kk
-> >=20
-> > > +=09=09=09pr_debug("%llu\n", params[i]);
-> > > +
-> > > +=09=09=09arguments.pointer[i].type =3D ACPI_TYPE_INTEGER;
-> > > +=09=09=09arguments.pointer[i].integer.value =3D params[i];
-> > > +=09=09}
-> > > +=09=09status =3D acpi_evaluate_integer(handle, pathname, &arguments,
-> > > +=09=09=09=09=09       &data);
-> > > +=09=09kfree(arguments.pointer);
-> > You can use cleanup.h to handle freeing.
-> will look into it
->
-> > > +=09} else {
-> > > +=09=09status =3D acpi_evaluate_integer(handle, pathname, NULL, &data=
-);
-> > This call should be on the main level. You can use ?: operator for the
-> > only parameter you're changing for it between the currently diverging
-> > code paths.
->=20
-> then the kcalloc call happens every time even if it is not required.
+> +#define NCT6694_CAN_FRAME_FLAG_EFF	BIT(0)
+> +#define NCT6694_CAN_FRAME_FLAG_RTR	BIT(1)
+> +#define NCT6694_CAN_FRAME_FLAG_FD	BIT(2)
+> +#define NCT6694_CAN_FRAME_FLAG_BRS	BIT(3)
+> +#define NCT6694_CAN_FRAME_FLAG_ERR	BIT(4)
+> +
+> +#define NCT6694_NAPI_WEIGHT		32
+> +
+> +enum nct6694_event_err {
+> +	NCT6694_CAN_EVT_ERR_NO_ERROR =3D 0,
+> +	NCT6694_CAN_EVT_ERR_CRC_ERROR,
+> +	NCT6694_CAN_EVT_ERR_STUFF_ERROR,
+> +	NCT6694_CAN_EVT_ERR_ACK_ERROR,
+> +	NCT6694_CAN_EVT_ERR_FORM_ERROR,
+> +	NCT6694_CAN_EVT_ERR_BIT_ERROR,
+> +	NCT6694_CAN_EVT_ERR_TIMEOUT_ERROR,
+> +	NCT6694_CAN_EVT_ERR_UNKNOWN_ERROR,
+> +};
+> +
+> +enum nct6694_event_status {
+> +	NCT6694_CAN_EVT_STS_ERROR_ACTIVE =3D 0,
+> +	NCT6694_CAN_EVT_STS_ERROR_PASSIVE,
+> +	NCT6694_CAN_EVT_STS_BUS_OFF,
+> +	NCT6694_CAN_EVT_STS_WARNING,
+> +};
+> +
+> +struct __packed nct6694_can_setting {
+> +	__le32 nbr;
+> +	__le32 dbr;
+> +	u8 active;
+> +	u8 reserved[3];
+> +	__le16 ctrl1;
+> +	__le16 ctrl2;
+> +	__le32 nbtp;
+> +	__le32 dbtp;
+> +};
+> +
+> +struct __packed nct6694_can_information {
+> +	u8 tx_fifo_cnt;
+> +	u8 rx_fifo_cnt;
+> +	u8 reserved[2];
+> +	__le32 can_clk;
+> +};
+> +
+> +struct __packed nct6694_can_event {
+> +	u8 err;
+> +	u8 status;
+> +	u8 tx_evt;
+> +	u8 rx_evt;
+> +	u8 rec;
+> +	u8 tec;
+> +	u8 reserved[2];
+> +};
+> +
+> +struct __packed nct6694_can_frame {
+> +	u8 tag;
+> +	u8 flag;
+> +	u8 reserved;
+> +	u8 length;
+> +	__le32 id;
+> +	u8 data[CANFD_MAX_DLEN];
+> +};
+> +
+> +struct nct6694_can_priv {
+> +	struct can_priv can;	/* must be the first member */
+> +	struct can_rx_offload offload;
+> +	struct net_device *ndev;
+> +	struct nct6694 *nct6694;
+> +	struct workqueue_struct *wq;
+> +	struct work_struct tx_work;
+> +	struct nct6694_can_frame tx;
+> +	struct nct6694_can_frame rx;
+> +	struct nct6694_can_event event[2];
+> +	struct can_berr_counter bec;
+> +	unsigned char can_idx;
 
-No it won't, you'd allocate only if pcount > 0 (in a similar block as=20
-now):
+can you use ndev->dev_port instead?
 
-#include <linux/cleanup.h>
-#include <linux/slab.h>
-=2E..
+> +};
+> +
+> +static inline struct nct6694_can_priv *rx_offload_to_priv(struct can_rx_=
+offload *offload)
+> +{
+> +	return container_of(offload, struct nct6694_can_priv, offload);
+> +}
+> +
+> +static const struct can_bittiming_const nct6694_can_bittiming_nominal_co=
+nst =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 2,
+> +	.tseg1_max =3D 256,
+> +	.tseg2_min =3D 2,
+> +	.tseg2_max =3D 128,
+> +	.sjw_max =3D 128,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 511,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static const struct can_bittiming_const nct6694_can_bittiming_data_const=
+ =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 1,
+> +	.tseg1_max =3D 32,
+> +	.tseg2_min =3D 1,
+> +	.tseg2_max =3D 16,
+> +	.sjw_max =3D 16,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 31,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static void nct6694_can_rx_offload(struct can_rx_offload *offload,
+> +				   struct sk_buff *skb)
+> +{
+> +	struct nct6694_can_priv *priv =3D rx_offload_to_priv(offload);
+> +	int ret;
+> +
+> +	ret =3D can_rx_offload_queue_tail(offload, skb);
+> +	if (ret)
+> +		priv->ndev->stats.rx_fifo_errors++;
+> +}
+> +
+> +static void nct6694_can_handle_lost_msg(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct net_device_stats *stats =3D &ndev->stats;
+> +	struct can_frame *cf;
+> +	struct sk_buff *skb;
+> +
+> +	netdev_err(ndev, "RX FIFO overflow, message(s) lost.\n");
+> +
+> +	stats->rx_errors++;
+> +	stats->rx_over_errors++;
+> +
+> +	skb =3D alloc_can_err_skb(ndev, &cf);
+> +	if (!skb)
+> +		return;
+> +
+> +	cf->can_id |=3D CAN_ERR_CRTL;
+> +	cf->data[1] =3D CAN_ERR_CRTL_RX_OVERFLOW;
+> +
+> +	nct6694_can_rx_offload(&priv->offload, skb);
+> +}
+> +
+> +static void nct6694_can_rx(struct net_device *ndev, u8 rx_evt)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct nct6694_can_frame *frame =3D &priv->rx;
+> +	struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_RECEIVE,
+> +		.sel =3D NCT6694_CAN_RECEIVE_SEL(priv->can_idx, 1),
+> +		.len =3D cpu_to_le16(sizeof(*frame))
+> +	};
+> +	struct sk_buff *skb;
+> +	int ret;
+> +
+> +	ret =3D nct6694_read_msg(priv->nct6694, &cmd_hd, frame);
+> +	if (ret)
+> +		return;
+> +
+> +	if (frame->flag & NCT6694_CAN_FRAME_FLAG_FD) {
+> +		struct canfd_frame *cfd;
+> +
+> +		skb =3D alloc_canfd_skb(priv->ndev, &cfd);
+> +		if (!skb)
+> +			return;
+> +
+> +		cfd->can_id =3D le32_to_cpu(frame->id);
+> +		cfd->len =3D canfd_sanitize_len(frame->length);
+> +		if (frame->flag & NCT6694_CAN_FRAME_FLAG_EFF)
+> +			cfd->can_id |=3D CAN_EFF_FLAG;
+> +		if (frame->flag & NCT6694_CAN_FRAME_FLAG_BRS)
+> +			cfd->flags |=3D CANFD_BRS;
+> +		if (frame->flag & NCT6694_CAN_FRAME_FLAG_ERR)
+> +			cfd->flags |=3D CANFD_ESI;
+> +
+> +		memcpy(cfd->data, frame->data, cfd->len);
+> +	} else {
+> +		struct can_frame *cf;
+> +
+> +		skb =3D alloc_can_skb(priv->ndev, &cf);
+> +		if (!skb)
+> +			return;
+> +
+> +		cf->can_id =3D le32_to_cpu(frame->id);
+> +		cf->len =3D min_t(u8, frame->length, CAN_MAX_DLEN);
 
-=09union acpi_object __free(kfree) *obj =3D NULL;
+use can_cc_dlc2len()
 
-=09if (pcount > 0)
-=09=09obj =3D kcalloc(...);
+> +		if (frame->flag & NCT6694_CAN_FRAME_FLAG_EFF)
+> +			cf->can_id |=3D CAN_EFF_FLAG;
+> +
+> +		if (frame->flag & NCT6694_CAN_FRAME_FLAG_RTR)
+> +			cf->can_id |=3D CAN_RTR_FLAG;
+> +		else
+> +			memcpy(cf->data, frame->data, cf->len);
+> +	}
+> +
+> +	nct6694_can_rx_offload(&priv->offload, skb);
+> +}
+> +
+> +static int nct6694_can_get_berr_counter(const struct net_device *ndev,
+> +					struct can_berr_counter *bec)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +
+> +	*bec =3D priv->bec;
+> +
+> +	return 0;
+> +}
+> +
+> +static void nct6694_can_handle_state_change(struct net_device *ndev,
+> +					    enum can_state new_state)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct can_berr_counter bec;
+> +	struct can_frame *cf;
+> +	struct sk_buff *skb;
+> +
+> +	skb =3D alloc_can_err_skb(ndev, &cf);
+> +
+> +	nct6694_can_get_berr_counter(ndev, &bec);
+> +
+> +	switch (new_state) {
+> +	case CAN_STATE_ERROR_ACTIVE:
+> +		priv->can.can_stats.error_warning++;
+                                    ^^^^^^^^^^^^^
+> +		priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> +		if (cf)
+> +			cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
+> +		break;
+> +	case CAN_STATE_ERROR_WARNING:
+> +		priv->can.can_stats.error_warning++;
+> +		priv->can.state =3D CAN_STATE_ERROR_WARNING;
+> +		if (cf) {
+> +			cf->can_id |=3D CAN_ERR_CRTL;
+> +			if (bec.txerr > bec.rxerr)
+> +				cf->data[1] =3D CAN_ERR_CRTL_TX_WARNING;
+> +			else
+> +				cf->data[1] =3D CAN_ERR_CRTL_RX_WARNING;
+> +			cf->data[6] =3D bec.txerr;
+> +			cf->data[7] =3D bec.rxerr;
+> +		}
+> +		break;
+> +	case CAN_STATE_ERROR_PASSIVE:
+> +		priv->can.can_stats.error_passive++;
+> +		priv->can.state =3D CAN_STATE_ERROR_PASSIVE;
+> +		if (cf) {
+> +			cf->can_id |=3D CAN_ERR_CRTL;
+> +			cf->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
+> +			if (bec.txerr >=3D CAN_ERROR_PASSIVE_THRESHOLD)
+> +				cf->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
+> +			cf->data[6] =3D bec.txerr;
+> +			cf->data[7] =3D bec.rxerr;
+> +		}
+> +		break;
+> +	case CAN_STATE_BUS_OFF:
+> +		priv->can.state =3D CAN_STATE_BUS_OFF;
+> +		priv->can.can_stats.bus_off++;
+> +		if (cf)
+> +			cf->can_id |=3D CAN_ERR_BUSOFF;
+> +		can_free_echo_skb(ndev, 0, NULL);
+> +		netif_stop_queue(ndev);
+> +		can_bus_off(ndev);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	nct6694_can_rx_offload(&priv->offload, skb);
+> +}
+> +
+> +static void nct6694_can_handle_state_errors(struct net_device *ndev, u8 =
+status)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
 
-=09=09arguments.count =3D ...;
-=09=09arguments.pointer =3D obj;
-=09=09...
-=09}
+It seems you don't have dedicated RX and TX states, so call
+nct6694_can_get_berr_counter() and use can_state_get_by_berr_counter()
+to get the states. Then basically do that what what
+mcp251xfd_handle_cerrif() does, starting with "new_state =3D max(tx_state, =
+rx_state);"
 
-=09status =3D acpi_evaluate_integer(handle, pathname,
-=09=09=09=09       pcount ? arguments : NULL, &data);
-=09if (ACPI_FAILURE(status))
-=09=09...
+> +
+> +	if (status =3D=3D NCT6694_CAN_EVT_STS_ERROR_ACTIVE &&
+> +	    priv->can.state !=3D CAN_STATE_ERROR_ACTIVE) {
+> +		netdev_dbg(ndev, "Error, entered active state\n");
+> +		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_ACTIVE);
+> +	}
+> +
+> +	if (status =3D=3D NCT6694_CAN_EVT_STS_WARNING &&
+> +	    priv->can.state !=3D CAN_STATE_ERROR_WARNING) {
+> +		netdev_dbg(ndev, "Error, entered warning state\n");
+> +		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_WARNING);
+> +	}
+> +
+> +	if (status =3D=3D NCT6694_CAN_EVT_STS_ERROR_PASSIVE &&
+> +	    priv->can.state !=3D CAN_STATE_ERROR_PASSIVE) {
+> +		netdev_dbg(ndev, "Error, entered passive state\n");
+> +		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_PASSIVE);
+> +	}
+> +
+> +	if (status =3D=3D NCT6694_CAN_EVT_STS_BUS_OFF &&
+> +	    priv->can.state !=3D CAN_STATE_BUS_OFF) {
+> +		netdev_dbg(ndev, "Error, entered bus-off state\n");
+> +		nct6694_can_handle_state_change(ndev, CAN_STATE_BUS_OFF);
+> +	}
+> +}
+> +
+> +static void nct6694_can_handle_bus_err(struct net_device *ndev, u8 bus_e=
+rr)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct can_frame *cf;
+> +	struct sk_buff *skb;
+> +
+> +	if (bus_err =3D=3D NCT6694_CAN_EVT_ERR_NO_ERROR)
+> +		return;
+> +
+> +	priv->can.can_stats.bus_error++;
+> +
+> +	skb =3D alloc_can_err_skb(ndev, &cf);
+> +	if (skb)
+> +		cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
+> +
+> +	switch (bus_err) {
+> +	case NCT6694_CAN_EVT_ERR_CRC_ERROR:
+> +		netdev_dbg(ndev, "CRC error\n");
+> +		ndev->stats.rx_errors++;
+> +		if (skb)
+> +			cf->data[3] |=3D CAN_ERR_PROT_LOC_CRC_SEQ;
+> +		break;
+> +
+> +	case NCT6694_CAN_EVT_ERR_STUFF_ERROR:
+> +		netdev_dbg(ndev, "Stuff error\n");
+> +		ndev->stats.rx_errors++;
+> +		if (skb)
+> +			cf->data[2] |=3D CAN_ERR_PROT_STUFF;
+> +		break;
+> +
+> +	case NCT6694_CAN_EVT_ERR_ACK_ERROR:
+> +		netdev_dbg(ndev, "Ack error\n");
+> +		ndev->stats.tx_errors++;
+> +		if (skb) {
+> +			cf->can_id |=3D CAN_ERR_ACK;
+> +			cf->data[2] |=3D CAN_ERR_PROT_TX;
+> +		}
+> +		break;
+> +
+> +	case NCT6694_CAN_EVT_ERR_FORM_ERROR:
+> +		netdev_dbg(ndev, "Form error\n");
+> +		ndev->stats.rx_errors++;
+> +		if (skb)
+> +			cf->data[2] |=3D CAN_ERR_PROT_FORM;
+> +		break;
+> +
+> +	case NCT6694_CAN_EVT_ERR_BIT_ERROR:
+> +		netdev_dbg(ndev, "Bit error\n");
+> +		ndev->stats.tx_errors++;
+> +		if (skb)
+> +			cf->data[2] |=3D CAN_ERR_PROT_TX | CAN_ERR_PROT_BIT;
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
 
-__free() will handle kfree(obj) for you, you don't call kfree() manually.
+missing check:
 
-> also i don't know if ?-operator in a function call is good to read.
+        if (skb)
 
-It is much better than duplicating almost the same call, by using ?: it=20
-is obvious that only single parameter is being altered, whereas on split=20
-calls, the code reader has to do the compare.
+> +	nct6694_can_rx_offload(&priv->offload, skb);
+> +}
+> +
+> +static void nct6694_can_tx_irq(struct net_device *ndev)
+> +{
+> +	struct net_device_stats *stats =3D &ndev->stats;
+> +
+> +	stats->tx_bytes +=3D can_get_echo_skb(ndev, 0, NULL);
 
+use can_rx_offload_get_echo_skb_queue_tail() here
 
-> > > + * Arg0: Fan index
-> > > + * Returns: Speed sensor value in revolutions per minute
-> > > + */
-> > > +#define TUXI_TFAN_METHOD_GET_FAN_RPM=09=09"GRPM"
-> > > +
-> > > +int tuxi_tfan_method(struct acpi_device *device, acpi_string method,
-> > > +=09=09     unsigned long long *params, u32 pcount,
-> > > +=09=09     unsigned long long *retval);
-> > > +
-> > > +#endif // __PLATFORM_X86_TUXEDO_NBXX_ACPI_TUXI_UTIL_H__
-> > >=20
-> > What is the reason for splitting this into so many files? Are there goi=
-ng
-> > to be other users of the code that is split into separate files? For th=
-e
-> > init/deinit code, surely not.
-> >=20
-> > It will be considerably harder to track call chains, etc. when the
-> > function cannot be found in the same file so you better provide a reall=
-y
-> > good reason for going so extreme with the split.
->=20
-> Same as above: in preparation for the future if there is another TUXI
-> subdevice other then TFAN.
->=20
-> Also to section of the hwmon logic as I might want to reuse it for other =
-odms
-> in the future albeit it would then need to get passed the acpi-write func=
-tion
-> in a dynamic way.
->=20
-> And imho it not harder to follow over different files, there is a lot of
-> external function references anyway, so having something setup to
-> automatically jump to a function definition in a different file is alread=
-y
-> required to quickly parse the code.
+> +	stats->tx_packets++;
+> +	netif_wake_queue(ndev);
+> +}
+> +
+> +static irqreturn_t nct6694_can_irq(int irq, void *data)
+> +{
+> +	struct net_device *ndev =3D data;
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct nct6694_can_event *evt =3D priv->event;
+> +	struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_EVENT,
+> +		.sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_CAN_EVENT_MASK),
+> +		.len =3D cpu_to_le16(sizeof(priv->event))
+> +	};
+> +	irqreturn_t handled =3D IRQ_NONE;
+> +	int can_idx =3D priv->can_idx;
+> +	int ret;
 
-For library type APIs, one usually doesn't read those functions. I'm=20
-talking about functions within the driver. For well-structured and=20
-well-named code, jumping all over the place not a requirement at all=20
-because the interfaces that cross file boundaries are well architected and=
-=20
-rest is self-contained and self-explanatory. I see you started to defend=20
-the suboptimal split with everybody does that argument ;-).
+it would make sense to have a event pointer here instead of the can_idx?
 
-Your references to "future" sound quite vague, if there are no immediate=20
-plans for such drivers to exist, I'd just do such rearranging of code when=
-=20
-the supposed other drivers actually happens (which often is never).
+        const struct nct6694_can_event *event =3D &priv->event[priv->can_id=
+x];
+
+> +
+> +	ret =3D nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
+> +	if (ret < 0)
+> +		return handled;
+> +
+> +	if (priv->event[can_idx].rx_evt & NCT6694_CAN_EVT_RX_DATA_IN) {
+> +		nct6694_can_rx(ndev, priv->event[can_idx].rx_evt);
+> +		handled =3D IRQ_HANDLED;
+> +	}
+> +
+> +	if (priv->event[can_idx].rx_evt & NCT6694_CAN_EVT_RX_DATA_LOST) {
+> +		nct6694_can_handle_lost_msg(ndev);
+> +		handled =3D IRQ_HANDLED;
+> +	}
+> +
+> +	if (priv->event[can_idx].status) {
+> +		nct6694_can_handle_state_errors(ndev, priv->event[can_idx].status);
+> +		handled =3D IRQ_HANDLED;
+> +	}
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
+> +		nct6694_can_handle_bus_err(ndev, priv->event[can_idx].err);
+> +		handled =3D IRQ_HANDLED;
+> +	}
+> +
+> +	if (handled)
+> +		can_rx_offload_threaded_irq_finish(&priv->offload);
+> +
+> +	if (priv->event[can_idx].tx_evt & NCT6694_CAN_EVT_TX_FIFO_EMPTY)
+> +		nct6694_can_tx_irq(ndev);
+
+Move this in front of the handled check and add "handled =3D IRQ_HANDLED;"
+to the if-block.
+
+> +
+> +	priv->bec.rxerr =3D priv->event[can_idx].rec;
+> +	priv->bec.txerr =3D priv->event[can_idx].tec;
+> +
+> +	return handled;
+> +}
+> +
+> +static void nct6694_can_tx_work(struct work_struct *work)
+> +{
+> +	struct nct6694_can_priv *priv =3D container_of(work,
+> +						     struct nct6694_can_priv,
+> +						     tx_work);
+> +	struct nct6694_can_frame *frame =3D &priv->tx;
+> +	struct net_device *ndev =3D priv->ndev;
+> +	struct net_device_stats *stats =3D &ndev->stats;
+> +	struct sk_buff *skb =3D priv->can.echo_skb[0];
+> +	static const struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_DELIVER,
+> +		.sel =3D NCT6694_CAN_DELIVER_SEL(1),
+> +		.len =3D cpu_to_le16(sizeof(*frame))
+> +	};
+> +	u32 txid;
+> +	int err;
+> +
+> +	memset(frame, 0, sizeof(*frame));
+> +
+> +	if (priv->can_idx =3D=3D 0)
+> +		frame->tag =3D NCT6694_CAN_FRAME_TAG_CAN0;
+> +	else
+> +		frame->tag =3D NCT6694_CAN_FRAME_TAG_CAN1;
+
+        frame->tag =3D NCT6694_CAN_FRAME_TAG_CAN(priv->can_idx);
+       =20
+> +
+> +	if (can_is_canfd_skb(skb)) {
+> +		struct canfd_frame *cfd =3D (struct canfd_frame *)skb->data;
+> +
+> +		if (cfd->flags & CANFD_BRS)
+> +			frame->flag |=3D NCT6694_CAN_FRAME_FLAG_BRS;
+> +
+> +		if (cfd->can_id & CAN_EFF_FLAG) {
+> +			txid =3D cfd->can_id & CAN_EFF_MASK;
+> +			frame->flag |=3D NCT6694_CAN_FRAME_FLAG_EFF;
+> +		} else {
+> +			txid =3D cfd->can_id & CAN_SFF_MASK;
+> +		}
+> +		frame->flag |=3D NCT6694_CAN_FRAME_FLAG_FD;
+> +		frame->id =3D cpu_to_le32(txid);
+> +		frame->length =3D cfd->len;
+> +
+> +		memcpy(frame->data, cfd->data, cfd->len);
+> +	} else {
+> +		struct can_frame *cf =3D (struct can_frame *)skb->data;
+> +
+> +		if (cf->can_id & CAN_EFF_FLAG) {
+> +			txid =3D cf->can_id & CAN_EFF_MASK;
+> +			frame->flag |=3D NCT6694_CAN_FRAME_FLAG_EFF;
+> +		} else {
+> +			txid =3D cf->can_id & CAN_SFF_MASK;
+> +		}
+> +
+> +		if (cf->can_id & CAN_RTR_FLAG)
+> +			frame->flag |=3D NCT6694_CAN_FRAME_FLAG_RTR;
+> +		else
+> +			memcpy(frame->data, cf->data, cf->len);
+> +
+> +		frame->id =3D cpu_to_le32(txid);
+> +		frame->length =3D cf->len;
+> +	}
+> +
+> +	err =3D nct6694_write_msg(priv->nct6694, &cmd_hd, frame);
+> +	if (err) {
+> +		netdev_err(ndev, "%s: TX FIFO is full!\n", __func__);
+> +		can_free_echo_skb(ndev, 0, NULL);
+> +		stats->tx_dropped++;
+> +		stats->tx_errors++;
+> +		netif_wake_queue(ndev);
+> +	}
+> +}
+> +
+> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+> +					  struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +
+> +	if (can_dev_dropped_skb(ndev, skb))
+> +		return NETDEV_TX_OK;
+> +
+> +	netif_stop_queue(ndev);
+> +	can_put_echo_skb(skb, ndev, 0, 0);
+> +	queue_work(priv->wq, &priv->tx_work);
+> +
+> +	return NETDEV_TX_OK;
+> +}
+> +
+> +static int nct6694_can_start(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	struct nct6694_can_setting *setting;
+> +	struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_SETTING,
+> +		.sel =3D priv->can_idx,
+> +		.len =3D cpu_to_le16(sizeof(*setting))
+> +	};
+> +	const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> +	const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+
+nitpick:
+move these 2 right after priv and d_bt first.
+
+> +	int ret;
+> +
+> +	setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> +	if (!setting)
+> +		return -ENOMEM;
+> +
+> +	setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> +	setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
+> +
+> +	if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
+> +	    priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+
+We should move this check into the infrastructure. Please only check for
+CAN_CTRLMODE_FD_NON_ISO.
+
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
+> +
+> +	ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+> +	if (ret)
+> +		goto exit;
+> +
+> +	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> +
+> +exit:
+> +	kfree(setting);
+> +	return ret;
+> +}
+> +
+> +static int nct6694_can_stop(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +
+
+How does the device know, that it should leave the CAN bus? Is there a
+message you can send to it? If not put it at least into listen only mode.
+
+> +	netif_stop_queue(ndev);
+> +	free_irq(ndev->irq, ndev);
+> +	destroy_workqueue(priv->wq);
+> +	priv->wq =3D NULL;
+
+no need to set wq to NULL
+
+> +	priv->can.state =3D CAN_STATE_STOPPED;
+> +	can_rx_offload_disable(&priv->offload);
+
+Please change move can_rx_offload_disable() in front of "priv->can.state
+=3D CAN_STATE_STOPPED".
+
+> +	close_candev(ndev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nct6694_can_set_mode(struct net_device *ndev, enum can_mode m=
+ode)
+> +{
+> +	switch (mode) {
+> +	case CAN_MODE_START:
+> +		nct6694_can_start(ndev);
+
+please add error checking
+
+> +		netif_wake_queue(ndev);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int nct6694_can_open(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	int ret;
+> +
+> +	ret =3D open_candev(ndev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	can_rx_offload_enable(&priv->offload);
+> +
+> +	ret =3D request_threaded_irq(ndev->irq, NULL,
+> +				   nct6694_can_irq, IRQF_ONESHOT,
+> +				   "nct6694_can", ndev);
+> +	if (ret) {
+> +		netdev_err(ndev, "Failed to request IRQ\n");
+> +		goto close_candev;
+> +	}
+> +
+> +	priv->wq =3D alloc_ordered_workqueue("%s-nct6694_wq",
+> +					   WQ_FREEZABLE | WQ_MEM_RECLAIM,
+> +					   ndev->name);
+> +	if (!priv->wq) {
+> +		ret =3D -ENOMEM;
+> +		goto free_irq;
+> +	}
+> +
+> +	ret =3D nct6694_can_start(ndev);
+> +	if (ret)
+> +		goto destroy_wq;
+> +
+> +	netif_start_queue(ndev);
+> +
+> +	return 0;
+> +
+> +destroy_wq:
+> +	destroy_workqueue(priv->wq);
+> +free_irq:
+> +	free_irq(ndev->irq, ndev);
+> +close_candev:
+> +	can_rx_offload_disable(&priv->offload);
+> +	close_candev(ndev);
+> +	return ret;
+> +}
+> +
+> +static const struct net_device_ops nct6694_can_netdev_ops =3D {
+> +	.ndo_open =3D nct6694_can_open,
+> +	.ndo_stop =3D nct6694_can_stop,
+> +	.ndo_start_xmit =3D nct6694_can_start_xmit,
+> +	.ndo_change_mtu =3D can_change_mtu,
+> +};
+> +
+> +static const struct ethtool_ops nct6694_can_ethtool_ops =3D {
+> +	.get_ts_info =3D ethtool_op_get_ts_info,
+> +};
+> +
+> +static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
+> +{
+> +	struct nct6694_can_information *info;
+> +	static const struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_INFORMATION,
+> +		.sel =3D NCT6694_CAN_INFORMATION_SEL,
+> +		.len =3D cpu_to_le16(sizeof(*info))
+> +	};
+> +	int ret, can_clk;
+> +
+> +	info =3D kzalloc(sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	ret =3D nct6694_read_msg(priv->nct6694, &cmd_hd, info);
+> +	if (ret) {
+> +		kfree(info);
+> +		return ret;
+> +	}
+> +
+> +	can_clk =3D le32_to_cpu(info->can_clk);
+> +	kfree(info);
+> +
+> +	return can_clk;
+> +}
+> +
+> +static int nct6694_can_probe(struct platform_device *pdev)
+> +{
+> +	const struct mfd_cell *cell =3D mfd_get_cell(pdev);
+> +	struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
+> +	struct nct6694_can_priv *priv;
+> +	struct net_device *ndev;
+> +	int ret, irq, can_clk;
+> +
+> +	irq =3D irq_create_mapping(nct6694->domain,
+> +				 NCT6694_IRQ_CAN1 + cell->id);
+> +	if (!irq)
+> +		return irq;
+> +
+> +	ndev =3D alloc_candev(sizeof(struct nct6694_can_priv), 1);
+> +	if (!ndev)
+> +		return -ENOMEM;
+> +
+> +	ndev->irq =3D irq;
+> +	ndev->flags |=3D IFF_ECHO;
+> +	ndev->dev_port =3D cell->id;
+> +	ndev->netdev_ops =3D &nct6694_can_netdev_ops;
+> +	ndev->ethtool_ops =3D &nct6694_can_ethtool_ops;
+> +
+> +	priv =3D netdev_priv(ndev);
+> +	priv->nct6694 =3D nct6694;
+> +	priv->ndev =3D ndev;
+> +
+> +	can_clk =3D nct6694_can_get_clock(priv);
+> +	if (can_clk < 0) {
+> +		ret =3D dev_err_probe(&pdev->dev, can_clk,
+> +				    "Failed to get clock\n");
+> +		goto free_candev;
+> +	}
+> +
+> +	INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
+> +
+> +	priv->can_idx =3D cell->id;
+> +	priv->can.state =3D CAN_STATE_STOPPED;
+
+The device is allocated with CAN_STATE_STOPPED set, can be removed.
+
+> +	priv->can.clock.freq =3D can_clk;
+> +	priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_const;
+> +	priv->can.data_bittiming_const =3D &nct6694_can_bittiming_data_const;
+> +	priv->can.do_set_mode =3D nct6694_can_set_mode;
+> +	priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counter;
+> +
+> +	priv->can.ctrlmode =3D CAN_CTRLMODE_FD;
+> +
+> +	priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK		|
+> +				       CAN_CTRLMODE_LISTENONLY		|
+> +				       CAN_CTRLMODE_FD			|
+> +				       CAN_CTRLMODE_FD_NON_ISO		|
+> +				       CAN_CTRLMODE_BERR_REPORTING;
+
+nitpick: one space in front of "|" please
+
+Does your device run in CAN-FD mode all the time? If so, please use
+can_set_static_ctrlmode() to set it after priv->can.ctrlmode_supported
+and remove CAN_CTRLMODE_FD from ctrlmode_supported.
+
+> +
+> +	ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
+> +					NCT6694_NAPI_WEIGHT);
+> +	if (ret) {
+> +		dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\n");
+> +		goto free_candev;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +	SET_NETDEV_DEV(priv->ndev, &pdev->dev);
+> +
+> +	ret =3D register_candev(priv->ndev);
+> +	if (ret)
+> +		goto del_rx_offload;
+> +
+> +	return 0;
+> +
+> +del_rx_offload:
+
+nitpick: please rename to rx_offload_del or can_rx_offload_del
+
+> +	can_rx_offload_del(&priv->offload);
+> +free_candev:
+> +	free_candev(ndev);
+> +	return ret;
+> +}
+> +
+> +static void nct6694_can_remove(struct platform_device *pdev)
+> +{
+> +	struct nct6694_can_priv *priv =3D platform_get_drvdata(pdev);
+> +
+> +	cancel_work_sync(&priv->tx_work);
+
+The workqueue has already been destroyed in nct6694_can_stop(), so more
+work should be pending.
+
+> +	unregister_candev(priv->ndev);
+> +	can_rx_offload_del(&priv->offload);
+> +	free_candev(priv->ndev);
+> +}
+> +
+> +static struct platform_driver nct6694_can_driver =3D {
+> +	.driver =3D {
+> +		.name	=3D DRVNAME,
+> +	},
+> +	.probe		=3D nct6694_can_probe,
+> +	.remove		=3D nct6694_can_remove,
+> +};
+> +
+> +module_platform_driver(nct6694_can_driver);
+> +
+> +MODULE_DESCRIPTION("USB-CAN FD driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:nct6694-can");
+> --=20
+> 2.34.1
+
+regards,
+Marc
 
 --=20
- i.
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---8323328-1481543863-1738929196=:938--
+--jwbz2hu4fil3rzed
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmel+VgACgkQDHRl3/mQ
+kZyrfgf/dL3YcIbnGvX3UetNgdrMfxKxrX1TBAZrAtjVAag91iCQgmUi04NqwPPe
+quP5RIF3FzXpN9JPx+3xmwDwNUrEyuYqnZbPsLPfldNVenRJcbGPsvUfNXW8prd/
+aJi46i5ANvpouvbX0MvsOnKh4LX/D7zDP3C8aroob7vjhwfQfmYyf/x38BYm6054
+I/B7tVLOO2bsVDzdN+ATremPNePY0Pk8TMlDntQAW+aS9NUkXS1Do5obtAuloshg
+gsRceA8rh1xqLw4eGbcXWfbLjS+JEn394ThM950ZzdVUNa2viLC3lY4h02Jcgq3R
+hBo74qyBUDF6xxA4/06ry51Uuqmujg==
+=Rcon
+-----END PGP SIGNATURE-----
+
+--jwbz2hu4fil3rzed--
