@@ -1,323 +1,107 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C0F1F37C3
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Feb 2025 13:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15356238D52;
+	Fri,  7 Feb 2025 15:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738934908; cv=none; b=SmDganusj2IayVqNJmuh91Z1KeZc7ZPPgfUIBRAAj+7Bdo1A/WwiTH+yn0bMWPySouaEFaSt+BjTu04t+8pDoB1YaqJFSR9Hx3dzkUHSNVwQZ9Amukp8tuN6OAl+S0neDaItj+DPGbtZNWQ5DHmhuJZpea6SZQsTjpfg2VANN5I=
+	t=1738940471; cv=none; b=PohG2zyZKZrzCfNcR1k99ffARgQJ7VD2Ne6nn7TsxkQMLScdRSVZn2E6ITATZxO9rsL7p5ju1w/ixah7r/qz59ktPmP/DgYB7tr5Jk/O6rPSL7MqqNROLIf8P08uvwUE5gu3I2xZWItPDg9iQ7vGGLMnPCVjrrERMZw1fCPOafE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738934908; c=relaxed/simple;
-	bh=ECqzfq7qoMuyq+r19JGd3UHmxyBzNK9DnZVYotYQS9U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SAGzGTgi/XUHEjj2y2LfraHnOwO4VAJfgF8PJ+gTn38mnEzSIasXDGbMhNKqc0Og58qch8utiFbycfaC+XwL1qvyqu+TgW9/kvDp2s75L9dt3IeEDCJaTMFTXA0Wgz+p2q/EISisM3WaIu22cDG20azIKppQtx7l7YQVPurycZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=eSpItwe0; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+	s=arc-20240116; t=1738940471; c=relaxed/simple;
+	bh=Ismxwm1c+xEaqBjLFJVdqK9TSoif2Fk0K+yMxRkINVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JYR9ybp/2M5pr5QzBHTMbiKESRtx582ocPyncHDLb1HU4p8DYS/hzclOcoTOkIXl22gDVKtV5f4iFuWAd/fjIp/j9K/sa2sIYdTeMpKQNZZSnk5xXZKIUHT/Ex5Ol+ORlgC57GoD4Z7DkOp/8TQAg47quKT8v2Uqd4h/ghW6dAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ltR/Bra9; arc=none smtp.client-ip=193.252.22.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="eSpItwe0"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436a39e4891so14133815e9.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 07 Feb 2025 05:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1738934904; x=1739539704; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ljes7wHzysMxiQ2RSq6rzU3Ys17WdodOahX8+S3+D3w=;
-        b=eSpItwe09eAUKxzRKhb/GcB36ta32JjYHso7ePQnCOtqy9BUqygtda8eePxC9bXget
-         lk0lwieuDLfXITfc3IPt/Njg1ywZY8LYOMOaBAGvaOS3ShYaIPYpCU+fLywaOb3crCJK
-         /mePE0RuBCUfewVp8mxicik2o9OZfo7DfUj+8L2o/5yyvwVyisjIrH+wV6ICEdyg5G+2
-         k6VvuziUyncnIQ5vI9esEk0/qhtS77OBaQW/jN/xYJaLrGb0/qaw8Dme9tkKGo0botHk
-         NuUZIrv+EC4DDygeYoHrIfmLV4pinMCP2jQuIkhFWaxjMAy7EOwvdqtepAbnTeIiB7gf
-         f3Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738934904; x=1739539704;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ljes7wHzysMxiQ2RSq6rzU3Ys17WdodOahX8+S3+D3w=;
-        b=uMHcAblKkFleZpMLZEwFBaHc+H3fF3mC5Ljfeu02gY5O1LeTOO55qNNpdVOV0pCaL/
-         iJ6VEvkkKRO2ei1K5EmatevYRLjUl4oiyj1JMZmexfDBbLBog5KQWJtN+Ao9j3TEcFOA
-         O/cVL3PyCCJMnxgqQwVZfXEuiBWW7Ok6q8S1JW4YCBI8iNa1YhJ4FIqw42dBkJN2b+W+
-         2Fx1Vwo+6mLO/u8lRz1TMrpSrDYiljk6a1zClU+j1VZJavCFrEITO7UwfpQ9w14EgYEg
-         aU2oZ00/Mia4tfbzuL7DE6qtTC3au5quCgj+VhXKKJ9VRqxJKn7FrCsLKwxrFG+15hP3
-         5Deg==
-X-Gm-Message-State: AOJu0YxjKJ1Cuk5oJgIrzO7J7c7+uOLdWW+rFkCgkHxyN7CJSaBAdVD0
-	E35p4T9w8KHu1XjbCZ2LHduJqbCumAoGQ8vbIbozxaADqV9xa0g5IY/mfqsN0U0=
-X-Gm-Gg: ASbGncu5aXSnZDIco7p0SlcjaZisdmjtQROTrzYfTrBRlipRI0UtXsfRk9mMN6FOKYR
-	tsNgFMSdNQoVhpOPZtANy7x2Z88Bs4POnXw66cvDaa0JQBVOMNBAwaAdUaqXQnAwC3RR67U0W9K
-	vyurSu/iRPvUYomUI04xqHZq3/yiZhOYgeg/4NRJoMVi0FKB7nue12+yT7HNHIyySoUag1GtuMz
-	HPagsTqADW2/MJV57GpmoGmL/SNvs/JKd/A6eUulSrXhmpv1qUpYpPawxeEheorbINpxWvNncm0
-	8CjIGvTFxLJytGk/M/S+6jy4H0GtjnM/qDuyNGR5saGzYvsARefvutQpNOH5vkwB9fjESs/FKpD
-	Y7iVM6O2OdZY=
-X-Google-Smtp-Source: AGHT+IGB4XJKYpEGae7tPR5GuQ2osyg0LoIfkHVlKh5g+8ClsDOeUgh83BithY47hmF8ctYqNIpOjw==
-X-Received: by 2002:a05:600c:4e55:b0:434:a7f1:6545 with SMTP id 5b1f17b1804b1-439249c384fmr25835735e9.27.1738934903804;
-        Fri, 07 Feb 2025 05:28:23 -0800 (PST)
-Received: from stroh80.lab.9e.network (ip-078-094-000-050.um19.pools.vodafone-ip.de. [78.94.0.50])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dc6b89ef5sm2641562f8f.31.2025.02.07.05.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 05:28:23 -0800 (PST)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	broonie@kernel.org,
-	conor@kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>
-Cc: linux-hwmon@vger.kernel.org,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARM: dts: aspeed: sbp1: Align regulator node with Infineon ir38060
-Date: Fri,  7 Feb 2025 18:58:04 +0530
-Message-ID: <20250207132806.3113268-2-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20250207132806.3113268-1-naresh.solanki@9elements.com>
-References: <20250207132806.3113268-1-naresh.solanki@9elements.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ltR/Bra9"
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id gPqWtL8WXFt3IgPqatESry; Fri, 07 Feb 2025 16:01:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1738940461;
+	bh=Pyha5odVGsX/CKqH1ZkXIQ53HwwjGzZ3ipFrj9lnhz4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=ltR/Bra9iY/vwRcNq/YBqz4kt3s9oCNpzfGigntH9sfQiTTrkWuSMYZeRdTVHAm9q
+	 ELN6QjvKXUDDagncZdtHNzfc4Dph6J9ZbNAMnJ2T8uTjBMkcQOy0w1CmQsZPJ0LpWT
+	 dOCxl+huYkYk1+Wj2h6oeNsysoenQmB6u8IMRd2y9Xmr3zkUCeN66z+Hha7pFLRs/W
+	 89ZI+zgAKMoUKsVRYls4qKSqE9WdR4rHvgwufNzfv2EPxKESy+aJXcg95jlM25oO+E
+	 8PurBrxhE+/r4TKOfBZKrvfxeXyUB4hsDku2l6X/asT6VfDK7fDLpwcmkDwpo0QgCf
+	 a+3PA3c1yBBLw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 07 Feb 2025 16:01:01 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+Date: Sat, 8 Feb 2025 00:00:43 +0900
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The PMBus driver expects a regulator node, which was missing in the
-board's device tree. This was corrected in the latest device binding
-update for ir38060.yaml.
+On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
+> On 07.02.2025 15:44:59, Ming Yu wrote:
 
-Update the board's DT binding accordingly to align with the fixed
-device binding and ensure proper regulator support.
+(...)
 
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
----
-Changes in V2:
-1. Update commit message
----
- .../boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts   | 124 +++++++++++-------
- 1 file changed, 80 insertions(+), 44 deletions(-)
+>> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+>> +					  struct net_device *ndev)
+>> +{
+>> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
+>> +
+>> +	if (can_dev_dropped_skb(ndev, skb))
+>> +		return NETDEV_TX_OK;
+>> +
+>> +	netif_stop_queue(ndev);
+>> +	can_put_echo_skb(skb, ndev, 0, 0);
+>> +	queue_work(priv->wq, &priv->tx_work);
 
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts
-index 8d98be3d5f2e..34f3d773a775 100644
---- a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts
-+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-sbp1.dts
-@@ -1838,13 +1838,17 @@ i2c@2 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			pvcore_nic2: ir38263-pvcore-nic2@40 {
-+			ir38263_pvcore_nic2: ir38263-pvcore-nic2@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "pvcore_nic2";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					pvcore_nic2: vout {
-+						regulator-name = "pvcore_nic2";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -1853,13 +1857,17 @@ i2c@3 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			pvcore_nic1: ir38263-pvcore-nic1@40 {
-+			ir38263_pvcore_nic1: ir38263-pvcore-nic1@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "pvcore_nic1";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					pvcore_nic1: vout {
-+						regulator-name = "pvcore_nic1";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -1874,13 +1882,17 @@ i2c@5 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			p3v3_nic: ir38263-p3v3-nic@40 {
-+			ir38263_p3v3_nic: ir38263-p3v3-nic@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "p3v3_nic";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					p3v3_nic: vout {
-+						regulator-name = "p3v3_nic";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -1889,13 +1901,17 @@ i2c@6 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			p1v2_nic: ir38263-p1v2-nic@40 {
-+			ir38263_p1v2_nic: ir38263-p1v2-nic@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "p1v2_nic";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					p1v2_nic: vout {
-+						regulator-name = "p1v2_nic";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -1904,13 +1920,17 @@ i2c@7 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			p1v8_nic: ir38263-p1v8-nic@40 {
-+			ir38263_p1v8_nic: ir38263-p1v8-nic@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "p1v8_nic";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					p1v8_nic: vout {
-+						regulator-name = "p1v8_nic";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 	};
-@@ -2070,13 +2090,17 @@ i2c@1 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			p1v05_pch_aux: ir38263-p1v05-pch-aux@40 {
-+			ir38263_p1v05_pch_aux: ir38263-p1v05-pch-aux@40 {
- 				compatible = "infineon,ir38263";
- 				reg = <0x40>;
- 
--				regulator-name = "p1v05_pch_aux";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					p1v05_pch_aux: vout {
-+						regulator-name = "p1v05_pch_aux";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -2085,13 +2109,17 @@ i2c@2 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			p1v8_pch_aux: ir38060-p1v8-pch-aux@40 {
-+			ir38060_p1v8_pch_aux: ir38060-p1v8-pch-aux@40 {
- 				compatible = "infineon,ir38060";
- 				reg = <0x40>;
- 
--				regulator-name = "p1v8_pch_aux";
--				regulator-enable-ramp-delay = <2000>;
--				vin-supply = <&p12v>;
-+				regulators {
-+					p1v8_pch_aux: vout {
-+						regulator-name = "p1v8_pch_aux";
-+						regulator-enable-ramp-delay = <2000>;
-+						vin-supply = <&p12v>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -3596,34 +3624,42 @@ i2c@1 {
- 		reg = <1>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--		p5v_aux: ir38263-p5v-aux@40 {
-+		ir38263_p5v_aux: ir38263-p5v-aux@40 {
- 			compatible = "infineon,ir38263";
- 			reg = <0x40>;
- 
--			regulator-name = "p5v_aux";
--			regulator-enable-ramp-delay = <2000>;
--			vin-supply = <&p12v>;
--			vbus-supply = <&p3v3_bmc_aux>;
--			regulator-always-on;
--			regulator-boot-on;
-+			regulators {
-+				p5v_aux: vout {
-+					regulator-name = "p5v_aux";
-+					regulator-enable-ramp-delay = <2000>;
-+					vin-supply = <&p12v>;
-+					vbus-supply = <&p3v3_bmc_aux>;
-+					regulator-always-on;
-+					regulator-boot-on;
-+				};
-+			};
- 		};
- 	};
- 	i2c@2 {
- 		reg = <2>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--		p3v3_aux: ir38263-p3v3-aux@40 {
-+		ir38263_p3v3_aux: ir38263-p3v3-aux@40 {
- 			compatible = "infineon,ir38263";
- 			reg = <0x40>;
- 
--			vin-supply = <&p12v>;
--			regulator-name = "p3v3_aux";
--			/*
--			 * 2msec for regulator + 18msec for board capacitance
--			 * Note: Every IC has a PTC which slowly charges the bypass
--			 * cap.
--			 */
--			regulator-enable-ramp-delay = <200000>;
-+			regulators {
-+				p3v3_aux: vout {
-+					regulator-name = "p3v3_aux";
-+					/*
-+					 * 2msec for regulator + 18msec for board capacitance
-+					 * Note: Every IC has a PTC which slowly charges the bypass
-+					 * cap.
-+					 */
-+					vin-supply = <&p12v>;
-+					regulator-enable-ramp-delay = <200000>;
-+				};
-+			};
- 		};
- 	};
- 	i2c@3 {
--- 
-2.42.0
+What is the reason to use a work queue here? xmit() is not a hard IRQ.
+Also, the other USB CAN devices just directly send the USB message in
+their xmit() without the need to rely on such worker.
+
+Sorry if this was discussed in the past, I can not remember if this
+question has already been raised.
+
+>> +	return NETDEV_TX_OK;
+>> +}
+
+(...)
+
+Yours sincerely,
+Vincent Mailhol
 
