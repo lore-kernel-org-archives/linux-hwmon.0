@@ -1,98 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7787F2405EA;
-	Fri,  7 Feb 2025 15:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB84223C8AF
+	for <linux-hwmon@vger.kernel.org>; Fri,  7 Feb 2025 15:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738941700; cv=none; b=sVNubkTXeIeMU5uE3mdhDl8E1xQAXHKSKJrNmFKjh93PoW5GkVGtwUpXyiHSNNDseUBjsWFriD+MEDgr6Lp6Dm8yyIP3apo/p6Vn1CIlggfS5h0kC4ejLcICWo+MZbYsEpdP2EFmSa12A2RfQajhP/kB7ZBgPrFvXS22pq0dm/w=
+	t=1738943508; cv=none; b=o9P5+bMiwJ/ujgJStdpqLI281I9o2ZQPrygN0iJxOOdqwnBNE4Uauhht6cJMCeuLiWlPs+w3tZ++8Xndyw0pd8lHFPyR2JfOZuwIs9zeDgUMl2yCIuJ0aerNPNp9iK0G5M1CdYT+aP4IYgoPMIBkq06STa+k1oh79gN6PgmROG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738941700; c=relaxed/simple;
-	bh=xsDB1Z4itK0LFAhRduY8snfsKbsHRyDF/OxtzpTJ1BY=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=rUzUiEnk6cjIwGQQx30lKXNsL/WRCLBUuDYw7XxSC1Xi4ePs84OBjpPgzJ/zcVYZWM65hYSh7MQYOSSIL7qmkxeWnKEvZwGIf8bZu2Z+BpakohKbzRMcHJcx+gn4R7jb/5qAC421M8A2fU1bAWLl1IyB3clCTZS2SI4XsWCpO8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwexZnac; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwexZnac"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DF0C4CEDF;
-	Fri,  7 Feb 2025 15:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738941700;
-	bh=xsDB1Z4itK0LFAhRduY8snfsKbsHRyDF/OxtzpTJ1BY=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=IwexZnacYHMUj5iRV6m8qHHtmBxBuefVLeEAXhdM5gdv7Obg1TBGo2wE1UnOAvFXm
-	 UV7/2q5XOW3cMgLFOZBbrMY5KBa4YIUaiM+YMLBvUSbX0SKWZCdE0GxiPmkLMLkdvW
-	 uS9FhYjmhQ4mAhABePNn2UQFouk1PnQXJOIkiH+5nc1dxyVFa876NYwh2IEReFjakF
-	 I4xYIl9H9C/4qZOIZKjKy7GgcNvOui6y9aw0Axx1//VtXxadEoVT0MlydyLnyhkSCo
-	 kKr8AqXkAju6vozcbXfPnYPwXx8YYoOjqJawV+p9/zR/jq5O3lMs4PP/sftN24DwCh
-	 v0JS0ixJ0Sl7g==
-Date: Fri, 07 Feb 2025 09:21:38 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1738943508; c=relaxed/simple;
+	bh=FYBzQWrbc5BZbG36FmSxvb/yRkK3m4dSs/j7WyRK1LM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iLhS8pr5ts3Kt6uQYgh1U9dfNPqe3xJdG7TfBIeibjRPfrGsezEhaxl9h3jcYmDCXnOCEVMF3FtN3CAZglhG5SR6keRQguzdiMZjZecZ1uOxByflsEQHb3zRG/VdIQQFUhx5MrfEmhlNvKbHOP83oeq1FB91qwWcR3xCMNHujV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgQdX-00035S-1R; Fri, 07 Feb 2025 16:51:23 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgQdU-003zzi-0y;
+	Fri, 07 Feb 2025 16:51:20 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id DAB1B3BC4F8;
+	Fri, 07 Feb 2025 15:51:19 +0000 (UTC)
+Date: Fri, 7 Feb 2025 16:51:19 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250207-fair-active-robin-30025a-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+ <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Jean Delvare <jdelvare@suse.com>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, devicetree@vger.kernel.org, 
- Patrick Rudolph <patrick.rudolph@9elements.com>, 
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, conor@kernel.org, 
- broonie@kernel.org, Liam Girdwood <lgirdwood@gmail.com>, 
- Naresh Solanki <Naresh.Solanki@9elements.com>, 
- Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-To: Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20250207132806.3113268-1-naresh.solanki@9elements.com>
-References: <20250207132806.3113268-1-naresh.solanki@9elements.com>
-Message-Id: <173894151141.331439.9793996837825195841.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ir38060: Move & update dt
- binding
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="76ydemzthxfsfgeu"
+Content-Disposition: inline
+In-Reply-To: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
 
-On Fri, 07 Feb 2025 18:58:03 +0530, Naresh Solanki wrote:
-> Move dt binding under hwmon/pmbus & align accordingly.
-> 
-> Previously the DT binding was invalid & wouldn't work with pmbus driver.
-> Pmbus driver expects a regulator node & hence added the same.
-> 
-> Fixes: 1d333cd641fb ("ARM: dts: aspeed: sbp1: IBM sbp1 BMC board")
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> ---
-> Changes in V2:
-> 1. Update commit message
-> 2. Add Fixes tags
-> ---
->  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
->  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
->  2 files changed, 61 insertions(+), 45 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
->  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
-> 
+--76ydemzthxfsfgeu
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
+On 08.02.2025 00:00:43, Vincent Mailhol wrote:
+> On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
+> > On 07.02.2025 15:44:59, Ming Yu wrote:
+>=20
+> (...)
+>=20
+> >> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+> >> +					  struct net_device *ndev)
+> >> +{
+> >> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> >> +
+> >> +	if (can_dev_dropped_skb(ndev, skb))
+> >> +		return NETDEV_TX_OK;
+> >> +
+> >> +	netif_stop_queue(ndev);
+> >> +	can_put_echo_skb(skb, ndev, 0, 0);
+> >> +	queue_work(priv->wq, &priv->tx_work);
+>=20
+> What is the reason to use a work queue here? xmit() is not a hard IRQ.
+> Also, the other USB CAN devices just directly send the USB message in
+> their xmit() without the need to rely on such worker.
+>=20
+> Sorry if this was discussed in the past, I can not remember if this
+> question has already been raised.
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+AFAICS xmit uses nct6694_write_msg(), which uses several usb_bulk_msg(),
+that can only be used from task context.
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+You can build a chain of usb_fill_bulk_urb(), usb_submit_urb(),
+callbacks instead, but that's hard to read compared to blocking
+usb_bulk_msg()s.
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+Marc
 
-  pip3 install dtschema --upgrade
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--76ydemzthxfsfgeu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/aspeed/' for 20250207132806.3113268-1-naresh.solanki@9elements.com:
+-----BEGIN PGP SIGNATURE-----
 
-arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dtb: ethernet-phy@0: 'reg' is a required property
-	from schema $id: http://devicetree.org/schemas/net/ethernet-phy.yaml#
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmemK/QACgkQDHRl3/mQ
+kZwmeQf+K8g+Oy8vCIUI/Kice58VwDSu6EFa30wRLM0oqjCgE4LqXapNiSB1F8iJ
+sDm2IyQER6qNYSLqzeZWG/bMyJwfHNpKjfXN3RImtyTXuN4nlvraaQabsV1bEY3y
+rNGHojpZqxDXCb3Q9B5GLjNhdZldM4T+Xrs8gG+7Zv4jBxjNxn8J7Xz+1BpX3UqZ
+ql8gENFEAe9nb6O5ODNVcGTnU+SzGWvy1VsEz23VcvXWEKbyyObvG+e0yUoYEi4y
+s2MbMh1xxkTliIXn7GvqIdMj6/RSPo7xLoShAalHzurN1mey2u5PZfQapk718BEx
+Wj/o/s1vTiX+qqRfcgpDz3UvoRZEtQ==
+=0uK9
+-----END PGP SIGNATURE-----
 
-
-
-
-
+--76ydemzthxfsfgeu--
