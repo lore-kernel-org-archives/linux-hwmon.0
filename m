@@ -1,221 +1,155 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E654224339B
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Feb 2025 01:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B97243392;
+	Sun,  9 Feb 2025 12:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739064988; cv=none; b=W7XBy7gwsUxNs86cP2Osq1inNVnDkbZybphX5Y/yWyrJD/U29pK2zxjbFnNLQKSyd2hDoNriSiAb605TqccyZ/9iU28cSgN5ebxF35wD8ieEvobUBoAX2p6Jytn5kQ6ph3/uVrV/zavVWyUm8UEMnRTBP19iQFLp82Qc+ojLQCI=
+	t=1739102484; cv=none; b=Vd+I/DaB77gUdeXOCQIRwsW/WCdFTpipOt3Ro5pjIj9yI/V6NQ9x7sD/Nk3cggtwHO73DUdnsndmo/7Ext4+dTVh2uiDY4uRCNuYrWpmLJ0HIG5j36yyvTwsfGO/z7F5FEnoZtmEF8SkHYg6Ki05GNruiw4FQGnskIQ3INM3Y1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739064988; c=relaxed/simple;
-	bh=xGX32KSxe/YZVKc3xxtf3Vbpl28poz8OIlnGaCr8jRc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MHLgNyouMeiIp2iGg6bAKwXRSx63EeHm4cvujPx7Ky0i1IlTRpcaLxeDCPgzIKkZp4qmNPnTsherCdNJt6wsEelTKLA5ecaddTzAcxvTXU4AQuNmZZUoteBjfjLNLk/GHEuOlu6im1djCyZA9XsDxurQ/U0MlekXsBUIxQQSsYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cy/zgz7H; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739102484; c=relaxed/simple;
+	bh=YOlF0kfEhFPlEFqyngV+aVrsjWHQHhzJ3hb7R1wmWaY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q6ma026IbOIHRpNzMhoejd71U2UQ4a7ihrBSnY+c381EMt99KpOU39diGM8hMd0wgbYfXRB9YMAFoZ/FcWXj8ZRmEfIMEArQL0pV3rH/bwfgsi8gZYAXn24J2ooIHu7S7Mhztn4k/SkBoWiksW4uUz+eg4f70CUziM8r5wpXoRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DI0fLVPn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cy/zgz7H"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21f6f18b474so8836095ad.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 08 Feb 2025 17:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739064985; x=1739669785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BMt4dHus8/ZF6JFhblunsnj5FOoFtOhSksCLiTPiumk=;
-        b=cy/zgz7HnNbP0167j6HSxlgQSF3xxU4dlQzQ7cU8GIGG6ohhB+j4rF2xHHLxUNCA0k
-         MJrkA7Xw2LggLfBk9tu6482eaLpXQaqA/MPNn33jexShLHpWnow2Mv7lhIemgsGDsSs4
-         7RH8bnVsEoqq9a2Jol5V7ecc6cfkI5xtlGep5ojn+D1dCr/ocaqu9UOjnC3vfK0mOfYg
-         J0yDaFWGK02Uu8cTheSGGvlF6IGcRkJo0BybOHbYKnK34kONXsajF9fE9Xe8PkAJXGdb
-         +OipJEJzmg2N65u5C0b7U/NBcoSlNkCjkFrhQf3SeG39sTX7PHH2eR3V0eng4ktVRMjf
-         Wlyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739064985; x=1739669785;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BMt4dHus8/ZF6JFhblunsnj5FOoFtOhSksCLiTPiumk=;
-        b=gV4tiMlcV+dlVi01OEhuhdNGOS17qkTrs/9yFa0kN8NUp2DBBhXv56XA5OIDay7gc7
-         AUSvwQraSe4jKBKH1u3ZBBVDwm+EYjETRSgYEDTOg3hygZoHQv2gFVHf8cLJTvnuLxEL
-         +c+mwQVopy5YAEsBZWJ8sjTHujBUBRTjXTEVy9wxNQaH/OJCGyGOfo5GZrKBDl3gAQpK
-         vdbuX7mqowdf2dSjjjzufw6NyZ0E0kkzivfAdbUQiAe90pcxaEh1R5xiOy2d9DEZtotn
-         y6S9ZZpj6geXdMz3OTWiR1wuWlv1CIOvHrV4fgCUjBTeCkEYMy29s5NlAUbF7+Q50FKV
-         1BIQ==
-X-Gm-Message-State: AOJu0Yyg6wPhulu38/MJ9OWnLu+Zi9JhMurVfY0O+dlvUHtfdB3HCs+j
-	MT8y6IGAc9N1zyhBh5EfKK0aKc+Q636OKcGg8e8ZJLMW/BFVMB3kveXO4g==
-X-Gm-Gg: ASbGncsD9CnRSQjdGY7DFOAvjdwi/H+yIAqC2prOTYptTX9SXsUzlE1RE1EPakBlI5G
-	d6nXQBDcn4N/4CauOJoMM1Np5Pe1Ycdp6+pHxUq+eRyYq+CUPEhZGtIqNXQwqAuXc4rAPeUw6bd
-	Nnl19jFEf/BBke6fj4wqwmdG1ecy+PsfHWsHmrSbZ0z/UX+HeS+Jcnc0JQGOwFBdMZv62o0YwmA
-	pjAU+gCGigMRwMQd0G5oy8Pu2RGcVdqnMKe8tKMPhNXEJvwvNWNzRHD5aQd5J56T6oK0PRFgqbO
-	uxrBBXRCbfnTx5gETc9vwBMREiQl
-X-Google-Smtp-Source: AGHT+IHr716Y3tQ/3A7WZfYCdmnZnPSNHHsAv8UnTJLvP2I1KxPJOwUszi7lzUMCrrXJNRht/qfRgw==
-X-Received: by 2002:a17:902:f60d:b0:21a:8dec:e59f with SMTP id d9443c01a7336-21f4e7637d1mr118651305ad.39.1739064985136;
-        Sat, 08 Feb 2025 17:36:25 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fa09a1848asm5902372a91.12.2025.02.08.17.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Feb 2025 17:36:24 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 6/8] hwmon: (pmbus/core) Optimize debugfs block data attribute initialization
-Date: Sat,  8 Feb 2025 17:26:15 -0800
-Message-ID: <20250209012617.944499-7-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250209012617.944499-1-linux@roeck-us.net>
-References: <20250209012617.944499-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DI0fLVPn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE53C4CEE2;
+	Sun,  9 Feb 2025 12:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739102484;
+	bh=YOlF0kfEhFPlEFqyngV+aVrsjWHQHhzJ3hb7R1wmWaY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DI0fLVPnHzCLzO/qyU7oeSgqlxDU/UEQdIgw+LaJ3hX/9EKWQPWn9d2gmA+dsV74h
+	 JAglg5KC/qvKWcAskeAB6dGq8y6qZjxVPVPIBjdqL1rZzvxw2w304+5MSSoVoHeLhK
+	 SYjO/5Z7zyvQMCVfYKW6ae51S0M1oB9yfydfXHn1ebhF2GjV5SwRRvzoNHplPNFNBu
+	 zxxUSpNpmiFut6/uheoxm8HzhSX47Bgvn7qPSzmItuc5xPwbrbAkoY6Xv7DD5JBofE
+	 WzOi5zk2dP68aOEAQXTy6u05EUYmFnv3D31uAc1AfulbXHrHmb4FD5PTC2/BEzjegA
+	 V0tCGga0bNHQg==
+Message-ID: <5d2b71a9-a62b-418c-91ae-fa2a195aa27c@kernel.org>
+Date: Sun, 9 Feb 2025 13:01:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add lt3074
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
+ <20250124-upstream-lt3074-v1-1-7603f346433e@analog.com>
+ <20250127-outgoing-ibis-of-respect-028c50@krzk-bin>
+ <PH0PR03MB6938B71327DAADC17492A5538EF62@PH0PR03MB6938.namprd03.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <PH0PR03MB6938B71327DAADC17492A5538EF62@PH0PR03MB6938.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Define debugfs attributes which need block data access in a data
-structure and loop through it instead of creating debugfs files
-one by one. This reduces code size and simplifies adding additional
-attributes if needed.
+On 06/02/2025 10:05, Encarnacion, Cedric justine wrote:
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzk@kernel.org>
+>> Sent: Monday, January 27, 2025 3:52 PM
+>> To: Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>
+>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
+>> Conor Dooley <conor+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>;
+>> Guenter Roeck <linux@roeck-us.net>; Jonathan Corbet <corbet@lwn.net>;
+>> Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>;
+>> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>> hwmon@vger.kernel.org; linux-doc@vger.kernel.org; linux-i2c@vger.kernel.org
+>> Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add lt3074
+>>
+>> [External]
+>>
+>> On Fri, Jan 24, 2025 at 11:39:06PM +0800, Cedric Encarnacion wrote:
+>>> Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
+>>> Regulator.
+>>
+>> Regulator? Then why is it trivial? No enable-gpios? No I2C interface?
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> I based this driver primarily on the LT7182S dual-channel silent switcher
+> regulator. 
 
-While this is currently only used for manufacturer specific attributes,
-the access code is generic and also works for other block attributes,
-so rename operation functions from _mfg to _block.
 
-While at it, rename the "revison" file to "pmbus_revision" to make its
-meaning more obvious and to create a clear distinction against the
-"mfg_revision" file.
+I do not understand why the base of driver matters here? If it was based
+on LTFOOBARGROUNDHOG1 would it change something? I know neither LT7182S
+nor the LTFOOBARGROUNDHOG1. And driver matters here even less - bindings
+are about hardware, not given implementation in OS.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/pmbus_core.c | 85 +++++++++++---------------------
- 1 file changed, 29 insertions(+), 56 deletions(-)
+> The LT3074 is a single-channel device with basic enable and
+> power-good GPIOs, fewer registers, and fewer functionalities than the
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 3085afc9c1ed..91dfb9ec9223 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3461,8 +3461,8 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
- DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
- 			 NULL, "0x%04llx\n");
- 
--static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
--				      size_t count, loff_t *ppos)
-+static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
-+					size_t count, loff_t *ppos)
- {
- 	int rc;
- 	struct pmbus_debugfs_entry *entry = file->private_data;
-@@ -3487,9 +3487,9 @@ static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
- 	return simple_read_from_buffer(buf, count, ppos, data, rc);
- }
- 
--static const struct file_operations pmbus_debugfs_ops_mfr = {
-+static const struct file_operations pmbus_debugfs_block_ops = {
- 	.llseek = noop_llseek,
--	.read = pmbus_debugfs_mfr_read,
-+	.read = pmbus_debugfs_block_read,
- 	.write = NULL,
- 	.open = simple_open,
- };
-@@ -3499,6 +3499,20 @@ static void pmbus_remove_symlink(void *symlink)
- 	debugfs_remove(symlink);
- }
- 
-+struct pmbus_debugfs_data {
-+	u8 reg;
-+	const char *name;
-+};
-+
-+static const struct pmbus_debugfs_data pmbus_debugfs_block_data[] = {
-+	{ .reg = PMBUS_MFR_ID, .name = "mfr_id" },
-+	{ .reg = PMBUS_MFR_MODEL, .name = "mfr_model" },
-+	{ .reg = PMBUS_MFR_REVISION, .name = "mfr_revision" },
-+	{ .reg = PMBUS_MFR_LOCATION, .name = "mfr_location" },
-+	{ .reg = PMBUS_MFR_DATE, .name = "mfr_date" },
-+	{ .reg = PMBUS_MFR_SERIAL, .name = "mfr_serial" },
-+};
-+
- static void pmbus_init_debugfs(struct i2c_client *client,
- 			       struct pmbus_data *data)
- {
-@@ -3561,63 +3575,22 @@ static void pmbus_init_debugfs(struct i2c_client *client,
- 		entries[idx].client = client;
- 		entries[idx].page = 0;
- 		entries[idx].reg = PMBUS_REVISION;
--		debugfs_create_file("revision", 0444, debugfs,
-+		debugfs_create_file("pmbus_revision", 0444, debugfs,
- 				    &entries[idx++],
- 				    &pmbus_debugfs_ops);
- 	}
- 
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_ID)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_ID;
--		debugfs_create_file("mfr_id", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
--	}
-+	for (i = 0; i < ARRAY_SIZE(pmbus_debugfs_block_data); i++) {
-+		const struct pmbus_debugfs_data *d = &pmbus_debugfs_block_data[i];
- 
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_MODEL)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_MODEL;
--		debugfs_create_file("mfr_model", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
--	}
--
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_REVISION)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_REVISION;
--		debugfs_create_file("mfr_revision", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
--	}
--
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_LOCATION)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_LOCATION;
--		debugfs_create_file("mfr_location", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
--	}
--
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_DATE)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_DATE;
--		debugfs_create_file("mfr_date", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
--	}
--
--	if (pmbus_check_block_register(client, 0, PMBUS_MFR_SERIAL)) {
--		entries[idx].client = client;
--		entries[idx].page = 0;
--		entries[idx].reg = PMBUS_MFR_SERIAL;
--		debugfs_create_file("mfr_serial", 0444, debugfs,
--				    &entries[idx++],
--				    &pmbus_debugfs_ops_mfr);
-+		if (pmbus_check_block_register(client, 0, d->reg)) {
-+			entries[idx].client = client;
-+			entries[idx].page = 0;
-+			entries[idx].reg = d->reg;
-+			debugfs_create_file(d->name, 0444, debugfs,
-+					    &entries[idx++],
-+					    &pmbus_debugfs_block_ops);
-+		}
- 	}
- 
- 	/* Add page specific entries */
--- 
-2.45.2
+So it has GPIOs? And by GPIOs you mean what the SoC/CPU, thus the
+operating system, sees as GPIOs or something else?
 
+> LT7182S. Like other PMBus drivers, its GPIOs are not exposed.
+> 
+> Here are other PMBus regulators/power modules found in trivial-devices
+> I also used as reference:
+> 
+> - infineon,irps5401
+> - delta,q54sj108a2
+
+
+I don't know these devices so still no clue. Please rather explain in
+the terms of the hardware, e.g. what this device has or has not. See
+also regulator bindings.
+
+Best regards,
+Krzysztof
