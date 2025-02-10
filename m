@@ -1,66 +1,66 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B357244195;
-	Mon, 10 Feb 2025 16:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5ED2580E6;
+	Mon, 10 Feb 2025 16:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739203823; cv=none; b=gYtv5hmZsM4+2bJt2UHGatvufJCFA+Ibii/Pk0LJ90JJYcDG14ZlXzkbG1WbrtF4vfoqEb+ySw3qJ4+m4KygerziH2RlWcdusd1U1YoR987xv3XXLYulKi09Eg5UOsLWzW3zSgnNwnXw72OiirZqwDXEvluOfRq2gUYLDGlHLmo=
+	t=1739204125; cv=none; b=ao/FyNnugvawrOPOgf3fMhOdysrKNOVvbza1JyEcRokq/FPyyqyPObiy49gn3lzedAVJ0xk/MbsMHl8TWTVLPytQUz5tXuU3BLnIxNSJE2PB9OcwVoUyP6TlKO0kdP1B8TRntRnm4/9gULYyQ43DCawebpS+01JW60XWZXTyv7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739203823; c=relaxed/simple;
-	bh=kQSx4IU/m6R9MPvDY5/22wbi1KGghWKBeHhjKPuP/Sw=;
+	s=arc-20240116; t=1739204125; c=relaxed/simple;
+	bh=69oPoGXGO1/I3dl5SQjJ2SX+Qm/azEY2yPtT20J8Q5U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YYPoY6RwIV/d+f64OVBS9a/sovC3OPkZpiDeDTN3I6b2xYm2G7n++drLQDDAbp83TINwsidx/TBIsG7sHMG6EahLLOMxXSP0b0sZdNC9UGXyyCOjiqawWMyp1uJimw//mPprMmbYku/CC0hIM6ZVY5Zy7yCrzWKFeoUfv0eSgfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3JYh9j1; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=Aqmq93wE8fE94I3InnYvK53lcteTlhg4CpWrct6AzkLSOlGf1xl3NxzQM37JGGLGliK4m8JL1H0hkeMOJGEcbEKH/RKamTY0r+KdIhGF245YL6zmAg/TveJaf9kL36YWzQ7dY5k8woiHYok+L8RddZXYORXD2zNq3OrX8otGVfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jSU+FPc+; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3JYh9j1"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21f7f1e1194so42457005ad.2;
-        Mon, 10 Feb 2025 08:10:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jSU+FPc+"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f53ad05a0so51326565ad.3;
+        Mon, 10 Feb 2025 08:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739203821; x=1739808621; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739204123; x=1739808923; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+TJgYMmTYcZw8reK5LOjccSW5UTYnPTpO1MNsbf/OOI=;
-        b=V3JYh9j1FT7usZimTDMOjw9MkWGFyyh1VEQDiRbsFusiHPwsosgo/663GvbnXbewI8
-         d5GqDSpD4wg+N6rWt37PqV1t3+JdlHp36rZ5skYmCvdxWX/CQV3YC9O3gdL+1nyurZuh
-         UJ6pGbX/VTGgUWbL/xow3hVCrTfW9M8ogGlvmsqtjPt4PCvzxX11BZu+iDQpmImaXWW/
-         N3aF0CbPcC5iZ/MlmYZ4p5Z3lyJFc5pRt8fZMrbnH48tTW9OfIs0iVyknyvlEBozzi3U
-         FIwvJ1YGoQBCc0hokkY5+Dg87+6xjAeqi/oooA0TGx+Jl8BAq55+2YP5UwG5/qASlt8T
-         44NQ==
+        bh=exHh3iJCugwqvJ/AUZ9T75qWIXB0k7aBw1De0F+zoHg=;
+        b=jSU+FPc+QRyG/AOO6+qJmEn+fDaL4JDLVxIIe67aHnaLyJlcW1EGs9kQIXn6lzQvK4
+         Dn1boQNfOQ2pIFLG/9aSlXr0Iqd6eBND95ak2GrWaPHDILtTvx3xDt9Af3ZzpASJB0US
+         yiF9Jia1fSDGFV74EoteZslWNprzhV+3UDH+RbQ1NBevIRAWEFbGEFGViqUlko+m2mF0
+         P+xdR7RBvcXQTNYd8UFFVSEUs/qcNNsit+Kw8MsOWozurZ0Fka/UYABkfofTu6sR4rDi
+         N7ou5i+LHRmeE5bkb/jnt1N7MVNaaVcVC9VqEXqQyPeVgmdVkj/Bn+Gfi/JSt0FbNQTD
+         q1fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739203821; x=1739808621;
+        d=1e100.net; s=20230601; t=1739204123; x=1739808923;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+TJgYMmTYcZw8reK5LOjccSW5UTYnPTpO1MNsbf/OOI=;
-        b=aDVWZKXjtU/WvA6d0bFx2LNXA5kIrhHLDyLl2k/c5fcWwwB6aaSpDcwoi80nc490hO
-         ysAaITgN07Io9emQEGTLctqlZcKdVikTks5CIpxybtLyCoZobbpbGZw+xgxs+b0e0ZGo
-         ThcsRdndW283D91hFLezQdtQ9ERw6l57aHD4/s4k955DlQ+OOsSxN3hwfQG2We/cj+9/
-         ptO7YwWpkpQ1J4FJCsrFeiQ2yC9kc3dmG336BYXcDPCKvXSWNZUsNgY8j7SrEEdXrDPt
-         914xKXLQAGuS4qgFxV9Ts2R7Usae3tgdbTW36TxGPAx1A6GLOouJrhhKlenixW07+uY/
-         ZNjw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHaC0hzMpHpTHc8K6kBl3XTZN+8Fd5ydn6kXQ56uiFmP0VOFpu67mg12+sfXgv6BlL9UP0blW+U9CjllpD@vger.kernel.org, AJvYcCWVg7DakAnuEubJS/wE/Z+Bogd4l7U3uf4oGc4BIP744/M3tHWiyvNCS1EJqiUpt/8/3BIEvvj0rs/v/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbO3cJjQ44ganDS7nsnk7Y6fA3v2bN3SGD/NSmr6o7AwE72kqZ
-	Q3jC/upI0w0l8Dq5H0LcpLo7TjTKSUtwr0b90LaXAv0l4CaFuz6L
-X-Gm-Gg: ASbGnctx2JSM72Ogi8qx4SNZQWAzy1os9KzM8UALYgIm+SmJHb1yNvhxPtxozKqdNfA
-	kfp7vtrbuMAw6rALQyEjSLy25dWM3VTn54xy9tB9A8P1J80SI6a/vs/h1TMRqmxpS5mQBpB6Foi
-	zmTsqTdTpLNhNvIn6kl23G2jpRJauV19WczD4d5xSa53QYLDLW7dgpXDQz6khVwxQe89Yket+sV
-	nCwJEEtj05GbZYfNvvAOfgSBxJTEUmuzlkPGbpBnK70Fzzsaw5nz2b98KmqfoExbUKKNRhCEuRX
-	lJNVRluRpp/xGMzSci0/ApjNfqaMpmyl/1G68o2pN56ejHeU3LlYvvUrE6e4xlOu
-X-Google-Smtp-Source: AGHT+IHcwFTzmEqZWtoeh7mWEArFs4yJg+WNPnZYC2w6JCoYCAfFh+25IR89qFyLWfT2M7UzYZ+kfw==
-X-Received: by 2002:a17:902:e802:b0:21f:35fd:1b6c with SMTP id d9443c01a7336-21f4e76372cmr225654315ad.45.1739203821295;
-        Mon, 10 Feb 2025 08:10:21 -0800 (PST)
+        bh=exHh3iJCugwqvJ/AUZ9T75qWIXB0k7aBw1De0F+zoHg=;
+        b=qwAgtrVJkgHN2dL2VDx0SRIhERSGRlTesZ4SngxDMlez9S0QW6rF+GW+a2qxCL66uS
+         KJiARYqUmWrS2fPPk5bGez6G5vfvVQrz0GSu1qXluor5wWO+gq1hCkstps/9+AM2fIpK
+         axGOlfAQxDrVGSA/6KfwPU4xxlP59HwOh4Hj/B4Z8ldKhFrj8DVgFYBu9EWsgvHH1udo
+         e31A72QrY9mA/dSBXwBnbCbRrK7tDGXrHwJCSm63swJA99g9LF9fuJWQEYYfXvEnbVus
+         xEHl3pD1X4T1mpB+sLp9xxrO1siUFDFZUxqzK47V3KHBw384yuvlKS4oNaASaacYijsV
+         uhtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdUr+Ba99hMsrranq0rMslnzH2XYy438ugxR0BgRkTMnO9Bc6XjK+9QDIZZFL2sY69X7AuR0iNdBTa2w==@vger.kernel.org, AJvYcCXMXLiAX+o9NQa6CdvErX2yornE7LodsViX51LZ8ulJpZS3sNf+aoObUVh5G6ECSJy0uvbnVEHCCOyzzEXh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg/l9DrjFQ0t2gzONKuh0o1ogY864fJpq6Kfl3pcsr/rJoM8AT
+	bA5Pay8t7rJPesvfdJP601z5rt2xiVdXW39m0eRQWrr7vRsuqmJT
+X-Gm-Gg: ASbGncvJ/il0Eu8k/GbU9Ccx11voyEPC0t3mOZZzs4zg0VEfizeGbSMUsj9eCNzKRmw
+	sAWZHubGrpZmZ2pHO9wLCUQ6wu+K9w0N9DhnpeL4hUl87wYKCBU2VzCC7l9NlEXYRBMH+XMhvTg
+	vkupgHptP4WQSlFIkZX9xvdaqEk0NTifh0Gj/XZ/Lm/szEhEntHBXM+jOwykqKM1wL54skeZnN3
+	o42qbK8FMDWGq0BXYGpe3y47E+pgwdTivLHr+pw/d042EOCnCCrJwmPmO4mg8FF64fqlIFA3wTl
+	3LY9f3pcyz8s5VG9c54MC17lYEeUVN1gRi+TAplrkRkdWTptFMX3uQwXepfL5urk
+X-Google-Smtp-Source: AGHT+IGrIpnmD1rjfVOcExkOXderHwH2tdrRDwDRFsgkMZfPT07QF2EVimiGqaQrOKeGpN+gjat1jQ==
+X-Received: by 2002:a05:6a00:1884:b0:730:927c:d451 with SMTP id d2e1a72fcca58-73217f8cb8amr249995b3a.20.1739204122938;
+        Mon, 10 Feb 2025 08:15:22 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653c997sm79890705ad.78.2025.02.10.08.10.20
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73074779cfdsm4607880b3a.176.2025.02.10.08.15.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Feb 2025 08:10:20 -0800 (PST)
+        Mon, 10 Feb 2025 08:15:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <637e2e72-2799-4914-aa96-9987edc1bfa4@roeck-us.net>
-Date: Mon, 10 Feb 2025 08:10:01 -0800
+Message-ID: <a7836a1d-4462-4f49-abd5-16aa22a19160@roeck-us.net>
+Date: Mon, 10 Feb 2025 08:15:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,14 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hwmon: emc2305: Update cooling device registration to
- include device node
+Subject: Re: [PATCH 2/2] hwmon: emc2305: Add device tree support for polarity
+ and pwm output
 To: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  viorel.suman@nxp.com
 Cc: Florin Leotescu <florin.leotescu@nxp.com>
 References: <20250210073158.336522-1-florin.leotescu@oss.nxp.com>
- <20250210073158.336522-2-florin.leotescu@oss.nxp.com>
+ <20250210073158.336522-3-florin.leotescu@oss.nxp.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,47 +121,21 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250210073158.336522-2-florin.leotescu@oss.nxp.com>
+In-Reply-To: <20250210073158.336522-3-florin.leotescu@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 2/9/25 23:31, florin.leotescu@oss.nxp.com wrote:
 > From: Florin Leotescu <florin.leotescu@nxp.com>
 > 
-> This patch updates the EMC2305 hwmon driver to register the thermal
-> cooling device with Device Tree (DTS) node. This change allows
-> cooling device to be configured based on the properties defined
-> in the Device Tree.
+> The patch enhances emc2305 driver by adding support for configuring
+> pwm output and polarity via Device Tree properties.
 > 
 > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
-> ---
->   drivers/hwmon/emc2305.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-> index 4d39fbd83769..18e765902d32 100644
-> --- a/drivers/hwmon/emc2305.c
-> +++ b/drivers/hwmon/emc2305.c
-> @@ -293,8 +293,9 @@ static int emc2305_set_single_tz(struct device *dev, int idx)
->   	pwm = data->pwm_min[cdev_idx];
->   
->   	data->cdev_data[cdev_idx].cdev =
-> -		thermal_cooling_device_register(emc2305_fan_name[idx], data,
-> -						&emc2305_cooling_ops);
-> +		devm_thermal_of_cooling_device_register(dev, dev->of_node,
-> +							emc2305_fan_name[idx], data,
-> +							&emc2305_cooling_ops);
 
-
-The use of a devm_ function means that
-
-         for (i = 0; i < EMC2305_PWM_MAX; i++)
-                 if (data->cdev_data[i].cdev)
-                         thermal_cooling_device_unregister(data->cdev_data[i].cdev);
-
-and thus each call to emc2305_unset_tz() will be fatal after this change.
-I don't mind the change itself, but emc2305_unset_tz() and all calls to it
-will have to be removed as well.
+You can not just add support for devictree attributes to a driver
+without documenting it in a devicetree .yaml file and getting it approved
+by devicetree maintainers.
 
 Guenter
 
