@@ -1,33 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B97243392;
-	Sun,  9 Feb 2025 12:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA89A36C;
+	Mon, 10 Feb 2025 00:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739102484; cv=none; b=Vd+I/DaB77gUdeXOCQIRwsW/WCdFTpipOt3Ro5pjIj9yI/V6NQ9x7sD/Nk3cggtwHO73DUdnsndmo/7Ext4+dTVh2uiDY4uRCNuYrWpmLJ0HIG5j36yyvTwsfGO/z7F5FEnoZtmEF8SkHYg6Ki05GNruiw4FQGnskIQ3INM3Y1s=
+	t=1739147489; cv=none; b=DBxvCI5SzaO47eYs3BHZvrUj2+fiPqDBqzCus+ZAF52ro9UjOjzZv3VW75WKVGFwWWhdHhIJMaQdUBQUsyFs0ce+dOJrT2Bsil4mvIViji82FEmgmIb2YZkh21/WZxRZ9ZC1JQtBgixfo4l4ipQAm3i9Y/PEMy2dvtiPTVjSCzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739102484; c=relaxed/simple;
-	bh=YOlF0kfEhFPlEFqyngV+aVrsjWHQHhzJ3hb7R1wmWaY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q6ma026IbOIHRpNzMhoejd71U2UQ4a7ihrBSnY+c381EMt99KpOU39diGM8hMd0wgbYfXRB9YMAFoZ/FcWXj8ZRmEfIMEArQL0pV3rH/bwfgsi8gZYAXn24J2ooIHu7S7Mhztn4k/SkBoWiksW4uUz+eg4f70CUziM8r5wpXoRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DI0fLVPn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739147489; c=relaxed/simple;
+	bh=601x+SY++aJieuva0VRl0VoplR7wgszkWt++q96M3rM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GFd0i9IBvCk/nZw5HZATRERw4NkY8cElE4R3W27WVQJqWSVOziHeL4IAECfhn4mUcP5Hp+mtVAYk7cO/56M/m+h7BCVSy6/GJRCPS8Y8VkSPPdD+keTRSvRUNJ3bossDFjum2pVS//XRimAn/3Gi1ZfOnsBPoJwMS/tIHWGh6+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=CQHibEeO; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DI0fLVPn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE53C4CEE2;
-	Sun,  9 Feb 2025 12:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739102484;
-	bh=YOlF0kfEhFPlEFqyngV+aVrsjWHQHhzJ3hb7R1wmWaY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DI0fLVPnHzCLzO/qyU7oeSgqlxDU/UEQdIgw+LaJ3hX/9EKWQPWn9d2gmA+dsV74h
-	 JAglg5KC/qvKWcAskeAB6dGq8y6qZjxVPVPIBjdqL1rZzvxw2w304+5MSSoVoHeLhK
-	 SYjO/5Z7zyvQMCVfYKW6ae51S0M1oB9yfydfXHn1ebhF2GjV5SwRRvzoNHplPNFNBu
-	 zxxUSpNpmiFut6/uheoxm8HzhSX47Bgvn7qPSzmItuc5xPwbrbAkoY6Xv7DD5JBofE
-	 WzOi5zk2dP68aOEAQXTy6u05EUYmFnv3D31uAc1AfulbXHrHmb4FD5PTC2/BEzjegA
-	 V0tCGga0bNHQg==
-Message-ID: <5d2b71a9-a62b-418c-91ae-fa2a195aa27c@kernel.org>
-Date: Sun, 9 Feb 2025 13:01:18 +0100
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="CQHibEeO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1739147474; x=1739752274; i=w_armin@gmx.de;
+	bh=Of5gT254PF8cdxR5Onf8LeOAzX4ESpG3fb6xMO+D2j8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=CQHibEeObtzlZOS0MAkKXbGRlkBCUK7yY70v+9ARZYBDnrLh9qZBa/Xvdt48liy3
+	 xJVJClu/C2dqk6M9qlpnzGrQXBV8T5sWFcV5Ni33zetzyvtyp7xGIyJLJQmM5Mli9
+	 f51qe3QJylmE8WIb4JrxeDkxWNVD0/CVwGT3dJTFSe7tD3AUUmLzPRk6sm/41KzvM
+	 zrWpbmdxx9XPLfoS62ry7zRfMG9loOLWt3X7Xvq5QctZ1ktgBSJgplVN6o2L6nLWm
+	 jAd72v+sZfCnY6sW+gE2AQ0caoXNlCH8Vf4CGSuyGorSsSujGskMTBGGn8QcMkmI4
+	 ReN8VuSMrlb+w5OeSg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCsU6-1tYWHK1j1s-00G0Ba; Mon, 10
+ Feb 2025 01:31:14 +0100
+Message-ID: <33eac2f8-b295-4716-a5f8-9f0bf7f6d349@gmx.de>
+Date: Mon, 10 Feb 2025 01:31:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,121 +42,146 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add lt3074
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
- <20250124-upstream-lt3074-v1-1-7603f346433e@analog.com>
- <20250127-outgoing-ibis-of-respect-028c50@krzk-bin>
- <PH0PR03MB6938B71327DAADC17492A5538EF62@PH0PR03MB6938.namprd03.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 2/7] platform/x86: think-lmi: Use ACPI object when
+ extracting strings
+From: Armin Wolf <W_Armin@gmx.de>
+To: james@equiv.tech, markpearson@lenovo.com, jorge.lopez2@hp.com
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com, platform-driver-x86@vger.kernel.org,
+ corbet@lwn.net, linux-doc@vger.kernel.org
+References: <20250203182322.384883-1-W_Armin@gmx.de>
+ <20250203182322.384883-3-W_Armin@gmx.de>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <PH0PR03MB6938B71327DAADC17492A5538EF62@PH0PR03MB6938.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20250203182322.384883-3-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:snXJDC4yv8QlN48/mIQ2AOzpIKAgbYb3qPHf0pa4pteaShD9qzA
+ HjHh0mz8lqcY/DOFAZjBgAx/ypergBFTKB9EYzDD+FTZZXbZgfpuJhq6ZiYEXHFZkd/aDxk
+ H/SAbtySK2LupcjMHvlU9YOvo8RQ0Fd2yPMMzmXSlAhqU57gDECmrgmyaUW29HnUbCqaAEF
+ fzGUcOhIuEi11BK79O+tg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:dQJbAEpsxa8=;DLkb0gxcb4MADX40d9AJBAHGtBs
+ oXHiCg2ele+MTkdtjxcmfQriAtCqhowKbIxM9jAeVZ3YT0lLK/EHsxt2QgUKEMFhhMIsVZM2u
+ YjJU4B7FANmaWq4ym4addJSgEp1smmRLURb7VLKUqrVddqnduQT+ALzqkFn62vKhWL0dHibP5
+ d4fPrpsbADZEtGxn7++nbu9//2v+bhOfNv76IsKEXACgUa5BFGT8bqVjhwerhNf2wgSuEJfqo
+ Dol/QXnjYcr7Nqp/yycgzfAEV4Ns0WCcYtguErW5ab+s5cFByogLU0P0Y+4nZCzlCi+JFYlrs
+ 2lFu3J04D/VC7rKCTsl7ozloPQFZS3SceJIbaGNRAAtV26KnBrWLy24F4/5afCHRP5Q9DzjWn
+ wsbOkLjWgjT1JmHU29fEW31VFBlq36XbGQcDeuk4J8gvkVxG54gwaAINQJ8DKHroXRw4MpJgI
+ +GYV1v33UTgpuhLIEI2Zy38xo7g6ELLKF1SVpf/dsC8Ohpoz14H/ewrc8j9pE4YkMJYTmgbd6
+ dXcPBtII+nxWZQy2GfHQ+tnYik4Vccbpg090pTmrDLSZAHsoiv2/MDwtOzFeKIl7HWaOPVa8+
+ 0a2PmYEvzPUIN6qg/Rbx9FOFIJ4ETe54xsPZ79vv16IfhnaqLDOFvl0RdjmWqXntv48R7i0+2
+ TiOZI6hVcO6afMjQmmpcmZgBMRVb7t1y/0buD2rBcSaIo/hEc9A2YhyH3RL/k8+8rp5UVOk/6
+ AmdxAIpVmpy0w52lDbjgLZ/+DXRJ/fkftZ9tMT1rQnnIJ78KXw1cpvzSJaAn2axzSlzd19qHV
+ 9pVV17r1OCVJg61+DtuHGjNzI3/9ePHlgh+GIU+mRbNk/CvrZG+gEHOmTlyKSBlb+ZviIVVVr
+ n5bSdxOZFcx+DGwBszcJOmgjUgYKJBvu8PW+u+j7ACnIJ6CFwZXIykM8qdKeVv53zUE6hpdzw
+ Ixc7SqgE0KH6i7HwUrAjh1/oWktcWvb/bJCdNb/cKyc9gEM6l4oWzQJL5vvWUknJ0W89qj7RF
+ KbKkMkIPNP8TWSkOvTD/QDJarnWzjwdie+c/9q3zksdwZ9ejuhloti9g+VAvRJ5YbpDP82NSL
+ Gd61dG94pDLRKroSYhMost2a1hEpW9sv34/Jb3OBp5CmQHWRQbomJnCFHIbDooeydTsDnjehp
+ MJ5Z3kBb3HWHs1GpbbRMNlz7kUJi8OYC3+vsFl/rOwGP0pMbm2+BosNMX/ap3VpEvGWsOdquh
+ 6A0vWe1Fo3329DCeF0yVI1uePlGlaUkq92cci3v2ENYCLJahZLtT2qQ0iKQuOM7dumHvKWzpu
+ 1SwZX8Q2OO2180201t0gsTRLVFMayTeEJ16LeIWICI6jRBlukwIClPMWQiG/cO/HEyqHucHUY
+ tDZ04Fxhcb4G0eFpsTz0qZdFWNEB0Gzae9ez2bnKzbFf5P1haAvobjkAuO
 
-On 06/02/2025 10:05, Encarnacion, Cedric justine wrote:
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Monday, January 27, 2025 3:52 PM
->> To: Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>
->> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
->> Conor Dooley <conor+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>;
->> Guenter Roeck <linux@roeck-us.net>; Jonathan Corbet <corbet@lwn.net>;
->> Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>;
->> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
->> hwmon@vger.kernel.org; linux-doc@vger.kernel.org; linux-i2c@vger.kernel.org
->> Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add lt3074
->>
->> [External]
->>
->> On Fri, Jan 24, 2025 at 11:39:06PM +0800, Cedric Encarnacion wrote:
->>> Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
->>> Regulator.
->>
->> Regulator? Then why is it trivial? No enable-gpios? No I2C interface?
->>
->> Best regards,
->> Krzysztof
-> 
-> I based this driver primarily on the LT7182S dual-channel silent switcher
-> regulator. 
+Am 03.02.25 um 19:23 schrieb Armin Wolf:
 
+> Move the ACPI buffer handling out of tlmi_extract_output_string()
+> and instead pass the unpacked ACPI object to prepare for future
+> changes.
 
-I do not understand why the base of driver matters here? If it was based
-on LTFOOBARGROUNDHOG1 would it change something? I know neither LT7182S
-nor the LTFOOBARGROUNDHOG1. And driver matters here even less - bindings
-are about hardware, not given implementation in OS.
+Hi,
 
-> The LT3074 is a single-channel device with basic enable and
-> power-good GPIOs, fewer registers, and fewer functionalities than the
+i was hoping that maybe the driver maintainer could take a look at this patch
+and give some feedback.
 
-So it has GPIOs? And by GPIOs you mean what the SoC/CPU, thus the
-operating system, sees as GPIOs or something else?
+Thanks,
+Armin Wolf
 
-> LT7182S. Like other PMBus drivers, its GPIOs are not exposed.
-> 
-> Here are other PMBus regulators/power modules found in trivial-devices
-> I also used as reference:
-> 
-> - infineon,irps5401
-> - delta,q54sj108a2
-
-
-I don't know these devices so still no clue. Please rather explain in
-the terms of the hardware, e.g. what this device has or has not. See
-also regulator bindings.
-
-Best regards,
-Krzysztof
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   drivers/platform/x86/think-lmi.c | 38 +++++++++++++++++---------------
+>   1 file changed, 20 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> index 323316ac6783..2c94a4af9a1d 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -262,16 +262,11 @@ static int tlmi_simple_call(const char *guid, const char *arg)
+>   	return 0;
+>   }
+>
+> -/* Extract output string from WMI return buffer */
+> -static int tlmi_extract_output_string(const struct acpi_buffer *output,
+> -				      char **string)
+> +/* Extract output string from WMI return value */
+> +static int tlmi_extract_output_string(union acpi_object *obj, char **string)
+>   {
+> -	const union acpi_object *obj;
+>   	char *s;
+>
+> -	obj = output->pointer;
+> -	if (!obj)
+> -		return -ENOMEM;
+>   	if (obj->type != ACPI_TYPE_STRING || !obj->string.pointer)
+>   		return -EIO;
+>
+> @@ -352,17 +347,21 @@ static int tlmi_opcode_setting(char *setting, const char *value)
+>   static int tlmi_setting(int item, char **value, const char *guid_string)
+>   {
+>   	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+>   	acpi_status status;
+>   	int ret;
+>
+>   	status = wmi_query_block(guid_string, item, &output);
+> -	if (ACPI_FAILURE(status)) {
+> -		kfree(output.pointer);
+> +	if (ACPI_FAILURE(status))
+>   		return -EIO;
+> -	}
+>
+> -	ret = tlmi_extract_output_string(&output, value);
+> -	kfree(output.pointer);
+> +	obj = output.pointer;
+> +	if (!obj)
+> +		return -ENODATA;
+> +
+> +	ret = tlmi_extract_output_string(obj, value);
+> +	kfree(obj);
+> +
+>   	return ret;
+>   }
+>
+> @@ -370,19 +369,22 @@ static int tlmi_get_bios_selections(const char *item, char **value)
+>   {
+>   	const struct acpi_buffer input = { strlen(item), (char *)item };
+>   	struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+>   	acpi_status status;
+>   	int ret;
+>
+>   	status = wmi_evaluate_method(LENOVO_GET_BIOS_SELECTIONS_GUID,
+>   				     0, 0, &input, &output);
+> -
+> -	if (ACPI_FAILURE(status)) {
+> -		kfree(output.pointer);
+> +	if (ACPI_FAILURE(status))
+>   		return -EIO;
+> -	}
+>
+> -	ret = tlmi_extract_output_string(&output, value);
+> -	kfree(output.pointer);
+> +	obj = output.pointer;
+> +	if (!obj)
+> +		return -ENODATA;
+> +
+> +	ret = tlmi_extract_output_string(obj, value);
+> +	kfree(obj);
+> +
+>   	return ret;
+>   }
+>
+> --
+> 2.39.5
+>
+>
