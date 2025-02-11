@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DF61D8DF6;
-	Tue, 11 Feb 2025 20:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2224C1EE7DC;
+	Tue, 11 Feb 2025 20:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739305613; cv=none; b=eilsGeTc84CVAAl7Uk0qMXDle7LsySUTyZBxikkzeHhPLjozqR3nHtB9g+T1bDMABh+VKafQowoRXJXJZDhqPNL1HtBaKfdbzz815nXu5+3LXYTakahwGvTR6ac3YCMVjOz96+nFSLIBjFvbU3viOpD39K6YBXE5/tPG8blVpI0=
+	t=1739307198; cv=none; b=CJrnQfuCDEkrFWupQ30Bnx/6ZSRVscDKd+CP33nZ8fJ0VIkMdIbLXYqC+/yUnqXi3QOAyAvk2sNiWoJ4drn10K/xqQ02odrTmuqXkPULYUlSe8x4FNBvXxo2wKIPfs5xikNfcvVmLP/nmYW7vzAsnVjuB2+vN66St99axRcpWEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739305613; c=relaxed/simple;
-	bh=+fClqH3t9Av9cG/CYZpvXyUGwAqU8nH5zY+gHkCMoro=;
+	s=arc-20240116; t=1739307198; c=relaxed/simple;
+	bh=8sphWtJykSdh/06Ktz9t9+80uXqBvCL0k4WcR3tRdhU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mu0bqT1y/kEQKivC2orx3Jds4iTjSKwUrKHwWdQ5pblICz70W95oah2VWj7Yg0KE0DvecJvHC/rrgNl1CWYg1urH/HomVtp8VCsP1zNEtVWy7yOuVE2CNiSDZXxAXmuyin2vOePcwupitHcjp9Ud2FLm7MFtfYxyJ6AqVAI3kzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dTAwEfJV; arc=none smtp.client-ip=192.198.163.18
+	 In-Reply-To:Content-Type; b=FIuk53F5Jh2ngFBeiiPQ+jHRS3r5xl2GdDymvcn/9x0/Y8aTuQMLw5rRVQif0PtaZpedXZK/2DuVjGZAXG62GgHtM/ZPwzxgWaTtBH/iM1I5BxWITr5kQkroT7tveUQ0ZYaUcOSWVSx/ZbtmndcJZlqPhkMywWofkv6/smerfco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSBZjkuG; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dTAwEfJV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSBZjkuG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739305612; x=1770841612;
+  t=1739307197; x=1770843197;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=+fClqH3t9Av9cG/CYZpvXyUGwAqU8nH5zY+gHkCMoro=;
-  b=dTAwEfJVkE6N2a33oKKNF9Fx1OF2v89PPMZ3EQB7qWG/1zUkR/8V7t+e
-   LAAXQAjdd05t0LWdSMLkHL/vKiCcspLVs8yxMZIDInljuioTMJISSTJ2G
-   fZ9z7f/NrLaN8wV55LKfukRnJ40tHOpAh/wxeFcIUw5EwEWiA9XwVUz0e
-   H9U1MwTPJqv69IUCDz0fqVeAP9Sma/W/7ucMKlZkZvgMQaV4pbk9l7aK4
-   jWW/VpMWK0hwiU29mlrlwLX4RvJLGkEA8oBX2tPMxOYNaePotJpA4Zqg7
-   /JpJz7+5MeEAzPlTsEm+SZfkBKZPXM8/XyYM0nqqgLnKyRHw0X45sDdkP
+  bh=8sphWtJykSdh/06Ktz9t9+80uXqBvCL0k4WcR3tRdhU=;
+  b=jSBZjkuGtL5JgsLJIQX4LgyF0UMXt5mLi21F8tqkyguSnXLLocgJiDqT
+   69kxqHl5ziR4Ks1MKhtmaLE9Cx0Gi3H74eljLUM1l9Y2Mw2tcF1DoAj4Z
+   rH7rz/5mDtntIii3Lqo0TRkSPtOY2AKyo+sLkjM5LQKHRGGq7yvBnKJe9
+   /kqyf48rqV4A2/le/SM3TPmHK1mFUAFY+yuflcJJ+SKr7SHRm7YbB4jYt
+   QAXrccOoHtIaaK0YOxm2rpBmNEMn2BFvVEXtG0hQobijA68fYsOgvtXmb
+   yDDOlo4EVOvUuo18V6TOo85Z1KkozZa9GRPBQ5g9sVKGD+SwuMnxyKDEh
    w==;
-X-CSE-ConnectionGUID: /geln+N4Qp++x/yYExFlEg==
-X-CSE-MsgGUID: SrSvyDy9Q+OyUVwLkuon4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="39179283"
+X-CSE-ConnectionGUID: mBM01KgKTu2Ty2rrqdLzQg==
+X-CSE-MsgGUID: i35HvJ3QQp2OKxIq+BApVw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="39640210"
 X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
-   d="scan'208";a="39179283"
+   d="scan'208";a="39640210"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:26:50 -0800
-X-CSE-ConnectionGUID: +AQkDedoTIKh72G7pqxSBg==
-X-CSE-MsgGUID: Ol+TZdIeQLup+dPw9nkEAg==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:53:17 -0800
+X-CSE-ConnectionGUID: LXCnERC9RhmWG1D/VhEbPw==
+X-CSE-MsgGUID: YSCEat7OSRelzneUWD7QDQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149801495"
+   d="scan'208";a="149807404"
 Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:26:49 -0800
-Message-ID: <5b954a96-1034-467d-a5dc-3d3f7bc112a1@intel.com>
-Date: Tue, 11 Feb 2025 12:26:48 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:53:16 -0800
+Message-ID: <b9c21518-54fc-4907-8fc3-d492a3f33bdf@intel.com>
+Date: Tue, 11 Feb 2025 12:53:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,8 +52,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/17] x86/cpu/intel: Fix the movsl alignment
- preference for extended Families
+Subject: Re: [PATCH v2 05/17] x86/cpu/intel: Fix page copy performance for
+ extended Families
 To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
  Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -74,7 +74,7 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
  linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 References: <20250211194407.2577252-1-sohil.mehta@intel.com>
- <20250211194407.2577252-5-sohil.mehta@intel.com>
+ <20250211194407.2577252-6-sohil.mehta@intel.com>
 From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -120,32 +120,31 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20250211194407.2577252-5-sohil.mehta@intel.com>
+In-Reply-To: <20250211194407.2577252-6-sohil.mehta@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-We should really rename intel_workarounds() to make it more clear that
-it's 32-bit only. But I digress...
-
 On 2/11/25 11:43, Sohil Mehta wrote:
-> The alignment preference for 32-bit movsl based bulk memory move has
-> been 8-byte for a long time. However this preference is only set for
-> Family 6 and 15 processors.
-> 
-> Extend the preference to upcoming Family numbers 18 and 19 to maintain
-> legacy behavior. Also, use a VFM based check instead of switching based
-> on Family numbers. Refresh the comment to reflect the new check.
-"Legacy behavior" is not important here. If anyone is running 32-bit
-kernel binaries on their brand new CPUs they (as far as I know) have a
-few screws loose. They don't care about performance or security and we
-shouldn't care _for_ them.
+> +	/*
+> +	 * Modern CPUs are generally expected to have a sane fast string
+> +	 * implementation. However, the BIOS may disable it on certain CPUs
+> +	 * via the architectural FAST_STRING bit.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_X86_64) && (c->x86 == 6 || c->x86 > 15))
+> +		set_cpu_cap(c, X86_FEATURE_REP_GOOD);
 
-If the code yielded the "wrong" movsl_mask.mask for 18/19, it wouldn't
-matter one bit.
+I'm not sure the BIOS comment is helpful here.
 
-The thing that _does_ matter is someone auditing to figure out whether
-the code comprehends families>15 or whether it would break in horrible
-ways. The new check is shorter and it's more obvious that it will work
-forever.
+Also, at this point, let's just make the check >=6 (or the >=PPRO
+equivalent).
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+It will only matter if *all* of these are true:
+1. Someone has a 64-bit capable P4 that powers on
+2. They're running a 64-bit mainline kernel
+3. String copy is *actually* slower than the alternative
+4. They are performance sensitive enough to notice
+
+We don't even know the answer to #3 for sure. Let's just say what we're
+doing in a comment:
+
+	/* Assume that any 64-bit CPU has a good implementation */
