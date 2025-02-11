@@ -1,184 +1,124 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E821A26BD8B
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 06:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06D31DEFFC;
+	Tue, 11 Feb 2025 07:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739254969; cv=none; b=PHbINREzLCu+0NfW8teoNHVUPdYuKgp7cKiJ93392hriQj/CJJzZKTyLAR6gu4yd9uMSpR3ByMa3/Wkg1EzeI5et6kBwRJmoTpf/oT2GRrCBaHDx6DNBRG2NSFy4dKFhfqmmCYT4IPYLI9UCTqMv72IKGycQDmZgyK0yUXMY8kQ=
+	t=1739257302; cv=none; b=Y8tA0M/+Yy8+FvTRIJA5zEAqAuE2yD+/WKwtnBV7hNLfRLXZlvTrFw60C7hcQE6xKBN0vxRtowpbUcEYYXZMkYbUaqefm3D/ENckrqOWVF91k7Gkh7rdU4Iv39nDqfn4pCA6eypnsgKKIRdvMVY1A+WOJZYim8DGwUWB+pzCZ54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739254969; c=relaxed/simple;
-	bh=Rz8cKMJmyfIBVbct3YeroYQWw8MjBlN9Rxz0+YXdWaQ=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=m1y32uDM0PWWch80GCb1qx2+iDNoiPGz8c4pxfDGx+szH5rgLXAnXUKLKJ95xvG5q7k2yopRjvyyQ1ep3DgyRUqAn7Xhaie/WNb4uetCj5Z5M7TTJTNNKVma5OiZePpBFp41CIX7/64em1rfJaDh6Jabb1BpatzaOeZ7REsFkag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=HzVCcd6K; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
+	s=arc-20240116; t=1739257302; c=relaxed/simple;
+	bh=oYkNhz60aIpUdONo8K56ubZU0soRSKZnPCi9UC8ZksY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=b2FL59Xl0t7JLYO/nqZVn095T7NTic2u+LIsZRrQauEL7RH6gzTPWY4/bL83EJRRhJKnDFQQRFagccGdAmXuSA8Snu7f9LiFC8MqvMdoMo3aa621UXmJ7UA0t1Je2QQgAI0PO2x2HCeDIQjPsoxqK4LYAQPES5ET1Oo2dNFJT34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBHIjeie; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="HzVCcd6K"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5dccaaca646so10156742a12.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Feb 2025 22:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1739254963; x=1739859763; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UKFlG+Xw5/bBQRdIpY9O06mR8ZEMGb7en+mSelhwoVQ=;
-        b=HzVCcd6KlRPNNclHt6SRpeUG0yFBN9ZK0ABz3U3PHBwZGRy2bEvRoEMXQbu3tE7BC7
-         jxBQ2lTKH/rUPt53bivolG3cbGVwBUVRl4mlTL0AiTnNTjwef7dI4A2Mp51xOwcw0gjU
-         VzUWB6xRlzNvYMVFdo6bi3ddciNPiJHvhIEjTdNSvU6ZNc2wO/LjwjvDdkio/QlwRkyy
-         l7lHyBAh6GaMIlDfGNHZmmzCstYV1lccFbsKuMR2as25G3vLQ1SZR9FiWoR9BRNZtnbN
-         /xCDIO82MROl8hv45Ij7sqMSf9PAuKcyMXwPamBsL/blHy2WmQ8uUAjvQFrPceiCSAZg
-         guHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739254963; x=1739859763;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UKFlG+Xw5/bBQRdIpY9O06mR8ZEMGb7en+mSelhwoVQ=;
-        b=Md5vTGiI77NcbPKzCb2P4tXbs7mM1AkGLgE3oWQkGdkNVQq7Q2DTgIDh1OK8luCf8P
-         4LpBMKL8pmmRPjmFZ9QxD6Eox06Qi6NnrwG3/uLt7wmt63KkYW5kG4U772ZhYfOPTef3
-         2HOrSnFDlDFEJQFFel111EYm86Ydxam8yVJ3JjjHvZ6hObTyez7e8fUM/cHlEBu9pypn
-         Oi2UOioQp8NFTx6QKJVD9gRz29tZhmd+WvfK7ltgr5Splpl5EqyFYVFZniEff8kEdmWS
-         /g5jn2YQStiWruEa673eIkGHMET/EN8nysrBsuAbZKr+78xnPjoJrztKvdVDBX0Uvx7m
-         O8iQ==
-X-Gm-Message-State: AOJu0YwnVCjwwIVhNlroSvx69o3phUISrT7X4lIZ++AEtPfGGRXnmcVt
-	hLhqGDANSnejf9sV2vFmz/OdvhlNfML/1DqoR+UCSkOh7dte9eqCPaOb44UXE1e9dtVKUJCg3UO
-	zjyG2FaMg44OuX6neWfm9UzQLcFi6LB2QQo54uzRS82/AOhiIWqY=
-X-Gm-Gg: ASbGncvftutKHO5O0rInn8IccEfG2Hgtgsl3bKy5StMVSHzqP0f9sFRGb9kNJiDnyfN
-	VkFC3nVIjhn92t0jtA/dND4VtpBSnVgyRIcAYjZVZWGDluMFf8VKcpi3wqdmQmOlqp1W84Jwm
-X-Google-Smtp-Source: AGHT+IGRVykDbuuifEBOWt2Wd+cvZogOe/HZywwNLj25dKLW1e58pv4pU8WaWp448V6KtbGW3bez74T6+br5LNjOcVs=
-X-Received: by 2002:a05:6402:268f:b0:5de:572c:72cf with SMTP id
- 4fb4d7f45d1cf-5de9b9b6f48mr1931527a12.10.1739254962659; Mon, 10 Feb 2025
- 22:22:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBHIjeie"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A69F2C4CEDD;
+	Tue, 11 Feb 2025 07:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739257301;
+	bh=oYkNhz60aIpUdONo8K56ubZU0soRSKZnPCi9UC8ZksY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=GBHIjeieIHwaxv7B+FqszHuj791BU/XeJne24vrma+XxG5jeA5HlVBxyRMJmeSLMT
+	 lwnGHQLJi8bGUAtRfP/4YzWTjPe937ERRoRX3zfWG9lfimLY22DSyif1hbf4AvuFkP
+	 6mCN4lfgvJCeRnBDHf3n6xzZa98fA2LmtnFAqnZdLmJk7ob2PN865t1T/dCJgixBDy
+	 jMnP3JwyEuGYcuUBDyw3SVCyNEwYbnWbwBG+Pl8GTnOtWMm3Wl0ffVnMG3/8/DCFGd
+	 oPpZAhaMGQit640Cv5sGwQGekeMKhVtWHw36riMNhegNsTxQ66quHZvxHBU8/CY7JU
+	 SuJbJYy/sfEjw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F782C0219E;
+	Tue, 11 Feb 2025 07:01:41 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>
+Subject: [PATCH v5 0/2] hwmon: add GPD devices sensor driver
+Date: Tue, 11 Feb 2025 15:01:16 +0800
+Message-Id: <20250211-gpd_fan-v5-0-608f4255f0e1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: =?UTF-8?B?Q2hpYW5nQnJpYW4g5rGf5rOz57e7IFRBTw==?= <chiang.brian@inventec.com>
-Date: Tue, 11 Feb 2025 14:22:31 +0800
-X-Gm-Features: AWEUYZm1Dl0ZPSUi-DHKUihjpWpULXvQFnU3ZyeLewtWCLEZYxQOVXFTx7PijtU
-Message-ID: <CAJCfHmW61d2jd_tYpNEqBG_Z58bEnVKAmsvhrEP1zXQoXqrUVw@mail.gmail.com>
-Subject: [PATCH v4] hwmon: (pmbus/tps53679) Add support for TPS53685
-To: linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALz1qmcC/3XMTQqDMBCG4atI1k3JJDHRrnqPUkpiJhqoP2iRF
+ vHujW4US5ffMM87kQH7gAO5JBPpcQxDaJs40lNCiso0JdLg4iaccck0KFp27uFNQ1PtBcu5KLJ
+ Mkvjd9ejDey3d7nFXYXi1/WcNj7BcfxsjUEaFZCk4p8EwdS1rE57noq3J0hj53unN8ei8thqVz
+ T0He3TijxPRZU6jt8CVsPro5N5lm5PRAShMpQCTe9y7eZ6/0xxiWkYBAAA=
+X-Change-ID: 20240716-gpd_fan-57f30923c884
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Cryolitia PukNgae <Cryolitia@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
+ Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>, 
+ =?utf-8?q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>, 
+ someone5678 <someone5678.dev@gmail.com>, 
+ Justin Weiss <justin@justinweiss.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1739;
+ i=Cryolitia@gmail.com; h=from:subject:message-id;
+ bh=oYkNhz60aIpUdONo8K56ubZU0soRSKZnPCi9UC8ZksY=;
+ b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0did012TXdDV1dQRU9OYzFGS3JRM2phY
+ lVraHZSVlgwL0Y4emZ6UmhvVXNoK0xucXMxUi9ULzFUVlRWcnYyCm0rd3VPbS9rNk50L1I4T3Bv
+ NVNGUVl5TFFWWk1rV1dGalBYRXVwS3U3Q3Z5TFh0ZzVyQXlnUXhoNE9JVWdJbWMKWTJaa1dNaTl
+ 3dFBGNEV4OGNEdkxsbmZkS2hjMnh6Y212THNrYUhPdjZaamRFVjFaUTBhR055V1d2YkVHbkYrdQ
+ ovWDlqTnIxU1pkR0N6V1hTdTl1M3A4Ymx0dWYyUGd4Z0JBQT0KPWJFQTAKLS0tLS1FTkQgUEdQI
+ E1FU1NBR0UtLS0tLQo=
+X-Developer-Key: i=Cryolitia@gmail.com; a=openpgp;
+ fpr=1C3C6547538D7152310C0EEA84DD0C0130A54DF7
+X-Endpoint-Received: by B4 Relay for Cryolitia@gmail.com/default with
+ auth_id=186
+X-Original-From: Cryolitia PukNgae <Cryolitia@gmail.com>
+Reply-To: Cryolitia@gmail.com
 
-From: Brian Chiang<chiang.brian@inventec.com>
+Sensors driver for GPD Handhelds that expose fan reading and control via
+hwmon sysfs.
 
-The TPS53685 is a fully AMD SVI3 compliant step down
-controller with trans-inductor voltage regulator
-(TLVR) topology support, dual channels, built-in
-non-volatile memory (NVM), PMBus=E2=84=A2 interface, and
-full compatible with TI NexFET=E2=84=A2 smart power
-stages.
-Add support for it to the tps53679 driver.
+Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+devices. This driver implements these functions through x86 port-mapped IO.
 
-Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
+Tested-by: Marcin Strągowski <marcin@stragowski.com>
+Tested-by: someone5678 <someone5678.dev@gmail.com>
+Tested-by: Justin Weiss <justin@justinweiss.com>
+
+Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+
 ---
- drivers/hwmon/pmbus/tps53679.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+Changes in v5:
+- Rebase on kernel 6.13
+- Remove all value-cache related code
+- Clean up code
+- Link to v4: https://lore.kernel.org/r/20240718-gpd_fan-v4-0-116e5431a9fe@gmail.com
 
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.=
-c
-index 63524dff5e75..7b412f3fe86a 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -16,7 +16,7 @@
- #include "pmbus.h"
+Changes in v4:
+- Apply suggest by Krzysztof Kozlowski, thanks!
+- Link to v3: https://lore.kernel.org/r/20240717-gpd_fan-v3-0-8d7efb1263b7@gmail.com
 
- enum chips {
--   tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
-+   tps53647, tps53667, tps53676, tps53679, tps53681, tps53685, tps53688
- };
+Changes in v3:
+- Re-arrange code, thanks to Krzysztof Kozlowski, Guenter Roeck, Yao Zi!
+- Link to v2: https://lore.kernel.org/r/20240717-gpd_fan-v2-0-f7b7e6b9f21b@gmail.com
 
- #define TPS53647_PAGE_NUM      1
-@@ -31,7 +31,8 @@ enum chips {
- #define TPS53679_PROT_VR13_5MV     0x07 /* VR13.0 mode, 5-mV DAC */
- #define TPS53679_PAGE_NUM      2
+Changes in v2:
+- Improved documentation, thanks to Randy Dunlap!
+- Link to v1: https://lore.kernel.org/r/20240716-gpd_fan-v1-0-34051dd71a06@gmail.com
 
--#define TPS53681_DEVICE_ID     0x81
-+#define TPS53681_DEVICE_ID     "\x81"
-+#define TPS53685_DEVICE_ID     "TIShP"
+---
+Cryolitia PukNgae (2):
+      hwmon: add GPD devices sensor driver
+      hwmon: document: add gpd-fan
 
- #define TPS53681_PMBUS_REVISION        0x33
+ Documentation/hwmon/gpd-fan.rst |  63 +++++
+ Documentation/hwmon/index.rst   |   1 +
+ MAINTAINERS                     |   7 +
+ drivers/hwmon/Kconfig           |  10 +
+ drivers/hwmon/Makefile          |   1 +
+ drivers/hwmon/gpd-fan.c         | 611 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 693 insertions(+)
+---
+base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
+change-id: 20240716-gpd_fan-57f30923c884
 
-@@ -86,7 +87,7 @@ static int tps53679_identify_phases(struct i2c_client *cl=
-ient,
- }
+Best regards,
+-- 
+Cryolitia PukNgae <Cryolitia@gmail.com>
 
- static int tps53679_identify_chip(struct i2c_client *client,
--                 u8 revision, u16 id)
-+                 u8 revision, char *id)
- {
-    u8 buf[I2C_SMBUS_BLOCK_MAX];
-    int ret;
-@@ -102,8 +103,8 @@ static int tps53679_identify_chip(struct i2c_client *cl=
-ient,
-    ret =3D i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-    if (ret < 0)
-        return ret;
--   if (ret !=3D 1 || buf[0] !=3D id) {
--       dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
-+   if (ret !=3D strlen(id) || strncmp(id, buf, ret)) {
-+       dev_err(&client->dev, "Unexpected device ID: %*ph\n", buf);
-        return -ENODEV;
-    }
-    return 0;
-@@ -138,6 +139,14 @@ static int tps53679_identify(struct i2c_client *client=
-,
-    return tps53679_identify_mode(client, info);
- }
 
-+static int tps53685_identify(struct i2c_client *client,
-+                struct pmbus_driver_info *info)
-+{
-+   info->format[PSC_VOLTAGE_OUT] =3D linear;
-+   return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
-+                       TPS53685_DEVICE_ID);
-+}
-+
- static int tps53681_identify(struct i2c_client *client,
-                 struct pmbus_driver_info *info)
- {
-@@ -215,7 +224,9 @@ static struct pmbus_driver_info tps53679_info =3D {
-        PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-        PMBUS_HAVE_POUT,
--   .func[1] =3D PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+   .func[1] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-+       PMBUS_HAVE_STATUS_INPUT |
-+       PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-        PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-        PMBUS_HAVE_POUT,
-@@ -263,6 +274,10 @@ static int tps53679_probe(struct i2c_client *client)
-        info->identify =3D tps53681_identify;
-        info->read_word_data =3D tps53681_read_word_data;
-        break;
-+   case tps53685:
-+       info->pages =3D TPS53679_PAGE_NUM;
-+       info->identify =3D tps53685_identify;
-+       break;
-    default:
-        return -ENODEV;
-    }
-@@ -277,6 +292,7 @@ static const struct i2c_device_id tps53679_id[] =3D {
-    {"tps53676", tps53676},
-    {"tps53679", tps53679},
-    {"tps53681", tps53681},
-+   {"tps53685", tps53685},
-    {"tps53688", tps53688},
-    {}
- };
-@@ -289,6 +305,7 @@ static const struct of_device_id __maybe_unused
-tps53679_of_match[] =3D {
-    {.compatible =3D "ti,tps53676", .data =3D (void *)tps53676},
-    {.compatible =3D "ti,tps53679", .data =3D (void *)tps53679},
-    {.compatible =3D "ti,tps53681", .data =3D (void *)tps53681},
-+   {.compatible =3D "ti,tps53685", .data =3D (void *)tps53685},
-    {.compatible =3D "ti,tps53688", .data =3D (void *)tps53688},
-    {}
- };
---=20
-2.25.1
