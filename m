@@ -1,69 +1,69 @@
 Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED68253F2D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54A4253F09
 	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739289181; cv=none; b=ACykXb6REz441w7qxivPNndtcvNJQAhhCcDg7JsQgBk1BOf2MCbreLS5ezNKaMsIGiEOT2UoCeS0yK4httKuTN8P3F0nfeyYRBfdszjLCIJw/t0Z4dU7VJKwKTAqQtwrlyu/I+wuYT1+tn4yzrgz184HtCFHW5OT1Z1faVfzadM=
+	t=1739289181; cv=none; b=PHnP0+RBb9EVGl3Hb7tFXkcEXnjSNORouVdUkGWu9sfTynWUZt0aE6Xe/srnZV/0axYx3fMZ/B18klgwyb/9lhYM/PBI+CCQWiXu5njcPsWZSKahCnlRkId6Ddf2xJJJi/NQ9cQkpWKu2vbBaOZj8lwCDHeuB+KkBrz+sLXDIaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1739289181; c=relaxed/simple;
-	bh=LMGomRaOtH29ja3KgW4GxX3Kca+kf+2WYVroN9XtXjI=;
+	bh=9TAhblHUf19WWcrTx4thdvfqQC1xuDKGrt9h50Lplwg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SEQYUQm3nsHr1fCVCBThVY8GDc4PpXazst/cIbosLXNTdUP4UrcMefb3xw3Q8jI2ZVEudN8ZOxjQSygMSmdjEzlO3ymQvKO6SXUYaM9I5smWeVuSSd/ICzO2ajnjDUoC5uD8vJ+FCplkWEUIua6flP8kOJRqGBcBBtfXOfDcDHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Un21d+6o; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=X7Vg7tWK3fN5to00hIxWKcGAm+mPfuqxJe3GZIThlBzWFpAZ5qt8yMl/BLn8rrdHU99eBE6tZn5TZZ7NYQEiIi12zbZD02kWeSGFkhEAbwFkfAfoxc+6EaXH9+CA/IIzP6gBc5GYS8mYceFugVvp+h3K2TDqY1t/MogHI6m3Mro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcRQJHMK; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Un21d+6o"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21f3e2b4eceso109459215ad.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcRQJHMK"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21c2f1b610dso139430695ad.0
         for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739289178; x=1739893978; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739289179; x=1739893979; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tz/KN50qJ3LMKII0WAeSZR2TOOMp+KirwyFnmg+pUzM=;
-        b=Un21d+6oV5gvOfdhT4f4sqrDs8rpejZW+iLzdJqjea9pLxPmPiXdMX2Uw6Z2B5ZxKQ
-         ZY0UBJkEDmp3jpQz7nOr3B0RGw52XvN1bIZmSrSKltClVl2gfH/NDA5s/o8me7YIWN3r
-         nD7SHlqxfSP5kjj7hF7Pva0+njK0ElBnwsSjCqV5zjJWP8jVO+zZ3GGoTZDHP3wjsUg5
-         iyC17IXu80yFRMNxLr/+ezkIE3OzGoAw4ID862526COFT/lxHdQFTLqPba3iSkqC2tht
-         BAEHGtb8w4UyeaWx0X0j/Q3D/SgRE0gnBpV2MonSx6pZfskrRQg7B6HgLX9BFFpf3hCy
-         n+/w==
+        bh=w4uwK3zgkOgZBJZqsrCjAZlHOEdEzMZJOcg4UjIAi6U=;
+        b=IcRQJHMK58uXaqkgkQALlhgb+jGcKSykj3O0TpuAW0nmJyc6JOkbhFZeB3VdHn7FDD
+         nrJTp4qdkuR0LQEsLSTXB7/7RF24T/52NfHrdtYcCbWJIA3aGE58QpxTtC4gGDR+HS7y
+         4UwcUG5zASU8LlptBKuLXohycQooJL8PZMUFrh+GkYgbXbKAqJjUtaYct+PAspLRruzO
+         nIdNkm31dQ/GMTYICLKnPzYHSrnOw6fn59n0upVCMJHZ53y3p4/ux7cUxxWJZyCx1T5g
+         03SEUZxUsu8HOHrHpAZ1HU8M+kqiZRi11Y+7R/AsSdheypypu+2jRw2JpUdkIuSNaSyC
+         igkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739289178; x=1739893978;
+        d=1e100.net; s=20230601; t=1739289179; x=1739893979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tz/KN50qJ3LMKII0WAeSZR2TOOMp+KirwyFnmg+pUzM=;
-        b=jY7zYsfCpI4mQHhCR8pJhUg4BgHBREcPn6L2CsyoCfUGggi8Bj+7O5jRSWSijo1ZsB
-         TmlaUqKX3jdzG32/IYCqE3fIPNwrXI777IPr/9phgelaTjfCgo4OvLIFoK2H8sacS/Xl
-         dic1TZFqFmYDw7kV74+1US7W+pMgnnpTndzj8YJNsjqsYRgGvX3X4PuJTB7ytuOgest4
-         esUMCbIZfrI428x5y/R6rqXcYmE9KMh30eWxnPsFLXW57eRU0s8FmhXaLUBELoaiostL
-         dAFS+O3OmtF83Q9H32q7fJz//qm0/CGWuS9npIKJux7CQYkS76xicRun7rxYvGljZ0eS
-         uHHg==
-X-Gm-Message-State: AOJu0Yyds5g1KYuHUjgVgpjMkkldvNqMK0sOAkZLy91hJVlzy3mwELGo
-	Hnns5SOrcZtWPUeTm8KV9I+FiPFcYzAfZh+Q7v5y4WOQL2SWbgwv7O3MhA==
-X-Gm-Gg: ASbGnctdRcE8hUrBSebkx96gcVhvGm6uxRzs2joS28dEdwHi3a0LpF+luYmWFrhoN95
-	tBF5+c3ntEOyVRnORXBxzDwGN8XLreWYmO1qll8EEz40dyL+PB6HQaSJ2FHX3HgG9GAytvLY65f
-	tMg7Vb0P+9bJaSGCpCTT5BKzqd7YGSJWF90t2jFTfPb5aHoWJRbNpc0SkMwju66Z3Bl/QC3EGs1
-	QcGjV5qH9xyBibUxo27GkYIUqbj9e8oYscCJTFao1FRV5tQ/Kat54Aqtf/JOTzKq2y9JwYWEsFY
-	1vlL5XyytKPj2ulGCF3WvMkduxgs
-X-Google-Smtp-Source: AGHT+IFfcw+wKxmUzXgyDKbGg+E0BlEOzerBQTvhshx08jGj3r3xR8B5ZaTeP2tPM+C/jIBw1TflEw==
-X-Received: by 2002:a17:903:2f84:b0:216:31aa:12fc with SMTP id d9443c01a7336-21f4e6e6123mr285502405ad.24.1739289177241;
-        Tue, 11 Feb 2025 07:52:57 -0800 (PST)
+        bh=w4uwK3zgkOgZBJZqsrCjAZlHOEdEzMZJOcg4UjIAi6U=;
+        b=AVJbJqe03Op3DYeKvmEL6Axz0acJFs1iY8WNnMaW8UmEkzuV5DsJ8zu81ybp2NRui2
+         JhZayN9xKNiQ5u+u15ubfN5C9y+MW4LDQ2FvnjaE6W0o9J456Ms+PIrBOFN0aezX82b7
+         6i83MmM0SsxGfmf/9YTCMwikUZqsA7Hg8efY3r/qyqyHPfNQA4z8jLytGpkzS3jHYcHh
+         Yzv/idZWUv/Zn1QXh+1JuDfSM3tdy+9vs6ai9TmTBuBTGM5z+VR2U1nIMOpOhryw0t2b
+         wQG3aujGMLuFrErGcOF38vHq2z5OaxXvrGoZHWb+n+uBMOKaLokq+uIcZvf4pBG49/5n
+         De+w==
+X-Gm-Message-State: AOJu0Yw0AXpr7BMwGPs87BuKF5RT/nBqKE+huxq+fZxmPoboC0ZgTDXG
+	W3TGCwOVAH5cj9LqocsG01xv68Q262DcqWGGbpJ47WVXdAy5bYMNYrVnDw==
+X-Gm-Gg: ASbGncv29svEpp+kZczNkl4JBCB5g146sH97r1E0vheZlwzz9AA4Ds+bGqZsePrUaV/
+	eQXqgolI7+yEHbsn03HNQ9tmIlH1VTx8fqTGhcFDS8GjFrhz4GwEhJ9cKp1/zvz95qaP4bSKFFC
+	wx77uG0vUpIbtT7lBLBsM/Q2EWqFm67oidBBrOvMQ6YM5vE2sXUX2/c9Tj/rJk6UEh40+QcIaVy
+	mZ6DaR2FntPS1zp/E/xPtfYeSNg7DVQb4RBqbqcIEOWtT+LVY4XA+PhjwvSWEfUhV/cRkxiUR7E
+	HNXbmhaPlq7V+1CKM1OD6DT67lLq
+X-Google-Smtp-Source: AGHT+IG7KQ3yZ6ueh84UQbdxAEhgzGltVUzJfuRxGH/4Hv86lX2wE2yoP8jAhovwP7jlmoL0+nrFig==
+X-Received: by 2002:a17:902:f685:b0:21f:2cb4:963 with SMTP id d9443c01a7336-21f4e7f2369mr274943685ad.50.1739289178697;
+        Tue, 11 Feb 2025 07:52:58 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f64a67488sm68690575ad.244.2025.02.11.07.52.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f368d79a7sm97631775ad.253.2025.02.11.07.52.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 07:52:56 -0800 (PST)
+        Tue, 11 Feb 2025 07:52:58 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 7/8] hwmon: (pmbus/core) Optimize debugfs status attribute initialization
-Date: Tue, 11 Feb 2025 07:52:39 -0800
-Message-ID: <20250211155240.2077464-8-linux@roeck-us.net>
+Subject: [PATCH v2 8/8] hwmon: (pmbus/core) Report content of CAPABILITY register in debugfs
+Date: Tue, 11 Feb 2025 07:52:40 -0800
+Message-ID: <20250211155240.2077464-9-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211155240.2077464-1-linux@roeck-us.net>
 References: <20250211155240.2077464-1-linux@roeck-us.net>
@@ -75,199 +75,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Define debugfs attributes used to access status registers in a data
-structure and loop through it instead of creating debugfs files
-one by one. This reduces code size and simplifies adding additional
-attributes if needed.
+Report the value of the CAPABILITY register in debugfs if supported.
+Only check if the register is supported if PMBUS_NO_CAPABILITY
+is not set.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Use ARRAY_SIZE() to calculate the number of debugfs files
+v2: Fix number of debugfs files
 
- drivers/hwmon/pmbus/pmbus_core.c | 130 +++++++++----------------------
- 1 file changed, 35 insertions(+), 95 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 25ad0a016292..f0f8b7ed5416 100644
+index f0f8b7ed5416..8625de9caff7 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3501,6 +3501,7 @@ static void pmbus_remove_symlink(void *symlink)
- 
- struct pmbus_debugfs_data {
- 	u8 reg;
-+	u32 flag;
- 	const char *name;
- };
- 
-@@ -3513,6 +3514,19 @@ static const struct pmbus_debugfs_data pmbus_debugfs_block_data[] = {
- 	{ .reg = PMBUS_MFR_SERIAL, .name = "mfr_serial" },
- };
- 
-+static const struct pmbus_debugfs_data pmbus_debugfs_status_data[] = {
-+	{ .reg = PMBUS_STATUS_VOUT, .flag = PMBUS_HAVE_STATUS_VOUT, .name = "status%d_vout" },
-+	{ .reg = PMBUS_STATUS_IOUT, .flag = PMBUS_HAVE_STATUS_IOUT, .name = "status%d_iout" },
-+	{ .reg = PMBUS_STATUS_INPUT, .flag = PMBUS_HAVE_STATUS_INPUT, .name = "status%d_input" },
-+	{ .reg = PMBUS_STATUS_TEMPERATURE, .flag = PMBUS_HAVE_STATUS_TEMP,
-+	  .name = "status%d_temp" },
-+	{ .reg = PMBUS_STATUS_FAN_12, .flag = PMBUS_HAVE_STATUS_FAN12, .name = "status%d_fan12" },
-+	{ .reg = PMBUS_STATUS_FAN_34, .flag = PMBUS_HAVE_STATUS_FAN34, .name = "status%d_fan34" },
-+	{ .reg = PMBUS_STATUS_CML, .name = "status%d_cml" },
-+	{ .reg = PMBUS_STATUS_OTHER, .name = "status%d_other" },
-+	{ .reg = PMBUS_STATUS_MFR_SPECIFIC, .name = "status%d_mfr" },
-+};
-+
- static void pmbus_init_debugfs(struct i2c_client *client,
- 			       struct pmbus_data *data)
- {
-@@ -3520,7 +3534,7 @@ static void pmbus_init_debugfs(struct i2c_client *client,
- 	struct pmbus_debugfs_entry *entries;
- 	const char *pathname, *symlink;
- 	char name[PMBUS_NAME_SIZE];
--	int i, idx = 0;
-+	int page, i, idx = 0;
- 
+@@ -3569,12 +3569,12 @@ static void pmbus_init_debugfs(struct i2c_client *client,
  	/*
- 	 * client->debugfs may be NULL or an ERR_PTR(). dentry_path_raw()
-@@ -3556,11 +3570,12 @@ static void pmbus_init_debugfs(struct i2c_client *client,
  	 * Allocate the max possible entries we need.
  	 * device specific:
- 	 *	ARRAY_SIZE(pmbus_debugfs_block_data) + 1
--	 * 10 entries page-specific
-+	 * page specific:
-+	 *	ARRAY_SIZE(pmbus_debugfs_status_data) + 1
+-	 *	ARRAY_SIZE(pmbus_debugfs_block_data) + 1
++	 *	ARRAY_SIZE(pmbus_debugfs_block_data) + 2
+ 	 * page specific:
+ 	 *	ARRAY_SIZE(pmbus_debugfs_status_data) + 1
  	 */
  	entries = devm_kcalloc(data->dev,
- 			       ARRAY_SIZE(pmbus_debugfs_block_data) + 1 +
--			       data->info->pages * 10,
-+			       data->info->pages * (ARRAY_SIZE(pmbus_debugfs_status_data) + 1),
+-			       ARRAY_SIZE(pmbus_debugfs_block_data) + 1 +
++			       ARRAY_SIZE(pmbus_debugfs_block_data) + 2 +
+ 			       data->info->pages * (ARRAY_SIZE(pmbus_debugfs_status_data) + 1),
  			       sizeof(*entries), GFP_KERNEL);
  	if (!entries)
- 		return;
-@@ -3596,107 +3611,32 @@ static void pmbus_init_debugfs(struct i2c_client *client,
- 	}
- 
- 	/* Add page specific entries */
--	for (i = 0; i < data->info->pages; ++i) {
-+	for (page = 0; page < data->info->pages; ++page) {
- 		/* Check accessibility of status register if it's not page 0 */
--		if (!i || pmbus_check_status_register(client, i)) {
-+		if (!page || pmbus_check_status_register(client, page)) {
- 			/* No need to set reg as we have special read op. */
- 			entries[idx].client = client;
--			entries[idx].page = i;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d", i);
-+			entries[idx].page = page;
-+			scnprintf(name, PMBUS_NAME_SIZE, "status%d", page);
- 			debugfs_create_file(name, 0444, debugfs,
- 					    &entries[idx++],
- 					    &pmbus_debugfs_ops_status);
- 		}
- 
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_VOUT) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_VOUT;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_vout", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
-+		for (i = 0; i < ARRAY_SIZE(pmbus_debugfs_status_data); i++) {
-+			const struct pmbus_debugfs_data *d =
-+					&pmbus_debugfs_status_data[i];
- 
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_IOUT) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_IOUT;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_iout", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_INPUT) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_INPUT;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_input", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_TEMP) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_TEMPERATURE;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_temp", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_CML)) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_CML;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_cml", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (pmbus_check_byte_register(client, i, PMBUS_STATUS_OTHER)) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_OTHER;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_other", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (pmbus_check_byte_register(client, i,
--					      PMBUS_STATUS_MFR_SPECIFIC)) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_MFR_SPECIFIC;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_mfr", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN12) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_FAN_12;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan12", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
--		}
--
--		if (data->info->func[i] & PMBUS_HAVE_STATUS_FAN34) {
--			entries[idx].client = client;
--			entries[idx].page = i;
--			entries[idx].reg = PMBUS_STATUS_FAN_34;
--			scnprintf(name, PMBUS_NAME_SIZE, "status%d_fan34", i);
--			debugfs_create_file(name, 0444, debugfs,
--					    &entries[idx++],
--					    &pmbus_debugfs_ops);
-+			if ((data->info->func[page] & d->flag) ||
-+			    (!d->flag && pmbus_check_byte_register(client, page, d->reg))) {
-+				entries[idx].client = client;
-+				entries[idx].page = page;
-+				entries[idx].reg = d->reg;
-+				scnprintf(name, PMBUS_NAME_SIZE, d->name, page);
-+				debugfs_create_file(name, 0444, debugfs,
-+						    &entries[idx++],
-+						    &pmbus_debugfs_ops);
-+			}
- 		}
- 	}
- }
+@@ -3588,6 +3588,15 @@ static void pmbus_init_debugfs(struct i2c_client *client,
+ 	 * assume that values of the following registers are the same for all
+ 	 * pages and report values only for page 0.
+ 	 */
++	if (!(data->flags & PMBUS_NO_CAPABILITY) &&
++	    pmbus_check_byte_register(client, 0, PMBUS_CAPABILITY)) {
++		entries[idx].client = client;
++		entries[idx].page = 0;
++		entries[idx].reg = PMBUS_CAPABILITY;
++		debugfs_create_file("capability", 0444, debugfs,
++				    &entries[idx++],
++				    &pmbus_debugfs_ops);
++	}
+ 	if (pmbus_check_byte_register(client, 0, PMBUS_REVISION)) {
+ 		entries[idx].client = client;
+ 		entries[idx].page = 0;
 -- 
 2.45.2
 
