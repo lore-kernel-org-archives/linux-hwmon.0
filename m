@@ -1,85 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9E81F192E;
-	Tue, 11 Feb 2025 13:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2652253B7E
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739281200; cv=none; b=baHEvTsKlafnHEe1v8j0KLxtHEHEO3RZy9CocpxQWL14pFtUgXi6Xr4JG7faG7XertQ8QfGQLa5GgAuUYeZhGBaBZfA87jBAE+7Y8qnXLKrv8DuyiJECPd4xW/7kzhAYdAzekKX8zkjteuTB17cQzc3FJxhGwF1ekuA3E7GuPSI=
+	t=1739289166; cv=none; b=djm5XH8FzR8d3kf6phpliUyHAe1+FA+RQsqX0/NU4eReHWIEG+kbh0Lq49BkeGVAma1To8ZGiYXHjoDe3J6jk7kX/p2BhM7j2LMxsJj8W4ZUMcmcmUFQu4+eFYw29sSh4bTYy4QLJHCxKUXMGMfQmf06xwFApSh5f5zRRoHquSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739281200; c=relaxed/simple;
-	bh=X/z5RLepAXNmUbTyzCdnYvNom6vcH+olkPKA1YQBd6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+ZTTYCn76Glv1NlnrHENx+LQ5LURC0VusTIxR+FAvgl1M1NmrrJHMmV6k5jAW//5SoCRaUXte3C4zAgO4zcx8FQmvWsN+irlfn5NNOI2cn9azeACd0wlJ3TMuCh+9pTY6Qjzfk79aj7H2yrGwdoNpmkKomh5S974aJzLuvo8ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gi7flhMZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739289166; c=relaxed/simple;
+	bh=b7BmnWeRF3gZrVJhUopFJd2Hk39yZVFPA/FkcoSs67Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g+0JRpPBuxmbG3NxF65D3rrCHvfiWliPBusGA5lBSnr0eeoES0k3/fuk2if9cL+qT6VycbYHoCGAjSK4ouCYEdwf2dk1NrCGIk7hY3L7bq5rgw0OsYKXv+PdVd+7EDzsceaRv0VC2LONoTkmpPwMnX/2+RyKZz41hY8jGNVsny0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FIvC/BTq; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gi7flhMZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57321C4CEDD;
-	Tue, 11 Feb 2025 13:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739281200;
-	bh=X/z5RLepAXNmUbTyzCdnYvNom6vcH+olkPKA1YQBd6o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gi7flhMZcezO26pgkPU7P3MQXiUzFVUKKni0EjG+hA6whzNDwmNDDIiRU5njEyBfE
-	 sJ/AoUcchyziuDrdMRWznfZGnA5X+QGc3Ts2dgbyt+CHxtqEWbF0UjyEOqu8ASGm5F
-	 ShAUHFGfTmS2y5pRsVSyRXJwETVB5ix1duQKQD4vaD02SOm74lsJgEe3JWUavgjE82
-	 BgVOnE5veQ6F2JdnoO52Wz9xbJtIi2OwcFpCIe9zfxOXCDRq5jDTdmb7bou+99HO3m
-	 gNjYuIDZIGNfwfQKpu0c86mi3dZRpD1tj8f6kInMZ4HynGBzx+CX8hBKoyoF2AvMIJ
-	 q/ikq9ZcycIag==
-Date: Tue, 11 Feb 2025 13:39:55 +0000
-From: Lee Jones <lee@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, thomas.petazzoni@bootlin.com,
-	blake.vermeer@keysight.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] mfd: cgbc: add a hwmon cell
-Message-ID: <20250211133955.GR1868108@google.com>
-References: <20250203-congatec-board-controller-hwmon-v4-0-ff6c76a4662c@bootlin.com>
- <20250203-congatec-board-controller-hwmon-v4-2-ff6c76a4662c@bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FIvC/BTq"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f5268cf50so62174425ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739289163; x=1739893963; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=podBIZupjum9hqRjg/OTVZkDWz6CvVGX+SB+9L6GNAQ=;
+        b=FIvC/BTqBaUEKdJEBUBRFVqL3XjT0ypTKJDLtD1Te0IJmNau9CBrnxAY5QLib62scf
+         zTpte+h+FG3RAzKLqMIPQ8yy6F1EYUVOnPCgLeL06IBROHd0saZP4B+zyIepZ2LlKVpp
+         rXPhQVBnWQg1Ci5Kw8O9tZedamV8DsiAC0I62hRP5i/+HTtQcTvMRHxvBTnLoaeldYMH
+         EPobcgQ0K0VZAtaooNcYt5aSvvac5Rn70UwhTkBySG5iM5tuO8b0/LyP/kXkVWO6Z851
+         +FKbU/ykW3E9RpTo4XTpLwMCkP75/BXtLbUIsL1AJHYoN7wRyf9ccI90sKdnFxD0yHsk
+         NwEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739289163; x=1739893963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=podBIZupjum9hqRjg/OTVZkDWz6CvVGX+SB+9L6GNAQ=;
+        b=w6wq9aQP/ONkHU6AJyrbopUu1jVlHRc/sEZF/MdVU8E+ryHxybNSWsXwOTMPvpVwYo
+         t8DIlPsZwQ5LK31pADgcKc7CmC98iPV95oD8RXGprRbJJ+sbcmMfxE2tlTCjzEc96xFc
+         IR3VxVv5eo4V1loL41BRo1cM91OHwH5TN6TnGFIlleOGPsDcLxukRmHv75LylHL+gpcc
+         03QiKMC83aqiF2tG6AHXqATbN2oB0eFUSiG/W2Vlk2R3JZUoihlqM8mMplFULBeL9O+w
+         VhT2Ha4lrRh/G24tuGRuTHpO3WnWGxak9tGmv1RgHOZajAzVvnJpAjyVzyh/lLhGorKe
+         G7qQ==
+X-Gm-Message-State: AOJu0YwRAPnvdsiz1tC+zJBnX5cBWJAbZNZ2FHfYgEA/p9iS3izR7J8O
+	ikM60+tVj01bKdAZyi2sapJTJE8EpAyXRjMULx/LWRue5uu2I678PX1/vA==
+X-Gm-Gg: ASbGncuztfKCvSXAio5p96l1jSF7Zz+t5utAIC571nh/bwsEj/aIM8WjDM08Ebzo5zW
+	A1FJRh9ZLpgY/TbrlmqxJWNakoFBQe+gak3ibVwVWsv+n0YzGpKKvp1n8sEPZDuIvTWh+4a3UNK
+	/hE4vzHyZu3dA6Lzq1AGq/myajiIElAP1x6Lv3cy5FqkKtTyTmUX99Du0JFizvXzcuTF4U0lK1e
+	L70BVS1NxICZj6gDs8NUzmeuxBOmDPZShehJTaVI6dK45Ah7iFBeDKK9WNqLiA1wAFELUjssWNu
+	HZPQAuJrbQps8Wcb6BQPt6lD34hR
+X-Google-Smtp-Source: AGHT+IGoT179Nhq/Ghigastg/KOYKJVxHVarbomqnYBxiTcyMgoPcOoFW33yRNwdrCHgyVq2EZED9Q==
+X-Received: by 2002:a05:6a20:7f96:b0:1e8:bd15:6845 with SMTP id adf61e73a8af0-1ee49d3e237mr7973111637.1.1739289163220;
+        Tue, 11 Feb 2025 07:52:43 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-730851fa25bsm4691683b3a.180.2025.02.11.07.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 07:52:42 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 0/8] hwmon: (pmbus/core) Various fixes and improvements
+Date: Tue, 11 Feb 2025 07:52:32 -0800
+Message-ID: <20250211155240.2077464-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203-congatec-board-controller-hwmon-v4-2-ff6c76a4662c@bootlin.com>
 
-If you resubmit this set, please capitalise the first char in the
-subject line after the driver identifiers.
+Improve debugfs code by improving its scalability and making it
+unconditional. Use the new i2c_client debugfs directory to reduce
+local code. To retain backward compatibility, link the old pmbus
+debugfs directory to the i2c debugfs directory.
 
-> The Board Controller has some internal sensors.
-> Add a hwmon cell for the cgbc-hwmon driver which adds support for
-> temperature, voltage, current and fan sensors.
+Report the CAPABILITY register content in debugfs if it is available.
 
-Generally fine.
+Declare regulator notification function as void since its return value
+is not used.
 
-Line-breaking just for a new sentence is an odd choice though.
+Last but not least, fix various coding style issues.
 
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> ---
->  drivers/mfd/cgbc-core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
-> index 85283c8dde25..0460e4e3f3c5 100644
-> --- a/drivers/mfd/cgbc-core.c
-> +++ b/drivers/mfd/cgbc-core.c
-> @@ -236,6 +236,7 @@ static struct mfd_cell cgbc_devs[] = {
->  	{ .name = "cgbc-gpio"	},
->  	{ .name = "cgbc-i2c", .id = 1 },
->  	{ .name = "cgbc-i2c", .id = 2 },
-> +	{ .name = "cgbc-hwmon"	},
->  };
->  
->  static int cgbc_map(struct cgbc_device_data *cgbc)
-> 
-> -- 
-> 2.39.5
-> 
+v2:
+- Add Reviewed-by: tags
+- Use ARRAY_SIZE() to determine the number of debugfs entries
+- Fix number of needed debugfs entries when adding the capability file 
 
--- 
-Lee Jones [李琼斯]
+----------------------------------------------------------------
+Guenter Roeck (8):
+      hwmon: (pmbus/core) Fix various coding style issues
+      hwmon: (pmbus/core) Use local debugfs variable in debugfs initialization
+      hwmon: (pmbus/core) Use the new i2c_client debugfs directory
+      hwmon: (pmbus/core) Make debugfs code unconditional
+      hwmon: (pmbus/core) Declare regulator notification function as void
+      hwmon: (pmbus/core) Optimize debugfs block data attribute initialization
+      hwmon: (pmbus/core) Optimize debugfs status attribute initialization
+      hwmon: (pmbus/core) Report content of CAPABILITY register in debugfs
+
+ drivers/hwmon/pmbus/pmbus_core.c | 374 ++++++++++++++++-----------------------
+ 1 file changed, 149 insertions(+), 225 deletions(-)
