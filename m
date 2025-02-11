@@ -1,70 +1,70 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F7B253F2A
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A018F253F2B
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739289173; cv=none; b=DTMaLF27FcgPvnMn60k6O1W3w6/Ae7SpZNEkDYFKuwgomNxy+syYS41X2swjADR7dRV5GPUgzqNJG9uh0gIwcmXIkbKCnQcUrP/3zRBWU1yQGTxn/5FO8T0WDbiRdVrHKyjXhUDuB2ggCcSEitkA7KB0o/e7FcqLg/tHDLqKuNc=
+	t=1739289175; cv=none; b=rl3fYYPijTXB2JP9SfLyusulVufbYpyySkdzPPmang5zajTjKP3lIQGXqYT0cCQeDhk8xOynzn9rmzQsy3Kwkrr3kGNMs577all1dWTyc/3FMw5BbAqcLSzF3ZTc+7PzHrOUUO5ewRU1noN1F3GVduP1za/CfFCrJvPUOxG9Dtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739289173; c=relaxed/simple;
-	bh=epYroza9t6c6x7Pr5NJhKYuxRgC16p4S0BGJhZ1/1jA=;
+	s=arc-20240116; t=1739289175; c=relaxed/simple;
+	bh=g8wzu0eYdr1RaOxgeeuA9TNT+mxg3KGV2OLMF/Yckbg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jidGjHLYH1MTcIbGwAfi7TiIO+5MTpr3w7iUqZ4d5HfGIW2RBmu2U5ExrIYTbDGr7z6coNrCvn1JR4G2xIO5ie0ddp6iP8Q7Mv5Wo8T0PI7GrDYgSis0HSttwKEEEuR5rIH9GCWEsGDdhT8ALTbbLdNMnIUpudaNZzitw7Qqrl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lAne/IZK; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=UT+hVM2g3cG9QOeNNSJneREhpuxwHioAcMs6dKOGNas0AgTDkDiD3HnEfZqK+viruK7IqDazWsZ/FHXvqxnzvDsPSrNmKtouPxhxGreG8NzXOpwWYgHI9JUgsqls5iH1MDmyPFV86A11jF/Iv+hsRulwakhmkFYUu1ofZwkSZwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e/Ynl74D; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lAne/IZK"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f50895565so64799425ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e/Ynl74D"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fa1d9fb990so9113282a91.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739289170; x=1739893970; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739289172; x=1739893972; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jYrIJHyOGbj+ZBYaeYIwFamAdh5HNASdG8LGnoiovEM=;
-        b=lAne/IZK9wyFh5rxoOJyy9/sLnrdkWYI2GXCC/LtH7H4ggqmzYsA1bJXib0XUbfiTc
-         M4CheQRgMFM+H8V/ge2RJAeDNdNe42/gOefIffNK6d43+vQpV8r1BaonUQ8gxToibDLS
-         dNIyIjw4Gpv9fLUjX+Tu1ajno9h8naIp7U5lJiU1UYfeUlfVUyhkIE6kMFrNYtuGSr1r
-         RdXYMXTLN9zKwl5rRfZUlUmdL+c9dlhYg96uHhTcdrr+q+ZK6Ke/5L7LcbGshzqzXXiA
-         1DSFSqIMKv6JYFuqzlGa+6RyurnntYBPkckMRx6k/1po72jfbwq07SWaelX8Iauh+UHe
-         QPnQ==
+        bh=Rs8PeEicoW0PbsG7q1rUbmUXFYDywYudvhHCFnOE6+Q=;
+        b=e/Ynl74DQxysqqa0AWrOrMghjcpSNx2k2P/riZjI/Mk1aTpCkPO9fAenVv+4DLYx3r
+         rm2KiSrNF1XQ7XIHXG7EjGTPya4aie83LXECbzWMVeu5qPhuyRGAkxpd4QGEFjVwDwsy
+         aRxDOiXS2FvIQnFmvUk7kHBzyqef0kFmI82O/NTQxbEmQ79SEn638WpBYVCi+z71B5BF
+         mzyQK91DhLyvdxhJpv96i0geAg7LQIU5O0bWnDWEa0a0BLHJDogaitU6HO5Dn5eX3XXx
+         +c6FEMzadJHig84/3XALkXQoyMlr9/TpYZrmCe50qH4ig1dB371HpXck0Jwj+2odXsSJ
+         D6KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739289170; x=1739893970;
+        d=1e100.net; s=20230601; t=1739289172; x=1739893972;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jYrIJHyOGbj+ZBYaeYIwFamAdh5HNASdG8LGnoiovEM=;
-        b=m+xkwnGIXuVb//tb+uw2qlzu+pVFqHhmNHlVbQke2mbna8CzJ4neRmxTyKk7bvhye8
-         xFAAV7k8R3mxe9bHP6AwsyXCvNn3QnfKi3PXm5dXDRN4x1t/Q/EDhxefrfHAcVeZ1Tvv
-         8eXUvuq13ykaNaUmiOwvAf7jDcD1qDIGxIvtk0s5Wa4N2JUOLf0syW7ESzLRpDmWrg4e
-         97piAlr7xw+aTro5u5fZ3/146ay5mOGIbLkaDfl8xV0dLXcRIM0YGruIwZcyfXAeUZAm
-         loi6q2ne381W6QcaJayIDz1dEW63ABKJM7PeRFbWyh+5DPuwlF/6WlH5P2heoKP3BqOk
-         Pgrg==
-X-Gm-Message-State: AOJu0YwBtA/RkUQF4mt9dT7iEkBLDyZdUtHiOgAvRx8g9rBKPjwGx0bG
-	tVV0UyHwQ6vsaC43ZrY9yhY32Z4ZWq8WRFrRyRfnXctKADjpB0+mKn4opA==
-X-Gm-Gg: ASbGncsWL+OdGqC5gzx3UUFUf6svbz+san/cgRe9GtZOLXhCAPAe8y04bHeuTuiuxEX
-	V7BhdmXSJxkbIqIkOtOJ6kEKfV9QAd9VJfOoDTuQSCIx+Q/FFJdNRX7U4zKiRh/BloEPkd2eVZy
-	4prPr2znf+kFCfji8ZbugoK+b9gW6Tsp52Kf+37VXeHgLgwqwn76bhDQ+pHAfR34z83+sT81CQd
-	/z9YjQ9CndthtgpNA0hnkjke4uHihJdQi2gWC5pAhkW3r2yXn1BDCx1ycQrMlEK2y+vt+rCIZOO
-	EqoCxeGOawvA/kxjVLyMerUjmqmt
-X-Google-Smtp-Source: AGHT+IHaLOD0ew7+A+fV+mL6cnl/TEqCRq205ruqCsWyIhQP/JIk/gvgXZKHkiVdlGnGpEqG+MPNQA==
-X-Received: by 2002:a17:902:d581:b0:215:7b06:90ca with SMTP id d9443c01a7336-21fb641d55dmr64414145ad.17.1739289170021;
-        Tue, 11 Feb 2025 07:52:50 -0800 (PST)
+        bh=Rs8PeEicoW0PbsG7q1rUbmUXFYDywYudvhHCFnOE6+Q=;
+        b=J8911WWHUyZvd5p3oV307imMGw7gs7a/MdB4LGOKDnCW8rkMfUTH4M/uxKzBb676yH
+         mqkZ9VSwDdPLuBt6mnufZTGPIAjx1qog+0RlJO9ChpXjDwANlTS1J124HRSOGkOEY9J8
+         /zFnPkctyWfr73Mj51SMcrKXIOF4RFG6Ub4kpzZCb3xf0SA90xLwFvYqphY15StTGHu5
+         b8Sn1qaJybTXrBVJlAnFgyRuQuKAA0uIQX15DM1Ri4YNgpki4yTW0DQ726szgMTgUoCH
+         ID81JhliT2vcFBnz5m5bIyQFc/KyJ7prTXRKKUwfTaRoq1/r59wp/9bmyy72JCgNXpD7
+         FQCQ==
+X-Gm-Message-State: AOJu0YzrBRHor5trWAJ8CjuX2Cc4LsZxO6b8q65V+oDW1LbXiOvclH99
+	K01M1K0SPskNX4wAaMh4C6kdS81oMWxRoN7wDWTt3cM2uOGSFWt0JuaNNw==
+X-Gm-Gg: ASbGncsLEHQPdtVWItWnYVD41ns14Cc58NyRU07D3k0C0acTfZzofsR0d/HTT1Xh9Nw
+	9Z82zdlUb2KzlQTomqECjwhaQttaGjVNgEeL++GD4fJ6TsNFMG1slp0huQEdmL4Ja7ld+BGP37K
+	IlO2Ej33mkoL/kotGAyWaC+WNLyZFgc/ySUAGruylpyn6sI7mj+StCkJFh99U4igNvLg5sK/ThF
+	nU1ZjWrEFG+5lUxY26COqCAYrWa/psvpGLYMHoNGd3qZopxidmhAJtf79uyXOk1H6PtGRUG4U3C
+	E7lap2K8sVCH78iScdOKwhqdk5+i
+X-Google-Smtp-Source: AGHT+IFtX9ggC/vjwUDh1mo6GoqIbgH5UuZkFg/yhsU4tVW/QJ7yymKQGIGgxCYTsn7KhSMSjfAkDA==
+X-Received: by 2002:a17:90b:1805:b0:2ee:d024:e4fc with SMTP id 98e67ed59e1d1-2fb7e8d765fmr381074a91.33.1739289172491;
+        Tue, 11 Feb 2025 07:52:52 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f368db022sm98309715ad.259.2025.02.11.07.52.49
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2faa30a356csm1730710a91.7.2025.02.11.07.52.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 07:52:49 -0800 (PST)
+        Tue, 11 Feb 2025 07:52:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v2 3/8] hwmon: (pmbus/core) Use the new i2c_client debugfs directory
-Date: Tue, 11 Feb 2025 07:52:35 -0800
-Message-ID: <20250211155240.2077464-4-linux@roeck-us.net>
+Subject: [PATCH v2 4/8] hwmon: (pmbus/core) Make debugfs code unconditional
+Date: Tue, 11 Feb 2025 07:52:36 -0800
+Message-ID: <20250211155240.2077464-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211155240.2077464-1-linux@roeck-us.net>
 References: <20250211155240.2077464-1-linux@roeck-us.net>
@@ -76,134 +76,106 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The I2C core now manages a debugfs directory per I2C client. PMBus has
-its own debugfs hierarchy. Link the two, so a user will be pointed to
-the I2C domain from the PMBus domain.
+Drop contitionals around debugfs code to compile it unconditionally.
+In practice it will be optimized away by the compiler if CONFIG_DEBUG_FS
+is not enabled, so the code size is not affected by this change.
 
-Suggested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Also silently ignore errors if debugfs initialization fails.
+
 Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Added Reviewed-by: tag
 
- drivers/hwmon/pmbus/pmbus_core.c | 63 +++++++++++++++++++++-----------
- 1 file changed, 41 insertions(+), 22 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 472375b62379..be794ba993b8 100644
+index be794ba993b8..39cdcbb96215 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -8,6 +8,7 @@
+@@ -3421,7 +3421,6 @@ static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
  
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/dcache.h>
- #include <linux/kernel.h>
- #include <linux/math64.h>
- #include <linux/module.h>
-@@ -99,7 +100,6 @@ struct pmbus_data {
- 	int num_attributes;
- 	struct attribute_group group;
- 	const struct attribute_group **groups;
--	struct dentry *debugfs;		/* debugfs device directory */
+ static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
  
- 	struct pmbus_sensor *sensors;
- 
-@@ -3497,34 +3497,49 @@ static const struct file_operations pmbus_debugfs_ops_mfr = {
- 	.open = simple_open,
- };
- 
--static void pmbus_remove_debugfs(void *data)
-+static void pmbus_remove_symlink(void *symlink)
+-#if IS_ENABLED(CONFIG_DEBUG_FS)
+ static int pmbus_debugfs_get(void *data, u64 *val)
  {
--	struct dentry *entry = data;
--
--	debugfs_remove_recursive(entry);
-+	debugfs_remove(symlink);
+ 	int rc;
+@@ -3502,8 +3501,8 @@ static void pmbus_remove_symlink(void *symlink)
+ 	debugfs_remove(symlink);
  }
  
- static int pmbus_init_debugfs(struct i2c_client *client,
- 			      struct pmbus_data *data)
+-static int pmbus_init_debugfs(struct i2c_client *client,
+-			      struct pmbus_data *data)
++static void pmbus_init_debugfs(struct i2c_client *client,
++			       struct pmbus_data *data)
  {
--	struct dentry *debugfs;
--	int i, idx = 0;
--	char name[PMBUS_NAME_SIZE];
-+	struct dentry *symlink_d, *debugfs = client->debugfs;
+ 	struct dentry *symlink_d, *debugfs = client->debugfs;
  	struct pmbus_debugfs_entry *entries;
-+	const char *pathname, *symlink;
-+	char name[PMBUS_NAME_SIZE];
-+	int i, idx = 0;
- 
--	if (!pmbus_debugfs_dir)
-+	/*
-+	 * client->debugfs may be NULL or an ERR_PTR(). dentry_path_raw()
-+	 * does not check if its parameters are valid, so validate
-+	 * client->debugfs before using it.
-+	 */
-+	if (!pmbus_debugfs_dir || IS_ERR_OR_NULL(debugfs))
- 		return -ENODEV;
- 
- 	/*
--	 * Create the debugfs directory for this device. Use the hwmon device
--	 * name to avoid conflicts (hwmon numbers are globally unique).
-+	 * Backwards compatibility: Create symlink from /pmbus/<hwmon_device>
-+	 * to i2c debugfs directory.
+@@ -3517,7 +3516,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 	 * client->debugfs before using it.
  	 */
--	debugfs = debugfs_create_dir(dev_name(data->hwmon_dev),
--				     pmbus_debugfs_dir);
--	if (IS_ERR_OR_NULL(debugfs))
+ 	if (!pmbus_debugfs_dir || IS_ERR_OR_NULL(debugfs))
 -		return -ENODEV;
-+	pathname = dentry_path_raw(debugfs, name, sizeof(name));
-+	if (IS_ERR(pathname))
-+		return PTR_ERR(pathname);
- 
--	data->debugfs = debugfs;
-+	/*
-+	 * The path returned by dentry_path_raw() starts with '/'. Prepend it
-+	 * with ".." to get the symlink relative to the pmbus root directory.
-+	 */
-+	symlink = kasprintf(GFP_KERNEL, "..%s", pathname);
-+	if (!symlink)
-+		return -ENOMEM;
-+
-+	symlink_d = debugfs_create_symlink(dev_name(data->hwmon_dev),
-+					   pmbus_debugfs_dir, symlink);
-+	kfree(symlink);
-+
-+	devm_add_action_or_reset(data->dev, pmbus_remove_symlink, symlink_d);
++		return;
  
  	/*
- 	 * Allocate the max possible entries we need.
-@@ -3712,9 +3727,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 	 * Backwards compatibility: Create symlink from /pmbus/<hwmon_device>
+@@ -3525,7 +3524,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 	 */
+ 	pathname = dentry_path_raw(debugfs, name, sizeof(name));
+ 	if (IS_ERR(pathname))
+-		return PTR_ERR(pathname);
++		return;
+ 
+ 	/*
+ 	 * The path returned by dentry_path_raw() starts with '/'. Prepend it
+@@ -3533,7 +3532,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 	 */
+ 	symlink = kasprintf(GFP_KERNEL, "..%s", pathname);
+ 	if (!symlink)
+-		return -ENOMEM;
++		return;
+ 
+ 	symlink_d = debugfs_create_symlink(dev_name(data->hwmon_dev),
+ 					   pmbus_debugfs_dir, symlink);
+@@ -3550,7 +3549,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
+ 			       7 + data->info->pages * 10, sizeof(*entries),
+ 			       GFP_KERNEL);
+ 	if (!entries)
+-		return -ENOMEM;
++		return;
+ 
+ 	/*
+ 	 * Add device-specific entries.
+@@ -3727,15 +3726,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
  					    &pmbus_debugfs_ops);
  		}
  	}
--
--	return devm_add_action_or_reset(data->dev, pmbus_remove_debugfs,
--					debugfs);
-+	return 0;
+-	return 0;
  }
- #else
- static int pmbus_init_debugfs(struct i2c_client *client,
-@@ -3819,9 +3832,15 @@ EXPORT_SYMBOL_NS_GPL(pmbus_do_probe, "PMBUS");
+-#else
+-static int pmbus_init_debugfs(struct i2c_client *client,
+-			      struct pmbus_data *data)
+-{
+-	return 0;
+-}
+-#endif	/* IS_ENABLED(CONFIG_DEBUG_FS) */
  
- struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
+ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
  {
--	struct pmbus_data *data = i2c_get_clientdata(client);
--
--	return data->debugfs;
-+	/*
-+	 * client->debugfs may be an ERR_PTR(). Returning that to
-+	 * the calling code would potentially require additional
-+	 * complexity in the calling code and otherwise add no
-+	 * value. Return NULL in that case.
-+	 */
-+	if (IS_ERR_OR_NULL(client->debugfs))
-+		return NULL;
-+	return client->debugfs;
- }
- EXPORT_SYMBOL_NS_GPL(pmbus_get_debugfs_dir, "PMBUS");
+@@ -3822,9 +3813,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+ 	if (ret)
+ 		return ret;
  
+-	ret = pmbus_init_debugfs(client, data);
+-	if (ret)
+-		dev_warn(dev, "Failed to register debugfs\n");
++	pmbus_init_debugfs(client, data);
+ 
+ 	return 0;
+ }
 -- 
 2.45.2
 
