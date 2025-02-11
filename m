@@ -1,70 +1,69 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561F0253F09
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F105253F09
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739289176; cv=none; b=Qxy+d76zmDiOgrf2vVx1gm1KVUIP1/MyT0uy9trxz5wKSHXTTc8aM3Pxa+jQLotUEnjR3gqaZgrx2NDa3y1OLIj/lX90cukbCkReULq8cygVJEOeWO/hM7oK56Xs62PkpNkuUK5qcgNghdrobnBIIvFWm4jLXD8uDsfDP/V4tWU=
+	t=1739289179; cv=none; b=ukgGN0MELY0c1qQWqF/Uu190wAyXb+et0oeBFTLwJfomj9LLZ0cIdBrlQUUOBQDx8v6cfJ9p2EZ+myyMOXL1sbrux70sfvmGizLlM5dHCywPmX5yQYf6uTnIZm2+3mLKMSnJSIa1SCWCpQ1DD/rRnzFnRqjUsfno6W3Y7PEF67g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739289176; c=relaxed/simple;
-	bh=cj48dyNTd0s9sZhJQ9XvBi9Ios9Yn3sGSNj2XqkMGhU=;
+	s=arc-20240116; t=1739289179; c=relaxed/simple;
+	bh=ZCxdGeHtPZl67RoBhM5PUAd7I1GtBCo7Tu4i5Kk1xxA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZpSLcEHEw9WBF0LYEIBDR6dWkojf6C3jy9sG/GvY4/fHsCF4xOqo57E30aj798y6+aiAaALsl4sa6x0NUZnHzWLIbgOHkwm8dlzVRhFldeF7HHHwPzTv6Wva2aNuE/mkqBpYS3LPxzX29c4PIbqdmGMFQEA+QZ3sqPrg0n7/5tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PGC7jMb3; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=JnFnjtu5Mvsu/GUXBw4ejnVelIuePRsdvqkti4grvvvNxF6fAsp47pxbbhL3PGBAv+BBek9LO+ko+Siz0zFsooA5FG5pHUTK9Mq0JLLDASoWjPehyo7JKjawl0O7ztpOlIqByhaJVRhOxWSnK3ntXn4DVaP5PgOzdstlktnZekE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dg6WAVwB; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PGC7jMb3"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21f573ff39bso85707925ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dg6WAVwB"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21f3c119fe6so130068675ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739289174; x=1739893974; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739289176; x=1739893976; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=20eQb4tQxHftvzVRi2J/iaF928YwTfWnxa70RPeCWJw=;
-        b=PGC7jMb3FcO4b9IORpBKpIpkwSU/QVGtbApeli76jzMmyi6oYgepeFe9GjBaJzmI4j
-         7sdbZ5QnWdlQcNuxkDkrk3wNjGXYtOjnA0QXxZ82vHuKEhGUrxdLHUNHzFRAs9GjNwYY
-         0eGxPKwrdwyaY8QxJLw8ftWkmjr1oNqvXcdK32NeeJltbC3SdQkZWQ4nYge8bJG5FRhe
-         tznGiImPmZ3lKAKjHFIWvqVX9NTEqvfHqkKiipDO3X3rIFaRxT8mcDi+fJ3JqH/TudMQ
-         9IzN81m95RiimU8H/NYouiQQt9ob5MXKYxNwaagMfMvm+/DRvxGAeaSBDAXm/uQ1MooD
-         /w8g==
+        bh=U9kai2uPOeBbYEdDxMaB3KxsGUE10PIaDaK+dtPaYwU=;
+        b=Dg6WAVwBggdv/KvVkPOkEBR+TSfVBEbTDeVULxUKcM5imjMZ/P09zITeyMCKvg4RR5
+         VvupMxoZ682t5sIOXer56lj46OBEW+ne+fiXgcQNHUB07vBp8C3odwXmdCnlWj3X4Xqt
+         PvDZD/mcs78OWFwqiRiGneC3I4qPteRmxPcdXAC1wBrFgmFA6m7vXMpuI8Wlt/5sQ0aJ
+         plenljs+wjj4U8+iP/h5ItGcf0Kfpq8xGkUsFuEdGTRRKU9NbtB27RtpH+0JBFcnG4zS
+         D/r1/HvPf3raNja/DVc7YtV9dudma4InE+CunlrMA1xI62XERBAlSvKsS55lVJALGvUI
+         eUBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739289174; x=1739893974;
+        d=1e100.net; s=20230601; t=1739289176; x=1739893976;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=20eQb4tQxHftvzVRi2J/iaF928YwTfWnxa70RPeCWJw=;
-        b=bFUPU2dFHvURsuRGQoyNyL8vMLXMn0kcOAOy5NSH6oSHr63loHrclyfzp4t9IkDaXp
-         vpzDZ5o1ykILfGFUujsV/aeK88iifBVTAUrHwpgZnmmSfanViIT0Rew1Rzu76K+PrUNA
-         UINBhPZQxHegq65nZw969JlCEKeWN0jSkF8qH3hdQYGVuUICgNU75aT2NXUkEM8ejU9t
-         vOZYEsmrUKV63EsKfrHdeoDreZPIcJG1BDFd2NmjNfXFhkz9WBW7PenJ2jQa9UmC9ASm
-         +d1qBD8Wau6bPS7NZm8EjBsd7V4+DXWt9iygBIfgPzTcWwL0jxuGacIaN44zvQ/0hnYg
-         CgsA==
-X-Gm-Message-State: AOJu0YyXDH6iXOzAj36tkXikjlkNyCuasgrpFHx9ZH449OuAabAf9Tdt
-	lYy7yCNPh2HpOHu/s/R+fHYhlhr6px5aTO7P2xP5/KjYLLFWu+G9F9HuIg==
-X-Gm-Gg: ASbGnctGHyOfwLXumdOtDoSkNgpXMRHOQit88yYTISolzxFVGj82/Ya006zy2yPjk3m
-	vQv93Y73NWyFUHEo3HksTIxWVm5dQpx7nBuspNFbtZSgM+Dpr4rn5SoUqB8+5fNIqFLS+njC0SN
-	fVeHAD+3hfKEITq05O9mauKDZLh47uCctmJK6cYhAnNfQTqO3hTmrRXFI2ghWkhWIUb88cEggHb
-	zhTKC/HJ7wQw6davk9mH459IEMsyP/oChsstALzTLxRKptuYlWsGsudHS/QP0e2v6yUDir0pYRW
-	zUNCONCzPZgq79Kc+GBnfUH3lJ3/
-X-Google-Smtp-Source: AGHT+IHab0C5kAALQQ4tG+Q0A+yoiWaUpk3a7yCBSDSZNGsW0WHJokWLo6bhWIUWtbku0x81KG7oRg==
-X-Received: by 2002:a17:903:32c6:b0:215:94eb:adb6 with SMTP id d9443c01a7336-2207d0221c1mr2990745ad.40.1739289174141;
-        Tue, 11 Feb 2025 07:52:54 -0800 (PST)
+        bh=U9kai2uPOeBbYEdDxMaB3KxsGUE10PIaDaK+dtPaYwU=;
+        b=EL5PATKCgZfSqDOqa+HIL61WsoXlH+3ZYKkNf3ABOJgubGSNLEXlvBqF8raQF9nZau
+         ndU5SBVsjphaEy5KJEhGrrAZQLxRjh+KYdPVGS3hVkIE+Bu/0YX6/FpmqUgSSx3i7wgi
+         XFjKV7E0J2ZBv/Qt4qvwc2ywUdvTvmaw6JZ803zHcHXGy2DhMrDTVOdR62dARVDc9orb
+         fjc9EhR2KbqDA/Yt+EwkymuyBw5gNnPKjSdBol4L+gxojtA+GEjlyw00sJcg+ZPZRAoC
+         o4DXme/WEpGrGqevgRzd5nrg2bTwuBVzEc2utsRITYL7dAg+UdLJy11mnGOs5XNIchT9
+         r23Q==
+X-Gm-Message-State: AOJu0YyxSQ1jZh80ZusCb4KcbOoxqoMIdFEi23bIXy3LL9uM53tyB5OZ
+	sBwG6K1MySgKojvOpi5pF46UbKS+B5aKXKMTuwaP/K7ARDEutVByznqm6Q==
+X-Gm-Gg: ASbGnctsjN3go38DStAHJ/0qhJ6LISMFSRKAV3K9PYM7Gqpp5MrlAy3gOycnogVHcBn
+	KKjYRqPTZ6AaSKgkC6QulPOl0IGY7rnel82Zm2SLfNLPoGAGvmSBAGGBMfL9NRs5B3uSwJvaR4Z
+	31FpptfeFK86er9Dx2Rz1wYXgdVg/OdJlH2/go4MEu1CiPTJ3DxGNuWtmMnWiAr+iUcPpQjYK49
+	PeXoUVnNAr7aTipCHpkf55MLnSz74NrTObUmmRxYFVREGSkzCgc2736ObjDkqa+J9sNhd85V82u
+	eestlleXp5TLk2hLTA8aPDjkrZXQ
+X-Google-Smtp-Source: AGHT+IGQV2K8bjfY2vLuY4G14xV3WuNGzgp4qKt+jT6fbSu0CrVVYFqoV8X3xJ4jaJvZs7trnfk7Vw==
+X-Received: by 2002:a05:6a21:9211:b0:1ed:a4ae:31d6 with SMTP id adf61e73a8af0-1ee03a9adf2mr33174228637.18.1739289175794;
+        Tue, 11 Feb 2025 07:52:55 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653cbbasm98518995ad.79.2025.02.11.07.52.53
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7307b136aa6sm5925799b3a.57.2025.02.11.07.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 07:52:53 -0800 (PST)
+        Tue, 11 Feb 2025 07:52:55 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v2 5/8] hwmon: (pmbus/core) Declare regulator notification function as void
-Date: Tue, 11 Feb 2025 07:52:37 -0800
-Message-ID: <20250211155240.2077464-6-linux@roeck-us.net>
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 6/8] hwmon: (pmbus/core) Optimize debugfs block data attribute initialization
+Date: Tue, 11 Feb 2025 07:52:38 -0800
+Message-ID: <20250211155240.2077464-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211155240.2077464-1-linux@roeck-us.net>
 References: <20250211155240.2077464-1-linux@roeck-us.net>
@@ -76,61 +75,167 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The regulator notification function never returns an error.
-Declare it as void.
+Define debugfs attributes which need block data access in a data
+structure and loop through it instead of creating debugfs files
+one by one. This reduces code size and simplifies adding additional
+attributes if needed.
 
-While at it, fix its indentation.
+While this is currently only used for manufacturer specific attributes,
+the access code is generic and also works for other block attributes,
+so rename operation functions from _mfg to _block.
 
-No functional change.
+While at it, rename the "revison" file to "pmbus_revision" to make its
+meaning more obvious and to create a clear distinction against the
+"mfg_revision" file.
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Added Reviewed-by: tag
+v2: Use ARRAY_SIZE() to calculate the number of debugfs files
 
- drivers/hwmon/pmbus/pmbus_core.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 93 ++++++++++++--------------------
+ 1 file changed, 34 insertions(+), 59 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 39cdcbb96215..3085afc9c1ed 100644
+index 3085afc9c1ed..25ad0a016292 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3313,17 +3313,16 @@ static int pmbus_regulator_register(struct pmbus_data *data)
- 	return 0;
- }
+@@ -3461,8 +3461,8 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
+ DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
+ 			 NULL, "0x%04llx\n");
  
--static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
-+static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+-static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
+-				      size_t count, loff_t *ppos)
++static ssize_t pmbus_debugfs_block_read(struct file *file, char __user *buf,
++					size_t count, loff_t *ppos)
  {
--		int j;
-+	int j;
- 
--		for (j = 0; j < data->info->num_regulators; j++) {
--			if (page == rdev_get_id(data->rdevs[j])) {
--				regulator_notifier_call_chain(data->rdevs[j], event, NULL);
--				break;
--			}
-+	for (j = 0; j < data->info->num_regulators; j++) {
-+		if (page == rdev_get_id(data->rdevs[j])) {
-+			regulator_notifier_call_chain(data->rdevs[j], event, NULL);
-+			break;
- 		}
--		return 0;
-+	}
- }
- #else
- static int pmbus_regulator_register(struct pmbus_data *data)
-@@ -3331,9 +3330,8 @@ static int pmbus_regulator_register(struct pmbus_data *data)
- 	return 0;
+ 	int rc;
+ 	struct pmbus_debugfs_entry *entry = file->private_data;
+@@ -3487,9 +3487,9 @@ static ssize_t pmbus_debugfs_mfr_read(struct file *file, char __user *buf,
+ 	return simple_read_from_buffer(buf, count, ppos, data, rc);
  }
  
--static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
-+static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+-static const struct file_operations pmbus_debugfs_ops_mfr = {
++static const struct file_operations pmbus_debugfs_block_ops = {
+ 	.llseek = noop_llseek,
+-	.read = pmbus_debugfs_mfr_read,
++	.read = pmbus_debugfs_block_read,
+ 	.write = NULL,
+ 	.open = simple_open,
+ };
+@@ -3499,6 +3499,20 @@ static void pmbus_remove_symlink(void *symlink)
+ 	debugfs_remove(symlink);
+ }
+ 
++struct pmbus_debugfs_data {
++	u8 reg;
++	const char *name;
++};
++
++static const struct pmbus_debugfs_data pmbus_debugfs_block_data[] = {
++	{ .reg = PMBUS_MFR_ID, .name = "mfr_id" },
++	{ .reg = PMBUS_MFR_MODEL, .name = "mfr_model" },
++	{ .reg = PMBUS_MFR_REVISION, .name = "mfr_revision" },
++	{ .reg = PMBUS_MFR_LOCATION, .name = "mfr_location" },
++	{ .reg = PMBUS_MFR_DATE, .name = "mfr_date" },
++	{ .reg = PMBUS_MFR_SERIAL, .name = "mfr_serial" },
++};
++
+ static void pmbus_init_debugfs(struct i2c_client *client,
+ 			       struct pmbus_data *data)
  {
--		return 0;
- }
- #endif
+@@ -3540,12 +3554,14 @@ static void pmbus_init_debugfs(struct i2c_client *client,
  
+ 	/*
+ 	 * Allocate the max possible entries we need.
+-	 * 7 entries device-specific
++	 * device specific:
++	 *	ARRAY_SIZE(pmbus_debugfs_block_data) + 1
+ 	 * 10 entries page-specific
+ 	 */
+ 	entries = devm_kcalloc(data->dev,
+-			       7 + data->info->pages * 10, sizeof(*entries),
+-			       GFP_KERNEL);
++			       ARRAY_SIZE(pmbus_debugfs_block_data) + 1 +
++			       data->info->pages * 10,
++			       sizeof(*entries), GFP_KERNEL);
+ 	if (!entries)
+ 		return;
+ 
+@@ -3561,63 +3577,22 @@ static void pmbus_init_debugfs(struct i2c_client *client,
+ 		entries[idx].client = client;
+ 		entries[idx].page = 0;
+ 		entries[idx].reg = PMBUS_REVISION;
+-		debugfs_create_file("revision", 0444, debugfs,
++		debugfs_create_file("pmbus_revision", 0444, debugfs,
+ 				    &entries[idx++],
+ 				    &pmbus_debugfs_ops);
+ 	}
+ 
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_ID)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_ID;
+-		debugfs_create_file("mfr_id", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
+-	}
++	for (i = 0; i < ARRAY_SIZE(pmbus_debugfs_block_data); i++) {
++		const struct pmbus_debugfs_data *d = &pmbus_debugfs_block_data[i];
+ 
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_MODEL)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_MODEL;
+-		debugfs_create_file("mfr_model", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
+-	}
+-
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_REVISION)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_REVISION;
+-		debugfs_create_file("mfr_revision", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
+-	}
+-
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_LOCATION)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_LOCATION;
+-		debugfs_create_file("mfr_location", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
+-	}
+-
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_DATE)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_DATE;
+-		debugfs_create_file("mfr_date", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
+-	}
+-
+-	if (pmbus_check_block_register(client, 0, PMBUS_MFR_SERIAL)) {
+-		entries[idx].client = client;
+-		entries[idx].page = 0;
+-		entries[idx].reg = PMBUS_MFR_SERIAL;
+-		debugfs_create_file("mfr_serial", 0444, debugfs,
+-				    &entries[idx++],
+-				    &pmbus_debugfs_ops_mfr);
++		if (pmbus_check_block_register(client, 0, d->reg)) {
++			entries[idx].client = client;
++			entries[idx].page = 0;
++			entries[idx].reg = d->reg;
++			debugfs_create_file(d->name, 0444, debugfs,
++					    &entries[idx++],
++					    &pmbus_debugfs_block_ops);
++		}
+ 	}
+ 
+ 	/* Add page specific entries */
 -- 
 2.45.2
 
