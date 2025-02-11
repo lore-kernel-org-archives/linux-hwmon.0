@@ -1,70 +1,70 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A018F253F2B
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561F0253F09
+	for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 15:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739289175; cv=none; b=rl3fYYPijTXB2JP9SfLyusulVufbYpyySkdzPPmang5zajTjKP3lIQGXqYT0cCQeDhk8xOynzn9rmzQsy3Kwkrr3kGNMs577all1dWTyc/3FMw5BbAqcLSzF3ZTc+7PzHrOUUO5ewRU1noN1F3GVduP1za/CfFCrJvPUOxG9Dtc=
+	t=1739289176; cv=none; b=Qxy+d76zmDiOgrf2vVx1gm1KVUIP1/MyT0uy9trxz5wKSHXTTc8aM3Pxa+jQLotUEnjR3gqaZgrx2NDa3y1OLIj/lX90cukbCkReULq8cygVJEOeWO/hM7oK56Xs62PkpNkuUK5qcgNghdrobnBIIvFWm4jLXD8uDsfDP/V4tWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739289175; c=relaxed/simple;
-	bh=g8wzu0eYdr1RaOxgeeuA9TNT+mxg3KGV2OLMF/Yckbg=;
+	s=arc-20240116; t=1739289176; c=relaxed/simple;
+	bh=cj48dyNTd0s9sZhJQ9XvBi9Ios9Yn3sGSNj2XqkMGhU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UT+hVM2g3cG9QOeNNSJneREhpuxwHioAcMs6dKOGNas0AgTDkDiD3HnEfZqK+viruK7IqDazWsZ/FHXvqxnzvDsPSrNmKtouPxhxGreG8NzXOpwWYgHI9JUgsqls5iH1MDmyPFV86A11jF/Iv+hsRulwakhmkFYUu1ofZwkSZwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e/Ynl74D; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=ZpSLcEHEw9WBF0LYEIBDR6dWkojf6C3jy9sG/GvY4/fHsCF4xOqo57E30aj798y6+aiAaALsl4sa6x0NUZnHzWLIbgOHkwm8dlzVRhFldeF7HHHwPzTv6Wva2aNuE/mkqBpYS3LPxzX29c4PIbqdmGMFQEA+QZ3sqPrg0n7/5tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PGC7jMb3; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e/Ynl74D"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fa1d9fb990so9113282a91.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PGC7jMb3"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21f573ff39bso85707925ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2025 07:52:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739289172; x=1739893972; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739289174; x=1739893974; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rs8PeEicoW0PbsG7q1rUbmUXFYDywYudvhHCFnOE6+Q=;
-        b=e/Ynl74DQxysqqa0AWrOrMghjcpSNx2k2P/riZjI/Mk1aTpCkPO9fAenVv+4DLYx3r
-         rm2KiSrNF1XQ7XIHXG7EjGTPya4aie83LXECbzWMVeu5qPhuyRGAkxpd4QGEFjVwDwsy
-         aRxDOiXS2FvIQnFmvUk7kHBzyqef0kFmI82O/NTQxbEmQ79SEn638WpBYVCi+z71B5BF
-         mzyQK91DhLyvdxhJpv96i0geAg7LQIU5O0bWnDWEa0a0BLHJDogaitU6HO5Dn5eX3XXx
-         +c6FEMzadJHig84/3XALkXQoyMlr9/TpYZrmCe50qH4ig1dB371HpXck0Jwj+2odXsSJ
-         D6KA==
+        bh=20eQb4tQxHftvzVRi2J/iaF928YwTfWnxa70RPeCWJw=;
+        b=PGC7jMb3FcO4b9IORpBKpIpkwSU/QVGtbApeli76jzMmyi6oYgepeFe9GjBaJzmI4j
+         7sdbZ5QnWdlQcNuxkDkrk3wNjGXYtOjnA0QXxZ82vHuKEhGUrxdLHUNHzFRAs9GjNwYY
+         0eGxPKwrdwyaY8QxJLw8ftWkmjr1oNqvXcdK32NeeJltbC3SdQkZWQ4nYge8bJG5FRhe
+         tznGiImPmZ3lKAKjHFIWvqVX9NTEqvfHqkKiipDO3X3rIFaRxT8mcDi+fJ3JqH/TudMQ
+         9IzN81m95RiimU8H/NYouiQQt9ob5MXKYxNwaagMfMvm+/DRvxGAeaSBDAXm/uQ1MooD
+         /w8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739289172; x=1739893972;
+        d=1e100.net; s=20230601; t=1739289174; x=1739893974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Rs8PeEicoW0PbsG7q1rUbmUXFYDywYudvhHCFnOE6+Q=;
-        b=J8911WWHUyZvd5p3oV307imMGw7gs7a/MdB4LGOKDnCW8rkMfUTH4M/uxKzBb676yH
-         mqkZ9VSwDdPLuBt6mnufZTGPIAjx1qog+0RlJO9ChpXjDwANlTS1J124HRSOGkOEY9J8
-         /zFnPkctyWfr73Mj51SMcrKXIOF4RFG6Ub4kpzZCb3xf0SA90xLwFvYqphY15StTGHu5
-         b8Sn1qaJybTXrBVJlAnFgyRuQuKAA0uIQX15DM1Ri4YNgpki4yTW0DQ726szgMTgUoCH
-         ID81JhliT2vcFBnz5m5bIyQFc/KyJ7prTXRKKUwfTaRoq1/r59wp/9bmyy72JCgNXpD7
-         FQCQ==
-X-Gm-Message-State: AOJu0YzrBRHor5trWAJ8CjuX2Cc4LsZxO6b8q65V+oDW1LbXiOvclH99
-	K01M1K0SPskNX4wAaMh4C6kdS81oMWxRoN7wDWTt3cM2uOGSFWt0JuaNNw==
-X-Gm-Gg: ASbGncsLEHQPdtVWItWnYVD41ns14Cc58NyRU07D3k0C0acTfZzofsR0d/HTT1Xh9Nw
-	9Z82zdlUb2KzlQTomqECjwhaQttaGjVNgEeL++GD4fJ6TsNFMG1slp0huQEdmL4Ja7ld+BGP37K
-	IlO2Ej33mkoL/kotGAyWaC+WNLyZFgc/ySUAGruylpyn6sI7mj+StCkJFh99U4igNvLg5sK/ThF
-	nU1ZjWrEFG+5lUxY26COqCAYrWa/psvpGLYMHoNGd3qZopxidmhAJtf79uyXOk1H6PtGRUG4U3C
-	E7lap2K8sVCH78iScdOKwhqdk5+i
-X-Google-Smtp-Source: AGHT+IFtX9ggC/vjwUDh1mo6GoqIbgH5UuZkFg/yhsU4tVW/QJ7yymKQGIGgxCYTsn7KhSMSjfAkDA==
-X-Received: by 2002:a17:90b:1805:b0:2ee:d024:e4fc with SMTP id 98e67ed59e1d1-2fb7e8d765fmr381074a91.33.1739289172491;
-        Tue, 11 Feb 2025 07:52:52 -0800 (PST)
+        bh=20eQb4tQxHftvzVRi2J/iaF928YwTfWnxa70RPeCWJw=;
+        b=bFUPU2dFHvURsuRGQoyNyL8vMLXMn0kcOAOy5NSH6oSHr63loHrclyfzp4t9IkDaXp
+         vpzDZ5o1ykILfGFUujsV/aeK88iifBVTAUrHwpgZnmmSfanViIT0Rew1Rzu76K+PrUNA
+         UINBhPZQxHegq65nZw969JlCEKeWN0jSkF8qH3hdQYGVuUICgNU75aT2NXUkEM8ejU9t
+         vOZYEsmrUKV63EsKfrHdeoDreZPIcJG1BDFd2NmjNfXFhkz9WBW7PenJ2jQa9UmC9ASm
+         +d1qBD8Wau6bPS7NZm8EjBsd7V4+DXWt9iygBIfgPzTcWwL0jxuGacIaN44zvQ/0hnYg
+         CgsA==
+X-Gm-Message-State: AOJu0YyXDH6iXOzAj36tkXikjlkNyCuasgrpFHx9ZH449OuAabAf9Tdt
+	lYy7yCNPh2HpOHu/s/R+fHYhlhr6px5aTO7P2xP5/KjYLLFWu+G9F9HuIg==
+X-Gm-Gg: ASbGnctGHyOfwLXumdOtDoSkNgpXMRHOQit88yYTISolzxFVGj82/Ya006zy2yPjk3m
+	vQv93Y73NWyFUHEo3HksTIxWVm5dQpx7nBuspNFbtZSgM+Dpr4rn5SoUqB8+5fNIqFLS+njC0SN
+	fVeHAD+3hfKEITq05O9mauKDZLh47uCctmJK6cYhAnNfQTqO3hTmrRXFI2ghWkhWIUb88cEggHb
+	zhTKC/HJ7wQw6davk9mH459IEMsyP/oChsstALzTLxRKptuYlWsGsudHS/QP0e2v6yUDir0pYRW
+	zUNCONCzPZgq79Kc+GBnfUH3lJ3/
+X-Google-Smtp-Source: AGHT+IHab0C5kAALQQ4tG+Q0A+yoiWaUpk3a7yCBSDSZNGsW0WHJokWLo6bhWIUWtbku0x81KG7oRg==
+X-Received: by 2002:a17:903:32c6:b0:215:94eb:adb6 with SMTP id d9443c01a7336-2207d0221c1mr2990745ad.40.1739289174141;
+        Tue, 11 Feb 2025 07:52:54 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2faa30a356csm1730710a91.7.2025.02.11.07.52.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653cbbasm98518995ad.79.2025.02.11.07.52.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 07:52:51 -0800 (PST)
+        Tue, 11 Feb 2025 07:52:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH v2 4/8] hwmon: (pmbus/core) Make debugfs code unconditional
-Date: Tue, 11 Feb 2025 07:52:36 -0800
-Message-ID: <20250211155240.2077464-5-linux@roeck-us.net>
+Subject: [PATCH v2 5/8] hwmon: (pmbus/core) Declare regulator notification function as void
+Date: Tue, 11 Feb 2025 07:52:37 -0800
+Message-ID: <20250211155240.2077464-6-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211155240.2077464-1-linux@roeck-us.net>
 References: <20250211155240.2077464-1-linux@roeck-us.net>
@@ -76,106 +76,61 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Drop contitionals around debugfs code to compile it unconditionally.
-In practice it will be optimized away by the compiler if CONFIG_DEBUG_FS
-is not enabled, so the code size is not affected by this change.
+The regulator notification function never returns an error.
+Declare it as void.
 
-Also silently ignore errors if debugfs initialization fails.
+While at it, fix its indentation.
+
+No functional change.
 
 Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2: Added Reviewed-by: tag
 
- drivers/hwmon/pmbus/pmbus_core.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index be794ba993b8..39cdcbb96215 100644
+index 39cdcbb96215..3085afc9c1ed 100644
 --- a/drivers/hwmon/pmbus/pmbus_core.c
 +++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3421,7 +3421,6 @@ static int pmbus_irq_setup(struct i2c_client *client, struct pmbus_data *data)
- 
- static struct dentry *pmbus_debugfs_dir;	/* pmbus debugfs directory */
- 
--#if IS_ENABLED(CONFIG_DEBUG_FS)
- static int pmbus_debugfs_get(void *data, u64 *val)
- {
- 	int rc;
-@@ -3502,8 +3501,8 @@ static void pmbus_remove_symlink(void *symlink)
- 	debugfs_remove(symlink);
- }
- 
--static int pmbus_init_debugfs(struct i2c_client *client,
--			      struct pmbus_data *data)
-+static void pmbus_init_debugfs(struct i2c_client *client,
-+			       struct pmbus_data *data)
- {
- 	struct dentry *symlink_d, *debugfs = client->debugfs;
- 	struct pmbus_debugfs_entry *entries;
-@@ -3517,7 +3516,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
- 	 * client->debugfs before using it.
- 	 */
- 	if (!pmbus_debugfs_dir || IS_ERR_OR_NULL(debugfs))
--		return -ENODEV;
-+		return;
- 
- 	/*
- 	 * Backwards compatibility: Create symlink from /pmbus/<hwmon_device>
-@@ -3525,7 +3524,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
- 	 */
- 	pathname = dentry_path_raw(debugfs, name, sizeof(name));
- 	if (IS_ERR(pathname))
--		return PTR_ERR(pathname);
-+		return;
- 
- 	/*
- 	 * The path returned by dentry_path_raw() starts with '/'. Prepend it
-@@ -3533,7 +3532,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
- 	 */
- 	symlink = kasprintf(GFP_KERNEL, "..%s", pathname);
- 	if (!symlink)
--		return -ENOMEM;
-+		return;
- 
- 	symlink_d = debugfs_create_symlink(dev_name(data->hwmon_dev),
- 					   pmbus_debugfs_dir, symlink);
-@@ -3550,7 +3549,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
- 			       7 + data->info->pages * 10, sizeof(*entries),
- 			       GFP_KERNEL);
- 	if (!entries)
--		return -ENOMEM;
-+		return;
- 
- 	/*
- 	 * Add device-specific entries.
-@@ -3727,15 +3726,7 @@ static int pmbus_init_debugfs(struct i2c_client *client,
- 					    &pmbus_debugfs_ops);
- 		}
- 	}
--	return 0;
- }
--#else
--static int pmbus_init_debugfs(struct i2c_client *client,
--			      struct pmbus_data *data)
--{
--	return 0;
--}
--#endif	/* IS_ENABLED(CONFIG_DEBUG_FS) */
- 
- int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
- {
-@@ -3822,9 +3813,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
- 	if (ret)
- 		return ret;
- 
--	ret = pmbus_init_debugfs(client, data);
--	if (ret)
--		dev_warn(dev, "Failed to register debugfs\n");
-+	pmbus_init_debugfs(client, data);
- 
+@@ -3313,17 +3313,16 @@ static int pmbus_regulator_register(struct pmbus_data *data)
  	return 0;
  }
+ 
+-static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
++static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+ {
+-		int j;
++	int j;
+ 
+-		for (j = 0; j < data->info->num_regulators; j++) {
+-			if (page == rdev_get_id(data->rdevs[j])) {
+-				regulator_notifier_call_chain(data->rdevs[j], event, NULL);
+-				break;
+-			}
++	for (j = 0; j < data->info->num_regulators; j++) {
++		if (page == rdev_get_id(data->rdevs[j])) {
++			regulator_notifier_call_chain(data->rdevs[j], event, NULL);
++			break;
+ 		}
+-		return 0;
++	}
+ }
+ #else
+ static int pmbus_regulator_register(struct pmbus_data *data)
+@@ -3331,9 +3330,8 @@ static int pmbus_regulator_register(struct pmbus_data *data)
+ 	return 0;
+ }
+ 
+-static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
++static void pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+ {
+-		return 0;
+ }
+ #endif
+ 
 -- 
 2.45.2
 
