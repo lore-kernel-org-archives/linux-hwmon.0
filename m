@@ -1,163 +1,247 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41982753FD;
-	Fri, 14 Feb 2025 03:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE132641FC;
+	Fri, 14 Feb 2025 18:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739502444; cv=none; b=Vkp7QpBAnFtSzxy59l74yYYmvUU3jxOrnLsQeJ8RZ4ndYUSXVYzKgIC1I9ccM2CVevYBTnxMu/12CFNCVWi5kYscIbIj7iRbFzIZ9rve/+Eb583zyJHm8bKglOiuP0fCYvPxZdySeN0a2y3gPt9HKDIE1ElpnQYTmrBXYD+YV/s=
+	t=1739556433; cv=none; b=Jz1h2zw4+wB2kORRF7+uXwgTnpdWtL3NWmlE7QCdyGR0iEYCGEmi9aFIZKrX/1WrwSrU1e6CasIoz/lZQMzEX7MxRAUQQc1VACnZtFbZofzM2Qr93+CdBQQgYqd7+eppoUSufEfxzRNnIowv/WCjZfLZjEQJ6cta5QVlMr67ftE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739502444; c=relaxed/simple;
-	bh=U3iLt2jTVvFU0CrH4KAjwFp/wrFL6Fai2J1A7HCeWvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VshFjDbzRlLs+lYIGMRIMM3MKVIHkT87g2LtLUPuy8DdfvTbxa++MLMVg0sZIqW71OxHcigD3UlBrcIOKdLCcD5QJOQx4BVKt7O9ixAe3F6C38DDEP0yd6i76whHvxJvBc/c2kYxwR5aYbugySVafkVjKsuMsD33ujfM+0CnQ34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=dEN3We9e; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1739556433; c=relaxed/simple;
+	bh=URbjemwboSMEOUXf1j9jNGkETmv8uXxJZI8xpmIE4yg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NeCLQjLK9mjdV56OWw8JDfp4A4+EnfBVjywuqscKGenjOVa0ERwd/5ZTnKtURFbc1mv/89zXGZYjTD531HTAHh8ovKjzyJxn4EtVDxYdnqOeQdDyJRcRWBS5OuG0qLTRxai/TW1OKyvxMnwIre9qCT5zugyTEBVeqdaG8Mx36N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eiVE32JF; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="dEN3We9e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1739502434; x=1740107234; i=w_armin@gmx.de;
-	bh=UkVu9TB9y3bg528X+5UCDMdueq5YjpPbMSyJYp2IyZA=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=dEN3We9ef2XfOawN+NEw7U4xlzDzWpAowENjqY+KmkA7OVQ8rElf+O+aeiNnfVbq
-	 liyq+23GMTMbRik+MoGg1xo4ByCkQcO3zxfKxj0IqwqJF7BGsJYyvwwjj8cqxyn4A
-	 a18Lg2khXyzFp+WLOTmYjSxKf/Lx5LGzpcCi7Szrb5Hq1e6SDISj8HrRducNxIreC
-	 Vgo/lwNyt5u2gPZHTeW1jW8OTqzWuWuUrWJhqgj1gE7WPc+ug1tuqzMBEdNyAzoQN
-	 Scr41vutcN1f9oOIHOWCM0oco4VmqaiFLtHJE0osauuLaosn6NWIIgC9OhzhrvVQw
-	 xYFwHzLi2BsfeXRvoA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.24] ([87.177.78.219]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1tTqER3isg-014D2j; Fri, 14
- Feb 2025 04:07:14 +0100
-Message-ID: <62e5b2f6-23e8-44e2-80f8-2509dd8e5a17@gmx.de>
-Date: Fri, 14 Feb 2025 04:07:07 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eiVE32JF"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-220c8f38febso44480555ad.2;
+        Fri, 14 Feb 2025 10:07:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739556431; x=1740161231; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xC+lTwpRgckevjor5+OLJeuzv1ZPmekIjdX8zKKqOY=;
+        b=eiVE32JFoKbJcWkHFOc+w4mSzHynrhmKMhjTKS1J7urGh2u5TK+2WIm7QoDCDkErFa
+         9uS/5hlsHfBVhlRHD/WaqHlDNRbQOW6+iPwW/VnEx8memKFNL5h4CApn5RVId/8Sq+6Y
+         QuuS3+/ZUqoQgLjoLPjnrizCg7hs8l4ZBU+/10l7bkdtdOSGORNcfsjIzqPzP+0mZVcj
+         ht7xFQsa1Ao0oEdFJYIJ1eqOWjlYsdupYIbGIb3xjOa4FG/t3yK38qi3BhbGf2H3/ogE
+         cIUmpXJHucI+NBJyABwBksfmTTmWk05OSRvg30TpLG/VXNC6X3xr+NWn1MhX4w4YCKA8
+         LffA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739556431; x=1740161231;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8xC+lTwpRgckevjor5+OLJeuzv1ZPmekIjdX8zKKqOY=;
+        b=JzH0w/+5792ml58r41NUglssVb3uyqd+k6j0ox/gsxLmtSpKJHSk+ee6H/MDRnzzzg
+         qMIylzd7AaamiTXgxYUFH+xmdDI8inDaXjxfMVnTy+qSKdBz///vg3OAUWb8tlRcHCTk
+         BmWktYnGwIuc4cZX1nsv4gg8loK3c96xJlKCOVEa2K+LMYXaARaFZ0lOt1KxO1ltuF0V
+         Sh1FmQkuTSkkXuYlj4NqIFiuzloV85kW3vuCjJe07lHzvDpvR69ricxSMaAsYKtGuGi6
+         9dTPWn5C9cm8tbvOC1DpL6LtDONi8fTwx0n2X4aykUkCIthV8Th9ONBQn+Gy/uwzjNgL
+         9jhA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEQjcz5/5L8iQa0FBOwwfs0QRzpkZCllYWJuIT6eWPxBfhWSJPhHVkwbkUp5wVcovh3IhhF0NydenkW2K1@vger.kernel.org, AJvYcCUghcsErP7mYhZ7B2DzDfWVJxNZHoXnNcyLFQUY9R+2TuEPGHsmAazZkAq3+sgNp6a+Li83fJIPSXAk1ULB@vger.kernel.org, AJvYcCWIpCMekko+/O5Vzfxd8wCUvkjIdlekR7YQK7LvSHj/mZByhc21VsST1ZdUmx92jOZs0Q6bmj0+T18STVc=@vger.kernel.org, AJvYcCX2OMZV5NSH3vL7NT8deBJM1P2xqg/sYNgCFqB5Tcjj1v99aSHEQ5B1Xg+mSL+yQop8pYUN7dexcd41PKNihjRwYJUa1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXEB8WpD0RD5cBOCHInFmZcZIdLiOS4G9Ok1X1CL+c8/3IFWnw
+	z76Zip0Kalt9cYOA2c7SOGoD3s43TfLP6MwqwzaZUx2pOOHCWkGR
+X-Gm-Gg: ASbGnct3DUqdd4xxTzq0WJvbAgNW0kUugkKd7eZTs2NksntOQWyd/3h7OdeHOlr8gmz
+	IJCABTnvbsHnSAlquOoOLTLfIeztFSLUhOzvvyohUFEVlslvW5JzFeXtIOLFMpPqaVowUs5Uhy2
+	F1Z9Mn0M3wfq3J7zUflSJzIosrgV0vcKSHyQOjv8abo0EtKNLqzPnpnjsdpLhAA0spEcGuvfMqi
+	QRO9frhnhW0NkBV4Q4tS6iB8mW37ys2oFE7lc2/JaRTRl3ZHP0NzYz6Q7/2NQf5IRmZPfqUxem4
+	B2v6XOAYvlB9t+I0
+X-Google-Smtp-Source: AGHT+IFMYs+l12kYZsvpCY3k5e7H959/QGGHvIdUiZGFjoopIGe5S5vKBXDj9pyF+4FIfigKX/0clg==
+X-Received: by 2002:a17:902:ce89:b0:21f:71b1:70d8 with SMTP id d9443c01a7336-221040d6f8emr2251505ad.51.1739556430580;
+        Fri, 14 Feb 2025 10:07:10 -0800 (PST)
+Received: from SC8280XP.. ([144.202.86.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545d051sm31599105ad.108.2025.02.14.10.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 10:07:10 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=83=C2=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Pengyu Luo <mitltlatltl@gmail.com>
+Subject: [PATCH v7 0/3] platform: arm64: Huawei Matebook E Go embedded controller
+Date: Sat, 15 Feb 2025 02:06:53 +0800
+Message-ID: <20250214180656.28599-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/7] platform/x86: think-lmi: Use WMI bus API when
- accessing BIOS settings
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: james@equiv.tech, markpearson@lenovo.com, jorge.lopez2@hp.com,
- jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>,
- platform-driver-x86@vger.kernel.org, corbet@lwn.net,
- linux-doc@vger.kernel.org
-References: <20250203182322.384883-1-W_Armin@gmx.de>
- <20250203182322.384883-4-W_Armin@gmx.de>
- <0dd7bda3-bf76-228b-27f3-f057e80e3a03@linux.intel.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <0dd7bda3-bf76-228b-27f3-f057e80e3a03@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7OWgTiuneYVq8FpBOEoyTSddAPhgwOL3QU9g3CpiK8oF7t5sbYv
- vm4Gfz3ze46FCkApkUgdWCnjY5dtJM7FvvudeAN9MTB/l3Lc5krFEmHzpTNi+IqQv3fsUbP
- FBCHKSO+z/yH2tyJ+PnIuT2RoD4tcbXpJIBZViuf0XPPOn5QptwISobBk5KhaOtWG6JFdjh
- InoP4BwP99ZyGaU5h0uGQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:9oFAX8DxaHU=;AZ76pu+mJr308YybNs+pLiNTG/2
- am67VWgfC/ASgx1PrP/gSHIZLHGKXGZGaZK+SHgpqcJFb2dt4AwV9pT/y0BhwUVeh8tljMgV5
- OYpDF6nnuZcfqJO6HNedInVLUkL59Ypzc2jeyZnFkkOpB4vW5ft3uHmZmEmvYy+dzXw/cGdBB
- f8bhxz7WJRypBqN5V7eO+LWy2slOJSVIRaD14JEopBaHmeFsv3wHFdJK+vx/aMwoNd9PGfJ2s
- Mg8bOn69bfTqIQJOKbvEOobpYgdr4sTy4o6DddzH9FfHEBUJ5POSGoG8xj4IkJkizJOmU45i2
- tlQcwcTWzd8feFIeAbF207OrCKDtyXK12/1Kivnkcx+Zgyi5KM0Qbnfm1xu7HVS9l0Qzoke93
- cgCSX+CAddJCIhenZFJ5Tp6gLfLSRcgjPoN1JHGOHqB75L1oeJq6DQMcBGBtz8uKe+gwCz1OD
- 9iZNjyxAEbI8d8rS+hwWChuVDD0SIR16GwoMAuy45vO6lzuZ22rirXn1IkQx8UDkrjuyZeFPJ
- eGdBun7MGm5VxhrGWwir+6ZygCWElfStiNT70IXWLGaeAqWVy/pOvsvHXQIKtEP4OQPX5s7O3
- /ZfOnAzSTELbhNEXxLxJDD9RzgO9gKXB+LMbuC9WZLMjhNnSlIb/lkPGvouubBtVuwfsWPDeU
- qLkht91RfQmNbw0JXk89urcD6PQMqQTiOv825Yi4/7ZY2ROT72Gu3mK+qn1qu9VlR8LSPN6Xi
- WhObR3cvXbzrHj53wifNIYR5sjIkkPZ8GfSeruxNfFir4/20s5Y4vLCSsvfnDx7DFp12OI1hJ
- Y/nh+UeldcN1t3oAWje/4LrP3sCrOi1tYIMYDH3Ueqc2lYYxMCX8bO2IhIelCHUA1sEL1GFDp
- 0ps8Q1Ij0uMXX/swpnOaU7/iHXXFi7gqCUH//3KVf2i5kCwjwleZAXyOiH31aXs36tWKjKLv7
- LlzIJJGrKsi301p/Z2j2akNtRDagXnfZ2oJ10kjrOB1ZSrObYsqmc4d3X84lbaeuMeLtrwBEU
- K5uj4V5V7nYRlUhp5Vb8ys9agZKXYkZVZyOVdrFC935aNsBQU1QHYVq316izc/0WbOGluSgaX
- gKWWoP+wqgi8gcdxKFZtF4DscV4X6UiYvk9tiJV6MXYUHZ04fB+n6zB5fyG1U7oZblfSOWEsr
- 3Y2AXWDzht+viRN/AoPWDKCid3FvKUgXR9me4PSL7o07f2fUloCLVfzngLok7v+iGF8NqOyCk
- BAicXNF7u155wSK4a0BnGlOTIO9TNsvUp+Tm6gbClIHA5Js+M527dR0y6ICkOrVBs/K5aeI2E
- W8saGvBT3FpA8GnTODTLQK013sDhd3A3duMqTkJhu+WK6X5hXnk2kV9G3aKuP2sJaAHULNoA7
- fD5vpeMt2npe/8azwhkez7yLvSYjzUuG6sfwxHpNxSFqxh+TcFFlXhLvoE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Am 13.02.25 um 14:17 schrieb Ilpo J=C3=A4rvinen:
+This adds binding, drivers and the DT support for the Huawei Matebook E Go
+(sc8280xp-based) Embedded Controller which is also found in Huawei Matebook
+E Go LTE (sc8180x-based), but I don't have the sc8180x one to perform
+tests, so this series enable support for sc8280xp variant only, this series
+provides the following features:
 
-> On Mon, 3 Feb 2025, Armin Wolf wrote:
->
->> Since the driver already binds to LENOVO_BIOS_SETTING_GUID, using
->> wmidev_block_query() inside tlmi_setting() allows for faster
->> access to BIOS settings.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   drivers/platform/x86/think-lmi.c | 23 +++++++++--------------
->>   drivers/platform/x86/think-lmi.h |  2 ++
->>   2 files changed, 11 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/th=
-ink-lmi.c
->> index 2c94a4af9a1d..0fc275e461be 100644
->> --- a/drivers/platform/x86/think-lmi.c
->> +++ b/drivers/platform/x86/think-lmi.c
->> @@ -344,20 +344,14 @@ static int tlmi_opcode_setting(char *setting, con=
-st char *value)
->>   	return ret;
->>   }
->>
->> -static int tlmi_setting(int item, char **value, const char *guid_strin=
-g)
->> +static int tlmi_setting(struct wmi_device *wdev, int item, char **valu=
-e)
->>   {
->> -	struct acpi_buffer output =3D { ACPI_ALLOCATE_BUFFER, NULL };
->>   	union acpi_object *obj;
->> -	acpi_status status;
->>   	int ret;
->>
->> -	status =3D wmi_query_block(guid_string, item, &output);
->> -	if (ACPI_FAILURE(status))
->> -		return -EIO;
->> -
->> -	obj =3D output.pointer;
->> +	obj =3D wmidev_block_query(wdev, item);
->>   	if (!obj)
->> -		return -ENODATA;
->> +		return -EIO;
-> Hi Armin,
->
-> I'm trying to understand why there are these back and forth changes in t=
-he
-> error code.
->
-> It almost looks to me like wmidev_block_query() would want to return the
-> error code itself because after you abstracted this code using
-> wmidev_block_query(), you had to change the error code because you no
-> longer have access to the key detail to decide which error code should b=
-e
-> returned. That is, use ERR_PTR() inside wmidev_block_query() and the
-> callers should just pass that error code on with IS_ERR & friends?
->
-Hi,
+- battery and charger information report
+- charging thresholds control
+- FN lock (An alternative method)
+- LID switch detection
+- Temperature sensors
+- USB Type-C altmode
+- USB Type-C PD(high power)
 
-the reason why wmidev_block_query() only returns NULL in case of an error =
-is that
-according to the WMI-ACPI specification, querying a WMI data block should =
-return data.
+Thanks to the work of Bjorn and Dmitry([1]), the work of Nikita([2]),
+writing a EC driver won't be suffering. This work refers a lot to their
+work, also, many other works. I mentioned them in commit messages.
 
-So we have two error scenarios:
+[1] https://lore.kernel.org/all/20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org
+[2] https://lore.kernel.org/all/20240315-aspire1-ec-v5-0-f93381deff39@trvn.ru
 
-- ACPI error =3D> firmware error =3D> EIO
-- no data returned =3D> violation of firmware spec =3D> EIO
+base-commit: 0ae0fa3bf0b44c8611d114a9f69985bf451010c3
 
-Because of this always returning EIO is the correct approach in my opinion=
-.
+Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+---
+Changes in v7:
+- rebased on tag next-20250214
+- fix Kconfig, this module depends on HWMON (kernel test robot)
+- Link to v6: https://lore.kernel.org/linux-arm-msm/20250123152559.52449-1-mitltlatltl@gmail.com
 
-Thanks,
-Armin Wolf
+Changes in v6 RESEND:
+- add Reviewed-by tag (Ilpo)
+- remove extra line
+- rebased on tag next-20250131
+- Link to v6: https://lore.kernel.org/linux-arm-msm/20250123152559.52449-1-mitltlatltl@gmail.com
+
+Changes in v6:
+- refactor one ternary operator expression (Ilpo)
+- replace one expression with &= (Ilpo)
+- use devm_mutex_init() instead of mutex_init() (Ilpo)
+- add Reviewed-by tag for devicetree (Konrad)
+- add explicit cast (void *) to fix warnings when compiling
+- rebased on tag next-20250123
+- Link to v5: https://lore.kernel.org/linux-arm-msm/20250117140348.180681-1-mitltlatltl@gmail.com
+
+Changes in v5 RESEND:
+- rebased on tag next-20250120
+- Link to v5: https://lore.kernel.org/linux-arm-msm/20250117140348.180681-1-mitltlatltl@gmail.com
+
+Changes in v5:
+- handle return code of i2c_transfer() (Bryan)
+- rename threshold validatition function (Bryan)
+- add enumerates and defines for registers (Bryan)
+- drop extra line in header (Heikki)
+- add Reviewed-by tag for devicetree (Krzysztof)
+- Link to v4: https://lore.kernel.org/linux-arm-msm/20250116111559.83641-1-mitltlatltl@gmail.com
+
+Changes in v4:
+- use new API to register hwmon device instead of the deprecated one. (Guenter)
+- add Reviewed-by tag for dt-binding (Krzysztof)
+- drop unnecessary header (Ilpo)
+- use guard mutex (Ilpo)
+- improve comments and naming (Ilpo)
+- add a shallow copy version of extr_resp() (Ilpo)
+- add functions to handle resp and req whose size is 1
+- drop PSY and UCSI subdrivers, commit them once the base driver is upstreamed
+- Link to v3: https://lore.kernel.org/linux-arm-msm/20250113175049.590511-1-mitltlatltl@gmail.com
+
+Changes in v3:
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20250105174159.227831-1-mitltlatltl@gmail.com
+
+dt-binding:
+- drop generic compatibles. (Krzysztof)
+- remove '+' to use literal block style. (Krzysztof)
+
+ec:
+- take struct gaokun_ucsi_reg as parameter (Heikki)
+- add almost all kernel doc comments (Krzysztof, Heikki)
+
+ucsi:
+- drop unnecessary ucsi quirks (Dmitry)
+- add UCSI v1.0 to ucsi.h (Heikki)
+- use gaokun_ucsi_read_cci() to read cci directly (Heikki)
+- drop unnecessary gaokun_ucsi_get_port_num (Heikki)
+- rename member port_num => num_ports (Heikki)
+- fix completion, forgot to signal threads in previous version
+
+dt:
+- fix indentation (Konrad)
+- add a link between role switch and connector
+
+Changes in v2:
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20241227171353.404432-1-mitltlatltl@gmail.com
+
+global:
+- drop qcom's products(i.e. sc8180x, sx8280xp) everywhere, use 'product'-based instead(Krzysztof, Bryan)
+- drop Cc Nikita Travkin, we had discussed the device in PM.
+- add myself to MAINTAINERS
+
+dt-binding:
+- fix building (Rob Herring (Arm))
+- remove unnecessary code (Krzysztof)
+- add bugzilla documentation, insights of gaokun(see [1] or patch[1/5]) (Krzysztof, Aiqun(Maria))
+- explain the difference between PMIC GLink and gaokun EC (Aiqun(Maria))
+
+ec:
+- use Linux style comments (Krzysztof)
+- add a comment for mutex lock (Krzysztof)
+- add more kerneldoc for exported functions (Krzysztof)
+- eliminate unnecessary conditions (Bryan)
+- add a macro for check thresholds (Bryan)
+- improve English (Bryan)
+- use existing sysfs interface(hwmon, psy) whenever possible (Krzysztof)
+- use __le16 and related endianess conversion function for temp data (Ilpo)
+- drop alias for packet headers (Ilpo)
+- avoid hardcoding i2c msgs size (Aiqun(Maria))
+- add a comment for the sleep in critial region (Bryan, Aiqun(Maria))
+- use macro to construct packet (Bryan, Aiqun(Maria))
+
+wmi:
+- dropped
+
+ucsi:
+- reorder headers (Bryan)
+- a comment for the orientation map macro (Bryan)
+- make mux mode map more explicit(minus six is very clear now) (Bryan, Dmitry)
+- handle port update exceptions return (Bryan)
+- a comment for the UCSI quirks (Dmitry)
+- use the inline hint for the short register function (Dmitry)
+- use the API with delay to handle register instead of a direct sleep (Bryan)
+- handle unfinished initialization early
+
+psy:
+- add charging related sysfs to here (Krzysztof, Dmitry)
+- document ABI for power_supply sysfs (Krzysztof)
+- drop charging threshold, use smart charging instead
+
+dts:
+- correct indentation, properties' order. (Konrad)
+
+Pengyu Luo (3):
+  dt-bindings: platform: Add Huawei Matebook E Go EC
+  platform: arm64: add Huawei Matebook E Go EC driver
+  arm64: dts: qcom: gaokun3: Add Embedded Controller node
+
+ .../bindings/platform/huawei,gaokun-ec.yaml   | 124 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 163 ++++
+ drivers/platform/arm64/Kconfig                |  21 +
+ drivers/platform/arm64/Makefile               |   1 +
+ drivers/platform/arm64/huawei-gaokun-ec.c     | 825 ++++++++++++++++++
+ .../linux/platform_data/huawei-gaokun-ec.h    |  79 ++
+ 7 files changed, 1220 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/platform/huawei,gaokun-ec.yaml
+ create mode 100644 drivers/platform/arm64/huawei-gaokun-ec.c
+ create mode 100644 include/linux/platform_data/huawei-gaokun-ec.h
+
+-- 
+2.48.1
 
