@@ -1,340 +1,163 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF322268C79;
-	Fri, 14 Feb 2025 18:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB3A1426C
+	for <linux-hwmon@vger.kernel.org>; Sat, 15 Feb 2025 03:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739556460; cv=none; b=WC9B5xLbxTLKlnY1MVaAlBAPsuYzB5u8grs9XIydlemm9pl+wMNct5aeTdJP+tmHj2Nov3VwA1p2uJFD+7fA46nrAcGq4ARqmMmSM3+RoTkeBXiSlEaFeq+5Ac1hbZ8QviSdsruBHktC7fKNsaVX18rWQUpm21+ZkbI8tVVRBqI=
+	t=1739589246; cv=none; b=UdlTUYtWSXqFSAyUz1wbxoVnQn42cz7m49Sf7MCnVZE45EB4EKP3F1p+6sL48+Q8ktO4e753aOugtr5kKp68Qkq6btj/I6GrdIoX7cXlrN9S1+mMgLbpSmkCpKkmn0vagRElJyd5TTi6bUPncJrCEW1WrA65cSsKR6wIQeYjjmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739556460; c=relaxed/simple;
-	bh=3x4K+SD5PYi2ViO8I6/HZjgmfGn/z75JBWV4fnL2QJU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Butj1J0/1egyzt30HIZQYtMWEc+cFmQZ15GV4XrvAQWD+7XDPOzKK15ca7/Lwl+lmB0kfE6tHf80WFJ76+c9eAekPGOALriKY2W7a0NRk32MrjyNEZdgQOZItLBLV5eak5oTeysGkjfcNWWeec7mEBcUnTnTKoXsiNlJ/anS/FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cDn6+Ip4; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739589246; c=relaxed/simple;
+	bh=XbtIgK4btgu4hpVTE1orOsAv4oWywTOG76u4zgWCn9I=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=aSQorqeL0RPYGxywyPcHHfe5Z9AVjGAl3gqIJsjkr0YH8RYwjxrzXRUYu1RcarEIryLztDi4NEX+gZ+btlDB3f1rJI1YnXt4BVSstyvpSO+z3qkWeNr053UFJXG+Qv4rh7IA0SoYuCGQ2AGWGBrNRipP+K5l7WXf6jwQ2xC0X4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ns1KFfMN; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cDn6+Ip4"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21f6d2642faso63536765ad.1;
-        Fri, 14 Feb 2025 10:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739556458; x=1740161258; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6V49PP2OXvDHhbvnLGV7YUEo0KCZSY47T2HrIiGDuHw=;
-        b=cDn6+Ip4YB3aeAD3tNMJVzPtztlnynjcoMwyGD3ZXQkfwTQrImAEE4IQSfcxaCQQhy
-         8pBxwD6zu0MiKtbjfgiRT2yqdpAZS85sltiXpmOwtjor+e6tOVLGwm8knHpAfbjZt1GY
-         mxq8Dn47gpGcXktzBi+2XHCy427tsi+eoQc6PtKN5MbDKfN+5qDLaSUd+ZR71CbmE49W
-         kd23bKKmkAXTLLUwcMuTGJ04+I6nhRQeWfkWM2CSRkQ+PqxKTgK1Fe3QRwnhQRxv/w9E
-         LhR5Ge8ybC9DDyjbdFpr1D8GJgs5dXWMo6U7RkFllFU+dKQhebRhtjhg6YLHlmR7Bs9A
-         OxNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739556458; x=1740161258;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6V49PP2OXvDHhbvnLGV7YUEo0KCZSY47T2HrIiGDuHw=;
-        b=LEinPdwId2mpLaXz96KSiwpDjqY6HT/vaoOixSI0nXQIQNnN3BmSF9kWrvIOPXe2Ht
-         GzAZAZtneFdg+wtF/C4jFRUtT9sd34Hj0BSkvb0R3/D35WwgPR5EM5i0nrccleWHuUEj
-         dqm4RBONd9Aiv7UjowLSO0gCjqM1GBocyNkQgaFsLQWIJ8V7pzYOqQSGtDC/gszLzEiU
-         qjpWKpGWje3nsFyT8o8bOR9bY2Tq2P3xd5nCal8LBfig3b9+GYPSax546KBo1XbJ12Os
-         tELc97n/LjkUtH+L6PAEIUZU8koEpuTs0R8pBoF6JN0iHSZWGhJroy4+xl5RIyZAN/lX
-         Q2fg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYF1h5kNy36Xg7UL1lbnefACBCucW5Kk3vyR1ZsdBP/hBFHO0D+1rV2b+qurkgf/lexCwzwsx0YK6Wegpx@vger.kernel.org, AJvYcCUeBU4NhwSjBzkRccmkm6zF2yWDRZVi2HGp5GN7Ixy8TriS8Yhd+5zVZHR3LsdeENSYLZKHx3pcUUUY5lXz@vger.kernel.org, AJvYcCVmvzu9q0eolVTFhBCmVtsmy0CYGsW3udGMEhSdrUV1Zaslvpy2sJ0jGDDB6eOpdmjOOB3h+X3N2KRFU9hiz86ebtgMPw==@vger.kernel.org, AJvYcCXgnsdRkbnSNrfyb7wRH+Fv1XxfzLC5yA8dHxXpZpp+VHDlACATWxLdXXBcL7+vYIs67ouAsFNHcAa7L8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCSZtYZIrM+zNa/unMHa+i89TcxGD/lFzgED8pV0MbvbDo+5/0
-	SBUArB0/+wukzZ+1harzHIKm+pnSVtgw5ikIT6zULMOUYvkVTCDS
-X-Gm-Gg: ASbGnctMT2w3z90qrZbrRLWzyqyG25TmrJG9Sj1TI1bvrcd3eOQ+gmMacyQX0mxRoGu
-	wUcjMbeg0qAsXZe2LJBOLH972QkYK3pBzlO/wz7KEvmtSz/tfohrlcrAN03ZtEyHwmUreXByh91
-	aw/bkJfYoc5fMHzdMuvn+B5E/PhxeXZ7QEz+Z6S6V4TaBfq8+zMil9JCFKJsGo1CZJ7keV6JvhS
-	GRsRLy49qUAuGcQ12hz/5TnVvrJPS0dR+1p87CCg/w/St0wSrYQBw5H1e2gHrUJ1iSr5XAZFi+i
-	cagxMikUXuEbc4by
-X-Google-Smtp-Source: AGHT+IFdqcOwrSbPxFE6udXiTud4ePffb512nZRYqbbNtQdie7/rchVUrYM0lC8PJwGVHc/43AGZhQ==
-X-Received: by 2002:a17:902:e5c6:b0:21b:b3c9:38ff with SMTP id d9443c01a7336-221040bccafmr1893635ad.37.1739556457820;
-        Fri, 14 Feb 2025 10:07:37 -0800 (PST)
-Received: from SC8280XP.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545d051sm31599105ad.108.2025.02.14.10.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2025 10:07:37 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=83=C2=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: [PATCH v7 3/3] arm64: dts: qcom: gaokun3: Add Embedded Controller node
-Date: Sat, 15 Feb 2025 02:06:56 +0800
-Message-ID: <20250214180656.28599-4-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250214180656.28599-1-mitltlatltl@gmail.com>
-References: <20250214180656.28599-1-mitltlatltl@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ns1KFfMN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739589244; x=1771125244;
+  h=date:from:to:cc:subject:message-id;
+  bh=XbtIgK4btgu4hpVTE1orOsAv4oWywTOG76u4zgWCn9I=;
+  b=ns1KFfMNvwR7EIWjreWRV665OTJTJe3+Fsfh0b74yF91Y9OE3kYoZBHf
+   W+raoRw0vcriUF7cFI1Tuk3uCE8uGnGV1rfMQDTUPzNSTz0U0z7nHTLd5
+   bC23jXz14a80HG4m0YDP2FpWVGDs0hJH25/LzSgH8nWJOrMkfuJ0Ldp/J
+   lu8wB4feCVkBYX4XVzr9xgB5eZ1Ab2xOPQondcXpzzvlKV9AhXFFZO00S
+   Vb3sMSoPLOtuiz+OmRvrnVT/XdH+7tkgKEouJ+PQ5ViHrZE/rHjuqAAT9
+   svyy3y//Q3npdY8KdPLHqt4hfRHt/qRc0vPpwPC/n5FHYfli4kqk7fLDE
+   w==;
+X-CSE-ConnectionGUID: CrR0KmHbSEGISaTeSXh8sQ==
+X-CSE-MsgGUID: E1W5bLifQYqjhdPXio7CZg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="43996030"
+X-IronPort-AV: E=Sophos;i="6.13,287,1732608000"; 
+   d="scan'208";a="43996030"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 19:14:03 -0800
+X-CSE-ConnectionGUID: hx/1V0XwSv60p0vgBJR88g==
+X-CSE-MsgGUID: Y7jjB4sGQEWzEy67ymYo2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="136844346"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Feb 2025 19:13:49 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tj8cl-001ASR-1K;
+	Sat, 15 Feb 2025 03:13:47 +0000
+Date: Sat, 15 Feb 2025 11:12:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 52885bdadeade448dc8bdd2017f88a71b8d4fc97
+Message-ID: <202502151141.952q2aeC-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The Embedded Controller in the Huawei Matebook E Go is accessible on &i2c15
-and provides battery and adapter status, port orientation status, as well
-as HPD event notifications for two USB Type-C port, etc.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 52885bdadeade448dc8bdd2017f88a71b8d4fc97  Merge branch 'fixes-v6.14' into testing
 
-Add the EC to the device tree and describe the relationship among
-the type-c connectors, role switches, orientation switches and the QMP
-combo PHY.
+elapsed time: 1446m
 
-Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
----
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 163 ++++++++++++++++++
- 1 file changed, 163 insertions(+)
+configs tested: 86
+configs skipped: 2
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-index 09b95f89e..1667c7157 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-@@ -28,6 +28,7 @@ / {
- 
- 	aliases {
- 		i2c4 = &i2c4;
-+		i2c15 = &i2c15;
- 		serial1 = &uart2;
- 	};
- 
-@@ -216,6 +217,40 @@ map1 {
- 		};
- 	};
- 
-+	usb0-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb0_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb0_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi0_sbu>;
-+			};
-+		};
-+	};
-+
-+	usb1-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&usb1_sbu_default>;
-+		pinctrl-names = "default";
-+
-+		orientation-switch;
-+
-+		port {
-+			usb1_sbu_mux: endpoint {
-+				remote-endpoint = <&ucsi1_sbu>;
-+			};
-+		};
-+	};
-+
- 	wcn6855-pmu {
- 		compatible = "qcom,wcn6855-pmu";
- 
-@@ -584,6 +619,97 @@ touchscreen@4f {
- 
- };
- 
-+&i2c15 {
-+	clock-frequency = <400000>;
-+
-+	pinctrl-0 = <&i2c15_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	embedded-controller@38 {
-+		compatible = "huawei,gaokun3-ec";
-+		reg = <0x38>;
-+
-+		interrupts-extended = <&tlmm 107 IRQ_TYPE_LEVEL_LOW>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi0_hs_in: endpoint {
-+						remote-endpoint = <&usb_0_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi0_ss_in: endpoint {
-+						remote-endpoint = <&usb_0_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi0_sbu: endpoint {
-+						remote-endpoint = <&usb0_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi1_hs_in: endpoint {
-+						remote-endpoint = <&usb_1_dwc3_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi1_ss_in: endpoint {
-+						remote-endpoint = <&usb_1_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ucsi1_sbu: endpoint {
-+						remote-endpoint = <&usb1_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
-@@ -1004,6 +1130,10 @@ &usb_0_dwc3 {
- 	dr_mode = "host";
- };
- 
-+&usb_0_dwc3_hs {
-+	remote-endpoint = <&ucsi0_hs_in>;
-+};
-+
- &usb_0_hsphy {
- 	vdda-pll-supply = <&vreg_l9d>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1025,6 +1155,10 @@ &usb_0_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp0_out>;
- };
- 
-+&usb_0_qmpphy_out {
-+	remote-endpoint = <&ucsi0_ss_in>;
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
-@@ -1033,6 +1167,10 @@ &usb_1_dwc3 {
- 	dr_mode = "host";
- };
- 
-+&usb_1_dwc3_hs {
-+	remote-endpoint = <&ucsi1_hs_in>;
-+};
-+
- &usb_1_hsphy {
- 	vdda-pll-supply = <&vreg_l4b>;
- 	vdda18-supply = <&vreg_l1c>;
-@@ -1054,6 +1192,10 @@ &usb_1_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp1_out>;
- };
- 
-+&usb_1_qmpphy_out {
-+	remote-endpoint = <&ucsi1_ss_in>;
-+};
-+
- &usb_2 {
- 	status = "okay";
- };
-@@ -1177,6 +1319,13 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	i2c15_default: i2c15-default-state {
-+		pins = "gpio36", "gpio37";
-+		function = "qup15";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	mode_pin_active: mode-pin-state {
- 		pins = "gpio26";
- 		function = "gpio";
-@@ -1301,6 +1450,20 @@ tx-pins {
- 		};
- 	};
- 
-+	usb0_sbu_default: usb0-sbu-state {
-+		pins = "gpio164";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
-+	usb1_sbu_default: usb1-sbu-state {
-+		pins = "gpio47";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
- 	wcd_default: wcd-default-state {
- 		reset-pins {
- 			pins = "gpio106";
--- 
-2.48.1
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                           allyesconfig    gcc-14.2.0
+arc                             allmodconfig    gcc-13.2.0
+arc                             allyesconfig    gcc-13.2.0
+arc                  randconfig-001-20250214    gcc-13.2.0
+arc                  randconfig-002-20250214    gcc-13.2.0
+arm                             allmodconfig    gcc-14.2.0
+arm                             allyesconfig    gcc-14.2.0
+arm                  randconfig-001-20250214    clang-16
+arm                  randconfig-002-20250214    gcc-14.2.0
+arm                  randconfig-003-20250214    clang-21
+arm                  randconfig-004-20250214    gcc-14.2.0
+arm64                           allmodconfig    clang-18
+arm64                randconfig-001-20250214    gcc-14.2.0
+arm64                randconfig-002-20250214    gcc-14.2.0
+arm64                randconfig-003-20250214    gcc-14.2.0
+arm64                randconfig-004-20250214    gcc-14.2.0
+csky                 randconfig-001-20250214    gcc-14.2.0
+csky                 randconfig-002-20250214    gcc-14.2.0
+hexagon                         allmodconfig    clang-21
+hexagon                         allyesconfig    clang-18
+hexagon              randconfig-001-20250214    clang-21
+hexagon              randconfig-002-20250214    clang-15
+i386                            allmodconfig    gcc-12
+i386                             allnoconfig    gcc-12
+i386                            allyesconfig    gcc-12
+i386       buildonly-randconfig-001-20250214    gcc-12
+i386       buildonly-randconfig-002-20250214    gcc-12
+i386       buildonly-randconfig-003-20250214    clang-19
+i386       buildonly-randconfig-004-20250214    gcc-12
+i386       buildonly-randconfig-005-20250214    gcc-12
+i386       buildonly-randconfig-006-20250214    gcc-12
+i386                               defconfig    clang-19
+loongarch                       allmodconfig    gcc-14.2.0
+loongarch            randconfig-001-20250214    gcc-14.2.0
+loongarch            randconfig-002-20250214    gcc-14.2.0
+m68k                            allmodconfig    gcc-14.2.0
+m68k                            allyesconfig    gcc-14.2.0
+nios2                randconfig-001-20250214    gcc-14.2.0
+nios2                randconfig-002-20250214    gcc-14.2.0
+openrisc                         allnoconfig    gcc-14.2.0
+openrisc                        allyesconfig    gcc-14.2.0
+parisc                          allmodconfig    gcc-14.2.0
+parisc                           allnoconfig    gcc-14.2.0
+parisc                          allyesconfig    gcc-14.2.0
+parisc               randconfig-001-20250214    gcc-14.2.0
+parisc               randconfig-002-20250214    gcc-14.2.0
+powerpc                         allmodconfig    gcc-14.2.0
+powerpc                          allnoconfig    gcc-14.2.0
+powerpc              randconfig-001-20250214    gcc-14.2.0
+powerpc              randconfig-002-20250214    clang-18
+powerpc              randconfig-003-20250214    clang-21
+powerpc64            randconfig-001-20250214    clang-18
+powerpc64            randconfig-002-20250214    gcc-14.2.0
+powerpc64            randconfig-003-20250214    gcc-14.2.0
+riscv                            allnoconfig    gcc-14.2.0
+riscv                randconfig-001-20250214    clang-18
+riscv                randconfig-002-20250214    gcc-14.2.0
+s390                            allmodconfig    clang-19
+s390                             allnoconfig    clang-21
+s390                            allyesconfig    gcc-14.2.0
+s390                 randconfig-001-20250214    gcc-14.2.0
+s390                 randconfig-002-20250214    clang-19
+sh                              allmodconfig    gcc-14.2.0
+sh                              allyesconfig    gcc-14.2.0
+sh                   randconfig-001-20250214    gcc-14.2.0
+sh                   randconfig-002-20250214    gcc-14.2.0
+sparc                randconfig-001-20250214    gcc-14.2.0
+sparc                randconfig-002-20250214    gcc-14.2.0
+sparc64              randconfig-001-20250214    gcc-14.2.0
+sparc64              randconfig-002-20250214    gcc-14.2.0
+um                              allmodconfig    clang-21
+um                               allnoconfig    clang-18
+um                              allyesconfig    gcc-12
+um                   randconfig-001-20250214    gcc-12
+um                   randconfig-002-20250214    clang-16
+x86_64                           allnoconfig    clang-19
+x86_64                          allyesconfig    clang-19
+x86_64     buildonly-randconfig-001-20250214    clang-19
+x86_64     buildonly-randconfig-002-20250214    clang-19
+x86_64     buildonly-randconfig-003-20250214    gcc-12
+x86_64     buildonly-randconfig-004-20250214    clang-19
+x86_64     buildonly-randconfig-005-20250214    gcc-12
+x86_64     buildonly-randconfig-006-20250214    gcc-12
+x86_64                             defconfig    gcc-11
+xtensa               randconfig-001-20250214    gcc-14.2.0
+xtensa               randconfig-002-20250214    gcc-14.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
