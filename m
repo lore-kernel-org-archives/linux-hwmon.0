@@ -1,37 +1,38 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E637F1A2860;
-	Sun, 16 Feb 2025 19:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4FE1442F4;
+	Sun, 16 Feb 2025 19:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739734403; cv=none; b=czsB/F+U6oPrRoWskZf1D505ptcBI5EAgGqww12fhnKZ+kl0n5SfaDeDgvPAhyQDNTyUaBqKwo6ziTgg9Bm2kcqVzzuV1XHk/72fE8PeVf3qNJGZNPMjI/mzEW8CQ1U05jp4svGm+XQ+6jKuGk7JGXFuZwJfjoh7gfVUzV48Osw=
+	t=1739734410; cv=none; b=GH6+ueoVtr9p+MWx77ra+rzR+EFlknY97YUhaiPeZgS5pDfCZs6kwkrhuxaxGzLXcJo60Upm7a85rKj2bVrqy7apgdwMrl+w5P9mndbotmXchpwQJjwO3u6QBRE8Nsv+2PejGUuOONFAmSLCLjySFAWrH9Wt3VNNjpw9hP73jOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739734403; c=relaxed/simple;
-	bh=WJV/XDNncV3HMhaU1OkQyuWjHFhef1ztCgpi83LVLx0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WnEMGFZNypGgLfLM8mKcFEbulz2Z6QFQYp4zuy/UPMzHnV1HgSUOl1iK14cWFmjpDa14MSZWbfVMU0u96zMkQa7QbcqQsItYDEW+8ap2GOSPvkff3GH8k/i/gvKdJyCfMDQRVTU55Txf8qOjeF4YOGCxPMGu6WkYB9wA4iZFOSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=rAdIPGvM; arc=none smtp.client-ip=212.227.15.19
+	s=arc-20240116; t=1739734410; c=relaxed/simple;
+	bh=yMjiz646ZJvCb1m2zwAwWL8ybidlrk4U2RBujeYWMdI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VNcl8sz0R8kkNWl9sTe8qYOP8cAVzfFVs19DFkqvLnBBpDx1ZkUJ+RENjlTFYsZlX2JG5RB0rLvmhWUnMeb1qUvRpAmOGxQUVIEQ10VZ2ZbFvN7JcOZC0u+d/fvQ3icqleAcvEcVvRuNeXZbOI97EZzDSf9Y2shBFfyg+ZVQdv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=nBiTgIaP; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="rAdIPGvM"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="nBiTgIaP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1739734377; x=1740339177; i=w_armin@gmx.de;
-	bh=5SxkcnujTlMkxclqqkcog9uUjawTQI9K/xGxAcUUiqY=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1739734385; x=1740339185; i=w_armin@gmx.de;
+	bh=7jyOAlVRB2LWS/oqgP3F/K1neWhMeaYSgJQHNRFX1fE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=rAdIPGvMneGt5JWjYN867QM9Q0DF5zLKHhpoBmrQYkv7zqzUDRASrOQ7hO2oQEg4
-	 oOvX9/8JUG7i+pmQ0nWuZ5YD5l+uwYsOvzXnZXKmSRws7FY6bWzlUpo3Pckem0ifI
-	 R04QA5W9Hq70SijenQVarViXB2Dy266/NBPdrnaOJoxNEv6h5ao4aYSZcXH8Asrrm
-	 yvuzu8rLcK44BHi3p0OCkJbEX5DzwP41NetdhYbBeBAAJE2gp/Im9DnaS+gKWe+SA
-	 sqNYTnWykbIRP7nipOMLIdFKNMlMFDEcMrR6f+Y5c4oZNv/VWcxnCVaCQGW60suf1
-	 wuslnRNgaTBolsOhMA==
+	b=nBiTgIaPEYqBE2U9Su9v+czEg1rVh/YlZ7uhRkpaSKZxynoiXU4Zs9xO5COBva0T
+	 Ubunb4qs40HKZIZvue4Q7Zd7uvDZnn88MIAho8ZHBj4YgU+LcmCh53rQGcay2uTPa
+	 t6OvMbf3BD84lSNDmwpkY1ellj3sNVhkKELXYsPPInnBdE/OJUSCwgL316vfT7kzG
+	 aaIf8xRzdliQ8/iMRz9Z5xfuEyb9eaNxWtiloDnHXk63LDqSeHkdTkgRTgXSxGj3Q
+	 WZ9NDoDrzLzNzlxka0MipaDK61l4WKWHL19RLSUmIT540sX3eykJ7pRRb6btx7ZFN
+	 IW4Ew5EDnKjTGDs9+g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M59C2-1tkqJY3cIe-004mIN; Sun, 16 Feb 2025 20:32:57 +0100
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MiJVG-1t6onX1vNe-00mXWL; Sun, 16 Feb 2025 20:33:05 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: james@equiv.tech,
 	markpearson@lenovo.com,
@@ -45,10 +46,12 @@ Cc: jdelvare@suse.com,
 	platform-driver-x86@vger.kernel.org,
 	corbet@lwn.net,
 	linux-doc@vger.kernel.org
-Subject: [PATCH v2 0/8] platform/x86: wmi: Rework WMI device enabling
-Date: Sun, 16 Feb 2025 20:32:43 +0100
-Message-Id: <20250216193251.866125-1-W_Armin@gmx.de>
+Subject: [PATCH v2 2/8] platform/x86: think-lmi: Use ACPI object when extracting strings
+Date: Sun, 16 Feb 2025 20:32:45 +0100
+Message-Id: <20250216193251.866125-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250216193251.866125-1-W_Armin@gmx.de>
+References: <20250216193251.866125-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,71 +59,126 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:E9HBntScjkVmVXA/RGU9WXs5GzImI8Q5X8772CBP2g8NU7m/q5o
- gD23GUCkgFW/DXUEj5q1iZmJ5FAAooM8lpLPX8BA6EkLJygVlRSXaqEjNnJXGNBWBJDLJFj
- 8ennt/4GXSDzNz0l74igPpfxYKGsVTw1ljyefKGPV00UjN5YAHMxyPMO955cmmG1eP5xCij
- aIVtIJdF9rk1dx77tCPEA==
+X-Provags-ID: V03:K1:kvuCTzUm6FD2pC4C6wZx2zJIpdrQjAHy2hoZAk8DFKAj/ITrjMy
+ JiRYDocLgpFjwvsMCMlitMFQi2B2AwkePI1BPTclVJeyOEG+XQ5Omf7SfBiVPX1rRIz5jU7
+ cLHnlZVJDk7uohwI+5AZrEu+f7428shoHv6SqXNxisWC0u25oPSYcwpKHFwF5oZf/8yyh+L
+ LwOlkzwfE7uwefR/iTTKA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:wKyUm7eqFOA=;oV8SorG/pKw1gx7VoIRfah3gMob
- 55qNoJ9jz/wxCTxZQc35Orx0cT7WgdSgZV96PovOQhy2vYrEF3zdEHE+opdmehVM/eVNOKQhp
- 9/o/9lHgJ29cCkRtAjcg7MgkvzqE2SFr30OkZIQ7jhlNJrWUyXEXABy4AsRDUAxeQn64c2byI
- uROM1ENssbACUGleJ5QgBljiwv03lUBYBvjrwquOX9AeXLWlXAXnTJSoUnsxqDnCiprZ+lY2e
- ZY3WVp2OKiX497vNmpH6xnTngg+b6clJUcjaaFQKvVp3YpiqyvLUfqs7G8rytkayHpZLcFsxZ
- RrtJzhKSHfsXN2M0EotP+CpPwtuiUdqXXklXwYUjLPWCQ358Y0DAYT1x0/DoQhk8BQ2VXlTYA
- Kfo/kYK6Cd7IuT6/BCGoB3WjzRKJR/rnaxeKVNwJJ0wbnAj/p92bRnxai26ayyA1LH7e8yOFP
- 9wUo5dGpfEC2A5Yerw3M15QIbHWEJ4MhevvOeUD6gvLmnLR8gK369W4c+ABC9uwx9Yxt9NgHA
- 9pxqnRQI+WScmkWIaEEOcVBZrqas8OM+4m4JXim/NrND42n/9QZTovkFYeNL8uYFXhvayCGa6
- ZzmIcg6U5ddCFVICpANRnIuB4zn5M62W05Dq63qlBhPBSXunaP8Mhdnp7I15sc26bk1xpbPx1
- X3xN4X0crc5ZIBG6zF2yCprNBQHJvEjVz8OcLfud16HO3YsqvHs1PtVAFlB0eP9Nlbvaj6eMr
- Jr3rkM6YQdBOLOG2TxdYP6TPQwkmEKxbb2B7Lj8OsIzknDh8Q/6FptUphDxYuZjdlr9jUzC/p
- 6+7AN1wdQXwcTdHkoRLYOqolOB0QX+2U9aHKyMpPnP2ifcTKSxY6qqVmJ2On5DA5skE5YLM9b
- NmOBype6LsRJ9xW56xNO2KFfPfi/xw9dAC9OJL+sDJat6t+qQ79jd1FJ9wHNYsOmYVLd+jWE3
- y219ZOl9kM0rFP0dVQehqT61ZkoW+GpQbxS5PREImBqDXZGcDPkuLBMDAj7y0ZMFUHmcfS2+P
- 7TJt7kqvduS4xy3wdLkVSp7kfejBbnIt6djOVDjRBwaitjn4ZWqFsSCw54q1SdkBRhxNBxRxT
- pXSg5lafIPkKzWrCCl7f9WhMun4g3oj7iZCzsAHlgw2uxWJBQiymSmxowbvOaJP8bMid07lJN
- /5/RdzreZOZwb0NB2ceQXnns5gj6FyavPKRA4TyA551b6+W/6lx5vVsxnHcUjVDCZm062HZVf
- U1oIJfPW08fmieyqPcVz3woOdW8eWZD2c3DDOBnyNZTfcj2WB+RO6chO3OdF29+WfQRhqCKJI
- 7kbuc2HGA3+Kbp/6Y7KJRBx+8MLQM8q1ju5ZWHMv1WJR8/1beR8HTWjDhQo0DpxhZlVK/PwJi
- s1o9sAMQ2R5qn6zpNy6LXlRh1/qxf6x8NgB4WpTdaNxvAiVliO/95rXBPorWZuAXsspewN0ku
- /YZ7Hfg==
+UI-OutboundReport: notjunk:1;M01:P0:2V3eQl82Db0=;BTYUK2JOTIeDEW2PmW+NjizJYyL
+ SnhPwCz+cWrlXPpzA9vDNV/RlrOyXa+SkktJMhRlT8dX6u93+yiaT6SJH0lvyFANHCWj+sNqS
+ pcC9bk3jmxVfVCbdFFd+8pYMOVKayTEC1O391eTRENGu/4wUQ6YxNGxN3u+mij4eLK3+j3AdO
+ 3lBcSeAh+9WLUsBQxDmwAzhQQxVinD7utduXSmoYhxp9pt2gx3HzeihJK+ysSl0j7ZLu28wkB
+ ObnQnxCfLX4Bgxr9W35EIKnjFlnf3kJhy1JT6U4OaA2tllN/F2XwpFSATvN2jBkTz17Aefv9J
+ wqvNx2VQ//IxE4lptkl1xralDU4IyHPuTzioxUF8/Q7RPmx/YsXEzpG4Fm0BRFlZRPO/YcQ35
+ F5jS7qtBNlWqn7BL9UoOvV4H0LK4slS8BQ0ZhyaXEXDMdNuiETMaVic1wOWMf4hjA95Lrt1aM
+ B1nyb16A0BWtIbBL4GXhPzEOZUjC391T8wZI5618uU4Zquq5CxerToGeArpz+hBfbBc9IQsYX
+ wzBSMi6dbxkXosIanzB5KywU3oWErAWHd3PFg917DxQ6GcLdlp2Yyh2yykSrrz2QIqukRZBoF
+ OoOn/QkLm04oyJf3Zf6CEPJ78MfetpUtO7IqaU9SHOT2KtGf4nzXnzZnwYA823KbSiy6o26M0
+ eTt0xYQOWEeu0A6QO0azSFG4rIB78LwQRTHdbgl64/dwZFKlKq5AILT7fJmI1DOUixVsJEIA7
+ SmY4mnsJSilKdZTPbsKT8hplriXDcS38FHINBvEFYDST/xKxclDpfEKcWMlrEqcuwV1sI5/qu
+ +yyZLNpMZFstS7ieRXCDjfVOdiBMy54VHSPrL4K9pNRwCxRZ/wKLsU0WmcPMaknHsTIzyfqP6
+ KroT5NH4l+KzcSD2o4MA9iVzHkSP2p1FjnqmMdK6nozv/aLWv5Uc1zV2Q4npIrFJN68Iqwh43
+ ffiVNerqGgRnZ/NcyWZQJUVeYRnqL6ioo/JMnk5JzNxvImCs8GIQETW7Ri0DN9hIX5CkE6+9T
+ z2/cLT1vvEG+2g+Nvsh2KS5X0x9svC89X+8YD1qjQrTcwnitR845PUIsXvC+fyOBLmImIIpEj
+ D3gVaz+hzifFWpkuGtfUVfJ0C46l3M6lPZ7xtYv+2t2TpEwktjpyZXQTh5wf/v0uBZpJO5aOc
+ J0cVUYb4ZfH7peGta+N7W39fR0orWgEOvlV/epWgNkfzIm6epLYtoIJBKJIABpHSZ7MRdHkms
+ obi8Ee8eVR3L0fiUzImttpY2+NvxAc8bUB57bqNnOeJgiVy/qdd2T22coNSZfTiity5Skv4s6
+ BQxAg8TRMOfszc2vpdQ4ONgQy+p463E2bWbW1ek4pGjUEGmIjIBhd60/krXWm0RWtyDUNrjv8
+ XkBOBAI49NyiR4d9P08MJrD4NlNk3YUE4BfwAoVOh+w74Jh5yAhBu7kLwI
 
-This patch series reworks how WMI devices are enabled and disabled
-to improve the compatibility with various firmware implementations.
+Move the ACPI buffer handling out of tlmi_extract_output_string()
+and instead pass the unpacked ACPI object to prepare for future
+changes.
 
-The first three patches make sure that no WMI driver using the WMI bus
-infrastructure is using the deprecated GUID-based API to access the
-underlying WMI device.
+Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/platform/x86/think-lmi.c | 38 +++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
 
-The fourth patch is a unrelated cleanup patch.
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think=
+-lmi.c
+index 323316ac6783..2c94a4af9a1d 100644
+=2D-- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -262,16 +262,11 @@ static int tlmi_simple_call(const char *guid, const =
+char *arg)
+ 	return 0;
+ }
 
-The last four patches finally rework the WMI device enabling inside
-the WMI core and update the documentation.
+-/* Extract output string from WMI return buffer */
+-static int tlmi_extract_output_string(const struct acpi_buffer *output,
+-				      char **string)
++/* Extract output string from WMI return value */
++static int tlmi_extract_output_string(union acpi_object *obj, char **stri=
+ng)
+ {
+-	const union acpi_object *obj;
+ 	char *s;
 
-The WMI core patches have been tested on a Dell Inspiron 3505, but
-the remaining patches are mostly compile-tested only.
+-	obj =3D output->pointer;
+-	if (!obj)
+-		return -ENOMEM;
+ 	if (obj->type !=3D ACPI_TYPE_STRING || !obj->string.pointer)
+ 		return -EIO;
 
-Changes since v2:
-- add Reviewed-by, Acked-by and Tested-by tags
-- use devres to disable the WMI device
+@@ -352,17 +347,21 @@ static int tlmi_opcode_setting(char *setting, const =
+char *value)
+ static int tlmi_setting(int item, char **value, const char *guid_string)
+ {
+ 	struct acpi_buffer output =3D { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
+ 	acpi_status status;
+ 	int ret;
 
-Armin Wolf (8):
-  hwmon: (hp-wmi-sensors) Use the WMI bus API when accessing sensors
-  platform/x86: think-lmi: Use ACPI object when extracting strings
-  platform/x86: think-lmi: Use WMI bus API when accessing BIOS settings
-  platform/x86: hp-bioscfg: Use wmi_instance_count()
-  platform/x86: wmi: Use devres to disable the WMI device
-  platform/x86: wmi: Rework WCxx/WExx ACPI method handling
-  platform/x86: wmi: Call WCxx methods when setting data blocks
-  platform/x86: wmi: Update documentation regarding the GUID-based API
+ 	status =3D wmi_query_block(guid_string, item, &output);
+-	if (ACPI_FAILURE(status)) {
+-		kfree(output.pointer);
++	if (ACPI_FAILURE(status))
+ 		return -EIO;
+-	}
 
- Documentation/wmi/acpi-interface.rst          |   3 +
- .../wmi/driver-development-guide.rst          |   4 +
- drivers/hwmon/hp-wmi-sensors.c                |   4 +-
- drivers/platform/x86/hp/hp-bioscfg/bioscfg.c  |  13 +-
- drivers/platform/x86/think-lmi.c              |  51 +++----
- drivers/platform/x86/think-lmi.h              |   2 +
- drivers/platform/x86/wmi.c                    | 141 ++++++++++--------
- 7 files changed, 116 insertions(+), 102 deletions(-)
+-	ret =3D tlmi_extract_output_string(&output, value);
+-	kfree(output.pointer);
++	obj =3D output.pointer;
++	if (!obj)
++		return -ENODATA;
++
++	ret =3D tlmi_extract_output_string(obj, value);
++	kfree(obj);
++
+ 	return ret;
+ }
+
+@@ -370,19 +369,22 @@ static int tlmi_get_bios_selections(const char *item=
+, char **value)
+ {
+ 	const struct acpi_buffer input =3D { strlen(item), (char *)item };
+ 	struct acpi_buffer output =3D { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
+ 	acpi_status status;
+ 	int ret;
+
+ 	status =3D wmi_evaluate_method(LENOVO_GET_BIOS_SELECTIONS_GUID,
+ 				     0, 0, &input, &output);
+-
+-	if (ACPI_FAILURE(status)) {
+-		kfree(output.pointer);
++	if (ACPI_FAILURE(status))
+ 		return -EIO;
+-	}
+
+-	ret =3D tlmi_extract_output_string(&output, value);
+-	kfree(output.pointer);
++	obj =3D output.pointer;
++	if (!obj)
++		return -ENODATA;
++
++	ret =3D tlmi_extract_output_string(obj, value);
++	kfree(obj);
++
+ 	return ret;
+ }
 
 =2D-
 2.39.5
