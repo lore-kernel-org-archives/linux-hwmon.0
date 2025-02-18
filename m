@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AC01990C7;
-	Tue, 18 Feb 2025 15:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D326AA94;
+	Tue, 18 Feb 2025 15:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739892907; cv=none; b=u6ZGeh9IUrIIBMnFg2FVhlv5E1nzrL9iHQGT3kp4e9J+5BSCDS/z7GBzidAr2tQJLKMdgOBaBKaIrByBumQ8456+nuLqQKe1PLbQ8SkHfdrUV4fi6cjq9oRGc2dDZad8kfTACbWjOaMEkq+VMEzw3tRYVE/RdDSuVa3hGkSb600=
+	t=1739893010; cv=none; b=XnBTaO4qpQf+w4mnPjSU6kF98wh9lu5cgapFBtZQR3PwPeoDu0/BWuKqQa43LnGDUhko8cy+pHGnD4UmnwSNRkyNyHK0JHYwftRxv6+6xiWfHqQPFfk/CG0b1sdnus9+FvZ2KDIsTVxgZLWYmJT67320oWqopGPyXn/rgztzxVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739892907; c=relaxed/simple;
-	bh=xG4cICiE98lRJZYn34MUYDdZqiy1OLzJL6O9uz4mrTw=;
+	s=arc-20240116; t=1739893010; c=relaxed/simple;
+	bh=XCzPqqxdiPdXilBJG/k8YxUGAOl+y9G9qdjAJWZl7Xk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ANEWdmWm48Plci5hnGar5e5XoKl3W8ngzkvTXRi1FdmGbUrqV7xhEpXXpmdO8NQYhP2pVvPF4iG7mnYGpC+ScB4g7vCCTztIbXI9r/ydPCqVBhhiEKSpSF2n/0ak4s+KXRj8F/lBDLHbacWS6SRSikVnxTF4tf09Yfidp+cy5gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3ni8SRf; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=jgVTOqUSvRASDCHVphtWza8MBWkWB9w5a0yFW2Be3S/hBOUMlchZze4gKKLXXPdDRko8fsBuO1VxbmgVTOLBm/fdzsYjtfUOF5fiQpZFESfIlERNa6l+SVAhbaPyWlyYiaDeKjpNQ+fx2ooNAcyXBGw98cJF1+ic7hd30IUJ11k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r7gLZWau; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3ni8SRf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F7EC4CEE2;
-	Tue, 18 Feb 2025 15:35:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7gLZWau"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D857C4CEE2;
+	Tue, 18 Feb 2025 15:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739892906;
-	bh=xG4cICiE98lRJZYn34MUYDdZqiy1OLzJL6O9uz4mrTw=;
+	s=k20201202; t=1739893009;
+	bh=XCzPqqxdiPdXilBJG/k8YxUGAOl+y9G9qdjAJWZl7Xk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h3ni8SRfCZanQq2OCYohP6jeCZGqeIzhPlJFYOoVYhxLfdxRgRORFwtqoCQlV7ziG
-	 wBDLimSOMcn0tPIjxg/Jd3/1aQvo3OPI6VNOuaGxSL9Vr10TTiHeultntgnZwFTa4z
-	 i4R7b1kOqK0YOpc6RCxeVaven2reJEUnFieS9M0gy0FaZGJ/YSY5RXwhUoc35WXWxm
-	 uavLpeJkNMLuFS1II3s/L4pXLeE2g7NRFoWam90Xt8o7r94Uo3lOBWF8DmQwwAwiSt
-	 qwq2tuMTKOmmmGzl66FgDHlPb/4Ui1DdQoF/5oxemLD//V/PliD6AzEQ9Ymfn7YHt/
-	 QJiW7fA7vHN7A==
-Date: Tue, 18 Feb 2025 15:35:02 +0000
+	b=r7gLZWauPUP40FqklSs02U6VPX/03uXN2bwpx5u2UzkJ70lP0LKMG0byYHsN/oCkm
+	 j75SQzdT12uMOoIAcPRCwUqhSJCoRq8c8UDwtxL7hiz0UcrqigobI405sAVDL5zaSV
+	 K8QZ92XSUfOZrYvNl49+l8K3SDwFTW41iky3UqwSHumUWxOgJ6uY3S8RUrJR1bnDlC
+	 2tHukX9fysGrpLDqeZ2Tw2qnLN6zxIdJYy/ZZfcivGAOcErhvbMJzDV8E84ig+dEDf
+	 HPLOL1q8RsypYM2lUWL1itltTg8+f6Z4ShTfpcBJnm0Tnd1nScIBj1btrNZRXOPSJ+
+	 SdWjkw4aM5U1w==
+Date: Tue, 18 Feb 2025 15:36:46 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -44,11 +44,10 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
 	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 21/29] ASoC: tas2764: Add reg defaults for
- TAS2764_INT_CLK_CFG
-Message-ID: <Z7Sopr2V6CzL9eVi@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v2 24/29] ASoC: tas2770: Add SDZ regulator
+Message-ID: <Z7SpDjQnabi0dZ_N@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-21-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-24-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,41 +55,45 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="V9/MPtnfPTWJuqHi"
+	protocol="application/pgp-signature"; boundary="VbY9DRThDDOXpegf"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-21-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-24-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---V9/MPtnfPTWJuqHi
+--VbY9DRThDDOXpegf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:35:55PM +1000, James Calligeros wrote:
+On Tue, Feb 18, 2025 at 06:35:58PM +1000, James Calligeros wrote:
 > From: Hector Martin <marcan@marcan.st>
 >=20
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> Multiple amps can be connected to the same SDZ GPIO. Using raw GPIOs for
+> this breaks, as there is no concept of refcounting/sharing. In order to
+> model these platforms, introduce support for an SDZ "regulator". This
+> allows us to represent the SDZ GPIO as a simple regulator-fixed, and
+> then the regulator core takes care of refcounting so that all codecs are
+> only powered down once all the driver instances are in the suspend
+> state.
 
-This is now upstream already, as are another couple of these patches.
-If nothing else please base your submissions on current code to avoid
-spurious conflicts.
+Same issue with the use of the regulator API winding up as ABI here as
+with the earlier patch - I get why you're doing this pragmatically and
+we should just have a general helper for refcounted GPIO enables.
 
---V9/MPtnfPTWJuqHi
+--VbY9DRThDDOXpegf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qKYACgkQJNaLcl1U
-h9A9iQf/WzzFguT3AEkECdXsmlm1cLHB1ASjmxzy7a7RyqWGQCjkplsneb0L+NKj
-/rP9bendh+6EzPmADrBRzB7OjzUaOa+cpBXQX9pEqZg3p2sRC+WCKy1rtH5pf7R0
-3yRL7h3P+dGaPf8R08SQ32iG8IT2d+M+ly7S5sAegrRf4VOubywTTXWRAYuETEQ+
-YMMEEAhmaleOaAmtJQVAfRBvd0/xj1qr6e+j4sslu83kmFdpycfb8bIe80Zr0WJ5
-ky2oNf32te0ps+Tc8Zf3Ya3gu+Ny4LF+cglv5FBUwEnNOR2vtFPjCF+f2IsOd9IO
-u7SfIAQgTal6r5LdVylz6825na8LUQ==
-=ma9b
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qQ0ACgkQJNaLcl1U
+h9CGCgf/fxWVZSLwHxh2udtDRheo1UlWDK/xCLvvIxJVLPGaQ0WRoMe3gGYDyvSQ
+Qd2S04UxYP6hDsYeIveDM+dslc1MYTKxcMBsauqgrEAKAGlOx/ejwj7gf9I3gMfi
+XxUcn7Avat8XX19uVotRpCv0U22+uN0jhDtSF9kkfxfPDnHqzXXoRjZ3ix3qFyem
+GvEw9xgjlZxDrrMhuynmdCnh9vS8/Nca9nYO7o5layQTjtau560xdwUtnuaDhYlB
+Aa+pcBKRfSoOyxQ6O7p5/P2q2fckkavwy3essd0t5ierc0glakHrKWucZ1c2r70t
+liG43Umfen98YLYpt5U8eGDjcjEeDA==
+=IH+p
 -----END PGP SIGNATURE-----
 
---V9/MPtnfPTWJuqHi--
+--VbY9DRThDDOXpegf--
