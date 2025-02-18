@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9DC26B09B;
-	Tue, 18 Feb 2025 15:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6527B26B959;
+	Tue, 18 Feb 2025 15:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739892342; cv=none; b=G/03vPsww4unhOnll4raTFU/LUg5HD5szGSIB9UsfRlp1lm8y8eCQ2UL1zEfUEsode+Hr5BJm4APNseWpC04B6QQGzGlCGQxwfEChD9AeSy8RKS9QHJlveMyK4sQ5zuiut5VepvdotJs/sNMAnGNbSkiXp0HEf0ViXMDc6TR21k=
+	t=1739892407; cv=none; b=Yv+qgHQxCyi+f2j6j8EfHAg793P5EYznv2QT/bSLiHSWSg4Z++aFAjCSdoRTTM4cguoUMkBaI5rnKhmhWOzpqR9mbOnyi/FQ0DnOfVvBWikhttO+Gv0ehCBYN0o9TViJ5k6XwV/8AdYcZ6rnbUAKHJbq4xc8O+P/u5VfNrcwWlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739892342; c=relaxed/simple;
-	bh=/PVR7lTm2rCtdnzLAbpvkucX6X5lhta8Uki8XlmijWg=;
+	s=arc-20240116; t=1739892407; c=relaxed/simple;
+	bh=LWSV7MB4eJu1tqu5Q170zpgZP/W+2kInVZagPTOniBM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ir5A6hMUBP2X8/OQPdlcuUVdT9/PMC0mRg8NgUP7okZ5pe7naz9AuKCTFGRJ54OcLRxwubo3RknAJ195PMdHVQBNJreZ69enEjc7IEFOPTOy92wYxX7XoTTYB4lPVihSngIdZTnrrv7Km//vInirfeyse2ztRge0L8y+K7IQlNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+e4pJrd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FD/cnzZWhDAmF1GvrNWx23/cyWm8mdfjn0nMk7FO+s9jCKE/mpiiSMNd6lGg7bWkUndzXdmWQZzHzeaV1yMnnUhTJetPvA8HpEjdZH5UCmw6hRhS/F3IbqDcCxEXwSeFFZwURaKjukW7WqeUqcKhWtlox5pgZ/1RAC8iWm0dUaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXUy3UKX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+e4pJrd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D9CC4CEE2;
-	Tue, 18 Feb 2025 15:25:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXUy3UKX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66F6CC4CEE2;
+	Tue, 18 Feb 2025 15:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739892341;
-	bh=/PVR7lTm2rCtdnzLAbpvkucX6X5lhta8Uki8XlmijWg=;
+	s=k20201202; t=1739892406;
+	bh=LWSV7MB4eJu1tqu5Q170zpgZP/W+2kInVZagPTOniBM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T+e4pJrdnfZllE/W7mPFZ38fk6AJ0kPonXn7dGhEcdKamJH7CGhT1jyt2BHExkpn+
-	 YKGefwXUur4GJI3SmqKxTDnRmXy0reg0w2ySpTcE52Eq1u0yU9lbEYPsHM3SDjgZks
-	 QPzu0qVHDoqSSLo/eyN6r/4FrWaErqOIpEp6w9FLSTDxM+U0gAZuraaZAoqMXDOPNx
-	 TldPTRBHikebxqKL7OS5aOX9AAzwGfkthoUMnzJC/vS6x5imG83WYTavF3hSfaIGml
-	 3ZHNtTZsnmpuei4ZJlAY4wJly934D0baG9RuSucr6Cgic3J8LKc/nIqFzaxlFPjiCq
-	 /4TfiDxfpbQXA==
-Date: Tue, 18 Feb 2025 15:25:37 +0000
+	b=pXUy3UKXHnjQgbV2FTzwjWkHaOCratj36yPVoENHIy7BjXIY7xIVhg704+QhmX6rT
+	 8chBmY050QL8PUql17EXYYDOvVYSEotIaHqe5UYGe8qsOf1/NFR6cexizvp5gWSO9U
+	 yKo4PsAVPx+jCdm2bRyZUsBCBl0n5aEHyf8WRBKJfFix0YqoEjicrtKW3LuQq2PcLr
+	 w2xejyJXmm24BG5SwzBMtxnKutczF9/Bvs4DhjxrWY1CoH29fVfP0hDkZagErV2fxd
+	 CQnyfNKMjX1/k0xdZQ2UI/XTL1Y5i2SC8v8uLjuqzlbGdEXRhp0VThgfCsyMQkUX8J
+	 4GeRdtvhxaEEA==
+Date: Tue, 18 Feb 2025 15:26:43 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -44,11 +44,10 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
 	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 17/29] ASoC: tas2764: Crop SDOUT zero-out mask based
- on BCLK ratio
-Message-ID: <Z7SmcfaGQpGG81Pw@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v2 18/29] ASoC: tas2764: Enable main IRQs
+Message-ID: <Z7Sms4UNIlnXF4PO@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-17-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-18-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,40 +55,49 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FnjQ69qDhYsOpOBW"
+	protocol="application/pgp-signature"; boundary="O2C8HfUUYwxVhEqa"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-17-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-18-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---FnjQ69qDhYsOpOBW
-Content-Type: text/plain; charset=utf-8
+--O2C8HfUUYwxVhEqa
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:35:51PM +1000, James Calligeros wrote:
-> From: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+On Tue, Feb 18, 2025 at 06:35:52PM +1000, James Calligeros wrote:
+> From: Hector Martin <marcan@marcan.st>
 >=20
 > Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 
-Again, why do this?  Is this a bug fix of some kind (ie, does the
-hardware misbehave if we get this wrong) or is it just for neatness?
+Changelogs please...
 
---FnjQ69qDhYsOpOBW
+>  	if (tas2764->irq) {
+> -		ret =3D snd_soc_component_write(tas2764->component, TAS2764_INT_MASK0,=
+ 0xff);
+> +		ret =3D snd_soc_component_write(tas2764->component, TAS2764_INT_MASK0,=
+ 0x00);
+>  		if (ret < 0)
+>  			return ret;
+
+Do we have handling for these interrupts already?
+
+--O2C8HfUUYwxVhEqa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0pnAACgkQJNaLcl1U
-h9ABMgf/bqg1mJwUXaQ6K+vLz+U0KeDMxix1PMazVlDjR1N6jYBaTY4shZuES1Lt
-6kDs4KHQBqXwUMpc9YvyU46lw5oeWFQPWlOQvc8qw8pK6ugWPB7i+yLzgAGe3Z1e
-cdbtHvf9vlC6zsY1bd9JmN9x67T/J0JEsQieVQPb/2zPsjA9+TM2dEuIpcQ8YZWj
-yokQDbgk4I1SP+1aLSNkSsU18ujt1ktwKiYSf9KLQPfHvSO5JOg0h8f6FZsLCw0c
-JB2uYWFXv5bzJTkuiZOQPGdczIkvEvcIFusDOxNqLBJkjnSNdcXxVhAf5UrPiCiN
-VGmr6a4FkieEuGMzXY4T+YbmT23agA==
-=0ji4
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0prIACgkQJNaLcl1U
+h9C5kwf/X9/bi4tQifqyw5/dU9vsseyU71R+vXaTffMTXnzmsw1YLfalQtN9fGvy
+BWhmJq+smVISlHZllomwmlJV4woiR/JU4rgODylTpjUHASuiWuqo3s0ClPvoDaIY
+UW6uAn/qe6I8k+HwrfMU4IvaYFBBOdmVnVLH+9J4iIQ3hnY0xxaaSjxpPWq7u3CK
+vgqeLvK8vfseHNnq4sLdMU0ZIrBV7Fg22jW9DG6l2er4Yl/BJJtdSAVttb9lAKHM
+WQIqUb+8UpY88gyzoJNKzisolQB0pqdEuMhfaplF6t+4dJPqvHLEaaxvpbZ4L5TX
+GAru/nQ91CR3us9+nQcBKQoXxpFd8w==
+=1Fx7
 -----END PGP SIGNATURE-----
 
---FnjQ69qDhYsOpOBW--
+--O2C8HfUUYwxVhEqa--
