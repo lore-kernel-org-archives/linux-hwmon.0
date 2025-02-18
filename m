@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE8126B953;
-	Tue, 18 Feb 2025 15:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9118A269AF4;
+	Tue, 18 Feb 2025 15:38:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739893045; cv=none; b=oLT/1Iyl9uOctGwZmBzNWvSTBtfjCqNPdEP4oO4R39jR/dSZOkqllc7kYhjOFEbID9X/mP9s8yK1V8xH70P9NPsxDXbxzv4BIncuddJiN5hHWR6oc72arRW9Nh7M4qbzneCCgGhvQ1mhHKhc0rN8PX8AcWMaawfO7QOXOkOS450=
+	t=1739893110; cv=none; b=eT/lgzvJbjxUZN5CPnmL7quy2ZpriahXziWUkYg9gL7bDDl1V1YBSzHQqEM1ytAAVkSDI4/N4GgMi/HwrzwBBBIbYmBurcRHWoGuzTPEPw2x9MTIgw7Z0r/HftU7MwO8NMzv+XjPGnipzwXZK5bBxiNjr7K/3BrWknPlgT4SMVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739893045; c=relaxed/simple;
-	bh=Pt12o47FXSx6eqtwoWUeScEOX3oJJlfjIsbV4sD9XRQ=;
+	s=arc-20240116; t=1739893110; c=relaxed/simple;
+	bh=joPSfEZV+4aLPYPABOyQKt5zihMFx75oapssE5Ldad0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L9EMg8k/tN/fId8Z3EptwrApO4D73OsgRVw73R9XKkYfq6C3n6MK86kRprmb24tHLc72jOJ9oYMwTkLQayvvbxP7+RM1LYS5I6COibI0Mp3au9Vq8IycLr+hA2AUBHsOTUgkf93u/gA1Oeb34ipXr9Dn78CsLwoPMw5qGdpg/zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDF4hNMH; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=f5ztyNZNHVV/7OWxkSZ+/EmklIcfmX/Hv0i5LXdqgjlSNxXgFkNC09KikuUrKYDlDitFxSaQraHZ9/FQoGTpjlrp3aQpdYNgOK0Zxd6GCEHSgSo2uyJx4MAYGsrpHdQsLDigTtgPhWCynpJFXigDkV7lLKl2zLwvHXavGz9t/9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPztPw+R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDF4hNMH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D349AC4CEE2;
-	Tue, 18 Feb 2025 15:37:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPztPw+R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625B9C4CEE7;
+	Tue, 18 Feb 2025 15:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739893044;
-	bh=Pt12o47FXSx6eqtwoWUeScEOX3oJJlfjIsbV4sD9XRQ=;
+	s=k20201202; t=1739893110;
+	bh=joPSfEZV+4aLPYPABOyQKt5zihMFx75oapssE5Ldad0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eDF4hNMHcXEh9Ay/SdBtdRxvDYUKoYxDDUdeW3dHZag7lEFN8wUHLFvSQoxdb62sh
-	 Xlm2+apObb3FGSZFjoe9Pnl4Gi1GjPLkHrxiJkI9+xDq/pbYfz+d+J4YEj8Yfp4VGS
-	 YFa/BOBbzoT/kZOXn8eK3PlIFq64OmvHQ3ggHcr0581ejv9L0ueZwsvAl6vsUMwWQ5
-	 LHL5OBSxvVxc7vKSVUuyHz74VFHwyXUHM9eWo6cyoAahzOFlU3Z0VVtBMDRHNWt4Ea
-	 TdZudm6Zhx+rl4oPz1rrTYMARc8AKbTzfZqd5rd+3jEJU8HyikPHJKAtdRhW8mi2Ne
-	 EUhIt0or/aJ/Q==
-Date: Tue, 18 Feb 2025 15:37:21 +0000
+	b=mPztPw+Roy+YvCLWy35PZsaqIno+mahEvJbPMVp5hOm47FVarfI23U3aNpEuN6JhL
+	 m7Ql9wJNzWqqX5QW+XhPQgNdIxEPkYDJ/qRdIhP6GsxQlWjGlVxjSYRu7xc7LuBlSS
+	 bg0kaMGODbGkS4nwYdyJ6XimJLLrADEt3750qymla7yF1LxNLO9DaHA33FOPYfF4qm
+	 zHX695BOFsGCpxJXEgdHgR/6cB8YJkm6EmoVdM49xrP/ioslZ2pxpBzKjMc2Du/M7A
+	 hAxg/E25n7iBG1jXEz63gsiZe5+3tdtaGvhH41ctdR6uP9adCu8UmF4UDpC2VNZ4z7
+	 CSUuwTh89t8Ew==
+Date: Tue, 18 Feb 2025 15:38:27 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -44,11 +44,10 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
 	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 26/29] ASoC: tas2770: Add zero-fill and pull-down
- controls
-Message-ID: <Z7SpMY1XtvjlUTDo@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v2 28/29] ASoC: tas2764: Set the SDOUT polarity correctly
+Message-ID: <Z7Spc-tHHy4IvRGx@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-26-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-28-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,40 +55,38 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Dgm1DNGToy699Htt"
+	protocol="application/pgp-signature"; boundary="KgWXd3LHFB3bSERc"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-26-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-28-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---Dgm1DNGToy699Htt
+--KgWXd3LHFB3bSERc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:36:00PM +1000, James Calligeros wrote:
+On Tue, Feb 18, 2025 at 06:36:02PM +1000, James Calligeros wrote:
 > From: Hector Martin <marcan@marcan.st>
 >=20
-> Expose the bits that control the behavior of the SDOUT pin when not
-> actively transmitting slot data. Zero-fill is useful when there is a
-> single amp on the SDOUT bus (e.g. Apple machines with mono speakers or a
-> single stereo pair, where L/R are on separate buses).
+> TX launch polarity needs to be the opposite of RX capture polarity, to
+> generate the right bit slot alignment.
 
-This is adding a DT property, please add a bindings update.
+Fixes should go at the start of the series.
 
---Dgm1DNGToy699Htt
+--KgWXd3LHFB3bSERc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qTAACgkQJNaLcl1U
-h9DMrQf/XvTsX5DHjtmIknji5B4246yYWOquIxmQFtaGwN4c6iu8iDlW5f+cJiAr
-by1QACyYIwd6ef3vxOD1CG2g2cwwvaqIsvX/lSYmeV276wLBi9Bhkwyxx0ySmQZD
-7xOktLhIXsmRkIMpgJfciaRdzE4F5XGjeCcBZB8AjtimcWFDuDI/iT3FAfCPM2mB
-oHFMT8pSHn3Cx9uq56GJbeE3fyXQkSJcQz7X3ExQ4U3kTDXeqIB/EbPwbFcgg0py
-8rwXonCUMy4wdVTjkngjs5G5alrlG70k2/vRqGtPJ803/xs4M2R6jZecudOuCzby
-KnFXB6e3l06mZTM40xMSm70VixH5dQ==
-=y0ej
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qXIACgkQJNaLcl1U
+h9BC7Af/UOtCJ5cQmn09R6PYGG6NnfBWsq54Xp2YhaSnH5VhqP384/z/zKBEMS1N
++3K1ni9mXewI25rH+vfMrjz80E4lcS2DL7he1OfscG0SAOtyzcNdtWJlVdhX13Zw
+lgOAP73k56zbG7Ub31xSlL1TqQ1IPBI2JoK/2mo0H/hZaw+wMmKVPWB4QM6KQmiY
+1/8ZDG7VxzHD8cWeLXrwIkmEwJ/Sn+JOk06C5h38LYkbL8M8DQSEC0c82qk/HnVZ
+YB33HOsStfukrmdKgWwn1wUpZ/Z06LQShvoTGCK5sIE9but3BXluKft9rVIUlANv
+53CamT8Ww9O3Ae7vZsuErVOkOxgpOA==
+=5mkQ
 -----END PGP SIGNATURE-----
 
---Dgm1DNGToy699Htt--
+--KgWXd3LHFB3bSERc--
