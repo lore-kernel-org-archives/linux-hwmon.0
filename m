@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E50526B977;
-	Tue, 18 Feb 2025 15:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AC01990C7;
+	Tue, 18 Feb 2025 15:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739892788; cv=none; b=E5BocJp4fu5wrrNHhNld6ZzuTzHlDQ6W7s4kNXgiCWazXeUTg7GwiVvTBgY5p+jazLHLcSwotv+XYTzbxv9HhAdc5ZyGAjOpwxIMCvkRkZG7G+uQGfa/kEHhbVuye5Y8Ht7IokAJ7L1RPbwXRwI64F2Q7vuQsL4OREErBTFyakw=
+	t=1739892907; cv=none; b=u6ZGeh9IUrIIBMnFg2FVhlv5E1nzrL9iHQGT3kp4e9J+5BSCDS/z7GBzidAr2tQJLKMdgOBaBKaIrByBumQ8456+nuLqQKe1PLbQ8SkHfdrUV4fi6cjq9oRGc2dDZad8kfTACbWjOaMEkq+VMEzw3tRYVE/RdDSuVa3hGkSb600=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739892788; c=relaxed/simple;
-	bh=SEcSvGqFeJ11Iq08rF601HaLImuJ1qHcDIFRTq6KKsA=;
+	s=arc-20240116; t=1739892907; c=relaxed/simple;
+	bh=xG4cICiE98lRJZYn34MUYDdZqiy1OLzJL6O9uz4mrTw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HkeKezPkv8kAGfoAw47g+mMZFnxGYX6NyiO1vDpHQI/QrKv8lu/8JA/EbXbn6yr+s9sxJ7Rh4l9253vDFGGoLxGPCSnFgDqYJ2nGLij0FHwe8zChfHiq5PfwN23EqDKr9h2LcIpc8fgIbqUBqi64am9Cy3mIDCUgdfL8uiziGDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9u4tCHt; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ANEWdmWm48Plci5hnGar5e5XoKl3W8ngzkvTXRi1FdmGbUrqV7xhEpXXpmdO8NQYhP2pVvPF4iG7mnYGpC+ScB4g7vCCTztIbXI9r/ydPCqVBhhiEKSpSF2n/0ak4s+KXRj8F/lBDLHbacWS6SRSikVnxTF4tf09Yfidp+cy5gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3ni8SRf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9u4tCHt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A493C4CEE7;
-	Tue, 18 Feb 2025 15:33:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3ni8SRf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F7EC4CEE2;
+	Tue, 18 Feb 2025 15:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739892787;
-	bh=SEcSvGqFeJ11Iq08rF601HaLImuJ1qHcDIFRTq6KKsA=;
+	s=k20201202; t=1739892906;
+	bh=xG4cICiE98lRJZYn34MUYDdZqiy1OLzJL6O9uz4mrTw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A9u4tCHtAnA1yRYSYs5MGup5zXlFZF2N0RKjFuJWt3+zhjmN/mH3MpqzYXwcXyld7
-	 tDt5MQOM8m4GTC8cibArGv43BFdgt9KoZTJeDxGXxMBEUJeay8fYOKwYDzIg/BoHhi
-	 rdo02+pJKEz5p1f1sc6IDy4rG9SkgxzCXFlEXTJQ+YFeMzXBvX2IEv4iqR7Eo2DahP
-	 E/KJJ7LGbjAcxwCcvC2+dIo4oym6jUrUwnnJI81+VU6/BecYaV4lZBc3esaUOSiews
-	 B7D8A+1pChNWaQlQpwIoreLHOTfG5uNg1MeGhcX7N7zNI6zfGZE1yKXGoO7SkaCif9
-	 /m7o62wiaTkiQ==
-Date: Tue, 18 Feb 2025 15:33:03 +0000
+	b=h3ni8SRfCZanQq2OCYohP6jeCZGqeIzhPlJFYOoVYhxLfdxRgRORFwtqoCQlV7ziG
+	 wBDLimSOMcn0tPIjxg/Jd3/1aQvo3OPI6VNOuaGxSL9Vr10TTiHeultntgnZwFTa4z
+	 i4R7b1kOqK0YOpc6RCxeVaven2reJEUnFieS9M0gy0FaZGJ/YSY5RXwhUoc35WXWxm
+	 uavLpeJkNMLuFS1II3s/L4pXLeE2g7NRFoWam90Xt8o7r94Uo3lOBWF8DmQwwAwiSt
+	 qwq2tuMTKOmmmGzl66FgDHlPb/4Ui1DdQoF/5oxemLD//V/PliD6AzEQ9Ymfn7YHt/
+	 QJiW7fA7vHN7A==
+Date: Tue, 18 Feb 2025 15:35:02 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -44,10 +44,11 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
 	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 20/29] ASoC: tas2764: Add SDZ regulator
-Message-ID: <Z7SoL3HN7Xb3HUTm@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v2 21/29] ASoC: tas2764: Add reg defaults for
+ TAS2764_INT_CLK_CFG
+Message-ID: <Z7Sopr2V6CzL9eVi@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-20-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-21-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,59 +56,41 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pWAmxsziw6n29cMf"
+	protocol="application/pgp-signature"; boundary="V9/MPtnfPTWJuqHi"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-20-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-21-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---pWAmxsziw6n29cMf
+--V9/MPtnfPTWJuqHi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:35:54PM +1000, James Calligeros wrote:
+On Tue, Feb 18, 2025 at 06:35:55PM +1000, James Calligeros wrote:
+> From: Hector Martin <marcan@marcan.st>
+>=20
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 
-> Multiple amps can be connected to the same SDZ GPIO. Using raw GPIOs for
-> this breaks, as there is no concept of refcounting/sharing. In order to
-> model these platforms, introduce support for an SDZ "regulator". This
-> allows us to represent the SDZ GPIO as a simple regulator-fixed, and
-> then the regulator core takes care of refcounting so that all codecs are
-> only powered down once all the driver instances are in the suspend
-> state.
+This is now upstream already, as are another couple of these patches.
+If nothing else please base your submissions on current code to avoid
+spurious conflicts.
 
-I get that the reference counting that the regulator API does is useful
-here but this isn't a regulator so shouldn't be exposed as such,
-particularly since this winds up being visible in the DT ABI.  I
-could've sworn that someone did some helpers for this case but now I go
-looking I can't find them, we certainly don't use any in the regulator
-core.
-
-> @@ -210,7 +220,7 @@ static const struct snd_soc_dapm_widget tas2764_dapm_=
-widgets[] =3D {
->  	SND_SOC_DAPM_DAC("DAC", NULL, SND_SOC_NOPM, 0, 0),
->  	SND_SOC_DAPM_OUTPUT("OUT"),
->  	SND_SOC_DAPM_SIGGEN("VMON"),
-> -	SND_SOC_DAPM_SIGGEN("IMON")
-> +	SND_SOC_DAPM_SIGGEN("IMON"),
->  };
-> =20
-Spurious unrelated change.
-
-
---pWAmxsziw6n29cMf
+--V9/MPtnfPTWJuqHi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qC8ACgkQJNaLcl1U
-h9D0zgf5AQykdBizrukXzPnimCpFL/x4jnIllW3wFPfrmEQhfMMZwNMCSS7Vjq/5
-BBAYZry7PEXAVMGVnv2DthOvUrAH7LxyDiZ2p/RGmTSp4+0pujUznfB49hIl3oVQ
-t47FKBghaQKV23zIyzLqRRL/DkP33/jcH2cXg1DKGIuaXtocGvHgAzB7GUEXnKM2
-0X5hYFntNU19CmrW5Z9469/bLwVQMJb16MeoLRhxh0/5Wz3ZF88ReujhUdyVZZMs
-3R9Dxrw4Bfp0V541KOwy6S0Cz/M2XYS1DqA2eIRPE3AmjftI+mnW9xpLXZqglW+D
-D9yoJcQZCmlka3jnqIAdKXjBqe6xqg==
-=IM1z
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0qKYACgkQJNaLcl1U
+h9A9iQf/WzzFguT3AEkECdXsmlm1cLHB1ASjmxzy7a7RyqWGQCjkplsneb0L+NKj
+/rP9bendh+6EzPmADrBRzB7OjzUaOa+cpBXQX9pEqZg3p2sRC+WCKy1rtH5pf7R0
+3yRL7h3P+dGaPf8R08SQ32iG8IT2d+M+ly7S5sAegrRf4VOubywTTXWRAYuETEQ+
+YMMEEAhmaleOaAmtJQVAfRBvd0/xj1qr6e+j4sslu83kmFdpycfb8bIe80Zr0WJ5
+ky2oNf32te0ps+Tc8Zf3Ya3gu+Ny4LF+cglv5FBUwEnNOR2vtFPjCF+f2IsOd9IO
+u7SfIAQgTal6r5LdVylz6825na8LUQ==
+=ma9b
 -----END PGP SIGNATURE-----
 
---pWAmxsziw6n29cMf--
+--V9/MPtnfPTWJuqHi--
