@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9F026B2BF;
-	Tue, 18 Feb 2025 15:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A4F23ED69;
+	Tue, 18 Feb 2025 15:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739891603; cv=none; b=PGXHFx79vADoe6xMFnCHFKkz+RUFedVTl3ZKZ12jvuQsa7UlnAcPb6aCR5GYryk3h5N0vzDC1m3XDC9hZM6JdversnVorz8GQZyk/X2VMagZnoTe8/JURMIW0JQVPG03RfYvCOkgBqh1sLQ51H4KJidy26/a8mQSCRMQRoEalf4=
+	t=1739891750; cv=none; b=N0nlZwy5BmoX3Pm1ztXnFLMANMG5FhzQg8oHpqWiyhn+TH7NouiFdPNw1OoINMnH3l6Lh+cAhlL2Xww+fznn+jc8T6+KJxlgcMiHwDOumwfJTRkKFkpqDEsVTRKhayCn/m78WY+x+JNZ255TJXp0YZLSDKNniCCl/7ZS/GDKkDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739891603; c=relaxed/simple;
-	bh=DX3TX+7yJwABho/ydv17BCgSzeruh7GiPooXHU5WanQ=;
+	s=arc-20240116; t=1739891750; c=relaxed/simple;
+	bh=Ib4Pm+5C9/8AIMYLPPJHBDj/uTaSeXuNctIV6FJv7Ko=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QhCacMWZ02NHVM6h9D0V1LfDdiSZnggkNgSWIHbmgF0JFGg8HnrzFo8mRZmKKk+eC41QdByHwD9LXa1qLivNSLlD63M/LbEplQCRPLksHx4CMSBoot4VBpgYeQcY3/wXFB9MkrxLZ5T3WettVKA5TAZVJvRVa3RhDl+8qx3VA0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uijAGsxg; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=P5fiqA9KjNr6ArnMj/+ILLBh9OKjyzFlOyrgPqcoKuTy4coetYHOswgpy+fihRhDGMme1+xZUfP54XFtKDHj8x9vWRQyEQ9iYdoNdt5GIj3A+gimCfmIFhYXvmNB718QUyponA4I4Oi+HwjdC4lshjVJ6lVVdnyYdnYsShC7bRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FrQjXHQd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uijAGsxg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEB4C4CEE7;
-	Tue, 18 Feb 2025 15:13:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FrQjXHQd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015F9C4CEE7;
+	Tue, 18 Feb 2025 15:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739891602;
-	bh=DX3TX+7yJwABho/ydv17BCgSzeruh7GiPooXHU5WanQ=;
+	s=k20201202; t=1739891749;
+	bh=Ib4Pm+5C9/8AIMYLPPJHBDj/uTaSeXuNctIV6FJv7Ko=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uijAGsxggthweKXyPm/uxvm0uOSini4ZBCRBw7EG19jwesyfixSqWpCn+xEH0Zgx7
-	 rOe1mORnbp5za5HsPstp/jYp+ahEZQJFB6q9Ow/wu4dYUNSqTfypD9/mttXEz40gTU
-	 JXZNPt1aoJMyKJW6eDb7T4/HVromP+HqEE+HoYTZbFmCEPC3kup3p4alAcT/0poAUo
-	 wWLatex/+CpTqhEH4oycuQ5YEhpJ0h55+C5YgwXgEY9ci2PMmM8F9b95jwh9gP39DX
-	 RyPHNVWF9jATpPw6bzMvgYCzyyHmmcwBO0Zxeyl3DunOKkzQiVTcXJnRFFpj/CXFDn
-	 TvUetn4i2iz0Q==
-Date: Tue, 18 Feb 2025 15:13:17 +0000
+	b=FrQjXHQd850c06d7C4Ku9v0LEKUAyAoQDrNLtIYWqDeFP7kZTV6ft/v5HC/VeMPdU
+	 2siDlZ3jDeDqZ2Nj/ibboUMFaqk1q9qDOXY0OlT0B+tTKyFxXoFcxYwZCwPSjk1vR8
+	 YOMSozF/WFFJV6ztw87mqpdQoHS+oTSQBz9DyS/8gewkXC9rf1agXY3ZEgz2yivOSb
+	 1DLVCmA6V0mxB8IDejYCfkY7yu2NqLZ13GOwNjrr1YrkSdz3QlkLM06ZqXTUfdtwDN
+	 FyxMSIquqeLzqHbbPiKwQ8gfRGs3ZkNCMwGebE3XXQrFwBSyQrOO0D7EAC40bcDH6j
+	 abiOnIDJ2ecFA==
+Date: Tue, 18 Feb 2025 15:15:45 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -44,10 +44,10 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
 	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 02/29] ASoC: tas2770: Fix volume scale
-Message-ID: <Z7SjjcaJNfFnQ2e4@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v2 05/29] ASoC: tas2764: Extend driver to SN012776
+Message-ID: <Z7SkIUs_d7ty-GU3@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-2-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-5-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -55,40 +55,54 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2ZYleMwCcuejHCJU"
+	protocol="application/pgp-signature"; boundary="PPOhNaWiX4C4lTj9"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-2-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-5-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---2ZYleMwCcuejHCJU
+--PPOhNaWiX4C4lTj9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:35:36PM +1000, James Calligeros wrote:
-> From: Hector Martin <marcan@marcan.st>
->=20
-> The scale starts at -100dB, not -128dB.
+On Tue, Feb 18, 2025 at 06:35:39PM +1000, James Calligeros wrote:
 
-As mentioned on your prior posting:
+> +	if (tas2764->devid == DEVID_SN012776) {
+> +		ret = snd_soc_component_update_bits(component, TAS2764_PWR_CTRL,
+> +					TAS2764_PWR_CTRL_BOP_SRC,
+> +					TAS2764_PWR_CTRL_BOP_SRC);
 
-   https://patch.msgid.link/20250208-asoc-tas2770-v1-1-cf50ff1d59a3@kernel.=
-org
+This sort of code is generally better written with switch statements for
+extensibility.
 
---2ZYleMwCcuejHCJU
+> +	if (device_is_compatible(&client->dev, "ti,sn012776"))
+> +		tas2764->devid = DEVID_SN012776;
+> +	else
+> +		tas2764->devid = DEVID_TAS2764;
+> +
+
+>  #if defined(CONFIG_OF)
+>  static const struct of_device_id tas2764_of_match[] = {
+> -	{ .compatible = "ti,tas2764" },
+> +	{ .compatible = "ti,tas2764",  },
+> +	{ .compatible = "ti,sn012776", },
+
+It would be more usual to use the data field in the of_device_id to look
+up the enum.
+
+--PPOhNaWiX4C4lTj9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0o40ACgkQJNaLcl1U
-h9CVjwf9Gbd2/n4+ovKr3KT3qVVMZdcuraD+qN1dgJ1bCMcQCSRk+JCVmiysFY6B
-H8gAIoQVrZg5f5fHJ0YkysipvuupoW8yng6Ja/WQThPxtVLkUQ2iXkX/LVsZnqr9
-XdJmvT5j7b89qzBTU2opj8pS/v2Y0KzvHMRhABFlsprr9wy2vHWOS7mttN16VviU
-h7F9UYtdCNIEQVVhm7SjeiMMrQQqpSq1rCCElqpIA2ZzyWMdDR9/jDs38ZGmMLzm
-PMFakD82X/xRK1AuMK8YM/mldl7P+pLpIQgHmkg26j0b0qcIwZSy5pTIoe+p20nr
-8ULOrHg9L29ZtEMdD8jl1XzacCbxBA==
-=XhYq
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0pCAACgkQJNaLcl1U
+h9AavAf+PefPB5tBS+9HAQnlJyDWHiyIub1mLugOQ6Lp9v8dm7nlt1cp4T3GdXq/
+8PqSyalqppiie2kJFvhE+BoZmeXuoREbwpbV1ldT1oitu92KbLG2wu8v1uZ5f0Jd
+wnyNdyLrxo/Oy0a4F4Cc5PYw8nDOHilFCGlAvtcdTKmSpPXe95SBLLza5HJsYP0X
+nYSzqGUmdAuKnn/H4N72JEddaLjxBokHg5/8FCvgYZ8H6SB4gQ/uor9R42IO9VrG
+xbnsCQKTdQ3apGSAp1NVHqNvkE/h4itzghJyZ2oKtZbQMgD8AB89B5fyHO4FPOOG
+GVCJXefFFikpw8i4b3GEsh/B991FPA==
+=Pnbb
 -----END PGP SIGNATURE-----
 
---2ZYleMwCcuejHCJU--
+--PPOhNaWiX4C4lTj9--
