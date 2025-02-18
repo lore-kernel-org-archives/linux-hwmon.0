@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C7A211499;
-	Tue, 18 Feb 2025 15:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9DC26B09B;
+	Tue, 18 Feb 2025 15:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739892271; cv=none; b=fstREXjVa04VT0w95us+s4hAxVzl1BSqpvgIT9otTf1QmI3uZvGDToH3pA5A15mlw+cPkHcfxLXth4/f6NtJmNIE0doZrO1wMNjroK0ouBwXJqr8Z7x4HtVapWOiBqJluvK2iCfVy/jMRhcGJxSXQO+36ACUoziCmbHr5pa/swY=
+	t=1739892342; cv=none; b=G/03vPsww4unhOnll4raTFU/LUg5HD5szGSIB9UsfRlp1lm8y8eCQ2UL1zEfUEsode+Hr5BJm4APNseWpC04B6QQGzGlCGQxwfEChD9AeSy8RKS9QHJlveMyK4sQ5zuiut5VepvdotJs/sNMAnGNbSkiXp0HEf0ViXMDc6TR21k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739892271; c=relaxed/simple;
-	bh=lz+IyjJeomORXfyusNlUxTlQKv9XoLXCm88WmFfwjQY=;
+	s=arc-20240116; t=1739892342; c=relaxed/simple;
+	bh=/PVR7lTm2rCtdnzLAbpvkucX6X5lhta8Uki8XlmijWg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=an+g5QbxWs+NJ70CSLSTJ6sAOTR7xc3Wd3hWl1MngPhRz2GBscATyyEscvm9Q8/PebdMfM9AhQqodAiBOdynCDVYaCpgURhqKskiC9Izo5r1tObBU3t6xYVuFyZDWAvlZMSJit3X+NvWq0yPjUJa9V2BHZHkq22QulmoQuonZm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zi7pV0T8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ir5A6hMUBP2X8/OQPdlcuUVdT9/PMC0mRg8NgUP7okZ5pe7naz9AuKCTFGRJ54OcLRxwubo3RknAJ195PMdHVQBNJreZ69enEjc7IEFOPTOy92wYxX7XoTTYB4lPVihSngIdZTnrrv7Km//vInirfeyse2ztRge0L8y+K7IQlNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+e4pJrd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zi7pV0T8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853EAC4CEE7;
-	Tue, 18 Feb 2025 15:24:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+e4pJrd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D9CC4CEE2;
+	Tue, 18 Feb 2025 15:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739892271;
-	bh=lz+IyjJeomORXfyusNlUxTlQKv9XoLXCm88WmFfwjQY=;
+	s=k20201202; t=1739892341;
+	bh=/PVR7lTm2rCtdnzLAbpvkucX6X5lhta8Uki8XlmijWg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zi7pV0T8H4ZKlrgST4w04TpsySEYItjStCjRX9vqXf862KIKJQXM+1GUzxSKIhsIF
-	 tmWeDJKKNXsmAvqcmSB31VHZ/SnFcht2yq6XocAsLxXS6mE4QxcM7qM8LTtTXigVBZ
-	 OnSja8HCzVQUcNAjn+u3AT3M63LUBzZR9QKhBEijXKHj50mFZxBJrZBuj908pghYyg
-	 Yp8Y4+MJJft6r3HQaEBFVhNkdxKSKh+bvOu6GIbzpC8FtLlWySssYF8OEpZ3TKpXzU
-	 QsQJ2JPMj9+2rns990BeQWyE8QUa7pwg7zZ/qRsFAfZra/gB3tzukleV5nGGh9Hj4G
-	 3S/6Sz5jg0lCA==
-Date: Tue, 18 Feb 2025 15:24:26 +0000
+	b=T+e4pJrdnfZllE/W7mPFZ38fk6AJ0kPonXn7dGhEcdKamJH7CGhT1jyt2BHExkpn+
+	 YKGefwXUur4GJI3SmqKxTDnRmXy0reg0w2ySpTcE52Eq1u0yU9lbEYPsHM3SDjgZks
+	 QPzu0qVHDoqSSLo/eyN6r/4FrWaErqOIpEp6w9FLSTDxM+U0gAZuraaZAoqMXDOPNx
+	 TldPTRBHikebxqKL7OS5aOX9AAzwGfkthoUMnzJC/vS6x5imG83WYTavF3hSfaIGml
+	 3ZHNtTZsnmpuei4ZJlAY4wJly934D0baG9RuSucr6Cgic3J8LKc/nIqFzaxlFPjiCq
+	 /4TfiDxfpbQXA==
+Date: Tue, 18 Feb 2025 15:25:37 +0000
 From: Mark Brown <broonie@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
@@ -42,11 +42,13 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
 	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
 	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 14/29] ASoC: tas2770: expose die temp to hwmon
-Message-ID: <Z7SmKoWF0zLoDoLc@finisterre.sirena.org.uk>
+	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Neal Gompa <neal@gompa.dev>
+Subject: Re: [PATCH v2 17/29] ASoC: tas2764: Crop SDOUT zero-out mask based
+ on BCLK ratio
+Message-ID: <Z7SmcfaGQpGG81Pw@finisterre.sirena.org.uk>
 References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-14-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-17-932760fd7e07@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -54,40 +56,40 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tq6akGPotT7yuHge"
+	protocol="application/pgp-signature"; boundary="FnjQ69qDhYsOpOBW"
 Content-Disposition: inline
-In-Reply-To: <20250218-apple-codec-changes-v2-14-932760fd7e07@gmail.com>
+In-Reply-To: <20250218-apple-codec-changes-v2-17-932760fd7e07@gmail.com>
 X-Cookie: Editing is a rewording activity.
 
 
---tq6akGPotT7yuHge
-Content-Type: text/plain; charset=us-ascii
+--FnjQ69qDhYsOpOBW
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 06:35:48PM +1000, James Calligeros wrote:
-> Create and register a hwmon device to export the die temperature
-> to the hwmon interface
+On Tue, Feb 18, 2025 at 06:35:51PM +1000, James Calligeros wrote:
+> From: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>=20
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 
-Oh, so there is actualy a hwmon device added (which was why I thought
-you were ignoring my review comments on the last patch...).  The
-question then becomes why also have the custom ABI for this as well?
+Again, why do this?  Is this a bug fix of some kind (ie, does the
+hardware misbehave if we get this wrong) or is it just for neatness?
 
-sysfs files are also supposed to be documented in Documention/ABI,
-though actal enforcement of that is a bit patchy.
-
---tq6akGPotT7yuHge
+--FnjQ69qDhYsOpOBW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0pioACgkQJNaLcl1U
-h9BGHQf+L3a01Xe4BXkXRpARVZ/PhW4X39H8P97msP/0wqI1E8dPDNB5OfcQhrRo
-pbpjIX+E0hBnDTk6JBEpRXZzWjewRofoLx6shsfGJCPhxOFkEFJJgYszoWJig9oh
-1UxhrPionc0Rmf74oliCQ+BzXS0LU7FsPOZAYjnmbOJ6NfzUyBaeh6s1tVS+jetM
-moYZmVaVkD6SQ39nMUi2bo1V4P2bL2fsFLqKKi5pZO3air4AWmI5/KSd07QWye3J
-hTkA9iktMLFbXaXZFbujvIkMPxaYb00fhZFE8sjT98wvYHS6Co2c1PBMPM13wFkx
-9aSONFIY88HmnowcJtiHcFc3SwxBRQ==
-=lXao
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme0pnAACgkQJNaLcl1U
+h9ABMgf/bqg1mJwUXaQ6K+vLz+U0KeDMxix1PMazVlDjR1N6jYBaTY4shZuES1Lt
+6kDs4KHQBqXwUMpc9YvyU46lw5oeWFQPWlOQvc8qw8pK6ugWPB7i+yLzgAGe3Z1e
+cdbtHvf9vlC6zsY1bd9JmN9x67T/J0JEsQieVQPb/2zPsjA9+TM2dEuIpcQ8YZWj
+yokQDbgk4I1SP+1aLSNkSsU18ujt1ktwKiYSf9KLQPfHvSO5JOg0h8f6FZsLCw0c
+JB2uYWFXv5bzJTkuiZOQPGdczIkvEvcIFusDOxNqLBJkjnSNdcXxVhAf5UrPiCiN
+VGmr6a4FkieEuGMzXY4T+YbmT23agA==
+=0ji4
 -----END PGP SIGNATURE-----
 
---tq6akGPotT7yuHge--
+--FnjQ69qDhYsOpOBW--
