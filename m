@@ -1,129 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F771F19A;
-	Thu, 20 Feb 2025 01:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2940F1D5AB9;
+	Thu, 20 Feb 2025 03:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740015951; cv=none; b=Cp9jqUdh/HN9HFPeVWgj6TPAxZYK3YI/UegJnqg82Gk3bhb50G7bzK5oOQ66hE/I6A1Rn1JrH2kn44V2DhdvwEugssCqGAk00N6IurBaWTGh3zbG2nnpJ8Pq1dlx/BUVjVKSP4Fw5SiY1AZOy/+JV4cuT8fhdspwpFNUJeuT1H4=
+	t=1740021669; cv=none; b=IKdfSnzRA47YyqERVxqI0lrEzdrwMz756JovRkhbHZgcIoXwrQecYRPT/jURFWY4i/MR0FuRJ+RBiBtofI6pR2Tcldbeb6NlhQBr4+hY55urhQKUZZ0B0b/XMK6tvZBPct39R4K1mxCOi27RTWuPdN9PA2rATWkr3D32MXd+H/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740015951; c=relaxed/simple;
-	bh=9irbtGVWQj8eLhc5O42ch0DohPLL2OQmuJNb1bG37ZM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XG3goz6Dczz6OqgjkiTKpCB54PM5tjRukSlxuKVJrsBVZT3TFqD4UEBjjdg805/5mQbiRxovGoAsQQPbkPNDW/yWyuYh0+ZEdnOeTyS5yL97M1uus3fqy4O71eEB9eXC/NmaUaUSBdG5/8n+OecQtUrjUuCHw3a7l/CHvJAqJS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQR0o9Gv; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQR0o9Gv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17646C4CED1;
-	Thu, 20 Feb 2025 01:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740015950;
-	bh=9irbtGVWQj8eLhc5O42ch0DohPLL2OQmuJNb1bG37ZM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TQR0o9GvMeGIOLknSOOAuwSnE1/m4pSPPZmKSQFEqHVDzAh6g1XNFC82sWuK3BXzh
-	 JP8AuxUjse5a6Vx4dcXyuhwZodZD68zz0TmzuGULFHVn5iYzRbdk5eGFaqkYgwCI5r
-	 1Ikrzi6cyBWFU13D2fOHcPZtv5tGiLKjj+VawXSoAOXSRCTOMtCHDbDegTVQpY1LGr
-	 l8+EzcCb9dk6k6XIDrpEx4RM2PftUlva7qfRs29WTsjW0ThOtT/HY9IouUPUjLGG5F
-	 7cg1brC8uiyKa2hM27hfBc0v9jqFPcY0/LqMHSBSwfdzxJYfUX+AdOo88/mf4P+mCo
-	 X2aytNNmfzdvw==
-Date: Thu, 20 Feb 2025 01:45:47 +0000
-From: Mark Brown <broonie@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Shenghao Ding <shenghao-ding@ti.com>,
-	Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>,
-	Dan Murphy <dmurphy@ti.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shi Fu <shifu0704@thundersoft.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	Neal Gompa <neal@gompa.dev>
-Subject: Re: [PATCH v2 20/29] ASoC: tas2764: Add SDZ regulator
-Message-ID: <Z7aJS_uq75aKLCht@finisterre.sirena.org.uk>
-References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
- <20250218-apple-codec-changes-v2-20-932760fd7e07@gmail.com>
- <Z7SoL3HN7Xb3HUTm@finisterre.sirena.org.uk>
- <CAHgNfTwmR57GyiMk+-_x3jVNjxCpgLvS4dY2wbZkJN68PgSdjQ@mail.gmail.com>
+	s=arc-20240116; t=1740021669; c=relaxed/simple;
+	bh=Qy2N8oC+a7tGQLAD4iW0NcTrv1a6+NZUXNIZOzhwdqU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OENFVVoEo/gILs2GRWxpDM9mjLRWVNnWdFJmqHJkUl6Mq/tU6znsAZ7Pmubi3NkO2bucZbFqn20xIBZM3OVJsUgLv5m0F438s6JQ691NCKRcST5yQp/R8wLbB9gv6ASA766OZvk+SSPM5G40j3R/GwPvkMmSiltj4WVOAKU1FIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Yyz3T48Hbz233Gd;
+	Thu, 20 Feb 2025 11:17:57 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id B51F9180044;
+	Thu, 20 Feb 2025 11:20:58 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 20 Feb 2025 11:20:58 +0800
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 20 Feb 2025 11:20:57 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <linux-hwmon@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux@roeck-us.net>, <jdelvare@suse.com>,
+	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH] hwmon: (acpi_power_meter) Fix the fake power alarm reporting
+Date: Thu, 20 Feb 2025 11:08:32 +0800
+Message-ID: <20250220030832.2976-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L0ausYZ/FTrIXK1l"
-Content-Disposition: inline
-In-Reply-To: <CAHgNfTwmR57GyiMk+-_x3jVNjxCpgLvS4dY2wbZkJN68PgSdjQ@mail.gmail.com>
-X-Cookie: Editing is a rewording activity.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
+We encountered a problem that a fake power alarm is reported to
+user on the platform unsupported notifications at the second step
+below:
+1> Query 'power1_alarm' attribute when the power capping occurs.
+2> Query 'power1_alarm' attribute when the power capping is over
+   and the current average power is less then power cap value.
 
---L0ausYZ/FTrIXK1l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The root cause is that the resource->power_alarm is set to true
+at the first step. And power meter use this old value to show
+the power alarm state instead of the current the comparison value.
 
-On Wed, Feb 19, 2025 at 02:47:04PM +1000, James Calligeros wrote:
-> On Wed, Feb 19, 2025 at 1:33=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
-rote:
-> > On Tue, Feb 18, 2025 at 06:35:54PM +1000, James Calligeros wrote:
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ drivers/hwmon/acpi_power_meter.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> > I get that the reference counting that the regulator API does is useful
-> > here but this isn't a regulator so shouldn't be exposed as such,
-> > particularly since this winds up being visible in the DT ABI.  I
-> > could've sworn that someone did some helpers for this case but now I go
-> > looking I can't find them, we certainly don't use any in the regulator
-> > core.
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 44afb07409a4..f05986e4f379 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -437,9 +437,13 @@ static ssize_t show_val(struct device *dev,
+ 			ret = update_cap(resource);
+ 			if (ret)
+ 				return ret;
++			resource->power_alarm = resource->power > resource->cap;
++			val = resource->power_alarm;
++		} else {
++			val = resource->power_alarm ||
++				 resource->power > resource->cap;
++			resource->power_alarm = resource->power > resource->cap;
+ 		}
+-		val = resource->power_alarm || resource->power > resource->cap;
+-		resource->power_alarm = resource->power > resource->cap;
+ 		break;
+ 	case 7:
+ 	case 8:
+-- 
+2.22.0
 
-> From what I recall, no attempt at shared GPIO infrastructure has actually
-> landed. The multiple {de}assertions of SDZ put each chip on the same line
-
-Yeah, I can't find anything.  Perhaps I was thinking of the reset API,
-most of the other users were reset lines so it's plausible someone
-started and then just ended up with the reset API instead.
-
-> into an unusable state that requires a full power cycle to clear, so
-> we can't live without
-> handling the shared GPIO somewhat sensibly.
-
-> One alternative off the top of my head is adding a dummy reset controller
-> to the DTs and integrating it into the ASoC machine driver (which we have
-> downstream). We could then put the GPIO behind a shared reset line, and h=
-it
-> that instead of the GPIO. This does seem a little complex/odd, and IIRC we
-> considered this at some point and decided against it.
-
-I'm not sure that's particularly better than the regulator version TBH,
-it's still got the problem of showing up in the device ABI.
-
-> Is there any other option that may work here? I'm open to ideas.
-
-Perhaps it's time to bite the bullet and do the shared GPIO API?
-regulator could certainly use it (and has a bunch of code, we could
-probably just pull that out and wrap an API around it?) and now there's
-this too.
-
-You could possibly also open code, but that does beg the question about
-the shared API.
-
---L0ausYZ/FTrIXK1l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme2iUoACgkQJNaLcl1U
-h9CBlwf/Ub4h2DWpJglm2UVUSMy1p+jAgsQRt9EndRI/Ud+eqYFTizBKQyKwah4/
-4BDSMQ0dIjhPBrArdfTm5Vsdj3TqgOyxaVQarJ18XKXoq9TM2JMpNr4xydKb43bl
-FvYaraHXdTwE/yx/gWaM5/lfx5JXf4yngatnf1Qz3vec5QeapYywRoWMVtBW1fBB
-rkKKv25XTHzG8D6DWK32PQnk1saKSdn6Uwx5f2qcS0OTwxCvK6mTq1/4cWE6JUGl
-tmY5wtcVMTSCxcCB3Kmp8y//HbNM+vHVTlm7KUQMg+jhf/Ydkq9CaYVX7A/QV/b2
-C1aD3TtPwl5KxBweUygcLU86e2qRQg==
-=z1+I
------END PGP SIGNATURE-----
-
---L0ausYZ/FTrIXK1l--
