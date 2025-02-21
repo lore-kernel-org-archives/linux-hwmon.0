@@ -1,145 +1,116 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A81D7E4C
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Feb 2025 04:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8220B1F9F51;
+	Fri, 21 Feb 2025 08:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740112830; cv=none; b=pxpptXGc+r9IATTkVq/Dq2LTUtLfkOSn93TAYwmsKd8DQcuF0NMko80gbUqdZdkGT5iY7ZeLBj0Oe++shnU0pT57pGP/hOWginDMj8p0OjJ5LQHvt01+MiEMYTiqplNdXByCYe2m2e821XWo9q3B/84tAVPnfTGsoP54Ul3kASw=
+	t=1740124881; cv=none; b=PFgWTSvrtQnPDCKF3Je13Txxucgb/D40U6ounlbiDmOsHxkavM509gpIMeJpW3ddxs3aBbnOkzxtyfx44ZrvEUuaXacCH9yUe5bzscrKHKpav8610+GdfEn65hcfqrWz01uQsqRx3YehEdZ6fQr4jB+yBiCltMVUT2cxe2v/eXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740112830; c=relaxed/simple;
-	bh=A370FwgmOcGxdQpV0Y3cC3Eh1VAs/X7rXfoHTYBE+vs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=c27XvsiF9qBSzzt56ciSFmhkoiEDbGwIqW8OKD1iRDWvUHj4JVeGytsvGoQADSKtsDs9+T8Mw/t1hThOnfEFhqZ/SfeJGBL4o8b7aEEAt3UJOmwbEbTOCUKYnrZVQv7+S8sWjT7nffWIXFduaCs1UFdvJula6WtMbe6yXcCar4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TwdRa2E2; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1740124881; c=relaxed/simple;
+	bh=Cv63BOL0oXO2PSjObiOHehq4Wn7S94yEUznizEi8GVA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AwAyfRInw7H2CKO9tUlWgwQHZj0et8b+MgDzjTFdx099SU39qn5WDn6jGVJBWd6l/2/GHY9Wcu+ndYYGmCt7uinJ0l6gGnIuY55hJy/LLSe/zb+K8M8e0Ta6RMwlsjXIhHU9VVSWNQHTmyUIxUsLD1TJ38PiRD7TXaMvhmvHNVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LV5vmAIt; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TwdRa2E2"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43948021a45so14513565e9.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 20 Feb 2025 20:40:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LV5vmAIt"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6fbaa0582a6so20234287b3.1;
+        Fri, 21 Feb 2025 00:01:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740112827; x=1740717627; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dUxQ8JHeZTOHPECNht+upnWJNGmFSV4ta5CH2/NFhzA=;
-        b=TwdRa2E2FgdYdAtyqMcPFqPuo0MSIr7+RJaRe4wls56hcgiWr8Y/NKCQhViJ8mcxvZ
-         tsyI+5t8ZhSEDFXUmrKoKijK+p6N6ECwfzWYSeiHFc3Vb0LeGA/0VVsIvl0s9XCQJSGC
-         iKiDx7/V1p+u4/ImWVaCjqkqTIOr8QTFiXvDGaPo9oPvXfzyYYwO5Afk14SexuLMkM6g
-         5NgjukzjXAD+Z7+J7P3pFMv0INDG4xeng0RSUnhrfg7UaGpWY0JUwUDlRjdKul8+un6C
-         ZCKENt0oniKziiLGEZaLUIHybIVNLr/njTb3uhQQICKQdauOnANQVu5w81oqdOKm776o
-         P+7w==
+        d=gmail.com; s=20230601; t=1740124878; x=1740729678; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lnr4Q3hoke2m4tnAyS/TN9K+Km6DFm15j9BEpxBS0+k=;
+        b=LV5vmAItmxOYlCn8SVPG7QTr32biEfRDkmitXwY+Wx+bWqRTi+t4/IF4cOS4q93c6R
+         HZqRuLtjHkHVUuVnWP8AvgQXtC/MHiRBc0MAXhZEYlTvHts1rZA9j/XWzL9E/IOtJADj
+         LROTiuCmwbVnvlFUsmWabwXy8Hl1HJFFD60t3q3JnRg7Rst+8jeuv1n4Dm8INbPldiEs
+         wC5TTkOBOVJ3ST7pgSXpf4kYByfE9cabGAu6EvO5mzyQEAabEkoIpmypH9ep66W2S6QH
+         yeAH5yPSd3IS4z4goBJpXUSRDignJDOr0jaXyXnw3VG6yBa2kJj0SfvtaumgQ16XV/ZW
+         Edbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740112827; x=1740717627;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dUxQ8JHeZTOHPECNht+upnWJNGmFSV4ta5CH2/NFhzA=;
-        b=FcEXQx0f1majuqm5thi7kv8YTkBRAjSvW0pMrx8/rlF8Zwzn7IF4kojDFuoQFjqeNW
-         M/wDGfe/8ZP4p5kwh4J13/3OvsvVh6EcgKNdWv9lmQFQlB1g+e01LYgYBe2qORMQ+U0F
-         avF2LabX6cVOgK4fv7b31biiNA4BBnio4jhSDOzGiuTxXdQzpV2C2oz9AEJmjS5WnMLs
-         MwfGvoxlSkBO19mZNC2X+Io1H3UWKY6gmqdd2ze+vai3QDHOxmD76j0lzEuYMx+nDq92
-         TRnQoec++4eb2P/xPYENJvopaNG29IG+Dnpob8Rt2c/BL66EwT5Mt62z5P70VSB6URHM
-         mjSA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5ShVZFYctsVMjKWhvehH6OzBkzQDSeTVjZ4+IVX9z5KX4MWCYFXSIRqHwNWO7YGcBawIscd3kyUQ2hg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeWnMGnWJo6JmQix9nPm2ez5ELvvu6PRTV3iUCVaUvYXXIGBRe
-	SOfiqd3YRH0coP8RrajA6+yCo9E/dUZq4pA3pOUOCGxfqLGrlTtJIUVeLEhKSbc=
-X-Gm-Gg: ASbGnct9FNX0J0ykfIqAdR89viucjt1TqvJ67AaqaGo7Rn1cAnupTgstAun/FQtcEC2
-	qgoEVyBMlVUyRa7U/bFzgZkRFMEOD61/m938m0h3P3+TSIbAt7rCe2TbmQAuyO6NuBn2indcyh3
-	C8FXv+s2OkasxHyrbsULQT61rnwIGtj/LCdM2bCgYPigOOvCkkwD64+jQlw7k9L80rpSz5Tdd5U
-	KWRkzXY8wCeB/bpdJJv6MIEweYqbrV59EW30VtZ4qDLVRF9DAzZixb3Jlbmm+v59qKytQtwmbvW
-	8Up+mxyZl1DGCrTn33Pb4bc6stvVNZef90/ktyHpSfcL
-X-Google-Smtp-Source: AGHT+IFZX2tGs3D96ENsDWlpydZ+9vz8q8gMCtR61BTdHRxHTAdwzjKTs3WtllXebpcvU3jdBD83Ug==
-X-Received: by 2002:a05:6000:1546:b0:38f:3c8a:4bf4 with SMTP id ffacd0b85a97d-38f6e7561cdmr1272842f8f.6.1740112826930;
-        Thu, 20 Feb 2025 20:40:26 -0800 (PST)
-Received: from localhost.localdomain ([2.124.154.225])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f25915688sm22618671f8f.57.2025.02.20.20.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 20:40:25 -0800 (PST)
-From: Alexey Klimov <alexey.klimov@linaro.org>
-To: srinivas.kandagatla@linaro.org,
-	broonie@kernel.org,
-	lgirdwood@gmail.com
-Cc: krzysztof.kozlowski@linaro.org,
-	abel.vesa@linaro.org,
-	neil.armstrong@linaro.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	jdelvare@suse.com,
-	linux-sound@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] ASoC: codecs: wsa884x: report temps to hwmon in millidegree of Celsius
-Date: Fri, 21 Feb 2025 04:40:24 +0000
-Message-ID: <20250221044024.1207921-1-alexey.klimov@linaro.org>
-X-Mailer: git-send-email 2.47.2
+        d=1e100.net; s=20230601; t=1740124878; x=1740729678;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lnr4Q3hoke2m4tnAyS/TN9K+Km6DFm15j9BEpxBS0+k=;
+        b=bmmyLU2TMEJsSyaXM+mgPqa104z8GiWbXshWE1tQg7uRohUa6+scwNWBhNhKRY+XwL
+         8JvrKylOaliry+rjA832LSY3w+qv3fndgMtx3Uv0YOkIkxircU4nnBV1Zae+Yz1evhh0
+         6vsp80lwIyDlh4kgzbIkN4sZFFCsTVyjwxe/ry0Qec3n8MvpkVxuONJitDlb7kXqWIqS
+         X/V2WE8FPie7SZJ65Qi1CBzpd/R00d+W+pO+H9Z7ke33AYl/TiMcRZ3ClV/+x75iZpdG
+         RXOZTAevqKUG5nWNGd0YmHrg8tnBh1RGMk3H37IICbiwT1cs7QA8pmYkDctF2AO5s3ZG
+         PLlA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/xG9L1RouU7eXDxJAbOSduimktN8t0gQiuyzQRYJtWt5y9M8sXMj3E81CyzbLkw95AffL88eL3qQ=@vger.kernel.org, AJvYcCUW0L2/3EsQxmKGmeXERmiXqKxqugxM3mJcPtfGgGzgiEi5aixi5RbVHdndtcUtWJXFMcVKdXPP+kI0dmne@vger.kernel.org, AJvYcCUsCDOH+zDVzB/NkZ7Y69bMz0dee3sbYHmLZtTviW37ntMh3oaxzLt6T2Hv1BwFkcA7J6owWVo3tSzC@vger.kernel.org, AJvYcCVBypgIMU4Mxp/QHC3HMI28XoIEeP32AftPL7mj8wUJB3N/6QwNTFENuB1yaKn1tJmBU9nZZMNI7prXjM78DOE=@vger.kernel.org, AJvYcCVHk6mn1uWmaM7W/PxxXccpyk2hsSyAtoFcKQjNMyXjQs+lLwTgAsZ43vRcN8w9NJSPxEG4J76z1l4a@vger.kernel.org, AJvYcCVsVFJ0ZMBuTFZT9mnRUBaTaeqk3Qh1yx6BtxTLnyNu93husohRLr4sXazkjCAU5prJbYQGoR4/LFq8yQ0=@vger.kernel.org, AJvYcCWlddh3zpKRqP2anELRQFFqbWS6LzuJlydZQOs/VRcxj9NKOt8uE/mVXI4g2TJhbO8DsT5NnETis+bn@vger.kernel.org, AJvYcCXCTKzcvZIniRv10JA0bXn/wWzsFumSGnW7pzMG9wiOj+uK5j0q2nuNDyeZotvxqFE3GLad6g41@vger.kernel.org, AJvYcCXFgXDEhox5VjJHINXw1zajj4FZSeUF06EjLumeCDzfj7NNI9U5SXMePd6saW/D9qabSWLiR78jIMSRew==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/Pkw04teTnejET5fVKAF0vR6ywBLo/BSAZwU3NjUH4VFgvB3I
+	trmw45tQFSfDN2+ZIMIuujGZeYoFiOxl1ktU4JgS/lydAL51QCaDnWCpPXbJ1PC9EjtWlvxkdwy
+	o05KNvT+OLu3F0NVxHgK4nw73eAg=
+X-Gm-Gg: ASbGncvSCLbCx/pXbli4eLGQXw2sr+VOj+MQiiirqsOSAVyFiLJESlx24Ul8I/bIiqc
+	FpLOfeoTNzTBcgcJiuSIwDIXfmXQqv8dWUmlGdAWYT4QIE2GNX4xz4F/Ei9LwNebsxNO4doPwul
+	Tm1ezXTpVqiS9lJqRbbvxRnQQFpK3yOtTa0l6QaqrPeA==
+X-Google-Smtp-Source: AGHT+IGjrdbl08X5Oz0gLPvhnZB5+e3gwUES5DRUa5Evh0AA8SRQbyVbsNbVNB80eiomx273zv7MffadhbF1WlGd9C0=
+X-Received: by 2002:a05:690c:290a:b0:6f9:e4e1:a86 with SMTP id
+ 00721157ae682-6fbb79d3ddcmr48861797b3.16.1740124878197; Fri, 21 Feb 2025
+ 00:01:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com> <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 21 Feb 2025 16:01:07 +0800
+X-Gm-Features: AWEUYZnurECAKh5ePECj3FH2D5NBztBMPIKD6SuOIyQk1k2iVir6-g3FRFc4M3o
+Message-ID: <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Temperatures are reported in units of Celsius however hwmon expects
-values to be in millidegree of Celsius. Userspace tools observe values
-close to zero and report it as "Not available" or incorrect values like
-0C or 1C. Add a simple conversion to fix that.
+Hi Marc,
 
-Before the change:
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=887=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:15=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> > +static irqreturn_t nct6694_can_irq(int irq, void *data)
+> > +{
+> > +     struct net_device *ndev =3D data;
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     struct nct6694_can_event *evt =3D priv->event;
+> > +     struct nct6694_cmd_header cmd_hd =3D {
+> > +             .mod =3D NCT6694_CAN_MOD,
+> > +             .cmd =3D NCT6694_CAN_EVENT,
+> > +             .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_CAN=
+_EVENT_MASK),
+> > +             .len =3D cpu_to_le16(sizeof(priv->event))
+> > +     };
+> > +     irqreturn_t handled =3D IRQ_NONE;
+> > +     int can_idx =3D priv->can_idx;
+> > +     int ret;
+>
+> it would make sense to have a event pointer here instead of the can_idx?
+>
+>         const struct nct6694_can_event *event =3D &priv->event[priv->can_=
+idx];
+>
+The CAN Event command always returns 16bytes: the first 8 bytes
+correspond to the CAN0 event, and the last 8 bytes correspond to the
+CAN1 event. Therefore, the event pointer here refers to both event
+buffers.
 
-wsa884x-virtual-0
-Adapter: Virtual device
-temp1:         +0.0°C
---
-wsa884x-virtual-0
-Adapter: Virtual device
-temp1:         +0.0°C
-
-Also reported as N/A before first amplifier power on.
-
-After this change and initial wsa884x power on:
-
-wsa884x-virtual-0
-Adapter: Virtual device
-temp1:        +39.0°C
---
-wsa884x-virtual-0
-Adapter: Virtual device
-temp1:        +37.0°C
-
-Tested on sm8550 only.
-
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Alexey Klimov <alexey.klimov@linaro.org>
----
- sound/soc/codecs/wsa884x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/codecs/wsa884x.c b/sound/soc/codecs/wsa884x.c
-index 86df5152c547..560a2c04b695 100644
---- a/sound/soc/codecs/wsa884x.c
-+++ b/sound/soc/codecs/wsa884x.c
-@@ -1875,7 +1875,7 @@ static int wsa884x_get_temp(struct wsa884x_priv *wsa884x, long *temp)
- 		 * Reading temperature is possible only when Power Amplifier is
- 		 * off. Report last cached data.
- 		 */
--		*temp = wsa884x->temperature;
-+		*temp = wsa884x->temperature * 1000;
- 		return 0;
- 	}
- 
-@@ -1934,7 +1934,7 @@ static int wsa884x_get_temp(struct wsa884x_priv *wsa884x, long *temp)
- 	if ((val > WSA884X_LOW_TEMP_THRESHOLD) &&
- 	    (val < WSA884X_HIGH_TEMP_THRESHOLD)) {
- 		wsa884x->temperature = val;
--		*temp = val;
-+		*temp = val * 1000;
- 		ret = 0;
- 	} else {
- 		ret = -EAGAIN;
--- 
-2.47.2
-
+Thanks,
+Ming
