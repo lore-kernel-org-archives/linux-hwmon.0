@@ -1,39 +1,67 @@
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B207F209681;
-	Fri, 21 Feb 2025 11:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5581B74BED;
+	Fri, 21 Feb 2025 15:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740138623; cv=none; b=Cmay3QM8yeaXRad378hWkK0LHqQC1MWcLcFXY1WarCqKJjL9lWHKlUQ1fB4BtTESZuXBPZ86PREQo+OpoFB+epE2miYgoP685MGCOwCYvv0oo0BAcVanLind6lDtiTOym7bKliGOaqgmPTht+IWDNaB6K8CsWPhbNvakCS55tH4=
+	t=1740150223; cv=none; b=n10L6fjCL59tVZkBtj8N4N5YLp7TT0ZiBSJHsLS824E8k4VFourBZG3h7jujSYffT0LETZo4eI8m/1Xy3plCgpWBmIHUdWPTx+YhGL+G3KrDH070HR6U+aCUpZCxIWAwESemyBJbmT0bkDF8PsbU30nD0R/yAX031k/OjifKQNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740138623; c=relaxed/simple;
-	bh=Ax1HLOrCM4FuTAt8HYk3+RIVVxX7+VlgLIn7Jnlyv68=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=m/MxzqzqKmSyamxvxoz45+1yi+WavmqwzUcRzX6kYgUjj3uqCigt/x7PK1HW5rtbBJ0qESjxZqxNlqQqGf3FrYoZ+ja5puc829l7SMI83IH9C3UUBUqI/iwJekLzbi3fDYzTGNYJngugPVvt7cQnMBWyUNS8B0gc0Ov/Id3+FLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=btR5qn/J; arc=none smtp.client-ip=157.90.84.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
+	s=arc-20240116; t=1740150223; c=relaxed/simple;
+	bh=gsnNSPpy3H9i0wRjy+ytwpp2TYwWOrgCWOPkgSZooRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XBk0Q79GICLEmXzrMCSvaBeD1Q/BfLXJQh8CUECZgqm2WEQyBmHOj39vywDEHC8i6PsC5iBXA8EPQ5Qm51Ii7SQ/UeLVKbVNAdl0B0A9HYnZZJn+ObkX6TpofHvIT/57dSUN/QEzl+OfvXdAKDk2PISuuP2mnDX6gxSOeSH5fyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a8zWMSWc; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="btR5qn/J"
-Received: from [192.168.42.116] (pd9e59d4d.dip0.t-ipconnect.de [217.229.157.77])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id EF6BC2FC0182;
-	Fri, 21 Feb 2025 12:50:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1740138617;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ntN7Ken4o08cAX1i2z6UfMc3CME1b/XumOkdtvbq90M=;
-	b=btR5qn/JQZ2iM9Z6Qbqzm/UmO/OMIde4ej5pERpuC3eETwAT8pHKMz6AUIKnWCToZlZAU+
-	/X5twyqGS+nefMFbZx2YpTS3yzfB7Rtmjzup7pjS6YSnwLw+pZ6TEGzSM6OPzbRIVitOpm
-	R9lA9Lc+l3h/gWNXJ5X+Ac/+G521zdY=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <cde97a29-bfe6-4dba-a059-b6df91814e6c@tuxedocomputers.com>
-Date: Fri, 21 Feb 2025 12:50:16 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8zWMSWc"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220d601886fso33923305ad.1;
+        Fri, 21 Feb 2025 07:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740150221; x=1740755021; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pXQvWn8yA4pYClIty3dZm8IPvbcGvvyTtfzoets52jY=;
+        b=a8zWMSWcBVDr95E8rnOBwgcFu7GBkM+zSmM7w8JkJVsxk3G09ZUgXsfnURGB2d+VHK
+         TKDV37Bz2hUMkSKxY9R4aNfWSZgPEiW8Ol/sI6piKaEtRy23L492rLTWKxt0AOoPkTNg
+         zQZbLAQXSpMaBQgG4Y6JPQ+/n4MxK+CFnlVX9I8Gw7qa0EifDgkl/fGIsw/Ih0iefNNE
+         jOpJj3jQHRwU1HBDs3Trqti3gENNW9tv8hJ8RVB8apr6MMALguLoyipRAIXoMCKHxGKY
+         M8vInU9XTk93og0IywoR7BZCCwkTCL0+SWXw2XKIx1BvL1xAP4EofyoJ/1yj56TQwN5V
+         A03A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740150221; x=1740755021;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pXQvWn8yA4pYClIty3dZm8IPvbcGvvyTtfzoets52jY=;
+        b=jd7qIZ6/Zm20Pkhc3tgjMbHhS7bLMjKhKZhGpWEJET0moAvjPR+snsoeAfaTBbozDE
+         vC4EI8SNB1vdeS/CxyRzc6mEUAa4JZN/OzPB+PpFzwGhw9YweAiE6FbL3JrLGvS5Swdb
+         LBKWYmF2DDqCbBuwADinuEmXy6RKOuLMSYQeOXmBmBwTC5qNAFGNBa3eZTqK7z5yy9Mo
+         oVwrwgIHlq7n9Pj7e+sUAxc7cUQbJJS3iWGItIZzNE9Wb+ySvw0Y6nbl3yhQTWHQ5ofN
+         mA9us+4seXZY434sURwzWQ+KSvC9ItTC3BatY222/4dC6Y0Bj8xfisYhrkDLogJIHao7
+         xSVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSfboRA1RHQJc0cF/fxGf7nccR2VwLsWEt/B1leKnl5OR5Q1qWUIjh45KD6z3ox+6Ybrgv7CfWitfP@vger.kernel.org, AJvYcCWVzYnyMkA49vwgXz0XtTHjgt8Dqfjzx2aYJh1QnU46QvrjI3RxiCwv+cUMmof5KQo04kT55Wghac2WxNw=@vger.kernel.org, AJvYcCX6tc1gnw9PlnN7lfoXhTpodKzvPFuD26eGHRGqH1Hrz69JRtWFbQzQjVuVoFbLlqNky7qTgSAabHoJyaat@vger.kernel.org, AJvYcCXTaa8o4KONxmrh+7isgs2c+FfBW6KWYHXYOfOTiU7e49Ye25v70gKt6mh2rs598njc9WXhK45MhKbITzc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDxIlueZjzmGq0f2PRRyo5J0otYsWSHdpXJsk3+JMt+O0a95dM
+	95cOe4B7Bd9rON2UWaLOBm6C6tjJVOZ52Ld38rnoWF6V84OzHoD+
+X-Gm-Gg: ASbGnctDkSxI2Yf0DjlCrrcp6Ib/9A6g5JpE+ArJlrg49JopboJNxc2UTMVqh9CiSvb
+	ns5xjOsqsvuya0YTOHl4IceCNk8RGWxHJijz+3do7VHemg7tCGYLrr6UoR0chvBg8ogAM477qbC
+	g413sVIw4iUV5aL3NJDFeAY9p4A8HW33+aYi9O/+ZHiYAtzHH9afKMu8aNMAjCRiEAnFRTZrL5+
+	gDWu4347Tdc/skd537/HjbWuov/LZXXy0gwK/msALjeRdBpaUYvdW/lvQbtB7zVY0Gn/1OP5QXH
+	I5WIUgHj1sRlfF/O/xXnR8rOLchCgQ9rxDjvWqBA1+FUIJqREF2G8yprI75RvN6z2mEZRVztO4k
+	=
+X-Google-Smtp-Source: AGHT+IFvvlSHmnEHZenrLxnU2xsQDizN0mIChQ6nonulNZbyqK538np0l4F2iSLpvjGVmqAux4YHnQ==
+X-Received: by 2002:a17:903:32c5:b0:21f:658b:8ed5 with SMTP id d9443c01a7336-2219ff30c91mr54740935ad.6.1740150221366;
+        Fri, 21 Feb 2025 07:03:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d536457esm137995665ad.85.2025.02.21.07.03.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Feb 2025 07:03:40 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <409e8873-5ebd-41af-8162-30668271be6a@roeck-us.net>
+Date: Fri, 21 Feb 2025 07:03:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,163 +69,118 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/1] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI
- TFAN via hwmon
-From: Werner Sembach <wse@tuxedocomputers.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, ukleinek@kernel.org,
- jdelvare@suse.com, linux-kernel@vger.kernel.org,
- platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20250205162109.222619-1-wse@tuxedocomputers.com>
- <20250205162109.222619-2-wse@tuxedocomputers.com>
- <767538f2-d79e-44e4-a671-4be56a3cfe44@roeck-us.net>
- <fce7929b-87e7-4c9a-8a54-ab678c5dc6b4@tuxedocomputers.com>
- <8f0a9bd6-52dd-442f-b0fd-73cf7028d9f0@roeck-us.net>
- <b32284b7-ddc8-4fb5-82f8-20199b0dec5a@tuxedocomputers.com>
+Subject: Re: [PATCH v2 14/29] ASoC: tas2770: expose die temp to hwmon
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>,
+ Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shi Fu <shifu0704@thundersoft.com>,
+ Jean Delvare <jdelvare@suse.com>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+ Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
+References: <20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com>
+ <20250218-apple-codec-changes-v2-14-932760fd7e07@gmail.com>
+ <4e0e2ae0-c53d-444c-9d8a-d465be690232@roeck-us.net>
+ <CAHgNfTzfK4HnYs+LDH7kcR+pZqSxT9YBZYQ=c+Mcpva4Vx=D_w@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <b32284b7-ddc8-4fb5-82f8-20199b0dec5a@tuxedocomputers.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CAHgNfTzfK4HnYs+LDH7kcR+pZqSxT9YBZYQ=c+Mcpva4Vx=D_w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi,
+On 2/21/25 03:31, James Calligeros wrote:
+> On Wed, Feb 19, 2025 at 1:20 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 2/18/25 00:35, James Calligeros wrote:
+>>> +static int tas2770_hwmon_read(struct device *dev,
+>>> +                           enum hwmon_sensor_types type,
+>>> +                           u32 attr, int channel, long *val)
+>>> +{
+>>> +     struct tas2770_priv *tas2770 = i2c_get_clientdata(to_i2c_client(dev));
+>>> +     int ret;
+>>> +
+>>> +     switch (attr) {
+>>> +     case hwmon_temp_input:
+>>> +             ret = tas2770_read_die_temp(tas2770, (int *)val);
+>>
+>> Type casting a pointer like this is never a good idea. This only works
+>> if sizeof(int) == sizeof(long).
+> 
+> I will rework this when dropping the die temp sysfs interface. This
+> was mostly so that
+> I didn't have to change any of the code there, but since we're going
+> to drop that
+> anyway it's redundant.
+> 
+>>> +             if (!ret)
+>>> +                     *val *= 1000;
+>>
+>> The calculations in the previous patch suggest that this is wrong.
+>>
+>> Either case, this is redundant. The temperature is already displayed
+>> as device specific sysfs attribute. Displaying it twice does not make sense.
+>> I would suggest to either drop the sysfs attribute in the previous patch
+>> or to drop this patch.
+> 
+> The calculation in the datasheet yields the temperature in degrees Celsius.
+> hwmon consumers expect temperatures in "millidegrees" Celsius as per the
+> sysfs interface documentation[1]. Regardless, as above I will likely rework this
 
-Am 06.02.25 um 23:55 schrieb Werner Sembach:
->
-> Am 06.02.25 um 19:57 schrieb Guenter Roeck:
->> On Thu, Feb 06, 2025 at 10:28:01AM +0100, Werner Sembach wrote:
->>
->> [ ... ]
->>
->>>>> +        temp = retval * 100 - 272000;
->>>>> +
->>>>> +        for (j = 0; temp_levels[j].temp; ++j) {
->>>>> +            temp_low = j == 0 ? -272000 : temp_levels[j-1].temp;
->>>>> +            temp_high = temp_levels[j].temp;
->>>>> +            if (driver_data->temp_level[i] > j)
->>>>> +                temp_high -= 2000; // hysteresis
->>>>> +
->>>>> +            if (temp >= temp_low && temp < temp_high)
->>>>> +                driver_data->temp_level[i] = j;
->>>>> +        }
->>>>> +        if (temp >= temp_high)
->>>>> +            driver_data->temp_level[i] = j;
->>>>> +
->>>>> +        temp_level = driver_data->temp_level[i];
->>>>> +        min_speed = temp_level == 0 ?
->>>>> +            0 : temp_levels[temp_level-1].min_speed;
->>>>> +        curr_speed = driver_data->curr_speed[i];
->>>>> +        want_speed = driver_data->want_speed[i];
->>>>> +
->>>>> +        if (want_speed < min_speed) {
->>>>> +            if (curr_speed < min_speed)
->>>>> +                write_speed(dev, i, min_speed);
->>>>> +        } else if (curr_speed != want_speed)
->>>>> +            write_speed(dev, i, want_speed);
->>>>> +    }
->>>>> +
->>>>> +    schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
->>>>> +}
->>>> This is not expected functionality of a hardware monitoring driver.
->>>> Hardware monmitoring drivers should not replicate userspace or
->>>> thermal subsystem functionality.
->>>>
->>>> This would be unacceptable in drivers/hwmon/.
->>> Problem is: The thermal subsystem doesn't do this either as far as I can tell.
->>>
->>> See this: 
->>> https://lore.kernel.org/all/453e0df5-416b-476e-9629-c40534ecfb72@tuxedocomputers.com/
->>> and this: 
->>> https://lore.kernel.org/all/41483e2b-361b-4b84-88a7-24fc1eaae745@tuxedocomputers.com/
->>> thread.
->>>
->>> The short version is: The Thermal subsystem always allows userspace to
->>> select the "userspace" governor which has no way for the kernel to enforce a
->>> minimum speed.
->>>
->> You can specify thermal parameters / limits using devicetree. Also, drivers
->> can always enforce value ranges.
->
-> Sorry for my noob question: What do you mean with devicetree in x86 context?
->
-> I only want to enforce a value range at a certain temperature, if the device 
-> is cool, the fan can be turned off for example.
-Gentle bump
->
->>
->>> As far as I can tell the Thermal subsystem would require a new governor for
->>> the behavior i want to archive and more importantly, a way to restrict which
->>> governors userspace can select.
->>>
->>> As to why I don't want grant userspace full control: The firmware is
->>> perfectly fine with accepting potentially mainboard frying settings (as
->>> mentioned in the cover letter) and the lowest level I can write code for is
->>> the kernel driver. So that's the location I need to prevent this.
->>>
->> It is ok for the kernel to accept and enforce _limits_ (such as lower and upper
->> ranges for temperatures) when they are written. That is not what the code here
->> does.
->
-> It conditionally enforces a minimum fanspeed.
->
-> So is the problem that hwmon drivers are only allowed to enforce unconditional 
-> limits?
-Here too.
->
->>
->>> Also hwmon is not purely a hardware monitoring, it also allows writing
->>> fanspeeds. Or did I miss something and this shouldn't actually be used?
->>>
->> If doesn't actively control fan speeds, though. It just tells the firmware what
->> the limits or target values are.
-> What is the difference if it tells the firmware a target fanspeed, which can 
-> be ignored by it, or a driver a target fanspeed, which can be ignored by it?
+Yes, I am well aware of that.
 
-Here too.
+> when dropping the die temp sysfs interface so that things are a little
+> more logical.
+> 
 
-Best regards,
+Unless I really misread the code, tas2770_read_die_temp() doesn't return
+the temperature in degrees C.
 
-Werner Sembach
+Guenter
 
->>
->>>> Personally I think this is way too complicated. It would make much more sense
->>>> to assume a reasonable maximum (say, 16) and use fixed size arrays to access
->>>> the data. The is_visible function can then simply return 0 for larger channel
->>>> values if the total number of fans is less than the ones configured in the
->>>> channel information.
->>> Didn't know it was possible to filter extra entries out completely with the
->>> is_visible function, thanks for the tip.
->>>> Also, as already mentioned, there is no range check of fan_count. This will
->>>> cause some oddities if the system ever claims to have 256+ fans.
->>> Will not happen, but i guess a singular additional if in the init doesn't
->>> hurt, i can add it.
->> You are making the assumption that the firmware always provides correct
->> values.
->>
->> I fully agree that repeated range checks for in-kernel API functions are
->> useless. However, values should still be checked when a value enters
->> the kernel, either via userspace or via hardware, even more so if that value
->> is used to determine, like here, the amount of memory allocated. Or, worse,
->> if the value is reported as 32-bit value and written into an 8-byte variable.
-> ok
->>
->>>>> +    *hwmdev = devm_hwmon_device_register_with_info(&pdev->dev,
->>>>> +                               "tuxedo_nbxx_acpi_tuxi",
->>>>> +                               driver_data, &hwminfo,
->>>>> +                               NULL);
->>>>> +    if (PTR_ERR_OR_ZERO(*hwmdev))
->>>>> +        return PTR_ERR_OR_ZERO(*hwmdev);
->>>>> +
->>>> Why not just return hwmdev ?
->>> because if hwmon is NULL it is still an error, i have to look again at what
->>> actually is returned by PTR_ERR_OR_ZERO on zero.
->> That seems a bit philosophical. The caller would have to check for
->> PTR_ERR_OR_ZERO() instead of checking for < 0.
->>
->> On a side note, the code now returns 0 if devm_hwmon_device_register_with_info()
->> returned NULL.  devm_hwmon_device_register_with_info() never returns NULL,
->> so that doesn't make a difference in practice, but, still, this should
->> at least use PTR_ERR().
-> ok
->>
->> Guenter
