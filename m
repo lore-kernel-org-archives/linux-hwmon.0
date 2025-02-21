@@ -1,113 +1,119 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D951B6D06;
-	Thu, 20 Feb 2025 22:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BDB1EB3D
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Feb 2025 00:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740090154; cv=none; b=HJ8sXfYz8aWIKBnCBKyBPypCBcF2Xp5fdzF+XaLEVIGiAfey5MSiAMPJmxWG2CORPpzXpCud+wA0arj9eIlhjdaMXgbVWJjakkGO7l/t9BQocQKWa16KD51ZRDIU9NRRmPmfCvBwGdMd0vnqmVjz2vYVeb2GZm+YDHGxJSDPyQ0=
+	t=1740098846; cv=none; b=JQeiFehQnlc8S/Wd2LtJeBQ2oz8zdcSqx3c5GZ8P7GwTpCQh2qKTKvW+ym+QnTQYF1f48aeZXYXxm4ovf0lwVVvn4eN/cR9xV7uexF0sSVf+LYJv48ntg1mt7ZP4jzPY2cpxi2BHlBcEkR7bpvLSdlgwMvXrh18uibsJ5apv8S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740090154; c=relaxed/simple;
-	bh=6B6FSe6DVN2MTY/rJvHuvje8ZU3R38sOomVuhIvff6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M0ceS7FCvZ0iOKrNakRdl51NV6ji+Ewd0ewWRwnImoAUhu2LTesmwC5COGKJYxzCJ9cFvWH7O43Bzzm5EoiA7/8NkAPa46A1cn63pAO6+6/4BU0GDR5LzMUNbC/ZLI5zcQJQW1u8b8HlToVogiFD2Y9eElY87Kxpik+e2pMGDjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWske4AI; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740098846; c=relaxed/simple;
+	bh=AFMZD8xA79SrcF7qdF9M6LpkATxyi3gQbmTSSDjdeMU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=IBJx/ER6Mw0OVaLdge9lXJ7EJBXNQ230WjJaiFEaBOtI17A0p/BCViEJzmkBwS8wjjh4JYq9oTml/CNe/gkoiZRqRDt2nYoGZgykAfw35k0A9XiAYw3n/MVGF8CydwNJriV4M/mGNi02oEKJVw6CxCk4wRmK3Ylj0XvWh3wREHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SPbadOSg; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWske4AI"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22100006bc8so26404205ad.0;
-        Thu, 20 Feb 2025 14:22:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SPbadOSg"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4398e3dfc66so13612885e9.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Feb 2025 16:47:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740090151; x=1740694951; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xCWwZcYXXjRdf892WSGghwBWWZu0cLbILy6CcELDbs4=;
-        b=HWske4AIW14ihq6H00FqUxIo9KDb1sGpkxFzZuSUWgq9NBPGXZ+ooEpsWFa9m9dhj0
-         xWMao6oOhK/A03bsfaXzgUaGsMRgcrKh1rCORI4FC54mgjVq6WInKv1bqw7Sui2906FB
-         3bjDVHV+BPcmbCUkxbEspDosgfdM+YXmmzrRiOQVTVX58QKWV8WurnUU4oWxm3jSQvKJ
-         AzMPRCI3C4UiyZbueUZPE7Z3zHsbfg9sPRQX2TNhI0QHDe6HkTSxBYoRtH71fGEXZaR2
-         0CuiLbfkxrtukoNVyoOrMn8qEMYR6pC2Agw4Ht2OoD1VHREjGJ9cgiO39UmPYRijoBoK
-         va6Q==
+        d=linaro.org; s=google; t=1740098843; x=1740703643; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1uwzXKEnNeEIPu52I2DCxojSGUOWNSCkUNKbC+s6sxg=;
+        b=SPbadOSgWdR2bVUHmyVLYXoeXl5elxDHAqEFCVi8kUac67RWfOTSOTVAjcAXIvg1bj
+         RUjJhIhMSgC1GCisOCUZ30bu/h9ylImmJ5y/R4Yv6TNX4WVzBTrgiDW0DH+n3HbzzH0B
+         OjERvsJxu3TgXmgijW5o2RqaHPqEQgLbXYnETfqQJk8xILLLwa10032crjdT0hYeGlDi
+         rMdakWDjCpL6Bt34zMn7L59lKTER5FTJG1p2baViBqWszVeLTObf1pPdYoNkP4EbDwq+
+         7rsMGz1hdw7RgPMaIvBoROQ+XphYhwgXF8HTIgey+STtdeZYz58xltzxrharMTVrAzDO
+         o0Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740090151; x=1740694951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xCWwZcYXXjRdf892WSGghwBWWZu0cLbILy6CcELDbs4=;
-        b=PcAyV1SKANuJuYgH5DA2LF/Fd/g+VwVJhvPgM36ze89JvvEpNVQr7tvlMb9YV1LSWQ
-         4OKZjRIDBZoij7JjQwR2KByAtwK46v0jBZ9r+8DaXVKnupwq+6uNuW0qMNKPDT7QSF3v
-         duOYA7RWN+/3gxl0N68sr77MFCP0H+AZvEL5a7PTuE3bshBEutx3JPSk7iYGY+bUufU2
-         ZAW9Jlw5Wx4jIkc0WmEZI0oeOP9dWgHzWqdQHqI3IpVbnBHqmJ+xU7JKC+BPF1d1ae3Q
-         XTUt9Sg8pwEMFNw7B0ZJmmy0Ejshi2dz2FZqDJqRB9MCVVlZR2dCiZRt0MOWOwMSzpv2
-         Ow8g==
-X-Forwarded-Encrypted: i=1; AJvYcCW6ZGqdsHsF7FbmpBCw+zQ0ZYUDhUTK8v3WK9qPhEE6DVw6W+tXSncz7uLu+97B76DPVvF+ic8KK14otHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw09xOCpdIgmyXIwMa3KSn26T3CvyOkgevQs2S4s9lv+kdRhm9F
-	EMtuKigacVov8ESe7FDnGyYdDulJxpuEAHMuDKGXdJGKId5meaRJ
-X-Gm-Gg: ASbGncuPNcHQGQUzhaezv85KCEoncPkg/yj+Fee9F+gCWWlZGL7WHzd7Jb2tyU/nAxc
-	KY5VvXKwyPNyJ+hBVOLzawrjsWlNhYuH1ZXQ2z/Fy+76adWC6kY0wplrej7WUkJhYdkLbPA2blK
-	mIump4KpUMyGP7fi8OQ1fD+F61VvrLjGhKazlFFVvZxE3sHKwOBZTVCIWoEiXiOARiDyYQm1Ylu
-	PwDuaUmfYD6dX/tXXPIfjui5kC/t3lUzY4HRU09XcIHPqLIDhiekICcvfeC8pvH3xgkeMc1prHI
-	4GOO4WfTW9Bsw8981xc0gXKSWkSQ
-X-Google-Smtp-Source: AGHT+IGbrsZ4qyaDOjAYUhu53Fftt4vkYb/8xMjeKDsR6ODk3APmHP8kKAFjDw4BXXNFWtdq78JDKg==
-X-Received: by 2002:a05:6a21:6e91:b0:1ee:d0f4:d14c with SMTP id adf61e73a8af0-1eef3c894e4mr1669416637.15.1740090151276;
-        Thu, 20 Feb 2025 14:22:31 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-732532ce7f1sm12397577b3a.73.2025.02.20.14.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 14:22:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 20 Feb 2025 14:22:29 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Erik Schumacher <erik.schumacher@iris-sensing.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: (ad7314) Validate leading zero bit and return
- error
-Message-ID: <7f299e75-a4c5-45c8-a755-e0365f8c7e2e@roeck-us.net>
-References: <c54ef4dd7b562268768200239b00441a74b547c3.camel@iris-sensing.com>
+        d=1e100.net; s=20230601; t=1740098843; x=1740703643;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1uwzXKEnNeEIPu52I2DCxojSGUOWNSCkUNKbC+s6sxg=;
+        b=Eo3+CrF6SJJOcxoYsB39IJbtvMxekvoP5aB50UDBXe3W60UFogIlQFgTUPAUG6NZv/
+         SUxCAyN8yWDdN99DBDm0lU82LDBqPIW2umEa7mxQMr3O0kJRxgw+VEsb1aO3pok74Vdj
+         zuFHTeiVcLm/1FfqviMUNzz453XSc7Qpo5ROoZpupuc2vclpSD2agE+rFRMczKE/YNve
+         hxxUsKGgCO74BNtg/ouLZhozT5EH8qp5M6u/ae+fJitidjYPVMuZ+Qd/AiwvOqd8pzaG
+         1Ljf/ndxwkd0qQPPK+FfI16u1eqXMMBD84T3sejKOWwSycFt9tIP6tC+WjIlUfLWDUHs
+         MDwg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTQ9KcY1CvYjnA4iyGmV6NEBpoFNW7s8gKJ1Wwg/jo1Uzh4UVYO9d+q/AfWviO3mAu66n0h8glh8qksw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx07wNGaSEexsNQEAVeG+UlLKZ6o9tLhr/q6KnS1oVKxlx1wmzO
+	7KY9pync2sgR44pGe8R3bL5nXW4nQYTxx4H7cDU21nYwodYAtXYwuRRuJSbE1vw=
+X-Gm-Gg: ASbGncucI1fZXZguGcwWleT3UDuHpoe3s+lMRTclYHyEMepNJODRp9zeK3UHhFRhy0U
+	PtPh7ZqfVXjcU1h+sF0HIzcRw7qWDJ23dXIwCZMUCB2b7Dgk+eQe/dl7ozcZ/M18bULxKgh/DF5
+	Zw9y6J9eBbV8ECWacld9NB6DkuVFv14ptE31bifUUXjmbjjdbb+BtJZRa3qwvl2qnS1YLfF4MmT
+	yH4LmKkLbc+A5rirhHqeYSk0kWmahdbK199dSHsNio5vjQNrAtoWkeEJCcT+tNcP9/wD63dfvNZ
+	hKQBRD6FavjVx402VA==
+X-Google-Smtp-Source: AGHT+IGP2COMTFmCb6NZD7IEUpBby+MJg1OI/LvEAFrSspNS5gqFhyuY2jzlf6BtHJjV5QSFOV34JQ==
+X-Received: by 2002:a05:600c:1390:b0:439:8bc3:a697 with SMTP id 5b1f17b1804b1-439ae1d7e97mr9688025e9.4.1740098843201;
+        Thu, 20 Feb 2025 16:47:23 -0800 (PST)
+Received: from localhost ([2.124.154.225])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439b0371c51sm877805e9.35.2025.02.20.16.47.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2025 16:47:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c54ef4dd7b562268768200239b00441a74b547c3.camel@iris-sensing.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 21 Feb 2025 00:47:22 +0000
+Message-Id: <D7XPK4C7YYVN.2H85SNZIOOPAB@linaro.org>
+Cc: <srinivas.kandagatla@linaro.org>, <broonie@kernel.org>,
+ <lgirdwood@gmail.com>, <krzysztof.kozlowski@linaro.org>, <perex@perex.cz>,
+ <tiwai@suse.com>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+ <linux-sound@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: codecs: wsa883x: Implement temperature reading
+ and hwmon
+From: "Alexey Klimov" <alexey.klimov@linaro.org>
+To: "Steev Klimaszewski" <steev@kali.org>
+X-Mailer: aerc 0.20.0
+References: <20250107114506.554589-1-alexey.klimov@linaro.org>
+ <CAKXuJqihpwnOTepgTkH3FaGB5=kXVCDOckPGpacJ7JWZXxsKWw@mail.gmail.com>
+In-Reply-To: <CAKXuJqihpwnOTepgTkH3FaGB5=kXVCDOckPGpacJ7JWZXxsKWw@mail.gmail.com>
 
-On Thu, Feb 20, 2025 at 10:18:17AM +0000, Erik Schumacher wrote:
-> A leading zero bit is sent on the bus before the temperature value is
-> transmitted. If this bit is high, the connection might be unstable or it
-> could mean that no AD7314 (or compatible) is connected on the bus.
-> Return -ENXIO in that case.
-> 
-> Signed-off-by: Erik Schumacher <erik.schumacher@iris-sensing.com>
-> ---
->  drivers/hwmon/ad7314.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/hwmon/ad7314.c b/drivers/hwmon/ad7314.c
-> index 7802bbf5f958..025846f1f18b 100644
-> --- a/drivers/hwmon/ad7314.c
-> +++ b/drivers/hwmon/ad7314.c
-> @@ -65,6 +65,10 @@ static ssize_t ad7314_temperature_show(struct device *dev,
->  		return ret;
->  	switch (spi_get_device_id(chip->spi_dev)->driver_data) {
->  	case ad7314:
-> +		if (ret & BIT(15)) {
-> +			/* Invalid read-out, leading zero bit is missing */
-> +			return -ENXIO;
+On Tue Jan 7, 2025 at 10:25 PM GMT, Steev Klimaszewski wrote:
+> Hi Alexey,
+> Thank you for this!
 
-ENXIO = No such device or address
+Hi Steev,
 
-We don't know if that is the case. -EIO seems more appropriate.
+Thank you for testing. This really helps.
+And sorry for slowly getting back to you.
 
-Also, AD7301 and AD7302 transmit two leading zeros. If we make this change
-for one of the chips supported by the driver, we should make it for all
-chips.
+> I've tested this on my Thinkpad X13s which has the wsa883x, and here,
+> when idle, I see an entry, sdw:1:0:0217:0202:00:1 which shows ~26-28C
+> when idle, as well as sdw:1:0:0217:0202:00:2 which has ~22-24C when
+> idle, however if I play audio, both of them drop to 1C and do not move
+> from that while audio is playing.  Is this expected behaviour
+> currently?
+>
+> (out of laziness to repeat what I am doing here - I have bottom
+> (https://github.com/clementtsang/bottom) running in 1 terminal, and
+> then in a second terminal I either play an audio file with
+> canbetrra-gtk-play or mpv a video with audio and for the entire time
+> that there is audio playback, the temperature sits at 1C.
+
+As far as I am aware there is some hw limitation resulting in that
+temperature is not updating during playback/when amplifier is active or
+that it is not allowed to read temp registers when the amplifier is active.
+
+However, we should return the last good value here and not drop temp to 1C.
+I think I found what the problem was and I will resend the new version soon=
+.
+
+Also, on sm8750 I see the 4-5 degree Celcius temperature diff between two
+amplifiers (30C and 35C for instance).
 
 Thanks,
-Guenter
+Alexey
+
