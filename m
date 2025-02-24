@@ -1,105 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E6270838;
-	Mon, 24 Feb 2025 15:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA7C265CC7;
+	Mon, 24 Feb 2025 18:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740410240; cv=none; b=SO2VnHq6WRJxPYndYsiPaW5fN82VIgwV73jzudHvctm0C7I9YDkZZ9KQcpdIT9OHKukuVzU0EIFJug6vALbJLH5HdHTjdhAzWjo4IpXB1FBEqPkvE/Cz5T1r2RA1Njj4uCjhlAvjlNT/iAx9n4Zlhx+B0cVRqQpGr9HxBpkS0jg=
+	t=1740421275; cv=none; b=VptHVG+8mM9p7F1sxqCzli5P/GEeiVy/f63sFWqCMhmSydpadYDjAfBTNb3flnptyrFXtC9cA2gWVppZMMiNVtL2naKfl3RmTfoRbK7iN6FnbwooRNb4D/Tt4xRUUP3h2oBuaveYUS/Wu/rOFlXvIzF1ievbS+EDv+y5uCJZzWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740410240; c=relaxed/simple;
-	bh=FctZeHaDqwfyYp6HlxgQeg9Z+pAOxz2hHEUmvjFy4Jg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Ux4X9ROgYbpO07Pjgmi8YJkOocx2nhl4AipoaSgaCN/h0Om/+fRCvFUTI7cxfijb7KDzPiCP2pjpp1uPsnK5h+erAncUFoc0LN3SUd74ypx2fSC0SUGUdwQpj7pCA1fZgq2sbuZ6Qq176Q/9i7eaC3F51gWGuP8ww/FNlJV9XCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a0V0zBLG; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1740421275; c=relaxed/simple;
+	bh=N/T5IHIQwCEr77i8CTQCQnWFjgaLHWXY7H4FMMhO8NE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q2LgkzVn8YICyID30vWf2tJ7va+GhYZ6Ol/952KYluKM7eLpGaM3qlyx7KvdKANJVsDDlNYzTnmHZkCZw5rHaEseIYVsh4Efb1KsGq6XUWo+k9P1FSNCD56yDJ059aTAKB1+b7CBvz2AkezlajmcuomKe80+w+nLj86fKsdM8UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=G02tW++1; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a0V0zBLG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740410239; x=1771946239;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=FctZeHaDqwfyYp6HlxgQeg9Z+pAOxz2hHEUmvjFy4Jg=;
-  b=a0V0zBLG+K9YWB+bJ82ZKx1qbISfdv6uEpAkw4tTWtiCPV4GzBiEe2in
-   0McBmj5xI4SFTZB+PtBswAi6Rd/mIAQK9f7UibON52ZEWUMrSq4eF/vh0
-   vjljcU508HeQ0wGVUECzAxi9HbGAM+d2MlZ1xkH/2xRSPpMOBvth79C2k
-   GLj8qMHrtYPrBgp6k/10OZpwbM29Qlt+elHjkaPBnynv9+c3ec2VSHfcA
-   Hdb0d1jFOOCSfAqwUeuooK0aKqbvsoWwuQLIhgrP2Hbn47zWdIVH6LAI8
-   QOVUiw8ct4uagYaXoDHJE9hPqZhMHxvhgN5v1o1bJZ399Rg/VpGWg+VHg
-   w==;
-X-CSE-ConnectionGUID: kP4TFIk/TmGPQoodkSW4fA==
-X-CSE-MsgGUID: PcThdI/wTP6XGqTZYIPYhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="28764827"
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="28764827"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 07:17:18 -0800
-X-CSE-ConnectionGUID: 627BfBPXQWSbvNobQ/+Twg==
-X-CSE-MsgGUID: uJmUrKYSRi+JtMZzcK4F1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121350358"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.233])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 07:17:14 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: james@equiv.tech, markpearson@lenovo.com, jorge.lopez2@hp.com, 
- Armin Wolf <W_Armin@gmx.de>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, hdegoede@redhat.com, 
- platform-driver-x86@vger.kernel.org, corbet@lwn.net, 
- linux-doc@vger.kernel.org
-In-Reply-To: <20250216193251.866125-1-W_Armin@gmx.de>
-References: <20250216193251.866125-1-W_Armin@gmx.de>
-Subject: Re: [PATCH v2 0/8] platform/x86: wmi: Rework WMI device enabling
-Message-Id: <174041022914.15708.15301539977547407490.b4-ty@linux.intel.com>
-Date: Mon, 24 Feb 2025 17:17:09 +0200
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="G02tW++1"
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id E3DD71F925;
+	Mon, 24 Feb 2025 19:08:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1740420485;
+	bh=1M7f396UBAmCxe+9OoMZbOkwcwDr8nFN1FiAHgkEDKw=; h=From:To:Subject;
+	b=G02tW++1t59ah+gMQCw6rNIexMpCQn4tbkpggdZBESNP314KmWnX6I7l3UfvPON8r
+	 lpwJs4TlO8idH2TYvsuD2TO9WLP23rOniO/1FT+C7+NmADsZC1hu2TXe0JeNFNZ6B3
+	 g2B0+I8G0DggYTAdj5KIxNLGEOvXLda+fTGIq/rnJhIfBA3wzdenzPjK82/sl007Wf
+	 4Fg0gSg1hZdqveaK7+Ag8ZMXWCqFx6pIq07+9Pz3vM2o2ykFACU876TZM5CxUKu7Sx
+	 Q8MycmK8MjAtfanOWyh9D2yeQy8ItI1b5ARx8lUZmNO+/yQIjfYuRiyKF7Xdjb6Jx2
+	 Jly1t9urHxBjg==
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Farouk Bouabid <farouk.bouabid@cherry.de>,
+	Quentin Schulz <quentin.schulz@cherry.de>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: (amc6821) Add PWM polarity configuration with OF
+Date: Mon, 24 Feb 2025 19:07:59 +0100
+Message-Id: <20250224180801.128685-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, 16 Feb 2025 20:32:43 +0100, Armin Wolf wrote:
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-> This patch series reworks how WMI devices are enabled and disabled
-> to improve the compatibility with various firmware implementations.
-> 
-> The first three patches make sure that no WMI driver using the WMI bus
-> infrastructure is using the deprecated GUID-based API to access the
-> underlying WMI device.
-> 
-> [...]
+Add support for configuring the PWM polarity of the amc6821 fan controller.
 
+Francesco Dolcini (2):
+  dt-bindings: hwmon: amc6821: add PWM polarity
+  hwmon: (amc6821) Add PWM polarity configuration with OF
 
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
+ .../devicetree/bindings/hwmon/ti,amc6821.yaml     |  8 ++++++++
+ drivers/hwmon/amc6821.c                           | 15 ++++++++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-The list of commits applied:
-[1/8] hwmon: (hp-wmi-sensors) Use the WMI bus API when accessing sensors
-      commit: 27cc2914e495d314d19c7c1f74687bb28bc292e8
-[2/8] platform/x86: think-lmi: Use ACPI object when extracting strings
-      commit: 82d3af6b30ac2c6031428dd506eab9fd416cb825
-[3/8] platform/x86: think-lmi: Use WMI bus API when accessing BIOS settings
-      commit: 126a53a94a3fb3171d35f3c87820aafbafa08430
-[4/8] platform/x86: hp-bioscfg: Use wmi_instance_count()
-      commit: 0fcc3162e3fbe4ca9347b2f42313dbf077207bb1
-[5/8] platform/x86: wmi: Use devres to disable the WMI device
-      commit: b6b566908cd75bd99eb0e4b396c89704588261b3
-[6/8] platform/x86: wmi: Rework WCxx/WExx ACPI method handling
-      commit: 656f0961d126f5d1f0bcc62fa8bb7598d8f89207
-[7/8] platform/x86: wmi: Call WCxx methods when setting data blocks
-      commit: 08c9f4029007325e0bbd4fdda05650b03e43f071
-[8/8] platform/x86: wmi: Update documentation regarding the GUID-based API
-      commit: 8d5316c6c6633c18c4ebeb2dd038933549d404de
-
---
- i.
+-- 
+2.39.5
 
