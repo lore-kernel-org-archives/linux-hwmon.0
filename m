@@ -1,91 +1,71 @@
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A260BCA64;
-	Mon, 24 Feb 2025 18:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66251FCCFA;
+	Mon, 24 Feb 2025 20:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740421575; cv=none; b=dXKOhTI87h0JCvuegcVhTgzyvuniga9YHwXJUTMbiLFuwpEtqux4zwksH0JlX0BcogydHvXHmX2ZPG99gv+eIERRLd9vhtUOQuo9pRzQ+9LEO5GTGcRYLOxJ8n0mu/MgHC1JdB4JDHfIUd4e/FuH/q5O8GPQt1i7ZQFzMe2/tQ0=
+	t=1740427757; cv=none; b=d/X+ewzEzozSV9ahTWfhUwzh6xyLzRzEoIGOADCdWf5TJ89lnmo9mEHnVf+1hHRV2mlLaPDNcktMGtFw+ennxmH8T594GkXXsGHcf150reqZswGwLpomit2u1ELHaQkFlZq5wX1ZHEmh9dXJdgSM4M2hMXE467XnGpaO61VitAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740421575; c=relaxed/simple;
-	bh=fPLzH7LE8mpU0lpFBxI6bTtDCg+LS4q5KJKW0NDcF+Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WYagX99A/035o07EKVIlEKe3vuE8akIME78hykB0tZTRiT5Qx4WF1caF8s0HSXfbS448lP23bK7uDZgnZ1jStB6f3hdxIqMqifYsZnMure7PZqFq7gaXjeG2oLGLU11dpkVWf/DuriJCyVM/ckhhDqXmwHs38H+eg1rluYP1G9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=VVrHpcAs; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+	s=arc-20240116; t=1740427757; c=relaxed/simple;
+	bh=NMza2eMoGjLrVMddzGGmTle2UIxuswjUJ47Pa1YCoXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YgYs9VLs4y5QcKzCzL0Wb+CbIk5elg9pNA2mgLFQjOddHU/mhQs6UAg6kcp3kxWvBAx6ZiMLI0zFhrh+JUYUbFEaSRqsx4WSeY0ahishZ8ZgSCw7GCFfzG2abUKIzsJf2mgI+0h/PVKjIFb/N5dK8TzdRLKrsbTeWBCFil8y3eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgguWlOp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="VVrHpcAs"
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 923481F989;
-	Mon, 24 Feb 2025 19:08:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1740420486;
-	bh=mWS9c2cfDFeU9QDimntm/gZ5WTWvS8Fqw7BP//0uZ2w=; h=From:To:Subject;
-	b=VVrHpcAsvGj7xi9g1Uubcuetnf5Nm8V36W/ScEMseQRU7h6ar7ZPloeyOjfzqPD1w
-	 vaLXkLAXVxsVsT4yztRfAl04FtfUw4PAGQM33HNpSKgqOONwMrXC5WnVEnZFXWyfsj
-	 a7uZXqrnknLQ/MSp+VENoHHix8kGOcvZNou0TPCg63l2KdY+0CdJMufCAVNFlH+4Sb
-	 +Ma4we4fVfMlnG8ZHc9YhrW0t9HpVX202yiLV6YXgutaK6tbwIIp4R7W11EVz+clsR
-	 VK1AZM2v9UOBGbqPZSV2G5DVu1koXPZLI0S+4ZvPrHUWRG59fYAQIJzp/kNIffJaLV
-	 otz4Of0mqz3ig==
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgguWlOp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE71EC4CED6;
+	Mon, 24 Feb 2025 20:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740427754;
+	bh=NMza2eMoGjLrVMddzGGmTle2UIxuswjUJ47Pa1YCoXA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dgguWlOp3RZFnoQVF/Au8pu2V7A8u+U2E14a8WF9nZmHE25CzmNVhnGSOqfPsw5XQ
+	 VThc4JuP+9EjX1+7zo2khaQ1B/n6egR1PP9+lRnrFvF53JnimXZ0olWtg/RN0un+YH
+	 qRh7xhqcsxu78nJPMzAoTuZKa3suVg8CWMRfz4SioDfIAMDkhDzYi/XW6boDw9yYea
+	 /za7LHiCNSmIU76hxEyo6cY9+h5rJewMyFmcjxijtYo2lev9elCHWO6eEyo9ekC6sK
+	 AD807m/9dbEN1I+4NShH3ldhxGjiZphT181SfqglPmitpevJrhxbm8cPsZoZ4+zw51
+	 Sm/maBeTrQw/A==
+Date: Mon, 24 Feb 2025 14:09:12 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Michal Simek <michal.simek@amd.com>
+Cc: Jonathan Stroud <jonathan.stroud@amd.com>, linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>, monstr@monstr.eu,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	git@xilinx.com, michal.simek@xilinx.com,
 	Conor Dooley <conor+dt@kernel.org>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: amc6821: add PWM polarity
-Date: Mon, 24 Feb 2025 19:08:00 +0100
-Message-Id: <20250224180801.128685-2-francesco@dolcini.it>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250224180801.128685-1-francesco@dolcini.it>
-References: <20250224180801.128685-1-francesco@dolcini.it>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+	Jim Wright <wrightj@linux.vnet.ibm.com>
+Subject: Re: [PATCH] dt-bindings: hwmon: Add UCD90320 gpio description
+Message-ID: <174042775200.4021268.9848390633975750195.robh@kernel.org>
+References: <662a050f3f8160fe7c80d4f19e45eb4fac0f2f0a.1740384385.git.michal.simek@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <662a050f3f8160fe7c80d4f19e45eb4fac0f2f0a.1740384385.git.michal.simek@amd.com>
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Add property to describe the PWM-Out pin polarity.
+On Mon, 24 Feb 2025 09:06:26 +0100, Michal Simek wrote:
+> From: Jonathan Stroud <jonathan.stroud@amd.com>
+> 
+> Add optional gpio device tree bindings to the UCD90320.
+> The binding's description is already mentioning the number of GPIOs but
+> without actual gpio controller description.
+> 
+> Signed-off-by: Jonathan Stroud <jonathan.stroud@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  .../devicetree/bindings/hwmon/pmbus/ti,ucd90320.yaml     | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-Link: https://www.ti.com/lit/gpn/amc6821
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-v2: no changes
-v1: https://lore.kernel.org/all/20250218165633.106867-2-francesco@dolcini.it/
----
- Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-index 5d33f1a23d03..11604aa41b3e 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-@@ -28,6 +28,14 @@ properties:
-   i2c-mux:
-     type: object
- 
-+  ti,pwm-inverted:
-+    type: boolean
-+    description:
-+      Set to make the PWM-Out pin go high (with an external pull-up resistor)
-+      for 100% duty cycle (suitable for driving the fan using a NMOS device),
-+      when not set the PWM-Out pin goes low for 100% duty cycle (suitable for
-+      driving the fan using a PMOS device).
-+
- required:
-   - compatible
-   - reg
--- 
-2.39.5
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
