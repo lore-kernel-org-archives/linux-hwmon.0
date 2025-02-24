@@ -1,95 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C5E24BBF3;
-	Mon, 24 Feb 2025 13:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCF32837B;
+	Mon, 24 Feb 2025 15:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740404194; cv=none; b=O8eVEhAlhYfVaHsyWL/w5x1Xdhdwtn9a1V/co+dj6c4YcZUUrp9SgO7GGDzrdHQ5XS8CSsCWkU/8E2O5wkgJNqTW5JIOIVtax5/dwnzGrG7XDxNg2eVaORgf3GjPb3imtSjSIBKoWrSe2pazI2yckWwc+dhFbH5W/s6QWKdfmKA=
+	t=1740409607; cv=none; b=S9yZvLgKv/pgY0TbdpWcO012RiXXi/3WCR/Qu0O0peXiqdJpRRMMvgoOwDb6yd4uZ3P5CF+lUxgB3TQjv5jzxB/v9WXy7wcAVI9akOaDww+TFASo19T/7yrLETtnyvcggRNeeck1wGUXRx5qmQT752BwvWn01Isxmnm/eiwNN2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740404194; c=relaxed/simple;
-	bh=VhFuW1YX+WDguNbx1Pqhdgwyq1wth1UVzs2bcOFTY6s=;
+	s=arc-20240116; t=1740409607; c=relaxed/simple;
+	bh=WhLrnvT/vsmJ4XaZG6h/I7B5d0//boKEBZZvxXFIVmg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gs8X8VW//irdQ4FqWcmlvjSqmbIxPQX4i2vbp3PumsdBPCQC/OMIBLTiNoTy88iLP4XA4fydK8FDDJD6Pa59gICoPINvAbeNQ7SvTDf88+fdHm7LX5U49416rSJXNgx46uvCOraOb2+daIM3ppojJQVbBFgAR7tmQ3DpnJwBeXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1qIi2DA; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=a43eBDdsz/B7K43RU6oeS3lpmnRcC8SfpTrkH726CaWAGxg15VEL5vTKL/CDmWBiOEdl4eRj+QeRfKAP7zntU3++oISqdV6GZyHakQLZsq0fYKXdfmxUgVTepjp01xkhK5fH2QbxzE0kZD/ocESE5O5EyaNwNdT57JrZN3yPPG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=muGMUS3N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1qIi2DA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DC5C4CED6;
-	Mon, 24 Feb 2025 13:36:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="muGMUS3N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90282C4CED6;
+	Mon, 24 Feb 2025 15:06:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740404193;
-	bh=VhFuW1YX+WDguNbx1Pqhdgwyq1wth1UVzs2bcOFTY6s=;
+	s=k20201202; t=1740409606;
+	bh=WhLrnvT/vsmJ4XaZG6h/I7B5d0//boKEBZZvxXFIVmg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G1qIi2DAwoQ/P1Re3G3WBaoT1KaYq+h3Yy0OxGNJWSsO8k5Nle1HFV3fXkLVu/7ol
-	 bRA4ewU6jH6usaAvxmTaUuBSmVSNpymyu4x1NqhaaYH1buNB9MpXaSFUfjdCZkESxW
-	 50IkRrzj1TRwCFjbO8EJUiNbwIcB0qNs3m9/uaTSJa8Ef09V2g3Vvp0cz9cCNmKd/g
-	 OfS0xiMSu4egIuoxXWwz9QziulS0mWQ5FVPvuq9qw2yQucnPyey5OaOlgRl9c/PL+f
-	 Em5/L/SKjsRvBpAMG7u68U98/CwIzi7gciO4gyYX9C+NsYuwpfEtBfdUHtvnb//cUB
-	 d7S9jQngIHsIw==
-Date: Mon, 24 Feb 2025 13:36:27 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Steev Klimaszewski <steev@kali.org>
-Cc: Alexey Klimov <alexey.klimov@linaro.org>,
-	srinivas.kandagatla@linaro.org, lgirdwood@gmail.com,
-	krzysztof.kozlowski@linaro.org, perex@perex.cz, tiwai@suse.com,
-	jdelvare@suse.com, linux@roeck-us.net, linux-sound@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: Implement temperature reading
- and hwmon
-Message-ID: <1a667486-590d-47c9-b23a-069e3d51cb54@sirena.org.uk>
-References: <20250221032141.1206902-1-alexey.klimov@linaro.org>
- <CAKXuJqj4zKfA4HNNcooG5Ffqi+EKQ1RvuzWndZd=htoatwszOw@mail.gmail.com>
+	b=muGMUS3NJF2CC5UKvyULzw2qmp/DAsCdyb6NZQnmDriT2tcIGzj/zEeZWhRQJz77f
+	 keQvzV8kMUdRRFQ4FaS4nsVRVLHgFEMQb/icDx7UgKn2C+28caLVsx9CBMeZf8vwoB
+	 9YsBwue7m7kcJnAV80NlmLf3V/BITF138JZ9DvThbW+d7i8EnWEls8uY1+MOi1u/WU
+	 k3bwQmNbSituCgKEUuV000LMredBagi3YQNo6je0H/I985yzAbhLZ2h0UObWiFmEpf
+	 PvdbG8ZZoaUqnvpCBvE06IHqH5/m22DRYC+XUUjlahYncAAbLEfLlBgnZ+HVbX6kKo
+	 1zgtkOuO9igpA==
+Date: Mon, 24 Feb 2025 09:06:45 -0600
+From: Rob Herring <robh@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, broonie@kernel.org,
+	conor@kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ir38060: Move & update dt
+ binding
+Message-ID: <20250224150645.GA2786847-robh@kernel.org>
+References: <20250221213837.1594057-1-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9sSdn6rh6EA/NDBo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKXuJqj4zKfA4HNNcooG5Ffqi+EKQ1RvuzWndZd=htoatwszOw@mail.gmail.com>
-X-Cookie: Phone call for chucky-pooh.
+In-Reply-To: <20250221213837.1594057-1-naresh.solanki@9elements.com>
 
+On Sat, Feb 22, 2025 at 03:08:34AM +0530, Naresh Solanki wrote:
+> Move dt binding under hwmon/pmbus & align accordingly.
+> 
+> Previously the DT binding was invalid & wouldn't work with pmbus driver.
+> Pmbus driver expects a regulator node & hence added the same.
 
---9sSdn6rh6EA/NDBo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This still doesn't really capture the previous discussion. With this, my 
+response is still 'fix the driver'. It seems there is something about 
+this is a common driver...
 
-On Fri, Feb 21, 2025 at 02:10:44PM -0600, Steev Klimaszewski wrote:
-> Hi Alexey,
->=20
-> On Thu, Feb 20, 2025 at 9:21=E2=80=AFPM Alexey Klimov <alexey.klimov@lina=
-ro.org> wrote:
-> >
-> > Read temperature of the amplifier and expose it via hwmon interface, wh=
-ich
-> > will be later used during calibration of speaker protection algorithms.
-> > The method is the same as for wsa884x and therefore this is based on
-> > Krzysztof Kozlowski's approach implemented in commit 6b99dc62d940 ("ASo=
-C:
-> > codecs: wsa884x: Implement temperature reading and hwmon").
-
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
-
---9sSdn6rh6EA/NDBo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme8ddsACgkQJNaLcl1U
-h9B8igf8DvVM3ehtTA/kt8PFdlYgC7fDa+W9NdQiGnL5dBWxZHkjW/K/+0BdZcLZ
-oUYwbPazrLOk/UNutZEPtmTeA/tsDICgJkRqo4JNr+ieJCYi5cx4ndnC41p9NaN+
-fBJmvIwp5fR3Xf7xqcNUYODzUV4up5UNcSrZ6XLbe7Gu9ARUDnbysW6xiDPrwT5f
-Vs4Dxbebd3DAc6AYaUY/238U7UMIs1grbd3n31BEDpHqARVEacRfrDs3T6HfJMcG
-QYifRzsro6uoZYLyqEQDQ8Arxz5mEXpJBMK1xUdtNPH3qElOLdhR0ilIJlGRmKIH
-fATfb92v3UosKMkBU1NWq2aU3ph4Gg==
-=v9FJ
------END PGP SIGNATURE-----
-
---9sSdn6rh6EA/NDBo--
+> 
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> ---
+> Changes in V2:
+> 1. Update commit message
+> ---
+>  .../hwmon/pmbus/infineon,ir38060.yaml         | 61 +++++++++++++++++++
+>  .../bindings/regulator/infineon,ir38060.yaml  | 45 --------------
+>  2 files changed, 61 insertions(+), 45 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+> new file mode 100644
+> index 000000000000..e1f683846a54
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,ir38060.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,ir38060.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon Buck Regulators with PMBUS interfaces
+> +
+> +maintainers:
+> +  - Not Me.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - infineon,ir38060
+> +      - infineon,ir38064
+> +      - infineon,ir38164
+> +      - infineon,ir38263
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  regulators:
+> +    type: object
+> +    description:
+> +      list of regulators provided by this controller.
+> +
+> +    properties:
+> +      vout:
+> +        $ref: /schemas/regulator/regulator.yaml#
+> +        type: object
+> +
+> +        unevaluatedProperties: false
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        regulator@34 {
+> +            compatible = "infineon,ir38060";
+> +            reg = <0x34>;
+> +
+> +            regulators {
+> +                vout {
+> +                    regulator-name = "p5v_aux";
+> +                    regulator-min-microvolt = <437500>;
+> +                    regulator-max-microvolt = <1387500>;
+> +                };
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml b/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> deleted file mode 100644
+> index e6ffbc2a2298..000000000000
+> --- a/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> -%YAML 1.2
+> ----
+> -$id: http://devicetree.org/schemas/regulator/infineon,ir38060.yaml#
+> -$schema: http://devicetree.org/meta-schemas/core.yaml#
+> -
+> -title: Infineon Buck Regulators with PMBUS interfaces
+> -
+> -maintainers:
+> -  - Not Me.
+> -
+> -allOf:
+> -  - $ref: regulator.yaml#
+> -
+> -properties:
+> -  compatible:
+> -    enum:
+> -      - infineon,ir38060
+> -      - infineon,ir38064
+> -      - infineon,ir38164
+> -      - infineon,ir38263
+> -
+> -  reg:
+> -    maxItems: 1
+> -
+> -required:
+> -  - compatible
+> -  - reg
+> -
+> -unevaluatedProperties: false
+> -
+> -examples:
+> -  - |
+> -    i2c {
+> -      #address-cells = <1>;
+> -      #size-cells = <0>;
+> -
+> -      regulator@34 {
+> -        compatible = "infineon,ir38060";
+> -        reg = <0x34>;
+> -
+> -        regulator-min-microvolt = <437500>;
+> -        regulator-max-microvolt = <1387500>;
+> -      };
+> -    };
+> 
+> base-commit: 8df0f002827e18632dcd986f7546c1abf1953a6f
+> -- 
+> 2.42.0
+> 
