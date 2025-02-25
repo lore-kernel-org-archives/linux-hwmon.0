@@ -1,59 +1,63 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77D626980F;
-	Tue, 25 Feb 2025 13:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACCD21ABC6;
+	Tue, 25 Feb 2025 19:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740488535; cv=none; b=q6vJqq9h9RA1wcI8JktU3CHRpNdveaV+MrGf5DTuEwywQhSGb38PRhZr7sPv7MPRJK8d/vjSCOJvcStMpe1QzxLv9fKElP15PSfnHzMxs8Z0NyRUgNRs9y3XQJz/Q2wRJglKwX8ryu9nYTdLqyFJAttsc4/tz/OOdISEBlLYZbA=
+	t=1740510719; cv=none; b=Q0LveKkwxz+x6bEdnWl5TUd6ESpF8fGimJDvL+MyW0doVNbPXWfc1FdkBhnruPivLceB/bunR/Qve9HnZwh62qsUNOv8yJH3bZSz7gpMYQl908Igi9r+t2JP1iHCzAu4avZcFXpeFHUzr0emUkFMBqd/5YaDvx/137Ix9Q81bZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740488535; c=relaxed/simple;
-	bh=cw4Sf8/z3PQjcTvY8TiUhKwNXxp/XRVM8wT6iEU8bsM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Uw/iVWNtud0iZxbH5SDA2VIqUBViVVx9tvQRiDt5Mt6lQJB92s5vkPDCgKKyIWuuqOpNv42AD4zzJSsmi9UAo5By/S3XpVu3aUPEYDk2lvXtuHp8k44oz9i0j2Z4d/FSgzHHNXdVy/A46aw8irMDbSJ0jp/cpenDsjzMjfDZLD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=EiwBCsS3; arc=none smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	s=arc-20240116; t=1740510719; c=relaxed/simple;
+	bh=MUX52mLrc9tAzehVSU27yGUahedRxwTwQS/B41HkVUA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jGkWug2sv7mUcDSPjZBVmFHKrdMGWdzkY9vSkZ1dpaDXFhH50anpxVf3YnX2KBluxZjTL/bPacbyjU21SWl4BHFPZ4XV+938cptnIUEcyoeVrV54xUlxnMBOfiYWHdxYLQCBQzpldgivzJw51YNTlkQy892qJZBoqRJMnruQe4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcdO49Dl; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="EiwBCsS3"
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51PAHLPd032310;
-	Tue, 25 Feb 2025 08:01:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=ep+wu
-	zrL130MidAt9/Q5e/9uJw+gYh41pQb4FipikFg=; b=EiwBCsS3XjUvLiGlKIO13
-	Mn4y63SF/ivvJO0CgOVvxY0c03eOI6+oD5Ge7sZWrNKFzxATaFAXpLuPyriQvl2C
-	MA7gLKz+WMi9TyT6CO1fHrslEx8A1LGGenOHd1ThL/5Vt7jRBFfKtym8IKCcFwu7
-	s/d0FqwoG2r67JcYBvSivBDrAysTYpoJJ9OFG99uTspekxlRQXYqDz01WG65v7GS
-	AwXr90DFEGcLmPcJlhhKXjNj1XQdq9cGuMrRLxwDEL7QsK7xyOx/OD5jLE1p0sHj
-	RTFKhTJX4oGPTLQufkvKw+Y+1seSp2ZWmIcHPG0iRZGEHi/ie/b8m4AggGw20PM6
-	g==
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 44yccapswm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 25 Feb 2025 08:01:57 -0500 (EST)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 51PD1u2j015513
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 25 Feb 2025 08:01:56 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 25 Feb 2025 08:01:56 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 25 Feb 2025 08:01:56 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 25 Feb 2025 08:01:56 -0500
-Received: from CENCARNA-L02.ad.analog.com (CENCARNA-L02.ad.analog.com [10.117.116.88])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 51PD1VXV020999;
-	Tue, 25 Feb 2025 08:01:48 -0500
-From: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Date: Tue, 25 Feb 2025 21:01:14 +0800
-Subject: [PATCH v2 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcdO49Dl"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ab7430e27b2so936158366b.3;
+        Tue, 25 Feb 2025 11:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740510715; x=1741115515; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNTMaZPxHxVjFYDVf/mtPKH9G4p1SDbuEUdw5G3mAak=;
+        b=RcdO49Dluldk+/U2kvPpykyNMPWJ0+JPXYos7Lnh35XEsCW5IqnaVyhmFooWHHEvG1
+         w+uBoyQ4FWHppGRk5HmKhjjYG+320H7QcBTu3zHWMjm8APOB+TkQo5mbQ9cqrr421kpG
+         Fk8GFmadI0jFis89mHljgfifONultjUIFf2MElnEe1uhSG5/rtxvlAGTJE1BmYp+mJzb
+         SQM/1Ia5HKsG5+koH4H20n3SOuM3xaEcgpWkYvBPvbYpbdeyudWm6gpuRL2VRG2H29mQ
+         v5PA1HPh3r088fqkbjMl+x5Ne9aa03KjfjzAkDdXqZXZYgCYqXwBmx5+erb7DCFDJ91t
+         DhAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740510715; x=1741115515;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SNTMaZPxHxVjFYDVf/mtPKH9G4p1SDbuEUdw5G3mAak=;
+        b=JggnC5XpM174Nd1CrJWi21T4yfT5Me4/m10UwxPYJGBBZ3bXMNxl4+ebneMYW3H603
+         4ny46ayPTs4XV5xrDxrbps/DLXwX3pr+rLtsGvCiG2UEk3vTGFqfEslEWvYijFP2M71V
+         uDq8sYPc4W7lFfrMBphaMDgbC8Ch6rUSwTxNRINMAG9YFqLYd6+LJpiGJoYpWje0pp0M
+         eWqiM2lvwR5XI4Rt4I1VYlR7wjNmeRhy0rgElyA7cq5lovf/1TjSRTH7h5MW/KtuH2vZ
+         5KHgCMc5G/F5Xz183vblYAMQFpkrw2rIaXu36cv3SP52cGL206iqUWLnPSHdJb7HpN4F
+         uVbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnPjr7i+GwrR6lfBVdC8dkmrRKECG+tCszTzQ8PRAOYAoM5teJQ5lbWWtfMZmX1SNTPIIQjzHFOyU=@vger.kernel.org, AJvYcCVuXyKaculkcYqHWFK2W6Ugp8rHLRtpvcahlF6msC7tmZ7bBPS9WaRT9EZvSV/vY7npOU5ytjZqgUG+Iq4A@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbKsXtqNIL34g03mGiMA7MxSCLMiRqYkILNKiojxmPNjjkel0+
+	JDzM+XChyWbhK2lMPO8OBbiGzLMWHW9kUIKaIhKTE0mkNjgtZvtQBx3U/dK6
+X-Gm-Gg: ASbGncuIJV/E8jwXjdAPT1OYdu0IX3Gic5CX6Gy2PiEn33FcwzfybcnAlEAr2nPGyb/
+	vVyhXLmQuJgCFfWjjT++4+8J370M96tYDdLC0GMZyfpy45MRTmQ9mBEJqtl7VpMP8+iOhkhGVrq
+	GmLOWV5inD89zL0UGxnfojVGr3+f72aFxmpb1IEhJfS0Se03Dp2wXXmJzKuXt5S70vDgPKNrE9V
+	kIbM0rVNtyO1RMbsgmkRU1cQ4RLVU2DXbWIv5b4sS/Si+jsD4OROTs39Eisq1n3gt3Xhh142+4d
+	o3UVxJuHOgOqewBUj8/bQwJ4
+X-Google-Smtp-Source: AGHT+IEqmZ/zw/2RYAb/i5OhbSJ5JrlYwM3gww/+dRFqbYgXrwVkj6qJ6V8F3Z30APjy+N/Ji+N1ew==
+X-Received: by 2002:a17:906:3296:b0:abb:b1ae:173b with SMTP id a640c23a62f3a-abc0d994e4emr1665532466b.11.1740510714491;
+        Tue, 25 Feb 2025 11:11:54 -0800 (PST)
+Received: from [127.0.1.1] ([46.53.242.22])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-abed2010d58sm187491366b.88.2025.02.25.11.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 11:11:54 -0800 (PST)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Date: Tue, 25 Feb 2025 22:11:46 +0300
+Subject: [PATCH] hwmon: (max77705) add initial support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -62,329 +66,423 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250225-upstream-lt3074-v2-2-18ad10ba542e@analog.com>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
-In-Reply-To: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        "Guenter Roeck" <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
-        "Delphine CC Chiu" <Delphine_CC_Chiu@Wiwynn.com>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        Cedric Encarnacion
-	<cedricjustine.encarnacion@analog.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740488492; l=9737;
- i=cedricjustine.encarnacion@analog.com; s=20250124;
- h=from:subject:message-id; bh=cw4Sf8/z3PQjcTvY8TiUhKwNXxp/XRVM8wT6iEU8bsM=;
- b=rQGG/Gr8f0o8A1DgOM6QjDIS7kp/18Jj/mHf9B9NjEK5huvIlXstdzLVtrFNoIlHH22fexQ16
- WcEMjxTNKGKB2e831ak8PMa6/hX74rsfXl0hU/Xah/DAtC/vnaFKUH0
-X-Developer-Key: i=cedricjustine.encarnacion@analog.com; a=ed25519;
- pk=ZsngY3B4sfltPVR5j8+IO2Sr8Db8Ck+fVCs+Qta+Wlc=
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: Y55xhiQdnnys8S8gsSil5yPSVtajyXN5
-X-Authority-Analysis: v=2.4 cv=SPa4VPvH c=1 sm=1 tr=0 ts=67bdbf45 cx=c_pps a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17 a=IkcTkHD0fZMA:10 a=T2h4t0Lz3GQA:10 a=gAnH3GRIAAAA:8 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=YXy7gRrCG489l9pt98cA:9
- a=QEXdDO2ut3YA:10 a=feVPlwq_TaIA:10 a=tI3wEBspppMA:10 a=oVHKYsEdi7-vN-J5QA_j:22
-X-Proofpoint-ORIG-GUID: Y55xhiQdnnys8S8gsSil5yPSVtajyXN5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-25_04,2025-02-25_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2502250090
+Message-Id: <20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPEVvmcC/y3NQQrCMBCF4auUWTuQpISAVxEXIZ3qgCZxJi2F0
+ rs3qMvvLd6/g5IwKVyHHYRWVi65w14GSM+YH4Q8dYMzzhvrRuTMjeMLdam1SMO5CL7jFkIwHpW
+ yFlGMk7HBxGQpeehXVWjm7Zu53X8W+iy91v7jcZwY+tbIiwAAAA==
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740510713; l=11128;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=MUX52mLrc9tAzehVSU27yGUahedRxwTwQS/B41HkVUA=;
+ b=wSbpoMAXVidnW1lel99HXq7bllZF+eNL2/kUHW7joXzoTo84MU1HrCQpF+pqkgl1lGn35eYRz
+ 5t9AooMYg+cD+1PqRQYGXFJBOch/XwVDjdCgZ3hIQw1whpWV/CQyViE
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Add hardware monitoring and regulator support for LT3074. The LT3074 is an
-ultrafast, ultralow noise 3A, 5.5V dropout linear regulator. The PMBus
-serial interface allows telemetry for input/output voltage, bias voltage,
-output current, and die temperature.
+Add support for max77705 hwmon. Includes charger input, system bus, and
+vbyp measurements.
 
-Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/lt3074.rst |  72 ++++++++++++++++++++++++
- MAINTAINERS                    |   2 +
- drivers/hwmon/pmbus/Kconfig    |  18 ++++++
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/lt3074.c   | 122 +++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 216 insertions(+)
+Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
+It includes charger and fuel gauge blocks, and is capable of measuring
+charger input current, system bus volatage and current, and bypass
+voltage.
+
+This patch add support for mentioned measurements.
+---
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/max77705.rst |  39 +++++++++++++++++++++++++++++++++++++++
+ MAINTAINERS                      |   7 +++++++
+ drivers/hwmon/Kconfig            |  10 ++++++++++
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/max77705-hwmon.c   | 260 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 318 insertions(+)
 
 diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 874f8fd2632520d3be489154ddd0eb7ca24fc405..54b14f571db4d3b3e0b74a12b41cf8cf0d6fe8a7 100644
+index 874f8fd26325..444c7865f74f 100644
 --- a/Documentation/hwmon/index.rst
 +++ b/Documentation/hwmon/index.rst
-@@ -122,6 +122,7 @@ Hardware Monitoring Kernel Drivers
-    lm95234
-    lm95245
-    lochnagar
-+   lt3074
-    lt7182s
-    ltc2992
-    ltc2945
-diff --git a/Documentation/hwmon/lt3074.rst b/Documentation/hwmon/lt3074.rst
+@@ -158,6 +158,7 @@ Hardware Monitoring Kernel Drivers
+    max6639
+    max6650
+    max6697
++   max77705
+    max8688
+    mc13783-adc
+    mc34vr500
+diff --git a/Documentation/hwmon/max77705.rst b/Documentation/hwmon/max77705.rst
 new file mode 100644
-index 0000000000000000000000000000000000000000..234f369153cf1374b8c7eaa2ed93358ac141fdf9
+index 000000000000..9037226c50b9
 --- /dev/null
-+++ b/Documentation/hwmon/lt3074.rst
-@@ -0,0 +1,72 @@
++++ b/Documentation/hwmon/max77705.rst
+@@ -0,0 +1,39 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+Kernel driver lt3074
++Kernel driver max77705
 +====================
 +
 +Supported chips:
 +
-+  * Analog Devices LT3074
++  * Maxim Integrated MAX77705
 +
-+    Prefix: 'lt3074'
++    Prefix: 'max77705'
 +
-+    Addresses scanned: -
++    Addresses scanned: none
 +
-+    Datasheet: https://www.analog.com/en/products/lt3074.html
++    Datasheet: Not available
 +
-+Authors: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-+
++Authors:
++      - Dzmitry Sankouski <dsankouski@gmail.com>
 +
 +Description
 +-----------
 +
-+This driver supports hardware monitoring for Analog Devices LT3074 Linear
-+Regulator with PMBus interface.
++The MAX77705 PMIC provides current and voltage measurements besides fuelgauge:
++- chip input current
++- system bus current and voltage
++- VBYP voltage
 +
-+The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
-+response linear regulator with PMBus serial interface. PMBus telemetry
-+feature provides information regarding the output voltage and current,
-+input voltage, bias voltage and die temperature.
++Sysfs Attributes
++----------------
 +
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate
-+the devices explicitly. Please see Documentation/i2c/instantiating-devices.rst
-+for details.
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+Sysfs entries
-+-------------
-+
-+======================= =======================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage
-+in1_max			Input overvoltage warning limit
-+in1_max_alarm		Input overvoltage warning status
-+in1_min			Input undervoltage warning limit
-+in1_min_alarm		Input undervoltage warning status
-+in2_label		"vmon"
-+in2_input		Measured bias voltage
-+in2_max			Bias overvoltage warning limit
-+in2_min			Bias undervoltage warning limit
-+in3_label		"vout1"
-+in3_input		Measured output voltage
-+in3_max			Output overvoltage warning limit
-+in3_max_alarm		Output overvoltage warning status
-+in3_min			Output undervoltage warning limit
-+in3_min_alarm		Output undervoltage warning status
-+curr1_label		"iout1"
-+curr1_input		Measured output current.
-+curr1_crit		Output overcurrent fault limit
-+curr1_crit_alarm	Output overcurrent fault status
-+temp1_input		Measured temperature
-+temp1_max		Maximum temperature limit
-+temp1_max_alarm		Overtemperature warning status
-+======================= =======================================================
++================= ========================================
++in1_label         "vbyp"
++in1_input         Measured chip vbyp voltage
++in2_label         "vsys"
++in2_input         Measured chip system bus voltage
++curr1_label       "iin"
++curr1_input       Measured chip input current.
++curr2_label       "isys"
++curr2_input       Measured chip system bus current.
++================= ========================================
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 4a59ee6a03919af6a48717a0ddddabc7241a9e63..be9372cf020c246586646ad240a0c0c7880800f1 100644
+index f076360ce3c6..b6e970731928 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -13693,6 +13693,8 @@ L:	linux-hwmon@vger.kernel.org
- S:	Supported
- W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-+F:	Documentation/hwmon/lt3074.rst
-+F:	drivers/hwmon/pmbus/lt3074.c
+@@ -18025,6 +18025,13 @@ S:	Maintained
+ F:	Documentation/hwmon/pc87427.rst
+ F:	drivers/hwmon/pc87427.c
  
- LTC1660 DAC DRIVER
- M:	Marcus Folkesson <marcus.folkesson@gmail.com>
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 675b0d4703d87c9d5654489d0d770661ff0dba11..3edad8d7476cf78f4c2dfc94294013b33f2d8cae 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -209,6 +209,24 @@ config SENSORS_LM25066_REGULATOR
- 	  If you say yes here you get regulator support for National
- 	  Semiconductor LM25066, LM5064, and LM5066.
++MAX77705 HARDWARE MONITORING DRIVER
++M:	Dzmitry Sankouski <dsankouski@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/max77705.rst
++F:	drivers/hwmon/max77705-hwmon.c
++
+ PCA9532 LED DRIVER
+ M:	Riku Voipio <riku.voipio@iki.fi>
+ S:	Maintained
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index f114d0c55d78..17b2e1b535eb 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1287,6 +1287,16 @@ config SENSORS_MAX31790
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called max31790.
  
-+config SENSORS_LT3074
-+	tristate "Analog Devices LT3074"
++config SENSORS_MAX77705
++	tristate "MAX77705 current and voltage sensor"
++	depends on I2C
++	select REGMAP_I2C
 +	help
-+	  If you say yes here you get hardware monitoring support for Analog
-+	  Devices LT3074.
++	  If you say yes here you get support for MAX77705 sensors connected with I2C.
 +
-+	  This driver can also be built as a module. If so, the module will
-+	  be called lt3074.
++	  This driver can also be built as a module. If so, the module
++	  will be called max77705-hwmon.
 +
-+config SENSORS_LT3074_REGULATOR
-+	tristate "Regulator support for LT3074"
-+	depends on SENSORS_LT3074 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for Analog Devices
-+	  LT3074. The LT3074 is a low voltage, ultralow noise, high PSRR,
-+	  dropout linear regulator. The device supplies up to 3A with a
-+	  typical dropout voltage of 45mV.
-+
- config SENSORS_LT7182S
- 	tristate "Analog Devices LT7182S"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index c7eb7739b7f861c5c105582b57ad16937649d4cf..5ef388c105811e73d5ea943648fb2f7a7ca59010 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -22,6 +22,7 @@ obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
- obj-$(CONFIG_SENSORS_IRPS5401)	+= irps5401.o
- obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
-+obj-$(CONFIG_SENSORS_LT3074)	+= lt3074.o
- obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-diff --git a/drivers/hwmon/pmbus/lt3074.c b/drivers/hwmon/pmbus/lt3074.c
+ config SENSORS_MC34VR500
+ 	tristate "NXP MC34VR500 hardware monitoring driver"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index b7ef0f0562d3..ff69f45eca50 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -159,6 +159,7 @@ obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
+ obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
+ obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
+ obj-$(CONFIG_MAX31827) += max31827.o
++obj-$(CONFIG_SENSORS_MAX77705) += max77705-hwmon.o
+ obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
+ obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
+ obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
+diff --git a/drivers/hwmon/max77705-hwmon.c b/drivers/hwmon/max77705-hwmon.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..a84bc5bddee7c4ae646b4fc7c5a57ed1eb233ab8
+index 000000000000..3218e9f5a726
 --- /dev/null
-+++ b/drivers/hwmon/pmbus/lt3074.c
-@@ -0,0 +1,122 @@
++++ b/drivers/hwmon/max77705-hwmon.c
+@@ -0,0 +1,260 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Hardware monitoring driver for Analog Devices LT3074
++ *  MAX77705 voltage and current hwmon driver.
 + *
-+ * Copyright (C) 2025 Analog Devices, Inc.
++ *  Copyright (C) 2025 Dzmitry Sankouski <dsankouski@gmail.com>
 + */
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
++
 +#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/platform_device.h>
++#include <linux/mfd/max77705-private.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/regmap.h>
++#include <linux/jiffies.h>
++#include <linux/slab.h>
++#include <linux/i2c.h>
++#include <linux/err.h>
 +
-+#include "pmbus.h"
-+
-+#define LT3074_MFR_READ_VBIAS			0xc6
-+#define LT3074_MFR_BIAS_OV_WARN_LIMIT		0xc7
-+#define LT3074_MFR_BIAS_UV_WARN_LIMIT		0xc8
-+#define LT3074_MFR_SPECIAL_ID			0xe7
-+
-+#define LT3074_SPECIAL_ID_VALUE			0x1c1d
-+
-+static const struct regulator_desc __maybe_unused lt3074_reg_desc[] = {
-+	PMBUS_REGULATOR_ONE("vout"),
++struct max77705_hwmon {
++	struct regmap *regmap;
 +};
 +
-+static int lt3074_read_word_data(struct i2c_client *client, int page,
-+				 int phase, int reg)
-+{
-+	switch (reg) {
-+	case PMBUS_VIRT_READ_VMON:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_READ_VBIAS);
-+	case PMBUS_VIRT_VMON_UV_WARN_LIMIT:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_BIAS_UV_WARN_LIMIT);
-+	case PMBUS_VIRT_VMON_OV_WARN_LIMIT:
-+		return pmbus_read_word_data(client, page, phase,
-+					   LT3074_MFR_BIAS_OV_WARN_LIMIT);
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static int lt3074_write_word_data(struct i2c_client *client, int page,
-+				  int reg, u16 word)
-+{
-+	switch (reg) {
-+	case PMBUS_VIRT_VMON_UV_WARN_LIMIT:
-+		return pmbus_write_word_data(client, 0,
-+					    LT3074_MFR_BIAS_UV_WARN_LIMIT,
-+					    word);
-+	case PMBUS_VIRT_VMON_OV_WARN_LIMIT:
-+		return pmbus_write_word_data(client, 0,
-+					    LT3074_MFR_BIAS_OV_WARN_LIMIT,
-+					    word);
-+	default:
-+		return -ENODATA;
-+	}
-+}
-+
-+static struct pmbus_driver_info lt3074_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		   PMBUS_HAVE_TEMP | PMBUS_HAVE_VMON |
-+		   PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
-+		   PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-+	.read_word_data = lt3074_read_word_data,
-+	.write_word_data = lt3074_write_word_data,
-+#if IS_ENABLED(CONFIG_SENSORS_LT3074_REGULATOR)
-+	.num_regulators = 1,
-+	.reg_desc = lt3074_reg_desc,
-+#endif
++struct channel_desc {
++	u8 reg;
++	u8 avg_reg;
++	const char *const label;
++	// register resolution. nano Volts for voltage, nano Amperes for current
++	u64 resolution;
 +};
 +
-+static int lt3074_probe(struct i2c_client *client)
-+{
-+	int ret;
-+	struct device *dev = &client->dev;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_READ_WORD_DATA))
-+		return -ENODEV;
-+
-+	ret = i2c_smbus_read_word_data(client, LT3074_MFR_SPECIAL_ID);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to read ID\n");
-+
-+	if (ret != LT3074_SPECIAL_ID_VALUE)
-+		return dev_err_probe(dev, -ENODEV, "ID mismatch\n");
-+
-+	return pmbus_do_probe(client, &lt3074_info);
-+}
-+
-+static const struct i2c_device_id lt3074_id[] = {
-+	{ "lt3074", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, lt3074_id);
-+
-+static const struct of_device_id __maybe_unused lt3074_of_match[] = {
-+	{ .compatible = "adi,lt3074" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, lt3074_of_match);
-+
-+static struct i2c_driver lt3074_driver = {
-+	.driver = {
-+		.name = "lt3074",
-+		.of_match_table = of_match_ptr(lt3074_of_match),
++static const struct channel_desc current_channel_desc[] = {
++	{
++		.reg = IIN_REG,
++		.label = "IIN_REG",
++		.resolution = 125000
 +	},
-+	.probe = lt3074_probe,
-+	.id_table = lt3074_id,
++	{
++		.reg = ISYS_REG,
++		.avg_reg = AVGISYS_REG,
++		.label = "ISYS_REG",
++		.resolution = 312500
++	}
 +};
-+module_i2c_driver(lt3074_driver);
 +
-+MODULE_AUTHOR("Cedric Encarnacion <cedricjustine.encarnacion@analog.com>");
-+MODULE_DESCRIPTION("PMBus driver for Analog Devices LT3074");
++static const struct channel_desc voltage_channel_desc[] = {
++	{
++		.reg = VBYP_REG,
++		.label = "VBYP_REG",
++		.resolution = 427246
++	},
++	{
++		.reg = VSYS_REG,
++		.label = "VSYS_REG",
++		.resolution = 156250
++	}
++};
++
++static const struct regmap_range max77705_hwmon_readable_ranges[] = {
++	regmap_reg_range(AVGISYS_REG,	AVGISYS_REG + 1),
++	regmap_reg_range(IIN_REG,	IIN_REG + 1),
++	regmap_reg_range(ISYS_REG,	ISYS_REG + 1),
++	regmap_reg_range(VBYP_REG,	VBYP_REG + 1),
++	regmap_reg_range(VSYS_REG,	VSYS_REG + 1),
++};
++
++static const struct regmap_access_table max77705_hwmon_readable_table = {
++	.yes_ranges = max77705_hwmon_readable_ranges,
++	.n_yes_ranges = ARRAY_SIZE(max77705_hwmon_readable_ranges),
++};
++
++static const struct regmap_config max77705_hwmon_regmap_config = {
++	.name = "max77705_hwmon",
++	.reg_bits = 8,
++	.val_bits = 16,
++	.rd_table = &max77705_hwmon_readable_table,
++	.max_register = MAX77705_FG_END,
++	.val_format_endian = REGMAP_ENDIAN_LITTLE
++};
++
++static umode_t max77705_is_visible(const void *data,
++		enum hwmon_sensor_types type,
++		u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_in:
++		if (channel >= ARRAY_SIZE(voltage_channel_desc))
++			return 0;
++
++		switch (attr) {
++		case hwmon_in_input:
++		case hwmon_in_label:
++			return 0444;
++		default:
++			break;
++		}
++		break;
++	case hwmon_curr:
++		if (channel >= ARRAY_SIZE(current_channel_desc))
++			return 0;
++
++		switch (attr) {
++		case hwmon_curr_input:
++		case hwmon_in_label:
++			return 0444;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++	return 0;
++}
++
++static int max77705_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
++		int channel, const char **buf)
++{
++	switch (type) {
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_in_label:
++			*buf = current_channel_desc[channel].label;
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_label:
++			*buf = voltage_channel_desc[channel].label;
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int max77705_read(struct device *dev, enum hwmon_sensor_types type,
++		u32 attr, int channel, long *val)
++{
++	struct max77705_hwmon *drv_data = dev_get_drvdata(dev);
++	struct regmap *regmap = drv_data->regmap;
++	u8 reg;
++	u32 regval;
++	u64 res;
++	int ret;
++
++	switch (type) {
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			reg = current_channel_desc[channel].reg;
++			res = current_channel_desc[channel].resolution;
++			ret = regmap_read(regmap, reg, &regval);
++			if (ret < 0)
++				return ret;
++			*val = mult_frac((long) regval, res, 1000000);
++			return 0;
++		case hwmon_curr_average:
++			reg = current_channel_desc[channel].avg_reg;
++			res = current_channel_desc[channel].resolution;
++			if (reg) {
++				ret = regmap_read(regmap, reg, &regval);
++				if (ret < 0)
++					return ret;
++				*val = mult_frac((long) regval, res, 1000000);
++			}
++			return 0;
++
++		default:
++			return -EOPNOTSUPP;
++		}
++
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			reg = voltage_channel_desc[channel].reg;
++			res = voltage_channel_desc[channel].resolution;
++			ret = regmap_read(regmap, reg, &regval);
++			if (ret < 0)
++				return ret;
++			*val = mult_frac((long) regval, res, 1000000);
++			return 0;
++		default:
++			return -EOPNOTSUPP;
++		}
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static const struct hwmon_ops max77705_hwmon_ops = {
++	.is_visible = max77705_is_visible,
++	.read = max77705_read,
++	.read_string = max77705_read_string,
++};
++
++static const struct hwmon_channel_info *max77705_info[] = {
++	HWMON_CHANNEL_INFO(in,
++			HWMON_I_INPUT | HWMON_I_LABEL,
++			HWMON_I_INPUT | HWMON_I_LABEL
++			),
++	HWMON_CHANNEL_INFO(curr,
++			HWMON_C_INPUT | HWMON_C_AVERAGE | HWMON_C_LABEL,
++			HWMON_C_INPUT | HWMON_C_LABEL
++			),
++	NULL
++};
++
++static const struct hwmon_chip_info max77705_chip_info = {
++	.ops = &max77705_hwmon_ops,
++	.info = max77705_info,
++};
++
++static int max77705_hwmon_probe(struct platform_device *pdev)
++{
++	struct i2c_client *i2c;
++	struct device *hwmon_dev;
++	struct max77705_hwmon *drv_data;
++
++	drv_data = devm_kzalloc(&pdev->dev, sizeof(struct max77705_hwmon),
++			GFP_KERNEL);
++	if (!drv_data)
++		return -ENOMEM;
++
++	i2c = to_i2c_client(pdev->dev.parent);
++	drv_data->regmap = devm_regmap_init_i2c(i2c, &max77705_hwmon_regmap_config);
++	if (IS_ERR(drv_data->regmap))
++		return dev_err_probe(&pdev->dev, PTR_ERR(drv_data->regmap),
++				"Failed to register max77705 hwmon regmap\n");
++
++	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "max77705", drv_data,
++			&max77705_chip_info, NULL);
++	if (IS_ERR(hwmon_dev)) {
++		return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev),
++				"Unable to register hwmon device\n");
++	}
++
++	return 0;
++};
++
++static struct platform_driver max77705_hwmon_driver = {
++	.driver = {
++		.name = "max77705-hwmon",
++	},
++	.probe = max77705_hwmon_probe,
++};
++
++module_platform_driver(max77705_hwmon_driver);
++
++MODULE_AUTHOR("Dzmitry Sankouski <dsankouski@gmail.com>");
++MODULE_DESCRIPTION("MAX77705 monitor driver");
 +MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
++
 
+---
+base-commit: d4b0fd87ff0d4338b259dc79b2b3c6f7e70e8afa
+change-id: 20250123-initial-support-for-max77705-sensors-ad0170ac1ec5
+
+Best regards,
 -- 
-2.39.5
+Dzmitry Sankouski <dsankouski@gmail.com>
 
