@@ -1,181 +1,233 @@
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazolkn19011027.outbound.protection.outlook.com [52.103.43.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EBCEEA9;
-	Tue, 25 Feb 2025 04:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.43.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740457518; cv=fail; b=RAyVRE7wjrlSEbzyUDdzmlh3qWNkZiOu1DXxI0rlKzcN1RbvcvkosC84oGk/cbUz2db2M58nPNipq5t+8H3k//fJNPRwQrk94ymxtotCk+c3B1U0d7pRFVoC9i6Rgr9daEEK771vixoGfQ5kwyiteCWWXJIexdAF2q53VbuGYqY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740457518; c=relaxed/simple;
-	bh=AX77UlsrEg+ZxN7un4sVt/+vTpblCt96AQWkc0GY7MU=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=l1V7O7uSL9/IXDUVXEay46GWwQFVpUc6ugAzPGHJZTkvyG9qX5mHCXXAtKdXaA93V0L5L/rdcHA5PWOmX/ntDZF3qLOoYcv4tapa0Ve1jKuqXGwo6h+OxWZdfkENwtZXRKyTnugFyk9iebNEAlrJj9nEdyElJ6JAjUZwhLNeb80=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=UcnN/8t7; arc=fail smtp.client-ip=52.103.43.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADCC25E473;
+	Tue, 25 Feb 2025 08:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740471424; cv=none; b=fUNWX5PTd2TKH3GToBIgi6GK/XRcin6D+d6KBre2fpPvglrgqExWamQwSBCmbOhbifW9QEBZK8l4Nw5lwaNd5yZTICF0AAWLGgbfLckBFcjVJt3ztTAw9BYCC8WzBchxCwEUX+ixzELUgQEdqAi4AUHxSIRoYhAsktkbw+DSrjA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740471424; c=relaxed/simple;
+	bh=BfekZDsUNdvKtB9OBR1tH04nEjz7Dci5U+bZ0eYDUZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=og5CB6jZX/gPuYfkv0geUTV6jICJwiu2SDfk9iOkuWNn/qpIGeauqXvnwYzTvNvdkjd/Q3fD/bijwbr5Nn9y/sFXD05GrkYCPT7RNeZl4LGqyFFkkw702wf4pEjS414vPn18JxLLULFY8mTdSBjqFWBufulf4gLGJ5ELEuQpgdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UjPO8MY4; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="UcnN/8t7"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YdKcXqqvjVi2ejyK+lDUR0Vo05MSKjNxvwaBH5t5gYnnsCPoqsW43AbYF1zsu/T/zrzaGPl3xpTH9PFKxgQoeSHHkErIZYJr8sjo0QTtg2R1KI+JwnHbC+hjo0rhE27+rsp4ABV+FLbx57zMiCI670OKcUFnpuqvOQfKsfwLUT6kWJKKGjkzkpyMMx4MkL5QSB9t6ersU+7ZKENR8T9uvqvPSDVNTJ/LjLdWhA172lff1ioGizI77L9tG7e1h2y1Eu5QfLYsjroaHqWs9SVilS6e5WwEADOGyjBVYZ4YCXc6d9M9GcY6pepCWZj397s03gyy3x9+xNEu57l1yua8mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9b5SmgOeYNihswM0NVFd7PxRc8zfPUHjUt9fli4wlIA=;
- b=FGu6cfZWXA+PU8VSUr06694bl2Qw6efH6j4bSavtc9aUaUotbjEbZZVBULFOXuXJbQ6RHvflPLETF+oS9cmud6B9gYqJW0ReNr9S6OetJCN1djceY6xglSbmHznNd4O6ST1/C5ySERMuxUf+c25YCNJO4bkW+XGKQ4vnfhOA5MNaL/AD84/TgNhw7eaXkqqbAqvMRfqT5QTODwFbJPGpMp5djPdgrxzQ1ww9DPe+uffKzGGaml1q5gYFZZUU/jnikOJhVMbeBMfZPVSYBDgIr7ZO9j6+R2srKFvYQpTV2MLwbKeb65DnHiyauqeiZtxazhbMLLV10A0qCEWj8k1eOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9b5SmgOeYNihswM0NVFd7PxRc8zfPUHjUt9fli4wlIA=;
- b=UcnN/8t7o16LzLC8knNb0d8Ryikjnz3sRIJVArHp5p+V/0H6Wyh5w1IYAO5k5JbolRJoHM1rkAcgH+wfCjfmxkNOEowf7SCcM1/Ha7sGjpDmaq4SqVix695p77AKNNyvbfEsp1qvKlaN85D/5LaapveTLw8w4ENSVNUnzy/osh76Q2assu/GOodkZQ3TTiERw6iyRTXjRnKWJVcnDU9Cocm03k2M2HGk6LTkayVwdrWYEuBjKaed++q76U+r/DW4fThPdQ8OM2BSOye9t4dsinqm4yTwbqhs/Qwz8310uBJi9Nt+dtF0bF3rBC5XZ42yk07Qhw+ITnDSWZbRhWcWOg==
-Received: from TYCPR01MB8437.jpnprd01.prod.outlook.com (2603:1096:400:156::5)
- by TYWPR01MB9575.jpnprd01.prod.outlook.com (2603:1096:400:1a5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.20; Tue, 25 Feb
- 2025 04:25:13 +0000
-Received: from TYCPR01MB8437.jpnprd01.prod.outlook.com
- ([fe80::83e7:751f:f3af:768f]) by TYCPR01MB8437.jpnprd01.prod.outlook.com
- ([fe80::83e7:751f:f3af:768f%5]) with mapi id 15.20.8466.016; Tue, 25 Feb 2025
- 04:25:13 +0000
-From: Shengyu Qu <wiagn233@outlook.com>
-To: jdelvare@suse.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UjPO8MY4"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22128b7d587so101888345ad.3;
+        Tue, 25 Feb 2025 00:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740471421; x=1741076221; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZ4pVbM1DCtU59HnFcpqSu0S4laqWHZt11qRCqs8PiE=;
+        b=UjPO8MY42cq4NW7ZVBdjFhfJbpumqAEMa4s+8NdFoZbtp9e6mEzx+m905l5VjxTVtM
+         s/zllCbz6z8V5iGz6kQLs7aW3OGq3VGwOq08f3JGH4POH1Zq81VeSgSEvxlZYuRaJXrk
+         lMxuNosuXGDtYSTWzAyB49iZhxrCasjyRs2QbyUY5L1PcxPM1HvGGgNXIJp9H0FUS8/4
+         EhI8BM6SEmjrcvt12eTkWfhhGGXIPvWmPCnv7SFnVjLvk8F7oE9oEZXQ2NZnDQqBDn87
+         7n3kEPHW/2zkH7l8/18aBLY0w9PqDhYbDrn7SVU2PEnlLG7s2wVHA5Kri/iRzWEe/+aP
+         OZOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740471421; x=1741076221;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZ4pVbM1DCtU59HnFcpqSu0S4laqWHZt11qRCqs8PiE=;
+        b=ctaTEhuXKJCIC/hLZ36YoEpQ0ZI+2z5c9J7A06XaJ1+ghROqG5Kyrza/g5rQgUE956
+         ELTYePZ9MFQ68/rJJb2vrUr0xZRsSb6rYdICzdAIYrcXjXEqrw5L4cOGoOOXtzcHE5qb
+         WOJ1Vq6aS9pSl2rxgxId5eTvJXYgxhdkJf+f3gAKxuZyNHE+BaMhN0vxRdAbCMjUQope
+         HGzrS1ynj0fuDfg2Np13vdIlcVIpj3UnphYXECBgLzxPBQfxYP2TvtPgYbSeqXBlXgym
+         PATQWqCHErqcWFwLdNtF7NESwM1PeKWasVysuhYakHirhGmfbNFOaswqu1BigcEzzxIJ
+         Oghg==
+X-Forwarded-Encrypted: i=1; AJvYcCVaxSdCbsPeG7xnr7BoE7trAAPJv4yLE4LhCiDn3SkuwW3eDKqYMbGRdlj6KcXLJH2csCGRunPC7qzW@vger.kernel.org, AJvYcCVbn5f9O82T+gs5VpgDj38ttQpf/nI70WtVwpuwYCpemk2vdBwulAsvaXIesKJMfMgMlqIBtBkBaqdX@vger.kernel.org, AJvYcCVsfbLpw0MFHYjR6dqfEDXCIcB7HhXnjn2Zn8SPucE43VsSgueDD3uCoMAFrBrCQSVmJey3zskX+ic86A==@vger.kernel.org, AJvYcCWfkbOZqFhcX3AWAegPgaGF3UCVy9ZB2g4Ts7X/0D9hpqMkPYMtUu2t63u8erqGRK9SEdNHXGgB1ege@vger.kernel.org, AJvYcCWgo0oJSg0xKamEE3S5Gc6/Zm+XvBoLkvcEFDwMcq2OK78iDoORhhP83A3bXLF0epXt5qKq0DP6nTs=@vger.kernel.org, AJvYcCWvFqGFGdI6UjXM/d9S32NCU5OoieHtM03/rF1W5KzGrZzWOi/QHxl7jbU/09UYODHDzt3AQYuSaaSb4QA=@vger.kernel.org, AJvYcCXYJiApuCg7t6maZk4xpvR/KvdMgnvl3LbBz+3H9lWrciuCE+6RcWwdse45CNZIXlkJIcA5b7O1Ar9uO91Kltk=@vger.kernel.org, AJvYcCXziHYubD1/v6rgTrMouNBHPUyA5YMpdr8FrcTQINqX19BZzaJGAxIaZ+csyerSTWdcOcC+R0qn@vger.kernel.org
+X-Gm-Message-State: AOJu0YzW84iEVVj9yFYR1WHT/IFJQNuBdB6m9WMbMIbrCmu/2AmtZmFL
+	l4DzUzP1OzGkBy4fgFnML7egfjwfoSOkZETQUGtW6D9ZpiyE3/1v
+X-Gm-Gg: ASbGncs4wQwLhrgDJsyeD9zqYLWAV0J+cUq0QFxLlYz1ZoKijGDSIpowQx6+uwK79WR
+	7ZWBZPhbJ28H94Ab4nvfqgKrxdAfBdLOr1YxvfsFIpVrJGZ4Qm2h3goBtpbkYAZkpiV5/onROJA
+	y4nZ522xikwF0G87moXs6FwSnB31aDxNM6xReON8M/PxLkRO/wAvP2e3Q+QvkiKD/41rBdTyCyV
+	Y1KtB80YKzzMnFU6dRgO4gYFRTsmn8vEZzQWjud0YLJk8foqmwxWPIix22CWkpcRpkffFi96iK0
+	SN6CXWV9Q5ZCHcZWrX6cGOgc2+g+SnNaOwOF9OwBt0x7fF25INK7Kg9CiLnD3+QcFjzr8w==
+X-Google-Smtp-Source: AGHT+IGJqhnWMpFd5AzrwtLP6iOv45ubCmVHfs7719Fi8vUpiDSkoN0uet8AEms++4EMHN3X5ehjoQ==
+X-Received: by 2002:a05:6a21:69b:b0:1e1:aef4:9ce8 with SMTP id adf61e73a8af0-1eef3d87138mr32217027637.28.1740471421179;
+        Tue, 25 Feb 2025 00:17:01 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6abaddsm902178b3a.20.2025.02.25.00.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 00:17:00 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
 	linux@roeck-us.net,
-	corbet@lwn.net,
-	eugene.shalygin@gmail.com,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Shengyu Qu <wiagn233@outlook.com>
-Subject: [PATCH v1] hwmon: (asus-ec-sensors) add PRIME X670E-PRO WIFI
-Date: Tue, 25 Feb 2025 12:25:06 +0800
-Message-ID:
- <TYCPR01MB84377BEADF97E8E7554EF0CF98C32@TYCPR01MB8437.jpnprd01.prod.outlook.com>
-X-Mailer: git-send-email 2.48.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TPYP295CA0060.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:8::19) To TYCPR01MB8437.jpnprd01.prod.outlook.com
- (2603:1096:400:156::5)
-X-Microsoft-Original-Message-ID: <20250225042506.9957-1-wiagn233@outlook.com>
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v8 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Tue, 25 Feb 2025 16:16:37 +0800
+Message-Id: <20250225081644.3524915-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB8437:EE_|TYWPR01MB9575:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12233d1e-6efb-4b5b-2134-08dd55546594
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|5072599009|7092599003|19110799003|15080799006|461199028|5062599005|440099028|3412199025|41001999003|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ponirtIPFm7lhs74HvaL/WhUkz/eIMzfKmVQoLmcCDN4p9z8A2lkgeDgNctk?=
- =?us-ascii?Q?JRTUJXDOHuLU+ltHT5r7FbaPQwmoYOfXWIzgp/welzc+mCRFcnoN2/9NCbSm?=
- =?us-ascii?Q?5g8qA9D79htadBTpZBU5qa8a3otmB3v+QNhi7VDuWxKg1quLg1F7IiVZH4wE?=
- =?us-ascii?Q?8uecfdPSWZq5de3fuduJw7W8LYkzFt+OOo2NmeQaqBDg8uatF++FfejhAS70?=
- =?us-ascii?Q?Yzlm6PJFXcGIVosNmxA54rhA5RqUcNs5atzyNdTCS3uDRtccwweMIWPPBYxV?=
- =?us-ascii?Q?osQ8vA83Y4qX6OneOh1qPdRYUiOLhhZr5SUKgVp2V6ms2FbaQy9fGNJSyMge?=
- =?us-ascii?Q?e7BdzJx+YLPLvgM61+yI/6TL91KCMDup43znOIyHO7gLwq+qPRe/9hSLYp47?=
- =?us-ascii?Q?eNfuDr08XjmtRJKkG6gUtdQRyDkJMAC9D54/QpX98zgCUfzF0MHe/Q6EawgA?=
- =?us-ascii?Q?7zj1lgOoEAvf45zKRaNnuBg2oO3vwL9x1eexhsM0LL0vMBFWz2iXL2oitWPe?=
- =?us-ascii?Q?YjSoZTKvv2TUWgfaf4NvWex0gZ5nG09iPYidJ78ddQeglUl63FTUZaemLmbY?=
- =?us-ascii?Q?pzrHXmmeIXljfkf1fT5Re/euS7NqEj0DcvSt1rMovfxoX98GXJiGpubxYM9n?=
- =?us-ascii?Q?PqbaSP2TKKIn79CmMUGP4fJ6C8WCGczC7pwy+P/G976mPDwLWLXBzWLCbAfD?=
- =?us-ascii?Q?eCyOQxVi+YGofSCpjH4PU7gBKPJvgV5FxXS8FvUr28iOCYWQ/zsghbBWWhAl?=
- =?us-ascii?Q?9BZysQeXShwi0biB/aiVvISVgrBZzob4uVtfu9rZ9yCoImsiDZ+DKSSRJoJh?=
- =?us-ascii?Q?yckp5Ozj2QoYeITdwCLHpjgoOLym4LFqQcCH3X4j+KwyAgSMj/XfPPEFHZXF?=
- =?us-ascii?Q?TDjU1mET0l4UZaauZCR7DY3g4mAQt9FE5hTFTHr9t8q2lixSDSpv6wAuaKSb?=
- =?us-ascii?Q?okMcAg4UkXvvLgtp+vDHo4ZiZ4m4+zAagryul9uFmgNQhyXPHLxT5zM/v8Uw?=
- =?us-ascii?Q?S2oX8f4X/Z+YrZpzZgsgpPOdAhobOlGT6aWar3jhJvkkasQ/xDD/o5VcY82H?=
- =?us-ascii?Q?pg1/5bvQvLGp4/Y8YulNfvgDbJM/j45Pi72P+jT68i1JpwOneQ77VeUEaQPr?=
- =?us-ascii?Q?D5NNIUOlwHg8kpp2jsSKXKTMXwpxRawbCiGlnOzWdut7p058T60wzGU=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9OFDcEVxUX1OmPQ7N8pqB9dzqqfg4109au8DHfyLDFAOw3MJCddlbaKie7BK?=
- =?us-ascii?Q?XrSiflbtoS0T0bYYt/Vw3jr+88HHKYrRB3HxSZwj+9ZPtiytMQi+bK9lLimv?=
- =?us-ascii?Q?LMNhwrgZdtXQdPxMYkxmnTHAoBWWiYwUPayy6o5+ypbz6PjgB9OQ6t2qPhKY?=
- =?us-ascii?Q?oHiI0c+ufRFioJ8gKCCRkdtsndz4ilHeyKRnWqvpCEyq9zpIxlZ9T4Kk3vIj?=
- =?us-ascii?Q?eXU4liyHWe29mdhA4M1yf14zP+wuEMt75bQNvfICZpl4q2vtPthpAgVNh7m7?=
- =?us-ascii?Q?nD7d/m/Te4hOKnT9HVhEjeokqGqSazxNhl+hwf+d+bWhEDNHiJVgdcJq+227?=
- =?us-ascii?Q?cMqZfkqkE741LzLIhvnhB6k19UgPtsSiL2NbREWDs+gdT3ImCO7oDULzsCO9?=
- =?us-ascii?Q?GAZViuyTrs2GSA0x9jyzfgARJkYxNZnRUlcvcTG0Q7+e0k/s85Gi+wxZ/Gvr?=
- =?us-ascii?Q?RqoQgGqBOuZQ1IQp6R+szOybFvP/eUVICXSd2cvmiFnasJ9OZSKWgzSemGp8?=
- =?us-ascii?Q?sddByvGEr92+EefOEAjEk/tBWVYXoyGP9TbfNPhGZMx7KR5jWWHPZfAC9Iz9?=
- =?us-ascii?Q?4lg1s+US6dPNasMIEwk/Wxn/9FcuJA6sml0j44VkbxGE2pjoql3L96JckOQV?=
- =?us-ascii?Q?vW49MIvVj8ogKfG3ikGASxuxXPSLELXu/2RzL8qX1x/a/bpNKkZFZS7Pg1eP?=
- =?us-ascii?Q?qxGOKTBeRYe0qNt7vQiAuTwBZOz2uMNpfxU6bcrFlI8/iqLwM0Oati77DfVU?=
- =?us-ascii?Q?fhvt20jLSZ/D6cZDasdiStM6jZW0yBr9/Rj1o4XhjD0fGDkun16Xa50CvyV3?=
- =?us-ascii?Q?PgSXNlsvsjNxPPeZGDthwgQRk2oRR8Ov/qfcBGM5fPgJEa4XqQHGZW4mamz7?=
- =?us-ascii?Q?pZRE9e6cVoRK4QtYHWHAksq23a+KQwV/+5pw+8qoPBY3ZemeKZhYSq09psNG?=
- =?us-ascii?Q?ViNx37GhBNx9GcXp1u5lFXDvqnOYd8D9jY9GAEbyS+6ApNoTqWjrdLgMu9ZT?=
- =?us-ascii?Q?7VcoPtYnSPAX5agNLS2/6oqEQYH2dt0EtDZc3s//rvkxYQq2h/9b2mxQpUDz?=
- =?us-ascii?Q?+aN2R6e5cTqjfRjVLyckL4laTscxRZdpxWj/iQPUuLG+wmFr8yisbdbj/Dze?=
- =?us-ascii?Q?A6b/KQcq4Y3RauKFVwmAXkaQichQv9pNaOW1upKhMY+3EKUk4GwazQ39L0J8?=
- =?us-ascii?Q?NO71CeNvQj2Bb1EkZz4qUVo1C4tG3F1hmPi8fVFkTvNH8mWFcDw6zqRGxwbF?=
- =?us-ascii?Q?WsgBr+RMikOKPicl0VBxIxgALhUSBcKuZWuulC2E+aF2bZyvLnauHHtkZqlg?=
- =?us-ascii?Q?d6U=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12233d1e-6efb-4b5b-2134-08dd55546594
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB8437.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 04:25:13.1703
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9575
+Content-Transfer-Encoding: 8bit
 
-Add support for PRIME X670E-PRO WIFI.
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 739636cf7994..d2be9db29614 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -6,6 +6,7 @@ Kernel driver asus_ec_sensors
- Supported boards:
-  * PRIME X470-PRO
-  * PRIME X570-PRO
-+ * PRIME X670E-PRO WIFI
-  * Pro WS X570-ACE
-  * ProArt X570-CREATOR WIFI
-  * ProArt X670E-CREATOR WIFI
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 43e54dc513da..006ced5ab6e6 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -316,6 +316,14 @@ static const struct ec_board_info board_info_prime_x570_pro = {
- 	.family = family_amd_500_series,
- };
- 
-+static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
-+		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_pro_art_x570_creator_wifi = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
-@@ -503,6 +511,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_prime_x470_pro),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO",
- 					&board_info_prime_x570_pro),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X670E-PRO WIFI",
-+					&board_info_prime_x670e_pro_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI",
- 					&board_info_pro_art_x570_creator_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X670E-CREATOR WIFI",
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  13 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 463 ++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 152 +++++
+ drivers/mfd/Kconfig                 |  18 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 378 +++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 799 +++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 286 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 298 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3530 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
 -- 
-2.48.1
+2.34.1
 
