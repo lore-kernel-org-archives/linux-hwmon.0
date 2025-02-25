@@ -1,95 +1,41 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0C6266573;
-	Tue, 25 Feb 2025 08:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C7018BB9C;
+	Tue, 25 Feb 2025 09:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740471456; cv=none; b=THA6MK/VtH3jntGiEoakocb/2T1v/9gO+578RUGjPy0JEJYPkkHGRbkP6XC3HZUf/b/KLs2dW/pzl6mLNz1XuxH8V79qG0mEeEMgQ7lcVKD5IGv4QO1hOiIUUX4om3e+jRxgbMxgrgK8lRB7AAG1yxsJ6CpR3uUAEJ8Lb9C8jW8=
+	t=1740474284; cv=none; b=MfkO0b+KdzSMq3Hic3wAt+9tuEvJ8Ooxik8bVhB+jMLLGQaZEgWFhkSkaYgg4JoT4csbiRz8CvZklmwSeUmVMmMY4EdrhijbrOQEPSC02pCFEsMaPBshZwNdmBQSkgE7ZdQ0UwtWzODJoUEqBrCtdMsV96OQyIxPeUjhxyhtnCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740471456; c=relaxed/simple;
-	bh=VyO1gY+quioa1x+mn9rphtVK2rIpVpnOMY66Pbkon2Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q4dpaYNhgelTxuC4y6DVfEIotPEAHznB8A6I5J9OcKBIdCOgY2GZfesT4nsGFXRB11v2pT80zoauuC55M44cKvgUzuC6KHZkXhyrnc3O8THkARD/XQkz/DTI5359FArWUfSYQXg4TwYOttFtr6xg5T1EO2DzSQ8elrDMJah+PxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZulISXl; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZulISXl"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220bfdfb3f4so5173065ad.2;
-        Tue, 25 Feb 2025 00:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740471454; x=1741076254; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R1/MlL808W3xu35xb2GKiIvjOGN0x2mk1uW+PFc6mZk=;
-        b=CZulISXlk9qLWI/IS6cgKeiJFoyH2JjY/jmWcitmWyQ5VaVdgJO5ndb4+IgDJdIH++
-         9aHzx4fge/HbBRgOyp4IIR438GRvH5qGhftixoVZzFNeoJ0ZwBIJDUr/mgMedAvhkYl4
-         2htu2iIbOlW1rHowdpHDhAqj0n5hi+v6okxeMWA3VxOs8+5A6Xko3/XNH0lmGSKOeWK6
-         wmhEHMKJRi5RL2gj5EyII8eKL559uCETnmtAjQf2NwAGqSpLJtO8dxB5iFld9DX2rVEk
-         8ZQqN/5y74UBqw5E+QHkuUyNZpXrKKXjwTH+GZ8qvYBw74ycPMx24EKxPMoAybV+39zB
-         W17w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740471454; x=1741076254;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R1/MlL808W3xu35xb2GKiIvjOGN0x2mk1uW+PFc6mZk=;
-        b=CbSHhoE9UtZKEYR7f3UPqRGAPTT6bHnD4r2t0V3EIQGMmc1Ab//h/JY/P5iqImLQqk
-         3r+jHnBGyrl1RdLaPUF3GxRCyoQNaTxf47UsQZl2XAGz2i2utg9i9uWj+8P388bIC2Si
-         aozsDURIk/BNaKBy+8OeWrqI/jM5MlzpscBJ+C+M78VF4Vxr2IHWq3fNPQA3PIQyu1LR
-         9MWtqPQuxBmyODFTvCc0jaPy5NW6tENgxIy03Yxqhz1PGXLEbysdt7ifd6NMkLjTbf4Y
-         no8Jw3my2grvjwG20DGC5DGIF2bSFpBDsfG77wAXWrza8sL1ZLIQMnfXO7TKx+Nte3yU
-         TN4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUHNL/LCJrLys9Tyjpv4Blq6TFr1VRFN+vy3nFVkbEmG/Ko1VcCnj9xqpvsu+WgetW34uoXqzRyhp47Jw==@vger.kernel.org, AJvYcCUJP6F+KpprkM5Mp30xho4SoSZ7l7aSoIF7e5ODIZl539OuXC4Zpo4Oo4aToAM4hf+nd/SPM1MMnb0=@vger.kernel.org, AJvYcCULkiIVfsXQj64MXi6XU/MXJnal+PWYOf9NHQopgDwpFdvb+Dm+n8kUZGtLzdPvwqaconPCvWXdJamw@vger.kernel.org, AJvYcCVBhh+h7QJ0lNrLrypJQB6Yrn1ix8HjrByjmxtRa5sCQMHzuRTVWKMiH9PhfRd/MhAhRc/Bn8iFxfih@vger.kernel.org, AJvYcCWFpywrrhSi/WCcGwSanNM9PwomGMD/OnGg1i/d63bZ1euIPtmFCICdLaQSaBeorMO442a/UvIj6AEp@vger.kernel.org, AJvYcCWJojWUrJSQ1FHn4THjEb/Ts4FMXb9T8YWlcxGTI2VK+Cv4y7SmtbxqiSAjKqoDzznNq5lTmw3lbKQvzp7QdCE=@vger.kernel.org, AJvYcCWd6mKjdrKDGDVrglYeEF2ZzY3vFgEheETfA8e6IxFXEDx7XaMw0stGC4iDpVwGpdTOK0rPC9IItX+giNU=@vger.kernel.org, AJvYcCWkS6f8Tqqjw4TRPtyL7JtdtVClR6u2vcWObjOsuXiRM7NibXCbRqRJgL1/y7DVwxtDlVlyXAYP@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYEEibpkqTmV9H7ygEZRSv8R134jWg1/Ebb3yw4fpDwyBnAyJg
-	1hfn23ST6wLHqlXmQ2sq2K7K/HaKjb6vD6oBsONfMQ+jSNdi8Dht
-X-Gm-Gg: ASbGnctdU3FLaRax3ZpycW3WTa05udr94lt0a6UtL5i4qG7Nx4lrA9OGUZHAFxDxzbK
-	V/OiWbiaXExuHy60R9oMn0MHJ+3ZrWszhFGAKan7LEJ9+iq8w/b97Ox0F2pVMeFU3T/MUTnZSfE
-	wZ4w2fkKlJ7SHafsvxy/yVbur3X9SgmefDX6c+fzWQXgA5viNYRGdNLJ44m/w5IKzQ3pHEq7M8H
-	CppRC7sVb073TRFNhusWb0+6bMyNFF/rH/sx6GUdNTssns1QbWUw5roMsaH5UCdbH/MNkkrMpFK
-	Cr450sjOlffKoya7dczAoETYk54kHwspSpsDrU2bNBK3VtklV3c4OGjj7nMep9xv4vBb4w==
-X-Google-Smtp-Source: AGHT+IH/gdqYrLFyBEtR8VWeKFEBaSCVXjtQW0HPLKg4ppwIhgMGGP47oVP66uI6RA/b/qX2/N13dA==
-X-Received: by 2002:a05:6a00:b84:b0:732:2170:b696 with SMTP id d2e1a72fcca58-73426daad91mr26552886b3a.22.1740471453637;
-        Tue, 25 Feb 2025 00:17:33 -0800 (PST)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6abaddsm902178b3a.20.2025.02.25.00.17.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 00:17:33 -0800 (PST)
-From: Ming Yu <a0282524688@gmail.com>
-To: tmyu0@nuvoton.com,
-	lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v8 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Tue, 25 Feb 2025 16:16:44 +0800
-Message-Id: <20250225081644.3524915-8-a0282524688@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250225081644.3524915-1-a0282524688@gmail.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
+	s=arc-20240116; t=1740474284; c=relaxed/simple;
+	bh=qKfVtuQYYK46bbyotNANakW1TEPcNNUrJw04XqoOn4s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HApdBfpWDeGFqBs+2KuILm9gdC5Od0aGVB4VhmbHHo0i7jVtfZLVS56aJtfaLuuu2WmYiW6RnwnjQ2wEi/pLXYo26AA+AiFP/MUTqhwtx6pb51s8QaFqfDLPvnMImBwzMrUSJ+TPH8scmGO5e+D7xcuslGpTloCIae76EaUw4ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Z2BQV5xLfz1ltcQ;
+	Tue, 25 Feb 2025 17:00:34 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 01BDE1401E9;
+	Tue, 25 Feb 2025 17:04:37 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 25 Feb 2025 17:04:24 +0800
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 25 Feb 2025 17:04:23 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <linux@roeck-us.net>, <jdelvare@suse.com>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>,
+	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [RFC] hwmon: (acpi_power_meter) Replace hwmon_device_register
+Date: Tue, 25 Feb 2025 16:51:58 +0800
+Message-ID: <20250225085158.6989-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -97,356 +43,978 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
+When load this mode, we can see the following log:
+"power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please
+ convert the driver to use hwmon_device_register_with_info()."
 
-Signed-off-by: Ming Yu <a0282524688@gmail.com>
+So replace hwmon_device_register with hwmon_device_register_with_info.
+
+To avoid any changes in the display of some sysfs interfaces, some of
+necessary changes in hwmon.c must be made:
+1> For 'power1_average_interval_max/min' interface, insert 'average' to the
+   string corresponding to hwmon_power_average_interval_max/max in
+   hwmon_power_attr_templates[]. I guess that is what's missing.
+2> Add some string attributes in power sensor type because of below items:
+   a) power1_accuracy  --> display like '90.0%'
+   b) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
+   c) power1_average_min/max --> display 'unknown' when its value is
+                                 negative.
+Note: All the attributes modified above in hwmon core are not used by other
+drivers.
+
+Please note that the path of these sysfs interfaces are modified
+accordingly if use hwmon_device_register_with_info():
+old: all sysfs interfaces are under acpi device.
+now: all sysfs interfaces are under hwmon device.
+
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
 ---
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 286 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 298 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
+Hi all,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a9eda4530b07..7eba4ffdc877 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16927,6 +16927,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
+This patch is aimed to replace a deprecated interface this driver used.
+The biggest difficulty is how to avoid ABI changes.
+Welcome to join the discussion.
+  
+---
+ drivers/hwmon/acpi_power_meter.c | 782 ++++++++++++++-----------------
+ drivers/hwmon/hwmon.c            |  13 +-
+ 2 files changed, 362 insertions(+), 433 deletions(-)
+
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 44afb07409a4..4c7641cd46c3 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -87,25 +87,12 @@ struct acpi_power_meter_resource {
+ 	bool		power_alarm;
+ 	int			sensors_valid;
+ 	unsigned long		sensors_last_updated;
+-	struct sensor_device_attribute	sensors[NUM_SENSORS];
+-	int			num_sensors;
+ 	s64			trip[2];
+ 	int			num_domain_devices;
+ 	struct acpi_device	**domain_devices;
+ 	struct kobject		*holders_dir;
+ };
  
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 0bbbf778ecfa..248425bf26f3 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
+-struct sensor_template {
+-	char *label;
+-	ssize_t (*show)(struct device *dev,
+-			struct device_attribute *devattr,
+-			char *buf);
+-	ssize_t (*set)(struct device *dev,
+-		       struct device_attribute *devattr,
+-		       const char *buf, size_t count);
+-	int index;
+-};
+-
+ /* Averaging interval */
+ static int update_avg_interval(struct acpi_power_meter_resource *resource)
+ {
+@@ -124,62 +111,6 @@ static int update_avg_interval(struct acpi_power_meter_resource *resource)
+ 	return 0;
+ }
  
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 489b4ab07068..d0d6f4a4972e 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..892674d453d1
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,286 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2024 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
+-static ssize_t show_avg_interval(struct device *dev,
+-				 struct device_attribute *devattr,
+-				 char *buf)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-
+-	mutex_lock(&resource->lock);
+-	update_avg_interval(resource);
+-	mutex_unlock(&resource->lock);
+-
+-	return sprintf(buf, "%llu\n", resource->avg_interval);
+-}
+-
+-static ssize_t set_avg_interval(struct device *dev,
+-				struct device_attribute *devattr,
+-				const char *buf, size_t count)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+-	struct acpi_object_list args = { 1, &arg0 };
+-	int res;
+-	unsigned long temp;
+-	unsigned long long data;
+-	acpi_status status;
+-
+-	res = kstrtoul(buf, 10, &temp);
+-	if (res)
+-		return res;
+-
+-	if (temp > resource->caps.max_avg_interval ||
+-	    temp < resource->caps.min_avg_interval)
+-		return -EINVAL;
+-	arg0.integer.value = temp;
+-
+-	mutex_lock(&resource->lock);
+-	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PAI",
+-				       &args, &data);
+-	if (ACPI_SUCCESS(status))
+-		resource->avg_interval = temp;
+-	mutex_unlock(&resource->lock);
+-
+-	if (ACPI_FAILURE(status)) {
+-		acpi_evaluation_failure_warn(resource->acpi_dev->handle, "_PAI",
+-					     status);
+-		return -EINVAL;
+-	}
+-
+-	/* _PAI returns 0 on success, nonzero otherwise */
+-	if (data)
+-		return -EINVAL;
+-
+-	return count;
+-}
+-
+ /* Cap functions */
+ static int update_cap(struct acpi_power_meter_resource *resource)
+ {
+@@ -198,61 +129,6 @@ static int update_cap(struct acpi_power_meter_resource *resource)
+ 	return 0;
+ }
+ 
+-static ssize_t show_cap(struct device *dev,
+-			struct device_attribute *devattr,
+-			char *buf)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-
+-	mutex_lock(&resource->lock);
+-	update_cap(resource);
+-	mutex_unlock(&resource->lock);
+-
+-	return sprintf(buf, "%llu\n", resource->cap * 1000);
+-}
+-
+-static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
+-		       const char *buf, size_t count)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+-	struct acpi_object_list args = { 1, &arg0 };
+-	int res;
+-	unsigned long temp;
+-	unsigned long long data;
+-	acpi_status status;
+-
+-	res = kstrtoul(buf, 10, &temp);
+-	if (res)
+-		return res;
+-
+-	temp = DIV_ROUND_CLOSEST(temp, 1000);
+-	if (temp > resource->caps.max_cap || temp < resource->caps.min_cap)
+-		return -EINVAL;
+-	arg0.integer.value = temp;
+-
+-	mutex_lock(&resource->lock);
+-	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_SHL",
+-				       &args, &data);
+-	if (ACPI_SUCCESS(status))
+-		resource->cap = temp;
+-	mutex_unlock(&resource->lock);
+-
+-	if (ACPI_FAILURE(status)) {
+-		acpi_evaluation_failure_warn(resource->acpi_dev->handle, "_SHL",
+-					     status);
+-		return -EINVAL;
+-	}
+-
+-	/* _SHL returns 0 on success, nonzero otherwise */
+-	if (data)
+-		return -EINVAL;
+-
+-	return count;
+-}
+-
+ /* Power meter trip points */
+ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
+ {
+@@ -287,34 +163,6 @@ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
+ 	return 0;
+ }
+ 
+-static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
+-			const char *buf, size_t count)
+-{
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	unsigned long temp, trip_bk;
+-	int res;
+-
+-	res = kstrtoul(buf, 10, &temp);
+-	if (res)
+-		return res;
+-
+-	temp = DIV_ROUND_CLOSEST(temp, 1000);
+-
+-	guard(mutex)(&resource->lock);
+-
+-	trip_bk = resource->trip[attr->index - 7];
+-	resource->trip[attr->index - 7] = temp;
+-	res = set_acpi_trip(resource);
+-	if (res) {
+-		resource->trip[attr->index - 7] = trip_bk;
+-		return res;
+-	}
+-
+-	return count;
+-}
+-
+ /* Power meter */
+ static int update_meter(struct acpi_power_meter_resource *resource)
+ {
+@@ -341,202 +189,6 @@ static int update_meter(struct acpi_power_meter_resource *resource)
+ 	return 0;
+ }
+ 
+-static ssize_t show_power(struct device *dev,
+-			  struct device_attribute *devattr,
+-			  char *buf)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-
+-	mutex_lock(&resource->lock);
+-	update_meter(resource);
+-	mutex_unlock(&resource->lock);
+-
+-	if (resource->power == UNKNOWN_POWER)
+-		return -ENODATA;
+-
+-	return sprintf(buf, "%llu\n", resource->power * 1000);
+-}
+-
+-/* Miscellaneous */
+-static ssize_t show_str(struct device *dev,
+-			struct device_attribute *devattr,
+-			char *buf)
+-{
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	acpi_string val;
+-	int ret;
+-
+-	mutex_lock(&resource->lock);
+-	switch (attr->index) {
+-	case 0:
+-		val = resource->model_number;
+-		break;
+-	case 1:
+-		val = resource->serial_number;
+-		break;
+-	case 2:
+-		val = resource->oem_info;
+-		break;
+-	default:
+-		WARN(1, "Implementation error: unexpected attribute index %d\n",
+-		     attr->index);
+-		val = "";
+-		break;
+-	}
+-	ret = sprintf(buf, "%s\n", val);
+-	mutex_unlock(&resource->lock);
+-	return ret;
+-}
+-
+-static ssize_t show_val(struct device *dev,
+-			struct device_attribute *devattr,
+-			char *buf)
+-{
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	u64 val = 0;
+-	int ret;
+-
+-	guard(mutex)(&resource->lock);
+-
+-	switch (attr->index) {
+-	case 0:
+-		val = resource->caps.min_avg_interval;
+-		break;
+-	case 1:
+-		val = resource->caps.max_avg_interval;
+-		break;
+-	case 2:
+-		val = resource->caps.min_cap * 1000;
+-		break;
+-	case 3:
+-		val = resource->caps.max_cap * 1000;
+-		break;
+-	case 4:
+-		if (resource->caps.hysteresis == UNKNOWN_HYSTERESIS)
+-			return sprintf(buf, "unknown\n");
+-
+-		val = resource->caps.hysteresis * 1000;
+-		break;
+-	case 5:
+-		if (resource->caps.flags & POWER_METER_IS_BATTERY)
+-			val = 1;
+-		else
+-			val = 0;
+-		break;
+-	case 6:
+-		ret = update_meter(resource);
+-		if (ret)
+-			return ret;
+-		/* need to update cap if not to support the notification. */
+-		if (!(resource->caps.flags & POWER_METER_CAN_NOTIFY)) {
+-			ret = update_cap(resource);
+-			if (ret)
+-				return ret;
+-		}
+-		val = resource->power_alarm || resource->power > resource->cap;
+-		resource->power_alarm = resource->power > resource->cap;
+-		break;
+-	case 7:
+-	case 8:
+-		if (resource->trip[attr->index - 7] < 0)
+-			return sprintf(buf, "unknown\n");
+-
+-		val = resource->trip[attr->index - 7] * 1000;
+-		break;
+-	default:
+-		WARN(1, "Implementation error: unexpected attribute index %d\n",
+-		     attr->index);
+-		break;
+-	}
+-
+-	return sprintf(buf, "%llu\n", val);
+-}
+-
+-static ssize_t show_accuracy(struct device *dev,
+-			     struct device_attribute *devattr,
+-			     char *buf)
+-{
+-	struct acpi_device *acpi_dev = to_acpi_device(dev);
+-	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
+-	unsigned int acc = resource->caps.accuracy;
+-
+-	return sprintf(buf, "%u.%u%%\n", acc / 1000, acc % 1000);
+-}
+-
+-static ssize_t show_name(struct device *dev,
+-			 struct device_attribute *devattr,
+-			 char *buf)
+-{
+-	return sprintf(buf, "%s\n", ACPI_POWER_METER_NAME);
+-}
+-
+-#define RO_SENSOR_TEMPLATE(_label, _show, _index)	\
+-	{						\
+-		.label = _label,			\
+-		.show  = _show,				\
+-		.index = _index,			\
+-	}
+-
+-#define RW_SENSOR_TEMPLATE(_label, _show, _set, _index)	\
+-	{						\
+-		.label = _label,			\
+-		.show  = _show,				\
+-		.set   = _set,				\
+-		.index = _index,			\
+-	}
+-
+-/* Sensor descriptions.  If you add a sensor, update NUM_SENSORS above! */
+-static struct sensor_template meter_attrs[] = {
+-	RO_SENSOR_TEMPLATE(POWER_AVERAGE_NAME, show_power, 0),
+-	RO_SENSOR_TEMPLATE("power1_accuracy", show_accuracy, 0),
+-	RO_SENSOR_TEMPLATE("power1_average_interval_min", show_val, 0),
+-	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
+-	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
+-	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
+-			   set_avg_interval, 0),
+-	{},
+-};
+-
+-static struct sensor_template misc_cap_attrs[] = {
+-	RO_SENSOR_TEMPLATE("power1_cap_min", show_val, 2),
+-	RO_SENSOR_TEMPLATE("power1_cap_max", show_val, 3),
+-	RO_SENSOR_TEMPLATE("power1_cap_hyst", show_val, 4),
+-	RO_SENSOR_TEMPLATE(POWER_ALARM_NAME, show_val, 6),
+-	{},
+-};
+-
+-static struct sensor_template ro_cap_attrs[] = {
+-	RO_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, 0),
+-	{},
+-};
+-
+-static struct sensor_template rw_cap_attrs[] = {
+-	RW_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, set_cap, 0),
+-	{},
+-};
+-
+-static struct sensor_template trip_attrs[] = {
+-	RW_SENSOR_TEMPLATE("power1_average_min", show_val, set_trip, 7),
+-	RW_SENSOR_TEMPLATE("power1_average_max", show_val, set_trip, 8),
+-	{},
+-};
+-
+-static struct sensor_template misc_attrs[] = {
+-	RO_SENSOR_TEMPLATE("name", show_name, 0),
+-	RO_SENSOR_TEMPLATE("power1_model_number", show_str, 0),
+-	RO_SENSOR_TEMPLATE("power1_oem_info", show_str, 2),
+-	RO_SENSOR_TEMPLATE("power1_serial_number", show_str, 1),
+-	{},
+-};
+-
+-#undef RO_SENSOR_TEMPLATE
+-#undef RW_SENSOR_TEMPLATE
+-
+ /* Read power domain data */
+ static void remove_domain_devices(struct acpi_power_meter_resource *resource)
+ {
+@@ -638,107 +290,362 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+ 	return res;
+ }
+ 
+-/* Registration and deregistration */
+-static int register_attrs(struct acpi_power_meter_resource *resource,
+-			  struct sensor_template *attrs)
++static int set_trip(struct acpi_power_meter_resource *resource, u32 attr,
++		    unsigned long trip)
+ {
+-	struct device *dev = &resource->acpi_dev->dev;
+-	struct sensor_device_attribute *sensors =
+-		&resource->sensors[resource->num_sensors];
+-	int res = 0;
++	unsigned long trip_bk;
 +	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
+ 
+-	while (attrs->label) {
+-		sensors->dev_attr.attr.name = attrs->label;
+-		sensors->dev_attr.attr.mode = 0444;
+-		sensors->dev_attr.show = attrs->show;
+-		sensors->index = attrs->index;
++	trip = DIV_ROUND_CLOSEST(trip, 1000);
+ 
+-		if (attrs->set) {
+-			sensors->dev_attr.attr.mode |= 0200;
+-			sensors->dev_attr.store = attrs->set;
+-		}
++	guard(mutex)(&resource->lock);
+ 
+-		sysfs_attr_init(&sensors->dev_attr.attr);
+-		res = device_create_file(dev, &sensors->dev_attr);
+-		if (res) {
+-			sensors->dev_attr.attr.name = NULL;
+-			goto error;
+-		}
+-		sensors++;
+-		resource->num_sensors++;
+-		attrs++;
++	trip_bk = resource->trip[attr - hwmon_power_average_max];
++	resource->trip[attr - hwmon_power_average_max] = trip;
++	ret = set_acpi_trip(resource);
 +	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
++		resource->trip[attr - hwmon_power_average_max] = trip_bk;
 +
 +	return ret;
 +}
 +
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
++static int set_cap(struct acpi_power_meter_resource *resource,
++		   unsigned long cap)
 +{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
++	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
++	struct acpi_object_list args = { 1, &arg0 };
++	unsigned long long data;
++	acpi_status status;
 +
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
++	cap = DIV_ROUND_CLOSEST(cap, 1000);
++	if (cap > resource->caps.max_cap || cap < resource->caps.min_cap)
++		return -EINVAL;
++	arg0.integer.value = cap;
 +
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret, irq;
-+
-+	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!irq)
++	guard(mutex)(&resource->lock);
++	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_SHL",
++				       &args, &data);
++	if (ACPI_FAILURE(status)) {
++		acpi_evaluation_failure_warn(resource->acpi_dev->handle, "_SHL",
++					     status);
++		return -EINVAL;
+ 	}
++	resource->cap = cap;
+ 
+-error:
+-	return res;
++	/* _SHL returns 0 on success, nonzero otherwise */
++	if (data)
 +		return -EINVAL;
 +
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
++	return 0;
+ }
+ 
+-static void remove_attrs(struct acpi_power_meter_resource *resource)
++static int set_avg_interval(struct acpi_power_meter_resource *resource,
++			    unsigned long val)
+ {
+-	int i;
++	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
++	struct acpi_object_list args = { 1, &arg0 };
++	unsigned long long data;
++	acpi_status status;
+ 
+-	for (i = 0; i < resource->num_sensors; i++) {
+-		if (!resource->sensors[i].dev_attr.attr.name)
+-			continue;
+-		device_remove_file(&resource->acpi_dev->dev,
+-				   &resource->sensors[i].dev_attr);
++	if (val > resource->caps.max_avg_interval ||
++	    val < resource->caps.min_avg_interval)
++		return -EINVAL;
++	arg0.integer.value = val;
 +
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"rtc-nct6694", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	ret = devm_rtc_register_device(data->rtc);
++	guard(mutex)(&resource->lock);
++	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PAI",
++				       &args, &data);
++	if (ACPI_FAILURE(status)) {
++		acpi_evaluation_failure_warn(resource->acpi_dev->handle, "_PAI",
++					     status);
++		return -EINVAL;
+ 	}
++	resource->avg_interval = val;
+ 
+-	remove_domain_devices(resource);
++	/* _PAI returns 0 on success, nonzero otherwise */
++	if (data)
++		return -EINVAL;
+ 
+-	resource->num_sensors = 0;
++	return 0;
+ }
+ 
+-static int setup_attrs(struct acpi_power_meter_resource *resource)
++static int get_power_alarm_state(struct acpi_power_meter_resource *resource,
++				 long *val)
+ {
+-	int res = 0;
++	int ret;
+ 
+-	/* _PMD method is optional. */
+-	res = read_domain_devices(resource);
+-	if (res && res != -ENODEV)
+-		return res;
++	ret = update_meter(resource);
 +	if (ret)
 +		return ret;
+ 
+-	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
+-		res = register_attrs(resource, meter_attrs);
+-		if (res)
+-			goto error;
++	/* need to update cap if not to support the notification. */
++	if (!(resource->caps.flags & POWER_METER_CAN_NOTIFY)) {
++		ret = update_cap(resource);
++		if (ret)
++			return ret;
+ 	}
+ 
+-	if (resource->caps.flags & POWER_METER_CAN_CAP) {
+-		if (!can_cap_in_hardware()) {
+-			dev_warn(&resource->acpi_dev->dev,
+-				 "Ignoring unsafe software power cap!\n");
+-			goto skip_unsafe_cap;
++	*val = resource->power_alarm || resource->power > resource->cap;
++	resource->power_alarm = resource->power > resource->cap;
 +
-+	device_init_wakeup(&pdev->dev, true);
 +	return 0;
 +}
 +
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "rtc-nct6694",
-+	},
-+	.probe		= nct6694_rtc_probe,
++static umode_t power_meter_is_visible(const void *data,
++				      enum hwmon_sensor_types type,
++				      u32 attr, int channel)
++{
++	const struct acpi_power_meter_resource *res = data;
++
++	if (type != hwmon_power)
++		return -EINVAL;
++
++	switch (attr) {
++	case hwmon_power_average:
++	case hwmon_power_accuracy:
++	case hwmon_power_average_interval_min:
++	case hwmon_power_average_interval_max:
++		if (res->caps.flags & POWER_METER_CAN_MEASURE)
++			return 0444;
++		break;
++	case hwmon_power_average_interval:
++		if (res->caps.flags & POWER_METER_CAN_MEASURE)
++			return 0644;
++		break;
++	case hwmon_power_cap_min:
++	case hwmon_power_cap_max:
++	case hwmon_power_cap_hyst:
++	case hwmon_power_alarm:
++		if (res->caps.flags & POWER_METER_CAN_CAP && can_cap_in_hardware())
++			return 0444;
++		break;
++	case hwmon_power_cap:
++		if (res->caps.flags & POWER_METER_CAN_CAP && can_cap_in_hardware()) {
++			if (res->caps.configurable_cap)
++				return 0644;
++			else
++				return 0444;
+ 		}
++		break;
++	case hwmon_power_average_min:
++	case hwmon_power_average_max:
++		if (res->caps.flags & POWER_METER_CAN_TRIP)
++			return 0x644;
++		break;
++	default:
++		break;
++	}
+ 
+-		if (resource->caps.configurable_cap)
+-			res = register_attrs(resource, rw_cap_attrs);
+-		else
+-			res = register_attrs(resource, ro_cap_attrs);
++	return 0;
++}
+ 
+-		if (res)
+-			goto error;
++static int power_meter_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++	int ret = 0;
+ 
+-		res = register_attrs(resource, misc_cap_attrs);
+-		if (res)
+-			goto error;
++	if (type != hwmon_power)
++		return -EINVAL;
++
++	guard(mutex)(&res->lock);
++
++	switch (attr) {
++	case hwmon_power_average:
++		ret = update_meter(res);
++		if (ret)
++			return ret;
++		if (res->power == UNKNOWN_POWER)
++			return -ENODATA;
++		*val = res->power * 1000;
++		break;
++	case hwmon_power_average_interval_min:
++		*val = res->caps.min_avg_interval;
++		break;
++	case hwmon_power_average_interval_max:
++		*val = res->caps.max_avg_interval;
++		break;
++	case hwmon_power_average_interval:
++		ret = update_avg_interval(res);
++		if (ret)
++			return ret;
++		*val = (res)->avg_interval;
++		break;
++	case hwmon_power_cap_min:
++		*val = res->caps.min_cap * 1000;
++		break;
++	case hwmon_power_cap_max:
++		*val = res->caps.max_cap * 1000;
++		break;
++	case hwmon_power_alarm:
++		ret = get_power_alarm_state(res, val);
++		if (ret)
++			return ret;
++		break;
++	case hwmon_power_cap:
++		ret = update_cap(res);
++		if (ret)
++			return ret;
++		*val = res->cap * 1000;
++		break;
++	default:
++		break;
+ 	}
+ 
+-skip_unsafe_cap:
+-	if (resource->caps.flags & POWER_METER_CAN_TRIP) {
+-		res = register_attrs(resource, trip_attrs);
+-		if (res)
+-			goto error;
++	return 0;
++}
++
++static int power_meter_read_string(struct device *dev,
++				   enum hwmon_sensor_types type, u32 attr,
++				   int channel, const char **str)
++{
++#define POWER_METER_MAX_READ_STR_LENGTH		32
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++	static char buf[POWER_METER_MAX_READ_STR_LENGTH];
++	u64 val;
++
++	if (type != hwmon_power)
++		return -EINVAL;
++
++	memset(buf, 0, sizeof(buf));
++	guard(mutex)(&res->lock);
++
++	switch (attr) {
++	case hwmon_power_accuracy:
++		sprintf(buf, "%llu.%llu%%\n", res->caps.accuracy / 1000,
++			res->caps.accuracy % 1000);
++		*str = buf;
++		break;
++	case hwmon_power_cap_hyst:
++		if (res->caps.hysteresis == UNKNOWN_HYSTERESIS)
++			sprintf(buf, "unknown\n");
++		else
++			sprintf(buf, "%llu\n", res->caps.hysteresis * 1000);
++		*str = buf;
++		break;
++	case hwmon_power_average_min:
++	case hwmon_power_average_max:
++		if (res->trip[attr - hwmon_power_average_max] < 0) {
++			sprintf(buf, "unknown\n");
++		} else {
++			val = res->trip[attr - hwmon_power_average_max] * 1000;
++			sprintf(buf, "%llu\n", val);
++		}
++		*str = buf;
++		break;
++	default:
++		return -EOPNOTSUPP;
+ 	}
+ 
+-	res = register_attrs(resource, misc_attrs);
+-	if (res)
+-		goto error;
++	return 0;
++}
+ 
+-	return res;
+-error:
+-	remove_attrs(resource);
+-	return res;
++static int power_meter_write(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long val)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++	int ret;
++
++	if (type != hwmon_power)
++		return -EINVAL;
++
++	switch (attr) {
++	case hwmon_power_average_max:
++	case hwmon_power_average_min:
++		ret = set_trip(res, attr, val);
++		break;
++	case hwmon_power_cap:
++		ret = set_cap(res, val);
++		break;
++	case hwmon_power_average_interval:
++		ret = set_avg_interval(res, val);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++	}
++
++	return ret;
++}
++
++static const struct hwmon_channel_info * const power_meter_info[] = {
++	HWMON_CHANNEL_INFO(power, HWMON_P_ACCURACY | HWMON_P_AVERAGE |
++		HWMON_P_AVERAGE_INTERVAL | HWMON_P_AVERAGE_INTERVAL_MIN |
++		HWMON_P_AVERAGE_INTERVAL_MAX | HWMON_P_CAP | HWMON_P_CAP_MIN |
++		HWMON_P_CAP_MAX | HWMON_P_CAP_HYST | HWMON_P_ALARM |
++		HWMON_P_AVERAGE_MIN | HWMON_P_AVERAGE_MAX),
++	NULL
 +};
 +
-+module_platform_driver(nct6694_rtc_driver);
++static const struct hwmon_ops power_meter_ops = {
++	.is_visible = power_meter_is_visible,
++	.read = power_meter_read,
++	.read_string = power_meter_read_string,
++	.write = power_meter_write,
++};
 +
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
++static const struct hwmon_chip_info power_meter_chip_info = {
++	.ops = &power_meter_ops,
++	.info = power_meter_info,
++};
++
++static ssize_t power1_is_battery_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%u\n",
++			  res->caps.flags & POWER_METER_IS_BATTERY ? 1 : 0);
++}
++
++static ssize_t power1_model_number_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%s\n", res->model_number);
++}
++
++static ssize_t power1_oem_info_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%s\n", res->oem_info);
++}
++
++static ssize_t power1_serial_number_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	struct acpi_power_meter_resource *res = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%s\n", res->serial_number);
++}
++
++static DEVICE_ATTR_RO(power1_is_battery);
++static DEVICE_ATTR_RO(power1_model_number);
++static DEVICE_ATTR_RO(power1_oem_info);
++static DEVICE_ATTR_RO(power1_serial_number);
++
++#define POWER_EXTRA_BATTERY_ATTR_IDX	3
++static struct attribute *power_extra_attrs[] = {
++	&dev_attr_power1_model_number.attr,
++	&dev_attr_power1_oem_info.attr,
++	&dev_attr_power1_serial_number.attr,
++	&dev_attr_power1_is_battery.attr,
++	NULL
++};
++
++ATTRIBUTE_GROUPS(power_extra);
++
++static void update_power_extra_groups(struct acpi_power_meter_resource *res)
++{
++	power_extra_attrs[POWER_EXTRA_BATTERY_ATTR_IDX] =
++			(res->caps.flags & POWER_METER_CAN_MEASURE) ?
++			&dev_attr_power1_is_battery.attr : NULL;
+ }
+ 
+ static void free_capabilities(struct acpi_power_meter_resource *resource)
+@@ -848,13 +755,24 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
+ 	case METER_NOTIFY_CONFIG:
+ 		mutex_lock(&resource->lock);
+ 		free_capabilities(resource);
++		remove_domain_devices(resource);
++		hwmon_device_unregister(resource->hwmon_dev);
+ 		res = read_capabilities(resource);
+-		mutex_unlock(&resource->lock);
+ 		if (res)
+-			break;
+-
+-		remove_attrs(resource);
+-		setup_attrs(resource);
++			dev_err_once(&device->dev, "read capabilities failed.\n");
++		res = read_domain_devices(resource);
++		if (res && res != -ENODEV)
++			dev_err_once(&device->dev, "read domain devices failed.\n");
++		update_power_extra_groups(resource);
++		resource->hwmon_dev =
++			hwmon_device_register_with_info(&device->dev,
++							ACPI_POWER_METER_NAME,
++							resource,
++							&power_meter_chip_info,
++							power_extra_groups);
++		if (IS_ERR(resource->hwmon_dev))
++			dev_err_once(&device->dev, "register hwmon device failed.\n");
++		mutex_unlock(&resource->lock);
+ 		break;
+ 	case METER_NOTIFY_TRIP:
+ 		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+@@ -928,11 +846,15 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	resource->trip[0] = -1;
+ 	resource->trip[1] = -1;
+ 
+-	res = setup_attrs(resource);
+-	if (res)
++	/* _PMD method is optional. */
++	res = read_domain_devices(resource);
++	if (res && res != -ENODEV)
+ 		goto exit_free_capability;
+ 
+-	resource->hwmon_dev = hwmon_device_register(&device->dev);
++	update_power_extra_groups(resource);
++	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev, ACPI_POWER_METER_NAME,
++						    resource, &power_meter_chip_info,
++						    power_extra_groups);
+ 	if (IS_ERR(resource->hwmon_dev)) {
+ 		res = PTR_ERR(resource->hwmon_dev);
+ 		goto exit_remove;
+@@ -942,7 +864,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	goto exit;
+ 
+ exit_remove:
+-	remove_attrs(resource);
++	remove_domain_devices(resource);
+ exit_free_capability:
+ 	free_capabilities(resource);
+ exit_free:
+@@ -961,7 +883,7 @@ static void acpi_power_meter_remove(struct acpi_device *device)
+ 	resource = acpi_driver_data(device);
+ 	hwmon_device_unregister(resource->hwmon_dev);
+ 
+-	remove_attrs(resource);
++	remove_domain_devices(resource);
+ 	free_capabilities(resource);
+ 
+ 	kfree(resource);
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 9703d60e9bbf..4f1af2ed091a 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -483,12 +483,19 @@ static ssize_t hwmon_attr_store(struct device *dev,
+ 	return count;
+ }
+ 
++static bool power_is_string_attr(u32 attr)
++{
++	return attr == hwmon_power_label || attr == hwmon_power_accuracy ||
++		attr == hwmon_power_cap_hyst || attr == hwmon_power_average_min ||
++		attr == hwmon_power_average_max;
++}
++
+ static bool is_string_attr(enum hwmon_sensor_types type, u32 attr)
+ {
+ 	return (type == hwmon_temp && attr == hwmon_temp_label) ||
+ 	       (type == hwmon_in && attr == hwmon_in_label) ||
+ 	       (type == hwmon_curr && attr == hwmon_curr_label) ||
+-	       (type == hwmon_power && attr == hwmon_power_label) ||
++	       (type == hwmon_power && power_is_string_attr(attr)) ||
+ 	       (type == hwmon_energy && attr == hwmon_energy_label) ||
+ 	       (type == hwmon_humidity && attr == hwmon_humidity_label) ||
+ 	       (type == hwmon_fan && attr == hwmon_fan_label);
+@@ -646,8 +653,8 @@ static const char * const hwmon_power_attr_templates[] = {
+ 	[hwmon_power_enable] = "power%d_enable",
+ 	[hwmon_power_average] = "power%d_average",
+ 	[hwmon_power_average_interval] = "power%d_average_interval",
+-	[hwmon_power_average_interval_max] = "power%d_interval_max",
+-	[hwmon_power_average_interval_min] = "power%d_interval_min",
++	[hwmon_power_average_interval_max] = "power%d_average_interval_max",
++	[hwmon_power_average_interval_min] = "power%d_average_interval_min",
+ 	[hwmon_power_average_highest] = "power%d_average_highest",
+ 	[hwmon_power_average_lowest] = "power%d_average_lowest",
+ 	[hwmon_power_average_max] = "power%d_average_max",
 -- 
-2.34.1
+2.22.0
 
