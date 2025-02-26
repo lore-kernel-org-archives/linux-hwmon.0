@@ -1,51 +1,49 @@
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1577D2A8C1;
-	Wed, 26 Feb 2025 13:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A9D2222A5;
+	Wed, 26 Feb 2025 14:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740578302; cv=none; b=GJg4+aWYG6Cujp3YZsF2vdDurqF1qSXJ98rZI7Uvt3gabbysiWa6YgFaHIqbQIBi9j5XE7khNQLkjYclfNWrANA6WJaqtsGyc038iR6nL+2ES0fWIKmrkisFH+8neqOJD42K+CQvM5mNUbzznsCzgeLSf26d0AMFzzEHMoE37ro=
+	t=1740581975; cv=none; b=FerRNsvwv6bb8fpA5keIoyIJl/4N9W3N4JcT2f8FP/zazUr8OgHS8H4VgKLmn8gaEIi3avBUIEau//HGSlvmEw7ibdDT3gRddGpkaTDVDvAspuvcyP95/FDlfP1mYqxOWxww94Wwpp43DFeFmnnMrAwpN52syhPLeyESd3QITRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740578302; c=relaxed/simple;
-	bh=/j3lfjiqZcqvT2PQ/eFP1OvhpNaj8E0n8/XSKRiemls=;
+	s=arc-20240116; t=1740581975; c=relaxed/simple;
+	bh=fSYcTa92gedbLZbsaWA/digY3oZKW/7+btr68YyooGA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=idE683Cf1J5iXqbavT0RCxQmSHyjptIJ31SOXZObtFVwRBK2VbixnAoU9bCM7ZbBi5683T4gfJNhhJYs0RfOb7IiWmZIVPgLVKfnwhOEgON1q6iKxr0m3+E/PTGSl9WDQPgjlBOPgUrEGdn5WY1+IXlcEF/uulLYatCiQKHYYY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=ARBcjjxj; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tev0DJpoB6LcgndKSKjHvEQh5KFcMaAdr60XG10v6uks2Z33kwVBgdMvjj94p7M6rNOtrS7+LlX9Q7FdooDFbQNvJ8eViKy2NygW5UnJefkno6O4A50T+VT236T0zOGNiFzihVWdJOfrqK5D8VIRLH7c5Q3rHyx44HFZcpLWcqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLXaNz+9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="ARBcjjxj"
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 07EF21FA03;
-	Wed, 26 Feb 2025 14:58:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1740578290;
-	bh=aP6mxVVWGR41Jkq1evaS9h/uHkl+eQ+MTfh6T74pxV8=; h=From:To:Subject;
-	b=ARBcjjxjRLi/5qeEScXdQpOXS1gpU4Xl0IjbemuUtzrPJWCIWFR7TkZvDT2abRewk
-	 1CXGVzZDpIabcSwBUEOfBoe/gbGk4NgwPcFvyyNB1PP/FIxHbJTxUKQ6pqJoVvF2qJ
-	 WqxZYQF3poNsPcPBBYRLuFihVVgjjD2Dn4v3TT3ug1kKPSWaNErAV+o1UA1wOnpiet
-	 rVL9o/pP8c02k7Gpu01PDMfw6hVSPz1j6vJdo89gosKpWCPKuwX6JhFB/VSUKyeSoD
-	 NIELb7GDbh/VZWR96MEGFE5Ik6fdig0zQV6l3R4Z2/TbreVktUHBndS7cgQealaTeX
-	 stmWXTxNs7tjw==
-Date: Wed, 26 Feb 2025 14:58:06 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Rob Herring <robh@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLXaNz+9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72363C4CED6;
+	Wed, 26 Feb 2025 14:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740581973;
+	bh=fSYcTa92gedbLZbsaWA/digY3oZKW/7+btr68YyooGA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CLXaNz+9fiGhVU/Os3/4wVX9iVEd0qlx8laIAWKvboTDdkQ+FlZxUOorv7344CVQz
+	 hBxBMN5GCKfdDFTRQxFE/b3VTQblG0fHnQX9dPHAOvq3ucnSdOFkh9ITuh+1Zo4FSP
+	 eAYOhUyqTNWGTzNJ3I5bKtDpUpW/p7aHCDRiNgyoOXkLLPUA/bB9KKtNgEULWNq65S
+	 hVCkbg8ArGA4TEqIX/qOLr7fKAo00W9IErursQtj75YezqnlR2uOkKRdUxndxhSLJC
+	 3enBX1Bb0h509rgLd8IgPkvSY3TOx9q8Cjo2ou2hNSiqDFVMdlLITOl8NRd5SZrHos
+	 kCdL56lE2P0rA==
+Date: Wed, 26 Feb 2025 08:59:31 -0600
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: amc6821: add PWM polarity
-Message-ID: <20250226135806.GA47264@francesco-nb>
-References: <20250224180801.128685-1-francesco@dolcini.it>
- <20250224180801.128685-2-francesco@dolcini.it>
- <20250226134922.GA1944823-robh@kernel.org>
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
+Message-ID: <20250226145931.GA2314060-robh@kernel.org>
+References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
+ <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
+ <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -54,28 +52,74 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250226134922.GA1944823-robh@kernel.org>
+In-Reply-To: <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
 
-On Wed, Feb 26, 2025 at 07:49:22AM -0600, Rob Herring wrote:
-> On Mon, Feb 24, 2025 at 07:08:00PM +0100, Francesco Dolcini wrote:
-> > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On Wed, Feb 26, 2025 at 09:20:40AM +0100, Krzysztof Kozlowski wrote:
+> On Tue, Feb 25, 2025 at 09:01:13PM +0800, Cedric Encarnacion wrote:
+> > Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
+> > Regulator.
 > > 
-> > Add property to describe the PWM-Out pin polarity.
+> > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> > ---
+> >  .../bindings/hwmon/pmbus/adi,lt3074.yaml           | 64 ++++++++++++++++++++++
+> >  MAINTAINERS                                        |  7 +++
+> >  2 files changed, 71 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..714426fd655a8daa96e15e1f789743f36001ac7a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
+> > @@ -0,0 +1,64 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,lt3074.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Analog Devices LT3074 voltage regulator
+> > +
+> > +maintainers:
+> > +  - Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> > +
+> > +description: |
+> > +  The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
+> > +  response linear regulator. It allows telemetry for input/output voltage,
+> > +  output current and temperature through the PMBus serial interface.
+> > +
+> > +  Datasheet:
+> > +    https://www.analog.com/en/products/lt3074.html
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - adi,lt3074
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  regulators:
+> > +    type: object
+> > +    description: |
+> > +      list of regulators provided by this controller.
 > 
-> Why doesn't the invert support in the pwm binding work for you? Yes, I 
-> read the discussion, but don't remember the conclusion and you need to 
-> justify it here.
+> You have only one regulator, so drop the "regulators". vout could be
+> here, but since you do not have any other resources, I doubt it stands
+> on its own either. This is even visible in your DTS - you named the
+> device as regulator, so logically this is the regulator. Regulator does
+> not have regulators (otherwise they could also have regulators... so
+> triple regulator).
+> 
+> hwmon code might need some changes, but that's not really relevant for
+> proper hardware description.
 
-This chip is not a PWM controller, it is a FAN controller.
+Normally, I would agree, but it seems generic pmbus code expects this 
+structure. This just came up with changing another binding maintained by 
+'Not Me' to follow this structure. We're stuck with the existing way, so 
+I don't know that it is worth supporting 2 ways forever. OTOH, is it 
+guaranteed that these devices will only ever be pmbus devices or that 
+other regulator devices which are not handled as pmbus devices currently 
+will be in the future. If so, more flexibility in the bindings will be 
+needed.
 
-The HW has a PWM pin output that is used to control the fan, but the
-device is not modelled as a PWM controller (correctly, given that is not
-such a device) and the OS does not control the PWM, the chip reads the
-temperature and decide the PWM duty cycle accordingly in an autonomous
-way.
-
-It's just the same that was done in commit ed39ff506adb ("dt-bindings:
-hwmon: Document adt7475 pwm-active-state property").
-
-Francesco
-
+Rob
