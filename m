@@ -1,112 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F70446426;
-	Wed, 26 Feb 2025 08:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F01120E302;
+	Wed, 26 Feb 2025 10:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740558044; cv=none; b=RI8JthibhhUA+JwPX1swNcXd0a4Rzq2t+p94St7pqS+v3t7u87AvVKztjLKwcVSWBk09AEDd6+slh3x+70uG/SCrX2RnJ2vEh9kdZfvsHwTkVvbnsRSZpg5QdgunD2430Y9Xqtpy5Lv8QwWS2eKLdB5wMcTZ/HAhItLsRUYycN0=
+	t=1740565206; cv=none; b=o0kwHEciU7OLL6kw67umOUwvYMc5QfY/nG+05lLf8wnBlc7RDarxO867MUuq2+vYGl22YjeWQduXLLykXdCEiwmaNjoxwE40nT3cSaXBQMLnFtz9KvVK9SlzuX9yGC3j6S0PusjVmFyfgANyUhSuEO0931ecsFRlaGAEzeObuIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740558044; c=relaxed/simple;
-	bh=4Pe8SdHpMNion2K2A1gVO1ETNWDlPyE6kIyEGg2L6M0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IVRs7/qZXefsjpr2k9YtZyujNmZAguigpQIDTfQ/IzOP690P/V4lsligxIekh/RvHAyTH1CV+h7DttsdvWLPpInDLKe8+085XsZbeYWYI2HwHUMTvvzN+MzQIOY74lVgC0/LQSeX1dKoLSK02KBGMdJPq72mbhELfO5f1VDz6n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiIm1eue; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiIm1eue"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B91C4CED6;
-	Wed, 26 Feb 2025 08:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740558043;
-	bh=4Pe8SdHpMNion2K2A1gVO1ETNWDlPyE6kIyEGg2L6M0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YiIm1eueQybrvNRsuNh8H8qRFgt8iHMrY1eUb0Gn83kdwU35X8kuTonpjSy3fIA93
-	 oVOzTsR5oNN5Kniu/v3KeNVmg1Bh4DJ64S/GhHIViumtsLjV2PIYdDV0yBNAelZkKw
-	 JnJst47qH/M7Sm7+ZtORetxKK+ptFMd1SiPLeZB1tI29tiZvjEtCYKyvVyxJrPvGbS
-	 l5AsyBJ9PLYeqnrBNXZOFc1RWntYlfS2vCFNy6YGex2DNVYBg1ovbmPqINPZ3hLqqI
-	 10RxbDM5YgxNit/zXBSQqJ3ghCbCIh6opv8NXkhfteFs5wDQDLgoymGvuuP98ISZPl
-	 PNA/bEBabI9dw==
-Date: Wed, 26 Feb 2025 09:20:40 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-Message-ID: <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
+	s=arc-20240116; t=1740565206; c=relaxed/simple;
+	bh=mN0lNSeBBhqB/5IZtFTHXKfDxy0YY26JEUmomHg9C1c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Kf/3ncQi27kbOydoO5hXJ6lWjEP2wv5u3RU9fuijesZG3z8VMCOcPGDfh2xd3V2dGTFWybGTHcJkDj4qkL/JfaBZzhGbz6ceAkBQOgBcNfdJ1hGj/3vfBdFk2mos3bPC/Bm4N+oEpO0Qs7Z8zVVuZpJNIWu+C+2b7Jz2Rge6kzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Z2r3x2j7cz21nyr;
+	Wed, 26 Feb 2025 18:16:45 +0800 (CST)
+Received: from dggemv711-chm.china.huawei.com (unknown [10.1.198.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0275B1A0188;
+	Wed, 26 Feb 2025 18:19:50 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 26 Feb 2025 18:19:49 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 26 Feb
+ 2025 18:19:49 +0800
+Message-ID: <05bb1583-13c7-25f6-48fb-dc415b3206f9@huawei.com>
+Date: Wed, 26 Feb 2025 18:19:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC] hwmon: (acpi_power_meter) Replace hwmon_device_register
+To: Guenter Roeck <linux@roeck-us.net>, <jdelvare@suse.com>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <liuyonglong@huawei.com>
+References: <20250225085158.6989-1-lihuisong@huawei.com>
+ <8b59c8d0-4710-48ab-ad70-b2eddc74fa9e@roeck-us.net>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <8b59c8d0-4710-48ab-ad70-b2eddc74fa9e@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-On Tue, Feb 25, 2025 at 09:01:13PM +0800, Cedric Encarnacion wrote:
-> Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
-> Regulator.
-> 
-> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> ---
->  .../bindings/hwmon/pmbus/adi,lt3074.yaml           | 64 ++++++++++++++++++++++
->  MAINTAINERS                                        |  7 +++
->  2 files changed, 71 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..714426fd655a8daa96e15e1f789743f36001ac7a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,lt3074.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices LT3074 voltage regulator
-> +
-> +maintainers:
-> +  - Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> +
-> +description: |
-> +  The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
-> +  response linear regulator. It allows telemetry for input/output voltage,
-> +  output current and temperature through the PMBus serial interface.
-> +
-> +  Datasheet:
-> +    https://www.analog.com/en/products/lt3074.html
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,lt3074
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  regulators:
-> +    type: object
-> +    description: |
-> +      list of regulators provided by this controller.
+Hi Guenter,
 
-You have only one regulator, so drop the "regulators". vout could be
-here, but since you do not have any other resources, I doubt it stands
-on its own either. This is even visible in your DTS - you named the
-device as regulator, so logically this is the regulator. Regulator does
-not have regulators (otherwise they could also have regulators... so
-triple regulator).
+在 2025/2/25 21:01, Guenter Roeck 写道:
+> On 2/25/25 00:51, Huisong Li wrote:
+>> When load this mode, we can see the following log:
+>> "power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please
+>>   convert the driver to use hwmon_device_register_with_info()."
+>>
+>> So replace hwmon_device_register with hwmon_device_register_with_info.
+>>
+>> To avoid any changes in the display of some sysfs interfaces, some of
+>> necessary changes in hwmon.c must be made:
+>> 1> For 'power1_average_interval_max/min' interface, insert 'average' 
+>> to the
+>>     string corresponding to hwmon_power_average_interval_max/max in
+>>     hwmon_power_attr_templates[]. I guess that is what's missing.
+>> 2> Add some string attributes in power sensor type because of below 
+>> items:
+>>     a) power1_accuracy  --> display like '90.0%'
+>>     b) power1_cap_hyst  --> display 'unknown' when its value is 
+>> 0xFFFFFFFF
+>>     c) power1_average_min/max --> display 'unknown' when its value is
+>>                                   negative.
+>> Note: All the attributes modified above in hwmon core are not used by 
+>> other
+>> drivers.
+>>
+>
+> That is not a reason to change the ABI, much less so hiding the change
+> in a driver patch.
+>
+>
+I am trying to replace the deprecated hwmon_device_register with 
+hwmon_device_register_with_info for acpi power meter driver.
 
-hwmon code might need some changes, but that's not really relevant for
-proper hardware description.
+To avoid any changes in the display of some sysfs interfaces, there are 
+two modifications in hwmon core as follows:
+(1) The first modification in hwmon is as follows:
+-->
+@@ -646,8 +653,8 @@ static const char * const 
+hwmon_power_attr_templates[] = {
+      [hwmon_power_enable] = "power%d_enable",
+      [hwmon_power_average] = "power%d_average",
+      [hwmon_power_average_interval] = "power%d_average_interval",
+-    [hwmon_power_average_interval_max] = "power%d_interval_max",
+-    [hwmon_power_average_interval_min] = "power%d_interval_min",
++    [hwmon_power_average_interval_max] = "power%d_average_interval_max",
++    [hwmon_power_average_interval_min] = "power%d_average_interval_min",
+      [hwmon_power_average_highest] = "power%d_average_highest",
 
-Best regards,
-Krzysztof
+The string names, "power%d_interval_max/min", are missing 'average'.
+I think the meaning of these attributes are unclear If no this word. It 
+can be regarded as a fault.
+And power attribute name in acpi power meter is 
+"power1_average_interval_min/max".
 
+(2)The second modification changes the attribute of 'power_accuracy', 
+'power_cap_hyst', 'power_average_min' and 'power_average_max' from data 
+to string.
+It is appropriate to assign 'power_accuracy' to string attribute.
+Because it can be displayed as '%' and also include decimal point like 
+acpi power meter driver, which is more in line with the meaning of this 
+attribute.
+It might be better to keep other attributes as data types. But it breaks 
+the cornor display of these attributes in acpi power meter driver as 
+said below.
+    a) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
+    b) power1_average_min/max --> display 'unknown' when its value is 
+negative.
+
+I want to say that all the attributes modified above in hwmon core are 
+not used by other drivers, so don't break ABI of some driver.
+These can't be solved in this driver side.
+
+AFAICS, acpi power meter driver can't replace the deprecated API because 
+their sysfs interfaces will be broken if there's no any modification in 
+hwmon core.
+
+
+/Huisong
+>
+> .
