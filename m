@@ -1,125 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-82.smtpout.orange.fr [80.12.242.82])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A9D2222A5;
-	Wed, 26 Feb 2025 14:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E623A22068B;
+	Wed, 26 Feb 2025 16:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740581975; cv=none; b=FerRNsvwv6bb8fpA5keIoyIJl/4N9W3N4JcT2f8FP/zazUr8OgHS8H4VgKLmn8gaEIi3avBUIEau//HGSlvmEw7ibdDT3gRddGpkaTDVDvAspuvcyP95/FDlfP1mYqxOWxww94Wwpp43DFeFmnnMrAwpN52syhPLeyESd3QITRA=
+	t=1740587214; cv=none; b=Ap2pxoms/pFyhqJfGWV4tBYP/rDtJUmcfr+NfT1jdAU02XiAJnWy6PUFe4tpOjWZ51pxBajmllEUSavL0EBuqMU7+MswcPFhEWA2l9r5OCbcSwj2ejO3azbd4/xt5IvHkDRdNNgxkR/DrT2DLtm72MacpiSmWFKWfrZ/w06LD8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740581975; c=relaxed/simple;
-	bh=fSYcTa92gedbLZbsaWA/digY3oZKW/7+btr68YyooGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tev0DJpoB6LcgndKSKjHvEQh5KFcMaAdr60XG10v6uks2Z33kwVBgdMvjj94p7M6rNOtrS7+LlX9Q7FdooDFbQNvJ8eViKy2NygW5UnJefkno6O4A50T+VT236T0zOGNiFzihVWdJOfrqK5D8VIRLH7c5Q3rHyx44HFZcpLWcqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLXaNz+9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740587214; c=relaxed/simple;
+	bh=YJ/+P3P/Fn2JvqI3zjsXaQHPUu/Jy5T9+fh/ITKJfPA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oun6DJIFE3VPVbCoyQjXHjQVaAd5DoEO3o7wFlPLWYM53kM7JSZRrt/VVvtSR+lHSi5LytGSGxLFvBicRGd17FXC4jgjHvPkug2dRLKRBFII4mIY1HtjJ5X/dA0Tz2/OtbgQ4q1XNsIzAeA5PtfEkBnR2i7Nn/nkMF1FbvCprJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=V9gpZOds; arc=none smtp.client-ip=80.12.242.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLXaNz+9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72363C4CED6;
-	Wed, 26 Feb 2025 14:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740581973;
-	bh=fSYcTa92gedbLZbsaWA/digY3oZKW/7+btr68YyooGA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CLXaNz+9fiGhVU/Os3/4wVX9iVEd0qlx8laIAWKvboTDdkQ+FlZxUOorv7344CVQz
-	 hBxBMN5GCKfdDFTRQxFE/b3VTQblG0fHnQX9dPHAOvq3ucnSdOFkh9ITuh+1Zo4FSP
-	 eAYOhUyqTNWGTzNJ3I5bKtDpUpW/p7aHCDRiNgyoOXkLLPUA/bB9KKtNgEULWNq65S
-	 hVCkbg8ArGA4TEqIX/qOLr7fKAo00W9IErursQtj75YezqnlR2uOkKRdUxndxhSLJC
-	 3enBX1Bb0h509rgLd8IgPkvSY3TOx9q8Cjo2ou2hNSiqDFVMdlLITOl8NRd5SZrHos
-	 kCdL56lE2P0rA==
-Date: Wed, 26 Feb 2025 08:59:31 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-Message-ID: <20250226145931.GA2314060-robh@kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="V9gpZOds"
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id nKE7t7elVLJNynKEAt1BPh; Wed, 26 Feb 2025 17:25:43 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1740587143;
+	bh=jHYBM0RY1+uRab10Zpvkox4s6qLlIbyBWl1J3zSisU4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=V9gpZOdsxmg54ji2qNTr5bCpRjzD5IfC744BKjoCpYnPF65LaysHOmtTVeMeVoqAO
+	 2L49GkKqABvSc19hk/3MBbxEMOkxaIum1rh1DAYqvtKEpv5kGKRGUkt4QuKMmybf3T
+	 UvLH3J+7bXlrmXPBTtxCz9FKEBHc0RQ3qnWiUZkYmr5R6y5cGIjl2vm8jHi7Lv/e70
+	 y3yIs5+1Z1AmJAFpTyBg4j4ktdDQSO4Vx2oSFZCSkWIfMncOs7KHQRM726c/F/eRBA
+	 mio+9BsgDnQuDX1Uy0VjHYAcD9il+F8CvVp27rg5/5rAT4f9Q/QwHuCswFYxZtsD/9
+	 2L4wVlRJT5NFQ==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Wed, 26 Feb 2025 17:25:43 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <9625cd57-dc1d-4455-af12-aac0e2ba5392@wanadoo.fr>
+Date: Wed, 26 Feb 2025 17:25:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (max77705) add initial support
+To: Dzmitry Sankouski <dsankouski@gmail.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 26, 2025 at 09:20:40AM +0100, Krzysztof Kozlowski wrote:
-> On Tue, Feb 25, 2025 at 09:01:13PM +0800, Cedric Encarnacion wrote:
-> > Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
-> > Regulator.
-> > 
-> > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> > ---
-> >  .../bindings/hwmon/pmbus/adi,lt3074.yaml           | 64 ++++++++++++++++++++++
-> >  MAINTAINERS                                        |  7 +++
-> >  2 files changed, 71 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..714426fd655a8daa96e15e1f789743f36001ac7a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> > @@ -0,0 +1,64 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,lt3074.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices LT3074 voltage regulator
-> > +
-> > +maintainers:
-> > +  - Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> > +
-> > +description: |
-> > +  The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
-> > +  response linear regulator. It allows telemetry for input/output voltage,
-> > +  output current and temperature through the PMBus serial interface.
-> > +
-> > +  Datasheet:
-> > +    https://www.analog.com/en/products/lt3074.html
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,lt3074
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  regulators:
-> > +    type: object
-> > +    description: |
-> > +      list of regulators provided by this controller.
+Le 25/02/2025 à 20:11, Dzmitry Sankouski a écrit :
+> Add support for max77705 hwmon. Includes charger input, system bus, and
+> vbyp measurements.
 > 
-> You have only one regulator, so drop the "regulators". vout could be
-> here, but since you do not have any other resources, I doubt it stands
-> on its own either. This is even visible in your DTS - you named the
-> device as regulator, so logically this is the regulator. Regulator does
-> not have regulators (otherwise they could also have regulators... so
-> triple regulator).
-> 
-> hwmon code might need some changes, but that's not really relevant for
-> proper hardware description.
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 
-Normally, I would agree, but it seems generic pmbus code expects this 
-structure. This just came up with changing another binding maintained by 
-'Not Me' to follow this structure. We're stuck with the existing way, so 
-I don't know that it is worth supporting 2 ways forever. OTOH, is it 
-guaranteed that these devices will only ever be pmbus devices or that 
-other regulator devices which are not handled as pmbus devices currently 
-will be in the future. If so, more flexibility in the bindings will be 
-needed.
+...
 
-Rob
+> +static int max77705_hwmon_probe(struct platform_device *pdev)
+> +{
+> +	struct i2c_client *i2c;
+> +	struct device *hwmon_dev;
+> +	struct max77705_hwmon *drv_data;
+> +
+> +	drv_data = devm_kzalloc(&pdev->dev, sizeof(struct max77705_hwmon),
+> +			GFP_KERNEL);
+> +	if (!drv_data)
+> +		return -ENOMEM;
+> +
+> +	i2c = to_i2c_client(pdev->dev.parent);
+> +	drv_data->regmap = devm_regmap_init_i2c(i2c, &max77705_hwmon_regmap_config);
+> +	if (IS_ERR(drv_data->regmap))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(drv_data->regmap),
+> +				"Failed to register max77705 hwmon regmap\n");
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "max77705", drv_data,
+> +			&max77705_chip_info, NULL);
+> +	if (IS_ERR(hwmon_dev)) {
+> +		return dev_err_probe(&i2c->dev, PTR_ERR(hwmon_dev),
+
+No strong opinion, but why &i2c->dev and not &pdev->dev?
+
+> +				"Unable to register hwmon device\n");
+> +	}
+
+Extra { } can be removed, as done a few lines above
+
+> +
+> +	return 0;
+> +};
+> +
+
+...
+
+CJ
