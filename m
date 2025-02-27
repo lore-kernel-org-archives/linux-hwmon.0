@@ -1,148 +1,272 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF16622D4E4;
-	Thu, 27 Feb 2025 12:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC0270043;
+	Thu, 27 Feb 2025 12:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740658290; cv=none; b=RiABzV6uMyUiHKGvR1dQf0+svqTU9+ysxGaIPEg3kfQr7a1A5wsJcRN/smNgKjb21WO3iuQKM8sQNEfp61ZIDOAkc4iJeX96LEfIhChJLGKlnL4UC0tbxdYRfhdj6W+o1xdN7CGpu/AFgFlxer9ZsuJm2lN17MdZRYgNpLcVc1o=
+	t=1740659470; cv=none; b=pvl8Jrig3abTGMPR5wNhfCfqVKxizy28erX9clXrkvpRIYOQXifnfgvh9iXVPha0hG81xkg0zuX7RpzXAcY7tT1qtNi9IR+IOCqDCoi7eaA1jdkvv4VtLpf6EjJ0oy1YJ0YOdJEDhwUreTXbTWwk0fx1Yz1JfT73ymS+udKkREA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740658290; c=relaxed/simple;
-	bh=Sd3QdDEgr83Fg6PxxgYQ9P4zyv6jCRBeVjY/d6AX3g8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hf9Mb1ZPE81pjpeUAtK2lUOx8JOki5HwoDJeiRLqGEhgQjfsIrcUFLEsTF5IanHgIR+M9RkXXxFm1omZO4FIWTsVkoP+QHvpHvSX1roW4LMfHMvL8EIK7FgGe6vY+OFl+QZ4Mm5YPYkrPQAIWdFic0hi3W8tbxbD51Nh/peYLWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efDdgJM1; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1740659470; c=relaxed/simple;
+	bh=AqEIH9433yDwPNwgw9t9ZX2WJJa7PjR/6z8Qr//WifM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PY4sstriEfQN6MgSdSzDN3UaN5hNEhGGBYo+/5rUdnkqkip/nIEvMXk9rFoYXIX1XMgqixBDn3pTCkhoN05wOJXnZdo7i+MrRcpJhbRHF4cCYkuONz7BnsOjzVk2MGvFJDk3szG7sAY9izyciaQz5IGgOQF30kY/Yee87JVbqGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3zLfAIM; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efDdgJM1"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-223594b3c6dso6584245ad.2;
-        Thu, 27 Feb 2025 04:11:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3zLfAIM"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22114b800f7so15479565ad.2;
+        Thu, 27 Feb 2025 04:31:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740658288; x=1741263088; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iEzzB9qVJ3Iw6yE+IGNZV4gwcPeMNS9a9nupNaDYjZA=;
-        b=efDdgJM1euJwjUZWrcB0NkFb0bK1NyU4e0BZ5P/0s/wE2oQCTixA4gHziRHZSdyprP
-         5o3G/SwZO806px4ZQP63w9VYfF52DyAT6ZIQKJwObVTSH/PttnIorlvfzZ3AJfKr+2Ig
-         pyMRkb7ZmIys598u/WaEbenztjAnbpPcL+i3BYud+i/CpWkvSqYB7QIQN0TwHSm2vkWC
-         q18wkJSnwC+ethHtyttncKesAduQVLUvM9gKmqNhO0ak4O1rVT7X8FqhpmVU+O5OYkNz
-         qWyH4F43HaRNMQ9n5zwlwEnIWzmIRLZD4Mo1oFl1fItqFAeOpK4j0jUDawhrsbLZKipj
-         niAw==
+        d=gmail.com; s=20230601; t=1740659467; x=1741264267; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+blIxPitSvjkhrGqpiFpUFnW1zSX0iPB5L+f4xPY4uM=;
+        b=W3zLfAIM8OlXo3cn7ktusmyhEydZSKPCUbHhihJbX7N5lufwu2hWKC6eTeOasQXnXm
+         GnWEmUfm/aSj2x5JV50WGJigrua4bR5pdDrL/uqTBhyM6S+46txt7LaitmvzwtwGu1JJ
+         DpqgctzLByFuAwMHRWULDryXI2OZ9R73+n9ftmwWHLLlMN3zMkeb5q8cUoYIzvpnLWDs
+         hZJ17/fvFgV6NN+ZrVibgeHQlhtJmwxVbJPL/C7w1runkDlJeV/I6f9ajYVib2LVjaVW
+         0R1gzTf7UzptxffDmsXxdg946QAMauXPYNHSs8liCkLY8m8KioAEWDOLSYOWXNXRgRLp
+         olag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740658288; x=1741263088;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iEzzB9qVJ3Iw6yE+IGNZV4gwcPeMNS9a9nupNaDYjZA=;
-        b=TYCcGhO4sFl+qD5MejjVIOFUFP6NpBT152mkFK1G89ExVi4OiLhF4xq/EDTS34ps0a
-         fSkPiIgiyykLg1VEugZEgyKc5R+6iB5pTmPOQKlhu+788Hm4Wisedmuh8wQaX0j9eIHh
-         s4uUjPgKI6vqO74e8eVEgPdtdWcNnyN8Bxyg/NhD0pU37ymL1CVbfR1HWqdbEiT3jOu0
-         pgxQPIlLeLO+hpQGYG+bf/IrfVdO51RBUKDwtZ+OTGSiMYCuAsErSoGCvv0MMYWU5jJP
-         9MpkFnmgrS37pV7geYuHdDMI2c/VoQwYUMsDNF/glAAop1fpjblPlCKkKJXMdKyJXky0
-         LErg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8RcXz5ki5LC8dTeCFrEqzi9AaAoPpOhVCZIICQD4jiUkNbuMCiEKkvc+yTcmg1FO7d3IK0s5iYCaJ8rg=@vger.kernel.org, AJvYcCUCfhQ3N6deV9T09zpZXIG2Qe+9fPY7yMYpHKj8vbpeTQ2HK2usGrCd6S++PhThoI4bGkJY/3YjnIUlfjo=@vger.kernel.org, AJvYcCUfi3KBI2zmcuolGu24P9ALNDhbQ8lHFMxeJfJC77k+0W29TgCyF9nMqSSIQ8R2VuwDiRVZiJfuSzkk@vger.kernel.org, AJvYcCXYKMMcIX2eod68nD9bBIM0Z8K7NP7iCfm6HCSJWhviFbhnWGw/1BvP60qRmLSZhTMPnC5TOdy8+kHPkDey@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4r3mHTEkF2F55MNGsSSJWR//sPGCrbzN/VlZKoTaazXtAAKkE
-	wigNpFswspe328B6maQzh3lhhyDa3US0qI3FM9OQZ1iC5VFZEfXZ
-X-Gm-Gg: ASbGnct5wlMJJyVzj0OQy3v+Prb2yJyiVdEMhNqJ/lh1PjO3AcUL3A/V88Cn9pjcMxT
-	agHwJWSPxuZhRBNVMDincjxImzd1RShxny5w7vn3PN42r06tlubh2Df4iQS7qP44h6Htk4GtD1g
-	BqTRbZDdpCbZY/SzGvzncV4gvwSXApEwKv7t26il2Eh+HrCnpNlqp1c8gt2K22fsO3Q24wvadYC
-	/t/WVXkOTFNEFiPM51SxltW8iadNAvd0FJcXgcEnpQexMuXvvLkiS4QZoCysDh1o9hcim9xKTpP
-	ERM31UO5LWLvtXVc8OhL3jJnzyY4Mpi/bS7fkRYDbdrcUUjWysgP/psegCI3AWZP0UIqQOXOp/G
-	f+AYBPtNAUqaoyzacDOb9
-X-Google-Smtp-Source: AGHT+IHdFPiIjso+jHQ5pYM1l26QNU+l3tZa6s8ZU6RVChKuKqgbn5vVYB+/pxo5sqBJaVfMPpIGhQ==
-X-Received: by 2002:a05:6a00:8c3:b0:730:9752:d034 with SMTP id d2e1a72fcca58-734790a07bemr16311476b3a.1.1740658288101;
-        Thu, 27 Feb 2025 04:11:28 -0800 (PST)
-Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7de19cdasm1074217a12.24.2025.02.27.04.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 04:11:27 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Thu, 27 Feb 2025 22:07:47 +1000
-Subject: [PATCH v3 20/20] ASoC: tas2770: Set the SDOUT polarity correctly
+        d=1e100.net; s=20230601; t=1740659467; x=1741264267;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+blIxPitSvjkhrGqpiFpUFnW1zSX0iPB5L+f4xPY4uM=;
+        b=oYz7z9ANZaLlN2A1JkAXV2QXkhG24f5pFbfR0fsO7jN3IDADuhN3FHg0x79tx7OPk0
+         uEmmNhiW2pFonPrTpCqvAH6gmx2ILluBcssnIVY1+OR6xZbc0EUot3jqAhTH2sEYBdKQ
+         ZAxG0o5ZXyedwJpQRhiHAmyjMYafi9GQ6n0dZ6hNTKk9sKef96kHmmO64ED+NyZJiiZg
+         5NjzsexKb7AbAdsxHC7JHKPckCKkWKtoOI/f0zCeL4XArhoXPMggBMpktA0QOK+5Zd25
+         qei9wFeopHWiRrhZ5Arrot4WlGvOoYbNyxAhoOyGi+2LF+Uzc/4RMzMXS/gx0pV2BXir
+         DN6g==
+X-Forwarded-Encrypted: i=1; AJvYcCXGbEkKhAu+u+PJTo2cKtV9vv2E1YaOYd5DlB7gP8JsW6ZthVsl2Jcwnx++TJXstV7rIRj/TH7HSWN5k6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3wXiNIcMmEzDUZB12j58pbuaOKGxXj43bj68hfmzQwNcjpTEB
+	5Np6kpPph63089KT57aApjDEHkJaajKRnOG10eH/5GwRGT8FHN6r5D8eSA==
+X-Gm-Gg: ASbGncuhKt2O0lHqCxHNN86KFe/n6d4oiRau3s5B6Wq/VgbhEKFIkBF3thlRNSFsS4U
+	Zw856+cvVEqIqr6Ql2heg6zsWSEb2UuDszvnUJFTyuxNbJiJQ1ovktNfd95CcaMTMum2Bohc+wK
+	I5rZfswGjdSgM/j10BF4gejsu05jvaKblg6FkBZ8Ww/YojwgQ7Ui0Rj3qxnMGbiSRa3Pb0BB+pI
+	dK7VQmFJraRtrgVtSCL3eAEqVXo2w4OQRlD5Ih50yJDz7x0l40vnsJp/aB/f3eoF17chdqrPMgf
+	V3DQrEX7GhgRDMHukmuDL4REc3VFompvD3SfmeI0mPziBr2/7cH+zvYJaiZZzRBM1vX29Rd/AeE
+	=
+X-Google-Smtp-Source: AGHT+IHp4bXT5y7AAAzCMtzxGj2FomQyV8TeuNBLxAuLjk3y+mP6Swztw/DrtDLvTwNOcIXkZXFqnQ==
+X-Received: by 2002:a05:6a21:398b:b0:1ee:6032:b1ed with SMTP id adf61e73a8af0-1f10ad098fdmr12383870637.17.1740659467317;
+        Thu, 27 Feb 2025 04:31:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7dec4142sm1261698a12.56.2025.02.27.04.31.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 04:31:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7c8db8ba-19ad-417f-bacd-00e8e88eea25@roeck-us.net>
+Date: Thu, 27 Feb 2025 04:31:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250227-apple-codec-changes-v3-20-cbb130030acf@gmail.com>
-References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
-In-Reply-To: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>, 
- Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shi Fu <shifu0704@thundersoft.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
- Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- asahi@lists.linux.dev, linux-hwmon@vger.kernel.org, 
- Neal Gompa <neal@gompa.dev>, James Calligeros <jcalligeros99@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1794;
- i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=IJKMt2MOzo4HqAlNbvJllezc8HVauxLaZQPm/TY6YwA=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDOkHQk8XTzVteJa9zyGteXNIKOu9izN3CS9kSJYwaitYF
- 5tnsaKto5SFQYyLQVZMkWVDk5DHbCO2m/0ilXth5rAygQxh4OIUgIlESjAyNP66avXB65vk3+X/
- tyf5R1ur/1rWzGh3ZPl1gQXhTIKpSxkZWs9cP6RixZIod15C8rDMsqc3e3P8u3/dXGnXUcHfd2s
- 1FwA=
-X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
- fpr=B08212489B3206D98F1479BDD43632D151F77960
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] hwmon: (acpi_power_meter) Replace hwmon_device_register
+To: "lihuisong (C)" <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, liuyonglong@huawei.com,
+ jdelvare@suse.com
+References: <20250225085158.6989-1-lihuisong@huawei.com>
+ <8b59c8d0-4710-48ab-ad70-b2eddc74fa9e@roeck-us.net>
+ <05bb1583-13c7-25f6-48fb-dc415b3206f9@huawei.com>
+ <d765aeb3-3ca6-44a1-9337-2706621df903@roeck-us.net>
+ <765d509f-112a-2173-43af-e657f59fddac@huawei.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <765d509f-112a-2173-43af-e657f59fddac@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Hector Martin <marcan@marcan.st>
+On 2/27/25 00:21, lihuisong (C) wrote:
+> 
+> 在 2025/2/26 21:26, Guenter Roeck 写道:
+>> On 2/26/25 02:19, lihuisong (C) wrote:
+>>> Hi Guenter,
+>>>
+>>> 在 2025/2/25 21:01, Guenter Roeck 写道:
+>>>> On 2/25/25 00:51, Huisong Li wrote:
+>>>>> When load this mode, we can see the following log:
+>>>>> "power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please
+>>>>>   convert the driver to use hwmon_device_register_with_info()."
+>>>>>
+>>>>> So replace hwmon_device_register with hwmon_device_register_with_info.
+>>>>>
+>>>>> To avoid any changes in the display of some sysfs interfaces, some of
+>>>>> necessary changes in hwmon.c must be made:
+>>>>> 1> For 'power1_average_interval_max/min' interface, insert 'average' to the
+>>>>>     string corresponding to hwmon_power_average_interval_max/max in
+>>>>>     hwmon_power_attr_templates[]. I guess that is what's missing.
+>>>>> 2> Add some string attributes in power sensor type because of below items:
+>>>>>     a) power1_accuracy  --> display like '90.0%'
+>>>>>     b) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
+>>>>>     c) power1_average_min/max --> display 'unknown' when its value is
+>>>>>                                   negative.
+>>>>> Note: All the attributes modified above in hwmon core are not used by other
+>>>>> drivers.
+>>>>>
+>>>>
+>>>> That is not a reason to change the ABI, much less so hiding the change
+>>>> in a driver patch.
+>>>>
+>>>>
+>>> I am trying to replace the deprecated hwmon_device_register with hwmon_device_register_with_info for acpi power meter driver.
+>>>
+>>> To avoid any changes in the display of some sysfs interfaces, there are two modifications in hwmon core as follows:
+>>
+>> The only reason to change the hwmon core would be if it is wrong or if it needs to
+>> be amended. Matching driver expectations is not a valid reason.
+> Got it.
+>>
+>>> (1) The first modification in hwmon is as follows:
+>>> -->
+>>> @@ -646,8 +653,8 @@ static const char * const hwmon_power_attr_templates[] = {
+>>>       [hwmon_power_enable] = "power%d_enable",
+>>>       [hwmon_power_average] = "power%d_average",
+>>>       [hwmon_power_average_interval] = "power%d_average_interval",
+>>> -    [hwmon_power_average_interval_max] = "power%d_interval_max",
+>>> -    [hwmon_power_average_interval_min] = "power%d_interval_min",
+>>> +    [hwmon_power_average_interval_max] = "power%d_average_interval_max",
+>>> +    [hwmon_power_average_interval_min] = "power%d_average_interval_min",
+>>>       [hwmon_power_average_highest] = "power%d_average_highest",
+>>>
+>> That is indeed a bug and should be fixed, but in a separate patch.
+> will do it.
+>>
+>>> The string names, "power%d_interval_max/min", are missing 'average'.
+>>> I think the meaning of these attributes are unclear If no this word. It can be regarded as a fault.
+>>> And power attribute name in acpi power meter is "power1_average_interval_min/max".
+>>>
+>>> (2)The second modification changes the attribute of 'power_accuracy', 'power_cap_hyst', 'power_average_min' and 'power_average_max' from data to string.
+>>> It is appropriate to assign 'power_accuracy' to string attribute.
+>>
+>> No. The ABI states that this is the accuracy in %. We don't append "mV"
+>> to voltages, or "mA" to currents either. The unit is determined by the ABI,
+>> which states that the expected value is a number reflecting %. If a driver
+>> adds "%", it is a driver oddity, but not a hwmon bug. The whole point of
+>> providing numeric values is to simplify parsing from userspace. Adding units
+>> to the displayed value would not only be pointless (since the unit is defined
+>> by the ABI) but also make parsing more difficult.
+> Ack
+>>
+>>> Because it can be displayed as '%' and also include decimal point like acpi power meter driver, which is more in line with the meaning of this attribute.
+>>
+>> Why ? Are you suggesting that all other attributes should provide units as well
+>> "to be more in line with the meaning of those attributes" ?
+>>
+>> It is absolutely not common to add units to sysfs attributes. We are not going
+>> to do that, period.
+> ok.
+> What I mean is that is the display in power meter.
 
-TX launch polarity needs to be the opposite of RX capture polarity, to
-generate the right bit slot alignment.
+Again, that is a problem in the power meter driver, not a problem
+in the hwmon core.
 
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
----
- sound/soc/codecs/tas2770.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>>> It might be better to keep other attributes as data types. But it breaks the cornor display of these attributes in acpi power meter driver as said below.
+>>>     a) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
+>>>     b) power1_average_min/max --> display 'unknown' when its value is negative.
+>>
+>> That is a driver problem, not a subsystem problem. If it is so important to retain
+>> that (i.e., if for some reason some userspace program depends on it), just
+>> implement the attributes in the driver.
+> Yes
+>>
+>> On a practical note, I do wonder what it means if ACPI reports those values.
+>> It might simply mean that they are not supported. If so, the attributes
+>> should not be instantiated in the first place.
+> Agreed. But we still can't break ABI of this driver. will retain what it was.
+>>
+>>>
+>>> I want to say that all the attributes modified above in hwmon core are not used by other drivers, so don't break ABI of some driver.
+>>
+>> That is not a valid argument. Especially displaying values such as "unknown" or
+>> starting to display units as part of an attributes _is_ an API break since that
+>> is completely unexpected.
+> Ack
+>>
+>>> These can't be solved in this driver side.
+>>
+>> That is incorrect.
+>>
+>>>
+>>> AFAICS, acpi power meter driver can't replace the deprecated API because their sysfs interfaces will be broken if there's no any modification in hwmon core.
+>>>
+>>
+>> That is simply wrong. The _with_info API supports non-standard attributes
+>> with the extra_groups parameter. Just use that and implement the non-standard
+>> attributes in the driver and explain why you are doing it in a comment.
+>>
+>>
+> Ok, I will put these attributes above into extra_groups and add some comments for them.
+> Many thanks for your good suggestion.
+> 
+> 
+> Hi Guenter,
+> 
+> BTW, I have another problem as commit log described:
+> -->
+> The path of these sysfs interfaces are modified accordingly if use hwmon_device_register_with_info():
+> Old: all sysfs interfaces are under acpi device, namely, path is "/sys/class/hwmon/hwmon1/device/" ('device' in the path is a soft link of acpi device)
+> Now: all sysfs interfaces are under hwmon device, namely, path is "/sys/class/hwmon/hwmon1/"
+> What do you think about this?
+> 
 
-diff --git a/sound/soc/codecs/tas2770.c b/sound/soc/codecs/tas2770.c
-index 58f36cf471a6b7dd15c1b0600710396de4e2f61e..b68ae6236d69b43cfb1cf28cabf73b1f729191ab 100644
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -352,7 +352,7 @@ static int tas2770_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	struct snd_soc_component *component = dai->component;
- 	struct tas2770_priv *tas2770 =
- 			snd_soc_component_get_drvdata(component);
--	u8 tdm_rx_start_slot = 0, invert_fpol = 0, fpol_preinv = 0, asi_cfg_1 = 0;
-+	u8 tdm_rx_start_slot = 0, invert_fpol = 0, fpol_preinv = 0, asi_cfg_1 = 0, asi_cfg_4 = 0;
- 	int ret;
- 
- 	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
-@@ -369,6 +369,7 @@ static int tas2770_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 		fallthrough;
- 	case SND_SOC_DAIFMT_NB_NF:
- 		asi_cfg_1 |= TAS2770_TDM_CFG_REG1_RX_RSING;
-+		asi_cfg_4 |= TAS2770_TDM_CFG_REG4_TX_EDGE_FALLING;
- 		break;
- 	case SND_SOC_DAIFMT_IB_IF:
- 		invert_fpol = 1;
-@@ -387,6 +388,12 @@ static int tas2770_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = snd_soc_component_update_bits(component, TAS2770_TDM_CFG_REG4,
-+					    TAS2770_TDM_CFG_REG4_TX_EDGE_FALLING,
-+					    asi_cfg_4);
-+	if (ret < 0)
-+		return ret;
-+
- 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
- 	case SND_SOC_DAIFMT_I2S:
- 		tdm_rx_start_slot = 1;
+That is as intended. The ABI states that the attributes are under
+/sys/class/hwmon/hwmonX _or_ /sys/class/hwmon/hwmonX/device/.
+The ABI does not guarantee that the underlying path remains the same.
+libsensors handles this automatically, as should any userspace programs
+accessing the attributes directly.
 
--- 
-2.48.1
+Guenter
 
