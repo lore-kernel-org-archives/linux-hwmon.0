@@ -1,155 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C38226551;
-	Thu, 27 Feb 2025 08:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B73A101FF;
+	Thu, 27 Feb 2025 12:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740646227; cv=none; b=YnO+WglicHoRED3/BOvSOvgWIOIs3qX0dcIaeO0/NVdf83f84SdDT3EF0jig7rx5i8XfolcU7lTxuvcTkCPWmp1veqmM1+m2XI3PA+SToc+8TrW+X7H4Re7zwqZwisHEpgCofLZs3m1dTQINfQShk5telRtC9J1r6/zhXX+vQMk=
+	t=1740658134; cv=none; b=TeKCiQbWZgacXOiAXVoFxTM10PsK9ByFTyJ4bPAntJ6AhDCOOL919QiuWvwam30Nsz9xTS4h8vUAAuACe5DYEcbSVglAlDOw+7IGJHC6bE+QzCLEOs+0KFQlQ5D530kAIuK2hU9kSIOMTxv1A22mPA7drvx5d3UHuU39fssskLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740646227; c=relaxed/simple;
-	bh=EE3knrHH8YT3ZkzHF6A+tlFuX23SQHUMMiwsbGXbq+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dv9+1YWlXVFG8vWnaLO4kmUbZ3A91nNRmb2UjUAGrmmR/F8IYw4W6d1l4PpVntq13/vgtYYNvJgQU45kfeSmmpy5a45K+F89adbQGH3RCCIzlXh/UKqp2kQNQxNAmFuMtGxbq7gYYaX2yUTw/BbcFV6ZkUBAfv4TrBOtQ+06sPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfrG/Vr4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740658134; c=relaxed/simple;
+	bh=tql2RO8GL3XbRYzLyF10LrmaUQUmVqAYtQm0jp7XazI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rhKg1jC6v061UMcWYH1X9X6nsT99xPYUOZrTB45OciNypcOj9zciSqcKTUgw5DbFSItArGqSI/39ZTKMQCnx0dpIZaa/T9Jrtp20xLnUm3pSW4yloSaefRfuLuTUBYuuI72j6psizVtUr4t67tGlKSbjSnKXxOObNeL6H9qn2uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bpQRU2F0; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfrG/Vr4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F10C4CEDD;
-	Thu, 27 Feb 2025 08:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740646227;
-	bh=EE3knrHH8YT3ZkzHF6A+tlFuX23SQHUMMiwsbGXbq+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JfrG/Vr40qTIY21lVpJ4sUtXo/+HrBEhlXEK+jtOK2rQ28R7KRABEh4iej9OIYaEe
-	 Xw3SQegimknFRuuE8ls1DjHg1agt/IytsqPUVQ6SFEiW2RGHCVBy7GP7e3u+j2S00e
-	 evqnHZFaWiEeoFNvtDeB+b6v3EeydfwPQmJkZODct3nB54D+ZIlXrfJ0HGgZS8zx67
-	 Kn1YPsXB/YH9sf3mMEXTvLYy55uM7ZG0YGjOPui0Pxz7uxZGAzS/Jpl60eYg2YlOaU
-	 H4spQcj+fSJ8ewu1cONdhPSBntYrJp3LesznJQ6GmITs7g7oVtG7uUmpucD8Omtezy
-	 VI9qsCnYmJVQw==
-Date: Thu, 27 Feb 2025 09:50:23 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, 
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-Message-ID: <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bpQRU2F0"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22185cddbffso33975675ad.1;
+        Thu, 27 Feb 2025 04:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740658132; x=1741262932; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jgXAyWJlzyUT7W8oT86LCqJbT092n3CAES1oCH+us9Q=;
+        b=bpQRU2F02KYDVnGeSXRBP1K9d0T+jI8c2B7ZvDbGsjHfhiTPh254HLopUzbBdQQmtg
+         oOiYpik6txxfpJx+uwC9BqYSH9DWRHq0fIDjWKGFd8TklUbCYiBkuSXi0LbWeN2Ut2Dp
+         NCNYfAX6LuvydRsgOlPh9r/s8Vjukw4BNkev//ivNLZClXNgjHclr3hC5M27PH3xwPJk
+         TOeASV6R5BWZ1JR7QAOFk5Iqsx69zRrUKfA09z64SO6/7g841ituEsmtsuCs5MP0gyJv
+         gnka00WaAgZBozK/UR/XHK+V7Nsq5iD6OudjaL1aOKHgvQT5HA8q6vKo9pM0sVKS1czr
+         ti0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740658132; x=1741262932;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jgXAyWJlzyUT7W8oT86LCqJbT092n3CAES1oCH+us9Q=;
+        b=GUwg1MMWfFtWtQINB3t0j7afqPOyjzY4g065DwImJdwUQXPM2W9x7ffM2DMJupa3lJ
+         nvlhOtzcLCWDIyQoDpLpd872Z90Tztjq1N2HkRjvZqdMsJOHPG5+MXrnm13WPEF/2HB/
+         5W2owHeOzp/T3jmhz4NIzX5tZurHg9fqgZ4Zz+I+7GBqjXBoMml5HJrp7jI/5g4SEzKr
+         aqJNnbERIAfwrMm+zluSe7dv0qcKd9P3yY3HXIa/MnebA2ohXnA0Mksu09UEhIBW0orW
+         Rq+gFfmG0HqzuVv47wJK8vhNXp98LyVnvq2rI4FCrObWNgbBAjZ5haJN4yaLwFWT5yQY
+         A8Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5EdCD4WZ2+akNLuP5MD7XcCoz1iq6vyJ2DX2PyrkauCbXGsq6UaZ0RGpaNXPSC9yoG3iem9P9vFUqhn0=@vger.kernel.org, AJvYcCWjxAai77jDy2ukAyV225vsC+9dD33DqjuL92gGJ4te+dmC34Q2/O96GMpx2rLbR9SQxMoKIOJGdjLLDe+Q@vger.kernel.org, AJvYcCXBZuTiutEC3ngL+Y19gi8vW+poWvwukcStge+iWBpwk02eZNAeTj/Efs0YOQRyIdsg3Oqvh3u/8eGY@vger.kernel.org, AJvYcCXUyp3RWDhUwdgP00KXtU4SZB9htcC2d9wwqgU/DxU4VGlbB6T/XZ4Ydm/4k9O2f2VTsOr2dk7XExxzRRU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhBqknXz1MECn9duYd4KBISr/VnfKerK75puZp/r69nKZvegle
+	A1e03wT1OnHIUCbcQjGkg8IPbGrj12oUIvtQqPQlVj0uLqAcnPIr
+X-Gm-Gg: ASbGncsCDK9KeqOiOHUev1VX7C+mgckzDEFP6NK+aMl1thRfhj/jg+FQEA2vxEpLCd/
+	yz476kxQ/cHAoJ6TT13io2K1L44k7+/+FHWQnBX1PvCWO7L+MfF/AoWkmbA/Y+Jxdvxjca0U3sF
+	3oDsQxvrc10IxrCBUrdsqXLl2t8IM0o0MAjdKCheWjt/+0S11l+tTbP39tyhydB7IqBUDEn5PkI
+	0zEnJf2nz8j90p1V4qqWY88Ae0FL+NZALW/CG+Wkzylla8/dxsPrzRlnYYsu23OgPPtf0DAQ8Jb
+	one/eZBUb2eFPd2mSBjPX7gpLJJw7nchcqpR3BbPToBWz2mb29HtRcrg4oG2KjTj61A7JLKSxzO
+	DkHPsoJDcW/ouGRmNSXBi
+X-Google-Smtp-Source: AGHT+IGpG3aYl9HWsQOldqhSuN29J84k9WJc0IYy7wzLeHC+7iHr1iy3v7s+wPTT3I+3pe465wAJnA==
+X-Received: by 2002:a05:6a21:6f0c:b0:1ee:d19c:45f9 with SMTP id adf61e73a8af0-1f2e39188d3mr5135935637.19.1740658131652;
+        Thu, 27 Feb 2025 04:08:51 -0800 (PST)
+Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7de19cdasm1074217a12.24.2025.02.27.04.08.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 04:08:51 -0800 (PST)
+From: James Calligeros <jcalligeros99@gmail.com>
+Subject: [PATCH v3 00/20] ASoC: tas27{64,70}: improve support for Apple
+ codec variants
+Date: Thu, 27 Feb 2025 22:07:27 +1000
+Message-Id: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAH9VwGcC/23NwQ6DIAyA4VcxnMcCVWB62nssOyhUJVExsJAtx
+ ncfuizx4PFv2q8LCegtBlJlC/EYbbBuSpFfMqL7euqQWpOaAAPBgBe0nucBqXYGNf1tBCpRCmk
+ 0RygMSZezx9a+d/XxTN3b8HL+sz+JfJv+PXHqRU4ZVZALWTbAG17eu7G2w1W7kWxehKNxOzcgG
+ WUOSrLWKGTqaKzr+gVhtMHr+gAAAA==
+X-Change-ID: 20250214-apple-codec-changes-6e656dc1e24d
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>, 
+ Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shi Fu <shifu0704@thundersoft.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+ Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ asahi@lists.linux.dev, linux-hwmon@vger.kernel.org, 
+ Neal Gompa <neal@gompa.dev>, James Calligeros <jcalligeros99@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3916;
+ i=jcalligeros99@gmail.com; h=from:subject:message-id;
+ bh=tql2RO8GL3XbRYzLyF10LrmaUQUmVqAYtQm0jp7XazI=;
+ b=owGbwMvMwCV2xczoYuD3ygTG02pJDOkHQk84PxRvSj/f26TnMf3zq6hn/pu8Jhf+/um1Z1Pnv
+ JNnmAVmdJSyMIhxMciKKbJsaBLymG3EdrNfpHIvzBxWJpAhDFycAjCRrAxGhs6n81dO2fhCyOrF
+ IYNyV3fWPwpLSmKXdHeuXqIZqX7m0iqGf1o8rpKShxfdM+A5V2x3RICdK+qU5izu3+ymgTl/L2p
+ fYAIA
+X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
+ fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-On Wed, Feb 26, 2025 at 11:17:48AM -0800, Guenter Roeck wrote:
-> On 2/26/25 06:59, Rob Herring wrote:
-> > On Wed, Feb 26, 2025 at 09:20:40AM +0100, Krzysztof Kozlowski wrote:
-> > > On Tue, Feb 25, 2025 at 09:01:13PM +0800, Cedric Encarnacion wrote:
-> > > > Add Analog Devices LT3074 Ultralow Noise, High PSRR Dropout Linear
-> > > > Regulator.
-> > > > 
-> > > > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> > > > ---
-> > > >   .../bindings/hwmon/pmbus/adi,lt3074.yaml           | 64 ++++++++++++++++++++++
-> > > >   MAINTAINERS                                        |  7 +++
-> > > >   2 files changed, 71 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..714426fd655a8daa96e15e1f789743f36001ac7a
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,lt3074.yaml
-> > > > @@ -0,0 +1,64 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/hwmon/pmbus/adi,lt3074.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Analog Devices LT3074 voltage regulator
-> > > > +
-> > > > +maintainers:
-> > > > +  - Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> > > > +
-> > > > +description: |
-> > > > +  The LT3074 is a low voltage, ultra-low noise and ultra-fast transient
-> > > > +  response linear regulator. It allows telemetry for input/output voltage,
-> > > > +  output current and temperature through the PMBus serial interface.
-> > > > +
-> > > > +  Datasheet:
-> > > > +    https://www.analog.com/en/products/lt3074.html
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      - adi,lt3074
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  regulators:
-> > > > +    type: object
-> > > > +    description: |
-> > > > +      list of regulators provided by this controller.
-> > > 
-> > > You have only one regulator, so drop the "regulators". vout could be
-> > > here, but since you do not have any other resources, I doubt it stands
-> > > on its own either. This is even visible in your DTS - you named the
-> > > device as regulator, so logically this is the regulator. Regulator does
-> > > not have regulators (otherwise they could also have regulators... so
-> > > triple regulator).
-> > > 
-> > > hwmon code might need some changes, but that's not really relevant for
-> > > proper hardware description.
-> > 
-> > Normally, I would agree, but it seems generic pmbus code expects this
-> > structure. This just came up with changing another binding maintained by
-> > 'Not Me' to follow this structure. We're stuck with the existing way, so
-> > I don't know that it is worth supporting 2 ways forever. OTOH, is it
-> > guaranteed that these devices will only ever be pmbus devices or that
-> > other regulator devices which are not handled as pmbus devices currently
-> > will be in the future. If so, more flexibility in the bindings will be
-> > needed.
-> > 
-> 
-> I would appreciate if someone would explain to me what the problems with
-> the current PMBus code actually are. I have seen several comments claiming
+Hi all,
 
-Not exactly a problem but missing feature. pmbus code (at least one of
-macros I looked at) expects regulator node and some sort of child of it
-(vout), while such simple devices should be:
+This series introduces a number of changes to the drivers for
+the Texas Instruments TAS2764 and TAS2770 amplifiers in order to
+introduce (and improve in the case of TAS2770) support for the
+variants of these amps found in Apple Silicon Macs.
 
-regulator {
-	compatible = "adi,lt3074";
-	regulator-name = "vout";
-	regulator-min-microvolt = "100000";
-	regulator-max-microvolt = "100000";
-};
+Apple's variant of TAS2764 is known as SN012776, and as always with
+Apple is a subtly incompatible variant with a number of quirks. It
+is not publicly available. The TAS2770 variant is known as TAS5770L,
+and does not require incompatible handling.
 
-so without any of regulators and regulators/vout subnodes.
+Much as with the Cirrus codec patches, I do not
+expect that we will get any official acknowledgement that these parts
+exist from TI, however I would be delighted to be proven wrong.
 
-> that the code should be changed, but I have no idea what the expected changes
-> actually are or, in other words, what the PMBus code should be doing
-> differently.
+This series has been living in the downstream Asahi kernel tree[1]
+for over two years, and has been tested by many thousands of users
+by this point[2].
 
-I did not investigate much into pmbus code, but this might be as simple
-as accepting arguments for .of_match and .regulators_node and then
-accepting NULLs as them as well. Or a new macro which assigns NULLs
-there.
+[1] https://github.com/AsahiLinux/linux/tree/asahi-wip
+[2] https://stats.asahilinux.org/
 
-Regulator core handles .regulators_node=NULL already.
+---
+Changes in v3:
+- Add Rob's Acked-by to Devicetree compatible additions
+- Dropped cherry-picked patches
+- Droped abuse of regulator API
+- Droped bespoke sysfs interface
+- Rationalised temperature reading for hwmon interface
+- Set SN012776 device ID with OF match data
+- Changed probe ops reliant on device ID to case/switch statement
+- Added documentation for new Devicetree properties
+- Improved a number of poor quality commit messages
+- Documented behaviour of die temperature ADC
+- Link to v2: https://lore.kernel.org/r/20250218-apple-codec-changes-v2-0-932760fd7e07@gmail.com
+
+Changes in v2:
+- Changed author field of patch to match Martin's Signed-off-by
+- Added Neal's Reviewed-by to reviewed patches
+- Moved fixes to existing code to the top of the series
+- Removed tas2764's explicit dependency on OF
+- Removed complicated single-use tas2764 quirks macro and replaced with
+  if block
+- Added hwmon interface for codec die temp
+- Fixed a malformed commit message
+- Link to v1: https://lore.kernel.org/r/20250215-apple-codec-changes-v1-0-723569b21b19@gmail.com
+
+---
+Hector Martin (5):
+      ASoC: tas2764: Enable main IRQs
+      ASoC: tas2770: Power cycle amp on ISENSE/VSENSE change
+      ASoC: tas2770: Add zero-fill and pull-down controls
+      ASoC: tas2770: Support setting the PDM TX slot
+      ASoC: tas2770: Set the SDOUT polarity correctly
+
+James Calligeros (6):
+      ASoC: dt-bindings: tas27xx: add compatible for SN012776
+      ASoC: dt-bindings: tas2770: add compatible for TAS5770L
+      ASoC: dt-bindings: tas27xx: document ti,sdout-force-zero-mask property
+      ASoC: tas2770: expose die temp to hwmon
+      ASoC: tas2764: expose die temp to hwmon
+      ASoC: dt-bindings: tas2770: add flags for SDOUT pulldown and zero-fill
+
+Martin Povišer (9):
+      ASoC: tas2764: Extend driver to SN012776
+      ASoC: tas2764: Add control concerning overcurrent events
+      ASoC: tas2770: Factor out set_ivsense_slots
+      ASoC: tas2770: Fix and redo I/V sense TDM slot setting logic
+      ASoC: tas2764: Reinit cache on part reset
+      ASoC: tas2764: Configure zeroing of SDOUT slots
+      ASoC: tas2764: Apply Apple quirks
+      ASoC: tas2764: Raise regmap range maximum
+      ASoC: tas2764: Crop SDOUT zero-out mask based on BCLK ratio
+
+ .../bindings/sound/ti,tas2770.yaml       |  13 ++
+ .../bindings/sound/ti,tas27xx.yaml       |   5 +
+ sound/soc/codecs/tas2764-quirks.h        | 180 +++++++++++++++++
+ sound/soc/codecs/tas2764.c               | 258 ++++++++++++++++++++++++-
+ sound/soc/codecs/tas2764.h               |  21 ++
+ sound/soc/codecs/tas2770.c               | 240 ++++++++++++++++++++---
+ sound/soc/codecs/tas2770.h               |  19 ++
+ 7 files changed, 706 insertions(+), 30 deletions(-)
+---
+base-commit: 32adeb9806ac5bf928514b62e6145bba12dfd71a
+change-id: 20250214-apple-codec-changes-6e656dc1e24d
 
 Best regards,
-Krzysztof
+-- 
+James Calligeros <jcalligeros99@gmail.com>
 
