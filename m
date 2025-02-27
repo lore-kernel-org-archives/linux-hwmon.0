@@ -1,106 +1,100 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qk1-f202.google.com (mail-qk1-f202.google.com [209.85.222.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0552702D7;
-	Thu, 27 Feb 2025 21:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BE32777EF
+	for <linux-hwmon@vger.kernel.org>; Thu, 27 Feb 2025 22:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740693534; cv=none; b=DoV8myTjxsPuFGCuuZBhZJSZ9E/E7FGkiij+5KKEWTJUSATAsKClltCJWPupLp92q4rtNahDo84ExDkL/zTpoxSxmsvg7HC+YDN0qIwMEsldq8fzNlSv82RIqWN4bYOyoaCLyirZ+SqS3LStL2RlXRcdEMIy5gMCR3ezKRZjTuA=
+	t=1740695106; cv=none; b=kyONG7IJLmat18kdRHAes5HnFf2M+GR/8g1Jo4qOr/8kZlf+K0AbiZZnDrNEkcE2jc/6SsjmJSjOFS+mXkDAE7q/swFAWhRxdlidU/6/1RLdBMm7ORuC6mKNGj7IAv9E33l/YrDx1O722wf4FKj6WuaTXI6JaHrd4Qzl3SqHhKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740693534; c=relaxed/simple;
-	bh=Dm3RxaB0CXAQe1z7lgXkILph+xq5j+lovtkROFEkZdE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XHivdrWziKojtDiIPYEMmNlhpW1jMs6i1mBdMSv0+q89bzV7ewuoFcA5jCNL/yUGp5tX3gUaQbyxZ4KYX3dIEwuttDC9odt+z0toXTEJ96YOIO05Xjg6MnQjj5j//oEEc1BIUjvmj4mfAw5dJZGQpi3t5hltd92FjID6eunV3nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KWiG7gSf; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740695106; c=relaxed/simple;
+	bh=yqmRATo9Iwptsr2ah/UqyMGkFCyCO9rGj356YotKp84=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qK8T6WkhXCsqmk95cwUG0YfwYXTvtjRJMt7Q5Y0JEGE6YVfuxzmwLLIs99eb6OVi1LezHPTAsRc38pe2b2RpAedrgGFaryph9vhhivOwpT7CkAq11vV/UvCCqaDBudwEi5ismjjIEoB5DblwtNJh8EfYelhxmFN7aobSQUouhMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--titusr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bWLeMhjM; arc=none smtp.client-ip=209.85.222.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--titusr.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KWiG7gSf"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-471f16f4b73so14224191cf.1;
-        Thu, 27 Feb 2025 13:58:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bWLeMhjM"
+Received: by mail-qk1-f202.google.com with SMTP id af79cd13be357-7c09b9c6991so286610285a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 27 Feb 2025 14:25:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740693532; x=1741298332; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dm3RxaB0CXAQe1z7lgXkILph+xq5j+lovtkROFEkZdE=;
-        b=KWiG7gSfBf4wGfKvY5ibhhZfYa7dtDt3IdGRtzsKbbabkgDcF24VShprByqUB0INNE
-         9yGUD7hxW+iqEauU8O9CqmgJYib9MRFE0Yz537CEhnOqXNjMht9TZcY7MOfG26vjHjPH
-         TmpdTiywRmthss4yewWtR4rV4Vsl09xPLm/tj19XxiUIGqtFkFmnjN+6LtD0tPENDtCa
-         9RlKIcq6Pt+tBcKnN3CvY78Cn3tB4YnX8NEzmzbWGqh8yqU4YN1EtC65da++PP0ZBliL
-         /9G0gFTIEq6BABkrGh9eT3otjYfhYawjvbx82u2fkLDNi23BZd8ZciMZ4NjiyG2TZvxf
-         CmPg==
+        d=google.com; s=20230601; t=1740695103; x=1741299903; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HSLRljK43Uk2l/2Nirh2DotK7yX9JYKhPGxc7DELhYk=;
+        b=bWLeMhjMx1u1wQCLXxf4NbMn6+byKR1Vjj7Y5G0KJC11dBTqEIMNP0jN2WuSW4lTC/
+         dC/xRsyqptKgE7cHogjryDLUf9c9xiq6r98iPV3h3FKyL6eisGmsoVrDnxRZP8Ig+5lU
+         TnunqcyQPOzB5rWwknA4c6WCV4Upq9+N9Cjb68KiL4xFcbjmLKB0xW9IrLhCYAukNCpy
+         hO87znVRpfTdL+l0wGnZpSMTJBQvjL2Wmn9ZCsuMymjE37CRbTN0/7Tz3/jccwSETUhI
+         vCYN81oAF7d/q5uEtqyuPkVZ74+Qt/QQP87FXn9knhMKxw9Mzk78Mu1SFMlj3M8IEieh
+         eH7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740693532; x=1741298332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dm3RxaB0CXAQe1z7lgXkILph+xq5j+lovtkROFEkZdE=;
-        b=SjqKsGs1F/iQrRrMUHwsRBWIV2g8VH/VZa8KCeFM+VjQuc/EPZ2uZLbxIAXVn2HQg5
-         IJ45q49Cvqng6ovd5RYUCLG7ri2SrJXv1/Lr/mVNHcMVsMpZX9Gjz/p6WAO60CrNSAot
-         tu+jjfR1/rYhPhu/RwuSlvc065dejl+tZ7xvG/qhZer7yMnNR6lY7Ds1tm7e0OEf7rXC
-         lAYjwo8y4Jnw3qEY121XadkUPJ4QwjsOISDKGahW3noUq3VbFvO9l9LGzwgxkiGku5vC
-         iQtUAd2ddTaf15UdZQ63retJUYd35tPtq/i2m59rLv0cV6i+M+7z52FaVu1Fak7t2fB0
-         36fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+L/VoFXPajW4+9SH1F6x86W+XJtPE9s3F4SrmFe3ODdkLXjiMOSzApo8h0jaESmrNWXZf2YtP3OQqLw/H@vger.kernel.org, AJvYcCUOug3lEs6QBvOjSEzsOVune/qwLFjhNRIxv3HmvdjJWonhpoDzFgd08CJbKzTcuObGAk1uMSPNBmJoUmY=@vger.kernel.org, AJvYcCV2MeQiaO8PEwHX3SHhfR2I4dqhVQNnqq5dfA5n8DHMSle/UUYACYqgpdePiqIK6YN3m7hU5ZCDI9hXSD0=@vger.kernel.org, AJvYcCXA6kxLdqyfoSmHBE7BHx2ALJqlxpM94+xl/lFZ0mcrI5MYY6Grx1YKt21cftdsJdeWAsdMqcONWs3V@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMvLeYNXbi226kkLOlzn+rhTNiPoQiyMCGINICFoMXIDXS8naZ
-	EAQrWW6ypD2JMBax83Nui9llkeLdRL7sVwCg5cVr9B7W2kmH62YrkHU/0KOaF4/WAVeO5fA8/WM
-	QKtq87cJv4MAI1vHR70ya1w472qaMFV49
-X-Gm-Gg: ASbGnctGESNdbgWz/aK24Q4LUh0uT4ukOMG18993Qr58V596RuY4yD0mHg/xnRG4f7i
-	hXXC9xHee2f/oPePEce+XmA9NPrzLfxo905zPguJAmHXJToiWYW0JI2WBSzRiso5woix/P5lSK5
-	6dduwJ1A==
-X-Google-Smtp-Source: AGHT+IGZycxF9mK2j7Xgw/jf4P4PzwJkPkA+YQ8gNsvWst/YlqRF9ahH2kcIfaFTwicW7dgH/uB2VhA7H7UVn8sEOSQ=
-X-Received: by 2002:ac8:5ad0:0:b0:473:87fb:2ecf with SMTP id
- d75a77b69052e-474bc068615mr12002921cf.21.1740693531852; Thu, 27 Feb 2025
- 13:58:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740695103; x=1741299903;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HSLRljK43Uk2l/2Nirh2DotK7yX9JYKhPGxc7DELhYk=;
+        b=KHgqvnKTbZfy1YRUtqaFMdIEol5LduBukemuS4lcGb0DSj6cmZ0xBJwsQF2UHjMzD8
+         0gDyXkOlAK7nAcXgZgOwsrbW9iw5RdkkigYjiCnNwQCylhO+81+tE+hKRaK6z7Z6q3HW
+         KveyYLB6p4WE7CpjSU/gpm5OUx8a2gFHKeM+OszpPXRepZvaihJUkV3X0HjQFk+NBdRV
+         so1vUlC1T6nAHRQ+rK0uLiJgvDsAQo0lLobsnbwscoqZrWeK/HyoyLGqePNX3cvZ5Nmq
+         tkuMO8oZ1oPenJlAmFxf0sJq2tzn+RWzQU2CFLnnza45znS0w7RkQB814e+vNj4kLvjJ
+         wfRw==
+X-Gm-Message-State: AOJu0YywFQKjRgb/8fRG6UXEt+fkwXe5J84Xt6G3bNxgGBU2Q/aSgfI2
+	GFu3xBf5R0vQ7kVEoyHEBvTkSfXeerLWl2IF2D8YobBBbP8VoxER8beCmE73NiLXRMUuibBBhiV
+	MEg==
+X-Google-Smtp-Source: AGHT+IEqTrAwZcU5ZEKxLHbUG+APrCAbFivtv8f+7zvkxGRFmGzE/9PiLmm3fuoj+RusAO97plbJo4qqGvI=
+X-Received: from qkap10.prod.google.com ([2002:a05:620a:a90a:b0:7c0:9e2a:81cd])
+ (user=titusr job=prod-delivery.src-stubby-dispatcher) by 2002:a05:620a:4408:b0:7c0:b9f3:bd1e
+ with SMTP id af79cd13be357-7c39c64a49cmr156313085a.49.1740695103560; Thu, 27
+ Feb 2025 14:25:03 -0800 (PST)
+Date: Thu, 27 Feb 2025 22:24:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
- <20250227-apple-codec-changes-v3-15-cbb130030acf@gmail.com> <f3eecce4-51d1-4414-af85-680d51e588fa@sirena.org.uk>
-In-Reply-To: <f3eecce4-51d1-4414-af85-680d51e588fa@sirena.org.uk>
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Fri, 28 Feb 2025 07:58:33 +1000
-X-Gm-Features: AQ5f1JqhIE5frhKKp88Yce4HcYqH0rbyxjCTlt3Y9iZPbu-hf4o4-EBYqcvAUCc
-Message-ID: <CAHgNfTx_kMj=rsd4nUCiX_PvgC4GX3DsPDwXHdEyEeLMbDFccw@mail.gmail.com>
-Subject: Re: [PATCH v3 15/20] ASoC: tas2764: Enable main IRQs
-To: Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>, 
-	Dan Murphy <dmurphy@ti.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shi Fu <shifu0704@thundersoft.com>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org, 
-	Neal Gompa <neal@gompa.dev>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.711.g2feabab25a-goog
+Message-ID: <20250227222455.2583468-1-titusr@google.com>
+Subject: [PATCH] hwmon: (pmbus) Initialise page count in pmbus_identify()
+From: Titus Rwantare <titusr@google.com>
+To: linux@roeck-us.net, jdelvare@suse.com
+Cc: linux-hwmon@vger.kernel.org, Titus Rwantare <titusr@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 28, 2025 at 2:23=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Thu, Feb 27, 2025 at 10:07:42PM +1000, James Calligeros wrote:
-> > From: Hector Martin <marcan@marcan.st>
-> >
-> > IRQ handling was added in commit dae191fb957f ("ASoC: tas2764: Add IRQ
-> > handling") however that same commit masks all interrupts coming from
-> > the chip. Unmask the "main" interrupts so that we can see and
-> > deal with a number of errors including clock, voltage, and current.
->
-> Shouldn't this also be a fix?
+The `pmbus_identify()` function fails to correctly determine the number
+of supported pages on PMBus devices. This occurs because `info->pages`
+is implicitly zero-initialised, and `pmbus_set_page()` does not perform
+writes to the page register if `info->pages` is not yet initialised.
+Without this patch, `info->pages` is always set to the maximum after
+scanning.
 
-I don't think so. The referenced commit only says that it adds an IRQ handl=
-er.
-I don't think this commit is actually "fixing" anything - it's just
-enabling previously
-masked interrupts.
+This patch initialises `info->pages` to `PMBUS_PAGES` before the probing
+loop, enabling `pmbus_set_page()` writes to make it out onto the bus
+correctly identifying the number of pages. `PMBUS_PAGES` seemed like a
+reasonable non-zero number because that's the current result of the
+identification process.
 
-Happy to move things around if you disagree.
+Testing was done with a PMBus device in QEMU.
 
-James
+Signed-off-by: Titus Rwantare <titusr@google.com>
+---
+ drivers/hwmon/pmbus/pmbus.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
+index 77cf268e7d2d..920cd5408141 100644
+--- a/drivers/hwmon/pmbus/pmbus.c
++++ b/drivers/hwmon/pmbus/pmbus.c
+@@ -103,6 +103,8 @@ static int pmbus_identify(struct i2c_client *client,
+ 		if (pmbus_check_byte_register(client, 0, PMBUS_PAGE)) {
+ 			int page;
+ 
++			info->pages = PMBUS_PAGES;
++
+ 			for (page = 1; page < PMBUS_PAGES; page++) {
+ 				if (pmbus_set_page(client, page, 0xff) < 0)
+ 					break;
+-- 
+2.48.1.711.g2feabab25a-goog
+
