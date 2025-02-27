@@ -1,67 +1,67 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC0270043;
-	Thu, 27 Feb 2025 12:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE5246BF;
+	Thu, 27 Feb 2025 12:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740659470; cv=none; b=pvl8Jrig3abTGMPR5wNhfCfqVKxizy28erX9clXrkvpRIYOQXifnfgvh9iXVPha0hG81xkg0zuX7RpzXAcY7tT1qtNi9IR+IOCqDCoi7eaA1jdkvv4VtLpf6EjJ0oy1YJ0YOdJEDhwUreTXbTWwk0fx1Yz1JfT73ymS+udKkREA=
+	t=1740660340; cv=none; b=IzslVjaiTew1Pxh/zwdjvneVg6IpH8c9VZ8Ac0TySsmTIOfv3Bs68h9rrSzeqAvPe8UOj3dkWGNQfZXONEHbuEfPSb95uLj3wm8cpXD1/bja7/DD7CLV7bqAm+fnshNkZYLjAp00TbVHGW5wXq/JuWVv4o22r1hvGj17Fx3D0c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740659470; c=relaxed/simple;
-	bh=AqEIH9433yDwPNwgw9t9ZX2WJJa7PjR/6z8Qr//WifM=;
+	s=arc-20240116; t=1740660340; c=relaxed/simple;
+	bh=fWnzntoPDeya2tebONYCDCnkBxEo93LOZEjPITsWVOk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PY4sstriEfQN6MgSdSzDN3UaN5hNEhGGBYo+/5rUdnkqkip/nIEvMXk9rFoYXIX1XMgqixBDn3pTCkhoN05wOJXnZdo7i+MrRcpJhbRHF4cCYkuONz7BnsOjzVk2MGvFJDk3szG7sAY9izyciaQz5IGgOQF30kY/Yee87JVbqGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3zLfAIM; arc=none smtp.client-ip=209.85.214.169
+	 In-Reply-To:Content-Type; b=ED8/Xi3N6PGqmD475+4B00Rg3OCX9GPFwL+dJQenHpvqo7v3EFQdttNe07ruBapLZW4OITkXoJx4gHSGP4xuXNGuaIxussg3fX0do4e7VhEos1wbuiDiZHXTmVE7g90stjNHy3UiEULDBXpkKvAj05qXkKJV1dRGuBI+RY6qHbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewA+zyCM; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3zLfAIM"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22114b800f7so15479565ad.2;
-        Thu, 27 Feb 2025 04:31:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewA+zyCM"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22359001f1aso9893295ad.3;
+        Thu, 27 Feb 2025 04:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740659467; x=1741264267; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740660338; x=1741265138; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+blIxPitSvjkhrGqpiFpUFnW1zSX0iPB5L+f4xPY4uM=;
-        b=W3zLfAIM8OlXo3cn7ktusmyhEydZSKPCUbHhihJbX7N5lufwu2hWKC6eTeOasQXnXm
-         GnWEmUfm/aSj2x5JV50WGJigrua4bR5pdDrL/uqTBhyM6S+46txt7LaitmvzwtwGu1JJ
-         DpqgctzLByFuAwMHRWULDryXI2OZ9R73+n9ftmwWHLLlMN3zMkeb5q8cUoYIzvpnLWDs
-         hZJ17/fvFgV6NN+ZrVibgeHQlhtJmwxVbJPL/C7w1runkDlJeV/I6f9ajYVib2LVjaVW
-         0R1gzTf7UzptxffDmsXxdg946QAMauXPYNHSs8liCkLY8m8KioAEWDOLSYOWXNXRgRLp
-         olag==
+        bh=YtmwYaqxFssIW0Pa2qC6sbwgJvuzp7NSxjltk2LJnU8=;
+        b=ewA+zyCMgDPPD0whKe0KeMr8rN6031ZacQMAwtVsNpR4ER6KScmFyoNqc3OwON92oY
+         CzqlhroEH9W0xNG4KbqVs2RGAbGUqUgZvwdYpaIEGeKnHxUNutzu6nO+6l81U5y2Tfz1
+         wpVEDMds38wbjnw++Gc+VLRG9cencUtkxb/A46UlLuI/IFX0WSftZZkkXqqvbBuzd9Lw
+         oEJBlxmhYYF+EJwUT3EP7+EMQg6qNQHs6T4r4o2Y/vCVcq50KcEkAysPvlDdtzdGxgue
+         c5PSdisRLhHkWL1AVOCywVWZ77NTCzCE/fmxZ9hG4Jq2tfTf2MRwKNeP1vjFfu7iTNEJ
+         1EHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740659467; x=1741264267;
+        d=1e100.net; s=20230601; t=1740660338; x=1741265138;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+blIxPitSvjkhrGqpiFpUFnW1zSX0iPB5L+f4xPY4uM=;
-        b=oYz7z9ANZaLlN2A1JkAXV2QXkhG24f5pFbfR0fsO7jN3IDADuhN3FHg0x79tx7OPk0
-         uEmmNhiW2pFonPrTpCqvAH6gmx2ILluBcssnIVY1+OR6xZbc0EUot3jqAhTH2sEYBdKQ
-         ZAxG0o5ZXyedwJpQRhiHAmyjMYafi9GQ6n0dZ6hNTKk9sKef96kHmmO64ED+NyZJiiZg
-         5NjzsexKb7AbAdsxHC7JHKPckCKkWKtoOI/f0zCeL4XArhoXPMggBMpktA0QOK+5Zd25
-         qei9wFeopHWiRrhZ5Arrot4WlGvOoYbNyxAhoOyGi+2LF+Uzc/4RMzMXS/gx0pV2BXir
-         DN6g==
-X-Forwarded-Encrypted: i=1; AJvYcCXGbEkKhAu+u+PJTo2cKtV9vv2E1YaOYd5DlB7gP8JsW6ZthVsl2Jcwnx++TJXstV7rIRj/TH7HSWN5k6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3wXiNIcMmEzDUZB12j58pbuaOKGxXj43bj68hfmzQwNcjpTEB
-	5Np6kpPph63089KT57aApjDEHkJaajKRnOG10eH/5GwRGT8FHN6r5D8eSA==
-X-Gm-Gg: ASbGncuhKt2O0lHqCxHNN86KFe/n6d4oiRau3s5B6Wq/VgbhEKFIkBF3thlRNSFsS4U
-	Zw856+cvVEqIqr6Ql2heg6zsWSEb2UuDszvnUJFTyuxNbJiJQ1ovktNfd95CcaMTMum2Bohc+wK
-	I5rZfswGjdSgM/j10BF4gejsu05jvaKblg6FkBZ8Ww/YojwgQ7Ui0Rj3qxnMGbiSRa3Pb0BB+pI
-	dK7VQmFJraRtrgVtSCL3eAEqVXo2w4OQRlD5Ih50yJDz7x0l40vnsJp/aB/f3eoF17chdqrPMgf
-	V3DQrEX7GhgRDMHukmuDL4REc3VFompvD3SfmeI0mPziBr2/7cH+zvYJaiZZzRBM1vX29Rd/AeE
+        bh=YtmwYaqxFssIW0Pa2qC6sbwgJvuzp7NSxjltk2LJnU8=;
+        b=RA0GXGAEWCuhl1msdcCwYv56Di9wZY7g1hso7phO2vnz97UTJR0ypkoEAN1kOAwW78
+         P5m4nqTIgmcPgAjJSsp5cgq33bkhPjBDgOBenwwMCAq1FL6d2w0cM8XAkB5TPDNbQKN+
+         adi61vYiCaBYGTKN6+dxpBz5nUpD2M3lFfTfhpOwlBIY1BECGOiDd7iutxBwKTBoLZBD
+         pY3AZfU5vz+sbRnADSsk2qR/StSLG8B7K3uH/ZUZggmFFRYP+dt8lUSgUMs5L+wgkSiI
+         2xIb005x4PsjsRT9PA333ukjg43ZzF/TOon/HQQHID/szptjDY2XK0KMCiHH/XmNmfV8
+         TOhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWG4I3zSIcj8NDw9HuEDac3VTMMxIGnn+j3nFcqCl+PIFus5bWsuKO3qopLRts4SMCX1UXUfBIbBVsG@vger.kernel.org, AJvYcCWvS8EfVV2EJOcnNQSrFoU4GO7DImwc4MRFKw3xMoD2MkagDnSN+UMUbsvKqMNmuWgBJiCcrrTC3jmK4LA=@vger.kernel.org, AJvYcCXgTSSZr3NM1LL3jg3Bks4MkYFjLuMGdrv4Pu1xAqANdnhuOfRQJ5IGBX1J4XKXCyEUoc8wpyl8VA5GllY=@vger.kernel.org, AJvYcCXnKMTcnpF+jBYfDQWx0xv0oUh586iBTadGIvOOPkMFQlT/nobU7N6HKJZen6ZTZYZMsS+BUqUqqF4GW92f@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywy3YpIQ61H5f0nn6IO6uedXSP2p90d1y4YYyha7ry/V/HXscnZ
+	bEg4u2fkL2eERmkG8qRumn2JUrQos5gdirLAeXbztmHCzfbJOR1R1I7zAQ==
+X-Gm-Gg: ASbGnctn30AavARL30LQO2Ul0Dv1g7DSMK5TVpdN6AvGiPJ5IFijbPx4u54L40fWF0y
+	0OvZNLZdCz+Z92CZiFCTQ0Nr4PMrCoxZg6WwqPugl9AiJsWJ5gicYi4QHB4RQ8vXuJm8gD5DOLo
+	DKa8ylhlJ4+16VBUvY6a7vv1SAINd4MbDkESpAMLfGbXYMU42oXtcnqlqndTJOfJNlcwBOkK/ei
+	3ZI4jbYTU5Kv889m+SbIg8Roj0twZnPcGklryiUweB0URvZuRCD7lXsy6wZ0kIZy+rrYRpiBcMr
+	2HZ7hmhjR7RuAb9I6lZ9g4uA4igmUaDHKj1LSDBU/tEzC2EZiOH5+sN4SSPz5duf+8907xLm5Dk
 	=
-X-Google-Smtp-Source: AGHT+IHp4bXT5y7AAAzCMtzxGj2FomQyV8TeuNBLxAuLjk3y+mP6Swztw/DrtDLvTwNOcIXkZXFqnQ==
-X-Received: by 2002:a05:6a21:398b:b0:1ee:6032:b1ed with SMTP id adf61e73a8af0-1f10ad098fdmr12383870637.17.1740659467317;
-        Thu, 27 Feb 2025 04:31:07 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEu1z9o+etyWQ3GYKQxj9svNIE80SY1i5LrNL1f5QPKZ8haclw49WFVfET5tXTwPShEIFk0HQ==
+X-Received: by 2002:a05:6a00:1a86:b0:730:74f8:25b9 with SMTP id d2e1a72fcca58-73426d81592mr36627859b3a.17.1740660337486;
+        Thu, 27 Feb 2025 04:45:37 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7dec4142sm1261698a12.56.2025.02.27.04.31.05
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003ec4fsm1474157b3a.130.2025.02.27.04.45.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2025 04:31:06 -0800 (PST)
+        Thu, 27 Feb 2025 04:45:36 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7c8db8ba-19ad-417f-bacd-00e8e88eea25@roeck-us.net>
-Date: Thu, 27 Feb 2025 04:31:05 -0800
+Message-ID: <b1be4c35-b452-479c-9dcb-700ae276e8b7@roeck-us.net>
+Date: Thu, 27 Feb 2025 04:45:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,16 +69,22 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] hwmon: (acpi_power_meter) Replace hwmon_device_register
-To: "lihuisong (C)" <lihuisong@huawei.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, liuyonglong@huawei.com,
- jdelvare@suse.com
-References: <20250225085158.6989-1-lihuisong@huawei.com>
- <8b59c8d0-4710-48ab-ad70-b2eddc74fa9e@roeck-us.net>
- <05bb1583-13c7-25f6-48fb-dc415b3206f9@huawei.com>
- <d765aeb3-3ca6-44a1-9337-2706621df903@roeck-us.net>
- <765d509f-112a-2173-43af-e657f59fddac@huawei.com>
+Subject: Re: [PATCH v3 12/20] ASoC: tas2770: expose die temp to hwmon
+To: James Calligeros <jcalligeros99@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>,
+ Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shi Fu <shifu0704@thundersoft.com>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+ Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+ <20250227-apple-codec-changes-v3-12-cbb130030acf@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,149 +130,164 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <765d509f-112a-2173-43af-e657f59fddac@huawei.com>
+In-Reply-To: <20250227-apple-codec-changes-v3-12-cbb130030acf@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2/27/25 00:21, lihuisong (C) wrote:
+On 2/27/25 04:07, James Calligeros wrote:
+> TAS2770 includes an ADC which reports the chip's die temperature.
+> As per the datasheet, the temperature in degrees Celsius is derived
+> ny taking the raw value stored in the ADC's registers, dividing by 16,
+> then subtracting 93.
 > 
-> 在 2025/2/26 21:26, Guenter Roeck 写道:
->> On 2/26/25 02:19, lihuisong (C) wrote:
->>> Hi Guenter,
->>>
->>> 在 2025/2/25 21:01, Guenter Roeck 写道:
->>>> On 2/25/25 00:51, Huisong Li wrote:
->>>>> When load this mode, we can see the following log:
->>>>> "power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please
->>>>>   convert the driver to use hwmon_device_register_with_info()."
->>>>>
->>>>> So replace hwmon_device_register with hwmon_device_register_with_info.
->>>>>
->>>>> To avoid any changes in the display of some sysfs interfaces, some of
->>>>> necessary changes in hwmon.c must be made:
->>>>> 1> For 'power1_average_interval_max/min' interface, insert 'average' to the
->>>>>     string corresponding to hwmon_power_average_interval_max/max in
->>>>>     hwmon_power_attr_templates[]. I guess that is what's missing.
->>>>> 2> Add some string attributes in power sensor type because of below items:
->>>>>     a) power1_accuracy  --> display like '90.0%'
->>>>>     b) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
->>>>>     c) power1_average_min/max --> display 'unknown' when its value is
->>>>>                                   negative.
->>>>> Note: All the attributes modified above in hwmon core are not used by other
->>>>> drivers.
->>>>>
->>>>
->>>> That is not a reason to change the ABI, much less so hiding the change
->>>> in a driver patch.
->>>>
->>>>
->>> I am trying to replace the deprecated hwmon_device_register with hwmon_device_register_with_info for acpi power meter driver.
->>>
->>> To avoid any changes in the display of some sysfs interfaces, there are two modifications in hwmon core as follows:
->>
->> The only reason to change the hwmon core would be if it is wrong or if it needs to
->> be amended. Matching driver expectations is not a valid reason.
-> Got it.
->>
->>> (1) The first modification in hwmon is as follows:
->>> -->
->>> @@ -646,8 +653,8 @@ static const char * const hwmon_power_attr_templates[] = {
->>>       [hwmon_power_enable] = "power%d_enable",
->>>       [hwmon_power_average] = "power%d_average",
->>>       [hwmon_power_average_interval] = "power%d_average_interval",
->>> -    [hwmon_power_average_interval_max] = "power%d_interval_max",
->>> -    [hwmon_power_average_interval_min] = "power%d_interval_min",
->>> +    [hwmon_power_average_interval_max] = "power%d_average_interval_max",
->>> +    [hwmon_power_average_interval_min] = "power%d_average_interval_min",
->>>       [hwmon_power_average_highest] = "power%d_average_highest",
->>>
->> That is indeed a bug and should be fixed, but in a separate patch.
-> will do it.
->>
->>> The string names, "power%d_interval_max/min", are missing 'average'.
->>> I think the meaning of these attributes are unclear If no this word. It can be regarded as a fault.
->>> And power attribute name in acpi power meter is "power1_average_interval_min/max".
->>>
->>> (2)The second modification changes the attribute of 'power_accuracy', 'power_cap_hyst', 'power_average_min' and 'power_average_max' from data to string.
->>> It is appropriate to assign 'power_accuracy' to string attribute.
->>
->> No. The ABI states that this is the accuracy in %. We don't append "mV"
->> to voltages, or "mA" to currents either. The unit is determined by the ABI,
->> which states that the expected value is a number reflecting %. If a driver
->> adds "%", it is a driver oddity, but not a hwmon bug. The whole point of
->> providing numeric values is to simplify parsing from userspace. Adding units
->> to the displayed value would not only be pointless (since the unit is defined
->> by the ABI) but also make parsing more difficult.
-> Ack
->>
->>> Because it can be displayed as '%' and also include decimal point like acpi power meter driver, which is more in line with the meaning of this attribute.
->>
->> Why ? Are you suggesting that all other attributes should provide units as well
->> "to be more in line with the meaning of those attributes" ?
->>
->> It is absolutely not common to add units to sysfs attributes. We are not going
->> to do that, period.
-> ok.
-> What I mean is that is the display in power meter.
+> Create and register a hwmon device to expose the chip's die temperature
+> to the hwmon interface.
+> 
+> The ADC is shut down during software shutdown mode, and its registers
+> are initialised to 0 on reset. This means that the die temperature will
+> read -93 *C until the chip has been fully powered up at least once (e.g.
+> the PCM its attached to is opened). Once the chip is put into software
+> shutdown again, the ADC will also shut down. The last value sampled
+> before this happens will persist in the ADC's registers.
+> 
+> Co-developed-by: Martin Povišer <povik+lin@cutebit.org>
+> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+>   sound/soc/codecs/tas2770.c | 102 +++++++++++++++++++++++++
+>   1 file changed, 102 insertions(+)
+> 
+> diff --git a/sound/soc/codecs/tas2770.c b/sound/soc/codecs/tas2770.c
+> index 7f219df8be7046912bf3ef452f75c17b5118bcf6..9cdd3470e9a04d5a5f801c3690d40f8fd131cd94 100644
+> --- a/sound/soc/codecs/tas2770.c
+> +++ b/sound/soc/codecs/tas2770.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/err.h>
+>   #include <linux/init.h>
+>   #include <linux/delay.h>
+> +#include <linux/hwmon.h>
+>   #include <linux/pm.h>
+>   #include <linux/i2c.h>
+>   #include <linux/gpio/consumer.h>
+> @@ -491,6 +492,94 @@ static struct snd_soc_dai_driver tas2770_dai_driver[] = {
+>   	},
+>   };
+>   
+> +static int tas2770_read_die_temp(struct tas2770_priv *tas2770, long *result)
+> +{
+> +	int ret, reading;
+> +
+> +	/*
+> +	 * component could be uninitialised if the codec is not
+> +	 * attached to a machine driver
+> +	 */
+> +	if (!tas2770->component)
+> +		return -EINVAL;
+> +
 
-Again, that is a problem in the power meter driver, not a problem
-in the hwmon core.
+If this is temporary, it should return -ENODATA or better only instantiate after
+a component is attached. If it is permanent, the device should not instantiate
+in the first place.
 
->>
->>> It might be better to keep other attributes as data types. But it breaks the cornor display of these attributes in acpi power meter driver as said below.
->>>     a) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
->>>     b) power1_average_min/max --> display 'unknown' when its value is negative.
->>
->> That is a driver problem, not a subsystem problem. If it is so important to retain
->> that (i.e., if for some reason some userspace program depends on it), just
->> implement the attributes in the driver.
-> Yes
->>
->> On a practical note, I do wonder what it means if ACPI reports those values.
->> It might simply mean that they are not supported. If so, the attributes
->> should not be instantiated in the first place.
-> Agreed. But we still can't break ABI of this driver. will retain what it was.
->>
->>>
->>> I want to say that all the attributes modified above in hwmon core are not used by other drivers, so don't break ABI of some driver.
->>
->> That is not a valid argument. Especially displaying values such as "unknown" or
->> starting to display units as part of an attributes _is_ an API break since that
->> is completely unexpected.
-> Ack
->>
->>> These can't be solved in this driver side.
->>
->> That is incorrect.
->>
->>>
->>> AFAICS, acpi power meter driver can't replace the deprecated API because their sysfs interfaces will be broken if there's no any modification in hwmon core.
->>>
->>
->> That is simply wrong. The _with_info API supports non-standard attributes
->> with the extra_groups parameter. Just use that and implement the non-standard
->> attributes in the driver and explain why you are doing it in a comment.
->>
->>
-> Ok, I will put these attributes above into extra_groups and add some comments for them.
-> Many thanks for your good suggestion.
+> +	ret = snd_soc_component_read(tas2770->component, TAS2770_TEMP_MSB);
+> +	if (ret < 0)
+> +		return ret;
+> +	reading = ret << 4;
+> +
+> +	ret = snd_soc_component_read(tas2770->component, TAS2770_TEMP_LSB);
+> +	if (ret < 0)
+> +		return ret;
+> +	reading |= ret >> 4;
+> +
+> +	/*
+> +	 * As per datasheet: divide register by 16 and subtract 93 to get
+> +	 * degrees Celsius. hwmon requires millidegrees. Let's avoid rounding
+> +	 * errors by subtracting 93 * 16 then multiplying by 1000 / 16.
+> +	 *
+> +	 * NOTE: The ADC registers are initialised to 0 on reset. This means
+> +	 * that the temperature will read -93 *C until the chip is brought out
+> +	 * of software shutdown (e.g. the PCM it's attached to is opened). The
+> +	 * ADC is also shut down in software shutdown/low-power mode, so the
+> +	 * value read back from its registers will be the last value sampled
+> +	 * before entering software shutdown.
+> +	 */
+> +	*result = (reading - (93 * 16)) * (1000 / 16);
+> +	return 0;
+> +}
+> +
+> +static umode_t tas2770_hwmon_is_visible(const void *data,
+> +					enum hwmon_sensor_types type, u32 attr,
+> +					int channel)
+> +{
+> +	if (type != hwmon_temp)
+> +		return 0;
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		return 0444;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tas2770_hwmon_read(struct device *dev,
+> +			      enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long *val)
+> +{
+> +	struct tas2770_priv *tas2770 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		ret = tas2770_read_die_temp(tas2770, val);
+> +		break;
+> +	default:
+> +		ret = -EOPNOTSUPP;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct hwmon_channel_info *const tas2770_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops tas2770_hwmon_ops = {
+> +	.is_visible	= tas2770_hwmon_is_visible,
+> +	.read		= tas2770_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_chip_info tas2770_hwmon_chip_info = {
+> +	.ops	= &tas2770_hwmon_ops,
+> +	.info	= tas2770_hwmon_info,
+> +};
+> +
+>   static const struct regmap_config tas2770_i2c_regmap;
+>   
+>   static int tas2770_codec_probe(struct snd_soc_component *component)
+> @@ -707,6 +796,19 @@ static int tas2770_i2c_probe(struct i2c_client *client)
+>   		}
+>   	}
+>   
+> +	if (IS_REACHABLE(CONFIG_HWMON)) {
+> +		struct device *hwmon;
+> +
+> +		hwmon = devm_hwmon_device_register_with_info(&client->dev, "tas2770",
+> +							tas2770,
+> +							&tas2770_hwmon_chip_info,
+> +							NULL);
+> +		if (IS_ERR(hwmon)) {
+> +			return dev_err_probe(&client->dev, PTR_ERR(hwmon),
+> +					     "Failed to register temp sensor\n");
+> +		}
+> +	}
+> +
+>   	result = tas2770_register_codec(tas2770);
+>   	if (result)
+>   		dev_err(tas2770->dev, "Register codec failed.\n");
 > 
-> 
-> Hi Guenter,
-> 
-> BTW, I have another problem as commit log described:
-> -->
-> The path of these sysfs interfaces are modified accordingly if use hwmon_device_register_with_info():
-> Old: all sysfs interfaces are under acpi device, namely, path is "/sys/class/hwmon/hwmon1/device/" ('device' in the path is a soft link of acpi device)
-> Now: all sysfs interfaces are under hwmon device, namely, path is "/sys/class/hwmon/hwmon1/"
-> What do you think about this?
-> 
-
-That is as intended. The ABI states that the attributes are under
-/sys/class/hwmon/hwmonX _or_ /sys/class/hwmon/hwmonX/device/.
-The ABI does not guarantee that the underlying path remains the same.
-libsensors handles this automatically, as should any userspace programs
-accessing the attributes directly.
-
-Guenter
 
