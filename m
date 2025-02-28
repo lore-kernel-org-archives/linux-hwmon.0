@@ -1,94 +1,107 @@
-Received: from outgoing16.jnb.host-h.net (outgoing16.jnb.host-h.net [129.232.250.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A320725F781
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Feb 2025 11:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.232.250.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE1D26D5A4;
+	Fri, 28 Feb 2025 13:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740743893; cv=none; b=gdtHde2Tfjy2XUyMigktY0jv3bgh/KicS83Y932WljRnkCgY7NNrY4Vak/VY8fVIZ+JjusieOHV1cNF9z6rF3r2VV/RlpaYslN4WxtUu2enNDG9nfRB5vHp0gXGDVoAkkUl0u383RtURWfZi7K4mb/IkuPJl5q/YUX43hheA5NY=
+	t=1740750845; cv=none; b=RM1KzRKvtH7MWhUk7ULOpM38xxnSRceByNwuEHyCviLeuzhm6MneuLPGQBFcaNeOpA7VjWuo4ozqT3bDByZ1rlYWhFgkQCcAwBiB36w1MymOC4WE30PbdF6aClHZYQP5wZuRxlXwtl7QisuZ6wNDXA7piVelIoZWeMsIEzgbjHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740743893; c=relaxed/simple;
-	bh=LnJAb5OtSiiPPpVmdSEicOxdfy335XXtHun9Lv2d8Bw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aHD+9wicon5YsK4QcCiT9rbtogCiQhrGx25i29nhRLTQs+6yMGY2+oYhdV/H73dsDPtlFmBafnLNUKPrCRCRm1atfA/qoeNXvJBWWIB3goXEh6RGo0B5Z/cCCSEmYByZM8bfD6M7xkj7ulhr8ZygPO3jEEPdRqn9bq6Qb0MK9KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za; spf=fail smtp.mailfrom=coldcon.co.za; dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b=gT7GT0Cz; arc=none smtp.client-ip=129.232.250.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=coldcon.co.za
+	s=arc-20240116; t=1740750845; c=relaxed/simple;
+	bh=PJN2LJY1zOX4ftevEUh2wxj5EtexemsOWVyrqD0LUbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oXuTGrTGVLq9EdpPsyYm7402HUKnRQx27Ny6NR6QqcYcl2sXPnfq0/jW6+qiYJUrJvEXNp3p5IBB0jgwOKdNmMRFQ+1g58YM3YJ4jHeInOiUq6hIfwu0mFnJ5o4NAMmzumGczfSHxr+NSIxiIODMgVngcjOAM4SY9sDfl7ktcpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=shIDGphM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b="gT7GT0Cz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=coldcon.co.za; s=xneelo; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:sender:cc:bcc:
-	in-reply-to:references; bh=t+qwmUT3iOAm1DfPM+nbVN5TXLHXkSwi3Xte37fm8Y0=; b=gT
-	7GT0CzSUxZTbbVPHJvWHABh6o/C2YxEfbvvI5RUmplDlmFfHTbeRYZH7TlyBmPOLD1AJ1d/3UeF8R
-	n2JCcvt24JOwm9nyLuNGYj+K/9gd0TG4Xgsd4vtv2dIGAlct6h+NWeTXsESkQXRwH/ocD85Whxf3s
-	hyRO5y13kz/lJ+JoukOc52cLkxlfS1jMOIg+3RV114RekNWRrEnupOqzCUVvlzyB1Gu9yl5/8vknO
-	7g50LdO6C2RBb36c25KY3juOkbn7h9zVe3CeusxlqVdzlWSOrX7TSO5pgRVRq1MOoGC6g8tRmymSS
-	ZnPWq6tA2Yo6oPqUAWE3NS4V8UzQeBZw==;
-Received: from dedi166.jnb2.host-h.net ([41.203.16.166])
-	by antispam4-jnb1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnz0H-004dug-Rt
-	for linux-hwmon@vger.kernel.org; Fri, 28 Feb 2025 13:58:07 +0200
-Received: from [104.192.5.240] (helo=coldcon.co.za)
-	by dedi166.jnb2.host-h.net with esmtpsa (TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256)
-	(Exim 4.98)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnz0G-00000006DqX-3zXB
-	for linux-hwmon@vger.kernel.org;
-	Fri, 28 Feb 2025 13:58:05 +0200
-Reply-To: funding@investorstrustco.net
-From: Iyke Nikolas <avaril@coldcon.co.za>
-To: linux-hwmon@vger.kernel.org
-Subject: Re: The Business Loan/financing.
-Date: 28 Feb 2025 11:58:04 +0000
-Message-ID: <20250228112431.0253DA89F653B4C7@coldcon.co.za>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="shIDGphM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EEB4C4CED6;
+	Fri, 28 Feb 2025 13:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740750844;
+	bh=PJN2LJY1zOX4ftevEUh2wxj5EtexemsOWVyrqD0LUbk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=shIDGphM7vaQLJjGY/X+Rjd1UxdtYZIba70NWQYhJqxq4Q86mmQVOUfyj62fr49Fz
+	 8DVr7L0ygLbvElSK9WkCjpu9HVBcCK5+22/GTC5TMkuqNcEobyqkGoW+Dx0+aH2aiC
+	 3g2tRmJdWli2Ebknj5FMhCb4fLZneK1Wrx1D3IapW6R/QGrXD772kBvcreXr1YSKF+
+	 CRaJojXLJnYkGuH/E69dPJxNH8VpBSUWvMOiasc1avt7t5tMYQ48AkCLtq6FWP/ie+
+	 KDZ28MnDAhMvpDkI5kNQetuDcbP3N0gGubPYDe2G8JDIyaXa8Z1nsaWtUi2UsAXU+P
+	 MAA0znUrFB5BA==
+Date: Fri, 28 Feb 2025 13:53:56 +0000
+From: Mark Brown <broonie@kernel.org>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Shenghao Ding <shenghao-ding@ti.com>,
+	Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>,
+	Dan Murphy <dmurphy@ti.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shi Fu <shifu0704@thundersoft.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Neal Gompa <neal@gompa.dev>
+Subject: Re: [PATCH v3 15/20] ASoC: tas2764: Enable main IRQs
+Message-ID: <ba20e709-517b-441a-8f89-37518d0a1d4f@sirena.org.uk>
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+ <20250227-apple-codec-changes-v3-15-cbb130030acf@gmail.com>
+ <f3eecce4-51d1-4414-af85-680d51e588fa@sirena.org.uk>
+ <CAHgNfTx_kMj=rsd4nUCiX_PvgC4GX3DsPDwXHdEyEeLMbDFccw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="YYYkVjdyM/0A8vBd"
+Content-Disposition: inline
+In-Reply-To: <CAHgNfTx_kMj=rsd4nUCiX_PvgC4GX3DsPDwXHdEyEeLMbDFccw@mail.gmail.com>
+X-Cookie: Avoid gunfire in the bathroom tonight.
+
+
+--YYYkVjdyM/0A8vBd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Authenticated-Sender: avaril@coldcon.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: coldcon.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@coldcon.co.za
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.88)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+CzanhUpQxxY0jGcn2Rs0cPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xtZajfZR3GQsTfNlEOo/bgO5jGBP+wEOrMwSAfHIYnNKvp
- k7Vp2UXVHEQMIct0liL+eMn/ACDqfKnzu2/TcYEDswKQDamPN66SYe4XX4xmgBU5OYS64UP6tL59
- SLfE+k7Q3sZpCfiGSRgTsNlEbg6K8Ua5TH/mXATlvzWGmcG4SIfxcIwpeN/AizL9fRuNyvNq7i40
- Cv3JVydIoq+DWRCNhQzEPyKAxN0e/oONNHpTVpx06IuyC+tcTGxdYh5dhAOrMIibkpY46HKySyiI
- 2P6osIZXKmwzbGT4VvpTL0Eb54bT3EszvIbAbB2Zy01d/7IXjkdTeVZ2qGWx/wHRpX68r4IxYv5l
- flLxuCfTD3fIXh6unVAsSuKjOThhS934edKuqr0aikOvJA+DuzeF4b+ym3AhG426mliYkCHBZpOg
- oqc4uCQ1hIibn+MrIDYy2WBZvd1k7AMVUvw4r/dmrv4vMEE6KEyh19rc7LZU5nlp0w2QEetkvH00
- /xmn6oF5z8skuB4fLNdsm49znGEOwW1RyaT+fhnmPmZ+OUuV5BM6eyy5Vo6xOiF9lxkCbdmQZuQ+
- vQFrtGqZBQEiQhC8E0amZTmDiuInTF1nn44FsG7IfwXlAa/VV1ggY+YjClziYV+KHYcWWwiikDEw
- 0L2tQ2Vz7QgdxtQsKWiN2eBEpDFg1VMP6t5qUNbkx/duvBFFEDWrf6mhLAJyf5HFv/CNAtfcbkrr
- XJdjvnK1Pf/En0f/a/vWH12qZK9jgS5VsMqaSNOYsI08JER8fzih6kejR4qiHfu8OQBn2E0GRi6C
- /N93Fal2rFu1wGqOfBufyw6YYHv1H/aAwarQpYDOYx/6JtUOePZJ1cLZcEz60L2+P1AbxHnFclhU
- Tx8cSXpvegfDpRm2UYC3nHd+F0bSxeRmZK2YK48zBUFiTBZlsVonx1/dsKYqMqJhMK7zo5npQAo6
- 6E7yKxL56TB3QjzBRZUNmuZa
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
-X-Complaints-To: abuse@antispammaster.host-h.net
 
-Hello,
+On Fri, Feb 28, 2025 at 07:58:33AM +1000, James Calligeros wrote:
+> On Fri, Feb 28, 2025 at 2:23=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
+rote:
+> > On Thu, Feb 27, 2025 at 10:07:42PM +1000, James Calligeros wrote:
 
-Do you require capital financing or low interest loans to advance=20
-your business projects or growth strategy? We can provide with=20
-the needed investments for your business. 
+> > > IRQ handling was added in commit dae191fb957f ("ASoC: tas2764: Add IRQ
+> > > handling") however that same commit masks all interrupts coming from
+> > > the chip. Unmask the "main" interrupts so that we can see and
+> > > deal with a number of errors including clock, voltage, and current.
 
-Get back to me if interested?
+> > Shouldn't this also be a fix?
 
-Best regards,
+> I don't think so. The referenced commit only says that it adds an IRQ han=
+dler.
+> I don't think this commit is actually "fixing" anything - it's just
+> enabling previously
+> masked interrupts.
 
+I think the expectation would be that when the interrupt handler was
+added it would've been possible for it to fire.
 
-Iyke Nikolas
-Managing Partner
-Investors Trust
+--YYYkVjdyM/0A8vBd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfBv/MACgkQJNaLcl1U
+h9DAZAf/ZrFnKZ/FuBMjARilKSLNHLOP7jWlIxEpAeaOpAnoNzqydRcLKZFmfObm
+X3k/p5RujSvvZykZfpl21qgxEJeeN3q9mCoWd5QebZTJa4GljGyM2gMDGwQE+wcx
+dKGCDAZwyiwwKSd1UML9U+Gjqb5WcouYMXC+nJM3xoauhz615Kz8JsIsOo9nZ2Jp
+KrQQ83tZD59O81MOL3glAMJ9wDIj7kpQRHMJkXfQYYN1794HK0h6hfgdni1n3ij9
+Bi2+Vzxw+f+wVRZVNFydQPOBeDca1aihac4QngDHbcRCP+ngYkJ7mvV+vFWhleJg
+5VOFhK/5/NxifNyAKRWkUWX9BP2Xrg==
+=9AfO
+-----END PGP SIGNATURE-----
+
+--YYYkVjdyM/0A8vBd--
