@@ -1,92 +1,123 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC6F1E9B1D;
-	Sun,  2 Mar 2025 16:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764C4111AD
+	for <linux-hwmon@vger.kernel.org>; Sun,  2 Mar 2025 16:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740933695; cv=none; b=iUVQkuEBoN7xZdAmUOKEJKVSZgRWCLJU4IXm+cfK04Q74r79duZCUxqg6M5Upif+HFxtzpLVh8jV+Avi6vkHD7zN8XTiByYv+eXk0+3m2BN9+Bh0lV/EotzXWuIaPq1YYCNlTw1FbtJfR3AqRZXDabo+6ptDVKKDAcMZAjiLgDo=
+	t=1740933956; cv=none; b=UGF+Be1qBHL1hTInQH6zvgtPOc3NfBns+wL7E9KN+gXkI5s6LjUpSDbbadSlEaHTKQMqzPfHiW8wMPZIZLxF1qRKKGtb6LqqDK8mqqo4x4QNT28NJW+JyBt+ANZv2yO/4xq9sPWMvKgUEoVqvFj5dxPfWv8DNKR26Ru7JRVKyZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740933695; c=relaxed/simple;
-	bh=tEykHLpWHdGlU30tcuNXzm1YIjLCsDIELusYg/BpCjs=;
+	s=arc-20240116; t=1740933956; c=relaxed/simple;
+	bh=K2Sjlwt9jdVoHje29XwqXu38TqGwhtT9gS2Oworq+Wg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tiX/Bbv1SVZLldoM/1dZSpO+XTX6pIOgduKASPv3wqbZcQ5s2eD/lhD2LSNI6ujzgoa62L0jAGnTPoiE2PB3YOgwxbHjv7bq4UyUYtn/D4RrjWnGD8P3C3BobJ7UAVhAEzU01eZBKSnpKTBrV+YtFklKfDApAVCe20VNVMXx4VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQjI4bWd; arc=none smtp.client-ip=209.85.214.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=bn6p+WnH2cHPLejBy+qWMrMOvS7M38Vhf5OttGLijPcYNbo19hvOuhR58pK3ZcOLuRgk6YvXQVsewLBwn/E7UqjV0qRBmIbFXsV83ddH73wQsRMqjUzQ9EBVRsjujW8OTM8I3FwTd8P/0CIbvd8QZR7iOIcgGGJN/kVEsNOhVsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWL48Hhl; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQjI4bWd"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22382657540so17883275ad.2;
-        Sun, 02 Mar 2025 08:41:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWL48Hhl"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-22398e09e39so10695455ad.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 02 Mar 2025 08:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740933693; x=1741538493; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lSqVId43C+d9NkwaRM37ZAAPDvqFWLEHC98L04TojJQ=;
-        b=XQjI4bWdKEO42grOby0ywAdojCpAYugk9GOiFz0NPIpQOBADJfPzuZjBoiTHm94SdA
-         DztAsduAWnGULXqT3PcAXJKU3ffQ/N+p5BNSOJsUXYKP8VcV7NgaBCYu7DkWewO3mpsr
-         MO8qXCMlg8kSEUnWXtjc0TarwzucckTqiWnOdOnwFniytmnQEN1BlHyykRH0V6/6pjVq
-         +IW6FFlhLrGBWHoGviCSdRqIzT5a3+dk/Svh5s0f62ZwkDALDW0NxM5d6qtIMk3l3VHm
-         Vyb3E9Yp2ov9G+GqfzxXBIJnoYf1zAOfggCtFh2uKEzSunglhPThx0Xwl6jTNy1DRreN
-         RAvg==
+        d=gmail.com; s=20230601; t=1740933954; x=1741538754; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/f2T6fKkvvYPqeruWN21Y5lSw3SBSszoXt5HXjDFLGE=;
+        b=IWL48HhlyUYbG6Wxm0mYwSLIJha+uOz2di3iG0xm3seQ1I9ugRZlZk+BQu0iNf/8s+
+         /F4ZRTGx6m9KXLI9CURjWQ12nfXdBsZwKN4YBSDmKnv0RWBSfZw9koqer8xA3tYeL05s
+         msG3rJo0090EtuUw8K6Cry/G5Jr2pxbQ4rWQ0d9YLVW8zjfhFro9G6HtUfTaDI2jwB00
+         MT+gUp9/MyW43U5p4HfWjWvMuA94NHWUrq99NdR4J+JgUWTV+4EYaLK0/hWGLcDVszMP
+         OiIfMG45PQyU5UedDTH6OXaqt0E/IsZO1OdxNEOok73Yw5UxU+FEBha6EIHB9AV41xLo
+         Y+6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740933693; x=1741538493;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lSqVId43C+d9NkwaRM37ZAAPDvqFWLEHC98L04TojJQ=;
-        b=YlREED0EGtUvl4OClmSf/P9LVvvwuR5bSDZ7fbDtad5CzZLUgAid2j216Gi+LFEEUu
-         dSK1yrWx3rvCEI051kajzfi/wyQ+0SGMXy25dIfOmXPp6LvSH8MXHakiln4DbHAZjo0Z
-         luWFOt9maeEbYXvG/yY2zu7iYBvNYv5rlC4jndTtN3E2ENpjqmd8SrOz2nmTUX1rk26k
-         +0326Ii/FsuSe5FRa9EQgTUjMxvQjJ7Y8gpAcgYaOgxEJNXyBKA4P961t10pp9lyy8zw
-         v8qv5i74tl5nNF83K2WenO4luDOVEBbPKc7i9wdzKO8sUGKJAvxhwAhT2VHwepzLO6T4
-         Ph0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXtCzcwrIcyn9ATYhGzF0QnX12y1d+jVnQUihmDiIy0hnaYIQUR1162PuoAjpeZx4IhQmQ2vtXYNL3B/xw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbH0841+0mtNsc2JZ1YnLF6+RjuP18ofMW7nj3A9BBfFce2oz8
-	Fdy6yjmdqccxfRsx8gBENwpAhvCjwpOTKabMe6QtGIbhB14FGpDi
-X-Gm-Gg: ASbGncsrQIEfemuk1fbE96XtZz42HPicg+07KlC/Idl2rP7sUZ8vCUkO0mz/MyKM2mg
-	PbmeTkOdzgJfnUuxo7lihcopqBuMhm7UWDTs9aP0oxGSFjdJ6hK7HzvyMGPRUuMJzz0OhcKde3l
-	tstfPzXCEZHQHCPXvywU7DiC450YiVgHprN4ZnqP17TtLdMIbxSLs8cWXEfTExHVNz3xLygE1MU
-	nVr3L3jQ2PGpNsh9ieCXCjgNQ0pslOlYNJtxVWPgr29+0TmcLfc+lr7YSIfW9YkJDKSvB2QzyUS
-	BtDUqzqkEurZBt7bC/pt5bthrEmVt6nmgrV8BhoHeCpQQ6/5dBuZJUNVqg==
-X-Google-Smtp-Source: AGHT+IGNojCJm9XiFhbHonpxzAZmoIpJVflYc/mmZ6BYZp7pBF+HScrO78L0oKjxUz4XZ2JWqegHNA==
-X-Received: by 2002:a05:6a21:2d84:b0:1ee:cdda:b8f8 with SMTP id adf61e73a8af0-1f2f4cafd60mr18332062637.7.1740933693318;
-        Sun, 02 Mar 2025 08:41:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740933954; x=1741538754;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/f2T6fKkvvYPqeruWN21Y5lSw3SBSszoXt5HXjDFLGE=;
+        b=RsuY0hOf6kPbFKIkdTh1K17Kihfxshc3etVG6SlkvJP0Jjb6879WG5yIUelEHJWoD1
+         TB+OKA3Xsf4ITFKZM1wtQ1qQYzmf3ujMNt4NSPA/kdLiG3FB9pUqSUO+a7n6m8DESL0O
+         VY7OGzKnq4wAIeajkIHD/CqOkpQ9trXgqv0AXoRk7mpPG2JrQ5ooo/Di3gsKkjNAg+1T
+         +5AOGOtY5skgNxYIm+BwM49qFMCXei9Blirqiq3yc4HsyvYEaKNExt0n48+uZrb0Bj+o
+         ORoWq3eE7OykztE4g5w3bL4mGWiaNbVYIIucZ2nLTbAN4KOVHEgbzFWyedY7Y+GxOVEd
+         HMcg==
+X-Gm-Message-State: AOJu0Yz9n+HCcmWSBvQM8TA58XZPhL+Aa+x3DZNZUKovePAshQWhbsGs
+	m0AR1937ZU8WUg68urSrtm45iLPW2idAtTqft85VdUqghFbLznTL
+X-Gm-Gg: ASbGncvAmjETH5/zOtgqulfSWJ+Uc6Rn8BVC+dU6JMbiXdruWfoh+xp7zor/sE/nORa
+	WQCwK5iJg7QDHUZvm1Ojxk4wSoDYEtnxfb0OA5W9IxtUyRU07IFPAoMgRddfAxKSkB0z3HuPqE/
+	OORkQvY0g6G3QzNdAgMDIGrc4MVXdLGlC1ytlXG57fqq+PDdLXlw/ecKo4NZAtHRI6tP9A0ZLgg
+	wyqbXzGHmM+h06y7hnxeeEFoB2NT/9AlKBqo5bSpfeTTMbpfRUaYSoNprU5aSI+GfhyMYhiQvsq
+	omh2MnpLI+Sm3O2QWmInxCUkXGVPiiq30XViPmAumN6WdfrJBRhksC29qw==
+X-Google-Smtp-Source: AGHT+IHpdugGHHSEpv8DXUN0TYsAW04yFWf1BM64lAswI5XqZkAqfCyS/uTSnKtZp9AAUUMI41pelg==
+X-Received: by 2002:a05:6a00:2d1d:b0:736:4abf:2967 with SMTP id d2e1a72fcca58-7364abf2b6fmr2718357b3a.16.1740933954590;
+        Sun, 02 Mar 2025 08:45:54 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736427c7290sm1682977b3a.177.2025.03.02.08.41.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003dd19sm7372476b3a.131.2025.03.02.08.45.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 08:41:32 -0800 (PST)
+        Sun, 02 Mar 2025 08:45:54 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 2 Mar 2025 08:41:32 -0800
+Date: Sun, 2 Mar 2025 08:45:53 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Erik Schumacher <erik.schumacher@iris-sensing.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"jdelvare@suse.com" <jdelvare@suse.com>
-Subject: Re: [PATCH v2] hwmon: (ad7314) Validate leading zero bits and return
- error
-Message-ID: <bfc22327-657f-4cee-914b-a2c0d19d7817@roeck-us.net>
-References: <24a50c2981a318580aca8f50d23be7987b69ea00.camel@iris-sensing.com>
+To: ChiangBrian =?utf-8?B?5rGf5rOz57e7?= TAO <chiang.brian@inventec.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (pmbus/isl68137) Add support for RAA229621
+Message-ID: <55d595bc-325a-4985-846b-fccc6fea5124@roeck-us.net>
+References: <CAJCfHmWJ9N1R8x6ikU02_RYq9ieq6yWY7CGdfvc4hRqHnX5szg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <24a50c2981a318580aca8f50d23be7987b69ea00.camel@iris-sensing.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJCfHmWJ9N1R8x6ikU02_RYq9ieq6yWY7CGdfvc4hRqHnX5szg@mail.gmail.com>
 
-On Mon, Feb 24, 2025 at 09:19:04AM +0000, Erik Schumacher wrote:
-> Leading zero bits are sent on the bus before the temperature value is
-> transmitted. If any of these bits are high, the connection might be
-> unstable or there could be no AD7314 / ADT730x (or compatible) at all.
-> Return -EIO in that case.
+On Wed, Feb 12, 2025 at 04:21:05PM +0800, ChiangBrian 江泳緻 TAO wrote:
+> The RAA229621 is a digital dual output multiphase
+> (X+Y ≤ 8) PWM controller designed to be compliant
+> with AMD SVI3 specifications, targeting
+> VDDCR_CPU and VDDCR_SOC rails.
+> Add support for it to the isl68137 driver.
 > 
-> Signed-off-by: Erik Schumacher <erik.schumacher@iris-sensing.com>
+> Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
 
-Applied.
+It looks like this patch was sent as cut-and-paste. Consequently,
+it is currupted and does not apply.
 
-Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/pmbus/isl68137.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+> index 2af921039309..c52c55d2e7f4 100644
+> --- a/drivers/hwmon/pmbus/isl68137.c
+> +++ b/drivers/hwmon/pmbus/isl68137.c
+> @@ -63,6 +63,7 @@ enum chips {
+>     raa228228,
+>     raa229001,
+>     raa229004,
+> +   raa229621,
+>  };
+> 
+>  enum variants {
+> @@ -465,6 +466,7 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
+>     {"raa228228", raa_dmpvr2_2rail_nontc},
+>     {"raa229001", raa_dmpvr2_2rail},
+>     {"raa229004", raa_dmpvr2_2rail},
+> +   {"raa229621", raa_dmpvr2_2rail},
+>     {}
+>  };
+> 
+> @@ -512,6 +514,7 @@ static const struct of_device_id isl68137_of_match[] = {
+>     { .compatible = "renesas,raa228228", .data = (void
+> *)raa_dmpvr2_2rail_nontc },
+>     { .compatible = "renesas,raa229001", .data = (void *)raa_dmpvr2_2rail },
+>     { .compatible = "renesas,raa229004", .data = (void *)raa_dmpvr2_2rail },
+> +   { .compatible = "renesas,raa229621", .data = (void *)raa_dmpvr2_2rail },
+>     { },
+>  };
