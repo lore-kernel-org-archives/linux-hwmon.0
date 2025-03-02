@@ -1,123 +1,111 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764C4111AD
-	for <linux-hwmon@vger.kernel.org>; Sun,  2 Mar 2025 16:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212621E5B9F;
+	Sun,  2 Mar 2025 16:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740933956; cv=none; b=UGF+Be1qBHL1hTInQH6zvgtPOc3NfBns+wL7E9KN+gXkI5s6LjUpSDbbadSlEaHTKQMqzPfHiW8wMPZIZLxF1qRKKGtb6LqqDK8mqqo4x4QNT28NJW+JyBt+ANZv2yO/4xq9sPWMvKgUEoVqvFj5dxPfWv8DNKR26Ru7JRVKyZ8=
+	t=1740934271; cv=none; b=JnHss5gQREtBVgCzY4hIFjd25tuQFB17OVNbvwWC32mwxRNpL/M0pBUxdcxklicam06Gn+/fShbN1FedZiqDwPlyclLb3Ac3lCMmWXQdokoyMlleuC2qWDjq0pM2Q4hOfuReJDJTuLPPwV07l8p6PO0/2ua9e0NxJsI+h7bgViw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740933956; c=relaxed/simple;
-	bh=K2Sjlwt9jdVoHje29XwqXu38TqGwhtT9gS2Oworq+Wg=;
+	s=arc-20240116; t=1740934271; c=relaxed/simple;
+	bh=us8tQCsFd7YwDUcz7xpVoolCPkE4KmbeOOookqTXAwE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bn6p+WnH2cHPLejBy+qWMrMOvS7M38Vhf5OttGLijPcYNbo19hvOuhR58pK3ZcOLuRgk6YvXQVsewLBwn/E7UqjV0qRBmIbFXsV83ddH73wQsRMqjUzQ9EBVRsjujW8OTM8I3FwTd8P/0CIbvd8QZR7iOIcgGGJN/kVEsNOhVsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWL48Hhl; arc=none smtp.client-ip=209.85.214.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pqu29KTqraXX1mX3estUqQkDgg5Bx/skryDskeF15NYjISaQ6qDH98i0YtbeKEfQwDtAOagA9ANLvEnrHy0m9ZS/DCfwxIpI2JecKHio8BFg2BYGl9s7cIT9zE3YpV0md2dwlCwHsaKyFwfYo5naErf/pUtsclOwT61FtpdPlwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFAcFBoT; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWL48Hhl"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-22398e09e39so10695455ad.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 02 Mar 2025 08:45:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFAcFBoT"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2233622fdffso71285075ad.2;
+        Sun, 02 Mar 2025 08:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740933954; x=1741538754; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/f2T6fKkvvYPqeruWN21Y5lSw3SBSszoXt5HXjDFLGE=;
-        b=IWL48HhlyUYbG6Wxm0mYwSLIJha+uOz2di3iG0xm3seQ1I9ugRZlZk+BQu0iNf/8s+
-         /F4ZRTGx6m9KXLI9CURjWQ12nfXdBsZwKN4YBSDmKnv0RWBSfZw9koqer8xA3tYeL05s
-         msG3rJo0090EtuUw8K6Cry/G5Jr2pxbQ4rWQ0d9YLVW8zjfhFro9G6HtUfTaDI2jwB00
-         MT+gUp9/MyW43U5p4HfWjWvMuA94NHWUrq99NdR4J+JgUWTV+4EYaLK0/hWGLcDVszMP
-         OiIfMG45PQyU5UedDTH6OXaqt0E/IsZO1OdxNEOok73Yw5UxU+FEBha6EIHB9AV41xLo
-         Y+6Q==
+        d=gmail.com; s=20230601; t=1740934269; x=1741539069; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zmO+GgUzWVuicFZ92LIZfvSSRqi+TDILi8AmnVSy/6w=;
+        b=LFAcFBoTCTo4203hjfNgyCexeYWJ59srg3D4MBbAvqTdB2Ap7yRbAYa/UX5W3Mgyha
+         dJ+GV6LFovWW9PjnBtdeXhcV00DPpF6oNZ51eLSEye5lPJefDNtcieii7z1GwdwR36A4
+         6aCRcYk/7JR13WFWoGMufpsREou9YxabPetARYO/8ZaAUI05zOmKWLGOmqcqNNPwcuZh
+         CcXlBReTBaY9Aw7ZgnkJAV0qg1GFykLCuNji4wohvr2g5Ryy2jaMYVwKD8E5vtL27cf5
+         fg0PRHODrtjvb5iJN5EW8FCnLp6Zjjy/0ZvrLsKhraqkl5mwT7X6tZIMWFX7OvVICUQW
+         q3WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740933954; x=1741538754;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/f2T6fKkvvYPqeruWN21Y5lSw3SBSszoXt5HXjDFLGE=;
-        b=RsuY0hOf6kPbFKIkdTh1K17Kihfxshc3etVG6SlkvJP0Jjb6879WG5yIUelEHJWoD1
-         TB+OKA3Xsf4ITFKZM1wtQ1qQYzmf3ujMNt4NSPA/kdLiG3FB9pUqSUO+a7n6m8DESL0O
-         VY7OGzKnq4wAIeajkIHD/CqOkpQ9trXgqv0AXoRk7mpPG2JrQ5ooo/Di3gsKkjNAg+1T
-         +5AOGOtY5skgNxYIm+BwM49qFMCXei9Blirqiq3yc4HsyvYEaKNExt0n48+uZrb0Bj+o
-         ORoWq3eE7OykztE4g5w3bL4mGWiaNbVYIIucZ2nLTbAN4KOVHEgbzFWyedY7Y+GxOVEd
-         HMcg==
-X-Gm-Message-State: AOJu0Yz9n+HCcmWSBvQM8TA58XZPhL+Aa+x3DZNZUKovePAshQWhbsGs
-	m0AR1937ZU8WUg68urSrtm45iLPW2idAtTqft85VdUqghFbLznTL
-X-Gm-Gg: ASbGncvAmjETH5/zOtgqulfSWJ+Uc6Rn8BVC+dU6JMbiXdruWfoh+xp7zor/sE/nORa
-	WQCwK5iJg7QDHUZvm1Ojxk4wSoDYEtnxfb0OA5W9IxtUyRU07IFPAoMgRddfAxKSkB0z3HuPqE/
-	OORkQvY0g6G3QzNdAgMDIGrc4MVXdLGlC1ytlXG57fqq+PDdLXlw/ecKo4NZAtHRI6tP9A0ZLgg
-	wyqbXzGHmM+h06y7hnxeeEFoB2NT/9AlKBqo5bSpfeTTMbpfRUaYSoNprU5aSI+GfhyMYhiQvsq
-	omh2MnpLI+Sm3O2QWmInxCUkXGVPiiq30XViPmAumN6WdfrJBRhksC29qw==
-X-Google-Smtp-Source: AGHT+IHpdugGHHSEpv8DXUN0TYsAW04yFWf1BM64lAswI5XqZkAqfCyS/uTSnKtZp9AAUUMI41pelg==
-X-Received: by 2002:a05:6a00:2d1d:b0:736:4abf:2967 with SMTP id d2e1a72fcca58-7364abf2b6fmr2718357b3a.16.1740933954590;
-        Sun, 02 Mar 2025 08:45:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740934269; x=1741539069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zmO+GgUzWVuicFZ92LIZfvSSRqi+TDILi8AmnVSy/6w=;
+        b=W/9eE57K0SjJ1CRZIk1K8IbfCv+sFE/ofJ8oQn1tZzDN+xyYjy4s5vV4DvdfDz18mW
+         urumdP07Rs6l11CnjiszcW9cuJLIfv4VoXQADMa6ZKoSwrreEBPbxaRFJbPLEH8MfoF6
+         afDpe7X/JWQIc9kNcTs5wLjk908nAKlehlZKpfzXpnpoZgzKLS3bLDulPTC73xdWqots
+         k93L/2nzeEO0Bwaje12sokATWo9rQLlJdXoJgPsllvKOq5Zo4o6GElnXUUNAIIIRrcPS
+         Fd4sg98EhbMkwIdkDBpaoqPbHGstHegR0OndBV1NDYAtBCjIXuNgGgnRV7vidN+4PjKS
+         k7sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpV/BB0sCKSll7AVB6au06zvN8P+zsvLB27uxdbRIA1ehRknBLGtHu9mcFcpgSHYi894IdDm3/ghto@vger.kernel.org, AJvYcCX3kLTGELt5MJSAyzTo46Q4PghssaEeTSqMEqdOwwcbrN9P2uMvW22vT4qlDV1eQp/my+I/DVJd1tJLPvg7@vger.kernel.org, AJvYcCX60SFnfW49bdOqtKHFP8Y1lItHk345FU/WP2nesuL8apT811xwBnAWtU/XuvTqwzC04rSqnPX3V8bc6Ig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO0ROoi3SOz5PI0muQRzE3JzBygnAsu8pAgzfmRi2VBeUlkchk
+	WLmg+b61mX6Skk9vd059E3JzHZkM4WprsZwQr6eLqZ6fRW04Mppi
+X-Gm-Gg: ASbGncsbMidJrHKaAaVvtmACBvZbGmQ7+YD+62YMqDD3sN6nr4195vs/HtZOTGDFys9
+	xLJRzyvecpXue/wAmugVTXmiOMbZJ9tYQ4J9dLGu/wapuKMCCuRbORMDYxLzSiw42alc7MjgM8L
+	rvWxg+OvIIIu56L1IEIIReJBhs1Dh6GGBx0vs+QMoeRPkMWznnNGqnTiJIDY+GPvJ2nSguvHUkc
+	j0XhO8rLCl2IXt+oFtn+PGlxEbCSjf99Ys1/FoTuFGigDce8IOqXXM2xEWmJrrcawIMgonK5jEK
+	l7bP75En1hyiOZnieTjwpdnvNH+wdVTwdveCPXtRl/XQKRGIDCGCTvFxMg==
+X-Google-Smtp-Source: AGHT+IFhbXN73C8c1R88P1V9sIiQqJcvmI5nPsi95MgZuxPifmt8O423iOmN9vaMCm/gAuTIweEhUw==
+X-Received: by 2002:a17:902:da91:b0:21f:c67:a68a with SMTP id d9443c01a7336-223690e5d44mr147987285ad.31.1740934268882;
+        Sun, 02 Mar 2025 08:51:08 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003dd19sm7372476b3a.131.2025.03.02.08.45.53
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2235052005fsm62009895ad.227.2025.03.02.08.51.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 08:45:54 -0800 (PST)
+        Sun, 02 Mar 2025 08:51:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 2 Mar 2025 08:45:53 -0800
+Date: Sun, 2 Mar 2025 08:51:07 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: ChiangBrian =?utf-8?B?5rGf5rOz57e7?= TAO <chiang.brian@inventec.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (pmbus/isl68137) Add support for RAA229621
-Message-ID: <55d595bc-325a-4985-846b-fccc6fea5124@roeck-us.net>
-References: <CAJCfHmWJ9N1R8x6ikU02_RYq9ieq6yWY7CGdfvc4hRqHnX5szg@mail.gmail.com>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: hwmon: gpio-fan: Add optional regulator
+ support
+Message-ID: <8e8a1743-8afe-4586-8fec-33f7d172f305@roeck-us.net>
+References: <20250210145934.761280-1-alexander.stein@ew.tq-group.com>
+ <20250210145934.761280-2-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJCfHmWJ9N1R8x6ikU02_RYq9ieq6yWY7CGdfvc4hRqHnX5szg@mail.gmail.com>
+In-Reply-To: <20250210145934.761280-2-alexander.stein@ew.tq-group.com>
 
-On Wed, Feb 12, 2025 at 04:21:05PM +0800, ChiangBrian 江泳緻 TAO wrote:
-> The RAA229621 is a digital dual output multiphase
-> (X+Y ≤ 8) PWM controller designed to be compliant
-> with AMD SVI3 specifications, targeting
-> VDDCR_CPU and VDDCR_SOC rails.
-> Add support for it to the isl68137 driver.
+On Mon, Feb 10, 2025 at 03:59:29PM +0100, Alexander Stein wrote:
+> This adds an optional regulator support (e.g. switchable supply) to the
+> GPIO fan binding.
 > 
-> Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-It looks like this patch was sent as cut-and-paste. Consequently,
-it is currupted and does not apply.
-
-Guenter
+Applied, after making the change suggested by Krzysztof.
 
 > ---
->  drivers/hwmon/pmbus/isl68137.c | 3 +++
+>  Documentation/devicetree/bindings/hwmon/gpio-fan.yaml | 3 +++
 >  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-> index 2af921039309..c52c55d2e7f4 100644
-> --- a/drivers/hwmon/pmbus/isl68137.c
-> +++ b/drivers/hwmon/pmbus/isl68137.c
-> @@ -63,6 +63,7 @@ enum chips {
->     raa228228,
->     raa229001,
->     raa229004,
-> +   raa229621,
->  };
-> 
->  enum variants {
-> @@ -465,6 +466,7 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
->     {"raa228228", raa_dmpvr2_2rail_nontc},
->     {"raa229001", raa_dmpvr2_2rail},
->     {"raa229004", raa_dmpvr2_2rail},
-> +   {"raa229621", raa_dmpvr2_2rail},
->     {}
->  };
-> 
-> @@ -512,6 +514,7 @@ static const struct of_device_id isl68137_of_match[] = {
->     { .compatible = "renesas,raa228228", .data = (void
-> *)raa_dmpvr2_2rail_nontc },
->     { .compatible = "renesas,raa229001", .data = (void *)raa_dmpvr2_2rail },
->     { .compatible = "renesas,raa229004", .data = (void *)raa_dmpvr2_2rail },
-> +   { .compatible = "renesas,raa229621", .data = (void *)raa_dmpvr2_2rail },
->     { },
->  };
+> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> index 7f30cfc873506..d5386990ab153 100644
+> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
+> @@ -23,6 +23,9 @@ properties:
+>    alarm-gpios:
+>      maxItems: 1
+>  
+> +  fan-supply:
+> +    description: Phandle to the regulator that provides power to the fan.
+> +
+>    gpio-fan,speed-map:
+>      $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>      minItems: 2
