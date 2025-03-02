@@ -1,70 +1,76 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3EC1E5713
-	for <linux-hwmon@vger.kernel.org>; Sun,  2 Mar 2025 16:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCDE339A8;
+	Sun,  2 Mar 2025 16:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740932757; cv=none; b=UGnAA7TGgvf8fP/QJbSbi5OqNo0UtyGbeKY44xgI1pa0lYqrEa3d3clJXMX6rNUXVleWDlHPy+wz3Fyq+DbFalXEANhwmfzhIdjGGFFuqrOgwOF7adD6Zyq7XuQ2hRjRFYz5ND7DYh5XWHLrYksTKIqlY69M6dvxwqzuSueKYbY=
+	t=1740932983; cv=none; b=U6X1+aXW8l1Ua5Zh9p/G5MJFlfF9B0xcykeGXK3rIvMfuxv2dFb/uNJdtSje5S0yo97kYRKkkvYp9q74qz1CqEQMadtWNPlvDdQoGcxnymMlTNlr730pciPIHJwOK7YoTigOYAKc7sVgYNmutK+m44UYey5KKfTCxTDIlbz/TnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740932757; c=relaxed/simple;
-	bh=/OJ9l6phgyDYFZVIbNpSv8DA0MLxX+jyZSiqHQnp2Kc=;
+	s=arc-20240116; t=1740932983; c=relaxed/simple;
+	bh=PKwQKCnzQxLCormRajg+fE/7G6f26nk0otMh6ZrCHZg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ORhksk1Z/2n7VIAeuu3dkl0gXzsORK417M4uaZTQ3C0FmgAG0tT81JSAjlFLc1wC0bX374+4MN8gP53WHvDSEo6NdX/FdfQWHRu1RtWBZzxxuLJFK7px1rDmD0a3W5LvZBj3SDe7OAFgflIGckqpK6hniKdlz15d6bWlBZg62Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ecO8CrvS; arc=none smtp.client-ip=209.85.214.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJ8YREbCIzxtSymkleB510r/LtQuFjiWa5B9TUKufMcyV/pkwMtxexiuE2qgIXyc8pKnP379I6Z7hUs1eTegQc6n86LIn51cle8a0AGR7Q0dAwZ/joKVt2UdAvZMvkzZdYdrQkQVX2u4EMu0h/nUm9ZEl4if8/8XNmIRgja+K0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3pHjfQG; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecO8CrvS"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2239f8646f6so9865985ad.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 02 Mar 2025 08:25:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3pHjfQG"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22349bb8605so70224395ad.0;
+        Sun, 02 Mar 2025 08:29:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740932755; x=1741537555; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740932981; x=1741537781; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KRzLn19cpTDexXSEqlJIDIlFJFLPSScKQzF3OK8T460=;
-        b=ecO8CrvSoFlQVbIOSlVvRJZ7GHHDH75n5fymih7RNK0lZXBMOKSA9Tew7YvzlCJiCp
-         GzcH04s4svTBPTP5ILskZRqOrmYYGfmeyHviAryEZb9Ix++UnpUeTdRyl0C3dc8Yhuyt
-         mrWCbGMd5eqtahYw4C6BSMBQDzxXogkpF892kJ2NNIPnzR2OQF/3G0JBL6t21+cOdSsa
-         ijuVFTvVliwfGtM1UCT6wA8yVKmFDy9QUx9/wlFTtvq5AVc9Ri5t00G+FKEeAZMg0WT/
-         JrI+I/D9PtoAGfF9I6zD3RhjcGu9ad6Wv1XohznWZN+rTjMc6NmbMajAx8Q1r/e3JVhI
-         Y1FQ==
+        bh=Dijfl36fdLRwpTIccWWKkVNKprn4Lw0LAYubF3gjRP0=;
+        b=d3pHjfQGP2YWe8/Pzb79Nq2iIkhpOj8YxxfejXN3ZqEuj7TbpqNCU4Ztdd9touAeWV
+         7F6H3FdLuMsx8lhnx3nk2hCfQ6cnmMxB3L6DSZSCTrJvvQfxaLWETEApjFzP4Vj59Q7r
+         /QS3t+YKo6JnlyZMitt4iZkl5GVtnz1qTzvyuK/kBTOXbzUVFK6n43jCFla3MzxG4OLI
+         ohHsOx/urLmKFVw0e1aY67zDYs6BLj5vPN/xAH4uvNSJ9z1jSdlqlSWr9W1K/P+hCPqc
+         WNO1Iw7Z3IZCN0v8jV8O/b/8R5xurhTW7v7DBandihNiA8gMQszO1RfaJTrrBakY7+bI
+         frcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740932755; x=1741537555;
+        d=1e100.net; s=20230601; t=1740932981; x=1741537781;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KRzLn19cpTDexXSEqlJIDIlFJFLPSScKQzF3OK8T460=;
-        b=dc93eOOu5Pi8ZJTQFM9UL/MtY8JkXUzyaCMQa8VKGP/G/BwJZkO74yXgTDBFMLaYBP
-         xf1mwrUVX90OMXv+8L8c7aC0PLuS4sUmCuPOgPJTr9rOqhLDilde/ev9fQh5mSEOVANO
-         2qQTn+Zkf9ikzBstJ1gTTltbMom4YahPRlhYs0Eyor62+YgV+AWXU69BPV2Ij2JUp7ZK
-         DnTgtvWwy/HtgJL3CahN5cbXT6uUkHeOPk287s5E5fhvsrOahFijftd4VoZjQSpx0siP
-         9RYx3tvivvW9vTq8D14VBHcxkejOUvo7bw3NIRJYmnBe5jkH2w1DGZ43wjOUM0RmQTvZ
-         Knxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSHnGQf6IWmsQYIbSTT0hLOLiEkkLuaYKACUktUEZUrBVmnxDBCa36JDVYPAZqVmlweLG06iIkra9zBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSz6sMrSKBqXGRE40VgfR7Pjx3/j7FV3h+kInT5cDHwcJGWPRI
-	wQHRS7/z1W5tDy51J4zpqIbjIFUFkCvg5Tcb2ibYRWcr9rVhoW2x
-X-Gm-Gg: ASbGnct9kLdS85OWmR15HD8FRY+wnuchTfv24xfVdYjswEIETDuYE5G7Yvp2ki+O+8q
-	iu4V4FsUq+zqGmTYzxUQupXNSdRw06RRdLGAiA5rDoZ5hAT82UYHyYCNg+FjWlIrNYeuQFGvcOf
-	MPHV9MdgMmOZ6y2iL6ut0Nb+5wC3OhSE2FoeCALCs7zME6w0m5LPGeSEw6NI8X5aVBq3UHgJMsl
-	ydHbK4kdYUnxmMQKDbQt7HzpKnO4JO0rCKq1v8zbjZ/LIyhVsTTOLh6GKoZRYjUItOUUtjObvhv
-	7KGNVqqMOfNuhv6VS++uxBMa2ZSTfMksP9L4lHCYoiM8O+dol8aojssP9g==
-X-Google-Smtp-Source: AGHT+IHUQIx7pOOWZxUGz33gIJIuLY4EYV/6TvWWRaCqoMocyH1gWX2yUnuhssWKVus9YaMn/pzDpQ==
-X-Received: by 2002:a17:902:e54a:b0:220:bdf2:e51e with SMTP id d9443c01a7336-22368fa90cbmr168131835ad.26.1740932755613;
-        Sun, 02 Mar 2025 08:25:55 -0800 (PST)
+        bh=Dijfl36fdLRwpTIccWWKkVNKprn4Lw0LAYubF3gjRP0=;
+        b=JnwBGkZdMMFZh87gXNl9OjKehLLbXMpM1wlY/nfhCfR0uHQlKQ1VNJb/hDm4RS4xj8
+         NO9UbCXTdnxgQ4/zqysOiSgklK18yFUYiioNGHwxBGqP9oRaEZvuyeocWV2zQBE+0s/F
+         mOr/PF54Zdu07MCCME312JW1obKJMX0OLoU4KMPHqnJEEQHC0lHD+soOgC3xUnLUffY6
+         ChqTX6zdmhbj5HrP3l8m9UHtEGgRCVdWpxidunnLk4bNn+MZs1cCn8jRfvDErhxzP9c0
+         rfT+MX73P8PeTqilURjLd+ik9yX6eO7zY8F37Q8P10rA4wk0h0ENrWeDBc08/GmEe33I
+         JM6w==
+X-Forwarded-Encrypted: i=1; AJvYcCU/3IZzIJgIyMaE78eyeDPzLoTMAsqjnnJ/ducHBZYhM/dT375qSAZ/AffAtg4MHey5cvI1/Z03XiyCdS4s@vger.kernel.org, AJvYcCX5bKoy4pCs+5on8j6p1q0MpHrTAXpJ4NaSvERtnnp4xKXSecr5nou2TWf262bdheTwNfC2qHmidtFuAAyNbao=@vger.kernel.org, AJvYcCXiC2ir7rr7u1gvq0xwFH0WbU/wi/5nH/1t3VDOmh/QdI/xHqU2sH/Ti+SBBsJmRVbr0VM6LuYYi2u801k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsDDLJKAjST3LmjlJ1ev0xQtbitHyf94jLu708oqVCUSImYHoz
+	/vLluN4oBXKj5LQZJ8M20Iyx4C9cibrIcDgmY/jEu45gT7fgWJda
+X-Gm-Gg: ASbGncvJs1Xsn1DSOzEjW2k8heYXOM+Seg37cCwHY39qSuHKoP3+JeKKmrD36vA85NL
+	hy2T70yB6n5Dcnzvna0PNElF8AnQ2APHoUL4rzlEQGMoDNslDTer+9L8X1Ot9hLnpoqjGr4ACB5
+	tIlUbwEECJiz77qFsrOSUlX6FXrHmRDoDOGgyb0vUywyATkNbd0DhiswAX26r3qSjUrZWj6PkZu
+	4Rxq0Blq+jIWWt6p9ynUNFzAGrjaaLyryOKnCxhAeanMClFo8ICE0w1Jen8f3tmcm4S9hVAES81
+	FWtIdOrpqYJaeCFS7diWqvYYzAHFMFveBBiHBi3qPf1ENT12g4b5/0CsVA==
+X-Google-Smtp-Source: AGHT+IF6hF9DfgJ6mhdNwGPBvt/piqg2Vn2ngBFN07q2c805TexmxJLP9SkGMhbT5HAO5Hpm+YqGPg==
+X-Received: by 2002:a17:903:32cf:b0:223:66bc:f1e6 with SMTP id d9443c01a7336-22368f61b58mr189470385ad.5.1740932981456;
+        Sun, 02 Mar 2025 08:29:41 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223504e4f64sm62519895ad.186.2025.03.02.08.25.55
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501d33ecsm62676175ad.37.2025.03.02.08.29.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 08:25:55 -0800 (PST)
+        Sun, 02 Mar 2025 08:29:40 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 2 Mar 2025 08:25:54 -0800
+Date: Sun, 2 Mar 2025 08:29:40 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Titus Rwantare <titusr@google.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) Initialise page count in pmbus_identify()
-Message-ID: <ded20709-c65a-4133-bfb1-d7730322cec1@roeck-us.net>
-References: <20250227222455.2583468-1-titusr@google.com>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Jean Delvare <jdelvare@suse.com>, Jerome Brunet <jbrunet@baylibre.com>,
+	Patryk Biel <pbiel7@gmail.com>, Ninad Palsule <ninad@linux.ibm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	linux-hardening@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus/core) Replace deprecated strncpy() with
+ strscpy()
+Message-ID: <f5b67a83-205c-42a5-a59f-cb5df877df99@roeck-us.net>
+References: <20250227173936.7746-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,27 +79,37 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227222455.2583468-1-titusr@google.com>
+In-Reply-To: <20250227173936.7746-2-thorsten.blum@linux.dev>
 
-On Thu, Feb 27, 2025 at 10:24:55PM +0000, Titus Rwantare wrote:
-> The `pmbus_identify()` function fails to correctly determine the number
-> of supported pages on PMBus devices. This occurs because `info->pages`
-> is implicitly zero-initialised, and `pmbus_set_page()` does not perform
-> writes to the page register if `info->pages` is not yet initialised.
-> Without this patch, `info->pages` is always set to the maximum after
-> scanning.
+On Thu, Feb 27, 2025 at 06:39:33PM +0100, Thorsten Blum wrote:
+> strncpy() is deprecated for NUL-terminated destination buffers; use
+> strscpy() instead.
 > 
-> This patch initialises `info->pages` to `PMBUS_PAGES` before the probing
-> loop, enabling `pmbus_set_page()` writes to make it out onto the bus
-> correctly identifying the number of pages. `PMBUS_PAGES` seemed like a
-> reasonable non-zero number because that's the current result of the
-> identification process.
+> Compile-tested only.
 > 
-> Testing was done with a PMBus device in QEMU.
-> 
-> Signed-off-by: Titus Rwantare <titusr@google.com>
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 
 Applied.
 
-Thanks,
+> ---
+>  drivers/hwmon/pmbus/pmbus_core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 787683e83db6..cdde8b03a6e9 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -1470,8 +1470,7 @@ static int pmbus_add_label(struct pmbus_data *data,
+>  	snprintf(label->name, sizeof(label->name), "%s%d_label", name, seq);
+>  	if (!index) {
+>  		if (phase == 0xff)
+> -			strncpy(label->label, lstring,
+> -				sizeof(label->label) - 1);
+> +			strscpy(label->label, lstring);
+
+I added a note explaining that strscpy() uses sizeof(label->label) if the
+length of the destination buffer is not provided.
+
 Guenter
