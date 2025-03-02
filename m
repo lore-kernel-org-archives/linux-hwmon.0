@@ -1,110 +1,97 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B726DCE1
-	for <linux-hwmon@vger.kernel.org>; Sun,  2 Mar 2025 18:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2503E12B93;
+	Sun,  2 Mar 2025 18:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740940122; cv=none; b=jaVZ9SKpxS+HejZHAjptMloYIZTlHbqN46o4l1P8tp1w4NeoadKPEwhcs4maEgGeuO3b9v2oXFdgHnp7bcOTrKyD3X+NmNms77ZpcFfogXgbnKI9G1HBhGe2mVtalD2E7PhruPVZs+ajrgkRVP8Bx/JPi4DrnAwQjx+YB4Jjd98=
+	t=1740940300; cv=none; b=TZqnj63yVhkEhB8YySRkWdzeAM0CNWUe04mY8XF0YZFGQd+WgW8QQe1abZ3mDGSlyKTfll0Y0syp3UdOAmnIpAWS2/SdPHs3ka91XXaoGLupskSI6u0yboE7KX7NqBD5xcIoPrtycoFEhZmOsZX02T1Oe4nMEBetsv+ESnctbrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740940122; c=relaxed/simple;
-	bh=1Ge8jFGfCm1sOthhOtWN5r7nDd92OBKurxDwQ/RkmA4=;
+	s=arc-20240116; t=1740940300; c=relaxed/simple;
+	bh=SzNCZySRf1eFQD0TS3/9fmObmjKeNxlo/iWLSlUhSZ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLk+gIotj6VKIpfhCUAei6Fh/epbmLimWNfYr1oax1rVvfWBF5XkhWe/RGy1ujdC/205R2wVWjTXHxY3kgoq8A6GsGW+JdUi5zaqWVNAp8Fw/+1bS204WMeKFLtAsLzlbKY0n2lGaRShzNEayFFzVF2F96itG2QikESE9g4bGsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e48bES5L; arc=none smtp.client-ip=209.85.216.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=QcM6cu4OG0XDcW8P005fRpf+zVcy8vRDS0VetI+R7TMHuYuoImIS/IPl+dXlpL/Ax12cqFkzBLjhbiQioNxX6hRjgwGchSrt22FvGNqmGB2q0H8HIRR9tWBBaJqpGutGJ3u53zbCP7btbs8y+elMRfuORGwxH4tWXsWrkLcJhpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=duK8tudp; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e48bES5L"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fee4d9c2efso1223550a91.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 02 Mar 2025 10:28:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="duK8tudp"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22349dc31bcso64282425ad.3;
+        Sun, 02 Mar 2025 10:31:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740940120; x=1741544920; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SE+IwOSqHRnLQhV4MfwjkBjJDpkglF8UVW1vEPKvrrM=;
-        b=e48bES5LYU/itDPKjBIypjRmeOSbhhLgPMScNaXrB+v1bRv2Mdi/S1cwjbC9+klu3X
-         S7E0V9lDkqss7MRA2jDu2ozG6q4hfBu6kX9lfB/eFBHPDUuhxWIYaVehq5LvFpeJCTC6
-         dGvqACv3dVq9D9I8SVlOxNKGcJsoBX3nr3wtYK0oALR5TAc/2eKEHlaTf9C+YozrW65h
-         j8gn/Ao1+DAxI/KFL88M8MAfQqqiyBC9lsSsVRwrAuMVBtfP1C0mKr8A/yELESVRFCsC
-         TBWBMaxbeRC/rZETXW9s2s2A+FVB/er5aBxvHHS1kwAIimis4+FecZ6TUysy5JShwFDg
-         /j2g==
+        d=gmail.com; s=20230601; t=1740940298; x=1741545098; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d/oznMeBLfkCNPzk67pfdLLxHxlKq3r15UYdTEA3Gwk=;
+        b=duK8tudpm7JOwDEghuUrGeQHu6HQaugmdEUfwIioYHCgdu/EGhvdIeEsFX8HY0l2X8
+         LfRy98cpXc20Flk5zlMfMiddALFG6pqvhsAydlI5pGW7VxF/LpbRv6iBpKIelBXnEdy9
+         r3Mv0GQT1e3lg18Xsvgb4XTxL7ttOsyOHHDfdIQV59zZGUZrnZ12qSAEaJmg25dgZRTO
+         TOxhka5sRoExGya076tYXjMWhUGUtONJg1nz5Ct6NR4yBSArJWQWrDKLDrggNTp8M4vx
+         IvSpufHkgoQ9vhDAiqQr9EYfKX7zYtYZYMNPmQdZPNLg7ia8X8CcLkZ94qoQXVlGSc9s
+         0/4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740940120; x=1741544920;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SE+IwOSqHRnLQhV4MfwjkBjJDpkglF8UVW1vEPKvrrM=;
-        b=Zd6L4NthrvLWKub9Ysvig6PUeNAxLku+Z/kEBFwBX3Vff/iHkFL2Me8edMnBmtn4l7
-         l3ozGla5mUhpDB50EYyy0PVuD3QkftSWfGpoBteXmucV1T4aY8paNFHtj9sePACWmBP9
-         zND8GfP/lF9Wq25p+YGjlTN9zLmmYo32E2Bp4rHcsoiFTeBRPZqr18Fv6+lfDlcPVWWN
-         WlylsjQ2ymDFqc5FfvcJYCQkZYTLFDr674ZxhCCfGh7By9KRQOpwFIzeer3+UuJdTKVx
-         VUvHU+I7Ttu9xgJP/C6GJXX/Dnnh3n2pYlhpWun8p1xFzRyAzu42R7Xc4U1vCYeOSjC/
-         YGbA==
-X-Gm-Message-State: AOJu0YzSwDNu1XsnzFu37OWETg2HLGekfYFZah0SHbV3aXU/9Yz28VOe
-	LZivpYA90pLGKb2MKaTnp0dv3O9j+7P4SlU9xE/7iZRzBb4O2APyPZiREA==
-X-Gm-Gg: ASbGncsjyDFDEesH5DrF9qg2Ln/21SD4FQ4iACqIn3HT5X5MlWvws9FE7NncWfREX8y
-	A0tyYEbNUZHa1f7uJLimSR1hUv9p/PIlB1HELXPPWeCYwlEnKcXWpFkhRnNXeB42eC7kkHYWZ85
-	DToZjUiNgIL6CAWSRVQOcUDW8Vg9fxtgOqU2DBMGxr5A2VW0A/rHf8rAy0/RQ8OniVKS4kQhquC
-	MfhK/f72Anu4H2gboEkW0PDX0vupHsGXzKTJCn3gaLEkdUmLPFo6fAKAswsi8bHH3R8Bl0Qu5sc
-	/r/SuEhPUr+TGNhdcvyz9OtCbTORqwjyUjXraIIIk3E2VpvyW9IjX+SLIw==
-X-Google-Smtp-Source: AGHT+IFOrk6MKc+YAWQJpQImfkeQJicYwthDKbuxIAdsrzBCdNehNs1PTx8rMHPz9y8q4Xyx+pAKng==
-X-Received: by 2002:a17:90b:3a89:b0:2f8:4a3f:dd2d with SMTP id 98e67ed59e1d1-2febab7875fmr17770617a91.15.1740940120472;
-        Sun, 02 Mar 2025 10:28:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740940298; x=1741545098;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d/oznMeBLfkCNPzk67pfdLLxHxlKq3r15UYdTEA3Gwk=;
+        b=Vw3f+dsGQLkf2rXaISfxUiirsNEwSk3GvVc0C7ZpHDMtEk3lLhANtIOjjPQwnKZTeb
+         ZJ6jSQkdvgW16ZAyEaRE9xSrorGZq1lBrWJoEL3gcA8IVZc9w9Do3WdHdm94+TiDUZz2
+         lhNh8i2ik0Sfqr3BZae0EDwTH34hcmaWOx2mRVcj8PtVx+tUADstx276W9/6K2sGLg1z
+         gJx2WrDkIp3jjLCdpmXNwgu4eMiNbWCBaK1XKCm3Xt/Mq2VOumbP0NsUhr4Y6M3+ATMM
+         w0DuGItT3//5aqIVV4ky3qbnupgTq6c05QieHjMimpYF+JstDYLE7ADs7pT2hm4ajDe/
+         Ki8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXyv6CpueSx+K7Hduvuhdv/SW782RQuhKN/robebEyWl9TQKi/HlKUbRjihq0V+QUh06KkjF5g1uLKq82Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2YQ//PK1zSIlCmrHEPRL+ZN9lW4SmuFHEFy/KQgn+aA8tPmQe
+	vXQsSsOTJJnX5VLFAfc8py7p8UODhLXho0HdpDAyS4fwTVpmhudKk7cNJw==
+X-Gm-Gg: ASbGncsMKEZjXrs65n8PXwLwQBlD+S2Io5Cufu7KFSDg7owQgs9iDslUECdyKqNnnLP
+	So9OjTmIMui2eA4UCsaU/R2IzGDYlaHo+ilpyj+s0XzRsW14PIvps9pBa8HsgORynyRPM4SrzG6
+	O8RmZpxqdAi3hCFyXlT7YW/D4y9mp5Y6v3BxVTKpDJW/1ygQ7D6i4v19+kdoOWfXaFp4dI7sOel
+	dwUKLX9KbEXWlDiFGedH/eaGssQm+JK7w7LjIYefsNGJS44A/gWHAc/BFmaq/r2itTcRWz+UST7
+	Th7NINQq+Wty9G/2gLiuS/+zKOx3RtRaCO/HP2aEgdKe8MUU3iDUP5r2jA==
+X-Google-Smtp-Source: AGHT+IHmhW+8hPE4I3ZlDJFkfm4EIxk+N5WfbpEHcBGWmqcrJgUMyUGgVDPTfkh4r8aeK1TPxMPyLw==
+X-Received: by 2002:a05:6a00:981:b0:736:47a5:e268 with SMTP id d2e1a72fcca58-73647a5f2e5mr3628253b3a.1.1740940298251;
+        Sun, 02 Mar 2025 10:31:38 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fe6cf95a04sm6532831a91.0.2025.03.02.10.28.39
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7349fe2adb2sm7499450b3a.19.2025.03.02.10.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 10:28:40 -0800 (PST)
+        Sun, 02 Mar 2025 10:31:37 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 2 Mar 2025 10:28:39 -0800
+Date: Sun, 2 Mar 2025 10:31:36 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: ChiangBrian =?utf-8?B?5rGf5rOz57e7?= TAO <chiang.brian@inventec.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4] hwmon: (pmbus/tps53679) Add support for TPS53685
-Message-ID: <5ed6079b-784e-4d0f-9f86-9bf8f6d02f7e@roeck-us.net>
-References: <CAJCfHmW61d2jd_tYpNEqBG_Z58bEnVKAmsvhrEP1zXQoXqrUVw@mail.gmail.com>
+To: Huisong Li <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jdelvare@suse.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com,
+	zhenglifeng1@huawei.com
+Subject: Re: [PATCH] hwmon: (acpi_power_meter) Fix the fake power alarm
+ reporting
+Message-ID: <90319d28-6bf3-4439-a86b-8adb7ac71d0d@roeck-us.net>
+References: <20250220030832.2976-1-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJCfHmW61d2jd_tYpNEqBG_Z58bEnVKAmsvhrEP1zXQoXqrUVw@mail.gmail.com>
+In-Reply-To: <20250220030832.2976-1-lihuisong@huawei.com>
 
-On Tue, Feb 11, 2025 at 02:22:31PM +0800, ChiangBrian 江泳緻 TAO wrote:
-> From: Brian Chiang<chiang.brian@inventec.com>
+On Thu, Feb 20, 2025 at 11:08:32AM +0800, Huisong Li wrote:
+> We encountered a problem that a fake power alarm is reported to
+> user on the platform unsupported notifications at the second step
+> below:
+> 1> Query 'power1_alarm' attribute when the power capping occurs.
+> 2> Query 'power1_alarm' attribute when the power capping is over
+>    and the current average power is less then power cap value.
 > 
-> The TPS53685 is a fully AMD SVI3 compliant step down
-> controller with trans-inductor voltage regulator
-> (TLVR) topology support, dual channels, built-in
-> non-volatile memory (NVM), PMBus™ interface, and
-> full compatible with TI NexFET™ smart power
-> stages.
-> Add support for it to the tps53679 driver.
+> The root cause is that the resource->power_alarm is set to true
+> at the first step. And power meter use this old value to show
+> the power alarm state instead of the current the comparison value.
 > 
-> Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
 
-The persisient lack of change logs does not help moving this patch forward.
-
-Worse, it is corrupted and does not apply.
-
-> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-> index 63524dff5e75..7b412f3fe86a 100644
-> --- a/drivers/hwmon/pmbus/tps53679.c
-> +++ b/drivers/hwmon/pmbus/tps53679.c
-...
-> -   if (ret != 1 || buf[0] != id) {
-> -       dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
-> +   if (ret != strlen(id) || strncmp(id, buf, ret)) {
-> +       dev_err(&client->dev, "Unexpected device ID: %*ph\n", buf);
-
-%*ph requires the buffer length as argument. Testing this out by applying
-just this line, the code does not even compile. That strongly suggests
-that the change was not compile tested, much less tested on real
-hardware. To move this forward, I'll want t see a boot log.
+Applied.
 
 Guenter
