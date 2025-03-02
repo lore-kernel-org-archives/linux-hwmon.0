@@ -1,99 +1,99 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mail.mixaill.net (mail.mixaill.net [144.76.234.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFAB17C210;
-	Sun,  2 Mar 2025 07:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327D4258A
+	for <linux-hwmon@vger.kernel.org>; Sun,  2 Mar 2025 15:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.234.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740901427; cv=none; b=hSGb349xA1zapR5UrWRmss31eGQqJ+dBll+5E48+MAWCeCytJNFGRYZsF1UNG+5UqW/EPTd9RCE163Jf+NMUjrCnLkWAGzuQY2aIMoxjsEhBfLS6zoJRT6uo1XG4pqEVJDrf000Nf93++LjfGe/rtkV8z0wO3O9K9O3U9XW4hFQ=
+	t=1740930666; cv=none; b=dwlcotbwmViga/8zEF0OTAXDojkgOJ1fiw6B7gggBKkl1aVSW02XOBx6aq7nfVwRRtyOBkEIP9hbL29EbBLJE08BDBd6gFXj6vG2G2CFXUKim/k6Y90ELFgjDO1LKT5WHLeq4Ei8LoTHCeb6/l6ijxeNbbTvz/FCm0RBf0kc62I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740901427; c=relaxed/simple;
-	bh=K65kWY5B+4YWKjER7mJsaaAx6Aw3pEYu/hpj4JmFhkg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=aybIJNvIZL2vVp6EFEqEOWPdZo2QO/qHWYxL2tsoJlmljNQk7PNQiVGoaeuvTzKKKkoRNiU3K3ES0ttafjsInjKKyWVv9WCLY8n4cY0gFVPjJ3IW9tOfkOIQye3dDiTDjTvWRzEeZUD+ecoDfqs5Dw/6nVfSoZauY3IBm7UDKi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Z5DRT418mz1R5sx;
-	Sun,  2 Mar 2025 15:41:57 +0800 (CST)
-Received: from dggemv704-chm.china.huawei.com (unknown [10.3.19.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4032914034E;
-	Sun,  2 Mar 2025 15:43:34 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Sun, 2 Mar 2025 15:43:34 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 2 Mar
- 2025 15:43:33 +0800
-Message-ID: <ab93d716-f38c-8e34-cd41-0a35b7db4e43@huawei.com>
-Date: Sun, 2 Mar 2025 15:43:32 +0800
+	s=arc-20240116; t=1740930666; c=relaxed/simple;
+	bh=Ir8ZI4R2IM4pyCCWWX2IRNe6GehZJvXY6fdXKVLdkQ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EEyHpHsez9bbGCEKcP1F7rLHUjsbxIoMnJ4Iv4lIyerhc0dQVF5OXPSqQnYuidzDu9mRBmjeXen3u4l1Sb2o69wWTtf6a17sNp8pkg6k7TytNENOFY15+Di9da6Ch7xBC+lYSn73Sb5xxdHikhygIEDgYMijsIbiO8P12++VzCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mixaill.net; spf=pass smtp.mailfrom=mixaill.net; dkim=pass (2048-bit key) header.d=mixaill.net header.i=@mixaill.net header.b=HW2kZ4M6; arc=none smtp.client-ip=144.76.234.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mixaill.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mixaill.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mixaill.net header.i=@mixaill.net header.b="HW2kZ4M6"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D9A696E6F4;
+	Sun,  2 Mar 2025 15:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mixaill.net; s=dkim;
+	t=1740930662; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=YG9lBUpLJfhhzYEZH6l6Enzmsv4WhFsOvD/G0fAlccE=;
+	b=HW2kZ4M6L0bB/JAQ+PEtD28rOXMM3P/sukE8/mbc3QG6kpCFbGrllHuh5NDMZivojqoAmq
+	sQn/QapIdCkpNlBOdyXCHkdmeOwaaXNBXPXry3hqU9JIFrEq9o3wlJIr0hoAaShil1vyOH
+	aVXzCgTOrwuB5cNT+b/sROX+prngkpY5c5/THgPlYwMw1faLPLwrepl8jXOwrh7E3AEZXK
+	iyV4GFmRSVOVKobcVzavqh4xkFSnjMBi2Q5pIzYuuxjhErtJNYNjs3PMPZNHHSkrQFv9UO
+	enbOratNZF2yvKbxT11W1EBJ+PyNBKL8ZKhAjwqONr1iKG6utHD+F80YF+izyg==
+From: Mikhail Paulyshka <me@mixaill.net>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
+Cc: Mikhail Paulyshka <me@mixaill.net>
+Subject: [PATCH] hwmon: (nct6683) Add customer ID for AMD BC-250
+Date: Sun,  2 Mar 2025 18:50:53 +0300
+Message-ID: <20250302155053.50096-1-me@mixaill.net>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC] hwmon: (acpi_power_meter) Replace hwmon_device_register
-To: Guenter Roeck <linux@roeck-us.net>
-CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>,
-	<liuyonglong@huawei.com>, <jdelvare@suse.com>
-References: <20250225085158.6989-1-lihuisong@huawei.com>
- <8b59c8d0-4710-48ab-ad70-b2eddc74fa9e@roeck-us.net>
- <05bb1583-13c7-25f6-48fb-dc415b3206f9@huawei.com>
- <d765aeb3-3ca6-44a1-9337-2706621df903@roeck-us.net>
- <765d509f-112a-2173-43af-e657f59fddac@huawei.com>
- <7c8db8ba-19ad-417f-bacd-00e8e88eea25@roeck-us.net>
- <25baf5c2-9f79-9bcc-fdfb-8d36b8472d4c@huawei.com>
- <ce3866a2-d264-4da9-9411-8427fc1c8f46@roeck-us.net>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <ce3866a2-d264-4da9-9411-8427fc1c8f46@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+X-Last-TLS-Session-Version: TLSv1.3
 
+This value was found on an AMD BC-250 board with an
+NCT6686D chip.
 
-在 2025/2/28 22:47, Guenter Roeck 写道:
-> On 2/28/25 00:26, lihuisong (C) wrote:
-> ...
->>>> BTW, I have another problem as commit log described:
->>>> -->
->>>> The path of these sysfs interfaces are modified accordingly if use 
->>>> hwmon_device_register_with_info():
->>>> Old: all sysfs interfaces are under acpi device, namely, path is 
->>>> "/sys/class/hwmon/hwmon1/device/" ('device' in the path is a soft 
->>>> link of acpi device)
->>>> Now: all sysfs interfaces are under hwmon device, namely, path is 
->>>> "/sys/class/hwmon/hwmon1/"
->>>> What do you think about this?
->>>>
->>>
->>> That is as intended. The ABI states that the attributes are under
->>> /sys/class/hwmon/hwmonX _or_ /sys/class/hwmon/hwmonX/device/.
->>> The ABI does not guarantee that the underlying path remains the same.
->> Yes
->>> libsensors handles this automatically, as should any userspace programs
->>> accessing the attributes directly.
->>>
->>>
->> So we don't need to care or handle this change of syfs path, right?
->>
->
-> Correct. Each driver converted to the new API experiences the same 
-> change.
-> If you insist keeping the path the same, you'll have to drop this effort
-> and live with the deprecated message.
->
->
-Ok, thanks for your advice and reply.
-will send next version ASAP.
+Signed-off-by: Mikhail Paulyshka <me@mixaill.net>
+---
+ Documentation/hwmon/nct6683.rst | 3 ++-
+ drivers/hwmon/nct6683.c         | 3 +++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-/Huisong
->
-> .
+diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
+index 8d4a20d99e59..3e549ba95a15 100644
+--- a/Documentation/hwmon/nct6683.rst
++++ b/Documentation/hwmon/nct6683.rst
+@@ -3,7 +3,7 @@ Kernel driver nct6683
+ 
+ Supported chips:
+ 
+-  * Nuvoton NCT6683D/NCT6687D
++  * Nuvoton NCT6683D/NCT6686D/NCT6687D
+ 
+     Prefix: 'nct6683'
+ 
+@@ -61,6 +61,7 @@ Board				Firmware version
+ Intel DH87RL			NCT6683D EC firmware version 1.0 build 04/03/13
+ Intel DH87MC			NCT6683D EC firmware version 1.0 build 04/03/13
+ Intel DB85FL			NCT6683D EC firmware version 1.0 build 04/03/13
++AMD BC-250			NCT6686D EC firmware version 1.0 build 07/28/21
+ ASRock X570			NCT6683D EC firmware version 1.0 build 06/28/19
+ ASRock X670E			NCT6686D EC firmware version 1.0 build 05/19/22
+ ASRock B650 Steel Legend WiFi	NCT6686D EC firmware version 1.0 build 11/09/23
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index 416ac02e9f74..6cda35388b24 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -176,6 +176,7 @@ superio_exit(int ioreg)
+ #define NCT6683_CUSTOMER_ID_MSI2	0x200
+ #define NCT6683_CUSTOMER_ID_MSI3	0x207
+ #define NCT6683_CUSTOMER_ID_MSI4	0x20d
++#define NCT6683_CUSTOMER_ID_AMD		0x162b
+ #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
+ #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
+ #define NCT6683_CUSTOMER_ID_ASROCK3	0x1631
+@@ -1231,6 +1232,8 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_MSI4:
+ 		break;
++	case NCT6683_CUSTOMER_ID_AMD:
++		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK:
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK2:
+-- 
+2.48.1
+
