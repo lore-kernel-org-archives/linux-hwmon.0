@@ -1,187 +1,90 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31457211A28;
-	Mon,  3 Mar 2025 13:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0508121128D;
+	Mon,  3 Mar 2025 13:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741010163; cv=none; b=q8WJXbhQIBrpsiUyCt0STiCL5Q+uB/WWC3WVlVqgWkCqpv/OTI4FdiQyFRAFSktoNkzbinD4TK+8aJ8FVa28hmTgushOtdQ9UK7uTtREkAq5n38He/HzJkSQnedeErp9gn/whD3RTzyLC8JmxnIWuQ2puUbnw3UmVlV29Y/80Zc=
+	t=1741010358; cv=none; b=a7pR0DH7lSRdI4zcl6+qFWDSjsAKr7RTR133SYRlQMAWNvOlpY0QrO+ajQDX9dy/mEvqK0WiTtEPY8fbEuSP98lX9jnPI+YjphHN++zzYbCZnejOB+YSceSk2bgHPmg4mQ/eU5mHjobqwXKcWJ8zU8Wcanr+URLOvS8cpt9uQDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741010163; c=relaxed/simple;
-	bh=MCTeDFzPFsuhhTnj3i86r61OhjjPyU6f8ybt9FJfxJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiTFCxPDLRQzf3QpDtGI3v/d7MS0P3MXaFSEg5wTz4CotGSd9DR15+I9YO9yx1W0Z+MNVbHJxKv1RVG8Ow82h00Tpyr72G0vvJKtkVusd9xpz1mU3UWdZELlZVUPeieLgYHY1Tl7+OXx0CAkXOpjI0vN7JaSh1QFfxT2yYrRhO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+uBhUrR; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1741010358; c=relaxed/simple;
+	bh=aCzck+5umm89xbCr5uf7I4rMYXSf8aGHLei86MNCb04=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzQMx1VeGeQCh2cs/9OhpiEJCXeJnvXVOERdK+XyhkkVVWEYOBc4XvIE2izC4Wt4TCTdwbs4OF/8m3i00iDNnyk4AC6Zqii3H4xxITZPn5iIYzZ5+GeLObsTJFUXV9JRzSxrkDuWjsagSFSNTBn9i3/nNIhnMG6f/IOPxPtTlRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HMfGrQ0M; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+uBhUrR"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2feb91a25bdso5424496a91.1;
-        Mon, 03 Mar 2025 05:56:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HMfGrQ0M"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22328dca22fso66525815ad.1;
+        Mon, 03 Mar 2025 05:59:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741010160; x=1741614960; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBTP2SsN8b8d1tj08ma/P1grGEnHl37Fv9ksqNgBmtw=;
-        b=l+uBhUrRIt2vae8rNSALiaqNZPNbVIzSp/nkZCM2yqW0+eMAnY4qh8PSJBPlXDE0au
-         a4lvHLkLukKeC75wIbJY/6HbDSvFtfsqgu4/Pdch6CG66njFzHXuL07gw/PSBXy3AFWb
-         A7jqVE5dAMzcMI+6T4M65MPZF40mYTz2IvC9HSj3y0Q9KdNX7QSZQw85RTf9XNYi2HnG
-         tj4vNORgYmiV+8oLmcboNsaRUeqHAyEtf6wlRx7zyauoesvGImeyv1a35gCBUU5T2hAP
-         GV574/kaRk0gv09s/hps+Ta12AMb2RJ5o4DgS10z981rC+5uTq34A1zIg1HZU9oskiE8
-         gJjA==
+        d=gmail.com; s=20230601; t=1741010355; x=1741615155; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jWzcrOwXdymJD531/VeFi+cXBZlpa2+kaaFzyIB35Ik=;
+        b=HMfGrQ0MEL8EpQHoTIkMt/UV//5Re5Swdfpt+9UtQT5dWalG9gSgjdVEGWcGjXhQlN
+         EBKFNSyHH4ogwRIly+MKCIPA2mtiSkP1jjjYK7jWNNPv4JPXcDc4+eh7NQEMSu46WPMb
+         0TyXd80HyAdPq9Lx0QynMfQYDJZ3sHbX3bKLtYEV2E4xUXs1c5omEiiX8X6wJjbJM7Ta
+         Q/HGPp6Yh0UGZmAOUeAxjIL8yglU1Ohq1bVIAoqFhU/TWPDHPZhljW17wxjwyRdjwshi
+         w6U6b6g4dnQRfL4Y7KI/5GY1AI1wk6yHeVCN2vaa3feJFd23aDpHaOIuWoeOFrOcvkYq
+         cZqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741010160; x=1741614960;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tBTP2SsN8b8d1tj08ma/P1grGEnHl37Fv9ksqNgBmtw=;
-        b=K16xm9EOevXY29t71la8+2kU1Cp0ysFdBH+JaYYDgvMeUYnLbTF3iqvbV5OGjVKerM
-         pQL5ictwJYhXiWZTnKFj+Znv64IKmM1lg9uDe+9Ove9Vmyjkwi+WDAw3Civc//Bi123Y
-         6+EQbYeDHLI4pQGJBwYoBxL+zeyJGN4O/Q1jkAzOa269mLILMWUqYTx0T/J5MPvrY2xu
-         AvARCd+gPc7U+OV0YIjfk7j7/xxcvBx51F6Bt7T5d+QdonGXRCk+iIXNhoAOVsbgAyzl
-         FI/G1SEOvvTfJespqG8LeQlMUvKAWfYxXFoF7bZwsquDn4xDynUOjFH1N8Q16Qmf/uk/
-         v8UA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwakdTganp/P5UWBLWIKpw68yESsQdXbZleuoEEEcMuN0Uvdp7sRIAcdh/6eCR3GTskkdRvVR9Ny1C@vger.kernel.org, AJvYcCW2Dcor1FeZw/siSHfXJqp9FiBiEKtpiI3pkIvLfIK7BxPY7Djn8hOHB/HGHikDXr4TT2EIB9HkbPcY86JI@vger.kernel.org, AJvYcCXayjDoJcpZqoL1DbSOWishoeg3ku45PAOMfKBOBo05DjmutNtzL+rE6Qghz3IlPhjxL6Y0Po6ruFVxdi8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyyjyQb2uZCXwPmKt3ETjgswWCr8cBnrV4t6JG2S48hxu4FEVx
-	EnXHlUzpuAVyWc7O73GVeSITcR7qs4k01DUlcSn9FxE783GfXsp4
-X-Gm-Gg: ASbGncsvGa1PxmEuKBnTi2GMJXG1qYPih1vHWdUKn39btsUUj+1dixGwkTkwFFzW9JD
-	P/eN+b8nxegXZhEsIx3z+xFK69EFDrDgH2fb6sJI1e1fp6ywd+lXKRqZeY2AtowJif0SvsLmhnU
-	gnQ7j+i+Iw2ha7EgWd/q1BF5Ip39jncbsek/gNas+0x3umjr1Io7XBzZ0DHsrvXyUwl/7N0CvG8
-	KKOkb4PGgZhJkdZ+rz0po5fDbw5q9WjuisPhGfQR36L4nrO3Pgq2xWzt+bjFmrpxSv5ohz6UPSw
-	+HSiFOsmAE7+vJ8bdJAGNIGaGtYR0yCbwi5AIVUpXGxQ9noX/8b1G0BCjotmxBFXAV7iBzavXQt
-	0yQlfOayYlmsBT2H/aA==
-X-Google-Smtp-Source: AGHT+IGTn6ar+i21IthOT0JS9e6dJdyXIRsagA4YhnhB00hq/ZrlppOYJSELP4R84rv2YxZxVFKujQ==
-X-Received: by 2002:a17:90b:4b41:b0:2fe:8217:2da6 with SMTP id 98e67ed59e1d1-2febabc804cmr16947066a91.22.1741010160288;
-        Mon, 03 Mar 2025 05:56:00 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fea696e3f0sm8957394a91.37.2025.03.03.05.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 05:55:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741010355; x=1741615155;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jWzcrOwXdymJD531/VeFi+cXBZlpa2+kaaFzyIB35Ik=;
+        b=Yoz50h7mwRLWa9jCLGGqHqMk14yiqZyVj0iEnSU7P+kH1WWW29IuEqYvDJbW3R/EbP
+         twHuJPKpR/AUm9zK/LNHPt6pVeTAG5CCsx/DKtb1SI5m7D4IuaBc4XVhhru3QBwO3Tgi
+         RV6ao07PHQ7WrBvwbp++QkylGYapvJxrsGSe9wTZpVG+aQTksZiIQwM6MYskQ19ZAvhR
+         DRJiq4V5utQNo5JEuiHxML0REFM+pT7gukFjFK7Y3YpjfNTcPmKPB0mFefB3ATGr+DnM
+         M7rn21copFhJQbRoZNyG3F1YSbanP4sI6b8dk16Z9gI13ws1Lju7gI0yTNZySEsKjMbF
+         vJ5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWL6K3on9fNOUSOGZc5TS//865vBwNx6U2xMI5uZFHCeGvTu2b7RVrA8kZLNRH5GPFwztjjrz1C7n0Sb+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoNp4x5Ibk0vJxazl5mxb6pGFhRN1kIWekU4ncDI8orq6XvocJ
+	cyZlqoqjUqYmzRC2wyKXHo9yK2bkc49t86pPBFc1SVabNxCMDaWW9zjAiQ==
+X-Gm-Gg: ASbGncutN8hwsj6OZLGUzfsSUj+zv2nMWWnhpTp6EgXNoukaBeQ4WpQWo969aLeCgQB
+	6S7zUfSVeHrD972BXxoNRzgvlXZqhEG6gA4IN2bwoustZlSlk3h3QTt+kG1LaQJ2V3nrJBjmZPU
+	C8r+kzKxJM/8Tax7/lEX7YIsavmgYbZdQBX3cLDZnhYr2Tt1hMlHbplI/8AZmtWX985Dh81MLZj
+	nYADxz5JG1GbDQad5FkKrjbG8W/bWW7uCoFaRw8w34RVwqagFHyK9IrRCF7/NLp59jX6hg5i7Gb
+	G5cB4Axbkm/VYsa52sxgM608MJ9d/CcZA29LjmvXY/8pGO+GbISQczt44w==
+X-Google-Smtp-Source: AGHT+IG7Z0nVXtNXCNE3Kj6/NMwSc1HiU62F92nPIsV8Hqt67/S2rnqaIHmgye6z+lvMLC2uRXPQDg==
+X-Received: by 2002:a17:902:ec90:b0:223:628c:199 with SMTP id d9443c01a7336-2236926725amr177548805ad.52.1741010355266;
+        Mon, 03 Mar 2025 05:59:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501fd28dsm78064945ad.94.2025.03.03.05.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 05:59:14 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <afb9a22f-7d21-42a2-a8dc-87537caad027@roeck-us.net>
-Date: Mon, 3 Mar 2025 05:55:57 -0800
+Date: Mon, 3 Mar 2025 05:59:13 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Akshay Gupta <akshay.gupta@amd.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	gregkh@linuxfoundation.org, arnd@arndb.de, shyam-sundar.s-k@amd.com,
+	gautham.shenoy@amd.com, mario.limonciello@amd.com,
+	naveenkrishna.chatradhi@amd.com
+Subject: Re: [PATCH v5 01/11] hwmon/misc: amd-sbi: Move core sbrmi from hwmon
+ to misc
+Message-ID: <4a1ba8b2-5d95-4eae-b7a5-cafaf6228817@roeck-us.net>
+References: <20250303105902.215009-1-akshay.gupta@amd.com>
+ <20250303105902.215009-2-akshay.gupta@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/14] hwmon: (xgene-hwmon) Simplify PCC shared memory
- region handling
-To: Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Jassi Brar <jassisinghbrar@gmail.com>, Huisong Li <lihuisong@huawei.com>,
- Adam Young <admiyo@os.amperecomputing.com>, Jean Delvare
- <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20250303-pcc_fixes_updates-v1-0-3b44f3d134b1@arm.com>
- <20250303-pcc_fixes_updates-v1-12-3b44f3d134b1@arm.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250303-pcc_fixes_updates-v1-12-3b44f3d134b1@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303105902.215009-2-akshay.gupta@amd.com>
 
-On 3/3/25 02:51, Sudeep Holla wrote:
-> The PCC driver now handles mapping and unmapping of shared memory
-> areas as part of pcc_mbox_{request,free}_channel(). Without these before,
-> this xgene hwmon driver did handling of those mappings like several
-> other PCC mailbox client drivers.
+On Mon, Mar 03, 2025 at 10:58:52AM +0000, Akshay Gupta wrote:
+> This is done to support other functionality provided by the SBRMI, which
+> does not fit in the hwmon subsystem.
 > 
-> There were redundant operations, leading to unnecessary code. Maintaining
-> the consistency across these driver was harder due to scattered handling
-> of shmem.
-> 
-> Just use the mapped shmem and remove all redundant operations from this
-> driver.
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reviewed-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+> Signed-off-by: Akshay Gupta <akshay.gupta@amd.com>
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-Note that I'll apply a fix this week which will cause a context conflict.
-See below.
-
-> ---
->   drivers/hwmon/xgene-hwmon.c | 40 ++++------------------------------------
-...
-> @@ -685,34 +681,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
->   			goto out;
->   		}
->   
-> -		/*
-> -		 * This is the shared communication region
-> -		 * for the OS and Platform to communicate over.
-> -		 */
-> -		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
-> -		if (ctx->comm_base_addr) {
-> -			if (version == XGENE_HWMON_V2)
-> -				ctx->pcc_comm_addr = (void __force *)devm_ioremap(&pdev->dev,
-> -								  ctx->comm_base_addr,
-> -								  pcc_chan->shmem_size);
-> -			else
-> -				ctx->pcc_comm_addr = devm_memremap(&pdev->dev,
-> -								   ctx->comm_base_addr,
-> -								   pcc_chan->shmem_size,
-> -								   MEMREMAP_WB);
-> -		} else {
-> -			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
-> -			rc = -ENODEV;
-> -			goto out;
-> -		}
-> -
-> -		if (!ctx->pcc_comm_addr) {
-
-This needed to be IS_ERR_OR_NULL() since devm_memremap() returns an ERR_PTR.
-
-Thanks,
-Guenter
-
