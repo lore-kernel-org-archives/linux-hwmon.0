@@ -1,126 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9751F583F;
-	Tue,  4 Mar 2025 08:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70261FC7DF;
+	Tue,  4 Mar 2025 10:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741076685; cv=none; b=tPkYseMmXSlW5UlL+XZZ88OwBdOCM24h+vGiUhkmnXXRtVhKGJwOpYCRircHuuDn5BWFq7fWGte2RuflxVLbc5xoTlDnKqBwZCDibUG2NOOH/EA1KVU3FUElsNyjLb/j4FFq/MQbnCWJuxNHcR4b10bxOx8l+50rHsRJ/36t/y0=
+	t=1741082608; cv=none; b=EJjKYx7Hj6Xb9pHdB09JDfbX2j+C+bp6ZJwMH+5AS+BV5OunGi3kgQaVr2vvrPEsQwdVn0GFXHENpCGSU0xZRypn9eEsZ3zHmKBSZDyeIrKBgOEuizVQVbiQBpRzB/I/Oxl1r4i5SYSfFfE74wWQhEjAi3tvwhTL7V1KSTSPeL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741076685; c=relaxed/simple;
-	bh=+LfuEtS3hu1y9dTM9mxPPM+YBFahStoGBJrYDCOEvOQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lh7lECFoGTq1A8mCOo72KJHsG2CxF85ZqhjM+0LOyZgMvO40pVeGxRRT7MG1GGY1J7sKigkYxKFEpXnA+Y36kWjBRqeWRx86oMUaVc2RN8OZCec0gOTMKWXrlX5tWiWxm/KhfNsClQsoXmmVnLwrvyDn1VBIF8Ilq3KTPuBlVD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOWgvRAQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741082608; c=relaxed/simple;
+	bh=MXox0Lyz/NoUGq4Jv82B/uOjxdzyOFGLNxekjNLbEFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MdG0Wd+0Mcz1ja+HDMRalNBpaJugXMWMiMWyDHOP/r6tkVsUusyqh1MnMF5RT1cxq3joc5iqzZiR1x9vmthxG9whAiqHFCva+HynFrCqGxVauVHdCvJ55su0ibZgoykEc5PZbzgvTBAgbX9fK6g2UPjzA0MvhAUiPo8oNMrdNOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ISrkCSe1; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOWgvRAQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4EF4C4CEE8;
-	Tue,  4 Mar 2025 08:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741076684;
-	bh=+LfuEtS3hu1y9dTM9mxPPM+YBFahStoGBJrYDCOEvOQ=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=EOWgvRAQC/+Kl/2yWBvrpLxw/J951iYOTxXrq/o0OVSU2XzLKONteM9WvSwBtR6xy
-	 jt2hCKmIDv7YGoF6El4rmnnuishxFyVwU4vH98wEMuMz2/wmV6FkT/wG7jqm5ll5Oq
-	 EbvxfuxkoHn6o6OwFnDpuDGexCKdC6/Ii2w2f7W5fCbbf4tTPsiNmikxDNQ9lsIjIc
-	 x3KfRrYAopYwE6LQy8U2DO8gHZWh3ScWHBZbOnppYQezcUWDiVGu8G7Nlfv5pgQ84L
-	 2wuOlS6viNAh2559hVjUGXo7nYvDURvYwqSBR0qvrygcIOz/M0u79y2qEqXHL30gvr
-	 4m11sP661tKsg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2982C021B8;
-	Tue,  4 Mar 2025 08:24:44 +0000 (UTC)
-From: Maud Spierings via B4 Relay <devnull+maudspierings.gocontroll.com@kernel.org>
-Date: Tue, 04 Mar 2025 09:24:43 +0100
-Subject: [PATCH] hwmon: (ntc_thermistor) Add min and max temperature
- attributes
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ISrkCSe1"
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86b2aaf84daso2157280241.3;
+        Tue, 04 Mar 2025 02:03:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741082605; x=1741687405; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=75uugYjxElZY6x8Po32ybV6WWPPYny1t3+5VwBk+/6U=;
+        b=ISrkCSe1UhBN+6cYExYpKDrLT/GVjwPeH60/vWLB6OIzdBGSpnWcJv6e4nkjOosRpf
+         fVXX8I+vExQ4rIRsBO2ZkswAzplDDl8TwronGdafsvmhyy2he/z5KxMbovRmcRRmQpu4
+         JFlFljHhyEMrkf0cOGMoFuYY4yjxDCSNKg7AXIdL71QkT9+JrQXuzO/W+B947uXzbUSX
+         jukFU9LjbFZOd8ou9OcJvRH7R6ADXsqlIV2wRMGVSgjy2pHP7oWl3shxbRO6PxbcBoUW
+         A1mZ2u0eZAVFiBibqOyfDIcnkjYgAA5W0WdNRAF5N4YLDipvL0IrNqKx0zBD2FgwasA8
+         eCjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741082605; x=1741687405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=75uugYjxElZY6x8Po32ybV6WWPPYny1t3+5VwBk+/6U=;
+        b=VsQO14ZBl2cfGbcUx9eL0zoIwv3jq6GjEAiEWTdaqZRWpjT+jg6j8C8FJ62lXdCTKV
+         QpmKPhrtYkLrJ7w1vdnbBdCmri/6vSvBxYaNzift1EGMk57A/I61rHUSQwg7LTXTILt0
+         qx85/Qh8dIVzej1bUN8Zj65b/ombkM7jTM+c1M38S2s/+NRYuuIAK2JpOn9begyw6+Pn
+         pW46bqj2mED/bRTXgDxJm4zWU7Guc4mpGUa7/YRm9lnTQenqabCAROmz7CMZIYRZT9ZU
+         4YkSdFGyJgdGVEcZOM5J0O3mW6EP7r4KlhwTCv7hHbzUrFOj9VCyNq99vgcYi/F+4CHt
+         20KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNNIuQFA98F0P5eek/ypvagQgpWyU9tQcnBzUEtxdJ6mkKMz1ysg3YSpFck+OeKgGvGSfOjOlvMeB5qqNK@vger.kernel.org, AJvYcCXpcwAHEWaMqaE2vJmdiWWnVvCWA/vC1EUxIwtxFCZf6G4mdyhyK2IFhMQbZ8OYNDU82PP8Rp6NQSA=@vger.kernel.org, AJvYcCXsjmUB+SLCZ7NX0ajjjkviIl2Rb/2fEcwbCBsbr27jqBVyh/gRfJ/QWXkEpEURDM1L93GjQ+OvCJ0XhzM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6k2cumniMSLtPf3ZX0atJkTe9c2LKpJxGERiqjUz1QcmIZAdL
+	AvTjU5xbfKBEy3/IeXc9ViiSN9sx10O6vwMWVUkpZTwVfoUMsL62Oue4xOiXkHVoB8v5l3eMslO
+	AEXf4PxR+E7lov4CyRW8hNN77s8g=
+X-Gm-Gg: ASbGncvnfwqMB05xu6vCxrgjSx4Q/bi1BdteucLeBr0ckXloEDcrL2kGOvw0Kz0UzwS
+	AqoLRoHY0mvINURoA/0EMxPFFA+FwdmcAufJ5naSTwNP31OnKG6L86JcyBIMpKkqxqe9MeZrqhO
+	jeom1dlAeCIZMVgAe4f7z40+0k
+X-Google-Smtp-Source: AGHT+IG+l9JR7fV93u9Wftn467Q+GhPebXTmpF9gNWTUd5YaEYIBbL1NcauvJnyntcvnbgg6Igo6p/7SkTGXmZ/cnq8=
+X-Received: by 2002:a05:6102:3f0c:b0:4b6:5e0f:6ddc with SMTP id
+ ada2fe7eead31-4c044d3e523mr9610629137.14.1741082605651; Tue, 04 Mar 2025
+ 02:03:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250304-ntc_min_max-v1-1-b08e70e56459@gocontroll.com>
-X-B4-Tracking: v=1; b=H4sIAMq4xmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDYwMT3byS5PjczLz43MQK3URLI9NUC/MUg5REcyWgjoKi1LTMCrBp0bG
- 1tQB0iY2eXQAAAA==
-X-Change-ID: 20250304-ntc_min_max-a925e87d0da7
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Maud Spierings <maudspierings@gocontroll.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741076683; l=2025;
- i=maudspierings@gocontroll.com; s=20250214; h=from:subject:message-id;
- bh=CtUQPwJHavioCaVE/ITL8uSD7Pf7f336ipLgnIe6DqQ=;
- b=VFtcbljprV8WoPiWguyklrq7/qaLVB3HmKS463g82n6G8aqwOurAdFbPbzZhWxI6zEoLahSgm
- h8SEs5l/xFuBQ2FXtWz2q45eksoMtFL2AGfke/QRtIW/sQrO+8omJyx
-X-Developer-Key: i=maudspierings@gocontroll.com; a=ed25519;
- pk=7chUb8XpaTQDvWhzTdHC0YPMkTDloELEC7q94tOUyPg=
-X-Endpoint-Received: by B4 Relay for maudspierings@gocontroll.com/20250214
- with auth_id=341
-X-Original-From: Maud Spierings <maudspierings@gocontroll.com>
-Reply-To: maudspierings@gocontroll.com
+References: <20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com>
+ <f80207ca-da38-4999-be16-326490396d18@roeck-us.net>
+In-Reply-To: <f80207ca-da38-4999-be16-326490396d18@roeck-us.net>
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Date: Tue, 4 Mar 2025 13:03:14 +0300
+X-Gm-Features: AQ5f1JqfkBpa9tRJ6UHWa1ECypAj07rjeWpfg4UZnrHKGSeHTTg1zgLlm1qy3Wc
+Message-ID: <CABTCjFD8yozABXGVMtxhHTkpkAVis6tR=LEN9jNpvurTe_0iyQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max77705) add initial support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Maud Spierings <maudspierings@gocontroll.com>
+=D1=81=D1=80, 26 =D1=84=D0=B5=D0=B2=D1=80. 2025=E2=80=AF=D0=B3. =D0=B2 16:5=
+3, Guenter Roeck <linux@roeck-us.net>:
+>
+> On 2/25/25 11:11, Dzmitry Sankouski wrote:
+> > Add support for max77705 hwmon. Includes charger input, system bus, and
+> > vbyp measurements.
+> >
+> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> > ---
+> > Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
+> > It includes charger and fuel gauge blocks, and is capable of measuring
+> > charger input current, system bus volatage and current, and bypass
+> > voltage.
+> >
+> > This patch add support for mentioned measurements.
+(...)
+> > +
+> > +struct channel_desc {
+> > +     u8 reg;
+> > +     u8 avg_reg;
+> > +     const char *const label;
+> > +     // register resolution. nano Volts for voltage, nano Amperes for =
+current
+> > +     u64 resolution;
+>
+> Why u64 ?
+>
 
-Add the min and max temperature attributes as it is trivial for this
-driver.
+Resolution is in nano Volts, and VBYP value is typically 5v, which leads to
+u32 overflow.
 
-This can help with detecting implausible readings and indicates to users
-which range they can actually measure, so they will not set a trip point
-at a temperature higher than max or lower than min.
+(...)
+>
+> This is unusual for an mfd driver. Why not pass regmap from the parent
+> driver ?
+>
 
-This implementation only works for ntcs, if a ptc gets added this will
-have to be changed, but I'm not sure if that is ever the intention.
+This limits access to shared device register map by using readable table
+with related registers only.
 
-Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
----
- drivers/hwmon/ntc_thermistor.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+(...)
 
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index 0d29c8f97ba7c2f264588b6309b91ca494012ad6..fecee177be5daf304c0521a74f2733f6e42567e0 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -522,6 +522,12 @@ static int ntc_read(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_temp_type:
- 			*val = 4;
- 			return 0;
-+		case hwmon_temp_min:
-+			*val = data->comp[0].temp_c*1000;
-+			return 0;
-+		case hwmon_temp_max:
-+			*val = data->comp[data->n_comp-1].temp_c*1000;
-+			return 0;
- 		default:
- 			break;
- 		}
-@@ -539,6 +545,8 @@ static umode_t ntc_is_visible(const void *data, enum hwmon_sensor_types type,
- 		switch (attr) {
- 		case hwmon_temp_input:
- 		case hwmon_temp_type:
-+		case hwmon_temp_min:
-+		case hwmon_temp_max:
- 			return 0444;
- 		default:
- 			break;
-@@ -549,7 +557,8 @@ static umode_t ntc_is_visible(const void *data, enum hwmon_sensor_types type,
- 
- static const struct hwmon_channel_info * const ntc_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
--	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_TYPE),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_TYPE | HWMON_T_MIN |
-+					 HWMON_T_MAX),
- 	NULL
- };
- 
-
----
-base-commit: cd3215bbcb9d4321def93fea6cfad4d5b42b9d1d
-change-id: 20250304-ntc_min_max-a925e87d0da7
-
-Best regards,
--- 
-Maud Spierings <maudspierings@gocontroll.com>
-
-
+--=20
+Best regards and thanks for review,
+Dzmitry
