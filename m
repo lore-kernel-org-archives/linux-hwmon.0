@@ -1,67 +1,67 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F6E1FDE27;
-	Tue,  4 Mar 2025 11:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A54B201031;
+	Tue,  4 Mar 2025 11:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741088341; cv=none; b=T0mEnGAqq8GCSqUH+Gdefn7Ty7i2frR4KRUku8Nidxv173Z4LFseTiNXZPh/iRMIq8CmqP78qfUUe1Nh63NfK9vUjTnGQEjW4gPYfrJL7/aPPfGp0It4QQhCs0IaRSu7u1uuSQLr8MtSfXbYab0d2Lsg0IIHptLjw6X9bhht3AA=
+	t=1741089298; cv=none; b=hGAbV5JM0FXrilb9rowWLXteTJftalHAPBKGdNQVaoh3rroM3tLH8Q7O7ktpR+0XTYBxx4rQ43sMMz0BsQMrurYIzOGdMERWlKEaII8o3e+to+9E+zU/L7+VBdoEUgw97VXkNQ30dgN6/RbWyd9jVcca3Qk0EsHeB5IJUZn1xWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741088341; c=relaxed/simple;
-	bh=ZsRZcHWZTDQQfbTTbZqop9EvXaPi8+mBGLyY6/ITkGI=;
+	s=arc-20240116; t=1741089298; c=relaxed/simple;
+	bh=EQzD1omOm3pwKmNRswisadriqNvQuIW7Gq+mnIrQTA4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=enZdj1RxU3qzqJIGaELuFHsX9At+ecmyicCe77EybbanaimWPiYgxRQbD6uj5QmGTm/AyxrGdtNI6MCh5rqAgD9W9RQN2Sr0MyL40l2gf4oEAeBQK6eAFqgfuoGyH8gkEvrx+wV9zzorzactINort9cUe5VLqya4CbNjDZ6aQ6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ww5Dx1XA; arc=none smtp.client-ip=209.85.214.181
+	 In-Reply-To:Content-Type; b=JwQ1ytUbsuTPERFkJHb68WcLPu2JV6Pn2GeON8basqKf8x2bS0NqDGqVZWBA4dd0vEXmS176QRx4Xxfuh/Pm3t0LbRaaMyfcmXfe118sjkFjNZojtQqvz0NSNHeikGKjk7MI4AcnW6/3T3/QTJ8sUn/OZR02N4U7aZNFo3tzx4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJl37krr; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ww5Dx1XA"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2234e5347e2so110257105ad.1;
-        Tue, 04 Mar 2025 03:38:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJl37krr"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-223a7065ff8so56730285ad.0;
+        Tue, 04 Mar 2025 03:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741088337; x=1741693137; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741089295; x=1741694095; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvPZVxjnDADFJGy7NRpTM2RDJYIWxdtmdLcAO4lQXIM=;
-        b=Ww5Dx1XAemKTsRPGWhNkYKztgqXqrTPCwE0wX2fk17AwX72+yn4Zz4F9ehbxAh3kxz
-         b6GrM8lKTPMUJwVgAZf0FG4p0pTGTzpU4WiBzIaCyhwgHKwR2mGasQFfAPhvPA4dhI3x
-         TDf/4bINAPc4cylNslQn1qTARq4RVE8kw2hpxyJ8uqARrDnW2Kt4rYku4BPYuoMMB3b0
-         0wqIrQG3/503BtUpPAaDxWc6pJhvyeXupEV2dWqF6gQii+v7jG/a5X53CJRMS+/q265C
-         E9GNkF9fxBwo3ChWIcTL9S3yQfN44eVppH6PIATzbF1W7/rYjc1cwsQ1gPXTlh2A5jTc
-         LsKg==
+        bh=F0XpVkzeedW1Nq5ayemT7/ox8DNq+JWUkRZ7WL8wWlc=;
+        b=TJl37krrHayFsoGmokNdBbzQ+YsjJ1zphF2OFxWFqigHMvP4MraoiUMmRCky4+ABbf
+         cc3aC3NrdJNL2LMuaeSDzzC08hxETIs5vT2IaHse6zoq7ioxsEn+vI41eG5Q05iwXW9J
+         3uUYiK1WQSXXxpEz+brMLnHIQeFpAAksMZxzFE/ooWvnxYY88T1DoMtQtDxFhvjGYrNV
+         cjP8/xTDuscr5AeNoeW/dFvd66A/uqCXpyfqix65sKysPIQAKF8a0LG0X7TInXGg5szJ
+         iIN0mq7Gwy4JdeIWahODpnYDWvue56vZ3bAQXEpxKtKkXfQie1PTiIEYnAMX5Rxld81j
+         E1fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741088337; x=1741693137;
+        d=1e100.net; s=20230601; t=1741089295; x=1741694095;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YvPZVxjnDADFJGy7NRpTM2RDJYIWxdtmdLcAO4lQXIM=;
-        b=Ta9xkOOOY0IRlgpgQbM+1q+yaiqnukNUx39lxqISFXTjXJSMq0SW9AWFUiA24j0uzm
-         A9hxFwUOyRe5A5eX9NMcddprkq9wHBsT2Q4KK4sk03bcgf3QpUjo0ckFYtvj+8zP7ItB
-         FHM5Off7uuuqinTu0ps+Lp9zB5S8lwnNHntMHWQIaaku1LOTHskPKNUYxsPUbp1oLplK
-         X4zjuicSbII5gcgxSwS6L9GYTL7SVlkEIN7GAVRj70LQJScI71JFW+MlkI3XCKxith8a
-         7Tmnp1S6jwSkiD4hMsv/MxwkcZWo9ltF1b6D9KzS/wMxrp2pQIUVj/SsyZQXLbS4TnxG
-         PBLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+t5hLN81bIwLq/jkl2Hj2oU9oOh/XRQozOg2Uqw8t6qTPJ7u1Qt9BogUYlrKpLuuNnL4MAMiHIOk=@vger.kernel.org, AJvYcCUh/52T0hr7biTcWnsZipmuWFgJpQGG3XowsBeiUU4pqYwbkiRyGWq763WWGjNMo3mTqMpVXfPRZRL7to4V@vger.kernel.org
-X-Gm-Message-State: AOJu0YybxyEQpIWZZrXx6JsKytnBudLnIiZL0DNxPXi2Jd9mVX3+eMh7
-	vLLm7swqazfOo9k9YT09UA4rlr9AYIrzJCudcTdg2GOatCoLe1pC
-X-Gm-Gg: ASbGncvF+RFEt6YSLuQ/9tMG8Ghcf36vhmZfgtrTA7NleEebf6X6ehw6GTIAf8TMyOw
-	E76hu1fLOqaL1RPljtuv3zhqG05zAYBh/JukyUPOhUnAW2dpc/03Ycg4t71y4rWizPzvg4/X5mP
-	lsNv7HOzk13cgZXGktWNnE6efW42KmnueozCaUdUGR0TD9oCdBhP6YIyciFRIPD9CjeD0thmvDy
-	12fcgWRb/4GQIz1qPzWWQDyydSe2oAUxxm897BMnPcJrFPwhLYNgIpf+Rw8P209ZyorIIeFsQbS
-	eTOH8RBnoGNCKNhhhXhtkSX2U33wFmnvv64Bsu18LSA5ZVL633ogM/eqGkoqFD5QYJ96jahzOCH
-	3RE4hOquarF23771/pg==
-X-Google-Smtp-Source: AGHT+IEvEsqqg47B8zLQOs4sZteiuPADAnHKOjvaH6oiZjK9tdsr8P/OfaeMugKpEMWp7V6yN5KGHw==
-X-Received: by 2002:a05:6a21:b97:b0:1ee:8bd5:81c4 with SMTP id adf61e73a8af0-1f2f4e3cc95mr27732249637.28.1741088336978;
-        Tue, 04 Mar 2025 03:38:56 -0800 (PST)
+        bh=F0XpVkzeedW1Nq5ayemT7/ox8DNq+JWUkRZ7WL8wWlc=;
+        b=TUysYm1cr5SyE0D0xB0ShhfVyf6G430QRfm26c/Sf/1B08i7ydzZlZWZ5jz7YuUfHp
+         MQj8JYZJX/Z6dNHqABSYHx+KaPm8PaGWayZS17NcmdnYzOBPfbf40F1m6sjwP/ZrxZdT
+         dGL1I3mwQU4W3v+Z7f3et0YWXKFyv3Ai4W/qDz2gswjybmzG8NgFSUsYdsqFCCU51oSp
+         gKvXCs+AikbW68wnnkytpRPItVuyOY/2YbTWKhQBvOE3fAImrnNl4lCff+PntsTIcPkB
+         kKX3ueKG4cwe3f42u4YpI9WUataEQHcwCSYsb47ajbxgHpUSOKAwUPUZjc4vgo6k/ChA
+         jp6w==
+X-Forwarded-Encrypted: i=1; AJvYcCU3Xj43uHzqNGgQB8pIeMkIjG/c1BR/0oHwFDWc/pDT3a1xyJLni5dtHpAI25TBHShXSU2w91z97S579tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxINZ45hTAQXhBzHJ7yFc2lwU06ZjA9kOjuxFs1IGFKZtvEC07
+	mEJnClZbQFte4izSbdtP+SD2GNmp0rCYcbEHXneC8979zmIRyA+1
+X-Gm-Gg: ASbGnctbVl4rqGsLG1CtOUDY+olNOjZH2lc5L7fYUjdUnLNNoxBVbWHXx/8putBLuam
+	G2QcUixtSbQqW/KHr1W1ghlAspMAjGMoF1PAn7v3Pp67SWoz4/9CpjKssaigxP4CyQwmd9pf8pD
+	G1DL5rPJhfLqb+ygBphxiH4QQYawbIB9YfIMcYtCgxZ3UXMvam4K+cMX8Hog776+KCmY1cH6fAn
+	0hvU/aoX7e53uwYXG414bGHowq8Z8mSv0WdNCpCNT3IAsHiMlzKNokBP7/BpFFzlpPQ6yKsdlKq
+	Nsa9I2gEY93bVvEgDIgB0Fcagefl2O+tlKSHtHnMJ6qEdEPIaGT7TuUHl8fvIVIL88plwv39Gj9
+	AQRAWgo0LLG79Rb8wuw==
+X-Google-Smtp-Source: AGHT+IGjUyHinsp26h918ISYhQUSikLX8b8ReBxUeT62h9WkpjHl/aT+V/7bjuOjQNhz98/I4BQgVg==
+X-Received: by 2002:a17:903:41d2:b0:21f:859a:9eab with SMTP id d9443c01a7336-22369258a09mr265334055ad.37.1741089294580;
+        Tue, 04 Mar 2025 03:54:54 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7dedcf86sm8348229a12.64.2025.03.04.03.38.55
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223504c5bd2sm93815545ad.111.2025.03.04.03.54.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Mar 2025 03:38:56 -0800 (PST)
+        Tue, 04 Mar 2025 03:54:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e9a2383-108a-4440-8f55-77679a79e36e@roeck-us.net>
-Date: Tue, 4 Mar 2025 03:38:55 -0800
+Message-ID: <d3e8a814-1dce-4054-87f9-3bd3f7b7c6dc@roeck-us.net>
+Date: Tue, 4 Mar 2025 03:54:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,12 +69,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (max77705) add initial support
-To: Dzmitry Sankouski <dsankouski@gmail.com>, Jean Delvare
- <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250304-initial-support-for-max77705-sensors-v2-1-58d2207c732b@gmail.com>
+Subject: Re: [PATCH] hwmon: (ntc_thermistor) Add min and max temperature
+ attributes
+To: Maud Spierings | GOcontroll <maudspierings@gocontroll.com>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250304-ntc_min_max-v1-1-b08e70e56459@gocontroll.com>
+ <f2b58aab-6664-4968-86d9-1e761a41b065@roeck-us.net>
+ <PA4PR04MB7630FFDEE9AF8E1458DBA6B0C5C82@PA4PR04MB7630.eurprd04.prod.outlook.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,450 +123,83 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250304-initial-support-for-max77705-sensors-v2-1-58d2207c732b@gmail.com>
+In-Reply-To: <PA4PR04MB7630FFDEE9AF8E1458DBA6B0C5C82@PA4PR04MB7630.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/4/25 03:08, Dzmitry Sankouski wrote:
-> Add support for max77705 hwmon. Includes charger input, system bus, and
-> vbyp measurements.
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
-> It includes charger and fuel gauge blocks, and is capable of measuring
-> charger input current, system bus volatage and current, and bypass
-> voltage.
-
-That makes me wonder if this should be implemented in drivers/power/supply/
-and utilize the power_supply->hwmon bridge. That seems to make more sense
-to me than implementing a separate hwmon driver.
-
-> 
-> Add support for mentioned measurements.
-> ---
-> Changes in v2:
-> - EDITME: describe what is new in this series revision.
-> - EDITME: use bulletpoints and terse descriptions.
-> - Link to v1: https://lore.kernel.org/r/20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com
-
-???
-
-> ---
-> Changes in v2:
-> - sort headers alphabetically
-> - swap curr channel info, to align indeces with channel_desc struct
-> - reword coverletter
-> - fix checkpatch --strict warnings
-> - remove struct max77705_hwmon, use regmap directly
-> - move register validation logic to is_visible function
-> - move common register reading and converting logic to separate function
-> - remove unnessesary {} in if statement
-> - s/i2c->dev/pdev->dev in dev_err_probe
-> ---
->   Documentation/hwmon/index.rst    |   1 +
->   Documentation/hwmon/max77705.rst |  39 +++++++++++++++++++++++++++++++++++++++
->   MAINTAINERS                      |   7 +++++++
->   drivers/hwmon/Kconfig            |  10 ++++++++++
->   drivers/hwmon/Makefile           |   1 +
->   drivers/hwmon/max77705-hwmon.c   | 250 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->   6 files changed, 308 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 874f8fd26325..444c7865f74f 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -158,6 +158,7 @@ Hardware Monitoring Kernel Drivers
->      max6639
->      max6650
->      max6697
-> +   max77705
->      max8688
->      mc13783-adc
->      mc34vr500
-> diff --git a/Documentation/hwmon/max77705.rst b/Documentation/hwmon/max77705.rst
-> new file mode 100644
-> index 000000000000..9037226c50b9
-> --- /dev/null
-> +++ b/Documentation/hwmon/max77705.rst
-> @@ -0,0 +1,39 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver max77705
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * Maxim Integrated MAX77705
-> +
-> +    Prefix: 'max77705'
-> +
-> +    Addresses scanned: none
-> +
-> +    Datasheet: Not available
-> +
-> +Authors:
-> +      - Dzmitry Sankouski <dsankouski@gmail.com>
-> +
-> +Description
-> +-----------
-> +
-> +The MAX77705 PMIC provides current and voltage measurements besides fuelgauge:
-> +- chip input current
-> +- system bus current and voltage
-> +- VBYP voltage
-> +
-> +Sysfs Attributes
-> +----------------
-> +
-> +================= ========================================
-> +in1_label         "vbyp"
-> +in1_input         Measured chip vbyp voltage
-> +in2_label         "vsys"
-> +in2_input         Measured chip system bus voltage
-> +curr1_label       "iin"
-> +curr1_input       Measured chip input current.
-> +curr2_label       "isys"
-> +curr2_input       Measured chip system bus current.
-> +================= ========================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 29e1a423eee5..0175f9f89325 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18110,6 +18110,13 @@ S:	Maintained
->   F:	Documentation/hwmon/pc87427.rst
->   F:	drivers/hwmon/pc87427.c
+On 3/4/25 03:33, Maud Spierings | GOcontroll wrote:
+> From: Guenter Roeck <groeck7@gmail.com> on behalf of Guenter Roeck <linux@roeck-us.net>
+> Sent: Tuesday, March 4, 2025 12:12 PM
 >   
-> +MAX77705 HARDWARE MONITORING DRIVER
-> +M:	Dzmitry Sankouski <dsankouski@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/max77705.rst
-> +F:	drivers/hwmon/max77705-hwmon.c
-> +
->   PCA9532 LED DRIVER
->   M:	Riku Voipio <riku.voipio@iki.fi>
->   S:	Maintained
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 56494ab85b83..c86fe094a978 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1287,6 +1287,16 @@ config SENSORS_MAX31790
->   	  This driver can also be built as a module. If so, the module
->   	  will be called max31790.
->   
-> +config SENSORS_MAX77705
-> +	tristate "MAX77705 current and voltage sensor"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  If you say yes here you get support for MAX77705 sensors connected with I2C.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called max77705-hwmon.
-> +
->   config SENSORS_MC34VR500
->   	tristate "NXP MC34VR500 hardware monitoring driver"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index b7ef0f0562d3..ff69f45eca50 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -159,6 +159,7 @@ obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
->   obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
->   obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
->   obj-$(CONFIG_MAX31827) += max31827.o
-> +obj-$(CONFIG_SENSORS_MAX77705) += max77705-hwmon.o
->   obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
->   obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
->   obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
-> diff --git a/drivers/hwmon/max77705-hwmon.c b/drivers/hwmon/max77705-hwmon.c
-> new file mode 100644
-> index 000000000000..6d2161421ac7
-> --- /dev/null
-> +++ b/drivers/hwmon/max77705-hwmon.c
-> @@ -0,0 +1,250 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  MAX77705 voltage and current hwmon driver.
-> + *
-> + *  Copyright (C) 2025 Dzmitry Sankouski <dsankouski@gmail.com>
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon-sysfs.h>
-
-Not needed.
-
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/max77705-private.h>
-
-Doesn't exist.
-
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +struct channel_desc {
-> +	u8 reg;
-> +	u8 avg_reg;
-> +	const char *const label;
-> +	// register resolution. nano Volts for voltage, nano Amperes for current
-> +	u64 resolution;
-
-u64 is unnecessary. See below.
-
-> +};
-> +
-> +static const struct channel_desc current_channel_desc[] = {
-> +	{
-> +		.reg = IIN_REG,
-> +		.label = "IIN_REG",
-> +		.resolution = 125000
-> +	},
-> +	{
-> +		.reg = ISYS_REG,
-> +		.avg_reg = AVGISYS_REG,
-> +		.label = "ISYS_REG",
-> +		.resolution = 312500
-> +	}
-> +};
-> +
-> +static const struct channel_desc voltage_channel_desc[] = {
-> +	{
-> +		.reg = VBYP_REG,
-> +		.label = "VBYP_REG",
-> +		.resolution = 427246
-> +	},
-> +	{
-> +		.reg = VSYS_REG,
-> +		.label = "VSYS_REG",
-> +		.resolution = 156250
-> +	}
-> +};
-> +
-> +static const struct regmap_range max77705_hwmon_readable_ranges[] = {
-> +	regmap_reg_range(AVGISYS_REG,	AVGISYS_REG + 1),
-> +	regmap_reg_range(IIN_REG,	IIN_REG + 1),
-> +	regmap_reg_range(ISYS_REG,	ISYS_REG + 1),
-> +	regmap_reg_range(VBYP_REG,	VBYP_REG + 1),
-> +	regmap_reg_range(VSYS_REG,	VSYS_REG + 1),
-> +};
-> +
-> +static const struct regmap_access_table max77705_hwmon_readable_table = {
-> +	.yes_ranges = max77705_hwmon_readable_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(max77705_hwmon_readable_ranges),
-> +};
-> +
-> +static const struct regmap_config max77705_hwmon_regmap_config = {
-> +	.name = "max77705_hwmon",
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.rd_table = &max77705_hwmon_readable_table,
-> +	.max_register = MAX77705_FG_END,
-> +	.val_format_endian = REGMAP_ENDIAN_LITTLE
-> +};
-> +
-> +static int max77705_read_and_convert(struct regmap *regmap, u8 reg, u64 res, long *val)
-
-u64 is unnecessary for res.
-
-> +{
-> +	int ret;
-> +	u32 regval;
-> +
-> +	ret = regmap_read(regmap, reg, &regval);
-> +	if (ret < 0)
-> +		return ret;
-> +	*val = mult_frac((long)regval, res, 1000000);
-
-This won't build on 32-bit systems. You'll need to use DIV_ROUND_CLOSEST_ULL(),
-and the conversion to 64-bit can be done with
-	*val = DIV_ROUND_CLOSEST_ULL((u64)regval * res, 1000000);
-
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t max77705_is_visible(const void *data,
-> +				   enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_in:
-> +		if (channel >= ARRAY_SIZE(voltage_channel_desc))
-> +			return 0;
-> +
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +		case hwmon_in_label:
-> +			return 0444;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		if (channel >= ARRAY_SIZE(current_channel_desc))
-> +			return 0;
-> +
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +		case hwmon_in_label:
-> +			return 0444;
-> +		case hwmon_curr_average:
-> +			if (current_channel_desc[channel].avg_reg)
-> +				return 0444;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-
-The chip provides temperature measurements. Why not support it ?
-
-Also, how about limits ? Doesn't the chip support any ? There do
-seem to be some threshold registers.
-
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int max77705_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +				int channel, const char **buf)
-> +{
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_in_label:
-> +			*buf = current_channel_desc[channel].label;
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_label:
-> +			*buf = voltage_channel_desc[channel].label;
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int max77705_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
-> +{
-> +	struct regmap *regmap = dev_get_drvdata(dev);
-> +	u8 reg;
-> +	u64 res;
-> +
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			reg = current_channel_desc[channel].reg;
-> +			res = current_channel_desc[channel].resolution;
-> +
-> +			return max77705_read_and_convert(regmap, reg, res, val);
-> +		case hwmon_curr_average:
-> +			reg = current_channel_desc[channel].avg_reg;
-> +			res = current_channel_desc[channel].resolution;
-> +
-> +			return max77705_read_and_convert(regmap, reg, res, val);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			reg = voltage_channel_desc[channel].reg;
-> +			res = voltage_channel_desc[channel].resolution;
-> +
-> +			return max77705_read_and_convert(regmap, reg, res, val);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops max77705_hwmon_ops = {
-> +	.is_visible = max77705_is_visible,
-> +	.read = max77705_read,
-> +	.read_string = max77705_read_string,
-> +};
-> +
-> +static const struct hwmon_channel_info *max77705_info[] = {
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL
-> +			),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_AVERAGE | HWMON_C_LABEL
-> +			),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info max77705_chip_info = {
-> +	.ops = &max77705_hwmon_ops,
-> +	.info = max77705_info,
-> +};
-> +
-> +static int max77705_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct i2c_client *i2c;
-> +	struct device *hwmon_dev;
-> +	struct regmap *regmap;
-> +
-> +	i2c = to_i2c_client(pdev->dev.parent);
-> +	regmap = devm_regmap_init_i2c(i2c, &max77705_hwmon_regmap_config);
-
-I still think this is unnecessarily restrictive, and that the mfd driver
-should register the regmap.
-
-> +	if (IS_ERR(regmap))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(regmap),
-> +				"Failed to register max77705 hwmon regmap\n");
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "max77705", regmap,
-> +							 &max77705_chip_info, NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
-> +				"Unable to register hwmon device\n");
-> +
-> +	return 0;
-> +};
-> +
-> +static struct platform_driver max77705_hwmon_driver = {
-> +	.driver = {
-> +		.name = "max77705-hwmon",
-> +	},
-> +	.probe = max77705_hwmon_probe,
-> +};
-> +
-> +module_platform_driver(max77705_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Dzmitry Sankouski <dsankouski@gmail.com>");
-> +MODULE_DESCRIPTION("MAX77705 monitor driver");
-> +MODULE_LICENSE("GPL");
-> +
+>> On 3/4/25 00:24, Maud Spierings via B4 Relay wrote:
+>>> From: Maud Spierings <maudspierings@gocontroll.com>
+>>>
+>>> Add the min and max temperature attributes as it is trivial for this
+>>> driver.
+>>>
+>>> This can help with detecting implausible readings and indicates to users
+>>> which range they can actually measure, so they will not set a trip point
+>>> at a temperature higher than max or lower than min.
+>>>
+>> Unless I misunderstand the driver code, readings outside the table values
+>> are never reported. Also, min/max are supposed to be alarm temperatures.
+>> The reported values for min/max would be between -55 and +155 degrees C,
+>> which does not make sense and has zero value for trip point usage.
 > 
-> ---
-> base-commit: 20d5c66e1810e6e8805ec0d01373afb2dba9f51a
-> change-id: 20250123-initial-support-for-max77705-sensors-ad0170ac1ec5
+> Regarding the driver not reporting values outside the table values:
 > 
-> Best regards,
+> That does seem to be true and is good in my opinion, however currently
+> 125 can mean 125 or something higher, with an indication of a max
+> measurable temperature it can be determined that this is a max value and
+> thus might have extra considerations.
+> 
+> Regarding the meaning of attribues:
+> 
+> It is difficult that the attributes do not have descriptions in
+> include/linux/hwmon.h
+> 
+> Is there an attribute that should be used to indicate this maximum
+> measurable value to userspace? HWMON_T_HIGHEST/LOWEST?
+> HWMON_T_RATED_MIN/MAX?
+>
+
+There is no attribute providing the temperature (or any other) range
+supported by a chip. highest/lowest are highest/lowest measurements, and
+the rated attributes are rated min/max values for the system, not for
+the chip. This applies to all chips, not just this one. Misusing the
+ABI to report "limits supported by the chip" would be inappropriate and
+misleading.
+
+> Some extra ramblings:
+> 
+> I want to have some indication of what the lowest and highest
+> temperatures that the sensor can measure are. Imagine I set my trip point
+> at 140 degrees, but the sensor can only measure up to 125, I would like
+> there to be some feedback that this trip point can never be measured.
+> 
+That would be a problem which applies to every chip. Unfortunately, it is
+all but impossible to try to express that in sysfs attributes. Many chips
+have different temperature ratings based on the chip model/variant
+(commercial vs. car vs. mil), but the valid range can not be determined
+from register values.
+
+The same really applies to this driver: The tables in the driver are for
+specific thermistors, but the thermistor will still provide a reading if the
+temperature is out of range. It will just be out of spec.
+
+On top of that, thermal limits should be based on board limits, not on chip
+limits. A board which supports a temperature up to 140 degrees C but
+utilizes a temperature sensor which can only measure up to 125 degrees C
+would be a badly designed board. Trying to address that in a driver
+would not add any value.
+
+> Some kind of plausibility check may also be interesting. For example I
+> have an ntc in an lvds display, if this display is disconnected it shuts
+> down because the ADC reads zero, which means temp==temp_max.
+> 
+
+The best we could do would be to return -ENODATA for temperature values
+if resistor values are out of range.
+
+Guenter
 
