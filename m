@@ -1,183 +1,175 @@
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2042.outbound.protection.outlook.com [40.107.22.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19613280CFC;
-	Tue,  4 Mar 2025 15:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741101405; cv=none; b=ZRNSXFUDAT0oBNAMp+viZROvs2fTG9SfPi2issXa10AT5pADQ9HZEFhfUWDlyLTuWGwWAI4IJaYX2zJe9GnuMknrWTpDdpDDwEBDvFhBpSGVVWDngLiE6lM6dgnEIdi7Eh2JRst0ReYT1YjFXZuq0xk+tiVja+/U7cOTv/Ve+94=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741101405; c=relaxed/simple;
-	bh=Dn4+zLGkSbuBY9M3LhG1oiQATnMWEDzyvJWH0JyJhYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tp55rsqrzOKs+yW4GA0iH+sSvs52G06InveVz5MxxGE2L4nMoLKUgXCACLXAv9mIHCCl+5O5PSeFfchZUs8t12c75h9BAnzNQNBUpIWnzGbqm0QsWcWNHRJjurNxZHQhYxMvASMajH6cZTHA13ZuF9m7ArWMwpFoTnH2vjJoKGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZefE7sUr; arc=none smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC5B27D787;
+	Tue,  4 Mar 2025 16:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741104859; cv=fail; b=Hhd9+W+a7MpN0cujctD6Qetl94g2/lGtTGr4GrHRs8n4Kf9wr/lbP0nhAHnPo/oL2q6EsqX5iz6GjXfhLm9uLAz22SJG0Sp+kSh4eYljtzxPpznM628R7U+C3vz/NhHsQuPKX3X6iRMLKx10+XUIkuD1cjax8t8+LPxH9pjM3FE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741104859; c=relaxed/simple;
+	bh=JKlmRQZeHN8odiLq4j1kSU7IrZRuLDbHPr+VScktEyY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=DbWYrV4aX6PL9A5/Sfxy9Z/o85OxeAmvJle8FAvtZKuu/A48/odkhq8g1frYqC2bg7xVF/2Y6iBoyKnjKmMG/rOBCva2rIEdXrrdHvgyOF/H4W71t86acauONIfTQ27sk5T/BnjIeVgzxdEEfCKOQiGHw9kh2gOCa27QyhVeOJ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=kgbgKRxH; arc=fail smtp.client-ip=40.107.22.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZefE7sUr"
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-86929964ed3so5112252241.0;
-        Tue, 04 Mar 2025 07:16:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741101401; x=1741706201; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dBExPiSD4X8jOCvNjsvczU6ubS0LpoXpsXfZrpLd6tg=;
-        b=ZefE7sUrmiU+ZyT8b61DzxWaDHR709H+SQ9f4sKgQ3iED4fZgHRRgxPJhUJ2VmKTJE
-         bwADBO++hwKjb7oAWuaKpp1wUhC9fJzor2XmyMGtMKCvLEZgpB1ntxDtTvOlKKbfdF2S
-         WRtH5jxMZ9ndYWE5u0g3a0v313SI4LDiOdQfy1D5BWlfzZw3q6i8UB5beAw6HjiKWrhO
-         QZrtnLTn9KI5x5qvruHNtR0LcL2KKTOyC9tr+B9yhEPjeBx/3qGnN+RhpS83MP+RDsZD
-         Sbr7t7rhW5BIwBCv7rsCWBANJaeuQodQ4fEWexbLIA4WoKTQwMWmb6QbtEPIHKDXbYJP
-         r6lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741101401; x=1741706201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dBExPiSD4X8jOCvNjsvczU6ubS0LpoXpsXfZrpLd6tg=;
-        b=LnXJ3Uya5+IBa5We9o7MCmMKzK87eIBJ86et7KWy0gNLdDL2IgbNzdmOqDYXT5rN90
-         FEELoiPUEjkTNWOZ13mFF5FsqJm6Ym+MH/lNU1u9cHndrqHbJ9+8NV66gIsOUC+hPO7V
-         yJtzVsb9Sse8shghC/IYBpMHZwgWwL9wo2i2m9n0sVjvfi7Fau8DQAOLf6w5AMjLfX5w
-         sTM8vupdGiB3Tcx833DBmFZA8IbHJaTUDYPBxk41eWflOFJTxbtU4qI5u4dpR2QMSXyU
-         R9BYVDkNP2mPjV0sCCb1GqWQGyGQhQuBV27GbqnTxotsgaXqpSwbg17td+s+46KDv4KU
-         AUTg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSjpytGZP/TohHOrQR5I1wH5cTQhPw9YtuiYaARiCOaRpd25iF7rC6APcaPJKwuXJt1nCT02TnINY=@vger.kernel.org, AJvYcCVpIoLxc3061NiTG+L3ErEGmtLE8I+766yWOtkkLgDXPt7IuTJSs9uJzLvBW9yug2VFanbg01RZWiXGDLDr@vger.kernel.org, AJvYcCWE+JmBPWTM97u+/UOQgs1scuHotnCsDp2X/55psnlnEaUMSwnkOluTiA+QqhJYwuqKciDO7kUwrmAMis4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTPQ/m/Nur7EyCGLutdGw9XcgNle+k0gBHw5LVznaifFqyijnr
-	wsfsQeFr7SfeI0v3yiHtK7KYW6+RZVsRGvmZmfZeJZEHcgM8rnWodsItvLCla7xdnTJFTLxl6Ip
-	UsBJPtxmXWupQCCdZkm6HlR6+KiU=
-X-Gm-Gg: ASbGncuUwE3bVAoVdRFpgY32RYfsWN7ut21fxc4ziCQGxbZSPkWLCjc4pfAZQ6gq2nq
-	XT9hNfQM/fh2uaBWYK2XR57QSIZAKLGbGfXPKNZ8K/aBGBz7M3VMGMMcXNP9+gqaMIEiGKrQKzE
-	46hLE8BANqSzZQOfhMQCtPRGWY
-X-Google-Smtp-Source: AGHT+IGiNXqMGZ/VCHM60oIynHo3ET2jPjUUoug+Y8PqqaIJx18YeTZsTGCb6GlaJbQZW0tfvKrzKsTqVti3TGE7cUI=
-X-Received: by 2002:a05:6102:4189:b0:4c1:a53d:c24b with SMTP id
- ada2fe7eead31-4c1a53dc383mr3854575137.23.1741101400328; Tue, 04 Mar 2025
- 07:16:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="kgbgKRxH"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ku5PoRk30aZl/ZVLmFVh9OZf/oPX9RqF5k9RXZtmHK7798pCxB60KcKHadmM4NZhcVZQJJrWysavA6sHcG+AFxRWGvcyvWAbeEzq1oDBCwQpHii64mTByq27jkNefyBby8FTKiUfxWnsNq8mCgZSdBYw492hEXeh9hZyLUYweWfC01cz4eYGYqQ7SqSxVEVo45h/ONE3oReD4tsy1yuopFFDaylEN2eXjVeKc+TIIza0KCNARCzusg5sZA20pVaakSfOJZPFx0YgMafo2yFMB7IwhuSVNqhtDXiYELYKOI9PvanF7FAMfu6UXr3FzPo27B5L/A4sadmqoYhFBaFEig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LHJkMEgvR5CFt7mMzjuFcVREWomQoP5aUxZyaZk9mII=;
+ b=bOwiRoX+olfEsf3dOwx5eWD9dy515srEK/L6Y7vbdwSwHvFMjx6IsuEovDtKhOqDQrXdl5Sh9I4lV325hZS6/HLOnr7i005SkZh1l13z8sCGRIBjTA95WY9LysF9R/Q1W4wgUPB/xOBIMzKpSZnt2jJQk1DcMzMVIg3If1cg99P+xo0tR8aww5diUuqnk0+IHY08WoZM9tm1wTkCcP9R5ZQBljdeqX99icaFw9D/VN9cUF3Ia6aHtXe/RnKWmAQ3A8eEwuPlmrkwxIj+5fYY7HeRuHUPYP4PWbXN67KsjzLlYzP6UyZzelBRT8obtPLVt81dL7iIoo/390skUTO0Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LHJkMEgvR5CFt7mMzjuFcVREWomQoP5aUxZyaZk9mII=;
+ b=kgbgKRxHHf6iQfidby2riRVZwJOJyaSkzbVKLm6W0Le5tjplK563+pYyprhBc7rnGkK/LqozT8SAr75yFkfUE4sPb96689faxsAhzRie7Q9o+PShn3XBQ9TN31exCvQoH4pgyoPJoxm84Uo3fXbnNOK+AuH90gTthi6mBpnW4c7TH8x/qaRcL+2iit4ht73JZK+oFAXMAtVjxVj+OkqFWMgFQZn/CedsncpTMak26kU1g7FPCpkMluafyhqo2Ame2+8GPtPSJF57USIJJ+Z2ewgiE061L1m3EK5gpJVHBjP0UwdelrhwyhV/PNGbj1uqO2PBIJM3LEqqzC7PDCyFIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
+ by DU4PR04MB11080.eurprd04.prod.outlook.com (2603:10a6:10:587::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.25; Tue, 4 Mar
+ 2025 16:14:14 +0000
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::3a74:80e4:4144:62db]) by DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::3a74:80e4:4144:62db%4]) with mapi id 15.20.8489.028; Tue, 4 Mar 2025
+ 16:14:13 +0000
+From: florin.leotescu@oss.nxp.com
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: viorel.suman@nxp.com,
+	carlos.song@nxp.com,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	festevam@gmail.com,
+	Florin Leotescu <florin.leotescu@nxp.com>
+Subject: [PATCH v3 0/3] Add OF support for Microchip emc2305 fan controller
+Date: Tue,  4 Mar 2025 18:21:33 +0200
+Message-Id: <20250304162136.1963384-1-florin.leotescu@oss.nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS4P195CA0025.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d6::20) To DU7PR04MB11163.eurprd04.prod.outlook.com
+ (2603:10a6:10:5b3::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250304-initial-support-for-max77705-sensors-v2-1-58d2207c732b@gmail.com>
- <4e9a2383-108a-4440-8f55-77679a79e36e@roeck-us.net>
-In-Reply-To: <4e9a2383-108a-4440-8f55-77679a79e36e@roeck-us.net>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Tue, 4 Mar 2025 18:16:29 +0300
-X-Gm-Features: AQ5f1JqS56tyVOI6OUdCZnIl_32rX0ffxN2S021rHpFmP3HaKf7zWOvDUhUXb1w
-Message-ID: <CABTCjFDsutg-BOKqH++_pYNaeX6SezVL0iyuePVA7m5gXA3Ftw@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (max77705) add initial support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|DU4PR04MB11080:EE_
+X-MS-Office365-Filtering-Correlation-Id: 06e5f39c-01ae-449d-6146-08dd5b379ac1
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?W8/8fvsvMwa9ZbTtj2AJmWDznJh5pN4YgAGef4sj3zpDl5WYaEc5laPbgR?=
+ =?iso-8859-1?Q?zER9yooz7Txb9Bj1vJEI8f1iea24a7R4E1EtGlZcDY8EbH6rKrw0k1Anae?=
+ =?iso-8859-1?Q?rY3MpNBBjpCt52Xtk9I3OU2KlXvkbGsSCXEG+9p+KFj7nMF5Xe98zm9aWg?=
+ =?iso-8859-1?Q?n7+SqFpjIlY8+vbiZ8euX7xgfMVRoGufuBWgC2XvNMAaaYOeYA1l2j7Xq3?=
+ =?iso-8859-1?Q?rQikqp5izh/os2H2qAFkGui9vystjncZnRGBKcfZoTj4w/RpSR8Tr+HohY?=
+ =?iso-8859-1?Q?191cHGk/+iYN/WJY3HsSyJhorYxBgZxkQFo+G/DxS4IYQmDOJ36SmohLiP?=
+ =?iso-8859-1?Q?Ex6c3ED+DnaZGkN6NTykXor8YD5CAko6/rumqkkhQMl1qqa9kwObhGL59r?=
+ =?iso-8859-1?Q?RigLsLoX18IrJWC1NubZulLYM0y8Y8oI6Rh1oRJlz66JOS7z/WDIt/9Ida?=
+ =?iso-8859-1?Q?MGnlHsybE39IXicuT2HHzWnbi8AiIhNIvwqZm3B6e0OcEtguKFgG2KMVOa?=
+ =?iso-8859-1?Q?99SBag46dW9uhRbEevoCbzzNSV+wUaw7wkPsVqvMAbcQtYz18NCVzOLIYU?=
+ =?iso-8859-1?Q?PyuA70kKatjbhQpfntlM0QTru1JGX15ouimMEo/e3DONqGaMgpYD3ArxhP?=
+ =?iso-8859-1?Q?qGqCW8XzvqUYEtDR0sNwM7gcFDio1cPTJ48rU4Q6xK2gMTORdZorVwrBWI?=
+ =?iso-8859-1?Q?w518DYX1zo14R1IH+b8Lhw9Vll2416sTeFcNx7k9AMVADCp7tipnnKrK4q?=
+ =?iso-8859-1?Q?8ZKhYVynN2oTpkcCRXeXSm7NpfP4pJZFDSSTMzsDufLRWJ71lbKMvU/1ek?=
+ =?iso-8859-1?Q?4DGUI7hasNbTsEYFIgpYXTsRLCnMqRLTAyfKCkQNYoC2KQuGmePsmJBbz/?=
+ =?iso-8859-1?Q?ZCK/OeoM6LiquosqKyWliznGHIpcuhNtg5GBd6+SWfJ/ohmweIdxgWmwZm?=
+ =?iso-8859-1?Q?vDsDfl412vbFinFTkcRc8ilUASy/83FuWS4EJ8Jigf8GlgGYQs/EA++u+Z?=
+ =?iso-8859-1?Q?A7QGZim4QA613Yan7p34IvKgsBZ3kNDuKIwbH0T+n3YgH5SJIHnpNiIBKv?=
+ =?iso-8859-1?Q?+fbSmaCgfM8o7Ozrr0Xa77UpY1eI2dp3QOW22SCWl2X6ZIOhdCBvTdC6wi?=
+ =?iso-8859-1?Q?MtEcysL+WlTiSDBhpo2+9n64+Nx+alZrh6Yck00Vh56FfnFe/8tVNax0I4?=
+ =?iso-8859-1?Q?4O17xgL/NOwAPEyRyH+ceNO3PhwfhNRTPzgU4vnw7pe9m+mLIzmYMTxPOp?=
+ =?iso-8859-1?Q?90we+4lL6BcsoKJLcXFDUNpyOY1fTdSyyYLSjxfYzgc3Z+ecQJZj25cLj9?=
+ =?iso-8859-1?Q?ONYSio/x0VNEjiDixp/PsrxbjZn6L46fE3sGIbYKlufSz4L2ezWUacg07J?=
+ =?iso-8859-1?Q?nl4K99ZWwc2M0xlk2Kg+0VGpBWk58jyQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?fkmBM9xIgWTO6pw6JkPxq6hzzjEfXpQySq32DX7TJ6S58LHRRw3PwtCu2F?=
+ =?iso-8859-1?Q?2lNXaZRHNFlpSH/jiFAhAd++ykLKIPVxyTJGsY+6BWTrjQhV7dpVvHgA76?=
+ =?iso-8859-1?Q?V8HZ7LhlSW9DKDInsF/lVmwjZH3fwjdlEZWONqOANlmPWAlJSjqv4LtyXB?=
+ =?iso-8859-1?Q?wIsPBbua5Jfpl67iLAgrlOW+d6kZ8EdqsLmZm97TuTnaR+R1ShYyU/6Ond?=
+ =?iso-8859-1?Q?BJjXXlytB/KGw0i1qL/xpm61yFlHnmBjaHIthIWqlDbkfBT3+c4N1N1uOt?=
+ =?iso-8859-1?Q?/tIwdcXvmm927Y4lz7HsvxUS1XmYsWPuKI9mCyKPD6wGx9q3bFkxUlMg44?=
+ =?iso-8859-1?Q?SHF+ySt8oTC5uhZLG/Vi53ayrjurwPIiNjr24HgeLK3lr2ebpwwBu8wJb4?=
+ =?iso-8859-1?Q?9rc/VTi/gFtrSuz7MBNqlLJrz/u+vdW0LfzRdiH2HNa1qNdM7nyxs6n9MP?=
+ =?iso-8859-1?Q?w6B5P1MlQ2vhIi+FuMyzkpUupshzmgMEWrNbTfj4FevhyFqmoRP3GP0G73?=
+ =?iso-8859-1?Q?hlEew6TEbW0OAGSAUON4QD1FSAmLc5Ur8Y0kGCLV6u2Il+H9WuoTMgUXQu?=
+ =?iso-8859-1?Q?NSCRPlCKNL7vRS2ieBzmIXrGalCpkIYEseQG+0dyFsCa9kUnHQt6SNslKw?=
+ =?iso-8859-1?Q?d0DtjQ4jnff5x1CCQjO+witQk9NS4/TTYfpUXlNSMCHohTmP4ES+kgVI+L?=
+ =?iso-8859-1?Q?SYTcin1yNoz3gHVs9bcBRQYxfcG6buLEup1MokZB883SF5GNTNA6RSf60u?=
+ =?iso-8859-1?Q?mC3JCYqPyiFnp9576xlzcnsdTwJg/8OPVVa3e8XDMFzrSyBoPJZohjqO9A?=
+ =?iso-8859-1?Q?BBQ6927v50xyNoDq5+BLms3Chi4DP/tgWMUWPsFDu/N/57CBrFaPIb5Gg7?=
+ =?iso-8859-1?Q?AOD07gfXKaD7Aac17RvdKnz5+Aa4sVkIAqVXMpsjAG4v7Q82LB1629z/Uc?=
+ =?iso-8859-1?Q?bZvcS1Bkw5mFYIFnjCg11qEwIxLEWNKmtRn/MpaOoKW7sCCpzNN+MmEhI0?=
+ =?iso-8859-1?Q?IC4jeiTAPVeYSslGWXdiBlHEp613vv0u84FmjZ10M3TUQqLsxY+eBG8u6z?=
+ =?iso-8859-1?Q?XBm7uQjS6a/ol6iT/kwV4xRcht1R21renzemw+832EEyg4MC3CkfdvJKbQ?=
+ =?iso-8859-1?Q?XNuKq13ogHhAAsPJcaMEgjyBWEyG2am5A2OlcpOqXVYD9cDZ9L6ybP9dR4?=
+ =?iso-8859-1?Q?D6Z6gd6XliVkcRC9UKWniw55kfEOucDyQOg0ddT6sPxg28hWJK/eUw7bPs?=
+ =?iso-8859-1?Q?oAV1tbj3r+pHfMRkKEud1dKkpNmbd3AlMDtCReTANgWyBhth0ZVtaxy2po?=
+ =?iso-8859-1?Q?CMvKs5fxVA7wOEZogIVjFg+c3X/x2WQYoGOG303Xt/Bo+55DxTaCmUniZm?=
+ =?iso-8859-1?Q?kLg9IQQZYqgaprNFPDUF173YirI5tfaMx0PZVFWr7xLbw+ELI/Khb9oLJs?=
+ =?iso-8859-1?Q?ELWQQx/M1Fp8f0zEyFaPatWsrK9SMRnBYo3DS+N1tkTklDo13x5oMHVji+?=
+ =?iso-8859-1?Q?kUP0USLoblcd7z0YRUpD1Tzlk7ecRI8E9MSiqXJ06pKZb24SqIaZZgzSk2?=
+ =?iso-8859-1?Q?ThiyiCl0MyheVZJM4mbvEJM8oTaeJbtC5b9exGaRUoZ2qTYkdzgydHgH6W?=
+ =?iso-8859-1?Q?rbAeYBCv+nIpeVKpbaLq30BwiExlaJqlBxbepNsajXPUaT9Qbe8MSuJg?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06e5f39c-01ae-449d-6146-08dd5b379ac1
+X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2025 16:14:13.8065
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TMM8zkfL5gRKghekTKpiM/4khptEs0KKMpi/oLmqjZ9X90XAkFttIqBl9K+ETM1vLlfhNTV1+LMUKKWKDSq7UQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB11080
 
-=D0=B2=D1=82, 4 =D0=BC=D0=B0=D1=80. 2025=E2=80=AF=D0=B3. =D0=B2 14:38, Guen=
-ter Roeck <linux@roeck-us.net>:
->
-> On 3/4/25 03:08, Dzmitry Sankouski wrote:
-> > Add support for max77705 hwmon. Includes charger input, system bus, and
-> > vbyp measurements.
-> >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> > ---
-> > Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
-> > It includes charger and fuel gauge blocks, and is capable of measuring
-> > charger input current, system bus volatage and current, and bypass
-> > voltage.
->
-> That makes me wonder if this should be implemented in drivers/power/suppl=
-y/
-> and utilize the power_supply->hwmon bridge. That seems to make more sense
-> to me than implementing a separate hwmon driver.
->
+From: Florin Leotescu <florin.leotescu@nxp.com>
 
-This chip incorporates charger and fuel gauge, which are modeled as power
-supply class drivers. These measurements, however, doesn't belong to any of
-mentioned drivers. For example, ISYS is the system bus current, but it
-not charger attribute, because charger output is split between battery and
-system bus.
+This patch series add initial OF support for Microchip emc2305 fan controller.
 
-Powering diagram:
+Changes since v2:
+- Removed the introduction of new properties for now and we only 
+  enable basic OF support.
+- Link to previous version: 
+  https://lore.kernel.org/linux-arm-kernel/20250219133221.2641041-3-florin.leotescu@oss.nxp.com/T/
 
-----------              ---------      ------------      --------------
-|usb port|<--[input]--> |charger| <--> |fuel gauge| <--> |battery pack|
-----------              ---------      ------------      --------------
-                            |
-                            |
-                            |---> [system bus]
+Florin Leotescu (3):
+  dt-bindings: hwmon: Add Microchip emc2305 yaml schema
+  hwmon: emc2305: Add OF support
+  hwmon: emc2305: Use devm_thermal_of_cooling_device_register
 
-See also https://patches.linaro.org/project/linux-leds/patch/20241217-starq=
-ltechn_integration_upstream-v12-2-ed840944f948@gmail.com/#952337
+ .../bindings/hwmon/microchip,emc2305.yaml     | 43 +++++++++++++++++++
+ drivers/hwmon/emc2305.c                       | 36 ++++++----------
+ 2 files changed, 55 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
 
-> >
-> > Add support for mentioned measurements.
-> > ---
-> > Changes in v2:
-> > - EDITME: describe what is new in this series revision.
-> > - EDITME: use bulletpoints and terse descriptions.
-> > - Link to v1: https://lore.kernel.org/r/20250225-initial-support-for-ma=
-x77705-sensors-v1-1-2be6467628b0@gmail.com
->
-> ???
->
+-- 
+2.34.1
 
-sorry, I forgot to edit that
-
-(...)
-> > +static umode_t max77705_is_visible(const void *data,
-> > +                                enum hwmon_sensor_types type,
-> > +                                u32 attr, int channel)
-> > +{
-> > +     switch (type) {
-> > +     case hwmon_in:
-> > +             if (channel >=3D ARRAY_SIZE(voltage_channel_desc))
-> > +                     return 0;
-> > +
-> > +             switch (attr) {
-> > +             case hwmon_in_input:
-> > +             case hwmon_in_label:
-> > +                     return 0444;
-> > +             default:
-> > +                     break;
-> > +             }
-> > +             break;
-> > +     case hwmon_curr:
-> > +             if (channel >=3D ARRAY_SIZE(current_channel_desc))
-> > +                     return 0;
-> > +
-> > +             switch (attr) {
-> > +             case hwmon_curr_input:
-> > +             case hwmon_in_label:
-> > +                     return 0444;
-> > +             case hwmon_curr_average:
-> > +                     if (current_channel_desc[channel].avg_reg)
-> > +                             return 0444;
-> > +             default:
-> > +                     break;
-> > +             }
-> > +             break;
->
-> The chip provides temperature measurements. Why not support it ?
->
-
-It provides temperature sensing in the fuel gauge block, so it is handled t=
-here.
-
-> Also, how about limits ? Doesn't the chip support any ? There do
-> seem to be some threshold registers.
->
-
-It has a register in the charger block to limit IIN current. It also has VB=
-YP
-interrupt, but I didn't found how the limit is set. Actually, I have a feel=
-ing
-these measurements are implemented by chip firmware, rather than some IP
-solution.
-
-(...)
-
---=20
-Best regards and thanks for review,
-Dzmitry
