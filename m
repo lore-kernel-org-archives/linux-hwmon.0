@@ -1,159 +1,211 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2F91DC9AA
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Mar 2025 12:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBE72E3396;
+	Wed,  5 Mar 2025 12:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741177918; cv=none; b=j+48u9MMxVGLdKpK7AH9YfPIxE7mBV212Ib2iOVkjZXY4HMeagFwRsgtn5DCVRZai3fB5io+UMVknzkmNvdbgL6gFs3Q2N7tpdrPY98GJN7JZrzf1EpVRx11yPoWg9dIRkRVgeCeOnH/POzzJRzoGNMCpkmmXUo2jqy8OWeKpvQ=
+	t=1741178768; cv=none; b=OBi4eEfqGzhpiuPvmdL8BCx89kGMfn4CgRNUbdY5KKsBhnr2QqGkn6XXnMwdXgcjo0NH6S9TKMElOvmukTH1MhMcb/EG8SmPKXu4GApk3vAWt4+n2p8V707vdGRz+yhwUnGFdYQCEnXfC+0kZozz8MW+2W1rUU2mqtAyGi/nPh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741177918; c=relaxed/simple;
-	bh=ds726Kg0hyNwQAqqHENQFz1hhTJQhLNkmGpHOmQYUws=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KMxn4AaqCXNcbR/O1jA1BspNo7IsYIFUZhI/z/ZoHDM7lT4/25/QLDdE90duU1BqMEA75yIEcRMWPWRH8RWvswnny0YtGTHRFy2Yy7S+DeJcGaxRkoBd/CuQVorc19sElHStYwRlMlOc3S3HDxu7jgnseg2vjY8i7sc2iDQ1nxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UoIj4Qmw; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1741178768; c=relaxed/simple;
+	bh=xx8JpjJPC8xYDKoDVOJwNq5GyjLhOLnf6u0v8a2NSeQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IVyLfY9T8p5ADf+tTevA5xMs39RR9snFdoLdNYjo7lkTFwS6u/N2HT9aCQGWe2yVx4pIbfVd8t46Zhq3RhSJ6nRTJZbPyxvSB+RGnqF2A9ZTyrZeIkXPjOimW33U4RlFP8c7Xa352AwJEdtfzfLs92KaWv85d95ZpLWCsajXlYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLQpFvYe; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="UoIj4Qmw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=ElYfFzYm6+hkEj
-	gzaTxnEHxgY4G9pehwaTd2Ai5ICc8=; b=UoIj4Qmwqh8GJK9oYdTjqP0hWZS3RD
-	n5inbbXyXKQ4XQAnCdmwBaMoUBRn+bf2NWrFS5NN53Xxw6gXPlZ/QkHxEvFsHhGT
-	RW+1oXF5LRRrwz7DohjcJgGisdwoTtixPa9JeDYK0WXJGoMAk63XXscp9vaescL2
-	YeHAzVldAKbsMEuO7SpVaIj1PARoJ1/mp+4wQApXYXuLAAR7ZI1Osd2b1tr7A5uo
-	Ftw8Tg2fVMsOvCP2sidER80s7PpDyKdV5ELrcxWPS45u/Np/1Tq84NKCsgdBoKKR
-	5ATvXGT8sBVYGwrxAqSUiPSpwZLscirjbIVr/h/kCx5D/S5cjEL1uNYg==
-Received: (qmail 2933127 invoked from network); 5 Mar 2025 13:31:53 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Mar 2025 13:31:53 +0100
-X-UD-Smtp-Session: l3s3148p1@QRP7kpcvEKkgAwDPXylhAB+mKiir6bOV
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Cosmo Chou <cosmo.chou@quantatw.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH RFT v3] hwmon: (pt5161l) Use per-client debugfs entry
-Date: Wed,  5 Mar 2025 13:30:12 +0100
-Message-ID: <20250305123149.16990-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLQpFvYe"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2234e4b079cso123431685ad.1;
+        Wed, 05 Mar 2025 04:46:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741178766; x=1741783566; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OZhOmEpDhm76SJPq5OYpOzDDF0g2lT4rBhjCoTGHE34=;
+        b=BLQpFvYee5o9JLTUmNAR4oG8A+aopqFUfD77x5yxXRfK871LUZS7hJib92fBxwjfAr
+         Skh6QLDnvGTVJjYkDyVbsuK8nFInafuXfl4/G4QONEpTSgiudCzmC6VCCWgGMTXW2cBL
+         EBTOLjaIkpPfHInQK6YWiLAMoqjwD2Nxkk5MYZTUFyFuWglPvMooiQLjoXciUBXiFUOO
+         YNlyolofzP7APtrQ3/sb8A1Fvtiz66angP/HnChDX1fY9FtsAJsCy3DkygEdomMVezgu
+         Ln2Wn81oFXEffKVHZ7c7cL+pIRwVafjMp7zokB88UKzXMVTQCO1V8p1wuc/25f9YXyTa
+         ZTkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741178766; x=1741783566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OZhOmEpDhm76SJPq5OYpOzDDF0g2lT4rBhjCoTGHE34=;
+        b=WsLxyChz4rLGXYFzyH7AwPFr0u0MisNFgt4KDYu+D30Qg3Uyjq3BJ0f7vqiDYb8X1F
+         Evwm0JTlA9JxlGYgzw8ivL61rhOLL9BxyJ66h62RePsO5ZDyAbaU3NuMYtgpC+3m+HXP
+         2cPbG6KkwCBDgEhWYJfIqIKMS3e4/y7LmIg9/VlGfuAZNdSr1bXYyUgVgU4zQ6rUD/CI
+         eF3HFBnuSS6sJMJqSbuWFKt7ySIZoZvCYDxwuVyjy+E36MLUwyp1XPhw8D5qNgv9ux1M
+         j5CplclM4k/KWDwMd11MuqGKac5PQsRK+zRP1lF/yrDW5iTqI+bUtM15cgeLbQpy+1Oa
+         O15Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUfoc5kbHjyjbYaHJrRhFe33QKcBCtTvPV8Zr8vtqZkMYNJPAyyvTydD4MMxfUsBcTvdDqSy2QkcfFR@vger.kernel.org, AJvYcCVJqXjJJit4GYdNdjiWI7xsbEgMWT1eECjC9MArtsNGQgndddzNFOuDG4sYl9qr7KMORYZuMHe4rrts+0DM@vger.kernel.org, AJvYcCVatLH5MTz7C956s+722jzazRwP57fB0Y77DmoE0sbS1cRJcsNIr8c2ptBVXZmSMgikbYtUPcSDRlET62M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl86Sy8NzArbDdj6XTr2hiz8joLOLvRQqrdmpka+Hk15YYL5Xl
+	SM+NARud8dt80KEUzkjHeqccM7jH6J1a9+Kd6njR5pJHDQNfspWTfiZReWG0U5hY/OZARR3LonB
+	9zHl+G7P4/pIO1VdIlKYi/Nee648mAN4s
+X-Gm-Gg: ASbGncuJcRFRCcjByhxwS38zYZEvawt+F1HAHFLOgKAX64qsV3laoHQYXW0DE9jZIu1
+	7RE4i+bFmge7RvNFzNaXCm/B9nf68XKoKkdisy7lu/bqy3GU27q7kFBWNiEd/4MzcK+SwLRXGQR
+	XxBaToQU+1xoUiFjQwep0BxVk=
+X-Google-Smtp-Source: AGHT+IHdwW4hQa2cLPlWYrU5ue4mWciZc0p5rQqeJ2JBGI1XN4w7WGoKToi7KE7C9eD7Ld4Askkac6qqdMHiE8X06ik=
+X-Received: by 2002:a17:902:ebc1:b0:223:f9a4:3fa8 with SMTP id
+ d9443c01a7336-223f9a457bemr25544855ad.19.1741178766361; Wed, 05 Mar 2025
+ 04:46:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250304162136.1963384-1-florin.leotescu@oss.nxp.com>
+ <20250304162136.1963384-2-florin.leotescu@oss.nxp.com> <Z8cp1xoIXT8lgD8T@lizhi-Precision-Tower-5810>
+In-Reply-To: <Z8cp1xoIXT8lgD8T@lizhi-Precision-Tower-5810>
+From: Daniel Baluta <daniel.baluta@gmail.com>
+Date: Wed, 5 Mar 2025 14:47:45 +0200
+X-Gm-Features: AQ5f1Jq_yZI7Qka024KvL_NkiadJQvrOZEyL3YURWLhpyxIxGw7rSu6jJaSDwjY
+Message-ID: <CAEnQRZCT4vfFBApv+C3Wp17Fk0-Rwx36h4eCTTygaXFYFipEGg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Microchip emc2305 yaml schema
+To: Frank Li <Frank.li@nxp.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	viorel.suman@nxp.com, carlos.song@nxp.com, 
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, festevam@gmail.com, 
+	Florin Leotescu <florin.leotescu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The I2C core now offers a debugfs-directory per client. Use it and
-remove the custom handling.
+Hello Frank, Conor, Krzysztof,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Changes since v2: add 'client' as a parameter to the debugfs init
-function.
+Thanks a lot for your comments and help.
 
-Sorry, sent an old version as v2 :(
+In this initial patchseries we only add minimal OF support and
+introduce a minimal binding.
 
- drivers/hwmon/pt5161l.c | 46 ++++++++---------------------------------
- 1 file changed, 9 insertions(+), 37 deletions(-)
+> How did you pickup the maintainer entry?
 
-diff --git a/drivers/hwmon/pt5161l.c b/drivers/hwmon/pt5161l.c
-index a9f0b23f9e76..20e3cfa625f1 100644
---- a/drivers/hwmon/pt5161l.c
-+++ b/drivers/hwmon/pt5161l.c
-@@ -63,7 +63,6 @@ struct pt5161l_fw_ver {
- /* Each client has this additional data */
- struct pt5161l_data {
- 	struct i2c_client *client;
--	struct dentry *debugfs;
- 	struct pt5161l_fw_ver fw_ver;
- 	struct mutex lock; /* for atomic I2C transactions */
- 	bool init_done;
-@@ -72,8 +71,6 @@ struct pt5161l_data {
- 	bool mm_wide_reg_access; /* MM assisted wide register access */
- };
- 
--static struct dentry *pt5161l_debugfs_dir;
--
- /*
-  * Write multiple data bytes to Aries over I2C
-  */
-@@ -568,21 +565,16 @@ static const struct file_operations pt5161l_debugfs_ops_hb_sts = {
- 	.open = simple_open,
- };
- 
--static int pt5161l_init_debugfs(struct pt5161l_data *data)
-+static void pt5161l_init_debugfs(struct i2c_client *client, struct pt5161l_data *data)
- {
--	data->debugfs = debugfs_create_dir(dev_name(&data->client->dev),
--					   pt5161l_debugfs_dir);
--
--	debugfs_create_file("fw_ver", 0444, data->debugfs, data,
-+	debugfs_create_file("fw_ver", 0444, client->debugfs, data,
- 			    &pt5161l_debugfs_ops_fw_ver);
- 
--	debugfs_create_file("fw_load_status", 0444, data->debugfs, data,
-+	debugfs_create_file("fw_load_status", 0444, client->debugfs, data,
- 			    &pt5161l_debugfs_ops_fw_load_sts);
- 
--	debugfs_create_file("heartbeat_status", 0444, data->debugfs, data,
-+	debugfs_create_file("heartbeat_status", 0444, client->debugfs, data,
- 			    &pt5161l_debugfs_ops_hb_sts);
--
--	return 0;
- }
- 
- static int pt5161l_probe(struct i2c_client *client)
-@@ -604,17 +596,12 @@ static int pt5161l_probe(struct i2c_client *client)
- 							 data,
- 							 &pt5161l_chip_info,
- 							 NULL);
-+	if (IS_ERR(hwmon_dev))
-+		return PTR_ERR(hwmon_dev);
- 
--	pt5161l_init_debugfs(data);
--
--	return PTR_ERR_OR_ZERO(hwmon_dev);
--}
--
--static void pt5161l_remove(struct i2c_client *client)
--{
--	struct pt5161l_data *data = i2c_get_clientdata(client);
-+	pt5161l_init_debugfs(client, data);
- 
--	debugfs_remove_recursive(data->debugfs);
-+	return 0;
- }
- 
- static const struct of_device_id __maybe_unused pt5161l_of_match[] = {
-@@ -643,24 +630,9 @@ static struct i2c_driver pt5161l_driver = {
- 		.acpi_match_table = ACPI_PTR(pt5161l_acpi_match),
- 	},
- 	.probe = pt5161l_probe,
--	.remove = pt5161l_remove,
- 	.id_table = pt5161l_id,
- };
--
--static int __init pt5161l_init(void)
--{
--	pt5161l_debugfs_dir = debugfs_create_dir("pt5161l", NULL);
--	return i2c_add_driver(&pt5161l_driver);
--}
--
--static void __exit pt5161l_exit(void)
--{
--	i2c_del_driver(&pt5161l_driver);
--	debugfs_remove_recursive(pt5161l_debugfs_dir);
--}
--
--module_init(pt5161l_init);
--module_exit(pt5161l_exit);
-+module_i2c_driver(pt5161l_driver);
- 
- MODULE_AUTHOR("Cosmo Chou <cosmo.chou@quantatw.com>");
- MODULE_DESCRIPTION("Hwmon driver for Astera Labs Aries PCIe retimer");
--- 
-2.45.2
+We got the author of the first commit for
+See 0d8400c5a2ce ("hwmon: (emc2305) add support for EMC2301/2/3/5 RPM-based=
+")
 
+> If only one reg You can go through trivial-devices.yaml
+
+This is not a trivial device as we will add some specific properties
+with our next patches
+(e.g polarity etc)
+
+> Missing descriptions of the fans, no?
+> missing $ref to fan-controller schema.
+
+Do we need to add this now? As this is only the minimal binding
+support. We want to add that
+in a follow up patch when we go into specifics.
+
+> The emc2301 label here can be dropped, it is not used.
+
+Will fix.
+
+> The nodename should be "fan-controller", not pwm here I guess.
+
+Sure, will fix.
+
+On Tue, Mar 4, 2025 at 6:56=E2=80=AFPM Frank Li <Frank.li@nxp.com> wrote:
+>
+> On Tue, Mar 04, 2025 at 06:21:34PM +0200, florin.leotescu@oss.nxp.com wro=
+te:
+> > From: Florin Leotescu <florin.leotescu@nxp.com>
+> >
+> > Introduce yaml schema for Microchip emc2305 pwm fan controller.
+> >
+> > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+> > ---
+> >  .../bindings/hwmon/microchip,emc2305.yaml     | 43 +++++++++++++++++++
+> >  1 file changed, 43 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,e=
+mc2305.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.=
+yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > new file mode 100644
+> > index 000000000000..cac0075a65bb
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > @@ -0,0 +1,43 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Microchip EMC2305 SMBus compliant PWM fan controller
+> > +
+> > +maintainers:
+> > +  - Michael Shych <michaelsh@nvidia.com>
+>
+> who is it? look like not Microchip and hwmon maintainer.
+>
+> > +
+> > +description: |
+>
+> Needn't |
+>
+> > +  Microchip EMC2301/2/3/5 pwm controller which supports up
+> > +  to five programmable fan control circuits
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - microchip,emc2301
+> > +      - microchip,emc2302
+> > +      - microchip,emc2303
+> > +      - microchip,emc2305
+>
+> According to your driver code look like all compatible with microchip,emc=
+2301
+>
+> oneOf:
+>   - enum:
+>       - microchip,emc2301
+>   - items:
+>       - enum:
+>           - microchip,emc2302
+>           - microchip,emc2303
+>           - microchip,emc2305
+>       - const: microchip,emc2301
+>
+> So your driver just need one "microchip,emc2301" compatible string.
+>
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        emc2301: pwm@2f {
+> > +            compatible =3D "microchip,emc2301";
+> > +            reg =3D <0x2f>;
+>
+> If only one reg:
+> You can go through trivial-devices.yaml
+>
+> Frank
+>
+> > +        };
+> > +    };
+> > --
+> > 2.34.1
+> >
+>
