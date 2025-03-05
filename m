@@ -1,211 +1,220 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBE72E3396;
-	Wed,  5 Mar 2025 12:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905A5248176
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Mar 2025 12:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741178768; cv=none; b=OBi4eEfqGzhpiuPvmdL8BCx89kGMfn4CgRNUbdY5KKsBhnr2QqGkn6XXnMwdXgcjo0NH6S9TKMElOvmukTH1MhMcb/EG8SmPKXu4GApk3vAWt4+n2p8V707vdGRz+yhwUnGFdYQCEnXfC+0kZozz8MW+2W1rUU2mqtAyGi/nPh8=
+	t=1741179394; cv=none; b=NdVwQwq9yihsDGbWM/YRthZ4nViFWxQG5JAWxZ+P5O8ZbJXRksRr7u6fGecXYaWxEF+gIIarPWLwR6w/PEr6R6LveoVXCOUKACwWiQ4JHR4tBk935ncSVwHFeHNNQk5n0RtaXIWzmAmJLNuqizL9zM1wQGuUj9gh6y+PQvTDLeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741178768; c=relaxed/simple;
-	bh=xx8JpjJPC8xYDKoDVOJwNq5GyjLhOLnf6u0v8a2NSeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IVyLfY9T8p5ADf+tTevA5xMs39RR9snFdoLdNYjo7lkTFwS6u/N2HT9aCQGWe2yVx4pIbfVd8t46Zhq3RhSJ6nRTJZbPyxvSB+RGnqF2A9ZTyrZeIkXPjOimW33U4RlFP8c7Xa352AwJEdtfzfLs92KaWv85d95ZpLWCsajXlYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLQpFvYe; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741179394; c=relaxed/simple;
+	bh=K7da3MzKEd0nn3HnPv23O+9gl/O5zjWRK3Tr/V1LzYU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=a89+UeCCF+bWCmFcn/NCYkjMKumWI+Kv6sJjD69xj5C4rjnvGg0kyopxItsv48xgSqxhdC/2O6MuANMynwS9rRQyDI05UdxDLeKCNRsVFdzmiTUgfkbhsUV0Ce+Zi26S2FeTVy9rxbQ6U3fs9HxIyx6zJ5TWq8oF407NkMKKPmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IvE8+bBi; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLQpFvYe"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2234e4b079cso123431685ad.1;
-        Wed, 05 Mar 2025 04:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741178766; x=1741783566; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OZhOmEpDhm76SJPq5OYpOzDDF0g2lT4rBhjCoTGHE34=;
-        b=BLQpFvYee5o9JLTUmNAR4oG8A+aopqFUfD77x5yxXRfK871LUZS7hJib92fBxwjfAr
-         Skh6QLDnvGTVJjYkDyVbsuK8nFInafuXfl4/G4QONEpTSgiudCzmC6VCCWgGMTXW2cBL
-         EBTOLjaIkpPfHInQK6YWiLAMoqjwD2Nxkk5MYZTUFyFuWglPvMooiQLjoXciUBXiFUOO
-         YNlyolofzP7APtrQ3/sb8A1Fvtiz66angP/HnChDX1fY9FtsAJsCy3DkygEdomMVezgu
-         Ln2Wn81oFXEffKVHZ7c7cL+pIRwVafjMp7zokB88UKzXMVTQCO1V8p1wuc/25f9YXyTa
-         ZTkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741178766; x=1741783566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OZhOmEpDhm76SJPq5OYpOzDDF0g2lT4rBhjCoTGHE34=;
-        b=WsLxyChz4rLGXYFzyH7AwPFr0u0MisNFgt4KDYu+D30Qg3Uyjq3BJ0f7vqiDYb8X1F
-         Evwm0JTlA9JxlGYgzw8ivL61rhOLL9BxyJ66h62RePsO5ZDyAbaU3NuMYtgpC+3m+HXP
-         2cPbG6KkwCBDgEhWYJfIqIKMS3e4/y7LmIg9/VlGfuAZNdSr1bXYyUgVgU4zQ6rUD/CI
-         eF3HFBnuSS6sJMJqSbuWFKt7ySIZoZvCYDxwuVyjy+E36MLUwyp1XPhw8D5qNgv9ux1M
-         j5CplclM4k/KWDwMd11MuqGKac5PQsRK+zRP1lF/yrDW5iTqI+bUtM15cgeLbQpy+1Oa
-         O15Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUfoc5kbHjyjbYaHJrRhFe33QKcBCtTvPV8Zr8vtqZkMYNJPAyyvTydD4MMxfUsBcTvdDqSy2QkcfFR@vger.kernel.org, AJvYcCVJqXjJJit4GYdNdjiWI7xsbEgMWT1eECjC9MArtsNGQgndddzNFOuDG4sYl9qr7KMORYZuMHe4rrts+0DM@vger.kernel.org, AJvYcCVatLH5MTz7C956s+722jzazRwP57fB0Y77DmoE0sbS1cRJcsNIr8c2ptBVXZmSMgikbYtUPcSDRlET62M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl86Sy8NzArbDdj6XTr2hiz8joLOLvRQqrdmpka+Hk15YYL5Xl
-	SM+NARud8dt80KEUzkjHeqccM7jH6J1a9+Kd6njR5pJHDQNfspWTfiZReWG0U5hY/OZARR3LonB
-	9zHl+G7P4/pIO1VdIlKYi/Nee648mAN4s
-X-Gm-Gg: ASbGncuJcRFRCcjByhxwS38zYZEvawt+F1HAHFLOgKAX64qsV3laoHQYXW0DE9jZIu1
-	7RE4i+bFmge7RvNFzNaXCm/B9nf68XKoKkdisy7lu/bqy3GU27q7kFBWNiEd/4MzcK+SwLRXGQR
-	XxBaToQU+1xoUiFjQwep0BxVk=
-X-Google-Smtp-Source: AGHT+IHdwW4hQa2cLPlWYrU5ue4mWciZc0p5rQqeJ2JBGI1XN4w7WGoKToi7KE7C9eD7Ld4Askkac6qqdMHiE8X06ik=
-X-Received: by 2002:a17:902:ebc1:b0:223:f9a4:3fa8 with SMTP id
- d9443c01a7336-223f9a457bemr25544855ad.19.1741178766361; Wed, 05 Mar 2025
- 04:46:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IvE8+bBi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741179392; x=1772715392;
+  h=date:from:to:cc:subject:message-id;
+  bh=K7da3MzKEd0nn3HnPv23O+9gl/O5zjWRK3Tr/V1LzYU=;
+  b=IvE8+bBi/mKPdNyEanQTdtpthedxdl+Pcd6X9wD7MI7+RwbEOflTPrEf
+   gofyMZEvXc7mVOkRc5zrzmmb2bgPKoWXHMYYHF957l41LQcOjhVGn0vHS
+   NWWaYcGnnZfdy3KhDxmScA0W7RMEdHwG7NEzF9j0D64fbfoSMOvqNRfq6
+   qC4rtaayNAnO3cRIb5fxbjYndtEFUILwYgwWil6J8VrORwskdYImMKCtn
+   Pr1sN/7QsDtSdp/QAdALfx4Qn1Y1sNN12Fy4Nm4LQPKKKERLR0BsV+GPW
+   YS1qfW0fpw7nltDo5rMQBTTT1NG8nO9DITDWmoXgyYDvvjZAEyvBCQsXz
+   w==;
+X-CSE-ConnectionGUID: 1CW8b8iMT2qhWAJCRDvKWA==
+X-CSE-MsgGUID: 7XwPbWLQSdCcHucDLp41Lg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42340506"
+X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
+   d="scan'208";a="42340506"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 04:56:32 -0800
+X-CSE-ConnectionGUID: aS8lZqLoTg2yfjOL7EAUOg==
+X-CSE-MsgGUID: JA0k9J+iR2eFIUMzQh75Zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
+   d="scan'208";a="141928654"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Mar 2025 04:56:31 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpoIW-000Kxy-2s;
+	Wed, 05 Mar 2025 12:56:28 +0000
+Date: Wed, 05 Mar 2025 20:56:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 232427772fc123942d110c18269cfbdf40edae18
+Message-ID: <202503052009.bLWrcCU7-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250304162136.1963384-1-florin.leotescu@oss.nxp.com>
- <20250304162136.1963384-2-florin.leotescu@oss.nxp.com> <Z8cp1xoIXT8lgD8T@lizhi-Precision-Tower-5810>
-In-Reply-To: <Z8cp1xoIXT8lgD8T@lizhi-Precision-Tower-5810>
-From: Daniel Baluta <daniel.baluta@gmail.com>
-Date: Wed, 5 Mar 2025 14:47:45 +0200
-X-Gm-Features: AQ5f1Jq_yZI7Qka024KvL_NkiadJQvrOZEyL3YURWLhpyxIxGw7rSu6jJaSDwjY
-Message-ID: <CAEnQRZCT4vfFBApv+C3Wp17Fk0-Rwx36h4eCTTygaXFYFipEGg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add Microchip emc2305 yaml schema
-To: Frank Li <Frank.li@nxp.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	viorel.suman@nxp.com, carlos.song@nxp.com, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, festevam@gmail.com, 
-	Florin Leotescu <florin.leotescu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hello Frank, Conor, Krzysztof,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 232427772fc123942d110c18269cfbdf40edae18  hwmon: Fix the missing of 'average' word in hwmon_power_attr_templates
 
-Thanks a lot for your comments and help.
+elapsed time: 1449m
 
-In this initial patchseries we only add minimal OF support and
-introduce a minimal binding.
+configs tested: 143
+configs skipped: 1
 
-> How did you pickup the maintainer entry?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-We got the author of the first commit for
-See 0d8400c5a2ce ("hwmon: (emc2305) add support for EMC2301/2/3/5 RPM-based=
-")
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250305    gcc-13.2.0
+arc                   randconfig-002-20250305    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20250305    gcc-14.2.0
+arm                   randconfig-002-20250305    clang-19
+arm                   randconfig-003-20250305    gcc-14.2.0
+arm                   randconfig-004-20250305    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250305    clang-15
+arm64                 randconfig-002-20250305    gcc-14.2.0
+arm64                 randconfig-003-20250305    clang-21
+arm64                 randconfig-004-20250305    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250305    gcc-14.2.0
+csky                  randconfig-002-20250305    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    clang-21
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250305    clang-21
+hexagon               randconfig-002-20250305    clang-18
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250304    clang-19
+i386        buildonly-randconfig-001-20250305    clang-19
+i386        buildonly-randconfig-002-20250304    clang-19
+i386        buildonly-randconfig-002-20250305    clang-19
+i386        buildonly-randconfig-003-20250304    gcc-12
+i386        buildonly-randconfig-003-20250305    clang-19
+i386        buildonly-randconfig-004-20250304    gcc-11
+i386        buildonly-randconfig-004-20250305    clang-19
+i386        buildonly-randconfig-005-20250304    gcc-11
+i386        buildonly-randconfig-005-20250305    clang-19
+i386        buildonly-randconfig-006-20250304    gcc-12
+i386        buildonly-randconfig-006-20250305    clang-19
+i386                                defconfig    clang-19
+i386                  randconfig-011-20250305    gcc-11
+i386                  randconfig-012-20250305    gcc-11
+i386                  randconfig-013-20250305    gcc-11
+i386                  randconfig-014-20250305    gcc-11
+i386                  randconfig-015-20250305    gcc-11
+i386                  randconfig-016-20250305    gcc-11
+i386                  randconfig-017-20250305    gcc-11
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250305    gcc-14.2.0
+loongarch             randconfig-002-20250305    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250305    gcc-14.2.0
+nios2                 randconfig-002-20250305    gcc-14.2.0
+openrisc                          allnoconfig    clang-15
+openrisc                          allnoconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-15
+parisc                            allnoconfig    gcc-14.2.0
+parisc                randconfig-001-20250305    gcc-14.2.0
+parisc                randconfig-002-20250305    gcc-14.2.0
+powerpc                           allnoconfig    clang-15
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc               randconfig-001-20250305    clang-17
+powerpc               randconfig-002-20250305    gcc-14.2.0
+powerpc               randconfig-003-20250305    gcc-14.2.0
+powerpc64             randconfig-001-20250305    clang-19
+powerpc64             randconfig-002-20250305    clang-17
+powerpc64             randconfig-003-20250305    clang-19
+riscv                             allnoconfig    clang-15
+riscv                             allnoconfig    gcc-14.2.0
+riscv                 randconfig-001-20250305    clang-19
+riscv                 randconfig-002-20250305    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250305    gcc-14.2.0
+s390                  randconfig-002-20250305    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250305    gcc-14.2.0
+sh                    randconfig-002-20250305    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250305    gcc-14.2.0
+sparc                 randconfig-002-20250305    gcc-14.2.0
+sparc64               randconfig-001-20250305    gcc-14.2.0
+sparc64               randconfig-002-20250305    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-15
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250305    clang-19
+um                    randconfig-002-20250305    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250304    clang-19
+x86_64      buildonly-randconfig-001-20250305    clang-19
+x86_64      buildonly-randconfig-002-20250304    gcc-12
+x86_64      buildonly-randconfig-002-20250305    clang-19
+x86_64      buildonly-randconfig-003-20250304    gcc-12
+x86_64      buildonly-randconfig-003-20250305    clang-19
+x86_64      buildonly-randconfig-004-20250304    gcc-12
+x86_64      buildonly-randconfig-004-20250305    clang-19
+x86_64      buildonly-randconfig-005-20250304    gcc-12
+x86_64      buildonly-randconfig-005-20250305    clang-19
+x86_64      buildonly-randconfig-006-20250304    gcc-12
+x86_64      buildonly-randconfig-006-20250305    clang-19
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20250305    gcc-12
+x86_64                randconfig-002-20250305    gcc-12
+x86_64                randconfig-003-20250305    gcc-12
+x86_64                randconfig-004-20250305    gcc-12
+x86_64                randconfig-005-20250305    gcc-12
+x86_64                randconfig-006-20250305    gcc-12
+x86_64                randconfig-007-20250305    gcc-12
+x86_64                randconfig-008-20250305    gcc-12
+x86_64                randconfig-071-20250305    clang-19
+x86_64                randconfig-072-20250305    clang-19
+x86_64                randconfig-073-20250305    clang-19
+x86_64                randconfig-074-20250305    clang-19
+x86_64                randconfig-075-20250305    clang-19
+x86_64                randconfig-076-20250305    clang-19
+x86_64                randconfig-077-20250305    clang-19
+x86_64                randconfig-078-20250305    clang-19
+x86_64                               rhel-9.4    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250305    gcc-14.2.0
+xtensa                randconfig-002-20250305    gcc-14.2.0
 
-> If only one reg You can go through trivial-devices.yaml
-
-This is not a trivial device as we will add some specific properties
-with our next patches
-(e.g polarity etc)
-
-> Missing descriptions of the fans, no?
-> missing $ref to fan-controller schema.
-
-Do we need to add this now? As this is only the minimal binding
-support. We want to add that
-in a follow up patch when we go into specifics.
-
-> The emc2301 label here can be dropped, it is not used.
-
-Will fix.
-
-> The nodename should be "fan-controller", not pwm here I guess.
-
-Sure, will fix.
-
-On Tue, Mar 4, 2025 at 6:56=E2=80=AFPM Frank Li <Frank.li@nxp.com> wrote:
->
-> On Tue, Mar 04, 2025 at 06:21:34PM +0200, florin.leotescu@oss.nxp.com wro=
-te:
-> > From: Florin Leotescu <florin.leotescu@nxp.com>
-> >
-> > Introduce yaml schema for Microchip emc2305 pwm fan controller.
-> >
-> > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
-> > ---
-> >  .../bindings/hwmon/microchip,emc2305.yaml     | 43 +++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,e=
-mc2305.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.=
-yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> > new file mode 100644
-> > index 000000000000..cac0075a65bb
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> > @@ -0,0 +1,43 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Microchip EMC2305 SMBus compliant PWM fan controller
-> > +
-> > +maintainers:
-> > +  - Michael Shych <michaelsh@nvidia.com>
->
-> who is it? look like not Microchip and hwmon maintainer.
->
-> > +
-> > +description: |
->
-> Needn't |
->
-> > +  Microchip EMC2301/2/3/5 pwm controller which supports up
-> > +  to five programmable fan control circuits
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - microchip,emc2301
-> > +      - microchip,emc2302
-> > +      - microchip,emc2303
-> > +      - microchip,emc2305
->
-> According to your driver code look like all compatible with microchip,emc=
-2301
->
-> oneOf:
->   - enum:
->       - microchip,emc2301
->   - items:
->       - enum:
->           - microchip,emc2302
->           - microchip,emc2303
->           - microchip,emc2305
->       - const: microchip,emc2301
->
-> So your driver just need one "microchip,emc2301" compatible string.
->
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        emc2301: pwm@2f {
-> > +            compatible =3D "microchip,emc2301";
-> > +            reg =3D <0x2f>;
->
-> If only one reg:
-> You can go through trivial-devices.yaml
->
-> Frank
->
-> > +        };
-> > +    };
-> > --
-> > 2.34.1
-> >
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
