@@ -1,220 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905A5248176
-	for <linux-hwmon@vger.kernel.org>; Wed,  5 Mar 2025 12:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C05230BC6;
+	Wed,  5 Mar 2025 13:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741179394; cv=none; b=NdVwQwq9yihsDGbWM/YRthZ4nViFWxQG5JAWxZ+P5O8ZbJXRksRr7u6fGecXYaWxEF+gIIarPWLwR6w/PEr6R6LveoVXCOUKACwWiQ4JHR4tBk935ncSVwHFeHNNQk5n0RtaXIWzmAmJLNuqizL9zM1wQGuUj9gh6y+PQvTDLeQ=
+	t=1741180961; cv=none; b=ni3lDCfB8q2gCjEPmv/c1gbMEt/GlZe9+znyplHoYtixMhZgZBVEwzMV0j7RHJoKMBoSt8T8+Y3B7AmBWcvanOzsGC644ET9vC/KeteGR9KheQdwke/oQ2FDBV+tAOGgRNSVUlfJS1nnB4Txna9qlrlbpVagc5KGLwtBcxD6TMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741179394; c=relaxed/simple;
-	bh=K7da3MzKEd0nn3HnPv23O+9gl/O5zjWRK3Tr/V1LzYU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=a89+UeCCF+bWCmFcn/NCYkjMKumWI+Kv6sJjD69xj5C4rjnvGg0kyopxItsv48xgSqxhdC/2O6MuANMynwS9rRQyDI05UdxDLeKCNRsVFdzmiTUgfkbhsUV0Ce+Zi26S2FeTVy9rxbQ6U3fs9HxIyx6zJ5TWq8oF407NkMKKPmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IvE8+bBi; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741180961; c=relaxed/simple;
+	bh=2Bu2IgsWQfcgd5O+NbADT2ErcKX0Ld5Byc6D0Elm9wQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mT/ZkSLSWGeX1YWNqUH0tAnOnBySnlFscL7Y0wEODWlYs70xNvT1ySHKhZvn8iRaV6RPyvQVKzVyPLEuJDpeaMViCghkU7tqUwyU5I/Ob/WQsY6hMcPbA1MyISK/Futasi+VO65HwwQVLkA8j5YUqF5JOMPPmdN4MLQ7/84mecs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Byw7q/iu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IvE8+bBi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741179392; x=1772715392;
-  h=date:from:to:cc:subject:message-id;
-  bh=K7da3MzKEd0nn3HnPv23O+9gl/O5zjWRK3Tr/V1LzYU=;
-  b=IvE8+bBi/mKPdNyEanQTdtpthedxdl+Pcd6X9wD7MI7+RwbEOflTPrEf
-   gofyMZEvXc7mVOkRc5zrzmmb2bgPKoWXHMYYHF957l41LQcOjhVGn0vHS
-   NWWaYcGnnZfdy3KhDxmScA0W7RMEdHwG7NEzF9j0D64fbfoSMOvqNRfq6
-   qC4rtaayNAnO3cRIb5fxbjYndtEFUILwYgwWil6J8VrORwskdYImMKCtn
-   Pr1sN/7QsDtSdp/QAdALfx4Qn1Y1sNN12Fy4Nm4LQPKKKERLR0BsV+GPW
-   YS1qfW0fpw7nltDo5rMQBTTT1NG8nO9DITDWmoXgyYDvvjZAEyvBCQsXz
-   w==;
-X-CSE-ConnectionGUID: 1CW8b8iMT2qhWAJCRDvKWA==
-X-CSE-MsgGUID: 7XwPbWLQSdCcHucDLp41Lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42340506"
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="42340506"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 04:56:32 -0800
-X-CSE-ConnectionGUID: aS8lZqLoTg2yfjOL7EAUOg==
-X-CSE-MsgGUID: JA0k9J+iR2eFIUMzQh75Zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="141928654"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Mar 2025 04:56:31 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpoIW-000Kxy-2s;
-	Wed, 05 Mar 2025 12:56:28 +0000
-Date: Wed, 05 Mar 2025 20:56:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 232427772fc123942d110c18269cfbdf40edae18
-Message-ID: <202503052009.bLWrcCU7-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Byw7q/iu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB336C4CEE2;
+	Wed,  5 Mar 2025 13:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741180960;
+	bh=2Bu2IgsWQfcgd5O+NbADT2ErcKX0Ld5Byc6D0Elm9wQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Byw7q/iuGLgydm3rTrQ6qR3u96o6B1oen331kBCeZ5OEEffcSIhz4RnvZZ3JVjdV9
+	 WyrB2S3IxQbCMdz3S6JGvj9M6MpTbJqcKcMVHy9ishP0rpU5b98W9sHS4M+fxW50W4
+	 9y1kF0UfcGQgYXHUBL1ol7PYdpCYLUCFIrYMBVZuaETGvoEJIOIT0WnVF0CO0xr5YQ
+	 0ZOVMpMi2zaLEN0wNB4HOHdT8+TU31SmSQN6KcZMagI55muKwYR2Z3Ciak1VII9lKn
+	 6BV+jWmg5263OmehDaDffOsMgl0zUaoSnc10VVVU63tGW76OTaFTNjrQH8nqWuGJ0d
+	 uTqpSRcL0JKhA==
+Date: Wed, 5 Mar 2025 07:22:39 -0600
+From: Rob Herring <robh@kernel.org>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>,
+	Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shi Fu <shifu0704@thundersoft.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 17/20] ASoC: dt-bindings: tas2770: add flags for SDOUT
+ pulldown and zero-fill
+Message-ID: <20250305132239.GA1415729-robh@kernel.org>
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+ <20250227-apple-codec-changes-v3-17-cbb130030acf@gmail.com>
+ <20250304135050.GA2485358-robh@kernel.org>
+ <CAHgNfTyVKFuT0fZ3Qj=MdcXs67KscwkSepAH95xkAAKWM1g8Xg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHgNfTyVKFuT0fZ3Qj=MdcXs67KscwkSepAH95xkAAKWM1g8Xg@mail.gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 232427772fc123942d110c18269cfbdf40edae18  hwmon: Fix the missing of 'average' word in hwmon_power_attr_templates
+On Wed, Mar 05, 2025 at 01:19:15AM +0000, James Calligeros wrote:
+> On Tue, Mar 4, 2025 at 1:50 PM Rob Herring <robh@kernel.org> wrote:
+> > Can't you align this with the other property you added? Or extend the
+> > existing TDM properties we have.
+> 
+> I don't think either option makes sense given the functionality. This chip
+> behaves differently to TAS2764, and instead of using a bitmask to determine
+> which slots to ignore, we only get a single bit to tell the chip whether we want
+> it to fill or pull down *all* inactive slots. The property being a u32 mask
+> therefore does not make sense here.
 
-elapsed time: 1449m
+If there's a single bit control, then that just means there's only 1 
+valid value for a mask in that case.
 
-configs tested: 143
-configs skipped: 1
+Or maybe a mask is overkill. What's the usecase for fill or pulldown 
+*some* inactive slots?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Building the logic off the existing generic TDM slot properties would alter
+> behaviour of existing implementations where zero-fill and pulldown may not be
+> required or even wanted. This may continue to be the case going forward so I'd
+> rather make it an explicit opt-in rather than some unconditional thing we try to
+> turn on heuristically.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250305    gcc-13.2.0
-arc                   randconfig-002-20250305    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250305    gcc-14.2.0
-arm                   randconfig-002-20250305    clang-19
-arm                   randconfig-003-20250305    gcc-14.2.0
-arm                   randconfig-004-20250305    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250305    clang-15
-arm64                 randconfig-002-20250305    gcc-14.2.0
-arm64                 randconfig-003-20250305    clang-21
-arm64                 randconfig-004-20250305    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250305    gcc-14.2.0
-csky                  randconfig-002-20250305    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                           allnoconfig    clang-21
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250305    clang-21
-hexagon               randconfig-002-20250305    clang-18
-i386                             allmodconfig    clang-19
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    clang-19
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    clang-19
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250304    clang-19
-i386        buildonly-randconfig-001-20250305    clang-19
-i386        buildonly-randconfig-002-20250304    clang-19
-i386        buildonly-randconfig-002-20250305    clang-19
-i386        buildonly-randconfig-003-20250304    gcc-12
-i386        buildonly-randconfig-003-20250305    clang-19
-i386        buildonly-randconfig-004-20250304    gcc-11
-i386        buildonly-randconfig-004-20250305    clang-19
-i386        buildonly-randconfig-005-20250304    gcc-11
-i386        buildonly-randconfig-005-20250305    clang-19
-i386        buildonly-randconfig-006-20250304    gcc-12
-i386        buildonly-randconfig-006-20250305    clang-19
-i386                                defconfig    clang-19
-i386                  randconfig-011-20250305    gcc-11
-i386                  randconfig-012-20250305    gcc-11
-i386                  randconfig-013-20250305    gcc-11
-i386                  randconfig-014-20250305    gcc-11
-i386                  randconfig-015-20250305    gcc-11
-i386                  randconfig-016-20250305    gcc-11
-i386                  randconfig-017-20250305    gcc-11
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250305    gcc-14.2.0
-loongarch             randconfig-002-20250305    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250305    gcc-14.2.0
-nios2                 randconfig-002-20250305    gcc-14.2.0
-openrisc                          allnoconfig    clang-15
-openrisc                          allnoconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-15
-parisc                            allnoconfig    gcc-14.2.0
-parisc                randconfig-001-20250305    gcc-14.2.0
-parisc                randconfig-002-20250305    gcc-14.2.0
-powerpc                           allnoconfig    clang-15
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250305    clang-17
-powerpc               randconfig-002-20250305    gcc-14.2.0
-powerpc               randconfig-003-20250305    gcc-14.2.0
-powerpc64             randconfig-001-20250305    clang-19
-powerpc64             randconfig-002-20250305    clang-17
-powerpc64             randconfig-003-20250305    clang-19
-riscv                             allnoconfig    clang-15
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250305    clang-19
-riscv                 randconfig-002-20250305    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250305    gcc-14.2.0
-s390                  randconfig-002-20250305    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250305    gcc-14.2.0
-sh                    randconfig-002-20250305    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250305    gcc-14.2.0
-sparc                 randconfig-002-20250305    gcc-14.2.0
-sparc64               randconfig-001-20250305    gcc-14.2.0
-sparc64               randconfig-002-20250305    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-15
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250305    clang-19
-um                    randconfig-002-20250305    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250304    clang-19
-x86_64      buildonly-randconfig-001-20250305    clang-19
-x86_64      buildonly-randconfig-002-20250304    gcc-12
-x86_64      buildonly-randconfig-002-20250305    clang-19
-x86_64      buildonly-randconfig-003-20250304    gcc-12
-x86_64      buildonly-randconfig-003-20250305    clang-19
-x86_64      buildonly-randconfig-004-20250304    gcc-12
-x86_64      buildonly-randconfig-004-20250305    clang-19
-x86_64      buildonly-randconfig-005-20250304    gcc-12
-x86_64      buildonly-randconfig-005-20250305    clang-19
-x86_64      buildonly-randconfig-006-20250304    gcc-12
-x86_64      buildonly-randconfig-006-20250305    clang-19
-x86_64                              defconfig    clang-19
-x86_64                              defconfig    gcc-11
-x86_64                                  kexec    clang-19
-x86_64                randconfig-001-20250305    gcc-12
-x86_64                randconfig-002-20250305    gcc-12
-x86_64                randconfig-003-20250305    gcc-12
-x86_64                randconfig-004-20250305    gcc-12
-x86_64                randconfig-005-20250305    gcc-12
-x86_64                randconfig-006-20250305    gcc-12
-x86_64                randconfig-007-20250305    gcc-12
-x86_64                randconfig-008-20250305    gcc-12
-x86_64                randconfig-071-20250305    clang-19
-x86_64                randconfig-072-20250305    clang-19
-x86_64                randconfig-073-20250305    clang-19
-x86_64                randconfig-074-20250305    clang-19
-x86_64                randconfig-075-20250305    clang-19
-x86_64                randconfig-076-20250305    clang-19
-x86_64                randconfig-077-20250305    clang-19
-x86_64                randconfig-078-20250305    clang-19
-x86_64                               rhel-9.4    clang-19
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250305    gcc-14.2.0
-xtensa                randconfig-002-20250305    gcc-14.2.0
+Existing implementations would not have the new/extra properties and 
+would continue to operate as before. Or those drivers could simply 
+ignore the properties.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> I gave some thought to flipping these bits if a TDM slot mask is passed to the
+> driver, however it can still be the case that we don't want both zero-fill *and*
+> pulldown active at the same time, or as above some implementations may want
+> neither, so we still need to be able to specify them individually.
+
+This just feels like something common because any TDM interface may need 
+to control this. It's not really a property of the chip, but requirement 
+of the TDM interface.
+
+Rob
