@@ -1,177 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2BB190482
-	for <linux-hwmon@vger.kernel.org>; Fri,  7 Mar 2025 06:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9037DDAB;
+	Fri,  7 Mar 2025 06:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741327999; cv=none; b=ZDSVZ8MJI3kAWuJ/WBG9BkOsUex0u+4mR7DeGuB0DY1zDdqQKXTISFLxbEPlnO7DHOe6mGk6VGMdhydRELHEcE5TI6BNyMdO0TiL8TzVjhED4pBkamib0IC3txmrKcwDltmbkg3uX9xiF0o8YMavT+Y7U9Wrt44FA17vrclO6wo=
+	t=1741328325; cv=none; b=C80VBtvhhy2sS/9VMfRKmZ9PWL0SBMdWGBAHmCSRXcYJXoKj6XchKxu6amznKunBWPA7IxFiPsom7zUrWlbf0M+cM72QnkbwyJK2afSjZZxLAa9GVjEERFYT9BLcKYRiInXUE6uayb6S8ohxaieVrm7ZziYr7FyCsyEBdbsi8vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741327999; c=relaxed/simple;
-	bh=l1gdUswSUdP8J3txQDrPumbeUZ0qb7ZiYD1VEadl/9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=OQ9BpEwVXfAlqk3iRBpevxpLz07r88HzSO6mm5zAPV3GDwox7b/n0trNF451crKMV8t8OFlQe+82o4FC9yYlqgI6YQExGC5nFKinDhELKX7fTwRR4BUmNbd9AXMn+bLi3yKnSmNxRL85Y9gmidpN3ArDpwxUbCkj+mH0tfGUM28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IJ1FvJ41; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741328325; c=relaxed/simple;
+	bh=1soUIkK5EKDYaH0c8vrvpJEpTwWQncZv9NclynqEpxM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k/1MgQ/h+eS+T2hhT48THA4INpwEoHDtUackheqVAFvsiwu65y5bFiDvfEVLMy7QOxFqItEnKkOOOp7x9Fv1tPo+Wew2q9gk5B38zrC4scOyjNJ2AL1VUbwVlHiEBs3JV2gh3zDcNA0GwPAI5xz3o6TDFnfqSeBJRW3ZKUoa6f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DTLXAzr1; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IJ1FvJ41"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741327997; x=1772863997;
-  h=date:from:to:cc:subject:message-id;
-  bh=l1gdUswSUdP8J3txQDrPumbeUZ0qb7ZiYD1VEadl/9Y=;
-  b=IJ1FvJ41ODAgyd5eX2IAnKG+o2jBIZMolHKPtaXONGLBWDIvnx1H+vPh
-   YTLZfj+IuRJFc0vvRbLfLNtVAdWu4/mES6zJzeGaSs2QbiBJyyp3/TVxR
-   am5f6aXI2kBmbJI248YJMq1AtSFxOdEBLaC61Tk4x1gKRIMGcys5A06Oo
-   ledHtUUnibm6nWA0uHrEhBwHfyvEeFNXInM5ggJOrmHYPJjS6W1Fj8rEU
-   jAdzBku2apuKlpNmw/JQA0+tpJOd90KCJsINbMISv2oLtuDlQNthFKrgy
-   pNdTWA1ym0+b/IvIUhlSrzc/p3UVyt+J1frOWVDLo/GxOcvb6kQ/n51za
-   A==;
-X-CSE-ConnectionGUID: IjDaZYS8SjG9sCQjNe95WA==
-X-CSE-MsgGUID: vtGXMghVTFa7JqWpl4oVkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53756638"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="53756638"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 22:13:16 -0800
-X-CSE-ConnectionGUID: mqUx8M5QTGm/ZIvfGET4fQ==
-X-CSE-MsgGUID: FzuD1c86QXWOtd7vjUPuSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="156446257"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 06 Mar 2025 22:13:15 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqQxM-00004V-33;
-	Fri, 07 Mar 2025 06:13:12 +0000
-Date: Fri, 07 Mar 2025 14:12:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- ee65d9e63046de1de2a5383ba6f998634c86c42c
-Message-ID: <202503071403.uTfY2MAQ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DTLXAzr1"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4750c3b0097so13048881cf.0;
+        Thu, 06 Mar 2025 22:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741328322; x=1741933122; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F10fia5s8BJGMmpI4HkuMx1Ala8TT6PDF9W24WMGIHg=;
+        b=DTLXAzr1METQGL1nVOzo0upACWY064ZI9wB9HCG5didw8yBtCBfykQc+DLedE31n+f
+         w4IMOE495czsJlX0IddESs9sDGbQns9n5uR7r2wNMV8Kl5eNb3TSi9nwI2Ved06TuzJY
+         i+ruvU8iGfi5nH/1LTAhjjQYCTVZ39n/F2GBqBZZaFST618gRdMFiUXEsykwiWR9ikXz
+         F1lwHF36Tv2KwTdrOj1yn6bCUNhDLDnjCF+ydd4aZBZujKJJORZHVaDOFDywTWyNvw1b
+         m8H/WiauP9bJ1CdYv5edL9m7DSxVYuKqHhoRdKRpmbHCxWOwyj9gKQFy5aLzcguY81Oz
+         fXJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741328322; x=1741933122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F10fia5s8BJGMmpI4HkuMx1Ala8TT6PDF9W24WMGIHg=;
+        b=XhF1VP5OU+ulAisigFdv70C4rlBZhQkFOgF/OQelRePe08iIhmzvCpM4hQ9b6EH6FY
+         ck8eKP42hTyrNSRLinlONqBagaPPYrMUSZn3E7+Dsdfxt4sK/T+OVyEHX61yPgGRiu/x
+         e4tJrmZk/Cn75asWzISwcYry0noPuUEVzMvfJhsa+NP0lAivGyHirh7VoYMVvvVPcjZg
+         JHmpAxTdOMX18qYgqN3Cz47u1GKf2R5D8nGXxqsvIiB7b8bQpnF5N9lpF2KZ5E0YKZQV
+         VFtvIi61LMQExdQgUq7F2LN1ZT0kQ7+QQTo+JV1PXK7tChKMusL+yYyClJvcTAvIoCzr
+         dK1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUEKE/H5R++2kpFrFB4UtGNN3O7zD6DNl1+dntV+ydFw7aCBGFTf1N3SS9c5RJXhRYg3raADrwquT9xo/fn@vger.kernel.org, AJvYcCURCQr3oSbQZALmvtbdQUInZlLhsfF5KqBpU0JoL8r9D4eR7nAL1xg93Lq6zm5Shu7h1cymdU9xbq4Q@vger.kernel.org, AJvYcCVGwXQ+KNgkt8uwsDsjkh2ns0LZ0vgNHzTl7gWMvEQKM9viq33oHusvTpqTGeW0pg5Pqpe0y/3vGznU7Bw=@vger.kernel.org, AJvYcCXIGwCEJ+sXhLtyWYGqYaTXUOcK8BfJQP2UN+L67wIZIIdzJlMEh3OnWkcCodcx9CaZomMemCT3qtxChFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmGaljcnPraTFQ8IOFrFsU5ubY50f1eGVs3hvBgW3wTry3iPhN
+	b5YsCOhUKc7Sx3i6yXjeAklkAIXOWEAxEncqVAXbNtMeqLxYDUlthAWNQNIJFxX4i7AaW0LH4m9
+	yqWSNLkWbpxnNRsSSWyqKatgBFL4=
+X-Gm-Gg: ASbGncuoyiWi/MjzkVtPi/nKkwzo9cUFy18aiksRMqmSMhHcfpA70Gt6tDpgG1a+aQ8
+	LWH8H6EJJ90iM3O/pga1SjvAi/kaO4JbG7UHG5gYTpbMEzCETzldfmjo/EcI1RwLNE2aoQL31qF
+	zXCFlwlQlf/bm2mf7LgGtiyhcIsI1J/SdO0E3uXDk0SgFTXgEsHEfVMd+f
+X-Google-Smtp-Source: AGHT+IHhETGPw/ZFKq+YENLV2u5EcdpAk3T+SS5XFSamMDKfcKgYmQS3Mbj3mWKDGRDz4TBEKSSztO8xYHOfJx/qczs=
+X-Received: by 2002:ac8:5e4d:0:b0:474:f29d:2e96 with SMTP id
+ d75a77b69052e-47610978d28mr30024911cf.21.1741328322528; Thu, 06 Mar 2025
+ 22:18:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+ <20250227-apple-codec-changes-v3-17-cbb130030acf@gmail.com>
+ <20250304135050.GA2485358-robh@kernel.org> <CAHgNfTyVKFuT0fZ3Qj=MdcXs67KscwkSepAH95xkAAKWM1g8Xg@mail.gmail.com>
+ <20250305132239.GA1415729-robh@kernel.org>
+In-Reply-To: <20250305132239.GA1415729-robh@kernel.org>
+From: James Calligeros <jcalligeros99@gmail.com>
+Date: Fri, 7 Mar 2025 16:18:31 +1000
+X-Gm-Features: AQ5f1JpO-lY2IBZyJ9phmkLFb8GGKVOf8HdEFFSJcTDAx0YxxJ5ZNijHlkAl-zg
+Message-ID: <CAHgNfTxS1Q4PPsw520-J4Yn6xg+QZOYFkYhg5yv-uZFu5waN_g@mail.gmail.com>
+Subject: Re: [PATCH v3 17/20] ASoC: dt-bindings: tas2770: add flags for SDOUT
+ pulldown and zero-fill
+To: Rob Herring <robh@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Shenghao Ding <shenghao-ding@ti.com>, 
+	Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shi Fu <shifu0704@thundersoft.com>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: ee65d9e63046de1de2a5383ba6f998634c86c42c  hwmon: (pt5161l) Use per-client debugfs entry
+On Wed, Mar 5, 2025 at 11:22=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+> This just feels like something common because any TDM interface may need
+> to control this. It's not really a property of the chip, but requirement
+> of the TDM interface.
 
-elapsed time: 1447m
+What I'm imagining then is something like:
 
-configs tested: 100
-configs skipped: 2
+dai-link@0 {
+    cpu {
+        sound-dai =3D <&some_cpu>;
+    };
+    codec {
+        sound-dai =3D <&some_codec>;
+        dai-tdm-tx-zerofill;
+        dai-tdm-tx-pulldown; /* either or, having both makes no sense */
+    };
+};
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Codec drivers would then provide a function to set TDM TX behaviour if they
+support it, and export that as a dai op for use by machine drivers
+when they parse
+the dai link similar to dai-tdm-tx-slot and friends. Is that close to
+what you have
+in mind?
 
-tested configs:
-alpha                            alldefconfig    gcc-14.2.0
-alpha                             allnoconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                          axs101_defconfig    gcc-13.2.0
-arc                   randconfig-001-20250306    gcc-13.2.0
-arc                   randconfig-002-20250306    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250306    gcc-14.2.0
-arm                   randconfig-002-20250306    gcc-14.2.0
-arm                   randconfig-003-20250306    gcc-14.2.0
-arm                   randconfig-004-20250306    clang-18
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250306    gcc-14.2.0
-arm64                 randconfig-002-20250306    gcc-14.2.0
-arm64                 randconfig-003-20250306    gcc-14.2.0
-arm64                 randconfig-004-20250306    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250306    gcc-14.2.0
-csky                  randconfig-002-20250306    gcc-14.2.0
-hexagon                           allnoconfig    clang-21
-hexagon               randconfig-001-20250306    clang-21
-hexagon               randconfig-002-20250306    clang-19
-i386        buildonly-randconfig-001-20250306    clang-19
-i386        buildonly-randconfig-002-20250306    clang-19
-i386        buildonly-randconfig-003-20250306    clang-19
-i386        buildonly-randconfig-004-20250306    gcc-12
-i386        buildonly-randconfig-005-20250306    gcc-12
-i386        buildonly-randconfig-006-20250306    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250306    gcc-14.2.0
-loongarch             randconfig-002-20250306    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                        m5272c3_defconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250306    gcc-14.2.0
-nios2                 randconfig-002-20250306    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                generic-64bit_defconfig    gcc-14.2.0
-parisc                randconfig-001-20250306    gcc-14.2.0
-parisc                randconfig-002-20250306    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250306    clang-21
-powerpc               randconfig-002-20250306    clang-18
-powerpc               randconfig-003-20250306    gcc-14.2.0
-powerpc                     tqm8560_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250306    clang-18
-powerpc64             randconfig-002-20250306    clang-21
-powerpc64             randconfig-003-20250306    clang-18
-riscv                             allnoconfig    gcc-14.2.0
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20250306    clang-18
-riscv                 randconfig-002-20250306    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250306    gcc-14.2.0
-s390                  randconfig-002-20250306    clang-19
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                    randconfig-001-20250306    gcc-14.2.0
-sh                    randconfig-002-20250306    gcc-14.2.0
-sh                        sh7763rdp_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250306    gcc-14.2.0
-sparc                 randconfig-002-20250306    gcc-14.2.0
-sparc                       sparc64_defconfig    gcc-14.2.0
-sparc64               randconfig-001-20250306    gcc-14.2.0
-sparc64               randconfig-002-20250306    gcc-14.2.0
-um                                allnoconfig    clang-18
-um                    randconfig-001-20250306    gcc-12
-um                    randconfig-002-20250306    clang-16
-x86_64                            allnoconfig    clang-19
-x86_64      buildonly-randconfig-001-20250306    gcc-11
-x86_64      buildonly-randconfig-002-20250306    clang-19
-x86_64      buildonly-randconfig-003-20250306    clang-19
-x86_64      buildonly-randconfig-004-20250306    clang-19
-x86_64      buildonly-randconfig-005-20250306    clang-19
-x86_64      buildonly-randconfig-006-20250306    gcc-12
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250306    gcc-14.2.0
-xtensa                randconfig-002-20250306    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+James
