@@ -1,762 +1,727 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B520A4C96;
-	Fri,  7 Mar 2025 00:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EDD184E;
+	Fri,  7 Mar 2025 01:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741307761; cv=none; b=pU6g0hQd1vm4u+w/eoniWaYCpYgh0f+UwnxQ1N9a5LKZeflcm/I3+9mqwEQu4s518ZC2GSfmV6hQ/DfQQhGDw5M5GprAdbovKIMFU8nJ1zAroQLCnwBSWzVRFK9kJ2VyeLPxV3WIRu5n/MNcqU8GcWUGB+48Cr+Z3MUfy+f/PwU=
+	t=1741310146; cv=none; b=AOcVy9nVBla6P++CuLVHjlhjrpkv0MlAEcva+N7aZmWEKfnkE+mDvJY4BV42GTFMvecXhqZBYstH4h4T7dm4FIg3XWESFYwY/lOEPy7BqRBMi0ur1XL/FYV7kv+CKD4+BAE7eOaJiBQTHq0ManN7hIizW/edKyAE83c3zewAROY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741307761; c=relaxed/simple;
-	bh=AXos1AlNZniVOqZrL/1OcU4mQG9qSVbEhtJAtY5tg5o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=qqoJC+K/Jxo4xqEXCuzbU8zQZyw8/n5+cr6rWZfnXH0HV+5PwujJBv0P6LUNH2m16Fq/jPY+bdXxvEM5+ICBafm2EGaffjbkTC7nBtBi6a6AveYMiRb9HUKjd8QNhS0VKR2ATaWT40Htc1kUikyQ/0pi3+pydXLjTEAUm1vcUNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgGQ1pBM; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741310146; c=relaxed/simple;
+	bh=bNMIUhhh/RXnwf99mZAYMem+tdjeV/8p4QU6V3jVJR0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IfuH2J8YkHISuflzN1hoImXBmv3SJZ6J3L1nlNgvE6bKgB+pr3qBkuF4BeENHk2hWKlekNgtdkkpWDec0jvYiI1Vfb8j0fHK1HrNhgJccpSGYaG6XPYTU09eb/IXS7TMLxOVx3NZ9Mke6SvIOT20D09Ekb9A/hNivxv9rWGJeQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aekRaXtW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgGQ1pBM"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6f74b78df93so13872337b3.0;
-        Thu, 06 Mar 2025 16:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741307758; x=1741912558; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BUxHPv2GTm+3dxs4P3WOFWhKn+KKweyyrgScbgE6QLM=;
-        b=fgGQ1pBM5KwNc627l3thZketD4kXWgxoC5aL79sghk+6HEQHn8oICgoePtVsM8pFRH
-         NyyiqXg+K0Ihju7tJeXjW5OLD1A/Rh53Eq0XbvidSOyuhjomhWdayXcaC1Yid92XX+vY
-         HbT9gzlxW63QOecxfJmyWS9m+OKwLClAzmg1i2Q/RV3o2DCY1gMA4mzK9D/aKxh8hehC
-         Bi2Wk/a2FBH8U/mjeohH2aPDpQWgtz6WDM8p6UGNQ85WrtmwC1/abU+FxG552xEDB+gI
-         gpk1djecNLRO/NqRffJRBecny0eo9FiTfEj7zv9S7gTZuDGJfrnWN91Bt3gl9PGUFllR
-         18bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741307758; x=1741912558;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BUxHPv2GTm+3dxs4P3WOFWhKn+KKweyyrgScbgE6QLM=;
-        b=VVTfPH2ZUYv0kFhkfst2HqwP5VN5dwCcnrwTtcUCdinWfDmRiwKfy6QjtbOTiuu4bu
-         J1YGzpdL7xhzpGZoRDJfwTlAnaOuQMkzG+MAN3MwKx/IUKtrWdI+lsFJIrZrmqi1kkae
-         9BccscyDMT149ucjo7K5IZqh03ykhMQsDeaoC1m4szAenMp6y/AUxV+uQJm56+DhmH6j
-         XIEH60nB9eaTdb0JQdKoxE148Poi79Nef3CZBEjT3P3AdQiliWFz+E15nqjqY/1ltmLj
-         1XtJyI6T3WHupVenbAV2NHuQi5NKbmCy170FmVYqbW26i3iqO2OfSLGuYOWE2pXt0ilh
-         DfQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUvq5MuXjT2nvZaqMur+23WSrkl3TpDHI9mPsWz5NRsdUP0Sqs1aiViFC2TihKZerG019CdxBZlB124w3Nh@vger.kernel.org, AJvYcCWR1AcGcP5d+f76TjnS1Bez/Chz5XLBPD3g/PdXTn6fkR/07zS5V8puLJvM8HXQZUWwBSl9iRhL+UoVOlgKicVRB7kXyg==@vger.kernel.org, AJvYcCXYtz4myinLtceiYvdaVY64b2e8rqF8bh9f0tnLy8OQx8tg+l8S1YrfXK6H1bymmNArW7LPBymICXubTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1otXrkiEPR94xvrIWV8wrcZthhgt6EUWMx3KAlg2s1cTYjXJg
-	wtHE8WqVXgIMQkWNyYwt4B0J4tM45Uugr8rtDxZ2uqEJXw3B5ZQb
-X-Gm-Gg: ASbGncujG77Z7egJD7e7dhZarmbI6iMQihR5l6XIqQ61bLOOe1HSOebTePZ76T7IvNY
-	bwBhMOYi65QLeo4vBiquqOW+mRPPq79jvxn/+kOl1gGHXcdOQN5Z9LSN93uwixkw/TVjDYDLVT4
-	aRWFfgTjci4DJjPcPwbYE3D+TA5EUSoRtJKYAxfHGbvPhHnajcdLF2TL23xItpN9abi4AyYi4QR
-	GD8hziduLzqvt0eXkpS1eDskQSMckv8sIhHdTGv+sP6EuddCtTtn7s7nlg2kMXpwjxYLPlQrdWl
-	Hxq0th2LA9uywUtsdWgGEuKAo906JConvlq4OQ==
-X-Google-Smtp-Source: AGHT+IEbIro/S0ElKJZyxGcXh68AXZ1Ng9rhcTcXe20Ln6ZAPHZMLI/TYTst7Qd9fkLVKaR4xS1erw==
-X-Received: by 2002:a05:690c:690d:b0:6fb:33e1:2e66 with SMTP id 00721157ae682-6febf2c8ab4mr24763187b3.14.1741307758538;
-        Thu, 06 Mar 2025 16:35:58 -0800 (PST)
-Received: from localhost ([2800:bf0:61:1288:2be8:bc29:ad13:842f])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6feb2c31ec6sm5001317b3.83.2025.03.06.16.35.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 16:35:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aekRaXtW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF99EC4CEE0;
+	Fri,  7 Mar 2025 01:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741310144;
+	bh=bNMIUhhh/RXnwf99mZAYMem+tdjeV/8p4QU6V3jVJR0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aekRaXtWfB1bTMiIpIND4XhzzWiL3Oo9VY8UcIKQrVMpmft1kZhAfRaB3VllW+5ro
+	 CcUEzR6bKGGSskD0FPiiduNDYcFohfarR2OwaDwAwEWLa6M9m+b1YrPocC3oJ2+lvW
+	 F0YggBMMgoSik766qD1Ogo/zvR1OnUSkvWnSJPtH2VDlKSVoUmvsWmAaXD8BVNsATq
+	 hII2fzQW59GTHh5B0fW4bOMrz8lUyV0lNfHXuOnowexaQyepMQrKWQeFUzR2Hp/X0R
+	 3Pg0OyvBnJF0LShNiJKCRkm75HpKmfWBFzVqxUIPtJ4V3hx/32OBTqzhE3a42o6ZhA
+	 V0fWJq1X+o8JA==
+Date: Thu, 6 Mar 2025 17:15:42 -0800
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250307011542.GE8350@google.com>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-2-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Mar 2025 19:35:56 -0500
-Message-Id: <D89M2ZQJEH45.1HKFFX5ESXRSJ@gmail.com>
-To: "Armin Wolf" <W_Armin@gmx.de>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>
-Cc: "Hans de Goede" <hdegoede@redhat.com>,
- <platform-driver-x86@vger.kernel.org>, <Dell.Client.Kernel@dell.com>,
- <linux-kernel@vger.kernel.org>, "Guenter Roeck" <linux@roeck-us.net>, "Jean
- Delvare" <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v3 07/10] platform/x86: alienware-wmi-wmax: Add HWMON
- support
-From: "Kurt Borja" <kuurtb@gmail.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250305-hwm-v3-0-395e7a1407e2@gmail.com>
- <20250305-hwm-v3-7-395e7a1407e2@gmail.com>
- <a375d474-5349-4662-8ce8-4f8f55349901@gmx.de>
-In-Reply-To: <a375d474-5349-4662-8ce8-4f8f55349901@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250225081644.3524915-2-a0282524688@gmail.com>
 
-On Thu Mar 6, 2025 at 5:19 PM -05, Armin Wolf wrote:
-> Am 06.03.25 um 01:56 schrieb Kurt Borja:
->
->> All models with the "AWCC" WMAX device support monitoring fan speed and
->> temperature sensors. Expose this feature through the HWMON interface.
->>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: Jean Delvare <jdelvare@suse.com>
->> Cc: linux-hwmon@vger.kernel.org
->> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
->> ---
->>   drivers/platform/x86/dell/Kconfig              |   1 +
->>   drivers/platform/x86/dell/alienware-wmi-wmax.c | 431 +++++++++++++++++=
-++++++++
->>   2 files changed, 432 insertions(+)
->>
->> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/de=
-ll/Kconfig
->> index f8a0dffcaab7c3b423472c5b9093011334a698c8..85a57c01aaada5d899cd8252=
-e77ed6043da5cbdf 100644
->> --- a/drivers/platform/x86/dell/Kconfig
->> +++ b/drivers/platform/x86/dell/Kconfig
->> @@ -43,6 +43,7 @@ config ALIENWARE_WMI_WMAX
->>   	bool "Alienware WMAX WMI device driver"
->>   	default y
->>   	depends on ALIENWARE_WMI
->> +	depends on HWMON
->>   	select ACPI_PLATFORM_PROFILE
->>   	help
->>   	 Alienware WMI driver with AlienFX LED, HDMI, amplifier, deep sleep a=
-nd
->> diff --git a/drivers/platform/x86/dell/alienware-wmi-wmax.c b/drivers/pl=
-atform/x86/dell/alienware-wmi-wmax.c
->> index 71fc17e8d103146b8edf53a552ae5ba64414e873..20cf3371ee3c0e1ea038b3ca=
-517e831f3b30dc29 100644
->> --- a/drivers/platform/x86/dell/alienware-wmi-wmax.c
->> +++ b/drivers/platform/x86/dell/alienware-wmi-wmax.c
->> @@ -9,10 +9,13 @@
->>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>
->>   #include <linux/bitfield.h>
->> +#include <linux/bitmap.h>
->>   #include <linux/bits.h>
->>   #include <linux/dmi.h>
->> +#include <linux/hwmon.h>
->>   #include <linux/moduleparam.h>
->>   #include <linux/platform_profile.h>
->> +#include <linux/units.h>
->>   #include <linux/wmi.h>
->>   #include "alienware-wmi.h"
->>
->> @@ -25,6 +28,7 @@
->>   #define WMAX_METHOD_BRIGHTNESS			0x3
->>   #define WMAX_METHOD_ZONE_CONTROL		0x4
->>
->> +#define AWCC_METHOD_GET_FAN_SENSORS		0x13
->>   #define AWCC_METHOD_THERMAL_INFORMATION		0x14
->>   #define AWCC_METHOD_THERMAL_CONTROL		0x15
->>   #define AWCC_METHOD_GAME_SHIFT_STATUS		0x25
->> @@ -39,6 +43,10 @@
->>   /* Arbitrary limit based on supported models */
->>   #define AWCC_MAX_RES_COUNT			16
->>
->> +static bool force_hwmon;
->> +module_param_unsafe(force_hwmon, bool, 0);
->> +MODULE_PARM_DESC(force_hwmon, "Force probing for HWMON support without =
-checking if the WMI backend is available");
->> +
->>   static bool force_platform_profile;
->>   module_param_unsafe(force_platform_profile, bool, 0);
->>   MODULE_PARM_DESC(force_platform_profile, "Forces auto-detecting therma=
-l profiles without checking if WMI thermal backend is available");
->> @@ -48,16 +56,19 @@ module_param_unsafe(force_gmode, bool, 0);
->>   MODULE_PARM_DESC(force_gmode, "Forces G-Mode when performance profile =
-is selected");
->>
->>   struct awcc_quirks {
->> +	bool hwmon;
->>   	bool pprof;
->>   	bool gmode;
->>   };
->>
->>   static struct awcc_quirks g_series_quirks =3D {
->> +	.hwmon =3D true,
->>   	.pprof =3D true,
->>   	.gmode =3D true,
->>   };
->>
->>   static struct awcc_quirks generic_quirks =3D {
->> +	.hwmon =3D true,
->>   	.pprof =3D true,
->>   	.gmode =3D false,
->>   };
->> @@ -155,9 +166,18 @@ static const struct dmi_system_id awcc_dmi_table[] =
-__initconst =3D {
->>   	},
->>   };
->>
->> +enum AWCC_GET_FAN_SENSORS_OPERATIONS {
->> +	AWCC_OP_GET_TOTAL_FAN_TEMPS		=3D 0x01,
->> +	AWCC_OP_GET_FAN_TEMP_ID			=3D 0x02,
->> +};
->> +
->>   enum AWCC_THERMAL_INFORMATION_OPERATIONS {
->>   	AWCC_OP_GET_SYSTEM_DESCRIPTION		=3D 0x02,
->>   	AWCC_OP_GET_RESOURCE_ID			=3D 0x03,
->> +	AWCC_OP_GET_TEMPERATURE			=3D 0x04,
->> +	AWCC_OP_GET_FAN_RPM			=3D 0x05,
->> +	AWCC_OP_GET_FAN_MIN_RPM			=3D 0x08,
->> +	AWCC_OP_GET_FAN_MAX_RPM			=3D 0x09,
->>   	AWCC_OP_GET_CURRENT_PROFILE		=3D 0x0B,
->>   };
->>
->> @@ -180,6 +200,12 @@ enum AWCC_SPECIAL_THERMAL_CODES {
->>   	AWCC_SPECIAL_PROFILE_GMODE		=3D 0xAB,
->>   };
->>
->> +enum AWCC_TEMP_SENSOR_TYPES {
->> +	AWCC_TEMP_SENSOR_CPU			=3D 0x01,
->> +	AWCC_TEMP_SENSOR_GPU			=3D 0x06,
->> +	AWCC_TEMP_SENSOR_LAST
->> +};
->> +
->>   enum awcc_thermal_profile {
->>   	AWCC_PROFILE_USTT_BALANCED,
->>   	AWCC_PROFILE_USTT_BALANCED_PERFORMANCE,
->> @@ -216,6 +242,15 @@ struct wmax_u32_args {
->>   	u8 arg3;
->>   };
->>
->> +struct awcc_fan_data {
->> +	unsigned long *related_temps;
->> +	unsigned long *auto_channels_temp;
->> +	u32 total_temps;
->> +	u32 min_rpm;
->> +	u32 max_rpm;
->> +	u8 id;
->> +};
->> +
->>   struct awcc_priv {
->>   	struct wmi_device *wdev;
->>   	union {
->> @@ -231,6 +266,11 @@ struct awcc_priv {
->>
->>   	struct device *ppdev;
->>   	u8 supported_profiles[PLATFORM_PROFILE_LAST];
->> +
->> +	struct device *hwdev;
->> +	struct awcc_fan_data **fan_data;
->> +	unsigned int temp_sensors_size;
->> +	unsigned long *temp_sensors;
->>   };
->>
->>   static const enum platform_profile_option awcc_mode_to_platform_profil=
-e[AWCC_PROFILE_LAST] =3D {
->> @@ -495,6 +535,19 @@ static int __awcc_wmi_command(struct wmi_device *wd=
-ev, u32 method_id,
->>   	return 0;
->>   }
->>
->> +static inline int awcc_get_fan_sensors(struct wmi_device *wdev, u8 oper=
-ation,
->> +				       u8 fan_id, u8 index, u32 *out)
->> +{
->> +	struct wmax_u32_args args =3D {
->> +		.operation =3D operation,
->> +		.arg1 =3D fan_id,
->> +		.arg2 =3D index,
->> +		.arg3 =3D 0,
->> +	};
->> +
->> +	return __awcc_wmi_command(wdev, AWCC_METHOD_GET_FAN_SENSORS, &args, ou=
-t);
->> +}
->> +
->>   static inline int awcc_thermal_information(struct wmi_device *wdev, u8=
- operation,
->>   					   u8 arg, u32 *out)
->>   {
->> @@ -552,6 +605,32 @@ static inline int awcc_op_get_resource_id(struct wm=
-i_device *wdev, u8 index, u32
->>   	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &arg=
-s, out);
->>   }
->>
->> +static inline int awcc_op_get_fan_rpm(struct wmi_device *wdev, u8 fan_i=
-d, u32 *out)
->> +{
->> +	struct wmax_u32_args args =3D {
->> +		.operation =3D AWCC_OP_GET_FAN_RPM,
->> +		.arg1 =3D fan_id,
->> +		.arg2 =3D 0,
->> +		.arg3 =3D 0,
->> +	};
->> +
->> +
->> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &args=
-, out);
->> +}
->> +
->> +static inline int awcc_op_get_temperature(struct wmi_device *wdev, u8 t=
-emp_id, u32 *out)
->> +{
->> +	struct wmax_u32_args args =3D {
->> +		.operation =3D AWCC_OP_GET_TEMPERATURE,
->> +		.arg1 =3D temp_id,
->> +		.arg2 =3D 0,
->> +		.arg3 =3D 0,
->> +	};
->> +
->> +
->> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &args=
-, out);
->> +}
->> +
->>   static inline int awcc_op_get_current_profile(struct wmi_device *wdev,=
- u32 *out)
->>   {
->>   	struct wmax_u32_args args =3D {
->> @@ -599,6 +678,345 @@ static int awcc_profile_id_to_pprof(u32 id, enum p=
-latform_profile_option *profil
->>   	return 0;
->>   }
->>
->> +/*
->> + * HWMON
->> + *  - Provides temperature and fan speed monitoring as well as manual f=
-an
->> + *    control
->> + */
->> +static umode_t awcc_hwmon_is_visible(const void *drvdata, enum hwmon_se=
-nsor_types type,
->> +				     u32 attr, int channel)
->> +{
->> +	const struct awcc_priv *priv =3D drvdata;
->> +	unsigned int temp_count;
->> +
->> +	switch (type) {
->> +	case hwmon_temp:
->> +		temp_count =3D bitmap_weight(priv->temp_sensors, priv->temp_sensors_s=
-ize);
->> +
->> +		return channel < temp_count ? 0444 : 0;
->> +	case hwmon_fan:
->> +		return channel < priv->fan_count ? 0444 : 0;
->> +	case hwmon_pwm:
->> +		if (channel >=3D priv->fan_count)
->> +			return 0;
->> +
->> +		switch (attr) {
->> +		case hwmon_pwm_enable:
->
-> Please drop pwm_enable here and only introduce it inside the proper patch=
-.
+On Tue, 25 Feb 2025, Ming Yu wrote:
 
-Thanks, mb.
+> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> PWM, and RTC.
 
->
->> +			return 0644;
->> +		case hwmon_pwm_auto_channels_temp:
->> +			return 0444;
->> +		default:
->> +			return 0;
->> +		}
->> +	default:
->> +		return 0;
->> +	}
->> +}
->> +
->> +static int awcc_hwmon_read(struct device *dev, enum hwmon_sensor_types =
-type,
->> +			   u32 attr, int channel, long *val)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	struct awcc_fan_data *fan;
->> +	u32 state;
->> +	int ret;
->> +	u8 temp;
->> +
->> +	switch (type) {
->> +	case hwmon_temp:
->> +		temp =3D find_nth_bit(priv->temp_sensors, priv->temp_sensors_size, ch=
-annel);
->> +
->> +		switch (attr) {
->> +		case hwmon_temp_input:
->> +			ret =3D awcc_op_get_temperature(priv->wdev, temp, &state);
->> +			if (ret)
->> +				return ret;
->> +
->> +			*val =3D state * MILLIDEGREE_PER_DEGREE;
->> +			break;
->> +		default:
->> +			return -EOPNOTSUPP;
->> +		}
->> +
->> +		break;
->> +	case hwmon_fan:
->> +		fan =3D priv->fan_data[channel];
->> +
->> +		switch (attr) {
->> +		case hwmon_fan_input:
->> +			ret =3D awcc_op_get_fan_rpm(priv->wdev, fan->id, &state);
->> +			if (ret)
->> +				return ret;
->> +
->> +			*val =3D state;
->> +			break;
->> +		case hwmon_fan_min:
->> +			*val =3D fan->min_rpm;
->> +			break;
->> +		case hwmon_fan_max:
->> +			*val =3D fan->max_rpm;
->> +			break;
->> +		default:
->> +			return -EOPNOTSUPP;
->> +		}
->> +
->> +		break;
->> +	case hwmon_pwm:
->> +		fan =3D priv->fan_data[channel];
->> +
->> +		switch (attr) {
->> +		case hwmon_pwm_auto_channels_temp:
->> +			bitmap_copy(val, fan->auto_channels_temp, BITS_PER_LONG);
->> +			break;
->> +		default:
->> +			return -EOPNOTSUPP;
->> +		}
->> +
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int awcc_hwmon_read_string(struct device *dev, enum hwmon_sensor=
-_types type,
->> +				  u32 attr, int channel, const char **str)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	struct awcc_fan_data *fan;
->> +	u8 temp;
->> +
->> +	switch (type) {
->> +	case hwmon_temp:
->> +		temp =3D find_nth_bit(priv->temp_sensors, priv->temp_sensors_size, ch=
-annel);
->> +
->> +		switch (temp) {
->> +		case AWCC_TEMP_SENSOR_CPU:
->> +			*str =3D "CPU";
->> +			break;
->> +		case AWCC_TEMP_SENSOR_GPU:
->> +			*str =3D "GPU";
->> +			break;
->> +		default:
->> +			*str =3D "Unknown";
->> +			break;
->> +		}
->> +
->> +		break;
->> +	case hwmon_fan:
->> +		fan =3D priv->fan_data[channel];
->> +
->> +		switch (fan->total_temps) {
->> +		case 0:
->> +			*str =3D "Independent Fan";
->> +			break;
->> +		case 1:
->> +			temp =3D find_first_bit(fan->related_temps, priv->temp_sensors_size)=
-;
->> +
->> +			switch (temp) {
->> +			case AWCC_TEMP_SENSOR_CPU:
->> +				*str =3D "Processor Fan";
->> +				break;
->> +			case AWCC_TEMP_SENSOR_GPU:
->> +				*str =3D "Video Fan";
->> +				break;
->> +			default:
->> +				*str =3D "Unknown Fan";
->> +				break;
->> +			}
->> +
->> +			break;
->> +		default:
->> +			*str =3D "Shared Fan";
->> +			break;
->> +		}
->> +
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct hwmon_ops awcc_hwmon_ops =3D {
->> +	.is_visible =3D awcc_hwmon_is_visible,
->> +	.read =3D awcc_hwmon_read,
->> +	.read_string =3D awcc_hwmon_read_string,
->> +};
->> +
->> +static const struct hwmon_channel_info * const awcc_hwmon_info[] =3D {
->> +	HWMON_CHANNEL_INFO(temp,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT,
->> +			   HWMON_T_LABEL | HWMON_T_INPUT
->> +			   ),
->> +	HWMON_CHANNEL_INFO(fan,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
->> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX
->> +			   ),
->> +	HWMON_CHANNEL_INFO(pwm,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP
->> +			   ),
->
-> Since the number of fans and temperature sensors is only known at runtime=
- creating awcc_hwmon_info
-> would make sense.
+This needs to go into the Kconfig help passage.
 
-IIRC Guenter asked another dev to add more CHANNEL_INFO entries instead
-of doing that? I might be wrong tho.
+> This driver implements USB device functionality and shares the
+> chip's peripherals as a child device.
 
-I'm fine either way.
+This driver doesn't implement USB functionality.
 
->
->> +	NULL
->> +};
->> +
->> +static const struct hwmon_chip_info awcc_hwmon_chip_info =3D {
->> +	.ops =3D &awcc_hwmon_ops,
->> +	.info =3D awcc_hwmon_info,
->> +};
->> +
->> +static int awcc_hwmon_temps_init(struct wmi_device *wdev)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
->> +	unsigned long temp_sensors[BITS_TO_LONGS(U8_MAX)];
->> +	unsigned int i, max_sensor_id =3D 0;
->> +	int ret;
->> +	u32 id;
->> +
->> +	for (i =3D 0; i < priv->temp_count; i++) {
->> +		/*
->> +		 * Temperature sensors IDs are listed after the fan IDs at
->> +		 * offset `fan_count`
->> +		 */
->> +		ret =3D awcc_op_get_resource_id(wdev, i + priv->fan_count, &id);
->> +		if (ret)
->> +			return ret;
->> +
->> +		id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, id);
->> +		if (id > max_sensor_id)
->> +			max_sensor_id =3D id;
->> +
->> +		__set_bit(id, temp_sensors);
->> +	}
->> +
->> +	/*
->> +	 * We prefer to allocate the bitmap dynamically because usually temp I=
-Ds
->> +	 * are small (< 0x30) and only one UL is needed to store it, but there
->> +	 * may be unknown devices that break this rule
->> +	 */
->
-> Hi,
->
-> as far as i know the memory allocator inside the kernel at least allocate=
-s 32 bytes, so you are
+> Each child device can use the USB functions nct6694_read_msg()
+> and nct6694_write_msg() to issue a command. They can also request
+> interrupt that will be called when the USB device receives its
+> interrupt pipe.
+> 
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-bytes? bits maybe?
+Why aren't you signing off with your work address?
 
-> not saving any memory with this. I suggest you allocate the bitmaps stati=
-cally.
+> ---
+>  MAINTAINERS                 |   7 +
+>  drivers/mfd/Kconfig         |  18 ++
+>  drivers/mfd/Makefile        |   2 +
+>  drivers/mfd/nct6694.c       | 378 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/nct6694.h | 102 ++++++++++
+>  5 files changed, 507 insertions(+)
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 include/linux/mfd/nct6694.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 873aa2cce4d7..c700a0b96960 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16918,6 +16918,13 @@ F:	drivers/nubus/
+>  F:	include/linux/nubus.h
+>  F:	include/uapi/linux/nubus.h
+>  
+> +NUVOTON NCT6694 MFD DRIVER
+> +M:	Ming Yu <tmyu0@nuvoton.com>
+> +L:	linux-kernel@vger.kernel.org
 
-The thing is - We don't know before hand how big an ID can be.
+This is the default list.  You shouldn't need to add that here.
 
-Technically the upper limit is U8_MAX which would require 4 ULs to
-store, which is a lot. However I haven't seen temp IDs bigger than 0x6,
-so this way only one UL is allocated for most devices.
+> +S:	Supported
+> +F:	drivers/mfd/nct6694.c
+> +F:	include/linux/mfd/nct6694.h
+> +
+>  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 6b0682af6e32..c97a2bdcea0b 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1045,6 +1045,24 @@ config MFD_MENF21BMC
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menf21bmc.
+>  
+> +config MFD_NCT6694
+> +	tristate "Nuvoton NCT6694 support"
+> +	select MFD_CORE
+> +	depends on USB
+> +	help
+> +	  This enables support for the Nuvoton USB device NCT6694, which shares
+> +	  peripherals.
+> +
+> +	  This driver provides core APIs to access the NCT6694 hardware
+> +	  monitoring and control features.
+> +
+> +	  The NCT6694 is a versatile multi-function device that supports
 
-I would be very grateful if Dell could help us on this one :')
+Please drop the term multi-function device and replace it what a proper
+description of the devices.
 
->
->> +	priv->temp_sensors_size =3D max_sensor_id + 1;
->> +	priv->temp_sensors =3D devm_bitmap_zalloc(&wdev->dev, priv->temp_senso=
-rs_size,
->> +						GFP_KERNEL);
->> +	if (!priv->temp_sensors)
->> +		return -ENOMEM;
->> +
->> +	bitmap_copy(priv->temp_sensors, temp_sensors, priv->temp_sensors_size)=
-;
->> +
->> +	return 0;
->> +}
->> +
->> +static int awcc_hwmon_fans_init(struct wmi_device *wdev)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
->> +	u32 id, min_rpm, max_rpm, temp_count, temp_id;
->> +	unsigned long gather[BITS_TO_LONGS(U8_MAX)];
->> +	struct awcc_fan_data *fan_data;
->> +	unsigned int i, j;
->> +	int ret;
->> +
->> +	for (i =3D 0; i < priv->fan_count; i++) {
->> +		fan_data =3D devm_kzalloc(&wdev->dev, sizeof(*fan_data), GFP_KERNEL);
->> +		if (!fan_data)
->> +			return -ENOMEM;
->> +
->> +		fan_data->related_temps =3D devm_bitmap_zalloc(&wdev->dev,
->> +							     priv->temp_sensors_size,
->> +							     GFP_KERNEL);
->
-> Same as above
->
->> +		if (!priv->temp_sensors)
->> +			return -ENOMEM;
->> +
->> +		fan_data->auto_channels_temp =3D devm_bitmap_zalloc(&wdev->dev,
->> +								  priv->temp_count,
->> +								  GFP_KERNEL);
->
-> We already know that we only ever use the first sizeof(long) bytes from t=
-his bitmap,
-> please do a static allocation here.
+> +	  functionalities such as GPIO, I2C, CAN, WDT, HWMON, and RTC
+> +	  management.
 
-Right, ofc! I forgot about the limit I imposed.
+All of these line breaks should be removed.
 
->
->> +		if (!priv->temp_sensors)
->> +			return -ENOMEM;
->> +
->> +		/*
->> +		 * Fan IDs are listed first at offset 0
->> +		 */
->> +		ret =3D awcc_op_get_resource_id(wdev, i, &id);
->> +		if (ret)
->> +			return ret;
->> +		id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, id);
->> +
->> +		ret =3D awcc_thermal_information(wdev, AWCC_OP_GET_FAN_MIN_RPM, id,
->> +					       &min_rpm);
->> +		if (ret)
->> +			return ret;
->> +
->> +		ret =3D awcc_thermal_information(wdev, AWCC_OP_GET_FAN_MAX_RPM, id,
->> +					       &max_rpm);
->> +		if (ret)
->> +			return ret;
->> +
->> +		ret =3D awcc_get_fan_sensors(wdev, AWCC_OP_GET_TOTAL_FAN_TEMPS, id,
->> +					   0, &temp_count);
->> +		if (ret)
->> +			return ret;
->> +
->> +		for (j =3D 0; j < temp_count; j++) {
->> +			ret =3D awcc_get_fan_sensors(wdev, AWCC_OP_GET_FAN_TEMP_ID,
->> +						   id, j, &temp_id);
->> +			if (ret)
->> +				break;
->> +
->> +			temp_id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, temp_id);
->> +			if (temp_id < priv->temp_sensors_size)
->> +				__set_bit(temp_id, fan_data->related_temps);
->> +		}
->> +
->> +		fan_data->id =3D id;
->> +		fan_data->min_rpm =3D min_rpm;
->> +		fan_data->max_rpm =3D max_rpm;
->> +		fan_data->total_temps =3D bitmap_weight(fan_data->related_temps,
->> +						      priv->temp_sensors_size);
->> +		bitmap_gather(gather, fan_data->related_temps, priv->temp_sensors,
->> +			      priv->temp_sensors_size);
->
-> Since fan_data->related_temps is only used for determining the fan label =
-after this it would
-> make sense to determine the fan label here and turn fan_data->related_tem=
-ps into a local
-> variable on the stack.
+> +	  Additional drivers must be enabled to utilize the specific
+> +	  functionalities of the device.
+> +
+>  config MFD_OCELOT
+>  	tristate "Microsemi Ocelot External Control Support"
+>  	depends on SPI_MASTER
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 9220eaf7cf12..7725b732e265 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -121,6 +121,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+>  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+>  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+>  
+> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+> +
+>  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+>  
+>  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
+> new file mode 100644
+> index 000000000000..c82457679ca6
+> --- /dev/null
+> +++ b/drivers/mfd/nct6694.c
+> @@ -0,0 +1,378 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 core driver using USB interface to provide
+> + * access to the NCT6694 hardware monitoring and control features.
+> + *
+> + * The NCT6694 is a versatile multi-function device that supports
 
-Ack.
+Here too.
 
->
-> Thanks,
-> Armin Wolf
+> + * functionalities such as GPIO, I2C, CAN, WDT, HWMON and RTC
+> + * management.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
 
-Thank you very much! Very helpful feedback :)
+This goes at the top.
 
->
->> +		bitmap_copy(fan_data->auto_channels_temp, gather, priv->temp_count);
->> +		priv->fan_data[i] =3D fan_data;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int awcc_hwmon_init(struct wmi_device *wdev)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
->> +	int ret;
->> +
->> +	priv->fan_data =3D devm_kcalloc(&wdev->dev, priv->fan_count,
->> +				      sizeof(*priv->fan_data), GFP_KERNEL);
->> +	if (!priv->fan_data)
->> +		return -ENOMEM;
->> +
->> +	ret =3D awcc_hwmon_temps_init(wdev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret =3D awcc_hwmon_fans_init(wdev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	priv->hwdev =3D devm_hwmon_device_register_with_info(&wdev->dev, "alie=
-nware_wmi", priv,
->> +							   &awcc_hwmon_chip_info, NULL);
->> +
->> +	return PTR_ERR_OR_ZERO(priv->hwdev);
->> +}
->> +
->>   /*
->>    * Thermal Profile control
->>    *  - Provides thermal profile control through the Platform Profile AP=
-I
->> @@ -753,6 +1171,12 @@ static int alienware_awcc_setup(struct wmi_device =
-*wdev)
->>   	priv->wdev =3D wdev;
->>   	dev_set_drvdata(&wdev->dev, priv);
->>
->> +	if (awcc->hwmon) {
->> +		ret =3D awcc_hwmon_init(wdev);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->>   	if (awcc->pprof) {
->>   		ret =3D awcc_platform_profile_init(wdev);
->>   		if (ret)
->> @@ -833,6 +1257,13 @@ int __init alienware_wmax_wmi_init(void)
->>   	if (id)
->>   		awcc =3D id->driver_data;
->>
->> +	if (force_hwmon) {
->> +		if (!awcc)
->> +			awcc =3D &empty_quirks;
->> +
->> +		awcc->hwmon =3D true;
->> +	}
->> +
->>   	if (force_platform_profile) {
->>   		if (!awcc)
->>   			awcc =3D &empty_quirks;
->>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +static const struct mfd_cell nct6694_dev[] = {
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x0),
 
+"-gpio" usually goes on the end.
 
---=20
- ~ Kurt
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
 
+IDs are usually given in base-10.
+
+Why are you manually adding the device IDs?
+
+PLATFORM_DEVID_AUTO doesn't work for you?
+
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
+> +
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x0),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x1),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x2),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x3),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x4),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x5),
+> +
+> +	MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x0),
+
+Why has the naming convention changed here?
+
+> +	MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x1),
+> +
+> +	MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x0),
+> +	MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x1),
+> +
+> +	MFD_CELL_NAME("nct6694-hwmon"),
+> +	MFD_CELL_NAME("rtc-nct6694"),
+
+There doesn't seem to be any consistency here.
+
+> +};
+> +
+> +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+
+> +{
+> +	switch (err_status) {
+> +	case NCT6694_NO_ERROR:
+> +		return err_status;
+
+This is odd since you already know this will be 0.
+
+> +	case NCT6694_NOT_SUPPORT_ERROR:
+> +		dev_warn(nct6694->dev, "Command is not supported!\n");
+
+Why not dev_err()?
+
+> +		break;
+> +	case NCT6694_NO_RESPONSE_ERROR:
+> +		dev_warn(nct6694->dev, "Command received no response!\n");
+> +		break;
+> +	case NCT6694_TIMEOUT_ERROR:
+> +		dev_warn(nct6694->dev, "Command timed out!\n");
+> +		break;
+> +	case NCT6694_PENDING:
+> +		dev_warn(nct6694->dev, "Command is pending!\n");
+
+Is this an error?
+
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return -EIO;
+> +}
+> +
+> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device */
+
+This doesn't really describe the next 2 lines.
+
+Move it down?
+
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_GET;
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+
+Since you use nct6694->udev a bunch - sometimes twice in the same call,
+it might be nicer to pull it into it's own variable instead of
+dereferencing it all the time.
+
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+
+How can you read sizeof(*msg) Bytes (22?) into the smaller
+response_header (16?) attribute?
+
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected received length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_read_msg);
+> +
+> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device */
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_SET;
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Send data packet to USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected transmitted length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_write_msg);
+> +
+> +static void usb_int_callback(struct urb *urb)
+> +{
+> +	struct nct6694 *nct6694 = urb->context;
+> +	unsigned int *int_status = urb->transfer_buffer;
+> +	int ret;
+> +
+> +	switch (urb->status) {
+> +	case 0:
+> +		break;
+> +	case -ECONNRESET:
+> +	case -ENOENT:
+> +	case -ESHUTDOWN:
+> +		return;
+> +	default:
+> +		generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq));
+> +		*int_status &= ~BIT(irq);
+> +	}
+> +
+> +resubmit:
+> +	ret = usb_submit_urb(urb, GFP_ATOMIC);
+> +	if (ret)
+> +		dev_dbg(nct6694->dev, "%s: Failed to resubmit urb, status %pe",
+
+Why debug?
+
+> +			__func__, ERR_PTR(ret));
+
+Remove the __func__ part.
+
+> +}
+> +
+> +static void nct6694_irq_lock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_lock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_sync_unlock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_unlock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_enable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable |= BIT(hwirq);
+> +}
+> +
+> +static void nct6694_irq_disable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable &= ~BIT(hwirq);
+> +}
+> +
+> +static const struct irq_chip nct6694_irq_chip = {
+> +	.name = "nct6694-irq",
+> +	.flags = IRQCHIP_SKIP_SET_WAKE,
+> +	.irq_bus_lock = nct6694_irq_lock,
+> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
+> +	.irq_enable = nct6694_irq_enable,
+> +	.irq_disable = nct6694_irq_disable,
+> +};
+> +
+> +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int irq,
+> +				  irq_hw_number_t hw)
+> +{
+> +	struct nct6694 *nct6694 = d->host_data;
+> +
+> +	irq_set_chip_data(irq, nct6694);
+> +	irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static void nct6694_irq_domain_unmap(struct irq_domain *d, unsigned int irq)
+> +{
+> +	irq_set_chip_and_handler(irq, NULL, NULL);
+> +	irq_set_chip_data(irq, NULL);
+> +}
+> +
+> +static const struct irq_domain_ops nct6694_irq_domain_ops = {
+> +	.map	= nct6694_irq_domain_map,
+> +	.unmap	= nct6694_irq_domain_unmap,
+> +};
+> +
+> +static int nct6694_usb_probe(struct usb_interface *iface,
+> +			     const struct usb_device_id *id)
+> +{
+> +	struct usb_device *udev = interface_to_usbdev(iface);
+> +	struct usb_endpoint_descriptor *int_endpoint;
+> +	struct usb_host_interface *interface;
+> +	struct device *dev = &iface->dev;
+> +	struct nct6694 *nct6694;
+> +	int pipe, maxp;
+> +	int ret;
+> +
+> +	nct6694 = devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
+> +	if (!nct6694)
+> +		return -ENOMEM;
+> +
+> +	pipe = usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
+> +	maxp = usb_maxpacket(udev, pipe);
+> +
+> +	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
+> +	if (!nct6694->usb_msg)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_buffer = devm_kzalloc(dev, maxp, GFP_KERNEL);
+> +	if (!nct6694->int_buffer)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!nct6694->int_in_urb)
+> +		return -ENOMEM;
+> +
+> +	nct6694->domain = irq_domain_add_simple(NULL, NCT6694_NR_IRQS, 0,
+> +						&nct6694_irq_domain_ops,
+> +						nct6694);
+> +	if (!nct6694->domain) {
+> +		ret = -ENODEV;
+> +		goto err_urb;
+> +	}
+> +
+> +	nct6694->dev = dev;
+> +	nct6694->udev = udev;
+> +	nct6694->timeout = NCT6694_URB_TIMEOUT;	/* Wait until URB completes */
+
+No need to save this known value.
+
+> +	ret = devm_mutex_init(dev, &nct6694->access_lock);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	ret = devm_mutex_init(dev, &nct6694->irq_lock);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	interface = iface->cur_altsetting;
+> +	int_endpoint = &interface->endpoint[0].desc;
+> +	if (!usb_endpoint_is_int_in(int_endpoint)) {
+> +		ret = -ENODEV;
+> +		goto err_urb;
+> +	}
+> +	usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
+> +			 nct6694->int_buffer, maxp, usb_int_callback,
+> +			 nct6694, int_endpoint->bInterval);
+> +	ret = usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
+> +	if (ret)
+> +		goto err_urb;
+
+Please unsquash these calls - space them out.
+
+> +
+> +	usb_set_intfdata(iface, nct6694);
+> +
+> +	ret = mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6694_dev));
+> +	if (ret)
+> +		goto err_mfd;
+> +
+> +	return 0;
+> +
+> +err_mfd:
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +err_urb:
+> +	usb_free_urb(nct6694->int_in_urb);
+> +	return ret;
+> +}
+> +
+> +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> +{
+> +	struct nct6694 *nct6694 = usb_get_intfdata(iface);
+> +
+> +	mfd_remove_devices(nct6694->dev);
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +	usb_free_urb(nct6694->int_in_urb);
+> +}
+> +
+> +static const struct usb_device_id nct6694_ids[] = {
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID,
+> +					NCT6694_PRODUCT_ID,
+> +					0xFF, 0x00, 0x00)},
+
+This should fit on one line.  You can use up to 100-chars.
+
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> +
+> +static struct usb_driver nct6694_usb_driver = {
+> +	.name	= "nct6694",
+
+Odd spaces.
+
+> +	.id_table = nct6694_ids,
+> +	.probe = nct6694_usb_probe,
+> +	.disconnect = nct6694_usb_disconnect,
+> +};
+> +
+
+Remove this line.
+
+> +module_usb_driver(nct6694_usb_driver);
+> +
+> +MODULE_DESCRIPTION("USB core driver for NCT6694");
+
+This is not a USB driver.
+
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+
+Different to SoB.
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> new file mode 100644
+> index 000000000000..8171f975761e
+> --- /dev/null
+> +++ b/include/linux/mfd/nct6694.h
+> @@ -0,0 +1,102 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Nuvoton NCT6694 USB transaction and data structure.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+
+At the top.
+
+> + */
+> +
+> +#ifndef __MFD_NCT6694_H
+> +#define __MFD_NCT6694_H
+> +
+> +#define NCT6694_VENDOR_ID	0x0416
+> +#define NCT6694_PRODUCT_ID	0x200B
+> +#define NCT6694_INT_IN_EP	0x81
+> +#define NCT6694_BULK_IN_EP	0x02
+> +#define NCT6694_BULK_OUT_EP	0x03
+> +
+> +#define NCT6694_HCTRL_SET	0x40
+> +#define NCT6694_HCTRL_GET	0x80
+> +
+> +#define NCT6694_URB_TIMEOUT	1000
+> +
+> +enum nct6694_irq_id {
+> +	NCT6694_IRQ_GPIO0 = 0,
+> +	NCT6694_IRQ_GPIO1,
+> +	NCT6694_IRQ_GPIO2,
+> +	NCT6694_IRQ_GPIO3,
+> +	NCT6694_IRQ_GPIO4,
+> +	NCT6694_IRQ_GPIO5,
+> +	NCT6694_IRQ_GPIO6,
+> +	NCT6694_IRQ_GPIO7,
+> +	NCT6694_IRQ_GPIO8,
+> +	NCT6694_IRQ_GPIO9,
+> +	NCT6694_IRQ_GPIOA,
+> +	NCT6694_IRQ_GPIOB,
+> +	NCT6694_IRQ_GPIOC,
+> +	NCT6694_IRQ_GPIOD,
+> +	NCT6694_IRQ_GPIOE,
+> +	NCT6694_IRQ_GPIOF,
+> +	NCT6694_IRQ_CAN0,
+> +	NCT6694_IRQ_CAN1,
+> +	NCT6694_IRQ_RTC,
+> +	NCT6694_NR_IRQS,
+> +};
+> +
+> +enum nct6694_response_err_status {
+> +	NCT6694_NO_ERROR = 0,
+> +	NCT6694_FORMAT_ERROR,
+> +	NCT6694_RESERVED1,
+> +	NCT6694_RESERVED2,
+> +	NCT6694_NOT_SUPPORT_ERROR,
+> +	NCT6694_NO_RESPONSE_ERROR,
+> +	NCT6694_TIMEOUT_ERROR,
+> +	NCT6694_PENDING,
+> +};
+> +
+> +struct __packed nct6694_cmd_header {
+> +	u8 rsv1;
+> +	u8 mod;
+> +	union __packed {
+> +		__le16 offset;
+> +		struct __packed {
+> +			u8 cmd;
+> +			u8 sel;
+> +		};
+> +	};
+> +	u8 hctrl;
+> +	u8 rsv2;
+> +	__le16 len;
+> +};
+> +
+> +struct __packed nct6694_response_header {
+> +	u8 sequence_id;
+> +	u8 sts;
+> +	u8 reserved[4];
+> +	__le16 len;
+> +};
+> +
+> +union __packed nct6694_usb_msg {
+> +	struct nct6694_cmd_header cmd_header;
+> +	struct nct6694_response_header response_header;
+> +};
+> +
+> +struct nct6694 {
+> +	struct device *dev;
+> +	struct irq_domain *domain;
+> +	/* Mutex to protect access to the device */
+> +	struct mutex access_lock;
+> +	/* Mutex to protect access to the IRQ */
+> +	struct mutex irq_lock;
+> +	struct urb *int_in_urb;
+> +	struct usb_device *udev;
+> +	union nct6694_usb_msg *usb_msg;
+> +	unsigned char *int_buffer;
+> +	unsigned int irq_enable;
+> +	/* Time in msec to wait for the URB to the complete */
+> +	long timeout;
+
+timeout_ms
+
+> +};
+> +
+> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
+> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
+> +
+> +#endif
+> -- 
+> 2.34.1
+> 
+
+-- 
+Lee Jones [李琼斯]
