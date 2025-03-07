@@ -1,102 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C722561BD;
-	Fri,  7 Mar 2025 20:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E5C258CC8;
+	Fri,  7 Mar 2025 21:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741380719; cv=none; b=Aj5hce5YNIuLXeCLL5QHF5aKDHk7gMs1UFJLi3kJoCZee4nzIkpIK0Q6pv1j6MglzFn77F9iKKa70/7XvKHVxN+Kl4bOdO/+rAI4mQNVDurjbBaBwqoPASANxim5+CDJ8ja5HS/bG6cn9SoQ64j/tqrNFTHjKjVxbTaAhx+xl1k=
+	t=1741381430; cv=none; b=qMp2rGwFz/Gwg8ug7bNM23Bi5SKz92zE5KIaDaHEddh722TokF8XzvQcds90eIznGYbD9RJnJ6Y4AEYDdNsyK1CIeidIdtwYrLg+u7mbrJ1wdUwtayzikCGS8jxnaLPWMSaY6rHmWZF8tDbDUxIrDoT2SV2xWXqwqIEMD/6/iSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741380719; c=relaxed/simple;
-	bh=GGNUHmMxcy6R0lwyYXAWHuq9IENeuZCWMCuYICMOCkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzvItq3NIjFH5Teb9Q5CNcBPy/hkgi4fh+LRbxD5KWJ6qYqiFltRvzI5W6ggrvqRYESvp0y5M1BQTxCpXdrfq4jcY19tHV3i2+HMBup7YVOMnXwDThJzAr79QTMNb5ko8KKCWucorIP7qJF2DmkhGRiWbMmVpUZ1lqK1PV/BofU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rx3UG0nl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741381430; c=relaxed/simple;
+	bh=F6ApWp0uPt4EKR+PmPeYyxQ8w+hfD4kuTYdVpN7C5f4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=iJ5l/9cj5HyzLSLAtzGFbQn/bUFY/FsagwCrLdocXgGeO6ITuMFwo74+WyRYHaY3aX5ERT9PNpBDNL2RS2CBjs6KB3K18E2eO5CMbVfI6wbVafHrUubQzycyUly23PPA20o7/PZHHp/vHqJamdzeDsVbPIiv0Qp0/F8R7VKIQEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOuuDZDc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rx3UG0nl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5359CC4CED1;
-	Fri,  7 Mar 2025 20:51:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOuuDZDc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 317DEC4CEE7;
+	Fri,  7 Mar 2025 21:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741380718;
-	bh=GGNUHmMxcy6R0lwyYXAWHuq9IENeuZCWMCuYICMOCkI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rx3UG0nlOjx2wRLfI/VRDwIiaxqaXwSPwrIiXjzY/IMj28NcF+NdHw7yBo5QUatvc
-	 ET5KAUPkdBK8ZQn5tDanolEjB8FkpVFAtTUFjgxDzhZFDBaqiyl1fK23EFDFDnkKsw
-	 npSNfgAqT52sZ0YsemlTbGO9ZJCJrKwYx0hpDc/Ltqv6WnG7FER/qAmEZiNk+R+eTj
-	 r9sbQ7tOLdj7WUXpvoKM6NEYOBYm7t+WslJp6McQ9ihfbpVoWfiMDBRxuuCv92NkET
-	 BPJZc1fgiDRsxzswxSxXqTehRj8YYBh2avtj1SMcjMHJ+tPfYDxWXr2i3PpSQeOsP5
-	 yJ71XFg7vh2Vw==
-Date: Fri, 7 Mar 2025 14:51:56 -0600
-From: Rob Herring <robh@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>,
-	Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shi Fu <shifu0704@thundersoft.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 17/20] ASoC: dt-bindings: tas2770: add flags for SDOUT
- pulldown and zero-fill
-Message-ID: <20250307205156.GA583954-robh@kernel.org>
-References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
- <20250227-apple-codec-changes-v3-17-cbb130030acf@gmail.com>
- <20250304135050.GA2485358-robh@kernel.org>
- <CAHgNfTyVKFuT0fZ3Qj=MdcXs67KscwkSepAH95xkAAKWM1g8Xg@mail.gmail.com>
- <20250305132239.GA1415729-robh@kernel.org>
- <CAHgNfTxS1Q4PPsw520-J4Yn6xg+QZOYFkYhg5yv-uZFu5waN_g@mail.gmail.com>
+	s=k20201202; t=1741381430;
+	bh=F6ApWp0uPt4EKR+PmPeYyxQ8w+hfD4kuTYdVpN7C5f4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=oOuuDZDcbSL5gS4mNCWayv9c/WE/dWHDx3D6ykiChayEi/NAjDpAc/CxWuexE3MvB
+	 KqbeEdYD+hl0uEIH/Ij4LClkkbnkev4UovGj2G2eRMH/44dSX+ZnMwTPCEienRdROc
+	 g69uc1AgOfVsXRdyjZ+OocZklcnEhwupwZ78/fjAPN4ITymIr3InfWGKEQyF0ZmzNu
+	 KGts6VlBegG5Y6eePTMXqwLymU4ZZZtY0DHHKY06uzawdk7cByczf4vN8PiLUEtrIk
+	 juBi+bs5Fqd77gj44aX/IRUK2SMbZTjFz05z23QwlbLOsD0Hxk59rAm+PhJnHcVCT3
+	 POWXDZZgaDsJw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEB2380CFD7;
+	Fri,  7 Mar 2025 21:04:24 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v6.14-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250307150347.3784204-1-linux@roeck-us.net>
+References: <20250307150347.3784204-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250307150347.3784204-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.14-rc6
+X-PR-Tracked-Commit-Id: 10fce7ebe888fa8c97eee7e317a47e7603e5e78d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8287dfc2915368092e98ef0caef9c03e8e0f7aa9
+Message-Id: <174138146362.2483503.9491574669390027491.pr-tracker-bot@kernel.org>
+Date: Fri, 07 Mar 2025 21:04:23 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHgNfTxS1Q4PPsw520-J4Yn6xg+QZOYFkYhg5yv-uZFu5waN_g@mail.gmail.com>
 
-On Fri, Mar 07, 2025 at 04:18:31PM +1000, James Calligeros wrote:
-> On Wed, Mar 5, 2025 at 11:22 PM Rob Herring <robh@kernel.org> wrote:
-> > This just feels like something common because any TDM interface may need
-> > to control this. It's not really a property of the chip, but requirement
-> > of the TDM interface.
-> 
-> What I'm imagining then is something like:
-> 
-> dai-link@0 {
->     cpu {
->         sound-dai = <&some_cpu>;
->     };
->     codec {
->         sound-dai = <&some_codec>;
->         dai-tdm-tx-zerofill;
->         dai-tdm-tx-pulldown; /* either or, having both makes no sense */
+The pull request you sent on Fri,  7 Mar 2025 07:03:47 -0800:
 
-If they are mutually exclusive, it's best to design the properties that 
-way. So something like:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.14-rc6
 
-dai-tdm-tx-idle = "zerofill";
-dai-tdm-tx-idle = "pulldown";
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8287dfc2915368092e98ef0caef9c03e8e0f7aa9
 
->     };
-> };
-> 
-> Codec drivers would then provide a function to set TDM TX behaviour if they
-> support it, and export that as a dai op for use by machine drivers
-> when they parse
-> the dai link similar to dai-tdm-tx-slot and friends. Is that close to
-> what you have
-> in mind?
+Thank you!
 
-How would it work when you need a mask? "dai-tdm-slot-tx-mask" is 
-enough?
-
-Rob
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
