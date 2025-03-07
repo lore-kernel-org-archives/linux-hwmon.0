@@ -1,62 +1,62 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2DC4430;
-	Fri,  7 Mar 2025 00:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B520A4C96;
+	Fri,  7 Mar 2025 00:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741306617; cv=none; b=ZjsbqoEH2/FhWsJWk8cdHQHXLfEzdxdIT24yOremwP95JOnonmLKyjVfkCIGVzEBO9V5IOTK5D3L8SjJL2i/haAfhbX4Gx6HlYrQ2BVkTtmICC702q1YnnwCnghk0nrTpFnNfMeK8NeDqJ3rMu9AODHtrhwZMO6gIxEvBBYiBaY=
+	t=1741307761; cv=none; b=pU6g0hQd1vm4u+w/eoniWaYCpYgh0f+UwnxQ1N9a5LKZeflcm/I3+9mqwEQu4s518ZC2GSfmV6hQ/DfQQhGDw5M5GprAdbovKIMFU8nJ1zAroQLCnwBSWzVRFK9kJ2VyeLPxV3WIRu5n/MNcqU8GcWUGB+48Cr+Z3MUfy+f/PwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741306617; c=relaxed/simple;
-	bh=twsT9Oo/Us9O7jUvQGjCKb7htDJjyL+JsvOWkId6PNo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Qhw7oOpVpF2wsdPfalpGyDeCASpWGhXQYZfCKJxvn6I1Jii77QF7xSwZmpSXH7+AiH+i2IRhjwb5q/jzkNf0JBwi+zxzAol1aP1suU7F1Xse1iMkjzL6wFKTSvTYzmxm/jDeVcB50ndJByFhV+mZ8sPuXGB78UFr9dGW+bVGrdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A3VwixgS; arc=none smtp.client-ip=209.85.128.174
+	s=arc-20240116; t=1741307761; c=relaxed/simple;
+	bh=AXos1AlNZniVOqZrL/1OcU4mQG9qSVbEhtJAtY5tg5o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=qqoJC+K/Jxo4xqEXCuzbU8zQZyw8/n5+cr6rWZfnXH0HV+5PwujJBv0P6LUNH2m16Fq/jPY+bdXxvEM5+ICBafm2EGaffjbkTC7nBtBi6a6AveYMiRb9HUKjd8QNhS0VKR2ATaWT40Htc1kUikyQ/0pi3+pydXLjTEAUm1vcUNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgGQ1pBM; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A3VwixgS"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6f679788fd1so10145787b3.2;
-        Thu, 06 Mar 2025 16:16:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgGQ1pBM"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6f74b78df93so13872337b3.0;
+        Thu, 06 Mar 2025 16:35:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741306614; x=1741911414; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20230601; t=1741307758; x=1741912558; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Elvo9kYm6JDwLbjCIV9FHjgmEXldhwO9y61s5I5jGbk=;
-        b=A3VwixgSjkpEQf9QrTPmluUtZbrtqsIu+T8qk8rC1vRk8+yNWzbJC2MVzxwCJmNJRt
-         GpmCv+BeNHNrcZvRUS0r6jr0SEnGVxU3R4aMLNOWfRMTzjF8KsKMJgewz5eXt/Awqfr7
-         srbMo5gyy5DW7iidlfQc8TaPKWGToQHxY744aUscs9H/BCgkuqJrdwGGVnrFxiOTAXHr
-         baL3CwFMHB8fmCsTIJ1gfX0f1QQ71cMYhhXb+0NCZEvPPm97XFTJ+pvmKXr8pb2/IxCY
-         AqHzg4sySpXW83ZEjPjywb+QycxPNtWCVNIbZ+nbDAvzjpU7VS5hzsK1zvDamFMHeu5m
-         Dlow==
+        bh=BUxHPv2GTm+3dxs4P3WOFWhKn+KKweyyrgScbgE6QLM=;
+        b=fgGQ1pBM5KwNc627l3thZketD4kXWgxoC5aL79sghk+6HEQHn8oICgoePtVsM8pFRH
+         NyyiqXg+K0Ihju7tJeXjW5OLD1A/Rh53Eq0XbvidSOyuhjomhWdayXcaC1Yid92XX+vY
+         HbT9gzlxW63QOecxfJmyWS9m+OKwLClAzmg1i2Q/RV3o2DCY1gMA4mzK9D/aKxh8hehC
+         Bi2Wk/a2FBH8U/mjeohH2aPDpQWgtz6WDM8p6UGNQ85WrtmwC1/abU+FxG552xEDB+gI
+         gpk1djecNLRO/NqRffJRBecny0eo9FiTfEj7zv9S7gTZuDGJfrnWN91Bt3gl9PGUFllR
+         18bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741306614; x=1741911414;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20230601; t=1741307758; x=1741912558;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Elvo9kYm6JDwLbjCIV9FHjgmEXldhwO9y61s5I5jGbk=;
-        b=v8fOgs+X/V7TejQpuiiR2flVvT6qFDypOyGW8B5PRNr8IG6fs9pKyahROpFVg1e708
-         cKfyj/RiSnpECFZVExOI5vgHTNyKDgRptx1Oul/5w95WxTEX5cghEFIyjC7IG1l3d3zj
-         YJ/b80PlT5GkTJiCNn4649jbCV1eopNW9UWJmgkepkFef0AAxw+J7v60eQ0hY4B672KW
-         kKPzr8wTqlL6Ehs2Hl2XBAM4+FMZboAeuEkBj09zFlY2RlXHmyyKUvwku09N05WQjNAP
-         VkBpSc/D4wjaM13rHe2qu02gzGNlAsOaULt/9APJq7obrB74yzmXfbtiu1smOCLWkN7L
-         V7HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxP3Boh9SPGSKSfAdVMx5TQAH6dorg+mjDQMCdB5KqoEqX0r/EY6bflWOpEuRqugQL5BL57LsZnBf5cmO3@vger.kernel.org, AJvYcCVBUWQx1faJyD/pi4TN3j4V4NiTJG4jtj3r5kwRjEx6i7IfBND0eZbG+4VwkKjN99LPjq6usjRdAp90DDxadwX6yFsjkA==@vger.kernel.org, AJvYcCXKJb/dQDWU6xFJS08urk96RMzMJ5f8x65WqXzxredxpMQXGoppumYkDJywufDTxJIRlrnsXDI2nfZYDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCzB856axHp8w8dqxWFppJMLa1FbJpIWrVuU72w6JwltWap491
-	fk8y8yqCMyStEo4eNi20XLAY5CxYpP8SUcxQ7ZF6qL4M7FGNpAvU
-X-Gm-Gg: ASbGnctQptXfqx54cM1ApXgkd9C2V5itAVRhvmGMMUuoOlllNhKK2EjRiQmoTzckuv/
-	iX7gn2bTQBhZy9DmE6B6yOGKfHuCOyLvPj8YcOL2psBMuorQEBhhjhQH8pBUM6wGgdcew5rnIn2
-	aueATnsJOIBciqmNbAfSEzG+5NwvPseFX6QKRFu5InwvRisFEyDwEUHlpZkZ82UOmWpDWia2kXH
-	eTPN4DU42XnNM44K0gcK5Bzi6es9sEY5vmF62ecaeOs+YzWUu492QneE7KXNX0qjqcaREuCut2I
-	tmKn2vPj2WjAuWxAF/LINKea2HdRgEb6H6KFMA==
-X-Google-Smtp-Source: AGHT+IHXPZp8rOFCJiSBB+K3TmJJodLqHdDMDj32MX6uDtjE5aBP4LLJyK5buWMxi5LKcudIYQBGjg==
-X-Received: by 2002:a05:690c:6f0a:b0:6f0:23da:49a3 with SMTP id 00721157ae682-6febf295f42mr23201597b3.8.1741306614078;
-        Thu, 06 Mar 2025 16:16:54 -0800 (PST)
+        bh=BUxHPv2GTm+3dxs4P3WOFWhKn+KKweyyrgScbgE6QLM=;
+        b=VVTfPH2ZUYv0kFhkfst2HqwP5VN5dwCcnrwTtcUCdinWfDmRiwKfy6QjtbOTiuu4bu
+         J1YGzpdL7xhzpGZoRDJfwTlAnaOuQMkzG+MAN3MwKx/IUKtrWdI+lsFJIrZrmqi1kkae
+         9BccscyDMT149ucjo7K5IZqh03ykhMQsDeaoC1m4szAenMp6y/AUxV+uQJm56+DhmH6j
+         XIEH60nB9eaTdb0JQdKoxE148Poi79Nef3CZBEjT3P3AdQiliWFz+E15nqjqY/1ltmLj
+         1XtJyI6T3WHupVenbAV2NHuQi5NKbmCy170FmVYqbW26i3iqO2OfSLGuYOWE2pXt0ilh
+         DfQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUvq5MuXjT2nvZaqMur+23WSrkl3TpDHI9mPsWz5NRsdUP0Sqs1aiViFC2TihKZerG019CdxBZlB124w3Nh@vger.kernel.org, AJvYcCWR1AcGcP5d+f76TjnS1Bez/Chz5XLBPD3g/PdXTn6fkR/07zS5V8puLJvM8HXQZUWwBSl9iRhL+UoVOlgKicVRB7kXyg==@vger.kernel.org, AJvYcCXYtz4myinLtceiYvdaVY64b2e8rqF8bh9f0tnLy8OQx8tg+l8S1YrfXK6H1bymmNArW7LPBymICXubTw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1otXrkiEPR94xvrIWV8wrcZthhgt6EUWMx3KAlg2s1cTYjXJg
+	wtHE8WqVXgIMQkWNyYwt4B0J4tM45Uugr8rtDxZ2uqEJXw3B5ZQb
+X-Gm-Gg: ASbGncujG77Z7egJD7e7dhZarmbI6iMQihR5l6XIqQ61bLOOe1HSOebTePZ76T7IvNY
+	bwBhMOYi65QLeo4vBiquqOW+mRPPq79jvxn/+kOl1gGHXcdOQN5Z9LSN93uwixkw/TVjDYDLVT4
+	aRWFfgTjci4DJjPcPwbYE3D+TA5EUSoRtJKYAxfHGbvPhHnajcdLF2TL23xItpN9abi4AyYi4QR
+	GD8hziduLzqvt0eXkpS1eDskQSMckv8sIhHdTGv+sP6EuddCtTtn7s7nlg2kMXpwjxYLPlQrdWl
+	Hxq0th2LA9uywUtsdWgGEuKAo906JConvlq4OQ==
+X-Google-Smtp-Source: AGHT+IEbIro/S0ElKJZyxGcXh68AXZ1Ng9rhcTcXe20Ln6ZAPHZMLI/TYTst7Qd9fkLVKaR4xS1erw==
+X-Received: by 2002:a05:690c:690d:b0:6fb:33e1:2e66 with SMTP id 00721157ae682-6febf2c8ab4mr24763187b3.14.1741307758538;
+        Thu, 06 Mar 2025 16:35:58 -0800 (PST)
 Received: from localhost ([2800:bf0:61:1288:2be8:bc29:ad13:842f])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6feb2a1c276sm4991197b3.13.2025.03.06.16.16.52
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6feb2c31ec6sm5001317b3.83.2025.03.06.16.35.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 16:16:53 -0800 (PST)
+        Thu, 06 Mar 2025 16:35:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -65,242 +65,348 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Mar 2025 19:16:50 -0500
-Message-Id: <D89LODODY167.1VG4P7K7X2BZO@gmail.com>
+Date: Thu, 06 Mar 2025 19:35:56 -0500
+Message-Id: <D89M2ZQJEH45.1HKFFX5ESXRSJ@gmail.com>
+To: "Armin Wolf" <W_Armin@gmx.de>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>
 Cc: "Hans de Goede" <hdegoede@redhat.com>,
  <platform-driver-x86@vger.kernel.org>, <Dell.Client.Kernel@dell.com>,
  <linux-kernel@vger.kernel.org>, "Guenter Roeck" <linux@roeck-us.net>, "Jean
  Delvare" <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v3 08/10] platform/x86: alienware-wmi-wmax: Add support
- for manual fan control
+Subject: Re: [PATCH v3 07/10] platform/x86: alienware-wmi-wmax: Add HWMON
+ support
 From: "Kurt Borja" <kuurtb@gmail.com>
-To: "Armin Wolf" <W_Armin@gmx.de>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>
 X-Mailer: aerc 0.20.1-0-g2ecb8770224a
 References: <20250305-hwm-v3-0-395e7a1407e2@gmail.com>
- <20250305-hwm-v3-8-395e7a1407e2@gmail.com>
- <e8a44866-602c-47bb-8b11-7ba59c3d346f@gmx.de>
-In-Reply-To: <e8a44866-602c-47bb-8b11-7ba59c3d346f@gmx.de>
+ <20250305-hwm-v3-7-395e7a1407e2@gmail.com>
+ <a375d474-5349-4662-8ce8-4f8f55349901@gmx.de>
+In-Reply-To: <a375d474-5349-4662-8ce8-4f8f55349901@gmx.de>
 
-Hi Armin,
-
-On Thu Mar 6, 2025 at 5:35 PM -05, Armin Wolf wrote:
+On Thu Mar 6, 2025 at 5:19 PM -05, Armin Wolf wrote:
 > Am 06.03.25 um 01:56 schrieb Kurt Borja:
 >
->> All models with the "AWCC" WMAX device support a way of manually
->> controlling fans.
->>
->> The PWM duty cycle of a fan can't be controlled directly. Instead the
->> AWCC interface let's us tune a PWM `boost` value, which has the
->> following empirically discovered, aproximate behavior over the PWM
->> value:
->>
->> 	pwm =3D pwm_base + (pwm_boost / 255) * (pwm_max - pwm_base)
->>
->> Where the pwm_base is the locked PWM value controlled by the FW and
->> pwm_boost is a value between 0 and 255.
->>
->> Expose this pwm_boost knob as a custom HWMON attribute.
+>> All models with the "AWCC" WMAX device support monitoring fan speed and
+>> temperature sensors. Expose this feature through the HWMON interface.
 >>
 >> Cc: Guenter Roeck <linux@roeck-us.net>
 >> Cc: Jean Delvare <jdelvare@suse.com>
 >> Cc: linux-hwmon@vger.kernel.org
 >> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
 >> ---
->>   drivers/platform/x86/dell/alienware-wmi-wmax.c | 223 +++++++++++++++++=
-+++++++-
->>   1 file changed, 220 insertions(+), 3 deletions(-)
+>>   drivers/platform/x86/dell/Kconfig              |   1 +
+>>   drivers/platform/x86/dell/alienware-wmi-wmax.c | 431 +++++++++++++++++=
+++++++++
+>>   2 files changed, 432 insertions(+)
 >>
+>> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/de=
+ll/Kconfig
+>> index f8a0dffcaab7c3b423472c5b9093011334a698c8..85a57c01aaada5d899cd8252=
+e77ed6043da5cbdf 100644
+>> --- a/drivers/platform/x86/dell/Kconfig
+>> +++ b/drivers/platform/x86/dell/Kconfig
+>> @@ -43,6 +43,7 @@ config ALIENWARE_WMI_WMAX
+>>   	bool "Alienware WMAX WMI device driver"
+>>   	default y
+>>   	depends on ALIENWARE_WMI
+>> +	depends on HWMON
+>>   	select ACPI_PLATFORM_PROFILE
+>>   	help
+>>   	 Alienware WMI driver with AlienFX LED, HDMI, amplifier, deep sleep a=
+nd
 >> diff --git a/drivers/platform/x86/dell/alienware-wmi-wmax.c b/drivers/pl=
 atform/x86/dell/alienware-wmi-wmax.c
->> index 20cf3371ee3c0e1ea038b3ca517e831f3b30dc29..de4e8f177aadc9552b05cc73=
-2e41ee458b761143 100644
+>> index 71fc17e8d103146b8edf53a552ae5ba64414e873..20cf3371ee3c0e1ea038b3ca=
+517e831f3b30dc29 100644
 >> --- a/drivers/platform/x86/dell/alienware-wmi-wmax.c
 >> +++ b/drivers/platform/x86/dell/alienware-wmi-wmax.c
->> @@ -13,8 +13,11 @@
+>> @@ -9,10 +9,13 @@
+>>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>
+>>   #include <linux/bitfield.h>
+>> +#include <linux/bitmap.h>
 >>   #include <linux/bits.h>
 >>   #include <linux/dmi.h>
->>   #include <linux/hwmon.h>
->> +#include <linux/hwmon-sysfs.h>
->> +#include <linux/minmax.h>
+>> +#include <linux/hwmon.h>
 >>   #include <linux/moduleparam.h>
 >>   #include <linux/platform_profile.h>
->> +#include <linux/pm.h>
->>   #include <linux/units.h>
+>> +#include <linux/units.h>
 >>   #include <linux/wmi.h>
 >>   #include "alienware-wmi.h"
->> @@ -179,10 +182,12 @@ enum AWCC_THERMAL_INFORMATION_OPERATIONS {
->>   	AWCC_OP_GET_FAN_MIN_RPM			=3D 0x08,
->>   	AWCC_OP_GET_FAN_MAX_RPM			=3D 0x09,
->>   	AWCC_OP_GET_CURRENT_PROFILE		=3D 0x0B,
->> +	AWCC_OP_GET_FAN_BOOST			=3D 0x0C,
->>   };
 >>
->>   enum AWCC_THERMAL_CONTROL_OPERATIONS {
->>   	AWCC_OP_ACTIVATE_PROFILE		=3D 0x01,
->> +	AWCC_OP_SET_FAN_BOOST			=3D 0x02,
->>   };
+>> @@ -25,6 +28,7 @@
+>>   #define WMAX_METHOD_BRIGHTNESS			0x3
+>>   #define WMAX_METHOD_ZONE_CONTROL		0x4
 >>
->>   enum AWCC_GAME_SHIFT_STATUS_OPERATIONS {
->> @@ -248,6 +253,7 @@ struct awcc_fan_data {
->>   	u32 total_temps;
->>   	u32 min_rpm;
->>   	u32 max_rpm;
->> +	u8 suspend_cache;
->>   	u8 id;
->>   };
+>> +#define AWCC_METHOD_GET_FAN_SENSORS		0x13
+>>   #define AWCC_METHOD_THERMAL_INFORMATION		0x14
+>>   #define AWCC_METHOD_THERMAL_CONTROL		0x15
+>>   #define AWCC_METHOD_GAME_SHIFT_STATUS		0x25
+>> @@ -39,6 +43,10 @@
+>>   /* Arbitrary limit based on supported models */
+>>   #define AWCC_MAX_RES_COUNT			16
 >>
->> @@ -627,6 +633,17 @@ static inline int awcc_op_get_temperature(struct wm=
-i_device *wdev, u8 temp_id, u
->>   		.arg3 =3D 0,
->>   	};
->>
->> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &args=
-, out);
->> +}
+>> +static bool force_hwmon;
+>> +module_param_unsafe(force_hwmon, bool, 0);
+>> +MODULE_PARM_DESC(force_hwmon, "Force probing for HWMON support without =
+checking if the WMI backend is available");
 >> +
->> +static inline int awcc_op_get_fan_boost(struct wmi_device *wdev, u8 fan=
-_id, u32 *out)
+>>   static bool force_platform_profile;
+>>   module_param_unsafe(force_platform_profile, bool, 0);
+>>   MODULE_PARM_DESC(force_platform_profile, "Forces auto-detecting therma=
+l profiles without checking if WMI thermal backend is available");
+>> @@ -48,16 +56,19 @@ module_param_unsafe(force_gmode, bool, 0);
+>>   MODULE_PARM_DESC(force_gmode, "Forces G-Mode when performance profile =
+is selected");
+>>
+>>   struct awcc_quirks {
+>> +	bool hwmon;
+>>   	bool pprof;
+>>   	bool gmode;
+>>   };
+>>
+>>   static struct awcc_quirks g_series_quirks =3D {
+>> +	.hwmon =3D true,
+>>   	.pprof =3D true,
+>>   	.gmode =3D true,
+>>   };
+>>
+>>   static struct awcc_quirks generic_quirks =3D {
+>> +	.hwmon =3D true,
+>>   	.pprof =3D true,
+>>   	.gmode =3D false,
+>>   };
+>> @@ -155,9 +166,18 @@ static const struct dmi_system_id awcc_dmi_table[] =
+__initconst =3D {
+>>   	},
+>>   };
+>>
+>> +enum AWCC_GET_FAN_SENSORS_OPERATIONS {
+>> +	AWCC_OP_GET_TOTAL_FAN_TEMPS		=3D 0x01,
+>> +	AWCC_OP_GET_FAN_TEMP_ID			=3D 0x02,
+>> +};
+>> +
+>>   enum AWCC_THERMAL_INFORMATION_OPERATIONS {
+>>   	AWCC_OP_GET_SYSTEM_DESCRIPTION		=3D 0x02,
+>>   	AWCC_OP_GET_RESOURCE_ID			=3D 0x03,
+>> +	AWCC_OP_GET_TEMPERATURE			=3D 0x04,
+>> +	AWCC_OP_GET_FAN_RPM			=3D 0x05,
+>> +	AWCC_OP_GET_FAN_MIN_RPM			=3D 0x08,
+>> +	AWCC_OP_GET_FAN_MAX_RPM			=3D 0x09,
+>>   	AWCC_OP_GET_CURRENT_PROFILE		=3D 0x0B,
+>>   };
+>>
+>> @@ -180,6 +200,12 @@ enum AWCC_SPECIAL_THERMAL_CODES {
+>>   	AWCC_SPECIAL_PROFILE_GMODE		=3D 0xAB,
+>>   };
+>>
+>> +enum AWCC_TEMP_SENSOR_TYPES {
+>> +	AWCC_TEMP_SENSOR_CPU			=3D 0x01,
+>> +	AWCC_TEMP_SENSOR_GPU			=3D 0x06,
+>> +	AWCC_TEMP_SENSOR_LAST
+>> +};
+>> +
+>>   enum awcc_thermal_profile {
+>>   	AWCC_PROFILE_USTT_BALANCED,
+>>   	AWCC_PROFILE_USTT_BALANCED_PERFORMANCE,
+>> @@ -216,6 +242,15 @@ struct wmax_u32_args {
+>>   	u8 arg3;
+>>   };
+>>
+>> +struct awcc_fan_data {
+>> +	unsigned long *related_temps;
+>> +	unsigned long *auto_channels_temp;
+>> +	u32 total_temps;
+>> +	u32 min_rpm;
+>> +	u32 max_rpm;
+>> +	u8 id;
+>> +};
+>> +
+>>   struct awcc_priv {
+>>   	struct wmi_device *wdev;
+>>   	union {
+>> @@ -231,6 +266,11 @@ struct awcc_priv {
+>>
+>>   	struct device *ppdev;
+>>   	u8 supported_profiles[PLATFORM_PROFILE_LAST];
+>> +
+>> +	struct device *hwdev;
+>> +	struct awcc_fan_data **fan_data;
+>> +	unsigned int temp_sensors_size;
+>> +	unsigned long *temp_sensors;
+>>   };
+>>
+>>   static const enum platform_profile_option awcc_mode_to_platform_profil=
+e[AWCC_PROFILE_LAST] =3D {
+>> @@ -495,6 +535,19 @@ static int __awcc_wmi_command(struct wmi_device *wd=
+ev, u32 method_id,
+>>   	return 0;
+>>   }
+>>
+>> +static inline int awcc_get_fan_sensors(struct wmi_device *wdev, u8 oper=
+ation,
+>> +				       u8 fan_id, u8 index, u32 *out)
 >> +{
 >> +	struct wmax_u32_args args =3D {
->> +		.operation =3D AWCC_OP_GET_FAN_BOOST,
+>> +		.operation =3D operation,
+>> +		.arg1 =3D fan_id,
+>> +		.arg2 =3D index,
+>> +		.arg3 =3D 0,
+>> +	};
+>> +
+>> +	return __awcc_wmi_command(wdev, AWCC_METHOD_GET_FAN_SENSORS, &args, ou=
+t);
+>> +}
+>> +
+>>   static inline int awcc_thermal_information(struct wmi_device *wdev, u8=
+ operation,
+>>   					   u8 arg, u32 *out)
+>>   {
+>> @@ -552,6 +605,32 @@ static inline int awcc_op_get_resource_id(struct wm=
+i_device *wdev, u8 index, u32
+>>   	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &arg=
+s, out);
+>>   }
+>>
+>> +static inline int awcc_op_get_fan_rpm(struct wmi_device *wdev, u8 fan_i=
+d, u32 *out)
+>> +{
+>> +	struct wmax_u32_args args =3D {
+>> +		.operation =3D AWCC_OP_GET_FAN_RPM,
 >> +		.arg1 =3D fan_id,
 >> +		.arg2 =3D 0,
 >> +		.arg3 =3D 0,
 >> +	};
->>
->>   	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &arg=
-s, out);
->>   }
->> @@ -656,6 +673,19 @@ static inline int awcc_op_activate_profile(struct w=
-mi_device *wdev, u8 profile)
->>   	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_CONTROL, &args, &=
-out);
->>   }
->>
->> +static int awcc_op_set_fan_boost(struct wmi_device *wdev, u8 fan_id, u8=
- boost)
->> +{
->> +	struct wmax_u32_args args =3D {
->> +		.operation =3D AWCC_OP_SET_FAN_BOOST,
->> +		.arg1 =3D fan_id,
->> +		.arg2 =3D boost,
->> +		.arg3 =3D 0,
->> +	};
->> +	u32 out;
 >> +
->> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_CONTROL, &args, &o=
-ut);
+>> +
+>> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &args=
+, out);
 >> +}
 >> +
->>   static int awcc_profile_id_to_pprof(u32 id, enum platform_profile_opti=
-on *profile)
+>> +static inline int awcc_op_get_temperature(struct wmi_device *wdev, u8 t=
+emp_id, u32 *out)
+>> +{
+>> +	struct wmax_u32_args args =3D {
+>> +		.operation =3D AWCC_OP_GET_TEMPERATURE,
+>> +		.arg1 =3D temp_id,
+>> +		.arg2 =3D 0,
+>> +		.arg3 =3D 0,
+>> +	};
+>> +
+>> +
+>> +	return __awcc_wmi_command(wdev, AWCC_METHOD_THERMAL_INFORMATION, &args=
+, out);
+>> +}
+>> +
+>>   static inline int awcc_op_get_current_profile(struct wmi_device *wdev,=
+ u32 *out)
 >>   {
->>   	switch (id) {
->> @@ -717,6 +747,7 @@ static int awcc_hwmon_read(struct device *dev, enum =
-hwmon_sensor_types type,
->>   			   u32 attr, int channel, long *val)
->>   {
->>   	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	enum platform_profile_option profile;
->>   	struct awcc_fan_data *fan;
->>   	u32 state;
->>   	int ret;
->> @@ -765,6 +796,28 @@ static int awcc_hwmon_read(struct device *dev, enum=
- hwmon_sensor_types type,
->>   		fan =3D priv->fan_data[channel];
->>
->>   		switch (attr) {
->> +		case hwmon_pwm_enable:
->> +			ret =3D awcc_op_get_current_profile(priv->wdev, &state);
->> +			if (ret)
->> +				return ret;
->> +
->> +			ret =3D awcc_profile_id_to_pprof(state, &profile);
->> +			if (ret)
->> +				return ret;
->> +
->> +			switch (profile) {
->> +			case PLATFORM_PROFILE_PERFORMANCE:
->
-> The hwmon sysfs docs say that 0 means that the fan is spinning at maximum=
- speed. Does PLATFORM_PROFILE_PERFORMANCE
-> guarantee that all fans are always spinning at maximum speed?
-
-Yes PERFORMANCE is full-speed for all devices I know. Manual fan control
-is completely disabled for that profile too.
-
-In fact I'm thinking about adding a module parameter to suppress this
-behavior. Not everyone may like that. That's outside the scope of these
-series tho.
-
->
-> If no then i suggest to drop support for 0.
->
->> +				*val =3D 0;
->> +				break;
->> +			case PLATFORM_PROFILE_CUSTOM:
->> +				*val =3D 1;
->> +				break;
->> +			default:
->> +				*val =3D 2;
->> +				break;
->> +			}
->> +
->> +			break;
->>   		case hwmon_pwm_auto_channels_temp:
->>   			bitmap_copy(val, fan->auto_channels_temp, BITS_PER_LONG);
->>   			break;
->> @@ -840,10 +893,48 @@ static int awcc_hwmon_read_string(struct device *d=
-ev, enum hwmon_sensor_types ty
+>>   	struct wmax_u32_args args =3D {
+>> @@ -599,6 +678,345 @@ static int awcc_profile_id_to_pprof(u32 id, enum p=
+latform_profile_option *profil
 >>   	return 0;
 >>   }
 >>
->> +
->> +static int awcc_hwmon_write(struct device *dev, enum hwmon_sensor_types=
- type,
->> +			    u32 attr, int channel, long val)
+>> +/*
+>> + * HWMON
+>> + *  - Provides temperature and fan speed monitoring as well as manual f=
+an
+>> + *    control
+>> + */
+>> +static umode_t awcc_hwmon_is_visible(const void *drvdata, enum hwmon_se=
+nsor_types type,
+>> +				     u32 attr, int channel)
 >> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	int ret;
+>> +	const struct awcc_priv *priv =3D drvdata;
+>> +	unsigned int temp_count;
 >> +
 >> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		temp_count =3D bitmap_weight(priv->temp_sensors, priv->temp_sensors_s=
+ize);
+>> +
+>> +		return channel < temp_count ? 0444 : 0;
+>> +	case hwmon_fan:
+>> +		return channel < priv->fan_count ? 0444 : 0;
 >> +	case hwmon_pwm:
+>> +		if (channel >=3D priv->fan_count)
+>> +			return 0;
+>> +
 >> +		switch (attr) {
 >> +		case hwmon_pwm_enable:
->> +			/*
->> +			 * We don't want to duplicate platform profile logic, so
->> +			 * we only allow enabling manual fan control
->> +			 */
 >
-> I do not think that having pwm1_enable brings any benefit, as the pwmX_bo=
-ost attributes
-> behave differently than pwmX attributes. I think it would be enough to do=
-cument that
-> pwmX_boost settings will only reliably work when the custom platform prof=
-ile is selected.
+> Please drop pwm_enable here and only introduce it inside the proper patch=
+.
 
-Now I realise I completely forgot about the admin-guide documentation!
-I'll include it in the next revision. Is this path ok?
-
-	Documentation/admin-guide/laptops/alienware-wmi.rst
-
-Or should I add driver specific ABI documentation? (or both ofc)
-
-I don't want to name the file alienware-laptop because this driver is
-compatible with Dell G-Series too.
+Thanks, mb.
 
 >
->> +			if (val !=3D 1)
->> +				return -EINVAL;
+>> +			return 0644;
+>> +		case hwmon_pwm_auto_channels_temp:
+>> +			return 0444;
+>> +		default:
+>> +			return 0;
+>> +		}
+>> +	default:
+>> +		return 0;
+>> +	}
+>> +}
 >> +
->> +			ret =3D awcc_op_activate_profile(priv->wdev, AWCC_SPECIAL_PROFILE_CU=
-STOM);
+>> +static int awcc_hwmon_read(struct device *dev, enum hwmon_sensor_types =
+type,
+>> +			   u32 attr, int channel, long *val)
+>> +{
+>> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
+>> +	struct awcc_fan_data *fan;
+>> +	u32 state;
+>> +	int ret;
+>> +	u8 temp;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		temp =3D find_nth_bit(priv->temp_sensors, priv->temp_sensors_size, ch=
+annel);
+>> +
+>> +		switch (attr) {
+>> +		case hwmon_temp_input:
+>> +			ret =3D awcc_op_get_temperature(priv->wdev, temp, &state);
 >> +			if (ret)
 >> +				return ret;
 >> +
->> +			if (priv->ppdev)
->> +				platform_profile_notify(priv->ppdev);
+>> +			*val =3D state * MILLIDEGREE_PER_DEGREE;
+>> +			break;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +
+>> +		break;
+>> +	case hwmon_fan:
+>> +		fan =3D priv->fan_data[channel];
+>> +
+>> +		switch (attr) {
+>> +		case hwmon_fan_input:
+>> +			ret =3D awcc_op_get_fan_rpm(priv->wdev, fan->id, &state);
+>> +			if (ret)
+>> +				return ret;
+>> +
+>> +			*val =3D state;
+>> +			break;
+>> +		case hwmon_fan_min:
+>> +			*val =3D fan->min_rpm;
+>> +			break;
+>> +		case hwmon_fan_max:
+>> +			*val =3D fan->max_rpm;
+>> +			break;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +
+>> +		break;
+>> +	case hwmon_pwm:
+>> +		fan =3D priv->fan_data[channel];
+>> +
+>> +		switch (attr) {
+>> +		case hwmon_pwm_auto_channels_temp:
+>> +			bitmap_copy(val, fan->auto_channels_temp, BITS_PER_LONG);
 >> +			break;
 >> +		default:
 >> +			return -EOPNOTSUPP;
@@ -314,235 +420,340 @@ STOM);
 >> +	return 0;
 >> +}
 >> +
->>   static const struct hwmon_ops awcc_hwmon_ops =3D {
->>   	.is_visible =3D awcc_hwmon_is_visible,
->>   	.read =3D awcc_hwmon_read,
->>   	.read_string =3D awcc_hwmon_read_string,
->> +	.write =3D awcc_hwmon_write,
->>   };
->>
->>   static const struct hwmon_channel_info * const awcc_hwmon_info[] =3D {
->> @@ -864,7 +955,7 @@ static const struct hwmon_channel_info * const awcc_=
-hwmon_info[] =3D {
->>   			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX
->>   			   ),
->>   	HWMON_CHANNEL_INFO(pwm,
->> -			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> +			   HWMON_PWM_AUTO_CHANNELS_TEMP | HWMON_PWM_ENABLE,
->>   			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->>   			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->>   			   HWMON_PWM_AUTO_CHANNELS_TEMP,
->> @@ -879,6 +970,75 @@ static const struct hwmon_chip_info awcc_hwmon_chip=
-_info =3D {
->>   	.info =3D awcc_hwmon_info,
->>   };
->>
->> +static ssize_t pwm_boost_show(struct device *dev, struct device_attribu=
-te *attr,
->> +			      char *buf)
->> +{
->> +	int ret, index =3D to_sensor_dev_attr(attr)->index;
->
-> Please initialize "index" on a separate line, can remember the reverse xm=
-as-tree order for variables.
-
-Ack.
-
->
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	struct awcc_fan_data *fan =3D priv->fan_data[index];
->> +	u32 boost;
->> +
->> +	ret =3D awcc_op_get_fan_boost(priv->wdev, fan->id, &boost);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return sysfs_emit(buf, "%u\n", boost);
->> +}
->> +
->> +static ssize_t pwm_boost_store(struct device *dev, struct device_attrib=
-ute *attr,
->> +			       const char *buf, size_t count)
->> +{
->> +	int ret, index =3D to_sensor_dev_attr(attr)->index;
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	struct awcc_fan_data *fan =3D priv->fan_data[index];
->> +	unsigned long val;
->> +
->> +	ret =3D kstrtoul(buf, 0, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret =3D awcc_op_set_fan_boost(priv->wdev, fan->id, clamp_val(val, 0, 2=
-55));
->> +
->> +	return ret ? ret : count;
->> +}
->> +
->> +static SENSOR_DEVICE_ATTR_RW(pwm1_boost, pwm_boost, 0);
->> +static SENSOR_DEVICE_ATTR_RW(pwm2_boost, pwm_boost, 1);
->> +static SENSOR_DEVICE_ATTR_RW(pwm3_boost, pwm_boost, 2);
->> +static SENSOR_DEVICE_ATTR_RW(pwm4_boost, pwm_boost, 3);
->
-> Since those attributes are working differently than the standard pwm attr=
-ibutes, i suggest to
-> instead name them fanX_boost.
-
-I went for pwm*_boost because we also export pwm*_auto_channels_temp,
-but I'm ok with fan*_boost too.
-
->
->> +
->> +static umode_t pwm_boost_attr_visible(struct kobject *kobj, struct attr=
-ibute *attr, int n)
->> +{
->> +	struct awcc_priv *priv =3D dev_get_drvdata(kobj_to_dev(kobj));
->> +
->> +	return n < priv->fan_count ? attr->mode : 0;
->> +}
->> +
->> +static bool pwm_boost_group_visible(struct kobject *kobj)
->> +{
->> +	return true;
->> +}
->> +
->> +DEFINE_SYSFS_GROUP_VISIBLE(pwm_boost);
->> +
->> +static struct attribute *fan_boost_attrs[] =3D {
->> +	&sensor_dev_attr_pwm1_boost.dev_attr.attr,
->> +	&sensor_dev_attr_pwm2_boost.dev_attr.attr,
->> +	&sensor_dev_attr_pwm3_boost.dev_attr.attr,
->> +	&sensor_dev_attr_pwm4_boost.dev_attr.attr,
->> +	NULL
->> +};
->> +
->> +static const struct attribute_group pwm_boost_group =3D {
->> +	.attrs =3D fan_boost_attrs,
->> +	.is_visible =3D SYSFS_GROUP_VISIBLE(pwm_boost),
->> +};
->> +
->> +static const struct attribute_group *awcc_hwmon_groups[] =3D {
->> +	&pwm_boost_group,
->> +	NULL
->> +};
->> +
->>   static int awcc_hwmon_temps_init(struct wmi_device *wdev)
->>   {
->>   	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
->> @@ -1011,12 +1171,50 @@ static int awcc_hwmon_init(struct wmi_device *wd=
-ev)
->>   	if (ret)
->>   		return ret;
->>
->> -	priv->hwdev =3D devm_hwmon_device_register_with_info(&wdev->dev, "alie=
-nware_wmi", priv,
->> -							   &awcc_hwmon_chip_info, NULL);
->> +	priv->hwdev =3D devm_hwmon_device_register_with_info(&wdev->dev, "alie=
-nware_wmi",
->> +							   priv, &awcc_hwmon_chip_info,
->> +							   awcc_hwmon_groups);
->>
->>   	return PTR_ERR_OR_ZERO(priv->hwdev);
->>   }
->>
->> +static void awcc_hwmon_suspend(struct device *dev)
+>> +static int awcc_hwmon_read_string(struct device *dev, enum hwmon_sensor=
+_types type,
+>> +				  u32 attr, int channel, const char **str)
 >> +{
 >> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
 >> +	struct awcc_fan_data *fan;
->> +	unsigned int i;
->> +	u32 boost;
+>> +	u8 temp;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		temp =3D find_nth_bit(priv->temp_sensors, priv->temp_sensors_size, ch=
+annel);
+>> +
+>> +		switch (temp) {
+>> +		case AWCC_TEMP_SENSOR_CPU:
+>> +			*str =3D "CPU";
+>> +			break;
+>> +		case AWCC_TEMP_SENSOR_GPU:
+>> +			*str =3D "GPU";
+>> +			break;
+>> +		default:
+>> +			*str =3D "Unknown";
+>> +			break;
+>> +		}
+>> +
+>> +		break;
+>> +	case hwmon_fan:
+>> +		fan =3D priv->fan_data[channel];
+>> +
+>> +		switch (fan->total_temps) {
+>> +		case 0:
+>> +			*str =3D "Independent Fan";
+>> +			break;
+>> +		case 1:
+>> +			temp =3D find_first_bit(fan->related_temps, priv->temp_sensors_size)=
+;
+>> +
+>> +			switch (temp) {
+>> +			case AWCC_TEMP_SENSOR_CPU:
+>> +				*str =3D "Processor Fan";
+>> +				break;
+>> +			case AWCC_TEMP_SENSOR_GPU:
+>> +				*str =3D "Video Fan";
+>> +				break;
+>> +			default:
+>> +				*str =3D "Unknown Fan";
+>> +				break;
+>> +			}
+>> +
+>> +			break;
+>> +		default:
+>> +			*str =3D "Shared Fan";
+>> +			break;
+>> +		}
+>> +
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct hwmon_ops awcc_hwmon_ops =3D {
+>> +	.is_visible =3D awcc_hwmon_is_visible,
+>> +	.read =3D awcc_hwmon_read,
+>> +	.read_string =3D awcc_hwmon_read_string,
+>> +};
+>> +
+>> +static const struct hwmon_channel_info * const awcc_hwmon_info[] =3D {
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT,
+>> +			   HWMON_T_LABEL | HWMON_T_INPUT
+>> +			   ),
+>> +	HWMON_CHANNEL_INFO(fan,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX,
+>> +			   HWMON_F_LABEL | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX
+>> +			   ),
+>> +	HWMON_CHANNEL_INFO(pwm,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP,
+>> +			   HWMON_PWM_AUTO_CHANNELS_TEMP
+>> +			   ),
+>
+> Since the number of fans and temperature sensors is only known at runtime=
+ creating awcc_hwmon_info
+> would make sense.
+
+IIRC Guenter asked another dev to add more CHANNEL_INFO entries instead
+of doing that? I might be wrong tho.
+
+I'm fine either way.
+
+>
+>> +	NULL
+>> +};
+>> +
+>> +static const struct hwmon_chip_info awcc_hwmon_chip_info =3D {
+>> +	.ops =3D &awcc_hwmon_ops,
+>> +	.info =3D awcc_hwmon_info,
+>> +};
+>> +
+>> +static int awcc_hwmon_temps_init(struct wmi_device *wdev)
+>> +{
+>> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
+>> +	unsigned long temp_sensors[BITS_TO_LONGS(U8_MAX)];
+>> +	unsigned int i, max_sensor_id =3D 0;
+>> +	int ret;
+>> +	u32 id;
+>> +
+>> +	for (i =3D 0; i < priv->temp_count; i++) {
+>> +		/*
+>> +		 * Temperature sensors IDs are listed after the fan IDs at
+>> +		 * offset `fan_count`
+>> +		 */
+>> +		ret =3D awcc_op_get_resource_id(wdev, i + priv->fan_count, &id);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, id);
+>> +		if (id > max_sensor_id)
+>> +			max_sensor_id =3D id;
+>> +
+>> +		__set_bit(id, temp_sensors);
+>> +	}
+>> +
+>> +	/*
+>> +	 * We prefer to allocate the bitmap dynamically because usually temp I=
+Ds
+>> +	 * are small (< 0x30) and only one UL is needed to store it, but there
+>> +	 * may be unknown devices that break this rule
+>> +	 */
+>
+> Hi,
+>
+> as far as i know the memory allocator inside the kernel at least allocate=
+s 32 bytes, so you are
+
+bytes? bits maybe?
+
+> not saving any memory with this. I suggest you allocate the bitmaps stati=
+cally.
+
+The thing is - We don't know before hand how big an ID can be.
+
+Technically the upper limit is U8_MAX which would require 4 ULs to
+store, which is a lot. However I haven't seen temp IDs bigger than 0x6,
+so this way only one UL is allocated for most devices.
+
+I would be very grateful if Dell could help us on this one :')
+
+>
+>> +	priv->temp_sensors_size =3D max_sensor_id + 1;
+>> +	priv->temp_sensors =3D devm_bitmap_zalloc(&wdev->dev, priv->temp_senso=
+rs_size,
+>> +						GFP_KERNEL);
+>> +	if (!priv->temp_sensors)
+>> +		return -ENOMEM;
+>> +
+>> +	bitmap_copy(priv->temp_sensors, temp_sensors, priv->temp_sensors_size)=
+;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int awcc_hwmon_fans_init(struct wmi_device *wdev)
+>> +{
+>> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
+>> +	u32 id, min_rpm, max_rpm, temp_count, temp_id;
+>> +	unsigned long gather[BITS_TO_LONGS(U8_MAX)];
+>> +	struct awcc_fan_data *fan_data;
+>> +	unsigned int i, j;
 >> +	int ret;
 >> +
 >> +	for (i =3D 0; i < priv->fan_count; i++) {
->> +		fan =3D priv->fan_data[i];
+>> +		fan_data =3D devm_kzalloc(&wdev->dev, sizeof(*fan_data), GFP_KERNEL);
+>> +		if (!fan_data)
+>> +			return -ENOMEM;
 >> +
->> +		ret =3D awcc_thermal_information(priv->wdev, AWCC_OP_GET_FAN_BOOST,
->> +					       fan->id, &boost);
->> +		if (ret)
->> +			fan->suspend_cache =3D 0;
+>> +		fan_data->related_temps =3D devm_bitmap_zalloc(&wdev->dev,
+>> +							     priv->temp_sensors_size,
+>> +							     GFP_KERNEL);
 >
-> Please at least log a warning here that the fan boost value can not be re=
-stored properly.
+> Same as above
+>
+>> +		if (!priv->temp_sensors)
+>> +			return -ENOMEM;
+>> +
+>> +		fan_data->auto_channels_temp =3D devm_bitmap_zalloc(&wdev->dev,
+>> +								  priv->temp_count,
+>> +								  GFP_KERNEL);
+>
+> We already know that we only ever use the first sizeof(long) bytes from t=
+his bitmap,
+> please do a static allocation here.
+
+Right, ofc! I forgot about the limit I imposed.
+
+>
+>> +		if (!priv->temp_sensors)
+>> +			return -ENOMEM;
+>> +
+>> +		/*
+>> +		 * Fan IDs are listed first at offset 0
+>> +		 */
+>> +		ret =3D awcc_op_get_resource_id(wdev, i, &id);
+>> +		if (ret)
+>> +			return ret;
+>> +		id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, id);
+>> +
+>> +		ret =3D awcc_thermal_information(wdev, AWCC_OP_GET_FAN_MIN_RPM, id,
+>> +					       &min_rpm);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		ret =3D awcc_thermal_information(wdev, AWCC_OP_GET_FAN_MAX_RPM, id,
+>> +					       &max_rpm);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		ret =3D awcc_get_fan_sensors(wdev, AWCC_OP_GET_TOTAL_FAN_TEMPS, id,
+>> +					   0, &temp_count);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		for (j =3D 0; j < temp_count; j++) {
+>> +			ret =3D awcc_get_fan_sensors(wdev, AWCC_OP_GET_FAN_TEMP_ID,
+>> +						   id, j, &temp_id);
+>> +			if (ret)
+>> +				break;
+>> +
+>> +			temp_id =3D FIELD_GET(AWCC_RESOURCE_ID_MASK, temp_id);
+>> +			if (temp_id < priv->temp_sensors_size)
+>> +				__set_bit(temp_id, fan_data->related_temps);
+>> +		}
+>> +
+>> +		fan_data->id =3D id;
+>> +		fan_data->min_rpm =3D min_rpm;
+>> +		fan_data->max_rpm =3D max_rpm;
+>> +		fan_data->total_temps =3D bitmap_weight(fan_data->related_temps,
+>> +						      priv->temp_sensors_size);
+>> +		bitmap_gather(gather, fan_data->related_temps, priv->temp_sensors,
+>> +			      priv->temp_sensors_size);
+>
+> Since fan_data->related_temps is only used for determining the fan label =
+after this it would
+> make sense to determine the fan label here and turn fan_data->related_tem=
+ps into a local
+> variable on the stack.
 
 Ack.
-
-Is not propagating errors a good approach here? My idea was to try to
-turn off fans no matter what.
-
->
->> +		else
->> +			fan->suspend_cache =3D clamp_val(boost, 0, 255);
->> +
->> +		awcc_op_set_fan_boost(priv->wdev, fan->id, 0);
->> +	}
->> +}
->> +
->> +static void awcc_hwmon_resume(struct device *dev)
->> +{
->> +
->> +	struct awcc_priv *priv =3D dev_get_drvdata(dev);
->> +	struct awcc_fan_data *fan;
->> +	unsigned int i;
->> +
->> +	for (i =3D 0; i < priv->fan_count; i++) {
->> +		fan =3D priv->fan_data[i];
->> +
->> +		if (fan->suspend_cache)
->
-> How does the driver restore fan boost settings with a value of 0?
-
-We set to 0 when suspending so I don't think it's necessary to restore
-to 0 again when resuming.
 
 >
 > Thanks,
 > Armin Wolf
+
+Thank you very much! Very helpful feedback :)
+
 >
->> +			awcc_op_set_fan_boost(priv->wdev, fan->id, fan->suspend_cache);
+>> +		bitmap_copy(fan_data->auto_channels_temp, gather, priv->temp_count);
+>> +		priv->fan_data[i] =3D fan_data;
 >> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int awcc_hwmon_init(struct wmi_device *wdev)
+>> +{
+>> +	struct awcc_priv *priv =3D dev_get_drvdata(&wdev->dev);
+>> +	int ret;
+>> +
+>> +	priv->fan_data =3D devm_kcalloc(&wdev->dev, priv->fan_count,
+>> +				      sizeof(*priv->fan_data), GFP_KERNEL);
+>> +	if (!priv->fan_data)
+>> +		return -ENOMEM;
+>> +
+>> +	ret =3D awcc_hwmon_temps_init(wdev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret =3D awcc_hwmon_fans_init(wdev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	priv->hwdev =3D devm_hwmon_device_register_with_info(&wdev->dev, "alie=
+nware_wmi", priv,
+>> +							   &awcc_hwmon_chip_info, NULL);
+>> +
+>> +	return PTR_ERR_OR_ZERO(priv->hwdev);
 >> +}
 >> +
 >>   /*
 >>    * Thermal Profile control
 >>    *  - Provides thermal profile control through the Platform Profile AP=
 I
->> @@ -1233,6 +1431,24 @@ static int wmax_wmi_probe(struct wmi_device *wdev=
-, const void *context)
->>   	return ret;
->>   }
+>> @@ -753,6 +1171,12 @@ static int alienware_awcc_setup(struct wmi_device =
+*wdev)
+>>   	priv->wdev =3D wdev;
+>>   	dev_set_drvdata(&wdev->dev, priv);
 >>
->> +static int wmax_wmi_suspend(struct device *dev)
->> +{
->> +	if (awcc->hwmon)
->> +		awcc_hwmon_suspend(dev);
+>> +	if (awcc->hwmon) {
+>> +		ret =3D awcc_hwmon_init(wdev);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
 >> +
->> +	return 0;
->> +}
+>>   	if (awcc->pprof) {
+>>   		ret =3D awcc_platform_profile_init(wdev);
+>>   		if (ret)
+>> @@ -833,6 +1257,13 @@ int __init alienware_wmax_wmi_init(void)
+>>   	if (id)
+>>   		awcc =3D id->driver_data;
+>>
+>> +	if (force_hwmon) {
+>> +		if (!awcc)
+>> +			awcc =3D &empty_quirks;
 >> +
->> +static int wmax_wmi_resume(struct device *dev)
->> +{
->> +	if (awcc->hwmon)
->> +		awcc_hwmon_resume(dev);
+>> +		awcc->hwmon =3D true;
+>> +	}
 >> +
->> +	return 0;
->> +}
->> +
->> +DEFINE_SIMPLE_DEV_PM_OPS(wmax_wmi_pm_ops, wmax_wmi_suspend, wmax_wmi_re=
-sume);
->> +
->>   static const struct wmi_device_id alienware_wmax_device_id_table[] =3D=
- {
->>   	{ WMAX_CONTROL_GUID, NULL },
->>   	{ },
->> @@ -1243,6 +1459,7 @@ static struct wmi_driver alienware_wmax_wmi_driver=
- =3D {
->>   	.driver =3D {
->>   		.name =3D "alienware-wmi-wmax",
->>   		.probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
->> +		.pm =3D pm_sleep_ptr(&wmax_wmi_pm_ops),
->>   	},
->>   	.id_table =3D alienware_wmax_device_id_table,
->>   	.probe =3D wmax_wmi_probe,
+>>   	if (force_platform_profile) {
+>>   		if (!awcc)
+>>   			awcc =3D &empty_quirks;
 >>
 
 
