@@ -1,131 +1,102 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B684621D3C2;
-	Fri,  7 Mar 2025 15:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C722561BD;
+	Fri,  7 Mar 2025 20:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741359831; cv=none; b=QuImsDmOaJua/tyRk4eTtwzrfxOsSJel/45c804t0ocZkenHdOrUXtmaoGNEazfEaZOU26bzf2xjQwZq2eno2Qz7i78ZxL4oRT8gpdPYRWcegcCGPm94w5B4wBkDETLVVHTc3egjFguKU+eJPhVg0MEFM6s7yzdQTp4Ixj9z4vw=
+	t=1741380719; cv=none; b=Aj5hce5YNIuLXeCLL5QHF5aKDHk7gMs1UFJLi3kJoCZee4nzIkpIK0Q6pv1j6MglzFn77F9iKKa70/7XvKHVxN+Kl4bOdO/+rAI4mQNVDurjbBaBwqoPASANxim5+CDJ8ja5HS/bG6cn9SoQ64j/tqrNFTHjKjVxbTaAhx+xl1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741359831; c=relaxed/simple;
-	bh=JWnX24bQXGvbdkcSpP8hZ14PW+ptSaxnMNvypsvsyfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h0JmEXwuATGAfJwORNXm+FU4No5AZp2RkzamrlMzttFEj+fwT1zGKqp7iSyo+UHPITgNY8ETBoVgiVyujuqTQAKKO684kUO7Df8IHylbtW87JWQw4BCmKwT9gDlywgbQi2iuWTU1ODQYWfgpUzKI0y0++MikPAE97gK4q9F5r6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qo8sgSCh; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741380719; c=relaxed/simple;
+	bh=GGNUHmMxcy6R0lwyYXAWHuq9IENeuZCWMCuYICMOCkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fzvItq3NIjFH5Teb9Q5CNcBPy/hkgi4fh+LRbxD5KWJ6qYqiFltRvzI5W6ggrvqRYESvp0y5M1BQTxCpXdrfq4jcY19tHV3i2+HMBup7YVOMnXwDThJzAr79QTMNb5ko8KKCWucorIP7qJF2DmkhGRiWbMmVpUZ1lqK1PV/BofU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rx3UG0nl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qo8sgSCh"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2234e4b079cso35130535ad.1;
-        Fri, 07 Mar 2025 07:03:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741359829; x=1741964629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjltdXPvzAGYWJCjNCh7/tJsigIQN9ooLcu9BagrtF8=;
-        b=Qo8sgSCh/Ri2cEcjiIZpfYyfbrMm7vQdoVHOkK5NbUWoimAq28ItOBS8iZ/XfjzFut
-         JGF2fs1TWe3jx9B4GsXtygrv93yTkzYrbUVsHKeoAqJTGL6AjlePqM7j5R4fZKTFgQwQ
-         AHQGqpA3hOBO8x9DftsjzHoOobti0brx5mxPTr0li9l0VoXqh/GdHGazlCwaiPbRaxaq
-         fLxSk85zV8o8THkS6O8LQR3SN53rVHLIe0qmEe1C0NmUNumrOFD51gXzfaSdm726tR5N
-         h+UIjlhdJh167vJb4W/Gk2e1TcWmVtRSkb51xZCFhiVY5CBTlStXJAof2kNF2py4FjO4
-         abqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741359829; x=1741964629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mjltdXPvzAGYWJCjNCh7/tJsigIQN9ooLcu9BagrtF8=;
-        b=eoWmFfwuwzx0X+GT/AwadM4ujcguQkOIM8jfzfZwp/9b8+fPEsU2Qep/znQtYesyBU
-         FzqHKlqoOcnbV9B20khXZvtKey6ygjZZsp1z4VTlm5NbyUI5HJoA/ZJ/VstZ9yyDOIZ3
-         VV20Xgb6lsRpjvdzNESmKHUrtxvLZ7Sz7bx0m0yt9CQPpghXsE90WMOr8SHrYWTfUImk
-         lwLGYt7RMFSfvBVjeCoksFY5P21Q4hrskyRRV+dQKcTeCEdJpPVM60ueG/qgVBIlacEx
-         h+/eKzMjKQXr0C/tkrqKecpd+4Cap9ZPxL8cm8R0YG4r4CK2CqdR1JlYwIv/X0dxPeLi
-         /Ojw==
-X-Forwarded-Encrypted: i=1; AJvYcCXX/fi/pVeauI3sHN2B+vIRq13aM+FSYmDWCVI1C9xARoveJQOHLiPOZTCDggcqORLloE10kVGNmXaHk+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvmNV8HIhYfSwbTnrMG01v394CgyALjasOB5J6WR7+d/OuJffn
-	hbDm1QUQruiSno6QRnVVgdZ1NSzJI/UZZKM475mh2H/HJcoTV2NhpLMfbg==
-X-Gm-Gg: ASbGncs9fkHiHQXlH6GBiSvKwfi1LQwukTjdtTrHj2TmYCYtZzTILKiFFdtZh0k3E6F
-	r2ioGx4bbYGWep6NQx66lxBvUjQIBGksxLhbrjfBdLZVMSebseic5gNj2rrd5c+/4v1qv+lxS/z
-	2xgPKhgy3tt/45/6QpfUWAfAr233lDiUFo2DU9/kdN6leO+cX4DEbm5THloX+1I/ByuyAdA0J8W
-	S1vbWyH4dA6EkdIvOsQhoymia5Gae20rvIVHbcVjwJLg1hDe3ObX3KagS8px60qHO89VC4JXZLC
-	gb3IeFXYt5ogWYtSj+5cBEsKMtFI5nQRouOS9wXftYo9cpx4ftoY/oQiyg==
-X-Google-Smtp-Source: AGHT+IEWDM76vDq+sGetR3TYHlWMMUUHGBnS2ETD1Absx3BChqLC/jgHSoWtZYIjx/0SwmgYZ74fSA==
-X-Received: by 2002:a17:902:ecc1:b0:224:1e77:1a8b with SMTP id d9443c01a7336-22428c0d609mr50555265ad.51.1741359828739;
-        Fri, 07 Mar 2025 07:03:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a7fad8sm30961195ad.119.2025.03.07.07.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 07:03:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.14-rc6
-Date: Fri,  7 Mar 2025 07:03:47 -0800
-Message-ID: <20250307150347.3784204-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rx3UG0nl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5359CC4CED1;
+	Fri,  7 Mar 2025 20:51:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741380718;
+	bh=GGNUHmMxcy6R0lwyYXAWHuq9IENeuZCWMCuYICMOCkI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rx3UG0nlOjx2wRLfI/VRDwIiaxqaXwSPwrIiXjzY/IMj28NcF+NdHw7yBo5QUatvc
+	 ET5KAUPkdBK8ZQn5tDanolEjB8FkpVFAtTUFjgxDzhZFDBaqiyl1fK23EFDFDnkKsw
+	 npSNfgAqT52sZ0YsemlTbGO9ZJCJrKwYx0hpDc/Ltqv6WnG7FER/qAmEZiNk+R+eTj
+	 r9sbQ7tOLdj7WUXpvoKM6NEYOBYm7t+WslJp6McQ9ihfbpVoWfiMDBRxuuCv92NkET
+	 BPJZc1fgiDRsxzswxSxXqTehRj8YYBh2avtj1SMcjMHJ+tPfYDxWXr2i3PpSQeOsP5
+	 yJ71XFg7vh2Vw==
+Date: Fri, 7 Mar 2025 14:51:56 -0600
+From: Rob Herring <robh@kernel.org>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Shenghao Ding <shenghao-ding@ti.com>, Kevin Lu <kevin-lu@ti.com>,
+	Baojun Xu <baojun.xu@ti.com>, Dan Murphy <dmurphy@ti.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shi Fu <shifu0704@thundersoft.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	asahi@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 17/20] ASoC: dt-bindings: tas2770: add flags for SDOUT
+ pulldown and zero-fill
+Message-ID: <20250307205156.GA583954-robh@kernel.org>
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+ <20250227-apple-codec-changes-v3-17-cbb130030acf@gmail.com>
+ <20250304135050.GA2485358-robh@kernel.org>
+ <CAHgNfTyVKFuT0fZ3Qj=MdcXs67KscwkSepAH95xkAAKWM1g8Xg@mail.gmail.com>
+ <20250305132239.GA1415729-robh@kernel.org>
+ <CAHgNfTxS1Q4PPsw520-J4Yn6xg+QZOYFkYhg5yv-uZFu5waN_g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHgNfTxS1Q4PPsw520-J4Yn6xg+QZOYFkYhg5yv-uZFu5waN_g@mail.gmail.com>
 
-Hi Linus,
+On Fri, Mar 07, 2025 at 04:18:31PM +1000, James Calligeros wrote:
+> On Wed, Mar 5, 2025 at 11:22 PM Rob Herring <robh@kernel.org> wrote:
+> > This just feels like something common because any TDM interface may need
+> > to control this. It's not really a property of the chip, but requirement
+> > of the TDM interface.
+> 
+> What I'm imagining then is something like:
+> 
+> dai-link@0 {
+>     cpu {
+>         sound-dai = <&some_cpu>;
+>     };
+>     codec {
+>         sound-dai = <&some_codec>;
+>         dai-tdm-tx-zerofill;
+>         dai-tdm-tx-pulldown; /* either or, having both makes no sense */
 
-Please pull hwmon fixes for Linux v6.14-rc6 from signed tag:
+If they are mutually exclusive, it's best to design the properties that 
+way. So something like:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.14-rc6
+dai-tdm-tx-idle = "zerofill";
+dai-tdm-tx-idle = "pulldown";
 
-Thanks,
-Guenter
-------
+>     };
+> };
+> 
+> Codec drivers would then provide a function to set TDM TX behaviour if they
+> support it, and export that as a dai op for use by machine drivers
+> when they parse
+> the dai link similar to dai-tdm-tx-slot and friends. Is that close to
+> what you have
+> in mind?
 
-The following changes since commit d082ecbc71e9e0bf49883ee4afd435a77a5101b6:
+How would it work when you need a mask? "dai-tdm-slot-tx-mask" is 
+enough?
 
-  Linux 6.14-rc4 (2025-02-23 12:32:57 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.14-rc6
-
-for you to fetch changes up to 10fce7ebe888fa8c97eee7e317a47e7603e5e78d:
-
-  hwmon: fix a NULL vs IS_ERR_OR_NULL() check in xgene_hwmon_probe() (2025-03-03 06:04:34 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v6.14-rc6
-
-- xgene-hwmon: Fix a NULL vs IS_ERR_OR_NULL() check
-
-- ad7314: Return error if leading zero bits are non-zero
-
-- ntc_thermistor: Update/fix the ncpXXxh103 sensor table
-
-- pmbus: Initialise page count in pmbus_identify()
-
-- peci/dimmtemp: Di not provide fake threshold data
-
-----------------------------------------------------------------
-Erik Schumacher (1):
-      hwmon: (ad7314) Validate leading zero bits and return error
-
-Maud Spierings (1):
-      hwmon: (ntc_thermistor) Fix the ncpXXxh103 sensor table
-
-Paul Fertser (1):
-      hwmon: (peci/dimmtemp) Do not provide fake thresholds data
-
-Titus Rwantare (1):
-      hwmon: (pmbus) Initialise page count in pmbus_identify()
-
-Xinghuo Chen (1):
-      hwmon: fix a NULL vs IS_ERR_OR_NULL() check in xgene_hwmon_probe()
-
- drivers/hwmon/ad7314.c         | 10 +++++++
- drivers/hwmon/ntc_thermistor.c | 66 +++++++++++++++++++++---------------------
- drivers/hwmon/peci/dimmtemp.c  | 10 +++----
- drivers/hwmon/pmbus/pmbus.c    |  2 ++
- drivers/hwmon/xgene-hwmon.c    |  2 +-
- 5 files changed, 50 insertions(+), 40 deletions(-)
+Rob
