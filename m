@@ -1,66 +1,67 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0FC19E999
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 14:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1B710E5
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 15:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741531826; cv=none; b=jg68NTur4n2Us87MZAWRHl9XPM68r7x9jJGOiqleu0hZXOfQXau4kuKkjtNVQxqjfWbqPKPihZ7oMDKvE24XazKuEgjEsSTknHb3X4f3whICtm5IL+b3tOTWhf/7yV0SCdShkKuVL3r4GRrSVsOoEr1NqfgqEFpTbwsmEpw5FmA=
+	t=1741532654; cv=none; b=Jtzn28dr9ddionszimhJme/ZQEkfGjPOZ3/6/+CGl7p0c6L8tgxuFWubPJyIIaPjkO+mBQwj7Y07Ajh7xL0GAI8U7v1s2n7WNd2UPb2EizL84Dx1Y8QwI+BU2hZ9xeUisYnUYpi2YQbZ0lcMDGaXe+AMTKiPQUo8f7zxgqzy9w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741531826; c=relaxed/simple;
-	bh=/2k4zmANrLa8o9Rpk891pjMnQao4XTsgz32zRhaRDJw=;
+	s=arc-20240116; t=1741532654; c=relaxed/simple;
+	bh=sOcuKN/m980d4tY+NrauBRzcSntJd4RuSjwQpDWi7rM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nAdjIKfM761frx/xcgHSu1ivxgIZUNNUP4LB9y0OKwWc+L8iQ6GD/npHaPcA6r3oKOv6pwkXYmRsVRZq9k9n1cnK/T5SSxYiRGb0EoZRxpE4nZ80Q1EyouU7R+1rZN8DkfH1ZIv/UJamuAjNcLNbPCRLGkBjitDn8Aip+JrUlHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfX7o4bf; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=kisQgsvkaUDcw1JIgY6Ud1Tzt8cLKT3YkHuidUTiVJ/+ztn2svctsx9URicfcGJh6LR0PksU+ZHrFEf6G/8UCzjZ+NMbWlqN6u6lrGr4f0SwYbJZH1rcdLyWdlD1EJzfW9AnqfEGxufFHkZyAoUIG4EIFEvj6XqGKb8KIADvsOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AlGVQ8fn; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfX7o4bf"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22403cbb47fso62489465ad.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 09 Mar 2025 07:50:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AlGVQ8fn"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-223594b3c6dso59138485ad.2
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Mar 2025 08:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741531824; x=1742136624; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741532650; x=1742137450; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pAnHFNBFYEKBV0D3j8Ek4czZB9M0vXU6URlX2ybdFN8=;
-        b=DfX7o4bf5BP/Ogz9mazK0COAnBEWxi+rmFtK4Ur2UHK8KhHgEqocpl/mln1qTdNCDN
-         zBa+YXWfy+/7qYAqFksNh7XDVoWyZd8uaO44BU2U59j3HJ1T0MAppfrz0Im7clRqqbaO
-         kMxMetfs48VN5mY4wcUnHGHgO7RATM9JHkVZG+4OXkqtXrgZKm8foxtEbpf27Wz/Ul+Q
-         xYtnIfuglkrtDT3llSSSYqcUi2p+clkrw5WM+OH9tKpgqEkqtlnB5+3TwODJ9i6z/nXs
-         Cwrr0dGRCSiCgtAMczacvhGHH9tevkBszUApfF6cHfMCS5auNYnSa0umTrkLweYDAFE4
-         mSwQ==
+        bh=24P/3KgBpnNd6IcDeWG+q5nPHIiIrAry9aiLBOLpAKs=;
+        b=AlGVQ8fn8/VD7V6xBbx+f1DH0RdIDb8fQGGduJS6CpDhU5LhMRF702bM1oeLJb9wl2
+         HE4BRizkiWcBn+cJ/3AGYWezvmtm4zbWBFlR874xZ1EydZvCpXp+D1sScPvkVSkgVkc+
+         Nbe6m8is67MQKxKaP9l0gZ9PoHDuDUeaBeu3iu+5WrDcdcR+JQkzA+XHJs7O1tCnuy8u
+         A1Z+CZXdT8+Bmdms+RI8bPyZtNoIl82hhFwNNnpx+LyUUM9YtdkbuPTMxbhP/zwpI32H
+         cnosIO+eV55a7Wvf9fLNiiu+Vi48TVDx9y9ha/hkMQ6veZC0RHW+NeWwte4bGvtGDEji
+         //Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741531824; x=1742136624;
+        d=1e100.net; s=20230601; t=1741532650; x=1742137450;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pAnHFNBFYEKBV0D3j8Ek4czZB9M0vXU6URlX2ybdFN8=;
-        b=SmYhYntMOTCZQVb3ywogP+XrKLiYNt7VGR8sAEBjPCxwI3nVGq74XXXlaTwDOuXPjI
-         LEBe3WgSMuxCpP58Lu8coPBGNTilWt4MYyApgFYsHKQ0Eht556jOFT4K36Rf9fDv6tS5
-         fXH/W6Z15MAWR5OeHE0rlDU0yu0hkehbswuATdl453TfcCoeK8OyRoz/Xt+NfhTeu8jO
-         QArcyfzIaXr/K3JPd/5MTo19TXZOmMMGt86lC2UI8nhMJVF5bVcuGJDr9Hzqa7OOvzcL
-         UlimSGkAaFi43+jaiOtTarA716NjpECe+GRt4VK8ULEZWeZVPbjB3BZpLa8R3YUtoF8T
-         m26g==
-X-Gm-Message-State: AOJu0YzEYCyCQJElVpD/RRx8oGgNceG7SxiexBI6gyX7ZYyBMs1sq9Jy
-	+2SQGtmZaTU/ZzWJwchv0B/omxCr/HCUJK361zlqrWonLw469Ov3
-X-Gm-Gg: ASbGncshlqdlAH7h5A4KGxw7acRT2VDeg9S6E1FzstNJr0eLrMjxfSQ+aBd6O9/V1cd
-	6Grl4Yi2j6l0XmCCK86e6m2Zm66yTuA8V6A4EHzULEmTO6Hew55pnYumxjFjQqPDI+zQe7EIqwH
-	doGGHCrRIvltiQTfS0Hx8Uy3z5ceGBEYx/4nOaCptofkyE/qXR7SOUAwkcUK/co91CctprDG8kB
-	QXOIs5NsFCStK9wV6PtrbRDQLcwThmgd9gphjJPMhx6q1LUcGKWvHqO2kguV3OiOAeO4Z4CFSjR
-	TsK0mFuTDxrXeGd9YGPrVM/Z4yx5Hz1yPyTMhBQdo/Te0oT9+BCcDO1zj931bO+zeYx9yPCGLyo
-	ywABkvCKCpbCPBr2n7g==
-X-Google-Smtp-Source: AGHT+IG2k2JYIbClQGbmt4hEzTUFxtqLMPohzYuVKDm5srjry8/SnELa1o8AKsEFDnnLTZnW2bDX5A==
-X-Received: by 2002:a05:6a00:3e29:b0:736:5ee3:64d5 with SMTP id d2e1a72fcca58-736aaaed79amr14320130b3a.23.1741531824040;
-        Sun, 09 Mar 2025 07:50:24 -0700 (PDT)
+        bh=24P/3KgBpnNd6IcDeWG+q5nPHIiIrAry9aiLBOLpAKs=;
+        b=DRlWRgtuMN6i/pNDVCAED9VWcoH7z5fzDRBVVRZVnoGrioV3X+nrCEPpCpw0d8l008
+         3oTxioSU7WxWlHmliSCcQmQL/Bjkp7V9FBxiFtI2wERM7oQrJ+BPzOHZYQrCb2PyBvKG
+         CJhK5VVxWL4OtPzw84XYy6vBX9lYm+Egir6lkDUAaJu0Eo+L6BnzPJqvZNZ/gqJwbVbP
+         wibx3bFlV4veCvuR45rgVjvNW633FzFfFKNgYn2Fpb9rUYrdkpMX1ekodY1cH66S9UmW
+         USo/XCGRGoByj9zVEdcsHjTejqs0ni0mFfJte6rYp5K0UDsDfBdfLlDI6ZT34uTclsmp
+         2AfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+dH2JsHOW2h47wyU6tPVxVTzgaG1NlgQkum6siRjyU6YMYyLW/bIDT4cEcNdjzJKAsF+lMeWof5e2rw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN8yYocHUY7q/K1PH1xME2IYBZ9P6U25TcX1yXJUa2DxQz4Zo1
+	+NEZupM/0E5JrDQ4+2NbbgLdGepzTDLWK1fR1/8Iea+qLyVS/gv+dFct1A==
+X-Gm-Gg: ASbGncu1p2A9hWlOCe9wXLYpKbONDm4Z1A2jvALpVD4T62sZXvzxEBZFlCxi688wJsx
+	hRxV72D39zprLw3vthZkSFdnrG6o4esUSIToGocrIwgW0ENxYtPBgfVHGKsOH1izUkkKDC0tBir
+	+LAkhGnRMEXWitETykZcoOFlJw0Th+4GFmGvyxw8D88VTe2/OYBtUn5PkVuC/rp4KIajSZpmxIl
+	oRScCPZFEwG8tVQoUGoIAx/Z+uC8cKd9Xw2eZfk/HRClVg+B32hiZFLgcRyMGoK6wgw9nruPVoF
+	I2aFm3l188dzx7IpLFn0Y4KlsWLWzbkTfhUUcs5aSvBvRaYhv9k0AVwyKmm37XuECekdD2KWX4h
+	9NT1DDaCsqKV2QzNOsw==
+X-Google-Smtp-Source: AGHT+IE6B5ZbzxB6y/6cfvuosXNTTRQby9HM1fnZm/DiJfDRgbNVyhsgjDlSVBZFo/tpIH9xEcifmw==
+X-Received: by 2002:a17:902:cccf:b0:224:194c:694c with SMTP id d9443c01a7336-22428aaeb6dmr210134225ad.28.1741532650354;
+        Sun, 09 Mar 2025 08:04:10 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736bb5fcd68sm3337422b3a.135.2025.03.09.07.50.22
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-224109e9f86sm61368135ad.83.2025.03.09.08.04.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Mar 2025 07:50:23 -0700 (PDT)
+        Sun, 09 Mar 2025 08:04:09 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <59e6ea7e-eb9a-49c4-9b43-4c6be4586530@roeck-us.net>
-Date: Sun, 9 Mar 2025 07:50:22 -0700
+Message-ID: <6d6dfcdc-aad3-401c-8845-1da7bfba3b02@roeck-us.net>
+Date: Sun, 9 Mar 2025 08:04:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +70,12 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
- Gerhard Engleder <eg@keba.com>
+To: Gerhard Engleder <gerhard@engleder-embedded.com>
+Cc: jdelvare@suse.com, Gerhard Engleder <eg@keba.com>,
+ linux-hwmon@vger.kernel.org
 References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
- <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
- <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
- <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+ <54a58308-e559-4007-a751-2d8a8fef29bb@roeck-us.net>
+ <aefd126d-2041-4355-b685-7aa5ebf6ff13@engleder-embedded.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,39 +121,66 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+In-Reply-To: <aefd126d-2041-4355-b685-7aa5ebf6ff13@engleder-embedded.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 3/9/25 00:23, Thomas Weißschuh wrote:
-
->>>> +static const struct hwmon_channel_info *kbatt_info[] = {
->>>> +	HWMON_CHANNEL_INFO(in,
->>>> +			   /* 0: dummy, skipped in is_visible */
+On 3/9/25 00:03, Gerhard Engleder wrote:
+> On 08.03.25 23:32, Guenter Roeck wrote:
+>> On 3/8/25 13:23, Gerhard Engleder wrote:
+>>> From: Gerhard Engleder <eg@keba.com>
 >>>
->>> Why?
+>>> The KEBA battery monitoring controller is found in the system FPGA of
+>>> KEBA PLC devices. It puts a load on the coin cell battery to check the
+>>> state of the battery.
+>>>
+>>> Signed-off-by: Gerhard Engleder <eg@keba.com>
 >>
->> For compatibility reasons, as the out of tree version of the driver did
->> start with index 1 and there is software which rely on that fact. But
->> I'm unsure if this is a valid argument for mainline code. Guenter Roeck
->> also commented that, so will discuss this in the other thread.
+>> Looking into the keba code, that is kind of piece by piece approach.
+>> I see a reference to fans in drivers/misc/keba/cp500.c, so I guess I'll see
+>> a fan controller driver at some point in the future. I do not support
+>> the idea of having multiple drivers for the hardware monitoring
+>> functionality of a single device.
 > 
-> Ack, lets' discuss with Guenter.
-> However I don't think it's going to fly.
+> Yes, the fan controller will follow. The cp500 driver supports multiple
+> devices. All of them have the battery controller, but only some of them
+> have the fan controller. Fanless devices don't have a fan controller in
+> the FPGA. There are also devices with two fan controllers.
+> 
+> The battery controller and the fan controller are separate IP cores with
+> its own 4k address range (also I2C, SPI, ...). So I see them as separate
+> devices. There is also no guarantee if the address range of both
+> controllers is next to each other or not.
+> 
+> Does that help you to see the battery controller and the fan controller
+> as separate devices?
+> 
 
-This kind of argument is often used by those who want to implement non-standard
-code. Implement it out-of-tree first and then say "sorry, we have to do it,
-the out-of-tree code does it and our userspace depends on it". That is completely
-unacceptable. If that is what you want, and you are not willing to adjust your
-userspace code, keep your code out of tree.
+Barely. At this point I am not convinced that this should be a hwmon driver
+in the first place.
 
-On top of that, I don't even know what the attribute means. An alarm attribute
-is supposed to indicate that a value is out of range. The implementation suggests
-that this is is not the case. What is "battery ok" ? Voltage out of range ?
-Battery failed ? The term itself suggests that it may reflect a failure.
-It might be a "fault" attribute, and even that would not be a good match.
-I'll need to see the actual description to determine what if anything is
-acceptable. It will most definitely not be in1_alarm.
+>> Either case, the attribute needs to be documented.
+> 
+> You mean the documentation Documentation/hwmon/, which Thomas Weißschuh
+> also mentioned? I will add it.
+> 
+
+Yes.
+...
+
+>> Not acceptable. The first voltage channel is channel 0, not 1.
+> 
+> I did that for compatibility reasons, as the out of tree version of the
+> driver did start with index 1 and there is software which rely on that
+> fact. I saw a similar dummy in ina3221.c, so I thought this is ok.
+
+Isn't this a nice thing in the Linux kernel: You can find almost everything
+in there to use as precedence.
+
+The ina3221 driver slipped this in when it was submitted and, yes, I didn't
+notice. When it was converted to the with_info API, it was too late to
+change it. That doesn't make it better, and it is most definitely not an
+argument to make for a new driver doing the same.
 
 Guenter
 
