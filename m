@@ -1,67 +1,66 @@
 Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1B710E5
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 15:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14FB1DF27F
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 15:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741532654; cv=none; b=Jtzn28dr9ddionszimhJme/ZQEkfGjPOZ3/6/+CGl7p0c6L8tgxuFWubPJyIIaPjkO+mBQwj7Y07Ajh7xL0GAI8U7v1s2n7WNd2UPb2EizL84Dx1Y8QwI+BU2hZ9xeUisYnUYpi2YQbZ0lcMDGaXe+AMTKiPQUo8f7zxgqzy9w4=
+	t=1741533776; cv=none; b=AVg1fuub54pBDKXCg5//OZ3u/bPN0Bvip4D3IDQ2H2RD/TxxJbm9pqdF0EJzUYoyNSvGYQy/I6/l59XBoPmzADRXrnQClBPMzniT6AB3k8snMrEVaB/VXIOFFCxEnj4pjilDmU5SzjFwf4EW0POQqWpWDR6XkIQnwd0OoCVOukE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741532654; c=relaxed/simple;
-	bh=sOcuKN/m980d4tY+NrauBRzcSntJd4RuSjwQpDWi7rM=;
+	s=arc-20240116; t=1741533776; c=relaxed/simple;
+	bh=UzuOtGndFFbDerug9VsJWd1dpG7ip0k15Mc/FfvRZfE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kisQgsvkaUDcw1JIgY6Ud1Tzt8cLKT3YkHuidUTiVJ/+ztn2svctsx9URicfcGJh6LR0PksU+ZHrFEf6G/8UCzjZ+NMbWlqN6u6lrGr4f0SwYbJZH1rcdLyWdlD1EJzfW9AnqfEGxufFHkZyAoUIG4EIFEvj6XqGKb8KIADvsOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AlGVQ8fn; arc=none smtp.client-ip=209.85.214.172
+	 In-Reply-To:Content-Type; b=TdKCKqlJzQZCU5YgtpbMSVQgfP4mn4Dvv1vptTuNVgTut5wHWAaXQTB1xr+JvNhjtchA3A014Anzx0o1xwNCcR2TIFm/GvxvTPt9M4o0YkDkXexWXN3xTz7k+mIx23AEBG1XdkIKUZ95dV5iyuxLCh4S+qXts3BmlSdylXfHv+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fOH5jU9e; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AlGVQ8fn"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-223594b3c6dso59138485ad.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 09 Mar 2025 08:04:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fOH5jU9e"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22334203781so80547555ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Mar 2025 08:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741532650; x=1742137450; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741533774; x=1742138574; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=24P/3KgBpnNd6IcDeWG+q5nPHIiIrAry9aiLBOLpAKs=;
-        b=AlGVQ8fn8/VD7V6xBbx+f1DH0RdIDb8fQGGduJS6CpDhU5LhMRF702bM1oeLJb9wl2
-         HE4BRizkiWcBn+cJ/3AGYWezvmtm4zbWBFlR874xZ1EydZvCpXp+D1sScPvkVSkgVkc+
-         Nbe6m8is67MQKxKaP9l0gZ9PoHDuDUeaBeu3iu+5WrDcdcR+JQkzA+XHJs7O1tCnuy8u
-         A1Z+CZXdT8+Bmdms+RI8bPyZtNoIl82hhFwNNnpx+LyUUM9YtdkbuPTMxbhP/zwpI32H
-         cnosIO+eV55a7Wvf9fLNiiu+Vi48TVDx9y9ha/hkMQ6veZC0RHW+NeWwte4bGvtGDEji
-         //Gw==
+        bh=IjHIuZiBKVP9KJlrHc0VTnsxL6AvaRmPqA2IGSJcxos=;
+        b=fOH5jU9eKNmch7k7WeQPvzWPEMbKX2pT2LbVie73svpAHWMXQtPhHPu9hNi5UuxE6x
+         TEiFzGMrfaTvVbgcey1vG70c7IXSmGfqih0Ay+plY/hkD71UwtRS97BwQ2s0TC0QSzf3
+         p0yBpvojv37UO5Dr2W/HgBrbS5PVzc3RyAnHFxKD4BbT0aurfxP70f84NVaqnk6Rmk1F
+         RDRgSyqAx2dQg4JYwZmQeHaaA1YH7Dky92BOrhS1FFBSzNg74V7Vk9lqiQuFjCnROpiq
+         94CU5jZqrVQE7Nx4Z6bkqXqkW1SS0Kd4KBIb1QKoHhl4UTGm/BM8P1GZzGKWq2fqavbE
+         jMmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741532650; x=1742137450;
+        d=1e100.net; s=20230601; t=1741533774; x=1742138574;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=24P/3KgBpnNd6IcDeWG+q5nPHIiIrAry9aiLBOLpAKs=;
-        b=DRlWRgtuMN6i/pNDVCAED9VWcoH7z5fzDRBVVRZVnoGrioV3X+nrCEPpCpw0d8l008
-         3oTxioSU7WxWlHmliSCcQmQL/Bjkp7V9FBxiFtI2wERM7oQrJ+BPzOHZYQrCb2PyBvKG
-         CJhK5VVxWL4OtPzw84XYy6vBX9lYm+Egir6lkDUAaJu0Eo+L6BnzPJqvZNZ/gqJwbVbP
-         wibx3bFlV4veCvuR45rgVjvNW633FzFfFKNgYn2Fpb9rUYrdkpMX1ekodY1cH66S9UmW
-         USo/XCGRGoByj9zVEdcsHjTejqs0ni0mFfJte6rYp5K0UDsDfBdfLlDI6ZT34uTclsmp
-         2AfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+dH2JsHOW2h47wyU6tPVxVTzgaG1NlgQkum6siRjyU6YMYyLW/bIDT4cEcNdjzJKAsF+lMeWof5e2rw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN8yYocHUY7q/K1PH1xME2IYBZ9P6U25TcX1yXJUa2DxQz4Zo1
-	+NEZupM/0E5JrDQ4+2NbbgLdGepzTDLWK1fR1/8Iea+qLyVS/gv+dFct1A==
-X-Gm-Gg: ASbGncu1p2A9hWlOCe9wXLYpKbONDm4Z1A2jvALpVD4T62sZXvzxEBZFlCxi688wJsx
-	hRxV72D39zprLw3vthZkSFdnrG6o4esUSIToGocrIwgW0ENxYtPBgfVHGKsOH1izUkkKDC0tBir
-	+LAkhGnRMEXWitETykZcoOFlJw0Th+4GFmGvyxw8D88VTe2/OYBtUn5PkVuC/rp4KIajSZpmxIl
-	oRScCPZFEwG8tVQoUGoIAx/Z+uC8cKd9Xw2eZfk/HRClVg+B32hiZFLgcRyMGoK6wgw9nruPVoF
-	I2aFm3l188dzx7IpLFn0Y4KlsWLWzbkTfhUUcs5aSvBvRaYhv9k0AVwyKmm37XuECekdD2KWX4h
-	9NT1DDaCsqKV2QzNOsw==
-X-Google-Smtp-Source: AGHT+IE6B5ZbzxB6y/6cfvuosXNTTRQby9HM1fnZm/DiJfDRgbNVyhsgjDlSVBZFo/tpIH9xEcifmw==
-X-Received: by 2002:a17:902:cccf:b0:224:194c:694c with SMTP id d9443c01a7336-22428aaeb6dmr210134225ad.28.1741532650354;
-        Sun, 09 Mar 2025 08:04:10 -0700 (PDT)
+        bh=IjHIuZiBKVP9KJlrHc0VTnsxL6AvaRmPqA2IGSJcxos=;
+        b=R3iRMuLFtLWfLdVZg8gxK5JjOEdleD4vDd9C/qR+0/WuQiLFbyyfmgyaZlb+GMCEES
+         NIhkEAtWuA+BFjytvk0QulM8YGGSHJFLQtfi44fiN6KpMCd6ixbJl2WkNWdsTXo4qb5P
+         zZJQhXH0UoYGKNSzv++/v3idP0Nk1yj1YrXE2xXlfgWHqvFUZGvo5peu29+5ee19MY0Y
+         MuzmE2kcjC1sVUwK0dtYZandMv5nLoKj5IYObEHVbU6kEXFaJAx1eEtV/7B0m9plQfSk
+         3fxYS9LYLjsU/XL3a3Hb46GfpHQfA+rYsSUtW3+fvyfYsjZgs0v6XYe6P4u+2ppwXyEv
+         dhCw==
+X-Gm-Message-State: AOJu0YznuisZgNax17sbvq6dm61IVso/KG6iiq70EcX4JwSO9CPZkURc
+	KQI1R0DsxM8PAQEQ2GZcowua9Lg3GXl/rEisrcxX2sQv/e0ftqOJ
+X-Gm-Gg: ASbGnctmHROvrNLpDmZGd8VEvEotrOfsFv2dpxxYlT+eagTBVsDbLa4GeKkPQlgwZ/8
+	t8FlkuYjS+LjkYEOK+7BWl3f3LkAreNSJlNm4bvfFa/+eLo+BeD4MZtlM1T/ZCeQkSceRXxeTkJ
+	voBwMA1q3JsCal5yX56PqVlWfSdEIGv7I4mYkVD1ipDU1pPZ2eXIsitKgcko9XdMdRsvD4ixPQQ
+	N4sXhHgJ2+V23RiCjvVU+/Q6uYr0D7/rB4/bwA+wlth/1FlqgrvnbkeVU7d59hBROGXiyufRcSJ
+	xanknw+Y2ehR4FJBPzTML5MOVMYlhazvm2ih9N/UE5u6CJWfT2GrvUKe3kjyRAa8lFnM8RyXfev
+	7oevVVYQtWk1wHqqo9w==
+X-Google-Smtp-Source: AGHT+IFPzDYBtIFqYwUvcCVHi6EcFfaxQn3QXIQ3tFSJb64cIiLrAzx5JCds8UXHIgB8bZAHgFvQZg==
+X-Received: by 2002:a05:6a00:2d05:b0:736:4d05:2e35 with SMTP id d2e1a72fcca58-736bbf31871mr10296627b3a.3.1741533773900;
+        Sun, 09 Mar 2025 08:22:53 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-224109e9f86sm61368135ad.83.2025.03.09.08.04.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73699da011asm6442526b3a.84.2025.03.09.08.22.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Mar 2025 08:04:09 -0700 (PDT)
+        Sun, 09 Mar 2025 08:22:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6d6dfcdc-aad3-401c-8845-1da7bfba3b02@roeck-us.net>
-Date: Sun, 9 Mar 2025 08:04:08 -0700
+Message-ID: <27859459-2640-4e33-93af-dd9c2ca0f16d@roeck-us.net>
+Date: Sun, 9 Mar 2025 08:22:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,12 +69,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
-To: Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc: jdelvare@suse.com, Gerhard Engleder <eg@keba.com>,
- linux-hwmon@vger.kernel.org
+To: Gerhard Engleder <gerhard@engleder-embedded.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+ Gerhard Engleder <eg@keba.com>
 References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
- <54a58308-e559-4007-a751-2d8a8fef29bb@roeck-us.net>
- <aefd126d-2041-4355-b685-7aa5ebf6ff13@engleder-embedded.com>
+ <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
+ <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
+ <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+ <f65dd656-2195-4686-b2e7-bdd5df47ede5@engleder-embedded.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,66 +123,58 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <aefd126d-2041-4355-b685-7aa5ebf6ff13@engleder-embedded.com>
+In-Reply-To: <f65dd656-2195-4686-b2e7-bdd5df47ede5@engleder-embedded.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 3/9/25 00:03, Gerhard Engleder wrote:
-> On 08.03.25 23:32, Guenter Roeck wrote:
->> On 3/8/25 13:23, Gerhard Engleder wrote:
->>> From: Gerhard Engleder <eg@keba.com>
->>>
->>> The KEBA battery monitoring controller is found in the system FPGA of
->>> KEBA PLC devices. It puts a load on the coin cell battery to check the
->>> state of the battery.
->>>
->>> Signed-off-by: Gerhard Engleder <eg@keba.com>
+On 3/9/25 01:16, Gerhard Engleder wrote:
+> On 09.03.25 09:23, Thomas Weißschuh wrote:
+>> On 2025-03-09 08:38:06+0100, Gerhard Engleder wrote:
+>>> On 08.03.25 23:23, Thomas Weißschuh wrote:
+>>>> On 2025-03-08 22:23:46+0100, Gerhard Engleder wrote:
 >>
->> Looking into the keba code, that is kind of piece by piece approach.
->> I see a reference to fans in drivers/misc/keba/cp500.c, so I guess I'll see
->> a fan controller driver at some point in the future. I do not support
->> the idea of having multiple drivers for the hardware monitoring
->> functionality of a single device.
+>> <snip>
+>>
+>>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>>>> index 4cbaba15d86e..ec396252cc18 100644
+>>>>> --- a/drivers/hwmon/Kconfig
+>>>>> +++ b/drivers/hwmon/Kconfig
+>>>>> @@ -335,6 +335,18 @@ config SENSORS_K10TEMP
+>>>>>          This driver can also be built as a module. If so, the module
+>>>>>          will be called k10temp.
+>>>>> +config SENSORS_KBATT
+>>>>> +    tristate "KEBA battery controller support"
+>>>>> +    depends on HAS_IOMEM
+>>>>> +    depends on KEBA_CP500 || COMPILE_TEST
+>>>>
+>>>> KEBA_CP500 already has a COMPILE_TEST variant.
+>>>> Duplicating it here looks unnecessary.
+>>>> Then the HAS_IOMEM and AUXILIARY_BUS references can go away.
+>>>
+>>> With COMPILE_TEST here the driver can be compile tested individually.
+>>> Is this property not worth it? But I can change it if needed.
+>>
+>> COMPILE_TEST is meant to break dependencies on concrete platforms.
+>> KEBA_CP500 itself is not a platform dependency.
+>> The platform dependencies of KERBA_CP500 are already broken through
+>> COMPILE_TEST.
 > 
-> Yes, the fan controller will follow. The cp500 driver supports multiple
-> devices. All of them have the battery controller, but only some of them
-> have the fan controller. Fanless devices don't have a fan controller in
-> the FPGA. There are also devices with two fan controllers.
-> 
-> The battery controller and the fan controller are separate IP cores with
-> its own 4k address range (also I2C, SPI, ...). So I see them as separate
-> devices. There is also no guarantee if the address range of both
-> controllers is next to each other or not.
-> 
-> Does that help you to see the battery controller and the fan controller
-> as separate devices?
+> Ok, I will change it.
 > 
 
-Barely. At this point I am not convinced that this should be a hwmon driver
-in the first place.
+FWIW, all those COMPILE_TEST dependencies are pointless:
 
->> Either case, the attribute needs to be documented.
-> 
-> You mean the documentation Documentation/hwmon/, which Thomas Weißschuh
-> also mentioned? I will add it.
-> 
+drivers/i2c/busses/Kconfig:     depends on KEBA_CP500 || COMPILE_TEST
+drivers/misc/keba/Kconfig:      depends on KEBA_CP500 || COMPILE_TEST
+drivers/spi/Kconfig:    depends on KEBA_CP500 || COMPILE_TEST
 
-Yes.
-...
+On top of that, both SPI_KSPI2 and I2C_KEBA select AUXILIARY_BUS
+which is equally pointless because KEBA_CP500 already does that.
+I2C_KEBA depends on HAS_IOMEM but I2C itself already depends on it.
 
->> Not acceptable. The first voltage channel is channel 0, not 1.
-> 
-> I did that for compatibility reasons, as the out of tree version of the
-> driver did start with index 1 and there is software which rely on that
-> fact. I saw a similar dummy in ina3221.c, so I thought this is ok.
-
-Isn't this a nice thing in the Linux kernel: You can find almost everything
-in there to use as precedence.
-
-The ina3221 driver slipped this in when it was submitted and, yes, I didn't
-notice. When it was converted to the with_info API, it was too late to
-change it. That doesn't make it better, and it is most definitely not an
-argument to make for a new driver doing the same.
+It is also ... odd ... that KEBA_CP500 depends on I2C. So it isn't
+possible to enable any of its sub-devices without also enabling I2C.
+It is not immediately obvious why this would be necessary.
 
 Guenter
 
