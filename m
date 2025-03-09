@@ -1,154 +1,160 @@
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2631A1C5D75;
-	Sun,  9 Mar 2025 11:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0FC19E999
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 14:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741519304; cv=none; b=j3heK7boucluonaNVTvYTixBOK7NwUAnTahu7XDn9/A7tji5o2kq7IMMqXpsoPhbN7P9A6QsOD01CFcNRvwG9gvnJUrLyGZHYpvsgL7sr3dWz5CvS+ph1dcBMh2ZN9Hud56J9qPJj1+EF9IRehfgfENUIBH6lFwY4opqI11KvQM=
+	t=1741531826; cv=none; b=jg68NTur4n2Us87MZAWRHl9XPM68r7x9jJGOiqleu0hZXOfQXau4kuKkjtNVQxqjfWbqPKPihZ7oMDKvE24XazKuEgjEsSTknHb3X4f3whICtm5IL+b3tOTWhf/7yV0SCdShkKuVL3r4GRrSVsOoEr1NqfgqEFpTbwsmEpw5FmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741519304; c=relaxed/simple;
-	bh=x7VIXFPiry34Dw0Y881bOgoIOqomKL15jPA8Ryo+3Qw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G5fiOIHTsaII25HG3u9EYUrIS+TRntFHkRl1md/7mtM/n1Lf45Fs25ActtqTx8Uq6+SRd8BQa8TSvwxck/8DRWj4BBThUKN3w9CHGi5/Ah5nBh9Fpw+2ncV7RBcp3LoGYD2lxq4W/kPikt8iP2BCO1ZHwg6o5A2qcX8njxZJQVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=t41+FfHK; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1741531826; c=relaxed/simple;
+	bh=/2k4zmANrLa8o9Rpk891pjMnQao4XTsgz32zRhaRDJw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nAdjIKfM761frx/xcgHSu1ivxgIZUNNUP4LB9y0OKwWc+L8iQ6GD/npHaPcA6r3oKOv6pwkXYmRsVRZq9k9n1cnK/T5SSxYiRGb0EoZRxpE4nZ80Q1EyouU7R+1rZN8DkfH1ZIv/UJamuAjNcLNbPCRLGkBjitDn8Aip+JrUlHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfX7o4bf; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="t41+FfHK"
-Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id C7C842E02CAB;
-	Sun,  9 Mar 2025 13:21:39 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741519301;
-	bh=OHipsFnWjp6uZ0j1y6/VAA7Vw2CV/N99b9nKlTIABCg=; h=From:To:Subject;
-	b=t41+FfHK4CExvvV/wNuF+hXofTbo2EmJ8aHuWsTlqVaP+fMlU9FFcpF7hhDnlb6K2
-	 6a7uGN2kzMhe6YEs9bxcj2lgW99UH6dh5uQenN+MRqRdtwauJrL3EfZnAhdD/Pkq8k
-	 2YOKXRLMGjpTlPsiHG6lmz/QdXe+fvXMZQLuevXs=
-Authentication-Results: linux1587.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
-	Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v3 12/12] platform/x86: oxpec: Adhere to sysfs-class-hwmon and
- enable pwm on 2
-Date: Sun,  9 Mar 2025 12:21:13 +0100
-Message-ID: <20250309112114.1177361-13-lkml@antheas.dev>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250309112114.1177361-1-lkml@antheas.dev>
-References: <20250309112114.1177361-1-lkml@antheas.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfX7o4bf"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22403cbb47fso62489465ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 09 Mar 2025 07:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741531824; x=1742136624; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pAnHFNBFYEKBV0D3j8Ek4czZB9M0vXU6URlX2ybdFN8=;
+        b=DfX7o4bf5BP/Ogz9mazK0COAnBEWxi+rmFtK4Ur2UHK8KhHgEqocpl/mln1qTdNCDN
+         zBa+YXWfy+/7qYAqFksNh7XDVoWyZd8uaO44BU2U59j3HJ1T0MAppfrz0Im7clRqqbaO
+         kMxMetfs48VN5mY4wcUnHGHgO7RATM9JHkVZG+4OXkqtXrgZKm8foxtEbpf27Wz/Ul+Q
+         xYtnIfuglkrtDT3llSSSYqcUi2p+clkrw5WM+OH9tKpgqEkqtlnB5+3TwODJ9i6z/nXs
+         Cwrr0dGRCSiCgtAMczacvhGHH9tevkBszUApfF6cHfMCS5auNYnSa0umTrkLweYDAFE4
+         mSwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741531824; x=1742136624;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pAnHFNBFYEKBV0D3j8Ek4czZB9M0vXU6URlX2ybdFN8=;
+        b=SmYhYntMOTCZQVb3ywogP+XrKLiYNt7VGR8sAEBjPCxwI3nVGq74XXXlaTwDOuXPjI
+         LEBe3WgSMuxCpP58Lu8coPBGNTilWt4MYyApgFYsHKQ0Eht556jOFT4K36Rf9fDv6tS5
+         fXH/W6Z15MAWR5OeHE0rlDU0yu0hkehbswuATdl453TfcCoeK8OyRoz/Xt+NfhTeu8jO
+         QArcyfzIaXr/K3JPd/5MTo19TXZOmMMGt86lC2UI8nhMJVF5bVcuGJDr9Hzqa7OOvzcL
+         UlimSGkAaFi43+jaiOtTarA716NjpECe+GRt4VK8ULEZWeZVPbjB3BZpLa8R3YUtoF8T
+         m26g==
+X-Gm-Message-State: AOJu0YzEYCyCQJElVpD/RRx8oGgNceG7SxiexBI6gyX7ZYyBMs1sq9Jy
+	+2SQGtmZaTU/ZzWJwchv0B/omxCr/HCUJK361zlqrWonLw469Ov3
+X-Gm-Gg: ASbGncshlqdlAH7h5A4KGxw7acRT2VDeg9S6E1FzstNJr0eLrMjxfSQ+aBd6O9/V1cd
+	6Grl4Yi2j6l0XmCCK86e6m2Zm66yTuA8V6A4EHzULEmTO6Hew55pnYumxjFjQqPDI+zQe7EIqwH
+	doGGHCrRIvltiQTfS0Hx8Uy3z5ceGBEYx/4nOaCptofkyE/qXR7SOUAwkcUK/co91CctprDG8kB
+	QXOIs5NsFCStK9wV6PtrbRDQLcwThmgd9gphjJPMhx6q1LUcGKWvHqO2kguV3OiOAeO4Z4CFSjR
+	TsK0mFuTDxrXeGd9YGPrVM/Z4yx5Hz1yPyTMhBQdo/Te0oT9+BCcDO1zj931bO+zeYx9yPCGLyo
+	ywABkvCKCpbCPBr2n7g==
+X-Google-Smtp-Source: AGHT+IG2k2JYIbClQGbmt4hEzTUFxtqLMPohzYuVKDm5srjry8/SnELa1o8AKsEFDnnLTZnW2bDX5A==
+X-Received: by 2002:a05:6a00:3e29:b0:736:5ee3:64d5 with SMTP id d2e1a72fcca58-736aaaed79amr14320130b3a.23.1741531824040;
+        Sun, 09 Mar 2025 07:50:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736bb5fcd68sm3337422b3a.135.2025.03.09.07.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Mar 2025 07:50:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <59e6ea7e-eb9a-49c4-9b43-4c6be4586530@roeck-us.net>
+Date: Sun, 9 Mar 2025 07:50:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Gerhard Engleder <gerhard@engleder-embedded.com>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+ Gerhard Engleder <eg@keba.com>
+References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
+ <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
+ <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
+ <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: 
- <174151930112.29430.13365461935020013033@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
 
-Currently, the driver does not adhere to the sysfs-class-hwmon
-specification: 0 is used for auto fan control and 1 is used for manual
-control. However, it is expected that 0 sets the fan to full speed,
-1 sets the fan to manual, and then 2 is used for automatic control.
+On 3/9/25 00:23, Thomas Weißschuh wrote:
 
-Therefore, change the sysfs API to reflect this and enable pwm on 2.
+>>>> +static const struct hwmon_channel_info *kbatt_info[] = {
+>>>> +	HWMON_CHANNEL_INFO(in,
+>>>> +			   /* 0: dummy, skipped in is_visible */
+>>>
+>>> Why?
+>>
+>> For compatibility reasons, as the out of tree version of the driver did
+>> start with index 1 and there is software which rely on that fact. But
+>> I'm unsure if this is a valid argument for mainline code. Guenter Roeck
+>> also commented that, so will discuss this in the other thread.
+> 
+> Ack, lets' discuss with Guenter.
+> However I don't think it's going to fly.
 
-As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
-reflecting the naming convention used by other drivers, to allow for
-a smooth migration in current userspace programs.
+This kind of argument is often used by those who want to implement non-standard
+code. Implement it out-of-tree first and then say "sorry, we have to do it,
+the out-of-tree code does it and our userspace depends on it". That is completely
+unacceptable. If that is what you want, and you are not willing to adjust your
+userspace code, keep your code out of tree.
 
-Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- drivers/platform/x86/oxpec.c | 37 ++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+On top of that, I don't even know what the attribute means. An alarm attribute
+is supposed to indicate that a value is out of range. The implementation suggests
+that this is is not the case. What is "battery ok" ? Voltage out of range ?
+Battery failed ? The term itself suggests that it may reflect a failure.
+It might be a "fault" attribute, and even that would not be a good match.
+I'll need to see the actual description to determine what if anything is
+acceptable. It will most definitely not be in1_alarm.
 
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index a06a7c54aa08..0b13baf190fe 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -938,7 +938,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_read(val);
- 		case hwmon_pwm_enable:
--			return oxp_pwm_read(val);
-+			ret = oxp_pwm_read(val);
-+			if (ret)
-+				return ret;
-+
-+			/* Check for auto and return 2 */
-+			if (!*val) {
-+				*val = 2;
-+				return 0;
-+			}
-+
-+			/* Return 0 if at full fan speed, 1 otherwise */
-+			ret = oxp_pwm_fan_speed(val);
-+			if (ret)
-+				return ret;
-+
-+			if (*val == 255)
-+				*val = 0;
-+			else
-+				*val = 1;
-+
-+			return 0;
- 		default:
- 			break;
- 		}
-@@ -952,15 +972,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long val)
- {
-+	int ret;
-+
- 	switch (type) {
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_enable:
- 			if (val == 1)
- 				return oxp_pwm_enable();
--			else if (val == 0)
-+			else if (val == 2)
- 				return oxp_pwm_disable();
--			return -EINVAL;
-+			else if (val != 0)
-+				return -EINVAL;
-+
-+			/* Enable PWM and set to max speed */
-+			ret = oxp_pwm_enable();
-+			if (ret)
-+				return ret;
-+			return oxp_pwm_input_write(255);
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_write(val);
- 		default:
-@@ -1025,7 +1054,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device *hwdev;
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+	hwdev = devm_hwmon_device_register_with_info(dev, "oxp_ec", NULL,
- 						     &oxp_ec_chip_info, NULL);
- 
- 	if (charge_behaviour_supported())
--- 
-2.48.1
+Guenter
 
