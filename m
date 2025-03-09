@@ -1,38 +1,38 @@
-Received: from mx04lb.world4you.com (mx04lb.world4you.com [81.19.149.114])
+Received: from mx14lb.world4you.com (mx14lb.world4you.com [81.19.149.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE0915B543
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 22:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843FD1805A
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 22:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741557850; cv=none; b=ZLbsYppv/Ou5xctcawgB3gqqIQWH73OHyl3EgGmdItMnwcbA2/Qp4T4X3n6GGOzVFP/3dojtyD2OGzgqpecOcnHPy9luP2m7s0aq5sHepU0fJiuXpktsYVZnCemvct5PwCgmYtxQd1IiSnubQEOuNPKItEULUUj/HAKouzXeVMs=
+	t=1741559684; cv=none; b=Az1bI/iarm5OHP7aX02x9tsjBMhBIFHeS69H4Q9dwwOo8of9ABLQiRxk4bdKrjti3vzSMJRurV1IxrC4J2D/ihDkWpgRTgeuIlj9lBC7/1fBy+AxdPX/GkrHiAde22xBgOYCL0T9HYUhCYqyOQ/JJFrCu+oz6BvjBaYtkR17Xow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741557850; c=relaxed/simple;
-	bh=UuaHfPbeMNMl8DBm5BmUwfZgjrAg8dJ3BblyQ0OaFBk=;
+	s=arc-20240116; t=1741559684; c=relaxed/simple;
+	bh=ZG7zemHYiXvLSzAYeI8uojvRjMA8KZpAPEgCio7ZaiU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZmvH24enHKYt59e0kg44IlsItxfkYp3ksYwgh0hecjwVM3C+dLRaHyfnCc7iwbXuBQfStoI3dqYNyqBzC4mT1sEOKZuNCL5RNpLPQx8N87mJYtiCkfwp1pgTyms8JSp5rvHldP4YsIkky/XbxMaf0W54aGmbaIM/fXnItQft2JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=YTsDSEqT; arc=none smtp.client-ip=81.19.149.114
+	 In-Reply-To:Content-Type; b=pV+b08QUYnCvL1Jk/YIGSDRiLHCJRxnUn+UUmrvxTqBHM5xrfSC4T/PoB+ro1/Q0/5wTBrw7qtQQBO0RxBHCehU+4KRP7bLPQ3lQCaM8mECbFB4v9mpP8KbRdFnd+ITzUAl4E7mn38AqYpO7Qn2/267QaNSxaukfSeaffzUz17k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=rYgucYsi; arc=none smtp.client-ip=81.19.149.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="YTsDSEqT"
+	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="rYgucYsi"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=kmfwlhZ8zzAviWbwRySzG3sCDtiqi7zA00PMNv256m8=; b=YTsDSEqTI5hZkGg4W8aP0Vj95T
-	DDBTSx8qC4hG/OZGo8N3we5G+yZTlzic/HkReD9RzrnoFstse6i4koFLtcz6wGDRkPCHSzrq1mGdr
-	v9/zX3X2Hhni0R5EiDhWrIbCSAcyRJ+Wgdx/f1uSafLz4jpXDqod0NFeOQjYmYZw/7C4=;
+	bh=IewZpeqMS4k7aWpLNi0L3j+LFJvXDWofANgIADEl9Ck=; b=rYgucYsi5V/K5LasOzaZFKxpQZ
+	Pr4qTcEMOIhxHFlsEyHKgv++kWG0g9aVF0H5owPztGZt/OWo3g3cJrw94pnc/NjQitU/usOnIakMt
+	jsgltmZEkjlZ8zPfGrtpuNtSTYKDwNn0NIpDqWManPaiNDIcozdqkZJbcbaE7Ugd+huk=;
 Received: from [80.121.79.4] (helo=[10.0.0.160])
-	by mx04lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	by mx14lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.97.1)
 	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1trOkf-000000002VM-238t;
-	Sun, 09 Mar 2025 23:04:05 +0100
-Message-ID: <71f2d248-9bcd-4b50-8044-7895e23a0d68@engleder-embedded.com>
-Date: Sun, 9 Mar 2025 23:04:04 +0100
+	id 1trOKE-000000008QD-31kY;
+	Sun, 09 Mar 2025 22:36:48 +0100
+Message-ID: <34604a76-d28e-4d40-8c73-1062edee0237@engleder-embedded.com>
+Date: Sun, 9 Mar 2025 22:36:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -42,77 +42,95 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
- Gerhard Engleder <eg@keba.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>
+Cc: jdelvare@suse.com, Gerhard Engleder <eg@keba.com>,
+ linux-hwmon@vger.kernel.org
 References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
- <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
- <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
- <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
- <f65dd656-2195-4686-b2e7-bdd5df47ede5@engleder-embedded.com>
- <27859459-2640-4e33-93af-dd9c2ca0f16d@roeck-us.net>
+ <54a58308-e559-4007-a751-2d8a8fef29bb@roeck-us.net>
+ <aefd126d-2041-4355-b685-7aa5ebf6ff13@engleder-embedded.com>
+ <6d6dfcdc-aad3-401c-8845-1da7bfba3b02@roeck-us.net>
 Content-Language: en-US
 From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <27859459-2640-4e33-93af-dd9c2ca0f16d@roeck-us.net>
+In-Reply-To: <6d6dfcdc-aad3-401c-8845-1da7bfba3b02@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-AV-Do-Run: Yes
 
-On 09.03.25 16:22, Guenter Roeck wrote:
-> On 3/9/25 01:16, Gerhard Engleder wrote:
->> On 09.03.25 09:23, Thomas Weißschuh wrote:
->>> On 2025-03-09 08:38:06+0100, Gerhard Engleder wrote:
->>>> On 08.03.25 23:23, Thomas Weißschuh wrote:
->>>>> On 2025-03-08 22:23:46+0100, Gerhard Engleder wrote:
->>>
->>> <snip>
->>>
->>>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>>>> index 4cbaba15d86e..ec396252cc18 100644
->>>>>> --- a/drivers/hwmon/Kconfig
->>>>>> +++ b/drivers/hwmon/Kconfig
->>>>>> @@ -335,6 +335,18 @@ config SENSORS_K10TEMP
->>>>>>          This driver can also be built as a module. If so, the module
->>>>>>          will be called k10temp.
->>>>>> +config SENSORS_KBATT
->>>>>> +    tristate "KEBA battery controller support"
->>>>>> +    depends on HAS_IOMEM
->>>>>> +    depends on KEBA_CP500 || COMPILE_TEST
->>>>>
->>>>> KEBA_CP500 already has a COMPILE_TEST variant.
->>>>> Duplicating it here looks unnecessary.
->>>>> Then the HAS_IOMEM and AUXILIARY_BUS references can go away.
+On 09.03.25 16:04, Guenter Roeck wrote:
+> On 3/9/25 00:03, Gerhard Engleder wrote:
+>> On 08.03.25 23:32, Guenter Roeck wrote:
+>>> On 3/8/25 13:23, Gerhard Engleder wrote:
+>>>> From: Gerhard Engleder <eg@keba.com>
 >>>>
->>>> With COMPILE_TEST here the driver can be compile tested individually.
->>>> Is this property not worth it? But I can change it if needed.
+>>>> The KEBA battery monitoring controller is found in the system FPGA of
+>>>> KEBA PLC devices. It puts a load on the coin cell battery to check the
+>>>> state of the battery.
+>>>>
+>>>> Signed-off-by: Gerhard Engleder <eg@keba.com>
 >>>
->>> COMPILE_TEST is meant to break dependencies on concrete platforms.
->>> KEBA_CP500 itself is not a platform dependency.
->>> The platform dependencies of KERBA_CP500 are already broken through
->>> COMPILE_TEST.
+>>> Looking into the keba code, that is kind of piece by piece approach.
+>>> I see a reference to fans in drivers/misc/keba/cp500.c, so I guess 
+>>> I'll see
+>>> a fan controller driver at some point in the future. I do not support
+>>> the idea of having multiple drivers for the hardware monitoring
+>>> functionality of a single device.
 >>
->> Ok, I will change it.
+>> Yes, the fan controller will follow. The cp500 driver supports multiple
+>> devices. All of them have the battery controller, but only some of them
+>> have the fan controller. Fanless devices don't have a fan controller in
+>> the FPGA. There are also devices with two fan controllers.
+>>
+>> The battery controller and the fan controller are separate IP cores with
+>> its own 4k address range (also I2C, SPI, ...). So I see them as separate
+>> devices. There is also no guarantee if the address range of both
+>> controllers is next to each other or not.
+>>
+>> Does that help you to see the battery controller and the fan controller
+>> as separate devices?
 >>
 > 
-> FWIW, all those COMPILE_TEST dependencies are pointless:
+> Barely. At this point I am not convinced that this should be a hwmon driver
+> in the first place.
+
+Here a more detailed description, which I would add to
+Documentation/hwmon/ in the proper form:
+
+The PLC devices use a coin cell battery for the RTC to keep the current
+time. The goal is to provide information about the coin cell state to
+user space. Actually the user space shall be informed that the coin cell
+battery is nearly empty and needs to be replaced.
+
+The coin cell must be tested actively to get to know if its nearly empty
+or not. Therefore, a load is put on the coin cell and the resulting
+voltage is evaluated. This evaluation is done by some hard wired analog
+logic, which compares the voltage to a defined limit. If the voltage is
+above the limit, then the coin cell is assumed to be ok. If the voltage
+is below the limit, then the coin cell is nearly empty (or broken,
+or removed, ...) and shall be replaced by a new one. The battery
+controller allows to start the test of the coin cell and to get the
+result if the voltage is above or below the limit. The actual voltage is
+not available. Only the information if the voltage is below a limit is
+available.
+
+That's why I thought a voltage alarm is a good fit. But I'm not an
+expert and I'm curious about your opinion.
+
+(...)
+
+>>> Not acceptable. The first voltage channel is channel 0, not 1.
+>>
+>> I did that for compatibility reasons, as the out of tree version of the
+>> driver did start with index 1 and there is software which rely on that
+>> fact. I saw a similar dummy in ina3221.c, so I thought this is ok.
 > 
-> drivers/i2c/busses/Kconfig:     depends on KEBA_CP500 || COMPILE_TEST
-> drivers/misc/keba/Kconfig:      depends on KEBA_CP500 || COMPILE_TEST
-> drivers/spi/Kconfig:    depends on KEBA_CP500 || COMPILE_TEST
+> Isn't this a nice thing in the Linux kernel: You can find almost everything
+> in there to use as precedence.
+> 
+> The ina3221 driver slipped this in when it was submitted and, yes, I didn't
+> notice. When it was converted to the with_info API, it was too late to
+> change it. That doesn't make it better, and it is most definitely not an
+> argument to make for a new driver doing the same.
 
-Ok, I won't add them anymore.
-
-> On top of that, both SPI_KSPI2 and I2C_KEBA select AUXILIARY_BUS
-> which is equally pointless because KEBA_CP500 already does that.
-> I2C_KEBA depends on HAS_IOMEM but I2C itself already depends on it.
-
-I'm sorry, I didn't know that Kconfig must be strictly minimized.
-
-> It is also ... odd ... that KEBA_CP500 depends on I2C. So it isn't
-> possible to enable any of its sub-devices without also enabling I2C.
-> It is not immediately obvious why this would be necessary.
-
-The cp500 driver uses functions of the I2C subsystem to find a defined
-EEPROM.
+I'm sorry, I only wanted to mention where the idea comes from. I will
+start with channel 0.
 
 Gerhard
