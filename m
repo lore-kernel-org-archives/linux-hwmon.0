@@ -1,170 +1,144 @@
-Received: from mx08lb.world4you.com (mx08lb.world4you.com [81.19.149.118])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF641B4151
-	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 10:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CED74C08;
+	Sun,  9 Mar 2025 11:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741517191; cv=none; b=BMNuQ2zYi+SzkMYsGrYP3d6hFtVsAv2u6crUQ5Tf7yKi7zRKHBxKyGeK/YDf8qCXIIiLufMk0Xh7DyQWKML5jXq4HY7Gr1RLmEQbXN8piSO8Jkiu9usN8jif+Q1cMeLidnjf2Rw0Ysbf66NpUhbTYvN6e38nm7C3Asrp5tbZSwI=
+	t=1741519290; cv=none; b=K6LGR90FXSj2xeBvG310VuF9K7m/+mmd2Ar+F2H0T2kFqNz5p2hE+a3DtxbnrQ/Og+Pr4NkmwXLeAeDaEaq3gr6KRW4ea4TvYcIZPjEv8ujI+VK4lbLRq8mVZCPpXorPkPCC0Y7O2wFR2kXeMGEVYzz/d6jCLP7VxV5GAOoYKk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741517191; c=relaxed/simple;
-	bh=kewlmXRAGz22DfYgSy+xebVyAUOxIwnZB5WJ0imyMdQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOXyHGeT9fP2HBdn203H70DMHwiH/Yj+lES67v6Euc++WdOjG7HH4wNr2ALrBubd150RWoHTu4GNyNbJTV7lDtivH3ElRgXSorcryTYWiMNdKMTAg7qNk2aSXbPizxC013+r75BDBLhkCZwSxwHJbNEPrzRoA8Som9f2EdSrqXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=kXoVrpXj; arc=none smtp.client-ip=81.19.149.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
+	s=arc-20240116; t=1741519290; c=relaxed/simple;
+	bh=D3tYI8iTJ7QZIlhKuN2+ClrGTuzJa2U2KPsn5/wV2js=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eBFE+hAd9J8H+9KM6Ugvl1OH/+QcVVPXra4uBvscu3zOl3gX/9apqBu8eYHYwawXBI+i5rnGdPg/w+4oLB7J9Yc7vTcViZ4lUn1n+TOyiUfG5d7bAdAld29JfVRHfzzV5uDanAG+2hEEjX/rFJBBFvGkiFFk+pqi1yH04esK/ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=PrlYaP84; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="kXoVrpXj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=jR5tPi8vc0nZIcoyHA9GBCAv8Ix0vi7yXjZa1yIhYqQ=; b=kXoVrpXjGzJ5ARVe0yKR7apWfY
-	OH7CLoZln+PD8tzz9WY7jXCcOjGrgcFYMi/GIj8wy2OG+CTlYgwC8vuvBKc4Fq7Um4XwfSa8tdvb/
-	RLKVVS6st7WzEvpkFDZ1HIkxHHVmw8GPVS3lC5Fo2bnmBXgTTKKQ4vNYRz7KHy77KLVI=;
-Received: from [80.121.79.4] (helo=[10.0.0.160])
-	by mx08lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1trCm6-0000000074Y-1UTN;
-	Sun, 09 Mar 2025 10:16:46 +0100
-Message-ID: <f65dd656-2195-4686-b2e7-bdd5df47ede5@engleder-embedded.com>
-Date: Sun, 9 Mar 2025 10:16:45 +0100
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="PrlYaP84"
+Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 917972E037CC;
+	Sun,  9 Mar 2025 13:21:16 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1741519278;
+	bh=w3CdKrkESq2tKARZR2k9fTv2YfnbpHvzaojVRo6xY4o=; h=From:To:Subject;
+	b=PrlYaP849T8sA/19KRFS4qOb2ocBEyujLhtlFvgAECkj6400RHpoxQjM72ukJzDDC
+	 FiiHqZ/SkXghZgVmAqOuJZICRlEh1T/+c2dn9e1e2rxjDLf1EWr+YbuVwHjNrFKk7W
+	 hbXi/r3JQR02UnmsGXfoQiZgbIiW8pm7Ir8DD8hM=
+Authentication-Results: linux1587.grserver.gr;
+	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+From: Antheas Kapenekakis <lkml@antheas.dev>
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: [PATCH v3 00/12] hwmon: (oxpsensors) Add devices, features,
+ fix ABI and move to platform/x86
+Date: Sun,  9 Mar 2025 12:21:01 +0100
+Message-ID: <20250309112114.1177361-1-lkml@antheas.dev>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
- Gerhard Engleder <eg@keba.com>
-References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
- <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
- <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
- <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
-Content-Language: en-US
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
+X-PPP-Message-ID: 
+ <174151927785.28547.2924708597399637820@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-On 09.03.25 09:23, Thomas Weißschuh wrote:
-> On 2025-03-09 08:38:06+0100, Gerhard Engleder wrote:
->> On 08.03.25 23:23, Thomas Weißschuh wrote:
->>> On 2025-03-08 22:23:46+0100, Gerhard Engleder wrote:
-> 
-> <snip>
-> 
->>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>> index 4cbaba15d86e..ec396252cc18 100644
->>>> --- a/drivers/hwmon/Kconfig
->>>> +++ b/drivers/hwmon/Kconfig
->>>> @@ -335,6 +335,18 @@ config SENSORS_K10TEMP
->>>>    	  This driver can also be built as a module. If so, the module
->>>>    	  will be called k10temp.
->>>> +config SENSORS_KBATT
->>>> +	tristate "KEBA battery controller support"
->>>> +	depends on HAS_IOMEM
->>>> +	depends on KEBA_CP500 || COMPILE_TEST
->>>
->>> KEBA_CP500 already has a COMPILE_TEST variant.
->>> Duplicating it here looks unnecessary.
->>> Then the HAS_IOMEM and AUXILIARY_BUS references can go away.
->>
->> With COMPILE_TEST here the driver can be compile tested individually.
->> Is this property not worth it? But I can change it if needed.
-> 
-> COMPILE_TEST is meant to break dependencies on concrete platforms.
-> KEBA_CP500 itself is not a platform dependency.
-> The platform dependencies of KERBA_CP500 are already broken through
-> COMPILE_TEST.
+This four part series updates the oxpsensors module to bring it in line
+with its Windows OneXPlayer counterpart. First, it adds support for all
+2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
+the module to platform/x86 to allow for including more EC features.
 
-Ok, I will change it.
+Then, it adds the new charge limiting and bypass features that were first
+introduced in the X1 and retrofit to older OneXFly variants and for
+controlling the turbo led found in the X1 models. For Bypass, it adds a new
+charge_behaviour variant called inhibit-charge-s0.
 
->>>> + *
->>>> + * Driver for KEBA battery monitoring controller FPGA IP core
->>>> + */
->>>> +
->>>> +#include <linux/hwmon.h>
->>>> +#include <linux/io.h>
->>>> +#include <linux/delay.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/misc/keba.h>
->>>
->>> #include <linux/auxiliary_bus.h>
->>> #include <linux/device.h>
->>
->> Do I really have to include them explicitly? They are included
->> indirectly with linux/misc/keba.h.
-> 
-> You are using symbols from those headers in your own source code,
-> so there is a direct dependency on them.
+Finally, it performs a minor refactor by moving around switch statements
+into their own functions, in order to allow for fixing the pwm1_enable ABI
+in the final patch. Currently, pwm1_enable sets the fan to auto with the
+value 0 and allows manual control with the value 1. This patch makes it
+so 0 sets the fan to full speed, 1 sets the fan to manual control, and
+2 sets the fan to auto. This requires both setting enable and the fan
+speed when the enable sysfs is written to as 0, hence the refactor.
 
-I will include them.
+As this is a minor ABI break and there is userspace software relying
+on this previous behavior, the last patch also changes the /name of the
+hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module conventions)
+such that userspace software that relied on the previous behavior can be
+retrofit to the new kernel while enabling correct functionality on old
+and new kernels. Failing that, software that is not updated will just
+stop controlling the fans, ensuring no malignant behavior.
 
->>>> +
->>>> +	bool valid;
->>>> +	unsigned long last_updated; /* in jiffies */
->>>> +	long alarm;
->>>
->>> bool
->>
->> I choose long to match the hwmon API, hwmon_ops->read. Does it need to
->> be bool nevertheless?
-> 
-> hwmon_ops->read needs to deal with different kinds of attributes,
-> most of which need proper number support. Alarm is only a bool,
-> so the code specific to it can be simpler.
-> 
-> Guenter also mentioned it.
+Changes since V2:
+    - Add ack by Guenter, move platform move patch to be third (not first
+      to allow for device support backport to lts kernels)
+    - Rework patch text, especially in the refactor patches as per Derek
+    - Change bypass to use charge_behaviour instead of charge_type, as that
+      ABI supports capability detection and is more appropriate
+    - Move battery attach to probe instead of init
+    - Fix bug where reading tt_led would instead use the turbo register
 
-I will switch to bool.
+Changes since V1:
+    - Add X1 Pro, F1 Pro variants
+    - Fix minor typo in initial patches
+    - Convert oxp-sensors into a platform driver, as it is no longer
+      considered a hwmon driver.
+    - Add sysfs documentation and myself to the MAINTAINERS file
+    - Update documentation to state that this is the OneXPlayer/AOKZOE
+      platform driver, and that support for Ayaneo/OPI is provided until
+      they gain their own platform driver.
 
-> <snip>
-> 
->>>> +		/* switch load on */
->>>> +		iowrite8(KBATT_CONTROL_BAT_TEST,
->>>> +			 kbatt->base + KBATT_CONTROL_REG);
->>>> +
->>>> +		/* wait some time to let things settle */
->>>> +		msleep(KBATT_SETTLE_TIME_MS);
->>>
->>> Could use the recommended fsleep():
->>> Documentation/timers/delay_sleep_functions.rst
->>
->> Thank you for the hint! According to the documentation, I would still
->> choose the second option "Use `*sleep()` whenever possible", because
->> I want to prevent unecessary hrtimer work and interrupts.
-> 
-> I read the docs as fsleep() being preferable.
-> The timer core should do the right thing to avoid unnecessary work.
+Antheas Kapenekakis (12):
+  hwmon: (oxp-sensors) Distinguish the X1 variants
+  hwmon: (oxp-sensors) Add all OneXFly variants
+  platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+  ABI: testing: add tt_toggle and tt_led entries
+  power: supply: add inhibit-charge-s0 to charge_behaviour
+  platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+  platform/x86: oxpec: Rename ec group to tt_toggle
+  platform/x86: oxpec: Add turbo led support to X1 devices
+  platform/x86: oxpec: Move pwm_enable read to its own function
+  platform/x86: oxpec: Move pwm value read/write to separate functions
+  platform/x86: oxpec: Move fan speed read to separate function
+  platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
 
-I read "Use `fsleep()` whenever _unsure_" and I'm sure that msleep() is
-sufficient and I don't need hrtimer. But in this case fsleep() will end
-up in msleep() anyway. I will switch to fsleep().
+ Documentation/ABI/testing/sysfs-class-power   |  11 +-
+ Documentation/ABI/testing/sysfs-platform-oxp  |  29 +
+ Documentation/hwmon/index.rst                 |   2 +-
+ Documentation/hwmon/oxp-sensors.rst           |  89 ---
+ Documentation/hwmon/oxpec.rst                 |  67 ++
+ MAINTAINERS                                   |   7 +-
+ drivers/hwmon/Kconfig                         |  11 -
+ drivers/hwmon/Makefile                        |   1 -
+ drivers/platform/x86/Kconfig                  |  11 +
+ drivers/platform/x86/Makefile                 |   3 +
+ .../oxp-sensors.c => platform/x86/oxpec.c}    | 675 ++++++++++++++----
+ drivers/power/supply/power_supply_sysfs.c     |   1 +
+ drivers/power/supply/test_power.c             |   1 +
+ include/linux/power_supply.h                  |   1 +
+ 14 files changed, 664 insertions(+), 245 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+ delete mode 100644 Documentation/hwmon/oxp-sensors.rst
+ create mode 100644 Documentation/hwmon/oxpec.rst
+ rename drivers/{hwmon/oxp-sensors.c => platform/x86/oxpec.c} (51%)
 
-(...)
+-- 
+2.48.1
 
->>>> +	auxiliary_set_drvdata(auxdev, kbatt);
->>>
->>> Is this needed?
->>
->> dev_get_drvdata() is used within kbatt_read().
-> 
-> The dev_get_drvdata() in kbatt_read(), is used on the hwmon device, not
-> the aux device. The drvdata for that hwmon device is set in
-> devm_hwmon_device_register_with_info() below.
-
-I will remove it.
-
-
-Thank you for your detailed review! Will make the code much simpler.
-
-Gerhard
