@@ -1,145 +1,102 @@
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx03lb.world4you.com (mx03lb.world4you.com [81.19.149.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868A9184F;
-	Sun,  9 Mar 2025 16:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA0D3208
+	for <linux-hwmon@vger.kernel.org>; Sun,  9 Mar 2025 21:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741536317; cv=none; b=X3LVnNUOvCTfzReKGjt05gjbw8c2dz+IBuWGR1i1QZPqek3puFFDWZ0K7D8DbHVwtu5N6jTN8YN6IzSAWmKsNck9XzXeZ6mnTIB+GcKcpMhuz11rx2+XEZX1TvUkRP7CpwiWoEgUXGsCL3StIm6W73/b8wJWMZqC/6MIGkOzq1s=
+	t=1741555382; cv=none; b=mnJYBWhy49n6ZAV3lLt/1KdjFzbwsBOy4rqsxDkHXEA+CASai8xDPnB2Vdcvqkp5RcMsazNhBT+NLrxGJ13lkZMUoGDG5402//pZd0Bh6kYkFuS9Eykj3CzjDfb7d+6raIKM/TxrbyB075dTwazIAJUHyZra8BGzues7RLL4/jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741536317; c=relaxed/simple;
-	bh=1dug6tuMzl79qjj9p0x90LqVI5l1SsUtVT9qTZFaXnE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=u/3rak/G8tuLYs7E3kl0nGSShWzJ4eY0nytN/Qd58BWR91S1Y8fCgxUzQ7O2H+Le4twFHpq5iJeVEy9sSlGPvpZz+PzUpa7pPFAJdV73KeDJWY+pv0rIbAobwvZ9bm8QgsRcnW+OvPabOCad0z1xEa6QYEebME5grKBApHSZGOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XnSVatdS; arc=none smtp.client-ip=209.85.222.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741555382; c=relaxed/simple;
+	bh=Bjy8NYVsp9xlqv9EaKoFmlvfl7rBlsE/S2WGptlqhxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GPVaUwT5Jai5/vS7DsfY7U/pB6Tofq1zMH24Wc/vyXF4nLIDkfqHUva79sxcjAhaTdf9zCe/bfXAuhcPStgV1lp1NSnfU9M641zH2IzhyJQC9xWts3FLvL04WGVbCGHyTGc/+4LOeTVXaSVYRx/UN9jp6l0MfVmpPhMSkK3CTqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=Rb25pbI1; arc=none smtp.client-ip=81.19.149.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnSVatdS"
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-86d587dbc15so606996241.1;
-        Sun, 09 Mar 2025 09:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741536314; x=1742141114; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWkRnX3QsMWBcGgnuSQDdkHTRxtHOBOp1UfOK3Y2j0k=;
-        b=XnSVatdS8/0me9RdWb7TbKZQm+OqjSgayX+ILV7AA5+5lgRt+Gc0Zz4HX+fkVbVFMx
-         fZrh2Qa+Gy/gf3WZdQ/UVz01nD6MUluzAYeCIfHxsb1qfqTHzqcpKYA7O50uj15fshRL
-         XIEkoUSAtnUVJjZER/qORR0SQDC8hFw57+PRNhA+liFG/Z3cb5UhbItEo6hDZ8cnOeWa
-         Sdw3BLNg3y8C+vufTduWYNNm6By6AtAil3WBNGoJetNBsh0Jkj5Tm4XXwO8Rquut9Cez
-         RtcDd2FGw9JdZOeIpKd+80B0+f5qb0ST2M5y5MeU+Z9pdnne9ZplHk7I3J66b6lE7Ulp
-         jvRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741536314; x=1742141114;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EWkRnX3QsMWBcGgnuSQDdkHTRxtHOBOp1UfOK3Y2j0k=;
-        b=jBO3n8NyX2J6qhhTViFWdw/+oWmS0X0L9Hpmd/6APFDdCHNXqrt2SFkOwZvbiOAaKo
-         WraGpqUgHcM2XkSUqw0dXj5X7y73me+1ZVdN8MEwoFTCzwWxOF13MVMCma/XFsfC5yHX
-         hrX56Ig3axQQkutUYAj5jbaUV3GYSGB/HjXY5Xgwa1v8nix5//0234jSjDojTQofyiYc
-         inDpGUGfPoLp47qWs1fdt+r/lHUbBAgU6AliAzcls0z89WpM/r9nL8OCoqHy32aBM8WP
-         bXZPmrSHTORA0SvX25TW8FiOgP1PBDRN72xrZFcdJoSFxA8FkkskvWKxP3eDfsvpjtdS
-         JJ9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWOpo0ydL/XSsPa02Kxhtj4vR7TQfYvBBM7S37e5l2MZFudEHA86qJOXC9voC7hiSbZDuLKbCNTumP6p+R/@vger.kernel.org, AJvYcCXHlJiZMKWoDO7I1WnrWHZatvaTsOY8RbJzwKFxRKr0VFbp6t0EYyX+46hEElWR/L23l1pE23y6mgL31A==@vger.kernel.org, AJvYcCXkHLgZX3xDEqppdJni1gQTrG5d41ikaB8/jUyHf5LPLX9vYW7vNAzQNCOMLN8mWVK27rqkHZMomPwUCI3r9vvNJbwi6A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3ZKWXIuCuR/b8NtY2BxNC8//SSZBwbISq8RiuRcLKPGH+hTR2
-	I0dwmfP6q7rtrc1xq0UNur9VWqLRw5eWrRzMOEOPn8hRpKW7webt
-X-Gm-Gg: ASbGncvj59wTpSPVcwiLj0a/VHkYL/aIEYaJYiWtA7Y0yr8OA0lunhog570GueTKP2G
-	M4UwTvNIbwbjIIRmIvgtAnKZBC9uID6ixVIVa615e6gKKCh9Nnb3IRABdXRy9dUmsqAtlEeE6lr
-	0Jy/KGFCzhoYCkc73C57H4wOS2nAsGoxyhJHGMqmkU/I3VM7vHG7qRh0SJcvE+rWRV38h7qMG0i
-	vNj7ALs8WhjsSIlcVQ9UdTSN//GhN6DaWJKAiGa7mv9KDW3rjegQVeAcHUSsTXpl1EZK//sdn27
-	UZkS7DqDXmSMBPdDg4iDmfdz7RZBESvA7Qdt
-X-Google-Smtp-Source: AGHT+IFE0VVNJOJlt2Gf4A845cRSe8thFkhp8epWmNKJhbRDSow/TTW3MEwZYPYNrcR5FkQl0u+L3w==
-X-Received: by 2002:a67:f304:0:b0:4bd:379c:4037 with SMTP id ada2fe7eead31-4c31b718467mr3124720137.9.1741536314101;
-        Sun, 09 Mar 2025 09:05:14 -0700 (PDT)
-Received: from localhost ([2800:bf0:82:3d2:9e61:1a62:1a8c:3e62])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-86d519139a7sm556002241.10.2025.03.09.09.05.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Mar 2025 09:05:13 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="Rb25pbI1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=veIJcQnYC72ybTiAGSjLRT1nJjeuDqQdS+FncncpUhw=; b=Rb25pbI1lMf4t8adtzinDy6L0o
+	T3EXzuRyufvepEZFh6AgtxsHKeP5tPsBNfGZepLRQSjYiTH/C4tekJsXcpqrWTMXqnvWTgrV+YWjm
+	IwVtt3KqqhlvW4eVsROJU+tabTPBbAsn7yyyamJuBP+WyOG01nN6L839UdHG8RFcm63E=;
+Received: from [80.121.79.4] (helo=[10.0.0.160])
+	by mx03lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1trNiK-000000008M2-0crE;
+	Sun, 09 Mar 2025 21:57:37 +0100
+Message-ID: <65ae604d-956e-4da9-9915-90dd39f6b657@engleder-embedded.com>
+Date: Sun, 9 Mar 2025 21:57:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 09 Mar 2025 11:05:09 -0500
-Message-Id: <D8BV3JTOCPI1.3OY62UIJOLJQL@gmail.com>
-From: "Kurt Borja" <kuurtb@gmail.com>
-To: "Guenter Roeck" <linux@roeck-us.net>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, "Armin Wolf" <W_Armin@gmx.de>
-Cc: "Hans de Goede" <hdegoede@redhat.com>,
- <platform-driver-x86@vger.kernel.org>, <Dell.Client.Kernel@dell.com>,
- <linux-kernel@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
- <linux-hwmon@vger.kernel.org>, "Bagas Sanjaya" <bagasdotme@gmail.com>
-Subject: Re: [PATCH v4 00/12] platform/x86: alienware-wmi-wmax: HWMON
- support + DebugFS + Improvements
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250308-hwm-v4-0-afa1342828f5@gmail.com>
- <a5a159ee-5623-454f-8b27-352603c5d1e8@roeck-us.net>
-In-Reply-To: <a5a159ee-5623-454f-8b27-352603c5d1e8@roeck-us.net>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: Add KEBA battery monitoring controller support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+ Gerhard Engleder <eg@keba.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>
+References: <20250308212346.51316-1-gerhard@engleder-embedded.com>
+ <f684a381-2eab-4c7b-8173-f8d8634bd237@t-8ch.de>
+ <f534db33-3464-4d75-ae73-c1a3a63e3c3c@engleder-embedded.com>
+ <054c5313-8b54-4afd-9457-26b89a4a7bab@t-8ch.de>
+ <59e6ea7e-eb9a-49c4-9b43-4c6be4586530@roeck-us.net>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <59e6ea7e-eb9a-49c4-9b43-4c6be4586530@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AV-Do-Run: Yes
 
-Hi Guenter,
+On 09.03.25 15:50, Guenter Roeck wrote:
+> On 3/9/25 00:23, Thomas Weißschuh wrote:
+> 
+>>>>> +static const struct hwmon_channel_info *kbatt_info[] = {
+>>>>> +    HWMON_CHANNEL_INFO(in,
+>>>>> +               /* 0: dummy, skipped in is_visible */
+>>>>
+>>>> Why?
+>>>
+>>> For compatibility reasons, as the out of tree version of the driver did
+>>> start with index 1 and there is software which rely on that fact. But
+>>> I'm unsure if this is a valid argument for mainline code. Guenter Roeck
+>>> also commented that, so will discuss this in the other thread.
+>>
+>> Ack, lets' discuss with Guenter.
+>> However I don't think it's going to fly.
+> 
+> This kind of argument is often used by those who want to implement non- 
+> standard
+> code. Implement it out-of-tree first and then say "sorry, we have to do it,
+> the out-of-tree code does it and our userspace depends on it". That is 
+> completely
+> unacceptable. If that is what you want, and you are not willing to 
+> adjust your
+> userspace code, keep your code out of tree.
 
-On Sat Mar 8, 2025 at 4:23 PM -05, Guenter Roeck wrote:
-> On 3/8/25 12:23, Kurt Borja wrote:
->> Hi all,
->>=20
->> This set mainly adds hwmon and manual fan control support (patches 7-8)
->> to the alienware-wmi driver, after some improvements.
->>=20
->> I have a question for anyone that may know how to solve it. In version 2
->> of these series the kernel test robot found a build error
->>=20
->> 	https://lore.kernel.org/platform-driver-x86/202503051819.bQ9P70Og-lkp@i=
-ntel.com/
->>=20
->> I think this happened because
->>=20
->> 	CONFIG_ALIENWARE_WMI=3Dy
->>=20
->> while
->>=20
->> 	CONFIG_ACPI_PLATFORM_PROFILE=3Dm
->> 	CONFIG_HWMON=3Dm
->>=20
->> How should I Kconfig to avoid this?
->>=20
->
-> If hwmon is considered to be mandatory, you'll need
-> 	depends on HWMON=3Dy
->
-> Alternative would be to use
-> 	depends on HWMON=3Dy || HWMON=3Dn
->
-> and use IS_ENABLED(). Something like
->
-> 	if (IS_ENABLED(CONFIG_HWMON) && awcc->hwmon) {
-> 		ret =3D awcc_hwmon_init(wdev);
-> 		if (ret)
-> 			return ret;
-> 	}
->
-> Using IS_REACHABLE() would be another option.
+I'm sorry that I created the impression that I don't want to change
+driver code and user space code. This is not the case, I'm will remove
+that dummy and start with 0.
 
-Oh - Now I understand why I saw this pattern in a few drivers. I'll
-think about this option for the next revision.
+> On top of that, I don't even know what the attribute means. An alarm 
+> attribute
+> is supposed to indicate that a value is out of range. The implementation 
+> suggests
+> that this is is not the case. What is "battery ok" ? Voltage out of range ?
+> Battery failed ? The term itself suggests that it may reflect a failure.
+> It might be a "fault" attribute, and even that would not be a good match.
+> I'll need to see the actual description to determine what if anything is
+> acceptable. It will most definitely not be in1_alarm.
 
->
-> The CONFIG_ACPI_PLATFORM_PROFILE problem is probably similar. You can not
-> have CONFIG_ALIENWARE_WMI as boolean depending on code which can be built
-> as module.
+I will try to provide a clear picture in the other thread.
 
-Actually ALIENWARE_WMI is tristate, but the symbol that actually pulls
-the dependency is ALIENWARE_WMI_WMAX, which is indeed bool.
-
-Thank you, this gave me the clue to fix the issue!
-
---=20
- ~ Kurt
-
->
-> Guenter
-
+Gerhard
