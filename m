@@ -1,113 +1,107 @@
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1CC261581;
-	Tue, 11 Mar 2025 16:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6466D1DE3CE;
+	Tue, 11 Mar 2025 18:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741712077; cv=none; b=Pz/qnHB4Sw/4UJ/REKYj3tULdKCtx60Fg7tPCz266r+x9izY8L/Lj/2YRntkkk61yCYllXj/YmlDVAbY7QBrI7mjFw9sqnZ6wCXvjk/eMaKgR1L84q4nHMIQkUmoMuEviDQaFTjm0BMZp43DtNhqafqz1xNoGzawUEE1zE9a7XM=
+	t=1741717057; cv=none; b=KQnreFZ05KKi0v7rA6zNJvmtaccZcijL6vgVRwxAWqSPRLKztKfvpdNSk8HOHi1s1p9nuMDat5HjlcAyEj2QxTkA54C+OEhrZ/fLVsWtXNskimqASGq7BqbS1hWFY5UUVSZSX1MrAmn6vTyot5CGwehsI834BA73HorKo8LjGCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741712077; c=relaxed/simple;
-	bh=57bUtWkumIaNfzhU8UUldSsAdJwVHq1f+/iMLy2KNiA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lhJZpOwLA2+hrQ7tTgtH2hk6tCUDGYKbaFJ4a3KDye+MqF+mAKD1nppZ82UfiGImvud+yGw8dtJWuKR4KYUfv4syT4yJxe9R4aSXD6AXKpPdikQP5aya7/mpcU0xLo6zfPiT82OKpvr2QTTx1LLe8/+XqWHpKuW2QMaMT0tIvpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=3ND2VWxW; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1741717057; c=relaxed/simple;
+	bh=dqGSDt393wLZ/84AHq84a5GjTYPy0MUv/hZxhrhFPKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uX0WLzeZANQO5HzLR/Kf6u8H5LDUXNXeQR+VrJ/rxFZk9LnbnPcBrA16r82V3bdyt0DVi3pF7MBysKQRgggGHBHoS3u1sQqhcepRHUBnd8sGQnJhC4bGK31rnRQACEpFECmrVGRCoIglkxRkHKgE/7+Bdce+sHz+ip9qOZmIawY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=UQTP0+QG; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="3ND2VWxW"
-Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id D9C562E0923D;
-	Tue, 11 Mar 2025 18:54:32 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741712074;
-	bh=EFhNmT7kyNtjQ1/AmOBtMWJ+TLTwebWeSRNPwES43Z8=; h=From:To:Subject;
-	b=3ND2VWxW1Hc5edx/qW56OxHoaLIh301FXEqlTrzbEPBOCf4faflZeiu6XGvvdjEA4
-	 1rTU5FOxDTGCYtdjy1/Xx0pMyGC2rtpAMDtiIVFcIH4bxKcRMRw9iFxorZVD/8BtmE
-	 w3IG7r83hN7/lO2kspTBz2uVqzksgcUpAfl32RjM=
-Authentication-Results: linux1587.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
-	Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v4 13/13] platform/x86: oxpec: Follow reverse xmas convention
- for tt_toggle
-Date: Tue, 11 Mar 2025 17:54:05 +0100
-Message-ID: <20250311165406.331046-14-lkml@antheas.dev>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250311165406.331046-1-lkml@antheas.dev>
-References: <20250311165406.331046-1-lkml@antheas.dev>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="UQTP0+QG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1741717032; x=1742321832; i=w_armin@gmx.de;
+	bh=dqGSDt393wLZ/84AHq84a5GjTYPy0MUv/hZxhrhFPKg=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UQTP0+QGJiNXurxJI6ewZ76EzV5MVgOTTd+FYVBzzKpN/UnjwozbXwpSx31He3Fz
+	 wW9JPaEymJFsTDbabv+71MgwMLnLocglmyh19yd08m+4ZfkAu0483l/gJA5Ytwthp
+	 hLTgr0O8uaXYsWBAijJ4UnCTRoLcJO8YJ+0cMqJqkUH684vq+Oz3W0ilJE6sC2w4I
+	 j8OhDc4LxyyC/AxmGu19vSERZcam0Ark4GnPb/02UINZObJ5SARfhZYrOqlwQ+8sZ
+	 gL/SnY7rvKaa1L6wLQzhFoOYfrZuM/o3A23QQMy5Z7lHJj5ezD9KhbHQKu+G8BOoh
+	 Kle+Jc/F+FA0wYjSOQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.24] ([87.177.78.219]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5fMe-1tqO8o1Das-0001Xq; Tue, 11
+ Mar 2025 19:17:12 +0100
+Message-ID: <de49b8e8-e865-445d-881f-d26a7bbcf9e0@gmx.de>
+Date: Tue, 11 Mar 2025 19:17:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: 
- <174171207410.20431.1423246787523265302@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] hwmon: (dell-smm) Increment the number of fans
+To: Guenter Roeck <linux@roeck-us.net>, Kurt Borja <kuurtb@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>
+References: <20250304055249.51940-2-kuurtb@gmail.com>
+ <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:uXcIDipZnToVJPwtmi/zIJQTB+M2OnOSCjaA0R/DWAQbszG0FWt
+ qDiKkeZWB0guqKpdOIaqHUTM4U6IhIVtvNW1+Y+kTvJCXp72XTQ/H/F3WNzhy946gqPdbm+
+ eMXWWhpQKVuwB4l5KZm6698QEG5kiDVo+PaVBmudg+dXW7yrD233uWTE6OBB8k4tx6+iHnY
+ Z3NvavRiKRM5gDCxWbxjQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:3jH106I87AI=;6bQ9AFJbPDG/5Gz/9aWpUjpttvP
+ vj/QwmAlte2tJXxnYIfPIZCtPPYc0l/JkOE9DBifo32YIvQhlupZp5C0O5uTyySvt+aAwcsgb
+ /cqSfhDiZU0H94TkbcTUs6Ho2Qz0DKUk1g4PAXXeEe4XyX5DhLbGsjARB8ULHgB0mDgakeBEg
+ YqDh7NAIsjjq+Ztr5UJMv4QEfUROJYTByCbdpupMgcWNRrw8MzbUHmMNJiuewiJ2e4djvpD2v
+ 3zscZA5VDZsTuOErDicREoFPwjQ8SJHEBY0XVUOu1n/cMMGfmYAHsj+ht6ef9L522XMoJD5U8
+ G6Xx52QlHwnfOqjjpnSRxhr4Zt0UAYKII8bbQuTZ8ENSg6Oi3VOSMzfcWeOttubfy3bIH9AMf
+ pwIkzcpLYVs5fknE5haDVd2tDH2uHHO7TfkYXif7Zmvah9YFHPKM/mU5BCm+fv1A97Hb4cVkR
+ hED+p8PesDjexN43OCljmkH01Nt7h4mBdbhNwgaADL10AJflhHxW5dK/TyYSxF9jLH2Wq0Saz
+ wVj5qcJsLUbKn5OfdA9XPr1g1C/DvyBbbrh7gCH5EYeKySw/J1sNlx6pNMnzdgznVuRzB9qZS
+ 7bzZkpISsz0yEhdR/ByirT/f7rusYXh783/jkMqMQQsiTMbaYPuFe0QPaYUjgzRze+eSHqyV9
+ pC8cukM4+llCiOTK6s15LQ0Psim7XmFsHOsFNVKi7SIXDW6qN9a8ssp3YPVoOBH63Hrcd5T/k
+ 43ay5+XuF1VnYnm1zgMofx0OPs6ZKpQsDi1npIp39bRusOr/JriRNucAtUbzUWETKpcFvbH5K
+ cgdrKFZC55jImxa1YT3hhId5pTcLqJvJ2yu6F1KhZh7GcIxNlc3dMKN9GZXhZZstbeMyP4Kl+
+ B47SQNzIDoCMsFGSO8LaG4KQ/sH/y3N7ohXidBIIR+DtBSWVPZOcxPhYGbCqIQNKWYm3E24Nq
+ NSYfbiqsRtmvpIlMzSYtPqxjSDWRMoqmF07g6bPncQDWUKzMUcu95BJssdQDMF9cdZpftEVoD
+ oHB9Pvx8u9nV3SWL1IvYtvkfLVtwFWIR17f95trG+V5hU7OtZJYCrZtqadMuaGZW2L6k67sgV
+ GZ4DAHQKBaZl731v1cFH40jHn9lbr+Xl+ztkhNF4U8/HB2TyQ1MXo5ZpN7zjpSIW3X287AnIc
+ ib7PFV1pJ+mUETOr8NhXryzP9VxCtyK0h2WZyzWs422BUip36WFEUykBQWCpZrFRchlMCPfF2
+ FLn3HnaaeNE0nN6iB+hB+KCiHLlD7YQR5TeSXvH2S/DCp2VyHjGNxR9ZadKOhnX24Bsi3DIo+
+ F50KFvziYIemC9m76VFA7hvj2GPq6fHf0CwFSlXqNcSPmh7xhX4klvSTkS7wrEsMUdqEPNbEO
+ Wu8R/B+jUZ/0u/VUeE/FwbDffBK7iAR5cw6N6syNiUnWRYARZB9R3x0IIy
 
-Since the rest of the driver follows this convention, apply it to the
-tt_toggle attribute as well.
+Am 11.03.25 um 15:13 schrieb Guenter Roeck:
 
-Suggested-by: Derek J. Clark <derekjohn.clark@gmail.com>
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- drivers/platform/x86/oxpec.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
+>> Some Alienware laptops that support the SMM interface, may have up to 4
+>> fans.
+>>
+>> Tested on an Alienware x15 r1.
+>>
+>> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+> Oh, never mind, I'll apply this patch. If it causes trouble on older machines,
+> we may have to make it conditional, but that is not a reason to hold it up.
+>
+> Guenter
+>
+Hi,
 
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 273589f8b2fa..a3c945c73fc5 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -294,9 +294,9 @@ static const struct dmi_system_id dmi_table[] = {
- /* Helper functions to handle EC read/write */
- static int read_from_ec(u8 reg, int size, long *val)
- {
--	int i;
--	int ret;
- 	u8 buffer;
-+	int ret;
-+	int i;
- 
- 	if (!lock_global_acpi_lock())
- 		return -EBUSY;
-@@ -408,8 +408,8 @@ static ssize_t tt_toggle_store(struct device *dev,
- 			       struct device_attribute *attr, const char *buf,
- 			       size_t count)
- {
--	int rval;
- 	bool value;
-+	int rval;
- 
- 	rval = kstrtobool(buf, &value);
- 	if (rval)
-@@ -430,8 +430,8 @@ static ssize_t tt_toggle_show(struct device *dev,
- 			      struct device_attribute *attr, char *buf)
- {
- 	int retval;
--	u8 reg;
- 	long val;
-+	u8 reg;
- 
- 	switch (board) {
- 	case oxp_mini_amd_a07:
--- 
-2.48.1
+seems that i forgot about this patch, sorry. I just tested it on my Inspiron 3505 (single fan)
+and everything works as expected.
+
+Thanks,
+Armin Wolf
 
