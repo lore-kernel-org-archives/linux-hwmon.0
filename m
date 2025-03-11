@@ -1,92 +1,109 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7411125C714;
-	Tue, 11 Mar 2025 14:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7585D84D2B;
+	Tue, 11 Mar 2025 14:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741702409; cv=none; b=uMRgmrCjeh4rWACbxKjD5X8FsEymOgj3EomznhKcIcNDery0vP19KORlVeL+1lni4THRGUsC3rodTudOJHFq/fL8UCchcd2LMp6wnBud/hNPvBPdfXNe2IKtA94zKhJPos4mzxhUO5wBoHXiayxbP4BiTKLHb7nRJ3j37efxkN8=
+	t=1741703493; cv=none; b=iXRPmBoVzgnHLRzsaEPpAH6S2s1oIyNFpw+TrqO2xaL7CN+467q29eLLMzk1cDR8FMh6qjBLQCt2wmvPUX6SzOXW8n1/WBhM1Czhhf/87WhsMkBASbRtWuesS7RzN5oZlqgDgZ0gt7m7mHOZWMUL/Rm9DyuypeB+BhiYjzgTb9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741702409; c=relaxed/simple;
-	bh=llvOW0bBcJIDSKQQ5wQKAiogGziM8VntLYU7HA3+t+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K8jy3oVaP0UwQBhDmM4Z6oVTebNZxCencDRkINN9dwNwONuHkVP3o/WcfAROIcHyoIbPtcsfSk1LGYbIOfxweT0tCR/Bp2JJnzooywHY0rdEGOS+hgNcAE7aakl8BW92THWlmlHe8YWiaZjJHBjQZyky1XNhIoVAi6xZZby4Li4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DonzDBUd; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1741703493; c=relaxed/simple;
+	bh=MwX+hLj+eMLpZm23lEQkZzA3/IGcokUB7SIroirMLmY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Zjr8u9pKsO78nAlbIJllrrc9cNLHH+TX9w+nXy4nGQf+y5DTLn7HXtxO17dRZOlzJn5eTbdyaXG8feGJD0znLvklBU5VoPKaMP9i2QLy5GuoKp7QWpjplSf3R0mGtgSZLi/vzphiwB4pvcxVis61KPQo+QHn5G8Na14dJeKuD64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OriaTBmT; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DonzDBUd"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2fea8d8c322so10798760a91.2;
-        Tue, 11 Mar 2025 07:13:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OriaTBmT"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6ff1814102aso1190217b3.1;
+        Tue, 11 Mar 2025 07:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741702407; x=1742307207; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vMedfzunbXKnIyIbLa9JRvGembMzcmlTG+fcGqUIJ9s=;
-        b=DonzDBUdz0So1Cg47zL7NPjjO8uWCLtW9yltpZqD7Xs4YDTZzpSBDHU1mWUV+xyPud
-         +vFkhVGsVBUWSDjTF5uuLl46tDM7B6/KfXNsPnxHPCZOYiJMcHNO0CwpsS6gYXokasK3
-         WO12PcmbCZRI/tkYp9KyEAwbSoZ2VbSl95D3dXNn2vG+BoBuLhZGk/+ajsVi6evMC84t
-         HugZfpXE2/HnqI62pfAtXS611Jsdve7STjhWaN08mIJQ0b3J4sqafS7R0krb001gVGuw
-         QJEFJe+tLyA7hYpqbdi4238ypsNOMs4hWJJ2g+e1Q4UQwWv2ylf8Vj0bS4QDtkEsupz4
-         j2CA==
+        d=gmail.com; s=20230601; t=1741703491; x=1742308291; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MwX+hLj+eMLpZm23lEQkZzA3/IGcokUB7SIroirMLmY=;
+        b=OriaTBmTvYoKQy0yrUcPLJW+QkZM0A75vA1kqRqcQ4eWZxjA4N7+cOMh/vcSqB2dsp
+         ho2+eANm51G9IWI5ASMNVXJPVzq/sD9i4LKbwN19CUxffV5G11loa7yAdsH5LbxpAEen
+         hL7jd76k1UACGqEPyOn6HFJ+UMybB2Xs/AB3dUU5CZ3er81WgKj7D/KFycrZLZrRE/Cu
+         8XvRvqvIHhHQ5BcbnW5QbYK+uysBdomqwFTJxvGPKaUXy+CYtMsWacKP7EVe7tvo0wSi
+         um6nghA9RAfFyHg/l7Xp0H6bTG3cCdbF+EKQMyKMVfa/bKwjZIh6yp8Na4Sqe+vT4l3Y
+         rBOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741702407; x=1742307207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vMedfzunbXKnIyIbLa9JRvGembMzcmlTG+fcGqUIJ9s=;
-        b=AkFI+KybK4e47V9hzVWNg5DhLpBShsTh05NCDNZmVcwOlU364KeUE4iIgLWPiTzM5l
-         1hqdaRaDGM3pJOMoaRARSJHSqMLddu5LD4sPYNiRetlGLiRrHC1NQwQQChYgjsbWZTs9
-         C8GUI/IgkJ09Rk6P4D8zoA38ewUJSMDVKS6O2zQsLwGrlKA12Yeg2dE+8+3rogYVUenl
-         aLh4Z7nYGYhq0T9QnKQy4we1KyMP9Z7ZgRXMT7DQJFWTQUMElBTb79q5YSdqiytxcL1q
-         CUNE5IzxRrZFJfBfc4qRRKSwRyfvEL8Nrn/c4jpfyP3wSVGygtJ+AD7M3HmWpEFpYuiX
-         a9tw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfiBuAYaB7EsBasUWHbPsKwwbMu18XgdnUExtM2sfSz4Fwp1hMrfqOlBsuhn9qwCpkOtL0n9dPA3g=@vger.kernel.org, AJvYcCWqn+ka8h+DveLhjepCRkg3CgO2zLrS6+vzfceBlEuGjuwLd2S7vqYEA+1JIOsN/EEsXCuZ5qVQxpN8aYbg@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqmnsJlCKQX6xWyYBASNIlYPROV5BnrmB85C2SgHdn9UcIozrH
-	Uqj5WHwsoAaZk1KW2A1/Wq9AjM72Y4r3R+9LR33hK1J5JG3xPzUpLXgTTA==
-X-Gm-Gg: ASbGnctr1KtUcHUCb5RZUbdOG7PcDvfY4X8eAHWB8GLKrc9Xskd552Li1A/03bVGxcY
-	ppd87WVOVc+KIL/ivMFV7VNqmAmebw+whnvnFWt4NxXbstJgMj3gMA3R8Gm5X/fd0SKk/16tPOm
-	bFeJIpMrwgoK7rpQLyG026uabzcl9cSRYHNjMIKxVJ0r6RLlYRjqMzZ3zg6lpFAz6j55/G6OgGN
-	5TIwEpBZWc7tbFAe1XMtqPu47wTFQoSprO1SCCRZZIn7eEx9v7R1gSRAAceMBlh4hzjY0LNWF3K
-	IX+AvpRTHHkTAMcIcsec3H6C2CsE8WVNtmqqOYKSMmed+9kErzIo+s+xtA==
-X-Google-Smtp-Source: AGHT+IGS5r/KAbCAZgsoPkYZJ5EAM8UHb1LtA78SDi0KLHm5GnABYYgm4Mn8K7vxXVcSREApyW5asg==
-X-Received: by 2002:a17:90b:164f:b0:2ee:45fd:34f2 with SMTP id 98e67ed59e1d1-2ff7ce596edmr25892400a91.6.1741702406784;
-        Tue, 11 Mar 2025 07:13:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff69374942sm10039071a91.29.2025.03.11.07.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 07:13:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 11 Mar 2025 07:13:25 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kurt Borja <kuurtb@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Subject: Re: [PATCH v1 1/1] hwmon: (dell-smm) Increment the number of fans
-Message-ID: <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
-References: <20250304055249.51940-2-kuurtb@gmail.com>
+        d=1e100.net; s=20230601; t=1741703491; x=1742308291;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MwX+hLj+eMLpZm23lEQkZzA3/IGcokUB7SIroirMLmY=;
+        b=cycPqqNCzY0DavnVzp9KRvzjBONFllU72/5sVq5uivJmSlP0RXBcqAf+dVeJn3DxIk
+         AOWmF2niy8gjw2ifPvvoWTrZ7c/4QYmk312aj+23fI3iEjw0KmgWpGsARNtwgHrVDTbc
+         Ybtyy3wqR/cCwj1TezApEF4UGbRQWm+s6Vzp3nApaGTOnp3oqhgoR016u0vVcE/X6B+U
+         twB+eCVDh79FT38qy7CmAc9OfSOFDl513YCgN/ppmslkHGn2lfSBWajwXzjbFKuF4ho3
+         edxVuBS6E7xi6CBQd0tApn9633N89tY7pbJtee1MJH9AWgsMIsJ6HjZrXoNOlirAmUhW
+         T8OA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEzTzOcll/+A2dQ34ke/CbXjJDIrCcGas09Vo/eBWo9GHNF8JtJoTNKCXOpAZkqKTD0o3lCVE+mcc=@vger.kernel.org, AJvYcCWLOkgOrdr0RYTV+FBhj7H+K+GyIm+xyNTSolYS1BLLCuAy+w1cicV+/TdtVE6navvMHLI3Wd4QnK/I9J2M@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkeHHh4Yx/XYfAmtb6XXj8Fv4Vpg3EwjFtXf7t2omz+7cRdPMc
+	Wxb3PmV8Us/rdXgJCXCJ93Y/e5HU7zoBFNB7PfI0DO+GqW5pTVfg5+bbvRKA
+X-Gm-Gg: ASbGnctl9ZeKNPTgowdmok7dCm35r/NPxwbRK/+rQlRfPct7dsjEM4H4kl3KKW7ntWA
+	SSpdD9+N+OMoGcdiF3oGRz1XSz847jNZHG5lMwgsPDQ6BR76gE+Gf8ug6giX78BWEh7XM1yZVHL
+	pZx4Z1IdU50WB0UdRZLDH3XI6BFl0jxTrEud4CWuUksvO80/wjyi43waB1arKdW1+X0/8ruJ1f5
+	X5+AyHvThWMXJqikopBc///N6TUKN054AcKRT18kmVUJoF59F0i95mU0Oe4Xodf/aZPZXYH1s7V
+	mZLHZ9z/g2KJPhtAdeaqqZVWvQRVxITNyzbu1tZkgTNZkrM=
+X-Google-Smtp-Source: AGHT+IHXo+gvCNYGwhhU02hRiXRZX+gNdRnjc2unpyj5Akje5bMKFUZmi5UTG9Ks/gqPNNuQoFj0uQ==
+X-Received: by 2002:a05:6902:4893:b0:e63:6b50:5cdf with SMTP id 3f1490d57ef6-e63b5181cf8mr4640025276.9.1741703491426;
+        Tue, 11 Mar 2025 07:31:31 -0700 (PDT)
+Received: from localhost ([2800:bf0:82:3d2:9e61:1a62:1a8c:3e62])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e634b8ff7a6sm2719087276.57.2025.03.11.07.31.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 07:31:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304055249.51940-2-kuurtb@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 11 Mar 2025 09:31:29 -0500
+Message-Id: <D8DICX20T6AI.3CFMJMR1W0SGF@gmail.com>
+Cc: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, =?utf-8?q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>
+Subject: Re: [PATCH v1 1/1] hwmon: (dell-smm) Increment the number of fans
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Guenter Roeck" <linux@roeck-us.net>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250304055249.51940-2-kuurtb@gmail.com>
+ <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
+In-Reply-To: <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
 
-On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
-> Some Alienware laptops that support the SMM interface, may have up to 4
-> fans.
-> 
-> Tested on an Alienware x15 r1.
-> 
-> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+Hi Guenter,
 
-Oh, never mind, I'll apply this patch. If it causes trouble on older machines,
-we may have to make it conditional, but that is not a reason to hold it up. 
+On Tue Mar 11, 2025 at 9:13 AM -05, Guenter Roeck wrote:
+> On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
+>> Some Alienware laptops that support the SMM interface, may have up to 4
+>> fans.
+>>=20
+>> Tested on an Alienware x15 r1.
+>>=20
+>> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+>
+> Oh, never mind, I'll apply this patch. If it causes trouble on older mach=
+ines,
+> we may have to make it conditional, but that is not a reason to hold it u=
+p.=20
+>
+> Guenter
 
-Guenter
+Thank you!
+
+AFAIK most systems have < 2 fans, so this driver already probes fans
+until failure for these systems.
+
+If I get notified about problems, I'll amend it with a quirk approach.
+
+--=20
+ ~ Kurt
+
