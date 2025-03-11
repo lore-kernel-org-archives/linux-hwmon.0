@@ -1,71 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3273722D4FE;
-	Tue, 11 Mar 2025 14:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7411125C714;
+	Tue, 11 Mar 2025 14:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741702226; cv=none; b=d0UAJoOeL09rxak+4NxRRWARC8J+DX8D9aI2h/WhLj7SS23LVOyz7SCu+nLTnPHA5NBO6iqm9V79Fm73DDuk3P4K7jtVlvPJqd1olId0D7TsT1R0ADsHRi0DXv3MJhyTRdDq39VvAotNSm5mHNObVEjA5Zomp3xe9jQP6zngi84=
+	t=1741702409; cv=none; b=uMRgmrCjeh4rWACbxKjD5X8FsEymOgj3EomznhKcIcNDery0vP19KORlVeL+1lni4THRGUsC3rodTudOJHFq/fL8UCchcd2LMp6wnBud/hNPvBPdfXNe2IKtA94zKhJPos4mzxhUO5wBoHXiayxbP4BiTKLHb7nRJ3j37efxkN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741702226; c=relaxed/simple;
-	bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+	s=arc-20240116; t=1741702409; c=relaxed/simple;
+	bh=llvOW0bBcJIDSKQQ5wQKAiogGziM8VntLYU7HA3+t+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LNmcoIXEc+k2ekDpAkjeWtVlrSNBMGbLEpnA0U6fMQzd2Qu5RVTVQrrnSBcywM85ahzPV3vBWRdoYHwTKF0ljtTyPphMLLpU7eyjgphWdJ17OwkdZ6DeDo1q3E3LE0S15JJ0k29w7fi8b2I7/1wE7VImqFkiz9FNUR97C64wQLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JoThZfxt; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=K8jy3oVaP0UwQBhDmM4Z6oVTebNZxCencDRkINN9dwNwONuHkVP3o/WcfAROIcHyoIbPtcsfSk1LGYbIOfxweT0tCR/Bp2JJnzooywHY0rdEGOS+hgNcAE7aakl8BW92THWlmlHe8YWiaZjJHBjQZyky1XNhIoVAi6xZZby4Li4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DonzDBUd; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JoThZfxt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741702224; x=1773238224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
-  b=JoThZfxtWpBAhqz35ynvdytlBWUKooygdqA1ehBNKiETJA+kgNPGWIeO
-   ALgbTMzxebN3BTl69J4/6+3neK/vHj7zeGBmmlkgCr9E10oJSN2uhIA2K
-   SVgGkPzVwCAzhip4Ked4lXJSDKPS50PKNqpfk347WXw6BzDe0oqw9705i
-   fO2yCukYgtwF/2iMM9hFEB9qlCmijD4IBox0iUtWHDegWXmD9yKmp0b0s
-   HeV06IEFT/qHP+6GvCNdrwx8DxziNukDOiAcxF2ORRPB8qIMEzsQMl9nE
-   4o9c+W6JfNwVi6gAOYgoA4j1PlP7UEPH4PscLKERtAqHm7nYKOxFuNf/B
-   Q==;
-X-CSE-ConnectionGUID: f9SNI9vLSNWZFUfLp49hyQ==
-X-CSE-MsgGUID: HkPR4dGQSpSrfRWpx/EYwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="46523319"
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="46523319"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 07:10:03 -0700
-X-CSE-ConnectionGUID: lwwV97C/Q1Ck5Ar/zlHaNQ==
-X-CSE-MsgGUID: ERKY/U9aQg6zkJ8ybsZURA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="157534140"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 11 Mar 2025 07:10:00 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts0Iv-0006hg-0j;
-	Tue, 11 Mar 2025 14:09:57 +0000
-Date: Tue, 11 Mar 2025 22:09:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antheas Kapenekakis <lkml@antheas.dev>,
-	platform-driver-x86@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
-	Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: Re: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and
- behaviour to OneXPlayer
-Message-ID: <202503112130.dl6b3XVs-lkp@intel.com>
-References: <20250309112114.1177361-7-lkml@antheas.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DonzDBUd"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2fea8d8c322so10798760a91.2;
+        Tue, 11 Mar 2025 07:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741702407; x=1742307207; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vMedfzunbXKnIyIbLa9JRvGembMzcmlTG+fcGqUIJ9s=;
+        b=DonzDBUdz0So1Cg47zL7NPjjO8uWCLtW9yltpZqD7Xs4YDTZzpSBDHU1mWUV+xyPud
+         +vFkhVGsVBUWSDjTF5uuLl46tDM7B6/KfXNsPnxHPCZOYiJMcHNO0CwpsS6gYXokasK3
+         WO12PcmbCZRI/tkYp9KyEAwbSoZ2VbSl95D3dXNn2vG+BoBuLhZGk/+ajsVi6evMC84t
+         HugZfpXE2/HnqI62pfAtXS611Jsdve7STjhWaN08mIJQ0b3J4sqafS7R0krb001gVGuw
+         QJEFJe+tLyA7hYpqbdi4238ypsNOMs4hWJJ2g+e1Q4UQwWv2ylf8Vj0bS4QDtkEsupz4
+         j2CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741702407; x=1742307207;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vMedfzunbXKnIyIbLa9JRvGembMzcmlTG+fcGqUIJ9s=;
+        b=AkFI+KybK4e47V9hzVWNg5DhLpBShsTh05NCDNZmVcwOlU364KeUE4iIgLWPiTzM5l
+         1hqdaRaDGM3pJOMoaRARSJHSqMLddu5LD4sPYNiRetlGLiRrHC1NQwQQChYgjsbWZTs9
+         C8GUI/IgkJ09Rk6P4D8zoA38ewUJSMDVKS6O2zQsLwGrlKA12Yeg2dE+8+3rogYVUenl
+         aLh4Z7nYGYhq0T9QnKQy4we1KyMP9Z7ZgRXMT7DQJFWTQUMElBTb79q5YSdqiytxcL1q
+         CUNE5IzxRrZFJfBfc4qRRKSwRyfvEL8Nrn/c4jpfyP3wSVGygtJ+AD7M3HmWpEFpYuiX
+         a9tw==
+X-Forwarded-Encrypted: i=1; AJvYcCVfiBuAYaB7EsBasUWHbPsKwwbMu18XgdnUExtM2sfSz4Fwp1hMrfqOlBsuhn9qwCpkOtL0n9dPA3g=@vger.kernel.org, AJvYcCWqn+ka8h+DveLhjepCRkg3CgO2zLrS6+vzfceBlEuGjuwLd2S7vqYEA+1JIOsN/EEsXCuZ5qVQxpN8aYbg@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqmnsJlCKQX6xWyYBASNIlYPROV5BnrmB85C2SgHdn9UcIozrH
+	Uqj5WHwsoAaZk1KW2A1/Wq9AjM72Y4r3R+9LR33hK1J5JG3xPzUpLXgTTA==
+X-Gm-Gg: ASbGnctr1KtUcHUCb5RZUbdOG7PcDvfY4X8eAHWB8GLKrc9Xskd552Li1A/03bVGxcY
+	ppd87WVOVc+KIL/ivMFV7VNqmAmebw+whnvnFWt4NxXbstJgMj3gMA3R8Gm5X/fd0SKk/16tPOm
+	bFeJIpMrwgoK7rpQLyG026uabzcl9cSRYHNjMIKxVJ0r6RLlYRjqMzZ3zg6lpFAz6j55/G6OgGN
+	5TIwEpBZWc7tbFAe1XMtqPu47wTFQoSprO1SCCRZZIn7eEx9v7R1gSRAAceMBlh4hzjY0LNWF3K
+	IX+AvpRTHHkTAMcIcsec3H6C2CsE8WVNtmqqOYKSMmed+9kErzIo+s+xtA==
+X-Google-Smtp-Source: AGHT+IGS5r/KAbCAZgsoPkYZJ5EAM8UHb1LtA78SDi0KLHm5GnABYYgm4Mn8K7vxXVcSREApyW5asg==
+X-Received: by 2002:a17:90b:164f:b0:2ee:45fd:34f2 with SMTP id 98e67ed59e1d1-2ff7ce596edmr25892400a91.6.1741702406784;
+        Tue, 11 Mar 2025 07:13:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff69374942sm10039071a91.29.2025.03.11.07.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 07:13:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 11 Mar 2025 07:13:25 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kurt Borja <kuurtb@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Subject: Re: [PATCH v1 1/1] hwmon: (dell-smm) Increment the number of fans
+Message-ID: <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
+References: <20250304055249.51940-2-kuurtb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -74,41 +76,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250309112114.1177361-7-lkml@antheas.dev>
+In-Reply-To: <20250304055249.51940-2-kuurtb@gmail.com>
 
-Hi Antheas,
+On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
+> Some Alienware laptops that support the SMM interface, may have up to 4
+> fans.
+> 
+> Tested on an Alienware x15 r1.
+> 
+> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
 
-kernel test robot noticed the following build errors:
+Oh, never mind, I'll apply this patch. If it causes trouble on older machines,
+we may have to make it conditional, but that is not a reason to hold it up. 
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on sre-power-supply/for-next amd-pstate/linux-next amd-pstate/bleeding-edge rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.14-rc6 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/hwmon-oxp-sensors-Distinguish-the-X1-variants/20250309-192300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250309112114.1177361-7-lkml%40antheas.dev
-patch subject: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
-config: x86_64-randconfig-074-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503112130.dl6b3XVs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: battery_hook_register
-   >>> referenced by oxpec.c:927 (drivers/platform/x86/oxpec.c:927)
-   >>>               vmlinux.o:(oxp_platform_probe)
---
->> ld.lld: error: undefined symbol: battery_hook_unregister
-   >>> referenced by oxpec.c:935 (drivers/platform/x86/oxpec.c:935)
-   >>>               vmlinux.o:(oxp_platform_remove)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Guenter
