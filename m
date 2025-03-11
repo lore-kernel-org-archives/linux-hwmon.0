@@ -1,65 +1,61 @@
-Received: from mail.brightintel.pl (mail.brightintel.pl [141.94.250.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA7A1386DA
-	for <linux-hwmon@vger.kernel.org>; Tue, 11 Mar 2025 08:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.94.250.72
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA486256C8B;
+	Tue, 11 Mar 2025 12:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741682489; cv=none; b=DZssEPO3+Btth1npQ0yotn5NBlVCg1YPq0xxOiUlBpMU8w/038FC5V3CaFl2pFXxbFIMz22frZ60kHCLiq8saV78DNEa1Ho6NWRvB6IGe6rSmefPdKjzmJAHDz42vmM9LX007gn9ZQ1QwtDGYh2DzL1kbdiuTyxSOUsWqkY0/cs=
+	t=1741695041; cv=none; b=KbMTfW7jNgy/K1IVkiAkXjFUcf0LRyZgsGZE4fMgtHSTmme73346V/ZJDPPw5y34kHRphNHS8P3yVnfoaEeg5EubcShXqeDm6/PQZn4fQymFIyWJJGtIToCuD+E/1JB1qtbf2CkJDxOIzxVFZtF2ngN8ITZXeiewqWY1HJ5wnhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741682489; c=relaxed/simple;
-	bh=HHFX4FFQ/YkzqsbtRZjzyxc+oVxV3is8VdC/pJJsr+Y=;
-	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type; b=TnHSFVNk4XhZ9oYcUzgkM85NyR5elCTpzWPrXN5hfAWpawLQgOyXESPwAy+/n1/PwJAkjQEos+8hoDnO93tUATUUw0VyXSsxU1HQYMSm4Huux2cNvjGDNtYurKt6NCs8Zl8OW2uBEp9zMOdYk8Hd4UEDHh2Dv/MxY+FxtyeLD1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brightintel.pl; spf=pass smtp.mailfrom=brightintel.pl; dkim=pass (2048-bit key) header.d=brightintel.pl header.i=@brightintel.pl header.b=HO/G8zX0; arc=none smtp.client-ip=141.94.250.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=brightintel.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=brightintel.pl
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brightintel.pl header.i=@brightintel.pl header.b="HO/G8zX0"
-Received: by mail.brightintel.pl (Postfix, from userid 1002)
-	id 3DFA8A4940; Tue, 11 Mar 2025 09:40:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=brightintel.pl;
-	s=mail; t=1741682452;
-	bh=HHFX4FFQ/YkzqsbtRZjzyxc+oVxV3is8VdC/pJJsr+Y=;
-	h=Date:From:To:Subject:From;
-	b=HO/G8zX0RzAdD3LWQ6070aTksSn0So3bRvWIqCaXRu2L0x1sn38jmoR7yerRKEPEC
-	 aFTI8HR77jAPBRBVpWD/LAG6dVhsY/Z2KXOpKN3JH6G2X4+myxINPXwzFCHEha8yNV
-	 o2spJcd3KOUXytAdnziMA4Vy4h3oIhuQMDl9jYgxLoaNgtLQz9ovvWl1hAtPu8RlUT
-	 1dh+K5iFHOryYRLWfRPYo8cWuGNJsRP/dPdt7pmgnsv0KUAGuOjQ8eVw+xkEt0fnpw
-	 tbWCH3z+vbW68m+Au8//D+LM2QrsgYM67HE/ZDcup0q6KklvzQCqbtwhIRV6oQ+Bsh
-	 OFYYUNDhLba9w==
-Received: by mail.brightintel.pl for <linux-hwmon@vger.kernel.org>; Tue, 11 Mar 2025 08:40:40 GMT
-Message-ID: <20250311084500-0.1.l7.17wt6.0.5y3gmjodcf@brightintel.pl>
-Date: Tue, 11 Mar 2025 08:40:40 GMT
-From: "Milena Smykowska" <milena.smykowska@brightintel.pl>
-To: <linux-hwmon@vger.kernel.org>
-Subject: Dokumenty
-X-Mailer: mail.brightintel.pl
+	s=arc-20240116; t=1741695041; c=relaxed/simple;
+	bh=UPTPjdjk4RMU9w33sXP1VAsOX3CbPCQCjeVllOpIVPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WR/jYKo0lYRRZUPxGWR+QimaWIR6GOTXnBBR6sZdNpNOLGKiQA43QiKHIZuWuQlLstEPxuL06reLRGmjrdjEd+D8emw8fWwek8oOJ3rT1o8rrX5NyKesTD9dLFo6pjFG36kMb7gwi8YgHL4cN5naozAqARQs/Vhklk3l3qm84K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F9CE1424;
+	Tue, 11 Mar 2025 05:10:50 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1853B3F673;
+	Tue, 11 Mar 2025 05:10:36 -0700 (PDT)
+Date: Tue, 11 Mar 2025 12:10:34 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	Adam Young <admiyo@os.amperecomputing.com>,
+	Huisong Li <lihuisong@huawei.com>,
+	Robbie King <robbiek@xsightlabs.com>
+Cc: Jassi Brar <jassisinghbrar@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Message-ID: <Z9AoOg-cx6xVW_Cu@bogus>
+References: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
 
-Dzie=C5=84 dobry,
+On Wed, Mar 05, 2025 at 04:38:04PM +0000, Sudeep Holla wrote:
+> Adam, Robbie, Huisong,
+>
+> Please test this in your setup as you are the ones reporting/fixing the
+> issues or last modified the code that I am changing here.
+>
+Huisong,
 
-jako weterani bran=C5=BCy t=C5=82umaczeniowej, =C5=82=C4=85czymy 20-letni=
-e do=C5=9Bwiadczenie z pot=C4=99g=C4=85 najnowszych technologii.=20
+Thanks a lot for all the testing and review.
 
-Ta unikalna synteza pozwala nam dostarcza=C4=87 przek=C5=82ady, kt=C3=B3r=
-e zachowuj=C4=85 precyzj=C4=99 orygina=C5=82u niezale=C5=BCnie od j=C4=99=
-zyka, ale r=C3=B3wnie=C5=BC optymalizuj=C4=85 Pa=C5=84stwa bud=C5=BCet.=20
+Adam, Robbie,
 
-Nasze portfolio obejmuje wsp=C3=B3=C5=82prac=C4=99 z czo=C5=82owymi przed=
-si=C4=99biorstwami oraz presti=C5=BCowymi instytucjami naukowymi, kt=C3=B3=
-rzy powierzyli nam rol=C4=99 swojego j=C4=99zykowego ambasadora.
+Can you please help me with the testing on your platforms ?
 
-Pozwol=C4=85 Pa=C5=84stwo, =C5=BCe przygotuj=C4=99 spersonalizowan=C4=85 =
-ofert=C4=99 dostosowan=C4=85 do Pa=C5=84stwa konkretnych potrzeb t=C5=82u=
-maczeniowych?
-
-
-Pozdrawiam
-Milena Smykowska
+-- 
+Regards,
+Sudeep
