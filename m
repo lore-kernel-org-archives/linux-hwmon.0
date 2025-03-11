@@ -1,107 +1,113 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6466D1DE3CE;
-	Tue, 11 Mar 2025 18:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A01125FA2F;
+	Tue, 11 Mar 2025 18:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741717057; cv=none; b=KQnreFZ05KKi0v7rA6zNJvmtaccZcijL6vgVRwxAWqSPRLKztKfvpdNSk8HOHi1s1p9nuMDat5HjlcAyEj2QxTkA54C+OEhrZ/fLVsWtXNskimqASGq7BqbS1hWFY5UUVSZSX1MrAmn6vTyot5CGwehsI834BA73HorKo8LjGCI=
+	t=1741717791; cv=none; b=O7YZiS9H/fOO/CFV1R7Jl5YSCuSRZpT8jK3qGbyJt21Q4CW2Rk9wLoKZpZaSa4NIziUmjYpn/2O+y61llqP8Hvj4yH5P8b7aurcGP8e2dBz/JdlhKaEKFpe0TGt4emuGoCNuWQxPSWgbrMaEXaGEmADwlshqaMFevlM35iTL9o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741717057; c=relaxed/simple;
-	bh=dqGSDt393wLZ/84AHq84a5GjTYPy0MUv/hZxhrhFPKg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uX0WLzeZANQO5HzLR/Kf6u8H5LDUXNXeQR+VrJ/rxFZk9LnbnPcBrA16r82V3bdyt0DVi3pF7MBysKQRgggGHBHoS3u1sQqhcepRHUBnd8sGQnJhC4bGK31rnRQACEpFECmrVGRCoIglkxRkHKgE/7+Bdce+sHz+ip9qOZmIawY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=UQTP0+QG; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1741717791; c=relaxed/simple;
+	bh=KnUqSnd7tj6cBBg2v4+tl5NOkLLKNodYpc+Q+0LlFbQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=VnV8p7RCWbUXzWOGZex6gy9U92hth0EIBqJj7x2c80mz0pAQ35r0zFiBV1aZJ1XpGXTsB4G5GSAWiBIgBTIA2DyvRwr+WYjL+ALsbtzFt+ckcu+NyRXYBiikfs+ijyJG54GqmhmiJgFDsyKlPJQVkxOBYQLZwY83LY9PmazrWhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GgNqwsxl; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="UQTP0+QG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1741717032; x=1742321832; i=w_armin@gmx.de;
-	bh=dqGSDt393wLZ/84AHq84a5GjTYPy0MUv/hZxhrhFPKg=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=UQTP0+QGJiNXurxJI6ewZ76EzV5MVgOTTd+FYVBzzKpN/UnjwozbXwpSx31He3Fz
-	 wW9JPaEymJFsTDbabv+71MgwMLnLocglmyh19yd08m+4ZfkAu0483l/gJA5Ytwthp
-	 hLTgr0O8uaXYsWBAijJ4UnCTRoLcJO8YJ+0cMqJqkUH684vq+Oz3W0ilJE6sC2w4I
-	 j8OhDc4LxyyC/AxmGu19vSERZcam0Ark4GnPb/02UINZObJ5SARfhZYrOqlwQ+8sZ
-	 gL/SnY7rvKaa1L6wLQzhFoOYfrZuM/o3A23QQMy5Z7lHJj5ezD9KhbHQKu+G8BOoh
-	 Kle+Jc/F+FA0wYjSOQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.24] ([87.177.78.219]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5fMe-1tqO8o1Das-0001Xq; Tue, 11
- Mar 2025 19:17:12 +0100
-Message-ID: <de49b8e8-e865-445d-881f-d26a7bbcf9e0@gmx.de>
-Date: Tue, 11 Mar 2025 19:17:08 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GgNqwsxl"
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e46ebe19489so4570333276.2;
+        Tue, 11 Mar 2025 11:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741717789; x=1742322589; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KnUqSnd7tj6cBBg2v4+tl5NOkLLKNodYpc+Q+0LlFbQ=;
+        b=GgNqwsxls4/KXJyFyyLNI2OGvwUAg/ohRF5hhWAIamxBQqIWi0gv8QHRZ9778/emcT
+         3iz8jjqX0ohEZdGuZzNcQcMdAALPSfCMcMV2n+REa1Y2LuosXA98fh3T0ZuoxMw0z+lX
+         BQfee6GcXMfHk8WbdW25l8jM02TGkT7HkDxxgnzC25HrhDe1bP6bDyzyp54PhxlfsxTz
+         NmfkaHLOJDQfwqqMMH7JWl3sTXHWZCTucNBlefF6fBadCq/7ZvV8a+UV6isDfCWdX4ck
+         0GRIJEHkmkeb24KUd1B0MQ8GpYDiF83yC/vIUltTsNEgMEFRsiB1oV1STJr9kcqytZFv
+         2tsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741717789; x=1742322589;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KnUqSnd7tj6cBBg2v4+tl5NOkLLKNodYpc+Q+0LlFbQ=;
+        b=np03yAzlkqC2TIskdtM9XXnJzPBb1y4xb/rmSLrI2Pd3WOGF6YhsoMZxpbsAalbb5Q
+         sKyZ0kd1T6olUxqNJDh4aoHQxM4kZlfEXSgrziHJBhtphAPHKYxWo/zW/Wae4cbbeG7e
+         +0RUrVe16+qXYTBSjUYl0TFEMA7/fqFDpvol241LBCR/gNoC0HeZEnmcXQfZ9/Ayr+tz
+         VjoHy7JUY/jJqRrTg0jh/XhwVXQlEEDPY0WFeN8MwRLHUd0xSHMC6G26aP2Fa9xOG8Da
+         Eelo4vPWSpnuZLyGJtgTgBHJGLy12mVJEUhSDdLxVZFsmqRcwLwEjZ6pa9jRK8eMgCoD
+         V3jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQtO1hAunNjEdskUo69bL0udCfT90FugMi5hJjlPZrcs9lJ3IZetp88KQpRDp2xWENjqNNgm9Nwp7moCid@vger.kernel.org, AJvYcCXNy+sU/2Zvpi/eI65eqG47NsHg1tsYF82uRuPzictFIc5HGTbDlDoJIjvjWNe/m6drVM5gWZbXmZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0Mr+X2TdFUWbJ6cI77WsS/jcMYKgbu3fyUzRL9LVeaskylydA
+	5y/ndnXW3/W/j2PdDx1Ot78yVsbVhOC9ulmkfA7GC9DoZKrSJ7UW
+X-Gm-Gg: ASbGncugOMhytbfEmsaapod70VJ0OCWMAaBXfshC5O9oStuqRMyYKzUUNcnCa+wHnde
+	fWpjAtjps+ZPKvWMswRA/lEyJHkSJQ6RRaz2WMOANFWQos2Jr7EGzMpRFxIst8pW8i6NHWe2guS
+	S2UdCsz9XGlkckm155WivTq6+kjxWCVn7ciD9udX4VaNnm6tMxClS+0Z+GL4aS9m/1O3pPhMTcY
+	HtzLV3Mz8kVmg7ntpCXIRa0fHs69QSwGkvSxEvA+4n7Ezk5yMOd1mk8GcBzHpWMoFMhhBLu0zgg
+	VKwSbU2zIVT7AfIV2RZXrqNzL8Xa6mkCDJpG
+X-Google-Smtp-Source: AGHT+IEuac/DAgSbKgIDxj7RrLhtBD/FJFLHfm6z+zqKWYjZg0d+aSa9DtIpcDnkKaHLq+cQ2V/Z1Q==
+X-Received: by 2002:a05:6902:2081:b0:e5a:c837:a8c7 with SMTP id 3f1490d57ef6-e635c136db5mr23807476276.11.1741717788979;
+        Tue, 11 Mar 2025 11:29:48 -0700 (PDT)
+Received: from localhost ([2800:bf0:82:3d2:9e61:1a62:1a8c:3e62])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e634b842945sm2792519276.20.2025.03.11.11.29.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 11:29:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 11 Mar 2025 13:29:45 -0500
+Message-Id: <D8DNFCVO68AX.NE67F0XRBQYX@gmail.com>
 Subject: Re: [PATCH v1 1/1] hwmon: (dell-smm) Increment the number of fans
-To: Guenter Roeck <linux@roeck-us.net>, Kurt Borja <kuurtb@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Armin Wolf" <W_Armin@gmx.de>, "Guenter Roeck" <linux@roeck-us.net>
+Cc: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, =?utf-8?q?Pali_Roh=C3=A1r?=
  <pali@kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
 References: <20250304055249.51940-2-kuurtb@gmail.com>
  <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <bfb70a81-2ac1-428c-a327-d5098a8d3ce8@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:uXcIDipZnToVJPwtmi/zIJQTB+M2OnOSCjaA0R/DWAQbszG0FWt
- qDiKkeZWB0guqKpdOIaqHUTM4U6IhIVtvNW1+Y+kTvJCXp72XTQ/H/F3WNzhy946gqPdbm+
- eMXWWhpQKVuwB4l5KZm6698QEG5kiDVo+PaVBmudg+dXW7yrD233uWTE6OBB8k4tx6+iHnY
- Z3NvavRiKRM5gDCxWbxjQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:3jH106I87AI=;6bQ9AFJbPDG/5Gz/9aWpUjpttvP
- vj/QwmAlte2tJXxnYIfPIZCtPPYc0l/JkOE9DBifo32YIvQhlupZp5C0O5uTyySvt+aAwcsgb
- /cqSfhDiZU0H94TkbcTUs6Ho2Qz0DKUk1g4PAXXeEe4XyX5DhLbGsjARB8ULHgB0mDgakeBEg
- YqDh7NAIsjjq+Ztr5UJMv4QEfUROJYTByCbdpupMgcWNRrw8MzbUHmMNJiuewiJ2e4djvpD2v
- 3zscZA5VDZsTuOErDicREoFPwjQ8SJHEBY0XVUOu1n/cMMGfmYAHsj+ht6ef9L522XMoJD5U8
- G6Xx52QlHwnfOqjjpnSRxhr4Zt0UAYKII8bbQuTZ8ENSg6Oi3VOSMzfcWeOttubfy3bIH9AMf
- pwIkzcpLYVs5fknE5haDVd2tDH2uHHO7TfkYXif7Zmvah9YFHPKM/mU5BCm+fv1A97Hb4cVkR
- hED+p8PesDjexN43OCljmkH01Nt7h4mBdbhNwgaADL10AJflhHxW5dK/TyYSxF9jLH2Wq0Saz
- wVj5qcJsLUbKn5OfdA9XPr1g1C/DvyBbbrh7gCH5EYeKySw/J1sNlx6pNMnzdgznVuRzB9qZS
- 7bzZkpISsz0yEhdR/ByirT/f7rusYXh783/jkMqMQQsiTMbaYPuFe0QPaYUjgzRze+eSHqyV9
- pC8cukM4+llCiOTK6s15LQ0Psim7XmFsHOsFNVKi7SIXDW6qN9a8ssp3YPVoOBH63Hrcd5T/k
- 43ay5+XuF1VnYnm1zgMofx0OPs6ZKpQsDi1npIp39bRusOr/JriRNucAtUbzUWETKpcFvbH5K
- cgdrKFZC55jImxa1YT3hhId5pTcLqJvJ2yu6F1KhZh7GcIxNlc3dMKN9GZXhZZstbeMyP4Kl+
- B47SQNzIDoCMsFGSO8LaG4KQ/sH/y3N7ohXidBIIR+DtBSWVPZOcxPhYGbCqIQNKWYm3E24Nq
- NSYfbiqsRtmvpIlMzSYtPqxjSDWRMoqmF07g6bPncQDWUKzMUcu95BJssdQDMF9cdZpftEVoD
- oHB9Pvx8u9nV3SWL1IvYtvkfLVtwFWIR17f95trG+V5hU7OtZJYCrZtqadMuaGZW2L6k67sgV
- GZ4DAHQKBaZl731v1cFH40jHn9lbr+Xl+ztkhNF4U8/HB2TyQ1MXo5ZpN7zjpSIW3X287AnIc
- ib7PFV1pJ+mUETOr8NhXryzP9VxCtyK0h2WZyzWs422BUip36WFEUykBQWCpZrFRchlMCPfF2
- FLn3HnaaeNE0nN6iB+hB+KCiHLlD7YQR5TeSXvH2S/DCp2VyHjGNxR9ZadKOhnX24Bsi3DIo+
- F50KFvziYIemC9m76VFA7hvj2GPq6fHf0CwFSlXqNcSPmh7xhX4klvSTkS7wrEsMUdqEPNbEO
- Wu8R/B+jUZ/0u/VUeE/FwbDffBK7iAR5cw6N6syNiUnWRYARZB9R3x0IIy
+ <de49b8e8-e865-445d-881f-d26a7bbcf9e0@gmx.de>
+In-Reply-To: <de49b8e8-e865-445d-881f-d26a7bbcf9e0@gmx.de>
 
-Am 11.03.25 um 15:13 schrieb Guenter Roeck:
-
-> On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
->> Some Alienware laptops that support the SMM interface, may have up to 4
->> fans.
->>
->> Tested on an Alienware x15 r1.
->>
->> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
-> Oh, never mind, I'll apply this patch. If it causes trouble on older machines,
-> we may have to make it conditional, but that is not a reason to hold it up.
+On Tue Mar 11, 2025 at 1:17 PM -05, Armin Wolf wrote:
+> Am 11.03.25 um 15:13 schrieb Guenter Roeck:
 >
-> Guenter
+>> On Tue, Mar 04, 2025 at 12:52:50AM -0500, Kurt Borja wrote:
+>>> Some Alienware laptops that support the SMM interface, may have up to 4
+>>> fans.
+>>>
+>>> Tested on an Alienware x15 r1.
+>>>
+>>> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+>> Oh, never mind, I'll apply this patch. If it causes trouble on older mac=
+hines,
+>> we may have to make it conditional, but that is not a reason to hold it =
+up.
+>>
+>> Guenter
+>>
+> Hi,
 >
-Hi,
+> seems that i forgot about this patch, sorry. I just tested it on my Inspi=
+ron 3505 (single fan)
+> and everything works as expected.
+>
+> Thanks,
+> Armin Wolf
 
-seems that i forgot about this patch, sorry. I just tested it on my Inspiron 3505 (single fan)
-and everything works as expected.
+That's good to know. Thanks a lot!
 
-Thanks,
-Armin Wolf
+--=20
+ ~ Kurt
 
