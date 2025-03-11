@@ -1,37 +1,71 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA486256C8B;
-	Tue, 11 Mar 2025 12:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3273722D4FE;
+	Tue, 11 Mar 2025 14:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741695041; cv=none; b=KbMTfW7jNgy/K1IVkiAkXjFUcf0LRyZgsGZE4fMgtHSTmme73346V/ZJDPPw5y34kHRphNHS8P3yVnfoaEeg5EubcShXqeDm6/PQZn4fQymFIyWJJGtIToCuD+E/1JB1qtbf2CkJDxOIzxVFZtF2ngN8ITZXeiewqWY1HJ5wnhw=
+	t=1741702226; cv=none; b=d0UAJoOeL09rxak+4NxRRWARC8J+DX8D9aI2h/WhLj7SS23LVOyz7SCu+nLTnPHA5NBO6iqm9V79Fm73DDuk3P4K7jtVlvPJqd1olId0D7TsT1R0ADsHRi0DXv3MJhyTRdDq39VvAotNSm5mHNObVEjA5Zomp3xe9jQP6zngi84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741695041; c=relaxed/simple;
-	bh=UPTPjdjk4RMU9w33sXP1VAsOX3CbPCQCjeVllOpIVPs=;
+	s=arc-20240116; t=1741702226; c=relaxed/simple;
+	bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WR/jYKo0lYRRZUPxGWR+QimaWIR6GOTXnBBR6sZdNpNOLGKiQA43QiKHIZuWuQlLstEPxuL06reLRGmjrdjEd+D8emw8fWwek8oOJ3rT1o8rrX5NyKesTD9dLFo6pjFG36kMb7gwi8YgHL4cN5naozAqARQs/Vhklk3l3qm84K8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F9CE1424;
-	Tue, 11 Mar 2025 05:10:50 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1853B3F673;
-	Tue, 11 Mar 2025 05:10:36 -0700 (PDT)
-Date: Tue, 11 Mar 2025 12:10:34 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	Adam Young <admiyo@os.amperecomputing.com>,
-	Huisong Li <lihuisong@huawei.com>,
-	Robbie King <robbiek@xsightlabs.com>
-Cc: Jassi Brar <jassisinghbrar@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 00/13] mailbox: pcc: Fixes and cleanup/refactoring
-Message-ID: <Z9AoOg-cx6xVW_Cu@bogus>
-References: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNmcoIXEc+k2ekDpAkjeWtVlrSNBMGbLEpnA0U6fMQzd2Qu5RVTVQrrnSBcywM85ahzPV3vBWRdoYHwTKF0ljtTyPphMLLpU7eyjgphWdJ17OwkdZ6DeDo1q3E3LE0S15JJ0k29w7fi8b2I7/1wE7VImqFkiz9FNUR97C64wQLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JoThZfxt; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JoThZfxt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741702224; x=1773238224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+  b=JoThZfxtWpBAhqz35ynvdytlBWUKooygdqA1ehBNKiETJA+kgNPGWIeO
+   ALgbTMzxebN3BTl69J4/6+3neK/vHj7zeGBmmlkgCr9E10oJSN2uhIA2K
+   SVgGkPzVwCAzhip4Ked4lXJSDKPS50PKNqpfk347WXw6BzDe0oqw9705i
+   fO2yCukYgtwF/2iMM9hFEB9qlCmijD4IBox0iUtWHDegWXmD9yKmp0b0s
+   HeV06IEFT/qHP+6GvCNdrwx8DxziNukDOiAcxF2ORRPB8qIMEzsQMl9nE
+   4o9c+W6JfNwVi6gAOYgoA4j1PlP7UEPH4PscLKERtAqHm7nYKOxFuNf/B
+   Q==;
+X-CSE-ConnectionGUID: f9SNI9vLSNWZFUfLp49hyQ==
+X-CSE-MsgGUID: HkPR4dGQSpSrfRWpx/EYwA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="46523319"
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="46523319"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 07:10:03 -0700
+X-CSE-ConnectionGUID: lwwV97C/Q1Ck5Ar/zlHaNQ==
+X-CSE-MsgGUID: ERKY/U9aQg6zkJ8ybsZURA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="157534140"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 11 Mar 2025 07:10:00 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts0Iv-0006hg-0j;
+	Tue, 11 Mar 2025 14:09:57 +0000
+Date: Tue, 11 Mar 2025 22:09:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+	platform-driver-x86@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: Re: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <202503112130.dl6b3XVs-lkp@intel.com>
+References: <20250309112114.1177361-7-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,22 +74,41 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
+In-Reply-To: <20250309112114.1177361-7-lkml@antheas.dev>
 
-On Wed, Mar 05, 2025 at 04:38:04PM +0000, Sudeep Holla wrote:
-> Adam, Robbie, Huisong,
->
-> Please test this in your setup as you are the ones reporting/fixing the
-> issues or last modified the code that I am changing here.
->
-Huisong,
+Hi Antheas,
 
-Thanks a lot for all the testing and review.
+kernel test robot noticed the following build errors:
 
-Adam, Robbie,
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on sre-power-supply/for-next amd-pstate/linux-next amd-pstate/bleeding-edge rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Can you please help me with the testing on your platforms ?
+url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/hwmon-oxp-sensors-Distinguish-the-X1-variants/20250309-192300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250309112114.1177361-7-lkml%40antheas.dev
+patch subject: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+config: x86_64-randconfig-074-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503112130.dl6b3XVs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: battery_hook_register
+   >>> referenced by oxpec.c:927 (drivers/platform/x86/oxpec.c:927)
+   >>>               vmlinux.o:(oxp_platform_probe)
+--
+>> ld.lld: error: undefined symbol: battery_hook_unregister
+   >>> referenced by oxpec.c:935 (drivers/platform/x86/oxpec.c:935)
+   >>>               vmlinux.o:(oxp_platform_remove)
 
 -- 
-Regards,
-Sudeep
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
