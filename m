@@ -1,171 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2135.outbound.protection.outlook.com [40.107.220.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11E92561CA
-	for <linux-hwmon@vger.kernel.org>; Wed, 12 Mar 2025 15:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741794479; cv=none; b=P5+gu9RmRJ7L8dJpr5SNAkfwOaUfwULyV2dh684fVt2HpNSb+81Ymeln6yWaZo1kiWkR2R3T+srJshCGM0kPzCvXXoviiRM46M9kj5Cd5L8BNPTC6KzGgbQwW4IOF+JFcUqYjawyQnsKnzhxKbuNWC7XhLESaGkWNWfepQnZ4JI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741794479; c=relaxed/simple;
-	bh=Qic5LbA3POI5RfhvdSEdfVa4eXsTLC+HtYdUtyxIAl8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=S7PRXAmdp54CLft22Ew27gaTLXfAvRz0S5kGVfmmNnfh4S+xaeKeuFFmb7fGLzauFs6cypfBQP3cRMuQYuuFshPVRd1glHaZR/q2XmG+6xoLzohv5C4ZSHKlrUhhKGNVNjsWieTzC0NPqYJ2PqH7/oLasvIxdfnYdranLNmpiA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YzX+BAq0; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1510A22DF8F;
+	Wed, 12 Mar 2025 18:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.135
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741802700; cv=fail; b=a8OG6pOEY9ypC0wqGi7sT0bmIQQc7Kco+UcZtfPMxlVl5oHC3wsw9WSHVG81xi77QvlJsE8uFsVzvRmHc4n++T1UluHHZho/fFbG4NdVpQ6We9RTHg7/1OYMOw2T3cAYmnYrEbURLae4/PtLwqE7Qadw/KSDn2N1JbqF/vw1cKA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741802700; c=relaxed/simple;
+	bh=Qet7NoN+bJ1WGoDWAvfWnleWpu3C2K+nXWQ4UoxqkI0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kYBuKUMx2cu0dBkfB2YcUcUeRrdIAqIPJOnO45omT9vs2buPTdjPU9FWSPPNyY1sbIkYCyqCxD1f5sYgrX6si9+j15fXytobJuR8kirkzIxnf+nWnpec2eXHRLmh45iNecJrS9Nt4rNTf/9daLE7H8Nviqv9XE8cUqhiJk6Qa2Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=jx2wtSiQ reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.220.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YzX+BAq0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741794477; x=1773330477;
-  h=date:from:to:cc:subject:message-id;
-  bh=Qic5LbA3POI5RfhvdSEdfVa4eXsTLC+HtYdUtyxIAl8=;
-  b=YzX+BAq0YWsncMGwiN29KtkEvRfRHGIbMNKM50Uuzp8NHmrMNebrRQv+
-   sZDsKSL1+LPXtaWNz/75u2CZDjAkkvCcdRQziGHVG5ubkPB/eKyUhtOov
-   t9IUPzbrTqeL85QLC6j9fexSh5JIuwrbkrhxoYh+q97XT9qGclnUMLz0k
-   P+Bu+9lgLORinC1+08E4ojzRzUATiH08QberDVC/H54rWt/vUP8cDJuww
-   Dsw79vUTaae5ZHR5BoMFDfQehI5qhsHHQYqcggY4Ob/l0OvGj/4m+SeLe
-   lI5tXdvU9RWKkM2hQlw7PWMpYFoC1O0LtfeG20qSaN75hS/nsx63HhLnW
-   w==;
-X-CSE-ConnectionGUID: rZ1o0tDmTIGfteIXunFjJA==
-X-CSE-MsgGUID: ROkT7orBQAqJM5mD2pF5cw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42739895"
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="42739895"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 08:47:57 -0700
-X-CSE-ConnectionGUID: G6C0THOyT9CMPXWpaz11yA==
-X-CSE-MsgGUID: ad2lT/yUTq2GTQ/IQ6loMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="120691922"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 12 Mar 2025 08:47:56 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsOJF-0008fm-31;
-	Wed, 12 Mar 2025 15:47:53 +0000
-Date: Wed, 12 Mar 2025 23:47:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- dbcfcb239b3b452ef8782842c36fb17dd1b9092f
-Message-ID: <202503122308.vCistre9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="jx2wtSiQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UD1AaxU5rB0WafUDctq/12fX1kNdQOipoFtjHHsg6VDtCT1pKoDjbCxujG6w8WJxN0cnYzlM/p72kyzHiosLyMqdoc5AE6WXCVUEH7SQkWHWJ+u0lqA3qNLq7RIJZeMbdoy7TP9UbFgCiiBHPTtD19iIRmnCGtMwKhXlNnMszo9P1vAmL275PvUVYAiqLEvUoAgxzHaR7j6qQEAjwfmJrtiLNXn8MBIHQy/qKSgXbsZg8YtmwRPDesMM/5LVdQIJE4yE2kBToXtl5wgaXWG5UkwQBoOI0FRFVaC39wKMFK2E6u4xP3tsA8IIpiRqs7gkp0uTi5InHoRoOinp8iw2UA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K61FGefTE92xnrrRDxEs741RivV0Y0eICWxaajPT/B4=;
+ b=kvnO8HdGazI5Uc9auKmXkcvxAxhVbI2h+UwBICcY6jkQd4jKS7f+Ww+zpqeQ9MUnkFHir63DBAHndl12NH/9ZxvOiQqbDOWtIr3HZkK/Jvkt8/4mA2H6wm1NfXAtzXFz85s+oHoTx5Lv2OkDVbyB4s1ZW0frLvD5GM7Z8pMdbc25TluYzMo+2ydRAop8/cFSlj79HwXCQeJSI65spy5H++AWp3lZYMQ1vs0hwwvmlhHHMQiVsV1er9I23HQawOeMCd4RZ91WBo+vu1Gc5a7/RRm5/WYISI7vmTUj1t4R3iZKX54+pQAV/gJMpJu3A6276Ee6k2eYS1jpagVDRtjlSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K61FGefTE92xnrrRDxEs741RivV0Y0eICWxaajPT/B4=;
+ b=jx2wtSiQG6xb3ocFx7SSD0hxpPfQOtFBFY8t9BrWO8R6qFuzdhzzrRyvTc/wrsZ510rwEg0DpNxZLm8s/XawoAzqu2AiU+8ElV4tDe7FQlpbkZXlw+SXOyspVAUNUtr9KL9A6VhHr1CImWC3wVZUAsYxXzDTV+wreBVmJ6VH1hs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from SA0PR01MB6171.prod.exchangelabs.com (2603:10b6:806:e5::16) by
+ BN5PR01MB9154.prod.exchangelabs.com (2603:10b6:408:2aa::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8511.28; Wed, 12 Mar 2025 18:04:55 +0000
+Received: from SA0PR01MB6171.prod.exchangelabs.com
+ ([fe80::b0e5:c494:81a3:5e1d]) by SA0PR01MB6171.prod.exchangelabs.com
+ ([fe80::b0e5:c494:81a3:5e1d%4]) with mapi id 15.20.8511.026; Wed, 12 Mar 2025
+ 18:04:55 +0000
+Message-ID: <17a7ca5a-31f5-47fc-ab67-348df20b31ec@amperemail.onmicrosoft.com>
+Date: Wed, 12 Mar 2025 14:04:51 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+To: Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Adam Young <admiyo@os.amperecomputing.com>,
+ Huisong Li <lihuisong@huawei.com>, Robbie King <robbiek@xsightlabs.com>
+Cc: Jassi Brar <jassisinghbrar@gmail.com>, Andi Shyti
+ <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
+ <Z9AoOg-cx6xVW_Cu@bogus>
+Content-Language: en-US
+From: Adam Young <admiyo@amperemail.onmicrosoft.com>
+In-Reply-To: <Z9AoOg-cx6xVW_Cu@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR13CA0172.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c7::27) To SA0PR01MB6171.prod.exchangelabs.com
+ (2603:10b6:806:e5::16)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA0PR01MB6171:EE_|BN5PR01MB9154:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4988e42e-2f41-4c8b-b976-08dd61906518
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|10070799003|366016|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c2k3cU0ybGo4bGZuRzJyVW5JbUw5eG13SG90Z1JqQ3ZFbGh5WWlPRThjSE9t?=
+ =?utf-8?B?YklYVUNFb0owbFhzcFpuL1VFdkxXcE4rbm56OG9uUXk3S0xDajRnMjFzRHJ1?=
+ =?utf-8?B?eU44dk5OM2hFMERlTDVBL01vaThjZ1o2NXFXNWxwbEI1Ui9mYkp5dWNIc0pX?=
+ =?utf-8?B?bXJWZS9sMi9qQ2NPQVhlT056L3R5MUROczNrV0wxZUN0S281SHRnWXVVL0dD?=
+ =?utf-8?B?eEpKU21Dd2Qxa3BudWx1dWxMYjJNTC9KVHhZUFVwY3pnUitaSUp3SGtOdnh0?=
+ =?utf-8?B?NGRIcU5kVkZZYzVYV3VuUVNVWTcrL29vcm5qTFpBSFVXdG8xdU9Hb2ZrSzN6?=
+ =?utf-8?B?MlptcFJYcG1tNnEvdklVYnRLWEFUZHA1NW5yZlA4NzdvYkpEZ3JwTUUxWGk3?=
+ =?utf-8?B?ZHRRRFVtZnBNRzZtRHJya2huR1BCSzlMU3Y4SWZJYUU2ajR2Qjl1QlVTaFZa?=
+ =?utf-8?B?SE50ZjY0Z2xDdEFnNHNicGJqQWxVL2JWWDhlVVVKVjRYTDdMOGdWYkN3WC93?=
+ =?utf-8?B?NTJzWDMxUGxMcXdaNDIzYklueHZrY20zMUc3QmxSN0tlay94a1ZWU2g1MjB5?=
+ =?utf-8?B?NHY1K1BXRjBTVWRHaXJRNXh3NjFQMFB4MHh6bzk1NlFnRmdCVUNOUU04Wnhk?=
+ =?utf-8?B?Rk5mNVZxSkNCMnAzV0x4aWZJTUN1cmI3bDNMbUN0MEdGNXdoaWRrVkZlbUdC?=
+ =?utf-8?B?OE1kS1pqcTU5OTArN1BOdGxKNnM0N0RTL3Q0c3VNc29TKzJuUm5XVVM2NVJw?=
+ =?utf-8?B?SGJFaXVmYVU5M0VFWGErOUtyVEtiNnlpTUxmREZNbS9BR0lLMlpHZElGSWpZ?=
+ =?utf-8?B?ZnhOY1hYMTMwTTFsUzB5bzdPVXI2M1l3bFZwL3VLOXRIckpCN1MvRWxwbCts?=
+ =?utf-8?B?NnNvcGt2cUgxZWk0Vk1hamhVOWNZN2cwV2pRb2NNeGZEUW9kK3RINWZrbE9S?=
+ =?utf-8?B?OTNwTk1aMEpjZ29sNCszdU1xZHkyVjNzWnBRajZMOHk1VGZwWUZYWkx4cXI5?=
+ =?utf-8?B?UGV3bUhWRnh3djdEaHR5UU82cnA1TnArNHYyZ3M5aGhKdHhpWUlzWmNSTXJo?=
+ =?utf-8?B?ZzBEbnhOUHJ2NUlDRHRFeXF1Qnk5UGltZk15UkphVndtckFUR1E3emRGNFZ0?=
+ =?utf-8?B?eWE2cmdBb2hOaEFwZHpkNlpoby9FYzhuTmJpZE43bVZTTTdvUHNLRlJoM29q?=
+ =?utf-8?B?VGs4OGlCdzlkV2pCY2ZWRUpwVktTdGk5eGwyUHljU0FoRk1EeHMwZU5WQ0xa?=
+ =?utf-8?B?RWN2TXYzSVNnbEdDalFVWXR6TEJWcG8vTGJsSUFFZW9TRGFkelFaN3dMdWp3?=
+ =?utf-8?B?YnhLWXVseWtnS3IwcGRMTENHaU1wcXdFdnpQZ2IzN1RkbzJOVFpyZ3FtQW5s?=
+ =?utf-8?B?UTVqbERaZGFMcHhVWHd3Mm0vNWhSL1d0RFkvUkZHRDRqSjdpQ0JOcjZxWElv?=
+ =?utf-8?B?YnpUc0tiOTcxOXU1N1BxN21yUUhpQ2dyS2xqcWhpdThEQjIrenFpYmpRWTV2?=
+ =?utf-8?B?SU9ST1FGR3AyTmIwQ1pFdldkOGNmdjkrVm82L1NvNE15dTN3UEtQQytZSkJw?=
+ =?utf-8?B?bGFzODdPUDROYjZVckhGSHcxRXBhM2xPeEhlVEdEdmo1bnp0OFJoWktaRGV6?=
+ =?utf-8?B?bGdhM0FGVDNEcklqWHdicGlmSnJReUVKL0NmQXdEMEV4N05HVHRjUkhTYXQ5?=
+ =?utf-8?B?blZpVmdpRzRiUVNLZTRxSlNKa3RiVFZFSktWMjdoNTVjQmQvMktUb05FdmY4?=
+ =?utf-8?B?cW5DMUtpUHIxWEpqWWNnSFcybnMwMDhLdStENlo2Si8vUnZ0N1JtTW04cGpk?=
+ =?utf-8?B?Q3Bub2N4UEs1Mk9vVUhLS3ZEaFZCOHhMb1ZzVVNPSHBhbkt1M0hZZGQvR0dX?=
+ =?utf-8?Q?FMiDa+w8oqwcE?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR01MB6171.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(10070799003)(366016)(7416014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Mzh1TkoxdzBFMUtpY3JqbjBQd2RiTVVrV2Flanh1TFlPSkZTZmp6dVl2WkU0?=
+ =?utf-8?B?bmtnMndPT0E0Y3hBbTBmZzkvVXhHZWE0RjVHZmJobXN6L0xZckwzWXpNbFFo?=
+ =?utf-8?B?RnhBeHM1cnUvQzF3UFBpdDVzaFVjcXhJNG4wZUJKeHdrVG1vTFQ0T3VkUzZp?=
+ =?utf-8?B?NmYwcmU2cGZDdUpNSjdWUmpjcnpTMC9BajA2M2gvS0VmWjVrL2hOenhFaUkx?=
+ =?utf-8?B?ek9qRGpkL05FV0s5QkJwU2F2RDhzSEh4endPRjNhbFpBaFh1MnpyRGRUcjBE?=
+ =?utf-8?B?dFNvaU5YcG5yNHNNdlcxd1JCV2l5SXpRbGQ4c2xObVJWdS9xTXZCK0tBdHE3?=
+ =?utf-8?B?T3RFbnBsTHlyVFRzVEJCMzdnNFpicUJuY0ltVHhpc2NGMVdTRUhmUlJDbXJh?=
+ =?utf-8?B?bExqSkx5WFFORDBJaTZwN1VXdW9lZlJjUDQzdkQ3MnF0Y2I4YkpQL0lad3Iw?=
+ =?utf-8?B?WUNZb0ttNUlHTEJmZlEzVkZIVktibGxLTEpkQXJsRzlQM2tIY0JINXdHMG5M?=
+ =?utf-8?B?QkdSNW5KcmtZVmJLTHlUYlVQajJzVERmS0xHY2VXazhEbTVwVGVKdllZMnNG?=
+ =?utf-8?B?c3YwQWR1a0l0STF2WFJ5MHp6YTEwQUdDem4xd3hYZVlqb3F6S0xyVm5qck5N?=
+ =?utf-8?B?KysrWFo4bFlDaUNYNTI1K3FqVGtSYXBVSmVxY3VQRmhoNUwvZld3Q21PNUlG?=
+ =?utf-8?B?WVVqTVcvK1VGZmZ2akRVRHNsUm11TXVSMlNwVTlGb3ByYTlxZjFNSzdaS2RU?=
+ =?utf-8?B?THBTTTdKU1o2aWxEOUx1K2JldjZTZFMxMmtEaTN5S3h6R3dvbUNzc21HOENq?=
+ =?utf-8?B?ODBuUERRdkJpR1h3RGRiazZtYzBrdkR3eVNGeHdmSmxDTi80YUdxcjZ5ZFo1?=
+ =?utf-8?B?L2tYcUJGUis0cTI3YVhFcmpRODRtaUIxUjFUSU5JT0cvaDFIUmR4OEJRNUdO?=
+ =?utf-8?B?OEhQSk9qajZyL0g1QlVxbFlQNzRHZGo1cmM3TFpPQ0dJeUFqWmJkQ3YvS1A1?=
+ =?utf-8?B?dk9DWFhXZERxanJvWHNKL3pIWWVwUktDZCtPL3k4cGdYYlR2N2wxd1FkU2l5?=
+ =?utf-8?B?N0M3RENVbmJueUI2dDVGUWVJT25NWkhQaHk4cUFBY3M0VHc5cCthNFp1QjBU?=
+ =?utf-8?B?NEQvaUNkR3dDWWNXcmlGc3hnUzAwdHd4aFJhOThlRmsrUUFxakh0OEdpby9G?=
+ =?utf-8?B?aGNnWEVaaXIxaUlEMTFDb3lndGxrVFRqOVlrS0dMZHVGaWJaMkZqMW4xdGFJ?=
+ =?utf-8?B?aFdjS3dydXhzN29ZWnZVcEtTcjkvRTBqZzBTbjhqOE1Bb0k1MU14VDM3SGto?=
+ =?utf-8?B?Q29vZ2NUNkxlNWEwWkdjNWN2SENVb01CakdKQkhNWmNFTG5WQkJaa2ZMdFE5?=
+ =?utf-8?B?VlFuY3Mwd2Z6S1liWEVIT094V2g1d1lNZjEzRkFQS3dvZGdkNTJuZkR4a1Zq?=
+ =?utf-8?B?VlhBZGhxM3hmUkYzVHlGODFNYmgwMkx0L3VhWktYcHhUSllkV25WQnRLK2Ns?=
+ =?utf-8?B?MStRWmhZWU5NUEZZVXFaZDFWelVreUtKMUpkaTI5bFJuRTZSV29UVzdLVm9K?=
+ =?utf-8?B?M09EdVhTNkpYMngxUjVHbytBUTI1eitSa2FJVGI3YWhrekdlSVJEN3k5Uzd3?=
+ =?utf-8?B?V05wZndKKzRlOUFQL3l5N3d0dmdSZjJ1Rlg0NDhCVWRLSnZSQnFNVnJqNW5B?=
+ =?utf-8?B?SG5ycTJrckF1Z0plSUY0Rkd3cjRWeUJmeXF5ZHV6WGVtM1ZUaU5ocDBhWG9i?=
+ =?utf-8?B?QllJRENDQzZ6UVpJdzl0elQwWGU0eFg4ZDBDTHdlK2hlcXc3UXZzemxpN1No?=
+ =?utf-8?B?MUFmUlkvOFZJSXdUYjBGVUFMOU1XSlgzUHg0eE1qZGYyRStkeHVOaCtqS3BZ?=
+ =?utf-8?B?anpEZ2l4cWZJMXExcEFKSUFCV2dLU1NWMWRySlNVSnBmTXhKbHlqTW1tU1VQ?=
+ =?utf-8?B?TnU1bEhvSDM4MXJXWmp3T1Uvb0V6QWVzYmJRY2dsaE55eWFFRjdmWEU2Qytu?=
+ =?utf-8?B?a3oxRFFqZjFFVjJrVGZBTGV0dmRpbG9ySE9BQ1YyRXh2dGRHdmQ4WWYxTC9o?=
+ =?utf-8?B?UURUK2gvK2hqbFcwVm9FazBWWnd5LzBzcDFhODdjeGpJZEthd1AwQW4yNnRB?=
+ =?utf-8?B?emlGVStXZ1oySnp3cmpOenlCQkJKRzc2QXNWRkcwWDRvWE5XSVkxbWkrRzhk?=
+ =?utf-8?B?OEVWbmxLRW1WdEhMQnJVREsyOVVSSGV2OVdBS0ZNcDhmWmRiUkVWMlhKeFhJ?=
+ =?utf-8?Q?KH6jOlbDQ5jLSgqbgRyX6/a2BL7IHvXqxfPYKpZ+mo=3D?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4988e42e-2f41-4c8b-b976-08dd61906518
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR01MB6171.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2025 18:04:55.7521
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: En4rvBR1UGZiGFHF9NFls/dqfaQcc5BAO6FpFiIis6S1RCRs4ns6L8GDf0YTYQO7XXjjkKoy65KjpCUiVCevNniKqjAQNuCbUDHUMcnlw4f6mN1vPwzXXaxBNoqROJJQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR01MB9154
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: dbcfcb239b3b452ef8782842c36fb17dd1b9092f  hwmon: (dell-smm) Increment the number of fans
+The XGene patch did not apply on top of Linus's current tree. The other 
+patches applied OK.
 
-elapsed time: 1457m
 
-configs tested: 94
-configs skipped: 1
+I only had to make one modification to my patch to remove the call to 
+‘pcc_mbox_ioremap’,  as it is performed in the pcc_mbox_request_channel 
+call instead. With that change, my driver continues to work. I will 
+submit another version here shortly.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I like the direction that this change is pushing, making the mailbox 
+layer the owner for other drivers.
 
-tested configs:
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250312    gcc-13.2.0
-arc                   randconfig-002-20250312    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250312    clang-19
-arm                   randconfig-002-20250312    clang-21
-arm                   randconfig-003-20250312    clang-19
-arm                   randconfig-004-20250312    clang-21
-arm64                            allmodconfig    clang-18
-arm64                 randconfig-001-20250312    clang-21
-arm64                 randconfig-002-20250312    gcc-14.2.0
-arm64                 randconfig-003-20250312    gcc-14.2.0
-arm64                 randconfig-004-20250312    gcc-14.2.0
-csky                  randconfig-001-20250312    gcc-14.2.0
-csky                  randconfig-002-20250312    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250312    clang-21
-hexagon               randconfig-002-20250312    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250312    clang-19
-i386        buildonly-randconfig-002-20250312    clang-19
-i386        buildonly-randconfig-003-20250312    gcc-12
-i386        buildonly-randconfig-004-20250312    gcc-12
-i386        buildonly-randconfig-005-20250312    gcc-12
-i386        buildonly-randconfig-006-20250312    clang-19
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch             randconfig-001-20250312    gcc-14.2.0
-loongarch             randconfig-002-20250312    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250312    gcc-14.2.0
-nios2                 randconfig-002-20250312    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250312    gcc-14.2.0
-parisc                randconfig-002-20250312    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250312    clang-21
-powerpc               randconfig-002-20250312    clang-21
-powerpc               randconfig-003-20250312    clang-21
-powerpc64             randconfig-001-20250312    clang-17
-powerpc64             randconfig-002-20250312    clang-15
-powerpc64             randconfig-003-20250312    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250312    clang-21
-riscv                 randconfig-002-20250312    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250312    clang-15
-s390                  randconfig-002-20250312    clang-16
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250312    gcc-14.2.0
-sh                    randconfig-002-20250312    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250312    gcc-14.2.0
-sparc                 randconfig-002-20250312    gcc-14.2.0
-sparc64               randconfig-001-20250312    gcc-14.2.0
-sparc64               randconfig-002-20250312    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250312    gcc-12
-um                    randconfig-002-20250312    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250312    clang-19
-x86_64      buildonly-randconfig-002-20250312    clang-19
-x86_64      buildonly-randconfig-003-20250312    gcc-12
-x86_64      buildonly-randconfig-004-20250312    clang-19
-x86_64      buildonly-randconfig-005-20250312    clang-19
-x86_64      buildonly-randconfig-006-20250312    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250312    gcc-14.2.0
-xtensa                randconfig-002-20250312    gcc-14.2.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 3/11/25 08:10, Sudeep Holla wrote:
+> On Wed, Mar 05, 2025 at 04:38:04PM +0000, Sudeep Holla wrote:
+>> Adam, Robbie, Huisong,
+>>
+>> Please test this in your setup as you are the ones reporting/fixing the
+>> issues or last modified the code that I am changing here.
+>>
+> Huisong,
+>
+> Thanks a lot for all the testing and review.
+>
+> Adam, Robbie,
+>
+> Can you please help me with the testing on your platforms ?
+>
