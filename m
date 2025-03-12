@@ -1,305 +1,148 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9137241678;
-	Wed, 12 Mar 2025 12:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A314923A9B6;
+	Wed, 12 Mar 2025 12:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741782689; cv=none; b=EDX9KIc4V19vfkijH2XEc6BN59PjY61QuL5WAbmbSGIutBV+CNp15RDDJBwwOHG3jsPQVcKeqOl/NBIFyeXBUF+yeeXKGV5iuN31IIUWYzRQ4Lbm2v99v43cwOd2MUQUiy+Xsg3TRX2Rri6IPY82Couu/vqPIdKb6+Dj9xLYy6w=
+	t=1741784161; cv=none; b=oSdIrxOfaNrId4NhOs5nmv4WHynKcZUmOGYs6LgvquqfxlWSo3seZWcBCOLqvbk1FFhhG/fw6rY+7598/pwn3DQ2sz1Gaq2JtncLFCJMTa+7bZep9n8qCU/AtvsNdXM7yLsJmWZpdP9nbyfcdi8brdlM/UTMHbmRVmXWatD/lCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741782689; c=relaxed/simple;
-	bh=H8QG5ecMLGOEY4Og/1MgPGyGHgWq5rjT5XfBRuu9LJ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e8PP/53/ljlrizKqE7LwqINpzgtVqHeY83egcy3gx8XUA2htIoIuegdfii6dqVi3f/AFO8DQKe5x6FUwBsbaiYxP2gApvHfyuit7Tcg6hAyUhbpcNG7tyZQ+rcDLWU5lehq+MSQVV93ipCDF+MMJI3yntDiR/cQmWubZbFiPHfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMu3Lbbq; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1741784161; c=relaxed/simple;
+	bh=m752jzKuXs1015LB95B52b/mMal0yvInOt6e91a6Rig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bt1597Qrf5nIoev7sFbPY5EcvsZthbQlxkUBYsq+AsEMA+GwVJh364uuLmYZSiZwK7F96dJOcpSlNO0BtCHfA/OVLSjnUPqki0Eau0fZshKPe/oYQ6/LfqIHIZB/1dKRQvzDqc22waDI6uuL3XH69u/ojNjmblvtbxJSbPsiqIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNMitbK4; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMu3Lbbq"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2fec3176ef3so9867902a91.1;
-        Wed, 12 Mar 2025 05:31:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNMitbK4"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-223959039f4so132849925ad.3;
+        Wed, 12 Mar 2025 05:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741782687; x=1742387487; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cYLJt2gp4oH8mVnJOtzfiFQb5AVimjLmYZhCSJgTXlw=;
-        b=QMu3LbbqC85zl+NPwZ3jOHPdkgBUOnTeYbflkv497S7/nXzaMuWnZ3uv53pehdjoyM
-         49+2SRlKNWa4yQGNatpYjYyq1wo0Hg/RxDx/Q4GQsWMNozXzxA/3Gz2t4+mGBPW8WLSv
-         u7X+YvvGr31d1A3lxaj59skSM2Ph1ndZDF2EvcXnb/UJOIn5VjPnZ/vsYGvBrMbg6zTk
-         HI7VB2cSSExl/F7I0/zjDEz48/tV92G/8xxCXETmdlX90Gw7Xb5vmN9uGqejQBjc0PWO
-         l4TJj1ucMIP/cLrrYorBPAWIQvA+p+UJxpk2uPx2Y8WWVBi/Yq43iIYbospoDcFe/Bjj
-         lbNw==
+        d=gmail.com; s=20230601; t=1741784159; x=1742388959; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=eym45oKm+OA7GJAGr3OieSc/8yhtuvItR6ugQDb4d30=;
+        b=QNMitbK4onbs/c6CQlCAoaqt9nV+hkIKILlx/LJk1MlNQzjuKrtChqMbkjOsXMGVBK
+         bGKmPE38Fuu5kdMwRrc2l+OjOLcEcCbZg1toQWtSCbz7pbcWLjI82ghyqgJHUPstw8iv
+         kUo429PfoM2aUKrphcY5CdTdRTlL3JPQhs/IFfsKU456xsAhbZZ4BdBW5IxED+L6AUeb
+         xCG6sSkRtnxXqOayFHv7mZqvNCKANLvRKt3W+1mTn5Op1JkguxUsNR+FLTerrToVFthx
+         N2ajkgZZSDNquHyKDY0nCbdyPMWXv1FfuuCCEQQIsfrEGCRfvy8HUDHFl4A/xQTbYow9
+         lZOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741782687; x=1742387487;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cYLJt2gp4oH8mVnJOtzfiFQb5AVimjLmYZhCSJgTXlw=;
-        b=QlmwsHkjRGk9v3Zm6PaYaqNFbsxJvkVGVH3STkInXReQhGSlLjBsJa28pgcjKPmWNj
-         ErsQXNbdaYsEJM+3k/ZM2ysg/Mrex7+Uq2M9L7ujLaAwAioZ+uzii3BYs/s1iTkr/xRZ
-         ShFOSGSmWBgamxp3cIa06VoF5N0YoJxIvIrIjG12PIL2ahxv508fQZ1bRIGvT/xad0xa
-         ms9ktV8DseLkplXMgQSa7tyFouX0OT2ZeJnJfwdIJA1v4iiQ03xWgxmxUXMmrk+cfUsL
-         KnXnAUj/PV080COd4f6HwtnVDn6qywaie/ed0U4ZFjBKHC8V/upNajmTSnFzbXPg9bYt
-         FyzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBx/x2gWq+HyH+wGCJfP0IOBf7+9cb1M8rfNQxo3CCPENfd/QQlDphrmmf1GNkLPy+QX/p5Xc9EE/yu7XN@vger.kernel.org, AJvYcCXet/+d52pWDNZliVY5RwhWXkS73vRUpxiG/N+HSMTktEIhdXYr81vSu1cr3zV7yGnK/B4bOhIo1CJMvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGCxG+GK/DdGhEPNg06lvRlwh4BsQOW4fVYwvrpwX2lYHXJwya
-	zMCKVvkLGBWp/1zMEXxmBjApc62Yzn+I7ADYleGNpbS00jzsS7Nw
-X-Gm-Gg: ASbGncueFX0xyzX5WHwRxUt7rhXVKqUnxhKNsnSqM6avWK7FCXIYP29CUYhmWhqCLSy
-	9gjWpk5/pqUlOQh6jathteqw0yQ0tc9OpW+iqv0FTAqpGGjwg4Ql3t2gWNOz/qNXWcg3/0YzSOu
-	4IqbVYpNg/N2X96xytLGEMyqnRtFpIl0uBNbUSI8vmWyONlIrLGH7Bga41q6rgy3+UkD7rp8DZ+
-	EdKmeJL4GaM+i/d66ekmDtqae1ejWtTcwE4sSytz3AJVbVpvodl/IuNW1RGActzzQgxPx0lWcS2
-	JeCmaEAsEhXgop6SZTsDSSb2+8C56EP5W9Z5n/37cYhEi6/S9GVofGoYZ2Ih8T1fc3nxWNbNue7
-	V4jqnlY+xnK/hxgchfPMzzE+1eCs=
-X-Google-Smtp-Source: AGHT+IHaV5eNAX6fjVra4FDgV+bkab0WccBzwzAJMJtmvvw5216pVI9cMpIffkO5ZphZ9IBnnEw5GA==
-X-Received: by 2002:a17:90b:1d0a:b0:2ea:5dea:eb0a with SMTP id 98e67ed59e1d1-2ff7ce5965amr30359359a91.4.1741782686911;
-        Wed, 12 Mar 2025 05:31:26 -0700 (PDT)
-Received: from kernel-Apple-Virtualization-Generic-Platform.. ([2401:4900:8898:8129:deb0:598c:ebb7:dc81])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301182181c3sm1621784a91.5.2025.03.12.05.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 05:31:26 -0700 (PDT)
-From: Subu Dwevedi <messigoatcr7nop@gmail.com>
-To: 
-Cc: Subu Dwevedi <messigoatcr7nop@gmail.com>,
-	Henrik Rydberg <rydberg@bitmath.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon/applesmc: add fan support for newer macs
-Date: Wed, 12 Mar 2025 18:00:23 +0530
-Message-ID: <20250312123055.1735-3-messigoatcr7nop@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250312123055.1735-1-messigoatcr7nop@gmail.com>
-References: <20250312123055.1735-1-messigoatcr7nop@gmail.com>
+        d=1e100.net; s=20230601; t=1741784159; x=1742388959;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eym45oKm+OA7GJAGr3OieSc/8yhtuvItR6ugQDb4d30=;
+        b=H66ZMWGw3MqOdOt94PqoyqJb4VV7pOC/oGOdbXomEwnO2qxZn+nfvxwVSM4J5lEUa3
+         vKUo6h2s1eKi1v7DDF7fJgCs5Uq4CXtZq4BuJXwANnvJVuUFcPneOMjOITlGHFQAHgYB
+         f2Pw5N5S2LYBJ+IGY/HTADOj3XaOHKdrJ+G3zaeafm9G7W1ivpG8CIE7rXbziC2/dnTX
+         8Cd1lQc40ckasG0clSqy55jV09eRbVMAs00uCFKgXUwScy8arfF8eAAyV3fGVIlZJI5X
+         HNHfUy+aqe/Etv4whr4syuEYhB4OGGEViGkooNFFfi5Us5xdCk3JiqpqBsCEbDJlur33
+         am9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWS/f9guF3tOoylINPbKG6gWVJpkl9v7dPhIUxlFBdR8Z8eHUGzKfYc9LXlhD2aaeg+7x7K/+WZiKwYG2bK@vger.kernel.org, AJvYcCXRc3n4E2Buz94oOI6nDdBwgCVJi8ZxAtcTA8SswcQfPMdCbX9/Mn85AkUKRqn4diC3XhMD9U5rGcsIXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPKUhrxJ1BX1tZc08xVyDydLRYuSeSb0WU4TzauQDSK76+PfNS
+	ybsxuxyoAaVW340dGJw63KqmxxzD8Y9cG7k0sUyDfgyoRYehTRoJ
+X-Gm-Gg: ASbGnctOpeetJsayTcRrmM3x2LgKb3vnfZKk04FxLtA+fhJj0EnRoUB/BxY/OWXOsjL
+	gvq5N0LBfZyAso6YNXtPsIOgbgIKaGAYcbnlH0cUke/9gxrWZaDRGaKq0Veeq1u+GxSwtlllTbh
+	UXDoBIEC6fhGNU8YbB8zE0PVNbkuwEeCrFri7SppTwvl072fKpOk8KAOGqJYDK59eFtDiwZCpzX
+	L3Hw0qXWciPXf/fV+V5FWJc3ftCiYRIcC4R26ZSkzYUBIvyAuv7McmVXsJM76wTi0Y63pIVtfSA
+	H0pZByHIYvMLbpQsuqKe/+b5g28TriWM/7hnq1c7xfyLEiKeC1+z4JsBakgAuoM1qj9Qb+oejmI
+	Hg2rIHhDABFHMqbWxDZIExmmNb65D
+X-Google-Smtp-Source: AGHT+IH/RhjuvbllU1lf6q0ffvOOvQgia+o04XWNrakfWolu5n7J3aPbV3KFOvRFvxWyuMckr6F0cQ==
+X-Received: by 2002:a17:902:fc4c:b0:21f:7077:2aaf with SMTP id d9443c01a7336-22428bf1715mr392334475ad.44.1741784158875;
+        Wed, 12 Mar 2025 05:55:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-224109e8587sm114697645ad.62.2025.03.12.05.55.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Mar 2025 05:55:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a148578c-0eca-4646-9abc-92684de4b9e1@roeck-us.net>
+Date: Wed, 12 Mar 2025 05:55:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Add support for newer macs in applesmc
+To: Subu Dwevedi <messigoatcr7nop@gmail.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250312123055.1735-1-messigoatcr7nop@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250312123055.1735-1-messigoatcr7nop@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Newer Mac models have transitioned
-the fan speed values from short to float.
+On 3/12/25 05:30, Subu Dwevedi wrote:
+> This patch series adds MMIO support for newer Macs in the AppleSMC driver
+> and enables fan control for these models.
+> 
+> Patch 1 introduces MMIO-based access for AppleSMC on modern Macs, replacing
+> the older I/O port-based access where applicable.
+> 
+> Patch 2 builds on this by implementing fan control using the new MMIO method.
+> 
+> Subu Dwevedi (2):
+>    hwmon/applesmc: add MMIO for newer macs
+>    hwmon/applesmc: add fan support for newer macs
+> 
+>   drivers/hwmon/applesmc.c | 347 +++++++++++++++++++++++++++++++++++----
+>   1 file changed, 314 insertions(+), 33 deletions(-)
+> 
 
-Additionally, the fan manual
-control mechanism (fan_manual) have changed from u16 to u8
+Isn't this the same series that I have seen before, pulled from some other repository,
+incomplete, and without acknowledging the original authors ?
 
-Signed-off-by: Subu Dwevedi <messigoatcr7nop@gmail.com>
----
- drivers/hwmon/applesmc.c | 124 +++++++++++++++++++++++++++++++--------
- 1 file changed, 101 insertions(+), 23 deletions(-)
+Guenter
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 1be4a4026a6e..9157f5978ee7 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -71,10 +71,12 @@
- #define MOTION_SENSOR_KEY	"MOCN" /* r/w ui16 */
- 
- #define FANS_COUNT		"FNum" /* r-o ui8 */
-+#define FANS_MANUAL_FMT	"F%dMd" /* r-w ui8*/
- #define FANS_MANUAL		"FS! " /* r-w ui16 */
- #define FAN_ID_FMT		"F%dID" /* r-o char[16] */
- 
- #define TEMP_SENSOR_TYPE	"sp78"
-+#define FLOAT_TYPE		"flt "
- 
- /* List of keys used to read/write fan speeds */
- static const char *const fan_speed_fmt[] = {
-@@ -145,6 +147,8 @@ static s16 rest_y;
- static u8 backlight_state[2];
- static u8 *__iomem mmio_base;
- static bool is_mmio;
-+static bool is_fan_manual_fmt;
-+static bool is_fan_speed_float;
- static u32 mmio_base_addr, mmio_base_size;
- static struct device *hwmon_dev;
- static struct input_dev *applesmc_idev;
-@@ -652,6 +656,50 @@ static int applesmc_read_s16(const char *key, s16 *value)
- 	return 0;
- }
- 
-+/*
-+ * applesmc_float_to_u32 - Retrieve the integral part of a float.
-+ * This is needed because Apple made fans use float values in the T2.
-+ * The fractional point is not significantly useful though, and the integral
-+ */
-+static inline u32 applesmc_float_to_u32(u32 from)
-+{
-+	u8 sign = from >> 31;
-+	s32 exp = ((from >> 23) & 0xFF) - 0x7F;
-+	u32 fr = from & GENMASK(22, 0);
-+	u32 round_up = 0;
-+
-+	if (sign || exp < 0)
-+		return 0;
-+
-+	u32 int_part = BIT(exp);
-+	u32 frac_part = fr >> (23 - exp);
-+
-+	if (fr & BIT(22 - exp))
-+		round_up = 1;
-+
-+	return int_part + frac_part + round_up;
-+}
-+
-+/*
-+ * applesmc_u32_to_float - Convert an u32 into a float.
-+ * See applesmc_float_to_u32 for a rationale.
-+ */
-+static inline u32 applesmc_u32_to_float(u32 from)
-+{
-+	if (!from)
-+		return 0;
-+
-+	u32 bc = fls(from) - 1;
-+	u32 exp = 0x7F + bc;
-+	u32 frac_part = (from << (23 - bc)) & GENMASK(22, 0);
-+	u32 round_up = 0;
-+
-+	if (from & BIT(bc - 1))
-+		round_up = 1;
-+
-+	return (exp << 23) | (frac_part + round_up);
-+}
-+
- /*
-  * applesmc_device_init - initialize the accelerometer.  Can sleep.
-  */
-@@ -763,6 +811,8 @@ static int applesmc_init_mmio_try(void)
- static int applesmc_init_smcreg_try(void)
- {
- 	struct applesmc_registers *s = &smcreg;
-+	const struct applesmc_entry *e;
-+	char newkey[5];
- 	bool left_light_sensor = false, right_light_sensor = false;
- 	unsigned int count;
- 	u8 tmp[1];
-@@ -788,6 +838,15 @@ static int applesmc_init_smcreg_try(void)
- 	if (!s->cache)
- 		return -ENOMEM;
- 
-+	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[1], 1); //example value
-+
-+	e = applesmc_get_entry_by_key(newkey);
-+	if (IS_ERR(e))
-+		return PTR_ERR(e);
-+
-+	if (!strcmp(e->type, FLOAT_TYPE))
-+		is_fan_speed_float = true;
-+
- 	ret = applesmc_read_key(FANS_COUNT, tmp, 1);
- 	if (ret)
- 		return ret;
-@@ -820,6 +879,10 @@ static int applesmc_init_smcreg_try(void)
- 	if (ret)
- 		return ret;
- 
-+	ret = applesmc_has_key(FANS_MANUAL_FMT, &is_fan_manual_fmt);
-+	if (ret)
-+		return ret;
-+
- 	s->num_light_sensors = left_light_sensor + right_light_sensor;
- 	s->init_complete = true;
- 
-@@ -1044,11 +1107,16 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
- 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
- 		  to_index(attr));
- 
--	ret = applesmc_read_key(newkey, buffer, 2);
-+	if (is_fan_speed_float) {
-+		ret = applesmc_read_key(newkey, (u8 *) &speed, 4);
-+		speed = applesmc_float_to_u32(speed);
-+	} else {
-+		ret = applesmc_read_key(newkey, buffer, 2);
-+		speed = ((buffer[0] << 8 | buffer[1]) >> 2);
-+	}
- 	if (ret)
- 		return ret;
- 
--	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
- 	return sysfs_emit(sysfsbuf, "%u\n", speed);
- }
- 
-@@ -1067,10 +1135,14 @@ static ssize_t applesmc_store_fan_speed(struct device *dev,
- 	scnprintf(newkey, sizeof(newkey), fan_speed_fmt[to_option(attr)],
- 		  to_index(attr));
- 
--	buffer[0] = (speed >> 6) & 0xff;
--	buffer[1] = (speed << 2) & 0xff;
--	ret = applesmc_write_key(newkey, buffer, 2);
--
-+	if (is_fan_speed_float) {
-+		speed = applesmc_u32_to_float(speed);
-+		ret = applesmc_write_key(newkey, (u8 *) &speed, 4);
-+	} else {
-+		buffer[0] = (speed >> 6) & 0xff;
-+		buffer[1] = (speed << 2) & 0xff;
-+		ret = applesmc_write_key(newkey, buffer, 2);
-+	}
- 	if (ret)
- 		return ret;
- 	else
-@@ -1084,11 +1156,13 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
- 	u16 manual = 0;
- 	u8 buffer[2];
- 
--	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
--	if (ret)
--		return ret;
--
--	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-+	if (is_fan_manual_fmt) {
-+		ret = applesmc_read_key(FANS_MANUAL_FMT, buffer, 1);
-+		manual = buffer[0];
-+	} else {
-+		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-+		manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-+	}
- 	return sysfs_emit(sysfsbuf, "%d\n", manual);
- }
- 
-@@ -1104,22 +1178,26 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
- 	if (kstrtoul(sysfsbuf, 10, &input) < 0)
- 		return -EINVAL;
- 
--	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
--	if (ret)
--		goto out;
--
--	val = (buffer[0] << 8 | buffer[1]);
-+	if (is_fan_manual_fmt) {
-+		buffer[0] = input & 0x01;
-+		ret = applesmc_write_key(FANS_MANUAL_FMT, buffer, 1);
-+	} else {
-+		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-+		if (ret)
-+			goto out;
- 
--	if (input)
--		val = val | (0x01 << to_index(attr));
--	else
--		val = val & ~(0x01 << to_index(attr));
-+		val = (buffer[0] << 8 | buffer[1]);
- 
--	buffer[0] = (val >> 8) & 0xFF;
--	buffer[1] = val & 0xFF;
-+		if (input)
-+			val = val | (0x01 << to_index(attr));
-+		else
-+			val = val & ~(0x01 << to_index(attr));
- 
--	ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
-+		buffer[0] = (val >> 8) & 0xFF;
-+		buffer[1] = val & 0xFF;
- 
-+		ret = applesmc_write_key(FANS_MANUAL, buffer, 2);
-+	}
- out:
- 	if (ret)
- 		return ret;
--- 
-2.43.0
 
