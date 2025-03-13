@@ -1,90 +1,86 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C5F1EFF98;
-	Thu, 13 Mar 2025 08:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8722641D4;
+	Thu, 13 Mar 2025 09:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741853024; cv=none; b=EOQ8kDfN0YBdCOmpzAktNVhj2hNwUIR+es7Ydz/PjHFE5W4hEKYqT4h580X+L4FA4qo/uYWHI5/wIGsdX5LDcI4tjL+M2zFjET4ubypPyAUmaL86+jaPtsMDk0PRvxw1JLqgqr+VuVoOp5g582cKgJGmz1Y2ruvCTd8SXyyVq5Q=
+	t=1741858702; cv=none; b=b9Mm/an2I+CIO9+KmQzI8LyrRoJcHWUsLj6RXdcWQJR4vm3iQne0noPxbW8F0u4A0toa/Mty7mv8j5sx0xBZTlKtuILsF44G5mbytJk5kUcCD1UEvQZ9iXtsrPKum40tKYa4Zv2W9penHc6d6IAE6GOxnWaCcSK/K1EX2RtkEKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741853024; c=relaxed/simple;
-	bh=BbndaW66x82a843D9atC0ooR505l5IQCJ7cnXblwzKo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=E/1WatN5pqhCgW/3+ooa8I9ARnNYKuXfgPgW4uK/tP/HeAKP0JzUJqx2Wsl0OhIO4e5bh7PMwrNkOEfeqBMA7xbt+uvKlMC6WozcCO0jk1EdyqPCyIGnsfb5mYnRQp0/rpuJNwWR1O1kQgn3eezw9cRVPYq0Cd0D8+hLcjrcb3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PjtMhAUd; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PjtMhAUd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=dmX0Ld07r5g3K2tF5F
-	vGX02IifBySoRjjEUiUrveLek=; b=PjtMhAUdESAkBll3vjlSOmc/INWcmfIQPg
-	2gP1mesVr6Trg9rMc5u777CA/wcyhLIFRVaXKsBJOpDcF5EFzdRvJHx9ucCnaJIs
-	c1nsQ2SzZY7yJ8Dvfo49Z4TLI12Y4FN+fDKd8eScqQ5+9YbNQH5r1e4Jel0WHABO
-	e3DAtq3zE=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgD3PycpkdJnzmZnDw--.13922S2;
-	Thu, 13 Mar 2025 16:02:51 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
+	s=arc-20240116; t=1741858702; c=relaxed/simple;
+	bh=+zRnvyYuwinJSmZOrxqeidL+AIOdo3cpe4HzFQMEQqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptQfQI7g4oc71MtS34FKqINoDJzJeK8Pc6iBnytGRVLVOcF6SVjiufIlZPbKZjfwvnlgRdZtyKcV9r7RMj6uO4vJLWqEJBDjvdiOmoXhUPJItZd1qPPHg5jrMW5Wl+uaj5ToBp+Uh190SI0krwDky9A/dZkn251eH1SWJD8e1eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3EAA15A1;
+	Thu, 13 Mar 2025 02:38:30 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1154B3F694;
+	Thu, 13 Mar 2025 02:38:17 -0700 (PDT)
+Date: Thu, 13 Mar 2025 09:38:15 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Adam Young <admiyo@amperemail.onmicrosoft.com>
+Cc: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	Adam Young <admiyo@os.amperecomputing.com>,
+	Huisong Li <lihuisong@huawei.com>,
+	Robbie King <robbiek@xsightlabs.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
 	Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Wenliang Yan <wenliang202407@163.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	christophe.jaillet@wanadoo.fr
-Subject: [PATCH v5 1/2] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
-Date: Thu, 13 Mar 2025 04:02:39 -0400
-Message-Id: <20250313080240.5506-1-wenliang202407@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250313075501.5435-1-wenliang202407@163.com>
-References: <20250313075501.5435-1-wenliang202407@163.com>
-X-CM-TRANSID:PigvCgD3PycpkdJnzmZnDw--.13922S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrtFy7ZFW7Jr4DGr1DGrykXwb_yoW8JrW7p3
-	y3GF12gryFgr13W3yUt3WkGr15Zw1kua18KF1DJr1Sga1DXa4Yqa9xKr1kKF1UCr1fZFWr
-	WFn2gr48tw40yw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRXdbUUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbibhcP02fSkRQCdAAAsj
+	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Message-ID: <Z9Knh0lQAHY6aEy1@bogus>
+References: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
+ <Z9AoOg-cx6xVW_Cu@bogus>
+ <17a7ca5a-31f5-47fc-ab67-348df20b31ec@amperemail.onmicrosoft.com>
+ <20250312200532.67xkag3joatel6m4@bogus>
+ <7237deb3-ad30-457c-a1b2-c92db1c1e9f3@amperemail.onmicrosoft.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7237deb3-ad30-457c-a1b2-c92db1c1e9f3@amperemail.onmicrosoft.com>
 
-Add the sq52206 compatible to the ina2xx.yaml
+On Wed, Mar 12, 2025 at 04:37:35PM -0400, Adam Young wrote:
+> 
+> On 3/12/25 16:05, Sudeep Holla wrote:
+> > On Wed, Mar 12, 2025 at 02:04:51PM -0400, Adam Young wrote:
+> > > The XGene patch did not apply on top of Linus's current tree. The other
+> > > patches applied OK.
+> > > 
+> > Yes Guenter had mentioned it in his review. I have it rebased locally [1]
+> > but yet to push out v3 on the list.
+> > 
+> > > I only had to make one modification to my patch to remove the call to
+> > > ‘pcc_mbox_ioremap’,  as it is performed in the pcc_mbox_request_channel call
+> > > instead. With that change, my driver continues to work. I will submit
+> > > another version here shortly.
+> > > 
+> > Nice, I wasn't aware of the Ampere driver using ioremap. Is it posted on
+> > the list ? Or are you saying you will post it soon.
+> 
+> It is posted to net-next.
+> 
+> https://lore.kernel.org/lkml/20250224181117.21ad7ab1@kernel.org/T/
+> 
+> I will post an updated version once this series goes in.  I don't expect it
+> to merge for this kernel due to the dependency, but the code will be better
+> for this change.
+> 
+> > 
+> > Thanks for testing. Please provide tested-by for patch 1-8 if you are
+> > happy with it.
+> Happy to do so.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
----
+Thanks a lot for your time and testing. Much appreciated!
 
-Add the meaning of 'shunt-gain' in SQ52206.
-
- Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-index 05a9cb36cd82..bf2b334ba5c7 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-@@ -20,6 +20,7 @@ description: |
- properties:
-   compatible:
-     enum:
-+      - silergy,sq52206
-       - silergy,sy24655
-       - ti,ina209
-       - ti,ina219
-@@ -58,6 +59,9 @@ properties:
-       shunt voltage, and a value of 4 maps to ADCRANGE=0 such that a wider
-       voltage range is used.
- 
-+      For SQ52206,the shunt-gain value 1 mapps to ADCRANGE=10/11, the value 2
-+      mapps to ADCRANGE=01, and the value 4 mapps to ADCRANGE=00.
-+
-       The default value is device dependent, and is defined by the reset value
-       of PGA/ADCRANGE in the respective configuration registers.
-     $ref: /schemas/types.yaml#/definitions/uint32
 -- 
-2.17.1
-
+Regards,
+Sudeep
