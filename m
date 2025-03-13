@@ -1,126 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7D411CA9;
-	Thu, 13 Mar 2025 14:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23000268684;
+	Thu, 13 Mar 2025 15:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741877685; cv=none; b=iXb+sue/xYfY7QKy6Npa+N7kW3x4/+4mBxn98ErYAJu3jgw6ef+NU5RBMyslpJwPqN5cpYbCB8WJSwc6lJp4fh8TXij3z5UFDOU90oKPnjWt9bMrcfjHPIxjdwEIQmRx+WEmhYwk/ge6LmyQVOjEw1LWjTPwyAPUgGiv1XsZI6k=
+	t=1741879754; cv=none; b=Y1el33amSolpelrte+yyZehlGjTkk0NUQ+63CmFY+htaeSZ9AB5nbOet4qqotgShRxkH5vXqViTTdlR0d0QOy9Laa/nCs5iCe7bvlMFPpDQZhUQ6LYojWZhKelsxL8ssxWtGKVpGu5AVmP4S9vl0Rw49//NZFV2tWvBShM2ZRBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741877685; c=relaxed/simple;
-	bh=T44nDw2LEfKVsCx2WxvTXGvhUUEfV3wxXQ1+rKA6t7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f8k/Rm9kOovgvVXEpVLWy/BPpRj0dT5FFxBAP7+yb94s647de618UMY9hIcDFEUBWDVZjRZvmrSwGDapDWbR+X+FmaHG495FYSgVy2PQSbYXa+JY0VjTx1z+5rzlfsy2xB4wSaNxscnoJKWI8r2W/YT957BIo4YrUctq7vPO3Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qg7rXks3; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qg7rXks3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741877684; x=1773413684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T44nDw2LEfKVsCx2WxvTXGvhUUEfV3wxXQ1+rKA6t7w=;
-  b=Qg7rXks3iPCRpYx34SiOXpsBqtC/aVBCWazEOL7h4ZGaBRLNHzFik+Oe
-   RCuwsoiyPEobEQOBUMFcSW+xGQoRA706vH9yGDbpfEgvMiDepb+g4bmbT
-   9Y7aeIUZZsOozznUKrJFXZwOgmSQsoReFirYxTcYiNdeQreK2iV34xLJe
-   wUJePCu0f5puce2whaH6EYTzuiI7Ss5Wk5t0KYsAvg1NbT/Qdnf/p8owi
-   vM5KE57IDBcwuzKx71i8PEctWMoEAi2awJ0HnDKI0mSaVsiABdNZJICtm
-   4sua8lgt8KuYa8JFmwpnRVYbBLkUJ7PVMDoud5tU+utZ7j8HeWycJ9r/T
-   w==;
-X-CSE-ConnectionGUID: c8FfMZqFRyGRaaHnNMDaBw==
-X-CSE-MsgGUID: uLbu5zK6RUCbXIwBcWqBYw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="53636313"
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="53636313"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:54:43 -0700
-X-CSE-ConnectionGUID: OJibDJw0SEKWo9QtAOKErw==
-X-CSE-MsgGUID: Z1sJvMHiSyCSL33+cdl3tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="125601523"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Mar 2025 07:54:41 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsjxG-0009YK-2M;
-	Thu, 13 Mar 2025 14:54:38 +0000
-Date: Thu, 13 Mar 2025 22:53:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Subu Dwevedi <messigoatcr7nop@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Subu Dwevedi <messigoatcr7nop@gmail.com>,
-	Henrik Rydberg <rydberg@bitmath.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon/applesmc: add fan support for newer macs
-Message-ID: <202503132205.Vf8imlWS-lkp@intel.com>
-References: <20250312123055.1735-3-messigoatcr7nop@gmail.com>
+	s=arc-20240116; t=1741879754; c=relaxed/simple;
+	bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=L3KvWViQuuZzJvVvipYw9+2rq9Vn4Ks/j8CsmKzAzArIo4X/JBtxse9N1KgX9FHEDR+bA4Kd/m8sH4HvCBYQe0/7U5yV+9kVYm3WOZ3FdWjM5XAGcVcog8dsrtoBhTeNVaeZMACPFApSjJH2OacIkSw++V1UbV7eJmtNtkX3OhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDCB11477;
+	Thu, 13 Mar 2025 08:29:21 -0700 (PDT)
+Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72EE13F694;
+	Thu, 13 Mar 2025 08:29:09 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v3 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Date: Thu, 13 Mar 2025 15:28:46 +0000
+Message-Id: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312123055.1735-3-messigoatcr7nop@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALL50mcC/33Nyw6CMBAF0F8hs7amTyCu+A9jSB+DdMEjLTYaw
+ r9b2OjCuLw3c+6sEDF4jHApVgiYfPTTmIM4FWB7Pd6ReJczcMoVFVSQ2dq280+M7WN2esFIlNK
+ s6hyvsSohuzngcZDZ9ZZz7+MyhdfxIrG9/beWGKFEGCk74ZiQhjU6DGc7DbBvJf7t1S/Ps2eG1
+ ZwbW1ey/Pht297ekLDt8AAAAA==
+X-Change-ID: 20250303-pcc_fixes_updates-55a17fd28e76
+To: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Sudeep Holla <sudeep.holla@arm.com>, 
+ Jassi Brar <jassisinghbrar@gmail.com>, Huisong Li <lihuisong@huawei.com>, 
+ Adam Young <admiyo@os.amperecomputing.com>, 
+ Robbie King <robbiek@xsightlabs.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
+ "Rafael J. Wysocki" <rafael@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5426; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn0vnDYCUZPlafqDSwEs9LsaePtULqedBwfFF2d
+ ad3xsVEwIOJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9L5wwAKCRAAQbq8MX7i
+ mBFHD/4oiodnKGh1JYmVO/F1ApXy+9binXe5A4h09BA30dSOLyXe3VXXDBg1aeQz79QugzSDr36
+ 9LsEZqSvlupZ9HbGWvHc8bz5upqwBbeLe/Gyg4fYrDFInoARWw692IqltBivm4WuALKTwcs+kE+
+ Q6RU+FzkL2v2iYJ1rzKpjB/Leb/Goguk3hPv3ZXkPs1bbtFfB/Nh8MFrjt2ETrLQLtqFiyrsLPr
+ caKVfPodbnaiCCeO9qhMky0hXb6B5mP05DnIKpXZV31snNzyoikvexR5Fd+i1Nu6gPwkjeIqPpi
+ IE736y+quX/+hm6M4rAiVy6WZNvtBhCnIkzebSlbLp4V7RMrqOOzIDFk2lU6kARI7aFRQpXMJLr
+ LZLGuNjOG7lXHltmw3yOHzoshjj0NFhC0/qHpDDuLqDmuBmun97wY8y4AKFI9BYUZq17sUCVo7Q
+ 1Eh33l7XZppgt1k9D8CX5jijkFH4/Cm429GsASaas0xfeqers/uvGYfbCxCl244TWtnmuaVxBT/
+ n1wuItVkgwoRIKnhPyIRTGRmfqNOoBfcsh96+JPZISu948w1x1G2IVFv4PhXRNC6qrmEAkh7DGV
+ QNhh/dn8TZL6sdV5prtBTzJPWFjuFQN3yXTaci8GUPATj3FAUaWwAC4c4/5oppOqLRb0LeQyEJB
+ Oeou6XJvIC/z8BQ==
+X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
+ fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 
-Hi Subu,
+Here is a summary of the changes in this patch series:
 
-kernel test robot noticed the following build warnings:
+1. Fix for race condition in updating of the chan_in_use flag
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.14-rc6 next-20250313]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+   Ensures correct updating of the chan_in_use flag to avoid potential race
+   conditions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Subu-Dwevedi/hwmon-applesmc-add-MMIO-for-newer-macs/20250312-203248
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250312123055.1735-3-messigoatcr7nop%40gmail.com
-patch subject: [PATCH 2/2] hwmon/applesmc: add fan support for newer macs
-config: i386-randconfig-002-20250313 (https://download.01.org/0day-ci/archive/20250313/202503132205.Vf8imlWS-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503132205.Vf8imlWS-lkp@intel.com/reproduce)
+2. Interrupt handling fix
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503132205.Vf8imlWS-lkp@intel.com/
+   Ensures platform acknowledgment interrupts are always cleared to avoid
+   leaving the interrupt asserted forever.
 
-All warnings (new ones prefixed by >>):
+3. Endian conversion cleanup
 
-   drivers/hwmon/applesmc.c: In function 'applesmc_show_fan_manual':
->> drivers/hwmon/applesmc.c:1155:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-    1155 |         int ret;
-         |             ^~~
+   Removes unnecessary endianness conversion in the PCC mailbox driver.
 
+4. Memory mapping improvements
 
-vim +/ret +1155 drivers/hwmon/applesmc.c
+   Uses acpi_os_ioremap() instead of direct mapping methods for better ACPI
+   compatibility.
 
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1151  
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1152  static ssize_t applesmc_show_fan_manual(struct device *dev,
-3eba2bf7c5fb786 Henrik Rydberg  2010-11-09  1153  			struct device_attribute *attr, char *sysfsbuf)
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1154  {
-6f2fad748ccced5 Nicolas Boichat 2007-05-08 @1155  	int ret;
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1156  	u16 manual = 0;
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1157  	u8 buffer[2];
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1158  
-beab9ce267efe06 Subu Dwevedi    2025-03-12  1159  	if (is_fan_manual_fmt) {
-beab9ce267efe06 Subu Dwevedi    2025-03-12  1160  		ret = applesmc_read_key(FANS_MANUAL_FMT, buffer, 1);
-beab9ce267efe06 Subu Dwevedi    2025-03-12  1161  		manual = buffer[0];
-beab9ce267efe06 Subu Dwevedi    2025-03-12  1162  	} else {
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1163  		ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-cecf7560f00a841 Tom Rix         2020-08-20  1164  		manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-beab9ce267efe06 Subu Dwevedi    2025-03-12  1165  	}
-1f4d4af4d7a1c79 Guenter Roeck   2021-03-21  1166  	return sysfs_emit(sysfsbuf, "%d\n", manual);
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1167  }
-6f2fad748ccced5 Nicolas Boichat 2007-05-08  1168  
+5. Return early if the command complete register is absent
 
+   Ensures that if no GAS (Generic Address Structure) register is available,
+   the function exits early.
+
+6. Refactor IRQ handler and move error handling to a separate function
+
+   Improves readability of error handling in the PCC mailbox driver’s
+   interrupt handler.
+
+7. Shared memory mapping refactoring/enhancements
+
+   Ensures the shared memory is always mapped and unmapped in the PCC
+   mailbox driver when the PCC channel is requested and release.
+
+8. Refactored check_and_ack() Function
+
+   Simplifies and improves the logic for handling type4 platform notification
+   acknowledgments.
+
+09-13. Shared memory handling simplifications across multiple drivers
+
+    Simplifies shared memory handling in:
+        Kunpeng HCCS driver (soc: hisilicon)
+        Apm X-Gene Slimpro I2C driver
+        X-Gene hardware monitoring driver (hwmon)
+        ACPI PCC driver
+        ACPI CPPC driver
+
+The X-gene related changes now change the mapping attributes to align
+with ACPI specification. There are possibilities for more cleanups on
+top of these changes around how the shmem is accessed within these
+driver.
+
+Also, my main aim is to get 1-8 merged first and target 9-13 for
+following merge window through respective tree.
+
+Overall, the patch series focuses on improving correctness, efficiency, and
+maintainability of the PCC mailbox driver and related components by fixing
+race conditions, optimizing memory handling, simplifying shared memory
+interactions, and refactoring code for clarity.
+
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+Jassi,
+
+Please take patch [1-8]/13 through the mailbox tree if and when you are
+happy with the changes. I haven't got Ack from I2C still, but if you are
+happy to take [9-13]/13, I can check with I2C maintainer. Or else I am
+happy to take it individually later once the PCC changes are merged. I
+am still keeping it together if anyone is interested in testing.
+
+Changes in v3:
+- Updated the comment around updation of chan_in_use flag to keep it
+  appropriate even after acknowledging the interrupt as first action
+  in the irq handler
+- Added all the review/ack/tested-by tags from Huisong Li, Adam Young
+  and Robbie King
+- Added a note that double mapping introduced temporarily will not
+  impact any existing mbox client drivers as all the drivers move to
+  using new and only mapping after all the changes
+- s/pcc_chan_check_and_ack/pcc_chan_acknowledge/ which was originally
+  check_and_ack()
+- Link to v2: https://lore.kernel.org/r/20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com
+
+Changes in v2:
+- Improved time vs flow graph for the platform ack interrupt
+  acknowledgment issue in patch 2
+- Replaced PCC_ACK_FLAG_MASK with PCC_CMD_COMPLETION_NOTIFY in patch 3
+- Fixed return value check from pcc_mbox_error_check_and_clear() in patch 6
+- Dropped the change moving the function pcc_mbox_ioremap()
+- Adjusted error message in kunpeng_hccs driver after the change
+- Added the received ack/review tags
+- Link to v1: https://lore.kernel.org/r/20250303-pcc_fixes_updates-v1-0-3b44f3d134b1@arm.com
+
+---
+Huisong Li (1):
+      mailbox: pcc: Fix the possible race in updation of chan_in_use flag
+
+Sudeep Holla (12):
+      mailbox: pcc: Always clear the platform ack interrupt first
+      mailbox: pcc: Drop unnecessary endianness conversion of pcc_hdr.flags
+      mailbox: pcc: Return early if no GAS register from pcc_mbox_cmd_complete_check
+      mailbox: pcc: Use acpi_os_ioremap() instead of ioremap()
+      mailbox: pcc: Refactor error handling in irq handler into separate function
+      mailbox: pcc: Always map the shared memory communication address
+      mailbox: pcc: Refactor and simplify check_and_ack()
+      soc: hisilicon: kunpeng_hccs: Simplify PCC shared memory region handling
+      i2c: xgene-slimpro: Simplify PCC shared memory region handling
+      hwmon: (xgene-hwmon) Simplify PCC shared memory region handling
+      ACPI: PCC: Simplify PCC shared memory region handling
+      ACPI: CPPC: Simplify PCC shared memory region handling
+
+ drivers/acpi/acpi_pcc.c                |  13 +---
+ drivers/acpi/cppc_acpi.c               |  16 +----
+ drivers/hwmon/xgene-hwmon.c            |  40 ++----------
+ drivers/i2c/busses/i2c-xgene-slimpro.c |  39 ++----------
+ drivers/mailbox/pcc.c                  | 113 ++++++++++++++++-----------------
+ drivers/soc/hisilicon/kunpeng_hccs.c   |  42 +++++-------
+ drivers/soc/hisilicon/kunpeng_hccs.h   |   2 -
+ include/acpi/pcc.h                     |   6 --
+ 8 files changed, 84 insertions(+), 187 deletions(-)
+---
+base-commit: 4d872d51bc9d7b899c1f61534e3dbde72613f627
+change-id: 20250303-pcc_fixes_updates-55a17fd28e76
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Sudeep
+
