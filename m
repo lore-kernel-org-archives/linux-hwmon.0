@@ -1,135 +1,109 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4412F1F4606
-	for <linux-hwmon@vger.kernel.org>; Thu, 13 Mar 2025 04:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C1A4D8C8;
+	Thu, 13 Mar 2025 07:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741841292; cv=none; b=GKUXhJDCLShsJWj9qq9HDbkGHEOoX+nWLBwFEQS75uNOA90p4RPh/AnX7Cffk9ToMOKisP88UK4MmhQReFGL/BBmW3ltWWDnL4bFlnnQmK3n+rlDxoQBSF9l2RxyL4IotDwo4IpmPhHwyiEAo7Qzhg6mbgnIZ/0MI9/sXxfnb4E=
+	t=1741852654; cv=none; b=VU2Pvway6T7HhZ6KyVWxqgDqI1NuJlOm7PQ9o/CryzjffMygOCKdfz6xjuL5YTQ5DFufVIhVa5XSJQah0ArWZUt/A46QdaQ1l7Qdl2NGSCSkk1w+FPryR3vu/pNFomaj0lHBlMcYLpJBXhjFEq7TfqVKQTBwzTu/FmkZNILBZg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741841292; c=relaxed/simple;
-	bh=6YZPbCIstrkFIBq12YFEFEcPE+av42I+9yZpNMwYV10=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rEzSB3baPsHE1wbGA1A7vQEusxi4Qq1HFKhK0oTyU0JIqmoFDXJGak8i3ulHdB2sOtPkfYrNx8J076ZbYX12HwUXMRTyChvjUfl1BcHhkX+5bPpbgIhP3eosNc4LDYLcAa9lsLsamoIAycfsX4PGlMiSirIK5Pwt1sqiunLYO0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=d1j28/+P; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1741852654; c=relaxed/simple;
+	bh=JR0e4Mkcrl8bOhfGYXfVynqu5N11irWI8rjmLJAwp38=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=natfgMs1UfOuy2z2PwPm9bQaUL4O4YPtW5M3xANbX6qFqr3GG3dovDoWtfmrwdkU3JL7oQPBywp6WCS8vK4/sMM4zPfdiGxt50TAXydP9ZPRmh9opL4N5ZRLHeF+YI0ShU2iRVV4zYVVTX/YtjIx21yktdR4hSSCnH6S8eDsCSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VnWbI+XS; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d1j28/+P"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22349bb8605so10921065ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Mar 2025 21:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1741841290; x=1742446090; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I+gtVH5q1IVL2N3KNRKRTyNZRjmajO4WtYbaLiekdyM=;
-        b=d1j28/+PWwXggRJEerxJ8uv9XGJXiifIENRLWIg5mh1IWwveyxq35dm59UlTcOWkTq
-         1jqOm1jdiiJM7yrEYK02vVGFvc4lrG2i7FZZjpjBwvcJCpf3hMQ3XJB6xYtpkERyAVoh
-         TiGMipo+q7toJgaJ+wwxLQo/PS56nz4zXQXqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741841290; x=1742446090;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I+gtVH5q1IVL2N3KNRKRTyNZRjmajO4WtYbaLiekdyM=;
-        b=uMXpogu3L2NZjl1hwLmixJPpYWNPmzPIrwUnmWtdk1+H3AjijthMGdYyzcmpq42BhL
-         fIeUxpLVN1uHaoRyOk1HlSUYPc+cY/mJ3gEdrop/GWvUamIaK0jEEXo/19ShOyYEVXWC
-         twBZ0iqWp14dVtwJr/3ky0W1T7OO5Z1rjQP1PIpzb/9dlSHORO3JZvc5m7QGCVYlY8At
-         LrYKgfbKr8V0cc8G2hZLc3AsAbAuEKD3XQu6T1t7CjWi0LPayQ2A3ZA0qupvlNf3gECq
-         c2CfTnxGRNWULm+neb37nXykQgRfYuT1eWzfx3Jryu30Lil8NZS4ya5vrYa6HlVqqyIL
-         U3Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCX2BMsuE6p+j7Ng+mLDUQVpX2yXOsN2Z46J+zjKcX5SDSdRqelbp+CMnKj7t7sUmDDeczTndXPqG6JViQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDrHVnrsI8G2swcOS9m43b80z6bbLAaQcfgunNQGqv5WmE/OP+
-	60uwUFoFX0e+kmxtTnUMVQCGm88pZtOHwWscLUPGKMwyf4/ZGTOI8T86pSe+S/XJ39SgvmTGPSA
-	=
-X-Gm-Gg: ASbGnctRzLcJtGEQsK/wRu2pdb7lnnmvUbu4C09jyL97WrIx8gKkzMkTMt8iPmOxLX7
-	ousiaybbsYO8mhP9ekyt3fx4Dlhd6EdvaPz7a841viyq9LNQRnPEgcUnto36RevWKT2U4P8GEyY
-	fqHbaNP8bSkS2jaXenlCN0zXDj+4Z4kz4mahIex4vNPY8J2ylshyAhJ1zE0Y3a28/a0dOY0tP8Q
-	iGVpG60IIOq3c+37SQSr42vebt6DJZA0m7oRSlRe9pln2NMhlVpc0CHnWT9rn4zJrozlx9mf+A0
-	OwPJ8EfYYPoSmLtEl6O4XPemHq4zTnPfLgJLP3swrpfdLZ0jMe0y3X79a2xItr4+FSQ=
-X-Google-Smtp-Source: AGHT+IEaZ5AffNlbpnnWajl9IqcugOB73K+75CMHqeDiaMOSmLOQz2lLmmj4CJcymfMhLCNoiy1i9w==
-X-Received: by 2002:a17:903:2281:b0:215:8d49:e2a7 with SMTP id d9443c01a7336-22428c1908amr341875375ad.50.1741841290572;
-        Wed, 12 Mar 2025 21:48:10 -0700 (PDT)
-Received: from lschyi-p920.tpe.corp.google.com ([2401:fa00:1:10:1872:6051:5c24:509e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd5c03sm4188025ad.249.2025.03.12.21.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 21:48:10 -0700 (PDT)
-From: Sung-Chi Li <lschyi@chromium.org>
-Date: Thu, 13 Mar 2025 12:47:44 +0800
-Subject: [PATCH 3/3] hwmon: (cros_ec) Register fan target attribute
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VnWbI+XS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=CwJuzNXShT9dLFy7pm
+	LGuVY8xzmytdLbrLVR90Z1Vrg=; b=VnWbI+XSupx3jffeEK6SdAFi6XvNF6694y
+	Gu1z1PfKClKsy0Xh4aN5o92hCfET96G1EkQk5HTO7NSmCy+sahM3JnuB5GhWCNil
+	/vb1AUlcgfiuIis0X7M2yn7ECs82rlYJB97e5fRgbkQbKYh5XSygcE3BiuVVRayy
+	hEpsthN7k=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3ro3Ej9JnuFJhSQ--.1599S2;
+	Thu, 13 Mar 2025 15:56:54 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	jdelvare@suse.com,
+	christophe.jaillet@wanadoo.fr
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] hwmon:(ina238)Add support for SQ52206
+Date: Thu, 13 Mar 2025 03:54:59 -0400
+Message-Id: <20250313075501.5435-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wA3ro3Ej9JnuFJhSQ--.1599S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr4fJrW8AFWxtr4xXFy5urg_yoW8tF4rpa
+	93Crs8Wry5Cr17XrZIkF4I9r1ru3Z5JF18Ww1xJw1rZ3W5ZFy0v3y2kr4Fka1DtrZxZFZ0
+	ya4IqF1SkF17ArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR_pn9UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiMAcP02fShdLWxgAAsZ
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-extend_ec_hwmon_fan-v1-3-5c566776f2c4@chromium.org>
-References: <20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org>
-In-Reply-To: <20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, 
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sung-Chi Li <lschyi@chromium.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741841282; l=1917;
- i=lschyi@chromium.org; s=20241113; h=from:subject:message-id;
- bh=6YZPbCIstrkFIBq12YFEFEcPE+av42I+9yZpNMwYV10=;
- b=JhUhhxTRkvnPU2ov79FmQS4td92jVH4sj9+r0KoSiXE2Sg7nvJ8UWqERzYXiXc47oPttOjo78
- tc+qyXZb9F1AjCgrfx1CFLpQ/fMpFl1pTwbrfgNiaVXvLnhUkahlThK
-X-Developer-Key: i=lschyi@chromium.org; a=ed25519;
- pk=nE3PJlqSK35GdWfB4oVLOwi4njfaUZRhM66HGos9P6o=
 
-The ChromeOS embedded controller (EC) supports closed loop fan speed
-control, so add this attribute under hwmon framework such that kernel
-can specify the desired fan RPM for fans connected to the EC.
+Add support for Silergy i2c power monitor SQ52206 to the ina238
+driver as those two are similar.
 
-Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/cros_ec_hwmon.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-index 73bfcbbaf9531be6b753cfef8045fd5dab5b2ab3..56a8ee13ec2a9f8e7127815a530d2a254a45bf55 100644
---- a/drivers/hwmon/cros_ec_hwmon.c
-+++ b/drivers/hwmon/cros_ec_hwmon.c
-@@ -168,8 +168,15 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
- 	const struct cros_ec_hwmon_priv *priv = data;
- 
- 	if (type == hwmon_fan) {
--		if (priv->usable_fans & BIT(channel))
-+		if (!(priv->usable_fans & BIT(channel)))
-+			return 0;
-+
-+		switch (attr) {
-+		case hwmon_fan_target:
-+			return 0644;
-+		default:
- 			return 0444;
-+		}
- 	} else if (type == hwmon_temp) {
- 		if (priv->temp_sensor_names[channel])
- 			return 0444;
-@@ -194,10 +201,10 @@ static int cros_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
- static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT),
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
+Add new chip SQ52206, the datasheet depends on 
+https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
+The password is fx6NEe.
+
+Changes in v5:
+- Add the description of change log in PATCH 0 and PATCH 2.
+- Link to v4: https://lore.kernel.org/linux-hwmon/20250125030300.1230967-1-wenliang202407@163.com/
+
+Changes in v4:
+- Add 'Acked-by: Krzysztof Kozlowski' information to PATCH 1.
+
+- Formatting adjustments have been made to ina2xx.c in PATCH 2.
+Including:
+1.Change 'sprintf()' in the 'energy1_input_show()' to 'sysfs_emit()'.
+2.Move up the "enum ina238_ids chip" line in the 'ina238_probe()' to keep RCT style.
+3.Remove the last comma when describing 'ina238_of_match[]' to keep the
+format consistent with the 'i2c_device_id ina238_id[]' structure.
+4.Change the '5bytes' in the description to '5 bytes'.
+
+- Link to v3: https://lore.kernel.org/linux-hwmon/20250117082017.688212-1-wenliang202407@163.com/
+
+Changes in v3:
+- Add the description of the different features of SQ52206 in the ina2xx.yaml(PATCH 1).
+
+- Change program logic errors in ina238.c(PATCH 2).
+Including:
+1.Change 'break' to 'return 0' after 'if (has_power_highest)'.
+2.Add {} after 'if (chip == sq52206)' in 'ina238_probe(struct i2c_client *client)'.
+3.Change 'data->config->has_energy ? NULL : ina238_groups' to 
+'data->config->has_energy ? ina238_groups : NULL'
+
+- Link to v2: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
+
+Changes in v2:
+- Explain why sq52206 compatibility has been added to ina2xx.yaml.
+
+- addressed various review comments.
+
+- Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
+
+Wenliang Yan (2):
+  dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+  hwmon:(ina238)Add support for SQ52206
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   4 +
+ Documentation/hwmon/ina238.rst                |  15 ++
+ drivers/hwmon/ina238.c                        | 209 +++++++++++++++---
+ 3 files changed, 195 insertions(+), 33 deletions(-)
 
 -- 
-2.49.0.rc0.332.g42c0ae87b1-goog
+2.17.1
 
