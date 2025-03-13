@@ -1,26 +1,27 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23000268684;
-	Thu, 13 Mar 2025 15:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE15B268FF9;
+	Thu, 13 Mar 2025 15:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741879754; cv=none; b=Y1el33amSolpelrte+yyZehlGjTkk0NUQ+63CmFY+htaeSZ9AB5nbOet4qqotgShRxkH5vXqViTTdlR0d0QOy9Laa/nCs5iCe7bvlMFPpDQZhUQ6LYojWZhKelsxL8ssxWtGKVpGu5AVmP4S9vl0Rw49//NZFV2tWvBShM2ZRBw=
+	t=1741879770; cv=none; b=TfQFynoblgpnfN7FoG5mIKktqGdLm5PuwLbUDOk9TA2FZTM/io47a1MathixV0C/RU1dfCulwH+6kQ6h/BMqIFRPXNclIZb0uQa/m88yw40vQyGvdAv57zx8wu/BHCUCzHbQKJAA8AQnAgjKkygsp/op7Q4q/qocgaH2Mxel61k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741879754; c=relaxed/simple;
-	bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=L3KvWViQuuZzJvVvipYw9+2rq9Vn4Ks/j8CsmKzAzArIo4X/JBtxse9N1KgX9FHEDR+bA4Kd/m8sH4HvCBYQe0/7U5yV+9kVYm3WOZ3FdWjM5XAGcVcog8dsrtoBhTeNVaeZMACPFApSjJH2OacIkSw++V1UbV7eJmtNtkX3OhI=
+	s=arc-20240116; t=1741879770; c=relaxed/simple;
+	bh=g2RUvDMQ2GBh1kicDpIWYqj1etweoptS+UnASfqEnjU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=FWp0Vkpjvz1ZyyZ4Z6LUFiPjVY+nWM76bvfdZhxRiJRa8eSM79NVoxl5oJ3bitSYqovPcClEO6T1P2kkuGtc4RAuys3p55G0khGvLV9D410JJ77EtoHeU+KrG9WHzG0zB4TIaRtEmQEs1X4Ms0FXCqyVbJWIvdVhB0BTqEvCaVY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDCB11477;
-	Thu, 13 Mar 2025 08:29:21 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B38581516;
+	Thu, 13 Mar 2025 08:29:38 -0700 (PDT)
 Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72EE13F694;
-	Thu, 13 Mar 2025 08:29:09 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C70113F694;
+	Thu, 13 Mar 2025 08:29:26 -0700 (PDT)
 From: Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH v3 00/13] mailbox: pcc: Fixes and cleanup/refactoring
-Date: Thu, 13 Mar 2025 15:28:46 +0000
-Message-Id: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
+Date: Thu, 13 Mar 2025 15:28:57 +0000
+Subject: [PATCH v3 11/13] hwmon: (xgene-hwmon) Simplify PCC shared memory
+ region handling
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -28,165 +29,142 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIALL50mcC/33Nyw6CMBAF0F8hs7amTyCu+A9jSB+DdMEjLTYaw
- r9b2OjCuLw3c+6sEDF4jHApVgiYfPTTmIM4FWB7Pd6ReJczcMoVFVSQ2dq280+M7WN2esFIlNK
- s6hyvsSohuzngcZDZ9ZZz7+MyhdfxIrG9/beWGKFEGCk74ZiQhjU6DGc7DbBvJf7t1S/Ps2eG1
- ZwbW1ey/Pht297ekLDt8AAAAA==
-X-Change-ID: 20250303-pcc_fixes_updates-55a17fd28e76
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250313-pcc_fixes_updates-v3-11-019a4aa74d0f@arm.com>
+References: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
+In-Reply-To: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
 To: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Sudeep Holla <sudeep.holla@arm.com>, 
  Jassi Brar <jassisinghbrar@gmail.com>, Huisong Li <lihuisong@huawei.com>, 
  Adam Young <admiyo@os.amperecomputing.com>, 
- Robbie King <robbiek@xsightlabs.com>, Andi Shyti <andi.shyti@kernel.org>, 
- linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
- "Rafael J. Wysocki" <rafael@kernel.org>
+ Robbie King <robbiek@xsightlabs.com>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5426; i=sudeep.holla@arm.com;
- h=from:subject:message-id; bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
- b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn0vnDYCUZPlafqDSwEs9LsaePtULqedBwfFF2d
- ad3xsVEwIOJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9L5wwAKCRAAQbq8MX7i
- mBFHD/4oiodnKGh1JYmVO/F1ApXy+9binXe5A4h09BA30dSOLyXe3VXXDBg1aeQz79QugzSDr36
- 9LsEZqSvlupZ9HbGWvHc8bz5upqwBbeLe/Gyg4fYrDFInoARWw692IqltBivm4WuALKTwcs+kE+
- Q6RU+FzkL2v2iYJ1rzKpjB/Leb/Goguk3hPv3ZXkPs1bbtFfB/Nh8MFrjt2ETrLQLtqFiyrsLPr
- caKVfPodbnaiCCeO9qhMky0hXb6B5mP05DnIKpXZV31snNzyoikvexR5Fd+i1Nu6gPwkjeIqPpi
- IE736y+quX/+hm6M4rAiVy6WZNvtBhCnIkzebSlbLp4V7RMrqOOzIDFk2lU6kARI7aFRQpXMJLr
- LZLGuNjOG7lXHltmw3yOHzoshjj0NFhC0/qHpDDuLqDmuBmun97wY8y4AKFI9BYUZq17sUCVo7Q
- 1Eh33l7XZppgt1k9D8CX5jijkFH4/Cm429GsASaas0xfeqers/uvGYfbCxCl244TWtnmuaVxBT/
- n1wuItVkgwoRIKnhPyIRTGRmfqNOoBfcsh96+JPZISu948w1x1G2IVFv4PhXRNC6qrmEAkh7DGV
- QNhh/dn8TZL6sdV5prtBTzJPWFjuFQN3yXTaci8GUPATj3FAUaWwAC4c4/5oppOqLRb0LeQyEJB
- Oeou6XJvIC/z8BQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3739; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=g2RUvDMQ2GBh1kicDpIWYqj1etweoptS+UnASfqEnjU=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn0vnE4FydmkyNvEATnXYkie6JdXUFcWu91UUbb
+ a4XUAfUw6OJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9L5xAAKCRAAQbq8MX7i
+ mLNHEADHv4egWlf3fUQ+XNfYRbFc0rKJWGm6QvNzZgmLAkYX5IM2LwYsfdArTAslOhl7X+B5mHt
+ jUpS2np6N8aA6dLa6LYanNRU+++HKeMv3fIWz49zruzgy8uP+n75t1Vg9rFI5RQniXBt4UDcn9u
+ SKyEVtv50AqPsStPgWow43jqKq3eMThiHn4a1bnjJplXc95U3R2vMYUsFHTVjb6GqNVg9PvonRu
+ VUDGNko/X5CwvtbBLzckB6neaHVPZu70rMYt5NeBck+uuZg9ECFVta1trcB7QSfI6/M43X80T9S
+ U3bL2XIEO+d38wdyje0kM6t3miT7pXJ+dwEK1NgxYXg49Wx0XCXt+OJZwXiICofRQgzke3r7Kc0
+ NESYdXn2CGvYU1bLum5oftaqgDiQQSJ07mHginHXmzWrGKEsS9HHkNyy72P+DwaRmv37wnfllKs
+ 6AU0+Mm4sF6nCb7Up+sj758W2qF9BF9aERVr6zMiFVBKo5dJkqgcrB/oFV2eWW9g59/EbPcydT8
+ ICQF0lKMvsvqfYvrdV7CppRfQtNwkHEZKd0mcDACSr7w52k89/itnipfv/w9YDjsERNGWJAHkjp
+ SPpBGJFnQZ5/ogakdq0ilFwAh6iPhOZpLsvPx36S+w16Yb7jj3FpTPER6ENT6jRNY20+N7Z5pXn
+ ooDxpyfSwCPTSqA==
 X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
  fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 
-Here is a summary of the changes in this patch series:
+The PCC driver now handles mapping and unmapping of shared memory
+areas as part of pcc_mbox_{request,free}_channel(). Without these before,
+this xgene hwmon driver did handling of those mappings like several
+other PCC mailbox client drivers.
 
-1. Fix for race condition in updating of the chan_in_use flag
+There were redundant operations, leading to unnecessary code. Maintaining
+the consistency across these driver was harder due to scattered handling
+of shmem.
 
-   Ensures correct updating of the chan_in_use flag to avoid potential race
-   conditions.
-
-2. Interrupt handling fix
-
-   Ensures platform acknowledgment interrupts are always cleared to avoid
-   leaving the interrupt asserted forever.
-
-3. Endian conversion cleanup
-
-   Removes unnecessary endianness conversion in the PCC mailbox driver.
-
-4. Memory mapping improvements
-
-   Uses acpi_os_ioremap() instead of direct mapping methods for better ACPI
-   compatibility.
-
-5. Return early if the command complete register is absent
-
-   Ensures that if no GAS (Generic Address Structure) register is available,
-   the function exits early.
-
-6. Refactor IRQ handler and move error handling to a separate function
-
-   Improves readability of error handling in the PCC mailbox driver’s
-   interrupt handler.
-
-7. Shared memory mapping refactoring/enhancements
-
-   Ensures the shared memory is always mapped and unmapped in the PCC
-   mailbox driver when the PCC channel is requested and release.
-
-8. Refactored check_and_ack() Function
-
-   Simplifies and improves the logic for handling type4 platform notification
-   acknowledgments.
-
-09-13. Shared memory handling simplifications across multiple drivers
-
-    Simplifies shared memory handling in:
-        Kunpeng HCCS driver (soc: hisilicon)
-        Apm X-Gene Slimpro I2C driver
-        X-Gene hardware monitoring driver (hwmon)
-        ACPI PCC driver
-        ACPI CPPC driver
-
-The X-gene related changes now change the mapping attributes to align
-with ACPI specification. There are possibilities for more cleanups on
-top of these changes around how the shmem is accessed within these
+Just use the mapped shmem and remove all redundant operations from this
 driver.
 
-Also, my main aim is to get 1-8 merged first and target 9-13 for
-following merge window through respective tree.
-
-Overall, the patch series focuses on improving correctness, efficiency, and
-maintainability of the PCC mailbox driver and related components by fixing
-race conditions, optimizing memory handling, simplifying shared memory
-interactions, and refactoring code for clarity.
-
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
-Jassi,
+ drivers/hwmon/xgene-hwmon.c | 40 ++++------------------------------------
+ 1 file changed, 4 insertions(+), 36 deletions(-)
 
-Please take patch [1-8]/13 through the mailbox tree if and when you are
-happy with the changes. I haven't got Ack from I2C still, but if you are
-happy to take [9-13]/13, I can check with I2C maintainer. Or else I am
-happy to take it individually later once the PCC changes are merged. I
-am still keeping it together if anyone is interested in testing.
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 7087197383c96cb97e4623f419afed01d4f3c716..ea350d4de902c4e6fc4de1cd54a8b75edfad1119 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -102,9 +102,6 @@ struct xgene_hwmon_dev {
+ 
+ 	struct device		*hwmon_dev;
+ 	bool			temp_critical_alarm;
+-
+-	phys_addr_t		comm_base_addr;
+-	void			*pcc_comm_addr;
+ 	u64			usecs_lat;
+ };
+ 
+@@ -125,7 +122,8 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
+ 
+ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
+ {
+-	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
++	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
++							ctx->pcc_chan->shmem;
+ 	u32 *ptr = (void *)(generic_comm_base + 1);
+ 	int rc, i;
+ 	u16 val;
+@@ -523,7 +521,8 @@ static void xgene_hwmon_rx_cb(struct mbox_client *cl, void *msg)
+ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ {
+ 	struct xgene_hwmon_dev *ctx = to_xgene_hwmon_dev(cl);
+-	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
++	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
++							ctx->pcc_chan->shmem;
+ 	struct slimpro_resp_msg amsg;
+ 
+ 	/*
+@@ -649,7 +648,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 	} else {
+ 		struct pcc_mbox_chan *pcc_chan;
+ 		const struct acpi_device_id *acpi_id;
+-		int version;
+ 
+ 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
+ 					    &pdev->dev);
+@@ -658,8 +656,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 			goto out_mbox_free;
+ 		}
+ 
+-		version = (int)acpi_id->driver_data;
+-
+ 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
+ 					     &ctx->mbox_idx)) {
+ 			dev_err(&pdev->dev, "no pcc-channel property\n");
+@@ -685,34 +681,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
+ 			goto out;
+ 		}
+ 
+-		/*
+-		 * This is the shared communication region
+-		 * for the OS and Platform to communicate over.
+-		 */
+-		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
+-		if (ctx->comm_base_addr) {
+-			if (version == XGENE_HWMON_V2)
+-				ctx->pcc_comm_addr = (void __force *)devm_ioremap(&pdev->dev,
+-								  ctx->comm_base_addr,
+-								  pcc_chan->shmem_size);
+-			else
+-				ctx->pcc_comm_addr = devm_memremap(&pdev->dev,
+-								   ctx->comm_base_addr,
+-								   pcc_chan->shmem_size,
+-								   MEMREMAP_WB);
+-		} else {
+-			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
+-			rc = -ENODEV;
+-			goto out;
+-		}
+-
+-		if (IS_ERR_OR_NULL(ctx->pcc_comm_addr)) {
+-			dev_err(&pdev->dev,
+-				"Failed to ioremap PCC comm region\n");
+-			rc = -ENOMEM;
+-			goto out;
+-		}
+-
+ 		/*
+ 		 * pcc_chan->latency is just a Nominal value. In reality
+ 		 * the remote processor could be much slower to reply.
 
-Changes in v3:
-- Updated the comment around updation of chan_in_use flag to keep it
-  appropriate even after acknowledging the interrupt as first action
-  in the irq handler
-- Added all the review/ack/tested-by tags from Huisong Li, Adam Young
-  and Robbie King
-- Added a note that double mapping introduced temporarily will not
-  impact any existing mbox client drivers as all the drivers move to
-  using new and only mapping after all the changes
-- s/pcc_chan_check_and_ack/pcc_chan_acknowledge/ which was originally
-  check_and_ack()
-- Link to v2: https://lore.kernel.org/r/20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com
-
-Changes in v2:
-- Improved time vs flow graph for the platform ack interrupt
-  acknowledgment issue in patch 2
-- Replaced PCC_ACK_FLAG_MASK with PCC_CMD_COMPLETION_NOTIFY in patch 3
-- Fixed return value check from pcc_mbox_error_check_and_clear() in patch 6
-- Dropped the change moving the function pcc_mbox_ioremap()
-- Adjusted error message in kunpeng_hccs driver after the change
-- Added the received ack/review tags
-- Link to v1: https://lore.kernel.org/r/20250303-pcc_fixes_updates-v1-0-3b44f3d134b1@arm.com
-
----
-Huisong Li (1):
-      mailbox: pcc: Fix the possible race in updation of chan_in_use flag
-
-Sudeep Holla (12):
-      mailbox: pcc: Always clear the platform ack interrupt first
-      mailbox: pcc: Drop unnecessary endianness conversion of pcc_hdr.flags
-      mailbox: pcc: Return early if no GAS register from pcc_mbox_cmd_complete_check
-      mailbox: pcc: Use acpi_os_ioremap() instead of ioremap()
-      mailbox: pcc: Refactor error handling in irq handler into separate function
-      mailbox: pcc: Always map the shared memory communication address
-      mailbox: pcc: Refactor and simplify check_and_ack()
-      soc: hisilicon: kunpeng_hccs: Simplify PCC shared memory region handling
-      i2c: xgene-slimpro: Simplify PCC shared memory region handling
-      hwmon: (xgene-hwmon) Simplify PCC shared memory region handling
-      ACPI: PCC: Simplify PCC shared memory region handling
-      ACPI: CPPC: Simplify PCC shared memory region handling
-
- drivers/acpi/acpi_pcc.c                |  13 +---
- drivers/acpi/cppc_acpi.c               |  16 +----
- drivers/hwmon/xgene-hwmon.c            |  40 ++----------
- drivers/i2c/busses/i2c-xgene-slimpro.c |  39 ++----------
- drivers/mailbox/pcc.c                  | 113 ++++++++++++++++-----------------
- drivers/soc/hisilicon/kunpeng_hccs.c   |  42 +++++-------
- drivers/soc/hisilicon/kunpeng_hccs.h   |   2 -
- include/acpi/pcc.h                     |   6 --
- 8 files changed, 84 insertions(+), 187 deletions(-)
----
-base-commit: 4d872d51bc9d7b899c1f61534e3dbde72613f627
-change-id: 20250303-pcc_fixes_updates-55a17fd28e76
 -- 
-Regards,
-Sudeep
+2.34.1
 
