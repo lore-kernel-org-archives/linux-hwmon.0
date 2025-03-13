@@ -1,247 +1,917 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2074.outbound.protection.outlook.com [40.107.20.74])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C190F267731;
-	Thu, 13 Mar 2025 12:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741870242; cv=fail; b=aJBajKI1Uaich8BFD4jMfrmd3GAqRLRZt5bw8TtD+YnEtzrprJEOe/2DHzslVlUCW2Uh3w1icc0jUr0jfWQNHFv1luzKZIbDzOGZYkQW6oLdhNzexieHZW2CyPTSZq8GZA8k17AmIfyYvNLgTSNz6MG6YGWzfcEzxwlFJ070dIg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741870242; c=relaxed/simple;
-	bh=12ddnSGbIaWfg7E2TPLFxJakB6OxILOhRRm6gpEsGSs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ksCRhw7fkck+Z+LV2XZIB8/dh8pi3faWo5XJi67Yoasl99vv9FAf+mV+OfZMQoVRptCK2pYJZ0SsyXGql/VyYrTxsbFCzQH/R1gPg9QYMcBH6JzCcNC9Jsjk+j/nQFhxz4BxL8pTpsjfgZ/oNs56LfAWJr4mLaDKKU8P2iRToaw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=glEJWqYp; arc=fail smtp.client-ip=40.107.20.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27252E3366;
+	Thu, 13 Mar 2025 13:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741873647; cv=none; b=G58/K+ep15eMoE4bH8Kd7WdsVFvSkLp74KIN4N56C2KiMjXuXRKZuG2hVYO5YRQZ8tb0y0RcUzMtws2Xdg9nR5AbKY0QTPLNs+IsNTDugc/NfYobPpbG2mvGA9Sciji7xX0MQdVNIsSA4NOFkhMMM+IbZxWpioyXknLayIoCzBI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741873647; c=relaxed/simple;
+	bh=IoUXuilUTeQx3+D2plAtGeZBKPpCNfA4Rkro0WGv6vg=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=XAPG8g0a091K/3oZ7bzJIjYFcipMn4XZXYz2oRbXAzsixivYUgUEgCVEQa3CgaoWYwRdbQSk56B3ZFGu6l1kFURdcHAiLrTTipQe/igMIV/XRM+xE1fEPnx71mtmRlNE6sD+JaRvSB3UgbeSJvEA+Q0Be5jAcU7HWnRfw2JfFiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mk2T5/kV; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="glEJWqYp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KgDamm/eQqpnJ0gWTNnayXniVe7yBYsp6njqzwspbllchzE6j82GlDJIaR38g85pJ7JWh/3y/5LelRpmCDmGPYOVCRq4FtyL8G8kPX5GVwOcmdRphATNV/jCBM75zL47szNtvwCN8CH1MDZ8WWj1/5gEra7Q0hQM8NsIg2NctILOyjNP814Qvh+Cy7xQey47wd02+jx7kU2ThgrOJRNGC+po1rU+8wqUpHuG5DsHoKXKBABixoTKgMRjd2JxgimvsS80qTIUYHEN6N+0YSw+/FUSjM3iXJRwHXcy8HRlDwx1aJUKezHZYv5H+WRXvnCY6BqGuMmFi4QpX3dDDF8Nag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8SAS32sWUqrMSSHqOwA3qiSpt4GRQEm8a3yJVSVKFmM=;
- b=byQGw/uITwU6szGIrfW0bulqpvx7jZkWY+75o8yf/dapTiNteF8YopX9eK6RsidokpiFzvF12qksloRvfeS7TL8GgHhXRl6c8UCB/6VEmgacvRJIQCHSC+1T6E+v3rBpTYEwjeDn07Q+ecnwOq1Xh6EvBYBQ32YZ6isF/FFYwYpTHKysq4wlsS6OAreDOa5yA0MoVJEtlf9Vak12w+mn2perwfYPTiYM7/OM6jsyblfcD8xUquzYfBH6u7dWcxMAYKTRela96DSvS7/5oDqj3c9lALw0sqIsxKP4gBAFZoGZy0/4JYKzB1vJm2wEjyFHf+0311kkpfbJxFc0uOF/HQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8SAS32sWUqrMSSHqOwA3qiSpt4GRQEm8a3yJVSVKFmM=;
- b=glEJWqYpSoJFkd0SNRHHxpnOWp0I5cj/wqQRLQPudNn9O9nzBwB42/4pnpzYlgWKbc0kyPqzw06eIv3AInbbZ+AyLPJbAX2Q1uynrjNfAf3jDAmrpWjkUj4/2lEdeCb6SgR6IEhQ0OL8aMaBM7q2tHdM7zYLonxiurMKfpgZZUpp07nMX0scL0T+J7MmR7AhpbN4aZkXMBgLtWoaDIG55en+7DRv+X/6d/Ke/CFXuOf1ff8Icvq9f+pUeVH+Hkwxk++oXDbAPOU90f6MtQeleynbZwYmKyj9UvNIecR00KuT9EcIb9TmS+GhzNYyE98ykhiDlUT5vU6TmregaSs6NQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
- by VI2PR04MB11025.eurprd04.prod.outlook.com (2603:10a6:800:277::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Thu, 13 Mar
- 2025 12:50:37 +0000
-Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
- ([fe80::3a74:80e4:4144:62db]) by DU7PR04MB11163.eurprd04.prod.outlook.com
- ([fe80::3a74:80e4:4144:62db%4]) with mapi id 15.20.8534.027; Thu, 13 Mar 2025
- 12:50:37 +0000
-From: florin.leotescu@oss.nxp.com
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Shych <michaelsh@nvidia.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: viorel.suman@nxp.com,
-	carlos.song@nxp.com,
-	linux-arm-kernel@lists.infradead.org,
-	imx@lists.linux.dev,
-	festevam@gmail.com,
-	Florin Leotescu <florin.leotescu@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: [PATCH v4 3/3] hwmon: emc2305: Use devm_thermal_of_cooling_device_register
-Date: Thu, 13 Mar 2025 14:57:46 +0200
-Message-Id: <20250313125746.2901904-4-florin.leotescu@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250313125746.2901904-1-florin.leotescu@oss.nxp.com>
-References: <20250313125746.2901904-1-florin.leotescu@oss.nxp.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM8P191CA0001.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:21a::6) To DU7PR04MB11163.eurprd04.prod.outlook.com
- (2603:10a6:10:5b3::14)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mk2T5/kV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741873644; x=1773409644;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=IoUXuilUTeQx3+D2plAtGeZBKPpCNfA4Rkro0WGv6vg=;
+  b=Mk2T5/kVP5apjgoJHXcU/EUn05SrfxrVWG33TqdS5mXp9t+cKqJ7NNbQ
+   Wf2WJ9/o49Ox38ohGlRle0BImusZlojtVzRDfaR0K8BAfIA9Ra1IubEeG
+   jtQ22JK4aHFqI1ZeaJiDq0hGw+pw2u+Ol0+k68LdO74c9UV5k44wgK54G
+   Z759MfREhI5ozQaB6V40qQqT9ax/Fa+mEBvRS/2Hp1ISLbi/x69n+sMJ5
+   uHR1DkyXMSG16m7S9O9T6tk9L6kI2NCxvNxIAYQxsKcVRc53ALktmgpFH
+   R0CZJHIyHEF6fs5BgDrLx/DVWE4j0w93KmFTRURRF4PQpvAIxwdrfV73N
+   A==;
+X-CSE-ConnectionGUID: TRKPd7vJT6Smyp9WFJCicQ==
+X-CSE-MsgGUID: yEa6JaQ4TOub870+rfrKjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43121180"
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="43121180"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 06:47:23 -0700
+X-CSE-ConnectionGUID: AZeJKVHQQYOEYyxb7AivRg==
+X-CSE-MsgGUID: Wdpf+gcxQWm1Jc4j7rX0Bg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="120674743"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.195])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 06:47:20 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 13 Mar 2025 15:47:17 +0200 (EET)
+To: Werner Sembach <wse@tuxedocomputers.com>
+cc: Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
+    Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI TFAN
+ via hwmon
+In-Reply-To: <20250306132639.642369-1-wse@tuxedocomputers.com>
+Message-ID: <70633701-31d2-c2ab-f4f4-043dd186f485@linux.intel.com>
+References: <20250306132639.642369-1-wse@tuxedocomputers.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|VI2PR04MB11025:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4096f8e8-6f0d-4299-f595-08dd622da710
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?iso-8859-1?Q?8Q28nhDyQu2g5u3l/N99tgwnmc6gNxFzs/R/+DwDRhLbCEPXUnPbCwQNNK?=
- =?iso-8859-1?Q?fIpMcq5ebqP1EODl0DWJ0ai9vnZKLdwR2Y/BRNpFnsQVWe9BFyWaTugbWL?=
- =?iso-8859-1?Q?PS6cS8YGTFHVn95k0sfqRtr3MlucPWaKviN7/bkVzT7IFhbgNEx1G1aVNM?=
- =?iso-8859-1?Q?Utsga3O5I5qUmK0hCscjETt4g2InWesFMR6zYP3rBhHThk7I26wdhwvd5v?=
- =?iso-8859-1?Q?mAuFXFsEROuIjI9hkuZifayKo3vJHDRU1Ce9+wbyRMgzAUPKVd4BOrJwLE?=
- =?iso-8859-1?Q?kxbw4JNeb6P8Vg5KDjBssDYU+f6f0UQ1+NhcZgPy2QgQAoTfqE6qxLiUgf?=
- =?iso-8859-1?Q?yKDzwqGbTFZiesdXD20Yw6tRSCiXnNMGecOmKSKoZNROcZQcfNd+gDNR/W?=
- =?iso-8859-1?Q?QG2/asf4cvIwU1BUHiArWA22g1+eYlPu1coOhVch2013ig+1CtEi4h5v4W?=
- =?iso-8859-1?Q?TnJ46ATlsd++rOpift12uAVT5GOX9iO4Yoof+VTTY0PFT0Gngy3sgQecdt?=
- =?iso-8859-1?Q?l6aYocej2EeoxWCg0zaVKZlkU2+yfQ7VyUQgSZDrdT8jgA5kBDGkTGj0PV?=
- =?iso-8859-1?Q?gB6/7NvXiEweOHmzvPo1XJxAIWj/0LULJUEl0gR9Z3NEYNSl1Knq0g/p0c?=
- =?iso-8859-1?Q?RQfRta1YtImzaaouOFydBiw3uwEz7uwNMCg2Ybt285zLDyREsddwXPF3JP?=
- =?iso-8859-1?Q?298ssPhvbJG8SM7obPv1m31IavgtukwSfkjQFZUOQjybO+3XxKo9nnSB9Z?=
- =?iso-8859-1?Q?/Fi7ER20MOLZ9lfhC6AIqJld/sIS64vyAoCed2SdcNIL49qYoPVW6La379?=
- =?iso-8859-1?Q?Mk2s6h1JWiq3OaZgFhxHgshYMJ55+baYuaVz8RMkJ/iufP2Lu/yaiC1U4K?=
- =?iso-8859-1?Q?QMDz0Ihm+Fg0ft6LTy2qBQ6hcc1toUYsiQx9yFfpI1Uba7JQESzN9Kyn6P?=
- =?iso-8859-1?Q?yfPCevlzc7aikyWpj11yG1nKqx44PFGJVW7AYWIaGqgqN+EwEJvQ7PR1ZX?=
- =?iso-8859-1?Q?o2Sv3xjYoCLLCdpmF/rb52x93jcP9euiOl00nLIp1WRlBUGNvtokbr+nbB?=
- =?iso-8859-1?Q?nIrMRB3EPLWcyFhS/ISRXA9gQfQeHSQVED7jehLYz5XiJDF6NBO5fmZeRq?=
- =?iso-8859-1?Q?HW9NMgGifOQ8oExZrhZPsJW4ysMdUsyuw+DL7/vs4ZUbrqV45TgXs25Qp7?=
- =?iso-8859-1?Q?VK5GZw7Du2o9AVQqs3v6lpbQCWM2DgJpJdDEUS39vX/OcLvYk6jHTut2tH?=
- =?iso-8859-1?Q?+qYlDiaPEqbc5jipnkrOnAU+spRs+PyvCoUZy25PdgA7XKX9WCcGQJZQgJ?=
- =?iso-8859-1?Q?aqDcdgRo6iTdCx1G0G+Dqbd6AbN26VDCcMoVaDhXKmEih7AaN+cbAavOQL?=
- =?iso-8859-1?Q?+QhHuKmHyaYY0unvq+JdtNbCC7np4QXCCBvdJmrvNFP7jPsCeZl7PkxEMZ?=
- =?iso-8859-1?Q?UWUJWe8vHiZCdPKB?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?KMS+1SDB0S1hpFb4y7KM0GD4XRvHB9uZ2UqATvmesU8Y0hIx/3GjQ+Fe+v?=
- =?iso-8859-1?Q?SlZCHhNfwYz3WFt6CXl5fXDwy9AxSx3w4arg/J7EdORNMLZNNB+LNpR2Gy?=
- =?iso-8859-1?Q?alE6xKMFJ06O5houqSGW6tQk3SmUbuZ6I22Ki6EeJ1H3SfIvgBLBnAAMFY?=
- =?iso-8859-1?Q?HYFt6TOnAIp4WKgvP0BXcyoZFvyJoKsm6QMpaXAg6/dGT7nQYrLrtCkuIl?=
- =?iso-8859-1?Q?nT8zc+bctsDo+/irCNB+Cnb4pjSvmtSCWj+pg0zE53b+hq71meoZTYcV22?=
- =?iso-8859-1?Q?yB4bJ/7c09S+xWAh8VKNboSdqAsVk65f3Agcau0mK7Mr43/5b/veOzjIcP?=
- =?iso-8859-1?Q?uKPuS581OOFJEWqq39uQdaq2MY1HldE0xHHs73MqTkNi6dOscKIPRIap3B?=
- =?iso-8859-1?Q?5kOSdoYucvT94q0+Pr26P2bxauvwvIbnUfSO44ak4EoyfBWTtkmC2c6R8G?=
- =?iso-8859-1?Q?ayBBXHb3G27jLKpUcmrlEkvJ5kMwFlM/nXM2hPCeLRYIfhksZnbyfdVnmt?=
- =?iso-8859-1?Q?tWgCIvnKqzfnHnnG88/U/TzjqPl1tNZyEoOqdKFCgiDHvtNXMLhbRlVwdQ?=
- =?iso-8859-1?Q?9JpAHvWIlDEqNQp50GbndcvHwKAdANifBwWRk9fTaeP1c2t/UlOUFsCgvw?=
- =?iso-8859-1?Q?VPUOPva4ggSVZwMGHAzr4Xi/mUSo3uXbni/2vOUlg7O0aoMPTCf+BA9TQG?=
- =?iso-8859-1?Q?J22HttQDUnL12ILoGsjHYdoKIDbCTDaIZli9YpvMJThAObOuS6EpWqDdJG?=
- =?iso-8859-1?Q?z2U3F6A2a6YU/3z5ljwn/6F4UCeyQ3J78lsnxokVxFOeq8EWH4xZWnldW5?=
- =?iso-8859-1?Q?WppGf6JFaX2h1rz5+J8YSEuMv9lpOFXMRYzt0K+rSfc4AJe3iGYVFxUdjR?=
- =?iso-8859-1?Q?wmjmqo1Wdjaf9YlGtypW7vaoEx3xTfOf1vQu8UWDb+zyLT5iiFY9DshQmO?=
- =?iso-8859-1?Q?H4iUsW/m/4uxVpb5QkkzhWNzNQi45jvkSLHQxB8f2G2gKesgYAkca/aUha?=
- =?iso-8859-1?Q?PKk6cUG9hrdsg47ga+YvZluONYWtw+SoYcXk9KZnGXyir0cVDFOeajO7o2?=
- =?iso-8859-1?Q?pkpP48ivYb39k5P4W2kzi2dZoGoJcJett3vk2mqJ2L53h+gQnVXLyeLIns?=
- =?iso-8859-1?Q?KtqUjlFhT3DgSJHRQ+XzfASXU+PtARClequV73NVs7tkIMav7jQjNF6QYx?=
- =?iso-8859-1?Q?RoV63UB3O058bXlLe4ZvBZA1jSChr9DYLM96Cnqt4Ft1oHY1Nvfk5DFK04?=
- =?iso-8859-1?Q?TIufoUN2VdWUX9fk3As3GaAQFVFtBWozxOGbgiQVL5Z2cvL68UBs5PSHWC?=
- =?iso-8859-1?Q?twgVHkjti1nztZ+JSMrkNo6DRZDMNgdsRMmJQgW20Fm1Zn0Hf9ubV4jc1E?=
- =?iso-8859-1?Q?gSumJhugbj5rWePNKFX/WI8A9X0FyiOjzktq+6tKFPqv1TCbt4elNySUer?=
- =?iso-8859-1?Q?jNAe+v8V3VYFGb1ffYOYKVPhOstlGNHPfdQmgsNhFJ3/BrINYsU1spgh2V?=
- =?iso-8859-1?Q?ydkUg/KVMgED4OemR1yLbA3uakbPIYFOXksRbewFlw/AskWjJnwgE0IPMd?=
- =?iso-8859-1?Q?H1QtHZ4Tumx1I51tf037vMq7yJn8kQZW0oOPQiWzxj/apbrnsOo9QiA4qa?=
- =?iso-8859-1?Q?YH3NFU3lN7qgsnAa+G5w/WHAfEkQOMPzfqJFKk+BAO1yiAvl1fjyzUpQ?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4096f8e8-6f0d-4299-f595-08dd622da710
-X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2025 12:50:37.3828
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cDL8PskESo6TGKvdajhAQ85K4VlVKdPLyT+FjJEccTl8vHsjdapzukiT5BS6NyeZaGINwaBQb1/0vwdaVKq4mA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB11025
+Content-Type: multipart/mixed; boundary="8323328-1196490205-1741873637=:1742"
 
-From: Florin Leotescu <florin.leotescu@nxp.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Prepare the emc2305 driver to use configuration from Device Tree nodes.
-Switch to devm_thermal_of_cooling_device_register to simplify the
-cleanup procedure, allowing the removal of emc2305_unset_tz and
-emc2305_remove, which are no longer needed.
+--8323328-1196490205-1741873637=:1742
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
----
- drivers/hwmon/emc2305.c | 33 ++++-----------------------------
- 1 file changed, 4 insertions(+), 29 deletions(-)
+On Thu, 6 Mar 2025, Werner Sembach wrote:
 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index f8a4c76fcadd..234c54956a4b 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -112,8 +112,6 @@ static char *emc2305_fan_name[] = {
- 	"emc2305_fan5",
- };
- 
--static void emc2305_unset_tz(struct device *dev);
--
- static int emc2305_get_max_channel(const struct emc2305_data *data)
- {
- 	return data->pwm_num;
-@@ -293,8 +291,9 @@ static int emc2305_set_single_tz(struct device *dev, int idx)
- 	pwm = data->pwm_min[cdev_idx];
- 
- 	data->cdev_data[cdev_idx].cdev =
--		thermal_cooling_device_register(emc2305_fan_name[idx], data,
--						&emc2305_cooling_ops);
-+		devm_thermal_of_cooling_device_register(dev, dev->of_node,
-+							emc2305_fan_name[idx], data,
-+							&emc2305_cooling_ops);
- 
- 	if (IS_ERR(data->cdev_data[cdev_idx].cdev)) {
- 		dev_err(dev, "Failed to register cooling device %s\n", emc2305_fan_name[idx]);
-@@ -332,24 +331,9 @@ static int emc2305_set_tz(struct device *dev)
- 	for (i = 0; i < data->pwm_num; i++) {
- 		ret = emc2305_set_single_tz(dev, i + 1);
- 		if (ret)
--			goto thermal_cooling_device_register_fail;
-+			return ret;
- 	}
- 	return 0;
--
--thermal_cooling_device_register_fail:
--	emc2305_unset_tz(dev);
--	return ret;
--}
--
--static void emc2305_unset_tz(struct device *dev)
--{
--	struct emc2305_data *data = dev_get_drvdata(dev);
--	int i;
--
--	/* Unregister cooling device. */
--	for (i = 0; i < EMC2305_PWM_MAX; i++)
--		if (data->cdev_data[i].cdev)
--			thermal_cooling_device_unregister(data->cdev_data[i].cdev);
- }
- 
- static umode_t
-@@ -599,14 +583,6 @@ static int emc2305_probe(struct i2c_client *client)
- 	return 0;
- }
- 
--static void emc2305_remove(struct i2c_client *client)
--{
--	struct device *dev = &client->dev;
--
--	if (IS_REACHABLE(CONFIG_THERMAL))
--		emc2305_unset_tz(dev);
--}
--
- static const struct of_device_id of_emc2305_match_table[] = {
- 	{ .compatible = "microchip,emc2305", },
- 	{},
-@@ -619,7 +595,6 @@ static struct i2c_driver emc2305_driver = {
- 		.of_match_table = of_emc2305_match_table,
- 	},
- 	.probe = emc2305_probe,
--	.remove	  = emc2305_remove,
- 	.id_table = emc2305_ids,
- };
- 
--- 
-2.34.1
+> The TUXEDO Sirius 16 Gen1 & Gen2 have the custom TUXEDO Interface (TUXI)
+> ACPI interface which currently consists of the TFAN device. This has ACPI
+> functions to control the built in fans and monitor fan speeds and CPU and
+> GPU temprature.
 
+temperature
+
+>=20
+> This driver implements this TFAN device via the hwmon subsystem with an
+> added temprature check that ensure a minimum fanspeed at certain
+
+temperature
+
+> temperatures. This allows userspace controlled, but hardware safe, custom
+> fan curves.
+>=20
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> ---
+>  MAINTAINERS                                  |   6 +
+>  drivers/platform/x86/Kconfig                 |   2 +
+>  drivers/platform/x86/Makefile                |   3 +
+>  drivers/platform/x86/tuxedo/Kbuild           |   6 +
+>  drivers/platform/x86/tuxedo/Kconfig          |   6 +
+>  drivers/platform/x86/tuxedo/nbxx/Kbuild      |   7 +
+>  drivers/platform/x86/tuxedo/nbxx/Kconfig     |  13 +
+>  drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c | 578 +++++++++++++++++++
+>  8 files changed, 621 insertions(+)
+>  create mode 100644 drivers/platform/x86/tuxedo/Kbuild
+>  create mode 100644 drivers/platform/x86/tuxedo/Kconfig
+>  create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kbuild
+>  create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kconfig
+>  create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8e0736dc2ee0e..7139c32e96dc7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -24190,6 +24190,12 @@ T:=09git git://git.kernel.org/pub/scm/linux/kern=
+el/git/lenb/linux.git turbostat
+>  F:=09tools/power/x86/turbostat/
+>  F:=09tools/testing/selftests/turbostat/
+> =20
+> +TUXEDO DRIVERS
+> +M:=09Werner Sembach <wse@tuxedocomputers.com>
+> +L:=09platform-driver-x86@vger.kernel.org
+> +S:=09Supported
+> +F:=09drivers/platform/x86/tuxedo/
+> +
+>  TW5864 VIDEO4LINUX DRIVER
+>  M:=09Bluecherry Maintainers <maintainers@bluecherrydvr.com>
+>  M:=09Andrey Utkin <andrey.utkin@corp.bluecherry.net>
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 0258dd879d64b..58b258cde4fdb 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1186,6 +1186,8 @@ config SEL3350_PLATFORM
+>  =09  To compile this driver as a module, choose M here: the module
+>  =09  will be called sel3350-platform.
+> =20
+> +source "drivers/platform/x86/tuxedo/Kconfig"
+> +
+>  endif # X86_PLATFORM_DEVICES
+> =20
+>  config P2SB
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
+e
+> index e1b1429470674..1562dcd7ad9a5 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -153,3 +153,6 @@ obj-$(CONFIG_WINMATE_FM07_KEYS)=09=09+=3D winmate-fm0=
+7-keys.o
+> =20
+>  # SEL
+>  obj-$(CONFIG_SEL3350_PLATFORM)=09=09+=3D sel3350-platform.o
+> +
+> +# TUXEDO
+> +obj-y=09=09=09=09=09+=3D tuxedo/
+> diff --git a/drivers/platform/x86/tuxedo/Kbuild b/drivers/platform/x86/tu=
+xedo/Kbuild
+> new file mode 100644
+> index 0000000000000..0de6c7871db95
+> --- /dev/null
+> +++ b/drivers/platform/x86/tuxedo/Kbuild
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +#
+> +# TUXEDO X86 Platform Specific Drivers
+> +#
+> +
+> +obj-y=09+=3D nbxx/
+> diff --git a/drivers/platform/x86/tuxedo/Kconfig b/drivers/platform/x86/t=
+uxedo/Kconfig
+> new file mode 100644
+> index 0000000000000..34aa2e89f00ba
+> --- /dev/null
+> +++ b/drivers/platform/x86/tuxedo/Kconfig
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +#
+> +# TUXEDO X86 Platform Specific Drivers
+> +#
+> +
+> +source "drivers/platform/x86/tuxedo/nbxx/Kconfig"
+> diff --git a/drivers/platform/x86/tuxedo/nbxx/Kbuild b/drivers/platform/x=
+86/tuxedo/nbxx/Kbuild
+> new file mode 100644
+> index 0000000000000..10ddef3564d84
+> --- /dev/null
+> +++ b/drivers/platform/x86/tuxedo/nbxx/Kbuild
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +#
+> +# TUXEDO X86 Platform Specific Drivers
+> +#
+> +
+> +tuxedo_nbxx_acpi_tuxi-y=09=09=09:=3D acpi_tuxi.o
+> +obj-$(CONFIG_TUXEDO_NBXX_ACPI_TUXI)=09+=3D tuxedo_nbxx_acpi_tuxi.o
+> diff --git a/drivers/platform/x86/tuxedo/nbxx/Kconfig b/drivers/platform/=
+x86/tuxedo/nbxx/Kconfig
+> new file mode 100644
+> index 0000000000000..827c65c410fb2
+> --- /dev/null
+> +++ b/drivers/platform/x86/tuxedo/nbxx/Kconfig
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+> +#
+> +# TUXEDO X86 Platform Specific Drivers
+> +#
+> +
+> +config TUXEDO_NBXX_ACPI_TUXI
+> +=09tristate "TUXEDO NBxx ACPI TUXI Platform Driver"
+> +=09help
+> +=09  This driver implements the ACPI TUXI device found on some TUXEDO
+> +=09  Notebooks. Currently this consists only of the TFAN subdevice which=
+ is
+> +=09  implemented via hwmon.
+> +
+> +=09  When compiled as a module it will be called tuxedo_nbxx_acpi_tuxi
+> diff --git a/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c b/drivers/platf=
+orm/x86/tuxedo/nbxx/acpi_tuxi.c
+> new file mode 100644
+> index 0000000000000..f42311f119956
+> --- /dev/null
+> +++ b/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c
+> @@ -0,0 +1,578 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2024-2025 Werner Sembach wse@tuxedocomputers.com
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/units.h>
+> +#include <linux/workqueue.h>
+> +
+> +#define TUXI_SAFEGUARD_PERIOD 1000      // 1s
+> +#define TUXI_PWM_FAN_ON_MIN_SPEED 0x40  // ~25%
+> +#define TUXI_TEMP_LEVEL_HYSTERESIS 1500 // 1.5=C2=B0C
+> +#define TUXI_FW_TEMP_OFFSET 2730        // Kelvin to Celsius
+> +#define TUXI_MAX_FAN_COUNT 16           /* If this is increased, new lin=
+es must
+> +=09=09=09=09=09 * be added to hwmcinfo below.
+> +=09=09=09=09=09 */
+
+Please use static_assert() to actually enforce what the comment says.
+
+> +
+> +static const struct acpi_device_id acpi_device_ids[] =3D {
+> +=09{"TUXI0000", 0},
+> +=09{"", 0}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, acpi_device_ids);
+> +
+> +struct tuxi_driver_data_t {
+> +=09acpi_handle tfan_handle;
+> +=09struct device *hwmdev;
+> +};
+> +
+> +struct tuxi_hwmon_driver_data_t {
+> +=09struct delayed_work work;
+> +=09struct device *hwmdev;
+> +=09u8 fan_count;
+> +=09const char *fan_types[TUXI_MAX_FAN_COUNT];
+> +=09u8 temp_level[TUXI_MAX_FAN_COUNT];
+> +=09u8 curr_speed[TUXI_MAX_FAN_COUNT];
+> +=09u8 want_speed[TUXI_MAX_FAN_COUNT];
+> +=09u8 pwm_enabled;
+> +};
+> +
+> +struct tuxi_temp_high_config_t {
+> +=09long temp;
+> +=09u8 min_speed;
+> +};
+> +
+> +/* Speed values in this table must be >=3D TUXI_PWM_FAN_ON_MIN_SPEED to =
+avoid
+> + * undefined behaviour.
+> + */
+> +static const struct tuxi_temp_high_config_t temp_levels[] =3D {
+> +=09{  80000, 0x4d }, // ~30%
+> +=09{  90000, 0x66 }, // ~40%
+> +=09{ 100000, 0xff }, // 100%
+> +=09{ }
+> +};
+> +
+> +/*
+> + * Set fan speed target
+> + *
+> + * Set a specific fan speed (needs manual mode)
+> + *
+> + * Arg0: Fan index
+> + * Arg1: Fan speed as a fraction of maximum speed (0-255)
+> + */
+> +#define TUXI_TFAN_METHOD_SET_FAN_SPEED=09=09"SSPD"
+> +
+> +/*
+> + * Get fan speed target
+> + *
+> + * Arg0: Fan index
+> + * Returns: Current fan speed target a fraction of maximum speed (0-255)
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_SPEED=09=09"GSPD"
+> +
+> +/*
+> + * Get fans count
+> + *
+> + * Returns: Number of individually controllable fans
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_COUNT=09=09"GCNT"
+> +
+> +/*
+> + * Set fans mode
+> + *
+> + * Arg0: 0 =3D auto, 1 =3D manual
+> + */
+> +#define TUXI_TFAN_METHOD_SET_FAN_MODE=09=09"SMOD"
+> +
+> +/*
+> + * Get fans mode
+> + *
+> + * Returns: 0 =3D auto, 1 =3D manual
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_MODE=09=09"GMOD"
+> +
+> +/*
+> + * Get fan type/what the fan is pointed at
+> + *
+> + * Arg0: Fan index
+> + * Returns: 0 =3D general, 1 =3D CPU, 2 =3D GPU
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_TYPE=09=09"GTYP"
+> +
+> +static const char * const tuxi_fan_type_labels[] =3D {
+> +=09"general",
+> +=09"cpu",
+> +=09"gpu"
+> +};
+> +
+> +/*
+> + * Get fan temperature/temperature of what the fan is pointed at
+> + *
+> + * Arg0: Fan index
+> + * Returns: Temperature sensor value in 10ths of degrees kelvin
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE=09"GTMP"
+> +
+> +/*
+> + * Get actual fan speed in RPM
+> + *
+> + * Arg0: Fan index
+> + * Returns: Speed sensor value in revolutions per minute
+> + */
+> +#define TUXI_TFAN_METHOD_GET_FAN_RPM=09=09"GRPM"
+> +
+> +static int tuxi_tfan_method(struct acpi_device *device, acpi_string meth=
+od,
+> +=09=09=09    unsigned long long *params, u32 pcount,
+> +=09=09=09    unsigned long long *retval)
+> +{
+> +=09struct tuxi_driver_data_t *driver_data =3D dev_get_drvdata(&device->d=
+ev);
+> +=09acpi_handle handle =3D driver_data->tfan_handle;
+> +=09union acpi_object *obj __free(kfree) =3D NULL;
+
+Please add linux/cleanup.h include.
+
+> +=09struct acpi_object_list arguments;
+> +=09unsigned long long data;
+> +=09acpi_status status;
+> +=09unsigned int i;
+> +
+> +=09if (pcount > 0) {
+> +=09=09obj =3D kcalloc(pcount, sizeof(*arguments.pointer), GFP_KERNEL);
+> +
+> +=09=09arguments.count =3D pcount;
+> +=09=09arguments.pointer =3D obj;
+> +=09=09for (i =3D 0; i < pcount; ++i) {
+> +=09=09=09arguments.pointer[i].type =3D ACPI_TYPE_INTEGER;
+> +=09=09=09arguments.pointer[i].integer.value =3D params[i];
+> +=09=09}
+> +=09}
+> +=09status =3D acpi_evaluate_integer(handle, method,
+> +=09=09=09=09       pcount ? &arguments : NULL, &data);
+> +=09if (ACPI_FAILURE(status))
+> +=09=09return_ACPI_STATUS(status);
+> +
+> +=09if (retval)
+> +=09=09*retval =3D data;
+> +
+> +=09return 0;
+> +}
+> +
+> +static umode_t hwm_is_visible(const void *data, enum hwmon_sensor_types =
+type,
+> +=09=09=09      u32 __always_unused attr, int channel)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t const *driver_data =3D data;
+> +
+> +=09if (channel >=3D driver_data->fan_count)
+> +=09=09return 0;
+> +
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09return 0444;
+> +=09case hwmon_pwm:
+> +=09=09return 0644;
+> +=09case hwmon_temp:
+> +=09=09return 0444;
+> +=09default:
+> +=09=09break;
+> +=09}
+> +
+> +=09return -EOPNOTSUPP;
+> +}
+> +
+> +static int hwm_read(struct device *dev, enum hwmon_sensor_types type, u3=
+2 attr,
+> +=09=09    int channel, long *val)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D dev_get_drvdata(dev)=
+;
+> +=09struct acpi_device *pdev =3D to_acpi_device(dev->parent);
+> +=09unsigned long long params[2], retval;
+> +=09int ret;
+> +
+> +=09switch (type) {
+> +=09case hwmon_fan:
+> +=09=09params[0] =3D channel;
+> +=09=09ret =3D tuxi_tfan_method(pdev,
+> +=09=09=09=09       TUXI_TFAN_METHOD_GET_FAN_RPM,
+
+These fit to same line.
+
+> +=09=09=09=09       params, 1, &retval);
+> +=09=09*val =3D retval > S32_MAX ? S32_MAX : retval;
+> +=09=09return ret;
+> +=09case hwmon_pwm:
+> +=09=09switch (attr) {
+> +=09=09case hwmon_pwm_input:
+> +=09=09=09if (driver_data->pwm_enabled) {
+> +=09=09=09=09*val =3D driver_data->curr_speed[channel];
+> +=09=09=09=09return 0;
+> +=09=09=09}
+> +=09=09=09params[0] =3D channel;
+> +=09=09=09ret =3D tuxi_tfan_method(pdev,
+> +=09=09=09=09=09       TUXI_TFAN_METHOD_GET_FAN_SPEED,
+> +=09=09=09=09=09       params, 1, &retval);
+> +=09=09=09*val =3D retval > S32_MAX ? S32_MAX : retval;
+> +=09=09=09return ret;
+> +=09=09case hwmon_pwm_enable:
+> +=09=09=09*val =3D driver_data->pwm_enabled;
+> +=09=09=09return ret;
+> +=09=09}
+> +=09=09break;
+> +=09case hwmon_temp:
+> +=09=09params[0] =3D channel;
+> +=09=09ret =3D tuxi_tfan_method(pdev,
+> +=09=09=09=09       TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+> +=09=09=09=09       params, 1, &retval);
+> +=09=09*val =3D retval > S32_MAX / 100 ?
+
+Add linux/limits.h include.
+
+> +=09=09=09S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) * 100;
+
+Is the math wrong, as you do retval - TUXI_FW_TEMP_OFFSET before=20
+multiplying? Shouldn't it be like this:
+
+=09=09retval -=3D TUXI_FW_TEMP_OFFSET;
+=09=09*val =3D min(retval * 100, (unsigned long long)S32_MAX);
+
++ add include for min().
+
+> +=09=09return ret;
+> +=09default:
+> +=09=09break;
+> +=09}
+> +
+> +=09return -EOPNOTSUPP;
+> +}
+> +
+> +static int hwm_read_string(struct device *dev,
+> +=09=09=09   enum hwmon_sensor_types __always_unused type,
+> +=09=09=09   u32 __always_unused attr, int channel,
+> +=09=09=09   const char **str)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D dev_get_drvdata(dev)=
+;
+> +
+> +=09*str =3D driver_data->fan_types[channel];
+> +
+> +=09return 0;
+> +}
+> +
+> +static int write_speed(struct device *dev, int channel, u8 val, bool for=
+ce)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D dev_get_drvdata(dev)=
+;
+> +=09struct acpi_device *pdev =3D to_acpi_device(dev->parent);
+> +=09unsigned long long params[2];
+> +=09u8 temp_level;
+> +=09int ret;
+> +
+> +=09params[0] =3D channel;
+> +
+> +=09/* The heatpipe across the DRMs is shared between both fans and the D=
+RMs
+
+In multi-line comments:
+
+=09/*
+=09 * Text starts here...
+
+What are DRMs? I guess it's neither Digital Rights Managements nor Direct=
+=20
+Rendering Managers :-).
+
+> +=09 * are the most likely to go up in smoke. So it's better to apply the
+> +=09 * minimum fan speed to all fans if either CPU or GPU is working hard=
+=2E
+> +=09 */
+> +=09temp_level =3D max_array(driver_data->temp_level, driver_data->fan_co=
+unt);
+> +=09if (temp_level)
+> +=09=09params[1] =3D max_t(u8, val,
+> +=09=09=09=09  temp_levels[temp_level - 1].min_speed);
+
+Both are already u8 so why you need max_t(), max() should be sufficient=20
+when types are already right.
+
+Include is missing.
+
+> +=09else if (val < TUXI_PWM_FAN_ON_MIN_SPEED / 2)
+> +=09=09params[1] =3D 0;
+> +=09else if (val < TUXI_PWM_FAN_ON_MIN_SPEED)
+> +=09=09params[1] =3D TUXI_PWM_FAN_ON_MIN_SPEED;
+> +=09else
+> +=09=09params[1] =3D val;
+> +
+> +=09if (force || params[1] !=3D driver_data->curr_speed[channel])
+> +=09=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_SPEED,
+> +=09=09=09=09       params, 2, NULL);
+> +=09if (ret)
+> +=09=09return ret;
+
+Please indent this to the correct level.
+
+> +
+> +=09driver_data->curr_speed[channel] =3D params[1];
+
+The use of params[1] obfuscates meaning, please use local variable with a=
+=20
+proper name and only assign it into params[1] for the tuxi_tfan_method call=
+=2E
+
+> +
+> +=09return 0;
+> +}
+> +
+> +static int hwm_write(struct device *dev,
+> +=09=09     enum hwmon_sensor_types __always_unused type, u32 attr,
+> +=09=09     int channel, long val)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D dev_get_drvdata(dev)=
+;
+> +=09struct acpi_device *pdev =3D to_acpi_device(dev->parent);
+> +=09unsigned long long params[2];
+> +=09unsigned int i;
+> +=09int ret;
+> +
+> +=09switch (attr) {
+> +=09case hwmon_pwm_input:
+> +=09=09if (val > U8_MAX || val < 0)
+> +=09=09=09return -EINVAL;
+> +
+> +=09=09if (driver_data->pwm_enabled) {
+> +=09=09=09driver_data->want_speed[channel] =3D val;
+> +=09=09=09return write_speed(dev, channel, val, false);
+> +=09=09}
+> +
+> +=09=09return 0;
+> +=09case hwmon_pwm_enable:
+> +=09=09params[0] =3D val ? 1 : 0;
+
+Can those two literals be named with defines?
+
+> +=09=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE,
+> +=09=09=09=09       params, 1, NULL);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +
+> +=09=09driver_data->pwm_enabled =3D val;
+> +
+> +=09=09/* Activating PWM sets speed to 0. Alternative design decision
+> +=09=09 * could be to keep the current value. This would require proper
+> +=09=09 * setting of driver_data->curr_speed for example.
+> +=09=09 */
+> +=09=09if (val)
+
+Consider:
+=09=09if (!val)
+=09=09=09return 0;
+
+So you can deindent the loop by one level.
+
+> +=09=09=09for (i =3D 0; i < driver_data->fan_count; ++i) {
+> +=09=09=09=09ret =3D write_speed(dev, i, 0, true);
+> +=09=09=09=09if (ret)
+> +=09=09=09=09=09return ret;
+> +=09=09=09}
+> +
+> +=09=09return 0;
+> +=09}
+> +
+> +=09return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops hwmops =3D {
+> +=09.is_visible =3D hwm_is_visible,
+> +=09.read =3D hwm_read,
+> +=09.read_string =3D hwm_read_string,
+> +=09.write =3D hwm_write,
+> +};
+> +
+> +static const struct hwmon_channel_info * const hwmcinfo[] =3D {
+> +=09HWMON_CHANNEL_INFO(fan,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09=09   HWMON_F_INPUT | HWMON_F_LABEL),
+> +=09HWMON_CHANNEL_INFO(pwm,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +=09=09=09   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+> +=09HWMON_CHANNEL_INFO(temp,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09=09   HWMON_T_INPUT | HWMON_T_LABEL),
+> +=09NULL
+> +};
+> +
+> +static const struct hwmon_chip_info hwminfo =3D {
+> +=09.ops =3D &hwmops,
+> +=09.info =3D hwmcinfo
+> +};
+> +
+> +static u8 tuxi_get_temp_level(struct tuxi_hwmon_driver_data_t *driver_da=
+ta,
+> +=09=09=09      u8 fan_id, long temp)
+> +{
+> +=09long temp_low, temp_high;
+> +=09unsigned int i;
+> +=09int ret;
+> +
+> +=09ret =3D driver_data->temp_level[fan_id];
+> +
+> +=09for (i =3D 0; temp_levels[i].temp; ++i) {
+> +=09=09temp_low =3D i =3D=3D 0 ? S32_MIN : temp_levels[i - 1].temp;
+> +=09=09temp_high =3D temp_levels[i].temp;
+> +=09=09if (ret > i)
+> +=09=09=09temp_high -=3D TUXI_TEMP_LEVEL_HYSTERESIS;
+> +
+> +=09=09if (temp >=3D temp_low && temp < temp_high)
+> +=09=09=09ret =3D i;
+
+Why you cannot return i; immediately here?
+
+> +=09}
+> +=09if (temp >=3D temp_high)
+> +=09=09ret =3D i;
+> +
+> +=09return ret;
+> +}
+> +
+> +static void tuxi_periodic_hw_safeguard(struct work_struct *work)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D container_of(work,
+> +=09=09=09=09=09=09=09=09    struct tuxi_hwmon_driver_data_t,
+> +=09=09=09=09=09=09=09=09    work.work);
+> +=09struct device *dev =3D driver_data->hwmdev;
+> +=09struct acpi_device *pdev =3D to_acpi_device(dev->parent);
+> +=09unsigned long long params[2], retval;
+> +=09unsigned int i;
+> +=09long temp;
+> +=09int ret;
+> +
+> +=09for (i =3D 0; i < driver_data->fan_count; ++i) {
+> +=09=09params[0] =3D i;
+> +=09=09ret =3D tuxi_tfan_method(pdev,
+> +=09=09=09=09       TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+> +=09=09=09=09       params, 1, &retval);
+> +=09=09/* If reading the temprature fails, default to a high value to
+
+temperature
+
+> +=09=09 * be on the safe side in the worst case.
+> +=09=09 */
+> +=09=09if (ret)
+> +=09=09=09retval =3D 2720 + 1200;
+
+TUXI_FW_TEMP_OFFSET + 1200 ?
+
+Why it doesn't match to that define??
+
+> +
+> +=09=09temp =3D retval > S32_MAX / 100 ?
+> +=09=09=09S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) * 100;
+
+Same math issue comment as above.
+
+Why is the read+conversion code duplicated into two places?
+
+> +
+> +=09=09driver_data->temp_level[i] =3D tuxi_get_temp_level(driver_data, i,
+> +=09=09=09=09=09=09=09=09 temp);
+> +=09}
+> +
+> +=09// Reapply want_speeds to respect eventual new temp_levels
+> +=09for (i =3D 0; i < driver_data->fan_count; ++i)
+> +=09=09write_speed(dev, i, driver_data->want_speed[i], false);
+> +
+> +=09schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
+> +}
+> +
+> +static int tuxi_hwmon_add_devices(struct acpi_device *pdev, struct devic=
+e **hwmdev)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data;
+> +=09unsigned long long params[2], retval;
+> +=09unsigned int i;
+> +=09int ret;
+> +
+> +=09/* The first version of TUXI TFAN didn't have the Get Fan Temperature
+> +=09 * method which is integral to this driver. So probe for existence an=
+d
+> +=09 * abort otherwise.
+> +=09 *
+> +=09 * The Get Fan Speed method is also missing in that version, but was
+> +=09 * added in the same version so it doesn't have to be probe separatel=
+y.
+> +=09 */
+> +=09params[0] =3D 0;
+> +=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+> +=09=09=09       params, 1, &retval);
+> +=09if (ret)
+> +=09=09return ret;
+> +
+> +=09driver_data =3D devm_kzalloc(&pdev->dev, sizeof(*driver_data), GFP_KE=
+RNEL);
+> +=09if (!driver_data)
+> +=09=09return -ENOMEM;
+> +
+> +=09/* Loading this module sets the fan mode to auto. Alternative design
+> +=09 * decision could be to keep the current value. This would require
+> +=09 * proper initialization of driver_data->curr_speed for example.
+> +=09 */
+> +=09params[0] =3D 0;
+
+Is this 0 ..._MODE_AUTO? Please use a named define if that's the case.
+
+> +=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE, params,=
+ 1,
+> +=09=09=09       NULL);
+> +=09if (ret)
+> +=09=09return ret;
+> +
+> +=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_COUNT, NULL, =
+0,
+> +=09=09=09       &retval);
+> +=09if (ret)
+> +=09=09return ret;
+> +=09if (retval > TUXI_MAX_FAN_COUNT)
+> +=09=09return -EINVAL;
+> +=09driver_data->fan_count =3D retval;
+> +
+> +=09for (i =3D 0; i < driver_data->fan_count; ++i) {
+> +=09=09params[0] =3D i;
+> +=09=09ret =3D tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_TYPE,
+> +=09=09=09=09       params, 1, &retval);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +=09=09else if (retval >=3D ARRAY_SIZE(tuxi_fan_type_labels))
+
+No need for else as there's return.
+
+> +=09=09=09return -EOPNOTSUPP;
+> +=09=09driver_data->fan_types[i] =3D tuxi_fan_type_labels[retval];
+> +=09}
+> +
+> +=09*hwmdev =3D devm_hwmon_device_register_with_info(&pdev->dev,
+> +=09=09=09=09=09=09       "tuxedo_nbxx_acpi_tuxi",
+> +=09=09=09=09=09=09       driver_data, &hwminfo,
+> +=09=09=09=09=09=09       NULL);
+> +=09ret =3D PTR_ERR_OR_ZERO(*hwmdev);
+> +=09if (ret)
+
+This obfuscates what you're doing here as you do not actually use 0 at=20
+all. Please use this instead:
+
+=09if (IS_ERR(*hwmdev))
+=09=09return PTR_ERR(*hwmdev);
+
+> +=09=09return ret;
+> +
+> +=09driver_data->hwmdev =3D *hwmdev;
+> +
+> +=09INIT_DELAYED_WORK(&driver_data->work, tuxi_periodic_hw_safeguard);
+> +=09schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
+> +
+> +=09return 0;
+> +}
+> +
+> +static void tuxi_hwmon_remove_devices(struct device *hwmdev)
+> +{
+> +=09struct tuxi_hwmon_driver_data_t *driver_data =3D dev_get_drvdata(hwmd=
+ev);
+> +=09struct acpi_device *pdev =3D to_acpi_device(hwmdev->parent);
+> +=09unsigned long long params[2];
+> +
+> +=09cancel_delayed_work_sync(&driver_data->work);
+> +
+> +=09params[0] =3D 0;
+
+Use a named define?
+
+> +=09tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE, params, 1, NULL=
+);
+> +}
+> +
+> +static int tuxi_add(struct acpi_device *device)
+> +{
+> +=09struct tuxi_driver_data_t *driver_data;
+> +=09acpi_status status;
+> +
+> +=09driver_data =3D devm_kzalloc(&device->dev, sizeof(*driver_data),
+> +=09=09=09=09   GFP_KERNEL);
+> +=09if (!driver_data)
+> +=09=09return -ENOMEM;
+> +
+> +=09// Find subdevices
+> +=09status =3D acpi_get_handle(device->handle, "TFAN",
+> +=09=09=09=09 &driver_data->tfan_handle);
+> +=09if (ACPI_FAILURE(status))
+> +=09=09return_ACPI_STATUS(status);
+> +
+> +=09dev_set_drvdata(&device->dev, driver_data);
+> +
+> +=09return tuxi_hwmon_add_devices(device, &driver_data->hwmdev);
+> +}
+> +
+> +static void tuxi_remove(struct acpi_device *device)
+> +{
+> +=09struct tuxi_driver_data_t *driver_data =3D dev_get_drvdata(&device->d=
+ev);
+> +
+> +=09tuxi_hwmon_remove_devices(driver_data->hwmdev);
+> +}
+> +
+> +static struct acpi_driver acpi_driver =3D {
+> +=09.name =3D "tuxedo_nbxx_acpi_tuxi",
+> +=09.ids =3D acpi_device_ids,
+> +=09.ops =3D {
+> +=09=09.add =3D tuxi_add,
+> +=09=09.remove =3D tuxi_remove,
+> +=09},
+> +};
+> +
+> +module_acpi_driver(acpi_driver);
+> +
+> +MODULE_DESCRIPTION("TUXEDO TUXI");
+
+Perhaps this could be made a more specific to the actual functionality?
+
+> +MODULE_AUTHOR("Werner Sembach <wse@tuxedocomputers.com>");
+> +MODULE_LICENSE("GPL");
+>=20
+
+--=20
+ i.
+
+--8323328-1196490205-1741873637=:1742--
