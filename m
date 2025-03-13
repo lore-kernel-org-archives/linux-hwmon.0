@@ -1,870 +1,894 @@
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A67E14A60F;
-	Thu, 13 Mar 2025 20:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF521EA7C9;
+	Thu, 13 Mar 2025 21:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741899534; cv=none; b=ZxNc1hxNmiwEybFtsM89unKXryiasWjmIaVOntTgzazjvOdhgmXn2pyV/tFF97vh3UAlBYlTFFIMufKAmm39E/RUdw86PT4uEF0FsgDb+qhodgiWw8VJMvmO6CgIiFsUqLHJIeSjljNc0teOZ7IGOOFIQnlvWMg6g2KUYS9OOy0=
+	t=1741902786; cv=none; b=ldHoYFPewkRQnaCTKUJB4vgA8Q/ntEXAG+YOTVOMn9en4DT8aIdrdcKFuyabj6eQL9UA2ZsdHVGGOuBmy/aTGXWZ9YUoehaEI12Va4MrNOKnzS8qi+ORPsxu8DE+fiorbijnlnnBiV4xqzSn3LN28C8hz90vkj/v+Sna6UsxOlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741899534; c=relaxed/simple;
-	bh=fSvPTMewSmcZmfUQpIHVhrzMlnrHus6axRXlv6L5LZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EVEgLxqQRk5YBa3Q4EXLIkF/0zZMsN8fEu04UrpN/r3XzcvN3xB5+2FY5sV0wIvcJ4q3B/1eoIJv/8EACPcJCzV8uROuS71levySU0rK043RFkzA4WbFOZzO1s0UuvwXaawqTEHkNPVuMN2rhfv19HKfsoX2npFfWH++bxyzS0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=b7Yoikxr; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1741902786; c=relaxed/simple;
+	bh=Ytsz+eb/V2e3IFloeeFyzf/rS0Opend8bNj7Uv9CZZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n7KHJjupsuxDyfR+hWQKwSz7UQbJ7OP7SWZmLb+cHATh0hM+JiuaXh3bNZsKy4/f4NtX1yGHy5+8w85kIU2RUvcLKmGBCra1GmkG/gJx6IQps0ljIY/iqMGYqG1dPOpjexvU5JQgOaLaKmH2/ntN045ZTpMjqSJMgDMzhSTeJ2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=Ux6Ibz0a; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="b7Yoikxr"
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id C31BB2E0999D;
-	Thu, 13 Mar 2025 22:58:39 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741899520;
-	bh=Y5VrSNdlsgJQoubN0CAtgMrTyGcggYC2+C8A79hNoGg=;
-	h=Received:From:Subject:To;
-	b=b7YoikxrejUqbDJgJG2FEKT1MgIumkC/ZLTFGIfvlZ74XLKyUgWHss8kFvRsxg9BT
-	 JvK123SrnyaRN5US6UFU2KR7LIJRi64xvqPz21bUm0c7Ct+T2gAnVkHBbfgRRAQJJE
-	 KgCgi0M40tfaZ8yVif1V/msq1ZeyrS7TYA1GcEFk=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.174) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f174.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f174.google.com with SMTP id
- 38308e7fff4ca-307c13298eeso16794601fa.0;
-        Thu, 13 Mar 2025 13:58:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVElnud0s3mHVmVQaTxtWvhmX65hpqFc/37eWpqMW0xnYN3NVtMBNx5B4lhb5lmOSSBxkSmfZYDN0c=@vger.kernel.org,
- AJvYcCWMxoabzEGmRsJLQUigukJ1wmcV5CPX0GJs9O+hHxfuNHhma9nH7qIiWrq8LL4nqPjdpp/9/u1ql2pnKNIc@vger.kernel.org,
- AJvYcCXiy96Qee2GDRlxF9SIYzlOvLOSYyVR8ZZOfG39ki93x6GwhM5lL+VRvDT6HUvoo2kk8rDu+S/0h5rh7Q8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhICELr4MKRcp8Rk0lLtABHtxQLIZVbLXwXjGn9xfVnnAEAdrd
-	joHBRAMc0opj5YyQtMxyPiOuU/ZOjA5sS7aQ5X5PDc6vFacIw+tdAGCoKDW/iq4SpodawJoLP+v
-	PicztmMeTPYJUkQKEVY0NwJN8Pfw=
-X-Google-Smtp-Source: 
- AGHT+IFVP2z7pKlq2maJuuMlyQM96aJotIRkeu4CsibblhQYwRjJaI00Z/V6Tm+b2Z5A/RkkyK7mrtpF1KQlceOALdU=
-X-Received: by 2002:a2e:a985:0:b0:30c:799:8418 with SMTP id
- 38308e7fff4ca-30c3dd13dd4mr16284171fa.4.1741899518912; Thu, 13 Mar 2025
- 13:58:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="Ux6Ibz0a"
+Received: from [192.168.42.116] (p5b164989.dip0.t-ipconnect.de [91.22.73.137])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 344E12FC0189;
+	Thu, 13 Mar 2025 22:52:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1741902773;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SejSD+YTwnCmoBSo6r27lIcgsx3S7MG2E9N2kdc8cto=;
+	b=Ux6Ibz0aveKI+bfpnymg5PAZA0NrcNPgA+5YzNg3BldjL8ktM+Zb2EyJXjDXHpfcT6EcWs
+	eF70IYPIar0fBlD2M62y9XZtkpm8Q2aPT7U1Ltgo9UzrmRGY21f9zWuMbzEhhwRVD8w25e
+	Nif/jB084TINlQdraVZfhY8U2HirfD8=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+Message-ID: <75556900-5fe3-4083-b81b-240994e4f8e0@tuxedocomputers.com>
+Date: Thu, 13 Mar 2025 22:52:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
- <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
-In-Reply-To: <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Thu, 13 Mar 2025 21:58:27 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
-X-Gm-Features: AQ5f1JpUweQBsjYFek3ctv1nypRPZzbamtcli6P4-dMtP8MdB-GFwb0CiLd94TU
-Message-ID: 
- <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
-To: Cryolitia@gmail.com
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
-	Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
-	someone5678 <someone5678.dev@gmail.com>,
- Justin Weiss <justin@justinweiss.com>,
-	command_block <mtf@ik.me>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <174189952030.30846.1271750701143063826@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI TFAN
+ via hwmon
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20250306132639.642369-1-wse@tuxedocomputers.com>
+ <70633701-31d2-c2ab-f4f4-043dd186f485@linux.intel.com>
+Content-Language: en-US
+From: Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <70633701-31d2-c2ab-f4f4-043dd186f485@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 13 Mar 2025 at 21:10, Cryolitia PukNgae via B4 Relay
-<devnull+Cryolitia.gmail.com@kernel.org> wrote:
+Hi Ilpo,
+
+Am 13.03.25 um 14:47 schrieb Ilpo Järvinen:
+> On Thu, 6 Mar 2025, Werner Sembach wrote:
 >
-> From: Cryolitia PukNgae <Cryolitia@gmail.com>
+>> The TUXEDO Sirius 16 Gen1 & Gen2 have the custom TUXEDO Interface (TUXI)
+>> ACPI interface which currently consists of the TFAN device. This has ACPI
+>> functions to control the built in fans and monitor fan speeds and CPU and
+>> GPU temprature.
+> temperature
+thx for spotting
 >
-> Sensors driver for GPD Handhelds that expose fan reading and control via
-> hwmon sysfs.
+>> This driver implements this TFAN device via the hwmon subsystem with an
+>> added temprature check that ensure a minimum fanspeed at certain
+> temperature
+thx for spotting
 >
-> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
-> devices. This driver implements these functions through x86 port-mapped IO.
+>> temperatures. This allows userspace controlled, but hardware safe, custom
+>> fan curves.
+>>
+>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+>> ---
+>>   MAINTAINERS                                  |   6 +
+>>   drivers/platform/x86/Kconfig                 |   2 +
+>>   drivers/platform/x86/Makefile                |   3 +
+>>   drivers/platform/x86/tuxedo/Kbuild           |   6 +
+>>   drivers/platform/x86/tuxedo/Kconfig          |   6 +
+>>   drivers/platform/x86/tuxedo/nbxx/Kbuild      |   7 +
+>>   drivers/platform/x86/tuxedo/nbxx/Kconfig     |  13 +
+>>   drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c | 578 +++++++++++++++++++
+>>   8 files changed, 621 insertions(+)
+>>   create mode 100644 drivers/platform/x86/tuxedo/Kbuild
+>>   create mode 100644 drivers/platform/x86/tuxedo/Kconfig
+>>   create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kbuild
+>>   create mode 100644 drivers/platform/x86/tuxedo/nbxx/Kconfig
+>>   create mode 100644 drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 8e0736dc2ee0e..7139c32e96dc7 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -24190,6 +24190,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+>>   F:	tools/power/x86/turbostat/
+>>   F:	tools/testing/selftests/turbostat/
+>>   
+>> +TUXEDO DRIVERS
+>> +M:	Werner Sembach <wse@tuxedocomputers.com>
+>> +L:	platform-driver-x86@vger.kernel.org
+>> +S:	Supported
+>> +F:	drivers/platform/x86/tuxedo/
+>> +
+>>   TW5864 VIDEO4LINUX DRIVER
+>>   M:	Bluecherry Maintainers <maintainers@bluecherrydvr.com>
+>>   M:	Andrey Utkin <andrey.utkin@corp.bluecherry.net>
+>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>> index 0258dd879d64b..58b258cde4fdb 100644
+>> --- a/drivers/platform/x86/Kconfig
+>> +++ b/drivers/platform/x86/Kconfig
+>> @@ -1186,6 +1186,8 @@ config SEL3350_PLATFORM
+>>   	  To compile this driver as a module, choose M here: the module
+>>   	  will be called sel3350-platform.
+>>   
+>> +source "drivers/platform/x86/tuxedo/Kconfig"
+>> +
+>>   endif # X86_PLATFORM_DEVICES
+>>   
+>>   config P2SB
+>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>> index e1b1429470674..1562dcd7ad9a5 100644
+>> --- a/drivers/platform/x86/Makefile
+>> +++ b/drivers/platform/x86/Makefile
+>> @@ -153,3 +153,6 @@ obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
+>>   
+>>   # SEL
+>>   obj-$(CONFIG_SEL3350_PLATFORM)		+= sel3350-platform.o
+>> +
+>> +# TUXEDO
+>> +obj-y					+= tuxedo/
+>> diff --git a/drivers/platform/x86/tuxedo/Kbuild b/drivers/platform/x86/tuxedo/Kbuild
+>> new file mode 100644
+>> index 0000000000000..0de6c7871db95
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/tuxedo/Kbuild
+>> @@ -0,0 +1,6 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later
+>> +#
+>> +# TUXEDO X86 Platform Specific Drivers
+>> +#
+>> +
+>> +obj-y	+= nbxx/
+>> diff --git a/drivers/platform/x86/tuxedo/Kconfig b/drivers/platform/x86/tuxedo/Kconfig
+>> new file mode 100644
+>> index 0000000000000..34aa2e89f00ba
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/tuxedo/Kconfig
+>> @@ -0,0 +1,6 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later
+>> +#
+>> +# TUXEDO X86 Platform Specific Drivers
+>> +#
+>> +
+>> +source "drivers/platform/x86/tuxedo/nbxx/Kconfig"
+>> diff --git a/drivers/platform/x86/tuxedo/nbxx/Kbuild b/drivers/platform/x86/tuxedo/nbxx/Kbuild
+>> new file mode 100644
+>> index 0000000000000..10ddef3564d84
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/tuxedo/nbxx/Kbuild
+>> @@ -0,0 +1,7 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later
+>> +#
+>> +# TUXEDO X86 Platform Specific Drivers
+>> +#
+>> +
+>> +tuxedo_nbxx_acpi_tuxi-y			:= acpi_tuxi.o
+>> +obj-$(CONFIG_TUXEDO_NBXX_ACPI_TUXI)	+= tuxedo_nbxx_acpi_tuxi.o
+>> diff --git a/drivers/platform/x86/tuxedo/nbxx/Kconfig b/drivers/platform/x86/tuxedo/nbxx/Kconfig
+>> new file mode 100644
+>> index 0000000000000..827c65c410fb2
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/tuxedo/nbxx/Kconfig
+>> @@ -0,0 +1,13 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later
+>> +#
+>> +# TUXEDO X86 Platform Specific Drivers
+>> +#
+>> +
+>> +config TUXEDO_NBXX_ACPI_TUXI
+>> +	tristate "TUXEDO NBxx ACPI TUXI Platform Driver"
+>> +	help
+>> +	  This driver implements the ACPI TUXI device found on some TUXEDO
+>> +	  Notebooks. Currently this consists only of the TFAN subdevice which is
+>> +	  implemented via hwmon.
+>> +
+>> +	  When compiled as a module it will be called tuxedo_nbxx_acpi_tuxi
+>> diff --git a/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c b/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c
+>> new file mode 100644
+>> index 0000000000000..f42311f119956
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/tuxedo/nbxx/acpi_tuxi.c
+>> @@ -0,0 +1,578 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Copyright (C) 2024-2025 Werner Sembach wse@tuxedocomputers.com
+>> + */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/device.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/units.h>
+>> +#include <linux/workqueue.h>
+>> +
+>> +#define TUXI_SAFEGUARD_PERIOD 1000      // 1s
+>> +#define TUXI_PWM_FAN_ON_MIN_SPEED 0x40  // ~25%
+>> +#define TUXI_TEMP_LEVEL_HYSTERESIS 1500 // 1.5°C
+>> +#define TUXI_FW_TEMP_OFFSET 2730        // Kelvin to Celsius
+>> +#define TUXI_MAX_FAN_COUNT 16           /* If this is increased, new lines must
+>> +					 * be added to hwmcinfo below.
+>> +					 */
+> Please use static_assert() to actually enforce what the comment says.
+
+I actually struggle to come up with how to do this for the array length because 
+of the macro and the pointer
+
+`static_assert(TUXI_MAX_FAN_COUNT <= ARRAY_SIZE(hwmcinfo[0]->config));` doesn't work
+
 >
-> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
-> ---
->  MAINTAINERS             |   6 +
->  drivers/hwmon/Kconfig   |  10 +
->  drivers/hwmon/Makefile  |   1 +
->  drivers/hwmon/gpd-fan.c | 681 ++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 698 insertions(+)
+>> +
+>> +static const struct acpi_device_id acpi_device_ids[] = {
+>> +	{"TUXI0000", 0},
+>> +	{"", 0}
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, acpi_device_ids);
+>> +
+>> +struct tuxi_driver_data_t {
+>> +	acpi_handle tfan_handle;
+>> +	struct device *hwmdev;
+>> +};
+>> +
+>> +struct tuxi_hwmon_driver_data_t {
+>> +	struct delayed_work work;
+>> +	struct device *hwmdev;
+>> +	u8 fan_count;
+>> +	const char *fan_types[TUXI_MAX_FAN_COUNT];
+>> +	u8 temp_level[TUXI_MAX_FAN_COUNT];
+>> +	u8 curr_speed[TUXI_MAX_FAN_COUNT];
+>> +	u8 want_speed[TUXI_MAX_FAN_COUNT];
+>> +	u8 pwm_enabled;
+>> +};
+>> +
+>> +struct tuxi_temp_high_config_t {
+>> +	long temp;
+>> +	u8 min_speed;
+>> +};
+>> +
+>> +/* Speed values in this table must be >= TUXI_PWM_FAN_ON_MIN_SPEED to avoid
+>> + * undefined behaviour.
+>> + */
+>> +static const struct tuxi_temp_high_config_t temp_levels[] = {
+>> +	{  80000, 0x4d }, // ~30%
+>> +	{  90000, 0x66 }, // ~40%
+>> +	{ 100000, 0xff }, // 100%
+>> +	{ }
+>> +};
+>> +
+>> +/*
+>> + * Set fan speed target
+>> + *
+>> + * Set a specific fan speed (needs manual mode)
+>> + *
+>> + * Arg0: Fan index
+>> + * Arg1: Fan speed as a fraction of maximum speed (0-255)
+>> + */
+>> +#define TUXI_TFAN_METHOD_SET_FAN_SPEED		"SSPD"
+>> +
+>> +/*
+>> + * Get fan speed target
+>> + *
+>> + * Arg0: Fan index
+>> + * Returns: Current fan speed target a fraction of maximum speed (0-255)
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_SPEED		"GSPD"
+>> +
+>> +/*
+>> + * Get fans count
+>> + *
+>> + * Returns: Number of individually controllable fans
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_COUNT		"GCNT"
+>> +
+>> +/*
+>> + * Set fans mode
+>> + *
+>> + * Arg0: 0 = auto, 1 = manual
+>> + */
+>> +#define TUXI_TFAN_METHOD_SET_FAN_MODE		"SMOD"
+>> +
+>> +/*
+>> + * Get fans mode
+>> + *
+>> + * Returns: 0 = auto, 1 = manual
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_MODE		"GMOD"
+>> +
+>> +/*
+>> + * Get fan type/what the fan is pointed at
+>> + *
+>> + * Arg0: Fan index
+>> + * Returns: 0 = general, 1 = CPU, 2 = GPU
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_TYPE		"GTYP"
+>> +
+>> +static const char * const tuxi_fan_type_labels[] = {
+>> +	"general",
+>> +	"cpu",
+>> +	"gpu"
+>> +};
+>> +
+>> +/*
+>> + * Get fan temperature/temperature of what the fan is pointed at
+>> + *
+>> + * Arg0: Fan index
+>> + * Returns: Temperature sensor value in 10ths of degrees kelvin
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE	"GTMP"
+>> +
+>> +/*
+>> + * Get actual fan speed in RPM
+>> + *
+>> + * Arg0: Fan index
+>> + * Returns: Speed sensor value in revolutions per minute
+>> + */
+>> +#define TUXI_TFAN_METHOD_GET_FAN_RPM		"GRPM"
+>> +
+>> +static int tuxi_tfan_method(struct acpi_device *device, acpi_string method,
+>> +			    unsigned long long *params, u32 pcount,
+>> +			    unsigned long long *retval)
+>> +{
+>> +	struct tuxi_driver_data_t *driver_data = dev_get_drvdata(&device->dev);
+>> +	acpi_handle handle = driver_data->tfan_handle;
+>> +	union acpi_object *obj __free(kfree) = NULL;
+> Please add linux/cleanup.h include.
+ack
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0fa7c5728f1e64d031f4a47b6fce1db484ce0fc2..777ba74ccb07ccc0840c3cd34e7b4d98d726f964 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9762,6 +9762,12 @@ F:       drivers/phy/samsung/phy-gs101-ufs.c
->  F:     include/dt-bindings/clock/google,gs101.h
->  K:     [gG]oogle.?[tT]ensor
+>> +	struct acpi_object_list arguments;
+>> +	unsigned long long data;
+>> +	acpi_status status;
+>> +	unsigned int i;
+>> +
+>> +	if (pcount > 0) {
+>> +		obj = kcalloc(pcount, sizeof(*arguments.pointer), GFP_KERNEL);
+>> +
+>> +		arguments.count = pcount;
+>> +		arguments.pointer = obj;
+>> +		for (i = 0; i < pcount; ++i) {
+>> +			arguments.pointer[i].type = ACPI_TYPE_INTEGER;
+>> +			arguments.pointer[i].integer.value = params[i];
+>> +		}
+>> +	}
+>> +	status = acpi_evaluate_integer(handle, method,
+>> +				       pcount ? &arguments : NULL, &data);
+>> +	if (ACPI_FAILURE(status))
+>> +		return_ACPI_STATUS(status);
+>> +
+>> +	if (retval)
+>> +		*retval = data;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static umode_t hwm_is_visible(const void *data, enum hwmon_sensor_types type,
+>> +			      u32 __always_unused attr, int channel)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t const *driver_data = data;
+>> +
+>> +	if (channel >= driver_data->fan_count)
+>> +		return 0;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_fan:
+>> +		return 0444;
+>> +	case hwmon_pwm:
+>> +		return 0644;
+>> +	case hwmon_temp:
+>> +		return 0444;
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static int hwm_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>> +		    int channel, long *val)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = dev_get_drvdata(dev);
+>> +	struct acpi_device *pdev = to_acpi_device(dev->parent);
+>> +	unsigned long long params[2], retval;
+>> +	int ret;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_fan:
+>> +		params[0] = channel;
+>> +		ret = tuxi_tfan_method(pdev,
+>> +				       TUXI_TFAN_METHOD_GET_FAN_RPM,
+> These fit to same line.
+ack
 >
-> +GPD FAN DRIVER
-> +M:     Cryolitia PukNgae <Cryolitia@gmail.com>
-> +L:     linux-hwmon@vger.kernel.org
-> +S:     Maintained
-> +F:     drivers/hwmon/gpd-fan.c
+>> +				       params, 1, &retval);
+>> +		*val = retval > S32_MAX ? S32_MAX : retval;
+>> +		return ret;
+>> +	case hwmon_pwm:
+>> +		switch (attr) {
+>> +		case hwmon_pwm_input:
+>> +			if (driver_data->pwm_enabled) {
+>> +				*val = driver_data->curr_speed[channel];
+>> +				return 0;
+>> +			}
+>> +			params[0] = channel;
+>> +			ret = tuxi_tfan_method(pdev,
+>> +					       TUXI_TFAN_METHOD_GET_FAN_SPEED,
+>> +					       params, 1, &retval);
+>> +			*val = retval > S32_MAX ? S32_MAX : retval;
+>> +			return ret;
+>> +		case hwmon_pwm_enable:
+>> +			*val = driver_data->pwm_enabled;
+>> +			return ret;
+>> +		}
+>> +		break;
+>> +	case hwmon_temp:
+>> +		params[0] = channel;
+>> +		ret = tuxi_tfan_method(pdev,
+>> +				       TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+>> +				       params, 1, &retval);
+>> +		*val = retval > S32_MAX / 100 ?
+> Add linux/limits.h include.
 
-A problem we had with oxp sensors is that once OneXPlayer expanded
-their EC to include e.g., battery capacity limits, it was no longer
-appropriate for it to reside in hwmon. I expect GPD to do the same
-sometime in the near future. If that is the case, should we
-futureproof the driver by moving it to platform-x86 right away?
+ack
 
-> +
->  GPD POCKET FAN DRIVER
->  M:     Hans de Goede <hdegoede@redhat.com>
->  L:     platform-driver-x86@vger.kernel.org
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index dd376602f3f19c6f258651afeffbe1bb5d9b6b72..974b341c0bdaba147370de59f510140c0c937913 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -729,6 +729,16 @@ config SENSORS_GL520SM
->           This driver can also be built as a module. If so, the module
->           will be called gl520sm.
+It is included in kernel.h, so I read from this that kernel.h should not be used 
+but the parts of it directly?
+
 >
-> +config SENSORS_GPD
-> +       tristate "GPD handhelds"
-> +       depends on X86
-> +       help
-> +         If you say yes here you get support for fan readings and
-> +         control over GPD handheld devices.
-> +
-> +         Can also be built as a module. In that case it will be
-> +         called gpd-fan.
-> +
->  config SENSORS_G760A
->         tristate "GMT G760A"
->         depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index b827b92f2a7844418f3f3b6434a63b744b52c33d..cd512c19caa9737a2926a3d4860f65b65cd013c3 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -87,6 +87,7 @@ obj-$(CONFIG_SENSORS_GIGABYTE_WATERFORCE) += gigabyte_waterforce.o
->  obj-$(CONFIG_SENSORS_GL518SM)  += gl518sm.o
->  obj-$(CONFIG_SENSORS_GL520SM)  += gl520sm.o
->  obj-$(CONFIG_SENSORS_GSC)      += gsc-hwmon.o
-> +obj-$(CONFIG_SENSORS_GPD)      += gpd-fan.o
->  obj-$(CONFIG_SENSORS_GPIO_FAN) += gpio-fan.o
->  obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
->  obj-$(CONFIG_SENSORS_HIH6130)  += hih6130.o
-> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..782c9981d5357b11faad4e6cd75242828e667f95
-> --- /dev/null
-> +++ b/drivers/hwmon/gpd-fan.c
-> @@ -0,0 +1,681 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +/* Platform driver for GPD devices that expose fan control via hwmon sysfs.
-> + *
-> + * Fan control is provided via pwm interface in the range [0-255].
-> + * Each model has a different range in the EC, the written value is scaled to
-> + * accommodate for that.
-> + *
-> + * Based on this repo:
-> + * https://github.com/Cryolitia/gpd-fan-driver
-
-Perhaps the github link will date this. I would remove it.
-
-> + *
-> + * Copyright (c) 2024 Cryolitia PukNgae
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/ioport.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define DRIVER_NAME "gpdfan"
-> +#define GPD_PWM_CTR_OFFSET 0x1841
-> +
-> +static char *gpd_fan_board = "";
-> +module_param(gpd_fan_board, charp, 0444);
-> +
-> +// EC read/write locker
-> +// Should never access EC at the same time, otherwise system down.
-
-These two comments could use some rewording. E.g., Prevent access to
-the EC at the same time to avoid system instability.
-
-> +static DEFINE_MUTEX(gpd_fan_lock);
-> +
-> +enum gpd_board {
-> +       win_mini,
-> +       win4_6800u,
-> +       win_max_2,
-> +};
-> +
-> +enum FAN_PWM_ENABLE {
-> +       DISABLE         = 0,
-> +       MANUAL          = 1,
-> +       AUTOMATIC       = 2,
-> +};
-> +
-> +static struct {
-> +       enum FAN_PWM_ENABLE pwm_enable;
-> +       u8 pwm_value;
-> +
-> +       const struct gpd_fan_drvdata *drvdata;
-> +} gpd_driver_priv;
-> +
-> +struct gpd_fan_drvdata {
-> +       const char *board_name; /* Board name for module param comparison */
-> +       const enum gpd_board board;
-> +
-> +       const u8 addr_port;
-> +       const u8 data_port;
-> +       const u16 manual_control_enable;
-> +       const u16 rpm_read;
-> +       const u16 pwm_write;
-> +       const u16 pwm_max;
-> +};
-> +
-> +static struct gpd_fan_drvdata gpd_win_mini_drvdata = {
-> +       .board_name             = "win_mini",
-> +       .board                  = win_mini,
-> +
-> +       .addr_port              = 0x4E,
-> +       .data_port              = 0x4F,
-> +       .manual_control_enable  = 0x047A,
-> +       .rpm_read               = 0x0478,
-> +       .pwm_write              = 0x047A,
-> +       .pwm_max                = 244,
-> +};
-> +
-> +static struct gpd_fan_drvdata gpd_win4_drvdata = {
-> +       .board_name             = "win4",
-> +       .board                  = win4_6800u,
-> +
-> +       .addr_port              = 0x2E,
-> +       .data_port              = 0x2F,
-> +       .manual_control_enable  = 0xC311,
-> +       .rpm_read               = 0xC880,
-> +       .pwm_write              = 0xC311,
-> +       .pwm_max                = 127,
-> +};
-> +
-> +static struct gpd_fan_drvdata gpd_wm2_drvdata = {
-> +       .board_name             = "wm2",
-> +       .board                  = win_max_2,
-> +
-> +       .addr_port              = 0x4E,
-> +       .data_port              = 0x4F,
-> +       .manual_control_enable  = 0x0275,
-> +       .rpm_read               = 0x0218,
-> +       .pwm_write              = 0x1809,
-> +       .pwm_max                = 184,
-> +};
-> +
-> +static const struct dmi_system_id dmi_table[] = {
-> +       {
-> +               // GPD Win Mini
-> +               // GPD Win Mini with AMD Ryzen 8840U
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
-> +               },
-> +               .driver_data = &gpd_win_mini_drvdata,
-> +       },
-> +       {
-> +               // GPD Win Mini
-> +               // GPD Win Mini with AMD Ryzen HX370
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02")
-> +               },
-> +               .driver_data = &gpd_win_mini_drvdata,
-> +       },
-> +       {
-> +               // GPD Win Mini
-> +               // GPD Win Mini with AMD Ryzen HX370
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1617-02-L")
-> +               },
-> +               .driver_data = &gpd_win_mini_drvdata,
-> +       },
-> +       {
-> +               // GPD Win 4 with AMD Ryzen 6800U
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-> +                       DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
-> +               },
-> +               .driver_data = &gpd_win4_drvdata,
-> +       },
-> +       {
-> +               // GPD Win 4 with Ryzen 7840U
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-> +                       DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
-> +               },
-> +               // Since 7840U, win4 uses the same drvdata as wm2
-> +               .driver_data = &gpd_wm2_drvdata,
-> +       },
-> +       {
-> +               // GPD Win 4 with Ryzen 7840U (another)
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-> +                       DMI_MATCH(DMI_BOARD_VERSION, "Ver.1.0"),
-> +               },
-> +               .driver_data = &gpd_wm2_drvdata,
-> +       },
-> +       {
-> +               // GPD Win Max 2 with Ryzen 6800U
-> +               // GPD Win Max 2 2023 with Ryzen 7840U
-> +               // GPD Win Max 2 2024 with Ryzen 8840U
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
-> +               },
-> +               .driver_data = &gpd_wm2_drvdata,
-> +       },
-> +       {
-> +               // GPD Win Max 2 with AMD Ryzen HX370
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1619-05"),
-> +               },
-> +               .driver_data = &gpd_wm2_drvdata,
-> +       },
-> +       {
-> +               // GPD Pocket 4
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04"),
-> +               },
-> +               .driver_data = &gpd_win_mini_drvdata,
-> +       },
-> +       {
-> +               // GPD Pocket 4 (another)
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "G1628-04-L"),
-> +               },
-> +               .driver_data = &gpd_win_mini_drvdata,
-> +       },
-> +       {}
-> +};
-> +
-> +static const struct gpd_fan_drvdata *gpd_module_drvdata[] = {
-> +       &gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, NULL
-> +};
-> +
-> +/* Helper functions to handle EC read/write */
-> +static int gpd_ecram_read(const struct gpd_fan_drvdata *drvdata, u16 offset,
-> +                         u8 *val)
-> +{
-> +       int ret;
-> +       u16 addr_port = drvdata->addr_port;
-> +       u16 data_port = drvdata->data_port;
-> +
-> +       ret = mutex_lock_interruptible(&gpd_fan_lock);
-> +
-> +       if (ret)
-> +               return ret;
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x11, data_port);
-> +       outb(0x2F, addr_port);
-> +       outb((u8)((offset >> 8) & 0xFF), data_port);
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x10, data_port);
-> +       outb(0x2F, addr_port);
-> +       outb((u8)(offset & 0xFF), data_port);
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x12, data_port);
-> +       outb(0x2F, addr_port);
-> +       *val = inb(data_port);
-> +
-> +       mutex_unlock(&gpd_fan_lock);
-> +       return 0;
-> +}
-
-One concern I had with this driver while using it is that ACPI might
-have access to this EC. If that is the case, then this mutex is not
-exclusive and that could cause some instability. You can reference
-oxp-sensors for an ACPI lock.
-
-Although, if I am being honest, the lock in oxp-sensors is probably
-duplicative because ec_read already holds a mutex. In your case, you
-do not use ec_read so it is not.
-
-> +
-> +static int gpd_ecram_write(const struct gpd_fan_drvdata *drvdata, u16 offset,
-> +                          u8 value)
-> +{
-> +       int ret;
-> +       u16 addr_port = drvdata->addr_port;
-> +       u16 data_port = drvdata->data_port;
-> +
-> +       ret = mutex_lock_interruptible(&gpd_fan_lock);
-> +
-> +       if (ret)
-> +               return ret;
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x11, data_port);
-> +       outb(0x2F, addr_port);
-> +       outb((u8)((offset >> 8) & 0xFF), data_port);
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x10, data_port);
-> +       outb(0x2F, addr_port);
-> +       outb((u8)(offset & 0xFF), data_port);
-> +
-> +       outb(0x2E, addr_port);
-> +       outb(0x12, data_port);
-> +       outb(0x2F, addr_port);
-> +       outb(value, data_port);
-> +
-> +       mutex_unlock(&gpd_fan_lock);
-> +       return 0;
-> +}
-> +
-> +static int gpd_generic_read_rpm(void)
-> +{
-> +       u8 high, low;
-> +       int ret;
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +
-> +       ret = gpd_ecram_read(drvdata, drvdata->rpm_read, &high);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = gpd_ecram_read(drvdata, drvdata->rpm_read + 1, &low);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return (u16)high << 8 | low;
-> +}
-> +
-> +static int gpd_win4_read_rpm(void)
-> +{
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +       u8 pwm_ctr_reg;
-> +       int ret;
-> +
-> +       gpd_ecram_read(drvdata, GPD_PWM_CTR_OFFSET, &pwm_ctr_reg);
-> +
-> +       if (pwm_ctr_reg != 0x7F)
-> +               gpd_ecram_write(drvdata, GPD_PWM_CTR_OFFSET, 0x7F);
-> +
-> +       ret = gpd_generic_read_rpm();
-> +
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (ret == 0) {
-> +               // re-init EC
-> +               u8 chip_id;
-> +
-> +               gpd_ecram_read(drvdata, 0x2000, &chip_id);
-> +               if (chip_id == 0x55) {
-> +                       u8 chip_ver;
-> +
-> +                       if (gpd_ecram_read(drvdata, 0x1060, &chip_ver))
-> +                               gpd_ecram_write(drvdata, 0x1060,
-> +                                               chip_ver | 0x80);
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static int gpd_wm2_read_rpm(void)
-> +{
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +
-> +       for (u16 pwm_ctr_offset = GPD_PWM_CTR_OFFSET;
-> +            pwm_ctr_offset <= GPD_PWM_CTR_OFFSET + 2; pwm_ctr_offset++) {
-> +               u8 PWMCTR;
-> +
-> +               gpd_ecram_read(drvdata, pwm_ctr_offset, &PWMCTR);
-> +
-> +               if (PWMCTR != 0xB8)
-> +                       gpd_ecram_write(drvdata, pwm_ctr_offset, 0xB8);
-> +       }
-> +
-> +       return gpd_generic_read_rpm();
-> +}
-> +
-> +// Read value for fan1_input
-> +static int gpd_read_rpm(void)
-> +{
-> +       switch (gpd_driver_priv.drvdata->board) {
-> +       case win_mini:
-> +               return gpd_generic_read_rpm();
-> +       case win4_6800u:
-> +               return gpd_win4_read_rpm();
-> +       case win_max_2:
-> +               return gpd_wm2_read_rpm();
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int gpd_wm2_read_pwm(void)
-> +{
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +       u8 var;
-> +       int ret = gpd_ecram_read(drvdata, drvdata->pwm_write, &var);
-> +
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       return var * 255 / drvdata->pwm_max;
-> +}
-> +
-> +// Read value for pwm1
-> +static int gpd_read_pwm(void)
-> +{
-> +       switch (gpd_driver_priv.drvdata->board) {
-> +       case win_mini:
-> +       case win4_6800u:
-> +               return gpd_driver_priv.pwm_value;
-> +       case win_max_2:
-> +               return gpd_wm2_read_pwm();
-> +       }
-> +       return 0;
-> +}
-> +
-> +static int gpd_generic_write_pwm(u8 val)
-> +{
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +       u8 pwm_reg;
-> +
-> +       // PWM value's range in EC is 1 - pwm_max, cast 0 - 255 to it.
-> +       pwm_reg = val * (drvdata->pwm_max - 1) / 255 + 1;
-> +       return gpd_ecram_write(drvdata, drvdata->pwm_write, pwm_reg);
-> +}
-> +
-> +static int gpd_win_mini_write_pwm(u8 val)
-> +{
-> +       if (gpd_driver_priv.pwm_enable == MANUAL)
-> +               return gpd_generic_write_pwm(val);
-> +       else
-> +               return -EPERM;
-> +}
-> +
-> +static int gpd_wm2_write_pwm(u8 val)
-> +{
-> +       if (gpd_driver_priv.pwm_enable != DISABLE)
-> +               return gpd_generic_write_pwm(val);
-> +       else
-> +               return -EPERM;
-> +}
-> +
-> +// Write value for pwm1
-> +static int gpd_write_pwm(u8 val)
-> +{
-> +       switch (gpd_driver_priv.drvdata->board) {
-> +       case win_mini:
-> +               return gpd_win_mini_write_pwm(val);
-> +       case win4_6800u:
-> +               return gpd_generic_write_pwm(val);
-> +       case win_max_2:
-> +               return gpd_wm2_write_pwm(val);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int gpd_win_mini_set_pwm_enable(enum FAN_PWM_ENABLE pwm_enable)
-> +{
-> +       const struct gpd_fan_drvdata *drvdata;
-> +
-> +       switch (pwm_enable) {
-> +       case DISABLE:
-> +               return gpd_generic_write_pwm(255);
-> +       case MANUAL:
-> +               return gpd_generic_write_pwm(gpd_driver_priv.pwm_value);
-> +       case AUTOMATIC:
-> +               drvdata = gpd_driver_priv.drvdata;
-> +               return gpd_ecram_write(drvdata, drvdata->pwm_write, 0);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int gpd_wm2_set_pwm_enable(enum FAN_PWM_ENABLE enable)
-> +{
-> +       const struct gpd_fan_drvdata *const drvdata = gpd_driver_priv.drvdata;
-> +       int ret;
-> +
-> +       switch (enable) {
-> +       case DISABLE: {
-> +               ret = gpd_generic_write_pwm(255);
-> +
-> +               if (ret)
-> +                       return ret;
-> +
-> +               return gpd_ecram_write(drvdata, drvdata->manual_control_enable,
-> +                                      1);
-> +       }
-> +       case MANUAL: {
-> +               ret = gpd_generic_write_pwm(gpd_driver_priv.pwm_value);
-> +
-> +               if (ret)
-> +                       return ret;
-> +
-> +               return gpd_ecram_write(drvdata, drvdata->manual_control_enable,
-> +                                      1);
-> +       }
-> +       case AUTOMATIC: {
-> +               ret = gpd_ecram_write(drvdata, drvdata->manual_control_enable,
-> +                                     0);
-> +
-> +               return ret;
-> +       }
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +// Write value for pwm1_enable
-> +static int gpd_set_pwm_enable(enum FAN_PWM_ENABLE enable)
-> +{
-> +       switch (gpd_driver_priv.drvdata->board) {
-> +       case win_mini:
-> +       case win4_6800u:
-> +               return gpd_win_mini_set_pwm_enable(enable);
-> +       case win_max_2:
-> +               return gpd_wm2_set_pwm_enable(enable);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static umode_t gpd_fan_hwmon_is_visible(__always_unused const void *drvdata,
-> +                                       enum hwmon_sensor_types type, u32 attr,
-> +                                       __always_unused int channel)
-> +{
-> +       if (type == hwmon_fan && attr == hwmon_fan_input) {
-> +               return 0444;
-> +       } else if (type == hwmon_pwm) {
-> +               switch (attr) {
-> +               case hwmon_pwm_enable:
-> +               case hwmon_pwm_input:
-> +                       return 0644;
-> +               default:
-> +                       return 0;
-> +               }
-> +       }
-> +       return 0;
-> +}
-> +
-> +static int gpd_fan_hwmon_read(__always_unused struct device *dev,
-> +                             enum hwmon_sensor_types type, u32 attr,
-> +                             __always_unused int channel, long *val)
-> +{
-> +       if (type == hwmon_fan) {
-> +               if (attr == hwmon_fan_input) {
-> +                       int ret = gpd_read_rpm();
-> +
-> +                       if (ret < 0)
-> +                               return ret;
-> +
-> +                       *val = ret;
-> +                       return 0;
-> +               }
-> +               return -EOPNOTSUPP;
-> +       } else if (type == hwmon_pwm) {
-> +               int ret;
-> +
-> +               switch (attr) {
-> +               case hwmon_pwm_enable:
-> +                       *val = gpd_driver_priv.pwm_enable;
-> +                       return 0;
-> +               case hwmon_pwm_input:
-> +                       ret = gpd_read_pwm();
-> +
-> +                       if (ret < 0)
-> +                               return ret;
-> +
-> +                       *val = ret;
-> +                       return 0;
-> +               default:
-> +                       return -EOPNOTSUPP;
-> +               }
-> +       }
-> +
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static int gpd_fan_hwmon_write(__always_unused struct device *dev,
-> +                              enum hwmon_sensor_types type, u32 attr,
-> +                              __always_unused int channel, long val)
-> +{
-> +       u8 var;
-> +
-> +       if (type == hwmon_pwm) {
-> +               switch (attr) {
-> +               case hwmon_pwm_enable:
-> +                       if (!in_range(val, 0, 3))
-> +                               return -EINVAL;
-> +
-> +                       gpd_driver_priv.pwm_enable = val;
-> +
-> +                       return gpd_set_pwm_enable(gpd_driver_priv.pwm_enable);
-> +               case hwmon_pwm_input:
-> +                       var = clamp_val(val, 0, 255);
-> +
-> +                       gpd_driver_priv.pwm_value = var;
-> +
-> +                       return gpd_write_pwm(var);
-> +               default:
-> +                       return -EOPNOTSUPP;
-> +               }
-> +       }
-> +
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static const struct hwmon_ops gpd_fan_ops = {
-> +       .is_visible = gpd_fan_hwmon_is_visible,
-> +       .read = gpd_fan_hwmon_read,
-> +       .write = gpd_fan_hwmon_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *gpd_fan_hwmon_channel_info[] = {
-> +       HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
-> +       HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
-> +       NULL
-> +};
-> +
-> +static struct hwmon_chip_info gpd_fan_chip_info = {
-> +       .ops = &gpd_fan_ops,
-> +       .info = gpd_fan_hwmon_channel_info
-> +};
-> +
-> +static int gpd_fan_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       const struct resource *res;
-> +       const struct device *hwdev;
-> +       const struct resource *region;
-> +
-> +       res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> +       if (IS_ERR(res))
-> +               return dev_err_probe(dev, PTR_ERR(res),
-> +                                    "Failed to get platform resource\n");
-> +
-> +       region = devm_request_region(dev, res->start,
-> +                                    resource_size(res), DRIVER_NAME);
-> +       if (IS_ERR(region))
-> +               return dev_err_probe(dev, PTR_ERR(region),
-> +                                    "Failed to request region\n");
-> +
-> +       hwdev = devm_hwmon_device_register_with_info(dev,
-> +                                                    DRIVER_NAME,
-> +                                                    NULL,
-> +                                                    &gpd_fan_chip_info,
-> +                                                    NULL);
-> +       if (IS_ERR(hwdev))
-> +               return dev_err_probe(dev, PTR_ERR(region),
-> +                                    "Failed to register hwmon device\n");
-> +
-> +       return 0;
-> +}
-> +
-> +static void gpd_fan_remove(__always_unused struct platform_device *pdev)
-> +{
-> +       gpd_driver_priv.pwm_enable = AUTOMATIC;
-> +       gpd_set_pwm_enable(AUTOMATIC);
-> +}
-> +
-> +static struct platform_driver gpd_fan_driver = {
-> +       .probe = gpd_fan_probe,
-> +       .remove = gpd_fan_remove,
-> +       .driver = {
-> +               .name = KBUILD_MODNAME,
-> +       },
-> +};
-> +
-> +static struct platform_device *gpd_fan_platform_device;
-> +
-> +static int __init gpd_fan_init(void)
-> +{
-> +       const struct gpd_fan_drvdata *match = NULL;
-> +
-> +       for (const struct gpd_fan_drvdata **p = gpd_module_drvdata; *p; p++) {
-> +               if (strcmp(gpd_fan_board, (*p)->board_name) == 0) {
-> +                       match = *p;
-> +                       break;
-> +               }
-> +       }
-> +
-> +       if (!match) {
-> +               const struct dmi_system_id *dmi_match =
-> +                       dmi_first_match(dmi_table);
-> +               if (dmi_match)
-> +                       match = dmi_match->driver_data;
-> +       }
-> +
-> +       if (!match)
-> +               return -ENODEV;
-> +
-> +       gpd_driver_priv.pwm_enable = AUTOMATIC;
-> +       gpd_driver_priv.pwm_value = 255;
-> +       gpd_driver_priv.drvdata = match;
-> +
-> +       struct resource gpd_fan_resources[] = {
-> +               {
-> +                       .start = match->addr_port,
-> +                       .end = match->data_port,
-> +                       .flags = IORESOURCE_IO,
-> +               },
-> +       };
-> +
-> +       gpd_fan_platform_device = platform_create_bundle(&gpd_fan_driver,
-> +                                                        gpd_fan_probe,
-> +                                                        gpd_fan_resources,
-> +                                                        1, NULL, 0);
-> +
-> +       if (IS_ERR(gpd_fan_platform_device)) {
-> +               pr_warn("Failed to create platform device\n");
-> +               return PTR_ERR(gpd_fan_platform_device);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void __exit gpd_fan_exit(void)
-> +{
-> +       platform_device_unregister(gpd_fan_platform_device);
-> +       platform_driver_unregister(&gpd_fan_driver);
-> +}
-> +
-> +MODULE_DEVICE_TABLE(dmi, dmi_table);
-> +
-> +module_init(gpd_fan_init);
-> +module_exit(gpd_fan_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Cryolitia PukNgae <Cryolitia@gmail.com>");
-> +MODULE_DESCRIPTION("GPD Devices fan control driver");
+>> +			S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) * 100;
+> Is the math wrong, as you do retval - TUXI_FW_TEMP_OFFSET before
+> multiplying?
+No, retval is in 10th of °K (but the last number is always 0) so is 
+TUXI_FW_TEMP_OFFSET which is there to convert it to 10th of °C, the * 100 is 
+then to bring it in line with hwmon wanting to output milli degrees
+> Shouldn't it be like this:
 >
-> --
-> 2.48.1
+> 		retval -= TUXI_FW_TEMP_OFFSET;
+> 		*val = min(retval * 100, (unsigned long long)S32_MAX);
+As retval is unsigned this would not work with (theoretical) negative °C.
 >
+> + add include for min().
+
+And for max() used elsewere in the code -> ack
+
 >
+>> +		return ret;
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static int hwm_read_string(struct device *dev,
+>> +			   enum hwmon_sensor_types __always_unused type,
+>> +			   u32 __always_unused attr, int channel,
+>> +			   const char **str)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = dev_get_drvdata(dev);
+>> +
+>> +	*str = driver_data->fan_types[channel];
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int write_speed(struct device *dev, int channel, u8 val, bool force)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = dev_get_drvdata(dev);
+>> +	struct acpi_device *pdev = to_acpi_device(dev->parent);
+>> +	unsigned long long params[2];
+>> +	u8 temp_level;
+>> +	int ret;
+>> +
+>> +	params[0] = channel;
+>> +
+>> +	/* The heatpipe across the DRMs is shared between both fans and the DRMs
+> In multi-line comments:
+>
+> 	/*
+> 	 * Text starts here...
+Ack
+>
+> What are DRMs? I guess it's neither Digital Rights Managements nor Direct
+> Rendering Managers :-).
+Sorry brainfail, wanted to write VRMs. Good that I failed twice xD.
+>
+>> +	 * are the most likely to go up in smoke. So it's better to apply the
+>> +	 * minimum fan speed to all fans if either CPU or GPU is working hard.
+>> +	 */
+>> +	temp_level = max_array(driver_data->temp_level, driver_data->fan_count);
+>> +	if (temp_level)
+>> +		params[1] = max_t(u8, val,
+>> +				  temp_levels[temp_level - 1].min_speed);
+> Both are already u8 so why you need max_t(), max() should be sufficient
+> when types are already right.
+>
+> Include is missing.
+>
+>> +	else if (val < TUXI_PWM_FAN_ON_MIN_SPEED / 2)
+>> +		params[1] = 0;
+>> +	else if (val < TUXI_PWM_FAN_ON_MIN_SPEED)
+>> +		params[1] = TUXI_PWM_FAN_ON_MIN_SPEED;
+>> +	else
+>> +		params[1] = val;
+>> +
+>> +	if (force || params[1] != driver_data->curr_speed[channel])
+>> +		ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_SPEED,
+>> +				       params, 2, NULL);
+>> +	if (ret)
+>> +		return ret;
+> Please indent this to the correct level.
+ack
+>
+>> +
+>> +	driver_data->curr_speed[channel] = params[1];
+> The use of params[1] obfuscates meaning, please use local variable with a
+> proper name and only assign it into params[1] for the tuxi_tfan_method call.
+ack
+>
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int hwm_write(struct device *dev,
+>> +		     enum hwmon_sensor_types __always_unused type, u32 attr,
+>> +		     int channel, long val)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = dev_get_drvdata(dev);
+>> +	struct acpi_device *pdev = to_acpi_device(dev->parent);
+>> +	unsigned long long params[2];
+>> +	unsigned int i;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_pwm_input:
+>> +		if (val > U8_MAX || val < 0)
+>> +			return -EINVAL;
+>> +
+>> +		if (driver_data->pwm_enabled) {
+>> +			driver_data->want_speed[channel] = val;
+>> +			return write_speed(dev, channel, val, false);
+>> +		}
+>> +
+>> +		return 0;
+>> +	case hwmon_pwm_enable:
+>> +		params[0] = val ? 1 : 0;
+> Can those two literals be named with defines?
+ack
+>
+>> +		ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE,
+>> +				       params, 1, NULL);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		driver_data->pwm_enabled = val;
+>> +
+>> +		/* Activating PWM sets speed to 0. Alternative design decision
+>> +		 * could be to keep the current value. This would require proper
+>> +		 * setting of driver_data->curr_speed for example.
+>> +		 */
+>> +		if (val)
+> Consider:
+> 		if (!val)
+> 			return 0;
+>
+> So you can deindent the loop by one level.
+Imho it makes the logic harder to follow and considering the only short code 
+lines following after, I don't really see the benefit.
+>
+>> +			for (i = 0; i < driver_data->fan_count; ++i) {
+>> +				ret = write_speed(dev, i, 0, true);
+>> +				if (ret)
+>> +					return ret;
+>> +			}
+>> +
+>> +		return 0;
+>> +	}
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static const struct hwmon_ops hwmops = {
+>> +	.is_visible = hwm_is_visible,
+>> +	.read = hwm_read,
+>> +	.read_string = hwm_read_string,
+>> +	.write = hwm_write,
+>> +};
+>> +
+>> +static const struct hwmon_channel_info * const hwmcinfo[] = {
+>> +	HWMON_CHANNEL_INFO(fan,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL),
+>> +	HWMON_CHANNEL_INFO(pwm,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>> +			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct hwmon_chip_info hwminfo = {
+>> +	.ops = &hwmops,
+>> +	.info = hwmcinfo
+>> +};
+>> +
+>> +static u8 tuxi_get_temp_level(struct tuxi_hwmon_driver_data_t *driver_data,
+>> +			      u8 fan_id, long temp)
+>> +{
+>> +	long temp_low, temp_high;
+>> +	unsigned int i;
+>> +	int ret;
+>> +
+>> +	ret = driver_data->temp_level[fan_id];
+>> +
+>> +	for (i = 0; temp_levels[i].temp; ++i) {
+>> +		temp_low = i == 0 ? S32_MIN : temp_levels[i - 1].temp;
+>> +		temp_high = temp_levels[i].temp;
+>> +		if (ret > i)
+>> +			temp_high -= TUXI_TEMP_LEVEL_HYSTERESIS;
+>> +
+>> +		if (temp >= temp_low && temp < temp_high)
+>> +			ret = i;
+> Why you cannot return i; immediately here?
 
-I will try to swap from the dkms variant to this series soon.
+leftover from when the loop wasn't it's own function
 
-Best,
-Antheas
+ack
+
+>
+>> +	}
+>> +	if (temp >= temp_high)
+>> +		ret = i;
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static void tuxi_periodic_hw_safeguard(struct work_struct *work)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = container_of(work,
+>> +								    struct tuxi_hwmon_driver_data_t,
+>> +								    work.work);
+>> +	struct device *dev = driver_data->hwmdev;
+>> +	struct acpi_device *pdev = to_acpi_device(dev->parent);
+>> +	unsigned long long params[2], retval;
+>> +	unsigned int i;
+>> +	long temp;
+>> +	int ret;
+>> +
+>> +	for (i = 0; i < driver_data->fan_count; ++i) {
+>> +		params[0] = i;
+>> +		ret = tuxi_tfan_method(pdev,
+>> +				       TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+>> +				       params, 1, &retval);
+>> +		/* If reading the temprature fails, default to a high value to
+> temperature
+thx for spotting
+>
+>> +		 * be on the safe side in the worst case.
+>> +		 */
+>> +		if (ret)
+>> +			retval = 2720 + 1200;
+> TUXI_FW_TEMP_OFFSET + 1200 ?
+>
+> Why it doesn't match to that define??
+Typo and from before the define existed, fixed.
+>
+>> +
+>> +		temp = retval > S32_MAX / 100 ?
+>> +			S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) * 100;
+> Same math issue comment as above.
+>
+> Why is the read+conversion code duplicated into two places?
+because here it is with special error handling and didn't thought about an own 
+function for a defacto 2 liner
+>
+>> +
+>> +		driver_data->temp_level[i] = tuxi_get_temp_level(driver_data, i,
+>> +								 temp);
+>> +	}
+>> +
+>> +	// Reapply want_speeds to respect eventual new temp_levels
+>> +	for (i = 0; i < driver_data->fan_count; ++i)
+>> +		write_speed(dev, i, driver_data->want_speed[i], false);
+>> +
+>> +	schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
+>> +}
+>> +
+>> +static int tuxi_hwmon_add_devices(struct acpi_device *pdev, struct device **hwmdev)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data;
+>> +	unsigned long long params[2], retval;
+>> +	unsigned int i;
+>> +	int ret;
+>> +
+>> +	/* The first version of TUXI TFAN didn't have the Get Fan Temperature
+>> +	 * method which is integral to this driver. So probe for existence and
+>> +	 * abort otherwise.
+>> +	 *
+>> +	 * The Get Fan Speed method is also missing in that version, but was
+>> +	 * added in the same version so it doesn't have to be probe separately.
+>> +	 */
+>> +	params[0] = 0;
+>> +	ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_TEMPERATURE,
+>> +			       params, 1, &retval);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	driver_data = devm_kzalloc(&pdev->dev, sizeof(*driver_data), GFP_KERNEL);
+>> +	if (!driver_data)
+>> +		return -ENOMEM;
+>> +
+>> +	/* Loading this module sets the fan mode to auto. Alternative design
+>> +	 * decision could be to keep the current value. This would require
+>> +	 * proper initialization of driver_data->curr_speed for example.
+>> +	 */
+>> +	params[0] = 0;
+> Is this 0 ..._MODE_AUTO? Please use a named define if that's the case.
+ack
+>
+>> +	ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE, params, 1,
+>> +			       NULL);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_COUNT, NULL, 0,
+>> +			       &retval);
+>> +	if (ret)
+>> +		return ret;
+>> +	if (retval > TUXI_MAX_FAN_COUNT)
+>> +		return -EINVAL;
+>> +	driver_data->fan_count = retval;
+>> +
+>> +	for (i = 0; i < driver_data->fan_count; ++i) {
+>> +		params[0] = i;
+>> +		ret = tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_GET_FAN_TYPE,
+>> +				       params, 1, &retval);
+>> +		if (ret)
+>> +			return ret;
+>> +		else if (retval >= ARRAY_SIZE(tuxi_fan_type_labels))
+> No need for else as there's return.
+ack
+>
+>> +			return -EOPNOTSUPP;
+>> +		driver_data->fan_types[i] = tuxi_fan_type_labels[retval];
+>> +	}
+>> +
+>> +	*hwmdev = devm_hwmon_device_register_with_info(&pdev->dev,
+>> +						       "tuxedo_nbxx_acpi_tuxi",
+>> +						       driver_data, &hwminfo,
+>> +						       NULL);
+>> +	ret = PTR_ERR_OR_ZERO(*hwmdev);
+>> +	if (ret)
+> This obfuscates what you're doing here as you do not actually use 0 at
+> all. Please use this instead:
+>
+> 	if (IS_ERR(*hwmdev))
+> 		return PTR_ERR(*hwmdev);
+ack
+>
+>> +		return ret;
+>> +
+>> +	driver_data->hwmdev = *hwmdev;
+>> +
+>> +	INIT_DELAYED_WORK(&driver_data->work, tuxi_periodic_hw_safeguard);
+>> +	schedule_delayed_work(&driver_data->work, TUXI_SAFEGUARD_PERIOD);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void tuxi_hwmon_remove_devices(struct device *hwmdev)
+>> +{
+>> +	struct tuxi_hwmon_driver_data_t *driver_data = dev_get_drvdata(hwmdev);
+>> +	struct acpi_device *pdev = to_acpi_device(hwmdev->parent);
+>> +	unsigned long long params[2];
+>> +
+>> +	cancel_delayed_work_sync(&driver_data->work);
+>> +
+>> +	params[0] = 0;
+> Use a named define?
+ack
+>
+>> +	tuxi_tfan_method(pdev, TUXI_TFAN_METHOD_SET_FAN_MODE, params, 1, NULL);
+>> +}
+>> +
+>> +static int tuxi_add(struct acpi_device *device)
+>> +{
+>> +	struct tuxi_driver_data_t *driver_data;
+>> +	acpi_status status;
+>> +
+>> +	driver_data = devm_kzalloc(&device->dev, sizeof(*driver_data),
+>> +				   GFP_KERNEL);
+>> +	if (!driver_data)
+>> +		return -ENOMEM;
+>> +
+>> +	// Find subdevices
+>> +	status = acpi_get_handle(device->handle, "TFAN",
+>> +				 &driver_data->tfan_handle);
+>> +	if (ACPI_FAILURE(status))
+>> +		return_ACPI_STATUS(status);
+>> +
+>> +	dev_set_drvdata(&device->dev, driver_data);
+>> +
+>> +	return tuxi_hwmon_add_devices(device, &driver_data->hwmdev);
+>> +}
+>> +
+>> +static void tuxi_remove(struct acpi_device *device)
+>> +{
+>> +	struct tuxi_driver_data_t *driver_data = dev_get_drvdata(&device->dev);
+>> +
+>> +	tuxi_hwmon_remove_devices(driver_data->hwmdev);
+>> +}
+>> +
+>> +static struct acpi_driver acpi_driver = {
+>> +	.name = "tuxedo_nbxx_acpi_tuxi",
+>> +	.ids = acpi_device_ids,
+>> +	.ops = {
+>> +		.add = tuxi_add,
+>> +		.remove = tuxi_remove,
+>> +	},
+>> +};
+>> +
+>> +module_acpi_driver(acpi_driver);
+>> +
+>> +MODULE_DESCRIPTION("TUXEDO TUXI");
+> Perhaps this could be made a more specific to the actual functionality?
+yes overlooked this, was still a placeholder from the very beginning of writing 
+this code.
+>
+>> +MODULE_AUTHOR("Werner Sembach <wse@tuxedocomputers.com>");
+>> +MODULE_LICENSE("GPL");
+>>
+v3 incomming
+
+Best regards,
+
+Werner
+
