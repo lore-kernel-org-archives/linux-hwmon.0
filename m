@@ -1,67 +1,67 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377F21FF5EB;
-	Fri, 14 Mar 2025 14:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2219B3B7A8;
+	Fri, 14 Mar 2025 15:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741962207; cv=none; b=I6oOTflpoFVcaG4DWsxMkUjgE/XJ+7ZwymB83wBPfAlko9NK6Pqe+k8OpH1u/J/rwtqwtTrMr/F5iynx7WXwX2xccpSHDbn4ijTeJUy8nvOov/BRrhTAhLFS2UiiyTUO7bqeS38hQv7SJAT0Z862rPZYZcupFNOx3uNhBQT+qVc=
+	t=1741964476; cv=none; b=SIznYn4QB8dddAiD2dE9PDnmdJLdJyjFH/B+gad5KGp+8H6pvUhKLDMgD4Jpi+lTBjrBJ+YMeZ/iBNTPfSdKx21JhT/Ca9ODH7IuVIgPQtiyR2Gm8XX1R/68IVK5tx68tYUaol0L6LxqBpBQBy8XrZy8VFjrNiOWUe9nvRaSpAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741962207; c=relaxed/simple;
-	bh=pEjdX24R2qOQHhHO8GtjN8hy9iBx/vf7c+ERVnPYw0w=;
+	s=arc-20240116; t=1741964476; c=relaxed/simple;
+	bh=GaRu5ERVoPZsrgYIAIhEjraG/SaBYRHYbSm2zGpJ9qw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tGfcPBxD4IV7LGgXYoXZyY3AzT3BI4ziDnqTcsdblcm1wMTizwrDAahewxkIXeXxPdhjs5/L7hAU2up+W4vwqHo+NeEQoiDf0xLTPk3xrlhGJQXbWR5qLvybA+TmUEWflBNck9Oa51V9ctNKwxz3q6+SvFPWdtVcjqGvdk+XDsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObRxrdCh; arc=none smtp.client-ip=209.85.216.52
+	 In-Reply-To:Content-Type; b=EWdQIS/mLax9IOF2Y0DAPm6Im2dFcFtnujWoJoQakNWAJiYFIoYQbn9JtTy16jhkTUj9b6n9+PKHyQhmtOuGlUuc7lUfOmh+MX97ef7+yP97jidx3H3AS1dFUEn8jVB7IuaMUoriwtCNi5unLwHFNFWopWZdmYExoxZdi+W1YJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OA7htbUY; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObRxrdCh"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ff799d99dcso4439337a91.1;
-        Fri, 14 Mar 2025 07:23:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OA7htbUY"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2235189adaeso39858955ad.0;
+        Fri, 14 Mar 2025 08:01:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741962204; x=1742567004; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741964473; x=1742569273; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNJToVRxkj9gSN78UZ+8BwUBvD3Z5JHkelp5nFBUOE0=;
-        b=ObRxrdChT4YPF50OAKJKvnmc1RuLq1ercnDR6a8VE4/eMOfAFUtou2SSbfyu2wGd3e
-         nHolZnJhNU91KOe/FdGpc6OiHgaxN9Pmt/EHXkHK2qVSPj/NF3to5EzE0RhWGW9elL5a
-         alTfL77FzofQlpGgOASrnud7qJztGgQAso2SZRZ43TsCt/Pix91Ab9XjO7Bx4UstJkS/
-         UkPc1C/6R+84WiwEyBbIxshQH/NCzy8edi+ewOQD8zZOizlx8gqjPebre5h8MmUX4F6o
-         xdkfZ9MKRtWfPbbTj+hutKMD3IPf3NR7acsU7+rfuUguax3ZMt/q3iu9tryY3oaoo/c7
-         fI5Q==
+        bh=dkqIt0dAm4flood+lEBFlTOVHHH/M15qiTxF9ROPp+o=;
+        b=OA7htbUYVwuoblnYieeAnJtXiq9LwQA1lfb+J4dklY4odkzi8BV8OVvKQLtkCTD9oz
+         LwVK3tP6PkoIpQLDjRgvJ93O4g24TgQGzJSHV11n88DOh93LWOw09eGW5SJZT5uwuTle
+         lS62mFWIq1RzZh8sl5duM54jsXxw5u5mN0SoE4jHf4/SVf9SJ+o+tkCTREh/iiq7QnbZ
+         X6WERgReG2svBMYD6ijHXDkAkf5cEElyb3oquh3KinbtokKZfHZ+LV2r/NDL8i4wRrGY
+         B5PgAtovoUAuXKvEBHJrwXLV3AJdK77HSwrphqukpG632z2qk3UZBriJTVU6M5Qzc8x8
+         TKeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741962204; x=1742567004;
+        d=1e100.net; s=20230601; t=1741964473; x=1742569273;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uNJToVRxkj9gSN78UZ+8BwUBvD3Z5JHkelp5nFBUOE0=;
-        b=pn4yj15z4rJEszjWRFaoU82qJFMgFjordtb0MlqlsIVjGfPpQymA9fCf/o9do/KCZe
-         9oIuB9mNmopVqJLgStBGZUCuAbXRLcXmP9Ak18GXuMUHCL9e8pXzyoSPBjd5zr/YkH0N
-         t/7yjTY9w7YroXfxmG1IRajDN02aRxGScCcwdODYD1WZ5e+WmLgLwj+CnxaApqBHv91+
-         r9RCux2zmbObfrFe4s5/8750TLqaPrjlVO15btV08PYYNS3lGF0eAsIVt9xl8977sHLa
-         Y0LhrRdJyEfA1rDOb385WUw/iAv5yumOmx0xWUXW4njo8kkijqCHDe8dQ/UNN68xZJJh
-         7YBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZGGsjbv6UOUi5HUF505t+3pN9Wu5iuaR721b6mR1cMdBYiJ6gE5xCHTofpUkvVkciDK5LXTbGYw+oYGHT@vger.kernel.org, AJvYcCVYXm2MxTsKdMFvj1C8e497YdS651TZYhXbv4PRsMKJMIALKc5H8A7OHcD8wndnCWed/ANPWop6JoRX1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHZEjSkMqpTKovTVahHIlkTW4cz5jsujM3804EdjwggYxsbAiu
-	71v9hNZ34/oQr2zN/2o/cJAv96lXFYHEqWOn3vSq2qgZogwlf5qu
-X-Gm-Gg: ASbGncsTAcyFmBJW3U481iLw2AFekRUVstT95w1KzUnjofbSPfPkOxlmXyq4ui8pQrM
-	dDNqbovLGnCZhswTq7HGwRVwTEXa+q4EblZmk+Uy65UWRDqtHA0vvVAGsa4YgQiQlG4UXnr1ZWL
-	Sna98kGEZSNRkMZgb7eOl/JkY8Aibs0Bj9gbQGR9DR4gyRV++E3n1faT9wbJxkWSUpYc5mkZoDC
-	iAYZg3oC2LrP4Ye+5KiZhmx1QrGCyL6n3T38FGGBgYUpzzP2H6PaJny72f6EPSWTBCDsSmv0lsM
-	bhIQcPFSMVyPIYMWix7QjC1Dann0D12JalPOzY1f6NlM2i05DzVsRu5hhkQYlOzj8rev6SDz8pj
-	l1emKmuoDMQc7Iqk8rg==
-X-Google-Smtp-Source: AGHT+IGyKSHsBl3vQIbkGe1tj6XJ5FsfEJXyyChd8Wl6/UgHQoCRuL4PFEak/DRtGbx+aaAvVsfZmA==
-X-Received: by 2002:a17:90b:5144:b0:2f4:432d:250d with SMTP id 98e67ed59e1d1-30151cff08emr3314697a91.21.1741962204416;
-        Fri, 14 Mar 2025 07:23:24 -0700 (PDT)
+        bh=dkqIt0dAm4flood+lEBFlTOVHHH/M15qiTxF9ROPp+o=;
+        b=FUc5SAZ9QCq1cabrNDBeocjTCDjaAexJeP22NV+0z8mHUtEvM9DGdsgE4bykVkINgh
+         DvroKAF6yU4Z//QGCqVjTmik85ilElQuNiWWjpEhBjJUx3gtmXKaWfH14gOwfypm4ilW
+         Goo2X5Zab9RbqakR1Ovc035IyS2nXm0WZP4PWgukp/2nUpjWyryGP56gMzYaNkZu8s4i
+         Hma7aD2dwPF1yWNbTk9csS79rBedNvi1DWK0p1Qa3HLSTRjTeh8qcYURpowiK2LJF1tf
+         nEBvqpKSsSJxp3D3uMFdFxDY7mPzR13bB/kONB1Nz4AbCzo/yP/Qwppv9pBtjl6SRt3L
+         jNXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdEHc6uMnH+zP/Bu76n95LZvxK9p+iozrL+C2ESCW/ZVLn4gMtlOSladh/THAyKTxZY8iWciHoK54jlQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwubHT8EDvcEpa0hmsVZsEqom891WxFNGssdEzW6MoeR/4Ufkws
+	kCifkMOYnDq5dv2IpDXmt6j7g7CcT1A1pU4jscxvKOQUVFGNt+ur
+X-Gm-Gg: ASbGnctSrCZBNbuTe7AY2XqvyWPVxXBugFDJuBRivZb7PHkeq3saJB0Qqh1wwHu2dt/
+	UO+eD5ly5R+9OufbXq3Vt1CdoZ0mz1qG3tIsLdH2CFHcTamvIDSTAQIUm6DINOtYgE6m4YkaWu0
+	vq9/Yylw+252gZWoyUTQ0Bre6dGJWSdTXT/QWFFVQP20koidIaztDmbvfEnalOAe3six4V27015
+	U8I5qMKGUN+rBkZw/6l5vZKE8ZpVpa6lsl0lq5HzS8tIwV2oIvH5bs+bNQIdzd10sG3tQ7X4RAx
+	h5l28Jn8o7gsWYXWJxv92Z2uO1e7g7XOWUgfO6p+q0GRUDG643sLqEOQjzua/ZV/H95IY466QFm
+	Buo7+hZkTxAzjKBfWLw==
+X-Google-Smtp-Source: AGHT+IHiTPxk83WFDew56WptLQbTVNUkpAFnbJkjARem9rmckTJEQH7ZKDnJfEiI9D/tmOSaAnxRlw==
+X-Received: by 2002:a17:902:cec4:b0:223:4d5e:7592 with SMTP id d9443c01a7336-225c66cbf5emr89034945ad.21.1741964471781;
+        Fri, 14 Mar 2025 08:01:11 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301534f477csm1064747a91.5.2025.03.14.07.23.23
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6888653sm29611615ad.22.2025.03.14.08.01.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 07:23:23 -0700 (PDT)
+        Fri, 14 Mar 2025 08:01:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b9301c9b-9fac-46c4-ae6a-95029a1a2668@roeck-us.net>
-Date: Fri, 14 Mar 2025 07:23:22 -0700
+Message-ID: <899edff7-eba1-49fb-9626-576798452f30@roeck-us.net>
+Date: Fri, 14 Mar 2025 08:01:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,17 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: (cros_ec) Add reading target fan RPM function
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
-Cc: Sung-Chi Li <lschyi@chromium.org>, Jean Delvare <jdelvare@suse.com>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org>
- <20250313-extend_ec_hwmon_fan-v1-2-5c566776f2c4@chromium.org>
- <782e6319-2082-4f05-9987-fa68439701ef@t-8ch.de>
- <523fe47a-73da-4eec-80b7-61408e0ba27b@roeck-us.net>
- <5cb816c0-c445-4a23-82de-e3d9cbce54ee@t-8ch.de>
+Subject: Re: [PATCH v2] hwmon: (acpi_power_meter) Replace the deprecated
+ hwmon_device_register
+To: Huisong Li <lihuisong@huawei.com>, jdelvare@suse.com
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, liuyonglong@huawei.com
+References: <20250314081834.3243243-1-lihuisong@huawei.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,64 +120,110 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <5cb816c0-c445-4a23-82de-e3d9cbce54ee@t-8ch.de>
+In-Reply-To: <20250314081834.3243243-1-lihuisong@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/14/25 01:52, Thomas Weißschuh wrote:
-> On 2025-03-13 16:36:54-0700, Guenter Roeck wrote:
->> On 3/13/25 09:24, Thomas Weißschuh wrote:
->>> On 2025-03-13 12:47:43+0800, Sung-Chi Li wrote:
->>>> Implement the functionality of reading the target fan RPM setting from
->>>> ChromeOS embedded controller under framework.
->>>>
->>>> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
->>>> ---
->>>>    drivers/hwmon/cros_ec_hwmon.c | 18 ++++++++++++++++++
->>>>    1 file changed, 18 insertions(+)
->>>>
->>>> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
->>>> index b2fec0768301f116f49c57b8dbfb042b98a573e1..73bfcbbaf9531be6b753cfef8045fd5dab5b2ab3 100644
->>>> --- a/drivers/hwmon/cros_ec_hwmon.c
->>>> +++ b/drivers/hwmon/cros_ec_hwmon.c
->>>> @@ -36,6 +36,19 @@ static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index
->>>>    	return 0;
->>>>    }
->>>> +static int cros_ec_hwmon_read_fan_target(struct cros_ec_device *cros_ec, u8 index, int32_t *speed)
->>>
->>> int32_t is a userspace type. In the kernel use i32, or even better u32.
->>>
->>
->> Seems to be pretty widely used to complain about.
+On 3/14/25 01:18, Huisong Li wrote:
+> When load this mode, we can see the following log:
+> "power_meter ACPI000D:00: hwmon_device_register() is deprecated. Please
+>   convert the driver to use hwmon_device_register_with_info()."
 > 
-> There is even a checkpatch.pl test for it, which should have triggered:
-> PREFER_KERNEL_TYPES.
+> So replace hwmon_device_register with hwmon_device_register_with_info.
 > 
->> $ git grep int32_t drivers/ | wc
->>    43662  192381 3555402
+> These attributes, 'power_accuracy', 'power_cap_hyst', 'power_average_min'
+> and 'power_average_max', should have been placed in hwmon_chip_info as
+> power data type. But these attributes are displayed as string format on
+> the following case:
+> a) power1_accuracy  --> display like '90.0%'
+> b) power1_cap_hyst  --> display 'unknown' when its value is 0xFFFFFFFF
+> c) power1_average_min/max --> display 'unknown' when its value is
+> 			      negative.
+> To avoid any changes in the display of these sysfs interfaces, we can't
+> modifiy the type of these attributes in hwmon core and have to put them
+> to extra_groups.
 > 
-> 33k of those are in generated amdgpu headers.
-> This search also happens to include the more frequently used uint32_t.
+> Please note that the path of these sysfs interfaces are modified
+> accordingly if use hwmon_device_register_with_info():
+> old: all sysfs interfaces are under acpi device, namely,
+>       /sys/class/hwmon/hwmonX/device/
+> now: all sysfs interfaces are under hwmon device, namely,
+>       /sys/class/hwmon/hwmonX/
+> The new ABI does not guarantee that the underlying path remains the same.
+> But we have to accept this change so as to replace the deprecated API.
+> Fortunately, some userspace application, like libsensors, would scan
+> the two path and handles this automatically. So to drop the deprecated
+> message, we can accept this change.
 > 
->> Also, in comparison:
->>
->> $ git grep i32 drivers/ | wc
->>      820    4009   68486
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>   drivers/hwmon/acpi_power_meter.c | 861 +++++++++++++++----------------
+>   1 file changed, 427 insertions(+), 434 deletions(-)
 > 
-> The numbers for u32 look a bit different:
-> 
-> $ git grep u32 drivers/ | wc
->      234768 1137059 17410570
-> 
-> 
-> Also this specific driver already consistently uses uNN.
-> This does look wrong:
-> 
-> 	int32_t target_rpm;
->   	u16 speed;
->   	u8 temp;
-> 
-_That_ is a much better argument.
+> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+> index f05986e4f379..46e8a0b6b210 100644
+> --- a/drivers/hwmon/acpi_power_meter.c
+> +++ b/drivers/hwmon/acpi_power_meter.c
+...
+> +
+> +// depend on POWER_METER_CAN_TRIP
+
+Please di not intermix C++ comments with a driver using C comments.
+
+> +static DEVICE_ATTR_RW(power1_average_max);
+> +static DEVICE_ATTR_RW(power1_average_min);
+> +
+> +// depend on POWER_METER_CAN_CAP
+> +static DEVICE_ATTR_RO(power1_cap_hyst);
+> +
+> +// depend on POWER_METER_CAN_MEASURE
+> +static DEVICE_ATTR_RO(power1_accuracy);
+> +static DEVICE_ATTR_RO(power1_is_battery);
+> +
+> +static DEVICE_ATTR_RO(power1_model_number);
+> +static DEVICE_ATTR_RO(power1_oem_info);
+> +static DEVICE_ATTR_RO(power1_serial_number);
+> +
+> +#define EXTRA_FIRST_DYNAMIC_ATTR_ID	3
+> +#define EXTRA_ATTR_MAX	10
+> +
+> +static struct attribute *power_extra_attrs[EXTRA_ATTR_MAX] = {
+> +	&dev_attr_power1_model_number.attr,
+> +	&dev_attr_power1_oem_info.attr,
+> +	&dev_attr_power1_serial_number.attr,
+> +	NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(power_extra);
+> +
+> +static void fill_extra_dynamic_attr(struct attribute *attr)
+> +{
+> +	int idx = EXTRA_FIRST_DYNAMIC_ATTR_ID;
+> +
+> +	for (idx = EXTRA_FIRST_DYNAMIC_ATTR_ID; idx < EXTRA_ATTR_MAX; idx++) {
+> +		if (!power_extra_attrs[idx])
+> +			break;
+> +	}
+> +
+> +	power_extra_attrs[idx] = attr;
+> +}
+> +
+
+Please use the .is_visible() callback in attribute_group to determine
+attribute visibility.
+
+That means you'll have to code attribute_group manually, but that is
+still better than re-implementing the is_visible() callback.
+Something like
+
+static const struct attribute_group power_extra_group = {
+	.attrs = power_extra_attrs,
+	.is_visible = power_extra_is_visible;
+};
+
+__ATTRIBUTE_GROUPS(power_extra);
+
+should do.
 
 Thanks,
 Guenter
