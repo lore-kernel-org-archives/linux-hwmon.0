@@ -1,39 +1,67 @@
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CA6204863;
-	Fri, 14 Mar 2025 17:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701292629D;
+	Fri, 14 Mar 2025 17:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741973303; cv=none; b=NC1odMtpmCRqdSVb6n986s598TDBZbWQ5Y/Nxct3xnKAXILU8E/vkWBuXKuS/046wwmfRjHIWzbPxxJO3+s9KracDNiHHg0Kz1f/gA5cMRzSgvvLOLuenp0tJQGlal/D78zWEyaTBiou6pjYrK88jnq+ssznFfnw6tyDxZJHBbo=
+	t=1741974303; cv=none; b=uIlKrLjm57r5wyNV822p2icXdawd6itoWPkmKSqtdFiYXi9KAW7a32uhcO/IzaSbbShVLb5bugUY/5P9utwMn1Bo/TWbMiOCKDv4YudJi/vICfIp2Riy0zLBPp9+lXNWiFadGGRKSDbOcJpTPiv/h++w1uKkOmOY9REcbQmkLTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741973303; c=relaxed/simple;
-	bh=KHgcPjnVOoijG9c/+h5zNbYKSPXH2dyw501fzPENB8Y=;
+	s=arc-20240116; t=1741974303; c=relaxed/simple;
+	bh=IudoS3tWFygkixhr5W7NaCnVIiBxoRIaZA8TWY3GaK8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=keKdelxgm8m+iL8DTNMSu6i20RYihwto+lb7BL8QcU/rAK5bzSotcq7dUbugPRek0fKQlYSJLotO88BIuwAilOXHPEyQcw8g6ECQBu8xhaoIrzABP/zYmOo+01ol7B9/M6qtuFM2LemJcGhyIZdw5sx7M5unBGN24GjdDayAdZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=egqEOekc; arc=none smtp.client-ip=157.90.84.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
+	 In-Reply-To:Content-Type; b=RcyXWKmH9OXC2M3vUeP/9L4q02xT4U4EY2P4tHd2r/jMYkLfqtEbn4UhJI8zIheVyUPP0FcX8f5G8VJq7lA0DoyJpkoZSIaazidG0UcOS9dNKTIlRztfnmeyC53b7nI6aB+Rk3lGayAjrsTSNDC2yA9eKBIduv7xEHjQq9uSwKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mfu4ZL4q; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="egqEOekc"
-Received: from [192.168.42.116] (p5b164989.dip0.t-ipconnect.de [91.22.73.137])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 738322FC0186;
-	Fri, 14 Mar 2025 18:28:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1741973296;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9f8SrtAYLDdPkvh4yYPQ0CsmuisQdBIm3f9X5+S3QdE=;
-	b=egqEOekcf+kkiZHOmxGCkGYXbv9H6dMxnWRpdNvY7BreBwUcMgeby14SwsWDMQs0wDSt+1
-	E4jiHtq7DQSkDMCF1XTSVsCC405BHdEQE9Jt7v054/cTJfZTs2DXK1BgoCA/9ARisynnQl
-	btYRBbx9/PTYFzlGqsDpGtcO3joFeEY=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <c6c5aceb-e329-464e-82ca-b70c5310ca89@tuxedocomputers.com>
-Date: Fri, 14 Mar 2025 18:28:16 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mfu4ZL4q"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2240b4de12bso64922045ad.2;
+        Fri, 14 Mar 2025 10:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741974301; x=1742579101; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=XTK+zFsZSk+m7SXsEBUdWvQ9eyMFzVYuOZ0uuc5BCqc=;
+        b=Mfu4ZL4qFFas2msbw52YAEC8txJ4ZHMBVgj/Wv4UW99CdKxxACd9VP53x99GZLY4DY
+         cyWbM1ur/snuNGzwYv4wgFYo890pukRnTqr67PWwpgbOELQlqk6wVSq1VA/SipcNWni1
+         1Tfw+oNAYT4SXVksbQlrTu8pckIT6vFu7wvWYMAnWMKva8rPnbablRnlMxpNpEFbHjzN
+         nxXdrdvT3WBJtFCaOLuLsmwFbLQ2DBguCn52zsnQLXwH78g5CyXGkuxmKhCK9zCQmAXp
+         6WS9w4yaT6iFGmwj09h2aJqkcR2OqN3elMjU/ztS8POYG7Wl/+uyIrbmX6rhJ2WoQXdg
+         /7fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741974301; x=1742579101;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XTK+zFsZSk+m7SXsEBUdWvQ9eyMFzVYuOZ0uuc5BCqc=;
+        b=daH0uDmWWY7bMmkr+mmxFTCiZYNYEuoIVs6macOcniMJuY81y1cFN1eNEazuOWsSKH
+         or3T7Gux3t5AvXrdY9UryuXpL5qQJXL7g/XIXars12h3KmDhAv3pv5pi7ie5sNsUFmT1
+         2PFr5szfUMvrHuch3OtAvJ4G5ZLesAzsL1kNuwCTuJRNWvYxcgjivaXdHldZpCf1wPxN
+         XAn7gYOP+uwh0dgpLQPFo5j53tsdZErBZA/tnBgAVWEdXRZ4DxS64mMyS8p/GqDHaZr2
+         hVsS9tacoEgOGKWU96OteBkT+mWDUFCWWMXoksNKgBgzuSPwx/jyvQTcYTBKNscGZNEV
+         QOyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwBHqE0Lc5sqOLfZkJnZygWiMx2WRwOpaHCa4nqY/+MFFS0E2glDsgNK5K/qCaSaFiRcoqwIhf+1aDnKH+gda6e3iaM9aQ@vger.kernel.org, AJvYcCVYWETWALwVM3ugRw4uxK5Z6UOC0Rbrm5VkrP1uf4wAQdLG03yJZty+Mkjo63KwhLAuuq+dlYUpADVROyXz@vger.kernel.org, AJvYcCXD6qHpyjXhCSCVPzD0GxJTunXVOvLgZ8YjHSorPuaCYOvkliB1wxrDZGKxQt03UPd9a6IUkovVtJqcnYrSlS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywx6TUwd/Qh5p62AFiWHp/mLslkwN552bskIy5zk6H9G8zme6nm
+	wmPrvQW5YoCqeAYsBryEp68BQoToZ+EtGQrpUYaIFdL6c7/JHIRX
+X-Gm-Gg: ASbGnct/LNWHx69OYFXko2iObRDl+1MOSQtsFP/EUAgSPTex0Yr2xjraMLzMDd1Qukp
+	eHoMOaW65xqnnXe1I29kigCo589xzhw/aZeCCUztbeHHO2AgRGhlDz0msj9AIsrnN8AVjDFAZob
+	dIAf9wc9U52eqQIEHp2d8yd9mspxetTXAt+cLuZxnKzCwmQsDIzdv4tKLJPa9QV8gXFfqOrwLnR
+	OI0OWIi+PletqTHbFrb2A+PG4p0LdEciRW/qYL2l0Y5ji+31T8yUmYvVVejXZ/R0HB9uofR67qw
+	dcBZ77beMPdEQJDwTcD/3la405wUdYcT6QBqB2qQMb08oG0IABW1pF0l9imB8fUGOJJI5x5I6iU
+	y9IewFA1h9DoFlGZSwGfMxIw04YQ9
+X-Google-Smtp-Source: AGHT+IG8t2RiWWHqExlCkH4UwwB/yJrN/VA6OIGwl2mVQE7y86DFcAhX5X9HvMhZiSS2xp1OznHmTQ==
+X-Received: by 2002:a05:6a00:2e20:b0:736:34ff:be8 with SMTP id d2e1a72fcca58-73722412c0amr3677682b3a.19.1741974300516;
+        Fri, 14 Mar 2025 10:45:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7371167e018sm3221272b3a.91.2025.03.14.10.44.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Mar 2025 10:45:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2628dd1f-1b8f-478a-aa89-4c0f78b27962@roeck-us.net>
+Date: Fri, 14 Mar 2025 10:44:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,179 +69,181 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] platform/x86/tuxedo: Implement TUXEDO TUXI ACPI TFAN
- via hwmon
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, LKML <linux-kernel@vger.kernel.org>,
- platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20250306132639.642369-1-wse@tuxedocomputers.com>
- <70633701-31d2-c2ab-f4f4-043dd186f485@linux.intel.com>
- <75556900-5fe3-4083-b81b-240994e4f8e0@tuxedocomputers.com>
- <4344644a-582b-aee6-7eef-8afd3c0ee16f@linux.intel.com>
- <49ceb1f4-93b1-47ed-a87b-b936fee1b371@tuxedocomputers.com>
- <ad2e303d-1b13-d575-d58c-f4785e71d6e7@linux.intel.com>
+Subject: Re: [PATCH v5] hwmon: (pmbus/tps53679) Add support for TPS53685
+To: Chiang Brian <chiang.brian@inventec.com>, Jean Delvare
+ <jdelvare@suse.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <CAJCfHmW61d2jd_tYpNEqBG_Z58bEnVKAmsvhrEP1zXQoXqrUVw@mail.gmail.com>
+ <20250314033040.3190642-1-chiang.brian@inventec.com>
 Content-Language: en-US
-From: Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <ad2e303d-1b13-d575-d58c-f4785e71d6e7@linux.intel.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250314033040.3190642-1-chiang.brian@inventec.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Ilpo,
+On 3/13/25 20:30, Chiang Brian wrote:
+> The TPS53685 is a fully AMD SVI3 compliant step down
+> controller with trans-inductor voltage regulator
+> (TLVR) topology support, dual channels, built-in
+> non-volatile memory (NVM), PMBus interface, and
+> full compatible with TI NexFET smart power
+> stages.
+> Add support for it to the tps53679 driver.
+> 
+> Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
+> ---
+> v4 -> V5:
+>      1. document the compatible of tps53685 into dt-bindings
+> 	2. add the buffer length as argument for %*ph
+> 	3. Add Changelog
+> v3 -> V4:
+>      1. Add length comparison into the comparison of "id",or it may be true when
+> 	   the substring of "id" matches device id.
+> 	2. Restore `return 0;` in `tps53679_identify_chip()`
+> V2 -> V3:
+>      1. Remove the length comparsion in the comparison of "id".
+> V1 -> V2:
+> 	1. Modify subject and description to meet requirements
+> 	2. Add "tps53685" into enum chips with numeric order
+> 	3. Modify the content of marco "TPS53681_DEVICE_ID" from 0x81 to "\x81"
+> 	   Add marco "TPS53685_DEVICE_ID" with content "TIShP"
+> 	4. Modify the type of "id" from u16 to char* in `tps53679_identify_chip()`
+> 	5. Modify the comparison of "id". It will be true if the string "id" matches
+> 	   device ID and compare with type char*,
+> 	6. Add the length comparsion into the comparison of "id".
+> 	7. Modify "len" as return code in `tps53679_identify_chip()`
+> 	8. Output device error log with %*ph, instead of 0x%x\n"
+>      9. Use existing tps53679_identify_multiphase() with argument
+> 	   "TPS53685_DEVICE_ID" in tps53685_identify() rather than creating one
+> 	   tps53685_identify_multiphase()
+> 
+> boot-log:
 
-Am 14.03.25 um 14:59 schrieb Ilpo Järvinen:
-> On Fri, 14 Mar 2025, Werner Sembach wrote:
->
->> Sorry, resend, mail client did html message by accident
-> Np.
->
->> Am 14.03.25 um 11:05 schrieb Ilpo Järvinen:
->>>>>> +			S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) *
->>>>>> 100;
->>>>> Is the math wrong, as you do retval - TUXI_FW_TEMP_OFFSET before
->>>>> multiplying?
->>>> No, retval is in 10th of °K (but the last number is always 0) so is
->>>> TUXI_FW_TEMP_OFFSET which is there to convert it to 10th of °C, the * 100
->>>> is
->>>> then to bring it in line with hwmon wanting to output milli degrees
->>> So is result of S32_MAX correct when retval is 21474837?
->>>
->>> (21474837-2730)*100
->>> 2147210700
->>> 2^31-1
->>> 2147483647
->>>
->>> 2147210700 would have been representable but the upper bound is
->>> still applied (the value might be large enough to not have practical
->>> significance but to me the code looks still illogical why it applies the
->>> bound prematurely).
->> Yeah my though was: this check is only here to catch the firmware doing some
->> crazy stuff and sending highly unrealistic values, so gifting a small bit of
->> the available range away doesn't matter
-> But it does matter as you could note. I stumbled on the logic which didn't
-> look right while reviewing. You even claimed afterwards is not wrong when
-> I raised this. :-/
->
-> Please just correct the logic so it makes sense to the code reader, there
-> seems to be no well justified reason to keep the illogical code even if
-> the practical impact is very low. It's probably done the way it is only
-> because the variable types are what they are so you couldn't do the
-> subtraction like I proposed ;-). At minimum you'd need to add a comment to
-> warn about the inconsistency at which point rewriting to correct logic is
-> already way simpler.
-ok
->
->>> I see you already sent another version, it would have been prudent to wait
->>> a bit longer as you contested some of the comments so you could have seen
->>> my replies before sending the next version.
->> I'm sorry. I just wanted to show that I'm iterating as I wait for the reply if
->> the design with the periodic safeguard is acceptable. If that's gets rejected
->> this driver must be rewritten anyway.
-> Kernel development is not a sprint. It's better to avoid sending versions
-> unnecessarily, a day or two isn't worth it when compared with ending up
-> into people's low priority bin which will inevitably happen when the
-> version counter starts to grow beyond v5-6.
->
-> I (and likely others too) appreciate if they don't have to waste review
-> cycles on something that is not "complete" because we have to look at the
-> completed one later too. Maintainers work in good faith that developers
-> are simply improving their patches (or working on some other great
-> improvements to the kernel :-)) while nothing seemingly happens for a
-> while. There's no need to prove that something is going on just for the
-> sake of proving.
->
-> Obviously RFC patches are still fine to ask specific questions about
-> something, but that's not about proving progress (in fact, RFC patches are
-> more about being "stuck" than about making progress).
-Sorry, didn't know though it will eventually just get skipped.
->
->>>>> Shouldn't it be like this:
->>>>>
->>>>> 		retval -= TUXI_FW_TEMP_OFFSET;
->>>>> 		*val = min(retval * 100, (unsigned long long)S32_MAX);
->>>> As retval is unsigned this would not work with (theoretical) negative °C.
->>> So your code relies on implicit type conversion in this: (retval -
->>> TUXI_FW_TEMP_OFFSET) ?
->> I can add an explicit cast, np.
->>
->> [snip]
->>
->>>>>> +	}
->>>>>> +	if (temp >= temp_high)
->>>>>> +		ret = i;
->>> Now that I reread things, is this also incorrect, as "i" is at the
->>> terminator entry at this point?
->> Yes that's intentional, the 3 entries in the array open up 4 ranges:
->>
->> lower then 1st entry i=0, between 1st and 2nd entry i=1, 2nd and 3rd i=2,
->> higher then 3rd i=3 (the value that terminates the for loop)
-> I didn't realize that. To me { } looks just an terminating entry. So
-> what's the min_speed going to be for that last entry since it's
-> initialized to 0?
->
-> Oh, I see you're taking .min_speed from temp_levels[temp_level - 1] which
-> I don't like either. You have a "state" and then store min_speed for the
-> state into other index inside the array?!?
+This is completely useless noise.
 
-Because state 0 is the implicit low temperature -> no min speed is required
+> 	
+>   drivers/hwmon/pmbus/tps53679.c | 29 +++++++++++++++++++++++------
+>   1 file changed, 23 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index 63524dff5e75..091d5eacbee0 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -16,7 +16,7 @@
+>   #include "pmbus.h"
+>   
+>   enum chips {
+> -	tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
+> +	tps53647, tps53667, tps53676, tps53679, tps53681, tps53685, tps53688
+>   };
+>   
+>   #define TPS53647_PAGE_NUM		1
+> @@ -31,7 +31,8 @@ enum chips {
+>   #define TPS53679_PROT_VR13_5MV		0x07 /* VR13.0 mode, 5-mV DAC */
+>   #define TPS53679_PAGE_NUM		2
+>   
+> -#define TPS53681_DEVICE_ID		0x81
+> +#define TPS53681_DEVICE_ID     "\x81"
+> +#define TPS53685_DEVICE_ID     "TIShP"
+>   
+>   #define TPS53681_PMBUS_REVISION		0x33
+>   
+> @@ -86,7 +87,7 @@ static int tps53679_identify_phases(struct i2c_client *client,
+>   }
+>   
+>   static int tps53679_identify_chip(struct i2c_client *client,
+> -				  u8 revision, u16 id)
+> +				  u8 revision, char *id)
+>   {
+>   	u8 buf[I2C_SMBUS_BLOCK_MAX];
+>   	int ret;
+> @@ -102,8 +103,8 @@ static int tps53679_identify_chip(struct i2c_client *client,
+>   	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
+>   	if (ret < 0)
+>   		return ret;
+> -	if (ret != 1 || buf[0] != id) {
+> -		dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
+> +	if (ret != strlen(id) || strncmp(id, buf, ret)) {
+> +		dev_err(&client->dev, "Unexpected device ID: %*ph\n", ret, buf);
+>   		return -ENODEV;
+>   	}
+>   	return 0;
+> @@ -138,6 +139,14 @@ static int tps53679_identify(struct i2c_client *client,
+>   	return tps53679_identify_mode(client, info);
+>   }
+>   
+> +static int tps53685_identify(struct i2c_client *client,
+> +				 struct pmbus_driver_info *info)
+> +{
+> +	info->format[PSC_VOLTAGE_OUT] = linear;
+> +	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
+> +					   TPS53685_DEVICE_ID);
+> +}
+> +
+>   static int tps53681_identify(struct i2c_client *client,
+>   			     struct pmbus_driver_info *info)
+>   {
+> @@ -215,7 +224,9 @@ static struct pmbus_driver_info tps53679_info = {
+>   		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>   		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>   		PMBUS_HAVE_POUT,
+> -	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +	    PMBUS_HAVE_STATUS_INPUT |
+> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
 
-And then high states have higher min speeds. So to sync this up I would need to 
-add a dummy entry in the first position of the array.
+This changes the attributes supported for the other chips supported by this
+driver. If those chips indeed support the additional attributes, the change
+should be submitted as separate patch. Otherwise, please explain how the change
+is supposed to work for those chips (and why you don't add the additional flags
+after determining that the chip is a tps53685 and after copying the data structure).
 
->
->>>>>> +
->>>>>> +		temp = retval > S32_MAX / 100 ?
->>>>>> +			S32_MAX : (retval - TUXI_FW_TEMP_OFFSET) *
->>>>>> 100;
->>>>> Same math issue comment as above.
->>>>>
->>>>> Why is the read+conversion code duplicated into two places?
->>>> because here it is with special error handling and didn't thought about an
->>>> own
->>>> function for a defacto 2 liner
->>> A function that does read+conversion would be 6-8 lines with the error
->>> handling.
->> I can add it.
->>
->> [snip]
->>
->> Thanks for the code review again.
->>
->>
->> Last but not least: As already mentioned, I still wonder if the design with
->> the periodic safeguard is ok or not or?
-> I'm not sure if fully understand Daniel's suggestion [1] as it
-> doesn't specify who/what is sending that notification to the thermal
-> engine.
->
-> [1] https://lore.kernel.org/all/286f5efc-cd15-4e0b-bec2-2e9bbb93dd37@linaro.org/#t
-
-Me too, also at one point he was talking about device trees, but isn't that only 
-an ARM thing? Or can you define one for x86 devices too?
-
-I put him in the cc again
-
->
->
-> When it comes to your own concerns, I'm not exactly buying the argument
-> that userspace can do dangerous things. Yeah, it can shoot one's own
-> foot, no doubt, such as unloading this driver and there goes your periodic
-> safeguards. If the argument would be that userspace fails to respond (in
-> time), I would have less trouble in accepting that argument.
->
-Unloading the driver will activate the auto mode again with firmware handling 
-the complete fancurve.
-
-Userspace not responding in time, or not responding at all, or intentionally 
-always requesting fan speed 0 kinda all result in the conclusion -> don't trust 
-userspace.
-
-Having this in driver is the only surefire way to communicate to the 
-User(-space) that this device must not be run under full load with the fans 
-turned off.
-
-Best regards,
-
-Werner
+Guenter
 
