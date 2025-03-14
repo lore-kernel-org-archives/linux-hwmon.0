@@ -1,128 +1,115 @@
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DDC14A09A;
-	Fri, 14 Mar 2025 07:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F90193436;
+	Fri, 14 Mar 2025 08:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741938361; cv=none; b=B7m1hcbbkMp5RZ/2MXMcn0MtkaadB6uBFyCwcg8cTP/jKB901PzS0ZFbE8qFzkyuCzkEwUqfxOa5G4rNhgsKkjDQMcmzUGT0/nlX5fk88XMQJBy8Git5X9xyS1J32EQL8ePEFTuOqWKgRM+l6DFMHFFybikBG/9pLr7MvQIuY4w=
+	t=1741939681; cv=none; b=TZtHVKrepu8C1Wwuqc9aQcYn42PuyHQNmcgDxWu+4vdr8tNG/mlbPel0krH0otVDJj+fWtf1rS6UBzVYm3QbdWUL8kPOGQflNMTyS2Z0qfRiKYnATpzzFWoae8qL+aRFR6ElZNySJjMDEAOps8uRglkkkgChykwNZB7vyxQn2Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741938361; c=relaxed/simple;
-	bh=wrGkeduHJf2FRdetfM7kLNaeu4ZTC4phfwCgw5vRVSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pLvYWEphHL18FE/zkvwXtL4xDPmBThb2+2Yf2A020+uiEtZubGOvXtrWfE2pUIqtJLhacrBkN1WzIV43vFYUzPAYpejxPNzpY08pdU+Bjexs/YGs4fW0rvES7IS+/xLHAB5V/jjoDvhXVcoEoVY2a1dX9QVLt624mfNniF3+mTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AWhOh1Hx; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1741939681; c=relaxed/simple;
+	bh=oYH/kGhK7YTdEQ7KFvtJxvjiQApYFDp63+DH/kdptis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k8bEl7M9zL2JIJXYxelHGhY9mAk41S9VflzOyl8ls4wEtuusjkHT3+KEsvezpEsgjUNBm5FD5l20ZvDTpo98Ur8r59XKlvhO2/EVca8y2MxZx6nKMl32MyVd7XSj32n8PNIe+iinQkFb27pBa2wSYvqm2j5obkAcRLbRTszVuNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6LlxMuw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AWhOh1Hx"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BFA84433EC;
-	Fri, 14 Mar 2025 07:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741938357;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8yRATkwAJPnxsl83BSKOjShQMMfdWMI6sf8JzOOif9w=;
-	b=AWhOh1HxnIUz7vl/wKSKO/qKsxjMwekOryuxHWaNmr8k+wVRXjyKvM/5dQ1GqJgT7uZ7aC
-	Ibco3VuXknFeFPcyIbUusAV0K12Uu8sjwMwYZjZ+Clc4g4XX+aFKKC1cl5vn8hYQVkONOH
-	an2gEB0MO5AWBXy2xfnwIA3dK7ivyKN9dHlzhk3gHr7oE9U9AoeNommDpjNFPfhdnzYoYQ
-	usCccppvwpBzfJvfADfnZPgeQjNEt4utikW3LL+CdH4IjJ43Z8fk7V0dvhksLk445RtYOn
-	7Fdf+BhT+YAra1stO/d4XwNzwgNSGj2Ol+XhIqeuCvzDZxnYlpdz87lWAQKV7w==
-Date: Fri, 14 Mar 2025 08:45:54 +0100
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Russell King - ARM Linux
- <linux@armlinux.org.uk>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, David Miller
- <davem@davemloft.net>, Xu Liang <lxu@maxlinear.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/4] net: phy: tja11xx: remove call to
- devm_hwmon_sanitize_name
-Message-ID: <20250314084554.322e790c@fedora-2.home>
-In-Reply-To: <4452cb7e-1a2f-4213-b49f-9de196be9204@gmail.com>
-References: <198f3cd0-6c39-4783-afe7-95576a4b8539@gmail.com>
-	<4452cb7e-1a2f-4213-b49f-9de196be9204@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6LlxMuw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDAADC4CEEC;
+	Fri, 14 Mar 2025 08:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741939680;
+	bh=oYH/kGhK7YTdEQ7KFvtJxvjiQApYFDp63+DH/kdptis=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s6LlxMuwdTaK9kpaCnkV8YbN2DMfAYsdpkdvGy78D9YUpd7Zv548uPiQAn8/F/eEu
+	 YuYLjJ0BRNvKvXTnL34pYJfvTZISlFknAcGLxnJExGUd9h5SlsS0PnvjG8ecJ0FAYC
+	 kYftjoHqQR4QQ3rwPA1P4h8o3UtRiiQI3HmqhXaA/xHNhMF0nnFVwIx4L9FzOyGcm+
+	 HHjmoki6ogkoVBc01Hi4REcuTMNbUf0J/RtIrlI4XslH2CMaK1eIDcX3k/h9tXD8fi
+	 +GBJVJFU2YGUrbaPPui2HhGONh7gofaYkwZFVFGPhreNRu+p3qt0zrrEsXAy9bVAD2
+	 FntX+BFI2Cggg==
+Date: Fri, 14 Mar 2025 09:07:56 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: florin.leotescu@oss.nxp.com
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	viorel.suman@nxp.com, carlos.song@nxp.com, linux-arm-kernel@lists.infradead.org, 
+	imx@lists.linux.dev, festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
+Message-ID: <20250314-encouraging-fabulous-ant-e1f7b0@krzk-bin>
+References: <20250313125746.2901904-1-florin.leotescu@oss.nxp.com>
+ <20250313125746.2901904-2-florin.leotescu@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufedtvdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpeforgigihhmvgcuvehhvghvrghllhhivghruceomhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeevledtvdevueehhfevhfelhfekveeftdfgiedufeffieeltddtgfefuefhueeknecukfhppedvrgdtudemtggsudelmeekugegheemgeeltddtmeeiheeikeemvdelsgdumeelvghfheemvgektgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemkegugeehmeegledttdemieehieekmedvlegsudemlegvfhehmegvkegtjedphhgvlhhopehfvgguohhrrgdqvddrhhhomhgvpdhmrghilhhfrhhomhepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtohephhhkrghllhifvghithdusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtoheplhhinhhugiesrghrmhhlihhnuhigrdhorhhgrdhukhdpr
- hgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehlgihusehmrgiglhhinhgvrghrrdgtohhm
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250313125746.2901904-2-florin.leotescu@oss.nxp.com>
 
-Hello Heiner,
+On Thu, Mar 13, 2025 at 02:57:44PM +0200, florin.leotescu@oss.nxp.com wrote:
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  '#pwm-cells':
+> +    const: 2
+> +
+> +patternProperties:
+> +  "^fan@[0-4]$":
 
-On Thu, 13 Mar 2025 20:45:06 +0100
-Heiner Kallweit <hkallweit1@gmail.com> wrote:
+Keep consistent quotes, either ' or "
 
-> Since c909e68f8127 ("hwmon: (core) Use device name as a fallback in
-> devm_hwmon_device_register_with_info") we can simply provide NULL
-> as name argument.
-> 
-> Note that neither priv->hwmon_name nor priv->hwmon_dev are used
-> outside tja11xx_hwmon_register.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/net/phy/nxp-tja11xx.c | 19 +++++--------------
->  1 file changed, 5 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
-> index 601094fe2..07e94a247 100644
-> --- a/drivers/net/phy/nxp-tja11xx.c
-> +++ b/drivers/net/phy/nxp-tja11xx.c
-> @@ -87,8 +87,6 @@
->  #define TJA110X_RMII_MODE_REFCLK_IN       BIT(0)
->  
->  struct tja11xx_priv {
-> -	char		*hwmon_name;
-> -	struct device	*hwmon_dev;
->  	struct phy_device *phydev;
->  	struct work_struct phy_register_work;
->  	u32 flags;
-> @@ -508,19 +506,12 @@ static const struct hwmon_chip_info tja11xx_hwmon_chip_info = {
->  static int tja11xx_hwmon_register(struct phy_device *phydev,
->  				  struct tja11xx_priv *priv)
->  {
-> -	struct device *dev = &phydev->mdio.dev;
-> -
-> -	priv->hwmon_name = devm_hwmon_sanitize_name(dev, dev_name(dev));
-> -	if (IS_ERR(priv->hwmon_name))
-> -		return PTR_ERR(priv->hwmon_name);
-> -
-> -	priv->hwmon_dev =
-> -		devm_hwmon_device_register_with_info(dev, priv->hwmon_name,
-> -						     phydev,
-> -						     &tja11xx_hwmon_chip_info,
-> -						     NULL);
-> +	struct device *hdev, *dev = &phydev->mdio.dev;
->  
-> -	return PTR_ERR_OR_ZERO(priv->hwmon_dev);
-> +	hdev = devm_hwmon_device_register_with_info(dev, NULL, phydev,
-> +						    &tja11xx_hwmon_chip_info,
-> +						    NULL);
-> +	return PTR_ERR_OR_ZERO(hdev);
->  }
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
+> +    properties:
+> +      reg:
+> +        description:
+> +          The fan number.
+> +
+> +    required:
+> +      - reg
+> +      - pwms
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        fan_controller: fan-controller@2f {
+> +            compatible = "microchip,emc2305";
+> +            reg = <0x2f>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            #pwm-cells = <2>;
+> +
+> +            fan@0 {
+> +                #cooling-cells = <2>;
+> +                reg = <0x0>;
 
-The change look correct to me, however I think you can go one step
-further and remove the field tja11xx_priv.hwmon_name as well as
-hwmon_dev.
+Please follow DTS coding style, so reg is here the first property.
 
-One could argue that we can even remove tja11xx_hwmon_register()
-entirely
+> +                pwms = <&fan_controller 1 1>;
 
-Thanks,
+It's the same PWM for all fans? So isn't it basically one fan? How do
+you exactly control them independently, if the same PWM channel is used?
 
-Maxime
+> +            };
+> +
+> +            fan@1 {
+> +                #cooling-cells = <2>;
+> +                reg = <0x1>;
+> +                pwms = <&fan_controller 1 1>;
+
+
+Best regards,
+Krzysztof
+
