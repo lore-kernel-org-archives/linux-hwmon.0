@@ -1,89 +1,191 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E8D1519B4
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 11:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305782376E2
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 12:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742211877; cv=none; b=j6VUIlE0OtMJMJg9OPsJfH/mD8spxCxwHZA+ScORXlA0twtn91YLy+e7vffLQJhI4N6zEUZ3q7J+uz9FMNeiroK9O8nzuCqYv8BaJaAd/dvT4sIhNIdQs3wI/vFVYBSrmlIbFNGBJbv/aTyZzC1u//jQnHl8k35Wf6gEUJr0YDQ=
+	t=1742212921; cv=none; b=sXa6V3U1ZOOdrqfMofQEdQo1+Jwl8qAoORwyLrUkBi+zTfDRXeTDKA/CDP7yyMG8Q8mEPCVG8zhQt7//MLRX+SS0xNpOOKLpLRQaam2955y8wcrrks0N8IUpKSqB2tiovrdCbzqHBgP+vYXBhCCfcNRJl+WWBAzxf87cawbIgAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742211877; c=relaxed/simple;
-	bh=3h+MsXQ3NviowYuDoRpuDuLcZ27wMI+GpfSD00VDaIM=;
+	s=arc-20240116; t=1742212921; c=relaxed/simple;
+	bh=PlMEiEJDam59+aty2oFc2pESN+enaEybP02730+FEq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wpbozo7PUHH9xJ4NQFr8sxvCoVWo79JQBdA16bENCfsOijmbVZI733A2CItjKwbHpGMSYnbROTg4dyzz56MIYqbsnWCJ3WeEDfOvr4rUtZSwEFlECdwCnncjrTz3lIh3LUCQj3sXTt157Y6Ep8I9klvoIqan4opESNovj4UXnyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SuTCNZQ6; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SuTCNZQ6"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-224019ad9edso26079515ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 04:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742211875; x=1742816675; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=chmXKrjJ+jVf9rZgMgNHJJrzG/IDgi03eNV+4CU4cKU=;
-        b=SuTCNZQ6MDrDch3lHcwgm0D0WWsFVK7qNgwY3mAthWKTAD6aHe7nNfjpNK9HkgYFS6
-         k+ydBjlnz46c2gQDssIcUkklmnNnYf6lk+fuMsw6AVkpLH3tlIXa1F2HDekFxAic/aO3
-         vyfRP27f0K1EJok+TU6Xaw+NSMMzixXF3ncMWfhCs6YeF7DoPd8w+OIhqTZ0mfjPgl14
-         OnHeTX0TZ51e6XWiEfdh/v1vjLtlC7S4zspFUBzJBLvtG1GuqVQPFakXAIq0oBZppZmy
-         BUraZDVcRMBwaWO4nXfLsPyE7aEJop1Hzz8PFQqAdhJ/RjtJC0/TunvkjyDY6PZ4d5bE
-         9RSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742211875; x=1742816675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=chmXKrjJ+jVf9rZgMgNHJJrzG/IDgi03eNV+4CU4cKU=;
-        b=hsT6xPxhhhTpnSmVvlZBjQXPJeNjJ76oeTEKS3eIOjNpGZzQYy21yeC9Kx055GhbzE
-         QlGlBCZiDd/Usm+xySdJW2akqtJeHRkOtHw1dsDYX07V19tRSfvhAb1f6zRmtsGESQSA
-         RhitdeD/GZ8ageYHpW4KgvMa5C54Wz6zyxehQ9DHsJttl03dhzz/TRTxYqw2pjZ/XhAy
-         iB0VBxZyanzlCP0kxvMonsoyuhSfAtwOlgWpGVb7UzjA+2IfQHfliUA5aeyL8jbmv6Ey
-         VSzWADSlFgOcLr34limi0Bp3hPhIyZv2/WEwNuj/fAKjC9NCZxTmLoCYa89QanmztUgD
-         2FmQ==
-X-Gm-Message-State: AOJu0YxaxnfGZ9KHL9UktS6NjE32auG4tNUtNPxSCbEMgR7+r6HXZVqc
-	iq6YTJVZ+KgrEYB09UxmpOCprA5EEJlmzpGGLiBubum8c56g5yub
-X-Gm-Gg: ASbGncvjzSAjXXCoybXXmDQPqxXtYySZinNWiIwYHAOye8qsNQls9IKHXk45CAOvoDt
-	3Ma3gqJ7RNaUG4f7I4gwuuuiurq9dJwG4Jrww8sW0QdRAcYusgglptRhVhcEBiFx8jpMTBIP9wF
-	dlX18fOCID3DxZ+v0T0C+Zx/w+tZ/bkxZSeBGtW5gUaEIodpaPfm7uFP+vqc+6sOoTnq8BQUeyL
-	5B5VBEHzlMJhHlLD3I39FATbaXXWNF9q59pmlRSVVHNNSSKWJrzSMgqpTvUmvWevZErr6iJZRCu
-	lsemvppXnrPssG0aM0qbxuXZMNZsLJsioKNCyqZ8415AjeW5ttlWlvnFyA==
-X-Google-Smtp-Source: AGHT+IFOSVIHK7rx1GLYfYtoYGmQq9OYwN2DN3hPwb/mQ78sSSten5vXO5d5kmcfyZPtb7ECFNVL0g==
-X-Received: by 2002:a17:903:283:b0:223:3b76:4e23 with SMTP id d9443c01a7336-225e0aff8cemr150454155ad.44.1742211875137;
-        Mon, 17 Mar 2025 04:44:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a7f87sm73515005ad.81.2025.03.17.04.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 04:44:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Mar 2025 04:44:33 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tasos Sahanidis <tasos@tasossah.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH] hwmon: (nct6775-core) Fix out of bounds access for
- NCT679{8,9}
-Message-ID: <b9ca1774-4752-49c1-b406-43eace2d56a0@roeck-us.net>
-References: <20250312030832.106475-1-tasos@tasossah.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=scVOBX9ZQF/QjtKgD73Tl65pgzhGj2/LikG7dLTtt2IZFh3KAEorRWzlJzqQFXc+p/WZ5wPtiSrWMG/zWzazU8s/V/MbGYRAIxtsQO/D0t8cQ1Fw+YrO7lDK67nilJjVxGJEiWZeWEo1zxwS2XCH0TWI5cq6eyuKYovaHPiLyTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tu99w-00020y-0U; Mon, 17 Mar 2025 13:01:32 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tu99t-000EuM-0g;
+	Mon, 17 Mar 2025 13:01:29 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A87EC3DE480;
+	Mon, 17 Mar 2025 10:41:48 +0000 (UTC)
+Date: Mon, 17 Mar 2025 11:41:48 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vzg54m2aeg5i4qkb"
 Content-Disposition: inline
-In-Reply-To: <20250312030832.106475-1-tasos@tasossah.com>
+In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 12, 2025 at 05:08:32AM +0200, Tasos Sahanidis wrote:
-> pwm_num is set to 7 for these chips, but NCT6776_REG_PWM_MODE and
-> NCT6776_PWM_MODE_MASK only contain 6 values.
-> 
-> Fix this by adding another 0 to the end of each array.
-> 
-> Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
 
-Applied.
+--vzg54m2aeg5i4qkb
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Thanks,
-Guenter
+On 25.02.2025 16:16:41, Ming Yu wrote:
+[...]
+
+> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nc=
+t6694_canfd.c
+> new file mode 100644
+> index 000000000000..d97fce5cdf32
+> --- /dev/null
+> +++ b/drivers/net/can/usb/nct6694_canfd.c
+
+[...]
+
+> +static const struct can_bittiming_const nct6694_can_bittiming_nominal_co=
+nst =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 2,
+> +	.tseg1_max =3D 256,
+> +	.tseg2_min =3D 2,
+> +	.tseg2_max =3D 128,
+> +	.sjw_max =3D 128,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 511,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static const struct can_bittiming_const nct6694_can_bittiming_data_const=
+ =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 1,
+> +	.tseg1_max =3D 32,
+> +	.tseg2_min =3D 1,
+> +	.tseg2_max =3D 16,
+> +	.sjw_max =3D 16,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 31,
+> +	.brp_inc =3D 1,
+> +};
+
+[...]
+
+> +static int nct6694_can_start(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> +	const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> +	struct nct6694_can_setting *setting __free(kfree) =3D NULL;
+> +	const struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_SETTING,
+> +		.sel =3D ndev->dev_port,
+> +		.len =3D cpu_to_le16(sizeof(*setting))
+> +	};
+> +	int ret;
+> +
+> +	setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> +	if (!setting)
+> +		return -ENOMEM;
+> +
+> +	setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> +	setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+
+I just noticed one thing that needs clarification/documentation.
+
+You have nct6694_can_bittiming_nominal_const and
+nct6694_can_bittiming_data_const, but only pass the bit rates to your
+device.
+
+Do the bit timing const really reflect the HW limitations of your
+device?
+
+Are you sure your device uses the same algorithm as the kernel and
+calculates the same bit timing parameters as the kernel, so that the
+values given to the user space reflects the bit timing parameter chosen
+by your device?
+
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
+> +
+> +	ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> +
+> +	return 0;
+> +}
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--vzg54m2aeg5i4qkb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfX/GkACgkQDHRl3/mQ
+kZzJDgf8DgOIcr0MWwz7wlhWys5Fxw4Vtn5MszTN3NLbf2p+jPRy/TQKbi3A7p+B
+PZFdTyo+sYOdG9csQChfdGGqWEA5cd6vIMYmIbUO1401s5U+bYudq1+h68pyfOhf
+XOKXDxnSWXlzFLw2vu2SsZ3M4svT1cU0S6NRSxPx/o4QuFfsG7KLFqwdMK+MEc8P
+CcqcJKo47KwOEcWuQm/eTq4LQFvmmKz8/6PCcrY2P99PQ9bqTkoiC7R+KMONa1p3
+f2/q875xuTHckepTB7slLcXA9K7ikoT7T865z4jHsZt5ClD3+L/j5pSa82E1kcxN
+nv4xvBHXTSmzW8wtGa6VrUWOif5cYg==
+=GQzc
+-----END PGP SIGNATURE-----
+
+--vzg54m2aeg5i4qkb--
