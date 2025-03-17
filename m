@@ -1,75 +1,75 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D4414C5AA;
-	Mon, 17 Mar 2025 18:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5191E1A840A;
+	Mon, 17 Mar 2025 18:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742235402; cv=none; b=ttCFX4vBU4j9K/ulDOzidbexcoC6VCaqsKV1QujTrkehSlt9z9emhKVKz9Ard+79Ni5KD4fpGGbbGTgzF1pVB8z0Kp48tJIRE/Wa+Qok+7pp0CkFbxRnbH1Feu8HaiL91/aB/FrutpOs0QnyFjCYc8RGguHiwLxDAFn84bBj5FQ=
+	t=1742235518; cv=none; b=HZ6aANQ9m8tyDobHqjomdSHqhBixkMuf1jGBEYRl3twt5GS7BGSIys6yR+qIuGJG3686usGbwQE5V79/Az/rCF26hQieHnh0TcHm+PmQP2jfw/qOGnNenpzEJhzpXhD7s6hrZDdEnHz6w7oTxi/BFoxnGR3Q0iLtlDsjx1nPSM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742235402; c=relaxed/simple;
-	bh=UYeNfcNlGpOAgum/qq1XWewCACm+JV4ZXY0pbXoiaJY=;
+	s=arc-20240116; t=1742235518; c=relaxed/simple;
+	bh=xe8KfUjDQPuPFRdZphH1n223KpOBP916LLy0up1lalo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j0FTRlD1BMlim8nPwk5tt+paRHuBWYJ6+ooomHtRAmCMfz3bm4R9I43321nJxy43xNum5D/ml1os3P/zwjj+MP+juZQkTydZ4hA/ln3TZUrxRwu4r92FWC3yVJ4tx5wAl6a8ZZ0zxuhXRlmOH3FaPi3HrP2xRx22fRz7H8WH1ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xnx8F6QF; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=hxruUDrEqXqwfCVF1BfYvEGEAVdIN8KOqyG6iIrAXEcMmDS5/4lLw7UwlbhFWZ+ynVjVFUu7DRxXwMzArxJosSqt1mdAfqqf0ka4S0LwKthyZ1XjJS4E4PG5JTvKCqQ2vAdFpuwWZMIEz32dIcSyH8pl6COmGs7KaspNYQwqnIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eu6XqQtq; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xnx8F6QF"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2235189adaeso81285085ad.0;
-        Mon, 17 Mar 2025 11:16:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eu6XqQtq"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-225a28a511eso79194445ad.1;
+        Mon, 17 Mar 2025 11:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742235400; x=1742840200; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742235516; x=1742840316; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TUCdB66sjGcy5Ju/mCBXU+gcykaOapWPEnxRUb11FKw=;
-        b=Xnx8F6QFAMsdtKkxBw99fOkDVhZEU6R7/wYz9eLW4Hb4aQ9jaeoVXhnmQPYU7yxB87
-         e/v5bmwPR6ZTnssBpum5LYptug9EY/Wmx8TyvxJM24PEEK8TACzTyMCH0yRfuaMeWyKu
-         2KH8g9GetFiHe318Q54OHJQDN1aCnnDIwRHLQu+x7RlG6wJk3DhPnkOObhIxYgfqoC3G
-         mpAXjN5Sj321Mz8Lq5Ai9wIasQCYAAmrEw86Tyz1sLdWeIx/HfEyA1TfYVz+SkEHJAo1
-         EJ5mfDONxkh+nAxwNY0YpuaTI8rX6a6gWbw1gj/vOWbjYlHcn02DfjCU9CAVgciA3OQw
-         lHng==
+        bh=MgNpbdg7rD7CF9kSIM9lsk/9NHqJcrRR1ygV6eL4qas=;
+        b=eu6XqQtqJDkCroxt/zQ5BaJIxb/3lgJTm8lBvJ2WwjjMPj+g+0ZXK+WKqlrH8z7jDQ
+         sN4SSDwT3o/ayyjKEEe1+BWFoMnCX9qnB9LoBNJNaPO5LnqFVK0V68erjfnEgrv1liJQ
+         /wO6dJQmH1rI1aX0ooXg58z1xh/L/eh0Y+IN/r19unYnYxvZeUQ8pUIh0RSPutl66tLF
+         46bPXOZE7IjZi4tD+lWxeKxQ5ZBenVwSRBHKCSt/I6kybfmRganc6M9PWhmaZQgOvNeX
+         X5XH+Hffxk2/QApRMvJvJ52ICoDw7svKLyHYmY+pnWlguCVQOomC/26BhEnOwKKYuGBi
+         5ICg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742235400; x=1742840200;
+        d=1e100.net; s=20230601; t=1742235516; x=1742840316;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TUCdB66sjGcy5Ju/mCBXU+gcykaOapWPEnxRUb11FKw=;
-        b=sQwKxIzouRzZ3MnxKqbG1QOcF9uf7jzMdkk5ycl/OacJv4T6KhsJFduER4rnqmyXpX
-         rf2KEIZgdo5knjNbja5+qXx4ouBJgtcnnxmR35BaPUA+y7Ki2f/H5g62qWo2ANogYbvL
-         CW1RTwJG6bowais8no3Z/s0OAwAkxvKAo3zU3avNak9vTtteWNhkA7+2yp4iZgP/iEgy
-         HmEM9YT2IqA3FXwGhJ4c4i3n22k7qRfC/icpsSG6waj/LHj1pKma8FR0k7LhDRRLHfp+
-         G82s6OxRji8i/QiuXGpwXTPUYKEoF+RZaZlQUd0xT63nbd7ddYbK2/ELOWzDJedm8Hj6
-         2hnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVSVbX3hPI3M5q1Wc/uTbptlCPq68RuMQYxazikXEKDAo5HcXRvNH/wP9R539WyBccnLiR64+50C1/3ayI=@vger.kernel.org, AJvYcCVoJ7O9AZAsmAA4ypyWnT3aLk5Hl8QangUuUlQt/I8oN4DazEBAPfOZZ2JYEBpALH4dT7JiVvzGhM4=@vger.kernel.org, AJvYcCW9Dgt3T7cOxapyB38d62nn2v+60QfV10OAdqtIe3Xlp8CqcCAipwdqslyLRj+Ucnd/LqHdZbYmH45jgLTt@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU2QtiL7l8t0FC75Zapfr595J7jpV07GVqP82KzY82+E+aVopG
-	DA1bEA4Hk01IRSp4py5evErsH9Z1bsfqA7wdAWqBfVrOJJxu8u0c
-X-Gm-Gg: ASbGnct1b7C1UT08s+YFi+Hfoj6a2Q7fNJhoE0T8n/GDTr4tzcTjZU7XOw/QbfCv+nY
-	geaPrT9U+DNjxKzBk82XTDdt3RMufOu0y/ZQCKqYSU6eh4WgoxkxuYUysoDOfV7GR07Ia1fI2BC
-	q0sUCBTdHJ8XHPuzZ6rpzkr1DMQRnX/xeFBWYxImchOatPbz/jVmVI/OJSOR5XN1Z5KHvamRftD
-	bREasHMs9MRQDvC5vNwBectsbQ34qV1aNJBWy0rarqVnULz3OTUWo5bTYDRLL42iEPa8R/6t+Bx
-	ZTgteVYk8NT/MXoe2nz6iaHa7N06krC92soruKJPyy5EZlYju4/d2oQEOQ==
-X-Google-Smtp-Source: AGHT+IEKRnJOI9AZvMY9zGnQwkia7aBR5J0uGyNw+zBClToyOYhZ25i/zugKIW/w/LmNxiXuBMpIWw==
-X-Received: by 2002:a17:903:2349:b0:215:58be:334e with SMTP id d9443c01a7336-2262c9b26ebmr4275985ad.10.1742235399779;
-        Mon, 17 Mar 2025 11:16:39 -0700 (PDT)
+        bh=MgNpbdg7rD7CF9kSIM9lsk/9NHqJcrRR1ygV6eL4qas=;
+        b=Wtbzuh7k2KxEDcJmyf8L85HCP1b/LE+tJR81b+VG5B4udD1Y8dFfSBj/UZqrTMDamx
+         d/K++4wiByAtM9yl/iR5fCCqU87zmjREypfE921Z0+0xfnuGE/DFNZmoKExRo43d5lHE
+         L370U5zewr6FMrE3mBkJviDKP2JddFbtxRebNy9ZxJGEycZJt3pM38ktuMoNFLiYq+6Y
+         o96VyAmlOMJU6Ilsf0k99Dqg+XF3xzXCFaVwDPr8zaUI3yQRs3dHmfcUxzfOHjSjqOG2
+         SYCI8UgwUKbdNuYg05gE805KHzuOo9tdG7rl0eQ8zhivQb3yTl5RYwLAgcUOFqUwRhW/
+         Yllw==
+X-Forwarded-Encrypted: i=1; AJvYcCUS4fddJcvq6ojIoGw/CRT+CJJVlk7d4Tzf0RRSSSayJsuCU9eP7CskUHM32OVjViErZE3cpOeoPh+n@vger.kernel.org, AJvYcCV39c7+yTUaekiGfYbPYPCH+7FurC1OXZyXmSZz1Dec7+szONWoEjlLfTuAhwrPzcL1w2QOMrPbsWUJeiE=@vger.kernel.org, AJvYcCW88R0Nk6WbH4gvF+NfWce5xllwpXKEutKsnyvXb2XHzXLZmsl85K4K2EJNS2lr8fc6eV+gg0xl/6uPfzKp@vger.kernel.org, AJvYcCXKmrP6QTMACEPmihLGxXzzTe3h/LgVeE9MF+5TgQyFcKwqhJ5OfKkKhQm+rN11SpExMjZiH8tXBAFy@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiPsYmyASRtwDphth05qqwJfHJnd00QxhXsvr1MEqcISgYRcp6
+	Q+EMefJWXLrdquRNlvM5t/fCsTvQOQrpemyCIJQS70NwoL70N/1t
+X-Gm-Gg: ASbGncunTN/ZXovPdMt7gO8OZuOGqTxdATHXvZUKocR8+OYDq+BPhsCGQVmJCyZb/yp
+	Ram+C0YXrGnSuY+p2OxKic/xoPI5d0n80p9EPodTz8LSPXI6QECOwaq/Nwapa5BngaoJsCzhb4P
+	umnNXeTnfmj0qlvGkrEM2cj6NdP65UQSuA9P9PnkgrCstOZyrsanVDemxLuKr0iWfZOptPzF9kx
+	Ug9ZYWpp/w8BIWcSIEouC+2BJ0JcZu99Vm7Lyo6uNTxuBcpPJRzi7O316S0CE7myOy9/D48mXea
+	ExRgE06HWQ1iM6maZH4BigXKmSobqmTljpPJY7RRjhjGyVRvnDaREcD7WQ==
+X-Google-Smtp-Source: AGHT+IGTm75VZ2hy30TxP38ei9rlRlFwYSyU436RH9zJQqc4PBg0T13AsNDzAAAmZh528BMapcIqyA==
+X-Received: by 2002:a17:902:cec5:b0:224:abb:92c with SMTP id d9443c01a7336-225e0b19692mr145294115ad.50.1742235516599;
+        Mon, 17 Mar 2025 11:18:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68aa637sm78858145ad.94.2025.03.17.11.16.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd3c59sm78537665ad.218.2025.03.17.11.18.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 11:16:39 -0700 (PDT)
+        Mon, 17 Mar 2025 11:18:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Mar 2025 11:16:38 -0700
+Date: Mon, 17 Mar 2025 11:18:35 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Lee Jones <lee@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, thomas.petazzoni@bootlin.com,
-	blake.vermeer@keysight.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] hwmon: Add Congatec Board Controller monitoring
- driver
-Message-ID: <4598db93-ca3b-4a29-9b4a-84445dc95577@roeck-us.net>
-References: <20250203-congatec-board-controller-hwmon-v4-0-ff6c76a4662c@bootlin.com>
- <20250203-congatec-board-controller-hwmon-v4-1-ff6c76a4662c@bootlin.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>
+Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA233 device
+Message-ID: <43b8275e-4961-4329-8c24-0017a3c3513e@roeck-us.net>
+References: <20250116085939.1235598-1-leo.yang.sy0@gmail.com>
+ <20250116085939.1235598-2-leo.yang.sy0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,22 +78,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250203-congatec-board-controller-hwmon-v4-1-ff6c76a4662c@bootlin.com>
+In-Reply-To: <20250116085939.1235598-2-leo.yang.sy0@gmail.com>
 
-On Mon, Feb 03, 2025 at 12:01:05PM +0100, Thomas Richard wrote:
-> Add support for the Congatec Board Controller. This controller exposes
-> temperature, voltage, current and fan sensors.
+On Thu, Jan 16, 2025 at 04:59:40PM +0800, Leo Yang wrote:
+> Add TI INA233 Current and Power Monitor bindings.
 > 
-> The available sensors list cannot be predicted. Some sensors can be
-> present or not, depending the system.
-> The driver has an internal list of all possible sensors, for all Congatec
-> boards. The Board Controller gives to the driver its sensors list, and
-> their status (active or not).
-> 
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+> Signed-off-by: Leo Yang <leo.yang.sy0@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
-Note that I can not apply the mfd patch.
-
+Thanks,
 Guenter
