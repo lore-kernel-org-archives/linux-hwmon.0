@@ -1,29 +1,29 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0041A38E3;
-	Mon, 17 Mar 2025 17:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F47B1B4240;
+	Mon, 17 Mar 2025 18:12:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742234254; cv=none; b=A8LMEgV4Ary0zuDelB8XdP+bf7B/gin/naM1z5jVBS19Vx5QORnvcaBCt7XzpocHKPmUc9cJkLy0SulQRpqxE9+1cdFB8npSDi2jpKNHmDATfLLHayixexMvKRkfC0ZuYqL6PJaH3wDOf+09vYGa9YHauvTxhmVhCrfXm/7mI0I=
+	t=1742235181; cv=none; b=tM59zE9cFhYISUFp5cJxxqAySaHPZPmpZen7/iMELyMLnoCFJd9u0GL+jHouF1B2xF+icFwEQliiLUmph6NG4sIxqnApNfnnnQR7ktYi1/wqUeECKKnRSAlpOOKmoAVP9Kq0QXfP13x4nsjf36y8s82T8h2XqHubkynpg/yLxpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742234254; c=relaxed/simple;
-	bh=hm3dL6UzDDNSHp2i5TtwBJQefX+U5wxitjITfilfjXE=;
+	s=arc-20240116; t=1742235181; c=relaxed/simple;
+	bh=qsSTjhE5fdyEUv/1+5Wp0M3tLWOO1tI1rSxmFRlOKcE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJvQFOTrkQn7GVSKjNhEQOcCL7SEMpQ9o1AZhk45P6SdWNwEmffR1cldiyZ6DmOvVWs1gZoKBPhhAk6U8m99L4cTIG4DYMzppvZlV7yXLnzf0m2Jta0uKwJYNzOwMEIpHQXt5cX4lRiwDTcAwNVwqFpRI/Mc926QY8bGYb4vfDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=J4ir1V1N; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZpP73SETU2jm1YtvPkoJaQnVlq+81BdVXeNTuN6qt8iU0LpwS/TRVShDJwWGfab12Iy9H8FL7fH90Kwi6zq8SyJdRqSQfq2IOas02zjyNuQclQiR5VkoRVW4zsUDAZLn9C94A6DrpQkdobvDQWb2kgG6oYzT5GmU++pC7Hxybw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=iZ+fbdMs; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="J4ir1V1N"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="iZ+fbdMs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1742234250;
-	bh=hm3dL6UzDDNSHp2i5TtwBJQefX+U5wxitjITfilfjXE=;
+	s=mail; t=1742235176;
+	bh=qsSTjhE5fdyEUv/1+5Wp0M3tLWOO1tI1rSxmFRlOKcE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J4ir1V1NC7bKT/TXMOdVWcSlztZvfONlx8GPt+iaLCJ5GzYtUZpr5MpI57L5P9YE+
-	 Ahyz8deS6jTDApHEJ4uQPA5XX56GuDEtGnSNQIzMo33EAzlwDLlSryl22j8rJvRnGu
-	 3drWqSsymgR1Zq0zqewAqVRxImy2a9doud9hppwg=
-Date: Mon, 17 Mar 2025 18:57:29 +0100
+	b=iZ+fbdMswZiNHLsPHy3g+Pl+T+XJDhUf7PGcW6x+KXGv5064WqNJTQbpEdJrSV6Gk
+	 n/nic+7nuPDpmEefJ6zDNxMESNN6u94OLmiYrJtABAeECTeFw59Z6s7G2KUKvd9Sro
+	 n4EnrogmzJuZtLIToYG4UxkHVCAZulEb1wV+BLOY=
+Date: Mon, 17 Mar 2025 19:12:56 +0100
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To: Antheas Kapenekakis <lkml@antheas.dev>
 Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
@@ -33,11 +33,11 @@ Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	Kevin Greenberg <kdgreenberg234@protonmail.com>, Joshua Tam <csinaction@pm.me>, 
 	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
 	sre@kernel.org
-Subject: Re: [PATCH v5 12/13] power: supply: add inhibit-charge-awake to
- charge_behaviour
-Message-ID: <141a8bee-cc2c-4e46-86ed-60fde4beb5b3@t-8ch.de>
+Subject: Re: [PATCH v5 13/13] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <ce0727b4-bf47-4dc7-9103-d87d88a0e213@t-8ch.de>
 References: <20250317155349.1236188-1-lkml@antheas.dev>
- <20250317155349.1236188-13-lkml@antheas.dev>
+ <20250317155349.1236188-14-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,61 +46,282 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250317155349.1236188-13-lkml@antheas.dev>
+In-Reply-To: <20250317155349.1236188-14-lkml@antheas.dev>
 
-On 2025-03-17 16:53:48+0100, Antheas Kapenekakis wrote:
-> OneXPlayer devices have a charge inhibit feature
-> that allows the user to select between it being
-> active always or only when the device is on.
+On 2025-03-17 16:53:49+0100, Antheas Kapenekakis wrote:
+> With the X1 (AMD), OneXPlayer added a charge limit and charge inhibit
+> feature to their devices. Charge limit allows for choosing an arbitrary
+> battery charge setpoint in percentages. Charge ihibit allows to instruct
+                                                 inhibit
+
+> the device to stop charging either when it is awake or always.
 > 
-> Therefore, add attribute inhibit-charge-awake to
-> charge_behaviour to allow the user to select
-> that charge should be paused only when the device
-> is awake.
-> 
+> This feature was then extended for the F1Pro as well. OneXPlayer also
+> released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices that
+> add support for this feature. Therefore, enable it for all F1 and
+> X1 devices.
+
+What happens for devices without the BIOS update?
+Can the availability be detected during probe and handled properly?
+
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->  Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
->  drivers/power/supply/power_supply_sysfs.c   |  1 +
->  drivers/power/supply/test_power.c           |  1 +
->  include/linux/power_supply.h                |  1 +
->  4 files changed, 9 insertions(+), 5 deletions(-)
+>  drivers/platform/x86/Kconfig |   1 +
+>  drivers/platform/x86/oxpec.c | 164 ++++++++++++++++++++++++++++++++++-
+>  2 files changed, 161 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index 2a5c1a09a28f9..78afb2422fc5a 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -508,11 +508,12 @@ Description:
->  		Access: Read, Write
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 82cfc76bc5c9f..f4d993658c01f 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1189,6 +1189,7 @@ config SEL3350_PLATFORM
+>  config OXP_EC
+>  	tristate "OneXPlayer EC platform control"
+>  	depends on ACPI_EC
+> +	depends on ACPI_BATTERY
+>  	depends on HWMON
+>  	depends on X86
+>  	help
+> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+> index 39a29295f9cfe..88d839c2a4834 100644
+> --- a/drivers/platform/x86/oxpec.c
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/processor.h>
+> +#include <acpi/battery.h>
 >  
->  		Valid values:
-> -			================ ====================================
-> -			auto:            Charge normally, respect thresholds
-> -			inhibit-charge:  Do not charge while AC is attached
-> -			force-discharge: Force discharge while AC is attached
-> -			================ ====================================
-> +			===================== ========================================
-> +			auto:                 Charge normally, respect thresholds
-> +			inhibit-charge:       Do not charge while AC is attached
-> +			inhibit-charge-awake: inhibit-charge only when device is awake
-> +			force-discharge:      Force discharge while AC is attached
-> +			===================== ========================================
->  
->  What:		/sys/class/power_supply/<supply_name>/technology
->  Date:		May 2007
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index edb058c19c9c4..8d036faf220ec 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -140,6 +140,7 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
->  static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
-> +	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE]	= "inhibit-charge-awake",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
-
-Please keep the alignment.
-
+>  /* Handle ACPI lock mechanism */
+>  static u32 oxp_mutex;
+> @@ -60,6 +61,7 @@ enum oxp_board {
 >  };
+>  
+>  static enum oxp_board board;
+> +static struct device *oxp_dev;
 
-<snip>
+Using a global variable is ugly.
+An explicit parameter passed through
+battery_hook_register() -> add_battery()
+would be nicer.
+It would require changes to the core code and all its users, though.
+
+>  
+>  /* Fan reading and PWM */
+>  #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 registers long */
+> @@ -93,6 +95,23 @@ static enum oxp_board board;
+>  #define OXP_X1_TURBO_LED_OFF           0x01
+>  #define OXP_X1_TURBO_LED_ON            0x02
+>  
+> +/* Battery extension settings */
+> +#define EC_CHARGE_CONTROL_BEHAVIOURS_X1	(BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)             | \
+> +					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)    | \
+> +					 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE))
+> +
+> +#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
+> +#define OXP_X1_CHARGE_INHIBIT_REG     0xA4 /* X1 bypass charging */
+> +
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_AWAKE 0x01
+> +/*
+> + * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
+> + * but the extra bit on the X1 does nothing.
+> + */
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_OFF 0x02
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS (OXP_X1_CHARGE_INHIBIT_MASK_AWAKE | \
+> +	OXP_X1_CHARGE_INHIBIT_MASK_OFF)
+> +
+>  static const struct dmi_system_id dmi_table[] = {
+>  	{
+>  		.matches = {
+> @@ -507,6 +526,136 @@ static ssize_t tt_led_show(struct device *dev,
+>  
+>  static DEVICE_ATTR_RW(tt_led);
+>  
+> +/* Callbacks for charge behaviour attributes */
+> +static bool oxp_psy_ext_supported(void)
+> +{
+> +	switch (board) {
+> +	case oxp_x1:
+> +	case oxp_fly:
+> +		return 1;
+> +	default:
+> +		break;
+> +	}
+> +	return 0;
+
+For 'bool' use 'true' and 'false.
+
+> +}
+> +
+> +static int oxp_psy_ext_get_prop(struct power_supply *psy,
+> +				       const struct power_supply_ext *ext,
+> +				       void *data,
+> +				       enum power_supply_property psp,
+> +				       union power_supply_propval *val)
+> +{
+> +	long raw_val;
+> +	int ret;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +		ret = read_from_ec(OXP_X1_CHARGE_LIMIT_REG, 1, &raw_val);
+> +		if (ret)
+> +			return ret;
+> +		if (raw_val > 100)
+> +			return -EINVAL;
+> +		val->intval = raw_val;
+> +		return 0;
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		ret = read_from_ec(OXP_X1_CHARGE_INHIBIT_REG, 1, &raw_val);
+> +		if (ret)
+> +			return ret;
+> +		if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS) ==
+> +		    OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS)
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
+> +		else if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_AWAKE) ==
+> +			 OXP_X1_CHARGE_INHIBIT_MASK_AWAKE)
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE;
+> +		else
+> +			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
+> +		return 0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int oxp_psy_ext_set_prop(struct power_supply *psy,
+> +				       const struct power_supply_ext *ext,
+> +				       void *data,
+> +				       enum power_supply_property psp,
+> +				       const union power_supply_propval *val)
+> +{
+> +	long raw_val;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +		if (val->intval > 100)
+> +			return -EINVAL;
+> +		return write_to_ec(OXP_X1_CHARGE_LIMIT_REG, val->intval);
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		switch (val->intval) {
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
+> +			raw_val = 0;
+> +			break;
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE:
+> +			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_AWAKE;
+> +			break;
+> +		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
+> +			raw_val = OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +
+> +		return write_to_ec(OXP_X1_CHARGE_INHIBIT_REG, raw_val);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int oxp_psy_prop_is_writeable(struct power_supply *psy,
+> +					    const struct power_supply_ext *ext,
+> +					    void *data,
+> +					    enum power_supply_property psp)
+> +{
+> +	return true;
+> +}
+> +
+> +static const enum power_supply_property oxp_psy_ext_props[] = {
+> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> +	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
+> +};
+> +
+> +struct power_supply_ext oxp_psy_ext = {
+
+static const
+
+> +	.name			= "oxp-charge-control",
+> +	.properties		= oxp_psy_ext_props,
+> +	.num_properties		= ARRAY_SIZE(oxp_psy_ext_props),
+> +	.charge_behaviours	= EC_CHARGE_CONTROL_BEHAVIOURS_X1,
+
+The charge control behaviours are named "X1", but nothing else.
+Seems inconsistent.
+
+> +	.get_property		= oxp_psy_ext_get_prop,
+> +	.set_property		= oxp_psy_ext_set_prop,
+> +	.property_is_writeable	= oxp_psy_prop_is_writeable,
+> +};
+> +
+> +static int oxp_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> +{
+> +	/* OneXPlayer devices only have one battery. */
+> +	if (strcmp(battery->desc->name, "BAT0") != 0 &&
+> +	    strcmp(battery->desc->name, "BAT1") != 0 &&
+> +	    strcmp(battery->desc->name, "BATC") != 0 &&
+> +	    strcmp(battery->desc->name, "BATT") != 0)
+> +		return -ENODEV;
+
+If they only have one battery, why is the check necessary?
+
+> +
+> +	return power_supply_register_extension(battery, &oxp_psy_ext, oxp_dev, NULL);
+> +}
+> +
+> +static int oxp_remove_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> +{
+> +	power_supply_unregister_extension(battery, &oxp_psy_ext);
+> +	return 0;
+> +}
+> +
+> +static struct acpi_battery_hook battery_hook = {
+> +	.add_battery = oxp_add_battery,
+> +	.remove_battery = oxp_remove_battery,
+> +	.name = "OneXPlayer Battery",
+
+This struct can also be aligned.
+
+> +};
+> +
+>  /* PWM enable/disable functions */
+>  static int oxp_pwm_enable(void)
+>  {
+> @@ -845,12 +994,19 @@ static const struct hwmon_chip_info oxp_ec_chip_info = {
+>  static int oxp_platform_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -	struct device *hwdev;
+> +	int ret;
+>  
+> -	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
+> -						     &oxp_ec_chip_info, NULL);
+> +	oxp_dev = dev;
+> +	ret = PTR_ERR_OR_ZERO(devm_hwmon_device_register_with_info(
+> +		dev, "oxp_ec", NULL, &oxp_ec_chip_info, NULL));
+>  
+> -	return PTR_ERR_OR_ZERO(hwdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (oxp_psy_ext_supported())
+> +		return devm_battery_hook_register(dev, &battery_hook);
+
+If the driver is extended in the future this line will need to be touch
+again as it is an unconditional early return.
+
+This is more future-proof:
+
+if (oxp_psy_ext_supported()) {
+	ret = devm_battery_hook_register(dev, &battery_hook);
+	if (ret)
+		return ret;
+}
+
+> +
+> +	return 0;
+>  }
+>  
+>  static struct platform_driver oxp_platform_driver = {
+> -- 
+> 2.48.1
+> 
