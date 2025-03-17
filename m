@@ -1,97 +1,77 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A17219E8F;
-	Mon, 17 Mar 2025 06:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D521B808
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 09:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742193659; cv=none; b=X7n/E4IimcJ/qaiD6nJE9JhbkQOyB7XFunlkXNFQLWy8eJ82x3UjQuqYYGF4AHi0JML06z2XQ1BsWX2ChR9mqqQirTKv7kgUlxXICzETQaxoFSns9qmZOjbjjcfQOdd6F+nqIlRNRSTyk5jqnjdLNf4XfFafP9NH9jdsYq4Vt80=
+	t=1742202914; cv=none; b=teqaJ6HCzPtBkYccDxBpTrjRLG9EUNj2dI8a90ccjnKkPbS7dzY382BhFK6pHeSzwSed+rTYpWddlrUTw7u0yeqlu3zCaJpgUPV/kmD3mcJ21+A3qUs/qfAM93i/G3d6n1mtbNsduPaIszAAvF/5wClWvHfRV10MpRk5bxBVouQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742193659; c=relaxed/simple;
-	bh=ueTDnhNiGkK2trcg7SlaETXX/t3eit7F2ZXxKu4qBeY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BiPW3wsJ02DQcOVJpDFuhVEMXG3QkBiNBsgpkuDnIzqtn3sl2VEQZ/tuxVaoRdCjZUc+oNNlkjhQwNcDu4QIaNXYODtuuIYcciB3HjqM3V57gQkXIwaZuCWxJz2L4DC9k8q0QLoHXvzZW1qq3MhPLlE789Q9qqOh7+JHp/ZHGR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JUhC/VS/; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1742202914; c=relaxed/simple;
+	bh=T7dimAhBfE4wY7JZAMkixTQrHaUwjdB62tQDyD1BYVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iqan3p4Ir0VZTUyHMRGzP9Qo/jIjw7hVOHhQUfacf84pBCeUby6UmtTcuWLf7gLR08pvXfds2WBWd9nX3lF9QSKyqzCmn1UzhDZSzwu3LOTnuVqNzvRFtMW2wfkhohBYHd7AljFpZHSUBQEhOJRd1QqoRxeT+6DaAzZKUTNf/rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WVIYa2JF; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JUhC/VS/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1742193652;
-	bh=ueTDnhNiGkK2trcg7SlaETXX/t3eit7F2ZXxKu4qBeY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JUhC/VS/2iR6e0Ge8EuxwPO8sNgvrpJWuqLplCWY8qYpZ6U+SVBpRzfIfq554rzrW
-	 A2v/ONO39sMbG8pvWOADVeiwh2xBcqFaQSLgZI8HA6jdq1di4101Ys/JMpwqsIS6Ob
-	 ERK+FZreU2n7p0+zG4BQ3o52xyLWX9se0wES8bLs=
-Date: Mon, 17 Mar 2025 07:40:51 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@weissschuh.net>
-To: "Sung-Chi, Li" <lschyi@chromium.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (cros_ec) Add reading target fan RPM function
-Message-ID: <f6b09d06-6fc5-4032-a960-856e8cbd1574@t-8ch.de>
-References: <20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org>
- <20250313-extend_ec_hwmon_fan-v1-2-5c566776f2c4@chromium.org>
- <782e6319-2082-4f05-9987-fa68439701ef@t-8ch.de>
- <Z9ecN4ZWx1P5csrK@google.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WVIYa2JF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=cG/S5H056jkpWk
+	EtOKUTFWfqUueLN6gaWdE13xyy61Q=; b=WVIYa2JFDYPUPW60VSd5ddHaWhx5yI
+	wdz879DupkJTN11AUlHy33zDdEv4fExWi/4JfJSC1t/hUd/+xN3Lz/2t1HvXJHf3
+	1vyRVH2sDwrvkJgEHwreYDnfBQjvcgJ+WyJv5YExodkmIIbc1ooM/i5UqdnkmOWK
+	NBI5jCPY81y5VDYvCUxq7H58z96GJisH0RvmwLuEOieqX40UydBapKUMs883Pz52
+	luclXhHB+FOoA3ep7dKneT5lkDTUqiEICWVs0vJ2M6ynJbsEzC8pS3mU3Q8ER4eA
+	9YAyRdqumONBqqRn0uzFInp5xAn3bElagGdg0dfZ15TxthwAC0hPgAMQ==
+Received: (qmail 3053338 invoked from network); 17 Mar 2025 10:15:04 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Mar 2025 10:15:04 +0100
+X-UD-Smtp-Session: l3s3148p1@QaZBOYYwZJggAwDPXyTHAJp038nK7dx+
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] MAINTAINERS: correct list and scope of LTC4286 HARDWARE MONITOR
+Date: Mon, 17 Mar 2025 10:14:49 +0100
+Message-ID: <20250317091459.41462-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9ecN4ZWx1P5csrK@google.com>
 
-On 2025-03-17 11:51:19+0800, Sung-Chi, Li wrote:
-> On Thu, Mar 13, 2025 at 05:24:28PM +0100, Thomas Weißschuh wrote:
-> > On 2025-03-13 12:47:43+0800, Sung-Chi Li wrote:
-> > > Implement the functionality of reading the target fan RPM setting from
-> > > ChromeOS embedded controller under framework.
-> > > 
-> > > Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
-> > > ---
-> > >  drivers/hwmon/cros_ec_hwmon.c | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > > index b2fec0768301f116f49c57b8dbfb042b98a573e1..73bfcbbaf9531be6b753cfef8045fd5dab5b2ab3 100644
-> > > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> > > @@ -36,6 +36,19 @@ static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static int cros_ec_hwmon_read_fan_target(struct cros_ec_device *cros_ec, u8 index, int32_t *speed)
-> > 
-> > int32_t is a userspace type. In the kernel use i32, or even better u32.
-> > 
-> Sorry for missing this important detail, I will not use userspace type
-> for following changes.
+This entry has a wrong list, i2c instead of hwmon. Also, it states to
+maintain Kconfig and Makefile which is not suitable for a single driver.
 
-No need to be sorry.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-<snip>
+Found because I was wondering why each and every pmbus patch was sent to
+the i2c-list... I'd love to have this in 6.14, if possible
 
-> > > +
-> > > +	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_PWM_GET_FAN_TARGET_RPM, NULL, 0, &r, sizeof(r));
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	*speed = le32_to_cpu(r.rpm);
-> > 
-> > r.rpm is not marked as __le32, I'm not sure if sparse will complain
-> > about the usage of le32_to_cpu().
-> > 
-> It did. Currently, all devices are running little endians on both AP and EC, so
-> I think it is ok not to explicitly call the le32_to_cpu?
+ MAINTAINERS | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I think on big endian none of the CrOS EC code in Linux would work.
-But as the driver currently already uses leXX_to_cpu() it would be nice
-to keep using it consistently.
-The nicest solution would be to change the definition of
-struct ec_response_pwm_get_fan_rpm to use __le32.
-Or add a cast: le32_to_cpu((__force __le32)r.rpm);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 896a307fa065..68e312bcd006 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13750,12 +13750,10 @@ F:	drivers/hwmon/ltc4282.c
+ 
+ LTC4286 HARDWARE MONITOR DRIVER
+ M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+-L:	linux-i2c@vger.kernel.org
++L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
+ F:	Documentation/hwmon/ltc4286.rst
+-F:	drivers/hwmon/pmbus/Kconfig
+-F:	drivers/hwmon/pmbus/Makefile
+ F:	drivers/hwmon/pmbus/ltc4286.c
+ 
+ LTC4306 I2C MULTIPLEXER DRIVER
+-- 
+2.47.2
+
