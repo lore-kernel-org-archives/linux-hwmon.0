@@ -1,70 +1,70 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD75321CC7B
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 11:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E8D1519B4
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 11:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742211702; cv=none; b=dx9qYfEjADirGkqjMPjtsg/Bn7SUpTHUFOsWu8o4Y89WbfqZ/JHDoVRRQIsx1uUhLWk2yKGRHjd5MWIxN4elAYhW8Krdd1EjWxq8RKUW64pZFH95JkFjZogbirSLnUnoENjTlVw/19o9GHhs7kTsX+ONv8imDEkaHGxWC77lMHM=
+	t=1742211877; cv=none; b=j6VUIlE0OtMJMJg9OPsJfH/mD8spxCxwHZA+ScORXlA0twtn91YLy+e7vffLQJhI4N6zEUZ3q7J+uz9FMNeiroK9O8nzuCqYv8BaJaAd/dvT4sIhNIdQs3wI/vFVYBSrmlIbFNGBJbv/aTyZzC1u//jQnHl8k35Wf6gEUJr0YDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742211702; c=relaxed/simple;
-	bh=XYynoBMqaT1uIjMbgDIg84i1cZ4yYg0+T4izPhaq9rs=;
+	s=arc-20240116; t=1742211877; c=relaxed/simple;
+	bh=3h+MsXQ3NviowYuDoRpuDuLcZ27wMI+GpfSD00VDaIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nUmR0tPfy/rK4f1q/NZ3CBT7QVPJRYUzcJh4DWLbjy1oTGjQfCrVTfA1EBNvFbP1Z0EkIYrpeHVHYSMvSe+mLSClSQR/n25fRsDaQ9T8KlFvgR0he2tzohtjeecCqX1AL3PAe/p4sEoJ+STUKIrkpRuDJwnCD6ee1axISRpZSOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqMz1o92; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wpbozo7PUHH9xJ4NQFr8sxvCoVWo79JQBdA16bENCfsOijmbVZI733A2CItjKwbHpGMSYnbROTg4dyzz56MIYqbsnWCJ3WeEDfOvr4rUtZSwEFlECdwCnncjrTz3lIh3LUCQj3sXTt157Y6Ep8I9klvoIqan4opESNovj4UXnyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SuTCNZQ6; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqMz1o92"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-223a7065ff8so34094455ad.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 04:41:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SuTCNZQ6"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-224019ad9edso26079515ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 04:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742211700; x=1742816500; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742211875; x=1742816675; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cxlEmYXAPVzvaxIzVzV/aas62rv06fFDgvDWGK5sc5E=;
-        b=iqMz1o92aeOuEsG0G/ymZaP5RLRGaGEPz1TtnjITNFZCKB8p02hGQE5p8e4w2j5P7F
-         WPjR80wJYLtKPqMK1gxPimdmNm5+DpPw/oEzOYS5Y7vsNaTcU+JabpSXds1Kqq4aysbn
-         q/R92kDpOKUBF8c6Q3Q+jwnxXZZXZTV2gGw9icAPHkVS1smuSeml/P0B15TXVN0JICcl
-         aj5RtyqDayQ/LjM5KE4GYs3mM93tMKubeeV+fDPihlnH8xLBfhYey4A1ZG4hM5n93t2z
-         3zB/yxJ1+1jt69PhaZQ5BoguV9LhYRB1Axsni6DkJj0WQlVeU4I+x9jltza4klMDLArp
-         lfcg==
+        bh=chmXKrjJ+jVf9rZgMgNHJJrzG/IDgi03eNV+4CU4cKU=;
+        b=SuTCNZQ6MDrDch3lHcwgm0D0WWsFVK7qNgwY3mAthWKTAD6aHe7nNfjpNK9HkgYFS6
+         k+ydBjlnz46c2gQDssIcUkklmnNnYf6lk+fuMsw6AVkpLH3tlIXa1F2HDekFxAic/aO3
+         vyfRP27f0K1EJok+TU6Xaw+NSMMzixXF3ncMWfhCs6YeF7DoPd8w+OIhqTZ0mfjPgl14
+         OnHeTX0TZ51e6XWiEfdh/v1vjLtlC7S4zspFUBzJBLvtG1GuqVQPFakXAIq0oBZppZmy
+         BUraZDVcRMBwaWO4nXfLsPyE7aEJop1Hzz8PFQqAdhJ/RjtJC0/TunvkjyDY6PZ4d5bE
+         9RSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742211700; x=1742816500;
+        d=1e100.net; s=20230601; t=1742211875; x=1742816675;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cxlEmYXAPVzvaxIzVzV/aas62rv06fFDgvDWGK5sc5E=;
-        b=aP6FmEVjq+njTaswSkmK05cZ4ok/nDVb43RUki8WedY/LrOHs3rIZNL0KGlRy1Zshf
-         5pDydkFhcmGY1/Sua8Ot55VVYpjmpYB7uBkYVB1FJIrnHthkd50Z6SAFGj5fOtibdmie
-         keHgsS+V3wTA+u7zWTKRHOTpDrqAaOsaRMKaZMtIL3hG674CcBi8a14DyyvIiXMLihGn
-         3j3k2M2z1s6zPJ8y+UTMt5wxuXQYo33Jy/KNIXWVAI+qHNyWBQUCIPR47CPtmQBF4Cc2
-         mVMbqwu/VGM5I9NWrp/6jW8nFegv1tECaqKa3Xbh8uijNFLcaBjHkFWcpFi2Al4FknMX
-         JdHQ==
-X-Gm-Message-State: AOJu0YyNM2LGC8O7m3YSMXCgRJirql1ypHFqGaO4Bk9TVFjOgsZKItoM
-	A1/SNFrey9J9bspeWlurfwXbYjCZY1lUzmLXxCg2h5As0Q/gZeOfA7xZnQ==
-X-Gm-Gg: ASbGncszjeK9+7DLVhAKwB6ClrSyjAcQ9FVQ9pf8oM5zryPLuS2rTtp8jaMhp9pqxMf
-	c/uAzp2mdYlyArpB32T8NTDlR8f7YNd7Y14Fu5H810syG8zT4PmKraQTUx1SVyiSUpMgcAwcOMv
-	AVlXE7NLPUlhyH4zkH2ylMRcbA1+lhM1+ETL0T68hdWXuXto8vwc0tAqGgk/RvEudAdi49LrhEA
-	WaihwzQe58LO6Ct3x5HcyRF1MyYy/JcxYyhvP+kColq1uDeO9Bz7rHPzvM2gCu3f96miDDJbe5h
-	LUpSrCrlhfXlvJw9cTRPRSbdMxKeL6Ak0k+9VCqvnEoBapWt1ev4eXYOBw==
-X-Google-Smtp-Source: AGHT+IFH6azgJt/xuOt+UXmGuboMx3Xyff8pDhE1rUzdH00qyh5N20M8zXLPueSogJ27x2Lje0+oFw==
-X-Received: by 2002:a17:90b:3d85:b0:2f9:cf97:56a6 with SMTP id 98e67ed59e1d1-30151c88a66mr17363618a91.14.1742211699913;
-        Mon, 17 Mar 2025 04:41:39 -0700 (PDT)
+        bh=chmXKrjJ+jVf9rZgMgNHJJrzG/IDgi03eNV+4CU4cKU=;
+        b=hsT6xPxhhhTpnSmVvlZBjQXPJeNjJ76oeTEKS3eIOjNpGZzQYy21yeC9Kx055GhbzE
+         QlGlBCZiDd/Usm+xySdJW2akqtJeHRkOtHw1dsDYX07V19tRSfvhAb1f6zRmtsGESQSA
+         RhitdeD/GZ8ageYHpW4KgvMa5C54Wz6zyxehQ9DHsJttl03dhzz/TRTxYqw2pjZ/XhAy
+         iB0VBxZyanzlCP0kxvMonsoyuhSfAtwOlgWpGVb7UzjA+2IfQHfliUA5aeyL8jbmv6Ey
+         VSzWADSlFgOcLr34limi0Bp3hPhIyZv2/WEwNuj/fAKjC9NCZxTmLoCYa89QanmztUgD
+         2FmQ==
+X-Gm-Message-State: AOJu0YxaxnfGZ9KHL9UktS6NjE32auG4tNUtNPxSCbEMgR7+r6HXZVqc
+	iq6YTJVZ+KgrEYB09UxmpOCprA5EEJlmzpGGLiBubum8c56g5yub
+X-Gm-Gg: ASbGncvjzSAjXXCoybXXmDQPqxXtYySZinNWiIwYHAOye8qsNQls9IKHXk45CAOvoDt
+	3Ma3gqJ7RNaUG4f7I4gwuuuiurq9dJwG4Jrww8sW0QdRAcYusgglptRhVhcEBiFx8jpMTBIP9wF
+	dlX18fOCID3DxZ+v0T0C+Zx/w+tZ/bkxZSeBGtW5gUaEIodpaPfm7uFP+vqc+6sOoTnq8BQUeyL
+	5B5VBEHzlMJhHlLD3I39FATbaXXWNF9q59pmlRSVVHNNSSKWJrzSMgqpTvUmvWevZErr6iJZRCu
+	lsemvppXnrPssG0aM0qbxuXZMNZsLJsioKNCyqZ8415AjeW5ttlWlvnFyA==
+X-Google-Smtp-Source: AGHT+IFOSVIHK7rx1GLYfYtoYGmQq9OYwN2DN3hPwb/mQ78sSSten5vXO5d5kmcfyZPtb7ECFNVL0g==
+X-Received: by 2002:a17:903:283:b0:223:3b76:4e23 with SMTP id d9443c01a7336-225e0aff8cemr150454155ad.44.1742211875137;
+        Mon, 17 Mar 2025 04:44:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301539d3f26sm5841134a91.8.2025.03.17.04.41.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a7f87sm73515005ad.81.2025.03.17.04.44.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 04:41:39 -0700 (PDT)
+        Mon, 17 Mar 2025 04:44:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Mar 2025 04:41:38 -0700
+Date: Mon, 17 Mar 2025 04:44:33 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: correct list and scope of LTC4286 HARDWARE
- MONITOR
-Message-ID: <ad1f8871-def1-4a45-9b15-d968fc96e439@roeck-us.net>
-References: <20250317091459.41462-2-wsa+renesas@sang-engineering.com>
+To: Tasos Sahanidis <tasos@tasossah.com>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH] hwmon: (nct6775-core) Fix out of bounds access for
+ NCT679{8,9}
+Message-ID: <b9ca1774-4752-49c1-b406-43eace2d56a0@roeck-us.net>
+References: <20250312030832.106475-1-tasos@tasossah.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -73,42 +73,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250317091459.41462-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250312030832.106475-1-tasos@tasossah.com>
 
-On Mon, Mar 17, 2025 at 10:14:49AM +0100, Wolfram Sang wrote:
-> This entry has a wrong list, i2c instead of hwmon. Also, it states to
-> maintain Kconfig and Makefile which is not suitable for a single driver.
+On Wed, Mar 12, 2025 at 05:08:32AM +0200, Tasos Sahanidis wrote:
+> pwm_num is set to 7 for these chips, but NCT6776_REG_PWM_MODE and
+> NCT6776_PWM_MODE_MASK only contain 6 values.
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
+> Fix this by adding another 0 to the end of each array.
 > 
-> Found because I was wondering why each and every pmbus patch was sent to
-> the i2c-list... I'd love to have this in 6.14, if possible
+> Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
 
 Applied.
 
 Thanks,
 Guenter
-
-> 
->  MAINTAINERS | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 896a307fa065..68e312bcd006 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13750,12 +13750,10 @@ F:	drivers/hwmon/ltc4282.c
->  
->  LTC4286 HARDWARE MONITOR DRIVER
->  M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> -L:	linux-i2c@vger.kernel.org
-> +L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
->  F:	Documentation/hwmon/ltc4286.rst
-> -F:	drivers/hwmon/pmbus/Kconfig
-> -F:	drivers/hwmon/pmbus/Makefile
->  F:	drivers/hwmon/pmbus/ltc4286.c
->  
->  LTC4306 I2C MULTIPLEXER DRIVER
