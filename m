@@ -1,187 +1,326 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFA619048F
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 16:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C181B4241;
+	Mon, 17 Mar 2025 17:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742227875; cv=none; b=QJ4u5mK27Vkfh35u2QgNKh3X5dMXlszS+OoBvb/KKXGOTSgppzzMgPxf1bzHUu5KYU9MOs9UtjY52+kR3v2n47s7Ni3xqJ9cqFlDr10mI25EfhSHW6hlrZ7VJpsV6I5gXJ9auA5tdpkaA6L8K8EUvWG7CxSC6Z0hrv2ov69uYLk=
+	t=1742233606; cv=none; b=sc014ggzp3x47oel8FPlh00xxe1mYA+7cmZ7/qTTeW2LCoV/iUBf1jplX4+u1kI8QSh8YzxUQKgLiTYdIu72vLT/wSY+iz69EKLemL/Muf+6UNjAbhOJJbgi5owInz5YqlxTYfsB7dqNQCxnGbAqKMdtFKRMy487Lrg6BWx8l9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742227875; c=relaxed/simple;
-	bh=Uoc1DrwhFhqKapvK2aZfs21XdFLHjo6sg1n08s0IZcE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DFkGAWe6R1eysE/aPAeOJbCXgtWndkGtku9sTwjU/u0RJ3ScKPGCoARJkQ8K8N9rFBUuRAr/K+jo6975ZpdeFfkQAVtv/hcGo81jovjk2HwR16ao70yxANTKsmkTouKROFdYFg8oj9yFPa9f+BCkQdlO3PXor3Wop4SKJFNuvxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MEhXOilo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742233606; c=relaxed/simple;
+	bh=96XrU3V7dfA10jUBILtr9fJx5dTZ4DBQF0wZ/SZDgEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcpR0WwjdiatRmNZe7uuVSzy/uQ4Sq5V0RfJ9rlp/+6PlpWQT6NW6RDfpiWmZYh5mojWIG4ruusEREHRhNrPt228eP2CQjkR5IX+ba4R0KV3JlDbIf/CbJfsVkmj/orCVvhczfTXVh2Ny1vK+aLCJY2rOTuVvcsy4FMXo3V0MXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=bDis2Lu1; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MEhXOilo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742227872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gMxOns8OLCANHT+gWoMrsh+8iH9de53W50uJK8mjjKs=;
-	b=MEhXOiloO8IjTmd4nrxj3uvjB0In4oqAcr5MZqIO0BRCl/nl5OMyI62AGFJNQkjwI/nH/G
-	k/StE3ABLkicKUVSU44tXzX5yvwVf3kjKkJzoGbgPo+dfx+HI2T/VrOMFnXN0oQFznDFhB
-	b7Uk38Dt9vGCjb7usRS6GIGRiVUK9WA=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-448-qfHDjvLYNc6VMAS_7hdCwg-1; Mon, 17 Mar 2025 12:11:11 -0400
-X-MC-Unique: qfHDjvLYNc6VMAS_7hdCwg-1
-X-Mimecast-MFC-AGG-ID: qfHDjvLYNc6VMAS_7hdCwg_1742227870
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ac29ae0b2fbso465435766b.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 09:11:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742227870; x=1742832670;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMxOns8OLCANHT+gWoMrsh+8iH9de53W50uJK8mjjKs=;
-        b=Tz8DeS+2Jr5Fis59z8olHSWW01AkCUdjyYjEhsa3ZzYFqQ0N5sAc8eG6dQRsnWdIYN
-         zX/gs1uZf7ZRYrSg4DbEDDS+2CEh+G4nn37r1FY5lLQifGC7s0PDpL4FpvyDrwg9baIv
-         kT58fpvNJqcEqykWAkkL1bG9sf8Mn9VA8AzK549D3DjVJtFJ4TIB/TOuAkhE3U2Kt8BY
-         p1/y6uGZEOYyxHjGo7YHqw9LFo0CqssgDQiSeyuwzIHfPHyBPLtlB/p/Qxkr97MUGHZt
-         nJk00VtiqJ7jo/JciaAoBLcc0/Nv/4imaduqtgNwbNdA4maAme/NRGu6m5gaTxFtqfaR
-         EaNw==
-X-Gm-Message-State: AOJu0YzzBoqFKVDsFTAFP3Bb3z8pojzUpJgttrhBmCDISWzVbazaNuvI
-	Q4zanJN1wZFF0TLvXGZKrQbMcoVI/Fh0H+UBRG9SE0kRcyolcct1vuNlZVxlnatyLj0XvVpOK68
-	6LXqlUH0nOnJ827oU0rpWG2gH6tdvVsEr2tl2njHYzKgqTOR3zQiyN3ZtQ9S4
-X-Gm-Gg: ASbGnctxGs+17Cm87tTqVLdL+YWiWByCXRzs7/ixDVCGSayl8aaoZ9ZsdKT3pRz761p
-	aRrVdw+dggvMbOolwZnqyPjWWJ3Gx1uTOBzeVq2d/C7CQ9dqH/xF7FwuKFeeK3Uo6HJBJ+t73xN
-	FMdGcVhSXQh7QPCELxDo38pRuGFiCd06CB6NcBeCVXmxOHjmQSOHLHCYj0BJ8bxynOJrSFgMOCQ
-	inGcHrzeNXzhSCWD5d8Q0Fn9zcGAhatQQ4v43CvRMNHxG3Q4iADzmDogZUG0TZLA+TVWRHvzP+d
-	pepAT2AnbcvJ2oRYLo0wWY3kr1XdNyufpN0M3dLKw4uj/iDX+lnde0b3pBvhAJ0H803u++8G0Cs
-	wm48m0VFcfLIbeBDR3LXZniKb776HP/DyCU/dtfM9kIrhVNI8g1QmRv5pCg+hOshBKw==
-X-Received: by 2002:a17:906:ee85:b0:ac2:d6d1:fe65 with SMTP id a640c23a62f3a-ac38d515007mr31491066b.41.1742227869883;
-        Mon, 17 Mar 2025 09:11:09 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH0sssDA3BQRaSOyamV/S0PXeQ9xKfhQPA6HZicsQtZlhud1G2Kdvgy67YBjeYvH5sJJ0eE7Q==
-X-Received: by 2002:a17:906:ee85:b0:ac2:d6d1:fe65 with SMTP id a640c23a62f3a-ac38d515007mr31484766b.41.1742227869395;
-        Mon, 17 Mar 2025 09:11:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac314858a8fsm676871266b.80.2025.03.17.09.11.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 09:11:08 -0700 (PDT)
-Message-ID: <d9da58be-7a83-4007-8ea7-8c6d6005094a@redhat.com>
-Date: Mon, 17 Mar 2025 17:11:07 +0100
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="bDis2Lu1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1742233593;
+	bh=96XrU3V7dfA10jUBILtr9fJx5dTZ4DBQF0wZ/SZDgEE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bDis2Lu1Uxq21mRBB3bbm3eHvWehGkKXV9txgSaOM+D7+8M0VIm9c9vJVyYknMm6f
+	 kd3zTneZbPlyKchxxE9s9A/ZhUhI6nLxGYBHAZa3j2aTVIm0uy+wuKMIjEwERemVhF
+	 eL4YcEXYDhoqsYzlO9PU0kCl87MKiP0uhaxcarmo=
+Date: Mon, 17 Mar 2025 18:46:32 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@weissschuh.net>
+To: Sung-Chi Li <lschyi@chromium.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+	chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (cros_ec) Add set and get target fan RPM
+ function
+Message-ID: <aaa1fe3e-9813-4701-9c55-405925d8d1f7@t-8ch.de>
+References: <20250317-extend_ec_hwmon_fan-v2-1-13670557afe5@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 12/13] power: supply: add inhibit-charge-awake to
- charge_behaviour
-To: Antheas Kapenekakis <lkml@antheas.dev>,
- platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Derek J Clark <derekjohn.clark@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
- Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org,
- sre@kernel.org, linux@weissschuh.net
-References: <20250317155349.1236188-1-lkml@antheas.dev>
- <20250317155349.1236188-13-lkml@antheas.dev>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20250317155349.1236188-13-lkml@antheas.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250317-extend_ec_hwmon_fan-v2-1-13670557afe5@chromium.org>
 
-Hi,
-
-On 17-Mar-25 4:53 PM, Antheas Kapenekakis wrote:
-> OneXPlayer devices have a charge inhibit feature
-> that allows the user to select between it being
-> active always or only when the device is on.
+On 2025-03-17 14:40:26+0800, Sung-Chi Li wrote:
+> The ChromeOS embedded controller (EC) supports closed loop fan speed
+> control, so add the fan target attribute under hwmon framework, such
+> that kernel can expose reading and specifying the desired fan RPM for
+> fans connected to the EC.
 > 
-> Therefore, add attribute inhibit-charge-awake to
-> charge_behaviour to allow the user to select
-> that charge should be paused only when the device
-> is awake.
-> 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> When probing the cros_ec hwmon module, we also check the supported
+> command version of setting target fan RPM. This commit implements the
+> version 0 of getting the target fan RPM, which can only read the target
+> RPM of the first fan. This commit also implements the version 0 and 1 of
+> setting the target fan RPM, where the version 0 only supports setting
+> all fan to the same RPM, while version 1 supports setting different RPM
+> to each fan respectively.
 
-Thanks, patch looks good to me, FWIW:
+Can you explain why this set of command compatibility was chosen?
+I would have expected to fully support the v1 commands and completely
+skip v0.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-
+> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
 > ---
->  Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
->  drivers/power/supply/power_supply_sysfs.c   |  1 +
->  drivers/power/supply/test_power.c           |  1 +
->  include/linux/power_supply.h                |  1 +
->  4 files changed, 9 insertions(+), 5 deletions(-)
+> ChromeOS embedded controller (EC) supports closed-loop fan control. We
+> anticipate to have the fan related control from the kernel side, so this
+> series register the HWMON_F_TARGET attribute, and implement the read and
+> write function for setting/reading the target fan RPM from the EC side.
+> ---
+> Changes in v2:
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index 2a5c1a09a28f9..78afb2422fc5a 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -508,11 +508,12 @@ Description:
->  		Access: Read, Write
->  
->  		Valid values:
-> -			================ ====================================
-> -			auto:            Charge normally, respect thresholds
-> -			inhibit-charge:  Do not charge while AC is attached
-> -			force-discharge: Force discharge while AC is attached
-> -			================ ====================================
-> +			===================== ========================================
-> +			auto:                 Charge normally, respect thresholds
-> +			inhibit-charge:       Do not charge while AC is attached
-> +			inhibit-charge-awake: inhibit-charge only when device is awake
-> +			force-discharge:      Force discharge while AC is attached
-> +			===================== ========================================
->  
->  What:		/sys/class/power_supply/<supply_name>/technology
->  Date:		May 2007
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index edb058c19c9c4..8d036faf220ec 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -140,6 +140,7 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
->  static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
-> +	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE]	= "inhibit-charge-awake",
->  	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
+> - Squash the read, write, and register of fan target attribute to 1
+>   commit, as they are the same topic.
+> - Probe the supported command version from EC for setting the target fan
+>   RPM, and perform the set fan target RPM based on the supported
+>   version.
+> - Update the used variable type to kernel types (i.e., u32).
+> - Link to v1: https://lore.kernel.org/r/20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org
+> ---
+>  drivers/hwmon/cros_ec_hwmon.c | 130 ++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 125 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> index 9991c3fa020ac859cbbff29dfb669e53248df885..b118a355f67d7238a6f596cf01a49d5b621b31d6 100644
+> --- a/drivers/hwmon/cros_ec_hwmon.c
+> +++ b/drivers/hwmon/cros_ec_hwmon.c
+> @@ -21,6 +21,12 @@ struct cros_ec_hwmon_priv {
+>  	struct cros_ec_device *cros_ec;
+>  	const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
+>  	u8 usable_fans;
+> +	int set_fan_target_rpm_version;
+> +};
+> +
+> +union ec_params_pwm_set_fan_target_rpm {
+> +	struct ec_params_pwm_set_fan_target_rpm_v0 v0;
+> +	struct ec_params_pwm_set_fan_target_rpm_v1 v1;
 >  };
->  
-> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-> index 2a975a110f485..958e0c0cf2876 100644
-> --- a/drivers/power/supply/test_power.c
-> +++ b/drivers/power/supply/test_power.c
-> @@ -214,6 +214,7 @@ static const struct power_supply_desc test_power_desc[] = {
->  		.property_is_writeable = test_power_battery_property_is_writeable,
->  		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
->  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
-> +				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE)
->  				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
->  	},
->  	[TEST_USB] = {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 6ed53b2921624..bb8e9e62ce834 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -212,6 +212,7 @@ enum power_supply_usb_type {
->  enum power_supply_charge_behaviour {
->  	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
->  	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
-> +	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE,
->  	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
->  };
->  
 
+No need to give this union a name. It is only used once.
+It doesn't even have to be a union but can be two dedicated on-stack
+variables.
+
+>  
+>  static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
+> @@ -36,6 +42,25 @@ static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index
+>  	return 0;
+>  }
+>  
+> +static int cros_ec_hwmon_read_fan_target(struct cros_ec_device *cros_ec,
+> +					 u8 index, u32 *speed)
+> +{
+> +	struct ec_response_pwm_get_fan_rpm r;
+> +	int ret;
+> +
+> +	// Currently only supports reading the first fan.
+> +	if (index > 0)
+> +		return -EOPNOTSUPP;
+
+This needs to be checked in is_visible(), not here.
+(Or only support v1 and not have the restriction)
+
+> +
+> +	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_PWM_GET_FAN_TARGET_RPM, NULL, 0,
+> +			  &r, sizeof(r));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*speed = r.rpm;
+
+Comments from v1 still apply.
+
+> +	return 0;
+> +}
+> +
+>  static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
+>  {
+>  	unsigned int offset;
+> @@ -52,6 +77,49 @@ static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8
+>  	return 0;
+>  }
+>  
+> +static int cros_ec_hwmon_set_fan_rpm(struct cros_ec_device *cros_ec,
+> +				     int version, u8 index, u16 val)
+> +{
+> +	union ec_params_pwm_set_fan_target_rpm req;
+> +	int req_size;
+> +	int ret;
+> +
+> +	if (version == 0) {
+> +		if (index != 0)
+> +			dev_warn(
+> +				cros_ec->dev,
+> +				"v0 only supports setting all fan to same RPM (cannot just set idx %d), set all to %d\n",
+> +				index, val);
+
+How important is v0 in general?
+
+> +
+> +		req_size = sizeof(req.v0);
+> +		req.v0.rpm = val;
+> +	} else if (version == 1) {
+> +		req_size = sizeof(req.v1);
+> +		req.v1.rpm = val;
+> +		req.v1.fan_idx = index;
+> +	} else
+> +		return -EOPNOTSUPP;
+
+If braces are used in the other branches, also use braces here.
+Also this case can never happen, remove it.
+
+> +
+> +	ret = cros_ec_cmd(cros_ec, version, EC_CMD_PWM_SET_FAN_TARGET_RPM, &req,
+> +			  req_size, NULL, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	return 0;
+> +}
+> +
+> +static int cros_ec_hwmon_write_fan(struct cros_ec_hwmon_priv *priv, u32 attr,
+> +				   int channel, long rpm)
+> +{
+> +	switch (attr) {
+> +	case hwmon_fan_target:
+> +		return cros_ec_hwmon_set_fan_rpm(
+> +			priv->cros_ec, priv->set_fan_target_rpm_version,
+> +			channel, rpm);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+>  static bool cros_ec_hwmon_is_error_fan(u16 speed)
+>  {
+>  	return speed == EC_FAN_SPEED_NOT_PRESENT || speed == EC_FAN_SPEED_STALLED;
+> @@ -75,6 +143,7 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>  {
+>  	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+>  	int ret = -EOPNOTSUPP;
+> +	u32 target_rpm;
+>  	u16 speed;
+>  	u8 temp;
+>  
+> @@ -91,6 +160,11 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>  			ret = cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed);
+>  			if (ret == 0)
+>  				*val = cros_ec_hwmon_is_error_fan(speed);
+> +		} else if (attr == hwmon_fan_target) {
+> +			ret = cros_ec_hwmon_read_fan_target(
+> +				priv->cros_ec, channel, &target_rpm);
+> +			if (ret == 0)
+> +				*val = target_rpm;
+>  		}
+>  	} else if (type == hwmon_temp) {
+>  		if (attr == hwmon_temp_input) {
+> @@ -130,8 +204,15 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
+>  	const struct cros_ec_hwmon_priv *priv = data;
+>  
+>  	if (type == hwmon_fan) {
+> -		if (priv->usable_fans & BIT(channel))
+> +		if (!(priv->usable_fans & BIT(channel)))
+> +			return 0;
+> +
+> +		switch (attr) {
+> +		case hwmon_fan_target:
+> +			return 0644;
+> +		default:
+>  			return 0444;
+> +		}
+>  	} else if (type == hwmon_temp) {
+>  		if (priv->temp_sensor_names[channel])
+>  			return 0444;
+> @@ -140,13 +221,26 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
+>  	return 0;
+>  }
+>  
+> +static int cros_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel, long val)
+> +{
+> +	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return cros_ec_hwmon_write_fan(priv, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+>  static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+>  	HWMON_CHANNEL_INFO(fan,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT),
+> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
+> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
+> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
+> +			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET),
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
+> @@ -178,6 +272,7 @@ static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
+>  static const struct hwmon_ops cros_ec_hwmon_ops = {
+>  	.read = cros_ec_hwmon_read,
+>  	.read_string = cros_ec_hwmon_read_string,
+> +	.write = cros_ec_hwmon_write,
+>  	.is_visible = cros_ec_hwmon_is_visible,
+>  };
+>  
+> @@ -233,6 +328,27 @@ static void cros_ec_hwmon_probe_fans(struct cros_ec_hwmon_priv *priv)
+>  	}
+>  }
+>  
+> +static int cros_ec_hwmon_probe_fan_target_cmd_version(struct cros_ec_hwmon_priv *priv)
+> +{
+> +	struct ec_params_get_cmd_versions_v1 params = {
+> +		.cmd = EC_CMD_PWM_SET_FAN_TARGET_RPM,
+> +	};
+> +	struct ec_response_get_cmd_versions response;
+> +	int ret;
+> +
+> +	ret = cros_ec_cmd(priv->cros_ec, 1, EC_CMD_GET_CMD_VERSIONS, &params,
+> +			  sizeof(params), &response, sizeof(response));
+
+cros_ec_get_cmd_versions().
+
+> +	if (ret < 0) {
+> +		dev_err(priv->cros_ec->dev,
+> +			"error getting target fan RPM set command version: %d\n", ret);
+> +		return ret;
+> +	}
+
+If neither v0 nor v1 are supported, this will completely prevent the
+driver from being probed. Is this intentional?
+
+> +
+> +	priv->set_fan_target_rpm_version = (response.version_mask & EC_VER_MASK(1)) ? 1 : 0;
+> +
+> +	return 0;
+> +}
+> +
+>  static int cros_ec_hwmon_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -260,6 +376,10 @@ static int cros_ec_hwmon_probe(struct platform_device *pdev)
+>  	cros_ec_hwmon_probe_temp_sensors(dev, priv, thermal_version);
+>  	cros_ec_hwmon_probe_fans(priv);
+>  
+> +	ret = cros_ec_hwmon_probe_fan_target_cmd_version(priv);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
+>  							 &cros_ec_hwmon_chip_info, NULL);
+>  
+> 
+> ---
+> base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
+> change-id: 20250313-extend_ec_hwmon_fan-a5f59aab2cb3
+> 
+> Best regards,
+> -- 
+> Sung-Chi Li <lschyi@chromium.org>
+> 
