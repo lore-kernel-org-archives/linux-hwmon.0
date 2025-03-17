@@ -1,92 +1,123 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8792619048F;
-	Mon, 17 Mar 2025 18:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C35617A311;
+	Mon, 17 Mar 2025 21:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742236085; cv=none; b=KPifeyzwps3aHB4Q04jV+t5UQ2m6cJJJm4x2ijHo4W1ctWtV+bNZ3Ze5cd1WmhM3TYLJZ5ZEugAPybd83n8FyYhe7ro5A7/Lz7BrRHM9s6O+5UT7Mh4AL2tX2+peWrlUHwko25LJh+q6UJXNTvMvDevtPert4BZbQFkkEI7Vios=
+	t=1742245330; cv=none; b=iDnur/9A66sHlDN5NS1K3Lq5EjtLxsfk/fr+gUjHbfcTqFa004xUU8Z1tguqDpQYv8eY8fyPOt1EJcdECwu2A3M/lCeclCBzlbxUXv+jc+THS384X0bIFnZSpAg5W3eDtALaf3n7CnbY2/0E18xZr4kiE0ng7W42eUB1SYICHxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742236085; c=relaxed/simple;
-	bh=/kL+Ap6DDe66A8Zm0uZY9aQg5lJrAyNkoqxCKmILK3k=;
+	s=arc-20240116; t=1742245330; c=relaxed/simple;
+	bh=tkddO0mXjCM4xUoDUByVjfHycXg5CLzqUgcE7sXXykY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HoT2Suuu2bcThznoCKcx4Ad2rvymrcJNLKVDhqEpOOMocKCiiymygV3cGijWqzzwfvcOOCKTGbHNjUF9a0DR7XO6R45WiCKp04KRwJO7TtZO2gnNfsXD8cGf4SB4W+o/fO6cyPnFqzxhR+lyg8Mds/LKvasPmW2/WWPaEloNGLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WpLmKyBx; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tw6skWRNDChOKxadfCyhPT4q3hDTqls022yHxbG1oJRqDnRg3vSNZue33acUg8qwQWFoq/AKVtrNw36z568wAD/Gjbh/h23tyknxAb7uO6p4QjS7D5bccoI8lVBxoQ0/S70SVr9bkCGe545jdsSWqF7cGv9jNqB2wZpXqAee8no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JHiBK7F5; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WpLmKyBx"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22435603572so76459765ad.1;
-        Mon, 17 Mar 2025 11:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742236084; x=1742840884; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tbNrdg7l4vUElHmVIwQwGoavySU6aVvgzfhqS1x4uMg=;
-        b=WpLmKyBxqCs5QI+hezXJx4S87/HGJ8ArZ+ZrZtpGSJ4SQlpU9x/hhqBY72cTIsOe99
-         IPdY5YZVbqO7MUH0pVMaAeW+yt3qwXgRXHLoTF5hMleK76u9uh0S1OjWw/xgqVwYtbOd
-         3mq3UNf7IUdq5u3MgMxAxevDXBe3x+7JlO5Vj4lLaYN5y4XKuysXTWKmAeVKtEUuKXna
-         HBG/n+Y54osZbZZOqMvh0KOD8sneoRvIqw/+UhR4rcuPRm5MKomh8NAu1ZsVTATguHQX
-         15kzcScHyx6Kda07xW/KOGYFFV6V94PnyULgSexycRmQOcLJv5I52qKIgv6GXLjeoyZ1
-         ZMqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742236084; x=1742840884;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tbNrdg7l4vUElHmVIwQwGoavySU6aVvgzfhqS1x4uMg=;
-        b=apov5pZHm11TSODpOc15491a2hsHOvMi9s5FLAqb4+vhalj7prfUoMiLikVUKwtUcs
-         QL91HQGh+uXB7rQmEO5r9PkkUhQdlXEiNcI9+PEcW7DlEkGpUCaKccwuBWKtJWALuJd5
-         GDC9yTXnt/VP9EQCTq7cBEc/jC05VWIthddoqKdeNnRgbwht2Ikif4jsodMbX+eegcBN
-         wA5PhdNmAfXGPC9HNtV1zXHXce5JcHPHrC/1Cnf7vH2iODckpueW1AVxx+GJJOttgIMj
-         eMBaYQmBZJHK0FQLulMqtwaCLmDxdtvMwKxEbikSq4YPwZn1HBwsQI1P+n7ylF5904J5
-         VkyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjh8DkD+TLAqCHiUnq5KtOjGV3jDxtWcCMJ1wEanuivjg2VnMA5x04bWXTDA69NiHX0QhpEkea1PsoBIyp@vger.kernel.org, AJvYcCWd1RlEJZBBL3Age2PIAk17Ns/v9MG5dX5SpYd0aENjfuD2owDBSFOwr9Uhb8QXrNGCSliBlE9vIPjcSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIY4i7/iM2rtw31hDLBd5rprochF7ciKRfOEYIpgJOCYvjYkuX
-	aDQRI5abxoo2mVqxpSNJfi9+k+6u5A5Mm2UqXCmqmSFYLYxmlCn7
-X-Gm-Gg: ASbGncsiSgkJThZWGWHQ3R7HiP+L+N159jvyP4YbGIxSxt57ieOKAtrNXXgy7DHb/gI
-	wroX6dCy07eVVrrgCBRyH9HSRizCFcF/u82YMcfidP/dFZ2Y/oGVopp1W6HK5IlmlL7VysJ7KyR
-	aSWl1Rhd54qX9YxA2ytY+zh2Yjkzuca4n6EFNEirSf7XVaz4jyLAwCsGy2/e3+dPdl9Ikbnnp0x
-	mjtrg7C7ko/wHLZ3BPg46MrCnPUgSaRtp9LpgyeYoQHQ4ac2SqyTaecUC0sGoH26jHjUh0c4Ly/
-	HQcXvTGUISFEDOPPWEirzQ5vYmYGJZgIpEjpsls2HiEy+MLVjjA/wS6z8A==
-X-Google-Smtp-Source: AGHT+IEepljzu0RP6ynLtQW4JsGi2Rq/NtjCuUtHgpqfaY4I5z3m5Zx0lOuJZq+cIUufWXNuNP0GUw==
-X-Received: by 2002:a05:6a20:4309:b0:1f5:7f45:7f95 with SMTP id adf61e73a8af0-1f5c12ec879mr17565588637.27.1742236083790;
-        Mon, 17 Mar 2025 11:28:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af56e9ddf4fsm7471193a12.21.2025.03.17.11.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 11:28:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Mar 2025 11:28:02 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Subu Dwevedi <messigoatcr7nop@gmail.com>
-Cc: Henrik Rydberg <rydberg@bitmath.org>, Jean Delvare <jdelvare@suse.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon/applesmc: add MMIO for newer macs
-Message-ID: <c7df720c-c4d1-4d0d-8c67-982899e60aaf@roeck-us.net>
-References: <20250312123055.1735-1-messigoatcr7nop@gmail.com>
- <20250312123055.1735-2-messigoatcr7nop@gmail.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JHiBK7F5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1742245325;
+	bh=tkddO0mXjCM4xUoDUByVjfHycXg5CLzqUgcE7sXXykY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JHiBK7F5+DY/zWzWeY9LzMfbXq20oIZ0SP3VvbvLajirBaxN8mkCQEg92UD00OVn8
+	 Ec6kX2X3mDJDQNEuFuPh4a4QOVlZEhKYSfygLklxl7vxayKEGWYRDQ3UmjaYKdsXgV
+	 u3ow/Mj+HGiV65NIFA19dJIG0bEnh3lTFBUdv24U=
+Date: Mon, 17 Mar 2025 22:02:04 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Derek J Clark <derekjohn.clark@gmail.com>, 
+	Kevin Greenberg <kdgreenberg234@protonmail.com>, Joshua Tam <csinaction@pm.me>, 
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
+	sre@kernel.org
+Subject: Re: [PATCH v5 13/13] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <a764ce58-27a8-44f1-b60e-c6a6d4233977@t-8ch.de>
+References: <20250317155349.1236188-1-lkml@antheas.dev>
+ <20250317155349.1236188-14-lkml@antheas.dev>
+ <ce0727b4-bf47-4dc7-9103-d87d88a0e213@t-8ch.de>
+ <CAGwozwEqjoW-6J8rzm9HcJ0W1DVvzzPkPRzsKZE62gk3Q1ewSA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250312123055.1735-2-messigoatcr7nop@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGwozwEqjoW-6J8rzm9HcJ0W1DVvzzPkPRzsKZE62gk3Q1ewSA@mail.gmail.com>
 
-On Wed, Mar 12, 2025 at 06:00:22PM +0530, Subu Dwevedi wrote:
-> Add basic MMIO support to AppleSMC for T2 Macs,
-> enabling it only when supported.
-> This replaces the legacy port-based method for
-> key reading, writing, and metadata operations
-> (retrieving keys by index and obtaining key information)
+On 2025-03-17 19:20:46+0100, Antheas Kapenekakis wrote:
+> On Mon, 17 Mar 2025 at 19:13, Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > On 2025-03-17 16:53:49+0100, Antheas Kapenekakis wrote:
+
+> > > @@ -60,6 +61,7 @@ enum oxp_board {
+> > >  };
+> > >
+> > >  static enum oxp_board board;
+> > > +static struct device *oxp_dev;
+> >
+> > Using a global variable is ugly.
+> > An explicit parameter passed through
+> > battery_hook_register() -> add_battery()
+> > would be nicer.
+> > It would require changes to the core code and all its users, though.
 > 
-> Signed-off-by: Subu Dwevedi <messigoatcr7nop@gmail.com>
+> I debated doing this. Unfortunately, this driver uses a global
+> variable already (see board), so introducing a struct here seemed a
+> bit excessive.
+> 
+> During a refactor, removing the board global variable would introduce
+> a features struct, which can then be used for the battery hook.
+> 
+> So I think they should be done together in a future series.
 
-I expect the errors reported by the kernel test robot to be fixed before
-I have a closer look at the patches.
+Fine by me.
 
-Guenter
+<snip>
+
+> > > +static int oxp_add_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> > > +{
+> > > +     /* OneXPlayer devices only have one battery. */
+> > > +     if (strcmp(battery->desc->name, "BAT0") != 0 &&
+> > > +         strcmp(battery->desc->name, "BAT1") != 0 &&
+> > > +         strcmp(battery->desc->name, "BATC") != 0 &&
+> > > +         strcmp(battery->desc->name, "BATT") != 0)
+> > > +             return -ENODEV;
+> >
+> > If they only have one battery, why is the check necessary?
+> 
+> Leftover from when I modelled the battery hook from asus-wmi. If the
+> battery hook only runs for system batteries and not e.g., for
+> peripherals, I will remove this.
+
+The battery hook runs for all batteries discovered through ACPI.
+These should only be system batteries.
+
+> > > +
+> > > +     return power_supply_register_extension(battery, &oxp_psy_ext, oxp_dev, NULL);
+> > > +}
+> > > +
+> > > +static int oxp_remove_battery(struct power_supply *battery, struct acpi_battery_hook *hook)
+> > > +{
+> > > +     power_supply_unregister_extension(battery, &oxp_psy_ext);
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static struct acpi_battery_hook battery_hook = {
+> > > +     .add_battery = oxp_add_battery,
+> > > +     .remove_battery = oxp_remove_battery,
+> > > +     .name = "OneXPlayer Battery",
+> >
+> > This struct can also be aligned.
+> 
+> Can you expand on that?
+
+It is about lining up the "=" characters all in one vertical line.
+Same as in oxp_psy_ext;
+
+<snip>
