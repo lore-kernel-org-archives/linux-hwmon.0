@@ -1,222 +1,229 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69CA23ED62
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 13:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C952405E4;
+	Mon, 17 Mar 2025 13:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742218283; cv=none; b=rz7IbLkg5ruDikdLkkSr6+wlYjtf5Gjk8k6HqUXNFOq0igR2z8IoNDdCF/WuLE4kyz6vczbO8yoTlZnAchPyafqdR5EA0MnCqHkLLMDV2idXatE2aPomwhBQEUoQcFtmXmuNh1yLXhbY/U80qTTfy1HGAS2rjSOIKEk+NIXmsnI=
+	t=1742219470; cv=none; b=PzRUUW66L6wlzNW7X1Hklr3KOqxt6qEWoSzy9+EW9td2UDuR+WotxZ2q2UjeKIqfOvLT3V8rHRT9GcpoMfCSrkEtZZQaNPmrBgKhRO7PX3X+2mmGtduyXicRxpt51y6ag6zSH72D1Eo2rAqNvRzYZor0aijCDBCDrqSVav54sRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742218283; c=relaxed/simple;
-	bh=GYJVMbQZ7uiqaYWMnpndV0P0ZAxM8Qmrf0bBSZB8jWQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tZwuSQoz+hUOQgulAZ49HJDzMJulhY1+Uht8FoOXS2DD3Xd4D/HC9KKXhgcTFod3ISH/FwUJN7ZCUNoNcHN0kG/U/ee4maFR/W7O88EzISDksB+hIm28Tw99p3/Dc7vtwSRpY9o3GP1+70VzE86wfxRVWkkU+Nfn1Vhh/Ua32QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YE5VhhCt; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742219470; c=relaxed/simple;
+	bh=xZxsNPccztyFB0O0ukCfdDkB/F+MCZw+Ajrf6NTEblk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OmNBL65oz3F/MZDmQ0rZbXRdxIgvMH5iSxrLMx3xq4xj83f1QyZQ6+Rlie4VE/Cl+HjJMHGdJFiOSeEKFeZMlvUSlmIPSTQvlzWDeHgIH3eymmKEvCxxeYyU7626XVMmtzXIXZz6flNUX1T3Rlg8/IDQvwUoHO4Nc9BclCLG85E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=FYjesMUe; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YE5VhhCt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742218280;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XicbyQCxRSNC4G7MmnFYTtssAxXR5/Ky4MMYhuVTNrE=;
-	b=YE5VhhCtnVIwkcZd/NoU6ebbvD/D2QMR961ocrV2S0Y0WpfYDVz1xsV+t2ia5OnFv60boG
-	Wd8Vd9q1vWHeUpF+cnL7PKC7XwONUItlDBCrDK4iY8uLERxbTflvoMHtoXQ7YLzv6Hjx+0
-	9oU2TVTch1ZudXwRoDmaLzXdxQixSso=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-57-5nYVxRGPO8O37WZ_FwBhTw-1; Mon, 17 Mar 2025 09:31:18 -0400
-X-MC-Unique: 5nYVxRGPO8O37WZ_FwBhTw-1
-X-Mimecast-MFC-AGG-ID: 5nYVxRGPO8O37WZ_FwBhTw_1742218277
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ac384a889easo38355566b.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Mar 2025 06:31:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742218277; x=1742823077;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XicbyQCxRSNC4G7MmnFYTtssAxXR5/Ky4MMYhuVTNrE=;
-        b=wbBYSPLsIffU9MbVLGz4HHxb+HeJ0DkxWjgKnQw0xlmkm3n8TUrgdlxr+6gZx1CSc3
-         mx6GCjdYaoL4vOOxq6uIc01ke+vGtnqZqYetBY11ZRdyYbr3qkMRNX5wpV3Jvr5un5Gc
-         C/DWh24AKyiWKAvpCfVeVZiUmg1T6wz6ZlJ+dfgOeHA1V2mAeaRY8dPaQJ9D9TjCwZV1
-         AaHYQ1n3JoaWoT/sP2GACNHA9h7iJTuR5Pw7KVs+84DkmAGsPVk9/IPZ0T1cDKlV2wWh
-         feOpEp+wz3Zr/itD+9nBkd4jk2JZml04TNNSSiabg4VmYgJAdrM9Z/nIZsRIdqSi20pk
-         JIEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgCRXBgY+VS89WTiSPDX64Oc1pZ3PEpz3CZM52LjkySs4M0CWiupV4sZibKlYtmjCJk6z1kPXkeuKAMQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSEQHMpcGqLCJQUYOjTrjXWH6nQCC/IQn4azKj/LEfTVUa3wZ/
-	5YnfUQutt3GhEYsELkcBle3tLmLDnjWzLlP7KnXBzr4BWFV+OIz9ZA8s12bmcFFNrL5YUa6PV77
-	oICgUuYWdrLhu3EVyhGSz2PoKRqGmm9BlBMal9RpLuntnx5G6lHQuoU6pOlP8
-X-Gm-Gg: ASbGncvHXY4W8QeAQOrrX2xmt2phujpil/n9ttQi6rzlC7s8r7Ck4jEa2DCl53gWUl1
-	Fnx60GjNaHrchNc4ALvW80F+hlr4ReWEru+ogpgffCpAGB965Pq/k1wqs5Qoph9PdWnE4fGADBb
-	Tl0DWehv+QOL/oWDZJrT5dOZzrqyr6wZs5BnNgxC1biqqg5uC20i8Tn9mlTlipNslxZI4q+FvBx
-	4kajK6aq3rEzRxj07Q4Qb/M3lOTBWqeCJMqboHRrnGnw0J6crik9TMObw69k1XPJttLAbotu51o
-	lBiIIahu9n9QGgfseSo=
-X-Received: by 2002:a05:6402:13c7:b0:5db:e88c:914f with SMTP id 4fb4d7f45d1cf-5e8b02242c4mr11890283a12.4.1742218277337;
-        Mon, 17 Mar 2025 06:31:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHhZiaJYx30uK3+q9vUUtAFQDkx1k1IDJZJR9UYxtCzYRPH7G5wkGZMkjI62F2gMmOFEuwo9g==
-X-Received: by 2002:a05:6402:13c7:b0:5db:e88c:914f with SMTP id 4fb4d7f45d1cf-5e8b02242c4mr11890206a12.4.1742218276779;
-        Mon, 17 Mar 2025 06:31:16 -0700 (PDT)
-Received: from [10.40.98.122] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e8169b1602sm6056505a12.42.2025.03.17.06.31.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 06:31:16 -0700 (PDT)
-Message-ID: <82e27f38-f951-4e6f-babd-81890d590a04@redhat.com>
-Date: Mon, 17 Mar 2025 14:31:15 +0100
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="FYjesMUe"
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0330A2E08E9E;
+	Mon, 17 Mar 2025 15:51:00 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1742219462;
+	bh=bSiXBmw1am1d5mYaRu0CkOuVLXJqETe9fSTZXOUGz0A=;
+	h=Received:From:Subject:To;
+	b=FYjesMUeJTKrFZHClJrxhBoDtYWdrAH/pMeegSdewD5LP/7N14Fk/JhZC9xqQSOiQ
+	 dU1MwOqS96FBRt0DD2ES3L1oZXXmGAvBJxaps6XieclkGWd5keb5aUYM+fwt2ROBJA
+	 TvKuqpAEPefDleqDjIUA32tId6bwnh0We3IKUQKw=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.175) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f175.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f175.google.com with SMTP id
+ 38308e7fff4ca-30bf1d48843so42642831fa.2;
+        Mon, 17 Mar 2025 06:51:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVLyJdlDtPfdcd+oSZ1/sBTMWDgyDHjS2f3VGLkah9Z3NO0x1olRfqLP/2sD5sFA5AcS1WAgkSl4hc=@vger.kernel.org,
+ AJvYcCVikoJYHdgTiaREFKoogzKvmjX621PLguU6RTA8La/JhZrgv5dJ15Hcjh8RAIv8ngVaI5056IJdHHE=@vger.kernel.org,
+ AJvYcCXuUe3oWzzjAHRDbnBkTDsUcqm4iojMgFfu1l6VRKw/eRaVVsx9olrYM57kmhFXSD8TLykJHQYXRwfr79w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkdV07fMEsFh3KQIX0N60FED0tZdqCSesPM7uQCwZ1kWC25jPT
+	Ovo+8goRP0LfW5n0LDdDieaPy7SYug3zHEPPwzvoJtBDw0+jUH49giJr/NysWBwt3gh5rObdpO4
+	TBVFsqEGgsJxVTIVNykdpEELuAJA=
+X-Google-Smtp-Source: 
+ AGHT+IEnx41lAYo5Mhe/AxEHi3UnRhRKWxV5VUp61bK28mpE5XINXyZSouO6LRLvzrM76t8W9JoxWquwmSyCHdaj1dE=
+X-Received: by 2002:a05:651c:503:b0:309:bc3:3a71 with SMTP id
+ 38308e7fff4ca-30c4a8e503bmr53622481fa.31.1742219460118; Mon, 17 Mar 2025
+ 06:51:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/13] power: supply: add inhibit-charge-s0 to
- charge_behaviour
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
- Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Derek J Clark <derekjohn.clark@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
- Eileen <eileen@one-netbook.com>
 References: <20250311165406.331046-1-lkml@antheas.dev>
  <20250311165406.331046-6-lkml@antheas.dev>
  <b1ac8a33-06ed-482a-b5f6-ca88eb3802a1@redhat.com>
  <CAGwozwGESTw2DJsqr3uAhEymXxH4O5EXDw6O91i8CzCT0=yC1Q@mail.gmail.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAGwozwGESTw2DJsqr3uAhEymXxH4O5EXDw6O91i8CzCT0=yC1Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <82e27f38-f951-4e6f-babd-81890d590a04@redhat.com>
+In-Reply-To: <82e27f38-f951-4e6f-babd-81890d590a04@redhat.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 17 Mar 2025 14:50:48 +0100
+X-Gmail-Original-Message-ID: 
+ <CAGwozwFCOqhyNTZPfq2nmDoAYwzrUGoDGWzvqmJf8zK2_5Hk6A@mail.gmail.com>
+X-Gm-Features: AQ5f1JpUXUMWy8daFCWyprPiJWFP1Wot8aQ0ggnLh3qeFkrQhHFrqnXOb8ZBC-k
+Message-ID: 
+ <CAGwozwFCOqhyNTZPfq2nmDoAYwzrUGoDGWzvqmJf8zK2_5Hk6A@mail.gmail.com>
+Subject: Re: [PATCH v4 05/13] power: supply: add inhibit-charge-s0 to
+ charge_behaviour
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+ Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <174221946140.8263.8791408111338328318@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Hi,
+On Mon, 17 Mar 2025 at 14:31, Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 17-Mar-25 13:38, Antheas Kapenekakis wrote:
+> > On Mon, 17 Mar 2025 at 13:27, Hans de Goede <hdegoede@redhat.com> wrote:
+> >>
+> >> Hi Antheas,
+> >>
+> >> On 11-Mar-25 17:53, Antheas Kapenekakis wrote:
+> >>> OneXPlayer devices have a charge bypass
+> >>
+> >> The term "charge bypass" is typically used for the case where the
+> >> external charger gets directly connected to the battery cells,
+> >> bypassing the charge-IC inside the device, in making
+> >> the external charger directly responsible for battery/charge
+> >> management.
+> >>
+> >> Yet you name the feature inhibit charge, so I guess it simply
+> >> disables charging of the battery rather then doing an actual
+> >> chaerger-IC bypass ?
+> >>
+> >> Assuming I have this correct, please stop using the term
+> >> charge-bypass as that has a specific (different) meaning.
+> >
+> > Unfortunately, this is how the feature is called in Windows. On both
+> > OneXPlayer and Ayaneo. Manufacturers are centralizing around that
+> > term.
+>
+> Ok, so I just did a quick duckduckgo for this and it looks like
+> you are right.
+>
+> > Under the hood, it should be bypassing the charger circuitry, but it
+> > is not obvious during use.
+>
+> Ack reading up on this it seems the idea is not to connect the external
+> charger directly to the battery to allow fast-charging without
+> the charge-IC inside the device adding heat, which is the traditional
+> bypass mode.
+>
+> Instead the whole battery + charging-IC are cut out of the circuit
+> (so bypassed) and the charger is now directly powering the device
+> without the battery acting as a buffer if the power-draw superseeds
+> what the external charger can deliver.
+>
+> > The user behavior mirrors `inhibit-charge`,
+> > as the battery just stops charging, so the endpoint is appropriate.
+>
+> Hmm this new bypass mode indeed does seem to mirror inhibit charge
+> from a user pov, but it does more. It reminds me of the battery disconnect
+> option which some charge-ICs have which just puts the battery FET in
+> high impedance mode effectively disconnecting the battery. Now that
+> feature is intended for long term storage of devices with a builtin
+> battery and it typically also immediately powers off the device ...
+>
+> Still I wonder if it would make sense to add a new "disconnect"
+> charge_behaviour or charge_types enum value for this ?
+>
 
-On 17-Mar-25 13:38, Antheas Kapenekakis wrote:
-> On Mon, 17 Mar 2025 at 13:27, Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi Antheas,
->>
->> On 11-Mar-25 17:53, Antheas Kapenekakis wrote:
->>> OneXPlayer devices have a charge bypass
->>
->> The term "charge bypass" is typically used for the case where the
->> external charger gets directly connected to the battery cells,
->> bypassing the charge-IC inside the device, in making
->> the external charger directly responsible for battery/charge
->> management.
->>
->> Yet you name the feature inhibit charge, so I guess it simply
->> disables charging of the battery rather then doing an actual
->> chaerger-IC bypass ?
->>
->> Assuming I have this correct, please stop using the term
->> charge-bypass as that has a specific (different) meaning.
-> 
-> Unfortunately, this is how the feature is called in Windows. On both
-> OneXPlayer and Ayaneo. Manufacturers are centralizing around that
-> term.
+The battery is not disconnected. It still provides backup. Unplugging
+the charger does not turn off the device. So it is more murky.
 
-Ok, so I just did a quick duckduckgo for this and it looks like
-you are right.
+From a userspace perspective it is inhibit-charge 1-1.
 
-> Under the hood, it should be bypassing the charger circuitry, but it
-> is not obvious during use.
+>
+>
+> <snip>
+>
+> >>> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> >>> index 2a5c1a09a28f..4a187ca11f92 100644
+> >>> --- a/Documentation/ABI/testing/sysfs-class-power
+> >>> +++ b/Documentation/ABI/testing/sysfs-class-power
+> >>> @@ -508,11 +508,12 @@ Description:
+> >>>               Access: Read, Write
+> >>>
+> >>>               Valid values:
+> >>> -                     ================ ====================================
+> >>> -                     auto:            Charge normally, respect thresholds
+> >>> -                     inhibit-charge:  Do not charge while AC is attached
+> >>> -                     force-discharge: Force discharge while AC is attached
+> >>> -                     ================ ====================================
+> >>> +                     ================== =====================================
+> >>> +                     auto:              Charge normally, respect thresholds
+> >>> +                     inhibit-charge:    Do not charge while AC is attached
+> >>> +                     inhibit-charge-s0: same as inhibit-charge but only in S0
+> >>
+> >> Only in S0 suggests that charging gets disabled when the device is on / in-use,
+> >> I guess this is intended to avoid generating extra heat while the device is on?
+> >>
+> >> What about when the device is suspended, should the battery charge then ?
+> >>
+> >> On x86 we've 2 sorts of suspends S3, and the current name suggests that the
+> >> device will charge (no inhibit) then. But modern hw almost always uses
+> >> s0i3 / suspend to idle suspend and the name suggests charging would then
+> >> still be inhibited?
+> >>
+> >> Also s0 is an ACPI specific term, so basically 2 remarks here:
+> >>
+> >> 1. The name should probably be "inhibit-charge-when-on" since the power_supply
+> >>    calls is platform agnositic and "S0" is not.
+> >
+> > I tried to be minimal. If we want to make the name longer, I vote for
+> > "inhibit-charge-awake". I can spin a v5 with that.
+> >
+> > The device does not charge while asleep. Only when it is off.
+>
+> Is suspend awake though ?
 
-Ack reading up on this it seems the idea is not to connect the external
-charger directly to the battery to allow fast-charging without
-the charge-IC inside the device adding heat, which is the traditional
-bypass mode.
+Sorry I mispoke. When inhibit-charge-awake, the device only charges
+while in s0i0. When inhibit-charge, it never charges. This includes
+s0i3, S4, and S5. The devices that support this only support modern
+standby.
 
-Instead the whole battery + charging-IC are cut out of the circuit
-(so bypassed) and the charger is now directly powering the device
-without the battery acting as a buffer if the power-draw superseeds
-what the external charger can deliver.
+I just verified this.
 
-> The user behavior mirrors `inhibit-charge`,
-> as the battery just stops charging, so the endpoint is appropriate.
+> >> 2. We need to clearly define what happens when the device is suspended and then
+> >>    make sure that the driver matches this (e.g. if we want to *not* inhibit during
+> >>    suspend we may need to turn this feature off during suspend).
+> >
+> > This is handled by the device when it comes to OneXPlayer. No driver
+> > changes are needed.
+>
+> Well you say no charging is done when suspended, the question also is what
+> behavior do we want here?  I'm fine with the default behaviour, but a case
+> could be made that charging while suspended might be desirable (dependent on
+> the use case) in which case we would need to disable the inhibit when
+> suspending to get the desired behavior.
+>
+> Also what if other firmware interfaces with a bypass^W inhibit option work
+> differently and do charge during suspend ?
+>
+> It is important that we clearly define the expected behavior now so that
+> future devices can be made to behave the same.
 
-Hmm this new bypass mode indeed does seem to mirror inhibit charge
-from a user pov, but it does more. It reminds me of the battery disconnect
-option which some charge-ICs have which just puts the battery FET in
-high impedance mode effectively disconnecting the battery. Now that
-feature is intended for long term storage of devices with a builtin
-battery and it typically also immediately powers off the device ...
+Sorry I mispoke. Charging happens under modern standby under -awake.
 
-Still I wonder if it would make sense to add a new "disconnect"
-charge_behaviour or charge_types enum value for this ?
+So -awake would mean awake (s0i0) here.
 
+If other devices charge during sleep and awake, another option could be added.
 
-
-
-<snip>
-
->>> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
->>> index 2a5c1a09a28f..4a187ca11f92 100644
->>> --- a/Documentation/ABI/testing/sysfs-class-power
->>> +++ b/Documentation/ABI/testing/sysfs-class-power
->>> @@ -508,11 +508,12 @@ Description:
->>>               Access: Read, Write
->>>
->>>               Valid values:
->>> -                     ================ ====================================
->>> -                     auto:            Charge normally, respect thresholds
->>> -                     inhibit-charge:  Do not charge while AC is attached
->>> -                     force-discharge: Force discharge while AC is attached
->>> -                     ================ ====================================
->>> +                     ================== =====================================
->>> +                     auto:              Charge normally, respect thresholds
->>> +                     inhibit-charge:    Do not charge while AC is attached
->>> +                     inhibit-charge-s0: same as inhibit-charge but only in S0
->>
->> Only in S0 suggests that charging gets disabled when the device is on / in-use,
->> I guess this is intended to avoid generating extra heat while the device is on?
->>
->> What about when the device is suspended, should the battery charge then ?
->>
->> On x86 we've 2 sorts of suspends S3, and the current name suggests that the
->> device will charge (no inhibit) then. But modern hw almost always uses
->> s0i3 / suspend to idle suspend and the name suggests charging would then
->> still be inhibited?
->>
->> Also s0 is an ACPI specific term, so basically 2 remarks here:
->>
->> 1. The name should probably be "inhibit-charge-when-on" since the power_supply
->>    calls is platform agnositic and "S0" is not.
-> 
-> I tried to be minimal. If we want to make the name longer, I vote for
-> "inhibit-charge-awake". I can spin a v5 with that.
-> 
-> The device does not charge while asleep. Only when it is off.
-
-Is suspend awake though ? 
-
->> 2. We need to clearly define what happens when the device is suspended and then
->>    make sure that the driver matches this (e.g. if we want to *not* inhibit during
->>    suspend we may need to turn this feature off during suspend).
-> 
-> This is handled by the device when it comes to OneXPlayer. No driver
-> changes are needed.
-
-Well you say no charging is done when suspended, the question also is what
-behavior do we want here?  I'm fine with the default behaviour, but a case
-could be made that charging while suspended might be desirable (dependent on
-the use case) in which case we would need to disable the inhibit when
-suspending to get the desired behavior.
-
-Also what if other firmware interfaces with a bypass^W inhibit option work
-differently and do charge during suspend ?
-
-It is important that we clearly define the expected behavior now so that
-future devices can be made to behave the same.
-
-Regards,
-
-Hans
-
-
+> Regards,
+>
+> Hans
+>
+>
