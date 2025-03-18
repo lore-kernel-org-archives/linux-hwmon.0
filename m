@@ -1,67 +1,67 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2644B20E6E1;
-	Tue, 18 Mar 2025 15:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B0520E706;
+	Tue, 18 Mar 2025 15:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742311051; cv=none; b=cPtOdirQ3fv4CIhY3ajI5CJosyQSW0xs146XH/jBspOT2mhJUX+LJK6tAdW/7Hhes/Z7TpoHjCxntJ39jFgPuo99zN90le73KGZqDoxG7Yupq2m5zELWMe7VBHF+H37O0uTCySNGkJ6RCNGT0+iK2ud4j7TukW7ODFOd/sIaou8=
+	t=1742311358; cv=none; b=GMTZowq25Qwwgj9lyKy+xsIP6iSX3mKoWmZaLheobGdyfqaEI465If7tcKLn4uoKyUhe1Bah69SORD+zVUl9qaeaAOAU1DWa1ssoVClIOzatGDZElBZRDbKIk305F+1n5TtQW5P/x4cLMdey2JqwgkIK0Y9AdNJsbgqHfGLc254=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742311051; c=relaxed/simple;
-	bh=psTxiGB92gSaGM/Faa8KmerNR/BeW98o+Pr9u0hxNaw=;
+	s=arc-20240116; t=1742311358; c=relaxed/simple;
+	bh=davtiVsXx98fsThB+WUnDWoANTiH8sILlfY6buOJYAA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=STpel70Jn7dIjpWVnRikvBNNif6y7ryaXQhToQlm6gRB73iRML5tRH7XmqT+i22d7v6dyRTvNH5LNSccAuIgnS9tS/tTojA60WNH9+cX9T8TLu2linNCb3TBkOc+ZAndoVtcIri7JF5nNSgVxi0Hh1Ts9mmsNfFDdHCidYN107s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4bw49gc; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:Content-Type; b=JpoKak0b4fPbtW/AD41EWKxCoBCD2FDmnxMUadXvowpeNRh2AvdTUJpdwgHxLvga+fenb5Qi2S4VMt9K8q8yiVy1uiYQQe8Znawtv1FqLJ2twFoUWIjqgQ0SgZXiOXzTtJtQbaEXSIHONJcfqfWi7fwcX8c9su3MYyU5qeLIYJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MbuZiAKi; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4bw49gc"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-225e3002dffso62868295ad.1;
-        Tue, 18 Mar 2025 08:17:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbuZiAKi"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3012a0c8496so4277096a91.2;
+        Tue, 18 Mar 2025 08:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742311049; x=1742915849; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742311356; x=1742916156; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHAf260asVvJfddY3c+QBCDCOVojVZW9/fzAEGmVdxY=;
-        b=D4bw49gcsdqgTSWJ1sFmEZ/nM2B+dsIskmmEv/lR8gG6gddSDorOXtDHpeod/X5peK
-         jF3v9RHyNZjTA+VjglycIZTNvyDGlpyUoGDMEb5Zqju/f9szir/9SR9JR7csnRNkN/dj
-         uWblDPoraGrJyuv3pspppwACzOs72NqtwanPCDUTWattbLzRV3jIhRf1/IUXI2rvivs0
-         Gd9S9T05G8DqDYoSrlg7rrRwbhDICaly3ZE9K2URtI5A/2YIsjpO9peWb62TQ4jnQgOC
-         f84nfrqU7/r+HCZFNgWHUW3nnHUopEhmIgvTJHwXqDhwk++7RTwnQ4AFmv+cQ6eW1Nbd
-         OuEQ==
+        bh=b1O+uLM1JS3SDRUPJkFsjl9GIuvpMT2cD+4v/3zBEAA=;
+        b=MbuZiAKi3kKG96zKQOHOfqF0jUqj4BJnXEcKYh+l6JdP4v/SO+uDMmAtbiwWhOOAcN
+         +K6fZj8zikznHZhVCpMOK5esrO5ja3FCAt7FBIDJH4DuUcYrTDUBBEAfVBqsCGoIeg1z
+         nPyUZNEjne4f5Kg0gsPd3CVxEXJcR/kxZq/EZIOIix/17B0pJfLaGheYFfRccMrKdIU5
+         B8OAAxqM8udjCXNCqY/tp9s4IOGbsu6FE+NomIQgrX16HrrJNFu/6Xe/bOl7AABNtrdY
+         HyzKucRRCOjRolF4+bGUOsf7ddVOpXIHIiFMyH8jFYBjyFt7i+02S0/us319d/Jn3N8E
+         Yv2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742311049; x=1742915849;
+        d=1e100.net; s=20230601; t=1742311356; x=1742916156;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZHAf260asVvJfddY3c+QBCDCOVojVZW9/fzAEGmVdxY=;
-        b=o2sXP+TA2JYqyC/4OkqDmxMQ8iswa1JQv00Ti0fjQOUZNsZ5ScUUATmZJpFpBFLOoS
-         WP7TX1wIvhuOs2Vyk6oPMJ1ey3GNWrkSEPPI+PpX/NjugvTHVST3nLnVqCKf266PicOd
-         cSyL7/ysHw3pKC3KDnrV1IbVs//lnwPinbrppAjw7lIZOiZLwaiVTCuqSxBRdwEBJCzN
-         SjfmwH+kAgml+b9I1DTtGi83ITaZUoOQv+NOa3h/xrnWrwd5QufCA2MWpjpj5B0Eb3Dq
-         LhjgV8xsKkOUHKPFhryGkNXVNRE1cw0w5XLZ8sE0duAON6t4JUDNhdDxpSdXkuv0eTYz
-         Go3g==
-X-Forwarded-Encrypted: i=1; AJvYcCV8veftKbTOGFdal8HIMqGgx0WgJpCy1V1YB+kD7TQjZRqmTACUrP97vLphJluhTr9NQDBdtPPw1d5q@vger.kernel.org, AJvYcCVBaHz6vVD+gC5tZ7Wv07kID1vckyYJuSn2TfWSiwy+rI25RStdUrtNlTfcDaoiemp4+uKImdAviWmC@vger.kernel.org, AJvYcCVb2Ivqvwg1xBxJ0kAwhQqKvTL+UGT1st3nOZgX0xrY9ciA2yvOfOk1YKFf1E67kIhA3WlJ8TzLvY/5ncAF@vger.kernel.org, AJvYcCVnV3dPFo8abpaA1WPyzTw8TIr407mpk2kGBGOZmSR8raXV4OeV/YEpGeJ7raVMPjGz1RJOdVhSIPr1kJw=@vger.kernel.org, AJvYcCWHSpR8/dR2S3ODPa7H+UTM0+JeilxX2N1MMnMnCm2oVKZLHIpcNEicBnW1qklPYof5HaiPMmMQlLqi@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgA76Ku79Bj9EWAWcdCIJdG51gx42VSIlkPAe+gDGwzNWNPsMT
-	vokXLFvGjBWl/5UdlpBoJzIgsh5hf9sqlTJZY1BcJ8dZeeUags6x
-X-Gm-Gg: ASbGncuOgXE1I4FDKDuK3svNb69UwZ1t0RtEVC7rLm3kY89LLXyFhGFckU+gjc6C5iz
-	U0ab5imX4mv0Zb5gBJ4Tre3fpM++kiq82Jk5qsEmd4qduprCsrewge4DeNOcWQIsrGn8x9LUiNa
-	KwD2w/4pWEorTuEi4gw3lDXXhSwWg4gvGovYzQfw30RZ9iNg9Z9IURuiY9sVfZRrJLPep79EqqR
-	7s3zbitKYwJ5DELMynkCxCbOfRhLeswXOq33kWwiKpHW2PKu16cuFdyuQC9HZ4LNSzm5fgRqnlI
-	wD+00vLGZikPXWXngVSTIULrgGnusmr32bF4HZtOrSlotUMo5i02y9m47UtDir5rq2YFNJFL/Pd
-	E2sryytaVniILn0t+lw==
-X-Google-Smtp-Source: AGHT+IEqH1G8VZBeSKB8c6EwNUAE+zwq3XXI2OW9qUH7fPlFDKsvo00z+J1eK41UJAnTlcsMJl8jsQ==
-X-Received: by 2002:a17:902:d4c5:b0:223:42ca:10ef with SMTP id d9443c01a7336-2262c6111d4mr51279195ad.43.1742311049329;
-        Tue, 18 Mar 2025 08:17:29 -0700 (PDT)
+        bh=b1O+uLM1JS3SDRUPJkFsjl9GIuvpMT2cD+4v/3zBEAA=;
+        b=mkbF43DbJoaghehuy1IZBkAbfSEmgsu6oWRVzsZtoiFgUGvoekhwMpGW2lzi1fD1i5
+         KROF2S1vzLscsyrzgSk0YGhjPFiAMMDxLHOFJibl1ClpJaIHYBgW43vLCwwVHRTCqcDn
+         eqYOgiQ19Xzug72owfAjymdqiGDUOQoHnhHFULuL5ttgZfs8zzmBji/npEBqqxmTuIqO
+         RaN9btFo/3sD0z8NkzUaIBJmj/SjibNqTJm0vfiyLv/HdRQJdcTbPBvTHCOV7eJkDNB6
+         7CTWZzTolE0obk5GfKkd8+22L7tbyHpW41NP6McFqX9sN6GbYjByaekfWil9wnUmDdKA
+         E/1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUl+YkSRrsIJ24j16A94MyKVljwI4GsnM1od96Qefq/J84t2kK/WhECTMsgveMnn3eemMNZKb9eZfba@vger.kernel.org, AJvYcCWm0pDmrbiCqkTmk17aYtIVmAgBiqCSyoOwOE2v8IdJKU2FPrQr6wrVEeIysUqEfJCwGr4xsB/I8x1ShsDK@vger.kernel.org, AJvYcCXOtrrJfk55p3cqDREbROB6sXBTjUH0Hk1eVysrnrrvVnkmTkfu9NS/0s1qsC9hOBLBcBZ+HAVwJ8AsEbY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoA1bqUi9L0xBvCBjKubzNoV6uVMbB5Pl06yKaatJcHaEyl6Jn
+	ub3G+5l/5vpxEuBFXQ0WBFUYDfjyzlprJZjkDOsgWw40nhyoePdm
+X-Gm-Gg: ASbGncs9XI/ZV8c8Oa7v8q2HQpjj2SaTZpXgvfE9U2QoZ75g9dw7n8j4augjKHTgxfL
+	JzTn/oN+J6HCQ85SE+ptkEYR77amY5oFhPw3j7py8I/TJBjsn8Y7ZvEHAd43+spIK8Pl8eTNkki
+	3s+B26iRjcbZI5cfaogaCctZWghUVEcEefc9SPDadnjkBdMKFYLvw+v4pPlpTNEx7PWXSpF7txS
+	8SWbZ4+o6wMg3FpjFkRbfE13Cn5p7TWQlNSvMD8pFFWYRKjssI4SXwiOJyY9ws8uNm0rjleTXXj
+	jnEHnBNUpukCE+TOUtstAAalbs5r7QfOj296J8r1+v+frOV2qXZnXpoBbm3Sk+f3iwZZRocfsAM
+	5C1IxpLjxpLunnJIjIT4IUfFhGvQc
+X-Google-Smtp-Source: AGHT+IHGHiOrC+gOvwxsNgQjXSm+TIRcVXspSDyBsDPgTboUtiOiWHemH4dUn+FSAC6hrpVwEjhvPw==
+X-Received: by 2002:a17:90b:1d48:b0:2f9:cf97:56ac with SMTP id 98e67ed59e1d1-301a5489ee0mr5080905a91.0.1742311356544;
+        Tue, 18 Mar 2025 08:22:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6888675sm95585345ad.51.2025.03.18.08.17.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301a39efc5bsm1492988a91.0.2025.03.18.08.22.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Mar 2025 08:17:28 -0700 (PDT)
+        Tue, 18 Mar 2025 08:22:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
-Date: Tue, 18 Mar 2025 08:17:27 -0700
+Message-ID: <7afcd224-1154-4e2f-b383-10f6a89fdae0@roeck-us.net>
+Date: Tue, 18 Mar 2025 08:22:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,26 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
- <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
- <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
- <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
+To: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: viorel.suman@nxp.com, carlos.song@nxp.com,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>,
+ Frank Li <Frank.Li@nxp.com>
+References: <20250318085444.3459380-1-florin.leotescu@oss.nxp.com>
+ <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,107 +126,91 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
+In-Reply-To: <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/18/25 03:03, Encarnacion, Cedric justine wrote:
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Friday, February 28, 2025 12:33 AM
->> To: Krzysztof Kozlowski <krzk@kernel.org>
->> Cc: Rob Herring <robh@kernel.org>; Encarnacion, Cedric justine
->> <Cedricjustine.Encarnacion@analog.com>; Krzysztof Kozlowski
->> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean Delvare
->> <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>; Delphine CC Chiu
->> <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
->> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>
->> [External]
->>
->> On Thu, Feb 27, 2025 at 09:50:23AM +0100, Krzysztof Kozlowski wrote:
->>>>>>
->>>>>> hwmon code might need some changes, but that's not really
->>>>>> relevant for proper hardware description.
->>>>>
->>>>> Normally, I would agree, but it seems generic pmbus code expects
->>>>> this structure. This just came up with changing another binding
->>>>> maintained by 'Not Me' to follow this structure. We're stuck with
->>>>> the existing way, so I don't know that it is worth supporting 2
->>>>> ways forever. OTOH, is it guaranteed that these devices will only
->>>>> ever be pmbus devices or that other regulator devices which are
->>>>> not handled as pmbus devices currently will be in the future. If
->>>>> so, more flexibility in the bindings will be needed.
->>>>>
->>>>
->>>> I would appreciate if someone would explain to me what the problems
->>>> with the current PMBus code actually are. I have seen several
->>>> comments claiming
->>>
->>> Not exactly a problem but missing feature. pmbus code (at least one of
->>> macros I looked at) expects regulator node and some sort of child of
->>> it (vout), while such simple devices should be:
->>>
->>> regulator {
->>> 	compatible = "adi,lt3074";
->>> 	regulator-name = "vout";
->>> 	regulator-min-microvolt = "100000";
->>> 	regulator-max-microvolt = "100000";
->>> };
->>>
->>> so without any of regulators and regulators/vout subnodes.
->>>
->>>> that the code should be changed, but I have no idea what the
->>>> expected changes actually are or, in other words, what the PMBus
->>>> code should be doing differently.
->>>
->>> I did not investigate much into pmbus code, but this might be as
->>> simple as accepting arguments for .of_match and .regulators_node and
->>> then accepting NULLs as them as well. Or a new macro which assigns
->>> NULLs there.
->>>
->>
->> Unless I am missing something, the following should do the trick.
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->> index ddb19c9726d6..289767e5d599 100644
->> --- a/drivers/hwmon/pmbus/pmbus.h
->> +++ b/drivers/hwmon/pmbus/pmbus.h
->> @@ -512,7 +512,6 @@ int pmbus_regulator_init_cb(struct regulator_dev *rdev,
->>   	{							\
->>   		.name = (_name),				\
->>   		.of_match = of_match_ptr(_name),		\
->> -		.regulators_node = of_match_ptr("regulators"),	\
->>   		.ops = &pmbus_regulator_ops,			\
->>   		.type = REGULATOR_VOLTAGE,			\
->>   		.owner = THIS_MODULE,				\
->>
->> Maybe someone can check if that works.
->>
->> Thanks,
->> Guenter
+On 3/18/25 01:54, florin.leotescu@oss.nxp.com wrote:
+> From: Florin Leotescu <florin.leotescu@nxp.com>
 > 
-> I'd like to follow up on this one. As of this writing, my understanding
-> is that the dt-binding should not expect regulators subnodes for
-> simple devices like this. There is already a similar binding as
-> mentioned in this thread particularly
-> "dt-bindings/regulator/infineon,ir38060". I think a binding without
-> the subnodes should still work with or without the change above.
+> Introduce yaml schema for Microchip emc2305 pwm fan controller.
+> 
+> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>   .../bindings/hwmon/microchip,emc2305.yaml     | 113 ++++++++++++++++++
+>   1 file changed, 113 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> new file mode 100644
+> index 000000000000..e61ef97e63af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> @@ -0,0 +1,113 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip EMC2305 SMBus compliant PWM fan controller
+> +
+> +maintainers:
+> +  - Michael Shych <michaelsh@nvidia.com>
+> +
+> +description:
+> +  Microchip EMC2301/2/3/5 pwm controller which supports
+> +  up to five programmable fan control circuits.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - microchip,emc2305
+> +      - items:
+> +          - enum:
+> +              - microchip,emc2303
+> +              - microchip,emc2302
+> +              - microchip,emc2301
+> +          - const: microchip,emc2305
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  '#pwm-cells':
+> +    const: 3
+> +    description: |
+> +      Number of cells in a PWM specifier.
+> +      - cell 0: The PWM frequency
+> +      - cell 1: The PWM polarity: 0 or PWM_POLARITY_INVERTED
+> +      - cell 2: The PWM output config:
+> +           - 0 (Open-Drain)
+> +           - 1 (Push-Pull)
+> +
+> +
+> +patternProperties:
+> +  '^fan@[0-4]$':
+> +    $ref: fan-common.yaml#
+> +    unevaluatedProperties: false
+> +    properties:
+> +      reg:
+> +        description:
+> +          The fan number used to determine the associated PWM channel.
+> +
+> +    required:
+> +      - reg
+> +      - pwms
 
-Interesting. I am not sure if it really works, though. I looked into
-the regulator code, and I don't immediately see the code path it would
-take.
-
-> With this, I'd like to know what the specific next steps are to continue
-> this patch series.
-
-Can you try on hardware using a devicetree file which doesn't have the
-regulators node ? If the current code works, just submit an updated
-(simplified) .yaml file and we should be good. If not, I have an
-untested patch series introducing another macro which doesn't set
-the regulators node.
+Is it necessary to make 'pwms' mandatory ? The current code works
+just fine with defaults.
 
 Thanks,
 Guenter
