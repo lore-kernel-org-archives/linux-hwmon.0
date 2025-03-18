@@ -1,303 +1,196 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2054.outbound.protection.outlook.com [40.107.22.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F22F1C860C
-	for <linux-hwmon@vger.kernel.org>; Tue, 18 Mar 2025 07:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742283932; cv=none; b=QgzlDijbyid1u0MdDMPzSAvScGltJUHBBh36dUs1iyGVoLe5A5ObUqlWI9NWY4AuYLyhinSbtFAJzqLCfs7NzvM54uBBO9Ca9Wq9QqVdDcygCH4M5lgzMXCxBd0wJedZ3xfGNwi+lhWBQaDGKB4eeEp4jXOzdlB6OfqTLk5Q9w4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742283932; c=relaxed/simple;
-	bh=5/FIovSNSR5c/7qz/TJ34uIJy/QRHE/ED9If2++ygGs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=u/Q08nNTSEIVU6nb7SwMRaTltKGEOIVIYw7J54eKXSryikdw8YtIYr0FlNxBmm8IwimT4ZT1Pc5Ca0lmylsDB1GoxXk7F71CsNlJXw8HVKCWCHjGICsRG+5EoHa7TwtlPnWnou6+V4jnLkkabotXOpQCuRhjYZU86u0SlRMMUuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cowl+tMD; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8411AA782;
+	Tue, 18 Mar 2025 08:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742287663; cv=fail; b=HyHq9gLVt++qON/DyhWWR9dK2aU4z/r5ZhXf9T5khLmcuR/9c+y5Dn6eUCwjzEj71CBiDle0c0bUlIMaHX3d4DbRLLv7Lf3WyYbSUNRqiEv2htPcCjXdbUSmv8T2mR6u7EFzCfBI5P2h1ILlEOdaJKClEhXVoU/i59kelztfw2g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742287663; c=relaxed/simple;
+	bh=LugN8dCiWzy3HKtU3Ramkv+HGin0VrRkn+MZWJGrF9E=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=aP89qRhF4KYas9oj0ZFcAMG7k9IGvNNctpAQCRtX7+8FbaGcybd6OYLe227MY/Xjun0At2OSswyqr83OhL8qMIrjfF5/0Jq4U8u9qC4F6Cjzwyx45H7lmEIOYUmj+6JZ4vpTj+KTp9PyRgm+W38J0OshkPrQUKIH0z5hsdI9m/s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=RMPF6m5Y; arc=fail smtp.client-ip=40.107.22.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cowl+tMD"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22349bb8605so112966195ad.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 18 Mar 2025 00:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1742283929; x=1742888729; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5myKVatSfN7fLvXu2WGUZkTCymQrL+tAPuTPdKmXDM8=;
-        b=cowl+tMDl0KJybGiWYGn5JV21DCmKfXUrrDlpUUWQtnRBsbrZ/ZEnkEPXTUbkc8DwL
-         5Eb8wQ2RUMACcd1AWfh2rYLPiqsOD73yQi6uzR6AXdTmLTxcOinHKNr2rnT0kdOm+zmi
-         G5fni0gyfLOD0l+BWRFRwlDhRRJITcqCeeCik=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742283929; x=1742888729;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5myKVatSfN7fLvXu2WGUZkTCymQrL+tAPuTPdKmXDM8=;
-        b=lxAwV18/0m8loJUaNHyynPjhCNUi2+c/daMUG0gIEKXR7LsvkLoR0BHdcXLcZys0wy
-         BTqiTaBeJrJi6N2pDzf7uGy/jrrHcInaCeQcuno6G5tW1Njuz7wKVF0OJWOuPrpKHRoQ
-         z/EsZcXk3B/V7QmdUvHsOniTCCjORS3vMBXMLB4H3Yp59vti1gPrwEJp6MAq7qm0IsNS
-         GaKYIsTDtXAXzPtKU0mpf1spnFVLna0ptQxaJwwEpGuVe/6S1ZpWXXMosc5Z20JkXtZX
-         ye4LdpxnoBv1Br6LAj6eCIeh2N703OHgPciWT1pYwdkhYIs1JMrcNuk9FLtCU7AgWBLF
-         MZzw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9N38qrIBS79631a8S5zaO1nUSwMmNfAH2UBB45zExbmPJHl6WPP4LH9DXS9sl3xuF5Lpb9tspPBx5Lw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcFboHXPBkKf2KpQEHUPrU9f6qPDCf2lIJ6mdKojPQIzoJNhTc
-	3O7DUpFRxGNj+olA3iJC2QRnwPZPzsfJKliKjOg+N7CM/PaxKRtA9Vij/+fpx+MJHhK1ixUJ0Rs
-	=
-X-Gm-Gg: ASbGnct/O+6yLFaFajuWXG37o/XdIATDnqa35NCtCrqlkZ2QuTwUbSLQB42OOkPUWMO
-	rrElmD7aMT0nHKHNwZaa37sc+jhZmiZsakaanPXqF/wGH2X5AzD7620kPAONm/OzEFn0auhA2vM
-	3O7T4+b85fKGwObmVzZyoYlxSgqEOIMBtMLB9fI9DoE4ua30D8dOBphqHRRW/v0XGiEZAWny72G
-	4oK3VcQGF0oaAZRhWYEP4voJ/Zxp4rB2H1AhorUsbnV53wRgoW8jqnuPK0pWPNMt+/xPLzKJP2b
-	DvHSS3URQhEfJ9lcq76WcDGYAHVxVQIr9+jr/0GF/0AWWHTbgT8aGv3tgRcQL22qkxY=
-X-Google-Smtp-Source: AGHT+IGmk2nTiV7s08pvMCd8OHe9edENdn8pgAYtk9PDerWDiP2SUUByJ0oxwb6HjjJpnTkkW1LH2g==
-X-Received: by 2002:a17:903:17cd:b0:223:f408:c3f8 with SMTP id d9443c01a7336-225e0a4a198mr175109025ad.14.1742283929317;
-        Tue, 18 Mar 2025 00:45:29 -0700 (PDT)
-Received: from lschyi-p920.tpe.corp.google.com ([2401:fa00:1:10:3904:afc7:e35e:2274])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd4ae8sm87328165ad.243.2025.03.18.00.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 00:45:28 -0700 (PDT)
-From: Sung-Chi Li <lschyi@chromium.org>
-Date: Tue, 18 Mar 2025 15:45:23 +0800
-Subject: [PATCH v3] hwmon: (cros_ec) Add set and get target fan RPM
- function
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="RMPF6m5Y"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qr7WIQh5WA7YihlQJnphgltd6M+LdcOC10xfhK8+10+bt8kVrN4DSNqCXq7ho419MWHN8aAaswT96EBdHJ93UCXnaKJqkz/nYqrho7FBcATZCIyJc5sVoAlV3l7O4eC9OZm0M4lk3dtQXbDBgLKNI3s9+f4tkrIzlaT0iif+VHpARl3XYcfWlfvltvkKJhDGNaZy/1rgjjzJlhiHWZweMHwsp7jX95EpWXqPEr5zF2JROCmsuGIEiJgXNkaOhoIzbO5VRMkcQYUSpuPN8m4+8wwPg0U8HhNG7qAQw5V2v+skHfIsoveMiVO27vi/6j/vyTG8dei3TwtUYm4U6oNeZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=unYPPXWyMHNEvdCJb7JBFIHYnC9wyxbJdn86STCb9uU=;
+ b=d0flrl6UL5ZQWwimJWE7DHiucXsLSOE0R3C+p6kRW45amMUh9vouo9AUVGzZHAv4/C6vn06MyXYTVKKBEkXyjayM50toHvvBvM2LtgiQSMH+kU7DWdENFjAwWUirv1OZhVpGFymF9lCrM+iBddj2wnBG0DcoYVdToLDHPyV83cSX3MSbZiOhtgLOVmvLWkbFaqFUP/WIJoeuVRbKZaLR2UuNye+UEgpctC8aJkXJkAA9D652Bk6HRenT2mMDrZC4hoCardsTTDA8qaVS7wz8N6oWi4y77keWG34qmqx7EsYVePhApY4gbA57mssvWB1vzczZWfMCmTnCNhpAoYgGqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=unYPPXWyMHNEvdCJb7JBFIHYnC9wyxbJdn86STCb9uU=;
+ b=RMPF6m5Y4m0nX+pYVnDHCrIbdYgzNnqgO9mT3Lesy1Q7iGdQoMHkFU7S0mv1ohvK6KXuEELu3dSgShQ9TG34fVdYIGTPgZ1AlsVwUZqz2KWA1pDg+yCJXi83PQb1sjdCxg9VfMjwuoLX+o1yCA0bftAoIyMy/oFZyHLYoqHcn+I10KGCCZ6Gos2c2nV6B358hvPq9hRCNLjCQqsAKoBdWtu1QfOgtR+nOausq1L4fRWWtlcW07Hei644NOomXmm1Cf81WwwGFAeo9P5oXISbEgta6Ko74rDrOnyZIRlvJLNTLWHZAFh95ztea+lKV59WqnyPgUjgXMDIr93T29/reA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
+ by PA4PR04MB7742.eurprd04.prod.outlook.com (2603:10a6:102:b9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
+ 2025 08:47:35 +0000
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::3a74:80e4:4144:62db]) by DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::3a74:80e4:4144:62db%4]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
+ 08:47:35 +0000
+From: florin.leotescu@oss.nxp.com
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: viorel.suman@nxp.com,
+	carlos.song@nxp.com,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	festevam@gmail.com,
+	Florin Leotescu <florin.leotescu@nxp.com>
+Subject: [PATCH v5 0/3] Add OF support for Microchip emc2305 fan controller
+Date: Tue, 18 Mar 2025 10:54:41 +0200
+Message-Id: <20250318085444.3459380-1-florin.leotescu@oss.nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS4P189CA0060.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:659::15) To DU7PR04MB11163.eurprd04.prod.outlook.com
+ (2603:10a6:10:5b3::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAJIk2WcC/33NTQ7CIBCG4asY1mL4EYiuvIcxDaVDYVEwULGm6
- d2lXRljXL5fMs/MKEPykNF5N6MExWcfQw2+3yHjdOgB+642YoQJwinHMI0QugZM455DDI3VAWt
- hxUnrlpmWo3p5T2D9tKnXW23n8xjTa3tS6Lr+9wrFBAsjpFRKWmaOF+NSHPxjOMTUo5Us7JNRv
- xmGKaZcKiKE0hbEF7MsyxtRWtjmAAEAAA==
-X-Change-ID: 20250313-extend_ec_hwmon_fan-a5f59aab2cb3
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, 
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sung-Chi Li <lschyi@chromium.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1742283927; l=7808;
- i=lschyi@chromium.org; s=20241113; h=from:subject:message-id;
- bh=5/FIovSNSR5c/7qz/TJ34uIJy/QRHE/ED9If2++ygGs=;
- b=iMx2q+Rr+I9wwrYsHocgX1PfEquEOu50fWCx4Ue53jz0cKexDFrv0hzZEZpQMsv+MWXUofkU2
- /pa2Bq+QwumDBrOJAMHwF+GhnyQGMTXv/Oo3JYHbBMwsVQsY8Pmvgk7
-X-Developer-Key: i=lschyi@chromium.org; a=ed25519;
- pk=nE3PJlqSK35GdWfB4oVLOwi4njfaUZRhM66HGos9P6o=
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|PA4PR04MB7742:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f289b96-dd75-49b0-fad5-08dd65f9877e
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?wIRvX/7lAdB5Tuae67OR2Jp11wuYw970GSjSbHp9Ap9TXeCUt4qRtiUGZE?=
+ =?iso-8859-1?Q?Wvv+GZ7PVBkTFFMMBijByzy/L8WI77E5FW02man0JLBD1H8BwngyBlAyuZ?=
+ =?iso-8859-1?Q?NnzSCw17fEZvZ5lMQDcWA5Lq72YsuwQeGrrp1UqwIX0w1lzhbK/rP0Loix?=
+ =?iso-8859-1?Q?17pJEi+Cj3Ov4FyOIu9DXoDbuQ1p52g2r3fD7NDKtqjHBVd0g+ZpqHZytm?=
+ =?iso-8859-1?Q?j5nxbIf5XCvjMFdRxcMZZoqRTCrjSuv1Z6q2L4aUId5t6ceAVIwskOsAKp?=
+ =?iso-8859-1?Q?jxu5f93b9fmJb6OCANyJ6mHCdMex0aQYj7e2PeqpvuABJVb5rhDljFfFzc?=
+ =?iso-8859-1?Q?ee+I2Cxj5B3NPKtTKFKb59lZRtR+6GJthjQJyE0K8p704buqZ/i8UIBzX9?=
+ =?iso-8859-1?Q?okFcUVhAdC/k8QXGPSetfHruilSXu+GOkz9POLUAqdr2lASAjK9BEWaGNM?=
+ =?iso-8859-1?Q?BI80zkZCMce7FbCsrZQ+0+Nk8ZAZ5scURVgU2hgXjS6UFweZxMJ8UK9Dls?=
+ =?iso-8859-1?Q?EqcFlBr6Ex1GSNuedgwhBVKE89RmbHfaEnv/SNZFmsoCD/2WNiPH9NGNhx?=
+ =?iso-8859-1?Q?pFiZ+6wPPwIOYVmFxh9cofG2iXhl+Pso5jJBWT3a36BInJTnlbNR2wlt3R?=
+ =?iso-8859-1?Q?i6MsqIbBDTkRecPPJkw7PaWwon48JRBwlmgesQZQAe6CLw0IifraE4iqR4?=
+ =?iso-8859-1?Q?qr1DJNpkHYosw4UDmPnAEfou4pl5T84JCOb2bKoT/i9iczB2eu+ariADoe?=
+ =?iso-8859-1?Q?J4nUHE4+cHOkDra+YLdSw4FDRBRQl/e73O483zFc+Uh2Dl+ptPqi9rjUgB?=
+ =?iso-8859-1?Q?ZUwuHK6+AK4oFh+cgsjO18oH0iukmhab8lnOK4y9zfs+Z+X6HqIZgjht3v?=
+ =?iso-8859-1?Q?LZUHNPqwFvxYUdeS/TcZ3bSCh+OjYE7+hAnYhkrrgzyzDCkSF+x/bx1f9v?=
+ =?iso-8859-1?Q?gV7uDJAH93l1usMiZRuakKg+dBd9T76CwTUmTNvHiX5jMs0YwZz5rnF8iz?=
+ =?iso-8859-1?Q?DrCH5THP5OL1KZO4zrc1pcBQ51EgSPo1przaSGjYRIUZxb61pFjVwISCUg?=
+ =?iso-8859-1?Q?1/656VgO1VdzFa4AL+IvpvG9sYn2UaerQj1apkqn7CQx0fR1j0lttPifPm?=
+ =?iso-8859-1?Q?PyshjeqMfiMBtdq/7jqwxoGh1lTZ2FUV/RaICNMLwLZXKr2KFBgKnbV4MY?=
+ =?iso-8859-1?Q?sJV11bGOw494BQ1J1BLY7mOlui79QF15nVkYbIgfcwutQfT41MpgZ66F+4?=
+ =?iso-8859-1?Q?NwBpfuS2OrQGei46574EQTGRlaf9io/L/EIAJZnaIqVMsIIjdw4/PwDjK9?=
+ =?iso-8859-1?Q?nGrFVPgK2NkOIwLKRWf/wZ+66tvKf8/ADa/flgpqYQelpqhpVwIxcHa/bT?=
+ =?iso-8859-1?Q?mYebr+cVZ5aaxnQKF+IUP6tqdwNVOSiKsxxrIWliJgg+hz+NJMgGhfu2tC?=
+ =?iso-8859-1?Q?Te7DG09ogHAUJCFEc8gimnP6Bk8khkeDqM9t4Q=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?/rtG0jD4x/WE5O9S3LWeKcwBF4ypwWnz6kN5dyPOuahxZK1LEtr4VEoyJM?=
+ =?iso-8859-1?Q?Vz0OjfRUdJX92Lc0CJ5ylKswICXVRQJp3wV567BUpurV2lSjrW3UTbPV31?=
+ =?iso-8859-1?Q?B4IsNIt9waZd1MJCztSQjsLICbbarVB9jz8htgAV38NcaDaTlNwqOYwCoK?=
+ =?iso-8859-1?Q?nNYHnfgISZQRjs5KH0kBkDFqqWfua9c5z3tziiYiNu8ekX0HfLiR9NDszI?=
+ =?iso-8859-1?Q?MRRe1dEZPqQpSrP9IGMf1rBO+D9PTH6yWHSZ4yXw+tVubP7uEfyEYupl/n?=
+ =?iso-8859-1?Q?X862hSU7dOoqK+BRVHZD0XECgOiaaD+s0ckTRDMvaGthmF5rK0r9F6mcJ7?=
+ =?iso-8859-1?Q?PE0FtuwglzUVYotJ8vJ9WUDBdT/0PeyKQ+LWaFp9hjZoNHB/MhRk7Mhqbf?=
+ =?iso-8859-1?Q?BkAYQiHlG+rfQ5IbEK0S+5avTgcxFF6d1M043nbeIKzECg3i+V9cvSIhtq?=
+ =?iso-8859-1?Q?GDuglT+dqYX8XhZq4WXT3Q2Q6VLkQ1stMRRTkibNTthQf+0Fp+upKC0PPu?=
+ =?iso-8859-1?Q?tsguE9E1vk3LeKQs1YaljmnMSN5QpmtfDjP7mF1EA7AZEvxXc5ABhOwlOg?=
+ =?iso-8859-1?Q?xUJWlyA5fjjncltPQY+jrH7QzXes1LvJClK8tYLIyf3NsQj63OLO/OIYO6?=
+ =?iso-8859-1?Q?aIzuxMeRmmPazKd+Yt2E2bu2PQdijbxLqe5X4Yug9aENk97r3I9WSOwXCm?=
+ =?iso-8859-1?Q?lKzdvcETizLZUgir+3NVrFaAjD6VKoVSQ0xQO9yl94CG/3jLNtXVw8zimE?=
+ =?iso-8859-1?Q?9F3DrLdvjWL6BquB5KCLPXEm+dMjr4xWTvryB1RZopxXqnCCSg0+o2ai9I?=
+ =?iso-8859-1?Q?AwZAk0YH7Jz4XKVVNUiiEfWYRqrgViCVuuJ8QKGAuY4ZTg7CGO7fIrhwxD?=
+ =?iso-8859-1?Q?6ISdrOfalreWN4YlH51QwsVQYSH18m49LCMQYUc3iTb+ydDuiYtA3hPrwA?=
+ =?iso-8859-1?Q?xggX1AOGBT1RZXWPenNsAV4fL2a0SdI9dF1MpwQTcNjDy5GKF7hE9HquEm?=
+ =?iso-8859-1?Q?95bD7SjUDDPAzBeErn9Rv5Aj2RIOmE7AUqrrbPJ/3vUp4PWUHjrt1b9n1W?=
+ =?iso-8859-1?Q?Db0jBwUN0Dqyx8Yc+kmjBcwojxRNzSr4UfX2+Vv7tIdSXyEbPgDU6XL1WR?=
+ =?iso-8859-1?Q?w2/Ffr+wc3CCW1xC3rSVlk19yJ44k9HTA0oZxQbSdp70UvciHrMJvylR8u?=
+ =?iso-8859-1?Q?CLnl53p7nzl2ipfkUnyO8gIU60Mxqor7Q4eb9377Z1jKL9zYjMxlC/dK9H?=
+ =?iso-8859-1?Q?L2qy/z7imq1Vg6NHOFcVkrydEKVrcjOd9yM7uOkUykp3hNqGANY0nanY97?=
+ =?iso-8859-1?Q?+K8BfBvfOzug5OvvyU4c4hGU8+IbptoVHvonavRktKAHobJjgLN4xJzbBj?=
+ =?iso-8859-1?Q?ES+Q6QaOwsFJqi7ZEU0wjzSS92+Q0FfbW3V5z5sIOsZMVBkm6iyUg/1r3g?=
+ =?iso-8859-1?Q?jtT0rVqhiZUJ2jfsjZ1agtjj2MUI1kcyen5JcBh2Qqhr94y4CpA1T1joKD?=
+ =?iso-8859-1?Q?B59sB93BOiuzuBgUgblTeH9FKcpSPM/++uOk5z/PS5mLYj13mbsFxqkK6R?=
+ =?iso-8859-1?Q?OErLi/VdkFJ9RQERdhV3vxqp8R4rN1i6eFcbqoNxSTS4i//7VmTum++EEk?=
+ =?iso-8859-1?Q?8VINeThKx9+OXwRSZmvCnCKZNv8zA1lEok?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f289b96-dd75-49b0-fad5-08dd65f9877e
+X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2025 08:47:35.3982
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dgO/9f47dm7RkSEOcOMPHuylbbiwVHMBXE6rZSkOsWNmthVgm9WnRIOEsgXLosZce6mvejY2BlxaZkmqlVNA3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7742
 
-The ChromeOS embedded controller (EC) supports closed loop fan speed
-control, so add the fan target attribute under hwmon framework, such
-that kernel can expose reading and specifying the desired fan RPM for
-fans connected to the EC.
+From: Florin Leotescu <florin.leotescu@nxp.com>
 
-When probing the cros_ec hwmon module, we also check the supported
-command version of setting target fan RPM. This commit implements the
-version 0 of getting the target fan RPM, which can only read the target
-RPM of the first fan. This commit also implements the version 1 of
-setting the target fan RPM to each fan respectively.
+This patch series add initial OF support for Microchip emc2305 fan controller.
 
-Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
----
-ChromeOS embedded controller (EC) supports closed-loop fan control. We
-anticipate to have the fan related control from the kernel side, so this
-series register the HWMON_F_TARGET attribute, and implement the read and
-write function for setting/reading the target fan RPM from the EC side.
----
-Changes in v3:
-- Drop support of v0 setting target fan RPM, thus also simplify
-  implementations.
-- Align coding style to existing code, including using if-else rather
-  than switch-case, and ensure little endian conversion from read data.
-- Only log warning for failed probing get fan target command version
-  instead of fail the whole driver.
-- Link to v2: https://lore.kernel.org/r/20250317-extend_ec_hwmon_fan-v2-1-13670557afe5@chromium.org
+Changes since v4:
+- Corrected quotes to have a consistent definition.
+- Corrected DTS coding style as recommended by Krzysztof Kozlowski.
+- Updated pwms phandle to include pwm frequency, pwm polarity and pwm output,
+  as recommended by Guenter Roeck and skipped the pwm channel as recommended by Krzysztof Kozlowski.
+- Documented the pwms args in #pwm-cells description.
+- Updated pwms phandle in dt-binding example to include pwm frequency and 
+  use PWM_POLARITY_INVERTED macro to inverse the PWM polarity. 
 
-Changes in v2:
-- Squash the read, write, and register of fan target attribute to 1
-  commit, as they are the same topic.
-- Probe the supported command version from EC for setting the target fan
-  RPM, and perform the set fan target RPM based on the supported
-  version.
-- Update the used variable type to kernel types (i.e., u32).
-- Link to v1: https://lore.kernel.org/r/20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org
----
- drivers/hwmon/cros_ec_hwmon.c | 90 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 85 insertions(+), 5 deletions(-)
+Changes since v3:
+- Removed thermal_cooling_device_register_fail label since is no longer needed
+  and replaced goto with imediate return, as recommended by Guenter Roeck. 
+- Redefined compatible property in dt-binding, as recommended by Frank Li.
+- Updated driver of compatible list.
+- Renamed node name in the dt-binding example, as recommended by Connor Dooley.
+- Corrected dt-binding commit subject.
+- Added dt-binding fan descriptions and $ref to fan schema, 
+  as Connor Dooley & Krzysztof Kozlowski recommended.
+  Used similar as on maxim,max6639 and nuvoton,nct7363. 
+- Updated dt-binding example.
 
-diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-index 9991c3fa020ac859cbbff29dfb669e53248df885..d54fd85ccb4350fc297bde62a2d98f386ce1a8de 100644
---- a/drivers/hwmon/cros_ec_hwmon.c
-+++ b/drivers/hwmon/cros_ec_hwmon.c
-@@ -21,6 +21,7 @@ struct cros_ec_hwmon_priv {
- 	struct cros_ec_device *cros_ec;
- 	const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
- 	u8 usable_fans;
-+	int set_fan_target_rpm_version;
- };
- 
- static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
-@@ -36,6 +37,21 @@ static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index
- 	return 0;
- }
- 
-+static int cros_ec_hwmon_read_fan_target(struct cros_ec_device *cros_ec,
-+					 u32 *speed)
-+{
-+	struct ec_response_pwm_get_fan_rpm r;
-+	int ret;
-+
-+	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_PWM_GET_FAN_TARGET_RPM, NULL, 0,
-+			  &r, sizeof(r));
-+	if (ret < 0)
-+		return ret;
-+
-+	*speed = le32_to_cpu((__force __le32)r.rpm);
-+	return 0;
-+}
-+
- static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
- {
- 	unsigned int offset;
-@@ -52,6 +68,31 @@ static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8
- 	return 0;
- }
- 
-+static int cros_ec_hwmon_set_fan_rpm(struct cros_ec_device *cros_ec, u8 index,
-+				     u16 val)
-+{
-+	struct ec_params_pwm_set_fan_target_rpm_v1 req = {
-+		.rpm = val,
-+		.fan_idx = index,
-+	};
-+	int ret;
-+
-+	ret = cros_ec_cmd(cros_ec, 1, EC_CMD_PWM_SET_FAN_TARGET_RPM, &req,
-+			  sizeof(req), NULL, 0);
-+	if (ret < 0)
-+		return ret;
-+	return 0;
-+}
-+
-+static int cros_ec_hwmon_write_fan(struct cros_ec_hwmon_priv *priv, u32 attr,
-+				   int channel, long rpm)
-+{
-+	if (attr == hwmon_fan_target)
-+		return cros_ec_hwmon_set_fan_rpm(priv->cros_ec, channel, rpm);
-+	else
-+		return -EOPNOTSUPP;
-+}
-+
- static bool cros_ec_hwmon_is_error_fan(u16 speed)
- {
- 	return speed == EC_FAN_SPEED_NOT_PRESENT || speed == EC_FAN_SPEED_STALLED;
-@@ -75,6 +116,7 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- {
- 	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
- 	int ret = -EOPNOTSUPP;
-+	u32 target_rpm;
- 	u16 speed;
- 	u8 temp;
- 
-@@ -91,6 +133,11 @@ static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 			ret = cros_ec_hwmon_read_fan_speed(priv->cros_ec, channel, &speed);
- 			if (ret == 0)
- 				*val = cros_ec_hwmon_is_error_fan(speed);
-+		} else if (attr == hwmon_fan_target) {
-+			ret = cros_ec_hwmon_read_fan_target(
-+				priv->cros_ec, &target_rpm);
-+			if (ret == 0)
-+				*val = target_rpm;
- 		}
- 	} else if (type == hwmon_temp) {
- 		if (attr == hwmon_temp_input) {
-@@ -130,7 +177,15 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
- 	const struct cros_ec_hwmon_priv *priv = data;
- 
- 	if (type == hwmon_fan) {
--		if (priv->usable_fans & BIT(channel))
-+		if (!(priv->usable_fans & BIT(channel)))
-+			return 0;
-+
-+		if (attr == hwmon_fan_target) {
-+			if (priv->set_fan_target_rpm_version == 1)
-+				return (channel == 0) ? 0644 : 0200;
-+			else
-+				return 0;
-+		} else
- 			return 0444;
- 	} else if (type == hwmon_temp) {
- 		if (priv->temp_sensor_names[channel])
-@@ -140,13 +195,24 @@ static umode_t cros_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_type
- 	return 0;
- }
- 
-+static int cros_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long val)
-+{
-+	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
-+
-+	if (type == hwmon_fan)
-+		return cros_ec_hwmon_write_fan(priv, attr, channel, val);
-+	else
-+		return -EOPNOTSUPP;
-+}
-+
- static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(fan,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT,
--			   HWMON_F_INPUT | HWMON_F_FAULT),
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_TARGET),
- 	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_FAULT | HWMON_T_LABEL,
-@@ -178,6 +244,7 @@ static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
- static const struct hwmon_ops cros_ec_hwmon_ops = {
- 	.read = cros_ec_hwmon_read,
- 	.read_string = cros_ec_hwmon_read_string,
-+	.write = cros_ec_hwmon_write,
- 	.is_visible = cros_ec_hwmon_is_visible,
- };
- 
-@@ -233,6 +300,18 @@ static void cros_ec_hwmon_probe_fans(struct cros_ec_hwmon_priv *priv)
- 	}
- }
- 
-+static void cros_ec_hwmon_probe_fan_target_cmd_version(struct cros_ec_hwmon_priv *priv)
-+{
-+	int ret;
-+
-+	ret =  cros_ec_get_cmd_versions(priv->cros_ec,  EC_CMD_GET_CMD_VERSIONS);
-+	if (ret < 0) {
-+		dev_warn(priv->cros_ec->dev,
-+			"error getting target fan RPM set command version: %d\n", ret);
-+	}
-+	priv->set_fan_target_rpm_version = (ret > 0) ? 1 : 0;
-+}
-+
- static int cros_ec_hwmon_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -259,6 +338,7 @@ static int cros_ec_hwmon_probe(struct platform_device *pdev)
- 
- 	cros_ec_hwmon_probe_temp_sensors(dev, priv, thermal_version);
- 	cros_ec_hwmon_probe_fans(priv);
-+	cros_ec_hwmon_probe_fan_target_cmd_version(priv);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
- 							 &cros_ec_hwmon_chip_info, NULL);
+Changes since v2:
+- Removed the introduction of new properties for now and we only 
+  enable basic OF support.
+- Link to previous version: 
+  https://lore.kernel.org/linux-arm-kernel/20250219133221.2641041-3-florin.leotescu@oss.nxp.com/T/
 
----
-base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
-change-id: 20250313-extend_ec_hwmon_fan-a5f59aab2cb3
+Florin Leotescu (3):
+  dt-bindings: hwmon: Add Microchip emc2305 support
+  hwmon: emc2305: Add OF support
+  hwmon: emc2305: Use devm_thermal_of_cooling_device_register
 
-Best regards,
+ .../bindings/hwmon/microchip,emc2305.yaml     | 113 ++++++++++++++++++
+ drivers/hwmon/emc2305.c                       |  38 ++----
+ 2 files changed, 123 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+
 -- 
-Sung-Chi Li <lschyi@chromium.org>
+2.34.1
 
