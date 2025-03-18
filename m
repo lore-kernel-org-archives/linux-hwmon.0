@@ -1,217 +1,181 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B0520E706;
-	Tue, 18 Mar 2025 15:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9038920FA91;
+	Tue, 18 Mar 2025 15:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742311358; cv=none; b=GMTZowq25Qwwgj9lyKy+xsIP6iSX3mKoWmZaLheobGdyfqaEI465If7tcKLn4uoKyUhe1Bah69SORD+zVUl9qaeaAOAU1DWa1ssoVClIOzatGDZElBZRDbKIk305F+1n5TtQW5P/x4cLMdey2JqwgkIK0Y9AdNJsbgqHfGLc254=
+	t=1742311905; cv=none; b=fE29ocDitBrVHuTOe0Zfl4GY0M8UNMeHfagBgaZ2vmTkXcONTuYn/H3Z0FHCXafRihMzFWKARW0noKHqZKD2JmAek0dQ18pHuo6YbGbXTOJCvPRPwdL97Mja7XxmVgsdiyecb6uY5yIcs5FTf1cin5B849VD8d7pelHkkAHhizw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742311358; c=relaxed/simple;
-	bh=davtiVsXx98fsThB+WUnDWoANTiH8sILlfY6buOJYAA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JpoKak0b4fPbtW/AD41EWKxCoBCD2FDmnxMUadXvowpeNRh2AvdTUJpdwgHxLvga+fenb5Qi2S4VMt9K8q8yiVy1uiYQQe8Znawtv1FqLJ2twFoUWIjqgQ0SgZXiOXzTtJtQbaEXSIHONJcfqfWi7fwcX8c9su3MYyU5qeLIYJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MbuZiAKi; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1742311905; c=relaxed/simple;
+	bh=XoyQyut0B0I09grFpiG22mcD2dPJKh7wdni3ku4Ykks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ws46JEVlgitw/ZGJaZ8GkCJCSgkaaxad/8nejCpiQXeEvc9a4Lz30MMsG32i9doWFn9CwW9nGLtfvu/ZIAhI31tS1Gx2FWZloaSr73CdKaoSqVezH/C5ht+vAjh2TJ0O+Kwf8QJhVILBPyj4Cx9mV4+OojA5RZAoylGzEkotEaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l9NHJEZW; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbuZiAKi"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3012a0c8496so4277096a91.2;
-        Tue, 18 Mar 2025 08:22:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9NHJEZW"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2ff6a98c638so6473967a91.0;
+        Tue, 18 Mar 2025 08:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742311356; x=1742916156; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1O+uLM1JS3SDRUPJkFsjl9GIuvpMT2cD+4v/3zBEAA=;
-        b=MbuZiAKi3kKG96zKQOHOfqF0jUqj4BJnXEcKYh+l6JdP4v/SO+uDMmAtbiwWhOOAcN
-         +K6fZj8zikznHZhVCpMOK5esrO5ja3FCAt7FBIDJH4DuUcYrTDUBBEAfVBqsCGoIeg1z
-         nPyUZNEjne4f5Kg0gsPd3CVxEXJcR/kxZq/EZIOIix/17B0pJfLaGheYFfRccMrKdIU5
-         B8OAAxqM8udjCXNCqY/tp9s4IOGbsu6FE+NomIQgrX16HrrJNFu/6Xe/bOl7AABNtrdY
-         HyzKucRRCOjRolF4+bGUOsf7ddVOpXIHIiFMyH8jFYBjyFt7i+02S0/us319d/Jn3N8E
-         Yv2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742311356; x=1742916156;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1742311900; x=1742916700; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b1O+uLM1JS3SDRUPJkFsjl9GIuvpMT2cD+4v/3zBEAA=;
-        b=mkbF43DbJoaghehuy1IZBkAbfSEmgsu6oWRVzsZtoiFgUGvoekhwMpGW2lzi1fD1i5
-         KROF2S1vzLscsyrzgSk0YGhjPFiAMMDxLHOFJibl1ClpJaIHYBgW43vLCwwVHRTCqcDn
-         eqYOgiQ19Xzug72owfAjymdqiGDUOQoHnhHFULuL5ttgZfs8zzmBji/npEBqqxmTuIqO
-         RaN9btFo/3sD0z8NkzUaIBJmj/SjibNqTJm0vfiyLv/HdRQJdcTbPBvTHCOV7eJkDNB6
-         7CTWZzTolE0obk5GfKkd8+22L7tbyHpW41NP6McFqX9sN6GbYjByaekfWil9wnUmDdKA
-         E/1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUl+YkSRrsIJ24j16A94MyKVljwI4GsnM1od96Qefq/J84t2kK/WhECTMsgveMnn3eemMNZKb9eZfba@vger.kernel.org, AJvYcCWm0pDmrbiCqkTmk17aYtIVmAgBiqCSyoOwOE2v8IdJKU2FPrQr6wrVEeIysUqEfJCwGr4xsB/I8x1ShsDK@vger.kernel.org, AJvYcCXOtrrJfk55p3cqDREbROB6sXBTjUH0Hk1eVysrnrrvVnkmTkfu9NS/0s1qsC9hOBLBcBZ+HAVwJ8AsEbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoA1bqUi9L0xBvCBjKubzNoV6uVMbB5Pl06yKaatJcHaEyl6Jn
-	ub3G+5l/5vpxEuBFXQ0WBFUYDfjyzlprJZjkDOsgWw40nhyoePdm
-X-Gm-Gg: ASbGncs9XI/ZV8c8Oa7v8q2HQpjj2SaTZpXgvfE9U2QoZ75g9dw7n8j4augjKHTgxfL
-	JzTn/oN+J6HCQ85SE+ptkEYR77amY5oFhPw3j7py8I/TJBjsn8Y7ZvEHAd43+spIK8Pl8eTNkki
-	3s+B26iRjcbZI5cfaogaCctZWghUVEcEefc9SPDadnjkBdMKFYLvw+v4pPlpTNEx7PWXSpF7txS
-	8SWbZ4+o6wMg3FpjFkRbfE13Cn5p7TWQlNSvMD8pFFWYRKjssI4SXwiOJyY9ws8uNm0rjleTXXj
-	jnEHnBNUpukCE+TOUtstAAalbs5r7QfOj296J8r1+v+frOV2qXZnXpoBbm3Sk+f3iwZZRocfsAM
-	5C1IxpLjxpLunnJIjIT4IUfFhGvQc
-X-Google-Smtp-Source: AGHT+IHGHiOrC+gOvwxsNgQjXSm+TIRcVXspSDyBsDPgTboUtiOiWHemH4dUn+FSAC6hrpVwEjhvPw==
-X-Received: by 2002:a17:90b:1d48:b0:2f9:cf97:56ac with SMTP id 98e67ed59e1d1-301a5489ee0mr5080905a91.0.1742311356544;
-        Tue, 18 Mar 2025 08:22:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301a39efc5bsm1492988a91.0.2025.03.18.08.22.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Mar 2025 08:22:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7afcd224-1154-4e2f-b383-10f6a89fdae0@roeck-us.net>
-Date: Tue, 18 Mar 2025 08:22:34 -0700
+        bh=GTo+P4IDj/egBTC39do6b+maTrxFfajRm+lC64dJAgc=;
+        b=l9NHJEZWfL+lu2uGwppIHjdociNfYxjtlF6WPBmjQi/hVyry9O1jIbLxml5OdHTaEV
+         09G98V9uOO04Lfh24xYx77DGBeFhgkhVhjRLpv4UNhEgvvSpWZq9tTTnxiPLqIcZZ1MY
+         IDAgrLdRih2H/aY+pVJze/H5LQi3/D+BWPfMngCrkNU02wK50GmpXO9dX446srEWSc01
+         NlLin3j9oX1WZcOJCWPAX99CsmWNqu48YOs+kgJyM5tKG7jpGzXPqbcRq/0Eziy5Clro
+         yWEM8/grZZQJPFrnfPORGFjwAE7sqE+EzcEojXqjjzKJa5Ld5rc6FznkrdA7g7fPTCr8
+         EEVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742311900; x=1742916700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GTo+P4IDj/egBTC39do6b+maTrxFfajRm+lC64dJAgc=;
+        b=C4PWvhGGvzGsHUQW+MHn/npCUo/FkBswI0Ab3tHso/pWJ4vgSP+I7aKWhIxomhd3RD
+         9P6dXnh5L6uPPBXNqCn3K98fTV+YfKIFGeWsWxy3c41yKLkyDQwXwOIgFqbvguGZvSJ2
+         e3L45vJHQQo3vlWC6CcG/Gs0Co0/RWWV2V9Xxe+HYYIFpOa8R+1Y1yny/ayJZAA5rcPS
+         xIXB5guHJjqZLvI3AZR8C3P/qwBWBp68xe6fJBPGx1d+cwaX+keAZWqNO0ArkH5soJ+/
+         rwCZrMCBw6IPoQEWbscq+NzdkrpDI7xyRmPxSrWVJX5E9SxlL1l8XP8uAUbEOxaZgsw+
+         epWg==
+X-Forwarded-Encrypted: i=1; AJvYcCW2igniwEURY8Ic8TcI0mppBRMeczwxiKhn4+iqzgY5p2hIFcaiSJfP9Vz+JDlnx0RP5dQdK/PHa0LOfoTr@vger.kernel.org, AJvYcCWRjtbyOsdCU+h0APnSARf4FbxqjInKtljKt6AvtEmg9euiJtHwTZmoy2BxotRHByNZ5ji5uKAiByYj3w0=@vger.kernel.org, AJvYcCXgZpDJvAudKULDPaaRyKN1IEfoQAmDEsxXCGmUuNGYpxk0MGkHLT7QAUT62aObuFEklZhqU+FV1tuv@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPIccBnZd51er6P72hqcL2FDsuK+kKLAoiqZ9CKIAEDIuKgbzH
+	z2Qm6s6l1gEc0oxwAPWRvlkPF5y87JYuxqCo3uJL7rdenFCwYdJR4MvJZqbpm7crzp2HZYy2vLv
+	buBo0O2V4/VVBlfNV4wNasQKBowY=
+X-Gm-Gg: ASbGnctRrZvTUJHE2qdUHMyitDGYy1DvIpD8kuRcOr+RqizDqU0eIAxr8Ug8yRZOpN9
+	LOc2WsEn96NnOK0dEfRlQQ6j7AqA689MxW/KFdURNJHwqgAftDrAMbB5mb7eAp86zPCC3+JlnFX
+	ge82ttamXPbLwR08KghzhVWmM=
+X-Google-Smtp-Source: AGHT+IGev3FhJjE3AIdupTysEnxLQqIhHB0aNv4HFA4FSPqyJjajPwHMn95jdK7N+OLjNP3hIRsGSfPOM63dkEDBTf0=
+X-Received: by 2002:a17:90b:3d86:b0:2ff:5ed8:83d1 with SMTP id
+ 98e67ed59e1d1-301a5b22c44mr3891136a91.19.1742311899758; Tue, 18 Mar 2025
+ 08:31:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
-To: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: viorel.suman@nxp.com, carlos.song@nxp.com,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>,
- Frank Li <Frank.Li@nxp.com>
 References: <20250318085444.3459380-1-florin.leotescu@oss.nxp.com>
- <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20250318085444.3459380-2-florin.leotescu@oss.nxp.com> <7afcd224-1154-4e2f-b383-10f6a89fdae0@roeck-us.net>
+In-Reply-To: <7afcd224-1154-4e2f-b383-10f6a89fdae0@roeck-us.net>
+From: Daniel Baluta <daniel.baluta@gmail.com>
+Date: Tue, 18 Mar 2025 17:33:12 +0200
+X-Gm-Features: AQ5f1JrGT6OkXhZLmAGbs6dhzXtsxvJYdhcQucC_VGy8G_11v7e7DfbTPZDv1rM
+Message-ID: <CAEnQRZBmYdLh29ha1FKz8=CbxjFBFFTgDkjrEmwTxW2WcxodfA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: florin.leotescu@oss.nxp.com, Jean Delvare <jdelvare@suse.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	viorel.suman@nxp.com, carlos.song@nxp.com, 
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, festevam@gmail.com, 
+	Florin Leotescu <florin.leotescu@nxp.com>, Frank Li <Frank.Li@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/18/25 01:54, florin.leotescu@oss.nxp.com wrote:
-> From: Florin Leotescu <florin.leotescu@nxp.com>
-> 
-> Introduce yaml schema for Microchip emc2305 pwm fan controller.
-> 
-> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> ---
->   .../bindings/hwmon/microchip,emc2305.yaml     | 113 ++++++++++++++++++
->   1 file changed, 113 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> new file mode 100644
-> index 000000000000..e61ef97e63af
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
-> @@ -0,0 +1,113 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip EMC2305 SMBus compliant PWM fan controller
-> +
-> +maintainers:
-> +  - Michael Shych <michaelsh@nvidia.com>
-> +
-> +description:
-> +  Microchip EMC2301/2/3/5 pwm controller which supports
-> +  up to five programmable fan control circuits.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - microchip,emc2305
-> +      - items:
-> +          - enum:
-> +              - microchip,emc2303
-> +              - microchip,emc2302
-> +              - microchip,emc2301
-> +          - const: microchip,emc2305
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  '#pwm-cells':
-> +    const: 3
-> +    description: |
-> +      Number of cells in a PWM specifier.
-> +      - cell 0: The PWM frequency
-> +      - cell 1: The PWM polarity: 0 or PWM_POLARITY_INVERTED
-> +      - cell 2: The PWM output config:
-> +           - 0 (Open-Drain)
-> +           - 1 (Push-Pull)
-> +
-> +
-> +patternProperties:
-> +  '^fan@[0-4]$':
-> +    $ref: fan-common.yaml#
-> +    unevaluatedProperties: false
-> +    properties:
-> +      reg:
-> +        description:
-> +          The fan number used to determine the associated PWM channel.
-> +
-> +    required:
-> +      - reg
-> +      - pwms
+On Tue, Mar 18, 2025 at 5:22=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 3/18/25 01:54, florin.leotescu@oss.nxp.com wrote:
+> > From: Florin Leotescu <florin.leotescu@nxp.com>
+> >
+> > Introduce yaml schema for Microchip emc2305 pwm fan controller.
+> >
+> > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> >   .../bindings/hwmon/microchip,emc2305.yaml     | 113 +++++++++++++++++=
++
+> >   1 file changed, 113 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,=
+emc2305.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.=
+yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > new file mode 100644
+> > index 000000000000..e61ef97e63af
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> > @@ -0,0 +1,113 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/microchip,emc2305.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Microchip EMC2305 SMBus compliant PWM fan controller
+> > +
+> > +maintainers:
+> > +  - Michael Shych <michaelsh@nvidia.com>
+> > +
+> > +description:
+> > +  Microchip EMC2301/2/3/5 pwm controller which supports
+> > +  up to five programmable fan control circuits.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - enum:
+> > +          - microchip,emc2305
+> > +      - items:
+> > +          - enum:
+> > +              - microchip,emc2303
+> > +              - microchip,emc2302
+> > +              - microchip,emc2301
+> > +          - const: microchip,emc2305
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +  '#pwm-cells':
+> > +    const: 3
+> > +    description: |
+> > +      Number of cells in a PWM specifier.
+> > +      - cell 0: The PWM frequency
+> > +      - cell 1: The PWM polarity: 0 or PWM_POLARITY_INVERTED
+> > +      - cell 2: The PWM output config:
+> > +           - 0 (Open-Drain)
+> > +           - 1 (Push-Pull)
+> > +
+> > +
+> > +patternProperties:
+> > +  '^fan@[0-4]$':
+> > +    $ref: fan-common.yaml#
+> > +    unevaluatedProperties: false
+> > +    properties:
+> > +      reg:
+> > +        description:
+> > +          The fan number used to determine the associated PWM channel.
+> > +
+> > +    required:
+> > +      - reg
+> > +      - pwms
+>
+> Is it necessary to make 'pwms' mandatory ? The current code works
+> just fine with defaults.
 
-Is it necessary to make 'pwms' mandatory ? The current code works
-just fine with defaults.
+The code adding OF support is added just in the next patch, so the
+current code isn't event
+probed when trying to use dts.
 
-Thanks,
-Guenter
+Or am I missing something?
 
++static const struct of_device_id of_emc2305_match_table[] =3D {
++       { .compatible =3D "microchip,emc2305", },
++       {},
++};
++MODULE_DEVICE_TABLE(of, of_emc2305_match_table);
+
+I have no strong opinion on this we could make pwms optional.
