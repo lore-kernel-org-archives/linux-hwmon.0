@@ -1,177 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858261361
-	for <linux-hwmon@vger.kernel.org>; Wed, 19 Mar 2025 16:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1371B4140;
+	Wed, 19 Mar 2025 17:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742401585; cv=none; b=PYy6g92IAEU7ubPVQRitQvWVbv2FsEyKtQTHsplFO+zo6HVUfyK9gJaIVmB441ijZ2nbESYpC7S6CazBXhEgxhVpldrmcxgmvkAT7D7vmWVZj0IDn1WCRByv+WVsjBag2diHcoleK8OViFhHHHdgWznp9QIZB8TnHqUTS0sHius=
+	t=1742403767; cv=none; b=QO985K/4w7xF4wUqPXQJTle0pVuH35cGAm80fmp2DC4RnD5JMriQQJwqNRWab1pcDfFFJGSB680Rvpjng6O3aSAinDRk8QyHIxHTrUdrziuVDd9RknsBG17vX5yqNNCUpZlWcl1UeoL+80zF23F2CqxgEzL+iWjWYzpWgFc75F0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742401585; c=relaxed/simple;
-	bh=bB7Z3D3pAJ9FqICDOfEOiaiZStKwUFsJysVaG4wtJLM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bdukm+pmRMqPaKQo0N0aUo/fialTEaVIh2y//r/NvO3/BQ4vCvkTUaG22wh8YyLNljC+6LrotCZHytZriae+xBocKVMMjVxeg5/ojiJNaBHvki+8Gu7WG61WRhfzFOVTba1c3WDcCqSPcfEwKOHAVmTj7CShEVL9T0rwjyd61VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dl3UU7G0; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742403767; c=relaxed/simple;
+	bh=GLuo+U2x55gQyUdk6YrmiE4u1WnOL4qCb3BnZbIW31U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X8/Gha04HFwMTq6T01GivBGLXTOh3AWNMAkJHuAwGgOShRcNADggnMc8ZlDqnlEF0yHvkzzEcsq9ZvJxc8cm4MAkhvxIcaBiqNVMw9QPazB8S9jWId57u87LfbA8Ya6uJqyYErhTAGagbJdw205/bC0uQ8kQRAG77gllFFQtsCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=FnstrJYj; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dl3UU7G0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742401584; x=1773937584;
-  h=date:from:to:cc:subject:message-id;
-  bh=bB7Z3D3pAJ9FqICDOfEOiaiZStKwUFsJysVaG4wtJLM=;
-  b=Dl3UU7G0VZw08n+Gb86qocu/n9rEMfNAiUhNTQ5Pel1ZdMz+dxiikQyF
-   0ZJbcZxMkZKuPBLhgNMi1ZcqV8vUUOdywX2DVTi1WaMc3/XdfOxh7MRmG
-   UpctFesWHIWL6mRXop500E+RrsJIJqh0q1s9UNTgRZajKrutS8NYxj8lK
-   Z7MM07mCDOBO4EwcZ+K/iWK1wgipZvP9vVvltb+olG0od8Z01vZbItG7/
-   /kPFZG6PtmLAgL73hUTqi5IuIFBJaeJLElJHTtU0B/GT13VRFFt+ZfJ+e
-   928BDLi9o6IuhaCMFtHLJCMPF2a/L1aGuSNKviOhw0AwuLQp3NAlbKMCr
-   w==;
-X-CSE-ConnectionGUID: GTXdwm2NS4iy7ldlSq8ECw==
-X-CSE-MsgGUID: /bLBDNC3Qv6gaWqHuxxw7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="43619276"
-X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="43619276"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 09:26:23 -0700
-X-CSE-ConnectionGUID: zMbG/uVORGi5ajJbALfn2A==
-X-CSE-MsgGUID: qSyerHWlRKSFshf3xj7Dfw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
-   d="scan'208";a="145884601"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Mar 2025 09:26:22 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tuwFH-000FVl-2P;
-	Wed, 19 Mar 2025 16:26:19 +0000
-Date: Thu, 20 Mar 2025 00:25:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- bf1bb26f23f10f835e596337604d32d34ab798a6
-Message-ID: <202503200021.ApNeZHYs-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="FnstrJYj"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac2a81e41e3so160533666b.1;
+        Wed, 19 Mar 2025 10:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1742403763; x=1743008563; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2BbuJseVPxwQi7Obc3hDJCXXvtVI/HaIv75L/ZC8hdI=;
+        b=FnstrJYjgz0OpTuZJFHt81MG8EHWK+qOwpB7I30/p8bpkBcJ6kk0rj1gMfVQoKrTD5
+         juLUSaLCJTT/AofSvUjfhe+45MFomBi05zHCW88OEx19eIeLyY0vWKSh6VvPrP39/bDe
+         YYm0KF+VzqqJSBfe50AFAstsmeXPC7EqpikUahlfrJZ2Z9Mvd9FLh8pLiMYBl2vMie6J
+         DQWq5IEf5dlknvHj5T71vVTE01hOsZ2vZEvMplk0ux7zSPXbA/ypJlvExwWUwe0ccXrB
+         V8MV1dOZMP0YAG6uWuN31qeodnXSApA9ieoT7KULM1N6JWM7yIL99HWOy5Os7PW9TIbu
+         W7/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742403763; x=1743008563;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2BbuJseVPxwQi7Obc3hDJCXXvtVI/HaIv75L/ZC8hdI=;
+        b=nisgiFdcdn9RVdDHL6aDB1mbFnBeyaUvVMCRxMXGj5OCUmLuEbJdNvThJ8nK9y3yyc
+         m2hBviadObHfYjAVPGeyBc7SZoC81328obqHX+6YHNBINosulOoeoUZnnM9j39y0S8Aa
+         LcVByuuNrmkvKuGMitw7nsbjBKsct36OmvHx9x0fIfaUD4Lhe6hWHKdvwwUmXi5SWCPF
+         KLJKxrJGS20OLQ3slwM++KayxiGRIWurJvohQAQXuYTtEkDNJoiiMUFuNZM/lQDlcaLz
+         I2b/obtQre0K6hyPehRXwPt4Zr8BE4mx+e97KazYzxomoEI6JXdfqlyUo+14Opro0xSG
+         5R+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU8a+goToNgSRaImrwFZPXY0ZNs1Cz3PpFdTzzIefEXzrZoUo+cKDe9HjiZj2AsfxRFH6BtYDF3r4J7@vger.kernel.org, AJvYcCUcagQg5piG9pN5iUcoFQf4L/Q8DaG3QadkiiFYbugC1ICiZr1/zT2ncZYmPauP5l+WI/9th8myXrvXpRo=@vger.kernel.org, AJvYcCUo9KJhim1drVGnwIm6VjTuW3SbCMfea7GHbuBgDjLUU7qPsgne2cQ9QblJ98ptouJ2YB9SkLlLMwWVvkEQ@vger.kernel.org, AJvYcCX2iDoF6BbQO6hYOYMMId26UualjcJGm8o3qv1JHL9tK/aHfAvnoxP+EI2EvoFEQAZIIwtHzi5HljYo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6Tco2P9yYLvNeAZK7xeSaJdFtj5DFK6xXBOCxfSJ7a7XuPeGF
+	gp97ojUfLiItd8dlsRsjDAj6WZVdHq/oI+lIAbtTTeMv40uEXMVB
+X-Gm-Gg: ASbGncui+FPBplgJ2LWduCjmVLxzywic1WlNwWQMvU7uPDxc69Je6mCTuBVf0h81Xa6
+	I6gLXusXAkhbjyWbMU/sXadVlWg9mPVCs5RWVW95ymkl6NvvJbnb60S4hVhUqguiFgeYhr6Bs3f
+	BACDvxSN/cIGmukkjBcSJGQg79hgfHEmSXXa8/usaP26hsALMdlhpL1x5eM1kNeCWCnooMBy4yy
+	goMS3KZZmA1dhO78L2Bj+IIIJEoYdK/Oa1pxOOJH7n5lSyDZCN723ZO0WtSg+q10N2qdphkAqvu
+	kEGL4uAj/mql5AZfebdyNIwW/kRqOWAJEWpg5ilp5j7Y7dOZi41O6Bb4DiGC
+X-Google-Smtp-Source: AGHT+IH5Z1KGEoI3eiCEX0Cg4+cgyl5EMRCB30vRsGgsY4BEhk3ajxrP6vH2Xxan2xP/QubzaS9ICg==
+X-Received: by 2002:a17:907:d1f:b0:ac2:9d15:2ec0 with SMTP id a640c23a62f3a-ac3b7dd75d7mr425026466b.27.1742403762322;
+        Wed, 19 Mar 2025 10:02:42 -0700 (PDT)
+Received: from flaviu-Aspire-E5-572G.. ([5.15.67.29])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3143653a7sm1034235866b.0.2025.03.19.10.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Mar 2025 10:02:41 -0700 (PDT)
+From: Flaviu Nistor <flaviu.nistor@googlemail.com>
+X-Google-Original-From: Flaviu Nistor <flaviu.nistor@gmail.com>
+To: 
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: Add support for TI TPS389008
+Date: Wed, 19 Mar 2025 19:02:27 +0200
+Message-ID: <20250319170234.63723-1-flaviu.nistor@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: bf1bb26f23f10f835e596337604d32d34ab798a6  hwmon: add driver for HTU31
+This series adds support and documentation for the TI TPS389008,
+TPS389006 and TPS389004 voltage monitor IC's.
 
-elapsed time: 1453m
+This I2C device provides 8 bit ADC conversion result for all
+input channels.
 
-configs tested: 100
-configs skipped: 1
+The proposed driver implements the logic to perform the ADC read.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The features this driver does not support (alarms and thresholds
+for the alarms) have been documented in the "Known Issues" section.
 
-tested configs:
-alpha                             allnoconfig    gcc-6.5.0
-alpha                            allyesconfig    gcc-9.3.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-8.5.0
-arc                              allyesconfig    gcc-14.2.0
-arc                   randconfig-001-20250319    gcc-14.2.0
-arc                   randconfig-002-20250319    gcc-14.2.0
-arm                              allmodconfig    gcc-8.5.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-6.5.0
-arm                   randconfig-001-20250319    clang-18
-arm                   randconfig-002-20250319    clang-21
-arm                   randconfig-003-20250319    clang-20
-arm                   randconfig-004-20250319    clang-16
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-8.5.0
-arm64                 randconfig-001-20250319    gcc-14.2.0
-arm64                 randconfig-002-20250319    gcc-7.5.0
-arm64                 randconfig-003-20250319    gcc-12.3.0
-arm64                 randconfig-004-20250319    gcc-7.5.0
-csky                              allnoconfig    gcc-9.3.0
-csky                  randconfig-001-20250319    gcc-14.2.0
-csky                  randconfig-002-20250319    gcc-10.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250319    clang-21
-hexagon               randconfig-002-20250319    clang-16
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250319    gcc-12
-i386        buildonly-randconfig-002-20250319    gcc-12
-i386        buildonly-randconfig-003-20250319    gcc-12
-i386        buildonly-randconfig-004-20250319    clang-20
-i386        buildonly-randconfig-005-20250319    gcc-12
-i386        buildonly-randconfig-006-20250319    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-13.3.0
-loongarch             randconfig-001-20250319    gcc-14.2.0
-loongarch             randconfig-002-20250319    gcc-14.2.0
-m68k                             allmodconfig    gcc-8.5.0
-m68k                              allnoconfig    gcc-5.5.0
-m68k                             allyesconfig    gcc-6.5.0
-microblaze                       allmodconfig    gcc-9.3.0
-microblaze                        allnoconfig    gcc-11.5.0
-microblaze                       allyesconfig    gcc-9.3.0
-mips                              allnoconfig    gcc-10.5.0
-nios2                             allnoconfig    gcc-8.5.0
-nios2                 randconfig-001-20250319    gcc-14.2.0
-nios2                 randconfig-002-20250319    gcc-10.5.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-5.5.0
-parisc                           allyesconfig    gcc-9.3.0
-parisc                randconfig-001-20250319    gcc-10.5.0
-parisc                randconfig-002-20250319    gcc-5.5.0
-powerpc                          allmodconfig    gcc-10.5.0
-powerpc                          allyesconfig    clang-21
-powerpc               randconfig-001-20250319    gcc-9.3.0
-powerpc               randconfig-002-20250319    clang-21
-powerpc               randconfig-003-20250319    clang-21
-powerpc64             randconfig-001-20250319    clang-20
-powerpc64             randconfig-002-20250319    gcc-5.5.0
-powerpc64             randconfig-003-20250319    clang-21
-riscv                            allmodconfig    clang-21
-riscv                            allyesconfig    clang-16
-riscv                 randconfig-001-20250319    clang-20
-riscv                 randconfig-002-20250319    clang-17
-s390                             allmodconfig    clang-18
-s390                             allyesconfig    gcc-13.2.0
-s390                  randconfig-001-20250319    gcc-11.5.0
-s390                  randconfig-002-20250319    gcc-8.5.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-10.5.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250319    gcc-11.5.0
-sh                    randconfig-002-20250319    gcc-14.2.0
-sparc                            allmodconfig    gcc-6.5.0
-sparc                             allnoconfig    gcc-6.5.0
-sparc                 randconfig-001-20250319    gcc-6.5.0
-sparc                 randconfig-002-20250319    gcc-13.3.0
-sparc64               randconfig-001-20250319    gcc-14.2.0
-sparc64               randconfig-002-20250319    gcc-14.2.0
-um                               allmodconfig    clang-19
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250319    gcc-12
-um                    randconfig-002-20250319    gcc-11
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250319    clang-20
-x86_64      buildonly-randconfig-002-20250319    clang-20
-x86_64      buildonly-randconfig-003-20250319    gcc-12
-x86_64      buildonly-randconfig-004-20250319    gcc-11
-x86_64      buildonly-randconfig-005-20250319    clang-20
-x86_64      buildonly-randconfig-006-20250319    clang-20
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250319    gcc-10.5.0
-xtensa                randconfig-002-20250319    gcc-14.2.0
+The complete supported functionality has been tested with a TPS389008
+and TPS389006 voltage monitors connected to a Raspberry Pi 4.
+Different device tree node definitions have been tested with success.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+
+Flaviu Nistor (2):
+  hwmon: Add support for TI TPS389008
+  dt-bindings: hwmon: Add TI TPS389008
+
+ .../bindings/hwmon/ti,tps389008.yaml          | 140 ++++++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/tps389008.rst             |  56 +++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tps389008.c                     | 466 ++++++++++++++++++
+ 7 files changed, 682 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps389008.yaml
+ create mode 100644 Documentation/hwmon/tps389008.rst
+ create mode 100644 drivers/hwmon/tps389008.c
+
+-- 
+2.43.0
+
