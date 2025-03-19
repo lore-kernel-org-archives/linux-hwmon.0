@@ -1,93 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFCC24E4D2;
-	Wed, 19 Mar 2025 08:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF86625334A;
+	Wed, 19 Mar 2025 10:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742373243; cv=none; b=AGszSCQ8f5h7PIp31U41zb9ccH1PioEv1OrV2SbW9mRJ5lHIXS0MBjR1hDYhw6fR58FJdq2GhlY/HbDLEEObal5lpGuCegmWC2ivBA0h+AZag6aEjOFnXYWn0EVUMemRAt4ShRcIpUJDvrwwwsjX8chvxFFMG2iVsLAJMdO1I/E=
+	t=1742379167; cv=none; b=Szct4eyQtLuf2bps7lFbiGr/kAMGH8gqsDP6+6KC7Lo5TDfRVK0EYsOMrcXDlwKCBlk8Nfp5THFIVs3d0kcbKNZtpkn6Dk4c1tfJgvf12eC4flabgSAgVbCdStWN4FMbEP9DdCJp9JO0sSaoWB07AFUKMMgIB+Kg2JuXOEfp33c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742373243; c=relaxed/simple;
-	bh=uHvP5v7oifXK6felVK4bK42cu7yy9x6VTVSPes59okU=;
+	s=arc-20240116; t=1742379167; c=relaxed/simple;
+	bh=AOQimFM4gJpZ42Ie2Z7N8zos6d6J3ZIO5Gx+iwOxWrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q9JR1qkXqh5SHMfd8ZONIHgZUqmeha4iqFQYcnNOT5AP2YA2Idgc9VJGfuJrlZw+FPn0Hmb+GQnSh/f1Cz/UM2Z/krn7JRqHZdN3PV1bNWRc/nh6ghn/wc4qsVPdcM7sNnlTQOmKGL4mWQNm/7iZf5zhHocSY7mMjF2OYYmaqHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rJYYznFa; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mQc1i8oG7gMaapH6wiNZB3fy6cldxiuQfgxTZ+h0bnbWhehMPsv98D2vyc8xdv7voFTrf9hloP1ArkITupwEvRfTGYTxOyvl4xqNRpmilWGBAvq/dSMGPU7bO2oVs4tJllwz/VXv7d5ZjGWBEe2nxpo2qBEU5qWoFNY9mGm1kUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=mDtW64AW; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJYYznFa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487C9C4CEEF;
-	Wed, 19 Mar 2025 08:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742373243;
-	bh=uHvP5v7oifXK6felVK4bK42cu7yy9x6VTVSPes59okU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rJYYznFaUu+VoupKyTZDR38lR2kdDtpPfGJfuqyBdYqwj+lYgFFggKrK4wWhos2cl
-	 aAb93us0ya5aY809KshBxieVJB935C1RYf2coB2dGTUcT16dPduenoP1PumfYxHYap
-	 wtc667FkA24dYiwNhn3p0Ea/TpVwl0NEprbtTnKLTa2VsNvOvO224zTp3ZvXg0s7mG
-	 0e+lGFa5v38rPF98/FsREiEAtNK6JZVodh/xGTy6ugnmkSnXyAi50zHSQPfe6wDGLc
-	 mGEb5/aZzI3wjfCRRkIAivwjYWdcz2XbJbPvRtG5uZBy5DU6vWx8rhW6LwwM3x6QPD
-	 lizlcx6I6/SyQ==
-Date: Wed, 19 Mar 2025 09:33:59 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Daniel Baluta <daniel.baluta@gmail.com>, florin.leotescu@oss.nxp.com, 
-	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, viorel.suman@nxp.com, carlos.song@nxp.com, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, festevam@gmail.com, 
-	Florin Leotescu <florin.leotescu@nxp.com>, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
-Message-ID: <20250319-auspicious-sparkling-dachshund-ef0eed@krzk-bin>
-References: <20250318085444.3459380-1-florin.leotescu@oss.nxp.com>
- <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
- <7afcd224-1154-4e2f-b383-10f6a89fdae0@roeck-us.net>
- <CAEnQRZBmYdLh29ha1FKz8=CbxjFBFFTgDkjrEmwTxW2WcxodfA@mail.gmail.com>
- <ca734f66-593f-4e7c-bc76-e343a7eb88d7@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="mDtW64AW"
+Received: from francesco-nb (31-10-206-125.static.upc.ch [31.10.206.125])
+	by mail11.truemail.it (Postfix) with ESMTPA id 534821FB55;
+	Wed, 19 Mar 2025 11:12:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1742379154;
+	bh=je0ja3Jbbdo9i8hgQIkz3VZNqrQjX74LnXvU4ZmFaFk=; h=From:To:Subject;
+	b=mDtW64AWkCAVnx7VshfU8wEZw5hqFFMwzuoGBJz2AXRejf9NEPKlgk1fLAW8IGUtx
+	 evCeknxkmdsG9xjvYjZI+XdVO2RDAb2qrZquZpGZ9iSo8Dnwm66v9l9UrL/YeOCqVc
+	 mrqtvjKfdUDl2RaWQEPfkBJp6mGHyrJw8k/DBxGoUFnd0p4lzx2kt/Wk1OUjugfVii
+	 ijrFNCixFo9ESesvf8HsAQPxFexq4bybU/5wWpe6xxgeHpnDsF20D7Nn9gjqx5gkq9
+	 SVyS9Di6eQzFiIish/OEx0qG94R99jKr20LYvlZcYQUrYNXh1JCGABSF63TkLTKgCH
+	 wltYbqI5D6I8A==
+Date: Wed, 19 Mar 2025 11:12:28 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Rob Herring <robh@kernel.org>,
+	Quentin Schulz <quentin.schulz@cherry.de>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Farouk Bouabid <farouk.bouabid@cherry.de>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: amc6821: add PWM polarity
+Message-ID: <20250319101228.GA17979@francesco-nb>
+References: <20250224180801.128685-1-francesco@dolcini.it>
+ <20250224180801.128685-2-francesco@dolcini.it>
+ <20250226134922.GA1944823-robh@kernel.org>
+ <20250226135806.GA47264@francesco-nb>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ca734f66-593f-4e7c-bc76-e343a7eb88d7@roeck-us.net>
+In-Reply-To: <20250226135806.GA47264@francesco-nb>
 
-On Tue, Mar 18, 2025 at 09:37:29AM -0700, Guenter Roeck wrote:
-> > > > +patternProperties:
-> > > > +  '^fan@[0-4]$':
-> > > > +    $ref: fan-common.yaml#
-> > > > +    unevaluatedProperties: false
-> > > > +    properties:
-> > > > +      reg:
-> > > > +        description:
-> > > > +          The fan number used to determine the associated PWM channel.
-> > > > +
-> > > > +    required:
-> > > > +      - reg
-> > > > +      - pwms
+Hello Rob and all,
+
+On Wed, Feb 26, 2025 at 02:58:06PM +0100, Francesco Dolcini wrote:
+> On Wed, Feb 26, 2025 at 07:49:22AM -0600, Rob Herring wrote:
+> > On Mon, Feb 24, 2025 at 07:08:00PM +0100, Francesco Dolcini wrote:
+> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
 > > > 
-> > > Is it necessary to make 'pwms' mandatory ? The current code works
-> > > just fine with defaults.
+> > > Add property to describe the PWM-Out pin polarity.
 > > 
-> > The code adding OF support is added just in the next patch, so the
-> > current code isn't event
-> > probed when trying to use dts.
-> > 
-> > Or am I missing something?
-> > 
+> > Why doesn't the invert support in the pwm binding work for you? Yes, I 
+> > read the discussion, but don't remember the conclusion and you need to 
+> > justify it here.
 > 
-> The patch introducing devicetree support to the driver doesn't evaluate
-> the pwm property. That makes it quite obvious that, from driver perspective,
-> it isn't needed. I don't immediately see why it would add value to _force_
-> users to provide pwm frequency, polarity, and the output configuration
-> if the defaults work just fine.
+> This chip is not a PWM controller, it is a FAN controller.
+> 
+> The HW has a PWM pin output that is used to control the fan, but the
+> device is not modelled as a PWM controller (correctly, given that is not
+> such a device) and the OS does not control the PWM, the chip reads the
+> temperature and decide the PWM duty cycle accordingly in an autonomous
+> way.
 
-Indeed. PWM source is actually fixed and rest of pwm argument could be fine
-with defaults.
+Can you advise on how to move this forward? Is my explanation good
+enough or some more clarification is needed? Should I send a v3
+incorporating such a comment into the commit message? Anything else?
 
-Both options are fine with me, so keep my tag.
-
-Best regards,
-Krzysztof
+Thanks,
+Francesco
 
