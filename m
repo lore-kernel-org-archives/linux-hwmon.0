@@ -1,73 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4034F1DE3A9;
-	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A622E17BA6;
+	Thu, 20 Mar 2025 03:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742428693; cv=none; b=Ndoj6luz0+1V47TvDMU8A9SAhUnYbgXrpXC19oLWh9GppfgWp5VrRNgheaQhZuf9tOGi9jxFAa0HPGJisqeDTLXSGpHJztfgCo67nL91WwwLMYVyOuGNLFCUUZn781S2EEPaxJ6NWN+Mi7BgGsMtAJIE5RKenp32LrKBodwB+bc=
+	t=1742442997; cv=none; b=ofr0NLVqaJ/TVU8wjvSvm9huODZk0lhFi71EzVS5RcULOQMBTp8fn8o6z/E91Dag7EHUs39ozl1XROhZc0sv0g4HRz7x4EiIVm6O6eisHfpDQp5L4sgUATIMvIqmFc0gwl/rInBYRR1R+vqtBQB5NJtcLgH8fUd2qMwS9kPeQ7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742428693; c=relaxed/simple;
-	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXLJj2x84gKvXdTOhljDJhSM5yr7bzeu76svY0Y1Q2dmiB6q9DJqFoC+K5wFpieUB20t80s0PX4Cg8cnWTxkCn76rYVsxjdcbCoXQQ32Ps/0IjVz5w39AWPna44nrdh4cPP9c1i4c+fEM439NUGZozmDZtzA808PA8yManRo5D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEs3QJCh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742442997; c=relaxed/simple;
+	bh=/h3zP33Mov53MvJ5F8oD97YZG7pYUTKqEZRskc9VT44=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=BDrlf9woDTsPMqAiBh3SYwm4k0jIbvSicO82rC8ENJGG/0m1QGWQdP6nPxqOVRI8t6JnpZjjMgJf9v6tPc9TQ+6fSSWBMgEoLMlwOnNj2SyHg5ddZBOYWMPLKOV5ou1zBFmx0mWEkG+4mddqj1l+mzLXOD2IZ645aleb8ywvDLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=jWIdNGAB; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEs3QJCh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458ACC4CEE4;
-	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742428692;
-	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aEs3QJChJFcdnPOHTauCmOrZ6IULAT7ZHAPKR4zUQKWpU4fVfq9xjjqMYvsI+BjnY
-	 tGhOwI9ScxsMy66k/+abaRY04I7+m9j1tjEdH9fAhcXCSi4LivrGhOBfVFXXTzlwMI
-	 p6De/RCvhON6CzIS0tGTyTbJuvO/FmRVGYyS9qC2+lu2dN/kngG4jI+E5IYPUo5gkM
-	 HheOzDF+CuZXuwayiJHFY7XfsiLvcbIecQPzGP0Uq9g85V4ym5K4eDIuM35vhUNiP3
-	 c/51O56HdxpGl/vDaGjSfPHxwvJ+8zacziTn2x/482i+A/8y3atJDVk6Ur1lsSqNve
-	 C0gP39TapTPrQ==
-Date: Thu, 20 Mar 2025 00:58:09 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 3/7] i2c: Add Nuvoton NCT6694 I2C support
-Message-ID: <jpaqx2z5io2bvtluexnzrkz4zcvea7qqgpa6bdhm4yzby2rjgb@izncuolmv7tl>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-4-a0282524688@gmail.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="jWIdNGAB"
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52K2oEuT030651;
+	Wed, 19 Mar 2025 23:56:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=aILvfTq/rdHZeO+eIoU0Yi5qGiB
+	teuutlXkFQ4NtMOs=; b=jWIdNGABUQotCVg8zsgdbygJg0EWBiQYNIh0mLqyR+2
+	e+JjSXz3lxt18ZboyIsxeVjYOVon6R3HQNaTU5p5Z9oh9gTxFlkWx6hEAXYJ0bR7
+	0qpu/sOwuZLNasynrm1Ih2KNURk4Es0DJHfeq27GMzIS6MIVfEGvgxffZC5SfN+d
+	dPP12gxxdm55MDuralD0HDYMn5x5PjavX21SR5HxB20+MH14Fhtl4yGj1VvsZRNF
+	xuEOMSa5WGAM4MF9ZHSRiNBK3hH6Z2kbaG4cbu7XYLUMpNT3aPsyPEl5NiKiMANc
+	ZTJd+matJbi4OuZEgcf/2TRUZYQQfoKTISZJDTh6fHw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 45fwvmm66e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Mar 2025 23:56:16 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 52K3uF1u012604
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 19 Mar 2025 23:56:15 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 19 Mar
+ 2025 23:56:15 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 19 Mar 2025 23:56:15 -0400
+Received: from ATORRENO-L02.ad.analog.com (ATORRENO-L02.ad.analog.com [10.117.223.3])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 52K3tvid030363;
+	Wed, 19 Mar 2025 23:55:59 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: [PATCH 0/2] Add support for ADPM12160 a DC/DC Power Module
+Date: Thu, 20 Mar 2025 11:55:46 +0800
+Message-ID: <20250320-dev_adpm12160-v1-0-8f7b975eac75@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225081644.3524915-4-a0282524688@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMOR22cC/x3MQQqAIBBA0avIrBNGQ6WuEhGWU82iEgUJorsnL
+ d/i/wcyJaYMvXggUeHM11mhGgHL7s+NJIdq0KgNthploDL5EA+llUVpOovknHfdTFCbmGjl+/8
+ N4/t+yCmwy18AAAA=
+X-Change-ID: 20250320-dev_adpm12160-5960e77a79be
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Delphine CC Chiu
+	<Delphine_CC_Chiu@Wiwynn.com>
+CC: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        Alexis Czezar
+ Torreno <alexisczezar.torreno@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1742442957; l=1228;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=/h3zP33Mov53MvJ5F8oD97YZG7pYUTKqEZRskc9VT44=;
+ b=YxORlbo5aQfFwruurTsBTx3J9EfMjfb2ZODygrTKqtodas0wmnv3/c7Sa+i8cg7Wkfw6dxTx8
+ W0ERn7aymvzDnYwmpqy3XeH21aiUq/zjMBch2H1G7Ar/nl8qJoNo4Mh
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: u1aaZNwEV6JDabxyGvePtO3c9ZAIBysk
+X-Authority-Analysis: v=2.4 cv=J5+q7BnS c=1 sm=1 tr=0 ts=67db91e0 cx=c_pps a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=gAnH3GRIAAAA:8 a=pX8K7AMcFWmkIJv9s54A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: u1aaZNwEV6JDabxyGvePtO3c9ZAIBysk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-20_01,2025-03-19_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=794 mlxscore=0
+ clxscore=1011 phishscore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503200023
 
-Hi Ming,
+Before adding the support for ADPM12160, this series includes a commit
+to fix the issue with max34451. The family of max344** contains switched
+PMBUS addresses 0x46 and 0x4A. For max34451, the version MAX34451ETNA6+
+and later fixed this issue and this first commit supports this.
 
-...
+The second commit adds the actual driver for adpm12160. ASPM12160 is a
+quarter brick DC/DC Power Module. It is a high power non-isolated
+converter capable of delivering a fully regulated 12V, with continuous
+power level of 1600W with peak power at 2400W for a limited time.
+Uses PMBus Configuration.
 
-> +enum i2c_baudrate {
-> +	I2C_BR_25K = 0,
-> +	I2C_BR_50K,
-> +	I2C_BR_100K,
-> +	I2C_BR_200K,
-> +	I2C_BR_400K,
-> +	I2C_BR_800K,
-> +	I2C_BR_1M
-> +};
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Alexis Czezar Torreno (2):
+      hwmon: (pmbus/max34440): Fix support for max34451
+      hwmon: (pmbus/max3440): add support adpm12160
 
-do we need all these frequencies? I don't see them use anywhere.
+ Documentation/hwmon/max34440.rst |  37 ++++++++---
+ drivers/hwmon/pmbus/Kconfig      |   1 +
+ drivers/hwmon/pmbus/max34440.c   | 139 +++++++++++++++++++++++++++++----------
+ 3 files changed, 133 insertions(+), 44 deletions(-)
+---
+base-commit: c812cc42f92d3d0b17c01b5db9a1dee5793a1491
+change-id: 20250320-dev_adpm12160-5960e77a79be
 
-Besides, can you please use a proper prefix? I2C_BR_* prefix
-doesn't belong to this driver.
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
-Andi
