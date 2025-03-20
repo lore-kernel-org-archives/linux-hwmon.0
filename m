@@ -1,209 +1,390 @@
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E17D1ADC7D;
-	Thu, 20 Mar 2025 04:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.135.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742445626; cv=fail; b=AX+ZXh2CSZ4tq9uHvNpcnUYIdtZJPwNu+G832giKGSGxS5W+nLppxwA6a2jLrs6TBavQ6h6DXd3r7nVuQvWHSEx63nPkTXq2EfBpdJJVJdbuFc+noVN2YCBMogU43ALWYsGsODw11dmWie/sXXmoV5noS/tcgHTY0dcrn3bPwBM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742445626; c=relaxed/simple;
-	bh=BRJGaip2RZHxdrwWegVQg4WU9aKqEgYpqymfdb59XZ0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lTRzPZEHBkPrDh0EIMgjtG3Nih2lLAirm1487C4CP1GNnKcJnmAXrN4eWey6F+0G5/z7dgZhNK/ZWVs43Vcnb52Iwckzhjq/R3gYS33TFcrJqdOKHgIbM3vIV+BUuXFrecaB+emR301w6DPxtJxq7wuxlMiSdTY9hn6MxtzvH+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=HQ7U2/FO; arc=fail smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E3922157F;
+	Thu, 20 Mar 2025 14:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742480195; cv=none; b=q+sd1jJW5Xib8FS6Q+T0ZLpVc1NvTlyGCSNZKTi0TweYSlwe5ZbPGq0uU88BAx1PgJqu2zPmq7p6vjLaPm5uYSWBiz6xlYMPdcoMmbCIm4ABGYfFYJBlNTXf7CL+YLeIbal6fe74Kdq3vOce2jE8TFHrxeropzWGQJbE1ABuT8s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742480195; c=relaxed/simple;
+	bh=1c23ChbDo23KyHqNToC9eHrlBDXxURNplK7NRrQ/R2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ePkQ2qNWPnDHjT4FhN9kH6ODjc78zaUB3ompDNbAq4dED2GREH+lC2ML9joYgqmVjwg137AG5ngB6fjvUEXfX33SP3R6j9Rg5U3ORUc2oI2ViUmzKJleXi/3taUdjrJNlh4ZHNxkxugjvuatqvuZ9v8phTA7UjuzJShkx2xVDQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCWXasvC; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="HQ7U2/FO"
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52K3a19q030512;
-	Thu, 20 Mar 2025 00:40:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=BRJGa
-	ip2RZHxdrwWegVQg4WU9aKqEgYpqymfdb59XZ0=; b=HQ7U2/FOWZ4LXiuABaYEI
-	Am5+HFB7eMCE8BKk8LHS7GubdzdHmozhcb1p3aP/CHBOr16L9g8/+dAYYxsg2xhq
-	vkscu3+Kv9nS/7BPrOVmjmPCzL6Wh4zKVWyTI2PUVOt4Shf999196BVrwKjaNzhB
-	+khVkBXksrn/4zItBVNhn8FpaSfZYPA05751gYfAoMPVHKa9oUSDadi07Ne+aoON
-	KHPENBWseaieC7DfT6Li7PHj6KTfiN8UMcs1uTR5a47+fgToT2xN5fgKAyUcXO2a
-	B6Lk3yMPBySx4yHghNyzjX1RL/kMk4+GRS/6UPmquV0KKPuO58whD5iGkbXiryPP
-	A==
-Received: from cy3pr05cu001.outbound.protection.outlook.com (mail-westcentralusazlp17013078.outbound.protection.outlook.com [40.93.6.78])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 45fwvmmbu7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Mar 2025 00:40:10 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aQfz0cLK+pmMXaZ5tQvh8hG0TXwDlf2YzE5GlYIbcLDcjVy5qAP/u6E3nwQDEns62QQacrIh2e00Plp2zldQSoFMt9LW92+3hB1WXfjRezgJjSbzZUnqSxK8q6iCV/gH3PtIRna59W26+s74a68e0JQK5HOqlgmP4MQF4rn/ohzg6lcpiYdauhXT1wffZRCnSUDr6KKNDvQWVTsmiZZkIzRdY7uH247gZqfjttPZbGYrwfs+RUgpnmL0V0dc8O/JK/hF1DMW1xggsTpKu3Xhr0ZMJBgfn0nbvFZhxnOZZOtMBIoE0igELHncpT3+ehbyuuUm+1d2uhZwuhAyDhYZgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BRJGaip2RZHxdrwWegVQg4WU9aKqEgYpqymfdb59XZ0=;
- b=mUjYENMZVHN+Ad3LqCD7NMqpAjOTSrxCjwRjpr9zXDFEIgeZJC95pxHZxkBUx4ZHHsF1EFmsF41YStsCHf0OOg3KWifdM1EYs4vaZZtrJbqz7g95L/hHEXACRbOli1wVyzEVlhmeS4jnOZgETABLa409NbcwVb3Q+Tdj0fF9FAvr0BMCyJ6YZfAoPv080Y0/j0la4gNjnknBx1VRY8LmhuYkjqvc49SLXnkUb8eupVZ+66j7F+r06zmDeU76FwN180UAZha4HyFPEu2tQypSWr9bcQe8LcygW2aI6jPEVnJOWtvC0k1TgztLtpxEUJvR/Pk14HER0EJW20+3afAJag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com (2603:10b6:510:ab::18)
- by SA1PR03MB7147.namprd03.prod.outlook.com (2603:10b6:806:336::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Thu, 20 Mar
- 2025 04:40:08 +0000
-Received: from PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::71f7:8e63:e91:a354]) by PH0PR03MB6351.namprd03.prod.outlook.com
- ([fe80::71f7:8e63:e91:a354%5]) with mapi id 15.20.8534.031; Thu, 20 Mar 2025
- 04:40:08 +0000
-From: "Torreno, Alexis Czezar" <AlexisCzezar.Torreno@analog.com>
-To: Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Delphine CC Chiu
-	<Delphine_CC_Chiu@Wiwynn.com>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH 2/2] hwmon: (pmbus/max3440): add support adpm12160
-Thread-Topic: [PATCH 2/2] hwmon: (pmbus/max3440): add support adpm12160
-Thread-Index: AQHbmUwMEB3Pp++x50yVbYwU9u2pSrN7b4wAgAAAmBA=
-Date: Thu, 20 Mar 2025 04:40:08 +0000
-Message-ID:
- <PH0PR03MB63517FB4C1D8E8197FBA1316F1D82@PH0PR03MB6351.namprd03.prod.outlook.com>
-References: <20250320-dev_adpm12160-v1-0-8f7b975eac75@analog.com>
- <20250320-dev_adpm12160-v1-2-8f7b975eac75@analog.com>
- <4c45ed61-5f9e-4e60-9458-3ad1274d0cf6@roeck-us.net>
-In-Reply-To: <4c45ed61-5f9e-4e60-9458-3ad1274d0cf6@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR03MB6351:EE_|SA1PR03MB7147:EE_
-x-ms-office365-filtering-correlation-id: 76bd2152-b7cf-4459-2d55-08dd67694b01
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SVlHdks5UTlkSUtDcFZ4d3dySTJMa3NxWWxPUzhCTHZGWG4xaHZ6ZWNYcnZM?=
- =?utf-8?B?Q2VNYmJIbzlNWmI3U2pZbXNyUjZ5ZmVLQk8zRFhlK2w0OS9uN25VR1dhQ3lE?=
- =?utf-8?B?VkdqYlNwcXd0OWZSYVJnZ3FIVFFZVmVyWDFUcEdyQWlaOVpWV2Ezbzk1UTVQ?=
- =?utf-8?B?dVhPTUdyaUk3UkREcjM1QzdpVG9EeHdzd2RwTjd6RlBjQUlQSFpkRXZ5KzBZ?=
- =?utf-8?B?Sk1HMzZ5OFlKYTV6U1ROL3FHQVd0bGJsUS9YYkRMU2xHY1BqNzVFR1psOUpC?=
- =?utf-8?B?Qk5BcDc5KzJWWk5Ha0JwRFcrcURLMnRESzdrYWx2Rmd5QmVyQlNoNEpiOWVx?=
- =?utf-8?B?dVovYjA0YzRqdzhralhrRjkvUHpVN0RnMW5ZM3J3cXhpSzRSTW1obWFDMSt2?=
- =?utf-8?B?dm1QcXpDZEZMN3pXa04rTnRQZFJ4YkJRZ1IyY2RZTzZhaE1HTDlMeHc5bmdB?=
- =?utf-8?B?NVJvZlArOVFrNWpwYmQ4MmhqUTU1QTB1cEdVV2kzcDc5blpNV1NBZEJvRUkx?=
- =?utf-8?B?YU52bFJ2dmhsTzFKUjdNbTEydmp1SkVvWWI2VVR3eG9LbDNVLzZWREs3aVdP?=
- =?utf-8?B?NHpXUEptQVh5UUhXSCtvNUpwd1lZdmJhcWkrc0pXT1dvNkxiZTUzSE0xM2xW?=
- =?utf-8?B?SlYwai8xWVhENDZIYlBrckhEUWkzWEx5VlZsMll3LzB1bGJFVGJsTnYyNEVJ?=
- =?utf-8?B?aTRxYnY1NUpKeFY3V0Q4WVExNHhSd1BBbzRhVGd0VVk3TDhzT1FsUkFzdHJi?=
- =?utf-8?B?WkpteXhQVGFvdXFpQjR1WTJUUVNOS1RJc0UzVXdmKzJXck5yaktrZ3RQWEk4?=
- =?utf-8?B?eXo0NVplczU1cU95MWhnWnRtVzBweXA3cURsOWVOdmUySGJvOEpub2krdDB3?=
- =?utf-8?B?L0JIdUxQbFcvTHhSblRveDV2WlNnVmlLUWREYkordUNoUVhJTmxPTzhhR05M?=
- =?utf-8?B?V3M1cjc0b1dIZU1EQks0YWlYZGtKOVUxbUgybFlBSUp6VXJRU2RyYXNRYmVy?=
- =?utf-8?B?OC9HYlh6Z1BPc0c0ODRzU29MTkNGNVMxWTZDR0xIOHE4TEU0S25tdnp1NFk5?=
- =?utf-8?B?MTIrR3k0MzdzSVA3L3ZJUGhadFBzazY3ZHp2WVhvZUR4OEcrelhWajF5ck91?=
- =?utf-8?B?NVVHMWwzRVFYVy9DQmVnNFQ1TVVwSWhQOW5QVGt1bjFaLzZXVDl4RlIyV0tH?=
- =?utf-8?B?U25mZXpwM1d0OEhrYlg3VE9WY0dPSVIyRUxENXhVRDFVZGxQeXd5bGNXaGt1?=
- =?utf-8?B?a3JEODB4cWswUUIwZEltZkpPMVl1cWZEVTlQMCtNYkR1Sy9aTDdEc3plcXRK?=
- =?utf-8?B?L2FlcCs5MHRwZXdMVTNOaE5qL09NRXNzZnBvOSsrQXd6d0tkN3BUeFdUSjlq?=
- =?utf-8?B?TEo5RG5CdjlYZnpEVmtXMGVvVWpWemZrZTZ1WlRHODNIcW9iZXh6YW15UExx?=
- =?utf-8?B?SG9RSmhHQlVqdHh1TWl6QXJrNXMweDcxMkJVSGo2eVZjY0R5SkJFKzZ1Nytt?=
- =?utf-8?B?UzdUN3dsNlNtSGxKR2dWRWM1aW1tNWJGQ0FHUmloNElSZ0pUdi95VFBJQWg1?=
- =?utf-8?B?cHJXcEhQcHZhcnBETjA4TTVNVSthZ1B3eHdkSmhxNmNEenJudFh6b0RqYVM3?=
- =?utf-8?B?VnRpVmhBOFZEaEkrbzZ4RE4waGRGdFNsQWdCOGF4LzZRekxicEYxS3p0TWxN?=
- =?utf-8?B?UXRSMVIyL1VneTJLcnQ3cWJZeS96aXFWUTQ3U2hDVDdvaVVQdlRhZmthdFVM?=
- =?utf-8?B?L2t3MVF6WGIrZ29pRlI0dlZ0ajBtbjRZckJ5ZFhzbWE0RFJEUlp6ZFQ3ekEz?=
- =?utf-8?B?NmVUdVRuQWJaakNuVEJFUUFPQ3ByYmUvaHRTQVE5c1RZN0lLb1g0YlVYVXJl?=
- =?utf-8?B?SnVJZTVuNmNuK2Z5bDd3Yk1rMEM3VlhlUVNwZU1VcEFSTjh6SXpiYmlPMjJR?=
- =?utf-8?Q?b+7C3dDjceekHLQ2E5FKuxIkSJ3HNiG1?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR03MB6351.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?SEVJY0trVkh1SUwvaW5DbExDU3hvTFF1cTI0aWgyVXp3a3NGSzRyUDNwdHE3?=
- =?utf-8?B?dkkyZElwZWtZenpUNDZDVVdXcVpLU0lYRGd1eTV4MllHTVNnWVJ3aVJsMlMw?=
- =?utf-8?B?UTJ4R0VPRmRvT0k3UE1YdzVRZHZRV2JRRFFTOTlVQXdGalg0UEhTdnR2YWZu?=
- =?utf-8?B?SDRTcGdYdWZWZUtsQ0pDRXphWnAwOVFDMEdRcEd5ZnUvazFReHF5OGtrUitS?=
- =?utf-8?B?ZEdvRXNjZjV4aXNXTnZoeFJKRGQvTHpMWEhLREZ2UDhHMURCMXl3R1ZBYXdZ?=
- =?utf-8?B?OWVmRFZzZ2x5YkN4RDhPeFArYnF6RjVuSnlQQUdNYmRGaUp5UjZXYVlRcEJ6?=
- =?utf-8?B?Q3E4cFNGN01pUGRNV1ozMU9xbzE3ZjIwKytXRkJsQi9vOG5VZXo2ZUN3bEd5?=
- =?utf-8?B?QUFhTExzWStQNGZQNjUyZnExVG5NUWJZYWlLQW54K0JqZDRZdjJZbno3Y2lq?=
- =?utf-8?B?UUppVHZlM25hdjFXZGVtWTBaODBMOGV1MlBld245QS92dHNVMVBTbzBSNXU4?=
- =?utf-8?B?SnVKSGNqbEYrbGUrOUw3VGs4YlNBMncvMzZhSUd5ZTh0czBRRmlNWjB0NzF4?=
- =?utf-8?B?V2t6K0xhN1V0M1JPUTdmZ3hCQll3OWdLZmErVTMvVUhQVHJPMDBYOGlmV2t1?=
- =?utf-8?B?cVNYdVZVa3MzVm1JOFNZU0djT0l6M1RCdXNHaExRaDdRNlMwanhKMUd5N1lL?=
- =?utf-8?B?L1BlTFFZOGlXQk44ZmJOMGI0cHA0a1pNa2tidjViSXptTHJENFJ0T3I1SkRw?=
- =?utf-8?B?TDg1aGVkQWpndGdoVFBSWURnNXAwRWlhNGtsVzNpeVJLMkpoekhWMFFrS0F3?=
- =?utf-8?B?RDZleTRzVXRVempVQURrZVFuZmFHS1ZlR0hLa2VJQ2lLWmw2MWt2VG9neU5E?=
- =?utf-8?B?ZGwwZHRCZVNOUklmUjhxMWxhMWtkWWt3TXN0Qnc5aUpvbEFocUtJQ0d0WVY0?=
- =?utf-8?B?YmQ5Y0xaMk5KS3ZFdVpWZEFKMFd3SS8wWG1VMVExczdiN2Yvbkc5dHd3WEdu?=
- =?utf-8?B?VWo5dFlrU1dRQUVJWEU3cWFXSk96SDZqZ1dlbFpDWWFCTUR1Y3pJdzI1UFhS?=
- =?utf-8?B?Y3Y5cjgveHkzSDBVclNNZ1pGRDQ3SkNIWEJ2MU9paEQzUzBvV3M0Q2NCNDM3?=
- =?utf-8?B?TzgxMVpZQTJVd2hvZUxQNy9kSVNsYUc0dUZvSGJnQ2pzMGY2RUNOK29uMlE3?=
- =?utf-8?B?a1JxZ2VUYnJXNEx3MERlMnVhbmc3Nm5OMWpoTWs0bG5BSFhIK0hqWFowUkR1?=
- =?utf-8?B?S21HR3g4eW02dkJueTFSenhhdUtiTVpJWWFhL1R0Zmp3S2FNSzkrTTE5cHhJ?=
- =?utf-8?B?dHRiKzNXenhRZTU0dDU1TkJKN0I4Tk1iQVk1Y093bXc1NXNwVC9veFN3NHNw?=
- =?utf-8?B?Tk82d3JqQmF4dnlwK0wrekpCRUExYWVMc0RRNC83SmZCQ3pRQm1Oc0ptNjQw?=
- =?utf-8?B?WlUzYTJiNEo0NU9JVGJ6WnJHVktkQmRrUDZEcmJWd1JZUmRMTDJ6byt5S2Zi?=
- =?utf-8?B?ZWlERmNyOUtTTHpCZWhKeXhMSUtvRzlYQndIWG1NUXVZVkg4aGxNSUV5SkdC?=
- =?utf-8?B?Q3lIRGIwTmRqQXZaQ1FQakZyZlJJN2w5c1p2OGdaUExjaFFvbmpQVlZoRExR?=
- =?utf-8?B?clIzSE8vUVBKTUN0NzdBREM5NFl0bWpuaUF5MTA0c0x6M3IxVGdWQ3pwSC9t?=
- =?utf-8?B?VkZqdXNXd3JUL2JjaGk2dnVkYlFKYmdENUhaU05IdEIvaW9kVGo0L2U1Vjhi?=
- =?utf-8?B?QmcrNXh6QWxrTGd0c2NGVWd0RGVBOEtDa2xTOXNQQmhadEhSaVhCTlYrRkRj?=
- =?utf-8?B?OUEvRHVjNHVOVk9Da0wydmtvZmRSVTFPTGpZRmF0bkZGTjBwVXZGTW0vNTJs?=
- =?utf-8?B?NkR1QjZtdGxlYi9MWUlEZzBzUzdpRWRaUmNXOWRJOUxONzRDOFlYSHp6T2Fp?=
- =?utf-8?B?SnB3U0ltSEVmRjA4RTlnU1BhaW9mWUNQbzRpek1DYVBqV3QyMnE0VFBqRmRF?=
- =?utf-8?B?TzlzdGZ1dndPU1ViMWdQc1NjWXJTVHpmMmZHYWxWcW51djZIM0xTSDRVWmFh?=
- =?utf-8?B?L2N0S293MGhyOUh5bjd0NnNNRGtEWHVRTE8rM2hMUjMyVDdsSjVJbTZKOFJm?=
- =?utf-8?B?ZnI0Zk1HcG40cldLS2xCd25OaVI3NFdtQmw5VXZaMm5yYXlJVnFmSEdIT2dO?=
- =?utf-8?B?Unc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCWXasvC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742480194; x=1774016194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1c23ChbDo23KyHqNToC9eHrlBDXxURNplK7NRrQ/R2Q=;
+  b=oCWXasvCLB2nvCr52SE3e9A8ka95ol+V2yZsQEuLsMUUqMW1ajuPeGn0
+   hIiQyRSwASVb3ke4ZquzawCm+5rjsshd8iyw5Vp5+sQGOR/yc1v8DgXgU
+   3Tlz6Y9jrsfL7igV/H0Gw255uDippmYAaAkfLhHm1sKvcOC9QfFzyX3/y
+   PubiBetEd0xeTLXe65WjPi99a1Q5QuirMPT92otIsa6VQXmFtV0LNRUPT
+   m0SZ9vniBDGJ3xra8o6IAXQSMwxQ4ezarIFGJD02uk62kG4HMjeRT2fIs
+   seF6a1GAblj1TqZVvPiH+HFfRFyLKgnTvG6/A6g0wjTnV9R5Tv6jNNAPD
+   Q==;
+X-CSE-ConnectionGUID: oRELqsTSSoiFfE2Ga9Ig+Q==
+X-CSE-MsgGUID: eTVYp8pGSGK5Pt5B1I8wMA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="61104376"
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="61104376"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 07:16:31 -0700
+X-CSE-ConnectionGUID: PIJRkv2NRL2dFYSYxc+0Jw==
+X-CSE-MsgGUID: gqGAOd1OQPKG4lVtrsYrEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="127942830"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 20 Mar 2025 07:16:29 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvGh3-0000UN-1I;
+	Thu, 20 Mar 2025 14:16:22 +0000
+Date: Thu, 20 Mar 2025 22:15:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
+Message-ID: <202503202136.NJ1U3Zos-lkp@intel.com>
+References: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB6351.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76bd2152-b7cf-4459-2d55-08dd67694b01
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2025 04:40:08.3959
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SCXm2g8f7VQT58TwDEc9SmmnhsPWYoF59KDv2wXoj5iwhyOGin0yVrKRqVlTEvyfx4IsJ0oMV8LY34jjvivPfEP0+yoJPc2MCcpOy2jD3+Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR03MB7147
-X-Proofpoint-GUID: Wtk45mKyaNbHCvSbZHRcroNHiVnAs-Ba
-X-Authority-Analysis: v=2.4 cv=J5+q7BnS c=1 sm=1 tr=0 ts=67db9c2a cx=c_pps a=BALyy5icRfvvzfOMzojctg==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Vs1iUdzkB0EA:10 a=H5OGdu5hBBwA:10 a=gAnH3GRIAAAA:8 a=i3tsMBky1FhzpfPjcLgA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: Wtk45mKyaNbHCvSbZHRcroNHiVnAs-Ba
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-20_01,2025-03-19_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999 mlxscore=0
- clxscore=1015 phishscore=0 suspectscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503200028
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
 
-PiBbRXh0ZXJuYWxdDQo+IA0KPiBPbiAzLzE5LzI1IDIwOjU1LCBBbGV4aXMgQ3plemFyIFRvcnJl
-bm8gd3JvdGU6DQo+ID4gQVNQTTEyMTYwIGlzIGEgcXVhcnRlciBicmljayBEQy9EQyBQb3dlciBN
-b2R1bGUuIEl0IGlzIGEgaGlnaA0KPiANCj4gQVNQTTEyMTYwIG9yIEFEUE0xMjE2MCA/DQo+IA0K
-PiA+IHBvd2VyIG5vbi1pc29sYXRlZCBjb252ZXJ0ZXIgY2FwYWJsZSBvZiBkZWxpdmVyaW5nIGEg
-ZnVsbHkgcmVndWxhdGVkDQo+ID4gMTJWLCB3aXRoIGNvbnRpbnVvdXMgcG93ZXIgbGV2ZWwgb2Yg
-MTYwMFcgd2l0aCBwZWFrIHBvd2VyIGF0IDI0MDBXIGZvcg0KPiA+IGEgbGltaXRlZCB0aW1lLiBV
-c2VzIFBNQnVzIENvbmZpZ3VyYXRpb24uDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBBbGV4aXMg
-Q3plemFyIFRvcnJlbm8gPGFsZXhpc2N6ZXphci50b3JyZW5vQGFuYWxvZy5jb20+DQo+IA0KPiBJ
-IGFtIG5vdCBjb252aW5jZWQgdGhhdCB0aGlzIGNoaXAgc2hvdWxkIGJlIHN1cHBvcnRlZCBhcyBw
-YXJ0IG9mIHRoaXMgZHJpdmVyLg0KPiBVbmZvcnR1bmF0ZWx5IHRoZSBkYXRhc2hlZXQgaXMgbm90
-IHB1YmxpYyAuLi4gb3IsIHJhdGhlciwgdGhlIGNoaXAgZG9lcyBub3QNCj4gb2ZmaWNpYWxseSBl
-eGlzdC4gU29ycnksIHRoaXMgZHJpdmVyIHdpbGwgaGF2ZSB0byB3YWl0IHVudGlsIEkgY2FuIGhh
-dmUgYSBsb29rIGludG8gdGhlDQo+IGRhdGFzaGVldC4NCj4gDQo+IEd1ZW50ZXINCg0KQXBvbG9n
-eSBvbiB0aGUgdHlwbywgaXQgaXMgQURQTTEyMTYwLg0KVGhleSB3YW50ZWQgdG8gdXBzdHJlYW0g
-dGhpcyBzYW1lIHRpbWUgYXMgdGhlIGNoaXAgcmVsZWFzZS4NCkJ1dCBpdCBtYWtlcyBzZW5zZSwg
-dGhpcyB1cHN0cmVhbSBzaG91bGQgYXQgbGVhc3QgYmUgYWZ0ZXIgaXQgcmVsZWFzZXMuDQoNCldp
-bGwgYXR0ZW5kIHRvIHRoZSBmZWVkYmFjayBvbiB0aGUgb3RoZXIgY29tbWl0IChQYXRjaCAxLzIp
-IGZvciB0aGUgbWVhbnRpbWUuDQoNClRoYW5rIHlvdSwNCkFsZXhpcyANCg0K
+Hi Alexis,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on c812cc42f92d3d0b17c01b5db9a1dee5793a1491]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexis-Czezar-Torreno/hwmon-pmbus-max34440-Fix-support-for-max34451/20250320-115905
+base:   c812cc42f92d3d0b17c01b5db9a1dee5793a1491
+patch link:    https://lore.kernel.org/r/20250320-dev_adpm12160-v1-1-8f7b975eac75%40analog.com
+patch subject: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
+config: i386-buildonly-randconfig-005-20250320 (https://download.01.org/0day-ci/archive/20250320/202503202136.NJ1U3Zos-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503202136.NJ1U3Zos-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503202136.NJ1U3Zos-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/max34440.c:447:37: error: expected expression before ',' token
+     447 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+   drivers/hwmon/pmbus/max34440.c:450:37: error: expected expression before ',' token
+     450 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+   In file included from include/linux/module.h:22,
+                    from drivers/hwmon/pmbus/max34440.c:11:
+>> drivers/hwmon/pmbus/max34440.c:566:18: error: expected ',' or ';' before 'PMBUS'
+     566 | MODULE_IMPORT_NS(PMBUS);
+         |                  ^~~~~
+   include/linux/moduleparam.h:26:61: note: in definition of macro '__MODULE_INFO'
+      26 |                 = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+         |                                                             ^~~~
+   include/linux/module.h:299:33: note: in expansion of macro 'MODULE_INFO'
+     299 | #define MODULE_IMPORT_NS(ns)    MODULE_INFO(import_ns, ns)
+         |                                 ^~~~~~~~~~~
+   drivers/hwmon/pmbus/max34440.c:566:1: note: in expansion of macro 'MODULE_IMPORT_NS'
+     566 | MODULE_IMPORT_NS(PMBUS);
+         | ^~~~~~~~~~~~~~~~
+
+
+vim +447 drivers/hwmon/pmbus/max34440.c
+
+   299	
+   300	#define MAX34451_COMMON_INFO \
+   301		.pages = 21, \
+   302		.format[PSC_VOLTAGE_OUT] = direct, \
+   303		.format[PSC_TEMPERATURE] = direct, \
+   304		.format[PSC_CURRENT_OUT] = direct, \
+   305		.m[PSC_VOLTAGE_OUT] = 1, \
+   306		.b[PSC_VOLTAGE_OUT] = 0, \
+   307		.R[PSC_VOLTAGE_OUT] = 3, \
+   308		.m[PSC_CURRENT_OUT] = 1, \
+   309		.b[PSC_CURRENT_OUT] = 0, \
+   310		.R[PSC_CURRENT_OUT] = 2, \
+   311		.m[PSC_TEMPERATURE] = 1, \
+   312		.b[PSC_TEMPERATURE] = 0, \
+   313		.R[PSC_TEMPERATURE] = 2, \
+   314		/* func 0-15 is set dynamically before probing */ \
+   315		.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   316		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   317		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   318		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   319		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   320		.read_word_data = max34440_read_word_data, \
+   321		.write_word_data = max34440_write_word_data,
+   322	
+   323	static struct pmbus_driver_info max34440_info[] = {
+   324		[max34440] = {
+   325			.pages = 14,
+   326			.format[PSC_VOLTAGE_IN] = direct,
+   327			.format[PSC_VOLTAGE_OUT] = direct,
+   328			.format[PSC_TEMPERATURE] = direct,
+   329			.format[PSC_CURRENT_OUT] = direct,
+   330			.m[PSC_VOLTAGE_IN] = 1,
+   331			.b[PSC_VOLTAGE_IN] = 0,
+   332			.R[PSC_VOLTAGE_IN] = 3,	    /* R = 0 in datasheet reflects mV */
+   333			.m[PSC_VOLTAGE_OUT] = 1,
+   334			.b[PSC_VOLTAGE_OUT] = 0,
+   335			.R[PSC_VOLTAGE_OUT] = 3,    /* R = 0 in datasheet reflects mV */
+   336			.m[PSC_CURRENT_OUT] = 1,
+   337			.b[PSC_CURRENT_OUT] = 0,
+   338			.R[PSC_CURRENT_OUT] = 3,    /* R = 0 in datasheet reflects mA */
+   339			.m[PSC_TEMPERATURE] = 1,
+   340			.b[PSC_TEMPERATURE] = 0,
+   341			.R[PSC_TEMPERATURE] = 2,
+   342			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   343			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   344			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   345			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   346			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   347			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   348			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   349			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   350			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   351			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   352			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   353			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   354			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   355			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   356			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   357			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   358			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   359			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   360			.func[12] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   361			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   362			.read_byte_data = max34440_read_byte_data,
+   363			.read_word_data = max34440_read_word_data,
+   364			.write_word_data = max34440_write_word_data,
+   365		},
+   366		[max34441] = {
+   367			.pages = 12,
+   368			.format[PSC_VOLTAGE_IN] = direct,
+   369			.format[PSC_VOLTAGE_OUT] = direct,
+   370			.format[PSC_TEMPERATURE] = direct,
+   371			.format[PSC_CURRENT_OUT] = direct,
+   372			.format[PSC_FAN] = direct,
+   373			.m[PSC_VOLTAGE_IN] = 1,
+   374			.b[PSC_VOLTAGE_IN] = 0,
+   375			.R[PSC_VOLTAGE_IN] = 3,
+   376			.m[PSC_VOLTAGE_OUT] = 1,
+   377			.b[PSC_VOLTAGE_OUT] = 0,
+   378			.R[PSC_VOLTAGE_OUT] = 3,
+   379			.m[PSC_CURRENT_OUT] = 1,
+   380			.b[PSC_CURRENT_OUT] = 0,
+   381			.R[PSC_CURRENT_OUT] = 3,
+   382			.m[PSC_TEMPERATURE] = 1,
+   383			.b[PSC_TEMPERATURE] = 0,
+   384			.R[PSC_TEMPERATURE] = 2,
+   385			.m[PSC_FAN] = 1,
+   386			.b[PSC_FAN] = 0,
+   387			.R[PSC_FAN] = 0,
+   388			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   389			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   390			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   391			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   392			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   393			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   394			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   395			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   396			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   397			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   398			.func[5] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+   399			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   400			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   401			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   402			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   403			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   404			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   405			.read_byte_data = max34440_read_byte_data,
+   406			.read_word_data = max34440_read_word_data,
+   407			.write_word_data = max34440_write_word_data,
+   408		},
+   409		[max34446] = {
+   410			.pages = 7,
+   411			.format[PSC_VOLTAGE_IN] = direct,
+   412			.format[PSC_VOLTAGE_OUT] = direct,
+   413			.format[PSC_TEMPERATURE] = direct,
+   414			.format[PSC_CURRENT_OUT] = direct,
+   415			.format[PSC_POWER] = direct,
+   416			.m[PSC_VOLTAGE_IN] = 1,
+   417			.b[PSC_VOLTAGE_IN] = 0,
+   418			.R[PSC_VOLTAGE_IN] = 3,
+   419			.m[PSC_VOLTAGE_OUT] = 1,
+   420			.b[PSC_VOLTAGE_OUT] = 0,
+   421			.R[PSC_VOLTAGE_OUT] = 3,
+   422			.m[PSC_CURRENT_OUT] = 1,
+   423			.b[PSC_CURRENT_OUT] = 0,
+   424			.R[PSC_CURRENT_OUT] = 3,
+   425			.m[PSC_POWER] = 1,
+   426			.b[PSC_POWER] = 0,
+   427			.R[PSC_POWER] = 3,
+   428			.m[PSC_TEMPERATURE] = 1,
+   429			.b[PSC_TEMPERATURE] = 0,
+   430			.R[PSC_TEMPERATURE] = 2,
+   431			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   432			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+   433			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   434			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   435			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   436			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+   437			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   438			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   439			.func[4] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   440			.func[5] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   441			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   442			.read_byte_data = max34440_read_byte_data,
+   443			.read_word_data = max34440_read_word_data,
+   444			.write_word_data = max34440_write_word_data,
+   445		},
+   446		[max34451] = {
+ > 447			MAX34451_COMMON_INFO,
+   448		},
+   449		[max34451_na6] = {
+   450			MAX34451_COMMON_INFO,
+   451		},
+   452		[max34460] = {
+   453			.pages = 18,
+   454			.format[PSC_VOLTAGE_OUT] = direct,
+   455			.format[PSC_TEMPERATURE] = direct,
+   456			.m[PSC_VOLTAGE_OUT] = 1,
+   457			.b[PSC_VOLTAGE_OUT] = 0,
+   458			.R[PSC_VOLTAGE_OUT] = 3,
+   459			.m[PSC_TEMPERATURE] = 1,
+   460			.b[PSC_TEMPERATURE] = 0,
+   461			.R[PSC_TEMPERATURE] = 2,
+   462			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   463			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   464			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   465			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   466			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   467			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   468			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   469			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   470			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   471			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   472			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   473			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   474			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   475			.func[14] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   476			.func[15] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   477			.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   478			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   479			.read_word_data = max34440_read_word_data,
+   480			.write_word_data = max34440_write_word_data,
+   481		},
+   482		[max34461] = {
+   483			.pages = 23,
+   484			.format[PSC_VOLTAGE_OUT] = direct,
+   485			.format[PSC_TEMPERATURE] = direct,
+   486			.m[PSC_VOLTAGE_OUT] = 1,
+   487			.b[PSC_VOLTAGE_OUT] = 0,
+   488			.R[PSC_VOLTAGE_OUT] = 3,
+   489			.m[PSC_TEMPERATURE] = 1,
+   490			.b[PSC_TEMPERATURE] = 0,
+   491			.R[PSC_TEMPERATURE] = 2,
+   492			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   493			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   494			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   495			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   496			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   497			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   498			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   499			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   500			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   501			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   502			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   503			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   504			.func[12] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   505			.func[13] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   506			.func[14] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   507			.func[15] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   508			/* page 16 is reserved */
+   509			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   510			.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   511			.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   512			.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   513			.func[21] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   514			.read_word_data = max34440_read_word_data,
+   515			.write_word_data = max34440_write_word_data,
+   516		},
+   517	};
+   518	
+   519	static int max34440_probe(struct i2c_client *client)
+   520	{
+   521		struct max34440_data *data;
+   522		int rv;
+   523	
+   524		data = devm_kzalloc(&client->dev, sizeof(struct max34440_data),
+   525				    GFP_KERNEL);
+   526		if (!data)
+   527			return -ENOMEM;
+   528		data->id = i2c_match_id(max34440_id, client)->driver_data;
+   529		data->info = max34440_info[data->id];
+   530	
+   531		if (data->id == max34451 || data->id == max34451_na6) {
+   532			rv = max34451_set_supported_funcs(client, data);
+   533			if (rv)
+   534				return rv;
+   535		}
+   536	
+   537		return pmbus_do_probe(client, &data->info);
+   538	}
+   539	
+   540	static const struct i2c_device_id max34440_id[] = {
+   541		{"max34440", max34440},
+   542		{"max34441", max34441},
+   543		{"max34446", max34446},
+   544		{"max34451", max34451},
+   545		{"max34451_na6", max34451_na6},
+   546		{"max34460", max34460},
+   547		{"max34461", max34461},
+   548		{}
+   549	};
+   550	MODULE_DEVICE_TABLE(i2c, max34440_id);
+   551	
+   552	/* This is the driver that will be inserted */
+   553	static struct i2c_driver max34440_driver = {
+   554		.driver = {
+   555			   .name = "max34440",
+   556			   },
+   557		.probe = max34440_probe,
+   558		.id_table = max34440_id,
+   559	};
+   560	
+   561	module_i2c_driver(max34440_driver);
+   562	
+   563	MODULE_AUTHOR("Guenter Roeck");
+   564	MODULE_DESCRIPTION("PMBus driver for Maxim MAX34440/MAX34441");
+   565	MODULE_LICENSE("GPL");
+ > 566	MODULE_IMPORT_NS(PMBUS);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
