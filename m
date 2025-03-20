@@ -1,258 +1,380 @@
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598A81D9A50;
-	Thu, 20 Mar 2025 18:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA5D22155C;
+	Thu, 20 Mar 2025 22:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742493714; cv=none; b=o9zg2C1kt0SJ0heftdv2BBSTCXEB81Hn9ZB2eCgp0nfUeEBkGeQOfCbfFml0+rOcXDWa5H0VKEaUvQ0hymi6Zbk81EBVGt34nK2ZKi1gSauUqJrucwlKgtP+Qdw/B67U9iPnUA8zbGcNO4Z5IpPrPPdj/n8nVF8+15iO/K4A0WI=
+	t=1742511437; cv=none; b=ZAN5GN0nS/19DDdQ8XkBnmvOKmmwbE7T+3Pq45RMp9oUxkt17NBEtB1bhbMwovnXM8rjEhRRugMRYCCyM/nUKap/uiN5UAaiBOygKf0QX2TlBai9oid7lK0uHExutDbkrfIe/6akrcwEYMFKH/Djm02tJJ+Qadpb5o77ANbjra4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742493714; c=relaxed/simple;
-	bh=ri4iePpKdHJZbPjuAz2uuFnkK1A0W4w0YFmS0f70L9c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lgn5Y3nyVnkKFP7X48P3Vo1XPD3qWpemZt3w7m2QjSngyRKBzQQdWrR4Zcjt+OdGGac3d1791eIchNCajFpYoEWRXH5UBI3i5EDYPTlrIjeJ+MXMiOx4kAxXOMWcP23A9JsisfzffseF8jGwtHWkv5PXRZyA+3YpapAnb8h2g7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=Ioeb1umN; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1742511437; c=relaxed/simple;
+	bh=QhJZ7XfUCUm2tG+ko7aBpX/k+gafGVYwXUhRAOblxyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I3q1Xm8FQqI560OQ4bJfUGH25xiJ7i6M4NTwey58EQlX5rsCXW6QyeXL70qEzF9eYNWWH/qLfK+0Q2NKRYFIOqfPv95Ox0BawZqqu+YVRm86FQ/eAxZRXvRyu3l3Q5Q/ZnPz3xA/ftuzYc1kzU2SPNIBqi/6jak9VCXbdSH5mTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JeMQAbIq; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="Ioeb1umN"
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id D72852E09430;
-	Thu, 20 Mar 2025 20:01:40 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1742493701;
-	bh=bfcDkCq066rbtoTdEqNCoKT/INV1aOtvGSYxQcLPl5g=;
-	h=Received:From:Subject:To;
-	b=Ioeb1umNACm1DpUB0pnCUIi5e8b4t2gYxDU81cW2p8BJmz65RlVXMtKLj3vLtv5px
-	 lgDm5JroMKdwbJZW21W31+hriZWtWY1WVzqtses1VfCADi3jSrA9VteFLtZQznyCAj
-	 Flw0ynpxAWjkTB/33q8wMuVs8S5UtHoevIH4wTz0=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.167.42) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lf1-f42.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lf1-f42.google.com with SMTP id
- 2adb3069b0e04-549b159c84cso1309219e87.3;
-        Thu, 20 Mar 2025 11:01:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCU5UkZGfXEEnWPYMC2s9CAka8p4U7/SiXMkazatTTrU5y80jrQTu14yQN09IcWQNtfYQKtW+5ubEKME22y5@vger.kernel.org,
- AJvYcCU6pVPo7tuZUlnH9hfn/swBFxkeN0ycrd+/X/TV1BD2MmkGh3vvgL644R3pRSro+dGn5K17+4IohyWNo5A=@vger.kernel.org,
- AJvYcCUNHWR0LVEYoyFkDh2epeESjrWJCHOBNDzZMu7d/IXv3g4XPRZGJ9heuBwXST3jXyVZmj9iPHHQT40=@vger.kernel.org,
- AJvYcCVOpmtnn6zkG9b5QADAmN8uH5xsI8sX2yjpx9VDVoSDl3QonNS4wBJaMkSBT2x347sRRNEkfEh+RVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywj1RHVsA444HQO1BYbbC0K4Eb8TiPERAomgLftWI//fCSxvd4j
-	q3VHJGTfpEm1FAzXPZvd3qZ2kW5mkla05hpvuTGnnnHD+E4DMWWCxN2zJBh+y3Z6lScdSso5wfA
-	UjtfUqDI/8OuET062VflQYtka6OU=
-X-Google-Smtp-Source: 
- AGHT+IGfhvfuOiB+DEb6uOTl9EpxtzHoqw+6Gezd8dTghpF9jNKTgiZmVV/+1AlX1dPtpovYPwKYj9IP3xGz+Cdgws0=
-X-Received: by 2002:a05:6512:1254:b0:549:8924:2212 with SMTP id
- 2adb3069b0e04-54ad64865bemr99041e87.17.1742493700020; Thu, 20 Mar 2025
- 11:01:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JeMQAbIq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742511435; x=1774047435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QhJZ7XfUCUm2tG+ko7aBpX/k+gafGVYwXUhRAOblxyk=;
+  b=JeMQAbIqFM1lc1JvvvYqLf0Q4t26qGJsoiUQi4Y92HSxOVon/fFdDx3I
+   9Z6aLufsO/621+KJuY40L7qXmLffoDe9u73LkIi2gO5txG82PGy4+6UPX
+   MqhsUHActQm7JgrLLZYj2Vcvs9WnK/06DHTarCsuu37mKrf7u5wKw9l7t
+   Hhe2Vu7q1kirHnxvsABVRtObgP4mQ0gRSegJPAiADGRHpf0YFwRZ4HKas
+   T1cnh4UQdEd++LK37EM5E6EPd32QZfcThc101zLXSVAwtnLIA+zJXaZns
+   SiDrYm0VqfDpbJLDCFR8r5ii+Umv7gUulKHYk2O1/NXNJLVRLhfcq4MA/
+   w==;
+X-CSE-ConnectionGUID: fXTN12ZcSsKnBDB+GUrx1g==
+X-CSE-MsgGUID: Hnm61t6YSFuUSkOWukaxqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="47428925"
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="47428925"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 15:57:14 -0700
+X-CSE-ConnectionGUID: agGNVLwyS/eCq7lZK7glqA==
+X-CSE-MsgGUID: 3gwNGhAPQbWHJ2mmgeTpsw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="146461757"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Mar 2025 15:57:10 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvOp2-0000qh-1A;
+	Thu, 20 Mar 2025 22:57:08 +0000
+Date: Fri, 21 Mar 2025 06:56:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
+Message-ID: <202503210647.xC0D586I-lkp@intel.com>
+References: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319175512.27059-1-lkml@antheas.dev>
- <41DE9E62-7BE6-4E65-BCFF-98DB243BB527@gmail.com>
-In-Reply-To: <41DE9E62-7BE6-4E65-BCFF-98DB243BB527@gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Thu, 20 Mar 2025 19:01:28 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwGXW_H1TdLNiYGctTpMpXBEYLtgdn-dcn9zP+LSpnYUew@mail.gmail.com>
-X-Gm-Features: AQ5f1JoKC-br4Ylipx4s-aD-wtdmaefte9GBB96ByJ_g9JolJcvjF51P1NHYNlo
-Message-ID: 
- <CAGwozwGXW_H1TdLNiYGctTpMpXBEYLtgdn-dcn9zP+LSpnYUew@mail.gmail.com>
-Subject: Re: [PATCH v6 00/14] hwmon: (oxpsensors) Add devices, features, fix
- ABI and move to platform/x86
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org,
- sre@kernel.org,
-	linux@weissschuh.net, ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com,
-	mario.limonciello@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <174249370148.7628.2782718619305504685@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
 
-On Thu, 20 Mar 2025 at 18:33, Derek J. Clark <derekjohn.clark@gmail.com> wr=
-ote:
->
->
->
-> On March 19, 2025 7:54:55 AM HST, Antheas Kapenekakis <lkml@antheas.dev> =
-wrote:
-> >This four part series updates the oxpsensors module to bring it in line
-> >with its Windows OneXPlayer counterpart. First, it adds support for all
-> >2024, 2025 OneXPlayer handhelds and their special variants. Then, it mov=
-es
-> >the module to platform/x86 to allow for including more EC features.
-> >
-> >Then, it adds the new charge limiting and bypass features that were firs=
-t
-> >introduced in the X1 and retrofit to older OneXFly variants and for
-> >controlling the turbo led found in the X1 models. For Bypass, it adds a =
-new
-> >charge_behaviour variant called inhibit-charge-s0.
-> >
-> >Finally, it performs a minor refactor by moving around switch statements
-> >into their own functions, in order to allow for fixing the pwm1_enable A=
-BI
-> >in the final patch. Currently, pwm1_enable sets the fan to auto with the
-> >value 0 and allows manual control with the value 1. This patch makes it
-> >so 0 sets the fan to full speed, 1 sets the fan to manual control, and
-> >2 sets the fan to auto. This requires both setting enable and the fan
-> >speed when the enable sysfs is written to as 0, hence the refactor.
-> >
-> >As this is a minor ABI break and there is userspace software relying
-> >on this previous behavior, the last patch also changes the /name of the
-> >hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module convention=
-s)
-> >such that userspace software that relied on the previous behavior can be
-> >retrofit to the new kernel while enabling correct functionality on old
-> >and new kernels. Failing that, software that is not updated will just
-> >stop controlling the fans, ensuring no malignant behavior.
-> >
-> >---
-> >V5: https://lore.kernel.org/all/20250317155349.1236188-1-lkml@antheas.de=
-v/
-> >V4: https://lore.kernel.org/all/20250311165406.331046-1-lkml@antheas.dev=
-/
-> >V3: https://lore.kernel.org/all/20250309112114.1177361-1-lkml@antheas.de=
-v/
-> >
-> >Changes since V5:
-> >    - Separate doc entries with Fixes as by Mario
-> >    - Add sysfs file name to subject as per Thomas
-> >    - Make tt_led and tt_turbo const as per Thomas
-> >    - Align a couple of structs as per Thomas
-> >    - Remove excess battery check as per Thomas
-> >    - For Thomas: devices without a BIOS update battery control is a NOO=
-P
-> >      OXP is a boutique manufacturer for now, so gathering information
-> >      about old devices to add BIOS checks is not practical unfortunatel=
-y
->
-> Antheas,
-> This sort of begs the question on how this feature was tested on those de=
-vices? That question includes whether or not it is really a no-op in unsupp=
-orted BIOS. My old contacts at OXP are no longer employed there, are you in=
- contact with anyone at OXP currently that can potentially provide the data=
-?
->
-> I'm still of the opinion that the attribute should be explicitly enabled =
-only on a known supported BIOS.  IMO there is a general assumption that a d=
-river exposed attribute fd will work and having a no-op will confuse users =
-and lead to spurious bug reports. We shouldn't be exposing a no-op in the s=
-ysfs for a driver if we can avoid it. If we add the BIOS checks we can also=
- print to dmesg if a BIOS is too low a version so they will know why it isn=
-'t there.
->
-> That being said, it does seem likely low risk, so I'm not nacking the fea=
-ture as is if the subsystem maintainers are okay with it.
->
-> - Derek
+Hi Alexis,
 
-Hi Derek,
-I have tested this patch series on an X1 (AMD) personally. I also have
-multiple people that have tested it on an F1 Pro, X1 Intel, and an X1
-Mini. And I am pretty sure that at least 1 or 2 people have tested on
-an older BIOS too without an ill effect.
+kernel test robot noticed the following build errors:
 
-The older F1s are a bit of a question mark. The BIOS update for those
-came out around Xmas and I do not have that many users with them.
-However, they act identically to the new ones when it comes to the EC
-and the controller, so I do not think that is that big of an issue.
-Also, no one has asked yet about it not working on those devices. And
-they ask about a lot of things. Yanking charging support from those
-will just hurt those users unnecessarily as they will get it later.
+[auto build test ERROR on c812cc42f92d3d0b17c01b5db9a1dee5793a1491]
 
-Eileen is from OneXPlayer and is cc'd in this series.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexis-Czezar-Torreno/hwmon-pmbus-max34440-Fix-support-for-max34451/20250320-115905
+base:   c812cc42f92d3d0b17c01b5db9a1dee5793a1491
+patch link:    https://lore.kernel.org/r/20250320-dev_adpm12160-v1-1-8f7b975eac75%40analog.com
+patch subject: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
+config: x86_64-randconfig-074-20250321 (https://download.01.org/0day-ci/archive/20250321/202503210647.xC0D586I-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503210647.xC0D586I-lkp@intel.com/reproduce)
 
-Antheas
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503210647.xC0D586I-lkp@intel.com/
 
-> >Changes since V4:
-> >    - Fix nits by Hans
-> >    - change inhibit-charge-s0 to inhibit-charge-awake
-> >    - use devm_battery_hook_register and power_supply_unregister_extensi=
-on
-> >      (based on cros driver)
-> >    - move charge behavior patches to the end to make the rest of the se=
-ries
-> >      easier to merge
-> >    - CC platform-x86 and power maintainers
-> >
-> >Changes since V3:
-> >    - Fix nits by Derek
-> >    - Remove the hwmon documentation as it is not required for platform
-> >      drivers (suggested by Guenter)
-> >    - Add ACPI_BATTERY and HWMON depends to Kconfig
-> >      (reported by kernel robot)
-> >    - Homogenize driver into following reverse xmas convention
-> >
-> >Changes since V2:
-> >    - Add ack by Guenter, move platform move patch to be third (not firs=
-t
-> >      to allow for device support backport to lts kernels)
-> >    - Rework patch text, especially in the refactor patches as per Derek
-> >    - Change bypass to use charge_behaviour instead of charge_type, as t=
-hat
-> >      ABI supports capability detection and is more appropriate
-> >    - Move battery attach to probe instead of init
-> >    - Fix bug where reading tt_led would instead use the turbo register
-> >
-> >Changes since V1:
-> >    - Add X1 Pro, F1 Pro variants
-> >    - Fix minor typo in initial patches
-> >    - Convert oxp-sensors into a platform driver, as it is no longer
-> >      considered a hwmon driver.
-> >    - Add sysfs documentation and myself to the MAINTAINERS file
-> >    - Update documentation to state that this is the OneXPlayer/AOKZOE
-> >      platform driver, and that support for Ayaneo/OPI is provided until
-> >      they gain their own platform driver.
-> >
-> >Antheas Kapenekakis (14):
-> >  hwmon: (oxp-sensors) Distinguish the X1 variants
-> >  hwmon: (oxp-sensors) Add all OneXFly variants
-> >  platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
-> >  ABI: testing: sysfs-class-oxp: add missing documentation
-> >  ABI: testing: sysfs-class-oxp: add tt_led attribute documentation
-> >  platform/x86: oxpec: Rename ec group to tt_toggle
-> >  platform/x86: oxpec: Add turbo led support to X1 devices
-> >  platform/x86: oxpec: Move pwm_enable read to its own function
-> >  platform/x86: oxpec: Move pwm value read/write to separate functions
-> >  platform/x86: oxpec: Move fan speed read to separate function
-> >  platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
-> >  platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
-> >  power: supply: add inhibit-charge-awake to charge_behaviour
-> >  platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
-> >
-> > Documentation/ABI/testing/sysfs-class-power   |  11 +-
-> > Documentation/ABI/testing/sysfs-platform-oxp  |  25 +
-> > Documentation/hwmon/index.rst                 |   2 +-
-> > Documentation/hwmon/oxp-sensors.rst           |  89 ---
-> > MAINTAINERS                                   |   7 +-
-> > drivers/hwmon/Kconfig                         |  11 -
-> > drivers/hwmon/Makefile                        |   1 -
-> > drivers/platform/x86/Kconfig                  |  13 +
-> > drivers/platform/x86/Makefile                 |   3 +
-> > .../oxp-sensors.c =3D> platform/x86/oxpec.c}    | 624 ++++++++++++++---=
--
-> > drivers/power/supply/power_supply_sysfs.c     |   7 +-
-> > drivers/power/supply/test_power.c             |   1 +
-> > include/linux/power_supply.h                  |   1 +
-> > 13 files changed, 540 insertions(+), 255 deletions(-)
-> > create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
-> > delete mode 100644 Documentation/hwmon/oxp-sensors.rst
-> > rename drivers/{hwmon/oxp-sensors.c =3D> platform/x86/oxpec.c} (52%)
-> >
-> >
-> >base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/max34440.c:447:23: error: expected expression
+     447 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+   drivers/hwmon/pmbus/max34440.c:450:23: error: expected expression
+     450 |                 MAX34451_COMMON_INFO,
+         |                                     ^
+>> drivers/hwmon/pmbus/max34440.c:566:18: error: expected ';' after top level declarator
+     566 | MODULE_IMPORT_NS(PMBUS);
+         |                  ^
+   3 errors generated.
+
+
+vim +447 drivers/hwmon/pmbus/max34440.c
+
+   299	
+   300	#define MAX34451_COMMON_INFO \
+   301		.pages = 21, \
+   302		.format[PSC_VOLTAGE_OUT] = direct, \
+   303		.format[PSC_TEMPERATURE] = direct, \
+   304		.format[PSC_CURRENT_OUT] = direct, \
+   305		.m[PSC_VOLTAGE_OUT] = 1, \
+   306		.b[PSC_VOLTAGE_OUT] = 0, \
+   307		.R[PSC_VOLTAGE_OUT] = 3, \
+   308		.m[PSC_CURRENT_OUT] = 1, \
+   309		.b[PSC_CURRENT_OUT] = 0, \
+   310		.R[PSC_CURRENT_OUT] = 2, \
+   311		.m[PSC_TEMPERATURE] = 1, \
+   312		.b[PSC_TEMPERATURE] = 0, \
+   313		.R[PSC_TEMPERATURE] = 2, \
+   314		/* func 0-15 is set dynamically before probing */ \
+   315		.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   316		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   317		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   318		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   319		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
+   320		.read_word_data = max34440_read_word_data, \
+   321		.write_word_data = max34440_write_word_data,
+   322	
+   323	static struct pmbus_driver_info max34440_info[] = {
+   324		[max34440] = {
+   325			.pages = 14,
+   326			.format[PSC_VOLTAGE_IN] = direct,
+   327			.format[PSC_VOLTAGE_OUT] = direct,
+   328			.format[PSC_TEMPERATURE] = direct,
+   329			.format[PSC_CURRENT_OUT] = direct,
+   330			.m[PSC_VOLTAGE_IN] = 1,
+   331			.b[PSC_VOLTAGE_IN] = 0,
+   332			.R[PSC_VOLTAGE_IN] = 3,	    /* R = 0 in datasheet reflects mV */
+   333			.m[PSC_VOLTAGE_OUT] = 1,
+   334			.b[PSC_VOLTAGE_OUT] = 0,
+   335			.R[PSC_VOLTAGE_OUT] = 3,    /* R = 0 in datasheet reflects mV */
+   336			.m[PSC_CURRENT_OUT] = 1,
+   337			.b[PSC_CURRENT_OUT] = 0,
+   338			.R[PSC_CURRENT_OUT] = 3,    /* R = 0 in datasheet reflects mA */
+   339			.m[PSC_TEMPERATURE] = 1,
+   340			.b[PSC_TEMPERATURE] = 0,
+   341			.R[PSC_TEMPERATURE] = 2,
+   342			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   343			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   344			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   345			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   346			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   347			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   348			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   349			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   350			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   351			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   352			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   353			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   354			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   355			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   356			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   357			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   358			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   359			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   360			.func[12] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   361			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   362			.read_byte_data = max34440_read_byte_data,
+   363			.read_word_data = max34440_read_word_data,
+   364			.write_word_data = max34440_write_word_data,
+   365		},
+   366		[max34441] = {
+   367			.pages = 12,
+   368			.format[PSC_VOLTAGE_IN] = direct,
+   369			.format[PSC_VOLTAGE_OUT] = direct,
+   370			.format[PSC_TEMPERATURE] = direct,
+   371			.format[PSC_CURRENT_OUT] = direct,
+   372			.format[PSC_FAN] = direct,
+   373			.m[PSC_VOLTAGE_IN] = 1,
+   374			.b[PSC_VOLTAGE_IN] = 0,
+   375			.R[PSC_VOLTAGE_IN] = 3,
+   376			.m[PSC_VOLTAGE_OUT] = 1,
+   377			.b[PSC_VOLTAGE_OUT] = 0,
+   378			.R[PSC_VOLTAGE_OUT] = 3,
+   379			.m[PSC_CURRENT_OUT] = 1,
+   380			.b[PSC_CURRENT_OUT] = 0,
+   381			.R[PSC_CURRENT_OUT] = 3,
+   382			.m[PSC_TEMPERATURE] = 1,
+   383			.b[PSC_TEMPERATURE] = 0,
+   384			.R[PSC_TEMPERATURE] = 2,
+   385			.m[PSC_FAN] = 1,
+   386			.b[PSC_FAN] = 0,
+   387			.R[PSC_FAN] = 0,
+   388			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   389			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   390			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   391			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   392			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   393			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   394			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   395			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   396			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   397			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   398			.func[5] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
+   399			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   400			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   401			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   402			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   403			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   404			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   405			.read_byte_data = max34440_read_byte_data,
+   406			.read_word_data = max34440_read_word_data,
+   407			.write_word_data = max34440_write_word_data,
+   408		},
+   409		[max34446] = {
+   410			.pages = 7,
+   411			.format[PSC_VOLTAGE_IN] = direct,
+   412			.format[PSC_VOLTAGE_OUT] = direct,
+   413			.format[PSC_TEMPERATURE] = direct,
+   414			.format[PSC_CURRENT_OUT] = direct,
+   415			.format[PSC_POWER] = direct,
+   416			.m[PSC_VOLTAGE_IN] = 1,
+   417			.b[PSC_VOLTAGE_IN] = 0,
+   418			.R[PSC_VOLTAGE_IN] = 3,
+   419			.m[PSC_VOLTAGE_OUT] = 1,
+   420			.b[PSC_VOLTAGE_OUT] = 0,
+   421			.R[PSC_VOLTAGE_OUT] = 3,
+   422			.m[PSC_CURRENT_OUT] = 1,
+   423			.b[PSC_CURRENT_OUT] = 0,
+   424			.R[PSC_CURRENT_OUT] = 3,
+   425			.m[PSC_POWER] = 1,
+   426			.b[PSC_POWER] = 0,
+   427			.R[PSC_POWER] = 3,
+   428			.m[PSC_TEMPERATURE] = 1,
+   429			.b[PSC_TEMPERATURE] = 0,
+   430			.R[PSC_TEMPERATURE] = 2,
+   431			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   432			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+   433			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   434			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   435			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   436			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+   437			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+   438			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
+   439			.func[4] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   440			.func[5] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   441			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   442			.read_byte_data = max34440_read_byte_data,
+   443			.read_word_data = max34440_read_word_data,
+   444			.write_word_data = max34440_write_word_data,
+   445		},
+   446		[max34451] = {
+ > 447			MAX34451_COMMON_INFO,
+   448		},
+   449		[max34451_na6] = {
+   450			MAX34451_COMMON_INFO,
+   451		},
+   452		[max34460] = {
+   453			.pages = 18,
+   454			.format[PSC_VOLTAGE_OUT] = direct,
+   455			.format[PSC_TEMPERATURE] = direct,
+   456			.m[PSC_VOLTAGE_OUT] = 1,
+   457			.b[PSC_VOLTAGE_OUT] = 0,
+   458			.R[PSC_VOLTAGE_OUT] = 3,
+   459			.m[PSC_TEMPERATURE] = 1,
+   460			.b[PSC_TEMPERATURE] = 0,
+   461			.R[PSC_TEMPERATURE] = 2,
+   462			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   463			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   464			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   465			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   466			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   467			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   468			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   469			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   470			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   471			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   472			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   473			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   474			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   475			.func[14] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   476			.func[15] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   477			.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   478			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   479			.read_word_data = max34440_read_word_data,
+   480			.write_word_data = max34440_write_word_data,
+   481		},
+   482		[max34461] = {
+   483			.pages = 23,
+   484			.format[PSC_VOLTAGE_OUT] = direct,
+   485			.format[PSC_TEMPERATURE] = direct,
+   486			.m[PSC_VOLTAGE_OUT] = 1,
+   487			.b[PSC_VOLTAGE_OUT] = 0,
+   488			.R[PSC_VOLTAGE_OUT] = 3,
+   489			.m[PSC_TEMPERATURE] = 1,
+   490			.b[PSC_TEMPERATURE] = 0,
+   491			.R[PSC_TEMPERATURE] = 2,
+   492			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   493			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   494			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   495			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   496			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   497			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   498			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   499			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   500			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   501			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   502			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   503			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   504			.func[12] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   505			.func[13] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   506			.func[14] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   507			.func[15] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
+   508			/* page 16 is reserved */
+   509			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   510			.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   511			.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   512			.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   513			.func[21] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+   514			.read_word_data = max34440_read_word_data,
+   515			.write_word_data = max34440_write_word_data,
+   516		},
+   517	};
+   518	
+   519	static int max34440_probe(struct i2c_client *client)
+   520	{
+   521		struct max34440_data *data;
+   522		int rv;
+   523	
+   524		data = devm_kzalloc(&client->dev, sizeof(struct max34440_data),
+   525				    GFP_KERNEL);
+   526		if (!data)
+   527			return -ENOMEM;
+   528		data->id = i2c_match_id(max34440_id, client)->driver_data;
+   529		data->info = max34440_info[data->id];
+   530	
+   531		if (data->id == max34451 || data->id == max34451_na6) {
+   532			rv = max34451_set_supported_funcs(client, data);
+   533			if (rv)
+   534				return rv;
+   535		}
+   536	
+   537		return pmbus_do_probe(client, &data->info);
+   538	}
+   539	
+   540	static const struct i2c_device_id max34440_id[] = {
+   541		{"max34440", max34440},
+   542		{"max34441", max34441},
+   543		{"max34446", max34446},
+   544		{"max34451", max34451},
+   545		{"max34451_na6", max34451_na6},
+   546		{"max34460", max34460},
+   547		{"max34461", max34461},
+   548		{}
+   549	};
+   550	MODULE_DEVICE_TABLE(i2c, max34440_id);
+   551	
+   552	/* This is the driver that will be inserted */
+   553	static struct i2c_driver max34440_driver = {
+   554		.driver = {
+   555			   .name = "max34440",
+   556			   },
+   557		.probe = max34440_probe,
+   558		.id_table = max34440_id,
+   559	};
+   560	
+   561	module_i2c_driver(max34440_driver);
+   562	
+   563	MODULE_AUTHOR("Guenter Roeck");
+   564	MODULE_DESCRIPTION("PMBus driver for Maxim MAX34440/MAX34441");
+   565	MODULE_LICENSE("GPL");
+ > 566	MODULE_IMPORT_NS(PMBUS);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
