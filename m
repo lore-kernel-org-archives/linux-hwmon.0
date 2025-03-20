@@ -1,380 +1,312 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA5D22155C;
-	Thu, 20 Mar 2025 22:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B58386352
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Mar 2025 23:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742511437; cv=none; b=ZAN5GN0nS/19DDdQ8XkBnmvOKmmwbE7T+3Pq45RMp9oUxkt17NBEtB1bhbMwovnXM8rjEhRRugMRYCCyM/nUKap/uiN5UAaiBOygKf0QX2TlBai9oid7lK0uHExutDbkrfIe/6akrcwEYMFKH/Djm02tJJ+Qadpb5o77ANbjra4=
+	t=1742514749; cv=none; b=m4ZA2MGadTEsKeCXThjdfVTGR8u5TnfUKeqyP7kRsHpjM5WcwaRNrLoCXlZ9zkjEx1D+e6DKAnNSFEvMWnnafv+HArJbn+bh+nL0yy6vCSWJ2psWeW2pxy+tvQZ1J97Xpd4oRHV1x0fbceF8VXbO8k3Wgp5AXiaVll8qLmz1Mdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742511437; c=relaxed/simple;
-	bh=QhJZ7XfUCUm2tG+ko7aBpX/k+gafGVYwXUhRAOblxyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I3q1Xm8FQqI560OQ4bJfUGH25xiJ7i6M4NTwey58EQlX5rsCXW6QyeXL70qEzF9eYNWWH/qLfK+0Q2NKRYFIOqfPv95Ox0BawZqqu+YVRm86FQ/eAxZRXvRyu3l3Q5Q/ZnPz3xA/ftuzYc1kzU2SPNIBqi/6jak9VCXbdSH5mTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JeMQAbIq; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1742514749; c=relaxed/simple;
+	bh=hvpLdyH6agyklPhPCvecTfBODKTiJ9uohNNff3c9I3k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cmoiN4sCT6olOAR33AIf2OFJq/KeIegjzkTIBVah779QeDws5TbcDLEfzXZeu1FtnNukA94oUNW1fPTAKhTp9+DKluOncV0Uw/d7C82xR7+3Fxuw/l2h3NS90Eg2wuFolpWRzDCG54UbYeOshkegK+IPhDnDQBllqn8kaWRXpWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W+WYfy20; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JeMQAbIq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W+WYfy20"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742511435; x=1774047435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QhJZ7XfUCUm2tG+ko7aBpX/k+gafGVYwXUhRAOblxyk=;
-  b=JeMQAbIqFM1lc1JvvvYqLf0Q4t26qGJsoiUQi4Y92HSxOVon/fFdDx3I
-   9Z6aLufsO/621+KJuY40L7qXmLffoDe9u73LkIi2gO5txG82PGy4+6UPX
-   MqhsUHActQm7JgrLLZYj2Vcvs9WnK/06DHTarCsuu37mKrf7u5wKw9l7t
-   Hhe2Vu7q1kirHnxvsABVRtObgP4mQ0gRSegJPAiADGRHpf0YFwRZ4HKas
-   T1cnh4UQdEd++LK37EM5E6EPd32QZfcThc101zLXSVAwtnLIA+zJXaZns
-   SiDrYm0VqfDpbJLDCFR8r5ii+Umv7gUulKHYk2O1/NXNJLVRLhfcq4MA/
+  t=1742514748; x=1774050748;
+  h=date:from:to:cc:subject:message-id;
+  bh=hvpLdyH6agyklPhPCvecTfBODKTiJ9uohNNff3c9I3k=;
+  b=W+WYfy20Ey+H+jczbyBA8iLcEf4h9xFj+8BdGYYJOSu1hgPa4eQc5JHg
+   UtIyDdeke0M7YmV1hFnW51mrhzutk1FR3JTCVDyJW+vzeCocZ+TWiY0cf
+   PldEuf/xkZNFgLLNXyBu1Au5x7LCWsY2EQEVZ7YSTWQudJIoUNZ2hfGPl
+   ou2Lt9vb0ODfCVY8K08+9mJwcnpoe/8kyJgPQNCTNsvbGV9JpudQhmPQI
+   UONFir2jR7HMVH2R5Wf1/xkGn8B3dhGY93W2YZ24oxBLeDGxz4VzWQJ3F
+   sgNqiVZeOe4wTtNRy86Exq1LbuoR5QU2VjGz/XalFau8p+KOvXlagBmy5
    w==;
-X-CSE-ConnectionGUID: fXTN12ZcSsKnBDB+GUrx1g==
-X-CSE-MsgGUID: Hnm61t6YSFuUSkOWukaxqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="47428925"
-X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
-   d="scan'208";a="47428925"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 15:57:14 -0700
-X-CSE-ConnectionGUID: agGNVLwyS/eCq7lZK7glqA==
-X-CSE-MsgGUID: 3gwNGhAPQbWHJ2mmgeTpsw==
+X-CSE-ConnectionGUID: OxRFuzqtReC0pBjkfMCygg==
+X-CSE-MsgGUID: mAwc/80XTWm9EFI/La72kA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43019300"
+X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
+   d="scan'208";a="43019300"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 16:52:27 -0700
+X-CSE-ConnectionGUID: iaW5BfWsQDqrxQQferV/Tw==
+X-CSE-MsgGUID: 5eMemNSUTpGVh+VlLbSmmw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
-   d="scan'208";a="146461757"
+X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
+   d="scan'208";a="128309157"
 Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Mar 2025 15:57:10 -0700
+  by orviesa004.jf.intel.com with ESMTP; 20 Mar 2025 16:52:25 -0700
 Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tvOp2-0000qh-1A;
-	Thu, 20 Mar 2025 22:57:08 +0000
-Date: Fri, 21 Mar 2025 06:56:07 +0800
+	id 1tvPgU-0000sF-2D;
+	Thu, 20 Mar 2025 23:52:22 +0000
+Date: Fri, 21 Mar 2025 07:51:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
-Message-ID: <202503210647.xC0D586I-lkp@intel.com>
-References: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ c812cc42f92d3d0b17c01b5db9a1dee5793a1491
+Message-ID: <202503210749.E0E4yyAr-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320-dev_adpm12160-v1-1-8f7b975eac75@analog.com>
 
-Hi Alexis,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: c812cc42f92d3d0b17c01b5db9a1dee5793a1491  hwmon: (acpi_power_meter) Replace the deprecated hwmon_device_register
 
-kernel test robot noticed the following build errors:
+elapsed time: 1451m
 
-[auto build test ERROR on c812cc42f92d3d0b17c01b5db9a1dee5793a1491]
+configs tested: 235
+configs skipped: 5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexis-Czezar-Torreno/hwmon-pmbus-max34440-Fix-support-for-max34451/20250320-115905
-base:   c812cc42f92d3d0b17c01b5db9a1dee5793a1491
-patch link:    https://lore.kernel.org/r/20250320-dev_adpm12160-v1-1-8f7b975eac75%40analog.com
-patch subject: [PATCH 1/2] hwmon: (pmbus/max34440): Fix support for max34451
-config: x86_64-randconfig-074-20250321 (https://download.01.org/0day-ci/archive/20250321/202503210647.xC0D586I-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503210647.xC0D586I-lkp@intel.com/reproduce)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503210647.xC0D586I-lkp@intel.com/
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-14.2.0
+arc                                 defconfig    gcc-14.2.0
+arc                         haps_hs_defconfig    gcc-14.2.0
+arc                        nsimosci_defconfig    gcc-14.2.0
+arc                   randconfig-001-20250320    gcc-10.5.0
+arc                   randconfig-001-20250321    clang-21
+arc                   randconfig-002-20250320    gcc-8.5.0
+arc                   randconfig-002-20250321    clang-21
+arm                              allmodconfig    clang-19
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-19
+arm                              allyesconfig    gcc-14.2.0
+arm                         assabet_defconfig    gcc-14.2.0
+arm                                 defconfig    gcc-14.2.0
+arm                            dove_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250320    clang-20
+arm                   randconfig-001-20250321    clang-21
+arm                   randconfig-002-20250320    clang-16
+arm                   randconfig-002-20250321    clang-21
+arm                   randconfig-003-20250320    gcc-8.5.0
+arm                   randconfig-003-20250321    clang-21
+arm                   randconfig-004-20250320    gcc-7.5.0
+arm                   randconfig-004-20250321    clang-21
+arm                           sama7_defconfig    gcc-14.2.0
+arm                           stm32_defconfig    gcc-14.2.0
+arm                       versatile_defconfig    gcc-14.2.0
+arm                         wpcm450_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20250320    clang-21
+arm64                 randconfig-001-20250321    clang-21
+arm64                 randconfig-002-20250320    clang-21
+arm64                 randconfig-002-20250321    clang-21
+arm64                 randconfig-003-20250320    clang-19
+arm64                 randconfig-003-20250321    clang-21
+arm64                 randconfig-004-20250320    gcc-8.5.0
+arm64                 randconfig-004-20250321    clang-21
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250320    gcc-10.5.0
+csky                  randconfig-001-20250321    gcc-7.5.0
+csky                  randconfig-002-20250320    gcc-14.2.0
+csky                  randconfig-002-20250321    gcc-7.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-21
+hexagon                             defconfig    gcc-14.2.0
+hexagon               randconfig-001-20250320    clang-18
+hexagon               randconfig-001-20250321    gcc-7.5.0
+hexagon               randconfig-002-20250320    clang-21
+hexagon               randconfig-002-20250321    gcc-7.5.0
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250320    gcc-12
+i386        buildonly-randconfig-002-20250320    clang-20
+i386        buildonly-randconfig-003-20250320    clang-20
+i386        buildonly-randconfig-004-20250320    clang-20
+i386        buildonly-randconfig-005-20250320    gcc-12
+i386        buildonly-randconfig-006-20250320    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250321    clang-20
+i386                  randconfig-002-20250321    clang-20
+i386                  randconfig-003-20250321    clang-20
+i386                  randconfig-004-20250321    clang-20
+i386                  randconfig-005-20250321    clang-20
+i386                  randconfig-006-20250321    clang-20
+i386                  randconfig-007-20250321    clang-20
+i386                  randconfig-011-20250321    clang-20
+i386                  randconfig-012-20250321    clang-20
+i386                  randconfig-013-20250321    clang-20
+i386                  randconfig-014-20250321    clang-20
+i386                  randconfig-015-20250321    clang-20
+i386                  randconfig-016-20250321    clang-20
+i386                  randconfig-017-20250321    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250320    gcc-14.2.0
+loongarch             randconfig-001-20250321    gcc-7.5.0
+loongarch             randconfig-002-20250320    gcc-12.4.0
+loongarch             randconfig-002-20250321    gcc-7.5.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-6.5.0
+m68k                                defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-9.3.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-9.3.0
+microblaze                          defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                   sb1250_swarm_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250320    gcc-6.5.0
+nios2                 randconfig-001-20250321    gcc-7.5.0
+nios2                 randconfig-002-20250320    gcc-12.4.0
+nios2                 randconfig-002-20250321    gcc-7.5.0
+openrisc                          allnoconfig    clang-15
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+openrisc                  or1klitex_defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-15
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20250320    gcc-13.3.0
+parisc                randconfig-001-20250321    gcc-7.5.0
+parisc                randconfig-002-20250320    gcc-11.5.0
+parisc                randconfig-002-20250321    gcc-7.5.0
+parisc64                            defconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-15
+powerpc                          allyesconfig    clang-21
+powerpc                     mpc83xx_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250320    gcc-6.5.0
+powerpc               randconfig-001-20250321    gcc-7.5.0
+powerpc               randconfig-002-20250320    clang-21
+powerpc               randconfig-002-20250321    gcc-7.5.0
+powerpc               randconfig-003-20250320    clang-21
+powerpc               randconfig-003-20250321    gcc-7.5.0
+powerpc                     tqm5200_defconfig    gcc-14.2.0
+powerpc                     tqm8541_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250320    clang-21
+powerpc64             randconfig-001-20250321    gcc-7.5.0
+powerpc64             randconfig-002-20250320    gcc-8.5.0
+powerpc64             randconfig-002-20250321    gcc-7.5.0
+powerpc64             randconfig-003-20250320    clang-21
+powerpc64             randconfig-003-20250321    gcc-7.5.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    clang-15
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250320    clang-21
+riscv                 randconfig-001-20250321    gcc-6.5.0
+riscv                 randconfig-002-20250320    gcc-8.5.0
+riscv                 randconfig-002-20250321    gcc-6.5.0
+s390                             alldefconfig    gcc-14.2.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-14.2.0
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                             allyesconfig    gcc-8.5.0
+s390                          debug_defconfig    gcc-14.2.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250320    gcc-6.5.0
+s390                  randconfig-001-20250321    gcc-6.5.0
+s390                  randconfig-002-20250320    gcc-7.5.0
+s390                  randconfig-002-20250321    gcc-6.5.0
+sh                               allmodconfig    gcc-14.2.0
+sh                               allmodconfig    gcc-9.3.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-7.5.0
+sh                                  defconfig    gcc-12
+sh                    randconfig-001-20250320    gcc-14.2.0
+sh                    randconfig-001-20250321    gcc-6.5.0
+sh                    randconfig-002-20250320    gcc-10.5.0
+sh                    randconfig-002-20250321    gcc-6.5.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-6.5.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250320    gcc-7.5.0
+sparc                 randconfig-001-20250321    gcc-6.5.0
+sparc                 randconfig-002-20250320    gcc-7.5.0
+sparc                 randconfig-002-20250321    gcc-6.5.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250320    gcc-5.5.0
+sparc64               randconfig-001-20250321    gcc-6.5.0
+sparc64               randconfig-002-20250320    gcc-13.3.0
+sparc64               randconfig-002-20250321    gcc-6.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-15
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250320    gcc-12
+um                    randconfig-001-20250321    gcc-6.5.0
+um                    randconfig-002-20250320    clang-16
+um                    randconfig-002-20250321    gcc-6.5.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250320    clang-20
+x86_64      buildonly-randconfig-001-20250321    clang-20
+x86_64      buildonly-randconfig-002-20250320    gcc-12
+x86_64      buildonly-randconfig-002-20250321    clang-20
+x86_64      buildonly-randconfig-003-20250320    clang-20
+x86_64      buildonly-randconfig-003-20250321    clang-20
+x86_64      buildonly-randconfig-004-20250320    clang-20
+x86_64      buildonly-randconfig-004-20250321    clang-20
+x86_64      buildonly-randconfig-005-20250320    clang-20
+x86_64      buildonly-randconfig-005-20250321    clang-20
+x86_64      buildonly-randconfig-006-20250320    gcc-12
+x86_64      buildonly-randconfig-006-20250321    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20250321    clang-20
+x86_64                randconfig-002-20250321    clang-20
+x86_64                randconfig-003-20250321    clang-20
+x86_64                randconfig-004-20250321    clang-20
+x86_64                randconfig-005-20250321    clang-20
+x86_64                randconfig-006-20250321    clang-20
+x86_64                randconfig-007-20250321    clang-20
+x86_64                randconfig-008-20250321    clang-20
+x86_64                randconfig-071-20250321    gcc-12
+x86_64                randconfig-072-20250321    gcc-12
+x86_64                randconfig-073-20250321    gcc-12
+x86_64                randconfig-074-20250321    gcc-12
+x86_64                randconfig-075-20250321    gcc-12
+x86_64                randconfig-076-20250321    gcc-12
+x86_64                randconfig-077-20250321    gcc-12
+x86_64                randconfig-078-20250321    gcc-12
+x86_64                               rhel-9.4    clang-20
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                  audio_kc705_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250320    gcc-9.3.0
+xtensa                randconfig-001-20250321    gcc-6.5.0
+xtensa                randconfig-002-20250320    gcc-11.5.0
+xtensa                randconfig-002-20250321    gcc-6.5.0
 
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/max34440.c:447:23: error: expected expression
-     447 |                 MAX34451_COMMON_INFO,
-         |                                     ^
-   drivers/hwmon/pmbus/max34440.c:450:23: error: expected expression
-     450 |                 MAX34451_COMMON_INFO,
-         |                                     ^
->> drivers/hwmon/pmbus/max34440.c:566:18: error: expected ';' after top level declarator
-     566 | MODULE_IMPORT_NS(PMBUS);
-         |                  ^
-   3 errors generated.
-
-
-vim +447 drivers/hwmon/pmbus/max34440.c
-
-   299	
-   300	#define MAX34451_COMMON_INFO \
-   301		.pages = 21, \
-   302		.format[PSC_VOLTAGE_OUT] = direct, \
-   303		.format[PSC_TEMPERATURE] = direct, \
-   304		.format[PSC_CURRENT_OUT] = direct, \
-   305		.m[PSC_VOLTAGE_OUT] = 1, \
-   306		.b[PSC_VOLTAGE_OUT] = 0, \
-   307		.R[PSC_VOLTAGE_OUT] = 3, \
-   308		.m[PSC_CURRENT_OUT] = 1, \
-   309		.b[PSC_CURRENT_OUT] = 0, \
-   310		.R[PSC_CURRENT_OUT] = 2, \
-   311		.m[PSC_TEMPERATURE] = 1, \
-   312		.b[PSC_TEMPERATURE] = 0, \
-   313		.R[PSC_TEMPERATURE] = 2, \
-   314		/* func 0-15 is set dynamically before probing */ \
-   315		.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
-   316		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
-   317		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
-   318		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
-   319		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP, \
-   320		.read_word_data = max34440_read_word_data, \
-   321		.write_word_data = max34440_write_word_data,
-   322	
-   323	static struct pmbus_driver_info max34440_info[] = {
-   324		[max34440] = {
-   325			.pages = 14,
-   326			.format[PSC_VOLTAGE_IN] = direct,
-   327			.format[PSC_VOLTAGE_OUT] = direct,
-   328			.format[PSC_TEMPERATURE] = direct,
-   329			.format[PSC_CURRENT_OUT] = direct,
-   330			.m[PSC_VOLTAGE_IN] = 1,
-   331			.b[PSC_VOLTAGE_IN] = 0,
-   332			.R[PSC_VOLTAGE_IN] = 3,	    /* R = 0 in datasheet reflects mV */
-   333			.m[PSC_VOLTAGE_OUT] = 1,
-   334			.b[PSC_VOLTAGE_OUT] = 0,
-   335			.R[PSC_VOLTAGE_OUT] = 3,    /* R = 0 in datasheet reflects mV */
-   336			.m[PSC_CURRENT_OUT] = 1,
-   337			.b[PSC_CURRENT_OUT] = 0,
-   338			.R[PSC_CURRENT_OUT] = 3,    /* R = 0 in datasheet reflects mA */
-   339			.m[PSC_TEMPERATURE] = 1,
-   340			.b[PSC_TEMPERATURE] = 0,
-   341			.R[PSC_TEMPERATURE] = 2,
-   342			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   343			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   344			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   345			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   346			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   347			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   348			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   349			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   350			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   351			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   352			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   353			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   354			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   355			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   356			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   357			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   358			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   359			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   360			.func[12] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   361			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   362			.read_byte_data = max34440_read_byte_data,
-   363			.read_word_data = max34440_read_word_data,
-   364			.write_word_data = max34440_write_word_data,
-   365		},
-   366		[max34441] = {
-   367			.pages = 12,
-   368			.format[PSC_VOLTAGE_IN] = direct,
-   369			.format[PSC_VOLTAGE_OUT] = direct,
-   370			.format[PSC_TEMPERATURE] = direct,
-   371			.format[PSC_CURRENT_OUT] = direct,
-   372			.format[PSC_FAN] = direct,
-   373			.m[PSC_VOLTAGE_IN] = 1,
-   374			.b[PSC_VOLTAGE_IN] = 0,
-   375			.R[PSC_VOLTAGE_IN] = 3,
-   376			.m[PSC_VOLTAGE_OUT] = 1,
-   377			.b[PSC_VOLTAGE_OUT] = 0,
-   378			.R[PSC_VOLTAGE_OUT] = 3,
-   379			.m[PSC_CURRENT_OUT] = 1,
-   380			.b[PSC_CURRENT_OUT] = 0,
-   381			.R[PSC_CURRENT_OUT] = 3,
-   382			.m[PSC_TEMPERATURE] = 1,
-   383			.b[PSC_TEMPERATURE] = 0,
-   384			.R[PSC_TEMPERATURE] = 2,
-   385			.m[PSC_FAN] = 1,
-   386			.b[PSC_FAN] = 0,
-   387			.R[PSC_FAN] = 0,
-   388			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   389			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   390			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   391			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   392			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   393			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   394			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   395			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   396			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   397			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   398			.func[5] = PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12,
-   399			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   400			.func[7] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   401			.func[8] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   402			.func[9] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   403			.func[10] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   404			.func[11] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   405			.read_byte_data = max34440_read_byte_data,
-   406			.read_word_data = max34440_read_word_data,
-   407			.write_word_data = max34440_write_word_data,
-   408		},
-   409		[max34446] = {
-   410			.pages = 7,
-   411			.format[PSC_VOLTAGE_IN] = direct,
-   412			.format[PSC_VOLTAGE_OUT] = direct,
-   413			.format[PSC_TEMPERATURE] = direct,
-   414			.format[PSC_CURRENT_OUT] = direct,
-   415			.format[PSC_POWER] = direct,
-   416			.m[PSC_VOLTAGE_IN] = 1,
-   417			.b[PSC_VOLTAGE_IN] = 0,
-   418			.R[PSC_VOLTAGE_IN] = 3,
-   419			.m[PSC_VOLTAGE_OUT] = 1,
-   420			.b[PSC_VOLTAGE_OUT] = 0,
-   421			.R[PSC_VOLTAGE_OUT] = 3,
-   422			.m[PSC_CURRENT_OUT] = 1,
-   423			.b[PSC_CURRENT_OUT] = 0,
-   424			.R[PSC_CURRENT_OUT] = 3,
-   425			.m[PSC_POWER] = 1,
-   426			.b[PSC_POWER] = 0,
-   427			.R[PSC_POWER] = 3,
-   428			.m[PSC_TEMPERATURE] = 1,
-   429			.b[PSC_TEMPERATURE] = 0,
-   430			.R[PSC_TEMPERATURE] = 2,
-   431			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   432			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
-   433			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   434			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   435			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   436			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
-   437			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-   438			  | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-   439			.func[4] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   440			.func[5] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   441			.func[6] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   442			.read_byte_data = max34440_read_byte_data,
-   443			.read_word_data = max34440_read_word_data,
-   444			.write_word_data = max34440_write_word_data,
-   445		},
-   446		[max34451] = {
- > 447			MAX34451_COMMON_INFO,
-   448		},
-   449		[max34451_na6] = {
-   450			MAX34451_COMMON_INFO,
-   451		},
-   452		[max34460] = {
-   453			.pages = 18,
-   454			.format[PSC_VOLTAGE_OUT] = direct,
-   455			.format[PSC_TEMPERATURE] = direct,
-   456			.m[PSC_VOLTAGE_OUT] = 1,
-   457			.b[PSC_VOLTAGE_OUT] = 0,
-   458			.R[PSC_VOLTAGE_OUT] = 3,
-   459			.m[PSC_TEMPERATURE] = 1,
-   460			.b[PSC_TEMPERATURE] = 0,
-   461			.R[PSC_TEMPERATURE] = 2,
-   462			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   463			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   464			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   465			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   466			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   467			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   468			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   469			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   470			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   471			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   472			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   473			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   474			.func[13] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   475			.func[14] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   476			.func[15] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   477			.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   478			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   479			.read_word_data = max34440_read_word_data,
-   480			.write_word_data = max34440_write_word_data,
-   481		},
-   482		[max34461] = {
-   483			.pages = 23,
-   484			.format[PSC_VOLTAGE_OUT] = direct,
-   485			.format[PSC_TEMPERATURE] = direct,
-   486			.m[PSC_VOLTAGE_OUT] = 1,
-   487			.b[PSC_VOLTAGE_OUT] = 0,
-   488			.R[PSC_VOLTAGE_OUT] = 3,
-   489			.m[PSC_TEMPERATURE] = 1,
-   490			.b[PSC_TEMPERATURE] = 0,
-   491			.R[PSC_TEMPERATURE] = 2,
-   492			.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   493			.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   494			.func[2] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   495			.func[3] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   496			.func[4] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   497			.func[5] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   498			.func[6] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   499			.func[7] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   500			.func[8] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   501			.func[9] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   502			.func[10] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   503			.func[11] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   504			.func[12] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   505			.func[13] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   506			.func[14] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   507			.func[15] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT,
-   508			/* page 16 is reserved */
-   509			.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   510			.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   511			.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   512			.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   513			.func[21] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-   514			.read_word_data = max34440_read_word_data,
-   515			.write_word_data = max34440_write_word_data,
-   516		},
-   517	};
-   518	
-   519	static int max34440_probe(struct i2c_client *client)
-   520	{
-   521		struct max34440_data *data;
-   522		int rv;
-   523	
-   524		data = devm_kzalloc(&client->dev, sizeof(struct max34440_data),
-   525				    GFP_KERNEL);
-   526		if (!data)
-   527			return -ENOMEM;
-   528		data->id = i2c_match_id(max34440_id, client)->driver_data;
-   529		data->info = max34440_info[data->id];
-   530	
-   531		if (data->id == max34451 || data->id == max34451_na6) {
-   532			rv = max34451_set_supported_funcs(client, data);
-   533			if (rv)
-   534				return rv;
-   535		}
-   536	
-   537		return pmbus_do_probe(client, &data->info);
-   538	}
-   539	
-   540	static const struct i2c_device_id max34440_id[] = {
-   541		{"max34440", max34440},
-   542		{"max34441", max34441},
-   543		{"max34446", max34446},
-   544		{"max34451", max34451},
-   545		{"max34451_na6", max34451_na6},
-   546		{"max34460", max34460},
-   547		{"max34461", max34461},
-   548		{}
-   549	};
-   550	MODULE_DEVICE_TABLE(i2c, max34440_id);
-   551	
-   552	/* This is the driver that will be inserted */
-   553	static struct i2c_driver max34440_driver = {
-   554		.driver = {
-   555			   .name = "max34440",
-   556			   },
-   557		.probe = max34440_probe,
-   558		.id_table = max34440_id,
-   559	};
-   560	
-   561	module_i2c_driver(max34440_driver);
-   562	
-   563	MODULE_AUTHOR("Guenter Roeck");
-   564	MODULE_DESCRIPTION("PMBus driver for Maxim MAX34440/MAX34441");
-   565	MODULE_LICENSE("GPL");
- > 566	MODULE_IMPORT_NS(PMBUS);
-
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
