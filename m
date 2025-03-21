@@ -1,66 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3871F22371B;
-	Fri, 21 Mar 2025 11:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890EB78F29;
+	Fri, 21 Mar 2025 13:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742556473; cv=none; b=u0gTbsuq6M5sDrwI60RqbTOYJ7OCeFLAeWkdif5pOJtb03WhHY089by98FzzPNdMSJO9lMbUB8o8NeWv+x+znbkLrSSoscHdzBITTDJApBsKbHLZ58BIEmkrGPJDs7AiVntBsn0X1xytvu4hiUtcLfW/ovG/G+4yhseS3Mxjy9E=
+	t=1742565435; cv=none; b=Aqy2JtfWWNmnhHB8a1yhe28nrmsjplZfLdbDuUvhJSSIASaIved8M6xystvFhSpe/SLLCzpyfYaJb0jIabd4ByRscV1iesonvXmDA/lR63o+qpL+JLLbI64SitfukyMZwCSh1jWPrCDfn9vbqzS7+IZy60vlehZMrTOs7HZ3Z5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742556473; c=relaxed/simple;
-	bh=c/wGSFJOfYXlMyOqzLU+K2iw5jrJZeHx2Bg2ojMHeEo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=P1BSoJebzGuzdObHXs7/TxYMVcwSvCUMN6/L5JuEBdG3KzGjWAUbrvaXdEJ/PNb7gOx8TQgnVCRP9BXtKr+FNe6A4SPxF+M/OMUfyfrV0nfv9tI8ONkJ9g63wJ4++/U2PZpUgOmD8erPYUVhbkEqjFpfelqSrwx3LGJzDCduYpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+7FmkuI; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+7FmkuI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AA7C4CEE3;
-	Fri, 21 Mar 2025 11:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742556471;
-	bh=c/wGSFJOfYXlMyOqzLU+K2iw5jrJZeHx2Bg2ojMHeEo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=H+7FmkuI/GZPcZaIJhYqQ7X0vVxUYzLjbSrz0q3bwLavBimgDa0PwVH1JEmySlMG5
-	 R5nRLNTiU/xZBvtOUPJbzaKnwm6yy6Lv00Tt87nDgns3aSOzCMuKZjcu5vb/vFL0su
-	 ATHvJlYTjv4k1yvLWY0n8ld4B7xPSFk3dG++V2T5XgoGsiRIFgkZMxsukuqwtwIipr
-	 3AlCJAOv/huo1tRBz2Q96b2dTyO3HdlobblNdLjoXCFWzduwVaPTQpZSjTroeiiMrt
-	 U/4i51aIbDQ0U8XsusvozJ1YDVkYXcfLBm2lm7WoBT7GNG+pdKps0yUNJzhFyDjsH4
-	 VyMUCaDxYE4qg==
-From: Lee Jones <lee@kernel.org>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Lee Jones <lee@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Thomas Richard <thomas.richard@bootlin.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
- linux-doc@vger.kernel.org
-In-Reply-To: <20250203-congatec-board-controller-hwmon-v4-2-ff6c76a4662c@bootlin.com>
-References: <20250203-congatec-board-controller-hwmon-v4-0-ff6c76a4662c@bootlin.com>
- <20250203-congatec-board-controller-hwmon-v4-2-ff6c76a4662c@bootlin.com>
-Subject: Re: (subset) [PATCH v4 2/2] mfd: cgbc: add a hwmon cell
-Message-Id: <174255646961.2088064.14807499273570643972.b4-ty@kernel.org>
-Date: Fri, 21 Mar 2025 11:27:49 +0000
+	s=arc-20240116; t=1742565435; c=relaxed/simple;
+	bh=mt5VrjA3cDeDU5iaGmha+OBFVRPyZDe+YhTGWVzJhKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xe64v9jsIOIfNUNm/LIzOv+2Ouz1uKGmvAL/y7ctmitR0XGyrJZrATRTHRSAlDVM4bl4S9eDMtoknZT3Pzg3Def0XZP44tU9Uc/zQcB4rRst1JTf9igSjBEPr5fSjoiGMqDDoySUIUBi7ftPXHVq3/YKOt3g8ZMKlOwkemqZFfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13B44106F;
+	Fri, 21 Mar 2025 06:57:20 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7343D3F673;
+	Fri, 21 Mar 2025 06:57:10 -0700 (PDT)
+Date: Fri, 21 Mar 2025 13:57:07 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Huisong Li <lihuisong@huawei.com>,
+	Adam Young <admiyo@os.amperecomputing.com>,
+	Robbie King <robbiek@xsightlabs.com>,
+	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Message-ID: <20250321-elegant-ruby-bull-7d9c50@sudeepholla>
+References: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-510f9
+In-Reply-To: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
 
-On Mon, 03 Feb 2025 12:01:06 +0100, Thomas Richard wrote:
-> The Board Controller has some internal sensors.
-> Add a hwmon cell for the cgbc-hwmon driver which adds support for
-> temperature, voltage, current and fan sensors.
+On Thu, Mar 13, 2025 at 03:28:46PM +0000, Sudeep Holla wrote:
+> Here is a summary of the changes in this patch series:
 > 
+> 1. Fix for race condition in updating of the chan_in_use flag
 > 
+>    Ensures correct updating of the chan_in_use flag to avoid potential race
+>    conditions.
+> 
+> 2. Interrupt handling fix
+> 
+>    Ensures platform acknowledgment interrupts are always cleared to avoid
+>    leaving the interrupt asserted forever.
+> 
+> 3. Endian conversion cleanup
+> 
+>    Removes unnecessary endianness conversion in the PCC mailbox driver.
+> 
+> 4. Memory mapping improvements
+> 
+>    Uses acpi_os_ioremap() instead of direct mapping methods for better ACPI
+>    compatibility.
+> 
+> 5. Return early if the command complete register is absent
+> 
+>    Ensures that if no GAS (Generic Address Structure) register is available,
+>    the function exits early.
+> 
+> 6. Refactor IRQ handler and move error handling to a separate function
+> 
+>    Improves readability of error handling in the PCC mailbox driver’s
+>    interrupt handler.
+> 
+> 7. Shared memory mapping refactoring/enhancements
+> 
+>    Ensures the shared memory is always mapped and unmapped in the PCC
+>    mailbox driver when the PCC channel is requested and release.
+> 
+> 8. Refactored check_and_ack() Function
+> 
+>    Simplifies and improves the logic for handling type4 platform notification
+>    acknowledgments.
+> 
+> 09-13. Shared memory handling simplifications across multiple drivers
+> 
+>     Simplifies shared memory handling in:
+>         Kunpeng HCCS driver (soc: hisilicon)
+>         Apm X-Gene Slimpro I2C driver
+>         X-Gene hardware monitoring driver (hwmon)
+>         ACPI PCC driver
+>         ACPI CPPC driver
+> 
+> The X-gene related changes now change the mapping attributes to align
+> with ACPI specification. There are possibilities for more cleanups on
+> top of these changes around how the shmem is accessed within these
+> driver.
+> 
+> Also, my main aim is to get 1-8 merged first and target 9-13 for
+> following merge window through respective tree.
+> 
+> Overall, the patch series focuses on improving correctness, efficiency, and
+> maintainability of the PCC mailbox driver and related components by fixing
+> race conditions, optimizing memory handling, simplifying shared memory
+> interactions, and refactoring code for clarity.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+> Jassi,
+> 
+> Please take patch [1-8]/13 through the mailbox tree if and when you are
+> happy with the changes.
 
-Applied, thanks!
+Hi Jassi,
 
-[2/2] mfd: cgbc: add a hwmon cell
-      commit: 6672baa795851fac209135f2ee24643280e1d017
+I2C change is also acked now. Let me know if you prefer pull request or
+you prefer to take it via ACPI tree which may need you ACK.
 
---
-Lee Jones [李琼斯]
-
+-- 
+Regards,
+Sudeep
