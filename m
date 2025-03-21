@@ -1,67 +1,67 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655D422D7AD;
-	Fri, 21 Mar 2025 17:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E4428E7;
+	Fri, 21 Mar 2025 20:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742577869; cv=none; b=kvPwNumgcWfwdC5TlMrIxGXbJUtnZJAbU+cThmXaAYhFwfenygMwpTTbKD3afQG3waPrk+n0lOf7T/Xd/UEuv6DiKXGbBjtNuNRNuAcqrBUKFUKGvIGmn3MRwo1CnZXRRy8Eb+8emC8eORXFhTprBObWX48qS9NPfU88Sckl6RI=
+	t=1742588634; cv=none; b=P1Rs5zaJjehufhrAcnGpRcLZglfr9bwZtmJd6SshKAnF1TOfag5u7sFmG11rbRB6hvPxK0Yr+ozm3Lr+u+uVovjVaQJNpsdfRO+BsFjdyCk1Fwejb/HOHnRfnZcXoe9eRf8FAvsTbVPURgOMyQKnrwhZDMrd6NPXq4o3nwTYQp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742577869; c=relaxed/simple;
-	bh=U3+4/ASbWGUJRsSspefTkVi4q/LOTzkUuqbk6W4voOY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=opATwckTBAf5MOY/3w2Ii95tGCL6BM5BHyczqpNA6f++5PNX0fAI8tmHsQG+S0F5lFu6As4DaynGKx+kBotberHxjhB9+h4FPnsXSJVZWCUSM5qIF+PYSvT8ZBAFhYbhOIi4YXaBUw3URCtFrjlu/QCteHezVbotBZMCeB7VSxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjeP4lDS; arc=none smtp.client-ip=209.85.216.47
+	s=arc-20240116; t=1742588634; c=relaxed/simple;
+	bh=pSGCkutqlhfgmZ9pcispcde5O1dmP4dkXo+z1DTalEw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e2+SoXbL9kK0PlVcTk+VMSQuAlH8K6MAGLuyrIIKd3u3Aq3ih1cK3HDUa9cgrRyaQny/AlwaMMjD0sPgRK81JzMjWlXPCU09vWz4/Xond3vSg1THRetKUijimDGGpRDum8WNJ8w47mYuAW7J4auhq8czxMsqjCW+7/CTkrP63kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxCCF+yA; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjeP4lDS"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ff85fec403so7320944a91.1;
-        Fri, 21 Mar 2025 10:24:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxCCF+yA"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2255003f4c6so49518295ad.0;
+        Fri, 21 Mar 2025 13:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742577866; x=1743182666; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=y/NHqYLciWdiqaCQgtvu2IZg4U/giDGdUChxb6BuJCU=;
-        b=fjeP4lDSWDqzdzhkNU3dfvkWmT8W5gsafd2NF6GeRKq5RSdAQbTbeh5JzYQRGeTRaH
-         fGWtAIIK3jTk3ygrEoa3SFKceGRTrGIJx44zwY5KGySxQhpF3QbaMPOvyJhGBAs73eKn
-         nb/Swknc5p2NptCXDJ/IMmNqikw/MtzEsNIT00o0d8RIy7RwiKbTdU+YKfWpigZDMwNY
-         aG/BppdEBYSJyMySYRfrS4u7COBVTuxugZyCawjIIo56+GMz9R1/wk5FHo8V39Da4TPx
-         4QmfVag9rJNNWPRIfA2KfAru6DitFKemkkAcHqHPnI6crWpXAa0/IkPysry3FjRTcl/8
-         GGSA==
+        d=gmail.com; s=20230601; t=1742588632; x=1743193432; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1djtg26CNE1DKn9YMuQNTPgebMHlacqcSzIFE/uHe2M=;
+        b=hxCCF+yAuq5PoaGLqcO8j/Td/R504DpoY3dJckzHI0HN71bG3GSQgRsiC5vG0mrtrs
+         +TSIgw97/CQVgrulgKbFYZbTeqzF+50hv3a8mKUrCRVTU5YZ+25qqwyim9jzhNUJbIAj
+         odr8RWlMCmlcMB6/YaL2KwVrRJWhNx8LB5rXTlnfRC9EpcffXHZiIR5IW0F1CLANNOYo
+         RqLuZv9wuCf9jSuO/D0SeCtFBHgGhWFh0nyysJzmSSnxYiqf7F4C0FA/mNMWEBw7clA3
+         8tkyDxv9nCbK/+Azu2b7tBb2V1g36tkXceeqSJrNsESMbOFAvDHFftXKRRkRjt1k6GFQ
+         sodA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742577866; x=1743182666;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1742588632; x=1743193432;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y/NHqYLciWdiqaCQgtvu2IZg4U/giDGdUChxb6BuJCU=;
-        b=pLx/6YlGmSmBFbFJ6Qp8T1/c/8VnTC2K79zEt+Ou5P5fdoYjHOCLlPF8AKX0m5kMjd
-         VI3xmBPEmWjvFGLD8NkWOL+NqlWGOcaS5hALAsg/M7RHnN0VsglJBbsdPPqDAxjT93zc
-         7qSh9NJUCzkGov+i6xz9ttcw9cBoCxmxc7yzLTcCDVn/L0eR4L1WeE6uQjyjmDHTRWkN
-         8PdyP2wB5TtwN5IJNIFzDnsQDk3MTEZws9Snu3FyU83aHYML7OHfnOcD8blLIebnZ/ml
-         lM80pvUOyWUiE4rIE8y0RytocRPnA9FhFthtLS6BLkOd6SEMA52byc5sKPTdkQhG/c5/
-         HtVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNFpKCHhdtBHT8xhq5ELmOTX9WJ84/mlHGjTMVMU6tMq+Xk3orXzXjYaAkFAEQhJEXcAVmpjrmdMot@vger.kernel.org, AJvYcCUU80YdgTbUTopPAsj6OTjYwVNkd654QvFm/nt6PYSyXbY6zgHspwyRNmjEKKpSMnKl0v6ibq69IFKyUX4=@vger.kernel.org, AJvYcCVLnMaSh4CUziz4jCHcgoxWpSUiVdaWoO5uZ2OttRojTL//1uGQF9Y9FvsfPHe78En7Os/EwHkW53jm@vger.kernel.org, AJvYcCWYQSwcyNJ+3NwRpF9KnOUCmoqtbw4RON/n9x24f5UQWbooNFkP5BkA0INrw3m7/2ITOEHoLHklveFVfqQv@vger.kernel.org, AJvYcCXCgxFr6xyXUY/Y2IDyFE7T31Vos/gnUOPDlsnzu6tKkJZo7I0OwJDU1Jx7moz2FIG88EYBCr6dGLFP@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjA5f2WjVZjjOZqetwI2BEFfObNYqIHYkQcAcpHm6g8z88ti//
-	D8My5X0bU8vunQ8jK1IbIpTigKfjXjluA25CxUmEbZik8k1PDqRE
-X-Gm-Gg: ASbGncsDZCjnIfAi6PSMwSNPbBGtldpCnIZ5r6XnEM7YbTVFTJw3GnI1B1zdq19soJ7
-	IIKp/Y2oXIZK/G1mH+PP+Y6jBPCtm5SWV3+eR/D3UtI+qkNup8/lXxis00BoB9xn6/9Q6fPDPez
-	5XOWjTFkoQ2OA/T4VnFQkc1KD0x4QQBAQvrz7n7q4F4oezVXc6Ow9UD+Ibmp41WyEPYXB69qiAM
-	aLrGPoqVHSlmQBK4bejuHTk36vM89nFaoxAP8KL6wXrYfQLIj8ddW31fiJSKJ/g3GHOAwNajTfG
-	dKr47Dh1N/fzX9qfz3SOz1uhO/y4KjofR9GoZZPQQ2d8nr1pua473cCvwp0YsAi4Bzv/Qiu64aN
-	eOnN1/rYNly4Idsw0GA==
-X-Google-Smtp-Source: AGHT+IGmFUdskVpDqaqmcl8pptczuWmbp1SYS3fxjeHts1BDLHMGTQ5HPEtOq7WmGHrgADYdhHBT6A==
-X-Received: by 2002:a17:90b:4a8a:b0:2fa:17e4:b1cf with SMTP id 98e67ed59e1d1-3030e54fb12mr6914349a91.2.1742577866361;
-        Fri, 21 Mar 2025 10:24:26 -0700 (PDT)
+        bh=1djtg26CNE1DKn9YMuQNTPgebMHlacqcSzIFE/uHe2M=;
+        b=QX/nUIq1MTOm7lHm8yJeDQLovopTChM/01pg1gKVlanOehDCtLi5o51dRgozPz7V8Y
+         D+5IVxu+KM1MtaeDw9J38MQC3CRi23a13iM/fHlzbT4zDpbPU0AH7NvKWh6Axh4WBqvm
+         Z7ZacEPwiMjHg9lC+rsj5x7Remza5JOXuYvyS/nAHW7tqy/CgaeKPOm8MH7xR5464PHY
+         3asO+710GiSi9x1GuQwI6yYKbeJ9L+kA0QmU7bHMSXA929f+elc5QnGiywyzc8BXqQG5
+         Fw+XEs7+bphKs59ifsGpK3JwwC8gk2Kpreziiww4RAByBLkEoVHyUHvCmuLAGS0r1kOW
+         VvOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVeAoXML0OvD+RvRamEu5H6TaucTIOEqlI/lCBrgmxlcvYTOjHT/cJrz+V16eZdtmPtl+JMlk8gpBI3mCX@vger.kernel.org, AJvYcCVyMhMtHVV8+L3PfyG3Str0lT22BxcCK1WVCnhNk0kQzvjJTts2tBdFP9h1b7a44i6hIKGrMaOkEcdK@vger.kernel.org, AJvYcCWEHEvdNU+ULtZsb0/NA4V2vZheXulyzlcQuGZKsldenm95O605gzKV8OgHdieNNq7bXXjSyVirsK15oBA=@vger.kernel.org, AJvYcCWpFkJR2IR7GCQMF/L3HRjV17DLoOhB4SPmafTszp+hqEODtRQbjid4A+NcFa3MimQd+rCrvPhMs8in@vger.kernel.org, AJvYcCWvYMpIlMo5HvjA/cbmtyyQLLxRysgDYrJI7XX/XDvtOUY2cYEJB5LsgEGgKZCKEj0HkbuE7m17e95b@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN9W2CVqMFOpftLgc5IiDCQbILEGPtfdHKeyhWRQmxrkkEPhkE
+	iAUjQ1Pga2TXJu4rQHh/z9x34cu4SlpvAYbXDaaXAunrzRulbOvKRTUaWQ==
+X-Gm-Gg: ASbGnctUFhMNyUoWjxDZ+dpLfcfl7KIKCkOfmXfNixkuy2FpGCW1bgGRJ/QYEBFFbOQ
+	WrPGdac1OtWbMSN8lk1QgzE495GsxISIuE5K4P+ueMDVornmSa+9vDPtsuGgO1Je49J3S4nbKqW
+	yboddm9OyIJJyF99s21yOXbXe2BcgyDidYnhEnLyEiXO+yiR/WmjRU4K7EdcS5+JH2Y3ActTaFd
+	TTpZIMg+d+Ej/Ng9OaQhv0FfISd0FXT6EDoT3JmRFeHMobOFIk7cEq24vJnYUl+dST/n9kKd0Gz
+	wQ8RQa4Zin2G2yrQZRSU1gfRQcdCCNrMHMEZLNQSXsC/sarVpmN8FPlbJ60V0ffrYMJNZXGGaDi
+	dA851jInow5qQfDkwGw==
+X-Google-Smtp-Source: AGHT+IGWdMAUjWh0+9yGqF7S/SRKjyn8WRH2kjJtyo1Nezds6nK2NVqewGCNg4/3iVAcnFSsWs5zUQ==
+X-Received: by 2002:a17:903:40cb:b0:221:331:1d46 with SMTP id d9443c01a7336-22780c510fcmr60907465ad.2.1742588631562;
+        Fri, 21 Mar 2025 13:23:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf61a579sm6412483a91.32.2025.03.21.10.24.24
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22780f461basm21912215ad.96.2025.03.21.13.23.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 10:24:25 -0700 (PDT)
+        Fri, 21 Mar 2025 13:23:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <16b6b98e-711e-40d5-970e-af1feb46ce91@roeck-us.net>
-Date: Fri, 21 Mar 2025 10:24:24 -0700
+Message-ID: <2bc5370b-949d-4b3e-b59a-d27c3f72026b@roeck-us.net>
+Date: Fri, 21 Mar 2025 13:23:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,7 +70,6 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-From: Guenter Roeck <linux@roeck-us.net>
 To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>,
  Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -93,8 +92,8 @@ References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
  <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
  <PH0PR03MB693831397416C4247F8BA58D8ED92@PH0PR03MB6938.namprd03.prod.outlook.com>
  <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
 Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -138,123 +137,117 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
+In-Reply-To: <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/21/25 10:09, Guenter Roeck wrote:
-> On 3/21/25 09:53, Encarnacion, Cedric justine wrote:
+On 3/21/25 09:53, Encarnacion, Cedric justine wrote:
+>> -----Original Message-----
+>> From: Encarnacion, Cedric justine
+>> Sent: Wednesday, March 19, 2025 12:10 PM
+>> To: Guenter Roeck <linux@roeck-us.net>; Krzysztof Kozlowski <krzk@kernel.org>
+>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
+>> Conor Dooley <conor+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>;
+>> Jonathan Corbet <corbet@lwn.net>; Delphine CC Chiu
+>> <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
+>> doc@vger.kernel.org; linux-i2c@vger.kernel.org
+>> Subject: RE: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
+>>
 >>> -----Original Message-----
->>> From: Encarnacion, Cedric justine
->>> Sent: Wednesday, March 19, 2025 12:10 PM
->>> To: Guenter Roeck <linux@roeck-us.net>; Krzysztof Kozlowski <krzk@kernel.org>
->>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
->>> Conor Dooley <conor+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>;
->>> Jonathan Corbet <corbet@lwn.net>; Delphine CC Chiu
->>> <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
+>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>>> Sent: Tuesday, March 18, 2025 11:17 PM
+>>> To: Encarnacion, Cedric justine
+>>> <Cedricjustine.Encarnacion@analog.com>;
+>>> Krzysztof Kozlowski <krzk@kernel.org>
+>>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski
+>>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean Delvare
+>>> <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>; Delphine CC
+>>> Chiu <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
 >>> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
 >>> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->>> Subject: RE: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
+>>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
 >>>
->>>> -----Original Message-----
->>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->>>> Sent: Tuesday, March 18, 2025 11:17 PM
->>>> To: Encarnacion, Cedric justine
->>>> <Cedricjustine.Encarnacion@analog.com>;
->>>> Krzysztof Kozlowski <krzk@kernel.org>
->>>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski
->>>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean Delvare
->>>> <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>; Delphine CC
->>>> Chiu <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
->>>> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
->>>> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->>>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>>>
->>>> [External]
->>>>
->>>> On 3/18/25 03:03, Encarnacion, Cedric justine wrote:
->>>>>> -----Original Message-----
->>>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->>>>>> Sent: Friday, February 28, 2025 12:33 AM
->>>>>> To: Krzysztof Kozlowski <krzk@kernel.org>
->>>>>> Cc: Rob Herring <robh@kernel.org>; Encarnacion, Cedric justine
->>>>>> <Cedricjustine.Encarnacion@analog.com>; Krzysztof Kozlowski
->>>>>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean
->>>>>> Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
->>>>>> Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>;
->>>>>> devicetree@vger.kernel.org; linux- kernel@vger.kernel.org;
->>>>>> linux-hwmon@vger.kernel.org; linux- doc@vger.kernel.org;
->>>>>> linux-i2c@vger.kernel.org
->>>>>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>>>>>
->>>>>> diff --git a/drivers/hwmon/pmbus/pmbus.h
->>>>>> b/drivers/hwmon/pmbus/pmbus.h index ddb19c9726d6..289767e5d599
->>>>>> 100644
->>>>>> --- a/drivers/hwmon/pmbus/pmbus.h
->>>>>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>>>>> @@ -512,7 +512,6 @@ int pmbus_regulator_init_cb(struct
->>>>>> regulator_dev
->>>> *rdev,
->>>>>>        {                            \
->>>>>>            .name = (_name),                \
->>>>>>            .of_match = of_match_ptr(_name),        \
->>>>>> -        .regulators_node = of_match_ptr("regulators"),    \
->>>>>>            .ops = &pmbus_regulator_ops,            \
->>>>>>            .type = REGULATOR_VOLTAGE,            \
->>>>>>            .owner = THIS_MODULE,                \
->>>>>>
->>>>>> Maybe someone can check if that works.
->>>>>>
->>>>>> Thanks,
->>>>>> Guenter
+>>> [External]
+>>>
+>>> On 3/18/25 03:03, Encarnacion, Cedric justine wrote:
+>>>>> -----Original Message-----
+>>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>>>>> Sent: Friday, February 28, 2025 12:33 AM
+>>>>> To: Krzysztof Kozlowski <krzk@kernel.org>
+>>>>> Cc: Rob Herring <robh@kernel.org>; Encarnacion, Cedric justine
+>>>>> <Cedricjustine.Encarnacion@analog.com>; Krzysztof Kozlowski
+>>>>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean
+>>>>> Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
+>>>>> Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>;
+>>>>> devicetree@vger.kernel.org; linux- kernel@vger.kernel.org;
+>>>>> linux-hwmon@vger.kernel.org; linux- doc@vger.kernel.org;
+>>>>> linux-i2c@vger.kernel.org
+>>>>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
 >>>>>
->>>>> I'd like to follow up on this one. As of this writing, my
->>>>> understanding is that the dt-binding should not expect regulators
->>>>> subnodes for simple devices like this. There is already a similar
->>>>> binding as mentioned in this thread particularly
->>>>> "dt-bindings/regulator/infineon,ir38060". I think a binding without
->>>>> the subnodes should still work with or without the change above.
+>>>>> diff --git a/drivers/hwmon/pmbus/pmbus.h
+>>>>> b/drivers/hwmon/pmbus/pmbus.h index ddb19c9726d6..289767e5d599
+>>>>> 100644
+>>>>> --- a/drivers/hwmon/pmbus/pmbus.h
+>>>>> +++ b/drivers/hwmon/pmbus/pmbus.h
+>>>>> @@ -512,7 +512,6 @@ int pmbus_regulator_init_cb(struct
+>>>>> regulator_dev
+>>> *rdev,
+>>>>>    	{							\
+>>>>>    		.name = (_name),				\
+>>>>>    		.of_match = of_match_ptr(_name),		\
+>>>>> -		.regulators_node = of_match_ptr("regulators"),	\
+>>>>>    		.ops = &pmbus_regulator_ops,			\
+>>>>>    		.type = REGULATOR_VOLTAGE,			\
+>>>>>    		.owner = THIS_MODULE,				\
+>>>>>
+>>>>> Maybe someone can check if that works.
+>>>>>
+>>>>> Thanks,
+>>>>> Guenter
 >>>>
->>>> Interesting. I am not sure if it really works, though. I looked into
->>>> the regulator code, and I don't immediately see the code path it would
->>>> take.
->>>>
->>>>> With this, I'd like to know what the specific next steps are to
->>>>> continue this patch series.
->>>>
->>>> Can you try on hardware using a devicetree file which doesn't have the
->>>> regulators node ? If the current code works, just submit an updated
->>>> (simplified) .yaml file and we should be good. If not, I have an
->>>> untested patch series introducing another macro which doesn't set the
->>>> regulators node.
+>>>> I'd like to follow up on this one. As of this writing, my
+>>>> understanding is that the dt-binding should not expect regulators
+>>>> subnodes for simple devices like this. There is already a similar
+>>>> binding as mentioned in this thread particularly
+>>>> "dt-bindings/regulator/infineon,ir38060". I think a binding without
+>>>> the subnodes should still work with or without the change above.
 >>>
->>> Okay. I'll test this and get back to you.
+>>> Interesting. I am not sure if it really works, though. I looked into
+>>> the regulator code, and I don't immediately see the code path it would
+>>> take.
+>>>
+>>>> With this, I'd like to know what the specific next steps are to
+>>>> continue this patch series.
+>>>
+>>> Can you try on hardware using a devicetree file which doesn't have the
+>>> regulators node ? If the current code works, just submit an updated
+>>> (simplified) .yaml file and we should be good. If not, I have an
+>>> untested patch series introducing another macro which doesn't set the
+>>> regulators node.
 >>
->> The "simplified" dt file (without the regulators node) does not work with
->> the current regulator_desc macro. I have also tried simply removing the
->> regulators_node setting from the regulator_desc macro, and it does not
->> work too. of_match looks for a certain regulator name in dt, and it seems
->> like it must handle NULL cases as well as suggested previously. I would
->> appreciate if this would be also verified on other ends. For now, I think I'll
->> wait for another macro to be introduced in pmbus to support this kind of
->> bindings.
->>
+>> Okay. I'll test this and get back to you.
 > 
-> Figured. As it turns out, there is also a patch series pending which tries
-> to fix the problem for ir38060 by changing its bindings.
-> 
-> I'll dig up my patch series to add a new macro and send it out as RFT.
-> 
+> The "simplified" dt file (without the regulators node) does not work with
+> the current regulator_desc macro. I have also tried simply removing the
+> regulators_node setting from the regulator_desc macro, and it does not
+> work too. of_match looks for a certain regulator name in dt, and it seems
 
-Question for DT maintainers:
+I just noticed the above. A NULL regulators_node should actually work. From
+drivers/regulator/of_regulator.c:regulator_of_get_init_node():
 
-Existing bindings, such as
-	Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
-expect a nested regulators node even though there is only a single
-regulator. What is the correct approach: Keep the nesting requirement
-for those regulators as is (even if there are no in-tree bindings
-using them), or update the code and the bindings to drop the nesting ?
+         if (desc->regulators_node) {
+                 search = of_get_child_by_name(dev->of_node,
+                                               desc->regulators_node);
+         } else {
+                 search = of_node_get(dev->of_node);
 
-Thanks,
+                 if (!strcmp(desc->of_match, search->name))
+                         return search;
+         }
+
+So, yes, there has to be a name match, but that is on the node describing
+the chip. That is how all single-regulator chips are supposed to work.
+
 Guenter
 
