@@ -1,66 +1,83 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5047980C02
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Mar 2025 14:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42301D9346;
+	Fri, 21 Mar 2025 14:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742567603; cv=none; b=aIeiWcxFLRzygNFm3pKKu2SEG6R7woV9smeKbpiHFWD55+/vkWMufmJLYNNemzTyst263PT9dCRou6qc6VW2hgPCWHGFbS18lvSEK7tgDWi+omqamZBnQA0yWQ+xPUr3V1IwSWsWHVse2CSfeKCDXI/Df4K7ANuEtbXG2Mdk0Gw=
+	t=1742569155; cv=none; b=SqUqVCEBpaxBruykyIPToALYD20aPFdfU7u49mSsYH50upDaLp4XIKKQKl63unejeQc1GowdNZ4RDIg7uxmlKQHUfX/tampDlHtbHZAlNCfwNTo97VJmp05WcsOL8QRWxwBYZ6tXUppnZScaZOU8BMDQ/ZuGenC4gyKrOLwp/oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742567603; c=relaxed/simple;
-	bh=QW4cJckpG5dsFBolJzYUPI0/ujHzXZViu+nU95169Rc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rFkiMz70bq0x+wB5S3ndkJ7s9tbD9K1advNU4Rukv8qAYShJVcXJgIScQipKif3RCisi00UN4JVEIlikpaAK7jMtrd0cNGrmcZXEMdINbngkGytxNaxKfoQ5VIfPuD+loxye9nk2vKXo0eyHIXqM1MIF8kQFfGmGwnOnM3hU6FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oEyxAcq4; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1742569155; c=relaxed/simple;
+	bh=gLVO5wxzEEPQuhNuCP1PQvtMhRXWVqTwTEOz/3fjcwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jXYbGaEF3TGlseR3gWWEOzkWEy9ze9CHYodMuCd4602ej8D4c0Kd0Mya4lSJC2RMIJYFUiH0jQW0vAHxix3we3sFQoSY2LAQWha+CMnRZbGottEGFadJqBYKJmV6w8+52IKAy/hH5z8x5tQyL/ZpcuDiE7/E0y8Rav1mqznJnPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ntHFYyuW; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oEyxAcq4"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cfecdd8b2so16692145e9.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Mar 2025 07:33:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ntHFYyuW"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ff6e91cff5so3547921a91.2;
+        Fri, 21 Mar 2025 07:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742567598; x=1743172398; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EbWhjmUFxyfN2qMw5Fj6z4IWbMUgKzCZfAKdA8QCVNM=;
-        b=oEyxAcq4bgTm/3LLXZjQQYpM2Dx5n15sYsqbGP4g6ApswxKnyqtpy3waGWGPrGRQxM
-         d2VMjDAtm53jbriVZc0jCJl2yIhGZCrPkT0XRQ0BaIS2f08CWeVFotKvOkAdWuB+lPky
-         QsUsBVB2eIkcwzZ5dbDqPrQ+92sDLU5pLmASKIX+oijbHYnAlzica/NMZ0DEspFp0vC6
-         hZVpIbtDzvi/rwmaA7LLeYi9r81lGkprlhF+fwfowFAoKm4e3yfd76c+uz4Sg5JskYHJ
-         LLgWDlqme4y14Zd+2KTRMdcBemA9Pr7Kf6dE/0NhnaSTpvdObE5O3SZNTq2jkx+JEAob
-         qEaA==
+        d=gmail.com; s=20230601; t=1742569153; x=1743173953; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oXKwGTUsQbiUYQW5joqs6O63fIJid8EztV7QgGhn/ng=;
+        b=ntHFYyuWYCZc9Ujr6gog86g+lnT9Tq/FchqX+FUVEAenw+WL7Hc+PVLBcSnGD4IYQc
+         0ZNAuf4nydKu7CHUaPIXHH016GeEC6O2XDHoAzbIwwykFabOyr6AIOmNYmhHGX9W00g2
+         AfkWtLrzYcaMTNiENybXQx7CLaQd8OBowxQHrv1/oXzD6SGHEH9uu9tKhfJ8sif+kgwC
+         HZM2TmXyjHCTM0KdTccisXYRaZ/FLPAsys5TsZWbZ3ytS/lsSOw6mt7hFOudukymCa8B
+         K7aAef71bYFBQ7KR20kA0nCsLKvmdk39/vE5k+mIvuW21PIyOk/Q2x1oKN2UQo7WUSD6
+         JVJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742567598; x=1743172398;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EbWhjmUFxyfN2qMw5Fj6z4IWbMUgKzCZfAKdA8QCVNM=;
-        b=Ts4vEMaz2Ev2Pf+gO6ZCYMZR4AuXPdOMZTcIRWiOpQtD5iZ9u0Gq9xC/fUXYEkP4aB
-         9aztByF558uyFYdAr9UK794dJIUdEPEBuhkZoFzysB18LFe1Z53evPkfRJJfE5ZmyaNN
-         U3rK5NWxDFSx7XEWOukVjxYYZ9HjQULp1QY7PfjDBNkz8maCqz6+waI9K5SKlhI1nSSZ
-         KgEPaypBg4LEtQkTbb/I49xrtQW8DH5yvakh/84tHD2ZDjw9jUJevL55tlkEhxmgIVMX
-         Zi9VRePGUkSoWDeZMT06Eaxc/CDDkvnBbzw/pLGnE16So997aoyoen9ob8bN1zFvtIQe
-         z+7g==
-X-Gm-Message-State: AOJu0Yxin0dsudLIELvf964A8ohsc4ZAYtS/zjjbJ7jkUSXW1P+p539O
-	GEoUzn8MM/NXaq+Hn8tj6ISSNT4Lr1l3a3FFwTK8Id1NeBEx1m3/LV6saqs9nbo=
-X-Gm-Gg: ASbGncsTsWPDKWDcOro3X8Wv7+st3Zzw5S00xJGsFoSP3OAsNYIZGFWCS3g0tijA/P2
-	lQWy12Z10OI5cYDnWdM/wuVWZ30Eb9949WSGp4Rj2sS0pGHnPdwV2RQQkm6ZSGmLd0ViMu5wAvC
-	xft+5KahXXSgt7XmmGpwnD+fLBYf0FE2orGE0+K5SHNlixn5EOFOLJw+LOcYnMUpdeA+9FGszl5
-	sUyuAgtuLaJMAHU2hDPsYA5PjBXVdIJl7j4MXe9Mh2k7w25FCfVsJmELioW2nnCGKb26k2ketUm
-	TN5bbdxpWZmfXTAmvmLKTao/UK1v5GbkWHKcNdUfx5MkngeULj0SxZMTqU9b
-X-Google-Smtp-Source: AGHT+IHU8ncJgsqaXj0tGoHuTnC1pZgx4iORNc3MWJYiTnMwYUFMAMCz+TWh6hFmRm/3Q0xNW5isMQ==
-X-Received: by 2002:a5d:47c6:0:b0:399:6d54:25ce with SMTP id ffacd0b85a97d-3997f8f9cc4mr2698999f8f.7.1742567598476;
-        Fri, 21 Mar 2025 07:33:18 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3997f934812sm2554206f8f.0.2025.03.21.07.33.17
+        d=1e100.net; s=20230601; t=1742569153; x=1743173953;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oXKwGTUsQbiUYQW5joqs6O63fIJid8EztV7QgGhn/ng=;
+        b=mGJ9AM9gu7maMPa8YfQaUhDspIHtr67QW64q8F9EVEx7D7gvwtmS80FG03kZsWSdk+
+         H03JVNWGd328RAOi4WFIUZDX4ONk/z7QLKPhDPwHARk6blenVQ1I3depRlyYzP7EM4Kc
+         1wgL7uEshATnSdgepciAZVx04yfCOloB857K8J1p4RbrRhLyrGNywt8umSe8gl3wB3bp
+         SMqcZX/JKEF99laax59+XOF5S8CMzREaG3pFB0GMOuoAuE1Q6ACaKQITaudU/QhSAI5x
+         bkWP8Y7Jt1f2Z9dWYByc7Jw9/PO5P5r9imrtUmVcS1cB2XcoCgP6/P/Xzgmlwz051dEE
+         hvCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdhq7t19HW0bALp61qPIZqza3Qo3TFj2NPb57U4u58wE94lOjBUpChnLMN24Bfr9YxFHBNxyCWo2+7@vger.kernel.org, AJvYcCWhSp/VPAoxgoFOW5K8XOygdrJjrUASDW0Ca1pjF4kyF9Zl9cjt9KjnOlni0whKHEp7EBwWfy1luKDtE165@vger.kernel.org, AJvYcCWtMyNY8KnDfsP0r/urel5pKXhCnNGKnb8Bx1zBiROn6j3+iFW4L2MW4tcyuOiFOGUnCOsUjtBB1yl5A14=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx17EYbi4v/AnQrhEAf17YDDHA0b2/Xe5IDeKs3iHap+iTFFtqa
+	sZm9PmJmyuhhfyYnBX4O1q4F5hAWLVJU2dRviwI9rcRJE/93MpUa
+X-Gm-Gg: ASbGncv6QVBeS+XbaGsPRMJ9m10mc+W4gDh1maTIXdMlRk7m+tEJTeMoAzW4MfuP0vc
+	BPCiUdAaIC7ZGGMkNaTtcs2aW6hdQUt4fevsed8MByEBJQqjXn7WfuWxl08lWVMkjZQntl5Bwme
+	Zc8BPHKVtSr1OUmNJ89FkQZskjmSf8SQBYtEuI+fefu/M11Wp6XPw/B2qi4EQSAkDJqurF3yQlP
+	miR4JcIDMTNZBEhyBotS2dTqHm1ci+JrB32JAdaFdjQvPVQDrq5b0MHD4A/VkdO5mKiLAHUXrFC
+	LriapcVxQgsEGPokFCgaihT5zVV1fh4/QsPgWJ+uiMJNPEzqJpWG42nhgg==
+X-Google-Smtp-Source: AGHT+IF6umVYRS212iBtEP1x40AMIpx9W1bRR0L02OmSGE1cdJ1gfB1CHrlYoh+yhHyO6tWkRhmqfw==
+X-Received: by 2002:a05:6a20:7285:b0:1f5:6f61:a0c2 with SMTP id adf61e73a8af0-1fe4300fe40mr8669919637.34.1742569152847;
+        Fri, 21 Mar 2025 07:59:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73905fd517fsm1985221b3a.40.2025.03.21.07.59.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 07:33:18 -0700 (PDT)
-Date: Fri, 21 Mar 2025 17:33:16 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Huisong Li <lihuisong@huawei.com>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [bug report] hwmon: (acpi_power_meter) Replace the deprecated
- hwmon_device_register
-Message-ID: <09675757-8507-4c4f-b143-2212a8f287ce@stanley.mountain>
+        Fri, 21 Mar 2025 07:59:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 21 Mar 2025 07:59:11 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Zev Weiss <zev@bewilderbeest.net>, Ban Feng <kcfeng0@nuvoton.com>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Eric Tremblay <etremblay@distech-controls.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Florin Leotescu <florin.leotescu@oss.nxp.com>
+Subject: Re: [PATCH] dt-bindings: hwmon: Drop stray blank line in the header
+Message-ID: <a85c2222-c2fd-41b4-bd29-79a43b4a451a@roeck-us.net>
+References: <20250321080212.18013-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,39 +86,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250321080212.18013-1-krzysztof.kozlowski@linaro.org>
 
-Hello Huisong Li,
+On Fri, Mar 21, 2025 at 09:02:12AM +0100, Krzysztof Kozlowski wrote:
+> There should be no blank line between the YAML opening header and the
+> schema '$id'.
+> 
+> Reported-by: Florin Leotescu (OSS) <florin.leotescu@oss.nxp.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Commit c812cc42f92d ("hwmon: (acpi_power_meter) Replace the
-deprecated hwmon_device_register") from Mar 19, 2025 (linux-next),
-leads to the following Smatch static checker warning:
+Applied.
 
-	drivers/hwmon/acpi_power_meter.c:405 power_meter_is_visible()
-	warn: signedness bug returning '(-22)'
-
-drivers/hwmon/acpi_power_meter.c
-    398 static umode_t power_meter_is_visible(const void *data,
-               ^^^^^^^
-This is an unsigned short.
-
-    399                                       enum hwmon_sensor_types type,
-    400                                       u32 attr, int channel)
-    401 {
-    402         const struct acpi_power_meter_resource *res = data;
-    403 
-    404         if (type != hwmon_power)
---> 405                 return -EINVAL;
-                               ^^^^^^^
-Negative.
-
-    406 
-    407         switch (attr) {
-    408         case hwmon_power_average:
-    409         case hwmon_power_average_interval_min:
-    410         case hwmon_power_average_interval_max:
-    411                 if (res->caps.flags & POWER_METER_CAN_MEASURE)
-    412                         return 0444;
-    413                 break;
-
-regards,
-dan carpenter
+Thanks,
+Guenter
