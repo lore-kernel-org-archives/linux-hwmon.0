@@ -1,248 +1,227 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59510229B26;
-	Fri, 21 Mar 2025 17:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67021D8E07;
+	Fri, 21 Mar 2025 17:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742577004; cv=none; b=OxlFEDSYxUSd4V5dTlinKdr3cJ1I0zpkIPx6Ksu5ppVQAyzZDaFkqotFvZtrx5Kspap65b+gsTDLGiLgaJdCawP7aCRVKbvyweqr+hqJVRjxICScaNQMosmPS3fFIRvG3FRcS5NgTTAEol2Avb22f290RDVgzfZNnC7jvKvgDzY=
+	t=1742577415; cv=none; b=M0PjbBFbFz///KG9imD33Tv3BO/KfQMvry5hpIFqmtp4mKnJ5sL7EACXgKc8mvpyQ2ukgoWx82ZsKei9KvJxFduroklvC5zFsvJ7tgYvMM9+OdzmA+DRBjEgC1HNTBIuudjMS46JqnB1i+RcfkLzSubrkcJ8enbCX0VF6+OIqSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742577004; c=relaxed/simple;
-	bh=Jf9O7KjMNA7NxwmRd31l+c7sfUh3Eaqc9SV8oiR4vQw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oUKziZW3TrYz3fKULWQTqZMvuxFcThJb/U7lGXUXarFVWD85YQmAnypHC2Es3I9/oiO7WYtRP2PoCmv/xT565tHVJekXdd5a/WdbW7bnBVbbdYbU7ZhgES9ntUA8FYTlkZwc9q7Gd7K+F2ka8iz9mL0+6Efyr5zZFJqRMVywTGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZXwNoL6; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1742577415; c=relaxed/simple;
+	bh=mhyr1Efzto/6WdPtZi0/MX9Rx1suko3LmuAnegYGxDI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=NPnM0HEbXhyy7QbOK/JEH9gX3ajuAjphGUGLQYLxQpma6Rp2mMVrpYf3gQJMA+FjggJPf+XgGYyID/kUH1W+COuOEDFk5wsCjsKhyf+7yX6EPULnzesdDFBTOJ0YNALnEU5hnv/B207zkzg1K0JReg31oEyrxmhKSIX/AHbWMw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArgHnKYI; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZXwNoL6"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2260c915749so32383875ad.3;
-        Fri, 21 Mar 2025 10:10:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArgHnKYI"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22409077c06so25560505ad.1;
+        Fri, 21 Mar 2025 10:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742577001; x=1743181801; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uztsJ7JzvIY981dArFAH0tUKF80EDOKJKLoCf65usL8=;
-        b=lZXwNoL65BjTcm6hc2GdLqorjndqIDKzzaYLHmlWmjmhVscRGC95MGHZ6xmLm2Ju4R
-         4AFzkFoAk66Xyg0o/K/dmQfIzervYu2o+G82LqvkI9Nw3x1nRX77TiRsjETGXiFSrvIU
-         vB+tNte/8V9D1RVGIP7eGGw/KfxQ3v0BXiZVS2UImiBaRSn6QY8XbTNS6kfL4v/pZMd+
-         qDj3PQpvXysvoMfe8vTe1vTkCgtq7N4oOnakZuDyefXZguPI4+QxxF9+tVtK8XtEAWkW
-         JvIGgyaJUtKh4vFwxBXJATpaL4KslAECg43p5DjIQUhvtxJlc+Vo/qgj7/C4uB3TBne9
-         h7jw==
+        d=gmail.com; s=20230601; t=1742577413; x=1743182213; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8i//BDa5v0dvJDkEA2fd7PHT9jRJc1TXdcY6VlZ8X1s=;
+        b=ArgHnKYIVTeGvwWoWklV2N6unCxiGEUcy6rTQEKVtL3dLUCbKuU+SKWsGH05x56Dfh
+         X4d4ujZybzkgi7Bvf7zJ0BbkfD0hBMBN7EivXotFMA4Wkj6fEMXgvF+1iZImvBtmJc/z
+         gNS+V/rxB4RsfBIHTHrIj0stxkZUqLowD084r4n+7Xsscg9U5tqBoQbNBmQgWN7tBHuh
+         VN0ZcwZw57Fq8+BkNdyaEmdm4RZCvdMiCDvbvlNaZ/R+sn5ft5r23dh6rtvKGnGMdDHJ
+         G2hS1ZjCzAElmjEHYsNTmyHNhLCPsR/uuYKIAXHUfmQdPf/1Y/ehpm4qDrgRlcVOGaP9
+         fgoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742577001; x=1743181801;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uztsJ7JzvIY981dArFAH0tUKF80EDOKJKLoCf65usL8=;
-        b=ee7aOAkms3Nc7m2To+k2qWeGCh9C5jxJoKbJ3zt6bXIqEU/MEPD/uKag22JOdQjmnH
-         0ygULqFO9iAkhIYxWkMAY8x2442BoFzRRkxv82qRCz3t5gmEbGQjrENC1PBZQIF+KS0i
-         ybFkILQATgrYHFOv3RLkK27NX2DLmFJOTLzdwGLQybK2vuzTgeM7rJquGfYwTltT2BOL
-         xjgGLaWOCNZjSJAwIk7yzfjsmNnTsdxga9aRyprEuPbq5UJtzaxviaAcferIce0myV7S
-         l19aMVpsCF2G9EC39AEF4wGZ99c9myRTcCazKV6pngOx8MalL4g+AkdCmNkclhPi0fKy
-         bjTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU07vQ1HYTILz3qU0Wkt+Ty+N5ItBaSNtThrBwocKIEFH1+DOqMqcA/j2PAcXU2TJKH8q7u8iPTvjzFx7M=@vger.kernel.org, AJvYcCWM9VD9+AS6FB0fyo24EzU/bYWn/MMY9MF3AyC8DTGWJdypbJJ6i6dkekUpnACl4J9xM2nM6kuGnfo9@vger.kernel.org, AJvYcCWbdaPKTkt9jbrNmrNJ07hl6xf/r+JQijwpAaJUqHZN11i16nMBf2fY9KOG9sU4OSpiZqeVd45Y3JRXFsAZ@vger.kernel.org, AJvYcCXf6iQjVLvwgcZNHXnrvmn3MhYkOWq+XbSCLMqtDUMW/CnJeCAGB4OmydpWqqacqOvbZ2+Uzma+Sck5@vger.kernel.org, AJvYcCXpoQi/n3Hij5KDOFG0PKmbNf+KRBn2c8IVmhMMXhWmH0+hJ5lIstqlG+pmkCHpmV0LO7Nn7Z8Ignkn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9t1e167A55df+4DpEsc2wKK2Lk+0ImRsNGM9RABaSc1KaYaZs
-	6IlTtZHOAzfKyvM1t7eGB5sNf3RpwUFAE03WtuDZIm9ul2Tlsl1/
-X-Gm-Gg: ASbGnctyUZIeZLPZmgzTxQsrWrjqUSHYQqhfqOyKHWDYScdz+Ts8QChBjztWHRkNhkq
-	r5DyMoG5KZ8U4abWPPej38WsfVQymJEdWKEw8+7zzuKYpen4nqzbBE4L6TW1bnpeksMd772W6e4
-	coPrCSAC/fcPoRqjNPvuXfTW2uX2/vNwRMDH12lyQZ4rhR+jdZMu2HkpSs2c4jtUmy9IsLMCyE6
-	hPR9SyIIq8NssKQfIKooWvQ134xTTwjQTL8oGofhaLbgyB1rNoW7eQ6ylDSECNtaoPz8W/S35yj
-	1a69OP1k72Qh7sInQAf6V2OaS05Cortj4SaiEGqVBaSiea8hKqzrBXMJEEUf9PPGGSpWRv37+81
-	DdsPVerORKV8f+owWyw==
-X-Google-Smtp-Source: AGHT+IHtcpZdirGnF20GsQ/Lw15UUPPEPMY1zNwB4lkIWMtRuLnEhyFubklIvJ0hyQuY5L2tiR7fGQ==
-X-Received: by 2002:a17:902:dacd:b0:220:d257:cdbd with SMTP id d9443c01a7336-22780e2a4c4mr69685285ad.48.1742577001190;
-        Fri, 21 Mar 2025 10:10:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811d968asm19491495ad.162.2025.03.21.10.09.59
+        d=1e100.net; s=20230601; t=1742577413; x=1743182213;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8i//BDa5v0dvJDkEA2fd7PHT9jRJc1TXdcY6VlZ8X1s=;
+        b=vO6Epo/oVeoPHlFm+MIpxNHYGOemqt51TJNRqYPZhcztJGVdiUXVtjE1cvWVzAUhoi
+         NW3SVGT49axtQzJ0qsm1kD7BXq/gh+z6YrSXR2rhe20VtAXpFdZ/DBtM4MjLDR945STx
+         ujOgBp0SHeT8JzD04bxcRJ29JZixEYa/2qu9xC1cYusC1NosFwZXMuP96LZsZFGWLarC
+         vV+j10LEayyVOwMZeNmW7S69Lm2BGvuKeKrFgLfPhkK8jWY7NQxdMMa8DKwc4jnVYIps
+         DbNqG3xW6wg6EL8WdURxtG1qaQAPoplFvvtjq9PEO5lJ+XF4Ty5VyLuoQVdhBPNB+Qyj
+         xTqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPxJGaucHqdZylTbKPGoq5vN7DjUJ6rKjVvSdnCfEX42p0xGN0taWoBLKLonuY0kVsqPxEunSA/BU=@vger.kernel.org, AJvYcCV1cBttheE8wXo6ZTKIbq91yKkHSKw0WyyNW0hN7qhau57o2/KQTjbtcGJTgH7S39dXEUKBYdcXAOU=@vger.kernel.org, AJvYcCWQPTMcULDbk2mW035Md0UKFzBNKpb4lermOpxH0F6/WX3sZfoTymdx1UDp1P6KLnIT/7jphGgDC14LDbpELU0wHbgzqA==@vger.kernel.org, AJvYcCWWFx5eXW4lHQtFzOJuqzrs7zldjgRQj58cWkdgQeH53mDVYKm7bt+268nQmc7sGIJycqYNyC37T4CnG995@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ9dNgYDCJ1fpF/sbMrB85SXmXGseH/NnOESjBwwbIJC2akI+Q
+	hNLavZNV0bsnjlNGKnOiU2eoPb8ZN8n4u2wuYZYCkGFAJujHkq0l
+X-Gm-Gg: ASbGncvSHMA6NbRdkdIe5naQa3VngMvUPbf1qjtftzaWxqoAIJfGhOUiRlteggJBMOv
+	TiZT54gtdvCiS0LYBxayHAv7oNxjebMpvWvdAIj1PeH19Osfz7foG5dztJLlJI05vlfySBH3bV4
+	gjs9hYSYE2Ecox9aEA6BFSMlC6BYpDq2nOKfRbPq+YYtsSC2P2TJVCkNqMm8bJCta+uMwn+Ar/x
+	JPV27pdfDTFwFwSslRtxxMfP5OUO/N9iz0vvUIqvlJCE2S7xkSfpeowbyLi96+GpxmxSc1jJZ1Z
+	K/dlP2loiCL/gTJkq3uOoMjx5HvOWa0SP9ZuMDZniGZHiMIAF0i4oDC3Hok=
+X-Google-Smtp-Source: AGHT+IH+1PKeHYLQOfk2UsR/Gh4n8yHVe1Xpnr1hVL7En1XlYgMolzB55S7fjiy3RV/oTo2BMebukA==
+X-Received: by 2002:a17:902:cec8:b0:223:668d:eba9 with SMTP id d9443c01a7336-22780c5587bmr84105385ad.10.1742577412847;
+        Fri, 21 Mar 2025 10:16:52 -0700 (PDT)
+Received: from [127.0.0.1] ([172.102.8.48])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811d9f1bsm19695945ad.166.2025.03.21.10.16.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 10:10:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
-Date: Fri, 21 Mar 2025 10:09:59 -0700
+        Fri, 21 Mar 2025 10:16:52 -0700 (PDT)
+Date: Fri, 21 Mar 2025 07:16:50 -1000
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+To: Antheas Kapenekakis <lkml@antheas.dev>, platform-driver-x86@vger.kernel.org
+CC: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ Kevin Greenberg <kdgreenberg234@protonmail.com>,
+ Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
+ Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org,
+ sre@kernel.org, linux@weissschuh.net, ilpo.jarvinen@linux.intel.com,
+ hdegoede@redhat.com, mario.limonciello@amd.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v7_00/14=5D_hwmon=3A_=28oxpsensors=29_Add_dev?=
+ =?US-ASCII?Q?ices=2C_features=2C_fix_ABI_and_move_to_platform/x86?=
+User-Agent: Thunderbird for Android
+In-Reply-To: <20250319181044.392235-1-lkml@antheas.dev>
+References: <20250319181044.392235-1-lkml@antheas.dev>
+Message-ID: <2798B14C-C8A4-4976-AF40-22A1E0FFB0FC@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
- <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
- <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
- <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
- <PH0PR03MB693831397416C4247F8BA58D8ED92@PH0PR03MB6938.namprd03.prod.outlook.com>
- <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/21/25 09:53, Encarnacion, Cedric justine wrote:
->> -----Original Message-----
->> From: Encarnacion, Cedric justine
->> Sent: Wednesday, March 19, 2025 12:10 PM
->> To: Guenter Roeck <linux@roeck-us.net>; Krzysztof Kozlowski <krzk@kernel.org>
->> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
->> Conor Dooley <conor+dt@kernel.org>; Jean Delvare <jdelvare@suse.com>;
->> Jonathan Corbet <corbet@lwn.net>; Delphine CC Chiu
->> <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
->> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->> Subject: RE: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>
->>> -----Original Message-----
->>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->>> Sent: Tuesday, March 18, 2025 11:17 PM
->>> To: Encarnacion, Cedric justine
->>> <Cedricjustine.Encarnacion@analog.com>;
->>> Krzysztof Kozlowski <krzk@kernel.org>
->>> Cc: Rob Herring <robh@kernel.org>; Krzysztof Kozlowski
->>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean Delvare
->>> <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>; Delphine CC
->>> Chiu <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
->>> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
->>> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>>
->>> [External]
->>>
->>> On 3/18/25 03:03, Encarnacion, Cedric justine wrote:
->>>>> -----Original Message-----
->>>>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->>>>> Sent: Friday, February 28, 2025 12:33 AM
->>>>> To: Krzysztof Kozlowski <krzk@kernel.org>
->>>>> Cc: Rob Herring <robh@kernel.org>; Encarnacion, Cedric justine
->>>>> <Cedricjustine.Encarnacion@analog.com>; Krzysztof Kozlowski
->>>>> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean
->>>>> Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
->>>>> Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>;
->>>>> devicetree@vger.kernel.org; linux- kernel@vger.kernel.org;
->>>>> linux-hwmon@vger.kernel.org; linux- doc@vger.kernel.org;
->>>>> linux-i2c@vger.kernel.org
->>>>> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>>>>
->>>>> diff --git a/drivers/hwmon/pmbus/pmbus.h
->>>>> b/drivers/hwmon/pmbus/pmbus.h index ddb19c9726d6..289767e5d599
->>>>> 100644
->>>>> --- a/drivers/hwmon/pmbus/pmbus.h
->>>>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>>>> @@ -512,7 +512,6 @@ int pmbus_regulator_init_cb(struct
->>>>> regulator_dev
->>> *rdev,
->>>>>    	{							\
->>>>>    		.name = (_name),				\
->>>>>    		.of_match = of_match_ptr(_name),		\
->>>>> -		.regulators_node = of_match_ptr("regulators"),	\
->>>>>    		.ops = &pmbus_regulator_ops,			\
->>>>>    		.type = REGULATOR_VOLTAGE,			\
->>>>>    		.owner = THIS_MODULE,				\
->>>>>
->>>>> Maybe someone can check if that works.
->>>>>
->>>>> Thanks,
->>>>> Guenter
->>>>
->>>> I'd like to follow up on this one. As of this writing, my
->>>> understanding is that the dt-binding should not expect regulators
->>>> subnodes for simple devices like this. There is already a similar
->>>> binding as mentioned in this thread particularly
->>>> "dt-bindings/regulator/infineon,ir38060". I think a binding without
->>>> the subnodes should still work with or without the change above.
->>>
->>> Interesting. I am not sure if it really works, though. I looked into
->>> the regulator code, and I don't immediately see the code path it would
->>> take.
->>>
->>>> With this, I'd like to know what the specific next steps are to
->>>> continue this patch series.
->>>
->>> Can you try on hardware using a devicetree file which doesn't have the
->>> regulators node ? If the current code works, just submit an updated
->>> (simplified) .yaml file and we should be good. If not, I have an
->>> untested patch series introducing another macro which doesn't set the
->>> regulators node.
->>
->> Okay. I'll test this and get back to you.
-> 
-> The "simplified" dt file (without the regulators node) does not work with
-> the current regulator_desc macro. I have also tried simply removing the
-> regulators_node setting from the regulator_desc macro, and it does not
-> work too. of_match looks for a certain regulator name in dt, and it seems
-> like it must handle NULL cases as well as suggested previously. I would
-> appreciate if this would be also verified on other ends. For now, I think I'll
-> wait for another macro to be introduced in pmbus to support this kind of
-> bindings.
-> 
 
-Figured. As it turns out, there is also a patch series pending which tries
-to fix the problem for ir38060 by changing its bindings.
 
-I'll dig up my patch series to add a new macro and send it out as RFT.
+On March 19, 2025 8:10:27 AM HST, Antheas Kapenekakis <lkml@antheas=2Edev>=
+ wrote:
+>This four part series updates the oxpsensors module to bring it in line
+>with its Windows OneXPlayer counterpart=2E First, it adds support for all
+>2024, 2025 OneXPlayer handhelds and their special variants=2E Then, it mo=
+ves
+>the module to platform/x86 to allow for including more EC features=2E
+>
+>Then, it adds the new charge limiting and bypass features that were first
+>introduced in the X1 and retrofit to older OneXFly variants and for
+>controlling the turbo led found in the X1 models=2E For Bypass, it adds a=
+ new
+>charge_behaviour variant called inhibit-charge-s0=2E
+>
+>Finally, it performs a minor refactor by moving around switch statements
+>into their own functions, in order to allow for fixing the pwm1_enable AB=
+I
+>in the final patch=2E Currently, pwm1_enable sets the fan to auto with th=
+e
+>value 0 and allows manual control with the value 1=2E This patch makes it
+>so 0 sets the fan to full speed, 1 sets the fan to manual control, and
+>2 sets the fan to auto=2E This requires both setting enable and the fan
+>speed when the enable sysfs is written to as 0, hence the refactor=2E
+>
+>As this is a minor ABI break and there is userspace software relying
+>on this previous behavior, the last patch also changes the /name of the
+>hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module conventions=
+)
+>such that userspace software that relied on the previous behavior can be
+>retrofit to the new kernel while enabling correct functionality on old
+>and new kernels=2E Failing that, software that is not updated will just
+>stop controlling the fans, ensuring no malignant behavior=2E
+>
+>---
+>V6: NA
+>V5: https://lore=2Ekernel=2Eorg/all/20250317155349=2E1236188-1-lkml@anthe=
+as=2Edev/
+>V4: https://lore=2Ekernel=2Eorg/all/20250311165406=2E331046-1-lkml@anthea=
+s=2Edev/
+>V3: https://lore=2Ekernel=2Eorg/all/20250309112114=2E1177361-1-lkml@anthe=
+as=2Edev/
+>
+>Changes since V6:
+>    - Fix compile error due to extra const=2E My bad on that one, did a
+>      double check on a device too=2E
+>
 
-Thanks,
-Guenter
+For the remainder of the series without my tag:
+Reviewed-by: Derek J=2E Clark <derekjohn=2Eclark@gmail=2Ecom>
 
+>Changes since V5:
+>    - Separate doc entries with Fixes as by Mario
+>    - Add sysfs file name to subject as per Thomas
+>    - Make tt_led and tt_turbo const as per Thomas
+>    - Align a couple of structs as per Thomas
+>    - Remove excess battery check as per Thomas
+>    - For Thomas: devices without a BIOS update battery control is a NOOP
+>      OXP is a boutique manufacturer for now, so gathering information
+>      about old devices to add BIOS checks is not practical unfortunately
+>
+>Changes since V4:
+>    - Fix nits by Hans
+>    - change inhibit-charge-s0 to inhibit-charge-awake
+>    - use devm_battery_hook_register and power_supply_unregister_extensio=
+n
+>      (based on cros driver)
+>    - move charge behavior patches to the end to make the rest of the ser=
+ies
+>      easier to merge
+>    - CC platform-x86 and power maintainers
+>
+>Changes since V3:
+>    - Fix nits by Derek
+>    - Remove the hwmon documentation as it is not required for platform
+>      drivers (suggested by Guenter)
+>    - Add ACPI_BATTERY and HWMON depends to Kconfig
+>      (reported by kernel robot)
+>    - Homogenize driver into following reverse xmas convention
+>
+>Changes since V2:
+>    - Add ack by Guenter, move platform move patch to be third (not first
+>      to allow for device support backport to lts kernels)
+>    - Rework patch text, especially in the refactor patches as per Derek
+>    - Change bypass to use charge_behaviour instead of charge_type, as th=
+at
+>      ABI supports capability detection and is more appropriate
+>    - Move battery attach to probe instead of init
+>    - Fix bug where reading tt_led would instead use the turbo register
+>
+>Changes since V1:
+>    - Add X1 Pro, F1 Pro variants
+>    - Fix minor typo in initial patches
+>    - Convert oxp-sensors into a platform driver, as it is no longer
+>      considered a hwmon driver=2E
+>    - Add sysfs documentation and myself to the MAINTAINERS file
+>    - Update documentation to state that this is the OneXPlayer/AOKZOE
+>      platform driver, and that support for Ayaneo/OPI is provided until
+>      they gain their own platform driver=2E
+>
+>Antheas Kapenekakis (14):
+>  hwmon: (oxp-sensors) Distinguish the X1 variants
+>  hwmon: (oxp-sensors) Add all OneXFly variants
+>  platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+>  ABI: testing: sysfs-class-oxp: add missing documentation
+>  ABI: testing: sysfs-class-oxp: add tt_led attribute documentation
+>  platform/x86: oxpec: Rename ec group to tt_toggle
+>  platform/x86: oxpec: Add turbo led support to X1 devices
+>  platform/x86: oxpec: Move pwm_enable read to its own function
+>  platform/x86: oxpec: Move pwm value read/write to separate functions
+>  platform/x86: oxpec: Move fan speed read to separate function
+>  platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
+>  platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
+>  power: supply: add inhibit-charge-awake to charge_behaviour
+>  platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+>
+> Documentation/ABI/testing/sysfs-class-power   |  11 +-
+> Documentation/ABI/testing/sysfs-platform-oxp  |  25 +
+> Documentation/hwmon/index=2Erst                 |   2 +-
+> Documentation/hwmon/oxp-sensors=2Erst           |  89 ---
+> MAINTAINERS                                   |   7 +-
+> drivers/hwmon/Kconfig                         |  11 -
+> drivers/hwmon/Makefile                        |   1 -
+> drivers/platform/x86/Kconfig                  |  13 +
+> drivers/platform/x86/Makefile                 |   3 +
+> =2E=2E=2E/oxp-sensors=2Ec =3D> platform/x86/oxpec=2Ec}    | 624 ++++++++=
+++++++----
+> drivers/power/supply/power_supply_sysfs=2Ec     |   7 +-
+> drivers/power/supply/test_power=2Ec             |   1 +
+> include/linux/power_supply=2Eh                  |   1 +
+> 13 files changed, 540 insertions(+), 255 deletions(-)
+> create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+> delete mode 100644 Documentation/hwmon/oxp-sensors=2Erst
+> rename drivers/{hwmon/oxp-sensors=2Ec =3D> platform/x86/oxpec=2Ec} (52%)
+>
+>
+>base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+
+- Derek
