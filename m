@@ -1,134 +1,309 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CD81388;
-	Fri, 21 Mar 2025 07:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC641F03D9
+	for <linux-hwmon@vger.kernel.org>; Fri, 21 Mar 2025 08:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742543985; cv=none; b=oyHIuGmT9vJ6SJvODSe/+DAKzsPDRNlmgcqMhb9tmwH4Br+8hAt61VQ6IAp3ryvAs/CjFy+AGHXoynPndcuwWGRaOlscEIFDtyG5+/Xg9ck/XNeGQgZ0My4tCLGCUPd3GgI2Ae26YKZlTR3pgSDLTYBlFdZd6ZCu+EQWoAUKoHc=
+	t=1742544140; cv=none; b=rzUzfYs454xMorIgKj7qDgTh6bsIO/lSivCJwMtRfG887aJWkihvgOYp7UEhwnF9NIanlIgjowuGcLEfVdGVsaHYX6JtNrsRmz2wzA7yXIskk1CtCtfb3ent4457jycEYfgHi7/tg3ZlJV8TWQ7o7GC5iuoXoZuX9dwHoHXN/8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742543985; c=relaxed/simple;
-	bh=pOn9x6VL60RWSKq8tUSuctOL+F1TrQS8bDL/t0ctgOU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F7sX6ozOf4iKQLbSa2OXF//pnGXASw4YaYh3JrI3aeeZoubE9aOXtkcIByfxOuJDa9hmNpIFFixGu5OxNSmqurQN2fXLYT4LlvU1SbMBwugpM2wDQQs0ZiAw/RGzsCe4h5HR9DYft5NzRaUckq/4WtwogxHSD4d0ZP/H6uBj8/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzetHDiP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742544140; c=relaxed/simple;
+	bh=RrnSN/CN2kZxgvV22FlvT89WAQGZ7oBHakES/ZqzmVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bRnHtMtQvrXSulvnM64kh+M3SvivogMV89WgAzqPQSVQZAd0BaEWCzBv+l+4qbFIf22nXeW5e327ZXq9gtHupuFZKPMpMXtvEtwzGEEm6/xd1cLE4/lWdvfEq5jap39F5EZ1osYlxP88zSQQfCOmmryVMtx4dee6r3VgnhmRUs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sxSbvNNc; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzetHDiP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC3AC4CEE3;
-	Fri, 21 Mar 2025 07:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742543985;
-	bh=pOn9x6VL60RWSKq8tUSuctOL+F1TrQS8bDL/t0ctgOU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HzetHDiP1v5WvZgW7SchOuLQEzW6PYuDsemfUwsjvpojaS0Cou9ctohlNmJhR/+eM
-	 vnqIBEHLmv4HivDJ0JQ+cAGzlAYXOdMiFtbrNDuR1mdLRkEHmbOyhQu9gHQcK2invq
-	 jNO6bWbiXpjPfAvICaWaJ0YKh8DyqHgijw0EfME6fRLAD4peQItcdbxrUGbZMaPsYE
-	 LCZttXhS80gXD0d5ru1Wn+gER79PZWmZiyzxyi67NcpKKhV/crmOlUCx8gcPSFa/cL
-	 p8Ot8loK6oZqEFM2HjOFEOoYYkBDzPpYNVog33tdvxKYTrACFpwKeCJ6uXBIG4Fh5y
-	 svQXTR8tRAoHQ==
-Message-ID: <b99eee70-5231-43fe-bff8-db92d78153e7@kernel.org>
-Date: Fri, 21 Mar 2025 08:59:36 +0100
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sxSbvNNc"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3978ef9a778so86868f8f.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Mar 2025 01:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742544137; x=1743148937; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/paNAb4b5evHCNjWAz+ZF/7zT+ALWwpQj48R9FGXL6o=;
+        b=sxSbvNNc9jFwWIk8FRxAD+tz/GquRwB0LYjgk+5y9R67Ii1OXHz9hSxsiDcH9NG69f
+         tnDaZlyyavzbNK2WJiaIC8N1evf3PhA0wQLlrm7vYXQjyE8tWj/lX+1YWILdpxvSlBrE
+         5goSlp53pUImzaud5ZAH+aheqfbdW4D9KbmbPdKEPs0rt+rLXsU7Y1J0UAx30vXu+vGd
+         9OvqWEhXtVFVOW9zaKFqO56RrLLZ6Pff/vRzCujDkXFEAJ8y5n0KveCDu7GakHBb73Y0
+         RlvWxcrY/5HtmNeO6dX7I39poRqOZsrXHrKA0V2gg3mn/pqvIk05tiis61fxaA1JEaSC
+         mzSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742544137; x=1743148937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/paNAb4b5evHCNjWAz+ZF/7zT+ALWwpQj48R9FGXL6o=;
+        b=Ppt80/kvAeIPTfLBArsy71dGw3ztqk0WOLVBK9iYPtNKoVkgsEA8AT2sL4KhhlOp6k
+         DT9/EXSoz1kNfTR+B9eDJwMYdgiEaVNXiYke0nAJLk9RITqWq6o1kBICMTuiMVJy+W8R
+         2MNzkIl5yOofMw5oL/22VSBi0Z9Bh7aHO7PTA37UClVCxKML6W7H72wgHwnEi83636Nb
+         2NtjBS8K0+uiZb+B6Vu3J9IQpoN80hmiOq+IEGXgxBMEgu6INVjNyn75QD4bc2X9Iqov
+         LuqdlNufKlaxAiJyLIM+LrXnvjVzVgIXFCmv9X4lbfelOJfTH+42xTEN+xs2tB0EU+B7
+         G5mA==
+X-Forwarded-Encrypted: i=1; AJvYcCWv08g+8AoOk3pd8F60RhXZPg4JSvWu+zvr4YVzYXJhQynqA1DS3tOK6YZP/qUQoLoSLo7Zi3vY05j9NQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXie27jVJzhKZC3y8QCpTjCEm0wflhOkn8WErJ5hyecgWBbdTR
+	CJHmEnCb9VWOUqsYY7REM1dptjv9hUaBZPIOc9n/qp8ikiKqpziIzLaLL13LfRgy9bsHLlYZcPQ
+	p
+X-Gm-Gg: ASbGncsMSfNZJTlIZjHiLOCytgGAjI7zOYWTFiv3eBPKKEci6n0KpFoxM6e0nOD5SUG
+	lN5ToENsPPzyNvzvtgob/9e88Ci/AXdJ0CJbypZkE5W6ASKirDZnHjrzKXkkVoGpjhV3xbWCEY3
+	Ck/pfl3cpRKA8dHry9qxMCzo2W0DHAg5PTE9evQOG048iHDGDmW1w3Lag8hs7zh1c5NA9sLwS4a
+	1k4BVbkaBMsKYGk7hrEeIa4G7yNYw4qpKRj2Id6/tbcwvY9bARL0vHtkPBWVS/qh0G3+8Hp4Bcf
+	+Z00va5XoGrt0FOBn1aGzkbwX35bIJuQyD5/+uiAH0Nu4461i3O92KXEMg==
+X-Google-Smtp-Source: AGHT+IF2AHef/qkj99JoiBNbLQIBcqaey9hWmPacciUSVdx3y1EUY5tMwczXWozBM2SM6z3OiVGoQQ==
+X-Received: by 2002:a05:6000:2a4:b0:391:2acc:aadf with SMTP id ffacd0b85a97d-3997f904f52mr755069f8f.6.1742544136598;
+        Fri, 21 Mar 2025 01:02:16 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9a3f81sm1697775f8f.35.2025.03.21.01.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Mar 2025 01:02:15 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Zev Weiss <zev@bewilderbeest.net>,
+	Ban Feng <kcfeng0@nuvoton.com>,
+	Robert Marko <robert.marko@sartura.hr>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Eric Tremblay <etremblay@distech-controls.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Florin Leotescu <florin.leotescu@oss.nxp.com>
+Subject: [PATCH] dt-bindings: hwmon: Drop stray blank line in the header
+Date: Fri, 21 Mar 2025 09:02:12 +0100
+Message-ID: <20250321080212.18013-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add Microchip emc2305 support
-To: "Florin Leotescu (OSS)" <florin.leotescu@oss.nxp.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Viorel Suman <viorel.suman@nxp.com>, Carlos Song <carlos.song@nxp.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>,
- "festevam@gmail.com" <festevam@gmail.com>,
- Florin Leotescu <florin.leotescu@nxp.com>, Frank Li <frank.li@nxp.com>
-References: <20250318085444.3459380-1-florin.leotescu@oss.nxp.com>
- <20250318085444.3459380-2-florin.leotescu@oss.nxp.com>
- <20250319-optimistic-positive-peacock-cc26b1@krzk-bin>
- <DU7PR04MB111631E2E5B074A306033D001FFD92@DU7PR04MB11163.eurprd04.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <DU7PR04MB111631E2E5B074A306033D001FFD92@DU7PR04MB11163.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 19/03/2025 12:54, Florin Leotescu (OSS) wrote:
+There should be no blank line between the YAML opening header and the
+schema '$id'.
 
->> No blank line here. Use existing code as template. If you find such code, share so we can fix it.
-> 
-> Thanks!   I will remove it.
-> 
-> Identified similar blank line on the following dt-binding files:
-> 
-> 1 adi,ad741x.yaml
-> 2 adi,adm1275.yaml
-> 3 adi,ltc2991.yaml
-> 4 maxim,max20730.yaml
-> 5 maxim,max6639.yaml
-> 6 maxim,max6650.yaml
-> 7 nuvoton,nct6775.yaml
-> 8 nuvoton,nct7363.yaml
-> 9 nuvoton,nct7802.yaml
-> 10 ti,adc128d818.yaml
-> 11 ti,ads7828.yaml
-> 12 ti,ina2xx.yaml
-> 13 ti,lm87.yaml
-> 14 ti,tmp513.yaml
-> 15 ti,tps23861.yaml
-> 16 winbond,w83781d.yaml
+Reported-by: Florin Leotescu (OSS) <florin.leotescu@oss.nxp.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/hwmon/adi,ad741x.yaml      | 1 -
+ Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml     | 1 -
+ Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml     | 1 -
+ Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml  | 1 -
+ Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml   | 1 -
+ Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml   | 1 -
+ Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml | 1 -
+ Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml | 1 -
+ Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml   | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml      | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml       | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,lm87.yaml         | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
+ Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
+ Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml | 1 -
+ 16 files changed, 16 deletions(-)
 
-Oh, that's quite a lot. Thanks, I'll fix them.
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ad741x.yaml b/Documentation/devicetree/bindings/hwmon/adi,ad741x.yaml
+index ce7f8ce9da0a..236d8b52ef85 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,ad741x.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,ad741x.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/adi,ad741x.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+index fd79bf2e0d16..ddb72857c846 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/adi,adm1275.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+index 011e5b65c79c..1ff44cb22ef4 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2991.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/adi,ltc2991.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
+index 93e86e3b4602..8af0d7458e62 100644
+--- a/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/maxim,max20730.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+index 4f5837a30773..139a95e00fe5 100644
+--- a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
+index 2c26104a5e16..24c7697fdc1a 100644
+--- a/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
++++ b/Documentation/devicetree/bindings/hwmon/maxim,max6650.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/maxim,max6650.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+index e3db642878d4..244470282890 100644
+--- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/nuvoton,nct6775.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+index c1e5dedc2f6a..625fcf5d3b54 100644
+--- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7363.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7363.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+index cd8dcd797031..c16a33227e94 100644
+--- a/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
++++ b/Documentation/devicetree/bindings/hwmon/nuvoton,nct7802.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/nuvoton,nct7802.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml b/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
+index a32035409cee..78e3d97e2ae5 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,adc128d818.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,adc128d818.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml b/Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml
+index 926be9a29044..fb80456120e1 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,ads7828.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+index 05a9cb36cd82..afcb3dbf90dd 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,ina2xx.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,lm87.yaml b/Documentation/devicetree/bindings/hwmon/ti,lm87.yaml
+index f553235a7321..63d8cf467806 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,lm87.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,lm87.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,lm87.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+index 227858e76058..cba5b4a1b81f 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,tmp513.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+index f58248c29e22..ee7de53e1918 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/ti,tps23861.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml b/Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml
+index 31ce77a4b087..6971ecb314eb 100644
+--- a/Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml
++++ b/Documentation/devicetree/bindings/hwmon/winbond,w83781d.yaml
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-
+ $id: http://devicetree.org/schemas/hwmon/winbond,w83781d.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-- 
+2.43.0
 
-
-Best regards,
-Krzysztof
