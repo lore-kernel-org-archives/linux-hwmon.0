@@ -1,67 +1,67 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0FB137923;
-	Sat, 22 Mar 2025 16:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B57022D4F9;
+	Sat, 22 Mar 2025 16:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742659576; cv=none; b=t1hsqmOGNZ2Pv5Tzed2+0Q6cYsL/QfN7rLvRORqBZURANSWXsL1UXXY8Lm4uoxJdyi6djAQyzdfQaGASh/t4SmjXcKIYr+//rIr8ZmWC/Qo+TlGlB9Wesh611/vxi+oOGPKqYXp0Yrc1RxFHufrT38jZNW2Pfv1koJxuGqm2ly8=
+	t=1742659844; cv=none; b=croWRGgwfz3rlGuC1CUQd+wC02HR/QcRA2uC4fS8OTBJ6rkBaw0xCVYGgnr+iOesp1XImR2Koq70CWzNZm2QBFvxtLm8s/GKblBujk5iNtX90j0LFxYVfiqWMMn4fCmySru61TuI4Yzl787+SyeJN3z5a/QB140bfAFhDP5z0MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742659576; c=relaxed/simple;
-	bh=dbdQwyvphXuExkL/c1dTdWHb6ZTyIyn2zmq2K0XguOU=;
+	s=arc-20240116; t=1742659844; c=relaxed/simple;
+	bh=HaG1QQpWowV3zqOZgL6LReoscnDOkJHO/+T7PqNBxe4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ebUY3lbwa3reQPgJCA/g7k7LzBTlbufz6Hr+YfyRU3LiWtsKyhL1jwQ5oEH8SPGFHCIG5VAqdb9Xtgqrnz+lWAqCrgPGJPfchBkK0OY5QI+e4lz22iHHavMuMKp/+7qz1aicYJIgz1ml1a4YPTFb0Qm3lmBXHI/+Qh+ODr0x6eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCaG7S53; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=eJE98UHBk5S5TH+LvQdrrrbZn+VKiy1DdSHNFLbautOR23OLxZBW6/IUpHvlF27+bnRtCaNsonpaHOauxF/EBgwJMvaZuYSz+i+f9jduM0YdelqEFDsBJz0KkQLr3UiSmszkn+wGxfIYHEWg8ADxNrjg80cS0Vn1hwqS3GixGVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCCyqS0D; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCaG7S53"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-223fb0f619dso62112575ad.1;
-        Sat, 22 Mar 2025 09:06:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCCyqS0D"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-301d6cbbd5bso5244092a91.3;
+        Sat, 22 Mar 2025 09:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742659574; x=1743264374; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742659842; x=1743264642; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwqWoBDMZJvpzZ7us8+VfOO19kDyN06FFsnMhV0YC6A=;
-        b=jCaG7S5337CRETXSE76ehbkfsgKbi5B7NtKpYQ4uOcACcYtf+omNI+uWg3cC65hKYr
-         zcnDGmd+zMLXdvQGhjmPJZqWDny+CGtJ/YPLavmOhUfpnwYF73RGl0dFakxmibmSDTpm
-         oosC3q1ujLPVXEMf1g5DPbXpOlVN/jU8WzaOOTnmEU7zdbUD96/N9mgUvIAzPJGAuhdv
-         +rI0o80n4uuenMvHvIrg86X0SIQJsWQOnInU3j1jkkGEAigb35khnRov5h5+qQrnq/43
-         ++c4TxNm+U6AudPACIOYJGw3CLAmPrihazZSfku2fQJXQfXLjn+D/Xj00/LajYR2nZh+
-         jnhw==
+        bh=nEjOAl7KxYpthTONAdqNUvrFWmX1LTq5WeO+Al3OX6A=;
+        b=bCCyqS0Dl0Zn6fRy1DBJl7An63Uz8vYrnuPYjGnOOLZwxcQlD2DTWyF2qCmAdMDY41
+         R3PPijpGyUgye1wgRTL5goS5RN1anpDCjCvsgNX5/N4vqpyCmif62BiWRhbMJonQJPPr
+         OB6IMrefpmLkmIXvo9xXF2t3dQ470wU5zmJQL5Jrz9FEZ2iPYgnwIAroRi7CndIvmsGM
+         j/sCE8scXXM6VUdNFSrUvCgBOPvZjPSx884y/tMwkXQs9nnZNUK3WYJqly+1RjSH+LgN
+         79RBjPTvGXGXGYdF3X4LyK2K5UldbOhlOtCux35xt5Lg7iqlJGvAQ4Y8dzhlFgA1H+5+
+         bc+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742659574; x=1743264374;
+        d=1e100.net; s=20230601; t=1742659842; x=1743264642;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NwqWoBDMZJvpzZ7us8+VfOO19kDyN06FFsnMhV0YC6A=;
-        b=IP5nNuTkImEEzwT6WwJPU3ZhNi+Y0q5mH9FpF9RQOhosFRcwizzryQc8b27PIWIssP
-         ltNKcMWNPvbwZvf+p+piGPRoaCiAJnNjSDdVzfII8skFid4x4nftXSYSJ50JyiWUrpay
-         FBWqSahXrLFsfOaFy+NJZWOdCNHv4Xf5U5TxdoySJHdKwa9n5bGlNA2+dqYfyj5hn/a7
-         oZZBft4AGMsLP0E1bDXIW+BVGfCsOkIJm1GCjkVsYKDDt04RHuX/qQl9jGnIJTeS2fP7
-         sDgUgIdlowjxi3im2ni+cJLiKFaf9K5KfAO7QTcVVaahwzx+/IsudMw+ON/SNvwZOQ5M
-         xJHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWGbgVXuled4OQz71kBM6z8MzmViG2LzMyXxUIXWPfCZGleksQ0d5YT5EHhpAS8yQN8d3rGGfBAwus/WQ==@vger.kernel.org, AJvYcCXyFmOuIvEAmMRPqCOhjRgljaibjmu/DxbvH0so+z0IyBE9JwpPfCYHmfctIfe+FlREkBDQ9LrURIGA3cpk@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHk1hcoBoABy1monyPGvtpZbjHhe2hlo0RIMM/opWyLz5PZ7lL
-	WcXRKb0QL8Mz6R/Trn/aJIlAioxZkAkQxsFq39MDPAuOcYelvy8C0qvaXA==
-X-Gm-Gg: ASbGncuOjF6rXq2bg/Ric3CLwekQalORPjC+or9IJOE3PGdRZoSD8vV48WzYD59ch07
-	EsdMk4f3GqJxFz2A7GEh7tWF0dMN0rw+cwVyCNfgCWrONczJAmKJ1yVM1+GnUkYHSoyCbG6xxuc
-	wcb8UHOtLKN3rcAYU1jcOLUohqGFJ1KUOS30hxJwz3rrmRghKTKC41sIqfeHN57LElO2W3Byb82
-	lQw5thANcmzyWsp1G6t4yRy82K3kAL98a9CDJEK/93Cb+M18YCgzJJ6IiZvku2rote2UNj6xwH4
-	gYxNKJBpaqJWJsFpC9pKH2vbBpRknMIYCAebV+k++cE+wKc49ORDi0grhe8qsf7PMIOS/CE8rBX
-	IF+mRqrLpnZAFjbyq4Q==
-X-Google-Smtp-Source: AGHT+IFXugbBXBczmWRmGl4feG49YIQJiZ7AHHntNMJ2oMLxtpYdoKHM1YK2Dd8hyVCjdXq0YRE5nQ==
-X-Received: by 2002:a05:6a21:b92:b0:1f3:4427:74ae with SMTP id adf61e73a8af0-1fe42f58575mr12241760637.25.1742659573391;
-        Sat, 22 Mar 2025 09:06:13 -0700 (PDT)
+        bh=nEjOAl7KxYpthTONAdqNUvrFWmX1LTq5WeO+Al3OX6A=;
+        b=V23FxMH1cRh/LVAckUzmdfjISc6+bqEOPCRJrx86QJMOQhpNmp+kfROvYo5qNULw7O
+         cl4L3sLVdbUMLpHbVYd4HwVM/+ZNhgQYmZDM5GHIsjQ1vUPCTTE0GZ+9Wr0zU5F5LTUw
+         ZojNPvfni6LVlCdfjXsUXzcFV8Im4t6aYINHIFBJikBw8IbuV9+jZQyGkig+iuRLc/AK
+         U39dNccHjEOGV//skcOB9UFV6mzr0Vxn0/8hACHm+4ZakfbBuKTsIT8jxih0vgs0umqW
+         d7uT0JEGRxdrrRqF5Y4q1sZfnmh1OQlL+gsB0oSCS30QB9X0lPg5yvS17XVt4ubYJfmG
+         HHZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCqS4Alo10cgH2Hd+psMreWn+n5QIlY237RxC58yV4ttIba/Asf3LdRPsL8haxEgDUvGMGgKol4LwPlB7v@vger.kernel.org, AJvYcCWu9akWtrDUi+StbWTXR671y/XH8S/wNycB2LZsd/Grg5KUm7CQKebkEcgD0NP6cbUMM1pvIUyJs7Bviw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyShWubmROSWkgKTlPlWcBELvPodOvSj/O9Ss/ysVuNnchMMGew
+	Lk4pfdUKhXPD6YZYAJxd+zNlDnbA/sufHIJ4ZahflmpfqGhJhakx
+X-Gm-Gg: ASbGncusX59+Unq6V1b7lu8G+isgG3IWZgK6c+1SOH0wDioyQ6WFhPFPjprcamWMczQ
+	eJfhf2soBQiaBPLTSLTrBYl5O/j2GoIzBA0mXxPipDkxsHHSDyvHHbPpaciMqGWoaqBeXouTL3d
+	qc0yqptblttAm7q4e/ZYou2Vw2KIJOFsk7SSafQBjJxCf0RfyT92Lxe90vHLbrRvF3YvGi2Tq+X
+	0NmjL3QjzJEDUL4eeSFU7d9x+uOK3Ko0yRJGT3bBKDgmlDOkFVQwtz46VkpNXZA2TeAQFfDmKhq
+	MtpvVF2vSdTJ+1mtmE/sHQREBEZ8v5qPj4e5gqS4/0k2FVNA6Nhdoz7maR6VK0VKQlFatMLoI3y
+	rvGSnqrCpdS57aFHEiQ==
+X-Google-Smtp-Source: AGHT+IE6f4ijZ6TPZFbBvByWuGNtIewjAThqJES6BbZ3s5whFhV4Cv/NAe7MGSdaXuDEj96TeplsqQ==
+X-Received: by 2002:a17:90b:3883:b0:2ff:5ed8:83d1 with SMTP id 98e67ed59e1d1-3030fea76cdmr9380645a91.19.1742659842150;
+        Sat, 22 Mar 2025 09:10:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73906186433sm4183301b3a.159.2025.03.22.09.06.12
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301a39efc5bsm9175942a91.0.2025.03.22.09.10.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Mar 2025 09:06:12 -0700 (PDT)
+        Sat, 22 Mar 2025 09:10:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6465be6e-432f-4b58-8dd0-508369bb7f7a@roeck-us.net>
-Date: Sat, 22 Mar 2025 09:06:11 -0700
+Message-ID: <42c49b0b-cef0-49ca-a5b2-5bb05eae8dec@roeck-us.net>
+Date: Sat, 22 Mar 2025 09:10:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,12 +71,15 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3] hwmon: (cros_ec) Add set and get target fan RPM
  function
-To: Sung-Chi Li <lschyi@chromium.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
- Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
+Cc: Sung-Chi Li <lschyi@chromium.org>, Jean Delvare <jdelvare@suse.com>,
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+ chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 References: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
+ <e4da28be-66ca-45d3-9ccf-34819460b463@t-8ch.de>
+ <f50221fd-1d76-465b-ba53-62c08c6f8536@roeck-us.net>
+ <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,113 +125,65 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
+In-Reply-To: <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/18/25 00:45, Sung-Chi Li wrote:
-> The ChromeOS embedded controller (EC) supports closed loop fan speed
-> control, so add the fan target attribute under hwmon framework, such
-> that kernel can expose reading and specifying the desired fan RPM for
-> fans connected to the EC.
+On 3/22/25 08:23, Thomas Weißschuh wrote:
+> On 2025-03-22 07:12:48-0700, Guenter Roeck wrote:
+>> On 3/22/25 06:55, Thomas Weißschuh wrote:
+>>> On 2025-03-18 15:45:23+0800, Sung-Chi Li wrote:
+>>>> The ChromeOS embedded controller (EC) supports closed loop fan speed
+>>>> control, so add the fan target attribute under hwmon framework, such
+>>>> that kernel can expose reading and specifying the desired fan RPM for
+>>>> fans connected to the EC.
+>>>>
+>>>> When probing the cros_ec hwmon module, we also check the supported
+>>>> command version of setting target fan RPM. This commit implements the
+>>>> version 0 of getting the target fan RPM, which can only read the target
+>>>> RPM of the first fan. This commit also implements the version 1 of
+>>>> setting the target fan RPM to each fan respectively.
+>>>>
+>>>> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+>>>> ---
+>>>> ChromeOS embedded controller (EC) supports closed-loop fan control. We
+>>>> anticipate to have the fan related control from the kernel side, so this
+>>>> series register the HWMON_F_TARGET attribute, and implement the read and
+>>>> write function for setting/reading the target fan RPM from the EC side.
+>>>
+>>> Should it be possible to switch back to automatic control?
+>>> I can't find anything in the hwmon ABI about it.
+>>> And neither in the CrOS EC source.
+>>>
+>>> Am I missing something?
+>>>
+>>
+>> Not sure I understand the context, but the fan control method is normally
+>> selected with pwmX_enable, which is defined as
+>>
+>>                  Fan speed control method:
+>>
+>>                  - 0: no fan speed control (i.e. fan at full speed)
+>>                  - 1: manual fan speed control enabled (using `pwmY`)
+>>                  - 2+: automatic fan speed control enabled
 > 
-> When probing the cros_ec hwmon module, we also check the supported
-> command version of setting target fan RPM. This commit implements the
-> version 0 of getting the target fan RPM, which can only read the target
-> RPM of the first fan. This commit also implements the version 1 of
-> setting the target fan RPM to each fan respectively.
+> So far I associated pwmY_enable = 1 with the pwmY attribute.
+> Also controlling it through fanY_target does make sense though.
+> It could be clearer from the docs IMHO.
 > 
-> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
-> ---
-> ChromeOS embedded controller (EC) supports closed-loop fan control. We
-> anticipate to have the fan related control from the kernel side, so this
-> series register the HWMON_F_TARGET attribute, and implement the read and
-> write function for setting/reading the target fan RPM from the EC side.
-> ---
-> Changes in v3:
-> - Drop support of v0 setting target fan RPM, thus also simplify
->    implementations.
-> - Align coding style to existing code, including using if-else rather
->    than switch-case, and ensure little endian conversion from read data.
-> - Only log warning for failed probing get fan target command version
->    instead of fail the whole driver.
-> - Link to v2: https://lore.kernel.org/r/20250317-extend_ec_hwmon_fan-v2-1-13670557afe5@chromium.org
+> That also means that the patch under discussion needs to implement the
+> pwmY_enable attribute.
 > 
-> Changes in v2:
-> - Squash the read, write, and register of fan target attribute to 1
->    commit, as they are the same topic.
-> - Probe the supported command version from EC for setting the target fan
->    RPM, and perform the set fan target RPM based on the supported
->    version.
-> - Update the used variable type to kernel types (i.e., u32).
-> - Link to v1: https://lore.kernel.org/r/20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org
-> ---
->   drivers/hwmon/cros_ec_hwmon.c | 90 ++++++++++++++++++++++++++++++++++++++++---
->   1 file changed, 85 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> index 9991c3fa020ac859cbbff29dfb669e53248df885..d54fd85ccb4350fc297bde62a2d98f386ce1a8de 100644
-> --- a/drivers/hwmon/cros_ec_hwmon.c
-> +++ b/drivers/hwmon/cros_ec_hwmon.c
-> @@ -21,6 +21,7 @@ struct cros_ec_hwmon_priv {
->   	struct cros_ec_device *cros_ec;
->   	const char *temp_sensor_names[EC_TEMP_SENSOR_ENTRIES + EC_TEMP_SENSOR_B_ENTRIES];
->   	u8 usable_fans;
-> +	int set_fan_target_rpm_version;
->   };
->   
->   static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
-> @@ -36,6 +37,21 @@ static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index
->   	return 0;
->   }
->   
-> +static int cros_ec_hwmon_read_fan_target(struct cros_ec_device *cros_ec,
-> +					 u32 *speed)
-> +{
-> +	struct ec_response_pwm_get_fan_rpm r;
-> +	int ret;
-> +
-> +	ret = cros_ec_cmd(cros_ec, 0, EC_CMD_PWM_GET_FAN_TARGET_RPM, NULL, 0,
-> +			  &r, sizeof(r));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*speed = le32_to_cpu((__force __le32)r.rpm);
-> +	return 0;
-> +}
-> +
->   static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
->   {
->   	unsigned int offset;
-> @@ -52,6 +68,31 @@ static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8
->   	return 0;
->   }
->   
-> +static int cros_ec_hwmon_set_fan_rpm(struct cros_ec_device *cros_ec, u8 index,
-> +				     u16 val)
-> +{
-> +	struct ec_params_pwm_set_fan_target_rpm_v1 req = {
-> +		.rpm = val,
-> +		.fan_idx = index,
-> +	};
-> +	int ret;
-> +
-> +	ret = cros_ec_cmd(cros_ec, 1, EC_CMD_PWM_SET_FAN_TARGET_RPM, &req,
-> +			  sizeof(req), NULL, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +	return 0;
-> +}
-> +
-> +static int cros_ec_hwmon_write_fan(struct cros_ec_hwmon_priv *priv, u32 attr,
-> +				   int channel, long rpm)
-> +{
-> +	if (attr == hwmon_fan_target)
-> +		return cros_ec_hwmon_set_fan_rpm(priv->cros_ec, channel, rpm);
-> +	else
 
-Static analyzers will report lots of "else after return is unnecessary"
-with this code, and they do have a point.
+Does it ? Does setting the target fan speed automatically change the fan
+control method ? Normally that is orthogonal: One does not necessarily
+want to enable a specific fan control method after setting a single related
+attribute, but do that only after all attributes have been set.
+
+For example, there could be another attribute specifying how fast the fan
+speed should be adjusted, or there could be minimum and/or maximum permitted
+pwm values. I am not saying that this is the case here, but setting a target
+fan speed should not automatically change the fan control method.
 
 Guenter
 
