@@ -1,80 +1,44 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1B2AD24;
-	Sat, 22 Mar 2025 00:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36471922C0;
+	Sat, 22 Mar 2025 08:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742602080; cv=none; b=Jn0MaKkFapdOBn8n9pI/I6ZV8uDrnDLvtSz/56fH60vGmWBmxplDe6XjqamlbSuwL4vpeCUD3Qv4CeuUykGU1aDEiC8/OXwQJHa3Y57bjYGdiqaOrwu3ZmifED4QcEhR20S5THo42JSbOfeOE+LtUGcJF3FWkL4ooNza2AzcAD8=
+	t=1742631835; cv=none; b=pQEmSAjYN1xewknxnKW6xAcZl1pypONCt0Wfyd6TaOdELmWnhZIzv0QasZl8Qn8uiavyGf221gxKcjQqKdHyCf8A04we+gOb+DunhErFChSGI9jWCCTRBJoUFvkLfdMNkRqFyq4VrDPMnfLc/uVLmlBH+xc3HGzs/2B2nBArl94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742602080; c=relaxed/simple;
-	bh=3QKaKPMSJD+/egJfzRapWYRtqycA3II4RLMgHhqVCHQ=;
+	s=arc-20240116; t=1742631835; c=relaxed/simple;
+	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EKH+msKvgo+KD57166x/pTR5UeVPh5Z8wAc77qJ6F3ysFzLbvsTAWETDZ0nAxsFk+KRh+oZjWwhngUldAGjELt+KpeljguygRLZGzRQboiBlmkffdYmWWbHry+kUq7HaDt/DK6dtk+TuXBzIzvFUy6s6HObN1AtILo3tawhIdeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ef1JJ3uH; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=QzM/+3MonUc7NN5qtyPrr4tZOHWEegQzonRJDk8ExYlFTtYa3sE7u9750Q6Zjtp4HP4UU0WL2YJ6CzS7od2vyxcDnv7IMwCQXm3Uwa8B/MbTCL99oOMkmCLo7ZY0NQO7IywdnZqloroZwT7/qebyq8rz03polLvVZfplIg6dJY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ieHacYSb; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ef1JJ3uH"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22409077c06so33755815ad.1;
-        Fri, 21 Mar 2025 17:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742602079; x=1743206879; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8EXV+liqXecF19/95E6X4B8HYwLOUANKAp4Chr+5IZE=;
-        b=Ef1JJ3uHz/SCeQr225QUNTYzYikh0wdp/SEkeH//Oa+KMSsO5VcVybqeeJ+bP0zi5R
-         nk06PVVWpbtSwQB4UG/OqATtJwNTejQfDydVBD6JL6HOLqVvAXA1DmOW4yYcuhJQBzL0
-         iiGc1hNg4GAOHJFTy/tlQYuGioo8TQC8lH5Tz22qevfXHhzMU+WqN1ISnN5FSzsdPGUI
-         vX8WH38VRE2qMUCQzAJVqHBqaWMjY44t4at4NaGDblLMb6VFVyMqx5makdAwb4NogQuf
-         8ArzEI5GVe5qZN6PIm1FxTkv7pCabU3kzJX9M4tOcrg6j7Z8tqRAFhBElu6SZ95mK7Er
-         +h/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742602079; x=1743206879;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8EXV+liqXecF19/95E6X4B8HYwLOUANKAp4Chr+5IZE=;
-        b=NpH36C+HuqbCVzc5P0pPzzkeUYtTn+AiDc4pTse8Vf42A890u1nO2vVVe0LXmMyGnB
-         FxDshg79odHbIFZ5hGEjzXwoLvUYyzya+7/ejPTKTdBC9KKTD/a5+84phDNWyIKVj5ee
-         +ESCQ25boVJ5i91PKrb01FsoQbvSJreyTYjdYt5xTfjNmxot5fWLmB1SV1tPNpoOX/aF
-         +OI8eqd22qF6haI/GqD+AhUr240DPuVvcwhaTUzbJudSZoAi+epEIKsGr4PILxxh2Lp6
-         zvsBBffLC8uLPG2X2N3WLMdL/PU+J+G9aP4o7hkYVxz3NxdLL2ChMRwb6EWyDcIQH8J3
-         vBgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1UeQldmJ8WMAMdZk6aD66x4JUiCVm9v4hkB9w6UbcA/UTZphd0FCm632Lw6jBu+7rMNn1Lbt14vrS@vger.kernel.org, AJvYcCWvHpyulqpK9b4bKZn/I3M2mzINxzc5BWyXv/C1kA5p3UoPmZeleSsHCNq677OmINjl4VLGuv8xP1/V+dya@vger.kernel.org, AJvYcCXtzrLtdSlYtKK+3vO0sM3RYd+74OiQxRpk905yC1GGhNL2sJIASX4pUxwxR6GmX+zWyZw6LVO0vFk9P5c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv2pnbhGbhO9Y4GVgjPFLPvmJxyvak+fOEd9OJQRKkcln3QsZX
-	MEffvQCUVxgdv5/HlqonVlUi4qycsv2v1JFRhGGhvmy1WbbL1c4oKXHDAg==
-X-Gm-Gg: ASbGncvZa2rnPN6sHqJWyb25t/drquMy7WmI+fUelgevUnD02x/5uYIdUiOtGPY5VCa
-	Zhxr93/YJT+HvPIUxkxWRiqwQ2oX4gTkESTbKM62zuTM1vqFBwykLuo4rWLK+GJXwAazjJWaHEk
-	GI0ZeBUNzKYsx/I7p4hZdulzMct/11IZeWBn/GtTrnaWQAaXigEUyWEKvdwHJInkKfbjc1MkKFu
-	roE1z6oZgNNjMuHz7Vmnw8bycgYvJeHGE4+Ci11CYUmafsyHZszz5OIhDzTeOXHj8+c5YnRGZW/
-	TujdbSVoIzDc7vU0DE0Qkarxj3AFtuuwC5MTvJw2trP4Hvqk6wdtXdRc6w==
-X-Google-Smtp-Source: AGHT+IFG3IzHoUnF4Irysf7rShLOoFBmDOITsQx3iVCYXu5PXAFkhXgqbngY+idRPjClaq9zGMWhOw==
-X-Received: by 2002:a17:903:32c3:b0:224:1774:1ecd with SMTP id d9443c01a7336-22780c5599amr67690555ad.4.1742602078632;
-        Fri, 21 Mar 2025 17:07:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811bd143sm23906575ad.150.2025.03.21.17.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 17:07:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 21 Mar 2025 17:07:57 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: florin.leotescu@oss.nxp.com
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	viorel.suman@nxp.com, carlos.song@nxp.com,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v6 3/3] hwmon: emc2305: Use
- devm_thermal_of_cooling_device_register
-Message-ID: <f9982a05-5104-426d-b9ac-de4b5c4d465e@roeck-us.net>
-References: <20250321143308.4008623-1-florin.leotescu@oss.nxp.com>
- <20250321143308.4008623-4-florin.leotescu@oss.nxp.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ieHacYSb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1742631830;
+	bh=1JtflKyowsrny4ccNJCHAmNyNDlmwMx7iwJtiAM/nUM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ieHacYSblP1rXFXNlq5KdNwhsLxdwYdLZKMC4361xBtkcU/m/XU4UY3jN1IfsO7DA
+	 055e3C/5ao8WDHkypz4xGGwvrxC96YNEqtIE6vck218veniHGOKILA9tZXySo6mUYa
+	 9PdeqRp8z3e7sN0PJtTdM9WEiUVperKrsnRFS2RE=
+Date: Sat, 22 Mar 2025 09:23:49 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Derek J Clark <derekjohn.clark@gmail.com>, 
+	Kevin Greenberg <kdgreenberg234@protonmail.com>, Joshua Tam <csinaction@pm.me>, 
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
+	sre@kernel.org, ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com, 
+	mario.limonciello@amd.com
+Subject: Re: [PATCH v6 11/14] platform/x86: oxpec: Adhere to
+ sysfs-class-hwmon and enable pwm on 2
+Message-ID: <96d19837-167a-43d6-93ea-cd24844cff7f@t-8ch.de>
+References: <20250319175512.27059-1-lkml@antheas.dev>
+ <20250319175512.27059-12-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,20 +47,89 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250321143308.4008623-4-florin.leotescu@oss.nxp.com>
+In-Reply-To: <20250319175512.27059-12-lkml@antheas.dev>
 
-On Fri, Mar 21, 2025 at 04:33:08PM +0200, florin.leotescu@oss.nxp.com wrote:
-> From: Florin Leotescu <florin.leotescu@nxp.com>
+On 2025-03-19 18:55:06+0100, Antheas Kapenekakis wrote:
+> Currently, the driver does not adhere to the sysfs-class-hwmon
+> specification: 0 is used for auto fan control and 1 is used for manual
+> control. However, it is expected that 0 sets the fan to full speed,
+> 1 sets the fan to manual, and then 2 is used for automatic control.
 > 
-> Prepare the emc2305 driver to use configuration from Device Tree nodes.
-> Switch to devm_thermal_of_cooling_device_register to simplify the
-> cleanup procedure, allowing the removal of emc2305_unset_tz and
-> emc2305_remove, which are no longer needed.
+> Therefore, change the sysfs API to reflect this and enable pwm on 2.
 > 
-> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
+> reflecting the naming convention used by other drivers, to allow for
+> a smooth migration in current userspace programs.
 
-Applied.
+Where is the renaming being done?
 
-Thanks,
-Guenter
+> Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>  drivers/platform/x86/oxpec.c | 35 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+> index e84afc5f53379..680fa537babf6 100644
+> --- a/drivers/platform/x86/oxpec.c
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -731,7 +731,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  		case hwmon_pwm_input:
+>  			return oxp_pwm_input_read(val);
+>  		case hwmon_pwm_enable:
+> -			return oxp_pwm_read(val);
+> +			ret = oxp_pwm_read(val);
+> +			if (ret)
+> +				return ret;
+> +
+> +			/* Check for auto and return 2 */
+> +			if (!*val) {
+> +				*val = 2;
+> +				return 0;
+> +			}
+> +
+> +			/* Return 0 if at full fan speed, 1 otherwise */
+> +			ret = oxp_pwm_fan_speed(val);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (*val == 255)
+> +				*val = 0;
+> +			else
+> +				*val = 1;
+> +
+> +			return 0;
+>  		default:
+>  			break;
+>  		}
+> @@ -745,15 +765,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+>  static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+>  			      u32 attr, int channel, long val)
+>  {
+> +	int ret;
+> +
+>  	switch (type) {
+>  	case hwmon_pwm:
+>  		switch (attr) {
+>  		case hwmon_pwm_enable:
+>  			if (val == 1)
+>  				return oxp_pwm_enable();
+> -			else if (val == 0)
+> +			else if (val == 2)
+>  				return oxp_pwm_disable();
+> -			return -EINVAL;
+> +			else if (val != 0)
+> +				return -EINVAL;
+> +
+> +			/* Enable PWM and set to max speed */
+> +			ret = oxp_pwm_enable();
+> +			if (ret)
+> +				return ret;
+> +			return oxp_pwm_input_write(255);
+>  		case hwmon_pwm_input:
+>  			return oxp_pwm_input_write(val);
+>  		default:
+> -- 
+> 2.48.1
+> 
