@@ -1,67 +1,33 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B57022D4F9;
-	Sat, 22 Mar 2025 16:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA63C42A95
+	for <linux-hwmon@vger.kernel.org>; Sat, 22 Mar 2025 16:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742659844; cv=none; b=croWRGgwfz3rlGuC1CUQd+wC02HR/QcRA2uC4fS8OTBJ6rkBaw0xCVYGgnr+iOesp1XImR2Koq70CWzNZm2QBFvxtLm8s/GKblBujk5iNtX90j0LFxYVfiqWMMn4fCmySru61TuI4Yzl787+SyeJN3z5a/QB140bfAFhDP5z0MA=
+	t=1742661995; cv=none; b=tZXcvehNlcPCmv37FomS6zWltBpDQttXxZtWPwbrhuQFvj0SYdK00w+lwakeThYdZs/xk1YzgWAO0rTIy2uoxX5AqGuT2WdaK1wSVQ40J8BDGUXsxb5CwI0xGkQICTQB1A4Cv7XhZgzTBV8fS3ffkpL6RCk7Stl2HpecO6iQwxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742659844; c=relaxed/simple;
-	bh=HaG1QQpWowV3zqOZgL6LReoscnDOkJHO/+T7PqNBxe4=;
+	s=arc-20240116; t=1742661995; c=relaxed/simple;
+	bh=yK2NdWkpz2azZMk01N1jNoOILxVKlve9BP5g1IWCTv8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eJE98UHBk5S5TH+LvQdrrrbZn+VKiy1DdSHNFLbautOR23OLxZBW6/IUpHvlF27+bnRtCaNsonpaHOauxF/EBgwJMvaZuYSz+i+f9jduM0YdelqEFDsBJz0KkQLr3UiSmszkn+wGxfIYHEWg8ADxNrjg80cS0Vn1hwqS3GixGVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCCyqS0D; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=AQNIQqvYLbtDtFIxxL1UecFdIvqz93p2TtjWzEYjVTU6XnuALJdIpugazLRLlwxhoD2+neIYTo3gQgiMdgoxSsgdtVJ/QN2so/lQ2tXDwpksQkEBrpphJ7FVZu2lz5CnbuXHSCkCtPDKJ4MbRhRMXo5It1pEgwGPpH+1QcnI8Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOoxWtLl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCCyqS0D"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-301d6cbbd5bso5244092a91.3;
-        Sat, 22 Mar 2025 09:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742659842; x=1743264642; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nEjOAl7KxYpthTONAdqNUvrFWmX1LTq5WeO+Al3OX6A=;
-        b=bCCyqS0Dl0Zn6fRy1DBJl7An63Uz8vYrnuPYjGnOOLZwxcQlD2DTWyF2qCmAdMDY41
-         R3PPijpGyUgye1wgRTL5goS5RN1anpDCjCvsgNX5/N4vqpyCmif62BiWRhbMJonQJPPr
-         OB6IMrefpmLkmIXvo9xXF2t3dQ470wU5zmJQL5Jrz9FEZ2iPYgnwIAroRi7CndIvmsGM
-         j/sCE8scXXM6VUdNFSrUvCgBOPvZjPSx884y/tMwkXQs9nnZNUK3WYJqly+1RjSH+LgN
-         79RBjPTvGXGXGYdF3X4LyK2K5UldbOhlOtCux35xt5Lg7iqlJGvAQ4Y8dzhlFgA1H+5+
-         bc+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742659842; x=1743264642;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nEjOAl7KxYpthTONAdqNUvrFWmX1LTq5WeO+Al3OX6A=;
-        b=V23FxMH1cRh/LVAckUzmdfjISc6+bqEOPCRJrx86QJMOQhpNmp+kfROvYo5qNULw7O
-         cl4L3sLVdbUMLpHbVYd4HwVM/+ZNhgQYmZDM5GHIsjQ1vUPCTTE0GZ+9Wr0zU5F5LTUw
-         ZojNPvfni6LVlCdfjXsUXzcFV8Im4t6aYINHIFBJikBw8IbuV9+jZQyGkig+iuRLc/AK
-         U39dNccHjEOGV//skcOB9UFV6mzr0Vxn0/8hACHm+4ZakfbBuKTsIT8jxih0vgs0umqW
-         d7uT0JEGRxdrrRqF5Y4q1sZfnmh1OQlL+gsB0oSCS30QB9X0lPg5yvS17XVt4ubYJfmG
-         HHZw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCqS4Alo10cgH2Hd+psMreWn+n5QIlY237RxC58yV4ttIba/Asf3LdRPsL8haxEgDUvGMGgKol4LwPlB7v@vger.kernel.org, AJvYcCWu9akWtrDUi+StbWTXR671y/XH8S/wNycB2LZsd/Grg5KUm7CQKebkEcgD0NP6cbUMM1pvIUyJs7Bviw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyShWubmROSWkgKTlPlWcBELvPodOvSj/O9Ss/ysVuNnchMMGew
-	Lk4pfdUKhXPD6YZYAJxd+zNlDnbA/sufHIJ4ZahflmpfqGhJhakx
-X-Gm-Gg: ASbGncusX59+Unq6V1b7lu8G+isgG3IWZgK6c+1SOH0wDioyQ6WFhPFPjprcamWMczQ
-	eJfhf2soBQiaBPLTSLTrBYl5O/j2GoIzBA0mXxPipDkxsHHSDyvHHbPpaciMqGWoaqBeXouTL3d
-	qc0yqptblttAm7q4e/ZYou2Vw2KIJOFsk7SSafQBjJxCf0RfyT92Lxe90vHLbrRvF3YvGi2Tq+X
-	0NmjL3QjzJEDUL4eeSFU7d9x+uOK3Ko0yRJGT3bBKDgmlDOkFVQwtz46VkpNXZA2TeAQFfDmKhq
-	MtpvVF2vSdTJ+1mtmE/sHQREBEZ8v5qPj4e5gqS4/0k2FVNA6Nhdoz7maR6VK0VKQlFatMLoI3y
-	rvGSnqrCpdS57aFHEiQ==
-X-Google-Smtp-Source: AGHT+IE6f4ijZ6TPZFbBvByWuGNtIewjAThqJES6BbZ3s5whFhV4Cv/NAe7MGSdaXuDEj96TeplsqQ==
-X-Received: by 2002:a17:90b:3883:b0:2ff:5ed8:83d1 with SMTP id 98e67ed59e1d1-3030fea76cdmr9380645a91.19.1742659842150;
-        Sat, 22 Mar 2025 09:10:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301a39efc5bsm9175942a91.0.2025.03.22.09.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Mar 2025 09:10:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <42c49b0b-cef0-49ca-a5b2-5bb05eae8dec@roeck-us.net>
-Date: Sat, 22 Mar 2025 09:10:40 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOoxWtLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A22C4CEDD;
+	Sat, 22 Mar 2025 16:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742661995;
+	bh=yK2NdWkpz2azZMk01N1jNoOILxVKlve9BP5g1IWCTv8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bOoxWtLlJa33GkNMgYRJK5cIuoupmuZb+ssa26z++eOmByar+NRGWENZiT1dauCfg
+	 kZO62Y/ByYj85MkRxHvk3AKgtsM0xiM05IH477SBwEI/+WRpCUJ9IGgUuiEvM0f0+9
+	 DCkK3olPOJek29S+aY4MisP6Ra6CDwD9in5ym2+7OElRb0CiF9xc2c7vUyCM0oJbDs
+	 +7gt/ZmZCGlP6MkQJ+uUz0osYo4gmGrXODbCo54MVqe8DJbNUq/kYr+rF21zax0P71
+	 TqGCHWQSl4SOb1MswBY3724dtuBDi7dtqrYIMms3mk1YYmIZL/VS5DIhEsTZ3HgMWu
+	 WLKGDdDAjBHoA==
+Message-ID: <50a025ef-d9ca-469e-bb42-e5dcefc84570@kernel.org>
+Date: Sat, 22 Mar 2025 17:46:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,121 +35,85 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (cros_ec) Add set and get target fan RPM
- function
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>
-Cc: Sung-Chi Li <lschyi@chromium.org>, Jean Delvare <jdelvare@suse.com>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
- <e4da28be-66ca-45d3-9ccf-34819460b463@t-8ch.de>
- <f50221fd-1d76-465b-ba53-62c08c6f8536@roeck-us.net>
- <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
+Subject: Re: [PATCH RFT/RFC] hwmon: (pmbus) Do not set regulators_node for
+ single-channel chips
+To: Guenter Roeck <linux@roeck-us.net>,
+ Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Cedricjustine.Encarnacion@analog.com
+References: <20250322142602.560042-1-linux@roeck-us.net>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250322142602.560042-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 3/22/25 08:23, Thomas Weißschuh wrote:
-> On 2025-03-22 07:12:48-0700, Guenter Roeck wrote:
->> On 3/22/25 06:55, Thomas Weißschuh wrote:
->>> On 2025-03-18 15:45:23+0800, Sung-Chi Li wrote:
->>>> The ChromeOS embedded controller (EC) supports closed loop fan speed
->>>> control, so add the fan target attribute under hwmon framework, such
->>>> that kernel can expose reading and specifying the desired fan RPM for
->>>> fans connected to the EC.
->>>>
->>>> When probing the cros_ec hwmon module, we also check the supported
->>>> command version of setting target fan RPM. This commit implements the
->>>> version 0 of getting the target fan RPM, which can only read the target
->>>> RPM of the first fan. This commit also implements the version 1 of
->>>> setting the target fan RPM to each fan respectively.
->>>>
->>>> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
->>>> ---
->>>> ChromeOS embedded controller (EC) supports closed-loop fan control. We
->>>> anticipate to have the fan related control from the kernel side, so this
->>>> series register the HWMON_F_TARGET attribute, and implement the read and
->>>> write function for setting/reading the target fan RPM from the EC side.
->>>
->>> Should it be possible to switch back to automatic control?
->>> I can't find anything in the hwmon ABI about it.
->>> And neither in the CrOS EC source.
->>>
->>> Am I missing something?
->>>
->>
->> Not sure I understand the context, but the fan control method is normally
->> selected with pwmX_enable, which is defined as
->>
->>                  Fan speed control method:
->>
->>                  - 0: no fan speed control (i.e. fan at full speed)
->>                  - 1: manual fan speed control enabled (using `pwmY`)
->>                  - 2+: automatic fan speed control enabled
+On 22/03/2025 15:26, Guenter Roeck wrote:
+> Single-channel regulators do not need and should not have a "regulators"
+> node. We can not entirely remove it due to existing bindings. To solve the
+> problem for new drivers, provide additional macros PMBUS_REGULATOR_ONE_NODE
+> and PMBUS_REGULATOR_STEP_ONE_NODE and convert existing drivers to use those
+> macros. The exception is the ir38064 driver because its devicetree files
+> and its description do not require or use the nested regulators node.
 > 
-> So far I associated pwmY_enable = 1 with the pwmY attribute.
-> Also controlling it through fanY_target does make sense though.
-> It could be clearer from the docs IMHO.
+> Modify PMBUS_REGULATOR_STEP_ONE and PMBUS_REGULATOR_ONE to set the
+> regulators_node pointer to NULL.
 > 
-> That also means that the patch under discussion needs to implement the
-> pwmY_enable attribute.
-> 
+> Cc: Cedricjustine.Encarnacion@analog.com
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> RFT: Untested. Open question is if not setting .regulators_node is
+>      sufficient to solve the problem.
+> RFC: Open question is if existing bindings (if unused in-tree) should
+>      be converted to not require the nested "regulators" node.
 
-Does it ? Does setting the target fan speed automatically change the fan
-control method ? Normally that is orthogonal: One does not necessarily
-want to enable a specific fan control method after setting a single related
-attribute, but do that only after all attributes have been set.
+Looks correct.
 
-For example, there could be another attribute specifying how fast the fan
-speed should be adjusted, or there could be minimum and/or maximum permitted
-pwm values. I am not saying that this is the case here, but setting a target
-fan speed should not automatically change the fan control method.
 
-Guenter
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
