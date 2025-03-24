@@ -1,67 +1,67 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720A2505C5;
-	Mon, 24 Mar 2025 14:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EA125FA31;
+	Mon, 24 Mar 2025 14:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742825537; cv=none; b=RDMAfbE9SAJKVYA2EC3LIVDjk5tVxkYRSwoDcAxHQlDQ+wY4O5839jf+WHQiS2fBdgvnQeaTiSDO2wq9sZVSC1MzrXD89ZAF/CSLBVQoSFvrEtugBaatjus9+kwqIRx9qg7WbPFpxlCEu318LQ4uBYzqozrFaPesgeLKOyIgH04=
+	t=1742826218; cv=none; b=tsLGPR+6KUeqArQC1MKrMlcZ2c3ZvhKdEPBI7dOcG1dG8JmfjhzLGXo8dn7LbQ/QRnFD0Y4R/84VFcQJBNVN+KIFGzkFSSsfIzVvHsRUn7V5vIgCyPhXIjO3Q4mIE2mgdI3m1JgzMZXMe0upB2JG236/f/PFWMcJK39j3nuIOrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742825537; c=relaxed/simple;
-	bh=hIlci/ejHPKu2NoO0xwOe+65FMTZn3FzjTVWnTvLsUo=;
+	s=arc-20240116; t=1742826218; c=relaxed/simple;
+	bh=T9O+OjyuYsEWsaV/u/I8OgmvvRYdBzOmioIB3KGGE5k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rDQzsE53TZbLpbzTaB43UhkdNorZLZaFyN5kmfKnALFMoQXX5eS2xR8aM+/XqnoXMxUkUgwR4bPTcq8KWdU7YAIQOt1fsCKqld4RrknazhR0mXyuMFrpz85nvwvMq+1Gi7bfpbNmncZOD7e7VK2GPOECEgxSY4rKN3jxX0VhU6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8Mp20dy; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:Content-Type; b=TOfMIKiTY8dWG3kbkQDAawfAMb4z4kHQVQnS7Z9GNRXPIZpe/np35UEcSAfNKjSwLQF02BvBikPzSvuUF4x54hlt1V7QWa24cmk4+lUntn4BSoZejQOEymAGFMT5YqucNUnEBouKyVjI5+lyZp1vJ92CujEbkfvr2K2ORKD+HZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eqhd3ejs; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8Mp20dy"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2260c91576aso73619405ad.3;
-        Mon, 24 Mar 2025 07:12:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eqhd3ejs"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ff6a98c638so9284725a91.0;
+        Mon, 24 Mar 2025 07:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742825534; x=1743430334; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742826216; x=1743431016; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7o3URVbvXtzI6YwkjrSDC5zCoxRK8EtHeWUGbXbB0SI=;
-        b=h8Mp20dyyd4mlbhpYcbkh1fV8R2KA7G6jNGa2Q1xe6Q9vecvozvtRo6jxpA5b7jXOY
-         54EPfYVf+lZbpVDzilMlgT/0mfohyrBbImWKt/A2UfwQ2Tvy6wtVKGyxV5YYzQtDSoyE
-         WxzlMnSIJ/O2EPpCvFUKfJMozH18haJpa87IOphYJZtmR0Vm82W668dFvXXOpj+vxcBZ
-         lyE8ea3H9cu1sEVDwbCBOTT2yY3E2KHWNKBf4OliBGR0Q6g1nMXbmMqvqfRVXNUggSjh
-         XWgYQV4sJQGRoEKJT7TyG89rxo++ngCvhCnJi1yGSPXp5GPWf1YBD273MFLMvkmTXRou
-         fb4Q==
+        bh=JOoT+rzf7f9RJXhKC/sBumAdpW8J/gLTaNzVv677dTg=;
+        b=Eqhd3ejs0RvS9VNEUlYoEAq2dav4rwenCaHI5S9dD3qdb1U/SPyzI4Dqk1eYluzqJU
+         eB7EQYEgrcS/y5tr9e107uFE8glnZD7/ypqJnm00lOun9S0CD7RxyhWeT5h2/jsMX4YR
+         Kb5tITe6yEYj7QWlSrd8KCZFunLynmFaBYEcBu45XmqYHSv+KDTQqNkoS02eJfV1l0SW
+         rgv7t5m5cJNFi5O4W4rWuss9E0foAv8+tR3jM+zeFRIw5JwvBZ++36XxTaCCMbB9ZmDF
+         ZNTbImi9iyNrDIUxqXVIk+sl8WhjCwm+OSu1nvupXyqeNcF747a5d8hlkFiVjjBzmWWa
+         ziXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742825534; x=1743430334;
+        d=1e100.net; s=20230601; t=1742826216; x=1743431016;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7o3URVbvXtzI6YwkjrSDC5zCoxRK8EtHeWUGbXbB0SI=;
-        b=AV7T+HtEG4jTKbjkPwbIBBwPiSemptylNFlFoXD11oJfLC4L3ZDb/CBSHwmb5YX+nA
-         RTvD/cZYp5vX56/7ymqpxtUqcbm/n80rf/9ZfROxX2+Q+YLG/WCfoMiC5gC5pA/yY82h
-         RwVe9oCgEoHyKjqiGsXVyHfKNdHtIAqZaSdqzU02S26Y5eQx6RTruuo0+RdH6XYgJUuZ
-         5UkUlJjzNJ/p9ugZg2bya+qwHKwu3yEMDNo0Obp5DqY828u06BXL6JLw1W620w+i4FHw
-         PofB5xx9ye8uhwYZc5rZdVHgTX7Q38ri1HbQa6JoOcX+T+sZBNypk3H2VsdWMcVewnWh
-         +Zjw==
-X-Forwarded-Encrypted: i=1; AJvYcCVisDBXPjFXc4IKXdsRNUGXG+9QgwXWnhJOD+w64RP+LDNlCTe0HJ4A8ntaguqvEJWq2NN3zxxftM0yMA==@vger.kernel.org, AJvYcCXuCJSz5wbv28Od+LkyVzv63vuwRr+Ll3zcJfO7vzuS4GrPk78Fi/I6oQD3oQajBxUIcTcabvYzv2OKj1Jg@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1tmD6SwKO4h+p8wnCJESfCgJ1EWdoAN76eX/oVlPvbgenuMWo
-	h0FEJJnDnR8VJQ72xPrbmToE4G6WoESIr0v4xVBB/GnqOLemzowL
-X-Gm-Gg: ASbGncvApHRstCUC8RS5XBSVUGWfqh5GLXPMG1w+/AAPyBodQz+MpQ+JynATmRCpEC1
-	CE2Dpvi77jjhs702fCYkBU2+ExzYGEglvD1uZCCY03JxPCsXAhl0mpULPRiMswt+q8nOGlunY4W
-	+ITRoP4+b8TKd00xs8UN2iBY5AHdC+HN2vz/a1EmBaCWdiqz31VZ76vmY10m4dS+JD23TZ9htIb
-	cZdBMTwH77nQ+94RWfckmrSLornuyn9M0xP0Mt8pYdjG/7hicmFwbJJaNf3MBk19zM2M7FJFSzZ
-	Hyri6LIymBtL2ThwVFYSDdvm7YCiFZyY05VcVpVC01stxw3NF3SrUJpLNTJyqzVkI0pLi0LUGwo
-	eneNAZ2HCYrawcgiWrg==
-X-Google-Smtp-Source: AGHT+IG7XorWqAx6k7knkJ37HFVJXY/lOIzBSxPdYHJJ0fvVsVxkCOpj/ciraFpciZ/nunpJ23DM7w==
-X-Received: by 2002:a17:902:e887:b0:224:1074:6393 with SMTP id d9443c01a7336-22780e1fab8mr215452435ad.43.1742825534118;
-        Mon, 24 Mar 2025 07:12:14 -0700 (PDT)
+        bh=JOoT+rzf7f9RJXhKC/sBumAdpW8J/gLTaNzVv677dTg=;
+        b=FqmNmM5X0yvcAcb3uOuJz4wCLk1X+V1eEPjCtZoYMvYs79fFeqwWVLDyV4HuKR8G9j
+         PVRgrv7ZNoDu7hksQUE6K386bfed2CI+fFOPSBy9/ztB6KYCCzKDuyQuduTeT3CzcP4j
+         jKDCwqw/yn1FC5XG0es/+ayRzb7nya+nv7ow0nIYCWCc0DkjuS/eQlDGAUq+Li/1wV3K
+         i0UoLMWrXx0olpEm6ULsLq8B41FqUAW4IecyldZ63ue6GP6n7lnBGKYEY7UB9Baj6QBG
+         auCBwiEO3KkSGc0fenj//GNT5hkE8TS8/jUcktKW7jMf73QBZN0DIUK9XsOm3xGWGR+x
+         HrOA==
+X-Forwarded-Encrypted: i=1; AJvYcCVWJ++bYWiSv5I0V4w9wnZasEJ++OaF9+E9k7YTkqhdGEke17F1P09iXA/exDG6AagiI6zld0LpeaQ2t6g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg5xrR5vURb3HZfxYnJ/H5CL45HqfbKR8MNT76y51MkkPiP4ir
+	wra5MfH/MnmgB2A4KBU6rLRmbrh0k8OUFFqzdLyu6aXNLtBrroQTjLrQow==
+X-Gm-Gg: ASbGncuQG3o47goYlZPMa+f9N2ZqigN3/nSymDScooH6JXmbUZwzzf1iknfe0q/La1W
+	/hg2J5zd2AyWpcVZ82DEp25CEItVbKBkG7J3jJnK3cOVmg6+at8dj2jY1SeRWSsN0xGHcmmbS32
+	Q2oN71Uzlz1g0fwrvbCBiVLcydKSHSaObamDg+oAjvrlBVIzAwShMtr2xdd/zqOWxGexC6yNzpf
+	e++8veLzo4L/xM3UrIG1N4tSzmkFjCsEz7LTK/N2Z+8NNa+REb/9OMy/piXnqjX3YAtetxKdhZe
+	3uMJv6vekyn0bWw8pFzVXMAJp0sxcLEy35FAmAKD/JPFaFMD35wY4vhfjqQ3hNRzFKKNZw8P7Jf
+	absIkzxw1ig5lHvbOEA==
+X-Google-Smtp-Source: AGHT+IH/zqC9VCVyDaxAL4MjsnixAiUijI43atRLNJuXpRjOdgn8/agjo02Ivk9OcXcrbW7oy7LwMA==
+X-Received: by 2002:a17:90b:48ca:b0:2ee:db1a:2e3c with SMTP id 98e67ed59e1d1-3030fe6e1dfmr19934733a91.1.1742826215354;
+        Mon, 24 Mar 2025 07:23:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811da8b8sm70630815ad.189.2025.03.24.07.12.13
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf5a1d80sm12256019a91.26.2025.03.24.07.23.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Mar 2025 07:12:13 -0700 (PDT)
+        Mon, 24 Mar 2025 07:23:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <164922f5-d7d9-4e36-b0d4-5ba4c30597e3@roeck-us.net>
-Date: Mon, 24 Mar 2025 07:12:12 -0700
+Message-ID: <851fe398-28da-4ca7-8b0d-b8111811779c@roeck-us.net>
+Date: Mon, 24 Mar 2025 07:23:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon:(ina238)Add support for SQ52206
-To: Wenliang Yan <wenliang202407@163.com>
-Cc: christophe.jaillet@wanadoo.fr, conor+dt@kernel.org, corbet@lwn.net,
- jdelvare@suse.com, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org
-References: <801599a6-81d9-4e06-8fc6-e959132eef24@roeck-us.net>
- <20250324123852.4120-1-wenliang202407@163.com>
+Subject: Re: [PATCH v3 1/1] hwmon: (gpio-fan) Add regulator support
+To: Alexander Stein <alexander.stein@ew.tq-group.com>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250324124550.989292-1-alexander.stein@ew.tq-group.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,91 +119,141 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250324123852.4120-1-wenliang202407@163.com>
+In-Reply-To: <20250324124550.989292-1-alexander.stein@ew.tq-group.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/24/25 05:38, Wenliang Yan wrote:
-> At 2025-03-23 01:25:11, "Guenter Roeck" <linux@roeck-us.net> wrote:
->> On 3/13/25 01:02, Wenliang Yan wrote:
->>> Add support for SQ52206 to the Ina238 driver. Add registers,
->>> add calculation formulas, increase compatibility, add
->>> compatibility programs for multiple chips.
->>>
->>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
->>
->> The patch unfortunately combines adding support for a new chip
->> with adding the necessary infrastructure. I finally found the time
->> to look into this further and split the changes, trying to find out
->> what actually changed. Unfortunately there are some problems.
->> Some of them are listed below.
->>
->> This is not a complete review. Also, I'll have to write module tests
->> to ensure that support for existing chips is not broken.
->>
->>>    #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
->>>    #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
->>> -#define INA238_DIE_TEMP_LSB		125 /* 125 mC/lsb */
->>> +#define INA238_DIE_TEMP_LSB			1250000 /* 125 mC/lsb */
->>
->> This is not correct. The unit is 10ths of uC.
->>
+On 3/24/25 05:45, Alexander Stein wrote:
+> FANs might be supplied by a regulator which needs to be enabled as well.
+> This is implemented using runtime PM. Every time speed_index changes from
+> 0 to non-zero and vise versa RPM is resumed or suspended.
+> Intitial RPM state is determined by initial value of speed_index.
 > 
-> Since the temp_lsb of sq52206 is 7.8125 mC/LSB, in order to express it as an interger,
-> my original intention was to use 7.8125*10000 to represent 7.8125 mC/lsb.
-> At the same time, for the consistency of different devides, using 125 * 10000 to represent 125mC/lsb.
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Patch 1 & 2 from v1 [1] have already been applied, although number 2 [2] is not
+> yet showing in next-20250305. Patches 3 & 4 (just removing comments) from v1
+> have been dropped, so only this patch remains.
 > 
+> Changes in v3:
+> * Remove noisy dev_err calls related to runtime pm
+> * Properly propagate return codes from set_fan_speed
+> 
+> Changes in v2:
+> * Make regulator non-optional
+> 
+> [1] https://lore.kernel.org/all/20250210145934.761280-1-alexander.stein@ew.tq-group.com/
+> [2] https://web.git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?h=hwmon-next&id=9fee7d19bab635f89223cc40dfd2c8797fdc4988
+> ---
+>   drivers/hwmon/gpio-fan.c | 104 +++++++++++++++++++++++++++++++++------
+>   1 file changed, 90 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> index cee3fa146d69a..4c736b7eb5473 100644
+> --- a/drivers/hwmon/gpio-fan.c
+> +++ b/drivers/hwmon/gpio-fan.c
+> @@ -20,6 +20,9 @@
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/of.h>
+>   #include <linux/of_platform.h>
+> +#include <linux/pm.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regulator/consumer.h>
+>   #include <linux/thermal.h>
+>   
+>   struct gpio_fan_speed {
+> @@ -42,6 +45,7 @@ struct gpio_fan_data {
+>   	bool			pwm_enable;
+>   	struct gpio_desc	*alarm_gpio;
+>   	struct work_struct	alarm_work;
+> +	struct regulator	*supply;
+>   };
+>   
+>   /*
+> @@ -125,13 +129,32 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
+>   }
+>   
+>   /* Must be called with fan_data->lock held, except during initialization. */
+> -static void set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
+> +static int set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
+>   {
+>   	if (fan_data->speed_index == speed_index)
+> -		return;
+> +		return 0;
+> +
+> +	if (fan_data->speed_index == 0 && speed_index > 0) {
+> +		int ret;
+> +
+> +		ret = pm_runtime_resume_and_get(fan_data->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+>   
+>   	__set_fan_ctrl(fan_data, fan_data->speed[speed_index].ctrl_val);
+> +
+> +	if (fan_data->speed_index > 0 && speed_index == 0) {
+> +		int ret;
+> +
+> +		ret = pm_runtime_put_sync(fan_data->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+>   	fan_data->speed_index = speed_index;
+> +
+> +	return 0;
+>   }
+>   
+>   static int get_fan_speed_index(struct gpio_fan_data *fan_data)
+> @@ -189,7 +212,9 @@ static ssize_t pwm1_store(struct device *dev, struct device_attribute *attr,
+>   	}
+>   
+>   	speed_index = DIV_ROUND_UP(pwm * (fan_data->num_speed - 1), 255);
+> -	set_fan_speed(fan_data, speed_index);
+> +	ret = set_fan_speed(fan_data, speed_index);
 
-Yes, I understand. The problem here is not the code, just the comment.
+That means pre-initializing ret is no longer necessary.
 
->>> +#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
->>> +#define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
->>>    
->> ... expressed in 10ths of uC.
->>
->>>    static const struct regmap_config ina238_regmap_config = {
->>>    	.max_register = INA238_REGISTERS,
->>> @@ -102,7 +114,20 @@ static const struct regmap_config ina238_regmap_config = {
->>>    	.val_bits = 16,
->>>    };
->>>    
->>> +enum ina238_ids { ina238, ina237, sq52206 };
->>> +
->>> +struct ina238_config {
->>> +	bool has_power_highest;		/* chip detection power peak */
->>> +	bool has_energy;		/* chip detection energy */
->>> +	u8 temp_shift;
->>> +	u32 power_calculate_factor;		/*fixed parameters for power calculate*/
->>> +	u16 config_default;
->>> +	int bus_voltage_lsb;    /* uV */
->>> +	int temp_lsb;   /* mC */
->>
->> No, this is not the temperature in mC. It is the temperature in 10th of uC.
->>
-> 
-> This is indeed a problem, I need to handle temp_lsb appropriately.
-> 
-Same as above. The problem is (as far as I can see) not in the code.
-The comment should state the correct units.
+> +	if (!ret)
+> +		ret = count;
+>   
 
->>>    			/* gain of 1 -> LSB / 4 */
->>> -			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
->>> -			       (1000 * (4 - data->gain + 1));
->>> +			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
->>> +					data->gain / (1000 * 4);
->>
->> The slight benefit of this change is that the divisor is now a constant,
->> which may enable some compiler optimization. Still, it is not a necessary
->> change and just makes review more difficult.
->>
-> 
-> The original formula takes effect only when gain=1 or 4, but sq52206 has a gain=2.
-> The principle of this formula is the same as before.
-> 
+This is confusing. Please use the same error handling everywhere.
+I would suggest
+	return ret ? : count;
+or
+	return ret ? ret : count;
 
-Thanks for the clarification. It might make sense to separate this and the
-calculation change below out into a separate patch and explain the reasoning
-in the commit description.
+>   exit_unlock:
+>   	mutex_unlock(&fan_data->lock);
+> @@ -211,6 +236,7 @@ static ssize_t pwm1_enable_store(struct device *dev,
+>   {
+>   	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+>   	unsigned long val;
+> +	int ret;
+>   
+>   	if (kstrtoul(buf, 10, &val) || val > 1)
+>   		return -EINVAL;
+> @@ -224,11 +250,14 @@ static ssize_t pwm1_enable_store(struct device *dev,
+>   
+>   	/* Disable manual control mode: set fan at full speed. */
+>   	if (val == 0)
+> -		set_fan_speed(fan_data, fan_data->num_speed - 1);
+> +		ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+>   
+>   	mutex_unlock(&fan_data->lock);
+>   
+> -	return count;
+> +	if (ret)
+> +		return ret;
+> +	else
+> +		return count;
+
+Static analyzers will rightfully complain that else after return is pointless.
+Try
+	return ret ? : count;
+or at least
+	return ret ? ret : count;
 
 Thanks,
 Guenter
