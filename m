@@ -1,338 +1,175 @@
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C49C4400;
-	Mon, 24 Mar 2025 12:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C8625F97D;
+	Mon, 24 Mar 2025 13:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742820369; cv=none; b=Rkd0Na+kMdO7LeLLKLc7jhqiPOPkvcgfa9dQLa5vWYiUGLNyB+mVkD7CEJAaTimgaL8Nj8LwJGQvndoR7PX+MY4Lfy7wNhf8CeayzA84w1/f087acXf/poUPfzQxTF6fEhmgR4T5wCwYh78emqsGzX7kGL8Jz3hgYOywO5fWfOw=
+	t=1742824699; cv=none; b=Bp6Z3e4g6+9rvGfme6eBOCGIc9yhm+jjpdKo1yD1qanFRlmk5cdxKiv9/BY9Y6ukhQWsr3I2KcirnDXzbDW5W7M1yv0RRtzuLZzW27EA2PUtM0mZYfKWO8kZWVii4/+KB/NKs+p8YBEiFdSqdcsGfU5tYZDSwDbrHeeI7SLIBJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742820369; c=relaxed/simple;
-	bh=oxTW1PrI7zxnvTAfviKT5O2OKh8U6bxkdbvldlFaQFw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uU4EYL4ZdQNflGTZZo3Wh6xst3mfiglmYeiIlH2ZmwVr3LvMKhMI1NIlC5OXRFUfKnuRQmxpwc2yDI6fGyNlhPoDCMKS54ig1rlaveNH1EUuDRybOwNQeA8GOQ4hlnNMAY37XfZSJ34dnE9balmENo6vTMw3wZlVcSfepChSc/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=YijUECz6; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=mwNeQ+iB reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1742824699; c=relaxed/simple;
+	bh=vvZImpPDSXtjhYYx9VMQXwdHX6YtDsEjrO4u8NsvmqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=obmCUi7WB91vDQ6vP1aAgv8E4C+NU/z2jZSMylcOwkL6sErSzfPJ+IkwL3wXYThiGo5UGV0Wmeg2gVhjQAc4rMMc3G86MeO7EBUlJiQTBdinlTQZ3deEjrb8XnGqgdDN5WMNhSozjCb5wYZmHzp+Yk72lrmLEh+McKIINmTcyac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPQ7wWZz; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="YijUECz6";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="mwNeQ+iB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPQ7wWZz"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-224191d92e4so82040355ad.3;
+        Mon, 24 Mar 2025 06:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1742820365; x=1774356365;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DX4/VO3OnQRr65r3k5zsXrc0QjpoAW2FHYBe64Wv3so=;
-  b=YijUECz6vu7a/SAuwv/PWFFSr6qzWMg1+ijRE02a5zi40ceQ9z9F1Cmi
-   SlqlGDNrZbJzLU8H3U6NBYNjxvCc4JJ+o5Xb8Y/JayLrdQMex2Vxi5VEf
-   LF39GVc9SbEjRJrG/H84NxhaGtEkQOsFxptnsDKv8/+Xp3wfzcw/PhcHn
-   T1FGuILbQQzo8grwuTdvk/+mHd3/QVqBnxUiwjsyMwAv4Stq3tr2FugzI
-   7rO2ZX2F7JnjzBPF9vYUJ1geI1Lb6593PZdgiujGUW57vAWGzMBFJqS/t
-   7CyDm3OpJdzW1nLfYkhyTvCf3Fxv1YMnSRwSVuEnOMmE7CCPxupUjtYd2
-   A==;
-X-CSE-ConnectionGUID: YJDNgeQkQxq1mymXzWzL4g==
-X-CSE-MsgGUID: FQhoTfolT++Nv+KvZ+nvag==
-X-IronPort-AV: E=Sophos;i="6.14,272,1736809200"; 
-   d="scan'208";a="43121863"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 24 Mar 2025 13:46:01 +0100
-X-CheckPoint: {67E15409-B-F35B2447-E1635CDE}
-X-MAIL-CPID: BA32B4495DC1B31DA7A57D267F96BBF6_1
-X-Control-Analysis: str=0001.0A006398.67E15403.0066,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 55114167297;
-	Mon, 24 Mar 2025 13:45:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1742820357;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DX4/VO3OnQRr65r3k5zsXrc0QjpoAW2FHYBe64Wv3so=;
-	b=mwNeQ+iBSVgfKds9QENrlVpJcFiuapYgpm7B1+bObeVbZK8K5HXlb8QBpYkNi7PtGbb2AR
-	MJpiqTgvsie91/s+cPwfc7ygbDJEy7Qt3an1dS8HXYgKQIDhZP0ItX+SyBSwV2+ml1ClLw
-	WzY6dtcONxuRgkzCUsQ99X3tPDVUcOhL6g92eQ9WQwuXYgaBmaeyMKEnbyZNA1VOlFTjd6
-	gcaURLZ9sBIfvqIV03DXnRbq4sZ2szY82ze2go+FGAVm6/+Gw42VVcW8YcOQ8O1ANWUM9b
-	EJFjG/ks+0uQpz/0P8Fp5kJlxSsz0wJxgYYmmyg+QKw6D9br0DWEkZj13QpTwA==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] hwmon: (gpio-fan) Add regulator support
-Date: Mon, 24 Mar 2025 13:45:49 +0100
-Message-ID: <20250324124550.989292-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.43.0
+        d=gmail.com; s=20230601; t=1742824697; x=1743429497; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bcExjkUMRFkywZF7IJHsZMCyAGFZolx+FfzPyY4VMWo=;
+        b=IPQ7wWZzprwL0pC9JJFUFN8Y7oItNGsRjW6YuBR7NdpiNen914Xz+YcAhFRgf9dKzZ
+         Jdv+dVD8Jj8rcfykQU0JohETlPbGhXEKUXzNGTnlASY4kwJC4Hf92UrYxKeTZPx18FUg
+         yVSRWlItZ1FrEvi8Ahnvsv71ai6xCoGZ+GVGg7mEJOTxePfeB8CxxQlFNODTSzr2/mm+
+         BMbcIVz8p5IuA+wjx5BTvwKfYu4SajdOf9sr+B+8PQibq6085BXjFCpv4kQjJ5fOTXkD
+         CAkHZsv8AdqpLUl6k+5uqPciNpBYe1xdoSWraICnx28EaRGaKrDgFyZxVqDJ6UK+HICF
+         A15g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742824697; x=1743429497;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bcExjkUMRFkywZF7IJHsZMCyAGFZolx+FfzPyY4VMWo=;
+        b=gQuDrTuyHvVZiOeEJ39KwovwS4IWWR90ZlhwabIxxKdKmQTQCFhMifzyuArsd77tlO
+         rvaV1VGwr5vZYGRsfGs+ZBDRoeU+jjRd2PfesCb6YHZqULsuiB9jkpbMzPu9Y1JClRzN
+         xZZhNMvmnnbimCkRFCb7+R2etI2C04qEsG6o59JviO/jZZr86JRvH0J3ecmWRga2G1le
+         CHrAzZ9ZKcgACdoVcpPQQ1G2OSjU3+atX85B5nsRGo9Dzj5Bp+/VECQdFD1vvKYzPR9r
+         KkCyIGEf6c56Z2Lw9cu3DD5gXOy9r3/HPubnWveztv1jADoSGbdbD3tlDsqrNIxP2P35
+         m96A==
+X-Forwarded-Encrypted: i=1; AJvYcCUDCs2dVvralevnasYtA/SfnhQM4mhMV6HYFfFAPUAMpMJ5za4FHWe/lYJtXfPCS5l2wh58V/UqxPVh5EY=@vger.kernel.org, AJvYcCVMMN1RwODy4Am+SeruN5lUs30iHzs9T7DZA1dbpQs7IwIZu2DT44+gm72uPjaXjjDGFh1DNIeQ498v@vger.kernel.org, AJvYcCVZOKX3/w9RzAZ1E1EWs09dsMjH7Prp1ODVGy0228DKw3CnowKDhN1neDofFVYS2Iq0SzusZ/pXBa/t@vger.kernel.org, AJvYcCVmDJY4RWkOPtefS4C9gO1r4xG+3MOJQyJZzJuP48++HRH74xnhuKernPg+ziGJDJxZIi7tQprBKdpp2etC@vger.kernel.org, AJvYcCXVz3MjvoaQTofMuaxtuytkppKYh/X4yzygUH8/DhBsh13uEwB3smqUpo6psLg4wMVf3OufregY9AF+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOFavQuLSqrdDbEy4Nv3IXTx4ybiRwSGkVXlC1cc6JfVqQjO87
+	Np3D34h32+l6ZiEZLTCpce6AeRPrStBSw4hywIJ4riaaj/sbppTu
+X-Gm-Gg: ASbGncuCk3TJpQ7HqOrS3NMQCqXS2k5DaRfSZTRtRmPNFMKhUXN9v1Q5BrNDvjDEYsP
+	QbUWllm0OTpcDxJ4xfk6fZ7VRL47JTQLNtCjVFSsLtMTmN/hkLkp03LawHv3qTDcyngcAUaBgY2
+	IuCbFrWOiXAIevxjQeQJYxhf50A0GWXJ/Z7MAqDwm20ufvRkfDHS9QQxCUYBi5e1HI29wrty56T
+	6LDFDefGi54rNqXst9jk0B9uN+nLEBWEv5ezk0Yd4v5/4ci78TbO+5vqYpcsbvs4c8y4XL+SHfN
+	4Fmd3V1y1MDLMC4Kb2Jy21hiOdqPTjgZKl8vNzy2BKOe/dnB/vjmkNT2gvtFrfy+rGdlFp1QlBn
+	m9jrpSELLfyJoD9TBvw==
+X-Google-Smtp-Source: AGHT+IGp8O7cq1uK0v/iuDHoZYPSWwvPQS5uZ3OszuIq7sJCR2hCvwPSIjpvwwmvt/SXqYre34xjPw==
+X-Received: by 2002:a05:6a20:ad0c:b0:1f5:75a9:5255 with SMTP id adf61e73a8af0-1fe43477ca6mr21749487637.39.1742824697005;
+        Mon, 24 Mar 2025 06:58:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a27dea45sm7136663a12.11.2025.03.24.06.58.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Mar 2025 06:58:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <190c4a14-167a-4f72-8aed-477d4a401d20@roeck-us.net>
+Date: Mon, 24 Mar 2025 06:58:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
+ <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
+ <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
+ <20250226145931.GA2314060-robh@kernel.org>
+ <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
+ <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
+ <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
+ <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
+ <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
+ <PH0PR03MB693831397416C4247F8BA58D8ED92@PH0PR03MB6938.namprd03.prod.outlook.com>
+ <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
+ <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
+ <16b6b98e-711e-40d5-970e-af1feb46ce91@roeck-us.net>
+ <7c3f107e-2732-4d6e-a9e4-652ae18c16c5@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <7c3f107e-2732-4d6e-a9e4-652ae18c16c5@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-FANs might be supplied by a regulator which needs to be enabled as well.
-This is implemented using runtime PM. Every time speed_index changes from
-0 to non-zero and vise versa RPM is resumed or suspended.
-Intitial RPM state is determined by initial value of speed_index.
+On 3/24/25 00:16, Krzysztof Kozlowski wrote:
+> On 21/03/2025 18:24, Guenter Roeck wrote:
+>>>
+>>> Figured. As it turns out, there is also a patch series pending which tries
+>>> to fix the problem for ir38060 by changing its bindings.
+>>>
+>>> I'll dig up my patch series to add a new macro and send it out as RFT.
+>>>
+>>
+>> Question for DT maintainers:
+>>
+>> Existing bindings, such as
+>> 	Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
+>> expect a nested regulators node even though there is only a single
+>> regulator. What is the correct approach: Keep the nesting requirement
+>> for those regulators as is (even if there are no in-tree bindings
+>> using them), or update the code and the bindings to drop the nesting ?
+>>
+> I would recommend keep the nesting, so don't touch it. There might be
+> external users, other projects relying on this. You can however
+> deprecate old node (nesting), if the driver can support both. Not sure
+> if it is worth the effort.
+> 
+That is not in driver control: If regulators_node is set by the driver,
+the regulator subsystem mandates the sub-node.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-Patch 1 & 2 from v1 [1] have already been applied, although number 2 [2] is not
-yet showing in next-20250305. Patches 3 & 4 (just removing comments) from v1
-have been dropped, so only this patch remains.
-
-Changes in v3:
-* Remove noisy dev_err calls related to runtime pm
-* Properly propagate return codes from set_fan_speed
-
-Changes in v2:
-* Make regulator non-optional
-
-[1] https://lore.kernel.org/all/20250210145934.761280-1-alexander.stein@ew.tq-group.com/
-[2] https://web.git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?h=hwmon-next&id=9fee7d19bab635f89223cc40dfd2c8797fdc4988
----
- drivers/hwmon/gpio-fan.c | 104 +++++++++++++++++++++++++++++++++------
- 1 file changed, 90 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index cee3fa146d69a..4c736b7eb5473 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -20,6 +20,9 @@
- #include <linux/gpio/consumer.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-+#include <linux/pm.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/thermal.h>
- 
- struct gpio_fan_speed {
-@@ -42,6 +45,7 @@ struct gpio_fan_data {
- 	bool			pwm_enable;
- 	struct gpio_desc	*alarm_gpio;
- 	struct work_struct	alarm_work;
-+	struct regulator	*supply;
- };
- 
- /*
-@@ -125,13 +129,32 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
- }
- 
- /* Must be called with fan_data->lock held, except during initialization. */
--static void set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
-+static int set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
- {
- 	if (fan_data->speed_index == speed_index)
--		return;
-+		return 0;
-+
-+	if (fan_data->speed_index == 0 && speed_index > 0) {
-+		int ret;
-+
-+		ret = pm_runtime_resume_and_get(fan_data->dev);
-+		if (ret < 0)
-+			return ret;
-+	}
- 
- 	__set_fan_ctrl(fan_data, fan_data->speed[speed_index].ctrl_val);
-+
-+	if (fan_data->speed_index > 0 && speed_index == 0) {
-+		int ret;
-+
-+		ret = pm_runtime_put_sync(fan_data->dev);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	fan_data->speed_index = speed_index;
-+
-+	return 0;
- }
- 
- static int get_fan_speed_index(struct gpio_fan_data *fan_data)
-@@ -189,7 +212,9 @@ static ssize_t pwm1_store(struct device *dev, struct device_attribute *attr,
- 	}
- 
- 	speed_index = DIV_ROUND_UP(pwm * (fan_data->num_speed - 1), 255);
--	set_fan_speed(fan_data, speed_index);
-+	ret = set_fan_speed(fan_data, speed_index);
-+	if (!ret)
-+		ret = count;
- 
- exit_unlock:
- 	mutex_unlock(&fan_data->lock);
-@@ -211,6 +236,7 @@ static ssize_t pwm1_enable_store(struct device *dev,
- {
- 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
- 	unsigned long val;
-+	int ret;
- 
- 	if (kstrtoul(buf, 10, &val) || val > 1)
- 		return -EINVAL;
-@@ -224,11 +250,14 @@ static ssize_t pwm1_enable_store(struct device *dev,
- 
- 	/* Disable manual control mode: set fan at full speed. */
- 	if (val == 0)
--		set_fan_speed(fan_data, fan_data->num_speed - 1);
-+		ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
- 
- 	mutex_unlock(&fan_data->lock);
- 
--	return count;
-+	if (ret)
-+		return ret;
-+	else
-+		return count;
- }
- 
- static ssize_t pwm1_mode_show(struct device *dev,
-@@ -279,7 +308,7 @@ static ssize_t set_rpm(struct device *dev, struct device_attribute *attr,
- 		goto exit_unlock;
- 	}
- 
--	set_fan_speed(fan_data, rpm_to_speed_index(fan_data, rpm));
-+	ret = set_fan_speed(fan_data, rpm_to_speed_index(fan_data, rpm));
- 
- exit_unlock:
- 	mutex_unlock(&fan_data->lock);
-@@ -386,6 +415,7 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 				  unsigned long state)
- {
- 	struct gpio_fan_data *fan_data = cdev->devdata;
-+	int ret;
- 
- 	if (!fan_data)
- 		return -EINVAL;
-@@ -395,11 +425,11 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
- 
- 	mutex_lock(&fan_data->lock);
- 
--	set_fan_speed(fan_data, state);
-+	ret = set_fan_speed(fan_data, state);
- 
- 	mutex_unlock(&fan_data->lock);
- 
--	return 0;
-+	return ret;
- }
- 
- static const struct thermal_cooling_device_ops gpio_fan_cool_ops = {
-@@ -499,6 +529,8 @@ static void gpio_fan_stop(void *data)
- 	mutex_lock(&fan_data->lock);
- 	set_fan_speed(data, 0);
- 	mutex_unlock(&fan_data->lock);
-+
-+	pm_runtime_disable(fan_data->dev);
- }
- 
- static int gpio_fan_probe(struct platform_device *pdev)
-@@ -521,6 +553,11 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, fan_data);
- 	mutex_init(&fan_data->lock);
- 
-+	fan_data->supply = devm_regulator_get(dev, "fan");
-+	if (IS_ERR(fan_data->supply))
-+		return dev_err_probe(dev, PTR_ERR(fan_data->supply),
-+				     "Failed to get fan-supply");
-+
- 	/* Configure control GPIOs if available. */
- 	if (fan_data->gpios && fan_data->num_gpios > 0) {
- 		if (!fan_data->speed || fan_data->num_speed <= 1)
-@@ -548,6 +585,17 @@ static int gpio_fan_probe(struct platform_device *pdev)
- 			return err;
- 	}
- 
-+	pm_runtime_set_suspended(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+	/* If current GPIO state is active, mark RPM as active as well */
-+	if (fan_data->speed_index > 0) {
-+		int ret;
-+
-+		ret = pm_runtime_resume_and_get(&pdev->dev);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/* Optional cooling device register for Device tree platforms */
- 	fan_data->cdev = devm_thermal_of_cooling_device_register(dev, np,
- 				"gpio-fan", fan_data, &gpio_fan_cool_ops);
-@@ -568,41 +616,69 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
- 	}
- }
- 
-+static int gpio_fan_runtime_suspend(struct device *dev)
-+{
-+	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	if (fan_data->supply)
-+		ret = regulator_disable(fan_data->supply);
-+
-+	return ret;
-+}
-+
-+static int gpio_fan_runtime_resume(struct device *dev)
-+{
-+	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	if (fan_data->supply)
-+		ret = regulator_enable(fan_data->supply);
-+
-+	return ret;
-+}
-+
- static int gpio_fan_suspend(struct device *dev)
- {
- 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-+	int ret = 0;
- 
- 	if (fan_data->gpios) {
- 		fan_data->resume_speed = fan_data->speed_index;
- 		mutex_lock(&fan_data->lock);
--		set_fan_speed(fan_data, 0);
-+		ret = set_fan_speed(fan_data, 0);
- 		mutex_unlock(&fan_data->lock);
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int gpio_fan_resume(struct device *dev)
- {
- 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
-+	int ret = 0;
- 
- 	if (fan_data->gpios) {
- 		mutex_lock(&fan_data->lock);
--		set_fan_speed(fan_data, fan_data->resume_speed);
-+		ret = set_fan_speed(fan_data, fan_data->resume_speed);
- 		mutex_unlock(&fan_data->lock);
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
--static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
-+static const struct dev_pm_ops gpio_fan_pm = {
-+	RUNTIME_PM_OPS(gpio_fan_runtime_suspend,
-+		       gpio_fan_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(gpio_fan_suspend, gpio_fan_resume)
-+};
- 
- static struct platform_driver gpio_fan_driver = {
- 	.probe		= gpio_fan_probe,
- 	.shutdown	= gpio_fan_shutdown,
- 	.driver	= {
- 		.name	= "gpio-fan",
--		.pm	= pm_sleep_ptr(&gpio_fan_pm),
-+		.pm	= pm_ptr(&gpio_fan_pm),
- 		.of_match_table = of_gpio_fan_match,
- 	},
- };
--- 
-2.43.0
+Thanks,
+Guenter
 
