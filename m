@@ -1,67 +1,67 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C8625F97D;
-	Mon, 24 Mar 2025 13:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720A2505C5;
+	Mon, 24 Mar 2025 14:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742824699; cv=none; b=Bp6Z3e4g6+9rvGfme6eBOCGIc9yhm+jjpdKo1yD1qanFRlmk5cdxKiv9/BY9Y6ukhQWsr3I2KcirnDXzbDW5W7M1yv0RRtzuLZzW27EA2PUtM0mZYfKWO8kZWVii4/+KB/NKs+p8YBEiFdSqdcsGfU5tYZDSwDbrHeeI7SLIBJQ=
+	t=1742825537; cv=none; b=RDMAfbE9SAJKVYA2EC3LIVDjk5tVxkYRSwoDcAxHQlDQ+wY4O5839jf+WHQiS2fBdgvnQeaTiSDO2wq9sZVSC1MzrXD89ZAF/CSLBVQoSFvrEtugBaatjus9+kwqIRx9qg7WbPFpxlCEu318LQ4uBYzqozrFaPesgeLKOyIgH04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742824699; c=relaxed/simple;
-	bh=vvZImpPDSXtjhYYx9VMQXwdHX6YtDsEjrO4u8NsvmqE=;
+	s=arc-20240116; t=1742825537; c=relaxed/simple;
+	bh=hIlci/ejHPKu2NoO0xwOe+65FMTZn3FzjTVWnTvLsUo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=obmCUi7WB91vDQ6vP1aAgv8E4C+NU/z2jZSMylcOwkL6sErSzfPJ+IkwL3wXYThiGo5UGV0Wmeg2gVhjQAc4rMMc3G86MeO7EBUlJiQTBdinlTQZ3deEjrb8XnGqgdDN5WMNhSozjCb5wYZmHzp+Yk72lrmLEh+McKIINmTcyac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPQ7wWZz; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=rDQzsE53TZbLpbzTaB43UhkdNorZLZaFyN5kmfKnALFMoQXX5eS2xR8aM+/XqnoXMxUkUgwR4bPTcq8KWdU7YAIQOt1fsCKqld4RrknazhR0mXyuMFrpz85nvwvMq+1Gi7bfpbNmncZOD7e7VK2GPOECEgxSY4rKN3jxX0VhU6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8Mp20dy; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPQ7wWZz"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-224191d92e4so82040355ad.3;
-        Mon, 24 Mar 2025 06:58:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8Mp20dy"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2260c91576aso73619405ad.3;
+        Mon, 24 Mar 2025 07:12:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742824697; x=1743429497; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742825534; x=1743430334; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bcExjkUMRFkywZF7IJHsZMCyAGFZolx+FfzPyY4VMWo=;
-        b=IPQ7wWZzprwL0pC9JJFUFN8Y7oItNGsRjW6YuBR7NdpiNen914Xz+YcAhFRgf9dKzZ
-         Jdv+dVD8Jj8rcfykQU0JohETlPbGhXEKUXzNGTnlASY4kwJC4Hf92UrYxKeTZPx18FUg
-         yVSRWlItZ1FrEvi8Ahnvsv71ai6xCoGZ+GVGg7mEJOTxePfeB8CxxQlFNODTSzr2/mm+
-         BMbcIVz8p5IuA+wjx5BTvwKfYu4SajdOf9sr+B+8PQibq6085BXjFCpv4kQjJ5fOTXkD
-         CAkHZsv8AdqpLUl6k+5uqPciNpBYe1xdoSWraICnx28EaRGaKrDgFyZxVqDJ6UK+HICF
-         A15g==
+        bh=7o3URVbvXtzI6YwkjrSDC5zCoxRK8EtHeWUGbXbB0SI=;
+        b=h8Mp20dyyd4mlbhpYcbkh1fV8R2KA7G6jNGa2Q1xe6Q9vecvozvtRo6jxpA5b7jXOY
+         54EPfYVf+lZbpVDzilMlgT/0mfohyrBbImWKt/A2UfwQ2Tvy6wtVKGyxV5YYzQtDSoyE
+         WxzlMnSIJ/O2EPpCvFUKfJMozH18haJpa87IOphYJZtmR0Vm82W668dFvXXOpj+vxcBZ
+         lyE8ea3H9cu1sEVDwbCBOTT2yY3E2KHWNKBf4OliBGR0Q6g1nMXbmMqvqfRVXNUggSjh
+         XWgYQV4sJQGRoEKJT7TyG89rxo++ngCvhCnJi1yGSPXp5GPWf1YBD273MFLMvkmTXRou
+         fb4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742824697; x=1743429497;
+        d=1e100.net; s=20230601; t=1742825534; x=1743430334;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bcExjkUMRFkywZF7IJHsZMCyAGFZolx+FfzPyY4VMWo=;
-        b=gQuDrTuyHvVZiOeEJ39KwovwS4IWWR90ZlhwabIxxKdKmQTQCFhMifzyuArsd77tlO
-         rvaV1VGwr5vZYGRsfGs+ZBDRoeU+jjRd2PfesCb6YHZqULsuiB9jkpbMzPu9Y1JClRzN
-         xZZhNMvmnnbimCkRFCb7+R2etI2C04qEsG6o59JviO/jZZr86JRvH0J3ecmWRga2G1le
-         CHrAzZ9ZKcgACdoVcpPQQ1G2OSjU3+atX85B5nsRGo9Dzj5Bp+/VECQdFD1vvKYzPR9r
-         KkCyIGEf6c56Z2Lw9cu3DD5gXOy9r3/HPubnWveztv1jADoSGbdbD3tlDsqrNIxP2P35
-         m96A==
-X-Forwarded-Encrypted: i=1; AJvYcCUDCs2dVvralevnasYtA/SfnhQM4mhMV6HYFfFAPUAMpMJ5za4FHWe/lYJtXfPCS5l2wh58V/UqxPVh5EY=@vger.kernel.org, AJvYcCVMMN1RwODy4Am+SeruN5lUs30iHzs9T7DZA1dbpQs7IwIZu2DT44+gm72uPjaXjjDGFh1DNIeQ498v@vger.kernel.org, AJvYcCVZOKX3/w9RzAZ1E1EWs09dsMjH7Prp1ODVGy0228DKw3CnowKDhN1neDofFVYS2Iq0SzusZ/pXBa/t@vger.kernel.org, AJvYcCVmDJY4RWkOPtefS4C9gO1r4xG+3MOJQyJZzJuP48++HRH74xnhuKernPg+ziGJDJxZIi7tQprBKdpp2etC@vger.kernel.org, AJvYcCXVz3MjvoaQTofMuaxtuytkppKYh/X4yzygUH8/DhBsh13uEwB3smqUpo6psLg4wMVf3OufregY9AF+@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOFavQuLSqrdDbEy4Nv3IXTx4ybiRwSGkVXlC1cc6JfVqQjO87
-	Np3D34h32+l6ZiEZLTCpce6AeRPrStBSw4hywIJ4riaaj/sbppTu
-X-Gm-Gg: ASbGncuCk3TJpQ7HqOrS3NMQCqXS2k5DaRfSZTRtRmPNFMKhUXN9v1Q5BrNDvjDEYsP
-	QbUWllm0OTpcDxJ4xfk6fZ7VRL47JTQLNtCjVFSsLtMTmN/hkLkp03LawHv3qTDcyngcAUaBgY2
-	IuCbFrWOiXAIevxjQeQJYxhf50A0GWXJ/Z7MAqDwm20ufvRkfDHS9QQxCUYBi5e1HI29wrty56T
-	6LDFDefGi54rNqXst9jk0B9uN+nLEBWEv5ezk0Yd4v5/4ci78TbO+5vqYpcsbvs4c8y4XL+SHfN
-	4Fmd3V1y1MDLMC4Kb2Jy21hiOdqPTjgZKl8vNzy2BKOe/dnB/vjmkNT2gvtFrfy+rGdlFp1QlBn
-	m9jrpSELLfyJoD9TBvw==
-X-Google-Smtp-Source: AGHT+IGp8O7cq1uK0v/iuDHoZYPSWwvPQS5uZ3OszuIq7sJCR2hCvwPSIjpvwwmvt/SXqYre34xjPw==
-X-Received: by 2002:a05:6a20:ad0c:b0:1f5:75a9:5255 with SMTP id adf61e73a8af0-1fe43477ca6mr21749487637.39.1742824697005;
-        Mon, 24 Mar 2025 06:58:17 -0700 (PDT)
+        bh=7o3URVbvXtzI6YwkjrSDC5zCoxRK8EtHeWUGbXbB0SI=;
+        b=AV7T+HtEG4jTKbjkPwbIBBwPiSemptylNFlFoXD11oJfLC4L3ZDb/CBSHwmb5YX+nA
+         RTvD/cZYp5vX56/7ymqpxtUqcbm/n80rf/9ZfROxX2+Q+YLG/WCfoMiC5gC5pA/yY82h
+         RwVe9oCgEoHyKjqiGsXVyHfKNdHtIAqZaSdqzU02S26Y5eQx6RTruuo0+RdH6XYgJUuZ
+         5UkUlJjzNJ/p9ugZg2bya+qwHKwu3yEMDNo0Obp5DqY828u06BXL6JLw1W620w+i4FHw
+         PofB5xx9ye8uhwYZc5rZdVHgTX7Q38ri1HbQa6JoOcX+T+sZBNypk3H2VsdWMcVewnWh
+         +Zjw==
+X-Forwarded-Encrypted: i=1; AJvYcCVisDBXPjFXc4IKXdsRNUGXG+9QgwXWnhJOD+w64RP+LDNlCTe0HJ4A8ntaguqvEJWq2NN3zxxftM0yMA==@vger.kernel.org, AJvYcCXuCJSz5wbv28Od+LkyVzv63vuwRr+Ll3zcJfO7vzuS4GrPk78Fi/I6oQD3oQajBxUIcTcabvYzv2OKj1Jg@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1tmD6SwKO4h+p8wnCJESfCgJ1EWdoAN76eX/oVlPvbgenuMWo
+	h0FEJJnDnR8VJQ72xPrbmToE4G6WoESIr0v4xVBB/GnqOLemzowL
+X-Gm-Gg: ASbGncvApHRstCUC8RS5XBSVUGWfqh5GLXPMG1w+/AAPyBodQz+MpQ+JynATmRCpEC1
+	CE2Dpvi77jjhs702fCYkBU2+ExzYGEglvD1uZCCY03JxPCsXAhl0mpULPRiMswt+q8nOGlunY4W
+	+ITRoP4+b8TKd00xs8UN2iBY5AHdC+HN2vz/a1EmBaCWdiqz31VZ76vmY10m4dS+JD23TZ9htIb
+	cZdBMTwH77nQ+94RWfckmrSLornuyn9M0xP0Mt8pYdjG/7hicmFwbJJaNf3MBk19zM2M7FJFSzZ
+	Hyri6LIymBtL2ThwVFYSDdvm7YCiFZyY05VcVpVC01stxw3NF3SrUJpLNTJyqzVkI0pLi0LUGwo
+	eneNAZ2HCYrawcgiWrg==
+X-Google-Smtp-Source: AGHT+IG7XorWqAx6k7knkJ37HFVJXY/lOIzBSxPdYHJJ0fvVsVxkCOpj/ciraFpciZ/nunpJ23DM7w==
+X-Received: by 2002:a17:902:e887:b0:224:1074:6393 with SMTP id d9443c01a7336-22780e1fab8mr215452435ad.43.1742825534118;
+        Mon, 24 Mar 2025 07:12:14 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a27dea45sm7136663a12.11.2025.03.24.06.58.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811da8b8sm70630815ad.189.2025.03.24.07.12.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Mar 2025 06:58:16 -0700 (PDT)
+        Mon, 24 Mar 2025 07:12:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <190c4a14-167a-4f72-8aed-477d4a401d20@roeck-us.net>
-Date: Mon, 24 Mar 2025 06:58:15 -0700
+Message-ID: <164922f5-d7d9-4e36-b0d4-5ba4c30597e3@roeck-us.net>
+Date: Mon, 24 Mar 2025 07:12:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,32 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
- <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
- <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
- <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
- <PH0PR03MB693831397416C4247F8BA58D8ED92@PH0PR03MB6938.namprd03.prod.outlook.com>
- <PH0PR03MB6938087B8F2EDB9899DD0F1D8EDB2@PH0PR03MB6938.namprd03.prod.outlook.com>
- <ab329813-2903-4bd1-8734-ab36466650c2@roeck-us.net>
- <16b6b98e-711e-40d5-970e-af1feb46ce91@roeck-us.net>
- <7c3f107e-2732-4d6e-a9e4-652ae18c16c5@kernel.org>
+Subject: Re: [PATCH v5 2/2] hwmon:(ina238)Add support for SQ52206
+To: Wenliang Yan <wenliang202407@163.com>
+Cc: christophe.jaillet@wanadoo.fr, conor+dt@kernel.org, corbet@lwn.net,
+ jdelvare@suse.com, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, robh@kernel.org
+References: <801599a6-81d9-4e06-8fc6-e959132eef24@roeck-us.net>
+ <20250324123852.4120-1-wenliang202407@163.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -140,35 +121,91 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <7c3f107e-2732-4d6e-a9e4-652ae18c16c5@kernel.org>
+In-Reply-To: <20250324123852.4120-1-wenliang202407@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/24/25 00:16, Krzysztof Kozlowski wrote:
-> On 21/03/2025 18:24, Guenter Roeck wrote:
+On 3/24/25 05:38, Wenliang Yan wrote:
+> At 2025-03-23 01:25:11, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>> On 3/13/25 01:02, Wenliang Yan wrote:
+>>> Add support for SQ52206 to the Ina238 driver. Add registers,
+>>> add calculation formulas, increase compatibility, add
+>>> compatibility programs for multiple chips.
 >>>
->>> Figured. As it turns out, there is also a patch series pending which tries
->>> to fix the problem for ir38060 by changing its bindings.
->>>
->>> I'll dig up my patch series to add a new macro and send it out as RFT.
->>>
+>>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 >>
->> Question for DT maintainers:
+>> The patch unfortunately combines adding support for a new chip
+>> with adding the necessary infrastructure. I finally found the time
+>> to look into this further and split the changes, trying to find out
+>> what actually changed. Unfortunately there are some problems.
+>> Some of them are listed below.
 >>
->> Existing bindings, such as
->> 	Documentation/devicetree/bindings/regulator/mps,mpq2286.yaml
->> expect a nested regulators node even though there is only a single
->> regulator. What is the correct approach: Keep the nesting requirement
->> for those regulators as is (even if there are no in-tree bindings
->> using them), or update the code and the bindings to drop the nesting ?
+>> This is not a complete review. Also, I'll have to write module tests
+>> to ensure that support for existing chips is not broken.
 >>
-> I would recommend keep the nesting, so don't touch it. There might be
-> external users, other projects relying on this. You can however
-> deprecate old node (nesting), if the driver can support both. Not sure
-> if it is worth the effort.
+>>>    #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
+>>>    #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
+>>> -#define INA238_DIE_TEMP_LSB		125 /* 125 mC/lsb */
+>>> +#define INA238_DIE_TEMP_LSB			1250000 /* 125 mC/lsb */
+>>
+>> This is not correct. The unit is 10ths of uC.
+>>
 > 
-That is not in driver control: If regulators_node is set by the driver,
-the regulator subsystem mandates the sub-node.
+> Since the temp_lsb of sq52206 is 7.8125 mC/LSB, in order to express it as an interger,
+> my original intention was to use 7.8125*10000 to represent 7.8125 mC/lsb.
+> At the same time, for the consistency of different devides, using 125 * 10000 to represent 125mC/lsb.
+> 
+
+Yes, I understand. The problem here is not the code, just the comment.
+
+>>> +#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
+>>> +#define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
+>>>    
+>> ... expressed in 10ths of uC.
+>>
+>>>    static const struct regmap_config ina238_regmap_config = {
+>>>    	.max_register = INA238_REGISTERS,
+>>> @@ -102,7 +114,20 @@ static const struct regmap_config ina238_regmap_config = {
+>>>    	.val_bits = 16,
+>>>    };
+>>>    
+>>> +enum ina238_ids { ina238, ina237, sq52206 };
+>>> +
+>>> +struct ina238_config {
+>>> +	bool has_power_highest;		/* chip detection power peak */
+>>> +	bool has_energy;		/* chip detection energy */
+>>> +	u8 temp_shift;
+>>> +	u32 power_calculate_factor;		/*fixed parameters for power calculate*/
+>>> +	u16 config_default;
+>>> +	int bus_voltage_lsb;    /* uV */
+>>> +	int temp_lsb;   /* mC */
+>>
+>> No, this is not the temperature in mC. It is the temperature in 10th of uC.
+>>
+> 
+> This is indeed a problem, I need to handle temp_lsb appropriately.
+> 
+Same as above. The problem is (as far as I can see) not in the code.
+The comment should state the correct units.
+
+>>>    			/* gain of 1 -> LSB / 4 */
+>>> -			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
+>>> -			       (1000 * (4 - data->gain + 1));
+>>> +			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
+>>> +					data->gain / (1000 * 4);
+>>
+>> The slight benefit of this change is that the divisor is now a constant,
+>> which may enable some compiler optimization. Still, it is not a necessary
+>> change and just makes review more difficult.
+>>
+> 
+> The original formula takes effect only when gain=1 or 4, but sq52206 has a gain=2.
+> The principle of this formula is the same as before.
+> 
+
+Thanks for the clarification. It might make sense to separate this and the
+calculation change below out into a separate patch and explain the reasoning
+in the commit description.
 
 Thanks,
 Guenter
