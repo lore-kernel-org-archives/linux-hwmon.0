@@ -1,182 +1,338 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D1D4A05;
-	Mon, 24 Mar 2025 12:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C49C4400;
+	Mon, 24 Mar 2025 12:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742819985; cv=none; b=UW/A3i3eBuHACPGeB6kLM0XD9IOE9gDDOlvKc6kf5F5QnH1dEykm9WvG47CuYt3056GaicuRVmOzxClup/OEPP4IMA2lc8rkWiz9/pOmH2ly1Y9lYZYPNClVkKiwyhMbqm5BiSPokiP8VIHVKCxfwdaqyE+yPie/niFVXi+oDFI=
+	t=1742820369; cv=none; b=Rkd0Na+kMdO7LeLLKLc7jhqiPOPkvcgfa9dQLa5vWYiUGLNyB+mVkD7CEJAaTimgaL8Nj8LwJGQvndoR7PX+MY4Lfy7wNhf8CeayzA84w1/f087acXf/poUPfzQxTF6fEhmgR4T5wCwYh78emqsGzX7kGL8Jz3hgYOywO5fWfOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742819985; c=relaxed/simple;
-	bh=SXi4t8IGwMM8E7u7vKNRAcRZHyXjcVC45S77Pz2BGmc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Gf9Yqs6VTjq0n7AlLNbevI4JUfY25azPaG5B2FZoQFxw4CR9owX0bw4yln2opdQSbWINaCKkpwRRbuZpXIC9XfuwNsWjlHtIpp3h5tYFiYQ063f+V+e5bpVhoV6l+i4vjeoLxQVbuuXecz0BRQlZA6Vi9kLdfT7u4TDvikfXk+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=p4AZSCXj; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1742820369; c=relaxed/simple;
+	bh=oxTW1PrI7zxnvTAfviKT5O2OKh8U6bxkdbvldlFaQFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uU4EYL4ZdQNflGTZZo3Wh6xst3mfiglmYeiIlH2ZmwVr3LvMKhMI1NIlC5OXRFUfKnuRQmxpwc2yDI6fGyNlhPoDCMKS54ig1rlaveNH1EUuDRybOwNQeA8GOQ4hlnNMAY37XfZSJ34dnE9balmENo6vTMw3wZlVcSfepChSc/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=YijUECz6; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=mwNeQ+iB reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="p4AZSCXj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=2AKhH7lBQf0mrFXw0X
-	WW2eowYgHNvuDOokg2ff//N/w=; b=p4AZSCXjx9ztzvtxPbnM/zVRok8u+Pjz9x
-	6RDJxWj2A9O4ZJcQDkdO0C3tM5ftvnBl/Cd/SEy5tEmiLpfVg+59exkRd2gLBnfM
-	ho5VEn/B7iBetuE6ADh7xGC3hb2HWrKEXkmLfCI6Cgi3kC7gHcE77wZj+sJyVDXQ
-	DOJ0dSndA=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wD3HAdnUuFneMx5Bg--.21555S2;
-	Mon, 24 Mar 2025 20:39:04 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net
-Cc: christophe.jaillet@wanadoo.fr,
-	conor+dt@kernel.org,
-	corbet@lwn.net,
-	jdelvare@suse.com,
-	krzk+dt@kernel.org,
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="YijUECz6";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="mwNeQ+iB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1742820365; x=1774356365;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DX4/VO3OnQRr65r3k5zsXrc0QjpoAW2FHYBe64Wv3so=;
+  b=YijUECz6vu7a/SAuwv/PWFFSr6qzWMg1+ijRE02a5zi40ceQ9z9F1Cmi
+   SlqlGDNrZbJzLU8H3U6NBYNjxvCc4JJ+o5Xb8Y/JayLrdQMex2Vxi5VEf
+   LF39GVc9SbEjRJrG/H84NxhaGtEkQOsFxptnsDKv8/+Xp3wfzcw/PhcHn
+   T1FGuILbQQzo8grwuTdvk/+mHd3/QVqBnxUiwjsyMwAv4Stq3tr2FugzI
+   7rO2ZX2F7JnjzBPF9vYUJ1geI1Lb6593PZdgiujGUW57vAWGzMBFJqS/t
+   7CyDm3OpJdzW1nLfYkhyTvCf3Fxv1YMnSRwSVuEnOMmE7CCPxupUjtYd2
+   A==;
+X-CSE-ConnectionGUID: YJDNgeQkQxq1mymXzWzL4g==
+X-CSE-MsgGUID: FQhoTfolT++Nv+KvZ+nvag==
+X-IronPort-AV: E=Sophos;i="6.14,272,1736809200"; 
+   d="scan'208";a="43121863"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 24 Mar 2025 13:46:01 +0100
+X-CheckPoint: {67E15409-B-F35B2447-E1635CDE}
+X-MAIL-CPID: BA32B4495DC1B31DA7A57D267F96BBF6_1
+X-Control-Analysis: str=0001.0A006398.67E15403.0066,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 55114167297;
+	Mon, 24 Mar 2025 13:45:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1742820357;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DX4/VO3OnQRr65r3k5zsXrc0QjpoAW2FHYBe64Wv3so=;
+	b=mwNeQ+iBSVgfKds9QENrlVpJcFiuapYgpm7B1+bObeVbZK8K5HXlb8QBpYkNi7PtGbb2AR
+	MJpiqTgvsie91/s+cPwfc7ygbDJEy7Qt3an1dS8HXYgKQIDhZP0ItX+SyBSwV2+ml1ClLw
+	WzY6dtcONxuRgkzCUsQ99X3tPDVUcOhL6g92eQ9WQwuXYgaBmaeyMKEnbyZNA1VOlFTjd6
+	gcaURLZ9sBIfvqIV03DXnRbq4sZ2szY82ze2go+FGAVm6/+Gw42VVcW8YcOQ8O1ANWUM9b
+	EJFjG/ks+0uQpz/0P8Fp5kJlxSsz0wJxgYYmmyg+QKw6D9br0DWEkZj13QpTwA==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	robh@kernel.org,
-	wenliang202407@163.com
-Subject: Re: [PATCH v5 2/2] hwmon:(ina238)Add support for SQ52206
-Date: Mon, 24 Mar 2025 08:38:52 -0400
-Message-Id: <20250324123852.4120-1-wenliang202407@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <801599a6-81d9-4e06-8fc6-e959132eef24@roeck-us.net>
-References: <801599a6-81d9-4e06-8fc6-e959132eef24@roeck-us.net>
-X-CM-TRANSID:_____wD3HAdnUuFneMx5Bg--.21555S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyxCry8Gry3tr1Dur43trb_yoW7Jw4UpF
-	W5Ga1DGr48Ary29397Ar4fu3W3Kw1kGrs8KrnYg34rAwn8Zryv9FsrKayF9r93Xwn3ZFW8
-	Jay8t3yrCws8ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUtnYrUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbBDR4Y02feGKEfqAACst
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/1] hwmon: (gpio-fan) Add regulator support
+Date: Mon, 24 Mar 2025 13:45:49 +0100
+Message-ID: <20250324124550.989292-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-At 2025-03-23 01:25:11, "Guenter Roeck" <linux@roeck-us.net> wrote:
->On 3/13/25 01:02, Wenliang Yan wrote:
->> Add support for SQ52206 to the Ina238 driver. Add registers,
->> add calculation formulas, increase compatibility, add
->> compatibility programs for multiple chips.
->> 
->> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
->
->The patch unfortunately combines adding support for a new chip
->with adding the necessary infrastructure. I finally found the time
->to look into this further and split the changes, trying to find out
->what actually changed. Unfortunately there are some problems.
->Some of them are listed below.
->
->This is not a complete review. Also, I'll have to write module tests
->to ensure that support for existing chips is not broken.
->
->>   #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
->>   #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
->> -#define INA238_DIE_TEMP_LSB		125 /* 125 mC/lsb */
->> +#define INA238_DIE_TEMP_LSB			1250000 /* 125 mC/lsb */
->
->This is not correct. The unit is 10ths of uC.
->
+FANs might be supplied by a regulator which needs to be enabled as well.
+This is implemented using runtime PM. Every time speed_index changes from
+0 to non-zero and vise versa RPM is resumed or suspended.
+Intitial RPM state is determined by initial value of speed_index.
 
-Since the temp_lsb of sq52206 is 7.8125 mC/LSB, in order to express it as an interger, 
-my original intention was to use 7.8125*10000 to represent 7.8125 mC/lsb. 
-At the same time, for the consistency of different devides, using 125 * 10000 to represent 125mC/lsb.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Patch 1 & 2 from v1 [1] have already been applied, although number 2 [2] is not
+yet showing in next-20250305. Patches 3 & 4 (just removing comments) from v1
+have been dropped, so only this patch remains.
 
->> +#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
->> +#define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
->>   
->... expressed in 10ths of uC.
->
->>   static const struct regmap_config ina238_regmap_config = {
->>   	.max_register = INA238_REGISTERS,
->> @@ -102,7 +114,20 @@ static const struct regmap_config ina238_regmap_config = {
->>   	.val_bits = 16,
->>   };
->>   
->> +enum ina238_ids { ina238, ina237, sq52206 };
->> +
->> +struct ina238_config {
->> +	bool has_power_highest;		/* chip detection power peak */
->> +	bool has_energy;		/* chip detection energy */
->> +	u8 temp_shift;
->> +	u32 power_calculate_factor;		/*fixed parameters for power calculate*/
->> +	u16 config_default;
->> +	int bus_voltage_lsb;    /* uV */
->> +	int temp_lsb;   /* mC */
->
->No, this is not the temperature in mC. It is the temperature in 10th of uC.
->
+Changes in v3:
+* Remove noisy dev_err calls related to runtime pm
+* Properly propagate return codes from set_fan_speed
 
-This is indeed a problem, I need to handle temp_lsb appropriately.
+Changes in v2:
+* Make regulator non-optional
 
->>   			/* gain of 1 -> LSB / 4 */
->> -			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
->> -			       (1000 * (4 - data->gain + 1));
->> +			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
->> +					data->gain / (1000 * 4);
->
->The slight benefit of this change is that the divisor is now a constant,
->which may enable some compiler optimization. Still, it is not a necessary
->change and just makes review more difficult.
->
+[1] https://lore.kernel.org/all/20250210145934.761280-1-alexander.stein@ew.tq-group.com/
+[2] https://web.git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?h=hwmon-next&id=9fee7d19bab635f89223cc40dfd2c8797fdc4988
+---
+ drivers/hwmon/gpio-fan.c | 104 +++++++++++++++++++++++++++++++++------
+ 1 file changed, 90 insertions(+), 14 deletions(-)
 
-The original formula takes effect only when gain=1 or 4, but sq52206 has a gain=2.
-The principle of this formula is the same as before.
-
->>   		else
->> -			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
->> +			*val = (regval * data->config->bus_voltage_lsb) / 1000;
->>   		break;
->>   	case hwmon_in_max_alarm:
->>   	case hwmon_in_min_alarm:
->> @@ -225,8 +298,8 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
->>   	case 0:
->>   		/* signed value, clamp to max range +/-163 mV */
->>   		regval = clamp_val(val, -163, 163);
->> -		regval = (regval * 1000 * (4 - data->gain + 1)) /
->> -			 INA238_SHUNT_VOLTAGE_LSB;
->> +		regval = (regval * 1000 * 4) /
->> +			 INA238_SHUNT_VOLTAGE_LSB * data->gain;
->
->This change is both unnecessary and wrong: The result is multiplied by data->gain,
->not divided by it. "INA238_SHUNT_VOLTAGE_LSB * data->gain" would have to be in ()
->to yield the same result as the original code. Also, unlike the change above,
->it makes the divisor non-constant. I don't see why this would be beneficial.
->
-
-The original formula takes effect only when gain=1 or 4, but sq52206 has a gain=2.
-"INA238_SHUNT_VOLTAGE_LSB * data->gain" should to be in (), I will change.
-
-> > -
-> > -               /* Signed, bits 15-4 of register, result in mC */
-> > -               *val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-> > +               /* Signed, result in mC */
-> > +               *val = div_s64(((s16)regval >> data->config->temp_shift) *
-> > +                                               data->config->temp_lsb, 10000);
->
->This will overflow since there is no type cast to s64.
->(32767 >> 4) * 1250000 == 0x98836D30. That means that large positive temperatures
->will be reported as negative temperatures.
->
->I did not have time to validate the rest of the calculation changes,
->but each of them will require close scrutiny. I suspect that most if not all
->of the 64-bit operations can and will overflow because the first parameter is
->not type cast to s64/u64.
->
->Also, the patch should really be
->split into multiple patches:
->- Introduce ina238_config
->- Calculation optimizations such as the ones above, with rationale
->- Introduce support for SQ52206
->to simplify (and even enable) review.
->
->Thanks,
->Guenter
-
-I will add a theoretical analysis to the calculation of each change as soon as possible
-to prevent errors and reduce your review difficulty.
-
-I will split this patch to show the changes more clearly in v6.
-
-
-Thanks,
-Wenliang Yan
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index cee3fa146d69a..4c736b7eb5473 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -20,6 +20,9 @@
+ #include <linux/gpio/consumer.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/pm.h>
++#include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/thermal.h>
+ 
+ struct gpio_fan_speed {
+@@ -42,6 +45,7 @@ struct gpio_fan_data {
+ 	bool			pwm_enable;
+ 	struct gpio_desc	*alarm_gpio;
+ 	struct work_struct	alarm_work;
++	struct regulator	*supply;
+ };
+ 
+ /*
+@@ -125,13 +129,32 @@ static int __get_fan_ctrl(struct gpio_fan_data *fan_data)
+ }
+ 
+ /* Must be called with fan_data->lock held, except during initialization. */
+-static void set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
++static int set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
+ {
+ 	if (fan_data->speed_index == speed_index)
+-		return;
++		return 0;
++
++	if (fan_data->speed_index == 0 && speed_index > 0) {
++		int ret;
++
++		ret = pm_runtime_resume_and_get(fan_data->dev);
++		if (ret < 0)
++			return ret;
++	}
+ 
+ 	__set_fan_ctrl(fan_data, fan_data->speed[speed_index].ctrl_val);
++
++	if (fan_data->speed_index > 0 && speed_index == 0) {
++		int ret;
++
++		ret = pm_runtime_put_sync(fan_data->dev);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	fan_data->speed_index = speed_index;
++
++	return 0;
+ }
+ 
+ static int get_fan_speed_index(struct gpio_fan_data *fan_data)
+@@ -189,7 +212,9 @@ static ssize_t pwm1_store(struct device *dev, struct device_attribute *attr,
+ 	}
+ 
+ 	speed_index = DIV_ROUND_UP(pwm * (fan_data->num_speed - 1), 255);
+-	set_fan_speed(fan_data, speed_index);
++	ret = set_fan_speed(fan_data, speed_index);
++	if (!ret)
++		ret = count;
+ 
+ exit_unlock:
+ 	mutex_unlock(&fan_data->lock);
+@@ -211,6 +236,7 @@ static ssize_t pwm1_enable_store(struct device *dev,
+ {
+ 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+ 	unsigned long val;
++	int ret;
+ 
+ 	if (kstrtoul(buf, 10, &val) || val > 1)
+ 		return -EINVAL;
+@@ -224,11 +250,14 @@ static ssize_t pwm1_enable_store(struct device *dev,
+ 
+ 	/* Disable manual control mode: set fan at full speed. */
+ 	if (val == 0)
+-		set_fan_speed(fan_data, fan_data->num_speed - 1);
++		ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+ 
+ 	mutex_unlock(&fan_data->lock);
+ 
+-	return count;
++	if (ret)
++		return ret;
++	else
++		return count;
+ }
+ 
+ static ssize_t pwm1_mode_show(struct device *dev,
+@@ -279,7 +308,7 @@ static ssize_t set_rpm(struct device *dev, struct device_attribute *attr,
+ 		goto exit_unlock;
+ 	}
+ 
+-	set_fan_speed(fan_data, rpm_to_speed_index(fan_data, rpm));
++	ret = set_fan_speed(fan_data, rpm_to_speed_index(fan_data, rpm));
+ 
+ exit_unlock:
+ 	mutex_unlock(&fan_data->lock);
+@@ -386,6 +415,7 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 				  unsigned long state)
+ {
+ 	struct gpio_fan_data *fan_data = cdev->devdata;
++	int ret;
+ 
+ 	if (!fan_data)
+ 		return -EINVAL;
+@@ -395,11 +425,11 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 
+ 	mutex_lock(&fan_data->lock);
+ 
+-	set_fan_speed(fan_data, state);
++	ret = set_fan_speed(fan_data, state);
+ 
+ 	mutex_unlock(&fan_data->lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static const struct thermal_cooling_device_ops gpio_fan_cool_ops = {
+@@ -499,6 +529,8 @@ static void gpio_fan_stop(void *data)
+ 	mutex_lock(&fan_data->lock);
+ 	set_fan_speed(data, 0);
+ 	mutex_unlock(&fan_data->lock);
++
++	pm_runtime_disable(fan_data->dev);
+ }
+ 
+ static int gpio_fan_probe(struct platform_device *pdev)
+@@ -521,6 +553,11 @@ static int gpio_fan_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, fan_data);
+ 	mutex_init(&fan_data->lock);
+ 
++	fan_data->supply = devm_regulator_get(dev, "fan");
++	if (IS_ERR(fan_data->supply))
++		return dev_err_probe(dev, PTR_ERR(fan_data->supply),
++				     "Failed to get fan-supply");
++
+ 	/* Configure control GPIOs if available. */
+ 	if (fan_data->gpios && fan_data->num_gpios > 0) {
+ 		if (!fan_data->speed || fan_data->num_speed <= 1)
+@@ -548,6 +585,17 @@ static int gpio_fan_probe(struct platform_device *pdev)
+ 			return err;
+ 	}
+ 
++	pm_runtime_set_suspended(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++	/* If current GPIO state is active, mark RPM as active as well */
++	if (fan_data->speed_index > 0) {
++		int ret;
++
++		ret = pm_runtime_resume_and_get(&pdev->dev);
++		if (ret)
++			return ret;
++	}
++
+ 	/* Optional cooling device register for Device tree platforms */
+ 	fan_data->cdev = devm_thermal_of_cooling_device_register(dev, np,
+ 				"gpio-fan", fan_data, &gpio_fan_cool_ops);
+@@ -568,41 +616,69 @@ static void gpio_fan_shutdown(struct platform_device *pdev)
+ 	}
+ }
+ 
++static int gpio_fan_runtime_suspend(struct device *dev)
++{
++	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
++	int ret = 0;
++
++	if (fan_data->supply)
++		ret = regulator_disable(fan_data->supply);
++
++	return ret;
++}
++
++static int gpio_fan_runtime_resume(struct device *dev)
++{
++	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
++	int ret = 0;
++
++	if (fan_data->supply)
++		ret = regulator_enable(fan_data->supply);
++
++	return ret;
++}
++
+ static int gpio_fan_suspend(struct device *dev)
+ {
+ 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
++	int ret = 0;
+ 
+ 	if (fan_data->gpios) {
+ 		fan_data->resume_speed = fan_data->speed_index;
+ 		mutex_lock(&fan_data->lock);
+-		set_fan_speed(fan_data, 0);
++		ret = set_fan_speed(fan_data, 0);
+ 		mutex_unlock(&fan_data->lock);
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int gpio_fan_resume(struct device *dev)
+ {
+ 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
++	int ret = 0;
+ 
+ 	if (fan_data->gpios) {
+ 		mutex_lock(&fan_data->lock);
+-		set_fan_speed(fan_data, fan_data->resume_speed);
++		ret = set_fan_speed(fan_data, fan_data->resume_speed);
+ 		mutex_unlock(&fan_data->lock);
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+-static DEFINE_SIMPLE_DEV_PM_OPS(gpio_fan_pm, gpio_fan_suspend, gpio_fan_resume);
++static const struct dev_pm_ops gpio_fan_pm = {
++	RUNTIME_PM_OPS(gpio_fan_runtime_suspend,
++		       gpio_fan_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(gpio_fan_suspend, gpio_fan_resume)
++};
+ 
+ static struct platform_driver gpio_fan_driver = {
+ 	.probe		= gpio_fan_probe,
+ 	.shutdown	= gpio_fan_shutdown,
+ 	.driver	= {
+ 		.name	= "gpio-fan",
+-		.pm	= pm_sleep_ptr(&gpio_fan_pm),
++		.pm	= pm_ptr(&gpio_fan_pm),
+ 		.of_match_table = of_gpio_fan_match,
+ 	},
+ };
+-- 
+2.43.0
 
