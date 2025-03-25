@@ -1,67 +1,67 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAA718BC3B;
-	Tue, 25 Mar 2025 12:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE8E265CC1;
+	Tue, 25 Mar 2025 12:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742906806; cv=none; b=kjFjvS91zF9hGWf0JhC/XtjrQN2Pm339LxBkfgKeOpNTlfH4S68WzPPUZYbEsDg2rCiBRC6vBB2EFQG+Nx84sVRAeJkh26mVvM7GV6a0CETiMH9DSdjhJCWRrqKNHwJUiutep5/Zq4xDwMWmX53dsoidR0F8/RxSGwfx1vJthFk=
+	t=1742907311; cv=none; b=A2ZWhoID/1GRSdVwA5AaR1X6u6rrodnpb98DqQi52FiAxh5xR/nJkS2A9G+8GyL01fdWbFTmHaOd3t5i9P3avIhc5+Y5CFZ0coQxlwMii3ApElJ7DfsXcNDrzRCnnE0Fo45qsrsQsnwjp7jwzu0Nq6gzgb4+27slp2wL4A/+pHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742906806; c=relaxed/simple;
-	bh=kNEU5Ty6m4T1RSoMTaERB61oyU0WcjBnDwB9tcH+z2w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PQ91uFYzGyBnhhxhbZaoH5o0Qpd2GZ3v6ZScEEeazjD8kljlJVBbFhoX3+kqA1DrFIG3bEZreEEvDxZzXNTHbYEBnTNAZADBS7EPc1Pf3bOUNm6Hrt/rLemIoIrn2wk2Ev8RpyS/pEVMZr1U68t6SYEzvEH0269UvF1CHxgTIEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqVurBCK; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1742907311; c=relaxed/simple;
+	bh=sGjwtT0kQqdaclvo0LNNYYTMJppQyf4Ly9g9aW3Wghw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mMxCl7BL25JqRJAk1AkyEvrIzZ7FT1vGGyHeQ9yTX3IvvcWJmBHyn42/D0a4PhEc/ZgNUSz5nUmqgsdVjdOw08Ru3LjcBIH+LqX/M+E4RqpvH22l8mqUlJC78hs17Ecqp3S6/inZlNVrVdMyX2/N5lbusLpUbpDoTLKtLNm8Uf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JdF+eMkD; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqVurBCK"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22409077c06so115714665ad.1;
-        Tue, 25 Mar 2025 05:46:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JdF+eMkD"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-301d6cbbd5bso9487452a91.3;
+        Tue, 25 Mar 2025 05:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742906804; x=1743511604; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742907309; x=1743512109; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aInV8hQRf6vE66+NMLSQP/qvF3TWUTWoboKCTyFkzPM=;
-        b=cqVurBCK0x7Q+k1pnRBoUjkWGH5OecP+EM+qk6SH0Jf1hjhyZy5VMJP8Z6R1Waac+G
-         m7rvojm0tpdAi2Szxmp53gvEqqhUjUNnmXoYPjBT2G2UkN7c+FT1myjBXxFHaZKeVii8
-         JhKlZIvvMoas6NmvYDPb/TesAJjF2XHfVamQg882j6TmioMvTBdCzNRE1mQfL9DjDTMI
-         eSKwSUz28/setAJmW7KQmuicLfC2CvHCDFQ35et6G88+sGUZaiL3l4KwJqBeUK/nHNjc
-         S6Rp6gLfPoyBPhkfChVhh49men70o8zGfISTgbEkWDO9rDalMzmUIKZO6doCaKZIE6me
-         L4zQ==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0M6Zo04/7HwG/RGrGKjHsDfbnEgUUvFdZ8bDedEanc=;
+        b=JdF+eMkDk2hYcuLdt3cRxWsCoyaDK9hcVNWjqklKpYaTNBFuULfR2SIMSaLo/SqSqN
+         iFnvnqLBglPQWAfpD+CfSTePmUXfCJmy91CqZ5ttSkeSLNR5uMfK9zKxWxfz86eK6Bu8
+         JxAWUM9FaTi8YeIKjLIwn6CJ2cyhejVciBbZWivc0xDarN6ejrndYMez7LF8Nv5sAiI2
+         fDLMAd4Xo+XRD4kVSuNw5CK1pmJ+gjpAaRz/EDODAKdN6j8P1Do9aBHwFiIGVnKIpatz
+         QC/AWvM6x9xxAlVxy/wagVOrGj3TvuamqSNCtPvAai+T264KsBQKDF0TzyCebT8qx22Q
+         VOTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742906804; x=1743511604;
+        d=1e100.net; s=20230601; t=1742907309; x=1743512109;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aInV8hQRf6vE66+NMLSQP/qvF3TWUTWoboKCTyFkzPM=;
-        b=DftW359UB/Ip/LLPc1EhKsmfOUJ4k+kLF8LEO2qTPSr5QTq565LHlslq433da3WKDr
-         A3TQXYb/SX0NLCTJhIp94QU25UKiOPkLeF9yzHWLf6yOTpfRtk4jRoLVyZqdxM+fRp0N
-         KZ8fUzLD9nMp0MLbGSgwyU3NOH1igIiJq5nsUetnqgyPe4oaXA0iyuY6hOszRcdF4P7d
-         ToTFS68qqrKCmYjJVCsYAJP4a+CsWf7GbMCnv+IeyLqRPKeSpmpVp+4uFHd3UVT5xHIe
-         RUGoIqFxz89TvO3g6xtSEUB4ubGGL26MT3nOkA6+LIRF/wDEyFFZuhrViDQGCv6GallQ
-         e7Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCUV1HI/pZAJOrN7PeyqqTXDG1Nc0a7oHTtMY/XKw3/ry9w2gy7VAmch3Iq858LW4K+xwTgIgtnIUPnDwIfC@vger.kernel.org, AJvYcCX4KKCHZ7ldf4SDC95jOynlkbSq7hEf5vgYa2xSem5hY349yBXde7IfKeeE/nTsA+1Z6awpKSi1rF/nLA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy62iOnAL0oQ1jHGPCDUqdCWkUvxfoV7Rx2Yi4lCuRLq92/2yWP
-	oJT54/cOR/PEmyr9QJE+OsUOyqrV/ClIlE86wiQmQOf2MhEvipbgy1BunQ==
-X-Gm-Gg: ASbGncuu2BYbGZJMkIb5ehJkRc7JUwVwsufkVlYsXDXWsTThC76/ZHrrCnXPfWTGJBe
-	Jhb/KPstJOdg6ubwhV7ZQWF8px209AqXJtnKS/66JXQq18lE1VhnG99E18Hap4BzLq749fLOJgw
-	VZkVJ0RxaMO6Radc6POEME19shBIU5g5lGjj/dVDB9piSlKba/uvjXwr9i7pb9edIaNimdldLl+
-	8PheeUbx9QFSXy4yUyYxqO3/jvoBl0PcNIVV5vdQ9FWi+TF6zYevfwAIoVJPQiP3GcWBgLVAXdK
-	3R+vmdMwcDzZ/erTzZMgV9aVv0thQbjP6apqTFcL6yGxU1sa27KYGRjv7vQN2KUNdGfW4s1L15Y
-	81cKylXfCWpjBxX9ysw==
-X-Google-Smtp-Source: AGHT+IHubCkNkdQqRNq5surmbfP8w4wYu7OFK+dLjG2tjH+9mevggwzoNXlK5cwjzNF04EQLZhkBkw==
-X-Received: by 2002:a17:903:178b:b0:21f:6bda:e492 with SMTP id d9443c01a7336-22780e09daamr305388055ad.35.1742906803769;
-        Tue, 25 Mar 2025 05:46:43 -0700 (PDT)
+        bh=D0M6Zo04/7HwG/RGrGKjHsDfbnEgUUvFdZ8bDedEanc=;
+        b=HffLOPS87mF/sLjsVhvKTLvoDgmfwfr5wOYR4Eb5GmeJiq3TuwOfdVnRbzR85p2Jsd
+         zfkJwebYYoUXKMDtgnauInvgEBCcNmfmZdJ5l8C+DWCoPZiehZjfUluFf5822mBDCrvd
+         5aJFeCbauwDb0EnVBiQpS0AvQxpZqhg259wTLQp18GvAOa3rcKFalDw9IzuisfjArKop
+         UqwPyjJULCyTDdAYghXOUxqisHVpYUBpRBQK/Nfw2Dsb8uBRHjGw5RWLaf+tXE5zszHu
+         ZVnx7xXtkpEt3pDCu7yWqOLdPHDl4Xpp2/ujJHVJKbSrPhyRRhRWCi+K9oAUhzKr4yda
+         qE+g==
+X-Forwarded-Encrypted: i=1; AJvYcCW3SKEYD0KlJMR4UW+JF3W7uq+WmOx0m+Y8lZ2j0eeKCCvQLvVNROf1eUcDtq66sB/obwMgn/zERPRjxxrJ@vger.kernel.org, AJvYcCXdWcPkQeeK0vx8zHIFzVPf/BdDYrj+PKYKTbQK3zse3CqyEqL4ik83tNv7tgzARBtZ3/VbGMy5Svc69w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxvg5LSYyU3kZqZBF+nkW/vSmnlqGCPdGoTqFZBYcpxj4q5vES
+	x9Y2S4t/MzEpi/DG1R/v87K2vj99BuL/QYSUnFLFEOyjtTLN1yG5bgOzrA==
+X-Gm-Gg: ASbGnctpU/QgFDvbcdxH9iyjVIeEy0Ip3iHbNKh40yjiin6dX10QzveRcE+p0PiLaMZ
+	Uniwb8F8kVFNUDD3dMs8OhtS5qu4EsoHY31V19bnLTUmhzsmlfBrH3bB20smr38lwqNLdaIYTD5
+	iisNkJ+BuTXSKIx1vy4rgp2FsD/fN2DaeNjq+6omOLyt/YmAEUExr+mW+pR674Amkkhuiur7271
+	AJ/0XQZjs3ND/+qYd0mSVwbvHvLEa1OMQ5x1nxqbQHpErATSBd99GOLYISB1S3e/V16/YPCCtwI
+	0am2lz/UdP+LMiWKjp0DZqmTgAv/QIEotHJPeAWSFUv/WmpJfsvaIAqiQnwQibM+xC3HKNLwBXS
+	VY9qV7AkfPRmHKKC+WQ==
+X-Google-Smtp-Source: AGHT+IGJ1A8WXkWv8tqL0/mNSt7XlUHjXISMclbtTcReoINaJs73G3ltq9M2MuxPVp6zEKsl6s0+Og==
+X-Received: by 2002:a17:90b:1d46:b0:2fa:1851:a023 with SMTP id 98e67ed59e1d1-3030ff11268mr27748126a91.35.1742907309239;
+        Tue, 25 Mar 2025 05:55:09 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22780f45f35sm89273125ad.90.2025.03.25.05.46.42
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf58c813sm14143078a91.18.2025.03.25.05.55.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Mar 2025 05:46:43 -0700 (PDT)
+        Tue, 25 Mar 2025 05:55:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <78352732-6494-4c29-a79b-879a8898bac5@roeck-us.net>
-Date: Tue, 25 Mar 2025 05:46:41 -0700
+Message-ID: <aa034893-405e-4f71-8cb6-0ccb112c36da@roeck-us.net>
+Date: Tue, 25 Mar 2025 05:55:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,12 +69,21 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Add support for CCD temperatures in AMD 1Ah CPUs model
- 0x40..0x4f
-To: David Hows <david@hows.id.au>, Clemens Ladisch <clemens@ladisch.de>,
- Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <Z-KQHKm0nBWvYNI1@archibald.hows.id.au>
+Subject: Re: [PATCH v3] hwmon: (cros_ec) Add set and get target fan RPM
+ function
+To: Sung-Chi Li <lschyi@chromium.org>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>,
+ Jean Delvare <jdelvare@suse.com>, Benson Leung <bleung@chromium.org>,
+ Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
+ <e4da28be-66ca-45d3-9ccf-34819460b463@t-8ch.de>
+ <f50221fd-1d76-465b-ba53-62c08c6f8536@roeck-us.net>
+ <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
+ <42c49b0b-cef0-49ca-a5b2-5bb05eae8dec@roeck-us.net>
+ <45d0681d-3446-409c-8d9b-0309dbb93ff8@t-8ch.de>
+ <7b5c4001-1a5b-4ea0-aca9-e0c88ec7a98b@roeck-us.net>
+ <Z-JYQyxJErCQKo4i@google.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,44 +129,30 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <Z-KQHKm0nBWvYNI1@archibald.hows.id.au>
+In-Reply-To: <Z-JYQyxJErCQKo4i@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 3/25/25 00:16, Sung-Chi Li wrote:
 
-On 3/25/25 04:14, David Hows wrote:
-> ---
+> 
+> Currently, when sending the fan control setting to EC, EC will switch to manual
+> fan control automatically. When system suspends or shuts down, fans are going
+> back to automatic control (based on current EC implementation).
+> 
+> Do you mean the driver should not change the fan control method if there is no
+> pwmY_enable implemented, or it is the user that should first explicitly set the
+> fan to manualy mode, then the user can specify the desired fan speed?
 
-The subject should start with "hwmon: (k10temp)". Also, it should really say
-something like "Add support for Zen5 Ryzen Desktop" or similar to better
-describe what it actually does.
+The user should first set the fan control method to manual mode.
 
-Every patch needs a description. Please see
-Documentation/process/submitting-patches.rst for guidance.
+Unless I am missing something, setting manual mode means that pwmY_enable does have
+to be implemented.
+
+Note that the suspend/resume behavior is unexpected. The user would assume that the fan
+control method is still in the same mode after resume. If resume reverts to automatic mode,
+there should be a suspend/resume handler which restores the mode on resume.
 
 Thanks,
 Guenter
-
->   drivers/hwmon/k10temp.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index d0b4cc9a5011..cc2ad7a324f9 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -502,6 +502,13 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   			k10temp_get_ccd_support(data, 12);
->   			break;
->   		}
-> +	} else if (boot_cpu_data.x86 == 0x1a) {
-> +		switch (boot_cpu_data.x86_model) {
-> +		case 0x40 ... 0x4f:	/* Zen5 Ryzen Desktop*/
-> +			data->ccd_offset = 0x308;
-> +			k10temp_get_ccd_support(data, 8);
-> +			break;
-> +		}
->   	}
->   
->   	for (i = 0; i < ARRAY_SIZE(tctl_offset_table); i++) {
 
