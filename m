@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810C21F5850;
-	Tue, 25 Mar 2025 18:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5F71F874F;
+	Tue, 25 Mar 2025 18:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928177; cv=none; b=dNaZRbg2nRHSMCW26wEPilCwSyaZndV/RNiCjg314RaZ21NkHdTFR+iuugCbfypOC5lvZUp622SGldo9SFlLRAx0NcYVXUWF4+Kim/eJfYHQPulnArOU05FX19lrOzf9c7BhD1hYFkIa45pmgbGxZNi9j9JCSVIOqjyq97JIMzM=
+	t=1742928186; cv=none; b=Bt+mAvbegih8JOCUB0+ftl8ECVybOzY+q+pkddqNDg7q7VRmkLjfzH90nyqmsk0mPFRCd60hIGc9qYls6+gGDWTnDXlxxD28eNyZwZHdpQbimIZOZfQTpHN6qbfA/s/Td47PZ4ddQsRhQZULPhid5+CES8gpHKRJDqKzfpAVno8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928177; c=relaxed/simple;
-	bh=l/WlSBPbgeikRatvuWUrCIvA8q+Wqd1bhbZrL6hGL7s=;
+	s=arc-20240116; t=1742928186; c=relaxed/simple;
+	bh=9IMmDSkBWJTA3YSD8svpuNrMfYCFJbNxTLX+M0T3GzI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=njtC6FZ9xkUU7SjIwox5LtwgtUXlfRCEnkiNgUclOWwY7ZLaXWiSYflgy9o4Uf25Y9cRta5QbYM8ddwPHbo2UdquxGJtbWQhh23qzxgpeWgEVmnZwmNH7LaLsVrlUOhIW0uVuMoLNDSRi/ap2GN8o348AduF5jaAqZynPWI4dOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdrn68Ud; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=i2wq7nM54ApyQcJjRJ319vjD/bt4lyKoDoQLzpXeL2hzLa/4ZLDXGsF4gdcoK1vP12BsjGk+nAqNVWloexStdW89btc9jQt6ERxX7htOUCrvb6IxsRewA6Cd/HM0ncI05qGWGOjrJ+aTYEx0ILSnc1YbXN2POuFP7pY1GP/NqII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eo7IlL4A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdrn68Ud"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B90DC4CEE4;
-	Tue, 25 Mar 2025 18:42:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eo7IlL4A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F3EC4CEE4;
+	Tue, 25 Mar 2025 18:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928177;
-	bh=l/WlSBPbgeikRatvuWUrCIvA8q+Wqd1bhbZrL6hGL7s=;
+	s=k20201202; t=1742928185;
+	bh=9IMmDSkBWJTA3YSD8svpuNrMfYCFJbNxTLX+M0T3GzI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mdrn68Ud0z7X4kjKppyOm28nPYFskG6FjvhL5JuuiakRlK//lC5YMX4ljHQlsqY/O
-	 cAXR2yh8Inco47at405Q1/G1G4kEqwosnkNEKii6G4gwT+fzaCngM36FrXFXOG7jFc
-	 jxQO7T+SAqS1FiThv6VB6JWD8JR/i+X/CRaqXNUl5fe98XuyhJ4l682BY4RdE9EFdT
-	 aqeT4oVIDhfTl+StQAq3Jjdck5ShK6S1nKubVQLWNCeOZnQzyfUISHpX3LKzvrsgUQ
-	 NT6pQpZm93yuP1K3TqU4z69SU6SpVjPbrOQLANtjFQ2nD9vFraLIPTZqEG3DvsBMUS
-	 L6e4T8XjR24+w==
+	b=Eo7IlL4AzxWKa7/6Oa6pI4xwr5Qzzz0QdcDE3ezIbFLWz75todjDjD68Aeq667gFM
+	 HWaIoabXm96QmTjobwLcSJ+8lUp7HV4ffUouON0YCJAEsPsSSzDYIlwA1KlEO9Rtu+
+	 0rQkurHdVihtP+WKKTdoBd0S0qysJ980muv9UrKGGphX4BaCD15nglkuKtM7JFNbTW
+	 8OTaKgDCPDjpRArGedYB/FX9/8uzvdHE5GyjQ7rf/JAvbZaUM/q+/BS6mj27DkJvPH
+	 z08OOO/ZIrgCcTvf90oWK7AkJfT3QH18wdO7PoT9Rk0otHOlH/YO76Y/kpu+tLKQwl
+	 WwOWGnnBFP+LA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -34,12 +34,12 @@ Cc: Tasos Sahanidis <tasos@tasossah.com>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 3/3] hwmon: (nct6775-core) Fix out of bounds access for NCT679{8,9}
-Date: Tue, 25 Mar 2025 14:42:48 -0400
-Message-Id: <20250325184249.2152329-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 3/3] hwmon: (nct6775-core) Fix out of bounds access for NCT679{8,9}
+Date: Tue, 25 Mar 2025 14:42:57 -0400
+Message-Id: <20250325184258.2152379-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250325184249.2152329-1-sashal@kernel.org>
-References: <20250325184249.2152329-1-sashal@kernel.org>
+In-Reply-To: <20250325184258.2152379-1-sashal@kernel.org>
+References: <20250325184258.2152379-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.84
+X-stable-base: Linux 6.1.131
 Content-Transfer-Encoding: 8bit
 
 From: Tasos Sahanidis <tasos@tasossah.com>
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index 16f6b7ba2a5de..da4c3425d2d1d 100644
+index 9de3ad2713f1d..ec3ff4e9a9abd 100644
 --- a/drivers/hwmon/nct6775-core.c
 +++ b/drivers/hwmon/nct6775-core.c
-@@ -273,8 +273,8 @@ static const s8 NCT6776_BEEP_BITS[NUM_BEEP_BITS] = {
+@@ -276,8 +276,8 @@ static const s8 NCT6776_BEEP_BITS[] = {
  static const u16 NCT6776_REG_TOLERANCE_H[] = {
  	0x10c, 0x20c, 0x30c, 0x80c, 0x90c, 0xa0c, 0xb0c };
  
