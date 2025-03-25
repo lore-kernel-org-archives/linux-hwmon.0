@@ -1,88 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C90A1F0E5B;
-	Tue, 25 Mar 2025 18:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.hows.id.au (125-63-26-112.ip4.superloop.au [125.63.26.112])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C552E337C;
+	Tue, 25 Mar 2025 19:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=125.63.26.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742928207; cv=none; b=lpgeAHFeFy7gnjfRsUNoP3LyS6kr2izylBXyFsnnC5+qodYt+dfyX4c/2/hn3+//5Oo3uJKKECe6m2aQs2u2KB3lAc0E5LgzqQGdA6gpCZidZO6dtQvXl8aL06dzR1+pSPlZKq9xEY2VnmbSMHE20aNy3iYFvDbBGvuwOL15+WQ=
+	t=1742929477; cv=none; b=KlAETmcO6t+LUHLUgicFjJ1jQ5H2K2K19z1hEI1BlkH8L75ypRReE2VvhJTx5KEQbhYpJcd+3sd5peFYBxpZ8C8E782HUOw3nTAT1TTDYDg4DXOqcpghZULAoW2uyZsxJ+YknVW3P8+NwUWTruKtVzpzkS5CkEWIGu1vHHXKXTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742928207; c=relaxed/simple;
-	bh=YDQnXBii9ZTIwMRIdbdy4sMkR9kIMVftvK2/KqRgcwI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gN+Qhxdo/0GeljcarWu+cB2nmfggP+OFkinCjsO+2bYRL/EYv1EW5ge2NZSUVIXjY48hxEMjNE8IyT8eHW+xHuc+eBLQ9bMT97IREt/vW4oSw37tmpf/Wxbeog8YGsSRkZLE2PvFIGNn7pChu0Vqq9ds/x/1Hr4MHVoJ2dYihGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSAPzkjj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSAPzkjj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCC0C4CEE8;
-	Tue, 25 Mar 2025 18:43:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742928207;
-	bh=YDQnXBii9ZTIwMRIdbdy4sMkR9kIMVftvK2/KqRgcwI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nSAPzkjjsH0oCasaPjtiJjDuNqu1ViRM17xK+M1q4hv0tLBpLLzmNxiyWlkNbgM1G
-	 1UF0gGr/LJrSVHvTj3BjjC/Lx8EhgYB6pFrPuPFntZwZQp2kuusSrmjKUhQmj8W95G
-	 xZoD0UeBzkYA0LknNc2SCNnzH/8htgJcXN1MTT++B0zW4cVTVBu71h7t36FkKtPLmx
-	 YV57A0g0deYb0YiYcO1PlCB/xTJD8emAoF/wJ82XswpTdO3RiGHSgKCfbEOD1KrC5L
-	 l9lh3g76wpji+CFL9JC9y/MqnreRYFigxwrjhlu6Jyg3d/TewJDtNGuqkUEpg13sF2
-	 57Fjn428z7xKw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tasos Sahanidis <tasos@tasossah.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sasha Levin <sashal@kernel.org>,
-	jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 2/2] hwmon: (nct6775-core) Fix out of bounds access for NCT679{8,9}
-Date: Tue, 25 Mar 2025 14:43:19 -0400
-Message-Id: <20250325184320.2152507-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250325184320.2152507-1-sashal@kernel.org>
-References: <20250325184320.2152507-1-sashal@kernel.org>
+	s=arc-20240116; t=1742929477; c=relaxed/simple;
+	bh=C7fdbGqOm8KeNvzziFzVaKjZtGQFX0Zz6r2W7/9j4YU=;
+	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
+	 Cc:In-Reply-To:To; b=SLQGjGR9BD19l8I64tSJLT6DyXEsdSWe7aatGP8dZWLTpBH/Coj09u6hbjArEeEG9R6pojGR+O8MOb4fmB/QVt5tSYpxi4Z+0N2+VpQE7dIBOULOPl3OXu9PPfXhfDSrxOLH/u3zyHNy14p+XJXrjTArquoqKlx6zELJyuBFJKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hows.id.au; spf=pass smtp.mailfrom=hows.id.au; arc=none smtp.client-ip=125.63.26.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hows.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hows.id.au
+Received: by mail.hows.id.au (Postfix, from userid 113)
+	id 4D7CE22F1B; Wed, 26 Mar 2025 06:04:31 +1100 (AEDT)
+X-Spam-Level: 
+Received: from smtpclient.apple (unknown [192.168.0.125])
+	by mail.hows.id.au (Postfix) with ESMTPSA id CD821229F9;
+	Wed, 26 Mar 2025 06:04:28 +1100 (AEDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: David Hows <david@hows.id.au>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.291
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] Add support for CCD temperatures in AMD 1Ah CPUs model 0x40..0x4f
+Date: Wed, 26 Mar 2025 06:04:17 +1100
+Message-Id: <AB8136A4-472C-47E4-A783-3C1CBD67D869@hows.id.au>
+References: <78352732-6494-4c29-a79b-879a8898bac5@roeck-us.net>
+Cc: Clemens Ladisch <clemens@ladisch.de>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <78352732-6494-4c29-a79b-879a8898bac5@roeck-us.net>
+To: Guenter Roeck <linux@roeck-us.net>
+X-Mailer: iPhone Mail (22D82)
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+Thank you.=20
 
-[ Upstream commit 815f80ad20b63830949a77c816e35395d5d55144 ]
+Should i make changes and re-submit?
 
-pwm_num is set to 7 for these chips, but NCT6776_REG_PWM_MODE and
-NCT6776_PWM_MODE_MASK only contain 6 values.
-
-Fix this by adding another 0 to the end of each array.
-
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Link: https://lore.kernel.org/r/20250312030832.106475-1-tasos@tasossah.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hwmon/nct6775.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index da6bbfca15fee..a6b7919ab63fe 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -420,8 +420,8 @@ static const s8 NCT6776_BEEP_BITS[] = {
- static const u16 NCT6776_REG_TOLERANCE_H[] = {
- 	0x10c, 0x20c, 0x30c, 0x80c, 0x90c, 0xa0c, 0xb0c };
- 
--static const u8 NCT6776_REG_PWM_MODE[] = { 0x04, 0, 0, 0, 0, 0 };
--static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0 };
-+static const u8 NCT6776_REG_PWM_MODE[] = { 0x04, 0, 0, 0, 0, 0, 0 };
-+static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0, 0 };
- 
- static const u16 NCT6776_REG_FAN_MIN[] = {
- 	0x63a, 0x63c, 0x63e, 0x640, 0x642, 0x64a, 0x64c };
--- 
-2.39.5
-
+> On 25 Mar 2025, at 11:46=E2=80=AFpm, Guenter Roeck <linux@roeck-us.net> wr=
+ote:
+>=20
+> =EF=BB=BFHi,
+>=20
+>> On 3/25/25 04:14, David Hows wrote:
+>> ---
+>=20
+> The subject should start with "hwmon: (k10temp)". Also, it should really s=
+ay
+> something like "Add support for Zen5 Ryzen Desktop" or similar to better
+> describe what it actually does.
+>=20
+> Every patch needs a description. Please see
+> Documentation/process/submitting-patches.rst for guidance.
+>=20
+> Thanks,
+> Guenter
+>=20
+>>  drivers/hwmon/k10temp.c | 7 +++++++
+>>  1 file changed, 7 insertions(+)
+>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+>> index d0b4cc9a5011..cc2ad7a324f9 100644
+>> --- a/drivers/hwmon/k10temp.c
+>> +++ b/drivers/hwmon/k10temp.c
+>> @@ -502,6 +502,13 @@ static int k10temp_probe(struct pci_dev *pdev, const=
+ struct pci_device_id *id)
+>>              k10temp_get_ccd_support(data, 12);
+>>              break;
+>>          }
+>> +    } else if (boot_cpu_data.x86 =3D=3D 0x1a) {
+>> +        switch (boot_cpu_data.x86_model) {
+>> +        case 0x40 ... 0x4f:    /* Zen5 Ryzen Desktop*/
+>> +            data->ccd_offset =3D 0x308;
+>> +            k10temp_get_ccd_support(data, 8);
+>> +            break;
+>> +        }
+>>      }
+>>        for (i =3D 0; i < ARRAY_SIZE(tctl_offset_table); i++) {
