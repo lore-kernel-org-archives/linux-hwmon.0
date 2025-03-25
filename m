@@ -1,128 +1,88 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3212A1494CC;
-	Tue, 25 Mar 2025 13:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C953C1E2838;
+	Tue, 25 Mar 2025 18:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742909882; cv=none; b=kZ4ruWsgeCeKeS/3rhcOIt6PmIf44eWKDbOS7ViWVOaqBDAP0tXKy2UHEa78z5MITTL/hT6Cu1V7nW/JM6u4nYqSU/uWF2zMIU20KASyqP2jR7PSsE71WB6tjYJPOfgW4cbE/zf/TJXmzNLWPXoLByJNmUFoDYmYGdBzUsQtwdE=
+	t=1742928146; cv=none; b=etn3di4c7wKc4IJJMHdVjTWt2KjoZ0xJFTtG8hCSHB6ZxUtjbOJXfCfasKC1eVh28p2A6yBbeEMhYW/auPY1ofQC7Z8Koe1+n26OIFi8R2DNBQRoY30sgNko8tDwRkPq0dOjzTpi/MHIn05BNLouPdokoZVIhpU9z+WPFRcGcwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742909882; c=relaxed/simple;
-	bh=Oq8mL1lN6G868BzCGd5HVNTfkTOGPBrWvu9alSwJKgw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=kUCl0qBBtT3P75x5Cbuw4+2EA/dKwiDcg49bEwS47LmMp21FLGGq+4xjrY/BL+vko/0tB5SZDBcCa28cPfDyobpPiTc/cf/nLZrylAY0zu+Gehp824LWYSxFyePRe4Qcd5V1F4Nk7TrCd7RktUaPRoVvEXPIM2xHnaGhGK+hyD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Au2ANczD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=acoEiW6Y; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1742928146; c=relaxed/simple;
+	bh=b0ElTFIwXwNHL7nzondQmJSf/3QVUkxQFYvSen+AJuI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VHdbJlBjstPxuk3CysCQL8nGBOayTi9BYwCjEvpViB6zDAqTH+gIXDmVdEJkm/gDS75KX4J8c9FHn5LW8nRS0jyqriOGG/bU2n1KezAVKKUo4jfKVw0n723/8HlnR9WogEyJzroBCh1IR9AmA3PmaDC7ZqGz9vcn6s/IG2EIZN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+RoZ4gw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Au2ANczD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="acoEiW6Y"
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id 0E29011401C7;
-	Tue, 25 Mar 2025 09:37:59 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Tue, 25 Mar 2025 09:37:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742909878;
-	 x=1742996278; bh=YVVVPHTJJIvcEN2whYB7APWkmV047iaLL0bj63L8CHk=; b=
-	Au2ANczDbIHtAdxayC+o550QqpDia0xGS+TRWIMXtD4fmNT1ZNWLO4cBEk9tpz+L
-	BbZWtmRX7ivx1CITgcOeG86WKmInaKgmkvDDqq5sHKHRf+Uuy5zi12iBtshKZ9Y2
-	g/VFuhvO1i0XEq9kfRQekjZAgQMNy0VYrb8Yk+Y7gm7lhwBrK6kjAomR/uRBNh18
-	Ro/GLeOyOQPuQdbgmRjxpkN56g7wb9OwOX91+bVueYfcK1u8K0+f4rZK6L1vLm05
-	y1PObKEAGDJFH5Z4lMPafSjBw96pdErn0q539WrUcrfvsJy0kn3/JYzBeNv38tAI
-	1k8mpNV4dMwkxo4R+c6J1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742909878; x=
-	1742996278; bh=YVVVPHTJJIvcEN2whYB7APWkmV047iaLL0bj63L8CHk=; b=a
-	coEiW6YB9psb32zPnTViK0GEPfKgAqNhfvgD24lIIRfVZuYYK021YXsbNnhFYpuV
-	OBnpwYXR7NxCr2OhW+Kq4iFznusAWaq4ChovCvX7iraWpFL+o3oJrcDjMhgHJEH2
-	OlBkUqzWqK7Ajb6PXj0CStnkZC+LetFaLH74fWWiwKrZA4+19kCxqq7Lhm4rE1Ea
-	wga+yyvda6tq89ht5jwPlcrh8aFgtSbeDn65glPOlDWmm4d4F0adNA7FI10a9+zr
-	9AJMkd1fcjWrq1ETTa59gYvta24ZrEV5pdoh+zmsiX0BfqnJXdM4aNmiQx/IsA4A
-	NpJ1P7oWgf01gNjVEBFXw==
-X-ME-Sender: <xms:trHiZ53vsdgbD7FLpdiJuCvCQIJTSFLB7b2QjIApqrrfacyS_-ga9Q>
-    <xme:trHiZwEwvHN0r5kcHVqlxDm1Uj2f2bu_8HSbfv_FiiyJ2_pyPOSBFUSra-cKwyfLj
-    3J6fnAGsRNv6SjpEO4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduiedvjeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnheptdevjeefjefhudeileehjeeuudeiudevfedv
-    jeffteekudehueeiteelkefhheetnecuffhomhgrihhnpegrmhgurdgtohhmnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvgdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopegrkhhshhgrhidrghhuphhtrgesrghmugdrtghomhdprhgtphhtthhopegrnhgr
-    nhgurdhumhgrrhhjihesrghmugdrtghomhdprhgtphhtthhopehgrghuthhhrghmrdhshh
-    gvnhhohiesrghmugdrtghomhdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghl
-    lhhosegrmhgurdgtohhmpdhrtghpthhtohepnhgrvhgvvghnkhhrihhshhhnrgdrtghhrg
-    htrhgrughhihesrghmugdrtghomhdprhgtphhtthhopehshhihrghmqdhsuhhnuggrrhdr
-    shdqkhesrghmugdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunh
-    gurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigsehrohgvtghkqdhushdrnhgv
-    thdprhgtphhtthhopehlihhnuhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorh
-    hg
-X-ME-Proxy: <xmx:trHiZ56ujXDaHCcHmHO0Iiyd6A-jvRSwFJsQQT4GcVVawIaN2q5tGQ>
-    <xmx:trHiZ225wHlHj8I_meBXHxRONikU_-MkNveWrp3t9H-nel0hE1Q2nQ>
-    <xmx:trHiZ8GlZrAp27JaXS0rF_MR18Khd4sU2xdchTCwWZOWOoV7ycxR0w>
-    <xmx:trHiZ3-VcgFKbbOeb7v26y5TNio-jnbhtjCYoAtjUy3VTbLCfODcVQ>
-    <xmx:trHiZ3AP222OAndQkimzhj62jH4YiTFQsYYPvpWN8Ep80MPZAldjj79Y>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8C6EF2220072; Tue, 25 Mar 2025 09:37:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+RoZ4gw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 736E4C4CEE8;
+	Tue, 25 Mar 2025 18:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742928146;
+	bh=b0ElTFIwXwNHL7nzondQmJSf/3QVUkxQFYvSen+AJuI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=R+RoZ4gwzM+hs4BhA4c0uK8/Fca4sucW0GHmNTbbtwdhNSHqXaiYyzNBnpEdRA7qm
+	 lKijRNUrKd+NWzpEz7PO3CEMWZpylNufpZnzIkjY/D+NkPBrleaLBbLlbKsiUj6ii8
+	 aHhxYv/hzQnu4Fed8poUyL0+TNJn6FFRhfVL6oWT3tg5OCjg/KcTKMGrrLRPrfkJXJ
+	 qB53KRmg0gR1SGaM/n1mpw/IzPXJv1wY7ipPDAJ4a0oII7eds9RWM0flkj35Pj/QIF
+	 S2AuG+jV8024s9gJ4PrwmjtCM0Xe+xabDHg9vCclDmgvSIr3fCyHL64h/HKqdmMdw5
+	 WE7EHVCnUDSqg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Tasos Sahanidis <tasos@tasossah.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.13 4/7] hwmon: (nct6775-core) Fix out of bounds access for NCT679{8,9}
+Date: Tue, 25 Mar 2025 14:42:12 -0400
+Message-Id: <20250325184215.2152123-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250325184215.2152123-1-sashal@kernel.org>
+References: <20250325184215.2152123-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T9168aded715bd4fc
-Date: Tue, 25 Mar 2025 14:37:36 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Akshay Gupta" <Akshay.Gupta@amd.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: "Guenter Roeck" <linux@roeck-us.net>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, shyam-sundar.s-k@amd.com,
- gautham.shenoy@amd.com, "Mario Limonciello" <mario.limonciello@amd.com>,
- naveenkrishna.chatradhi@amd.com, anand.umarji@amd.com
-Message-Id: <eedd6e17-b6e0-4e02-8c12-ba835b0dba15@app.fastmail.com>
-In-Reply-To: <b26e9abc-10bb-46a0-be05-d0cd2ce835bd@amd.com>
-References: <20250324145815.1026314-1-akshay.gupta@amd.com>
- <20250324145815.1026314-7-akshay.gupta@amd.com>
- <c9138dd3-6a09-47a2-a8fe-716c8894042e@app.fastmail.com>
- <b26e9abc-10bb-46a0-be05-d0cd2ce835bd@amd.com>
-Subject: Re: [PATCH v6 06/11] misc: amd-sbi: Add support for AMD_SBI IOCTL
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13.8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 25, 2025, at 13:35, Gupta, Akshay wrote:
-> On 3/24/2025 9:10 PM, Arnd Bergmann wrote:
->
-> Link for the documentation: 
-> https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/programmer-references/57883.zip 
-> <https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/programmer-references/57883.zip>
-> You may refer to section: 5.4.2.2 SB-RMI Mailbox Service
-> At present, more than 70 mailbox commands ids are supported.
-> The number is increasing with each platforms.
-> however, the input and output for all mailbox commands are maintained 
-> as 32 bit, hence, we can use the same structure and differentiate the 
-> functionality.
+From: Tasos Sahanidis <tasos@tasossah.com>
 
-The large number of mailbox commands is exactly what I'm worried
-about. Having 70 well-documented ioctl command numbers is not a problem,
-since the numbers are cheap, but having an unfiltered pass-through
-inteface between userspace and a PMIC is scary, and it's worse if
-future hardware version has additional registers here.
+[ Upstream commit 815f80ad20b63830949a77c816e35395d5d55144 ]
 
-A lot of the values reported through this interface could simply
-be sysfs files, some look like they should integrate into existing
-kernel subsystems (scheduler, pci, ...) and not be directly
-visible to userspace.
+pwm_num is set to 7 for these chips, but NCT6776_REG_PWM_MODE and
+NCT6776_PWM_MODE_MASK only contain 6 values.
 
-      Arnd
+Fix this by adding another 0 to the end of each array.
+
+Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
+Link: https://lore.kernel.org/r/20250312030832.106475-1-tasos@tasossah.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hwmon/nct6775-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index fa3351351825b..79bc67ffb9986 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -273,8 +273,8 @@ static const s8 NCT6776_BEEP_BITS[NUM_BEEP_BITS] = {
+ static const u16 NCT6776_REG_TOLERANCE_H[] = {
+ 	0x10c, 0x20c, 0x30c, 0x80c, 0x90c, 0xa0c, 0xb0c };
+ 
+-static const u8 NCT6776_REG_PWM_MODE[] = { 0x04, 0, 0, 0, 0, 0 };
+-static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0 };
++static const u8 NCT6776_REG_PWM_MODE[] = { 0x04, 0, 0, 0, 0, 0, 0 };
++static const u8 NCT6776_PWM_MODE_MASK[] = { 0x01, 0, 0, 0, 0, 0, 0 };
+ 
+ static const u16 NCT6776_REG_FAN_MIN[] = {
+ 	0x63a, 0x63c, 0x63e, 0x640, 0x642, 0x64a, 0x64c };
+-- 
+2.39.5
+
