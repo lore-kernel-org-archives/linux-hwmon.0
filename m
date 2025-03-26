@@ -1,140 +1,267 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1340021ABA6
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 17:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7349A23F41A;
+	Wed, 26 Mar 2025 17:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743010918; cv=none; b=hgH9aMYFxFE8ntfxhsOQWMbqSXkIn0nCYswQfH7RGR06lKVpzvA7WeSCRPanu4ICRwfTz84QA0+VHR823VC92KnGcWHf/droo0hsEeU/ibepaKvsW7AXZ/Ve4y/lmBN6uN5nAe0S4he+z9MlRACRhOxaPxEXoQ86CIpQ7tJid/8=
+	t=1743010928; cv=none; b=NNCnXt9POHaqJsX9V/oPjtLSqtEGJon3lypGvTW9P47tsyXQEeqkJGNImVDRiuTJLUC1FXjx80XgI+Gyhj8HPKYpAhFC3n/uGIFOVcKvVMaAJyZD0wHmXmamhLob8ivOS/tSYtQz0YNUlspVU2uZUHo2gVENyviwp+aSYVunIXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743010918; c=relaxed/simple;
-	bh=Z+kmXHGClhFpLj7Nta6mCo6WFt55JgT1HnxwLsMrksk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HKQatysHzXgwL+TG1QuxS9Yq2jSOW4gTVeZNmzxb/NBi9mTFf/f7gZazlhxIET4fTR6mkkgS/XDO+DLRo+LPHJKemjVeRPkYcblin5tWpTYU/d49Uk3EBjKwQmONh/qmMSwEUY6ETTeSlwG4CLtwjuOax7uv4cD+AaR6hpeZzlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-0001hP-Qx; Wed, 26 Mar 2025 18:41:36 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txUky-001nIV-1O;
-	Wed, 26 Mar 2025 18:41:36 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id D680D3E7735;
-	Wed, 26 Mar 2025 17:41:35 +0000 (UTC)
-Date: Wed, 26 Mar 2025 18:41:35 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
+	s=arc-20240116; t=1743010928; c=relaxed/simple;
+	bh=lEq4Hd3zWk4SO28GUjXnNOiCchFBKjIMJP+Fa8ijp9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DSXPbCnc+LuWw8uOZHVM0SPi5R7hX7mnxX3aVoOcQj5a9gDIhoVALq53eqooOA2VkvyAHIyhqicOO68qiuURpSpHONoFqCXwvFPo5PAGJp6CSJD02ZQqpfvvHe5HL8pqKgPy4d9cja/35cYFySAgNvrdWhym4oBdZciEDaQ2adI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q5tolS/T; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5tolS/T"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2264aefc45dso4782515ad.0;
+        Wed, 26 Mar 2025 10:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743010926; x=1743615726; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOWiUHVlWPAh8Ja5Ly3mS6pLUvyY2sWL0fhMkd73oAY=;
+        b=Q5tolS/TpJHrU+WLr/yZTVainp1xquluEgpRhK5zn4X1TTpaQNSMyDunEiOOcus4+Q
+         Wn1IA0oqvkJ70Yiwe/njhHhn4Vmo67q2Z009wIbYG8t2S+6JXhtSTUCQscAl1Njtpjxv
+         5XpaW7Ta+FxtgU93CnlcFsnLkrdl9rIS4DJfiM/xnEjDjzwq7tSNDegl7OBkYqHLLr6i
+         s9NidvRMPh0Rwq2KNLeHQUDQyA+p370y+MD3TLfJ5EwQ+uZoTL3W+03cgONpRmh0qxMO
+         lAcOW/ZN4vmHzqO+EOo84TFOcP8IAjP6pxBcY1X4YqDgAApNj/od8a2aE6nA9dnNhviV
+         ++2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743010926; x=1743615726;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zOWiUHVlWPAh8Ja5Ly3mS6pLUvyY2sWL0fhMkd73oAY=;
+        b=AWaj66xRRx1tk3wHNRQMfV9GoWwwReT3LqGhGsGTB7oM7ifniOzxVonTV7KHQKdAXQ
+         Isv5CSeG0koM8vVHxznQmiZkyO5VplthYttyKAP/5L5YYGSxwtlLffRm74DtV3xzRDL2
+         6gHtqtyEo81Xv/Sgo+N5wXPiIkEGPCZYrjBgE3nDJPtVHbPB55Lu5TXI5GsDBUwTkXY3
+         dbyKa332EThP3DPMfndAnY/wRouYsi5scY96r4IPrHqyV0FwGj029QhKqoFpr9DMsNUq
+         hkHl4HEdz33pt+IHUOJBI3vCs60rpZtKy73rd47Fri+qTa7cqV/jsZIVnXRwPR4M3BkZ
+         3tPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHdBxA6qutuoHACk8tlAr3XV7nzckIPflbvOydGDFjGNP8vsLIZpuTC521ndxk9zX1OImKGMkbVFT4jQ==@vger.kernel.org, AJvYcCW85dgm14mnvjD6s3VyCA3rID3QsMK9W4sUT8/sIkObF60uwcnpfCbzKjCyNu+7vDb43PDZSEYdjfrl+1La@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrpfZNUDTXaSWXYuulHyOBSy+pPYYXDcRUTOb6W8f9GieMF3om
+	Zm6JWmGPI3C0vjerc/HH5vI7uLSHoj8w33JeNsRiD+0hwWQPjRiwV0EW/g==
+X-Gm-Gg: ASbGncu7QKdOuyaE7sRTOZofLGqQRmWUqfA5NavuiaHQ5qg5O+II/FbaQOoMQiq6wuD
+	I5csWer6QCo0sUILsHnFAs2piVhtn4uDseCcv5tFqIhTkm6CaN/iNb3ket4y8Jo+LmeLRCdQ6QH
+	d9KmFitlClpI4zv7mfX86VPpIZL+fKKWmxICnBvXzACJSN8VLOSKo68CLBGU0s9g6BftgBhAyqG
+	r1CKOkbq++3o3h4EYyOsmwX05YieyVM3d2nu7Z/ObX4LY29RnDzy83PIu7v1fC37eAtLg7RmMnQ
+	zPXyNT20X7NzcD7zG3KTLIxrSrr09sw5ZaYwAyf8+DZDZCToiBKPxL+AtmwMHimXSLsRE+vRvhu
+	qzaNvuuZvqfPLD81E2g==
+X-Google-Smtp-Source: AGHT+IElmHLpRBVbkB5QF3rKWMm7lEAW21LHjJtVfX1ua5AvjBDxnGcIiabUflv6lRNZlSw3zdFhlw==
+X-Received: by 2002:a17:902:ce02:b0:224:1c41:a4bc with SMTP id d9443c01a7336-22804839a06mr9211685ad.12.1743010925442;
+        Wed, 26 Mar 2025 10:42:05 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811da38asm113120555ad.186.2025.03.26.10.42.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Mar 2025 10:42:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <efa85637-7a6b-475c-b7ca-3a3c8fc3429b@roeck-us.net>
+Date: Wed, 26 Mar 2025 10:42:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r56ki5hqfoc5hcq4"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (max6639) : Allow setting target RPM
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250324185744.2421462-1-you@example.com>
+ <b6668968-897f-4864-913c-d4d557f1d7cc@roeck-us.net>
+ <CABqG17h8cpnFkdD-nnqyr+UnwADU9XWK6TGBxj_FCH37Y3Q1Lw@mail.gmail.com>
+ <be099cf4-338b-45c8-b0d3-24b2cefe386e@roeck-us.net>
+ <CABqG17gZV7ZBKOz0gTsrfsuHQENF3VM2T-=O27sWdc1PP9OmPA@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CABqG17gZV7ZBKOz0gTsrfsuHQENF3VM2T-=O27sWdc1PP9OmPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 3/26/25 09:59, Naresh Solanki wrote:
+> Hi Guenter,
+> 
+> On Wed, 26 Mar 2025 at 22:19, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 3/26/25 09:36, Naresh Solanki wrote:
+>>> Hi Guenter,
+>>>
+>>> On Tue, 25 Mar 2025 at 05:00, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>
+>>>> On 3/24/25 11:57, Your Name wrote:
+>>>>> From: Naresh Solanki <naresh.solanki@9elements.com>
+>>>>>
+>>>>> Currently, during startup, the fan is set to its maximum RPM by default,
+>>>>> which may not be suitable for all use cases.
+>>>>> This patch introduces support for specifying a target RPM via the Device
+>>>>> Tree property "target-rpm".
+>>>>>
+>>>>> Changes:
+>>>>> - Added `target_rpm` field to `max6639_data` structure to store the
+>>>>>      target RPM for each fan channel.
+>>>>> - Modified `max6639_probe_child_from_dt()` to read the `"target-rpm"`
+>>>>>      property from the Device Tree and set `target_rpm` accordingly.
+>>>>> - Updated `max6639_init_client()` to use `target_rpm` to compute the
+>>>>>      initial PWM duty cycle instead of defaulting to full speed (120/120).
+>>>>>
+>>>>> Behavior:
+>>>>> - If `"target-rpm"` is specified, the fan speed is set accordingly.
+>>>>> - If `"target-rpm"` is not specified, the previous behavior (full speed
+>>>>>      at startup) is retained.
+>>>>>
+>>>>
+>>>> Unless I am missing something, that is not really correct. See below.
+>>>>
+>>>>> This allows better control over fan speed during system initialization.
+>>>>>
+>>>>> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+>>>>> ---
+>>>>>     drivers/hwmon/max6639.c | 15 ++++++++++++---
+>>>>>     1 file changed, 12 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+>>>>> index 32b4d54b2076..ca8a8f58d133 100644
+>>>>> --- a/drivers/hwmon/max6639.c
+>>>>> +++ b/drivers/hwmon/max6639.c
+>>>>> @@ -80,6 +80,7 @@ struct max6639_data {
+>>>>>         /* Register values initialized only once */
+>>>>>         u8 ppr[MAX6639_NUM_CHANNELS];   /* Pulses per rotation 0..3 for 1..4 ppr */
+>>>>>         u8 rpm_range[MAX6639_NUM_CHANNELS]; /* Index in above rpm_ranges table */
+>>>>> +     u32 target_rpm[MAX6639_NUM_CHANNELS];
+>>>>>
+>>>>>         /* Optional regulator for FAN supply */
+>>>>>         struct regulator *reg;
+>>>>> @@ -560,8 +561,14 @@ static int max6639_probe_child_from_dt(struct i2c_client *client,
+>>>>>         }
+>>>>>
+>>>>
+>>>> target_rpm[] is 0 here.
+>>>>
+>>>>>         err = of_property_read_u32(child, "max-rpm", &val);
+>>>>> -     if (!err)
+>>>>> +     if (!err) {
+>>>>>                 data->rpm_range[i] = rpm_range_to_reg(val);
+>>>>> +             data->target_rpm[i] = val;
+>>>>> +     }
+>>>>
+>>>> If there is no max-rpm property, or if there is no devicetree support,
+>>>> target_rpm[i] is still 0.
+>>>>
+>>>>> +
+>>>>> +     err = of_property_read_u32(child, "target-rpm", &val);
+>>>>> +     if (!err)
+>>>>> +             data->target_rpm[i] = val;
+>>>>
+>>>> If there is neither max-rpm nor target-rpm, target_rpm[i] is still 0.
+>>>>
+>>>>>
+>>>>>         return 0;
+>>>>>     }
+>>>>> @@ -573,6 +580,7 @@ static int max6639_init_client(struct i2c_client *client,
+>>>>>         const struct device_node *np = dev->of_node;
+>>>>>         struct device_node *child;
+>>>>>         int i, err;
+>>>>> +     u8 target_duty;
+>>>>>
+>>>>>         /* Reset chip to default values, see below for GCONFIG setup */
+>>>>>         err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
+>>>>> @@ -639,8 +647,9 @@ static int max6639_init_client(struct i2c_client *client,
+>>>>>                 if (err)
+>>>>>                         return err;
+>>>>>
+>>>>> -             /* PWM 120/120 (i.e. 100%) */
+>>>>> -             err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(i), 120);
+>>>>> +             /* Set PWM based on target RPM if specified */
+>>>>> +             target_duty = 120 * data->target_rpm[i] / rpm_ranges[data->rpm_range[i]];
+>>>>
+>>>> If there is no devicetree support, or if neither max-rpm nor target-rpm are
+>>>> provided, target_duty will be 0, and the fans will stop.
+>>>>
+>>>> Maybe my interpretation is wrong, but I think both target_rpm[] and rpm_range[]
+>>>> will need to be initialized. Also, it seems to me that there will need to be an
+>>>> upper bound for target_rpm[]; without it, it is possible that target_duty > 120,
+>>>> which would probably not be a good idea.
+>>> Yes you're right. I missed it in my analysis.
+>>>
+>>> Here is the logic that would address:
+>>>                   target_rpm = 120;
+>>>                   /* Set PWM based on target RPM if specified */
+>>>                   if (data->target_rpm[i] != 0 &&
+>>>                       data->target_rpm[i]  <= rpm_ranges[data->rpm_range[i]]) {
+>>>
+>>>                           target_duty = 120 * data->target_rpm[i] /
+>>> rpm_ranges[data->rpm_range[i]];
+>>>                   }
+>>>
+>>> Please let me know your thoughts & suggestions.
+>>>
+>>
+>> I would prefer if target_rpm[] and rpm_range[] were pre-initialized with default
+>> values in the probe function. That would avoid runtime checks.
+> rpm_range is pre-initialized to 4000 RPM [1]
+> I can also init target_rpm[] to 4000 RPM as default along with above init.
+> 
+Yes.
 
---r56ki5hqfoc5hcq4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+> But still there might be a case wherein DT doesn't provide max-rpm but
+> target-rpm is set to greater than 4000 RPM
+> Thus there will be a need to check to cover this kind of scenario.
+> 
+> Please let me know your thoughts & will implement that.
+> 
 
-On 26.03.2025 10:27:03, Ming Yu wrote:
-> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
-7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:21=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > > > > +     priv->can.clock.freq =3D can_clk;
-> > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nomina=
-l_const;
-> > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_d=
-ata_const;
-> > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_coun=
-ter;
-> > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTI=
-NG |
-> > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > > >
-> > > > Does your device run in CAN-FD mode all the time? If so, please use
-> > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_suppor=
-ted
-> > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
-> > > >
-> > >
-> > > Our device is designed to allow users to dynamically switch between
-> > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
-> > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported, and
-> > > can_set_static_ctrlmode() is not suitable in this case.
-> > > Please let me know if you have any concerns about this approach.
-> >
-> > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or not?
-> >
->=20
-> Sorry, I was previously confused about our device's control mode. I
-> will use can_set_static_ctrlmode() to set CAN_FD mode in the next
-> patch.
+You'll need to validate target_rpm against max-rpm either way,
+to make sure that target_rpm <= max_rpm.
 
-Does your device support CAN-CC only mode? Does your device support to
-switch between CAN-CC only and CAN-FD mode?
+Thanks,
+Guenter
 
-regards,
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---r56ki5hqfoc5hcq4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkPEwACgkQDHRl3/mQ
-kZwXaAf/a0RArL3RY/rCsvGqnhAz/Nk1ljI1/sjXn6b6BRnEzwSev7b8LpGNMeTK
-ygCzVEDcFHwfjhcV2/C2irc0XtxnLLmh3YqpNF54IY/vAAFDzqPGqzOHYPiOE+Al
-ZFK6zjj26zmBDh011lfjyWk9EYvhDUfZNCUAX6N8Cdic+9wNGDiN9HKVfz6cUj9K
-oGTTUPVTU0Nh7bwnuHLuj5IIruIQlTPH6w0Yd56Uv4TvGZ0cQ+S9hgGvY2J6v4f8
-tdvZIe+xMQTR2d4kaK/HU+wA0iMdSoxKyu9sCszU3tWGH/Yb+UAF1/gcdc0f5Gk6
-0X0j7uJgXLMbbdpHbsWypGiIkORpqQ==
-=mUFO
------END PGP SIGNATURE-----
-
---r56ki5hqfoc5hcq4--
