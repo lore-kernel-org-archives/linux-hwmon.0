@@ -1,164 +1,195 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF10E1E505;
-	Wed, 26 Mar 2025 14:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E8C1F63F5
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 16:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742998304; cv=none; b=Owu4Ajk7j/jNFdnX6b+jD3oTa8LIqsKB59V0ANIkldVDtH68MviavJGDYVQ+eqHcVaNaz9QhBMi9ioyGPAlXoO3oAzRhmBsP/uW/uhjdl0wj7WrUpkMHgI7uDRyLTXoDwSgRspBpgdIEywH6U4d7r85GDIGKhYD6KeM/9nMrEyk=
+	t=1743007029; cv=none; b=HRhn/QBS7bSithY1I5nRfgLUISOs5IPVj8+0R7YSXCSsN0zt7ZAgAVAKZcffmy86IA4DHavO15ETqjowd+EPZnsp0rBcLjnUZmE/ZQ9XZh9WUBkUyLUY3fvqagQjATaNpdxqsgImvt/6TuOKpdh/UqLsOkI0MlZB/7mtaWYTF2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742998304; c=relaxed/simple;
-	bh=s6f9kbEJrcHVk1C4n8PlU3JWvNoRMWWc7lpV4Xs/ZFU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=LCQz/VSXHuRMjAzSEHE4AvzRByETBsPUUdrmMdGi95e9GlVZH+4lcmkdtpUq6lmnpkSImdpdGngQ9woWLVCGgw8mbSHE5NXTxHDFW7Tlf39Ubye8UCeA6qOIn+Q7osgFnqwTchUQ/DrigreQF5B5vP4Pt8CRYYnuWCpKkOqtvbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JoYsjU+a; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743007029; c=relaxed/simple;
+	bh=IQq6enMTG+6ROhzOBexSTgmY6GuXBcunbOF41yLY31s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dIb/+QcnD4Gzlwae4A/Q79wyPkL7rRwsidRzBsbENmhBLNqpNKErDYmzknc4xycrvgzgl4evP4y7LEpQGS4FVCRl7C/lOnU9IgjHjteJ7lnh9uI0YAVvRjZ4Brf+iDHuoX6C0UZ3s50RMwSrvHi6c166WZHaLpvM0TZXO6KOIlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=NjYjsUML; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JoYsjU+a"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ff85fec403so1845878a91.1;
-        Wed, 26 Mar 2025 07:11:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="NjYjsUML"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-227b828de00so1755545ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 09:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742998302; x=1743603102; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nn9CeCREC2ry0DlbKdz0wfSVQ0WW3pjZuN5c2VFSAqQ=;
-        b=JoYsjU+aBHsuQjLPGWb/V9u3Abb94G1Q+HNAEoZc0l2gjIVpQd+/YnylssvQKgaaKy
-         NLcf3xAW3ntZcqrkvU2RaVwQ9jIkHfELaSTJXEM4RzUNyGNEQoAJZnJtvIdxcVoLBhEj
-         uCBaqWQQdN9oTDLZ28pOZLIDJKxD99o+G6ZBLU6SpvFEpRK7jQtREio26A6fCe42s0nF
-         7TMtMU2OVUNAylxfDnOczHN1vnQOEWa7EHFMIKoX3Nvsrj17SnHmh15d7G9G63+d2hOY
-         5AeilBHfUvTszfGwUeBxghkHUzfeJs+6y0PSqxYm0uXQTBIt7bBDeB8s5pI2YxdoD3oR
-         3X9w==
+        d=9elements.com; s=google; t=1743007025; x=1743611825; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F91AnXnLokiKJ1KvPD1kpvGF5dxInp9ewGKQcQQqyqc=;
+        b=NjYjsUMLWgLzf28ZFILvAcDIbuqUb6LGool1t3D/01CGSC7bgtMHPrEPIN5RZoI1Ls
+         AN0kzJ7LO9+fxcn++d+PtD4alaHyK0nfOwmufiwsZMC4VrzuvIVFwzKiZoACDVW1n3k5
+         TUDsF58pMH5aTgHJnKnTRe/F50+DR3zspPM1Cq29Qeyi6HEjKdKYPYhkrM9hd0OLK7PF
+         4zadNF3HGXAMq/oFAN3twjanbI0ZBAjHjfBU0tyGySwLXev0fCGAGUwqd9BTL9RC+6c9
+         WyaHoj528S3MdOGCyR7KrRiBbwS6nMbiSd7i9Htz0VE9vdoPa4aowIu7eLXRJatwOA/c
+         qLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742998302; x=1743603102;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Nn9CeCREC2ry0DlbKdz0wfSVQ0WW3pjZuN5c2VFSAqQ=;
-        b=i3jKLPIrlugIB5z3ztWBnbeFF3ekZWAys//j+uQZoLw7fr5i/faDEHGL4lDgG+fVTW
-         2bK7lBldq180e8EisD6RosQnLsucaDqs3EmGrkrIs+BiLLPIan1lzaIS5Rgt3wsviHPu
-         4+u4iLtrg4zZfBhgADlji0mMVGv8d81DXPzvtM4GfqSSSTzJ9Xv1p35zG7ViXEl1y1FQ
-         n6wKm+mACenGLArZeshDZ52FMmYBCrBd2DBdwvx5Mz5awXJJa9347p5+EENtLaB5agaG
-         0lrOucKVbzRiNiM/6B2XrbOZAYDIr1yD9Rv0laNTS4AJMWdUW2rSjyhKjwpyIQxWmBEF
-         CGDg==
-X-Forwarded-Encrypted: i=1; AJvYcCU57XeN8zKJA6XsZm5vp5nXpsVf2MDS+VNqNHo82SexoipeWlLu29XdG1RjkQ++qyJn2qaKJ+7X2NvH44qG@vger.kernel.org, AJvYcCUfCFJ13+4K4Ht7vc34RneK0soWhSDJ3avK8YxmqWUzY6VKwCthzZQ6VP0unumyeszHW2DoN36ihavBtat1VqIQLmVd6A==@vger.kernel.org, AJvYcCUh1MDFJArXqpwmqoa6GcBw6afE3G/Pi7bA17WVyPwAMJl59ajc1ShXhut5Vu45Z2eqNpOnFVpYt3HLew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtSKCA/Q+Iuce4cIhJpxc7SiqfzCk/Bbxo7L0r8GKo1jWutJUt
-	PNCRJZRdWxTlfENmPTVZZ+L/sqTXtiCnB5NGTO/qYCAPWlLj8Rjh
-X-Gm-Gg: ASbGnct/9ZpRSZYMODuf980WLEDx23Y0eWlXw1OYPW3JEW2F/ukD0XodIWsuctwyDy0
-	YXv7fKqee2wN6/kXSc/800Omxb+tQcXDMPMfV6he1s6O57xR8VMRWns3KlR6+KtnRcl8M6uLXmY
-	Bt4FN5cu7LNjPKpNaEltWmiU9Qmk5tl7pjH3obs4Qu6Da28xjNrwqzF7mTARGn1YX8OyNeZEWfu
-	WF+iWdUdSreZ7fD9bdxAkmeMrcI6+ENfjHKQcaNYx88uxrQHEz3kMSAoVwVZF2ilCPNZTz1p1lJ
-	VedjeC7+qBRUltPAdbBLdtSjczqRQTfhGmVCRw==
-X-Google-Smtp-Source: AGHT+IEy1LFInOX/PuskLuvPaKjlDPucXAb7MH0QA60Wl2zBfVZVL5upjQJ122F9ZhqKss7fCJ4Urw==
-X-Received: by 2002:a05:6a21:101a:b0:1f3:20be:c18a with SMTP id adf61e73a8af0-1fe9389e62cmr6045583637.10.1742998301727;
-        Wed, 26 Mar 2025 07:11:41 -0700 (PDT)
-Received: from localhost ([181.91.133.137])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2a23c31sm10945425a12.54.2025.03.26.07.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Mar 2025 07:11:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743007025; x=1743611825;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F91AnXnLokiKJ1KvPD1kpvGF5dxInp9ewGKQcQQqyqc=;
+        b=iaY/3HE/yv8D0sDZGUyH7WgIz90kc45t6CEqys1c3Rzz4U1d5u+PGJN6ZNydz1H76s
+         RrAm1RLzM5YH0d1EOptgjCjp/5y4YcDqJZliplpDWTQGcZ3Pa01MPryvAOblLS7IhUKE
+         n48C52OIaLEX3jZTUdWekHtrGl2Z88PIvC+VKkJbgBL+/LNFbG0VNP66UwTxthM91Tle
+         S3GnXEwzuhsS6LBUKaoIMy6WCHkxRiBYpIaxGVolLFWqrdIDS22UhozZcK+seooY3G9p
+         0HyBUwDEyJRqs2SG+NWMoJDF8b1JFrxeK28SszTUHvKJRLW2ES8zDMfdIFJc1q/BnOwR
+         2oRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYSEaydv+VgGs6JJ+b+puapIdxmVVfBMfDGPk3Cq3lzW9O32L+fIXV/C2zGCPOlKrGrolKujldyY6PIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSB0f8L+BQeDph+DrJTKcdPQbX4+IEvv1Y7mgd29mH6eY3YWfQ
+	RK6mMLPrq8AhICXkBrEZVUxZDbhGXhFyb+6JO6oG8tJZQUu3ptS9xWngKXgDX8LvdHEX3bwHBas
+	NvEyOHmrwwuFgqKhHvcBaAQWnl02TEvaCKo6S5UQ5QJqZgiZB7L4kZA==
+X-Gm-Gg: ASbGncurlanQmRyh3sLOUPSQ/lp935FZ+pVWCd/66mXo7Fq8j2sHzeHsZuHLNVLhuaA
+	WqurOoV1BNUZNQL10jOJ1Fs+wHc591NVT0ub4+V+H6dcqZWjWO6Tp92Hn/1rxWxwtCXSjzg0JBV
+	Jv3CgVTSLARZ3uCOplxVwFl0g0jBs=
+X-Google-Smtp-Source: AGHT+IGAO5DJ1GpXnTQ+m2CNdWahsXytfna0ljOHok84BCyI0sxWBMxOJcSBUojWT9rV9QGXKmf8vt4g7Fx08Hr1EMk=
+X-Received: by 2002:a17:90b:1f81:b0:2ff:784b:ffe with SMTP id
+ 98e67ed59e1d1-303a7d6a9b4mr550673a91.11.1743007025141; Wed, 26 Mar 2025
+ 09:37:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 26 Mar 2025 11:11:37 -0300
-Message-Id: <D8Q9BVX71OXS.3LT6V7AR5EGR5@gmail.com>
-To: =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: "Armin Wolf" <W_Armin@gmx.de>, "Hans de Goede" <hdegoede@redhat.com>,
- <platform-driver-x86@vger.kernel.org>, <Dell.Client.Kernel@dell.com>,
- "LKML" <linux-kernel@vger.kernel.org>, "Guenter Roeck"
- <linux@roeck-us.net>, "Jean Delvare" <jdelvare@suse.com>,
- <linux-hwmon@vger.kernel.org>, "Bagas Sanjaya" <bagasdotme@gmail.com>
-Subject: Re: [PATCH v6 00/12] platform/x86: alienware-wmi-wmax: HWMON
- support + DebugFS + Improvements
-From: "Kurt Borja" <kuurtb@gmail.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250313-hwm-v6-0-17b57f787d77@gmail.com>
- <D8PMFDWIJJUB.196935MS2OZ7J@gmail.com>
- <32a05292-aaa0-15f0-8bdf-dae645b452f3@linux.intel.com>
-In-Reply-To: <32a05292-aaa0-15f0-8bdf-dae645b452f3@linux.intel.com>
+MIME-Version: 1.0
+References: <20250324185744.2421462-1-you@example.com> <b6668968-897f-4864-913c-d4d557f1d7cc@roeck-us.net>
+In-Reply-To: <b6668968-897f-4864-913c-d4d557f1d7cc@roeck-us.net>
+From: Naresh Solanki <naresh.solanki@9elements.com>
+Date: Wed, 26 Mar 2025 22:06:53 +0530
+X-Gm-Features: AQ5f1Jo7E8SdVYgDTlKTQFzVY9tNtZ40o22pq5kpX8djeafj-PpX-f5_zPtBc8s
+Message-ID: <CABqG17h8cpnFkdD-nnqyr+UnwADU9XWK6TGBxj_FCH37Y3Q1Lw@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max6639) : Allow setting target RPM
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed Mar 26, 2025 at 5:34 AM -03, Ilpo J=C3=A4rvinen wrote:
-> On Tue, 25 Mar 2025, Kurt Borja wrote:
->> On Thu Mar 13, 2025 at 11:29 AM -03, Kurt Borja wrote:
->> > Hi all,
->> >
->> > This set mainly adds hwmon and manual fan control support (patches 7-8=
-)
->> > to the alienware-wmi driver, after some improvements.
->> >
->> > Thank you for your feedback :)
->> >
->> > ---
->> > Changes in v6:
->> >
->> > [08/12]
->> >   - Define dev_pm_ops statically (kernel test robot)
->> >
->> > Link to v5: https://lore.kernel.org/r/20250312-hwm-v5-0-deb15ff8f3c6@g=
-mail.com
->> >
->> > ---
->> > Kurt Borja (12):
->> >       platform/x86: alienware-wmi-wmax: Rename thermal related symbols
->> >       platform/x86: alienware-wmi-wmax: Refactor is_awcc_thermal_mode(=
-)
->> >       platform/x86: alienware-wmi-wmax: Improve internal AWCC API
->> >       platform/x86: alienware-wmi-wmax: Modify supported_thermal_profi=
-les[]
->> >       platform/x86: alienware-wmi-wmax: Improve platform profile probe
->> >       platform/x86: alienware-wmi-wmax: Add support for the "custom" t=
-hermal profile
->> >       platform/x86: alienware-wmi-wmax: Add HWMON support
->> >       platform/x86: alienware-wmi-wmax: Add support for manual fan con=
-trol
->> >       platform/x86: alienware-wmi-wmax: Add a DebugFS interface
->> >       Documentation: wmi: Improve and update alienware-wmi documentati=
-on
->> >       Documentation: admin-guide: laptops: Add documentation for alien=
-ware-wmi
->> >       Documentation: ABI: Add sysfs platform and debugfs ABI documenta=
-tion for alienware-wmi
->> >
->> >  Documentation/ABI/testing/debugfs-alienware-wmi    |   44 +
->> >  .../ABI/testing/sysfs-platform-alienware-wmi       |   14 +
->> >  .../admin-guide/laptops/alienware-wmi.rst          |  128 +++
->> >  Documentation/admin-guide/laptops/index.rst        |    1 +
->> >  Documentation/wmi/devices/alienware-wmi.rst        |  383 +++-----
->> >  MAINTAINERS                                        |    3 +
->> >  drivers/platform/x86/dell/Kconfig                  |    1 +
->> >  drivers/platform/x86/dell/alienware-wmi-wmax.c     | 1023 +++++++++++=
-++++++---
->> >  8 files changed, 1187 insertions(+), 410 deletions(-)
->> > ---
->> > base-commit: f895f2493098b862f1ada0568aba278e49bf05b4
->> > change-id: 20250305-hwm-f7bd91902b57
->> >
->> > Best regards,
->>=20
->> Hi Ilpo,
->>=20
->> Is there still a chance for this to go into v6.15? or are you planning
->> to review it on the next cycle?
->
-> Hi,
->
-> I'm almost there to make the main PR for 6.15 from what's in for-next=20
-> currently, so no, this won't be part of it.
->
-> In general, I don't usually take large series after -rc6 timeframe to giv=
-e=20
-> time for things to settle and problems to be brought to surface.
-> Especially if the series is interfacing with other subsystems which is=20
-> prone to lack of select/depends on clauses, etc. so more likely to break=
-=20
-> the build than changes that seem immune to the .config variations.
+Hi Guenter,
 
-Oh - I'll keep in mind this in the future. Thank you!
+On Tue, 25 Mar 2025 at 05:00, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/24/25 11:57, Your Name wrote:
+> > From: Naresh Solanki <naresh.solanki@9elements.com>
+> >
+> > Currently, during startup, the fan is set to its maximum RPM by default,
+> > which may not be suitable for all use cases.
+> > This patch introduces support for specifying a target RPM via the Device
+> > Tree property "target-rpm".
+> >
+> > Changes:
+> > - Added `target_rpm` field to `max6639_data` structure to store the
+> >    target RPM for each fan channel.
+> > - Modified `max6639_probe_child_from_dt()` to read the `"target-rpm"`
+> >    property from the Device Tree and set `target_rpm` accordingly.
+> > - Updated `max6639_init_client()` to use `target_rpm` to compute the
+> >    initial PWM duty cycle instead of defaulting to full speed (120/120).
+> >
+> > Behavior:
+> > - If `"target-rpm"` is specified, the fan speed is set accordingly.
+> > - If `"target-rpm"` is not specified, the previous behavior (full speed
+> >    at startup) is retained.
+> >
+>
+> Unless I am missing something, that is not really correct. See below.
+>
+> > This allows better control over fan speed during system initialization.
+> >
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+> > ---
+> >   drivers/hwmon/max6639.c | 15 ++++++++++++---
+> >   1 file changed, 12 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+> > index 32b4d54b2076..ca8a8f58d133 100644
+> > --- a/drivers/hwmon/max6639.c
+> > +++ b/drivers/hwmon/max6639.c
+> > @@ -80,6 +80,7 @@ struct max6639_data {
+> >       /* Register values initialized only once */
+> >       u8 ppr[MAX6639_NUM_CHANNELS];   /* Pulses per rotation 0..3 for 1..4 ppr */
+> >       u8 rpm_range[MAX6639_NUM_CHANNELS]; /* Index in above rpm_ranges table */
+> > +     u32 target_rpm[MAX6639_NUM_CHANNELS];
+> >
+> >       /* Optional regulator for FAN supply */
+> >       struct regulator *reg;
+> > @@ -560,8 +561,14 @@ static int max6639_probe_child_from_dt(struct i2c_client *client,
+> >       }
+> >
+>
+> target_rpm[] is 0 here.
+>
+> >       err = of_property_read_u32(child, "max-rpm", &val);
+> > -     if (!err)
+> > +     if (!err) {
+> >               data->rpm_range[i] = rpm_range_to_reg(val);
+> > +             data->target_rpm[i] = val;
+> > +     }
+>
+> If there is no max-rpm property, or if there is no devicetree support,
+> target_rpm[i] is still 0.
+>
+> > +
+> > +     err = of_property_read_u32(child, "target-rpm", &val);
+> > +     if (!err)
+> > +             data->target_rpm[i] = val;
+>
+> If there is neither max-rpm nor target-rpm, target_rpm[i] is still 0.
+>
+> >
+> >       return 0;
+> >   }
+> > @@ -573,6 +580,7 @@ static int max6639_init_client(struct i2c_client *client,
+> >       const struct device_node *np = dev->of_node;
+> >       struct device_node *child;
+> >       int i, err;
+> > +     u8 target_duty;
+> >
+> >       /* Reset chip to default values, see below for GCONFIG setup */
+> >       err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
+> > @@ -639,8 +647,9 @@ static int max6639_init_client(struct i2c_client *client,
+> >               if (err)
+> >                       return err;
+> >
+> > -             /* PWM 120/120 (i.e. 100%) */
+> > -             err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(i), 120);
+> > +             /* Set PWM based on target RPM if specified */
+> > +             target_duty = 120 * data->target_rpm[i] / rpm_ranges[data->rpm_range[i]];
+>
+> If there is no devicetree support, or if neither max-rpm nor target-rpm are
+> provided, target_duty will be 0, and the fans will stop.
+>
+> Maybe my interpretation is wrong, but I think both target_rpm[] and rpm_range[]
+> will need to be initialized. Also, it seems to me that there will need to be an
+> upper bound for target_rpm[]; without it, it is possible that target_duty > 120,
+> which would probably not be a good idea.
+Yes you're right. I missed it in my analysis.
 
---=20
- ~ Kurt
+Here is the logic that would address:
+                target_rpm = 120;
+                /* Set PWM based on target RPM if specified */
+                if (data->target_rpm[i] != 0 &&
+                    data->target_rpm[i]  <= rpm_ranges[data->rpm_range[i]]) {
+
+                        target_duty = 120 * data->target_rpm[i] /
+rpm_ranges[data->rpm_range[i]];
+                }
+
+Please let me know your thoughts & suggestions.
+
+Regards,
+Naresh
+>
+> Guenter
+>
+> > +             err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(i), target_duty);
+> >               if (err)
+> >                       return err;
+> >       }
+> >
+> > base-commit: 2115cbeec8a3ccc69e3b7ecdf97b4472b0829cfc
+>
