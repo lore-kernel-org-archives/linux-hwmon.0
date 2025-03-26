@@ -1,159 +1,116 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE9D1E522;
-	Wed, 26 Mar 2025 02:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048D62AD2C
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 02:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742956645; cv=none; b=QpEX+XchB5YbVMlCZk3t7IYi/NdmjERA8r4s56umRwmR+Xc+94NKKjvqcuzW8n6KtTs0qVpOLrb+uZYYEgjRilYdF0lVtpiW5FfSBAe2UNkVWTB4ySFC15efP6o5gXVkIb895VnE5QwaLYjgdcq5/QfLMEZe7Oh9NQDsgmPamHM=
+	t=1742957084; cv=none; b=PhZqDV1vnYecHPcYizAuvm4nMyibwmUdt0Izc9lGMvAFktZ8ZmDJET3YCpc9Zif9cYulJa3+Rvzc2swZ6Q4mlK3n6/m9tvhEPmsdIBbY6CiZd5ktUb1BoS62omEjwyd+2ZGgJdRQFXq5DEdc8JWU2SZukyVwpRtMxE7mp/Kzcww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742956645; c=relaxed/simple;
-	bh=4aKVdki5wns6qRzTx7R+loqMBGca0hbPQ5jyuD8BmtU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O7dItRa/Sw6MH3H3wSPFcHDQBwE5Hibd1fIovRyRgHUE2o7SdAAXEmI/wWIevAs4mnnMbhSeb9ZG7zE0IGbNxMFyG6UqZAwJ4eASCCzsfvd9VjlSvkLc2k2luHpQyIaOkbrSl9W7au4Whl34IRqHgtmP13nWpcrlxVkOoU1JtME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sbw4m/LE; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742957084; c=relaxed/simple;
+	bh=XxPAydEN/QVzZOUrNuNHLVqKWZeO4X//CfD2Ek1J4cM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cr10npvHKWODESDc0wdTp6nqKyAfMw0bGWVJK6sqJ7m5KwR6hENHC9E9qK0MPCkwPjN7BnlAVgcjxuIQ66JEYjoBKVMz4SLAKxvYeiGcEgMXx95SvTJRpPXhgNCmZeH1aGKOkIAU1mwIK2F+AM9QvmF2rKLoFvSKAU+EhHObtmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=P7OcQ2UI; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sbw4m/LE"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e63504bedd0so4549166276.0;
-        Tue, 25 Mar 2025 19:37:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="P7OcQ2UI"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22401f4d35aso132516225ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 Mar 2025 19:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742956642; x=1743561442; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0T4kJi2YlX/9jr0Egj3I/ehfw/D62slsl5V/JEua0fA=;
-        b=Sbw4m/LEZezUJ3/vDThK7OLNQwBaXptfzwVWr/68q2BwU+OjxzCVxttk+RqG/xclDU
-         dLD5ayx9GbrERA2yELAhyPk6d3ckr1BxWqDlkdXzVv+26oKkT2RUOLJb4bOqDtWvO1Fe
-         Yd/G5sXAsS1bGqq4Ia1/i1hRT0PbJW+6W1Vn7q7dQUcCUkWCmRebytcxJZGNEmBRPYFC
-         XD7w/Tns+9AwBOUu4UXliuyyIJjWBEaDipfCfqmykvui41v/jrw27ssCIJBQU4neSIcM
-         78tFR1wGPppOfDuq3RePpio6aNtRvhQtMvejLtmww3NPAXZtEzneHUvG7cgo+NNSc5q9
-         hsgw==
+        d=chromium.org; s=google; t=1742957082; x=1743561882; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+QVNWHqDnDbjGyo3K6bEwTsBkwG4P8ZSV0JdfZxw+I=;
+        b=P7OcQ2UIU6/YhRvZajLQ2lGJ+BFu6eJjusiiC+dBB+2Q9iPdKgxINAg1aux0/YjADx
+         gWm84fj2W/jhJM8TyErWlc6hNBfKOF4etBOn2e/df5LmNzUxJQb5rPP9xwtN2TWwywyH
+         SQ/JxmqNycbWAL26o6KdfFCJiccUAQ8Ia02+c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742956642; x=1743561442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0T4kJi2YlX/9jr0Egj3I/ehfw/D62slsl5V/JEua0fA=;
-        b=M1mqwbvZhcutdOMOidXxNVJMBQzmWPZd6xjASm1Wo7UYaBuPDJpHXMN58RwlYgNbtb
-         LDgxkE3261oTCtZLgl22WL8cgTHuyfUgUmuEVDgj4io25TF4/945saBz4DGgjrMbs9Gv
-         MVynubbxSwi1KzWtPhqZxwt1IjHO+Vsw6xnMyZw3zsE2PIwlRVNbQiPcun5NNGJnKK/V
-         8fVvnF8cFbi3g5sSHlffRSHtbIOaNufOL/Dc3z5hWxiELqgHMVJ4BKiUFgiFFURBBFhH
-         T6qAH8tjCsTlQ9kZ+2fcVmUVyq6GQelD0ur3zqA1bxnHxYlX1tiAzHIsgm0hp6uPQ12F
-         HRgg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6dUnYmHgYx2dlZHogsxHNvVM44rHA6cG18tFSrd8WDqpyyyv/MU3kXbv30ZiVyQW9FWxNKTDr/rM7vSGq@vger.kernel.org, AJvYcCUg2+Bhbky4IZ8Djt7doUMN/WxRIPwzlD5bgrNxegbEkGE8p0HIpXEOJIX2ZvpH+88UBYTG6kzd7wOE@vger.kernel.org, AJvYcCV/7SGeSTkPR2gn+og5JjOabaHKcgQAYWABucEuqiOvvU7qDgIdyTTx5uDO4mJSP0l1jczaXEiw1J8=@vger.kernel.org, AJvYcCW2fncM/UFJ9J6c+WpcmyBrX219wOZ8Os/DNnLK+H2RO/N7gmRS1L0vv0qfcNUzGQXlBwZrjY+X6alJ@vger.kernel.org, AJvYcCWGX/a3qtIhubUurW19iAnkBYw8rU6SFWkhhWhOiigg4w44909Rh7OtF050aGm2Izm7YFWBw+71@vger.kernel.org, AJvYcCWK3VdcljBm+B4Z7O1malzU8lI8F84lZCfR+sFaVqgqH+iR0isX7mVKq/gc7uGmGAjXHc29OHTyZ9jepotSgxw=@vger.kernel.org, AJvYcCXKmPa4CuByF9x0CIsDC8Hp1igPTCHqRgnH+i79Qpyp4LDpajDhyu3mIjfZtXk+BtRUqkKKMG6rLy1T7A==@vger.kernel.org, AJvYcCXRxfRnBnGDkGC7EUZHCh/OYb3S4BgTfJbcDRmcR3jq8GsTywOe6b3j7x6B9Q89eKP2CJaJqCLorI65Sb8=@vger.kernel.org, AJvYcCXWZecKHpdllQtHNPfqAt9kEU/mCdQGbfeRg9wjOzfiH/XYqU43Nm/kwN8bCYf68u6oY57WSL15LVJC@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQx1jZRyjJjO8iwVo0fSz4GmIIXNl8NWRsUwatvvIR8XDfbogW
-	tIL0lrFqb41vrOp/gWkXNu4Xa+BS35/+sSbYeRJw0h8vW6pil823zyBUhiNV9zlZhYHkkHcByXE
-	yhYpTb8AicGQDmbNtAdSfLo28qk0=
-X-Gm-Gg: ASbGnctaoCbZy5KjTedHTM7ofnzml1VetNsJOmrQ8oFUi9YerHPLagElUv/r6bqiI5Z
-	CDv9wOWgC5JHqcGE9I54V0oLocn3CLd3Qxyxf29lgJp/UoP9VBuwLQgTPNyujKU+rrFLLSKfWNS
-	+VlAt6SEVy6FTg1KJv+jj0vsT2zqaCSYSV97YNLroCHVfq2hwnve/tMPrNdGyz
-X-Google-Smtp-Source: AGHT+IG5aqamBazHGcglJhnmQUC1EqM+w9idtbItezzAn5GTsOL3nj+p/kfRDDrQ6dTI4NF5PXbmX69K/YimNo8Iegc=
-X-Received: by 2002:a05:6902:cc5:b0:e5d:fecf:9acb with SMTP id
- 3f1490d57ef6-e66a4d5988cmr25337306276.12.1742956642135; Tue, 25 Mar 2025
- 19:37:22 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742957082; x=1743561882;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+QVNWHqDnDbjGyo3K6bEwTsBkwG4P8ZSV0JdfZxw+I=;
+        b=fr+MT6n+Nyx5Np66NPiLWitcyzQZOP6hUJCUuCmc8+PNBrIbPcDUmm8pLetasHWXGM
+         50DrNszzu2m2Jcc0w7iDs/2fIEn5DV3ZVN9sQ/OYYfSL1l68VVuaZBUTt93zqdiF2gX1
+         yoNbdMpaOpu11Lix50BM2hPCX4tYsmWoFjdP9eAiAMIFbGPdPqRakJPqyWHwnmvrvTyM
+         1o6xJR3MAhHxqXYzxlctb92BkFgT0IAMKZte2GV9meie5P4q0w4tp6x7OVGEcbmbN09L
+         S8jFM6gAyIVNCxCNgk+HQnDOvJ5pYWU4nViJIAzVfUItxSuxmCJ6UQDBf4xlKzJx+Kn1
+         peMA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjvnI2Fdrr3r4j2qmwpdEJollqebF2+H4pFUoAkf/Ol7EAbRsa/A7nOo/7oF43jK0sVsW3FMrPnfa9pg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhA33MfCcbq9UNrXkZ8qis4NfBMPMIIni1L5uwD6gQ45h3FPW1
+	ZJc/jgJl8MtamzatNNAh2rX8Hdaebil7TvbGGXqAMXoaL0OZiOzEYzobeNpmvQ==
+X-Gm-Gg: ASbGncu4rGIcZmPqbGi0pyvlo9gLPKpaax1yGOQlss+9/D05sd/b9a6XGPZmh6WGx2a
+	1xH93tLodjGxcQAZ52V2nAoD1ZB2s3L7DXl4Ya29rZXrLoJGwlQV9dTPckZLZnRhSDgNiCp3GRh
+	R+dxbVxAb4hgIcar1kHZ8Bp7jazNqKXVMIqb37U2gFAyTqdkFYmNge4sxc7u/oovZB4oH9wGvDP
+	vXHCd0Ra7KUAB6H5d3BMiilK1QTVYyztDKr08X+Irh4yWN63rjEj2znzpQWGqleP++VQOgHdWAk
+	5p3R3VIbr0YcV/PM1RrZdMyCrXeWUp0VkH269wMEVCO72xJaqUb1f0SPW2TDYleNrgXxc6rzxKW
+	HjY0dlGl40+GANwGIjiSWev4=
+X-Google-Smtp-Source: AGHT+IF5YnTVm0OKmRRmeSaZC9AvdQvm4Gu8QZGPFptt8d07uMe5+ho57hgYCPcyGlZxhVtV7UesPw==
+X-Received: by 2002:a17:902:d504:b0:215:bc30:c952 with SMTP id d9443c01a7336-22780c68a03mr259297625ad.6.1742957082124;
+        Tue, 25 Mar 2025 19:44:42 -0700 (PDT)
+Received: from google.com (198.180.199.104.bc.googleusercontent.com. [104.199.180.198])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811c156dsm98109075ad.117.2025.03.25.19.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 19:44:41 -0700 (PDT)
+Date: Wed, 26 Mar 2025 02:44:37 +0000
+From: Sung-Chi Li <lschyi@chromium.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@weissschuh.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (cros_ec) Add set and get target fan RPM
+ function
+Message-ID: <Z-NqFTZuW5yJ_FC5@google.com>
+References: <20250318-extend_ec_hwmon_fan-v3-1-4c886385861f@chromium.org>
+ <e4da28be-66ca-45d3-9ccf-34819460b463@t-8ch.de>
+ <f50221fd-1d76-465b-ba53-62c08c6f8536@roeck-us.net>
+ <780ce6e8-11fc-42be-b4a7-9cffbf811d78@t-8ch.de>
+ <42c49b0b-cef0-49ca-a5b2-5bb05eae8dec@roeck-us.net>
+ <45d0681d-3446-409c-8d9b-0309dbb93ff8@t-8ch.de>
+ <7b5c4001-1a5b-4ea0-aca9-e0c88ec7a98b@roeck-us.net>
+ <Z-JYQyxJErCQKo4i@google.com>
+ <aa034893-405e-4f71-8cb6-0ccb112c36da@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com> <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
-In-Reply-To: <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 26 Mar 2025 10:37:11 +0800
-X-Gm-Features: AQ5f1JqWfqANJXxVxhsOmk2h30Jl9M6xAz4-tpF9pseWjGYdxNzmcOylUXKtSMU
-Message-ID: <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa034893-405e-4f71-8cb6-0ccb112c36da@roeck-us.net>
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=8817=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=888:01=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-...
-> > +static const struct can_bittiming_const nct6694_can_bittiming_nominal_=
-const =3D {
-> > +     .name =3D DRVNAME,
-> > +     .tseg1_min =3D 2,
-> > +     .tseg1_max =3D 256,
-> > +     .tseg2_min =3D 2,
-> > +     .tseg2_max =3D 128,
-> > +     .sjw_max =3D 128,
-> > +     .brp_min =3D 1,
-> > +     .brp_max =3D 511,
-> > +     .brp_inc =3D 1,
-> > +};
-> > +
-> > +static const struct can_bittiming_const nct6694_can_bittiming_data_con=
-st =3D {
-> > +     .name =3D DRVNAME,
-> > +     .tseg1_min =3D 1,
-> > +     .tseg1_max =3D 32,
-> > +     .tseg2_min =3D 1,
-> > +     .tseg2_max =3D 16,
-> > +     .sjw_max =3D 16,
-> > +     .brp_min =3D 1,
-> > +     .brp_max =3D 31,
-> > +     .brp_inc =3D 1,
-> > +};
->
-> [...]
->
-> > +static int nct6694_can_start(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
-> > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> > +     struct nct6694_can_setting *setting __free(kfree) =3D NULL;
-> > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_CAN_MOD,
-> > +             .cmd =3D NCT6694_CAN_SETTING,
-> > +             .sel =3D ndev->dev_port,
-> > +             .len =3D cpu_to_le16(sizeof(*setting))
-> > +     };
-> > +     int ret;
-> > +
-> > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> > +     if (!setting)
-> > +             return -ENOMEM;
-> > +
-> > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
-> > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
->
-> I just noticed one thing that needs clarification/documentation.
->
-> You have nct6694_can_bittiming_nominal_const and
-> nct6694_can_bittiming_data_const, but only pass the bit rates to your
-> device.
->
-> Do the bit timing const really reflect the HW limitations of your
-> device?
->
-> Are you sure your device uses the same algorithm as the kernel and
-> calculates the same bit timing parameters as the kernel, so that the
-> values given to the user space reflects the bit timing parameter chosen
-> by your device?
->
+On Tue, Mar 25, 2025 at 05:55:07AM -0700, Guenter Roeck wrote:
+> On 3/25/25 00:16, Sung-Chi Li wrote:
+> 
+> > 
+> > Currently, when sending the fan control setting to EC, EC will switch to manual
+> > fan control automatically. When system suspends or shuts down, fans are going
+> > back to automatic control (based on current EC implementation).
+> > 
+> > Do you mean the driver should not change the fan control method if there is no
+> > pwmY_enable implemented, or it is the user that should first explicitly set the
+> > fan to manualy mode, then the user can specify the desired fan speed?
+> 
+> The user should first set the fan control method to manual mode.
+> 
+> Unless I am missing something, setting manual mode means that pwmY_enable does have
+> to be implemented.
+> 
+> Note that the suspend/resume behavior is unexpected. The user would assume that the fan
+> control method is still in the same mode after resume. If resume reverts to automatic mode,
+> there should be a suspend/resume handler which restores the mode on resume.
+> 
+> Thanks,
+> Guenter
+> 
 
-Originally, I only intended to provide NBR and DBR for user
-configuration. In the next patch, I will add code to configure
-NBTP(Nominal Bit Timing Prescaler) and DBTP(Data Bit Timing Prescaler)
-based on the setting of nct6694_can_bittiming_nominal_const and
-nct6694_can_bittiming_data_const.
-
-Thanks,
-Ming
+Thank you for the clarification, I think it is better to implement some missing
+EC control points (For 1. getting a fan PWM value, and 2. for getting individual
+fan target speed) first. After that, I will continue working on this seris.
+Thanks all for these details that I missed.
