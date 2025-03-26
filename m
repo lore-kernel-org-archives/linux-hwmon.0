@@ -1,209 +1,158 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3671E8343
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 16:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7DE21577C
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 17:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743008388; cv=none; b=IOvW2T711xO85Wk/d4UjIOv0MUUosd5uYLWzJz4vBx/f7lqC8hFNL3+wQJis2dngZqBKPjyfyYjHXtlZDsE6QEByTp6/QWWSm2rM7HcO7Ajl0GE8u5bETHMjKSPn4qj1AX30Ly6rAYCQ4FWlLPJzpfC0Do5pqqLEy09V+XGGtFc=
+	t=1743010590; cv=none; b=i/gzElNZ8gFJqcHSduhnUgqZhAnupoDG06EpZz9wUeZu5H2P/VFRhU/qHC3Ex3yFcmJcBcA6Twg9t98l2KveFjtdROBO80nnslsguIAWxnHVuxNfk/QrysJQX1zx/m0zLnDZ8+1fxHMmFkzCQ1Z+rKcNbvVyruN5pgIpUbicE3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743008388; c=relaxed/simple;
-	bh=z8v4HgNksasV6Ym9ZoHWSxFb1Pm6JPjkpNDX7QGI6w0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TUf6mjGhXCwn7I7OidkrRKGL8bNOe5dPowP42JiYFQTMaAKoIqLEETtOIY/GFuIaP5TYjmQxXdGmgOZwupInn4FS6lIdLIjRkybKnOL/vSlo40drcTS+E7tJGErxTTovp9Yh9fHcIObeDU9JK1m5H4mi9FCmIW7F1U8ke+sEw4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=DPD/rkpe; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="DPD/rkpe"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-30185d00446so129542a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Mar 2025 09:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1743008385; x=1743613185; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1ta+e4yZg+E/JBqDKl34KJtyjkMqGr/ZUFNKEBvHrc=;
-        b=DPD/rkpetSSW/NtLwL8QyYBd8SWFIvgKt8xEt0+rQ4HSIEPPE/2+e4usYpEwVdKij0
-         ap75QrGZ1b+j8fANYs9J46fZeeGFSbKsdwn2OVDTY+ibXDJyqBkE0JX85RzcQ3rYojGs
-         Tq5HLTh6IKlqLnodtYEOsdsMm9pbMOvmLudQW7pGgDYagvR2ec9TOIn9vSJQzmdz2y8T
-         Vo23yU33cqr/J0Ksv/WS5H6l3RYRL1dF8K4DAK0u43NRQUrxrOs/bkdz5JZnQpUZQUXD
-         qcSxrv4pVsK83uVZheeTfeSsS1NgwmRzUqPHsbFnq6sOW7bgA/yAEcP48YNDcGM/EsjN
-         u99A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743008385; x=1743613185;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k1ta+e4yZg+E/JBqDKl34KJtyjkMqGr/ZUFNKEBvHrc=;
-        b=P/XOrxfnFIWRekCRV0o7rYQF6gfP3mduHN4Afxsu9hQeQXFR409Lo187bws2bgZQ8i
-         0B+eLPOUtFCmO/hjH2rVjN0ySPkOt0NK7tRF1LaRnxjp/cpicHk8CFuSyEgiJv8MD4Po
-         SR/++ngDEcZgn7mOu3lOvd6uZsOFFkoWXuCBsI21e/Ctyq0Hs62EW22QiColN9tNJ6ch
-         V42DAfSjdmALPWEhV+AoV0hbxbhfTYtwYreLhwdsAfgMEKHDcZMEPKXNoNMEKYydGK4y
-         9nkmt8enMA/lznxntvsOJKw3gsKpLD/ZIN3ZyCZWzyiZrORzzBJuhtxt/IxpJH+ISjfP
-         jICA==
-X-Forwarded-Encrypted: i=1; AJvYcCX3h13ykraLULmG+zwvhCMWuCiSVcER21rDUSrXxQljATehgnEcuQyz4Ha57Sa6Ti8W5JDEoTSYmMrDqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDDB3g5B2N3n99xT8QtxNsvBg9JkPGwbqMSogZWKIjjjin1tdu
-	SYzUr0v+rw/lRg9ZBk5mc4bvuyKO4SHQUKjn2orTt5cK0SnmQOBhxraJ6TSms/HYXzDTL5SNVFz
-	9AtRylF5WVDAqsF9P6MWUyKkiGjeZpmU43PjEdQ==
-X-Gm-Gg: ASbGncs8+W5KTjCnnFuLJDywIxqXyEBql+g/5WASxztyh8dXfjKMz7ZeNJaUbZzg4TV
-	diCb/D7xjen18JUvhdyBlfHCfLGTSVwlFIqSQo6WsYgtckWDD/em73u4aRrFd3DfT2nGJXQEXsp
-	aF48scmPdGWE26B7GFFCd2wVG6818=
-X-Google-Smtp-Source: AGHT+IF/ZIUOzoCMXkmF9NPMBJoRs7scjT/WUjWYTeNlhns68B6x95FZ4W9S/inkhtFJoFewTokWWenkVY3WgzQlTmY=
-X-Received: by 2002:a17:90b:54c4:b0:2fa:562c:c1cf with SMTP id
- 98e67ed59e1d1-303788c2685mr7077910a91.1.1743008385079; Wed, 26 Mar 2025
- 09:59:45 -0700 (PDT)
+	s=arc-20240116; t=1743010590; c=relaxed/simple;
+	bh=1VrlRkek0WqK4HdrG8gRnbeBPzHFXN/BnW7I901OUcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RFKLE/MJ+m7ZbhI+9dysbpnwrhnGrgainKI5YpEpJwxKMC6s0D0F1xheovK3+0cjXFNsRYgIDP4O9GqGcxOCDNGouFNwShcvrQjhkMIIcDVNqblIB9Qai8Roapc6UlO8j8afBZNybvvybGxaspflVLUUYu7xl+guCabs0ghSpHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfR-0000ck-SV; Wed, 26 Mar 2025 18:35:53 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfO-001nHx-0b;
+	Wed, 26 Mar 2025 18:35:50 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B6C7C3E7719;
+	Wed, 26 Mar 2025 17:35:49 +0000 (UTC)
+Date: Wed, 26 Mar 2025 18:35:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250326-utopian-mega-scallop-5f6899-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
+ <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250324185744.2421462-1-you@example.com> <b6668968-897f-4864-913c-d4d557f1d7cc@roeck-us.net>
- <CABqG17h8cpnFkdD-nnqyr+UnwADU9XWK6TGBxj_FCH37Y3Q1Lw@mail.gmail.com> <be099cf4-338b-45c8-b0d3-24b2cefe386e@roeck-us.net>
-In-Reply-To: <be099cf4-338b-45c8-b0d3-24b2cefe386e@roeck-us.net>
-From: Naresh Solanki <naresh.solanki@9elements.com>
-Date: Wed, 26 Mar 2025 22:29:33 +0530
-X-Gm-Features: AQ5f1JqHhKNucZ4ApFXKvUPExSvoJwEGxZ88fxC3KKffOUHRX87iCId87ML5ll0
-Message-ID: <CABqG17gZV7ZBKOz0gTsrfsuHQENF3VM2T-=O27sWdc1PP9OmPA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (max6639) : Allow setting target RPM
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3fo4gps22dugmrwp"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
 
-On Wed, 26 Mar 2025 at 22:19, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/26/25 09:36, Naresh Solanki wrote:
-> > Hi Guenter,
+--3fo4gps22dugmrwp
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
+
+On 26.03.2025 10:37:11, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
+7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=888:01=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > > +static int nct6694_can_start(struct net_device *ndev)
+> > > +{
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > > +     struct nct6694_can_setting *setting __free(kfree) =3D NULL;
+> > > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CAN_MOD,
+> > > +             .cmd =3D NCT6694_CAN_SETTING,
+> > > +             .sel =3D ndev->dev_port,
+> > > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > > +     };
+> > > +     int ret;
+> > > +
+> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > > +     if (!setting)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
 > >
-> > On Tue, 25 Mar 2025 at 05:00, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 3/24/25 11:57, Your Name wrote:
-> >>> From: Naresh Solanki <naresh.solanki@9elements.com>
-> >>>
-> >>> Currently, during startup, the fan is set to its maximum RPM by default,
-> >>> which may not be suitable for all use cases.
-> >>> This patch introduces support for specifying a target RPM via the Device
-> >>> Tree property "target-rpm".
-> >>>
-> >>> Changes:
-> >>> - Added `target_rpm` field to `max6639_data` structure to store the
-> >>>     target RPM for each fan channel.
-> >>> - Modified `max6639_probe_child_from_dt()` to read the `"target-rpm"`
-> >>>     property from the Device Tree and set `target_rpm` accordingly.
-> >>> - Updated `max6639_init_client()` to use `target_rpm` to compute the
-> >>>     initial PWM duty cycle instead of defaulting to full speed (120/120).
-> >>>
-> >>> Behavior:
-> >>> - If `"target-rpm"` is specified, the fan speed is set accordingly.
-> >>> - If `"target-rpm"` is not specified, the previous behavior (full speed
-> >>>     at startup) is retained.
-> >>>
-> >>
-> >> Unless I am missing something, that is not really correct. See below.
-> >>
-> >>> This allows better control over fan speed during system initialization.
-> >>>
-> >>> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-> >>> ---
-> >>>    drivers/hwmon/max6639.c | 15 ++++++++++++---
-> >>>    1 file changed, 12 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-> >>> index 32b4d54b2076..ca8a8f58d133 100644
-> >>> --- a/drivers/hwmon/max6639.c
-> >>> +++ b/drivers/hwmon/max6639.c
-> >>> @@ -80,6 +80,7 @@ struct max6639_data {
-> >>>        /* Register values initialized only once */
-> >>>        u8 ppr[MAX6639_NUM_CHANNELS];   /* Pulses per rotation 0..3 for 1..4 ppr */
-> >>>        u8 rpm_range[MAX6639_NUM_CHANNELS]; /* Index in above rpm_ranges table */
-> >>> +     u32 target_rpm[MAX6639_NUM_CHANNELS];
-> >>>
-> >>>        /* Optional regulator for FAN supply */
-> >>>        struct regulator *reg;
-> >>> @@ -560,8 +561,14 @@ static int max6639_probe_child_from_dt(struct i2c_client *client,
-> >>>        }
-> >>>
-> >>
-> >> target_rpm[] is 0 here.
-> >>
-> >>>        err = of_property_read_u32(child, "max-rpm", &val);
-> >>> -     if (!err)
-> >>> +     if (!err) {
-> >>>                data->rpm_range[i] = rpm_range_to_reg(val);
-> >>> +             data->target_rpm[i] = val;
-> >>> +     }
-> >>
-> >> If there is no max-rpm property, or if there is no devicetree support,
-> >> target_rpm[i] is still 0.
-> >>
-> >>> +
-> >>> +     err = of_property_read_u32(child, "target-rpm", &val);
-> >>> +     if (!err)
-> >>> +             data->target_rpm[i] = val;
-> >>
-> >> If there is neither max-rpm nor target-rpm, target_rpm[i] is still 0.
-> >>
-> >>>
-> >>>        return 0;
-> >>>    }
-> >>> @@ -573,6 +580,7 @@ static int max6639_init_client(struct i2c_client *client,
-> >>>        const struct device_node *np = dev->of_node;
-> >>>        struct device_node *child;
-> >>>        int i, err;
-> >>> +     u8 target_duty;
-> >>>
-> >>>        /* Reset chip to default values, see below for GCONFIG setup */
-> >>>        err = regmap_write(data->regmap, MAX6639_REG_GCONFIG, MAX6639_GCONFIG_POR);
-> >>> @@ -639,8 +647,9 @@ static int max6639_init_client(struct i2c_client *client,
-> >>>                if (err)
-> >>>                        return err;
-> >>>
-> >>> -             /* PWM 120/120 (i.e. 100%) */
-> >>> -             err = regmap_write(data->regmap, MAX6639_REG_TARGTDUTY(i), 120);
-> >>> +             /* Set PWM based on target RPM if specified */
-> >>> +             target_duty = 120 * data->target_rpm[i] / rpm_ranges[data->rpm_range[i]];
-> >>
-> >> If there is no devicetree support, or if neither max-rpm nor target-rpm are
-> >> provided, target_duty will be 0, and the fans will stop.
-> >>
-> >> Maybe my interpretation is wrong, but I think both target_rpm[] and rpm_range[]
-> >> will need to be initialized. Also, it seems to me that there will need to be an
-> >> upper bound for target_rpm[]; without it, it is possible that target_duty > 120,
-> >> which would probably not be a good idea.
-> > Yes you're right. I missed it in my analysis.
+> > I just noticed one thing that needs clarification/documentation.
 > >
-> > Here is the logic that would address:
-> >                  target_rpm = 120;
-> >                  /* Set PWM based on target RPM if specified */
-> >                  if (data->target_rpm[i] != 0 &&
-> >                      data->target_rpm[i]  <= rpm_ranges[data->rpm_range[i]]) {
+> > You have nct6694_can_bittiming_nominal_const and
+> > nct6694_can_bittiming_data_const, but only pass the bit rates to your
+> > device.
 > >
-> >                          target_duty = 120 * data->target_rpm[i] /
-> > rpm_ranges[data->rpm_range[i]];
-> >                  }
+> > Do the bit timing const really reflect the HW limitations of your
+> > device?
 > >
-> > Please let me know your thoughts & suggestions.
+> > Are you sure your device uses the same algorithm as the kernel and
+> > calculates the same bit timing parameters as the kernel, so that the
+> > values given to the user space reflects the bit timing parameter chosen
+> > by your device?
 > >
->
-> I would prefer if target_rpm[] and rpm_range[] were pre-initialized with default
-> values in the probe function. That would avoid runtime checks.
-rpm_range is pre-initialized to 4000 RPM [1]
-I can also init target_rpm[] to 4000 RPM as default along with above init.
+>=20
+> Originally, I only intended to provide NBR and DBR for user
+> configuration. In the next patch, I will add code to configure
+> NBTP(Nominal Bit Timing Prescaler) and DBTP(Data Bit Timing Prescaler)
+> based on the setting of nct6694_can_bittiming_nominal_const and
+> nct6694_can_bittiming_data_const.
 
-But still there might be a case wherein DT doesn't provide max-rpm but
-target-rpm is set to greater than 4000 RPM
-Thus there will be a need to check to cover this kind of scenario.
+Sounds good, but this doesn't answer my questions:
 
-Please let me know your thoughts & will implement that.
+You have nct6694_can_bittiming_nominal_const and
+nct6694_can_bittiming_data_const, but only pass the bit rates and the
+prescaler to your device.
 
-[1]https://kernel.googlesource.com/pub/scm/linux/kernel/git/groeck/linux-staging/+/hwmon-next/drivers/hwmon/max6639.c#586
+Do the bit timing const really reflect the HW limitations of your
+device?
 
-Regards,
-Naresh
->
-> Thanks,
-> Guenter
->
+Are you sure your device uses the same algorithm as the kernel and
+calculates the same bit timing parameters as the kernel, so that the
+values given to the user space reflects the bit timing parameter chosen
+by your device?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--3fo4gps22dugmrwp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkOvEACgkQDHRl3/mQ
+kZzpHQgAgGRAJKZUC90pxD/IpTMDutPBbTPEyhq69hM419fjym5rJ4HxuM6meZHF
+MCGE5zEy8fsC05K8QdtwmiAmvaGYg8b/Ky/4MTwj0R5AjFqfWFghJJ5hrypphQzB
+ZKiyvcnkIAxTgkEZlMg9MBQf+OdN5Q3Z/nHLPvfk0OHrsz44UqxPAfWuMI6HWoaN
+RTSbxLxlKoAWEDTzmyT6YAyehq42fVSdsC+FK82lQmloaAkq7dkQAUmaJn1pTEHL
++ea6VayK34n+e3kzz2OkTDrOIvJwDSdX0lMrIT9A97ju+hgzdQSY839BL5xOvDEe
+9TFcEhv92TjknvV5PdmFfiwnNLDNHg==
+=T1kB
+-----END PGP SIGNATURE-----
+
+--3fo4gps22dugmrwp--
