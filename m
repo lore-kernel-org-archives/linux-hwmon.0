@@ -1,153 +1,102 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CC61F4178
-	for <linux-hwmon@vger.kernel.org>; Thu, 27 Mar 2025 07:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480B620D514
+	for <linux-hwmon@vger.kernel.org>; Thu, 27 Mar 2025 12:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743060355; cv=none; b=miinHI8boraYWc7Xfe7Qh46c5s1tTGe97QnXEzKyG6u0+DQdLKmdqQz8UY8YTz1V6myc1o2nm1Jvhw3NyDj2S+xonbk6ZAPPGc1eDAIEzhJiGrOkI1SpiXy6svByd2Wzd3tl9PnoWUKLbuV/GVbihPH02P9HfVkdQl1+Np1ZapE=
+	t=1743079313; cv=none; b=dNHcC5aAuAWlZ4DgLmRWCr7S4Yao/XTu1KIp2OjZyCjVzvQKZptUkJ/EYvolxAKLPVc8BRFfgP3ThvQ0S6svG4YlCIxQL1xiCrDaA8hn0HibX99q7Q5lqiozBr6CCgEs8y16YpaQ8hxnR3Fr45GZlZKClCmuQWTBhgx4kN1mAvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743060355; c=relaxed/simple;
-	bh=JSSGQS6tGG25ltA0Mvv5MyPkthwco/wCEhroPDJOdFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+3h0diCYTA4oRV7ncPWHjQ0m/33gCIFEt33lHmA8m6a1KxcyaGe3nC7ReLC/3OL1/qi2HO/Pyjq8zL/fXgyr7BJR32ZuyXmRgE1ree1jiPDetzkmWEMmUBSLm1B4I7d+oUh+ZCMzwMihBJuSZl+R0E1EiVtdRfAsSIJ8z2oo4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txhcD-0004yL-Vr; Thu, 27 Mar 2025 08:25:26 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1txhc9-001t0o-2e;
-	Thu, 27 Mar 2025 08:25:21 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id E00643E7BAF;
-	Thu, 27 Mar 2025 07:06:19 +0000 (UTC)
-Date: Thu, 27 Mar 2025 08:06:13 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
- <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
- <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
+	s=arc-20240116; t=1743079313; c=relaxed/simple;
+	bh=rTUk5WsXR6uaQmtmVpjNHsbtIr+WlFlJncQhJeTUUpU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=knoTWEDB4mz6q1xhALuDu+c2h2u5qKH1JOT9QGZv26F4BLM30UFjQOZs6mP42Az3o/F274JSh8Dqu6Kh0SEVDwsC2w/FK0fTKh+opsQDuwkKEPgmAiDL9NcmsJM8ef5naXTfCuXwflgSnYJ6brjtBuVjuc6qS/keLQjRCn8ZkiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NGP58XlI; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NGP58XlI"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cef035a3bso6802095e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 27 Mar 2025 05:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743079309; x=1743684109; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rTUk5WsXR6uaQmtmVpjNHsbtIr+WlFlJncQhJeTUUpU=;
+        b=NGP58XlITYgewmnUz3C5CEsnJ90a7XtwoWFh2GZRC4H3o+r8nni8xsVysctoNM0pDx
+         eKLdB7bYq09MnHMo+018Ng6T6Bd+sYQMLEsYCNkGqxcwqWXLG32UscFqrWZnOocQMM1r
+         zIbBGUoWg/axjCUrNJqRKR86xNI/Er/23e1YAp5XgaPBlbtjpaFPorQdreacKWPf4wi9
+         4cfv+wBWSjPDXz9noy5kN/v6ujGHrxGqxvHAY9SNTkHwrtGeu4zLIRbEia+3sFN/Bwd5
+         Ar29oFRc/nqfYVT7ljk8skQU2EA2ovUAXXnZioCL50q85XYALdu7pXFpusK+B8Ywj87S
+         jRTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743079309; x=1743684109;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rTUk5WsXR6uaQmtmVpjNHsbtIr+WlFlJncQhJeTUUpU=;
+        b=XFQV40qi3T0tzRlbm6Ov4bpzHac3VpQd1I4zwYoRRyQNa5DdSsrU5Sv+wwhUBqd/GI
+         wxJwcwceQDp+O3kZ0jXZBJaBzzTxzq+cfZsfjupoymOyFx6iojsOJbvmKH+Ux7ThjxrK
+         IttpVHywJFB/Kh5tFkSjEGV93PHtNAgOtRbaiJlVswlMLE2zTg1Q8f9tAeyztN4iuLdT
+         L4kfiPNFsMYZczCTb6ZCMHWLC7ndJ7prPDTQk4PuC3YbH713sZEpYs9DDQxEoFFisR1n
+         VOg14dHVyqX5hHqfI6ISZtVLFobTtUm5klXogbJDlr2Zx4R5jVtxXVBRLyv8jHJ+yGZu
+         aH1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUCDgxa3IbxMIZpHcgcBcRQuqddj9P43DMkDGcZgxX440cZPrqrtpnHF6pd1z0wwSLfyfBbssiKyh94eA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaY2MtAg6mxZdfSNT/GbHGUHp4j+M6mYZJTXBddKltVoqGt+cA
+	5JgrKMDgUnouausMF9Y8QTCF5aIrfaNiHb3sLVS4mSNnaQosEKtPJW+F1gI00IY=
+X-Gm-Gg: ASbGncuu0wcFyWQ80GWM0/CPZN6lVuW/Rp4pLbviAL8qJ6XA7R1UVMvFuV3R0I/7BEk
+	ccBNggwNYkgEV5UavH5fyqCqGK96WtpGQw1xxsTSyqUsgyWQnpkSzxZUWGMJeCid7oWe1MLjqd1
+	PTxmxP50bCZVOiexZ0bMuUjY2At/sibmM9X08QFqq4g4OKrubrCKb2atOfxfXHVcoWs8c2RT2FA
+	kqX8r609CUuzTeBPJp2lbPbeD4MCJNhMYP1sww6+0MF2qzZSFzwzkNw05gnSK1CZXOou2QXe+VW
+	J0JcTiE3/olpPhHNpLJIllbnZehT8o67feWdY0hCYtcNI8mmTg==
+X-Google-Smtp-Source: AGHT+IGWrkmnwwYBa5Bvx8VGNmhRtptYZl223u01AmKMJ5pNwx5tLvmrcvvV5SU1hmSMut9pH5TgMA==
+X-Received: by 2002:a05:600c:4f94:b0:43c:eea9:f45d with SMTP id 5b1f17b1804b1-43d850fd6aemr35034475e9.18.1743079309513;
+        Thu, 27 Mar 2025 05:41:49 -0700 (PDT)
+Received: from localhost ([2a00:2381:fd67:101:6c39:59e6:b76d:825])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d82dedea3sm39373785e9.3.2025.03.27.05.41.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Mar 2025 05:41:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="c65ffbddv2wxsgu3"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
-
-
---c65ffbddv2wxsgu3
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 27 Mar 2025 12:41:48 +0000
+Message-Id: <D8R21NO1IN43.1E4FD7KG9Z4KI@linaro.org>
+Cc: <srinivas.kandagatla@linaro.org>, <lgirdwood@gmail.com>,
+ <krzysztof.kozlowski@linaro.org>, <perex@perex.cz>, <tiwai@suse.com>,
+ <jdelvare@suse.com>, <linux@roeck-us.net>, <linux-sound@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: codecs: wsa883x: Implement temperature reading
+ and hwmon
+From: "Alexey Klimov" <alexey.klimov@linaro.org>
+To: "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.20.0
+References: <20250107114506.554589-1-alexey.klimov@linaro.org>
+ <3e08b501-f8d0-4e68-874e-b578e7c82c47@sirena.org.uk>
+In-Reply-To: <3e08b501-f8d0-4e68-874e-b578e7c82c47@sirena.org.uk>
 
-On 27.03.2025 13:38:22, Ming Yu wrote:
-> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=882=
-7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:41=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > > > > > > +     priv->can.clock.freq =3D can_clk;
-> > > > > > > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_no=
-minal_const;
-> > > > > > > +     priv->can.data_bittiming_const =3D &nct6694_can_bittimi=
-ng_data_const;
-> > > > > > > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > > > > > > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_=
-counter;
-> > > > > > > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > > > > > > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REP=
-ORTING |
-> > > > > > > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > > > > >
-> > > > > > Does your device run in CAN-FD mode all the time? If so, please=
- use
-> > > > > > can_set_static_ctrlmode() to set it after priv->can.ctrlmode_su=
-pported
-> > > > > > and remove CAN_CTRLMODE_FD from ctrlmode_supported.
-> > > > > >
-> > > > >
-> > > > > Our device is designed to allow users to dynamically switch betwe=
-en
-> > > > > Classical CAN and CAN-FD mode via ip link set ... fd on/off.
-> > > > > Therefore, CAN_CTRLMODE_FD needs to remain in ctrlmode_supported,=
- and
-> > > > > can_set_static_ctrlmode() is not suitable in this case.
-> > > > > Please let me know if you have any concerns about this approach.
-> > > >
-> > > > Where do you evaluate if the user has configured CAN_CTRLMODE_FD or=
- not?
-> > > >
-> > >
-> > > Sorry, I was previously confused about our device's control mode. I
-> > > will use can_set_static_ctrlmode() to set CAN_FD mode in the next
-> > > patch.
-> >
-> > Does your device support CAN-CC only mode? Does your device support to
-> > switch between CAN-CC only and CAN-FD mode?
-> >
->=20
-> Our device supports both CAN-CC and CAN-FD mode.
+Hi Mark,
 
-This doesn't answer my question:
+On Sun Mar 16, 2025 at 11:33 PM GMT, Mark Brown wrote:
+> On Tue, Jan 07, 2025 at 11:45:06AM +0000, Alexey Klimov wrote:
+>> Read temperature of the amplifier and expose it via hwmon interface, whi=
+ch
+>> will be later used during calibration of speaker protection algorithms.
+>> The method is the same as for wsa884x and therefore this is based on
+>> Krzysztof Kozlowski's approach implemented in commit 6b99dc62d940 ("ASoC=
+:
+>> codecs: wsa884x: Implement temperature reading and hwmon").
+>
+> This doesn't apply against current code, please check and resend.
 
-Does your device support CAN-CC only mode?
+Just for reference and for future, what should be the base for patches?
+linux-next or specific repo/branch in audio asoc?
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---c65ffbddv2wxsgu3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfk+OIACgkQDHRl3/mQ
-kZyShwf/SEuLYWxNwEXPQAFmu0xkYcX51A4Mbmaf6/13N46iS6PA0obpQq4+AO3C
-b9PQ/S6ksgL4cA7wqXcakT/lI4Q8EAhieKHkpCD63j3S82fGjVACaE+USZLhDdWV
-Dv3+2yePBKFkyBQuI0LPTq0isnXsbZ2UPF/mA9amECwxoyUTFTGYLyjN5KfyLppD
-UNPdQWoRXLadDDSKKQGLVD58oUO1QYaWoY/ZdTZg3EnLFLJEccmkG1+gxCuhOenM
-GwjIagbJVdODncOGVoFPLa5diYu68IVwaKWPEomFwIzxi53uQKLHtGvtLTfa2pwf
-5SH3X1oM60OqPxr+EKluuxWTRgN9kg==
-=ctjr
------END PGP SIGNATURE-----
-
---c65ffbddv2wxsgu3--
+Thanks,
+Alexey
