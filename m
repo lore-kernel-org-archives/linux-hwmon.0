@@ -1,86 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878032153D5;
-	Thu, 27 Mar 2025 13:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D426E1BC41;
+	Thu, 27 Mar 2025 13:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743080486; cv=none; b=GUTUooAjIByJMoUuWKwo3wlJDASnFst5U3h4JAJ/U9XuPDHbw34+sc26E58Mcjlv4sLOMyou0tBqct5ZBPwtFRoZkPqy6WxSGaKRqa29Kpv6EEW2RDtJOzMZLKGe5tuWAzo+/HUj8ZxRX85Fl/ui/XEpHRNIYLdd02VlWLfFvQA=
+	t=1743081630; cv=none; b=DXoyBIWF9Vj81LdT9/TEzKx8vMVq39JKk3K9QfQN5tCyGsS+c/hlmlInIPa6oiLS5uRqdeahccRNhsPpSuJ6hbW10NpnH9FtV1V38ZZ3hjWLj112hN2oou0hjxMA8+2CvZMq1Dv/iWQu6okae26NTa9B9/aaUWH9MRjI8UJNlKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743080486; c=relaxed/simple;
-	bh=1O1yKZ63fknWxD1PLDOG6cVDUidy0ndhXm1ekOteIFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f5qX5fGj54S8In3lFrGlNnLHiOnRV55CmfNS2marGTDBK1FWB94CdhVWub4ggTZ+nm0fuRIdiueiPSDek8OB3xOxC0b/1OQuICfVd0YyrgGeqt2CnDbJzfYVlpM5n0XS6rPycagsZP0wRhBSCyZVi+TdYDo+J2YdMEFbv/fALGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVzi7zPf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743081630; c=relaxed/simple;
+	bh=RZlULOmRSXzlznSkXKkt2dyMZh6NjO5+8VE5CdR4Cig=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=mRUirzvguBD8YMUA4GxzeUPjqrkycfAJ+/L4GwCi0BCzc4NSTJ7nbXvoDGm6JFSHDZv/uNJK9GIUJECAbK7wRsQZ21z5iS3jBMhPJoc1NC1giSCzDXcNee6SVPOC9eVQ22Eas3yLaejORtiO2CKWFCD+MQdw3HSAUjNZu8QwIhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=h0uEd2wR; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVzi7zPf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93658C4CEDD;
-	Thu, 27 Mar 2025 13:01:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743080486;
-	bh=1O1yKZ63fknWxD1PLDOG6cVDUidy0ndhXm1ekOteIFU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PVzi7zPfGb4IYBTX0InZ0ctLOD5ULU0JNLLru5ShWJldOMZQlMa/EIsCy2PWzoYh/
-	 TwDwO146dT6M/FkZM1z4+JCEWlEyWOgOzTBOP8i6H9ePyQ2zGcVJgJaOS21/5kGktk
-	 gdySz4PGevNX7OKO4XFd1ykFNwLA418h7AFJ8SnSJlMVZqSxkO9mIR4lGjTwq2XQX8
-	 W7XdykR1XADzOznvm+JXMiwS1VIuVPGA0gfM77JTmtiRvAqzZ4THFMp3YJbo84fntK
-	 llIIW2P5e4prf3EbyIwLc/KapoFGF72FTdurzB1lC8jLaiPim/e0jvogKUTukNNglB
-	 wL+Vx0cJyVF3A==
-Date: Thu, 27 Mar 2025 13:01:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Alexey Klimov <alexey.klimov@linaro.org>
-Cc: srinivas.kandagatla@linaro.org, lgirdwood@gmail.com,
-	krzysztof.kozlowski@linaro.org, perex@perex.cz, tiwai@suse.com,
-	jdelvare@suse.com, linux@roeck-us.net, linux-sound@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] ASoC: codecs: wsa883x: Implement temperature reading and
- hwmon
-Message-ID: <51da9bbe-559a-43bb-9f1a-3cb9784cd7bd@sirena.org.uk>
-References: <20250107114506.554589-1-alexey.klimov@linaro.org>
- <3e08b501-f8d0-4e68-874e-b578e7c82c47@sirena.org.uk>
- <D8R21NO1IN43.1E4FD7KG9Z4KI@linaro.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="h0uEd2wR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=6s+FIweNHSsPmtC+D3
+	07TvTFIK5mhHg+DJ5XJ/ZuodE=; b=h0uEd2wRqxn+EwTA5kZB77+LLZQz3pEXXT
+	ZTK4OelfX42+sBQZDx2hJ5IoNNBZGn4mAayHzF0UjYf1IWSo8EqYoTbGmo1+rRYX
+	yaXG60AB9GIPAOL5dXO4zUpBRI5+9r1dG2CThbsZhdxJX52R8s0Db23ZpG25CnLo
+	cQUp79vaI=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3f7xtUOVn1ekMCQ--.39600S2;
+	Thu, 27 Mar 2025 21:19:43 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	jdelvare@suse.com,
+	christophe.jaillet@wanadoo.fr
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/4]  hwmon:(ina238)Add support for SQ52206
+Date: Thu, 27 Mar 2025 09:18:37 -0400
+Message-Id: <20250327131841.15013-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wD3f7xtUOVn1ekMCQ--.39600S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGF1UXw1kAFWkZFyftF1xGrg_yoW5GFykp3
+	yfCF95Wr98Jr17XrZIkr4I9r1rW3WkJF18Ww1xJw1Fv3W5uFy0v3y2kr45Ca1DtrZxZFZ8
+	ta4SgFn7Kr17ArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR_pn9UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbBDQUd02flUB4G0QAAsd
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VstiSd6HitBx/O/R"
-Content-Disposition: inline
-In-Reply-To: <D8R21NO1IN43.1E4FD7KG9Z4KI@linaro.org>
-X-Cookie: Multics is security spelled sideways.
 
+Add support for Silergy i2c power monitor SQ52206 to the ina238
+driver as those two are similar.
 
---VstiSd6HitBx/O/R
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
 
-On Thu, Mar 27, 2025 at 12:41:48PM +0000, Alexey Klimov wrote:
-> On Sun Mar 16, 2025 at 11:33 PM GMT, Mark Brown wrote:
+Add new chip SQ52206, the datasheet depends on 
+https://us1.silergy.com/cloud/index/uniqid/676b659b4a503
+The password is fx6NEe.
 
-> > This doesn't apply against current code, please check and resend.
+Changes in v6:
+- Split the patch and explain in detail how the formula changes and the reasons for adding content.
+- Link to v5: https://lore.kernel.org/linux-hwmon/20250313075501.5435-1-wenliang202407@163.com/
 
-> Just for reference and for future, what should be the base for patches?
-> linux-next or specific repo/branch in audio asoc?
+Changes in v5:
+- Add the description of change log in PATCH 0 and PATCH 2.
+- Link to v4: https://lore.kernel.org/linux-hwmon/20250125030300.1230967-1-wenliang202407@163.com/
 
-For new code it's for-next in my tree, for fixes for-linus (or the
-versioned branch for the targeted kernel version).
+Changes in v4:
+- Add 'Acked-by: Krzysztof Kozlowski' information to PATCH 1.
 
---VstiSd6HitBx/O/R
-Content-Type: application/pgp-signature; name="signature.asc"
+- Formatting adjustments have been made to ina2xx.c in PATCH 2.
+Including:
+1.Change 'sprintf()' in the 'energy1_input_show()' to 'sysfs_emit()'.
+2.Move up the "enum ina238_ids chip" line in the 'ina238_probe()' to keep RCT style.
+3.Remove the last comma when describing 'ina238_of_match[]' to keep the
+format consistent with the 'i2c_device_id ina238_id[]' structure.
+4.Change the '5bytes' in the description to '5 bytes'.
 
------BEGIN PGP SIGNATURE-----
+- Link to v3: https://lore.kernel.org/linux-hwmon/20250117082017.688212-1-wenliang202407@163.com/
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmflTB8ACgkQJNaLcl1U
-h9BZFwf8DoSn9ZmzfQqDx+X0aYlXuocHr550N4aIGmMJ98fpi6OR9mW/2d1SZMGy
-cohA95gwYdKjv+u1RoxnAUe6lHd9nRLATTwM2nLX5Hx/dtm1f/HSHMaNte15lUhO
-+3VtezHR++ZGHvBa+Y2uAEbER0f1cVMcmWmSz8/Di0yBhglImhSR5Ob14BNnJEHh
-nPj0J/OHa+KmmWhnCm8oDoowB2ZcJELEsnHVZtEF3eD8PQiLt9zb1DQXoP2BcJCt
-vZ0y7Qa1KdZcRzZSJlLVvlg8c/l6GdzD97mXG/Fa6rxKkGXepoq8MlIKQ0VFpzzu
-inCab64R79XxeVmBbepdVWC99GoXPg==
-=DkBO
------END PGP SIGNATURE-----
+Changes in v3:
+- Add the description of the different features of SQ52206 in the ina2xx.yaml(PATCH 1).
 
---VstiSd6HitBx/O/R--
+- Change program logic errors in ina238.c(PATCH 2).
+Including:
+1.Change 'break' to 'return 0' after 'if (has_power_highest)'.
+2.Add {} after 'if (chip == sq52206)' in 'ina238_probe(struct i2c_client *client)'.
+3.Change 'data->config->has_energy ? NULL : ina238_groups' to 
+'data->config->has_energy ? ina238_groups : NULL'
+
+- Link to v2: https://lore.kernel.org/linux-hwmon/20250113035023.365697-1-wenliang202407@163.com/
+
+Changes in v2:
+- Explain why sq52206 compatibility has been added to ina2xx.yaml.
+
+- addressed various review comments.
+
+- Link to v1: https://lore.kernel.org/linux-hwmon/20241224063559.391061-1-wenliang202407@163.com/
+
+Wenliang Yan (4):
+  hwmon:(ina238)Add ina238_config to save configurations for different
+    chips
+  hwmon:(ina238)Add support for SQ52206
+  hwmon:(ina238)Modify the calculation formula to adapt to different
+    chips
+  dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |   5 +
+ Documentation/hwmon/ina238.rst                |  15 ++
+ drivers/hwmon/ina238.c                        | 211 +++++++++++++++---
+ 3 files changed, 198 insertions(+), 33 deletions(-)
+
+-- 
+2.17.1
+
