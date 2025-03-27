@@ -1,215 +1,92 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E24D215782;
-	Thu, 27 Mar 2025 13:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CC421858A;
+	Thu, 27 Mar 2025 14:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743081637; cv=none; b=Ze0ESCaXYJvqZtvvnci2ryYPt9RfCz+QVA3o+ZHzSE16of8Wr0qWs5wXww7MpEEVQg/r4epBGBeBJkSWruos+CBGsDDzMVUK03/0iKLWuAifoD3OuU0FLQ8BiYxxcyL8LBPJrPS6oFeHQVGxg+SCvl7QbgNuMzee3iTiCGOvl58=
+	t=1743085648; cv=none; b=LgzaNmGt+IAZF0VJGi0pO52YvLxGULWq1r1u3pWYrbbBr3K0zAy2trOjzTncZPdDibwJs1hvJZiydBZ9VObJ4i87yTuozk1gJC13BznGxq56IRaahTJigbgjmejgqooeoQmu7qZjN7Ao6ggV204n/SP2MvuT1VXUexGtzcVXN50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743081637; c=relaxed/simple;
-	bh=wlj26vdCFJW6SSyEiwr/A888h+vTeqcZLsamfLhqP/I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=pFoB7ECzaJUIKb5UNchExrla5SxPtMRK0EPasBl+iWQsLnDvObT17X3pRAjnBMHlEQjcIP/Lhs5MwsETY6wHycZ4p5t/ud/t1KuGMm5oX/4l/YPsS7dqLsDcw7fVKdGerJYeZeZPMPS7av591k96IfZNsthtWHYXh+Mb1ICPSnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=UbJeYpJo; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1743085648; c=relaxed/simple;
+	bh=PHCtWk2ujBixo9IvPmi6q3vmA3r7w6UW4s2qw+/aOKI=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=u/WnOduzucT7DOHIfDAsZ8QxYYWtFdG9zvJ1rcSJFSycp68dWkRYGxgtwGavYx8FjMz5T9049JwemSIpgtpDKYUbvvRkax9BYj5jizaIJmoXNCYkC7LKy/2+J9spjB9qo1E5bIr7aUQPkyiMHq+ZaaVa8EENKQmEJh0MG7ydfh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WH5bLeyY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="UbJeYpJo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=f9qeqcDtLM620bE3Ca
-	/AcO/hR5gMSWl/zpqwr6lqtRs=; b=UbJeYpJo/U8obNN2veBIhkJx0xo+fWYoRe
-	XVzBxKUgI8e1nHzfqQIgJguIa1nikqL1ma8ilqoJXMlHKluenKywY+bxnu5Wzj2F
-	LcQ6oSADIFoLpSbuCJwqlNRZHnC09uMSM/cPmyANpmlsXR0Om0Sq1fnLCZnuvoNY
-	4ot5avctM=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3f7xtUOVn1ekMCQ--.39600S5;
-	Thu, 27 Mar 2025 21:19:49 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/4] hwmon:(ina238)Modify the calculation formula to adapt to different chips
-Date: Thu, 27 Mar 2025 09:18:40 -0400
-Message-Id: <20250327131841.15013-4-wenliang202407@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250327131841.15013-1-wenliang202407@163.com>
-References: <20250327131841.15013-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wD3f7xtUOVn1ekMCQ--.39600S5
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKrWfJrWfuw45Cry5uF45Jrb_yoWxZry8pF
-	y5Can8Gr18tw17WrnFkr4xuF15Xwn7GwnxAr97KwnavFn0k34v9rW5tFWrZrW3Jws8Xa18
-	t34UtrWYkwsFyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRFksgUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbibhkd02flSlJ99AAEsu
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WH5bLeyY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA91C4CEE8;
+	Thu, 27 Mar 2025 14:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743085647;
+	bh=PHCtWk2ujBixo9IvPmi6q3vmA3r7w6UW4s2qw+/aOKI=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=WH5bLeyYejpQfYXXDzOiCSxKnk5iMRHvuy3xImI7mNxU1PZaahP4bZNgHqYhnzN5h
+	 9b593HZ86bRvjkIOlj7WNhEZ1YRC16twAPNAE1mkWYmtuBvHCTuo63Uejwa7tklIzj
+	 /G9TZ/HC2BUVn3jeYAhRUdYes2woGmKEbQqcadWPgsI8X87TOHsj34vskpCDiimyNa
+	 UmaU1MT5T3HxIAv8iQNaeBvaHQ/ZLp0fFPwkprY1Xm/lWGXa1fAya05u4qKiWziDy9
+	 OlGl3rX7Y7j1TYKFlAHNVRye+iFuB1mAyG17/ewDUrvm5fYyzgHuI7NYB8OOA/nws6
+	 kprtWqXfj5fTw==
+Date: Thu, 27 Mar 2025 09:27:26 -0500
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: christophe.jaillet@wanadoo.fr, linux@roeck-us.net, 
+ Jonathan Corbet <corbet@lwn.net>, Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org
+To: Wenliang Yan <wenliang202407@163.com>
+In-Reply-To: <20250327131841.15013-5-wenliang202407@163.com>
+References: <20250327131841.15013-1-wenliang202407@163.com>
+ <20250327131841.15013-5-wenliang202407@163.com>
+Message-Id: <174308564652.728326.9393437187243408438.robh@kernel.org>
+Subject: Re: [PATCH v6 4/4] dt-bindings:Add SQ52206 to ina2xx devicetree
+ bindings
 
-Modify the calculation formula to adapt to different chips.
 
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
----
+On Thu, 27 Mar 2025 09:18:41 -0400, Wenliang Yan wrote:
+> Add the sq52206 compatible to the ina2xx.yaml
+> 
+> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+> ---
+> 
+> Add the meaning of 'shunt-gain' in SQ52206.
+> 
+> v5->v6:add content to meet the update requirements of the ina2xx.yaml
+> 
+>  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-v5->v6:Split the patch, this patch introduce the principle of the formula:
-1.shunt voltage reading and writing calculate
-*val = (regval * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4);
-regval = (regval * 1000 * 4) / (INA238_SHUNT_VOLTAGE_LSB * data->gain);
-Solves the situation where gain=2 exists
+My bot found errors running 'make dt_binding_check' on your patch:
 
-2.power reading and writing calculate
-power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT * data->gain *
-data->config->power_calculate_factor, 4 * 100 * data->rshunt);
+yamllint warnings/errors:
 
-Since the 'data->config->power_calculate_factor' parameter values of different
-chips are different, the formula is modified.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml: allOf:1:if:properties:compatible:contains:enum: ['silergy,sy24655', 'silergy,sy24655', 'ti,ina209', 'ti,ina219', 'ti,ina220', 'ti,ina226', 'ti,ina230', 'ti,ina231', 'ti,ina237', 'ti,ina238', 'ti,ina260'] has non-unique elements
+	hint: "enum" must be an array of either integers or strings
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
 
-Current_LSB is 1mA/lsb, so the SQ52206's Energy calculation formula is
-Power (uW) = 0.24(0.2) * register value * 1000 * 20000 / rshunt / 4 * gain,
-where 20000 is the default resistance value. 4 is the default gain of 4,
-20000*gain/ (rshunt*4) indicates the conversion ratio based on the actual
-resistance value and the gain ratio. 0.24(0.2) is fixed parameters.
-'data->config->power_calculate_factor/100 == 0.24(0.2)'.
+doc reference errors (make refcheckdocs):
 
-3.read temp calculate
-*val = div_s64(((s64)((s16)regval) >> data->config->temp_shift) *
-(s64)data->config->temp_lsb, 10000);
-Since the 'data->config->temp_shift' parameter values of different
-chips are different, the formula is modified.
-Cast the parameter regval type s64 to avoid overflows resulting in calculation errors.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250327131841.15013-5-wenliang202407@163.com
 
-4.writr temp calculate
-regval = clamp_val(val, -40000, 125000);
-Limiting the size of written data prevents overflows that can cause calculation error
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
- drivers/hwmon/ina238.c | 47 +++++++++++++++++++++---------------------
- 1 file changed, 24 insertions(+), 23 deletions(-)
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 1bf4c850b04d..7a96b68d4d20 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -270,10 +270,10 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 		regval = (s16)regval;
- 		if (channel == 0)
- 			/* gain of 1 -> LSB / 4 */
--			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) /
--			       (1000 * (4 - data->gain + 1));
-+			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
-+					data->gain / (1000 * 4);
- 		else
--			*val = (regval * INA238_BUS_VOLTAGE_LSB) / 1000;
-+			*val = (regval * data->config->bus_voltage_lsb) / 1000;
- 		break;
- 	case hwmon_in_max_alarm:
- 	case hwmon_in_min_alarm:
-@@ -298,8 +298,8 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 0:
- 		/* signed value, clamp to max range +/-163 mV */
- 		regval = clamp_val(val, -163, 163);
--		regval = (regval * 1000 * (4 - data->gain + 1)) /
--			 INA238_SHUNT_VOLTAGE_LSB;
-+		regval = (regval * 1000 * 4) /
-+			 (INA238_SHUNT_VOLTAGE_LSB * data->gain);
- 		regval = clamp_val(regval, S16_MIN, S16_MAX);
- 
- 		switch (attr) {
-@@ -315,7 +315,7 @@ static int ina238_write_in(struct device *dev, u32 attr, int channel,
- 	case 1:
- 		/* signed value, positive values only. Clamp to max 102.396 V */
- 		regval = clamp_val(val, 0, 102396);
--		regval = (regval * 1000) / INA238_BUS_VOLTAGE_LSB;
-+		regval = (regval * 1000) / data->config->bus_voltage_lsb;
- 		regval = clamp_val(regval, 0, S16_MAX);
- 
- 		switch (attr) {
-@@ -370,8 +370,8 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
- 
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *
--				data->gain, 20 * data->rshunt);
-+		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -381,8 +381,8 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
- 
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *
--				data->gain, 20 * data->rshunt);
-+		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -395,8 +395,8 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		 * Truncated 24-bit compare register, lower 8-bits are
- 		 * truncated. Same conversion to/from uW as POWER register.
- 		 */
--		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *
--			       data->gain, 20 * data->rshunt);
-+		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -428,8 +428,8 @@ static int ina238_write_power(struct device *dev, u32 attr, long val)
- 	 * register.
- 	 */
- 	regval = clamp_val(val, 0, LONG_MAX);
--	regval = div_u64(val * 20ULL * data->rshunt,
--			 1000ULL * INA238_FIXED_SHUNT * data->gain);
-+	regval = div_u64(val * 4 * 100 * data->rshunt, data->config->power_calculate_factor *
-+			1000ULL * INA238_FIXED_SHUNT * data->gain);
- 	regval = clamp_val(regval >> 8, 0, U16_MAX);
- 
- 	return regmap_write(data->regmap, INA238_POWER_LIMIT, regval);
-@@ -446,17 +446,17 @@ static int ina238_read_temp(struct device *dev, u32 attr, long *val)
- 		err = regmap_read(data->regmap, INA238_DIE_TEMP, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s64)((s16)regval) >> data->config->temp_shift) *
-+						(s64)data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max:
- 		err = regmap_read(data->regmap, INA238_TEMP_LIMIT, &regval);
- 		if (err)
- 			return err;
--
--		/* Signed, bits 15-4 of register, result in mC */
--		*val = ((s16)regval >> 4) * INA238_DIE_TEMP_LSB;
-+		/* Signed, result in mC */
-+		*val = div_s64(((s64)((s16)regval) >> data->config->temp_shift) *
-+						(s64)data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max_alarm:
- 		err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
-@@ -480,9 +480,10 @@ static int ina238_write_temp(struct device *dev, u32 attr, long val)
- 	if (attr != hwmon_temp_max)
- 		return -EOPNOTSUPP;
- 
--	/* Signed, bits 15-4 of register */
--	regval = (val / INA238_DIE_TEMP_LSB) << 4;
--	regval = clamp_val(regval, S16_MIN, S16_MAX) & 0xfff0;
-+	/* Signed */
-+	regval = clamp_val(val, -40000, 125000);
-+	regval = div_s64(val*10000, data->config->temp_lsb) << data->config->temp_shift;
-+	regval = clamp_val(regval, S16_MIN, S16_MAX) & (0xffff << data->config->temp_shift);
- 
- 	return regmap_write(data->regmap, INA238_TEMP_LIMIT, regval);
- }
--- 
-2.17.1
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
