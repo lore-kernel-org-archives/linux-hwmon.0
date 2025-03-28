@@ -1,121 +1,108 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7308A21147B
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Mar 2025 09:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF744A35;
+	Fri, 28 Mar 2025 10:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743153110; cv=none; b=eCWcW1J3SbyeP2XyL5u/0MvMfc6LSWqxz7JktvjndfjP3IpSPEllGwwj3+PMjBwlDGFKfNhGCw2b1pPjjtOzbkn/vUx7xZOR9Q96NDyVJKe8/hxr9mwYzdGWQvdwZu+dwCev8p7MbkIEpzoqK7FiBy3qy34N1sz8ScJUu3Y9pak=
+	t=1743158188; cv=none; b=ete3RM5KjWZoFKvc3djyAVtjKDDPzkOcSUf9rTMc5cqb6XLPkB9hzqVuZw/iRXfOoOZXLoLxK7y/HCkG7zTN90ft6XN+ZuRrVXpW/1ZwXN38/rbM7IU0b4q5sUxf/B1GUp85rEiSABKSgnhLmUTLzt409iSRJN3bEUIFrW7rSss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743153110; c=relaxed/simple;
-	bh=pbIVsVcuNi+0DDbMVyNw26SOB82vpubAP8F0r7NBXg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hc2drCMogWgOdLcWx6he3S0edqOcI8VkUYbIzGqv3DNHgEveYC+grNVL7jYt5niDA6XLk3G6iIk05nSBNeepCNE19nb1aR4EYgf0BrcBLFSCj/+VlNlJ+DfYIKn4NU43jsyAumQH4ob1LgesxvjjETMMYjzIbyFEjFU7OVXK63Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kJ-0005uZ-G0; Fri, 28 Mar 2025 10:11:23 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kG-0024gm-2N;
-	Fri, 28 Mar 2025 10:11:20 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5804A3E86D3;
-	Fri, 28 Mar 2025 09:11:20 +0000 (UTC)
-Date: Fri, 28 Mar 2025 10:11:19 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250328-gentle-dangerous-raptor-2b66fa-mkl@pengutronix.de>
-References: <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
- <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
- <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
- <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
- <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
- <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
- <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
+	s=arc-20240116; t=1743158188; c=relaxed/simple;
+	bh=Kfudq2zBmF5GsfnfmqkxJPDAA0WqYO+pmhs87CvpzdU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=B1MqC8BzyXzy3a79Q5uquX/a+itt/C37HT1ILJm/MaNa8Xj2n3lEjhzeKPGPcoWIeIfTiGMmnSgjpih6kbaCVVsZ5uhFREfWNYb9BYGfa3GVCnfalg7rF39Ew45WG1qsi9WyDLkFQWYDkx27UEDLQOe40H00BBUBEA8w/t3ds2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AcRV5sTy; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AcRV5sTy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=UdJbnIvHTJoyF1Q8KH
+	RV7bQemCVQTNqvc+BySkfmlO4=; b=AcRV5sTyAtxYtNhrjhprcxUQmFXWh+9zM/
+	6Fe+tqqJv48GMHSoibYQNdXXzl4yRY9591xa9jC/q54IwqU8VU4q54ZaTFV+h/8p
+	FSXFLJ3WV1cJ2NPT2ch+PT0oQMGpckSpJ3Eeg3DZmpTt9WTLRQPaQ2VLtDQWVN3d
+	qCcTO5HgQ=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3HXGFe+ZnIgTgCQ--.59704S2;
+	Fri, 28 Mar 2025 18:35:50 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: christophe.jaillet@wanadoo.fr,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	wenliang202407@163.com
+Subject: Re: [PATCH v6 4/4] dt-bindings:Add SQ52206 to ina2xx devicetree bindings
+Date: Fri, 28 Mar 2025 06:35:32 -0400
+Message-Id: <20250328103532.18102-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <b93159ed-247e-4cdf-81c0-f32b85d4fbbf@roeck-us.net>
+References: <b93159ed-247e-4cdf-81c0-f32b85d4fbbf@roeck-us.net>
+X-CM-TRANSID:_____wD3HXGFe+ZnIgTgCQ--.59704S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1DCrW7JrWrWr1fKw4Durg_yoW8Ar48pr
+	W3CF18tF90qr13XrW2y3ZYkw15Z3WvvF40krWDXr1a9a4kua4Sqa9xKr109F17Ar1SvFWf
+	uFyvg3yfJw40yaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUG9akUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiJRAd02fl1K4jAgABsj
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tzr33nw7euhn5lwq"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
+At 2025-03-28 06:53:02, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>On 3/27/25 06:18, Wenliang Yan wrote:
+>> Add the sq52206 compatible to the ina2xx.yaml
+>> 
+>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+>> ---
+>> 
+>> Add the meaning of 'shunt-gain' in SQ52206.
+>> 
+>> v5->v6:add content to meet the update requirements of the ina2xx.yaml
+>> 
+>>   Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>> index bc03781342c0..8cd672e6bf62 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+>> @@ -19,6 +19,7 @@ description: |
+>>   properties:
+>>     compatible:
+>>       enum:
+>> +      - silergy,sq52206
+>>         - silergy,sy24655
+>>         - ti,ina209
+>>         - ti,ina219
+>> @@ -58,6 +59,9 @@ properties:
+>>         shunt voltage, and a value of 4 maps to ADCRANGE=0 such that a wider
+>>         voltage range is used.
+>>   
+>> +      For SQ52206,the shunt-gain value 1 mapps to ADCRANGE=10/11, the value 2
+>> +      mapps to ADCRANGE=01, and the value 4 mapps to ADCRANGE=00.
+>> +
+>>         The default value is device dependent, and is defined by the reset value
+>>         of PGA/ADCRANGE in the respective configuration registers.
+>>       $ref: /schemas/types.yaml#/definitions/uint32
+>> @@ -97,6 +101,7 @@ allOf:
+>>           compatible:
+>>             contains:
+>>               enum:
+>> +              - silergy,sy24655
+>
+>silergy,sq52206 ?
+>
 
---tzr33nw7euhn5lwq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+Yes, it is my oversight, which may be the reason why 'make dt_binding_check' fails 
 
-On 28.03.2025 16:57:46, Ming Yu wrote:
-> > > > Does your device support CAN-CC only mode?
-> > >
-> > > It can dynamically switch between CAN-CC and CAN-FD mode when
-> > > trasmitting or receiving, depending on whether the nct6694_can_frame
-> > > passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
-> >
-> > Ok, but what about the receive path? Does the device support CAN-CC only
-> > mode? Will it throw an error, if it receives a CAN-FD frame?
->=20
-> No, it can receive both CAN-CC and CAN-FD frames, if the hardware
-> receives a CAN-FD frame, the firmware will set the
-> NCT6694_CAN_FRAME_FLAG_FD flag.
+>>                 - silergy,sy24655
+>>                 - ti,ina209
+>>                 - ti,ina219
 
-Ok, then set the CAN-FD ctrl mode static.
+Thanks,
+Wenliang Yan
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---tzr33nw7euhn5lwq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmZ7UACgkQDHRl3/mQ
-kZwYtQf/c7cT0KfIOS3YnlbxRmDPcKbxtcH25rhCTmL7CvrAnktrR9i0DzB+7vkt
-BwE/PZmyu3XSHeCbvfd/Di0Zddu9NxXyFTe32yXpA3s7uV0UFwWEyi7y20ZT19aL
-r5PeInCTNFIQG88kHekGt/bAO+afweWxvb+iphZpcLZj3PGQlE24S0SSgUqo0tHZ
-oqTgFKC4v/YvEV2qmLQ5966R+L/7cKSRf5QlJfQl/v0pfk+IJ+QuhQhcG4YjQOVQ
-NFBM2ncTGmQWGFeKqJiB5IuvhInT2DukqwaChLbEaqhPFS9PmRvb+YXGxTnd4b4H
-Iob/zMnIE/RmFXwHANoSF/2Sely55Q==
-=2tPP
------END PGP SIGNATURE-----
-
---tzr33nw7euhn5lwq--
