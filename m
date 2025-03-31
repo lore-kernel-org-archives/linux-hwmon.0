@@ -1,223 +1,507 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 11.mo584.mail-out.ovh.net (11.mo584.mail-out.ovh.net [46.105.34.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FB642A94;
-	Mon, 31 Mar 2025 17:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E271E2147EA
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Mar 2025 17:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.34.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743441848; cv=none; b=lC2dv/Bjkf3YCADIYrJosUjGUS81Uk9/jW222l3dIKmzuhoiieoxE0AbkcN+NzAmDX7ctoby46FOx0ywX/wl4mCzTGjYxNlMVKDiTRT/MlItPTUm5wP2tfvaSLdimgoZeRl38AgcH1KCkodKTfV/Sk8REbttgrCNxO6xz8WSlHs=
+	t=1743442209; cv=none; b=n+wQH/Hg8e5okaX07TBiIArV7yr72WbDBFchm4To8bsEdTXVVBgolaCZ965SDFmFbugPYmmztS+M4XGWXxSxeWzGQ1nMQQ0h7DIfQNznn7znyfQ0ovKg0fTGHL1v7eYIU8uFbjm4YhSEYnytQFbL1ika3/DSQtFOu4tWdLxePrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743441848; c=relaxed/simple;
-	bh=j79R1MPh1L5sHuW70wQiqkONGcjFNH95LO5umympOEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0QN/FgkfdvUM0CwiiOlSWC13Utdv1/my9YhRH02IUqQOjuMgrfs8bgg53Dk7lihbxEu9RMb3d437hI9PHwwO3vzBx486I7DGvOgjmw2OUx96kIirqvmX1SR9vf1SXRV6VhnLzjHlx/30gHUOVOU7ewKwStDNvyT8/PLpxJN/ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1y9exqi; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743442209; c=relaxed/simple;
+	bh=AelK+/RIUbHByplJFdHx4Pn/mzHxNB8dtK1a8jTfri8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GQ/IM1zndtfHPBSjcRjNbQiqmXavhJBakrWJVx55oxWLpfk/BcxPU7n0nW8gFHIxS9vMGuV28NjVmkJ7oHy9HzJTFRY1QdrAe6qwJALclha54QslgiatC+RJ2EMbqIvFT3uSGHCcoS1b6eVkkAJZ40DXv6J2xQyb6bB+iHdOt48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=JX99cxqN; arc=none smtp.client-ip=46.105.34.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1y9exqi"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3014ae35534so6649016a91.0;
-        Mon, 31 Mar 2025 10:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743441846; x=1744046646; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=aO9hWxZgmcR20oMMBCQQk52QBGrPlRCDOCISSjrXhZg=;
-        b=k1y9exqiQ7AN+BwG+DL+X0hTefLCq4GpE9cjHvXDzQoLW8rsB5BS1TPTmolROjZKGl
-         aKrD/eSuFqkZxbXxhlyXazb92NpHR/41ziCSP0eG0TfV102T3ku8Lz1TcRBzhIvIhzcI
-         +No2ahYjg5J3+CGsFXJaYrvpLykeU6KceZ/fb1DXn7l9qXNHPEFX3V8jOpM7b66yTVyB
-         CCuPwezvBREvUBWjYs9TDqKA0KMAy7LX4sj8o3bjOw1V/Ys3yA0yU/xHHjID4ATy4n8+
-         fD5iYpna85l1JzVUXejw7klVRUN7gUwqf3XzhnB6zPrhxP0RVz3C01DsO0+Hu9R8Cdfn
-         S6cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743441846; x=1744046646;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aO9hWxZgmcR20oMMBCQQk52QBGrPlRCDOCISSjrXhZg=;
-        b=ULpoarHYLtjsJo2CAE6O7tVNoTg7sok82CL3EYOUmKd4DHH6CAFIEUri/baUMCO4QG
-         6lzFgtwNfbcvH/7PAltBOiBAt0TxWBJxm7g5h1p63eLbsWFGATVBXb6yALb4Vi3wAC+S
-         TfaYcfY44IA9ptORxWFh+cPiGUoIrWQn/tFPTDgRLh87UD2Rztw96yL+JfEeI2HApUvK
-         sCqGMSopE3pAi+DQWcrW5DQFKaRmjGVQIC97KL4Tc9YIP9Q/s7+qbgH/al/aC8NPUCGM
-         jDdUJHhQGGoZxhHDDFPEIF/jqlUggJ4omM653sRYlPY/eMVyHo0NgxVMhUHtzrTrMHN8
-         mwcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWI1TQjI73YuUXl0XC9xv5IcsWMje9Q5tlCcC+PrFvExp4IoxE/aTPqbl9313WEqOwF0/vxOMvbBiD2@vger.kernel.org, AJvYcCWjd7Ts5ou2LLDd9shjeYn7vI5XafA4Zo05dHbaWrrjUcACmud+9ReTL/om7kG+6FFy3M/8O/bRnmNQCEDo@vger.kernel.org, AJvYcCWocT+NQ1iuVGAOq4fx3eyu6rTuugHPcj9akCdvV0ubx81a5sJEUnbqWK/QzbW0PcZAe+oSFgWsmrI97NU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4QuvffuvLG9JrL0c2QMpYNC3Zs2i0tj4ZcaOO9uVCuNunH5nF
-	BBUtP4Vm3bBMH3IyYE8StTHtG7/y3Hc2lBUfUlMpw+NtZkHuAMk2
-X-Gm-Gg: ASbGncsx7vjxk62K6EPBVxu1MboGHl6lwF2zVZdTDKGLuKk07b70+83gU6hLvM4ObKN
-	krPOYa2wDmH21TJesyE1wS9okkiMtU3lAXJLTf8BMJ7yW69Lcc0A0ujQjE69ZGNTDL3mytL85tG
-	A82pw/uLv0HuTUW9j5A1yxDb4gpI3dd05CxLeqzKnYW+PVMPztBZA8+BYfoGvRo1ctPQW28zkZq
-	11UOX2oLzbRV5hLdd7gueCJPk0O/613/WnFSGN8PiasSjH+0RBQ+jsR7DmhdmgSuE8BUGk/sLzG
-	NySTVeRAfbLg94pTlNuYlG8V3C8SGwQFB+qEc7xmdpDpgA3k85wNQRHaLkOjOMaOO5i2cRL472V
-	KGRZEXdVOf8Yh49CEUQ==
-X-Google-Smtp-Source: AGHT+IGnAPt62LGmhB5W7lIyl3TUVN34XCTyX6dQ9OWSKF6x66MR+8JG2LxGDl0PPfRMfaSTURCQEQ==
-X-Received: by 2002:a17:90b:2b88:b0:2fe:9581:fbea with SMTP id 98e67ed59e1d1-3053216dd42mr15622056a91.29.1743441846104;
-        Mon, 31 Mar 2025 10:24:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3039f1d4b6asm9812324a91.38.2025.03.31.10.24.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Mar 2025 10:24:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cbe0e557-f75c-4a4b-b2fb-0ca33f0ec2d1@roeck-us.net>
-Date: Mon, 31 Mar 2025 10:24:04 -0700
+	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="JX99cxqN"
+Received: from director1.ghost.mail-out.ovh.net (unknown [10.109.176.101])
+	by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4ZRDtN31kNz1CyW
+	for <linux-hwmon@vger.kernel.org>; Mon, 31 Mar 2025 15:04:12 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-z77lt (unknown [10.108.42.32])
+	by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7430C1FEA5;
+	Mon, 31 Mar 2025 15:04:11 +0000 (UTC)
+Received: from 3mdeb.com ([37.59.142.112])
+	by ghost-submission-5b5ff79f4f-z77lt with ESMTPSA
+	id LsokNOmu6mczfAAAaRWDkw:T2
+	(envelope-from <michal.kopec@3mdeb.com>); Mon, 31 Mar 2025 15:04:11 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-112S006d44775c3-4be2-474a-ae17-d0a38f71518b,
+                    022D63F0A2E1D1A994006CE925429A65688265DF) smtp.auth=michal.kopec@3mdeb.com
+X-OVh-ClientIp:213.192.77.249
+From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
+To: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	tomasz.pakula.oficjalny@gmail.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: platform-driver-x86@vger.kernel.org,
+	piotr.krol@3mdeb.com,
+	maciej.pijanowski@3mdeb.com,
+	michal.kopec@3mdeb.com,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v4 1/1] platform/x86: Introduce dasharo-acpi platform driver
+Date: Mon, 31 Mar 2025 17:03:53 +0200
+Message-ID: <20250331150353.127067-2-michal.kopec@3mdeb.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250331150353.127067-1-michal.kopec@3mdeb.com>
+References: <20250331150353.127067-1-michal.kopec@3mdeb.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: amc6821: add fan and PWM
- output
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Farouk Bouabid <farouk.bouabid@cherry.de>,
- Quentin Schulz <quentin.schulz@cherry.de>,
- Francesco Dolcini <francesco.dolcini@toradex.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250331155229.147879-1-francesco@dolcini.it>
- <20250331155229.147879-2-francesco@dolcini.it>
- <8064282a-17aa-4b97-b5d9-1b4a8b0dc40b@roeck-us.net>
- <20250331161606.GA148019@francesco-nb>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250331161606.GA148019@francesco-nb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 12604449460394593689
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedtvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofhitghhrghlucfmohhpvggtuceomhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmqeenucggtffrrghtthgvrhhnpeegjefhhfdtgeeuleethedvkeejkeejvddvhfeftefhueefhffhheeileeivdfffeenucffohhmrghinhepuggrshhhrghrohdrtghomhenucfkphepuddvjedrtddrtddruddpvddufedrudelvddrjeejrddvgeelpdefjedrheelrddugedvrdduuddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehmihgthhgrlhdrkhhophgvtgesfehmuggvsgdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegmgdpmhhouggvpehsmhhtphhouhht
+DKIM-Signature: a=rsa-sha256; bh=0iQfrbKVxyeNm3D/LqcBOmCPO7+WxV1uRNznrWLbPus=;
+ c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
+ t=1743433452; v=1;
+ b=JX99cxqNAqhZ+5sVk/JWyzmN65OO+jPxqemnHP8H81pwdFPNhGX08aydw95+rMl9/fYnCznt
+ XofvAu2lhLnVOZFRRcJIKM/0ss9CTmq3MVmStOHbhP/fs8ACWzXhpHK99zvmFdxSUC4TeCkd6fi
+ peuwrSzdOWr/cUPfUNCfWHuYBG8xwUB5BE9oLVpv7JFZh8/2cA1HdJu9ofVH5R7Cc67WGOoIjSM
+ RTfUbqOx+l//UAcD+UrD39jckrfbMFO5g8LawasWDfIy8JGmvYIQMk1cSmf7BVs/Kk35IBJeDBY
+ dtdcbFSn2tWvwp5mlr8tcbp6RPu7L4gpGB2Ob3xPuSDVg==
 
-On 3/31/25 09:16, Francesco Dolcini wrote:
-> Hello Guenter,
-> 
-> 
-> On Mon, Mar 31, 2025 at 09:01:08AM -0700, Guenter Roeck wrote:
->> On 3/31/25 08:52, Francesco Dolcini wrote:
->>> From: Francesco Dolcini <francesco.dolcini@toradex.com>
->>>
->>> Add properties to describe the fan and the PWM controller output.
->>>
->>> Link: https://www.ti.com/lit/gpn/amc6821
->>> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
->>> ---
->>> v3:
->>>    - explicitly describe the fan, use standard PWM and FAN bindings
->>>    - pwm.yaml cannot be referenced, because of the $nodename pattern that is
->>>      enforced there
->>> v2: https://lore.kernel.org/all/20250224180801.128685-2-francesco@dolcini.it/
->>>    - no changes
->>> v1: https://lore.kernel.org/all/20250218165633.106867-2-francesco@dolcini.it/
->>> ---
->>>    .../devicetree/bindings/hwmon/ti,amc6821.yaml      | 14 +++++++++++++-
->>>    1 file changed, 13 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
->>> index 5d33f1a23d03..94aca9c378e6 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
->>> @@ -28,6 +28,13 @@ properties:
->>>      i2c-mux:
->>>        type: object
->>> +  fan:
->>> +    $ref: fan-common.yaml#
->>> +    unevaluatedProperties: false
->>> +
->>> +  "#pwm-cells":
->>> +    const: 3
->>> +
->>>    required:
->>>      - compatible
->>>      - reg
->>> @@ -50,9 +57,14 @@ examples:
->>>            #address-cells = <1>;
->>>            #size-cells = <0>;
->>> -        fan@18 {
->>> +        fan_controller: fan@18 {
->>>                compatible = "ti,amc6821";
->>>                reg = <0x18>;
->>> +            #pwm-cells = <3>;
->>> +
->>> +            fan {
->>> +                pwms = <&fan_controller 0 40000 0>;
->>
->> There is no explanation for the parameters. I guess that the first is the index and the
->> second is the frequency. The index is not used and can be dropped (there is just a single
->> channel), and the frequency only makes sense if it can actually be configured.
-> 
-> The PWM period can be configured, the HW supports it, so I think is a
-> good idea to properly describe the HW now that I am modifying the
-> binding and not have the situation in which we need it in 1 month.
-> 
-> The instance is just one, it's correct, but there is an assumption
-> pretty much everywhere that these 3 #cells are
->   - PWM instance
->   - PWM period in ns
->   - PWM flags
-> 
-> I decided to keep the first cell there, with the PWM instance, for this
-> reason, even as you correctly wrote it would not be required here.
-> 
-> With that said, looking at existing binding, the description is almost
-> never present.
-> 
+Introduce a driver for devices running Dasharo firmware. The driver
+supports thermal monitoring using a new ACPI interface in Dasharo. The
+initial version supports monitoring fan speeds, fan PWM duty cycles and
+system temperatures as well as determining which specific interfaces are
+implemented by firmware.
 
-That is not a valid argument.
+It has been tested on a NovaCustom laptop running pre-release Dasharo
+firmware, which implements fan and thermal monitoring for the CPU and
+the discrete GPU, if present.
 
-> I would proceed this way for v4:
->   - keep the first cell as PWM instance
->   - add the description
-> 
+Signed-off-by: Michał Kopeć <michal.kopec@3mdeb.com>
+---
+ MAINTAINERS                         |   7 +
+ drivers/platform/x86/Kconfig        |  10 +
+ drivers/platform/x86/Makefile       |   3 +
+ drivers/platform/x86/dasharo-acpi.c | 357 ++++++++++++++++++++++++++++
+ 4 files changed, 377 insertions(+)
+ create mode 100644 drivers/platform/x86/dasharo-acpi.c
 
-We just had another driver where we dropped the pwm instance number because
-it is unnecessary. See commit a25633a00906. I very much prefer to keep it that
-way if it is not needed. Everything else is just confusing. It is bad enough
-that the sub-node is needed. We should not make it worse.
-
-Thanks,
-Guenter
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00e94bec401e..4122d9e28308 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6404,6 +6404,13 @@ F:	net/ax25/ax25_out.c
+ F:	net/ax25/ax25_timer.c
+ F:	net/ax25/sysctl_net_ax25.c
+ 
++DASHARO ACPI PLATFORM DRIVER
++M:	Michał Kopeć <michal.kopec@3mdeb.com>
++L:	platform-driver-x86@vger.kernel.org
++S:	Maintained
++W:	https://docs.dasharo.com/
++F:	platform/x86/dasharo_acpi.c
++
+ DATA ACCESS MONITOR
+ M:	SeongJae Park <sj@kernel.org>
+ L:	damon@lists.linux.dev
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 0258dd879d64..8168c5274a08 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -1060,6 +1060,16 @@ config LENOVO_WMI_CAMERA
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called lenovo-wmi-camera.
+ 
++config DASHARO_ACPI
++	tristate "Dasharo ACPI Platform Driver"
++	depends on ACPI
++	depends on HWMON
++	help
++	  This driver provides HWMON support for devices running Dasharo
++	  firmware.
++
++	  If you have a device with Dasharo firmware, choose Y or M here.
++
+ source "drivers/platform/x86/x86-android-tablets/Kconfig"
+ 
+ config FW_ATTR_CLASS
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index e1b142947067..3ca53ae01d93 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -110,6 +110,9 @@ obj-$(CONFIG_ACPI_TOSHIBA)	+= toshiba_acpi.o
+ # Inspur
+ obj-$(CONFIG_INSPUR_PLATFORM_PROFILE)	+= inspur_platform_profile.o
+ 
++# Dasharo
++obj-$(CONFIG_DASHARO_ACPI)	+= dasharo-acpi.o
++
+ # Laptop drivers
+ obj-$(CONFIG_ACPI_CMPC)		+= classmate-laptop.o
+ obj-$(CONFIG_COMPAL_LAPTOP)	+= compal-laptop.o
+diff --git a/drivers/platform/x86/dasharo-acpi.c b/drivers/platform/x86/dasharo-acpi.c
+new file mode 100644
+index 000000000000..a8728e3537f9
+--- /dev/null
++++ b/drivers/platform/x86/dasharo-acpi.c
+@@ -0,0 +1,357 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Dasharo ACPI Driver
++ */
++
++#include <linux/acpi.h>
++#include <linux/hwmon.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++#include <linux/units.h>
++
++enum dasharo_feature {
++	DASHARO_FEATURE_TEMPERATURE = 0,
++	DASHARO_FEATURE_FAN_PWM,
++	DASHARO_FEATURE_FAN_TACH,
++	DASHARO_FEATURE_MAX,
++};
++
++enum dasharo_temperature {
++	DASHARO_TEMPERATURE_CPU_PACKAGE = 0,
++	DASHARO_TEMPERATURE_CPU_CORE,
++	DASHARO_TEMPERATURE_GPU,
++	DASHARO_TEMPERATURE_BOARD,
++	DASHARO_TEMPERATURE_CHASSIS,
++	DASHARO_TEMPERATURE_MAX,
++};
++
++enum dasharo_fan {
++	DASHARO_FAN_CPU = 0,
++	DASHARO_FAN_GPU,
++	DASHARO_FAN_CHASSIS,
++	DASHARO_FAN_MAX,
++};
++
++#define MAX_GROUPS_PER_FEAT 8
++
++static const char * const dasharo_group_names[DASHARO_FEATURE_MAX][MAX_GROUPS_PER_FEAT] = {
++	[DASHARO_FEATURE_TEMPERATURE] = {
++		[DASHARO_TEMPERATURE_CPU_PACKAGE] = "CPU Package",
++		[DASHARO_TEMPERATURE_CPU_CORE] = "CPU Core",
++		[DASHARO_TEMPERATURE_GPU] = "GPU",
++		[DASHARO_TEMPERATURE_BOARD] = "Board",
++		[DASHARO_TEMPERATURE_CHASSIS] = "Chassis",
++	},
++	[DASHARO_FEATURE_FAN_PWM] = {
++		[DASHARO_FAN_CPU] = "CPU",
++		[DASHARO_FAN_GPU] = "GPU",
++		[DASHARO_FAN_CHASSIS] = "Chassis",
++	},
++	[DASHARO_FEATURE_FAN_TACH] = {
++		[DASHARO_FAN_CPU] = "CPU",
++		[DASHARO_FAN_GPU] = "GPU",
++		[DASHARO_FAN_CHASSIS] = "Chassis",
++	},
++};
++
++struct dasharo_capability {
++	unsigned int group;
++	unsigned int index;
++	char name[16];
++};
++
++#define MAX_CAPS_PER_FEAT 24
++
++struct dasharo_data {
++	struct platform_device *pdev;
++	int caps_found[DASHARO_FEATURE_MAX];
++	struct dasharo_capability capabilities[DASHARO_FEATURE_MAX][MAX_CAPS_PER_FEAT];
++};
++
++static int dasharo_get_feature_cap_count(struct dasharo_data *data, enum dasharo_feature feat, int cap)
++{
++	struct acpi_object_list obj_list;
++	union acpi_object obj[2];
++	acpi_handle handle;
++	acpi_status status;
++	u64 count;
++
++	obj[0].type = ACPI_TYPE_INTEGER;
++	obj[0].integer.value = feat;
++	obj[1].type = ACPI_TYPE_INTEGER;
++	obj[1].integer.value = cap;
++	obj_list.count = 2;
++	obj_list.pointer = &obj[0];
++
++	handle = ACPI_HANDLE(&data->pdev->dev);
++	status = acpi_evaluate_integer(handle, "GFCP", &obj_list, &count);
++	if (!ACPI_SUCCESS(status))
++		return -ENODEV;
++
++	return count;
++}
++
++static int dasharo_read_channel(struct dasharo_data *data, char *method, enum dasharo_feature feat, int channel, long *value)
++{
++	struct acpi_object_list obj_list;
++	union acpi_object obj[2];
++	acpi_handle handle;
++	acpi_status status;
++	u64 val;
++
++	obj[0].type = ACPI_TYPE_INTEGER;
++	obj[0].integer.value = data->capabilities[feat][channel].group;
++	obj[1].type = ACPI_TYPE_INTEGER;
++	obj[1].integer.value = data->capabilities[feat][channel].index;
++	obj_list.count = 2;
++	obj_list.pointer = &obj[0];
++
++	handle = ACPI_HANDLE(&data->pdev->dev);
++	status = acpi_evaluate_integer(handle, method, &obj_list, &val);
++	if (!ACPI_SUCCESS(status))
++		return -ENODEV;
++
++	*value = val;
++	return 0;
++}
++
++static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			      u32 attr, int channel, long *val)
++{
++	struct dasharo_data *data = dev_get_drvdata(dev);
++	long value;
++	int ret;
++
++	switch (type) {
++	case hwmon_temp:
++		ret = dasharo_read_channel(data, "GTMP", DASHARO_FEATURE_TEMPERATURE, channel, &value);
++		if (ret < 0)
++			return ret;
++		else
++			*val = value * MILLIDEGREE_PER_DEGREE;
++		break;
++	case hwmon_fan:
++		ret = dasharo_read_channel(data, "GFTH", DASHARO_FEATURE_FAN_TACH, channel, &value);
++		if (ret < 0)
++			return ret;
++		else
++			*val = value;
++		break;
++	case hwmon_pwm:
++		ret = dasharo_read_channel(data, "GFDC", DASHARO_FEATURE_FAN_PWM, channel, &value);
++		if (ret < 0)
++			return ret;
++		else
++			*val = value;
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int dasharo_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
++				     u32 attr, int channel, const char **str)
++{
++	struct dasharo_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		if (channel < data->caps_found[DASHARO_FEATURE_TEMPERATURE])
++			*str = data->capabilities[DASHARO_FEATURE_TEMPERATURE][channel].name;
++		break;
++	case hwmon_fan:
++		if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
++			*str = data->capabilities[DASHARO_FEATURE_FAN_TACH][channel].name;
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static umode_t dasharo_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
++					u32 attr, int channel)
++{
++	const struct dasharo_data *data = drvdata;
++
++	switch (type) {
++	case hwmon_temp:
++		if (channel < data->caps_found[DASHARO_FEATURE_TEMPERATURE])
++			return 0444;
++		break;
++	case hwmon_pwm:
++		if (channel < data->caps_found[DASHARO_FEATURE_FAN_PWM])
++			return 0444;
++		break;
++	case hwmon_fan:
++		if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
++			return 0444;
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static const struct hwmon_ops dasharo_hwmon_ops = {
++	.is_visible = dasharo_hwmon_is_visible,
++	.read_string = dasharo_hwmon_read_string,
++	.read = dasharo_hwmon_read,
++};
++
++// Max 24 capabilities per feature
++static const struct hwmon_channel_info * const dasharo_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(fan,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL,
++		HWMON_F_INPUT | HWMON_F_LABEL),
++	HWMON_CHANNEL_INFO(temp,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL,
++		HWMON_T_INPUT | HWMON_T_LABEL),
++	HWMON_CHANNEL_INFO(pwm,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT,
++		HWMON_PWM_INPUT),
++	NULL
++};
++
++static const struct hwmon_chip_info dasharo_hwmon_chip_info = {
++	.ops = &dasharo_hwmon_ops,
++	.info = dasharo_hwmon_info,
++};
++
++static void dasharo_fill_feature_caps(struct dasharo_data *data, enum dasharo_feature feat)
++{
++	struct dasharo_capability *cap;
++	int cap_count = 0;
++	int count;
++
++	for (int group = 0; group < MAX_GROUPS_PER_FEAT; ++group) {
++		count = dasharo_get_feature_cap_count(data, feat, group);
++
++		if (count <= 0)
++			continue;
++
++		for (unsigned int i = 0; i < count && cap_count < ARRAY_SIZE(data->capabilities[feat]); ++i) {
++			cap = &data->capabilities[feat][cap_count];
++			cap->group = group;
++			cap->index = i;
++			scnprintf(cap->name, sizeof(cap->name), "%s %d", dasharo_group_names[feat][group], i);
++			cap_count++;
++		}
++	}
++	data->caps_found[feat] = cap_count;
++}
++
++static int dasharo_probe(struct platform_device *pdev)
++{
++	struct dasharo_data *data;
++	struct device *hwmon;
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++	data->pdev = pdev;
++
++	for (unsigned int i = 0; i < DASHARO_FEATURE_MAX; ++i)
++		dasharo_fill_feature_caps(data, i);
++
++	hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
++		"dasharo_acpi", data, &dasharo_hwmon_chip_info, NULL);
++
++	if (IS_ERR(hwmon)) {
++		dev_err(&pdev->dev, "Could not register Dasharo hwmon device\n");
++		return PTR_ERR(hwmon);
++	}
++
++	return 0;
++}
++
++static const struct acpi_device_id dasharo_device_ids[] = {
++	{"DSHR0001", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, dasharo_device_ids);
++
++static struct platform_driver dasharo_driver = {
++	.driver = {
++		.name = "dasharo-acpi",
++		.acpi_match_table = dasharo_device_ids,
++	},
++	.probe = dasharo_probe,
++};
++module_platform_driver(dasharo_driver);
++
++MODULE_DESCRIPTION("Dasharo ACPI Driver");
++MODULE_AUTHOR("Michał Kopeć <michal.kopec@3mdeb.com>");
++MODULE_LICENSE("GPL");
+-- 
+2.49.0
 
