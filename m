@@ -1,121 +1,125 @@
-Received: from 10.mo575.mail-out.ovh.net (10.mo575.mail-out.ovh.net [46.105.79.203])
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAB8237179
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 10:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.79.203
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C38B1EB9F3;
+	Wed,  2 Apr 2025 11:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743590643; cv=none; b=Q806mMvBz17p2jmwT9RwE93oLE+mCeT711T7UueXZgOAQyUi1rS5luht9S9A0V+edWsJkHEXkBeXVVGDoLFYIBj2+CqrnW9G29YPXOXl7YDpclQlcDAMKmuRE1rgUze3HdzcaWu4jb7sF4aA98csO7jIRfhXoKsE0Aayp/4prt8=
+	t=1743591854; cv=none; b=MsQ3mMiDfytT+Wn3H7gGYYhY7jNjRrTlt+2j41g2HOaFxXpbBYqk79gXWm9gtnr8n2lDgAFu7KiELAf4WaP0s/423AnLGMTMbX398JQNTQOF1GzmTKHIEmsw+3g5xNq3OJpmGnxjt8Wb47czerqh1plXz+lDq7mH7+7u23RY7vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743590643; c=relaxed/simple;
-	bh=EzdHxW81hN6HIX2xMeDvPOVXkeyID9Trj+boirZ22Dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E8GawQnHdhOV1gF9ea7Ro07/zpUPQE+0PcXcVOWjaKNLRANz3lEBmI3wVEZLhdZEbn+WAS57+X+dpqNapWO1sX7obb9sKpHciZ8FM4+d0sx+SJUNkD4XjEf//JQgBFX4EuSz32kxRR93j9QLf661BH88KGkfRogvXzgEDtq5mog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=Cr1Ci+h5; arc=none smtp.client-ip=46.105.79.203
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+	s=arc-20240116; t=1743591854; c=relaxed/simple;
+	bh=6d9OGw+GQO0uLw1dN+Q6U55NaS4IXjOQQRF2LeeTj7E=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=chfYdlTS1E1JfpfQKnk0JhswWONdm5huDK6Xr56e/K2ZpxhXDz5oDa6ibb9NGRpWFJShn34v8Eg/C90yCqtPNoqz1q2C9OWdTf8hkmFtFWmH4eCwxX9Y2ivxKoc75GTvBkn2H067YzGl/Jbg636kTEcn6nnYa7iEHU5uy8Oo6fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cj8brkGv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FDGJ2ZJO; arc=none smtp.client-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="Cr1Ci+h5"
-Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.25.166])
-	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4ZSLtN4ffYz1rlM
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 10:38:04 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-dpvsw (unknown [10.111.174.60])
-	by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 3BC311FD46;
-	Wed,  2 Apr 2025 10:38:03 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.96])
-	by ghost-submission-5b5ff79f4f-dpvsw with ESMTPSA
-	id QkQENooT7WfaGQAAFHTgiw
-	(envelope-from <michal.kopec@3mdeb.com>); Wed, 02 Apr 2025 10:38:03 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-96R001bbd2d3bc-15be-44db-91fa-19141c932659,
-                    5FCBFF1DCA98F7E0201DF243E115F3AF9CF69AF3) smtp.auth=michal.kopec@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
-To: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	tomasz.pakula.oficjalny@gmail.com,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: platform-driver-x86@vger.kernel.org,
-	piotr.krol@3mdeb.com,
-	maciej.pijanowski@3mdeb.com,
-	michal.kopec@3mdeb.com,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v5 0/1] platform/x86: Introduce dasharo-acpi platform driver
-Date: Wed,  2 Apr 2025 12:37:45 +0200
-Message-ID: <20250402103746.92575-1-michal.kopec@3mdeb.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cj8brkGv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FDGJ2ZJO"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 0CEC22540224;
+	Wed,  2 Apr 2025 07:04:10 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 02 Apr 2025 07:04:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743591849;
+	 x=1743678249; bh=0+2nC1yRWO2krIGNS9hPJRkYfq3R8kYhi3T6ukOvaHI=; b=
+	cj8brkGv0OS41KWvxOndfLmENKO3MsZH1cH2HAh97cmzpxFnmPgIqtQu75EqQ1lf
+	fDoud6Hf5DjH5m4c1ZyAaVZpNrbGXgebn2VI6j6P3o/5KukoTHtpQrNV7AOtxJsp
+	FQ6DemD38e4eYbJ22Hc9myzjT16XI5pe62qDxFSZ56TM9mcb2M7edzYUpesxa7p5
+	Q8tMpTBkIrddRZkGYuajIghr10Tc4TJtReP7w6+TFXGxURW1CzaSwv91jaCrTxYh
+	0dnb91j5bX6Fr67Bat3HDONGrRW8euYli8Fy6GhZ5hGdQ9vdmmJ6RB/ifT7sE473
+	SKlIeWYrvJoMaeKXOWoqEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743591849; x=
+	1743678249; bh=0+2nC1yRWO2krIGNS9hPJRkYfq3R8kYhi3T6ukOvaHI=; b=F
+	DGJ2ZJOEMKQAABJUWyvR2R0wygnWFFAChKs5AbbZkvyrlyILDrP12bZNOq/DECrG
+	XK5m7cbzolhhGS+XW4RkuAzz2GplAWEPA/Kg1FMBckGOtINVnHeX7QwqFBNqRr6q
+	KohzskG7D8Ja3GuIOpQ1jY1j4TqpBxkSGc1D18zX+drV6a6ccNer8vtmnC6M2844
+	LOPOuF2iRfA1tBiygTWsXHpVcP3LtzbTwAJFTB4ngPDAJz8FBS9bu8/ny7XlHPH8
+	wmwDUBrEnr+KMTxDlfC1pQvarbxncwo6KsaCS91gZ8FptE9JZTiSnZeBBcnJ0iPs
+	nSZM4L2lBEPUGswSoqb7g==
+X-ME-Sender: <xms:qRntZ000e9FiA9fULog-htIlqrdDQ0meUAx1NE17y9t5nhahmWMLbA>
+    <xme:qRntZ_GOZCe6ALDh55TQFupueBRj8BYj6Rx0n3a8ij8BiVEiMgllQxwp303Womfnv
+    Ui5_DO6GK5vPCCoA3o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeehhedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    uddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrkhhshhgrhidrghhuphhtrg
+    esrghmugdrtghomhdprhgtphhtthhopegrnhgrnhgurdhumhgrrhhjihesrghmugdrtgho
+    mhdprhgtphhtthhopehgrghuthhhrghmrdhshhgvnhhohiesrghmugdrtghomhdprhgtph
+    htthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthht
+    ohepnhgrvhgvvghnkhhrihhshhhnrgdrtghhrghtrhgrughhihesrghmugdrtghomhdprh
+    gtphhtthhopehshhihrghmqdhsuhhnuggrrhdrshdqkhesrghmugdrtghomhdprhgtphht
+    thhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtth
+    hopehlihhnuhigsehrohgvtghkqdhushdrnhgvthdprhgtphhtthhopehlihhnuhigqdhh
+    fihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:qRntZ866ydlzsrFrJA1n1NjZGLxirmSTg8bCAH4YZrhkViGVjJdPWA>
+    <xmx:qRntZ90JhRc7C4yKx0FarM6GmMEWipQugPvrkOcSY2jKfTzAjp2H4w>
+    <xmx:qRntZ3GFgYTSLmm8T7rdwSksl-TWYbge5YzMN4LhVCfY9iTq9wmCvg>
+    <xmx:qRntZ2_zG0xqqBZpwXQVbY936XMekcU0p7qj8lWq2SainAN_yydwHA>
+    <xmx:qRntZxfmGW-MItUq8AZGXgaJZyny80z7MpA5MQzIrfg5RAAEL0ECuxY3>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 44A552220074; Wed,  2 Apr 2025 07:04:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 1408500786861116825
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeehgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofhitghhrghlucfmohhpvggtuceomhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmqeenucggtffrrghtthgvrhhnpeduledtfffgueeugfffieeivdfhfeeutdfhffeigedttdefheektedvgefgueeugfenucfkphepuddvjedrtddrtddruddpvddufedrudelvddrjeejrddvgeelpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepmhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhegmpdhmohguvgepshhmthhpohhuth
-DKIM-Signature: a=rsa-sha256; bh=oOVF/Yn2fXr8gv4LEnTc2BmKgPUm9BdbOLjP0udGp1E=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1743590284; v=1;
- b=Cr1Ci+h5E9AL1i3KvBE6HD2QgjUlsbP1VJhY/cc7Qc7Ymg3XH0BX/MG8YwHEHZ+Gl7VoMSet
- fuy4SwEUwKZCydTPplu5/ilP2s3bXxyyZaQl62TKRWqxe+Eb0dN9hcLSaxpHgWEI7nkqSG8Smbr
- GIW1qHAtnf14WJWkX0iAKjDv+QX+W946cl/cEnjlfzW6hVMgRKzNYjI2eivz8g3Oqy0UCoa3Dlk
- V7YknLZIc/w0vzUVZLjfsYQ+uCo0qOFdhV0+uxzEQaIa6GiDJ0PgLwgVo1tHRrtcVzXzxOLAA46
- mNA8fUBo/AjAb8aw34LQB6+yWKN7hHyfeWxOGWJyn55wA==
+X-ThreadId: T2646875b90204225
+Date: Wed, 02 Apr 2025 13:03:49 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Akshay Gupta" <akshay.gupta@amd.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: "Guenter Roeck" <linux@roeck-us.net>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, shyam-sundar.s-k@amd.com,
+ gautham.shenoy@amd.com, "Mario Limonciello" <mario.limonciello@amd.com>,
+ naveenkrishna.chatradhi@amd.com, anand.umarji@amd.com
+Message-Id: <af416dbf-240c-4c21-954f-d69420f6bd3d@app.fastmail.com>
+In-Reply-To: <20250402055840.1346384-4-akshay.gupta@amd.com>
+References: <20250402055840.1346384-1-akshay.gupta@amd.com>
+ <20250402055840.1346384-4-akshay.gupta@amd.com>
+Subject: Re: [PATCH v7 03/10] misc: amd-sbi: Move hwmon device sensor as separate
+ entity
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Introduce a driver for devices running Dasharo firmware. The driver
-supports thermal monitoring using a new ACPI interface in Dasharo. The
-initial version supports monitoring fan speeds, fan PWM duty cycles and
-system temperatures as well as determining which specific interfaces are
-implemented by firmware.
+On Wed, Apr 2, 2025, at 07:58, Akshay Gupta wrote:
 
-It has been tested on a NovaCustom laptop running pre-release Dasharo
-firmware, which implements fan and thermal monitoring for the CPU and
-the discrete GPU, if present.
+> +
+> +int create_hwmon_sensor_device(struct device *dev, struct sbrmi_data *data)
+> +{
+> +	if (IS_REACHABLE(CONFIG_HWMON)) {
+> +		struct device *hwmon_dev;
+> +
+> +		hwmon_dev = devm_hwmon_device_register_with_info(dev, "sbrmi", data,
+> +								 &sbrmi_chip_info, NULL);
+> +		return PTR_ERR_OR_ZERO(hwmon_dev);
+> +	}
+> +	return 0;
 
-Changes in v2:
-- Remove redundant copyright information
-- Turn dasharo_fill_* functions into single dasharo_fill_feature_caps
-  function
-- Code style fixes
-- Turn large if / else blocks into switch / case
-- Fix possible positive return values in hwmon read handler
-- Change while loops to for loops
-- Add local variable for data->sensors[data->sensors_count] in
-  dasharo_fill_feature_caps
-- Replace snprintf with scnprintf per Ilpo's review
-- Keep the "ok" path silent
+I just one more problems with this bit. This was already in the
+existing code, but should still be addressed:
 
-Changes in V3:
-- Simplify dasharo_read_value_by_cap_idx arguments and rename to
-  dasharo_read_channel
+Using IS_REACHABLE() is usually a sign that the Kconfig dependencies
+are wrong. Fix the dependencies instead so the hwmon driver can
+only be enabled if the subsystem is enabled. You can either add a
+separate Kconfig symbol or make the driver 'depends on HWMON || !HWMON'
+to express this.
 
-Changes in V4:
-- Remove unnecessary linebreaks
-- Simplify naming of variables
-- Constify zone lookup table
-- Remove unneeded includes
-- Switch to platform_device API
-- Remove unneeded driver remove handler
-- Add myself to MAINTAINERS
-
-Changex in V5:
-- Fix up the MAINTAINERS entry
-- Use PTR_ERR_OR_ZERO for the hwmon pointer in the register func
-- Simplify if blocks in dasharo_hwmon_read
-- Use ACPI_FAILURE instead of !ACPI_SUCCESS
-
-Michał Kopeć (1):
-  platform/x86: Introduce dasharo-acpi platform driver
-
- MAINTAINERS                         |   6 +
- drivers/platform/x86/Kconfig        |  10 +
- drivers/platform/x86/Makefile       |   3 +
- drivers/platform/x86/dasharo-acpi.c | 345 ++++++++++++++++++++++++++++
- 4 files changed, 364 insertions(+)
- create mode 100644 drivers/platform/x86/dasharo-acpi.c
-
--- 
-2.49.0
-
+       Arnd
