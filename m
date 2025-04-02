@@ -1,119 +1,121 @@
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 10.mo575.mail-out.ovh.net (10.mo575.mail-out.ovh.net [46.105.79.203])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E76E23534D;
-	Wed,  2 Apr 2025 10:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAB8237179
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 10:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.79.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743589324; cv=none; b=WDjlSi9S9K1+uk6q/ykdf9t5o4NF811G9V3DKHzzOiZAXSqkjt2/eIfg4m9vm/Cu2Dd6J4G93CvzmpCJ65b44s+UIqV3/p6tz/1aZD6fHOpEg5bxIzhIpK6YEVFK+98oX97QxV/eCDNSpyaQhCJsAcM8Y2hQJHA2vjOucM12gF0=
+	t=1743590643; cv=none; b=Q806mMvBz17p2jmwT9RwE93oLE+mCeT711T7UueXZgOAQyUi1rS5luht9S9A0V+edWsJkHEXkBeXVVGDoLFYIBj2+CqrnW9G29YPXOXl7YDpclQlcDAMKmuRE1rgUze3HdzcaWu4jb7sF4aA98csO7jIRfhXoKsE0Aayp/4prt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743589324; c=relaxed/simple;
-	bh=oPk6ucGcDI1wEgXM+63PrveBDg05TKuPFs6H/5AgwpU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FXcEJrHuY5WyelYxIu65TyYwF3uGpuMlolxy92ZDbH9cIbdDLM4gnwC3ejgqzOvHiuV7BeV5QQTKMLql+Ga1LhTeUNpu6OwNDz/HWAijKwnth5eTfpD7OkyIkAO51DwQK/U5Sk34bs8Uv2FbkA7bjT2YW7L24TCvwipjQDDi+3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=r2wXuuto; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+	s=arc-20240116; t=1743590643; c=relaxed/simple;
+	bh=EzdHxW81hN6HIX2xMeDvPOVXkeyID9Trj+boirZ22Dc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E8GawQnHdhOV1gF9ea7Ro07/zpUPQE+0PcXcVOWjaKNLRANz3lEBmI3wVEZLhdZEbn+WAS57+X+dpqNapWO1sX7obb9sKpHciZ8FM4+d0sx+SJUNkD4XjEf//JQgBFX4EuSz32kxRR93j9QLf661BH88KGkfRogvXzgEDtq5mog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=Cr1Ci+h5; arc=none smtp.client-ip=46.105.79.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="r2wXuuto"
-Received: from francesco-nb.corp.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
-	by mail11.truemail.it (Postfix) with ESMTPA id 19F6F1F936;
-	Wed,  2 Apr 2025 12:21:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1743589313;
-	bh=U0nPMu7F4Ahw1UZcx/AIz4XJ14OTdfCkOQ65to8yGPo=; h=From:To:Subject;
-	b=r2wXuutoPk+kTdd849Dkw7VavNojN8naow68u6fboOdY8y/L384ISL7lB1HjOHHiI
-	 +Xd3evMsy4TZ/DQTKP75k/Wv/NYJV/wyxdZ4w3LQ4QC4kbKYVbXLIcmVSlrrjpJLr4
-	 3b5srBpiOJEyFqwZNXFCjSIsSdlAt2dg++PRjgkcoFXto+z7jJlg4vGuVwVETlzUSw
-	 /DPJAqrc28jGsnxCgCn1PaUxmM3F5RxFQahSysu2+tChyg7VVdiuI3U09ngkuXQVii
-	 erzIdNMqaXfBaIGRuma+OqBaRIbP7t/lr5otBTZSvNKmqbjyhuQKlAGapu4+8EFqOE
-	 ve20ofcO2ahZw==
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Farouk Bouabid <farouk.bouabid@cherry.de>,
-	Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/2] dt-bindings: hwmon: amc6821: add fan and PWM output
-Date: Wed,  2 Apr 2025 12:21:45 +0200
-Message-Id: <20250402102146.65406-2-francesco@dolcini.it>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250402102146.65406-1-francesco@dolcini.it>
-References: <20250402102146.65406-1-francesco@dolcini.it>
+	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="Cr1Ci+h5"
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.25.166])
+	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4ZSLtN4ffYz1rlM
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 10:38:04 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-dpvsw (unknown [10.111.174.60])
+	by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 3BC311FD46;
+	Wed,  2 Apr 2025 10:38:03 +0000 (UTC)
+Received: from 3mdeb.com ([37.59.142.96])
+	by ghost-submission-5b5ff79f4f-dpvsw with ESMTPSA
+	id QkQENooT7WfaGQAAFHTgiw
+	(envelope-from <michal.kopec@3mdeb.com>); Wed, 02 Apr 2025 10:38:03 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-96R001bbd2d3bc-15be-44db-91fa-19141c932659,
+                    5FCBFF1DCA98F7E0201DF243E115F3AF9CF69AF3) smtp.auth=michal.kopec@3mdeb.com
+X-OVh-ClientIp:213.192.77.249
+From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
+To: hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	tomasz.pakula.oficjalny@gmail.com,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: platform-driver-x86@vger.kernel.org,
+	piotr.krol@3mdeb.com,
+	maciej.pijanowski@3mdeb.com,
+	michal.kopec@3mdeb.com,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v5 0/1] platform/x86: Introduce dasharo-acpi platform driver
+Date: Wed,  2 Apr 2025 12:37:45 +0200
+Message-ID: <20250402103746.92575-1-michal.kopec@3mdeb.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 1408500786861116825
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeehgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofhitghhrghlucfmohhpvggtuceomhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmqeenucggtffrrghtthgvrhhnpeduledtfffgueeugfffieeivdfhfeeutdfhffeigedttdefheektedvgefgueeugfenucfkphepuddvjedrtddrtddruddpvddufedrudelvddrjeejrddvgeelpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepmhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhegmpdhmohguvgepshhmthhpohhuth
+DKIM-Signature: a=rsa-sha256; bh=oOVF/Yn2fXr8gv4LEnTc2BmKgPUm9BdbOLjP0udGp1E=;
+ c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
+ t=1743590284; v=1;
+ b=Cr1Ci+h5E9AL1i3KvBE6HD2QgjUlsbP1VJhY/cc7Qc7Ymg3XH0BX/MG8YwHEHZ+Gl7VoMSet
+ fuy4SwEUwKZCydTPplu5/ilP2s3bXxyyZaQl62TKRWqxe+Eb0dN9hcLSaxpHgWEI7nkqSG8Smbr
+ GIW1qHAtnf14WJWkX0iAKjDv+QX+W946cl/cEnjlfzW6hVMgRKzNYjI2eivz8g3Oqy0UCoa3Dlk
+ V7YknLZIc/w0vzUVZLjfsYQ+uCo0qOFdhV0+uxzEQaIa6GiDJ0PgLwgVo1tHRrtcVzXzxOLAA46
+ mNA8fUBo/AjAb8aw34LQB6+yWKN7hHyfeWxOGWJyn55wA==
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+Introduce a driver for devices running Dasharo firmware. The driver
+supports thermal monitoring using a new ACPI interface in Dasharo. The
+initial version supports monitoring fan speeds, fan PWM duty cycles and
+system temperatures as well as determining which specific interfaces are
+implemented by firmware.
 
-Add properties to describe the fan and the PWM controller output.
+It has been tested on a NovaCustom laptop running pre-release Dasharo
+firmware, which implements fan and thermal monitoring for the CPU and
+the discrete GPU, if present.
 
-Link: https://www.ti.com/lit/gpn/amc6821
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-v4:
- - add #pwm-cells description
- - remove useless first #pwm-cells, that was supposed to be the instance
-   number
-v3: https://lore.kernel.org/all/20250331155229.147879-2-francesco@dolcini.it/
- - explicitly describe the fan, use standard PWM and FAN bindings
- - pwm.yaml cannot be referenced, because of the $nodename pattern that is
-   enforced there
-v2: https://lore.kernel.org/all/20250224180801.128685-2-francesco@dolcini.it/
- - no changes
-v1: https://lore.kernel.org/all/20250218165633.106867-2-francesco@dolcini.it/
----
- .../devicetree/bindings/hwmon/ti,amc6821.yaml  | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Changes in v2:
+- Remove redundant copyright information
+- Turn dasharo_fill_* functions into single dasharo_fill_feature_caps
+  function
+- Code style fixes
+- Turn large if / else blocks into switch / case
+- Fix possible positive return values in hwmon read handler
+- Change while loops to for loops
+- Add local variable for data->sensors[data->sensors_count] in
+  dasharo_fill_feature_caps
+- Replace snprintf with scnprintf per Ilpo's review
+- Keep the "ok" path silent
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-index 5d33f1a23d03..9ca7356760a7 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,amc6821.yaml
-@@ -28,6 +28,17 @@ properties:
-   i2c-mux:
-     type: object
- 
-+  fan:
-+    $ref: fan-common.yaml#
-+    unevaluatedProperties: false
-+
-+  "#pwm-cells":
-+    const: 2
-+    description: |
-+      Number of cells in a PWM specifier.
-+      - cell 0: PWM period in nanoseconds
-+      - cell 1: PWM polarity: 0 or PWM_POLARITY_INVERTED
-+
- required:
-   - compatible
-   - reg
-@@ -50,9 +61,14 @@ examples:
-         #address-cells = <1>;
-         #size-cells = <0>;
- 
--        fan@18 {
-+        fan_controller: fan@18 {
-             compatible = "ti,amc6821";
-             reg = <0x18>;
-+            #pwm-cells = <2>;
-+
-+            fan {
-+                pwms = <&fan_controller 40000 0>;
-+            };
-         };
-     };
- 
+Changes in V3:
+- Simplify dasharo_read_value_by_cap_idx arguments and rename to
+  dasharo_read_channel
+
+Changes in V4:
+- Remove unnecessary linebreaks
+- Simplify naming of variables
+- Constify zone lookup table
+- Remove unneeded includes
+- Switch to platform_device API
+- Remove unneeded driver remove handler
+- Add myself to MAINTAINERS
+
+Changex in V5:
+- Fix up the MAINTAINERS entry
+- Use PTR_ERR_OR_ZERO for the hwmon pointer in the register func
+- Simplify if blocks in dasharo_hwmon_read
+- Use ACPI_FAILURE instead of !ACPI_SUCCESS
+
+Michał Kopeć (1):
+  platform/x86: Introduce dasharo-acpi platform driver
+
+ MAINTAINERS                         |   6 +
+ drivers/platform/x86/Kconfig        |  10 +
+ drivers/platform/x86/Makefile       |   3 +
+ drivers/platform/x86/dasharo-acpi.c | 345 ++++++++++++++++++++++++++++
+ 4 files changed, 364 insertions(+)
+ create mode 100644 drivers/platform/x86/dasharo-acpi.c
+
 -- 
-2.39.5
+2.49.0
 
