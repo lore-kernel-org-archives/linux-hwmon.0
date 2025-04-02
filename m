@@ -1,172 +1,68 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5852E337B
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 08:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1B021ABC3;
+	Wed,  2 Apr 2025 10:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743582803; cv=none; b=ZObG/fzL9CUbcIrRN4hHg0lHU3HnH65PnrJSSSzkcbAOHMSQgNC24FJBDh1eASheVii549q9S4QX5TAAPZtJGtx2AzFPIsVPtHY1kvNe1I0Cy5ide1fIo18dVO+5FPZdPmHLg3qQ1LxcEE9Xw2tl+ewfqKfXvC4a576K92pOHTc=
+	t=1743589324; cv=none; b=INGpBkhGDJClogQvRltl5AdA2HaQxeLuyL+1gfsaBsVI84zeeQ1NB8xtmTJ03v374NWh9S5lRphVio4pgy8i1IckmVtqDxyUXrx8W+JnsI45zjjaFOFoJ9Gw8JuUAS4C8+b78cmbwh8rqftyA4+Hk0xIc9HSfa4+lFYpznzwbzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743582803; c=relaxed/simple;
-	bh=rarRiwBT0Clf3tqnhxdPEnRPmTTIuWDxCnJGuk7ONYg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E3HInKBREWfHrN1XbScgIG9jl4ph3+BAeklTozyHcu/o0WjalGK5feNgtU1KFEt+yPGBnAhcelrAYTCrnBCtCOVV9nLRZ6k0owSuDRwbb8i50MPxOoXUK5nPcHRmaqLYc0p1UZi/AE7P9ji+2B8i4XzcWDOw6azRXzNfQY8AKrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com; spf=none smtp.mailfrom=wkennington.com; dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b=0w/JBWhE; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=wkennington.com
+	s=arc-20240116; t=1743589324; c=relaxed/simple;
+	bh=BdORvnXoGJLZV9Q+UHKAr4GajfyQXVCoCL4Hlvs5oxY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QFrt/k+VRCIhK26sgMJlBZyZCpo2o8OMFt8KDDAUglVkp1nCwuAdoYzMMsIB3udGI3R7GeRy5rMavwyYqelBynsCgT3azmg5igv0zbZPGWcOLQEkgfU+3+T3r9pCMrSdjB3X8nQmz8RL5iO0jtSe1iTpYhCH9VwA9rqZQ3urkP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=jny5Ptsj; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b="0w/JBWhE"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2240b4de12bso109947255ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 02 Apr 2025 01:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1743582801; x=1744187601; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4zbCN7/36D6rNO+6WczUGmYkS2wWeNOSiv+dD5fzbc8=;
-        b=0w/JBWhEKtDNHRvInQ0UuKd4P3KemrSIuPl/BJ+wu6L/YfA4BLmUfc5u+dsCVint4h
-         /623jmW2MldCXMpjMWilRSNUG/B/Tf4EtvIRlF48Yvqe4G+EeLpmCf5sqvvO/ZoSq042
-         18rVIxkZXAmaeHLfhW+rr6EWBT4dTZLx15bNFQGxiyimVZg+SXO7l1hmOK3MianRHBR+
-         GF1qv+q1c4PDq9AQJ5PCAIKUDbtjZzrfPQzT7OamvhQzRb1AJGvNfH6o1URLYjXgwN4m
-         I8hqa0Vgy/lU9k3pfVWGW0uoTMmjkkM51T53n5rzzWyUBc4Zw8rcCgZZaFQ63TL42IkX
-         aNBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743582801; x=1744187601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4zbCN7/36D6rNO+6WczUGmYkS2wWeNOSiv+dD5fzbc8=;
-        b=DXS75jOiP+96hHkJoo6UIL5iVkmWAFo/xUZFugXUNlvX4vio/MflJbiHoQzBYY4sKH
-         nZ4SPP6n8KWsMW9JehLcqr4/uCsBDKVJQAB7KTgY15PMf2K8a2EROKstMukI+P/cwaQc
-         6pImSxdc3Gsg5zW1YKs0AOzb8pyDchKJ6nT8acj4rTW0xw/TzTLrp300h6wiLv3r8Zvs
-         LOHeMKgkmoc2ftaen/cchKTNP/VeTZSbKzXyaaRnLZv+llmKIdnKaxAB3YT3nYOxDMSt
-         jqLgbb8rgyay388Ora4wmjTmDvMnrLULxAfogWG1SpdPsRujzlR+L/7TmJu9LkvKtfw9
-         FQWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuuOmIwXSPXRZNblMUo/It9dVHzKtTAriDOtmkWOgIOKdEXm+VNOUZZqGYiRNYlTzLcrDuFOhguohnYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3M9spCHaOF08WfRwAtfwUZzDK6+R9XasC3izymLjLYMU0phvN
-	QTbH/a9D3e8B4G5n/CpnDOXwm/FyaYeHgRpZaG8OaVsdvC1PVXL36MaXCunOaieDagZTvzAb4ta
-	4JFBxQCi5BWfUAc5nWLm7bZixZ/+NZgwx9xoRPw==
-X-Gm-Gg: ASbGncv8TGpJtMkLslNaD/bwCw9222olhKAiYe/3sXGHGHtW8gxKd15jUZzDeA+npwo
-	UrwSQTAQ5cYee5dyxnCBdLqaY3//1goGj5+VkFVX+a4tYQv71AOAvVBItJKa6dSkEXHArD9PakR
-	CEr3DGzeqWkqbpjfAZ7fbvYRZfj7hW
-X-Google-Smtp-Source: AGHT+IECa8vOuJWn11iMEwGLRvcjY2DqXsAj8ZLW6d2RQCfllK6etY+RQclFt1PkiFw09dKf5UneNsfK41PQ0Wlc4Kg=
-X-Received: by 2002:a05:6a00:2e18:b0:736:a973:748 with SMTP id
- d2e1a72fcca58-739804484admr23046777b3a.22.1743582800678; Wed, 02 Apr 2025
- 01:33:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="jny5Ptsj"
+Received: from francesco-nb.corp.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
+	by mail11.truemail.it (Postfix) with ESMTPA id 5A5E21F8BD;
+	Wed,  2 Apr 2025 12:21:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1743589312;
+	bh=CQYsomTp7PnswtMuL1xQSA60xFVOu9qYyptJXh/jGag=; h=From:To:Subject;
+	b=jny5PtsjG0wPoGRtXXHg0zU5JdKj0Qr+PNc8BNB/H6R0B162IrlBy4b5meL0fJxLs
+	 Sf/ayIAaWpveluejxUxUlHir62C+dv0s/5bouZennpXysxI0QED2+sjeZYhyBwBGaI
+	 y9PRsNa+yZfUaGT3euy6AUKjQid3AcpygE8P9arKbKCR2EM5RdrfTvK/RFQCwQcApK
+	 PUoIfI08Dm56dNmV4WHJjxSY3TLYKZiK1s9q0KVAiIbr4vd95YacIeCb6UPpZxIO0y
+	 uOdIeEylTliL+yFH2S6jZ8LuJsvm9e6oNjmnVKDBKUcAy7wYfieA7VOYmmU3ZOT38Q
+	 TKIq3RgK8ECYg==
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Farouk Bouabid <farouk.bouabid@cherry.de>,
+	Quentin Schulz <quentin.schulz@cherry.de>
+Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] hwmon: (amc6821) Add PWM polarity configuration with OF
+Date: Wed,  2 Apr 2025 12:21:44 +0200
+Message-Id: <20250402102146.65406-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250401220850.3189582-1-william@wkennington.com>
- <5a602ffc-5cbb-4f39-b815-545f3f1f4c98@roeck-us.net> <CAD_4BXgzvFavEcfhY5_BEi9y6pK0wJ1q4oqFYC5ctP53c57=wg@mail.gmail.com>
- <84d37c25-197b-44b4-b181-f71f5e8b81d8@roeck-us.net>
-In-Reply-To: <84d37c25-197b-44b4-b181-f71f5e8b81d8@roeck-us.net>
-From: William Kennington <william@wkennington.com>
-Date: Wed, 2 Apr 2025 01:33:08 -0700
-X-Gm-Features: AQ5f1JpF0TbFppZlbdINtj6p3CO4yPycwcUeh0ZCC6cwfVlwY364gxiKVFB1nzE
-Message-ID: <CAD_4BXhUVRpNjORSHYiwhxXAGbAv5=4SYekWZhK+r9Wi=n5+Lw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: max34451: Workaround for lost page
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 1, 2025 at 5:19=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
->
-> On 4/1/25 15:55, William Kennington wrote:
-> > On Tue, Apr 1, 2025 at 3:52=E2=80=AFPM Guenter Roeck <linux@roeck-us.ne=
-t> wrote:
-> >>
-> >> On 4/1/25 15:08, William A. Kennington III wrote:
-> >>> When requesting new pages from the max34451 we sometimes see that the
-> >>> firmware doesn't update the page on the max34451 side fast enough. Th=
-is
-> >>> results in the kernel receiving data for a different page than what i=
-t
-> >>> expects.
-> >>>
-> >>> To remedy this, the manufacturer recommends we wait 50-100us until
-> >>> the firmware should be ready with the new page.
-> >>>
-> >>> Signed-off-by: William A. Kennington III <william@wkennington.com>
-> >>> ---
-> >>>    drivers/hwmon/pmbus/max34440.c | 7 +++++++
-> >>>    1 file changed, 7 insertions(+)
-> >>>
-> >>> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max=
-34440.c
-> >>> index c9dda33831ff..ac3a26f7cff3 100644
-> >>> --- a/drivers/hwmon/pmbus/max34440.c
-> >>> +++ b/drivers/hwmon/pmbus/max34440.c
-> >>> @@ -12,6 +12,7 @@
-> >>>    #include <linux/init.h>
-> >>>    #include <linux/err.h>
-> >>>    #include <linux/i2c.h>
-> >>> +#include <linux/delay.h>
-> >>>    #include "pmbus.h"
-> >>>
-> >>>    enum chips { max34440, max34441, max34446, max34451, max34460, max=
-34461 };
-> >>> @@ -241,6 +242,12 @@ static int max34451_set_supported_funcs(struct i=
-2c_client *client,
-> >>>                if (rv < 0)
-> >>>                        return rv;
-> >>>
-> >>> +             /* Firmware is sometimes not ready if we try and read t=
-he
-> >>
-> >> This is not the networking subsystem. Standard multi-line comments, pl=
-ease.
-> >
-> > Okay, let me fix that.
-> >
-> >>
-> >>> +              * data from the page immediately after setting. Maxim
-> >>> +              * recommends 50-100us delay.
-> >>> +              */
-> >>> +             fsleep(50);
-> >>
-> >> I would suggest to wait 100uS to be safe. The function is only called =
-during probe,
-> >> so that should be ok.
-> >
-> > Yeah, I don't think they did strenuous measurement of these values on
-> > their end. We have been using this patch for 4-5 years now with
-> > seemingly good robustness on the 50us value. I just pulled up an old
-> > email from the vendor that gives this context.
-> >
-> >>
-> >> Is this a generic problem with this chip when changing pages ?
-> >
-> > I believe that is the case, but this patch is pretty old at this
-> > point. Is there somewhere to add in quirks for such chips that would
-> > allow us to build in such a delay?
-> >
->
-> So far we only have delays for all accesses and for write operations.
-> See access_delay and write_delay in struct pmbus_data. If the problem
-> only affects page changes, we might have to add page_change_delay or
-> something similar. Alternatively, maybe we could just set write_delay.
-> If the chip has trouble with page changes, it might well be that it has
-> trouble with write operations in general.
->
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-So I did some digging and asked the original contributors to the
-patch. It would appear that it's specifically an issue with this IC
-around page switches and not any arbitrary write command. There is an
-issue where it does not correctly respond to the second command issued
-after a PAGE switch occurs, if the commands come in too quickly. They
-believe it's an issue with max34451 (and other derivative ICs) not
-correctly clock stretching while the PAGE command is processed.
+Add support for configuring the PWM polarity of the amc6821 fan controller.
 
-Let me know what approach you would prefer to take here. It seems like
-it would be most optimal to have a quirk specifically to delay
-commands after a PAGE.
+Francesco Dolcini (2):
+  dt-bindings: hwmon: amc6821: add fan and PWM output
+  hwmon: (amc6821) Add PWM polarity configuration with OF
 
-> Thanks,
-> Guenter
->
+ .../devicetree/bindings/hwmon/ti,amc6821.yaml | 18 ++++++-
+ drivers/hwmon/amc6821.c                       | 50 +++++++++++++++++--
+ 2 files changed, 62 insertions(+), 6 deletions(-)
+
+-- 
+2.39.5
+
