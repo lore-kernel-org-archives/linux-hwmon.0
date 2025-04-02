@@ -1,496 +1,279 @@
-Received: from 13.mo561.mail-out.ovh.net (13.mo561.mail-out.ovh.net [188.165.33.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5CA18A93F
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 18:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.33.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9E61DDC28
+	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 19:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743620023; cv=none; b=fSMwohpiBNUG9X7dXfKOHHWbUnaxBVOGQ2ukAiXG0+xdz/l9ZjErX5/EVDTHh1hn9ATIQJ0tPPS8DIJj7eAVCCXmJ3WZRmuMUHSWRR+3bC4XlV2U3InWjNxLWPsusgsvbjdefszbyKaqF9Fp3a6IzPV1/wvR9lT7jRg5UUHBZm8=
+	t=1743622504; cv=none; b=H2NR425SuIfbWGjX24ZKTVSxI6k4BNOQ22EmplPArkVSxeW3giPGaTEciNYBIHnrb8mXSzgj6CDsGQx10cnVh46V3XNP9N4rq69g/tUBAVc0PQrcFPCodsn5NLvxlRGLlbzgfFi1cKJB6RVcjUqHjadlSoZQIXxnLDYVjHF/svI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743620023; c=relaxed/simple;
-	bh=dUIkoGkrAC4dQ/0VLREEY7PQQks0gtch95GOJ0qWd3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XTGwIazEMkUgGsPL005w79kK3hPLzWj5G9U+eb+ri5nx38nBnSnpgLDflndvpwZS6iiJsXqD0YbSFKOJkVCkMoRcGlwcFYtZBShJB0walRCZplUU4Y/BXpvm5SstJrQYWbGKR47eclY2Bz8tRHaWR6S/ljGGBbXoxSyim4axb7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=BCwo5Xpd; arc=none smtp.client-ip=188.165.33.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+	s=arc-20240116; t=1743622504; c=relaxed/simple;
+	bh=q+7rDiESpW/5o/TmwAoALZFAEN0ZYQGNCvmcoJZ0byY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jmlar5O43djnH7KImJnq02bSyC7WEXHw2JlMYgmnUyxA9mTgT9kln4tr6Wut9UhbieDhc+zhvMBSStxXLfHONH/Yei0k2Dse2csw/sQPzZOSmRq86djH0ml+XLxSdAWDoPe6h8bvFU5B9QZyA/tmDIejk6DcLAGO4+B7aiLGc8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com; spf=none smtp.mailfrom=wkennington.com; dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b=mh1gFJhr; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=wkennington.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="BCwo5Xpd"
-Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.9.204])
-	by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4ZSLtQ01xMz1TG4
-	for <linux-hwmon@vger.kernel.org>; Wed,  2 Apr 2025 10:38:05 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-dpvsw (unknown [10.111.174.60])
-	by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B7D571FEB7;
-	Wed,  2 Apr 2025 10:38:04 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.96])
-	by ghost-submission-5b5ff79f4f-dpvsw with ESMTPSA
-	id QkQENooT7WfaGQAAFHTgiw:T2
-	(envelope-from <michal.kopec@3mdeb.com>); Wed, 02 Apr 2025 10:38:04 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-96R001035ca41d-e4c1-4c94-ac44-a9b42edb4470,
-                    5FCBFF1DCA98F7E0201DF243E115F3AF9CF69AF3) smtp.auth=michal.kopec@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
-To: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	tomasz.pakula.oficjalny@gmail.com,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: platform-driver-x86@vger.kernel.org,
-	piotr.krol@3mdeb.com,
-	maciej.pijanowski@3mdeb.com,
-	michal.kopec@3mdeb.com,
-	linux-hwmon@vger.kernel.org,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v5 1/1] platform/x86: Introduce dasharo-acpi platform driver
-Date: Wed,  2 Apr 2025 12:37:46 +0200
-Message-ID: <20250402103746.92575-2-michal.kopec@3mdeb.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250402103746.92575-1-michal.kopec@3mdeb.com>
-References: <20250402103746.92575-1-michal.kopec@3mdeb.com>
+	dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b="mh1gFJhr"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22403cbb47fso2315725ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 02 Apr 2025 12:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1743622500; x=1744227300; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdfekkXQ2BPkIkZEF2KATlxON6SfSUU4DnMu+LAjv8Q=;
+        b=mh1gFJhr8VIb/60mzOBHVQyJZEBA/oTOP+PTypE1ezh9ggv5m8PBDVV89HvaDjvgXY
+         /zyMUuGbR7XIG+0pH3P+49plttBL0CEFuH5/RSWrjXscbFEX81JNaMosGe6Kj1syr6zN
+         2LN9A9tdqExX7QUY9ZsjFfUtzTgSTM7oO4Xi6LgKOPBHBW2dTSx//qhUsClZkYCuO85I
+         DLpKq+qbQ0hL/Lg3lIgpN7vJIkNKt+CMGmqNX8GswMZ3r99HOGjnBwzZQMKtIYqHgcHR
+         i0xtXyuu1DV0QZNIjhYN+z9W0YGq1eF0LXSJQGV92dtXxj01OGqzYbHPqWgtxYdZo3kL
+         /BOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743622500; x=1744227300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jdfekkXQ2BPkIkZEF2KATlxON6SfSUU4DnMu+LAjv8Q=;
+        b=WnqUVR8ida0TuFF2qUI6mc+KAnZwZMczZ7wNmiQVln/9xMF9OUPQWc/ZyLoTluLFzu
+         7A0nmddyOjE2pV58MIAl75ZbOe6fJCIDusCu3uDJQbSfbQzXX35ckz2xVHQPVNIHmRGd
+         qHyW9CEwZc8p7LOh2kz7UUbXO3I8dbDSsy1QR8EQJKUAKXdnmIsGgiRtIzOHJC/zetKp
+         lQlmel6+drJ6MwQuVH8wk0EO2C1uwiaKHOP6EL9huXx1Tr7Q2lCbqlGc6kYAW9FaihTB
+         DNv77a9vTcMCDb0YU8CAnpGUUKMY+z6WNCrWOEAmVTkDU/vQAe7hkmH27TY1fdUVnJ2G
+         o4ZQ==
+X-Gm-Message-State: AOJu0Yzg+gUWJpBfEy0+0IUYKb8RPqQ6wXfZeQwlxWMtxIL8OVDIHi+u
+	bGrnxR6B5FlTaAmSwpmIgT6629JyketH/ZfIWvR1ik+46HR7BM2nV0kNscyHcbc=
+X-Gm-Gg: ASbGncuFdU2aNWPKmgfbsw7v8FTGuSfit/Kv/snox5OucurnKsVawH+URhNBUDo4oMM
+	2FgRkz+ZYZUzBoR2zFLLV+cOklxxhYbzHbsP3Qm2iw0bUavSLizsCL3NW2tRwdhbP7AUPY0FZkn
+	ISkQ2ikxCvLul5FgoWnIm2Ia5ZeLxYNbr/z6N8Dz7b+gczXvne7H5O8G3C0EMyp3EHHpQCFPZNd
+	K45vrNWZLHXoUfNvG04n62b7Q32DJwkfeZ/XDyqlh/RH5DU/wnbP6NfYiLg+HSymGN/YBHohXyz
+	KFnQRuEgKvaFMQqZjDOlhIVGq3H6Eb8tPUDw33cRmci/uJWMPWO1bkC9uTWn6Lyjhy262CnE+Ar
+	zw6VgDGRTY5dECsQGss+4vShSamV5T9AW
+X-Google-Smtp-Source: AGHT+IFKrVJio0LKpW2SzFWvHvDpGei9zMhW0Yx5z/I6qFKNcJ1k/8ZevK3YqM48GqJfPM1mqLKcUg==
+X-Received: by 2002:a17:903:189:b0:223:f9a4:3f99 with SMTP id d9443c01a7336-2292f975798mr305163525ad.29.1743622500080;
+        Wed, 02 Apr 2025 12:35:00 -0700 (PDT)
+Received: from wak-linux.svl.corp.google.com ([2a00:79e0:2e5b:9:9c70:5442:2794:3e8d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291eedfd85sm112868025ad.77.2025.04.02.12.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Apr 2025 12:34:59 -0700 (PDT)
+From: "William A. Kennington III" <william@wkennington.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"William A. Kennington III" <william@wkennington.com>
+Subject: [PATCH] hwmon: (pmbus): Introduce page_change_delay
+Date: Wed,  2 Apr 2025 12:34:52 -0700
+Message-ID: <20250402193452.3571888-1-william@wkennington.com>
+X-Mailer: git-send-email 2.49.0.472.ge94155a9ec-goog
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 1408782259875941650
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeehgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofhitghhrghlucfmohhpvggtuceomhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmqeenucggtffrrghtthgvrhhnpeegjefhhfdtgeeuleethedvkeejkeejvddvhfeftefhueefhffhheeileeivdfffeenucffohhmrghinhepuggrshhhrghrohdrtghomhenucfkphepuddvjedrtddrtddruddpvddufedrudelvddrjeejrddvgeelpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepmhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiudgmpdhmohguvgepshhmthhpohhuth
-DKIM-Signature: a=rsa-sha256; bh=5ZGjYM9dNTmV8zogi7rzAjbqe1FTPJTPKVhPYuuMzI8=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1743590286; v=1;
- b=BCwo5Xpd4DooJRPVaqFLQph1kLx50RxQdizFUxoUTTTYYKN5h77nu6ckk5vWW0/SAwVkgmht
- GOhqKN4PoObGildjKAqvC0xc1SELv8WMU5DOngHsapKu1g6KCKC+DkMxst5xgcK4g5I47W6/ut3
- 4ATWVNkwrerw4+arRg1sXMILQxwV59AiWjvTMAPppyMPCy0jxs6ygN+KN6vF/4OjA6MBn5TXapK
- 5mGlTQmzNgcA2+d14DJ0A+p30uCjPW/LZWCtGQiJkHhn8PqAwdbkxBYxVjx4kkkwZW3/0rOWeVF
- GFp1qN62118St0qmcE9zlGd2yxVV1aaq4YjR6mYl0PMuA==
 
-Introduce a driver for devices running Dasharo firmware. The driver
-supports thermal monitoring using a new ACPI interface in Dasharo. The
-initial version supports monitoring fan speeds, fan PWM duty cycles and
-system temperatures as well as determining which specific interfaces are
-implemented by firmware.
+We have some buggy pmbus devices that require a delay after performing a
+page change operation before trying to issue more commands to the
+device.
 
-It has been tested on a NovaCustom laptop running pre-release Dasharo
-firmware, which implements fan and thermal monitoring for the CPU and
-the discrete GPU, if present.
+This allows for a configurable delay after page changes, but not
+affecting other read or write operations.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Michał Kopeć <michal.kopec@3mdeb.com>
+Signed-off-by: William A. Kennington III <william@wkennington.com>
 ---
- MAINTAINERS                         |   6 +
- drivers/platform/x86/Kconfig        |  10 +
- drivers/platform/x86/Makefile       |   3 +
- drivers/platform/x86/dasharo-acpi.c | 345 ++++++++++++++++++++++++++++
- 4 files changed, 364 insertions(+)
- create mode 100644 drivers/platform/x86/dasharo-acpi.c
+ drivers/hwmon/pmbus/pmbus.h      |  1 +
+ drivers/hwmon/pmbus/pmbus_core.c | 59 ++++++++++++++++++++++----------
+ 2 files changed, 41 insertions(+), 19 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 00e94bec401e..6d2e0909ac63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6404,6 +6404,12 @@ F:	net/ax25/ax25_out.c
- F:	net/ax25/ax25_timer.c
- F:	net/ax25/sysctl_net_ax25.c
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index ddb19c9726d6..742dafc44390 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -482,6 +482,7 @@ struct pmbus_driver_info {
+ 	 */
+ 	int access_delay;		/* in microseconds */
+ 	int write_delay;		/* in microseconds */
++	int page_change_delay;		/* in microseconds */
+ };
  
-+DASHARO ACPI PLATFORM DRIVER
-+M:	Michał Kopeć <michal.kopec@3mdeb.com>
-+S:	Maintained
-+W:	https://docs.dasharo.com/
-+F:	drivers/platform/x86/dasharo_acpi.c
-+
- DATA ACCESS MONITOR
- M:	SeongJae Park <sj@kernel.org>
- L:	damon@lists.linux.dev
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 0258dd879d64..8168c5274a08 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1060,6 +1060,16 @@ config LENOVO_WMI_CAMERA
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called lenovo-wmi-camera.
+ /* Regulator ops */
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 787683e83db6..cfb724a8718b 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -116,6 +116,7 @@ struct pmbus_data {
+ 	int vout_high[PMBUS_PAGES];	/* voltage high margin */
+ 	ktime_t write_time;		/* Last SMBUS write timestamp */
+ 	ktime_t access_time;		/* Last SMBUS access timestamp */
++	ktime_t page_change_time;	/* Last SMBUS page change timestamp */
+ };
  
-+config DASHARO_ACPI
-+	tristate "Dasharo ACPI Platform Driver"
-+	depends on ACPI
-+	depends on HWMON
-+	help
-+	  This driver provides HWMON support for devices running Dasharo
-+	  firmware.
-+
-+	  If you have a device with Dasharo firmware, choose Y or M here.
-+
- source "drivers/platform/x86/x86-android-tablets/Kconfig"
+ struct pmbus_debugfs_entry {
+@@ -178,24 +179,44 @@ static void pmbus_wait(struct i2c_client *client)
  
- config FW_ATTR_CLASS
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index e1b142947067..3ca53ae01d93 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -110,6 +110,9 @@ obj-$(CONFIG_ACPI_TOSHIBA)	+= toshiba_acpi.o
- # Inspur
- obj-$(CONFIG_INSPUR_PLATFORM_PROFILE)	+= inspur_platform_profile.o
+ 		if (delta < info->access_delay)
+ 			fsleep(info->access_delay - delta);
+-	} else if (info->write_delay) {
++	}
++	if (info->write_delay) {
+ 		delta = ktime_us_delta(ktime_get(), data->write_time);
  
-+# Dasharo
-+obj-$(CONFIG_DASHARO_ACPI)	+= dasharo-acpi.o
+ 		if (delta < info->write_delay)
+ 			fsleep(info->write_delay - delta);
+ 	}
++	if (info->page_change_delay) {
++		delta = ktime_us_delta(ktime_get(), data->page_change_time);
 +
- # Laptop drivers
- obj-$(CONFIG_ACPI_CMPC)		+= classmate-laptop.o
- obj-$(CONFIG_COMPAL_LAPTOP)	+= compal-laptop.o
-diff --git a/drivers/platform/x86/dasharo-acpi.c b/drivers/platform/x86/dasharo-acpi.c
-new file mode 100644
-index 000000000000..bf7e24b7e7cb
---- /dev/null
-+++ b/drivers/platform/x86/dasharo-acpi.c
-@@ -0,0 +1,345 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Dasharo ACPI Driver
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/hwmon.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/units.h>
-+
-+enum dasharo_feature {
-+	DASHARO_FEATURE_TEMPERATURE = 0,
-+	DASHARO_FEATURE_FAN_PWM,
-+	DASHARO_FEATURE_FAN_TACH,
-+	DASHARO_FEATURE_MAX
-+};
-+
-+enum dasharo_temperature {
-+	DASHARO_TEMPERATURE_CPU_PACKAGE = 0,
-+	DASHARO_TEMPERATURE_CPU_CORE,
-+	DASHARO_TEMPERATURE_GPU,
-+	DASHARO_TEMPERATURE_BOARD,
-+	DASHARO_TEMPERATURE_CHASSIS,
-+	DASHARO_TEMPERATURE_MAX
-+};
-+
-+enum dasharo_fan {
-+	DASHARO_FAN_CPU = 0,
-+	DASHARO_FAN_GPU,
-+	DASHARO_FAN_CHASSIS,
-+	DASHARO_FAN_MAX
-+};
-+
-+#define MAX_GROUPS_PER_FEAT 8
-+
-+static const char * const dasharo_group_names[DASHARO_FEATURE_MAX][MAX_GROUPS_PER_FEAT] = {
-+	[DASHARO_FEATURE_TEMPERATURE] = {
-+		[DASHARO_TEMPERATURE_CPU_PACKAGE] = "CPU Package",
-+		[DASHARO_TEMPERATURE_CPU_CORE] = "CPU Core",
-+		[DASHARO_TEMPERATURE_GPU] = "GPU",
-+		[DASHARO_TEMPERATURE_BOARD] = "Board",
-+		[DASHARO_TEMPERATURE_CHASSIS] = "Chassis",
-+	},
-+	[DASHARO_FEATURE_FAN_PWM] = {
-+		[DASHARO_FAN_CPU] = "CPU",
-+		[DASHARO_FAN_GPU] = "GPU",
-+		[DASHARO_FAN_CHASSIS] = "Chassis",
-+	},
-+	[DASHARO_FEATURE_FAN_TACH] = {
-+		[DASHARO_FAN_CPU] = "CPU",
-+		[DASHARO_FAN_GPU] = "GPU",
-+		[DASHARO_FAN_CHASSIS] = "Chassis",
-+	},
-+};
-+
-+struct dasharo_capability {
-+	unsigned int group;
-+	unsigned int index;
-+	char name[16];
-+};
-+
-+#define MAX_CAPS_PER_FEAT 24
-+
-+struct dasharo_data {
-+	struct platform_device *pdev;
-+	int caps_found[DASHARO_FEATURE_MAX];
-+	struct dasharo_capability capabilities[DASHARO_FEATURE_MAX][MAX_CAPS_PER_FEAT];
-+};
-+
-+static int dasharo_get_feature_cap_count(struct dasharo_data *data, enum dasharo_feature feat, int cap)
-+{
-+	struct acpi_object_list obj_list;
-+	union acpi_object obj[2];
-+	acpi_handle handle;
-+	acpi_status status;
-+	u64 count;
-+
-+	obj[0].type = ACPI_TYPE_INTEGER;
-+	obj[0].integer.value = feat;
-+	obj[1].type = ACPI_TYPE_INTEGER;
-+	obj[1].integer.value = cap;
-+	obj_list.count = 2;
-+	obj_list.pointer = &obj[0];
-+
-+	handle = ACPI_HANDLE(&data->pdev->dev);
-+	status = acpi_evaluate_integer(handle, "GFCP", &obj_list, &count);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	return count;
-+}
-+
-+static int dasharo_read_channel(struct dasharo_data *data, char *method, enum dasharo_feature feat, int channel, long *value)
-+{
-+	struct acpi_object_list obj_list;
-+	union acpi_object obj[2];
-+	acpi_handle handle;
-+	acpi_status status;
-+	u64 val;
-+
-+	obj[0].type = ACPI_TYPE_INTEGER;
-+	obj[0].integer.value = data->capabilities[feat][channel].group;
-+	obj[1].type = ACPI_TYPE_INTEGER;
-+	obj[1].integer.value = data->capabilities[feat][channel].index;
-+	obj_list.count = 2;
-+	obj_list.pointer = &obj[0];
-+
-+	handle = ACPI_HANDLE(&data->pdev->dev);
-+	status = acpi_evaluate_integer(handle, method, &obj_list, &val);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	*value = val;
-+	return 0;
-+}
-+
-+static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			      u32 attr, int channel, long *val)
-+{
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+	long value;
-+	int ret;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		ret = dasharo_read_channel(data, "GTMP", DASHARO_FEATURE_TEMPERATURE, channel, &value);
-+		if (!ret)
-+			*val = value * MILLIDEGREE_PER_DEGREE;
-+		break;
-+	case hwmon_fan:
-+		ret = dasharo_read_channel(data, "GFTH", DASHARO_FEATURE_FAN_TACH, channel, &value);
-+		if (!ret)
-+			*val = value;
-+		break;
-+	case hwmon_pwm:
-+		ret = dasharo_read_channel(data, "GFDC", DASHARO_FEATURE_FAN_PWM, channel, &value);
-+		if (!ret)
-+			*val = value;
-+		break;
-+	default:
-+		break;
++		if (delta < info->page_change_delay)
++			fsleep(info->page_change_delay - delta);
 +	}
+ }
+ 
+-/* Sets the last accessed timestamp for pmbus_wait */
+-static void pmbus_update_ts(struct i2c_client *client, bool write_op)
++#define PMBUS_OP_READ_BIT 1
++#define PMBUS_OP_WRITE_BIT 2
++#define PMBUS_OP_PAGE_CHANGE_BIT 4
 +
-+	return ret;
-+}
++#define PMBUS_OP_READ PMBUS_OP_READ_BIT
++#define PMBUS_OP_WRITE PMBUS_OP_WRITE_BIT
++#define PMBUS_OP_PAGE_CHANGE (PMBUS_OP_PAGE_CHANGE_BIT | PMBUS_OP_WRITE)
 +
-+static int dasharo_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-+				     u32 attr, int channel, const char **str)
-+{
-+	struct dasharo_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->caps_found[DASHARO_FEATURE_TEMPERATURE])
-+			*str = data->capabilities[DASHARO_FEATURE_TEMPERATURE][channel].name;
-+		break;
-+	case hwmon_fan:
-+		if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
-+			*str = data->capabilities[DASHARO_FEATURE_FAN_TACH][channel].name;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
++/* Sets the last operation timestamp for pmbus_wait */
++static void pmbus_update_ts(struct i2c_client *client, int op)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	const struct pmbus_driver_info *info = data->info;
++	ktime_t now = ktime_get();
+ 
+ 	if (info->access_delay) {
+-		data->access_time = ktime_get();
+-	} else if (info->write_delay && write_op) {
+-		data->write_time = ktime_get();
++		data->access_time = now;
 +	}
-+
-+	return 0;
-+}
-+
-+static umode_t dasharo_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_types type,
-+					u32 attr, int channel)
-+{
-+	const struct dasharo_data *data = drvdata;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->caps_found[DASHARO_FEATURE_TEMPERATURE])
-+			return 0444;
-+		break;
-+	case hwmon_pwm:
-+		if (channel < data->caps_found[DASHARO_FEATURE_FAN_PWM])
-+			return 0444;
-+		break;
-+	case hwmon_fan:
-+		if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
-+			return 0444;
-+		break;
-+	default:
-+		break;
++	if (info->write_delay && (op & PMBUS_OP_WRITE_BIT)) {
++		data->write_time = now;
 +	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops dasharo_hwmon_ops = {
-+	.is_visible = dasharo_hwmon_is_visible,
-+	.read_string = dasharo_hwmon_read_string,
-+	.read = dasharo_hwmon_read,
-+};
-+
-+// Max 24 capabilities per feature
-+static const struct hwmon_channel_info * const dasharo_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(fan,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL,
-+		HWMON_F_INPUT | HWMON_F_LABEL),
-+	HWMON_CHANNEL_INFO(temp,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL,
-+		HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(pwm,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT,
-+		HWMON_PWM_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info dasharo_hwmon_chip_info = {
-+	.ops = &dasharo_hwmon_ops,
-+	.info = dasharo_hwmon_info,
-+};
-+
-+static void dasharo_fill_feature_caps(struct dasharo_data *data, enum dasharo_feature feat)
-+{
-+	struct dasharo_capability *cap;
-+	int cap_count = 0;
-+	int count;
-+
-+	for (int group = 0; group < MAX_GROUPS_PER_FEAT; ++group) {
-+		count = dasharo_get_feature_cap_count(data, feat, group);
-+
-+		if (count <= 0)
-+			continue;
-+
-+		for (unsigned int i = 0; i < count && cap_count < ARRAY_SIZE(data->capabilities[feat]); ++i) {
-+			cap = &data->capabilities[feat][cap_count];
-+			cap->group = group;
-+			cap->index = i;
-+			scnprintf(cap->name, sizeof(cap->name), "%s %d", dasharo_group_names[feat][group], i);
-+			cap_count++;
-+		}
-+	}
-+	data->caps_found[feat] = cap_count;
-+}
-+
-+static int dasharo_probe(struct platform_device *pdev)
-+{
-+	struct dasharo_data *data;
-+	struct device *hwmon;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+	data->pdev = pdev;
-+
-+	for (unsigned int i = 0; i < DASHARO_FEATURE_MAX; ++i)
-+		dasharo_fill_feature_caps(data, i);
-+
-+	hwmon = devm_hwmon_device_register_with_info(&pdev->dev,
-+		"dasharo_acpi", data, &dasharo_hwmon_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon);
-+}
-+
-+static const struct acpi_device_id dasharo_device_ids[] = {
-+	{"DSHR0001", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, dasharo_device_ids);
-+
-+static struct platform_driver dasharo_driver = {
-+	.driver = {
-+		.name = "dasharo-acpi",
-+		.acpi_match_table = dasharo_device_ids,
-+	},
-+	.probe = dasharo_probe,
-+};
-+module_platform_driver(dasharo_driver);
-+
-+MODULE_DESCRIPTION("Dasharo ACPI Driver");
-+MODULE_AUTHOR("Michał Kopeć <michal.kopec@3mdeb.com>");
-+MODULE_LICENSE("GPL");
++	if (info->page_change_delay && (op & PMBUS_OP_PAGE_CHANGE_BIT)) {
++		data->write_time = now;
+ 	}
+ }
+ 
+@@ -211,13 +232,13 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 	    data->info->pages > 1 && page != data->currpage) {
+ 		pmbus_wait(client);
+ 		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+-		pmbus_update_ts(client, true);
++		pmbus_update_ts(client, PMBUS_OP_PAGE_CHANGE);
+ 		if (rv < 0)
+ 			return rv;
+ 
+ 		pmbus_wait(client);
+ 		rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
+-		pmbus_update_ts(client, false);
++		pmbus_update_ts(client, PMBUS_OP_READ);
+ 		if (rv < 0)
+ 			return rv;
+ 
+@@ -231,7 +252,7 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 		pmbus_wait(client);
+ 		rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
+ 					       phase);
+-		pmbus_update_ts(client, true);
++		pmbus_update_ts(client, PMBUS_OP_WRITE);
+ 		if (rv)
+ 			return rv;
+ 	}
+@@ -251,7 +272,7 @@ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_write_byte(client, value);
+-	pmbus_update_ts(client, true);
++	pmbus_update_ts(client, PMBUS_OP_WRITE);
+ 
+ 	return rv;
+ }
+@@ -286,7 +307,7 @@ int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_write_word_data(client, reg, word);
+-	pmbus_update_ts(client, true);
++	pmbus_update_ts(client, PMBUS_OP_WRITE);
+ 
+ 	return rv;
+ }
+@@ -408,7 +429,7 @@ int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_read_word_data(client, reg);
+-	pmbus_update_ts(client, false);
++	pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 	return rv;
+ }
+@@ -471,7 +492,7 @@ int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg)
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_read_byte_data(client, reg);
+-	pmbus_update_ts(client, false);
++	pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 	return rv;
+ }
+@@ -487,7 +508,7 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_write_byte_data(client, reg, value);
+-	pmbus_update_ts(client, true);
++	pmbus_update_ts(client, PMBUS_OP_WRITE);
+ 
+ 	return rv;
+ }
+@@ -523,7 +544,7 @@ static int pmbus_read_block_data(struct i2c_client *client, int page, u8 reg,
+ 
+ 	pmbus_wait(client);
+ 	rv = i2c_smbus_read_block_data(client, reg, data_buf);
+-	pmbus_update_ts(client, false);
++	pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 	return rv;
+ }
+@@ -2530,7 +2551,7 @@ static int pmbus_read_coefficients(struct i2c_client *client,
+ 	rv = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+ 			    I2C_SMBUS_WRITE, PMBUS_COEFFICIENTS,
+ 			    I2C_SMBUS_BLOCK_PROC_CALL, &data);
+-	pmbus_update_ts(client, true);
++	pmbus_update_ts(client, PMBUS_OP_READ | PMBUS_OP_WRITE);
+ 
+ 	if (rv < 0)
+ 		return rv;
+@@ -2734,7 +2755,7 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+ 		pmbus_wait(client);
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+-		pmbus_update_ts(client, false);
++		pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+ 			if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))
+@@ -2750,13 +2771,13 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 	data->read_status = pmbus_read_status_word;
+ 	pmbus_wait(client);
+ 	ret = i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
+-	pmbus_update_ts(client, false);
++	pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 	if (ret < 0 || ret == 0xffff) {
+ 		data->read_status = pmbus_read_status_byte;
+ 		pmbus_wait(client);
+ 		ret = i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYTE);
+-		pmbus_update_ts(client, false);
++		pmbus_update_ts(client, PMBUS_OP_READ);
+ 
+ 		if (ret < 0 || ret == 0xff) {
+ 			dev_err(dev, "PMBus status register not found\n");
 -- 
-2.49.0
+2.49.0.472.ge94155a9ec-goog
 
