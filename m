@@ -1,67 +1,67 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2503F5BAF0;
-	Wed,  2 Apr 2025 13:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CBB238168;
+	Wed,  2 Apr 2025 13:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743600105; cv=none; b=GA0xytcD6pdr7pfbsF2pbiVtY6I937T9sLLDf4Ofx2jrjj3Gous3aoRh8voJPTDkuKBSz9NqXl9CdL77gkCOnCsD0kD56NUclrS6AAVn6CF7R93qeQ4Wo3Za18X9yBONfU73HMLnc2y33nNf+aC0zLf11t3a6cPrVdTmV/QHodo=
+	t=1743600885; cv=none; b=phHh3ZBa3gosQu1f9Ks6PDD8dcgXgcULpLKY9o9pQ46CHAyEYIblA1pcIfUq2+u6i1KyytjoED+zxlpdUYuEqI68dCGYhCZW4GBcLywzBBDndEcCdv9GX8JDznmaPEDKoz6358ntvThr5by583TCkStTwbD9RY5s5yFCobiAuKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743600105; c=relaxed/simple;
-	bh=FX0CnmQqGwrk2bkPsK9IogoP3JOc1+5ShtlmALI4jD4=;
+	s=arc-20240116; t=1743600885; c=relaxed/simple;
+	bh=1Vvlfk1WR61JSY4I6mA0KbR0jL8QIxca3L6B0pHyd/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pqtwichXY1B2Sq1wcTmyxpsqTsTPijqeCknqEhbEuf4bbVo/PBS29VGTWV/7QtkavE6IvoXB/0BwV+eVbW7JTgasDLMWup6EQyZ+EtniZTBxJ2MO+5n2oIayuIM3OcqF9+36H0jo6EoPr3StMZp8maQkEjEJg5CzADVxNxOYMH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krmep7QP; arc=none smtp.client-ip=209.85.214.172
+	 In-Reply-To:Content-Type; b=diEF8UoxEfoqiSVdcl6Lj+MLQXMsVjsvCs5Oa5ywuz81hTlNfp1bfS4RPnK4iWa0MNChykAsA2hiVTixAbWHswucLjlfpJwNihY63ACwAy5OPcJ7OVckb55Zuh9N1dVrJALBlCw4p5sg9++3BD2hZpJGs8+Dwa2U8GaSZqr8emQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USYAC7D9; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krmep7QP"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2279915e06eso135008285ad.1;
-        Wed, 02 Apr 2025 06:21:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USYAC7D9"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-73972a54919so121349b3a.3;
+        Wed, 02 Apr 2025 06:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743600103; x=1744204903; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1743600883; x=1744205683; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ORMOjCHQ/Ycvm6fkSvAtXGgmug70vdQxaMsVkAp+GuE=;
-        b=krmep7QPX3xDmIwCs7RAXmjqLkI/GnobjVjCo2YNmzJjFt50alhu4JpnEf+a8kT+3g
-         G3XMjk23LkbeiTKlIoPP+q4vXxp/6GPe94TWoqArGcQ6FeZq5fKGcufGrIBDsNa9tas+
-         LhK1wKLx8RF7Z7/OGjQCA0ZBT0gj21dXBZydAYFpD4mUCK+cY8Q0gQOHSy/hy2CXKD74
-         /VAjTg/tj/Eg86y8mwBGfuwqMenQm05v9ReCK9vSYQNrv61zdM2BQCby6CbGxmvXXYXc
-         mk/W4gDS1VIJIQehEXJHNrBs+9emQl/tmLyTmRZSJSBcZ5TMAK2M2UBF37jow4WSdh4g
-         eGaA==
+        bh=oM4dIlENBzmCrkF/MVmHBr9o/bxamEKafWPRvKH+k5Q=;
+        b=USYAC7D99epuAN6e8Y4FDZbOsmThebeQv47bmh4FL8ntQKQf0tLPSM+Ht1PwR4i12U
+         xq5IRdD+bgL5kiUMgmvSm52cPwCtnK+c9FLO3mb3gVhGVuZUSNOZ3PJJpS4ZAHyUpRyZ
+         uV1tF+keGwN4Cyaznb0sPxqMdV73/IXjI/IpK9FSFILmshVns0S6kFZu1++XE4/Ie1/R
+         5MVJ3ql18jzhCRenAOHR6d3mjUNREeuPiqCPeAUlvavfVyNPU2taBininvz/ZTCPQD/g
+         0roiKAHhUW9cUrkRhJyjdZcCZS57/QukdIqVKsz+0vBaO+BVhF+ytV1SGBmM8YAmgLDA
+         QKUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743600103; x=1744204903;
+        d=1e100.net; s=20230601; t=1743600883; x=1744205683;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ORMOjCHQ/Ycvm6fkSvAtXGgmug70vdQxaMsVkAp+GuE=;
-        b=g4POqEoi6iWeilGRhHxVe424qx/6Kpoq1cZj/iNt6RWoAz+cHEJQAdPBDVRNtLqN7t
-         Kk/a5Kecf4BqL2HVAM5XcKj8J0NEs3nuFES3d2qdXklNO9hbRfxP1EP7E1S5fSIJGfsG
-         H0tOlaUDcZiP/IscxmhvFCq+BND4h78Aw6ypHodwqa3DNJNSDa6sk+GOycSkSF8pZh82
-         19tVP6N0QPgoe1ECM2tP5SvgvMRMhv42DmYYvtlyS7gOoZxf/9ZOEK5Cq/Kp5Rijl2nE
-         2ANIP8vck5xIjcbfULIHBmXv4MqBIgx6mMunRzjtwqHe9x8IDUOsTUh4yRWox+KWGz6e
-         GAUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSd7iD8w1gAw8D/TpLMnj7yj5W7BOTFq6qwep/pnGuAptCGWuKipIeqGlEpgL9ziJkl0xd+NcsIhDu16lt@vger.kernel.org, AJvYcCXf50Wsol5imMk8Q5zr0N0tv8vkPPYng6owEPjUwe0P231ZqqW9/IPUhpbQG8YQxwclEbvZWmFZLKOF@vger.kernel.org, AJvYcCXjs4tX7ORoA0jlIhPutyRYSMEc6f0fuRkIn3ooZCT/5AY44MXsH+o/UKXotbQvLJ82dCWuA/RZSn5MW7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLkT/23ajlXGM22ymvcTQqhEZuVe6ptBEeSR08EM5IIAxswbV7
-	TiGxM6eVMJIUPh+51vSTz99jD/llPs9mWF1xeSy7LvfZP0HsmlV2
-X-Gm-Gg: ASbGncvYyE1wb4tuqaw6yGrfEiQ4c08F18C030gu9XMj7si3CjF5dX4NwEdGXuXDtET
-	Hx92+rEtSua7IJqeT3vjWZGO7AtUExW/d8ah0dyUlcdPTzivtEesCp9JHdX43L9JqlFFcfDKH8L
-	caPvgSPbIbMBkanrplF3gPrQsCHsBzFybCnsSgzcCtQMAqAktgu8xy1IIhc6LENmsihp+iZNJ92
-	xGjksZ1DlVhKFIcPEBsTso2aiAyZkfLrKEEYvNcGHCQCoNOtXUn+pyFdLXSsYTcT1zoSb53pBGU
-	ddIeby/X556M4uCSdu+TZAtbuFP/DyUqFW1nl4vL8vy9ZQTDmIQFv+sP3aCXiUayTH+pgW9IAOx
-	QtpZPbJWQnMjS1PynZw==
-X-Google-Smtp-Source: AGHT+IEo2GNuK5Ncvh1Mn96UCydQ0exmAN765xZxLKmLnRc17NECb2B7XHFXywsHJwfEkF7LcM8BeA==
-X-Received: by 2002:a17:903:3d05:b0:220:e1e6:4457 with SMTP id d9443c01a7336-2292f974b94mr258110945ad.26.1743600103275;
-        Wed, 02 Apr 2025 06:21:43 -0700 (PDT)
+        bh=oM4dIlENBzmCrkF/MVmHBr9o/bxamEKafWPRvKH+k5Q=;
+        b=NNpNhSxN12wsbhRy21WSHdtv7/mD/tcolAM0WPvEKxEFlJB+Zn8mpnS9cGyjiko9bq
+         B3zaOs/vr2NBJxzz/bfoP5LW7ahJCMl4TbPr2fXhax0mBO0O3p5x873cBcZ/r+fKKLEl
+         BYxAo5grQK7fvQarTN2kR2ZgX3AmdjDt6WZU435u5Wtl6iv3tOSBJQzIe0rY+nMV6FUK
+         0qErAP2rLEzsVgzhyltZFwmoI314/wPBRMwJmYBaTrRY8RcWA+4D+MG2Wyf+BtTsJku0
+         fmFtJ6gapttRmVso63ermXRFibx85ca03XCBx2HRB8urXI6GWrr2xuNnJzUk4UudBZ/W
+         ZGug==
+X-Forwarded-Encrypted: i=1; AJvYcCXRaJQIp7U700ba0Nwkf/x80BYeTCoKC3sfn16RBnjHIpSC4RqipANuMzJufaAgnbgMI8lCb9a26y7uvQ==@vger.kernel.org, AJvYcCXw40b+EWyK24hHARKaLhB0EfhYwpG8MDDyOS17P0+99OJ48laiOauKT9m315P3Ep1qC5+kIf7tZQLuJEJl@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFCldQc9fdEHGM1/uf8I2/G7pkVbdKjR4k7O7SxZgKg22aKilk
+	g8aT4CAHlmYuTIPOLV5MGv0udJYTv3oSqCb/HgPAbYoPgJi7KeZZ
+X-Gm-Gg: ASbGncuGqXQwBHwQoZaP2ysw5v3ypH3S5V5ZJntLPjf44f3j7tPw/OFuLxNPQjDWVZX
+	z5PZj5c91tCB9PIVkXHkgH7cV+ojefz4K9KbCoOn+NGfBEWKBw2OYavGRm2vbKqe8e9e8kuZlBJ
+	NROk07uU6DLxjmGOhPYdouRgTxP/0ZHYXXALeCz7yzwyhEmtis2lOLLc49gy9wPId8J6AJrIDqZ
+	0DhKahBBqzUzEkcKHiR49VAR8PbS8Fl2Iotyps4l/YJf5SrykGkYUiGldYM3/75R669Pw9LGN7M
+	PNpUAjjb7s3eT5xjc8Gy+j3luhW+awL9+DNo55qqhN8eOhd5+XEE8eUVfdbGonxiqAe6EBOsIIF
+	5CUeN6KqN+utIy3JSPw==
+X-Google-Smtp-Source: AGHT+IEIhvroKxYlDv/3ZMvAZuAXQz4vMLWwCVmGJDXd8YcRbaeyhMlDmhOD1GHhqpSudUbhmqouCQ==
+X-Received: by 2002:a05:6a20:9f99:b0:1f5:80a3:b003 with SMTP id adf61e73a8af0-2009f7ee203mr25401787637.37.1743600882757;
+        Wed, 02 Apr 2025 06:34:42 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2291f1cdfb0sm107164985ad.142.2025.04.02.06.21.41
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73971069b62sm10871531b3a.112.2025.04.02.06.34.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Apr 2025 06:21:42 -0700 (PDT)
+        Wed, 02 Apr 2025 06:34:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bfd36e46-7056-403a-9242-8ca7cda1c6de@roeck-us.net>
-Date: Wed, 2 Apr 2025 06:21:40 -0700
+Message-ID: <ae38b526-520f-45ae-b9d3-7628058d56d8@roeck-us.net>
+Date: Wed, 2 Apr 2025 06:34:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,18 +69,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] hwmon: (amc6821) Add PWM polarity configuration
- with OF
-To: Francesco Dolcini <francesco@dolcini.it>, Jean Delvare
- <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Farouk Bouabid <farouk.bouabid@cherry.de>,
- Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250402102146.65406-1-francesco@dolcini.it>
- <20250402102146.65406-3-francesco@dolcini.it>
+Subject: Re: [PATCH] hwmon: max34451: Workaround for lost page
+To: William Kennington <william@wkennington.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20250401220850.3189582-1-william@wkennington.com>
+ <5a602ffc-5cbb-4f39-b815-545f3f1f4c98@roeck-us.net>
+ <CAD_4BXgzvFavEcfhY5_BEi9y6pK0wJ1q4oqFYC5ctP53c57=wg@mail.gmail.com>
+ <84d37c25-197b-44b4-b181-f71f5e8b81d8@roeck-us.net>
+ <CAD_4BXhUVRpNjORSHYiwhxXAGbAv5=4SYekWZhK+r9Wi=n5+Lw@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,23 +123,98 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250402102146.65406-3-francesco@dolcini.it>
+In-Reply-To: <CAD_4BXhUVRpNjORSHYiwhxXAGbAv5=4SYekWZhK+r9Wi=n5+Lw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/2/25 03:21, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+On 4/2/25 01:33, William Kennington wrote:
+> On Tue, Apr 1, 2025 at 5:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 4/1/25 15:55, William Kennington wrote:
+>>> On Tue, Apr 1, 2025 at 3:52 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>
+>>>> On 4/1/25 15:08, William A. Kennington III wrote:
+>>>>> When requesting new pages from the max34451 we sometimes see that the
+>>>>> firmware doesn't update the page on the max34451 side fast enough. This
+>>>>> results in the kernel receiving data for a different page than what it
+>>>>> expects.
+>>>>>
+>>>>> To remedy this, the manufacturer recommends we wait 50-100us until
+>>>>> the firmware should be ready with the new page.
+>>>>>
+>>>>> Signed-off-by: William A. Kennington III <william@wkennington.com>
+>>>>> ---
+>>>>>     drivers/hwmon/pmbus/max34440.c | 7 +++++++
+>>>>>     1 file changed, 7 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+>>>>> index c9dda33831ff..ac3a26f7cff3 100644
+>>>>> --- a/drivers/hwmon/pmbus/max34440.c
+>>>>> +++ b/drivers/hwmon/pmbus/max34440.c
+>>>>> @@ -12,6 +12,7 @@
+>>>>>     #include <linux/init.h>
+>>>>>     #include <linux/err.h>
+>>>>>     #include <linux/i2c.h>
+>>>>> +#include <linux/delay.h>
+>>>>>     #include "pmbus.h"
+>>>>>
+>>>>>     enum chips { max34440, max34441, max34446, max34451, max34460, max34461 };
+>>>>> @@ -241,6 +242,12 @@ static int max34451_set_supported_funcs(struct i2c_client *client,
+>>>>>                 if (rv < 0)
+>>>>>                         return rv;
+>>>>>
+>>>>> +             /* Firmware is sometimes not ready if we try and read the
+>>>>
+>>>> This is not the networking subsystem. Standard multi-line comments, please.
+>>>
+>>> Okay, let me fix that.
+>>>
+>>>>
+>>>>> +              * data from the page immediately after setting. Maxim
+>>>>> +              * recommends 50-100us delay.
+>>>>> +              */
+>>>>> +             fsleep(50);
+>>>>
+>>>> I would suggest to wait 100uS to be safe. The function is only called during probe,
+>>>> so that should be ok.
+>>>
+>>> Yeah, I don't think they did strenuous measurement of these values on
+>>> their end. We have been using this patch for 4-5 years now with
+>>> seemingly good robustness on the 50us value. I just pulled up an old
+>>> email from the vendor that gives this context.
+>>>
+>>>>
+>>>> Is this a generic problem with this chip when changing pages ?
+>>>
+>>> I believe that is the case, but this patch is pretty old at this
+>>> point. Is there somewhere to add in quirks for such chips that would
+>>> allow us to build in such a delay?
+>>>
+>>
+>> So far we only have delays for all accesses and for write operations.
+>> See access_delay and write_delay in struct pmbus_data. If the problem
+>> only affects page changes, we might have to add page_change_delay or
+>> something similar. Alternatively, maybe we could just set write_delay.
+>> If the chip has trouble with page changes, it might well be that it has
+>> trouble with write operations in general.
+>>
 > 
-> Add support to configure the PWM-Out pin polarity based on the device
-> tree. The binding would allow also to configure the PWM period, this is
-> currently not implemented by the driver.
+> So I did some digging and asked the original contributors to the
+> patch. It would appear that it's specifically an issue with this IC
+> around page switches and not any arbitrary write command. There is an
+> issue where it does not correctly respond to the second command issued
+> after a PAGE switch occurs, if the commands come in too quickly. They
+> believe it's an issue with max34451 (and other derivative ICs) not
+> correctly clock stretching while the PAGE command is processed.
 > 
-> The driver has a module option to set the PWM polarity (normal=0,
-> inverted=1), when specified it always takes the precedence over the DT.
+> Let me know what approach you would prefer to take here. It seems like
+> it would be most optimal to have a quirk specifically to delay
+> commands after a PAGE.
 > 
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-For my reference:
+I think we should add page_change_delay to struct pmbus_data, plus its handling
+in the pmbus core.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Guenter
 
