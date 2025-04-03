@@ -1,190 +1,355 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5B81514F6;
-	Thu,  3 Apr 2025 16:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0743585931
+	for <linux-hwmon@vger.kernel.org>; Thu,  3 Apr 2025 21:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743697969; cv=none; b=LikbNK0uItllGgRb7oPFcrUgIvz3fkqA38X1u2oe7+h5cSWrQqBski2VDh52YTUSFVqromWOg9oNE5JDvKbzymIvHbOiu1cm/jfRcml4WrRNGjNdbu1Kg0lJgLW1JOJPaFpkI9p5KwtNkaICdw37GAvBJSoZ8TfoDnX2N/lukSY=
+	t=1743714421; cv=none; b=MLC8GOvZUxkShrkwkI8CFVGZP/l8VHv7b+Leqwmjf7gcBSxL6qK/yI/7cgJ/xfX8GRmGF4Fd1JcceZTxFkHTJXXiE/AsQBqMr+waYjpGMS8t+Zk8mxN82Cr/FE4tULzGeaVi+0kgx4qBEazYklyI02kQYFL5VuPjWqUncG2I2ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743697969; c=relaxed/simple;
-	bh=nMCJUD39JxPn8sbGvbI/xrwFl+jsJVFVNZQe/Lk07E8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qYa5JxHeU1pqTPoU3a/j03yXve0dFm6PXluDnaYdPy2Wc+42fvXAGqi+kKzSfkVd+zxXxDYJmW+tu5cyBe34OaVEp8aACJoePizVZqccpYmgyhJCB7QxbpFZMI+sms3OzJ2A7Ye55L15hqe4jPKeFvBLeFYR9a4UvYalkphYMRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WGqtQ+cE; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743714421; c=relaxed/simple;
+	bh=tVBvnd/7YLHozsuPAQF5ZCG5JR6KXKV+F5OgNWGLOBM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uPcNGf+my57l/+e4hEtkvSjEQHP8KT+sMfii4tQvBEemqD6oEj0WigDIY/b+5LlhI8d6QZP6X2jEfD9DEMKqVWSQ3h9VOFbTyMZl8SSdGbqXHW8q+GG6704eKXzTkSRhUWCMRi+F4T93jKA+LHnJWIGjExDc4cgcrKaMUh4Zb7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com; spf=none smtp.mailfrom=wkennington.com; dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b=quzLL7QY; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=wkennington.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGqtQ+cE"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-af241f0a4beso1020305a12.2;
-        Thu, 03 Apr 2025 09:32:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b="quzLL7QY"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22403cbb47fso15011925ad.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 03 Apr 2025 14:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743697966; x=1744302766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7KJdAxOd/G0iqxROXI10DaNI9IIAFwi2MfAijcTTkYc=;
-        b=WGqtQ+cEdySJ6D2gzXYfXDcw/u+jYnwq8P5lpFeXUUdyyrQdmiIr4yk7SjI4fT8/iy
-         3x0Z6+01oJZl4bgqY3M4edE5APuKFy9sUXWwWHq0oAYCXW8NbrdljBdkXy+8shn1eNeD
-         cIcutsXNStFblFrk4+JmFGf7a2NgaUHFMiM5hRjRbIDAKKx4xusMfsN+qcOqB4Be2NHe
-         7XC4H4+oO05SAPyINxO9Qt0YV+VrTSjKFd+hZZ1fHqLTGWFRlHNAt+gLkBLQ9qZSqN+D
-         PtpwNdCTxuKJ8yNHgI7NaOBg4eTmJsjmqluy7namlvYXZ8cuV3V607r3CNVZKlCwOM0B
-         T3KQ==
+        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1743714417; x=1744319217; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gYmBiZPgtPm+fTNFRpxiV4Ltg0qHt2/Bty1RuY/WW1I=;
+        b=quzLL7QY2Q+qSHDKd7w2UEwZPFcVVgRcbvF13N65XsCecUBmeD7puqPPG+VsiUqvcr
+         thRiGl202hdI5UcGvNXWKRewR7dHs6wJGyT3tx0yW6cLXxd2wd/Q/4jHRKTVA7JrNLiI
+         kB8u2Lww5DhZ0PLzvQ8lMzKPR7aa7Dzqog4cbCcLh255ABXp1Xw42toLYRZXAgHB/XKg
+         iBhw86088KOhR3mEY3vERn1oW+6n1F7403Xkx1ISEBWCQqEWMy8KZQTveHdtapBotxho
+         hwVmLVabUL31VlU90hBYgiMSX/ghvl76pyDz3QaBTvehuQM6Ie5TWpzfi9TdiAR9xxgH
+         2+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743697966; x=1744302766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1743714417; x=1744319217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7KJdAxOd/G0iqxROXI10DaNI9IIAFwi2MfAijcTTkYc=;
-        b=ZZDyyAJg2pnNdmykSkITwfqWbRdhsJsGHp6oUoxw6HeQeL9ACPzy384bB0/OUbQiBQ
-         +UMIXKGabicsz3/U2gIINBTob0r/acKJXMI2ku6UFnfwChhVOdTJRBVaFfvwl97VTLxY
-         fnlRh+0cSU44ATutZW3fWU87B2VnXsXAwP0rTFOb6Sf0DyVr6OSKGUOwWN3KuMBzMkKj
-         F8K6S3wo2SAoR5ucjpzx2/RjWBkJKMNdLxpLjTtoLZ/+tX4RX20XVjkvL5PqVr1LhMz3
-         v6iw71d21d/4gqNW0O/w5oY0lkbNxDI/lkg75eKbOjHeqLRrLUxn3RejKZWCMnbY9/Tp
-         /KWg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Xn+5W62idSAiRWgjb7GissTFbUzYEEDmxQi1eeTnVXVWGLcmhFDecuGT7y9Sx2rIMXvTwgtX2XeHpIE=@vger.kernel.org, AJvYcCWGabrbfpVeNmmuEYATi1RRCJXuz3OvVbIIZwj+RaOFej/XWVKaE4j25vMkt0Lo1vHvXgGwGibaRuU=@vger.kernel.org, AJvYcCXeewcdku5EvOVK9ObiXJZMOTt9coMh54n7AjINEJFHEQKcNkddX2A3nFeNm9614mShOfdVWRUFj9WY@vger.kernel.org, AJvYcCXevtq/rfbDC+XIqUO6COfbTAGxcvtikJ5gLindUR99hQB4wJ1jBNkRWiMtRlsSLIDZKpIF96V48N0OnIbK@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc561kOmUAinADvKqVmtR/JUoEnHBlncZtEbPYfdsGCEyIDyw0
-	mlkk1G5KLgOY0JPCGZs2jctm3z11d0J/UZIRmtiYRc53HDistaHr
-X-Gm-Gg: ASbGncv3rzoMWKO/EJ+VT7scJnSuISbMxPFCvjuk6K0VldaOENo+etEr98Sse7LTRdf
-	LtT1RsEhkU1s6s+TxsiINS+WyGaZkfR+HjHBnhrzibc0lL34AEbpIZHJ7accBcLZkqkdAQKADWK
-	GGPoIlmJuo0a0+WOSP2XVdSCf0jQnMNYU3UT1LaZJJXfRAfuS8ar7Me+uEUfr/am3VsBAFxoK3t
-	r4mUiOu+43A6EDJt2AQjvtlSDWMYRO4d0i8mrW9BMYa6Qtvbp42Rwy7HIzBJIko+ZZ/20/jfA1/
-	8KGaV+Fzl6k1AZ7X6cLcYZGNXsWUiFqSZMHOx69EQtMdL3NVm6Ux9HeIGg==
-X-Google-Smtp-Source: AGHT+IGNyHx4nxR5tTiooAyFc+8Sh9HpSHaXhwKL4UKkSQzlutFbKuE/+7rfXHqUXEHQgUx/tXZDIA==
-X-Received: by 2002:a05:6a21:1583:b0:1f5:7eee:bb10 with SMTP id adf61e73a8af0-20104598389mr113569637.8.1743697966408;
-        Thu, 03 Apr 2025 09:32:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af9bc40098dsm1448971a12.48.2025.04.03.09.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Apr 2025 09:32:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 3 Apr 2025 09:32:44 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/max34440): Fix support for max34451
-Message-ID: <2234425e-b676-4564-96c6-57c0a635292c@roeck-us.net>
-References: <20250403-dev_adpm12160-v2-0-bbf40faae988@analog.com>
- <20250403-dev_adpm12160-v2-1-bbf40faae988@analog.com>
+        bh=gYmBiZPgtPm+fTNFRpxiV4Ltg0qHt2/Bty1RuY/WW1I=;
+        b=Y4UJSOFOf2by4tZjuQPYciBoFZGb+ZV/+iratFojKtVAO3XyUiOb7Tz9yc7sYAfgBM
+         5UhEpyJ3/0bpKqUcmh9pp2QkQlniRjNtWeyhGY/cahwc+Wm8oJ+1IoBEXmoto0Rmj05y
+         Q7zB68oz8Cx89QQrqqgmS5O/cs4b38hGHRvlSCQX7C+Naz8jXbghJBxXbNsfuHMOswNb
+         8vRlzBpir9d2p+IyhJWmqm0zuSht9CPmfkLi+3ODNscqMo8YE32bImgoAu2KLR5wUB62
+         kgbNPrQlHzOlfH9NSkgj/DKQxXc7Xy4FDunNdDPrIKcgUs7FuMhyrbvOkecoWd32/zEa
+         b7Sg==
+X-Forwarded-Encrypted: i=1; AJvYcCUkElk4Ns/XUMmbVaAC3h7446hJ8nFvZqk9uZr6yTx/VRvmJ098pJqtlX4Buzt+Q+UzHh+S0e1Lc+c4SQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFy0d6FdeDAnXhvH5sVcwItPdoPk6zkZQ6i7a7p4JYnOB2uwJC
+	owgbWBvcwahtx2IDpYKIfQj7p32mOi/6TNMck7o1ztpeUl8ia/j3ME6Sd8KGq22PckeXpV44C+9
+	UgICXZ5xVoItY1BwggjEPbakrEkZCedCwASI9R5vmGc3Wj0hVG8ZzZg==
+X-Gm-Gg: ASbGncuQksx7nTW77TupPYh3It+sJm7EXUQrfIs7TRVfZ1XlaIc+f3c/7p6b9hkvVQ6
+	lsbzVF9tyQ/ZP/CduuZN6Wab5EjxCCw6qYdbs/36d0t9yU/9rnNQsluI+V1Xy0RX47qr+Z/REEg
+	XhyFu/5QYXnbGWW/eiSKniv2/p5hihEaafFVyhOeZy3JVA7zdl2aK4UUzsjNjw
+X-Google-Smtp-Source: AGHT+IFDh0StEqe8xu7nUxjvKFKRBNctwbbvEWD4V5L9tyGSGREj1ztuh6Atx2N4L0KKGtE0hEVlWRMG9ORCkv8/hE8=
+X-Received: by 2002:a17:902:e745:b0:224:10a2:cae1 with SMTP id
+ d9443c01a7336-22a8a8ca2b4mr4826765ad.37.1743714416952; Thu, 03 Apr 2025
+ 14:06:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250403-dev_adpm12160-v2-1-bbf40faae988@analog.com>
+References: <20250402193452.3571888-1-william@wkennington.com> <81462799-6ef6-4079-9ebe-5b886d6e1eab@roeck-us.net>
+In-Reply-To: <81462799-6ef6-4079-9ebe-5b886d6e1eab@roeck-us.net>
+From: William Kennington <william@wkennington.com>
+Date: Thu, 3 Apr 2025 14:06:45 -0700
+X-Gm-Features: ATxdqUH5g7XsdKqLscZwrTmfuiLQldKTW-PETzxori14yipg1xiHL7LcEJQcIN8
+Message-ID: <CAD_4BXiaHEndVCKYOHnA9=CcZ7jRFzFEs_+A=09duhzuf2X9+w@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus): Introduce page_change_delay
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 03, 2025 at 01:16:18PM +0800, Alexis Czezar Torreno wrote:
-> The max344** family has an issue with some PMBUS address being switched.
-> This includes max34451 however version MAX34451-NA6 and later has this
-> issue fixed and this commit supports that update.
-> 
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> ---
->  drivers/hwmon/pmbus/max34440.c | 55 +++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 51 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
-> index c9dda33831ff24e7b5e2fd1956a65e6bd2bfcbb9..585746806663409bc97042647f6c0aba4c6f520a 100644
-> --- a/drivers/hwmon/pmbus/max34440.c
-> +++ b/drivers/hwmon/pmbus/max34440.c
-> @@ -34,16 +34,22 @@ enum chips { max34440, max34441, max34446, max34451, max34460, max34461 };
->  /*
->   * The whole max344* family have IOUT_OC_WARN_LIMIT and IOUT_OC_FAULT_LIMIT
->   * swapped from the standard pmbus spec addresses.
-> + * For max34451, version MAX34451ETNA6+ and later has this issue fixed.
->   */
->  #define MAX34440_IOUT_OC_WARN_LIMIT	0x46
->  #define MAX34440_IOUT_OC_FAULT_LIMIT	0x4A
->  
-> +#define MAX34451ETNA6_MFR_REV		0x0012
-> +
->  #define MAX34451_MFR_CHANNEL_CONFIG	0xe4
->  #define MAX34451_MFR_CHANNEL_CONFIG_SEL_MASK	0x3f
->  
->  struct max34440_data {
->  	int id;
->  	struct pmbus_driver_info info;
-> +	bool pmbus_addr_fixed;
+On Wed, Apr 2, 2025 at 3:18=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+>
+> On 4/2/25 12:34, William A. Kennington III wrote:
+> > We have some buggy pmbus devices that require a delay after performing =
+a
+> > page change operation before trying to issue more commands to the
+> > device.
+> >
+> > This allows for a configurable delay after page changes, but not
+> > affecting other read or write operations.
+> >
+> > Signed-off-by: William A. Kennington III <william@wkennington.com>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus.h      |  1 +
+> >   drivers/hwmon/pmbus/pmbus_core.c | 59 ++++++++++++++++++++++---------=
+-
+> >   2 files changed, 41 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> > index ddb19c9726d6..742dafc44390 100644
+> > --- a/drivers/hwmon/pmbus/pmbus.h
+> > +++ b/drivers/hwmon/pmbus/pmbus.h
+> > @@ -482,6 +482,7 @@ struct pmbus_driver_info {
+> >        */
+> >       int access_delay;               /* in microseconds */
+> >       int write_delay;                /* in microseconds */
+> > +     int page_change_delay;          /* in microseconds */
+> >   };
+> >
+> >   /* Regulator ops */
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmb=
+us_core.c
+> > index 787683e83db6..cfb724a8718b 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -116,6 +116,7 @@ struct pmbus_data {
+> >       int vout_high[PMBUS_PAGES];     /* voltage high margin */
+> >       ktime_t write_time;             /* Last SMBUS write timestamp */
+> >       ktime_t access_time;            /* Last SMBUS access timestamp */
+> > +     ktime_t page_change_time;       /* Last SMBUS page change timesta=
+mp */
+> >   };
+> >
+> >   struct pmbus_debugfs_entry {
+> > @@ -178,24 +179,44 @@ static void pmbus_wait(struct i2c_client *client)
+> >
+> >               if (delta < info->access_delay)
+> >                       fsleep(info->access_delay - delta);
+> > -     } else if (info->write_delay) {
+> > +     }
+> > +     if (info->write_delay) {
+> >               delta =3D ktime_us_delta(ktime_get(), data->write_time);
+> >
+> >               if (delta < info->write_delay)
+> >                       fsleep(info->write_delay - delta);
+> >       }
+> > +     if (info->page_change_delay) {
+> > +             delta =3D ktime_us_delta(ktime_get(), data->page_change_t=
+ime);
+> > +
+>
+> page_change_time isn't actually set. I suggest to just use data->write_ti=
+me.
+> Also see below.
 
-Unnecessary. See below.
+Yeah, I consolidated the times in v2 and will keep it in v3
 
-> +	u32 iout_oc_warn_limit;
-> +	u32 iout_oc_fault_limit;
+>
+> > +             if (delta < info->page_change_delay)
+> > +                     fsleep(info->page_change_delay - delta);
+> > +     }
+> >   }
+> >
+> > -/* Sets the last accessed timestamp for pmbus_wait */
+> > -static void pmbus_update_ts(struct i2c_client *client, bool write_op)
+> > +#define PMBUS_OP_READ_BIT 1
+> > +#define PMBUS_OP_WRITE_BIT 2
+> > +#define PMBUS_OP_PAGE_CHANGE_BIT 4
+>
+> #define<space>NAME<tab>BIT(...)
+>
+> > +
+> > +#define PMBUS_OP_READ PMBUS_OP_READ_BIT
+> > +#define PMBUS_OP_WRITE PMBUS_OP_WRITE_BIT
+> > +#define PMBUS_OP_PAGE_CHANGE (PMBUS_OP_PAGE_CHANGE_BIT | PMBUS_OP_WRIT=
+E)
+>
+> That is way too complicated. Just make it
+>
+> #define PMBUS_OP_READ           BIT(0)
+> #define PMBUS_OP_WRITE          BIT(1)
+> #define PMBUS_OP_PAGE_CHANGE    BIT(2)
+>
+> A page change implies a write, so it is not necessary to combine the bits=
+.
 
-u8 would be sufficient.
+Yeah, I combined then here to make the function working with the
+delays consider both delays. I'll make this simpler.
 
->  };
->  
->  #define to_max34440_data(x)  container_of(x, struct max34440_data, info)
-> @@ -60,11 +66,11 @@ static int max34440_read_word_data(struct i2c_client *client, int page,
->  	switch (reg) {
->  	case PMBUS_IOUT_OC_FAULT_LIMIT:
->  		ret = pmbus_read_word_data(client, page, phase,
-> -					   MAX34440_IOUT_OC_FAULT_LIMIT);
-> +					   data->iout_oc_fault_limit);
->  		break;
->  	case PMBUS_IOUT_OC_WARN_LIMIT:
->  		ret = pmbus_read_word_data(client, page, phase,
-> -					   MAX34440_IOUT_OC_WARN_LIMIT);
-> +					   data->iout_oc_warn_limit);
->  		break;
->  	case PMBUS_VIRT_READ_VOUT_MIN:
->  		ret = pmbus_read_word_data(client, page, phase,
-> @@ -133,11 +139,11 @@ static int max34440_write_word_data(struct i2c_client *client, int page,
->  
->  	switch (reg) {
->  	case PMBUS_IOUT_OC_FAULT_LIMIT:
-> -		ret = pmbus_write_word_data(client, page, MAX34440_IOUT_OC_FAULT_LIMIT,
-> +		ret = pmbus_write_word_data(client, page, data->iout_oc_fault_limit,
->  					    word);
->  		break;
->  	case PMBUS_IOUT_OC_WARN_LIMIT:
-> -		ret = pmbus_write_word_data(client, page, MAX34440_IOUT_OC_WARN_LIMIT,
-> +		ret = pmbus_write_word_data(client, page, data->iout_oc_warn_limit,
->  					    word);
->  		break;
->  	case PMBUS_VIRT_RESET_POUT_HISTORY:
-> @@ -235,6 +241,24 @@ static int max34451_set_supported_funcs(struct i2c_client *client,
->  	 */
->  
->  	int page, rv;
-> +	bool max34451_na6 = false;
-> +
-> +	rv = i2c_smbus_read_word_data(client, PMBUS_MFR_REVISION);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	if (rv == MAX34451ETNA6_MFR_REV) {
+>
+> > +
+> > +/* Sets the last operation timestamp for pmbus_wait */
+> > +static void pmbus_update_ts(struct i2c_client *client, int op)
+> >   {
+> >       struct pmbus_data *data =3D i2c_get_clientdata(client);
+> >       const struct pmbus_driver_info *info =3D data->info;
+> > +     ktime_t now =3D ktime_get();
+> >
+> >       if (info->access_delay) {
+> > -             data->access_time =3D ktime_get();
+> > -     } else if (info->write_delay && write_op) {
+> > -             data->write_time =3D ktime_get();
+> > +             data->access_time =3D now;
+> > +     }
+> > +     if (info->write_delay && (op & PMBUS_OP_WRITE_BIT)) {
+> > +             data->write_time =3D now;
+> > +     }
+> > +     if (info->page_change_delay && (op & PMBUS_OP_PAGE_CHANGE_BIT)) {
+> > +             data->write_time =3D now;
+> >       }
+>
+> Seems to me that we should only need write_time and not
+> page_change_time since both will always be set together.
+>
+> I also think this can be simplified if ktime_get() is always called anywa=
+y.
+>
+>         ktime_t now =3D ktime_get();
+>
+>         data->access_time =3D now;
+>         if (op & (PMBUS_OP_WRITE | PMBUS_OP_PAGE_CHANGE))
+>                 data->write_time =3D now;
+>
+> It doesn't matter if the values are set unnecessarily if there is no dela=
+y
+> because they won't be used in that case.
 
-Sure that this is only one revision ?
-Would it be better to use ">=" instead of "==" ?
+Yes, I think v2 (and shortly v3) makes this better
 
-> +		max34451_na6 = true;
-> +		data->pmbus_addr_fixed = true;
-> +		data->info.format[PSC_VOLTAGE_IN] = direct;
-> +		data->info.format[PSC_CURRENT_IN] = direct;
-> +		data->info.m[PSC_VOLTAGE_IN] = 1;
-> +		data->info.b[PSC_VOLTAGE_IN] = 0;
-> +		data->info.R[PSC_VOLTAGE_IN] = 3;
-> +		data->info.m[PSC_CURRENT_IN] = 1;
-> +		data->info.b[PSC_CURRENT_IN] = 0;
-> +		data->info.R[PSC_CURRENT_IN] = 2;
+>
+> >   }
+> >
+> > @@ -211,13 +232,13 @@ int pmbus_set_page(struct i2c_client *client, int=
+ page, int phase)
+> >           data->info->pages > 1 && page !=3D data->currpage) {
+> >               pmbus_wait(client);
+> >               rv =3D i2c_smbus_write_byte_data(client, PMBUS_PAGE, page=
+);
+> > -             pmbus_update_ts(client, true);
+> > +             pmbus_update_ts(client, PMBUS_OP_PAGE_CHANGE);
+> >               if (rv < 0)
+> >                       return rv;
+> >
+> >               pmbus_wait(client);
+> >               rv =3D i2c_smbus_read_byte_data(client, PMBUS_PAGE);
+> > -             pmbus_update_ts(client, false);
+> > +             pmbus_update_ts(client, PMBUS_OP_READ);
+> >               if (rv < 0)
+> >                       return rv;
+> >
+> > @@ -231,7 +252,7 @@ int pmbus_set_page(struct i2c_client *client, int p=
+age, int phase)
+> >               pmbus_wait(client);
+> >               rv =3D i2c_smbus_write_byte_data(client, PMBUS_PHASE,
+> >                                              phase);
+> > -             pmbus_update_ts(client, true);
+> > +             pmbus_update_ts(client, PMBUS_OP_WRITE);
+> >               if (rv)
+> >                       return rv;
+> >       }
+> > @@ -251,7 +272,7 @@ int pmbus_write_byte(struct i2c_client *client, int=
+ page, u8 value)
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_write_byte(client, value);
+> > -     pmbus_update_ts(client, true);
+> > +     pmbus_update_ts(client, PMBUS_OP_WRITE);
+> >
+> >       return rv;
+> >   }
+> > @@ -286,7 +307,7 @@ int pmbus_write_word_data(struct i2c_client *client=
+, int page, u8 reg,
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_write_word_data(client, reg, word);
+> > -     pmbus_update_ts(client, true);
+> > +     pmbus_update_ts(client, PMBUS_OP_WRITE);
+> >
+> >       return rv;
+> >   }
+> > @@ -408,7 +429,7 @@ int pmbus_read_word_data(struct i2c_client *client,=
+ int page, int phase, u8 reg)
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_read_word_data(client, reg);
+> > -     pmbus_update_ts(client, false);
+> > +     pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >       return rv;
+> >   }
+> > @@ -471,7 +492,7 @@ int pmbus_read_byte_data(struct i2c_client *client,=
+ int page, u8 reg)
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_read_byte_data(client, reg);
+> > -     pmbus_update_ts(client, false);
+> > +     pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >       return rv;
+> >   }
+> > @@ -487,7 +508,7 @@ int pmbus_write_byte_data(struct i2c_client *client=
+, int page, u8 reg, u8 value)
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_write_byte_data(client, reg, value);
+> > -     pmbus_update_ts(client, true);
+> > +     pmbus_update_ts(client, PMBUS_OP_WRITE);
+> >
+> >       return rv;
+> >   }
+> > @@ -523,7 +544,7 @@ static int pmbus_read_block_data(struct i2c_client =
+*client, int page, u8 reg,
+> >
+> >       pmbus_wait(client);
+> >       rv =3D i2c_smbus_read_block_data(client, reg, data_buf);
+> > -     pmbus_update_ts(client, false);
+> > +     pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >       return rv;
+> >   }
+> > @@ -2530,7 +2551,7 @@ static int pmbus_read_coefficients(struct i2c_cli=
+ent *client,
+> >       rv =3D i2c_smbus_xfer(client->adapter, client->addr, client->flag=
+s,
+> >                           I2C_SMBUS_WRITE, PMBUS_COEFFICIENTS,
+> >                           I2C_SMBUS_BLOCK_PROC_CALL, &data);
+> > -     pmbus_update_ts(client, true);
+> > +     pmbus_update_ts(client, PMBUS_OP_READ | PMBUS_OP_WRITE);
+>
+> I don't immediately follow the reason for adding PMBUS_OP_READ.
 
-Assign register addresses directly here.
+I can just remove it, I just added it for clarity as opposed to having
+it just be 0.
 
-		data->iout_oc_fault_limit = PMBUS_IOUT_OC_FAULT_LIMIT;
-		data->iout_oc_warn_limit = PMBUS_IOUT_OC_WARN_LIMIT;
-	} else {
-		data->iout_oc_fault_limit = MAX34440_IOUT_OC_FAULT_LIMIT;
-		data->iout_oc_warn_limit = MAX34440_IOUT_OC_WARN_LIMIT;
-
-> +	}
-
-Thanks,
-Guenter
+>
+> >
+> >       if (rv < 0)
+> >               return rv;
+> > @@ -2734,7 +2755,7 @@ static int pmbus_init_common(struct i2c_client *c=
+lient, struct pmbus_data *data,
+> >       if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+> >               pmbus_wait(client);
+> >               ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY=
+);
+> > -             pmbus_update_ts(client, false);
+> > +             pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >               if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+> >                       if (i2c_check_functionality(client->adapter, I2C_=
+FUNC_SMBUS_PEC))
+> > @@ -2750,13 +2771,13 @@ static int pmbus_init_common(struct i2c_client =
+*client, struct pmbus_data *data,
+> >       data->read_status =3D pmbus_read_status_word;
+> >       pmbus_wait(client);
+> >       ret =3D i2c_smbus_read_word_data(client, PMBUS_STATUS_WORD);
+> > -     pmbus_update_ts(client, false);
+> > +     pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >       if (ret < 0 || ret =3D=3D 0xffff) {
+> >               data->read_status =3D pmbus_read_status_byte;
+> >               pmbus_wait(client);
+> >               ret =3D i2c_smbus_read_byte_data(client, PMBUS_STATUS_BYT=
+E);
+> > -             pmbus_update_ts(client, false);
+> > +             pmbus_update_ts(client, PMBUS_OP_READ);
+> >
+> >               if (ret < 0 || ret =3D=3D 0xff) {
+> >                       dev_err(dev, "PMBus status register not found\n")=
+;
+>
