@@ -1,72 +1,71 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F304B665
-	for <linux-hwmon@vger.kernel.org>; Mon,  7 Apr 2025 22:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A23B22756A;
+	Mon,  7 Apr 2025 22:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744066214; cv=none; b=l40LIC6+VlOGc6azb9My7kiEvFWTfyI3ggh4u2HRZQFkqV9LPILGTDZI+DxVNyOQdPVWbLEja+zCuBaFVoBmyCjmCRHpJL9lYwzMsb/0YtYNpeXctFogqKrsvjJNVs7Eseu73SX4iQ6nG9hatm247lnvE81Bfd+V6afKDwwOR80=
+	t=1744066341; cv=none; b=oF/TPLcHICs6o95tCH7xR2WS8SVFtj3cZxzf9vP+j9Uxwm34MS3PAXdwbWVIHo4JJrygGR0iRJi7+VKUMpfkbP/ardfTJdISVSRw2u2BdT68eTUmrdz8bDwNvtUs1AI9d7HamyUq+pnQJm6wl/cPU1Pf5FZNvCI5BVvBGlVZRgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744066214; c=relaxed/simple;
-	bh=8GAWzENHMPKfOQfDgRled+VgAS5+9Gc2azwWCta93lE=;
+	s=arc-20240116; t=1744066341; c=relaxed/simple;
+	bh=zDw6p/nrFabHPx2fns0yPmR1KypKtmRjTUt+OZMiUHI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SF7eZZVMe8Lxjk3UUABA7QJZIxQQ/pGYyDzH0thuJcKH9PusBHQlHk9MyPwOGL9dvmIVMvXLD4PmYJ3WvGYGitFBbBlfWJcAdGD3DfixilU2Ov3R13IHaORFyYxUO+Jg8AHiO4HL00qCwSe+FpaqdBP40cq9RDWjoS59PEWTo4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5gZpCOg; arc=none smtp.client-ip=209.85.210.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sz2tlF9d4ataEzoml1+BLveFDBHuKkf1eMIx9gwk7cMPF2v1DJgJzyXhtRHBd6ghRbF5IfaVn+yzYNrvkJKVWXIWVXorycnpWb0uqv/Hg4Xd8Huf/uoTVzfHBsKRemWE0/YWHgDwp1Ahxr0m+rHTWuMkDzhoifSIrM+RFdoUI0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CeKlbyKw; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5gZpCOg"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-736a72220edso5012379b3a.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 07 Apr 2025 15:50:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CeKlbyKw"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-22438c356c8so47224065ad.1;
+        Mon, 07 Apr 2025 15:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744066211; x=1744671011; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744066339; x=1744671139; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qkPN/Cq+zsUIo3L1C0Hq+Zh5cCYoB43xlCPLDuPufn0=;
-        b=c5gZpCOgHJ3Ci4Z62sdiOdwM6Oqxaqc+haU/lYy6+Wjo6q+5XYSltO4BGweJYy9s84
-         vfgQ6ea48q7qL5UhiUSYZ7SiVCsuX0ND6eL6jgN/b11AhCz5mRnTiKHv58cDHgS+EWr/
-         /O4LbmiuV8np4uXJTcRtVjc1fg3CeG1c0bYaMq02Axi2KxbxIroDGHMiTjOsikAZuE/1
-         M75Cei7gOoMpKNMRi4ra89Rhfv+VL5CkyACrbw+4cWSJr+YVfmczbicOCHCKl6MqEiog
-         jWIfD2Z1B0W3/LzKl+sla3RafyS/IJ/sz2rB0vyOSIrgY1un43VzIWmtyc+U1f6gWqwv
-         hu9w==
+        bh=ONmngaQrt848tSL3nlt0r5IHv9Au2hpL7/9mDfuemm8=;
+        b=CeKlbyKwHQPaCweoE1mYlUfUDYa/CNfC8KEWTMivr5mIdj2WAXDr9TZYwr5nst3bwu
+         5SmiHYbG0cthPwWzvnHEtK30DewDRWI0aN9NQQ3DZsAC+jR3WQTVv1fIwn1sxrJNWeqc
+         13nDUtzrDy4CmeTgcmn+d9kGPVADp+lJPi8vOZB3XK2Xd2e0xEIVfSjRuh/90y/ZqSjy
+         /ND6ByfBmbWXwMMZLLqE8vlr5t6T9gD6kOWjtciB22AJ2QJk2JmJA4yICqoE0giWEqF6
+         19j6bn6EWdahzMDR7aDLXNXfCcvsacEzBbWHNGfotX2w3wvB4i//O+vDuA8E+AP6pvgB
+         nQbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744066211; x=1744671011;
+        d=1e100.net; s=20230601; t=1744066339; x=1744671139;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qkPN/Cq+zsUIo3L1C0Hq+Zh5cCYoB43xlCPLDuPufn0=;
-        b=Ku47V+zBpYOJsFdfYZ7Ya7JCNCdlb33WrNqOHdsC+kyV+owUpUw0hceBd5uwQ6tjTJ
-         3c90lyLi0SsTqzpXTMm7swYYq6HAILvcJJYpP4tqvo4J4Mwu2hbxt1dxIhadrjduzgWj
-         sPPxO3sjni7w3yXdSL+O1tqLoAP56pEnnxDl5C0WgjWfA6AbALbRFXuGPZogd/EUr+LX
-         6bRPioC9jh/TCeF+glN5yQgsiZFF2baj0t+XRyImF5Xy8Px7a6Ka6WOQLRRNW6V93iTo
-         lUzkk+vciW5wocJ5hT24bh5VkDyUdCWcJo6OjKrwhY0tsWrr682undjwT4X92+JsgNYZ
-         GToA==
-X-Gm-Message-State: AOJu0Yx1THeoY6TJr6xCepAdbJ12UYmmooZAefOKuzilFw4tsZL+XkPS
-	bv2my6Y/3WJ5BDA/xe9k7kcHWCwEiab+EE7KWa0USj6p21UPGbyKawvMHw==
-X-Gm-Gg: ASbGncuGoqEC7zKyC9prjFHBrDvZir0E3mmeIbkBuCda+3lWGIgeasV6KPk/Q2Ul1/A
-	ixT4iw1h8pNfOy11SoAM5xLlcZOImp435wI5g0ChuxuwdYouitD5Jk4dCB9Tno7VN4l2EE9Yp51
-	w+e2/Jx4W/eSEcV3LRM5h93TqeMcy0hf2pglobtcwPARamxBackiV4LkwTigdev0Clz/3sZgVsB
-	QL+SfFjIceFvxSFN6l7JJtupv0VcaXjtacXO8buagD1C1wX423MkUmFuZ6UkqNyQzeTKMnk0sQI
-	/nKXw5+G5k8yI2hbzuesBcAGtHrxlqR2dQkjNIe58DRpQmIHwcKaDIpuHA==
-X-Google-Smtp-Source: AGHT+IGf9iB7pPwyO/emUMIBnJgNnchecq9dM8meOC4Ct0ylSGBeoqA0MtTFnrgKciB8qiTLkuysBg==
-X-Received: by 2002:aa7:88c9:0:b0:736:6043:69f9 with SMTP id d2e1a72fcca58-73b6b8c2c45mr12217413b3a.19.1744066211589;
-        Mon, 07 Apr 2025 15:50:11 -0700 (PDT)
+        bh=ONmngaQrt848tSL3nlt0r5IHv9Au2hpL7/9mDfuemm8=;
+        b=fxBp4T7JmdP5gSoXKzHZItUpjaFgcr+jUwLXZ/4wz6XcM1zGp1VZ5SCG/UH4P7VmGt
+         SYTFaHWG3V4tW3hrol2Xv/z/Yfml8JDciKMF9pC+VJLRLbpcTXIuIwFqjy9vwtUTMbtS
+         K2nvlWKLfMAe+vJbYXMrBJBZxLWroz8JW8wzpNK811YS+ElchejtmrYDBJsPFfDuZGNB
+         653L0MgaN5EtArcaT6zqzgCUF9jlYuNpr6YWgqas5qyGwz2hm8g4atr7LBiXcyD9q35T
+         r46bZhYOPLc3xs+KMz+0/BMKObbP5nvhyq+AWczWvCSJ7kPwf/SRP4EOYw5KUghmK2c2
+         BueA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhalfkoP8rVB1DRGlPuritXlke8+AmAnpI0bU8jxVda7NnYQuEDxzlc1rsnf3Uu0/QqZ6Ytl2CUtNmxD4/@vger.kernel.org, AJvYcCXL9lGjMceWLrScod6LrVf9F8WJCqGxKx9lrsiV3AVwRX8P9yN7s/E8C9NvwJJCjANZledYkZzyXwIQyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY7WTqgU+oRg3I3C/pmXzxS5bMpt97t+G4T6H7N5JgwhwF1LRW
+	jl4Q8QGCcGHW6pmmMhkR2qfjSQhlJINaFhOx/Ebz/+K6ufj4FRUL
+X-Gm-Gg: ASbGncuTJ/xEVjokKBpbXB1T72XlHnMxaTIDGp2FuPgKWlHcTmVzpaa04YSnKisUgAn
+	ZkVrLHD9laDLhCIQAjlvnaOiheJRONYcnwP1/RIuLEmWmAa+9f5dUNFkZQxJusxqh15gc6KSW/7
+	MAzOyHhwlCSiJJA4Ak21OmR0B5SBER0O4yuzqJltPTfdKL+qu73PzlX7I5RjaMwKlZMEsQvzpuw
+	z4rVAdfUDPYEJ6n0ET/9bUfmPOL4cz/905xnLXgFgYLr8s9P3DY2x08bWGv34YXpbSzmtMEcmqQ
+	cc5G89UlLIW42UJsckRgluKlFDsEwbqUCmtWZdOK997RiAEVESa8Uy85Mw==
+X-Google-Smtp-Source: AGHT+IFrmmDLxQJo6iSXayiG7seHcUOBypyJoJwOIWwgbxm4mHpcqg39FqW9z8AjzBzeF77nHQ6TdQ==
+X-Received: by 2002:a17:902:d4c7:b0:220:ec62:7dc8 with SMTP id d9443c01a7336-22a8a85a18dmr198140525ad.2.1744066338692;
+        Mon, 07 Apr 2025 15:52:18 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739da0e7deasm9408446b3a.170.2025.04.07.15.50.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739da0b3009sm9094338b3a.123.2025.04.07.15.52.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 15:50:11 -0700 (PDT)
+        Mon, 07 Apr 2025 15:52:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 7 Apr 2025 15:50:10 -0700
+Date: Mon, 7 Apr 2025 15:52:17 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Cedricjustine.Encarnacion@analog.com
-Subject: Re: [PATCH RFT/RFC] hwmon: (pmbus) Do not set regulators_node for
- single-channel chips
-Message-ID: <18251168-b9b3-402c-a810-0b8045ba1336@roeck-us.net>
-References: <20250322142602.560042-1-linux@roeck-us.net>
+To: Your Name <naresh.solanki@9elements.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] hwmon: (max6639) : Allow setting target RPM
+Message-ID: <54c57f1c-38f4-42ad-9aca-05233c9a4483@roeck-us.net>
+References: <20250404115646.2000563-1-you@example.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,29 +74,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250322142602.560042-1-linux@roeck-us.net>
+In-Reply-To: <20250404115646.2000563-1-you@example.com>
 
-On Sat, Mar 22, 2025 at 07:26:02AM -0700, Guenter Roeck wrote:
-> Single-channel regulators do not need and should not have a "regulators"
-> node. We can not entirely remove it due to existing bindings. To solve the
-> problem for new drivers, provide additional macros PMBUS_REGULATOR_ONE_NODE
-> and PMBUS_REGULATOR_STEP_ONE_NODE and convert existing drivers to use those
-> macros. The exception is the ir38064 driver because its devicetree files
-> and its description do not require or use the nested regulators node.
+On Fri, Apr 04, 2025 at 05:26:45PM +0530, Your Name wrote:
+> From: Naresh Solanki <naresh.solanki@9elements.com>
 > 
-> Modify PMBUS_REGULATOR_STEP_ONE and PMBUS_REGULATOR_ONE to set the
-> regulators_node pointer to NULL.
+> Currently, during startup, the fan is set to its maximum RPM by default,
+> which may not be suitable for all use cases.
+> This patch introduces support for specifying a target RPM via the Device
+> Tree property "target-rpm".
 > 
-> Cc: Cedricjustine.Encarnacion@analog.com
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> RFT: Untested. Open question is if not setting .regulators_node is
->      sufficient to solve the problem.
-> RFC: Open question is if existing bindings (if unused in-tree) should
->      be converted to not require the nested "regulators" node.
+> Changes:
+> - Added `target_rpm` field to `max6639_data` structure to store the
+>   target RPM for each fan channel.
+> - Modified `max6639_probe_child_from_dt()` to read the `"target-rpm"`
+>   property from the Device Tree and set `target_rpm` accordingly.
+> - Updated `max6639_init_client()` to use `target_rpm` to compute the
+>   initial PWM duty cycle instead of defaulting to full speed (120/120).
+> 
+> Behavior:
+> - If `"target-rpm"` is specified, the fan speed is set accordingly.
+> - If `"target-rpm"` is not specified, the previous behavior (full speed
+>   at startup) is retained.
+> 
+> This allows better control over fan speed during system initialization.
+> 
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-I did not get any test feedback. Given that we are at -rc1, I decided to apply
-the patch. Let's see if there is any fall-out.
+Applied.
 
+Thanks,
 Guenter
