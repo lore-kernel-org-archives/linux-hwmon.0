@@ -1,144 +1,204 @@
-Received: from smtp2.infineon.com (smtp2.infineon.com [217.10.52.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41EE4A1E;
-	Tue,  8 Apr 2025 03:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.52.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E961DE3AC
+	for <linux-hwmon@vger.kernel.org>; Tue,  8 Apr 2025 03:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744082920; cv=none; b=Altzdu4aNj06C0Nv04HJpt8iyWc9glUfFmD2V8E/ai3ff56tRJqhRGU1Pna3VfJP4oU/Se7W4V7as6MwHmo1TV9Po4fpoMxj/agMKk+renbmyhRLY5pK6G4sLGAFnIOPD1NAqGfS/2etU2xTbm4VVsl++M/iMlAzwci+imcXv4o=
+	t=1744083681; cv=none; b=KlRbjnzoLXk/8tKKVNOgAYpLv5fNdS5saKk+fKwNJDQoDk/Wb5/c+pZabbh9IFQnjbG0B+8CHhrWNnxIpRR0gcHw7nHcE24LL50JruKfMMvAPzbE8JQZRpVwOC83N2PeU2+ZF4DgRy96AIi92/mgfDks/oYy8qlnDtfbC+boMC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744082920; c=relaxed/simple;
-	bh=NhUqRHGXvznjLxV6/mpyO20W9nTF5RCj2oU+Gi6q32g=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rsxV80Dtm/lAdetnchcG6Er0aD+tey2FRqJkU9sDNhWyoypcyhdKI+kKiCw/r56L6+8CKoePyJnGnaz6g9UmAMsqlPWmAab8GHh4plrn0/2SaM8QKMhSeTByDVw+KcdTlm/TjzmcFeSTj09NNNQckSX3RL+GmnA5Nc8XHfLSy+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com; spf=pass smtp.mailfrom=infineon.com; dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b=DIPsDAnl; arc=none smtp.client-ip=217.10.52.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infineon.com
+	s=arc-20240116; t=1744083681; c=relaxed/simple;
+	bh=q0A5FAqFUZk/e3ucz6fYlYBVhYFVn8RU/c/fcNaAcMA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=pk8XMYXzG4iLbshhqzRHdsLbhmJQoRuU65uPTCDRp72syRaAlzwJShEhFQS3G51XzP7y46lq0G8IPWqMV1zCQzk+Clc7i3O/g36Bztf0V3nLpkoVDYGV3IPyZ7fwm4VQqavu6u2ibi9UoC8KK1rYRcVJcO/wOs1VJOLhbIpmzGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1KlRbF/; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b="DIPsDAnl"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1744082918; x=1775618918;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=NhUqRHGXvznjLxV6/mpyO20W9nTF5RCj2oU+Gi6q32g=;
-  b=DIPsDAnlBQloXF49967YZ34E3czPCloLeb9LaBmeWK892FJdroXqIWws
-   2UwDEUsK3REDNvjqpjW5hQ/ikJvqUpPdGTwxWXzQkQQAA0hcyYE7/4ACu
-   4uQ277wYtZudKXISaexu05NfNyCIsrvtc8KnHeZ2F5g7nMTpnGksJ9tHb
-   Y=;
-X-CSE-ConnectionGUID: xg05KNqeTEKSkLs9bsiP5A==
-X-CSE-MsgGUID: z4qFc0OtQ4u++L8lCaL78g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="107247366"
-X-IronPort-AV: E=Sophos;i="6.15,196,1739833200"; 
-   d="scan'208";a="107247366"
-Received: from unknown (HELO MUCSE822.infineon.com) ([172.23.29.53])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2025 05:28:35 +0200
-Received: from MUCSE808.infineon.com (172.23.29.34) by MUCSE822.infineon.com
- (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.39; Tue, 8 Apr
- 2025 05:28:35 +0200
-Received: from MUCSE839.infineon.com (172.23.7.112) by MUCSE808.infineon.com
- (172.23.29.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.39; Tue, 8 Apr
- 2025 05:28:35 +0200
-Received: from MUCSE839.infineon.com ([fe80::e04:7b92:8020:5ebd]) by
- MUCSE839.infineon.com ([fe80::e04:7b92:8020:5ebd%11]) with mapi id
- 15.02.1258.039; Tue, 8 Apr 2025 05:28:35 +0200
-From: <Ashish.Yadav@infineon.com>
-To: <linux@roeck-us.net>, <wsa+renesas@sang-engineering.com>,
-	<Shirley.Lin@infineon.com>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <jdelvare@suse.com>, <corbet@lwn.net>,
-	<patrick.rudolph@9elements.com>, <bhelgaas@google.com>,
-	<ninad@linux.ibm.com>, <festevam@denx.de>, <devicetree@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<Mills.Liu@infineon.com>, <Ian.Fang@infineon.com>
-Subject: RE: Update driver xdpe152c4.c
-Thread-Topic: Update driver xdpe152c4.c
-Thread-Index: AduncG4+KOQ8tLMYRdSyF3hlAwcSUwAAz8qAABBIAQAAATWmAAAe7QAw
-Date: Tue, 8 Apr 2025 03:28:35 +0000
-Message-ID: <c8b9aa8e579e4892a35542f59cff44e4@infineon.com>
-References: <3f7d0644a1f844b8b3ee9b3139b85339@infineon.com>
- <Z_NteUAIeuDdDPls@shikoro>
- <69c8cf7c-b334-4f13-ba36-a2248686b419@roeck-us.net>
- <3df0bfff-413d-4ad5-a3a8-39a7bb7a90ba@roeck-us.net>
-In-Reply-To: <3df0bfff-413d-4ad5-a3a8-39a7bb7a90ba@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1KlRbF/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744083680; x=1775619680;
+  h=date:from:to:cc:subject:message-id;
+  bh=q0A5FAqFUZk/e3ucz6fYlYBVhYFVn8RU/c/fcNaAcMA=;
+  b=d1KlRbF/o+NEcTNRUEnYDw1htJmsXsolUGQLwpGOQoyBsu4nNf0Xan00
+   RY9dJDaCobiEV7hjASqndXcYG/MpT1h7k5ep53+vH2luVt+vvTpOw8G+l
+   UsGYEB9R+34KcXLeLZD3OPS40HaEafxmlVPxRUuAliJr+xZZA01lUrDlZ
+   20y5R8Ktq9qZLkZ1Mm6xtaXRq2ZHGTxs67AugECO83W10BxyuQDvs+xaD
+   Xum5qwT82gqegHlRJBV9gY92kz9ENNLnMbswB5sHbFIqUfTndK31iSOcR
+   PN54EHJaUZarGXo/2rfrgFUm8RzG+ocZ668PTVSMoxshUogVq0SA1fIhE
+   Q==;
+X-CSE-ConnectionGUID: Bj+W9VNJRWmsK83dGExmJA==
+X-CSE-MsgGUID: ACbr6ctVQHm000I9A1+kWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45396123"
+X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
+   d="scan'208";a="45396123"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 20:41:19 -0700
+X-CSE-ConnectionGUID: 17oh2jUESZSrYxDW6eIDuA==
+X-CSE-MsgGUID: 9h1/1D2lTHymoLdsVPwuOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,197,1739865600"; 
+   d="scan'208";a="159135952"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 07 Apr 2025 20:41:18 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u1zps-00045X-0g;
+	Tue, 08 Apr 2025 03:41:16 +0000
+Date: Tue, 08 Apr 2025 11:40:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 409c4e26cf268a11b758fd4cf41ee447445f5df0
+Message-ID: <202504081119.rBKuMu2o-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Hi Guenter, Wolfram and Mukesh,=20
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 409c4e26cf268a11b758fd4cf41ee447445f5df0  Merge branch 'fixes-v6.15' into testing
 
-I hope you are doing well.
-Thanks for your suggestion/feedback.=20
+elapsed time: 1451m
 
-Sorry for the inconvenience.
-This patch is still in the testing phase and not the final one, that is why=
-  " pr_warn()" is used for debug purposes.=20
+configs tested: 127
+configs skipped: 4
 
-We will get back to you with the final patch with proper process as suggest=
-ed by you.=20
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-With Best Regards
-   Ashish Yadav
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              alldefconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250407    gcc-12.4.0
+arc                   randconfig-002-20250407    gcc-14.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                            dove_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250407    gcc-8.5.0
+arm                   randconfig-002-20250407    clang-21
+arm                   randconfig-003-20250407    gcc-8.5.0
+arm                   randconfig-004-20250407    gcc-8.5.0
+arm                           stm32_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250407    clang-21
+arm64                 randconfig-002-20250407    gcc-6.5.0
+arm64                 randconfig-003-20250407    gcc-8.5.0
+arm64                 randconfig-004-20250407    clang-15
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250407    gcc-14.2.0
+csky                  randconfig-002-20250407    gcc-14.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250407    clang-21
+hexagon               randconfig-002-20250407    clang-15
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250407    gcc-12
+i386        buildonly-randconfig-002-20250407    gcc-12
+i386        buildonly-randconfig-003-20250407    gcc-12
+i386        buildonly-randconfig-004-20250407    clang-20
+i386        buildonly-randconfig-005-20250407    gcc-12
+i386        buildonly-randconfig-006-20250407    clang-20
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250407    gcc-14.2.0
+loongarch             randconfig-002-20250407    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                          ath25_defconfig    clang-21
+mips                           gcw0_defconfig    clang-14
+nios2                         10m50_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250407    gcc-6.5.0
+nios2                 randconfig-002-20250407    gcc-8.5.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250407    gcc-7.5.0
+parisc                randconfig-002-20250407    gcc-7.5.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc                      arches_defconfig    gcc-14.2.0
+powerpc                        fsp2_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250407    clang-21
+powerpc               randconfig-002-20250407    clang-21
+powerpc               randconfig-003-20250407    gcc-6.5.0
+powerpc                 xes_mpc85xx_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250407    clang-21
+powerpc64             randconfig-002-20250407    clang-17
+powerpc64             randconfig-003-20250407    clang-21
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-21
+riscv                 randconfig-001-20250407    gcc-8.5.0
+riscv                 randconfig-002-20250407    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250407    gcc-9.3.0
+s390                  randconfig-002-20250407    clang-15
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                               j2_defconfig    gcc-14.2.0
+sh                 kfr2r09-romimage_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250407    gcc-12.4.0
+sh                    randconfig-002-20250407    gcc-10.5.0
+sh                           sh2007_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250407    gcc-13.3.0
+sparc                 randconfig-002-20250407    gcc-10.3.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250407    gcc-7.5.0
+sparc64               randconfig-002-20250407    gcc-9.3.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250407    clang-18
+um                    randconfig-002-20250407    clang-21
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250407    gcc-11
+x86_64      buildonly-randconfig-002-20250407    clang-20
+x86_64      buildonly-randconfig-003-20250407    clang-20
+x86_64      buildonly-randconfig-004-20250407    clang-20
+x86_64      buildonly-randconfig-005-20250407    clang-20
+x86_64      buildonly-randconfig-006-20250407    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250407    gcc-9.3.0
+xtensa                randconfig-002-20250407    gcc-7.5.0
 
-
------Original Message-----
-From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-Sent: 07 April 2025 20:06
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>; Lin Shirley (SMD C3 GC=
- TM DCO) <Shirley.Lin@infineon.com>; robh@kernel.org; krzk+dt@kernel.org; c=
-onor+dt@kernel.org; jdelvare@suse.com; corbet@lwn.net; patrick.rudolph@9ele=
-ments.com; bhelgaas@google.com; ninad@linux.ibm.com; festevam@denx.de; devi=
-cetree@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-i2c@vger.kernel.=
-org; Liu Mills (SMD C3 GC TM DCO) <Mills.Liu@infineon.com>; Yadav Ashish (P=
-SS PCS RD FW HD) <Ashish.Yadav@infineon.com>; Fang Ian (SMD C3 GC TM DCO) <=
-Ian.Fang@infineon.com>
-Subject: Re: Update driver xdpe152c4.c
-
-Caution: This e-mail originated outside Infineon Technologies. Please be ca=
-utious when sharing information or opening attachments especially from unkn=
-own senders. Refer to our intranet guide<https://intranet-content.infineon.=
-com/explore/aboutinfineon/rules/informationsecurity/ug/SocialEngineering/Pa=
-ges/SocialEngineeringElements_en.aspx> to help you identify Phishing email.
-
-
-
-On 4/7/25 07:01, Guenter Roeck wrote:
-> On 4/6/25 23:15, Wolfram Sang wrote:
->>
->>> Please help to review the attached Linux Kernel patch for xdpe152xx dri=
-ver.
->>
->> To shorten things, you could return -EAGAIN as an error code, then=20
->> the I2C core will retry the message for you. Within the configured=20
->> limits for the controller.
->>
->
-> The patch neglects to state the _reason_ for the change.
->
-> I'd like to know what causes the problem before applying a change like th=
-is.
-> I suspect that the chip needs either a delay between accesses or a=20
-> delay after a write. Both are supported by the PMBus core.
->
-
-And this is a complete no-go:
-
-+       if (ret < 0)
-+               pr_warn("PMBUS READ ERROR:%d\n", ret);
-
-It isn't even dev_warn(), and I am not going to accept patches which will c=
-log the kernel log for every single error return. Just imagine how the kern=
-el log would look like if every driver would log errors like this.
-
-Guenter
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
