@@ -1,216 +1,154 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89B123C8C7;
-	Tue,  8 Apr 2025 18:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E2A2AE86;
+	Tue,  8 Apr 2025 20:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744135674; cv=none; b=Etmmgos5VDFV6AOei3E+ngIaIJpleTVCtAfc5aIhYIQ32sZz/XexEu0/WgIiBtgEXeb6dIY9TYC85D1rKnSNkgkdUH6+8xJujxnzI/2plvf/AV8ZCZsK33BrWHOjDyk3VFq+XJZzQrznpx2adajBp/e2ZepIavYVndcZKHiiJus=
+	t=1744145123; cv=none; b=Lufqx3m/2i/PC1+w82EXrbgtfAexRHXqo3Bv1HxUFTLor5nnoEN2t3VYvOGpMzLjt2KnyRdhPvMa4zFpQ6HlWlnQtloNyi6eWxOKoWlMw8hWa+B1nkLM7nC0meGsj28dk/je0X4RyLcpioImYUy8Yxu+wob/emeBTiVgQifuklg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744135674; c=relaxed/simple;
-	bh=rkXra9kOREWmAsORcy0+XvfydkiyhJbKXo+APNRCe5M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GyIsYmyeVOHxpmWEuy2HERPNIJ7ESRF7erusREzYFIYQzRslnN3AalBanIVA88TamIQgc6RZ2Gj3P22yz0XjFw6K6E49MegPy+H0z22YtWYP2Xj3+vopR7gzSi1ITN+9xxoBFHgbrxAjUfG+o7LHB3fhNP9BLjioz4oRiISrlA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhp08UmL; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1744145123; c=relaxed/simple;
+	bh=1bNz92khaSe4WMhhscdfBsFjURuC1gcvssQOQNGpYjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ArVpO/nW1gvSEHVLNdjlErdNE+x5qyg0IyU6aRDLzEEHdEQIKIDuoBAJDweHjETDPU0O1FOceEA5FU/XZDS3yI7sAaXsR1Za/0X1DkcJvYYefu4WZM3CS04ElOqdDnvf5c1YxJwjwNOz8ujb9R4TBwVaOkOR10FZy7WJokaW51U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ki9q3AZR; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhp08UmL"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-73712952e1cso5470866b3a.1;
-        Tue, 08 Apr 2025 11:07:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ki9q3AZR"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cf257158fso42643755e9.2;
+        Tue, 08 Apr 2025 13:45:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744135670; x=1744740470; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhshArBE7GFfsDqBVcijf6Rw3bHMYKXCJZahS7CtZaw=;
-        b=hhp08UmL9PA+ugwDSYhWbKE97ltRUIWEub22VvgIsJG+qTXFgUbcoFTZrztXr4cxe8
-         kJ4R/GrHoJ2/zFfwbAoCOKGkmk0GAeSysjmXVUlgE6/kTmA6/8J0tLpkaz1/utracJWK
-         FCQPnOhwEZ/lkEQCFq7lhkf2EA1YObQY2z8Zd2u7bdB2FDBB3Wqo5/MtHht0wYXvAnYJ
-         48Gt0zXqK1+DGnxPvdj/tyi+wzGiGcrPFfDlkOT8xB5nrMitISdevrtzxVFlQK23l3jO
-         xGY8tuOc3RgeztdP2kPIPq+8di7ZDLMXa8V6q7zLdhqUPUVOC9jkTrpGuID7wGPrjgHD
-         GvdA==
+        d=gmail.com; s=20230601; t=1744145119; x=1744749919; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=omhZP3ALIIlr2e/LbZBz1i8GirHA+tc1abtfH/xxT/M=;
+        b=Ki9q3AZRkCecnKPiu4B3J8z0f4wA3ux77Yp1b8WnVgLg0q0jsH8M5h8/73ueZ7XxrP
+         AUvcC9KSYrN/ogEyaCJ+v65CqtkKkl3pHcEjI5/swx6/olqEqRZxYg9etl0pYTaIE6BO
+         gLXCfgEl0r9Ir1X0IWLTXIybKkoa+YKXT1DUrvOdIFPQAU+dY4aGh9PhBbLld6YVZnCY
+         Ad4FsDpm+ee0a314Z6tGpRKTxNZIe7bKXpXdIJCi42QPQZ0vLY31XQsy25ih817DrPwS
+         hhn/11tfhE90CYcFAKOWkd3W0ZgLm9QBkSaVnJUsLwSxlaYpArILs4JVteNtEJR3fdue
+         YRog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744135670; x=1744740470;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vhshArBE7GFfsDqBVcijf6Rw3bHMYKXCJZahS7CtZaw=;
-        b=OLdZMa0U1Z9q2mOThgTOlF4UxuPNB6kuZYnb7t0S/bZSYfmLiUw/HBNAE3+bT1EXSR
-         F5WwMtcYH5V5oIW28Prj6cEov7eePO+eDTAyXU+sjd/TizKacTXJpSkF02osLC1zY97t
-         j8ZLuOmt+6ulY9k+bD7NGv7Spaj6Uqd+wvIFfk/xmx+HEwJZUNuPhQ0ZHipMZFFNLpX1
-         dvGcZBTZAP5tDueAQwgWU1UE/vF+sWDEztgy99bLyQdoz7jZdhfDEWO5ZiJaumleoqWN
-         ZdGomKE6d/rQpSmULHdMenSvQyEHsVc2Wuc/wQXoVZxbJ4z9/zYUH17Re2vzTKWekqer
-         Kjnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNaCCoHgvMZvZ+m5gRH1A1lMj2D0OBNSoFUxwkIYGXnsAKCqJbyxefix57x50botVMMZYJZHTCpBMmdesu@vger.kernel.org, AJvYcCUi3kgeWwOpxhSFgPC2x9cRoKihiMkFHDoa8TwNwZJoJT2KSAvUy0aKY0Szz0DrQY61pDhC5QWwvQBzAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiJ9WWRLXEJJsRrf1NVtEjoei1/SKpit1RrYjj0UpLBdfvxNFg
-	2PKYo7lsj1mUzoZFlY0j1OtkNdk/iXlcy9l4ZD2dsxIPEWLJCdZI
-X-Gm-Gg: ASbGncsHAv4ylNDBC+iXJzMnHmmXF9VBVyK0wokLH0FlQh2qqYFHcob0OIHw/7TzPOC
-	awdtU/kj5SbWaAQOJ3B/tupFutdtJlvsfe1y4uq9mhdiKb/NvPf3PdEIMCCQoPmeUrWjjFkg13U
-	bdJMxGCVDJlzImaQI8X/kJ/XIBSNxzdsorK9LSz4LRp7nbl3XHpmejeQK3+0Z8/KWNBguEIyVpG
-	qdC3K57uCvWJUHxwv2/t0Ejgj+ITJakkf0p6qhWAcHwQoLr5pd+tFp5HU0nGLjzXRtYxxJuqg9+
-	9yvRBPf1Pg1vOApNLO6rJx0dpFguftcyZk1iGA+qu2jwvSq65ruNo0NeF6zYr6iWBXWJJJw4juu
-	8u4D4j5FARVAQLKfTZwU5ygFels7+
-X-Google-Smtp-Source: AGHT+IHqyMpIU1FUrhiZ3RNfjRFR3xnQKMeYbX4DWdX1+YH1sAAApL39/kjWHb41qHpmaFxZzgHBMg==
-X-Received: by 2002:a05:6a00:2355:b0:736:6ac4:d204 with SMTP id d2e1a72fcca58-73bae4d11e8mr9150b3a.11.1744135670081;
-        Tue, 08 Apr 2025 11:07:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739da0b2d76sm10881998b3a.122.2025.04.08.11.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 11:07:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <661f972b-cd0f-4d9c-b429-5990edf8f13f@roeck-us.net>
-Date: Tue, 8 Apr 2025 11:07:48 -0700
+        d=1e100.net; s=20230601; t=1744145119; x=1744749919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=omhZP3ALIIlr2e/LbZBz1i8GirHA+tc1abtfH/xxT/M=;
+        b=q4uqk943UYYvW5zMJbt28xNruf08cZS2T02XR/1yoywA+9uCi0R6280NvxBlJWG2SH
+         xQmpwR8aQlXSB97MIvKYOVacVlEXL1X7OcBJvKcrO6XdTLFIVOkoaWgP7PUtLk+D/NqI
+         mWjg0xBtixbI66Qi0M3w8TFD0eW7y7eqcW3jsUVRA6lK4fIpIOp8TdLcoBNAaO4PKrst
+         eewtukRCKNgdCxQDPq5qmo+ZKvC+XW7B6drdYtjTtMipemQPtUDrmBJPrHr4BQQNODHS
+         8+5cUbeHrGwd8na8qIXr0FMJ2V+ITavqbXKFrenL8pXBVbFM7vTyQvTpSiwAzgmoQn4W
+         O57Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUx2+qJFfJDXpSWDLuqihYoSiNm5J8LE+1Fo1tt/z4KKgta7fOx1QfQTydxfmqJrHO0EQYhU9H564cWNw==@vger.kernel.org, AJvYcCW+ih63vxHgnYL1Fr5awci7oVmE0DJwxuz596p+GAdkIZdXUA7LDkVg6FmdRnZDWrLAQWw9Katoj6l2mOOL@vger.kernel.org
+X-Gm-Message-State: AOJu0YybSY+CesWmRibyP3M5gTNgV1FUCv5XzLut+XjSLEoXWxpwh3Vn
+	rChue19Sr4/LDhNL0pfzJdua2CPBaHXdoM/OiYmOg/KO/HBmQdzw
+X-Gm-Gg: ASbGnctE5vQg7IvL32FiJf03JsGxhcaq/SXUF8q34RxIf1sVuCRWMXnOAVoF2qGECSY
+	GesuYow7XCBzes7E/SRgEHl3SrBPvY4g868sKKKwqwB0c0sl2UG381+t5xe1+6GBDQOK2lUixM2
+	9M2dBalwMO3C1BQSNNKmn764j2QRGq3ZpdQzM2uT+IGiu4u2JpbPb2rRsem7xOS62zG3RB6mpAF
+	+coiTiL/DEqEF65TlMJKJiSrY3pwGGvceH62+r4JJUBKCmG0EyVmobEQ/KUNRyhCG+wy5noeLYb
+	NeYaTW+uNhk5OTvFsLxBbIe4KQc+E70tOZhUVUxSHLjsNHX9I05NjRGTHhUqO7TyZ0O2NH44fex
+	79GZ59g7v9ETTfe9Z3zl8+lRb2znaPIKALJUESZHEOKYg8JcuffOgx2HGSQ==
+X-Google-Smtp-Source: AGHT+IEM4n/lgRB2B3BWnpgXUOcCM6lMw6L9Kn9Tr/16AUjgRht6FtU4JPrSapVivJcvJgcXfDkbkw==
+X-Received: by 2002:a05:600c:1ca0:b0:43c:fae1:5151 with SMTP id 5b1f17b1804b1-43f1ff39bebmr732195e9.25.1744145118952;
+        Tue, 08 Apr 2025 13:45:18 -0700 (PDT)
+Received: from puma.museclub.art (p200300cf9f403a007076fa4c1d18edfe.dip0.t-ipconnect.de. [2003:cf:9f40:3a00:7076:fa4c:1d18:edfe])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f11eaf4cdsm20265945e9.1.2025.04.08.13.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Apr 2025 13:45:18 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) sort sensor definition arrays
+Date: Tue,  8 Apr 2025 22:44:57 +0200
+Message-ID: <20250408204505.11412-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (ina2xx) make regulator 'vs' support optional
-To: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, NXP S32 Linux <s32@nxp.com>,
- imx@lists.linux.dev, Christophe Lizzi <clizzi@redhat.com>,
- Alberto Ruiz <aruizrui@redhat.com>, Enric Balletbo <eballetb@redhat.com>,
- Eric Chanudet <echanude@redhat.com>, Florin Buica <florin.buica@nxp.com>
-References: <20250403101516.3047802-1-ciprianmarian.costea@oss.nxp.com>
- <dab2f459-240f-4e4c-9bf6-8c0285354cfb@roeck-us.net>
- <4efff19d-b5e6-49b5-9a15-e4af622c6ebf@oss.nxp.com>
- <2a12e6be-c253-4542-86a0-aacb71671ed6@roeck-us.net>
- <1d7318bf-9971-41aa-a952-85367f001c9c@oss.nxp.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <1d7318bf-9971-41aa-a952-85367f001c9c@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 4/4/25 01:36, Ciprian Marian Costea wrote:
-> On 4/3/2025 7:06 PM, Guenter Roeck wrote:
->> On Thu, Apr 03, 2025 at 05:29:26PM +0300, Ciprian Marian Costea wrote:
->>> On 4/3/2025 3:15 PM, Guenter Roeck wrote:
->>>> On 4/3/25 03:15, Ciprian Costea wrote:
->>>>> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
->>>>>
->>>>> S32G2/S32G3 based boards which integrate the ina231 sensor do not have a
->>>>> dedicated voltage regulator.
->>>>>
->>>>> Co-developed-by: Florin Buica <florin.buica@nxp.com>
->>>>> Signed-off-by: Florin Buica <florin.buica@nxp.com>
->>>>> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
->>>>> ---
->>>>>    drivers/hwmon/ina2xx.c | 4 ++--
->>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
->>>>> index 345fe7db9de9..ab4972f94a8c 100644
->>>>> --- a/drivers/hwmon/ina2xx.c
->>>>> +++ b/drivers/hwmon/ina2xx.c
->>>>> @@ -959,8 +959,8 @@ static int ina2xx_probe(struct i2c_client *client)
->>>>>            return PTR_ERR(data->regmap);
->>>>>        }
->>>>> -    ret = (dev, "vs");
->>>>> -    if (ret)
->>>>> +    ret = devm_regulator_get_enable_optional(dev, "vs");
->>>>
->>>> devm_regulator_get_enable() should provide a dummy regulator if there is
->>>> no explicit regulator. Why does this not work ?
->>>>
->>>>> +    if (ret < 0 && ret != -ENODEV)
->>>>
->>>> Why this added check ?
->>>>
->>>> I know it used to be necessary if regulator support is disabled,
->>>> but that is no longer the case.
->>>>
->>>> Guenter
->>>>
->>>
->>> Hello Guenter,
->>>
->>> I've just tested and devm_regulator_get_enable() does work as you've
->>> described, providing a dummy regulator.
->>>
->>> But, according to the 'ti,ina2xx' binding [1] I see that the `vs-supply`
->>> property is not required. Hence wouldn't it be correct for `vs-supply` to be
->>> optional ? Using 'devm_regulator_get_enable_optional()'
->>>
->> Yes, but the reasoning you provided is different and suggested that the
->> current code would not work. Since that is not the case, the change would
->> be purely cosmetic. Also, I still don't see why the -ENODEV check would be
->> necessary.
->>
->> Guenter
-> 
-> For boards such as S32G274A-EVB, S32G274A-RDB2 and S32G399A-RDB3 which do not have a voltage regulator, 'devm_regulator_get_enable_optional()' would return error value -19 (-ENODEV). Also, other usages from the Linux Kernel seem to perform the same error check when using 'devm_regulator_get_enable_optional()' [1], [2] and [3].
-> 
-> This patch would help in S32G2 and S32G3 to not print an unnecessary kernel log warning hinting usage of a dummy regulator when such a regulator is not required according to the binding.
-> 
-> Would you like me to send a V2 with the commit title updated as follows ?
-> 
-> "
-> hwmon: (ina2xx) make regulator 'vs' support optional
-> 
-> According to the 'ti,ina2xx' binding, the 'vs-supply' property is optional. Furthermore, S32G2/S32G3 based boards which integrate the ina231 sensor do not have a dedicated voltage regulator. Thus, making regulator support optional would help in avoiding any unnecessary kernel log warnings during boot.
-> "
+The arrays have to be sorted by the sensor register bank and index
+because this is what the sensor reading function expects. So sort them
+and leave a comment for future contributors.
 
-Make it:
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ drivers/hwmon/asus-ec-sensors.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-"According to the 'ti,ina2xx' binding, the 'vs-supply' property is optional.
-  Use devm_regulator_get_enable_optional() to avoid a kernel warning message
-  if the property is not provided.
-"
-
-Then add a note to the code explaining that the check for -ENODEV is necessary
-because the regulator core returns -ENODEV if the regulator is not available.
-
-Why it makes sense for this function to return -ENODEV if an _optional_ regulator
-is not available escapes me, but that is a different issue.
-
-Guenter
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 006ced5ab6e6..ec428c5e97d4 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -169,7 +169,10 @@ enum board_family {
+ 	family_intel_600_series
+ };
+ 
+-/* All the known sensors for ASUS EC controllers */
++/* All the known sensors for ASUS EC controllers. These arrays have to be sorted
++ * by the full ((bank << 8) + index) register index (see asus_ec_block_read() as
++ * to why).
++*/
+ static const struct ec_sensor_info sensors_family_amd_400[] = {
+ 	[ec_sensor_temp_chipset] =
+ 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+@@ -183,10 +186,10 @@ static const struct ec_sensor_info sensors_family_amd_400[] = {
+ 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
+ 	[ec_sensor_in_cpu_core] =
+ 		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
+-	[ec_sensor_fan_cpu_opt] =
+-		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
+ 	[ec_sensor_fan_vrm_hs] =
+ 		EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
+ 	[ec_sensor_fan_chipset] =
+ 		/* no chipset fans in this generation */
+ 		EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
+@@ -194,10 +197,10 @@ static const struct ec_sensor_info sensors_family_amd_400[] = {
+ 		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
+ 	[ec_sensor_curr_cpu] =
+ 		EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
+-	[ec_sensor_temp_water_in] =
+-		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
+ 	[ec_sensor_temp_water_out] =
+ 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
++	[ec_sensor_temp_water_in] =
++		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
+ };
+ 
+ static const struct ec_sensor_info sensors_family_amd_500[] = {
+@@ -239,19 +242,20 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
+ 
+ static const struct ec_sensor_info sensors_family_amd_600[] = {
+ 	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x30),
+-	[ec_sensor_temp_cpu_package] = EC_SENSOR("CPU Package", hwmon_temp, 1, 0x00, 0x31),
++	[ec_sensor_temp_cpu_package] =
++		EC_SENSOR("CPU Package", hwmon_temp, 1, 0x00, 0x31),
+ 	[ec_sensor_temp_mb] =
+ 	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
+ 	[ec_sensor_temp_vrm] =
+ 		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
+ 	[ec_sensor_temp_t_sensor] =
+ 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+ 	[ec_sensor_temp_water_in] =
+ 		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
+ 	[ec_sensor_temp_water_out] =
+ 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
+-	[ec_sensor_fan_cpu_opt] =
+-		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+ };
+ 
+ static const struct ec_sensor_info sensors_family_intel_300[] = {
+-- 
+2.49.0
 
