@@ -1,134 +1,178 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8909E224AE0;
-	Mon,  7 Apr 2025 23:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365C623C380
+	for <linux-hwmon@vger.kernel.org>; Tue,  8 Apr 2025 01:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744068772; cv=none; b=hd2znkZPh/RVtzrfyepjixqEIHFV5T2sNBLmC9gAgx1olFU5U1u+OezFTTVhUl1IQHQ0UoxAoFCIZpd6n7U7PQXhjIAZ6RMHH131LHEnFTSMVTDxwfkT0j6ZY+soZGLX1zvHijqRhAwscXhy8zL4g5Y1/2TuQNt6tjvsAWfxOWQ=
+	t=1744074617; cv=none; b=drJcgP+3m14SrBsLLYQ64fWHlo3Q6y4QOB3DHNu7EViNxg6LsigL8TQxCmPJkElD0cOXITS5+mQFyFPIpib+q5X+nCzj9Zqr0V1P72GoUeUiW8oAxi/pYsPUR9glNyvor/OfDfgCgnwcf35PfwDRjCqCXIN52PwPSWel226S2LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744068772; c=relaxed/simple;
-	bh=dmuKXMQ/caR//xPi4FKmohokbL649GqU+5X3flfmL4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6k2WYw8w6YnRgA/LJmDouL8yPw48D92ceZ7X7mK0wGjpIEdDc01B6n0ue1X76O8WvC/TiWvgs5SPVPg7QqP1qxnyddkzyeTOCnsgaTzOaixipyCSD5VKj4b9gP2HZb80e/obSNJCvZ9V1yTxmLlnKIM6LNFhJMfsCFIdkcWpNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SQlCAGo8; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744074617; c=relaxed/simple;
+	bh=1dvKWkQFNySml/BHzbZrJRX8AmqHIEGZs05c50PV2XY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CklPUPSUWH4F+bpikGIIYhuVLRWr/QQOntRBEFrh4NsDEw+A93CgYU6cKQaxx7oOUV3V9rsFsJDYvQnl6tlu/rfUGCkMX0Hc3qngpm6kQxlrl1nFjo8FZK9J39D7wd6WqNeBlKsSt1373pquYqCHv9awiu4sQzN7L3Hp7FDFJTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com; spf=none smtp.mailfrom=wkennington.com; dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b=S/iqlrcz; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wkennington.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=wkennington.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQlCAGo8"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6ecfbf1c7cbso86452536d6.2;
-        Mon, 07 Apr 2025 16:32:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=wkennington-com.20230601.gappssmtp.com header.i=@wkennington-com.20230601.gappssmtp.com header.b="S/iqlrcz"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22580c9ee0aso53075475ad.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Apr 2025 18:10:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744068769; x=1744673569; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gce3tpEJQvbseQHEqMDIeqXwjb5hnF6K+vDTyD8uXCg=;
-        b=SQlCAGo8LcOUKY0fONwRaspEU+tiipbXEP+a4s2JR6MuYt0DgfDa1Ns4ml96ubrE/G
-         JzqOA+vrJbSd8qStlO4v+1y4mvpyaujhEyMxAVksFbliT4rW3DitKjehGz3t86buH826
-         p6ek6mUH49KKrU+QLOd6su/hziExA/kFlPhPJczIFWAlTwGGw5VE+8+K9M6Ym8ZcPvCQ
-         54jdrfsW0vGHAmIP7IZ/aBfVWST/GwmU2ec/2v3gY1XTaiBuS4KwB+l3d0FkaqdmlNXJ
-         2oiqXDri9BfyyInVUfM7rMC/TbDfXXc/sY9EXhnwyXzjy26g8EEpzPO9zn0jYIP+eC+p
-         MS6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744068769; x=1744673569;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1744074613; x=1744679413; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gce3tpEJQvbseQHEqMDIeqXwjb5hnF6K+vDTyD8uXCg=;
-        b=vgwf+QzXFu3Py9sRa8Q/J2Cfkgbap9Fq5QbgDxXtPFNxT20GabFwkUo+DoweSwzblD
-         UmhuHZl0FIj205yIyp1RKtfV/IuNRql1IxWUMvoG+zX1zxE2mQ9iClEDP83/N2UASQkT
-         L5ZsXkS9DPTLsEj/QIcO9pm1Ny9AUlYrv1r0BSPP3CeOEbNooZ+Q6VTA09S4dUdrWQjD
-         R+ws0H01JSvsYxh0pCh0u+iI4mkdp9sTbfl1AKxUMnzm+wZsVZ2Kitu80ojmTbHvdraE
-         VtE6nAe614K79GxkmCOEOgmIp/E4w4VGafRNKAoI8VrekTXDbc28Kt//qoab4/twTuOs
-         sWgg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWcf0C/JO5YgmU7ALWaqj8gtWrGwnzD1NOsHWiJtRco0hwWe0FdIQ3kRuyw/9pCk9yoktg0vN9GfPspXI=@vger.kernel.org, AJvYcCWdhaEPZEajMRNe08br8/DY/tjnErdWsqGxamAYuUFhK8GoUhBcD5sK3KFfPjguuwUS84wA/h8RWPcuvKUg@vger.kernel.org, AJvYcCWkYEe3XblN2C8/tF9nFx5t1bKkZDV2aMFsxwgdV8SWQFRZb8AkhefPLPeaUHrspzKs0INS1HNatTHK@vger.kernel.org, AJvYcCWuUToW41Al28EfZQSP6D5ij/+uLIaAaTEYIQdQebPerET6x3CqMk76n69oRkOGHpAcPDvMgmSqJilm@vger.kernel.org, AJvYcCWxnUWtAsh5RQETYIrQ7lzzpcgGyBXr6oQzZ97LisFik3zGVwU805UOfHnfATecAfdthYLbvJrUMWLo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJNh1TSuA8hGZ+scZi3tMeRb3ysEyrYRy+gF4yJSN2SdLUJZRz
-	EfKMxMtAj1RrCjX3myAkYYkDTYjuhPEkakURLm0A8iN6la53ls6n
-X-Gm-Gg: ASbGnctcxlFSxcWLUnusiTuMtRfaHhyAx+lrS6JLfjtUM6vUKXM+k0efQid0IbLdq3n
-	2aqRnWCiHgvpWvShMMtWC+GjthANJ9fKPWphqtCaDrfWy49ytaYzi2DwSf/A46mNs875nwkPRoa
-	hrSr0oepIp3WTT8fdhaqBE541c9SqFplPWUeWumWhfUCYZ/opSpebcfrZD+a3JOmcjGsPthrp8C
-	zMkzlmDRY+6p74yCJgp90Vi6/JUm4OQTNAqP5MJGTAKJeEVNS8rkBWLlhtomtqC/+m6hB49XHd2
-	D12xBSlTYz4ZnHco0XeA
-X-Google-Smtp-Source: AGHT+IGGFoQKhq8jM/xnT/qx+VBX8ceaYU/gWDZkhtX4DqhWCeEET7bOo/0E0kCVyVbHnelemU4pwA==
-X-Received: by 2002:a05:6214:493:b0:6e8:9021:9090 with SMTP id 6a1803df08f44-6f00df2bf58mr216384456d6.26.1744068769391;
-        Mon, 07 Apr 2025 16:32:49 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6ef0f164dc6sm65186516d6.120.2025.04.07.16.32.48
+        bh=Z87UPzf+MqrJNhVkbVd+0Pk25DzXX9MXWXUg8MGhgOM=;
+        b=S/iqlrczzFZOJIYckxgyddYkUBsITzhv+Aw137R6vziZXraAZ+jW/UpvXno2zoTCuN
+         QKYrn/7wI4uba96w7hLaxu5Pnwh6FxboF2XalVbHyjfkLi0ke6IwYxfpK85pqAHutZdf
+         X5v9txrAGnHGYw+MqN1+YQ6+O7rrIl6aAPPT66aZD3e23pV2Ray9r1aPDs5KT9KhirY6
+         Wl9jliIhVLQaZphYsKirx3LQsph1BB5N0i+UCuxNF52M6Oraac3Lg+UqBzkjGXw7p8dd
+         hx4w3DsvJJG6ocSgJVPkyjN7QSXjb0u0KfrU7+vgaWDvnFzrb4zHsYgMZrYYsy5YneKN
+         rxbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744074613; x=1744679413;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z87UPzf+MqrJNhVkbVd+0Pk25DzXX9MXWXUg8MGhgOM=;
+        b=a5fnFpjnytnMId66l5J/mgWQg5ayoROWS954z0P2MTo/W1CWqoytN41RfWYYNK64oJ
+         UPvOaBvSk+LMLNPDJCcuT+ZLaEt6xrLH7/TNbZGpK5ApW75D0X4QHIqDQHDBdeGSePbH
+         cVk1k3mZIMMwHGyUYmVlVmFikwmp+grl3a/KpX5gJMj2MwAvW9GSfyei1J00N+qQ/GPn
+         IXklRrazlxlCBIxGCypjc/hkbSN/7td6M6t2zCUwvr5+mUbD6KPb3BHBL4BwgfWdQtGK
+         oGeq4zd2WaaPZQlb0Ji1vzwMSDN23oUS9sDiNNCcO2E/YhUbKqpXBwtpdp38NAVyCGCJ
+         CwPg==
+X-Gm-Message-State: AOJu0Yy+cBhFbn16YyOh8rxeo7OCKwMjPR+wAYMjl9TAoMCApndyLKHL
+	/oF1G0JJoikgreOwkLxW9/zZjWIov5vDo2XAgnSbGtf8Vqpdw7hzlt/37o4OAbY=
+X-Gm-Gg: ASbGnctVqUZqpX7gOwPZ1MeV1yuwgkwUkFnlURVCebuPI9QzRECLxd+H6tGYf32mh0t
+	SfM/2TZBdks1lyzEJUEDHt2vMFPuuee4Jym4IrmSOqq9/8P4gPvqQXHj/padD5ZjrrwZGn1551a
+	m4+RHTAEKUX7Dpme9T1s15mYHcUv3zaCCas+al9GtEuo7OF7vkWSr7bsop0zLp2zTR8sBgNj+mP
+	2CnRbJYbvBNkJ7jyQa0HZkWqJGNx1xfQsE67whqjDUHskLyldDyd6pXVT1+N9jOXtMejTsJnu5p
+	0TzJ7BFDzdrrxm2PvVQIaancpOuoWlVN0Hu5a+HxFJzCfjXL6TLtymcPpnd5Ql/SZbvfKIv1nAv
+	ePz5ajrCEBaOM94eM6uLoBO9ovK9FuE5T76/LvoYbjXU=
+X-Google-Smtp-Source: AGHT+IELwZdrzCrMgf6MPDTbVAGSrXtw+CM5rng2WwTZHjmvYgfIyEWBDFW2oDHLWFLqwBVWv23EKg==
+X-Received: by 2002:a17:902:ce8f:b0:224:162:a3e0 with SMTP id d9443c01a7336-22a8a8ded01mr196113395ad.49.1744074613270;
+        Mon, 07 Apr 2025 18:10:13 -0700 (PDT)
+Received: from wak-linux.svl.corp.google.com ([2a00:79e0:2e5b:9:b25a:2d1b:1734:78be])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739da0b2f66sm9193728b3a.125.2025.04.07.18.10.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 16:32:49 -0700 (PDT)
-Date: Tue, 8 Apr 2025 07:32:14 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Rob Herring <robh@kernel.org>, Inochi Amaoto <inochiama@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Bonnefille <thomas.bonnefille@bootlin.com>, 
-	ghost <2990955050@qq.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, 
-	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>
-Subject: Re: [PATCH 6/9] dt-bindings: mmc: sdhci-of-dwcmhsc: Add Sophgo
- SG2044 support
-Message-ID: <7wklz2qbo3pej7plhdwcuwilbkntfiyuadjpihuhedkvhgvz6p@3h2hxhw54lgq>
-References: <20250407010616.749833-1-inochiama@gmail.com>
- <20250407010616.749833-7-inochiama@gmail.com>
- <20250407140015.GA2164748-robh@kernel.org>
+        Mon, 07 Apr 2025 18:10:12 -0700 (PDT)
+From: "William A. Kennington III" <william@wkennington.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"William A. Kennington III" <william@wkennington.com>
+Subject: [PATCH v2] hwmon: max34451: Work around lost page
+Date: Mon,  7 Apr 2025 18:10:06 -0700
+Message-ID: <20250408011006.1314622-1-william@wkennington.com>
+X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
+In-Reply-To: <20250401220850.3189582-1-william@wkennington.com>
+References: <20250401220850.3189582-1-william@wkennington.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250407140015.GA2164748-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 07, 2025 at 09:00:15AM -0500, Rob Herring wrote:
-> On Mon, Apr 07, 2025 at 09:06:11AM +0800, Inochi Amaoto wrote:
-> > The sdhci IP of SG2044 is similar to it of SG2042. They
-> > share the same clock and controller configuration.
-> > 
-> > Add compatible string for SG2044.
-> > 
-> > Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> > ---
-> >  .../devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml        | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> > index e6e604072d3c..47b5fc1b8e07 100644
-> > --- a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> > @@ -19,6 +19,9 @@ properties:
-> >                - rockchip,rk3562-dwcmshc
-> >                - rockchip,rk3576-dwcmshc
-> >            - const: rockchip,rk3588-dwcmshc
-> > +      - items:
-> > +          - const: sophgo,sg2044-dwcmshc
-> > +          - const: sophgo,sg2042-dwcmshc
-> >        - enum:
-> >            - rockchip,rk3568-dwcmshc
-> >            - rockchip,rk3588-dwcmshc
-> > @@ -74,7 +77,9 @@ allOf:
-> >        properties:
-> >          compatible:
-> >            contains:
-> > -            const: sophgo,sg2042-dwcmshc
-> > +            enum:
-> > +              - sophgo,sg2042-dwcmshc
-> > +              - sophgo,sg2044-dwcmshc
-> 
-> No need for this hunk because the new one has sophgo,sg2042-dwcmshc 
-> already.
-> 
-> Rob
+When requesting new pages from the max34451 we sometimes see that the
+firmware responds with stale or bad data to reads that happen
+immediately after a page change. This is due to a lack of clock
+stretching after page changing on the device side when it needs more
+time to complete the operation.
 
-Thanks, I will remove it.
+To remedy this, the manufacturer recommends we wait 50us until
+the firmware should be ready with the new page.
 
-Regards,
-Inochi
+Signed-off-by: William A. Kennington III <william@wkennington.com>
+---
+V1 -> V2: Make all page changes delay the required 50us
+
+ drivers/hwmon/pmbus/max34440.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+index c9dda33831ff..0d9cb39a9cc6 100644
+--- a/drivers/hwmon/pmbus/max34440.c
++++ b/drivers/hwmon/pmbus/max34440.c
+@@ -12,10 +12,19 @@
+ #include <linux/init.h>
+ #include <linux/err.h>
+ #include <linux/i2c.h>
++#include <linux/delay.h>
+ #include "pmbus.h"
+ 
+ enum chips { max34440, max34441, max34446, max34451, max34460, max34461 };
+ 
++/*
++ * Firmware is sometimes not ready if we try and read the
++ * data from the page immediately after setting. Maxim
++ * recommends 50us delay due to the chip failing to clock
++ * stretch long enough here.
++ */
++#define MAX34440_PAGE_CHANGE_DELAY 50
++
+ #define MAX34440_MFR_VOUT_PEAK		0xd4
+ #define MAX34440_MFR_IOUT_PEAK		0xd5
+ #define MAX34440_MFR_TEMPERATURE_PEAK	0xd6
+@@ -238,6 +247,7 @@ static int max34451_set_supported_funcs(struct i2c_client *client,
+ 
+ 	for (page = 0; page < 16; page++) {
+ 		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
++		fsleep(MAX34440_PAGE_CHANGE_DELAY);
+ 		if (rv < 0)
+ 			return rv;
+ 
+@@ -312,6 +322,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ 	[max34441] = {
+ 		.pages = 12,
+@@ -355,6 +366,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ 	[max34446] = {
+ 		.pages = 7,
+@@ -392,6 +404,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ 	[max34451] = {
+ 		.pages = 21,
+@@ -415,6 +428,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ 	[max34460] = {
+ 		.pages = 18,
+@@ -445,6 +459,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ 	[max34461] = {
+ 		.pages = 23,
+@@ -480,6 +495,7 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[21] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
++		.page_change_delay = MAX34440_PAGE_CHANGE_DELAY,
+ 	},
+ };
+ 
+-- 
+2.49.0.504.g3bcea36a83-goog
+
