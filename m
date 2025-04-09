@@ -1,140 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E912AE8C
-	for <linux-hwmon@vger.kernel.org>; Wed,  9 Apr 2025 14:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FC7262811;
+	Wed,  9 Apr 2025 14:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209081; cv=none; b=WorIGqOpjhb6lxh5pJhq6fLXADtrBgk1JZrfw27lq89R1JA0mm0P3xHtMUZaJKj758vTsbf8FV+rXFZTy01NbdrlxfHh6zyhk30vH8Uu0PNp9oi9S7lgdKNDmLE8fQNk0IYafOQZ8HUCAvl1sM2Ob4/1p7IMk/7o89MVdrpJBBs=
+	t=1744209175; cv=none; b=Uds99HFVBPtaxkZ9kF2G1deoke72rP9ww3j0typHBRcXGu5x+7kWAFZTGooVaLcOJCTb7pvowZByyatz5zwqZWqtY/4IKnSUISiWczgkDcpMkryVIVFc+N9t8WyYOiGBU1HyJOJOyjCIwbIvrSz21qCfCSpaqi12R+PsMpNWwfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209081; c=relaxed/simple;
-	bh=/A0/E6RW+zz/Q3F9MNhOyGXOFashPLIF47QpTHlLk50=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jZn5qSCTll2CAu3vNNENcUNxFkWg6upzZA9MfjjcTHJi/sTGUSkKyUiXG2siZ3qWpy7V43oC1IrNgRC5HAJmKA9GimvoT0Z8qiKTQv7O9vsm5biMfUk7y5Vuhuc0HNPIfzeb7hagFGcY6ATIM33nRVHVrNmTVPRxa9sLYv1qgPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d8PzMpKA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1744209175; c=relaxed/simple;
+	bh=dgs4VNIUccb3VKlgy5RETMbn/dH56y2TOWu0Ep1tE0E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u9d8waGSBvyyMo6R+9ZKfIZoke6CWBHMEo/b8Fia93hjh7qEerqMW1YUybphALnOCPUxX4eLVPniZdQoHCkZgU6/Cm9ROFUZuYvOg7+QBw+ajDx8QWxS8k0PZXYS/nyXGrxcqmnL8xlXEjxKhy2rYO64MkfLYN/yVryOO7wdU4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7/hrkG2; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d8PzMpKA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744209078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bWzyml1e3e0sFCXu/PTQRw2B8guy4dfIE5xDJUgcYCI=;
-	b=d8PzMpKABuB3FlNEE84IaVyEjavXdYKg4wj4bMLGy10oxE0b+/Hs+t4suc5iSSX+881SsU
-	cZrJ4DNUs6n2J+tDcNq401X7NZIxOvK0q8ztO+RFCyFXDnDxsgbA192xwR+mev7rfQCk+q
-	3U1s4wjSF40PDN3jmk0x0MZT2uNwSN0=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-NffpMMneO12xZnTWS4dsRA-1; Wed, 09 Apr 2025 10:31:17 -0400
-X-MC-Unique: NffpMMneO12xZnTWS4dsRA-1
-X-Mimecast-MFC-AGG-ID: NffpMMneO12xZnTWS4dsRA_1744209076
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-2c84aead25aso295620fac.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Apr 2025 07:31:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7/hrkG2"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-227b650504fso64334915ad.0;
+        Wed, 09 Apr 2025 07:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744209173; x=1744813973; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hACfhNRwlqXovej2hysiEcuy4h8cF45gwT3gzZ3u9kk=;
+        b=B7/hrkG2zh+iJFpVEu+VGJBnDyThX626GdhNeBLKiW4F4oGlEAnOP/ewF8jALIoR9w
+         ynMZpyKZwqu/cPZLP3A5LN8Q9zBkjseV9Oia2S/PPBxNdQl/k5Wh5euqwNJwxJno+CJw
+         igosXybf1+hpm8mdLBbr0EeCRb6TB1IbNe7KCgOzD6MJzC4xb7vWTIQYZgw4iv4mTfMC
+         jYvQEx/c69/smu5ts8FxAxhi7gHppo1AGtI0fcBOb3G8iEJkP8dUbcNscoVejcaMxgAX
+         2QcNT5mdF09GBiOpEHWCQZymeI3+VJwj+FDDnvu/AbBDUl61VckIpD6FjP+dDKvygsvH
+         oZag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744209076; x=1744813876;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1744209173; x=1744813973;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bWzyml1e3e0sFCXu/PTQRw2B8guy4dfIE5xDJUgcYCI=;
-        b=JVdiCirMqBH3QzOUu8mmEwZQeo0EVdoMPvlRflKdMNmj9e0VTpQfm2TAczW+1EupXK
-         ToG/KEsZVs82p9j3ss5o4taRJjRhwD9bIaymE1nuYRj8rolERFbMnI5XLZvDiW1fNE1T
-         RfZySLGrJkcRkqN1NmMkAm+lPPoofgyFnc+H3rOL/M1mjVu0aamFkvZAISByXmICMzXf
-         l90gLmTI6uk5Pp3HhOO7kdAW9j4SJN0F7YgLDpklPvIz4NJ2s89821yptPCOdUUxeVDQ
-         2LBXJ7+rgA/evcvo3sii6dBKmB31dZbvTZfRgbZ+LHRL4oQAVoOiepknla7WBv/SypSm
-         M6bg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTWyG1gCNeNlzQUzLFRLgSfq7dqqO6IyOtPNkNtxv2+Az5oxPp44E0awKlny80ga/saVLwNkEfstqtkQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR1xA4NogWS+jdC+iTZxIqvRWHs8K1wJK3uz65Y+my8jgjLKJb
-	h3hqg/EThYzTH0dvkeFXjWZMM5Y1BPAl7sXZ8RII2ZMCxqA8Ooz/iA4/jPDpwI9chnXKaIvw5Zn
-	f/8ZsB5SVskx9bp0bod2aPXTDZL28olDSczvpPSY9YnuqNFXe5gDNT4aswCkm37Qriv35MwVLFU
-	IpA3khgBquzb0ottFlV/u1cGAEaAjt9qXJjFU=
-X-Gm-Gg: ASbGncugcInsdVm06kG8rntppLrWD+7BdEplHBIDHgBrW5PqxPXZZXTWYuDgJhTJJTY
-	nfcI7iFZSp5hIwHt43iad/YoKhGTqGjPNlifqsT/v39Yhwy52gsMKLMuyHCWtOVUO+v7s
-X-Received: by 2002:a05:6871:6184:b0:29e:32e7:5f0d with SMTP id 586e51a60fabf-2d08df909f5mr633849fac.10.1744209076144;
-        Wed, 09 Apr 2025 07:31:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEj15/sfKzjsjKYtAN6/sg9JG469/cZB1MFteleubs5OfTolZvlG+wELSU/pYcsvOH+TTr8CnoX3erw61YVCr4=
-X-Received: by 2002:a05:6871:6184:b0:29e:32e7:5f0d with SMTP id
- 586e51a60fabf-2d08df909f5mr633832fac.10.1744209075809; Wed, 09 Apr 2025
- 07:31:15 -0700 (PDT)
+        bh=hACfhNRwlqXovej2hysiEcuy4h8cF45gwT3gzZ3u9kk=;
+        b=RItt43X9PfOrFNR8j8DgWAuTRdf6ksHS3GqLZSpO/MkFLMYHT8qHRYX4rFDVK2yQWJ
+         I2GmNYyrCZTv3X6cry+xnt1AQm8PQL/6q8FyXCJqE+e8p8xnLU0ZAcmFLiYaDaUdFRgz
+         +kjgomdL0zM6R2DoUjqbeXoRnknNLwRdM/ir22qfkyoxK8e5FgQ3Co5YUu61QCY+WvdX
+         TgLOg965qkcjnBicVsO9XskqapKurCGGTHa4ZIjMJ2ADsfLukI8iFeY2jltUy/cOOxt9
+         7tQmDkyNRZEgyDAsibgoHucMCELYPU1EUi6iMCLK357j3S2tofybadXedldlGSVDr6rV
+         SBug==
+X-Forwarded-Encrypted: i=1; AJvYcCWCLZtMh/ocvogS6VZCIv7AnoFj2g44IHr2ATKljX6/2yZZc0Ps/LRH1M0MVYlriuvJQHMAB5tucicpPw==@vger.kernel.org, AJvYcCWt/GR+ekjF1/mTaTdFbGQB3lKXwOgrDtl3RT7DsSTLDr/1d6m8WfjftRZtGfqS6gFjYLs7U7elefgFBXhU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGjb7VpQv5gZW1iHfJVVFR97uHG4bbIJWIkjrcM4Pyqn5rTAed
+	dr7wuD+lJN8TRPU9j9f58/4W7NB/f4a/uvcFafFs1NkQKisFmk2W
+X-Gm-Gg: ASbGnctb2OxZf5bEAM6+bgbCl1mXajDj6UINsqXI3YHdOxw5ieAobk5QxyuRA8R7soW
+	gvQ/hpWKRAYamo1YlNXXBgc3O4SJfCEAP3AXUtjITyYFPqvWzuJnuBscqxXH4Y9yVbn7r5z2O0i
+	e+5p+uObzcq3ZrZF7rS4EEQDUeI1QS1N2kebzh/7icVeUEhp88nRcKnc/bxgamj0XIdmgwfFKv2
+	Xt4uZzjZQi3AvIi27vZV6VDNX/q85WNYRv15nELkX2Ok7mMNBQl3X27Ua4U9aAnRsQBT8U4nYLM
+	PkCMDVrwDU8DlJFH3X4BvGCfFwTUWmZWm6kbVIEP66IO51ds65V+Kac0tUdDawCt
+X-Google-Smtp-Source: AGHT+IHU1lXmIHmOtQjdOWvnkxGXNioa+/z6LgGjPgjk6iEbR/WK2GRs0RMBTbVw9FVcTLiUXbEByQ==
+X-Received: by 2002:a17:903:1b03:b0:223:67ac:8929 with SMTP id d9443c01a7336-22ac3e100eamr43781285ad.0.1744209172512;
+        Wed, 09 Apr 2025 07:32:52 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7b8aff9sm12583075ad.79.2025.04.09.07.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 07:32:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 9 Apr 2025 07:32:50 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, s32@nxp.com, imx@lists.linux.dev,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Florin Buica <florin.buica@nxp.com>
+Subject: Re: [PATCH v2] hwmon: (ina2xx) make regulator 'vs' support optional
+Message-ID: <badbf2eb-1968-4549-98eb-5ee916860090@roeck-us.net>
+References: <20250409074529.2233733-1-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409074529.2233733-1-ciprianmarian.costea@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20250409074529.2233733-1-ciprianmarian.costea@oss.nxp.com>
-From: Enric Balletbo i Serra <eballetb@redhat.com>
-Date: Wed, 9 Apr 2025 16:30:58 +0200
-X-Gm-Features: ATxdqUHzKWaL37Ln9vA_iKRnaJ2sqIT6FJHzwrfyAc7evIoEaSOKgMOMRDePQYI
-Message-ID: <CALE0LRscnNFzo-tdjBdQQSi=1EdMveX-eSXyhpg_Bdp6EFiKgA@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (ina2xx) make regulator 'vs' support optional
-To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, s32@nxp.com, imx@lists.linux.dev, 
-	Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>, 
-	Eric Chanudet <echanude@redhat.com>, Florin Buica <florin.buica@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Ciprian,
-
-Many thanks for your patch.
-
-On Wed, Apr 9, 2025 at 9:45=E2=80=AFAM Ciprian Costea
-<ciprianmarian.costea@oss.nxp.com> wrote:
->
+On Wed, Apr 09, 2025 at 10:45:29AM +0300, Ciprian Costea wrote:
 > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
->
+> 
 > According to the 'ti,ina2xx' binding, the 'vs-supply' property is
 > optional. Use devm_regulator_get_enable_optional() to avoid a kernel
 > warning message if the property is not provided.
->
+> 
 > Co-developed-by: Florin Buica <florin.buica@nxp.com>
 > Signed-off-by: Florin Buica <florin.buica@nxp.com>
 > Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 
-I verified that using the following patch gets rid of the kernel
-warning about using the dummy regulator, and that the driver continue
-working as expected.
+Applied, after converting multi-line comment to standard form.
 
-[    7.247679] ina2xx 2-0040: power monitor ina231 (Rshunt =3D 1000 uOhm)
-
-So,
-
-Tested-by: Enric Balletbo i Serra <eballetbo@kernel.org>
-
-Thanks,
-  Enric
-
+Guenter
 
 > ---
 >  drivers/hwmon/ina2xx.c | 7 +++++--
 >  1 file changed, 5 insertions(+), 2 deletions(-)
->
+> 
 > diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
 > index 345fe7db9de9..b79e9c2072b3 100644
 > --- a/drivers/hwmon/ina2xx.c
 > +++ b/drivers/hwmon/ina2xx.c
 > @@ -959,8 +959,11 @@ static int ina2xx_probe(struct i2c_client *client)
->                 return PTR_ERR(data->regmap);
->         }
->
-> -       ret =3D devm_regulator_get_enable(dev, "vs");
-> -       if (ret)
-> +       /* Regulator core returns -ENODEV if the 'vs' is not available.
-> +        * Hence the check for -ENODEV return code is necessary.
-> +        */
-> +       ret =3D devm_regulator_get_enable_optional(dev, "vs");
-> +       if (ret < 0 && ret !=3D -ENODEV)
->                 return dev_err_probe(dev, ret, "failed to enable vs regul=
-ator\n");
->
->         ret =3D ina2xx_init(dev, data);
-> --
-> 2.45.2
->
-
+>  		return PTR_ERR(data->regmap);
+>  	}
+>  
+> -	ret = devm_regulator_get_enable(dev, "vs");
+> -	if (ret)
+> +	/* Regulator core returns -ENODEV if the 'vs' is not available.
+> +	 * Hence the check for -ENODEV return code is necessary.
+> +	 */
+> +	ret = devm_regulator_get_enable_optional(dev, "vs");
+> +	if (ret < 0 && ret != -ENODEV)
+>  		return dev_err_probe(dev, ret, "failed to enable vs regulator\n");
+>  
+>  	ret = ina2xx_init(dev, data);
