@@ -1,166 +1,206 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8F682899;
-	Wed,  9 Apr 2025 02:14:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DCB15442A
+	for <linux-hwmon@vger.kernel.org>; Wed,  9 Apr 2025 02:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744164873; cv=none; b=lFuXuvB52dHGzJdQWNi6lJPcHN+qILNhwyJ8UGQqcDnxaqcdvRrynf6apU2LpGdcblXJJYBEiqe16TNEp3Jd9ppxtqmtsQPkdKBGHQUrRQgM7FjbdDzIt/hOJPHTy32uJaTluV17rZwVHjiCLU1i0+fiVdrzCUHQr32zLMbbeMc=
+	t=1744167099; cv=none; b=eLWct6/uaWMaeqlOMBuF2cwuq/aKXeogzx2jl7QhQnhPJzeVMqHh6v7hg0GaAcNZD/nJB2ztcpRblxTSuQqYX3zgYzk+FBOnsrmpEuhbq0w8e/GDqCioecL2VgqUpHvVDwdRHGhp9TElosZB8xWFeQfX+jQN9IPeb8u2QvX5G+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744164873; c=relaxed/simple;
-	bh=UP0FQR/n1zwynJlG9G02mJ86TJ3qtx96xbpDMqupU8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ha9igYX405sTAIJVBuctF5TAIJSUXHp4hnNY5nCRqQkn2i4WK1CBx7bW/CBL2WGJaWzkwgtSIfOeom1EqZPJvOy2Re4fQYJPYwLbo03MQs8YHySH+yd6FnY5nevbtFudpVriHurYWQFrpsikllnY5wgofoEwhZY42LoskfA7q4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hUcNOP08; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1744167099; c=relaxed/simple;
+	bh=lT4g1I0dVOz0aF/0AXaVzztSopxyQziqhLneTK+JWBI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dxSuh0BTwfosPJrW9qc7SfwaJoHJmfpW+t08SGxGqrXA1U8sRp6prhEFYdC6OauojCDdmWnzR41hOHZZzANzxsgKpFiQq87nRnF1wuLdlE6FfxCmwprBTvR1FBoP3eWeQt4hA0OGXDS0VOM7vdi8tNuQ1hC2tGnJAsWU1oyZT2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juDfggWs; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUcNOP08"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-af19b9f4c8cso4146455a12.2;
-        Tue, 08 Apr 2025 19:14:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juDfggWs"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ff69365e1dso4980815a91.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 08 Apr 2025 19:51:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744164870; x=1744769670; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cpDgCF4RC4kIU1sVwLFc1hmL/y8zp2nauAmOE/PaU40=;
-        b=hUcNOP08LJvaROQDnfBSCBnw4s44wle04hHq6eyXMpYoYgxAPNSGflvZWGt79S4P9B
-         3kt6ZTQ3qweI7As/N+YxLp2E9vtn5jE5xcggRszRNJxe3GJKmqbPLiMUVT0tRuAntO7O
-         XjHbpPqHyALUheeXTQH942OqkOH78ox6Ywql+eekf+n9ZmplCVoBzDfYrQcIyifxRdTU
-         vwteHbuUo0XlTDO0ZnEbEbIFmh/IXiXRwxeI/ecwpf9tZJbj8YRhVy1wpVvuLxUWu3Vn
-         OVzlEUofSjI64s1a5Zjb/ltK6I3aWd09tR7D9N3ILi3crgKFBsZ8nO9xd57+dU2ozTX3
-         Un0A==
+        d=gmail.com; s=20230601; t=1744167097; x=1744771897; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ThPw0WlLK+8gmiKxrkcqwMje23EM7ylwQZj6rY88408=;
+        b=juDfggWsGqPyhLYgVNBkegW1+okwDdaGImu6wWSm6Yv/EN2F/m4vyWj1aoQCkXtgVC
+         kIcrKm5il6+U4TH6DVrkaOnykRWtLQntS6MO+nm9yo5FK7wWcj11oQOvVlpL8ZhOzU0C
+         BVh0G2sHxDFUymSKjVCxFW3g05atZhoEIhmwvdrgY3crLpKY2aPYyL7uAIxz32E0zN32
+         wKHE9Le0ooLDfyrnc4weR+EvyDQDVkcbZZnPHjMKYLSSIJvcYOj8F9+9UWWdOiyagyYQ
+         EG9Ciyby0mlQNws3LG4RnOCo3P765sbn1i26Bx4dkQ7mQP6vYsbQCx/qQQsbvdbVxF/H
+         RbhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744164870; x=1744769670;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cpDgCF4RC4kIU1sVwLFc1hmL/y8zp2nauAmOE/PaU40=;
-        b=pC5qgnE15E9xj/25HHjFtbcGej81U72ree8gr0oZQ46J9nYZuORGqw/snngxNeNql4
-         7wXywxwTxd2Bl5oVDrhok21PDozshKiRS2XMVOryLiWYsqUr/JDPhtYvDjPdfdjevWA1
-         YQAOcJdV6LZ7lsXjcB2JXYfk311NCiSAonUSsZAOeX1jGVvP4ivmZ0FgQVj4yiypRtiZ
-         2o9WqpKVhf7UZs2wUwPCta5uGptRWbljBHQ2kdEQU5v7BJyr/ljCGEWw3LhpIrPlOqFY
-         j5EAYugWn6/mVY6//sv/U84hT57y7RzoMvDAVjWILggzgbvpQO8HZxqAIHxHa82TSTI6
-         fhAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHtX7DyuNL6iUSoS/oDoCqiVHkXJNNOh1UB5LgBTjdEsNmdqlHbN38+N76EdWT8UmGdTgSkm8W1JDsQJwc@vger.kernel.org, AJvYcCWNZACbUJ95+nPqHWNZ77d9UIgo7lKDMZm1pMh2pGGnt0lGeHshCJDtI7V6ZnbrDz8G2vx4sw2V2K0Mxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzT3kduSbIFF8TQBmF4fNkchLP3aTHdy3kNdTkAVuLzoWivR/7
-	8d4h+KM0mGOxJY/gcyJlP5NrW5eLcPSs2SdI8hhoFsp25joSKOmt
-X-Gm-Gg: ASbGncvSPR3KVvTM34VrTgLBkuMX7Ty0maPil3OvcenfratTt3X9/xtWGhiLH+MbXio
-	cCbTTDNCcLKhGhtuCtSwCefSVQAkM3K1Wo6RHQ4fN4WVUqxbYxO4/F27LmtaEBpbuKm5ES2tZZs
-	sBR56pGr6S0VZtYxuo3ye9N6BS/Uq/5Wm7PeDea1Oic7v/nE9y90zAv48yPtISeqTNt/Gmi6zn3
-	ty7dhro3mIDVe22EZt4EomuZ6J4UQNhLxx23xK06JZIoIZYtjM8k5azG3I6pnJyT2De7q2Gy7d+
-	2gvkyyJCwNjp29LOtRHraT3S1ftS0mCwrxGnMJ9fIWLtZu+QWx+vR2mF4g==
-X-Google-Smtp-Source: AGHT+IHSZ14NomQz3hALXnGcow5TBpBzj55daEIsWeRV7i8LA3ITmKaDqDlVX3vcaOOZLZG55FAXGg==
-X-Received: by 2002:a05:6a21:3a48:b0:1f5:81bc:c72e with SMTP id adf61e73a8af0-201592ad38fmr1515616637.33.1744164870250;
-        Tue, 08 Apr 2025 19:14:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1e69b2csm83128b3a.166.2025.04.08.19.14.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 19:14:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744167097; x=1744771897;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ThPw0WlLK+8gmiKxrkcqwMje23EM7ylwQZj6rY88408=;
+        b=ehyBBuJBbHG5cSvEAjmbkor0+aWBH8nMG4gJEloaejQIvGZ+4b/WDUMtfqnmwVbhwX
+         o/uE4ENhVOzfzzEAOzBRV9q9Ttp0Ezng6pSwlrfBXWuA5BI4KZdInEtVdNo0tx67WIJ4
+         t799xNmDPlAAVu6H0+qeqTnFizxKoI5dP/bnPn/OAhAgxgLJ3jODtuwaK5J2oNPytL7A
+         FRwwDvlt1zJpCZekk3lg/EnQpWYcRd4Wpw6oiweUIexVKKKxDopF/N9SQlcfD4yAzc2F
+         x1s/RcNY7JoE+uK6Zoc2xF4k3Qo7OHre2DVr3d4oOglANoW2DU6MsU7DOsenGpSXR0Ya
+         W79w==
+X-Forwarded-Encrypted: i=1; AJvYcCXZJIcnEClQtwmMI6MR+QT/yrs5MGYw+P78u5MpgCcBZAnST8YOshq/G9Zgs9yKOnROVrOYfiuK1CDJRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxD2/mPHxkY+DZ7xcnd9UxKY5D+U8AS6FbPh7+fJgOFj5SFye7z
+	kRBPvC37gNqgN589YGuaZaU0UiuDt9NSZDkOGU7s75EXFJt8HBRopwc3xQ==
+X-Gm-Gg: ASbGnctqyOW7bR9Brn02Lu2W8FNKzqc19Buydx3WLDeenVDJtqKVMVFfDg4OptYJSFh
+	bakV7Cch3LyiGO2nW9fsOhbKRmTm1vy/XlIg5ER19ypiVksxqmI4qJsisupXpfmedsM24tLOg1r
+	ejayOcINsVWUcvUesNNI/EiKfGzh2ygipj8NkK0YL3VHi73CQPdqIGX+dGj3cuMZ/WMBj6mWRqo
+	VYmgBh0yZhI5GrKiXqx4A22fHsp/vFmSjnNQDZOZ4TS89H92UkEEkr/3VaX2bUSZsfYyhSvOfXl
+	9YJR9oSWpmYYpfczHFNrRpXFS/lob7e12BkcLUP1YzqBmTKDhc5rXD/Hnz00R+LMrHhj8WvjFc8
+	Ea8HvqZsWK+LLKOx9fg==
+X-Google-Smtp-Source: AGHT+IFM5dD6BomPG2evk7NHep6uA2CXVDskY05xMI9CEaJtPRxMKHv3Hc3O8QTtlXtUlzl81i8JSg==
+X-Received: by 2002:a17:90a:dfc3:b0:2ff:7ad4:77b1 with SMTP id 98e67ed59e1d1-306dd3218f9mr1137606a91.2.1744167097448;
+        Tue, 08 Apr 2025 19:51:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cccb95sm649005ad.242.2025.04.08.19.51.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 19:51:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 8 Apr 2025 19:14:28 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) sort sensor definition arrays
-Message-ID: <faefe6df-8e2c-426a-a22c-7cc0eeba3387@roeck-us.net>
-References: <20250408204505.11412-1-eugene.shalygin@gmail.com>
+Message-ID: <82d98804-e9b6-458e-bb39-3a48c10e9f70@roeck-us.net>
+Date: Tue, 8 Apr 2025 19:51:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408204505.11412-1-eugene.shalygin@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [groeck-staging:hwmon-next 13/13] drivers/hwmon/gpio-fan.c:250:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+To: kernel test robot <lkp@intel.com>,
+ Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-hwmon@vger.kernel.org
+References: <202504091047.biuX8Kl2-lkp@intel.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <202504091047.biuX8Kl2-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 08, 2025 at 10:44:57PM +0200, Eugene Shalygin wrote:
-> The arrays have to be sorted by the sensor register bank and index
-> because this is what the sensor reading function expects. So sort them
-> and leave a comment for future contributors.
+Alexander,
+
+On 4/8/25 19:11, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> head:   d6b1492c9c2e7f2659b63a165ea45ab556c0df0c
+> commit: d6b1492c9c2e7f2659b63a165ea45ab556c0df0c [13/13] hwmon: (gpio-fan) Add regulator support
+> config: riscv-randconfig-001-20250409 (https://download.01.org/0day-ci/archive/20250409/202504091047.biuX8Kl2-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250409/202504091047.biuX8Kl2-lkp@intel.com/reproduce)
 > 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
->  drivers/hwmon/asus-ec-sensors.c | 20 ++++++++++++--------
->  1 file changed, 12 insertions(+), 8 deletions(-)
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504091047.biuX8Kl2-lkp@intel.com/
 > 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 006ced5ab6e6..ec428c5e97d4 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -169,7 +169,10 @@ enum board_family {
->  	family_intel_600_series
->  };
->  
-> -/* All the known sensors for ASUS EC controllers */
-> +/* All the known sensors for ASUS EC controllers. These arrays have to be sorted
-> + * by the full ((bank << 8) + index) register index (see asus_ec_block_read() as
-> + * to why).
-> +*/
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/hwmon/gpio-fan.c:250:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>       250 |         if (val == 0)
+>           |             ^~~~~~~~
+>     drivers/hwmon/gpio-fan.c:255:9: note: uninitialized use occurs here
+>       255 |         return ret ? ret : count;
+>           |                ^~~
+>     drivers/hwmon/gpio-fan.c:250:2: note: remove the 'if' if its condition is always true
+>       250 |         if (val == 0)
+>           |         ^~~~~~~~~~~~~
+>       251 |                 ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+>     drivers/hwmon/gpio-fan.c:237:9: note: initialize the variable 'ret' to silence this warning
+>       237 |         int ret;
+>           |                ^
+>           |                 = 0
+>     1 warning generated.
+> 
 
-WARNING: Block comments should align the * on each line
-#123: FILE: drivers/hwmon/asus-ec-sensors.c:175:
-+ * to why).
-+*/
+I dropped the patch from linux-next. Please fix and make sure there are no
+such problems before resubmitting.
 
-I'll fix that up and apply the patch, but _please_ run checkpatch on your patches.
-
-Also, this is not the network subsystem. Please use standard multi-line comments.
-
+Thanks,
 Guenter
+> 
+> vim +250 drivers/hwmon/gpio-fan.c
+> 
+> d6fe1360f42e86 Simon Guinot       2010-10-22  230
+> c490c63e9505a3 Julia Lawall       2016-12-22  231  static ssize_t pwm1_enable_store(struct device *dev,
+> c490c63e9505a3 Julia Lawall       2016-12-22  232  				 struct device_attribute *attr,
+> d6fe1360f42e86 Simon Guinot       2010-10-22  233  				 const char *buf, size_t count)
+> d6fe1360f42e86 Simon Guinot       2010-10-22  234  {
+> d6fe1360f42e86 Simon Guinot       2010-10-22  235  	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+> d6fe1360f42e86 Simon Guinot       2010-10-22  236  	unsigned long val;
+> d6b1492c9c2e7f Alexander Stein    2025-04-08  237  	int ret;
+> d6fe1360f42e86 Simon Guinot       2010-10-22  238
+> 179c4fdb565dd2 Frans Meulenbroeks 2012-01-04  239  	if (kstrtoul(buf, 10, &val) || val > 1)
+> d6fe1360f42e86 Simon Guinot       2010-10-22  240  		return -EINVAL;
+> d6fe1360f42e86 Simon Guinot       2010-10-22  241
+> d6fe1360f42e86 Simon Guinot       2010-10-22  242  	if (fan_data->pwm_enable == val)
+> d6fe1360f42e86 Simon Guinot       2010-10-22  243  		return count;
+> d6fe1360f42e86 Simon Guinot       2010-10-22  244
+> d6fe1360f42e86 Simon Guinot       2010-10-22  245  	mutex_lock(&fan_data->lock);
+> d6fe1360f42e86 Simon Guinot       2010-10-22  246
+> d6fe1360f42e86 Simon Guinot       2010-10-22  247  	fan_data->pwm_enable = val;
+> d6fe1360f42e86 Simon Guinot       2010-10-22  248
+> d6fe1360f42e86 Simon Guinot       2010-10-22  249  	/* Disable manual control mode: set fan at full speed. */
+> d6fe1360f42e86 Simon Guinot       2010-10-22 @250  	if (val == 0)
+> d6b1492c9c2e7f Alexander Stein    2025-04-08  251  		ret = set_fan_speed(fan_data, fan_data->num_speed - 1);
+> d6fe1360f42e86 Simon Guinot       2010-10-22  252
+> d6fe1360f42e86 Simon Guinot       2010-10-22  253  	mutex_unlock(&fan_data->lock);
+> d6fe1360f42e86 Simon Guinot       2010-10-22  254
+> d6b1492c9c2e7f Alexander Stein    2025-04-08  255  	return ret ? ret : count;
+> d6fe1360f42e86 Simon Guinot       2010-10-22  256  }
+> d6fe1360f42e86 Simon Guinot       2010-10-22  257
+> 
+> :::::: The code at line 250 was first introduced by commit
+> :::::: d6fe1360f42e86262153927986dea6502daff703 hwmon: add generic GPIO fan driver
+> 
+> :::::: TO: Simon Guinot <sguinot@lacie.com>
+> :::::: CC: Guenter Roeck <guenter.roeck@ericsson.com>
+> 
 
->  static const struct ec_sensor_info sensors_family_amd_400[] = {
->  	[ec_sensor_temp_chipset] =
->  		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> @@ -183,10 +186,10 @@ static const struct ec_sensor_info sensors_family_amd_400[] = {
->  		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
->  	[ec_sensor_in_cpu_core] =
->  		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-> -	[ec_sensor_fan_cpu_opt] =
-> -		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
->  	[ec_sensor_fan_vrm_hs] =
->  		EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-> +	[ec_sensor_fan_cpu_opt] =
-> +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
->  	[ec_sensor_fan_chipset] =
->  		/* no chipset fans in this generation */
->  		EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
-> @@ -194,10 +197,10 @@ static const struct ec_sensor_info sensors_family_amd_400[] = {
->  		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
->  	[ec_sensor_curr_cpu] =
->  		EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-> -	[ec_sensor_temp_water_in] =
-> -		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
->  	[ec_sensor_temp_water_out] =
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
-> +	[ec_sensor_temp_water_in] =
-> +		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
->  };
->  
->  static const struct ec_sensor_info sensors_family_amd_500[] = {
-> @@ -239,19 +242,20 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
->  
->  static const struct ec_sensor_info sensors_family_amd_600[] = {
->  	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x30),
-> -	[ec_sensor_temp_cpu_package] = EC_SENSOR("CPU Package", hwmon_temp, 1, 0x00, 0x31),
-> +	[ec_sensor_temp_cpu_package] =
-> +		EC_SENSOR("CPU Package", hwmon_temp, 1, 0x00, 0x31),
->  	[ec_sensor_temp_mb] =
->  	EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x32),
->  	[ec_sensor_temp_vrm] =
->  		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
->  	[ec_sensor_temp_t_sensor] =
->  		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x36),
-> +	[ec_sensor_fan_cpu_opt] =
-> +		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
->  	[ec_sensor_temp_water_in] =
->  		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
->  	[ec_sensor_temp_water_out] =
->  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> -	[ec_sensor_fan_cpu_opt] =
-> -		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
->  };
->  
->  static const struct ec_sensor_info sensors_family_intel_300[] = {
