@@ -1,110 +1,238 @@
-Received: from qmt20.citechco.net (qmt20.citechco.net [203.191.33.192])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA946F099
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 01:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.191.33.192
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FED918A6A9;
+	Thu, 10 Apr 2025 02:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744249933; cv=none; b=aB5F03x09hhi3RNaKnqPOFn2/44FLAgkeu9rKXLb4Xgdz7/1Tt6lKhPcfIulQRV0jQtpO5+vGFmDwfAn4hgWijfUODMf29dC4zC1EBim+mMr8XZEHPu5lHUfPn+DIv3w0VikJzkti3KqEyxBtrLdFjWnLc4i6/I4e0idUl7aLwg=
+	t=1744251237; cv=none; b=a/pEaPkaba+nukECgiKUCZY32D5OhIy/l1P8ArZyevcKgHeSkDcFWC2yapcaFRWClSzf0sUJyA7df3bo9USZdDUgLmLb7VKC99OxYUW/OtpE3SG1iQau2UtkHOGYKvU9n2CMUODyBcMG+MKMNjDkz5a0RLV/Bm63yS23Uy7JhiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744249933; c=relaxed/simple;
-	bh=hqskI2l0bSS7XdAaXzIxsB/kNb7inziURcq7FFqQol8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uvxsBGRxp5zQRfR40V5AGE0MUx9ZELp31KRrtXc27Flk1QTkF9gDqnPlBNCfWA/211Lfrbwyp2ypeeg0H+2KdzLeW0Dm50p6qEdl1Ob4t2Pm6c4YxLAxArViyqMgVUMyzKHjWz4SJjmzn2/WcKOrDcYd6GzP8c3PaY34QqWPa9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jf-bd.net; spf=pass smtp.mailfrom=jf-bd.net; dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b=q87P5/bM; arc=none smtp.client-ip=203.191.33.192
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jf-bd.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jf-bd.net
+	s=arc-20240116; t=1744251237; c=relaxed/simple;
+	bh=9u60sO7OOT1oWOmjPwikFu4rY64oDd58zik3I0OmYfo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jyrx9vcKh3bQBwlFUn5MCd03clO2cOnKXN0/VHVawSfJhx3OrL+vuYxCQixECWJov5lKBt9rI+r8GLFYxoRz9760wpu7sDj1ao+nLg7LgGmSn6bqt7pXWP/0AL3taPtxaXDAeo+2/qUhQxoOHG/dBa4OQKDjm6r/E2KJKIRCd1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=oGXzMqPn; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b="q87P5/bM"
-DomainKey-Signature: a=rsa-sha1; c=nofws; d=jf-bd.net; h=reply-to:from
-	:to:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; q=dns; s=dkim1; b=AUAqFSQAqcIYDHOl9+
-	uAc5HKcmUgzwr4tlp9akEHdn6Fs1YXFp0+Fbr+Z12rKc9cPcR1n7D4GRMVd4wd/h
-	VjvQKvjtRQcQdc1Nqk+ds5qCEdICC0i6wACpx1n87iE0EsZRaA+k4vq6uwhQLfia
-	gmSW5AgmE+epSut1bE2kYpm9Y=
-DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=jf-bd.net; h=reply-to:from
-	:to:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; s=dkim1; bh=BQ4VYQ759GlRs1a2EUBRjVDV
-	aZ8=; b=q87P5/bMyi9H4MWI3mcZ86VVF75brcMbjNjJjB3HUhe4KrJMtbMNbXKS
-	Xa5WISyx6FfYYgSMPnC5xwauivAdHr4l2rPCY+2zPzd0gqM2U2k9pro7HDcGK7CA
-	zz+2FPF21Q+Q+NVlh/x80ZGFZaIMutlDyWBeA++QaUsEBcaW0bo=
-Received: (qmail 25656 invoked by uid 89); 10 Apr 2025 01:52:08 -0000
-Received: from unknown (HELO 179-190-173-23.cable.cabotelecom.com.br) (commercial@jf-bd.net@154.205.144.222)
-  by qmt20.citechco.net with ESMTPA; 10 Apr 2025 01:52:07 -0000
-Reply-To: winstontaylor@theleadingone.net
-From: Winston Taylor <commercial@jf-bd.net>
-To: linux-hwmon@vger.kernel.org
-Subject: WTS
-Date: 9 Apr 2025 20:52:05 -0500
-Message-ID: <20250409205204.03695CA68FF90F2F@jf-bd.net>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="oGXzMqPn"
+Received: from [IPV6:2601:646:8081:1f94:9d5:a0c2:3619:62ac] ([IPv6:2601:646:8081:1f94:9d5:a0c2:3619:62ac])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53A29YJd3849252
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 9 Apr 2025 19:09:34 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53A29YJd3849252
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744250985;
+	bh=sYPb2HJP4fVpfYUaFUUZ0pgxUHfO2I9/b7H7IqJmj3c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oGXzMqPnDihlvH8csOG6X1vYEL5+OkVYip8jhTPp6IM9qVTa+TE2DQN/NL7CCufbI
+	 W70VoP5+eXYAecjlqh+Tn7MRcWyYYPY6ri9KgXYwsAfXP39A5RG5P/1U2MrIrPxIl4
+	 LgNJ7p5qe7PlXd1brGtIHKI9TjgO8NyN/0p80ooXB7kFpxcUb3DSe2qpaXbL6MYH5Y
+	 jkbPJIJLpQn1W597tFm89pO6yOJzSzHl/UbpTIyOav94ZVlYeTk/+v6ZOvSDveTwGk
+	 3WaanUXTgaBtSBGsUrLEl+lM6ukmEGPsrkHUnC15nBvJNz4rVyDO7jHqYWigKmp0ks
+	 M5Uu5VvWQnEFA==
+Message-ID: <e97a83a2-dabd-4dc3-b69a-840ca17d70b5@zytor.com>
+Date: Wed, 9 Apr 2025 19:09:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/13] Introduce parity_odd() and refactor redundant
+ parity code
+To: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
+        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, rfoss@kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
+        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
+        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
+        linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
+        alistair@popple.id.au, linux@rasmusvillemoes.dk,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
+        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
+        Yu-Chun Lin <eleanor15x@gmail.com>
+References: <20250409154356.423512-1-visitorckw@gmail.com>
+ <Z_amQp3gK5Dm8Qz3@yury> <Z/a5Qh/OeLT8JBS4@visitorckw-System-Product-Name>
+ <Z_a9YpE46Xf8581l@yury>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <Z_a9YpE46Xf8581l@yury>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello ,
-These are available for sale. If you=E2=80=99re interested in purchasing=20=
+On 4/9/25 11:33, Yury Norov wrote:
+>>>
+>> I don't have a strong preference for the name, but if I had to guess
+>> the return value from the function prototype, I would intuitively
+>> expect an int to return "0 for even and 1 for odd," and a bool to
+>> return "true for even, false for odd." I recall Jiri and Jacob shared
+>> similar thoughts, which is why I felt adding _odd could provide better
+>> clarity.
+> 
+> I think they said they are convinced that parity should return 1 for
+> odd because of folding and __builtin_parity() arguments.
+> 
 
-these, please email me
+And for bool, 0 == false, and 1 == true. In fact, the *definitions* for 
+false and true in C (but not C++) is:
 
-brand new and original
-Brand New ST8000NM017B  $70 EA
-Brand New ST20000NM007D   $100 EACH
-Brand New ST4000NM000A   $30 EA
-Brand New WD80EFPX   $60 EA
- Brand New WD101PURZ    $70 EA
+<stdbool.h>:
+typedef _Bool bool;
+#define false	0
+#define true	1
 
-Brand New CISCO C9300-48UXM-E
-Available 5
-$21800 EACH
+If someone wants to make more clear, it would be better to put "typedef 
+bool bit_t" in a common header, but that personally seems ridiculous to me.
+   >>>> type from u8 to u64 for broader applicability, and updates its 
+return
+>>>> type from int to bool to make its usage and return semantics more
+>>>> intuitive-returning true for odd parity and false for even parity. It
+>>>> also adds __attribute_const__ to enable compiler optimizations.
+>>>
+>>> That's correct and nice, but can you support it with a bloat-o-meter's
+>>> before/after and/or asm snippets? I also think it worth to be a separate
+>>> patch, preferably the last patch in the series.
+>>>
+>> I quickly tested it with the x86 defconfig, and it appears that the
+>> generated code doesn't change. I forgot who requested the addition
+>> during the review process, but I initially thought it would either
+>> improve the generated code or leave it unchanged without significantly
+>> increasing the source code size.
+> 
+> That's what I actually expected, but was shy to guess openly. :). It's
+> hard to imagine how compiler may improve code generation in this case...
+> 
+> This attribute is used when there's an asm block, or some non-trivial
+> function call. In this case, the function is self-consistent and makes
+> no calls. And you see, const annotation raises more questions than
+> solves problems. Let's drop it.
 
-Intel Xeon Gold 5418Y Processors
-QTY28 $780 each
+Ah yes; one of the quirks about gcc asm is that an asm is implicitly 
+assumed "const" (with no memory operands) or "pure" (with memory 
+operands) unless declared volatile or given an explicit "memory" clobber.
 
-Brand New C9200L-48T-4X-E  $1000 EAC
+So yes, the compiler can most definitely derive the constness from the 
+form of the function even in the variable case.
 
+I would still like to see __builtin_parity() being used as an 
+architecture opt-in; it can, of course, also be unconditionally used in 
+the constant case.
 
- Brand New N9K-C93108TC-FX-24 Nexus
-9300-FX w/ 24p 100M/1/10GT & 6p 40/100G
-Available 4
-$3000 each
+So in the end one of these two become my preferred implementation, and I 
+really don't think it is very complicated:
 
-Brand New NVIDIA GeForce RTX 4090 Founders
-Edition 24GB - QTY: 56 - $700 each
+#ifndef use_builtin_parity
+#define use_builtin_parity(x) __builtin_constant_p(x)
+#endif
 
-Brand new Palit NVIDIA GeForce RTX 5080
-GamingPro OC card with full manufacturer
-QTY 48 $750 EAC
+static inline bool parity8(u8 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	val ^= val >> 4;
+	return (0x6996 >> (val & 0xf)) & 1;
+}
 
-BRAND NEW - ASUS TUF Gaming GeForce RTX =E2=84=A2 5080 16GB
-GDDR7 OC Edition Gaming Graphics Card SEALED
-QTY50  $700 EACH
+static inline bool parity16(u16 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	return parity8(val ^ (val >> 8));
+}
 
-Condition: Grade A
-Used HP EliteBook 840 G7 i7-10610U 16GB RAM 512GB
-SSD Windows 11 Pro TOUCH Screen
-QTY 30 USD 100 each
+static inline bool parity32(u32 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	return parity16(val ^ (val >> 16));
+}
 
-Condition: Grade A
-Used HP EliteBook 850 G8 15.6" FHD,
-INTEL I7, 256GB SSD, 8GB RAM Win11
- QTY50 $240 EACH
+static inline bool parity64(u64 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parityll(val);
+	return parity32(val ^ (val >> 32));
+}
 
-SK Hynix 48GB DDR5 4800 1Rx4 PC5-4800B-
-PF0-1010-XT 288pin Server EC4 RDIMM RAM
-QTY 239 $50 EACH
+This means that an architecture -- in particular, x86 -- can still ask 
+to use __builtin_parity*() directly. It means that architectures on 
+which __builtin_parity*() produces bad code should either complain to 
+the gcc/clang team and have it fixed, or we can add additional mechanism 
+for them to override the implementation at that time.
 
+The alternative is to stop worrying about overengineering, and just do 
+it once and for all:
 
------------------------------------------------------------------
----------------
+#ifndef parity8
+static inline bool parity8(u8 val)
+{
+	val ^= val >> 4;
+	return (0x6996 >> (val & 0xf)) & 1;
+}
+#endif
 
-Best Regards,
-Winston Taylor
-300 Laird St, Wilkes-Barre, PA 18702, USA
-Mobile: +1 (570) 890-5512
-Email: winstontaylor@theleadingone.net
-www.theleadingone.net
+#ifndef parity16
+static inline bool parity16(u16 val)
+{
+	return parity8(val ^ (val >> 8));
+}
+#endif
+
+#ifndef parity32
+static inline bool parity32(u32 val)
+{
+	return parity16(val ^ (val >> 16));
+}
+#endif
+
+#ifndef parity64
+static inline bool parity64(u64 val)
+{
+	return parity32(val ^ (val >> 32));
+}
+#endif
+
+In either case, instead of packing the cascade into one function, make 
+good use of it.
+
+In the latter case, __builtin_constant_p() isn't necessary as it puts 
+the onus on the architecture to separate out const and non-const cases, 
+if it matters -- which it doesn't if the architecture simply wants to 
+use __builtin_parity:
+
+#define parity8(x)  ((bool) __builtin_parity((u8)(x)))
+#define parity16(x) ((bool) __builtin_parity((u16)(x)))
+#define parity32(x) ((bool) __builtin_parity((u32)(x)))
+#define parity64(x) ((bool) __builtin_parityll((u64)(x)))
+
+As stated before, I don't really see that the parity function itself 
+would be very suitable for a generic helper, but if it were to, then 
+using the "standard" macro construct for it would seem to be the better 
+option.
+
+(And I would be very much in favor of not open-coding the helper 
+everywhere but to macroize it; effectively creating a C++ template 
+equivalent. It is out of scope for this project, though.)
+
+	-hpa
+
