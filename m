@@ -1,91 +1,151 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4F8290BA6
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 20:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E581F6EB79
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 21:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744318376; cv=none; b=TuEh7oFU6ceNfUPH1+kkGbLDMnf/o5IbfJAxjdrh6rEqEQeRM13AL/1yMPsbdfCrtKWJZJPYSlFyQZlK3EThg0JyMhTmIiY6LUv/rvqH733tE9dPnvoaKof3r/Oo8XfAhvbpN3z9wznUAI57IPe6+V0Ic2grXGMibBZ6Nrp7yJI=
+	t=1744319302; cv=none; b=DfYSR4IZVSFw8363FiMc6IvlxEDV4fb+kQDNWnTP6KQ9g7HVL/ZGSWLzOX+rlRkmVd2KPVdLRa6tCJjRpEA11yhCpxzT8aZoDbvioiB+rM03sKkYXyfMfgqBwzWR9YHEphl91/9T9lxAeA9O4ccelosprA4Z+vPw64SbbJL6Q8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744318376; c=relaxed/simple;
-	bh=02S6qYqKyu7NgQpahycOC/ngzTXwbJou+TAE7nef2CM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pc4brorIAP3teefTqEcHWfl1SZ+3yojlxjzXLfUMR4hhbexDnl+kyXdeBn1fZTe2cLMxbCK7eCUZrCyNrT9YjtJ471qqK79aAZTKdO1OGhQSFWnwJv/C7grQURzeVUxZZtSrObqT5WYzL4AU3372S2TQDe6WiS0DVX94rr2jkTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NA6f9aoy; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744319302; c=relaxed/simple;
+	bh=zrrHuajWbauLcto28oEaHJ3anApGH2Yvs5sJTerTrW4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=FxkoQkTtKPgFNRpfw5NMfe6lL5v1Yr/7Yds7wu2HzdPKneApe8299+rahwLCOtWQh68smwJmeHhKOqd1cY83wprshp6aL3GxbxJ2PfMsC+kAblqvUZhjYM1eUaHUyRU91nipG2f4hbn6/gz+iar2O9VlHh7coBeJfKQ6ADstLU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxFF6ATa; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NA6f9aoy"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-227c7e57da2so12686005ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 13:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744318374; x=1744923174; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YA2MxkaSY1j6yHK2UqCqbmgU5GeWV5bWQi26PBgBNc4=;
-        b=NA6f9aoyVqq0d9eRo4xpr8g7D++aqzA1rKzUvvyTQ0j/5aVjkjNaLOdP2hCtQPZY+T
-         tfeZzFX5Gx+ZBDg2Y3Eh1RBYN2tcAgaf28hRN4adZxsh/DAlcYWlGmCnMKvogtKDQUwE
-         3Q0Gbe89OvqhDzpNHTaHrswCjfSrEYKukg9OP26dDiMRCvtVgZCYW/RqnN2D5+zhxvSn
-         JN5wjh+KXb0uNkRTr8rjqCiJ5E+1kHbA2CMdM25SdBjK7vByQ69nZAarcVWFW/gNS3BB
-         4Yepmgjle5e4NKhxgD/s5hhremV/bmJuKqHFcICzV9x6Mmm2p1805XbOzLtvY2pNJtuy
-         vzqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744318374; x=1744923174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YA2MxkaSY1j6yHK2UqCqbmgU5GeWV5bWQi26PBgBNc4=;
-        b=EiKZh9zgV2d+ImYrF7huUryNKREE6GUht0Vt0GHlpvcLCbeJgcfRacAiR/ygk7vtJs
-         b+5KzisBWp7LuaVmB0zlBnShIGe5Q/ijF52tNiC7txLK/Ymc2jq8Vap6b445Tg2ymYan
-         8LZAELLw3llFbilZIZgoLnJN1nGKPfKOBib/yv27Fkbsmz6juIWdGfss1bps2lLGXXKE
-         MlLGWt8cBR1BZ9UeGhxv6f/an2riSC62OvutfELaK/jwFg7rUMiwVk+qJdsLodCWnwqd
-         /C5oPIXRjOgL61NhC+nb83TlNl5xv0CVicOEm2iCabIdCSucn2Kxoadn7jy+92Tx071d
-         vdAQ==
-X-Gm-Message-State: AOJu0Yx+wRRjcpfph5IJfYd1/DYZ06vjgsg6I55U6xVQz+Tr/cDkoImU
-	Tu9Uaa+sxCsXK2JRY/3/7fGOIrcGRtNfeg9Q5Ws/iXX5vijtWChM
-X-Gm-Gg: ASbGnctXjq7llEjtEq5GTPadsgCUAUvzthEGhHpEgM/NAmMTxaO+CcOaitmkLX59l+0
-	jK1kz49bpaIO0c3qwaUV0D8VowkUVHcfVkxS571YDXbwCK90Xzi04L6ZMLjFG9RN8mCb1k9I5yw
-	mdyzECg9EYtNLyEiY0e9nILdqLUQL1IAOr5aqNvQYLDEH7bL6TFRz+I/rOP3Q7ENDZSUo8It0fE
-	8W2BGR8A28Szuy/6K9iTWgevrzf5Z1m/lq+ugZeFa80dF8oVJeC3Yj0TlvA/CQDhISRqwduVUtb
-	7KUs5uvNps2CZHdszjl98Zx6H1J78udVHnQXdPwuOmc5LMUM8bIg3lPM0hgWe2zP
-X-Google-Smtp-Source: AGHT+IGDNTyr9db1DGzsdG3KyYkkf8XI2Gg2Cx62xEUbqJudRHUGmLgaKgxR1TXi1goT7m7uiJuWqw==
-X-Received: by 2002:a17:902:f688:b0:215:b473:1dc9 with SMTP id d9443c01a7336-22bea502637mr2941125ad.46.1744318374194;
-        Thu, 10 Apr 2025 13:52:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7b6288asm35285105ad.9.2025.04.10.13.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 13:52:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 10 Apr 2025 13:52:52 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc: linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@weissschuh.net,
-	Gerhard Engleder <eg@keba.com>
-Subject: Re: [PATCH v2] hwmon: Add KEBA battery monitoring controller support
-Message-ID: <10c43757-4fea-4eb8-9fcc-f2c25ff256e8@roeck-us.net>
-References: <20250409190830.60489-1-gerhard@engleder-embedded.com>
- <651ce8b5-4257-4d38-aa18-285698ab7856@roeck-us.net>
- <c1a67d09-a23a-4ba8-bf8b-19f3f6d2eb34@engleder-embedded.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxFF6ATa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744319301; x=1775855301;
+  h=date:from:to:cc:subject:message-id;
+  bh=zrrHuajWbauLcto28oEaHJ3anApGH2Yvs5sJTerTrW4=;
+  b=DxFF6ATaJXnEixMrQHIP90Z2Q9RDmp4alX2YrGoD0GQ3UfBakGTQjNsp
+   gG5lkQ0wYhHQdyLDDTpF6OhuGU2PE36M4TgtT4rQXUek7eF0aXJoPSjfo
+   1PI3qwWGsu7NxL2tBDMyYENTBehhKc6c2BAIKQAj1HRLfKuWHgdCkULvI
+   3mahmSDipr9Yu9DJuWkh36Azk9FEKNeR6xnXRbVjpat4vBepQunPzEoGq
+   uktWNd5dDAuyu21JWZUtju5G4dLC3qT2/E7P3eUMGn/btEPo3Mkh8zebX
+   AUKx730GssRZgVWuUzJZGIYuxB/Jkl/BMTVyKrj+f4PfOSGCkToisJlXs
+   Q==;
+X-CSE-ConnectionGUID: bKB78EFhTIKbssi8S5e+pA==
+X-CSE-MsgGUID: 4KgVW8/lTJ2lNAzhePmiCg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="49697404"
+X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
+   d="scan'208";a="49697404"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2025 14:08:20 -0700
+X-CSE-ConnectionGUID: K7d44sMQTEqsUpMZ2dRKxQ==
+X-CSE-MsgGUID: 4GUmb6YMRjS9IercGmYNRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,203,1739865600"; 
+   d="scan'208";a="128781795"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 10 Apr 2025 14:08:19 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u2z8C-000AX5-30;
+	Thu, 10 Apr 2025 21:08:16 +0000
+Date: Fri, 11 Apr 2025 05:07:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 1d1a3692ba9c0184ac28793b323edef01a121081
+Message-ID: <202504110511.FLj0Kdl1-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1a67d09-a23a-4ba8-bf8b-19f3f6d2eb34@engleder-embedded.com>
 
-On Thu, Apr 10, 2025 at 09:24:57PM +0200, Gerhard Engleder wrote:
-> > would have been equivalent and a bit simpler. Also, kbatt_is_visible()
-> > could have just returned 0444 without any checks since there is only one
-> > attribute and it is always present. However, I am tired of arguing today,
-> > so applied.
-> 
-> Thanks for applying! I will try to make you less tired next time.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 1d1a3692ba9c0184ac28793b323edef01a121081  hwmon: Add KEBA battery monitoring controller support
 
-Wasn't you :-)
+elapsed time: 1460m
 
-Guenter
+configs tested: 74
+configs skipped: 1
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250410    gcc-14.2.0
+arc                   randconfig-002-20250410    gcc-12.4.0
+arm                   randconfig-001-20250410    clang-21
+arm                   randconfig-002-20250410    clang-18
+arm                   randconfig-003-20250410    gcc-7.5.0
+arm                   randconfig-004-20250410    gcc-8.5.0
+arm64                 randconfig-001-20250410    clang-21
+arm64                 randconfig-002-20250410    clang-21
+arm64                 randconfig-003-20250410    gcc-6.5.0
+arm64                 randconfig-004-20250410    gcc-8.5.0
+csky                  randconfig-001-20250410    gcc-14.2.0
+csky                  randconfig-002-20250410    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250410    clang-21
+hexagon               randconfig-002-20250410    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250410    clang-20
+i386        buildonly-randconfig-002-20250410    clang-20
+i386        buildonly-randconfig-003-20250410    clang-20
+i386        buildonly-randconfig-004-20250410    gcc-11
+i386        buildonly-randconfig-005-20250410    clang-20
+i386        buildonly-randconfig-006-20250410    clang-20
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch             randconfig-001-20250410    gcc-12.4.0
+loongarch             randconfig-002-20250410    gcc-12.4.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+nios2                 randconfig-001-20250410    gcc-14.2.0
+nios2                 randconfig-002-20250410    gcc-10.5.0
+parisc                randconfig-001-20250410    gcc-5.5.0
+parisc                randconfig-002-20250410    gcc-11.5.0
+powerpc               randconfig-001-20250410    gcc-6.5.0
+powerpc               randconfig-002-20250410    gcc-6.5.0
+powerpc               randconfig-003-20250410    clang-21
+powerpc64             randconfig-001-20250410    clang-21
+powerpc64             randconfig-002-20250410    clang-21
+powerpc64             randconfig-003-20250410    clang-21
+riscv                 randconfig-001-20250410    clang-21
+riscv                 randconfig-002-20250410    gcc-8.5.0
+s390                             allmodconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250410    clang-17
+s390                  randconfig-002-20250410    gcc-6.5.0
+sh                               allmodconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250410    gcc-12.4.0
+sh                    randconfig-002-20250410    gcc-10.5.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                 randconfig-001-20250410    gcc-10.3.0
+sparc                 randconfig-002-20250410    gcc-7.5.0
+sparc64               randconfig-001-20250410    gcc-7.5.0
+sparc64               randconfig-002-20250410    gcc-5.5.0
+um                               allmodconfig    clang-19
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250410    clang-21
+um                    randconfig-002-20250410    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250410    clang-20
+x86_64      buildonly-randconfig-002-20250410    gcc-12
+x86_64      buildonly-randconfig-003-20250410    clang-20
+x86_64      buildonly-randconfig-004-20250410    clang-20
+x86_64      buildonly-randconfig-005-20250410    clang-20
+x86_64      buildonly-randconfig-006-20250410    clang-20
+x86_64                              defconfig    gcc-11
+xtensa                randconfig-001-20250410    gcc-14.2.0
+xtensa                randconfig-002-20250410    gcc-7.5.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
