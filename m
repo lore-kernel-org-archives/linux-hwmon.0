@@ -1,71 +1,70 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1C81EE7DD;
-	Thu, 10 Apr 2025 18:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15711AA786;
+	Thu, 10 Apr 2025 19:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744310173; cv=none; b=Yz4QTK6rCWjlLcOxNWUfLgOaZ3tZMgjtsoEIVG/g8m8HRqojopGcpk91XE+sTZGCLCnXB/S5BkN7KPVdvZNipOYuXMcYlgCY9pkmA/lkEHZTDWIcsFVxqo4CKpxnVi9EzHgh464tTutWmbk4M4FcMBOg0hZQn3ivoWBmnmX1mrU=
+	t=1744314554; cv=none; b=T3Na76UAkEWogyfGvqdO4LceZfxJmzUN0d3pQ19Ud00AdFhl5CRBtyI+b9xZfnJizBazxTuhvk4EbU4EJeke+iGbjHiBhnP09PB1NxlGEM02YD4c4l1RJodGNXp7SswEAzzc2XJ5iBFTpc12tqstuWGMhpAhd5D1eIu+QdhtMS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744310173; c=relaxed/simple;
-	bh=/YlGaJrDMtREG70oFyBmE+DbzuF9W9LpheI5IW5gcas=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SZKkHGt1ZqgpbystiMybYCxTrSB93e9u8lUrEkExpwp5JOL+1lvqzhg45tXB1YNccrEdGEPcnN5zKSwvEY31+XnFstY7PjzzdIfnb0v0LD5a66txmqUsLbO18edue6VAmPJTtpUNcaZF8Y9lXOB+bAqX2bSyOCMWywbR5YyqlxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ClrfYx0S; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1744314554; c=relaxed/simple;
+	bh=0+WlZOuqbF0bXm7t3MBcReXYYpFdLnP3mku1ztHJfEY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=VJEH70TpRfL5gu8U7yCoJTw7u0HSYsROFyoEC4fFrkCwDfQz58027ETzH3eijisg1OFsz2h8WTR63IAYuX3cej7gcUwYncEwuFV4NDymY7zQ5I3+u+RoaJndGuzZc1ABCD+WSzBw/DrUUn1/xUzxtXgniaw2p1j83wkQwqHFcvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=moVhvSd1; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ClrfYx0S"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22548a28d0cso17369955ad.3;
-        Thu, 10 Apr 2025 11:36:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="moVhvSd1"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-224341bbc1dso12200875ad.3;
+        Thu, 10 Apr 2025 12:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744310171; x=1744914971; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744314552; x=1744919352; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oac5s7OjyGN5VS5VbkIAHn0ot4yH/f9rZZZ6VzOSKww=;
-        b=ClrfYx0SHuPcbGDME6tbNfBXtMem4P+PoNO0BccWMCBpe8adesXK+zJ9Uj8rZLu4P/
-         raEV3AMlQiCOz5SVPrmPNBlF4OcV/lzojG92v2BwQvkQLIEO3sUU3M8cw6h7+vupXo58
-         Qm6Opi4QMVyahRdKu4WYk9MByPeTX95k1Q97fHW4BYr3UPQp6JtgmBirBpQ4sVruhcZl
-         YWB+eBj7isuWTlAMmMlXVDLO8EqiEe7QUHGA622RXOXW7nybVOJmk4xc7RxDFzIOTdF5
-         5Cv7n3I0aKSNVMmTtEjYXQr88wR4QgUa/0gIXBZArNUcKkk0eiLLttT3KupHewNupIvI
-         LLzw==
+        bh=PKY2YNNJabaBgf6w79AisfgBJwnfIvkP7se+XQ8iOTw=;
+        b=moVhvSd1SYqEuQh4XWD5Prgz1QoP78TaJedgMmkHinT82WdOcP4EPp2qMAFjWNq8Ts
+         lU0Z0yJRELvOz/etobyDlFYCYyODQZzuX6ZFd+uFHfhIrdOi5uDxx0SzozjxvozuQ/08
+         zW6Na4YSf1MNyGQXbtcfd/kmTzjtklzcfA9HFCqq49D8JbevH3p4Mrtq2k/5ygw1tzOD
+         UUVVrnfShfx6f/mHhqP+YZicrXAYyOOWEZzcIB67ZKBnqNZgfDBvj9YChP0oAdwBFpQp
+         ADPDtuReUZi/8BN8O3Yz3abHfgbT22W+A4xcDYeKXwriuFdB8koFZJcKEGXgIPZiXZ/L
+         QiUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744310171; x=1744914971;
+        d=1e100.net; s=20230601; t=1744314552; x=1744919352;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oac5s7OjyGN5VS5VbkIAHn0ot4yH/f9rZZZ6VzOSKww=;
-        b=KJcBfwq9CMt/W7+PDFiLRw1BxvGN31ZErBJdrPZEFOi5DS2jkpr6/ZhobSVrzyOxCC
-         CKb3cGSOZDh8A+Uv3DSQAciiC8lAhyNGYTnJqhXFNF9Z0adexaHGsExpKfDoH7Q8wwTj
-         BixihVWLkGdCnjLE6yXjM2GbJ65vHak0eKZ6+77VN1UXN6RxUu98OYBEAKVhwM+umEsF
-         vsAxXLx3NJaRRiNHFCZvguqtq8JJXZsMKRKczQAPnp6597eUggkuxZ23bXkADfOpYauO
-         RbDLeIkfso2Eg8gX/78QivKpvVIVKcXpgsZkaaspadIOBbW1StsniGBSJlBDL24LcnnR
-         m5lA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmp8FddNICkwhdsQj1z7NwIlWxDutyFSvua9xrp0LIBY60p5SZtBx3JKjD41QTVmez2zfLpZxKFKJd3aM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlS6Xs3MR7Hd9cGRniTw0pQ5WdNU8QhVIdxDCRgayPVO1iV37i
-	WxfJoSoqQiwgS5ELGC00Ex+mJnfY9MaAw18XPoyYcULfuGhwgY6w
-X-Gm-Gg: ASbGnctOd+XyWSu6AgXvcNlmT0JLo/EqcPXei8UjeKsgNtOAo1fQIeL02pbwNp5nX7o
-	l7/Zi0437nKzkQmHsXrn+qFC8X2g+NoVToLRM/9wnm1jdSZLfRhVvGiFpEmO64l4wL2SHUCX7Ca
-	ffGHRCFYOOUtu559u9kJYt0kJ0Pj54zgnKk/9LZPN+6k8uYuC0BK0iG1NW/HVNEef2YkjINn7pY
-	J/GWA7nef0g5p9RmY2gumSOXtZhz5C1Ql8/nFQixCNyinlGY1g1lBqXGrTKRb+lUyQ3QQpidggk
-	PtPI9BsXQOushZ++PIetdZreSJVqoLh3QXrOPzgAiK0dPTbH8PNT9nH4Ojd74CqH9Ry7jYNSiCY
-	=
-X-Google-Smtp-Source: AGHT+IE7813f09Upk4N+t4KU/FISmjErr0pklWnn1shoTyren++hXOMRERD8bFxjlcaeHEq0hfPvUQ==
-X-Received: by 2002:a17:902:db06:b0:224:1074:63a2 with SMTP id d9443c01a7336-22be03edf37mr51007795ad.43.1744310171563;
-        Thu, 10 Apr 2025 11:36:11 -0700 (PDT)
+        bh=PKY2YNNJabaBgf6w79AisfgBJwnfIvkP7se+XQ8iOTw=;
+        b=dLtgWCDf14+1S1eu5wvQio8KkpjK+ruiyEeiPntinw28g/d9r6pGaMMYPh+X69+5U6
+         h+6bnpeOa60Q3Nz9tK1m6t6ST8fFXPjuRYD6PtYclK67bQ6HwE5zBxzXKVUdglwkfxss
+         Z2Xi0fTle+g3L6f5z6g/qh1R3X1f9F4wFGJGYgBQLmkcrQ4jRHwS3Xt11qyn4CK87ZqK
+         jZI2Xm53Y3o+3Q1rYYtq6az4bbTJzhUuAjH5V1ENqypA+SodHWhfKqHQFAax+7GP4DVB
+         UggEijgDZadE3VzvVyC+hZjIWT0tHLEHG0y0PuYp282XAYWo6RinYAwXZVGpaHHZonzY
+         SENw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeMe/FtBqNAI0fA+rz63PbS5X5R8WCwSOS46VokwaznEYU0eDLvTPwiOXHtP/BOaR8hXghCdydFD3ctlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwKQ/JF4H2VQSzgKzd/AvWlcTxSWx9xgtzPRBxNzof3wySvq8a
+	wW0xC8TT5JgLpc/Sy8mOJ+mGB8PYM0fluSdclpqZPuvyWTQrmWcf
+X-Gm-Gg: ASbGncuiLTrv5L5eQcBMlhYbwDS3r8gR4U1aC1Jlp2m4wKivP9PvHw5oEFKIkQZUWgL
+	9TzJ5pDvYRUVdMaaAaFegJLUhrUtDmrFiZ5LZPoo4mBaBeHMxPq7x3X9ycmZZitB3Oh0M75BlSC
+	tEC/6JrKh3jZQThG9kjTB26odtflpzzTcM76YVJcrF7cVsGtM+eZ5qWmwWqoyx3qM11dFgw/Im5
+	XwqLDAE76JkYPQY99DnDgfBeolD3pGupaE7gZCbXtNbSoiBVR4snDbrm6xk1gQiqD/wrynduf47
+	jRYmd54Omf9o44fUoFN+vriDJlME0CrrOwdEBCXJv9w/2iVKMS/WwRVJPYH0iOdn5L5eahb3giU
+	UbnJgT4Ggpg==
+X-Google-Smtp-Source: AGHT+IEaSY6FBwE2JNJQ6fyN19fcenuhr13rJxJqIq6oVj1MXtuR2q8ugxop0ZMJ5+LofNYQQpen6A==
+X-Received: by 2002:a17:903:41c3:b0:220:ea90:191e with SMTP id d9443c01a7336-22bea4956c8mr1427545ad.4.1744314551862;
+        Thu, 10 Apr 2025 12:49:11 -0700 (PDT)
 Received: from purva-IdeaPad-Gaming-3-15IHU6.. ([2409:4080:204:a537:70f5:9c3d:61d0:62b9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7ccb5ddsm34072825ad.230.2025.04.10.11.36.08
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb68e5sm34933235ad.206.2025.04.10.12.49.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 11:36:11 -0700 (PDT)
+        Thu, 10 Apr 2025 12:49:11 -0700 (PDT)
 From: Purva Yeshi <purvayeshi550@gmail.com>
-To: Luca Tettamanti <kronos.it@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
+To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Purva Yeshi <purvayeshi550@gmail.com>
-Subject: [PATCH] hwmon: asus_atk0110: NULL buf.pointer after free
-Date: Fri, 11 Apr 2025 00:04:50 +0530
-Message-Id: <20250410183450.15514-1-purvayeshi550@gmail.com>
+Subject: [PATCH] hwmon: max31827: Fix uninitialized variable lsb_idx in max31827_init_client
+Date: Fri, 11 Apr 2025 01:18:33 +0530
+Message-Id: <20250410194833.21366-1-purvayeshi550@gmail.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -73,52 +72,49 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
 
 Fix Smatch-detected issue:
-drivers/hwmon/asus_atk0110.c:987 atk_enumerate_old_hwmon() error:
-double free of 'buf.pointer' (line 966)
-drivers/hwmon/asus_atk0110.c:1008 atk_enumerate_old_hwmon() error:
-double free of 'buf.pointer' (line 987)
+drivers/hwmon/max31827.c:564 max31827_init_client() error:
+uninitialized symbol 'lsb_idx'.
 
-Smatch warns about double free of 'buf.pointer'.
-This happens because the same buffer struct is reused multiple times
-without resetting the pointer after free. Set buf.pointer = NULL
-after each ACPI_FREE to prevent possible use-after-free bugs.
+​In the max31827_init_client() function, the variable lsb_idx is assigned
+a value only when data has exactly one bit set (hweight32(data) == 1).
+If this condition isn't met, lsb_idx remains uninitialized, leading to
+undefined behavior when it's subsequently used.
+
+Ensure that data is non-zero and has exactly one bit set before
+calling __ffs(data) to determine lsb_idx. Additionally, verify that
+lsb_idx does not exceed 4. This approach prevents the use of an
+uninitialized lsb_idx and resolves the Smatch warning.
 
 Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
 ---
- drivers/hwmon/asus_atk0110.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/max31827.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/asus_atk0110.c b/drivers/hwmon/asus_atk0110.c
-index c80350e499e9..83ee7f25bb8e 100644
---- a/drivers/hwmon/asus_atk0110.c
-+++ b/drivers/hwmon/asus_atk0110.c
-@@ -964,6 +964,7 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 			count++;
- 	}
- 	ACPI_FREE(buf.pointer);
-+	buf.pointer = NULL;
+diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+index 48e8f8ba4d05..c62eaf186d9d 100644
+--- a/drivers/hwmon/max31827.c
++++ b/drivers/hwmon/max31827.c
+@@ -558,10 +558,13 @@ static int max31827_init_client(struct max31827_state *st,
+ 		/*
+ 		 * Convert the desired fault queue into register bits.
+ 		 */
+-		if (data != 0)
+-			lsb_idx = __ffs(data);
++		if (data == 0 || hweight32(data) != 1) {
++			dev_err(dev, "Invalid data in adi,fault-q\n");
++			return -EINVAL;
++		}
  
- 	/* Temperatures */
- 	buf.length = ACPI_ALLOCATE_BUFFER;
-@@ -985,6 +986,7 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 			count++;
- 	}
- 	ACPI_FREE(buf.pointer);
-+	buf.pointer = NULL;
- 
- 	/* Fans */
- 	buf.length = ACPI_ALLOCATE_BUFFER;
-@@ -1006,6 +1008,7 @@ static int atk_enumerate_old_hwmon(struct atk_data *data)
- 			count++;
- 	}
- 	ACPI_FREE(buf.pointer);
-+	buf.pointer = NULL;
- 
- 	return count;
- }
+-		if (hweight32(data) != 1 || lsb_idx > 4) {
++		lsb_idx = __ffs(data);
++		if (lsb_idx > 4) {
+ 			dev_err(dev, "Invalid data in adi,fault-q\n");
+ 			return -EINVAL;
+ 		}
 -- 
 2.34.1
 
