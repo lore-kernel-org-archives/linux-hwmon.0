@@ -1,238 +1,239 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FED918A6A9;
-	Thu, 10 Apr 2025 02:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8C01E285A;
+	Thu, 10 Apr 2025 02:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744251237; cv=none; b=a/pEaPkaba+nukECgiKUCZY32D5OhIy/l1P8ArZyevcKgHeSkDcFWC2yapcaFRWClSzf0sUJyA7df3bo9USZdDUgLmLb7VKC99OxYUW/OtpE3SG1iQau2UtkHOGYKvU9n2CMUODyBcMG+MKMNjDkz5a0RLV/Bm63yS23Uy7JhiI=
+	t=1744252848; cv=none; b=KjMWkFOWHwwza7b/Dcy+x6KJfgVzMs7XMMKZVsvXSN/9eTAk+n1O4W3OM5aSqnthQYgssSFXeTxjCliOAXZzUiwTHW101D48d0TxH2VciNLmwTO60b7knii8tGVH1pGmtOzIpGSQnrXYvPhRIksQ1hgTPEmccsOIKSecoipZg8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744251237; c=relaxed/simple;
-	bh=9u60sO7OOT1oWOmjPwikFu4rY64oDd58zik3I0OmYfo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jyrx9vcKh3bQBwlFUn5MCd03clO2cOnKXN0/VHVawSfJhx3OrL+vuYxCQixECWJov5lKBt9rI+r8GLFYxoRz9760wpu7sDj1ao+nLg7LgGmSn6bqt7pXWP/0AL3taPtxaXDAeo+2/qUhQxoOHG/dBa4OQKDjm6r/E2KJKIRCd1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=oGXzMqPn; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1744252848; c=relaxed/simple;
+	bh=3/tfsE5WqQ4jsxy0JOcV1bgcuEhi9GuIovCCra7x0/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lkGTpujUKNo+MCc1M6Qri/+WoGuoExfrJUiEqZmfnTHMdLwn5ILvoTWFDQE3k4sbhW+JTDspJBCuGVyLUzRNKSLj/4YnjdDX7YWld9UwHtpRDEoXzG8G5I9BEibjLbMrpWavPDuJXxYLE7MqmnW8tAbE47oJCCvjM1zxuIl+sjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ep0VsQTf; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="oGXzMqPn"
-Received: from [IPV6:2601:646:8081:1f94:9d5:a0c2:3619:62ac] ([IPv6:2601:646:8081:1f94:9d5:a0c2:3619:62ac])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53A29YJd3849252
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 9 Apr 2025 19:09:34 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53A29YJd3849252
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1744250985;
-	bh=sYPb2HJP4fVpfYUaFUUZ0pgxUHfO2I9/b7H7IqJmj3c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oGXzMqPnDihlvH8csOG6X1vYEL5+OkVYip8jhTPp6IM9qVTa+TE2DQN/NL7CCufbI
-	 W70VoP5+eXYAecjlqh+Tn7MRcWyYYPY6ri9KgXYwsAfXP39A5RG5P/1U2MrIrPxIl4
-	 LgNJ7p5qe7PlXd1brGtIHKI9TjgO8NyN/0p80ooXB7kFpxcUb3DSe2qpaXbL6MYH5Y
-	 jkbPJIJLpQn1W597tFm89pO6yOJzSzHl/UbpTIyOav94ZVlYeTk/+v6ZOvSDveTwGk
-	 3WaanUXTgaBtSBGsUrLEl+lM6ukmEGPsrkHUnC15nBvJNz4rVyDO7jHqYWigKmp0ks
-	 M5Uu5VvWQnEFA==
-Message-ID: <e97a83a2-dabd-4dc3-b69a-840ca17d70b5@zytor.com>
-Date: Wed, 9 Apr 2025 19:09:28 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ep0VsQTf"
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e6dee579f38so243005276.0;
+        Wed, 09 Apr 2025 19:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744252846; x=1744857646; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KcuOTVyHU6jhzBy0xZ293tFvt3BaYYRswaEJVrukAHE=;
+        b=Ep0VsQTf5v+ZELQRtqkzYH1/5DRHxxQ7gVeHZZm8UGBURjtGsxEnpFFhn7ePBIwDDL
+         v6hcMA6CgADw5yrJ/GjhoOGOYxdpqpSl43oQyk9wQxDmOyEzNZJc+odEmA3gtEojxS+D
+         OfiGzdUd/9pXUFfTOJDdfWcRdYEeWb29wW/ruVbVtuHjHFmhA8BrsZfarbnZaxSrjUaa
+         knQM3UMtZZ8WjaDbJt4+XctOxuwy2cKbIYFzlhHx1KlM85DqTbg4+URg/ohTx09c3ahL
+         elXao5WpDk2vG5nUneDiMtodRJzAUl0/nG5gS6gjyNuuY+ubdotV7Gko7RFlLzYz0zR1
+         ebxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744252846; x=1744857646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KcuOTVyHU6jhzBy0xZ293tFvt3BaYYRswaEJVrukAHE=;
+        b=h8tMtq5rnnHdhOGbQBoSkvUbbyd5M1R+L9JrC/9030IDqKo3w7sfd0D00lOLv1oQzf
+         GGk3pjQSrtSk3TU/ECS9VA53rndRSVR98qwNodH3WHH53CByim47WnB3vcZP24CVwSni
+         fuWNJBiSviN0KHq29t/qcOIcU7ISIGE3zd58CRgyL+HSbhw4Gx0OSE0ZEhpbNsAjS7Oi
+         t25g7WiipkrA229BIA2LQ3ZlMx/UpP2bXT78ck8pJxyBomd4TIJWkr+JXEZhdYKKBuF/
+         GZ1eEo1ukX5P40akrr9P3+kZtmbxwonvidL9LD2gs6HxxezXpI6YhRIvKBiP89lASuQS
+         J9CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKAqzRv/TCfnZSzQAk0asjIuuEAcomNxNFNQWAWLph3tWh9j9amoWecIcjZbuQbkM4DC8LLhmIQnJV@vger.kernel.org, AJvYcCUX/lL3I2k4hWFy4WBySQ2q8Z+KlOyaeysfpVvE3U2GoqzFTMFcoIisXawrdZ4jG+FcB/h/bHh7FUA=@vger.kernel.org, AJvYcCVPE+AW2wGJybhPvGOteNXTYA8v9Jwq5C7eAAvkHubY3csjd8VBlhArqzSSvZZgvjFIvuhDQ7No0Gj8voGEZ/4=@vger.kernel.org, AJvYcCVWvLo0tRWLyhCLa5+zfkUO+0gHQoO0kCPaAdzPbP/0I7zMzFezhWTurSTAqWKUFMRw2ovJPKjsbyl1ZQ==@vger.kernel.org, AJvYcCWF2sivcCMa7hDhWF0cJvWPKvLDse0ktPWCadLWU9KC0Gk3EAUTskxHGrv8r/mBgkd18IAV0r+EAfhJ+Kjl@vger.kernel.org, AJvYcCWKaQtfSZVOVbTGZqYeOJmocKAU7Hn+U6c5R0ODGbhJBQ2bIRnyVeT/8VkqT5U4kb5miraUNVbAcHMLtr0=@vger.kernel.org, AJvYcCWOW21NxHoYlEdaS5zIiQrrJfIt+d5hlfMYX5RS7R8WiPa3woE0LlEXqagDhxIa6sG4uHHk9v2l@vger.kernel.org, AJvYcCXbINYZP7Hl7NA5/cotrHn07tD0uGLpE5+3DhGNAP7z3jtZa1q0IvQAfo2Y1J7PDUnEOJ1DujKndV4H@vger.kernel.org, AJvYcCXqkHV9/RgtBZVlDYXRELfjF+olewpO9rnVcUpYLV6EDTT4w9u6G7E7FYoe5LPZMzAcceTdKLbV8x1z@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAM4Z5i3kEcp3hdZcLGcG0JdLhORFsUy9pryxhizVi8vi412cy
+	mPlm4JlXY4aLpBn/QgUXro3mZ2XNbBCcu0i1GkKz4GQ1SYQHxKJVtLVm4zB27k9nfJPQatD8e9G
+	44GSl50kEeaXIbnu76XuK89TpHKA=
+X-Gm-Gg: ASbGncvXPDy0zgDGCJ75jBA1I3XIM957a7Jbf7IBoCP5RJFm0RLLLOkZ1IfnMtwt5vI
+	HrL3VHism/4rsvyC6WbccSnQIODa6lhOgnbwuu5gc2QNEAtZfFbdqsNACo86JnnvBPG4siKS6RH
+	4yKzASJhJJZt6oeoUd03CIvAzMGEnFNGxfw8tAAYXJW1eQQabPLIJ40YXc
+X-Google-Smtp-Source: AGHT+IF3IaahFFEt95p88L2E+DMS5YlqS8f6R+jKEhaHG6PmdCAg0utj1GK9fsdr5gTPdjPGEMMC0Hqk+ak++gS3uUU=
+X-Received: by 2002:a05:6902:981:b0:e6d:f0a6:4cc5 with SMTP id
+ 3f1490d57ef6-e703e0dce41mr1936544276.1.1744252845873; Wed, 09 Apr 2025
+ 19:40:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/13] Introduce parity_odd() and refactor redundant
- parity code
-To: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
-        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, rfoss@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
-        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
-        linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
-        alistair@popple.id.au, linux@rasmusvillemoes.dk,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
-        Yu-Chun Lin <eleanor15x@gmail.com>
-References: <20250409154356.423512-1-visitorckw@gmail.com>
- <Z_amQp3gK5Dm8Qz3@yury> <Z/a5Qh/OeLT8JBS4@visitorckw-System-Product-Name>
- <Z_a9YpE46Xf8581l@yury>
-Content-Language: en-US
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <Z_a9YpE46Xf8581l@yury>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com> <20250409082752.3697532-5-tmyu0@nuvoton.com>
+ <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+In-Reply-To: <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 10 Apr 2025 10:40:34 +0800
+X-Gm-Features: ATxdqUHWhDl-xyLqC0glS-YG8IxmYyFFtwBiJ5M-DMW7Jb2-OYIl3qY47lOEkyg
+Message-ID: <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/9/25 11:33, Yury Norov wrote:
->>>
->> I don't have a strong preference for the name, but if I had to guess
->> the return value from the function prototype, I would intuitively
->> expect an int to return "0 for even and 1 for odd," and a bool to
->> return "true for even, false for odd." I recall Jiri and Jacob shared
->> similar thoughts, which is why I felt adding _odd could provide better
->> clarity.
-> 
-> I think they said they are convinced that parity should return 1 for
-> odd because of folding and __builtin_parity() arguments.
-> 
+Dear Marc,
 
-And for bool, 0 == false, and 1 == true. In fact, the *definitions* for 
-false and true in C (but not C++) is:
+Thank you for reviewing.
 
-<stdbool.h>:
-typedef _Bool bool;
-#define false	0
-#define true	1
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:21=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+...
+> > +static void nct6694_canfd_handle_state_change(struct net_device *ndev,=
+ u8 status)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     enum can_state new_state, rx_state, tx_state;
+> > +     struct can_berr_counter bec;
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     nct6694_canfd_get_berr_counter(ndev, &bec);
+> > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+> > +
+> > +     new_state =3D max(tx_state, rx_state);
+> > +
+> > +     /* state hasn't changed */
+> > +     if (new_state =3D=3D priv->can.state)
+> > +             return;
+> > +
+> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +
+> > +     can_change_state(ndev, cf, tx_state, rx_state);
+> > +
+> > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+> > +             can_bus_off(ndev);
+>
+> What does your device do when it goes into bus off? Does it recover itsel=
+f?
+>
 
-If someone wants to make more clear, it would be better to put "typedef 
-bool bit_t" in a common header, but that personally seems ridiculous to me.
-   >>>> type from u8 to u64 for broader applicability, and updates its 
-return
->>>> type from int to bool to make its usage and return semantics more
->>>> intuitive-returning true for odd parity and false for even parity. It
->>>> also adds __attribute_const__ to enable compiler optimizations.
->>>
->>> That's correct and nice, but can you support it with a bloat-o-meter's
->>> before/after and/or asm snippets? I also think it worth to be a separate
->>> patch, preferably the last patch in the series.
->>>
->> I quickly tested it with the x86 defconfig, and it appears that the
->> generated code doesn't change. I forgot who requested the addition
->> during the review process, but I initially thought it would either
->> improve the generated code or leave it unchanged without significantly
->> increasing the source code size.
-> 
-> That's what I actually expected, but was shy to guess openly. :). It's
-> hard to imagine how compiler may improve code generation in this case...
-> 
-> This attribute is used when there's an asm block, or some non-trivial
-> function call. In this case, the function is self-consistent and makes
-> no calls. And you see, const annotation raises more questions than
-> solves problems. Let's drop it.
+No, the device does not support automatic bus-off recovery. It
+requires an explicit CAN Setting and Initialization(CMD0) command to
+re-initialize the controller after entering bus-off state.
 
-Ah yes; one of the quirks about gcc asm is that an asm is implicitly 
-assumed "const" (with no memory operands) or "pure" (with memory 
-operands) unless declared volatile or given an explicit "memory" clobber.
+> > +     } else if (cf) {
+> > +             cf->can_id |=3D CAN_ERR_CNT;
+> > +             cf->data[6] =3D bec.txerr;
+> > +             cf->data[7] =3D bec.rxerr;
+> > +     }
+> > +
+> > +     if (skb)
+> > +             nct6694_canfd_rx_offload(&priv->offload, skb);
+> > +}
+> > +
+> > +static void nct6694_canfd_handle_bus_err(struct net_device *ndev, u8 b=
+us_err)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     if (bus_err =3D=3D NCT6694_CANFD_EVT_ERR_NO_ERROR)
+> > +             return;
+>
+> I think this has already been checked nct6694_canfd_irq()
+>
 
-So yes, the compiler can most definitely derive the constness from the 
-form of the function even in the variable case.
+Drop it in v10.
 
-I would still like to see __builtin_parity() being used as an 
-architecture opt-in; it can, of course, also be unconditionally used in 
-the constant case.
+> > +
+...
+> > +static int nct6694_canfd_start(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
+> > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > +             .mod =3D NCT6694_CANFD_MOD,
+> > +             .cmd =3D NCT6694_CANFD_SETTING,
+> > +             .sel =3D ndev->dev_port,
+> > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > +     };
+> > +     int ret;
+> > +
+> > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > +     if (!setting)
+> > +             return -ENOMEM;
+> > +
+> > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_MON);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_NISO);
+> > +
+> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
+L1_LBCK);
+> > +
+> > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NSJW,
+> > +                                            n_bt->sjw - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NBRP,
+> > +                                            n_bt->brp - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NTSEG2,
+> > +                                            n_bt->phase_seg2 - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
+_NTSEG1,
+> > +                                            n_bt->prop_seg + n_bt->pha=
+se_seg1 - 1));
+> > +
+> > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DSJW,
+> > +                                            d_bt->sjw - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DBRP,
+> > +                                            d_bt->brp - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DTSEG2,
+> > +                                            d_bt->phase_seg2 - 1) |
+> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
+_DTSEG1,
+> > +                                            d_bt->prop_seg + d_bt->pha=
+se_seg1 - 1));
+>
+> What does your device do, if you set the bitrates _and_ the bit timing
+> parameters? They are redundant.
+>
 
-So in the end one of these two become my preferred implementation, and I 
-really don't think it is very complicated:
+The firmware calculates the default bit timing parameters when it
+receives the bitrates, and then overwrites them if it later receives
+explicit bit timing parameters.
 
-#ifndef use_builtin_parity
-#define use_builtin_parity(x) __builtin_constant_p(x)
-#endif
+To avoid confusion and ensure consistent behavior, I will remove the
+bitrate setting logic in next patch. Instead, the bit timing will be
+determined solely based on the provided bit timing parameters.
 
-static inline bool parity8(u8 val)
-{
-	if (use_builtin_parity(val))
-		return __builtin_parity(val);
-	val ^= val >> 4;
-	return (0x6996 >> (val & 0xf)) & 1;
-}
+> > +     setting->active =3D NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
+> > +                       NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
+> > +
+> > +     ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> > +
+> > +     return 0;
+> > +}
+>
 
-static inline bool parity16(u16 val)
-{
-	if (use_builtin_parity(val))
-		return __builtin_parity(val);
-	return parity8(val ^ (val >> 8));
-}
-
-static inline bool parity32(u32 val)
-{
-	if (use_builtin_parity(val))
-		return __builtin_parity(val);
-	return parity16(val ^ (val >> 16));
-}
-
-static inline bool parity64(u64 val)
-{
-	if (use_builtin_parity(val))
-		return __builtin_parityll(val);
-	return parity32(val ^ (val >> 32));
-}
-
-This means that an architecture -- in particular, x86 -- can still ask 
-to use __builtin_parity*() directly. It means that architectures on 
-which __builtin_parity*() produces bad code should either complain to 
-the gcc/clang team and have it fixed, or we can add additional mechanism 
-for them to override the implementation at that time.
-
-The alternative is to stop worrying about overengineering, and just do 
-it once and for all:
-
-#ifndef parity8
-static inline bool parity8(u8 val)
-{
-	val ^= val >> 4;
-	return (0x6996 >> (val & 0xf)) & 1;
-}
-#endif
-
-#ifndef parity16
-static inline bool parity16(u16 val)
-{
-	return parity8(val ^ (val >> 8));
-}
-#endif
-
-#ifndef parity32
-static inline bool parity32(u32 val)
-{
-	return parity16(val ^ (val >> 16));
-}
-#endif
-
-#ifndef parity64
-static inline bool parity64(u64 val)
-{
-	return parity32(val ^ (val >> 32));
-}
-#endif
-
-In either case, instead of packing the cascade into one function, make 
-good use of it.
-
-In the latter case, __builtin_constant_p() isn't necessary as it puts 
-the onus on the architecture to separate out const and non-const cases, 
-if it matters -- which it doesn't if the architecture simply wants to 
-use __builtin_parity:
-
-#define parity8(x)  ((bool) __builtin_parity((u8)(x)))
-#define parity16(x) ((bool) __builtin_parity((u16)(x)))
-#define parity32(x) ((bool) __builtin_parity((u32)(x)))
-#define parity64(x) ((bool) __builtin_parityll((u64)(x)))
-
-As stated before, I don't really see that the parity function itself 
-would be very suitable for a generic helper, but if it were to, then 
-using the "standard" macro construct for it would seem to be the better 
-option.
-
-(And I would be very much in favor of not open-coding the helper 
-everywhere but to macroize it; effectively creating a C++ template 
-equivalent. It is out of scope for this project, though.)
-
-	-hpa
-
+Best regards,
+Ming
