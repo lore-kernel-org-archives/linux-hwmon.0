@@ -1,41 +1,41 @@
 Received: from qmt20.citechco.net (qmt20.citechco.net [203.191.33.192])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ED12E40E
-	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 01:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA946F099
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 01:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.191.33.192
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744248422; cv=none; b=u8LBnEOt5LIbEYnbL/V2PbJc1DkHz/Diu2AgC7Br2oS53rG0Qn1azrCUGM7K1ucDnONR81wHTvdxaJ8+i5qOOg61lOCfRM7DpqCoapHqzGbgqopQlEDSiyZpt61QSJvBGZnKJdTBLPgYspz9RiAXEjqRZRjpUrppQzoRcjXv0Zw=
+	t=1744249933; cv=none; b=aB5F03x09hhi3RNaKnqPOFn2/44FLAgkeu9rKXLb4Xgdz7/1Tt6lKhPcfIulQRV0jQtpO5+vGFmDwfAn4hgWijfUODMf29dC4zC1EBim+mMr8XZEHPu5lHUfPn+DIv3w0VikJzkti3KqEyxBtrLdFjWnLc4i6/I4e0idUl7aLwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744248422; c=relaxed/simple;
+	s=arc-20240116; t=1744249933; c=relaxed/simple;
 	bh=hqskI2l0bSS7XdAaXzIxsB/kNb7inziURcq7FFqQol8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YQKjteeWcT01QCrIBiktD7/25xHAXFsBs1+k+lx00/Kc2N5eozASzQ3HU453Vb20KSoEBfH9d1SAGg7cVfwmet0fSZ+vlXdaKgzvUdj3KpCEmX+ZIqHmpwi6q6P8cVc+svyPJqYyvI0OrPU83tOn2u47IK5DMCQD3HX+D+8JfTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jf-bd.net; spf=pass smtp.mailfrom=jf-bd.net; dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b=fFcaILlV; arc=none smtp.client-ip=203.191.33.192
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uvxsBGRxp5zQRfR40V5AGE0MUx9ZELp31KRrtXc27Flk1QTkF9gDqnPlBNCfWA/211Lfrbwyp2ypeeg0H+2KdzLeW0Dm50p6qEdl1Ob4t2Pm6c4YxLAxArViyqMgVUMyzKHjWz4SJjmzn2/WcKOrDcYd6GzP8c3PaY34QqWPa9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jf-bd.net; spf=pass smtp.mailfrom=jf-bd.net; dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b=q87P5/bM; arc=none smtp.client-ip=203.191.33.192
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jf-bd.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jf-bd.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b="fFcaILlV"
+	dkim=pass (1024-bit key) header.d=jf-bd.net header.i=@jf-bd.net header.b="q87P5/bM"
 DomainKey-Signature: a=rsa-sha1; c=nofws; d=jf-bd.net; h=reply-to:from
 	:to:subject:date:message-id:mime-version:content-type
-	:content-transfer-encoding; q=dns; s=dkim1; b=mQKyPl4tpciQhvzSxX
-	2jQrENdw3RUX6OhiMtFrYFfiqFR0zoOKqGvw0dmlZhsBeVjdd8VMBrMXCwgPccNl
-	IhCFcXulaPyEnGpf7DE05rL2xp2rc/X06pKR6t33zvEN5ig/E6qiZfy8wcg15pcn
-	b6aCuJCwxHBaBX5kBDAYMbTJ4=
+	:content-transfer-encoding; q=dns; s=dkim1; b=AUAqFSQAqcIYDHOl9+
+	uAc5HKcmUgzwr4tlp9akEHdn6Fs1YXFp0+Fbr+Z12rKc9cPcR1n7D4GRMVd4wd/h
+	VjvQKvjtRQcQdc1Nqk+ds5qCEdICC0i6wACpx1n87iE0EsZRaA+k4vq6uwhQLfia
+	gmSW5AgmE+epSut1bE2kYpm9Y=
 DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=jf-bd.net; h=reply-to:from
 	:to:subject:date:message-id:mime-version:content-type
 	:content-transfer-encoding; s=dkim1; bh=BQ4VYQ759GlRs1a2EUBRjVDV
-	aZ8=; b=fFcaILlVJ0zJ01a/yB0/jeIenJm5BDmgcG/4bfATzu11lIQJdAkuiBXY
-	9ySEX3/YjB/0v3MKU86mDUpxnUxycAxDncAzBAsnIp+jWJsM0J/akdpKrz1qIIBt
-	mixh51OnOXCX21sR8MDT/4nKjKWXJ02oDxxBfj8n/smZqnMOqLA=
-Received: (qmail 5122 invoked by uid 89); 10 Apr 2025 01:26:54 -0000
+	aZ8=; b=q87P5/bMyi9H4MWI3mcZ86VVF75brcMbjNjJjB3HUhe4KrJMtbMNbXKS
+	Xa5WISyx6FfYYgSMPnC5xwauivAdHr4l2rPCY+2zPzd0gqM2U2k9pro7HDcGK7CA
+	zz+2FPF21Q+Q+NVlh/x80ZGFZaIMutlDyWBeA++QaUsEBcaW0bo=
+Received: (qmail 25656 invoked by uid 89); 10 Apr 2025 01:52:08 -0000
 Received: from unknown (HELO 179-190-173-23.cable.cabotelecom.com.br) (commercial@jf-bd.net@154.205.144.222)
-  by qmt20.citechco.net with ESMTPA; 10 Apr 2025 01:26:54 -0000
+  by qmt20.citechco.net with ESMTPA; 10 Apr 2025 01:52:07 -0000
 Reply-To: winstontaylor@theleadingone.net
 From: Winston Taylor <commercial@jf-bd.net>
 To: linux-hwmon@vger.kernel.org
 Subject: WTS
-Date: 9 Apr 2025 20:26:52 -0500
-Message-ID: <20250409202650.06955E553FD3F673@jf-bd.net>
+Date: 9 Apr 2025 20:52:05 -0500
+Message-ID: <20250409205204.03695CA68FF90F2F@jf-bd.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
