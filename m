@@ -1,145 +1,123 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C114A1DD0F2;
-	Thu, 10 Apr 2025 15:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC3A1D5CE8;
+	Thu, 10 Apr 2025 16:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744297655; cv=none; b=WJpkS3pfTeWRpTZAWfQjJrFtQqpJ0y9644gItdMV7RYn15yFH4SycGf1MjUNkqvxQR0xlPOKC8a4QpNBiLAHUi+oYL3SD0orjsAUae1WdqjBGVoHFhQuQkW39E9QnrTIZPD+I7o0sLmxraTssnHjnmhpf42uHridDrF3m7SykkI=
+	t=1744301742; cv=none; b=F2AkZXtvXpfeVz/C2lYAeDjA6ynetxBaS/9mzDzVkYvjV+Yquu1wt7M0kCfJobjAc5shvd/tA77uN2SUnzZsL4sRnxHVydJhT387EMo9Ha4um3p78deeUQcs1waxRbyIFjZFEYMw+OX85MhpS9Ld3/9LAmgvxY7vw82etpE4tcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744297655; c=relaxed/simple;
-	bh=29zjlfK0mXnUdbnnsCXfS6Oi8Qrp5HNYmCj3Q7Up+6s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFA8T5/E69kW2ox6TRFwZyRUP84kZPN1lVaB59MAnI4jQ2pRjrag3T/vyEpCa82OxjT1c1VYojosoK0TWZxB6FhZa+AQ/PDIXLHSjCRPQE0A5hIBaI/4Kn90cNLAZn6hjAjdD/p130JtWi7dentQLMFmZRoYNOHs9A13WxQjysc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amDTfSbD; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1744301742; c=relaxed/simple;
+	bh=u2TlwBOzgobYs6NU9vBkdIki+8FEexHtdbsjNxa1jqY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uoEDEwz5WSrNMTVGlObdbF1tVZhQ3RV/IQzJkpWqPGrHYQ7U3DA1kYHqn0HhZezAg1spxdpgcjKDwr4h/kNu2fkpCcfVdFkt9igr7T7IZhtFPgpDYxiOt/ulMe2euqvhKpmEEDM2x/cxKtz3DcpvpSJZmV2tAyCYbgdRgAd+8Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amDTfSbD"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso925995b3a.2;
-        Thu, 10 Apr 2025 08:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744297653; x=1744902453; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3D5EegHjNXWtRqs7oVUZyDcWwG0k9rfQtFHn9dOK4Lo=;
-        b=amDTfSbD53YThn8o+gHPCYOPaXb3ht5o+9iKLu1o8PGhl4GpZUUeanQNe27NLA8QqB
-         O4WVra5EoYRlYnIuhpRllVhR8IRIqI/2JiLnhZm/D7QD0t8pCjCQpp+THJGEXWLj3Qg8
-         OkZTXtaSwuzjyQZhtPFNBvEkOv5bBPo7Q9v+yFcMmjQfJwh1u8IC7aAyMvzgDUf4fiMp
-         7u1kVUArdSUPogbagebUmlDBxKcr15uUCVS2BPetFHz11bXGdg9YCXx/OTyrqOJiXM2f
-         +FS8Hr6MaSXRd4iikSg7hTTfnDZtHtKYwHBnK9FSzklkFdYGRDB9erLEXwDGwdwIdMkG
-         qRog==
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7c54f67db99so210286485a.1;
+        Thu, 10 Apr 2025 09:15:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744297653; x=1744902453;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3D5EegHjNXWtRqs7oVUZyDcWwG0k9rfQtFHn9dOK4Lo=;
-        b=Rwbnt88uwAgdeZE/7/6ZPxWrmiAB5+XBCF5NxE64049+Lozqgcr8uVXedjUKTiVpCl
-         7/G3uVjQCIkbzgiGOnXhBDH3jQ++xuadQueY9ox5UGiJlYAgSn8oxvLXGNnCjhqFfY2M
-         GXiNQVCV9KvRKq5CyRE3d53loMR4aIEfIDdrwX02ZS1I+HguoxvLJPVGYF0I2FF3okCV
-         SbjdvXaITe8fnK/BE7ipjTkJXWCz4R8PyGJXNTLRrLl9zbXhsl2t9wyQcqFi5iUmmL6v
-         5kSiw49H0sRrRJjQIwOkpIJCWksNkEEyNSc+Q7hKwypqPZgr3y9t+sAsZw4V2j1X0j9o
-         Tqxw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOXZc/jSHOaGYJZ8V9U3oGXV91M2rU7mUlsWvjjXce98piQd0KgaaUsC5biHt6u1HQBN/A8pnb6VxDFNo=@vger.kernel.org, AJvYcCUtV5dT5rk3w9GBdMX/eau0G0v3F2jG+O2VW4uINRyUHWb2/Qg+FS11+mJR7sfN3d+xvQlcQWErHRgozTlfyq8=@vger.kernel.org, AJvYcCUvp9CHFBXUToar8Pc6Id4+IT0PAhwXBfnNhDeCl1xFoyB4dxcVLqHm4aLo/UG47gAQlYi0LjO+YXmUJiA=@vger.kernel.org, AJvYcCV8/8EubvyJx+OkrdRqrgGX0xdbf6V4OtpPhaON/RaRLZNmVnf2dYSmy9bGeSKhweIGt+PAyUSQcNbZTvim@vger.kernel.org, AJvYcCVa6OSqmh4AqIVHFOKC7ASrcX+jCf4kOprby2u2Q8RyfNCU2+y5GVn5WnX7eE3t0ADQrZ9+HQWr@vger.kernel.org, AJvYcCWMEYGjekVzJ+XYFaYRw9Q5QiJsTdJBipT1nKrKqthRDzIVtwzuYVKiciVqSfyOGRYg8hXJEo4Gp35fuog=@vger.kernel.org, AJvYcCX40BhYTeD5D25GEcix4kPLNhNREHZW1Chb3JtiEzNqXXxqg8GGwYnJsKDx9tWWVm2q8es=@vger.kernel.org, AJvYcCXD8go/IeqNJ4ZtWOfTUg2nK00VdAJDxJI0jmEIhBI4ySF/0u3uVLOtFpbc2r0WUdfyu7aWoewHufQThMOm@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRNV0Ni7lrRayLQw40texyWx54h8br7248G9tHz1Eo4QJTICMS
-	EQ8ftGmiZwLPqb/q4lG59kQEHuFQfZEj05olQCzA0nndfiHRnM6K
-X-Gm-Gg: ASbGncsNSYc5k9RpBlkjv2zau/fW183kDN8nqJFcxJMoH4mXEQCezpJTmUtcGZrzaw6
-	krbqntr0f3+7VEO4fKCLNbBkoU5Cd5ZjA1HMyicVMoRHaw496/VQo3aB5oCDM5WPeSSpMakN/rC
-	iD8R5Knw8TmlxQYtOfQ9IlLVoeFug2RwuIPwRk3C0iLbegi4Q8zeKhZuq0uaglHklUf14BvKZVF
-	bnZLEQdAHlj+QUidSeLqx/NDqKtwcE2pGaB8nsPa8AHe/EtqUfa2AM045i/cZoxTa8iVa30eRNW
-	SvmP8diy5i4+3ZeAgQEXn7CeEmpSYNM1csAmLnzH
-X-Google-Smtp-Source: AGHT+IFy1ewRYIQi2QM4ZSLkQhokapTj0gR7Ltj5GpPkDsZlOlyCTjP19Ec1IKFhcZrwo1l74Iw4rg==
-X-Received: by 2002:a05:6a00:240a:b0:736:ab1d:83c4 with SMTP id d2e1a72fcca58-73bbec49f99mr4365817b3a.0.1744297652831;
-        Thu, 10 Apr 2025 08:07:32 -0700 (PDT)
-Received: from localhost ([216.228.127.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1e51f1csm3501019b3a.145.2025.04.10.08.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 08:07:31 -0700 (PDT)
-Date: Thu, 10 Apr 2025 11:07:29 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
-	joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
-	neil.armstrong@linaro.org, rfoss@kernel.org,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	dmitry.torokhov@gmail.com, mchehab@kernel.org,
-	awalls@md.metrocast.net, hverkuil@xs4all.nl,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	louis.peens@corigine.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-	johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
-	linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
-	hpa@zytor.com, alistair@popple.id.au, linux@rasmusvillemoes.dk,
-	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-	jernej.skrabec@gmail.com, kuba@kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-	dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	oss-drivers@corigine.com, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-	brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-	bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
-	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-	david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
-	Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: Re: [PATCH v4 02/13] media: media/test_drivers: Replace open-coded
- parity calculation with parity_odd()
-Message-ID: <Z_fesYbCnSjAo-K4@yury>
-References: <20250409154356.423512-1-visitorckw@gmail.com>
- <20250409154356.423512-3-visitorckw@gmail.com>
- <Z_aobrK3t7zdwZRK@yury>
- <Z/a7DecDljuLtKeS@visitorckw-System-Product-Name>
- <Z_a_PzmNnvC2z7se@yury>
- <Z/bC6cygo0hem5IO@visitorckw-System-Product-Name>
+        d=1e100.net; s=20230601; t=1744301737; x=1744906537;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w8EsySpJlSULS66RCfJ+UHS8bmbeTZRzNn9o+t8zKEs=;
+        b=iScbnFnvHDLCxXEDhlAftPSpehDPozSH2KK0PR0NnBlcp2ui1TUzrhRakh6QuMjLmA
+         OU3YlRd9IBsrn8DaGax5UQGJVQNPWEQrmEQYlzLkYIBaGUPumkrUZDUjgDvust0zQ9+S
+         fki2wUte+MtMqLLSLbvtaZWbWwUxM7BMAc1WryUziWOBJg0RvUDqP9Lxp7bM3tj/9wK+
+         qDFUhB0/x5J9UNWA23iVDJioYg5ZlV/XSgvbxEzTctgxO0cn3FmKd/dSveBNgwsTdQCH
+         c7usAQpoghhztyGMums7dgL/Z0kR1+9+RV7Ra+28+KRpARmGh4KrB98UcE+nFeyZXTjf
+         P26A==
+X-Forwarded-Encrypted: i=1; AJvYcCUtGoHCLPaHvFMwpJ2xQ4RRDdWCduHNw5pyGYpFG2n/I1hr5rG5g19uqVC9/Y1M7iIQAeOsAhb1Ul9Tgqs=@vger.kernel.org, AJvYcCXQEwaOlYAQhDN/BuqIQcNn2xC2vSt4WcYk4m4sM77vX6IDTgB0W0ebZ50mryoC25wjRKfnh0GuPaXR@vger.kernel.org, AJvYcCXQfOonv4miQSHvYe9t9jB1V3rOHvhgiZp7H7TzJBtRXBBLr/K8FqtA85CsG8asraKXH+QuCF+LVGOVqXqR@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjtjQxGkSZCbHz9uOA16jkbecmjXUuimWSr01rutXTYNDhkeMu
+	ax9mEYh5wKBBrqGIcc+8NdwJCHkCwfMCmGAsrfvuO43UDL5pMa/12K3ni+V85ww=
+X-Gm-Gg: ASbGnctCdn1+F53aZbtPilHPG5oW5DRxdXyXKo5QnZm1HXlg2BFT3UcVxugSDx1Ht3n
+	4LCE7glyWdcvnprp7CwrrRnT8AU5nXEpo3v70+K8WqJMeUabYxvIInzOxCahKUiTcrQ4CGb1jxX
+	7veNhDfwAn44vTggTmQRM3gyO1+f9YsUuHPRxbC33WZqv9GqouaKjKeOiyyXiUYX8O2SthBnDTe
+	WfYpnT4paUTBJjvvz6KLdMLo4k07ljL6P8/T/ONJ02OPnwC1XSl43rP9UBpO4kiyXUdtwdPP/Bw
+	iwNuj7UeMEnEiUJNsVgkIvCDKbrpUh/zMxdaLcfi9+LtfpafLNdKWJO5TtE8bM3nLrRVEzpZOxr
+	b+vDDUX0=
+X-Google-Smtp-Source: AGHT+IHMU8QCbZ82jkl7oaLNClFAAowOSu8lTPHBSxxXabsnF4oAGM4j/n3afgexRoG4sxGHOFu4hA==
+X-Received: by 2002:a05:620a:4094:b0:7b6:cb3c:cb81 with SMTP id af79cd13be357-7c7a76b9749mr469780685a.18.1744301737110;
+        Thu, 10 Apr 2025 09:15:37 -0700 (PDT)
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8a0c608sm109294585a.93.2025.04.10.09.15.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Apr 2025 09:15:36 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c5f720c717so212425885a.0;
+        Thu, 10 Apr 2025 09:15:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW+SyqE1cScBSnHpHwe0bMHVaWEU5gtGvy5j4uOXGF2hUxSj5DC5u4ISbvqhhkpX4mBmVSW9sPtdJVEWlcp@vger.kernel.org, AJvYcCWPum97O4ee4vAYsZO4Yzm/NOc1SLy6ybtckjhOx0uCqTuu2mqbJ0Gjh4T/E87cpXaaLNATu1/cGkcB@vger.kernel.org, AJvYcCXmV8zjhyedFbDaxF7B7Ysm1xTV0g6C7hkOI/AZYREcOwpsVmmAWppkvTWkwTp3Ble0HwLzWBBVzpFhDus=@vger.kernel.org
+X-Received: by 2002:a05:620a:4515:b0:7c5:6b46:e1ee with SMTP id
+ af79cd13be357-7c7a764cb6bmr497107485a.4.1744301736084; Thu, 10 Apr 2025
+ 09:15:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z/bC6cygo0hem5IO@visitorckw-System-Product-Name>
+References: <20240223-moonrise-feminist-de59b9e1b3ba@spud> <20240223-blabber-obnoxious-353e519541a6@spud>
+In-Reply-To: <20240223-blabber-obnoxious-353e519541a6@spud>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 10 Apr 2025 18:15:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXXWSfDrrQUTW54FFHN464efe+672jyCjqYw4jpSPosBA@mail.gmail.com>
+X-Gm-Features: ATxdqUEct_QnFBksOgt38puapdCm8A8IqZn3f2lKjQY01BE-SIP4uvm6YbHt3Qo
+Message-ID: <CAMuHMdXXWSfDrrQUTW54FFHN464efe+672jyCjqYw4jpSPosBA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] regulator: dt-bindings: promote infineon buck
+ converters to their own binding
+To: Conor Dooley <conor@kernel.org>
+Cc: linux@roeck-us.net, Conor Dooley <conor.dooley@microchip.com>, 
+	Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Zev Weiss <zev@bewilderbeest.net>, Patrick Rudolph <patrick.rudolph@9elements.com>, 
+	Peter Yin <peteryin.openbmc@gmail.com>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Apr 10, 2025 at 02:56:41AM +0800, Kuan-Wei Chiu wrote:
-> On Wed, Apr 09, 2025 at 02:41:03PM -0400, Yury Norov wrote:
-> > On Thu, Apr 10, 2025 at 02:23:09AM +0800, Kuan-Wei Chiu wrote:
-> > > On Wed, Apr 09, 2025 at 01:03:42PM -0400, Yury Norov wrote:
-> > > > On Wed, Apr 09, 2025 at 11:43:45PM +0800, Kuan-Wei Chiu wrote:
+Hi Conor,
 
-> > > > So, if val == 0 than parity_odd(val) is also 0, and this can be
-> > > > simplified just to:
-> > > >         return parity(val) ? 0 : 0x80;
-> > > > Or I miss something?
-> > > >
-> > > If val == 0x01, the return value of calc_parity() will remain 0x01.
-> > > If changed to return parity_odd(val) ? 0 : 0x80;, the return value will
-> > > be changed to 0x00.
-> > 
-> > Sorry, I meant
-> >         return val ? 0 : 0x80;
-> > 
-> > This 'val | (parity_odd(val)' is only false when val == 0, right?
-> > When val != 0, compiler will return true immediately, not even calling
-> > parity().
-> >
-> I'm still confused.
-> 
-> Maybe you're interpreting the code as:
-> 
-> 	(val | parity(val)) ? 0 : 0x80
-> 
-> But what we're trying to do is:
-> 
-> 	val | (parity(val) ? 0 : 0x80)
-> 
-> So, for example, if val == 0x06, the return value will be 0x86.
-> Only returning 0 or 0x80 seems wrong to me.
-> Or did I misunderstand something?
+On Fri, 23 Feb 2024 at 17:23, Conor Dooley <conor@kernel.org> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> These devices are regulators may need to make use of the common
+> regulator properties, but these are not permitted while only documented
+> in trivial-devices.yaml
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-I misread the whole construction. Sorry, you're right. Scratch this.
+Thanks for your patch, which is now commit bad582f9879812bc
+("regulator: dt-bindings: promote infineon buck converters
+to their own binding") in v6.9-rc1.
+
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/infineon,ir38060.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Infineon Buck Regulators with PMBUS interfaces
+> +
+> +maintainers:
+> +  - Not Me.
+
+make dt_binding_check:
+
+    Documentation/devicetree/bindings/regulator/infineon,ir38060.yaml:
+maintainers:0: 'Not Me.' does not match '@'
+            from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
