@@ -1,135 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2591F03F8;
-	Thu, 10 Apr 2025 08:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3821E1E10
+	for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 08:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273301; cv=none; b=Me5k3mf7j6UjOFKwb45FB0FSEaiYEo0gJwWAlbRLsQzqlxlFYu4sbZn9rJh1oWtrkskbcXGaJqEsB6rkVXS0zPoPDYkAfd23dOU5I7DFA/DpkCTDQ4gSyV0p+RL0FSgP5FGTsNmsh2d4pNgKBJiwLAdKy6OYThrTmobRExA9ywk=
+	t=1744274136; cv=none; b=AlZTSPABLBnd1q1pwlD7gbilJbEbqYpwGJuqGHT9fRvtHrwbpw19PK7/h1ch8La8/kMrJExt/y+S1j09A/xZwpmBeeJJdJHclh50N/cEepDQwjuYmiaQW9QWR5AYuazsXAvA2oTYSsKm3CcnDlHMKl2RN6nSnJGTntUKkrA9PlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273301; c=relaxed/simple;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
+	s=arc-20240116; t=1744274136; c=relaxed/simple;
+	bh=JdYcK6fAGQtlodFRUy0bhtgD36qMwbdQO7D7iUkLixc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E05KcU0ClR4Rp3XZkTldFE7FhkEP2zLeXhUusgQe4IO6UaN+ys90uyQGG/z+sk1xxa/7zC0ljRhYmsiz4IjHJZDGsfnkAeq3Tro0AhEPrKQh/IoTXXO267T79U00+doSZ2WsYOMR4tSbbDnS+Vdmy8EBNyC69/9/cInYg0fp2MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHqX2mW9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctqsA8nk0Vh928OP7ucNaed51KLBMezPIjadY37heicnx1IVITki6Wo/esOKncdMm+3Nlju9En2MjS7GvawaaA8t2ll8qrWI+mkWYusw11zt0b78QjOS/sBCX+dR/3dFVsQzsFudxlygdoQZV4OQSGXYw4J0aPxxMRwoiQJ2Dcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gXH9uAiO; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHqX2mW9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64388C4CEDD;
-	Thu, 10 Apr 2025 08:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744273299;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CHqX2mW9Zjwnt70+e0Tz0XPrkqHOtRGF/P69tBC+UmJYQMsTed3SOZ6EedJfZQjJf
-	 w5WM/9bt71oA38jm3o63EOmToJHx3UbTjhrYeefhAbILWJAiS4q2QYJCpHJKwlNh/k
-	 9vLO59VSIZvsqYux6o1BoYYbkm+yBbt0SRVK1BiBAJNOmgZqDhlqn5ZETEFunMsnt/
-	 hy8+o0EY1K8T63ZQA9+4sGRhftCcM4NfBud/wrw7vfKy1IL/gwad2OjFwt/ot38+uO
-	 bkvkWMHcrxxDykCGGY9OBhCTC4GGOUT1ZZpem2HTqfbnsdf3mdhSFb8qkstBZH9WhH
-	 JvucG4tU7jseg==
-Date: Thu, 10 Apr 2025 09:21:32 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250410082132.GP372032@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com>
- <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com>
- <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gXH9uAiO"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39727fe912cso184253f8f.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Apr 2025 01:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744274131; x=1744878931; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1+ytBosE9KKYfsxuSA5vHZYEINNgxVHBZaHGuzR0zM=;
+        b=gXH9uAiODbXDp+qnUSXfNyCE4ntmL9WYdUFd+WPm45iC08wg5wsX1NKmuoQn1tKp/1
+         QI2tuwvA6uEF12QLS4Q+hnWYPP8fIRN5Xj5TNAIwoswW1IYD0YK03+SHfPN8grhV93EQ
+         ViT6aznQTz7zAZ3UWfMEyzOyb8JpLKDZ8EVG9kj7EUi9Vv0hp2ZzcgzPQ6kRgTqZ/lxD
+         pou3IZn3mKNVKe2NBHGQBr82MDt4XJP8qBP+r/lPsz6h2YydWHUTm0Y3OjuKecATTUWo
+         rsbfAEvuFt09ZFyW39qZEXTAQIcX1ADiHExy3u2CalGnnIe+rmDcxV0b57/8WS4R5WCs
+         Dh7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744274131; x=1744878931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z1+ytBosE9KKYfsxuSA5vHZYEINNgxVHBZaHGuzR0zM=;
+        b=ApsOCJ9XLJgWygb54gE5KTUNPUYecaztPSmPUkPV8j25GgzcSLLyJCgEMbf5M9Ox+C
+         Sr+OxWjEfBOOmWkcMjQq+UAVavI6llbXsO9h4zhoRcXrFKOrOzpjduF9VG4uqFfutEEP
+         RqOfDiPZFJ6Z+78Wf/5su2QyMEISA2JhcbBZNAYj44ZZQVqK1Oh+U6pqce/rX2y/LylX
+         jGpAc34eBLPvAZtyIPF2+9y0IHKih7ccboQoDpWwA2goX/5ersRXzUmRXi2tdf+K2rG9
+         m5yBgpP+4xV8QYzQTbwaqovJ2Udw+Z6or+QRgZu2BeQWagvxf/hevDDVD69CpkG+kBDY
+         7/Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVeguf+mqxEOV+JOYerObB29WUNh4ubyGwNiQDdomeY1eq+p2gOQ+P/cG3wBVnN8hvMkiVFddRxbkeRA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnOrLVOsrF7ydwXfemS5EIDXyS7HjO2Fa976+6R8nnzf1gSrCC
+	9/rI2Qtw3ll22TM/fp14I9mKTnDuPqUf3JAzEZlXBLt6E7DT/f3EIxwztZ2HFwU=
+X-Gm-Gg: ASbGncs6UziN28z8cNNJCseFghsyr9gkP16fairEi+d39d6ujc5JpWzZYLJKatKXUVY
+	Oz50IqWxLc1EYAVK20C67wd5HpjNEUSbapo8LFA1eYJfLVfIMWPvLiZAgnz7fiEwkPWqOwSeXu9
+	wcvl0elomNOAEO/ScwNhnVrfxkUgry8zT4xZ+Ock9c7I5Bl2kooy1aH+napIL9mLCvceEXunG4q
+	GTBR8uWnuNKCzn0e38bEMD8ba1xiQzd03NHmq0MfpAxfT7eaXB9NoPu1z8x9/RLvgIRaBUAwqmf
+	iAOZw4z/4EbCihpW51ryrMToNgRgcuIslmsKiikcoNOexA==
+X-Google-Smtp-Source: AGHT+IG4hFp0SZ/GX5y1K3OD+w9YXQH3jCqLKyFID+cibmYCTQbSECvA/Q29TPvpdqbyjEyE/E8lrw==
+X-Received: by 2002:a05:6000:4203:b0:39c:1f02:449f with SMTP id ffacd0b85a97d-39d8f272aa3mr1264796f8f.2.1744274131466;
+        Thu, 10 Apr 2025 01:35:31 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39d893fe28fsm4078162f8f.96.2025.04.10.01.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 01:35:31 -0700 (PDT)
+Date: Thu, 10 Apr 2025 11:35:28 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	kernel test robot <lkp@intel.com>,
+	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org
+Subject: Re: [groeck-staging:hwmon-next 13/13]
+ drivers/hwmon/gpio-fan.c:250:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <d80689a3-6055-449d-9475-5e8e4f1ddabf@stanley.mountain>
+References: <202504091047.biuX8Kl2-lkp@intel.com>
+ <82d98804-e9b6-458e-bb39-3a48c10e9f70@roeck-us.net>
+ <2368483.ElGaqSPkdT@steina-w>
+ <20250409160250.GB1506425@ax162>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+In-Reply-To: <20250409160250.GB1506425@ax162>
 
-On Mon, 07 Apr 2025, Ming Yu wrote:
+Another option is Smatch.
 
-> Lee Jones <lee@kernel.org> 於 2025年4月4日 週五 下午10:21寫道：
-> >
-> > > ...
-> > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > > >
-> > > > > > IDs are usually given in base-10.
-> > > > > >
-> > > > >
-> > > > > Fix it in v9.
-> > > > >
-> > > > > > Why are you manually adding the device IDs?
-> > > > > >
-> > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > > >
-> > > > >
-> > > > > I need to manage these IDs to ensure that child devices can be
-> > > > > properly utilized within their respective modules.
-> > > >
-> > > > How?  Please explain.
-> > > >
-> > > > This numbering looks sequential and arbitrary.
-> > > >
-> > > > What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-> > > >
-> > >
-> > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> > > but I need fixed IDs.
-> > > For example, the GPIO driver relies on these IDs to determine the
-> > > group, allowing the firmware to identify which GPIO group to operate
-> > > on through the API.
-> >
-> > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-> > done here.  These lines do not have any differentiating attributes, so
-> > either way we are not allocating specific IDs to specific pieces of the
-> > H/W.  I still do not understand why you need to allocate them manually.
-> >
-> 
-> I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-> MFD_CELL_NAME(), like this:
-> 
-> static const struct mfd_cell nct6694_dev[] = {
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-gpio"),
->     ......
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
-> };
-> 
-> For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-> i2c-nct6694.c is 17~22. Does this mean each driver should
-> independently handle its dynamically assigned IDs?
-> Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-> and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-> you think this approach is appropriate in my case?
+https://github.com/error27/smatch
 
-Yes, if you _need_ the ranges to start from 0, then you will have to
-call mfd_add_devices() separately on those ranges.  Otherwise one range
-will follow directly on to another range.
+:! ~/progs/smatch/release/smatch_scripts/kchecker drivers/hwmon/gpio-fan.c
+  CHECK   scripts/mod/empty.c
+  CALL    scripts/checksyscalls.sh
+  DESCEND objtool
+  INSTALL libsubcmd_headers
+  CC      drivers/hwmon/gpio-fan.o
+  CHECK   drivers/hwmon/gpio-fan.c
+drivers/hwmon/gpio-fan.c:145 set_fan_speed() warn: potential spectre issue 'fan_data->speed' [w] (local cap)
+drivers/hwmon/gpio-fan.c:255 pwm1_enable_store() error: uninitialized symbol 'ret'.
 
-But wait, you're using mfd_add_hotplug_devices(), which means you are
-using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
-being ignored anyway.  Thus, if you have tested that this works, you
-don't need them anyway, right?
+I don't think the spectre v1 issue is real but I don't know very much
+about spectre.
 
--- 
-Lee Jones [李琼斯]
+regards,
+dan carpenter
+
