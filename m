@@ -1,157 +1,111 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0344E238C23;
-	Fri, 11 Apr 2025 11:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3013A221299;
+	Fri, 11 Apr 2025 12:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744370459; cv=none; b=Zeui0j+sgnrgGXeLzp3k233YVc4dxEYAnWbkXSy6bVDUEtyhirw/SqNshmcf7gx6JdY7Vofua4DqvZWhPdXkT3PjmdjNpjYzaffzZTG3ZlA6ru2rJw0kW0VgyE/g1TSkzJVwDXBi9pXBw6399vIFkyndJXtHnFUqZ6uD3K+Eq7Q=
+	t=1744374244; cv=none; b=bRTaBYOW9sSiFZEBuUYWy61mIRmjjZEPD0xTrWP/dqF2ZWGlwtP8zDvVSQAwuKXOkO2zfy5kDlgQyHSj4OPLqJW850lExBtw1HwVSYhk+jIQbZ9Jmi45srU3ejUQyfeQr0RRDcb1GlEuduAdHj1Bk3sfpoOly0B59qzdxf1CNF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744370459; c=relaxed/simple;
-	bh=vaESse4EBr2rkIVWnoJKA86Ws56vzNLB/aNS6YY2bnc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fCEnCaYAouaU0D/02+/HNWtqxecKsxr6ZyU/MM+bVvwFgnxBV7TLy5oIb4dlyDk1SahHGF25HuWRUoaP/+FCcRiJCLGRpi+YGNkARvVP+BdMG63r1astmQU6j0/HHGYrp5fyoHwpD1Mjtt4oGGRMhb/ufG0COBnU/6Fa07xcHN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28417106F;
-	Fri, 11 Apr 2025 04:20:56 -0700 (PDT)
-Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6587C3F694;
-	Fri, 11 Apr 2025 04:20:55 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: linux-kernel@vger.kernel.org
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (xgene-hwmon) Simplify PCC shared memory region handling
-Date: Fri, 11 Apr 2025 12:20:53 +0100
-Message-Id: <20250411112053.1148624-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1744374244; c=relaxed/simple;
+	bh=IdaYWxAcBmp0GWp0ombnuMCothE6G1nJdec0JBFVcqk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NiW9YFvRgohrb+SkNcg1p5AO6JCvM1FhBI9VzegWKRAhHkt87+eiZjJQfmpIJUSJ4cXZos+X1ccGHyXrC/AcIsbALxFiGwGmc8upllJJJuP/zYfg1oZGhNfsMzzq5umU9YcnqSvn6XfXjQlE39eDvAC9GT/zkqRgzd6aJ5qHtHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VXIV2Gdh; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VXIV2Gdh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744374243; x=1775910243;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=IdaYWxAcBmp0GWp0ombnuMCothE6G1nJdec0JBFVcqk=;
+  b=VXIV2GdhhxCYvfKxXkWYdt5Tk9wSBkrDTI9IocF23VKK5VENGe+zmiYE
+   qQ7kF9gNHfBksVOBAVFLGjGJwQ9oAmA1L2R1wQqsldq9bBf4ia1F8M7q8
+   ExzGzoQsFo8rcksYcpKjac8PRvO3qVhr1QdnaoIwyFW71UIMbIth+G080
+   iSjC8G1i9nZus3ASCTLfwMWSONaXTrg5lF5EPWis67Cwi2uU8PRuzDWub
+   wxUTtNpa61Uq1VAddpWNhOgFypEhnoHCb2sAOns+NR40CsCiscSGE1P75
+   7oAEAyxc04HHP+dm5Qty54gVouOFpgPr5dxHqO4d67PF/msrrNcVnKkXx
+   Q==;
+X-CSE-ConnectionGUID: PKxcYeW6TI22znb0a6jSLQ==
+X-CSE-MsgGUID: NuxUaMCBSJOsKEJNFbhxEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11400"; a="45937021"
+X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
+   d="scan'208";a="45937021"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 05:24:02 -0700
+X-CSE-ConnectionGUID: 6AmRGqbBSFqTfthRqTsH0A==
+X-CSE-MsgGUID: G0HKKgtvRX2zYLdoJJ8T7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
+   d="scan'208";a="133942396"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.51])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 05:23:58 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Armin Wolf <W_Armin@gmx.de>, Kurt Borja <kuurtb@gmail.com>
+Cc: Hans de Goede <hdegoede@redhat.com>, 
+ platform-driver-x86@vger.kernel.org, Dell.Client.Kernel@dell.com, 
+ linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+ Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org, 
+ Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20250329-hwm-v7-0-a14ea39d8a94@gmail.com>
+References: <20250329-hwm-v7-0-a14ea39d8a94@gmail.com>
+Subject: Re: [PATCH v7 00/12] platform/x86: alienware-wmi-wmax: HWMON
+ support + DebugFS + Improvements
+Message-Id: <174437423366.3859.4617952203843157795.b4-ty@linux.intel.com>
+Date: Fri, 11 Apr 2025 15:23:53 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-The PCC driver now handles mapping and unmapping of shared memory
-areas as part of pcc_mbox_{request,free}_channel(). Without these before,
-this xgene hwmon driver did handling of those mappings like several
-other PCC mailbox client drivers.
+On Sat, 29 Mar 2025 04:32:17 -0300, Kurt Borja wrote:
 
-There were redundant operations, leading to unnecessary code. Maintaining
-the consistency across these driver was harder due to scattered handling
-of shmem.
+> This set mainly adds hwmon and manual fan control support (patches 7-8)
+> to the alienware-wmi driver, after some improvements.
+> 
+> Thank you for your feedback :)
+> 
 
-Just use the mapped shmem and remove all redundant operations from this
-driver.
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/hwmon/xgene-hwmon.c | 39 ++++---------------------------------
- 1 file changed, 4 insertions(+), 35 deletions(-)
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
 
-Hi,
+The list of commits applied:
+[01/12] platform/x86: alienware-wmi-wmax: Rename thermal related symbols
+        commit: 8a1a0fb55f8a8e482314d2769a9cac0703016fd4
+[02/12] platform/x86: alienware-wmi-wmax: Improve ID processing
+        commit: a000da9dbc249642233587a80df03130e8983d10
+[03/12] platform/x86: alienware-wmi-wmax: Improve internal AWCC API
+        commit: 45983d19f305a562386f4d13accd11056b99f48a
+[04/12] platform/x86: alienware-wmi-wmax: Modify supported_thermal_profiles[]
+        commit: 77bb2ec55700ee3af0cd902398fa903363826679
+[05/12] platform/x86: alienware-wmi-wmax: Improve platform profile probe
+        commit: 32b6372ddd4385a47a6a4b6ccff0c22b7be8765a
+[06/12] platform/x86: alienware-wmi-wmax: Add support for the "custom" thermal profile
+        commit: 3dde0ae1eb5f00c1d61959d1fcce2b1b46ccc199
+[07/12] platform/x86: alienware-wmi-wmax: Add HWMON support
+        commit: d699907834959c87a6b6c5214d5e9a3e8ba6b5a1
+[08/12] platform/x86: alienware-wmi-wmax: Add support for manual fan control
+        commit: 07ac275981b1f11a58dd7bb7790eed66252b072c
+[09/12] platform/x86: alienware-wmi-wmax: Add a DebugFS interface
+        commit: b028fb497c152febbdc48b544aaaadbe06406dbf
+[10/12] Documentation: wmi: Improve and update alienware-wmi documentation
+        commit: a56d188a0a8f3df4860acf66a6af89318ce611be
+[11/12] Documentation: admin-guide: laptops: Add documentation for alienware-wmi
+        commit: 3e48767ab53b56d31c77a063d022ca9aca43bf22
+[12/12] Documentation: ABI: Add sysfs platform and debugfs ABI documentation for alienware-wmi
+        commit: 361813db5d9ba33434754c0de1207a2b91264ab1
 
-This is just resend of the same patch that was part of a series [1].
-Only core PCC mailbox changes were merged during v6.15 merge window.
-So dropping all the maintainer acks and reposting it so that it can
-be picked up for v6.16 via maintainers tree.
-
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20250313-pcc_fixes_updates-v3-11-019a4aa74d0f@arm.com/
-
-diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
-index 2cdbd5f107a2..11c5d80428cd 100644
---- a/drivers/hwmon/xgene-hwmon.c
-+++ b/drivers/hwmon/xgene-hwmon.c
-@@ -103,8 +103,6 @@ struct xgene_hwmon_dev {
- 	struct device		*hwmon_dev;
- 	bool			temp_critical_alarm;
- 
--	phys_addr_t		comm_base_addr;
--	void			*pcc_comm_addr;
- 	unsigned int		usecs_lat;
- };
- 
-@@ -125,7 +123,8 @@ static u16 xgene_word_tst_and_clr(u16 *addr, u16 mask)
- 
- static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
- {
--	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
-+	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
-+							ctx->pcc_chan->shmem;
- 	u32 *ptr = (void *)(generic_comm_base + 1);
- 	int rc, i;
- 	u16 val;
-@@ -523,7 +522,8 @@ static void xgene_hwmon_rx_cb(struct mbox_client *cl, void *msg)
- static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
- {
- 	struct xgene_hwmon_dev *ctx = to_xgene_hwmon_dev(cl);
--	struct acpi_pcct_shared_memory *generic_comm_base = ctx->pcc_comm_addr;
-+	struct acpi_pcct_shared_memory __iomem *generic_comm_base =
-+							ctx->pcc_chan->shmem;
- 	struct slimpro_resp_msg amsg;
- 
- 	/*
-@@ -649,7 +649,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 	} else {
- 		struct pcc_mbox_chan *pcc_chan;
- 		const struct acpi_device_id *acpi_id;
--		int version;
- 
- 		acpi_id = acpi_match_device(pdev->dev.driver->acpi_match_table,
- 					    &pdev->dev);
-@@ -658,8 +657,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 			goto out_mbox_free;
- 		}
- 
--		version = (int)acpi_id->driver_data;
--
- 		if (device_property_read_u32(&pdev->dev, "pcc-channel",
- 					     &ctx->mbox_idx)) {
- 			dev_err(&pdev->dev, "no pcc-channel property\n");
-@@ -685,34 +682,6 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
- 			goto out;
- 		}
- 
--		/*
--		 * This is the shared communication region
--		 * for the OS and Platform to communicate over.
--		 */
--		ctx->comm_base_addr = pcc_chan->shmem_base_addr;
--		if (ctx->comm_base_addr) {
--			if (version == XGENE_HWMON_V2)
--				ctx->pcc_comm_addr = (void __force *)devm_ioremap(&pdev->dev,
--								  ctx->comm_base_addr,
--								  pcc_chan->shmem_size);
--			else
--				ctx->pcc_comm_addr = devm_memremap(&pdev->dev,
--								   ctx->comm_base_addr,
--								   pcc_chan->shmem_size,
--								   MEMREMAP_WB);
--		} else {
--			dev_err(&pdev->dev, "Failed to get PCC comm region\n");
--			rc = -ENODEV;
--			goto out;
--		}
--
--		if (IS_ERR_OR_NULL(ctx->pcc_comm_addr)) {
--			dev_err(&pdev->dev,
--				"Failed to ioremap PCC comm region\n");
--			rc = -ENOMEM;
--			goto out;
--		}
--
- 		/*
- 		 * pcc_chan->latency is just a Nominal value. In reality
- 		 * the remote processor could be much slower to reply.
--- 
-2.34.1
+--
+ i.
 
