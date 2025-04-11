@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154ED20F07D;
-	Fri, 11 Apr 2025 15:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EA41F91F6;
+	Fri, 11 Apr 2025 15:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744384629; cv=none; b=SLyE9CXE4idfCQhaqRCzFN+uYgjjTJoCCWIR52qUvPrMaiXG6NWOWJvVhg1w7e4XYvv1tL3jljxQhFpIPJcwdfS/Yey8mWUW7ByTiuybKC20MAlj1XOH7iojjZHFpbjdy01jfj1TeOOonR7V7+vbpQrT0I4znCCUC7AmqF2+dFc=
+	t=1744384908; cv=none; b=MPGnRyi2Xgk2HrMeb7VK7vX/QOWggwNrk1EdpgSmojPLWHY6S+wmBSHK61wQM2aI2voRHa9jDOlTpoLqmKmpU4uhvDva13nlyXZDcE3gyGxOU6/Oj21TUtJLAnUAP/NKE9N6dH+OxflZljOudXd2Mg//Ahq21fhjwFdgcMxPoJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744384629; c=relaxed/simple;
-	bh=pvn3IXVDFoHiL+8SIW4XH1ZdCzBrI80Ao3qpO8mhyWQ=;
+	s=arc-20240116; t=1744384908; c=relaxed/simple;
+	bh=Tw87e5Z2+o3Cia05sESpVVc5/dF27IORpEOYljJX210=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=brbIi2N7a/EpHOg2skwwQn3UkHYD+zG/eZrPDUtrt35HBnYiU7njff0arbsDQzJgmYGfCBwsagLvPfy9ZFBMEt3dMUzW96KGlXY9cWuN0wBZWWjr94/i7EfgctKvpNZOegNEcSwtVfP7Nw9sxY7OD9EFoue+SDCXCvNX60qtabI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y8igjtSW; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version:Content-Type; b=R7F2u8PohkiPCWSaJcB8kdZWHYyg/595vQ2iBnO/xtOGONWJFvLgU/BOZyBOkQkFLlc5kFFOK0UL1qZKUqpyX1BVFHjpC4MdALss7OoGYFLLqLj7rQwE4HiPsVLMCakOfIGRdJxTdQS9JYUzOFijKN8RmRAebk13SbyfcFn8BEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+Z6WGPt; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y8igjtSW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+Z6WGPt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744384628; x=1775920628;
+  t=1744384907; x=1775920907;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=pvn3IXVDFoHiL+8SIW4XH1ZdCzBrI80Ao3qpO8mhyWQ=;
-  b=Y8igjtSWk2ZRchdXjZdTk/6cO39qJSO3WZzuu571XzHyZFW5r62h8fUG
-   4DBeC7NsDY1bGBFFiov7j+RmwjMs8EmPYhEYqmyxaDrAv0bsFSFGNQrku
-   j6Evsf3yBslshskToUgFLRnFSAL1VHXT791pcAK+DxOQQ3wzi4bv9tMeg
-   CVODzHwCCNFAu2RWERdNnH94gEynRKVGRd0MJCuKtFXCP54Dy40ZaOzLp
-   FyXupGs443a5d92Q9SgDInwLEapRw+EMWHLm1ejYQw6JuH0U3d/oXuPOM
-   SOUetSX29z3zlPjQ1eYyX9nngkyMNQSAzLbAz9E+2SdOF1WLFgklJQywn
+  bh=Tw87e5Z2+o3Cia05sESpVVc5/dF27IORpEOYljJX210=;
+  b=L+Z6WGPtYczkhFqOT1d2LnNSaJPqmbhIqYYU+kzg29vIJJDyuc1DLxyq
+   kKYO8TPysKVszmE/5Xhx/613tcxNk3TvtU1KvYPUYfEbfbTdxxTVxWZCL
+   sEaahRxqf2S1Fx4s1otP57DpmztCM2Scyf5jzBeST4NR37q71FdriH3bk
+   mohpvnxHFzzuVx9WubVGX+klUUuCEF6EIqyLklEJTMyf7JBjb1AdZQYeU
+   DaHo1o4y9WE7irbs7bljT7RFmwv/4oNfblEY5bxvVy2i4Hrafx99mGlPq
+   36PsU6WBfsucQlgRFCG+vRI1Nmu/k2sr2TMelJwEbUHsf6VjXhb4HkE+m
    g==;
-X-CSE-ConnectionGUID: hx1ZFg8aSu2ANtNXRNNJ9A==
-X-CSE-MsgGUID: iDIKIf6oRLa4snBJFURBlQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="45831145"
+X-CSE-ConnectionGUID: 83xC6K++QYafxUIn+ntV5Q==
+X-CSE-MsgGUID: 1vObuezeRTO66Z67nkuJAA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="49744352"
 X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="45831145"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 08:17:08 -0700
-X-CSE-ConnectionGUID: sAWRgJx4TiS9cgxYXjdMAA==
-X-CSE-MsgGUID: gJUnx4fZRNiqooMJxuXu0w==
+   d="scan'208";a="49744352"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 08:21:46 -0700
+X-CSE-ConnectionGUID: ZN7F5R2QSnS6gU9u+heceQ==
+X-CSE-MsgGUID: OgdXmu7hQnWi10VVkYsecg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="160185938"
+   d="scan'208";a="128993003"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.51])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 08:17:02 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 08:21:40 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 11 Apr 2025 18:16:58 +0300 (EEST)
+Date: Fri, 11 Apr 2025 18:21:36 +0300 (EEST)
 To: Antheas Kapenekakis <lkml@antheas.dev>
 cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
     linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
@@ -57,118 +57,174 @@ cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
     Eileen <eileen@one-netbook.com>, LKML <linux-kernel@vger.kernel.org>, 
     sre@kernel.org, linux@weissschuh.net, Hans de Goede <hdegoede@redhat.com>, 
     mario.limonciello@amd.com
-Subject: Re: [PATCH v8 08/14] platform/x86: oxpec: Move pwm_enable read to
- its own function
-In-Reply-To: <20250322103606.680401-9-lkml@antheas.dev>
-Message-ID: <c3b89444-bc78-4e1d-573e-b2f9af9892c2@linux.intel.com>
-References: <20250322103606.680401-1-lkml@antheas.dev> <20250322103606.680401-9-lkml@antheas.dev>
+Subject: Re: [PATCH v8 07/14] platform/x86: oxpec: Add turbo led support to
+ X1 devices
+In-Reply-To: <20250322103606.680401-8-lkml@antheas.dev>
+Message-ID: <b63450af-e3e9-41a6-fd14-81a4ac22a69e@linux.intel.com>
+References: <20250322103606.680401-1-lkml@antheas.dev> <20250322103606.680401-8-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1458065115-1744384618=:944"
+Content-Type: multipart/mixed; boundary="8323328-207892103-1744384896=:944"
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1458065115-1744384618=:944
+--8323328-207892103-1744384896=:944
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 
 On Sat, 22 Mar 2025, Antheas Kapenekakis wrote:
 
-> Currently, this driver breaks ABI by using auto as 0 and manual as 1.
-> However, for pwm_enable, 0 is full speed, 1 is manual, and 2 is auto.
-> For the correction to be possible, this means that the pwm_enable
-> endpoint will need access to both pwm enable and value (as for
-> the 0th value, the fan needs to be set to full power).
+> The X1 and X1 mini lineups feature an LED nested within their turbo
+> button. When turbo takeover is not enabled, the turbo button allows
+> the device to switch from 18W to 25W TDP. When the device is in the
+> 25W TDP mode, the LED is turned on.
 >=20
-> Therefore, begin by moving the current pwm_enable read to its own
-> function, oxp_pwm_enable.
+> However, when we engage turbo takeover, the turbo led remains on its
+> last state, which might be illuminated and cannot be currently
+> controlled. Therefore, add the register that controls it under sysfs,
+> to allow userspace to turn it off once engaging turbo takeover and
+> then control it as they wish.
 >=20
-> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> 2024 OneXPlayer devices, other than the X1s, do not have a turbo LED.
+> However, earlier models do, so this can be extended to them as well
+> when the register for it is found.
+>=20
 > Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->  drivers/platform/x86/oxpec.c | 50 +++++++++++++++++++-----------------
->  1 file changed, 27 insertions(+), 23 deletions(-)
+>  drivers/platform/x86/oxpec.c | 84 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
 >=20
 > diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-> index 384d525402def..2f31490fde64c 100644
+> index ee37070ec54fc..384d525402def 100644
 > --- a/drivers/platform/x86/oxpec.c
 > +++ b/drivers/platform/x86/oxpec.c
-> @@ -559,6 +559,32 @@ static int oxp_pwm_disable(void)
->  =09}
->  }
+> @@ -87,6 +87,12 @@ static enum oxp_board board;
 > =20
-> +static int oxp_pwm_read(long *val)
+>  #define OXP_TURBO_RETURN_VAL           0x00 /* Common return val */
+> =20
+> +/* X1 Turbo LED */
+> +#define OXP_X1_TURBO_LED_REG           0x57
+> +
+> +#define OXP_X1_TURBO_LED_OFF           0x01
+> +#define OXP_X1_TURBO_LED_ON            0x02
+> +
+>  static const struct dmi_system_id dmi_table[] =3D {
+>  =09{
+>  =09=09.matches =3D {
+> @@ -434,6 +440,73 @@ static ssize_t tt_toggle_show(struct device *dev,
+> =20
+>  static DEVICE_ATTR_RW(tt_toggle);
+> =20
+> +/* Callbacks for turbo LED attribute */
+> +static umode_t tt_led_is_visible(struct kobject *kobj,
+> +=09=09=09=09    struct attribute *attr, int n)
 > +{
 > +=09switch (board) {
-> +=09case orange_pi_neo:
-> +=09=09return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
-> +=09case aok_zoe_a1:
-> +=09case aya_neo_2:
-> +=09case aya_neo_air:
-> +=09case aya_neo_air_1s:
-> +=09case aya_neo_air_plus_mendo:
-> +=09case aya_neo_air_pro:
-> +=09case aya_neo_flip:
-> +=09case aya_neo_geek:
-> +=09case aya_neo_kun:
-> +=09case oxp_2:
-> +=09case oxp_fly:
-> +=09case oxp_mini_amd:
-> +=09case oxp_mini_amd_a07:
-> +=09case oxp_mini_amd_pro:
 > +=09case oxp_x1:
-> +=09=09return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+> +=09=09return attr->mode;
 > +=09default:
-> +=09=09return -EOPNOTSUPP;
+> +=09=09break;
 > +=09}
+> +=09return 0;
 > +}
 > +
->  /* Callbacks for hwmon interface */
->  static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
->  =09=09=09=09       enum hwmon_sensor_types type, u32 attr, int channel)
-> @@ -656,29 +682,7 @@ static int oxp_platform_read(struct device *dev, enu=
-m hwmon_sensor_types type,
->  =09=09=09}
->  =09=09=09return 0;
->  =09=09case hwmon_pwm_enable:
-> -=09=09=09switch (board) {
-> -=09=09=09case orange_pi_neo:
-> -=09=09=09=09return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
-> -=09=09=09case aok_zoe_a1:
-> -=09=09=09case aya_neo_2:
-> -=09=09=09case aya_neo_air:
-> -=09=09=09case aya_neo_air_1s:
-> -=09=09=09case aya_neo_air_plus_mendo:
-> -=09=09=09case aya_neo_air_pro:
-> -=09=09=09case aya_neo_flip:
-> -=09=09=09case aya_neo_geek:
-> -=09=09=09case aya_neo_kun:
-> -=09=09=09case oxp_2:
-> -=09=09=09case oxp_fly:
-> -=09=09=09case oxp_mini_amd:
-> -=09=09=09case oxp_mini_amd_a07:
-> -=09=09=09case oxp_mini_amd_pro:
-> -=09=09=09case oxp_x1:
-> -=09=09=09=09return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
-> -=09=09=09default:
-> -=09=09=09=09break;
-> -=09=09=09}
-> -=09=09=09break;
-> +=09=09=09return oxp_pwm_read(val);
->  =09=09default:
->  =09=09=09break;
->  =09=09}
->=20
+> +static ssize_t tt_led_store(struct device *dev,
+> +=09=09=09       struct device_attribute *attr, const char *buf,
+> +=09=09=09       size_t count)
+> +{
+> +=09u8 reg, val;
+> +=09bool value;
+> +=09int rval;
+> +
+> +=09rval =3D kstrtobool(buf, &value);
+> +=09if (rval)
+> +=09=09return rval;
+> +
+> +=09switch (board) {
+> +=09case oxp_x1:
+> +=09=09reg =3D OXP_X1_TURBO_LED_REG;
+> +=09=09val =3D value ? OXP_X1_TURBO_LED_ON : OXP_X1_TURBO_LED_OFF;
+> +=09=09break;
+> +=09default:
+> +=09=09return -EINVAL;
+> +=09}
+> +=09rval =3D write_to_ec(reg, val);
+> +
+> +=09if (rval)
 
-Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+Please don't put empty lines in between call and its error handling.
+
+Please change "rval" to "ret".
+
+(I'd add also a patch to convert the another rval to ret if it remains and=
+=20
+change "retval" too to ret for consistency).
+
+> +=09=09return rval;
+> +
+> +=09return count;
+> +}
+> +
+> +static ssize_t tt_led_show(struct device *dev,
+> +=09=09=09      struct device_attribute *attr, char *buf)
+> +{
+> +=09int retval;
+> +=09long enval;
+> +=09long val;
+> +=09u8 reg;
+> +
+> +=09switch (board) {
+> +=09case oxp_x1:
+> +=09=09reg =3D OXP_X1_TURBO_LED_REG;
+> +=09=09enval =3D OXP_X1_TURBO_LED_ON;
+> +=09=09break;
+> +=09default:
+> +=09=09return -EINVAL;
+> +=09}
+> +
+> +=09retval =3D read_from_ec(reg, 1, &val);
+> +=09if (retval)
+> +=09=09return retval;
+> +
+> +=09return sysfs_emit(buf, "%d\n", val =3D=3D enval);
+> +}
+> +
+> +static DEVICE_ATTR_RW(tt_led);
+> +
+>  /* PWM enable/disable functions */
+>  static int oxp_pwm_enable(void)
+>  {
+> @@ -691,8 +764,19 @@ static const struct attribute_group oxp_tt_toggle_at=
+tribute_group =3D {
+>  =09.attrs =3D oxp_tt_toggle_attrs,
+>  };
+> =20
+> +static struct attribute *oxp_tt_led_attrs[] =3D {
+> +=09&dev_attr_tt_led.attr,
+> +=09NULL
+> +};
+> +
+> +static const struct attribute_group oxp_tt_led_attribute_group =3D {
+> +=09.is_visible =3D tt_led_is_visible,
+> +=09.attrs =3D oxp_tt_led_attrs,
+> +};
+> +
+>  static const struct attribute_group *oxp_ec_groups[] =3D {
+>  =09&oxp_tt_toggle_attribute_group,
+> +=09&oxp_tt_led_attribute_group,
+>  =09NULL
+>  };
+> =20
+>=20
 
 --=20
  i.
 
---8323328-1458065115-1744384618=:944--
+--8323328-207892103-1744384896=:944--
