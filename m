@@ -1,510 +1,219 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C52B189F39;
-	Sat, 12 Apr 2025 07:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C299149C6F;
+	Sat, 12 Apr 2025 07:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744442462; cv=none; b=sWtK8YVRfSWnDLNS/nEiopBfNrzijcl48Wq3D/MvLIbs7IgdtT1C+J+VdjCyAw5oW3TbgSRF2EUgGvuZBW+6+c6vMg1ws4OWxwgJW1wIJ46OUeH9FouqM8/4Dt9Ezw4b9q20vJh7L8fTYutsTuTIm+2rjPn9jEwnqupoqNgB5dQ=
+	t=1744444795; cv=none; b=io5FgZl+u1rbm96a4Cm7ISWkHWbRRqWR7ZqxZF3vuAQ5sSZ87Q1frzlBH71AiyjKucxIwOrn0jOoBGVUpGSWBBiUiZLhruYbaaV+kEh1BWWw8YdFLHKYwObvUaZFlECudkhGnpe6asgGP6XleNozHTRriAijHoDOlVyOv2aes/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744442462; c=relaxed/simple;
-	bh=mSeDTcR+tgk9bBe4Dc4bg1bIP7jRg8EpUTpRuxesnJs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oflErX3IXDEV8ucLW2qYACtgXPDP6tHwW5qvRviQBCIuCnQY6Zczh1KC6+8TRd+jvi7ncgZpnW7m1eKQpXJXAEZ4GADFMsLlqg7N8VjjzqRRqcFIkYiu1oQC5iL82JJSj1khABzjKDcD99ONlV3QYpfCfEOpQ/sAijvTsJ+nhf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JrjHsqPw; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744444795; c=relaxed/simple;
+	bh=EiuPKkmqCFZXP4N/edZwnI3nbjMbmbyJsvypHGLqJ5g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RDbBr4Kgcn7dEQJJvpeqvCnSQI7yO4ysylhjLwCyNcHj8Rzb8gQRvYEUGZzWqylNq+3jV4bYj6INcNAgUUvZiKN7D1Dg6OYxfLotduCWKpuX9ahGVbYju/AlDO40gwFmjtoDLP6fEIH/XLQxIe+Ca6ujFXA1VfXBMK7YISEjxRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=efhzUGG3; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JrjHsqPw"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-abbb12bea54so531588066b.0;
-        Sat, 12 Apr 2025 00:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744442458; x=1745047258; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FbGi7WMei86EFh6Cqcy/J9CQZJXo3+zhxPZsIHVGgcE=;
-        b=JrjHsqPwDihhDhy5KJdsHUWymezxjk3TKyrh3NraqvJv3clyNj0d1DhEWo7ocXJdc0
-         9die5PMlR6aPTnnLwLS4W40iDd4RvTZ+uSjCksBj78SQb2j6v/eQX9ahUjpG5WdOkX9O
-         x31G1Tq+Nh5XX7A7vjFHNxAROShJDv7BVzmX8JcuXFt/ejn1/wKvkxQgyjLyvse0B7Dx
-         tkvvp0yflkOv8/qvBP4bJ6tBmmeXrQt4fSlWXGD6bLa/uSarxNTLJIHZBhm4IIIRW9TY
-         1Dr76gBDXJatGROvz4rcyee3OLOorHHOXUfNq636Dp37ILHeEEPkCCLE4DzQ2YQIdfGZ
-         a2Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744442458; x=1745047258;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FbGi7WMei86EFh6Cqcy/J9CQZJXo3+zhxPZsIHVGgcE=;
-        b=A4ABOWJz1j8cRxOnIvv765fS4xY3EH8pcczGHbvmz28d41sqONcm4JpOjngaMN0Dko
-         Ju1qTCDOzB3438IHSgTETzjm2SJCrKlYAW90hFcCCZJGY23tianEKwXXPTlC8MRHuhrA
-         EJ0rMe7xf6M7JxkEqABLRUqV09UHvP7/6yOrEHQ9Q+3altOUOP7pB7h6Me2nGD+1FPz0
-         lLvzSksRhyIjDyS33mLKsqoZZ08cxXP6jy6nB022TWDlXNp3lK7RNDGo8WKajvWH5x4t
-         VRlS9+DNTwS/xul2g8pX0pI9bS8Oz1ji/36ZOPupfrGV8KrACTcRoZuG6VSm04E9GmDC
-         jcow==
-X-Forwarded-Encrypted: i=1; AJvYcCU9LNp8NMbp0ZLyVSgTrlj9tYwTFLBT4qwOzlp3vE9Dos271YNSWz+cM9oCTos8RTadlNA1sA6jA48v2hjm@vger.kernel.org, AJvYcCW3kxj2HEEvYTx6NPxvhvUc0HvbkhR+PCZc+iDMyuuvijLO4bPQSee/ncoIbZ5KDayTP2Re/gCF3qQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuREgRDSWs7GHyGR0HYQNylc579Fyu/dT4vtHgaXg9gxwj+bd2
-	yT/1iFb3wCdWp2TOpUZGiIdyqgQZL0u0dti3yUfPul0r5WHWmGbv
-X-Gm-Gg: ASbGncs0jhvx16h1QlH9Ss/Brp94nIBOONeicj5pIoxpvaY4MOa1bvNCYSsoQb43Bt0
-	fzgD8eJ1CV1nGWLfEd4gHtDJijv5b12WlpQe2Lx/Ts8N+l8dmkdb8xSPBPqwbPflu1ymLedK2Dv
-	RbIt8ukzp2xuAO/9+knsxaGudIzfLY4zPF7zUIESj79u2lobwoejTVJSwEwrDgn+WxQdpqJA7qD
-	pCgTCcWvzqJWGV3UT8uJB3BpeGwzZdEQ2IzgXt8mxfzN/J+9MvUJPDnJKgwWj8mJ1RkSw5BCG4+
-	3UTGkBtl1l6gsxwcqrxKeluaEk/GreOGrR70D90=
-X-Google-Smtp-Source: AGHT+IFldD56k+RFFoK1VQksNeNN4T4b5THixoaExuCFihvc44/LrxGvpmwXj5H4JV1y3fS3FSHk8g==
-X-Received: by 2002:a17:906:6a07:b0:ac6:da00:83f4 with SMTP id a640c23a62f3a-acad36c1cbfmr452570966b.53.1744442457976;
-        Sat, 12 Apr 2025 00:20:57 -0700 (PDT)
-Received: from [127.0.1.1] ([46.53.242.22])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-acaa1ce70c1sm559914466b.175.2025.04.12.00.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Apr 2025 00:20:57 -0700 (PDT)
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Sat, 12 Apr 2025 10:20:44 +0300
-Subject: [PATCH v4] hwmon: (max77705) add initial support
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="efhzUGG3"
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 2AC8F2E08F06;
+	Sat, 12 Apr 2025 10:59:41 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1744444781;
+	bh=REeIeHESt0YMj2YCBhUUTwnaTdQeKuRlTFEDz5IF1yY=;
+	h=Received:From:Subject:To;
+	b=efhzUGG3Bz3sJr4JWM4L3NoG7oat+W/iKT9+8c8X4skeL9F4tLrn1kd2ml4VvBP3o
+	 apJH0ZOWDaUQYNsUANhst3kuXfawgo+V6IlqKMNbNNq584NYRZOK6VQR2p63dBO14e
+	 gl64GoEu7D7FTZ7JDm0DAwgVozS1oHcMltwu0j3M=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f179.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f179.google.com with SMTP id
+ 38308e7fff4ca-30bf3f3539dso30012921fa.1;
+        Sat, 12 Apr 2025 00:59:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUUskxXEzWV/+3u3osXLiBRNY18iZ8Hq4RIbmbNyRN7ChPU1X2L4jPjVW7UTYOm3pGhHqAj0oVrEWs=@vger.kernel.org,
+ AJvYcCVJm3PFoOQ/RHqCHMHwGwXVy0YP6p631g2wxp+TpiEqdJlNo43N1QvyatZ/F5IdOyQMWw4ijE2jc3tUVpQ=@vger.kernel.org,
+ AJvYcCW0xxte6tVrzIFwXtcxgLp3/CobEGPStmyBG/BD1E7xQ/otbadB0lK0Nv9h/T0NUlyQN02GFJOLyRg=@vger.kernel.org,
+ AJvYcCWW+PFKwaYejflbhuBYe/nG7NKBx1L/MYbiyVY91jUu+uN3h1urcmoj8GPFfIAf9dX4/k9ciHs/oIF8IygS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0yAVAWNBkrNj8y54GMm2X+ycHEXdiO0dgmi0rws5RvJz/6oTD
+	z/bxWLooi8o9byclEEFK5H9v55pRy+gtqGLU343EqW8rDtQFRCoW52xjmDE8FfCuYLeN+WBQncv
+	PZrLl2zdzR8Wo1RYSdyifUEIAVc8=
+X-Google-Smtp-Source: 
+ AGHT+IGVjsis0wnIIdzXhAkrlGIyN9teUJRgNyaJsyRzIeqkI6ouzeeODqZf/BwuubgIncEFB0FdZxqjnTVfVHLkR8s=
+X-Received: by 2002:a05:651c:908:b0:30c:12b8:fb97 with SMTP id
+ 38308e7fff4ca-310489a03b8mr16804031fa.11.1744444780124; Sat, 12 Apr 2025
+ 00:59:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250412-initial-support-for-max77705-sensors-v4-1-2e4cf268a3d0@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAEsU+mcC/43OMY7CMBCF4asg1xiNx3aMqLgH2sJxJjASiYMdI
- lYod8dAkdVWKd8U3z9PkSkxZXHYPEWiiTPHvgyz3Yhw8f2ZJDdlCwS0oFBL7nlkf5X5PgwxjbK
- NSXb+4ZwDKzP1OaYsfQPKgQ+KghWFGhK1/PhkTj/fneh2L7VxOV44jzH9fl6Z1Pv6rSLaddVJS
- SWxpspUrsJ9Dcdz5/m6C7ET78CEC6rBrESxoHbfIIILTmP9H9ULamDtp7qgZNvKtCE0APYvOs/
- zC/Rk56yXAQAA
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>, Chanwoo Choi <cw00.choi@samsung.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744442456; l=11828;
- i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=mSeDTcR+tgk9bBe4Dc4bg1bIP7jRg8EpUTpRuxesnJs=;
- b=NF1AnXsCPgc6wJG4v4MG+yTKU9GmzCC+fl+JHuwBBkDrchK/0lnlwbfbVnqxkGDiCatt1kNWt
- vOM12EoSarxC5oDLAnLQP+3zGhp2mWUtBwee0Khy7LXl9lwDCDFrjaF
-X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
- pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
+References: <20250322103606.680401-1-lkml@antheas.dev>
+ <20250322103606.680401-12-lkml@antheas.dev>
+ <4049e2db-fcea-a441-466d-84267d423c2c@linux.intel.com>
+In-Reply-To: <4049e2db-fcea-a441-466d-84267d423c2c@linux.intel.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Sat, 12 Apr 2025 09:59:28 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwEGLB+duOD=GyAZ25fFm0RmoEdawAxvLJ+_nJBTNmcEqg@mail.gmail.com>
+X-Gm-Features: ATxdqUHnjRjKm0yhYmqShP5-yp_wPweL0YrKdTdcLw4vbge4osaykUoFzBpbdsQ
+Message-ID: 
+ <CAGwozwEGLB+duOD=GyAZ25fFm0RmoEdawAxvLJ+_nJBTNmcEqg@mail.gmail.com>
+Subject: Re: [PATCH v8 11/14] platform/x86: oxpec: Adhere to sysfs-class-hwmon
+ and enable pwm on 2
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+ Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+ Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>,
+	LKML <linux-kernel@vger.kernel.org>, sre@kernel.org, linux@weissschuh.net,
+	Hans de Goede <hdegoede@redhat.com>, mario.limonciello@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <174444478157.30741.9183234111640429283@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Add support for max77705 hwmon. Includes charger input, system bus, and
-vbyp measurements.
+On Fri, 11 Apr 2025 at 17:13, Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> On Sat, 22 Mar 2025, Antheas Kapenekakis wrote:
+>
+> > Currently, the driver does not adhere to the sysfs-class-hwmon
+> > specification: 0 is used for auto fan control and 1 is used for manual
+> > control. However, it is expected that 0 sets the fan to full speed,
+> > 1 sets the fan to manual, and then 2 is used for automatic control.
+> >
+> > Therefore, change the sysfs API to reflect this and enable pwm on 2.
+> >
+> > As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
+> > reflecting the naming convention used by other drivers, to allow for
+> > a smooth migration in current userspace programs.
+>
+> So there's no gracious deprecation of the previous interface? It doesn't
+> sound "smooth" by any means from userspace perspective.
 
-Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
----
-Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
-It includes charger and fuel gauge blocks, and is capable of measuring
-charger input current, system bus volatage and current, and bypass
-voltage.
+The previous interface was not compliant with the hwmon ABI, so any
+software that used it without being cognisant of that would misbehave.
 
-Add support for mentioned measurements.
----
-Changes in v4:
-- Fix review comments.
-- Link to v3: https://lore.kernel.org/r/20250405-initial-support-for-max77705-sensors-v3-1-e5f64fccd005@gmail.com
+This driver got really fleshed out with 6.12, before that there was
+one userspace software that relied on this. We made sure to update all
+software that binds to oxpec specifically so it is not a problem now.
 
-Changes in v3:
-- Fix review comments.
-- Fix v2 changed message.
-- Link to v2: https://lore.kernel.org/r/20250304-initial-support-for-max77705-sensors-v2-1-58d2207c732b@gmail.com
+By adding a dash at the name at the same time as the change is done it
+is possible to handle both the previous interface and this one at the
+same time.
 
-Changes in v2:
-- Fix review comments.
-- Link to v1: https://lore.kernel.org/r/20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com
----
-Changes in v4:
-- documentation: "===" line is as long as the text
-- simplify the dependency to depends on MFD_MAX77705
-- cleanup headers
-- sign_extend current measurements - add 'is_signed' parameter to
-  max77705_read_and_convert function
-- replace ARRAY_SIZE(voltage_channel_desc) to 2
-- remove last blank line
+It is not ideal by any means, but if we don't change it now we will
+not be able to again.
 
-Changes in v3:
-- change resolution type to u32
-- pass regmap from parent
-- rebase on latest linux-next, containg max77705 driver
+> > Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derek=
+john.clark@gmail.com/
+> > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> > Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > ---
+> >  drivers/platform/x86/oxpec.c | 37 ++++++++++++++++++++++++++++++++----
+> >  1 file changed, 33 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.=
+c
+> > index 5b84647569931..3bf2c597e9b00 100644
+> > --- a/drivers/platform/x86/oxpec.c
+> > +++ b/drivers/platform/x86/oxpec.c
+> > @@ -731,7 +731,27 @@ static int oxp_platform_read(struct device *dev, e=
+num hwmon_sensor_types type,
+> >               case hwmon_pwm_input:
+> >                       return oxp_pwm_input_read(val);
+> >               case hwmon_pwm_enable:
+> > -                     return oxp_pwm_read(val);
+> > +                     ret =3D oxp_pwm_read(val);
+> > +                     if (ret)
+> > +                             return ret;
+> > +
+> > +                     /* Check for auto and return 2 */
+> > +                     if (!*val) {
+> > +                             *val =3D 2;
+> > +                             return 0;
+> > +                     }
+> > +
+> > +                     /* Return 0 if at full fan speed, 1 otherwise */
+> > +                     ret =3D oxp_pwm_fan_speed(val);
+> > +                     if (ret)
+> > +                             return ret;
+> > +
+> > +                     if (*val =3D=3D 255)
+> > +                             *val =3D 0;
+> > +                     else
+> > +                             *val =3D 1;
+>
+> Why all these literals? These should be named properly with defines are
+> there some defines/enums for some of them already if this hwmon ABI?
 
-Changes in v2:
-- sort headers alphabetically
-- swap curr channel info, to align indeces with channel_desc struct
-- reword coverletter
-- fix checkpatch --strict warnings
-- remove struct max77705_hwmon, use regmap directly
-- move register validation logic to is_visible function
-- move common register reading and converting logic to separate function
-- remove unnessesary {} in if statement
-- s/i2c->dev/pdev->dev in dev_err_probe
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max77705.rst |  39 ++++++++++++++++++++++++++++++++
- MAINTAINERS                      |   7 ++++++
- drivers/hwmon/Kconfig            |   9 ++++++++
- drivers/hwmon/Makefile           |   1 +
- drivers/hwmon/max77705-hwmon.c   | 242 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 6 files changed, 299 insertions(+)
+Specifically for pwm_enable I don't think so actually. With a quick
+grep all drivers I checked use literals.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index f0ddf6222c44..764c1c91ed70 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -161,6 +161,7 @@ Hardware Monitoring Kernel Drivers
-    max6639
-    max6650
-    max6697
-+   max77705
-    max8688
-    mc13783-adc
-    mc34vr500
-diff --git a/Documentation/hwmon/max77705.rst b/Documentation/hwmon/max77705.rst
-new file mode 100644
-index 000000000000..4a7680a340e1
---- /dev/null
-+++ b/Documentation/hwmon/max77705.rst
-@@ -0,0 +1,39 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver max77705
-+======================
-+
-+Supported chips:
-+
-+  * Maxim Integrated MAX77705
-+
-+    Prefix: 'max77705'
-+
-+    Addresses scanned: none
-+
-+    Datasheet: Not available
-+
-+Authors:
-+      - Dzmitry Sankouski <dsankouski@gmail.com>
-+
-+Description
-+-----------
-+
-+The MAX77705 PMIC provides current and voltage measurements besides fuelgauge:
-+- chip input current
-+- system bus current and voltage
-+- VBYP voltage
-+
-+Sysfs Attributes
-+----------------
-+
-+================= ========================================
-+in1_label         "vbyp"
-+in1_input         Measured chip vbyp voltage
-+in2_label         "vsys"
-+in2_input         Measured chip system bus voltage
-+curr1_label       "iin"
-+curr1_input       Measured chip input current.
-+curr2_label       "isys"
-+curr2_input       Measured chip system bus current.
-+================= ========================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 78467ad7a8fe..2e1e5233a011 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18369,6 +18369,13 @@ S:	Maintained
- F:	Documentation/hwmon/pc87427.rst
- F:	drivers/hwmon/pc87427.c
- 
-+MAX77705 HARDWARE MONITORING DRIVER
-+M:	Dzmitry Sankouski <dsankouski@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/max77705.rst
-+F:	drivers/hwmon/max77705-hwmon.c
-+
- PCA9532 LED DRIVER
- M:	Riku Voipio <riku.voipio@iki.fi>
- S:	Maintained
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index f91f713b0105..7109f252dab4 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1308,6 +1308,15 @@ config SENSORS_MAX31790
- 	  This driver can also be built as a module. If so, the module
- 	  will be called max31790.
- 
-+config SENSORS_MAX77705
-+	tristate "MAX77705 current and voltage sensor"
-+	depends on MFD_MAX77705
-+	help
-+	  If you say yes here you get support for MAX77705 sensors connected with I2C.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called max77705-hwmon.
-+
- config SENSORS_MC34VR500
- 	tristate "NXP MC34VR500 hardware monitoring driver"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 766c652ef22b..22ceebf10299 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -161,6 +161,7 @@ obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
- obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
- obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
- obj-$(CONFIG_MAX31827) += max31827.o
-+obj-$(CONFIG_SENSORS_MAX77705) += max77705-hwmon.o
- obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
- obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
- obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
-diff --git a/drivers/hwmon/max77705-hwmon.c b/drivers/hwmon/max77705-hwmon.c
-new file mode 100644
-index 000000000000..be0a4bd31d33
---- /dev/null
-+++ b/drivers/hwmon/max77705-hwmon.c
-@@ -0,0 +1,242 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  MAX77705 voltage and current hwmon driver.
-+ *
-+ *  Copyright (C) 2025 Dzmitry Sankouski <dsankouski@gmail.com>
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/hwmon.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/max77705-private.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+struct channel_desc {
-+	u8 reg;
-+	u8 avg_reg;
-+	const char *const label;
-+	// register resolution. nano Volts for voltage, nano Amperes for current
-+	u32 resolution;
-+};
-+
-+static const struct channel_desc current_channel_desc[] = {
-+	{
-+		.reg = IIN_REG,
-+		.label = "IIN_REG",
-+		.resolution = 125000
-+	},
-+	{
-+		.reg = ISYS_REG,
-+		.avg_reg = AVGISYS_REG,
-+		.label = "ISYS_REG",
-+		.resolution = 312500
-+	}
-+};
-+
-+static const struct channel_desc voltage_channel_desc[] = {
-+	{
-+		.reg = VBYP_REG,
-+		.label = "VBYP_REG",
-+		.resolution = 427246
-+	},
-+	{
-+		.reg = VSYS_REG,
-+		.label = "VSYS_REG",
-+		.resolution = 156250
-+	}
-+};
-+
-+static const struct regmap_range max77705_hwmon_readable_ranges[] = {
-+	regmap_reg_range(AVGISYS_REG,	AVGISYS_REG + 1),
-+	regmap_reg_range(IIN_REG,	IIN_REG + 1),
-+	regmap_reg_range(ISYS_REG,	ISYS_REG + 1),
-+	regmap_reg_range(VBYP_REG,	VBYP_REG + 1),
-+	regmap_reg_range(VSYS_REG,	VSYS_REG + 1),
-+};
-+
-+static const struct regmap_access_table max77705_hwmon_readable_table = {
-+	.yes_ranges = max77705_hwmon_readable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(max77705_hwmon_readable_ranges),
-+};
-+
-+static int max77705_read_and_convert(struct regmap *regmap, u8 reg, u32 res,
-+				     u8 is_signed, long *val)
-+{
-+	int ret;
-+	u32 regval;
-+
-+	ret = regmap_read(regmap, reg, &regval);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (is_signed)
-+		*val = mult_frac((long)sign_extend32(regval, 15), res, 1000000);
-+	else
-+		*val = mult_frac((long)regval, res, 1000000);
-+
-+	return 0;
-+}
-+
-+static umode_t max77705_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		if (channel >= 2)
-+			return 0;
-+
-+		switch (attr) {
-+		case hwmon_in_input:
-+		case hwmon_in_label:
-+			return 0444;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_curr:
-+		if (channel >= 2)
-+			return 0;
-+
-+		switch (attr) {
-+		case hwmon_curr_input:
-+		case hwmon_in_label:
-+			return 0444;
-+		case hwmon_curr_average:
-+			if (current_channel_desc[channel].avg_reg)
-+				return 0444;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+static int max77705_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-+				int channel, const char **buf)
-+{
-+	switch (type) {
-+	case hwmon_curr:
-+		switch (attr) {
-+		case hwmon_in_label:
-+			*buf = current_channel_desc[channel].label;
-+			return 0;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_label:
-+			*buf = voltage_channel_desc[channel].label;
-+			return 0;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int max77705_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	u8 reg, is_signed;
-+	u32 res;
-+
-+	switch (type) {
-+	case hwmon_curr:
-+		is_signed = 1;
-+		switch (attr) {
-+		case hwmon_curr_input:
-+			reg = current_channel_desc[channel].reg;
-+			res = current_channel_desc[channel].resolution;
-+
-+			return max77705_read_and_convert(regmap, reg, res, is_signed, val);
-+		case hwmon_curr_average:
-+			reg = current_channel_desc[channel].avg_reg;
-+			res = current_channel_desc[channel].resolution;
-+
-+			return max77705_read_and_convert(regmap, reg, res, is_signed, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+
-+	case hwmon_in:
-+		is_signed = 0;
-+		switch (attr) {
-+		case hwmon_in_input:
-+			reg = voltage_channel_desc[channel].reg;
-+			res = voltage_channel_desc[channel].resolution;
-+
-+			return max77705_read_and_convert(regmap, reg, res, is_signed, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops max77705_hwmon_ops = {
-+	.is_visible = max77705_is_visible,
-+	.read = max77705_read,
-+	.read_string = max77705_read_string,
-+};
-+
-+static const struct hwmon_channel_info *max77705_info[] = {
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL
-+			),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_AVERAGE | HWMON_C_LABEL
-+			),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info max77705_chip_info = {
-+	.ops = &max77705_hwmon_ops,
-+	.info = max77705_info,
-+};
-+
-+static int max77705_hwmon_probe(struct platform_device *pdev)
-+{
-+	struct device *hwmon_dev;
-+	struct regmap *regmap;
-+
-+	regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!regmap)
-+		return -ENODEV;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "max77705", regmap,
-+							 &max77705_chip_info, NULL);
-+	if (IS_ERR(hwmon_dev))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(hwmon_dev),
-+				"Unable to register hwmon device\n");
-+
-+	return 0;
-+};
-+
-+static struct platform_driver max77705_hwmon_driver = {
-+	.driver = {
-+		.name = "max77705-hwmon",
-+	},
-+	.probe = max77705_hwmon_probe,
-+};
-+
-+module_platform_driver(max77705_hwmon_driver);
-+
-+MODULE_AUTHOR("Dzmitry Sankouski <dsankouski@gmail.com>");
-+MODULE_DESCRIPTION("MAX77705 monitor driver");
-+MODULE_LICENSE("GPL");
-
----
-base-commit: a4cda136f021ad44b8b52286aafd613030a6db5f
-change-id: 20250123-initial-support-for-max77705-sensors-ad0170ac1ec5
-
-Best regards,
--- 
-Dzmitry Sankouski <dsankouski@gmail.com>
-
+> > +
+> > +                     return 0;
+> >               default:
+> >                       break;
+> >               }
+> > @@ -745,15 +765,24 @@ static int oxp_platform_read(struct device *dev, =
+enum hwmon_sensor_types type,
+> >  static int oxp_platform_write(struct device *dev, enum hwmon_sensor_ty=
+pes type,
+> >                             u32 attr, int channel, long val)
+> >  {
+> > +     int ret;
+> > +
+> >       switch (type) {
+> >       case hwmon_pwm:
+> >               switch (attr) {
+> >               case hwmon_pwm_enable:
+> >                       if (val =3D=3D 1)
+> >                               return oxp_pwm_enable();
+> > -                     else if (val =3D=3D 0)
+> > +                     else if (val =3D=3D 2)
+> >                               return oxp_pwm_disable();
+> > -                     return -EINVAL;
+> > +                     else if (val !=3D 0)
+>
+> Literals here too should be changed.
+>
+> > +                             return -EINVAL;
+> > +
+> > +                     /* Enable PWM and set to max speed */
+> > +                     ret =3D oxp_pwm_enable();
+> > +                     if (ret)
+> > +                             return ret;
+> > +                     return oxp_pwm_input_write(255);
+> >               case hwmon_pwm_input:
+> >                       return oxp_pwm_input_write(val);
+> >               default:
+> > @@ -818,7 +847,7 @@ static int oxp_platform_probe(struct platform_devic=
+e *pdev)
+> >       struct device *dev =3D &pdev->dev;
+> >       struct device *hwdev;
+> >
+> > -     hwdev =3D devm_hwmon_device_register_with_info(dev, "oxpec", NULL=
+,
+> > +     hwdev =3D devm_hwmon_device_register_with_info(dev, "oxp_ec", NUL=
+L,
+> >                                                    &oxp_ec_chip_info, N=
+ULL);
+> >
+> >       return PTR_ERR_OR_ZERO(hwdev);
+> >
+>
+> --
+>  i.
