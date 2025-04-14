@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1C52750E7;
-	Mon, 14 Apr 2025 13:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF33729B79E;
+	Mon, 14 Apr 2025 13:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744638987; cv=none; b=QDQbWS2x6EUUJG+KL9+NkWCktMVWvLJvLCBMnTFWu3ILoPtw3/Q8A+7Mgr6hC2znQbmQxx+OWg8bG8bLhF+GZCEXHVvxD4Wct9nZwepnMi3+ztatKBu32IQNIMn5YrVeuQ4fcJqZlZlpTAtH6IHaGMdT1k2DrhrovfhcPy3LppU=
+	t=1744639014; cv=none; b=OsN9fi421Uv1Y02XX3s1+hv/K/4xIuLzGr3O/44MW6gFIFjFBIEfVLCovMWbtVTD/IPOJ2sZpAXq15sXGkJLppH82cIMf7bvF+DfzVrx3A5HCm7ggWwhmkGQyQ5rcVDq5r3e5RFW2lXDePn+OWzf7tk4Vdu1krulvrF1akx+cFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744638987; c=relaxed/simple;
-	bh=NFLGYLwfMv4O8oauiY7vmwB/nw7imAlHzVax0tuTb+E=;
+	s=arc-20240116; t=1744639014; c=relaxed/simple;
+	bh=ESCuQapauQmjDSGxrvdMiWpiZpAHRAJUwS3o5TN6AVY=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=i6Ja071a5w47RglaC/5BFii8HOES/zAxm4s49HG+SgOEsOLx26FAszeGtcmp4PqO/VipZMZ53xt1qxO3wJF4Z6WqbMcwqwNXoa/6bganc4Avjs9dwWzIB4067d9/OoUijTm7RuevxUP/pMDN5GK3Qr/2YLLpSgdvauoRxU7OrzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/0pocpD; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=RRbMtvYUDxaBDq/iZOPb8G6YVXZNTKHNZ7iOUwjc73smenBOEG95rl/HVCwBnyFl94aBRT0ikF36Yee3Yi21+PyM6NjFaGcZLMBkkSvSlpK3PfTLNNk1zhwy7iiZu4Xtvq0VPwSsKtPbKWgR4gTRhL0qH+TLgP3e4MPC28SlCz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jf11uyuw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/0pocpD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C4BC4CEE2;
-	Mon, 14 Apr 2025 13:56:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jf11uyuw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB01C4CEE2;
+	Mon, 14 Apr 2025 13:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744638986;
-	bh=NFLGYLwfMv4O8oauiY7vmwB/nw7imAlHzVax0tuTb+E=;
+	s=k20201202; t=1744639012;
+	bh=ESCuQapauQmjDSGxrvdMiWpiZpAHRAJUwS3o5TN6AVY=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=f/0pocpDSbkaNH9t2nd0UfGeZ2kaghu7xBWHR8+RAV/ZT/esgLAF5DrxIVl7ml2Sr
-	 vzP30Qc8TpuvpR/0hyX2N/+1EGKYtsKhy9I0dF/FXx1QNBwPUjNKeceQFehm+RZ+tj
-	 n/MCvgJrKHDuQfmpOfoq28JeTkcCxqGGIEnMwDqMPoUTLk2RnvACi77o40eV0GEGek
-	 WaGgqDcr8ZCsbvA7fCPhLtGHyEJ6CSJd+si0BmTDAK0uIOtxmIfbjIX4Xx/4olHACc
-	 UkgJiOiV8WZTzb+poBd4KmPe9cjh5cfcVA01v7fQGNs7vDSkkkBe5fAqlz5ioY093k
-	 hs/OwjkW6ARlA==
+	b=jf11uyuwRiOn7OWxfW/FwmJbtmCrgx/l83Yo46x674XqBJTyKdt1//0T7iACWhMwC
+	 3gUe3I9cqTTiar1eVQttJp+r+Hx/18y06jqra+n1jqNyD67c72xH8EyJnqTAWmi8J/
+	 fGosgy0I2+4jIpBlWrpf/EIKgcjm5Lr1O3tE6mDYlcZStLxC+Gf7Wa5yoFxb0ffTE+
+	 ulW3T9ZcLpHxEBBlzX3h9R3Qh0syXzAyB3vlMZKnm0WF9/cFAoQV3hIORxiH+8FMQ5
+	 LzeFDWRqY4cJKKjm2iM6X8N11TidFRh+C5OklUx15JL2r2wjOkCPEk+nQPQ851zjQy
+	 WEJK3LnzMYwlQ==
 From: Mark Brown <broonie@kernel.org>
 To: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
  Takashi Iwai <tiwai@suse.com>, Shenghao Ding <shenghao-ding@ti.com>, 
@@ -41,12 +41,12 @@ Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  asahi@lists.linux.dev, linux-hwmon@vger.kernel.org, 
  Neal Gompa <neal@gompa.dev>
-In-Reply-To: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
-References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
-Subject: Re: (subset) [PATCH v3 00/20] ASoC: tas27{64,70}: improve support
- for Apple codec variants
-Message-Id: <174463898202.86688.2390703716966922295.b4-ty@kernel.org>
-Date: Mon, 14 Apr 2025 14:56:22 +0100
+In-Reply-To: <20250406-apple-codec-changes-v5-0-50a00ec850a3@gmail.com>
+References: <20250406-apple-codec-changes-v5-0-50a00ec850a3@gmail.com>
+Subject: Re: [PATCH v5 0/8] ASoC: tas27{64,70}: improve support for Apple
+ codec variants
+Message-Id: <174463900790.86688.4041479471029106682.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 14:56:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -57,7 +57,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Thu, 27 Feb 2025 22:07:27 +1000, James Calligeros wrote:
+On Sun, 06 Apr 2025 09:15:04 +1000, James Calligeros wrote:
 > This series introduces a number of changes to the drivers for
 > the Texas Instruments TAS2764 and TAS2770 amplifiers in order to
 > introduce (and improve in the case of TAS2770) support for the
@@ -76,8 +76,22 @@ Applied to
 
 Thanks!
 
-[07/20] ASoC: tas2764: Reinit cache on part reset
-        commit: 592ab3936b096da5deb64d4c906edbeb989174d6
+[1/8] ASoC: tas2770: Power cycle amp on ISENSE/VSENSE change
+      commit: f529c91be8a34ac12e7599bf87c65b6f4a2c9f5c
+[2/8] ASoC: tas2770: Support setting the PDM TX slot
+      commit: 7699892ad3cf3a9afc8c63886344f6e2b73166e2
+[3/8] ASoC: tas2764: Reinit cache on part reset
+      commit: 592ab3936b096da5deb64d4c906edbeb989174d6
+[4/8] ASoC: tas2764: Enable main IRQs
+      commit: dd50f0e38563f15819059c923bf142200453e003
+[5/8] ASoC: tas2764: Raise regmap range maximum
+      commit: f0aff451f399d09aaf2a23c4e2ef2077b9857ca5
+[6/8] ASoC: tas2764: Apply Apple quirks
+      commit: f33b01e0947d81c514bc8ff31ad28cae7ff6d91f
+[7/8] ASoC: tas2770: expose die temp to hwmon
+      commit: ff73e2780169a43617cc339686f5bd3d74fa8652
+[8/8] ASoC: tas2764: expose die temp to hwmon
+      commit: 186dfc85f9a824e3f8383322747ca75e988486e9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
