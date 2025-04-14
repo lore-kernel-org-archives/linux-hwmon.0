@@ -1,77 +1,100 @@
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CDE2F4A;
-	Mon, 14 Apr 2025 07:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1C52750E7;
+	Mon, 14 Apr 2025 13:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744616893; cv=none; b=U1lubTeCibUew5J4AgaD7sEXHoKYm/VzCR4/9nD2doFzOCWJHch2UjpKmea8LQzv6pGhKwIg/7DChg6h9EZZfEO0ZMc7nTKgjcAqQI7NsJ6lqRRE71p062rKR5C9qLwYaDt+xZtP5SwiKU8Ki6/3hZOXXIkXAbmmZvce7GRj1ME=
+	t=1744638987; cv=none; b=QDQbWS2x6EUUJG+KL9+NkWCktMVWvLJvLCBMnTFWu3ILoPtw3/Q8A+7Mgr6hC2znQbmQxx+OWg8bG8bLhF+GZCEXHVvxD4Wct9nZwepnMi3+ztatKBu32IQNIMn5YrVeuQ4fcJqZlZlpTAtH6IHaGMdT1k2DrhrovfhcPy3LppU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744616893; c=relaxed/simple;
-	bh=WYwRR1Pc+EMmU7eSySZSDCumVjqm7uIRCv2bPRMdja8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lUFqFm08a/Sz9Om4yKgSftgjPSi17CMIsVh32VeWThCjKnlYUe3Cv0hRbG3Gjo7OL7yD4LbLBXaBrpZ9WDTvPPpm2ePBcxka5gCeoAta/77pvrls3yq6p4MikEcy4YnjjmlwCiP9R3QMuDVKLkXBrHWq879Oo88WQA97sv71Yz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-05 (Coremail) with SMTP id zQCowADnJA21vfxnc_znCA--.1690S2;
-	Mon, 14 Apr 2025 15:48:05 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] hwmon: (lm90): Use to_delayed_work()
-Date: Mon, 14 Apr 2025 15:47:39 +0800
-Message-Id: <20250414074739.3954203-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1744638987; c=relaxed/simple;
+	bh=NFLGYLwfMv4O8oauiY7vmwB/nw7imAlHzVax0tuTb+E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=i6Ja071a5w47RglaC/5BFii8HOES/zAxm4s49HG+SgOEsOLx26FAszeGtcmp4PqO/VipZMZ53xt1qxO3wJF4Z6WqbMcwqwNXoa/6bganc4Avjs9dwWzIB4067d9/OoUijTm7RuevxUP/pMDN5GK3Qr/2YLLpSgdvauoRxU7OrzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/0pocpD; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/0pocpD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C4BC4CEE2;
+	Mon, 14 Apr 2025 13:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744638986;
+	bh=NFLGYLwfMv4O8oauiY7vmwB/nw7imAlHzVax0tuTb+E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=f/0pocpDSbkaNH9t2nd0UfGeZ2kaghu7xBWHR8+RAV/ZT/esgLAF5DrxIVl7ml2Sr
+	 vzP30Qc8TpuvpR/0hyX2N/+1EGKYtsKhy9I0dF/FXx1QNBwPUjNKeceQFehm+RZ+tj
+	 n/MCvgJrKHDuQfmpOfoq28JeTkcCxqGGIEnMwDqMPoUTLk2RnvACi77o40eV0GEGek
+	 WaGgqDcr8ZCsbvA7fCPhLtGHyEJ6CSJd+si0BmTDAK0uIOtxmIfbjIX4Xx/4olHACc
+	 UkgJiOiV8WZTzb+poBd4KmPe9cjh5cfcVA01v7fQGNs7vDSkkkBe5fAqlz5ioY093k
+	 hs/OwjkW6ARlA==
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Shenghao Ding <shenghao-ding@ti.com>, 
+ Kevin Lu <kevin-lu@ti.com>, Baojun Xu <baojun.xu@ti.com>, 
+ Dan Murphy <dmurphy@ti.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shi Fu <shifu0704@thundersoft.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ James Calligeros <jcalligeros99@gmail.com>
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+ =?utf-8?q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+ Hector Martin <marcan@marcan.st>, linux-sound@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ asahi@lists.linux.dev, linux-hwmon@vger.kernel.org, 
+ Neal Gompa <neal@gompa.dev>
+In-Reply-To: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+References: <20250227-apple-codec-changes-v3-0-cbb130030acf@gmail.com>
+Subject: Re: (subset) [PATCH v3 00/20] ASoC: tas27{64,70}: improve support
+ for Apple codec variants
+Message-Id: <174463898202.86688.2390703716966922295.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 14:56:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowADnJA21vfxnc_znCA--.1690S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw1xJF1kCFWktw1kJF4ktFb_yoW3Zwc_ur
-	Wxury7ur45tFn3J3s8Cr43ZrWvywn5WFn2gFsYga98Z3ykJF1YvrW8ZrnrCr98WrW7AFnx
-	G3sxWr45Cws7AjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-	6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7VUjb18PUUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-Use to_delayed_work() instead of open-coding it.
+On Thu, 27 Feb 2025 22:07:27 +1000, James Calligeros wrote:
+> This series introduces a number of changes to the drivers for
+> the Texas Instruments TAS2764 and TAS2770 amplifiers in order to
+> introduce (and improve in the case of TAS2770) support for the
+> variants of these amps found in Apple Silicon Macs.
+> 
+> Apple's variant of TAS2764 is known as SN012776, and as always with
+> Apple is a subtly incompatible variant with a number of quirks. It
+> is not publicly available. The TAS2770 variant is known as TAS5770L,
+> and does not require incompatible handling.
+> 
+> [...]
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/hwmon/lm90.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 75f09553fd67..c1f528e292f3 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -1235,7 +1235,7 @@ static int lm90_update_alarms(struct lm90_data *data, bool force)
- 
- static void lm90_alert_work(struct work_struct *__work)
- {
--	struct delayed_work *delayed_work = container_of(__work, struct delayed_work, work);
-+	struct delayed_work *delayed_work = to_delayed_work(__work);
- 	struct lm90_data *data = container_of(delayed_work, struct lm90_data, alert_work);
- 
- 	/* Nothing to do if alerts are enabled */
--- 
-2.25.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[07/20] ASoC: tas2764: Reinit cache on part reset
+        commit: 592ab3936b096da5deb64d4c906edbeb989174d6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
