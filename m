@@ -1,72 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671FB3B7A8;
-	Mon, 14 Apr 2025 07:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CDE2F4A;
+	Mon, 14 Apr 2025 07:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744616000; cv=none; b=UVDhrIFBIlXX6/OTea21ImPc66s+dnlSypWR+q2CC0hiOMO8+zmiA/uiea4ckBP+aM40bnQSUlAsMYK3LtFNLUmPncMaAJthpMGH8j9ZC9kuCiFwspYS6fWdJx2VUJCD7g8syUyHrbvbLkUaD0OuiQ40kUGd4WOHdEivjizwsr8=
+	t=1744616893; cv=none; b=U1lubTeCibUew5J4AgaD7sEXHoKYm/VzCR4/9nD2doFzOCWJHch2UjpKmea8LQzv6pGhKwIg/7DChg6h9EZZfEO0ZMc7nTKgjcAqQI7NsJ6lqRRE71p062rKR5C9qLwYaDt+xZtP5SwiKU8Ki6/3hZOXXIkXAbmmZvce7GRj1ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744616000; c=relaxed/simple;
-	bh=kTal2JJIjvbhqqeb2aXNLhvO1P71bn/m7n+c3fSUmFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rIOpqXnSl/frlc7XQiBp9CgHcud1xTbQ8SscFfKh0aiux73F3z+3J25O1o8LUSzpBK1mCLuLNXbq8BpVqPRBTD/WDXudh/1Y5fEEQ14YoIt4Do1vaB84iIjkTxK+0jcvcFuzmAUJNnj06GV4LCmVnYkeHZMfozeZvYPZGWbRJPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uVPlimpU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVPlimpU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADA5C4CEE2;
-	Mon, 14 Apr 2025 07:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744616000;
-	bh=kTal2JJIjvbhqqeb2aXNLhvO1P71bn/m7n+c3fSUmFg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uVPlimpUDYBt4gJJhPFhhpA2n3VetxCb4i63xcd2AuKq+ciPthWfhwmv2mQodGvTe
-	 pQf+LBQ/Ib/LsVsJ8oTXtIL6PZIbbn0FURfbYgNmXaI6RTpTzjGuW/kq9ZtnEg/acg
-	 r/rHOLuiOewVFKRPdMzRbCcc1l19mqZCdm3YcSuf83U/zxI2cQDKirzWHh9cZkeXT6
-	 kDOlN83CmMrdzm5WGiUlKlxXCaR6BzlOEtgmvgAmAq96NzXl6itExfdSV9tDaR/sIA
-	 Z0f6BzFjPKqZR5jmas63v2PubPQvbbrR0N7GiCg4yisSwZQnucP71USp2YLhCEuakN
-	 G9LZrP27Ev/ow==
-Date: Mon, 14 Apr 2025 09:33:15 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Inochi Amaoto <inochiama@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen Wang <unicorn_wang@outlook.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, 
-	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>
-Subject: Re: [PATCH v2 08/10] dt-bindings: i2c: dw: Add Sophgo SG2044 SoC I2C
- controller
-Message-ID: <20250414-muscular-steady-perch-cb44e3@shite>
-References: <20250413223507.46480-1-inochiama@gmail.com>
- <20250413223507.46480-9-inochiama@gmail.com>
+	s=arc-20240116; t=1744616893; c=relaxed/simple;
+	bh=WYwRR1Pc+EMmU7eSySZSDCumVjqm7uIRCv2bPRMdja8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lUFqFm08a/Sz9Om4yKgSftgjPSi17CMIsVh32VeWThCjKnlYUe3Cv0hRbG3Gjo7OL7yD4LbLBXaBrpZ9WDTvPPpm2ePBcxka5gCeoAta/77pvrls3yq6p4MikEcy4YnjjmlwCiP9R3QMuDVKLkXBrHWq879Oo88WQA97sv71Yz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-05 (Coremail) with SMTP id zQCowADnJA21vfxnc_znCA--.1690S2;
+	Mon, 14 Apr 2025 15:48:05 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] hwmon: (lm90): Use to_delayed_work()
+Date: Mon, 14 Apr 2025 15:47:39 +0800
+Message-Id: <20250414074739.3954203-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250413223507.46480-9-inochiama@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowADnJA21vfxnc_znCA--.1690S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw1xJF1kCFWktw1kJF4ktFb_yoW3Zwc_ur
+	Wxury7ur45tFn3J3s8Cr43ZrWvywn5WFn2gFsYga98Z3ykJF1YvrW8ZrnrCr98WrW7AFnx
+	G3sxWr45Cws7AjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
+	JF0_Jw1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+	UI43ZEXa7VUjb18PUUUUU==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-On Mon, Apr 14, 2025 at 06:35:02AM GMT, Inochi Amaoto wrote:
-> Add compatible string for Sophgo SG2044 SoC I2C controller which can be
-> used specifically for the SG2044 SoC.
-> 
-> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> ---
->  Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 1 +
+Use to_delayed_work() instead of open-coding it.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/hwmon/lm90.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+index 75f09553fd67..c1f528e292f3 100644
+--- a/drivers/hwmon/lm90.c
++++ b/drivers/hwmon/lm90.c
+@@ -1235,7 +1235,7 @@ static int lm90_update_alarms(struct lm90_data *data, bool force)
+ 
+ static void lm90_alert_work(struct work_struct *__work)
+ {
+-	struct delayed_work *delayed_work = container_of(__work, struct delayed_work, work);
++	struct delayed_work *delayed_work = to_delayed_work(__work);
+ 	struct lm90_data *data = container_of(delayed_work, struct lm90_data, alert_work);
+ 
+ 	/* Nothing to do if alerts are enabled */
+-- 
+2.25.1
 
