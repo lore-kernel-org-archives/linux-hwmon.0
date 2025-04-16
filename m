@@ -1,103 +1,191 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA612231CAE;
-	Wed, 16 Apr 2025 06:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D21E1EF380
+	for <linux-hwmon@vger.kernel.org>; Wed, 16 Apr 2025 11:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744786507; cv=none; b=gm1RXtUSbCDeGglA5aCE5JmXWMbTjeeICijZCkK1kPCmmUGgaehzhF/IH1BqtrDEuFSNgYNMKEDLdUPoeqDdtzLfEHHtaFW6PjSigBeEHxcGqN1sDG/3OKqDUzRPmGe+Tu8/gzeesfR/3omjXwjh3hKE1t31cMRI2iZdHM/BsxQ=
+	t=1744801546; cv=none; b=A+VTxkVUyn1WP+SXwFew3Dz3DcCCbXc9U+6Ow6HF8fK3K9+whh0X+77SbvvL3d03yojidY7LhMEXUpvJ9S+DX5BfjsQITPN0tTCEzvSOyqa7/yW248McSkoIHD+PjRD027nZ2FhI0DMTXwpIIJcPQ8sQu5n6fUQz20RxCy6D4v4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744786507; c=relaxed/simple;
-	bh=5Aw7PZlPRNIq1ZdW/H4hJQMsd7p/xyc2yDa2BP5+vrk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RX5EZmiz51beC2R/mRArAa/18w6IR0wXPXCjshmByMTp3iiV/OV6TfZ2wQ1mwPUyLo14iUo9G4WzgZ6pNA34o6mtImc2xH1ebvMRQOO7/+nR+vTnRftYmT56D6FX8lOTd0TAAxx47pbTNtlPA3MOck952mvUPQ7ZW8ovRJVOLno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=oQTc5NQF; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1744801546; c=relaxed/simple;
+	bh=Sn1gl8Z3DQwVEKnzgi9ovJRTRasFdJIx/atxlsowIDM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NoaWpTVuihyiiH17rhtj3gQVyAZhmU/s02olDsH0d+gBK65T9e1jL3SH8yxATebbOcTPMTaneE41YNi8qkCcRj7LWkLkR3sDgGVV0Z8XF7/jwdJ46RD3mHRohiNNBLQSuAKcwmN3Eqmfiw3Svjj6Zy4REYOqmNWK/7iIaVEfHF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L2i214uM; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="oQTc5NQF"
-Received: from 2001-b400-e2a9-54f6-6e67-7778-9cb9-7043.emome-ip6.hinet.net (unknown [10.101.200.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2731F3FF14;
-	Wed, 16 Apr 2025 06:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1744786015;
-	bh=ETroOFXahmn2t5VaBTxI4L8slF1VXmL7ifUOmTK6emQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc;
-	b=oQTc5NQFdHYUVVI4hxcmFWo+lKqjy2nxSjk/z69S9TmJwpcYcDWe/czHnUrfMpMdF
-	 9t766T+UAJFqvzUfkTRVLhl0o/Gh7MvPw+/nqviKISnh1ju89mOqQhMQNy0d9OT28f
-	 tZTRgkd8z3yEVb6106N+Ft8As12eIna6BvMngR0b+rKratIz5j2L2VT3kxODZ4T75Y
-	 yy4MXLngx4YqahhZg6rJyfaTSmn2QhQwkoTWM0WaX7IeMZFTH2VHOYxz95wGqzKOFJ
-	 wpbJo7oIYUQQmem1dx5SxjS2WmGC+bmpSsxUBWrllq6hazfNeS0m4X8B/oFCbHsXhM
-	 bjSe79LeZ36Eg==
-From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
-Subject: [PATCH 0/2] hwmon: (spd5118) adjust sensor behaviors under SPD
- write protection
-Date: Wed, 16 Apr 2025 14:46:25 +0800
-Message-Id: <20250416-for-upstream-spd5118-spd-write-prot-detect-v1-0-8b3bcafe9dad@canonical.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L2i214uM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744801544; x=1776337544;
+  h=date:from:to:cc:subject:message-id;
+  bh=Sn1gl8Z3DQwVEKnzgi9ovJRTRasFdJIx/atxlsowIDM=;
+  b=L2i214uM6Ljx++xno9WF9qIFCNgQvdZ+Yt3vbO9My+heRXPL5tJ4baXX
+   HC4AMCK0hryQxTMN0fDmqS4Yl2lzjAKhNbLABgnnJqHr0+Vt3U2VHEQ1g
+   ck1uuYcXbOBkyKPtzewAkFyHIbUBkP+RBnkqMFi+l9Nc9OkI313eFfYeb
+   jRPkNwPeLq+MpynpYYHDeXLbs51r2wQ6PErXkRKOLfxplmOP4hg0lrGQC
+   OWxCbzIXp0iIQP+7dsqWJliOlXwnIbY0bEOP2+qjEolqS/Oo/Ri+vybRe
+   cEYWGWuk190hA83nKZ0nrBQNWqep80vUzHLxQOmJLfSM1Vs7ZLfU6F83X
+   w==;
+X-CSE-ConnectionGUID: 2xSAmlb2QH24TidzP+A99A==
+X-CSE-MsgGUID: iKW4D8wkQMW+l+PdP6uWWQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11404"; a="33958996"
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="33958996"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 04:05:44 -0700
+X-CSE-ConnectionGUID: qEKTqq17TLGS+4aAUU9oow==
+X-CSE-MsgGUID: wajZgIxhQ32y4OzrhOev2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="131405575"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 16 Apr 2025 04:05:43 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u50aJ-000JZx-35;
+	Wed, 16 Apr 2025 11:05:39 +0000
+Date: Wed, 16 Apr 2025 19:04:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 8f47f2d1355a3846d0ac2b1e05b3bb8aaf3a6c2f
+Message-ID: <202504161934.R6A632F5-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAEFS/2cC/x2NMQ7CMAwAv1J5xlKTUlr4CmIIiQseaCLb0EpV/
- 05gOt1yt4GSMClcmg2EPqyc5yru0EB8hvlByKk6+Nb37dGdcMqC76ImFF6oJfXOjT/iImyERbJ
- hIqNoGAbq7qE7+2GMUINFaOL1P7ve9v0L8zDwh3wAAAA=
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1380; i=leo.lin@canonical.com;
- h=from:subject:message-id; bh=5Aw7PZlPRNIq1ZdW/H4hJQMsd7p/xyc2yDa2BP5+vrk=;
- b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBn/1JWLAwAKHbyy+9+Z8YexEPaFUs4n/3akN+oH
- fIbX2PE77+JAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCZ/9SVgAKCRBfF7GWSinu
- hvteD/0e7R6YeZFa7jAZ0N9I53PZ0u3o+CIxTGha978uofrnLXWDCQ1XAq4OAXCNY3bJgiqnZab
- AxMT3JVwLcOx7MBv3Glx92xxjpGn+9f+4yKfvYb4lIqDunxhW0FjPsBUxtNOScoD+niIKOcT7uI
- 3tFEdYsymrhrvfO7apeyEA33G3GtmHParyj+aVLcI32tyrBZRV8kpX/KPIwpJFpvnYEyr9LpOk4
- yb8SssmLoTxTMreX9M9joKshsQBAAjs/Iu7GMUEO7gn1kIFMp+noHJYMEpsLYDTWv2oelVSlfH9
- Y7c3gpUy0TTGiu/M1jCMj+CXQJfsGNuY8OaL/GD2T1M5yFKtkSmH4j/4kd1nznLnd9k7i8VAqjg
- eC6OcIyE4gOfsSHPKsmeF4K87H4ao1j4bRTlYtVkBMvD4wbOw1tumQTvcxQkHM9F+z1sfoBjPQ3
- fjLFlKAjBc0xOlslrH9JFRRvvDqbJMTQiLzx19qR5lkFk0PdQdhjmzGaZuX6VwRlyO0rieR22nK
- LkXdqFl50xlfFrfMDri9/7cki4eSU4GgBRPMu7u++n/RwCSAF2JOv1/ngLcrR5YWHtzwsb0nj5e
- 36s7h+nP7Q2SXTAMCTv+7t/4QUwTLJHZo4V7xahFK2oKgynNMOsb1VD6GWLJ9MiXGqOBOL2Nw3W
- y1lUdcS4A7yx8Qw==
-X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
- fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
 
-On some PC platforms, BIOS may enable SPD Write Protection and forbids
-writes to certain SMBus addresses. For i801 family those addresses are
-0x50 to 0x57 [1], where the spd5118 sensors usually get probed.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 8f47f2d1355a3846d0ac2b1e05b3bb8aaf3a6c2f  hwmon: (lm90) Use to_delayed_work()
 
-One implication is that the driver is not able to sync back values to
-the sensor registers cache during resume, leading to resume failure.
-Also, sensor functions related to writes are not functional in those
-cases. This has been observed on multiple existing PC platforms from
-Dell and HP.
+elapsed time: 1448m
 
-This patchset introduces basic mechanism similar to what was done in the
-spd5118_init() to detect this, and bypass sensor functions that might
-involve writes if this is detected.
+configs tested: 114
+configs skipped: 1
 
-[1] 18.1.16 HOSTC—Host Configuration Register (SMBus—D31:F3),
-    Intel 8 Series/C220 Series Chipset Family Platform Controller Hub(PCH)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Yo-Jung Lin (Leo) <leo.lin@canonical.com>
----
-Yo-Jung (Leo) Lin (2):
-      hwmon: (spd5118) pass spd5118_data to hwmon callbacks
-      hwmon: (spd5118) restrict writes under SPD write protection
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250415    gcc-14.2.0
+arc                   randconfig-002-20250415    gcc-14.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                          gemini_defconfig    clang-20
+arm                   randconfig-001-20250415    clang-21
+arm                   randconfig-002-20250415    clang-21
+arm                   randconfig-003-20250415    gcc-10.5.0
+arm                   randconfig-004-20250415    gcc-6.5.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250415    clang-16
+arm64                 randconfig-002-20250415    gcc-7.5.0
+arm64                 randconfig-003-20250415    gcc-9.5.0
+arm64                 randconfig-004-20250415    gcc-9.5.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250415    gcc-13.3.0
+csky                  randconfig-002-20250415    gcc-14.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250415    clang-20
+hexagon               randconfig-002-20250415    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250415    clang-20
+i386        buildonly-randconfig-002-20250415    clang-20
+i386        buildonly-randconfig-003-20250415    clang-20
+i386        buildonly-randconfig-004-20250415    clang-20
+i386        buildonly-randconfig-005-20250415    gcc-12
+i386        buildonly-randconfig-006-20250415    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250415    gcc-14.2.0
+loongarch             randconfig-002-20250415    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                          rb532_defconfig    clang-18
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250415    gcc-13.3.0
+nios2                 randconfig-002-20250415    gcc-7.5.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                generic-64bit_defconfig    gcc-14.2.0
+parisc                randconfig-001-20250415    gcc-12.4.0
+parisc                randconfig-002-20250415    gcc-10.5.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc                       eiger_defconfig    clang-21
+powerpc                          g5_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250415    gcc-5.5.0
+powerpc               randconfig-002-20250415    clang-17
+powerpc               randconfig-003-20250415    gcc-7.5.0
+powerpc64             randconfig-001-20250415    gcc-7.5.0
+powerpc64             randconfig-002-20250415    clang-17
+powerpc64             randconfig-003-20250415    gcc-10.5.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                 randconfig-001-20250415    gcc-14.2.0
+riscv                 randconfig-002-20250415    gcc-9.3.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-21
+s390                  randconfig-001-20250415    clang-21
+s390                  randconfig-002-20250415    gcc-7.5.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250415    gcc-11.5.0
+sh                    randconfig-002-20250415    gcc-9.3.0
+sh                   secureedge5410_defconfig    gcc-14.2.0
+sh                             sh03_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250415    gcc-6.5.0
+sparc                 randconfig-002-20250415    gcc-12.4.0
+sparc64               randconfig-001-20250415    gcc-14.2.0
+sparc64               randconfig-002-20250415    gcc-12.4.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250415    clang-21
+um                    randconfig-002-20250415    clang-21
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250415    clang-20
+x86_64      buildonly-randconfig-002-20250415    gcc-11
+x86_64      buildonly-randconfig-003-20250415    gcc-12
+x86_64      buildonly-randconfig-004-20250415    clang-20
+x86_64      buildonly-randconfig-005-20250415    clang-20
+x86_64      buildonly-randconfig-006-20250415    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250415    gcc-6.5.0
+xtensa                randconfig-002-20250415    gcc-10.5.0
 
- drivers/hwmon/spd5118.c | 41 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 5 deletions(-)
----
-base-commit: a6d89461ace59cf66bbfecddfdf3433f626ecd7a
-change-id: 20250416-for-upstream-spd5118-spd-write-prot-detect-a7e3ba39278c
-
-Best regards,
--- 
-Yo-Jung (Leo) Lin <leo.lin@canonical.com>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
